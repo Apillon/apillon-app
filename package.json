@@ -18,7 +18,8 @@
     "eslint-plugin-vue": "^9.4.0",
     "naive-ui": "^2.33.3",
     "nuxt": "3.0.0-rc.8",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "vue-i18n": "^9.2.2"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.0",

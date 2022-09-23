@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="min-h-screen">
-    <n-config-provider :locale="deDE" :date-locale="dateDeDE">
+    <n-config-provider>
       <NuxtLayout>
         <portal-target :name="Portals.LAYOUT" multiple />
-
+        <LanguageSwitcher />
         <NuxtPage />
       </NuxtLayout>
     </n-config-provider>
@@ -11,13 +11,17 @@
 </template>
 
 <script lang="ts" setup>
-import { NConfigProvider, enUS, dateEnUS, deDE, dateDeDE } from 'naive-ui';
+import { NConfigProvider } from 'naive-ui';
+import { useI18n } from 'vue-i18n';
 
-useHead({
-  lang: 'sl-SI',
+const $i18n = useI18n();
+const lang = computed(() => {
+  return $i18n.locale.value;
 });
 
-const lang = ref('sl-SI');
-console.log(enUS);
-console.log(dateEnUS);
+useHead({
+  htmlAttrs: {
+    lang,
+  },
+});
 </script>
