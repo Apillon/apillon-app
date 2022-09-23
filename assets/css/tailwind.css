@@ -2,6 +2,10 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@import './epilogue';
+@import './inter';
+@import './authtrail';
+
 @import './utility';
 @import './typography';
 @import './transitions';

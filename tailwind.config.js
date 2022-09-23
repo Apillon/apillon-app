@@ -14,40 +14,49 @@ module.exports = {
       current: 'currentColor',
       black: '#000000',
       white: '#ffffff',
-      dark: '#070707',
-      red: '#E96452',
-      green: '#27B51A',
-      blue: '#42C6FF',
-      disabled: '#353530',
+      dark: '#010101',
+      red: '#B62C2C',
+      green: '#2CB67D',
+      olive: '#B3B62C',
+      orange: '#B6552C',
+      fireBrick: '#B6552C',
+      turquoise: '#2C95B6',
+      blue: '#2C3AB6',
 
       grey: {
-        DEFAULT: '#767676',
-        light: '#141414',
-        lighter: '#1A1B1A',
-        lightest: '#353530',
-        bright: '#AEAEAE',
-        dark: '#0C0C0C',
-        darker: '#080808',
+        DEFAULT: '#94A1B2',
+        lightest: '#FAF8F5',
+        lighter: '#DCDCDC',
+        light: '#94A1B2',
+        bright: '#6A7380',
+        dark: '#242629',
+        darker: '#010101',
       },
 
-      gold: {
-        DEFAULT: '#EEDA74',
-        dark: '#F3CD7F',
-        light: '#FFD887',
-
+      purple: {
+        DEFAULT: '#7F5AF0',
+        dark: '#5E43B2',
+        light: '#A48BF0',
         // GradientFills
-        'gradient-light': '#FFD887',
-        'gradient-dark': '#825D0E',
+        'gradient-light': '#B62CA8',
+        'gradient-dark': '#7F5AF0',
+      },
 
-        // GradientStrokes
-        'stroke-light': '#FFF7E4',
-        'stroke-dark': '#855F11',
+      pink: {
+        DEFAULT: '#B62CA8',
+        dark: '#821F78',
+        light: '#B62CA8',
+        // GradientFills
+        'gradient-light': '#B62CA8',
+        'gradient-dark': '#7F5AF0',
       },
     },
 
     fontFamily: {
-      sans: ['Inter', 'ui-sans-serif', 'system-ui'],
-      serif: ['Playfair Display', 'ui-serif'],
+      heading: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      content: ['Epilogue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      inter: ['Inter'],
+      epilogue: ['Epilogue'],
     },
 
     container: {
@@ -58,9 +67,19 @@ module.exports = {
     },
 
     extend: {
+      backgroundColor: {
+        'pink-purple': 'linear-gradient(242.78deg, #7F5AF0 -0.94%, #B62CA8 66.98%)',
+      },
       zIndex: {
         1: 1,
         2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+        6: 6,
+        7: 7,
+        8: 8,
+        9: 9,
       },
     },
   },
@@ -72,8 +91,8 @@ module.exports = {
     `composables/**/*.{js,ts}`,
     `plugins/**/*.{js,ts}`,
     `App.{js,ts,vue}`,
-    `app.{js,ts,vue}`
+    `app.{js,ts,vue}`,
   ],
 
   plugins: [],
-}
+};

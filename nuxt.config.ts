@@ -1,12 +1,13 @@
 import { defineNuxtConfig } from 'nuxt';
-import { getAppConfig } from './lib/utils'; 
+import { getAppConfig } from './lib/utils';
 
 const meta = {
-  title: 'Kalmia Frontend',
-  description: 'Join The Kingdom!',
-  url: 'https://kalmia.si/',
-  image: 'https://kalmia.si/og.jpg',
-  twitter: '@kalmialtd',
+  lang: 'en',
+  title: 'AuthTrail',
+  description: 'AuthTrail',
+  url: getAppConfig().url,
+  image: `${getAppConfig().url}/og.jpg`,
+  twitter: '@authtrail',
 };
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
@@ -14,30 +15,31 @@ export default defineNuxtConfig({
   ssr: false,
 
   runtimeConfig: {
-    public: getAppConfig()
+    public: getAppConfig() as Record<string, any>,
   },
 
-  components: ['~/components', '~/components/general/', '~/components/parts/'],
-
-  modules: [
-    '@vueuse/nuxt',
-    '@nuxtjs/tailwindcss',
-    '@pinia/nuxt',
-    'nuxt-icons',
+  components: [
+    '~/components',
+    '~/components/general/',
+    '~/components/parts/',
+    '~/components/signup/',
+    '~/components/dashboard/',
   ],
 
+  modules: ['@vueuse/nuxt', '@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-icons'],
+
   tailwindcss: {
-    cssPath: '~/assets/tailwind.css',
+    cssPath: '~/assets/css/tailwind.css',
   },
 
   autoImports: {
-    dirs: ['./stores', './lib']
+    dirs: ['./stores', './lib'],
   },
 
   app: {
     head: {
       htmlAttrs: {
-        lang: 'en'
+        lang: meta.lang,
       },
 
       titleTemplate: `%s – ${meta.title}`,
@@ -68,25 +70,25 @@ export default defineNuxtConfig({
         {
           rel: 'preconnect',
           href: 'https://fonts.gstatic.com',
-          crossorigin: 'true'
+          crossorigin: 'true',
         },
         {
           rel: 'preconnect',
           href: 'https://fonts.googleapis.com',
-          crossorigin: 'true'
+          crossorigin: 'true',
         },
         {
           rel: 'preload',
           as: 'style',
-          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap',
+          href: 'https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700&family=Inter:wght@400;700&display=swap',
         },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap',
+          href: 'https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700&family=Inter:wght@400;700&display=swap',
           media: 'print',
-          onload: "this.media='all'"
-        }
-      ]
-    }
-  }
-})
+          onload: "this.media='all'",
+        },
+      ],
+    },
+  },
+});

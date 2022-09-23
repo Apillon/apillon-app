@@ -1,8 +1,8 @@
 body {
-  @apply bg-black text-white;
+  @apply bg-white body-md;
   font-size: 16px;
 }
 
 #app .nuxt-icon svg {
-  margin-bottom: 0; 
+  margin-bottom: 0;
 }

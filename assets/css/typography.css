@@ -1,0 +1,62 @@
+@layer base {
+  /* Headline 1 */
+  h1 {
+    @apply font-heading font-bold;
+    font-size: 3rem;
+    line-height: 1.33;
+  }
+
+  /* Headline 2 */
+  h2 {
+    @apply font-heading font-bold;
+    font-size: 2.5rem;
+    line-height: 1.5;
+  }
+
+  /* Headline 3 */
+  h3 {
+    @apply font-heading font-bold;
+    font-size: 2rem;
+    line-height: 1.5;
+  }
+
+  /* Headline 4 */
+  h4 {
+    @apply font-heading font-bold;
+    font-size: 1.5rem;
+    line-height: 1.5;
+  }
+
+  /* Headline 5 */
+  h5 {
+    @apply font-heading font-bold;
+    font-size: 1.25rem;
+    line-height: 1.5;
+  }
+
+  p {
+    @apply body-md;
+  }
+
+  label {
+    @apply font-content body-sm font-bold text-black tracking-[0.25rem] uppercase;
+  }
+
+  .body-lg {
+    @apply font-content;
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+
+  .body-md {
+    @apply font-content;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .body-sm {
+    @apply font-content;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
