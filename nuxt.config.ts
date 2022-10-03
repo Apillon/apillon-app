@@ -20,11 +20,13 @@ export default defineNuxtConfig({
 
   components: [
     '~/components',
+    '~/components/auth/',
     '~/components/general/',
     '~/components/parts/',
-    '~/components/signup/',
     '~/components/dashboard/',
   ],
+
+  buildModules: ['@nuxtjs/google-fonts'],
 
   modules: ['@vueuse/nuxt', '@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-icons'],
 
@@ -67,28 +69,20 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon.png' },
         { rel: 'manifest', href: '/manifest.json' },
-        {
-          rel: 'preconnect',
-          href: 'https://fonts.gstatic.com',
-          crossorigin: 'true',
-        },
-        {
-          rel: 'preconnect',
-          href: 'https://fonts.googleapis.com',
-          crossorigin: 'true',
-        },
-        {
-          rel: 'preload',
-          as: 'style',
-          href: 'https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700&family=Inter:wght@400;700&display=swap',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700&family=Inter:wght@400;700&display=swap',
-          media: 'print',
-          onload: "this.media='all'",
-        },
       ],
+    },
+  },
+
+  googleFonts: {
+    display: 'swap',
+    download: true,
+    families: {
+      Inter: {
+        wght: [400, 700],
+      },
+      Epilogue: {
+        wght: [400, 700],
+      },
     },
   },
 });

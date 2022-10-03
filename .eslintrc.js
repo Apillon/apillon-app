@@ -18,6 +18,7 @@ module.exports = {
     'vue/html-indent': 0,
     'vue/max-attributes-per-line': 0,
     'vue/no-multiple-template-root': 0,
+    'vue/no-v-model-argument': 0,
     'vue/html-self-closing': [
       'error',
       {

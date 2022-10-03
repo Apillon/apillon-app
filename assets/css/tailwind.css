@@ -1,12 +1,13 @@
+@import './preflight';
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-@import './epilogue';
-@import './inter';
-@import './authtrail';
-
+@import './naive-ui';
 @import './utility';
+
+@import './authtrail';
 @import './typography';
+
 @import './transitions';
 @import './main';

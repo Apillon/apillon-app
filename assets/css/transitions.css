@@ -27,3 +27,26 @@
 .fade-leave-to {
   opacity: 0;
 }
+
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-down-enter-active {
+  transition: all 0.5s ease;
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.slide-down-enter-to {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Slide sleft */
+.slide-left-enter-active {
+  transition: all 0.5s ease;
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-left-enter-to {
+  transform: translateX(0);
+  opacity: 1;
+}

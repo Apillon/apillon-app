@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   theme: {
     screens: {
       sm: '640px',
@@ -10,6 +11,9 @@ module.exports = {
     },
 
     colors: {
+      primary: '#7F5AF0',
+      secondary: '#B62CA8',
+
       transparent: 'transparent',
       current: 'currentColor',
       black: '#000000',
@@ -37,38 +41,50 @@ module.exports = {
         DEFAULT: '#7F5AF0',
         dark: '#5E43B2',
         light: '#A48BF0',
-        // GradientFills
-        'gradient-light': '#B62CA8',
-        'gradient-dark': '#7F5AF0',
+        lightest: '#F4F1FE',
       },
 
       pink: {
         DEFAULT: '#B62CA8',
         dark: '#821F78',
         light: '#B62CA8',
-        // GradientFills
-        'gradient-light': '#B62CA8',
-        'gradient-dark': '#7F5AF0',
       },
     },
 
     fontFamily: {
-      heading: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-      content: ['Epilogue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-      inter: ['Inter'],
-      epilogue: ['Epilogue'],
+      heading: ['Epilogue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      content: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
     },
 
     container: {
+      width: '90%',
       center: true,
+      screens: {
+        xl: '1480px',
+      },
       padding: {
-        DEFAULT: '1rem',
+        DEFAULT: '2rem',
       },
     },
 
     extend: {
-      backgroundColor: {
+      background: {
         'pink-purple': 'linear-gradient(242.78deg, #7F5AF0 -0.94%, #B62CA8 66.98%)',
+      },
+      backgroundImage: {
+        login: "url('/images/bg-login.png')",
+      },
+      colors: {
+        purple: {
+          500: '#A48BF0',
+          750: '#7F5AF0',
+          900: '#5E43B2',
+        },
+        pink: {
+          DEFAULT: '#B62CA8',
+          dark: '#821F78',
+          light: '#B62CA8',
+        },
       },
       zIndex: {
         1: 1,
@@ -94,5 +110,8 @@ module.exports = {
     `app.{js,ts,vue}`,
   ],
 
+  corePlugins: {
+    preflight: false,
+  },
   plugins: [],
 };

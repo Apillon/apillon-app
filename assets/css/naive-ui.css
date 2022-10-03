@@ -1,0 +1,20 @@
+/** Switch */
+.n-switch {
+  margin: 0 1rem;
+
+  &.n-switch--active .n-switch__button {
+    background-color: theme('colors.purple.DEFAULT');
+  }
+
+  .n-switch__rail {
+    overflow: visible;
+  }
+}
+
+/** Layout */
+.n-layout {
+  background-color: transparent;
+}
+.n-layout-sider {
+  background-color: transparent;
+}

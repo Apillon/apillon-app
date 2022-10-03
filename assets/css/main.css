@@ -1,8 +1,14 @@
 body {
-  @apply bg-white body-md;
+  @apply body-md;
   font-size: 16px;
 }
 
 #app .nuxt-icon svg {
   margin-bottom: 0;
+}
+
+.n-message-container {
+  &.n-message-container--top {
+    @apply absolute top-10;
+  }
 }
