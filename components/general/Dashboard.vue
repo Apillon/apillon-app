@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <n-space v-if="loading" vertical>
+    <n-skeleton height="40px" width="33%" />
+    <n-skeleton height="40px" width="66%" :sharp="false" />
+    <n-skeleton height="40px" round />
+    <n-skeleton height="40px" circle />
+  </n-space>
+  <div v-else>
     <div v-if="$slots.heading" class="mb-10">
       <slot name="heading"> </slot>
     </div>
@@ -9,14 +15,9 @@
     </div>
 
     <div class="flex flex-auto w-full">
-      <div v-if="$slots.sidebar" class="bg-white w-44 py-6 mr-6 rounded">
+      <div v-if="$slots.sidebar" class="bg-white w-44 h-fit py-6 mr-6 rounded">
         <slot name="sidebar"></slot>
       </div>
-      <!-- <div class="w-[inherit]">
-        <slot />
-      </div>
-      <div v-if="$slots.learn" class="w-[356px] mt-16">
-      </div> -->
       <n-layout :has-sider="$slots.learn ? true : false" sider-placement="right">
         <n-layout-header v-if="$slots.title">
           <slot name="title"></slot>
@@ -30,6 +31,8 @@
           :collapsed-width="48"
           :width="356"
           content-style="padding-left: 32px;"
+          @after-enter="handleOnUpdateCollapse(false)"
+          @after-leave="handleOnUpdateCollapse(true)"
         >
           <div class="mb-2">
             <strong v-if="!learnCollapsed" class="uppercase">{{ $t('general.learn') }}</strong>
@@ -48,7 +51,15 @@
 </template>
 
 <script lang="ts" setup>
-import { NLayout, NLayoutContent, NLayoutSider, NLayoutHeader } from 'naive-ui';
+import { NLayout, NLayoutContent, NLayoutSider, NLayoutHeader, NSkeleton } from 'naive-ui';
 
-const learnCollapsed = ref(false);
+defineProps({
+  loading: { type: Boolean, default: false },
+});
+
+const learnCollapsed = ref<boolean>(localStorage.getItem('learnCollapsed') === '1' || false);
+
+function handleOnUpdateCollapse(value: boolean) {
+  localStorage.setItem('learnCollapsed', value ? '1' : '0');
+}
 </script>

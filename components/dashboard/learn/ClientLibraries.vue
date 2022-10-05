@@ -10,7 +10,7 @@
             <div
               class="border-grey border-[1px] rounded inline-flex justify-center items-center w-12 h-12"
             >
-              <nuxt-icon :name="library.icon" class="icon-library text-[22px]" fill />
+              <NuxtIcon :name="library.icon" class="icon-library text-[22px]" fill />
             </div>
           </template>
           <span>{{ library.name }}</span>

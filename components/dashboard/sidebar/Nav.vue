@@ -5,18 +5,24 @@
   >
     <n-collapse-item title="Services" name="services">
       <div>
-        <span class="icon-authentication"></span>
-        Authentication
+        <NuxtLink to="authentication">
+          <span class="icon-authentication"></span>
+          Authentication
+        </NuxtLink>
       </div>
-      <div>
-        <span class="icon-storage"></span>
-        Storage
-        <span class="coming-soon">Coming soon</span>
+      <div class="clear-both">
+        <NuxtLink to="storage">
+          <span class="icon-storage"></span>
+          Storage
+          <n-tag class="float-right" size="small" :bordered="false">Coming soon</n-tag>
+        </NuxtLink>
       </div>
-      <div>
-        <span class="icon-computing"></span>
-        Computing
-        <span class="coming-soon">Coming soon</span>
+      <div class="clear-both">
+        <NuxtLink to="computing">
+          <span class="icon-computing"></span>
+          Computing
+          <n-tag class="float-right" size="small" :bordered="false">Coming soon</n-tag>
+        </NuxtLink>
       </div>
     </n-collapse-item>
     <n-collapse-item title="Monitoring" name="monitoring">
@@ -47,5 +53,5 @@
 </template>
 
 <script lang="ts" setup>
-import { NCollapse, NCollapseItem } from 'naive-ui';
+import { NCollapse, NCollapseItem, NTag } from 'naive-ui';
 </script>

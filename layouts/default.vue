@@ -1,18 +1,18 @@
 <template>
   <div class="relative h-screen pl-64 bg-grey-lightest">
-    <Sidebar />
-    <Header />
-    <!-- <div :class="$style.content" class="h-screen">
+    <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="5000">
+      <Sidebar />
+      <Header />
+      <!-- <div :class="$style.content" class="h-screen">
     </div> -->
-    <n-scrollbar style="max-height: calc(100vh - 80px)">
-      <HeaderTabs />
-      <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="3000">
+      <n-scrollbar style="max-height: calc(100vh - 80px)">
+        <HeaderTabs />
         <div ref="messageRef" class="relative py-10 pl-20 pr-12">
           <slot />
         </div>
-      </n-message-provider>
-      <!-- <CookieConsent /> -->
-    </n-scrollbar>
+        <!-- <CookieConsent /> -->
+      </n-scrollbar>
+    </n-message-provider>
   </div>
 </template>
 

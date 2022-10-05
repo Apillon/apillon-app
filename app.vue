@@ -76,22 +76,6 @@ const themeOverrides: GlobalThemeOverrides = {
   common: {
     primaryColor: colors.primary,
   },
-  Switch: {
-    railColor: colors.grey.lightest,
-    railColorActive: colors.grey.lighter,
-    railWidthMedium: '34px',
-    railHeightMedium: '14px',
-    buttonColor: colors.grey.DEFAULT,
-    buttonHeightMedium: '20px',
-    buttonWidthMedium: '20px',
-  },
-  Input: {
-    heightMedium: '56px',
-    border: `1px solid ${colors.grey.lighter}`,
-    borderFocus: `1px solid ${colors.primary}`,
-    borderHover: `1px solid ${colors.primary}`,
-    borderError: `1px solid ${colors.red}`,
-  },
   Button: {
     fontSizeMedium: '16px',
     fontWeight: 'bold',
@@ -106,6 +90,25 @@ const themeOverrides: GlobalThemeOverrides = {
     colorFocusPrimary: colors.purple.light,
     colorHoverPrimary: colors.purple.light,
     colorPressedPrimary: colors.purple.dark,
+  },
+  DataTable: {
+    thColor: colors.grey.lightest,
+  },
+  Input: {
+    heightMedium: '56px',
+    border: `1px solid ${colors.grey.lighter}`,
+    borderFocus: `1px solid ${colors.primary}`,
+    borderHover: `1px solid ${colors.primary}`,
+    borderError: `1px solid ${colors.red}`,
+  },
+  Switch: {
+    railColor: colors.grey.lightest,
+    railColorActive: colors.grey.lighter,
+    railWidthMedium: '34px',
+    railHeightMedium: '14px',
+    buttonColor: colors.grey.DEFAULT,
+    buttonHeightMedium: '20px',
+    buttonWidthMedium: '20px',
   },
 };
 </script>

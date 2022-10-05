@@ -16,18 +16,13 @@
       <LearnClientLibraries />
     </template>
     <slot>
-      <TableWeb3Methods />
+      <TableSecrets />
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 useHead({
-  title: 'AuthTrail',
+  title: 'API keys',
 });
-
-const message = useMessage();
-message.warning('...');
 </script>

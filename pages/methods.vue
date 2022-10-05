@@ -1,11 +1,17 @@
 <template>
   <Dashboard>
     <template #heading>
-      <h4>Title</h4>
+      <h4>Methods</h4>
     </template>
     <template #infobar> Infobar </template>
     <template #sidebar>
       <SidebarProjectPages />
+      <!-- <ul>
+        <li>
+          <NuxtLink to="/methods">Methods</NuxtLink>
+          <NuxtLink to="/api-keys">API keys</NuxtLink>
+        </li>
+      </ul> -->
     </template>
     <template #learn>
       <LearnAlert>
@@ -22,12 +28,23 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 useHead({
   title: 'AuthTrail',
 });
 
-const message = useMessage();
-message.warning('...');
+// const { notification } = createDiscreteApi(['notification']);
+// const notification = useNotification();
+// notification.warning({
+//   content: '...',
+// });
+
+// const message = useMessage();
+// message.warning('...');
+
+// export default defineComponent({
+//   setup() {
+//     const message = useMessage();
+//     return [NMessageProvider, message];
+//   },
+// });
 </script>

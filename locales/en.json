@@ -1,5 +1,4 @@
 {
-  "hello": "Hello, {name}! EN",
   "language": "Language EN",
   "general": {
     "signup": "Sign up",
@@ -9,7 +8,20 @@
     "continue": "Continue",
     "copyrights": "© Authtrail",
     "learn": "Learn",
-    "clientLibraries": "Client Libraries"
+    "clientLibraries": "Client Libraries",
+    "method": "Method",
+    "status": "Status",
+    "action": "Action",
+    "actions": "Actions",
+    "active": "Active",
+    "paused": "Paused",
+    "secret": "Secret",
+    "attach": "Attach",
+    "name": "Name",
+    "serviceName": "Service name",
+    "serviceType": "Service type",
+    "uptime": "Uptime",
+    "learnMore": "Learn more"
   },
   "footer": {
     "support": "Support",
@@ -31,5 +43,18 @@
     "magicLink": "Send me a Magic Link",
     "useEmail": "or sign up using email",
     "dontHaveAccount": "I don’t have Authrail account yet? Sign up"
+  },
+  "nav": {
+    "authentication": "Authentication",
+    "storage": "Storage",
+    "Computing": "Computing"
+  },
+  "pageMenu": {
+    "methods": "Methods",
+    "access": "Access",
+    "apiKeys": "API keys",
+    "charts": "Charts",
+    "history": "History",
+    "Destroy": "Destroy"
   }
 }
