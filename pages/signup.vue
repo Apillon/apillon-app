@@ -5,8 +5,8 @@
         <h2>{{ $t('signup.title') }}</h2>
         <p class="text-grey-bright mb-5">{{ $t('signup.description') }}</p>
 
-        <Btn type="outline-primary" class="w-full">
-          <span class="icon-authtrail-icon"></span>
+        <Btn type="secondary" class="w-full">
+          <span class="icon-apillon-icon"></span>
           {{ $t('signup.continueWithAT') }}
         </Btn>
         <div class="mt-14 mb-8 flex items-center">
@@ -41,7 +41,7 @@ definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: 'AuthTrail',
+  title: 'SignUp',
 });
 
 onBeforeMount(() => {

@@ -25,7 +25,7 @@
 import { useMessage } from 'naive-ui';
 
 useHead({
-  title: 'AuthTrail',
+  title: 'Dashboard',
 });
 
 const message = useMessage();

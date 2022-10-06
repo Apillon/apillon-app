@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="bg-white dark:bg-black">
+  <div id="app" class="bg-dark">
     <n-config-provider
       :theme="theme"
       :theme-overrides="themeOverrides"
@@ -54,15 +54,17 @@ const dateLocale = computed(() => {
   }
 });
 
-// Dark mode
-const prefersDarkMode =
+/**  Theme switcher dark/light mode
+const prefersTheme =
   localStorage.getItem('theme') === 'dark' ||
   (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme:dark)').matches);
-const themeName = prefersDarkMode ? 'dark' : 'light';
+  */
+const prefersTheme = 'dark';
+const themeName = prefersTheme ? 'dark' : 'light';
 localStorage.setItem('theme', themeName);
 
 const theme = computed(() => {
-  return prefersDarkMode ? darkTheme : lightTheme;
+  return prefersTheme ? darkTheme : lightTheme;
 });
 
 useHead({
@@ -79,31 +81,32 @@ const themeOverrides: GlobalThemeOverrides = {
   Button: {
     fontSizeMedium: '16px',
     fontWeight: 'bold',
-    heightLarge: '68px',
     heightMedium: '56px',
-    heightSmall: '36px',
-    borderPrimary: `1px solid ${colors.purple.DEFAULT}`,
-    borderFocusPrimary: `1px solid ${colors.purple.light}`,
-    borderHoverPrimary: `1px solid ${colors.purple.light}`,
-    borderPressedPrimary: `1px solid ${colors.purple.dark}`,
-    colorPrimary: colors.purple.DEFAULT,
-    colorFocusPrimary: colors.purple.light,
-    colorHoverPrimary: colors.purple.light,
-    colorPressedPrimary: colors.purple.dark,
+    heightSmall: '44px',
+    heightTiny: '24px',
+    borderPrimary: `2px solid ${colors.primary}`,
+    borderFocusPrimary: `2px solid ${colors.primary}`,
+    borderHoverPrimary: `2px solid ${colors.primary}`,
+    borderPressedPrimary: `2px solid ${colors.primary}`,
+    colorPrimary: colors.primary,
+    colorFocusPrimary: colors.primary,
+    colorHoverPrimary: colors.primary,
+    colorPressedPrimary: colors.primary,
+    textColorGhost: colors.primary,
   },
   DataTable: {
-    thColor: colors.grey.lightest,
+    thColor: colors.dark,
   },
   Input: {
     heightMedium: '56px',
-    border: `1px solid ${colors.grey.lighter}`,
+    border: `1px solid ${colors.grey.DEFAULT}`,
     borderFocus: `1px solid ${colors.primary}`,
     borderHover: `1px solid ${colors.primary}`,
-    borderError: `1px solid ${colors.red}`,
+    borderError: `1px solid ${colors.pink}`,
   },
   Switch: {
-    railColor: colors.grey.lightest,
-    railColorActive: colors.grey.lighter,
+    railColor: colors.grey.light,
+    railColorActive: colors.grey.light,
     railWidthMedium: '34px',
     railHeightMedium: '14px',
     buttonColor: colors.grey.DEFAULT,

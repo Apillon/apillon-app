@@ -51,12 +51,13 @@
 </template>
 
 <script lang="ts" setup>
-import { NLayout, NLayoutContent, NLayoutSider, NLayoutHeader, NSkeleton } from 'naive-ui';
+import { NLayout, NLayoutContent, NLayoutSider, NLayoutHeader, NSkeleton, NSpace } from 'naive-ui';
 
 defineProps({
   loading: { type: Boolean, default: false },
 });
 
+// Keep info about collapsible section learn in local storage
 const learnCollapsed = ref<boolean>(localStorage.getItem('learnCollapsed') === '1' || false);
 
 function handleOnUpdateCollapse(value: boolean) {

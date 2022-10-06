@@ -3,7 +3,7 @@
   margin: 0 1rem;
 
   &.n-switch--active .n-switch__button {
-    background-color: theme('colors.purple.DEFAULT');
+    background-color: theme('colors.primary');
   }
 
   .n-switch__rail {

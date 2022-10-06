@@ -3,8 +3,8 @@ import { getAppConfig } from './lib/utils';
 
 const meta = {
   lang: 'en',
-  title: 'AuthTrail',
-  description: 'AuthTrail',
+  title: 'Apillon',
+  description: 'Apillon',
   url: getAppConfig().url,
   image: `${getAppConfig().url}/og.jpg`,
   twitter: '@authtrail',
@@ -77,10 +77,7 @@ export default defineNuxtConfig({
     display: 'swap',
     download: true,
     families: {
-      Inter: {
-        wght: [400, 700],
-      },
-      Epilogue: {
+      'IBM Plex Sans': {
         wght: [400, 700],
       },
     },

@@ -2,7 +2,7 @@
   <div class="relative bg-pink-purple text-white px-12 pt-5 pb-10 overflow-hidden rounded">
     <div class="max-w-[600px] w-1/2">
       <n-space size="large" align="center" class="h-12">
-        <h4 class="mr-">{{ $t('nav.storage') }}</h4>
+        <h4 class="">{{ $t('nav.storage') }}</h4>
         <div class="w-[1px] h-[13px] bg-grey-light"></div>
         <div class="flex items-center h-12">
           <NuxtIcon name="StorageCrust" class="text-[80px]" fill />

@@ -5,10 +5,10 @@
         <h2 class="text-white">{{ $t('login.title') }}</h2>
         <p class="text-white mb-5">{{ $t('login.description') }}</p>
 
-        <Btn type="outline-primary" class="w-full mb-2">
+        <Btn type="secondary" class="w-full mb-2">
           {{ $t('login.wallet') }}
         </Btn>
-        <Btn type="outline-primary" class="w-full">
+        <Btn type="secondary" class="w-full">
           {{ $t('login.magicLink') }}
         </Btn>
         <div class="mt-6 mb-8 flex items-center">

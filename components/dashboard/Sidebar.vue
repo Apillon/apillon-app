@@ -8,13 +8,13 @@
         <n-space class="py-6" size="large" vertical>
           <div class="flex justify-center">
             <NuxtLink to="/login">
-              <span class="icon-authtrail-icon text-3xl"></span>
+              <span class="icon-apillon-icon text-3xl"></span>
             </NuxtLink>
           </div>
           <div class="pr-4">
             <n-select v-model:value="currentProject" :options="projects" />
           </div>
-          <Btn type="outline-primary" size="sm"> New Project </Btn>
+          <Btn type="secondary" size="sm"> New Project </Btn>
           <button class="bg-purple-black">Project overview</button>
           <SidebarNav />
           <SidebarNav />

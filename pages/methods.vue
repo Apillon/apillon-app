@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 useHead({
-  title: 'AuthTrail',
+  title: 'Dashboard (Methods)',
 });
 
 // const { notification } = createDiscreteApi(['notification']);
