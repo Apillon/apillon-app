@@ -1,3 +1,45 @@
+/**
+ * Btn animation - hover bounce
+*/
+.hover-bounce {
+  animation-name: bounceOut;
+  animation-duration: 50s;
+
+  &:hover {
+    animation-name: bounceIn;
+    animation-duration: 50s;
+  }
+  &.locked {
+    animation-duration: 0s;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: translateY(0px);
+  }
+  1% {
+    transform: translateY(-6px);
+  }
+  2%,
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes bounceOut {
+  0% {
+    transform: translateY(-4px);
+  }
+  1% {
+    transform: translateY(2px);
+  }
+  2%,
+  100% {
+    transform: translateY(0px);
+  }
+}
+
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.2s;

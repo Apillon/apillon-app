@@ -3,8 +3,6 @@
     <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="5000">
       <Sidebar />
       <Header />
-      <!-- <div :class="$style.content" class="h-screen">
-    </div> -->
       <n-scrollbar style="max-height: calc(100vh - 80px)">
         <HeaderTabs />
         <div ref="messageRef" class="relative py-10 pl-20 pr-12">
@@ -24,10 +22,3 @@ disableBodyScroll(document);
 
 const messageRef = ref(null);
 </script>
-
-<style lang="postcss" module>
-.content {
-  @apply scrollbar;
-  max-height: calc(100vh - 80px);
-}
-</style>

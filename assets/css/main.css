@@ -1,5 +1,5 @@
 body {
-  @apply body-md;
+  @apply body-md text-grey-light;
   font-size: 16px;
 }
 

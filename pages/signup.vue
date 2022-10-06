@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
-    <div class="container">
-      <div class="md:w-1/2 max-w-md">
+    <div class="container flex flex-wrap">
+      <div class="md:w-1/2">
         <h2>{{ $t('signup.title') }}</h2>
         <p class="text-grey-bright mb-5">{{ $t('signup.description') }}</p>
 
@@ -27,6 +27,10 @@
         <NuxtLink to="/login" class="text-sm text-purple font-bold">
           {{ $t('general.login') }}
         </NuxtLink>
+      </div>
+      <div class="md:w-1/2">
+        <AnimationPress />
+        <AnimationJet />
       </div>
     </div>
   </transition>

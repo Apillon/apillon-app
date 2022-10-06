@@ -1,6 +1,6 @@
 {
-  "name": "AuthTrail",
-  "short_name": "AuthTrail",
+  "name": "Apillon",
+  "short_name": "Apillon",
   "icons": [
     {
       "src": "/icons/icon-48x48.png",
@@ -57,8 +57,8 @@
       "purpose": "any maskable"
     }
   ],
-  "theme_color": "#070707",
-  "background_color": "#070707",
+  "theme_color": "#141721",
+  "background_color": "#141721",
   "start_url": "/",
   "display": "standalone"
 }

@@ -1,10 +1,10 @@
 <template>
-  <div class="container py-16">
-    <div class="flex items-center">
+  <div class="container h-[160px] pt-12 pb-16">
+    <div class="flex h-full">
       <div class="flex md:w-1/2 justify-center md:justify-start">
         <Logo />
       </div>
-      <div class="flex md:w-1/2 justify-center md:justify-end">
+      <div class="flex md:w-1/2 items-end justify-center md:justify-end">
         <div v-if="isLoginSwitchVisible">
           <strong class="text-sm" :class="switchTextClass">{{ $t('general.signup') }}</strong>
           <n-switch v-model:value="isLogin" @update:value="handleChange" />
@@ -42,7 +42,7 @@ const isLoginSwitchVisible = computed(() => {
 });
 
 const switchTextClass = computed(() => {
-  return [isLogin.value ? 'text-black' : 'text-white'];
+  return [isLogin.value ? 'text-blue' : 'text-white'];
 });
 
 function handleChange(value: boolean) {

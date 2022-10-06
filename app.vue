@@ -27,6 +27,7 @@ import {
   dateFrFR,
 } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
+import { m } from './dist/_nuxt/entry.e46f421c.mjs';
 import colors from './tailwind.colors';
 
 const $i18n = useI18n();
@@ -77,6 +78,8 @@ useHead({
 const themeOverrides: GlobalThemeOverrides = {
   common: {
     primaryColor: colors.primary,
+    primaryColorHover: colors.primary,
+    primaryColorPressed: colors.primary,
   },
   Button: {
     fontSizeMedium: '16px',
@@ -88,11 +91,10 @@ const themeOverrides: GlobalThemeOverrides = {
     borderFocusPrimary: `2px solid ${colors.primary}`,
     borderHoverPrimary: `2px solid ${colors.primary}`,
     borderPressedPrimary: `2px solid ${colors.primary}`,
-    colorPrimary: colors.primary,
-    colorFocusPrimary: colors.primary,
-    colorHoverPrimary: colors.primary,
-    colorPressedPrimary: colors.primary,
-    textColorGhost: colors.primary,
+    borderRadiusTiny: '0px',
+    borderRadiusSmall: '0px',
+    borderRadiusMedium: '0px',
+    borderRadiusLarge: '0px',
   },
   DataTable: {
     thColor: colors.dark,

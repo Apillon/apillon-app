@@ -6,7 +6,7 @@
     :to="to"
     :class="btnClass"
     :type="!href && !to ? 'primary' : ''"
-    :ghost="btnType === 'secondary'"
+    :ghost="type === 'secondary' ? true : false"
     @click="onClick"
   >
     <span :class="[$style.inner, innerClass]">
@@ -25,7 +25,7 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
 
-  btnType: {
+  type: {
     type: String,
     validator: (value: string) => ['primary', 'secondary', 'link'].includes(value),
     default: 'link',
@@ -45,6 +45,10 @@ const emit = defineEmits(['click']);
 const NuxtLink = resolveComponent('NuxtLink');
 const $style = useCssModule();
 
+/** Disable animation on load */
+const isBtnLocked = ref<boolean>(!props.href && !props.to);
+setTimeout(() => (isBtnLocked.value = false), 1000);
+
 const btnClass = computed(() => {
   return [
     $style.btn,
@@ -52,6 +56,8 @@ const btnClass = computed(() => {
     {
       'pointer-events-none pointer-default': props.disabled || props.loading,
       'opacity-60': props.disabled,
+      'hover-bounce': !props.href && !props.to,
+      locked: isBtnLocked.value,
 
       [$style.borderless]: props.borderless,
       [$style.ridge]: props.ridged,
@@ -72,13 +78,12 @@ function onClick(event: MouseEvent) {
 
 <style lang="postcss" module>
 .btn {
-  @apply relative inline-block font-content font-bold;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @apply relative font-content font-bold;
   &.sm {
-    @apply px-[10px] py-6;
+    @apply py-[10px] px-6;
   }
   &.md {
-    @apply px-4 py-10;
+    @apply py-4 px-10;
   }
 
   .inner {

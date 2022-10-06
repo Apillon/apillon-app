@@ -20,7 +20,6 @@ export default defineNuxtConfig({
 
   components: [
     '~/components',
-    '~/components/auth/',
     '~/components/general/',
     '~/components/parts/',
     '~/components/dashboard/',
