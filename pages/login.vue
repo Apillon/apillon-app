@@ -1,35 +1,33 @@
 <template>
-  <transition name="fade">
-    <div class="container">
-      <div class="md:w-1/2 max-w-md">
-        <h2 class="text-white">{{ $t('login.title') }}</h2>
-        <p class="text-white mb-5">{{ $t('login.description') }}</p>
+  <div>
+    <h2 class="text-white mb-4">{{ $t('login.title') }}</h2>
+    <p class="text-white mb-11">{{ $t('login.description') }}</p>
 
-        <Btn type="secondary" class="w-full mb-2">
-          {{ $t('login.wallet') }}
-        </Btn>
-        <Btn type="secondary" class="w-full">
-          {{ $t('login.magicLink') }}
-        </Btn>
-        <div class="mt-6 mb-8 flex items-center">
-          <span class="bg-grey-lighter h-[1px] w-full"></span>
-          <span class="inline-block mx-[30px] text-grey-bright whitespace-nowrap">
-            {{ $t('login.useEmail') }}
-          </span>
-          <span class="bg-grey-lighter h-[1px] w-full"></span>
-        </div>
-
-        <FormSignupEmail />
-
-        <span class="text-sm text-grey-light">{{ $t('login.dontHaveAccount') }} </span>&nbsp;
-        <NuxtLink to="/signup" class="text-sm text-purple font-bold">
-          {{ $t('general.signup') }}
-        </NuxtLink>
-
-        <AuthSocial />
-      </div>
+    <Btn type="secondary" class="w-full mb-2">
+      {{ $t('login.wallet') }}
+    </Btn>
+    <Btn type="secondary" class="w-full">
+      {{ $t('login.magicLink') }}
+    </Btn>
+    <div class="my-8 flex items-center">
+      <span class="bg-grey-light h-[1px] w-full"></span>
+      <strong class="inline-block px-5 mx-[8%] text-grey whitespace-nowrap">
+        {{ $t('login.useEmail') }}
+      </strong>
+      <span class="bg-grey-light h-[1px] w-full"></span>
     </div>
-  </transition>
+
+    <AuthFormLogin />
+
+    <div class="mt-10 text-center">
+      <span class="text-sm text-grey">{{ $t('login.dontHaveAccount') }} </span>&nbsp;
+      <Btn to="/signup">
+        {{ $t('general.signup') }}
+      </Btn>
+    </div>
+
+    <AuthSocial />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -41,7 +39,7 @@ definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: 'AuthTrail',
+  title: 'Log in',
 });
 
 onBeforeMount(() => {

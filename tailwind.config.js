@@ -40,7 +40,7 @@ module.exports = {
       width: '90%',
       center: true,
       screens: {
-        xl: '1480px',
+        lg: '1320px',
       },
       padding: {
         DEFAULT: '2rem',
@@ -48,12 +48,6 @@ module.exports = {
     },
 
     extend: {
-      background: {
-        'pink-purple': 'linear-gradient(242.78deg, #7F5AF0 -0.94%, #B62CA8 66.98%)',
-      },
-      backgroundImage: {
-        login: "url('/images/bg-login.png')",
-      },
       zIndex: {
         1: 1,
         2: 2,

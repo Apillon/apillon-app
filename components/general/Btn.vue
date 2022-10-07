@@ -52,8 +52,11 @@ setTimeout(() => (isBtnLocked.value = false), 1000);
 const btnClass = computed(() => {
   return [
     $style.btn,
-    $style[props.size],
     {
+      'py-[10px] px-6': props.type !== 'link' && props.size === 'sm',
+      'py-4 px-10': props.type !== 'link' && props.size === 'md',
+      'text-primary': props.type === 'link',
+      'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,
       'opacity-60': props.disabled,
       'hover-bounce': !props.href && !props.to,
@@ -78,16 +81,6 @@ function onClick(event: MouseEvent) {
 
 <style lang="postcss" module>
 .btn {
-  @apply relative font-content font-bold;
-  &.sm {
-    @apply py-[10px] px-6;
-  }
-  &.md {
-    @apply py-4 px-10;
-  }
-
-  .inner {
-    @apply px-2;
-  }
+  @apply relative font-content;
 }
 </style>

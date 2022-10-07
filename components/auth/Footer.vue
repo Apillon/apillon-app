@@ -3,10 +3,10 @@
   <div class="container py-6">
     <div class="flex items-center">
       <div class="flex md:w-1/2 justify-center md:justify-start">
-        <span class="text-grey-bright">{{ $t('general.copyrights') }}</span>
+        <span class="text-grey-light">{{ $t('general.copyrights') }}</span>
       </div>
       <div class="flex md:w-1/2 justify-center md:justify-end">
-        <ul class="body-sm flex" :class="linksClass">
+        <ul class="body-sm flex text-white">
           <li>
             <NuxtLink to="/">{{ $t('footer.support') }}</NuxtLink>
           </li>
@@ -30,16 +30,6 @@ import { useAuthStore } from '~~/stores/auth';
 import { AuthStep } from '~~/types/auth';
 
 const authStore = useAuthStore();
-
-const linksClass = computed(() => {
-  return [
-    authStore.authStep === AuthStep.SIGN_UP ||
-    authStore.authStep === AuthStep.SIGN_UP_CONFIRM ||
-    authStore.authStep === AuthStep.SIGN_UP_CONFIRMED
-      ? 'text-white'
-      : 'tex-grey-bright',
-  ];
-});
 </script>
 
 <style lang="postcss" scoped>

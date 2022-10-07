@@ -1,5 +1,5 @@
 export enum AuthStep {
-  SIGN_UP = 'signUp',
+  SIGN_UP = 'signup',
   SIGN_UP_CONFIRM = 'signUpConfirm',
   SIGN_UP_CONFIRMED = 'signUpConfirmed',
   LOGIN = 'login',

@@ -19,20 +19,20 @@
     transform: translateY(0px);
   }
   1% {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
   }
   2%,
   100% {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
   }
 }
 
 @keyframes bounceOut {
   0% {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
   }
   1% {
-    transform: translateY(2px);
+    transform: translateY(1px);
   }
   2%,
   100% {
@@ -40,6 +40,9 @@
   }
 }
 
+/**
+ * Page transitions
+*/
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.2s;
@@ -49,25 +52,40 @@
   opacity: 0;
 }
 
+/* Scale X */
+.scaleX-enter-active,
+.scaleX-leave-active {
+  transition: transform 0.2s;
+  transform-origin: 0 0;
+}
+.scaleX-enter-from,
+.scaleX-leave-to {
+  transform: scaleX(0);
+}
+
+/* Scale Y */
 .scaleY-enter-active,
 .scaleY-leave-active {
   transition: transform 0.2s;
   transform-origin: 0 0;
 }
-
 .scaleY-enter-from,
 .scaleY-leave-to {
   transform: scaleY(0);
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.4s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
+/* Topic */
+.topic-left-enter {
   opacity: 0;
+  transform: translateX(100%);
+}
+.topic-right-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.topic-left-enter-active,
+.topic-right-enter-active {
+  transition: all 0.75s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 /* Enter and leave animations can use different */
@@ -91,4 +109,36 @@
 .slide-left-enter-to {
   transform: translateX(0);
   opacity: 1;
+}
+
+/* Fade */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-leave-active {
+  position: absolute;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+
+/* Width */
+.width-enter-active,
+.width-leave-active {
+  transition: width 1s;
+}
+.width-enter-from,
+.width-leave-to {
+  width: 0%;
+  opacity: 0;
+}
+.width-enter-to,
+.width-leave-from {
+  width: 100%;
 }

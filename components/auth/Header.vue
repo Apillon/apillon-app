@@ -5,10 +5,19 @@
         <Logo />
       </div>
       <div class="flex md:w-1/2 items-end justify-center md:justify-end">
-        <div v-if="isLoginSwitchVisible">
-          <strong class="text-sm" :class="switchTextClass">{{ $t('general.signup') }}</strong>
-          <n-switch v-model:value="isLogin" @update:value="handleChange" />
-          <strong class="text-sm" :class="switchTextClass">{{ $t('general.login') }}</strong>
+        <div v-if="isLoginSwitchVisible" class="flex items-center">
+          <NuxtLink
+            to="signup"
+            class="text-sm"
+            :class="[!isLogin ? 'text-blue' : 'text-grey-light']"
+          >
+            <strong>{{ $t('general.signup') }}</strong>
+          </NuxtLink>
+          <!-- <n-switch v-model:value="isLogin" @update:value="handleChange" /> -->
+          <AnimationSwitcher :value="isLogin" class="cursor-pointer" @click="switchPage" />
+          <NuxtLink to="login" class="text-sm" :class="[isLogin ? 'text-blue' : 'text-grey-light']">
+            <strong>{{ $t('general.login') }}</strong>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -16,7 +25,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NSwitch } from 'naive-ui';
 import { WritableComputedRef } from 'vue';
 import { useAuthStore } from '~~/stores/auth';
 import { AuthStep } from '~~/types/auth';
@@ -24,10 +32,6 @@ import { AuthStep } from '~~/types/auth';
 const authStore = useAuthStore();
 const router = useRouter();
 
-// const isLogin = ref(null);
-// onMounted(() => {
-//   isLogin.value = authStore.authStep === AuthStep.LOGIN;
-// });
 const isLogin: WritableComputedRef<boolean> = computed({
   get(): boolean {
     return authStore.authStep === AuthStep.LOGIN;
@@ -38,12 +42,17 @@ const isLogin: WritableComputedRef<boolean> = computed({
 });
 
 const isLoginSwitchVisible = computed(() => {
-  return authStore.authStep === AuthStep.LOGIN || AuthStep.SIGN_UP;
+  return authStore.authStep === AuthStep.LOGIN || authStore.authStep === AuthStep.SIGN_UP;
 });
 
-const switchTextClass = computed(() => {
-  return [isLogin.value ? 'text-blue' : 'text-white'];
-});
+function switchPage() {
+  isLogin.value = !isLogin.value;
+  if (isLogin.value) {
+    router.push('/login');
+  } else {
+    router.push('/signup');
+  }
+}
 
 function handleChange(value: boolean) {
   if (value) {

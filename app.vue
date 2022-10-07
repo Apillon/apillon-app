@@ -8,10 +8,10 @@
     >
       <NuxtLayout>
         <NuxtPage />
-        <!-- <CookieConsent /> -->
         <portal-target :name="Portals.LAYOUT" multiple />
       </NuxtLayout>
     </n-config-provider>
+    <!-- <CookieConsent /> -->
   </div>
 </template>
 
@@ -27,7 +27,6 @@ import {
   dateFrFR,
 } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { m } from './dist/_nuxt/entry.e46f421c.mjs';
 import colors from './tailwind.colors';
 
 const $i18n = useI18n();
@@ -101,10 +100,14 @@ const themeOverrides: GlobalThemeOverrides = {
   },
   Input: {
     heightMedium: '56px',
+    fontSizeMedium: '18px',
+    color: colors.grey.dark,
+    textColor: colors.grey.DEFAULT,
     border: `1px solid ${colors.grey.DEFAULT}`,
     borderFocus: `1px solid ${colors.primary}`,
     borderHover: `1px solid ${colors.primary}`,
     borderError: `1px solid ${colors.pink}`,
+    borderRadius: '0px',
   },
   Switch: {
     railColor: colors.grey.light,

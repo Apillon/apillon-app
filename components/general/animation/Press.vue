@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex items-center">
     <NuxtIcon :name="iconName" class="animation-press text-[340px]" fill />
   </div>
 </template>
