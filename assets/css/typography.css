@@ -39,7 +39,7 @@
   }
 
   label {
-    @apply font-content body-sm font-bold text-black tracking-[0.25rem] uppercase;
+    @apply font-black;
   }
 
   .body-lg {

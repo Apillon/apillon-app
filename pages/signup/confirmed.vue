@@ -1,0 +1,30 @@
+<template>
+  <div class="container flex flex-col justify-center items-center">
+    <div class="text-center">
+      <div class="mb-7 text-center text-blue">
+        <span class="icon-new text-[34px]"></span>
+      </div>
+      <h1 class="mb-6">{{ $t('signup.emailConfirmed') }}</h1>
+      <p class="mb-7">{{ $t('signup.enterDesiredPassword') }}</p>
+
+      <AuthFormPassword class="mx-auto max-w-[520px] text-left" />
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { useAuthStore } from '~~/stores/auth';
+import { AuthStep } from '~~/types/auth';
+const authStore = useAuthStore();
+
+definePageMeta({
+  layout: 'auth',
+});
+useHead({
+  title: 'SignUp - e-mail seccessfully confirmed',
+});
+
+onBeforeMount(() => {
+  authStore.authStep = AuthStep.SIGN_UP_CONFIRMED;
+});
+</script>

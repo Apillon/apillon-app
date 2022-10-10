@@ -4,19 +4,26 @@
       <n-input
         v-model:value="formValue.email"
         :input-props="{ type: 'email' }"
-        :placeholder="$t('form.emailPlaceholder', { afna: '@' })"
+        :placeholder="$t('form.placeholder.email', { afna: '@' })"
       />
     </n-form-item>
     <n-form-item :show-label="false">
       <Btn type="primary" class="w-full mt-2" @click="handleValidateClick">
-        {{ $t('general.continue') }}
+        {{ $t('form.continue') }}
       </Btn>
     </n-form-item>
   </n-form>
 </template>
 
 <script lang="ts" setup>
-import { NForm, NFormItem, NInput, FormInst, createDiscreteApi } from 'naive-ui';
+import {
+  NForm,
+  NFormItem,
+  NInput,
+  FormInst,
+  createDiscreteApi,
+  FormValidationError,
+} from 'naive-ui';
 
 const formRef = ref<FormInst | null>(null);
 const { message } = createDiscreteApi(['message']);
@@ -41,7 +48,7 @@ const rules = {
 
 function handleValidateClick(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(errors => {
+  formRef.value?.validate((errors: Array<FormValidationError> | undefined) => {
     if (!errors) {
       message.success('Valid');
     } else {

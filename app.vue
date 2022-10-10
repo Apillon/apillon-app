@@ -98,6 +98,9 @@ const themeOverrides: GlobalThemeOverrides = {
   DataTable: {
     thColor: colors.dark,
   },
+  Form: {
+    labelTextColor: colors.grey.light,
+  },
   Input: {
     heightMedium: '56px',
     fontSizeMedium: '18px',
@@ -108,6 +111,8 @@ const themeOverrides: GlobalThemeOverrides = {
     borderHover: `1px solid ${colors.primary}`,
     borderError: `1px solid ${colors.pink}`,
     borderRadius: '0px',
+    paddingMedium: '20px',
+    placeholderColor: colors.grey.DEFAULT,
   },
   Switch: {
     railColor: colors.grey.light,

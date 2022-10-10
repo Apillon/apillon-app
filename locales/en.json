@@ -4,7 +4,6 @@
     "signup": "Sign up",
     "login": "Log in",
     "logout": "Log out",
-    "continue": "Continue",
     "copyrights": "© Apillon",
     "learn": "Learn",
     "clientLibraries": "Client Libraries",
@@ -20,11 +19,28 @@
     "serviceName": "Service name",
     "serviceType": "Service type",
     "uptime": "Uptime",
-    "learnMore": "Learn more"
+    "learnMore": "Learn more",
+    "tryAgain": "Try again"
   },
   "form": {
-    "emailPlaceholder": "youremail{afna}mail.com",
-    "passwordPlaceholder": "password"
+    "label": {
+      "password": "Enter 12 characters password",
+      "confirmPassword": "Confirm password",
+      "projectName": "Project name",
+      "projectDescription": "Project description"
+    },
+    "placeholder": {
+      "email": "youremail{afna}mail.com",
+      "password": "password",
+      "complexPassword": "Enter complex password",
+      "reenterPassword": "Re-enter your complex password",
+      "projectName": "Enter project name",
+      "projectDescription": "Enter project description"
+    },
+    "login": "Log in",
+    "continue": "Continue",
+    "proceed": "Proceed",
+    "startFirstProject": "Start your first project"
   },
   "footer": {
     "support": "Support",
@@ -37,7 +53,14 @@
     "description": "Build your first Web3 application with Apillon. Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
     "continueWithAT": "Continue with Apillon",
     "useEmail": "or sign up using email",
-    "alreadyHaveAccount": "Already have an account?"
+    "alreadyHaveAccount": "Already have an account?",
+    "checkEmail": "Check your e-mail",
+    "emailSent": "We just sent an email containing a link to email{afna}example.com. \n Click on it to activate your account.",
+    "checkInbox": "Crickets in your inbox?",
+    "sendAgain": "Send again",
+    "madeMistake": "Made a mistake?",
+    "emailConfirmed": "E-mail successfully confirmed",
+    "enterDesiredPassword": "Enter the desired password to finish the account setup."
   },
   "login": {
     "title": "Log in to Apillon",
@@ -45,7 +68,20 @@
     "wallet": "Log in with Wallet",
     "magicLink": "Send me a Magic Link",
     "useEmail": "or sign up using email",
-    "dontHaveAccount": "I don’t have Authrail account yet?"
+    "dontHaveAccount": "I don’t have Authrail account yet?",
+    "web3Gateway": "Your Getaway to Web3",
+    "createWeb3Project": "Create Web3 project",
+    "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
+    "startBuilding": "Start building",
+    "demoProject": "Demo project",
+    "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
+    "buildDemo": "OK, let’s do demo first",
+    "skip": "Skip to the dashboard",
+    "buildWeb3": "“Build versatile and high-performing Web3 solutions with Apillon. Harness the power of blockchain technology and create next-gen dapps through simple yet robust APIs”",
+    "getStarted": "Get started",
+    "goToDocs": "Go to Doc’s",
+    "web3ProjectName": "Your  Web3 project needs a name",
+    "loader": "Put your Web3 hat on, your dashboard is getting ready."
   },
   "nav": {
     "authentication": "Authentication",
