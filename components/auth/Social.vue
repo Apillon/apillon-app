@@ -18,8 +18,8 @@
 import { SocialInterface } from '~~/types/component';
 
 const socials: Array<SocialInterface> = [
-  { name: 'Google', link: 'https://www.google.com', iconName: 'icon-google' },
-  { name: 'Twitter', link: 'https://www.twitter.com', iconName: 'icon-twitter' },
   { name: 'GitHub', link: 'https://www.github.com', iconName: 'icon-github' },
+  { name: 'Twitter', link: 'https://www.twitter.com', iconName: 'icon-twitter' },
+  { name: 'Google', link: 'https://www.google.com', iconName: 'icon-google' },
 ];
 </script>

@@ -16,7 +16,7 @@ module.exports = {
 
       transparent: 'transparent',
       current: 'currentColor',
-      black: '#000000',
+      black: '#06080F',
       white: '#FFFFFF',
       dark: '#141721',
       yellow: '#F9FF73',
@@ -27,6 +27,7 @@ module.exports = {
       grey: {
         DEFAULT: '#9D9E91',
         light: '#F0F2DA',
+        lightBg: '#313442',
         dark: '#1E212B',
       },
     },
@@ -52,8 +53,15 @@ module.exports = {
         gradientDark: 'linear-gradient(180deg, #06080F 0%, rgba(6, 8, 15, 0) 100%)',
         gradientDarkReverse: 'linear-gradient(180deg, rgba(6, 8, 15, 0) 0%, #06080F 100%)',
       },
+      borderWidth: {
+        1: '1px',
+        3: '3px',
+      },
       boxShadow: {
         black: '0px 2px 4px rgba(0, 0, 0, 0.12)',
+      },
+      gridTemplateColumns: {
+        services: 'repeat(auto-fit, minmax(280px, 1fr))',
       },
       zIndex: {
         1: 1,

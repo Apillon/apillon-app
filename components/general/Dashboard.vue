@@ -10,12 +10,12 @@
       <slot name="heading"> </slot>
     </div>
 
-    <div v-if="$slots.infobar" class="bg-white px-9 py-3 mb-8">
+    <div v-if="$slots.infobar" class="px-9 py-3 mb-8 bg-grey-lightBg">
       <slot name="infobar"> </slot>
     </div>
 
     <div class="flex flex-auto w-full">
-      <div v-if="$slots.sidebar" class="bg-white w-44 h-fit py-6 mr-6 rounded">
+      <div v-if="$slots.sidebar" class="w-44 h-fit mr-6">
         <slot name="sidebar"></slot>
       </div>
       <n-layout :has-sider="$slots.learn ? true : false" sider-placement="right">
@@ -26,6 +26,7 @@
           <slot />
         </n-layout-content>
         <n-layout-sider
+          v-if="$slots.learn"
           :collapsed="learnCollapsed"
           collapse-mode="width"
           :collapsed-width="48"
@@ -35,11 +36,17 @@
           @after-leave="handleOnUpdateCollapse(true)"
         >
           <div class="mb-2">
-            <strong v-if="!learnCollapsed" class="uppercase">{{ $t('general.learn') }}</strong>
-            <button class="float-right border-[1px]" @click="learnCollapsed = !learnCollapsed">
-              <span v-if="learnCollapsed" class="icon-tip text-primary"></span>
-              <span v-else class="icon-go-to"></span>
-              <span class="icon-back"></span>
+            <h6 v-if="!learnCollapsed" class="inline-block">
+              {{ $t('general.learn') }}
+            </h6>
+            <button
+              class="btn-collapse flex justify-center items-center w-8 h-7 float-right border-[1px] text-[10px]"
+              @click="learnCollapsed = !learnCollapsed"
+            >
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path :d="collapseIconLeft" fill="#F0F2DA" />
+                <path :d="collapseIconRight" fill="#F0F2DA" />
+              </svg>
             </button>
           </div>
 
@@ -63,4 +70,21 @@ const learnCollapsed = ref<boolean>(localStorage.getItem('learnCollapsed') === '
 function handleOnUpdateCollapse(value: boolean) {
   localStorage.setItem('learnCollapsed', value ? '1' : '0');
 }
+
+const collapseIconLeft = computed(() => {
+  return learnCollapsed.value
+    ? 'M12.0002 18.5454L12.0002 5.45444L3.27295 11.9999L12.0002 18.5454Z'
+    : 'M3.27273 5.45453V18.5454L12 12L3.27273 5.45453Z';
+});
+const collapseIconRight = computed(() => {
+  return learnCollapsed.value
+    ? 'M12 5.45444L12 18.5453L20.7273 11.9999L12 5.45444Z'
+    : 'M20.7271 18.5454V5.45453L11.9998 12L20.7271 18.5454Z';
+});
 </script>
+
+<style lang="postcss" scoped>
+.btn-collapse > svg path {
+  transition: all 1s;
+}
+</style>

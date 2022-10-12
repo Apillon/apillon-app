@@ -1,57 +1,79 @@
 <template>
   <n-collapse
-    arrow-placement="right"
+    class="collapse-nav"
+    :theme-overrides="collapseNavOverrides"
     :default-expanded-names="['services', 'monitoring', 'configuration']"
   >
-    <n-collapse-item title="Services" name="services">
-      <div>
-        <NuxtLink to="authentication">
-          <span class="icon-authentication"></span>
-          Authentication
-        </NuxtLink>
-      </div>
-      <div class="clear-both">
-        <NuxtLink to="storage">
-          <span class="icon-storage"></span>
-          Storage
-          <n-tag class="float-right" size="small" :bordered="false">Coming soon</n-tag>
-        </NuxtLink>
-      </div>
-      <div class="clear-both">
-        <NuxtLink to="computing">
-          <span class="icon-computing"></span>
-          Computing
-          <n-tag class="float-right" size="small" :bordered="false">Coming soon</n-tag>
-        </NuxtLink>
-      </div>
-    </n-collapse-item>
-    <n-collapse-item title="Monitoring" name="monitoring">
-      <div>
-        <span class="icon-analytics"></span>
-        Analytics
-      </div>
-      <div>
-        <span class="icon-service-monitor"></span>
-        Service monitor
-      </div>
-    </n-collapse-item>
-    <n-collapse-item title="Configuration" name="configuration">
-      <div>
-        <span class="icon-project-setting"></span>
-        Project settings
-      </div>
-      <div>
-        <span class="icon-acess"></span>
-        Access
-      </div>
-      <div>
-        <span class="icon-billing"></span>
-        Billing
+    <template #arrow>
+      <span class="icon-right"></span>
+    </template>
+
+    <n-collapse-item v-for="(items, key) in menu" :key="key" :title="$t(`nav.${key}`)" :name="key">
+      <div v-for="item in items" :key="item.name">
+        <component
+          :is="item.link ? NuxtLink : 'div'"
+          :to="item.link || undefined"
+          class="block h-[38px] w-full py-2 pl-2 pr-6"
+          :class="{ 'bg-grey-lightBg border-l-3 border-primary': currentRoute.name === item.name }"
+        >
+          <span :class="item.icon"></span>
+          <span class="ml-2">{{ $t(`nav.${item.name}`) }}</span>
+          <span v-if="item.new" class="icon-new float-right text-blue text-2xl"></span>
+        </component>
       </div>
     </n-collapse-item>
   </n-collapse>
 </template>
 
 <script lang="ts" setup>
-import { NCollapse, NCollapseItem, NTag } from 'naive-ui';
+import { NCollapse, NCollapseItem } from 'naive-ui';
+import colors from '~~/tailwind.colors';
+import MainNavInterface from '~~/types/menu';
+
+const collapseNavOverrides = {
+  textColor: colors.white,
+  titleTextColor: colors.grey.DEFAULT,
+};
+
+const NuxtLink = resolveComponent('NuxtLink');
+const { currentRoute } = useRouter();
+
+const menu: MainNavInterface = {
+  services: [
+    { name: 'authentication', icon: 'icon-authentication', link: 'authentication' },
+    { name: 'storage', icon: 'icon-storage', new: true, link: 'storage' },
+    { name: 'computing', icon: 'icon-computing', new: true },
+  ],
+  monitoring: [
+    { name: 'analytics', icon: 'icon-analytics' },
+    { name: 'serviceMonitor', icon: 'icon-service-monitor' },
+  ],
+  configuration: [
+    { name: 'projectSettings', icon: 'icon-project-setting' },
+    { name: 'access', icon: 'icon-acess' },
+    { name: 'billing', icon: 'icon-billing' },
+  ],
+};
 </script>
+
+<style lang="postcss">
+.n-collapse.collapse-nav {
+  .n-collapse-item:not(:first-child) {
+    border-top: 0;
+  }
+
+  .n-collapse-item {
+    .n-collapse-item__header {
+      @apply font-bold uppercase pl-2;
+    }
+
+    .n-collapse-item__header-main {
+      letter-spacing: 0.3em;
+
+      .n-collapse-item-arrow .icon-right {
+        @apply w-4 text-grey;
+      }
+    }
+  }
+}
+</style>

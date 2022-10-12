@@ -20,14 +20,16 @@
     "serviceType": "Service type",
     "uptime": "Uptime",
     "learnMore": "Learn more",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "terms": "terms"
   },
   "form": {
     "label": {
       "password": "Enter 12 characters password",
       "confirmPassword": "Confirm password",
       "projectName": "Project name",
-      "projectDescription": "Project description"
+      "projectDescription": "Project description",
+      "terms": "I understand product is in beta stage and I accept the "
     },
     "placeholder": {
       "email": "youremail{afna}mail.com",
@@ -84,9 +86,17 @@
     "loader": "Put your Web3 hat on, your dashboard is getting ready."
   },
   "nav": {
+    "services": "Services",
     "authentication": "Authentication",
     "storage": "Storage",
-    "Computing": "Computing"
+    "computing": "Computing",
+    "monitoring": "Monitoring",
+    "analytics": "Analytics",
+    "serviceMonitor": "Service monitor",
+    "configuration": "Configuration",
+    "projectSettings": "Project settings",
+    "access": "Access",
+    "billing": "Billing"
   },
   "pageMenu": {
     "methods": "Methods",
@@ -95,5 +105,28 @@
     "charts": "Charts",
     "history": "History",
     "Destroy": "Destroy"
+  },
+  "dashboard": {
+    "newProject": "Add new project",
+    "projectOverview": "Project overview",
+    "yourPlan": "Your plan: ",
+    "attachService": "Attach service",
+    "attachNewService": "Attach new service",
+    "learnMoreAboutServices": "Learn more about services",
+    "selectServices": "Select services"
+  },
+  "service": {
+    "authentication": {
+      "name": "Authentication",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
+    },
+    "storage": {
+      "name": "Storage",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
+    },
+    "computing": {
+      "name": "Computing",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
+    }
   }
 }

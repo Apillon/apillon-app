@@ -80,6 +80,7 @@ const themeOverrides: GlobalThemeOverrides = {
     primaryColorHover: colors.primary,
     primaryColorPressed: colors.primary,
   },
+  Alert: {},
   Button: {
     fontSizeMedium: '16px',
     fontWeight: 'bold',
@@ -95,6 +96,14 @@ const themeOverrides: GlobalThemeOverrides = {
     borderRadiusMedium: '0px',
     borderRadiusLarge: '0px',
   },
+  Checkbox: {
+    sizeMedium: '18px',
+    sizeLarge: '24px',
+    fontSizeMedium: '14px',
+    fontSizeLarge: '14px',
+    textColor: colors.grey.DEFAULT,
+  },
+  Collapse: {},
   DataTable: {
     thColor: colors.dark,
   },
@@ -102,6 +111,7 @@ const themeOverrides: GlobalThemeOverrides = {
     labelTextColor: colors.grey.light,
   },
   Input: {
+    heightSmall: '42px',
     heightMedium: '56px',
     fontSizeMedium: '18px',
     color: colors.grey.dark,
@@ -114,6 +124,10 @@ const themeOverrides: GlobalThemeOverrides = {
     paddingMedium: '20px',
     placeholderColor: colors.grey.DEFAULT,
   },
+  Menu: {
+    color: colors.grey.lightBg,
+    itemHeight: '24px',
+  },
   Switch: {
     railColor: colors.grey.light,
     railColorActive: colors.grey.light,
@@ -122,6 +136,10 @@ const themeOverrides: GlobalThemeOverrides = {
     buttonColor: colors.grey.DEFAULT,
     buttonHeightMedium: '20px',
     buttonWidthMedium: '20px',
+  },
+  Tag: {
+    colorInfo: colors.blue,
+    textColorInfo: colors.dark,
   },
 };
 </script>

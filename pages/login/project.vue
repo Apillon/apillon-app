@@ -12,7 +12,7 @@
       <AuthFormProject class="max-w-[520px]" @submit="startProject" />
 
       <div class="mt-10">
-        <Btn to="/">{{ $t('login.skip') }}</Btn>
+        <NuxtLink to="/" class="text-grey text-bold">{{ $t('login.skip') }}</NuxtLink>
       </div>
     </div>
     <AuthProjectHelp />

@@ -1,7 +1,7 @@
 <template>
   <div class="relative min-h-screen h-full pb-20">
     <AuthHeader />
-    <div class="container flex md:flex-auto py-0 md:py-10">
+    <div class="container flex md:flex-auto py-0 md:py-10 relative z-1">
       <transition name="width" :duration="1000">
         <AnimationJet v-if="isLogin" />
       </transition>

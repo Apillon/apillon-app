@@ -1,14 +1,16 @@
-/** Switch */
-.n-switch {
-  margin: 0 1rem;
-
-  &.n-switch--active .n-switch__button {
-    background-color: theme('colors.primary');
+/** Checkbox */
+.n-checkbox {
+  .n-checkbox-box .n-checkbox-box__border {
+    border-width: 3px;
   }
-
-  .n-switch__rail {
-    overflow: visible;
+  .n-checkbox__label a {
+    @apply text-primary;
   }
+}
+
+/** Collapse */
+.n-collapse {
+  font-weight: bold;
 }
 
 /** Layout */
@@ -17,4 +19,45 @@
 }
 .n-layout-sider {
   background-color: transparent;
+}
+
+/** Menu */
+.n-menu.n-menu--vertical {
+  @apply pt-1 pb-5;
+
+  .n-menu-item {
+    @apply mt-4;
+  }
+  .n-menu-item-content-header {
+    margin-left: -8px;
+  }
+  .n-menu-item-content--selected {
+    border-left: 4px solid theme('colors.primary');
+
+    &::before {
+      display: none;
+    }
+
+    .n-menu-item-content-header {
+      margin-left: -12px;
+    }
+  }
+}
+
+/** Switch */
+.n-switch {
+  margin: 0 1rem;
+
+  &.n-switch--active .n-switch__button {
+    background-color: theme('colors.green');
+  }
+
+  .n-switch__rail {
+    overflow: visible;
+  }
+}
+
+/** Tag */
+.n-tag {
+  font-weight: bold;
 }

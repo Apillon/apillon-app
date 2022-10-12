@@ -1,6 +1,6 @@
 <template>
   <div class="my-6">
-    <p class="mb-4">
+    <p class="mb-4 text-sm">
       <strong>{{ $t('general.clientLibraries') }}</strong>
     </p>
     <n-space size="small">
@@ -8,7 +8,7 @@
         <n-tooltip v-if="library.show" placement="bottom" trigger="hover">
           <template #trigger>
             <div
-              class="border-grey border-[1px] rounded inline-flex justify-center items-center w-12 h-12"
+              class="bg-white border-grey border-[1px] inline-flex justify-center items-center w-12 h-12"
             >
               <NuxtIcon :name="library.icon" class="icon-library text-[22px]" fill />
             </div>

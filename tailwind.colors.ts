@@ -5,7 +5,7 @@ export default {
 
   transparent: 'transparent',
   current: 'currentColor',
-  black: '#000000',
+  black: '#06080F',
   white: '#FFFFFF',
   dark: '#141721',
   yellow: '#F9FF73',
@@ -16,6 +16,7 @@ export default {
   grey: {
     DEFAULT: '#9D9E91',
     light: '#F0F2DA',
+    lightBg: '#313442',
     dark: '#1E212B',
   },
 };

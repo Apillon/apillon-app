@@ -10,8 +10,9 @@ import { NAlert } from 'naive-ui';
 import colors from '../../../tailwind.colors';
 
 const alertLearnOverrides = {
-  color: colors.white,
+  color: colors.transparent,
   iconColor: colors.primary,
-  border: `1px solid ${colors.primary}`,
+  titleTextColor: colors.grey.light,
+  border: `1px solid ${colors.grey.DEFAULT}`,
 };
 </script>

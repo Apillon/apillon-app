@@ -2,8 +2,12 @@
   /* Headline 1 */
   h1 {
     @apply font-heading font-black;
-    font-size: 3rem;
+    font-size: 3.25rem;
     line-height: 1.33;
+
+    @screen md {
+      font-size: 5rem;
+    }
   }
 
   /* Headline 2 */
@@ -11,20 +15,36 @@
     @apply font-heading font-black;
     font-size: 2.5rem;
     line-height: 1.5;
+
+    @screen md {
+      font-size: 3.5rem;
+    }
   }
 
   /* Headline 3 */
   h3 {
     @apply font-heading font-black;
-    font-size: 2rem;
+    font-size: 1.625rem;
     line-height: 1.5;
+
+    @screen md {
+      font-size: 1.75rem;
+    }
   }
 
   /* Headline 4 */
   h4 {
     @apply font-heading font-black;
-    font-size: 1.5rem;
+    font-size: 1.375rem;
     line-height: 1.5;
+
+    @screen md {
+      font-size: 1.5rem;
+    }
+
+    + p {
+      @apply mt-2;
+    }
   }
 
   /* Headline 5 */
@@ -34,23 +54,39 @@
     line-height: 1.5;
   }
 
+  /* Headline 6 */
+  h6 {
+    @apply font-content font-bold uppercase;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: 0.25em;
+  }
+
   p {
     @apply body-md;
+
+    + p {
+      @apply mt-2;
+    }
   }
 
   label {
-    @apply font-black;
+    @apply font-black cursor-pointer;
+
+    > a {
+      @apply text-primary;
+    }
   }
 
   .body-lg {
     @apply font-content;
-    font-size: 1.125rem;
+    font-size: 1.375rem;
     line-height: 1.5;
   }
 
   .body-md {
     @apply font-content;
-    font-size: 1rem;
+    font-size: 1.125rem;
     line-height: 1.5;
   }
 

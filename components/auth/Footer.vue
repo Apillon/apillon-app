@@ -33,7 +33,10 @@ import { AuthStep } from '~~/types/auth';
 const authStore = useAuthStore();
 
 const isFooterHidden = computed(() => {
-  return authStore.authStep === AuthStep.LOGIN || authStore.authStep === AuthStep.SIGN_UP;
+  return (
+    authStore.authStep === AuthStep.SIGN_UP_EMAIL ||
+    authStore.authStep === AuthStep.SIGN_UP_CONFIRMED
+  );
 });
 </script>
 

@@ -1,10 +1,10 @@
 <template>
   <transition name="slide-down" appear>
-    <div class="px-20 pt-3 bg-white">
+    <div class="flex items-end h-8 px-20 bg-dark">
       <n-space align="center" :size="32">
-        <button>Resource</button>
-        <button>Active</button>
-        <button>Settings</button>
+        <button class="font-bold border-b-3 border-primary">Resource</button>
+        <button class="text-grey">Active</button>
+        <button class="text-grey">Settings</button>
       </n-space>
     </div>
   </transition>

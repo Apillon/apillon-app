@@ -6,12 +6,6 @@
     <template #infobar> Infobar </template>
     <template #sidebar>
       <SidebarProjectPages />
-      <!-- <ul>
-        <li>
-          <NuxtLink to="/methods">Methods</NuxtLink>
-          <NuxtLink to="/api-keys">API keys</NuxtLink>
-        </li>
-      </ul> -->
     </template>
     <template #learn>
       <LearnAlert>
@@ -31,20 +25,4 @@
 useHead({
   title: 'Dashboard (Methods)',
 });
-
-// const { notification } = createDiscreteApi(['notification']);
-// const notification = useNotification();
-// notification.warning({
-//   content: '...',
-// });
-
-// const message = useMessage();
-// message.warning('...');
-
-// export default defineComponent({
-//   setup() {
-//     const message = useMessage();
-//     return [NMessageProvider, message];
-//   },
-// });
 </script>

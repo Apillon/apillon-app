@@ -9,7 +9,9 @@
             <p class="mb-4">{{ $t('login.buildCustomApp') }}</p>
           </div>
           <div>
-            <Btn type="primary" class="w-full">{{ $t('login.startBuilding') }}</Btn>
+            <Btn type="primary" class="w-full" @click="router.push('/login/project')">
+              {{ $t('login.startBuilding') }}
+            </Btn>
           </div>
         </div>
         <div class="p-6 flex flex-col justify-between bg-grey-dark shadow-black">
@@ -22,7 +24,7 @@
           </div>
         </div>
       </div>
-      <Btn to="/">{{ $t('login.skip') }}</Btn>
+      <NuxtLink to="/" class="text-grey text-bold">{{ $t('login.skip') }}</NuxtLink>
     </div>
     <AuthProjectHelp />
   </div>
@@ -32,6 +34,7 @@
 import { useAuthStore } from '~~/stores/auth';
 import { AuthStep } from '~~/types/auth';
 const authStore = useAuthStore();
+const router = useRouter();
 
 definePageMeta({
   layout: 'auth',

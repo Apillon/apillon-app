@@ -1,11 +1,11 @@
 <template>
-  <div class="relative h-screen pl-64 bg-grey-lightest">
+  <div class="relative h-screen pl-64">
     <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="5000">
       <Sidebar />
       <Header />
-      <n-scrollbar style="max-height: calc(100vh - 80px)">
+      <n-scrollbar class="bg-grey-dark" style="max-height: calc(100vh - 64px)">
         <HeaderTabs />
-        <div ref="messageRef" class="relative py-10 pl-20 pr-12">
+        <div ref="messageRef" class="relative py-7 pl-8 pr-10">
           <slot />
         </div>
         <!-- <CookieConsent /> -->

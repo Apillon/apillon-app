@@ -7,6 +7,7 @@
         @keydown.enter.prevent
       />
     </n-form-item>
+    <n-tag :bordered="false" type="info" class="mb-8">Project_name.AUTHTRSIL.COM/ </n-tag>
     <n-form-item path="projectDescription" :label="$t('form.label.projectDescription')">
       <n-input
         v-model:value="modelRef.projectDescription"
@@ -14,6 +15,9 @@
         :placeholder="$t('form.placeholder.projectDescription')"
         @keydown.enter.prevent
       />
+    </n-form-item>
+    <n-form-item path="terms" :show-label="false">
+      <n-checkbox id="terms" v-model:checked="modelRef.terms" size="large" :label="termsLabel" />
     </n-form-item>
     <n-form-item>
       <Btn type="primary" class="w-full mt-2" @click="handleValidateClick">
@@ -25,17 +29,30 @@
 
 <script lang="ts" setup>
 import {
+  NCheckbox,
   NForm,
   NFormItem,
   NInput,
+  NTag,
   FormInst,
   createDiscreteApi,
   FormValidationError,
 } from 'naive-ui';
+import { useI18n } from 'vue-i18n';
+
+/** Terms label with link */
+const $i18n = useI18n();
+const termsLabel = computed(() => {
+  return h('span', {}, [
+    $i18n.t('form.label.terms'),
+    h('a', { href: '#terms', target: '_blank' }, $i18n.t('general.terms')),
+  ]);
+});
 
 interface ModelType {
   projectName: string | null;
   projectDescription: string | null;
+  terms: boolean | null;
 }
 
 const formRef = ref<FormInst | null>(null);
@@ -45,6 +62,7 @@ const $emit = defineEmits(['submit']);
 const modelRef = ref<ModelType>({
   projectName: null,
   projectDescription: null,
+  terms: null,
 });
 
 const rules = {
@@ -56,6 +74,12 @@ const rules = {
     },
   ],
   projectDescription: [],
+  terms: [
+    {
+      required: true,
+      message: 'Please accept the terms',
+    },
+  ],
 };
 
 // Submit

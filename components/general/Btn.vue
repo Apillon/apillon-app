@@ -6,6 +6,7 @@
     :to="to"
     :class="btnClass"
     :type="!href && !to ? 'primary' : ''"
+    :size="size"
     :ghost="type === 'secondary' ? true : false"
     @click="onClick"
   >
@@ -28,12 +29,12 @@ const props = defineProps({
   type: {
     type: String,
     validator: (value: string) => ['primary', 'secondary', 'link'].includes(value),
-    default: 'link',
+    default: 'primary',
   },
   size: {
     type: String,
-    validator: (value: string) => ['tiny', 'sm', 'md'].includes(value),
-    default: 'md',
+    validator: (value: string) => ['tiny', 'small', 'medium'].includes(value),
+    default: 'medium',
   },
   innerClass: { type: [String, Array, Object], default: '' },
   ridged: { type: Boolean, default: false }, // Add ridge border effect instead of solid color
@@ -53,8 +54,8 @@ const btnClass = computed(() => {
   return [
     $style.btn,
     {
-      'py-[10px] px-6': props.type !== 'link' && props.size === 'sm',
-      'py-4 px-10': props.type !== 'link' && props.size === 'md',
+      'py-[10px] px-6': props.type !== 'link' && props.size === 'small',
+      'py-4 px-10': props.type !== 'link' && props.size === 'medium',
       'text-primary': props.type === 'link',
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,

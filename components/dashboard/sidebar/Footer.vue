@@ -1,11 +1,16 @@
 <template>
   <div class="flex flex-col px-6 py-2">
-    <p class="mb-2"><strong>Your plan:</strong> Free plan</p>
-    <Btn type="outline-primary" size="sm">
-      <span class="icon-star text-pink-purple"></span>
+    <p class="mb-2">
+      <strong>{{ $t('dashboard.yourPlan') }}</strong>
+      <span>Free plan</span>
+    </p>
+    <Btn type="secondary" size="small">
       <strong>Upgrade to PRO</strong>
     </Btn>
-    <span class="mt-8 text-grey-bright">{{ $t('general.copyrights') }}</span>
+    <p class="mt-8 text-sm text-grey text-center">
+      {{ $t('general.copyrights') }}
+      <span>1.0.1</span>
+    </p>
   </div>
 </template>
 

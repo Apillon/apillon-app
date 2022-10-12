@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import colors from '~~/tailwind.colors';
 
-const props = defineProps({
+defineProps({
   value: { type: Boolean, default: false },
 });
 

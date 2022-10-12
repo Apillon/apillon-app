@@ -22,10 +22,10 @@ import { NCollapse, NCollapseItem } from 'naive-ui';
 <style lang="postcss">
 .n-collapse.collapse-learn {
   .n-collapse-item {
-    @apply bg-white;
+    @apply mt-2;
 
     .n-collapse-item__header {
-      @apply py-2 pr-6;
+      @apply h-11 pl-4 py-2 pr-6 bg-grey-lightBg shadow-black;
     }
     .n-collapse-item-arrow {
       @apply absolute right-1 text-primary;
