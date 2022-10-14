@@ -1,27 +1,27 @@
 {
   "language": "Language EN",
   "general": {
-    "signup": "Sign up",
-    "login": "Log in",
-    "logout": "Log out",
-    "copyrights": "© Apillon",
-    "learn": "Learn",
-    "clientLibraries": "Client Libraries",
-    "method": "Method",
-    "status": "Status",
     "action": "Action",
     "actions": "Actions",
     "active": "Active",
+    "attach": "Attach",
+    "copyrights": "© Apillon",
+    "created": "created",
+    "learn": "Learn",
+    "learnMore": "Learn more",
+    "login": "Log in",
+    "logout": "Log out",
+    "method": "Method",
+    "name": "Name",
     "paused": "Paused",
     "secret": "Secret",
-    "attach": "Attach",
-    "name": "Name",
     "serviceName": "Service name",
     "serviceType": "Service type",
-    "uptime": "Uptime",
-    "learnMore": "Learn more",
+    "signup": "Sign up",
+    "status": "Status",
     "tryAgain": "Try again",
-    "terms": "terms"
+    "terms": "terms",
+    "uptime": "Uptime"
   },
   "form": {
     "label": {
@@ -29,7 +29,13 @@
       "confirmPassword": "Confirm password",
       "projectName": "Project name",
       "projectDescription": "Project description",
-      "terms": "I understand product is in beta stage and I accept the "
+      "terms": "I understand product is in beta stage and I accept the ",
+      "serviceName": "Service name",
+      "networkType": "Choose the desired network",
+      "networkTypes": {
+        "test": "Test network",
+        "live": "Live network"
+      }
     },
     "placeholder": {
       "email": "youremail{afna}mail.com",
@@ -37,12 +43,14 @@
       "complexPassword": "Enter complex password",
       "reenterPassword": "Re-enter your complex password",
       "projectName": "Enter project name",
-      "projectDescription": "Enter project description"
+      "projectDescription": "Enter project description",
+      "serviceName": "Enter the name for the new service"
     },
     "login": "Log in",
     "continue": "Continue",
     "proceed": "Proceed",
-    "startFirstProject": "Start your first project"
+    "startFirstProject": "Start your first project",
+    "createServiceAndContinue": "Create service & continue to management"
   },
   "footer": {
     "support": "Support",
@@ -57,7 +65,7 @@
     "useEmail": "or sign up using email",
     "alreadyHaveAccount": "Already have an account?",
     "checkEmail": "Check your e-mail",
-    "emailSent": "We just sent an email containing a link to email{afna}example.com. \n Click on it to activate your account.",
+    "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
     "checkInbox": "Crickets in your inbox?",
     "sendAgain": "Send again",
     "madeMistake": "Made a mistake?",
@@ -107,13 +115,15 @@
     "Destroy": "Destroy"
   },
   "dashboard": {
-    "newProject": "Add new project",
-    "projectOverview": "Project overview",
-    "yourPlan": "Your plan: ",
+    "attached": "Attached",
     "attachService": "Attach service",
     "attachNewService": "Attach new service",
+    "clientLibraries": "Client Libraries",
     "learnMoreAboutServices": "Learn more about services",
-    "selectServices": "Select services"
+    "newProject": "Add new project",
+    "projectOverview": "Project overview",
+    "selectServices": "Select services",
+    "yourPlan": "Your plan: "
   },
   "service": {
     "authentication": {

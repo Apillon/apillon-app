@@ -1,8 +1,8 @@
 <template>
-  <n-form ref="formRef" :model="modelRef" :rules="rules">
+  <n-form ref="formRef" :model="formData" :rules="rules">
     <n-form-item path="password" :label="$t('form.label.password')">
       <n-input
-        v-model:value="modelRef.password"
+        v-model:value="formData.password"
         type="password"
         :placeholder="$t('form.placeholder.complexPassword')"
         @input="handlePasswordInput"
@@ -15,8 +15,8 @@
       :label="$t('form.label.confirmPassword')"
     >
       <n-input
-        v-model:value="modelRef.reenteredPassword"
-        :disabled="!modelRef.password"
+        v-model:value="formData.reenteredPassword"
+        :disabled="!formData.password"
         type="password"
         :placeholder="$t('form.placeholder.reenterPassword')"
         @keydown.enter.prevent
@@ -40,18 +40,19 @@ import {
   FormValidationError,
   FormItemRule,
   FormItemInst,
+  dataTableDark,
 } from 'naive-ui';
+import { FormPassword } from '~~/types/form';
+import { useAuthStore } from '~~/stores/auth';
 
-interface ModelType {
-  password: string | null;
-  reenteredPassword: string | null;
-}
-
+const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
 const rPasswordFormItemRef = ref<FormItemInst | null>(null);
 const { message } = createDiscreteApi(['message']);
+const authStore = useAuthStore();
+const router = useRouter();
 
-const modelRef = ref<ModelType>({
+const formData = ref<FormPassword>({
   password: null,
   reenteredPassword: null,
 });
@@ -90,17 +91,17 @@ const rules = {
 // Custom validations
 function validatePasswordStartWith(_: FormItemRule, value: string): boolean {
   return (
-    !!modelRef.value.password &&
-    modelRef.value.password.startsWith(value) &&
-    modelRef.value.password.length >= value.length
+    !!formData.value.password &&
+    formData.value.password.startsWith(value) &&
+    formData.value.password.length >= value.length
   );
 }
 function validatePasswordSame(_: FormItemRule, value: string): boolean {
-  return value === modelRef.value.password;
+  return value === formData.value.password;
 }
 
 function handlePasswordInput() {
-  if (modelRef.value.reenteredPassword) {
+  if (formData.value.reenteredPassword) {
     rPasswordFormItemRef.value?.validate({ trigger: 'password-input' });
   }
 }
@@ -108,12 +109,30 @@ function handlePasswordInput() {
 // Submit
 function handleValidateClick(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate((errors: Array<FormValidationError> | undefined) => {
-    if (!errors) {
-      message.success('Valid');
+  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+    if (errors) {
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {
-      message.error('Invalid');
+      await register();
     }
   });
+}
+async function register() {
+  loading.value = true;
+
+  const { data, error } = await $api.post(UsersEndpoint.register, {
+    ...formData.value,
+    email: authStore.email,
+  });
+
+  if (error) {
+    loading.value = false;
+    return;
+  }
+
+  if (dataTableDark) {
+    router.push('/login');
+  }
+  loading.value = false;
 }
 </script>

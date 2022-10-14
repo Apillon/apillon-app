@@ -13,12 +13,16 @@
         <component
           :is="item.link ? NuxtLink : 'div'"
           :to="item.link || undefined"
-          class="block h-[38px] w-full py-2 pl-2 pr-6"
+          class="block h-[38px] w-full py-2 pl-2 pr-6 font-normal"
           :class="{ 'bg-grey-lightBg border-l-3 border-primary': currentRoute.name === item.name }"
         >
-          <span :class="item.icon"></span>
+          <span :class="item.icon" class="text-base align-middle"></span>
           <span class="ml-2">{{ $t(`nav.${item.name}`) }}</span>
-          <span v-if="item.new" class="icon-new float-right text-blue text-2xl"></span>
+          <span
+            v-if="item.new"
+            class="icon-new float-right text-blue text-2xl"
+            :class="`animation-new-${randomInteger(0, 3)}`"
+          ></span>
         </component>
       </div>
     </n-collapse-item>
@@ -27,6 +31,7 @@
 
 <script lang="ts" setup>
 import { NCollapse, NCollapseItem } from 'naive-ui';
+import { randomInteger } from '~~/lib/utils';
 import colors from '~~/tailwind.colors';
 import MainNavInterface from '~~/types/menu';
 

@@ -44,6 +44,34 @@
   }
 }
 
+/** Message */
+.n-message {
+  border-left: 4px solid theme('colors.grey.lightBg');
+
+  &--success-error {
+    border-color: theme('colors.pink');
+  }
+  &--success-info {
+    border-color: theme('colors.blue');
+  }
+  &--success-type {
+    border-color: theme('colors.green');
+  }
+  &--success-warning {
+    border-color: theme('colors.yellow');
+  }
+}
+
+/** Radio */
+.n-radio-group {
+  @apply mt-2;
+}
+.n-radio {
+  .n-radio__label {
+    font-weight: normal;
+  }
+}
+
 /** Switch */
 .n-switch {
   margin: 0 1rem;

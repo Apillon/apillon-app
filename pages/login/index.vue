@@ -21,7 +21,7 @@
 
     <div class="mt-10 text-center">
       <span class="text-sm text-grey">{{ $t('login.dontHaveAccount') }} </span>&nbsp;
-      <Btn to="/signup">
+      <Btn to="/signup" type="link">
         {{ $t('general.signup') }}
       </Btn>
     </div>

@@ -71,6 +71,7 @@ function handleOnUpdateCollapse(value: boolean) {
   localStorage.setItem('learnCollapsed', value ? '1' : '0');
 }
 
+// Collapse icon animation
 const collapseIconLeft = computed(() => {
   return learnCollapsed.value
     ? 'M12.0002 18.5454L12.0002 5.45444L3.27295 11.9999L12.0002 18.5454Z'

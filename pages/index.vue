@@ -13,6 +13,7 @@
         will become operational.
         <strong>Keep in mind, you can always edit the attached services or add new ones.</strong>
       </LearnAlert>
+      <LearnVideo />
       <LearnClientLibraries />
     </template>
     <slot>
@@ -27,17 +28,44 @@
           >
             <div class="text-2xl">
               <span :class="service.icon"></span>
-              <span v-if="service.new" class="icon-new float-right text-blue text-2xl"></span>
+              <span
+                v-if="service.new"
+                class="icon-new float-right text-blue text-2xl"
+                :class="`animation-new-${randomInteger(0, 3)}`"
+              ></span>
             </div>
             <h4>{{ $t(`service.${service.name}.name`) }}</h4>
             <p class="mb-5">
               {{ $t(`service.${service.name}.description`) }}
             </p>
-            <Btn class="w-full" :disabled="service.disabled">
-              {{ $t('dashboard.attachService') }}
+            <Btn
+              class="w-full"
+              :type="attachService === service.name ? 'secondary' : 'primary'"
+              :disabled="service.disabled"
+              @click="attachService = service.name"
+            >
+              <span v-if="attachService === service.name">{{ $t('dashboard.attached') }}</span>
+              <span v-else>{{ $t('dashboard.attachService') }}</span>
             </Btn>
           </div>
         </div>
+        <Notification class="mt-5">
+          Authentication service was successfully attached. Below enter the name and select desired
+          network.
+        </Notification>
+        <Notification type="info" class="mt-5">
+          Authentication service was successfully attached. Below enter the name and select desired
+          network.
+        </Notification>
+        <Notification type="warning" class="mt-5">
+          Authentication service was successfully attached. Below enter the name and select desired
+          network.
+        </Notification>
+        <Notification type="error" class="mt-5">
+          Authentication service was successfully attached. Below enter the name and select desired
+          network.
+        </Notification>
+        <FormAttachService v-if="attachService" class="max-w-[520px] mt-5" />
       </div>
       <div v-else class="flex items-center justify-between max-w-3xl bg-grey-lightBg px-6 py-4">
         <div>
@@ -57,12 +85,14 @@
 <script lang="ts" setup>
 import { NSpace } from 'naive-ui';
 import { ServiceInterface } from '~~/types/service';
+import { randomInteger } from '~~/lib/utils';
 
 useHead({
   title: 'Dashboard',
 });
 
 const showServices = ref(false);
+const attachService = ref('');
 
 const services: Array<ServiceInterface> = [
   {
@@ -81,8 +111,3 @@ const services: Array<ServiceInterface> = [
   },
 ];
 </script>
-<style lang="postcss">
-.icon-new {
-  animation-duration: resolve(floor(random() * 100 + 1));
-}
-</style>

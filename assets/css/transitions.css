@@ -44,19 +44,32 @@
  * Animation - new
 */
 .icon-new {
-  animation: colorsNew 2s infinite;
+  animation: colorsNew 0.3s infinite;
+
+  &.animation-new-0 {
+    animation: colorsNew 0.3s infinite;
+  }
+  &.animation-new-1 {
+    animation: colorsNew 0.5s infinite;
+  }
+  &.animation-new-2 {
+    animation: colorsNew 1s infinite;
+  }
+  &.animation-new-3 {
+    animation: colorsNew 2s infinite;
+  }
 }
 
 @keyframes colorsNew {
   0%,
-  32% {
+  33% {
     color: theme('colors.blue');
   }
-  33%,
-  65% {
+  34%,
+  66% {
     color: theme('colors.pink');
   }
-  66%,
+  67%,
   100% {
     color: theme('colors.green');
   }
@@ -94,20 +107,6 @@
 .scaleY-enter-from,
 .scaleY-leave-to {
   transform: scaleY(0);
-}
-
-/* Topic */
-.topic-left-enter {
-  opacity: 0;
-  transform: translateX(100%);
-}
-.topic-right-enter {
-  opacity: 0;
-  transform: translateX(-100%);
-}
-.topic-left-enter-active,
-.topic-right-enter-active {
-  transition: all 0.75s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 /* Enter and leave animations can use different */

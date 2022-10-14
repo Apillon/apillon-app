@@ -1,7 +1,7 @@
 <template>
   <div class="my-6">
     <p class="mb-4 text-sm">
-      <strong>{{ $t('general.clientLibraries') }}</strong>
+      <strong>{{ $t('dashboard.clientLibraries') }}</strong>
     </p>
     <n-space size="small">
       <span v-for="(library, key) in libraries" v-show="library.show" :key="key">

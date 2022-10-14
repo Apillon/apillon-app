@@ -29,12 +29,17 @@ export default defineNuxtConfig({
 
   modules: ['@vueuse/nuxt', '@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-icons'],
 
+  router: {
+    prefetchLinks: true,
+    middleware: ['auto-login', 'protected-routes'],
+  },
+
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',
   },
 
   autoImports: {
-    dirs: ['./stores', './lib'],
+    dirs: ['./stores', './lib', './types'],
   },
 
   app: {

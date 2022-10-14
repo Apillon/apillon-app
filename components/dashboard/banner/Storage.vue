@@ -12,9 +12,9 @@
         Store your Web3 dapp data in a decentralized, private, and Metaverse-ready storage with
         instant access.
       </p>
-      <n-button>
+      <Btn type="secondary">
         Our team is working hard to get Storage live. Below learn more what to expect.
-      </n-button>
+      </Btn>
     </div>
     <div class="absolute top-1/2 right-[75px] -translate-y-1/2">
       <Image src="./images/storage/sdk.svg" />
@@ -23,5 +23,5 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NSpace } from 'naive-ui';
+import { NSpace } from 'naive-ui';
 </script>

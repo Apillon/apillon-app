@@ -1,48 +1,168 @@
-import { mande } from 'mande';
 import { stringify } from 'query-string';
-import { getAppConfig, removeLastSlash } from './utils';
+import { getAppConfig } from './utils';
 
-const conn = mande(removeLastSlash(getAppConfig().apiUrl));
+export const APISettings = {
+  headers: new Headers({
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  }),
+  basePath: removeLastSlash(getAppConfig().apiUrl),
+};
+
+export interface ApiErrorResponse {
+  statusCode: number;
+  message: string;
+  error: any;
+}
 
 export const $api = {
-  async get(path: string, query: { [k: string]: string | number | Array<string | number> }) {
-    try {
-      const q = !query ? '' : '?' + stringify(query, { arrayFormat: 'bracket' });
-      await conn.get(path + q);
-    } catch (e) {
-      console.error(e);
+  async post<T>(path: string, data?: any) {
+    const response = await fetch(APISettings.basePath + path, {
+      method: 'POST',
+      headers: APISettings.headers,
+      body: data ? JSON.stringify(data) : null,
+    });
+
+    if (response.status > 250) {
+      const error: ApiErrorResponse = await response.json();
+      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+        $api.backToLogin();
+        return {
+          response,
+        };
+      } else {
+        return {
+          error,
+          response,
+        };
+      }
     }
+
+    return {
+      response,
+      data: (await response.json()) as T,
+    };
+  },
+  async get<T>(path: string, query?: { [k: string]: string | number | Array<string | number> }) {
+    const q = !query ? '' : '?' + stringify(query, { arrayFormat: 'bracket' });
+    const response = await fetch(APISettings.basePath + path + q, {
+      method: 'GET',
+      headers: APISettings.headers,
+    });
+    if (response.status > 250) {
+      const error: ApiErrorResponse = await response.json();
+      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+        $api.backToLogin();
+        return {
+          response,
+        };
+      } else {
+        return {
+          error,
+          response,
+        };
+      }
+    }
+
+    return {
+      response,
+      data: (await response.json()) as T,
+    };
   },
 
-  async post(path: string, data: any) {
-    try {
-      await conn.post(path, data);
-    } catch (e) {
-      console.error(e);
+  async put<T>(path: string, data?: any) {
+    const response = await fetch(APISettings.basePath + path, {
+      method: 'PUT',
+      headers: APISettings.headers,
+      body: data ? JSON.stringify(data) : null,
+    });
+    if (response.status > 250) {
+      const error: ApiErrorResponse = await response.json();
+      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+        $api.backToLogin();
+        return {
+          response,
+        };
+      } else {
+        return {
+          error,
+          response,
+        };
+      }
     }
+
+    return {
+      response,
+      data: (await response.json()) as T,
+    };
   },
 
-  async put(path: string, data: any) {
-    try {
-      await conn.put(path, data);
-    } catch (e) {
-      console.error(e);
+  async patch<T>(path: string, data?: any) {
+    const response = await fetch(APISettings.basePath + path, {
+      method: 'PATCH',
+      headers: APISettings.headers,
+      body: data ? JSON.stringify(data) : null,
+    });
+    if (response.status > 250) {
+      const error: ApiErrorResponse = await response.json();
+      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+        $api.backToLogin();
+        return {
+          response,
+        };
+      } else {
+        return {
+          error,
+          response,
+        };
+      }
     }
+
+    return {
+      response,
+      data: (await response.json()) as T,
+    };
   },
 
   async delete(path: string) {
-    try {
-      await conn.delete(path);
-    } catch (e) {
-      console.error(e);
+    const response = await fetch(APISettings.basePath + path, {
+      method: 'DELETE',
+      headers: APISettings.headers,
+    });
+    if (response.status > 250) {
+      const error: ApiErrorResponse = await response.json();
+      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+        $api.backToLogin();
+        return {
+          response,
+        };
+      } else {
+        return {
+          error,
+          response,
+        };
+      }
     }
+
+    return {
+      response,
+    };
   },
 
   setToken(token: string) {
-    conn.options.headers.Authorization = `Bearer ${token}`;
+    APISettings.headers.set('Authorization', 'Bearer ' + token);
   },
 
   clearToken() {
-    delete conn.options.headers.Authorization;
+    APISettings.headers.delete('Authorization');
+  },
+
+  async backToLogin() {
+    const router = useRouter();
+    const { $alert } = useAlerts();
+    await $alert.error({
+      title: 'Your login token has expired, please login again.',
+    });
+    router.push('/auth');
   },
 };

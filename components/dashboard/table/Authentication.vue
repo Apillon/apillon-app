@@ -111,7 +111,18 @@ const columns = createColumns({
     currentRow.value = rowData;
   },
   handleSelect(key: string | number) {
-    message.info('Handle select ' + JSON.stringify(key) + JSON.stringify(currentRow.value));
+    message.info(
+      () =>
+        h('span', {}, [
+          'Handle',
+          h('strong', { class: 'text-white' }, 'Select'),
+          JSON.stringify(key),
+          JSON.stringify(currentRow.value),
+        ]),
+      {
+        icon: () => h('span', { class: 'icon-info' }, {}),
+      }
+    );
   },
 });
 
@@ -121,7 +132,9 @@ const dropdownOptions = [
     key: 'profile',
     props: {
       onClick: () => {
-        message.success('Profile: ' + JSON.stringify(currentRow.value));
+        message.success('Profile: ' + JSON.stringify(currentRow.value), {
+          icon: () => h('span', { class: 'icon-check' }, {}),
+        });
       },
     },
   },
@@ -130,7 +143,9 @@ const dropdownOptions = [
     key: 'editProfile',
     props: {
       onClick: () => {
-        message.success('Edit Profile: ' + JSON.stringify(currentRow.value));
+        message.warning('Edit Profile: ' + JSON.stringify(currentRow.value), {
+          icon: () => h('span', { class: 'icon-info' }, {}),
+        });
       },
     },
   },
@@ -139,7 +154,9 @@ const dropdownOptions = [
     key: 'logout',
     props: {
       onClick: () => {
-        message.success('Logout: ' + JSON.stringify(currentRow.value));
+        message.error('Logout: ' + JSON.stringify(currentRow.value), {
+          icon: () => h('span', { class: 'icon-close' }, {}),
+        });
       },
     },
   },

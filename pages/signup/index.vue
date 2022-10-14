@@ -19,7 +19,7 @@
 
     <div class="mt-10 text-center">
       <span class="text-sm text-grey"> {{ $t('signup.alreadyHaveAccount') }} </span>&nbsp;
-      <Btn to="/login" class="">
+      <Btn to="/login" type="link">
         {{ $t('general.login') }}
       </Btn>
     </div>

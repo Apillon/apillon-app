@@ -29,6 +29,9 @@ import {
 import { useI18n } from 'vue-i18n';
 import colors from './tailwind.colors';
 
+const auth = useAuthStore();
+auth.initUser();
+
 const $i18n = useI18n();
 const lang = computed(() => {
   return $i18n.locale.value;
@@ -105,7 +108,9 @@ const themeOverrides: GlobalThemeOverrides = {
   },
   Collapse: {},
   DataTable: {
-    thColor: colors.dark,
+    thColor: colors.grey.dark,
+    tdColor: colors.grey.lightBg,
+    borderColor: colors.grey.lightBg,
   },
   Form: {
     labelTextColor: colors.grey.light,
@@ -127,6 +132,33 @@ const themeOverrides: GlobalThemeOverrides = {
   Menu: {
     color: colors.grey.lightBg,
     itemHeight: '24px',
+  },
+  Message: {
+    borderRadius: '0px',
+    color: colors.grey.lightBg,
+    colorError: colors.grey.lightBg,
+    colorInfo: colors.grey.lightBg,
+    colorLoading: colors.grey.lightBg,
+    colorSuccess: colors.grey.lightBg,
+    colorWarning: colors.grey.lightBg,
+    iconColorError: colors.pink,
+    iconColorInfo: colors.blue,
+    iconColorSuccess: colors.green,
+    iconColorWarning: colors.yellow,
+    textColorError: colors.pink,
+    textColorInfo: colors.blue,
+    textColorSuccess: colors.green,
+    textColorWarning: colors.yellow,
+  },
+  Radio: {
+    boxShadow: `inset 0 0 0 1px ${colors.grey.DEFAULT}`,
+    fontSizeSmall: '16px',
+    fontSizeMedium: '18px',
+    fontSizeLarge: '20px',
+    radioSizeSmall: '16px',
+    radioSizeMedium: '20px',
+    radioSizeLarge: '24px',
+    textColor: colors.grey.light,
   },
   Switch: {
     railColor: colors.grey.light,

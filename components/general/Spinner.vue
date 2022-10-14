@@ -2,7 +2,7 @@
 defineProps({
   size: { type: Number, default: 36 },
   width: { type: Number, default: 2 },
-  color: { type: String, default: '#FFFFFF' },
+  color: { type: String, default: 'currentColor' },
 });
 </script>
 

@@ -4,7 +4,6 @@
       <n-space size="large" align="center" class="h-12">
         <h4 class="mr-">{{ $t('nav.authentication') }}</h4>
         <div class="w-[1px] h-[13px] bg-grey-light"></div>
-        <Image src="./images/auth/kilt.svg" />
         <NuxtIcon name="AuthKilt" class="text-[50px]" fill />
       </n-space>
       <p class="mb-8">
