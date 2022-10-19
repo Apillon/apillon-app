@@ -1,8 +1,8 @@
 import ConfigInterface from '~~/types/config';
 
 const config: ConfigInterface = {
-  url: 'https://app-dev.apillon.io',
-  apiUrl: 'http://api-dev.apillon.io',
+  url: 'http://localhost:3000',
+  apiUrl: 'http://localhost:6001',
 };
 
 export default config;
