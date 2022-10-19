@@ -1,16 +1,14 @@
 version: 0.2
 
 phases:
-  runtime-versions:
-    nodejs: 16
-  # install:
-  #   runtime-versions:
-  #     nodejs: 16
-  #   # commands:
-  #   #   - npm i npm@latest -g
-  #   #   - pip install --upgrade pip
-  #   #   - pip install --upgrade awscli
-  #   #   - echo Ready
+  install:
+    runtime-versions:
+      nodejs: 16
+      commands:
+        #   - npm i npm@latest -g
+        #   - pip install --upgrade pip
+        #   - pip install --upgrade awscli
+        - echo Ready
   pre_build:
     commands:
       - printenv
@@ -23,5 +21,5 @@ phases:
       - npm run generate
   post_build:
     commands:
-      - aws s3 sync --cache-control max-age=604800,public --delete ./dist $S3_BUCKET
+      - aws s3 sync --cache-control max-age=604800,public --delete ./.output/public $S3_BUCKET
       - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
