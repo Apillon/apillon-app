@@ -21,5 +21,5 @@ phases:
       - npm run generate
   post_build:
     commands:
-      - aws s3 sync --cache-control max-age=604800,public --delete ./.output/public $S3_BUCKET
+      - aws s3 sync --cache-control max-age=604800,public --delete ./dist $S3_BUCKET
       - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
