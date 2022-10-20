@@ -160,6 +160,10 @@ const themeOverrides: GlobalThemeOverrides = {
     radioSizeLarge: '24px',
     textColor: colors.grey.light,
   },
+  Skeleton: {
+    color: colors.grey.lightBg,
+    colorEnd: colors.grey.DEFAULT,
+  },
   Switch: {
     railColor: colors.grey.light,
     railColorActive: colors.grey.light,

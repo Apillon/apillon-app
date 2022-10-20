@@ -10,9 +10,9 @@
         v-if="isLogin || isSignUp"
         class="relative w-full md:w-1/2 md:min-w-[490px] md:max-w-[490px]"
       >
-        <transition name="fade" :duration="1000">
-          <slot />
-        </transition>
+        <!-- <transition name="fade" :duration="1000">
+        </transition> -->
+        <slot />
       </div>
       <slot v-else />
 

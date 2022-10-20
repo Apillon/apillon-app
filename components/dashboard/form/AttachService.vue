@@ -1,15 +1,15 @@
 <template>
-  <n-form ref="formRef" :model="modelRef" :rules="rules">
+  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <n-form-item path="serviceName" :label="$t('form.label.serviceName')">
       <n-input
-        v-model:value="modelRef.serviceName"
+        v-model:value="formData.serviceName"
         :placeholder="$t('form.placeholder.serviceName')"
       />
     </n-form-item>
     <n-tag :bordered="false" type="info" class="mb-8">Servicename.com/ </n-tag>
 
     <n-form-item path="networkTypes" :label="$t('form.label.networkType')">
-      <n-radio-group v-model:value="modelRef.networkType" name="radiogroup">
+      <n-radio-group v-model:value="formData.networkType" name="radiogroup">
         <n-space>
           <n-radio
             v-for="(type, key) in networkTypes"
@@ -22,7 +22,7 @@
     </n-form-item>
 
     <n-form-item>
-      <Btn type="primary" class="w-full mt-2" @click="handleValidateClick">
+      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.createServiceAndContinue') }}
       </Btn>
     </n-form-item>
@@ -43,18 +43,23 @@ import {
   FormValidationError,
 } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
+import { FormService, CreateServiceResponse } from '~~/types/form';
+
+const props = defineProps({
+  serviceType: {
+    type: Number,
+    validator: (value: number) => Object.values(ServiceType).includes(value),
+    required: true,
+  },
+});
+
 const $i18n = useI18n();
-
-interface ModelType {
-  serviceName: string | null;
-  networkType: boolean;
-}
-
+const dataStore = useDataStore();
+const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
 const { message } = createDiscreteApi(['message']);
-const $emit = defineEmits(['submit']);
 
-const modelRef = ref<ModelType>({
+const formData = ref<FormService>({
   serviceName: null,
   networkType: false,
 });
@@ -82,15 +87,42 @@ const networkTypes = [
 ];
 
 // Submit
-function handleValidateClick(e: MouseEvent) {
+function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate((errors: Array<FormValidationError> | undefined) => {
-    if (!errors) {
-      message.success('Valid');
-      $emit('submit', true);
+  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+    if (errors) {
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {
-      message.error('Invalid');
+      await createService();
     }
   });
+}
+async function createService() {
+  loading.value = true;
+
+  const bodyData = {
+    project_id: dataStore.currentProject.id,
+    serviceType_id: props.serviceType,
+    name: formData.value.serviceName,
+    active: 1,
+    testNetwork: formData.value.networkType ? 0 : 1,
+  };
+  console.log(props);
+  console.log(bodyData);
+  const { data, error } = await $api.post<CreateServiceResponse>(
+    ServiceEndpoint.services,
+    bodyData
+  );
+
+  if (error) {
+    message.error(error.message);
+    loading.value = false;
+    return;
+  }
+
+  if (data) {
+    console.log(data);
+  }
+  loading.value = false;
 }
 </script>
