@@ -3,6 +3,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "local": "ENV=local nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview"
   },
