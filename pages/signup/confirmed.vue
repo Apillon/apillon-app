@@ -7,7 +7,7 @@
       <h1 class="mb-6">{{ $t('signup.emailConfirmed') }}</h1>
       <p class="mb-7">{{ $t('signup.enterDesiredPassword') }}</p>
 
-      <AuthFormPassword class="mx-auto max-w-[520px] text-left" />
+      <AuthFormRegister class="mx-auto max-w-[520px] text-left" />
     </div>
   </div>
 </template>

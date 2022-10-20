@@ -9,7 +9,11 @@
     <div class="md:w-1/2">
       <h3 class="mb-4">{{ $t('login.web3ProjectName') }}</h3>
 
-      <AuthFormProject class="max-w-[520px]" @submit="startProject" />
+      <FormProject
+        class="max-w-[520px]"
+        @submit-active="loaderStatus"
+        @submit-success="projectCreated"
+      />
 
       <div class="mt-10">
         <NuxtLink to="/" class="text-grey text-bold">{{ $t('login.skip') }}</NuxtLink>
@@ -26,6 +30,7 @@ import { AuthStep } from '~~/types/auth';
 const $style = useCssModule();
 const authStore = useAuthStore();
 const loading = ref<boolean>(false);
+const router = useRouter();
 
 definePageMeta({
   layout: 'auth',
@@ -38,8 +43,21 @@ onBeforeMount(() => {
   authStore.authStep = AuthStep.LOGIN_FIRST;
 });
 
-function startProject(status: boolean) {
-  loading.value = status;
+function loaderStatus(status: boolean) {
+  if (status) {
+    loading.value = status;
+  } else {
+    setTimeout(() => {
+      loading.value = status;
+    }, 2001);
+  }
+}
+
+/** Credirect after project has been created */
+function projectCreated() {
+  setTimeout(() => {
+    router.push('/');
+  }, 2000);
 }
 </script>
 

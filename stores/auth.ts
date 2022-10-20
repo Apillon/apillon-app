@@ -62,7 +62,7 @@ export const useAuthStore = defineStore('auth', {
         details;
         permissions;
         roles;
-      }>(UsersEndpoint.me, null);
+      }>(UserEndpoint.me, null);
       if (res.error) {
         throw new Error(res.error.message);
       }
@@ -84,10 +84,10 @@ export const useAuthStore = defineStore('auth', {
     },
     async logout() {
       this.deleteUser();
-      const res = await $api.patch(AuthEndpoint.logout);
-      if (res.error) {
-        alert(res.error.message);
-      }
+      // const res = await $api.patch(AuthEndpoint.logout);
+      // if (res.error) {
+      //   alert(res.error.message);
+      // }
     },
   },
 });

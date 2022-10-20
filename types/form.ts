@@ -3,9 +3,13 @@ export interface FormPassword {
   reenteredPassword: string;
 }
 export interface RegisterResponse {
-  id: number;
+  data: {
+    id: number;
+    status: number;
+    name: string;
+    token: string;
+  };
   status: number;
-  user_uuid: string;
 }
 
 export interface FormLogin {
@@ -41,7 +45,7 @@ export interface ProjectResponse {
 }
 
 export interface CreateProjectResponse {
-  data: any;
+  data: ProjectInterface;
   status: number;
 }
 

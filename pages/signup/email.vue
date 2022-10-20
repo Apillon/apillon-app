@@ -10,10 +10,7 @@
       </p>
 
       <strong class="inline-block mb-4">{{ $t('signup.checkInbox') }}</strong>
-      <Btn type="primary" class="w-full" @click="sendEmailAgain()">
-        <span class="icon-apillon-icon"></span>
-        {{ $t('signup.sendAgain') }}
-      </Btn>
+      <AuthFormSignup :send-again="hasEmail" />
 
       <div class="mt-10 text-center">
         <span class="text-sm text-grey"> {{ $t('signup.madeMistake') }} </span>&nbsp;
@@ -40,9 +37,15 @@ useHead({
 
 onBeforeMount(() => {
   authStore.authStep = AuthStep.SIGN_UP_EMAIL;
+
+  /** If user hasn't signup, redirect him to signup form */
+  if (!hasEmail) {
+    router.push('/signup');
+  }
 });
 
-function sendEmailAgain() {
-  router.push('/signup/confirmed');
-}
+/** If user has written his email on signup, then allow him to send email again */
+const hasEmail = computed(() => {
+  return authStore.email && authStore.email.length > 0;
+});
 </script>

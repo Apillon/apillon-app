@@ -26,5 +26,10 @@ export const useDataStore = defineStore('data', {
       return state.projects[state.currentProjectId] || null;
     },
   },
-  actions: {},
+  actions: {
+    setCurrentProject(id: number) {
+      this.currentProjectId = id;
+      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
+    },
+  },
 });

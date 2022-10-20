@@ -3,7 +3,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "local": "ENV=local nuxt dev",
+    "local": "cross-env ENV=local nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview"
   },
@@ -13,6 +13,7 @@
     "@nuxtjs/tailwindcss": "^5.3.2",
     "@vueuse/core": "^9.1.0",
     "@vueuse/nuxt": "^9.1.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^3.2.0",

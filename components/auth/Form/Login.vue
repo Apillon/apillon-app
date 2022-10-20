@@ -52,19 +52,16 @@ const rules = {
     {
       type: 'email',
       message: 'Email address is not valid',
-      trigger: 'input',
     },
     {
       required: true,
       message: 'Please enter your email',
-      trigger: 'input',
     },
   ],
   password: [
     {
       required: true,
       message: 'Please enter your password',
-      trigger: 'input',
     },
   ],
 };
@@ -78,22 +75,24 @@ function handleSubmit(e: MouseEvent) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {
       await login();
-      await getProjects();
     }
   });
   loading.value = false;
 }
 
 async function login() {
-  const { data, error } = await $api.post<LoginResponse>(AuthEndpoint.login, formData.value);
+  const { data, error } = await $api.post<LoginResponse>(UserEndpoint.login, formData.value);
 
   if (error) {
+    message.error(error.message);
+    loading.value = false;
     return;
   }
-
   if (data) {
     authStore.setUserToken(data.data.token);
   }
+
+  await getProjects();
 }
 
 async function getProjects() {

@@ -31,6 +31,9 @@
 <script lang="ts" setup>
 import { NDropdown } from 'naive-ui';
 
+const authStore = useAuthStore();
+const router = useRouter();
+
 const options = [
   {
     label: 'Profile',
@@ -48,5 +51,9 @@ const options = [
 
 function handleSelect(key: string | number) {
   console.log(key);
+  if (key === 'logout') {
+    authStore.logout();
+    router.push('/login');
+  }
 }
 </script>

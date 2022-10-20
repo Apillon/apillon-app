@@ -42,7 +42,8 @@ import {
 import { useI18n } from 'vue-i18n';
 import { CreateProjectResponse, FormProject } from '~~/types/form';
 
-const $emit = defineEmits(['submit']);
+const dataStore = useDataStore();
+const $emit = defineEmits(['submitActive', 'submitSuccess']);
 
 /** Terms label with link */
 const $i18n = useI18n();
@@ -64,7 +65,6 @@ const projectNameText = computed(() => {
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
 const { message } = createDiscreteApi(['message']);
-const router = useRouter();
 
 const formData = ref<FormProject>({
   name: null,
@@ -107,7 +107,8 @@ function handleSubmit(e: MouseEvent) {
   });
 }
 async function createProject() {
-  $emit('submit', true);
+  loading.value = true;
+  $emit('submitActive', true);
 
   const { data, error } = await $api.post<CreateProjectResponse>(
     ProjectEndpoint.project,
@@ -117,16 +118,20 @@ async function createProject() {
   if (error) {
     setTimeout(() => {
       message.error(error.message);
-      $emit('submit', false);
+
+      loading.value = false;
+      $emit('submitActive', false);
     }, 2000);
     return;
   }
 
   if (data) {
-    setTimeout(() => {
-      $emit('submit', false);
-      router.push('/');
-    }, 2000);
+    /** Set new project as current project */
+    dataStore.setCurrentProject(data.data.id);
+
+    loading.value = false;
+    $emit('submitSuccess');
+    $emit('submitActive', false);
   }
   loading.value = false;
 }

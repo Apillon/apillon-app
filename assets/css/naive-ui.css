@@ -13,6 +13,11 @@
   font-weight: bold;
 }
 
+/** Dialog */
+.n-dialog.n-modal {
+  width: 660px;
+}
+
 /** Layout */
 .n-layout {
   background-color: transparent;

@@ -99,6 +99,15 @@ const themeOverrides: GlobalThemeOverrides = {
     borderRadiusMedium: '0px',
     borderRadiusLarge: '0px',
   },
+  Card: {
+    color: colors.grey.lightBg,
+    colorEmbedded: colors.grey.lightBg,
+    colorEmbeddedModal: colors.grey.lightBg,
+    colorEmbeddedPopover: colors.grey.lightBg,
+    colorModal: colors.grey.lightBg,
+    colorPopover: colors.grey.lightBg,
+    colorTarget: colors.grey.lightBg,
+  },
   Checkbox: {
     sizeMedium: '18px',
     sizeLarge: '24px',
@@ -111,6 +120,9 @@ const themeOverrides: GlobalThemeOverrides = {
     thColor: colors.grey.dark,
     tdColor: colors.grey.lightBg,
     borderColor: colors.grey.lightBg,
+  },
+  Dialog: {
+    color: colors.grey.lightBg,
   },
   Form: {
     labelTextColor: colors.grey.light,

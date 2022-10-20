@@ -23,7 +23,7 @@
       />
     </n-form-item>
     <n-form-item>
-      <Btn type="primary" class="w-full mt-2" @click="handleValidateClick">
+      <Btn type="primary" class="w-full mt-2" @click="handleSubmit">
         {{ $t('form.proceed') }}
       </Btn>
     </n-form-item>
@@ -41,8 +41,7 @@ import {
   FormItemRule,
   FormItemInst,
 } from 'naive-ui';
-import { FormPassword } from '~~/types/form';
-import { useAuthStore } from '~~/stores/auth';
+import { FormPassword, RegisterResponse } from '~~/types/form';
 
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
@@ -50,6 +49,13 @@ const rPasswordFormItemRef = ref<FormItemInst | null>(null);
 const { message } = createDiscreteApi(['message']);
 const authStore = useAuthStore();
 const router = useRouter();
+const { query } = useRoute();
+
+onMounted(() => {
+  if (!query.token || query.token.length < 100) {
+    router.push('/signup');
+  }
+});
 
 const formData = ref<FormPassword>({
   password: null,
@@ -106,7 +112,7 @@ function handlePasswordInput() {
 }
 
 // Submit
-function handleValidateClick(e: MouseEvent) {
+function handleSubmit(e: MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
     if (errors) {
@@ -119,18 +125,20 @@ function handleValidateClick(e: MouseEvent) {
 async function register() {
   loading.value = true;
 
-  const { data, error } = await $api.post(UsersEndpoint.register, {
+  const { data, error } = await $api.post<RegisterResponse>(UserEndpoint.register, {
     ...formData.value,
-    email: authStore.email,
+    token: query.token,
   });
 
   if (error) {
+    message.error(error.message);
     loading.value = false;
     return;
   }
 
   if (data) {
-    router.push('/login');
+    authStore.setUserToken(data.data.token);
+    router.push('/');
   }
   loading.value = false;
 }
