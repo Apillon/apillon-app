@@ -18,7 +18,7 @@
     </n-form-item>
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn type="primary" class="w-full mt-2" @click="handleSubmit">
+      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.login') }}
       </Btn>
     </n-form-item>
@@ -34,12 +34,13 @@ import {
   createDiscreteApi,
   FormValidationError,
 } from 'naive-ui';
-import { FormLogin, LoginResponse } from '~~/types/form';
+import { FormLogin, LoginResponse, ProjectInterface, ProjectResponse } from '~~/types/form';
 
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
 const { message } = createDiscreteApi(['message']);
 const authStore = useAuthStore();
+const dataStore = useDataStore();
 const router = useRouter();
 
 const formData = ref<FormLogin>({
@@ -70,28 +71,49 @@ const rules = {
 
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
+
+  loading.value = true;
   formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {
       await login();
+      await getProjects();
     }
   });
+  loading.value = false;
 }
-async function login() {
-  loading.value = true;
 
+async function login() {
   const { data, error } = await $api.post<LoginResponse>(AuthEndpoint.login, formData.value);
 
   if (error) {
-    loading.value = false;
     return;
   }
 
   if (data) {
     authStore.setUserToken(data.data.token);
+  }
+}
+
+async function getProjects() {
+  const { data, error } = await $api.get<ProjectResponse>(ProjectEndpoint.project);
+
+  if (error) {
+    return;
+  }
+
+  if (data.data.total === 0) {
+    router.push('/login/first');
+  } else {
+    dataStore.projects = data.data.items.map((project: ProjectInterface, key: number) => {
+      return {
+        ...project,
+        value: key,
+        label: project.name,
+      };
+    });
     router.push('/');
   }
-  loading.value = false;
 }
 </script>

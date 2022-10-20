@@ -40,7 +40,6 @@ import {
   FormValidationError,
   FormItemRule,
   FormItemInst,
-  dataTableDark,
 } from 'naive-ui';
 import { FormPassword } from '~~/types/form';
 import { useAuthStore } from '~~/stores/auth';
@@ -130,7 +129,7 @@ async function register() {
     return;
   }
 
-  if (dataTableDark) {
+  if (data) {
     router.push('/login');
   }
   loading.value = false;

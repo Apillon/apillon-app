@@ -43,7 +43,10 @@ export const $api = {
       data: (await response.json()) as T,
     };
   },
-  async get<T>(path: string, query?: { [k: string]: string | number | Array<string | number> }) {
+  async get<T>(
+    path: string,
+    query?: { [k: string]: string | number | Array<string | number> }
+  ): Promise<any> {
     const q = !query ? '' : '?' + stringify(query, { arrayFormat: 'bracket' });
     const response = await fetch(APISettings.basePath + path + q, {
       method: 'GET',

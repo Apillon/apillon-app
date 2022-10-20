@@ -1,5 +1,5 @@
 <template>
-  <div class="flex xl:pt-20 lg:pt-14 md:pt-10 pt-4">
+  <div class="flex xl:pt-8 md:pt-6 pt-4">
     <div class="md:w-1/2">
       <h1 class="mb-10">{{ $t('login.web3Gateway') }}</h1>
       <div class="grid grid-cols-2 gap-8 mb-8 lg:mb-16 md:mb-10">

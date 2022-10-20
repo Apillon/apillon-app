@@ -39,10 +39,7 @@ const createColumns = ({
           'span',
           { class: 'text-grey' },
           {
-            default: () => [
-              h('span', { class: 'icon-authentication text-black' }, ''),
-              row.serviceType,
-            ],
+            default: () => [h('span', { class: 'icon-storage text-black' }, ''), row.serviceType],
           }
         );
       },
@@ -88,7 +85,7 @@ const createColumns = ({
     },
   ];
 };
-const createData = (): RowData[] => dataStore.services.authentication;
+const createData = (): RowData[] => dataStore.services.storage;
 const currentRow = ref(null);
 
 const data = createData();

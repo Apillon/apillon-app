@@ -9,7 +9,7 @@ export const AuthLsKeys = {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    jwt: localStorage.getItem(AuthLsKeys.AUTH) || '',
+    jwt: '',
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
     username: localStorage.getItem(AuthLsKeys.USERNAME) || '',
     metamaskWallet: localStorage.getItem(AuthLsKeys.WALLET) || '',

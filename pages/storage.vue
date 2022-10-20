@@ -23,18 +23,35 @@
       <LearnCollapse />
     </template>
     <slot>
-      <TableAuthentication />
+      <TableStorage />
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NSpace, NSkeleton } from 'naive-ui';
+import { NButton, NSpace } from 'naive-ui';
+import { getServices } from '~~/lib/service';
 
 useHead({
   title: 'Authentication',
 });
 
+const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
-setTimeout(() => (pageLoading.value = false), 1000);
+
+onMounted(() => {
+  Promise.all(Object.values(dataStore.promises)).then(_ => {
+    getServicesAuth();
+  });
+});
+
+async function getServicesAuth() {
+  if (!dataStore.currentProject) {
+    console.warn('No project selected');
+    return;
+  }
+  dataStore.services.storage = await getServices(dataStore.currentProject.id, ServiceType.STORAGE);
+
+  setTimeout(() => (pageLoading.value = false), 300);
+}
 </script>

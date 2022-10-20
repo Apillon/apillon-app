@@ -4,10 +4,10 @@
       <div class="flex justify-between">
         <div class="pr-4">
           <n-select
-            v-model:value="currentProject"
+            v-model:value="dataStore.currentProjectId"
             class="select-project"
             :theme-overrides="SelectProjectOverrides"
-            :options="projects"
+            :options="dataStore.projects"
           >
             <template #arrow>
               <span class="icon-down text-2xl"></span>
@@ -34,6 +34,10 @@
 <script lang="ts" setup>
 import { NInput, NSpace, NSelect } from 'naive-ui';
 import colors from '~~/tailwind.colors';
+import { ProjectInterface, ProjectResponse } from '~~/types/form';
+
+const dataStore = useDataStore();
+const router = useRouter();
 
 const SelectProjectOverrides = {
   InternalSelection: {
@@ -48,21 +52,47 @@ const SelectProjectOverrides = {
   },
 };
 
-const currentProject = ref(0);
-const projects = [
-  {
-    label: 'Project_name',
-    value: 0,
-  },
-  {
-    label: 'First project',
-    value: 1,
-  },
-];
+onMounted(() => {
+  dataStore.promises.projects = getProjects();
+});
+
+/** Watcher - project change */
+watch(
+  () => dataStore.currentProjectId,
+  currentProjectId => {
+    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${currentProjectId}`);
+    router.push('/');
+  }
+);
+
+async function getProjects(refresh: boolean = false) {
+  if (dataStore.projects && dataStore.projects.length && !refresh) {
+    return;
+  }
+
+  const { response, data, error } = await $api.get<ProjectResponse>(ProjectEndpoint.project);
+
+  if (error) {
+    return;
+  }
+
+  if (data) {
+    dataStore.projects = data.data.items.map((project: ProjectInterface, key: number) => {
+      return {
+        ...project,
+        value: key,
+        label: project.name,
+      };
+    });
+  }
+  return response;
+}
 </script>
 
 <style lang="postcss">
 .n-select.select-project {
+  @apply min-w-[120px];
+
   .n-base-selection-label {
     background-color: transparent;
 

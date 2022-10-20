@@ -40,11 +40,11 @@
             </p>
             <Btn
               class="w-full"
-              :type="attachService === service.name ? 'secondary' : 'primary'"
+              :type="attachService === service.id ? 'secondary' : 'primary'"
               :disabled="service.disabled"
-              @click="attachService = service.name"
+              @click="attachService = service.id"
             >
-              <span v-if="attachService === service.name">{{ $t('dashboard.attached') }}</span>
+              <span v-if="attachService === service.id">{{ $t('dashboard.attached') }}</span>
               <span v-else>{{ $t('dashboard.attachService') }}</span>
             </Btn>
           </div>
@@ -65,7 +65,11 @@
           Authentication service was successfully attached. Below enter the name and select desired
           network.
         </Notification>
-        <FormAttachService v-if="attachService" class="max-w-[520px] mt-5" />
+        <FormAttachService
+          v-if="attachService"
+          :service-type="attachService"
+          class="max-w-[520px] mt-5"
+        />
       </div>
       <div v-else class="flex items-center justify-between max-w-3xl bg-grey-lightBg px-6 py-4">
         <div>
@@ -84,7 +88,7 @@
 
 <script lang="ts" setup>
 import { NSpace } from 'naive-ui';
-import { ServiceInterface } from '~~/types/service';
+import { ServiceTypeItem } from '~~/types/service';
 import { randomInteger } from '~~/lib/utils';
 
 useHead({
@@ -92,19 +96,22 @@ useHead({
 });
 
 const showServices = ref(false);
-const attachService = ref('');
+const attachService = ref(null);
 
-const services: Array<ServiceInterface> = [
+const services: Array<ServiceTypeItem> = [
   {
+    id: ServiceType.AUTHENTICATION,
     name: 'authentication',
     icon: 'icon-authentication',
   },
   {
+    id: ServiceType.STORAGE,
     name: 'storage',
     icon: 'icon-storage',
     new: true,
   },
   {
+    id: ServiceType.COPMUTING,
     name: 'computing',
     icon: 'icon-computing',
     disabled: true,

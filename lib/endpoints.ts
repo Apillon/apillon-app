@@ -14,3 +14,12 @@ export const UsersEndpoint = {
   connectWallet: '/users/connect-wallet',
   removeWallet: '/users/remove-wallet',
 };
+
+export const ProjectEndpoint = {
+  project: '/project/',
+  projectUsers: '/project/getProjectUsers',
+};
+
+export const ServiceEndpoint = {
+  services: '/services/',
+};
