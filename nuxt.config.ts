@@ -1,13 +1,32 @@
 import { defineNuxtConfig } from 'nuxt';
-import { getAppConfig } from './lib/utils';
+import ConfigInterface from './types/config';
+import stg from './config/staging';
+import dev from './config/development';
+import prod from './config/production';
+import local from './config/local';
+
+const appConfig: ConfigInterface = getAppConfig(
+  process.env.ENV || process.env.RUN_ENV || process.env.NODE_ENV
+);
+function getAppConfig(env?: string) {
+  if (env === 'production') {
+    return prod;
+  } else if (env === 'staging') {
+    return stg;
+  } else if (env === 'development') {
+    return dev;
+  } else {
+    return local;
+  }
+}
 
 const meta = {
   lang: 'en',
   title: 'Apillon',
   description: 'Apillon',
-  url: getAppConfig().url,
-  image: `${getAppConfig().url}/og.jpg`,
-  twitter: '@authtrail',
+  url: appConfig.url,
+  image: `${appConfig.url}/og.jpg`,
+  twitter: '@apillon_io',
 };
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
@@ -15,7 +34,7 @@ export default defineNuxtConfig({
   ssr: false,
 
   runtimeConfig: {
-    public: getAppConfig() as Record<string, any>,
+    public: appConfig,
   },
 
   components: [

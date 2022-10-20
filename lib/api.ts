@@ -1,12 +1,11 @@
 import { stringify } from 'query-string';
-import { getAppConfig } from './utils';
 
 export const APISettings = {
   headers: new Headers({
     Accept: 'application/json',
     'Content-Type': 'application/json',
   }),
-  basePath: removeLastSlash(getAppConfig().apiUrl),
+  basePath: '',
 };
 
 export interface ApiErrorResponse {
@@ -150,6 +149,10 @@ export const $api = {
     return {
       response,
     };
+  },
+
+  setBaseUrl(baseUrl: string) {
+    APISettings.basePath = baseUrl;
   },
 
   setToken(token: string) {
