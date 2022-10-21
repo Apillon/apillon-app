@@ -5,6 +5,7 @@ export const AuthLsKeys = {
   EMAIL: 'al_email',
   USERNAME: 'al_username',
   WALLET: 'al_wallet',
+  PROVIDER: 'al_provider',
 };
 
 export const useAuthStore = defineStore('auth', {
@@ -12,8 +13,10 @@ export const useAuthStore = defineStore('auth', {
     jwt: '',
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
     username: localStorage.getItem(AuthLsKeys.USERNAME) || '',
-    metamaskWallet: localStorage.getItem(AuthLsKeys.WALLET) || '',
+    provider: parseInt(localStorage.getItem(AuthLsKeys.PROVIDER)) || 0,
+    wallet: localStorage.getItem(AuthLsKeys.WALLET) || '',
     authStep: '',
+    crypto: null,
   }),
   getters: {
     loggedIn(state) {

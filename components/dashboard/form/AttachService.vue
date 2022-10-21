@@ -1,5 +1,6 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+    <!--  Service name -->
     <n-form-item path="serviceName" :label="$t('form.label.serviceName')">
       <n-input
         v-model:value="formData.serviceName"
@@ -8,6 +9,7 @@
     </n-form-item>
     <n-tag :bordered="false" type="info" class="mb-8">Servicename.com/ </n-tag>
 
+    <!--  Service type -->
     <n-form-item path="networkTypes" :label="$t('form.label.networkType')">
       <n-radio-group v-model:value="formData.networkType" name="radiogroup">
         <n-space>
@@ -21,6 +23,7 @@
       </n-radio-group>
     </n-form-item>
 
+    <!--  Service submit -->
     <n-form-item>
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.createServiceAndContinue') }}

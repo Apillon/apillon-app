@@ -4,10 +4,12 @@
       <div class="flex justify-between">
         <div class="pr-4">
           <n-select
+            :key="componentSelectKey"
             v-model:value="dataStore.currentProjectId"
             class="select-project"
             :theme-overrides="SelectProjectOverrides"
             :options="dataStore.projects"
+            :loading="loading"
           >
             <template #arrow>
               <span class="icon-down text-2xl"></span>
@@ -38,6 +40,8 @@ import { ProjectInterface, ProjectResponse } from '~~/types/form';
 
 const dataStore = useDataStore();
 const router = useRouter();
+const componentSelectKey = ref(0);
+const loading = ref(false);
 
 const SelectProjectOverrides = {
   InternalSelection: {
@@ -59,7 +63,19 @@ onMounted(() => {
 /** Watcher - project change */
 watch(
   () => dataStore.currentProjectId,
-  currentProjectId => {
+  async currentProjectId => {
+    /** Reload projects if currentProjectId is new project */
+    if (!dataStore.projects[currentProjectId]) {
+      loading.value = true;
+      dataStore.projects = [];
+
+      await getProjects(true);
+
+      setTimeout(() => {
+        loading.value = false;
+        componentSelectKey.value += 1;
+      }, 1000);
+    }
     localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${currentProjectId}`);
     router.push('/');
   }
@@ -77,10 +93,10 @@ async function getProjects(refresh: boolean = false) {
   }
 
   if (data) {
-    dataStore.projects = data.data.items.map((project: ProjectInterface, key: number) => {
+    dataStore.projects = data.data.items.map((project: ProjectInterface) => {
       return {
         ...project,
-        value: key,
+        value: project.id,
         label: project.name,
       };
     });

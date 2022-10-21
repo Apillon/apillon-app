@@ -1,14 +1,16 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules">
+    <!--  Register password -->
     <n-form-item path="password" :label="$t('form.label.password')">
       <n-input
         v-model:value="formData.password"
         type="password"
         :placeholder="$t('form.placeholder.complexPassword')"
         @input="handlePasswordInput"
-        @keydown.enter.prevent
       />
     </n-form-item>
+
+    <!--  Register reenter password -->
     <n-form-item
       ref="rPasswordFormItemRef"
       path="reenteredPassword"
@@ -22,7 +24,10 @@
         @keydown.enter.prevent
       />
     </n-form-item>
+
+    <!--  Register submit -->
     <n-form-item>
+      <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn type="primary" class="w-full mt-2" @click="handleSubmit">
         {{ $t('form.proceed') }}
       </Btn>

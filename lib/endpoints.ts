@@ -1,3 +1,8 @@
+export const AuthEndpoint = {
+  walletMsg: '/auth/wallet-auth-msg',
+  loginWallet: '/auth/loginWallet',
+};
+
 export const UserEndpoint = {
   me: '/user/me',
   login: '/user/login',

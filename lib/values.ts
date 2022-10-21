@@ -7,3 +7,14 @@ export const lsKeys = {
   GOOGLE: 'al_google',
   DISCORD: 'al_discord',
 };
+
+export const AlertLocation = {
+  NONE: 'nan',
+  BOTTOM_CENTER: 'bottomCenter',
+  BOTTOM_RIGHT: 'bottomRight',
+};
+
+export const RootMutation = {
+  alert: 'alert',
+  alertUpdate: 'alertUpdate',
+};

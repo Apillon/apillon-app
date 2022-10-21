@@ -119,6 +119,7 @@ const themeOverrides: GlobalThemeOverrides = {
   DataTable: {
     thColor: colors.grey.dark,
     tdColor: colors.grey.lightBg,
+    tdColorHover: colors.dark,
     borderColor: colors.grey.lightBg,
   },
   Dialog: {
@@ -143,6 +144,7 @@ const themeOverrides: GlobalThemeOverrides = {
   },
   Menu: {
     color: colors.grey.lightBg,
+    itemColorHover: colors.dark,
     itemHeight: '24px',
   },
   Message: {

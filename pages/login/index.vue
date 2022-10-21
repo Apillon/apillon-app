@@ -3,9 +3,7 @@
     <h2 class="text-white mb-4">{{ $t('login.title') }}</h2>
     <p class="text-white mb-11">{{ $t('login.description') }}</p>
 
-    <Btn type="secondary" class="w-full mb-2">
-      {{ $t('login.wallet') }}
-    </Btn>
+    <WalletConnect class="w-full mb-2" />
     <Btn type="secondary" class="w-full">
       {{ $t('login.magicLink') }}
     </Btn>
@@ -31,6 +29,7 @@
 </template>
 
 <script lang="ts" setup>
+import WalletConnect from '../../components/auth/WalletConnect.vue';
 import { useAuthStore } from '~~/stores/auth';
 import { AuthStep } from '~~/types/auth';
 const authStore = useAuthStore();

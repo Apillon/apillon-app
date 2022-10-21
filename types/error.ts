@@ -1,0 +1,4 @@
+export enum ERROR {
+  INSUFFICIENT_PERMISSIONS = 'INSUFFICIENT_PERMISSIONS',
+  INVALID_SIGNATURE = 'invalid signature',
+}

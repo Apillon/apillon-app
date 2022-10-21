@@ -23,7 +23,11 @@ export const useDataStore = defineStore('data', {
   }),
   getters: {
     currentProject(state) {
-      return state.projects[state.currentProjectId] || null;
+      /** Select first project as fallback if project is not selected */
+      if (state.currentProjectId === 0 && state.projects && state.projects.length > 0) {
+        this.setCurrentProject(state.projects[0].id);
+      }
+      return state.projects.find(project => project.id === state.currentProjectId);
     },
   },
   actions: {

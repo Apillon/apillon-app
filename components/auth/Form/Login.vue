@@ -1,5 +1,6 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+    <!--  Login email -->
     <n-form-item path="email" :show-label="false">
       <n-input
         v-model:value="formData.email"
@@ -8,6 +9,8 @@
         @keydown.enter.prevent
       />
     </n-form-item>
+
+    <!--  Login password -->
     <n-form-item path="password" :show-label="false">
       <n-input
         v-model:value="formData.password"
@@ -16,6 +19,8 @@
         :placeholder="$t('form.placeholder.password')"
       />
     </n-form-item>
+
+    <!--  Login submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">

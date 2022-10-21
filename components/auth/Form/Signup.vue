@@ -1,5 +1,6 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules">
+    <!--  Signup email -->
     <n-form-item v-show="!sendAgain" path="email">
       <n-input
         v-model:value="formData.email"
@@ -7,7 +8,10 @@
         :placeholder="$t('form.placeholder.email', { afna: '@' })"
       />
     </n-form-item>
+
+    <!--  Signup submit -->
     <n-form-item :show-label="false">
+      <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn v-if="sendAgain" type="primary" class="w-full" @click="handleSubmit">
         <span class="icon-apillon-icon"></span>
         {{ $t('signup.sendAgain') }}

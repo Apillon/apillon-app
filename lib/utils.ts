@@ -34,3 +34,7 @@ export function removeLastSlash(val: string) {
   }
   return val.replace(/\/$/, '');
 }
+
+export function ActionReturn(success: boolean, data: any) {
+  return { success, data };
+}

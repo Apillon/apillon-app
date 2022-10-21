@@ -1,4 +1,5 @@
 import { stringify } from 'query-string';
+import { ERROR } from '~~/types/error';
 
 export const APISettings = {
   headers: new Headers({
@@ -24,7 +25,10 @@ export const $api = {
 
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+      if (
+        error?.message === ERROR.INSUFFICIENT_PERMISSIONS ||
+        error?.message === ERROR.INVALID_SIGNATURE
+      ) {
         $api.backToLogin();
         return {
           response,
@@ -53,7 +57,10 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+      if (
+        error?.message === ERROR.INSUFFICIENT_PERMISSIONS ||
+        error?.message === ERROR.INVALID_SIGNATURE
+      ) {
         $api.backToLogin();
         return {
           response,
@@ -80,7 +87,10 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+      if (
+        error?.message === ERROR.INSUFFICIENT_PERMISSIONS ||
+        error?.message === ERROR.INVALID_SIGNATURE
+      ) {
         $api.backToLogin();
         return {
           response,
@@ -107,7 +117,10 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+      if (
+        error?.message === ERROR.INSUFFICIENT_PERMISSIONS ||
+        error?.message === ERROR.INVALID_SIGNATURE
+      ) {
         $api.backToLogin();
         return {
           response,
@@ -133,7 +146,10 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+      if (
+        error?.message === ERROR.INSUFFICIENT_PERMISSIONS ||
+        error?.message === ERROR.INVALID_SIGNATURE
+      ) {
         $api.backToLogin();
         return {
           response,
@@ -163,12 +179,12 @@ export const $api = {
     APISettings.headers.delete('Authorization');
   },
 
-  async backToLogin() {
+  backToLogin() {
     const router = useRouter();
-    const { $alert } = useAlerts();
-    await $alert.error({
-      title: 'Your login token has expired, please login again.',
-    });
-    router.push('/auth');
+    // const { $alert } = useAlerts();
+    // await $alert.error({
+    //   title: 'Your login token has expired, please login again.',
+    // });
+    router.push('/login');
   },
 };

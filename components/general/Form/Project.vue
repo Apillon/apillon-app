@@ -1,5 +1,6 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+    <!--  Project name -->
     <n-form-item path="name" :label="$t('form.label.projectName')">
       <n-input
         v-model:value="formData.name"
@@ -7,6 +8,8 @@
         @keydown.enter.prevent
       />
     </n-form-item>
+
+    <!--  Project description -->
     <n-tag :bordered="false" type="info" class="mb-8">{{ projectNameText }}</n-tag>
     <n-form-item path="description" :label="$t('form.label.projectDescription')">
       <n-input
@@ -15,9 +18,13 @@
         :placeholder="$t('form.placeholder.projectDescription')"
       />
     </n-form-item>
+
+    <!--  Project terms -->
     <n-form-item path="terms" :show-label="false">
       <n-checkbox id="terms" v-model:checked="formData.terms" size="large" :label="termsLabel" />
     </n-form-item>
+
+    <!--  Project submit -->
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
