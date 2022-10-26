@@ -1,5 +1,5 @@
 import { useMessage } from 'naive-ui';
-import { ServicesInterface, ServicesResponse } from '~~/types/form';
+import { ServicesInterface, ServicesResponse } from '~~/types/service';
 
 export async function getServices(projectId: number, type: number): Promise<ServicesInterface[]> {
   const params = {

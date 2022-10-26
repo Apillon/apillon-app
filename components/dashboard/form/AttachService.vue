@@ -46,7 +46,7 @@ import {
   FormValidationError,
 } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormService, CreateServiceResponse } from '~~/types/form';
+import { FormService, CreateServiceResponse } from '~~/types/service';
 
 const props = defineProps({
   serviceType: {
@@ -110,8 +110,6 @@ async function createService() {
     active: 1,
     testNetwork: formData.value.networkType ? 0 : 1,
   };
-  console.log(props);
-  console.log(bodyData);
   const { data, error } = await $api.post<CreateServiceResponse>(
     ServiceEndpoint.services,
     bodyData
@@ -123,7 +121,7 @@ async function createService() {
     return;
   }
 
-  if (data) {
+  if (data.data) {
     console.log(data);
   }
   loading.value = false;

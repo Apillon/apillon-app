@@ -47,7 +47,7 @@ import {
   FormItemRule,
 } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { CreateProjectResponse, FormProject } from '~~/types/form';
+import { CreateProjectResponse, FormProject } from '~~/types/data';
 
 const dataStore = useDataStore();
 const $emit = defineEmits(['submitActive', 'submitSuccess']);

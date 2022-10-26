@@ -44,8 +44,16 @@
               @click="learnCollapsed = !learnCollapsed"
             >
               <svg viewBox="0 0 24 24" width="24" height="24">
-                <path :d="collapseIconLeft" fill="#F0F2DA" />
-                <path :d="collapseIconRight" fill="#F0F2DA" />
+                <path
+                  d="M3.27273 5.45453V18.5454L12 12L3.27273 5.45453Z"
+                  fill="#F0F2DA"
+                  :class="learnCollapsed ? 'translate-x-[9px]' : 'translate-x-0'"
+                />
+                <path
+                  d="M20.7271 18.5454V5.45453L11.9998 12L20.7271 18.5454Z"
+                  fill="#F0F2DA"
+                  :class="learnCollapsed ? '-translate-x-[9px]' : 'translate-x-0'"
+                />
               </svg>
             </button>
           </div>
@@ -70,22 +78,10 @@ const learnCollapsed = ref<boolean>(localStorage.getItem('learnCollapsed') === '
 function handleOnUpdateCollapse(value: boolean) {
   localStorage.setItem('learnCollapsed', value ? '1' : '0');
 }
-
-// Collapse icon animation
-const collapseIconLeft = computed(() => {
-  return learnCollapsed.value
-    ? 'M12.0002 18.5454L12.0002 5.45444L3.27295 11.9999L12.0002 18.5454Z'
-    : 'M3.27273 5.45453V18.5454L12 12L3.27273 5.45453Z';
-});
-const collapseIconRight = computed(() => {
-  return learnCollapsed.value
-    ? 'M12 5.45444L12 18.5453L20.7273 11.9999L12 5.45444Z'
-    : 'M20.7271 18.5454V5.45453L11.9998 12L20.7271 18.5454Z';
-});
 </script>
 
-<style lang="postcss" scoped>
+<style lang="postcss">
 .btn-collapse > svg path {
-  transition: all 1s;
+  transition: all 0.5s;
 }
 </style>

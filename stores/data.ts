@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { InstructionInterface } from '~~/types/data';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
@@ -17,6 +18,8 @@ export const useDataStore = defineStore('data', {
       storage: [],
       computing: [],
     },
+    instruction: {} as Record<string, InstructionInterface>,
+    instructions: {} as Record<string, Array<InstructionInterface>>,
     promises: {
       projects: null,
     },
@@ -34,6 +37,13 @@ export const useDataStore = defineStore('data', {
     setCurrentProject(id: number) {
       this.currentProjectId = id;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
+    },
+
+    getInstruction(key: string) {
+      if (key in this.instruction) {
+        return this.instruction[key];
+      }
+      return null;
     },
   },
 });

@@ -32,6 +32,7 @@ import {
   createDiscreteApi,
   FormValidationError,
 } from 'naive-ui';
+import { ValidateMailResponse } from '~~/types/data';
 
 const props = defineProps({
   sendAgain: { type: Boolean, default: false },
@@ -73,7 +74,10 @@ function handleSubmit(e: MouseEvent) {
 }
 async function signupWithEmail() {
   loading.value = true;
-  const { data, error } = await $api.post(UserEndpoint.validateMail, formData.value);
+  const { data, error } = await $api.post<ValidateMailResponse>(
+    UserEndpoint.validateMail,
+    formData.value
+  );
 
   if (error) {
     message.error(error.message);
@@ -81,7 +85,10 @@ async function signupWithEmail() {
     return;
   }
 
-  if (data && !props.sendAgain) {
+  if (!data.data.success) {
+    // TODO: error
+    message.error('ERROR');
+  } else if (!props.sendAgain) {
     router.push('/signup/email');
   }
   loading.value = false;

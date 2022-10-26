@@ -13,7 +13,7 @@
       <Btn type="secondary"> How to attach service </Btn>
     </div>
     <div class="absolute top-1/2 right-[75px] -translate-y-1/2">
-      <AnimationLabirynth />
+      <AnimationIcons :num-of-icons="8" :animation-name="'Labirynth'" :size="'md'" />
     </div>
   </div>
 </template>

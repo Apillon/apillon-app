@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-const auth = useAuthStore();
+const authStore = useAuthStore();
 const router = useRouter();
 const { $alert } = useAlerts();
 const { userAccount, selectProvider } = useProvider();
@@ -21,7 +21,7 @@ async function walletConnect(connector = ProviderConnectors.METAMASK) {
   loading.value = true;
 
   if (await selectProvider(connector)) {
-    await connectToAccount(connector === ProviderConnectors.METAMASK && auth.allowedEntry);
+    await connectToAccount(connector === ProviderConnectors.METAMASK && authStore.allowedEntry);
     if (!isWalletPluginReady.value) {
       loading.value = false;
       return;
@@ -64,7 +64,7 @@ async function walletConnect(connector = ProviderConnectors.METAMASK) {
         }
         const { authToken } = res.data;
         if (authToken && authToken.data) {
-          await auth.setUserToken(authToken.data);
+          await authStore.setUserToken(authToken.data);
           router.push('/profile/');
         }
       } else {

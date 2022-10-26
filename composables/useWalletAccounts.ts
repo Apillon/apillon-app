@@ -79,13 +79,10 @@ export default function useWalletAccounts() {
       $alert.error('Please connect to specified chain to use this functionality');
       return;
     }
-    for (const provider of ethereum?.value?.providers) {
-      const chainId = await provider.request({ method: 'eth_chainId' });
-      // return the first chainId that is not null.
-      if (chainId !== '0x0') {
-        handleChainChanged(chainId);
-        return;
-      }
+    const chainId = await ethereum.value.request({ method: 'eth_chainId' });
+    // return the first chainId that is not null.
+    if (chainId !== '0x0') {
+      handleChainChanged(chainId);
     }
   }
 

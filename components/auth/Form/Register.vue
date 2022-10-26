@@ -5,6 +5,7 @@
       <n-input
         v-model:value="formData.password"
         type="password"
+        :autocomplete="false"
         :placeholder="$t('form.placeholder.complexPassword')"
         @input="handlePasswordInput"
       />
@@ -20,6 +21,7 @@
         v-model:value="formData.reenteredPassword"
         :disabled="!formData.password"
         type="password"
+        :autocomplete="false"
         :placeholder="$t('form.placeholder.reenterPassword')"
         @keydown.enter.prevent
       />
@@ -46,7 +48,7 @@ import {
   FormItemRule,
   FormItemInst,
 } from 'naive-ui';
-import { FormPassword, RegisterResponse } from '~~/types/form';
+import { FormRegister, RegisterResponse } from '~~/types/data';
 
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
@@ -62,7 +64,7 @@ onMounted(() => {
   }
 });
 
-const formData = ref<FormPassword>({
+const formData = ref<FormRegister>({
   password: null,
   reenteredPassword: null,
 });

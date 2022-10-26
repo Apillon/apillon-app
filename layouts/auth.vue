@@ -3,7 +3,7 @@
     <AuthHeader />
     <div class="container flex md:flex-auto py-0 md:py-10 relative z-1">
       <transition name="width" :duration="1000">
-        <AnimationJet v-if="isLogin" />
+        <AnimationIcons v-if="isLogin" :num-of-icons="4" :animation-name="'Jet'" :size="'xl'" />
       </transition>
 
       <div
@@ -17,7 +17,7 @@
       <slot v-else />
 
       <transition name="width" :duration="1000">
-        <AnimationPress v-if="isSignUp" />
+        <AnimationIcons v-if="isSignUp" :num-of-icons="6" :animation-name="'Press'" :size="'xl'" />
       </transition>
     </div>
     <AuthFooter class="absolute left-0 right-0 bottom-0 w-full" />

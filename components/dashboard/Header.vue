@@ -36,7 +36,7 @@
 <script lang="ts" setup>
 import { NInput, NSpace, NSelect } from 'naive-ui';
 import colors from '~~/tailwind.colors';
-import { ProjectInterface, ProjectResponse } from '~~/types/form';
+import { ProjectInterface, ProjectResponse } from '~~/types/data';
 
 const dataStore = useDataStore();
 const router = useRouter();

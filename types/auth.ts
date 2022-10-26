@@ -8,7 +8,9 @@ export enum AuthStep {
   LOGIN_FIRST_PROJECT_BUILD = 'loginFirstProjectBuild',
 }
 
-export default interface AuthInterface extends Record<string, any> {
+export interface AuthInterface extends Record<string, any> {
   url: String;
   apiUrl: String;
 }
+
+export default AuthStep;

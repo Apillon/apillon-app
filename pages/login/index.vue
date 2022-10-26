@@ -30,9 +30,7 @@
 
 <script lang="ts" setup>
 import WalletConnect from '../../components/auth/WalletConnect.vue';
-import { useAuthStore } from '~~/stores/auth';
 import { AuthStep } from '~~/types/auth';
-const authStore = useAuthStore();
 
 definePageMeta({
   layout: 'auth',
@@ -40,6 +38,8 @@ definePageMeta({
 useHead({
   title: 'Log in',
 });
+
+const authStore = useAuthStore();
 
 onBeforeMount(() => {
   authStore.authStep = AuthStep.LOGIN;

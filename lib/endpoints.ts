@@ -20,4 +20,6 @@ export const ProjectEndpoint = {
 
 export const ServiceEndpoint = {
   services: '/services/',
+  instruction: '/instruction/',
+  instructions: '/instruction/all',
 };

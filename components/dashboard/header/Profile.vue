@@ -50,7 +50,6 @@ const options = [
 ];
 
 function handleSelect(key: string | number) {
-  console.log(key);
   if (key === 'logout') {
     authStore.logout();
     router.push('/login');

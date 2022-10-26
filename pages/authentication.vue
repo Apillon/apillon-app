@@ -34,6 +34,7 @@ import { getServices } from '~~/lib/service';
 
 useHead({
   title: 'Authentication',
+  meta: [{ hid: 'og-type', name: 'og:type', property: 'og:type', content: 'website' }],
 });
 
 const dataStore = useDataStore();

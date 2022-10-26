@@ -1,4 +1,7 @@
-export interface FormPassword {
+/**
+ *  Register
+ */
+export interface FormRegister {
   password: string;
   reenteredPassword: string;
 }
@@ -12,6 +15,18 @@ export interface RegisterResponse {
   status: number;
 }
 
+export interface ValidateMailResponse {
+  data: {
+    data: boolean;
+    status: number;
+    success: boolean;
+  };
+  status: number;
+}
+
+/**
+ * Login
+ */
 export interface FormLogin {
   email: string;
   password: string;
@@ -23,6 +38,9 @@ export interface LoginResponse {
   status: number;
 }
 
+/**
+ * Project
+ */
 export interface FormProject {
   name: string | null;
   description: string | null;
@@ -49,29 +67,30 @@ export interface CreateProjectResponse {
   status: number;
 }
 
-export interface ServicesInterface {
-  name: string;
-  serviceType: string;
-  active: number;
-  uptime: string;
+/**
+ * Instruction
+ */
+export interface InstructionInterface {
+  id: number;
+  status: number;
+  title: string;
+  instructionEnum: string;
+  instructionType: number;
+  htmlContent: string;
+  extendedHtmlContent: string;
+  docsUrl: string;
+  forRoute: string;
 }
 
-export interface ServicesResponse {
-  data: {
-    items: ServicesInterface[];
-    total: number;
-  };
+export interface InstructionResponse {
+  data: InstructionInterface;
   status: number;
 }
 
-export interface FormService {
-  serviceName: string;
-  networkType: boolean;
-}
-export interface CreateServiceResponse {
+export interface InstructionsResponse {
   data: {
-    id: number;
-    status: number;
+    items: InstructionInterface;
+    total: number;
   };
   status: number;
 }
