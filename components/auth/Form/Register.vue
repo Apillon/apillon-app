@@ -5,9 +5,11 @@
       <n-input
         v-model:value="formData.password"
         type="password"
-        :autocomplete="false"
+        show-password-on="mousedown"
+        :input-props="{ autocomplete: 'off' }"
         :placeholder="$t('form.placeholder.complexPassword')"
         @input="handlePasswordInput"
+        @keydown.enter.prevent
       />
     </n-form-item>
 
@@ -21,9 +23,9 @@
         v-model:value="formData.reenteredPassword"
         :disabled="!formData.password"
         type="password"
-        :autocomplete="false"
+        show-password-on="mousedown"
+        :input-props="{ autocomplete: 'off' }"
         :placeholder="$t('form.placeholder.reenterPassword')"
-        @keydown.enter.prevent
       />
     </n-form-item>
 
@@ -47,6 +49,7 @@ import {
   FormValidationError,
   FormItemRule,
   FormItemInst,
+  FormRules,
 } from 'naive-ui';
 import { FormRegister, RegisterResponse } from '~~/types/data';
 
@@ -69,17 +72,15 @@ const formData = ref<FormRegister>({
   reenteredPassword: null,
 });
 
-const rules = {
+const rules: FormRules = {
   password: [
     {
       required: true,
       message: 'Please enter your password',
-      trigger: 'input',
     },
     {
       min: 12,
       message: 'Password must contain at least 12 characters.',
-      trigger: 'input',
     },
   ],
   reenteredPassword: [

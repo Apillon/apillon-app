@@ -31,6 +31,7 @@ import {
   FormInst,
   createDiscreteApi,
   FormValidationError,
+  FormRules,
 } from 'naive-ui';
 import { ValidateMailResponse } from '~~/types/data';
 
@@ -47,7 +48,7 @@ const authStore = useAuthStore();
 const formData = ref({
   email: authStore.email,
 });
-const rules = {
+const rules: FormRules = {
   email: [
     {
       type: 'email',

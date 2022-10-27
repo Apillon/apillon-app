@@ -45,6 +45,7 @@ import {
   createDiscreteApi,
   FormValidationError,
   FormItemRule,
+  FormRules,
 } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { CreateProjectResponse, FormProject } from '~~/types/data';
@@ -79,7 +80,7 @@ const formData = ref<FormProject>({
   terms: null,
 });
 
-const rules = {
+const rules: FormRules = {
   name: [
     {
       required: true,

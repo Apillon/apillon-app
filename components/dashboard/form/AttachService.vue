@@ -44,6 +44,7 @@ import {
   FormInst,
   createDiscreteApi,
   FormValidationError,
+  FormRules,
 } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { FormService, CreateServiceResponse } from '~~/types/service';
@@ -67,7 +68,7 @@ const formData = ref<FormService>({
   networkType: false,
 });
 
-const rules = {
+const rules: FormRules = {
   serviceName: [
     {
       required: true,

@@ -15,8 +15,8 @@
       <n-input
         v-model:value="formData.password"
         type="password"
-        :autocomplete="false"
-        :input-props="{ type: 'password' }"
+        show-password-on="mousedown"
+        :input-props="{ autocomplete: 'off' }"
         :placeholder="$t('form.placeholder.password')"
       />
     </n-form-item>
@@ -39,6 +39,7 @@ import {
   FormInst,
   createDiscreteApi,
   FormValidationError,
+  FormRules,
 } from 'naive-ui';
 import { FormLogin, LoginResponse, ProjectInterface, ProjectResponse } from '~~/types/data';
 
@@ -53,8 +54,8 @@ const formData = ref<FormLogin>({
   email: authStore.email,
   password: '',
 });
-const rules = {
-  email: [
+const rules: FormRules = {
+  mail: [
     {
       type: 'email',
       message: 'Email address is not valid',
