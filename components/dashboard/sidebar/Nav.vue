@@ -30,7 +30,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NCollapse, NCollapseItem } from 'naive-ui';
 import { randomInteger } from '~~/lib/utils';
 import colors from '~~/tailwind.colors';
 import MainNavInterface from '~~/types/menu';

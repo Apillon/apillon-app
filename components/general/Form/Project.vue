@@ -36,11 +36,6 @@
 
 <script lang="ts" setup>
 import {
-  NCheckbox,
-  NForm,
-  NFormItem,
-  NInput,
-  NTag,
   FormInst,
   createDiscreteApi,
   FormValidationError,
@@ -48,6 +43,7 @@ import {
   FormRules,
 } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
+import { useDataStore } from '~~/stores/data';
 import { CreateProjectResponse, FormProject } from '~~/types/data';
 
 const dataStore = useDataStore();
@@ -118,29 +114,35 @@ async function createProject() {
   loading.value = true;
   $emit('submitActive', true);
 
-  const { data, error } = await $api.post<CreateProjectResponse>(
-    ProjectEndpoint.project,
-    formData.value
-  );
+  try {
+    const { data, error } = await $api.post<CreateProjectResponse>(
+      ProjectEndpoint.project,
+      formData.value
+    );
 
-  if (error) {
-    setTimeout(() => {
-      message.error(error.message);
+    if (error) {
+      setTimeout(() => {
+        message.error(error.message);
+        message.error($i18n.t(`error.${error.statusCode}`));
 
-      loading.value = false;
+        loading.value = false;
+        $emit('submitActive', false);
+      }, 2000);
+      return;
+    }
+
+    if (data) {
+      /** Set new project as current project */
+      dataStore.setCurrentProject(data.data.id);
+
+      $emit('submitSuccess');
       $emit('submitActive', false);
-    }, 2000);
-    return;
-  }
-
-  if (data) {
-    /** Set new project as current project */
-    dataStore.setCurrentProject(data.data.id);
-
+    }
     loading.value = false;
-    $emit('submitSuccess');
+  } catch (error) {
+    message.error($i18n.t('error.API'));
+    loading.value = false;
     $emit('submitActive', false);
   }
-  loading.value = false;
 }
 </script>

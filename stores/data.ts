@@ -1,5 +1,7 @@
+import { useMessage } from 'naive-ui';
 import { defineStore } from 'pinia';
-import { InstructionInterface } from '~~/types/data';
+import { InstructionInterface, ProjectInterface, ProjectResponse } from '~~/types/data';
+import { ServicesInterface, ServicesResponse } from '~~/types/service';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
@@ -12,7 +14,7 @@ export const useDataStore = defineStore('data', {
     currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
       ? parseInt(localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID))
       : 0,
-    projects: [],
+    projects: [] as Array<ProjectInterface>,
     services: {
       authentication: [],
       storage: [],
@@ -44,6 +46,58 @@ export const useDataStore = defineStore('data', {
         return this.instruction[key];
       }
       return null;
+    },
+
+    async getProjects() {
+      const message = useMessage();
+      try {
+        const { response, data, error } = await $api.get<ProjectResponse>(ProjectEndpoint.project);
+
+        if (error) {
+          message.error(error.message);
+
+          this.projects = [];
+        }
+
+        this.projects = data.data.items.map((project: ProjectInterface) => {
+          return {
+            ...project,
+            value: project.id,
+            label: project.name,
+          };
+        });
+
+        /* If current project is not selected, take first one */
+        if (this.currentProjectId === 0) {
+          this.setCurrentProject(this.projects[0].id);
+        }
+
+        return response;
+      } catch (error) {
+        // message.error(t('error.API'));
+      }
+    },
+
+    async getServices(type: number) {
+      const message = useMessage();
+      try {
+        const params = {
+          project_id: this.currentProjectId,
+          serviceType_id: type,
+        };
+        const { data, error } = await $api.get<ServicesResponse>(ServiceEndpoint.services, params);
+
+        if (error) {
+          message.error(error.message);
+          return [];
+        }
+
+        return data.data.items.map((service: ServicesInterface, key: number) => {
+          return { key, ...service };
+        });
+      } catch (error) {
+        // message.error(t('error.API'));
+      }
     },
   },
 });

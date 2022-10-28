@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-left" appear>
-    <div class="absolute left-0 top-0 bottom-0 w-64 min-h-full text-white">
+    <div class="absolute left-0 top-0 bottom-0 w-64 min-h-full">
       <n-scrollbar style="max-height: 100vh" class="scrollbar--menu">
         <n-space class="py-6" :size="24" vertical>
           <!-- LOGO -->
@@ -38,7 +38,9 @@
       </n-scrollbar>
     </div>
   </transition>
-  <!-- <n-modal
+  <!-- Modal - Create new project
+    Example of basic modal
+    <n-modal
     v-model:show="showModalNewProject"
     :title="$t('dashboard.newProject')"
     :bordered="false"
@@ -62,10 +64,19 @@
 </template>
 
 <script lang="ts" setup>
-import { NCard, NModal, NScrollbar, NSpace } from 'naive-ui';
+import { useDataStore } from '~~/stores/data';
 
+const dataStore = useDataStore();
 const { currentRoute } = useRouter();
 const showModalNewProject = ref(false);
+
+onMounted(() => {
+  Promise.all(Object.values(dataStore.promises)).then(_ => {
+    if (dataStore.currentProjectId === 0) {
+      showModalNewProject.value = true;
+    }
+  });
+});
 </script>
 
 <style lang="postcss">

@@ -1,11 +1,11 @@
 /**
  *  Register
  */
-export interface FormRegister {
+interface FormRegister {
   password: string;
   reenteredPassword: string;
 }
-export interface RegisterResponse {
+interface RegisterResponse {
   data: {
     id: number;
     status: number;
@@ -15,7 +15,7 @@ export interface RegisterResponse {
   status: number;
 }
 
-export interface ValidateMailResponse {
+interface ValidateMailResponse {
   data: {
     data: boolean;
     status: number;
@@ -27,11 +27,11 @@ export interface ValidateMailResponse {
 /**
  * Login
  */
-export interface FormLogin {
+interface FormLogin {
   email: string;
   password: string;
 }
-export interface LoginResponse {
+interface LoginResponse {
   data: {
     token: string;
   };
@@ -41,12 +41,12 @@ export interface LoginResponse {
 /**
  * Project
  */
-export interface FormProject {
+interface FormProject {
   name: string | null;
   description: string | null;
   terms: boolean | null;
 }
-export interface ProjectInterface {
+interface ProjectInterface {
   id: number;
   status: number;
   name: string;
@@ -54,7 +54,7 @@ export interface ProjectInterface {
   shortDescription: string;
   imageFile_id: number;
 }
-export interface ProjectResponse {
+interface ProjectResponse {
   data: {
     items: Array<ProjectInterface>;
     total: number;
@@ -62,7 +62,7 @@ export interface ProjectResponse {
   status: number;
 }
 
-export interface CreateProjectResponse {
+interface CreateProjectResponse {
   data: ProjectInterface;
   status: number;
 }
@@ -70,7 +70,7 @@ export interface CreateProjectResponse {
 /**
  * Instruction
  */
-export interface InstructionInterface {
+interface InstructionInterface {
   id: number;
   status: number;
   title: string;
@@ -82,15 +82,30 @@ export interface InstructionInterface {
   forRoute: string;
 }
 
-export interface InstructionResponse {
+interface InstructionResponse {
   data: InstructionInterface;
   status: number;
 }
 
-export interface InstructionsResponse {
+interface InstructionsResponse {
   data: {
     items: InstructionInterface;
     total: number;
   };
   status: number;
 }
+
+export {
+  FormRegister,
+  RegisterResponse,
+  ValidateMailResponse,
+  FormLogin,
+  LoginResponse,
+  FormProject,
+  ProjectInterface,
+  ProjectResponse,
+  CreateProjectResponse,
+  InstructionInterface,
+  InstructionResponse,
+  InstructionsResponse,
+};

@@ -16,21 +16,9 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  GlobalThemeOverrides,
-  NConfigProvider,
-  lightTheme,
-  darkTheme,
-  enUS,
-  dateEnUS,
-  frFR,
-  dateFrFR,
-} from 'naive-ui';
+import { GlobalThemeOverrides, lightTheme, darkTheme, enUS, dateEnUS } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import colors from './tailwind.colors';
-
-const auth = useAuthStore();
-auth.initUser();
 
 const $i18n = useI18n();
 const lang = computed(() => {
@@ -40,8 +28,6 @@ const locale = computed(() => {
   switch ($i18n.locale.value) {
     case 'en':
       return enUS;
-    case 'fr':
-      return frFR;
     default:
       return enUS;
   }
@@ -50,8 +36,6 @@ const dateLocale = computed(() => {
   switch ($i18n.locale.value) {
     case 'en':
       return dateEnUS;
-    case 'fr':
-      return dateFrFR;
     default:
       return dateEnUS;
   }

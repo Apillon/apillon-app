@@ -66,8 +66,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NLayout, NLayoutContent, NLayoutSider, NLayoutHeader, NSkeleton, NSpace } from 'naive-ui';
-
 defineProps({
   loading: { type: Boolean, default: false },
 });

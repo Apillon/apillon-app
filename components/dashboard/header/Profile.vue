@@ -29,8 +29,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NDropdown } from 'naive-ui';
-
 const authStore = useAuthStore();
 const router = useRouter();
 

@@ -34,9 +34,8 @@
 </template>
 
 <script lang="ts" setup>
-import { NInput, NSpace, NSelect } from 'naive-ui';
 import colors from '~~/tailwind.colors';
-import { ProjectInterface, ProjectResponse } from '~~/types/data';
+import { useDataStore } from '~~/stores/data';
 
 const dataStore = useDataStore();
 const router = useRouter();
@@ -56,8 +55,10 @@ const SelectProjectOverrides = {
   },
 };
 
-onMounted(() => {
-  dataStore.promises.projects = getProjects();
+onBeforeMount(() => {
+  if (dataStore.projects && dataStore.projects.length === 0) {
+    dataStore.promises.projects = dataStore.getProjects();
+  }
 });
 
 /** Watcher - project change */
@@ -69,7 +70,7 @@ watch(
       loading.value = true;
       dataStore.projects = [];
 
-      await getProjects(true);
+      await dataStore.getProjects();
 
       setTimeout(() => {
         loading.value = false;
@@ -80,29 +81,6 @@ watch(
     router.push('/');
   }
 );
-
-async function getProjects(refresh: boolean = false) {
-  if (dataStore.projects && dataStore.projects.length && !refresh) {
-    return;
-  }
-
-  const { response, data, error } = await $api.get<ProjectResponse>(ProjectEndpoint.project);
-
-  if (error) {
-    return;
-  }
-
-  if (data) {
-    dataStore.projects = data.data.items.map((project: ProjectInterface) => {
-      return {
-        ...project,
-        value: project.id,
-        label: project.name,
-      };
-    });
-  }
-  return response;
-}
 </script>
 
 <style lang="postcss">

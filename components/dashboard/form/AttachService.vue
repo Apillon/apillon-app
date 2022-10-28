@@ -33,21 +33,10 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  NForm,
-  NFormItem,
-  NInput,
-  NRadioGroup,
-  NRadio,
-  NSpace,
-  NTag,
-  FormInst,
-  createDiscreteApi,
-  FormValidationError,
-  FormRules,
-} from 'naive-ui';
+import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { FormService, CreateServiceResponse } from '~~/types/service';
+import { useDataStore } from '~~/stores/data';
 
 const props = defineProps({
   serviceType: {
@@ -105,26 +94,33 @@ async function createService() {
   loading.value = true;
 
   const bodyData = {
-    project_id: dataStore.currentProject.id,
+    project_id: dataStore.currentProjectId,
     serviceType_id: props.serviceType,
     name: formData.value.serviceName,
     active: 1,
     testNetwork: formData.value.networkType ? 0 : 1,
   };
-  const { data, error } = await $api.post<CreateServiceResponse>(
-    ServiceEndpoint.services,
-    bodyData
-  );
 
-  if (error) {
-    message.error(error.message);
+  try {
+    const { data, error } = await $api.post<CreateServiceResponse>(
+      ServiceEndpoint.services,
+      bodyData
+    );
+
+    if (error) {
+      message.error(error.message);
+      loading.value = false;
+      return;
+    }
+
+    // TODO
+    if (data.data) {
+      console.log(data);
+    }
     loading.value = false;
-    return;
+  } catch (error) {
+    message.error($i18n.t('error.API'));
+    loading.value = false;
   }
-
-  if (data.data) {
-    console.log(data);
-  }
-  loading.value = false;
 }
 </script>

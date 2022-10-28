@@ -37,13 +37,16 @@
 </template>
 
 <script lang="ts" setup>
-import { NCollapse, NCollapseItem, useMessage } from 'naive-ui';
+import { useMessage } from 'naive-ui';
+import { useI18n } from 'vue-i18n';
+import { useDataStore } from '~~/stores/data';
 import { InstructionResponse, InstructionsResponse, InstructionInterface } from '~~/types/data';
 
 const props = defineProps({
   instructionKey: { type: String, default: null },
 });
 
+const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const { name } = useRoute();
@@ -76,16 +79,23 @@ async function getInstruction(key: string) {
     return;
   }
 
-  const params = { instructionEnum: key };
-  const { data, error } = await $api.get<InstructionResponse>(ServiceEndpoint.instruction, params);
+  try {
+    const params = { instructionEnum: key };
+    const { data, error } = await $api.get<InstructionResponse>(
+      ServiceEndpoint.instruction,
+      params
+    );
 
-  if (error) {
-    message.error(error.message);
-    return;
-  }
+    if (error) {
+      message.error(error.message);
+      return;
+    }
 
-  if (data.data) {
-    dataStore.instruction[key] = data.data;
+    if (data.data) {
+      dataStore.instruction[key] = data.data;
+    }
+  } catch (error) {
+    message.error($i18n.t('error.API'));
   }
 }
 async function getInstructions(key: string) {
@@ -93,19 +103,23 @@ async function getInstructions(key: string) {
     return;
   }
 
-  const params = { instructionEnum: key };
-  const { data, error } = await $api.get<InstructionsResponse>(
-    ServiceEndpoint.instructions,
-    params
-  );
+  try {
+    const params = { instructionEnum: key };
+    const { data, error } = await $api.get<InstructionsResponse>(
+      ServiceEndpoint.instructions,
+      params
+    );
 
-  if (error) {
-    message.error(error.message);
-    return;
-  }
+    if (error) {
+      message.error(error.message);
+      return;
+    }
 
-  if (data.data) {
-    dataStore.instructions[key] = data.data.items;
+    if (data.data) {
+      dataStore.instructions[key] = data.data.items;
+    }
+  } catch (error) {
+    message.error($i18n.t('error.API'));
   }
 }
 </script>

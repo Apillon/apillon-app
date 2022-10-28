@@ -10,6 +10,4 @@
   </transition>
 </template>
 
-<script lang="ts" setup>
-import { NSpace } from 'naive-ui';
-</script>
+<script lang="ts" setup></script>

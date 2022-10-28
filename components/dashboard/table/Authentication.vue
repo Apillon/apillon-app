@@ -3,11 +3,12 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDataTable, NDropdown, NTag, useMessage } from 'naive-ui';
+import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
+import { useDataStore } from '~~/stores/data';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 
@@ -28,11 +29,11 @@ const createColumns = ({
 }): DataTableColumns<RowData> => {
   return [
     {
-      title: $i18n.t('general.serviceName'),
+      title: t('general.serviceName'),
       key: 'name',
     },
     {
-      title: $i18n.t('general.serviceType'),
+      title: t('general.serviceType'),
       key: 'serviceType',
       render(row) {
         return h(
@@ -48,24 +49,24 @@ const createColumns = ({
       },
     },
     {
-      title: $i18n.t('general.status'),
+      title: t('general.status'),
       key: 'active',
       render(row) {
         return h(
           NTag,
           { type: row.active ? 'success' : 'default' },
           {
-            default: () => (row.active ? $i18n.t('general.active') : $i18n.t('general.paused')),
+            default: () => (row.active ? t('general.active') : t('general.paused')),
           }
         );
       },
     },
     {
-      title: $i18n.t('general.uptime'),
+      title: t('general.uptime'),
       key: 'uptime',
     },
     {
-      title: $i18n.t('general.actions'),
+      title: t('general.actions'),
       key: 'actions',
       render(row) {
         return h(

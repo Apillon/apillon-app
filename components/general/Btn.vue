@@ -10,7 +10,7 @@
     :ghost="type === 'secondary' ? true : false"
     @click="onClick"
   >
-    <span :class="[$style.inner, innerClass]">
+    <span :class="[innerClass]">
       <Spinner v-if="loading" />
       <slot v-else />
     </span>
@@ -18,8 +18,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton } from 'naive-ui';
-
 const props = defineProps({
   href: { type: String, default: null },
   to: { type: [String, Object], default: null },
@@ -44,7 +42,7 @@ const props = defineProps({
 const emit = defineEmits(['click']);
 
 const NuxtLink = resolveComponent('NuxtLink');
-const $style = useCssModule();
+const NButton = resolveComponent('NButton');
 
 /** Disable animation on load */
 const isBtnLocked = ref<boolean>(!props.href && !props.to);
@@ -52,7 +50,7 @@ setTimeout(() => (isBtnLocked.value = false), 1000);
 
 const btnClass = computed(() => {
   return [
-    $style.btn,
+    props.type === 'link' ? 'font-content' : 'font-button',
     {
       'py-[10px] px-6': props.type !== 'link' && props.size === 'small',
       'py-4 px-10': props.type !== 'link' && props.size === 'medium',
@@ -62,10 +60,6 @@ const btnClass = computed(() => {
       'opacity-60': props.disabled,
       'hover-bounce': !props.href && !props.to,
       locked: isBtnLocked.value,
-
-      [$style.borderless]: props.borderless,
-      [$style.ridge]: props.ridged,
-      [$style.faded]: props.faded,
     },
   ];
 });
@@ -79,9 +73,3 @@ function onClick(event: MouseEvent) {
   }
 }
 </script>
-
-<style lang="postcss" module>
-.btn {
-  @apply relative font-content;
-}
-</style>

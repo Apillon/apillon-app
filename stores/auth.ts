@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { UserResponse } from '~~/types/auth';
 
 export const AuthLsKeys = {
   AUTH: 'al_auth',
@@ -29,15 +30,15 @@ export const useAuthStore = defineStore('auth', {
       let lsAuth = localStorage.getItem(AuthLsKeys.AUTH) as any;
       if (lsAuth) {
         lsAuth = JSON.parse(lsAuth);
-        this.jwt = lsAuth.jwt;
-        await $api.setToken(lsAuth.jwt);
-        // await this.getUserData();
+
+        await this.setUserToken(lsAuth.jwt);
+        await this.getUserData();
       }
     },
 
     changeUser(userData) {
-      this.email = userData?.authUser?.email;
-      this.username = userData?.authUser?.username;
+      this.email = userData?.email;
+      this.username = userData?.username;
     },
 
     saveEmail(email: string) {
@@ -54,43 +55,28 @@ export const useAuthStore = defineStore('auth', {
         })
       );
       await $api.setToken(token);
-      // await this.getUserData();
     },
 
     async getUserData() {
-      const res = await $api.get<{
-        authUser: { email; username };
-        oauth;
-        crypto;
-        details;
-        permissions;
-        roles;
-      }>(UserEndpoint.me, null);
-      if (res.error) {
-        throw new Error(res.error.message);
+      const { data, error } = await $api.get<UserResponse>(UserEndpoint.me, null);
+      if (error) {
+        throw new Error(error.message);
       }
 
-      if (res.data) {
-        await this.changeUser(res.data);
+      if (data.data) {
+        await this.changeUser(data.data);
       }
     },
 
-    deleteUser() {
+    logout() {
       this.jwt = '';
       this.email = '';
       this.username = '';
-      this.metamaskWallet = '';
+      this.wallet = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.EMAIL);
       localStorage.removeItem(AuthLsKeys.USERNAME);
       localStorage.removeItem(AuthLsKeys.WALLET);
-    },
-    async logout() {
-      this.deleteUser();
-      // const res = await $api.patch(AuthEndpoint.logout);
-      // if (res.error) {
-      //   alert(res.error.message);
-      // }
     },
   },
 });

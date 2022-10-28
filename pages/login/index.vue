@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2 class="text-white mb-4">{{ $t('login.title') }}</h2>
-    <p class="text-white mb-11">{{ $t('login.description') }}</p>
+    <h2 class="mb-4">{{ $t('login.title') }}</h2>
+    <p class="mb-11">{{ $t('login.description') }}</p>
 
     <WalletConnect class="w-full mb-2" />
     <Btn type="secondary" class="w-full">

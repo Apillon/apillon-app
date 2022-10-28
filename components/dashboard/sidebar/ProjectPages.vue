@@ -6,7 +6,6 @@
 
 <script lang="ts" setup>
 import { h } from 'vue';
-import { NMenu } from 'naive-ui';
 import type { MenuOption } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 

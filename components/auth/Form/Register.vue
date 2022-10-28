@@ -41,25 +41,27 @@
 
 <script lang="ts" setup>
 import {
-  NForm,
-  NFormItem,
-  NInput,
-  FormInst,
   createDiscreteApi,
-  FormValidationError,
-  FormItemRule,
+  FormInst,
   FormItemInst,
+  FormItemRule,
   FormRules,
+  FormValidationError,
 } from 'naive-ui';
+import { useI18n } from 'vue-i18n';
 import { FormRegister, RegisterResponse } from '~~/types/data';
+import { useDataStore } from '~~/stores/data';
+
+const $i18n = useI18n();
+const router = useRouter();
+const { query } = useRoute();
+const authStore = useAuthStore();
+const dataStore = useDataStore();
+const { message } = createDiscreteApi(['message']);
 
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
 const rPasswordFormItemRef = ref<FormItemInst | null>(null);
-const { message } = createDiscreteApi(['message']);
-const authStore = useAuthStore();
-const router = useRouter();
-const { query } = useRoute();
 
 onMounted(() => {
   if (!query.token || query.token.length < 100) {
@@ -133,21 +135,33 @@ function handleSubmit(e: MouseEvent) {
 async function register() {
   loading.value = true;
 
-  const { data, error } = await $api.post<RegisterResponse>(UserEndpoint.register, {
-    ...formData.value,
-    token: query.token,
-  });
+  try {
+    const { data, error } = await $api.post<RegisterResponse>(UserEndpoint.register, {
+      ...formData.value,
+      token: query.token,
+    });
 
-  if (error) {
-    message.error(error.message);
-    loading.value = false;
-    return;
-  }
+    if (error) {
+      message.error(error.message);
+      loading.value = false;
+      return;
+    }
 
-  if (data) {
     authStore.setUserToken(data.data.token);
-    router.push('/');
+
+    /** Fetch projects, if user hasn't any project redirect him to '/login/first' so he will be able to create first project */
+    await dataStore.getProjects();
+    loading.value = false;
+
+    if (dataStore.projects.length >= 0) {
+      router.push('/login/first');
+    } else {
+      router.push('/');
+    }
+  } catch (error) {
+    console.log(error);
+    message.error($i18n.t('error.API'));
+    loading.value = false;
   }
-  loading.value = false;
 }
 </script>

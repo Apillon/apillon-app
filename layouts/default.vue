@@ -15,7 +15,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NMessageProvider, NScrollbar } from 'naive-ui';
 import { disableBodyScroll } from 'body-scroll-lock';
 
 disableBodyScroll(document);

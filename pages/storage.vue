@@ -29,15 +29,14 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NSpace } from 'naive-ui';
-import { getServices } from '~~/lib/service';
+import { useDataStore } from '~~/stores/data';
+
+const dataStore = useDataStore();
+const pageLoading = ref<boolean>(true);
 
 useHead({
   title: 'Authentication',
 });
-
-const dataStore = useDataStore();
-const pageLoading = ref<boolean>(true);
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(_ => {
@@ -50,7 +49,7 @@ async function getServicesAuth() {
     console.warn('No project selected');
     return;
   }
-  dataStore.services.storage = await getServices(dataStore.currentProject.id, ServiceType.STORAGE);
+  dataStore.services.storage = await dataStore.getServices(ServiceType.STORAGE);
 
   setTimeout(() => (pageLoading.value = false), 300);
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-pink-purple text-white px-12 pt-5 pb-10 overflow-hidden rounded">
+  <div class="relative bg-pink-purple px-12 pt-5 pb-10 overflow-hidden rounded">
     <div class="max-w-[600px] w-1/2">
       <n-space size="large" align="center" class="h-12">
         <h4 class="">{{ $t('nav.storage') }}</h4>
@@ -22,6 +22,4 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { NSpace } from 'naive-ui';
-</script>
+<script lang="ts" setup></script>

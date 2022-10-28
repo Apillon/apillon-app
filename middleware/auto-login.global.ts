@@ -15,6 +15,6 @@ export default defineNuxtRouteMiddleware(() => {
 
   authStore.initUser();
   if (!authStore.jwt) {
-    // authStore.deleteUser();
+    authStore.logout();
   }
 });

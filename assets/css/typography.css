@@ -78,6 +78,13 @@
     }
   }
 
+  button,
+  [role='button'],
+  [type='reset'],
+  [type='submit'] {
+    @apply relative font-button;
+  }
+
   .body-lg {
     @apply font-content;
     font-size: 1.375rem;

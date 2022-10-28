@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-model-argument -->
 <template>
-  <div class="flex items-center justify-center text-white text-xl mt-8">
+  <div class="flex items-center justify-center text-xl mt-8">
     <div v-for="(social, key) in socials" :key="key" class="mx-2">
       <a
         :href="social.link"

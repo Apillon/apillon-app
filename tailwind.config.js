@@ -35,6 +35,7 @@ module.exports = {
     fontFamily: {
       heading: ['Cabinet Grotesk', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       content: ['IBM Plex Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      button: ['IBM Plex Mono', 'ui-sans-serif', 'system-ui', 'sans-serif'],
     },
 
     container: {

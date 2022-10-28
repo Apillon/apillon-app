@@ -3,9 +3,10 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDataTable, NDropdown, NTag, useMessage } from 'naive-ui';
+import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
+import { useDataStore } from '~~/stores/data';
 
 const $i18n = useI18n();
 const message = useMessage();

@@ -32,23 +32,19 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  NForm,
-  NFormItem,
-  NInput,
-  FormInst,
-  createDiscreteApi,
-  FormValidationError,
-  FormRules,
-} from 'naive-ui';
-import { FormLogin, LoginResponse, ProjectInterface, ProjectResponse } from '~~/types/data';
+import { createDiscreteApi, FormInst, FormRules, FormValidationError } from 'naive-ui';
+import { useI18n } from 'vue-i18n';
+import { FormLogin, LoginResponse } from '~~/types/data';
+import { useDataStore } from '~~/stores/data';
+
+const $i18n = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const dataStore = useDataStore();
+const { message } = createDiscreteApi(['message']);
 
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
-const authStore = useAuthStore();
-const dataStore = useDataStore();
-const router = useRouter();
 
 const formData = ref<FormLogin>({
   email: authStore.email,
@@ -88,38 +84,28 @@ function handleSubmit(e: MouseEvent) {
 }
 
 async function login() {
-  const { data, error } = await $api.post<LoginResponse>(UserEndpoint.login, formData.value);
+  try {
+    const { data, error } = await $api.post<LoginResponse>(UserEndpoint.login, formData.value);
 
-  if (error) {
-    message.error(error.message);
+    if (error) {
+      message.error(error.message);
+      loading.value = false;
+      return;
+    }
+    if (data) {
+      authStore.setUserToken(data.data.token);
+    }
+
+    /** Fetch projects, if user hasn't any project redirect him to '/login/first' so he will be able to create first project */
+    await dataStore.getProjects();
+    if (dataStore.projects.length === 0) {
+      router.push('/login/first');
+    } else {
+      router.push('/');
+    }
+  } catch (error) {
+    message.error($i18n.t('error.API'));
     loading.value = false;
-    return;
-  }
-  if (data) {
-    authStore.setUserToken(data.data.token);
-  }
-
-  await getProjects();
-}
-
-async function getProjects() {
-  const { data, error } = await $api.get<ProjectResponse>(ProjectEndpoint.project);
-
-  if (error) {
-    return;
-  }
-
-  if (data.data.total === 0) {
-    router.push('/login/first');
-  } else {
-    dataStore.projects = data.data.items.map((project: ProjectInterface, key: number) => {
-      return {
-        ...project,
-        value: key,
-        label: project.name,
-      };
-    });
-    router.push('/');
   }
 }
 </script>

@@ -1,7 +1,7 @@
 /**
  * Service ENUM
  */
-export enum ServiceType {
+enum ServiceType {
   AUTHENTICATION = 1,
   STORAGE = 2,
   COPMUTING = 3,
@@ -10,14 +10,14 @@ export enum ServiceType {
 /**
  * Service Type
  */
-export interface ServiceTypeInterface {
+interface ServiceTypeInterface {
   id: number;
   name: string;
   description: string;
   active: number;
   status: number;
 }
-export interface ServiceTypeItem {
+interface ServiceTypeItem {
   id: number;
   name: string;
   icon: string;
@@ -28,14 +28,14 @@ export interface ServiceTypeItem {
 /**
  * Service
  */
-export interface ServicesInterface {
+interface ServicesInterface {
   name: string;
   serviceType: string;
   active: number;
   uptime: string;
 }
 
-export interface ServicesResponse {
+interface ServicesResponse {
   data: {
     items: ServicesInterface[];
     total: number;
@@ -43,14 +43,27 @@ export interface ServicesResponse {
   status: number;
 }
 
-export interface FormService {
+interface FormService {
   serviceName: string;
   networkType: boolean;
 }
-export interface CreateServiceResponse {
+interface CreateServiceResponse {
   data: {
     id: number;
     status: number;
   };
   status: number;
 }
+
+/**
+ * Export all
+ */
+export {
+  ServiceType,
+  ServiceTypeInterface,
+  ServiceTypeItem,
+  ServicesInterface,
+  ServicesResponse,
+  FormService,
+  CreateServiceResponse,
+};

@@ -1,5 +1,4 @@
 {
-  "language": "Language EN",
   "general": {
     "action": "Action",
     "actions": "Actions",
@@ -51,6 +50,9 @@
     "proceed": "Proceed",
     "startFirstProject": "Start your first project",
     "createServiceAndContinue": "Create service & continue to management"
+  },
+  "error": {
+    "API": "General API error"
   },
   "footer": {
     "support": "Support",

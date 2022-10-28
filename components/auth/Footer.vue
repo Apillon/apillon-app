@@ -11,13 +11,13 @@
               <NuxtLink to="/">{{ $t('footer.support') }}</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/docs">{{ $t('footer.docs') }}</NuxtLink>
+              <NuxtLink to="/">{{ $t('footer.docs') }}</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/terms">{{ $t('footer.terms') }}</NuxtLink>
+              <NuxtLink to="/">{{ $t('footer.terms') }}</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/privacy">{{ $t('footer.privacy') }}</NuxtLink>
+              <NuxtLink to="/">{{ $t('footer.privacy') }}</NuxtLink>
             </li>
           </ul>
         </div>

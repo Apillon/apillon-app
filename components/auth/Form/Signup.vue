@@ -24,26 +24,21 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  NForm,
-  NFormItem,
-  NInput,
-  FormInst,
-  createDiscreteApi,
-  FormValidationError,
-  FormRules,
-} from 'naive-ui';
+import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
+import { useI18n } from 'vue-i18n';
 import { ValidateMailResponse } from '~~/types/data';
 
 const props = defineProps({
   sendAgain: { type: Boolean, default: false },
 });
 
-const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
+const $i18n = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
+const { message } = createDiscreteApi(['message']);
+
+const loading = ref(false);
+const formRef = ref<FormInst | null>(null);
 
 const formData = ref({
   email: authStore.email,
@@ -75,23 +70,29 @@ function handleSubmit(e: MouseEvent) {
 }
 async function signupWithEmail() {
   loading.value = true;
-  const { data, error } = await $api.post<ValidateMailResponse>(
-    UserEndpoint.validateMail,
-    formData.value
-  );
 
-  if (error) {
-    message.error(error.message);
+  try {
+    const { data, error } = await $api.post<ValidateMailResponse>(
+      UserEndpoint.validateMail,
+      formData.value
+    );
+
+    if (error) {
+      message.error(error.message);
+      loading.value = false;
+      return;
+    }
+
     loading.value = false;
-    return;
+    if (!data.data.success) {
+      // TODO: error
+      message.error('ERROR');
+    } else if (!props.sendAgain) {
+      router.push('/signup/email');
+    }
+  } catch (error) {
+    message.error($i18n.t('error.API'));
+    loading.value = false;
   }
-
-  if (!data.data.success) {
-    // TODO: error
-    message.error('ERROR');
-  } else if (!props.sendAgain) {
-    router.push('/signup/email');
-  }
-  loading.value = false;
 }
 </script>

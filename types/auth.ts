@@ -1,4 +1,4 @@
-export enum AuthStep {
+enum AuthStep {
   SIGN_UP = 'signup',
   SIGN_UP_EMAIL = 'signUpEmail',
   SIGN_UP_CONFIRMED = 'signUpConfirmed',
@@ -8,9 +8,17 @@ export enum AuthStep {
   LOGIN_FIRST_PROJECT_BUILD = 'loginFirstProjectBuild',
 }
 
-export interface AuthInterface extends Record<string, any> {
-  url: String;
-  apiUrl: String;
+/**
+ * User
+ */
+interface UserResponse {
+  data: {
+    id: number;
+    status: number;
+    name: string;
+    user_uuid: string;
+  };
+  status: number;
 }
 
-export default AuthStep;
+export { AuthStep, UserResponse };
