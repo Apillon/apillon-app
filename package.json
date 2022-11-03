@@ -38,6 +38,7 @@
     "pinia": "^2.0.18",
     "portal-vue": "^3.0.0-beta.0",
     "query-string": "^7.1.1",
+    "text-marshal": "^0.0.2",
     "v-lazy-image": "^2.1.1"
   }
 }

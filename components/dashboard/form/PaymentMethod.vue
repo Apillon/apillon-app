@@ -23,6 +23,7 @@
         v-model:value="formData.cardNumber"
         :input-props="{ id: 'cardNumber' }"
         :placeholder="$t('form.placeholder.cardNumber')"
+        @input="handleCreditCardInput"
       >
         <template #suffix>
           <Image src="./images/payment/mastercard.svg" :width="35" :height="24" alt="mastercard" />
@@ -42,10 +43,11 @@
           v-model:value="formData.expirationDate"
           :input-props="{ id: 'expirationDate' }"
           :placeholder="$t('form.placeholder.expirationDate')"
+          @input="handleExpirationDateInput"
         />
       </n-form-item-gi>
 
-      <!--  Expiration Date -->
+      <!--  CVV -->
       <n-form-item-gi
         :span="1"
         path="cvv"
@@ -56,6 +58,7 @@
           v-model:value="formData.cvv"
           :input-props="{ id: 'cvv' }"
           :placeholder="$t('form.placeholder.cvv')"
+          @input="handleCvvInput"
         />
       </n-form-item-gi>
     </n-grid>
@@ -70,6 +73,7 @@
         v-model:value="formData.postalCode"
         :input-props="{ id: 'postalCode' }"
         :placeholder="$t('form.placeholder.postalCode')"
+        @input="handlePostalCodeInput"
       />
     </n-form-item>
 
@@ -95,6 +99,7 @@
 
 <script lang="ts" setup>
 import cardValidator from 'card-validator';
+import { textMarshal } from 'text-marshal';
 import { FormInst, FormValidationError, FormRules, FormItemRule, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { FormBilling, BillingResponse } from '~~/types/settings';
@@ -189,6 +194,46 @@ function validateCVV(_: FormItemRule, value: string): boolean {
 }
 function validatePostalCode(_: FormItemRule, value: string): boolean {
   return cardValidator.postalCode(value).isValid;
+}
+
+/** Format credit card */
+function handleCreditCardInput(value: string | [string, string]) {
+  const data = textMarshal({
+    input: value,
+    template: 'xxxx - xxxx - xxxx - xxxx',
+    disallowCharacters: [/[a-z]/, /\W/],
+  });
+  formData.value.cardNumber = data.marshaltext;
+}
+
+/** Format Expiration date */
+function handleExpirationDateInput(value: string | [string, string]) {
+  const data = textMarshal({
+    input: value,
+    template: 'xx/xxxx',
+    disallowCharacters: [/[a-z]/, /\W/],
+  });
+  formData.value.expirationDate = data.marshaltext;
+}
+
+/** Format CVV */
+function handleCvvInput(value: string | [string, string]) {
+  const data = textMarshal({
+    input: value,
+    template: 'xxx',
+    disallowCharacters: [/[a-z]/, /\W/],
+  });
+  formData.value.cvv = data.marshaltext;
+}
+
+/** Format CVV */
+function handlePostalCodeInput(value: string | [string, string]) {
+  const data = textMarshal({
+    input: value,
+    template: 'xxxx',
+    disallowCharacters: [/[a-z]/, /\W/],
+  });
+  formData.value.postalCode = data.marshaltext;
 }
 
 // Submit
