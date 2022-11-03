@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import { h } from 'vue';
-import { useMessage } from 'naive-ui';
+import { NButton, NInput, useMessage } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 

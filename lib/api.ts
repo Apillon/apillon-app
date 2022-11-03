@@ -1,5 +1,6 @@
+import { useMessage } from 'naive-ui';
 import { stringify } from 'query-string';
-import { ERROR } from '~~/types/error';
+import { ERROR, ERROR_CODE } from '~~/types/error';
 
 export const APISettings = {
   headers: new Headers({
@@ -10,9 +11,12 @@ export const APISettings = {
 };
 
 export interface ApiErrorResponse {
-  statusCode: number;
+  code?: number;
   message: string;
+  path?: string;
+  status: number;
   error: any;
+  timestamp?: string;
 }
 
 export const $api = {
@@ -26,7 +30,7 @@ export const $api = {
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
       if (
-        error?.message === ERROR.INSUFFICIENT_PERMISSIONS ||
+        error?.code === ERROR_CODE.FORBIDDEN_RESOURCE ||
         error?.message === ERROR.INVALID_SIGNATURE
       ) {
         $api.backToLogin();
@@ -58,7 +62,7 @@ export const $api = {
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
       if (
-        error?.message === ERROR.INSUFFICIENT_PERMISSIONS ||
+        error?.code === ERROR_CODE.FORBIDDEN_RESOURCE ||
         error?.message === ERROR.INVALID_SIGNATURE
       ) {
         $api.backToLogin();
@@ -88,7 +92,7 @@ export const $api = {
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
       if (
-        error?.message === ERROR.INSUFFICIENT_PERMISSIONS ||
+        error?.code === ERROR_CODE.FORBIDDEN_RESOURCE ||
         error?.message === ERROR.INVALID_SIGNATURE
       ) {
         $api.backToLogin();
@@ -118,7 +122,7 @@ export const $api = {
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
       if (
-        error?.message === ERROR.INSUFFICIENT_PERMISSIONS ||
+        error?.code === ERROR_CODE.FORBIDDEN_RESOURCE ||
         error?.message === ERROR.INVALID_SIGNATURE
       ) {
         $api.backToLogin();
@@ -147,7 +151,7 @@ export const $api = {
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
       if (
-        error?.message === ERROR.INSUFFICIENT_PERMISSIONS ||
+        error?.code === ERROR_CODE.FORBIDDEN_RESOURCE ||
         error?.message === ERROR.INVALID_SIGNATURE
       ) {
         $api.backToLogin();
@@ -181,6 +185,10 @@ export const $api = {
 
   backToLogin() {
     const router = useRouter();
+
+    const authStore = useAuthStore();
+    authStore.logout();
+
     // const { $alert } = useAlerts();
     // await $alert.error({
     //   title: 'Your login token has expired, please login again.',

@@ -84,6 +84,8 @@ const themeOverrides: GlobalThemeOverrides = {
     borderRadiusLarge: '0px',
   },
   Card: {
+    borderColor: colors.primary,
+    borderRadius: '0px',
     color: colors.grey.lightBg,
     colorEmbedded: colors.grey.lightBg,
     colorEmbeddedModal: colors.grey.lightBg,
@@ -108,6 +110,13 @@ const themeOverrides: GlobalThemeOverrides = {
   },
   Dialog: {
     color: colors.grey.lightBg,
+  },
+  Drawer: {
+    color: colors.black,
+    headerBorderBottom: '0',
+    headerPadding: '32px 32px 16px 32px',
+    bodyPadding: '16px 32px 16px 32px',
+    footerPadding: '16px 32px 32px 32px',
   },
   Form: {
     labelTextColor: colors.grey.light,
@@ -172,8 +181,12 @@ const themeOverrides: GlobalThemeOverrides = {
     buttonWidthMedium: '20px',
   },
   Tag: {
+    color: colors.grey.dark,
     colorInfo: colors.blue,
+    colorSuccess: colors.grey.dark,
+    textColor: colors.grey.DEFAULT,
     textColorInfo: colors.dark,
+    textColorSuccess: colors.green,
   },
 };
 </script>

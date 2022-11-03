@@ -1,9 +1,14 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Service name -->
-    <n-form-item path="serviceName" :label="$t('form.label.serviceName')">
+    <n-form-item
+      path="serviceName"
+      :label="$t('form.label.serviceName')"
+      :label-props="{ for: 'serviceName' }"
+    >
       <n-input
         v-model:value="formData.serviceName"
+        :input-props="{ id: 'serviceName' }"
         :placeholder="$t('form.placeholder.serviceName')"
       />
     </n-form-item>
@@ -25,6 +30,7 @@
 
     <!--  Service submit -->
     <n-form-item>
+      <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.createServiceAndContinue') }}
       </Btn>
@@ -46,7 +52,7 @@ const props = defineProps({
   },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
@@ -71,11 +77,11 @@ const rules: FormRules = {
 const networkTypes = [
   {
     value: false,
-    label: $i18n.t('form.label.networkTypes.test'),
+    label: t('form.label.networkTypes.test'),
   },
   {
     value: true,
-    label: $i18n.t('form.label.networkTypes.live'),
+    label: t('form.label.networkTypes.live'),
   },
 ];
 
@@ -119,7 +125,7 @@ async function createService() {
     }
     loading.value = false;
   } catch (error) {
-    message.error($i18n.t('error.API'));
+    message.error(t('error.API'));
     loading.value = false;
   }
 }

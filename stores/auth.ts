@@ -14,6 +14,7 @@ export const useAuthStore = defineStore('auth', {
     jwt: '',
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
     username: localStorage.getItem(AuthLsKeys.USERNAME) || '',
+    phone: '',
     provider: parseInt(localStorage.getItem(AuthLsKeys.PROVIDER)) || 0,
     wallet: localStorage.getItem(AuthLsKeys.WALLET) || '',
     authStep: '',

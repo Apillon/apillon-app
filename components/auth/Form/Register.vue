@@ -1,12 +1,16 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules">
     <!--  Register password -->
-    <n-form-item path="password" :label="$t('form.label.password')">
+    <n-form-item
+      path="password"
+      :label="$t('form.label.password')"
+      :label-props="{ for: 'password' }"
+    >
       <n-input
         v-model:value="formData.password"
         type="password"
         show-password-on="mousedown"
-        :input-props="{ autocomplete: 'off' }"
+        :input-props="{ id: 'password', autocomplete: 'off' }"
         :placeholder="$t('form.placeholder.complexPassword')"
         @input="handlePasswordInput"
         @keydown.enter.prevent
@@ -18,13 +22,14 @@
       ref="rPasswordFormItemRef"
       path="reenteredPassword"
       :label="$t('form.label.confirmPassword')"
+      :label-props="{ for: 'confirmPassword' }"
     >
       <n-input
         v-model:value="formData.reenteredPassword"
         :disabled="!formData.password"
         type="password"
         show-password-on="mousedown"
-        :input-props="{ autocomplete: 'off' }"
+        :input-props="{ id: 'confirmPassword', autocomplete: 'off' }"
         :placeholder="$t('form.placeholder.reenterPassword')"
       />
     </n-form-item>

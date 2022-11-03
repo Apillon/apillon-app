@@ -21,4 +21,23 @@ interface UserResponse {
   status: number;
 }
 
-export { AuthStep, UserResponse };
+/**
+ * User profile
+ */
+interface FormUserProfile {
+  username: string;
+  email: string;
+  phone: string;
+}
+
+interface UserProfileResponse {
+  data: {
+    id: number;
+    status: number;
+    name: string;
+    user_uuid: string;
+  };
+  status: number;
+}
+
+export { AuthStep, UserResponse, FormUserProfile, UserProfileResponse };

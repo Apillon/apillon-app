@@ -55,7 +55,7 @@ const menu: MainNavInterface = {
   configuration: [
     { name: 'projectSettings', icon: 'icon-project-setting' },
     { name: 'access', icon: 'icon-acess' },
-    { name: 'billing', icon: 'icon-billing' },
+    { name: 'billing', icon: 'icon-billing', link: 'billing' },
   ],
 };
 </script>

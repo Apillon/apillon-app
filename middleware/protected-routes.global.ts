@@ -27,7 +27,7 @@ export default defineNuxtRouteMiddleware(to => {
         decodedUrl === protectedRoute.path) &&
       !authStore.allowedEntry
     ) {
-      return navigateTo('/', { redirectCode: 301 });
+      return navigateTo(protectedRoute.redirect, { redirectCode: 301 });
     }
   }
 });

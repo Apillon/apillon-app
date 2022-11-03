@@ -5,6 +5,7 @@ export const AuthEndpoint = {
 
 export const UserEndpoint = {
   me: '/user/me',
+  profile: '/user/profile',
   login: '/user/login',
   register: '/user/register',
   validateMail: '/user/validate-email',
@@ -22,4 +23,8 @@ export const ServiceEndpoint = {
   services: '/services/',
   instruction: '/instruction/',
   instructions: '/instruction/all',
+};
+
+export const SettignsEndpoint = {
+  billing: '/billing/',
 };

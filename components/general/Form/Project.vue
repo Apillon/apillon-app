@@ -1,9 +1,14 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Project name -->
-    <n-form-item path="name" :label="$t('form.label.projectName')">
+    <n-form-item
+      path="name"
+      :label="$t('form.label.projectName')"
+      :label-props="{ for: 'projectName' }"
+    >
       <n-input
         v-model:value="formData.name"
+        :input-props="{ id: 'projectName' }"
         :placeholder="$t('form.placeholder.projectName')"
         @keydown.enter.prevent
       />
@@ -11,10 +16,15 @@
 
     <!--  Project description -->
     <n-tag :bordered="false" type="info" class="mb-8">{{ projectNameText }}</n-tag>
-    <n-form-item path="description" :label="$t('form.label.projectDescription')">
+    <n-form-item
+      path="description"
+      :label="$t('form.label.projectDescription')"
+      :label-props="{ for: 'projectDescription' }"
+    >
       <n-input
         v-model:value="formData.description"
         type="textarea"
+        :input-props="{ id: 'projectDescription' }"
         :placeholder="$t('form.placeholder.projectDescription')"
       />
     </n-form-item>
@@ -35,13 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  FormInst,
-  createDiscreteApi,
-  FormValidationError,
-  FormItemRule,
-  FormRules,
-} from 'naive-ui';
+import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { useDataStore } from '~~/stores/data';
 import { CreateProjectResponse, FormProject } from '~~/types/data';
@@ -53,7 +57,7 @@ const $emit = defineEmits(['submitActive', 'submitSuccess']);
 const $i18n = useI18n();
 const termsLabel = computed(() => {
   return h('span', {}, [
-    $i18n.t('form.label.terms'),
+    $i18n.t('form.terms.project'),
     h('a', { href: '#terms', target: '_blank' }, $i18n.t('general.terms')),
   ]);
 });
@@ -94,11 +98,6 @@ const rules: FormRules = {
   ],
 };
 
-// Custom validations
-function validateRequiredCheckbox(_: FormItemRule, value: boolean | null): boolean {
-  return value === true;
-}
-
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
@@ -123,7 +122,7 @@ async function createProject() {
     if (error) {
       setTimeout(() => {
         message.error(error.message);
-        message.error($i18n.t(`error.${error.statusCode}`));
+        message.error($i18n.t(`error.${error.status}`));
 
         loading.value = false;
         $emit('submitActive', false);

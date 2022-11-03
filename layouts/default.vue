@@ -4,7 +4,7 @@
       <Sidebar />
       <Header />
       <n-scrollbar class="bg-grey-dark" style="max-height: calc(100vh - 64px)">
-        <HeaderTabs />
+        <HeaderTabs v-if="routeName === 'index'" />
         <div ref="messageRef" class="relative py-7 pl-8 pr-10">
           <slot />
         </div>
@@ -20,4 +20,9 @@ import { disableBodyScroll } from 'body-scroll-lock';
 disableBodyScroll(document);
 
 const messageRef = ref(null);
+
+const route = useRoute();
+const routeName = computed(() => {
+  return route.name;
+});
 </script>

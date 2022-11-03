@@ -63,6 +63,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         services: 'repeat(auto-fit, minmax(280px, 1fr))',
+        billing: 'repeat(auto-fill, minmax( 310px, 1fr))',
       },
       zIndex: {
         1: 1,

@@ -51,14 +51,14 @@
   h5 {
     @apply font-heading font-black;
     font-size: 1.25rem;
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   /* Headline 6 */
   h6 {
     @apply font-content font-bold uppercase;
     font-size: 0.875rem;
-    line-height: 1.5;
+    line-height: 1.6;
     letter-spacing: 0.25em;
   }
 

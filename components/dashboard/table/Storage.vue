@@ -51,7 +51,7 @@ const createColumns = ({
       render(row) {
         return h(
           NTag,
-          { type: row.active ? 'success' : 'default' },
+          { type: row.active ? 'success' : 'default', round: true, bordered: false },
           {
             default: () => (row.active ? $i18n.t('general.active') : $i18n.t('general.paused')),
           }

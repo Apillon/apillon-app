@@ -1,5 +1,6 @@
 import { Validation } from '@vuelidate/core';
 import { helpers } from '@vuelidate/validators';
+import { FormItemRule } from 'naive-ui';
 
 export function getVuelidateErrorMsg(v$: Validation, key: string) {
   if (!!v$[key] && v$[key].$invalid && v$[key].$errors.length) {
@@ -37,4 +38,9 @@ export function removeLastSlash(val: string) {
 
 export function ActionReturn(success: boolean, data: any) {
   return { success, data };
+}
+
+// Custom validations
+export function validateRequiredCheckbox(_: FormItemRule, value: boolean | null): boolean {
+  return value === true;
 }

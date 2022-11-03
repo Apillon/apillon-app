@@ -87,7 +87,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NSpace } from 'naive-ui';
 import { ServiceTypeItem } from '~~/types/service';
 import { randomInteger } from '~~/lib/utils';
 

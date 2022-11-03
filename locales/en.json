@@ -2,7 +2,7 @@
   "general": {
     "action": "Action",
     "actions": "Actions",
-    "active": "Active",
+    "active": "active",
     "attach": "Attach",
     "copyrights": "© Apillon",
     "created": "created",
@@ -12,7 +12,8 @@
     "logout": "Log out",
     "method": "Method",
     "name": "Name",
-    "paused": "Paused",
+    "notActive": "not active",
+    "paused": "paused",
     "secret": "Secret",
     "serviceName": "Service name",
     "serviceType": "Service type",
@@ -24,32 +25,52 @@
   },
   "form": {
     "label": {
-      "password": "Enter 12 characters password",
+      "cardHolder": "Card holder",
+      "cardNumber": "Card number",
       "confirmPassword": "Confirm password",
-      "projectName": "Project name",
-      "projectDescription": "Project description",
-      "terms": "I understand product is in beta stage and I accept the ",
-      "serviceName": "Service name",
+      "cvv": "CVV",
+      "email": "Email address",
+      "expirationDate": "Expiration date",
       "networkType": "Choose the desired network",
       "networkTypes": {
         "test": "Test network",
         "live": "Live network"
-      }
+      },
+      "password": "Enter 12 characters password",
+      "phone": "Phone",
+      "postalCode": "Postal code",
+      "projectName": "Project name",
+      "projectDescription": "Project description",
+      "serviceName": "Service name",
+      "username": "First & Last name"
     },
     "placeholder": {
-      "email": "youremail{afna}mail.com",
-      "password": "password",
+      "cardHolder": "John Doe",
+      "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "complexPassword": "Enter complex password",
-      "reenterPassword": "Re-enter your complex password",
+      "cvv": "311",
+      "email": "youremail{afna}mail.com",
+      "expirationDate": "01/2023",
+      "password": "password",
+      "phone": "Enter yout Phone",
+      "postalCode": "4223",
       "projectName": "Enter project name",
       "projectDescription": "Enter project description",
-      "serviceName": "Enter the name for the new service"
+      "reenterPassword": "Re-enter your complex password",
+      "serviceName": "Enter the name for the new service",
+      "username": "Enter yout First & Last name"
     },
-    "login": "Log in",
+    "terms": {
+      "project": "I understand product is in beta stage and I accept the ",
+      "payment": "I understand the billing process and some other legal stuff."
+    },
+    "createServiceAndContinue": "Create service & continue to management",
     "continue": "Continue",
+    "login": "Log in",
     "proceed": "Proceed",
-    "startFirstProject": "Start your first project",
-    "createServiceAndContinue": "Create service & continue to management"
+    "save": "Save",
+    "saveCard": "Save card",
+    "startFirstProject": "Start your first project"
   },
   "error": {
     "API": "General API error"
@@ -118,14 +139,32 @@
     "Destroy": "Destroy"
   },
   "dashboard": {
+    "2fa": "Two-factor authentication",
+    "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
+    "addPayment": "Add payment",
+    "addPaymentMethod": "Add payment method",
+    "addPaymentMethodText": " Add payment method and prepurchase the needed credits. Once the credits supply is depleated you will be charged again.",
     "attached": "Attached",
     "attachService": "Attach service",
     "attachNewService": "Attach new service",
+    "billing": "Billing",
+    "changePassword": "Change password",
     "clientLibraries": "Client Libraries",
+    "date": "Date",
+    "invoiceDate": "Next invoice issue date",
+    "invoiceTotal": "Invoice total",
+    "invoice": "Invoice",
+    "invoices": "Invoices",
     "learnMoreAboutServices": "Learn more about services",
+    "mySettings": "My settings",
     "newProject": "Add new project",
+    "password": "Password",
+    "payment": "Payment",
     "projectOverview": "Project overview",
     "selectServices": "Select services",
+    "setup2fa": "Set up 2FA",
+    "total": "Total",
+    "viewInvoice": "View Invoice",
     "yourPlan": "Your plan: "
   },
   "service": {
