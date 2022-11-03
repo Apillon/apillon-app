@@ -48,8 +48,9 @@ export const useDataStore = defineStore('data', {
       return null;
     },
 
-    async getProjects() {
+    async getProjects(redirectToDashboard: boolean = false) {
       const message = useMessage();
+      const router = useRouter();
       try {
         const { response, data, error } = await $api.get<ProjectResponse>(ProjectEndpoint.project);
 
@@ -70,6 +71,13 @@ export const useDataStore = defineStore('data', {
         /* If current project is not selected, take first one */
         if (this.currentProjectId === 0) {
           this.setCurrentProject(this.projects[0].id);
+        }
+
+        /** If user hasn't any project redirect him to '/login/first' so he will be able to create first project */
+        if (redirectToDashboard && this.projects.length === 0) {
+          router.push('/login/first');
+        } else if (redirectToDashboard) {
+          router.push('/');
         }
 
         return response;

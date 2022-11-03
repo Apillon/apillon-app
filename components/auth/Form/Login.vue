@@ -37,7 +37,7 @@ import { useI18n } from 'vue-i18n';
 import { FormLogin, LoginResponse } from '~~/types/data';
 import { useDataStore } from '~~/stores/data';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
@@ -72,18 +72,18 @@ const rules: FormRules = {
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
 
-  loading.value = true;
   formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {
+      /** Login with mail and password */
       await login();
     }
   });
-  loading.value = false;
 }
 
 async function login() {
+  loading.value = true;
   try {
     const { data, error } = await $api.post<LoginResponse>(UserEndpoint.login, formData.value);
 
@@ -97,14 +97,10 @@ async function login() {
     }
 
     /** Fetch projects, if user hasn't any project redirect him to '/login/first' so he will be able to create first project */
-    await dataStore.getProjects();
-    if (dataStore.projects.length === 0) {
-      router.push('/login/first');
-    } else {
-      router.push('/');
-    }
+    await dataStore.getProjects(true);
+    loading.value = false;
   } catch (error) {
-    message.error($i18n.t('error.API'));
+    message.error(t('error.API'));
     loading.value = false;
   }
 }

@@ -25,6 +25,7 @@
 </template>
 
 <script lang="ts" setup>
+import { clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { useAuthStore } from '~~/stores/auth';
 import { AuthStep } from '~~/types/auth';
 const authStore = useAuthStore();
@@ -34,5 +35,12 @@ const isLogin = computed(() => {
 });
 const isSignUp = computed(() => {
   return authStore.authStep === AuthStep.SIGN_UP;
+});
+
+/**
+ * Disable body scroll
+ */
+onUnmounted(() => {
+  clearAllBodyScrollLocks(document);
 });
 </script>

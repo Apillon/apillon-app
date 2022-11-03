@@ -57,7 +57,7 @@ import { useI18n } from 'vue-i18n';
 import { FormRegister, RegisterResponse } from '~~/types/data';
 import { useDataStore } from '~~/stores/data';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const { query } = useRoute();
 const authStore = useAuthStore();
@@ -155,17 +155,11 @@ async function register() {
     authStore.setUserToken(data.data.token);
 
     /** Fetch projects, if user hasn't any project redirect him to '/login/first' so he will be able to create first project */
-    await dataStore.getProjects();
+    await dataStore.getProjects(true);
     loading.value = false;
-
-    if (dataStore.projects.length >= 0) {
-      router.push('/login/first');
-    } else {
-      router.push('/');
-    }
   } catch (error) {
     console.log(error);
-    message.error($i18n.t('error.API'));
+    message.error(t('error.API'));
     loading.value = false;
   }
 }

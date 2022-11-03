@@ -15,14 +15,23 @@
 </template>
 
 <script lang="ts" setup>
-import { disableBodyScroll } from 'body-scroll-lock';
-
-disableBodyScroll(document);
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 const messageRef = ref(null);
 
 const route = useRoute();
 const routeName = computed(() => {
   return route.name;
+});
+
+/**
+ * Enable/disable body scroll
+ */
+onMounted(() => {
+  disableBodyScroll(document);
+});
+
+onUnmounted(() => {
+  clearAllBodyScrollLocks(document);
 });
 </script>
