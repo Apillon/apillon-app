@@ -94,6 +94,7 @@
 </template>
 
 <script lang="ts" setup>
+import cardValidator from 'card-validator';
 import { FormInst, FormValidationError, FormRules, FormItemRule, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { FormBilling, BillingResponse } from '~~/types/settings';
@@ -119,6 +120,10 @@ const rules: FormRules = {
       required: true,
       message: 'Please enter your name',
     },
+    {
+      validator: validateCardHolder,
+      message: 'Please enter valid name',
+    },
   ],
   cardNumber: [
     {
@@ -135,17 +140,29 @@ const rules: FormRules = {
       required: true,
       message: 'Please enter expiration date',
     },
+    {
+      validator: validateExpirationDate,
+      message: 'Date is expired',
+    },
   ],
   cvv: [
     {
       required: true,
       message: 'Please enter CVV',
     },
+    {
+      validator: validateCVV,
+      message: 'Wrong CVV',
+    },
   ],
   postalCode: [
     {
       required: true,
       message: 'Please enter postal code',
+    },
+    {
+      validator: validatePostalCode,
+      message: 'Wrong postal code',
     },
   ],
   terms: [
@@ -158,11 +175,20 @@ const rules: FormRules = {
 };
 
 // Custom validations
+function validateCardHolder(_: FormItemRule, value: string): boolean {
+  return cardValidator.cardholderName(value).isValid;
+}
 function validateCreditCard(_: FormItemRule, value: string): boolean {
-  const regEx =
-    /^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/;
-
-  return regEx.test(value);
+  return cardValidator.number(value).isValid;
+}
+function validateExpirationDate(_: FormItemRule, value: string): boolean {
+  return cardValidator.expirationDate(value).isValid;
+}
+function validateCVV(_: FormItemRule, value: string): boolean {
+  return cardValidator.cvv(value).isValid;
+}
+function validatePostalCode(_: FormItemRule, value: string): boolean {
+  return cardValidator.postalCode(value).isValid;
 }
 
 // Submit
