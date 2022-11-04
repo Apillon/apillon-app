@@ -3,18 +3,15 @@
     <div class="px-8 py-4">
       <div class="flex justify-between">
         <div class="pr-4">
-          <n-select
+          <select-options
             :key="componentSelectKey"
             v-model:value="dataStore.currentProjectId"
-            class="select-project"
-            :theme-overrides="SelectProjectOverrides"
             :options="dataStore.projects"
+            :theme-overrides="SelectProjectOverrides"
+            class="select-project"
+            size="small"
             :loading="loading"
-          >
-            <template #arrow>
-              <span class="icon-down text-2xl"></span>
-            </template>
-          </n-select>
+          />
         </div>
         <n-space align="center" :size="32">
           <div class="w-[20vw] max-w-xs">
@@ -34,6 +31,7 @@
 </template>
 
 <script lang="ts" setup>
+import { SelectProps } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 import { useDataStore } from '~~/stores/data';
 
@@ -42,16 +40,16 @@ const router = useRouter();
 const componentSelectKey = ref(0);
 const loading = ref(false);
 
-const SelectProjectOverrides = {
-  InternalSelection: {
-    heightMedium: '24px',
-    color: colors.transparent,
-    borderActive: `1px solid ${colors.blue}`,
-    borderFocus: `1px solid ${colors.blue}`,
-    borderHover: `1px solid ${colors.blue}`,
-  },
-  InternalSelectMenu: {
-    color: colors.dark,
+type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>;
+const SelectProjectOverrides: SelectThemeOverrides = {
+  peers: {
+    InternalSelection: {
+      color: colors.transparent,
+      border: `0px solid ${colors.grey.DEFAULT}`,
+      borderActive: `1px solid ${colors.blue}`,
+      borderFocus: `1px solid ${colors.blue}`,
+      borderHover: `1px solid ${colors.blue}`,
+    },
   },
 };
 

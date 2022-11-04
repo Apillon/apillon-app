@@ -15,7 +15,7 @@
     </div>
 
     <div class="flex flex-auto w-full">
-      <div v-if="$slots.sidebar" class="w-44 h-fit mr-6">
+      <div v-if="$slots.sidebar" class="w-44 lg:min-w-[11rem] h-fit mr-6">
         <slot name="sidebar"></slot>
       </div>
       <n-layout :has-sider="$slots.learn ? true : false" sider-placement="right">

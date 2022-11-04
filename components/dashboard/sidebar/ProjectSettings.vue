@@ -21,16 +21,18 @@ function handleUpdateValue(key: string, item: MenuOption) {
 
 const menuOptions: MenuOption[] = [
   {
-    label: () => h(NuxtLink, { to: { path: '/methods' } }, () => t('pageMenu.methods')),
-    key: 'methods',
+    label: () =>
+      h(NuxtLink, { to: { path: 'project-settings' } }, () => t('pageMenu.projectSettings')),
+    key: 'project-settings',
   },
   {
-    label: () => h(NuxtLink, { to: { path: '/' } }, () => t('pageMenu.access')),
-    key: 'access',
+    label: () =>
+      h(NuxtLink, { to: { path: 'user-permissions' } }, () => t('pageMenu.usersPermissions')),
+    key: 'user-permissions',
   },
   {
-    label: () => h(NuxtLink, { href: '/api-keys' }, () => t('pageMenu.apiKeys')),
-    key: 'api-keys',
+    label: () => h(NuxtLink, { href: 'credentials' }, () => t('pageMenu.credentials')),
+    key: 'credentials',
   },
 ];
 </script>

@@ -54,7 +54,7 @@ const rules: FormRules = {
   mail: [
     {
       type: 'email',
-      message: 'Email address is not valid',
+      message: t('validation.email'),
     },
     {
       required: true,

@@ -184,15 +184,9 @@ export const $api = {
   },
 
   backToLogin() {
-    const router = useRouter();
-
-    const authStore = useAuthStore();
-    authStore.logout();
-
-    // const { $alert } = useAlerts();
-    // await $alert.error({
-    //   title: 'Your login token has expired, please login again.',
-    // });
-    router.push('/login');
+    // const authStore = useAuthStore();
+    // authStore.logout();
+    // const router = useRouter();
+    // router.push('/login');
   },
 };

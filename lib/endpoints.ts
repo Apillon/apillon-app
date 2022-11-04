@@ -15,7 +15,7 @@ export const UserEndpoint = {
 };
 
 export const ProjectEndpoint = {
-  project: '/project/',
+  project: '/project',
   projectUsers: '/project/getProjectUsers',
 };
 

@@ -66,6 +66,7 @@
   }
   .n-menu-item-content-header {
     margin-left: -8px;
+    white-space: normal;
   }
   .n-menu-item-content--selected {
     border-left: 4px solid theme('colors.primary');

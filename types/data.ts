@@ -1,11 +1,11 @@
 /**
  *  Register
  */
-interface FormRegister {
+export interface FormRegister {
   password: string;
   reenteredPassword: string;
 }
-interface RegisterResponse {
+export interface RegisterResponse {
   data: {
     id: number;
     status: number;
@@ -15,7 +15,7 @@ interface RegisterResponse {
   status: number;
 }
 
-interface ValidateMailResponse {
+export interface ValidateMailResponse {
   data: {
     data: boolean;
     status: number;
@@ -27,11 +27,11 @@ interface ValidateMailResponse {
 /**
  * Login
  */
-interface FormLogin {
+export interface FormLogin {
   email: string;
   password: string;
 }
-interface LoginResponse {
+export interface LoginResponse {
   data: {
     token: string;
   };
@@ -41,20 +41,21 @@ interface LoginResponse {
 /**
  * Project
  */
-interface FormProject {
+export interface FormProject {
   name: string | null;
   description: string | null;
   terms: boolean | null;
 }
-interface ProjectInterface {
+export interface ProjectInterface {
   id: number;
   status: number;
   name: string;
   description: string;
   shortDescription: string;
   imageFile_id: number;
+  project_uuid?: string;
 }
-interface ProjectResponse {
+export interface ProjectResponse {
   data: {
     items: Array<ProjectInterface>;
     total: number;
@@ -62,7 +63,19 @@ interface ProjectResponse {
   status: number;
 }
 
-interface CreateProjectResponse {
+export interface CreateProjectResponse {
+  data: ProjectInterface;
+  status: number;
+}
+
+/**
+ * Project settings
+ */
+export interface FormProjectSettings {
+  name: string | null;
+  description: string | null;
+}
+export interface ProjectSettingsResponse {
   data: ProjectInterface;
   status: number;
 }
@@ -70,7 +83,7 @@ interface CreateProjectResponse {
 /**
  * Instruction
  */
-interface InstructionInterface {
+export interface InstructionInterface {
   id: number;
   status: number;
   title: string;
@@ -82,30 +95,15 @@ interface InstructionInterface {
   forRoute: string;
 }
 
-interface InstructionResponse {
+export interface InstructionResponse {
   data: InstructionInterface;
   status: number;
 }
 
-interface InstructionsResponse {
+export interface InstructionsResponse {
   data: {
     items: InstructionInterface;
     total: number;
   };
   status: number;
 }
-
-export {
-  FormRegister,
-  RegisterResponse,
-  ValidateMailResponse,
-  FormLogin,
-  LoginResponse,
-  FormProject,
-  ProjectInterface,
-  ProjectResponse,
-  CreateProjectResponse,
-  InstructionInterface,
-  InstructionResponse,
-  InstructionsResponse,
-};

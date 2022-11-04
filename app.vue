@@ -103,10 +103,11 @@ const themeOverrides: GlobalThemeOverrides = {
   },
   Collapse: {},
   DataTable: {
+    borderColor: colors.grey.lightBg,
     thColor: colors.grey.dark,
     tdColor: colors.grey.lightBg,
     tdColorHover: colors.dark,
-    borderColor: colors.grey.lightBg,
+    thFontWeight: '700',
   },
   Dialog: {
     color: colors.grey.lightBg,
@@ -139,7 +140,7 @@ const themeOverrides: GlobalThemeOverrides = {
   Menu: {
     color: colors.grey.lightBg,
     itemColorHover: colors.dark,
-    itemHeight: '24px',
+    itemHeight: 'auto',
   },
   Message: {
     borderRadius: '0px',
@@ -188,6 +189,21 @@ const themeOverrides: GlobalThemeOverrides = {
     textColor: colors.grey.DEFAULT,
     textColorInfo: colors.dark,
     textColorSuccess: colors.green,
+  },
+  Select: {
+    peers: {
+      InternalSelection: {
+        border: `1px solid ${colors.grey.DEFAULT}`,
+        borderRadius: '0px',
+        heightSmall: '24px',
+        heightMedium: '40px',
+        heightLarge: '56px',
+        color: colors.transparent,
+      },
+      InternalSelectMenu: {
+        color: colors.grey.lightBg,
+      },
+    },
   },
 };
 </script>

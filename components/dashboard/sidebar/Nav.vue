@@ -53,7 +53,7 @@ const menu: MainNavInterface = {
     { name: 'serviceMonitor', icon: 'icon-service-monitor' },
   ],
   configuration: [
-    { name: 'projectSettings', icon: 'icon-project-setting' },
+    { name: 'projectSettings', icon: 'icon-project-setting', link: 'project-settings' },
     { name: 'access', icon: 'icon-acess' },
     { name: 'billing', icon: 'icon-billing', link: 'billing' },
   ],

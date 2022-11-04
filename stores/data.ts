@@ -41,6 +41,18 @@ export const useDataStore = defineStore('data', {
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
     },
 
+    updateCurrentProject(project: ProjectInterface) {
+      /** Find index of specific object using findIndex method. */
+      const projectIndex = this.projects.findIndex(item => item.id === project.id);
+
+      /** Update current project, add value and label, which are used in header dropdown */
+      this.projects[projectIndex] = {
+        ...project,
+        value: project.id,
+        label: project.name,
+      };
+    },
+
     getInstruction(key: string) {
       if (key in this.instruction) {
         return this.instruction[key];

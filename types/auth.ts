@@ -1,4 +1,4 @@
-enum AuthStep {
+export enum AuthStep {
   SIGN_UP = 'signup',
   SIGN_UP_EMAIL = 'signUpEmail',
   SIGN_UP_CONFIRMED = 'signUpConfirmed',
@@ -11,7 +11,7 @@ enum AuthStep {
 /**
  * User
  */
-interface UserResponse {
+export interface UserResponse {
   data: {
     id: number;
     status: number;
@@ -24,13 +24,13 @@ interface UserResponse {
 /**
  * User profile
  */
-interface FormUserProfile {
+export interface FormUserProfile {
   username: string;
   email: string;
   phone: string;
 }
 
-interface UserProfileResponse {
+export interface UserProfileResponse {
   data: {
     id: number;
     status: number;
@@ -40,4 +40,20 @@ interface UserProfileResponse {
   status: number;
 }
 
-export { AuthStep, UserResponse, FormUserProfile, UserProfileResponse };
+/**
+ * User invite
+ */
+export interface FormUserInvite {
+  email: string;
+  role: string;
+}
+
+export interface UserInviteResponse {
+  data: {
+    id: number;
+    status: number;
+    name: string;
+    user_uuid: string;
+  };
+  status: number;
+}

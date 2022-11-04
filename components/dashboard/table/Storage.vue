@@ -77,8 +77,8 @@ const createColumns = ({
             default: () =>
               h(
                 NButton,
-                { onClick: selectRow(row) },
-                { default: () => h('span', { class: 'icon-more' }, {}) }
+                { size: 'small', quaternary: true, onClick: selectRow(row) },
+                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
               ),
           }
         );

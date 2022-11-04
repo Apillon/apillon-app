@@ -30,6 +30,7 @@
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "email": "Email address",
+      "inviteByEmail": "Invite by email",
       "expirationDate": "Expiration date",
       "networkType": "Choose the desired network",
       "networkTypes": {
@@ -41,6 +42,7 @@
       "postalCode": "Postal code",
       "projectName": "Project name",
       "projectDescription": "Project description",
+      "role": "Role",
       "serviceName": "Service name",
       "username": "First & Last name"
     },
@@ -50,6 +52,7 @@
       "complexPassword": "Enter complex password",
       "cvv": "311",
       "email": "youremail{afna}mail.com",
+      "inviteByEmail": "Type e-mail",
       "expirationDate": "01/2023",
       "password": "password",
       "phone": "Enter yout Phone",
@@ -57,6 +60,7 @@
       "projectName": "Enter project name",
       "projectDescription": "Enter project description",
       "reenterPassword": "Re-enter your complex password",
+      "role": "Select role",
       "serviceName": "Enter the name for the new service",
       "username": "Enter yout First & Last name"
     },
@@ -70,6 +74,7 @@
     "proceed": "Proceed",
     "save": "Save",
     "saveCard": "Save card",
+    "sendInvite": "Send invite",
     "startFirstProject": "Start your first project"
   },
   "error": {
@@ -136,7 +141,10 @@
     "apiKeys": "API keys",
     "charts": "Charts",
     "history": "History",
-    "Destroy": "Destroy"
+    "Destroy": "Destroy",
+    "projectSettings": "Project settings",
+    "usersPermissions": "Users & permissions",
+    "credentials": "Credentials & API keys"
   },
   "dashboard": {
     "2fa": "Two-factor authentication",
@@ -153,20 +161,30 @@
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "date": "Date",
+    "deleteProject": "Delete project",
+    "deleteProjectText": "Submit a request for project deletion. ",
+    "email": "Email",
     "expiration": "Expiration",
+    "inviteTeamMember": "Invite team member",
     "invoiceDate": "Next invoice issue date",
     "invoiceTotal": "Invoice total",
     "invoice": "Invoice",
     "invoices": "Invoices",
     "learnMoreAboutServices": "Learn more about services",
+    "manageRoles": "Manage roles",
     "mySettings": "My settings",
     "newProject": "Add new project",
     "password": "Password",
     "payment": "Payment",
     "projectOverview": "Project overview",
+    "projectOwner": "Project owner",
+    "projectUsersAndPermissions": "Project users & permissions",
+    "role": "Role",
     "selectServices": "Select services",
+    "sendRequestToDeleteProject": "Send a request to delete project",
     "setup2fa": "Set up 2FA",
     "total": "Total",
+    "user": "User",
     "viewInvoice": "View Invoice",
     "yourPlan": "Your plan: "
   },
@@ -183,5 +201,10 @@
       "name": "Computing",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
     }
+  },
+  "validation": {
+    "email": "Email address is not valid",
+    "emailRequired": "Please enter your email",
+    "phone": "Phone validation error"
   }
 }

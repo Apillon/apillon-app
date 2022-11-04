@@ -32,7 +32,7 @@ const props = defineProps({
   sendAgain: { type: Boolean, default: false },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const { message } = createDiscreteApi(['message']);
@@ -47,11 +47,11 @@ const rules: FormRules = {
   email: [
     {
       type: 'email',
-      message: 'Email address is not valid',
+      message: t('validation.email'),
     },
     {
       required: true,
-      message: 'Please enter your email',
+      message: t('validation.emailRequired'),
     },
   ],
 };
@@ -91,7 +91,7 @@ async function signupWithEmail() {
       router.push('/signup/email');
     }
   } catch (error) {
-    message.error($i18n.t('error.API'));
+    message.error(t('error.API'));
     loading.value = false;
   }
 }

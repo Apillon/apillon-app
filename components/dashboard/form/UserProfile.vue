@@ -75,17 +75,17 @@ const rules: FormRules = {
   email: [
     {
       type: 'email',
-      message: 'Email address is not valid',
+      message: t('validation.email'),
     },
     {
       required: true,
-      message: 'Please enter your email',
+      message: t('validation.emailRequired'),
     },
   ],
   phone: [
     {
       validator: validatePhone,
-      message: 'Phone validation error',
+      message: t('validation.phone'),
       trigger: 'input',
     },
   ],

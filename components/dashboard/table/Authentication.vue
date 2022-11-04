@@ -68,6 +68,7 @@ const createColumns = ({
     {
       title: t('general.actions'),
       key: 'actions',
+      align: 'right',
       render(row) {
         return h(
           NDropdown,
@@ -80,8 +81,8 @@ const createColumns = ({
             default: () =>
               h(
                 NButton,
-                { onClick: selectRow(row) },
-                { default: () => h('span', { class: 'icon-more' }, {}) }
+                { size: 'small', quaternary: true, onClick: selectRow(row) },
+                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
               ),
           }
         );
