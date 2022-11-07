@@ -109,6 +109,28 @@
   }
 }
 
+/** Select */
+.n-select {
+  &.select-role {
+    .n-base-selection-tag-wrapper {
+      padding: 0 4px 0 0;
+
+      &:not(:nth-last-child(3)) .n-tag__content:after {
+        content: ',';
+      }
+      .n-tag {
+        padding: 0;
+      }
+      .n-tag__border {
+        border: 0;
+      }
+      .n-tag__close {
+        display: none;
+      }
+    }
+  }
+}
+
 /** Switch */
 .n-switch {
   margin: 0 1rem;

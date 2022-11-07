@@ -1,5 +1,11 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="data" table-layout="fixed" />
+  <n-data-table
+    table-layout="fixed"
+    :bordered="false"
+    :columns="columns"
+    :data="data"
+    :row-props="rowProps"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -18,13 +24,11 @@ type RowData = {
 };
 
 const createColumns = ({
-  selectRow,
-  handleSelect,
+  handleSelectAction,
   handleRoleChange,
 }: {
-  selectRow: (row: RowData) => void;
-  handleSelect: (key: string | number) => void;
-  handleRoleChange: (key: string | number) => void;
+  handleSelectAction: (key: string | number) => void;
+  handleRoleChange: (selected: Array<string>) => void;
 }): DataTableColumns<RowData> => {
   return [
     {
@@ -43,6 +47,7 @@ const createColumns = ({
         return h(
           SelectRoles,
           {
+            class: 'select-role',
             model: row.role,
             options: roleOptions,
             onChange: handleRoleChange,
@@ -56,19 +61,19 @@ const createColumns = ({
       key: 'actions',
       align: 'right',
       className: '!py-0',
-      render(row) {
+      render() {
         return h(
           NDropdown,
           {
             options: dropdownOptions,
             trigger: 'click',
-            onSelect: handleSelect,
+            onSelect: handleSelectAction,
           },
           {
             default: () =>
               h(
                 NButton,
-                { size: 'small', quaternary: true, onClick: selectRow(row) },
+                { size: 'small', quaternary: true },
                 { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
               ),
           }
@@ -118,24 +123,31 @@ const roleOptions = [
   },
 ];
 
-const currentRow = ref(null);
+const currentRow = ref<number>(0);
 const data = ref(createData());
 const columns = createColumns({
-  selectRow(rowData: RowData) {
-    currentRow.value = rowData;
-    console.log(rowData);
-  },
-  handleSelect(key: string | number) {
+  handleSelectAction(key: string | number) {
     console.log(key);
   },
-  handleRoleChange(key, value) {
-    console.log('handleRoleChange');
-    console.log(key);
-    console.log(data);
-    data.value[0].role = key;
+  handleRoleChange(selected: Array<string>) {
+    data.value[currentRow.value].role = selected;
+
+    // TODO: sync role change
   },
 });
 
+function rowProps(row: RowData) {
+  return {
+    onClick: () => {
+      console.log('rowProps');
+      currentRow.value = row.key;
+    },
+  };
+}
+
+/**
+ * Dropdown Actions
+ */
 const dropdownOptions = [
   {
     label: 'Profile',
