@@ -37,3 +37,16 @@ export interface GenerateApiKeyResponse {
   data: any;
   status: number;
 }
+
+/**
+ * Email configuration
+ */
+export interface FormEmailConfiguration {
+  email: boolean;
+  did: boolean;
+}
+
+export interface EmailConfigurationResponse {
+  data: any;
+  status: number;
+}

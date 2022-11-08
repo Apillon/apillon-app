@@ -1,7 +1,7 @@
 <template>
   <div
-    class="inline-block py-2 pl-5 pr-3 border-l-4 bg-grey-lightBg"
-    :class="[`text-${colorClass}`, `border-color-${colorClass}`]"
+    class="inline-block py-2 pl-5 pr-3 border-l-4 bg-grey-lightBg text-sm"
+    :class="notificationClass"
   >
     <span :class="iconClass"></span>
     <slot />
@@ -19,34 +19,33 @@ const props = defineProps({
 
 const $style = useCssModule();
 
-const iconClass = computed(() => {
+const notificationClass = computed(() => {
   return [
     $style.notification,
     {
-      'text-blue icon-info': props.type === 'info',
-      'text-yellow icon-info': props.type === 'warning',
-      'text-pink icon-close': props.type === 'error',
-      'text-green icon-check': props.type === 'success',
+      'border-blue': props.type === 'info',
+      'border-yellow': props.type === 'warning',
+      'border-pink': props.type === 'error',
+      'border-green': props.type === 'success',
     },
   ];
 });
 
-const colorClass = computed(() => {
-  switch (props.type) {
-    case 'info':
-      return 'blue';
-    case 'warning':
-      return 'yellow';
-    case 'error':
-      return 'pink';
-    default:
-      return 'green';
-  }
+const iconClass = computed(() => {
+  return [
+    $style.icon,
+    {
+      'text-blue icon-info': props.type === 'info',
+      'text-yellow icon-info': props.type === 'warning',
+      'text-pink icon-info': props.type === 'error',
+      'text-green icon-check': props.type === 'success',
+    },
+  ];
 });
 </script>
 
 <style lang="postcss" module>
-.notification {
+.icon {
   @apply mr-2 align-middle text-xl;
 }
 </style>

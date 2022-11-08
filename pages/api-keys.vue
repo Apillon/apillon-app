@@ -17,6 +17,13 @@
     </template>
     <slot>
       <TableSecrets />
+      <div class="text-right">
+        <NuxtLink to="credentials">
+          <n-button type="primary" quaternary>
+            {{ $t('dashboard.goToApiManagement') }}
+          </n-button>
+        </NuxtLink>
+      </div>
     </slot>
   </Dashboard>
 </template>

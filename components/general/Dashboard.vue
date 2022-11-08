@@ -23,7 +23,9 @@
           <slot name="title"></slot>
         </n-layout-header>
         <n-layout-content>
-          <slot />
+          <div class="pb-8">
+            <slot />
+          </div>
         </n-layout-content>
         <n-layout-sider
           v-if="$slots.learn"

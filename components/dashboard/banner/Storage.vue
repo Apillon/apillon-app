@@ -1,6 +1,6 @@
 <template>
-  <div class="relative bg-pink-purple px-12 pt-5 pb-10 overflow-hidden rounded">
-    <div class="max-w-[600px] w-1/2">
+  <div class="relative bg-black px-12 pt-5 pb-10 overflow-hidden rounded">
+    <div class="max-w-[600px] w-2/3">
       <n-space size="large" align="center" class="h-12">
         <h4 class="">{{ $t('nav.storage') }}</h4>
         <div class="w-[1px] h-[13px] bg-grey-light"></div>
@@ -8,16 +8,16 @@
           <NuxtIcon name="StorageCrust" class="text-[80px]" fill />
         </div>
       </n-space>
-      <p class="mb-7">
+      <p class="mb-7 text-sm">
         Store your Web3 dapp data in a decentralized, private, and Metaverse-ready storage with
         instant access.
       </p>
-      <Btn type="secondary">
+      <Notification type="error">
         Our team is working hard to get Storage live. Below learn more what to expect.
-      </Btn>
+      </Notification>
     </div>
-    <div class="absolute top-1/2 right-[75px] -translate-y-1/2">
-      <Image src="./images/storage/sdk.svg" />
+    <div class="absolute top-1/2 right-0 -translate-y-1/2">
+      <AnimationIcons :num-of-icons="8" :animation-name="'Labirynth'" :size="'md'" />
     </div>
   </div>
 </template>

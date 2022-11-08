@@ -4,15 +4,13 @@
       <SidebarProjectSettings />
     </template>
     <slot>
-      <div class="mb-2">
-        <!-- Project users & permissions -->
-        <h4 class="mb-6">{{ $t('dashboard.projectUsersAndPermissions') }}</h4>
-        <TableUsersPermissions />
+      <!-- Project users & permissions -->
+      <h4 class="mb-6">{{ $t('dashboard.projectUsersAndPermissions') }}</h4>
+      <TableUsersPermissions />
 
-        <!-- Invite team member -->
-        <n-h5 prefix="bar">{{ $t('dashboard.inviteTeamMember') }}</n-h5>
-        <FormUserInvite />
-      </div>
+      <!-- Invite team member -->
+      <n-h5 prefix="bar">{{ $t('dashboard.inviteTeamMember') }}</n-h5>
+      <FormUserInvite />
     </slot>
   </Dashboard>
 </template>
