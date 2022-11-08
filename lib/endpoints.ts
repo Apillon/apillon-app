@@ -26,5 +26,6 @@ export const ServiceEndpoint = {
 };
 
 export const SettignsEndpoint = {
+  apiKey: '/api-key/',
   billing: '/billing/',
 };

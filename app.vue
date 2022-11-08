@@ -101,7 +101,10 @@ const themeOverrides: GlobalThemeOverrides = {
     fontSizeLarge: '14px',
     textColor: colors.grey.DEFAULT,
   },
-  Collapse: {},
+  Collapse: {
+    dividerColor: `${colors.grey.DEFAULT}66`,
+    titleFontWeight: 'bold',
+  },
   DataTable: {
     borderColor: colors.grey.lightBg,
     thColor: colors.grey.dark,

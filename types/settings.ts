@@ -17,3 +17,23 @@ export interface BillingResponse {
   };
   status: number;
 }
+
+/**
+ * Generate API key
+ */
+export interface ApiKeyPermissions {
+  read: boolean;
+  write: boolean;
+  xy?: boolean;
+  zzz?: boolean;
+}
+export interface FormGenerateApiKey {
+  authentication: ApiKeyPermissions;
+  storage: ApiKeyPermissions;
+  computing: ApiKeyPermissions;
+}
+
+export interface GenerateApiKeyResponse {
+  data: any;
+  status: number;
+}
