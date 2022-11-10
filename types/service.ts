@@ -1,7 +1,7 @@
 /**
  * Service ENUM
  */
-enum ServiceType {
+export enum ServiceType {
   AUTHENTICATION = 1,
   STORAGE = 2,
   COPMUTING = 3,
@@ -10,14 +10,14 @@ enum ServiceType {
 /**
  * Service Type
  */
-interface ServiceTypeInterface {
+export interface ServiceTypeInterface {
   id: number;
   name: string;
   description: string;
   active: number;
   status: number;
 }
-interface ServiceTypeItem {
+export interface ServiceTypeItem {
   id: number;
   name: string;
   icon: string;
@@ -28,14 +28,14 @@ interface ServiceTypeItem {
 /**
  * Service
  */
-interface ServicesInterface {
+export interface ServicesInterface {
   name: string;
   serviceType: string;
   active: number;
   uptime: string;
 }
 
-interface ServicesResponse {
+export interface ServicesResponse {
   data: {
     items: ServicesInterface[];
     total: number;
@@ -43,11 +43,11 @@ interface ServicesResponse {
   status: number;
 }
 
-interface FormService {
+export interface FormService {
   serviceName: string;
   networkType: boolean;
 }
-interface CreateServiceResponse {
+export interface CreateServiceResponse {
   data: {
     id: number;
     status: number;
@@ -56,14 +56,30 @@ interface CreateServiceResponse {
 }
 
 /**
- * Export all
+ * Bucket
  */
-export {
-  ServiceType,
-  ServiceTypeInterface,
-  ServiceTypeItem,
-  ServicesInterface,
-  ServicesResponse,
-  FormService,
-  CreateServiceResponse,
-};
+export enum BucketType {
+  STORAGE = 1,
+  HOSTING = 2,
+}
+
+export interface FormNewBucket {
+  bucketName: string;
+  bucketSize: string;
+}
+export interface NewBucketResponse {
+  data: {
+    id: number;
+    status: number;
+    bucket_uuid: string;
+    project_uuid: string;
+    bucketType: number;
+    name: string;
+    description: string;
+    maxSize: number;
+    size: number | null;
+    CID: string | null;
+    IPNS: string | null;
+  };
+  status: number;
+}

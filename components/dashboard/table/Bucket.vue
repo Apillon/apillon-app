@@ -3,23 +3,21 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
+import { NButton, NDropdown, NTag, NProgress, useMessage } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { timeToDays } from '~~/lib/utils';
 import { useDataStore } from '~~/stores/data';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const IconStatus = resolveComponent('IconStatus');
 
 type RowData = {
   key: number;
   name: string;
-  serviceType: string;
-  active: boolean;
-  uptime: string;
+  usage: string;
+  traffic: boolean;
+  visits: string;
 };
 
 const createColumns = ({
@@ -29,50 +27,35 @@ const createColumns = ({
 }): DataTableColumns<RowData> => {
   return [
     {
-      title: t('general.serviceName'),
+      title: $i18n.t('storage.bucketName'),
       key: 'name',
       render(row) {
-        return [
-          h(IconStatus, { active: row.active }, ''),
-          h('span', { class: 'ml-2 text-blue' }, row.serviceType),
-        ];
+        return h('span', { class: 'ml-2 text-blue' }, row.name);
       },
     },
     {
-      title: t('general.serviceType'),
+      title: $i18n.t('storage.usage'),
       key: 'serviceType',
       render(row) {
         return h(
           'span',
           { class: 'text-grey' },
           {
-            default: () => row.serviceType,
+            default: () => row.usage,
           }
         );
       },
     },
     {
-      title: t('general.status'),
-      key: 'active',
-      render(row) {
-        return h(
-          NTag,
-          { type: row.active ? 'success' : 'default', round: true, bordered: false },
-          {
-            default: () => (row.active ? t('general.active') : t('general.paused')),
-          }
-        );
-      },
+      title: $i18n.t('storage.traffic'),
+      key: 'traffic',
     },
     {
-      title: t('general.uptime'),
-      key: 'uptime',
-      render(row) {
-        return h('span', {}, { default: () => timeToDays(row.uptime) });
-      },
+      title: $i18n.t('general.visits'),
+      key: 'visits',
     },
     {
-      title: t('general.actions'),
+      title: $i18n.t('general.actions'),
       key: 'actions',
       align: 'right',
       className: '!py-0',
@@ -97,7 +80,7 @@ const createColumns = ({
     },
   ];
 };
-const createData = (): RowData[] => dataStore.services.authentication;
+const createData = (): RowData[] => dataStore.services.storage;
 const currentRow = ref(null);
 
 const data = createData();
@@ -121,7 +104,6 @@ const columns = createColumns({
 function rowProps(row: RowData) {
   return {
     onClick: () => {
-      console.log('rowProps');
       currentRow.value = row.key;
     },
   };

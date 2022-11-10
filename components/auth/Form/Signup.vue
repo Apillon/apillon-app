@@ -73,7 +73,7 @@ async function signupWithEmail() {
 
   try {
     const { data, error } = await $api.post<ValidateMailResponse>(
-      UserEndpoint.validateMail,
+      endpoints.validateMail,
       formData.value
     );
 

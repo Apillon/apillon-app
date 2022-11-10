@@ -1,16 +1,18 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="data" />
+  <n-data-table :bordered="false" :columns="columns" :data="data" :row-props="rowProps" />
 </template>
 
 <script lang="ts" setup>
 import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
+import { timeToDays } from '~~/lib/utils';
 import { useDataStore } from '~~/stores/data';
 
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const IconStatus = resolveComponent('IconStatus');
 
 type RowData = {
   key: number;
@@ -21,16 +23,20 @@ type RowData = {
 };
 
 const createColumns = ({
-  selectRow,
   handleSelect,
 }: {
-  selectRow: (row: RowData) => void;
   handleSelect: (key: string | number) => void;
 }): DataTableColumns<RowData> => {
   return [
     {
       title: $i18n.t('general.serviceName'),
       key: 'name',
+      render(row) {
+        return [
+          h(IconStatus, { active: row.active }, ''),
+          h('span', { class: 'ml-2 text-blue' }, row.serviceType),
+        ];
+      },
     },
     {
       title: $i18n.t('general.serviceType'),
@@ -40,7 +46,7 @@ const createColumns = ({
           'span',
           { class: 'text-grey' },
           {
-            default: () => [h('span', { class: 'icon-storage text-black' }, ''), row.serviceType],
+            default: () => row.serviceType,
           }
         );
       },
@@ -61,11 +67,16 @@ const createColumns = ({
     {
       title: $i18n.t('general.uptime'),
       key: 'uptime',
+      render(row) {
+        return h('span', {}, { default: () => timeToDays(row.uptime) });
+      },
     },
     {
       title: $i18n.t('general.actions'),
       key: 'actions',
-      render(row) {
+      align: 'right',
+      className: '!py-0',
+      render() {
         return h(
           NDropdown,
           {
@@ -77,7 +88,7 @@ const createColumns = ({
             default: () =>
               h(
                 NButton,
-                { size: 'small', quaternary: true, onClick: selectRow(row) },
+                { size: 'small', quaternary: true },
                 { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
               ),
           }
@@ -91,9 +102,6 @@ const currentRow = ref(null);
 
 const data = createData();
 const columns = createColumns({
-  selectRow(rowData: RowData) {
-    currentRow.value = rowData;
-  },
   handleSelect(key: string | number) {
     message.info(
       () =>
@@ -109,6 +117,14 @@ const columns = createColumns({
     );
   },
 });
+
+function rowProps(row: RowData) {
+  return {
+    onClick: () => {
+      currentRow.value = row.key;
+    },
+  };
+}
 
 const dropdownOptions = [
   {

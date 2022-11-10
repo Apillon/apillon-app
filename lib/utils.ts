@@ -40,7 +40,33 @@ export function ActionReturn(success: boolean, data: any) {
   return { success, data };
 }
 
-// Custom validations
+/**
+ * Custom validations
+ */
+/** Validate checkbox if it is checked */
 export function validateRequiredCheckbox(_: FormItemRule, value: boolean | null): boolean {
   return value === true;
+}
+
+/**
+ *  Date and time functions
+ */
+/** Time to days and hours */
+export function timeToDays(time: String) {
+  const [d, h, s] = time.split(':');
+  const days = parseInt(d);
+  const hours = parseInt(h);
+  const seconds = parseInt(s);
+
+  if (days > 1) {
+    return `${days}d`;
+  } else if (days > 0 && hours > 1) {
+    return `${days}d ${hours}h`;
+  } else if (hours > 0) {
+    return `${hours}h ${seconds}s`;
+  } else if (seconds > 0) {
+    return `${seconds}s`;
+  } else {
+    return `${days}d ${hours}h ${seconds}s`;
+  }
 }

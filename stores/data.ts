@@ -64,7 +64,7 @@ export const useDataStore = defineStore('data', {
       const message = useMessage();
       const router = useRouter();
       try {
-        const { response, data, error } = await $api.get<ProjectResponse>(ProjectEndpoint.project);
+        const { response, data, error } = await $api.get<ProjectResponse>(endpoints.userProjects);
 
         if (error) {
           message.error(error.message);
@@ -105,7 +105,7 @@ export const useDataStore = defineStore('data', {
           project_id: this.currentProjectId,
           serviceType_id: type,
         };
-        const { data, error } = await $api.get<ServicesResponse>(ServiceEndpoint.services, params);
+        const { data, error } = await $api.get<ServicesResponse>(endpoints.services, params);
 
         if (error) {
           message.error(error.message);

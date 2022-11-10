@@ -125,7 +125,7 @@ async function inviteUser() {
 
   try {
     const { data, error } = await $api.post<UserInviteResponse>(
-      UserEndpoint.profile,
+      endpoints.validateMail,
       formData.value
     );
 

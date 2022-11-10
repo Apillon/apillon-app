@@ -2,27 +2,27 @@
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Service name -->
     <n-form-item
-      path="serviceName"
-      :label="$t('form.label.serviceName')"
-      :label-props="{ for: 'serviceName' }"
+      path="bucketName"
+      :label="$t('form.label.bucketName')"
+      :label-props="{ for: 'bucketName' }"
     >
       <n-input
-        v-model:value="formData.serviceName"
-        :input-props="{ id: 'serviceName' }"
-        :placeholder="$t('form.placeholder.serviceName')"
+        v-model:value="formData.bucketName"
+        :input-props="{ id: 'bucketName' }"
+        :placeholder="$t('form.placeholder.bucketName')"
       />
     </n-form-item>
     <n-tag :bordered="false" type="info" class="mb-8">Servicename.com/ </n-tag>
 
-    <!--  Service type -->
-    <n-form-item path="networkTypes" :label="$t('form.label.networkType')">
-      <n-radio-group v-model:value="formData.networkType" name="radiogroup">
+    <!--  Bucket Sizes -->
+    <n-form-item path="bucketSizes" :label="$t('form.label.bucketSize')">
+      <n-radio-group v-model:value="formData.bucketSize" name="radiogroup">
         <n-space>
           <n-radio
-            v-for="(type, key) in networkTypes"
+            v-for="(size, key) in bucketSizes"
             :key="key"
-            :value="type.value"
-            :label="type.label"
+            :value="size.value"
+            :label="size.label"
           />
         </n-space>
       </n-radio-group>
@@ -30,9 +30,9 @@
 
     <!--  Service submit -->
     <n-form-item>
-      <input type="submit" class="hidden" :value="$t('form.login')" />
+      <input type="submit" class="hidden" :value="$t('form.createBucketAndContinue')" />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
-        {{ $t('form.createServiceAndContinue') }}
+        {{ $t('form.createBucketAndContinue') }}
       </Btn>
     </n-form-item>
   </n-form>
@@ -41,16 +41,8 @@
 <script lang="ts" setup>
 import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormService, CreateServiceResponse } from '~~/types/service';
+import { FormNewBucket, NewBucketResponse } from '~~/types/service';
 import { useDataStore } from '~~/stores/data';
-
-const props = defineProps({
-  serviceType: {
-    type: Number,
-    validator: (value: number) => Object.values(ServiceType).includes(value),
-    required: true,
-  },
-});
 
 const { t } = useI18n();
 const dataStore = useDataStore();
@@ -58,30 +50,30 @@ const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
 const { message } = createDiscreteApi(['message']);
 
-const formData = ref<FormService>({
-  serviceName: null,
-  networkType: false,
+const formData = ref<FormNewBucket>({
+  bucketName: null,
+  bucketSize: null,
 });
 
 const rules: FormRules = {
-  serviceName: [
+  bucketName: [
     {
       required: true,
-      message: 'Please enter service name',
+      message: 'Please enter bucket name',
       trigger: 'input',
     },
   ],
-  networkType: [],
+  bucketSize: [],
 };
 
-const networkTypes = [
+const bucketSizes = [
   {
-    value: false,
-    label: t('form.networkTypes.test'),
+    value: 5,
+    label: t('form.bucketSizes.5gb'),
   },
   {
-    value: true,
-    label: t('form.networkTypes.live'),
+    value: 100,
+    label: t('form.bucketSizes.100gb'),
   },
 ];
 
@@ -100,15 +92,14 @@ async function createService() {
   loading.value = true;
 
   const bodyData = {
-    project_id: dataStore.currentProjectId,
-    serviceType_id: props.serviceType,
-    name: formData.value.serviceName,
-    active: 1,
-    testNetwork: formData.value.networkType ? 0 : 1,
+    project_uuid: dataStore.currentProject.project_uuid,
+    bucketType: BucketType.STORAGE,
+    name: formData.value.bucketName,
+    size: formData.value.bucketSize,
   };
 
   try {
-    const { data, error } = await $api.post<CreateServiceResponse>(endpoints.services, bodyData);
+    const { data, error } = await $api.post<NewBucketResponse>(endpoints.bucket, bodyData);
 
     if (error) {
       message.error(error.message);

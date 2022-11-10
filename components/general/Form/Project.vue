@@ -115,7 +115,7 @@ async function createProject() {
 
   try {
     const { data, error } = await $api.post<CreateProjectResponse>(
-      ProjectEndpoint.project,
+      endpoints.project,
       formData.value
     );
 

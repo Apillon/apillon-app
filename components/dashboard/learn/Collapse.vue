@@ -81,10 +81,7 @@ async function getInstruction(key: string) {
 
   try {
     const params = { instructionEnum: key };
-    const { data, error } = await $api.get<InstructionResponse>(
-      ServiceEndpoint.instruction,
-      params
-    );
+    const { data, error } = await $api.get<InstructionResponse>(endpoints.instruction, params);
 
     if (error) {
       message.error(error.message);
@@ -105,10 +102,7 @@ async function getInstructions(key: string) {
 
   try {
     const params = { instructionEnum: key };
-    const { data, error } = await $api.get<InstructionsResponse>(
-      ServiceEndpoint.instructions,
-      params
-    );
+    const { data, error } = await $api.get<InstructionsResponse>(endpoints.instructions, params);
 
     if (error) {
       message.error(error.message);

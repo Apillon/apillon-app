@@ -251,10 +251,7 @@ async function updateUserProfile() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<BillingResponse>(
-      SettignsEndpoint.billing,
-      formData.value
-    );
+    const { data, error } = await $api.post<BillingResponse>(endpoints.billing, formData.value);
 
     if (error) {
       message.error(error.message);

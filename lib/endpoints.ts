@@ -1,31 +1,47 @@
-export const AuthEndpoint = {
+const Endpoints = {
+  /** Auth */
   walletMsg: '/auth/wallet-auth-msg',
   loginWallet: '/auth/loginWallet',
-};
 
-export const UserEndpoint = {
-  me: '/user/me',
-  profile: '/user/profile',
-  login: '/user/login',
-  register: '/user/register',
-  validateMail: '/user/validate-email',
-  // confirm: '/user/confirm ',
-  // connectWallet: '/user/connect-wallet',
-  // removeWallet: '/user/remove-wallet',
-};
+  /** User */
+  me: '/users/me',
+  login: '/users/login',
+  register: '/users/register',
+  validateMail: '/users/validate-email',
 
-export const ProjectEndpoint = {
-  project: '/project',
-  projectUsers: '/project/getProjectUsers',
-};
+  /** Project */
+  project: '/projects/',
+  userProjects: '/projects/user-projects',
+  projectUser: '/projects/user/',
 
-export const ServiceEndpoint = {
+  /** File */
+  file: '/files/',
+
+  /** Services */
   services: '/services/',
+
+  /** Instructions */
   instruction: '/instruction/',
   instructions: '/instruction/all',
-};
 
-export const SettignsEndpoint = {
+  /** Bucket */
+  bucket: '/buckets/',
+
+  /** Directories */
+  directory: '/directories/',
+  directoryContent: '/directories/directory-content',
+
+  /** Storage */
+  storage: '/storage/',
+  storageFileUpload: '/storage/file-upload-request',
+  storageFileUploadSession: '/storage/file-upload-session',
+  storageFileDetails: '/storage/file-details',
+
+  /** Api Keys */
   apiKey: '/api-key/',
+
+  /** Billing */
   billing: '/billing/',
 };
+
+export default Endpoints;

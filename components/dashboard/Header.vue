@@ -32,6 +32,7 @@
 
 <script lang="ts" setup>
 import { SelectProps } from 'naive-ui';
+import { isArray } from 'lodash';
 import colors from '~~/tailwind.colors';
 import { useDataStore } from '~~/stores/data';
 
@@ -54,7 +55,7 @@ const SelectProjectOverrides: SelectThemeOverrides = {
 };
 
 onBeforeMount(() => {
-  if (dataStore.projects && dataStore.projects.length === 0) {
+  if (!isArray(dataStore.projects) || dataStore.projects.length === 0) {
     dataStore.promises.projects = dataStore.getProjects();
   }
 });

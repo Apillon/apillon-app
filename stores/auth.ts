@@ -59,7 +59,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async getUserData() {
-      const { data, error } = await $api.get<UserResponse>(UserEndpoint.me, null);
+      const { data, error } = await $api.get<UserResponse>(endpoints.me, null);
       if (error) {
         throw new Error(error.message);
       }

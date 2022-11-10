@@ -29,10 +29,7 @@ async function walletConnect(connector = ProviderConnectors.METAMASK) {
   }
 
   try {
-    const res = await $api.get<{ message: string; timestamp: number }>(
-      AuthEndpoint.walletMsg,
-      null
-    );
+    const res = await $api.get<{ message: string; timestamp: number }>(endpoints.walletMsg, null);
 
     if (res.error) {
       $alert.error({
@@ -49,7 +46,7 @@ async function walletConnect(connector = ProviderConnectors.METAMASK) {
       console.debug('signature', userAccount.value);
 
       if (signature) {
-        const res = await $api.post<{ authToken }>(AuthEndpoint.loginWallet, {
+        const res = await $api.post<{ authToken }>(endpoints.loginWallet, {
           wallet: userAccount.value,
           signature,
           timestamp,

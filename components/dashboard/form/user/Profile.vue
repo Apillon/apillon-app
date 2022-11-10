@@ -114,10 +114,7 @@ async function updateUserProfile() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<UserProfileResponse>(
-      UserEndpoint.profile,
-      formData.value
-    );
+    const { data, error } = await $api.post<UserProfileResponse>(endpoints.me, formData.value);
 
     if (error) {
       message.error(error.message);

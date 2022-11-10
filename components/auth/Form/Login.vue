@@ -85,7 +85,7 @@ function handleSubmit(e: MouseEvent) {
 async function login() {
   loading.value = true;
   try {
-    const { data, error } = await $api.post<LoginResponse>(UserEndpoint.login, formData.value);
+    const { data, error } = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
     if (error) {
       message.error(error.message);

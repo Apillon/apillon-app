@@ -111,7 +111,7 @@ async function generateApiKey() {
 
   try {
     const { data, error } = await $api.post<GenerateApiKeyResponse>(
-      SettignsEndpoint.apiKey,
+      endpoints.apiKey,
       formData.value
     );
 

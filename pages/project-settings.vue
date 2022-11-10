@@ -10,7 +10,7 @@
       <FormProjectSettings />
 
       <!-- Porject owner -->
-      <n-h5 prefix="bar">{{ $t('dashboard.projectOwner') }}</n-h5>
+      <n-h5 prefix="bar">{{ $t('project.owner') }}</n-h5>
       <TableProjectOwner />
       <div class="text-right">
         <n-button type="primary" quaternary>
@@ -19,9 +19,9 @@
       </div>
 
       <!-- Delete project -->
-      <n-h5 class="mb-0" prefix="bar">{{ $t('dashboard.deleteProject') }}</n-h5>
-      <p class="mb-6">{{ $t('dashboard.deleteProjectText') }}</p>
-      <Btn type="primary">{{ $t('dashboard.sendRequestToDeleteProject') }}</Btn>
+      <n-h5 class="mb-0" prefix="bar">{{ $t('project.delete') }}</n-h5>
+      <p class="mb-6">{{ $t('project.deleteText') }}</p>
+      <Btn type="primary">{{ $t('project.deleteRequest') }}</Btn>
     </slot>
   </Dashboard>
 </template>

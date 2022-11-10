@@ -13,7 +13,7 @@
           <!-- NEW PROJECT -->
           <div class="text-center">
             <Btn size="tiny" quaternary @click="showModalNewProject = true">
-              {{ $t('dashboard.newProject') }}
+              {{ $t('project.new') }}
             </Btn>
           </div>
 
@@ -25,7 +25,7 @@
               :class="{ 'bg-grey-dark border-l-3': currentRoute.name === 'index' }"
             >
               <span class="icon-home text-primary"></span>
-              <strong class="ml-1">{{ $t('dashboard.projectOverview') }}</strong>
+              <strong class="ml-1">{{ $t('project.overview') }}</strong>
             </NuxtLink>
           </div>
 
@@ -52,7 +52,7 @@
   <n-modal v-model:show="showModalNewProject">
     <n-card
       style="width: 660px"
-      :title="$t('dashboard.newProject')"
+      :title="$t('project.new')"
       :bordered="false"
       size="huge"
       role="dialog"

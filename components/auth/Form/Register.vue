@@ -141,7 +141,7 @@ async function register() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<RegisterResponse>(UserEndpoint.register, {
+    const { data, error } = await $api.post<RegisterResponse>(endpoints.register, {
       ...formData.value,
       token: query.token,
     });

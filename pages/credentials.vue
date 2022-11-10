@@ -7,7 +7,7 @@
       <h4 class="mb-6">{{ $t('dashboard.credentialsAndApiKeys') }}</h4>
 
       <!-- Project ID -->
-      <n-h5 prefix="bar">{{ $t('dashboard.projectId') }}</n-h5>
+      <n-h5 prefix="bar">{{ $t('project.id') }}</n-h5>
       <TableProjectId />
 
       <!-- Secrets -->

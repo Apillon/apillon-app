@@ -2,17 +2,6 @@
   <Dashboard :loading="pageLoading">
     <template #heading>
       <BannerAuthentication />
-      <n-space justify="space-between" align="center">
-        <n-space size="large" align="center">
-          <h4 class="mr-">{{ $t('nav.authentication') }}</h4>
-          <div class="w-[1px] h-[13px] bg-grey"></div>
-          <a href="#learn-more">{{ $t('general.learnMore') }}</a>
-        </n-space>
-        <n-button type="primary">{{ $t('general.attach') }}</n-button>
-      </n-space>
-    </template>
-    <template #sidebar>
-      <SidebarProjectPages />
     </template>
     <template #learn>
       <LearnAlert>
@@ -23,7 +12,20 @@
       <LearnCollapse />
     </template>
     <slot>
-      <TableAuthentication />
+      <h5 class="mb-8">{{ $t('nav.services') }}</h5>
+      <div class="flex items-center justify-between bg-grey-lightBg px-6 py-4">
+        <div>
+          <p class="body-md font-bold">Your project currently has no active service</p>
+          <p class="body-sm">
+            First attach a desired service and configure it, then start building.
+          </p>
+        </div>
+        <div>
+          <nuxt-link to="/service/authentication/list">
+            <Btn type="primary"> Attach services</Btn>
+          </nuxt-link>
+        </div>
+      </div>
     </slot>
   </Dashboard>
 </template>
