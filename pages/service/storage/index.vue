@@ -31,22 +31,24 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import { useDataStore } from '~~/stores/data';
 
+const { t } = useI18n();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: 'Authentication',
+  title: t('nav.storage'),
 });
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(_ => {
-    getServicesAuth();
+    getServicesStorage();
   });
 });
 
-async function getServicesAuth() {
+async function getServicesStorage() {
   if (!dataStore.currentProject) {
     console.warn('No project selected');
     return;

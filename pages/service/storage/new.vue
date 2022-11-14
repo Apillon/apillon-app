@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <Dashboard>
     <template #heading>
       <h5>{{ $t('storage.newBucket') }}</h5>
     </template>
@@ -13,33 +13,19 @@
     </template>
     <slot>
       <FormStorageNew class="max-w-[520px]" />
+      <nuxt-link to="/service/storage/list">
+        <n-button type="primary">{{ $t('storage.list') }}</n-button>
+      </nuxt-link>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { useDataStore } from '~~/stores/data';
+import { useI18n } from 'vue-i18n';
 
-const dataStore = useDataStore();
-const pageLoading = ref<boolean>(true);
+const { t } = useI18n();
 
 useHead({
-  title: 'Authentication',
+  title: t('storage.newBucket'),
 });
-
-onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(_ => {
-    getServicesAuth();
-  });
-});
-
-async function getServicesAuth() {
-  if (!dataStore.currentProject) {
-    console.warn('No project selected');
-    return;
-  }
-  dataStore.services.storage = await dataStore.getServices(ServiceType.STORAGE);
-
-  setTimeout(() => (pageLoading.value = false), 300);
-}
 </script>

@@ -3,22 +3,21 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NTag, NProgress, useMessage } from 'naive-ui';
+import { NButton, NDropdown, useMessage } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { useDataStore } from '~~/stores/data';
+import { BucketInterface } from '~~/types/service';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const router = useRouter();
+const ProgressStorage = resolveComponent('ProgressStorage');
 
-type RowData = {
+interface RowData extends BucketInterface {
   key: number;
-  name: string;
-  usage: string;
-  traffic: boolean;
-  visits: string;
-};
+}
 
 const createColumns = ({
   handleSelect,
@@ -27,35 +26,37 @@ const createColumns = ({
 }): DataTableColumns<RowData> => {
   return [
     {
-      title: $i18n.t('storage.bucketName'),
+      title: t('storage.bucketName'),
       key: 'name',
       render(row) {
         return h('span', { class: 'ml-2 text-blue' }, row.name);
       },
     },
     {
-      title: $i18n.t('storage.usage'),
+      title: t('storage.usage'),
       key: 'serviceType',
       render(row) {
         return h(
-          'span',
-          { class: 'text-grey' },
+          ProgressStorage,
           {
-            default: () => row.usage,
-          }
+            size: row.sizeMb,
+            maxSize: row.maxSizeMb,
+            percentage: row.percentage,
+          },
+          null
         );
       },
     },
     {
-      title: $i18n.t('storage.traffic'),
+      title: t('storage.traffic'),
       key: 'traffic',
     },
     {
-      title: $i18n.t('general.visits'),
+      title: t('storage.visits'),
       key: 'visits',
     },
     {
-      title: $i18n.t('general.actions'),
+      title: t('general.actions'),
       key: 'actions',
       align: 'right',
       className: '!py-0',
@@ -80,8 +81,8 @@ const createColumns = ({
     },
   ];
 };
-const createData = (): RowData[] => dataStore.services.storage;
-const currentRow = ref(null);
+const createData = (): RowData[] => dataStore.services.bucket;
+const currentRow = ref<RowData | null>(null);
 
 const data = createData();
 const columns = createColumns({
@@ -104,40 +105,27 @@ const columns = createColumns({
 function rowProps(row: RowData) {
   return {
     onClick: () => {
-      currentRow.value = row.key;
+      currentRow.value = row;
     },
   };
 }
 
 const dropdownOptions = [
   {
-    label: 'Profile',
-    key: 'profile',
+    label: t('storage.edit'),
+    key: 'storageEdit',
     props: {
       onClick: () => {
-        message.success('Profile: ' + JSON.stringify(currentRow.value), {
-          icon: () => h('span', { class: 'icon-check' }, {}),
-        });
+        router.push(`/service/storage/bucket/${currentRow.value.id}`);
       },
     },
   },
   {
-    label: 'Edit Profile',
-    key: 'editProfile',
+    label: t('storage.delete'),
+    key: 'storage.delete',
     props: {
       onClick: () => {
-        message.warning('Edit Profile: ' + JSON.stringify(currentRow.value), {
-          icon: () => h('span', { class: 'icon-info' }, {}),
-        });
-      },
-    },
-  },
-  {
-    label: 'Logout',
-    key: 'logout',
-    props: {
-      onClick: () => {
-        message.error('Logout: ' + JSON.stringify(currentRow.value), {
+        message.error('TODO: DELETE' + JSON.stringify(currentRow.value), {
           icon: () => h('span', { class: 'icon-close' }, {}),
         });
       },
