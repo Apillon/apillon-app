@@ -44,7 +44,7 @@
     </template>
     <slot>
       <n-h5 prefix="bar" class="mb-8">{{ $t('nav.storage') }}</n-h5>
-      <n-upload directory-dnd :custom-request="uploadFiles">
+      <n-upload multiple directory-dnd :custom-request="uploadFiles">
         <n-upload-dragger>
           <div>
             <span>Drag & drop files and folders you want to upload to your bucket, or</span>
@@ -87,7 +87,7 @@ onMounted(() => {
       pageLoading.value = false;
     });
   } else if (!dataStore.services.bucket.find(bucket => bucket.id === bucketId)) {
-    router.push('/service/storage');
+    router.push({ name: 'dashboard-service-storage' });
   } else {
     pageLoading.value = false;
   }
@@ -107,38 +107,31 @@ const fileList = ref<UploadFileInfo[]>([
   },
 ]);
 
-const uploadFiles = async (options: UploadCustomRequestOptions) => {
+const uploadFiles = async ({ file, onError, onFinish }: UploadCustomRequestOptions) => {
   const bodyData = {
     bucket: bucketId,
-    name: options.file.name,
+    name: file.name,
     extension: 'txt',
     contentType: 'text/plain;charset=UTF-8',
-    body: options.file.file as File,
+    body: file.file as File,
   };
-
-  const formData = new FormData();
-  formData.append('name', options.file.name);
-  formData.append('extension', 'txt');
-  formData.append('contentType', 'text/plain;charset=UTF-8');
-  formData.append('body', options.file.file as File);
-  formData.append(options.file.name, options.file.file as File);
 
   try {
     const { data, error } = await $api.post(endpoints.file, bodyData);
 
     if (error) {
       message.error(error.message);
-      options.onError();
+      onError();
     }
 
     // TODO
     if (data) {
       console.log(data);
-      options.onFinish();
+      onFinish();
     }
   } catch (error) {
     message.error(t('error.API'));
-    options.onError();
+    onError();
   }
 };
 </script>

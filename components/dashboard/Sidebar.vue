@@ -5,7 +5,7 @@
         <n-space class="py-6" :size="24" vertical>
           <!-- LOGO -->
           <div class="flex justify-center">
-            <NuxtLink to="/login">
+            <NuxtLink :to="{ name: 'login' }">
               <span class="icon-apillon text-2xl"></span>
             </NuxtLink>
           </div>
@@ -20,9 +20,9 @@
           <!-- PROJECT OVERVIEW -->
           <div class="pl-4 mt-6">
             <NuxtLink
-              to="/"
+              :to="{ name: 'dashboard' }"
               class="block p-2 h-[38px] w-full text-left border-primary"
-              :class="{ 'bg-grey-dark border-l-3': currentRoute.name === 'index' }"
+              :class="{ 'bg-grey-dark border-l-3': currentRoute.name === 'dashboard' }"
             >
               <span class="icon-home text-primary"></span>
               <strong class="ml-1">{{ $t('project.overview') }}</strong>

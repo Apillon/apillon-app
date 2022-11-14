@@ -76,7 +76,7 @@ watch(
       }, 1000);
     }
     localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${currentProjectId}`);
-    router.push('/');
+    router.push({ name: 'dashboard' });
   }
 );
 </script>

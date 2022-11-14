@@ -88,7 +88,7 @@ async function signupWithEmail() {
       // TODO: error
       message.error('ERROR');
     } else if (!props.sendAgain) {
-      router.push('/signup/email');
+      router.push({ name: 'register-email' });
     }
   } catch (error) {
     message.error(t('error.API'));

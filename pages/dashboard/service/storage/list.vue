@@ -7,7 +7,7 @@
           <div class="w-[1px] h-[13px] bg-grey"></div>
           <a href="#learn-more">{{ $t('general.learnMore') }}</a>
         </n-space>
-        <nuxt-link to="/service/storage/new">
+        <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
           <n-button type="primary">{{ $t('storage.newBucket') }}</n-button>
         </nuxt-link>
       </n-space>

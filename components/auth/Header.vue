@@ -14,7 +14,7 @@
         >
           <div class="flex items-center">
             <NuxtLink
-              to="signup"
+              :to="{ name: 'register' }"
               class="text-sm"
               :class="[!isLogin ? 'text-blue' : 'text-grey-light']"
             >
@@ -22,7 +22,7 @@
             </NuxtLink>
             <AnimationSwitcher :value="isLogin" class="cursor-pointer" @click="switchPage" />
             <NuxtLink
-              to="login"
+              :to="{ name: 'login' }"
               class="text-sm"
               :class="[isLogin ? 'text-blue' : 'text-grey-light']"
             >
@@ -66,9 +66,9 @@ const isLogoCentered = computed(() => {
 function switchPage() {
   isLogin.value = !isLogin.value;
   if (isLogin.value) {
-    router.push('/login');
+    router.push({ name: 'login' });
   } else {
-    router.push('/signup');
+    router.push({ name: 'register' });
   }
 }
 </script>

@@ -9,7 +9,7 @@
             <p class="mb-4">{{ $t('login.buildCustomApp') }}</p>
           </div>
           <div>
-            <Btn type="primary" class="w-full" @click="router.push('/login/project')">
+            <Btn type="primary" class="w-full" @click="router.push({ name: 'onboarding-project' })">
               {{ $t('login.startBuilding') }}
             </Btn>
           </div>
@@ -24,7 +24,9 @@
           </div>
         </div>
       </div>
-      <NuxtLink to="/" class="text-grey text-bold">{{ $t('login.skip') }}</NuxtLink>
+      <NuxtLink :to="{ name: 'dashboard' }" class="text-grey text-bold">
+        {{ $t('login.skip') }}
+      </NuxtLink>
     </div>
     <AuthProjectHelp />
   </div>
@@ -37,7 +39,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 definePageMeta({
-  layout: 'auth',
+  layout: 'onboarding',
 });
 useHead({
   title: 'SignUp - e-mail seccessfully confirmed',

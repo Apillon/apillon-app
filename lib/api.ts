@@ -187,6 +187,6 @@ export const $api = {
     // const authStore = useAuthStore();
     // authStore.logout();
     // const router = useRouter();
-    // router.push('/login');
+    // router.push({name:'login'});
   },
 };

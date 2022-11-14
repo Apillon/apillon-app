@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <BannerStorage />
+      <BannerAuthentication />
     </template>
     <template #learn>
       <LearnAlert>
@@ -12,7 +12,7 @@
       <LearnCollapse />
     </template>
     <slot>
-      <h5 class="mb-8">{{ $t('nav.storage') }}</h5>
+      <h5 class="mb-8">{{ $t('nav.services') }}</h5>
       <div class="flex items-center justify-between bg-grey-lightBg px-6 py-4">
         <div>
           <p class="body-md font-bold">Your project currently has no active service</p>
@@ -21,8 +21,8 @@
           </p>
         </div>
         <div>
-          <nuxt-link to="/service/storage/new">
-            <Btn type="primary"> Add new bucket</Btn>
+          <nuxt-link :to="{ name: 'dashboard-service-authentication-list' }">
+            <Btn type="primary"> Attach services</Btn>
           </nuxt-link>
         </div>
       </div>
@@ -31,30 +31,28 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
 import { useDataStore } from '~~/stores/data';
 
-const { t } = useI18n();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: t('nav.storage'),
+  title: 'Authentication',
+  meta: [{ hid: 'og-type', name: 'og:type', property: 'og:type', content: 'website' }],
 });
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(_ => {
-    getServicesStorage();
+    getServicesAuth();
   });
 });
 
-async function getServicesStorage() {
+async function getServicesAuth() {
   if (!dataStore.currentProject) {
     console.warn('No project selected');
     return;
   }
-  dataStore.services.storage = await dataStore.getServices(ServiceType.STORAGE);
-
+  dataStore.services.authentication = await dataStore.getServices(ServiceType.AUTHENTICATION);
   setTimeout(() => (pageLoading.value = false), 300);
 }
 </script>

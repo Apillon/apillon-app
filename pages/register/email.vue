@@ -14,7 +14,7 @@
 
       <div class="mt-10 text-center">
         <span class="text-sm text-grey"> {{ $t('signup.madeMistake') }} </span>&nbsp;
-        <Btn type="link" to="/signup">
+        <Btn type="link" :to="{ name: 'register' }">
           {{ $t('general.tryAgain') }}
         </Btn>
       </div>
@@ -40,7 +40,7 @@ onBeforeMount(() => {
 
   /** If user hasn't signup, redirect him to signup form */
   if (!hasEmail) {
-    router.push('/signup');
+    router.push({ name: 'register' });
   }
 });
 

@@ -92,11 +92,11 @@ export const useDataStore = defineStore('data', {
           this.setCurrentProject(this.projects[0].id);
         }
 
-        /** If user hasn't any project redirect him to '/login/first' so he will be able to create first project */
+        /** If user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
         if (redirectToDashboard && this.projects.length === 0) {
-          router.push('/login/first');
+          router.push({ name: 'onboarding' });
         } else if (redirectToDashboard) {
-          router.push('/');
+          router.push({ name: 'dashboard' });
         }
 
         return response;
