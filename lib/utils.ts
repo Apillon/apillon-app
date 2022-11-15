@@ -70,3 +70,13 @@ export function timeToDays(time: String) {
     return `${days}d ${hours}h ${seconds}s`;
   }
 }
+
+/** Storage calculations */
+export function kbToMb(kb: number) {
+  if (!+kb) return 0;
+  return parseFloat(((kb / Math.pow(1024, 2)) * 1000).toFixed(0));
+}
+
+export function storagePercantage(size: number, maxSize: number) {
+  return ((size / maxSize) * 100).toFixed(0);
+}

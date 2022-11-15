@@ -208,9 +208,16 @@
     "useEmail": "or sign up using email"
   },
   "storage": {
+    "bucket": "Storage bucket",
     "buckets": "Storage buckets",
+    "bucketName": "Bucket name",
+    "delete": "Delete bucket",
+    "edit": "Edit bucket",
     "name": "Bucket name",
-    "newBucket": "New bucket"
+    "newBucket": "New bucket",
+    "traffic": "30d traffic",
+    "usage": "Storage usage",
+    "visits": "30d visits"
   },
   "pageMenu": {
     "methods": "Methods",

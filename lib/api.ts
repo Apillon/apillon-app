@@ -184,9 +184,9 @@ export const $api = {
   },
 
   backToLogin() {
-    // const authStore = useAuthStore();
-    // authStore.logout();
-    // const router = useRouter();
-    // router.push('/login');
+    const authStore = useAuthStore();
+    authStore.logout();
+    const router = useRouter();
+    router.push({ name: 'login' });
   },
 };

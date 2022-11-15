@@ -50,9 +50,9 @@ const options = [
 function handleSelect(key: string | number) {
   if (key === 'logout') {
     authStore.logout();
-    router.push('/login');
+    router.push({ name: 'login' });
   } else {
-    router.push('/user-profile');
+    router.push({ name: 'profile' });
   }
 }
 </script>

@@ -8,16 +8,22 @@
         <div class="flex md:w-1/2 justify-center md:justify-end">
           <ul class="body-sm flex text-white">
             <li>
-              <NuxtLink to="/">{{ $t('footer.support') }}</NuxtLink>
+              <NuxtLink :to="{ name: 'support' }">{{ $t('footer.support') }}</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/">{{ $t('footer.docs') }}</NuxtLink>
+              <NuxtLink href="https://wiki.apillon.io/" target="_blank">
+                {{ $t('footer.docs') }}
+              </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/">{{ $t('footer.terms') }}</NuxtLink>
+              <NuxtLink href="https://apillon.io/legal-disclaimer" target="_blank">
+                {{ $t('footer.terms') }}
+              </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/">{{ $t('footer.privacy') }}</NuxtLink>
+              <NuxtLink href="https://apillon.io/privacy-policy/" target="_blank">
+                {{ $t('footer.privacy') }}
+              </NuxtLink>
             </li>
           </ul>
         </div>

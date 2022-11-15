@@ -29,6 +29,7 @@ import {
   NLayoutContent,
   NLayoutHeader,
   NLayoutSider,
+  NProgress,
   NRadio,
   NRadioGroup,
   NScrollbar,
@@ -39,6 +40,10 @@ import {
   NTag,
   NText,
   NTooltip,
+  NUpload,
+  NUploadDragger,
+  NUploadFileList,
+  NUploadTrigger,
 } from 'naive-ui';
 
 export default defineNuxtPlugin(nuxtApp => {
@@ -74,6 +79,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NLayoutContent,
         NLayoutHeader,
         NLayoutSider,
+        NProgress,
         NRadio,
         NRadioGroup,
         NScrollbar,
@@ -84,6 +90,10 @@ export default defineNuxtPlugin(nuxtApp => {
         NTag,
         NText,
         NTooltip,
+        NUpload,
+        NUploadDragger,
+        NUploadFileList,
+        NUploadTrigger,
       ],
     })
   );

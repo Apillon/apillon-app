@@ -19,7 +19,7 @@
 
     <div class="mt-10 text-center">
       <span class="text-sm text-grey">{{ $t('login.dontHaveAccount') }} </span>&nbsp;
-      <Btn to="/signup" type="link">
+      <Btn :to="{ name: 'register' }" type="link">
         {{ $t('general.signup') }}
       </Btn>
     </div>
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import WalletConnect from '../../components/auth/WalletConnect.vue';
+import WalletConnect from '~~/components/auth/WalletConnect.vue';
 import { AuthStep } from '~~/types/auth';
 
 definePageMeta({

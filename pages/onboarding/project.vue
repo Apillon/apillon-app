@@ -16,7 +16,9 @@
       />
 
       <div class="mt-10">
-        <NuxtLink to="/" class="text-grey text-bold">{{ $t('login.skip') }}</NuxtLink>
+        <NuxtLink :to="{ name: 'dashboard' }" class="text-grey text-bold">
+          {{ $t('login.skip') }}
+        </NuxtLink>
       </div>
     </div>
     <AuthProjectHelp />
@@ -33,7 +35,7 @@ const loading = ref<boolean>(false);
 const router = useRouter();
 
 definePageMeta({
-  layout: 'auth',
+  layout: 'onboarding',
 });
 useHead({
   title: 'SignUp - e-mail seccessfully confirmed',
@@ -56,7 +58,7 @@ function loaderStatus(status: boolean) {
 /** Credirect after project has been created */
 function projectCreated() {
   setTimeout(() => {
-    router.push('/');
+    router.push({ name: 'dashboard' });
   }, 2000);
 }
 </script>

@@ -1,7 +1,13 @@
 import { useMessage } from 'naive-ui';
 import { defineStore } from 'pinia';
 import { InstructionInterface, ProjectInterface, ProjectResponse } from '~~/types/data';
-import { ServicesInterface, ServicesResponse } from '~~/types/service';
+import {
+  BucketInterface,
+  BucketResponse,
+  ServicesInterface,
+  ServicesResponse,
+} from '~~/types/service';
+import { kbToMb } from '~~/lib/utils';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
@@ -17,6 +23,7 @@ export const useDataStore = defineStore('data', {
     projects: [] as Array<ProjectInterface>,
     services: {
       authentication: [],
+      bucket: [],
       storage: [],
       computing: [],
     },
@@ -85,15 +92,16 @@ export const useDataStore = defineStore('data', {
           this.setCurrentProject(this.projects[0].id);
         }
 
-        /** If user hasn't any project redirect him to '/login/first' so he will be able to create first project */
+        /** If user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
         if (redirectToDashboard && this.projects.length === 0) {
-          router.push('/login/first');
+          router.push({ name: 'onboarding' });
         } else if (redirectToDashboard) {
-          router.push('/');
+          router.push({ name: 'dashboard' });
         }
 
         return response;
       } catch (error) {
+        message.error(error);
         // message.error(t('error.API'));
       }
     },
@@ -116,6 +124,35 @@ export const useDataStore = defineStore('data', {
           return { key, ...service };
         });
       } catch (error) {
+        message.error(error);
+        // message.error(t('error.API'));
+      }
+    },
+
+    async getBuckets() {
+      const message = useMessage();
+      try {
+        const params = {
+          project_uuid: this.currentProject.project_uuid,
+        };
+        const { data, error } = await $api.get<BucketResponse>(endpoints.bucket, params);
+
+        if (error) {
+          message.error(error.message);
+          this.services.bucket = [];
+        }
+
+        this.services.bucket = data.data.items.map((bucket: BucketInterface) => {
+          return {
+            ...bucket,
+            sizeMb: kbToMb(bucket.size),
+            maxSizeMb: kbToMb(bucket.maxSize),
+            percentage: storagePercantage(bucket.size, bucket.maxSize),
+          };
+        });
+      } catch (error) {
+        this.services.bucket = [];
+        message.error(error);
         // message.error(t('error.API'));
       }
     },

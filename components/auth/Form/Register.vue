@@ -70,7 +70,7 @@ const rPasswordFormItemRef = ref<FormItemInst | null>(null);
 
 onMounted(() => {
   if (!query.token || query.token.length < 100) {
-    router.push('/signup');
+    router.push({ name: 'register' });
   }
 });
 
@@ -154,7 +154,7 @@ async function register() {
 
     authStore.setUserToken(data.data.token);
 
-    /** Fetch projects, if user hasn't any project redirect him to '/login/first' so he will be able to create first project */
+    /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     await dataStore.getProjects(true);
     loading.value = false;
   } catch (error) {

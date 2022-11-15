@@ -62,7 +62,7 @@ async function walletConnect(connector = ProviderConnectors.METAMASK) {
         const { authToken } = res.data;
         if (authToken && authToken.data) {
           await authStore.setUserToken(authToken.data);
-          router.push('/profile/');
+          router.push({ name: 'profile' });
         }
       } else {
         $alert.error({

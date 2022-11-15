@@ -21,7 +21,7 @@ const Endpoints = {
   services: '/services/',
 
   /** Instructions */
-  instruction: '/instruction/',
+  instruction: '/instructions/',
   instructions: '/instruction/all',
 
   /** Bucket */

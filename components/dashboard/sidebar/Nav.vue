@@ -44,8 +44,12 @@ const { currentRoute } = useRouter();
 
 const menu: MainNavInterface = {
   services: [
-    { name: 'authentication', icon: 'icon-authentication', link: '/service/authentication' },
-    { name: 'storage', icon: 'icon-storage', new: true, link: '/service/storage' },
+    {
+      name: 'authentication',
+      icon: 'icon-authentication',
+      link: '/dashboard/service/authentication',
+    },
+    { name: 'storage', icon: 'icon-storage', new: true, link: '/dashboard/service/storage' },
     { name: 'computing', icon: 'icon-computing', new: true },
   ],
   monitoring: [
@@ -53,9 +57,9 @@ const menu: MainNavInterface = {
     { name: 'serviceMonitor', icon: 'icon-service-monitor' },
   ],
   configuration: [
-    { name: 'projectSettings', icon: 'icon-project-setting', link: '/project-settings' },
+    { name: 'projectSettings', icon: 'icon-project-setting', link: '/dashboard/project-settings' },
     { name: 'access', icon: 'icon-acess' },
-    { name: 'billing', icon: 'icon-billing', link: '/billing' },
+    { name: 'billing', icon: 'icon-billing', link: '/dashboard/billing' },
   ],
 };
 </script>

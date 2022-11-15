@@ -62,24 +62,35 @@ export enum BucketType {
   STORAGE = 1,
   HOSTING = 2,
 }
+export interface BucketInterface {
+  id: number;
+  status: number;
+  bucket_uuid: string;
+  project_uuid: string;
+  bucketType: number;
+  name: string;
+  description: string;
+  maxSize: number;
+  size: number | null;
+  CID: string | null;
+  IPNS: string | null;
+  sizeMb?: number;
+  maxSizeMb?: number;
+  percentage?: number;
+}
 
 export interface FormNewBucket {
   bucketName: string;
   bucketSize: string;
 }
 export interface NewBucketResponse {
+  data: BucketInterface;
+  status: number;
+}
+export interface BucketResponse {
   data: {
-    id: number;
-    status: number;
-    bucket_uuid: string;
-    project_uuid: string;
-    bucketType: number;
-    name: string;
-    description: string;
-    maxSize: number;
-    size: number | null;
-    CID: string | null;
-    IPNS: string | null;
+    items: BucketInterface;
+    total: number;
   };
   status: number;
 }

@@ -7,9 +7,8 @@ interface ProtectedRouteInterface {
 }
 
 const protectedRoutes: Array<ProtectedRouteInterface> = [
-  { path: '/dashboard', redirect: '/login' },
-  { path: '/authentication', redirect: '/login' },
-  { path: '/storage', redirect: '/login' },
+  { regex: /^\/dashboard/, redirect: '/login' },
+  { path: '/profile', redirect: '/login' },
 ];
 
 /**

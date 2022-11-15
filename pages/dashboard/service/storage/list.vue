@@ -7,7 +7,9 @@
           <div class="w-[1px] h-[13px] bg-grey"></div>
           <a href="#learn-more">{{ $t('general.learnMore') }}</a>
         </n-space>
-        <n-button type="primary">{{ $t('storage.newBucket') }}</n-button>
+        <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
+          <n-button type="primary">{{ $t('storage.newBucket') }}</n-button>
+        </nuxt-link>
       </n-space>
     </template>
     <template #learn>
@@ -37,16 +39,34 @@ useHead({
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(_ => {
-    getServicesAuth();
+    getServicesStorage();
+    getBuckets();
   });
 });
 
-async function getServicesAuth() {
+async function getServicesStorage() {
   if (!dataStore.currentProject) {
     console.warn('No project selected');
+    setTimeout(() => (pageLoading.value = false), 300);
+    return;
+  } else if (Array.isArray(dataStore.services.storage) && dataStore.services.storage.length > 0) {
+    setTimeout(() => (pageLoading.value = false), 300);
     return;
   }
   dataStore.services.storage = await dataStore.getServices(ServiceType.STORAGE);
+
+  setTimeout(() => (pageLoading.value = false), 300);
+}
+
+async function getBuckets() {
+  if (!dataStore.currentProject) {
+    console.warn('No project selected');
+    return;
+  } else if (Array.isArray(dataStore.services.bucket) && dataStore.services.bucket.length > 0) {
+    return;
+  }
+
+  await dataStore.getBuckets();
 
   setTimeout(() => (pageLoading.value = false), 300);
 }
