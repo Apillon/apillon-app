@@ -3,6 +3,7 @@ import { UserResponse } from '~~/types/auth';
 
 export const AuthLsKeys = {
   AUTH: 'al_auth',
+  USER_ID: 'al_userId',
   EMAIL: 'al_email',
   USERNAME: 'al_username',
   WALLET: 'al_wallet',
@@ -12,6 +13,7 @@ export const AuthLsKeys = {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     jwt: '',
+    userId: localStorage.getItem(AuthLsKeys.USER_ID) || '',
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
     username: localStorage.getItem(AuthLsKeys.USERNAME) || '',
     phone: '',
@@ -22,7 +24,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     loggedIn(state) {
-      return !!state.email && !!state.username;
+      return !!state.email && !!state.jwt;
     },
     allowedEntry: state => !!state.jwt,
   },
@@ -32,14 +34,16 @@ export const useAuthStore = defineStore('auth', {
       if (lsAuth) {
         lsAuth = JSON.parse(lsAuth);
 
-        await this.setUserToken(lsAuth.jwt);
+        this.setUserToken(lsAuth.jwt);
         await this.getUserData();
       }
     },
 
     changeUser(userData) {
+      this.userId = userData?.user_uuid;
       this.email = userData?.email;
-      this.username = userData?.username;
+      this.username = userData?.name;
+      this.phone = userData?.phone;
     },
 
     saveEmail(email: string) {
@@ -47,7 +51,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem(AuthLsKeys.EMAIL, email);
     },
 
-    async setUserToken(token) {
+    setUserToken(token) {
       this.jwt = token;
       localStorage.setItem(
         AuthLsKeys.AUTH,
@@ -55,7 +59,7 @@ export const useAuthStore = defineStore('auth', {
           jwt: token,
         })
       );
-      await $api.setToken(token);
+      $api.setToken(token);
     },
 
     async getUserData() {
@@ -65,17 +69,15 @@ export const useAuthStore = defineStore('auth', {
       }
 
       if (data.data) {
-        await this.changeUser(data.data);
+        this.changeUser(data.data);
       }
     },
 
     logout() {
       this.jwt = '';
-      this.email = '';
       this.username = '';
       this.wallet = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
-      localStorage.removeItem(AuthLsKeys.EMAIL);
       localStorage.removeItem(AuthLsKeys.USERNAME);
       localStorage.removeItem(AuthLsKeys.WALLET);
       localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);

@@ -51,7 +51,7 @@ import { FormInst, FormValidationError, FormRules, useMessage, CollapseProps } f
 import { useI18n } from 'vue-i18n';
 import { FormGenerateApiKey, GenerateApiKeyResponse } from '~~/types/settings';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
 const message = useMessage();
@@ -116,7 +116,7 @@ async function generateApiKey() {
     );
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
       return;
     }
@@ -127,7 +127,7 @@ async function generateApiKey() {
     }
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
   }
 }

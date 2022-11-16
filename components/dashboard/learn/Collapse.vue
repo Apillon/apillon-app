@@ -84,7 +84,7 @@ async function getInstruction(key: string) {
     const { data, error } = await $api.get<InstructionResponse>(endpoints.instruction, params);
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       return;
     }
 
@@ -92,7 +92,7 @@ async function getInstruction(key: string) {
       dataStore.instruction[key] = data.data;
     }
   } catch (error) {
-    message.error($i18n.t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
   }
 }
 async function getInstructions(key: string) {
@@ -105,7 +105,7 @@ async function getInstructions(key: string) {
     const { data, error } = await $api.get<InstructionsResponse>(endpoints.instructions, params);
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       return;
     }
 
@@ -113,7 +113,7 @@ async function getInstructions(key: string) {
       dataStore.instructions[key] = data.data.items;
     }
   } catch (error) {
-    message.error($i18n.t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
   }
 }
 </script>

@@ -31,7 +31,7 @@
     <!--  Service submit -->
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.createServiceAndContinue') }}
       </Btn>
     </n-form-item>
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
+import { FormInst, FormValidationError, FormRules, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { FormService, CreateServiceResponse } from '~~/types/service';
 import { useDataStore } from '~~/stores/data';
@@ -52,11 +52,11 @@ const props = defineProps({
   },
 });
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const dataStore = useDataStore();
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
+const message = useMessage();
 
 const formData = ref<FormService>({
   serviceName: null,
@@ -77,11 +77,11 @@ const rules: FormRules = {
 const networkTypes = [
   {
     value: false,
-    label: t('form.networkTypes.test'),
+    label: $i18n.t('form.networkTypes.test'),
   },
   {
     value: true,
-    label: t('form.networkTypes.live'),
+    label: $i18n.t('form.networkTypes.live'),
   },
 ];
 
@@ -111,7 +111,7 @@ async function createService() {
     const { data, error } = await $api.post<CreateServiceResponse>(endpoints.services, bodyData);
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
       return;
     }
@@ -122,7 +122,7 @@ async function createService() {
     }
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
   }
 }

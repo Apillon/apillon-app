@@ -24,7 +24,7 @@
     <!--  Login submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.login') }}
       </Btn>
     </n-form-item>
@@ -35,13 +35,13 @@
 import { createDiscreteApi, FormInst, FormRules, FormValidationError } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { FormLogin, LoginResponse } from '~~/types/data';
+import { useAuthStore } from '~~/stores/auth';
 import { useDataStore } from '~~/stores/data';
 
-const { t } = useI18n();
-const router = useRouter();
+const $i18n = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const { message } = createDiscreteApi(['message']);
+const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
@@ -54,17 +54,17 @@ const rules: FormRules = {
   mail: [
     {
       type: 'email',
-      message: t('validation.email'),
+      message: $i18n.t('validation.email'),
     },
     {
       required: true,
-      message: 'Please enter your email',
+      message: $i18n.t('validation.emailRequired'),
     },
   ],
   password: [
     {
       required: true,
-      message: 'Please enter your password',
+      message: $i18n.t('validation.passwordRequired'),
     },
   ],
 };
@@ -88,19 +88,20 @@ async function login() {
     const { data, error } = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
       return;
     }
     if (data) {
       authStore.setUserToken(data.data.token);
+      authStore.changeUser(data.data);
     }
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     await dataStore.getProjects(true);
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
   }
 }

@@ -2,7 +2,6 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import { useDebounceFn } from '@vueuse/core';
 import { ethers, providers } from 'ethers';
-import useAlerts from './useAlerts';
 import chains from '~/config/chains';
 import { ActionReturn, removeLastSlash } from '~/lib/utils';
 
@@ -18,7 +17,6 @@ export const ProviderConnectors = {
 
 export const useProvider = () => {
   const authStore = useAuthStore();
-  const { $alert } = useAlerts();
 
   onMounted(() => {
     initProvider();

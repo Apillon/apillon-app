@@ -57,3 +57,11 @@ export interface UserInviteResponse {
   };
   status: number;
 }
+
+/**
+ * Wallet
+ */
+export interface WalletResponse {
+  message: string;
+  timestamp: number;
+}

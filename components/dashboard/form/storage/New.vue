@@ -39,16 +39,16 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
+import { FormInst, FormValidationError, FormRules, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { FormNewBucket, NewBucketResponse } from '~~/types/service';
 import { useDataStore } from '~~/stores/data';
 
-const { t } = useI18n();
+const message = useMessage();
+const $i18n = useI18n();
 const dataStore = useDataStore();
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
 
 const formData = ref<FormNewBucket>({
   bucketName: null,
@@ -59,7 +59,7 @@ const rules: FormRules = {
   bucketName: [
     {
       required: true,
-      message: 'Please enter bucket name',
+      message: $i18n.t('validation.bucketNameRequired'),
       trigger: 'input',
     },
   ],
@@ -69,11 +69,11 @@ const rules: FormRules = {
 const bucketSizes = [
   {
     value: 5,
-    label: t('form.bucketSizes.5gb'),
+    label: $i18n.t('form.bucketSizes.5gb'),
   },
   {
     value: 100,
-    label: t('form.bucketSizes.100gb'),
+    label: $i18n.t('form.bucketSizes.100gb'),
   },
 ];
 
@@ -102,7 +102,7 @@ async function createService() {
     const { data, error } = await $api.post<NewBucketResponse>(endpoints.bucket, bodyData);
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
       return;
     }
@@ -113,7 +113,7 @@ async function createService() {
     }
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
   }
 }

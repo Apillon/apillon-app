@@ -1,5 +1,6 @@
 <template>
   <n-dropdown
+    v-if="authStore.loggedIn"
     placement="bottom-end"
     trigger="click"
     size="huge"
@@ -18,8 +19,9 @@
         </div>
       </div>
       <div class="flex flex-col min-w-[120px] pr-1">
-        <strong>Guy Hawkins</strong>
-        <span class="text-grey">5535k...3243</span>
+        <strong v-if="authStore.username">{{ authStore.username }}</strong>
+        <strong v-else>{{ authStore.email }}</strong>
+        <span class="text-grey">{{ truncateWallet(authStore.userId) }}</span>
       </div>
       <div class="flex items-center">
         <span class="icon-down text-2xl"></span>
@@ -29,6 +31,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useAuthStore } from '~~/stores/auth';
 const authStore = useAuthStore();
 const router = useRouter();
 

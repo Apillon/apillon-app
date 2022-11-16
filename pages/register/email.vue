@@ -23,23 +23,26 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import { AuthStep } from '~~/types/auth';
+import { useAuthStore } from '~~/stores/auth';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const { t } = useI18n();
 
 definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: 'SignUp - check your e-mail',
+  title: t('signup.checkEmail'),
 });
 
-onBeforeMount(() => {
+onMounted(() => {
   authStore.authStep = AuthStep.SIGN_UP_EMAIL;
 
   /** If user hasn't signup, redirect him to signup form */
-  if (!hasEmail) {
+  if (!hasEmail.value) {
     router.push({ name: 'register' });
   }
 });

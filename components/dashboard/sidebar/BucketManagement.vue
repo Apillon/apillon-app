@@ -22,16 +22,21 @@ function handleUpdateValue(key: string, item: MenuOption) {
 const menuOptions: MenuOption[] = [
   {
     label: () =>
-      h(NuxtLink, { to: { path: '/service/storage/bucket/:id/files' } }, () => t('storage.files')),
+      h(NuxtLink, { to: { path: '/dashboard/service/storage/bucket/:id/files' } }, () =>
+        t('storage.files')
+      ),
     key: 'files',
   },
   {
     label: () =>
-      h(NuxtLink, { to: { path: '/service/storage/snapshots' } }, () => t('storage.snapshots')),
+      h(NuxtLink, { to: { path: '/dashboard/service/storage/snapshots' } }, () =>
+        t('storage.snapshots')
+      ),
     key: 'snapshots',
   },
   {
-    label: () => h(NuxtLink, { href: '/service/storage/stats' }, () => t('storage.stats')),
+    label: () =>
+      h(NuxtLink, { href: '/dashboard/service/storage/stats' }, () => t('storage.stats')),
     key: 'stats',
   },
 ];

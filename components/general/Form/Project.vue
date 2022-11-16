@@ -72,7 +72,7 @@ const projectNameText = computed(() => {
 /** Form project */
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
+const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const formData = ref<FormProject>({
   name: null,
@@ -84,7 +84,7 @@ const rules: FormRules = {
   name: [
     {
       required: true,
-      message: 'Please enter project name',
+      message: $i18n.t('validation.projectNameRequired'),
       trigger: 'input',
     },
   ],
@@ -93,7 +93,7 @@ const rules: FormRules = {
     {
       required: true,
       validator: validateRequiredCheckbox,
-      message: 'Please accept the terms',
+      message: $i18n.t('validation.terms'),
     },
   ],
 };
@@ -121,9 +121,7 @@ async function createProject() {
 
     if (error) {
       setTimeout(() => {
-        message.error(error.message);
-        message.error($i18n.t(`error.${error.status}`));
-
+        message.error(userFriendlyMsg($i18n, error));
         loading.value = false;
         $emit('submitActive', false);
       }, 2000);
@@ -139,7 +137,7 @@ async function createProject() {
     }
     loading.value = false;
   } catch (error) {
-    message.error($i18n.t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
     $emit('submitActive', false);
   }

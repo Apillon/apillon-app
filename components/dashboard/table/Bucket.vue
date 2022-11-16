@@ -116,7 +116,7 @@ const dropdownOptions = [
     key: 'storageEdit',
     props: {
       onClick: () => {
-        router.push(`/service/storage/bucket/${currentRow.value.id}`);
+        router.push(`/dashboard/service/storage/bucket/${currentRow.value.id}`);
       },
     },
   },

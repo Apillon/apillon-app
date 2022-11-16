@@ -5,7 +5,7 @@
         {{ $t('login.buildWeb3') }}
       </p>
       <n-space :size="40" class="font-bold">
-        <Btn :to="{ name: 'dashboard' }">{{ $t('login.getStarted') }}</Btn>
+        <Btn :to="{ name: 'dashboard' }" type="link">{{ $t('login.getStarted') }}</Btn>
         <NuxtLink href="https://wiki.apillon.io/">{{ $t('login.goToDocs') }}</NuxtLink>
       </n-space>
     </div>

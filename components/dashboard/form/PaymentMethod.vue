@@ -104,7 +104,7 @@ import { FormInst, FormValidationError, FormRules, FormItemRule, useMessage } fr
 import { useI18n } from 'vue-i18n';
 import { FormBilling, BillingResponse } from '~~/types/settings';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
 const message = useMessage();
@@ -123,58 +123,58 @@ const rules: FormRules = {
   cardHolder: [
     {
       required: true,
-      message: 'Please enter your name',
+      message: $i18n.t('validation.cardHolderRequired'),
     },
     {
       validator: validateCardHolder,
-      message: 'Please enter valid name',
+      message: $i18n.t('validation.cardHolder'),
     },
   ],
   cardNumber: [
     {
       required: true,
-      message: 'Please enter credit card number',
+      message: $i18n.t('validation.cardNumberRequired'),
     },
     {
       validator: validateCreditCard,
-      message: 'Credit card validation error',
+      message: $i18n.t('validation.cardNumber'),
     },
   ],
   expirationDate: [
     {
       required: true,
-      message: 'Please enter expiration date',
+      message: $i18n.t('validation.expirationDateRequired'),
     },
     {
       validator: validateExpirationDate,
-      message: 'Date is expired',
+      message: $i18n.t('validation.expirationDate'),
     },
   ],
   cvv: [
     {
       required: true,
-      message: 'Please enter CVV',
+      message: $i18n.t('validation.cvvRequired'),
     },
     {
       validator: validateCVV,
-      message: 'Wrong CVV',
+      message: $i18n.t('validation.cvv'),
     },
   ],
   postalCode: [
     {
       required: true,
-      message: 'Please enter postal code',
+      message: $i18n.t('validation.postalCodeRequired'),
     },
     {
       validator: validatePostalCode,
-      message: 'Wrong postal code',
+      message: $i18n.t('validation.postalCode'),
     },
   ],
   terms: [
     {
       required: true,
       validator: validateRequiredCheckbox,
-      message: 'Please accept the terms',
+      message: $i18n.t('validation.terms'),
     },
   ],
 };
@@ -254,7 +254,7 @@ async function updateUserProfile() {
     const { data, error } = await $api.post<BillingResponse>(endpoints.billing, formData.value);
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
       return;
     }
@@ -265,7 +265,7 @@ async function updateUserProfile() {
     }
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
   }
 }

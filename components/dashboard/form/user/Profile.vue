@@ -48,21 +48,15 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  FormInst,
-  createDiscreteApi,
-  FormValidationError,
-  FormRules,
-  FormItemRule,
-} from 'naive-ui';
+import { FormInst, FormValidationError, FormRules, FormItemRule, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { FormUserProfile, UserProfileResponse } from '~~/types/auth';
 
-const { t } = useI18n();
+const message = useMessage();
+const $i18n = useI18n();
 const authStore = useAuthStore();
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
 
 const formData = ref<FormUserProfile>({
   username: authStore.username,
@@ -75,17 +69,17 @@ const rules: FormRules = {
   email: [
     {
       type: 'email',
-      message: t('validation.email'),
+      message: $i18n.t('validation.email'),
     },
     {
       required: true,
-      message: t('validation.emailRequired'),
+      message: $i18n.t('validation.emailRequired'),
     },
   ],
   phone: [
     {
       validator: validatePhone,
-      message: t('validation.phone'),
+      message: $i18n.t('validation.phone'),
       trigger: 'input',
     },
   ],
@@ -114,10 +108,10 @@ async function updateUserProfile() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<UserProfileResponse>(endpoints.me, formData.value);
+    const { data, error } = await $api.patch<UserProfileResponse>(endpoints.me, formData.value);
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
       return;
     }
@@ -128,7 +122,7 @@ async function updateUserProfile() {
     }
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
   }
 }

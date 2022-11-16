@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gradientDark">
-    <div class="container h-[160px] pt-12 pb-16">
+    <div class="container min-h-[120px] py-12 pb-10">
       <div class="flex h-full">
         <div
           class="flex justify-center"
@@ -16,7 +16,11 @@
             <NuxtLink
               :to="{ name: 'register' }"
               class="text-sm"
-              :class="[!isLogin ? 'text-blue' : 'text-grey-light']"
+              :class="[
+                !isLogin ? 'text-blue' : 'text-grey-light',
+                allowSwitchPage ? 'cursor-pointer' : 'cursor-default pointer-events-none',
+              ]"
+              @click.native="pageSwitched"
             >
               <strong>{{ $t('general.signup') }}</strong>
             </NuxtLink>
@@ -24,11 +28,21 @@
             <NuxtLink
               :to="{ name: 'login' }"
               class="text-sm"
-              :class="[isLogin ? 'text-blue' : 'text-grey-light']"
+              :class="[
+                isLogin ? 'text-blue' : 'text-grey-light',
+                allowSwitchPage ? 'cursor-pointer' : 'cursor-default pointer-events-none',
+              ]"
+              @click.native="pageSwitched"
             >
               <strong>{{ $t('general.login') }}</strong>
             </NuxtLink>
           </div>
+        </div>
+        <div
+          v-else-if="authStore.loggedIn"
+          class="flex md:w-1/2 items-end justify-center md:justify-end"
+        >
+          <HeaderProfile />
         </div>
       </div>
     </div>
@@ -63,12 +77,24 @@ const isLogoCentered = computed(() => {
   );
 });
 
+/** Allow next page switch, after 1s */
+const allowSwitchPage = ref<boolean>(true);
 function switchPage() {
+  if (!allowSwitchPage.value) return;
+
+  pageSwitched();
+
   isLogin.value = !isLogin.value;
   if (isLogin.value) {
     router.push({ name: 'login' });
   } else {
     router.push({ name: 'register' });
   }
+}
+function pageSwitched() {
+  allowSwitchPage.value = false;
+  setTimeout(() => {
+    allowSwitchPage.value = true;
+  }, 1000);
 }
 </script>

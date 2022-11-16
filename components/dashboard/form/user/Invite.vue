@@ -44,14 +44,14 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
+import { FormInst, FormValidationError, FormRules, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { FormUserInvite, UserInviteResponse } from '~~/types/auth';
 
-const { t } = useI18n();
+const message = useMessage();
+const $i18n = useI18n();
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
 
 /** Col widths */
 const { width } = useWindowSize();
@@ -94,17 +94,17 @@ const rules: FormRules = {
   email: [
     {
       type: 'email',
-      message: t('validation.email'),
+      message: $i18n.t('validation.email'),
     },
     {
       required: true,
-      message: t('validation.emailRequired'),
+      message: $i18n.t('validation.emailRequired'),
     },
   ],
   role: [
     {
       required: true,
-      message: t('validation.role'),
+      message: $i18n.t('validation.role'),
     },
   ],
 };
@@ -130,7 +130,7 @@ async function inviteUser() {
     );
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
       return;
     }
@@ -141,7 +141,7 @@ async function inviteUser() {
     }
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
   }
 }

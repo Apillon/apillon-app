@@ -48,7 +48,7 @@ import { useI18n } from 'vue-i18n';
 import { useDataStore } from '~~/stores/data';
 import { FormProjectSettings, ProjectSettingsResponse } from '~~/types/data';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const dataStore = useDataStore();
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
@@ -95,7 +95,7 @@ async function updateUserProfile() {
     );
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
       return;
     }
@@ -105,7 +105,7 @@ async function updateUserProfile() {
     }
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
   }
 }
