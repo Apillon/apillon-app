@@ -1,5 +1,5 @@
 import { stringify } from 'query-string';
-import { ERROR } from '~~/types/error';
+import { ApiErrorResponse, ERROR } from '~~/types/error';
 
 export const APISettings = {
   headers: new Headers({
@@ -8,15 +8,6 @@ export const APISettings = {
   }),
   basePath: '',
 };
-
-export interface ApiErrorResponse {
-  code?: number;
-  message: string;
-  path?: string;
-  status: number;
-  error: any;
-  timestamp?: string;
-}
 
 export const $api = {
   async post<T>(path: string, data?: any) {

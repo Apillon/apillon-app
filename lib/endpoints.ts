@@ -8,6 +8,8 @@ const Endpoints = {
   login: '/users/login',
   register: '/users/register',
   validateMail: '/users/validate-email',
+  passwordReset: '/users/password-reset',
+  passwordResetRequest: '/users/password-reset-request',
 
   /** Project */
   project: '/projects/',

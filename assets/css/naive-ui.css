@@ -4,6 +4,20 @@
   .n-button__content {
     white-space: normal;
   }
+  &.n-button--loading {
+    .n-button__icon {
+      position: absolute;
+      margin: 0;
+
+      .n-base-loading {
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+    .n-button__content {
+      color: transparent;
+    }
+  }
 }
 
 /** Checkbox */

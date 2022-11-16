@@ -29,12 +29,26 @@
       </Btn>
     </n-form-item>
   </n-form>
+  <div class="min-h-[30px] text-center">
+    <div v-if="showResetPassword && formData.email">
+      <span class="text-sm text-grey">{{ $t('login.forgotPassword') }} </span>&nbsp;
+      <NButton
+        type="primary"
+        size="tiny"
+        quaternary
+        :loading="loadingResetBtn"
+        @click="resetPassword"
+      >
+        {{ $t('login.resetPassword') }}
+      </NButton>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { createDiscreteApi, FormInst, FormRules, FormValidationError } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormLogin, LoginResponse } from '~~/types/data';
+import { FormLogin, LoginResponse, PasswordResetResponse } from '~~/types/auth';
 import { useAuthStore } from '~~/stores/auth';
 import { useDataStore } from '~~/stores/data';
 
@@ -44,6 +58,8 @@ const dataStore = useDataStore();
 const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
+const loadingResetBtn = ref(false);
+const showResetPassword = ref(false);
 const formRef = ref<FormInst | null>(null);
 
 const formData = ref<FormLogin>({
@@ -90,6 +106,7 @@ async function login() {
     if (error) {
       message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
+      showResetPassword.value = true;
       return;
     }
     if (data) {
@@ -102,7 +119,32 @@ async function login() {
     loading.value = false;
   } catch (error) {
     message.error(userFriendlyMsg($i18n, error));
+    showResetPassword.value = true;
     loading.value = false;
+  }
+}
+
+async function resetPassword() {
+  loadingResetBtn.value = true;
+  try {
+    const bodyData = { email: formData.value.email };
+    const { data, error } = await $api.post<PasswordResetResponse>(
+      endpoints.passwordResetRequest,
+      bodyData
+    );
+
+    if (error) {
+      message.error(userFriendlyMsg($i18n, error));
+      loadingResetBtn.value = false;
+      return;
+    }
+    if (data) {
+      message.success($i18n.t('login.passwordRequestSuccess'));
+    }
+    loadingResetBtn.value = false;
+  } catch (error) {
+    message.error(userFriendlyMsg($i18n, error));
+    loadingResetBtn.value = false;
   }
 }
 </script>

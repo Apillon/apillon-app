@@ -27,7 +27,7 @@
 import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '~~/stores/auth';
-import { ValidateMailResponse } from '~~/types/data';
+import { ValidateMailResponse } from '~~/types/auth';
 
 const props = defineProps({
   sendAgain: { type: Boolean, default: false },
