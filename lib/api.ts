@@ -1,6 +1,5 @@
-import { useMessage } from 'naive-ui';
 import { stringify } from 'query-string';
-import { ERROR, ERROR_CODE } from '~~/types/error';
+import { ERROR } from '~~/types/error';
 
 export const APISettings = {
   headers: new Headers({
@@ -29,10 +28,7 @@ export const $api = {
 
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (
-        error?.message === ERROR.FORBIDDEN_RESOURCE ||
-        error?.message === ERROR.INVALID_SIGNATURE
-      ) {
+      if ($api.isUnauthorized(error?.message)) {
         $api.backToLogin();
         return {
           response,
@@ -61,10 +57,7 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (
-        error?.message === ERROR.FORBIDDEN_RESOURCE ||
-        error?.message === ERROR.INVALID_SIGNATURE
-      ) {
+      if ($api.isUnauthorized(error?.message)) {
         $api.backToLogin();
         return {
           response,
@@ -91,10 +84,7 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (
-        error?.message === ERROR.FORBIDDEN_RESOURCE ||
-        error?.message === ERROR.INVALID_SIGNATURE
-      ) {
+      if ($api.isUnauthorized(error?.message)) {
         $api.backToLogin();
         return {
           response,
@@ -121,10 +111,7 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (
-        error?.message === ERROR.FORBIDDEN_RESOURCE ||
-        error?.message === ERROR.INVALID_SIGNATURE
-      ) {
+      if ($api.isUnauthorized(error?.message)) {
         $api.backToLogin();
         return {
           response,
@@ -150,10 +137,7 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (
-        error?.message === ERROR.FORBIDDEN_RESOURCE ||
-        error?.message === ERROR.INVALID_SIGNATURE
-      ) {
+      if ($api.isUnauthorized(error?.message)) {
         $api.backToLogin();
         return {
           response,
@@ -181,6 +165,15 @@ export const $api = {
 
   clearToken() {
     APISettings.headers.delete('Authorization');
+  },
+
+  isUnauthorized(msg: string) {
+    return (
+      msg === ERROR.FORBIDDEN_RESOURCE ||
+      msg === ERROR.INVALID_SIGNATURE ||
+      msg === ERROR.USER_IS_NOT_AUTHENTICATED ||
+      msg === ERROR.JWT_EXPIRED
+    );
   },
 
   backToLogin() {

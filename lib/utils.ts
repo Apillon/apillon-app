@@ -1,6 +1,7 @@
 import { Validation } from '@vuelidate/core';
 import { helpers } from '@vuelidate/validators';
 import { FormItemRule } from 'naive-ui';
+import { ApiErrorResponse } from '~~/types/error';
 
 export function getVuelidateErrorMsg(v$: Validation, key: string) {
   if (!!v$[key] && v$[key].$invalid && v$[key].$errors.length) {
@@ -90,18 +91,32 @@ export function storagePercantage(size: number, maxSize: number) {
 }
 
 /** Error messages */
-export function userFriendlyMsg($i18n, error) {
-  if (!$i18n || !$i18n.te('error.API') || !$i18n.t('error.API')) {
+export function userFriendlyMsg($i18n, error: ApiErrorResponse) {
+  if (!$i18n || !$i18n.te('error.API') || !$i18n.t('error.API') || !error) {
     return 'Internal server error';
   }
-  if (error && error.message) {
-    if ($i18n.te(`error.${error.message}`)) {
-      return $i18n.t(`error.${error.message}`);
-    } else if (error.code >= 500) {
-      return $i18n.t('error.DEFAULT_SYSTEM_ERROR');
-    } else if (error.code >= 400) {
-      return $i18n.t('error.BAD_REQUEST');
-    }
+  if (error.errors && Array.isArray(error.errors)) {
+    return error.errors
+      .map(e => singleErrorMessage($i18n, e.message, takeFirstDigitsFromNumber(e.statusCode)))
+      .join(', ');
+  } else if (error.message) {
+    return singleErrorMessage($i18n, error.message, error.status);
   }
   return $i18n.t('error.API');
+}
+
+/** Translate single error message */
+function singleErrorMessage($i18n, message: string, code: number) {
+  if ($i18n.te(`error.${message}`)) {
+    return $i18n.t(`error.${message}`);
+  } else if (code >= 500) {
+    return $i18n.t('error.DEFAULT_SYSTEM_ERROR');
+  } else if (code >= 400) {
+    return $i18n.t('error.BAD_REQUEST');
+  }
+}
+
+/** statusCode to HTTP code */
+function takeFirstDigitsFromNumber(num: number, numOfDigits: number = 3): number {
+  return parseInt(String(num).slice(0, numOfDigits));
 }

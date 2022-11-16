@@ -1,4 +1,5 @@
 import chains from '~/config/chains';
+import { useProvider } from '~~/composables/useProvider';
 
 const isWpLoading = ref(true); // disable interaction while setting metamask account/chain
 const isWpInitialized = ref(false); // is window.ethereum initialized
@@ -7,7 +8,6 @@ const isWpChainConnected = ref(false); // is metamask chain connected
 
 export default function useWalletAccounts() {
   const config = useRuntimeConfig();
-  const { $alert } = useAlerts();
 
   const metamaskStatus = ref('Waiting for wallet...');
 
@@ -69,14 +69,14 @@ export default function useWalletAccounts() {
       await handleAccountsChanged();
     } catch (err) {
       console.error(err);
-      $alert.error('Please connect to specified chain to use this functionality');
+      // $alert.error('Please connect to specified chain to use this functionality');
     }
   }
 
   async function checkChain() {
     if (!ethereum.value) {
       console.error('Ethereum not initialized');
-      $alert.error('Please connect to specified chain to use this functionality');
+      // $alert.error('Please connect to specified chain to use this functionality');
       return;
     }
     const chainId = await ethereum.value.request({ method: 'eth_chainId' });
@@ -109,7 +109,7 @@ export default function useWalletAccounts() {
 
   function handleChainChanged(chainId: string) {
     if (chainId === '0x0' || chainId === '0' || Number(chainId) === 0) {
-      $alert.error('Please connect or unlock wallet');
+      // $alert.error('Please connect or unlock wallet');
       return;
     }
     setChainId(chainId);
@@ -129,13 +129,13 @@ export default function useWalletAccounts() {
   async function connectToAccount(resetPermissions = false) {
     if (!isWpInitialized.value) {
       console.error('Wallet not initialized');
-      $alert.error('Wallet not initialized');
+      // $alert.error('Wallet not initialized');
       return;
     }
 
     if (!ethereum.value) {
       console.error('Ethereum not initialized');
-      $alert.error('Ethereum not initialized');
+      // $alert.error('Ethereum not initialized');
       return;
     }
 
@@ -170,10 +170,10 @@ export default function useWalletAccounts() {
          */
         metamaskStatus.value = 'Please connect to a wallet';
         console.error('You have to connect to a wallet to use this functionality', err);
-        $alert.error('You have to connect to a wallet to use this functionality');
+        // $alert.error('You have to connect to a wallet to use this functionality');
       } else {
         console.error(err);
-        $alert.error('You have to connect to a wallet to use this functionality');
+        // $alert.error('You have to connect to a wallet to use this functionality');
       }
     }
 
@@ -187,13 +187,13 @@ export default function useWalletAccounts() {
   async function connectToChain(chainId = config.CHAIN_ID) {
     if (!isWpInitialized.value) {
       console.error('Wallet not initialized');
-      $alert.error('Wallet not initialized');
+      // $alert.error('Wallet not initialized');
       return;
     }
 
     if (!ethereum.value) {
       console.error('Ethereum not initialized');
-      $alert.error('Wallet not initialized');
+      // $alert.error('Wallet not initialized');
       return;
     }
 
@@ -208,7 +208,7 @@ export default function useWalletAccounts() {
     } catch (err: any) {
       if (err.code === 4001) {
         console.error('Please connect to specified chain to use this functionality');
-        $alert.error('Wallet not initialized');
+        // $alert.error('Wallet not initialized');
       } else if (!!chains[chainId] && err.code === 4902) {
         // Chain not added to MetaMask yet
         try {
@@ -224,7 +224,7 @@ export default function useWalletAccounts() {
         }
       } else {
         console.error(err);
-        $alert.error('Please connect to specified chain to use this functionality');
+        // $alert.error('Please connect to specified chain to use this functionality');
       }
     }
 

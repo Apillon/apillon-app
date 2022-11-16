@@ -133,7 +133,6 @@ export const useDataStore = defineStore('data', {
         });
       } catch (error) {
         message.error(error);
-        // message.error(t('error.API'));
       }
     },
 

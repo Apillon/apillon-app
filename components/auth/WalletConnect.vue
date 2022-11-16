@@ -9,6 +9,7 @@ import { createDiscreteApi } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '~~/stores/auth';
 import { WalletResponse } from '~~/types/auth';
+import { useProvider } from '~~/composables/useProvider';
 
 const authStore = useAuthStore();
 const $i18n = useI18n();
