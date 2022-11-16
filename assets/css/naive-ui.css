@@ -1,3 +1,11 @@
+/** Button */
+
+.n-button {
+  .n-button__content {
+    white-space: normal;
+  }
+}
+
 /** Checkbox */
 .n-checkbox {
   .n-checkbox-box .n-checkbox-box__border {
@@ -106,17 +114,23 @@
 .n-message {
   border-left: 4px solid theme('colors.grey.lightBg');
 
-  &--success-error {
+  &--error-type {
     border-color: theme('colors.pink');
   }
-  &--success-info {
+  &--info-type {
     border-color: theme('colors.blue');
   }
   &--success-type {
     border-color: theme('colors.green');
   }
-  &--success-warning {
+  &--warning-type {
     border-color: theme('colors.yellow');
+  }
+}
+/** Message provider */
+body > .n-message-container {
+  &.n-message-container--top {
+    position: fixed;
   }
 }
 

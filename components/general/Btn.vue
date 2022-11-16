@@ -31,7 +31,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    validator: (value: string) => ['tiny', 'small', 'medium'].includes(value),
+    validator: (value: string) => ['tiny', 'small', 'medium', 'large'].includes(value),
     default: 'medium',
   },
   innerClass: { type: [String, Array, Object], default: '' },
@@ -54,6 +54,7 @@ const btnClass = computed(() => {
     {
       'py-[10px] px-6': props.type !== 'link' && props.size === 'small',
       'py-4 px-10': props.type !== 'link' && props.size === 'medium',
+      'py-4 px-2 w-full': props.type !== 'link' && props.size === 'large',
       'text-primary': props.type === 'link',
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,

@@ -36,10 +36,13 @@ export const useDataStore = defineStore('data', {
   getters: {
     currentProject(state) {
       /** Select first project as fallback if project is not selected */
-      if (state.currentProjectId === 0 && state.projects && state.projects.length > 0) {
+      if (state.currentProjectId === 0 && this.hasProjects(state)) {
         this.setCurrentProject(state.projects[0].id);
       }
       return state.projects.find(project => project.id === state.currentProjectId);
+    },
+    hasProjects(state) {
+      return Array.isArray(state.projects) && state.projects.length > 0;
     },
   },
   actions: {
@@ -74,6 +77,8 @@ export const useDataStore = defineStore('data', {
         const { response, data, error } = await $api.get<ProjectResponse>(endpoints.userProjects);
 
         if (error) {
+          console.log('error');
+          console.log(error);
           message.error(error.message);
 
           this.projects = [];
@@ -88,12 +93,12 @@ export const useDataStore = defineStore('data', {
         });
 
         /* If current project is not selected, take first one */
-        if (this.currentProjectId === 0) {
+        if (this.currentProjectId === 0 && this.hasProjects) {
           this.setCurrentProject(this.projects[0].id);
         }
 
         /** If user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-        if (redirectToDashboard && this.projects.length === 0) {
+        if (redirectToDashboard && !this.hasProjects) {
           router.push({ name: 'onboarding' });
         } else if (redirectToDashboard) {
           router.push({ name: 'dashboard' });
@@ -101,9 +106,12 @@ export const useDataStore = defineStore('data', {
 
         return response;
       } catch (error) {
+        console.log('catch error');
+        console.log(error);
         message.error(error);
         // message.error(t('error.API'));
       }
+      return null;
     },
 
     async getServices(type: number) {

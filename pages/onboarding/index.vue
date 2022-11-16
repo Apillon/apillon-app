@@ -9,7 +9,7 @@
             <p class="mb-4">{{ $t('login.buildCustomApp') }}</p>
           </div>
           <div>
-            <Btn type="primary" class="w-full" @click="router.push({ name: 'onboarding-project' })">
+            <Btn type="primary" size="large" @click="router.push({ name: 'onboarding-project' })">
               {{ $t('login.startBuilding') }}
             </Btn>
           </div>
@@ -20,7 +20,7 @@
             <p class="mb-4">{{ $t('login.walkThroughWeb3') }}</p>
           </div>
           <div>
-            <Btn type="secondary" class="w-full">{{ $t('login.buildDemo') }}</Btn>
+            <Btn type="secondary" size="large">{{ $t('login.buildDemo') }}</Btn>
           </div>
         </div>
       </div>

@@ -29,15 +29,23 @@ export function randomInteger(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+export function ActionReturn(success: boolean, data: any) {
+  return { success, data };
+}
+
+/**
+ * String manipulations
+ * */
 export function removeLastSlash(val: string) {
   if (!val) {
     return val;
   }
   return val.replace(/\/$/, '');
 }
-
-export function ActionReturn(success: boolean, data: any) {
-  return { success, data };
+export function truncateWallet(source: string, partLength: number = 4): string {
+  return source.length > 9
+    ? source.slice(0, partLength) + '…' + source.slice(source.length - partLength, source.length)
+    : source;
 }
 
 /**
@@ -79,4 +87,21 @@ export function kbToMb(kb: number) {
 
 export function storagePercantage(size: number, maxSize: number) {
   return ((size / maxSize) * 100).toFixed(0);
+}
+
+/** Error messages */
+export function userFriendlyMsg($i18n, error) {
+  if (!$i18n || !$i18n.te('error.API') || !$i18n.t('error.API')) {
+    return 'Internal server error';
+  }
+  if (error && error.message) {
+    if ($i18n.te(`error.${error.message}`)) {
+      return $i18n.t(`error.${error.message}`);
+    } else if (error.code >= 500) {
+      return $i18n.t('error.DEFAULT_SYSTEM_ERROR');
+    } else if (error.code >= 400) {
+      return $i18n.t('error.BAD_REQUEST');
+    }
+  }
+  return $i18n.t('error.API');
 }

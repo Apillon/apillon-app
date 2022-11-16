@@ -4,6 +4,7 @@
       <div class="flex justify-between">
         <div class="pr-4">
           <select-options
+            v-if="dataStore.hasProjects"
             :key="componentSelectKey"
             v-model:value="dataStore.currentProjectId"
             :options="dataStore.projects"
@@ -54,7 +55,7 @@ const SelectProjectOverrides: SelectThemeOverrides = {
 };
 
 onBeforeMount(() => {
-  if (!Array.isArray(dataStore.projects) || dataStore.projects.length === 0) {
+  if (!dataStore.hasProjects) {
     dataStore.promises.projects = dataStore.getProjects();
   }
 });

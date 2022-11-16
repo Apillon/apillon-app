@@ -29,17 +29,20 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import WalletConnect from '~~/components/auth/WalletConnect.vue';
 import { AuthStep } from '~~/types/auth';
+import { useAuthStore } from '~~/stores/auth';
+
+const { t } = useI18n();
+const authStore = useAuthStore();
 
 definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: 'Log in',
+  title: t('login.title'),
 });
-
-const authStore = useAuthStore();
 
 onBeforeMount(() => {
   authStore.authStep = AuthStep.LOGIN;

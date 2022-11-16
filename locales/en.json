@@ -69,7 +69,66 @@
     "value": "Value"
   },
   "error": {
-    "API": "General API error"
+    "BAD_REQUEST": "Bad request",
+    "INVALID_PATH": "Invalid path",
+    "INVALID_QUERY_PARAMETERS": "Invalid query parameters",
+    "UNAUTHORIZED": "Unauthorized",
+    "INVALID_TOKEN": "Invalid token",
+    "USER_IS_NOT_AUTHENTICATED": "User is not authenticated",
+    "FORBIDDEN": "Forbidden",
+    "USER_IS_NOT_AUTHORIZED": "User is not authorized",
+
+    "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error",
+    "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
+
+    "API_KEY_NOT_PRESENT": "API key is missing",
+    "API_KEY_SECRET_NOT_PRESENT": "API key secret is missing",
+    "API_KEY_PROJECT_UUID_NOT_PRESENT": "API_KEY_PROJECT_UUID is missing",
+    "API_KEY_ROLE_API_KEY_ID_NOT_PRESENT": "API_KEY_ROLE_API_KEY_ID is missing",
+    "API_KEY_ROLE_ROLE_ID_NOT_PRESENT": "API_KEY_ROLE_ROLE_ID is missing",
+    "API_KEY_ROLE_SERVICE_UUID_NOT_PRESENT": "API_KEY_ROLE_SERVICE_UUID is missing",
+    "API_KEY_ROLE_PROJECT_UUID_NOT_PRESENT": "API_KEY_ROLE_PROJECT_UUID is missing",
+    "API_KEY_ROLE_ROLE_ID_NOT_VALID": "API_KEY_ROLE_ROLE_ID is not valid",
+    "CREATE_API_KEY_PROJECT_UUID_NOT_PRESENT": "CREATE_API_KEY_PROJECT_UUID is missing",
+
+    "BUCKET_PROJECT_UUID_NOT_PRESENT": "Bucket project ID is missing",
+    "BUCKET_STORAGE_PLAN_ID_NOT_PRESENT": "Bucket storage plain ID is missing",
+    "BUCKET_NAME_NOT_PRESENT": "Bucekt name is missing",
+    "DIRECTORY_BUCKET_ID_NOT_PRESENT": "Directory bucket ID is missing",
+    "DIRECTORY_NAME_NOT_PRESENT": "Directory name is missing",
+    "BUCKET_UUID_NOT_PRESENT": "Bucekt UUID is missing",
+    "PATH_NOT_PRESENT": "Path is missing",
+    "FILE_NAME_NOT_PRESENT": "File name is missing",
+    "CONTENT_TYPE_NOT_PRESENT": "Content type is missing",
+    "SESSION_UUID_NOT_PRESENT": "Session UUID is missing",
+    "BUCKET_TYPE_NOT_PRESENT": "Bucket type is missing",
+
+    "STATUS_NOT_PRESENT": "Status not present",
+    "INVALID_STATUS": "Invalid status",
+    "EMAIL_NOT_PRESENT": "Email is missing",
+    "TOKEN_NOT_PRESENT": "Token is missing",
+    "USER_EMAIL_NOT_PRESENT": "Email is missing",
+    "USER_INVALID_LOGIN": "Wrong email or password",
+    "USER_EMAIL_NOT_VALID": "Email is not valid",
+    "USER_EMAIL_ALREADY_TAKEN": "Email is already taken",
+    "USER_UUID_NOT_PRESENT": "user_uuid is missing",
+    "USER_UUID_ALREADY_EXISTS": "user_uuid already exists",
+    "USER_PASSWORD_NOT_PRESENT": "Password is missing",
+    "USER_AUTH_TOKEN_NOT_PRESENT": "AUTH_TOKEN is missing",
+    "USER_AUTH_TOKEN_EXPIRES_IN_NOT_PRESENT": "AUTH_TOKEN_EXPIRES is missing",
+    "USER_AUTH_TOKEN_TYPE_NOT_PRESENT": "AUTH_TOKEN_TYPE is missing",
+
+    "API": "Internal server error",
+    "DEFAULT_SYSTEM_ERROR": "System error",
+    "UNHANDLED_SYSTEM_ERROR": "Unhandled system error",
+    "SQL_SYSTEM_ERROR": "System error",
+    "AWS_SYSTEM_ERROR": "System error",
+    "MICROSERVICE_SYSTEM_ERROR": "System error",
+    "ERROR_WRITING_TO_DATABASE": "Internal server error",
+    "ERROR_READING_FROM_DATABASE": "Internal server error",
+    "SERVICE_ERROR": "Internal server error",
+
+    "walletSignature": "'Could not capture your signature, check your wallet connection"
   },
   "footer": {
     "support": "Support",
@@ -268,8 +327,25 @@
     }
   },
   "validation": {
+    "bucketNameRequired": "Please enter bucket name",
+    "cardHolder": "Please enter valid name",
+    "cardHolderRequired": "Please enter your name",
+    "creditCard": "Credit card validation error",
+    "creditCardRequired": "Please enter credit card number",
+    "cvv": "Wrong CVV",
+    "cvvRequired": "Please enter CVV",
     "email": "Email address is not valid",
     "emailRequired": "Please enter your email",
-    "phone": "Phone validation error"
+    "expirationDate": "Date is expired",
+    "expirationDateRequired": "Please enter expiration date",
+    "passwordMinLength": "Password must contain at least 12 characters.",
+    "passwordReenterSame": "Password is not same as re-entered password!",
+    "passwordReenterRequired": "Re-entered password is required",
+    "passwordRequired": "Please enter your password",
+    "postalCode": "Wrong postal code",
+    "postalCodeRequired": "Please enter postal code",
+    "projectNameRequired": "Please enter project name",
+    "phone": "Phone validation error",
+    "terms": "Please accept the terms"
   }
 }

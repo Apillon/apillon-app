@@ -37,7 +37,7 @@
     <!--  Register submit -->
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn type="primary" class="w-full mt-2" @click="handleSubmit">
+      <Btn type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.proceed') }}
       </Btn>
     </n-form-item>
@@ -57,12 +57,12 @@ import { useI18n } from 'vue-i18n';
 import { FormRegister, RegisterResponse } from '~~/types/data';
 import { useDataStore } from '~~/stores/data';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const router = useRouter();
 const { query } = useRoute();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const { message } = createDiscreteApi(['message']);
+const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
@@ -83,27 +83,27 @@ const rules: FormRules = {
   password: [
     {
       required: true,
-      message: 'Please enter your password',
+      message: $i18n.t('validation.passwordRequired'),
     },
     {
       min: 12,
-      message: 'Password must contain at least 12 characters.',
+      message: $i18n.t('validation.passwordMinLength'),
     },
   ],
   reenteredPassword: [
     {
       required: true,
-      message: 'Re-entered password is required',
+      message: $i18n.t('validation.passwordReenterRequired'),
       trigger: ['input', 'blur'],
     },
     {
       validator: validatePasswordStartWith,
-      message: 'Password is not same as re-entered password!',
+      message: $i18n.t('validation.passwordReenterSame'),
       trigger: 'input',
     },
     {
       validator: validatePasswordSame,
-      message: 'Password is not same as re-entered password!',
+      message: $i18n.t('validation.passwordReenterSame'),
       trigger: ['blur', 'password-input'],
     },
   ],
@@ -147,7 +147,7 @@ async function register() {
     });
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
       return;
     }
@@ -158,8 +158,7 @@ async function register() {
     await dataStore.getProjects(true);
     loading.value = false;
   } catch (error) {
-    console.log(error);
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
   }
 }

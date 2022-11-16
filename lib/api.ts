@@ -30,7 +30,7 @@ export const $api = {
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
       if (
-        error?.code === ERROR_CODE.FORBIDDEN_RESOURCE ||
+        error?.message === ERROR.FORBIDDEN_RESOURCE ||
         error?.message === ERROR.INVALID_SIGNATURE
       ) {
         $api.backToLogin();
@@ -62,7 +62,7 @@ export const $api = {
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
       if (
-        error?.code === ERROR_CODE.FORBIDDEN_RESOURCE ||
+        error?.message === ERROR.FORBIDDEN_RESOURCE ||
         error?.message === ERROR.INVALID_SIGNATURE
       ) {
         $api.backToLogin();
@@ -92,7 +92,7 @@ export const $api = {
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
       if (
-        error?.code === ERROR_CODE.FORBIDDEN_RESOURCE ||
+        error?.message === ERROR.FORBIDDEN_RESOURCE ||
         error?.message === ERROR.INVALID_SIGNATURE
       ) {
         $api.backToLogin();
@@ -122,7 +122,7 @@ export const $api = {
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
       if (
-        error?.code === ERROR_CODE.FORBIDDEN_RESOURCE ||
+        error?.message === ERROR.FORBIDDEN_RESOURCE ||
         error?.message === ERROR.INVALID_SIGNATURE
       ) {
         $api.backToLogin();
@@ -151,7 +151,7 @@ export const $api = {
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
       if (
-        error?.code === ERROR_CODE.FORBIDDEN_RESOURCE ||
+        error?.message === ERROR.FORBIDDEN_RESOURCE ||
         error?.message === ERROR.INVALID_SIGNATURE
       ) {
         $api.backToLogin();

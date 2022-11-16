@@ -19,7 +19,7 @@
         <Tag color="violet">{{ bucket.name }}</Tag>
         <span>
           <span class="icon-storage"></span>
-          {{ t('storage.bucket') }}
+          {{ $t('storage.bucket') }}
         </span>
         <ProgressStorage
           class="w-1/2"
@@ -67,14 +67,14 @@ import { useDataStore } from '~~/stores/data';
 import { BucketInterface } from '~~/types/service';
 
 const message = useMessage();
-const { t } = useI18n();
+const $i18n = useI18n();
 const { params } = useRoute();
 const router = useRouter();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: t('nav.storage'),
+  title: $i18n.t('nav.storage'),
 });
 
 /** Bucket ID from route */
@@ -120,7 +120,7 @@ const uploadFiles = async ({ file, onError, onFinish }: UploadCustomRequestOptio
     const { data, error } = await $api.post(endpoints.file, bodyData);
 
     if (error) {
-      message.error(error.message);
+      message.error(userFriendlyMsg($i18n, error));
       onError();
     }
 
@@ -130,7 +130,7 @@ const uploadFiles = async ({ file, onError, onFinish }: UploadCustomRequestOptio
       onFinish();
     }
   } catch (error) {
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     onError();
   }
 };

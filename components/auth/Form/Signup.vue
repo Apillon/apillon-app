@@ -12,11 +12,11 @@
     <!--  Signup submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn v-if="sendAgain" type="primary" class="w-full" @click="handleSubmit">
+      <Btn v-if="sendAgain" type="primary" size="large" @click="handleSubmit">
         <span class="icon-apillon-icon"></span>
         {{ $t('signup.sendAgain') }}
       </Btn>
-      <Btn v-else type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn v-else type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.continue') }}
       </Btn>
     </n-form-item>
@@ -26,16 +26,17 @@
 <script lang="ts" setup>
 import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '~~/stores/auth';
 import { ValidateMailResponse } from '~~/types/data';
 
 const props = defineProps({
   sendAgain: { type: Boolean, default: false },
 });
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
-const { message } = createDiscreteApi(['message']);
+const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
@@ -47,11 +48,11 @@ const rules: FormRules = {
   email: [
     {
       type: 'email',
-      message: t('validation.email'),
+      message: $i18n.t('validation.email'),
     },
     {
       required: true,
-      message: t('validation.emailRequired'),
+      message: $i18n.t('validation.emailRequired'),
     },
   ],
 };
@@ -77,21 +78,17 @@ async function signupWithEmail() {
       formData.value
     );
 
-    if (error) {
-      message.error(error.message);
+    if (error || !data.data.success) {
+      message.error(userFriendlyMsg($i18n, error));
       loading.value = false;
       return;
     }
-
-    loading.value = false;
-    if (!data.data.success) {
-      // TODO: error
-      message.error('ERROR');
-    } else if (!props.sendAgain) {
+    if (!props.sendAgain) {
       router.push({ name: 'register-email' });
     }
+    loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
+    message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
   }
 }
