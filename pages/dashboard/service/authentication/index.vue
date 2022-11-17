@@ -50,6 +50,7 @@ onMounted(() => {
 async function getServicesAuth() {
   if (!dataStore.currentProject) {
     console.warn('No project selected');
+    pageLoading.value = false;
     return;
   }
   dataStore.services.authentication = await dataStore.getServices(ServiceType.AUTHENTICATION);

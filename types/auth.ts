@@ -6,6 +6,53 @@ export enum AuthStep {
   LOGIN_FIRST = 'loginFirst',
   LOGIN_FIRST_PROJECT = 'loginFirstProject',
   LOGIN_FIRST_PROJECT_BUILD = 'loginFirstProjectBuild',
+  PASSWORD_RESET = 'passwordReset',
+}
+/**
+ *  Register
+ */
+export interface FormRegister {
+  password: string;
+  reenteredPassword: string;
+}
+export interface RegisterResponse {
+  data: {
+    id: number;
+    status: number;
+    name: string;
+    token: string;
+  };
+  status: number;
+}
+export interface ValidateMailResponse {
+  data: {
+    data: boolean;
+    status: number;
+    success: boolean;
+  };
+  status: number;
+}
+export interface ResetPasswordResponse {
+  data: boolean;
+  status: number;
+}
+
+/**
+ * Login
+ */
+export interface FormLogin {
+  email: string;
+  password: string;
+}
+export interface LoginResponse {
+  data: {
+    token: string;
+  };
+  status: number;
+}
+export interface PasswordResetResponse {
+  data: boolean;
+  status: number;
 }
 
 /**

@@ -1,44 +1,4 @@
 /**
- *  Register
- */
-export interface FormRegister {
-  password: string;
-  reenteredPassword: string;
-}
-export interface RegisterResponse {
-  data: {
-    id: number;
-    status: number;
-    name: string;
-    token: string;
-  };
-  status: number;
-}
-
-export interface ValidateMailResponse {
-  data: {
-    data: boolean;
-    status: number;
-    success: boolean;
-  };
-  status: number;
-}
-
-/**
- * Login
- */
-export interface FormLogin {
-  email: string;
-  password: string;
-}
-export interface LoginResponse {
-  data: {
-    token: string;
-  };
-  status: number;
-}
-
-/**
  * Project
  */
 export interface FormProject {
@@ -62,7 +22,6 @@ export interface ProjectResponse {
   };
   status: number;
 }
-
 export interface CreateProjectResponse {
   data: ProjectInterface;
   status: number;

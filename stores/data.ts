@@ -36,7 +36,7 @@ export const useDataStore = defineStore('data', {
   getters: {
     currentProject(state) {
       /** Select first project as fallback if project is not selected */
-      if (state.currentProjectId === 0 && this.hasProjects(state)) {
+      if (state.currentProjectId === 0 && this.hasProjects) {
         this.setCurrentProject(state.projects[0].id);
       }
       return state.projects.find(project => project.id === state.currentProjectId);

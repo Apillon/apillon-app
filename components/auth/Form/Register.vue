@@ -36,7 +36,7 @@
 
     <!--  Register submit -->
     <n-form-item>
-      <input type="submit" class="hidden" :value="$t('form.login')" />
+      <input type="submit" class="hidden" :value="$t('form.proceed')" />
       <Btn type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.proceed') }}
       </Btn>
@@ -54,8 +54,12 @@ import {
   FormValidationError,
 } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormRegister, RegisterResponse } from '~~/types/data';
+import { FormRegister, RegisterResponse, ResetPasswordResponse } from '~~/types/auth';
 import { useDataStore } from '~~/stores/data';
+
+const props = defineProps({
+  resetPassword: { type: Boolean, default: false },
+});
 
 const $i18n = useI18n();
 const router = useRouter();
@@ -132,6 +136,8 @@ function handleSubmit(e: MouseEvent) {
   formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+    } else if (props.resetPassword) {
+      await resetPassword();
     } else {
       await register();
     }
@@ -156,6 +162,32 @@ async function register() {
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     await dataStore.getProjects(true);
+    loading.value = false;
+  } catch (error) {
+    message.error(userFriendlyMsg($i18n, error));
+    loading.value = false;
+  }
+}
+async function resetPassword() {
+  loading.value = true;
+
+  try {
+    const { data, error } = await $api.post<ResetPasswordResponse>(endpoints.passwordReset, {
+      ...formData.value,
+      token: query.token,
+    });
+
+    if (error) {
+      message.error(userFriendlyMsg($i18n, error));
+      loading.value = false;
+      return;
+    }
+    if (data) {
+      message.success($i18n.t('login.passwordReplaced'));
+      setTimeout(() => {
+        router.push({ name: 'login' });
+      }, 2000);
+    }
     loading.value = false;
   } catch (error) {
     message.error(userFriendlyMsg($i18n, error));
