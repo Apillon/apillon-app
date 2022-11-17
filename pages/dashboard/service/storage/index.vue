@@ -51,10 +51,10 @@ onMounted(() => {
 async function getServicesStorage() {
   if (!dataStore.currentProject) {
     console.warn('No project selected');
+    pageLoading.value = false;
     return;
   }
   dataStore.services.storage = await dataStore.getServices(ServiceType.STORAGE);
-
   setTimeout(() => (pageLoading.value = false), 300);
 }
 </script>
