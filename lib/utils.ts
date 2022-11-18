@@ -137,3 +137,9 @@ function instanceOfApiError(object: any): object is ApiErrorResponse {
 function takeFirstDigitsFromNumber(num: number, numOfDigits: number = 3): number {
   return parseInt(String(num).slice(0, numOfDigits));
 }
+
+/** Feature flags - check if feature is enabled */
+export function isFeatureEnabled(feature: string): boolean {
+  const config = useRuntimeConfig();
+  return config.public.features[feature] || false;
+}

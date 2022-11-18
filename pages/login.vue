@@ -2,15 +2,23 @@
   <div>
     <h2 class="mb-4">{{ $t('login.title') }}</h2>
     <p class="mb-11">{{ $t('login.description') }}</p>
-
-    <WalletConnect class="w-full mb-2" />
-    <Btn type="secondary" class="w-full">
-      {{ $t('login.magicLink') }}
-    </Btn>
+    <template v-if="isFeatureEnabled(Feature.WALLET_LOGIN)">
+      <WalletConnect class="w-full mb-2" />
+    </template>
+    <template v-if="isFeatureEnabled(Feature.MAGIC_LINK)">
+      <Btn type="secondary" class="w-full">
+        {{ $t('login.magicLink') }}
+      </Btn>
+    </template>
     <div class="my-8 flex items-center">
       <span class="bg-grey-light h-[1px] w-full"></span>
       <strong class="inline-block px-5 mx-[8%] text-grey whitespace-nowrap">
-        {{ $t('login.useEmail') }}
+        <template
+          v-if="isFeatureEnabled(Feature.WALLET_LOGIN) || isFeatureEnabled(Feature.MAGIC_LINK)"
+        >
+          {{ $t('login.orUseEmail') }}
+        </template>
+        <template v-else>{{ $t('login.withEmail') }}</template>
       </strong>
       <span class="bg-grey-light h-[1px] w-full"></span>
     </div>

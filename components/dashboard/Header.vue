@@ -15,7 +15,7 @@
           />
         </div>
         <n-space align="center" :size="32">
-          <div class="w-[20vw] max-w-xs">
+          <div v-if="isFeatureEnabled(Feature.SEARCH)" class="w-[20vw] max-w-xs">
             <n-input
               type="text"
               name="search"

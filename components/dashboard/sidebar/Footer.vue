@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col px-6 py-2">
+  <div v-if="isFeatureEnabled(Feature.BILLING)" class="flex flex-col px-6 py-2">
     <p class="mb-2">
       <strong>{{ $t('dashboard.yourPlan') }}</strong>
       <span>Free plan</span>

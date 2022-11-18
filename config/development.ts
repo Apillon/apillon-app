@@ -5,8 +5,20 @@ const config: ConfigInterface = {
   apiUrl: 'https://api-dev.apillon.io',
   CHAIN_ID: '0x5',
   features: {
-    SEARCH: false,
-    TWO_FACTOR_AUTHENTICATION: false,
+    ACCESS: true,
+    APILLON_REGISTER: true,
+    AUTHENTICATION: true,
+    BILLING: true,
+    CONFIGURATION: true,
+    COMPUTING: true,
+    MAGIC_LOGIN: true,
+    MONITORING: true,
+    PROJECT_SETTINGS: true,
+    SEARCH: true,
+    SERVICES: true,
+    STORAGE: true,
+    TWO_FACTOR_AUTHENTICATION: true,
+    WALLET_LOGIN: true,
   },
 };
 

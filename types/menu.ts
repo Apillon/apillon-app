@@ -1,9 +1,14 @@
 export interface MainNavItemInterface {
   name: string;
   icon: string;
-  link?: string | null;
-  new?: boolean | null;
+  link?: string;
+  soon?: boolean;
+  new?: boolean;
+  disabled?: boolean;
 }
 export default interface MainNavInterface {
-  [key: string]: Array<MainNavItemInterface>;
+  [key: string]: {
+    disabled: boolean;
+    items: Array<MainNavItemInterface>;
+  };
 }

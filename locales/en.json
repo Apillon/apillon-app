@@ -237,17 +237,18 @@
     "goToDocs": "Go to Doc’s",
     "loader": "Put your Web3 hat on, your dashboard is getting ready.",
     "magicLink": "Send me a Magic Link",
+    "orUseEmail": "or log in using email",
+    "passwordReplaced": "Your password has been replaced",
     "projectName": "Project_name",
+    "resetPassword": "Reset password",
     "skip": "Skip to the dashboard",
     "startBuilding": "Start building",
-    "passwordReplaced": "Your password has been replaced",
-    "resetPassword": "Reset password",
     "title": "Log in to Apillon",
-    "useEmail": "or sign up using email",
     "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
     "wallet": "Log in with Wallet",
     "web3Gateway": "Your Getaway to Web3",
-    "web3ProjectName": "Your  Web3 project needs a name"
+    "web3ProjectName": "Your  Web3 project needs a name",
+    "withEmail": "login with email"
   },
   "nav": {
     "services": "Services",
@@ -283,9 +284,10 @@
     "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
     "enterDesiredPassword": "Enter the desired password to finish the account setup.",
     "madeMistake": "Made a mistake?",
+    "orUseEmail": "or sign up using email",
     "sendAgain": "Send again",
     "title": "Build your first Web3 project - FREE",
-    "useEmail": "or sign up using email"
+    "withEmail": "sign up with email"
   },
   "storage": {
     "bucket": "Storage bucket",

@@ -3,14 +3,19 @@
     <h2>{{ $t('signup.title') }}</h2>
     <p class="text-grey-bright mb-5">{{ $t('signup.description') }}</p>
 
-    <Btn type="secondary" class="w-full">
-      <span class="icon-apillon-icon"></span>
-      {{ $t('signup.continueWithAT') }}
-    </Btn>
+    <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER)">
+      <Btn type="secondary" class="w-full">
+        <span class="icon-apillon-icon"></span>
+        {{ $t('signup.continueWithAT') }}
+      </Btn>
+    </template>
     <div class="my-8 flex items-center">
       <span class="bg-grey-light h-[1px] w-full"></span>
       <strong class="inline-block px-5 mx-[8%] text-grey whitespace-nowrap">
-        {{ $t('signup.useEmail') }}
+        <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER)">
+          {{ $t('signup.orUseEmail') }}
+        </template>
+        <template v-else>{{ $t('signup.withEmail') }}</template>
       </strong>
       <span class="bg-grey-light h-[1px] w-full"></span>
     </div>

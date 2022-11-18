@@ -41,7 +41,9 @@
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
+import { isFeatureEnabled } from '~~/lib/utils';
 import { useAuthStore } from '~~/stores/auth';
+import { Feature } from '~~/types/config';
 
 const $i18n = useI18n();
 const authStore = useAuthStore();
@@ -58,16 +60,5 @@ function passwordChanged() {
   setTimeout(() => {
     showModalChangePassword.value = false;
   }, 2000);
-}
-
-function isFeatureEnabled(feature: string): boolean {
-  const config = useRuntimeConfig();
-  console.log(feature);
-  console.log(config);
-  console.log(config.public);
-  console.log(config.public.features);
-  console.log(config.public.features[feature]);
-
-  return config.public.features[feature] || false;
 }
 </script>
