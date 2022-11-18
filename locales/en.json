@@ -194,7 +194,7 @@
       "inviteByEmail": "Type e-mail",
       "expirationDate": "01/2023",
       "password": "password",
-      "phone": "Enter yout Phone",
+      "phone": "+386 41 882 224",
       "postalCode": "4223",
       "projectName": "Enter project name",
       "projectDescription": "Enter project description",
@@ -202,6 +202,10 @@
       "role": "Select role",
       "serviceName": "Enter the name for the new service",
       "username": "Enter yout First & Last name"
+    },
+    "success": {
+      "requestPasswordChange": "We have send you a password reset request to your email.",
+      "profile": "Your profile data has been updated"
     },
     "terms": {
       "project": "I understand product is in beta stage and I accept the ",
@@ -237,7 +241,6 @@
     "skip": "Skip to the dashboard",
     "startBuilding": "Start building",
     "passwordReplaced": "Your password has been replaced",
-    "passwordResetRequestSuccess": "We have send you a password reset request to your email.",
     "resetPassword": "Reset password",
     "title": "Log in to Apillon",
     "useEmail": "or sign up using email",

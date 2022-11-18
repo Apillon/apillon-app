@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia';
 import { UserResponse } from '~~/types/auth';
+import { $api } from '~~/lib/api';
 
 export const AuthLsKeys = {
   AUTH: 'al_auth',
-  USER_ID: 'al_userId',
   EMAIL: 'al_email',
-  USERNAME: 'al_username',
   WALLET: 'al_wallet',
   PROVIDER: 'al_provider',
 };
@@ -13,14 +12,17 @@ export const AuthLsKeys = {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     jwt: '',
-    userId: localStorage.getItem(AuthLsKeys.USER_ID) || '',
+    userUuid: '',
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
-    username: localStorage.getItem(AuthLsKeys.USERNAME) || '',
+    username: '',
     phone: '',
     provider: parseInt(localStorage.getItem(AuthLsKeys.PROVIDER)) || 0,
     wallet: localStorage.getItem(AuthLsKeys.WALLET) || '',
     authStep: '',
     crypto: null,
+    promises: {
+      profile: null,
+    },
   }),
   getters: {
     loggedIn(state) {
@@ -35,15 +37,15 @@ export const useAuthStore = defineStore('auth', {
         lsAuth = JSON.parse(lsAuth);
 
         this.setUserToken(lsAuth.jwt);
-        await this.getUserData();
+        this.promises.profile = await this.getUserData();
       }
     },
 
     changeUser(userData) {
-      this.userId = userData?.user_uuid;
-      this.email = userData?.email;
+      this.userUuid = userData?.user_uuid;
       this.username = userData?.name;
       this.phone = userData?.phone;
+      this.saveEmail(userData?.email);
     },
 
     saveEmail(email: string) {
@@ -63,13 +65,21 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async getUserData() {
-      const { data, error } = await $api.get<UserResponse>(endpoints.me, null);
-      if (error) {
-        throw new Error(error.message);
-      }
+      try {
+        const { response, data, error } = await $api.get<UserResponse>(endpoints.me, null);
 
-      if (data.data) {
-        this.changeUser(data.data);
+        if (error) {
+          this.promises.profile = null;
+          throw new Error(error.message);
+        }
+
+        if (data.data) {
+          this.changeUser(data.data);
+        }
+        return response;
+      } catch (error) {
+        console.warn(error);
+        return null;
       }
     },
 
@@ -78,7 +88,6 @@ export const useAuthStore = defineStore('auth', {
       this.username = '';
       this.wallet = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
-      localStorage.removeItem(AuthLsKeys.USERNAME);
       localStorage.removeItem(AuthLsKeys.WALLET);
       localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
       localStorage.removeItem(DataLsKeys.PROJECTS);

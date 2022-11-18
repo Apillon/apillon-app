@@ -5,7 +5,7 @@
         <n-space class="py-6" :size="24" vertical>
           <!-- LOGO -->
           <div class="flex justify-center">
-            <NuxtLink :to="{ name: 'login' }">
+            <NuxtLink :to="{ name: 'dashboard' }">
               <span class="icon-apillon text-2xl"></span>
             </NuxtLink>
           </div>
@@ -38,17 +38,7 @@
       </n-scrollbar>
     </div>
   </transition>
-  <!-- Modal - Create new project
-    Example of basic modal
-    <n-modal
-    v-model:show="showModalNewProject"
-    :title="$t('dashboard.newProject')"
-    :bordered="false"
-    :show-icon="false"
-    preset="dialog"
-  >
-    <AuthFormProject />
-  </n-modal> -->
+  <!-- Modal - Create new project -->
   <n-modal v-model:show="showModalNewProject">
     <n-card
       style="width: 660px"
@@ -72,7 +62,7 @@ const showModalNewProject = ref(false);
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(_ => {
-    if (dataStore.currentProjectId === 0) {
+    if (!dataStore.hasProjects) {
       showModalNewProject.value = true;
     }
   });

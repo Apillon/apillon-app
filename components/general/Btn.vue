@@ -10,9 +10,11 @@
     :ghost="type === 'secondary' ? true : false"
     @click="onClick"
   >
-    <span :class="[innerClass]">
-      <Spinner v-if="loading" />
-      <slot v-else />
+    <span v-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <Spinner />
+    </span>
+    <span :class="[innerClass, { 'opacity-0': loading }]">
+      <slot />
     </span>
   </component>
 </template>

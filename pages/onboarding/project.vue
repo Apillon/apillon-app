@@ -55,7 +55,7 @@ function loaderStatus(status: boolean) {
   }
 }
 
-/** Credirect after project has been created */
+/** Redirect after project has been created */
 function projectCreated() {
   setTimeout(() => {
     router.push({ name: 'dashboard' });

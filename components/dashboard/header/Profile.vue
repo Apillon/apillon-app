@@ -21,7 +21,7 @@
       <div class="flex flex-col min-w-[120px] pr-1">
         <strong v-if="authStore.username">{{ authStore.username }}</strong>
         <strong v-else>{{ authStore.email }}</strong>
-        <span class="text-grey">{{ truncateWallet(authStore.userId) }}</span>
+        <span class="text-grey">{{ truncateWallet(authStore.userUuid) }}</span>
       </div>
       <div class="flex items-center">
         <span class="icon-down text-2xl"></span>

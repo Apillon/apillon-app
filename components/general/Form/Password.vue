@@ -54,15 +54,17 @@ import {
   FormValidationError,
 } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormRegister, RegisterResponse, ResetPasswordResponse } from '~~/types/auth';
+import { FormRegister, RegisterResponse, PasswordResetResponse } from '~~/types/auth';
+import { useAuthStore } from '~~/stores/auth';
 import { useDataStore } from '~~/stores/data';
 
 const props = defineProps({
   resetPassword: { type: Boolean, default: false },
+  token: { type: String, default: '' },
 });
+const $emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
-const router = useRouter();
 const { query } = useRoute();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
@@ -71,12 +73,6 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
 const rPasswordFormItemRef = ref<FormItemInst | null>(null);
-
-onMounted(() => {
-  if (!query.token || query.token.length < 100) {
-    router.push({ name: 'register' });
-  }
-});
 
 const formData = ref<FormRegister>({
   password: null,
@@ -149,7 +145,7 @@ async function register() {
   try {
     const { data, error } = await $api.post<RegisterResponse>(endpoints.register, {
       ...formData.value,
-      token: query.token,
+      token: query.token || authStore.jwt,
     });
 
     if (error) {
@@ -169,12 +165,16 @@ async function register() {
   }
 }
 async function resetPassword() {
+  if (props.token) {
+    message.warning('Missing token');
+    return;
+  }
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<ResetPasswordResponse>(endpoints.passwordReset, {
+    const { data, error } = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
       ...formData.value,
-      token: query.token,
+      token: props.token,
     });
 
     if (error) {
@@ -184,9 +184,7 @@ async function resetPassword() {
     }
     if (data) {
       message.success($i18n.t('login.passwordReplaced'));
-      setTimeout(() => {
-        router.push({ name: 'login' });
-      }, 2000);
+      $emit('submitSuccess');
     }
     loading.value = false;
   } catch (error) {
