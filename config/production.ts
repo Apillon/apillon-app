@@ -4,6 +4,7 @@ const config: ConfigInterface = {
   url: 'https://app.apillon.io',
   apiUrl: 'https://api.apillon.io',
   CHAIN_ID: '0x5',
+  features: {},
 };
 
 export default config;

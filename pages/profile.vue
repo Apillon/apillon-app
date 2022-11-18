@@ -15,9 +15,11 @@
         </FormPasswordResetRequest>
 
         <!-- 2FA -->
-        <n-h5 class="mb-0" prefix="bar">{{ $t('dashboard.2fa') }}</n-h5>
-        <p class="mb-6">{{ $t('dashboard.2faText') }}</p>
-        <Btn type="secondary">{{ $t('dashboard.setup2fa') }}</Btn>
+        <template v-if="isFeatureEnabled(Feature.TWO_FACTOR_AUTHENTICATION)">
+          <n-h5 class="mb-0" prefix="bar">{{ $t('dashboard.2fa') }}</n-h5>
+          <p class="mb-6">{{ $t('dashboard.2faText') }}</p>
+          <Btn type="secondary">{{ $t('dashboard.setup2fa') }}</Btn>
+        </template>
       </div>
 
       <!-- Modal - Change password -->
@@ -56,5 +58,16 @@ function passwordChanged() {
   setTimeout(() => {
     showModalChangePassword.value = false;
   }, 2000);
+}
+
+function isFeatureEnabled(feature: string): boolean {
+  const config = useRuntimeConfig();
+  console.log(feature);
+  console.log(config);
+  console.log(config.public);
+  console.log(config.public.features);
+  console.log(config.public.features[feature]);
+
+  return config.public.features[feature] || false;
 }
 </script>
