@@ -42,17 +42,13 @@ import { useI18n } from 'vue-i18n';
 import { useDataStore } from '~~/stores/data';
 import { InstructionResponse, InstructionsResponse, InstructionInterface } from '~~/types/data';
 
-const props = defineProps({
-  instructionKey: { type: String, default: null },
-});
-
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const { name } = useRoute();
+const route = useRoute();
 
 const key = computed(() => {
-  return props.instructionKey || name.toString();
+  return route.name.toString();
 });
 
 const instruction = computed<InstructionInterface>(() => {
@@ -71,7 +67,7 @@ const instructions = computed<Array<InstructionInterface>>(() => {
 
 onMounted(async () => {
   await getInstruction(key.value);
-  // await getInstructions(key.value);
+  // await getInstructions(key: string);
 });
 
 async function getInstruction(key: string) {
@@ -101,8 +97,8 @@ async function getInstructions(key: string) {
   }
 
   try {
-    const params = { instructionEnum: key };
-    const { data, error } = await $api.get<InstructionsResponse>(endpoints.instructions, params);
+    const params = { forRoute: key };
+    const { data, error } = await $api.get<InstructionsResponse>(endpoints.instruction, params);
 
     if (error) {
       message.error(userFriendlyMsg($i18n, error));

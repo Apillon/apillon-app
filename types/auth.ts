@@ -32,7 +32,7 @@ export interface ValidateMailResponse {
   };
   status: number;
 }
-export interface ResetPasswordResponse {
+export interface PasswordResetResponse {
   data: boolean;
   status: number;
 }
@@ -50,7 +50,7 @@ export interface LoginResponse {
   };
   status: number;
 }
-export interface PasswordResetResponse {
+export interface PasswordResetRequestResponse {
   data: boolean;
   status: number;
 }
@@ -72,16 +72,18 @@ export interface UserResponse {
  * User profile
  */
 export interface FormUserProfile {
-  username: string;
+  name: string;
   email: string;
   phone: string;
 }
 
 export interface UserProfileResponse {
   data: {
+    email: string;
     id: number;
-    status: number;
     name: string;
+    phone: string;
+    status: number;
     user_uuid: string;
   };
   status: number;

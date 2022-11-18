@@ -90,17 +90,29 @@ export function storagePercantage(size: number, maxSize: number) {
   return ((size / maxSize) * 100).toFixed(0);
 }
 
-/** Error messages */
-export function userFriendlyMsg($i18n, error: ApiErrorResponse) {
+/**
+ * Error messages
+ */
+export function userFriendlyMsg($i18n, error: ApiErrorResponse | ReferenceError | any) {
+  // Check error exists and if translation is included
   if (!$i18n || !$i18n.te('error.API') || !$i18n.t('error.API') || !error) {
     return 'Internal server error';
   }
-  if (error.errors && Array.isArray(error.errors)) {
-    return error.errors
+  // Check error type
+  if (error instanceof ReferenceError) {
+    return error.message;
+  } else if (!instanceOfApiError(error)) {
+    $i18n.t('error.API');
+  }
+
+  // Beautify API error
+  const err = error as ApiErrorResponse;
+  if (err.errors && Array.isArray(err.errors)) {
+    return err.errors
       .map(e => singleErrorMessage($i18n, e.message, takeFirstDigitsFromNumber(e.statusCode)))
       .join(', ');
-  } else if (error.message) {
-    return singleErrorMessage($i18n, error.message, error.status);
+  } else if (err.message) {
+    return singleErrorMessage($i18n, err.message, err.status);
   }
   return $i18n.t('error.API');
 }
@@ -116,7 +128,18 @@ function singleErrorMessage($i18n, message: string, code: number) {
   }
 }
 
+/** Check if object is instance of ApiErrorResponse  */
+function instanceOfApiError(object: any): object is ApiErrorResponse {
+  return 'status' in object && ('errors' in object || 'message' in object);
+}
+
 /** statusCode to HTTP code */
 function takeFirstDigitsFromNumber(num: number, numOfDigits: number = 3): number {
   return parseInt(String(num).slice(0, numOfDigits));
+}
+
+/** Feature flags - check if feature is enabled */
+export function isFeatureEnabled(feature: string): boolean {
+  const config = useRuntimeConfig();
+  return config.public.features[feature] || false;
 }

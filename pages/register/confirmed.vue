@@ -7,14 +7,14 @@
       <h1 class="mb-6">{{ $t('signup.emailConfirmed') }}</h1>
       <p class="mb-7">{{ $t('signup.enterDesiredPassword') }}</p>
 
-      <AuthFormRegister class="mx-auto max-w-[520px] text-left" />
+      <FormPassword class="mx-auto max-w-[520px] text-left" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from '~~/stores/auth';
 import { AuthStep } from '~~/types/auth';
+import { useAuthStore } from '~~/stores/auth';
 const authStore = useAuthStore();
 
 definePageMeta({

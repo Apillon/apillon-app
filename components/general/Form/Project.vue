@@ -14,8 +14,11 @@
       />
     </n-form-item>
 
-    <!--  Project description -->
+    <!-- Project TAG - currently not in use
     <n-tag :bordered="false" type="info" class="mb-8">{{ projectNameText }}</n-tag>
+    -->
+
+    <!--  Project description -->
     <n-form-item
       path="description"
       :label="$t('form.label.projectDescription')"
@@ -62,12 +65,12 @@ const termsLabel = computed(() => {
   ]);
 });
 
-/** Tag Project_name text */
+/** Tag Project_name text - Currently not in use
 const projectNameText = computed(() => {
   return formData.value.name
     ? `${formData.value.name}.Appilon.io`
     : `${$i18n.t('login.projectName')}.Appilon.io`;
-});
+}); */
 
 /** Form project */
 const loading = ref(false);

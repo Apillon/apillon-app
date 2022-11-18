@@ -10,6 +10,7 @@ import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '~~/stores/auth';
 import { WalletResponse } from '~~/types/auth';
 import { useProvider } from '~~/composables/useProvider';
+import useContracts from '~~/composables/useContracts';
 
 const authStore = useAuthStore();
 const $i18n = useI18n();

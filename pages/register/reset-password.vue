@@ -4,7 +4,12 @@
       <h1 class="mb-6">{{ $t('login.resetPassword') }}</h1>
       <p class="mb-7">{{ $t('login.enterNewPassword') }}</p>
 
-      <AuthFormRegister class="mx-auto max-w-[520px] text-left" :reset-password="true" />
+      <FormPassword
+        class="mx-auto max-w-[520px] text-left"
+        :reset-password="true"
+        :token="query.token.toString()"
+        @submit-success="passwordChanged"
+      />
     </div>
   </div>
 </template>
@@ -15,6 +20,8 @@ import { useAuthStore } from '~~/stores/auth';
 import { AuthStep } from '~~/types/auth';
 
 const { t } = useI18n();
+const { query } = useRoute();
+const router = useRouter();
 const authStore = useAuthStore();
 
 definePageMeta({
@@ -27,4 +34,17 @@ useHead({
 onBeforeMount(() => {
   authStore.authStep = AuthStep.PASSWORD_RESET;
 });
+
+onMounted(() => {
+  if (!query.token || query.token.length < 100) {
+    router.push({ name: 'register' });
+  }
+});
+
+/** Close modal after password has been changed */
+function passwordChanged() {
+  setTimeout(() => {
+    router.push({ name: 'login' });
+  }, 2000);
+}
 </script>
