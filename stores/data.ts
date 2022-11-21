@@ -12,8 +12,6 @@ import { $api } from '~~/lib/api';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
-  PROJECTS: 'al_projects',
-  SERVICES: 'al_services',
 };
 
 export const useDataStore = defineStore('data', {
@@ -36,11 +34,21 @@ export const useDataStore = defineStore('data', {
   }),
   getters: {
     currentProject(state) {
+      if (!this.hasProjects) {
+        return null;
+      }
       /** Select first project as fallback if project is not selected */
-      if (state.currentProjectId === 0 && this.hasProjects) {
+      if (state.currentProjectId === 0) {
         this.setCurrentProject(state.projects[0].id);
       }
-      return state.projects.find(project => project.id === state.currentProjectId);
+      /** Return project with currentProjectId, if this ID does not exists, return first project */
+      const project = state.projects.find(project => project.id === state.currentProjectId);
+      if (project) {
+        return project;
+      }
+      /** Select first project as fallback if currentProjectId is not available */
+      this.setCurrentProject(state.projects[0].id);
+      return state.projects[0];
     },
     hasProjects(state) {
       return Array.isArray(state.projects) && state.projects.length > 0;
@@ -78,8 +86,6 @@ export const useDataStore = defineStore('data', {
         const { response, data, error } = await $api.get<ProjectResponse>(endpoints.userProjects);
 
         if (error) {
-          console.log('error');
-          console.log(error);
           message.error(error.message);
 
           this.projects = [];
@@ -107,8 +113,6 @@ export const useDataStore = defineStore('data', {
 
         return response;
       } catch (error) {
-        console.log('catch error');
-        console.log(error);
         message.error(error);
         // message.error(t('error.API'));
       }

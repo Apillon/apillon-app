@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { DataLsKeys } from './data';
 import { UserResponse } from '~~/types/auth';
 import { $api } from '~~/lib/api';
 
@@ -84,14 +85,14 @@ export const useAuthStore = defineStore('auth', {
     },
 
     logout() {
+      $api.clearToken();
+
       this.jwt = '';
       this.username = '';
       this.wallet = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.WALLET);
       localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
-      localStorage.removeItem(DataLsKeys.PROJECTS);
-      localStorage.removeItem(DataLsKeys.SERVICES);
     },
   },
 });

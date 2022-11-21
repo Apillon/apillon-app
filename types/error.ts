@@ -1,11 +1,3 @@
-export enum ERROR {
-  FORBIDDEN_RESOURCE = 'Forbidden resource',
-  INSUFFICIENT_PERMISSIONS = 'INSUFFICIENT_PERMISSIONS',
-  INVALID_SIGNATURE = 'invalid signature',
-  USER_IS_NOT_AUTHENTICATED = 'USER_IS_NOT_AUTHENTICATED',
-  JWT_EXPIRED = 'jwt expired',
-}
-
 export enum ERROR_CODE {
   // 400 - Bad request
   BAD_REQUEST = 40000000,
