@@ -92,6 +92,9 @@ function handleSubmit(e: MouseEvent) {
 async function login() {
   loading.value = true;
   try {
+    // Logout first - delete LS and store if there is any data
+    authStore.logout();
+
     const { data, error } = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
     if (error) {

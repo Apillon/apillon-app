@@ -11,7 +11,7 @@ const config: ConfigInterface = {
     BILLING: true,
     CONFIGURATION: true,
     COMPUTING: true,
-    MAGIC_LOGIN: true,
+    MAGIC_LINK: true,
     MONITORING: true,
     PROJECT_SETTINGS: true,
     SEARCH: true,
