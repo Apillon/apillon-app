@@ -62,7 +62,11 @@ export function validateRequiredCheckbox(_: FormItemRule, value: boolean | null)
  */
 /** Time to days and hours */
 export function timeToDays(time: String) {
+  if (!time) return;
+
   const [d, h, s] = time.split(':');
+  if (!d || !h || !s) return time;
+
   const days = parseInt(d);
   const hours = parseInt(h);
   const seconds = parseInt(s);

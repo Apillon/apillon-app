@@ -18,7 +18,7 @@
       <div v-if="$slots.sidebar" class="w-44 lg:min-w-[11rem] h-fit mr-6">
         <slot name="sidebar"></slot>
       </div>
-      <n-layout :has-sider="$slots.learn ? true : false" sider-placement="right">
+      <n-layout :has-sider="instructionsAvailable" sider-placement="right">
         <n-layout-header v-if="$slots.title">
           <slot name="title"></slot>
         </n-layout-header>
@@ -28,7 +28,7 @@
           </div>
         </n-layout-content>
         <n-layout-sider
-          v-if="$slots.learn"
+          v-if="instructionsAvailable"
           :collapsed="learnCollapsed"
           collapse-mode="width"
           :collapsed-width="48"
@@ -70,6 +70,12 @@
 <script lang="ts" setup>
 defineProps({
   loading: { type: Boolean, default: false },
+});
+
+/** Check if instructions are available (page has content and feature is enabled) */
+const $slots = useSlots();
+const instructionsAvailable = computed(() => {
+  return $slots.learn && isFeatureEnabled(Feature.INSTRUCTIONS);
 });
 
 // Keep info about collapsible section learn in local storage
