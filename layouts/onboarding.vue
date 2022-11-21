@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen h-full pb-20">
+  <div class="relative min-h-screen h-full pb-28 md:pb-20">
     <AuthHeader />
     <div class="container flex md:flex-auto py-0 md:py-10 relative z-1">
       <slot />

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="mb-4">{{ $t('login.title') }}</h2>
+    <h2 class="mb-4 text-center sm:text-left">{{ $t('login.title') }}</h2>
     <p class="mb-11">{{ $t('login.description') }}</p>
     <template v-if="isFeatureEnabled(Feature.WALLET_LOGIN)">
       <WalletConnect class="w-full mb-2" />

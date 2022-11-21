@@ -1,5 +1,5 @@
 <template>
-  <div class="container flex flex-col justify-center items-center">
+  <div class="w-full flex flex-col justify-center items-center">
     <div class="text-center">
       <div class="mb-7 text-center text-blue">
         <span class="icon-new text-[34px]"></span>

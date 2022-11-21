@@ -50,7 +50,7 @@ const createColumns = ({
             class: 'select-role',
             model: row.role,
             options: roleOptions,
-            onChange: handleRoleChange,
+            onRoleChnage: handleRoleChange,
           },
           ''
         );
@@ -131,6 +131,7 @@ const columns = createColumns({
   },
   handleRoleChange(selected: Array<string>) {
     data.value[currentRow.value].role = selected;
+    console.log(selected);
 
     // TODO: sync role change
   },

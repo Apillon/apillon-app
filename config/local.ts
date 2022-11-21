@@ -1,6 +1,7 @@
 import ConfigInterface from '~~/types/config';
 
 const config: ConfigInterface = {
+  VERSION: `${require('../package.json').version}`,
   url: 'http://localhost:3000',
   apiUrl: 'http://localhost:6001',
   CHAIN_ID: '0x5',

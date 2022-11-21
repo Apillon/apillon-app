@@ -5,7 +5,7 @@
     </template>
     <slot>
       <!-- Project users & permissions -->
-      <h4 class="mb-6">{{ $t('dashboard.projectUsersAndPermissions') }}</h4>
+      <h4 class="mb-6">{{ $t('project.usersAndPermissions') }}</h4>
       <TableUsersPermissions />
 
       <!-- Invite team member -->

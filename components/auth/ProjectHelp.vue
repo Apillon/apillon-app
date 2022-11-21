@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center md:w-1/2 md:pl-10">
+  <div class="flex justify-center items-center w-full md:w-1/2 md:pl-10 my-20 md:my-0">
     <div class="max-w-[400px]">
       <p class="body-lg text-grey mb-12">
         {{ $t('login.buildWeb3') }}
