@@ -1,6 +1,7 @@
 import ConfigInterface from '~~/types/config';
 
 const config: ConfigInterface = {
+  VERSION: `${require('../package.json').version}`,
   url: 'https://app.apillon.io',
   apiUrl: 'https://api.apillon.io',
   CHAIN_ID: '0x5',

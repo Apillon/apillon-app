@@ -40,13 +40,12 @@ module.exports = {
     },
 
     container: {
-      width: '90%',
       center: true,
       screens: {
-        lg: '1320px',
+        lx: '1320px',
       },
       padding: {
-        DEFAULT: '2rem',
+        DEFAULT: '1rem',
       },
     },
 

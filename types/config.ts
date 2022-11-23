@@ -18,6 +18,7 @@ export enum Feature {
   WALLET_LOGIN = 'WALLET_LOGIN',
 }
 export default interface ConfigInterface extends PublicRuntimeConfig {
+  VERSION: string;
   url: string;
   apiUrl: string;
   CHAIN_ID: string;

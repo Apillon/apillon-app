@@ -1,6 +1,6 @@
 <template>
   <div>
-    <n-menu v-model:value="selectedPage" :options="menuOptions" @update-value="handleUpdateValue" />
+    <n-menu v-model:value="selectedPage" :options="menuOptions" />
   </div>
 </template>
 
@@ -10,29 +10,29 @@ import type { MenuOption } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const NuxtLink = resolveComponent('NuxtLink');
 const { currentRoute } = useRouter();
+const NuxtLink = resolveComponent('NuxtLink');
 const selectedPage = ref(currentRoute.value?.name);
-
-function handleUpdateValue(key: string, item: MenuOption) {
-  console.info('[onUpdate:value]: ' + JSON.stringify(key));
-  console.info('[onUpdate:value]: ' + JSON.stringify(item));
-}
 
 const menuOptions: MenuOption[] = [
   {
     label: () =>
-      h(NuxtLink, { to: { path: 'project-settings' } }, () => t('pageMenu.projectSettings')),
-    key: 'project-settings',
+      h(NuxtLink, { to: { name: 'dashboard-project-settings' } }, () =>
+        t('pageMenu.projectSettings')
+      ),
+    key: 'dashboard-project-settings',
   },
   {
     label: () =>
-      h(NuxtLink, { to: { path: 'user-permissions' } }, () => t('pageMenu.usersPermissions')),
-    key: 'user-permissions',
+      h(NuxtLink, { to: { name: 'dashboard-user-permissions' } }, () =>
+        t('pageMenu.usersPermissions')
+      ),
+    key: 'dashboard-user-permissions',
   },
   {
-    label: () => h(NuxtLink, { href: 'credentials' }, () => t('pageMenu.credentials')),
-    key: 'credentials',
+    label: () =>
+      h(NuxtLink, { to: { name: 'dashboard-credentials' } }, () => t('pageMenu.credentials')),
+    key: 'dashboard-credentials',
   },
 ];
 </script>

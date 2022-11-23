@@ -1,5 +1,4 @@
 /** Button */
-
 .n-button {
   .n-button__content {
     white-space: normal;
@@ -39,7 +38,7 @@
       transform: none;
     }
     .n-collapse-item__content-inner {
-      @apply pl-8;
+      @apply pl-4 sm:pl-8;
     }
   }
   &.collapse-emailConfiguration {
@@ -49,6 +48,11 @@
       transform: none;
     }
   }
+}
+
+/** Container */
+.container {
+  @apply md:px-8;
 }
 
 /** Dialog */

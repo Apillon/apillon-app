@@ -32,7 +32,7 @@
   <div class="min-h-[30px] text-center">
     <div v-if="showResetPassword && formData.email">
       <span class="text-sm text-grey">{{ $t('login.forgotPassword') }} </span>&nbsp;
-      <FormPasswordResetRequest :email="formData.email" btn-type="primary" size="tiny" quaternary />
+      <FormPasswordResetRequest :email="formData.email" btn-type="link" size="tiny" quaternary />
     </div>
   </div>
 </template>

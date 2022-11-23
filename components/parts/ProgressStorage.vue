@@ -7,7 +7,10 @@
     :percentage="percentage"
     :status="status"
   >
-    <span class="inline-block min-w-[130px]">{{ `${size}MB/${maxSize}MB` }}</span>
+    <span class="inline-block lg:min-w-[130px]">
+      <span class="whitespace-nowrap">{{ `${size}MB/` }}</span>
+      <span class="whitespace-nowrap">{{ `${maxSize}MB` }}</span>
+    </span>
   </n-progress>
 </template>
 

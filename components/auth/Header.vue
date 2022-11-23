@@ -1,16 +1,16 @@
 <template>
   <div class="bg-gradientDark">
-    <div class="container min-h-[120px] py-12 pb-10">
-      <div class="flex h-full">
+    <div class="container min-h-[120px] py-8 sm:pt-12 sm:pb-10">
+      <div class="flex h-full flex-wrap sm:flex-nowrap">
         <div
-          class="flex justify-center"
-          :class="isLogoCentered ? 'md:justify-center md:w-full' : 'md:justify-start md:w-1/2'"
+          class="flex w-full justify-center mb-8 sm:mb-0"
+          :class="isLogoCentered ? 'sm:justify-center' : 'sm:justify-start sm:w-1/2'"
         >
           <Logo />
         </div>
         <div
           v-if="isLoginSwitchVisible"
-          class="flex md:w-1/2 items-end justify-center md:justify-end"
+          class="flex w-full sm:w-1/2 items-end justify-center sm:justify-end"
         >
           <div class="flex items-center">
             <NuxtLink
@@ -40,7 +40,7 @@
         </div>
         <div
           v-else-if="authStore.loggedIn"
-          class="flex md:w-1/2 items-end justify-center md:justify-end"
+          class="flex w-full sm:w-1/2 items-end justify-center sm:justify-end"
         >
           <HeaderProfile />
         </div>

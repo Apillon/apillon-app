@@ -85,6 +85,8 @@ async function signupWithEmail() {
     }
     if (!props.sendAgain) {
       router.push({ name: 'register-email' });
+    } else {
+      message.success($i18n.t('form.success.sendAgainEmail'));
     }
     loading.value = false;
   } catch (error) {

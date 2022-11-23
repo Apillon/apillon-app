@@ -62,7 +62,7 @@ const props = defineProps({
   resetPassword: { type: Boolean, default: false },
   token: { type: String, default: '' },
 });
-const $emit = defineEmits(['submitSuccess']);
+const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const { query } = useRoute();
@@ -184,7 +184,7 @@ async function resetPassword() {
     }
     if (data) {
       message.success($i18n.t('login.passwordReplaced'));
-      $emit('submitSuccess');
+      emit('submitSuccess');
     }
     loading.value = false;
   } catch (error) {

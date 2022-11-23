@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>{{ $t('signup.title') }}</h2>
+    <h2 class="text-center sm:text-left">{{ $t('signup.title') }}</h2>
     <p class="text-grey-bright mb-5">{{ $t('signup.description') }}</p>
 
     <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER)">

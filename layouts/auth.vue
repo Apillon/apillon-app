@@ -1,23 +1,33 @@
 <template>
-  <div class="relative min-h-screen h-full pb-20">
+  <div class="relative min-h-screen h-full pb-28 md:pb-20">
     <AuthHeader />
-    <div class="container flex md:flex-auto py-0 md:py-10 relative z-1">
+    <div class="container flex md:flex-auto py-10 relative z-1 flex-wrap md:flex-nowrap">
       <transition name="width" :duration="1000">
-        <AnimationIcons v-if="isLogin" :num-of-icons="4" :animation-name="'Jet'" :size="'xl'" />
+        <AnimationIcons
+          v-if="isLogin"
+          :num-of-icons="4"
+          :animation-name="'Jet'"
+          :size="'xl'"
+          class="order-3 md:order-1"
+        />
       </transition>
 
       <div
         v-if="isLogin || isSignUp"
-        class="relative w-full md:w-1/2 md:min-w-[490px] md:max-w-[490px]"
+        class="relative w-full md:w-1/2 md:min-w-[50%] md:max-w-[490px] lg:min-w-[490px] order-2"
       >
-        <!-- <transition name="fade" :duration="1000">
-        </transition> -->
         <slot />
       </div>
       <slot v-else />
 
       <transition name="width" :duration="1000">
-        <AnimationIcons v-if="isSignUp" :num-of-icons="6" :animation-name="'Press'" :size="'xl'" />
+        <AnimationIcons
+          v-if="isSignUp"
+          :num-of-icons="6"
+          :animation-name="'Press'"
+          :size="'xl'"
+          class="order-3"
+        />
       </transition>
     </div>
     <AuthFooter class="absolute left-0 right-0 bottom-0 w-full" />

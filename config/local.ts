@@ -1,22 +1,26 @@
 import ConfigInterface from '~~/types/config';
 
 const config: ConfigInterface = {
+  VERSION: `${require('../package.json').version}`,
   url: 'http://localhost:3000',
   apiUrl: 'http://localhost:6001',
   CHAIN_ID: '0x5',
   features: {
     ACCESS: true,
+    APILLON_REGISTER: true,
     AUTHENTICATION: true,
-    BILLING: false,
+    BILLING: true,
     CONFIGURATION: true,
-    COMPUTING: false,
+    COMPUTING: true,
     INSTRUCTIONS: true,
-    MONITORING: false,
+    MAGIC_LINK: true,
+    MONITORING: true,
     PROJECT_SETTINGS: true,
-    SEARCH: false,
+    SEARCH: true,
     SERVICES: true,
     STORAGE: true,
-    TWO_FACTOR_AUTHENTICATION: false,
+    TWO_FACTOR_AUTHENTICATION: true,
+    WALLET_LOGIN: true,
   },
 };
 
