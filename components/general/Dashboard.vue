@@ -1,6 +1,6 @@
 <template>
-  <!-- Loading skeleton - on long page load show skeleten -->
   <n-space v-if="loading" vertical>
+    <!-- Loading skeleton - on long page load show skeleten -->
     <n-skeleton height="40px" width="33%" />
     <n-skeleton height="40px" width="66%" :sharp="false" />
     <n-skeleton height="40px" round />

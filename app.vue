@@ -8,7 +8,6 @@
     >
       <NuxtLayout>
         <NuxtPage />
-        <portal-target :name="Portals.LAYOUT" multiple />
       </NuxtLayout>
     </n-config-provider>
     <!-- <CookieConsent /> -->
