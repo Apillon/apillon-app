@@ -41,7 +41,12 @@
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
-        {{ $t('form.startFirstProject') }}
+        <template v-if="dataStore.hasProjects">
+          {{ $t('form.createNewProject') }}
+        </template>
+        <template v-else>
+          {{ $t('form.startFirstProject') }}
+        </template>
       </Btn>
     </n-form-item>
   </n-form>

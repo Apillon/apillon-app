@@ -27,7 +27,7 @@
           </div>
 
           <!-- NEW PROJECT -->
-          <div class="text-center">
+          <div v-if="isFeatureEnabled(Feature.PROJECT)" class="text-center">
             <Btn size="tiny" quaternary @click="showModalNewProject = true">
               {{ $t('project.new') }}
             </Btn>
@@ -96,7 +96,7 @@ const showModalNewProject = ref(false);
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(_ => {
-    if (!dataStore.hasProjects) {
+    if (!dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT_ON_STARTUP)) {
       showModalNewProject.value = true;
     }
   });

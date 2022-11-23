@@ -140,6 +140,7 @@
 .fade-leave-active {
   position: absolute;
 }
+.fade-enter,
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
@@ -147,6 +148,9 @@
 .fade-enter-to,
 .fade-leave-from {
   opacity: 1;
+}
+.fade-leave-to {
+  opacity: 0;
 }
 
 /* Width */

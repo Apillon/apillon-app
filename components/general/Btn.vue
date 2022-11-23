@@ -54,9 +54,8 @@ const btnClass = computed(() => {
   return [
     props.type === 'link' ? 'font-content' : 'font-button',
     {
-      'py-[10px] px-6': props.type !== 'link' && props.size === 'small',
-      'py-4 px-10': props.type !== 'link' && props.size === 'medium',
-      'py-4 px-2 w-full': props.type !== 'link' && props.size === 'large',
+      'py-2': props.type !== 'link',
+      'px-2 w-full': props.type !== 'link' && props.size === 'large',
       'text-primary': props.type === 'link',
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,

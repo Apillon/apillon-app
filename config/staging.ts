@@ -12,6 +12,8 @@ const config: ConfigInterface = {
     CONFIGURATION: true,
     COMPUTING: false,
     MONITORING: false,
+    PROJECT: true,
+    PROJECT_ON_STARTUP: false,
     PROJECT_SETTINGS: false,
     SEARCH: false,
     SERVICES: true,
