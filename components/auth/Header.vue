@@ -1,17 +1,14 @@
 <template>
   <div class="bg-gradientDark">
     <div class="container min-h-[120px] py-8 sm:pt-12 sm:pb-10">
-      <div class="flex h-full flex-wrap sm:flex-nowrap">
+      <div class="flex items-center h-full">
         <div
-          class="flex w-full justify-center mb-8 sm:mb-0"
-          :class="isLogoCentered ? 'sm:justify-center' : 'sm:justify-start sm:w-1/2'"
+          class="flex pr-3 sm:pr-0"
+          :class="isLogoFullwidth ? 'justify-center w-full' : 'justify-start w-1/2'"
         >
           <Logo />
         </div>
-        <div
-          v-if="isLoginSwitchVisible"
-          class="flex w-full sm:w-1/2 items-end justify-center sm:justify-end"
-        >
+        <div v-if="isLoginSwitchVisible" class="flex w-1/2 items-end justify-end">
           <div class="flex items-center">
             <NuxtLink
               :to="{ name: 'register' }"
@@ -38,10 +35,7 @@
             </NuxtLink>
           </div>
         </div>
-        <div
-          v-else-if="authStore.loggedIn"
-          class="flex w-full sm:w-1/2 items-end justify-center sm:justify-end"
-        >
+        <div v-else-if="authStore.loggedIn" class="flex w-1/2 items-end justify-end">
           <HeaderProfile />
         </div>
       </div>
@@ -69,12 +63,8 @@ const isLogin: WritableComputedRef<boolean> = computed({
 const isLoginSwitchVisible = computed(() => {
   return authStore.authStep === AuthStep.LOGIN || authStore.authStep === AuthStep.SIGN_UP;
 });
-
-const isLogoCentered = computed(() => {
-  return (
-    authStore.authStep === AuthStep.SIGN_UP_EMAIL ||
-    authStore.authStep === AuthStep.SIGN_UP_CONFIRMED
-  );
+const isLogoFullwidth = computed(() => {
+  return !isLoginSwitchVisible.value && !authStore.loggedIn;
 });
 
 /** Allow next page switch, after 1s */

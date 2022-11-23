@@ -207,6 +207,7 @@
       "payment": "I understand the billing process and some other legal stuff."
     },
     "createBucketAndContinue": "Create bucket & continue to management",
+    "createNewProject": "Create new project",
     "createServiceAndContinue": "Create service & continue to management",
     "continue": "Continue",
     "generate": "Generate",
@@ -219,30 +220,17 @@
     "startFirstProject": "Start your first project"
   },
   "login": {
-    "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
-    "buildDemo": "OK, let’s do demo first",
-    "buildWeb3": "“Build versatile and high-performing Web3 solutions with Apillon. Harness the power of blockchain technology and create next-gen dapps through simple yet robust APIs”",
-    "createWeb3Project": "Create Web3 project",
-    "demoProject": "Demo project",
     "description": "Web3 will not build itself. Go and add your block.",
     "dontHaveAccount": "I don’t have Authrail account yet?",
     "enterNewPassword": "Enter new password",
     "forgotPassword": "Did you forgot your password?",
-    "getStarted": "Get started",
-    "goToDocs": "Go to Doc’s",
-    "loader": "Put your Web3 hat on, your dashboard is getting ready.",
     "magicLink": "Send me a Magic Link",
     "orUseEmail": "or log in using email",
     "passwordReplaced": "Your password has been replaced",
     "projectName": "Project_name",
     "resetPassword": "Reset password",
-    "skip": "Skip to the dashboard",
-    "startBuilding": "Start building",
     "title": "Log in to Apillon",
-    "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
     "wallet": "Log in with Wallet",
-    "web3Gateway": "Your Gateway to Web3",
-    "web3ProjectName": "Your  Web3 project needs a name",
     "withEmail": "login with email"
   },
   "nav": {
@@ -257,6 +245,21 @@
     "projectSettings": "Project settings",
     "access": "Access",
     "billing": "Billing"
+  },
+  "onboarding": {
+    "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
+    "buildDemo": "OK, let’s do demo first",
+    "buildWeb3": "“Build versatile and high-performing Web3 solutions with Apillon. Harness the power of blockchain technology and create next-gen dapps through simple yet robust APIs”",
+    "createWeb3Project": "Create Web3 project",
+    "demoProject": "Demo project",
+    "getStarted": "Get started",
+    "goToDocs": "Go to Docs",
+    "loader": "Put your Web3 hat on, your dashboard is getting ready.",
+    "skip": "Skip to the dashboard",
+    "startBuilding": "Start building",
+    "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
+    "web3Gateway": "Your Gateway to Web3",
+    "web3ProjectName": "Your  Web3 project needs a name"
   },
   "profile": {
     "2fa": "Two-factor authentication",

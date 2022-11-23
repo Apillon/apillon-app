@@ -12,8 +12,7 @@
     <!--  Signup submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn v-if="sendAgain" type="primary" size="large" @click="handleSubmit">
-        <span class="icon-apillon-icon"></span>
+      <Btn v-if="sendAgain" class="mx-auto" type="primary" size="medium" @click="handleSubmit">
         {{ $t('signup.sendAgain') }}
       </Btn>
       <Btn v-else type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">

@@ -1,12 +1,12 @@
 <template>
   <div class="w-full flex flex-col justify-center items-center">
-    <div class="text-center max-w-[510px]">
+    <div class="text-center max-w-[550px]">
       <div class="mb-7 text-center text-blue">
         <span class="icon-new text-[34px]"></span>
       </div>
       <h2 class="mb-7">{{ $t('signup.checkEmail') }}</h2>
       <p class="mb-12 whitespace-pre-line">
-        {{ $t('signup.emailSent', { mail: authStore.email }) }}
+        {{ $t('signup.emailSent', { email: authStore.email }) }}
       </p>
 
       <strong class="inline-block mb-4">{{ $t('signup.checkInbox') }}</strong>

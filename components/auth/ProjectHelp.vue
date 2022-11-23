@@ -1,12 +1,12 @@
 <template>
   <div class="flex justify-center items-center w-full md:w-1/2 md:pl-10 my-20 md:my-0">
-    <div class="max-w-[400px]">
+    <div class="md:max-w-[400px]">
       <p class="body-lg text-grey mb-12">
-        {{ $t('login.buildWeb3') }}
+        {{ $t('onboarding.buildWeb3') }}
       </p>
       <n-space :size="40" class="font-bold">
-        <Btn :to="{ name: 'dashboard' }" type="link">{{ $t('login.getStarted') }}</Btn>
-        <NuxtLink href="https://wiki.apillon.io/">{{ $t('login.goToDocs') }}</NuxtLink>
+        <Btn :to="{ name: 'dashboard' }" type="link">{{ $t('onboarding.getStarted') }}</Btn>
+        <NuxtLink href="https://wiki.apillon.io/">{{ $t('onboarding.goToDocs') }}</NuxtLink>
       </n-space>
     </div>
   </div>
