@@ -25,7 +25,7 @@ const SelectRoleOverrides: SelectThemeOverrides = {
 };
 
 const attrs = useAttrs();
-const $emit = defineEmits(['roleChange']);
+const emit = defineEmits(['roleChange']);
 
 const selectedRoles = computed({
   get() {
@@ -33,7 +33,7 @@ const selectedRoles = computed({
   },
   set(newValue): void {
     console.log(newValue);
-    $emit('roleChange', newValue);
+    emit('roleChange', newValue);
   },
 });
 </script>

@@ -7,7 +7,7 @@ import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const $emit = defineEmits(['changePaymentEmit']);
+const emit = defineEmits(['changePaymentEmit']);
 
 type RowData = {
   key: number;
@@ -77,7 +77,7 @@ const data = createData();
 const columns = createColumns({
   changePayment(rowData: RowData) {
     console.log(rowData);
-    $emit('changePaymentEmit');
+    emit('changePaymentEmit');
   },
 });
 </script>

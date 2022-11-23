@@ -24,8 +24,6 @@
     "uptime": "Uptime"
   },
   "dashboard": {
-    "2fa": "Two-factor authentication",
-    "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
     "addPayment": "Add payment",
     "addPaymentMethod": "Add payment method",
     "addPaymentMethodText": " Add payment method and prepurchase the needed credits. Once the credits supply is depleated you will be charged again.",
@@ -34,7 +32,6 @@
     "attachNewService": "Attach new service",
     "billing": "Billing",
     "card": "Card",
-    "changePassword": "Change password",
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
@@ -53,15 +50,12 @@
     "invoices": "Invoices",
     "learnMoreAboutServices": "Learn more about services",
     "manageRoles": "Manage roles",
-    "mySettings": "My settings",
     "name": "Name",
-    "password": "Password",
     "payment": "Payment",
     "role": "Role",
     "secret": "Secret",
     "secrets": "Secrets",
     "selectServices": "Select services",
-    "setup2fa": "Set up 2FA",
     "total": "Total",
     "user": "User",
     "viewInvoice": "View Invoice",
@@ -205,7 +199,8 @@
     },
     "success": {
       "requestPasswordChange": "We have send you a password reset request to your email.",
-      "profile": "Your profile data has been updated"
+      "profile": "Your profile data has been updated",
+      "sendAgainEmail": "Email has been re-sent"
     },
     "terms": {
       "project": "I understand product is in beta stage and I accept the ",
@@ -246,7 +241,7 @@
     "title": "Log in to Apillon",
     "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
     "wallet": "Log in with Wallet",
-    "web3Gateway": "Your Getaway to Web3",
+    "web3Gateway": "Your Gateway to Web3",
     "web3ProjectName": "Your  Web3 project needs a name",
     "withEmail": "login with email"
   },
@@ -262,6 +257,16 @@
     "projectSettings": "Project settings",
     "access": "Access",
     "billing": "Billing"
+  },
+  "profile": {
+    "2fa": "Two-factor authentication",
+    "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
+    "changePassword": "Change password",
+    "logout": "Logout",
+    "mySettings": "My settings",
+    "password": "Password",
+    "profile": "Profile",
+    "setup2fa": "Set up 2FA"
   },
   "project": {
     "delete": "Delete project",
@@ -369,6 +374,7 @@
     "postalCodeRequired": "Please enter postal code",
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
+    "role": "Role validation error",
     "terms": "Please accept the terms"
   }
 }

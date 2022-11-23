@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="href ? 'a' : to ? NuxtLink : NButton"
+    :is="href ? 'a' : to ? NuxtLink : type === 'link' ? 'button' : NButton"
     v-bind="$attrs"
     :href="href || undefined"
     :to="to"
@@ -61,7 +61,7 @@ const btnClass = computed(() => {
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,
       'opacity-60': props.disabled,
-      'hover-bounce': !props.href && !props.to,
+      'hover-bounce': !props.href && !props.to && props.type !== 'link',
       locked: isBtnLocked.value,
     },
   ];

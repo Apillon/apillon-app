@@ -58,9 +58,9 @@
       </div>
       <div
         v-else-if="isFeatureEnabled(Feature.SERVICES)"
-        class="flex items-center justify-between max-w-3xl bg-grey-lightBg px-6 py-4"
+        class="flex flex-col md:flex-row items-center justify-between max-w-3xl bg-grey-lightBg px-6 py-4"
       >
-        <div>
+        <div class="mb-4 md:mb-0">
           <p class="body-lg font-bold">Your project currently has no active service</p>
           <p class="body-sm">
             First attach a desired service and configure it, then start building.

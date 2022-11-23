@@ -159,7 +159,7 @@ export const $api = {
   },
 
   isUnauthorized(status: number) {
-    return status === 403;
+    return status === 401;
   },
 
   backToLogin() {

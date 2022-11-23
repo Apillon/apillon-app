@@ -31,21 +31,20 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '~~/stores/auth';
+
 const authStore = useAuthStore();
 const router = useRouter();
+const $i18n = useI18n();
 
 const options = [
   {
-    label: 'Profile',
+    label: $i18n.t('profile.profile'),
     key: 'profile',
   },
   {
-    label: 'Edit Profile',
-    key: 'editProfile',
-  },
-  {
-    label: 'Logout',
+    label: $i18n.t('profile.logout'),
     key: 'logout',
   },
 ];
@@ -54,7 +53,7 @@ function handleSelect(key: string | number) {
   if (key === 'logout') {
     authStore.logout();
     router.push({ name: 'login' });
-  } else {
+  } else if (key === 'profile') {
     router.push({ name: 'profile' });
   }
 }

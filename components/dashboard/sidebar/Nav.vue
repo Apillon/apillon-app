@@ -24,6 +24,7 @@
             'bg-grey-lightBg border-l-3 border-primary': currentRoute.name === item.name,
             'cursor-default opacity-70': item.disabled,
           }"
+          @click.native="emit('toggleSidebar')"
         >
           <span :class="item.icon" class="text-base align-middle"></span>
           <span class="ml-2">{{ $t(`nav.${item.name}`) }}</span>
@@ -48,13 +49,15 @@ import { randomInteger } from '~~/lib/utils';
 import colors from '~~/tailwind.colors';
 import MainNavInterface from '~~/types/menu';
 
+const emit = defineEmits(['toggleSidebar']);
+const NuxtLink = resolveComponent('NuxtLink');
+const { currentRoute } = useRouter();
+
+/** Naive UI - Theme overrides */
 const collapseNavOverrides = {
   textColor: colors.white,
   titleTextColor: colors.grey.DEFAULT,
 };
-
-const NuxtLink = resolveComponent('NuxtLink');
-const { currentRoute } = useRouter();
 
 const menu: MainNavInterface = {
   services: {

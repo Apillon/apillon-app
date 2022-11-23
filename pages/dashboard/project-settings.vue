@@ -4,7 +4,7 @@
       <SidebarProjectSettings />
     </template>
     <slot>
-      <h4 class="mb-6">{{ $t('dashboard.mySettings') }}</h4>
+      <h4 class="mb-6">{{ $t('nav.projectSettings') }}</h4>
 
       <!-- Edit project -->
       <FormProjectSettings />
@@ -32,6 +32,6 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 useHead({
-  title: t('dashboard.mySettings'),
+  title: t('nav.projectSettings'),
 });
 </script>

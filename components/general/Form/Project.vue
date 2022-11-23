@@ -54,7 +54,7 @@ import { useDataStore } from '~~/stores/data';
 import { CreateProjectResponse, FormProject } from '~~/types/data';
 
 const dataStore = useDataStore();
-const $emit = defineEmits(['submitActive', 'submitSuccess']);
+const emit = defineEmits(['submitActive', 'submitSuccess']);
 
 /** Terms label with link */
 const $i18n = useI18n();
@@ -114,7 +114,7 @@ function handleSubmit(e: MouseEvent) {
 }
 async function createProject() {
   loading.value = true;
-  $emit('submitActive', true);
+  emit('submitActive', true);
 
   try {
     const { data, error } = await $api.post<CreateProjectResponse>(
@@ -126,7 +126,7 @@ async function createProject() {
       setTimeout(() => {
         message.error(userFriendlyMsg($i18n, error));
         loading.value = false;
-        $emit('submitActive', false);
+        emit('submitActive', false);
       }, 2000);
       return;
     }
@@ -135,14 +135,14 @@ async function createProject() {
       /** Set new project as current project */
       dataStore.setCurrentProject(data.data.id);
 
-      $emit('submitSuccess');
-      $emit('submitActive', false);
+      emit('submitSuccess');
+      emit('submitActive', false);
     }
     loading.value = false;
   } catch (error) {
     message.error(userFriendlyMsg($i18n, error));
     loading.value = false;
-    $emit('submitActive', false);
+    emit('submitActive', false);
   }
 }
 </script>

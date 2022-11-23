@@ -38,10 +38,12 @@ useHead({
 });
 
 onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(_ => {
-    getServicesStorage();
-    getBuckets();
-  });
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      getServicesStorage();
+      getBuckets();
+    });
+  }, 100);
 });
 
 async function getServicesStorage() {

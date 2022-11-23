@@ -1,8 +1,12 @@
 <template>
   <transition name="slide-down" appear>
-    <div class="px-8 py-4">
-      <div class="flex justify-between">
-        <div class="pr-4">
+    <div class="px-4 sm:px-8 py-2">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center pr-4">
+          <!-- Hamburder btn to show sidebar on mobile -->
+          <BtnHamburger class="flex lg:hidden mr-4" @click="emit('toggleSidebar')" />
+
+          <!-- Porjects dropdown -->
           <select-options
             v-if="dataStore.hasProjects"
             :key="componentSelectKey"
@@ -35,6 +39,8 @@
 import { SelectProps } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 import { useDataStore } from '~~/stores/data';
+
+const emit = defineEmits(['toggleSidebar']);
 
 const dataStore = useDataStore();
 const router = useRouter();
