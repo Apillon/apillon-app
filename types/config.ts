@@ -14,16 +14,21 @@ export enum Feature {
   PROJECT = 'PROJECT',
   PROJECT_ON_STARTUP = 'PROJECT_ON_STARTUP',
   PROJECT_SETTINGS = 'PROJECT_SETTINGS',
+  REFERRAL = 'REFERRAL',
   SEARCH = 'SEARCH',
   SERVICES = 'SERVICES',
   STORAGE = 'STORAGE',
   TWO_FACTOR_AUTHENTICATION = 'TWO_FACTOR_AUTHENTICATION',
   WALLET_LOGIN = 'WALLET_LOGIN',
 }
-export default interface ConfigInterface extends PublicRuntimeConfig {
+
+type SimpleSpread<L, R> = R & Pick<L, Exclude<keyof L, keyof R>>;
+interface PropsFeatures {
+  features?: Partial<Record<Feature, boolean>>;
+}
+export default interface ConfigInterface extends SimpleSpread<PublicRuntimeConfig, PropsFeatures> {
   VERSION: string;
   url: string;
   apiUrl: string;
   CHAIN_ID: string;
-  features?: Partial<Record<Feature, boolean>>;
 }

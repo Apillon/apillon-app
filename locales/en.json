@@ -36,6 +36,7 @@
     "clientLibraries": "Client Libraries",
     "created": "Created",
     "credentialsAndApiKeys": "Credentials and API keys",
+    "dashboard": "Dashboard",
     "date": "Date",
     "email": "Email",
     "emailMethodConfiguration": "Email method configuration",
@@ -206,6 +207,7 @@
       "project": "I understand product is in beta stage and I accept the ",
       "payment": "I understand the billing process and some other legal stuff."
     },
+    "connect": "Connect",
     "createBucketAndContinue": "Create bucket & continue to management",
     "createNewProject": "Create new project",
     "createServiceAndContinue": "Create service & continue to management",
@@ -281,6 +283,18 @@
     "overview": "Project overview",
     "owner": "Project owner",
     "usersAndPermissions": "Project users & permissions"
+  },
+  "referral": {
+    "claimMerchPack": "Claim merch pack",
+    "connectGithub": "Connect your Github account",
+    "connectTwitter": "Connect your Twitter account",
+    "content": "Welcome to Apillon referral programme. While we are working hard on first MVP and giving you access to beta test, you are free to invite other developers to Apillon, collect points and get your Apillon Merch pack 1.0. ",
+    "included": "What is included?",
+    "learnMore": "Learn more about referral",
+    "points": "points",
+    "subtitle": "Get your Apillon Merch pack 1.0, by helping with referral. ",
+    "title": "Referral programme",
+    "yourPoints": "Your points"
   },
   "signup": {
     "alreadyHaveAccount": "Already have an account?",

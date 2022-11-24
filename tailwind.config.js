@@ -62,8 +62,8 @@ module.exports = {
         black: '0px 2px 4px rgba(0, 0, 0, 0.12)',
       },
       gridTemplateColumns: {
+        billing: 'repeat(auto-fill, minmax(310px, 1fr))',
         services: 'repeat(auto-fit, minmax(280px, 1fr))',
-        billing: 'repeat(auto-fill, minmax( 310px, 1fr))',
       },
       zIndex: {
         1: 1,

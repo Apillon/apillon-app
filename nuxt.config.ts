@@ -101,7 +101,7 @@ export default defineNuxtConfig({
     download: true,
     families: {
       'IBM Plex Mono': {
-        wght: [700],
+        wght: [400, 700],
       },
       'IBM Plex Sans': {
         wght: [400, 700],
