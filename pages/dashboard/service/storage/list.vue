@@ -43,7 +43,7 @@ onMounted(() => {
       getServicesStorage();
       getBuckets();
     });
-  }, 100);
+  }, 500);
 });
 
 async function getServicesStorage() {

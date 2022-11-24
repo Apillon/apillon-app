@@ -2,108 +2,70 @@
   <Dashboard>
     <template #heading>
       <n-space :size="24" align="center" class="h-12">
-        <h4 class="">{{ $t('dashboard.attachNewService') }}</h4>
+        <h4 class="">{{ $t('referral.title') }}</h4>
         <div class="w-[1px] h-[13px] bg-grey-light"></div>
-        <strong class="body-sm">{{ $t('dashboard.learnMoreAboutServices') }}</strong>
+        <strong class="body-sm font-button">{{ $t('referral.learnMore') }}</strong>
       </n-space>
     </template>
-    <template v-if="showServices || !isFeatureEnabled(Feature.SERVICES)" #learn>
-      <LearnAlert>
-        Click on a service you want to attach to your project. After configuring it, the service
-        will become operational.
-        <strong>Keep in mind, you can always edit the attached services or add new ones.</strong>
-      </LearnAlert>
-      <LearnVideo />
-      <LearnClientLibraries />
-    </template>
     <slot>
-      <div v-if="showServices && isFeatureEnabled(Feature.SERVICES)">
-        <h6 class="mb-6">{{ $t('dashboard.selectServices') }}</h6>
-        <div class="grid gap-4 grid-cols-services">
-          <div
-            v-for="(service, key) in services"
-            :key="key"
-            class="py-6 px-[22px] bg-grey-lightBg shadow-black"
-            :class="{ 'text-grey': service.disabled }"
-          >
-            <div class="text-2xl">
-              <span :class="service.icon"></span>
-              <span
-                v-if="service.new"
-                class="icon-new float-right text-blue text-2xl"
-                :class="`animation-new-${randomInteger(0, 3)}`"
-              ></span>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-24 font-button text-sm">
+        <!-- Referral - intro -->
+        <div>
+          <p class="font-button text-sm mb-7">
+            <strong>{{ $t('referral.subtitle') }}</strong>
+          </p>
+          <p class="font-button text-sm">{{ $t('referral.content') }}</p>
+        </div>
+        <!-- Referral - images -->
+        <div>
+          <p class="mb-10 text-center font-button text-sm">{{ $t('referral.included') }}</p>
+          <div class="flex flex-wrap justify-evenly gap-3 md:gap-6 lg:gap-9">
+            <div v-for="(img, index) in merchImages" :key="index">
+              <img :src="img" alt="apillon merch" />
             </div>
-            <h4>{{ $t(`service.${service.name}.name`) }}</h4>
-            <p class="mb-5">
-              {{ $t(`service.${service.name}.description`) }}
-            </p>
-            <Btn
-              class="w-full"
-              :type="attachService === service.id ? 'secondary' : 'primary'"
-              :disabled="service.disabled"
-              @click="attachService = service.id"
-            >
-              <span v-if="attachService === service.id">{{ $t('dashboard.attached') }}</span>
-              <span v-else>{{ $t('dashboard.attachService') }}</span>
-            </Btn>
           </div>
         </div>
 
-        <FormAttachService
-          v-if="attachService"
-          :service-type="attachService"
-          class="max-w-[520px] mt-5"
-        />
-      </div>
-      <div
-        v-else-if="isFeatureEnabled(Feature.SERVICES)"
-        class="flex flex-col md:flex-row items-center justify-between max-w-3xl bg-grey-lightBg px-6 py-4"
-      >
-        <div class="mb-4 md:mb-0">
-          <p class="body-lg font-bold">Your project currently has no active service</p>
-          <p class="body-sm">
-            First attach a desired service and configure it, then start building.
-          </p>
-        </div>
-        <div>
-          <Btn type="primary" @click="showServices = !showServices"> Attach a service </Btn>
-        </div>
+        <!-- Referral - show this section only if this feature is enabled -->
+        <template v-if="isFeatureEnabled(Feature.REFERRAL)">
+          <!-- Referral - points -->
+          <div class="text-center">
+            <p class="font-button text-sm mb-11">
+              <strong>{{ $t('referral.yourPoints') }}</strong>
+            </p>
+            <p class="font-button text-2xl md:text-[48px] mb-14">3</p>
+            <Btn type="primary">{{ $t('referral.claimMerchPack') }}</Btn>
+          </div>
+          <!-- Referral - empty space -->
+          <div></div>
+
+          <!-- Referral - connect Twitter -->
+          <div>
+            <FormReferralTwitter />
+          </div>
+
+          <!-- Referral - connect GitHub -->
+          <div>
+            <FormReferralGitHub />
+          </div>
+        </template>
       </div>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeItem } from '~~/types/service';
-import { randomInteger } from '~~/lib/utils';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 useHead({
-  title: 'Dashboard',
+  title: t('dashboard.dashboard'),
 });
 
-const showServices = ref(false);
-const attachService = ref(null);
-
-const services: Array<ServiceTypeItem> = [
-  {
-    id: ServiceType.AUTHENTICATION,
-    name: 'authentication',
-    icon: 'icon-authentication',
-    disabled: !isFeatureEnabled(Feature.AUTHENTICATION),
-  },
-  {
-    id: ServiceType.STORAGE,
-    name: 'storage',
-    icon: 'icon-storage',
-    new: true,
-    disabled: !isFeatureEnabled(Feature.STORAGE),
-  },
-  {
-    id: ServiceType.COPMUTING,
-    name: 'computing',
-    icon: 'icon-computing',
-    disabled: !isFeatureEnabled(Feature.COMPUTING),
-  },
+const merchImages = [
+  '/images/referral/merch_1.jpg',
+  '/images/referral/merch_2.jpg',
+  '/images/referral/merch_3.jpg',
+  '/images/referral/merch_4.jpg',
 ];
 </script>
