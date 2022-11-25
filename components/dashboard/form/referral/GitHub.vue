@@ -30,17 +30,17 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, FormValidationError, FormRules, useMessage } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const message = useMessage();
 const $i18n = useI18n();
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 
 const formData = ref({ email: null });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   email: [
     {
       type: 'email',
@@ -56,7 +56,7 @@ const rules: FormRules = {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {

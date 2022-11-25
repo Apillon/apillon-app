@@ -61,10 +61,8 @@
 </template>
 
 <script lang="ts" setup>
-import { UploadCustomRequestOptions, UploadFileInfo, useMessage } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { useDataStore } from '~~/stores/data';
-import { BucketInterface } from '~~/types/service';
 
 const message = useMessage();
 const $i18n = useI18n();
@@ -98,7 +96,7 @@ const bucket = computed<BucketInterface>(() => {
   return dataStore.services.bucket.find(bucket => bucket.id === bucketId) || {};
 });
 
-const fileList = ref<UploadFileInfo[]>([
+const fileList = ref<NUploadFileInfo[]>([
   {
     id: 'b',
     name: 'file.doc',
@@ -107,7 +105,7 @@ const fileList = ref<UploadFileInfo[]>([
   },
 ]);
 
-const uploadFiles = async ({ file, onError, onFinish }: UploadCustomRequestOptions) => {
+const uploadFiles = async ({ file, onError, onFinish }: NUploadCustomRequestOptions) => {
   const bodyData = {
     bucket: bucketId,
     name: file.name,

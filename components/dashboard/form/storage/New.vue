@@ -39,23 +39,21 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, FormValidationError, FormRules, useMessage } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormNewBucket, NewBucketResponse } from '~~/types/service';
-import { useDataStore } from '~~/stores/data';
 
 const message = useMessage();
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 
 const formData = ref<FormNewBucket>({
   bucketName: null,
   bucketSize: null,
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   bucketName: [
     {
       required: true,
@@ -80,7 +78,7 @@ const bucketSizes = [
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {

@@ -3,7 +3,7 @@
     <h2 class="mb-4 text-center sm:text-left">{{ $t('login.title') }}</h2>
     <p class="mb-11">{{ $t('login.description') }}</p>
     <template v-if="isFeatureEnabled(Feature.WALLET_LOGIN)">
-      <WalletConnect class="w-full mb-2" />
+      <AuthWalletConnect class="w-full mb-2" />
     </template>
     <template v-if="isFeatureEnabled(Feature.MAGIC_LINK)">
       <Btn type="secondary" class="w-full">
@@ -38,9 +38,6 @@
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import WalletConnect from '~~/components/auth/WalletConnect.vue';
-import { AuthStep } from '~~/types/auth';
-import { useAuthStore } from '~~/stores/auth';
 
 const { t } = useI18n();
 const authStore = useAuthStore();

@@ -75,9 +75,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeItem } from '~~/types/service';
-import { randomInteger } from '~~/lib/utils';
-
 useHead({
   title: 'Dashboard',
 });

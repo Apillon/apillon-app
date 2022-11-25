@@ -1,5 +1,4 @@
 import { stringify } from 'query-string';
-import { ApiErrorResponse, ERROR } from '~~/types/error';
 
 export const APISettings = {
   headers: new Headers({

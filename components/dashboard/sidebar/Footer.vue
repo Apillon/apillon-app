@@ -11,12 +11,12 @@
     </template>
     <p class="mt-8 text-sm text-grey text-center">
       {{ $t('general.copyrights') }}
-      <span>{{ verison }}</span>
+      <span>{{ version }}</span>
     </p>
   </div>
 </template>
 
 <script lang="ts" setup>
 const config = useRuntimeConfig();
-const verison = ref(config.public.VERSION);
+const version = ref(config.public.VERSION);
 </script>

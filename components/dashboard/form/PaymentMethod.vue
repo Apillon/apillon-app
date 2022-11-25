@@ -100,13 +100,12 @@
 <script lang="ts" setup>
 import cardValidator from 'card-validator';
 import { textMarshal } from 'text-marshal';
-import { FormInst, FormValidationError, FormRules, FormItemRule, useMessage } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormBilling, BillingResponse } from '~~/types/settings';
 
 const $i18n = useI18n();
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 const message = useMessage();
 const authStore = useAuthStore();
 
@@ -119,7 +118,7 @@ const formData = ref<FormBilling>({
   terms: null,
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   cardHolder: [
     {
       required: true,
@@ -180,19 +179,19 @@ const rules: FormRules = {
 };
 
 // Custom validations
-function validateCardHolder(_: FormItemRule, value: string): boolean {
+function validateCardHolder(_: NFormItemRule, value: string): boolean {
   return cardValidator.cardholderName(value).isValid;
 }
-function validateCreditCard(_: FormItemRule, value: string): boolean {
+function validateCreditCard(_: NFormItemRule, value: string): boolean {
   return cardValidator.number(value).isValid;
 }
-function validateExpirationDate(_: FormItemRule, value: string): boolean {
+function validateExpirationDate(_: NFormItemRule, value: string): boolean {
   return cardValidator.expirationDate(value).isValid;
 }
-function validateCVV(_: FormItemRule, value: string): boolean {
+function validateCVV(_: NFormItemRule, value: string): boolean {
   return cardValidator.cvv(value).isValid;
 }
-function validatePostalCode(_: FormItemRule, value: string): boolean {
+function validatePostalCode(_: NFormItemRule, value: string): boolean {
   return cardValidator.postalCode(value).isValid;
 }
 
@@ -239,7 +238,7 @@ function handlePostalCodeInput(value: string | [string, string]) {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {

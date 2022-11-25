@@ -38,11 +38,8 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi, FormInst, FormRules, FormValidationError } from 'naive-ui';
+import { createDiscreteApi } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormLogin, LoginResponse } from '~~/types/auth';
-import { useAuthStore } from '~~/stores/auth';
-import { useDataStore } from '~~/stores/data';
 
 const $i18n = useI18n();
 const authStore = useAuthStore();
@@ -51,13 +48,13 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
 const showResetPassword = ref(false);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 
 const formData = ref<FormLogin>({
   email: authStore.email,
   password: '',
 });
-const rules: FormRules = {
+const rules: NFormRules = {
   mail: [
     {
       type: 'email',
@@ -79,7 +76,7 @@ const rules: FormRules = {
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
 
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {

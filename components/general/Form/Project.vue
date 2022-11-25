@@ -53,10 +53,8 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
+import { createDiscreteApi } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { useDataStore } from '~~/stores/data';
-import { CreateProjectResponse, FormProject } from '~~/types/data';
 
 const dataStore = useDataStore();
 const emit = defineEmits(['submitActive', 'submitSuccess']);
@@ -79,7 +77,7 @@ const projectNameText = computed(() => {
 
 /** Form project */
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const formData = ref<FormProject>({
@@ -88,7 +86,7 @@ const formData = ref<FormProject>({
   terms: null,
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   name: [
     {
       required: true,
@@ -109,7 +107,7 @@ const rules: FormRules = {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {

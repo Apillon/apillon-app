@@ -1,5 +1,3 @@
-import ConfigInterface from '~~/types/config';
-
 const config: ConfigInterface = {
   VERSION: `${require('../package.json').version}`,
   url: 'http://localhost:3000',

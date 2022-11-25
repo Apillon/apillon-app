@@ -21,9 +21,7 @@
         <n-space class="py-6" :size="24" vertical>
           <!-- LOGO -->
           <div class="flex justify-center">
-            <NuxtLink :to="{ name: 'dashboard' }" @click.native="hideNavOnMobile">
-              <span class="icon-apillon text-2xl"></span>
-            </NuxtLink>
+            <Logo />
           </div>
 
           <!-- NEW PROJECT -->
