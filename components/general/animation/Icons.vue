@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center">
-    <NuxtIcon :name="iconName" :class="btnClass" fill />
+    <NuxtIcon :name="iconName" :key="iconIndex" :class="btnClass" filled />
   </div>
 </template>
 
@@ -35,11 +35,11 @@ const iconIndex = ref<number>(1);
 
 /** Name of currently visibile icon */
 const iconName = computed(() => {
-  return `Animation${props.animationName}${iconIndex.value}`;
+  return `animation/${props.animationName}/${iconIndex.value}`;
 });
 
 setInterval(() => {
-  iconIndex.value = iconIndex.value === props.numOfIcons ? 1 : iconIndex.value + 1;
+  // iconIndex.value = iconIndex.value === props.numOfIcons ? 1 : iconIndex.value + 1;
 }, 300);
 </script>
 

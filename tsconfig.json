@@ -3,6 +3,7 @@
   "extends": "./.nuxt/tsconfig.json",
 
   "compilerOptions": {
+    "isolatedModules": true,
     "types": ["node", "naive-ui/volar"],
     "typeRoots": ["./node_modules/@types", "./types"]
   }

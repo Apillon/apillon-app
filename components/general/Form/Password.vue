@@ -99,6 +99,7 @@ const rules: NFormRules = {
   ],
 };
 // Custom validations
+/** Additional validatins
 function passwordContainsUppercase(_: NFormItemRule, value: string): boolean {
   return /[A-Z]/.test(value);
 }
@@ -110,7 +111,7 @@ function passwordContainsNumber(_: NFormItemRule, value: string): boolean {
 }
 function passwordContainsSpecial(_: NFormItemRule, value: string): boolean {
   return /[#?!@$%^&*-]/.test(value);
-}
+} */
 function validatePasswordStartWith(_: NFormItemRule, value: string): boolean {
   return (
     !!formData.value.password &&

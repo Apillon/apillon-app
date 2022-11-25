@@ -1,4 +1,3 @@
-import { defineNuxtConfig } from 'nuxt';
 import stg from './config/staging';
 import dev from './config/development';
 import prod from './config/production';
@@ -32,6 +31,17 @@ const meta = {
 export default defineNuxtConfig({
   ssr: false,
 
+  nitro: {
+    prerender: {
+      crawlLinks: false,
+    },
+    commonJS: {
+      transformMixedEsModules: true,
+    },
+  },
+
+  typescript: { shim: false },
+
   runtimeConfig: {
     public: appConfig,
   },
@@ -43,20 +53,19 @@ export default defineNuxtConfig({
     '~/components/dashboard/',
   ],
 
-  buildModules: ['@nuxtjs/google-fonts'],
-
-  modules: ['@vueuse/nuxt', '@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-icons'],
-
-  router: {
-    prefetchLinks: true,
-    middleware: ['auto-login', 'protected-routes'],
-  },
+  modules: [
+    '@vueuse/nuxt',
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    'nuxt-icons',
+    '@nuxtjs/google-fonts',
+  ],
 
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',
   },
 
-  autoImports: {
+  imports: {
     dirs: ['./stores', './lib', './types'],
   },
 
@@ -66,6 +75,7 @@ export default defineNuxtConfig({
         lang: meta.lang,
       },
 
+      title: meta.title,
       titleTemplate: `%s – ${meta.title}`,
       charset: 'utf-9',
       viewport: 'width=device-width, initial-scale=1',
