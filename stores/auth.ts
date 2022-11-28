@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
 import { DataLsKeys } from './data';
-import { UserResponse } from '~~/types/auth';
-import { $api } from '~~/lib/api';
 
 export const AuthLsKeys = {
   AUTH: 'al_auth',

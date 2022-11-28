@@ -40,7 +40,6 @@
 import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { useDataStore } from '~~/stores/data';
-import { InstructionResponse, InstructionsResponse, InstructionInterface } from '~~/types/data';
 
 const $i18n = useI18n();
 const message = useMessage();

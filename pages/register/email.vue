@@ -24,8 +24,6 @@
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { AuthStep } from '~~/types/auth';
-import { useAuthStore } from '~~/stores/auth';
 
 const authStore = useAuthStore();
 const router = useRouter();

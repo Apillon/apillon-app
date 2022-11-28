@@ -13,8 +13,6 @@
 </template>
 
 <script lang="ts" setup>
-import { AuthStep } from '~~/types/auth';
-import { useAuthStore } from '~~/stores/auth';
 const authStore = useAuthStore();
 
 definePageMeta({

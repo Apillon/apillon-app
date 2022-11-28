@@ -1,14 +1,21 @@
 <template>
   <NuxtLink :to="link" class="inline-block text-center">
-    <img src="/images/logo/apillon.png" :width="162" :height="28" :alt="alt" />
+    <img
+      v-if="version < 1"
+      src="/images/logo/apillon-beta.png"
+      :width="176"
+      :height="25"
+      :alt="alt"
+    />
+    <img v-else src="/images/logo/apillon.png" :width="width" :height="height" :alt="alt" />
   </NuxtLink>
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from '~~/stores/auth';
-
 defineProps({
   alt: { type: String, default: 'Apillon logo' },
+  height: { type: Number, default: 19 },
+  width: { type: Number, default: 110 },
 });
 
 const authStore = useAuthStore();
@@ -16,4 +23,8 @@ const authStore = useAuthStore();
 const link = computed(() => {
   return authStore.loggedIn ? { name: 'dashboard' } : { name: 'login' };
 });
+
+/** App version */
+const config = useRuntimeConfig();
+const version = ref<number>(parseFloat(config.public.VERSION));
 </script>

@@ -8,7 +8,6 @@
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { PasswordResetRequestResponse } from '~~/types/auth';
 
 const props = defineProps({
   btnType: {

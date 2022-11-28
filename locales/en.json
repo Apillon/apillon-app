@@ -373,6 +373,10 @@
   },
   "validation": {
     "bucketNameRequired": "Please enter bucket name",
+    "containsLowercase": "Must include a lowercase character",
+    "containsNumber": "Must include a number character",
+    "containsSpecial": "Must include a special character",
+    "containsUppercase": "Must include an uppercase character",
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
     "creditCard": "Credit card validation error",

@@ -33,9 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from '~~/stores/auth';
-import { AuthStep } from '~~/types/auth';
-
 const authStore = useAuthStore();
 
 const isFooterHidden = computed(() => {

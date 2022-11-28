@@ -45,18 +45,8 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  createDiscreteApi,
-  FormInst,
-  FormItemInst,
-  FormItemRule,
-  FormRules,
-  FormValidationError,
-} from 'naive-ui';
+import { createDiscreteApi } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormRegister, RegisterResponse, PasswordResetResponse } from '~~/types/auth';
-import { useAuthStore } from '~~/stores/auth';
-import { useDataStore } from '~~/stores/data';
 
 const props = defineProps({
   resetPassword: { type: Boolean, default: false },
@@ -71,15 +61,15 @@ const dataStore = useDataStore();
 const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
-const rPasswordFormItemRef = ref<FormItemInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
+const rPasswordFormItemRef = ref<NFormItemInst | null>(null);
 
 const formData = ref<FormRegister>({
   password: null,
   reenteredPassword: null,
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   password: [
     {
       required: true,
@@ -109,14 +99,26 @@ const rules: FormRules = {
   ],
 };
 // Custom validations
-function validatePasswordStartWith(_: FormItemRule, value: string): boolean {
+function passwordContainsUppercase(_: NFormItemRule, value: string): boolean {
+  return /[A-Z]/.test(value);
+}
+function passwordContainsLowercase(_: NFormItemRule, value: string): boolean {
+  return /[a-z]/.test(value);
+}
+function passwordContainsNumber(_: NFormItemRule, value: string): boolean {
+  return /[0-9]/.test(value);
+}
+function passwordContainsSpecial(_: NFormItemRule, value: string): boolean {
+  return /[#?!@$%^&*-]/.test(value);
+}
+function validatePasswordStartWith(_: NFormItemRule, value: string): boolean {
   return (
     !!formData.value.password &&
     formData.value.password.startsWith(value) &&
     formData.value.password.length >= value.length
   );
 }
-function validatePasswordSame(_: FormItemRule, value: string): boolean {
+function validatePasswordSame(_: NFormItemRule, value: string): boolean {
   return value === formData.value.password;
 }
 
@@ -129,7 +131,7 @@ function handlePasswordInput() {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else if (props.resetPassword) {

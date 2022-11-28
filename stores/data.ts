@@ -1,14 +1,5 @@
 import { useMessage } from 'naive-ui';
 import { defineStore } from 'pinia';
-import { InstructionInterface, ProjectInterface, ProjectResponse } from '~~/types/data';
-import {
-  BucketInterface,
-  BucketResponse,
-  ServicesInterface,
-  ServicesResponse,
-} from '~~/types/service';
-import { kbToMb } from '~~/lib/utils';
-import { $api } from '~~/lib/api';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
