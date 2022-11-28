@@ -1,3 +1,23 @@
+import stg from '../config/staging';
+import dev from '../config/development';
+import prod from '../config/production';
+import local from '../config/local';
+
+export function getAppConfig(env?: string) {
+  if (!env) {
+    return prod;
+  }
+  if (env === 'staging') {
+    return stg;
+  } else if (env === 'development') {
+    return dev;
+  } else if (env === 'local') {
+    return local;
+  } else {
+    return prod;
+  }
+}
+
 export function randomInteger(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

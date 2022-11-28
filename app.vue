@@ -15,9 +15,8 @@
 </template>
 
 <script lang="ts" setup>
-import { GlobalThemeOverrides, lightTheme, darkTheme, enUS, dateEnUS } from 'naive-ui';
+import { lightTheme, darkTheme, enUS, dateEnUS } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import colors from './tailwind.colors';
 
 const $i18n = useI18n();
 const lang = computed(() => {

@@ -15,4 +15,16 @@ declare global {
     path?: string;
     timestamp?: string;
   }
+
+  interface ApiOriginalError {
+    message: string;
+    statusCode?: number;
+    code?: number;
+    errors?: number[];
+  }
+
+  interface ApiError extends Error {
+    code: number;
+    data: ApiOriginalError;
+  }
 }

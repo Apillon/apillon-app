@@ -1,5 +1,7 @@
+import packageConfig from '../package.json';
+
 const config: ConfigInterface = {
-  VERSION: `${require('../package.json').version}`,
+  VERSION: packageConfig.version || '1.0.0',
   url: 'http://localhost:3000',
   apiUrl: 'http://localhost:6001',
   CHAIN_ID: '0x5',

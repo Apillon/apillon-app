@@ -1,22 +1,8 @@
-import stg from './config/staging';
-import dev from './config/development';
-import prod from './config/production';
-import local from './config/local';
+import { getAppConfig } from './lib/utils';
 
 const appConfig: ConfigInterface = getAppConfig(
   process.env.ENV || process.env.RUN_ENV || process.env.NODE_ENV
 );
-function getAppConfig(env?: string) {
-  if (env === 'production') {
-    return prod;
-  } else if (env === 'staging') {
-    return stg;
-  } else if (env === 'development') {
-    return dev;
-  } else {
-    return local;
-  }
-}
 
 const meta = {
   lang: 'en',
