@@ -1,54 +1,36 @@
 <template>
   <Dashboard>
-    <template #heading>
-      <n-space :size="24" align="center" class="h-12">
-        <h4 class="">{{ $t('referral.title') }}</h4>
-        <div class="w-[1px] h-[13px] bg-grey-light"></div>
-        <strong class="body-sm font-button">{{ $t('referral.learnMore') }}</strong>
-      </n-space>
-    </template>
     <slot>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-24 font-button text-sm">
-        <!-- Referral - intro -->
-        <div>
-          <p class="font-button text-sm mb-7">
-            <strong>{{ $t('referral.subtitle') }}</strong>
+      <div class="flex lg:flex-nowrap flex-wrap gap-8 max-w-[980px] p-8 bg-grey-lightBg">
+        <div class="max-w-[480px]">
+          <h4 class="mb-4">Welcome to Apillon</h4>
+          <p>
+            Thank you for registering for Apillon platform and becoming one of the first Beta
+            testers!
           </p>
-          <p class="font-button text-sm">{{ $t('referral.content') }}</p>
-        </div>
-        <!-- Referral - images -->
-        <div>
-          <p class="mb-10 text-center font-button text-sm">{{ $t('referral.included') }}</p>
-          <div class="flex flex-wrap justify-evenly gap-3 md:gap-6 lg:gap-9">
-            <div v-for="(img, index) in merchImages" :key="index">
-              <img :src="img" alt="apillon merch" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Referral - show this section only if this feature is enabled -->
-        <template v-if="isFeatureEnabled(Feature.REFERRAL)">
-          <!-- Referral - points -->
-          <div class="text-center">
-            <p class="font-button text-sm mb-11">
-              <strong>{{ $t('referral.yourPoints') }}</strong>
+          <br />
+          <p>
+            The services are under development, but soon you’ll be able to test the available
+            features and build your first Web3 product with Apillon.
+          </p>
+          <br />
+          <p>
+            You’ll also be able to win Apillon’s merch pack as through Apillon’s referral system
+            which is in progress as we speak.
+          </p>
+          <div class="p-4 bg-grey-dark mt-8">
+            <p>
+              <strong>I’m registered, now what?</strong>
             </p>
-            <p class="font-button text-2xl md:text-[48px] mb-14">3</p>
-            <Btn type="primary">{{ $t('referral.claimMerchPack') }}</Btn>
+            <p>
+              Sit back and relax. Once the first feature is ready to be tested and used, we will
+              notify you via email so you can start your Web3 journey.
+            </p>
           </div>
-          <!-- Referral - empty space -->
-          <div></div>
-
-          <!-- Referral - connect Twitter -->
-          <div>
-            <FormReferralTwitter />
-          </div>
-
-          <!-- Referral - connect GitHub -->
-          <div>
-            <FormReferralGitHub />
-          </div>
-        </template>
+        </div>
+        <div>
+          <Image src="./images/dashboard/welcome.svg" :width="400" :height="470" alt="apillon" />
+        </div>
       </div>
     </slot>
   </Dashboard>
@@ -61,11 +43,4 @@ const { t } = useI18n();
 useHead({
   title: t('dashboard.dashboard'),
 });
-
-const merchImages = [
-  '/images/referral/merch_1.jpg',
-  '/images/referral/merch_2.jpg',
-  '/images/referral/merch_3.jpg',
-  '/images/referral/merch_4.jpg',
-];
 </script>
