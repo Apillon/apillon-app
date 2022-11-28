@@ -18,8 +18,8 @@
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 const { isLg } = useScreen();
-const messageRef = ref(null);
-const mainContentRef = ref<HTMLDivElement>(null);
+const messageRef = ref<HTMLDivElement>();
+const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
 
 const route = useRoute();
@@ -31,11 +31,11 @@ const routeName = computed(() => {
  * Enable/disable body scroll
  */
 onMounted(() => {
-  disableBodyScroll(document);
+  disableBodyScroll(document.body as HTMLElement);
 });
 
 onUnmounted(() => {
-  clearAllBodyScrollLocks(document);
+  clearAllBodyScrollLocks();
 });
 
 /**

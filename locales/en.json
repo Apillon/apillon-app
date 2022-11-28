@@ -6,6 +6,7 @@
     "attach": "Attach",
     "copyrights": "© Apillon",
     "created": "created",
+    "goHome": "Go home",
     "learn": "Learn",
     "learnMore": "Learn more",
     "login": "Log in",
@@ -64,6 +65,8 @@
     "value": "Value"
   },
   "error": {
+    "404": "Page not found",
+
     "BAD_REQUEST": "Bad request",
     "INVALID_PATH": "Invalid path",
     "INVALID_QUERY_PARAMETERS": "Invalid query parameters",

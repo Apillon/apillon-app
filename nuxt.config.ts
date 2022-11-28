@@ -31,15 +31,6 @@ const meta = {
 export default defineNuxtConfig({
   ssr: false,
 
-  nitro: {
-    prerender: {
-      crawlLinks: false,
-    },
-    commonJS: {
-      transformMixedEsModules: true,
-    },
-  },
-
   typescript: { shim: false },
 
   runtimeConfig: {

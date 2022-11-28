@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-down" appear>
-    <div class="px-4 sm:px-8 py-2">
+    <div class="px-4 sm:px-8 py-2 bg-dark">
       <div class="flex justify-between items-center">
         <div class="flex items-center pr-4">
           <!-- Hamburder btn to show sidebar on mobile -->

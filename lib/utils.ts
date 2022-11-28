@@ -69,7 +69,7 @@ export function storagePercantage(size: number, maxSize: number) {
 /**
  * Error messages
  */
-export function userFriendlyMsg($i18n, error: ApiErrorResponse | ReferenceError | any) {
+export function userFriendlyMsg($i18n: any, error: ApiErrorResponse | ReferenceError | any) {
   // Check error exists and if translation is included
   if (!$i18n || !$i18n.te('error.API') || !$i18n.t('error.API') || !error) {
     return 'Internal server error';

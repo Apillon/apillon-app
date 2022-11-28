@@ -1,6 +1,13 @@
 <template>
   <div class="flex items-center">
-    <NuxtIcon :name="iconName" :key="iconIndex" :class="btnClass" filled />
+    <NuxtIcon
+      v-for="icon in numOfIcons"
+      v-show="icon === iconIndex"
+      :name="`animation/${animationName}/${icon}`"
+      :key="icon"
+      :class="btnClass"
+      filled
+    />
   </div>
 </template>
 
@@ -39,7 +46,7 @@ const iconName = computed(() => {
 });
 
 setInterval(() => {
-  // iconIndex.value = iconIndex.value === props.numOfIcons ? 1 : iconIndex.value + 1;
+  iconIndex.value = iconIndex.value === props.numOfIcons ? 1 : iconIndex.value + 1;
 }, 300);
 </script>
 
