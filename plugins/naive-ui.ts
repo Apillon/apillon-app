@@ -1,5 +1,11 @@
 import {
+  CollapseProps,
   create,
+  FormInst,
+  FormItemInst,
+  FormItemRule,
+  FormRules,
+  FormValidationError,
   NAlert,
   NButton,
   NCard,
@@ -44,8 +50,20 @@ import {
   NUploadDragger,
   NUploadFileList,
   NUploadTrigger,
+  UploadCustomRequestOptions,
+  UploadFileInfo,
 } from 'naive-ui';
 
+declare global {
+  interface NCollapseProps extends CollapseProps {}
+  interface NFormInst extends FormInst {}
+  interface NFormItemInst extends FormItemInst {}
+  interface NFormRules extends FormRules {}
+  interface NFormItemRule extends FormItemRule {}
+  interface NFormValidationError extends FormValidationError {}
+  interface NUploadCustomRequestOptions extends UploadCustomRequestOptions {}
+  interface NUploadFileInfo extends UploadFileInfo {}
+}
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(
     create({

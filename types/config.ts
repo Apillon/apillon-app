@@ -26,9 +26,12 @@ type SimpleSpread<L, R> = R & Pick<L, Exclude<keyof L, keyof R>>;
 interface PropsFeatures {
   features?: Partial<Record<Feature, boolean>>;
 }
-export default interface ConfigInterface extends SimpleSpread<PublicRuntimeConfig, PropsFeatures> {
-  VERSION: string;
-  url: string;
-  apiUrl: string;
-  CHAIN_ID: string;
+
+declare global {
+  interface ConfigInterface extends SimpleSpread<PublicRuntimeConfig, PropsFeatures> {
+    VERSION: string;
+    url: string;
+    apiUrl: string;
+    CHAIN_ID: string;
+  }
 }

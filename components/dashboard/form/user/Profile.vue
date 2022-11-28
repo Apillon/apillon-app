@@ -48,17 +48,15 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, FormValidationError, FormRules, FormItemRule, useMessage } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { useAuthStore } from '~~/stores/auth';
-import { FormUserProfile, UserProfileResponse } from '~~/types/auth';
 
 const message = useMessage();
 const $i18n = useI18n();
 const authStore = useAuthStore();
 const loading = ref<boolean>(false);
 const loadingForm = ref<boolean>(true);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 
 const formData = ref<FormUserProfile>({
   name: authStore.username,
@@ -80,7 +78,7 @@ onMounted(() => {
   }, 500);
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   name: [],
   email: [
     {
@@ -102,7 +100,7 @@ const rules: FormRules = {
 };
 
 // Custom validations
-function validatePhone(_: FormItemRule, value: string): boolean {
+function validatePhone(_: NFormItemRule, value: string): boolean {
   // const re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
 
@@ -112,7 +110,7 @@ function validatePhone(_: FormItemRule, value: string): boolean {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {

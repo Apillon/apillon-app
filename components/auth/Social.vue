@@ -15,8 +15,6 @@
 </template>
 
 <script lang="ts" setup>
-import { SocialInterface } from '~~/types/component';
-
 const socials: Array<SocialInterface> = [
   { name: 'GitHub', link: 'https://www.github.com', iconName: 'icon-github' },
   { name: 'Twitter', link: 'https://www.twitter.com', iconName: 'icon-twitter' },

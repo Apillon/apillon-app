@@ -6,7 +6,7 @@
           class="flex pr-3 sm:pr-0"
           :class="isLogoFullwidth ? 'justify-center w-full' : 'justify-start w-1/2'"
         >
-          <Logo />
+          <Logo :width="162" :height="28" />
         </div>
         <div v-if="isLoginSwitchVisible" class="flex w-1/2 items-end justify-end">
           <div class="flex items-center">
@@ -45,8 +45,6 @@
 
 <script lang="ts" setup>
 import { WritableComputedRef } from 'vue';
-import { useAuthStore } from '~~/stores/auth';
-import { AuthStep } from '~~/types/auth';
 
 const authStore = useAuthStore();
 const router = useRouter();

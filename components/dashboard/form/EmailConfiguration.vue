@@ -39,13 +39,12 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, FormValidationError, FormRules, useMessage, CollapseProps } from 'naive-ui';
+import { CollapseProps, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormEmailConfiguration, EmailConfigurationResponse } from '~~/types/settings';
 
 const $i18n = useI18n();
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 const message = useMessage();
 
 /**
@@ -56,7 +55,7 @@ const formData = ref<FormEmailConfiguration>({
   did: false,
 });
 
-const rules: FormRules = {};
+const rules: NFormRules = {};
 
 /**
  * Change form data on Collapse header click
@@ -71,7 +70,7 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, event
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {

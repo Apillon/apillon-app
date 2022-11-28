@@ -27,7 +27,7 @@
           @click.native="emit('toggleSidebar')"
         >
           <span :class="item.icon" class="text-base align-middle"></span>
-          <span class="ml-2">{{ $t(`nav.${item.name}`) }}</span>
+          <span class="ml-2 select-none">{{ $t(`nav.${item.name}`) }}</span>
           <span
             v-if="item.soon"
             class="icon-new float-right text-blue text-2xl"
@@ -45,9 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { randomInteger } from '~~/lib/utils';
 import colors from '~~/tailwind.colors';
-import MainNavInterface from '~~/types/menu';
 
 const emit = defineEmits(['toggleSidebar']);
 const NuxtLink = resolveComponent('NuxtLink');
@@ -132,6 +130,7 @@ const defaultExpandedNames = computed(() => {
     }
 
     .n-collapse-item__header-main {
+      @apply select-none;
       letter-spacing: 0.3em;
 
       .n-collapse-item-arrow .icon-right {

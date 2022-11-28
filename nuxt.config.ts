@@ -1,5 +1,4 @@
 import { defineNuxtConfig } from 'nuxt';
-import ConfigInterface from './types/config';
 import stg from './config/staging';
 import dev from './config/development';
 import prod from './config/production';
