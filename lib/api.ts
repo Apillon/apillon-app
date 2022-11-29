@@ -20,15 +20,11 @@ export const $api = {
       const error: ApiErrorResponse = await response.json();
       if ($api.isUnauthorized(response.status)) {
         $api.backToLogin();
-        return {
-          response,
-        };
-      } else {
-        return {
-          error,
-          response,
-        };
       }
+      return {
+        error,
+        response,
+      };
     }
 
     return {
@@ -49,15 +45,11 @@ export const $api = {
       const error: ApiErrorResponse = await response.json();
       if ($api.isUnauthorized(response.status)) {
         $api.backToLogin();
-        return {
-          response,
-        };
-      } else {
-        return {
-          error,
-          response,
-        };
       }
+      return {
+        error,
+        response,
+      };
     }
 
     return {
@@ -76,15 +68,11 @@ export const $api = {
       const error: ApiErrorResponse = await response.json();
       if ($api.isUnauthorized(response.status)) {
         $api.backToLogin();
-        return {
-          response,
-        };
-      } else {
-        return {
-          error,
-          response,
-        };
       }
+      return {
+        error,
+        response,
+      };
     }
 
     return {
@@ -103,15 +91,11 @@ export const $api = {
       const error: ApiErrorResponse = await response.json();
       if ($api.isUnauthorized(response.status)) {
         $api.backToLogin();
-        return {
-          response,
-        };
-      } else {
-        return {
-          error,
-          response,
-        };
       }
+      return {
+        error,
+        response,
+      };
     }
 
     return {
@@ -129,15 +113,11 @@ export const $api = {
       const error: ApiErrorResponse = await response.json();
       if ($api.isUnauthorized(response.status)) {
         $api.backToLogin();
-        return {
-          response,
-        };
-      } else {
-        return {
-          error,
-          response,
-        };
       }
+      return {
+        error,
+        response,
+      };
     }
 
     return {
