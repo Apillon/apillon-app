@@ -69,7 +69,7 @@ export function storagePercantage(size: number, maxSize: number) {
 /**
  * Error messages
  */
-export function userFriendlyMsg($i18n, error: ApiErrorResponse | ReferenceError | any) {
+export function userFriendlyMsg($i18n, error: ApiErrorResponse | ReferenceError | TypeError | any) {
   // Check error exists and if translation is included
   if (!$i18n || !$i18n.te('error.API') || !$i18n.t('error.API') || !error) {
     return 'Internal server error';
@@ -77,8 +77,10 @@ export function userFriendlyMsg($i18n, error: ApiErrorResponse | ReferenceError 
   // Check error type
   if (error instanceof ReferenceError) {
     return error.message;
+  } else if (error instanceof TypeError) {
+    return $i18n.te(`error.${error.message}`) ? $i18n.t(`error.${error.message}`) : error.message;
   } else if (!instanceOfApiError(error)) {
-    $i18n.t('error.API');
+    return $i18n.t('error.API');
   }
 
   // Beautify API error
@@ -94,7 +96,7 @@ export function userFriendlyMsg($i18n, error: ApiErrorResponse | ReferenceError 
 }
 
 /** Translate single error message */
-function singleErrorMessage($i18n, message: string, code: number) {
+function singleErrorMessage($i18n, message: string, code: number = 0) {
   if ($i18n.te(`error.${message}`)) {
     return $i18n.t(`error.${message}`);
   } else if (code >= 500) {
@@ -102,6 +104,7 @@ function singleErrorMessage($i18n, message: string, code: number) {
   } else if (code >= 400) {
     return $i18n.t('error.BAD_REQUEST');
   }
+  return $i18n.t('error.API');
 }
 
 /** Check if object is instance of ApiErrorResponse  */

@@ -96,22 +96,19 @@ async function login() {
 
     if (error) {
       message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
       showResetPassword.value = true;
-      return;
     }
     if (data) {
       authStore.setUserToken(data.data.token);
       authStore.changeUser(data.data);
-    }
 
-    /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-    await dataStore.getProjects(true);
-    loading.value = false;
+      /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
+      await dataStore.getProjects(true);
+    }
   } catch (error) {
     message.error(userFriendlyMsg($i18n, error));
     showResetPassword.value = true;
-    loading.value = false;
   }
+  loading.value = false;
 }
 </script>
