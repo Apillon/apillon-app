@@ -13,7 +13,6 @@
 
 <script lang="ts" setup>
 import { SelectProps } from 'naive-ui';
-import colors from '~~/tailwind.colors';
 import { useDataStore } from '~~/stores/data';
 
 const dataStore = useDataStore();
@@ -25,11 +24,16 @@ type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>;
 const SelectProjectOverrides: SelectThemeOverrides = {
   peers: {
     InternalSelection: {
-      color: colors.transparent,
-      border: `0px solid ${colors.grey.DEFAULT}`,
-      borderActive: `1px solid ${colors.blue}`,
-      borderFocus: `1px solid ${colors.blue}`,
-      borderHover: `1px solid ${colors.blue}`,
+      color: 'transparent',
+      colorActive: 'transparent',
+      border: 'none',
+      borderActive: 'none',
+      borderFocus: 'none',
+      borderHover: 'none',
+      borderPressed: 'none',
+      boxShadowActive: 'none',
+      boxShadowFocus: 'none',
+      boxShadowHover: 'none',
     },
   },
 };
@@ -69,11 +73,21 @@ watch(
   .n-base-selection-label {
     background-color: transparent;
 
+    .n-base-selection-input {
+      padding-left: 0;
+    }
+
     .n-base-selection-input__content {
       background-color: theme('colors.blue');
       color: theme('colors.dark');
       font-weight: bold;
+      padding: 0 1px;
       margin-right: 10px;
+    }
+
+    .n-base-loading__placeholder {
+      height: 16px;
+      width: 16px;
     }
   }
 }
