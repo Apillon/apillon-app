@@ -80,6 +80,7 @@
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
     "ERR_CONNECTION_REFUSED": "Connection refused, please check your internet connection.",
     "Failed to fetch": "Connection refused, please check your internet connection.",
+    "jwt expired": "Your session has expired, please log in again.",
 
     "API_KEY_NOT_PRESENT": "API key is missing",
     "API_KEY_SECRET_NOT_PRESENT": "API key secret is missing",

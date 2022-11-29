@@ -115,20 +115,15 @@ const uploadFiles = async ({ file, onError, onFinish }: NUploadCustomRequestOpti
   };
 
   try {
-    const { data, error } = await $api.post(endpoints.file, bodyData);
-
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      onError();
-    }
+    const res = await $api.post(endpoints.file, bodyData);
 
     // TODO
-    if (data) {
-      console.log(data);
+    if (res.data) {
+      console.log(res.data);
       onFinish();
     }
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
+    message.error(userFriendlyMsg(error, $i18n));
     onError();
   }
 };

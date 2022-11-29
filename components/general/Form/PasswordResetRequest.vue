@@ -25,24 +25,16 @@ const loading = ref(false);
 async function passwordChangeRequest() {
   loading.value = true;
   try {
-    const bodyData = { email: props.email };
-    const { data, error } = await $api.post<PasswordResetRequestResponse>(
-      endpoints.passwordResetRequest,
-      bodyData
-    );
+    const res = await $api.post<PasswordResetRequestResponse>(endpoints.passwordResetRequest, {
+      email: props.email,
+    });
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
-    if (data) {
+    if (res.data) {
       message.success($i18n.t('form.success.requestPasswordChange'));
     }
-    loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

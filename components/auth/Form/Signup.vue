@@ -58,7 +58,7 @@ function handleSubmit(e: MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       // Email validation
       authStore.saveEmail(formData.value.email);
@@ -70,25 +70,16 @@ async function signupWithEmail() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<ValidateMailResponse>(
-      endpoints.validateMail,
-      formData.value
-    );
+    const res = await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
 
-    if (error || !data.data.success) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
     if (!props.sendAgain) {
       router.push({ name: 'register-email' });
     } else {
       message.success($i18n.t('form.success.sendAgainEmail'));
     }
-    loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

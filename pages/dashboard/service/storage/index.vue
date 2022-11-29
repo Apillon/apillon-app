@@ -32,14 +32,13 @@
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { useDataStore } from '~~/stores/data';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: t('nav.storage'),
+  title: $i18n.t('nav.storage'),
 });
 
 onMounted(() => {
@@ -49,12 +48,9 @@ onMounted(() => {
 });
 
 async function getServicesStorage() {
-  if (!dataStore.currentProject) {
-    console.warn('No project selected');
-    pageLoading.value = false;
-    return;
+  if (!dataStore.hasServices(ServiceType.STORAGE)) {
+    await dataStore.getStorageServices($i18n);
   }
-  dataStore.services.storage = await dataStore.getServices(ServiceType.STORAGE);
-  setTimeout(() => (pageLoading.value = false), 300);
+  pageLoading.value = false;
 }
 </script>

@@ -17,6 +17,8 @@ declare global {
     shortDescription: string;
     imageFile_id: number;
     project_uuid?: string;
+    value?: number;
+    label?: string;
   }
   interface ProjectResponse {
     data: {
@@ -64,7 +66,7 @@ declare global {
 
   interface InstructionsResponse {
     data: {
-      items: InstructionInterface;
+      items: Array<InstructionInterface>;
       total: number;
     };
     status: number;

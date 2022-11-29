@@ -50,6 +50,7 @@ import {
   NUploadDragger,
   NUploadFileList,
   NUploadTrigger,
+  SelectProps,
   UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
@@ -61,6 +62,7 @@ declare global {
   interface NFormRules extends FormRules {}
   interface NFormItemRule extends FormItemRule {}
   interface NFormValidationError extends FormValidationError {}
+  interface NSelectProps extends SelectProps {}
   interface NUploadCustomRequestOptions extends UploadCustomRequestOptions {}
   interface NUploadFileInfo extends UploadFileInfo {}
 }

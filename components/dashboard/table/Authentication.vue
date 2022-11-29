@@ -97,7 +97,7 @@ const createColumns = ({
   ];
 };
 const createData = (): RowData[] => dataStore.services.authentication;
-const currentRow = ref(null);
+const currentRow = ref<number>(0);
 
 const data = createData();
 const columns = createColumns({

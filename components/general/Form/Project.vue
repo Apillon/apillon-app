@@ -109,7 +109,7 @@ function handleSubmit(e: MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       await createProject();
     }
@@ -120,32 +120,19 @@ async function createProject() {
   emit('submitActive', true);
 
   try {
-    const { data, error } = await $api.post<CreateProjectResponse>(
-      endpoints.project,
-      formData.value
-    );
+    const res = await $api.post<CreateProjectResponse>(endpoints.project, formData.value);
 
-    if (error) {
-      setTimeout(() => {
-        message.error(userFriendlyMsg($i18n, error));
-        loading.value = false;
-        emit('submitActive', false);
-      }, 2000);
-      return;
-    }
-
-    if (data) {
+    if (res.data) {
       /** Set new project as current project */
-      dataStore.setCurrentProject(data.data.id);
+      dataStore.setCurrentProject(res.data.id);
 
       emit('submitSuccess');
       emit('submitActive', false);
     }
-    loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
-    emit('submitActive', false);
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
+  emit('submitActive', false);
 }
 </script>

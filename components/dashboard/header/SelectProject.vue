@@ -12,16 +12,16 @@
 </template>
 
 <script lang="ts" setup>
-import { SelectProps } from 'naive-ui';
 import colors from '~~/tailwind.colors';
-import { useDataStore } from '~~/stores/data';
+import { useI18n } from 'vue-i18n';
 
+const $i18n = useI18n();
 const dataStore = useDataStore();
 const router = useRouter();
 const componentSelectKey = ref(0);
 const loading = ref(false);
 
-type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>;
+type SelectThemeOverrides = NonNullable<NSelectProps['themeOverrides']>;
 const SelectProjectOverrides: SelectThemeOverrides = {
   peers: {
     InternalSelection: {
@@ -36,7 +36,7 @@ const SelectProjectOverrides: SelectThemeOverrides = {
 
 onBeforeMount(() => {
   if (!dataStore.hasProjects) {
-    dataStore.promises.projects = dataStore.getProjects();
+    dataStore.promises.projects = dataStore.getProjects(false, $i18n);
   }
 });
 
@@ -49,7 +49,7 @@ watch(
       loading.value = true;
       dataStore.projects = [];
 
-      await dataStore.getProjects();
+      await dataStore.getProjects(false, $i18n);
 
       setTimeout(() => {
         loading.value = false;

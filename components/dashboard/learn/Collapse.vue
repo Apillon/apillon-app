@@ -76,18 +76,13 @@ async function getInstruction(key: string) {
 
   try {
     const params = { instructionEnum: key };
-    const { data, error } = await $api.get<InstructionResponse>(endpoints.instruction, params);
+    const res = await $api.get<InstructionResponse>(endpoints.instruction, params);
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      return;
-    }
-
-    if (data.data) {
-      dataStore.instruction[key] = data.data;
+    if (res.data) {
+      dataStore.instruction[key] = res.data;
     }
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
+    message.error(userFriendlyMsg(error, $i18n));
   }
 }
 async function getInstructions(key: string) {
@@ -97,18 +92,13 @@ async function getInstructions(key: string) {
 
   try {
     const params = { forRoute: key };
-    const { data, error } = await $api.get<InstructionsResponse>(endpoints.instruction, params);
+    const res = await $api.get<InstructionsResponse>(endpoints.instruction, params);
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      return;
-    }
-
-    if (data.data) {
-      dataStore.instructions[key] = data.data.items;
+    if (res.data) {
+      dataStore.instructions[key] = res.data.items;
     }
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
+    message.error(userFriendlyMsg(error, $i18n));
   }
 }
 </script>

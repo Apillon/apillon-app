@@ -78,34 +78,27 @@ function handleSubmit(e: MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
-      await updateUserProfile();
+      await updateProjectData();
     }
   });
 }
-async function updateUserProfile() {
+async function updateProjectData() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.patch<ProjectSettingsResponse>(
-      `${endpoints.project}/${dataStore.currentProjectId}`,
+    const res = await $api.patch<ProjectSettingsResponse>(
+      `${endpoints.project}${dataStore.currentProjectId}`,
       formData.value
     );
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
+    if (res.data) {
+      dataStore.updateCurrentProject(res.data);
     }
-
-    if (data.data) {
-      dataStore.updateCurrentProject(data.data);
-    }
-    loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

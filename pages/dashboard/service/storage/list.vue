@@ -28,8 +28,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useDataStore } from '~~/stores/data';
+import { useI18n } from 'vue-i18n';
 
+const $i18n = useI18n();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 
@@ -42,34 +43,20 @@ onMounted(() => {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
       getServicesStorage();
       getBuckets();
+      pageLoading.value = false;
     });
   }, 500);
 });
 
 async function getServicesStorage() {
-  if (!dataStore.currentProject) {
-    console.warn('No project selected');
-    setTimeout(() => (pageLoading.value = false), 300);
-    return;
-  } else if (Array.isArray(dataStore.services.storage) && dataStore.services.storage.length > 0) {
-    setTimeout(() => (pageLoading.value = false), 300);
-    return;
+  if (!dataStore.hasServices(ServiceType.STORAGE)) {
+    await dataStore.getStorageServices($i18n);
   }
-  dataStore.services.storage = await dataStore.getServices(ServiceType.STORAGE);
-
-  setTimeout(() => (pageLoading.value = false), 300);
 }
 
 async function getBuckets() {
-  if (!dataStore.currentProject) {
-    console.warn('No project selected');
-    return;
-  } else if (Array.isArray(dataStore.services.bucket) && dataStore.services.bucket.length > 0) {
-    return;
+  if (!dataStore.hasServices(ServiceType.BUCKET)) {
+    await dataStore.getBuckets();
   }
-
-  await dataStore.getBuckets();
-
-  setTimeout(() => (pageLoading.value = false), 300);
 }
 </script>

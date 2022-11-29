@@ -1,5 +1,6 @@
 import { useMessage } from 'naive-ui';
 import { defineStore } from 'pinia';
+import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
@@ -8,19 +9,19 @@ export const DataLsKeys = {
 export const useDataStore = defineStore('data', {
   state: () => ({
     currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
-      ? parseInt(localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID))
+      ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
       : 0,
     projects: [] as Array<ProjectInterface>,
     services: {
-      authentication: [],
-      bucket: [],
-      storage: [],
-      computing: [],
-    },
+      authentication: [] as Array<ServiceInterface>,
+      storage: [] as Array<ServiceInterface>,
+      bucket: [] as Array<BucketInterface>,
+      computing: [] as Array<ServiceInterface>,
+    } as Record<ServiceTypeName, any>,
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
     promises: {
-      projects: null,
+      projects: null as any,
     },
   }),
   getters: {
@@ -28,17 +29,14 @@ export const useDataStore = defineStore('data', {
       if (!this.hasProjects) {
         return null;
       }
-      /** Select first project as fallback if project is not selected */
-      if (state.currentProjectId === 0) {
-        this.setCurrentProject(state.projects[0].id);
-      }
       /** Return project with currentProjectId, if this ID does not exists, return first project */
       const project = state.projects.find(project => project.id === state.currentProjectId);
       if (project) {
         return project;
       }
       /** Select first project as fallback if currentProjectId is not available */
-      this.setCurrentProject(state.projects[0].id);
+      this.currentProjectId = state.projects[0].id;
+      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${this.currentProjectId}`);
       return state.projects[0];
     },
     hasProjects(state) {
@@ -70,19 +68,13 @@ export const useDataStore = defineStore('data', {
       return null;
     },
 
-    async getProjects(redirectToDashboard: boolean = false) {
+    async getProjects(redirectToDashboard: boolean = false, $i18n: any = null) {
       const message = useMessage();
       const router = useRouter();
       try {
-        const { response, data, error } = await $api.get<ProjectResponse>(endpoints.userProjects);
+        const res = await $api.get<ProjectResponse>(endpoints.userProjects);
 
-        if (error) {
-          message.error(error.message);
-
-          this.projects = [];
-        }
-
-        this.projects = data.data.items.map((project: ProjectInterface) => {
+        this.projects = res.data.items.map((project: ProjectInterface) => {
           return {
             ...project,
             value: project.id,
@@ -102,61 +94,76 @@ export const useDataStore = defineStore('data', {
           router.push({ name: 'dashboard' });
         }
 
-        return response;
+        return res;
       } catch (error) {
-        message.error(error);
-        // message.error(t('error.API'));
+        this.projects = [];
+        message.error(userFriendlyMsg(error, $i18n));
       }
       return null;
     },
 
-    async getServices(type: number) {
+    hasServices(type: number) {
+      const key: ServiceTypeName = ServiceTypeNames[type];
+      return Array.isArray(this.services[key]) && this.services[key].length > 0;
+    },
+
+    async getServices(type: number, $i18n: any = null) {
+      if (!this.hasProjects) {
+        alert('Please create your first project');
+        return [] as Array<ServiceInterface>;
+      }
+
       const message = useMessage();
       try {
         const params = {
           project_id: this.currentProjectId,
           serviceType_id: type,
         };
-        const { data, error } = await $api.get<ServicesResponse>(endpoints.services, params);
+        const res = await $api.get<ServicesResponse>(endpoints.services, params);
 
-        if (error) {
-          message.error(error.message);
-          return [];
-        }
-
-        return data.data.items.map((service: ServicesInterface, key: number) => {
+        return res.data.items.map((service: ServiceInterface, key: number) => {
           return { key, ...service };
         });
-      } catch (error) {
-        message.error(error);
+      } catch (error: any) {
+        message.error(userFriendlyMsg(error, $i18n));
       }
+      return [] as Array<ServiceInterface>;
     },
 
-    async getBuckets() {
+    async getAuthServices($i18n: any = null) {
+      this.services.authentication = await this.getServices(ServiceType.AUTHENTICATION, $i18n);
+    },
+    async getStorageServices($i18n: any = null) {
+      this.services.storage = await this.getServices(ServiceType.STORAGE, $i18n);
+    },
+    async getComputingServices($i18n: any = null) {
+      this.services.computing = await this.getServices(ServiceType.COPMUTING, $i18n);
+    },
+
+    async getBuckets($i18n: any = null) {
+      if (!this.hasProjects) {
+        alert('Please create your first project');
+        return;
+      }
+
       const message = useMessage();
       try {
         const params = {
-          project_uuid: this.currentProject.project_uuid,
+          project_uuid: this.currentProject?.project_uuid || '',
         };
-        const { data, error } = await $api.get<BucketResponse>(endpoints.bucket, params);
+        const res = await $api.get<BucketResponse>(endpoints.bucket, params);
 
-        if (error) {
-          message.error(error.message);
-          this.services.bucket = [];
-        }
-
-        this.services.bucket = data.data.items.map((bucket: BucketInterface) => {
+        this.services.bucket = res.data.items.map((bucket: BucketInterface) => {
           return {
             ...bucket,
-            sizeMb: kbToMb(bucket.size),
+            sizeMb: kbToMb(bucket.size || 0),
             maxSizeMb: kbToMb(bucket.maxSize),
-            percentage: storagePercantage(bucket.size, bucket.maxSize),
+            percentage: storagePercantage(bucket.size || 0, bucket.maxSize),
           };
         });
-      } catch (error) {
+      } catch (error: any) {
         this.services.bucket = [];
-        message.error(error);
-        // message.error(t('error.API'));
+        message.error(userFriendlyMsg(error, $i18n));
       }
     },
   },

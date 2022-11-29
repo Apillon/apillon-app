@@ -35,13 +35,7 @@ async function walletConnect(connector = ProviderConnectors.METAMASK) {
   }
 
   try {
-    const res = await $api.get<WalletResponse>(endpoints.walletMsg, null);
-
-    if (res.error) {
-      message.error(userFriendlyMsg($i18n, res.error));
-      loading.value = false;
-      return;
-    }
+    const res = await $api.get<WalletResponse>(endpoints.walletMsg);
 
     const timestamp = res.data.timestamp;
     if (!!res.data.message && !!res.data.timestamp) {
@@ -50,20 +44,15 @@ async function walletConnect(connector = ProviderConnectors.METAMASK) {
       console.debug('signature', userAccount.value);
 
       if (signature) {
-        const res = await $api.post<{ authToken }>(endpoints.loginWallet, {
+        const res = await $api.post<WalletLoginResponse>(endpoints.loginWallet, {
           wallet: userAccount.value,
           signature,
           timestamp,
         });
 
-        if (res.error) {
-          message.error(userFriendlyMsg($i18n, res.error));
-          loading.value = false;
-          return;
-        }
         const { authToken } = res.data;
-        if (authToken && authToken.data) {
-          await authStore.setUserToken(authToken.data);
+        if (authToken) {
+          await authStore.setUserToken(authToken);
           router.push({ name: 'profile' });
         }
       } else {
@@ -72,7 +61,6 @@ async function walletConnect(connector = ProviderConnectors.METAMASK) {
     }
   } catch (e) {
     message.error($i18n.t('error.walletSignature'));
-    console.error(e);
   }
 
   loading.value = false;

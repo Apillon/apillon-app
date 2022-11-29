@@ -11,9 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { SelectProps } from 'naive-ui';
-
-type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>;
+type SelectThemeOverrides = NonNullable<NSelectProps['themeOverrides']>;
 const SelectRoleOverrides: SelectThemeOverrides = {
   peers: {
     InternalSelection: {

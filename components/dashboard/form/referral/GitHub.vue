@@ -58,7 +58,7 @@ function handleSubmit(e: MouseEvent) {
   const message = useMessage();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       // await connectTwitter();
     }

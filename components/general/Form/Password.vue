@@ -134,7 +134,7 @@ function handleSubmit(e: MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (props.resetPassword) {
       await resetPassword();
     } else {
@@ -146,26 +146,19 @@ async function register() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<RegisterResponse>(endpoints.register, {
+    const res = await $api.post<RegisterResponse>(endpoints.register, {
       ...formData.value,
       token: query.token || authStore.jwt,
     });
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
-
-    authStore.setUserToken(data.data.token);
+    authStore.setUserToken(res.data.token);
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-    await dataStore.getProjects(true);
-    loading.value = false;
+    await dataStore.getProjects(true, $i18n);
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 async function resetPassword() {
   if (props.token) {
@@ -175,24 +168,18 @@ async function resetPassword() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
+    const res = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
       ...formData.value,
       token: props.token,
     });
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
-    if (data) {
+    if (res.data) {
       message.success($i18n.t('login.passwordReplaced'));
       emit('submitSuccess');
     }
-    loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

@@ -76,15 +76,16 @@ class Api {
     APISettings.headers.delete('Authorization');
   }
 
-  isUnauthorized(status: number) {
-    return status === 401;
-  }
-
   backToLogin() {
     const authStore = useAuthStore();
     authStore.logout();
     const router = useRouter();
     router.push({ name: 'login' });
+  }
+
+  preventForbiddenAccess() {
+    const router = useRouter();
+    router.push({ name: 'dashboard-error' });
   }
 
   onRequest(request: Request | any) {
@@ -97,17 +98,21 @@ class Api {
 
   async onResponse<T>(response: Response) {
     if (response.status > 250) {
-      const errorData: ApiOriginalError = await response.json();
-      console.log(errorData);
+      const error: ApiError = await response.json();
 
-      if (this.isUnauthorized(response.status)) {
-        console.log(response);
+      if (!error.code) {
+        error.code = response.status;
       }
 
-      const error = new Error(`API Error - ${errorData.message}`) as ApiError;
-
-      error.code = errorData.code as number;
-      error.data = errorData;
+      /** Unauthorized or session expired */
+      if (
+        (response.status === 401 && error.message !== UserError.USER_INVALID_LOGIN) ||
+        (response.status === 500 && error.message === UserError.JWT_TOKEN_EXPIRED)
+      ) {
+        // this.backToLogin();
+      } else if (response.status === 403) {
+        this.preventForbiddenAccess();
+      }
 
       throw error;
     }

@@ -2,6 +2,9 @@ import stg from '../config/staging';
 import dev from '../config/development';
 import prod from '../config/production';
 import local from '../config/local';
+import { Feature } from '~~/types/config';
+import { useI18n } from 'vue-i18n';
+import i18n from '~~/plugins/i18n';
 
 export function getAppConfig(env?: string) {
   if (!env) {
@@ -53,7 +56,7 @@ export function validateRequiredCheckbox(_: NFormItemRule, value: boolean | null
  *  Date and time functions
  */
 /** Time to days and hours */
-export function timeToDays(time: String) {
+export function timeToDays(time: String): string {
   if (!time) return;
 
   const [d, h, s] = time.split(':');
@@ -77,46 +80,50 @@ export function timeToDays(time: String) {
 }
 
 /** Storage calculations */
-export function kbToMb(kb: number) {
+export function kbToMb(kb: number): number {
   if (!+kb) return 0;
   return parseFloat(((kb / Math.pow(1024, 2)) * 1000).toFixed(0));
 }
 
-export function storagePercantage(size: number, maxSize: number) {
+export function storagePercantage(size: number, maxSize: number): string {
   return ((size / maxSize) * 100).toFixed(0);
 }
 
 /**
  * Error messages
  */
-export function userFriendlyMsg($i18n: any, error: ApiErrorResponse | ReferenceError | TypeError | any) {
+export function userFriendlyMsg(
+  error: ApiError | ReferenceError | TypeError | any,
+  $i18n: any = null
+) {
   // Check error exists and if translation is included
-  if (!$i18n || !$i18n.te('error.API') || !$i18n.t('error.API') || !error) {
+  if (!$i18n || !($i18n instanceof Object) || !error) {
+    if (error instanceof ReferenceError || error instanceof TypeError) {
+      return error.message;
+    }
     return 'Internal server error';
   }
+
   // Check error type
-  if (error instanceof ReferenceError) {
-    return error.message;
-  } else if (error instanceof TypeError) {
+  if (instanceOfApiError(error)) {
+    // Beautify API error
+    const err = error as ApiError;
+    if (err.errors && Array.isArray(err.errors)) {
+      return err.errors
+        .map(e => singleErrorMessage($i18n, e.message, takeFirstDigitsFromNumber(e.statusCode)))
+        .join(', ');
+    } else if (err.message) {
+      return singleErrorMessage($i18n, err.message, err.status);
+    }
+  } else if (error instanceof ReferenceError || error instanceof TypeError) {
     return $i18n.te(`error.${error.message}`) ? $i18n.t(`error.${error.message}`) : error.message;
-  } else if (!instanceOfApiError(error)) {
-    return $i18n.t('error.API');
   }
 
-  // Beautify API error
-  const err = error as ApiErrorResponse;
-  if (err.errors && Array.isArray(err.errors)) {
-    return err.errors
-      .map(e => singleErrorMessage($i18n, e.message, takeFirstDigitsFromNumber(e.statusCode)))
-      .join(', ');
-  } else if (err.message) {
-    return singleErrorMessage($i18n, err.message, err.status);
-  }
   return $i18n.t('error.API');
 }
 
 /** Translate single error message */
-function singleErrorMessage($i18n, message: string, code: number = 0) {
+function singleErrorMessage($i18n: any, message: string, code: number = 0) {
   if ($i18n.te(`error.${message}`)) {
     return $i18n.t(`error.${message}`);
   } else if (code >= 500) {
@@ -127,9 +134,9 @@ function singleErrorMessage($i18n, message: string, code: number = 0) {
   return $i18n.t('error.API');
 }
 
-/** Check if object is instance of ApiErrorResponse  */
-function instanceOfApiError(object: any): object is ApiErrorResponse {
-  return 'status' in object && ('errors' in object || 'message' in object);
+/** Check if object is instance of ApiError  */
+function instanceOfApiError(object: any): object is ApiError {
+  return ('code' in object || 'status' in object) && ('errors' in object || 'message' in object);
 }
 
 /** statusCode to HTTP code */
@@ -138,7 +145,7 @@ function takeFirstDigitsFromNumber(num: number, numOfDigits: number = 3): number
 }
 
 /** Feature flags - check if feature is enabled */
-export function isFeatureEnabled(feature: string): boolean {
+export function isFeatureEnabled(feature: Feature): boolean {
   const config = useRuntimeConfig();
   return config.public.features[feature] || false;
 }

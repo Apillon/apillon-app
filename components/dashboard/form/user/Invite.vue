@@ -113,7 +113,7 @@ function handleSubmit(e: MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       // await inviteUser();
     }
@@ -123,25 +123,16 @@ async function inviteUser() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<UserInviteResponse>(
-      endpoints.validateMail,
-      formData.value
-    );
-
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
+    const res = await $api.post<UserInviteResponse>(endpoints.validateMail, formData.value);
 
     // TODO
-    if (data.data) {
-      console.log(data);
+    if (res.data) {
+      console.log(res.data);
     }
     loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

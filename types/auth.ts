@@ -113,7 +113,16 @@ declare global {
    * Wallet
    */
   export interface WalletResponse {
-    message: string;
-    timestamp: number;
+    data: {
+      message: string;
+      timestamp: number;
+    };
+    status: number;
+  }
+  export interface WalletLoginResponse {
+    data: {
+      authToken: string;
+    };
+    status: number;
   }
 }

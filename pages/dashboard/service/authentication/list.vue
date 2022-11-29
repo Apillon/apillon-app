@@ -25,8 +25,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useDataStore } from '~~/stores/data';
+import { useI18n } from 'vue-i18n';
 
+const $i18n = useI18n();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 
@@ -42,11 +43,9 @@ onMounted(() => {
 });
 
 async function getServicesAuth() {
-  if (!dataStore.currentProject) {
-    console.warn('No project selected');
-    return;
+  if (!dataStore.hasServices(ServiceType.AUTHENTICATION)) {
+    await dataStore.getAuthServices($i18n);
   }
-  dataStore.services.authentication = await dataStore.getServices(ServiceType.AUTHENTICATION);
-  setTimeout(() => (pageLoading.value = false), 300);
+  pageLoading.value = false;
 }
 </script>
