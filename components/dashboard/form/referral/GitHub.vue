@@ -33,7 +33,6 @@
 import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
-const message = useMessage();
 const $i18n = useI18n();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -56,6 +55,7 @@ const rules: NFormRules = {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
+  const message = useMessage();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
