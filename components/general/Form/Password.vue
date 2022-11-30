@@ -175,7 +175,7 @@ async function resetPassword() {
 
   try {
     const { data, error } = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
-      ...formData.value,
+      password: formData.value.password,
       token: props.token,
     });
 
