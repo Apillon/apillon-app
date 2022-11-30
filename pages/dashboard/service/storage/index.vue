@@ -1,7 +1,20 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <BannerStorage />
+      <!-- Banner for storage if project hasb't got any services -->
+      <BannerStorage v-if="!dataStore.hasServices(ServiceType.STORAGE)" />
+
+      <!-- Basic title -->
+      <n-space v-else justify="space-between" align="center">
+        <n-space size="large" align="center">
+          <h4 class="mr-">{{ $t('nav.storage') }}</h4>
+          <div class="w-[1px] h-[13px] bg-grey"></div>
+          <a href="#learn-more">{{ $t('general.learnMore') }}</a>
+        </n-space>
+        <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
+          <n-button type="primary">{{ $t('storage.newBucket') }}</n-button>
+        </nuxt-link>
+      </n-space>
     </template>
     <template #learn>
       <LearnAlert>
@@ -12,20 +25,26 @@
       <LearnCollapse />
     </template>
     <slot>
-      <h5 class="mb-8">{{ $t('nav.storage') }}</h5>
-      <div class="flex flex-col md:flex-row items-center justify-between bg-grey-lightBg px-6 py-4">
-        <div class="mb-4 md:mb-0">
-          <p class="body-md font-bold">Your project currently has no active service</p>
-          <p class="body-sm">
-            First attach a desired service and configure it, then start building.
-          </p>
+      <TableBucket v-if="dataStore.hasServices(ServiceType.BUCKET)" />
+      <TableStorage v-if="dataStore.hasServices(ServiceType.STORAGE)" />
+      <template v-else>
+        <h5 class="mb-8">{{ $t('nav.storage') }}</h5>
+        <div
+          class="flex flex-col md:flex-row items-center justify-between bg-grey-lightBg px-6 py-4"
+        >
+          <div class="mb-4 md:mb-0">
+            <p class="body-md font-bold">Your project currently has no active service</p>
+            <p class="body-sm">
+              First attach a desired service and configure it, then start building.
+            </p>
+          </div>
+          <div>
+            <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
+              <Btn type="primary"> Add new bucket</Btn>
+            </nuxt-link>
+          </div>
         </div>
-        <div>
-          <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
-            <Btn type="primary"> Add new bucket</Btn>
-          </nuxt-link>
-        </div>
-      </div>
+      </template>
     </slot>
   </Dashboard>
 </template>
@@ -42,8 +61,11 @@ useHead({
 });
 
 onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(_ => {
-    getServicesStorage();
+  Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    await getServicesStorage();
+    await getBuckets();
+
+    pageLoading.value = false;
   });
 });
 
@@ -51,6 +73,10 @@ async function getServicesStorage() {
   if (!dataStore.hasServices(ServiceType.STORAGE)) {
     await dataStore.getStorageServices($i18n);
   }
-  pageLoading.value = false;
+}
+async function getBuckets() {
+  if (!dataStore.hasServices(ServiceType.BUCKET)) {
+    await dataStore.getBuckets($i18n);
+  }
 }
 </script>

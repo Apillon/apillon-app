@@ -68,7 +68,7 @@ watch(
 
 <style lang="postcss">
 .n-select.select-project {
-  @apply font-button min-w-[120px];
+  @apply min-w-[120px];
 
   .n-base-selection-label {
     background-color: transparent;

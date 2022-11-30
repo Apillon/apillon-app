@@ -1,5 +1,10 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="data" :row-props="rowProps" />
+  <n-data-table
+    :bordered="false"
+    :columns="columns"
+    :data="dataStore.services.bucket"
+    :row-props="rowProps"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -7,7 +12,7 @@ import { NButton, NDropdown, useMessage } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const router = useRouter();
@@ -17,21 +22,17 @@ interface RowData extends BucketInterface {
   key: number;
 }
 
-const createColumns = ({
-  handleSelect,
-}: {
-  handleSelect: (key: string | number) => void;
-}): DataTableColumns<RowData> => {
+const createColumns = (): DataTableColumns<RowData> => {
   return [
     {
-      title: t('storage.bucketName'),
+      title: $i18n.t('storage.bucketName'),
       key: 'name',
       render(row) {
         return h('span', { class: 'ml-2 text-blue' }, row.name);
       },
     },
     {
-      title: t('storage.usage'),
+      title: $i18n.t('storage.usage'),
       key: 'serviceType',
       render(row) {
         return h(
@@ -46,15 +47,15 @@ const createColumns = ({
       },
     },
     {
-      title: t('storage.traffic'),
+      title: $i18n.t('storage.traffic'),
       key: 'traffic',
     },
     {
-      title: t('storage.visits'),
+      title: $i18n.t('storage.visits'),
       key: 'visits',
     },
     {
-      title: t('general.actions'),
+      title: $i18n.t('general.actions'),
       key: 'actions',
       align: 'right',
       className: '!py-0',
@@ -64,7 +65,6 @@ const createColumns = ({
           {
             options: dropdownOptions,
             trigger: 'click',
-            onSelect: handleSelect,
           },
           {
             default: () =>
@@ -79,38 +79,20 @@ const createColumns = ({
     },
   ];
 };
-const createData = (): RowData[] => dataStore.services.bucket;
+const columns = createColumns();
 const currentRow = ref<RowData | null>(null);
 
-const data = createData();
-const columns = createColumns({
-  handleSelect(key: string | number) {
-    message.info(
-      () =>
-        h('span', {}, [
-          'Handle',
-          h('strong', { class: 'text-white' }, 'Select'),
-          JSON.stringify(key),
-          JSON.stringify(currentRow.value),
-        ]),
-      {
-        icon: () => h('span', { class: 'icon-info' }, {}),
-      }
-    );
-  },
-});
-
-function rowProps(row: RowData) {
+const rowProps = (row: RowData) => {
   return {
     onClick: () => {
       currentRow.value = row;
     },
   };
-}
+};
 
 const dropdownOptions = [
   {
-    label: t('storage.edit'),
+    label: $i18n.t('storage.edit'),
     key: 'storageEdit',
     props: {
       onClick: () => {
@@ -119,7 +101,7 @@ const dropdownOptions = [
     },
   },
   {
-    label: t('storage.delete'),
+    label: $i18n.t('storage.delete'),
     key: 'storage.delete',
     props: {
       onClick: () => {
@@ -130,4 +112,21 @@ const dropdownOptions = [
     },
   },
 ];
+
+/**
+ * Load data on mounted
+ */
+onMounted(() => {
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      getBuckets();
+    });
+  }, 100);
+});
+
+async function getBuckets() {
+  if (!dataStore.hasServices(ServiceType.BUCKET)) {
+    await dataStore.getBuckets($i18n);
+  }
+}
 </script>

@@ -18,7 +18,9 @@
     }
   }
   &.quaternary:not(.n-button--disabled):hover,
-  &:not(.n-button--disabled):hover .icon-more {
+  &.quaternary:not(.n-button--disabled):focus,
+  &:not(.n-button--disabled):hover .icon-more,
+  &:not(.n-button--disabled):focus .icon-more {
     @apply text-dark;
   }
 }

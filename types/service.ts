@@ -104,7 +104,7 @@ declare global {
     IPNS: string | null;
     sizeMb?: number;
     maxSizeMb?: number;
-    percentage?: string;
+    percentage?: number;
   }
 
   interface FormNewBucket {

@@ -1,9 +1,9 @@
+import { useI18n } from 'vue-i18n';
 import stg from '../config/staging';
 import dev from '../config/development';
 import prod from '../config/production';
 import local from '../config/local';
 import { Feature } from '~~/types/config';
-import { useI18n } from 'vue-i18n';
 import i18n from '~~/plugins/i18n';
 
 export function getAppConfig(env?: string) {
@@ -85,8 +85,8 @@ export function kbToMb(kb: number): number {
   return parseFloat(((kb / Math.pow(1024, 2)) * 1000).toFixed(0));
 }
 
-export function storagePercantage(size: number, maxSize: number): string {
-  return ((size / maxSize) * 100).toFixed(0);
+export function storagePercantage(size: number, maxSize: number): number {
+  return parseInt(((size / maxSize) * 100).toFixed(0));
 }
 
 /**

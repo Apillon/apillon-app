@@ -13,9 +13,6 @@
     </template>
     <slot>
       <FormStorageNew class="max-w-[520px]" />
-      <nuxt-link :to="{ name: 'dashboard-service-storage-list' }">
-        <n-button type="primary">{{ $t('storage.list') }}</n-button>
-      </nuxt-link>
     </slot>
   </Dashboard>
 </template>
