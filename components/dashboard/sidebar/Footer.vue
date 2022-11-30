@@ -5,7 +5,7 @@
         <strong>{{ $t('dashboard.yourPlan') }}</strong>
         <span>Free plan</span>
       </p>
-      <Btn type="secondary" size="small">
+      <Btn type="secondary">
         <strong>Upgrade to PRO</strong>
       </Btn>
     </template>

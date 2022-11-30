@@ -13,9 +13,9 @@
       <n-h5 prefix="bar">{{ $t('project.owner') }}</n-h5>
       <TableProjectOwner />
       <div class="text-right">
-        <n-button type="primary" quaternary>
+        <Btn type="builders">
           {{ $t('dashboard.manageRoles') }}
-        </n-button>
+        </Btn>
       </div>
 
       <!-- Delete project -->

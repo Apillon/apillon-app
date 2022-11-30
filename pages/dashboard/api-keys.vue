@@ -19,9 +19,9 @@
       <TableSecrets />
       <div class="text-right">
         <NuxtLink to="credentials">
-          <n-button type="primary" quaternary>
+          <Btn type="builders">
             {{ $t('dashboard.goToApiManagement') }}
-          </n-button>
+          </Btn>
         </NuxtLink>
       </div>
     </slot>
