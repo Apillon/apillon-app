@@ -8,6 +8,7 @@
     :type="!href && !to ? 'primary' : ''"
     :size="size"
     :ghost="type === 'secondary' ? true : false"
+    :quaternary="quaternary || type === 'builders' ? true : false"
     @click="onClick"
   >
     <span v-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -28,7 +29,7 @@ const props = defineProps({
 
   type: {
     type: String,
-    validator: (value: string) => ['primary', 'secondary', 'link'].includes(value),
+    validator: (value: string) => ['primary', 'secondary', 'builders', 'link'].includes(value),
     default: 'primary',
   },
   size: {
@@ -40,6 +41,7 @@ const props = defineProps({
   ridged: { type: Boolean, default: false }, // Add ridge border effect instead of solid color
   borderless: { type: Boolean, default: false },
   faded: { type: Boolean, default: false }, // greyed out
+  quaternary: { type: Boolean, default: false },
 });
 const emit = defineEmits(['click']);
 
@@ -54,13 +56,14 @@ const btnClass = computed(() => {
   return [
     props.type === 'link' ? 'font-content' : 'font-button',
     {
-      'py-2': props.type !== 'link',
-      'px-2 w-full': props.type !== 'link' && props.size === 'large',
+      'w-full': props.type !== 'link' && props.size === 'large',
       'text-primary': props.type === 'link',
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,
       'opacity-60': props.disabled,
-      'hover-bounce': !props.href && !props.to && props.type !== 'link',
+      'hover-bounce':
+        !props.href && !props.to && props.type !== 'link' && props.type !== 'builders',
+      quaternary: props.quaternary || props.type === 'builders',
       locked: isBtnLocked.value,
     },
   ];

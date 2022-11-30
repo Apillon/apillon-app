@@ -43,24 +43,26 @@
 /**
  * Animation - new
 */
-.icon-new {
-  animation: colorsNew 0.3s infinite;
+.icon-new,
+.icon-wow,
+.icon-soon {
+  animation: randomColor 0.3s infinite;
 
-  &.animation-new-0 {
-    animation: colorsNew 0.3s infinite;
+  &.random-color-0 {
+    animation: randomColor 0.3s infinite;
   }
-  &.animation-new-1 {
-    animation: colorsNew 0.5s infinite;
+  &.random-color-1 {
+    animation: randomColor 0.5s infinite;
   }
-  &.animation-new-2 {
-    animation: colorsNew 1s infinite;
+  &.random-color-2 {
+    animation: randomColor 1s infinite;
   }
-  &.animation-new-3 {
-    animation: colorsNew 2s infinite;
+  &.random-color-3 {
+    animation: randomColor 2s infinite;
   }
 }
 
-@keyframes colorsNew {
+@keyframes randomColor {
   0%,
   33% {
     color: theme('colors.blue');

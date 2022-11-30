@@ -14,7 +14,7 @@
 
       <div
         v-if="isLogin || isSignUp"
-        class="relative w-full md:w-1/2 md:min-w-[50%] md:max-w-[490px] lg:min-w-[490px] order-2"
+        class="relative w-full md:w-1/2 md:min-w-[50%] md:max-w-[522px] lg:min-w-[522px] order-2"
       >
         <slot />
       </div>
