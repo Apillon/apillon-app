@@ -18,7 +18,7 @@
           ></span>
         </div>
       </div>
-      <div class="hidden md:flex flex-col min-w-[120px] pr-1">
+      <div class="hidden md:flex flex-col justify-center min-w-[120px] pr-1">
         <strong v-if="authStore.username">{{ authStore.username }}</strong>
         <strong v-else>{{ authStore.email }}</strong>
         <span v-if="authStore.wallet" class="text-grey">

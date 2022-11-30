@@ -2,7 +2,7 @@
   <Dashboard :loading="pageLoading">
     <template #heading>
       <n-space align="center" :size="32" class="-mb-4">
-        <span>{{ `<-` }}</span>
+        <span class="icon-back"></span>
         <h4>{{ $t('storage.bucketManagement') }}</h4>
         <Notification type="success">
           <span class="text-green">

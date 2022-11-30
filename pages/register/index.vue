@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="text-center sm:text-left">{{ $t('signup.title') }}</h2>
-    <p class="text-grey-bright mb-5">{{ $t('signup.description') }}</p>
+    <p class="text-grey-bright mb-10">{{ $t('signup.description') }}</p>
 
     <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER)">
       <Btn type="secondary" class="w-full">

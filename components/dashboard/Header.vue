@@ -3,7 +3,7 @@
     <div class="px-4 sm:px-8 py-2 bg-dark">
       <div class="flex justify-between items-center">
         <div class="flex items-center pr-4">
-          <!-- Hamburder btn to show sidebar on mobile -->
+          <!-- Hamburger btn to show sidebar on mobile -->
           <BtnHamburger class="flex lg:hidden mr-4" @click="emit('toggleSidebar')" />
 
           <!-- Projects dropdown -->

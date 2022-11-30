@@ -14,7 +14,7 @@
   h2 {
     @apply font-heading font-black;
     font-size: 2.5rem;
-    line-height: 1.5;
+    line-height: 1.22;
 
     @screen md {
       font-size: 3.5rem;

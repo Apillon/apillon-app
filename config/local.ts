@@ -15,7 +15,7 @@ const config: ConfigInterface = {
     INSTRUCTIONS: true,
     MAGIC_LINK: true,
     MONITORING: true,
-    ONBOARDING: false,
+    ONBOARDING: true,
     PROJECT: true,
     PROJECT_ON_STARTUP: true,
     PROJECT_SETTINGS: true,

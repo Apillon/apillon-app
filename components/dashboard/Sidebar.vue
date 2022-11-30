@@ -26,7 +26,7 @@
 
           <!-- NEW PROJECT -->
           <div v-if="isFeatureEnabled(Feature.PROJECT)" class="text-center">
-            <Btn size="tiny" quaternary @click="showModalNewProject = true">
+            <Btn type="builders" size="tiny" @click="showModalNewProject = true">
               {{ $t('project.new') }}
             </Btn>
           </div>

@@ -28,7 +28,7 @@ const createColumns = ({
       render(row) {
         return h(
           'img',
-          { src: `./images/payment/${row.type}.svg`, width: 50, height: 35, alt: 'mastercard' },
+          { src: `/images/payment/${row.type}.svg`, width: 50, height: 35, alt: 'mastercard' },
           ''
         );
       },

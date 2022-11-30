@@ -26,7 +26,7 @@
         @input="handleCreditCardInput"
       >
         <template #suffix>
-          <Image src="./images/payment/mastercard.svg" :width="35" :height="24" alt="mastercard" />
+          <Image src="/images/payment/mastercard.svg" :width="35" :height="24" alt="mastercard" />
         </template>
       </n-input>
     </n-form-item>
