@@ -17,6 +17,10 @@
       color: transparent;
     }
   }
+  &.quaternary:not(.n-button--disabled):hover,
+  &:not(.n-button--disabled):hover .icon-more {
+    @apply text-dark;
+  }
 }
 
 /** Checkbox */

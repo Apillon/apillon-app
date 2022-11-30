@@ -13,13 +13,16 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
+const $i18n = useI18n();
 const authStore = useAuthStore();
 
 definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: 'SignUp - e-mail seccessfully confirmed',
+  title: $i18n.t('signup.emailConfirmed'),
 });
 
 onBeforeMount(() => {

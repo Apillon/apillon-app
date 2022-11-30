@@ -30,13 +30,18 @@
           <span class="ml-2 select-none">{{ $t(`nav.${item.name}`) }}</span>
           <span
             v-if="item.soon"
-            class="icon-new float-right text-blue text-2xl"
-            :class="`animation-new-${randomInteger(0, 3)}`"
-          ></span>
+            class="icon-soon float-right text-blue text-2xl"
+            :class="`random-color-${randomInteger(0, 3)}`"
+          >
+            <span class="path2"></span>
+            <span class="path3"></span>
+            <span class="path4"></span>
+            <span class="path5"></span>
+          </span>
           <span
             v-else-if="item.new"
             class="icon-new float-right text-blue text-2xl"
-            :class="`animation-new-${randomInteger(0, 3)}`"
+            :class="`random-color-${randomInteger(0, 3)}`"
           ></span>
         </component>
       </div>

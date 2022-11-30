@@ -89,7 +89,7 @@ async function updateUserProfile() {
 
   try {
     const { data, error } = await $api.patch<ProjectSettingsResponse>(
-      `${endpoints.project}/${dataStore.currentProjectId}`,
+      `${endpoints.project}${dataStore.currentProjectId}`,
       formData.value
     );
 

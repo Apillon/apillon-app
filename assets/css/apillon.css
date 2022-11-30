@@ -26,6 +26,35 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-soon:before {
+  content: '\e932';
+}
+.icon-soon .path2:before {
+  content: '\e935';
+  margin-left: -1.8828125em;
+  color: rgb(255, 255, 255);
+}
+.icon-soon .path3:before {
+  content: '\e936';
+  margin-left: -1.8828125em;
+  color: rgb(255, 255, 255);
+}
+.icon-soon .path4:before {
+  content: '\e937';
+  margin-left: -1.8828125em;
+  color: rgb(255, 255, 255);
+}
+.icon-soon .path5:before {
+  content: '\e938';
+  margin-left: -1.8828125em;
+  color: rgb(255, 255, 255);
+}
+.icon-wow:before {
+  content: '\e934';
+}
+.icon-back:before {
+  content: '\e933';
+}
 .icon-google:before {
   content: '\e931';
 }
