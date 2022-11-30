@@ -1,11 +1,11 @@
 <template>
-  <div class="relative h-screen pl-64">
+  <div ref="mainContentRef" class="relative h-screen lg:pl-64">
     <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="5000">
-      <Sidebar />
-      <Header />
-      <n-scrollbar class="bg-grey-dark" style="max-height: calc(100vh - 64px)">
-        <HeaderTabs />
-        <div ref="messageRef" class="relative py-7 pl-8 pr-10">
+      <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
+      <Header @toggleSidebar="toggleSidebar" />
+      <n-scrollbar class="bg-grey-dark" y-scrollable style="max-height: calc(100vh - 64px)">
+        <HeaderTabs v-if="routeName === 'index'" />
+        <div ref="messageRef" class="relative py-7 px-4 sm:px-8 lg:pr-10">
           <slot />
         </div>
         <!-- <CookieConsent /> -->
@@ -15,10 +15,58 @@
 </template>
 
 <script lang="ts" setup>
-import { NMessageProvider, NScrollbar } from 'naive-ui';
-import { disableBodyScroll } from 'body-scroll-lock';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
-disableBodyScroll(document);
-
+const { isLg } = useScreen();
 const messageRef = ref(null);
+const mainContentRef = ref<HTMLDivElement>(null);
+const showMobileSidebar = ref<boolean>(false);
+
+const route = useRoute();
+const routeName = computed(() => {
+  return route.name;
+});
+
+/**
+ * Enable/disable body scroll
+ */
+onMounted(() => {
+  disableBodyScroll(document);
+});
+
+onUnmounted(() => {
+  clearAllBodyScrollLocks(document);
+});
+
+/**
+ * Show/hide sidebar on mobile
+ */
+const { lengthX, lengthY } = useSwipe(mainContentRef, {
+  onSwipeEnd() {
+    if (
+      !isLg.value &&
+      Math.abs(lengthX.value) > 150 &&
+      Math.abs(lengthX.value) > Math.abs(lengthY.value)
+    ) {
+      /** Show sidebar if user swipe right otherwise close it   */
+      toggleSidebar(lengthX.value < 0);
+    }
+  },
+});
+
+/** Hide sidebar if user flip devcie in mobile view */
+watch(
+  () => isLg.value,
+  isLg => {
+    toggleSidebar(isLg);
+  }
+);
+
+function toggleSidebar(show?: boolean) {
+  if (show === undefined) {
+    showMobileSidebar.value = !showMobileSidebar.value;
+  } else {
+    showMobileSidebar.value = show;
+  }
+}
 </script>

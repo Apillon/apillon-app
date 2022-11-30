@@ -6,8 +6,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NAlert } from 'naive-ui';
-import colors from '../../../tailwind.colors';
+import colors from '~~/tailwind.colors';
 
 const alertLearnOverrides = {
   color: colors.transparent,

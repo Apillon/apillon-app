@@ -1,15 +1,17 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="data" />
+  <n-data-table :bordered="false" :columns="columns" :data="data" :row-props="rowProps" />
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDataTable, NDropdown, NTag, useMessage } from 'naive-ui';
-import type { DataTableColumns } from 'naive-ui';
+import { DataTableColumns, NButton, NDropdown, NTag, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
+import { timeToDays } from '~~/lib/utils';
+import { useDataStore } from '~~/stores/data';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const IconStatus = resolveComponent('IconStatus');
 
 type RowData = {
   key: number;
@@ -20,54 +22,60 @@ type RowData = {
 };
 
 const createColumns = ({
-  selectRow,
   handleSelect,
 }: {
-  selectRow: (row: RowData) => void;
   handleSelect: (key: string | number) => void;
 }): DataTableColumns<RowData> => {
   return [
     {
-      title: $i18n.t('general.serviceName'),
+      title: t('general.serviceName'),
       key: 'name',
+      render(row) {
+        return [
+          h(IconStatus, { active: row.active }, ''),
+          h('span', { class: 'ml-2 text-blue' }, row.serviceType),
+        ];
+      },
     },
     {
-      title: $i18n.t('general.serviceType'),
+      title: t('general.serviceType'),
       key: 'serviceType',
       render(row) {
         return h(
           'span',
           { class: 'text-grey' },
           {
-            default: () => [
-              h('span', { class: 'icon-authentication text-black' }, ''),
-              row.serviceType,
-            ],
+            default: () => row.serviceType,
           }
         );
       },
     },
     {
-      title: $i18n.t('general.status'),
+      title: t('general.status'),
       key: 'active',
       render(row) {
         return h(
           NTag,
-          { type: row.active ? 'success' : 'default' },
+          { type: row.active ? 'success' : 'default', round: true, bordered: false },
           {
-            default: () => (row.active ? $i18n.t('general.active') : $i18n.t('general.paused')),
+            default: () => (row.active ? t('general.active') : t('general.paused')),
           }
         );
       },
     },
     {
-      title: $i18n.t('general.uptime'),
+      title: t('general.uptime'),
       key: 'uptime',
+      render(row) {
+        return h('span', {}, { default: () => timeToDays(row.uptime) });
+      },
     },
     {
-      title: $i18n.t('general.actions'),
+      title: t('general.actions'),
       key: 'actions',
-      render(row) {
+      align: 'right',
+      className: '!py-0',
+      render() {
         return h(
           NDropdown,
           {
@@ -79,8 +87,8 @@ const createColumns = ({
             default: () =>
               h(
                 NButton,
-                { onClick: selectRow(row) },
-                { default: () => h('span', { class: 'icon-more' }, {}) }
+                { size: 'small', quaternary: true },
+                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
               ),
           }
         );
@@ -93,9 +101,6 @@ const currentRow = ref(null);
 
 const data = createData();
 const columns = createColumns({
-  selectRow(rowData: RowData) {
-    currentRow.value = rowData;
-  },
   handleSelect(key: string | number) {
     message.info(
       () =>
@@ -111,6 +116,15 @@ const columns = createColumns({
     );
   },
 });
+
+function rowProps(row: RowData) {
+  return {
+    onClick: () => {
+      console.log('rowProps');
+      currentRow.value = row.key;
+    },
+  };
+}
 
 const dropdownOptions = [
   {

@@ -1,19 +1,12 @@
 import { stringify } from 'query-string';
-import { getAppConfig } from './utils';
 
 export const APISettings = {
   headers: new Headers({
     Accept: 'application/json',
     'Content-Type': 'application/json',
   }),
-  basePath: removeLastSlash(getAppConfig().apiUrl),
+  basePath: '',
 };
-
-export interface ApiErrorResponse {
-  statusCode: number;
-  message: string;
-  error: any;
-}
 
 export const $api = {
   async post<T>(path: string, data?: any) {
@@ -25,17 +18,13 @@ export const $api = {
 
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+      if ($api.isUnauthorized(response.status)) {
         $api.backToLogin();
-        return {
-          response,
-        };
-      } else {
-        return {
-          error,
-          response,
-        };
       }
+      return {
+        error,
+        response,
+      };
     }
 
     return {
@@ -54,17 +43,13 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+      if ($api.isUnauthorized(response.status)) {
         $api.backToLogin();
-        return {
-          response,
-        };
-      } else {
-        return {
-          error,
-          response,
-        };
       }
+      return {
+        error,
+        response,
+      };
     }
 
     return {
@@ -81,17 +66,13 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+      if ($api.isUnauthorized(response.status)) {
         $api.backToLogin();
-        return {
-          response,
-        };
-      } else {
-        return {
-          error,
-          response,
-        };
       }
+      return {
+        error,
+        response,
+      };
     }
 
     return {
@@ -108,17 +89,13 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+      if ($api.isUnauthorized(response.status)) {
         $api.backToLogin();
-        return {
-          response,
-        };
-      } else {
-        return {
-          error,
-          response,
-        };
       }
+      return {
+        error,
+        response,
+      };
     }
 
     return {
@@ -134,22 +111,22 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if (error?.message === 'INSUFFICIENT_PERMISSIONS') {
+      if ($api.isUnauthorized(response.status)) {
         $api.backToLogin();
-        return {
-          response,
-        };
-      } else {
-        return {
-          error,
-          response,
-        };
       }
+      return {
+        error,
+        response,
+      };
     }
 
     return {
       response,
     };
+  },
+
+  setBaseUrl(baseUrl: string) {
+    APISettings.basePath = baseUrl;
   },
 
   setToken(token: string) {
@@ -160,12 +137,14 @@ export const $api = {
     APISettings.headers.delete('Authorization');
   },
 
-  async backToLogin() {
+  isUnauthorized(status: number) {
+    return status === 401;
+  },
+
+  backToLogin() {
+    const authStore = useAuthStore();
+    authStore.logout();
     const router = useRouter();
-    const { $alert } = useAlerts();
-    await $alert.error({
-      title: 'Your login token has expired, please login again.',
-    });
-    router.push('/auth');
+    router.push({ name: 'login' });
   },
 };

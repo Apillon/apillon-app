@@ -1,13 +1,20 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
-    <n-form-item path="serviceName" :label="$t('form.label.serviceName')">
+    <!--  Service name -->
+    <n-form-item
+      path="serviceName"
+      :label="$t('form.label.serviceName')"
+      :label-props="{ for: 'serviceName' }"
+    >
       <n-input
         v-model:value="formData.serviceName"
+        :input-props="{ id: 'serviceName' }"
         :placeholder="$t('form.placeholder.serviceName')"
       />
     </n-form-item>
     <n-tag :bordered="false" type="info" class="mb-8">Servicename.com/ </n-tag>
 
+    <!--  Service type -->
     <n-form-item path="networkTypes" :label="$t('form.label.networkType')">
       <n-radio-group v-model:value="formData.networkType" name="radiogroup">
         <n-space>
@@ -21,8 +28,10 @@
       </n-radio-group>
     </n-form-item>
 
+    <!--  Service submit -->
     <n-form-item>
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <input type="submit" class="hidden" :value="$t('form.login')" />
+      <Btn type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.createServiceAndContinue') }}
       </Btn>
     </n-form-item>
@@ -30,20 +39,8 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  NForm,
-  NFormItem,
-  NInput,
-  NRadioGroup,
-  NRadio,
-  NSpace,
-  NTag,
-  FormInst,
-  createDiscreteApi,
-  FormValidationError,
-} from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormService, CreateServiceResponse } from '~~/types/form';
 
 const props = defineProps({
   serviceType: {
@@ -56,15 +53,15 @@ const props = defineProps({
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
+const formRef = ref<NFormInst | null>(null);
+const message = useMessage();
 
 const formData = ref<FormService>({
   serviceName: null,
   networkType: false,
 });
 
-const rules = {
+const rules: NFormRules = {
   serviceName: [
     {
       required: true,
@@ -78,18 +75,18 @@ const rules = {
 const networkTypes = [
   {
     value: false,
-    label: $i18n.t('form.label.networkTypes.test'),
+    label: $i18n.t('form.networkTypes.test'),
   },
   {
     value: true,
-    label: $i18n.t('form.label.networkTypes.live'),
+    label: $i18n.t('form.networkTypes.live'),
   },
 ];
 
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
     } else {
@@ -101,28 +98,30 @@ async function createService() {
   loading.value = true;
 
   const bodyData = {
-    project_id: dataStore.currentProject.id,
+    project_id: dataStore.currentProjectId,
     serviceType_id: props.serviceType,
     name: formData.value.serviceName,
     active: 1,
     testNetwork: formData.value.networkType ? 0 : 1,
   };
-  console.log(props);
-  console.log(bodyData);
-  const { data, error } = await $api.post<CreateServiceResponse>(
-    ServiceEndpoint.services,
-    bodyData
-  );
 
-  if (error) {
-    message.error(error.message);
+  try {
+    const { data, error } = await $api.post<CreateServiceResponse>(endpoints.services, bodyData);
+
+    if (error) {
+      message.error(userFriendlyMsg($i18n, error));
+      loading.value = false;
+      return;
+    }
+
+    // TODO
+    if (data.data) {
+      console.log(data);
+    }
     loading.value = false;
-    return;
+  } catch (error) {
+    message.error(userFriendlyMsg($i18n, error));
+    loading.value = false;
   }
-
-  if (data) {
-    console.log(data);
-  }
-  loading.value = false;
 }
 </script>

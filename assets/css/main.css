@@ -12,3 +12,18 @@ body {
     @apply absolute top-10;
   }
 }
+
+/* Change autfill styles:  */
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+textarea:autofill,
+textarea:autofill:hover,
+textarea:autofill:focus,
+select:autofill,
+select:autofill:hover,
+select:autofill:focus {
+  border: none;
+  -webkit-text-fill-color: theme('colors.primary');
+  -webkit-box-shadow: 0 0 0px 1000px theme('colors.grey.dark') inset;
+}

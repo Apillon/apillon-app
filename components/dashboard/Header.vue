@@ -1,21 +1,16 @@
 <template>
   <transition name="slide-down" appear>
-    <div class="px-8 py-4">
-      <div class="flex justify-between">
-        <div class="pr-4">
-          <n-select
-            v-model:value="dataStore.currentProjectId"
-            class="select-project"
-            :theme-overrides="SelectProjectOverrides"
-            :options="dataStore.projects"
-          >
-            <template #arrow>
-              <span class="icon-down text-2xl"></span>
-            </template>
-          </n-select>
+    <div class="px-4 sm:px-8 py-2">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center pr-4">
+          <!-- Hamburger btn to show sidebar on mobile -->
+          <BtnHamburger class="flex lg:hidden mr-4" @click="emit('toggleSidebar')" />
+
+          <!-- Projects dropdown -->
+          <HeaderSelectProject />
         </div>
         <n-space align="center" :size="32">
-          <div class="w-[20vw] max-w-xs">
+          <div v-if="isFeatureEnabled(Feature.SEARCH)" class="w-[20vw] max-w-xs">
             <n-input
               type="text"
               name="search"
@@ -32,76 +27,5 @@
 </template>
 
 <script lang="ts" setup>
-import { NInput, NSpace, NSelect } from 'naive-ui';
-import colors from '~~/tailwind.colors';
-import { ProjectInterface, ProjectResponse } from '~~/types/form';
-
-const dataStore = useDataStore();
-const router = useRouter();
-
-const SelectProjectOverrides = {
-  InternalSelection: {
-    heightMedium: '24px',
-    color: colors.transparent,
-    borderActive: `1px solid ${colors.blue}`,
-    borderFocus: `1px solid ${colors.blue}`,
-    borderHover: `1px solid ${colors.blue}`,
-  },
-  InternalSelectMenu: {
-    color: colors.dark,
-  },
-};
-
-onMounted(() => {
-  dataStore.promises.projects = getProjects();
-});
-
-/** Watcher - project change */
-watch(
-  () => dataStore.currentProjectId,
-  currentProjectId => {
-    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${currentProjectId}`);
-    router.push('/');
-  }
-);
-
-async function getProjects(refresh: boolean = false) {
-  if (dataStore.projects && dataStore.projects.length && !refresh) {
-    return;
-  }
-
-  const { response, data, error } = await $api.get<ProjectResponse>(ProjectEndpoint.project);
-
-  if (error) {
-    return;
-  }
-
-  if (data) {
-    dataStore.projects = data.data.items.map((project: ProjectInterface, key: number) => {
-      return {
-        ...project,
-        value: key,
-        label: project.name,
-      };
-    });
-  }
-  return response;
-}
+const emit = defineEmits(['toggleSidebar']);
 </script>
-
-<style lang="postcss">
-.n-select.select-project {
-  @apply min-w-[120px];
-
-  .n-base-selection-label {
-    background-color: transparent;
-
-    .n-base-selection-input__content {
-      background-color: theme('colors.blue');
-      color: theme('colors.dark');
-      font-weight: bold;
-      margin-right: 10px;
-    }
-  }
-}
-</style>

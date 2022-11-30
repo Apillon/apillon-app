@@ -3,8 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NDataTable, NSwitch, NTag } from 'naive-ui';
-import type { DataTableColumns } from 'naive-ui';
+import { DataTableColumns, NSwitch, NTag } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
@@ -12,7 +11,7 @@ const $i18n = useI18n();
 type RowData = {
   key: number;
   method: string;
-  status: boolean;
+  active: boolean;
 };
 
 const createColumns = ({
@@ -31,9 +30,9 @@ const createColumns = ({
       render(row) {
         return h(
           NTag,
-          { type: row.status ? 'success' : 'default' },
+          { type: row.active ? 'success' : 'default', round: true, bordered: false },
           {
-            default: () => (row.status ? $i18n.t('general.active') : $i18n.t('general.paused')),
+            default: () => (row.active ? $i18n.t('general.active') : $i18n.t('general.paused')),
           }
         );
       },
@@ -53,22 +52,22 @@ const createData = (): RowData[] => [
   {
     key: 0,
     method: 'Email',
-    status: true,
+    active: true,
   },
   {
     key: 1,
     method: 'Twitter',
-    status: false,
+    active: false,
   },
   {
     key: 2,
     method: 'Anonymus',
-    status: true,
+    active: true,
   },
   {
     key: 2,
     method: 'MetaMask wallet',
-    status: true,
+    active: true,
   },
 ];
 

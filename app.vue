@@ -8,7 +8,6 @@
     >
       <NuxtLayout>
         <NuxtPage />
-        <portal-target :name="Portals.LAYOUT" multiple />
       </NuxtLayout>
     </n-config-provider>
     <!-- <CookieConsent /> -->
@@ -16,21 +15,9 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  GlobalThemeOverrides,
-  NConfigProvider,
-  lightTheme,
-  darkTheme,
-  enUS,
-  dateEnUS,
-  frFR,
-  dateFrFR,
-} from 'naive-ui';
+import { GlobalThemeOverrides, lightTheme, darkTheme, enUS, dateEnUS } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import colors from './tailwind.colors';
-
-const auth = useAuthStore();
-auth.initUser();
 
 const $i18n = useI18n();
 const lang = computed(() => {
@@ -40,8 +27,6 @@ const locale = computed(() => {
   switch ($i18n.locale.value) {
     case 'en':
       return enUS;
-    case 'fr':
-      return frFR;
     default:
       return enUS;
   }
@@ -50,8 +35,6 @@ const dateLocale = computed(() => {
   switch ($i18n.locale.value) {
     case 'en':
       return dateEnUS;
-    case 'fr':
-      return dateFrFR;
     default:
       return dateEnUS;
   }
@@ -85,11 +68,6 @@ const themeOverrides: GlobalThemeOverrides = {
   },
   Alert: {},
   Button: {
-    fontSizeMedium: '16px',
-    fontWeight: 'bold',
-    heightMedium: '56px',
-    heightSmall: '44px',
-    heightTiny: '24px',
     borderPrimary: `2px solid ${colors.primary}`,
     borderFocusPrimary: `2px solid ${colors.primary}`,
     borderHoverPrimary: `2px solid ${colors.primary}`,
@@ -98,6 +76,31 @@ const themeOverrides: GlobalThemeOverrides = {
     borderRadiusSmall: '0px',
     borderRadiusMedium: '0px',
     borderRadiusLarge: '0px',
+    colorQuaternary: 'transparent',
+    colorQuaternaryHover: colors.primary,
+    colorQuaternaryPressed: colors.primary,
+    fontSizeMedium: '16px',
+    fontSizeLarge: '16px',
+    fontWeight: 'bold',
+    heightMedium: '48px',
+    heightLarge: '48px',
+    heightSmall: '24px',
+    heightTiny: '22px',
+    paddingLarge: '8px',
+    paddingMedium: '8px 25px',
+    paddingSmall: '2px',
+    paddingTiny: '1px',
+  },
+  Card: {
+    borderColor: colors.primary,
+    borderRadius: '0px',
+    color: colors.grey.lightBg,
+    colorEmbedded: colors.grey.lightBg,
+    colorEmbeddedModal: colors.grey.lightBg,
+    colorEmbeddedPopover: colors.grey.lightBg,
+    colorModal: colors.grey.lightBg,
+    colorPopover: colors.grey.lightBg,
+    colorTarget: colors.grey.lightBg,
   },
   Checkbox: {
     sizeMedium: '18px',
@@ -106,32 +109,51 @@ const themeOverrides: GlobalThemeOverrides = {
     fontSizeLarge: '14px',
     textColor: colors.grey.DEFAULT,
   },
-  Collapse: {},
+  Collapse: {
+    dividerColor: `${colors.grey.DEFAULT}66`,
+    titleFontWeight: 'bold',
+  },
   DataTable: {
+    borderColor: colors.grey.lightBg,
     thColor: colors.grey.dark,
     tdColor: colors.grey.lightBg,
-    borderColor: colors.grey.lightBg,
+    tdColorHover: colors.dark,
+    thFontWeight: '700',
+  },
+  Dialog: {
+    color: colors.grey.lightBg,
+  },
+  Drawer: {
+    color: colors.black,
+    headerBorderBottom: '0',
+    headerPadding: '32px 32px 16px 32px',
+    bodyPadding: '16px 32px 16px 32px',
+    footerPadding: '16px 32px 32px 32px',
   },
   Form: {
     labelTextColor: colors.grey.light,
   },
   Input: {
-    heightSmall: '42px',
-    heightMedium: '56px',
+    heightSmall: '48px',
+    heightMedium: '48px',
     fontSizeMedium: '18px',
+    caretColor: colors.primary,
     color: colors.grey.dark,
-    textColor: colors.grey.DEFAULT,
+    textColor: colors.grey.light,
     border: `1px solid ${colors.grey.DEFAULT}`,
     borderFocus: `1px solid ${colors.primary}`,
     borderHover: `1px solid ${colors.primary}`,
     borderError: `1px solid ${colors.pink}`,
     borderRadius: '0px',
+    paddingLarge: '25px',
     paddingMedium: '20px',
+    paddingTiny: '16px',
     placeholderColor: colors.grey.DEFAULT,
   },
   Menu: {
     color: colors.grey.lightBg,
-    itemHeight: '24px',
+    itemColorHover: colors.dark,
+    itemHeight: 'auto',
   },
   Message: {
     borderRadius: '0px',
@@ -174,8 +196,27 @@ const themeOverrides: GlobalThemeOverrides = {
     buttonWidthMedium: '20px',
   },
   Tag: {
+    color: colors.grey.dark,
     colorInfo: colors.blue,
+    colorSuccess: colors.grey.dark,
+    textColor: colors.grey.DEFAULT,
     textColorInfo: colors.dark,
+    textColorSuccess: colors.green,
+  },
+  Select: {
+    peers: {
+      InternalSelection: {
+        border: `1px solid ${colors.grey.DEFAULT}`,
+        borderRadius: '0px',
+        heightSmall: '24px',
+        heightMedium: '48px',
+        heightLarge: '48px',
+        color: colors.transparent,
+      },
+      InternalSelectMenu: {
+        color: colors.grey.lightBg,
+      },
+    },
   },
 };
 </script>

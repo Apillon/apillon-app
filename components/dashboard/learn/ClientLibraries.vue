@@ -21,8 +21,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NSpace, NTooltip } from 'naive-ui';
-
 const props = defineProps({
   react: { type: Boolean, default: true },
   vue: { type: Boolean, default: true },

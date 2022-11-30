@@ -1,8 +1,29 @@
-import ConfigInterface from '~~/types/config';
-
 const config: ConfigInterface = {
-  url: 'http://localhost:3000',
-  apiUrl: 'http://localhost:6001',
+  VERSION: `${require('../package.json').version}`,
+  url: 'https://app-dev.apillon.io',
+  apiUrl: 'https://api-dev.apillon.io',
+  CHAIN_ID: '0x5',
+  features: {
+    ACCESS: true,
+    APILLON_REGISTER: true,
+    AUTHENTICATION: true,
+    BILLING: true,
+    CONFIGURATION: true,
+    COMPUTING: true,
+    INSTRUCTIONS: true,
+    MAGIC_LINK: true,
+    MONITORING: true,
+    ONBOARDING: true,
+    PROJECT: true,
+    PROJECT_ON_STARTUP: true,
+    PROJECT_SETTINGS: true,
+    REFERRAL: true,
+    SEARCH: true,
+    SERVICES: true,
+    STORAGE: true,
+    TWO_FACTOR_AUTHENTICATION: true,
+    WALLET_LOGIN: true,
+  },
 };
 
 export default config;

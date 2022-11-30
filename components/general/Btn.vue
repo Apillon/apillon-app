@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="href ? 'a' : to ? NuxtLink : NButton"
+    :is="href ? 'a' : to ? NuxtLink : type === 'link' ? 'button' : NButton"
     v-bind="$attrs"
     :href="href || undefined"
     :to="to"
@@ -8,18 +8,19 @@
     :type="!href && !to ? 'primary' : ''"
     :size="size"
     :ghost="type === 'secondary' ? true : false"
+    :quaternary="quaternary || type === 'builders' ? true : false"
     @click="onClick"
   >
-    <span :class="[$style.inner, innerClass]">
-      <Spinner v-if="loading" />
-      <slot v-else />
+    <span v-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <Spinner />
+    </span>
+    <span :class="[innerClass, { 'opacity-0': loading }]">
+      <slot />
     </span>
   </component>
 </template>
 
 <script lang="ts" setup>
-import { NButton } from 'naive-ui';
-
 const props = defineProps({
   href: { type: String, default: null },
   to: { type: [String, Object], default: null },
@@ -28,23 +29,24 @@ const props = defineProps({
 
   type: {
     type: String,
-    validator: (value: string) => ['primary', 'secondary', 'link'].includes(value),
+    validator: (value: string) => ['primary', 'secondary', 'builders', 'link'].includes(value),
     default: 'primary',
   },
   size: {
     type: String,
-    validator: (value: string) => ['tiny', 'small', 'medium'].includes(value),
+    validator: (value: string) => ['tiny', 'small', 'medium', 'large'].includes(value),
     default: 'medium',
   },
   innerClass: { type: [String, Array, Object], default: '' },
   ridged: { type: Boolean, default: false }, // Add ridge border effect instead of solid color
   borderless: { type: Boolean, default: false },
   faded: { type: Boolean, default: false }, // greyed out
+  quaternary: { type: Boolean, default: false },
 });
 const emit = defineEmits(['click']);
 
 const NuxtLink = resolveComponent('NuxtLink');
-const $style = useCssModule();
+const NButton = resolveComponent('NButton');
 
 /** Disable animation on load */
 const isBtnLocked = ref<boolean>(!props.href && !props.to);
@@ -52,20 +54,17 @@ setTimeout(() => (isBtnLocked.value = false), 1000);
 
 const btnClass = computed(() => {
   return [
-    $style.btn,
+    props.type === 'link' ? 'font-content' : 'font-button',
     {
-      'py-[10px] px-6': props.type !== 'link' && props.size === 'small',
-      'py-4 px-10': props.type !== 'link' && props.size === 'medium',
+      'w-full': props.type !== 'link' && props.size === 'large',
       'text-primary': props.type === 'link',
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,
       'opacity-60': props.disabled,
-      'hover-bounce': !props.href && !props.to,
+      'hover-bounce':
+        !props.href && !props.to && props.type !== 'link' && props.type !== 'builders',
+      quaternary: props.quaternary || props.type === 'builders',
       locked: isBtnLocked.value,
-
-      [$style.borderless]: props.borderless,
-      [$style.ridge]: props.ridged,
-      [$style.faded]: props.faded,
     },
   ];
 });
@@ -79,9 +78,3 @@ function onClick(event: MouseEvent) {
   }
 }
 </script>
-
-<style lang="postcss" module>
-.btn {
-  @apply relative font-content;
-}
-</style>

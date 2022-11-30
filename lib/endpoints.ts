@@ -1,25 +1,49 @@
-export const AuthEndpoint = {
-  emailCheck: '/auth/userExists',
-  login: '/auth/login',
-  logout: '/auth/logout',
-  reset: '/auth/password/reset',
-  resetRequest: '/auth/password/reset/request ',
-};
+const Endpoints = {
+  /** Auth */
+  walletMsg: '/auth/wallet-auth-msg',
+  loginWallet: '/auth/loginWallet',
 
-export const UsersEndpoint = {
+  /** User */
   me: '/users/me',
-  register: '/user/register',
-  confirm: '/user/confirm ',
-  details: '/user/details',
-  connectWallet: '/users/connect-wallet',
-  removeWallet: '/users/remove-wallet',
-};
+  login: '/users/login',
+  register: '/users/register',
+  validateMail: '/users/validate-email',
+  passwordReset: '/users/password-reset',
+  passwordResetRequest: '/users/password-reset-request',
 
-export const ProjectEndpoint = {
-  project: '/project/',
-  projectUsers: '/project/getProjectUsers',
-};
+  /** Project */
+  project: '/projects/',
+  userProjects: '/projects/user-projects',
+  projectUser: '/projects/user/',
 
-export const ServiceEndpoint = {
+  /** File */
+  file: '/files/',
+
+  /** Services */
   services: '/services/',
+
+  /** Instructions */
+  instruction: '/instructions/',
+  instructions: '/instruction/all',
+
+  /** Bucket */
+  bucket: '/buckets/',
+
+  /** Directories */
+  directory: '/directories/',
+  directoryContent: '/directories/directory-content',
+
+  /** Storage */
+  storage: '/storage/',
+  storageFileUpload: '/storage/file-upload-request',
+  storageFileUploadSession: '/storage/file-upload-session',
+  storageFileDetails: '/storage/file-details',
+
+  /** Api Keys */
+  apiKey: '/api-key/',
+
+  /** Billing */
+  billing: '/billing/',
 };
+
+export default Endpoints;

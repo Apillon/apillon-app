@@ -6,11 +6,10 @@
 
 <script lang="ts" setup>
 import { h } from 'vue';
-import { NMenu } from 'naive-ui';
 import type { MenuOption } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const NuxtLink = resolveComponent('NuxtLink');
 const { currentRoute } = useRouter();
 const selectedPage = ref(currentRoute.value?.name);
@@ -22,15 +21,15 @@ function handleUpdateValue(key: string, item: MenuOption) {
 
 const menuOptions: MenuOption[] = [
   {
-    label: () => h(NuxtLink, { to: { path: '/methods' } }, () => $i18n.t('pageMenu.methods')),
+    label: () => h(NuxtLink, { to: { path: '/methods' } }, () => t('pageMenu.methods')),
     key: 'methods',
   },
   {
-    label: () => h(NuxtLink, { to: { path: '/' } }, () => $i18n.t('pageMenu.access')),
+    label: () => h(NuxtLink, { to: { path: '/' } }, () => t('pageMenu.access')),
     key: 'access',
   },
   {
-    label: () => h(NuxtLink, { href: '/api-keys' }, () => $i18n.t('pageMenu.apiKeys')),
+    label: () => h(NuxtLink, { href: '/api-keys' }, () => t('pageMenu.apiKeys')),
     key: 'api-keys',
   },
 ];

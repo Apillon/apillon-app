@@ -11,6 +11,7 @@ export default {
   yellow: '#F9FF73',
   green: '#A9DC76',
   pink: '#FF6188',
+  violet: '#AB9DF2',
   blue: '#78DCE8',
 
   grey: {

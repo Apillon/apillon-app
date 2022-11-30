@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-black text-white px-12 pt-5 pb-10 overflow-hidden rounded">
+  <div class="relative bg-black px-12 pt-5 pb-10 overflow-hidden rounded">
     <div class="max-w-[600px] w-1/2">
       <n-space size="large" align="center" class="h-12">
         <h4 class="mr-">{{ $t('nav.authentication') }}</h4>
@@ -13,11 +13,9 @@
       <Btn type="secondary"> How to attach service </Btn>
     </div>
     <div class="absolute top-1/2 right-[75px] -translate-y-1/2">
-      <AnimationLabirynth />
+      <AnimationIcons :num-of-icons="8" :animation-name="'Labirynth'" :size="'md'" />
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { NSpace } from 'naive-ui';
-</script>
+<script lang="ts" setup></script>
