@@ -68,14 +68,14 @@ const menu: MainNavInterface = {
       {
         name: 'authentication',
         icon: 'icon-authentication',
-        soon: true,
+        new: true,
         link: '/dashboard/service/authentication',
         disabled: !isFeatureEnabled(Feature.AUTHENTICATION),
       },
       {
         name: 'storage',
         icon: 'icon-storage',
-        soon: true,
+        new: true,
         link: '/dashboard/service/storage',
         disabled: !isFeatureEnabled(Feature.STORAGE),
       },

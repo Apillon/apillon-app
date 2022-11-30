@@ -44,12 +44,12 @@ const prefersTheme =
   localStorage.getItem('theme') === 'dark' ||
   (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme:dark)').matches);
   */
-const prefersTheme = 'dark';
-const themeName = prefersTheme ? 'dark' : 'light';
+const prefersDarkTheme = true;
+const themeName = prefersDarkTheme ? 'dark' : 'light';
 localStorage.setItem('theme', themeName);
 
 const theme = computed(() => {
-  return prefersTheme ? darkTheme : lightTheme;
+  return prefersDarkTheme ? darkTheme : lightTheme;
 });
 
 useHead({
