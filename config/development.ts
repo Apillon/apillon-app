@@ -1,7 +1,7 @@
 const config: ConfigInterface = {
   VERSION: `${require('../package.json').version}`,
   url: 'https://app-dev.apillon.io',
-  apiUrl: 'https://api-dev.apillon.io',
+  apiUrl: 'https://console-api-dev.apillon.io',
   CHAIN_ID: '0x5',
   features: {
     ACCESS: true,
