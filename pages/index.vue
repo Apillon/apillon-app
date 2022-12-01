@@ -1,5 +1,5 @@
 <template>
-  <!-- Notification examples -->
+  <!-- Notification examples
   <Notification class="mt-5">
     Authentication service was successfully attached. Below enter the name and select desired
     network.
@@ -15,7 +15,7 @@
   <Notification type="error" class="mt-5">
     Authentication service was successfully attached. Below enter the name and select desired
     network.
-  </Notification>
+  </Notification> -->
 </template>
 
 <script lang="ts" setup>
@@ -23,6 +23,10 @@ import { useAuthStore } from '~~/stores/auth';
 
 const authStore = useAuthStore();
 const router = useRouter();
+
+definePageMeta({
+  layout: 'auth',
+});
 
 onBeforeMount(() => {
   if (authStore.loggedIn) {

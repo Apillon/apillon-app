@@ -30,7 +30,7 @@
     </n-form-item>
   </n-form>
   <div class="min-h-[30px] text-center">
-    <div v-if="showResetPassword && formData.email">
+    <div>
       <span class="text-sm text-grey">{{ $t('login.forgotPassword') }} </span>&nbsp;
       <FormPasswordResetRequest :email="formData.email" btn-type="link" size="tiny" quaternary />
     </div>
@@ -47,7 +47,6 @@ const dataStore = useDataStore();
 const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
-const showResetPassword = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
 const formData = ref<FormLogin>({
@@ -55,7 +54,7 @@ const formData = ref<FormLogin>({
   password: '',
 });
 const rules: NFormRules = {
-  mail: [
+  email: [
     {
       type: 'email',
       message: $i18n.t('validation.email'),
@@ -96,7 +95,6 @@ async function login() {
 
     if (error) {
       message.error(userFriendlyMsg($i18n, error));
-      showResetPassword.value = true;
     }
     if (data) {
       authStore.setUserToken(data.data.token);
@@ -107,7 +105,6 @@ async function login() {
     }
   } catch (error) {
     message.error(userFriendlyMsg($i18n, error));
-    showResetPassword.value = true;
   }
   loading.value = false;
 }

@@ -20,6 +20,7 @@ const config: ConfigInterface = {
     REFERRAL: true,
     SEARCH: true,
     SERVICES: true,
+    SOCIAL_ICONS: false,
     STORAGE: true,
     TWO_FACTOR_AUTHENTICATION: true,
     WALLET_LOGIN: true,
