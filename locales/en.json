@@ -20,7 +20,7 @@
     "signup": "Sign up",
     "status": "Status",
     "tryAgain": "Try again",
-    "terms": "terms",
+    "terms": "",
     "uptime": "Uptime"
   },
   "dashboard": {
@@ -206,7 +206,7 @@
       "sendAgainEmail": "Email has been re-sent"
     },
     "terms": {
-      "project": "I understand product is in beta stage and I accept the ",
+      "project": "I understand product is in beta stage",
       "payment": "I understand the billing process and some other legal stuff."
     },
     "connect": "Connect",
