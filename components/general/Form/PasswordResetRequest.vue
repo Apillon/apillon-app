@@ -1,8 +1,24 @@
 <template>
-  <Btn v-bind="$attrs" :type="btnType" :loading="loading" @click="passwordChangeRequest">
-    <slot v-if="$slots.default"></slot>
-    <span v-else>{{ $t('login.resetPassword') }}</span>
-  </Btn>
+  <n-form
+    class="inline"
+    ref="formRef"
+    :model="{ email: email }"
+    :rules="rules"
+    @submit.prevent="handleSubmit"
+  >
+    <!--  Btn submit -->
+    <Btn v-bind="$attrs" :type="btnType" :loading="loading" @click="handleSubmit">
+      <slot v-if="$slots.default"></slot>
+      <span v-else>{{ $t('login.resetPassword') }}</span>
+    </Btn>
+
+    <!--  Email - hidden -->
+    <div class="absolute invisible">
+      <n-form-item path="email" :show-label="false" :show-feedback="false">
+        <n-input v-model:value="email" :input-props="{ type: 'email' }" readonly />
+      </n-form-item>
+    </div>
+  </n-form>
 </template>
 
 <script lang="ts" setup>
@@ -21,14 +37,43 @@ const props = defineProps({
 const $i18n = useI18n();
 const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 const loading = ref(false);
+const formRef = ref<NFormInst | null>(null);
+
+const formData = ref<{ email: string }>({
+  email: props.email,
+});
+const rules: NFormRules = {
+  email: [
+    {
+      type: 'email',
+      message: $i18n.t('validation.email'),
+    },
+    {
+      required: true,
+      message: $i18n.t('validation.emailRequired'),
+    },
+  ],
+};
+
+function handleSubmit(e: MouseEvent) {
+  e.preventDefault();
+
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
+    if (errors) {
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+    } else {
+      /** Request password change */
+      await passwordChangeRequest();
+    }
+  });
+}
 
 async function passwordChangeRequest() {
   loading.value = true;
   try {
-    const bodyData = { email: props.email };
     const { data, error } = await $api.post<PasswordResetRequestResponse>(
       endpoints.passwordResetRequest,
-      bodyData
+      { email: props.email }
     );
 
     if (error) {
