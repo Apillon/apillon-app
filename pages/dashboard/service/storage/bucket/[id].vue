@@ -54,20 +54,23 @@
           </div>
         </n-upload-dragger>
 
-        <n-upload-file-list />
+        <!-- <n-upload-file-list /> -->
       </n-upload>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
+import { lyla } from 'lyla';
 import { useMessage } from 'naive-ui';
+import { FileInfo, SettledFileInfo } from 'naive-ui/es/upload/src/interface';
 import { useI18n } from 'vue-i18n';
 
 const message = useMessage();
 const $i18n = useI18n();
 const { params } = useRoute();
 const router = useRouter();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 
@@ -93,38 +96,108 @@ onMounted(() => {
 
 /** Bucket from state, if bucket doesn't exists than redirect to storage */
 const bucket = computed<BucketInterface>(() => {
-  return dataStore.services.bucket.find(bucket => bucket.id === bucketId) || {};
+  return dataStore.services.bucket.find((item: BucketInterface) => item.id === bucketId) || {};
 });
 
-const fileList = ref<NUploadFileInfo[]>([
-  {
-    id: 'b',
-    name: 'file.doc',
-    status: 'finished',
-    type: 'text/plain',
-  },
-]);
-
-const uploadFiles = async ({ file, onError, onFinish }: NUploadCustomRequestOptions) => {
-  const bodyData = {
-    bucket: bucketId,
-    name: file.name,
-    extension: 'txt',
-    contentType: 'text/plain;charset=UTF-8',
-    body: file.file as File,
-  };
-
+/**
+ *  API calls
+ */
+async function getFilesDetails(fileUuid: string) {
   try {
-    const res = await $api.post(endpoints.file, bodyData);
+    const res = await $api.get<FileDetailsResponse>(endpoints.storageFileDetails, {
+      file_uuid: fileUuid,
+    });
 
-    // TODO
-    if (res.data) {
-      console.log(res.data);
-      onFinish();
+    if (res.file) {
+      message.success(res.file.name);
+      console.log(res);
     }
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));
-    onError();
+  }
+}
+
+const uploadFiles = async ({
+  file,
+  withCredentials,
+  onError,
+  onFinish,
+  onProgress,
+}: NUploadCustomRequestOptions) => {
+  const bodyData: FormFileUploadRequest = {
+    bucket_uuid: bucket.value.bucket_uuid,
+    session_uuid: authStore.userUuid,
+    fileName: file.name,
+    contentType: file.type || 'text/plain',
+    // path: bucket.value.name,
+  };
+
+  try {
+    const res = await $api.post<FileUploadRequestResponse>(endpoints.storageFileUpload, bodyData);
+
+    console.log(res.data);
+    console.log(file);
+    const formData = new FormData();
+    formData.append('file', file.file as File);
+    console.log(formData);
+    console.log('withCredentials', withCredentials);
+
+    lyla
+      .post(res.data.signedUrlForUpload, {
+        withCredentials,
+        body: formData,
+        onUploadProgress: ({ percent }) => {
+          console.log('percent', percent);
+          onProgress({ percent: Math.ceil(percent) });
+        },
+      })
+      .then(({ json }) => {
+        message.success(JSON.stringify(json));
+        onFinish();
+      })
+      .catch(error => {
+        message.success(error.message);
+        onError();
+      });
+    // uploadFileData(file, res.data.signedUrlForUpload, withCredentials || false);
+    sendFile(res.data);
+  } catch (error) {
+    message.error(userFriendlyMsg(error, $i18n));
   }
 };
+
+async function uploadFileData(file: SettledFileInfo, url: string, withCredentials: boolean) {
+  console.log(file);
+  const formData = new FormData();
+  formData.append('file', file.file as File);
+  console.log(formData);
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      body: file,
+    })
+      .then(response => response.json())
+      .then(success => console.log(success))
+      .catch(error => console.log(error));
+    console.log(res);
+  } catch (error) {
+    message.error(userFriendlyMsg(error, $i18n));
+  }
+}
+
+async function sendFile(data: FileUploadRequestInterface) {
+  try {
+    const res = await $api.post<PasswordResetResponse>(
+      `${endpoints.storageFileUploadSession}/${authStore.userUuid}/end`,
+      { directSync: true }
+    );
+
+    if (res.data) {
+      message.success($i18n.t('storage.fileUploaded'));
+    }
+  } catch (error) {
+    message.error(userFriendlyMsg(error, $i18n));
+  }
+}
 </script>

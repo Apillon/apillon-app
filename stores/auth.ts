@@ -15,12 +15,12 @@ export const useAuthStore = defineStore('auth', {
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
     username: '',
     phone: '',
-    provider: parseInt(localStorage.getItem(AuthLsKeys.PROVIDER)) || 0,
-    wallet: localStorage.getItem(AuthLsKeys.WALLET) || '',
+    provider: 0,
+    wallet: '',
     authStep: '',
     crypto: null,
     promises: {
-      profile: null,
+      profile: null as any,
     },
   }),
   getters: {
@@ -40,11 +40,11 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    changeUser(userData) {
-      this.userUuid = userData?.user_uuid;
-      this.username = userData?.name;
-      this.phone = userData?.phone;
-      this.saveEmail(userData?.email);
+    changeUser(userData: Record<string, string | number>) {
+      this.userUuid = `${userData?.user_uuid}`;
+      this.username = `${userData?.name}`;
+      this.phone = `${userData?.phone}`;
+      this.saveEmail(`${userData?.email}`);
     },
 
     saveEmail(email: string) {
@@ -52,7 +52,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem(AuthLsKeys.EMAIL, email);
     },
 
-    setUserToken(token) {
+    setUserToken(token: string) {
       this.jwt = token;
       localStorage.setItem(
         AuthLsKeys.AUTH,
@@ -65,17 +65,12 @@ export const useAuthStore = defineStore('auth', {
 
     async getUserData() {
       try {
-        const { response, data, error } = await $api.get<UserResponse>(endpoints.me, null);
+        const res = await $api.get<UserResponse>(endpoints.me);
 
-        if (error) {
-          this.promises.profile = null;
-          throw new Error(error.message);
+        if (res.data) {
+          this.changeUser(res.data);
         }
-
-        if (data.data) {
-          this.changeUser(data.data);
-        }
-        return response;
+        return res;
       } catch (error) {
         console.warn(error);
         return null;

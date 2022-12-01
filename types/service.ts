@@ -122,4 +122,42 @@ declare global {
     };
     status: number;
   }
+
+  /**
+   * Storage
+   */
+  interface FileUploadRequestInterface {
+    fileUploadRequestId: number;
+    file_uuid: string;
+    signedUrlForUpload: string;
+  }
+  interface FileInterface {
+    file_uuid: string;
+    CID: string;
+    s3FileKey: string;
+    name: string;
+    size: number;
+  }
+
+  interface FormFileUploadRequest {
+    bucket_uuid: string;
+    session_uuid: string;
+    fileName: string;
+    contentType: string;
+    directory_uuid?: string;
+    path?: string;
+  }
+  interface FileUploadRequestResponse {
+    data: FileUploadRequestInterface;
+    status: number;
+  }
+  interface FileUploadSessionResponse {
+    data: boolean;
+    status: number;
+  }
+
+  interface FileDetailsResponse {
+    file: FileInterface;
+    fileStatus: number;
+  }
 }
