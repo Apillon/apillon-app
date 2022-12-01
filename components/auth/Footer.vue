@@ -8,7 +8,7 @@
         <div class="flex w-full md:w-1/2 justify-center md:justify-end mb-4 md:mb-0">
           <ul class="body-sm flex text-white">
             <li>
-              <NuxtLink :to="{ name: 'support' }">{{ $t('footer.support') }}</NuxtLink>
+              <a href="mailto:info@apillon.io" target="_blank">{{ $t('footer.support') }}</a>
             </li>
             <li>
               <NuxtLink href="https://wiki.apillon.io/" target="_blank">
