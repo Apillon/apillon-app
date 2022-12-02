@@ -5,8 +5,6 @@
 <script lang="ts" setup>
 import { DataTableColumns, NButton, NDropdown, NTag, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { timeToDays } from '~~/lib/utils';
-import { useDataStore } from '~~/stores/data';
 
 const { t } = useI18n();
 const message = useMessage();

@@ -30,7 +30,6 @@ const SelectProjectOverrides: SelectThemeOverrides = {
       borderActive: 'none',
       borderFocus: 'none',
       borderHover: 'none',
-      borderPressed: 'none',
       boxShadowActive: 'none',
       boxShadowFocus: 'none',
       boxShadowHover: 'none',
@@ -40,7 +39,7 @@ const SelectProjectOverrides: SelectThemeOverrides = {
 
 onBeforeMount(() => {
   if (!dataStore.hasProjects) {
-    dataStore.promises.projects = dataStore.getProjects(false, $i18n);
+    dataStore.promises.projects = dataStore.fetchProjects(false, $i18n);
   }
 });
 
@@ -53,13 +52,17 @@ watch(
       loading.value = true;
       dataStore.projects = [];
 
-      await dataStore.getProjects(false, $i18n);
+      await dataStore.fetchProjects(false, $i18n);
 
       setTimeout(() => {
         loading.value = false;
         componentSelectKey.value += 1;
       }, 1000);
     }
+    /** Reset store data */
+    dataStore.resetData();
+
+    /** Save current project ID to LS and redirect to Dashboard */
     localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${currentProjectId}`);
     router.push({ name: 'dashboard' });
   }

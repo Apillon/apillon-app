@@ -21,7 +21,7 @@ function handleUpdateValue(key: string, item: MenuOption) {
 
 const menuOptions: MenuOption[] = [
   {
-    label: () => h(NuxtLink, { to: { path: '/methods' } }, () => t('pageMenu.methods')),
+    label: () => h(NuxtLink, { to: { name: 'dashboard-methods' } }, () => t('pageMenu.methods')),
     key: 'methods',
   },
   {
@@ -29,7 +29,7 @@ const menuOptions: MenuOption[] = [
     key: 'access',
   },
   {
-    label: () => h(NuxtLink, { href: '/api-keys' }, () => t('pageMenu.apiKeys')),
+    label: () => h(NuxtLink, { to: { name: 'dashboard-api-keys' } }, () => t('pageMenu.apiKeys')),
     key: 'api-keys',
   },
 ];

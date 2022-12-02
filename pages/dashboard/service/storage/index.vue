@@ -76,7 +76,7 @@ async function getServicesStorage() {
 }
 async function getBuckets() {
   if (!dataStore.hasServices(ServiceType.BUCKET)) {
-    await dataStore.getBuckets($i18n);
+    dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
   }
 }
 </script>

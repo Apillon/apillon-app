@@ -1,6 +1,7 @@
 {
+  "name": "apillon-app",
+  "version": "0.2.0",
   "private": true,
-  "version": "0.1.0",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -30,14 +31,15 @@
   "dependencies": {
     "@metamask/detect-provider": "^2.0.0",
     "@pinia/nuxt": "^0.4.5",
+    "@types/uuid": "^9.0.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "card-validator": "^8.1.1",
     "ethers": "^5.7.2",
-    "lyla": "^0.6.8",
     "nuxt-icons": "^3.0.0",
     "pinia": "^2.0.26",
     "query-string": "^7.1.1",
     "text-marshal": "^0.0.2",
+    "uuid": "^9.0.0",
     "v-lazy-image": "^2.1.1"
   }
 }

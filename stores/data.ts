@@ -16,12 +16,14 @@ export const useDataStore = defineStore('data', {
       authentication: [] as Array<ServiceInterface>,
       storage: [] as Array<ServiceInterface>,
       bucket: [] as Array<BucketInterface>,
+      folder: {} as Record<string, Array<FolderInterface>>,
       computing: [] as Array<ServiceInterface>,
     } as Record<ServiceTypeName, any>,
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
     promises: {
       projects: null as any,
+      buckets: null as any,
     },
   }),
   getters: {
@@ -44,6 +46,14 @@ export const useDataStore = defineStore('data', {
     },
   },
   actions: {
+    resetData() {
+      this.services.authentication = [] as Array<ServiceInterface>;
+      this.services.storage = [] as Array<ServiceInterface>;
+      this.services.bucket = [] as Array<BucketInterface>;
+      this.services.folder = {} as Record<string, Array<FolderInterface>>;
+      this.services.computing = [] as Array<ServiceInterface>;
+    },
+
     setCurrentProject(id: number) {
       this.currentProjectId = id;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
@@ -68,7 +78,16 @@ export const useDataStore = defineStore('data', {
       return null;
     },
 
-    async getProjects(redirectToDashboard: boolean = false, $i18n: any = null) {
+    hasServices(type: number) {
+      const key: ServiceTypeName = ServiceTypeNames[type];
+      return Array.isArray(this.services[key]) && this.services[key].length > 0;
+    },
+
+    hasFolder(folderUuid: string) {
+      return folderUuid in this.services.folder;
+    },
+
+    async fetchProjects(redirectToDashboard: boolean = false, $i18n: any = null) {
       const message = useMessage();
       const router = useRouter();
       try {
@@ -102,12 +121,7 @@ export const useDataStore = defineStore('data', {
       return null;
     },
 
-    hasServices(type: number) {
-      const key: ServiceTypeName = ServiceTypeNames[type];
-      return Array.isArray(this.services[key]) && this.services[key].length > 0;
-    },
-
-    async getServices(type: number, $i18n: any = null) {
+    async fetchServices(type: number, $i18n: any = null) {
       if (!this.hasProjects) {
         alert('Please create your first project');
         return [] as Array<ServiceInterface>;
@@ -131,16 +145,16 @@ export const useDataStore = defineStore('data', {
     },
 
     async getAuthServices($i18n: any = null) {
-      this.services.authentication = await this.getServices(ServiceType.AUTHENTICATION, $i18n);
+      this.services.authentication = await this.fetchServices(ServiceType.AUTHENTICATION, $i18n);
     },
     async getStorageServices($i18n: any = null) {
-      this.services.storage = await this.getServices(ServiceType.STORAGE, $i18n);
+      this.services.storage = await this.fetchServices(ServiceType.STORAGE, $i18n);
     },
     async getComputingServices($i18n: any = null) {
-      this.services.computing = await this.getServices(ServiceType.COPMUTING, $i18n);
+      this.services.computing = await this.fetchServices(ServiceType.COPMUTING, $i18n);
     },
 
-    async getBuckets($i18n: any = null) {
+    async fetchBuckets($i18n: any = null) {
       if (!this.hasProjects) {
         alert('Please create your first project');
         return;
@@ -161,8 +175,25 @@ export const useDataStore = defineStore('data', {
             percentage: storagePercantage(bucket.size || 0, bucket.maxSize),
           };
         });
+        return res;
       } catch (error: any) {
         this.services.bucket = [];
+        message.error(userFriendlyMsg(error, $i18n));
+      }
+      return null;
+    },
+
+    async fetchDirectoryContent(bucketUuid: string, $i18n: any = null) {
+      const message = useMessage();
+      try {
+        const params = {
+          bucket_uuid: bucketUuid,
+        };
+        const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
+
+        this.services.folder[bucketUuid] = res.data.items;
+      } catch (error: any) {
+        this.services.folder[bucketUuid] = [];
         message.error(userFriendlyMsg(error, $i18n));
       }
     },

@@ -2,7 +2,9 @@
   <Dashboard :loading="pageLoading">
     <template #heading>
       <n-space align="center" :size="32" class="-mb-4">
-        <span class="icon-back"></span>
+        <NuxtLink :to="{ name: 'dashboard-service-storage' }">
+          <span class="icon-back"></span>
+        </NuxtLink>
         <h4>{{ $t('storage.bucketManagement') }}</h4>
         <Notification type="success">
           <span class="text-green">
@@ -43,36 +45,68 @@
       <LearnCollapse />
     </template>
     <slot>
-      <n-h5 prefix="bar" class="mb-8">{{ $t('nav.storage') }}</n-h5>
-      <n-upload multiple directory-dnd :custom-request="uploadFiles">
-        <n-upload-dragger>
-          <div>
-            <span>Drag & drop files and folders you want to upload to your bucket, or</span>
-            <n-upload-trigger #="{ handleClick }" abstract>
-              <strong class="text-primary" @click="handleClick"> Click to upload. </strong>
-            </n-upload-trigger>
-          </div>
-        </n-upload-dragger>
+      <n-h5 prefix="bar" class="mb-8">{{ $t('storage.uploadFiles') }}</n-h5>
+      <FormStorageUploadFiles :bucketUuid="bucket.bucket_uuid" />
 
-        <!-- <n-upload-file-list /> -->
-      </n-upload>
+      <n-h5 prefix="bar" class="mb-8">{{ $t('storage.yourFiles') }}</n-h5>
+      <n-space vertical :size="12">
+        <n-space justify="space-between">
+          <div class="w-[20vw] max-w-xs">
+            <n-input
+              type="text"
+              name="search"
+              size="small"
+              class="bg-grey-lightBg"
+              placeholder="Search files"
+            />
+          </div>
+          <n-space>
+            <n-button size="small">
+              <span class="icon-copy"></span>
+              <span class="text-normal">Copy ARN</span>
+            </n-button>
+            <n-button size="small">Actions</n-button>
+            <n-button size="small" @click="showModalNewFolder = true">Create folder</n-button>
+            <n-button size="small">Download</n-button>
+          </n-space>
+        </n-space>
+
+        <!-- DataTable: files and directories -->
+        <TableFiles :bucketUuid="bucket.bucket_uuid" />
+      </n-space>
+
+      <!-- Modal - Create new folder -->
+      <n-modal v-model:show="showModalNewFolder">
+        <n-card
+          style="width: 660px"
+          :title="$t('storage.createNewFolder')"
+          :bordered="false"
+          size="huge"
+          role="dialog"
+          aria-modal="true"
+        >
+          <FormStorageFolder :bucket-id="bucket.id" @submit-success="onFolderCreated" />
+        </n-card>
+      </n-modal>
+
+      <!-- Drawer - Add new payment method -->
+      <n-drawer v-model:show="drawerFileDetailsActive" :width="495">
+        <n-drawer-content> Content </n-drawer-content>
+        dibv
+      </n-drawer>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { lyla } from 'lyla';
-import { useMessage } from 'naive-ui';
-import { FileInfo, SettledFileInfo } from 'naive-ui/es/upload/src/interface';
 import { useI18n } from 'vue-i18n';
 
-const message = useMessage();
 const $i18n = useI18n();
 const { params } = useRoute();
 const router = useRouter();
-const authStore = useAuthStore();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
+const showModalNewFolder = ref<boolean>(false);
 
 useHead({
   title: $i18n.t('nav.storage'),
@@ -82,15 +116,17 @@ useHead({
 const bucketId = parseInt(`${params?.id}`);
 
 onMounted(() => {
+  console.log('1');
   if (!Array.isArray(dataStore.services.bucket) || dataStore.services.bucket.length === 0) {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
-      dataStore.getBuckets();
-      pageLoading.value = false;
+      dataStore.promises.buckets = dataStore.fetchBuckets();
+
+      Promise.all(Object.values(dataStore.promises)).then(_ => {
+        checkIfBucketExists();
+      });
     });
-  } else if (!dataStore.services.bucket.find(bucket => bucket.id === bucketId)) {
-    router.push({ name: 'dashboard-service-storage' });
   } else {
-    pageLoading.value = false;
+    checkIfBucketExists();
   }
 });
 
@@ -99,105 +135,15 @@ const bucket = computed<BucketInterface>(() => {
   return dataStore.services.bucket.find((item: BucketInterface) => item.id === bucketId) || {};
 });
 
-/**
- *  API calls
- */
-async function getFilesDetails(fileUuid: string) {
-  try {
-    const res = await $api.get<FileDetailsResponse>(endpoints.storageFileDetails, {
-      file_uuid: fileUuid,
-    });
-
-    if (res.file) {
-      message.success(res.file.name);
-      console.log(res);
-    }
-  } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+function checkIfBucketExists() {
+  if (!dataStore.services.bucket.find((bucket: BucketInterface) => bucket.id === bucketId)) {
+    router.push({ name: 'dashboard' });
   }
+  pageLoading.value = false;
 }
 
-const uploadFiles = async ({
-  file,
-  withCredentials,
-  onError,
-  onFinish,
-  onProgress,
-}: NUploadCustomRequestOptions) => {
-  const bodyData: FormFileUploadRequest = {
-    bucket_uuid: bucket.value.bucket_uuid,
-    session_uuid: authStore.userUuid,
-    fileName: file.name,
-    contentType: file.type || 'text/plain',
-    // path: bucket.value.name,
-  };
-
-  try {
-    const res = await $api.post<FileUploadRequestResponse>(endpoints.storageFileUpload, bodyData);
-
-    console.log(res.data);
-    console.log(file);
-    const formData = new FormData();
-    formData.append('file', file.file as File);
-    console.log(formData);
-    console.log('withCredentials', withCredentials);
-
-    lyla
-      .post(res.data.signedUrlForUpload, {
-        withCredentials,
-        body: formData,
-        onUploadProgress: ({ percent }) => {
-          console.log('percent', percent);
-          onProgress({ percent: Math.ceil(percent) });
-        },
-      })
-      .then(({ json }) => {
-        message.success(JSON.stringify(json));
-        onFinish();
-      })
-      .catch(error => {
-        message.success(error.message);
-        onError();
-      });
-    // uploadFileData(file, res.data.signedUrlForUpload, withCredentials || false);
-    sendFile(res.data);
-  } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
-  }
-};
-
-async function uploadFileData(file: SettledFileInfo, url: string, withCredentials: boolean) {
-  console.log(file);
-  const formData = new FormData();
-  formData.append('file', file.file as File);
-  console.log(formData);
-
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      body: file,
-    })
-      .then(response => response.json())
-      .then(success => console.log(success))
-      .catch(error => console.log(error));
-    console.log(res);
-  } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
-  }
-}
-
-async function sendFile(data: FileUploadRequestInterface) {
-  try {
-    const res = await $api.post<PasswordResetResponse>(
-      `${endpoints.storageFileUploadSession}/${authStore.userUuid}/end`,
-      { directSync: true }
-    );
-
-    if (res.data) {
-      message.success($i18n.t('storage.fileUploaded'));
-    }
-  } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
-  }
+function onFolderCreated() {
+  showModalNewFolder.value = false;
+  dataStore.fetchDirectoryContent(bucket.value.bucket_uuid, $i18n);
 }
 </script>

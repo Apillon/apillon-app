@@ -16,6 +16,7 @@ const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const router = useRouter();
+const NuxtLink = resolveComponent('NuxtLink');
 const ProgressStorage = resolveComponent('ProgressStorage');
 
 interface RowData extends BucketInterface {
@@ -28,7 +29,14 @@ const createColumns = (): DataTableColumns<RowData> => {
       title: $i18n.t('storage.bucketName'),
       key: 'name',
       render(row) {
-        return h('span', { class: 'ml-2 text-blue' }, row.name);
+        return h(
+          NuxtLink,
+          {
+            class: 'ml-2 text-blue',
+            to: `/dashboard/service/storage/bucket/${row.id}`,
+          },
+          row.name
+        );
       },
     },
     {
@@ -126,7 +134,7 @@ onMounted(() => {
 
 async function getBuckets() {
   if (!dataStore.hasServices(ServiceType.BUCKET)) {
-    await dataStore.getBuckets($i18n);
+    dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
   }
 }
 </script>

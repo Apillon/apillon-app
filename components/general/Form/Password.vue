@@ -154,7 +154,7 @@ async function register() {
     authStore.setUserToken(res.data.token);
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-    await dataStore.getProjects(true, $i18n);
+    await dataStore.fetchProjects(true, $i18n);
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));
   }
