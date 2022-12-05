@@ -21,7 +21,7 @@
     "signup": "Sign up",
     "status": "Status",
     "tryAgain": "Try again",
-    "terms": "terms",
+    "terms": "",
     "uptime": "Uptime"
   },
   "dashboard": {
@@ -195,7 +195,7 @@
       "inviteByEmail": "Type e-mail",
       "expirationDate": "01/2023",
       "password": "password",
-      "phone": "+386 41 882 224",
+      "phone": "+000 12345678",
       "postalCode": "4223",
       "projectName": "Enter project name",
       "projectDescription": "Enter project description",
@@ -210,7 +210,7 @@
       "sendAgainEmail": "Email has been re-sent"
     },
     "terms": {
-      "project": "I understand product is in beta stage and I accept the ",
+      "project": "I understand product is in beta stage",
       "payment": "I understand the billing process and some other legal stuff."
     },
     "connect": "Connect",

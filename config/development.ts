@@ -3,7 +3,7 @@ import packageConfig from '../package.json';
 const config: ConfigInterface = {
   VERSION: packageConfig.version || '1.0.0',
   url: 'https://app-dev.apillon.io',
-  apiUrl: 'https://api-dev.apillon.io',
+  apiUrl: 'https://console-api-dev.apillon.io',
   CHAIN_ID: '0x5',
   features: {
     ACCESS: true,
@@ -22,6 +22,7 @@ const config: ConfigInterface = {
     REFERRAL: true,
     SEARCH: true,
     SERVICES: true,
+    SOCIAL_ICONS: true,
     STORAGE: true,
     TWO_FACTOR_AUTHENTICATION: true,
     WALLET_LOGIN: true,

@@ -29,7 +29,7 @@
           </div>
         </div>
         <div>
-          <Image src="./images/dashboard/welcome.svg" :width="400" :height="470" alt="apillon" />
+          <Image src="/images/dashboard/welcome.svg" :width="400" :height="470" alt="apillon" />
         </div>
       </div>
     </slot>

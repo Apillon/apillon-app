@@ -147,7 +147,7 @@ async function register() {
 
   try {
     const res = await $api.post<RegisterResponse>(endpoints.register, {
-      ...formData.value,
+      password: formData.value.password,
       token: query.token || authStore.jwt,
     });
 
@@ -169,7 +169,7 @@ async function resetPassword() {
 
   try {
     const res = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
-      ...formData.value,
+      password: formData.value.password,
       token: props.token,
     });
 
