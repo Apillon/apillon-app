@@ -9,7 +9,7 @@ const config: ConfigInterface = {
     AUTHENTICATION: true,
     BILLING: true,
     CONFIGURATION: true,
-    COMPUTING: true,
+    COMPUTING: false,
     INSTRUCTIONS: true,
     MAGIC_LINK: true,
     MONITORING: true,

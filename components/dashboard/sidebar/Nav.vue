@@ -29,19 +29,13 @@
           <span :class="item.icon" class="text-base align-middle"></span>
           <span class="ml-2 select-none">{{ $t(`nav.${item.name}`) }}</span>
           <span
-            v-if="item.soon"
-            class="icon-soon float-right text-blue text-2xl"
-            :class="`random-color-${randomInteger(0, 3)}`"
-          >
-            <span class="path2"></span>
-            <span class="path3"></span>
-            <span class="path4"></span>
-            <span class="path5"></span>
-          </span>
-          <span
-            v-else-if="item.new"
-            class="icon-new float-right text-blue text-2xl"
-            :class="`random-color-${randomInteger(0, 3)}`"
+            v-if="item.soon || item.new"
+            class=" float-right text-blue text-2xl"
+            :class="[
+              `random-color-${randomInteger(0, 3)}`,
+              { 'icon-soon' : item.soon },
+              { 'icon-new' : item.new },
+              ]"
           ></span>
         </component>
       </div>
@@ -68,21 +62,24 @@ const menu: MainNavInterface = {
       {
         name: 'authentication',
         icon: 'icon-authentication',
-        soon: true,
         link: '/dashboard/service/authentication',
+        new: isFeatureEnabled(Feature.AUTHENTICATION),
+        soon: !isFeatureEnabled(Feature.AUTHENTICATION),
         disabled: !isFeatureEnabled(Feature.AUTHENTICATION),
       },
       {
         name: 'storage',
         icon: 'icon-storage',
-        soon: true,
         link: '/dashboard/service/storage',
+        new: isFeatureEnabled(Feature.STORAGE),
+        soon: !isFeatureEnabled(Feature.STORAGE),
         disabled: !isFeatureEnabled(Feature.STORAGE),
       },
       {
         name: 'computing',
         icon: 'icon-computing',
-        soon: true,
+        new: isFeatureEnabled(Feature.COMPUTING),
+        soon: !isFeatureEnabled(Feature.COMPUTING),
         disabled: !isFeatureEnabled(Feature.COMPUTING),
       },
     ],
