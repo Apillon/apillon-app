@@ -128,6 +128,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     color: colors.grey.lightBg,
     itemColorHover: colors.dark,
     itemHeight: 'auto',
+    itemTextColor: colors.grey.light,
   },
   Message: {
     borderRadius: '0px',

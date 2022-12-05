@@ -47,7 +47,6 @@ const props = defineProps({
 });
 
 const $i18n = useI18n();
-const dataStore = useDataStore();
 const emit = defineEmits(['submitSuccess']);
 
 /** Form folder */

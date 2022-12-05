@@ -3,18 +3,55 @@
 
   <!-- Drawer - File details -->
   <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
-    <n-drawer-content> Content </n-drawer-content>
-    dibv
+    <n-drawer-content>
+      <div class="body-sm mb-4">
+        <p class="body-sm">{{ $t('storage.fileName') }}</p>
+        <strong>{{ currentRow.name }}</strong>
+      </div>
+
+      <div class="body-sm mb-4">
+        <p class="body-sm">{{ $t('storage.fileCid') }}</p>
+        <strong>{{ currentRow.fileCID }}</strong>
+      </div>
+
+      <div class="body-sm mb-4">
+        <p class="body-sm">{{ $t('storage.fileSize') }}</p>
+        <strong>{{ currentRow.fileSize }}</strong>
+      </div>
+
+      <div class="body-sm mb-4">
+        <p class="body-sm">{{ $t('storage.expiration') }}</p>
+        <strong>{{ currentRow.expiration }}</strong>
+      </div>
+
+      <div class="body-sm mb-4">
+        <p class="body-sm">{{ $t('storage.replicas') }}</p>
+        <strong>{{ currentRow.replicas }}</strong>
+      </div>
+
+      <div class="body-sm mb-4">
+        <p class="body-sm">{{ $t('storage.status') }}</p>
+        <n-tag v-if="currentRow.active" type="success" :bordered="false" round>{{
+          $t('general.ok')
+        }}</n-tag>
+        <n-tag v-else type="error" :bordered="false" round>{{ $t('general.error') }}</n-tag>
+      </div>
+
+      <div class="mb-4">
+        <p class="body-sm">{{ $t('general.actions') }}</p>
+      </div>
+      <Btn type="secondary" size="large">{{ $t('storage.renewPoolBalance') }}</Btn>
+    </n-drawer-content>
   </n-drawer>
 </template>
 
 <script lang="ts" setup>
-import { sample } from 'lodash';
 import { DataTableColumns, NButton, NDropdown, NTag, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   bucketUuid: { type: String, required: true },
+  search: { type: String, required: true },
 });
 
 const $i18n = useI18n();
@@ -41,7 +78,14 @@ const createColumns = (): DataTableColumns<RowData> => {
       render(row) {
         return [
           h(IconFolderFile, { isFile: row.fileCID ? true : false }, ''),
-          h('span', { class: 'ml-2 text-blue' }, row.name),
+          h(
+            'span',
+            {
+              class: 'ml-2 text-blue cursor-pointer',
+              onClick: () => (drawerFileDetailsVisible.value = true),
+            },
+            row.name
+          ),
         ];
       },
     },
@@ -109,7 +153,7 @@ const createColumns = (): DataTableColumns<RowData> => {
   ];
 };
 
-const currentRow = ref<number>(0);
+const currentRow = ref<RowData>({} as RowData);
 const data = computed(() => {
   const sampleData = {
     key: 0,
@@ -120,10 +164,12 @@ const data = computed(() => {
     replicas: 16,
     active: true,
   };
-  if (props.bucketUuid in dataStore.services.folder) {
-    return [sampleData, ...dataStore.services.folder[props.bucketUuid]];
-  }
-  return [sampleData];
+  const data =
+    props.bucketUuid in dataStore.services.folder
+      ? [sampleData, ...dataStore.services.folder[props.bucketUuid]]
+      : [sampleData];
+
+  return data.filter(item => item.name.toLowerCase().includes(props.search.toLowerCase()));
 });
 
 const columns = createColumns();
@@ -132,7 +178,7 @@ function rowProps(row: RowData) {
   return {
     onClick: () => {
       console.log('rowProps');
-      currentRow.value = row.key;
+      currentRow.value = row;
     },
   };
 }

@@ -45,6 +45,7 @@ import { useI18n } from 'vue-i18n';
 const message = useMessage();
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const router = useRouter();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -104,10 +105,12 @@ async function createService() {
   try {
     const res = await $api.post<NewBucketResponse>(endpoints.bucket, bodyData);
 
-    // TODO
-    if (res.data) {
-      console.log(res.data);
-    }
+    message.success($i18n.t('form.success.bucketCreated'));
+
+    /** On new bucket created redirect to storage list in refresh data */
+    dataStore.fetchBuckets();
+    router.push({ name: 'dashboard-service-storage' });
+
     loading.value = false;
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));

@@ -109,7 +109,7 @@ class Api {
         (response.status === 401 && error.message !== UserError.USER_INVALID_LOGIN) ||
         (response.status === 500 && error.message === UserError.JWT_TOKEN_EXPIRED)
       ) {
-        // this.backToLogin();
+        this.backToLogin();
       } else if (response.status === 403) {
         this.preventForbiddenAccess();
       }

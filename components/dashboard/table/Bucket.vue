@@ -5,6 +5,19 @@
     :data="dataStore.services.bucket"
     :row-props="rowProps"
   />
+  <!-- Modal - Destroy bucket -->
+  <n-modal v-model:show="showModalDestroyBucket">
+    <n-card
+      style="width: 660px"
+      :title="$t('storage.bucketDestroy')"
+      :bordered="false"
+      size="huge"
+      role="dialog"
+      aria-modal="true"
+    >
+      <FormStorageBucketDestroy :bucket-id="currentRow?.id || 0" />
+    </n-card>
+  </n-modal>
 </template>
 
 <script lang="ts" setup>
@@ -17,6 +30,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const router = useRouter();
 const NuxtLink = resolveComponent('NuxtLink');
+const showModalDestroyBucket = ref<boolean>(false);
 const ProgressStorage = resolveComponent('ProgressStorage');
 
 interface RowData extends BucketInterface {
@@ -33,7 +47,7 @@ const createColumns = (): DataTableColumns<RowData> => {
           NuxtLink,
           {
             class: 'ml-2 text-blue',
-            to: `/dashboard/service/storage/bucket/${row.id}`,
+            to: `/dashboard/service/storage/${row.id}`,
           },
           row.name
         );
@@ -104,7 +118,7 @@ const dropdownOptions = [
     key: 'storageEdit',
     props: {
       onClick: () => {
-        router.push(`/dashboard/service/storage/bucket/${currentRow.value?.id}`);
+        router.push(`/dashboard/service/storage/${currentRow.value?.id}`);
       },
     },
   },
@@ -113,9 +127,7 @@ const dropdownOptions = [
     key: 'storage.delete',
     props: {
       onClick: () => {
-        message.error('TODO: DELETE' + JSON.stringify(currentRow.value), {
-          icon: () => h('span', { class: 'icon-close' }, {}),
-        });
+        showModalDestroyBucket.value = true;
       },
     },
   },

@@ -37,6 +37,26 @@ export enum BucketType {
 
 declare global {
   /**
+   * Base responses
+   */
+  interface GeneralResponse {
+    data: any;
+    status: number;
+  }
+  interface DeleteResponse {
+    data: boolean;
+    status: number;
+  }
+
+  interface FileDetailsResponse {
+    data: {
+      file: FileInterface;
+      fileStatus: number;
+    };
+    status: number;
+  }
+
+  /**
    * Service Type
    */
   interface ServiceTypeInterface {
@@ -173,17 +193,14 @@ declare global {
 
   /** Folder */
   interface FolderInterface {
+    CID?: string;
+    contentType?: string;
     id: number;
-    status: number;
-
-    directory_uuid: string;
-    parentDirectory_uuid: string;
-    project_uuid: string;
-
-    bucket_id: number;
-    CID: string;
     name: string;
-    description: string;
+    size?: number;
+    type?: string;
+    createTime: string;
+    updateTime: string;
   }
   interface FormFolder {
     name: string;
@@ -198,8 +215,8 @@ declare global {
   }
   interface FolderResponse {
     data: {
-      folder: FolderInterface;
-      folderStatus: number;
+      items: Array<FolderInterface>;
+      total: number;
     };
     status: number;
   }

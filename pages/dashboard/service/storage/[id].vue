@@ -53,10 +53,11 @@
         <n-space justify="space-between">
           <div class="w-[20vw] max-w-xs">
             <n-input
+              v-model:value="searchFiles"
               type="text"
               name="search"
               size="small"
-              class="bg-grey-lightBg"
+              class="bg-grey-dark"
               placeholder="Search files"
             />
           </div>
@@ -72,7 +73,7 @@
         </n-space>
 
         <!-- DataTable: files and directories -->
-        <TableFiles :bucketUuid="bucket.bucket_uuid" />
+        <TableFiles :bucketUuid="bucket.bucket_uuid" :search="searchFiles" />
       </n-space>
 
       <!-- Modal - Create new folder -->
@@ -88,12 +89,6 @@
           <FormStorageFolder :bucket-id="bucket.id" @submit-success="onFolderCreated" />
         </n-card>
       </n-modal>
-
-      <!-- Drawer - Add new payment method -->
-      <n-drawer v-model:show="drawerFileDetailsActive" :width="495">
-        <n-drawer-content> Content </n-drawer-content>
-        dibv
-      </n-drawer>
     </slot>
   </Dashboard>
 </template>
@@ -107,6 +102,7 @@ const router = useRouter();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 const showModalNewFolder = ref<boolean>(false);
+const searchFiles = ref<string>('');
 
 useHead({
   title: $i18n.t('nav.storage'),
@@ -116,7 +112,6 @@ useHead({
 const bucketId = parseInt(`${params?.id}`);
 
 onMounted(() => {
-  console.log('1');
   if (!Array.isArray(dataStore.services.bucket) || dataStore.services.bucket.length === 0) {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
       dataStore.promises.buckets = dataStore.fetchBuckets();

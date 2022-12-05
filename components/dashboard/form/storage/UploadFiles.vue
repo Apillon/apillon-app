@@ -22,7 +22,6 @@ const props = defineProps({
 
 const message = useMessage();
 const $i18n = useI18n();
-const dataStore = useDataStore();
 
 const fileList = ref<NUploadFileInfo[]>([
   {
@@ -87,7 +86,7 @@ const uploadFiles = async ({
       console.log('progress', percent);
       onProgress({ percent: Math.ceil(100) });
     };
-    xhr.open('POST', res.data.signedUrlForUpload, false);
+    xhr.open('PUT', res.data.signedUrlForUpload, false);
     xhr.onreadystatechange = function (aEvt) {
       console.log('onreadystatechange');
       console.log(xhr);
