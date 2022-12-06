@@ -6,6 +6,9 @@
     "attach": "Attach",
     "copyrights": "© Apillon",
     "created": "created",
+    "delete": "Delete",
+    "edit": "Edit",
+    "error": "Error",
     "goHome": "Go home",
     "learn": "Learn",
     "learnMore": "Learn more",
@@ -14,6 +17,8 @@
     "method": "Method",
     "name": "Name",
     "notActive": "not active",
+    "ok": "OK",
+    "open": "Open",
     "paused": "paused",
     "secret": "Secret",
     "serviceName": "Service name",
@@ -22,7 +27,8 @@
     "status": "Status",
     "tryAgain": "Try again",
     "terms": "",
-    "uptime": "Uptime"
+    "uptime": "Uptime",
+    "view": "View"
   },
   "dashboard": {
     "addPayment": "Add payment",
@@ -269,6 +275,40 @@
     "web3Gateway": "Your Gateway to Web3",
     "web3ProjectName": "Your  Web3 project needs a name"
   },
+  "pageMenu": {
+    "methods": "Methods",
+    "access": "Access",
+    "apiKeys": "API keys",
+    "charts": "Charts",
+    "history": "History",
+    "Destroy": "Destroy",
+    "projectSettings": "Project settings",
+    "usersPermissions": "Users & permissions",
+    "credentials": "Credentials & API keys"
+  },
+  "permissions": {
+    "authentication": {
+      "name": "Authentication",
+      "read": "Read permissions",
+      "write": "Write permissions",
+      "xy": "XY permissions",
+      "zzz": "ZZZ permissions"
+    },
+    "storage": {
+      "name": "Storage",
+      "read": "Read permissions",
+      "write": "Write permissions",
+      "xy": "XY permissions",
+      "zzz": "ZZZ permissions"
+    },
+    "computing": {
+      "name": "Copmuting",
+      "read": "Read permissions",
+      "write": "Write permissions",
+      "xy": "XY permissions",
+      "zzz": "ZZZ permissions"
+    }
+  },
   "profile": {
     "2fa": "Two-factor authentication",
     "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
@@ -319,49 +359,30 @@
   },
   "storage": {
     "bucket": "Storage bucket",
-    "buckets": "Storage buckets",
+    "bucketManagement": "Bucket management",
     "bucketName": "Bucket name",
+    "buckets": "Storage buckets",
     "delete": "Delete bucket",
-    "edit": "Edit bucket",
+    "destroy": "Destroy",
+    "edit": "Edit",
+    "expiration": "Expired on blockchain",
+    "goToRootDirectory": "Go to root directory",
+    "fileCid": "File CID",
+    "fileName": "File name",
+    "files": "Files",
+    "fileSize": "File size",
+    "history": "History",
     "name": "Bucket name",
     "newBucket": "New bucket",
+    "replicas": "Replicas",
+    "snapshots": "Snapshots",
+    "stats": "Stats",
+    "status": "Status",
     "traffic": "30d traffic",
+    "uploadFiles": "Upload files",
     "usage": "Storage usage",
-    "visits": "30d visits"
-  },
-  "pageMenu": {
-    "methods": "Methods",
-    "access": "Access",
-    "apiKeys": "API keys",
-    "charts": "Charts",
-    "history": "History",
-    "Destroy": "Destroy",
-    "projectSettings": "Project settings",
-    "usersPermissions": "Users & permissions",
-    "credentials": "Credentials & API keys"
-  },
-  "permissions": {
-    "authentication": {
-      "name": "Authentication",
-      "read": "Read permissions",
-      "write": "Write permissions",
-      "xy": "XY permissions",
-      "zzz": "ZZZ permissions"
-    },
-    "storage": {
-      "name": "Storage",
-      "read": "Read permissions",
-      "write": "Write permissions",
-      "xy": "XY permissions",
-      "zzz": "ZZZ permissions"
-    },
-    "computing": {
-      "name": "Copmuting",
-      "read": "Read permissions",
-      "write": "Write permissions",
-      "xy": "XY permissions",
-      "zzz": "ZZZ permissions"
-    }
+    "visits": "30d visits",
+    "yourFiles": "Your files"
   },
   "service": {
     "authentication": {

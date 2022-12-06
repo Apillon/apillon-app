@@ -18,16 +18,16 @@
 
     <template #infobar>
       <n-space align="center" justify="space-between" class="w-full">
-        <Tag color="violet">{{ bucket.name }}</Tag>
+        <Tag color="violet">{{ dataStore.currentBucket.name }}</Tag>
         <span>
           <span class="icon-storage"></span>
           {{ $t('storage.bucket') }}
         </span>
-        <ProgressStorage
+        <StorageProgress
           class="w-1/2"
-          :percentage="bucket.percentage"
-          :size="bucket.sizeMb"
-          :max-size="bucket.maxSizeMb"
+          :percentage="dataStore.currentBucket.percentage"
+          :size="dataStore.currentBucket.sizeMb"
+          :max-size="dataStore.currentBucket.maxSizeMb"
         />
       </n-space>
     </template>
@@ -45,8 +45,10 @@
       <LearnCollapse />
     </template>
     <slot>
-      <n-h5 prefix="bar" class="mb-8">{{ $t('storage.uploadFiles') }}</n-h5>
-      <FormStorageUploadFiles :bucketUuid="bucket.bucket_uuid" />
+      <StorageBreadcrumbs v-if="dataStore.selected.folderId" />
+      <n-h5 v-else prefix="bar" class="mb-8">{{ $t('storage.uploadFiles') }}</n-h5>
+
+      <FormStorageUploadFiles :bucketUuid="dataStore.currentBucket.bucket_uuid" />
 
       <n-h5 prefix="bar" class="mb-8">{{ $t('storage.yourFiles') }}</n-h5>
       <n-space vertical :size="12">
@@ -73,7 +75,7 @@
         </n-space>
 
         <!-- DataTable: files and directories -->
-        <TableFiles :bucketUuid="bucket.bucket_uuid" :search="searchFiles" />
+        <TableFiles :bucketUuid="dataStore.currentBucket.bucket_uuid" :search="searchFiles" />
       </n-space>
 
       <!-- Modal - Create new folder -->
@@ -86,7 +88,7 @@
           role="dialog"
           aria-modal="true"
         >
-          <FormStorageFolder :bucket-id="bucket.id" @submit-success="onFolderCreated" />
+          <FormStorageFolderCreate @submit-success="onFolderCreated" />
         </n-card>
       </n-modal>
     </slot>
@@ -108,16 +110,18 @@ useHead({
   title: $i18n.t('nav.storage'),
 });
 
-/** Bucket ID from route */
-const bucketId = parseInt(`${params?.id}`);
-
 onMounted(() => {
+  /** Bucket ID from route */
+  dataStore.selected.bucketId = parseInt(`${params?.id}`);
+
   if (!Array.isArray(dataStore.services.bucket) || dataStore.services.bucket.length === 0) {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
       dataStore.promises.buckets = dataStore.fetchBuckets();
 
       Promise.all(Object.values(dataStore.promises)).then(_ => {
         checkIfBucketExists();
+        console.log(dataStore.currentFolder);
+        console.log(dataStore.currentFolderContent);
       });
     });
   } else {
@@ -126,12 +130,13 @@ onMounted(() => {
 });
 
 /** Bucket from state, if bucket doesn't exists than redirect to storage */
-const bucket = computed<BucketInterface>(() => {
-  return dataStore.services.bucket.find((item: BucketInterface) => item.id === bucketId) || {};
-});
 
 function checkIfBucketExists() {
-  if (!dataStore.services.bucket.find((bucket: BucketInterface) => bucket.id === bucketId)) {
+  if (
+    !dataStore.services.bucket.find(
+      (bucket: BucketInterface) => bucket.id === dataStore.selected.bucketId
+    )
+  ) {
     router.push({ name: 'dashboard' });
   }
   pageLoading.value = false;
@@ -139,6 +144,6 @@ function checkIfBucketExists() {
 
 function onFolderCreated() {
   showModalNewFolder.value = false;
-  dataStore.fetchDirectoryContent(bucket.value.bucket_uuid, $i18n);
+  dataStore.fetchDirectoryContent($i18n);
 }
 </script>

@@ -43,10 +43,12 @@ import { createDiscreteApi } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
-  bucketId: { type: Number, required: true },
+  bucketId: { type: Number },
+  parentFolderId: { type: Number },
 });
 
 const $i18n = useI18n();
+const dataStore = useDataStore();
 const emit = defineEmits(['submitSuccess']);
 
 /** Form folder */
@@ -70,6 +72,14 @@ const rules: NFormRules = {
   description: [],
 };
 
+/** Computed values - bucketId and parentFolderID (use fallback data from dataStore) */
+const bucketId = computed(() => {
+  return props.bucketId || dataStore.selected.bucketId;
+});
+const parentFoldertId = computed(() => {
+  return props.parentFolderId || dataStore.selected.folderId;
+});
+
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
@@ -85,10 +95,18 @@ async function createFolder() {
   loading.value = true;
 
   try {
-    const res = await $api.post<CreateFolderResponse>(endpoints.directory, {
-      ...formData.value,
-      bucket_id: props.bucketId,
-    });
+    const params =
+      parentFoldertId.value > 0
+        ? {
+            ...formData.value,
+            bucket_id: bucketId.value,
+            parentDirectory_id: parentFoldertId.value,
+          }
+        : {
+            ...formData.value,
+            bucket_id: bucketId.value,
+          };
+    const res = await $api.post<CreateFolderResponse>(endpoints.directory, params);
 
     if (res.data) {
       message.success($i18n.t('form.success.folderCreated'));

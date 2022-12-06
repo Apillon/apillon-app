@@ -15,7 +15,7 @@
       role="dialog"
       aria-modal="true"
     >
-      <FormStorageBucketDestroy :bucket-id="currentRow?.id || 0" />
+      <FormStorageDestroy :bucket-id="currentRow?.id || 0" />
     </n-card>
   </n-modal>
 </template>
@@ -26,12 +26,11 @@ import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
 const router = useRouter();
 const NuxtLink = resolveComponent('NuxtLink');
 const showModalDestroyBucket = ref<boolean>(false);
-const ProgressStorage = resolveComponent('ProgressStorage');
+const StorageProgress = resolveComponent('StorageProgress');
 
 interface RowData extends BucketInterface {
   key: number;
@@ -58,7 +57,7 @@ const createColumns = (): DataTableColumns<RowData> => {
       key: 'serviceType',
       render(row) {
         return h(
-          ProgressStorage,
+          StorageProgress,
           {
             size: row.sizeMb,
             maxSize: row.maxSizeMb,

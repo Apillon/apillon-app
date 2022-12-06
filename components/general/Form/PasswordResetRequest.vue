@@ -2,7 +2,7 @@
   <n-form
     class="inline"
     ref="formRef"
-    :model="{ email: email }"
+    :model="formData"
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
@@ -15,7 +15,7 @@
     <!--  Email - hidden -->
     <div class="absolute invisible">
       <n-form-item path="email" :show-label="false" :show-feedback="false">
-        <n-input v-model:value="email" :input-props="{ type: 'email' }" readonly />
+        <n-input v-model:value="formData.email" :input-props="{ type: 'email' }" readonly />
       </n-form-item>
     </div>
   </n-form>
@@ -39,8 +39,8 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const formData = ref<{ email: string }>({
-  email: props.email,
+const formData = computed<{ email: string }>(() => {
+  return { email: props.email };
 });
 const rules: NFormRules = {
   email: [
@@ -60,7 +60,7 @@ function handleSubmit(e: MouseEvent) {
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || '')));
     } else {
       /** Request password change */
       await passwordChangeRequest();
@@ -71,9 +71,10 @@ function handleSubmit(e: MouseEvent) {
 async function passwordChangeRequest() {
   loading.value = true;
   try {
-    const res = await $api.post<PasswordResetRequestResponse>(endpoints.passwordResetRequest, {
-      email: props.email,
-    });
+    const res = await $api.post<PasswordResetRequestResponse>(
+      endpoints.passwordResetRequest,
+      formData
+    );
 
     if (res.data) {
       message.success($i18n.t('form.success.requestPasswordChange'));

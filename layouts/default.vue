@@ -3,7 +3,7 @@
     <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="5000">
       <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
       <Header @toggleSidebar="toggleSidebar" />
-      <n-scrollbar class="bg-grey-dark" y-scrollable style="max-height: calc(100vh - 64px)">
+      <n-scrollbar class="bg-grey-dark" y-scrollable style="max-height: calc(100vh - 56px)">
         <HeaderTabs v-if="routeName === 'index'" />
         <div ref="messageRef" class="relative py-7 px-4 sm:px-8 lg:pr-10">
           <slot />

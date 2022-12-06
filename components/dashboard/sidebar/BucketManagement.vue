@@ -16,7 +16,7 @@
         role="dialog"
         aria-modal="true"
       >
-        <FormStorageBucketDestroy :bucket-id="bucketId" />
+        <FormStorageDestroy :bucket-id="bucketId" />
       </n-card>
     </n-modal>
   </div>
@@ -47,18 +47,12 @@ const menuOptions: MenuOption[] = [
     key: 'dashboard-service-storage-id',
   },
   {
-    label: () =>
-      h(
-        NuxtLink,
-        { class: 'disabled', to: { name: 'dashboard-service-storage' }, disabled: true },
-        () => t('storage.snapshots')
-      ),
+    label: () => h('span', {}, t('storage.snapshots')),
     key: 'snapshots',
     disabled: true,
   },
   {
-    label: () =>
-      h(NuxtLink, { href: '/dashboard/service/storage/stats' }, () => t('storage.stats')),
+    label: () => h('span', {}, t('storage.stats')),
     key: 'stats',
     disabled: true,
   },

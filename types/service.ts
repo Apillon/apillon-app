@@ -48,14 +48,6 @@ declare global {
     status: number;
   }
 
-  interface FileDetailsResponse {
-    data: {
-      file: FileInterface;
-      fileStatus: number;
-    };
-    status: number;
-  }
-
   /**
    * Service Type
    */
@@ -155,15 +147,32 @@ declare global {
     signedUrlForUpload: string;
   }
   interface FileInterface {
+    CID: string;
     bucket_id: number;
     contentType: string;
-    filename: string;
-    fileStatus: number;
+    directory_id: number;
     file_uuid: string;
     id: number;
-    path: string;
+    name: string;
+    project_uuid: string;
     s3FileKey: string;
+    size: number;
     status: number;
+  }
+  interface FileDetailsInterface {
+    crustStatus: {
+      amount: number;
+      calculated_at: number;
+      expired_at: number;
+      file_size: number;
+      prepaid: number;
+      remaining_paid_count: number;
+      replicas: Record<string, any>;
+      reported_replica_count: number;
+      spower: number;
+    };
+    file: FileInterface;
+    fileStatus: number;
   }
 
   interface FormFileUploadRequest {
@@ -184,23 +193,21 @@ declare global {
   }
 
   interface FileDetailsResponse {
-    data: {
-      file: FileInterface;
-      fileStatus: number;
-    };
+    data: FileDetailsInterface;
     status: number;
   }
 
   /** Folder */
   interface FolderInterface {
-    CID?: string;
-    contentType?: string;
+    CID: string | null;
+    contentType: string | null;
     id: number;
     name: string;
-    size?: number;
-    type?: string;
+    size: number | null;
+    type: string;
     createTime: string;
     updateTime: string;
+    parentDirectoryId?: number;
   }
   interface FormFolder {
     name: string;

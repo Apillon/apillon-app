@@ -20,8 +20,9 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
-const message = useMessage();
 const $i18n = useI18n();
+const message = useMessage();
+const dataStore = useDataStore();
 
 const fileList = ref<NUploadFileInfo[]>([
   {
@@ -46,21 +47,6 @@ const fileList = ref<NUploadFileInfo[]>([
 /**
  *  API calls
  */
-async function fetchFilesDetails(fileUuid: string) {
-  try {
-    const res = await $api.get<FileDetailsResponse>(endpoints.storageFileDetails, {
-      file_uuid: fileUuid,
-    });
-
-    if (res.data) {
-      message.success(res.data.file.filename);
-      console.log(res);
-    }
-  } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
-  }
-}
-
 const uploadFiles = async ({
   file,
   onError,
@@ -72,8 +58,8 @@ const uploadFiles = async ({
     bucket_uuid: props.bucketUuid,
     session_uuid: sessionUuid,
     fileName: file.name,
-    contentType: file.type || 'text/plain',
-    path: '/folder',
+    contentType: file.type || '',
+    path: dataStore.currentFolder.name || '',
   };
 
   try {

@@ -140,7 +140,6 @@ const columns = createColumns({
 function rowProps(row: RowData) {
   return {
     onClick: () => {
-      console.log('rowProps');
       currentRow.value = row.key;
     },
   };

@@ -2,7 +2,7 @@
   <n-form ref="formRef" :model="formData" :rules="rules">
     <!--  Folder submit -->
     <n-form-item>
-      <input type="hidden" name="bucketId" :value="formData.bucketId" />
+      <input type="hidden" name="bucketId" :value="formData.bucketId" readonly />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('storage.destroyBucket') }}
       </Btn>

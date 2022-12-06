@@ -4,11 +4,11 @@
       <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="5000">
         <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
         <Header @toggleSidebar="toggleSidebar" />
-        <n-scrollbar class="bg-grey-dark" y-scrollable style="max-height: calc(100vh - 64px)">
+        <n-scrollbar class="bg-grey-dark" y-scrollable style="max-height: calc(100vh - 56px)">
           <div
             ref="messageRef"
             class="flex justify-center items-center relative py-7 px-4 sm:px-8 lg:pr-10"
-            style="height: calc(100vh - 64px)"
+            style="height: calc(100vh - 56px)"
           >
             <div>
               <!-- customise 404 message from template section -->

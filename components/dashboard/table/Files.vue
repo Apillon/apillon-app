@@ -1,37 +1,46 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="data" :row-props="rowProps" />
+  <n-data-table
+    :bordered="false"
+    :columns="columns"
+    :data="dataStore.currentFolderContent"
+    :loading="tableLoading"
+    :pagination="{ pageSize: 10 }"
+    :row-key="rowKey"
+    @update:checked-row-keys="handleCheck"
+    :row-props="rowProps"
+  />
 
   <!-- Drawer - File details -->
   <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
-    <n-drawer-content>
+    <n-drawer-content v-if="fileDetails.file">
       <div class="body-sm mb-4">
         <p class="body-sm">{{ $t('storage.fileName') }}</p>
-        <strong>{{ currentRow.name }}</strong>
+        <strong>{{ fileDetails.file.name }}</strong>
       </div>
 
       <div class="body-sm mb-4">
         <p class="body-sm">{{ $t('storage.fileCid') }}</p>
-        <strong>{{ currentRow.fileCID }}</strong>
+        <strong>{{ fileDetails.file.CID }}</strong>
       </div>
 
       <div class="body-sm mb-4">
         <p class="body-sm">{{ $t('storage.fileSize') }}</p>
-        <strong>{{ currentRow.fileSize }}</strong>
+        <strong>{{ formatBytes(fileDetails.file.size) }}</strong>
       </div>
 
       <div class="body-sm mb-4">
         <p class="body-sm">{{ $t('storage.expiration') }}</p>
-        <strong>{{ currentRow.expiration }}</strong>
+        <strong>{{ fileDetails.crustStatus.expired_at }}</strong>
       </div>
 
       <div class="body-sm mb-4">
         <p class="body-sm">{{ $t('storage.replicas') }}</p>
-        <strong>{{ currentRow.replicas }}</strong>
+        <strong>{{ fileDetails.crustStatus.reported_replica_count }}</strong>
       </div>
 
       <div class="body-sm mb-4">
         <p class="body-sm">{{ $t('storage.status') }}</p>
-        <n-tag v-if="currentRow.active" type="success" :bordered="false" round>{{
+        <n-tag v-if="fileDetails.file.status === 5" type="success" :bordered="false" round>{{
           $t('general.ok')
         }}</n-tag>
         <n-tag v-else type="error" :bordered="false" round>{{ $t('general.error') }}</n-tag>
@@ -42,11 +51,26 @@
       </div>
       <Btn type="secondary" size="large">{{ $t('storage.renewPoolBalance') }}</Btn>
     </n-drawer-content>
+    <AnimationLoader v-else />
   </n-drawer>
+
+  <!-- Modal - Delete folder -->
+  <n-modal v-model:show="showModalFolderDelete">
+    <n-card
+      style="width: 660px"
+      :title="$t('storage.folderDelete')"
+      :bordered="false"
+      size="huge"
+      role="dialog"
+      aria-modal="true"
+    >
+      <FormStorageFolderDelete :folder-id="currentRow?.id || 0" @submit-success="onFolderDeleted" />
+    </n-card>
+  </n-modal>
 </template>
 
 <script lang="ts" setup>
-import { DataTableColumns, NButton, NDropdown, NTag, useMessage } from 'naive-ui';
+import { DataTableColumns, DataTableRowKey, NButton, NDropdown, NTag } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
@@ -55,34 +79,41 @@ const props = defineProps({
 });
 
 const $i18n = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
+const tableLoading = ref<boolean>(false);
+const showModalFileDelete = ref<boolean>(false);
+const showModalFolderDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
 
 type RowData = {
+  id: number;
   key: number;
   name: string;
-  fileCID: string;
-  fileSize: string;
+  CID: string;
+  size: number;
   expiration: string;
   replicas: number;
   active: boolean;
+  type: string;
 };
 
-const createColumns = (): DataTableColumns<RowData> => {
+const createColumns = (): DataTableColumns<FolderInterface> => {
   return [
+    {
+      type: 'selection',
+    },
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
       render(row) {
         return [
-          h(IconFolderFile, { isFile: row.fileCID ? true : false }, ''),
+          h(IconFolderFile, { isFile: row.type === 'file' }, ''),
           h(
             'span',
             {
               class: 'ml-2 text-blue cursor-pointer',
-              onClick: () => (drawerFileDetailsVisible.value = true),
+              onClick: () => onItemOpen(row),
             },
             row.name
           ),
@@ -91,20 +122,23 @@ const createColumns = (): DataTableColumns<RowData> => {
     },
     {
       title: $i18n.t('storage.fileCid'),
-      key: 'fileCID',
+      key: 'CID',
       render(row) {
         return h(
           'span',
           { class: 'text-grey' },
           {
-            default: () => row.fileCID,
+            default: () => truncateCid(row.CID || ''),
           }
         );
       },
     },
     {
       title: $i18n.t('storage.fileSize'),
-      key: 'fileSize',
+      key: 'size',
+      render(row) {
+        return h('span', {}, { default: () => formatBytes(row.size || 0) });
+      },
     },
     {
       title: $i18n.t('storage.expiration'),
@@ -120,9 +154,9 @@ const createColumns = (): DataTableColumns<RowData> => {
       render(row) {
         return h(
           NTag,
-          { type: row.active ? 'success' : 'error', round: true, bordered: false },
+          { type: row.id ? 'success' : 'error', round: true, bordered: false },
           {
-            default: () => (row.active ? $i18n.t('general.ok') : $i18n.t('general.error')),
+            default: () => (row.id ? $i18n.t('general.ok') : $i18n.t('general.error')),
           }
         );
       },
@@ -132,11 +166,11 @@ const createColumns = (): DataTableColumns<RowData> => {
       key: 'actions',
       align: 'right',
       className: '!py-0',
-      render() {
+      render(row) {
         return h(
           NDropdown,
           {
-            options: dropdownOptions,
+            options: row.type === 'file' ? dropdownFileOptions : dropdownFolderOptions,
             trigger: 'click',
           },
           {
@@ -152,41 +186,67 @@ const createColumns = (): DataTableColumns<RowData> => {
     },
   ];
 };
-
-const currentRow = ref<RowData>({} as RowData);
-const data = computed(() => {
-  const sampleData = {
-    key: 0,
-    name: 'filename-longername.pdf',
-    fileCID: 'QmXH...',
-    fileSize: '10.7MB',
-    expiration: '23 Okt 2022',
-    replicas: 16,
-    active: true,
-  };
-  const data =
-    props.bucketUuid in dataStore.services.folder
-      ? [sampleData, ...dataStore.services.folder[props.bucketUuid]]
-      : [sampleData];
-
-  return data.filter(item => item.name.toLowerCase().includes(props.search.toLowerCase()));
-});
-
 const columns = createColumns();
 
-function rowProps(row: RowData) {
+const currentRow = ref<FolderInterface>({} as FolderInterface);
+const selectedRows = ref<DataTableRowKey[]>([]);
+const fileDetails = ref<FileDetailsInterface>({} as FileDetailsInterface);
+
+const rowKey = (row: FolderInterface) => row.id;
+
+const handleCheck = (rowKeys: DataTableRowKey[]) => {
+  selectedRows.value = rowKeys;
+};
+
+function rowProps(row: FolderInterface) {
   return {
     onClick: () => {
-      console.log('rowProps');
       currentRow.value = row;
     },
   };
 }
 
-const dropdownOptions = [
+/** Action when user click on File/Folder name */
+async function onItemOpen(row: FolderInterface) {
+  if (row.type === 'file') {
+    drawerFileDetailsVisible.value = true;
+
+    /** Fetch file details */
+    fileDetails.value = await dataStore.fetchFileDetails(
+      'bb8f6e06-0b2b-4393-8f21-1bc476823996',
+      $i18n
+    );
+  } else if (row.type === 'directory') {
+    tableLoading.value = true;
+    await dataStore.fetchDirectoryContent($i18n, props.bucketUuid, row.id);
+    tableLoading.value = false;
+  } else {
+    console.warn("Unknown item type: it should be of type 'file' or 'directory'!");
+  }
+}
+
+const dropdownFolderOptions = [
   {
-    label: 'Edit ',
-    key: 'edit',
+    label: $i18n.t('general.open'),
+    key: 'open',
+    props: {
+      onClick: () => {},
+    },
+  },
+  {
+    label: $i18n.t('general.delete'),
+    key: 'delete',
+    props: {
+      onClick: () => {
+        showModalFolderDelete.value = true;
+      },
+    },
+  },
+];
+const dropdownFileOptions = [
+  {
+    label: $i18n.t('general.view'),
+    key: 'view',
     props: {
       onClick: () => {
         drawerFileDetailsVisible.value = true;
@@ -194,13 +254,11 @@ const dropdownOptions = [
     },
   },
   {
-    label: 'Delete',
+    label: $i18n.t('general.delete'),
     key: 'delete',
     props: {
       onClick: () => {
-        message.error('Delete: ' + JSON.stringify(currentRow.value), {
-          icon: () => h('span', { class: 'icon-delete' }, {}),
-        });
+        showModalFileDelete.value = true;
       },
     },
   },
@@ -211,15 +269,20 @@ const dropdownOptions = [
  */
 onMounted(() => {
   setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(_ => {
-      getFolders();
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      tableLoading.value = true;
+      await dataStore.fetchDirectoryContent($i18n);
+      tableLoading.value = false;
     });
   }, 100);
 });
 
-async function getFolders() {
-  if (!dataStore.hasFolder(props.bucketUuid)) {
-    await dataStore.fetchDirectoryContent(props.bucketUuid, $i18n);
-  }
+async function onFolderDeleted() {
+  tableLoading.value = true;
+
+  showModalFolderDelete.value = false;
+  await dataStore.fetchDirectoryContent($i18n);
+
+  tableLoading.value = false;
 }
 </script>

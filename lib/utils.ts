@@ -1,10 +1,8 @@
-import { useI18n } from 'vue-i18n';
 import stg from '../config/staging';
 import dev from '../config/development';
 import prod from '../config/production';
 import local from '../config/local';
 import { Feature } from '~~/types/config';
-import i18n from '~~/plugins/i18n';
 
 export function getAppConfig(env?: string) {
   if (!env) {
@@ -42,6 +40,9 @@ export function truncateWallet(source: string, partLength: number = 4): string {
   return source.length > 9
     ? source.slice(0, partLength) + '…' + source.slice(source.length - partLength, source.length)
     : source;
+}
+export function truncateCid(source: string, partLength: number = 4): string {
+  return source && source.length > 9 ? source.slice(0, partLength) + '…' : source;
 }
 
 /**
@@ -87,6 +88,18 @@ export function kbToMb(kb: number): number {
 
 export function storagePercantage(size: number, maxSize: number): number {
   return parseInt(((size / maxSize) * 100).toFixed(0));
+}
+
+export function formatBytes(bytes: number, decimals: number = 2): string {
+  if (!+bytes) return '';
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
 /**
