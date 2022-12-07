@@ -175,6 +175,8 @@
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "email": "Email address",
+      "folderName": "Folder name",
+      "folderDescription": "Folder description",
       "inviteByEmail": "Invite by email",
       "expirationDate": "Expiration date",
       "networkType": "Choose the desired network",
@@ -198,6 +200,8 @@
       "complexPassword": "Enter complex password",
       "cvv": "311",
       "email": "youremail{afna}mail.com",
+      "folderName": "",
+      "folderDescription": "",
       "inviteByEmail": "Type e-mail",
       "expirationDate": "01/2023",
       "password": "password",
@@ -358,6 +362,15 @@
     "withEmail": "sign up with email"
   },
   "storage": {
+    "file": {
+      "create": "Create file",
+      "delete": "Delete file"
+    },
+    "folder": {
+      "create": "Create folder",
+      "createNew": "Create new folder",
+      "delete": "Delete folder"
+    },
     "bucket": "Storage bucket",
     "bucketManagement": "Bucket management",
     "bucketName": "Bucket name",

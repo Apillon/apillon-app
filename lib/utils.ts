@@ -102,6 +102,16 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
+export function fileExpiration(expiredAt: number): string {
+  const expiredAtDate = new Date(Date.now() + expiredAt);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+  return expiredAtDate.toLocaleDateString('en-us', options);
+}
+
 /**
  * Error messages
  */

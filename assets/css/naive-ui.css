@@ -213,3 +213,17 @@ body > .n-message-container {
   font-weight: bold;
 }
 */
+
+/** Upload file */
+.n-upload-file-list .n-upload-file {
+  @apply bg-dark mb-2 px-6 pb-1;
+
+  .n-upload-file-info__thumbnail {
+    display: none;
+  }
+
+  .n-progress-graph-line-rail,
+  .n-progress-graph-line-fill {
+    min-height: 4px;
+  }
+}

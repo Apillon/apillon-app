@@ -6,13 +6,6 @@
           <span class="icon-back"></span>
         </NuxtLink>
         <h4>{{ $t('storage.bucketManagement') }}</h4>
-        <Notification type="success">
-          <span class="text-green">
-            Bucket storage
-            <strong class="text-grey-light">Bucketname</strong>
-            was successfully created
-          </span>
-        </Notification>
       </n-space>
     </template>
 
@@ -55,7 +48,7 @@
         <n-space justify="space-between">
           <div class="w-[20vw] max-w-xs">
             <n-input
-              v-model:value="searchFiles"
+              v-model:value="dataStore.folder.search"
               type="text"
               name="search"
               size="small"
@@ -69,20 +62,22 @@
               <span class="text-normal">Copy ARN</span>
             </n-button>
             <n-button size="small">Actions</n-button>
-            <n-button size="small" @click="showModalNewFolder = true">Create folder</n-button>
+            <n-button size="small" @click="showModalNewFolder = true">
+              {{ $t('storage.folder.create') }}
+            </n-button>
             <n-button size="small">Download</n-button>
           </n-space>
         </n-space>
 
         <!-- DataTable: files and directories -->
-        <TableFiles :bucketUuid="dataStore.currentBucket.bucket_uuid" :search="searchFiles" />
+        <TableFiles />
       </n-space>
 
       <!-- Modal - Create new folder -->
       <n-modal v-model:show="showModalNewFolder">
         <n-card
           style="width: 660px"
-          :title="$t('storage.createNewFolder')"
+          :title="$t('storage.folder.createNew')"
           :bordered="false"
           size="huge"
           role="dialog"
@@ -104,7 +99,6 @@ const router = useRouter();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 const showModalNewFolder = ref<boolean>(false);
-const searchFiles = ref<string>('');
 
 useHead({
   title: $i18n.t('nav.storage'),
@@ -112,7 +106,7 @@ useHead({
 
 onMounted(() => {
   /** Bucket ID from route */
-  dataStore.selected.bucketId = parseInt(`${params?.id}`);
+  dataStore.setBucketId(parseInt(`${params?.id}`));
 
   if (!Array.isArray(dataStore.services.bucket) || dataStore.services.bucket.length === 0) {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
@@ -120,8 +114,6 @@ onMounted(() => {
 
       Promise.all(Object.values(dataStore.promises)).then(_ => {
         checkIfBucketExists();
-        console.log(dataStore.currentFolder);
-        console.log(dataStore.currentFolderContent);
       });
     });
   } else {

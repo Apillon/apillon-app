@@ -24,25 +24,7 @@ const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 
-const fileList = ref<NUploadFileInfo[]>([
-  {
-    id: 'a',
-    name: 'My Fault.png',
-    status: 'error',
-  },
-  {
-    id: 'c',
-    name: 'Finished you can dowload.png',
-    status: 'finished',
-    url: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg',
-  },
-  {
-    id: 'd',
-    name: 'Waiting for the finish .doc',
-    status: 'uploading',
-    percentage: 50,
-  },
-]);
+const fileList = ref<NUploadFileInfo[]>([]);
 
 /**
  *  API calls
@@ -53,7 +35,7 @@ const uploadFiles = async ({
   onFinish,
   onProgress,
 }: NUploadCustomRequestOptions) => {
-  const sessionUuid = uuidv4();
+  const sessionUuid = file.batchId || uuidv4();
   const bodyData: FormFileUploadRequest = {
     bucket_uuid: props.bucketUuid,
     session_uuid: sessionUuid,
@@ -62,49 +44,94 @@ const uploadFiles = async ({
     path: dataStore.currentFolder.name || '',
   };
 
+  fileList.value.push({
+    id: file.id,
+    name: file.name,
+    status: 'uploading',
+    percentage: 0,
+  });
+
   try {
     /** Upload file request */
     const res = await $api.post<FileUploadRequestResponse>(endpoints.storageFileUpload, bodyData);
 
     /** Upload file to S3 */
     var xhr = new XMLHttpRequest();
-    xhr.onprogress = percent => {
-      console.log('progress', percent);
-      onProgress({ percent: Math.ceil(100) });
+    xhr.onprogress = (progress: ProgressEvent<EventTarget>) => {
+      console.log('progress');
+      console.log(progress);
+      console.log(progress.loaded);
+
+      updateFilePercentage(file.id, progress.loaded);
+      onProgress({ percent: Math.ceil(progress.loaded) });
     };
-    xhr.open('PUT', res.data.signedUrlForUpload, false);
+    xhr.open('PUT', res.data.signedUrlForUpload, true);
     xhr.onreadystatechange = function (aEvt) {
       console.log('onreadystatechange');
       console.log(xhr);
+      console.log(xhr.readyState);
       console.log(aEvt);
+      if (xhr.readyState == 2) {
+        updateFilePercentage(file.id, 20);
+      }
+      if (xhr.readyState == 3) {
+        updateFilePercentage(file.id, 80);
+      }
       if (xhr.readyState == 4) {
         //run any callback here
+        updateFilePercentage(file.id, 90);
         onFinish();
       }
     };
-    xhr.onload = success => {
-      console.log('success', success);
+    xhr.onload = (success: ProgressEvent<EventTarget>) => {
+      console.log('success');
+      console.log(success);
+      console.log(success.loaded);
+      uploadSessionEnd(sessionUuid);
       onFinish();
     };
     xhr.onerror = error => {
       console.log('error', error);
+      updateFileStatus(file.id, 'error');
       onError();
     };
     xhr.send(file.file as File);
     console.log('xhr');
     console.log(xhr);
-
-    /** Session End */
-    const resSessionEnd = await $api.post<PasswordResetResponse>(
-      `${endpoints.storageFileUploadSession}/${sessionUuid}/end`,
-      { directSync: true }
-    );
-
-    if (resSessionEnd.data) {
-      message.success($i18n.t('storage.fileUploaded'));
-    }
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));
   }
 };
+
+function updateFilePercentage(fileId: string, percent: number) {
+  fileList.value.map(item => {
+    if (item.id === fileId) {
+      item.percentage = percent;
+    }
+  });
+}
+function updateFileStatus(
+  fileId: string,
+  status: 'pending' | 'uploading' | 'finished' | 'removed' | 'error'
+) {
+  fileList.value.map(item => {
+    if (item.id === fileId) {
+      item.status = status;
+    }
+  });
+}
+
+/** Upload Session End */
+async function uploadSessionEnd(sessionUuid: string) {
+  const resSessionEnd = await $api.post<PasswordResetResponse>(
+    `${endpoints.storageFileUploadSession}/${sessionUuid}/end`,
+    { directSync: true }
+  );
+
+  if (resSessionEnd.data) {
+    message.success($i18n.t('storage.fileUploaded'));
+  }
+
+  dataStore.fetchDirectoryContent($i18n);
+}
 </script>

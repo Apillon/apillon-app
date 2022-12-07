@@ -22,15 +22,17 @@ export const useDataStore = defineStore('data', {
     } as Record<ServiceTypeName, any>,
     selected: {
       bucketId: 0,
-      folderId: sessionStorage.getItem(DataLsKeys.CURRENT_FOLDER_ID)
-        ? parseInt(`${sessionStorage.getItem(DataLsKeys.CURRENT_FOLDER_ID)}`)
-        : 0,
+      folderId: 0,
     },
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
     promises: {
       projects: null as any,
       buckets: null as any,
+    },
+    folder: {
+      total: 0,
+      search: '',
     },
   }),
   getters: {
@@ -93,6 +95,14 @@ export const useDataStore = defineStore('data', {
     setCurrentProject(id: number) {
       this.currentProjectId = id;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
+    },
+
+    setBucketId(id: number) {
+      this.services.folder = {} as Record<string, Array<FolderInterface>>;
+      this.selected.folderId = 0;
+      this.folder.total = 0;
+      this.folder.search = '';
+      this.selected.bucketId = id;
     },
 
     setFolderId(id: number) {
@@ -242,7 +252,14 @@ export const useDataStore = defineStore('data', {
       return null;
     },
 
-    async fetchDirectoryContent($i18n: any, bucketUuid?: string, folderId?: number) {
+    async fetchDirectoryContent(
+      $i18n: any,
+      bucketUuid?: string,
+      folderId?: number,
+      offset?: number,
+      limit?: number,
+      search?: string
+    ) {
       /** Fallback for bucketUuid */
       const bucket = bucketUuid || this.currentBucket.bucket_uuid;
 
@@ -253,21 +270,30 @@ export const useDataStore = defineStore('data', {
       const folderKey = this.getFolderKey();
       try {
         /** If subfolder is selected, search directory content in this sibfolder */
-        const params: Record<string, string | number> = this.selected.folderId
-          ? {
-              bucket_uuid: bucket,
-              directory_id: this.selected.folderId,
-            }
-          : {
-              bucket_uuid: bucket,
-            };
+        let params: Record<string, string | number> = {
+          bucket_uuid: bucket,
+        };
+
+        /** Add additional parameters */
+        if (this.selected.folderId > 0) {
+          params.directory_id = this.selected.folderId;
+        }
+        if (search) {
+          params.search = search;
+        }
+        if (offset) {
+          params.offset = offset;
+          params.limit = limit || PAGINATION_LIMIT;
+        }
 
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
 
         this.services.folder[folderKey] = res.data.items;
+        this.folder.total = res.data.total;
       } catch (error: any) {
         /** Reset data */
         this.services.folder[folderKey] = [];
+        this.folder.total = 0;
 
         /** Show error message */
         const message = useMessage();

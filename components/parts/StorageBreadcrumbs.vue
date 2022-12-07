@@ -25,15 +25,11 @@ const $i18n = useI18n();
 const dataStore = useDataStore();
 
 function goToParentFolder(parentFolderId?: number | undefined) {
-  console.log(parentFolderId);
   /** Select parent directory or root directory */
   dataStore.setFolderId(parentFolderId || 0);
 
-  if (
-    !Array.isArray(dataStore.currentFolderContent) ||
-    dataStore.currentFolderContent.length === 0
-  ) {
-    dataStore.fetchDirectoryContent($i18n);
-  }
+  /** Reset search string and refesh folders */
+  dataStore.folder.search = '';
+  dataStore.fetchDirectoryContent($i18n);
 }
 </script>

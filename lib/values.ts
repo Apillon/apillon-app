@@ -1,11 +1,7 @@
 import { DiscreteApiOptions, GlobalThemeOverrides } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 
-export const lsKeys = {
-  TWITTER: 'al_twitter',
-  GOOGLE: 'al_google',
-  DISCORD: 'al_discord',
-};
+export const PAGINATION_LIMIT = 20;
 
 export const MessageProviderOptoins: DiscreteApiOptions = {
   messageProviderProps: {
@@ -146,6 +142,14 @@ export const themeOverrides: GlobalThemeOverrides = {
     textColorInfo: colors.blue,
     textColorSuccess: colors.green,
     textColorWarning: colors.yellow,
+  },
+  Progress: {
+    fillColor: colors.green,
+    fillColorInfo: colors.green,
+    fillColorError: colors.pink,
+    fillColorSuccess: colors.green,
+    railColor: colors.grey.lightBg,
+    railHeight: '4px',
   },
   Radio: {
     boxShadow: `inset 0 0 0 1px ${colors.grey.DEFAULT}`,

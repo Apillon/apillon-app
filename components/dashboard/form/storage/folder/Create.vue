@@ -32,7 +32,7 @@
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
-        {{ $t('storage.createNewFolder') }}
+        {{ $t('storage.folder.createNew') }}
       </Btn>
     </n-form-item>
   </n-form>

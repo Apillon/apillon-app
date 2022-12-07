@@ -29,6 +29,7 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const { name, params } = useRoute();
+const dataStore = useDataStore();
 const showModalDestroyBucket = ref<boolean>(false);
 const NuxtLink = resolveComponent('NuxtLink');
 
@@ -43,7 +44,11 @@ function handleUpdateValue(key: string, item: MenuOption) {
 const menuOptions: MenuOption[] = [
   {
     label: () =>
-      h(NuxtLink, { to: { path: '/dashboard/service/storage/:id' } }, () => t('storage.files')),
+      h(
+        NuxtLink,
+        { to: { path: `/dashboard/service/storage/${dataStore.selected.bucketId}` } },
+        () => t('storage.files')
+      ),
     key: 'dashboard-service-storage-id',
   },
   {

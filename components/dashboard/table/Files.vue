@@ -1,13 +1,15 @@
 <template>
   <n-data-table
+    remote
     :bordered="false"
     :columns="columns"
     :data="dataStore.currentFolderContent"
     :loading="tableLoading"
-    :pagination="{ pageSize: 10 }"
+    :pagination="pagination"
     :row-key="rowKey"
-    @update:checked-row-keys="handleCheck"
     :row-props="rowProps"
+    @update:checked-row-keys="handleCheck"
+    @update:page="handlePageChange"
   />
 
   <!-- Drawer - File details -->
@@ -30,7 +32,7 @@
 
       <div class="body-sm mb-4">
         <p class="body-sm">{{ $t('storage.expiration') }}</p>
-        <strong>{{ fileDetails.crustStatus.expired_at }}</strong>
+        <strong>{{ fileExpiration(fileDetails.crustStatus.expired_at) }}</strong>
       </div>
 
       <div class="body-sm mb-4">
@@ -54,50 +56,100 @@
     <AnimationLoader v-else />
   </n-drawer>
 
-  <!-- Modal - Delete folder -->
-  <n-modal v-model:show="showModalFolderDelete">
+  <!-- Modal - Delete file/folder -->
+  <n-modal v-model:show="showModalDelete">
     <n-card
       style="width: 660px"
-      :title="$t('storage.folderDelete')"
+      :title="$t(`storage.${currentRow.type}.delete`)"
       :bordered="false"
       size="huge"
       role="dialog"
       aria-modal="true"
     >
-      <FormStorageFolderDelete :folder-id="currentRow?.id || 0" @submit-success="onFolderDeleted" />
+      <FormStorageFolderDelete
+        :id="currentRow.id"
+        :type="currentRow.type"
+        @submit-success="onDeleted"
+      />
     </n-card>
   </n-modal>
 </template>
 
 <script lang="ts" setup>
+import { debounce } from 'lodash';
 import { DataTableColumns, DataTableRowKey, NButton, NDropdown, NTag } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-
-const props = defineProps({
-  bucketUuid: { type: String, required: true },
-  search: { type: String, required: true },
-});
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const tableLoading = ref<boolean>(false);
-const showModalFileDelete = ref<boolean>(false);
-const showModalFolderDelete = ref<boolean>(false);
+const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
 
-type RowData = {
-  id: number;
-  key: number;
-  name: string;
-  CID: string;
-  size: number;
-  expiration: string;
-  replicas: number;
-  active: boolean;
-  type: string;
-};
+const currentRow = ref<FolderInterface>({} as FolderInterface);
+const selectedRows = ref<DataTableRowKey[]>([]);
+const fileDetails = ref<FileDetailsInterface>({} as FileDetailsInterface);
 
+/** Pagination data */
+const currentPage = ref<number>(0);
+const pagination = computed(() => {
+  return {
+    page: currentPage.value,
+    pageSize: PAGINATION_LIMIT,
+    pageCount: Math.ceil(dataStore.folder.total / PAGINATION_LIMIT),
+    itemCount: dataStore.folder.total,
+  };
+});
+
+/** Dropdown options for folder and file */
+const dropdownFolderOptions = [
+  {
+    label: $i18n.t('general.open'),
+    key: 'open',
+    props: {
+      onClick: () => {},
+    },
+  },
+  {
+    label: $i18n.t('general.delete'),
+    key: 'delete',
+    props: {
+      onClick: () => {
+        showModalDelete.value = true;
+      },
+    },
+  },
+];
+
+const dropdownFileOptions = [
+  {
+    label: $i18n.t('general.view'),
+    key: 'view',
+    props: {
+      onClick: async () => {
+        drawerFileDetailsVisible.value = true;
+
+        /** Fetch file details */
+        fileDetails.value = await dataStore.fetchFileDetails(
+          currentRow.value.fileUuid || '',
+          $i18n
+        );
+      },
+    },
+  },
+  {
+    label: $i18n.t('general.delete'),
+    key: 'delete',
+    props: {
+      onClick: () => {
+        showModalDelete.value = true;
+      },
+    },
+  },
+];
+
+/** Columns */
 const createColumns = (): DataTableColumns<FolderInterface> => {
   return [
     {
@@ -188,10 +240,6 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
 };
 const columns = createColumns();
 
-const currentRow = ref<FolderInterface>({} as FolderInterface);
-const selectedRows = ref<DataTableRowKey[]>([]);
-const fileDetails = ref<FileDetailsInterface>({} as FileDetailsInterface);
-
 const rowKey = (row: FolderInterface) => row.id;
 
 const handleCheck = (rowKeys: DataTableRowKey[]) => {
@@ -212,57 +260,15 @@ async function onItemOpen(row: FolderInterface) {
     drawerFileDetailsVisible.value = true;
 
     /** Fetch file details */
-    fileDetails.value = await dataStore.fetchFileDetails(
-      'bb8f6e06-0b2b-4393-8f21-1bc476823996',
-      $i18n
-    );
+    fileDetails.value = await dataStore.fetchFileDetails(row.fileUuid || '', $i18n);
   } else if (row.type === 'directory') {
-    tableLoading.value = true;
-    await dataStore.fetchDirectoryContent($i18n, props.bucketUuid, row.id);
-    tableLoading.value = false;
+    /** Fetch data in reset search string */
+    dataStore.folder.search = '';
+    getDirectoryContent(dataStore.currentBucket.bucket_uuid, row.id);
   } else {
     console.warn("Unknown item type: it should be of type 'file' or 'directory'!");
   }
 }
-
-const dropdownFolderOptions = [
-  {
-    label: $i18n.t('general.open'),
-    key: 'open',
-    props: {
-      onClick: () => {},
-    },
-  },
-  {
-    label: $i18n.t('general.delete'),
-    key: 'delete',
-    props: {
-      onClick: () => {
-        showModalFolderDelete.value = true;
-      },
-    },
-  },
-];
-const dropdownFileOptions = [
-  {
-    label: $i18n.t('general.view'),
-    key: 'view',
-    props: {
-      onClick: () => {
-        drawerFileDetailsVisible.value = true;
-      },
-    },
-  },
-  {
-    label: $i18n.t('general.delete'),
-    key: 'delete',
-    props: {
-      onClick: () => {
-        showModalFileDelete.value = true;
-      },
-    },
-  },
-];
 
 /**
  * Load data on mounted
@@ -270,19 +276,52 @@ const dropdownFileOptions = [
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      tableLoading.value = true;
-      await dataStore.fetchDirectoryContent($i18n);
-      tableLoading.value = false;
+      await getDirectoryContent();
     });
   }, 100);
 });
 
-async function onFolderDeleted() {
+/** On page change, load data */
+async function handlePageChange(currentPage: number) {
+  if (!tableLoading.value) {
+    await getDirectoryContent(
+      dataStore.currentBucket.bucket_uuid,
+      dataStore.selected.folderId,
+      currentPage
+    );
+  }
+}
+
+/** On folder deleted, refresh folder list */
+async function onDeleted() {
+  await getDirectoryContent();
+  showModalDelete.value = false;
+}
+
+/** Search folders and files */
+watch(
+  () => dataStore.folder.search,
+  _ => {
+    debouncedSearchFilter();
+  }
+);
+const debouncedSearchFilter = debounce(getDirectoryContent, 350);
+
+/** Function "Fetch directory content" wrapper  */
+async function getDirectoryContent(bucketUuid?: string, folderId?: number, page: number = 1) {
   tableLoading.value = true;
+  const offset = (page - 1) * PAGINATION_LIMIT;
 
-  showModalFolderDelete.value = false;
-  await dataStore.fetchDirectoryContent($i18n);
+  await dataStore.fetchDirectoryContent(
+    $i18n,
+    bucketUuid,
+    folderId,
+    offset,
+    PAGINATION_LIMIT,
+    dataStore.folder.search
+  );
 
+  currentPage.value = page;
   tableLoading.value = false;
 }
 </script>

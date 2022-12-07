@@ -207,6 +207,7 @@ declare global {
     type: string;
     createTime: string;
     updateTime: string;
+    fileUuid?: string;
     parentDirectoryId?: number;
   }
   interface FormFolder {
