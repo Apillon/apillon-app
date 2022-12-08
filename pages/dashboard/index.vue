@@ -32,13 +32,27 @@
           <Image src="/images/dashboard/welcome.svg" :width="400" :height="470" alt="apillon" />
         </div>
       </div>
+      <div class="max-w-[980px] p-8 mt-7 bg-grey-lightBg">
+        <p>
+          <strong>Referral code:</strong>
+        </p>
+        <div class="max-w-[480px]">
+          <div class="p-4 bg-grey-dark mt-2">
+            <p>
+              {{ authStore.userUuid }}
+            </p>
+          </div>
+        </div>
+      </div>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
+
 const { t } = useI18n();
+const authStore = useAuthStore();
 
 useHead({
   title: t('dashboard.dashboard'),
