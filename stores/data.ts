@@ -33,6 +33,7 @@ export const useDataStore = defineStore('data', {
     folder: {
       total: 0,
       search: '',
+      allowFetch: true,
       loading: false,
       path: [] as Array<{ id: number; name: string }>,
     },
@@ -84,9 +85,9 @@ export const useDataStore = defineStore('data', {
       this.services.folder = [] as Array<FolderInterface>;
       this.selected.folderId = 0;
       this.folder.total = 0;
-      this.folder.search = '';
       this.folder.path = [];
       this.selected.bucketId = id;
+      this.folderSearch();
     },
 
     setFolderId(id: number) {
@@ -129,6 +130,15 @@ export const useDataStore = defineStore('data', {
           .find(folder => folder.type === 'directory' && folder.id === folderId) ||
         ({} as FolderInterface)
       );
+    },
+
+    folderSearch(search: string = '', fetch: boolean = false) {
+      this.folder.allowFetch = fetch;
+      this.folder.search = search;
+
+      if (!fetch) {
+        setTimeout(() => (this.folder.allowFetch = true), 1000);
+      }
     },
 
     async fetchProjects(redirectToDashboard: boolean = false, $i18n: any = null) {

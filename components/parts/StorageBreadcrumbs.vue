@@ -43,11 +43,7 @@ function goToFolder(parentFolderId?: number | undefined) {
   }
 
   /** Reset search string and refesh folders */
-  dataStore.folder.loading = true;
-  dataStore.folder.search = '';
+  dataStore.folderSearch();
   dataStore.fetchDirectoryContent($i18n);
-  setTimeout(() => {
-    dataStore.folder.loading = false;
-  }, 1000);
 }
 </script>

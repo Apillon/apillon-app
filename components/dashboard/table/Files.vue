@@ -272,7 +272,7 @@ async function onFolderOpen(folder: FolderInterface) {
   });
 
   /** Fetch data in reset search string */
-  dataStore.folder.search = '';
+  dataStore.folderSearch();
   getDirectoryContent(dataStore.currentBucket.bucket_uuid, folder.id);
 }
 
@@ -308,7 +308,9 @@ async function onDeleted() {
 watch(
   () => dataStore.folder.search,
   _ => {
-    debouncedSearchFilter();
+    if (dataStore.folder.allowFetch) {
+      debouncedSearchFilter();
+    }
   }
 );
 const debouncedSearchFilter = debounce(getDirectoryContent, 500);
