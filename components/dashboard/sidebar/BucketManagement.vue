@@ -1,10 +1,6 @@
 <template>
   <div>
-    <n-menu
-      v-model:value="(name as string)"
-      :options="menuOptions"
-      @update-value="handleUpdateValue"
-    />
+    <n-menu v-model:value="selectedMenu" :options="menuOptions" />
 
     <!-- Modal - Destroy bucket -->
     <n-modal v-model:show="showModalDestroyBucket">
@@ -16,7 +12,7 @@
         role="dialog"
         aria-modal="true"
       >
-        <FormStorageDestroy :bucket-id="bucketId" />
+        <FormStorageDestroy :bucket-id="dataStore.selected.bucketId" />
       </n-card>
     </n-modal>
   </div>
@@ -28,18 +24,14 @@ import type { MenuOption } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const { name, params } = useRoute();
+const { name } = useRoute();
 const dataStore = useDataStore();
 const showModalDestroyBucket = ref<boolean>(false);
 const NuxtLink = resolveComponent('NuxtLink');
 
-/** Bucket ID from route */
-const bucketId = parseInt(`${params?.id}`);
-
-function handleUpdateValue(key: string, item: MenuOption) {
-  console.info('[onUpdate:value]: ' + JSON.stringify(key));
-  console.info('[onUpdate:value]: ' + JSON.stringify(item));
-}
+const selectedMenu = computed(() => {
+  return name || '';
+});
 
 const menuOptions: MenuOption[] = [
   {
@@ -52,22 +44,22 @@ const menuOptions: MenuOption[] = [
     key: 'dashboard-service-storage-id',
   },
   {
-    label: () => h('span', {}, t('storage.snapshots')),
+    label: () => h('span', {}, () => t('storage.snapshots')),
     key: 'snapshots',
     disabled: true,
   },
   {
-    label: () => h('span', {}, t('storage.stats')),
+    label: () => h('span', {}, () => t('storage.stats')),
     key: 'stats',
     disabled: true,
   },
   {
-    label: () => h('span', {}, t('storage.history')),
+    label: () => h('span', {}, () => t('storage.history')),
     key: 'history',
     disabled: true,
   },
   {
-    label: () => h('span', { class: 'text-grey-light' }, t('storage.destroy')),
+    label: () => h('span', {}, () => t('storage.destroy')),
     key: 'delete',
     onClick: () => (showModalDestroyBucket.value = true),
   },
