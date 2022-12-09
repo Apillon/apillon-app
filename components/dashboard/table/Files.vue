@@ -3,8 +3,8 @@
     remote
     :bordered="false"
     :columns="columns"
-    :data="dataStore.currentFolderContent"
-    :loading="tableLoading"
+    :data="dataStore.services.folder"
+    :loading="dataStore.folder.loading"
     :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
@@ -32,12 +32,12 @@
 
       <div class="body-sm mb-4">
         <p class="body-sm">{{ $t('storage.expiration') }}</p>
-        <strong>{{ fileExpiration(fileDetails.crustStatus.expired_at) }}</strong>
+        <strong>{{ fileExpiration(fileDetails.crustStatus?.expired_at || 0) }}</strong>
       </div>
 
       <div class="body-sm mb-4">
         <p class="body-sm">{{ $t('storage.replicas') }}</p>
-        <strong>{{ fileDetails.crustStatus.reported_replica_count }}</strong>
+        <strong>{{ fileDetails.crustStatus?.reported_replica_count || 0 }}</strong>
       </div>
 
       <div class="body-sm mb-4">
@@ -82,7 +82,6 @@ import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const tableLoading = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
@@ -108,7 +107,9 @@ const dropdownFolderOptions = [
     label: $i18n.t('general.open'),
     key: 'open',
     props: {
-      onClick: () => {},
+      onClick: async () => {
+        onFolderOpen(currentRow.value);
+      },
     },
   },
   {
@@ -128,13 +129,7 @@ const dropdownFileOptions = [
     key: 'view',
     props: {
       onClick: async () => {
-        drawerFileDetailsVisible.value = true;
-
-        /** Fetch file details */
-        fileDetails.value = await dataStore.fetchFileDetails(
-          currentRow.value.fileUuid || '',
-          $i18n
-        );
+        onFileOpen(currentRow.value);
       },
     },
   },
@@ -193,14 +188,6 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
       },
     },
     {
-      title: $i18n.t('storage.expiration'),
-      key: 'expiration',
-    },
-    {
-      title: $i18n.t('storage.replicas'),
-      key: 'replicas',
-    },
-    {
       title: $i18n.t('storage.status'),
       key: 'active',
       render(row) {
@@ -256,18 +243,37 @@ function rowProps(row: FolderInterface) {
 
 /** Action when user click on File/Folder name */
 async function onItemOpen(row: FolderInterface) {
-  if (row.type === 'file') {
-    drawerFileDetailsVisible.value = true;
-
-    /** Fetch file details */
-    fileDetails.value = await dataStore.fetchFileDetails(row.fileUuid || '', $i18n);
-  } else if (row.type === 'directory') {
-    /** Fetch data in reset search string */
-    dataStore.folder.search = '';
-    getDirectoryContent(dataStore.currentBucket.bucket_uuid, row.id);
-  } else {
-    console.warn("Unknown item type: it should be of type 'file' or 'directory'!");
+  switch (row.type) {
+    case 'file':
+      onFileOpen(row);
+      break;
+    case 'directory':
+      onFolderOpen(row);
+      break;
+    default:
+      console.warn("Unknown item type: it should be of type 'file' or 'directory'!");
   }
+}
+
+/** Open file - show file details */
+async function onFileOpen(file: FolderInterface) {
+  drawerFileDetailsVisible.value = true;
+
+  /** Fetch file details */
+  fileDetails.value = await dataStore.fetchFileDetails(file.file_uuid || '', $i18n);
+}
+
+/** Open directory - show subfolder content */
+async function onFolderOpen(folder: FolderInterface) {
+  /** Add subfolder to folder path */
+  dataStore.folder.path.push({
+    id: folder.id,
+    name: folder.name,
+  });
+
+  /** Fetch data in reset search string */
+  dataStore.folder.search = '';
+  getDirectoryContent(dataStore.currentBucket.bucket_uuid, folder.id);
 }
 
 /**
@@ -283,7 +289,7 @@ onMounted(() => {
 
 /** On page change, load data */
 async function handlePageChange(currentPage: number) {
-  if (!tableLoading.value) {
+  if (!dataStore.folder.loading) {
     await getDirectoryContent(
       dataStore.currentBucket.bucket_uuid,
       dataStore.selected.folderId,
@@ -305,11 +311,10 @@ watch(
     debouncedSearchFilter();
   }
 );
-const debouncedSearchFilter = debounce(getDirectoryContent, 350);
+const debouncedSearchFilter = debounce(getDirectoryContent, 500);
 
 /** Function "Fetch directory content" wrapper  */
 async function getDirectoryContent(bucketUuid?: string, folderId?: number, page: number = 1) {
-  tableLoading.value = true;
   const offset = (page - 1) * PAGINATION_LIMIT;
 
   await dataStore.fetchDirectoryContent(
@@ -322,6 +327,5 @@ async function getDirectoryContent(bucketUuid?: string, folderId?: number, page:
   );
 
   currentPage.value = page;
-  tableLoading.value = false;
 }
 </script>

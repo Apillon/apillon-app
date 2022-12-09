@@ -159,25 +159,23 @@ declare global {
     size: number;
     status: number;
   }
+  interface CrustInterface {
+    amount: number;
+    calculated_at: number;
+    expired_at: number;
+    file_size: number;
+    prepaid: number;
+    remaining_paid_count: number;
+    replicas: Record<string, any>;
+    reported_replica_count: number;
+    spower: number;
+  }
   interface FileDetailsInterface {
-    crustStatus: {
-      amount: number;
-      calculated_at: number;
-      expired_at: number;
-      file_size: number;
-      prepaid: number;
-      remaining_paid_count: number;
-      replicas: Record<string, any>;
-      reported_replica_count: number;
-      spower: number;
-    };
     file: FileInterface;
     fileStatus: number;
   }
 
   interface FormFileUploadRequest {
-    bucket_uuid: string;
-    session_uuid: string;
     fileName: string;
     contentType: string;
     directory_uuid?: string;
@@ -207,7 +205,7 @@ declare global {
     type: string;
     createTime: string;
     updateTime: string;
-    fileUuid?: string;
+    file_uuid?: string;
     parentDirectoryId?: number;
   }
   interface FormFolder {

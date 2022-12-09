@@ -215,8 +215,9 @@
       "username": "Enter yout First & Last name"
     },
     "success": {
-      "requestPasswordChange": "We have send you a password reset request to your email.",
+      "filesUploaded": "Files has been successfully uploaded",
       "profile": "Your profile data has been updated",
+      "requestPasswordChange": "We have send you a password reset request to your email.",
       "sendAgainEmail": "Email has been re-sent"
     },
     "terms": {

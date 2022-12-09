@@ -17,7 +17,7 @@ export const useDataStore = defineStore('data', {
       authentication: [] as Array<ServiceInterface>,
       storage: [] as Array<ServiceInterface>,
       bucket: [] as Array<BucketInterface>,
-      folder: {} as Record<string, Array<FolderInterface>>,
+      folder: [] as Array<FolderInterface>,
       computing: [] as Array<ServiceInterface>,
     } as Record<ServiceTypeName, any>,
     selected: {
@@ -33,6 +33,8 @@ export const useDataStore = defineStore('data', {
     folder: {
       total: 0,
       search: '',
+      loading: false,
+      path: [] as Array<{ id: number; name: string }>,
     },
   }),
   getters: {
@@ -60,27 +62,8 @@ export const useDataStore = defineStore('data', {
         ) || {}
       );
     },
-
-    currentFolder(state): FolderInterface {
-      if (state.selected.folderId === 0) {
-        return {} as FolderInterface;
-      }
-
-      return (
-        (Object.values(state.services.folder) as Array<Array<FolderInterface>>)
-          .flatMap(_ => _)
-          .find(folder => folder.type === 'directory' && folder.id === state.selected.folderId) ||
-        ({} as FolderInterface)
-      );
-    },
-    currentFolderContent(state): Array<FolderInterface> {
-      const folderKey = state.selected.folderId
-        ? `${state.selected.bucketId}_${state.selected.folderId}`
-        : `${state.selected.bucketId}`;
-
-      return folderKey in state.services.folder
-        ? state.services.folder[folderKey]
-        : ([] as Array<FolderInterface>);
+    getFolderPath(state) {
+      return state.folder.path.map(p => p.name).join('/') || '';
     },
   },
   actions: {
@@ -88,7 +71,7 @@ export const useDataStore = defineStore('data', {
       this.services.authentication = [] as Array<ServiceInterface>;
       this.services.storage = [] as Array<ServiceInterface>;
       this.services.bucket = [] as Array<BucketInterface>;
-      this.services.folder = {} as Record<string, Array<FolderInterface>>;
+      this.services.folder = [] as Array<FolderInterface>;
       this.services.computing = [] as Array<ServiceInterface>;
     },
 
@@ -98,10 +81,11 @@ export const useDataStore = defineStore('data', {
     },
 
     setBucketId(id: number) {
-      this.services.folder = {} as Record<string, Array<FolderInterface>>;
+      this.services.folder = [] as Array<FolderInterface>;
       this.selected.folderId = 0;
       this.folder.total = 0;
       this.folder.search = '';
+      this.folder.path = [];
       this.selected.bucketId = id;
     },
 
@@ -132,15 +116,6 @@ export const useDataStore = defineStore('data', {
     hasServices(type: number) {
       const key: ServiceTypeName = ServiceTypeNames[type];
       return Array.isArray(this.services[key]) && this.services[key].length > 0;
-    },
-
-    getFolderKey(): string {
-      if (!this.currentBucket) {
-        return '';
-      }
-      return this.selected.folderId
-        ? `${this.selected.bucketId}_${this.selected.folderId}`
-        : `${this.selected.bucketId}`;
     },
 
     getFolderById(folderId: number): FolderInterface {
@@ -260,6 +235,8 @@ export const useDataStore = defineStore('data', {
       limit?: number,
       search?: string
     ) {
+      this.folder.loading = true;
+
       /** Fallback for bucketUuid */
       const bucket = bucketUuid || this.currentBucket.bucket_uuid;
 
@@ -267,7 +244,7 @@ export const useDataStore = defineStore('data', {
       if (folderId) {
         this.setFolderId(folderId);
       }
-      const folderKey = this.getFolderKey();
+
       try {
         /** If subfolder is selected, search directory content in this sibfolder */
         let params: Record<string, string | number> = {
@@ -288,17 +265,19 @@ export const useDataStore = defineStore('data', {
 
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
 
-        this.services.folder[folderKey] = res.data.items;
+        this.services.folder = res.data.items;
         this.folder.total = res.data.total;
       } catch (error: any) {
         /** Reset data */
-        this.services.folder[folderKey] = [];
+        this.services.folder = [];
         this.folder.total = 0;
 
         /** Show error message */
         const message = useMessage();
         message.error(userFriendlyMsg(error, $i18n));
       }
+
+      this.folder.loading = false;
     },
 
     async fetchFileInfo(fileId: number, $i18n: any = null) {
@@ -315,9 +294,8 @@ export const useDataStore = defineStore('data', {
 
     async fetchFileDetails(fileUuid: string, $i18n: any = null): Promise<FileDetailsInterface> {
       try {
-        const res = await $api.get<FileDetailsResponse>(endpoints.storageFileDetails, {
-          file_uuid: fileUuid,
-        });
+        const url = `/storage/${this.currentBucket.bucket_uuid}/file/${fileUuid}/detail`;
+        const res = await $api.get<FileDetailsResponse>(url);
 
         return res.data;
       } catch (error: any) {

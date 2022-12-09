@@ -35,9 +35,6 @@ const Endpoints = {
 
   /** Storage */
   storage: '/storage/',
-  storageFileUpload: '/storage/file-upload-request',
-  storageFileUploadSession: '/storage/file-upload-session',
-  storageFileDetails: '/storage/file-details',
 
   /** Api Keys */
   apiKey: '/api-key/',

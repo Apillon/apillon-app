@@ -3,6 +3,20 @@ import colors from '~~/tailwind.colors';
 
 export const PAGINATION_LIMIT = 20;
 
+export enum FileUploadStatusValue {
+  PENDING = 'pending',
+  UPLOADING = 'uploading',
+  FINISHED = 'finished',
+  REMOVED = 'removed',
+  ERROR = 'error',
+}
+export type FileUploadStatus =
+  | FileUploadStatusValue.PENDING
+  | FileUploadStatusValue.UPLOADING
+  | FileUploadStatusValue.FINISHED
+  | FileUploadStatusValue.REMOVED
+  | FileUploadStatusValue.ERROR;
+
 export const MessageProviderOptoins: DiscreteApiOptions = {
   messageProviderProps: {
     duration: 5000,
@@ -120,6 +134,9 @@ export const themeOverrides: GlobalThemeOverrides = {
     paddingLarge: '25px',
     placeholderColor: colors.grey.DEFAULT,
   },
+  Layout: {
+    textColor: colors.grey.light,
+  },
   Menu: {
     color: colors.grey.lightBg,
     itemColorHover: colors.dark,
@@ -181,6 +198,11 @@ export const themeOverrides: GlobalThemeOverrides = {
     textColor: colors.grey.DEFAULT,
     textColorInfo: colors.dark,
     textColorSuccess: colors.green,
+  },
+  Upload: {
+    draggerBorder: `none`,
+    draggerBorderHover: `none`,
+    draggerColor: colors.grey.dark,
   },
   Select: {
     peers: {

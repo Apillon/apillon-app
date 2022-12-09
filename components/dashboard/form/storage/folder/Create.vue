@@ -11,6 +11,7 @@
         :input-props="{ id: 'folderName' }"
         :placeholder="$t('form.placeholder.folderName')"
         @keydown.enter.prevent
+        @input="handleFolderNameInput"
       />
     </n-form-item>
 
@@ -40,6 +41,7 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
+import { textMarshal } from 'text-marshal';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
@@ -79,6 +81,21 @@ const bucketId = computed(() => {
 const parentFoldertId = computed(() => {
   return props.parentFolderId || dataStore.selected.folderId;
 });
+
+/** Format credit card */
+function handleFolderNameInput(value: string | [string, string]) {
+  const data = textMarshal({
+    input: value,
+    template: 'x',
+    disallowCharacters: [/@/, /\\/, /\//, /\|/, /\!/, /\#/, /\$/, /\%/, /\^/, /\&/, /\*/],
+    isRepeat: {
+      value: true,
+      removeStart: true,
+      removeEnd: true,
+    },
+  });
+  formData.value.name = data.marshaltext;
+}
 
 // Submit
 function handleSubmit(e: MouseEvent) {
