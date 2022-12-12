@@ -14,46 +14,9 @@
 
   <!-- Drawer - File details -->
   <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
-    <n-drawer-content v-if="fileDetails.file">
-      <div class="body-sm mb-4">
-        <p class="body-sm">{{ $t('storage.fileName') }}</p>
-        <strong>{{ fileDetails.file.name }}</strong>
-      </div>
-
-      <div class="body-sm mb-4">
-        <p class="body-sm">{{ $t('storage.fileCid') }}</p>
-        <strong>{{ fileDetails.file.CID }}</strong>
-      </div>
-
-      <div class="body-sm mb-4">
-        <p class="body-sm">{{ $t('storage.fileSize') }}</p>
-        <strong>{{ formatBytes(fileDetails.file.size) }}</strong>
-      </div>
-
-      <div class="body-sm mb-4">
-        <p class="body-sm">{{ $t('storage.expiration') }}</p>
-        <strong>{{ fileExpiration(fileDetails.crustStatus?.expired_at || 0) }}</strong>
-      </div>
-
-      <div class="body-sm mb-4">
-        <p class="body-sm">{{ $t('storage.replicas') }}</p>
-        <strong>{{ fileDetails.crustStatus?.reported_replica_count || 0 }}</strong>
-      </div>
-
-      <div class="body-sm mb-4">
-        <p class="body-sm">{{ $t('storage.status') }}</p>
-        <n-tag v-if="fileDetails.file.status === 5" type="success" :bordered="false" round>{{
-          $t('general.ok')
-        }}</n-tag>
-        <n-tag v-else type="error" :bordered="false" round>{{ $t('general.error') }}</n-tag>
-      </div>
-
-      <div class="mb-4">
-        <p class="body-sm">{{ $t('general.actions') }}</p>
-      </div>
-      <Btn type="secondary" size="large">{{ $t('storage.renewPoolBalance') }}</Btn>
+    <n-drawer-content v-if="drawerFileDetailsVisible">
+      <FileDetails v-if="currentRow.CID" :file-cid="currentRow.CID" />
     </n-drawer-content>
-    <AnimationLoader v-else />
   </n-drawer>
 
   <!-- Modal - Delete file/folder -->
@@ -88,7 +51,6 @@ const IconFolderFile = resolveComponent('IconFolderFile');
 
 const currentRow = ref<FolderInterface>({} as FolderInterface);
 const selectedRows = ref<DataTableRowKey[]>([]);
-const fileDetails = ref<FileDetailsInterface>({} as FileDetailsInterface);
 
 /** Pagination data */
 const currentPage = ref<number>(0);
@@ -128,8 +90,8 @@ const dropdownFileOptions = [
     label: $i18n.t('general.view'),
     key: 'view',
     props: {
-      onClick: async () => {
-        onFileOpen(currentRow.value);
+      onClick: () => {
+        drawerFileDetailsVisible.value = true;
       },
     },
   },
@@ -188,19 +150,6 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
       },
     },
     {
-      title: $i18n.t('storage.status'),
-      key: 'active',
-      render(row) {
-        return h(
-          NTag,
-          { type: row.id ? 'success' : 'error', round: true, bordered: false },
-          {
-            default: () => (row.id ? $i18n.t('general.ok') : $i18n.t('general.error')),
-          }
-        );
-      },
-    },
-    {
       title: $i18n.t('general.actions'),
       key: 'actions',
       align: 'right',
@@ -243,9 +192,10 @@ function rowProps(row: FolderInterface) {
 
 /** Action when user click on File/Folder name */
 async function onItemOpen(row: FolderInterface) {
+  currentRow.value = row;
   switch (row.type) {
     case 'file':
-      onFileOpen(row);
+      drawerFileDetailsVisible.value = true;
       break;
     case 'directory':
       onFolderOpen(row);
@@ -253,14 +203,6 @@ async function onItemOpen(row: FolderInterface) {
     default:
       console.warn("Unknown item type: it should be of type 'file' or 'directory'!");
   }
-}
-
-/** Open file - show file details */
-async function onFileOpen(file: FolderInterface) {
-  drawerFileDetailsVisible.value = true;
-
-  /** Fetch file details */
-  fileDetails.value = await dataStore.fetchFileDetails(file.file_uuid || '', $i18n);
 }
 
 /** Open directory - show subfolder content */

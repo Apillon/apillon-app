@@ -17,6 +17,7 @@ export const useDataStore = defineStore('data', {
       authentication: [] as Array<ServiceInterface>,
       storage: [] as Array<ServiceInterface>,
       bucket: [] as Array<BucketInterface>,
+      crust: {} as Record<string, Array<any>>,
       folder: [] as Array<FolderInterface>,
       computing: [] as Array<ServiceInterface>,
     } as Record<ServiceTypeName, any>,

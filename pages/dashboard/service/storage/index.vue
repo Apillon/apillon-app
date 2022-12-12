@@ -26,7 +26,6 @@
     </template>
     <slot>
       <TableBucket v-if="dataStore.hasServices(ServiceType.BUCKET)" />
-      <TableStorage v-if="dataStore.hasServices(ServiceType.STORAGE)" />
       <template v-else>
         <h5 class="mb-8">{{ $t('nav.storage') }}</h5>
         <div
@@ -62,18 +61,12 @@ useHead({
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await getServicesStorage();
     await getBuckets();
 
     pageLoading.value = false;
   });
 });
 
-async function getServicesStorage() {
-  if (!dataStore.hasServices(ServiceType.STORAGE)) {
-    await dataStore.getStorageServices($i18n);
-  }
-}
 async function getBuckets() {
   if (!dataStore.hasServices(ServiceType.BUCKET)) {
     dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
