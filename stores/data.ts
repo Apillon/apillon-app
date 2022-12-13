@@ -242,7 +242,7 @@ export const useDataStore = defineStore('data', {
       $i18n: any,
       bucketUuid?: string,
       folderId?: number,
-      offset?: number,
+      page?: number,
       limit?: number,
       search?: string
     ) {
@@ -269,8 +269,8 @@ export const useDataStore = defineStore('data', {
         if (search) {
           params.search = search;
         }
-        if (offset) {
-          params.offset = offset;
+        if (page) {
+          params.page = page;
           params.limit = limit || PAGINATION_LIMIT;
         }
 

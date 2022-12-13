@@ -259,13 +259,11 @@ const debouncedSearchFilter = debounce(getDirectoryContent, 500);
 
 /** Function "Fetch directory content" wrapper  */
 async function getDirectoryContent(bucketUuid?: string, folderId?: number, page: number = 1) {
-  const offset = (page - 1) * PAGINATION_LIMIT;
-
   await dataStore.fetchDirectoryContent(
     $i18n,
     bucketUuid,
     folderId,
-    offset,
+    page,
     PAGINATION_LIMIT,
     dataStore.folder.search
   );

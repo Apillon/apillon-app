@@ -19,7 +19,6 @@
 <script lang="ts" setup>
 import { NUpload, NUploadDragger, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { v4 as uuidv4 } from 'uuid';
 import { FileUploadStatus } from '~~/lib/values';
 import { FileListItemType } from '~~/types/component';
 
@@ -32,16 +31,12 @@ const message = useMessage();
 const dataStore = useDataStore();
 
 const BASE_UPLOAD_SPEED = 1024;
-const batchId = ref<string>('');
-const sessionUuid = ref<string>('');
 const fileList = ref<Array<FileListItemType>>([]);
 const promises = ref<Array<Promise<any>>>([]);
 
 /** Calculate average upload speed from uploaded files */
 const avgUploadSpeed = computed(() => {
   const uploadSpeeds = fileList.value.filter(item => (item.uploadSpeed || 0) > 0);
-  console.log(uploadSpeeds);
-
   if (uploadSpeeds.length === 0) {
     return BASE_UPLOAD_SPEED;
   }
@@ -57,15 +52,6 @@ const avgUploadSpeed = computed(() => {
  *  API calls
  */
 async function uploadFiles({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-  /** Show loader in table */
-  dataStore.folder.loading = true;
-
-  /** Refresh sessionUuid if batchId is new */
-  if (file.batchId !== batchId.value) {
-    sessionUuid.value = uuidv4();
-    batchId.value = file.batchId || '';
-  }
-
   const fileData: FormFileUploadRequest = {
     fileName: file.name || '',
     contentType: file.type || '',
@@ -86,11 +72,14 @@ async function uploadFiles({ file, onError, onFinish }: NUploadCustomRequestOpti
   try {
     /** Upload file request */
     const request = $api.post<FileUploadRequestResponse>(
-      `/storage/${props.bucketUuid}/file-upload/${sessionUuid.value}`,
+      `/storage/${props.bucketUuid}/file-upload`,
       fileData
     );
     promises.value.push(request);
     const res = await request;
+
+    /** Sync to IPFS
+    await syncToIpfs(res.data.file_uuid); */
 
     /** Upload file to S3 */
     var xhr = new XMLHttpRequest();
@@ -103,20 +92,21 @@ async function uploadFiles({ file, onError, onFinish }: NUploadCustomRequestOpti
       onFinish();
       updateFileStatus(file.id, FileUploadStatusValue.FINISHED);
       updateFilePercentage(file.id, 100);
-      uploadSessionEnd(sessionUuid.value);
     };
     xhr.onerror = error => {
       onError();
       updateFileStatus(file.id, FileUploadStatusValue.ERROR);
-      uploadSessionEnd(sessionUuid.value);
+
+      /** Show error message */
       message.error(userFriendlyMsg(error, $i18n));
     };
     xhr.send(file.file);
   } catch (error) {
     onError();
     updateFileStatus(file.id, FileUploadStatusValue.ERROR);
+
+    /** Show error message */
     message.error(userFriendlyMsg(error, $i18n));
-    dataStore.folder.loading = false;
   }
 }
 
@@ -142,7 +132,8 @@ function updateFileStatus(fileId: string, status: FileUploadStatus) {
     if (item.id === fileId) {
       item.status = status;
 
-      if (status == FileUploadStatusValue.FINISHED || status == FileUploadStatusValue.ERROR) {
+      if (status == FileUploadStatusValue.ERROR) {
+        item.percentage = 0;
         clearInterval(item.progress);
       }
       if (status == FileUploadStatusValue.FINISHED) {
@@ -150,6 +141,11 @@ function updateFileStatus(fileId: string, status: FileUploadStatus) {
         if (timeDiff > 0) {
           item.uploadSpeed = item.size / timeDiff;
         }
+        clearInterval(item.progress);
+      }
+      /** Refresh diretory content */
+      if (allFilesFinished()) {
+        dataStore.fetchDirectoryContent($i18n);
       }
     }
   });
@@ -168,12 +164,21 @@ function createFileProgress(fileId: string) {
   });
 }
 
-/** Upload Session End */
+/** TEMPORARLY: Sync to IPFS */
+async function syncToIpfs(fileUuid: string) {
+  try {
+    const url = `/storage/${props.bucketUuid}/file/${fileUuid}/sync-to-ipfs`;
+    await $api.post(url);
+
+    message.success($i18n.t('storage.filesUploaded'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error, $i18n));
+  }
+}
+
+/** HOSTING: Upload Session End - Currently not in use */
 async function uploadSessionEnd(sessionUuid: string) {
-  const uploadingFiles = fileList.value.find(
-    file => file.status === FileUploadStatusValue.UPLOADING
-  );
-  if (uploadingFiles) {
+  if (!allFilesFinished()) {
     return;
   }
 
@@ -186,10 +191,16 @@ async function uploadSessionEnd(sessionUuid: string) {
     }
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));
-    dataStore.folder.loading = false;
   }
 
   /** Refresh diretory content */
   dataStore.fetchDirectoryContent($i18n);
+}
+
+function allFilesFinished(): boolean {
+  const uploadingFiles = fileList.value.find(
+    file => file.status === FileUploadStatusValue.UPLOADING
+  );
+  return uploadingFiles === undefined;
 }
 </script>
