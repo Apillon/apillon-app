@@ -1,5 +1,5 @@
 <template>
-  <Dashboard>
+  <Dashboard :loading="pageLoading">
     <template #sidebar>
       <SidebarProjectSettings />
     </template>
@@ -30,11 +30,7 @@
           <template #header>
             <h5>{{ $t('dashboard.generateNewKey') }}</h5>
           </template>
-          <p class="pb-4 mb-4 border-b-1 border-grey/40 text-sm">
-            <strong>API key name: </strong>
-            <strong class="text-primary">24.com Auth Internal</strong>
-          </p>
-          <FormGenerateApiKey />
+          <FormApiKeyCreate />
         </n-drawer-content>
       </n-drawer>
     </slot>
@@ -45,6 +41,9 @@
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
+const pageLoading = ref<boolean>(true);
 
 useHead({
   title: t('dashboard.credentialsAndApiKeys'),
@@ -57,4 +56,13 @@ const drawerGenerateApiKeyVisible = ref(false);
 const showDrawerGenerateApiKey = () => {
   drawerGenerateApiKeyVisible.value = true;
 };
+
+onMounted(() => {
+  Promise.all(Object.values(dataStore.promises)).then(_ => {
+    dataStore.getAllServices();
+    settingsStore.fetchApiKeys();
+
+    pageLoading.value = false;
+  });
+});
 </script>

@@ -6,18 +6,9 @@
     :row-props="rowProps"
   />
   <!-- Modal - Destroy bucket -->
-  <n-modal v-model:show="showModalDestroyBucket">
-    <n-card
-      style="width: 660px"
-      :title="$t('storage.bucketDestroy')"
-      :bordered="false"
-      size="huge"
-      role="dialog"
-      aria-modal="true"
-    >
-      <FormStorageDestroy :bucket-id="currentRow?.id || 0" />
-    </n-card>
-  </n-modal>
+  <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucketDestroy')">
+    <FormStorageDestroy :bucket-id="currentRow?.id || 0" />
+  </modal>
 </template>
 
 <script lang="ts" setup>

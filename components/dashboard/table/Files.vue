@@ -57,22 +57,13 @@
   </n-drawer>
 
   <!-- Modal - Delete file/folder -->
-  <n-modal v-model:show="showModalDelete">
-    <n-card
-      style="width: 660px"
-      :title="$t(`storage.${currentRow.type}.delete`)"
-      :bordered="false"
-      size="huge"
-      role="dialog"
-      aria-modal="true"
-    >
-      <FormStorageFolderDelete
-        :id="currentRow.id"
-        :type="currentRow.type"
-        @submit-success="onDeleted"
-      />
-    </n-card>
-  </n-modal>
+  <modal v-model:show="showModalDelete" :title="$t(`storage.${currentRow.type}.delete`)">
+    <FormStorageFolderDelete
+      :id="currentRow.id"
+      :type="currentRow.type"
+      @submit-success="onDeleted"
+    />
+  </modal>
 </template>
 
 <script lang="ts" setup>

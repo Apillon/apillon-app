@@ -142,7 +142,6 @@ export const useDataStore = defineStore('data', {
     },
 
     async fetchProjects(redirectToDashboard: boolean = false, $i18n: any = null) {
-      const message = useMessage();
       const router = useRouter();
       try {
         const res = await $api.get<ProjectResponse>(endpoints.userProjects);
@@ -170,42 +169,60 @@ export const useDataStore = defineStore('data', {
         return res;
       } catch (error) {
         this.projects = [];
+
+        /** Show error message */
+        const message = useMessage();
         message.error(userFriendlyMsg(error, $i18n));
       }
       return null;
     },
 
-    async fetchServices(type: number, $i18n: any = null) {
+    async fetchServices($i18n?: any, type?: number) {
       if (!this.hasProjects) {
         alert('Please create your first project');
         return [] as Array<ServiceInterface>;
       }
 
-      const message = useMessage();
       try {
-        const params = {
+        let params: Record<string, string | number> = {
           project_id: this.currentProjectId,
-          serviceType_id: type,
         };
+        if (type) {
+          params.serviceType_id = type;
+        }
         const res = await $api.get<ServicesResponse>(endpoints.services, params);
 
         return res.data.items.map((service: ServiceInterface, key: number) => {
           return { key, ...service };
         });
       } catch (error: any) {
+        /** Show error message */
+        const message = useMessage();
         message.error(userFriendlyMsg(error, $i18n));
       }
       return [] as Array<ServiceInterface>;
     },
 
+    async getAllServices($i18n: any = null) {
+      const services = await this.fetchServices($i18n);
+      this.services.authentication =
+        services.filter(service => service.serviceType_id == ServiceType.AUTHENTICATION) ||
+        ([] as Array<ServiceInterface>);
+      this.services.storage =
+        services.filter(service => service.serviceType_id == ServiceType.STORAGE) ||
+        ([] as Array<ServiceInterface>);
+      this.services.computing =
+        services.filter(service => service.serviceType_id == ServiceType.COPMUTING) ||
+        ([] as Array<ServiceInterface>);
+    },
     async getAuthServices($i18n: any = null) {
-      this.services.authentication = await this.fetchServices(ServiceType.AUTHENTICATION, $i18n);
+      this.services.authentication = await this.fetchServices($i18n, ServiceType.AUTHENTICATION);
     },
     async getStorageServices($i18n: any = null) {
-      this.services.storage = await this.fetchServices(ServiceType.STORAGE, $i18n);
+      this.services.storage = await this.fetchServices($i18n, ServiceType.STORAGE);
     },
     async getComputingServices($i18n: any = null) {
-      this.services.computing = await this.fetchServices(ServiceType.COPMUTING, $i18n);
+      this.services.computing = await this.fetchServices($i18n, ServiceType.COPMUTING);
     },
 
     async fetchBuckets($i18n: any = null) {
@@ -214,7 +231,6 @@ export const useDataStore = defineStore('data', {
         return;
       }
 
-      const message = useMessage();
       try {
         const params = {
           project_uuid: this.currentProject?.project_uuid || '',
@@ -232,6 +248,9 @@ export const useDataStore = defineStore('data', {
         return res;
       } catch (error: any) {
         this.services.bucket = [];
+
+        /** Show error message */
+        const message = useMessage();
         message.error(userFriendlyMsg(error, $i18n));
       }
       return null;
@@ -296,6 +315,7 @@ export const useDataStore = defineStore('data', {
 
         return res.data;
       } catch (error: any) {
+        /** Show error message */
         const message = useMessage();
         message.error(userFriendlyMsg(error, $i18n));
       }
@@ -309,6 +329,7 @@ export const useDataStore = defineStore('data', {
 
         return res.data;
       } catch (error: any) {
+        /** Show error message */
         const message = useMessage();
         message.error(userFriendlyMsg(error, $i18n));
       }

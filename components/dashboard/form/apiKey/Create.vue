@@ -1,12 +1,44 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+    <!--  Service name -->
+    <n-form-item
+      path="name"
+      class="mb-4 border-b-1 border-grey/40"
+      :label="$t('form.label.apiKeyName')"
+      :label-props="{ for: 'name' }"
+    >
+      <n-input
+        v-model:value="formData.name"
+        :input-props="{ id: 'name' }"
+        :placeholder="$t('form.placeholder.apiKeyName')"
+      />
+    </n-form-item>
+
+    <!--  API key type -->
+    <n-form-item
+      path="apiKeyTypes"
+      class="mb-4 border-b-1 border-grey/40"
+      :label="$t('form.label.apiKeyType')"
+    >
+      <n-radio-group v-model:value="formData.apiKeyType" name="radiogroup">
+        <n-space>
+          <n-radio
+            v-for="(type, key) in apiKeyTypes"
+            :key="key"
+            :value="type.value"
+            :label="type.label"
+          />
+        </n-space>
+      </n-radio-group>
+    </n-form-item>
+
     <n-collapse
       class="collapse-permissions"
       :default-expanded-names="expandedServices"
       @item-header-click="handleItemHeaderClick"
     >
       <n-collapse-item
-        v-for="(pesmissions, serviceName) in formData"
+        v-for="(pesmissions, serviceName) in formData.roles"
         :key="serviceName"
         :title="$t(`permissions.${serviceName}.name`)"
         :name="serviceName"
@@ -27,7 +59,7 @@
             :show-feedback="false"
           >
             <n-checkbox
-              v-model:checked="formData[serviceName][pesmissionName]"
+              v-model:checked="formData.roles[serviceName][pesmissionName]"
               size="medium"
               :label="$t(`permissions.${serviceName}.${pesmissionName}`)"
             />
@@ -74,8 +106,8 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expan
 
     /* If service was collapsed, than deactivate all permissions  */
     if (!expanded) {
-      Object.keys(formData.value[name]).forEach(permission => {
-        formData.value[name][permission] = false;
+      Object.keys(formData.value.roles[name]).forEach(permission => {
+        formData.value.roles[name][permission] = false;
       });
     }
   } else {
@@ -83,13 +115,28 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expan
   }
 };
 
+const apiKeyTypes = [
+  {
+    value: true,
+    label: $i18n.t('form.apiKeyTypes.test'),
+  },
+  {
+    value: false,
+    label: $i18n.t('form.apiKeyTypes.live'),
+  },
+];
+
 /**
  * Form data
  */
-const formData = ref<FormGenerateApiKey>({
-  authentication: { read: null, xy: null, write: null, zzz: null },
-  storage: { read: null, write: null, xy: null, zzz: null },
-  computing: { read: null, write: null, xy: null },
+const formData = ref({
+  name: '',
+  apiKeyType: true,
+  roles: {
+    authentication: { read: null, execute: null, write: null },
+    storage: { read: null, execute: null, write: null },
+    computing: { read: null, execute: null, write: null },
+  },
 });
 
 const rules: NFormRules = {};
@@ -101,15 +148,15 @@ function handleSubmit(e: MouseEvent) {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
-      await generateApiKey();
+      await createApiKey();
     }
   });
 }
-async function generateApiKey() {
+async function createApiKey() {
   loading.value = true;
 
   try {
-    const res = await $api.post<GenerateApiKeyResponse>(endpoints.apiKey, formData.value);
+    const res = await $api.post<ApiKeyCreatedResponse>(endpoints.apiKey, formData.value);
 
     // TODO
     if (res.data) {

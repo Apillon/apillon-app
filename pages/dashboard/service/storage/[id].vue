@@ -74,18 +74,9 @@
       </n-space>
 
       <!-- Modal - Create new folder -->
-      <n-modal v-model:show="showModalNewFolder">
-        <n-card
-          style="width: 660px"
-          :title="$t('storage.folder.createNew')"
-          :bordered="false"
-          size="huge"
-          role="dialog"
-          aria-modal="true"
-        >
-          <FormStorageFolderCreate @submit-success="onFolderCreated" />
-        </n-card>
-      </n-modal>
+      <modal v-model:show="showModalNewFolder" :title="$t('storage.folder.createNew')">
+        <FormStorageFolderCreate @submit-success="onFolderCreated" />
+      </modal>
     </slot>
   </Dashboard>
 </template>

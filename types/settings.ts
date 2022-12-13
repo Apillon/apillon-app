@@ -1,4 +1,8 @@
-export {};
+export enum ApiKeyRole {
+  EXECUTE = 50,
+  WRITE = 51,
+  READ = 52,
+}
 
 declare global {
   /**
@@ -22,23 +26,47 @@ declare global {
   }
 
   /**
-   * Generate API key
+   * API key
    */
+  interface ApiKeyInterface {
+    id: number;
+    status: string;
+    apiKey: string;
+    name: string;
+    testNetwork: number;
+    updateTime: string;
+  }
+  interface ApiKeysResponse {
+    data: {
+      items: Array<ApiKeyInterface>;
+      total: number;
+    };
+    status: number;
+  }
+
+  interface ApiKeyCreatedInterface {
+    id: string;
+    status: string;
+    apiKey: string;
+    name: string;
+    testNetwork: boolean;
+    project_uuid: string;
+    apiKeySecret: string;
+  }
+  interface ApiKeyCreatedResponse {
+    data: ApiKeyCreatedInterface;
+    status: number;
+  }
+
   interface ApiKeyPermissions {
     read: boolean;
     write: boolean;
-    xy?: boolean;
-    zzz?: boolean;
+    execute: boolean;
   }
   interface FormGenerateApiKey {
     authentication: ApiKeyPermissions;
     storage: ApiKeyPermissions;
     computing: ApiKeyPermissions;
-  }
-
-  interface GenerateApiKeyResponse {
-    data: any;
-    status: number;
   }
 
   /**
