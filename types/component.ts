@@ -5,10 +5,13 @@ export interface SocialInterface {
   iconName?: string;
 }
 
-export type FileListItem = {
+export type FileListItemType = {
   id: string;
   name: string;
   status: FileUploadStatus;
   percentage: number;
   size: number;
+  timestamp: number;
+  progress?: any;
+  uploadSpeed?: number;
 };
