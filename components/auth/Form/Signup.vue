@@ -9,6 +9,22 @@
       />
     </n-form-item>
 
+    <!-- <div class="flex justify-center align-center mb-3">
+      <n-form-item path="captcha"> -->
+    <vue-hcaptcha
+      ref="captchaInput"
+      sitekey="f5f700a0-51b2-49f3-9ba5-46c7fe146af0"
+      size="invisible"
+      theme="dark"
+      @error="onCaptchaError"
+      @verify="onCaptchaVerify"
+      @expired="onCaptchaExpire"
+      @challenge-expired="onCaptchaChallengeExpire"
+      @closed="onCaptchaClose"
+    />
+    <!-- </n-form-item>
+    </div> -->
+
     <!--  Signup submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
@@ -26,6 +42,7 @@
 <script lang="ts" setup>
 import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 import { ValidateMailResponse } from '~~/types/data';
 
 const props = defineProps({
@@ -39,9 +56,11 @@ const { message } = createDiscreteApi(['message']);
 
 const loading = ref(false);
 const formRef = ref<FormInst | null>(null);
+const captchaInput = ref(null);
 
 const formData = ref({
   email: authStore.email,
+  captcha: null,
 });
 const rules: FormRules = {
   email: [
@@ -54,13 +73,22 @@ const rules: FormRules = {
       message: t('validation.emailRequired'),
     },
   ],
+  // captcha: [
+  //   {
+  //     required: true,
+  //     message: t('validation.captchaRequired'),
+  //   },
+  // ],
 };
 
 function handleSubmit(e: MouseEvent) {
-  e.preventDefault();
+  e?.preventDefault();
   formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+    } else if (!formData.value.captcha) {
+      loading.value = true;
+      captchaInput.value.execute();
     } else {
       // Email validation
       authStore.saveEmail(formData.value.email);
@@ -94,5 +122,35 @@ async function signupWithEmail() {
     message.error(t('error.API'));
     loading.value = false;
   }
+}
+
+function onCaptchaError(err) {
+  console.log('error');
+  console.log(err);
+  loading.value = false;
+}
+
+function onCaptchaChallengeExpire(err) {
+  console.log('expired challenge');
+  console.log(err);
+  loading.value = false;
+}
+function onCaptchaExpire(err) {
+  console.log('expired');
+  console.log(err);
+  loading.value = false;
+}
+
+function onCaptchaVerify(token, eKey) {
+  console.log('verified');
+  console.log(token, eKey);
+  formData.value.captcha = { token, eKey };
+  handleSubmit(null);
+  loading.value = false;
+}
+
+function onCaptchaClose() {
+  loading.value = false;
+  console.log('closed');
 }
 </script>

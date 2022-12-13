@@ -263,6 +263,7 @@
   "validation": {
     "email": "Email address is not valid",
     "emailRequired": "Please enter your email",
-    "phone": "Phone validation error"
+    "phone": "Phone validation error",
+    "captchaRequired": "Captcha challange required!"
   }
 }
