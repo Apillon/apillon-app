@@ -83,9 +83,10 @@ import { useMessage, CollapseProps } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
-const loading = ref(false);
-const formRef = ref<NFormInst | null>(null);
+const dataStore = useDataStore();
 const message = useMessage();
+const formRef = ref<NFormInst | null>(null);
+const loading = ref(false);
 
 /**
  *  Collapse - enabled services
@@ -115,7 +116,7 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expan
   }
 };
 
-const apiKeyTypes = [
+const apiKeyTypes: Array<{ value: boolean; label: string }> = [
   {
     value: true,
     label: $i18n.t('form.apiKeyTypes.test'),
@@ -137,6 +138,20 @@ const formData = ref({
     storage: { read: null, execute: null, write: null },
     computing: { read: null, execute: null, write: null },
   },
+});
+
+const formRoles = computed(() => {
+  return Object.entries(dataStore.services).map(([serviceType, service]) => {
+    console.log(serviceType);
+    console.log(service);
+    if (service) {
+      return {
+        name: service.name,
+        serviceType: serviceType,
+        service_uuid: service.service_uuid,
+      };
+    }
+  });
 });
 
 const rules: NFormRules = {};
