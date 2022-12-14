@@ -54,11 +54,11 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const captchaInput = ref(null);
+const captchaInput = ref<any>(null);
 
 const formData = ref({
   email: authStore.email,
-  captcha: null,
+  captcha: null as any,
 });
 const rules: NFormRules = {
   email: [
@@ -71,15 +71,9 @@ const rules: NFormRules = {
       message: $i18n.t('validation.emailRequired'),
     },
   ],
-  // captcha: [
-  //   {
-  //     required: true,
-  //     message: t('validation.captchaRequired'),
-  //   },
-  // ],
 };
 
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: MouseEvent | null) {
   e?.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
@@ -106,6 +100,7 @@ async function signupWithEmail() {
       message.success($i18n.t('form.success.sendAgainEmail'));
     }
   } catch (error) {
+    formData.value.captcha = null;
     message.error(userFriendlyMsg(error, $i18n));
   }
   loading.value = false;
@@ -130,7 +125,7 @@ function onCaptchaExpire(err) {
 
 function onCaptchaVerify(token, eKey) {
   console.log('verified');
-  console.log(token, eKey);
+  // console.log(token, eKey);
   formData.value.captcha = { token, eKey };
   handleSubmit(null);
   loading.value = false;
