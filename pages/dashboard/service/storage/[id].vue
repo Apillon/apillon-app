@@ -37,11 +37,15 @@
       </LearnAlert>
       <LearnCollapse />
     </template>
+
     <slot>
       <StorageBreadcrumbs v-if="dataStore.selected.folderId" />
       <n-h5 v-else prefix="bar">{{ $t('storage.uploadFiles') }}</n-h5>
 
-      <FormStorageUploadFiles :bucketUuid="dataStore.currentBucket.bucket_uuid" class="mt-4" />
+      <FormStorageUploadFiles
+        :bucketUuid="dataStore.currentBucket.bucket_uuid"
+        class="mt-4 pr-[2px] pb-1 mb-1"
+      />
 
       <n-h5 prefix="bar" class="mb-8">{{ $t('storage.yourFiles') }}</n-h5>
       <n-space vertical :size="12">

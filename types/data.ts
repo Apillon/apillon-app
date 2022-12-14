@@ -1,4 +1,9 @@
-export {};
+export enum FileStatus {
+  REQUEST_FOR_UPLOAD_GENERATED = 1,
+  UPLOADED_TO_S3 = 2,
+  UPLOADED_TO_IPFS = 3,
+  PINNED_TO_CRUST = 4,
+}
 
 declare global {
   /**

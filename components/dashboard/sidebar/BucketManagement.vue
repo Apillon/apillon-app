@@ -35,22 +35,22 @@ const menuOptions: MenuOption[] = [
     key: 'dashboard-service-storage-id',
   },
   {
-    label: () => h('span', {}, () => t('storage.snapshots')),
+    label: () => h('span', {}, t('storage.snapshots')),
     key: 'snapshots',
     disabled: true,
   },
   {
-    label: () => h('span', {}, () => t('storage.stats')),
+    label: () => h('span', {}, t('storage.stats')),
     key: 'stats',
     disabled: true,
   },
   {
-    label: () => h('span', {}, () => t('storage.history')),
+    label: () => h('span', {}, t('storage.history')),
     key: 'history',
     disabled: true,
   },
   {
-    label: () => h('span', {}, () => t('storage.destroy')),
+    label: () => h('span', {}, t('storage.destroy')),
     key: 'delete',
     onClick: () => (showModalDestroyBucket.value = true),
   },

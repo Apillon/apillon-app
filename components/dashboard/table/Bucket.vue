@@ -39,7 +39,7 @@ const createColumns = (): DataTableColumns<RowData> => {
             class: 'ml-2 text-blue',
             to: `/dashboard/service/storage/${row.id}`,
           },
-          row.name
+          () => row.name
         );
       },
     },

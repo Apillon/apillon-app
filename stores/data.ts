@@ -17,6 +17,7 @@ export const useDataStore = defineStore('data', {
       authentication: [] as Array<ServiceInterface>,
       storage: [] as Array<ServiceInterface>,
       bucket: [] as Array<BucketInterface>,
+      crust: {} as Record<string, Array<any>>,
       folder: [] as Array<FolderInterface>,
       computing: [] as Array<ServiceInterface>,
     } as Record<ServiceTypeName, any>,
@@ -260,7 +261,7 @@ export const useDataStore = defineStore('data', {
       $i18n: any,
       bucketUuid?: string,
       folderId?: number,
-      offset?: number,
+      page?: number,
       limit?: number,
       search?: string
     ) {
@@ -287,8 +288,8 @@ export const useDataStore = defineStore('data', {
         if (search) {
           params.search = search;
         }
-        if (offset) {
-          params.offset = offset;
+        if (page) {
+          params.page = page;
           params.limit = limit || PAGINATION_LIMIT;
         }
 

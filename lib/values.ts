@@ -44,9 +44,13 @@ export const MessageProviderOptoins: DiscreteApiOptions = {
 
 export const themeOverrides: GlobalThemeOverrides = {
   common: {
+    errorColor: colors.pink,
+    infoColor: colors.blue,
     primaryColor: colors.primary,
     primaryColorHover: colors.primary,
     primaryColorPressed: colors.primary,
+    successColor: colors.green,
+    warningColor: colors.yellow,
   },
   Alert: {},
   Button: {
