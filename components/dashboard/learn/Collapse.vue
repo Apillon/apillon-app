@@ -40,19 +40,14 @@
 import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { useDataStore } from '~~/stores/data';
-import { InstructionResponse, InstructionsResponse, InstructionInterface } from '~~/types/data';
-
-const props = defineProps({
-  instructionKey: { type: String, default: null },
-});
 
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const { name } = useRoute();
+const route = useRoute();
 
 const key = computed(() => {
-  return props.instructionKey || name.toString();
+  return route.name.toString();
 });
 
 const instruction = computed<InstructionInterface>(() => {
@@ -71,7 +66,7 @@ const instructions = computed<Array<InstructionInterface>>(() => {
 
 onMounted(async () => {
   await getInstruction(key.value);
-  // await getInstructions(key.value);
+  // await getInstructions(key: string);
 });
 
 async function getInstruction(key: string) {
@@ -81,18 +76,13 @@ async function getInstruction(key: string) {
 
   try {
     const params = { instructionEnum: key };
-    const { data, error } = await $api.get<InstructionResponse>(endpoints.instruction, params);
+    const res = await $api.get<InstructionResponse>(endpoints.instruction, params);
 
-    if (error) {
-      message.error(error.message);
-      return;
-    }
-
-    if (data.data) {
-      dataStore.instruction[key] = data.data;
+    if (res.data) {
+      dataStore.instruction[key] = res.data;
     }
   } catch (error) {
-    message.error($i18n.t('error.API'));
+    message.error(userFriendlyMsg(error, $i18n));
   }
 }
 async function getInstructions(key: string) {
@@ -101,19 +91,14 @@ async function getInstructions(key: string) {
   }
 
   try {
-    const params = { instructionEnum: key };
-    const { data, error } = await $api.get<InstructionsResponse>(endpoints.instructions, params);
+    const params = { forRoute: key };
+    const res = await $api.get<InstructionsResponse>(endpoints.instruction, params);
 
-    if (error) {
-      message.error(error.message);
-      return;
-    }
-
-    if (data.data) {
-      dataStore.instructions[key] = data.data.items;
+    if (res.data) {
+      dataStore.instructions[key] = res.data.items;
     }
   } catch (error) {
-    message.error($i18n.t('error.API'));
+    message.error(userFriendlyMsg(error, $i18n));
   }
 }
 </script>

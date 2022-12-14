@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'apillon';
-  src:  url('fonts/apillon.eot?fdqs38');
-  src:  url('fonts/apillon.eot?fdqs38#iefix') format('embedded-opentype'),
-    url('fonts/apillon.ttf?fdqs38') format('truetype'),
-    url('fonts/apillon.woff?fdqs38') format('woff'),
-    url('fonts/apillon.svg?fdqs38#apillon') format('svg');
+  src:  url('fonts/apillon.eot?vwgj2u');
+  src:  url('fonts/apillon.eot?vwgj2u#iefix') format('embedded-opentype'),
+    url('fonts/apillon.ttf?vwgj2u') format('truetype'),
+    url('fonts/apillon.woff?vwgj2u') format('woff'),
+    url('fonts/apillon.svg?vwgj2u#apillon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,24 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-file:before {
+  content: "\e935";
+}
+.icon-folder:before {
+  content: "\e936";
+}
+.icon-copy:before {
+  content: "\e937";
+}
+.icon-soon:before {
+  content: "\e932";
+}
+.icon-wow:before {
+  content: "\e934";
+}
+.icon-back:before {
+  content: "\e933";
+}
 .icon-google:before {
   content: "\e931";
 }

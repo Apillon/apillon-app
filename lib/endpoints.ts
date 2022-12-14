@@ -8,6 +8,8 @@ const Endpoints = {
   login: '/users/login',
   register: '/users/register',
   validateMail: '/users/validate-email',
+  passwordReset: '/users/password-reset',
+  passwordResetRequest: '/users/password-reset-request',
 
   /** Project */
   project: '/projects/',
@@ -21,7 +23,7 @@ const Endpoints = {
   services: '/services/',
 
   /** Instructions */
-  instruction: '/instruction/',
+  instruction: '/instructions/',
   instructions: '/instruction/all',
 
   /** Bucket */
@@ -33,9 +35,6 @@ const Endpoints = {
 
   /** Storage */
   storage: '/storage/',
-  storageFileUpload: '/storage/file-upload-request',
-  storageFileUploadSession: '/storage/file-upload-session',
-  storageFileDetails: '/storage/file-details',
 
   /** Api Keys */
   apiKey: '/api-key/',

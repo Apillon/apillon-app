@@ -7,24 +7,23 @@
     @submit.prevent="handleSubmit"
   >
     <!--  Username -->
-    <n-form-item
-      path="username"
-      :label="$t('form.label.username')"
-      :label-props="{ for: 'username' }"
-    >
+    <n-form-item path="name" :label="$t('form.label.username')" :label-props="{ for: 'username' }">
       <n-input
-        v-model:value="formData.username"
+        v-model:value="formData.name"
         :input-props="{ id: 'username' }"
         :placeholder="$t('form.placeholder.username')"
+        :loading="loadingForm"
       />
     </n-form-item>
 
-    <!--  Login email -->
+    <!--  Email -->
     <n-form-item path="email" :label="$t('form.label.email')" :label-props="{ for: 'email' }">
       <n-input
         v-model:value="formData.email"
         :input-props="{ id: 'email', type: 'email' }"
         :placeholder="$t('form.placeholder.email', { afna: '@' })"
+        :readonly="true"
+        :loading="loadingForm"
       />
     </n-form-item>
 
@@ -34,13 +33,14 @@
         v-model:value="formData.phone"
         :input-props="{ id: 'phone' }"
         :placeholder="$t('form.placeholder.phone')"
+        :loading="loadingForm"
       />
     </n-form-item>
 
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.save')" />
-      <Btn type="primary" class="mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" class="mt-2" :loading="loading || loadingForm" @click="handleSubmit">
         {{ $t('form.save') }}
       </Btn>
     </n-form-item>
@@ -48,51 +48,59 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  FormInst,
-  createDiscreteApi,
-  FormValidationError,
-  FormRules,
-  FormItemRule,
-} from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormUserProfile, UserProfileResponse } from '~~/types/auth';
 
-const { t } = useI18n();
+const message = useMessage();
+const $i18n = useI18n();
 const authStore = useAuthStore();
-const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
+const loading = ref<boolean>(false);
+const loadingForm = ref<boolean>(true);
+const formRef = ref<NFormInst | null>(null);
 
 const formData = ref<FormUserProfile>({
-  username: authStore.username,
+  name: authStore.username,
   email: authStore.email,
   phone: authStore.phone,
 });
 
-const rules: FormRules = {
-  username: [],
+onMounted(() => {
+  /** If page was reloaded, populate form data after page has been loaded */
+  setTimeout(() => {
+    Promise.all(Object.values(authStore.promises)).then(_ => {
+      if (!formData.value.name || !formData.value.email) {
+        formData.value.name = authStore.username;
+        formData.value.email = authStore.email;
+        formData.value.phone = authStore.phone;
+      }
+      loadingForm.value = false;
+    });
+  }, 500);
+});
+
+const rules: NFormRules = {
+  name: [],
   email: [
     {
       type: 'email',
-      message: t('validation.email'),
+      message: $i18n.t('validation.email'),
     },
     {
       required: true,
-      message: t('validation.emailRequired'),
+      message: $i18n.t('validation.emailRequired'),
     },
   ],
   phone: [
     {
       validator: validatePhone,
-      message: t('validation.phone'),
+      message: $i18n.t('validation.phone'),
       trigger: 'input',
     },
   ],
 };
 
 // Custom validations
-function validatePhone(_: FormItemRule, value: string): boolean {
+function validatePhone(_: NFormItemRule, value: string): boolean {
   // const re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
   const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
 
@@ -102,9 +110,9 @@ function validatePhone(_: FormItemRule, value: string): boolean {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       await updateUserProfile();
     }
@@ -114,22 +122,15 @@ async function updateUserProfile() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<UserProfileResponse>(endpoints.me, formData.value);
+    const res = await $api.patch<UserProfileResponse>(endpoints.me, formData.value);
 
-    if (error) {
-      message.error(error.message);
-      loading.value = false;
-      return;
+    if (res.data) {
+      authStore.changeUser(res.data);
+      message.success($i18n.t('form.success.profile'));
     }
-
-    // TODO
-    if (data.data) {
-      console.log(data);
-    }
-    loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

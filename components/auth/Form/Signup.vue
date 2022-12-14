@@ -28,11 +28,10 @@
     <!--  Signup submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn v-if="sendAgain" type="primary" class="w-full" @click="handleSubmit">
-        <span class="icon-apillon-icon"></span>
+      <Btn v-if="sendAgain" class="mx-auto" type="primary" size="medium" @click="handleSubmit">
         {{ $t('signup.sendAgain') }}
       </Btn>
-      <Btn v-else type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn v-else type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.continue') }}
       </Btn>
     </n-form-item>
@@ -40,37 +39,36 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
+import { createDiscreteApi } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
-import { ValidateMailResponse } from '~~/types/data';
 
 const props = defineProps({
   sendAgain: { type: Boolean, default: false },
 });
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
-const { message } = createDiscreteApi(['message']);
+const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 const captchaInput = ref(null);
 
 const formData = ref({
   email: authStore.email,
   captcha: null,
 });
-const rules: FormRules = {
+const rules: NFormRules = {
   email: [
     {
       type: 'email',
-      message: t('validation.email'),
+      message: $i18n.t('validation.email'),
     },
     {
       required: true,
-      message: t('validation.emailRequired'),
+      message: $i18n.t('validation.emailRequired'),
     },
   ],
   // captcha: [
@@ -83,9 +81,9 @@ const rules: FormRules = {
 
 function handleSubmit(e: MouseEvent) {
   e?.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (!formData.value.captcha) {
       loading.value = true;
       captchaInput.value.execute();
@@ -100,28 +98,17 @@ async function signupWithEmail() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<ValidateMailResponse>(
-      endpoints.validateMail,
-      formData.value
-    );
+    const res = await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
 
-    if (error) {
-      message.error(error.message);
-      loading.value = false;
-      return;
-    }
-
-    loading.value = false;
-    if (!data.data.success) {
-      // TODO: error
-      message.error('ERROR');
-    } else if (!props.sendAgain) {
-      router.push('/signup/email');
+    if (!props.sendAgain) {
+      router.push({ name: 'register-email' });
+    } else {
+      message.success($i18n.t('form.success.sendAgainEmail'));
     }
   } catch (error) {
-    message.error(t('error.API'));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 
 function onCaptchaError(err) {

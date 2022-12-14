@@ -11,9 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { SelectProps } from 'naive-ui';
-
-type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>;
+type SelectThemeOverrides = NonNullable<NSelectProps['themeOverrides']>;
 const SelectRoleOverrides: SelectThemeOverrides = {
   peers: {
     InternalSelection: {
@@ -25,14 +23,15 @@ const SelectRoleOverrides: SelectThemeOverrides = {
 };
 
 const attrs = useAttrs();
-const $emit = defineEmits(['changeRoles']);
+const emit = defineEmits(['roleChange']);
 
 const selectedRoles = computed({
   get() {
     return attrs.model;
   },
   set(newValue): void {
-    $emit('changeRoles', newValue);
+    console.log(newValue);
+    emit('roleChange', newValue);
   },
 });
 </script>

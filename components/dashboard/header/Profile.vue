@@ -1,5 +1,6 @@
 <template>
   <n-dropdown
+    v-if="authStore.loggedIn"
     placement="bottom-end"
     trigger="click"
     size="huge"
@@ -17,11 +18,17 @@
           ></span>
         </div>
       </div>
-      <div class="flex flex-col min-w-[120px] pr-1">
-        <strong>Guy Hawkins</strong>
-        <span class="text-grey">5535k...3243</span>
+      <div class="hidden md:flex flex-col justify-center min-w-[120px] pr-1">
+        <strong v-if="authStore.username">{{ authStore.username }}</strong>
+        <strong v-else>{{ authStore.email }}</strong>
+        <span v-if="authStore.wallet" class="text-grey">
+          {{ truncateWallet(authStore.wallet) }}
+        </span>
+        <span v-else-if="authStore.username" class="text-grey">
+          {{ authStore.email }}
+        </span>
       </div>
-      <div class="flex items-center">
+      <div class="hidden md:flex items-center">
         <span class="icon-down text-2xl"></span>
       </div>
     </div>
@@ -29,20 +36,20 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '~~/stores/auth';
+
 const authStore = useAuthStore();
 const router = useRouter();
+const $i18n = useI18n();
 
 const options = [
   {
-    label: 'Profile',
+    label: $i18n.t('profile.profile'),
     key: 'profile',
   },
   {
-    label: 'Edit Profile',
-    key: 'editProfile',
-  },
-  {
-    label: 'Logout',
+    label: $i18n.t('profile.logout'),
     key: 'logout',
   },
 ];
@@ -50,9 +57,9 @@ const options = [
 function handleSelect(key: string | number) {
   if (key === 'logout') {
     authStore.logout();
-    router.push('/login');
-  } else {
-    router.push('/user-profile');
+    router.push({ name: 'login' });
+  } else if (key === 'profile') {
+    router.push({ name: 'profile' });
   }
 }
 </script>

@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia';
-import { UserResponse } from '~~/types/auth';
+import { DataLsKeys } from './data';
 
 export const AuthLsKeys = {
   AUTH: 'al_auth',
   EMAIL: 'al_email',
-  USERNAME: 'al_username',
   WALLET: 'al_wallet',
   PROVIDER: 'al_provider',
 };
@@ -12,17 +11,21 @@ export const AuthLsKeys = {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     jwt: '',
+    userUuid: '',
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
-    username: localStorage.getItem(AuthLsKeys.USERNAME) || '',
+    username: '',
     phone: '',
-    provider: parseInt(localStorage.getItem(AuthLsKeys.PROVIDER)) || 0,
-    wallet: localStorage.getItem(AuthLsKeys.WALLET) || '',
+    provider: 0,
+    wallet: '',
     authStep: '',
     crypto: null,
+    promises: {
+      profile: null as any,
+    },
   }),
   getters: {
     loggedIn(state) {
-      return !!state.email && !!state.username;
+      return !!state.email && !!state.jwt;
     },
     allowedEntry: state => !!state.jwt,
   },
@@ -32,14 +35,16 @@ export const useAuthStore = defineStore('auth', {
       if (lsAuth) {
         lsAuth = JSON.parse(lsAuth);
 
-        await this.setUserToken(lsAuth.jwt);
-        await this.getUserData();
+        this.setUserToken(lsAuth.jwt);
+        this.promises.profile = await this.getUserData();
       }
     },
 
-    changeUser(userData) {
-      this.email = userData?.email;
-      this.username = userData?.username;
+    changeUser(userData: Record<string, string | number>) {
+      this.userUuid = `${userData?.user_uuid}`;
+      this.username = `${userData?.name}`;
+      this.phone = `${userData?.phone}`;
+      this.saveEmail(`${userData?.email}`);
     },
 
     saveEmail(email: string) {
@@ -47,7 +52,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem(AuthLsKeys.EMAIL, email);
     },
 
-    async setUserToken(token) {
+    setUserToken(token: string) {
       this.jwt = token;
       localStorage.setItem(
         AuthLsKeys.AUTH,
@@ -55,29 +60,32 @@ export const useAuthStore = defineStore('auth', {
           jwt: token,
         })
       );
-      await $api.setToken(token);
+      $api.setToken(token);
     },
 
     async getUserData() {
-      const { data, error } = await $api.get<UserResponse>(endpoints.me, null);
-      if (error) {
-        throw new Error(error.message);
-      }
+      try {
+        const res = await $api.get<UserResponse>(endpoints.me);
 
-      if (data.data) {
-        await this.changeUser(data.data);
+        if (res.data) {
+          this.changeUser(res.data);
+        }
+        return res;
+      } catch (error) {
+        console.warn(error);
+        return null;
       }
     },
 
     logout() {
+      $api.clearToken();
+
       this.jwt = '';
-      this.email = '';
       this.username = '';
       this.wallet = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
-      localStorage.removeItem(AuthLsKeys.EMAIL);
-      localStorage.removeItem(AuthLsKeys.USERNAME);
       localStorage.removeItem(AuthLsKeys.WALLET);
+      localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
   },
 });

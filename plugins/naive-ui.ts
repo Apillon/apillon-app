@@ -1,5 +1,11 @@
 import {
+  CollapseProps,
   create,
+  FormInst,
+  FormItemInst,
+  FormItemRule,
+  FormRules,
+  FormValidationError,
   NAlert,
   NButton,
   NCard,
@@ -29,6 +35,7 @@ import {
   NLayoutContent,
   NLayoutHeader,
   NLayoutSider,
+  NProgress,
   NRadio,
   NRadioGroup,
   NScrollbar,
@@ -39,8 +46,26 @@ import {
   NTag,
   NText,
   NTooltip,
+  NUpload,
+  NUploadDragger,
+  NUploadFileList,
+  NUploadTrigger,
+  SelectProps,
+  UploadCustomRequestOptions,
+  UploadFileInfo,
 } from 'naive-ui';
 
+declare global {
+  interface NCollapseProps extends CollapseProps {}
+  interface NFormInst extends FormInst {}
+  interface NFormItemInst extends FormItemInst {}
+  interface NFormRules extends FormRules {}
+  interface NFormItemRule extends FormItemRule {}
+  interface NFormValidationError extends FormValidationError {}
+  interface NSelectProps extends SelectProps {}
+  interface NUploadCustomRequestOptions extends UploadCustomRequestOptions {}
+  interface NUploadFileInfo extends UploadFileInfo {}
+}
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(
     create({
@@ -74,6 +99,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NLayoutContent,
         NLayoutHeader,
         NLayoutSider,
+        NProgress,
         NRadio,
         NRadioGroup,
         NScrollbar,
@@ -84,6 +110,10 @@ export default defineNuxtPlugin(nuxtApp => {
         NTag,
         NText,
         NTooltip,
+        NUpload,
+        NUploadDragger,
+        NUploadFileList,
+        NUploadTrigger,
       ],
     })
   );

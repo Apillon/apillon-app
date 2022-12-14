@@ -26,7 +26,7 @@
         @input="handleCreditCardInput"
       >
         <template #suffix>
-          <Image src="./images/payment/mastercard.svg" :width="35" :height="24" alt="mastercard" />
+          <Image src="/images/payment/mastercard.svg" :width="35" :height="24" alt="mastercard" />
         </template>
       </n-input>
     </n-form-item>
@@ -100,13 +100,12 @@
 <script lang="ts" setup>
 import cardValidator from 'card-validator';
 import { textMarshal } from 'text-marshal';
-import { FormInst, FormValidationError, FormRules, FormItemRule, useMessage } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormBilling, BillingResponse } from '~~/types/settings';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 const message = useMessage();
 const authStore = useAuthStore();
 
@@ -119,80 +118,80 @@ const formData = ref<FormBilling>({
   terms: null,
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   cardHolder: [
     {
       required: true,
-      message: 'Please enter your name',
+      message: $i18n.t('validation.cardHolderRequired'),
     },
     {
       validator: validateCardHolder,
-      message: 'Please enter valid name',
+      message: $i18n.t('validation.cardHolder'),
     },
   ],
   cardNumber: [
     {
       required: true,
-      message: 'Please enter credit card number',
+      message: $i18n.t('validation.cardNumberRequired'),
     },
     {
       validator: validateCreditCard,
-      message: 'Credit card validation error',
+      message: $i18n.t('validation.cardNumber'),
     },
   ],
   expirationDate: [
     {
       required: true,
-      message: 'Please enter expiration date',
+      message: $i18n.t('validation.expirationDateRequired'),
     },
     {
       validator: validateExpirationDate,
-      message: 'Date is expired',
+      message: $i18n.t('validation.expirationDate'),
     },
   ],
   cvv: [
     {
       required: true,
-      message: 'Please enter CVV',
+      message: $i18n.t('validation.cvvRequired'),
     },
     {
       validator: validateCVV,
-      message: 'Wrong CVV',
+      message: $i18n.t('validation.cvv'),
     },
   ],
   postalCode: [
     {
       required: true,
-      message: 'Please enter postal code',
+      message: $i18n.t('validation.postalCodeRequired'),
     },
     {
       validator: validatePostalCode,
-      message: 'Wrong postal code',
+      message: $i18n.t('validation.postalCode'),
     },
   ],
   terms: [
     {
       required: true,
       validator: validateRequiredCheckbox,
-      message: 'Please accept the terms',
+      message: $i18n.t('validation.terms'),
     },
   ],
 };
 
 // Custom validations
-function validateCardHolder(_: FormItemRule, value: string): boolean {
+function validateCardHolder(_: NFormItemRule, value: string): boolean {
   return cardValidator.cardholderName(value).isValid;
 }
-function validateCreditCard(_: FormItemRule, value: string): boolean {
+function validateCreditCard(_: NFormItemRule, value: string): boolean {
   return cardValidator.number(value).isValid;
 }
-function validateExpirationDate(_: FormItemRule, value: string): boolean {
+function validateExpirationDate(_: NFormItemRule, value: string): boolean {
   return cardValidator.expirationDate(value).isValid;
 }
-function validateCVV(_: FormItemRule, value: string): boolean {
+function validateCVV(_: NFormItemRule, value: string): boolean {
   return cardValidator.cvv(value).isValid;
 }
-function validatePostalCode(_: FormItemRule, value: string): boolean {
+function validatePostalCode(_: NFormItemRule, value: string): boolean {
   return cardValidator.postalCode(value).isValid;
 }
 
@@ -239,9 +238,9 @@ function handlePostalCodeInput(value: string | [string, string]) {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       await updateUserProfile();
     }
@@ -251,22 +250,16 @@ async function updateUserProfile() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<BillingResponse>(endpoints.billing, formData.value);
-
-    if (error) {
-      message.error(error.message);
-      loading.value = false;
-      return;
-    }
+    const res = await $api.post<BillingResponse>(endpoints.billing, formData.value);
 
     // TODO
-    if (data.data) {
-      console.log(data);
+    if (res.data) {
+      console.log(res.data);
     }
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

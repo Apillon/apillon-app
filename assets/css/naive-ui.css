@@ -1,3 +1,30 @@
+/** Button */
+.n-button {
+  .n-button__content {
+    white-space: normal;
+  }
+  &.n-button--loading {
+    .n-button__icon {
+      position: absolute;
+      margin: 0;
+
+      .n-base-loading {
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+    .n-button__content {
+      color: transparent;
+    }
+  }
+  &.quaternary:not(.n-button--disabled):hover,
+  &.quaternary:not(.n-button--disabled):focus,
+  &:not(.n-button--disabled):hover .icon-more,
+  &:not(.n-button--disabled):focus .icon-more {
+    @apply text-dark;
+  }
+}
+
 /** Checkbox */
 .n-checkbox {
   .n-checkbox-box .n-checkbox-box__border {
@@ -17,7 +44,7 @@
       transform: none;
     }
     .n-collapse-item__content-inner {
-      @apply pl-8;
+      @apply pl-4 sm:pl-8;
     }
   }
   &.collapse-emailConfiguration {
@@ -27,6 +54,11 @@
       transform: none;
     }
   }
+}
+
+/** Container */
+.container {
+  @apply md:px-8;
 }
 
 /** Dialog */
@@ -91,6 +123,7 @@
   }
   .n-menu-item-content--selected {
     border-left: 4px solid theme('colors.primary');
+    font-weight: strong;
 
     &::before {
       display: none;
@@ -98,6 +131,10 @@
 
     .n-menu-item-content-header {
       margin-left: -12px;
+
+      a {
+        color: theme('colors.grey.light');
+      }
     }
   }
 }
@@ -106,17 +143,23 @@
 .n-message {
   border-left: 4px solid theme('colors.grey.lightBg');
 
-  &--success-error {
+  &--error-type {
     border-color: theme('colors.pink');
   }
-  &--success-info {
+  &--info-type {
     border-color: theme('colors.blue');
   }
   &--success-type {
     border-color: theme('colors.green');
   }
-  &--success-warning {
+  &--warning-type {
     border-color: theme('colors.yellow');
+  }
+}
+/** Message provider */
+body > .n-message-container {
+  &.n-message-container--top {
+    position: fixed;
   }
 }
 
@@ -170,3 +213,28 @@
   font-weight: bold;
 }
 */
+
+/** Upload file */
+.n-upload {
+  .n-upload-dragger {
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23F0F2DA' stroke-width='2' stroke-dasharray='8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+    &:focus,
+    &:hover {
+      background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23F9FF73' stroke-width='2' stroke-dasharray='8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+    }
+  }
+}
+
+.n-upload-file-list .n-upload-file {
+  @apply bg-dark mb-2 px-6 pb-1;
+
+  .n-upload-file-info__thumbnail {
+    display: none;
+  }
+
+  .n-progress-graph-line-rail,
+  .n-progress-graph-line-fill {
+    min-height: 4px;
+  }
+}

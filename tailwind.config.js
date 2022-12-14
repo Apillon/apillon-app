@@ -22,6 +22,7 @@ module.exports = {
       yellow: '#F9FF73',
       green: '#A9DC76',
       pink: '#FF6188',
+      violet: '#AB9DF2',
       blue: '#78DCE8',
 
       grey: {
@@ -39,13 +40,12 @@ module.exports = {
     },
 
     container: {
-      width: '90%',
       center: true,
       screens: {
-        lg: '1320px',
+        lx: '1320px',
       },
       padding: {
-        DEFAULT: '2rem',
+        DEFAULT: '1rem',
       },
     },
 
@@ -62,8 +62,8 @@ module.exports = {
         black: '0px 2px 4px rgba(0, 0, 0, 0.12)',
       },
       gridTemplateColumns: {
+        billing: 'repeat(auto-fill, minmax(310px, 1fr))',
         services: 'repeat(auto-fit, minmax(280px, 1fr))',
-        billing: 'repeat(auto-fill, minmax( 310px, 1fr))',
       },
       zIndex: {
         1: 1,

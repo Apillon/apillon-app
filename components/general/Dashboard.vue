@@ -1,5 +1,6 @@
 <template>
   <n-space v-if="loading" vertical>
+    <!-- Loading skeleton - on long page load show skeleten -->
     <n-skeleton height="40px" width="33%" />
     <n-skeleton height="40px" width="66%" :sharp="false" />
     <n-skeleton height="40px" round />
@@ -14,11 +15,11 @@
       <slot name="infobar"> </slot>
     </div>
 
-    <div class="flex flex-auto w-full">
-      <div v-if="$slots.sidebar" class="w-44 lg:min-w-[11rem] h-fit mr-6">
+    <div class="flex flex-auto w-full flex-col md:flex-row">
+      <div v-if="$slots.sidebar" class="w-full md:w-44 md:min-w-[11rem] h-fit md:mr-6 mb-6 md:mb-0">
         <slot name="sidebar"></slot>
       </div>
-      <n-layout :has-sider="$slots.learn ? true : false" sider-placement="right">
+      <n-layout :has-sider="instructionsAvailable" sider-placement="right">
         <n-layout-header v-if="$slots.title">
           <slot name="title"></slot>
         </n-layout-header>
@@ -28,7 +29,7 @@
           </div>
         </n-layout-content>
         <n-layout-sider
-          v-if="$slots.learn"
+          v-if="instructionsAvailable"
           :collapsed="learnCollapsed"
           collapse-mode="width"
           :collapsed-width="48"
@@ -70,6 +71,14 @@
 <script lang="ts" setup>
 defineProps({
   loading: { type: Boolean, default: false },
+});
+
+/** Check if instructions are available (page has content and feature is enabled) */
+const $slots = useSlots();
+const { isLg } = useScreen();
+
+const instructionsAvailable = computed(() => {
+  return $slots.learn && isFeatureEnabled(Feature.INSTRUCTIONS) && isLg.value;
 });
 
 // Keep info about collapsible section learn in local storage

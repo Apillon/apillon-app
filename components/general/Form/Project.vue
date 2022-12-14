@@ -14,8 +14,11 @@
       />
     </n-form-item>
 
-    <!--  Project description -->
+    <!-- Project TAG - currently not in use
     <n-tag :bordered="false" type="info" class="mb-8">{{ projectNameText }}</n-tag>
+    -->
+
+    <!--  Project description -->
     <n-form-item
       path="description"
       :label="$t('form.label.projectDescription')"
@@ -38,20 +41,23 @@
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
-        {{ $t('form.startFirstProject') }}
+        <template v-if="dataStore.hasProjects">
+          {{ $t('form.createNewProject') }}
+        </template>
+        <template v-else>
+          {{ $t('form.startFirstProject') }}
+        </template>
       </Btn>
     </n-form-item>
   </n-form>
 </template>
 
 <script lang="ts" setup>
-import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
+import { createDiscreteApi } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { useDataStore } from '~~/stores/data';
-import { CreateProjectResponse, FormProject } from '~~/types/data';
 
 const dataStore = useDataStore();
-const $emit = defineEmits(['submitActive', 'submitSuccess']);
+const emit = defineEmits(['submitActive', 'submitSuccess']);
 
 /** Terms label with link */
 const $i18n = useI18n();
@@ -62,17 +68,17 @@ const termsLabel = computed(() => {
   ]);
 });
 
-/** Tag Project_name text */
+/** Tag Project_name text - Currently not in use
 const projectNameText = computed(() => {
   return formData.value.name
     ? `${formData.value.name}.Appilon.io`
     : `${$i18n.t('login.projectName')}.Appilon.io`;
-});
+}); */
 
 /** Form project */
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
+const formRef = ref<NFormInst | null>(null);
+const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const formData = ref<FormProject>({
   name: null,
@@ -80,11 +86,11 @@ const formData = ref<FormProject>({
   terms: null,
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   name: [
     {
       required: true,
-      message: 'Please enter project name',
+      message: $i18n.t('validation.projectNameRequired'),
       trigger: 'input',
     },
   ],
@@ -93,7 +99,7 @@ const rules: FormRules = {
     {
       required: true,
       validator: validateRequiredCheckbox,
-      message: 'Please accept the terms',
+      message: $i18n.t('validation.terms'),
     },
   ],
 };
@@ -101,9 +107,9 @@ const rules: FormRules = {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       await createProject();
     }
@@ -111,37 +117,22 @@ function handleSubmit(e: MouseEvent) {
 }
 async function createProject() {
   loading.value = true;
-  $emit('submitActive', true);
+  emit('submitActive', true);
 
   try {
-    const { data, error } = await $api.post<CreateProjectResponse>(
-      endpoints.project,
-      formData.value
-    );
+    const res = await $api.post<CreateProjectResponse>(endpoints.project, formData.value);
 
-    if (error) {
-      setTimeout(() => {
-        message.error(error.message);
-        message.error($i18n.t(`error.${error.status}`));
-
-        loading.value = false;
-        $emit('submitActive', false);
-      }, 2000);
-      return;
-    }
-
-    if (data) {
+    if (res.data) {
       /** Set new project as current project */
-      dataStore.setCurrentProject(data.data.id);
+      dataStore.setCurrentProject(res.data.id);
 
-      $emit('submitSuccess');
-      $emit('submitActive', false);
+      emit('submitSuccess');
+      emit('submitActive', false);
     }
-    loading.value = false;
   } catch (error) {
-    message.error($i18n.t('error.API'));
-    loading.value = false;
-    $emit('submitActive', false);
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
+  emit('submitActive', false);
 }
 </script>

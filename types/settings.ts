@@ -1,52 +1,56 @@
-/**
- * Billing
- */
-export interface FormBilling {
-  cardHolder: string;
-  cardNumber: string;
-  expirationDate: string;
-  cvv: string;
-  postalCode: string;
-  terms: boolean;
-}
+export {};
 
-export interface BillingResponse {
-  data: {
-    items: any;
-    total: number;
-  };
-  status: number;
-}
+declare global {
+  /**
+   * Billing
+   */
+  interface FormBilling {
+    cardHolder: string;
+    cardNumber: string;
+    expirationDate: string;
+    cvv: string;
+    postalCode: string;
+    terms: boolean;
+  }
 
-/**
- * Generate API key
- */
-export interface ApiKeyPermissions {
-  read: boolean;
-  write: boolean;
-  xy?: boolean;
-  zzz?: boolean;
-}
-export interface FormGenerateApiKey {
-  authentication: ApiKeyPermissions;
-  storage: ApiKeyPermissions;
-  computing: ApiKeyPermissions;
-}
+  interface BillingResponse {
+    data: {
+      items: any;
+      total: number;
+    };
+    status: number;
+  }
 
-export interface GenerateApiKeyResponse {
-  data: any;
-  status: number;
-}
+  /**
+   * Generate API key
+   */
+  interface ApiKeyPermissions {
+    read: boolean;
+    write: boolean;
+    xy?: boolean;
+    zzz?: boolean;
+  }
+  interface FormGenerateApiKey {
+    authentication: ApiKeyPermissions;
+    storage: ApiKeyPermissions;
+    computing: ApiKeyPermissions;
+  }
 
-/**
- * Email configuration
- */
-export interface FormEmailConfiguration {
-  email: boolean;
-  did: boolean;
-}
+  interface GenerateApiKeyResponse {
+    data: any;
+    status: number;
+  }
 
-export interface EmailConfigurationResponse {
-  data: any;
-  status: number;
+  /**
+   * Email configuration
+   */
+  interface FormEmailConfiguration {
+    email: boolean;
+    did: boolean;
+  }
+
+  interface EmailConfigurationResponse {
+    data: any;
+    status: number;
+  }
 }

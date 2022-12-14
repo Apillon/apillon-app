@@ -31,7 +31,7 @@
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.saveExit')" />
-      <Btn type="secondary" class="w-full mt-8" :loading="loading" @click="handleSubmit">
+      <Btn type="secondary" size="large" class="mt-8" :loading="loading" @click="handleSubmit">
         {{ $t('form.saveExit') }}
       </Btn>
     </n-form-item>
@@ -39,13 +39,12 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, FormValidationError, FormRules, useMessage, CollapseProps } from 'naive-ui';
+import { CollapseProps, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormEmailConfiguration, EmailConfigurationResponse } from '~~/types/settings';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 const message = useMessage();
 
 /**
@@ -56,7 +55,7 @@ const formData = ref<FormEmailConfiguration>({
   did: false,
 });
 
-const rules: FormRules = {};
+const rules: NFormRules = {};
 
 /**
  * Change form data on Collapse header click
@@ -71,9 +70,9 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, event
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       await generateApiKey();
     }
@@ -83,25 +82,15 @@ async function generateApiKey() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<EmailConfigurationResponse>(
-      endpoints.apiKey,
-      formData.value
-    );
-
-    if (error) {
-      message.error(error.message);
-      loading.value = false;
-      return;
-    }
+    const res = await $api.post<EmailConfigurationResponse>(endpoints.apiKey, formData.value);
 
     // TODO
-    if (data.data) {
-      console.log(data);
+    if (res.data) {
+      console.log(res.data);
     }
-    loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

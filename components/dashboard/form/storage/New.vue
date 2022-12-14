@@ -39,27 +39,26 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormNewBucket, NewBucketResponse } from '~~/types/service';
-import { useDataStore } from '~~/stores/data';
 
-const { t } = useI18n();
+const message = useMessage();
+const $i18n = useI18n();
 const dataStore = useDataStore();
+const router = useRouter();
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
+const formRef = ref<NFormInst | null>(null);
 
 const formData = ref<FormNewBucket>({
-  bucketName: null,
-  bucketSize: null,
+  bucketName: '',
+  bucketSize: '',
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   bucketName: [
     {
       required: true,
-      message: 'Please enter bucket name',
+      message: $i18n.t('validation.bucketNameRequired'),
       trigger: 'input',
     },
   ],
@@ -69,52 +68,53 @@ const rules: FormRules = {
 const bucketSizes = [
   {
     value: 5,
-    label: t('form.bucketSizes.5gb'),
+    label: $i18n.t('form.bucketSizes.5gb'),
   },
   {
     value: 100,
-    label: t('form.bucketSizes.100gb'),
+    label: $i18n.t('form.bucketSizes.100gb'),
   },
 ];
 
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       await createService();
     }
   });
 }
 async function createService() {
+  if (!dataStore.currentProjectId) {
+    alert('Please select your project');
+    return;
+  }
+
   loading.value = true;
 
   const bodyData = {
-    project_uuid: dataStore.currentProject.project_uuid,
+    project_uuid: dataStore.currentProject?.project_uuid,
     bucketType: BucketType.STORAGE,
     name: formData.value.bucketName,
     size: formData.value.bucketSize,
   };
 
   try {
-    const { data, error } = await $api.post<NewBucketResponse>(endpoints.bucket, bodyData);
+    const res = await $api.post<NewBucketResponse>(endpoints.bucket, bodyData);
 
-    if (error) {
-      message.error(error.message);
-      loading.value = false;
-      return;
-    }
+    message.success($i18n.t('form.success.bucketCreated'));
 
-    // TODO
-    if (data.data) {
-      console.log(data);
-    }
+    /** On new bucket created redirect to storage list in refresh data */
+    dataStore.fetchBuckets();
+    router.push({ name: 'dashboard-service-storage' });
+
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

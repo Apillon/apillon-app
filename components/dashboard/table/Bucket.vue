@@ -1,36 +1,55 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="data" :row-props="rowProps" />
+  <n-data-table
+    :bordered="false"
+    :columns="columns"
+    :data="dataStore.services.bucket"
+    :row-props="rowProps"
+  />
+  <!-- Modal - Destroy bucket -->
+  <n-modal v-model:show="showModalDestroyBucket">
+    <n-card
+      style="width: 660px"
+      :title="$t('storage.bucketDestroy')"
+      :bordered="false"
+      size="huge"
+      role="dialog"
+      aria-modal="true"
+    >
+      <FormStorageDestroy :bucket-id="currentRow?.id || 0" />
+    </n-card>
+  </n-modal>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NTag, NProgress, useMessage } from 'naive-ui';
+import { NButton, NDropdown, useMessage } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { useDataStore } from '~~/stores/data';
 
 const $i18n = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
+const router = useRouter();
+const NuxtLink = resolveComponent('NuxtLink');
+const showModalDestroyBucket = ref<boolean>(false);
+const StorageProgress = resolveComponent('StorageProgress');
 
-type RowData = {
+interface RowData extends BucketInterface {
   key: number;
-  name: string;
-  usage: string;
-  traffic: boolean;
-  visits: string;
-};
+}
 
-const createColumns = ({
-  handleSelect,
-}: {
-  handleSelect: (key: string | number) => void;
-}): DataTableColumns<RowData> => {
+const createColumns = (): DataTableColumns<RowData> => {
   return [
     {
       title: $i18n.t('storage.bucketName'),
       key: 'name',
       render(row) {
-        return h('span', { class: 'ml-2 text-blue' }, row.name);
+        return h(
+          NuxtLink,
+          {
+            class: 'ml-2 text-blue',
+            to: `/dashboard/service/storage/${row.id}`,
+          },
+          () => row.name
+        );
       },
     },
     {
@@ -38,11 +57,13 @@ const createColumns = ({
       key: 'serviceType',
       render(row) {
         return h(
-          'span',
-          { class: 'text-grey' },
+          StorageProgress,
           {
-            default: () => row.usage,
-          }
+            size: row.sizeMb,
+            maxSize: row.maxSizeMb,
+            percentage: row.percentage,
+          },
+          null
         );
       },
     },
@@ -51,7 +72,7 @@ const createColumns = ({
       key: 'traffic',
     },
     {
-      title: $i18n.t('general.visits'),
+      title: $i18n.t('storage.visits'),
       key: 'visits',
     },
     {
@@ -65,7 +86,6 @@ const createColumns = ({
           {
             options: dropdownOptions,
             trigger: 'click',
-            onSelect: handleSelect,
           },
           {
             default: () =>
@@ -80,68 +100,52 @@ const createColumns = ({
     },
   ];
 };
-const createData = (): RowData[] => dataStore.services.storage;
-const currentRow = ref(null);
+const columns = createColumns();
+const currentRow = ref<RowData | null>(null);
 
-const data = createData();
-const columns = createColumns({
-  handleSelect(key: string | number) {
-    message.info(
-      () =>
-        h('span', {}, [
-          'Handle',
-          h('strong', { class: 'text-white' }, 'Select'),
-          JSON.stringify(key),
-          JSON.stringify(currentRow.value),
-        ]),
-      {
-        icon: () => h('span', { class: 'icon-info' }, {}),
-      }
-    );
-  },
-});
-
-function rowProps(row: RowData) {
+const rowProps = (row: RowData) => {
   return {
     onClick: () => {
-      currentRow.value = row.key;
+      currentRow.value = row;
     },
   };
-}
+};
 
 const dropdownOptions = [
   {
-    label: 'Profile',
-    key: 'profile',
+    label: $i18n.t('storage.edit'),
+    key: 'storageEdit',
     props: {
       onClick: () => {
-        message.success('Profile: ' + JSON.stringify(currentRow.value), {
-          icon: () => h('span', { class: 'icon-check' }, {}),
-        });
+        router.push(`/dashboard/service/storage/${currentRow.value?.id}`);
       },
     },
   },
   {
-    label: 'Edit Profile',
-    key: 'editProfile',
+    label: $i18n.t('storage.delete'),
+    key: 'storage.delete',
     props: {
       onClick: () => {
-        message.warning('Edit Profile: ' + JSON.stringify(currentRow.value), {
-          icon: () => h('span', { class: 'icon-info' }, {}),
-        });
-      },
-    },
-  },
-  {
-    label: 'Logout',
-    key: 'logout',
-    props: {
-      onClick: () => {
-        message.error('Logout: ' + JSON.stringify(currentRow.value), {
-          icon: () => h('span', { class: 'icon-close' }, {}),
-        });
+        showModalDestroyBucket.value = true;
       },
     },
   },
 ];
+
+/**
+ * Load data on mounted
+ */
+onMounted(() => {
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      getBuckets();
+    });
+  }, 100);
+});
+
+async function getBuckets() {
+  if (!dataStore.hasServices(ServiceType.BUCKET)) {
+    dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
+  }
+}
 </script>

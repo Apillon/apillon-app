@@ -24,47 +24,50 @@
     <!--  Login submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.login') }}
       </Btn>
     </n-form-item>
   </n-form>
+  <div class="min-h-[30px] text-center">
+    <div>
+      <span class="text-sm text-grey">{{ $t('login.forgotPassword') }} </span>&nbsp;
+      <FormPasswordResetRequest :email="formData.email" btn-type="link" size="tiny" quaternary />
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi, FormInst, FormRules, FormValidationError } from 'naive-ui';
+import { createDiscreteApi } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormLogin, LoginResponse } from '~~/types/data';
-import { useDataStore } from '~~/stores/data';
 
-const { t } = useI18n();
-const router = useRouter();
+const $i18n = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const { message } = createDiscreteApi(['message']);
+const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
+const formRef = ref<NFormInst | null>(null);
 
 const formData = ref<FormLogin>({
   email: authStore.email,
   password: '',
 });
-const rules: FormRules = {
-  mail: [
+const rules: NFormRules = {
+  email: [
     {
       type: 'email',
-      message: t('validation.email'),
+      message: $i18n.t('validation.email'),
     },
     {
       required: true,
-      message: 'Please enter your email',
+      message: $i18n.t('validation.emailRequired'),
     },
   ],
   password: [
     {
       required: true,
-      message: 'Please enter your password',
+      message: $i18n.t('validation.passwordRequired'),
     },
   ],
 };
@@ -72,9 +75,9 @@ const rules: FormRules = {
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
 
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       /** Login with mail and password */
       await login();
@@ -85,23 +88,19 @@ function handleSubmit(e: MouseEvent) {
 async function login() {
   loading.value = true;
   try {
-    const { data, error } = await $api.post<LoginResponse>(endpoints.login, formData.value);
+    // Logout first - delete LS and store if there is any data
+    authStore.logout();
 
-    if (error) {
-      message.error(error.message);
-      loading.value = false;
-      return;
-    }
-    if (data) {
-      authStore.setUserToken(data.data.token);
-    }
+    const data = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
-    /** Fetch projects, if user hasn't any project redirect him to '/login/first' so he will be able to create first project */
-    await dataStore.getProjects(true);
-    loading.value = false;
+    authStore.setUserToken(data.data.token);
+    authStore.changeUser(data.data);
+
+    /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
+    await dataStore.fetchProjects(true, $i18n);
   } catch (error) {
-    message.error(t('error.API'));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

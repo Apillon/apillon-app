@@ -1,24 +1,8 @@
-import { defineNuxtConfig } from 'nuxt';
-import ConfigInterface from './types/config';
-import stg from './config/staging';
-import dev from './config/development';
-import prod from './config/production';
-import local from './config/local';
+import { getAppConfig } from './lib/utils';
 
 const appConfig: ConfigInterface = getAppConfig(
   process.env.ENV || process.env.RUN_ENV || process.env.NODE_ENV
 );
-function getAppConfig(env?: string) {
-  if (env === 'production') {
-    return prod;
-  } else if (env === 'staging') {
-    return stg;
-  } else if (env === 'development') {
-    return dev;
-  } else {
-    return local;
-  }
-}
 
 const meta = {
   lang: 'en',
@@ -33,6 +17,8 @@ const meta = {
 export default defineNuxtConfig({
   ssr: false,
 
+  typescript: { shim: false },
+
   runtimeConfig: {
     public: appConfig,
   },
@@ -44,20 +30,19 @@ export default defineNuxtConfig({
     '~/components/dashboard/',
   ],
 
-  buildModules: ['@nuxtjs/google-fonts'],
-
-  modules: ['@vueuse/nuxt', '@nuxtjs/tailwindcss', '@pinia/nuxt', 'nuxt-icons'],
-
-  router: {
-    prefetchLinks: true,
-    middleware: ['auto-login', 'protected-routes'],
-  },
+  modules: [
+    '@vueuse/nuxt',
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    'nuxt-icons',
+    '@nuxtjs/google-fonts',
+  ],
 
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',
   },
 
-  autoImports: {
+  imports: {
     dirs: ['./stores', './lib', './types'],
   },
 
@@ -67,6 +52,7 @@ export default defineNuxtConfig({
         lang: meta.lang,
       },
 
+      title: meta.title,
       titleTemplate: `%s – ${meta.title}`,
       charset: 'utf-9',
       viewport: 'width=device-width, initial-scale=1',
@@ -101,7 +87,7 @@ export default defineNuxtConfig({
     download: true,
     families: {
       'IBM Plex Mono': {
-        wght: [700],
+        wght: [400, 700],
       },
       'IBM Plex Sans': {
         wght: [400, 700],

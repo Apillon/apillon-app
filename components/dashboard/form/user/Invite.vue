@@ -44,14 +44,13 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormUserInvite, UserInviteResponse } from '~~/types/auth';
 
-const { t } = useI18n();
+const message = useMessage();
+const $i18n = useI18n();
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
+const formRef = ref<NFormInst | null>(null);
 
 /** Col widths */
 const { width } = useWindowSize();
@@ -90,21 +89,21 @@ const formData = ref<FormUserInvite>({
   role: null,
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   email: [
     {
       type: 'email',
-      message: t('validation.email'),
+      message: $i18n.t('validation.email'),
     },
     {
       required: true,
-      message: t('validation.emailRequired'),
+      message: $i18n.t('validation.emailRequired'),
     },
   ],
   role: [
     {
       required: true,
-      message: t('validation.role'),
+      message: $i18n.t('validation.role'),
     },
   ],
 };
@@ -112,9 +111,9 @@ const rules: FormRules = {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       // await inviteUser();
     }
@@ -124,25 +123,16 @@ async function inviteUser() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<UserInviteResponse>(
-      endpoints.validateMail,
-      formData.value
-    );
-
-    if (error) {
-      message.error(error.message);
-      loading.value = false;
-      return;
-    }
+    const res = await $api.post<UserInviteResponse>(endpoints.validateMail, formData.value);
 
     // TODO
-    if (data.data) {
-      console.log(data);
+    if (res.data) {
+      console.log(res.data);
     }
     loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

@@ -31,7 +31,7 @@
     <!--  Service submit -->
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.createServiceAndContinue') }}
       </Btn>
     </n-form-item>
@@ -39,10 +39,8 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, createDiscreteApi, FormValidationError, FormRules } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FormService, CreateServiceResponse } from '~~/types/service';
-import { useDataStore } from '~~/stores/data';
 
 const props = defineProps({
   serviceType: {
@@ -52,18 +50,18 @@ const props = defineProps({
   },
 });
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const dataStore = useDataStore();
 const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
-const { message } = createDiscreteApi(['message']);
+const formRef = ref<NFormInst | null>(null);
+const message = useMessage();
 
 const formData = ref<FormService>({
-  serviceName: null,
+  serviceName: '',
   networkType: false,
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   serviceName: [
     {
       required: true,
@@ -77,20 +75,20 @@ const rules: FormRules = {
 const networkTypes = [
   {
     value: false,
-    label: t('form.networkTypes.test'),
+    label: $i18n.t('form.networkTypes.test'),
   },
   {
     value: true,
-    label: t('form.networkTypes.live'),
+    label: $i18n.t('form.networkTypes.live'),
   },
 ];
 
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       await createService();
     }
@@ -108,22 +106,15 @@ async function createService() {
   };
 
   try {
-    const { data, error } = await $api.post<CreateServiceResponse>(endpoints.services, bodyData);
-
-    if (error) {
-      message.error(error.message);
-      loading.value = false;
-      return;
-    }
+    const res = await $api.post<CreateServiceResponse>(endpoints.services, bodyData);
 
     // TODO
-    if (data.data) {
-      console.log(data);
+    if (res.data) {
+      console.log(res.data);
     }
-    loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

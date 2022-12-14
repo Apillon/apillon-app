@@ -43,16 +43,15 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, useMessage, FormValidationError, FormRules } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { useDataStore } from '~~/stores/data';
-import { FormProjectSettings, ProjectSettingsResponse } from '~~/types/data';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 const dataStore = useDataStore();
-const loading = ref(false);
-const formRef = ref<FormInst | null>(null);
 const message = useMessage();
+
+const loading = ref(false);
+const formRef = ref<NFormInst | null>(null);
 
 const formData = ref<FormProjectSettings>({
   name: dataStore.currentProject?.name || null,
@@ -69,7 +68,7 @@ onMounted(() => {
   });
 });
 
-const rules: FormRules = {
+const rules: NFormRules = {
   name: [],
   description: [],
 };
@@ -77,36 +76,29 @@ const rules: FormRules = {
 // Submit
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<FormValidationError> | undefined) => {
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
-      await updateUserProfile();
+      await updateProjectData();
     }
   });
 }
-async function updateUserProfile() {
+async function updateProjectData() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.patch<ProjectSettingsResponse>(
-      `${endpoints.project}/${dataStore.currentProjectId}`,
+    const res = await $api.patch<ProjectSettingsResponse>(
+      `${endpoints.project}${dataStore.currentProjectId}`,
       formData.value
     );
 
-    if (error) {
-      message.error(error.message);
-      loading.value = false;
-      return;
+    if (res.data) {
+      dataStore.updateCurrentProject(res.data);
     }
-
-    if (data.data) {
-      dataStore.updateCurrentProject(data.data);
-    }
-    loading.value = false;
   } catch (error) {
-    message.error(t('error.API'));
-    loading.value = false;
+    message.error(userFriendlyMsg(error, $i18n));
   }
+  loading.value = false;
 }
 </script>

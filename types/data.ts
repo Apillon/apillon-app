@@ -1,109 +1,79 @@
-/**
- *  Register
- */
-export interface FormRegister {
-  password: string;
-  reenteredPassword: string;
+export enum FileStatus {
+  REQUEST_FOR_UPLOAD_GENERATED = 1,
+  UPLOADED_TO_S3 = 2,
+  UPLOADED_TO_IPFS = 3,
+  PINNED_TO_CRUST = 4,
 }
-export interface RegisterResponse {
-  data: {
+
+declare global {
+  /**
+   * Project
+   */
+  interface FormProject {
+    name: string | null;
+    description: string | null;
+    terms: boolean | null;
+  }
+  interface ProjectInterface {
     id: number;
     status: number;
     name: string;
-    token: string;
-  };
-  status: number;
-}
-
-export interface ValidateMailResponse {
-  data: {
-    data: boolean;
+    description: string;
+    shortDescription: string;
+    imageFile_id: number;
+    project_uuid?: string;
+    value?: number;
+    label?: string;
+  }
+  interface ProjectResponse {
+    data: {
+      items: Array<ProjectInterface>;
+      total: number;
+    };
     status: number;
-    success: boolean;
-  };
-  status: number;
-}
+  }
+  interface CreateProjectResponse {
+    data: ProjectInterface;
+    status: number;
+  }
 
-/**
- * Login
- */
-export interface FormLogin {
-  email: string;
-  password: string;
-}
-export interface LoginResponse {
-  data: {
-    token: string;
-  };
-  status: number;
-}
+  /**
+   * Project settings
+   */
+  interface FormProjectSettings {
+    name: string | null;
+    description: string | null;
+  }
+  interface ProjectSettingsResponse {
+    data: ProjectInterface;
+    status: number;
+  }
 
-/**
- * Project
- */
-export interface FormProject {
-  name: string | null;
-  description: string | null;
-  terms: boolean | null;
-}
-export interface ProjectInterface {
-  id: number;
-  status: number;
-  name: string;
-  description: string;
-  shortDescription: string;
-  imageFile_id: number;
-  project_uuid?: string;
-}
-export interface ProjectResponse {
-  data: {
-    items: Array<ProjectInterface>;
-    total: number;
-  };
-  status: number;
-}
+  /**
+   * Instruction
+   */
+  interface InstructionInterface {
+    id: number;
+    status: number;
+    title: string;
+    instructionEnum: string;
+    instructionType: number;
+    htmlContent: string;
+    extendedHtmlContent: string;
+    docsUrl: string;
+    forRoute: string;
+  }
 
-export interface CreateProjectResponse {
-  data: ProjectInterface;
-  status: number;
-}
+  interface InstructionResponse {
+    data: InstructionInterface;
+    status: number;
+  }
 
-/**
- * Project settings
- */
-export interface FormProjectSettings {
-  name: string | null;
-  description: string | null;
-}
-export interface ProjectSettingsResponse {
-  data: ProjectInterface;
-  status: number;
-}
-
-/**
- * Instruction
- */
-export interface InstructionInterface {
-  id: number;
-  status: number;
-  title: string;
-  instructionEnum: string;
-  instructionType: number;
-  htmlContent: string;
-  extendedHtmlContent: string;
-  docsUrl: string;
-  forRoute: string;
-}
-
-export interface InstructionResponse {
-  data: InstructionInterface;
-  status: number;
-}
-
-export interface InstructionsResponse {
-  data: {
-    items: InstructionInterface;
-    total: number;
-  };
-  status: number;
+  interface InstructionsResponse {
+    data: {
+      items: Array<InstructionInterface>;
+      total: number;
+    };
+    status: number;
+  }
 }
