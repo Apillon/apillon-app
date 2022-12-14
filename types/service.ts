@@ -5,15 +5,11 @@ export enum ServiceType {
   AUTHENTICATION = 1,
   STORAGE = 2,
   COPMUTING = 3,
-  BUCKET = 4,
 }
 export enum ServiceTypeName {
   AUTHENTICATION = 'authentication',
   STORAGE = 'storage',
   COPMUTING = 'computing',
-  BUCKET = 'bucket',
-  CRUST = 'crust',
-  FOLDER = 'folder',
 }
 
 /**
@@ -23,7 +19,6 @@ export const ServiceTypeNames: { [k: number]: ServiceTypeName } = {
   [ServiceType.AUTHENTICATION]: ServiceTypeName.AUTHENTICATION,
   [ServiceType.STORAGE]: ServiceTypeName.STORAGE,
   [ServiceType.COPMUTING]: ServiceTypeName.COPMUTING,
-  [ServiceType.BUCKET]: ServiceTypeName.BUCKET,
 };
 
 /**

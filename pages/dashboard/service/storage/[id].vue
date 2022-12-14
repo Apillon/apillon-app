@@ -39,7 +39,7 @@
     </template>
 
     <slot>
-      <StorageBreadcrumbs v-if="dataStore.selected.folderId" />
+      <StorageBreadcrumbs v-if="dataStore.folder.selected" />
       <n-h5 v-else prefix="bar">{{ $t('storage.uploadFiles') }}</n-h5>
 
       <FormStorageUploadFiles
@@ -103,7 +103,7 @@ onMounted(() => {
   /** Bucket ID from route */
   dataStore.setBucketId(parseInt(`${params?.id}`));
 
-  if (!Array.isArray(dataStore.services.bucket) || dataStore.services.bucket.length === 0) {
+  if (!dataStore.hasBuckets) {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
       dataStore.promises.buckets = dataStore.fetchBuckets();
 
@@ -117,13 +117,8 @@ onMounted(() => {
 });
 
 /** Bucket from state, if bucket doesn't exists than redirect to storage */
-
 function checkIfBucketExists() {
-  if (
-    !dataStore.services.bucket.find(
-      (bucket: BucketInterface) => bucket.id === dataStore.selected.bucketId
-    )
-  ) {
+  if (!dataStore.hasSelectedBucket) {
     router.push({ name: 'dashboard' });
   }
   pageLoading.value = false;

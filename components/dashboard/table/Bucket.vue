@@ -2,7 +2,7 @@
   <n-data-table
     :bordered="false"
     :columns="columns"
-    :data="dataStore.services.bucket"
+    :data="dataStore.bucket.items"
     :row-props="rowProps"
   />
   <!-- Modal - Destroy bucket -->
@@ -135,7 +135,7 @@ onMounted(() => {
 });
 
 async function getBuckets() {
-  if (!dataStore.hasServices(ServiceType.BUCKET)) {
+  if (!dataStore.hasBuckets) {
     dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
   }
 }

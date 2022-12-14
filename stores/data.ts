@@ -9,35 +9,35 @@ export const DataLsKeys = {
 
 export const useDataStore = defineStore('data', {
   state: () => ({
+    bucket: {
+      items: [] as Array<BucketInterface>,
+      selected: 0,
+    },
+    crust: {} as Record<string, Array<any>>,
     currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
       ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
       : 0,
-    projects: [] as Array<ProjectInterface>,
-    services: {
-      authentication: [] as Array<ServiceInterface>,
-      storage: [] as Array<ServiceInterface>,
-      bucket: [] as Array<BucketInterface>,
-      crust: {} as Record<string, Array<any>>,
-      folder: [] as Array<FolderInterface>,
-      computing: [] as Array<ServiceInterface>,
-    } as Record<ServiceTypeName, any>,
-    selected: {
-      bucketId: 0,
-      folderId: 0,
+    folder: {
+      allowFetch: true,
+      items: [] as Array<FolderInterface>,
+      loading: false,
+      path: [] as Array<{ id: number; name: string }>,
+      search: '',
+      selected: 0,
+      total: 0,
     },
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
+    projects: [] as Array<ProjectInterface>,
     promises: {
       projects: null as any,
       buckets: null as any,
     },
-    folder: {
-      total: 0,
-      search: '',
-      allowFetch: true,
-      loading: false,
-      path: [] as Array<{ id: number; name: string }>,
-    },
+    services: {
+      authentication: [] as Array<ServiceInterface>,
+      storage: [] as Array<ServiceInterface>,
+      computing: [] as Array<ServiceInterface>,
+    } as Record<ServiceTypeName, Array<ServiceInterface>>,
   }),
   getters: {
     currentProject(state) {
@@ -59,9 +59,18 @@ export const useDataStore = defineStore('data', {
     },
     currentBucket(state): BucketInterface {
       return (
-        state.services.bucket.find(
-          (item: BucketInterface) => item.id === state.selected.bucketId
-        ) || {}
+        state.bucket.items.find((item: BucketInterface) => item.id === state.bucket.selected) ||
+        ({} as BucketInterface)
+      );
+    },
+    hasBuckets(state): boolean {
+      return Array.isArray(state.bucket.items) && state.bucket.items.length > 0;
+    },
+    hasSelectedBucket(state): boolean {
+      return (
+        state.bucket.items.find(
+          (bucket: BucketInterface) => bucket.id === state.bucket.selected
+        ) !== undefined
       );
     },
     getFolderPath(state) {
@@ -70,10 +79,10 @@ export const useDataStore = defineStore('data', {
   },
   actions: {
     resetData() {
+      this.bucket.items = [] as Array<BucketInterface>;
+      this.folder.items = [] as Array<FolderInterface>;
       this.services.authentication = [] as Array<ServiceInterface>;
       this.services.storage = [] as Array<ServiceInterface>;
-      this.services.bucket = [] as Array<BucketInterface>;
-      this.services.folder = [] as Array<FolderInterface>;
       this.services.computing = [] as Array<ServiceInterface>;
     },
 
@@ -83,16 +92,16 @@ export const useDataStore = defineStore('data', {
     },
 
     setBucketId(id: number) {
-      this.services.folder = [] as Array<FolderInterface>;
-      this.selected.folderId = 0;
+      this.folder.items = [] as Array<FolderInterface>;
       this.folder.total = 0;
       this.folder.path = [];
-      this.selected.bucketId = id;
+      this.folder.selected = 0;
+      this.bucket.selected = id;
       this.folderSearch();
     },
 
     setFolderId(id: number) {
-      this.selected.folderId = id;
+      this.folder.selected = id;
       sessionStorage.setItem(DataLsKeys.CURRENT_FOLDER_ID, `${id}`);
     },
 
@@ -120,19 +129,6 @@ export const useDataStore = defineStore('data', {
       return Array.isArray(this.services[key]) && this.services[key].length > 0;
     },
 
-    getFolderById(folderId: number): FolderInterface {
-      if (folderId === 0) {
-        return {} as FolderInterface;
-      }
-
-      return (
-        (Object.values(this.services.folder) as Array<Array<FolderInterface>>)
-          .flatMap(_ => _)
-          .find(folder => folder.type === 'directory' && folder.id === folderId) ||
-        ({} as FolderInterface)
-      );
-    },
-
     folderSearch(search: string = '', fetch: boolean = false) {
       this.folder.allowFetch = fetch;
       this.folder.search = search;
@@ -142,6 +138,11 @@ export const useDataStore = defineStore('data', {
       }
     },
 
+    /**
+     * API calls
+     */
+
+    /** Projects */
     async fetchProjects(redirectToDashboard: boolean = false, $i18n: any = null) {
       const router = useRouter();
       try {
@@ -178,6 +179,7 @@ export const useDataStore = defineStore('data', {
       return null;
     },
 
+    /** Services */
     async fetchServices($i18n?: any, type?: number) {
       if (!this.hasProjects) {
         alert('Please create your first project');
@@ -206,15 +208,12 @@ export const useDataStore = defineStore('data', {
 
     async getAllServices($i18n: any = null) {
       const services = await this.fetchServices($i18n);
-      this.services.authentication =
-        services.filter(service => service.serviceType_id == ServiceType.AUTHENTICATION) ||
-        ([] as Array<ServiceInterface>);
-      this.services.storage =
-        services.filter(service => service.serviceType_id == ServiceType.STORAGE) ||
-        ([] as Array<ServiceInterface>);
-      this.services.computing =
-        services.filter(service => service.serviceType_id == ServiceType.COPMUTING) ||
-        ([] as Array<ServiceInterface>);
+
+      Object.entries(ServiceTypeNames).map(([serviceType, typeName]) => {
+        this.services[typeName] =
+          services.filter(service => service.serviceType_id == parseInt(serviceType)) ||
+          ([] as Array<ServiceInterface>);
+      });
     },
     async getAuthServices($i18n: any = null) {
       this.services.authentication = await this.fetchServices($i18n, ServiceType.AUTHENTICATION);
@@ -226,6 +225,7 @@ export const useDataStore = defineStore('data', {
       this.services.computing = await this.fetchServices($i18n, ServiceType.COPMUTING);
     },
 
+    /** Buckets */
     async fetchBuckets($i18n: any = null) {
       if (!this.hasProjects) {
         alert('Please create your first project');
@@ -238,7 +238,7 @@ export const useDataStore = defineStore('data', {
         };
         const res = await $api.get<BucketResponse>(endpoints.bucket, params);
 
-        this.services.bucket = res.data.items.map((bucket: BucketInterface) => {
+        this.bucket.items = res.data.items.map((bucket: BucketInterface) => {
           return {
             ...bucket,
             sizeMb: kbToMb(bucket.size || 0),
@@ -248,7 +248,7 @@ export const useDataStore = defineStore('data', {
         });
         return res;
       } catch (error: any) {
-        this.services.bucket = [];
+        this.bucket.items = [];
 
         /** Show error message */
         const message = useMessage();
@@ -282,8 +282,8 @@ export const useDataStore = defineStore('data', {
         };
 
         /** Add additional parameters */
-        if (this.selected.folderId > 0) {
-          params.directory_id = this.selected.folderId;
+        if (this.folder.selected > 0) {
+          params.directory_id = this.folder.selected;
         }
         if (search) {
           params.search = search;
@@ -295,11 +295,11 @@ export const useDataStore = defineStore('data', {
 
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
 
-        this.services.folder = res.data.items;
+        this.folder.items = res.data.items;
         this.folder.total = res.data.total;
       } catch (error: any) {
         /** Reset data */
-        this.services.folder = [];
+        this.folder.items = [];
         this.folder.total = 0;
 
         /** Show error message */

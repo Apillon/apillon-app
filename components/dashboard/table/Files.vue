@@ -3,7 +3,7 @@
     remote
     :bordered="false"
     :columns="columns"
-    :data="dataStore.services.folder"
+    :data="dataStore.folder.items"
     :loading="dataStore.folder.loading"
     :pagination="pagination"
     :row-key="rowKey"
@@ -225,7 +225,7 @@ async function handlePageChange(currentPage: number) {
   if (!dataStore.folder.loading) {
     await getDirectoryContent(
       dataStore.currentBucket.bucket_uuid,
-      dataStore.selected.folderId,
+      dataStore.folder.selected,
       currentPage
     );
   }

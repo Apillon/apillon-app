@@ -13,7 +13,10 @@
       <!-- Secrets -->
       <n-h5 prefix="bar">{{ $t('dashboard.secrets') }}</n-h5>
       <n-space class="text-sm" size="large" align="center">
-        <strong>Scope: <span class="text-primary">24.com Auth Internal</span> </strong>
+        <strong>
+          Scope:
+          <span class="text-primary">{{ dataStore.currentProject?.name }}</span>
+        </strong>
         <div class="w-[1px] h-[13px] bg-grey"></div>
         <span>Test enviroment</span>
       </n-space>

@@ -11,8 +11,8 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const NuxtLink = resolveComponent('NuxtLink');
-const { currentRoute } = useRouter();
-const selectedPage = ref(currentRoute.value?.name);
+const { name } = useRoute();
+const selectedPage = ref<string>(name?.toString() || '');
 
 function handleUpdateValue(key: string, item: MenuOption) {
   console.info('[onUpdate:value]: ' + JSON.stringify(key));
@@ -22,15 +22,15 @@ function handleUpdateValue(key: string, item: MenuOption) {
 const menuOptions: MenuOption[] = [
   {
     label: () => h(NuxtLink, { to: { name: 'dashboard-methods' } }, () => t('pageMenu.methods')),
-    key: 'methods',
+    key: 'dashboard-methods',
   },
   {
-    label: () => h(NuxtLink, { to: { path: '/' } }, () => t('pageMenu.access')),
-    key: 'access',
+    label: () => h(NuxtLink, { to: { path: '/dashboard' } }, () => t('pageMenu.access')),
+    key: 'dashboard-access',
   },
   {
     label: () => h(NuxtLink, { to: { name: 'dashboard-api-keys' } }, () => t('pageMenu.apiKeys')),
-    key: 'api-keys',
+    key: 'dashboard-api-keys',
   },
 ];
 </script>
