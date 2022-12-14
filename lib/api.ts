@@ -18,7 +18,7 @@ export const $api = {
 
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if ($api.isUnauthorized(response.status)) {
+      if ($api.isUnauthorized(response, error)) {
         $api.backToLogin();
       }
       return {
@@ -43,7 +43,7 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if ($api.isUnauthorized(response.status)) {
+      if ($api.isUnauthorized(response, error)) {
         $api.backToLogin();
       }
       return {
@@ -66,7 +66,7 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if ($api.isUnauthorized(response.status)) {
+      if ($api.isUnauthorized(response, error)) {
         $api.backToLogin();
       }
       return {
@@ -89,7 +89,7 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if ($api.isUnauthorized(response.status)) {
+      if ($api.isUnauthorized(response, error)) {
         $api.backToLogin();
       }
       return {
@@ -111,7 +111,7 @@ export const $api = {
     });
     if (response.status > 250) {
       const error: ApiErrorResponse = await response.json();
-      if ($api.isUnauthorized(response.status)) {
+      if ($api.isUnauthorized(response, error)) {
         $api.backToLogin();
       }
       return {
@@ -137,8 +137,11 @@ export const $api = {
     APISettings.headers.delete('Authorization');
   },
 
-  isUnauthorized(status: number) {
-    return status === 401;
+  isUnauthorized(response: Response, error: ApiErrorResponse) {
+    return (
+      (response.status === 401 && error.message !== 'USER_INVALID_LOGIN') ||
+      (response.status === 500 && error.message === 'jwt expired')
+    );
   },
 
   backToLogin() {
