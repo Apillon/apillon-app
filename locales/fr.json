@@ -1,7 +1,0 @@
-{
-  "hello": "Hello, {name}! FR",
-  "language": "Language FR",
-  "validation": {
-    "captchaRequired": "Défi Captcha requis !"
-  }
-}
