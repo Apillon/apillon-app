@@ -436,6 +436,7 @@
     "postalCodeRequired": "Please enter postal code",
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
+    "captchaRequired": "Captcha challange required!",
     "role": "Role validation error",
     "terms": "Please accept the terms"
   }
