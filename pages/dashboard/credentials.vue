@@ -4,7 +4,7 @@
       <SidebarProjectSettings />
     </template>
     <slot>
-      <h4 class="mb-6">{{ $t('dashboard.credentialsAndApiKeys') }}</h4>
+      <h4 class="mb-6">{{ $t('dashboard.apiKey.title') }}</h4>
 
       <!-- Project ID -->
       <n-h5 prefix="bar">{{ $t('project.id') }}</n-h5>
@@ -14,7 +14,7 @@
       <n-h5 prefix="bar">{{ $t('dashboard.secrets') }}</n-h5>
       <n-space class="text-sm" size="large" align="center">
         <strong>
-          Scope:
+          {{ $t('general.scope') }}:
           <span class="text-primary">{{ dataStore.currentProject?.name }}</span>
         </strong>
         <div class="w-[1px] h-[13px] bg-grey"></div>
@@ -23,7 +23,7 @@
       <TableApiKeys />
       <div class="text-right mt-5">
         <Btn type="secondary" @click="showDrawerGenerateApiKey">
-          {{ $t('dashboard.generateNewKey') }}
+          {{ $t('dashboard.apiKey.generate') }}
         </Btn>
       </div>
 
@@ -31,9 +31,9 @@
       <n-drawer v-model:show="drawerGenerateApiKeyVisible" :width="495">
         <n-drawer-content>
           <template #header>
-            <h5>{{ $t('dashboard.generateNewKey') }}</h5>
+            <h5>{{ $t('dashboard.apiKey.generate') }}</h5>
           </template>
-          <FormApiKeyCreate />
+          <FormApiKeyCreate @close="drawerGenerateApiKeyVisible = false" />
         </n-drawer-content>
       </n-drawer>
     </slot>
@@ -49,7 +49,7 @@ const settingsStore = useSettingsStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: t('dashboard.credentialsAndApiKeys'),
+  title: t('dashboard.apiKey.title'),
 });
 
 /**

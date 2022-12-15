@@ -62,9 +62,9 @@ async function deleteEntity() {
   try {
     await $api.delete(getUrl(props.type, props.id));
 
-    const successMsg = $i18n.te(`form.success.delete.${props.type}`)
-      ? $i18n.t(`form.success.delete.${props.type}`)
-      : $i18n.t('form.success.deleted');
+    const successMsg = $i18n.te(`form.success.deleted.${props.type}`)
+      ? $i18n.t(`form.success.deleted.${props.type}`)
+      : $i18n.t('form.success.deleted.item');
     message.success(successMsg);
 
     emit('submitSuccess');

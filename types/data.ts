@@ -4,6 +4,17 @@ export enum FileStatus {
   UPLOADED_TO_IPFS = 3,
   PINNED_TO_CRUST = 4,
 }
+export enum FileUploadRequestFileStatus {
+  SIGNED_URL_FOR_UPLOAD_GENERATED = 1,
+  UPLOADED_TO_S3 = 2,
+  UPLOADED_TO_IPFS = 3,
+  PINNED_TO_CRUST = 4,
+  UPLOAD_COMPLETED = 5,
+  ERROR_UPLOADING_TO_IPFS = 100,
+  ERROR_PINING_TO_CRUST = 101,
+  ERROR_FILE_NOT_EXISTS_ON_S3 = 102,
+  ERROR_BUCKET_FULL = 103,
+}
 
 declare global {
   /**

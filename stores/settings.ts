@@ -9,6 +9,10 @@ export const useSettingsStore = defineStore('settings', {
   }),
   getters: {},
   actions: {
+    getApiKeyById(id: number) {
+      return this.apiKeys.find(item => item.id === id) || ({} as ApiKeyInterface);
+    },
+
     async fetchApiKeys($i18n?: any) {
       if (!dataStore.hasProjects) {
         this.apiKeys = [] as Array<ApiKeyInterface>;

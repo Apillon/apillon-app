@@ -108,6 +108,7 @@ export const themeOverrides: GlobalThemeOverrides = {
   },
   Dialog: {
     color: colors.grey.lightBg,
+    contentMargin: '16px 0',
   },
   Drawer: {
     color: colors.black,

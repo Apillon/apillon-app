@@ -54,16 +54,18 @@ class Api {
     return this.onResponse<T>(response);
   }
 
-  async delete(path: string) {
+  async delete<T>(path: string, data?: any) {
     const response = await fetch(
       APISettings.basePath + path,
       this.onRequest({
         method: 'DELETE',
+        body: data ? JSON.stringify(data) : null,
         headers: APISettings.headers,
       })
     );
-    return this.onResponse(response);
+    return this.onResponse<T>(response);
   }
+
   setBaseUrl(baseUrl: string) {
     APISettings.basePath = baseUrl;
   }
@@ -107,7 +109,8 @@ class Api {
       /** Unauthorized or session expired */
       if (
         (response.status === 401 && error.message !== UserError.USER_INVALID_LOGIN) ||
-        (response.status === 500 && error.message === UserError.JWT_TOKEN_EXPIRED)
+        (response.status === 500 && error.message === UserError.JWT_TOKEN_EXPIRED) ||
+        (response.status === 500 && error.message === UserError.INVALID_SIGNATURE)
       ) {
         this.backToLogin();
       } else if (response.status === 403) {

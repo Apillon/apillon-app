@@ -211,7 +211,7 @@ export const useDataStore = defineStore('data', {
 
       Object.entries(ServiceTypeNames).map(([serviceType, typeName]) => {
         this.services[typeName] =
-          services.filter(service => service.serviceType_id == parseInt(serviceType)) ||
+          services.filter(service => service.serviceType_id === parseInt(serviceType)) ||
           ([] as Array<ServiceInterface>);
       });
     },

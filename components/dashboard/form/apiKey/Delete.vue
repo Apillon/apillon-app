@@ -4,7 +4,7 @@
     <n-form-item>
       <input type="hidden" name="apiKeyId" :value="formData.apiKeyId" readonly />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
-        {{ $t('dashboard.apiKeyDelete') }}
+        {{ $t('dashboard.apiKey.delete') }}
       </Btn>
     </n-form-item>
   </n-form>
@@ -57,7 +57,7 @@ async function deleteApiKey() {
   try {
     const res = await $api.delete(`${endpoints.apiKey}${props.apiKeyId}`);
 
-    message.success($i18n.t('form.success.delete.apiKey'));
+    message.success($i18n.t('form.success.deleted.apiKey'));
 
     /** On deleted Api key refresh data */
     settingsStore.fetchApiKeys();

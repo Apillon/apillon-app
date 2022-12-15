@@ -132,11 +132,11 @@ function updateFileStatus(fileId: string, status: FileUploadStatus) {
     if (item.id === fileId) {
       item.status = status;
 
-      if (status == FileUploadStatusValue.ERROR) {
+      if (status === FileUploadStatusValue.ERROR) {
         item.percentage = 0;
         clearInterval(item.progress);
       }
-      if (status == FileUploadStatusValue.FINISHED) {
+      if (status === FileUploadStatusValue.FINISHED) {
         const timeDiff = Date.now() - item.timestamp;
         if (timeDiff > 0) {
           item.uploadSpeed = item.size / timeDiff;

@@ -1,5 +1,11 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    v-if="!loading"
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    @submit.prevent="handleSubmit"
+  >
     <!--  Service name -->
     <n-form-item
       path="name"
@@ -49,6 +55,7 @@
         </template>
         <template #header-extra>
           <n-switch
+            :key="service.enabled ? 1 : 0"
             v-model:value="service.enabled"
             @update:value="service.enabled = !service.enabled"
           />
@@ -56,16 +63,19 @@
 
         <n-grid :cols="2">
           <n-form-item-gi
-            v-for="permissions in service.permissions"
-            :key="permissions.key"
-            :path="`${service.name}.${permissions.name}`"
+            v-for="permission in service.permissions"
+            :key="permission.key"
+            :path="`${service.name}.${permission.name}`"
             :show-label="false"
             :show-feedback="false"
           >
             <n-checkbox
-              v-model:checked="permissions.value"
+              v-model:checked="permission.value"
               size="medium"
-              :label="permissions.label"
+              :label="permission.label"
+              @update:checked="
+                updatePermission(service.service_uuid, permission.key, permission.value)
+              "
             />
           </n-form-item-gi>
         </n-grid>
@@ -74,39 +84,36 @@
 
     <!--  Submit -->
     <n-form-item :show-label="false">
-      <input type="submit" class="hidden" :value="$t('form.generate')" />
-      <Btn type="secondary" class="w-full mt-8" :loading="loading" @click="handleSubmit">
-        {{ $t('form.generate') }}
+      <input type="submit" class="hidden" :value="$t('form.update')" />
+      <Btn type="secondary" class="w-full mt-8" :loading="loadingForm" @click="handleSubmit">
+        {{ $t('form.update') }}
       </Btn>
     </n-form-item>
   </n-form>
-  <!-- Modal - API key detals -->
-  <n-modal
-    v-model:show="showModalApiKeyDetails"
-    :mask-closable="false"
-    preset="dialog"
-    :title="$t('dashboard.apiKey.details')"
-    :positive-text="$t('dashboard.apiKey.secredSaved')"
-    @positive-click="emit('close')"
-  >
-    <ApiKeyDetails v-bind="createdApiKey"></ApiKeyDetails>
-  </n-modal>
+  <Spinner v-else />
 </template>
 
 <script lang="ts" setup>
-import { useMessage, CollapseProps } from 'naive-ui';
+import { useMessage, CollapseProps, CheckboxProps } from 'naive-ui';
+import { stringify } from 'query-string';
 import { useI18n } from 'vue-i18n';
+
+const props = defineProps({
+  id: { type: Number, required: true },
+});
 
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
+const emit = defineEmits(['submitSuccess']);
 
 const formRef = ref<NFormInst | null>(null);
-const loading = ref<boolean>(false);
-const showModalApiKeyDetails = ref<boolean>(false);
-const createdApiKey = ref<ApiKeyCreatedInterface>({} as ApiKeyCreatedInterface);
-const emit = defineEmits(['close']);
+const loading = ref<boolean>(true);
+const loadingForm = ref<boolean>(false);
+const loadingRoles = ref<boolean>(false);
+const apiKey: ApiKeyInterface = settingsStore.getApiKeyById(props.id);
+const apiKeyRoles = ref<Array<ApiKeyRoleInterface>>([]);
 
 /**
  * Form data
@@ -123,19 +130,19 @@ const roles = computed(() => {
           permissions: [
             {
               key: ApiKeyRole.READ,
-              value: false,
+              value: isPermissionEnabled(service.service_uuid, ApiKeyRole.READ),
               name: 'read',
               label: $i18n.t('dashboard.permissions.read'),
             },
             {
               key: ApiKeyRole.EXECUTE,
-              value: false,
+              value: isPermissionEnabled(service.service_uuid, ApiKeyRole.EXECUTE),
               name: 'execute',
               label: $i18n.t('dashboard.permissions.execute'),
             },
             {
               key: ApiKeyRole.WRITE,
-              value: false,
+              value: isPermissionEnabled(service.service_uuid, ApiKeyRole.WRITE),
               name: 'write',
               label: $i18n.t('dashboard.permissions.write'),
             },
@@ -158,9 +165,9 @@ const apiKeyTypes: Array<{ value: boolean; label: string }> = [
 ];
 
 const formData = ref<ApiKeyForm>({
-  name: '',
-  apiKeyType: true,
-  roles: roles.value,
+  name: apiKey.name,
+  apiKeyType: apiKey.testNetwork === 1,
+  roles: [],
 });
 
 const rules: NFormRules = {
@@ -182,27 +189,52 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expan
   if (service) {
     service.enabled = !service.enabled;
 
-    if (!expanded) {
-      service.permissions.forEach(permission => {
-        permission.value = false;
-      });
-    }
+    // if (!expanded) {
+    //   service.permissions.forEach(permission => {
+    //     permission.value = false;
+    //   });
+    // }
   }
 };
 
-// Submit
+/** Load roles and show permissions */
+onMounted(async () => {
+  await getApiKeyRoles();
+
+  formData.value.roles = roles.value;
+  loading.value = false;
+});
+
+/** Get API key's roles */
+async function getApiKeyRoles() {
+  loadingRoles.value = true;
+
+  try {
+    const res = await $api.get<ApiKeyRolesResponse>(`${endpoints.apiKey}${props.id}/roles`);
+
+    if (res.data) {
+      apiKeyRoles.value = res.data;
+    }
+  } catch (error) {
+    message.error(userFriendlyMsg(error, $i18n));
+  }
+  loadingRoles.value = false;
+}
+
+/** Submit form - update API key */
 function handleSubmit(e: MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
-      await createApiKey();
+      await updateApiKey();
     }
   });
 }
-async function createApiKey() {
-  loading.value = true;
+
+async function updateApiKey() {
+  loadingForm.value = true;
 
   try {
     const projectUuid = dataStore.currentProject?.project_uuid;
@@ -210,33 +242,68 @@ async function createApiKey() {
       project_uuid: projectUuid,
       name: formData.value.name,
       testNetwork: formData.value.apiKeyType,
-      roles: formData.value.roles
-        .map(role => {
-          return role.permissions.map(permission => {
-            if (permission.value) {
-              return {
-                role_id: permission.key,
-                project_uuid: projectUuid,
-                service_uuid: role.service_uuid,
-              };
-            }
-          });
-        })
-        .flat()
-        .filter(item => item !== undefined),
     };
-    const res = await $api.post<ApiKeyCreatedResponse>(endpoints.apiKey, bodyData);
+    const res = await $api.put<ApiKeyCreatedResponse>(endpoints.apiKey, bodyData);
 
     if (res.data) {
-      createdApiKey.value = res.data;
-      showModalApiKeyDetails.value = true;
-
-      /** Refresh table API key */
-      settingsStore.fetchApiKeys();
+      message.error($i18n.t('form.success.apiKey'));
+      emit('submitSuccess');
     }
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));
   }
-  loading.value = false;
+  loadingForm.value = false;
+}
+
+/** Check if permission is enabled */
+function isPermissionEnabled(serviceUuid: string, roleId: number) {
+  const projectUuid = dataStore.currentProject?.project_uuid;
+  return (
+    apiKeyRoles.value.find(
+      role =>
+        role.project_uuid === projectUuid &&
+        role.service_uuid === serviceUuid &&
+        role.role_id === roleId
+    ) !== undefined
+  );
+}
+
+/** Permission update */
+function updatePermission(serviceUuid: string, roleId: number, value: boolean) {
+  if (value) {
+    addPermission(serviceUuid, roleId);
+  } else {
+    removePermission(serviceUuid, roleId);
+  }
+}
+
+async function addPermission(serviceUuid: string, roleId: number) {
+  const projectUuid = dataStore.currentProject?.project_uuid;
+  try {
+    await $api.post<ApiKeyRoleUpdateResponse>(`${endpoints.apiKey}${props.id}/role`, {
+      project_uuid: projectUuid,
+      service_uuid: serviceUuid,
+      role_id: roleId,
+    });
+
+    message.success($i18n.t('form.success.updated.apiKeyRole'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error, $i18n));
+  }
+}
+
+async function removePermission(serviceUuid: string, roleId: number) {
+  const projectUuid = dataStore.currentProject?.project_uuid || '';
+  try {
+    await $api.delete<DeleteResponse>(`${endpoints.apiKey}${props.id}/role`, {
+      project_uuid: projectUuid,
+      service_uuid: serviceUuid,
+      role_id: roleId,
+    });
+
+    message.success($i18n.t('form.success.deleted.apiKeyRole'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error, $i18n));
+  }
 }
 </script>

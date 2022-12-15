@@ -26,6 +26,28 @@ declare global {
   }
 
   /**
+   * API key - Form
+   */
+  interface ApiKeyPermissionForm {
+    key: number;
+    label: string;
+    name: string;
+    value: boolean;
+  }
+  interface ApiKeyRoleForm {
+    enabled: boolean;
+    name: string;
+    serviceType: string;
+    service_uuid: string;
+    permissions: Array<ApiKeyPermissionForm>;
+  }
+  interface ApiKeyForm {
+    name: string;
+    apiKeyType: boolean;
+    roles: Array<ApiKeyRoleForm>;
+  }
+
+  /**
    * API key
    */
   interface ApiKeyInterface {
@@ -58,15 +80,22 @@ declare global {
     status: number;
   }
 
-  interface ApiKeyPermissions {
-    read: boolean;
-    write: boolean;
-    execute: boolean;
+  interface ApiKeyRoleInterface {
+    id?: number;
+    apiKey_id: number;
+    role_id: number;
+    serviceType_id: number;
+    project_uuid: string;
+    service_uuid: string;
+    status?: number;
   }
-  interface FormGenerateApiKey {
-    authentication: ApiKeyPermissions;
-    storage: ApiKeyPermissions;
-    computing: ApiKeyPermissions;
+  interface ApiKeyRolesResponse {
+    data: Array<ApiKeyRoleInterface>;
+    status: number;
+  }
+  interface ApiKeyRoleUpdateResponse {
+    data: ApiKeyRoleInterface;
+    status: number;
   }
 
   /**
