@@ -122,10 +122,10 @@ async function getFileDetails(cid: string) {
 }
 
 async function getCrustStatus(cid: string) {
-  if (!(cid in dataStore.services.crust)) {
-    dataStore.services.crust[cid] = await fetchFileDetailsFromCrust(cid);
+  if (!(cid in dataStore.crust)) {
+    dataStore.crust[cid] = await fetchFileDetailsFromCrust(cid);
   }
-  crustStatus.value = dataStore.services.crust[cid];
+  crustStatus.value = dataStore.crust[cid];
 }
 
 async function fetchFileDetailsFromCrust(cid: string) {

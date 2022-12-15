@@ -11,19 +11,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const IconStatus = resolveComponent('IconStatus');
 
-type RowData = {
-  key: number;
-  name: string;
-  serviceType: string;
-  active: boolean;
-  uptime: string;
-};
-
-const createColumns = ({
-  handleSelect,
-}: {
-  handleSelect: (key: string | number) => void;
-}): DataTableColumns<RowData> => {
+const createColumns = (): DataTableColumns<ServiceInterface> => {
   return [
     {
       title: t('general.serviceName'),
@@ -65,7 +53,8 @@ const createColumns = ({
       title: t('general.uptime'),
       key: 'uptime',
       render(row) {
-        return h('span', {}, { default: () => timeToDays(row.uptime) });
+        // TODO: Uptime
+        return h('span', {}, { default: () => timeToDays('') });
       },
     },
     {
@@ -79,7 +68,6 @@ const createColumns = ({
           {
             options: dropdownOptions,
             trigger: 'click',
-            onSelect: handleSelect,
           },
           {
             default: () =>
@@ -94,31 +82,16 @@ const createColumns = ({
     },
   ];
 };
-const createData = (): RowData[] => dataStore.services.authentication;
-const currentRow = ref<number>(0);
+const createData = (): ServiceInterface[] => dataStore.services.authentication;
+const currentRow = ref<ServiceInterface>({} as ServiceInterface);
 
 const data = createData();
-const columns = createColumns({
-  handleSelect(key: string | number) {
-    message.info(
-      () =>
-        h('span', {}, [
-          'Handle',
-          h('strong', { class: 'text-white' }, 'Select'),
-          JSON.stringify(key),
-          JSON.stringify(currentRow.value),
-        ]),
-      {
-        icon: () => h('span', { class: 'icon-info' }, {}),
-      }
-    );
-  },
-});
+const columns = createColumns();
 
-function rowProps(row: RowData) {
+function rowProps(row: ServiceInterface) {
   return {
     onClick: () => {
-      currentRow.value = row.key;
+      currentRow.value = row;
     },
   };
 }

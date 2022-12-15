@@ -39,7 +39,7 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const formData = computed<{ email: string }>(() => {
+const formData = computed<PasswordResetForm>(() => {
   return { email: props.email };
 });
 const rules: NFormRules = {
@@ -73,7 +73,7 @@ async function passwordChangeRequest() {
   try {
     const res = await $api.post<PasswordResetRequestResponse>(
       endpoints.passwordResetRequest,
-      formData
+      formData.value
     );
 
     if (res.data) {

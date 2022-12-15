@@ -23,18 +23,9 @@
       </div>
 
       <!-- Modal - Change password -->
-      <n-modal v-model:show="showModalChangePassword">
-        <n-card
-          style="width: 660px"
-          :title="$t('profile.changePassword')"
-          :bordered="false"
-          size="huge"
-          role="dialog"
-          aria-modal="true"
-        >
-          <FormPassword :token="authStore.jwt" @submit-success="passwordChanged" />
-        </n-card>
-      </n-modal>
+      <modal v-model:show="showModalChangePassword" :title="$t('profile.changePassword')">
+        <FormPassword :token="authStore.jwt" @submit-success="passwordChanged" />
+      </modal>
     </slot>
   </Dashboard>
 </template>

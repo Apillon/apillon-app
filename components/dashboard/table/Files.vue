@@ -3,7 +3,7 @@
     remote
     :bordered="false"
     :columns="columns"
-    :data="dataStore.services.folder"
+    :data="dataStore.folder.items"
     :loading="dataStore.folder.loading"
     :pagination="pagination"
     :row-key="rowKey"
@@ -20,22 +20,13 @@
   </n-drawer>
 
   <!-- Modal - Delete file/folder -->
-  <n-modal v-model:show="showModalDelete">
-    <n-card
-      style="width: 660px"
-      :title="$t(`storage.${currentRow.type}.delete`)"
-      :bordered="false"
-      size="huge"
-      role="dialog"
-      aria-modal="true"
-    >
-      <FormStorageFolderDelete
-        :id="currentRow.id"
-        :type="currentRow.type"
-        @submit-success="onDeleted"
-      />
-    </n-card>
-  </n-modal>
+  <modal v-model:show="showModalDelete" :title="$t(`storage.${currentRow.type}.delete`)">
+    <FormStorageFolderDelete
+      :id="currentRow.id"
+      :type="currentRow.type"
+      @submit-success="onDeleted"
+    />
+  </modal>
 </template>
 
 <script lang="ts" setup>
@@ -234,7 +225,7 @@ async function handlePageChange(currentPage: number) {
   if (!dataStore.folder.loading) {
     await getDirectoryContent(
       dataStore.currentBucket.bucket_uuid,
-      dataStore.selected.folderId,
+      dataStore.folder.selected,
       currentPage
     );
   }

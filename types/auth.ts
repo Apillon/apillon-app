@@ -34,6 +34,9 @@ declare global {
     };
     status: number;
   }
+  export interface PasswordResetForm {
+    email: string;
+  }
   export interface PasswordResetResponse {
     data: boolean;
     status: number;

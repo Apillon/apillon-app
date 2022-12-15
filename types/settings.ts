@@ -1,4 +1,8 @@
-export {};
+export enum ApiKeyRole {
+  EXECUTE = 50,
+  WRITE = 51,
+  READ = 52,
+}
 
 declare global {
   /**
@@ -22,22 +26,75 @@ declare global {
   }
 
   /**
-   * Generate API key
+   * API key - Form
    */
-  interface ApiKeyPermissions {
-    read: boolean;
-    write: boolean;
-    xy?: boolean;
-    zzz?: boolean;
+  interface ApiKeyPermissionForm {
+    key: number;
+    label: string;
+    name: string;
+    value: boolean;
   }
-  interface FormGenerateApiKey {
-    authentication: ApiKeyPermissions;
-    storage: ApiKeyPermissions;
-    computing: ApiKeyPermissions;
+  interface ApiKeyRoleForm {
+    enabled: boolean;
+    name: string;
+    serviceType: string;
+    service_uuid: string;
+    permissions: Array<ApiKeyPermissionForm>;
+  }
+  interface ApiKeyForm {
+    name: string;
+    apiKeyType: boolean;
+    roles: Array<ApiKeyRoleForm>;
   }
 
-  interface GenerateApiKeyResponse {
-    data: any;
+  /**
+   * API key
+   */
+  interface ApiKeyInterface {
+    id: number;
+    status: string;
+    apiKey: string;
+    name: string;
+    testNetwork: number;
+    updateTime: string;
+  }
+  interface ApiKeysResponse {
+    data: {
+      items: Array<ApiKeyInterface>;
+      total: number;
+    };
+    status: number;
+  }
+
+  interface ApiKeyCreatedInterface {
+    id: string;
+    status: string;
+    apiKey: string;
+    name: string;
+    testNetwork: boolean;
+    project_uuid: string;
+    apiKeySecret: string;
+  }
+  interface ApiKeyCreatedResponse {
+    data: ApiKeyCreatedInterface;
+    status: number;
+  }
+
+  interface ApiKeyRoleInterface {
+    id?: number;
+    apiKey_id: number;
+    role_id: number;
+    serviceType_id: number;
+    project_uuid: string;
+    service_uuid: string;
+    status?: number;
+  }
+  interface ApiKeyRolesResponse {
+    data: Array<ApiKeyRoleInterface>;
+    status: number;
+  }
+  interface ApiKeyRoleUpdateResponse {
+    data: ApiKeyRoleInterface;
     status: number;
   }
 

@@ -44,6 +44,12 @@ export function truncateWallet(source: string, partLength: number = 4): string {
 export function truncateCid(source: string, partLength: number = 4): string {
   return source && source.length > 9 ? source.slice(0, partLength) + '…' : source;
 }
+export function hideSecret(source: string, partLength: number = 4): string {
+  return source && source.length > partLength
+    ? '•'.repeat(source.length - partLength) +
+        source.slice(source.length - partLength, source.length)
+    : source;
+}
 
 /**
  * Custom validations
@@ -58,10 +64,10 @@ export function validateRequiredCheckbox(_: NFormItemRule, value: boolean | null
  */
 /** Time to days and hours */
 export function timeToDays(time: String): string {
-  if (!time) return;
+  if (!time) return '';
 
   const [d, h, s] = time.split(':');
-  if (!d || !h || !s) return time;
+  if (!d || !h || !s) return `${time}`;
 
   const days = parseInt(d);
   const hours = parseInt(h);
@@ -78,6 +84,17 @@ export function timeToDays(time: String): string {
   } else {
     return `${days}d ${hours}h ${seconds}s`;
   }
+}
+
+/** Datetime to date: "2022-12-13T07:21:50.000Z" -> 13 Dec, 2022  */
+export function datetimeToDate(datetime: string): string {
+  const date = new Date(datetime);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+  return date.toLocaleDateString('en-us', options);
 }
 
 /** Storage calculations */

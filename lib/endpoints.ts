@@ -37,7 +37,7 @@ const Endpoints = {
   storage: '/storage/',
 
   /** Api Keys */
-  apiKey: '/api-key/',
+  apiKey: '/api-keys/',
 
   /** Billing */
   billing: '/billing/',

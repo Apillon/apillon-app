@@ -2,22 +2,13 @@
   <n-data-table
     :bordered="false"
     :columns="columns"
-    :data="dataStore.services.bucket"
+    :data="dataStore.bucket.items"
     :row-props="rowProps"
   />
   <!-- Modal - Destroy bucket -->
-  <n-modal v-model:show="showModalDestroyBucket">
-    <n-card
-      style="width: 660px"
-      :title="$t('storage.bucketDestroy')"
-      :bordered="false"
-      size="huge"
-      role="dialog"
-      aria-modal="true"
-    >
-      <FormStorageDestroy :bucket-id="currentRow?.id || 0" />
-    </n-card>
-  </n-modal>
+  <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucketDestroy')">
+    <FormStorageDestroy :bucket-id="currentRow?.id || 0" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
@@ -144,7 +135,7 @@ onMounted(() => {
 });
 
 async function getBuckets() {
-  if (!dataStore.hasServices(ServiceType.BUCKET)) {
+  if (!dataStore.hasBuckets) {
     dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
   }
 }

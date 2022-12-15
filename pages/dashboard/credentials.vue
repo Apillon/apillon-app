@@ -1,10 +1,10 @@
 <template>
-  <Dashboard>
+  <Dashboard :loading="pageLoading">
     <template #sidebar>
       <SidebarProjectSettings />
     </template>
     <slot>
-      <h4 class="mb-6">{{ $t('dashboard.credentialsAndApiKeys') }}</h4>
+      <h4 class="mb-6">{{ $t('dashboard.apiKey.title') }}</h4>
 
       <!-- Project ID -->
       <n-h5 prefix="bar">{{ $t('project.id') }}</n-h5>
@@ -13,14 +13,17 @@
       <!-- Secrets -->
       <n-h5 prefix="bar">{{ $t('dashboard.secrets') }}</n-h5>
       <n-space class="text-sm" size="large" align="center">
-        <strong>Scope: <span class="text-primary">24.com Auth Internal</span> </strong>
+        <strong>
+          {{ $t('general.scope') }}:
+          <span class="text-primary">{{ dataStore.currentProject?.name }}</span>
+        </strong>
         <div class="w-[1px] h-[13px] bg-grey"></div>
         <span>Test enviroment</span>
       </n-space>
       <TableApiKeys />
       <div class="text-right mt-5">
         <Btn type="secondary" @click="showDrawerGenerateApiKey">
-          {{ $t('dashboard.generateNewKey') }}
+          {{ $t('dashboard.apiKey.generate') }}
         </Btn>
       </div>
 
@@ -28,13 +31,9 @@
       <n-drawer v-model:show="drawerGenerateApiKeyVisible" :width="495">
         <n-drawer-content>
           <template #header>
-            <h5>{{ $t('dashboard.generateNewKey') }}</h5>
+            <h5>{{ $t('dashboard.apiKey.generate') }}</h5>
           </template>
-          <p class="pb-4 mb-4 border-b-1 border-grey/40 text-sm">
-            <strong>API key name: </strong>
-            <strong class="text-primary">24.com Auth Internal</strong>
-          </p>
-          <FormGenerateApiKey />
+          <FormApiKeyCreate @close="drawerGenerateApiKeyVisible = false" />
         </n-drawer-content>
       </n-drawer>
     </slot>
@@ -45,9 +44,12 @@
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
+const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: t('dashboard.credentialsAndApiKeys'),
+  title: t('dashboard.apiKey.title'),
 });
 
 /**
@@ -57,4 +59,13 @@ const drawerGenerateApiKeyVisible = ref(false);
 const showDrawerGenerateApiKey = () => {
   drawerGenerateApiKeyVisible.value = true;
 };
+
+onMounted(() => {
+  Promise.all(Object.values(dataStore.promises)).then(_ => {
+    dataStore.getAllServices();
+    settingsStore.fetchApiKeys();
+
+    pageLoading.value = false;
+  });
+});
 </script>
