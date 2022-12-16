@@ -72,7 +72,7 @@ async function uploadFiles({ file, onError, onFinish }: NUploadCustomRequestOpti
   try {
     /** Upload file request */
     const request = $api.post<FileUploadRequestResponse>(
-      `/storage/${props.bucketUuid}/file-upload`,
+      endpoints.storageFileUpload(props.bucketUuid),
       fileData
     );
     promises.value.push(request);
@@ -167,8 +167,7 @@ function createFileProgress(fileId: string) {
 /** TEMPORARLY: Sync to IPFS */
 async function syncToIpfs(fileUuid: string) {
   try {
-    const url = `/storage/${props.bucketUuid}/file/${fileUuid}/sync-to-ipfs`;
-    await $api.post(url);
+    await $api.post(endpoints.storageSyncToIpfs(props.bucketUuid, fileUuid));
 
     message.success($i18n.t('storage.filesUploaded'));
   } catch (error) {
@@ -183,8 +182,10 @@ async function uploadSessionEnd(sessionUuid: string) {
   }
 
   try {
-    const url = `/storage/${props.bucketUuid}/file-upload/${sessionUuid}/end`;
-    const resSessionEnd = await $api.post<PasswordResetResponse>(url, { directSync: false });
+    const resSessionEnd = await $api.post<PasswordResetResponse>(
+      endpoints.storageFileUpload(props.bucketUuid, sessionUuid),
+      { directSync: false }
+    );
 
     if (resSessionEnd.data) {
       message.success($i18n.t('storage.filesUploaded'));

@@ -102,6 +102,30 @@
   }
 }
 
+/** Icon */
+.n-base-icon {
+  width: auto;
+  height: auto;
+  line-height: unset;
+
+  [class^='icon-'],
+  [class*=' icon-'] {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+
+    &.text-xl {
+      width: 1.25rem;
+      height: 1.125rem;
+    }
+
+    &.text-2xl {
+      width: 1.5rem;
+      height: 1.25rem;
+    }
+  }
+}
+
 /** Layout */
 .n-layout {
   background-color: transparent;

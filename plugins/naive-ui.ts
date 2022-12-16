@@ -50,6 +50,7 @@ import {
   NUploadDragger,
   NUploadFileList,
   NUploadTrigger,
+  SelectOption,
   SelectProps,
   UploadCustomRequestOptions,
   UploadFileInfo,
@@ -62,6 +63,7 @@ declare global {
   interface NFormRules extends FormRules {}
   interface NFormItemRule extends FormItemRule {}
   interface NFormValidationError extends FormValidationError {}
+  interface NSelectOption extends SelectOption {}
   interface NSelectProps extends SelectProps {}
   interface NUploadCustomRequestOptions extends UploadCustomRequestOptions {}
   interface NUploadFileInfo extends UploadFileInfo {}

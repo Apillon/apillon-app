@@ -33,6 +33,24 @@ const menuOptions: MenuOption[] = [
     key: 'dashboard-service-storage-id',
   },
   {
+    label: () =>
+      h(
+        NuxtLink,
+        { to: { path: `/dashboard/service/storage/${dataStore.bucket.selected}/all` } },
+        () => t('storage.filesAll')
+      ),
+    key: 'dashboard-service-storage-slug-all',
+  },
+  {
+    label: () =>
+      h(
+        NuxtLink,
+        { to: { path: `/dashboard/service/storage/${dataStore.bucket.selected}/webhook` } },
+        () => t('storage.webhook')
+      ),
+    key: 'dashboard-service-storage-slug-webhook',
+  },
+  {
     label: () => h('span', {}, t('storage.snapshots')),
     key: 'snapshots',
     disabled: true,
