@@ -25,7 +25,7 @@
       <LearnCollapse />
     </template>
     <slot>
-      <TableBucket v-if="dataStore.hasServices(ServiceType.BUCKET)" />
+      <TableBucket v-if="dataStore.hasBuckets" />
       <template v-else>
         <h5 class="mb-8">{{ $t('nav.storage') }}</h5>
         <div
@@ -68,7 +68,7 @@ onMounted(() => {
 });
 
 async function getBuckets() {
-  if (!dataStore.hasServices(ServiceType.BUCKET)) {
+  if (!dataStore.hasBuckets) {
     dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
   }
 }

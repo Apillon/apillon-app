@@ -65,7 +65,7 @@ const colSubmitWidth = computed(() => {
 });
 
 /** Role options */
-const roleOptions = [
+const roleOptions: Array<NSelectOption> = [
   {
     label: 'Owner',
     value: 'owner',
@@ -85,8 +85,8 @@ const roleOptions = [
 ];
 
 const formData = ref<FormUserInvite>({
-  email: null,
-  role: null,
+  email: '',
+  role: '',
 });
 
 const rules: NFormRules = {

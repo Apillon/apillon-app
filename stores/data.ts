@@ -1,6 +1,7 @@
 import { useMessage } from 'naive-ui';
 import { defineStore } from 'pinia';
 import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
+import { AnyJson } from '@polkadot/types-codec/types';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
@@ -13,7 +14,7 @@ export const useDataStore = defineStore('data', {
       items: [] as Array<BucketInterface>,
       selected: 0,
     },
-    crust: {} as Record<string, Array<any>>,
+    crust: {} as Record<string, AnyJson>,
     currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
       ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
       : 0,
@@ -135,6 +136,28 @@ export const useDataStore = defineStore('data', {
 
       if (!fetch) {
         setTimeout(() => (this.folder.allowFetch = true), 1000);
+      }
+    },
+
+    onBucketMounted(id: number) {
+      this.setBucketId(id);
+
+      if (!this.hasBuckets) {
+        Promise.all(Object.values(this.promises)).then(_ => {
+          this.promises.buckets = this.fetchBuckets();
+
+          Promise.all(Object.values(this.promises)).then(_ => {
+            this.checkIfBucketExistsElseRedirectHome();
+          });
+        });
+      } else {
+        this.checkIfBucketExistsElseRedirectHome();
+      }
+    },
+    checkIfBucketExistsElseRedirectHome() {
+      if (!this.hasSelectedBucket) {
+        const router = useRouter();
+        router.push({ name: 'dashboard' });
       }
     },
 
@@ -323,9 +346,12 @@ export const useDataStore = defineStore('data', {
       return null;
     },
 
-    async fetchFileDetails(fileUuid: string, $i18n: any = null): Promise<FileDetailsInterface> {
+    async fetchFileDetails(
+      fileUuidOrCID: string,
+      $i18n: any = null
+    ): Promise<FileDetailsInterface> {
       try {
-        const url = `/storage/${this.currentBucket.bucket_uuid}/file/${fileUuid}/detail`;
+        const url = endpoints.storageFileDetails(this.currentBucket.bucket_uuid, fileUuidOrCID);
         const res = await $api.get<FileDetailsResponse>(url);
 
         return res.data;

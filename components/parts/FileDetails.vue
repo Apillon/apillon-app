@@ -1,8 +1,8 @@
 <template>
-  <div v-if="fileDetails.CID">
+  <div v-if="fileDetails.CID || fileDetails.file_uuid">
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('storage.fileName') }}</p>
-      <strong>{{ fileDetails.name }}</strong>
+      <strong>{{ fileDetails.name || fileDetails.fileName }}</strong>
     </div>
 
     <div class="body-sm mb-4">
@@ -18,7 +18,7 @@
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('storage.expiration') }}</p>
       <div class="relative min-h-[20px]">
-        <strong v-if="crustStatus.expired_at">
+        <strong v-if="crustStatus?.expired_at">
           {{ fileExpiration(parseInt(crustStatus.expired_at)) }}
         </strong>
         <Spinner v-else :size="16" />
@@ -28,7 +28,7 @@
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('storage.replicas') }}</p>
       <div class="relative min-h-[20px]">
-        <strong v-if="crustStatus.reported_replica_count">
+        <strong v-if="crustStatus?.reported_replica_count">
           {{ crustStatus.reported_replica_count }}
         </strong>
         <Spinner v-else :size="16" />
@@ -86,28 +86,31 @@
 import { useI18n } from 'vue-i18n';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { typesBundleForPolkadot, crustTypes } from '@crustio/type-definitions';
+import { AnyJson } from '@polkadot/types-codec/types';
 
 const props = defineProps({
-  fileCid: {
-    type: String,
-    default: '',
-  },
+  fileCid: { type: String, default: '' },
+  fileUuid: { type: String, default: '' },
 });
+
+type File = FileInterface | FileUploadInterface;
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const fileDetails = ref<FileInterface>({} as FileInterface);
+const fileDetails = ref<File>({} as File);
 const fileStatus = ref<number>(0);
-const crustStatus = ref<FileInfo>({} as FileInfo);
+const crustStatus = ref<AnyJson>();
 
 onMounted(async () => {
   if (props.fileCid) {
     getFileDetails(props.fileCid);
     getCrustStatus(props.fileCid);
+  } else if (props.fileUuid) {
+    getFileDetails(props.fileUuid);
   }
 });
 onDeactivated(() => {
-  fileDetails.value = {} as FileInterface;
+  fileDetails.value = {} as File;
   fileStatus.value = 0;
   crustStatus.value = {} as FileInfo;
 });
@@ -115,12 +118,13 @@ onDeactivated(() => {
 // Define FileInfo
 type FileInfo = typeof crustTypes.market.types.FileInfoV2;
 
-async function getFileDetails(cid: string) {
-  const fileDetailsResponse = await dataStore.fetchFileDetails(cid, $i18n);
+async function getFileDetails(uuidOrCID: string) {
+  const fileDetailsResponse = await dataStore.fetchFileDetails(uuidOrCID, $i18n);
   fileDetails.value = fileDetailsResponse.file;
   fileStatus.value = fileDetailsResponse.fileStatus;
 }
 
+/** Get File details from CRUST */
 async function getCrustStatus(cid: string) {
   if (!(cid in dataStore.crust)) {
     dataStore.crust[cid] = await fetchFileDetailsFromCrust(cid);

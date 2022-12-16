@@ -90,7 +90,6 @@ import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const { params } = useRoute();
-const router = useRouter();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 const showModalNewFolder = ref<boolean>(false);
@@ -100,29 +99,13 @@ useHead({
 });
 
 onMounted(() => {
-  /** Bucket ID from route */
-  dataStore.setBucketId(parseInt(`${params?.id}`));
+  /** Bucket ID from route, then load buckets */
+  dataStore.onBucketMounted(parseInt(`${params?.id}`));
 
-  if (!dataStore.hasBuckets) {
-    Promise.all(Object.values(dataStore.promises)).then(_ => {
-      dataStore.promises.buckets = dataStore.fetchBuckets();
-
-      Promise.all(Object.values(dataStore.promises)).then(_ => {
-        checkIfBucketExists();
-      });
-    });
-  } else {
-    checkIfBucketExists();
-  }
+  Promise.all(Object.values(dataStore.promises)).then(_ => {
+    pageLoading.value = false;
+  });
 });
-
-/** Bucket from state, if bucket doesn't exists than redirect to storage */
-function checkIfBucketExists() {
-  if (!dataStore.hasSelectedBucket) {
-    router.push({ name: 'dashboard' });
-  }
-  pageLoading.value = false;
-}
 
 function onFolderCreated() {
   showModalNewFolder.value = false;
