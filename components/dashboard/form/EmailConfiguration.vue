@@ -68,7 +68,7 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, event
 };
 
 // Submit
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {

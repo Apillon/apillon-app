@@ -77,9 +77,9 @@ declare global {
    * User profile
    */
   export interface FormUserProfile {
-    name: string;
+    name?: string | null;
     email: string;
-    phone: string;
+    phone?: string | null;
   }
 
   export interface UserProfileResponse {
@@ -99,7 +99,7 @@ declare global {
    */
   export interface FormUserInvite {
     email: string;
-    role: string;
+    role_id: number | null;
   }
 
   export interface UserInviteResponse {

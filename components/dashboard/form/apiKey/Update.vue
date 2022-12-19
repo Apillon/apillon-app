@@ -222,7 +222,7 @@ async function getApiKeyRoles() {
 }
 
 /** Submit form - update API key */
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {

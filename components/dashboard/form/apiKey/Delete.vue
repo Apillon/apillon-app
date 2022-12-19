@@ -41,7 +41,7 @@ const rules: NFormRules = {
 };
 
 // Submit
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
@@ -55,7 +55,7 @@ async function deleteApiKey() {
   loading.value = true;
 
   try {
-    const res = await $api.delete(`${endpoints.apiKey}${props.apiKeyId}`);
+    const res = await $api.delete<DeleteResponse>(`${endpoints.apiKey}${props.apiKeyId}`);
 
     message.success($i18n.t('form.success.deleted.apiKey'));
 

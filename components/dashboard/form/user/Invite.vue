@@ -18,16 +18,15 @@
       <!--  Role -->
       <n-form-item-gi
         :span="colRoleWidth"
-        path="cvv"
+        path="role_id"
         :label="$t('form.label.role')"
         :label-props="{ for: 'role' }"
       >
         <select-options
-          v-model:value="formData.role"
-          :options="roleOptions"
+          v-model:value="formData.role_id"
+          :options="userRoles"
           :placeholder="$t('form.placeholder.role')"
           size="large"
-          multiple
           filterable
         />
       </n-form-item-gi>
@@ -47,10 +46,18 @@
 import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
-const message = useMessage();
 const $i18n = useI18n();
+const message = useMessage();
+const dataStore = useDataStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
+
+const userRoles: Array<NSelectOption> = Object.entries(DefaultUserRoles).map(([roleId, role]) => {
+  return {
+    label: $i18n.t(`userRole.${role}`),
+    value: parseInt(roleId),
+  };
+});
 
 /** Col widths */
 const { width } = useWindowSize();
@@ -64,29 +71,9 @@ const colSubmitWidth = computed(() => {
   return width.value >= 768 ? 2 : 6;
 });
 
-/** Role options */
-const roleOptions: Array<NSelectOption> = [
-  {
-    label: 'Owner',
-    value: 'owner',
-  },
-  {
-    label: 'Superadmin',
-    value: 'superadmin',
-  },
-  {
-    label: 'Admin',
-    value: 'admin',
-  },
-  {
-    label: 'Member',
-    value: 'member',
-  },
-];
-
 const formData = ref<FormUserInvite>({
   email: '',
-  role: '',
+  role_id: null,
 });
 
 const rules: NFormRules = {
@@ -100,22 +87,29 @@ const rules: NFormRules = {
       message: $i18n.t('validation.emailRequired'),
     },
   ],
-  role: [
+  role_id: [
     {
       required: true,
+      message: $i18n.t('validation.roleRequired'),
+    },
+    {
+      validator(_: NFormItemRule, value: string) {
+        return UserRoleIds.includes(parseInt(value));
+      },
       message: $i18n.t('validation.role'),
     },
   ],
 };
 
 // Submit
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: MouseEvent | Event) {
+  console.log(formData.value);
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
-      // await inviteUser();
+      await inviteUser();
     }
   });
 }
@@ -123,13 +117,12 @@ async function inviteUser() {
   loading.value = true;
 
   try {
-    const res = await $api.post<UserInviteResponse>(endpoints.validateMail, formData.value);
+    const res = await $api.post<InviteUserResponse>(
+      endpoints.projectInviteUser(dataStore.currentProjectId),
+      formData.value
+    );
 
-    // TODO
-    if (res.data) {
-      console.log(res.data);
-    }
-    loading.value = false;
+    message.success($i18n.t('form.success.created.userInvite'));
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));
   }
