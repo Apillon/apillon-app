@@ -3,23 +3,57 @@ import colors from '~~/tailwind.colors';
 
 export const PAGINATION_LIMIT = 20;
 
-export enum FileUploadStatusValue {
-  PENDING = 'pending',
-  UPLOADING = 'uploading',
-  FINISHED = 'finished',
-  REMOVED = 'removed',
-  ERROR = 'error',
-}
-export type FileUploadStatus =
-  | FileUploadStatusValue.PENDING
-  | FileUploadStatusValue.UPLOADING
-  | FileUploadStatusValue.FINISHED
-  | FileUploadStatusValue.REMOVED
-  | FileUploadStatusValue.ERROR;
+/** User roles */
+export const UserRoleIds = [
+  DefaultUserRole.ADMIN,
+  DefaultUserRole.SUPPORT,
+  DefaultUserRole.ANALYTIC,
+  DefaultUserRole.PROJECT_OWNER,
+  DefaultUserRole.PROJECT_ADMIN,
+  DefaultUserRole.PROJECT_USER,
+  DefaultUserRole.USER,
+];
 
+/** User roles */
+const CreateUserRoles: Array<NSelectOption> = $i18n => {
+  return [
+    {
+      label: $i18n.t(`userRole.${DefaultUserRole.ADMIN}`),
+      value: DefaultUserRole.ADMIN,
+    },
+    {
+      label: $i18n.t(`userRole.${DefaultUserRole.SUPPORT}`),
+      value: DefaultUserRole.SUPPORT,
+    },
+    {
+      label: $i18n.t(`userRole.${DefaultUserRole.ANALYTIC}`),
+      value: DefaultUserRole.ANALYTIC,
+    },
+    {
+      label: $i18n.t(`userRole.${DefaultUserRole.PROJECT_OWNER}`),
+      value: DefaultUserRole.PROJECT_OWNER,
+    },
+    {
+      label: $i18n.t(`userRole.${DefaultUserRole.PROJECT_ADMIN}`),
+      value: DefaultUserRole.PROJECT_ADMIN,
+    },
+    {
+      label: $i18n.t(`userRole.${DefaultUserRole.PROJECT_USER}`),
+      value: DefaultUserRole.PROJECT_USER,
+    },
+    {
+      label: $i18n.t(`userRole.${DefaultUserRole.USER}`),
+      value: DefaultUserRole.USER,
+    },
+  ];
+};
+
+/**
+ * Theme configs
+ */
 export const MessageProviderOptoins: DiscreteApiOptions = {
   messageProviderProps: {
-    duration: 5000,
+    duration: 3000,
     keepAliveOnHover: true,
     max: 4,
     themeOverrides: {

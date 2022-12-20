@@ -108,7 +108,7 @@ function validatePhone(_: NFormItemRule, value: string): boolean {
 }
 
 // Submit
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {

@@ -72,7 +72,7 @@ const rules: NFormRules = {
   ],
 };
 
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {

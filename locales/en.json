@@ -21,6 +21,7 @@
     "ok": "OK",
     "open": "Open",
     "paused": "paused",
+    "pending": "pending",
     "scope": "Scope",
     "secret": "Secret",
     "serviceName": "Service name",
@@ -153,6 +154,7 @@
     "USER_AUTH_TOKEN_NOT_PRESENT": "AUTH_TOKEN is missing",
     "USER_AUTH_TOKEN_EXPIRES_IN_NOT_PRESENT": "AUTH_TOKEN_EXPIRES is missing",
     "USER_AUTH_TOKEN_TYPE_NOT_PRESENT": "AUTH_TOKEN_TYPE is missing",
+    "CANNOT_MODIFY_PROJECT_OWNER": "Can't modify project owner",
 
     "PROJECT_NAME_NOT_PRESENT": "Project name is missing",
     "PROJECT_UUID_NOT_PRESENT": "Project UUID is missing",
@@ -271,7 +273,8 @@
         "bucket": "Bucket has been created",
         "directory": "Directory key has been created",
         "file": "File has been created",
-        "item": "Item has been created"
+        "item": "Item has been created",
+        "userInvite": "User has been invited."
       },
       "deleted": {
         "apiKey": "Api key has been deleted",
@@ -287,7 +290,8 @@
         "bucket": "Bucket has been updated",
         "directory": "Directory key has been updated",
         "file": "File has been updated",
-        "item": "Item has been updated"
+        "item": "Item has been updated",
+        "userRole": "User role has been updated"
       }
     },
     "terms": {
@@ -476,6 +480,15 @@
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
     }
   },
+  "userRole": {
+    "ADMIN": "Admin",
+    "SUPPORT": "Support",
+    "ANALYTIC": "Analytic",
+    "PROJECT_OWNER": "Project owner",
+    "PROJECT_ADMIN": "Project admin",
+    "PROJECT_USER": "Project user",
+    "USER": "User"
+  },
   "validation": {
     "apiKeyName": "API key name is required",
     "apiKeyIdRequired": "API key is required",
@@ -504,7 +517,8 @@
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
     "captchaRequired": "Captcha challange required!",
-    "role": "Role validation error",
+    "role": "Selected role is invalid",
+    "roleRequired": "Please select role",
     "terms": "Please accept the terms",
     "webhookAuthTypeRequired": "Please select Auth type",
     "webhookPasswordRequired": "Please enter password",

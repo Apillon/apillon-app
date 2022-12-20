@@ -23,18 +23,6 @@ export const ServiceTypeNames: { [k: number]: ServiceTypeName } = {
 
 declare global {
   /**
-   * Base responses
-   */
-  interface GeneralResponse {
-    data: any;
-    status: number;
-  }
-  interface DeleteResponse {
-    data: boolean;
-    status: number;
-  }
-
-  /**
    * Service Type
    */
   interface ServiceTypeInterface {

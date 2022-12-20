@@ -6,6 +6,35 @@ export enum BucketType {
   HOSTING = 2,
 }
 
+/**
+ * File status
+ */
+export enum FileStatus {
+  REQUEST_FOR_UPLOAD_GENERATED = 1,
+  UPLOADED_TO_S3 = 2,
+  UPLOADED_TO_IPFS = 3,
+  PINNED_TO_CRUST = 4,
+}
+export enum FileUploadRequestFileStatus {
+  SIGNED_URL_FOR_UPLOAD_GENERATED = 1,
+  UPLOADED_TO_S3 = 2,
+  UPLOADED_TO_IPFS = 3,
+  PINNED_TO_CRUST = 4,
+  UPLOAD_COMPLETED = 5,
+  ERROR_UPLOADING_TO_IPFS = 100,
+  ERROR_PINING_TO_CRUST = 101,
+  ERROR_FILE_NOT_EXISTS_ON_S3 = 102,
+  ERROR_BUCKET_FULL = 103,
+}
+
+export enum FileUploadStatusValue {
+  PENDING = 'pending',
+  UPLOADING = 'uploading',
+  FINISHED = 'finished',
+  REMOVED = 'removed',
+  ERROR = 'error',
+}
+
 /** Webhook Auth method */
 export enum BucketWebhookAuthMethod {
   BASIC = 'basic',
@@ -52,6 +81,13 @@ declare global {
   /**
    * File
    */
+  /** File status */
+  type FileUploadStatus =
+    | FileUploadStatusValue.PENDING
+    | FileUploadStatusValue.UPLOADING
+    | FileUploadStatusValue.FINISHED
+    | FileUploadStatusValue.REMOVED
+    | FileUploadStatusValue.ERROR;
   interface FileUploadRequestInterface {
     fileUploadRequestId: number;
     file_uuid: string;

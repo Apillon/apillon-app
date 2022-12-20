@@ -12,9 +12,19 @@ const Endpoints = {
   passwordResetRequest: '/users/password-reset-request',
 
   /** Project */
-  project: '/projects/',
-  userProjects: '/projects/user-projects',
-  projectUser: '/projects/user/',
+  projects: '/projects/user-projects',
+  project: (projectId: number) => {
+    return `/projects/${projectId}`;
+  },
+  projectUsers: (projectId: number) => {
+    return `/projects/${projectId}/users`;
+  },
+  projectInviteUser: (projectId: number) => {
+    return `/projects/${projectId}/invite-user`;
+  },
+  projectUserRole: (id: number) => {
+    return `/projects/user/${id}`;
+  },
 
   /** File */
   file: '/files/',

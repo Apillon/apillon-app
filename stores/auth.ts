@@ -41,10 +41,10 @@ export const useAuthStore = defineStore('auth', {
     },
 
     changeUser(userData: Record<string, string | number>) {
-      this.userUuid = `${userData?.user_uuid}`;
-      this.username = `${userData?.name}`;
-      this.phone = `${userData?.phone}`;
-      this.saveEmail(`${userData?.email}`);
+      this.userUuid = userData?.user_uuid.toString();
+      this.username = userData?.name.toString();
+      this.phone = userData?.phone.toString();
+      this.saveEmail(userData.email.toString());
     },
 
     saveEmail(email: string) {

@@ -169,7 +169,7 @@ export const useDataStore = defineStore('data', {
     async fetchProjects(redirectToDashboard: boolean = false, $i18n: any = null) {
       const router = useRouter();
       try {
-        const res = await $api.get<ProjectResponse>(endpoints.userProjects);
+        const res = await $api.get<ProjectsResponse>(endpoints.projects);
 
         this.projects = res.data.items.map((project: ProjectInterface) => {
           return {
