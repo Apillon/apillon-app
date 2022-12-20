@@ -12,7 +12,6 @@
         :placeholder="$t('form.placeholder.bucketName')"
       />
     </n-form-item>
-    <n-tag :bordered="false" type="info" class="mb-8">Servicename.com/ </n-tag>
 
     <!--  Bucket Sizes -->
     <n-form-item path="bucketSizes" :label="$t('form.label.bucketSize')">
@@ -23,6 +22,7 @@
             :key="key"
             :value="size.value"
             :label="size.label"
+            :disabled="true"
           />
         </n-space>
       </n-radio-group>
@@ -103,7 +103,7 @@ async function createService() {
   };
 
   try {
-    const res = await $api.post<NewBucketResponse>(endpoints.bucket, bodyData);
+    const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
 
     message.success($i18n.t('form.success.bucketCreated'));
 

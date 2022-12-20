@@ -7,6 +7,7 @@
     "copyrights": "© Apillon",
     "created": "created",
     "delete": "Delete",
+    "download": "Download",
     "edit": "Edit",
     "error": "Error",
     "goHome": "Go home",
@@ -31,6 +32,7 @@
     "tryAgain": "Try again",
     "terms": "",
     "test": "Test",
+    "upload": "Upload",
     "uptime": "Uptime",
     "view": "View"
   },
@@ -189,7 +191,8 @@
     },
     "authTypes": {
       "basic": "Basic",
-      "bearer-token": "Bearer token"
+      "bearer-token": "Bearer token",
+      "none": "None"
     },
     "bucketSizes": {
       "5gb": "5GB - Free",
@@ -274,7 +277,8 @@
         "directory": "Directory key has been created",
         "file": "File has been created",
         "item": "Item has been created",
-        "userInvite": "User has been invited."
+        "userInvite": "User has been invited.",
+        "webhook": "Webhook has been created"
       },
       "deleted": {
         "apiKey": "Api key has been deleted",
@@ -282,7 +286,8 @@
         "bucket": "Bucket has been deleted",
         "directory": "Directory key has been deleted",
         "file": "File has been deleted",
-        "item": "Item has been deleted"
+        "item": "Item has been deleted",
+        "webhook": "Webhook has been deleted"
       },
       "updated": {
         "apiKey": "Api key has been updated",
@@ -291,7 +296,8 @@
         "directory": "Directory key has been updated",
         "file": "File has been updated",
         "item": "Item has been updated",
-        "userRole": "User role has been updated"
+        "userRole": "User role has been updated",
+        "webhook": "Webhook has been updated"
       }
     },
     "terms": {
@@ -455,6 +461,7 @@
     "name": "Bucket name",
     "newBucket": "New bucket",
     "replicas": "Replicas",
+    "selectFiles": "Select files",
     "snapshots": "Snapshots",
     "stats": "Stats",
     "status": "Status",

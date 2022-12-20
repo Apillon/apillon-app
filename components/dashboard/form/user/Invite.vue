@@ -104,7 +104,6 @@ const rules: NFormRules = {
 
 // Submit
 function handleSubmit(e: MouseEvent | Event) {
-  console.log(formData.value);
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {

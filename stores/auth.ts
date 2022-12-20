@@ -42,9 +42,14 @@ export const useAuthStore = defineStore('auth', {
 
     changeUser(userData: Record<string, string | number>) {
       this.userUuid = userData?.user_uuid.toString();
-      this.username = userData?.name.toString();
-      this.phone = userData?.phone.toString();
       this.saveEmail(userData.email.toString());
+
+      if (userData.name) {
+        this.username = userData?.name.toString();
+      }
+      if (userData.phone) {
+        this.phone = userData?.phone.toString();
+      }
     },
 
     saveEmail(email: string) {

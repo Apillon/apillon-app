@@ -11,6 +11,7 @@ export const DataLsKeys = {
 export const useDataStore = defineStore('data', {
   state: () => ({
     bucket: {
+      active: {} as BucketInterface,
       items: [] as Array<BucketInterface>,
       selected: 0,
     },
@@ -25,7 +26,9 @@ export const useDataStore = defineStore('data', {
       path: [] as Array<{ id: number; name: string }>,
       search: '',
       selected: 0,
+      selectedItems: [] as Array<number>,
       total: 0,
+      uploadActive: false,
     },
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
@@ -80,6 +83,7 @@ export const useDataStore = defineStore('data', {
   },
   actions: {
     resetData() {
+      this.bucket.active = {} as BucketInterface;
       this.bucket.items = [] as Array<BucketInterface>;
       this.folder.items = [] as Array<FolderInterface>;
       this.services.authentication = [] as Array<ServiceInterface>;
@@ -259,19 +263,30 @@ export const useDataStore = defineStore('data', {
         const params = {
           project_uuid: this.currentProject?.project_uuid || '',
         };
-        const res = await $api.get<BucketResponse>(endpoints.bucket, params);
+        const res = await $api.get<BucketsResponse>(endpoints.buckets, params);
 
         this.bucket.items = res.data.items.map((bucket: BucketInterface) => {
-          return {
-            ...bucket,
-            sizeMb: kbToMb(bucket.size || 0),
-            maxSizeMb: kbToMb(bucket.maxSize),
-            percentage: storagePercantage(bucket.size || 0, bucket.maxSize),
-          };
+          return addBucketAdditionalData(bucket);
         });
         return res;
       } catch (error: any) {
         this.bucket.items = [];
+
+        /** Show error message */
+        const message = useMessage();
+        message.error(userFriendlyMsg(error, $i18n));
+      }
+      return null;
+    },
+
+    async fetchBucket(bucketId: number, $i18n: any = null) {
+      try {
+        const res = await $api.get<BucketResponse>(endpoints.bucket(bucketId));
+
+        this.bucket.active = addBucketAdditionalData(res.data);
+        return res;
+      } catch (error: any) {
+        this.bucket.active = {} as BucketInterface;
 
         /** Show error message */
         const message = useMessage();

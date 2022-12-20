@@ -2,7 +2,7 @@
   <Dashboard :loading="pageLoading">
     <template #heading>
       <!-- Banner for storage if project hasb't got any services -->
-      <BannerStorage v-if="!dataStore.hasServices(ServiceType.STORAGE)" />
+      <BannerStorage v-if="!dataStore.hasBuckets" />
 
       <!-- Basic title -->
       <n-space v-else justify="space-between" align="center">

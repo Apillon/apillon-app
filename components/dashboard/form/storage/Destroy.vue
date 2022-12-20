@@ -55,7 +55,7 @@ async function bucketDestroy() {
   loading.value = true;
 
   try {
-    const res = await $api.delete(`${endpoints.bucket}${props.bucketId}`);
+    const res = await $api.delete(endpoints.bucket(props.bucketId));
 
     message.success($i18n.t('form.success.bucketDestroyed'));
 

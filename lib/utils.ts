@@ -100,7 +100,11 @@ export function datetimeToDate(datetime: string): string {
 /** Storage calculations */
 export function kbToMb(kb: number): number {
   if (!+kb) return 0;
-  return parseFloat(((kb / Math.pow(1024, 2)) * 1000).toFixed(0));
+  return parseFloat(((kb / Math.pow(1024, 2)) * 1000).toFixed(2));
+}
+export function bytesToMb(bytes: number): number {
+  if (!+bytes) return 0;
+  return parseFloat(((bytes / Math.pow(1024, 3)) * 1000).toFixed(2));
 }
 
 export function storagePercantage(size: number, maxSize: number): number {
@@ -127,6 +131,16 @@ export function fileExpiration(expiredAt: number): string {
     day: 'numeric',
   };
   return expiredAtDate.toLocaleDateString('en-us', options);
+}
+
+/** Bucket - calculate additional data */
+export function addBucketAdditionalData(bucket: BucketInterface): BucketInterface {
+  return {
+    ...bucket,
+    sizeMb: bytesToMb(bucket.size || 0),
+    maxSizeMb: bytesToMb(bucket.maxSize),
+    percentage: storagePercantage(bucket.size || 0, bucket.maxSize),
+  };
 }
 
 /**

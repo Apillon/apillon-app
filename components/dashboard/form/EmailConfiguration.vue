@@ -13,7 +13,7 @@
         <template #header-extra>
           <n-switch v-model:value="formData.email" />
         </template>
-        <p class="body-sm text-grey max-w-[350px]">{{ $t('form.emailConfiguration.emailText') }}</p>
+        <p class="body-sm text-grey max-w-sm">{{ $t('form.emailConfiguration.emailText') }}</p>
       </n-collapse-item>
 
       <!-- DID Vault -->
@@ -24,7 +24,7 @@
         <template #header-extra>
           <n-switch v-model:value="formData.did" />
         </template>
-        <p class="body-sm text-grey max-w-[350px]">{{ $t('form.emailConfiguration.didText') }}</p>
+        <p class="body-sm text-grey max-w-sm">{{ $t('form.emailConfiguration.didText') }}</p>
       </n-collapse-item>
     </n-collapse>
 

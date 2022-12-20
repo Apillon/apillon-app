@@ -37,6 +37,7 @@ export enum FileUploadStatusValue {
 
 /** Webhook Auth method */
 export enum BucketWebhookAuthMethod {
+  NONE = 'none',
   BASIC = 'basic',
   TOKEN = 'bearer-token',
 }
@@ -66,17 +67,8 @@ declare global {
     bucketName: string;
     bucketSize: string;
   }
-  interface NewBucketResponse {
-    data: BucketInterface;
-    status: number;
-  }
-  interface BucketResponse {
-    data: {
-      items: Array<BucketInterface>;
-      total: number;
-    };
-    status: number;
-  }
+  interface BucketResponse extends GeneralResponse<BucketInterface> {}
+  interface BucketsResponse extends GeneralItemsResponse<BucketInterface> {}
 
   /**
    * File

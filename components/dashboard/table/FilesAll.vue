@@ -40,7 +40,7 @@
   <!-- Drawer - File details -->
   <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
     <n-drawer-content v-if="drawerFileDetailsVisible">
-      <FileDetails
+      <StorageFileDetails
         v-if="currentRow.CID || currentRow.file_uuid"
         :file-cid="currentRow.CID"
         :file-uuid="currentRow.file_uuid"

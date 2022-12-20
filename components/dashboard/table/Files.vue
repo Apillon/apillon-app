@@ -15,7 +15,7 @@
   <!-- Drawer - File details -->
   <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
     <n-drawer-content v-if="drawerFileDetailsVisible">
-      <FileDetails v-if="currentRow.CID" :file-cid="currentRow.CID" />
+      <StorageFileDetails v-if="currentRow.CID" :file-cid="currentRow.CID" />
     </n-drawer-content>
   </n-drawer>
 
@@ -41,7 +41,6 @@ const drawerFileDetailsVisible = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
 
 const currentRow = ref<FolderInterface>({} as FolderInterface);
-const selectedRows = ref<DataTableRowKey[]>([]);
 
 /** Pagination data */
 const currentPage = ref<number>(0);
@@ -169,8 +168,8 @@ const columns = createColumns();
 
 const rowKey = (row: FolderInterface) => row.id;
 
-const handleCheck = (rowKeys: DataTableRowKey[]) => {
-  selectedRows.value = rowKeys;
+const handleCheck = (rowKeys: Array<number>) => {
+  dataStore.folder.selectedItems = rowKeys;
 };
 
 function rowProps(row: FolderInterface) {
