@@ -50,8 +50,8 @@ const createColumns = (): DataTableColumns<RowData> => {
         return h(
           StorageProgress,
           {
-            size: row.sizeMb,
-            maxSize: row.maxSizeMb,
+            size: row.size,
+            maxSize: row.maxSize,
             percentage: row.percentage,
           },
           null

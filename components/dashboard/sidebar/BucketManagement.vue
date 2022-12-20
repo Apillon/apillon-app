@@ -54,20 +54,24 @@ const menuOptions: MenuOption[] = [
     label: () => h('span', {}, t('storage.snapshots')),
     key: 'snapshots',
     disabled: true,
+    show: false,
   },
   {
     label: () => h('span', {}, t('storage.stats')),
     key: 'stats',
     disabled: true,
+    show: false,
   },
   {
     label: () => h('span', {}, t('storage.history')),
     key: 'history',
     disabled: true,
+    show: false,
   },
   {
     label: () => h('span', {}, t('storage.destroy')),
     key: 'delete',
+    show: false,
     onClick: () => (showModalDestroyBucket.value = true),
   },
 ];

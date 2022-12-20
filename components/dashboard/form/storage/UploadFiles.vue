@@ -9,7 +9,7 @@
     <n-scrollbar class="max-h-[50vh]" y-scrollable>
       <div v-if="fileList" class="n-upload-file-list mt-4">
         <div v-for="file in fileList" class="n-upload-file">
-          <FileListItem v-bind="file" />
+          <StorageFileListItem v-bind="file" />
         </div>
       </div>
     </n-scrollbar>
@@ -19,8 +19,6 @@
 <script lang="ts" setup>
 import { NUpload, NUploadDragger, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import { FileUploadStatus } from '~~/lib/values';
-import { FileListItemType } from '~~/types/component';
 
 const props = defineProps({
   bucketUuid: { type: String, required: true },
@@ -137,10 +135,19 @@ function updateFileStatus(fileId: string, status: FileUploadStatus) {
         clearInterval(item.progress);
       }
       if (status === FileUploadStatusValue.FINISHED) {
+        /** Calculate upload speed */
         const timeDiff = Date.now() - item.timestamp;
         if (timeDiff > 0) {
           item.uploadSpeed = item.size / timeDiff;
         }
+
+        /** Increase bucket size */
+        if (dataStore.bucket.active?.size) {
+          dataStore.bucket.active.size += item.size;
+        } else {
+          dataStore.bucket.active.size = item.size;
+        }
+
         clearInterval(item.progress);
       }
       /** Refresh diretory content */

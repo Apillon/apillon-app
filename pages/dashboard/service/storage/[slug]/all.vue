@@ -19,8 +19,8 @@
         <StorageProgress
           class="w-1/2"
           :percentage="dataStore.currentBucket.percentage"
-          :size="dataStore.currentBucket.sizeMb"
-          :max-size="dataStore.currentBucket.maxSizeMb"
+          :size="dataStore.currentBucket.size || 0"
+          :max-size="dataStore.currentBucket.maxSize || 0"
         />
       </n-space>
     </template>

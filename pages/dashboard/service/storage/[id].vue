@@ -11,16 +11,17 @@
 
     <template #infobar>
       <n-space align="center" justify="space-between" class="w-full">
-        <Tag color="violet">{{ dataStore.currentBucket.name }}</Tag>
+        <Tag color="violet">{{ dataStore.bucket.active.name }}</Tag>
         <span>
           <span class="icon-storage"></span>
           {{ $t('storage.bucket') }}
         </span>
         <StorageProgress
           class="w-1/2"
-          :percentage="dataStore.currentBucket.percentage"
-          :size="dataStore.currentBucket.sizeMb"
-          :max-size="dataStore.currentBucket.maxSizeMb"
+          :key="dataStore.bucket.active.size || 0"
+          :percentage="dataStore.bucket.active.percentage"
+          :size="dataStore.bucket.active.size || 0"
+          :max-size="dataStore.bucket.active.maxSize"
         />
       </n-space>
     </template>
@@ -39,60 +40,39 @@
     </template>
 
     <slot>
+      <!-- Breadcrumbs -->
       <StorageBreadcrumbs v-if="dataStore.folder.selected" />
-      <n-h5 v-else prefix="bar">{{ $t('storage.uploadFiles') }}</n-h5>
+      <n-h5 v-else-if="dataStore.folder.uploadActive" prefix="bar">{{
+        $t('storage.uploadFiles')
+      }}</n-h5>
 
+      <!-- Upload files -->
       <FormStorageUploadFiles
+        v-show="dataStore.folder.uploadActive"
         :bucketUuid="dataStore.currentBucket.bucket_uuid"
         class="mt-4 pr-[2px] pb-1 mb-1"
       />
 
       <n-h5 prefix="bar" class="mb-8">{{ $t('storage.yourFiles') }}</n-h5>
       <n-space vertical :size="12">
-        <n-space justify="space-between">
-          <div class="w-[20vw] max-w-xs">
-            <n-input
-              v-model:value="dataStore.folder.search"
-              type="text"
-              name="search"
-              size="small"
-              class="bg-grey-dark"
-              placeholder="Search files"
-            />
-          </div>
-          <n-space>
-            <n-button size="small">
-              <span class="icon-copy"></span>
-              <span class="text-normal">Copy ARN</span>
-            </n-button>
-            <n-button size="small">Actions</n-button>
-            <n-button size="small" @click="showModalNewFolder = true">
-              {{ $t('storage.folder.create') }}
-            </n-button>
-            <n-button size="small">Download</n-button>
-          </n-space>
-        </n-space>
+        <!-- Actions -->
+        <StorageActions />
 
         <!-- DataTable: files and directories -->
         <TableFiles />
       </n-space>
-
-      <!-- Modal - Create new folder -->
-      <modal v-model:show="showModalNewFolder" :title="$t('storage.folder.createNew')">
-        <FormStorageFolderCreate @submit-success="onFolderCreated" />
-      </modal>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
+import colors from '~~/tailwind.colors';
 import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const { params } = useRoute();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
-const showModalNewFolder = ref<boolean>(false);
 
 useHead({
   title: $i18n.t('nav.storage'),
@@ -102,15 +82,13 @@ onMounted(() => {
   /** Bucket ID from route, then load buckets */
   dataStore.onBucketMounted(parseInt(`${params?.id}`));
 
-  Promise.all(Object.values(dataStore.promises)).then(_ => {
+  Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    await dataStore.fetchBucket(parseInt(`${params?.id}`));
+
+    if (!dataStore.bucket.active.size) {
+      dataStore.folder.uploadActive = true;
+    }
     pageLoading.value = false;
   });
 });
-
-function onFolderCreated() {
-  showModalNewFolder.value = false;
-
-  /** Refresh directory content */
-  dataStore.fetchDirectoryContent($i18n);
-}
 </script>

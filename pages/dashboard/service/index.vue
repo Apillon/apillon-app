@@ -53,7 +53,7 @@
         <FormAttachService
           v-if="attachService"
           :service-type="attachService"
-          class="max-w-[520px] mt-5"
+          class="max-w-lg mt-5"
         />
       </div>
       <div

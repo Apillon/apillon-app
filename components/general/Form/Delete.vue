@@ -80,7 +80,7 @@ function getUrl(type: string, id: number) {
     case 'apiKey':
       return `${endpoints.apiKey}${id}`;
     case 'bucket':
-      return `${endpoints.bucket}${id}`;
+      return endpoints.bucket(id);
     case 'directory':
       return `${endpoints.directory}${id}`;
     default:

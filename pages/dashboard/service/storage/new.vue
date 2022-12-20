@@ -1,7 +1,7 @@
 <template>
   <Dashboard>
     <template #heading>
-      <h5>{{ $t('storage.newBucket') }}</h5>
+      <BannerStorage />
     </template>
     <template #learn>
       <LearnAlert>
@@ -12,7 +12,13 @@
       <LearnCollapse />
     </template>
     <slot>
-      <FormStorageNew class="max-w-[520px]" />
+      <n-space align="center" class="mb-6">
+        <NuxtLink :to="{ name: 'dashboard-service-storage' }">
+          <span class="icon-back"></span>
+        </NuxtLink>
+        <h5>{{ $t('storage.newBucket') }}</h5>
+      </n-space>
+      <FormStorageNew class="max-w-xl" />
     </slot>
   </Dashboard>
 </template>

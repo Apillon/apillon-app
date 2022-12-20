@@ -37,7 +37,10 @@ const Endpoints = {
   instructions: '/instruction/all',
 
   /** Bucket */
-  bucket: '/buckets/',
+  buckets: '/buckets/',
+  bucket: (buckeId: number) => {
+    return `/buckets/${buckeId}`;
+  },
   bucketWebhook: (buckeId: number, webhookId?: number) => {
     return webhookId ? `/buckets/${buckeId}/webhook/${webhookId}` : `/buckets/${buckeId}/webhook`;
   },

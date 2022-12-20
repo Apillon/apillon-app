@@ -106,9 +106,10 @@ const props = defineProps({
 
 const message = useMessage();
 const $i18n = useI18n();
-const loadingForm = ref(false);
-const loadingPage = ref(false);
-const loadingReset = ref(false);
+const loadingForm = ref<boolean>(false);
+const loadingPage = ref<boolean>(false);
+const loadingReset = ref<boolean>(false);
+const disabledParamReset = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const webhook = ref<WebhookInterface | null>(null);
 
@@ -137,7 +138,9 @@ const rules = computed<NFormRules>(() => {
     ],
     param1: [
       {
-        required: true,
+        required:
+          formData.value.authType === BucketWebhookAuthMethod.BASIC ||
+          formData.value.authType === BucketWebhookAuthMethod.TOKEN,
         message:
           formData.value.authType === BucketWebhookAuthMethod.BASIC
             ? $i18n.t('validation.webhookUsernameRequired')
@@ -157,6 +160,10 @@ const rules = computed<NFormRules>(() => {
 
 const authTypes = ref<Array<NSelectOption>>([
   {
+    value: BucketWebhookAuthMethod.NONE,
+    label: $i18n.t(`form.authTypes.${BucketWebhookAuthMethod.NONE}`),
+  },
+  {
     value: BucketWebhookAuthMethod.BASIC,
     label: $i18n.t(`form.authTypes.${BucketWebhookAuthMethod.BASIC}`),
   },
@@ -169,6 +176,17 @@ const authTypes = ref<Array<NSelectOption>>([
 onMounted(async () => {
   await getWebhook();
 });
+
+/** Watch Auth type and reset params */
+watch(
+  () => formData.value.authType,
+  _ => {
+    if (!disabledParamReset.value) {
+      formData.value.param1 = '';
+      formData.value.param2 = '';
+    }
+  }
+);
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -194,12 +212,7 @@ async function getWebhook() {
     );
 
     webhook.value = res.data;
-    formData.value.url = res.data.url;
-    formData.value.authType =
-      res.data.authMethod ||
-      (res.data.param2 ? BucketWebhookAuthMethod.BASIC : BucketWebhookAuthMethod.TOKEN);
-    formData.value.param1 = res.data.param1;
-    formData.value.param2 = res.data.param2;
+    updateFormData(res.data);
   } catch (error) {
     webhook.value = null;
   }
@@ -215,6 +228,8 @@ async function createWebhook() {
     );
 
     webhook.value = res.data;
+    updateFormData(res.data);
+
     message.success($i18n.t('form.success.created.webhook'));
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));
@@ -225,12 +240,14 @@ async function updateWebhook() {
   loadingForm.value = true;
 
   try {
-    await $api.patch<WebhookResponse>(
+    const res = await $api.patch<WebhookResponse>(
       endpoints.bucketWebhook(props.bucketId, webhook.value?.id),
       formData.value
     );
+    webhook.value = res.data;
+    updateFormData(res.data);
 
-    message.success($i18n.t('form.success.created.webhook'));
+    message.success($i18n.t('form.success.updated.webhook'));
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));
   }
@@ -243,15 +260,30 @@ async function resetWebhook() {
 
     /** Reset form data */
     webhook.value = null;
-    formData.value.url = '';
-    formData.value.authType = '';
-    formData.value.param1 = '';
-    formData.value.param2 = '';
+    updateFormData({} as WebhookInterface);
 
     message.success($i18n.t('form.success.deleted.webhook'));
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));
   }
   loadingReset.value = false;
+}
+
+function updateFormData(webhook: WebhookInterface) {
+  disabledParamReset.value = true;
+
+  formData.value.url = webhook.url;
+  formData.value.param1 = webhook.param1;
+  formData.value.param2 = webhook.param2;
+
+  formData.value.authType =
+    webhook.authMethod ||
+    (webhook.param2
+      ? BucketWebhookAuthMethod.BASIC
+      : webhook.param1
+      ? BucketWebhookAuthMethod.TOKEN
+      : BucketWebhookAuthMethod.NONE);
+
+  setTimeout(() => (disabledParamReset.value = false), 1);
 }
 </script>
