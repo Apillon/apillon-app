@@ -53,7 +53,7 @@ const CreateUserRoles: Array<NSelectOption> = $i18n => {
  */
 export const MessageProviderOptoins: DiscreteApiOptions = {
   messageProviderProps: {
-    duration: 5000,
+    duration: 3000,
     keepAliveOnHover: true,
     max: 4,
     themeOverrides: {

@@ -13,9 +13,11 @@
       <n-h5 prefix="bar">{{ $t('project.owner') }}</n-h5>
       <TableProjectOwner />
       <div class="text-right">
-        <Btn type="builders">
-          {{ $t('dashboard.manageRoles') }}
-        </Btn>
+        <NuxtLink :to="{ name: 'dashboard-user-permissions' }">
+          <Btn type="builders">
+            {{ $t('dashboard.manageRoles') }}
+          </Btn>
+        </NuxtLink>
       </div>
 
       <!-- Delete project -->
@@ -29,9 +31,9 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const $i18n = useI18n();
 
 useHead({
-  title: t('nav.projectSettings'),
+  title: $i18n.t('nav.projectSettings'),
 });
 </script>

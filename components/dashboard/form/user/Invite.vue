@@ -49,6 +49,7 @@ import { useI18n } from 'vue-i18n';
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -117,12 +118,14 @@ async function inviteUser() {
   loading.value = true;
 
   try {
-    const res = await $api.post<InviteUserResponse>(
+    await $api.post<InviteUserResponse>(
       endpoints.projectInviteUser(dataStore.currentProjectId),
       formData.value
     );
 
+    /** Show success msg and refresh users */
     message.success($i18n.t('form.success.created.userInvite'));
+    await settingsStore.fetchProjectUsers($i18n);
   } catch (error) {
     message.error(userFriendlyMsg(error, $i18n));
   }

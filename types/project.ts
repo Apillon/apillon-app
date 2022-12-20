@@ -44,6 +44,23 @@ declare global {
     value?: number;
     label?: string;
   }
+
+  interface ProjectResponse extends GeneralResponse<ProjectInterface> {}
+  interface ProjectsResponse extends GeneralItemsResponse<ProjectInterface> {}
+  interface CreateProjectResponse extends GeneralResponse<ProjectInterface> {}
+
+  /**
+   * Project settings
+   */
+  interface FormProjectSettings {
+    name?: string | null;
+    description?: string | null;
+  }
+  interface ProjectSettingsResponse extends GeneralResponse<ProjectInterface> {}
+
+  /**
+   * Project users
+   */
   interface ProjectUserInterface {
     id: number;
     status: number;
@@ -55,20 +72,7 @@ declare global {
     pendingInvitation: number;
     loading?: boolean;
   }
-
-  interface ProjectResponse extends GeneralResponse<ProjectInterface> {}
-  interface ProjectsResponse extends GeneralItemsResponse<ProjectInterface> {}
-  interface CreateProjectResponse extends GeneralResponse<ProjectInterface> {}
   interface ProjectUsersResponse extends GeneralItemsResponse<ProjectUserInterface> {}
-
-  /**
-   * Project settings
-   */
-  interface FormProjectSettings {
-    name?: string | null;
-    description?: string | null;
-  }
-  interface ProjectSettingsResponse extends GeneralResponse<ProjectInterface> {}
 
   /**
    * Invite user

@@ -2,7 +2,7 @@
   <n-data-table
     :bordered="false"
     :columns="columns"
-    :data="users"
+    :data="settingsStore.users"
     :loading="loading"
     :row-props="rowProps"
   />
@@ -15,12 +15,15 @@ import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const message = useMessage();
-const dataStore = useDataStore();
-const loading = ref<boolean>(true);
+const settingsStore = useSettingsStore();
+const loading = ref<boolean>(false);
 const SelectRole = resolveComponent('SelectRole');
+const currentRow = ref<ProjectUserInterface>({} as ProjectUserInterface);
 
 onMounted(() => {
-  getUsers();
+  if (!settingsStore.hasUsers) {
+    getUsers();
+  }
 });
 
 const createColumns = ({
@@ -39,7 +42,7 @@ const createColumns = ({
     },
     {
       title: $i18n.t('dashboard.role'),
-      key: 'role',
+      key: 'role_id',
       className: '!py-0',
       render(row) {
         return h(
@@ -48,7 +51,7 @@ const createColumns = ({
             class: 'select-role',
             model: row.role_id,
             loading: row.loading,
-            disabled: row.pendingInvitation === 1,
+            disabled: !isRoleChangeAllowed(row),
             onRoleChange: handleRoleChange,
           },
           ''
@@ -78,9 +81,8 @@ const createColumns = ({
         return h(
           NDropdown,
           {
-            options: dropdownOptions,
+            options: dropdownOptions(row),
             trigger: 'click',
-            disabled: row.pendingInvitation === 1,
           },
           {
             default: () =>
@@ -95,8 +97,6 @@ const createColumns = ({
     },
   ];
 };
-const currentRow = ref<ProjectUserInterface>({} as ProjectUserInterface);
-const users = ref<Array<ProjectUserInterface>>([]);
 
 const columns = createColumns({
   handleRoleChange(selected: number) {
@@ -115,30 +115,30 @@ function rowProps(row: ProjectUserInterface) {
 /**
  * Dropdown Actions
  */
-const dropdownOptions = [
-  {
-    label: $i18n.t('general.delete'),
-    key: 'delete',
-    props: {
-      onClick: () => {
-        deleteRole(currentRow.value.id);
+const dropdownOptions = (user: ProjectUserInterface) => {
+  return [
+    {
+      label: $i18n.t('general.delete'),
+      key: 'delete',
+      disabled: !isRoleChangeAllowed(user),
+      props: {
+        onClick: () => {
+          deleteRole(currentRow.value.id);
+        },
       },
     },
-  },
-];
+  ];
+};
 
-/** Fetch Users on project */
+/** Check if user role can be changed - user is active and is not project owner */
+function isRoleChangeAllowed(user: ProjectUserInterface) {
+  return !(user.pendingInvitation === 1 || user.role_id === DefaultUserRole.PROJECT_OWNER);
+}
+
+/** GET Users on project */
 async function getUsers() {
   loading.value = true;
-
-  try {
-    const res = await $api.get<ProjectUsersResponse>(
-      endpoints.projectUsers(dataStore.currentProjectId)
-    );
-    users.value = res.data.items;
-  } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
-  }
+  await settingsStore.fetchProjectUsers($i18n);
   loading.value = false;
 }
 
@@ -166,6 +166,7 @@ async function deleteRole(id: number) {
   try {
     await $api.delete<DeleteResponse>(endpoints.projectUserRole(id));
 
+    /** Show success msg and refresh users */
     message.success($i18n.t('form.success.deleted.userRole'));
     await getUsers();
   } catch (error) {
@@ -175,7 +176,7 @@ async function deleteRole(id: number) {
 }
 
 function updateLoadingStatusOnUsersRole(id: number, enabled: boolean) {
-  users.value.forEach(user => {
+  settingsStore.users.forEach(user => {
     if (user.id === id && user.pendingInvitation === 0) {
       user.loading = enabled;
     }

@@ -17,6 +17,7 @@
         v-model:value="formData.name"
         :input-props="{ id: 'name' }"
         :placeholder="$t('form.placeholder.apiKeyName')"
+        :disabled="true"
       />
     </n-form-item>
 
@@ -33,6 +34,7 @@
             :key="key"
             :value="type.value"
             :label="type.label"
+            :disabled="true"
           />
         </n-space>
       </n-radio-group>
@@ -81,21 +83,12 @@
         </n-grid>
       </n-collapse-item>
     </n-collapse>
-
-    <!--  Submit -->
-    <n-form-item :show-label="false">
-      <input type="submit" class="hidden" :value="$t('form.update')" />
-      <Btn type="secondary" class="w-full mt-8" :loading="loadingForm" @click="handleSubmit">
-        {{ $t('form.update') }}
-      </Btn>
-    </n-form-item>
   </n-form>
   <Spinner v-else />
 </template>
 
 <script lang="ts" setup>
-import { useMessage, CollapseProps, CheckboxProps } from 'naive-ui';
-import { stringify } from 'query-string';
+import { useMessage, CollapseProps } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
