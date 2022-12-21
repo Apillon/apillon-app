@@ -22,7 +22,7 @@ export const useDataStore = defineStore('data', {
       ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
       : 0,
     file: {
-      items: {} as Record<string, { file: FileDetails; fileStatus: number }>,
+      items: {} as Record<string, FileDetailsInterface>,
     },
     folder: {
       allowFetch: true,
