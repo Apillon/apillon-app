@@ -15,38 +15,15 @@ export const UserRoleIds = [
 ];
 
 /** User roles */
-const CreateUserRoles: Array<NSelectOption> = $i18n => {
-  return [
-    {
-      label: $i18n.t(`userRole.${DefaultUserRole.ADMIN}`),
-      value: DefaultUserRole.ADMIN,
-    },
-    {
-      label: $i18n.t(`userRole.${DefaultUserRole.SUPPORT}`),
-      value: DefaultUserRole.SUPPORT,
-    },
-    {
-      label: $i18n.t(`userRole.${DefaultUserRole.ANALYTIC}`),
-      value: DefaultUserRole.ANALYTIC,
-    },
-    {
-      label: $i18n.t(`userRole.${DefaultUserRole.PROJECT_OWNER}`),
-      value: DefaultUserRole.PROJECT_OWNER,
-    },
-    {
-      label: $i18n.t(`userRole.${DefaultUserRole.PROJECT_ADMIN}`),
-      value: DefaultUserRole.PROJECT_ADMIN,
-    },
-    {
-      label: $i18n.t(`userRole.${DefaultUserRole.PROJECT_USER}`),
-      value: DefaultUserRole.PROJECT_USER,
-    },
-    {
-      label: $i18n.t(`userRole.${DefaultUserRole.USER}`),
-      value: DefaultUserRole.USER,
-    },
-  ];
-};
+export function CreateUserRoles($i18n: i18nType): Array<NSelectOption> {
+  return Object.entries(DefaultUserRoles).map(([roleId, role]) => {
+    return {
+      label: $i18n.t(`userRole.${role}`),
+      value: parseInt(roleId),
+      disabled: parseInt(roleId) === DefaultUserRole.PROJECT_OWNER,
+    };
+  });
+}
 
 /**
  * Theme configs
@@ -204,7 +181,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     fillColorInfo: colors.green,
     fillColorError: colors.pink,
     fillColorSuccess: colors.green,
-    railColor: colors.grey.lightBg,
+    railColor: colors.grey.dark,
     railHeight: '4px',
   },
   Radio: {

@@ -158,7 +158,7 @@ export function addBucketAdditionalData(bucket: BucketInterface): BucketInterfac
  */
 export function userFriendlyMsg(
   error: ApiError | ReferenceError | TypeError | any,
-  $i18n: any = null
+  $i18n?: i18nType | null
 ) {
   // Check error exists and if translation is included
   if (!$i18n || !($i18n instanceof Object) || !error) {

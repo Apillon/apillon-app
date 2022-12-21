@@ -46,10 +46,5 @@ const selectedRole = computed({
   },
 });
 
-const userRoles: Array<NSelectOption> = Object.entries(DefaultUserRoles).map(([roleId, role]) => {
-  return {
-    label: $i18n.t(`userRole.${role}`),
-    value: parseInt(roleId),
-  };
-});
+const userRoles: Array<NSelectOption> = CreateUserRoles($i18n);
 </script>

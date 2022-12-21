@@ -59,14 +59,6 @@ const createColumns = (): DataTableColumns<RowData> => {
       },
     },
     {
-      title: $i18n.t('storage.traffic'),
-      key: 'traffic',
-    },
-    {
-      title: $i18n.t('storage.visits'),
-      key: 'visits',
-    },
-    {
       title: $i18n.t('general.actions'),
       key: 'actions',
       align: 'right',
@@ -115,6 +107,7 @@ const dropdownOptions = [
   {
     label: $i18n.t('storage.delete.bucket'),
     key: 'storage.delete.bucket',
+    show: false,
     props: {
       onClick: () => {
         showModalDestroyBucket.value = true;
