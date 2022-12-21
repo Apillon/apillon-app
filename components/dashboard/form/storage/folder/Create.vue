@@ -126,7 +126,7 @@ async function createFolder() {
     const res = await $api.post<CreateFolderResponse>(endpoints.directory, params);
 
     if (res.data) {
-      message.success($i18n.t('form.success.folderCreated'));
+      message.success($i18n.t('form.success.created.directory'));
       emit('submitSuccess');
     }
   } catch (error) {

@@ -2,7 +2,8 @@
   <div v-if="fileDetails.CID || fileDetails.file_uuid">
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('storage.fileName') }}</p>
-      <strong>{{ fileDetails.name || fileDetails.fileName }}</strong>
+      <strong v-if="fileDetails?.name">{{ fileDetails.name }}</strong>
+      <strong v-else-if="fileDetails?.fileName">{{ fileDetails.fileName }}</strong>
     </div>
 
     <div class="body-sm mb-4">
@@ -12,14 +13,14 @@
 
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('storage.fileSize') }}</p>
-      <strong>{{ formatBytes(fileDetails.size) }}</strong>
+      <strong>{{ formatBytes(fileDetails.size || 0) }}</strong>
     </div>
 
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('storage.expiration') }}</p>
       <div class="relative min-h-[20px]">
-        <strong v-if="crustStatus?.expired_at">
-          {{ fileExpiration(parseInt(crustStatus.expired_at)) }}
+        <strong v-if="crustFileStatus?.expired_at">
+          {{ fileExpiration(parseInt(crustFileStatus.expired_at)) }}
         </strong>
         <Spinner v-else :size="16" />
       </div>
@@ -28,8 +29,8 @@
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('storage.replicas') }}</p>
       <div class="relative min-h-[20px]">
-        <strong v-if="crustStatus?.reported_replica_count">
-          {{ crustStatus.reported_replica_count }}
+        <strong v-if="crustFileStatus?.reported_replica_count">
+          {{ crustFileStatus.reported_replica_count }}
         </strong>
         <Spinner v-else :size="16" />
       </div>
@@ -77,69 +78,63 @@
     <div class="mb-4">
       <p class="body-sm">{{ $t('general.actions') }}</p>
     </div>
-    <Btn type="secondary" size="large">{{ $t('storage.renewPoolBalance') }}</Btn>
+    <n-space vertical>
+      <Btn type="secondary" size="large">{{ $t('storage.renewPoolBalance') }}</Btn>
+      <Btn
+        type="secondary"
+        size="large"
+        @click="download(fileDetails.downloadLink, fileDetails.name)"
+      >
+        {{ $t('general.download') }}
+      </Btn>
+      <Btn type="secondary" size="large">{{ $t('general.delete') }}</Btn>
+    </n-space>
   </div>
   <Spinner v-else />
 </template>
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { ApiPromise, WsProvider } from '@polkadot/api';
-import { typesBundleForPolkadot, crustTypes } from '@crustio/type-definitions';
-import { AnyJson } from '@polkadot/types-codec/types';
 
 const props = defineProps({
   fileCid: { type: String, default: '' },
   fileUuid: { type: String, default: '' },
 });
 
-type File = FileInterface | FileUploadInterface;
-
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const fileDetails = ref<File>({} as File);
+const fileDetails = ref<FileDetails>({} as FileDetails);
 const fileStatus = ref<number>(0);
-const crustStatus = ref<AnyJson>();
+const crustFileStatus = ref<FileCrust>({} as FileCrust);
 
 onMounted(async () => {
   if (props.fileCid) {
     getFileDetails(props.fileCid);
-    getCrustStatus(props.fileCid);
+    getcrustFileStatus(props.fileCid);
   } else if (props.fileUuid) {
     getFileDetails(props.fileUuid);
   }
 });
 onDeactivated(() => {
-  fileDetails.value = {} as File;
+  fileDetails.value = {} as FileDetails;
   fileStatus.value = 0;
-  crustStatus.value = {} as FileInfo;
+  crustFileStatus.value = {} as FileCrust;
 });
 
-// Define FileInfo
-type FileInfo = typeof crustTypes.market.types.FileInfoV2;
-
+/** Get File details */
 async function getFileDetails(uuidOrCID: string) {
-  const fileDetailsResponse = await dataStore.fetchFileDetails(uuidOrCID, $i18n);
-  fileDetails.value = fileDetailsResponse.file;
-  fileStatus.value = fileDetailsResponse.fileStatus;
+  if (!(uuidOrCID in dataStore.file.items)) {
+    dataStore.file.items[uuidOrCID] = await dataStore.fetchFileDetails(uuidOrCID, $i18n);
+  }
+  fileDetails.value = dataStore.file.items[uuidOrCID].file;
+  fileStatus.value = dataStore.file.items[uuidOrCID].fileStatus;
 }
 
 /** Get File details from CRUST */
-async function getCrustStatus(cid: string) {
+async function getcrustFileStatus(cid: string) {
   if (!(cid in dataStore.crust)) {
-    dataStore.crust[cid] = await fetchFileDetailsFromCrust(cid);
+    dataStore.crust[cid] = await dataStore.fetchFileDetailsFromCrust(cid);
   }
-  crustStatus.value = dataStore.crust[cid];
-}
-
-async function fetchFileDetailsFromCrust(cid: string) {
-  const api = new ApiPromise({
-    provider: new WsProvider('wss://rpc.crust.network'),
-    typesBundle: typesBundleForPolkadot,
-  });
-
-  await api.isReadyOrError;
-  const fileInfo = await api.query.market.filesV2(cid);
-  return fileInfo.toJSON();
+  crustFileStatus.value = dataStore.crust[cid] as FileCrust;
 }
 </script>

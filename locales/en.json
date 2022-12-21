@@ -176,7 +176,8 @@
     "ERROR_READING_FROM_DATABASE": "Internal server error",
     "SERVICE_ERROR": "Internal server error",
 
-    "walletSignature": "'Could not capture your signature, check your wallet connection"
+    "walletSignature": "'Could not capture your signature, check your wallet connection",
+    "fileDownload": "Download failed. Something went wrong during the download."
   },
   "footer": {
     "support": "Support",
@@ -287,6 +288,7 @@
         "directory": "Directory key has been deleted",
         "file": "File has been deleted",
         "item": "Item has been deleted",
+        "items": "Items has been deleted",
         "webhook": "Webhook has been deleted"
       },
       "updated": {
@@ -442,11 +444,21 @@
       "createNew": "Create new folder",
       "delete": "Delete folder"
     },
+    "delete": {
+      "bucket": "Delete bucket",
+      "bucketItems": "Delete these items?",
+      "item": "Delete selected item",
+      "items": "Delete selected items"
+    },
+    "download": {
+      "bucketItems": "Download selected items?",
+      "item": "Download selected item",
+      "items": "Download selected items"
+    },
     "bucket": "Storage bucket",
     "bucketManagement": "Bucket management",
     "bucketName": "Bucket name",
     "buckets": "Storage buckets",
-    "delete": "Delete bucket",
     "destroy": "Destroy",
     "edit": "Edit",
     "expiration": "Expired on blockchain",

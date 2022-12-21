@@ -113,8 +113,8 @@ const dropdownOptions = [
     },
   },
   {
-    label: $i18n.t('storage.delete'),
-    key: 'storage.delete',
+    label: $i18n.t('storage.delete.bucket'),
+    key: 'storage.delete.bucket',
     props: {
       onClick: () => {
         showModalDestroyBucket.value = true;

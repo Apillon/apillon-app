@@ -19,8 +19,18 @@ export function getAppConfig(env?: string) {
   }
 }
 
+/**
+ * Numeric manipulations
+ */
 export function randomInteger(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+export function isNumeric(n: any): n is number | string {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+export function intVal(n: number | string): number {
+  return typeof n === 'number' ? n : parseInt(n, 10);
 }
 
 export function ActionReturn(success: boolean, data: any) {
@@ -202,4 +212,25 @@ function takeFirstDigitsFromNumber(num: number, numOfDigits: number = 3): number
 export function isFeatureEnabled(feature: Feature): boolean {
   const config = useRuntimeConfig();
   return config.public.features[feature] || false;
+}
+
+/**
+ * Actions
+ */
+
+/**
+ * Download file
+ * @param url
+ * @param filename
+ */
+export async function download(url: string, filename: string) {
+  return fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
+    })
+    .catch(console.error);
 }

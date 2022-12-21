@@ -2,6 +2,8 @@ import { useMessage } from 'naive-ui';
 import { defineStore } from 'pinia';
 import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
 import { AnyJson } from '@polkadot/types-codec/types';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { typesBundleForPolkadot } from '@crustio/type-definitions';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
@@ -19,6 +21,9 @@ export const useDataStore = defineStore('data', {
     currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
       ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
       : 0,
+    file: {
+      items: {} as Record<string, { file: FileDetails; fileStatus: number }>,
+    },
     folder: {
       allowFetch: true,
       items: [] as Array<FolderInterface>,
@@ -26,7 +31,7 @@ export const useDataStore = defineStore('data', {
       path: [] as Array<{ id: number; name: string }>,
       search: '',
       selected: 0,
-      selectedItems: [] as Array<number>,
+      selectedItems: [] as Array<FolderInterface>,
       total: 0,
       uploadActive: false,
     },
@@ -85,6 +90,7 @@ export const useDataStore = defineStore('data', {
     resetData() {
       this.bucket.active = {} as BucketInterface;
       this.bucket.items = [] as Array<BucketInterface>;
+      this.file.items = {} as Record<string, { file: FileDetails; fileStatus: number }>;
       this.folder.items = [] as Array<FolderInterface>;
       this.services.authentication = [] as Array<ServiceInterface>;
       this.services.storage = [] as Array<ServiceInterface>;
@@ -97,6 +103,7 @@ export const useDataStore = defineStore('data', {
     },
 
     setBucketId(id: number) {
+      this.file.items = {} as Record<string, { file: FileDetails; fileStatus: number }>;
       this.folder.items = [] as Array<FolderInterface>;
       this.folder.total = 0;
       this.folder.path = [];
@@ -173,7 +180,7 @@ export const useDataStore = defineStore('data', {
     async fetchProjects(redirectToDashboard: boolean = false, $i18n: any = null) {
       const router = useRouter();
       try {
-        const res = await $api.get<ProjectsResponse>(endpoints.projects);
+        const res = await $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
 
         this.projects = res.data.items.map((project: ProjectInterface) => {
           return {
@@ -376,6 +383,17 @@ export const useDataStore = defineStore('data', {
         message.error(userFriendlyMsg(error, $i18n));
       }
       return {} as FileDetailsInterface;
+    },
+
+    async fetchFileDetailsFromCrust(cid: string) {
+      const api = new ApiPromise({
+        provider: new WsProvider('wss://rpc.crust.network'),
+        typesBundle: typesBundleForPolkadot,
+      });
+
+      await api.isReadyOrError;
+      const fileInfo = await api.query.market.filesV2(cid);
+      return fileInfo.toJSON();
     },
   },
 });

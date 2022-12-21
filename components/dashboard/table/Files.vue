@@ -21,17 +21,13 @@
 
   <!-- Modal - Delete file/folder -->
   <modal v-model:show="showModalDelete" :title="$t(`storage.${currentRow.type}.delete`)">
-    <FormStorageFolderDelete
-      :id="currentRow.id"
-      :type="currentRow.type"
-      @submit-success="onDeleted"
-    />
+    <FormStorageFolderDelete :items="[currentRow]" @submit-success="onDeleted" />
   </modal>
 </template>
 
 <script lang="ts" setup>
 import { debounce } from 'lodash';
-import { DataTableColumns, DataTableRowKey, NButton, NDropdown, NTag } from 'naive-ui';
+import { DataTableColumns, DataTableRowKey, NButton, NDropdown } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
@@ -86,6 +82,15 @@ const dropdownFileOptions = [
     },
   },
   {
+    label: $i18n.t('general.download'),
+    key: 'download',
+    props: {
+      onClick: () => {
+        downloadFile(currentRow.value.CID);
+      },
+    },
+  },
+  {
     label: $i18n.t('general.delete'),
     key: 'delete',
     props: {
@@ -107,7 +112,7 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
       key: 'name',
       render(row) {
         return [
-          h(IconFolderFile, { isFile: row.type === 'file' }, ''),
+          h(IconFolderFile, { isFile: row.type === BucketItemType.FILE }, ''),
           h(
             'span',
             {
@@ -148,7 +153,7 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
         return h(
           NDropdown,
           {
-            options: row.type === 'file' ? dropdownFileOptions : dropdownFolderOptions,
+            options: row.type === BucketItemType.FILE ? dropdownFileOptions : dropdownFolderOptions,
             trigger: 'click',
           },
           {
@@ -168,8 +173,12 @@ const columns = createColumns();
 
 const rowKey = (row: FolderInterface) => row.id;
 
-const handleCheck = (rowKeys: Array<number>) => {
-  dataStore.folder.selectedItems = rowKeys;
+const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
+  const rowKeyIds = rowKeys.map(item => intVal(item));
+
+  dataStore.folder.selectedItems = dataStore.folder.items.filter(item =>
+    rowKeyIds.includes(item.id)
+  );
 };
 
 function rowProps(row: FolderInterface) {
@@ -259,5 +268,18 @@ async function getDirectoryContent(bucketUuid?: string, folderId?: number, page:
   );
 
   currentPage.value = page;
+}
+
+/** Download file - get file details and download content from downloadLink */
+async function downloadFile(CID?: string | null) {
+  if (!CID) {
+    console.warn('MISSING File CID!');
+    return;
+  }
+  if (!(CID in dataStore.file.items)) {
+    dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID, $i18n);
+  }
+  const fileDetails: FileDetails = dataStore.file.items[CID].file;
+  download(fileDetails.downloadLink, fileDetails.name);
 }
 </script>

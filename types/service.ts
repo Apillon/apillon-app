@@ -43,6 +43,10 @@ declare global {
   /**
    * Service
    */
+  interface FormService {
+    serviceName: string;
+    networkType: boolean;
+  }
   interface ServiceInterface {
     active: number;
     id: number;
@@ -55,24 +59,6 @@ declare global {
     key?: number;
     uptime?: string;
   }
-
-  interface ServicesResponse {
-    data: {
-      items: Array<ServiceInterface>;
-      total: number;
-    };
-    status: number;
-  }
-
-  interface FormService {
-    serviceName: string;
-    networkType: boolean;
-  }
-  interface CreateServiceResponse {
-    data: {
-      id: number;
-      status: number;
-    };
-    status: number;
-  }
+  interface CreateServiceResponse extends GeneralResponse<{ id: number; status: number }> {}
+  interface ServicesResponse extends GeneralItemsResponse<ServiceInterface> {}
 }
