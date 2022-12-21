@@ -1,3 +1,5 @@
+import { Composer, UseI18nOptions } from 'vue-i18n';
+
 export {};
 
 declare global {
@@ -12,6 +14,17 @@ declare global {
   };
 
   type Either<T, U> = Only<T, U> | Only<U, T>;
+
+  /**
+   * i18n
+   */
+  interface Options extends UseI18nOptions {}
+  type i18nType = Composer<
+    NonNullable<Options['messages']>,
+    NonNullable<Options['datetimeFormats']>,
+    NonNullable<Options['numberFormats']>,
+    NonNullable<Options['locale']>
+  >;
 
   /**
    * Base responses

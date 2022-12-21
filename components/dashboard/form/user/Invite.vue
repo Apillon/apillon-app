@@ -53,12 +53,7 @@ const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const userRoles: Array<NSelectOption> = Object.entries(DefaultUserRoles).map(([roleId, role]) => {
-  return {
-    label: $i18n.t(`userRole.${role}`),
-    value: parseInt(roleId),
-  };
-});
+const userRoles: Array<NSelectOption> = CreateUserRoles($i18n);
 
 /** Col widths */
 const { width } = useWindowSize();

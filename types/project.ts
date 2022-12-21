@@ -14,13 +14,9 @@ export enum DefaultUserRole {
   USER = 99, // user with access to platform
 }
 export const DefaultUserRoles: { [k: number]: string } = {
-  [DefaultUserRole.ADMIN]: 'ADMIN',
-  [DefaultUserRole.SUPPORT]: 'SUPPORT',
-  [DefaultUserRole.ANALYTIC]: 'ANALYTIC',
   [DefaultUserRole.PROJECT_OWNER]: 'PROJECT_OWNER',
   [DefaultUserRole.PROJECT_ADMIN]: 'PROJECT_ADMIN',
   [DefaultUserRole.PROJECT_USER]: 'PROJECT_USER',
-  [DefaultUserRole.USER]: 'USER',
 };
 
 declare global {

@@ -177,7 +177,7 @@ export const useDataStore = defineStore('data', {
      */
 
     /** Projects */
-    async fetchProjects(redirectToDashboard: boolean = false, $i18n: any = null) {
+    async fetchProjects(redirectToDashboard: boolean = false, $i18n?: i18nType | null) {
       const router = useRouter();
       try {
         const res = await $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
@@ -240,7 +240,7 @@ export const useDataStore = defineStore('data', {
       return [] as Array<ServiceInterface>;
     },
 
-    async getAllServices($i18n: any = null) {
+    async getAllServices($i18n?: i18nType | null) {
       const services = await this.fetchServices($i18n);
 
       Object.entries(ServiceTypeNames).map(([serviceType, typeName]) => {
@@ -249,18 +249,18 @@ export const useDataStore = defineStore('data', {
           ([] as Array<ServiceInterface>);
       });
     },
-    async getAuthServices($i18n: any = null) {
+    async getAuthServices($i18n?: i18nType | null) {
       this.services.authentication = await this.fetchServices($i18n, ServiceType.AUTHENTICATION);
     },
-    async getStorageServices($i18n: any = null) {
+    async getStorageServices($i18n?: i18nType | null) {
       this.services.storage = await this.fetchServices($i18n, ServiceType.STORAGE);
     },
-    async getComputingServices($i18n: any = null) {
+    async getComputingServices($i18n?: i18nType | null) {
       this.services.computing = await this.fetchServices($i18n, ServiceType.COPMUTING);
     },
 
     /** Buckets */
-    async fetchBuckets($i18n: any = null) {
+    async fetchBuckets($i18n?: i18nType | null) {
       if (!this.hasProjects) {
         alert('Please create your first project');
         return;
@@ -286,7 +286,7 @@ export const useDataStore = defineStore('data', {
       return null;
     },
 
-    async fetchBucket(bucketId: number, $i18n: any = null) {
+    async fetchBucket(bucketId: number, $i18n?: i18nType | null) {
       try {
         const res = await $api.get<BucketResponse>(endpoints.bucket(bucketId));
 
@@ -303,7 +303,7 @@ export const useDataStore = defineStore('data', {
     },
 
     async fetchDirectoryContent(
-      $i18n: any,
+      $i18n: i18nType,
       bucketUuid?: string,
       folderId?: number,
       page?: number,
@@ -355,7 +355,7 @@ export const useDataStore = defineStore('data', {
       this.folder.loading = false;
     },
 
-    async fetchFileInfo(fileId: number, $i18n: any = null) {
+    async fetchFileInfo(fileId: number, $i18n?: i18nType | null) {
       try {
         const res = await $api.get<FolderResponse>(`${endpoints.file}${fileId}`);
 
@@ -370,7 +370,7 @@ export const useDataStore = defineStore('data', {
 
     async fetchFileDetails(
       fileUuidOrCID: string,
-      $i18n: any = null
+      $i18n?: i18nType | null
     ): Promise<FileDetailsInterface> {
       try {
         const url = endpoints.storageFileDetails(this.currentBucket.bucket_uuid, fileUuidOrCID);

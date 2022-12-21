@@ -105,7 +105,7 @@ async function createService() {
   try {
     const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
 
-    message.success($i18n.t('form.success.bucketCreated'));
+    message.success($i18n.t('form.success.created.bucket'));
 
     /** On new bucket created redirect to storage list in refresh data */
     dataStore.fetchBuckets();
