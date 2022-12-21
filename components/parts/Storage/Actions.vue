@@ -33,6 +33,7 @@
             size="small"
             :focus="true"
             :title="$t('storage.selectFiles')"
+            :loading="downloading"
             @click="downloadSelectedFiles"
           >
             {{ $t('general.download') }}
@@ -62,15 +63,24 @@
   <modal v-model:show="showModalNewFolder" :title="$t('storage.folder.createNew')">
     <FormStorageFolderCreate @submit-success="onFolderCreated" />
   </modal>
+
+  <!-- Modal - Delete file/folder -->
+  <modal v-model:show="showModalDelete" :title="$t(`storage.delete.bucketItems`)">
+    <FormStorageFolderDelete :items="dataStore.folder.selectedItems" @submit-success="onDeleted" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
 import colors from '~~/tailwind.colors';
 import { useI18n } from 'vue-i18n';
+import { useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
+const message = useMessage();
 const dataStore = useDataStore();
+const downloading = ref<boolean>(false);
 const showModalNewFolder = ref<boolean>(false);
+const showModalDelete = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
 const showPopoverDownload = ref<boolean>(false);
 
@@ -81,7 +91,10 @@ function onFolderCreated() {
   dataStore.fetchDirectoryContent($i18n);
 }
 
-function downloadSelectedFiles() {
+/**
+ * Download
+ */
+async function downloadSelectedFiles() {
   if (dataStore.folder.selectedItems.length === 0) {
     showPopoverDownload.value = true;
 
@@ -90,10 +103,44 @@ function downloadSelectedFiles() {
     }, 3000);
     return;
   }
-  // TODO: Download files
-  console.log(dataStore.folder.selectedItems);
+
+  const promises: Array<Promise<any>> = [];
+  downloading.value = true;
+
+  dataStore.folder.selectedItems.forEach(async item => {
+    const req = downloadFile(item.CID);
+    promises.push(req);
+    await req;
+  });
+
+  Promise.all(promises).then(async _ => {
+    downloading.value = false;
+    console.log('loaded');
+  });
+  console.log(promises);
+}
+/** Download file - get file details and download content from downloadLink */
+async function downloadFile(CID?: string | null) {
+  if (!CID) {
+    console.warn('MISSING File CID!');
+    return;
+  }
+  try {
+    if (!(CID in dataStore.file.items)) {
+      dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID, $i18n);
+    }
+    const fileDetails: FileDetails = dataStore.file.items[CID].file;
+    return download(fileDetails.downloadLink, fileDetails.name);
+  } catch (error: any) {
+    /** Show error message */
+    message.error($i18n.t('error.fileDownload'));
+  }
+  return null;
 }
 
+/**
+ * Delete
+ */
 function deleteSelectedFiles() {
   if (dataStore.folder.selectedItems.length === 0) {
     showPopoverDelete.value = true;
@@ -103,7 +150,13 @@ function deleteSelectedFiles() {
     }, 3000);
     return;
   }
-  // TODO: Delete files
-  console.log(dataStore.folder.selectedItems);
+
+  showModalDelete.value = true;
+}
+
+/** On folder deleted, refresh folder list */
+async function onDeleted() {
+  await dataStore.fetchDirectoryContent($i18n);
+  showModalDelete.value = false;
 }
 </script>

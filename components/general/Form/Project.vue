@@ -120,7 +120,7 @@ async function createProject() {
   emit('submitActive', true);
 
   try {
-    const res = await $api.post<CreateProjectResponse>(endpoints.project, formData.value);
+    const res = await $api.post<CreateProjectResponse>(endpoints.projects, formData.value);
 
     if (res.data) {
       /** Set new project as current project */

@@ -16,14 +16,7 @@ declare global {
     postalCode: string;
     terms: boolean;
   }
-
-  interface BillingResponse {
-    data: {
-      items: any;
-      total: number;
-    };
-    status: number;
-  }
+  interface BillingResponse extends GeneralItemsResponse<any> {}
 
   /**
    * API key - Form
@@ -58,13 +51,6 @@ declare global {
     testNetwork: number;
     updateTime: string;
   }
-  interface ApiKeysResponse {
-    data: {
-      items: Array<ApiKeyInterface>;
-      total: number;
-    };
-    status: number;
-  }
 
   interface ApiKeyCreatedInterface {
     id: string;
@@ -74,10 +60,6 @@ declare global {
     testNetwork: boolean;
     project_uuid: string;
     apiKeySecret: string;
-  }
-  interface ApiKeyCreatedResponse {
-    data: ApiKeyCreatedInterface;
-    status: number;
   }
 
   interface ApiKeyRoleInterface {
@@ -89,14 +71,11 @@ declare global {
     service_uuid: string;
     status?: number;
   }
-  interface ApiKeyRolesResponse {
-    data: Array<ApiKeyRoleInterface>;
-    status: number;
-  }
-  interface ApiKeyRoleUpdateResponse {
-    data: ApiKeyRoleInterface;
-    status: number;
-  }
+
+  interface ApiKeyCreatedResponse extends GeneralResponse<ApiKeyCreatedInterface> {}
+  interface ApiKeyRolesResponse extends GeneralResponse<Array<ApiKeyRoleInterface>> {}
+  interface ApiKeyRoleUpdateResponse extends GeneralResponse<ApiKeyRoleInterface> {}
+  interface ApiKeysResponse extends GeneralItemsResponse<ApiKeyInterface> {}
 
   /**
    * Email configuration
@@ -105,9 +84,5 @@ declare global {
     email: boolean;
     did: boolean;
   }
-
-  interface EmailConfigurationResponse {
-    data: any;
-    status: number;
-  }
+  interface EmailConfigurationResponse extends GeneralResponse<any> {}
 }

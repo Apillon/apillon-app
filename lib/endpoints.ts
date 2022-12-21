@@ -12,7 +12,8 @@ const Endpoints = {
   passwordResetRequest: '/users/password-reset-request',
 
   /** Project */
-  projects: '/projects/user-projects',
+  projects: '/projects',
+  projectsUserProjects: '/projects/user-projects',
   project: (projectId: number) => {
     return `/projects/${projectId}`;
   },
