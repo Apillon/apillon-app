@@ -103,7 +103,7 @@ const props = defineProps({
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const fileDetails = ref<FileDetails>({} as FileDetails);
+const fileDetails = ref<FileInterface>({} as FileInterface);
 const fileStatus = ref<number>(0);
 const crustFileStatus = ref<FileCrust>({} as FileCrust);
 
@@ -116,7 +116,7 @@ onMounted(async () => {
   }
 });
 onDeactivated(() => {
-  fileDetails.value = {} as FileDetails;
+  fileDetails.value = {} as FileInterface;
   fileStatus.value = 0;
   crustFileStatus.value = {} as FileCrust;
 });

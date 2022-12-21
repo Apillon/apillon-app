@@ -141,7 +141,7 @@ declare global {
     path?: string;
   }
 
-  type FileDetails = Only<FileInterface, FileUploadInterface>;
+  type FileDetails = FileInterface | FileUploadInterface;
   type FileCrust = typeof crustTypes.market.types.FileInfoV2;
 
   interface FileDetailsResponse extends GeneralResponse<FileDetailsInterface> {}
