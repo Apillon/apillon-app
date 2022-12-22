@@ -115,7 +115,7 @@ const formData = ref<FormBilling>({
   expirationDate: '',
   cvv: '',
   postalCode: '',
-  terms: null,
+  terms: false,
 });
 
 const rules: NFormRules = {

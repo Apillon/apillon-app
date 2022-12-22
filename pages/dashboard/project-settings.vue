@@ -13,7 +13,7 @@
       <n-h5 prefix="bar">{{ $t('project.owner') }}</n-h5>
       <TableProjectOwner />
       <div class="text-right">
-        <NuxtLink :to="{ name: 'dashboard-user-permissions' }">
+        <NuxtLink :to="{ name: 'dashboard-users-permissions' }">
           <Btn type="builders">
             {{ $t('dashboard.manageRoles') }}
           </Btn>

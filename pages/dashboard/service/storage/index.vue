@@ -12,7 +12,7 @@
           <a href="#learn-more">{{ $t('general.learnMore') }}</a>
         </n-space>
         <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
-          <n-button type="primary">{{ $t('storage.newBucket') }}</n-button>
+          <n-button type="primary">{{ $t('storage.bucket.new') }}</n-button>
         </nuxt-link>
       </n-space>
     </template>
@@ -32,14 +32,12 @@
           class="flex flex-col md:flex-row items-center justify-between bg-grey-lightBg px-6 py-4"
         >
           <div class="mb-4 md:mb-0">
-            <p class="body-md font-bold">Your project currently has no active service</p>
-            <p class="body-sm">
-              First attach a desired service and configure it, then start building.
-            </p>
+            <p class="body-md font-bold">{{ $t('storage.noActiveService') }}</p>
+            <p class="body-sm">{{ $t('storage.attachService') }}</p>
           </div>
           <div>
             <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
-              <Btn type="primary"> Add new bucket</Btn>
+              <Btn type="primary">{{ $t('storage.bucket.addNew') }}</Btn>
             </nuxt-link>
           </div>
         </div>
@@ -53,6 +51,7 @@ import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
@@ -65,11 +64,20 @@ onMounted(() => {
 
     pageLoading.value = false;
   });
+
+  getUsersOnProject();
 });
 
 async function getBuckets() {
   if (!dataStore.hasBuckets) {
     dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
+  }
+}
+
+/** GET Users on project */
+async function getUsersOnProject() {
+  if (!settingsStore.hasUsers) {
+    await settingsStore.fetchProjectUsers($i18n);
   }
 }
 </script>

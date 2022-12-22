@@ -251,7 +251,7 @@ body > .n-message-container {
 }
 
 .n-upload-file-list .n-upload-file {
-  @apply bg-dark mb-2 px-6 pb-1;
+  @apply bg-dark hover:bg-dark mb-2 px-6 pb-1;
 
   .n-upload-file-info__thumbnail {
     display: none;

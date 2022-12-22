@@ -80,7 +80,7 @@
       "details": "API key details",
       "generate": "Generate new key",
       "secredSaved": "I've saved API key's secret",
-      "title": "Credentials and API keys",
+      "title": "API keys",
       "update": "Update API key"
     },
     "clipboard": {
@@ -210,6 +210,7 @@
       "apiKeyName": "API Key name",
       "apiKeyType": "API Key type",
       "bearerToken": "Bearer token",
+      "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
       "bucketSize": "Bucket size",
       "cardHolder": "Card holder",
@@ -241,6 +242,7 @@
     "placeholder": {
       "apiKeyName": "API Key name",
       "bearerToken": "Enter Bearer token",
+      "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
       "cardHolder": "John Doe",
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
@@ -424,9 +426,35 @@
     "withEmail": "sign up with email"
   },
   "storage": {
+    "bucket": {
+      "addNew": "Add new bucket",
+      "buckets": "Storage buckets",
+      "destroy": "Destroy",
+      "edit": "Edit bucket",
+      "management": "Bucket management",
+      "name": "Bucket name",
+      "new": "New bucket",
+      "storage": "Storage bucket",
+      "update": "Update bucket",
+      "quotaReached": "Quota has been reached."
+    },
+    "delete": {
+      "bucket": "Delete bucket",
+      "bucketItems": "Delete these items?",
+      "item": "Delete selected item",
+      "items": "Delete selected items"
+    },
+    "download": {
+      "bucketItems": "Download selected items?",
+      "item": "Download selected item",
+      "items": "Download selected items"
+    },
     "file": {
       "create": "Create file",
-      "delete": "Delete file"
+      "clickToUpload": "Click to upload.",
+      "delete": "Delete file",
+      "dragAndDrop": "Drag & drop files and folders you want to upload to your bucket, or",
+      "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab."
     },
     "fileStatus": {
       "1": "Signed URL for upload generated",
@@ -444,22 +472,7 @@
       "createNew": "Create new folder",
       "delete": "Delete folder"
     },
-    "delete": {
-      "bucket": "Delete bucket",
-      "bucketItems": "Delete these items?",
-      "item": "Delete selected item",
-      "items": "Delete selected items"
-    },
-    "download": {
-      "bucketItems": "Download selected items?",
-      "item": "Download selected item",
-      "items": "Download selected items"
-    },
-    "bucket": "Storage bucket",
-    "bucketManagement": "Bucket management",
-    "bucketName": "Bucket name",
-    "buckets": "Storage buckets",
-    "destroy": "Destroy",
+    "attachService": "First attach a desired service and configure it, then start building.",
     "edit": "Edit",
     "expiration": "Expired on blockchain",
     "goToRootDirectory": "Go to root directory",
@@ -470,8 +483,8 @@
     "fileSize": "File size",
     "fileStatusName": "File status",
     "history": "History",
-    "name": "Bucket name",
-    "newBucket": "New bucket",
+    "noActiveService": "Your project currently has no active service",
+    "refresh": "Refresh",
     "replicas": "Replicas",
     "selectFiles": "Select files",
     "snapshots": "Snapshots",

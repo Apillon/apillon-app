@@ -1,9 +1,18 @@
 <template>
   <div class="flex pt-2 pb-1">
     <div class="w-full">
-      <div class="">
-        <span class="text-sm mr-4">{{ name }}</span>
-        <span class="text-sm opacity-60">{{ formatBytes(size) }}</span>
+      <div class="flex justify-between">
+        <div class="">
+          <span class="inline-block text-sm mr-4 whitespace-nowrap">{{ name }}</span>
+          <span class="inline-block text-sm opacity-60 whitespace-nowrap">
+            {{ formatBytes(size) }}
+          </span>
+        </div>
+        <div v-if="status === FileUploadStatusValue.FINISHED" class="ml-4">
+          <span class="text-sm text-green">
+            {{ $t('storage.file.pinningToCrust') }}
+          </span>
+        </div>
       </div>
       <n-progress
         type="line"

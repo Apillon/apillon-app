@@ -5,7 +5,7 @@
         <NuxtLink :to="{ name: 'dashboard-service-storage' }">
           <span class="icon-back"></span>
         </NuxtLink>
-        <h4>{{ $t('storage.bucketManagement') }}</h4>
+        <h4>{{ $t('storage.bucket.management') }}</h4>
       </n-space>
     </template>
 
@@ -14,7 +14,7 @@
         <Tag color="violet">{{ dataStore.currentBucket.name }}</Tag>
         <span>
           <span class="icon-storage"></span>
-          {{ $t('storage.bucket') }}
+          {{ $t('storage.bucket.storage') }}
         </span>
         <StorageProgress
           class="w-1/2"

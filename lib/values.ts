@@ -195,8 +195,8 @@ export const themeOverrides: GlobalThemeOverrides = {
     textColor: colors.grey.light,
   },
   Skeleton: {
-    color: colors.grey.lightBg,
-    colorEnd: colors.grey.DEFAULT,
+    color: colors.grey.dark,
+    colorEnd: colors.grey.lightBg,
   },
   Switch: {
     railColor: colors.grey.light,
@@ -214,6 +214,9 @@ export const themeOverrides: GlobalThemeOverrides = {
     textColor: colors.grey.DEFAULT,
     textColorInfo: colors.dark,
     textColorSuccess: colors.green,
+  },
+  Typography: {
+    headerMargin5: '32px 0 16px 0',
   },
   Upload: {
     draggerBorder: `none`,

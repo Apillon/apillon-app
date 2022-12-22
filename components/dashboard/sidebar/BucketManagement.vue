@@ -3,7 +3,7 @@
     <n-menu v-model:value="selectedMenu" :options="menuOptions" />
 
     <!-- Modal - Destroy bucket -->
-    <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucketDestroy')">
+    <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucket.destroy')">
       <FormStorageDestroy :bucket-id="dataStore.bucket.selected" />
     </modal>
   </div>

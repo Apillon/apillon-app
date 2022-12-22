@@ -44,10 +44,10 @@ import { useDataStore } from '~~/stores/data';
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const route = useRoute();
+const { name } = useRoute();
 
 const key = computed(() => {
-  return route.name.toString();
+  return name?.toString() || '';
 });
 
 const instruction = computed<InstructionInterface>(() => {

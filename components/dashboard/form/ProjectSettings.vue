@@ -4,6 +4,7 @@
     class="max-w-lg"
     :model="formData"
     :rules="rules"
+    :disabled="!settingsStore.isUserOwner()"
     @submit.prevent="handleSubmit"
   >
     <!--  Project name -->
@@ -35,7 +36,13 @@
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.save')" />
-      <Btn type="primary" class="mt-2" :loading="loading" @click="handleSubmit">
+      <Btn
+        type="primary"
+        class="mt-2"
+        :loading="loading"
+        :disabled="!settingsStore.isUserOwner()"
+        @click="handleSubmit"
+      >
         {{ $t('form.save') }}
       </Btn>
     </n-form-item>
@@ -47,8 +54,9 @@ import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
-const dataStore = useDataStore();
 const message = useMessage();
+const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);

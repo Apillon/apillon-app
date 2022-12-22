@@ -11,6 +11,11 @@
       />
     </div>
     <n-space>
+      <!-- Refresh directory content -->
+      <n-button size="small" @click="refreshDirectoryContent">
+        {{ $t('storage.refresh') }}
+      </n-button>
+
       <!-- Create folder -->
       <n-button size="small" @click="showModalNewFolder = true">
         {{ $t('storage.folder.create') }}
@@ -83,6 +88,11 @@ const showModalNewFolder = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
 const showPopoverDownload = ref<boolean>(false);
+
+/** Refresh directory content */
+function refreshDirectoryContent() {
+  dataStore.fetchDirectoryContent($i18n);
+}
 
 function onFolderCreated() {
   showModalNewFolder.value = false;
