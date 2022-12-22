@@ -24,15 +24,14 @@ const menuOptions: MenuOption[] = [
   },
   {
     label: () =>
-      h(NuxtLink, { to: { name: 'dashboard-user-permissions' } }, () =>
+      h(NuxtLink, { to: { name: 'dashboard-users-permissions' } }, () =>
         t('pageMenu.usersPermissions')
       ),
-    key: 'dashboard-user-permissions',
+    key: 'dashboard-users-permissions',
   },
   {
-    label: () =>
-      h(NuxtLink, { to: { name: 'dashboard-credentials' } }, () => t('pageMenu.credentials')),
-    key: 'dashboard-credentials',
+    label: () => h(NuxtLink, { to: { name: 'dashboard-api-keys' } }, () => t('pageMenu.apiKeys')),
+    key: 'dashboard-api-keys',
   },
 ];
 </script>

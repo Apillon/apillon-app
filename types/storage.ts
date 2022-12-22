@@ -75,10 +75,12 @@ declare global {
 
   interface FormNewBucket {
     bucketName: string;
-    bucketSize: string;
+    bucketDescription: string;
+    bucketSize: number;
   }
   interface BucketResponse extends GeneralResponse<BucketInterface> {}
   interface BucketsResponse extends GeneralItemsResponse<BucketInterface> {}
+  interface BucketQuotaResponse extends GeneralResponse<boolean> {}
 
   /**
    * File

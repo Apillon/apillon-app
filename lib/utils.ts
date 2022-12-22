@@ -187,7 +187,7 @@ export function userFriendlyMsg(
 }
 
 /** Translate single error message */
-function singleErrorMessage($i18n: any, message: string, code: number = 0) {
+function singleErrorMessage($i18n: i18nType, message: string, code: number = 0) {
   if ($i18n.te(`error.${message}`)) {
     return $i18n.t(`error.${message}`);
   } else if (code >= 500) {

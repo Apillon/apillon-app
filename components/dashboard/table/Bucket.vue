@@ -5,8 +5,14 @@
     :data="dataStore.bucket.items"
     :row-props="rowProps"
   />
+
+  <!-- Modal - Edit bucket -->
+  <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
+    <FormStorageBucket :bucket-id="currentRow?.id || 0" />
+  </modal>
+
   <!-- Modal - Destroy bucket -->
-  <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucketDestroy')">
+  <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucket.destroy')">
     <FormStorageDestroy :bucket-id="currentRow?.id || 0" />
   </modal>
 </template>
@@ -18,8 +24,9 @@ import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const router = useRouter();
+const settingsStore = useSettingsStore();
 const NuxtLink = resolveComponent('NuxtLink');
+const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean>(false);
 const StorageProgress = resolveComponent('StorageProgress');
 
@@ -30,7 +37,7 @@ interface RowData extends BucketInterface {
 const createColumns = (): DataTableColumns<RowData> => {
   return [
     {
-      title: $i18n.t('storage.bucketName'),
+      title: $i18n.t('storage.bucket.name'),
       key: 'name',
       render(row) {
         return h(
@@ -98,9 +105,10 @@ const dropdownOptions = [
   {
     label: $i18n.t('storage.edit'),
     key: 'storageEdit',
+    disabled: settingsStore.isProjectUser(),
     props: {
       onClick: () => {
-        router.push(`/dashboard/service/storage/${currentRow.value?.id}`);
+        showModalEditBucket.value = true;
       },
     },
   },

@@ -1,6 +1,7 @@
 import { useMessage } from 'naive-ui';
 import { defineStore } from 'pinia';
 
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 
 export const useSettingsStore = defineStore('settings', {
@@ -15,10 +16,29 @@ export const useSettingsStore = defineStore('settings', {
     hasUsers(state) {
       return Array.isArray(state.users) && state.users.length > 0;
     },
+    currentUser(state) {
+      if (this.hasUsers) {
+        return state.users.find(user => user.user_id === authStore.userId);
+      }
+      return {} as ProjectUserInterface;
+    },
   },
   actions: {
     getApiKeyById(id: number) {
       return this.apiKeys.find(item => item.id === id) || ({} as ApiKeyInterface);
+    },
+
+    isUser(type: number): boolean {
+      return !!this.currentUser && this.currentUser.role_id === type;
+    },
+    isUserOwner(): boolean {
+      return !!this.currentUser && this.currentUser.role_id === DefaultUserRole.PROJECT_OWNER;
+    },
+    isUserAdmin(): boolean {
+      return !!this.currentUser && this.currentUser.role_id === DefaultUserRole.PROJECT_ADMIN;
+    },
+    isProjectUser(): boolean {
+      return !!this.currentUser && this.currentUser.role_id === DefaultUserRole.PROJECT_USER;
     },
 
     /**

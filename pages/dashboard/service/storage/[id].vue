@@ -5,7 +5,7 @@
         <NuxtLink :to="{ name: 'dashboard-service-storage' }">
           <span class="icon-back"></span>
         </NuxtLink>
-        <h4>{{ $t('storage.bucketManagement') }}</h4>
+        <h4>{{ $t('storage.bucket.management') }}</h4>
       </n-space>
     </template>
 
@@ -14,7 +14,7 @@
         <Tag color="violet">{{ dataStore.bucket.active.name }}</Tag>
         <span>
           <span class="icon-storage"></span>
-          {{ $t('storage.bucket') }}
+          {{ $t('storage.bucket.storage') }}
         </span>
         <StorageProgress
           class="w-1/2"
@@ -41,32 +41,43 @@
 
     <slot>
       <!-- Breadcrumbs -->
-      <StorageBreadcrumbs v-if="dataStore.folder.selected" />
-      <n-h5 v-else-if="dataStore.folder.uploadActive" prefix="bar">{{
-        $t('storage.uploadFiles')
-      }}</n-h5>
+      <transition name="fade" appear>
+        <div v-show="dataStore.folder.selected" class="mb-4">
+          <StorageBreadcrumbs v-if="dataStore.folder.selected" />
+        </div>
+      </transition>
 
       <!-- Upload files -->
-      <FormStorageUploadFiles
-        v-show="dataStore.folder.uploadActive"
-        :bucketUuid="dataStore.currentBucket.bucket_uuid"
-        class="mt-4 pr-[2px] pb-1 mb-1"
-      />
+      <transition name="fade" appear>
+        <div v-show="dataStore.folder.uploadActive" class="mb-8">
+          <n-h5 v-if="dataStore.folder.uploadActive && !dataStore.folder.selected" prefix="bar">
+            {{ $t('storage.uploadFiles') }}
+          </n-h5>
+          <FormStorageUploadFiles
+            v-if="dataStore.folder.uploadActive"
+            :bucketUuid="dataStore.currentBucket.bucket_uuid"
+            class="mt-4 pr-[2px] pb-1 mb-1"
+          />
+        </div>
+      </transition>
 
-      <n-h5 prefix="bar" class="mb-8">{{ $t('storage.yourFiles') }}</n-h5>
-      <n-space vertical :size="12">
-        <!-- Actions -->
-        <StorageActions />
+      <div>
+        <n-h5 v-if="dataStore.folder.uploadActive || !dataStore.folder.selected" prefix="bar">
+          {{ $t('storage.yourFiles') }}
+        </n-h5>
+        <n-space vertical :size="12" class="mt-8">
+          <!-- Actions -->
+          <StorageActions />
 
-        <!-- DataTable: files and directories -->
-        <TableFiles />
-      </n-space>
+          <!-- DataTable: files and directories -->
+          <TableFiles />
+        </n-space>
+      </div>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import colors from '~~/tailwind.colors';
 import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();

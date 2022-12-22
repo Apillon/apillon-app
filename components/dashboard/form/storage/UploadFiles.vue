@@ -2,18 +2,19 @@
   <n-upload :show-file-list="false" multiple directory-dnd :custom-request="uploadFiles">
     <n-upload-dragger>
       <div class="text-sm">
-        <span>Drag & drop files and folders you want to upload to your bucket, or</span>
-        <strong class="text-primary"> Click to upload. </strong>
+        <span class="mr-1">{{ $t('storage.file.dragAndDrop') }}</span>
+        <strong class="text-primary">{{ $t('storage.file.clickToUpload') }}</strong>
       </div>
     </n-upload-dragger>
-    <n-scrollbar class="max-h-[50vh]" y-scrollable>
-      <div v-if="fileList" class="n-upload-file-list mt-4">
-        <div v-for="file in fileList" class="n-upload-file">
-          <StorageFileListItem v-bind="file" />
-        </div>
-      </div>
-    </n-scrollbar>
   </n-upload>
+
+  <n-scrollbar class="max-h-[50vh]" y-scrollable>
+    <div v-if="fileList" class="n-upload-file-list mt-4">
+      <div v-for="file in fileList" class="n-upload-file">
+        <StorageFileListItem v-bind="file" />
+      </div>
+    </div>
+  </n-scrollbar>
 </template>
 
 <script lang="ts" setup>
