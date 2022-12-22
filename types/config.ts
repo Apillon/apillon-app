@@ -34,5 +34,6 @@ declare global {
     url: string;
     apiUrl: string;
     CHAIN_ID: string;
+    captchaKey: string;
   }
 }

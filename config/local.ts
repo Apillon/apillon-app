@@ -5,6 +5,7 @@ const config: ConfigInterface = {
   url: 'http://localhost:3000',
   apiUrl: 'http://localhost:6001',
   CHAIN_ID: '0x5',
+  captchaKey: 'f5f700a0-51b2-49f3-9ba5-46c7fe146af0',
   features: {
     ACCESS: true,
     APILLON_REGISTER: true,
