@@ -13,7 +13,7 @@
       <n-form-item path="captcha"> -->
     <vue-hcaptcha
       ref="captchaInput"
-      sitekey="f5f700a0-51b2-49f3-9ba5-46c7fe146af0"
+      :sitekey="captchaKey"
       size="invisible"
       theme="dark"
       @error="onCaptchaError"
@@ -54,6 +54,9 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
+
+const config = useRuntimeConfig();
+const captchaKey = ref<string>(config.public.captchaKey);
 const captchaInput = ref<any>(null);
 
 const formData = ref({
