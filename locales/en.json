@@ -395,6 +395,11 @@
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
+    "enter": {
+      "header": "Enter Referral",
+      "country": "Choose your Country",
+      "terms": "I accept Terms & conditions"
+    },
     "claim": "Claim",
     "claimMerchPack": "Claim merch pack",
     "connectGithub": "Connect your Github account",
@@ -413,6 +418,7 @@
       "third": "3. If you collect more points than you can spend, dont worry, the points are transferred to the next reward cycle"
     },
     "rewards": {
+      "title": "Rewards",
       "shirt": {
         "info": "Web3 instant Fashion. Show others you are a dev and Web3 supporter.",
         "info1": "- Choose size",
