@@ -70,20 +70,6 @@ const createColumns = (): DataTableColumns<RowData> => {
       key: 'description',
     },
     {
-      title: $i18n.t('storage.bucket.name'),
-      key: 'name',
-      render(row) {
-        return h(
-          NuxtLink,
-          {
-            class: 'ml-2 text-blue',
-            to: `/dashboard/service/storage/${row.id}`,
-          },
-          () => row.name
-        );
-      },
-    },
-    {
       title: $i18n.t('general.actions'),
       key: 'actions',
       align: 'right',
