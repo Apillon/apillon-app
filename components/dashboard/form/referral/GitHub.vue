@@ -6,18 +6,12 @@
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
-    <div>
+    <div class="flex">
       <strong>{{ $t('referral.connectGithub') }}</strong>
-      <ReferralPoints :points="2" />
+      <div class="relative mt-10">
+        <ReferralPoints :points="2" />
+      </div>
     </div>
-    <!--  Email -->
-    <n-form-item path="email" :label-props="{ for: 'email' }">
-      <n-input
-        v-model:value="formData.email"
-        :input-props="{ id: 'email', type: 'email' }"
-        placeholder=""
-      />
-    </n-form-item>
 
     <!--  Submit -->
     <n-form-item :show-label="false">
@@ -33,11 +27,24 @@
 import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
+const $route = useRoute();
+
 const $i18n = useI18n();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
 const formData = ref({ email: null });
+
+const ouathToken = computed(() => $route.query.code);
+
+onMounted(() => {
+  if (ouathToken.value) {
+    loading.value = true;
+    console.log('My ouathToken', ouathToken.value);
+    loading.value = false;
+    // Send oath token to backend
+  }
+});
 
 const rules: NFormRules = {
   email: [
@@ -60,6 +67,11 @@ function handleSubmit(e: Event | MouseEvent) {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
+      window.open(
+        'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=http://localhost:3000/dashboard/referral',
+        '_self'
+      );
+      console.log('Connect twitter');
       // await connectTwitter();
     }
   });

@@ -395,6 +395,7 @@
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
+    "claim": "Claim",
     "claimMerchPack": "Claim merch pack",
     "connectGithub": "Connect your Github account",
     "connectTwitter": "Connect your Twitter account",
@@ -404,7 +405,33 @@
     "points": "points",
     "subtitle": "Get your Apillon Merch pack 1.0, by helping with referral. ",
     "title": "Referral programme",
-    "yourPoints": "Your points"
+    "yourPoints": "Your points",
+    "instructionsHeader": "Instructions:",
+    "instructions": {
+      "first": "1. Collect points by completing tasks",
+      "second": "2. Choose a desired reward and claim it, spending your points",
+      "third": "3. If you collect more points than you can spend, dont worry, the points are transferred to the next reward cycle"
+    },
+    "rewards": {
+      "shirt": {
+        "info": "Web3 instant Fashion. Show others you are a dev and Web3 supporter.",
+        "info1": "- Choose size",
+        "info2": "- Free shipping",
+        "info3": "- Instant SWAG"
+      }
+    },
+    "connect": "Connect your Twitter and Github accounts",
+    "earnPoints": "Earn Some POINTS",
+    "invite": "Invite other developers and score",
+    "link": "This is your referral link",
+    "linkDesc": "Share this link with others before they register to ensure referral connection is set. Once they confirm the github account, you will earn 2 points per each referral.",
+    "referres": {
+      "header": "Your referres",
+      "name": "Service name",
+      "github": "Github profile",
+      "joined": "Joined"
+    },
+    "shoutout": "Help us with the shoutout"
   },
   "signup": {
     "alreadyHaveAccount": "Already have an account?",

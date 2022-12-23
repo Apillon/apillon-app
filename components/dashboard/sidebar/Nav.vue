@@ -30,12 +30,12 @@
           <span class="ml-2 select-none">{{ $t(`nav.${item.name}`) }}</span>
           <span
             v-if="item.soon || item.new"
-            class=" float-right text-blue text-2xl"
+            class="float-right text-blue text-2xl"
             :class="[
               `random-color-${randomInteger(0, 3)}`,
-              { 'icon-soon' : item.soon },
-              { 'icon-new' : item.new },
-              ]"
+              { 'icon-soon': item.soon },
+              { 'icon-new': item.new },
+            ]"
           ></span>
         </component>
       </div>
