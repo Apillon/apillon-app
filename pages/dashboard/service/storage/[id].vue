@@ -18,9 +18,9 @@
         </span>
         <StorageProgress
           class="w-1/2"
-          :key="dataStore.bucket.active.size || 0"
+          :key="dataStore.bucket.active.uploadedSize || 0"
           :percentage="dataStore.bucket.active.percentage"
-          :size="dataStore.bucket.active.size || 0"
+          :size="dataStore.bucket.active.uploadedSize || 0"
           :max-size="dataStore.bucket.active.maxSize"
         />
       </n-space>
