@@ -29,15 +29,6 @@
       <SidebarBucketManagement />
     </template>
 
-    <template #learn>
-      <LearnAlert>
-        Click on a service you want to attach to your project. After configuring it, the service
-        will become operational.
-        <strong>Keep in mind, you can always edit the attached services or add new ones.</strong>
-      </LearnAlert>
-      <LearnCollapse />
-    </template>
-
     <slot>
       <n-h5 prefix="bar" class="mb-8">{{ $t('storage.webhook') }}</n-h5>
 

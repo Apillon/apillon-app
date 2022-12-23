@@ -1,5 +1,11 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    :disabled="dataStore.project.quotaReached === true"
+    @submit.prevent="handleSubmit"
+  >
     <!--  Project name -->
     <n-form-item
       path="name"
@@ -40,7 +46,13 @@
     <!--  Project submit -->
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn
+        type="primary"
+        class="w-full mt-2"
+        :loading="loading"
+        :disabled="dataStore.project.quotaReached === true"
+        @click="handleSubmit"
+      >
         <template v-if="dataStore.hasProjects">
           {{ $t('form.createNewProject') }}
         </template>
@@ -56,11 +68,16 @@
 import { createDiscreteApi } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
+const $i18n = useI18n();
 const dataStore = useDataStore();
 const emit = defineEmits(['submitActive', 'submitSuccess']);
 
+onMounted(async () => {
+  /** GET Project quota */
+  await dataStore.fetchProjectsQuota($i18n);
+});
+
 /** Terms label with link */
-const $i18n = useI18n();
 const termsLabel = computed(() => {
   return h('span', {}, [
     $i18n.t('form.terms.project'),

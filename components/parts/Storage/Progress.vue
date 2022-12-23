@@ -8,8 +8,8 @@
     :status="status"
   >
     <span class="inline-block lg:min-w-[130px]">
-      <span class="whitespace-nowrap">{{ bytesToMb(size) }}MB/</span>
-      <span class="whitespace-nowrap">{{ bytesToMb(maxSize) }}MB</span>
+      <span class="whitespace-nowrap">{{ formatBytes(size) }}/</span>
+      <span class="whitespace-nowrap">{{ formatBytes(maxSize) }}</span>
     </span>
   </n-progress>
 </template>

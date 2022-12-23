@@ -123,7 +123,7 @@ async function createFolder() {
             ...formData.value,
             bucket_id: bucketId.value,
           };
-    const res = await $api.post<CreateFolderResponse>(endpoints.directory, params);
+    const res = await $api.post<CreateFolderResponse>(endpoints.directory(), params);
 
     if (res.data) {
       message.success($i18n.t('form.success.created.directory'));

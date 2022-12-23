@@ -19,6 +19,15 @@ export const DefaultUserRoles: { [k: number]: string } = {
   [DefaultUserRole.PROJECT_USER]: 'PROJECT_USER',
 };
 
+/**
+ * Instruction Type Enum { Helper, Video, Q&A }
+ */
+export enum InstructionType {
+  HELPER = 10,
+  VIDEO = 20,
+  QA = 30,
+}
+
 declare global {
   /**
    * Project
@@ -44,6 +53,7 @@ declare global {
   interface ProjectResponse extends GeneralResponse<ProjectInterface> {}
   interface ProjectsResponse extends GeneralItemsResponse<ProjectInterface> {}
   interface CreateProjectResponse extends GeneralResponse<ProjectInterface> {}
+  interface ProjectsQuotaResponse extends GeneralResponse<boolean> {}
 
   /**
    * Project settings

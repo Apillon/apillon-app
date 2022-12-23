@@ -3,7 +3,7 @@
     v-if="dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT)"
     :key="componentSelectKey"
     v-model:value="dataStore.currentProjectId"
-    :options="dataStore.projects"
+    :options="dataStore.project.items"
     :theme-overrides="SelectProjectOverrides"
     class="select-project"
     size="small"
@@ -48,9 +48,9 @@ watch(
   () => dataStore.currentProjectId,
   async currentProjectId => {
     /** Reload projects if currentProjectId is new project */
-    if (!dataStore.projects[currentProjectId]) {
+    if (!dataStore.project.items[currentProjectId]) {
       loading.value = true;
-      dataStore.projects = [];
+      dataStore.project.items = [];
 
       await dataStore.fetchProjects(false, $i18n);
 

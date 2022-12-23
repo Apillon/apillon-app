@@ -50,7 +50,7 @@
 
   <!-- Modal - Delete file -->
   <modal v-model:show="showModalDelete" :title="$t(`storage.file.delete`)">
-    <FormStorageFolderDelete :id="currentRow.id" type="file" @submit-success="onDeleted" />
+    <FormStorageFolderDelete :items="[currentRow]" @submit-success="onDeleted" />
   </modal>
 </template>
 

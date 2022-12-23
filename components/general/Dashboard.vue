@@ -70,7 +70,9 @@
             </button>
           </div>
 
-          <slot v-if="!learnCollapsed" name="learn"></slot>
+          <slot v-if="!learnCollapsed" name="learn">
+            <learn-section />
+          </slot>
         </n-layout-sider>
       </n-layout>
     </div>
@@ -78,16 +80,38 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
 defineProps({
   loading: { type: Boolean, default: false },
 });
 
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
+const $i18n = useI18n();
+const dataStore = useDataStore();
 const { isLg } = useScreen();
+const { name } = useRoute();
+
+/** Instructions load */
+const key = computed(() => {
+  return name?.toString() || '';
+});
+
+onMounted(async () => {
+  // await getInstructions(key.value);
+});
+
+async function getInstructions(key: string) {
+  if (!dataStore.hasInstructions(key)) {
+    await dataStore.fetchInstructions(key, $i18n);
+  }
+}
 
 const instructionsAvailable = computed(() => {
-  return $slots.learn && isFeatureEnabled(Feature.INSTRUCTIONS) && isLg.value;
+  return (
+    dataStore.hasInstructions(key.value) && isFeatureEnabled(Feature.INSTRUCTIONS) && isLg.value
+  );
 });
 
 // Keep info about collapsible section learn in local storage
