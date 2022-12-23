@@ -13,6 +13,7 @@ const Endpoints = {
 
   /** Project */
   projects: '/projects',
+  projectsQuota: '/projects/qouta-reached',
   projectsUserProjects: '/projects/user-projects',
   project: (projectId: number) => {
     return `/projects/${projectId}`;
@@ -34,12 +35,13 @@ const Endpoints = {
   services: '/services/',
 
   /** Instructions */
-  instruction: '/instructions/',
-  instructions: '/instruction/all',
+  instructions: (key?: string) => {
+    return key ? `/instructions/${key}` : '/instructions';
+  },
 
   /** Bucket */
   buckets: '/buckets/',
-  bucketQuota: '/buckets/quota-reached',
+  bucketsQuota: '/buckets/quota-reached',
   bucket: (buckeId: number) => {
     return `/buckets/${buckeId}`;
   },
@@ -48,7 +50,9 @@ const Endpoints = {
   },
 
   /** Directories */
-  directory: '/directories/',
+  directory: (id?: number) => {
+    return id ? `/directories/${id}` : '/directories';
+  },
   directoryContent: '/directories/directory-content',
 
   /** Storage */
@@ -63,6 +67,9 @@ const Endpoints = {
   },
   storageSyncToIpfs: (bucketUuid: string, fileUuid: string) => {
     return `/storage/${bucketUuid}/file/${fileUuid}/sync-to-ipfs`;
+  },
+  storageFileDelete: (bucketUuid: string, fileUuid: string | number) => {
+    return `/storage/${bucketUuid}/file/${fileUuid}`;
   },
 
   /** Api Keys */

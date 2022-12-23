@@ -110,6 +110,7 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
+      className: 'min-w-[150px]',
       render(row) {
         return [
           h(IconFolderFile, { isFile: row.type === BucketItemType.FILE }, ''),

@@ -66,6 +66,7 @@ declare global {
     description: string;
     maxSize: number;
     size: number | null;
+    uploadedSize: number | null;
     CID: string | null;
     IPNS: string | null;
     sizeMb?: number;

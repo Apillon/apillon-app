@@ -1,5 +1,5 @@
 <template v-if="items.length">
-  <Btn type="primary" class="w-full mt-2" :loading="loading" @click="folderItems">
+  <Btn type="primary" class="w-full mt-2" :loading="loading" @click="deleteFolderItems">
     <template v-if="items.length === 1">
       {{ $t(`storage.delete.item`) }}
     </template>
@@ -19,32 +19,38 @@ const props = defineProps({
 
 const $i18n = useI18n();
 const message = useMessage();
+const dataStore = useDataStore();
 const emit = defineEmits(['submitSuccess']);
 
 const loading = ref(false);
 
-async function folderItems() {
+async function deleteFolderItems() {
   loading.value = true;
   const promises: Array<Promise<any>> = [];
 
   props.items.map(async item => {
     try {
-      const url = item.type === BucketItemType.FILE ? endpoints.file : endpoints.directory;
+      const url =
+        item.type === BucketItemType.FILE
+          ? endpoints.storageFileDelete(dataStore.currentBucket.bucket_uuid, item.id)
+          : endpoints.directory(item.id);
 
-      const req = $api.delete(`${url}${item.id}`);
-      promises.push(req);
-      await req;
+      const req = $api.delete<DeleteResponse>(url);
+      const res = await req;
 
-      message.success($i18n.t(`form.success.deleted.${item.type}`));
+      if (res.data) {
+        promises.push(req);
+      }
+
+      if (props.items.length === 1) {
+        message.success($i18n.t(`form.success.deleted.${item.type}`));
+      }
     } catch (error) {
       message.error(userFriendlyMsg(error, $i18n));
     }
   });
-
   Promise.all(promises).then(_ => {
-    if (props.items.length === 1) {
-      message.success($i18n.t('form.success.deleted.item'));
-    } else if (props.items.length > 1) {
+    if (props.items.length > 1) {
       message.success($i18n.t('form.success.deleted.items'));
     }
 

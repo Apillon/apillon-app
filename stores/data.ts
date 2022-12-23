@@ -38,7 +38,12 @@ export const useDataStore = defineStore('data', {
     },
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
-    projects: [] as Array<ProjectInterface>,
+    project: {
+      active: {} as ProjectInterface,
+      items: [] as Array<ProjectInterface>,
+      selected: 0,
+      quotaReached: undefined as Boolean | undefined,
+    },
     promises: {
       projects: null as any,
       buckets: null as any,
@@ -55,17 +60,17 @@ export const useDataStore = defineStore('data', {
         return null;
       }
       /** Return project with currentProjectId, if this ID does not exists, return first project */
-      const project = state.projects.find(project => project.id === state.currentProjectId);
+      const project = state.project.items.find(project => project.id === state.currentProjectId);
       if (project) {
         return project;
       }
       /** Select first project as fallback if currentProjectId is not available */
-      this.currentProjectId = state.projects[0].id;
+      this.currentProjectId = state.project.items[0].id;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${this.currentProjectId}`);
-      return state.projects[0];
+      return state.project.items[0];
     },
     hasProjects(state) {
-      return Array.isArray(state.projects) && state.projects.length > 0;
+      return Array.isArray(state.project.items) && state.project.items.length > 0;
     },
     currentBucket(state): BucketInterface {
       return (
@@ -120,21 +125,14 @@ export const useDataStore = defineStore('data', {
 
     updateCurrentProject(project: ProjectInterface) {
       /** Find index of specific object using findIndex method. */
-      const projectIndex = this.projects.findIndex(item => item.id === project.id);
+      const projectIndex = this.project.items.findIndex(item => item.id === project.id);
 
       /** Update current project, add value and label, which are used in header dropdown */
-      this.projects[projectIndex] = {
+      this.project.items[projectIndex] = {
         ...project,
         value: project.id,
         label: project.name,
       };
-    },
-
-    getInstruction(key: string) {
-      if (key in this.instruction) {
-        return this.instruction[key];
-      }
-      return null;
     },
 
     hasServices(type: number) {
@@ -182,6 +180,14 @@ export const useDataStore = defineStore('data', {
       }
     },
 
+    hasInstructions(key: string) {
+      return (
+        key in this.instructions &&
+        Array.isArray(this.instructions[key]) &&
+        this.instructions[key].length > 0
+      );
+    },
+
     /**
      * API calls
      */
@@ -192,7 +198,7 @@ export const useDataStore = defineStore('data', {
       try {
         const res = await $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
 
-        this.projects = res.data.items.map((project: ProjectInterface) => {
+        this.project.items = res.data.items.map((project: ProjectInterface) => {
           return {
             ...project,
             value: project.id,
@@ -202,7 +208,7 @@ export const useDataStore = defineStore('data', {
 
         /* If current project is not selected, take first one */
         if (this.currentProjectId === 0 && this.hasProjects) {
-          this.setCurrentProject(this.projects[0].id);
+          this.setCurrentProject(this.project.items[0].id);
         }
 
         /** If user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
@@ -214,13 +220,26 @@ export const useDataStore = defineStore('data', {
 
         return res;
       } catch (error) {
-        this.projects = [];
+        this.project.items = [];
 
         /** Show error message */
         const message = useMessage();
         message.error(userFriendlyMsg(error, $i18n));
       }
       return null;
+    },
+
+    async fetchProjectsQuota($i18n?: i18nType | null) {
+      try {
+        const res = await $api.get<ProjectsQuotaResponse>(endpoints.projectsQuota);
+        this.project.quotaReached = res.data;
+      } catch (error: any) {
+        this.project.quotaReached = undefined;
+
+        /** Show error message */
+        const message = useMessage();
+        message.error(userFriendlyMsg(error, $i18n));
+      }
     },
 
     /** Services */
@@ -323,7 +342,7 @@ export const useDataStore = defineStore('data', {
         bucketType: BucketType.STORAGE,
       };
       try {
-        const res = await $api.get<BucketQuotaResponse>(endpoints.bucketQuota, params);
+        const res = await $api.get<BucketQuotaResponse>(endpoints.bucketsQuota, params);
         this.bucket.quotaReached = res.data;
       } catch (error: any) {
         this.bucket.quotaReached = undefined;
@@ -426,6 +445,41 @@ export const useDataStore = defineStore('data', {
       await api.isReadyOrError;
       const fileInfo = await api.query.market.filesV2(cid);
       return fileInfo.toJSON();
+    },
+
+    /**
+     * Instructions
+     */
+    async fetchInstruction(key: string, $i18n?: i18nType | null) {
+      try {
+        const res = await $api.get<InstructionResponse>(endpoints.instructions(key));
+
+        if (res.data) {
+          this.instruction[key] = res.data;
+        }
+      } catch (error) {
+        /** Show error message */
+        const message = useMessage();
+        message.error(userFriendlyMsg(error, $i18n));
+      }
+    },
+    async fetchInstructions(key: string, $i18n?: i18nType | null) {
+      try {
+        const res = await $api.get<InstructionsResponse>(endpoints.instructions(), {
+          forRoute: key,
+        });
+
+        if (res.data) {
+          this.instructions[key] = res.data.items;
+        } else {
+          this.instructions[key] = [];
+        }
+      } catch (error) {
+        this.instructions[key] = [];
+        /** Show error message */
+        const message = useMessage();
+        message.error(userFriendlyMsg(error, $i18n));
+      }
     },
   },
 });

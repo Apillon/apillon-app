@@ -61,6 +61,13 @@
   @apply md:px-8;
 }
 
+/** Data table */
+.n-data-table {
+  .n-data-table-th .n-data-table-th__title-wrapper .n-data-table-th__title {
+    white-space: nowrap;
+  }
+}
+
 /** Dialog */
 .n-dialog.n-modal {
   width: 660px;

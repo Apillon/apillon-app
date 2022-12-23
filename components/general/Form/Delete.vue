@@ -82,7 +82,7 @@ function getUrl(type: string, id: number) {
     case 'bucket':
       return endpoints.bucket(id);
     case 'directory':
-      return `${endpoints.directory}${id}`;
+      return endpoints.directory(id);
     default:
       return `${endpoints.file}${id}`;
   }

@@ -110,11 +110,11 @@ export function datetimeToDate(datetime: string): string {
 /** Storage calculations */
 export function kbToMb(kb: number): number {
   if (!+kb) return 0;
-  return parseFloat(((kb / Math.pow(1024, 2)) * 1000).toFixed(2));
+  return parseFloat((kb / Math.pow(1024, 1)).toFixed(2));
 }
 export function bytesToMb(bytes: number): number {
   if (!+bytes) return 0;
-  return parseFloat(((bytes / Math.pow(1024, 3)) * 1000).toFixed(2));
+  return parseFloat((bytes / Math.pow(1024, 2)).toFixed(2));
 }
 
 export function storagePercantage(size: number, maxSize: number): number {
@@ -122,7 +122,7 @@ export function storagePercantage(size: number, maxSize: number): number {
 }
 
 export function formatBytes(bytes: number, decimals: number = 2): string {
-  if (!+bytes) return '';
+  if (!+bytes) return '0 KB';
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;

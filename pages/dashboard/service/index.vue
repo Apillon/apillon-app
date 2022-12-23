@@ -7,15 +7,7 @@
         <strong class="body-sm">{{ $t('dashboard.learnMoreAboutServices') }}</strong>
       </n-space>
     </template>
-    <template v-if="showServices || !isFeatureEnabled(Feature.SERVICES)" #learn>
-      <LearnAlert>
-        Click on a service you want to attach to your project. After configuring it, the service
-        will become operational.
-        <strong>Keep in mind, you can always edit the attached services or add new ones.</strong>
-      </LearnAlert>
-      <LearnVideo />
-      <LearnClientLibraries />
-    </template>
+    <template v-if="showServices || !isFeatureEnabled(Feature.SERVICES)" #learn> </template>
     <slot>
       <div v-if="showServices && isFeatureEnabled(Feature.SERVICES)">
         <h6 class="mb-6">{{ $t('dashboard.selectServices') }}</h6>

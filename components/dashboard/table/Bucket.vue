@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, useMessage } from 'naive-ui';
+import { NButton, NDropdown } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
@@ -62,6 +62,24 @@ const createColumns = (): DataTableColumns<RowData> => {
             percentage: row.percentage,
           },
           null
+        );
+      },
+    },
+    {
+      title: $i18n.t('storage.bucket.description'),
+      key: 'description',
+    },
+    {
+      title: $i18n.t('storage.bucket.name'),
+      key: 'name',
+      render(row) {
+        return h(
+          NuxtLink,
+          {
+            class: 'ml-2 text-blue',
+            to: `/dashboard/service/storage/${row.id}`,
+          },
+          () => row.name
         );
       },
     },

@@ -1,75 +1,77 @@
 <template>
-  <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
-    {{ $t('storage.bucket.quotaReached') }}
-  </Notification>
-  <n-form
-    ref="formRef"
-    :model="formData"
-    :rules="rules"
-    :disabled="isQuotaReached"
-    @submit.prevent="handleSubmit"
-  >
-    <!--  Service name -->
-    <n-form-item
-      path="bucketName"
-      :label="$t('form.label.bucketName')"
-      :label-props="{ for: 'bucketName' }"
+  <div>
+    <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
+      {{ $t('storage.bucket.quotaReached') }}
+    </Notification>
+    <n-form
+      ref="formRef"
+      :model="formData"
+      :rules="rules"
+      :disabled="isQuotaReached"
+      @submit.prevent="handleSubmit"
     >
-      <n-input
-        v-model:value="formData.bucketName"
-        :input-props="{ id: 'bucketName' }"
-        :placeholder="$t('form.placeholder.bucketName')"
-      />
-    </n-form-item>
-
-    <!--  Bucket description -->
-    <n-form-item
-      path="description"
-      :label="$t('form.label.bucketDescription')"
-      :label-props="{ for: 'bucketDescription' }"
-    >
-      <n-input
-        v-model:value="formData.bucketDescription"
-        type="textarea"
-        :input-props="{ id: 'bucketDescription' }"
-        :placeholder="$t('form.placeholder.bucketDescription')"
-      />
-    </n-form-item>
-
-    <!--  Bucket Sizes -->
-    <n-form-item path="bucketSizes" :label="$t('form.label.bucketSize')">
-      <n-radio-group v-model:value="formData.bucketSize" name="radiogroup">
-        <n-space>
-          <n-radio
-            v-for="(size, key) in bucketSizes"
-            :key="key"
-            :value="size.value"
-            :label="size.label"
-            :disabled="true"
-          />
-        </n-space>
-      </n-radio-group>
-    </n-form-item>
-
-    <!--  Service submit -->
-    <n-form-item>
-      <input type="submit" class="hidden" :value="$t('form.createBucketAndContinue')" />
-      <Btn
-        type="primary"
-        class="w-full mt-2"
-        :loading="loading"
-        :disabled="isQuotaReached"
-        @click="handleSubmit"
+      <!--  Service name -->
+      <n-form-item
+        path="bucketName"
+        :label="$t('form.label.bucketName')"
+        :label-props="{ for: 'bucketName' }"
       >
-        <template v-if="bucket">
-          {{ $t('storage.bucket.update') }}
-        </template>
-        <template v-else>
-          {{ $t('form.createBucketAndContinue') }}
-        </template>
-      </Btn>
-    </n-form-item>
-  </n-form>
+        <n-input
+          v-model:value="formData.bucketName"
+          :input-props="{ id: 'bucketName' }"
+          :placeholder="$t('form.placeholder.bucketName')"
+        />
+      </n-form-item>
+
+      <!--  Bucket description -->
+      <n-form-item
+        path="description"
+        :label="$t('form.label.bucketDescription')"
+        :label-props="{ for: 'bucketDescription' }"
+      >
+        <n-input
+          v-model:value="formData.bucketDescription"
+          type="textarea"
+          :input-props="{ id: 'bucketDescription' }"
+          :placeholder="$t('form.placeholder.bucketDescription')"
+        />
+      </n-form-item>
+
+      <!--  Bucket Sizes -->
+      <n-form-item path="bucketSizes" :label="$t('form.label.bucketSize')">
+        <n-radio-group v-model:value="formData.bucketSize" name="radiogroup">
+          <n-space>
+            <n-radio
+              v-for="(size, key) in bucketSizes"
+              :key="key"
+              :value="size.value"
+              :label="size.label"
+              :disabled="true"
+            />
+          </n-space>
+        </n-radio-group>
+      </n-form-item>
+
+      <!--  Service submit -->
+      <n-form-item>
+        <input type="submit" class="hidden" :value="$t('form.createBucketAndContinue')" />
+        <Btn
+          type="primary"
+          class="w-full mt-2"
+          :loading="loading"
+          :disabled="isQuotaReached"
+          @click="handleSubmit"
+        >
+          <template v-if="bucket">
+            {{ $t('storage.bucket.update') }}
+          </template>
+          <template v-else>
+            {{ $t('form.createBucketAndContinue') }}
+          </template>
+        </Btn>
+      </n-form-item>
+    </n-form>
+  </div>
 </template>
 
 <script lang="ts" setup>
