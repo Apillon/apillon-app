@@ -30,17 +30,30 @@ import { useI18n } from 'vue-i18n';
 const $route = useRoute();
 
 const $i18n = useI18n();
-const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
 const formData = ref({ email: null });
 
-const ouathToken = computed(() => $route.query.code);
+const ouathToken = computed(() => $route.query.oauth_token);
+const oauthVerifier = computed(() => $route.query.oauth_verifier);
+// oauth_token=yWN-MwAAAAABkvwbAAABhXNpJbA
 
-onMounted(() => {
-  if (ouathToken.value) {
+const loading = ref(false);
+
+onMounted(async () => {
+  if (ouathToken.value && oauthVerifier.value) {
     loading.value = true;
-    console.log('My ouathToken', ouathToken.value);
+    try {
+      console.log('My ouathToken', ouathToken.value);
+      const res = await $api.post(endpoints.referralTwitter, {
+        oauth_token: ouathToken.value,
+        oauth_verifier: oauthVerifier.value,
+      });
+      console.log('resLink: ', res);
+    } catch (e) {
+      console.error(e);
+    }
+
     loading.value = false;
     // Send oath token to backend
   }
@@ -71,9 +84,24 @@ function handleSubmit(e: Event | MouseEvent) {
       //   'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=http://localhost:3000/dashboard/referral',
       //   '_self'
       // );
-      // console.log('Connect twitter');
-      // await connectTwitter();
+      console.log('Connect twitter');
+      await connectTwitter();
     }
   });
+}
+
+async function connectTwitter() {
+  loading.value = true;
+  try {
+    const res = await $api.get<ApiKeyRolesResponse>(endpoints.referralTwitterAuth, {
+      redirectUrl: window.location.origin + window.location.pathname,
+    });
+    console.log('My res twitter connect: ', res);
+    window.open(res.data.url, '_self');
+    console.log('Open window');
+  } catch (e) {
+    console.error(e);
+  }
+  loading.value = false;
 }
 </script>

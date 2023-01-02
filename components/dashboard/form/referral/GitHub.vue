@@ -37,12 +37,21 @@ const formData = ref({ email: null });
 
 const ouathToken = computed(() => $route.query.code);
 
-onMounted(() => {
+onMounted(async () => {
   if (ouathToken.value) {
     loading.value = true;
     console.log('My ouathToken', ouathToken.value);
+    // Github link // Send oath token to backend
+    try {
+      const res = await $api.post(endpoints.referralGithub, {
+        code: ouathToken.value,
+      });
+      console.log('My res github link: ', res);
+    } catch (e) {
+      console.error(e);
+    }
+
     loading.value = false;
-    // Send oath token to backend
   }
 });
 

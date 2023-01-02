@@ -22,11 +22,12 @@
     <p class="font-button text-sm mb-11">
       <strong>{{ $t('referral.yourPoints') }}</strong>
     </p>
-    <p class="font-button text-2xl md:text-[48px] mb-4">{{ points }}</p>
+    <p class="font-button text-2xl md:text-[48px] mb-4">{{ referralStore.balance }}</p>
   </div>
 </template>
 
 <script lang="ts" setup>
+const referralStore = useReferralStore();
 defineProps({
   points: { type: Number, required: true },
 });

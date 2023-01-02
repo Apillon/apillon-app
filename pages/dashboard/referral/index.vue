@@ -10,11 +10,16 @@
       </div>
     </template>
     <slot>
-      <div v-if="step === 0">
-        <ReferralEnter @enter-referral="step = 1" />
+      <div v-if="loading">
+        <Spinner />
       </div>
-      <div v-else-if="step === 1">
-        <Referral />
+      <div v-else>
+        <div v-if="step === 0">
+          <ReferralAcceptTerms @enter-referral="step = 1" />
+        </div>
+        <div v-else-if="step === 1">
+          <Referral />
+        </div>
       </div>
     </slot>
   </Dashboard>
@@ -23,11 +28,29 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
 
+const referralStore = useReferralStore();
+
 const $i18n = useI18n();
 
 useHead({
   title: $i18n.t('referral.title'),
 });
+
+const loading = ref(false);
+
+getReferral();
+async function getReferral() {
+  loading.value = true;
+  try {
+    const res = await $api.get(endpoints.referral);
+    // If there is no error -> user already accepted terms & conditions
+    referralStore.initReferral(res.data);
+    step.value = 1;
+  } catch (e) {
+    console.error(e);
+  }
+  loading.value = false;
+}
 
 const step = ref(0);
 </script>

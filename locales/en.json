@@ -437,7 +437,8 @@
       "github": "Github profile",
       "joined": "Joined"
     },
-    "shoutout": "Help us with the shoutout"
+    "shoutout": "Help us with the shoutout",
+    "share": "Share"
   },
   "signup": {
     "alreadyHaveAccount": "Already have an account?",
@@ -560,6 +561,7 @@
     "role": "Selected role is invalid",
     "roleRequired": "Please select role",
     "terms": "Please accept the terms",
+    "country": "Please select the country",
     "webhookAuthTypeRequired": "Please select Auth type",
     "webhookPasswordRequired": "Please enter password",
     "webhookRequired": "Please enter Webhook URL",

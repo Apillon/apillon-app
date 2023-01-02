@@ -15,7 +15,14 @@
       <strong>{{ $t('referral.link') }}</strong>
     </p>
 
-    <n-input v-model:value="referralCode" disabled />
+    <div class="max-w-[480px]">
+      <div class="p-4 bg-grey-dark mt-2 border-1 border-grey flex justify-between">
+        <p>
+          {{ authStore.userUuid }}
+        </p>
+        <div class="mt-1 cursor-pointer" @click="copyWalletNumber()">ikona</div>
+      </div>
+    </div>
     <p class="font-button text-sm text-white mt-3">
       {{ $t('referral.linkDesc') }}
     </p>
@@ -47,7 +54,16 @@
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
+const authStore = useAuthStore();
+const message = useMessage();
+
 const referralCode = 'https://apillon.io/register/?REF=X5FGH';
+
+function copyWalletNumber() {
+  navigator.clipboard.writeText(authStore.userUuid);
+  message.info('Wallet number copied');
+}
 
 const referres = [
   {
