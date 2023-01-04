@@ -111,6 +111,7 @@ declare global {
     s3FileKey: string;
     size: number;
     status: number;
+    fileStatus?: number | null;
   }
   interface FileUploadInterface {
     id: number;

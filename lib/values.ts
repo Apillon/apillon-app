@@ -3,6 +3,10 @@ import colors from '~~/tailwind.colors';
 
 export const PAGINATION_LIMIT = 20;
 
+export const LsTableColumnsKeys = {
+  FILES: 'al_table_files_columns',
+};
+
 /** User roles */
 export const UserRoleIds = [
   DefaultUserRole.ADMIN,

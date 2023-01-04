@@ -359,7 +359,9 @@ export const useDataStore = defineStore('data', {
       folderId?: number,
       page?: number,
       limit?: number,
-      search?: string
+      search?: string,
+      orderBy?: string,
+      order?: string
     ) {
       this.folder.loading = true;
 
@@ -387,6 +389,12 @@ export const useDataStore = defineStore('data', {
         if (page) {
           params.page = page;
           params.limit = limit || PAGINATION_LIMIT;
+        }
+        if (orderBy) {
+          params.orderBy = orderBy;
+        }
+        if (order) {
+          params.desc = order === 'descend' ? 'true' : 'false';
         }
 
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
@@ -444,6 +452,7 @@ export const useDataStore = defineStore('data', {
 
       await api.isReadyOrError;
       const fileInfo = await api.query.market.filesV2(cid);
+      await api.disconnect();
       return fileInfo.toJSON();
     },
 

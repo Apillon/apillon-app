@@ -133,8 +133,19 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
-export function fileExpiration(expiredAt: number): string {
-  const expiredAtDate = new Date(Date.now() + expiredAt);
+/**
+ * Calculate expiration date on CRUST
+ * @param calculatedAt block number when file has been created
+ * @param expiredAt block number when file will expire
+ * @returns
+ */
+export function fileExpiration(calculatedAt: number, expiredAt: number): string {
+  const TIME_TO_CREATE_NEW_BLOCK = 6000;
+  const numOfBlocksBeforeExpiratoin = expiredAt - calculatedAt;
+
+  const expiredAtDate = new Date(
+    Date.now() + TIME_TO_CREATE_NEW_BLOCK * numOfBlocksBeforeExpiratoin
+  );
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',

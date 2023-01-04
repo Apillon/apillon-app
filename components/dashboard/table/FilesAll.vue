@@ -158,6 +158,7 @@ const createColumns = (): DataTableColumns<FileUploadInterface> => {
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
+      minWidth: 150,
       render(row) {
         return [
           h(IconFolderFile, { isFile: true }, ''),
