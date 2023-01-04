@@ -1,6 +1,7 @@
 import {
   CollapseProps,
   create,
+  DataTableSortState,
   FormInst,
   FormItemInst,
   FormItemRule,
@@ -10,6 +11,7 @@ import {
   NButton,
   NCard,
   NCheckbox,
+  NCheckboxGroup,
   NCollapse,
   NCollapseItem,
   NConfigProvider,
@@ -67,6 +69,7 @@ declare global {
   interface NSelectProps extends SelectProps {}
   interface NUploadCustomRequestOptions extends UploadCustomRequestOptions {}
   interface NUploadFileInfo extends UploadFileInfo {}
+  interface NDataTableSortState extends DataTableSortState {}
 }
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(
@@ -76,6 +79,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NButton,
         NCard,
         NCheckbox,
+        NCheckboxGroup,
         NCollapse,
         NCollapseItem,
         NConfigProvider,

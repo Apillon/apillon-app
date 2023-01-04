@@ -34,6 +34,7 @@
     "test": "Test",
     "upload": "Upload",
     "uptime": "Uptime",
+    "uuid": "UUID",
     "view": "View"
   },
   "dashboard": {
@@ -448,6 +449,11 @@
       "item": "Delete selected item",
       "items": "Delete selected items"
     },
+    "directory": {
+      "create": "Create directory",
+      "createNew": "Create new directory",
+      "delete": "Delete directory"
+    },
     "download": {
       "bucketItems": "Download selected items?",
       "item": "Download selected item",
@@ -457,6 +463,7 @@
       "create": "Create file",
       "clickToUpload": "Click to upload.",
       "delete": "Delete file",
+      "downloadLink": "Download link",
       "dragAndDrop": "Drag & drop files and folders you want to upload to your bucket, or",
       "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab."
     },
@@ -477,6 +484,7 @@
       "delete": "Delete folder"
     },
     "attachService": "First attach a desired service and configure it, then start building.",
+    "contentType": "Content type",
     "edit": "Edit",
     "expiration": "Expired on blockchain",
     "goToRootDirectory": "Go to root directory",
@@ -543,6 +551,7 @@
     "emailRequired": "Please enter your email",
     "expirationDate": "Date is expired",
     "expirationDateRequired": "Please enter expiration date",
+    "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",
     "passwordMinLength": "Password must contain at least 12 characters.",
     "passwordReenterSame": "Password is not same as re-entered password!",

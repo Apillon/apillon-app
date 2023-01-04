@@ -10,6 +10,7 @@
     :row-props="rowProps"
     @update:checked-row-keys="handleCheck"
     @update:page="handlePageChange"
+    @update:sorter="handleSorterChange"
   />
 
   <!-- Drawer - File details -->
@@ -20,20 +21,29 @@
   </n-drawer>
 
   <!-- Modal - Delete file/folder -->
-  <modal v-model:show="showModalDelete" :title="$t(`storage.${currentRow.type}.delete`)">
+  <modal
+    v-model:show="showModalDelete"
+    :title="
+      $i18n.te(`storage.${currentRow.type}.delete`)
+        ? $t(`storage.${currentRow.type}.delete`)
+        : $t(`general.delete`)
+    "
+  >
     <FormStorageFolderDelete :items="[currentRow]" @submit-success="onDeleted" />
   </modal>
 </template>
 
 <script lang="ts" setup>
 import { debounce } from 'lodash';
-import { DataTableColumns, DataTableRowKey, NButton, NDropdown } from 'naive-ui';
+import { DataTableColumns, DataTableRowKey, NButton, NDropdown, useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
+const message = useMessage();
 const dataStore = useDataStore();
 const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
+const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
 
 const currentRow = ref<FolderInterface>({} as FolderInterface);
@@ -101,8 +111,18 @@ const dropdownFileOptions = [
   },
 ];
 
+/** Available columns - show/hide column */
+const selectedColumns = ref(['name', 'CID', 'size', 'createTime', 'contentType']);
+const availableColumns = ref([
+  { value: 'name', label: $i18n.t('storage.fileName') },
+  { value: 'CID', label: $i18n.t('storage.fileCid') },
+  { value: 'size', label: $i18n.t('storage.fileSize') },
+  { value: 'createTime', label: $i18n.t('dashboard.created') },
+  { value: 'contentType', label: $i18n.t('storage.contentType') },
+]);
+
 /** Columns */
-const createColumns = (): DataTableColumns<FolderInterface> => {
+const columns = computed<DataTableColumns<FolderInterface>>(() => {
   return [
     {
       type: 'selection',
@@ -110,16 +130,15 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
-      className: 'min-w-[150px]',
+      className: selectedColumns.value.includes('name') ? '' : 'hidden',
+      sorter: 'default',
+      minWidth: 150,
       render(row) {
         return [
           h(IconFolderFile, { isFile: row.type === BucketItemType.FILE }, ''),
           h(
             'span',
-            {
-              class: 'ml-2 text-blue cursor-pointer',
-              onClick: () => onItemOpen(row),
-            },
+            { class: 'ml-2 text-blue cursor-pointer', onClick: () => onItemOpen(row) },
             row.name
           ),
         ];
@@ -128,21 +147,59 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
     {
       title: $i18n.t('storage.fileCid'),
       key: 'CID',
+      className: selectedColumns.value.includes('CID') ? '' : 'hidden',
+      sorter: 'default',
       render(row) {
-        return h(
-          'span',
-          { class: 'text-grey' },
-          {
-            default: () => truncateCid(row.CID || ''),
-          }
-        );
+        if (row.CID) {
+          return [
+            h(
+              'span',
+              { class: 'text-grey' },
+              {
+                default: () => truncateCid(row.CID || ''),
+              }
+            ),
+            h(
+              'button',
+              { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '') },
+              h('span', { class: 'icon-copy text-grey' }, {})
+            ),
+          ];
+        }
+        return '';
       },
     },
     {
       title: $i18n.t('storage.fileSize'),
       key: 'size',
+      className: selectedColumns.value.includes('size') ? '' : 'hidden',
+      sorter: 'default',
       render(row) {
-        return h('span', {}, { default: () => formatBytes(row.size || 0) });
+        if (row.size) {
+          return h('span', {}, { default: () => formatBytes(row.size || 0) });
+        }
+        return '';
+      },
+    },
+    {
+      title: $i18n.t('dashboard.created'),
+      key: 'createTime',
+      className: selectedColumns.value.includes('createTime') ? '' : 'hidden',
+      sorter: 'default',
+      render(row) {
+        return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
+      },
+    },
+    {
+      title: $i18n.t('storage.contentType'),
+      key: 'contentType',
+      className: selectedColumns.value.includes('contentType') ? '' : 'hidden',
+      sorter: 'default',
+      render(row) {
+        if (row.contentType) {
+          return h('span', {}, row.contentType);
+        }
+        return '';
       },
     },
     {
@@ -168,9 +225,27 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
         );
       },
     },
+    {
+      key: 'columns',
+      filter: 'default',
+      filterOptionValue: null,
+      renderFilterIcon: () => {
+        return h('span', { class: 'icon-more' }, '');
+      },
+      renderFilterMenu: ({ hide }) => {
+        return h(
+          TableColumns,
+          {
+            model: selectedColumns.value,
+            columns: availableColumns.value,
+            onColumnChange: handleColumnChange,
+          },
+          ''
+        );
+      },
+    },
   ];
-};
-const columns = createColumns();
+});
 
 const rowKey = (row: FolderInterface) => row.id;
 
@@ -181,6 +256,11 @@ const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
     rowKeyIds.includes(item.id)
   );
 };
+
+function handleColumnChange(selectedValues: Array<string>) {
+  selectedColumns.value = selectedValues;
+  localStorage.setItem(LsTableColumnsKeys.FILES, JSON.stringify(selectedColumns.value));
+}
 
 function rowProps(row: FolderInterface) {
   return {
@@ -218,16 +298,36 @@ async function onFolderOpen(folder: FolderInterface) {
   getDirectoryContent(dataStore.currentBucket.bucket_uuid, folder.id);
 }
 
-/**
- * Load data on mounted
- */
 onMounted(() => {
+  /** Check if selected columns are stored in LS */
+  if (localStorage.getItem(LsTableColumnsKeys.FILES)) {
+    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.FILES) || '');
+  }
+
+  /**
+   * Load data on mounted
+   */
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await getDirectoryContent();
     });
   }, 100);
 });
+
+/** Sort column - fetch directory content with order params  */
+async function handleSorterChange(sorter: NDataTableSortState) {
+  if (sorter.order === false) {
+    await getDirectoryContent();
+  } else {
+    await getDirectoryContent(
+      dataStore.currentBucket.bucket_uuid,
+      dataStore.folder.selected,
+      1,
+      `${sorter.columnKey}`,
+      `${sorter.order}`
+    );
+  }
+}
 
 /** On page change, load data */
 async function handlePageChange(currentPage: number) {
@@ -258,14 +358,22 @@ watch(
 const debouncedSearchFilter = debounce(getDirectoryContent, 500);
 
 /** Function "Fetch directory content" wrapper  */
-async function getDirectoryContent(bucketUuid?: string, folderId?: number, page: number = 1) {
+async function getDirectoryContent(
+  bucketUuid?: string,
+  folderId?: number,
+  page: number = 1,
+  orderBy?: string,
+  order?: string
+) {
   await dataStore.fetchDirectoryContent(
     $i18n,
     bucketUuid,
     folderId,
     page,
     PAGINATION_LIMIT,
-    dataStore.folder.search
+    dataStore.folder.search,
+    orderBy,
+    order
   );
 
   currentPage.value = page;
@@ -282,5 +390,19 @@ async function downloadFile(CID?: string | null) {
   }
   const fileDetails: FileDetails = dataStore.file.items[CID].file;
   download(fileDetails.downloadLink, fileDetails.name);
+}
+
+/** Copy CID to clipboard */
+function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      /* Resolved - text copied to clipboard successfully */
+      message.success($i18n.t('dashboard.clipboard.copied'));
+    },
+    () => {
+      /* Rejected - text failed to copy to the clipboard */
+      message.warning($i18n.t('dashboard.clipboard.error'));
+    }
+  );
 }
 </script>

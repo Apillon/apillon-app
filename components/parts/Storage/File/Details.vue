@@ -6,9 +6,24 @@
       <strong v-else-if="fileDetails?.fileName">{{ fileDetails.fileName }}</strong>
     </div>
 
-    <div class="body-sm mb-4">
-      <p class="body-sm">{{ $t('storage.fileCid') }}</p>
+    <div v-if="fileDetails.CID" class="body-sm mb-4">
+      <p class="body-sm">
+        <span>{{ $t('storage.fileCid') }}</span>
+        <button class="ml-2" @click="copyToClipboard(fileDetails.CID)">
+          <span class="icon-copy"></span>
+        </button>
+      </p>
       <strong>{{ fileDetails.CID }}</strong>
+    </div>
+
+    <div v-if="fileDetails.downloadLink" class="body-sm mb-4">
+      <p class="body-sm">
+        <span>{{ $t('storage.file.downloadLink') }}</span>
+        <button class="ml-2" @click="copyToClipboard(fileDetails.downloadLink)">
+          <span class="icon-copy"></span>
+        </button>
+      </p>
+      <strong>{{ fileDetails.downloadLink }}</strong>
     </div>
 
     <div class="body-sm mb-4">
@@ -16,17 +31,22 @@
       <strong>{{ formatBytes(fileDetails.size || 0) }}</strong>
     </div>
 
-    <div class="body-sm mb-4">
+    <div v-if="fileDetails.CID" class="body-sm mb-4">
       <p class="body-sm">{{ $t('storage.expiration') }}</p>
       <div class="relative min-h-[20px]">
         <strong v-if="crustFileStatus?.expired_at">
-          {{ fileExpiration(parseInt(crustFileStatus.expired_at)) }}
+          {{
+            fileExpiration(
+              parseInt(crustFileStatus.calculated_at),
+              parseInt(crustFileStatus.expired_at)
+            )
+          }}
         </strong>
         <Spinner v-else :size="16" />
       </div>
     </div>
 
-    <div class="body-sm mb-4">
+    <div v-if="fileDetails.CID" class="body-sm mb-4">
       <p class="body-sm">{{ $t('storage.replicas') }}</p>
       <div class="relative min-h-[20px]">
         <strong v-if="crustFileStatus?.reported_replica_count">
@@ -36,64 +56,55 @@
       </div>
     </div>
 
-    <div class="body-sm mb-4">
-      <p class="body-sm">{{ $t('storage.status') }}</p>
+    <div class="body-sm mb-6">
+      <p class="body-sm mb-1">{{ $t('storage.status') }}</p>
       <n-tag
         v-if="fileStatus === FileStatus.PINNED_TO_CRUST"
         type="success"
         :bordered="false"
         round
       >
-        {{ $t('general.ok') }}
+        {{ $t(`storage.fileStatus.${fileStatus}`) }}
       </n-tag>
       <n-tag
-        v-else-if="fileStatus === FileStatus.UPLOADED_TO_IPFS"
+        v-else-if="
+          fileStatus === FileStatus.UPLOADED_TO_IPFS ||
+          fileStatus === FileStatus.UPLOADED_TO_S3 ||
+          fileStatus === FileStatus.REQUEST_FOR_UPLOAD_GENERATED
+        "
         type="info"
         :bordered="false"
         round
       >
-        UPLOADED_TO_IPFS
-      </n-tag>
-      <n-tag
-        v-else-if="fileStatus === FileStatus.UPLOADED_TO_S3"
-        type="info"
-        :bordered="false"
-        round
-      >
-        UPLOADED_TO_S3
-      </n-tag>
-      <n-tag
-        v-else-if="fileStatus === FileStatus.REQUEST_FOR_UPLOAD_GENERATED"
-        type="info"
-        :bordered="false"
-        round
-      >
-        UPLOADED_TO_S3
+        {{ $t(`storage.fileStatus.${fileStatus}`) }}
       </n-tag>
       <n-tag v-else type="error" :bordered="false" round>
-        {{ $t('general.error') }}
+        {{ $t(`storage.fileStatus.${fileStatus}`) }}
       </n-tag>
     </div>
 
-    <div class="mb-4">
-      <p class="body-sm">{{ $t('general.actions') }}</p>
+    <div class="mb-4" v-if="fileDetails.CID">
+      <p class="body-sm mb-2">{{ $t('general.actions') }}</p>
+      <n-space size="large" vertical>
+        <!-- Renew Pool Balance
+      <Btn type="secondary" size="large">{{ $t('storage.renewPoolBalance') }}</Btn> 
+      -->
+        <Btn
+          type="primary"
+          size="large"
+          @click="download(fileDetails.downloadLink, fileDetails.name)"
+        >
+          {{ $t('general.download') }}
+        </Btn>
+        <Btn type="secondary" size="large">{{ $t('general.delete') }}</Btn>
+      </n-space>
     </div>
-    <n-space vertical>
-      <Btn type="secondary" size="large">{{ $t('storage.renewPoolBalance') }}</Btn>
-      <Btn
-        type="secondary"
-        size="large"
-        @click="download(fileDetails.downloadLink, fileDetails.name)"
-      >
-        {{ $t('general.download') }}
-      </Btn>
-      <Btn type="secondary" size="large">{{ $t('general.delete') }}</Btn>
-    </n-space>
   </div>
   <Spinner v-else />
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
@@ -102,6 +113,7 @@ const props = defineProps({
 });
 
 const $i18n = useI18n();
+const message = useMessage();
 const dataStore = useDataStore();
 const fileDetails = ref<FileInterface>({} as FileInterface);
 const fileStatus = ref<number>(0);
@@ -127,7 +139,7 @@ async function getFileDetails(uuidOrCID: string) {
     dataStore.file.items[uuidOrCID] = await dataStore.fetchFileDetails(uuidOrCID, $i18n);
   }
   fileDetails.value = dataStore.file.items[uuidOrCID].file;
-  fileStatus.value = dataStore.file.items[uuidOrCID].fileStatus;
+  fileStatus.value = fileDetails.value?.fileStatus || dataStore.file.items[uuidOrCID].fileStatus;
 }
 
 /** Get File details from CRUST */
@@ -136,5 +148,18 @@ async function getcrustFileStatus(cid: string) {
     dataStore.crust[cid] = await dataStore.fetchFileDetailsFromCrust(cid);
   }
   crustFileStatus.value = dataStore.crust[cid] as FileCrust;
+}
+
+function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      /* Resolved - text copied to clipboard successfully */
+      message.success($i18n.t('dashboard.clipboard.copied'));
+    },
+    () => {
+      /* Rejected - text failed to copy to the clipboard */
+      message.warning($i18n.t('dashboard.clipboard.error'));
+    }
+  );
 }
 </script>

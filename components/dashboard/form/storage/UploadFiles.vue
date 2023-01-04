@@ -77,9 +77,6 @@ async function uploadFiles({ file, onError, onFinish }: NUploadCustomRequestOpti
     promises.value.push(request);
     const res = await request;
 
-    /** Sync to IPFS
-    await syncToIpfs(res.data.file_uuid); */
-
     /** Upload file to S3 */
     var xhr = new XMLHttpRequest();
     xhr.open('PUT', res.data.signedUrlForUpload, true);
@@ -151,10 +148,6 @@ function updateFileStatus(fileId: string, status: FileUploadStatus) {
 
         clearInterval(item.progress);
       }
-      /** Refresh diretory content */
-      if (allFilesFinished()) {
-        dataStore.fetchDirectoryContent($i18n);
-      }
     }
   });
 }
@@ -170,46 +163,5 @@ function createFileProgress(fileId: string) {
       }, timeFor1Percent);
     }
   });
-}
-
-/** TEMPORARLY: Sync to IPFS */
-async function syncToIpfs(fileUuid: string) {
-  try {
-    await $api.post(endpoints.storageSyncToIpfs(props.bucketUuid, fileUuid));
-
-    message.success($i18n.t('storage.filesUploaded'));
-  } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
-  }
-}
-
-/** HOSTING: Upload Session End - Currently not in use */
-async function uploadSessionEnd(sessionUuid: string) {
-  if (!allFilesFinished()) {
-    return;
-  }
-
-  try {
-    const resSessionEnd = await $api.post<PasswordResetResponse>(
-      endpoints.storageFileUpload(props.bucketUuid, sessionUuid),
-      { directSync: false }
-    );
-
-    if (resSessionEnd.data) {
-      message.success($i18n.t('storage.filesUploaded'));
-    }
-  } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
-  }
-
-  /** Refresh diretory content */
-  dataStore.fetchDirectoryContent($i18n);
-}
-
-function allFilesFinished(): boolean {
-  const uploadingFiles = fileList.value.find(
-    file => file.status === FileUploadStatusValue.UPLOADING
-  );
-  return uploadingFiles === undefined;
 }
 </script>
