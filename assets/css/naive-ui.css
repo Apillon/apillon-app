@@ -66,6 +66,14 @@
   .n-data-table-th .n-data-table-th__title-wrapper .n-data-table-th__title {
     white-space: nowrap;
   }
+
+  .n-data-table-th.n-data-table-th--filterable {
+    padding-right: 15px;
+
+    .n-data-table-filter {
+      width: 28px;
+    }
+  }
 }
 
 /** Dialog */

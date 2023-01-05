@@ -9,7 +9,7 @@
     <div v-if="fileDetails.CID" class="body-sm mb-4">
       <p class="body-sm">
         <span>{{ $t('storage.fileCid') }}</span>
-        <button class="ml-2" @click="copyToClipboard(fileDetails.CID)">
+        <button class="ml-2" @click="copyToClipboard(fileDetails.CID, $t)">
           <span class="icon-copy"></span>
         </button>
       </p>
@@ -19,7 +19,7 @@
     <div v-if="fileDetails.downloadLink" class="body-sm mb-4">
       <p class="body-sm">
         <span>{{ $t('storage.file.downloadLink') }}</span>
-        <button class="ml-2" @click="copyToClipboard(fileDetails.downloadLink)">
+        <button class="ml-2" @click="copyToClipboard(fileDetails.downloadLink, $t)">
           <span class="icon-copy"></span>
         </button>
       </p>
@@ -148,18 +148,5 @@ async function getcrustFileStatus(cid: string) {
     dataStore.crust[cid] = await dataStore.fetchFileDetailsFromCrust(cid);
   }
   crustFileStatus.value = dataStore.crust[cid] as FileCrust;
-}
-
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).then(
-    () => {
-      /* Resolved - text copied to clipboard successfully */
-      message.success($i18n.t('dashboard.clipboard.copied'));
-    },
-    () => {
-      /* Rejected - text failed to copy to the clipboard */
-      message.warning($i18n.t('dashboard.clipboard.error'));
-    }
-  );
 }
 </script>

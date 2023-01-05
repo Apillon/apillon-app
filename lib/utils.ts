@@ -245,3 +245,49 @@ export async function download(url: string, filename: string) {
     })
     .catch(console.error);
 }
+
+/** Copy text to clipboard */
+export function copyToClipboard(text: string, $t?: i18nT | null) {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      /* Resolved - text copied to clipboard successfully */
+      if ($t) {
+        window.$message.success($t('dashboard.clipboard.copied'));
+      } else {
+        window.$message.success('Text has been copied to clipboard');
+      }
+    },
+    () => {
+      /* Rejected - text failed to copy to the clipboard */
+      if ($t) {
+        window.$message.success($t('dashboard.clipboard.error'));
+      } else {
+        window.$message.success('Failed to copy');
+      }
+    }
+  );
+}
+export function copyToClipboardWithResponseTexts(
+  text: string,
+  successMsg?: string,
+  errorMsg?: string
+) {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      /* Resolved - text copied to clipboard successfully */
+      if (successMsg) {
+        window.$message.success(successMsg);
+      } else {
+        window.$message.success('Text has been copied to clipboard');
+      }
+    },
+    () => {
+      /* Rejected - text failed to copy to the clipboard */
+      if (errorMsg) {
+        window.$message.success(errorMsg);
+      } else {
+        window.$message.success('Failed to copy');
+      }
+    }
+  );
+}

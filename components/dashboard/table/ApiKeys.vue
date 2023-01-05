@@ -114,7 +114,7 @@ const dropdownOptions = [
     key: 'copy',
     props: {
       onClick: () => {
-        copyToClipboard(currentRow.value.apiKey);
+        copyToClipboard(currentRow.value.apiKey, t);
       },
     },
   },
@@ -137,19 +137,6 @@ const dropdownOptions = [
     },
   },
 ];
-
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).then(
-    () => {
-      /* Resolved - text copied to clipboard successfully */
-      message.success(t('dashboard.clipboard.copied'));
-    },
-    () => {
-      /* Rejected - text failed to copy to the clipboard */
-      message.warning(t('dashboard.clipboard.error'));
-    }
-  );
-}
 
 function onApiKeyDeleted() {
   showModalDeleteApiKey.value = false;

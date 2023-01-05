@@ -50,11 +50,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
 
@@ -86,7 +84,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => window.$message.error(error.message || 'Error'))
+      );
     } else {
       await updateProjectData();
     }
@@ -105,7 +105,7 @@ async function updateProjectData() {
       dataStore.updateCurrentProject(res.data);
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    window.$message.error(userFriendlyMsg(error, $i18n));
   }
   loading.value = false;
 }

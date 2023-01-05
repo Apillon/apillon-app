@@ -1,4 +1,3 @@
-import { useMessage } from 'naive-ui';
 import { defineStore } from 'pinia';
 import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
 import { AnyJson } from '@polkadot/types-codec/types';
@@ -223,8 +222,7 @@ export const useDataStore = defineStore('data', {
         this.project.items = [];
 
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
       return null;
     },
@@ -237,8 +235,7 @@ export const useDataStore = defineStore('data', {
         this.project.quotaReached = undefined;
 
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
     },
 
@@ -263,8 +260,7 @@ export const useDataStore = defineStore('data', {
         });
       } catch (error: any) {
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
       return [] as Array<ServiceInterface>;
     },
@@ -307,11 +303,9 @@ export const useDataStore = defineStore('data', {
         return res;
       } catch (error: any) {
         this.bucket.items = [] as Array<BucketInterface>;
-        console.log(error);
 
         /** Show error message 
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));*/
+        window.$message.error(userFriendlyMsg(error, $i18n));*/
       }
       return null;
     },
@@ -326,8 +320,7 @@ export const useDataStore = defineStore('data', {
         this.bucket.active = {} as BucketInterface;
 
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
       return {} as BucketInterface;
     },
@@ -348,8 +341,7 @@ export const useDataStore = defineStore('data', {
         this.bucket.quotaReached = undefined;
 
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
     },
 
@@ -407,8 +399,7 @@ export const useDataStore = defineStore('data', {
         this.folder.total = 0;
 
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
 
       this.folder.loading = false;
@@ -421,8 +412,7 @@ export const useDataStore = defineStore('data', {
         return res.data;
       } catch (error: any) {
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
       return null;
     },
@@ -438,8 +428,7 @@ export const useDataStore = defineStore('data', {
         return res.data;
       } catch (error: any) {
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
       return {} as FileDetailsInterface;
     },
@@ -468,8 +457,7 @@ export const useDataStore = defineStore('data', {
         }
       } catch (error) {
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
     },
     async fetchInstructions(key: string, $i18n?: i18nType | null) {
@@ -486,8 +474,7 @@ export const useDataStore = defineStore('data', {
       } catch (error) {
         this.instructions[key] = [];
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
     },
   },

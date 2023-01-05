@@ -7,7 +7,8 @@
         name="search"
         size="small"
         class="bg-grey-dark"
-        placeholder="Search files"
+        :placeholder="$t('storage.file.search')"
+        clearable
       />
     </div>
     <n-space>
