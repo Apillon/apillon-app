@@ -45,6 +45,7 @@ declare global {
     description: string;
     shortDescription: string | null;
     imageFile_id: number | null;
+    myRole_id_onProject?: number;
     project_uuid: string;
     value?: number;
     label?: string;

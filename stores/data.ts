@@ -71,6 +71,9 @@ export const useDataStore = defineStore('data', {
     hasProjects(state) {
       return Array.isArray(state.project.items) && state.project.items.length > 0;
     },
+    myRoleOnProject(state) {
+      return state.project.active.myRole_id_onProject || DefaultUserRole.PROJECT_USER;
+    },
     currentBucket(state): BucketInterface {
       return (
         state.bucket.items.find((item: BucketInterface) => item.id === state.bucket.selected) ||
@@ -225,6 +228,19 @@ export const useDataStore = defineStore('data', {
         window.$message.error(userFriendlyMsg(error, $i18n));
       }
       return null;
+    },
+
+    /** Users */
+    async fetchProject($i18n?: any) {
+      try {
+        const res = await $api.get<ProjectResponse>(endpoints.project(this.currentProjectId));
+        this.project.active = res.data;
+      } catch (error) {
+        this.project.active = {} as ProjectInterface;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error, $i18n));
+      }
     },
 
     async fetchProjectsQuota($i18n?: i18nType | null) {

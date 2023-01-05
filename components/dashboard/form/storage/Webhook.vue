@@ -206,10 +206,7 @@ function handleSubmit(e: Event | MouseEvent) {
 async function getWebhook() {
   loadingPage.value = true;
   try {
-    const res = await $api.get<WebhookResponse>(
-      endpoints.bucketWebhook(props.bucketId),
-      formData.value
-    );
+    const res = await $api.get<WebhookResponse>(endpoints.bucketWebhook(props.bucketId));
 
     webhook.value = res.data;
     updateFormData(res.data);

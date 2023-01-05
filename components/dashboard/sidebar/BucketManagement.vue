@@ -20,9 +20,7 @@ const dataStore = useDataStore();
 const showModalDestroyBucket = ref<boolean>(false);
 const NuxtLink = resolveComponent('NuxtLink');
 
-const selectedMenu = computed(() => {
-  return name || '';
-});
+const selectedMenu = ref(name?.toString());
 
 const menuOptions: MenuOption[] = [
   {

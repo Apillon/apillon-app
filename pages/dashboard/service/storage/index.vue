@@ -11,8 +11,13 @@
           <div class="w-[1px] h-[13px] bg-grey"></div>
           <a href="#learn-more">{{ $t('general.learnMore') }}</a>
         </n-space>
-        <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
-          <n-button type="primary">{{ $t('storage.bucket.new') }}</n-button>
+        <nuxt-link
+          :to="{ name: 'dashboard-service-storage-new' }"
+          :disabled="settingsStore.isProjectUser()"
+        >
+          <n-button type="primary" :disabled="settingsStore.isProjectUser()">
+            {{ $t('storage.bucket.new') }}
+          </n-button>
         </nuxt-link>
       </n-space>
     </template>

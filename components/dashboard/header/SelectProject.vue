@@ -40,6 +40,9 @@ const SelectProjectOverrides: SelectThemeOverrides = {
 onBeforeMount(() => {
   if (!dataStore.hasProjects) {
     dataStore.promises.projects = dataStore.fetchProjects(false, $i18n);
+
+    /** Fetch selected project data(get myRole_id_onProject) */
+    dataStore.fetchProject($i18n);
   }
 });
 
@@ -59,6 +62,9 @@ watch(
         componentSelectKey.value += 1;
       }, 1000);
     }
+    /** Fetch selected project data(get myRole_id_onProject) */
+    await dataStore.fetchProject($i18n);
+
     /** Reset store data */
     dataStore.resetData();
 

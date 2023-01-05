@@ -23,6 +23,10 @@
   &:not(.n-button--disabled):focus .icon-more {
     @apply text-dark;
   }
+
+  &.pointer-events-none {
+    cursor: not-allowed;
+  }
 }
 
 /** Checkbox */
