@@ -40,21 +40,11 @@ declare global {
   interface PasswordResetResponse extends GeneralResponse<boolean> {}
 
   /**
-   * Login
-   */
-  interface FormLogin {
-    email: string;
-    password: string;
-  }
-  interface LoginResponse extends GeneralResponse<{ token: string }> {}
-  interface PasswordResetRequestResponse extends GeneralResponse<boolean> {}
-
-  /**
    * User
    */
   interface UserInterface {
-    email: string;
     id: number;
+    email: string;
     name: string;
     phone: string;
     status: number;
@@ -80,6 +70,19 @@ declare global {
     email: string;
     role_id: number | null;
   }
+
+  /**
+   * Login
+   */
+  interface FormLogin {
+    email: string;
+    password: string;
+  }
+  interface LoginInterface extends UserInterface {
+    token: string;
+  }
+  interface LoginResponse extends GeneralResponse<LoginInterface> {}
+  interface PasswordResetRequestResponse extends GeneralResponse<boolean> {}
 
   /**
    * Wallet

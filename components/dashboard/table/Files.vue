@@ -1,6 +1,7 @@
 <template>
   <n-data-table
     remote
+    ref="tableRef"
     :bordered="false"
     :columns="columns"
     :data="dataStore.folder.items"
@@ -43,6 +44,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
+const tableRef = ref<NDataTableInst | null>(null);
 const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
 
@@ -161,7 +163,7 @@ const columns = computed<DataTableColumns<FolderInterface>>(() => {
             ),
             h(
               'button',
-              { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '') },
+              { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '', $i18n.t) },
               h('span', { class: 'icon-copy text-grey' }, {})
             ),
           ];
@@ -295,7 +297,8 @@ async function onFolderOpen(folder: FolderInterface) {
 
   /** Fetch data in reset search string */
   dataStore.folderSearch();
-  getDirectoryContent(dataStore.currentBucket.bucket_uuid, folder.id);
+  await getDirectoryContent(dataStore.currentBucket.bucket_uuid, folder.id);
+  clearSorter();
 }
 
 onMounted(() => {
@@ -315,10 +318,10 @@ onMounted(() => {
 });
 
 /** Sort column - fetch directory content with order params  */
-async function handleSorterChange(sorter: NDataTableSortState) {
-  if (sorter.order === false) {
+async function handleSorterChange(sorter?: NDataTableSortState) {
+  if (sorter && sorter.order === false) {
     await getDirectoryContent();
-  } else {
+  } else if (sorter) {
     await getDirectoryContent(
       dataStore.currentBucket.bucket_uuid,
       dataStore.folder.selected,
@@ -326,6 +329,13 @@ async function handleSorterChange(sorter: NDataTableSortState) {
       `${sorter.columnKey}`,
       `${sorter.order}`
     );
+  }
+}
+
+/** Reset sort if user search change directory or search directory content */
+function clearSorter() {
+  if (tableRef.value) {
+    tableRef.value.sort(0, false);
   }
 }
 
@@ -352,6 +362,7 @@ watch(
   _ => {
     if (dataStore.folder.allowFetch) {
       debouncedSearchFilter();
+      clearSorter();
     }
   }
 );
@@ -390,19 +401,5 @@ async function downloadFile(CID?: string | null) {
   }
   const fileDetails: FileDetails = dataStore.file.items[CID].file;
   download(fileDetails.downloadLink, fileDetails.name);
-}
-
-/** Copy CID to clipboard */
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).then(
-    () => {
-      /* Resolved - text copied to clipboard successfully */
-      message.success($i18n.t('dashboard.clipboard.copied'));
-    },
-    () => {
-      /* Rejected - text failed to copy to the clipboard */
-      message.warning($i18n.t('dashboard.clipboard.error'));
-    }
-  );
 }
 </script>

@@ -16,7 +16,11 @@
       </n-space>
       <TableApiKeys />
       <div class="text-right mt-5">
-        <Btn type="secondary" @click="showDrawerGenerateApiKey">
+        <Btn
+          type="secondary"
+          :disabled="settingsStore.isProjectUser()"
+          @click="showDrawerGenerateApiKey"
+        >
           {{ $t('dashboard.apiKey.generate') }}
         </Btn>
       </div>

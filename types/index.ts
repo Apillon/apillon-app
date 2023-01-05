@@ -1,19 +1,11 @@
-import { Composer, UseI18nOptions } from 'vue-i18n';
+import { Composer, ComposerTranslation, UseI18nOptions } from 'vue-i18n';
 
 export {};
 
 declare global {
   interface Window {
-    $message: any;
+    $message: NMessageApiInjection;
   }
-
-  type Only<T, U> = {
-    [P in keyof T]: T[P];
-  } & {
-    [P in keyof U]?: never;
-  };
-
-  type Either<T, U> = Only<T, U> | Only<U, T>;
 
   /**
    * i18n
@@ -25,6 +17,7 @@ declare global {
     NonNullable<Options['numberFormats']>,
     NonNullable<Options['locale']>
   >;
+  type i18nT = ComposerTranslation;
 
   /**
    * Base responses

@@ -38,6 +38,27 @@
     "view": "View"
   },
   "dashboard": {
+    "apiKey": {
+      "apiKey": "API key",
+      "apiKeySecret": "API key secet",
+      "delete": "Delete API key",
+      "details": "API key details",
+      "generate": "Generate new key",
+      "secredSaved": "I've saved API key's secret",
+      "title": "API keys",
+      "update": "Update API key"
+    },
+    "clipboard": {
+      "copied": "Text has been copied to clipboard",
+      "copy": "Copy to clipboard",
+      "copyApiKey": "Copy Api key to clipboard",
+      "error": "Failed to copy"
+    },
+    "permissions": {
+      "read": "Read permissions",
+      "write": "Write permissions",
+      "execute": "Execute permissions"
+    },
     "addPayment": "Add payment",
     "addPaymentMethod": "Add payment method",
     "addPaymentMethodText": " Add payment method and prepurchase the needed credits. Once the credits supply is depleated you will be charged again.",
@@ -74,27 +95,7 @@
     "viewInvoice": "View Invoice",
     "yourPlan": "Your plan: ",
     "value": "Value",
-    "apiKey": {
-      "apiKey": "API key",
-      "apiKeySecret": "API key secet",
-      "delete": "Delete API key",
-      "details": "API key details",
-      "generate": "Generate new key",
-      "secredSaved": "I've saved API key's secret",
-      "title": "API keys",
-      "update": "Update API key"
-    },
-    "clipboard": {
-      "copied": "Text has been copied to clipboard",
-      "copy": "Copy to clipboard",
-      "copyApiKey": "Copy Api key to clipboard",
-      "error": "Failed to copy"
-    },
-    "permissions": {
-      "read": "Read permissions",
-      "write": "Write permissions",
-      "execute": "Execute permissions"
-    }
+    "visibleColumns": "Visible columns"
   },
   "error": {
     "404": "Page not found",
@@ -400,6 +401,7 @@
     "newBucket": "New storage bucket",
     "overview": "Project overview",
     "owner": "Project owner",
+    "quotaReached": "Quota has been reached.",
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
@@ -465,7 +467,8 @@
       "delete": "Delete file",
       "downloadLink": "Download link",
       "dragAndDrop": "Drag & drop files and folders you want to upload to your bucket, or",
-      "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab."
+      "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab.",
+      "search": "Search files"
     },
     "fileStatus": {
       "1": "Signed URL for upload generated",

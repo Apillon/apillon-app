@@ -7,7 +7,7 @@
       ref="formRef"
       :model="formData"
       :rules="rules"
-      :disabled="isQuotaReached"
+      :disabled="isFormDisabled"
       @submit.prevent="handleSubmit"
     >
       <!--  Service name -->
@@ -59,7 +59,7 @@
           type="primary"
           class="w-full mt-2"
           :loading="loading"
-          :disabled="isQuotaReached"
+          :disabled="isFormDisabled"
           @click="handleSubmit"
         >
           <template v-if="bucket">
@@ -85,6 +85,7 @@ const props = defineProps({
 const message = useMessage();
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
 const router = useRouter();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -122,6 +123,9 @@ const bucketSizes = [
 
 const isQuotaReached = computed<boolean>(() => {
   return !bucket && dataStore.bucket.quotaReached === true;
+});
+const isFormDisabled = computed<boolean>(() => {
+  return isQuotaReached.value || settingsStore.isProjectUser();
 });
 
 // Submit

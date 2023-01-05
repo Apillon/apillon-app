@@ -27,12 +27,11 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, useMessage } from 'naive-ui';
+import { NButton, NDropdown } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const message = useMessage();
 const settingsStore = useSettingsStore();
 const showModalDeleteApiKey = ref<boolean>(false);
 const drawerUpdateApiKeyVisible = ref<boolean>(false);
@@ -114,13 +113,14 @@ const dropdownOptions = [
     key: 'copy',
     props: {
       onClick: () => {
-        copyToClipboard(currentRow.value.apiKey);
+        copyToClipboard(currentRow.value.apiKey, t);
       },
     },
   },
   {
     label: t('general.edit'),
     key: 'edit',
+    disabled: settingsStore.isProjectUser(),
     props: {
       onClick: () => {
         drawerUpdateApiKeyVisible.value = true;
@@ -130,6 +130,7 @@ const dropdownOptions = [
   {
     label: t('general.delete'),
     key: 'delete',
+    disabled: settingsStore.isProjectUser(),
     props: {
       onClick: () => {
         showModalDeleteApiKey.value = true;
@@ -137,19 +138,6 @@ const dropdownOptions = [
     },
   },
 ];
-
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).then(
-    () => {
-      /* Resolved - text copied to clipboard successfully */
-      message.success(t('dashboard.clipboard.copied'));
-    },
-    () => {
-      /* Rejected - text failed to copy to the clipboard */
-      message.warning(t('dashboard.clipboard.error'));
-    }
-  );
-}
 
 function onApiKeyDeleted() {
   showModalDeleteApiKey.value = false;

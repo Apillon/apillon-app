@@ -1,5 +1,11 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    :disabled="!settingsStore.isUserOwner()"
+    @submit.prevent="handleSubmit"
+  >
     <!--  Service name -->
     <n-form-item
       path="name"
@@ -75,7 +81,13 @@
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.generate')" />
-      <Btn type="secondary" class="w-full mt-8" :loading="loading" @click="handleSubmit">
+      <Btn
+        type="secondary"
+        class="w-full mt-8"
+        :loading="loading"
+        :disabled="!settingsStore.isUserOwner()"
+        @click="handleSubmit"
+      >
         {{ $t('form.generate') }}
       </Btn>
     </n-form-item>

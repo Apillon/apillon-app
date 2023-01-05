@@ -1,6 +1,7 @@
 import {
   CollapseProps,
   create,
+  DataTableInst,
   DataTableSortState,
   FormInst,
   FormItemInst,
@@ -57,6 +58,7 @@ import {
   UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
+import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
 
 declare global {
   interface NCollapseProps extends CollapseProps {}
@@ -69,7 +71,9 @@ declare global {
   interface NSelectProps extends SelectProps {}
   interface NUploadCustomRequestOptions extends UploadCustomRequestOptions {}
   interface NUploadFileInfo extends UploadFileInfo {}
+  interface NDataTableInst extends DataTableInst {}
   interface NDataTableSortState extends DataTableSortState {}
+  interface NMessageApiInjection extends MessageApiInjection {}
 }
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(

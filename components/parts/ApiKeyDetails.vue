@@ -20,7 +20,7 @@
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('dashboard.apiKey.apiKey') }}</p>
       <strong>{{ apiKey }}</strong>
-      <button class="ml-2" @click="copyToClipboard(apiKey)">
+      <button class="ml-2" @click="copyToClipboard(apiKey, $t)">
         <span class="icon-copy"></span>
       </button>
     </div>
@@ -28,7 +28,7 @@
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('dashboard.apiKey.apiKeySecret') }}</p>
       <strong>{{ apiKeySecret }}</strong>
-      <button class="ml-2" @click="copyToClipboard(apiKeySecret)">
+      <button class="ml-2" @click="copyToClipboard(apiKeySecret, $t)">
         <span class="icon-copy"></span>
       </button>
     </div>
@@ -49,20 +49,4 @@ const props = defineProps({
   project_uuid: { type: String, default: '' },
   apiKeySecret: { type: String, default: '' },
 });
-
-const { t } = useI18n();
-const message = useMessage();
-
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).then(
-    () => {
-      /* Resolved - text copied to clipboard successfully */
-      message.success(t('dashboard.clipboard.copied'));
-    },
-    () => {
-      /* Rejected - text failed to copy to the clipboard */
-      message.warning(t('dashboard.clipboard.error'));
-    }
-  );
-}
 </script>

@@ -1,4 +1,3 @@
-import { useMessage } from 'naive-ui';
 import { defineStore } from 'pinia';
 
 const authStore = useAuthStore();
@@ -29,16 +28,16 @@ export const useSettingsStore = defineStore('settings', {
     },
 
     isUser(type: number): boolean {
-      return !!this.currentUser && this.currentUser.role_id === type;
+      return dataStore.myRoleOnProject === type;
     },
     isUserOwner(): boolean {
-      return !!this.currentUser && this.currentUser.role_id === DefaultUserRole.PROJECT_OWNER;
+      return dataStore.myRoleOnProject === DefaultUserRole.PROJECT_OWNER;
     },
     isUserAdmin(): boolean {
-      return !!this.currentUser && this.currentUser.role_id === DefaultUserRole.PROJECT_ADMIN;
+      return dataStore.myRoleOnProject === DefaultUserRole.PROJECT_ADMIN;
     },
     isProjectUser(): boolean {
-      return !!this.currentUser && this.currentUser.role_id === DefaultUserRole.PROJECT_USER;
+      return dataStore.myRoleOnProject === DefaultUserRole.PROJECT_USER;
     },
 
     /**
@@ -63,8 +62,7 @@ export const useSettingsStore = defineStore('settings', {
         this.apiKeys = [] as Array<ApiKeyInterface>;
 
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
     },
 
@@ -79,8 +77,7 @@ export const useSettingsStore = defineStore('settings', {
         this.users = [];
 
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error, $i18n));
       }
     },
   },

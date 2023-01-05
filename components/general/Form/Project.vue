@@ -1,67 +1,76 @@
 <template>
-  <n-form
-    ref="formRef"
-    :model="formData"
-    :rules="rules"
-    :disabled="dataStore.project.quotaReached === true"
-    @submit.prevent="handleSubmit"
-  >
-    <!--  Project name -->
-    <n-form-item
-      path="name"
-      :label="$t('form.label.projectName')"
-      :label-props="{ for: 'projectName' }"
+  <div>
+    <Notification
+      v-if="dataStore.project.quotaReached === true"
+      type="warning"
+      class="w-full mb-4 !bg-dark"
     >
-      <n-input
-        v-model:value="formData.name"
-        :input-props="{ id: 'projectName' }"
-        :placeholder="$t('form.placeholder.projectName')"
-        @keydown.enter.prevent
-      />
-    </n-form-item>
+      {{ $t('project.quotaReached') }}
+    </Notification>
+    <n-form
+      ref="formRef"
+      :model="formData"
+      :rules="rules"
+      :disabled="dataStore.project.quotaReached === true"
+      @submit.prevent="handleSubmit"
+    >
+      <!--  Project name -->
+      <n-form-item
+        path="name"
+        :label="$t('form.label.projectName')"
+        :label-props="{ for: 'projectName' }"
+      >
+        <n-input
+          v-model:value="formData.name"
+          :input-props="{ id: 'projectName' }"
+          :placeholder="$t('form.placeholder.projectName')"
+          @keydown.enter.prevent
+        />
+      </n-form-item>
 
-    <!-- Project TAG - currently not in use
+      <!-- Project TAG - currently not in use
     <n-tag :bordered="false" type="info" class="mb-8">{{ projectNameText }}</n-tag>
     -->
 
-    <!--  Project description -->
-    <n-form-item
-      path="description"
-      :label="$t('form.label.projectDescription')"
-      :label-props="{ for: 'projectDescription' }"
-    >
-      <n-input
-        v-model:value="formData.description"
-        type="textarea"
-        :input-props="{ id: 'projectDescription' }"
-        :placeholder="$t('form.placeholder.projectDescription')"
-      />
-    </n-form-item>
-
-    <!--  Project terms -->
-    <n-form-item path="terms" :show-label="false">
-      <n-checkbox id="terms" v-model:checked="formData.terms" size="large" :label="termsLabel" />
-    </n-form-item>
-
-    <!--  Project submit -->
-    <n-form-item>
-      <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn
-        type="primary"
-        class="w-full mt-2"
-        :loading="loading"
-        :disabled="dataStore.project.quotaReached === true"
-        @click="handleSubmit"
+      <!--  Project description -->
+      <n-form-item
+        path="description"
+        :label="$t('form.label.projectDescription')"
+        :label-props="{ for: 'projectDescription' }"
       >
-        <template v-if="dataStore.hasProjects">
-          {{ $t('form.createNewProject') }}
-        </template>
-        <template v-else>
-          {{ $t('form.startFirstProject') }}
-        </template>
-      </Btn>
-    </n-form-item>
-  </n-form>
+        <n-input
+          v-model:value="formData.description"
+          type="textarea"
+          :input-props="{ id: 'projectDescription' }"
+          :placeholder="$t('form.placeholder.projectDescription')"
+        />
+      </n-form-item>
+
+      <!--  Project terms -->
+      <n-form-item path="terms" :show-label="false">
+        <n-checkbox id="terms" v-model:checked="formData.terms" size="large" :label="termsLabel" />
+      </n-form-item>
+
+      <!--  Project submit -->
+      <n-form-item>
+        <input type="submit" class="hidden" :value="$t('form.login')" />
+        <Btn
+          type="primary"
+          class="w-full mt-2"
+          :loading="loading"
+          :disabled="dataStore.project.quotaReached === true"
+          @click="handleSubmit"
+        >
+          <template v-if="dataStore.hasProjects">
+            {{ $t('form.createNewProject') }}
+          </template>
+          <template v-else>
+            {{ $t('form.startFirstProject') }}
+          </template>
+        </Btn>
+      </n-form-item>
+    </n-form>
+  </div>
 </template>
 
 <script lang="ts" setup>

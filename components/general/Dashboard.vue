@@ -80,11 +80,15 @@
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 
 defineProps({
   loading: { type: Boolean, default: false },
 });
+
+/** Global messages */
+window.$message = useMessage();
 
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
