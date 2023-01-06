@@ -40,7 +40,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
 const props = defineProps({
@@ -104,7 +103,7 @@ async function signupWithEmail() {
     }
   } catch (error) {
     formData.value.captcha = null;
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

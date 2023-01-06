@@ -1,15 +1,6 @@
 <template>
-  <n-modal v-bind="$attrs">
-    <n-card
-      style="width: 660px"
-      :title="title"
-      :bordered="false"
-      size="huge"
-      role="dialog"
-      aria-modal="true"
-    >
-      <slot />
-    </n-card>
+  <n-modal v-bind="$attrs" :title="title" preset="dialog" :bordered="false" :show-icon="false">
+    <slot />
   </n-modal>
 </template>
 

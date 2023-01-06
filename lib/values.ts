@@ -2,6 +2,7 @@ import { DiscreteApiOptions, GlobalThemeOverrides } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 
 export const PAGINATION_LIMIT = 20;
+export const ON_COLUMN_CLICK_OPEN_CLASS = 'onClickOpen';
 
 export const LsTableColumnsKeys = {
   FILES: 'al_table_files_columns',
@@ -19,10 +20,10 @@ export const UserRoleIds = [
 ];
 
 /** User roles */
-export function CreateUserRoles($i18n: i18nType): Array<NSelectOption> {
+export function CreateUserRoles(): Array<NSelectOption> {
   return Object.entries(DefaultUserRoles).map(([roleId, role]) => {
     return {
-      label: $i18n.t(`userRole.${role}`),
+      label: window.$i18n.t(`userRole.${role}`),
       value: parseInt(roleId),
       disabled: parseInt(roleId) === DefaultUserRole.PROJECT_OWNER,
     };
@@ -179,6 +180,23 @@ export const themeOverrides: GlobalThemeOverrides = {
     textColorInfo: colors.blue,
     textColorSuccess: colors.green,
     textColorWarning: colors.yellow,
+  },
+  Modal: {
+    color: colors.grey.lightBg,
+    peers: {
+      Card: {
+        paddingSmall: '28px 40px',
+        paddingMedium: '28px 40px',
+        paddingLarge: '32px 48px',
+        paddingHuge: '38px 56px',
+      },
+      Dialog: {
+        closeColorHover: 'inherit',
+        closeMargin: '32px 42px 0 0',
+        contentMargin: '28px 0',
+        padding: '28px 40px',
+      },
+    },
   },
   Progress: {
     fillColor: colors.green,

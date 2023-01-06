@@ -89,7 +89,6 @@
 
 <script lang="ts" setup>
 import { useMessage, CollapseProps } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   id: { type: Number, required: true },
@@ -209,7 +208,7 @@ async function getApiKeyRoles() {
       apiKeyRoles.value = res.data;
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loadingRoles.value = false;
 }
@@ -243,7 +242,7 @@ async function updateApiKey() {
       emit('submitSuccess');
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loadingForm.value = false;
 }
@@ -281,7 +280,7 @@ async function addPermission(serviceUuid: string, roleId: number) {
 
     message.success($i18n.t('form.success.updated.apiKeyRole'));
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
 }
 
@@ -296,7 +295,7 @@ async function removePermission(serviceUuid: string, roleId: number) {
 
     message.success($i18n.t('form.success.deleted.apiKeyRole'));
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
 }
 </script>

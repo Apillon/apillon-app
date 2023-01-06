@@ -25,7 +25,7 @@
 
       <!--  Bucket description -->
       <n-form-item
-        path="description"
+        path="bucketDescription"
         :label="$t('form.label.bucketDescription')"
         :label-props="{ for: 'bucketDescription' }"
       >
@@ -76,7 +76,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   bucketId: { type: Number, default: 0 },
@@ -104,6 +103,13 @@ const rules: NFormRules = {
     {
       required: true,
       message: $i18n.t('validation.bucketNameRequired'),
+      trigger: 'input',
+    },
+  ],
+  bucketDescription: [
+    {
+      max: 255,
+      message: $i18n.t('validation.bucketDescriptionTooLong'),
       trigger: 'input',
     },
   ],
@@ -166,7 +172,7 @@ async function createBucket() {
     dataStore.fetchBuckets();
     router.push({ name: 'dashboard-service-storage' });
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }
@@ -192,7 +198,7 @@ async function updateBucket() {
       }
     });
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

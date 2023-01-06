@@ -44,7 +44,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -53,7 +52,7 @@ const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const userRoles: Array<NSelectOption> = CreateUserRoles($i18n);
+const userRoles: Array<NSelectOption> = CreateUserRoles();
 
 /** Col widths */
 const { width } = useWindowSize();
@@ -119,9 +118,9 @@ async function inviteUser() {
 
     /** Show success msg and refresh users */
     message.success($i18n.t('form.success.created.userInvite'));
-    await settingsStore.fetchProjectUsers($i18n);
+    await settingsStore.fetchProjectUsers();
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

@@ -16,8 +16,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
@@ -29,7 +27,7 @@ useHead({
 onMounted(async () => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     /** GET Bucket quota */
-    await dataStore.fetchBucketQuota($i18n);
+    await dataStore.fetchBucketQuota();
     pageLoading.value = false;
   });
 });

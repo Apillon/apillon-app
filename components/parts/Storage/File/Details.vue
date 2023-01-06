@@ -105,7 +105,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   fileCid: { type: String, default: '' },
@@ -136,7 +135,7 @@ onDeactivated(() => {
 /** Get File details */
 async function getFileDetails(uuidOrCID: string) {
   if (!(uuidOrCID in dataStore.file.items)) {
-    dataStore.file.items[uuidOrCID] = await dataStore.fetchFileDetails(uuidOrCID, $i18n);
+    dataStore.file.items[uuidOrCID] = await dataStore.fetchFileDetails(uuidOrCID);
   }
   fileDetails.value = dataStore.file.items[uuidOrCID].file;
   fileStatus.value = fileDetails.value?.fileStatus || dataStore.file.items[uuidOrCID].fileStatus;

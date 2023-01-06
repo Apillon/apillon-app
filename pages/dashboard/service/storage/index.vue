@@ -11,14 +11,18 @@
           <div class="w-[1px] h-[13px] bg-grey"></div>
           <a href="#learn-more">{{ $t('general.learnMore') }}</a>
         </n-space>
-        <nuxt-link
-          :to="{ name: 'dashboard-service-storage-new' }"
-          :disabled="settingsStore.isProjectUser()"
-        >
+        <template v-if="!settingsStore.isProjectUser()">
+          <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
+            <n-button type="primary">
+              {{ $t('storage.bucket.new') }}
+            </n-button>
+          </nuxt-link>
+        </template>
+        <template v-else>
           <n-button type="primary" :disabled="settingsStore.isProjectUser()">
             {{ $t('storage.bucket.new') }}
           </n-button>
-        </nuxt-link>
+        </template>
       </n-space>
     </template>
     <slot>
@@ -44,8 +48,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
@@ -67,14 +69,14 @@ onMounted(() => {
 
 async function getBuckets() {
   if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
+    dataStore.promises.buckets = await dataStore.fetchBuckets();
   }
 }
 
 /** GET Users on project */
 async function getUsersOnProject() {
   if (!settingsStore.hasUsers) {
-    await settingsStore.fetchProjectUsers($i18n);
+    await settingsStore.fetchProjectUsers();
   }
 }
 </script>

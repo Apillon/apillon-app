@@ -23,7 +23,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   btnType: {
@@ -80,7 +79,7 @@ async function passwordChangeRequest() {
       message.success($i18n.t('form.success.requestPasswordChange'));
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

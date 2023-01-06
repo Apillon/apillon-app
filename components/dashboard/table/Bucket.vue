@@ -18,9 +18,8 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
@@ -68,6 +67,9 @@ const createColumns = (): DataTableColumns<RowData> => {
     {
       title: $i18n.t('storage.bucket.description'),
       key: 'description',
+      render(row) {
+        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
+      },
     },
     {
       title: $i18n.t('general.actions'),
@@ -141,7 +143,7 @@ onMounted(() => {
 
 async function getBuckets() {
   if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
+    dataStore.promises.buckets = await dataStore.fetchBuckets();
   }
 }
 </script>

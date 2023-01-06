@@ -98,7 +98,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   bucketId: { type: Number, required: true },
@@ -229,7 +228,7 @@ async function createWebhook() {
 
     message.success($i18n.t('form.success.created.webhook'));
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loadingForm.value = false;
 }
@@ -246,7 +245,7 @@ async function updateWebhook() {
 
     message.success($i18n.t('form.success.updated.webhook'));
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loadingForm.value = false;
 }
@@ -261,7 +260,7 @@ async function resetWebhook() {
 
     message.success($i18n.t('form.success.deleted.webhook'));
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loadingReset.value = false;
 }

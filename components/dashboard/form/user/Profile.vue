@@ -49,7 +49,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const message = useMessage();
 const $i18n = useI18n();
@@ -129,7 +128,7 @@ async function updateUserProfile() {
       message.success($i18n.t('form.success.profile'));
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

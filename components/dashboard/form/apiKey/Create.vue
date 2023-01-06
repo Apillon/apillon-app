@@ -107,7 +107,6 @@
 
 <script lang="ts" setup>
 import { useMessage, CollapseProps } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -247,7 +246,7 @@ async function createApiKey() {
       settingsStore.fetchApiKeys();
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

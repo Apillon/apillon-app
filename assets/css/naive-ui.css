@@ -78,6 +78,11 @@
       width: 28px;
     }
   }
+
+  /** Clickable columns */
+  .onClickOpen {
+    cursor: pointer;
+  }
 }
 
 /** Dialog */
@@ -203,6 +208,14 @@
 body > .n-message-container {
   &.n-message-container--top {
     position: fixed;
+  }
+}
+
+/** Popover */
+.n-popover {
+  &__content {
+    width: 400px;
+    max-width: 100vw;
   }
 }
 

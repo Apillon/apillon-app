@@ -7,12 +7,11 @@
 <script lang="ts" setup>
 import { h } from 'vue';
 import type { MenuOption } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const { currentRoute } = useRouter();
+const { name } = useRoute();
+const selectedPage = ref(name?.toString() || '');
 const NuxtLink = resolveComponent('NuxtLink');
-const selectedPage = ref(currentRoute.value?.name);
 
 const menuOptions: MenuOption[] = [
   {

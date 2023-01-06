@@ -19,7 +19,6 @@
 
 <script lang="ts" setup>
 import { NUpload, NUploadDragger, useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   bucketUuid: { type: String, required: true },
@@ -94,7 +93,7 @@ async function uploadFiles({ file, onError, onFinish }: NUploadCustomRequestOpti
       updateFileStatus(file.id, FileUploadStatusValue.ERROR);
 
       /** Show error message */
-      message.error(userFriendlyMsg(error, $i18n));
+      message.error(userFriendlyMsg(error));
     };
     xhr.send(file.file);
   } catch (error) {
@@ -102,7 +101,7 @@ async function uploadFiles({ file, onError, onFinish }: NUploadCustomRequestOpti
     updateFileStatus(file.id, FileUploadStatusValue.ERROR);
 
     /** Show error message */
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
 }
 

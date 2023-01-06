@@ -152,12 +152,12 @@ export const useDataStore = defineStore('data', {
     },
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getBucket(bucketId: number, $i18n?: i18nType | null): Promise<BucketInterface> {
+    async getBucket(bucketId: number): Promise<BucketInterface> {
       const bucket = this.bucket.items.find(item => item.id === bucketId);
       if (bucket !== undefined) {
         return bucket;
       }
-      return await this.fetchBucket(bucketId, $i18n);
+      return await this.fetchBucket(bucketId);
     },
 
     onBucketMounted(id: number) {
@@ -195,7 +195,7 @@ export const useDataStore = defineStore('data', {
      */
 
     /** Projects */
-    async fetchProjects(redirectToDashboard: boolean = false, $i18n?: i18nType | null) {
+    async fetchProjects(redirectToDashboard: boolean = false) {
       const router = useRouter();
       try {
         const res = await $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
@@ -225,13 +225,13 @@ export const useDataStore = defineStore('data', {
         this.project.items = [];
 
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
       return null;
     },
 
     /** Users */
-    async fetchProject($i18n?: any) {
+    async fetchProject() {
       try {
         const res = await $api.get<ProjectResponse>(endpoints.project(this.currentProjectId));
         this.project.active = res.data;
@@ -239,11 +239,11 @@ export const useDataStore = defineStore('data', {
         this.project.active = {} as ProjectInterface;
 
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
     },
 
-    async fetchProjectsQuota($i18n?: i18nType | null) {
+    async fetchProjectsQuota() {
       try {
         const res = await $api.get<ProjectsQuotaResponse>(endpoints.projectsQuota);
         this.project.quotaReached = res.data;
@@ -251,12 +251,12 @@ export const useDataStore = defineStore('data', {
         this.project.quotaReached = undefined;
 
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
     },
 
     /** Services */
-    async fetchServices($i18n?: any, type?: number) {
+    async fetchServices(type?: number) {
       if (!this.hasProjects) {
         alert('Please create your first project');
         return [] as Array<ServiceInterface>;
@@ -276,13 +276,13 @@ export const useDataStore = defineStore('data', {
         });
       } catch (error: any) {
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
       return [] as Array<ServiceInterface>;
     },
 
-    async getAllServices($i18n?: i18nType | null) {
-      const services = await this.fetchServices($i18n);
+    async getAllServices() {
+      const services = await this.fetchServices();
 
       Object.entries(ServiceTypeNames).map(([serviceType, typeName]) => {
         this.services[typeName] =
@@ -290,18 +290,18 @@ export const useDataStore = defineStore('data', {
           ([] as Array<ServiceInterface>);
       });
     },
-    async getAuthServices($i18n?: i18nType | null) {
-      this.services.authentication = await this.fetchServices($i18n, ServiceType.AUTHENTICATION);
+    async getAuthServices() {
+      this.services.authentication = await this.fetchServices(ServiceType.AUTHENTICATION);
     },
-    async getStorageServices($i18n?: i18nType | null) {
-      this.services.storage = await this.fetchServices($i18n, ServiceType.STORAGE);
+    async getStorageServices() {
+      this.services.storage = await this.fetchServices(ServiceType.STORAGE);
     },
-    async getComputingServices($i18n?: i18nType | null) {
-      this.services.computing = await this.fetchServices($i18n, ServiceType.COPMUTING);
+    async getComputingServices() {
+      this.services.computing = await this.fetchServices(ServiceType.COPMUTING);
     },
 
     /** Buckets */
-    async fetchBuckets($i18n?: i18nType | null) {
+    async fetchBuckets() {
       if (!this.hasProjects) {
         alert('Please create your first project');
         return null;
@@ -321,12 +321,12 @@ export const useDataStore = defineStore('data', {
         this.bucket.items = [] as Array<BucketInterface>;
 
         /** Show error message 
-        window.$message.error(userFriendlyMsg(error, $i18n));*/
+        window.$message.error(userFriendlyMsg(error));*/
       }
       return null;
     },
 
-    async fetchBucket(bucketId: number, $i18n?: i18nType | null): Promise<BucketInterface> {
+    async fetchBucket(bucketId: number): Promise<BucketInterface> {
       try {
         const res = await $api.get<BucketResponse>(endpoints.bucket(bucketId));
 
@@ -336,12 +336,12 @@ export const useDataStore = defineStore('data', {
         this.bucket.active = {} as BucketInterface;
 
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
       return {} as BucketInterface;
     },
 
-    async fetchBucketQuota($i18n?: i18nType | null) {
+    async fetchBucketQuota() {
       if (!this.hasProjects) {
         alert('Please create your first project');
         return;
@@ -357,12 +357,11 @@ export const useDataStore = defineStore('data', {
         this.bucket.quotaReached = undefined;
 
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
     },
 
     async fetchDirectoryContent(
-      $i18n: i18nType,
       bucketUuid?: string,
       folderId?: number,
       page?: number,
@@ -415,28 +414,25 @@ export const useDataStore = defineStore('data', {
         this.folder.total = 0;
 
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
 
       this.folder.loading = false;
     },
 
-    async fetchFileInfo(fileId: number, $i18n?: i18nType | null) {
+    async fetchFileInfo(fileId: number) {
       try {
         const res = await $api.get<FolderResponse>(`${endpoints.file}${fileId}`);
 
         return res.data;
       } catch (error: any) {
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
       return null;
     },
 
-    async fetchFileDetails(
-      fileUuidOrCID: string,
-      $i18n?: i18nType | null
-    ): Promise<FileDetailsInterface> {
+    async fetchFileDetails(fileUuidOrCID: string): Promise<FileDetailsInterface> {
       try {
         const url = endpoints.storageFileDetails(this.currentBucket.bucket_uuid, fileUuidOrCID);
         const res = await $api.get<FileDetailsResponse>(url);
@@ -444,7 +440,7 @@ export const useDataStore = defineStore('data', {
         return res.data;
       } catch (error: any) {
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
       return {} as FileDetailsInterface;
     },
@@ -464,7 +460,7 @@ export const useDataStore = defineStore('data', {
     /**
      * Instructions
      */
-    async fetchInstruction(key: string, $i18n?: i18nType | null) {
+    async fetchInstruction(key: string) {
       try {
         const res = await $api.get<InstructionResponse>(endpoints.instructions(key));
 
@@ -473,10 +469,10 @@ export const useDataStore = defineStore('data', {
         }
       } catch (error) {
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
     },
-    async fetchInstructions(key: string, $i18n?: i18nType | null) {
+    async fetchInstructions(key: string) {
       try {
         const res = await $api.get<InstructionsResponse>(endpoints.instructions(), {
           forRoute: key,
@@ -490,7 +486,7 @@ export const useDataStore = defineStore('data', {
       } catch (error) {
         this.instructions[key] = [];
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
     },
   },

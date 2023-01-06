@@ -17,8 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
@@ -36,7 +34,7 @@ onMounted(() => {
 
 async function getServicesAuth() {
   if (!dataStore.hasServices(ServiceType.AUTHENTICATION)) {
-    await dataStore.getAuthServices($i18n);
+    await dataStore.getAuthServices();
   }
   pageLoading.value = false;
 }

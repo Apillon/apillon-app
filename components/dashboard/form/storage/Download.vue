@@ -11,7 +11,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   items: { type: Array<FolderInterface>, required: true },
@@ -50,7 +49,7 @@ async function downloadFile(CID?: string | null) {
     return;
   }
   if (!(CID in dataStore.file.items)) {
-    dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID, $i18n);
+    dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
   }
   const fileDetails: FileDetails = dataStore.file.items[CID].file;
   return download(fileDetails.downloadLink, fileDetails.name);

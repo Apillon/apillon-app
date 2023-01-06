@@ -539,6 +539,7 @@
   "validation": {
     "apiKeyName": "API key name is required",
     "apiKeyIdRequired": "API key is required",
+    "bucketDescriptionTooLong": "Text is too long (max 255 characters)",
     "bucketNameRequired": "Please enter bucket name",
     "containsLowercase": "Must include a lowercase character",
     "containsNumber": "Must include a number character",

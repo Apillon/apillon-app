@@ -11,8 +11,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const attrs = useAttrs();
 const emit = defineEmits(['roleChange']);
@@ -46,5 +44,5 @@ const selectedRole = computed({
   },
 });
 
-const userRoles: Array<NSelectOption> = CreateUserRoles($i18n);
+const userRoles: Array<NSelectOption> = CreateUserRoles();
 </script>

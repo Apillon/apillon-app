@@ -10,9 +10,6 @@
 <script lang="ts" setup>
 import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
-import { timeToDays } from '~~/lib/utils';
-import { useDataStore } from '~~/stores/data';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -157,7 +154,7 @@ onMounted(() => {
 
 async function getServicesStorage() {
   if (!dataStore.hasServices(ServiceType.STORAGE)) {
-    await dataStore.getStorageServices($i18n);
+    await dataStore.getStorageServices();
   }
 }
 </script>

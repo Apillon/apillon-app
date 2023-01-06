@@ -78,7 +78,6 @@
 
 <script lang="ts" setup>
 import colors from '~~/tailwind.colors';
-import { useI18n } from 'vue-i18n';
 import { useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
@@ -92,14 +91,14 @@ const showPopoverDownload = ref<boolean>(false);
 
 /** Refresh directory content */
 function refreshDirectoryContent() {
-  dataStore.fetchDirectoryContent($i18n);
+  dataStore.fetchDirectoryContent();
 }
 
 function onFolderCreated() {
   showModalNewFolder.value = false;
 
   /** Refresh directory content */
-  dataStore.fetchDirectoryContent($i18n);
+  dataStore.fetchDirectoryContent();
 }
 
 /**
@@ -138,7 +137,7 @@ async function downloadFile(CID?: string | null) {
   }
   try {
     if (!(CID in dataStore.file.items)) {
-      dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID, $i18n);
+      dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
     }
     const fileDetails: FileDetails = dataStore.file.items[CID].file;
     return download(fileDetails.downloadLink, fileDetails.name);
@@ -167,7 +166,7 @@ function deleteSelectedFiles() {
 
 /** On folder deleted, refresh folder list */
 async function onDeleted() {
-  await dataStore.fetchDirectoryContent($i18n);
+  await dataStore.fetchDirectoryContent();
   showModalDelete.value = false;
 }
 </script>

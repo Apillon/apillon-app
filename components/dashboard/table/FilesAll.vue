@@ -57,7 +57,6 @@
 <script lang="ts" setup>
 import { debounce } from 'lodash';
 import { DataTableColumns, NButton, NDropdown, useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -315,7 +314,7 @@ async function fetchFiles(page?: number, limit?: number) {
     total.value = 0;
 
     /** Show error message */
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
 
   loading.value = false;

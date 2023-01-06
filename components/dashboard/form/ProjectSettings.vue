@@ -50,8 +50,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
@@ -105,7 +103,7 @@ async function updateProjectData() {
       dataStore.updateCurrentProject(res.data);
     }
   } catch (error) {
-    window.$message.error(userFriendlyMsg(error, $i18n));
+    window.$message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

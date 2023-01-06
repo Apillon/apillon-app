@@ -46,7 +46,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   resetPassword: { type: Boolean, default: false },
@@ -154,9 +153,9 @@ async function register() {
     authStore.setUserToken(res.data.token);
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-    await dataStore.fetchProjects(true, $i18n);
+    await dataStore.fetchProjects(true);
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }
@@ -178,7 +177,7 @@ async function resetPassword() {
       emit('submitSuccess');
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }
