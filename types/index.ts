@@ -7,10 +7,6 @@ import {
 export {};
 
 declare global {
-  interface Window {
-    $message: NMessageApiInjection;
-  }
-
   /**
    * i18n
    */
@@ -22,6 +18,14 @@ declare global {
     NonNullable<Options['locale']>
   >;
   type i18nT = ComposerTranslation;
+
+  /**
+   * Window
+   */
+  interface Window {
+    $message: NMessageApiInjection;
+    $i18n: i18nType;
+  }
 
   /**
    * Base responses

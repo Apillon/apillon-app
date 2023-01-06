@@ -128,7 +128,7 @@ async function updateUserProfile() {
       message.success($i18n.t('form.success.profile'));
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

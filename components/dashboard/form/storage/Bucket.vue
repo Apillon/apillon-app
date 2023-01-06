@@ -165,7 +165,7 @@ async function createBucket() {
     dataStore.fetchBuckets();
     router.push({ name: 'dashboard-service-storage' });
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }
@@ -191,7 +191,7 @@ async function updateBucket() {
       }
     });
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

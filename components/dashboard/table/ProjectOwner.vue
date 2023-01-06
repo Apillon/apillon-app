@@ -13,7 +13,7 @@ const SelectRole = resolveComponent('SelectRole');
 onMounted(async () => {
   if (!settingsStore.hasUsers) {
     loading.value = true;
-    await settingsStore.fetchProjectUsers($i18n);
+    await settingsStore.fetchProjectUsers();
     loading.value = false;
   }
 });

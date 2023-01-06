@@ -154,7 +154,7 @@ onMounted(() => {
 
 async function getServicesStorage() {
   if (!dataStore.hasServices(ServiceType.STORAGE)) {
-    await dataStore.getStorageServices($i18n);
+    await dataStore.getStorageServices();
   }
 }
 </script>

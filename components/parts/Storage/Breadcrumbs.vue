@@ -42,6 +42,6 @@ function goToFolder(parentFolderId?: number | undefined) {
 
   /** Reset search string and refesh folders */
   dataStore.folderSearch();
-  dataStore.fetchDirectoryContent($i18n);
+  dataStore.fetchDirectoryContent();
 }
 </script>

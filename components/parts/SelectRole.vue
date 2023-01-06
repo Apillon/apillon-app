@@ -44,5 +44,5 @@ const selectedRole = computed({
   },
 });
 
-const userRoles: Array<NSelectOption> = CreateUserRoles($i18n);
+const userRoles: Array<NSelectOption> = CreateUserRoles();
 </script>

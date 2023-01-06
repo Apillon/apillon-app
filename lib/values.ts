@@ -19,10 +19,10 @@ export const UserRoleIds = [
 ];
 
 /** User roles */
-export function CreateUserRoles($i18n: i18nType): Array<NSelectOption> {
+export function CreateUserRoles(): Array<NSelectOption> {
   return Object.entries(DefaultUserRoles).map(([roleId, role]) => {
     return {
-      label: $i18n.t(`userRole.${role}`),
+      label: window.$i18n.t(`userRole.${role}`),
       value: parseInt(roleId),
       disabled: parseInt(roleId) === DefaultUserRole.PROJECT_OWNER,
     };

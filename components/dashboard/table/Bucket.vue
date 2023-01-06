@@ -140,7 +140,7 @@ onMounted(() => {
 
 async function getBuckets() {
   if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
+    dataStore.promises.buckets = await dataStore.fetchBuckets();
   }
 }
 </script>

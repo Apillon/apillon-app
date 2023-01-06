@@ -167,12 +167,9 @@ export function addBucketAdditionalData(bucket: BucketInterface): BucketInterfac
 /**
  * Error messages
  */
-export function userFriendlyMsg(
-  error: ApiError | ReferenceError | TypeError | any,
-  $i18n?: i18nType | null
-) {
+export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | any) {
   // Check error exists and if translation is included
-  if (!$i18n || !($i18n instanceof Object) || !error) {
+  if (!window.$i18n || !(window.$i18n instanceof Object) || !error) {
     if (error instanceof ReferenceError || error instanceof TypeError) {
       return error.message;
     }
@@ -185,16 +182,20 @@ export function userFriendlyMsg(
     const err = error as ApiError;
     if (err.errors && Array.isArray(err.errors)) {
       return err.errors
-        .map(e => singleErrorMessage($i18n, e.message, takeFirstDigitsFromNumber(e.statusCode)))
+        .map(e =>
+          singleErrorMessage(window.$i18n, e.message, takeFirstDigitsFromNumber(e.statusCode))
+        )
         .join(', ');
     } else if (err.message) {
-      return singleErrorMessage($i18n, err.message, err.status);
+      return singleErrorMessage(window.$i18n, err.message, err.status);
     }
   } else if (error instanceof ReferenceError || error instanceof TypeError) {
-    return $i18n.te(`error.${error.message}`) ? $i18n.t(`error.${error.message}`) : error.message;
+    return window.$i18n.te(`error.${error.message}`)
+      ? window.$i18n.t(`error.${error.message}`)
+      : error.message;
   }
 
-  return $i18n.t('error.API');
+  return window.$i18n.t('error.API');
 }
 
 /** Translate single error message */

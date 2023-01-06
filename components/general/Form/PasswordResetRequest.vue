@@ -79,7 +79,7 @@ async function passwordChangeRequest() {
       message.success($i18n.t('form.success.requestPasswordChange'));
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

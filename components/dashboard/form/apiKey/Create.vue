@@ -246,7 +246,7 @@ async function createApiKey() {
       settingsStore.fetchApiKeys();
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

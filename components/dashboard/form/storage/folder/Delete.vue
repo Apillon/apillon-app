@@ -45,7 +45,7 @@ async function deleteFolderItems() {
         message.success($i18n.t(`form.success.deleted.${item.type}`));
       }
     } catch (error) {
-      message.error(userFriendlyMsg(error, $i18n));
+      message.error(userFriendlyMsg(error));
     }
   });
   Promise.all(promises).then(_ => {

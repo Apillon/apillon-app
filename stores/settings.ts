@@ -42,11 +42,11 @@ export const useSettingsStore = defineStore('settings', {
 
     /**
      *
-     * $i18n API calls
+     * API calls
      */
 
     /** API keys */
-    async fetchApiKeys($i18n?: any) {
+    async fetchApiKeys() {
       if (!dataStore.hasProjects) {
         this.apiKeys = [] as Array<ApiKeyInterface>;
         alert('Please create project first');
@@ -62,12 +62,12 @@ export const useSettingsStore = defineStore('settings', {
         this.apiKeys = [] as Array<ApiKeyInterface>;
 
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
     },
 
     /** Users */
-    async fetchProjectUsers($i18n?: any) {
+    async fetchProjectUsers() {
       try {
         const res = await $api.get<ProjectUsersResponse>(
           endpoints.projectUsers(dataStore.currentProjectId)
@@ -77,7 +77,7 @@ export const useSettingsStore = defineStore('settings', {
         this.users = [];
 
         /** Show error message */
-        window.$message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
     },
   },

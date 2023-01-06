@@ -129,7 +129,7 @@ async function createFolder() {
       emit('submitSuccess');
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

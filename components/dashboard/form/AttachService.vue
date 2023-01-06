@@ -111,7 +111,7 @@ async function createService() {
       console.log(res.data);
     }
   } catch (error) {
-    window.$message.error(userFriendlyMsg(error, $i18n));
+    window.$message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

@@ -82,7 +82,7 @@ const emit = defineEmits(['submitActive', 'submitSuccess']);
 
 onMounted(async () => {
   /** GET Project quota */
-  await dataStore.fetchProjectsQuota($i18n);
+  await dataStore.fetchProjectsQuota();
 });
 
 /** Terms label with link */
@@ -155,7 +155,7 @@ async function createProject() {
       emit('submitActive', false);
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
   emit('submitActive', false);

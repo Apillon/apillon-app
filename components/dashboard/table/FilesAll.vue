@@ -314,7 +314,7 @@ async function fetchFiles(page?: number, limit?: number) {
     total.value = 0;
 
     /** Show error message */
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
 
   loading.value = false;

@@ -18,6 +18,8 @@
 import { lightTheme, darkTheme, enUS, dateEnUS } from 'naive-ui';
 
 const $i18n = useI18n();
+window.$i18n = useI18n();
+
 const lang = computed(() => {
   return $i18n.locale.value;
 });

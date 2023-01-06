@@ -65,14 +65,14 @@ onMounted(() => {
 
 async function getBuckets() {
   if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
+    dataStore.promises.buckets = await dataStore.fetchBuckets();
   }
 }
 
 /** GET Users on project */
 async function getUsersOnProject() {
   if (!settingsStore.hasUsers) {
-    await settingsStore.fetchProjectUsers($i18n);
+    await settingsStore.fetchProjectUsers();
   }
 }
 </script>

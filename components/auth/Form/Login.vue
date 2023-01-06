@@ -96,9 +96,9 @@ async function login() {
     authStore.changeUser(data.data);
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-    await dataStore.fetchProjects(true, $i18n);
+    await dataStore.fetchProjects(true);
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

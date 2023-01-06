@@ -107,7 +107,7 @@ onMounted(async () => {
 
 async function getInstructions(key: string) {
   if (!dataStore.hasInstructions(key)) {
-    await dataStore.fetchInstructions(key, $i18n);
+    await dataStore.fetchInstructions(key);
   }
 }
 

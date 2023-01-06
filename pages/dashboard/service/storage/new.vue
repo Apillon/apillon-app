@@ -27,7 +27,7 @@ useHead({
 onMounted(async () => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     /** GET Bucket quota */
-    await dataStore.fetchBucketQuota($i18n);
+    await dataStore.fetchBucketQuota();
     pageLoading.value = false;
   });
 });

@@ -88,7 +88,7 @@ async function generateApiKey() {
       console.log(res.data);
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

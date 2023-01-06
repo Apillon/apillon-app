@@ -100,7 +100,7 @@ async function signupWithEmail() {
     }
   } catch (error) {
     formData.value.captcha = null;
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

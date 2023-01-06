@@ -137,7 +137,7 @@ function isRoleChangeAllowed(user: ProjectUserInterface) {
 /** GET Users on project */
 async function getUsers() {
   loading.value = true;
-  await settingsStore.fetchProjectUsers($i18n);
+  await settingsStore.fetchProjectUsers();
   loading.value = false;
 }
 
@@ -153,7 +153,7 @@ async function updateRole(id: number, roleId: number) {
     message.success($i18n.t('form.success.updated.userRole'));
     await getUsers();
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   updateLoadingStatusOnUsersRole(id, false);
 }
@@ -169,7 +169,7 @@ async function deleteRole(id: number) {
     message.success($i18n.t('form.success.deleted.userRole'));
     await getUsers();
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   updateLoadingStatusOnUsersRole(id, false);
 }
