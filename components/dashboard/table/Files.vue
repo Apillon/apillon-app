@@ -36,7 +36,15 @@
 
 <script lang="ts" setup>
 import { debounce } from 'lodash';
-import { DataTableColumns, DataTableRowKey, NButton, NDropdown, useMessage } from 'naive-ui';
+import {
+  DataTableColumns,
+  DataTableRowKey,
+  NButton,
+  NDropdown,
+  NEllipsis,
+  NSpace,
+  useMessage,
+} from 'naive-ui';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -123,7 +131,7 @@ const availableColumns = ref([
 ]);
 
 /** Columns */
-const columns = computed<DataTableColumns<FolderInterface>>(() => {
+const columns = computed(() => {
   return [
     {
       type: 'selection',
@@ -131,16 +139,27 @@ const columns = computed<DataTableColumns<FolderInterface>>(() => {
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
-      className: selectedColumns.value.includes('name') ? '' : 'hidden',
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        selectedColumns.value.includes('name') ? '' : 'hidden',
+      ],
       sorter: 'default',
       minWidth: 150,
-      render(row) {
+      render(row: FolderInterface) {
         return [
-          h(IconFolderFile, { isFile: row.type === BucketItemType.FILE }, ''),
           h(
-            'span',
-            { class: 'ml-2 text-blue cursor-pointer', onClick: () => onItemOpen(row) },
-            row.name
+            NSpace,
+            { align: 'center', wrap: false },
+            {
+              default: () => [
+                h(IconFolderFile, { isFile: row.type === BucketItemType.FILE }, ''),
+                h(
+                  NEllipsis,
+                  { class: 'text-blue align-bottom', 'line-clamp': 2 },
+                  { default: () => row.name }
+                ),
+              ],
+            }
           ),
         ];
       },
@@ -150,16 +169,10 @@ const columns = computed<DataTableColumns<FolderInterface>>(() => {
       key: 'CID',
       className: selectedColumns.value.includes('CID') ? '' : 'hidden',
       sorter: 'default',
-      render(row) {
+      render(row: FolderInterface) {
         if (row.CID) {
           return [
-            h(
-              'span',
-              { class: 'text-grey' },
-              {
-                default: () => truncateCid(row.CID || ''),
-              }
-            ),
+            h('span', { class: 'text-grey' }, { default: () => truncateCid(row.CID || '') }),
             h(
               'button',
               { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '', $i18n.t) },
@@ -173,9 +186,12 @@ const columns = computed<DataTableColumns<FolderInterface>>(() => {
     {
       title: $i18n.t('storage.fileSize'),
       key: 'size',
-      className: selectedColumns.value.includes('size') ? '' : 'hidden',
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        selectedColumns.value.includes('size') ? '' : 'hidden',
+      ],
       sorter: 'default',
-      render(row) {
+      render(row: FolderInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
         }
@@ -185,18 +201,24 @@ const columns = computed<DataTableColumns<FolderInterface>>(() => {
     {
       title: $i18n.t('dashboard.created'),
       key: 'createTime',
-      className: selectedColumns.value.includes('createTime') ? '' : 'hidden',
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        selectedColumns.value.includes('createTime') ? '' : 'hidden',
+      ],
       sorter: 'default',
-      render(row) {
+      render(row: FolderInterface) {
         return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
       },
     },
     {
       title: $i18n.t('storage.contentType'),
       key: 'contentType',
-      className: selectedColumns.value.includes('contentType') ? '' : 'hidden',
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        selectedColumns.value.includes('contentType') ? '' : 'hidden',
+      ],
       sorter: 'default',
-      render(row) {
+      render(row: FolderInterface) {
         if (row.contentType) {
           return h('span', {}, row.contentType);
         }
@@ -208,7 +230,7 @@ const columns = computed<DataTableColumns<FolderInterface>>(() => {
       key: 'actions',
       align: 'right',
       className: '!py-0',
-      render(row) {
+      render(row: FolderInterface) {
         return h(
           NDropdown,
           {
@@ -265,8 +287,12 @@ function handleColumnChange(selectedValues: Array<string>) {
 
 function rowProps(row: FolderInterface) {
   return {
-    onClick: () => {
+    onClick: (e: Event) => {
       currentRow.value = row;
+
+      if (canOpenColumnCell(e.composedPath())) {
+        onItemOpen(row);
+      }
     },
   };
 }
@@ -337,6 +363,14 @@ function clearSorter() {
     tableRef.value.sort(0, false);
   }
 }
+
+/** Watch folder path, onCahnge clear sorter */
+watch(
+  () => dataStore.folder.path,
+  _ => {
+    clearSorter();
+  }
+);
 
 /** On page change, load data */
 async function handlePageChange(currentPage: number) {

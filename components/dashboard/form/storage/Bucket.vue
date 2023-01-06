@@ -25,7 +25,7 @@
 
       <!--  Bucket description -->
       <n-form-item
-        path="description"
+        path="bucketDescription"
         :label="$t('form.label.bucketDescription')"
         :label-props="{ for: 'bucketDescription' }"
       >
@@ -103,6 +103,13 @@ const rules: NFormRules = {
     {
       required: true,
       message: $i18n.t('validation.bucketNameRequired'),
+      trigger: 'input',
+    },
+  ],
+  bucketDescription: [
+    {
+      max: 255,
+      message: $i18n.t('validation.bucketDescriptionTooLong'),
       trigger: 'input',
     },
   ],

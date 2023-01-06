@@ -226,6 +226,15 @@ export function isFeatureEnabled(feature: Feature): boolean {
   return config.public.features[feature] || false;
 }
 
+/** Check if any of elements contains class ${ON_COLUMN_CLICK_OPEN_CLASS}, which means this column is clickable */
+export function canOpenColumnCell(path: EventTarget[]) {
+  return (
+    path.find((item: EventTarget) =>
+      (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
+    ) !== undefined
+  );
+}
+
 /**
  * Actions
  */
