@@ -89,7 +89,6 @@
 
 <script lang="ts" setup>
 import { useMessage, CollapseProps } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   id: { type: Number, required: true },

@@ -6,7 +6,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 import { useProvider } from '~~/composables/useProvider';
 import useContracts from '~~/composables/useContracts';
 

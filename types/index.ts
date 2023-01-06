@@ -1,4 +1,8 @@
-import { Composer, ComposerTranslation, UseI18nOptions } from 'vue-i18n';
+import {
+  Composer,
+  ComposerTranslation,
+  UseI18nOptions,
+} from '@nuxtjs/i18n/dist/runtime/composables';
 
 export {};
 

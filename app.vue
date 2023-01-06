@@ -16,7 +16,6 @@
 
 <script lang="ts" setup>
 import { lightTheme, darkTheme, enUS, dateEnUS } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const lang = computed(() => {

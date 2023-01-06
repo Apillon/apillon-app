@@ -1,4 +1,6 @@
+import { DefaultLocaleMessageSchema } from '@nuxtjs/i18n/dist/runtime/composables';
 import { getAppConfig } from './lib/utils';
+import en from './locales/en.json';
 
 const appConfig: ConfigInterface = getAppConfig(
   process.env.ENV || process.env.RUN_ENV || process.env.NODE_ENV
@@ -36,6 +38,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-icons',
     '@nuxtjs/google-fonts',
+    '@nuxtjs/i18n',
   ],
 
   tailwindcss: {
@@ -91,6 +94,18 @@ export default defineNuxtConfig({
       },
       'IBM Plex Sans': {
         wght: [400, 700],
+      },
+    },
+  },
+
+  i18n: {
+    // add `vueI18n` option to `@nuxtjs/i18n` module options
+    vueI18n: {
+      legacy: false,
+      globalInjection: true,
+      locale: 'en',
+      messages: {
+        en: en as DefaultLocaleMessageSchema,
       },
     },
   },

@@ -19,7 +19,6 @@
 
 <script lang="ts" setup>
 import { NUpload, NUploadDragger, useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   bucketUuid: { type: String, required: true },

@@ -78,7 +78,6 @@
 
 <script lang="ts" setup>
 import colors from '~~/tailwind.colors';
-import { useI18n } from 'vue-i18n';
 import { useMessage } from 'naive-ui';
 
 const $i18n = useI18n();

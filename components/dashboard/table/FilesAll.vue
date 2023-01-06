@@ -57,7 +57,6 @@
 <script lang="ts" setup>
 import { debounce } from 'lodash';
 import { DataTableColumns, NButton, NDropdown, useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const message = useMessage();
