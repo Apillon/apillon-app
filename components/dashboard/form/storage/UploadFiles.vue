@@ -1,20 +1,22 @@
 <template>
-  <n-upload :show-file-list="false" multiple directory-dnd :custom-request="uploadFiles">
-    <n-upload-dragger>
-      <div class="text-sm">
-        <span class="mr-1">{{ $t('storage.file.dragAndDrop') }}</span>
-        <strong class="text-primary">{{ $t('storage.file.clickToUpload') }}</strong>
-      </div>
-    </n-upload-dragger>
-  </n-upload>
+  <div>
+    <n-upload :show-file-list="false" multiple directory-dnd :custom-request="uploadFiles">
+      <n-upload-dragger>
+        <div class="text-sm">
+          <span class="mr-1">{{ $t('storage.file.dragAndDrop') }}</span>
+          <strong class="text-primary">{{ $t('storage.file.clickToUpload') }}</strong>
+        </div>
+      </n-upload-dragger>
+    </n-upload>
 
-  <n-scrollbar class="max-h-[50vh]" y-scrollable>
-    <div v-if="fileList" class="n-upload-file-list mt-4">
-      <div v-for="file in fileList" class="n-upload-file">
-        <StorageFileListItem v-bind="file" />
+    <n-scrollbar class="max-h-[50vh]" y-scrollable>
+      <div v-if="fileList" class="n-upload-file-list mt-4">
+        <div v-for="file in fileList" class="n-upload-file">
+          <StorageFileListItem v-bind="file" />
+        </div>
       </div>
-    </div>
-  </n-scrollbar>
+    </n-scrollbar>
+  </div>
 </template>
 
 <script lang="ts" setup>

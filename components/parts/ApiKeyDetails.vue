@@ -20,7 +20,7 @@
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('dashboard.apiKey.apiKey') }}</p>
       <strong>{{ apiKey }}</strong>
-      <button class="ml-2" @click="copyToClipboard(apiKey, $t)">
+      <button class="ml-2" @click="copyToClipboard(apiKey)">
         <span class="icon-copy"></span>
       </button>
     </div>
@@ -28,7 +28,7 @@
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('dashboard.apiKey.apiKeySecret') }}</p>
       <strong>{{ apiKeySecret }}</strong>
-      <button class="ml-2" @click="copyToClipboard(apiKeySecret, $t)">
+      <button class="ml-2" @click="copyToClipboard(apiKeySecret)">
         <span class="icon-copy"></span>
       </button>
     </div>

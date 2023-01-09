@@ -257,20 +257,20 @@ export async function download(url: string, filename: string) {
 }
 
 /** Copy text to clipboard */
-export function copyToClipboard(text: string, $t?: i18nT | null) {
+export function copyToClipboard(text: string) {
   navigator.clipboard.writeText(text).then(
     () => {
       /* Resolved - text copied to clipboard successfully */
-      if ($t) {
-        window.$message.success($t('dashboard.clipboard.copied'));
+      if (window.$i18n?.te('dashboard.clipboard.copied')) {
+        window.$message.success(window.$i18n.t('dashboard.clipboard.copied'));
       } else {
         window.$message.success('Text has been copied to clipboard');
       }
     },
     () => {
       /* Rejected - text failed to copy to the clipboard */
-      if ($t) {
-        window.$message.success($t('dashboard.clipboard.error'));
+      if (window.$i18n?.te('dashboard.clipboard.error')) {
+        window.$message.success(window.$i18n.t('dashboard.clipboard.error'));
       } else {
         window.$message.success('Failed to copy');
       }

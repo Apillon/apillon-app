@@ -9,7 +9,7 @@
     <div v-if="fileDetails.CID" class="body-sm mb-4">
       <p class="body-sm">
         <span>{{ $t('storage.fileCid') }}</span>
-        <button class="ml-2" @click="copyToClipboard(fileDetails.CID, $t)">
+        <button class="ml-2" @click="copyToClipboard(fileDetails.CID)">
           <span class="icon-copy"></span>
         </button>
       </p>
@@ -19,7 +19,7 @@
     <div v-if="fileDetails.downloadLink" class="body-sm mb-4">
       <p class="body-sm">
         <span>{{ $t('storage.file.downloadLink') }}</span>
-        <button class="ml-2" @click="copyToClipboard(fileDetails.downloadLink, $t)">
+        <button class="ml-2" @click="copyToClipboard(fileDetails.downloadLink)">
           <span class="icon-copy"></span>
         </button>
       </p>
