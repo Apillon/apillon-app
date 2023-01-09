@@ -161,6 +161,7 @@ declare global {
     contentType: string | null;
     id: number;
     name: string;
+    link: string;
     size: number | null;
     type: string;
     createTime: string;

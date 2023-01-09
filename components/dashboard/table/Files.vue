@@ -121,10 +121,11 @@ const dropdownFileOptions = [
 ];
 
 /** Available columns - show/hide column */
-const selectedColumns = ref(['name', 'CID', 'size', 'createTime', 'contentType']);
+const selectedColumns = ref(['name', 'CID', 'link', 'size', 'createTime', 'contentType']);
 const availableColumns = ref([
   { value: 'name', label: $i18n.t('storage.fileName') },
   { value: 'CID', label: $i18n.t('storage.fileCid') },
+  { value: 'link', label: $i18n.t('storage.downloadLink') },
   { value: 'size', label: $i18n.t('storage.fileSize') },
   { value: 'createTime', label: $i18n.t('dashboard.created') },
   { value: 'contentType', label: $i18n.t('storage.contentType') },
@@ -172,11 +173,54 @@ const columns = computed(() => {
       render(row: FolderInterface) {
         if (row.CID) {
           return [
-            h('span', { class: 'text-grey' }, { default: () => truncateCid(row.CID || '') }),
             h(
-              'button',
-              { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '', $i18n.t) },
-              h('span', { class: 'icon-copy text-grey' }, {})
+              'div',
+              { class: 'flex' },
+              {
+                default: () => [
+                  h(
+                    'span',
+                    { class: 'text-grey whitespace-nowrap' },
+                    { default: () => truncateCid(row.CID || '') }
+                  ),
+                  h(
+                    'button',
+                    { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '') },
+                    h('span', { class: 'icon-copy text-grey' }, {})
+                  ),
+                ],
+              }
+            ),
+          ];
+        }
+        return '';
+      },
+    },
+    {
+      title: $i18n.t('storage.downloadLink'),
+      key: 'link',
+      className: selectedColumns.value.includes('link') ? '' : 'hidden',
+      sorter: 'default',
+      render(row: FolderInterface) {
+        if (row.CID) {
+          return [
+            h(
+              'div',
+              { class: 'flex' },
+              {
+                default: () => [
+                  h(
+                    NEllipsis,
+                    { class: 'text-grey align-bottom', 'line-clamp': 1 },
+                    { default: () => row.link }
+                  ),
+                  h(
+                    'button',
+                    { class: 'ml-2', onClick: () => copyToClipboard(row.link) },
+                    h('span', { class: 'icon-copy text-grey' }, {})
+                  ),
+                ],
+              }
             ),
           ];
         }
