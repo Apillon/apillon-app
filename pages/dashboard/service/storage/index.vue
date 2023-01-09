@@ -11,18 +11,11 @@
           <div class="w-[1px] h-[13px] bg-grey"></div>
           <a href="#learn-more">{{ $t('general.learnMore') }}</a>
         </n-space>
-        <template v-if="!settingsStore.isProjectUser()">
-          <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
+          <nuxt-link v-show="!settingsStore.isProjectUser()" :to="{ name: 'dashboard-service-storage-new' }">
             <n-button type="primary">
               {{ $t('storage.bucket.new') }}
             </n-button>
           </nuxt-link>
-        </template>
-        <template v-else>
-          <n-button type="primary" :disabled="settingsStore.isProjectUser()">
-            {{ $t('storage.bucket.new') }}
-          </n-button>
-        </template>
       </n-space>
     </template>
     <slot>
