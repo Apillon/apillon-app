@@ -6,7 +6,7 @@
     <div class="absolute right-[36%] top-5">
       <ReferralPoints :points="1" />
     </div>
-    <Tweet :tweet-id="tweet" theme="dark">
+    <Tweet :tweet-id="(tweet as any).id" theme="dark">
       <template #loading>
         <Spinner />
       </template>
@@ -14,7 +14,9 @@
         <span>Sorry, that tweet doesn't exist!</span>
       </template>
     </Tweet>
-    <Btn class="mt-5" type="primary" @click="shareTweet(tweet)">{{ $t('referral.share') }}</Btn>
+    <Btn class="mt-5" type="primary" @click="shareTweet((tweet as any).id)">
+      {{ $t('referral.share') }}
+    </Btn>
   </div>
 </template>
 

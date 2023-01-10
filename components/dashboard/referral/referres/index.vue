@@ -18,7 +18,7 @@
     <div class="max-w-[480px]">
       <div class="p-4 bg-grey-dark mt-2 border-1 border-grey flex justify-between">
         <p>
-          {{ authStore.userUuid }}
+          {{ referralCode }}
         </p>
         <div class="mt-1 cursor-pointer" @click="copyWalletNumber()">ikona</div>
       </div>
@@ -55,36 +55,38 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-const authStore = useAuthStore();
+// const authStore = useAuthStore();
+const referralStore = useReferralStore();
 const message = useMessage();
 
-const referralCode = 'https://apillon.io/register/?REF=X5FGH';
+const referralCode = `https://apillon.io/register/?REF=${referralStore.refCode}`;
 
 function copyWalletNumber() {
-  navigator.clipboard.writeText(authStore.userUuid);
+  navigator.clipboard.writeText(referralCode);
   message.info('Wallet number copied');
 }
 
-const referres = [
-  {
-    name: 'f***.y***@g***.com',
-    github: true,
-    joined: '32d',
-  },
-  {
-    name: 'f***.y***@g***.com',
-    github: false,
-    joined: '1d',
-  },
-  {
-    name: 'f***.y***@g***.com',
-    github: true,
-    joined: '32d',
-  },
-  {
-    name: 'f***.y***@g***.com',
-    github: true,
-    joined: '32d',
-  },
-];
+const referres = referralStore.referrals;
+// [
+//   {
+//     name: 'f***.y***@g***.com',
+//     github: true,
+//     joined: '32d',
+//   },
+//   {
+//     name: 'f***.y***@g***.com',
+//     github: false,
+//     joined: '1d',
+//   },
+//   {
+//     name: 'f***.y***@g***.com',
+//     github: true,
+//     joined: '32d',
+//   },
+//   {
+//     name: 'f***.y***@g***.com',
+//     github: true,
+//     joined: '32d',
+//   },
+// ];
 </script>

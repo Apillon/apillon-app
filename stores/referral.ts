@@ -8,6 +8,7 @@ export const useReferralStore = defineStore('referral', {
 
     id: 0,
     refCode: '',
+    referrals: [],
     referred_id: null,
     shippingInfo: null,
     status: 0,
@@ -22,6 +23,7 @@ export const useReferralStore = defineStore('referral', {
       this.twitter_id = data.twitter_id;
       this.id = data.id;
       this.refCode = data.refCode;
+      this.referrals = data.referrals;
       this.referred_id = data.referred_id;
       this.shippingInfo = data.shippingInfo;
       this.status = data.status;
