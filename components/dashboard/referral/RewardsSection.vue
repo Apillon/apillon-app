@@ -18,7 +18,7 @@
             {{ $t('referral.rewards.shirt.info3') }}
           </div>
         </div>
-        <Btn type="primary">{{ $t('referral.claim') }}</Btn>
+        <Btn type="primary" @click="claimReward(img)">{{ $t('referral.claim') }}</Btn>
       </div>
     </div>
   </div>
@@ -31,4 +31,10 @@ const merchImages = [
   '/images/referral/merch_3.jpg',
   '/images/referral/merch_4.jpg',
 ];
+
+const emit = defineEmits(['claimReward']);
+
+function claimReward(img) {
+  emit('claimReward', img);
+}
 </script>

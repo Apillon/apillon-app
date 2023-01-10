@@ -426,6 +426,8 @@
         "info3": "- Instant SWAG"
       }
     },
+    "rewardsClaim": "Claim reward",
+    "rewardsSize": "Choose the desired size. In case the size is not available we will send you whatever we have left. ",
     "connect": "Connect your Twitter and Github accounts",
     "earnPoints": "Earn Some POINTS",
     "invite": "Invite other developers and score",

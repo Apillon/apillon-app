@@ -18,7 +18,10 @@
           <ReferralAcceptTerms @enter-referral="step = 1" />
         </div>
         <div v-else-if="step === 1">
-          <Referral />
+          <Referral @claim-reward="claimReward" />
+        </div>
+        <div v-else-if="step === 2">
+          <ReferralClaimReward :data="claimRewardData" />
         </div>
       </div>
     </slot>
@@ -53,4 +56,12 @@ async function getReferral() {
 }
 
 const step = ref(0);
+
+const claimRewardData = ref(null);
+
+function claimReward(event) {
+  console.log('event claim reward: ', event);
+  claimRewardData.value = event;
+  step.value = 2;
+}
 </script>
