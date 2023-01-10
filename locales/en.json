@@ -440,7 +440,8 @@
       "joined": "Joined"
     },
     "shoutout": "Help us with the shoutout",
-    "share": "Share"
+    "share": "Share",
+    "confirm": "Confirm"
   },
   "signup": {
     "alreadyHaveAccount": "Already have an account?",

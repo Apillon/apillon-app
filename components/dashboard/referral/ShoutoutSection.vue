@@ -14,8 +14,11 @@
         <span>Sorry, that tweet doesn't exist!</span>
       </template>
     </Tweet>
-    <Btn class="mt-5" type="primary" @click="shareTweet((tweet as any).id)">
+    <Btn class="mt-5 mr-5" type="primary" @click="shareTweet((tweet as any).id)">
       {{ $t('referral.share') }}
+    </Btn>
+    <Btn class="mt-5" type="primary" @click="confirmShareTweet((tweet as any).id)">
+      {{ $t('referral.confirm') }}
     </Btn>
   </div>
 </template>
@@ -36,6 +39,14 @@ onMounted(async () => {
 });
 
 async function shareTweet(id: String) {
+  try {
+    window.open('https://twitter.com/Apillon/status/' + id);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function confirmShareTweet(id: String) {
   try {
     const res = await $api.post(endpoints.referralRetweet, {
       tweet_id: id,
