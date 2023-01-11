@@ -6,7 +6,7 @@
           bordered
           show-trigger
           collapse-mode="width"
-          :collapsed-width="80"
+          :collapsed-width="64"
           :width="320"
           :native-scrollbar="false"
           style="max-height: 100vh"

@@ -344,6 +344,7 @@
     "withEmail": "login with email"
   },
   "nav": {
+    "projectOverview": "Project overview",
     "services": "Services",
     "authentication": "Authentication",
     "storage": "Storage",
@@ -399,7 +400,6 @@
     "id": "Project ID",
     "new": "Add new project",
     "newBucket": "New storage bucket",
-    "overview": "Project overview",
     "owner": "Project owner",
     "quotaReached": "Quota has been reached.",
     "usersAndPermissions": "Project users & permissions"

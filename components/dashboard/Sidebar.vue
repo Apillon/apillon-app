@@ -39,19 +39,6 @@
             </n-space>
           </div>
 
-          <!-- PROJECT OVERVIEW -->
-          <div class="pl-4 mt-6">
-            <NuxtLink
-              :to="{ name: 'dashboard' }"
-              class="block p-2 h-[38px] w-full text-left border-primary"
-              :class="{ 'border-l-3': currentRoute.name === 'dashboard' }"
-              @click.native="hideNavOnMobile"
-            >
-              <span class="icon-home text-primary"></span>
-              <strong class="ml-1">{{ $t('project.overview') }}</strong>
-            </NuxtLink>
-          </div>
-
           <!-- SIDEBAR NAVIGATION -->
           <SidebarNavResponsive @toggleSidebar="hideNavOnMobile" />
         </n-space>

@@ -1,10 +1,10 @@
 <template>
-  <Dashboard>
+  <Dashboard class="bg-bg">
     <template #heading>
       <n-space :size="24" align="center" class="h-12">
         <h4 class="">{{ $t('error.error') }}</h4>
         <div class="w-[1px] h-[13px] bg-white"></div>
-        <strong class="body-sm font-button">{{ $t('error.404') }}</strong>
+        <strong class="body-sm font-mono">{{ $t('error.404') }}</strong>
       </n-space>
     </template>
     <slot>

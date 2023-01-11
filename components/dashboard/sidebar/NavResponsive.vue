@@ -1,21 +1,39 @@
 <template>
   <n-menu
+    v-model:value="selectedMenu"
+    :value="selectedMenu"
+    :default-value="selectedMenu"
     :inverted="true"
-    :collapsed-width="40"
-    :collapsed-icon-size="22"
+    :root-indent="32"
+    :indent="0"
+    :collapsed-width="32"
+    :icon-size="20"
+    :collapsed-icon-size="24"
     :options="menuOptions"
     :render-label="renderMenuLabel"
   />
 </template>
 
 <script lang="ts" setup>
+import { Key } from 'naive-ui/es/menu/src/interface';
 import { VNode } from 'vue';
 
 const $i18n = useI18n();
 const emit = defineEmits(['toggleSidebar']);
 const NuxtLink = resolveComponent('NuxtLink');
 
+const { name } = useRoute();
+const selectedMenu = ref<Key>(name?.toString() || '');
+console.log(selectedMenu.value);
+
 const menuOptions: NMenuMixedOption[] = [
+  {
+    key: 'project-overview',
+    label: $i18n.t('nav.projectOverview'),
+    to: 'dashboard',
+    icon: renderIcon('icon-home'),
+    disabled: !isFeatureEnabled(Feature.PROJECT),
+  },
   {
     type: 'group',
     label: $i18n.t('nav.services'),
