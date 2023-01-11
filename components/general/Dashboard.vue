@@ -20,7 +20,7 @@
       <slot name="heading"> </slot>
     </div>
 
-    <div v-if="$slots.infobar" class="px-9 py-3 mb-8 bg-grey-lightBg">
+    <div v-if="$slots.infobar" class="px-9 py-3 mb-8 bg-bg-lighter">
       <slot name="infobar"> </slot>
     </div>
 

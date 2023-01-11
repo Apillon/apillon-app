@@ -3,7 +3,7 @@
     <Notification
       v-if="dataStore.project.quotaReached === true"
       type="warning"
-      class="w-full mb-4 !bg-dark"
+      class="w-full mb-4 !bg-bg"
     >
       {{ $t('project.quotaReached') }}
     </Notification>

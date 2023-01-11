@@ -11,20 +11,21 @@
           <div class="w-[1px] h-[13px] bg-grey"></div>
           <a href="#learn-more">{{ $t('general.learnMore') }}</a>
         </n-space>
-          <nuxt-link v-show="!settingsStore.isProjectUser()" :to="{ name: 'dashboard-service-storage-new' }">
-            <n-button type="primary">
-              {{ $t('storage.bucket.new') }}
-            </n-button>
-          </nuxt-link>
+        <nuxt-link
+          v-show="!settingsStore.isProjectUser()"
+          :to="{ name: 'dashboard-service-storage-new' }"
+        >
+          <n-button type="primary">
+            {{ $t('storage.bucket.new') }}
+          </n-button>
+        </nuxt-link>
       </n-space>
     </template>
     <slot>
       <TableBucket v-if="dataStore.hasBuckets" />
       <template v-else>
         <h5 class="mb-8">{{ $t('nav.storage') }}</h5>
-        <div
-          class="flex flex-col md:flex-row items-center justify-between bg-grey-lightBg px-6 py-4"
-        >
+        <div class="flex flex-col md:flex-row items-center justify-between bg-bg-lighter px-6 py-4">
           <div class="mb-4 md:mb-0">
             <p class="body-md font-bold">{{ $t('storage.noActiveService') }}</p>
             <p class="body-sm">{{ $t('storage.attachService') }}</p>

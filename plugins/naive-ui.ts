@@ -1,6 +1,7 @@
 import {
   CollapseProps,
   create,
+  DataTableColumns,
   DataTableInst,
   DataTableSortState,
   NEllipsis,
@@ -59,7 +60,10 @@ import {
   UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
+import { InternalRowData } from 'naive-ui/es/data-table/src/interface';
+import { MenuOption, MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
+import { RendererNode, RendererElement } from 'vue';
 
 declare global {
   interface NCollapseProps extends CollapseProps {}
@@ -75,6 +79,13 @@ declare global {
   interface NDataTableInst extends DataTableInst {}
   interface NDataTableSortState extends DataTableSortState {}
   interface NMessageApiInjection extends MessageApiInjection {}
+
+  type NDataTableColumns<T = InternalRowData> = DataTableColumns<T>;
+  type NMenuOption = MenuOption;
+  type NMenuMixedOption = MenuMixedOption;
+
+  interface VueRendererNode extends RendererNode {}
+  interface VueRendererElement extends RendererElement {}
 }
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(

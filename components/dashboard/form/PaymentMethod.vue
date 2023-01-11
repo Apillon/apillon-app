@@ -10,6 +10,7 @@
         v-model:value="formData.cardHolder"
         :input-props="{ id: 'cardHolder' }"
         :placeholder="$t('form.placeholder.cardHolder')"
+        clearable
       />
     </n-form-item>
 
@@ -24,6 +25,7 @@
         :input-props="{ id: 'cardNumber' }"
         :placeholder="$t('form.placeholder.cardNumber')"
         @input="handleCreditCardInput"
+        clearable
       >
         <template #suffix>
           <Image src="/images/payment/mastercard.svg" :width="35" :height="24" alt="mastercard" />
@@ -44,6 +46,7 @@
           :input-props="{ id: 'expirationDate' }"
           :placeholder="$t('form.placeholder.expirationDate')"
           @input="handleExpirationDateInput"
+          clearable
         />
       </n-form-item-gi>
 
@@ -59,6 +62,7 @@
           :input-props="{ id: 'cvv' }"
           :placeholder="$t('form.placeholder.cvv')"
           @input="handleCvvInput"
+          clearable
         />
       </n-form-item-gi>
     </n-grid>
@@ -74,6 +78,7 @@
         :input-props="{ id: 'postalCode' }"
         :placeholder="$t('form.placeholder.postalCode')"
         @input="handlePostalCodeInput"
+        clearable
       />
     </n-form-item>
 

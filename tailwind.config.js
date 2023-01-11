@@ -16,15 +16,27 @@ module.exports = {
 
       transparent: 'transparent',
       current: 'currentColor',
-      black: '#06080F',
-      white: '#FFFFFF',
-      dark: '#141721',
+      white: '#F0F2DA',
       yellow: '#F9FF73',
-      green: '#A9DC76',
+      orange: '#F7AF39',
       pink: '#FF6188',
+      green: '#A9DC76',
       violet: '#AB9DF2',
       blue: '#78DCE8',
 
+      body: '#9D9E91',
+      bodyDark: '#6A6B63',
+
+      bg: {
+        lighter: '#313442',
+        light: '#1E212B',
+        DEFAULT: '#141721',
+        dark: '#06080F',
+      },
+
+      /** Depricated color names - use body and bg colors instead */
+      dark: '#141721',
+      black: '#06080F',
       grey: {
         DEFAULT: '#9D9E91',
         light: '#F0F2DA',
@@ -53,6 +65,8 @@ module.exports = {
       backgroundImage: {
         gradientDark: 'linear-gradient(180deg, #06080F 0%, rgba(6, 8, 15, 0) 100%)',
         gradientDarkReverse: 'linear-gradient(180deg, rgba(6, 8, 15, 0) 0%, #06080F 100%)',
+        w3Warn:
+          'linear-gradient(180deg, #F9FF73 0%, #78DCE8 20.31%, #F7AF39 39.58%, #FF6188 59.37%, #A9DC76 79.17%, #AB9DF2 100%)',
       },
       borderWidth: {
         1: '1px',
@@ -60,6 +74,7 @@ module.exports = {
       },
       boxShadow: {
         black: '0px 2px 4px rgba(0, 0, 0, 0.12)',
+        light: '0px 0px 4px rgba(240, 242, 218, 0.64)',
       },
       gridTemplateColumns: {
         billing: 'repeat(auto-fill, minmax(310px, 1fr))',

@@ -26,6 +26,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-upload:before {
+  content: '\e93e';
+}
+.icon-left-long:before {
+  content: '\e938';
+}
+.icon-spendable-points:before {
+  content: '\e939';
+}
+.icon-xp-points:before {
+  content: '\e93a';
+}
+.icon-add:before {
+  content: '\e93b';
+}
+.icon-clear:before {
+  content: '\e93c';
+}
+.icon-search:before {
+  content: '\e93d';
+}
 .icon-file:before {
   content: '\e935';
 }

@@ -90,7 +90,7 @@ const theme = computed(() => {
     case 'success':
       obj = {
         icon: '',
-        class: 'bg-gold-dark',
+        class: 'bg-bg',
       };
       break;
     case 'warning':
@@ -114,7 +114,7 @@ const theme = computed(() => {
     default:
       obj = {
         icon: '',
-        class: 'bg-gold-dark',
+        class: 'bg-bg',
       };
   }
 

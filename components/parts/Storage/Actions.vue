@@ -6,10 +6,13 @@
         type="text"
         name="search"
         size="small"
-        class="bg-grey-dark"
         :placeholder="$t('storage.file.search')"
         clearable
-      />
+      >
+        <template #prefix>
+          <span class="icon-search text-xl"></span>
+        </template>
+      </n-input>
     </div>
     <n-space>
       <!-- Refresh directory content -->

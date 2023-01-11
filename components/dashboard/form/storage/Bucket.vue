@@ -20,6 +20,7 @@
           v-model:value="formData.bucketName"
           :input-props="{ id: 'bucketName' }"
           :placeholder="$t('form.placeholder.bucketName')"
+          clearable
         />
       </n-form-item>
 
@@ -34,6 +35,7 @@
           type="textarea"
           :input-props="{ id: 'bucketDescription' }"
           :placeholder="$t('form.placeholder.bucketDescription')"
+          clearable
         />
       </n-form-item>
 

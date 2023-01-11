@@ -1,15 +1,6 @@
 <template>
-  <div class="flex flex-col px-6 py-2">
-    <template v-if="isFeatureEnabled(Feature.BILLING)">
-      <p class="mb-2">
-        <strong>{{ $t('dashboard.yourPlan') }}</strong>
-        <span>Free plan</span>
-      </p>
-      <Btn type="secondary">
-        <strong>Upgrade to PRO</strong>
-      </Btn>
-    </template>
-    <p class="mt-8 text-sm text-grey text-center">
+  <div class="flex flex-col p-8">
+    <p class="text-sm text-body">
       {{ $t('general.copyrights') }}
       <span>{{ version }}</span>
     </p>

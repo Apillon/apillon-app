@@ -9,10 +9,8 @@
   >
     <div class="flex cursor-pointer">
       <div class="flex items-center pr-2">
-        <div
-          class="relative w-10 h-10 flex justify-center items-center rounded-[50%] bg-grey-light"
-        >
-          <span class="icon-apillon-icon text-dark text-lg"></span>
+        <div class="relative w-10 h-10 flex justify-center items-center rounded-[50%] bg-white">
+          <span class="icon-apillon-icon text-bg text-lg"></span>
           <span
             class="absolute right-0 bottom-0 icon-status text-green translate-x-1/4 translate-y-1/4 text-xl"
           ></span>

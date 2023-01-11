@@ -19,7 +19,6 @@
 
 <script lang="ts" setup>
 import { NButton, NDropdown, NEllipsis } from 'naive-ui';
-import type { DataTableColumns } from 'naive-ui';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
@@ -33,7 +32,7 @@ interface RowData extends BucketInterface {
   key: number;
 }
 
-const createColumns = (): DataTableColumns<RowData> => {
+const createColumns = (): NDataTableColumns<RowData> => {
   return [
     {
       title: $i18n.t('storage.bucket.name'),

@@ -12,6 +12,7 @@
         v-model:value="formData.url"
         :input-props="{ id: 'url' }"
         :placeholder="$t('form.placeholder.webhookUrl')"
+        clearable
       />
     </n-form-item>
 
@@ -41,6 +42,7 @@
           v-model:value="formData.param1"
           :input-props="{ id: 'param1' }"
           :placeholder="$t('form.placeholder.webhookUsername')"
+          clearable
         />
       </n-form-item-gi>
 
@@ -54,6 +56,7 @@
           v-model:value="formData.param2"
           :input-props="{ id: 'param2' }"
           :placeholder="$t('form.placeholder.webhookPassword')"
+          clearable
         />
       </n-form-item-gi>
     </n-grid>
@@ -71,6 +74,7 @@
           type="textarea"
           :input-props="{ id: 'param1' }"
           :placeholder="$t('form.placeholder.bearerToken')"
+          clearable
         />
       </n-form-item-gi>
     </n-grid>

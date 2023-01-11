@@ -21,7 +21,7 @@
   &.quaternary:not(.n-button--disabled):focus,
   &:not(.n-button--disabled):hover .icon-more,
   &:not(.n-button--disabled):focus .icon-more {
-    @apply text-dark;
+    @apply text-bg;
   }
 
   &.pointer-events-none {
@@ -79,6 +79,16 @@
     }
   }
 
+  [data-col-key='actions'] .n-button--small-type {
+    width: 40px;
+    padding-left: 11px;
+    padding-right: 11px;
+
+    .n-button__content {
+      justify-content: center;
+    }
+  }
+
   /** Clickable columns */
   .onClickOpen {
     cursor: pointer;
@@ -121,7 +131,7 @@
     padding-left: 1.5rem;
 
     &::before {
-      @apply w-3 h-[2px] rounded-none top-1/2 -translate-y-1/2 bg-grey-light;
+      @apply w-3 h-[2px] rounded-none top-1/2 -translate-y-1/2 bg-white;
     }
   }
 }
@@ -147,6 +157,13 @@
       width: 1.5rem;
       height: 1.25rem;
     }
+  }
+}
+
+/** Input */
+.n-input {
+  .n-input__prefix {
+    @apply mr-2;
   }
 }
 
@@ -181,7 +198,7 @@
       margin-left: -12px;
 
       a {
-        color: theme('colors.grey.light');
+        color: theme('colors.white');
       }
     }
   }
@@ -189,7 +206,7 @@
 
 /** Message */
 .n-message {
-  border-left: 4px solid theme('colors.grey.lightBg');
+  border-left: 4px solid theme('colors.bg.lighter');
 
   &--error-type {
     border-color: theme('colors.pink');
@@ -283,7 +300,7 @@ body > .n-message-container {
 }
 
 .n-upload-file-list .n-upload-file {
-  @apply bg-dark hover:bg-dark mb-2 px-6 pb-1;
+  @apply bg-bg hover:bg-bg mb-2 px-6 pb-1;
 
   .n-upload-file-info__thumbnail {
     display: none;

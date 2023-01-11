@@ -6,6 +6,7 @@
         v-model:value="formData.email"
         :input-props="{ type: 'email' }"
         :placeholder="$t('form.placeholder.email', { afna: '@' })"
+        clearable
         @keydown.enter.prevent
       />
     </n-form-item>
@@ -18,6 +19,7 @@
         show-password-on="mousedown"
         :input-props="{ autocomplete: 'off' }"
         :placeholder="$t('form.placeholder.password')"
+        clearable
       />
     </n-form-item>
 

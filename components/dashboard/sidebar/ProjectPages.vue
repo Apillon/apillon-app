@@ -6,19 +6,18 @@
 
 <script lang="ts" setup>
 import { h } from 'vue';
-import type { MenuOption } from 'naive-ui';
 
 const { t } = useI18n();
 const { name } = useRoute();
 const selectedPage = ref<string>(name?.toString() || '');
 const NuxtLink = resolveComponent('NuxtLink');
 
-function handleUpdateValue(key: string, item: MenuOption) {
+function handleUpdateValue(key: string, item: NMenuOption) {
   console.info('[onUpdate:value]: ' + JSON.stringify(key));
   console.info('[onUpdate:value]: ' + JSON.stringify(item));
 }
 
-const menuOptions: MenuOption[] = [
+const menuOptions: NMenuOption[] = [
   {
     label: () => h(NuxtLink, { to: { name: 'dashboard-methods' } }, () => t('pageMenu.methods')),
     key: 'dashboard-methods',
