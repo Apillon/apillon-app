@@ -143,6 +143,7 @@ declare global {
     contentType: string;
     directory_uuid?: string;
     path?: string;
+    session_uuid?: string;
   }
 
   type FileDetails = FileInterface | FileUploadInterface;

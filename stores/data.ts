@@ -35,6 +35,12 @@ export const useDataStore = defineStore('data', {
       total: 0,
       uploadActive: false,
     },
+    hosting: {
+      active: {} as BucketInterface,
+      items: [] as Array<BucketInterface>,
+      selected: 0,
+      quotaReached: undefined as Boolean | undefined,
+    },
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
     project: {
@@ -81,7 +87,24 @@ export const useDataStore = defineStore('data', {
       );
     },
     hasBuckets(state): boolean {
-      return Array.isArray(state.bucket.items) && state.bucket.items.length > 0;
+      if (Array.isArray(state.bucket.items) && state.bucket.items.length > 0) {
+        return (
+          state.bucket.items.find(
+            (bucket: BucketInterface) => bucket.bucketType === BucketType.STORAGE
+          ) !== undefined
+        );
+      }
+      return false;
+    },
+    hasHosting(state): boolean {
+      if (Array.isArray(state.bucket.items) && state.bucket.items.length > 0) {
+        return (
+          state.bucket.items.find(
+            (bucket: BucketInterface) => bucket.bucketType === BucketType.HOSTING
+          ) !== undefined
+        );
+      }
+      return false;
     },
     hasSelectedBucket(state): boolean {
       return (
@@ -341,20 +364,29 @@ export const useDataStore = defineStore('data', {
       return {} as BucketInterface;
     },
 
-    async fetchBucketQuota() {
+    async fetchBucketQuota(bucketType: number = BucketType.STORAGE) {
       if (!this.hasProjects) {
         alert('Please create your first project');
         return;
       }
       const params = {
         project_uuid: this.currentProject?.project_uuid || '',
-        bucketType: BucketType.STORAGE,
+        bucketType: bucketType,
       };
       try {
         const res = await $api.get<BucketQuotaResponse>(endpoints.bucketsQuota, params);
-        this.bucket.quotaReached = res.data;
+
+        if (bucketType === BucketType.STORAGE) {
+          this.bucket.quotaReached = res.data;
+        } else {
+          this.hosting.quotaReached = res.data;
+        }
       } catch (error: any) {
-        this.bucket.quotaReached = undefined;
+        if (bucketType === BucketType.STORAGE) {
+          this.bucket.quotaReached = undefined;
+        } else {
+          this.hosting.quotaReached = undefined;
+        }
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));

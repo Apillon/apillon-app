@@ -20,6 +20,16 @@ export function getAppConfig(env?: string) {
 }
 
 /**
+ * Enum
+ */
+export function enumKeys(E: any): string[] {
+  return Object.keys(E).filter(k => isNaN(Number(k)));
+}
+export function enumValues(E: any): string[] | number[] {
+  return enumKeys(E).map(k => E[k as any]);
+}
+
+/**
  * Numeric manipulations
  */
 export function randomInteger(min: number, max: number): number {

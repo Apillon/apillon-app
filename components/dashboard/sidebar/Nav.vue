@@ -30,12 +30,12 @@
           <span class="ml-2 select-none">{{ $t(`nav.${item.name}`) }}</span>
           <span
             v-if="item.soon || item.new"
-            class=" float-right text-blue text-2xl"
+            class="float-right text-blue text-2xl"
             :class="[
               `random-color-${randomInteger(0, 3)}`,
-              { 'icon-soon' : item.soon },
-              { 'icon-new' : item.new },
-              ]"
+              { 'icon-soon': item.soon },
+              { 'icon-new': item.new },
+            ]"
           ></span>
         </component>
       </div>
@@ -74,6 +74,14 @@ const menu: MainNavInterface = {
         new: isFeatureEnabled(Feature.STORAGE),
         soon: !isFeatureEnabled(Feature.STORAGE),
         disabled: !isFeatureEnabled(Feature.STORAGE),
+      },
+      {
+        name: 'hosting',
+        icon: 'icon-folder',
+        link: '/dashboard/service/hosting',
+        new: isFeatureEnabled(Feature.HOSTING),
+        soon: !isFeatureEnabled(Feature.HOSTING),
+        disabled: !isFeatureEnabled(Feature.HOSTING),
       },
       {
         name: 'computing',

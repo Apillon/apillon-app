@@ -1,10 +1,5 @@
 <template>
-  <n-data-table
-    :bordered="false"
-    :columns="columns"
-    :data="dataStore.bucket.items"
-    :row-props="rowProps"
-  />
+  <n-data-table :bordered="false" :columns="columns" :data="tableData" :row-props="rowProps" />
 
   <!-- Modal - Edit bucket -->
   <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
@@ -21,6 +16,17 @@
 import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
 
+const props = defineProps({
+  bucketType: {
+    type: Number,
+    validator: (value: number) =>
+      Object.values(BucketType)
+        .filter(value => !isNaN(Number(value)))
+        .includes(value),
+    default: BucketType.STORAGE,
+  },
+});
+
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
@@ -29,11 +35,7 @@ const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean>(false);
 const StorageProgress = resolveComponent('StorageProgress');
 
-interface RowData extends BucketInterface {
-  key: number;
-}
-
-const createColumns = (): DataTableColumns<RowData> => {
+const createColumns = (): DataTableColumns<BucketInterface> => {
   return [
     {
       title: $i18n.t('storage.bucket.name'),
@@ -43,7 +45,10 @@ const createColumns = (): DataTableColumns<RowData> => {
           NuxtLink,
           {
             class: 'ml-2 text-blue',
-            to: `/dashboard/service/storage/${row.id}`,
+            to:
+              row.bucketType === BucketType.HOSTING
+                ? `/dashboard/service/hosting/${row.id}`
+                : `/dashboard/service/storage/${row.id}`,
           },
           () => row.name
         );
@@ -97,9 +102,9 @@ const createColumns = (): DataTableColumns<RowData> => {
   ];
 };
 const columns = createColumns();
-const currentRow = ref<RowData | null>(null);
+const currentRow = ref<BucketInterface | null>(null);
 
-const rowProps = (row: RowData) => {
+const rowProps = (row: BucketInterface) => {
   return {
     onClick: () => {
       currentRow.value = row;
@@ -129,6 +134,11 @@ const dropdownOptions = [
     },
   },
 ];
+
+/** Table data - filter buckets by bucket type (storage/hosting) */
+const tableData = computed<Array<BucketInterface>>(() => {
+  return dataStore.bucket.items.filter(item => item.bucketType === props.bucketType);
+});
 
 /**
  * Load data on mounted

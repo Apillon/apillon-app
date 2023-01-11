@@ -13,27 +13,27 @@
       <!--  Service name -->
       <n-form-item
         path="bucketName"
-        :label="$t('form.label.bucketName')"
+        :label="$t('form.label.hostingName')"
         :label-props="{ for: 'bucketName' }"
       >
         <n-input
           v-model:value="formData.bucketName"
           :input-props="{ id: 'bucketName' }"
-          :placeholder="$t('form.placeholder.bucketName')"
+          :placeholder="$t('form.placeholder.hostingName')"
         />
       </n-form-item>
 
       <!--  Bucket description -->
       <n-form-item
         path="bucketDescription"
-        :label="$t('form.label.bucketDescription')"
+        :label="$t('form.label.hostingDescription')"
         :label-props="{ for: 'bucketDescription' }"
       >
         <n-input
           v-model:value="formData.bucketDescription"
           type="textarea"
           :input-props="{ id: 'bucketDescription' }"
-          :placeholder="$t('form.placeholder.bucketDescription')"
+          :placeholder="$t('form.placeholder.hostingDescription')"
         />
       </n-form-item>
 
@@ -63,10 +63,10 @@
           @click="handleSubmit"
         >
           <template v-if="bucket">
-            {{ $t('storage.bucket.update') }}
+            {{ $t('storage.hosting.update') }}
           </template>
           <template v-else>
-            {{ $t('form.createBucketAndContinue') }}
+            {{ $t('form.createHostingAndContinue') }}
           </template>
         </Btn>
       </n-form-item>
@@ -128,7 +128,7 @@ const bucketSizes = [
 ];
 
 const isQuotaReached = computed<boolean>(() => {
-  return !bucket && dataStore.bucket.quotaReached === true;
+  return !bucket && dataStore.hosting.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
@@ -141,14 +141,14 @@ function handleSubmit(e: Event | MouseEvent) {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (bucket) {
-      await updateBucket();
+      await updateHosting();
     } else {
-      await createBucket();
+      await createHosting();
     }
   });
 }
 
-async function createBucket() {
+async function createHosting() {
   if (!dataStore.currentProjectId) {
     alert('Please select your project');
     return;
@@ -158,7 +158,7 @@ async function createBucket() {
 
   const bodyData = {
     project_uuid: dataStore.currentProject?.project_uuid,
-    bucketType: BucketType.STORAGE,
+    bucketType: BucketType.HOSTING,
     name: formData.value.bucketName,
     description: formData.value.bucketDescription,
     size: formData.value.bucketSize,
@@ -167,18 +167,18 @@ async function createBucket() {
   try {
     const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
 
-    message.success($i18n.t('form.success.created.bucket'));
+    message.success($i18n.t('form.success.created.hosting'));
 
-    /** On new bucket created redirect to storage list in refresh data */
+    /** On new hosting created redirect to storage list in refresh data */
     dataStore.fetchBuckets();
-    router.push({ name: 'dashboard-service-storage' });
+    router.push({ name: 'dashboard-service-hosting' });
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }
 
-async function updateBucket() {
+async function updateHosting() {
   loading.value = true;
 
   const bodyData = {
@@ -189,9 +189,9 @@ async function updateBucket() {
   try {
     const res = await $api.patch<BucketResponse>(endpoints.bucket(props.bucketId), bodyData);
 
-    message.success($i18n.t('form.success.updated.bucket'));
+    message.success($i18n.t('form.success.updated.hosting'));
 
-    /** On bucket updated refresh bucket data */
+    /** On hosting updated refresh hosting data */
     dataStore.bucket.items.map((item: BucketInterface) => {
       if (item.id === props.bucketId) {
         item.name = res.data.name;
