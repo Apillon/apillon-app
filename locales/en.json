@@ -87,6 +87,7 @@
     "name": "Name",
     "payment": "Payment",
     "role": "Role",
+    "searchDocs": "Search the docs",
     "secret": "Secret",
     "secrets": "Secrets",
     "selectServices": "Select services",

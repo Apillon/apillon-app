@@ -1,5 +1,6 @@
 <template>
   <Menu
+    :slice-name="true"
     :inverted="true"
     :root-indent="32"
     :indent="0"

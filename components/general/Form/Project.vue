@@ -11,7 +11,7 @@
       ref="formRef"
       :model="formData"
       :rules="rules"
-      :disabled="dataStore.project.quotaReached === 1"
+      :disabled="dataStore.project.quotaReached === true"
       @submit.prevent="handleSubmit"
     >
       <!--  Project name -->
@@ -58,7 +58,7 @@
           type="primary"
           class="w-full mt-2"
           :loading="loading"
-          :disabled="dataStore.project.quotaReached === 1"
+          :disabled="dataStore.project.quotaReached === true"
           @click="handleSubmit"
         >
           <template v-if="dataStore.hasProjects">
@@ -108,7 +108,7 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 const formData = ref<FormProject>({
   name: null,
   description: null,
-  terms: null,
+  terms: undefined,
 });
 
 const rules: NFormRules = {

@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-down" appear>
-    <div class="px-4 sm:px-8 py-2">
+    <div class="px-8 py-6">
       <div class="flex justify-between items-center">
         <div class="flex items-center pr-4">
           <!-- Hamburger btn to show sidebar on mobile -->
@@ -8,9 +8,15 @@
 
           <!-- Search docs -->
           <div v-if="isFeatureEnabled(Feature.SEARCH)" class="w-[20vw] max-w-xs">
-            <n-input type="text" name="search" size="small" placeholder="Search the docs" clearable>
+            <n-input
+              type="text"
+              name="search"
+              size="small"
+              :placeholder="$t('dashboard.searchDocs')"
+              clearable
+            >
               <template #prefix>
-                <span class="icon-search text-xl"></span>
+                <span class="icon-search text-bodyDark text-xl"></span>
               </template>
             </n-input>
           </div>

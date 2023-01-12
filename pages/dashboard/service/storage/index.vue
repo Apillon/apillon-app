@@ -1,27 +1,27 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
+      <Heading>
+        <slot>
+          <h4 class="mr-">{{ $t('nav.storage') }}</h4>
+        </slot>
+
+        <template #info>
+          <nuxt-link
+            v-show="!settingsStore.isProjectUser()"
+            :to="{ name: 'dashboard-service-storage-new' }"
+          >
+            <n-button type="primary">
+              {{ $t('storage.bucket.new') }}
+            </n-button>
+          </nuxt-link>
+        </template>
+      </Heading>
+    </template>
+    <slot>
       <!-- Banner for storage if project hasb't got any services -->
       <BannerStorage v-if="!dataStore.hasBuckets" />
 
-      <!-- Basic title -->
-      <n-space v-else justify="space-between" align="center">
-        <n-space size="large" align="center">
-          <h4 class="mr-">{{ $t('nav.storage') }}</h4>
-          <div class="w-[1px] h-[13px] bg-grey"></div>
-          <a href="#learn-more">{{ $t('general.learnMore') }}</a>
-        </n-space>
-        <nuxt-link
-          v-show="!settingsStore.isProjectUser()"
-          :to="{ name: 'dashboard-service-storage-new' }"
-        >
-          <n-button type="primary">
-            {{ $t('storage.bucket.new') }}
-          </n-button>
-        </nuxt-link>
-      </n-space>
-    </template>
-    <slot>
       <TableBucket v-if="dataStore.hasBuckets" />
       <template v-else>
         <h5 class="mb-8">{{ $t('nav.storage') }}</h5>

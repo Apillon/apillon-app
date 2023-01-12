@@ -1,33 +1,30 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <n-space align="center" :size="32" class="-mb-4">
-        <NuxtLink :to="{ name: 'dashboard-service-storage' }">
-          <span class="icon-back"></span>
-        </NuxtLink>
-        <h4>{{ $t('storage.bucket.management') }}</h4>
-      </n-space>
-    </template>
+      <Heading>
+        <slot>
+          <n-space align="center" :size="32">
+            <NuxtLink :to="{ name: 'dashboard-service-storage' }">
+              <span class="icon-back"></span>
+            </NuxtLink>
+            <h4>{{ dataStore.bucket.active.name }}</h4>
+          </n-space>
+        </slot>
 
-    <template #infobar>
-      <n-space align="center" justify="space-between" class="w-full">
-        <Tag color="violet">{{ dataStore.bucket.active.name }}</Tag>
-        <span>
-          <span class="icon-storage"></span>
-          {{ $t('storage.bucket.storage') }}
-        </span>
-        <StorageProgress
-          class="w-1/2"
-          :key="dataStore.bucket.active.uploadedSize || 0"
-          :percentage="dataStore.bucket.active.percentage"
-          :size="dataStore.bucket.active.uploadedSize || 0"
-          :max-size="dataStore.bucket.active.maxSize"
-        />
-      </n-space>
-    </template>
+        <template #info>
+          <StorageProgress
+            class="w-1/2"
+            :key="dataStore.bucket.active.uploadedSize || 0"
+            :percentage="dataStore.bucket.active.percentage"
+            :size="dataStore.bucket.active.uploadedSize || 0"
+            :max-size="dataStore.bucket.active.maxSize"
+          />
+        </template>
 
-    <template #sidebar>
-      <SidebarBucketManagement />
+        <template #submenu>
+          <MenuBucketManagement />
+        </template>
+      </Heading>
     </template>
 
     <slot>

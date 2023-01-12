@@ -212,20 +212,9 @@
     }
   }
 
-  .n-menu-item-content--selected_ {
-    border-left: 4px solid theme('colors.primary');
-    font-weight: strong;
-
-    &::before {
-      display: none;
-    }
-
-    .n-menu-item-content-header {
-      margin-left: -12px;
-
-      a {
-        color: theme('colors.white');
-      }
+  &.n-menu--horizontal {
+    .n-menu-item-content {
+      @apply px-1 mr-8;
     }
   }
 }

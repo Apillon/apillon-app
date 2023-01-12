@@ -12,9 +12,28 @@
 </template>
 
 <script lang="ts" setup>
+const props = defineProps({
+  sliceName: { type: Boolean, default: false },
+});
+const route = useRoute();
 const { name } = useRoute();
-const selectedMenu = ref(name?.toString() || '');
+const selectedMenu = ref<string>(routeNameToKey(name?.toString() || ''));
 const NuxtLink = resolveComponent('NuxtLink');
+
+/** Watch route name and refresh selected menu item */
+const routeName = computed(() => {
+  return route.name?.toString() || '';
+});
+watch(
+  () => routeName.value,
+  routeName => {
+    selectedMenu.value = routeNameToKey(routeName?.toString() || '');
+  }
+);
+
+function routeNameToKey(name: string) {
+  return props.sliceName ? name.split('-').slice(0, 3).join('-') : name;
+}
 
 /**
  * Render functions
