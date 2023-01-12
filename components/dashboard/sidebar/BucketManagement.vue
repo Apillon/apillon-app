@@ -1,25 +1,16 @@
 <template>
-  <div>
-    <n-menu v-model:value="selectedMenu" :options="menuOptions" :render-label="renderMenuLabel" />
-
+  <Menu :options="menuOptions">
     <!-- Modal - Destroy bucket -->
     <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucket.destroy')">
       <FormStorageDestroy :bucket-id="dataStore.bucket.selected" />
     </modal>
-  </div>
+  </Menu>
 </template>
 
 <script lang="ts" setup>
-import { h } from 'vue';
-
 const { t } = useI18n();
 const dataStore = useDataStore();
-
-const { name } = useRoute();
-const selectedMenu = ref(name?.toString());
-
 const showModalDestroyBucket = ref<boolean>(false);
-const NuxtLink = resolveComponent('NuxtLink');
 
 const menuOptions: NMenuOption[] = [
   {
@@ -62,15 +53,4 @@ const menuOptions: NMenuOption[] = [
     onClick: () => (showModalDestroyBucket.value = true),
   },
 ];
-
-function renderMenuLabel(option: NMenuOption) {
-  if ('href' in option) {
-    return h('a', { href: option.href, target: '_blank' }, () => option.label as string);
-  } else if ('path' in option) {
-    return h(NuxtLink, { to: { path: option.path } }, () => option.label as string);
-  } else if ('to' in option) {
-    return h(NuxtLink, { to: { name: option.to } }, () => option.label as string);
-  }
-  return h('span', { class: 'text' }, { default: () => option.label as string });
-}
 </script>

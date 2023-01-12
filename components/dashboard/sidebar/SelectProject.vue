@@ -10,7 +10,6 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
 const dataStore = useDataStore();
 const router = useRouter();
 const componentSelectKey = ref(0);

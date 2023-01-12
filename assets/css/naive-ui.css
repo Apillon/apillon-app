@@ -190,6 +190,8 @@
       }
     }
     .n-menu-item-content {
+      @apply pr-8;
+
       &::before {
         @apply left-8 right-8;
       }
@@ -198,8 +200,14 @@
         @apply ml-3;
       }
 
-      .n-menu-item-content-header a::before {
-        @apply left-8 right-8;
+      .n-menu-item-content-header {
+        &__extra {
+          @apply float-right pr-1;
+        }
+
+        a::before {
+          @apply left-8 right-8;
+        }
       }
     }
   }

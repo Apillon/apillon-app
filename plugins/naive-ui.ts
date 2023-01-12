@@ -63,7 +63,6 @@ import {
 import { InternalRowData } from 'naive-ui/es/data-table/src/interface';
 import { MenuOption, MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
-import { RendererNode, RendererElement } from 'vue';
 
 declare global {
   interface NCollapseProps extends CollapseProps {}
@@ -83,9 +82,6 @@ declare global {
   type NDataTableColumns<T = InternalRowData> = DataTableColumns<T>;
   type NMenuOption = MenuOption;
   type NMenuMixedOption = MenuMixedOption;
-
-  interface VueRendererNode extends RendererNode {}
-  interface VueRendererElement extends RendererElement {}
 }
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(

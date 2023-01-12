@@ -11,7 +11,7 @@
       ref="formRef"
       :model="formData"
       :rules="rules"
-      :disabled="dataStore.project.quotaReached === true"
+      :disabled="dataStore.project.quotaReached === 1"
       @submit.prevent="handleSubmit"
     >
       <!--  Project name -->
@@ -58,7 +58,7 @@
           type="primary"
           class="w-full mt-2"
           :loading="loading"
-          :disabled="dataStore.project.quotaReached === true"
+          :disabled="dataStore.project.quotaReached === 1"
           @click="handleSubmit"
         >
           <template v-if="dataStore.hasProjects">

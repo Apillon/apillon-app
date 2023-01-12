@@ -33,7 +33,7 @@
       </n-input>
     </n-form-item>
 
-    <n-grid :cols="2" :span="2" :x-gap="8">
+    <n-grid :cols="2" :span="2" :x-gap="32">
       <!--  Expiration Date -->
       <n-form-item-gi
         :span="1"

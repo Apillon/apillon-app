@@ -1,6 +1,6 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
-    <n-grid :cols="12" :x-gap="12">
+    <n-grid :cols="12" :x-gap="32">
       <!--  Email -->
       <n-form-item-gi
         :span="colEmailWidth"

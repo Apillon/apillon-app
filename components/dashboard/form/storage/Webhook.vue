@@ -31,7 +31,7 @@
     </n-form-item>
 
     <!-- Basic auth: user and pass -->
-    <n-grid v-if="formData.authType === BucketWebhookAuthMethod.BASIC" :cols="2" :x-gap="8">
+    <n-grid v-if="formData.authType === BucketWebhookAuthMethod.BASIC" :cols="2" :x-gap="32">
       <n-form-item-gi
         :span="1"
         path="param1"
@@ -62,7 +62,7 @@
     </n-grid>
 
     <!-- Token auth: bearer token -->
-    <n-grid v-else-if="formData.authType === BucketWebhookAuthMethod.TOKEN" :cols="1" :x-gap="8">
+    <n-grid v-else-if="formData.authType === BucketWebhookAuthMethod.TOKEN" :cols="1" :x-gap="32">
       <n-form-item-gi
         :span="1"
         path="param1"
@@ -80,7 +80,7 @@
     </n-grid>
 
     <!--  Form submit -->
-    <n-grid :cols="3" :x-gap="8">
+    <n-grid :cols="3" :x-gap="32">
       <n-form-item-gi :span="webhook ? 2 : 3">
         <input type="submit" class="hidden" :value="$t('form.save')" />
         <Btn type="primary" class="w-full mt-2" :loading="loadingForm" @click="handleSubmit">

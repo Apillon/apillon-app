@@ -3,6 +3,7 @@ import dev from '../config/development';
 import prod from '../config/production';
 import local from '../config/local';
 import { Feature } from '~~/types/config';
+import { NuxtLink } from '~~/.nuxt/components';
 
 export function getAppConfig(env?: string) {
   if (!env) {
