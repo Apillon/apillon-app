@@ -53,7 +53,18 @@
           @input="handleFolderNameInput"
         />
       </n-form-item>
-      <n-button type="primary" @click="uploadDirectory">{{ $t('general.upload') }}</n-button>
+      <n-grid :cols="2" :span="2" :x-gap="8">
+        <n-gi>
+          <n-button class="w-full" type="primary" @click="uploadDirectory">
+            {{ $t('general.upload') }}
+          </n-button>
+        </n-gi>
+        <n-gi>
+          <n-button class="w-full" type="primary" ghost @click="uploadFiles">
+            {{ $t('general.skip') }}
+          </n-button>
+        </n-gi>
+      </n-grid>
     </modal>
   </div>
 </template>
@@ -87,13 +98,13 @@ watch(
   () => wrapToDirectory.value,
   wrap => {
     if (wrap) {
-      showModalWrapFolder.value = wrap;
+      // showModalWrapFolder.value = wrap;
     }
   }
 );
 function onModalShow(value: boolean) {
   if (!value) {
-    wrapToDirectory.value = false;
+    // wrapToDirectory.value = false;
   }
 }
 
@@ -127,7 +138,7 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
 }
 
 async function uploadFiles() {
-  if (wrapToDirectory.value) {
+  if (wrapToDirectory.value && !showModalWrapFolder.value) {
     showModalWrapFolder.value = true;
     return;
   }
@@ -135,6 +146,7 @@ async function uploadFiles() {
   fileList.value.forEach(file => {
     uploadFile(file);
   });
+  showModalWrapFolder.value = false;
 }
 async function uploadDirectory() {
   fileList.value.forEach(file => {
