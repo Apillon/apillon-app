@@ -50,7 +50,7 @@ const settingsStore = useSettingsStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('nav.hosting'),
 });
 
 onMounted(() => {
