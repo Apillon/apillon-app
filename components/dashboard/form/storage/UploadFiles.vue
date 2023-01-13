@@ -18,7 +18,7 @@
     </n-scrollbar>
 
     <n-space
-      v-show="fileList && fileList.length"
+      v-if="fileList && fileList.length > 0"
       class="upload-actions"
       justify="end"
       align="center"
@@ -275,7 +275,7 @@ function updateFileStatus(fileId: string, status: FileUploadStatus) {
           /** After 3s, remove finished files */
           setTimeout(() => {
             removeFinishedFilesFromList();
-          }, 3000);
+          }, 5000);
         }
       }
     }
@@ -309,7 +309,9 @@ async function uploadSessionEnd(sessionUuid: string) {
 /** Check if all files are finished (status FINISH or ERROR) */
 function allFilesFinished(): boolean {
   const uploadingFiles = fileList.value.find(
-    file => file.status === FileUploadStatusValue.UPLOADING
+    file =>
+      file.status === FileUploadStatusValue.PENDING ||
+      file.status === FileUploadStatusValue.UPLOADING
   );
   return uploadingFiles === undefined;
 }
