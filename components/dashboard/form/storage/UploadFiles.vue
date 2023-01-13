@@ -1,6 +1,6 @@
 <template>
   <div>
-    <n-upload :show-file-list="false" multiple directory-dnd :custom-request="uploadFiles">
+    <n-upload :show-file-list="false" multiple directory-dnd :custom-request="uploadFilesRequest">
       <n-upload-dragger>
         <div class="text-sm">
           <span class="mr-1">{{ $t('storage.file.dragAndDrop') }}</span>
@@ -16,11 +16,52 @@
         </div>
       </div>
     </n-scrollbar>
+
+    <n-space
+      v-show="fileList && fileList.length"
+      class="upload-actions"
+      justify="end"
+      align="center"
+    >
+      <div class="wrap-directory">
+        <n-checkbox
+          v-model:checked="wrapToDirectory"
+          size="medium"
+          :label="$t('storage.wrapToDirectory')"
+        />
+      </div>
+      <n-button type="primary" @click="uploadFiles">{{ $t('general.upload') }}</n-button>
+    </n-space>
+
+    <!-- Modal - Wrap files to folder -->
+    <modal
+      v-model:show="showModalWrapFolder"
+      :title="$t('storage.wrapFiles')"
+      @update:show="onModalShow"
+    >
+      <p>{{ $t('storage.wrapFilesDescription') }}</p>
+      <br />
+      <!--  Folder name -->
+      <n-form-item
+        path="name"
+        :label="$t('form.label.folderName')"
+        :label-props="{ for: 'folderName' }"
+      >
+        <n-input
+          v-model:value="folderName"
+          :placeholder="$t('form.placeholder.folderName')"
+          @input="handleFolderNameInput"
+        />
+      </n-form-item>
+      <n-button type="primary" @click="uploadDirectory">{{ $t('general.upload') }}</n-button>
+    </modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { NUpload, NUploadDragger, useMessage } from 'naive-ui';
+import { v4 as uuidv4 } from 'uuid';
+import { textMarshal } from 'text-marshal';
 
 const props = defineProps({
   bucketUuid: { type: String, required: true },
@@ -29,10 +70,32 @@ const props = defineProps({
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const config = useRuntimeConfig();
 
 const BASE_UPLOAD_SPEED = 1024;
+const batchId = ref<string>('');
+const sessionUuid = ref<string>('');
 const fileList = ref<Array<FileListItemType>>([]);
 const promises = ref<Array<Promise<any>>>([]);
+
+/** Wrap files to directory */
+const showModalWrapFolder = ref<boolean>(false);
+const wrapToDirectory = ref<boolean>(false);
+const folderName = ref<string>('');
+
+watch(
+  () => wrapToDirectory.value,
+  wrap => {
+    if (wrap) {
+      showModalWrapFolder.value = wrap;
+    }
+  }
+);
+function onModalShow(value: boolean) {
+  if (!value) {
+    wrapToDirectory.value = false;
+  }
+}
 
 /** Calculate average upload speed from uploaded files */
 const avgUploadSpeed = computed(() => {
@@ -51,22 +114,55 @@ const avgUploadSpeed = computed(() => {
 /**
  *  API calls
  */
-async function uploadFiles({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-  const fileData: FormFileUploadRequest = {
-    fileName: file.name || '',
-    contentType: file.type || '',
-    path: dataStore.getFolderPath + fileFolderPath(file.fullPath || ''),
-  };
-
+function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
-    id: file.id,
-    name: file.name,
-    status: FileUploadStatusValue.UPLOADING,
+    ...file,
     percentage: 0,
     size: file.file?.size || 0,
     timestamp: Date.now(),
+    onFinish,
+    onError,
   };
   fileList.value.push(fileListItem);
+}
+
+async function uploadFiles() {
+  if (wrapToDirectory.value) {
+    showModalWrapFolder.value = true;
+    return;
+  }
+
+  fileList.value.forEach(file => {
+    uploadFile(file);
+  });
+}
+async function uploadDirectory() {
+  fileList.value.forEach(file => {
+    uploadFile(file, true);
+  });
+  showModalWrapFolder.value = false;
+}
+
+async function uploadFile(file: FileListItemType, wrapToFolder: Boolean = false) {
+  /** Refresh timestamp */
+  file.timestamp = Date.now();
+
+  /** Refresh sessionUuid if batchId is new */
+  if (file.batchId !== batchId.value) {
+    sessionUuid.value = uuidv4();
+    batchId.value = file.batchId || '';
+  }
+
+  const fileData: FormFileUploadRequest = {
+    fileName: file.name,
+    contentType: file.type || '',
+    path: dataStore.getFolderPath + fileFolderPath(file.fullPath || ''),
+  };
+  if (wrapToFolder) {
+    fileData.session_uuid = sessionUuid.value;
+    fileData.path = fileFolderPath(file.fullPath || '');
+  }
+
   createFileProgress(file.id);
 
   try {
@@ -86,20 +182,29 @@ async function uploadFiles({ file, onError, onFinish }: NUploadCustomRequestOpti
       }
     };
     xhr.onload = () => {
-      onFinish();
+      file.onFinish();
       updateFileStatus(file.id, FileUploadStatusValue.FINISHED);
       updateFilePercentage(file.id, 100);
+
+      /** Upload directory - use session */
+      if (wrapToFolder) {
+        uploadSessionEnd(sessionUuid.value);
+      }
     };
     xhr.onerror = error => {
-      onError();
+      file.onError();
       updateFileStatus(file.id, FileUploadStatusValue.ERROR);
+
+      if (wrapToFolder) {
+        uploadSessionEnd(sessionUuid.value);
+      }
 
       /** Show error message */
       message.error(userFriendlyMsg(error));
     };
     xhr.send(file.file);
   } catch (error) {
-    onError();
+    file.onError();
     updateFileStatus(file.id, FileUploadStatusValue.ERROR);
 
     /** Show error message */
@@ -114,6 +219,20 @@ function fileFolderPath(fullPath: string): string {
     return '';
   }
   return parts.slice(0, -1).join('/');
+}
+
+/** Get wrapper folder path from user's input */
+function wrapperFolderPath(path: string): string {
+  if (path.length < 1) {
+    return '';
+  }
+  return (
+    '/' +
+    path
+      .split('/')
+      .filter(p => p)
+      .join('/')
+  );
 }
 
 /** Update file property */
@@ -148,10 +267,60 @@ function updateFileStatus(fileId: string, status: FileUploadStatus) {
         }
 
         clearInterval(item.progress);
+
+        /** Refresh diretory content */
+        if (allFilesFinished()) {
+          dataStore.fetchDirectoryContent();
+
+          /** After 3s, remove finished files */
+          setTimeout(() => {
+            removeFinishedFilesFromList();
+          }, 3000);
+        }
       }
     }
   });
 }
+
+/** HOSTING: Upload Session End  */
+async function uploadSessionEnd(sessionUuid: string) {
+  if (!allFilesFinished()) {
+    return;
+  }
+  try {
+    const resSessionEnd = await $api.post<PasswordResetResponse>(
+      endpoints.storageFileUpload(props.bucketUuid, sessionUuid),
+      {
+        directSync: config.public.ENV === AppEnv.LOCAL,
+        wrapWithDirectory: true,
+        directoryPath: dataStore.getFolderPath + wrapperFolderPath(folderName.value),
+      }
+    );
+    if (resSessionEnd.data) {
+      message.success($i18n.t('form.success.filesUploaded'));
+    }
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  /** Refresh diretory content */
+  dataStore.fetchDirectoryContent();
+}
+
+/** Check if all files are finished (status FINISH or ERROR) */
+function allFilesFinished(): boolean {
+  const uploadingFiles = fileList.value.find(
+    file => file.status === FileUploadStatusValue.UPLOADING
+  );
+  return uploadingFiles === undefined;
+}
+
+/** Remove finished files from list */
+function removeFinishedFilesFromList() {
+  fileList.value =
+    fileList.value.filter(file => file.status !== FileUploadStatusValue.FINISHED) || [];
+}
+
+/** Calculate file upload progress */
 function createFileProgress(fileId: string) {
   fileList.value.map(file => {
     if (file.id === fileId) {
@@ -164,5 +333,20 @@ function createFileProgress(fileId: string) {
       }, timeFor1Percent);
     }
   });
+}
+
+/** Format folder name (remove dissallowed characters) */
+function handleFolderNameInput(value: string | [string, string]) {
+  const data = textMarshal({
+    input: value,
+    template: 'x',
+    disallowCharacters: [/@/, /\\/, /\//, /\|/, /\!/, /\#/, /\$/, /\%/, /\^/, /\&/, /\*/],
+    isRepeat: {
+      value: true,
+      removeStart: true,
+      removeEnd: true,
+    },
+  });
+  folderName.value = data.marshaltext;
 }
 </script>

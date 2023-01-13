@@ -46,7 +46,7 @@
           </n-h5>
           <FormStorageUploadFiles
             v-if="dataStore.folder.uploadActive"
-            :bucketUuid="dataStore.currentBucket.bucket_uuid"
+            :bucketUuid="dataStore.bucket.active.bucket_uuid || dataStore.currentBucket.bucket_uuid"
             class="mt-4 pr-[2px] pb-1 mb-1"
           />
         </div>

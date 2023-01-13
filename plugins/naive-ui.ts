@@ -60,9 +60,11 @@ import {
   UploadFileInfo,
 } from 'naive-ui';
 import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
+import { FileInfo } from 'naive-ui/es/upload/src/interface';
 
 declare global {
   interface NCollapseProps extends CollapseProps {}
+  interface NFileInfo extends FileInfo {}
   interface NFormInst extends FormInst {}
   interface NFormItemInst extends FormItemInst {}
   interface NFormRules extends FormRules {}
