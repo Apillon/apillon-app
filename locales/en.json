@@ -512,7 +512,10 @@
     "visits": "30d visits",
     "yourFiles": "Your files",
     "yourFilesAll": "All your files",
-    "webhook": "Webhook"
+    "webhook": "Webhook",
+    "wrapFiles": "Wrap files",
+    "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don’t want to do it just skip this process.",
+    "wrapToDirectory": "Wrap to directory"
   },
   "service": {
     "authentication": {

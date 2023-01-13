@@ -142,6 +142,7 @@ declare global {
     fileName: string;
     contentType: string;
     directory_uuid?: string;
+    session_uuid?: string;
     path?: string;
   }
 

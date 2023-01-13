@@ -5,18 +5,12 @@ import local from '../config/local';
 import { Feature } from '~~/types/config';
 
 export function getAppConfig(env?: string) {
-  if (!env) {
-    return prod;
-  }
-  if (env === 'staging') {
-    return stg;
-  } else if (env === 'development') {
-    return dev;
-  } else if (env === 'local') {
-    return local;
-  } else {
-    return prod;
-  }
+  const configFile =
+    env === 'staging' ? stg : env === 'development' ? dev : env === 'local' ? local : prod;
+  return {
+    ...configFile,
+    ENV: env,
+  };
 }
 
 /**
