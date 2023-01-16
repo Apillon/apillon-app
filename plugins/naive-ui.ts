@@ -43,6 +43,7 @@ import {
   NLayoutSider,
   NProgress,
   NRadio,
+  NRadioButton,
   NRadioGroup,
   NScrollbar,
   NSkeleton,
@@ -81,6 +82,10 @@ declare global {
   interface NDataTableInst extends DataTableInst {}
   interface NDataTableSortState extends DataTableSortState {}
   interface NMessageApiInjection extends MessageApiInjection {}
+
+  interface NRadioOption extends SelectOption {
+    label: string;
+  }
 
   type NDataTableColumns<T = InternalRowData> = DataTableColumns<T>;
   type NMenuOption = MenuOption;
@@ -124,6 +129,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NLayoutSider,
         NProgress,
         NRadio,
+        NRadioButton,
         NRadioGroup,
         NScrollbar,
         NSkeleton,

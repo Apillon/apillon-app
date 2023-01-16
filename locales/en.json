@@ -77,6 +77,7 @@
     "emailMethodConfiguration": "Email method configuration",
     "env": "ENV",
     "expiration": "Expiration",
+    "gotIt": "Got it, thanks!",
     "goToApiManagement": "Go to central API management",
     "inviteTeamMember": "Invite team member",
     "invoiceDate": "Next invoice issue date",
@@ -97,7 +98,8 @@
     "viewInvoice": "View Invoice",
     "yourPlan": "Your plan: ",
     "value": "Value",
-    "visibleColumns": "Visible columns"
+    "visibleColumns": "Visible columns",
+    "w3Warn": "W3 warn"
   },
   "error": {
     "404": "Page not found",
@@ -440,6 +442,7 @@
       "description": "Description",
       "destroy": "Destroy",
       "edit": "Edit bucket",
+      "infoNew": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
       "management": "Bucket management",
       "name": "Bucket name",
       "new": "New bucket",

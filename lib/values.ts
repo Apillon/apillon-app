@@ -8,6 +8,10 @@ export const LsTableColumnsKeys = {
   FILES: 'al_table_files_columns',
 };
 
+export const LsW3WarnKeys = {
+  NEW_BUCKET: 'al_w3warn_new_bucket',
+};
+
 /** User roles */
 export const UserRoleIds = [
   DefaultUserRole.ADMIN,
@@ -99,13 +103,14 @@ export const themeOverrides: GlobalThemeOverrides = {
   Card: {
     borderColor: colors.primary,
     borderRadius: '0px',
-    color: colors.bg.lighter,
-    colorEmbedded: colors.bg.lighter,
-    colorEmbeddedModal: colors.bg.lighter,
-    colorEmbeddedPopover: colors.bg.lighter,
-    colorModal: colors.bg.lighter,
-    colorPopover: colors.bg.lighter,
-    colorTarget: colors.bg.lighter,
+    color: colors.bg.DEFAULT,
+    colorEmbedded: colors.bg.DEFAULT,
+    colorEmbeddedModal: colors.bg.DEFAULT,
+    colorEmbeddedPopover: colors.bg.DEFAULT,
+    colorModal: colors.bg.DEFAULT,
+    colorPopover: colors.bg.DEFAULT,
+    colorTarget: colors.bg.DEFAULT,
+    paddingMedium: '16px 64px 16px 64px',
   },
   Checkbox: {
     sizeMedium: '18px',
@@ -126,6 +131,12 @@ export const themeOverrides: GlobalThemeOverrides = {
     thFontWeight: '700',
   },
   Dialog: {
+    closeBorderRadius: '50%',
+    closeColorHover: colors.white,
+    closeColorPressed: colors.white,
+    closeIconColor: colors.white,
+    closeIconColorPressed: colors.bg.DEFAULT,
+    closeIconColorHover: colors.bg.DEFAULT,
     color: colors.bg.DEFAULT,
     contentMargin: '16px 0',
   },
@@ -155,13 +166,14 @@ export const themeOverrides: GlobalThemeOverrides = {
     feedbackHeightSmall: '24px',
     feedbackHeightMedium: '32px',
     feedbackHeightLarge: '40px',
-    labelTextColor: colors.white,
     labelFontSizeTopSmall: '10px',
     labelFontSizeLeftSmall: '10px',
     labelFontSizeLeftMedium: '12px',
     labelFontSizeTopMedium: '12px',
     labelFontSizeLeftLarge: '14px',
     labelFontSizeTopLarge: '14px',
+    labelPaddingVertical: '0 0 8px',
+    labelTextColor: colors.white,
   },
   Input: {
     border: `1px solid ${colors.bg.lighter}`,
@@ -243,15 +255,15 @@ export const themeOverrides: GlobalThemeOverrides = {
     peers: {
       Card: {
         paddingSmall: '28px 40px',
-        paddingMedium: '28px 40px',
-        paddingLarge: '32px 48px',
-        paddingHuge: '38px 56px',
+        paddingMedium: '32px 64px',
+        paddingLarge: '32px 64px',
+        paddingHuge: '32px 64px',
       },
       Dialog: {
         closeColorHover: 'inherit',
-        closeMargin: '32px 42px 0 0',
-        contentMargin: '28px 0',
-        padding: '28px 40px',
+        closeMargin: '-24px -24px 0 0',
+        contentMargin: '16px 0',
+        padding: '64px 64px 32px',
       },
     },
   },
@@ -265,13 +277,33 @@ export const themeOverrides: GlobalThemeOverrides = {
   },
   Radio: {
     boxShadow: `inset 0 0 0 1px ${colors.body}`,
-    fontSizeSmall: '16px',
-    fontSizeMedium: '18px',
-    fontSizeLarge: '20px',
+    fontSizeSmall: '12px',
+    fontSizeMedium: '14px',
+    fontSizeLarge: '16px',
+
     radioSizeSmall: '16px',
     radioSizeMedium: '20px',
     radioSizeLarge: '24px',
+
     textColor: colors.white,
+
+    buttonBorderColor: colors.bg.lighter,
+    buttonBorderColorActive: colors.body,
+    buttonBorderColorHover: colors.body,
+
+    buttonBorderRadius: '0px',
+    buttonColor: colors.bg.light,
+    buttonColorActive: colors.bg.lighter,
+    colorDisabled: colors.bg.DEFAULT,
+
+    buttonTextColor: colors.white,
+    buttonTextColorActive: colors.white,
+    buttonTextColorHover: colors.white,
+    textColorDisabled: colors.white,
+
+    buttonBoxShadow: 'none',
+    buttonBoxShadowFocus: 'none',
+    buttonBoxShadowHover: 'none',
   },
   Skeleton: {
     color: colors.bg.light,

@@ -1,8 +1,14 @@
 <template>
   <div>
+    <p class="text-body mb-8">
+      {{ $t('storage.bucket.infoNew') }}
+    </p>
+
+    <!-- Notification - show if qouta has been reached -->
     <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
       {{ $t('storage.bucket.quotaReached') }}
     </Notification>
+
     <n-form
       ref="formRef"
       :model="formData"
@@ -41,16 +47,17 @@
 
       <!--  Bucket Sizes -->
       <n-form-item path="bucketSizes" :label="$t('form.label.bucketSize')">
-        <n-radio-group v-model:value="formData.bucketSize" name="radiogroup">
-          <n-space>
-            <n-radio
-              v-for="(size, key) in bucketSizes"
-              :key="key"
-              :value="size.value"
-              :label="size.label"
-              :disabled="true"
-            />
-          </n-space>
+        <n-radio-group v-model:value="formData.bucketSize" name="bucketSize" class="w-full">
+          <n-grid :cols="2" :x-gap="32" :y-gap="32">
+            <n-gi v-for="(size, key) in bucketSizes">
+              <n-radio-button
+                :key="key"
+                :value="size.value"
+                :label="size.label"
+                :disabled="size?.disabled === true"
+              />
+            </n-gi>
+          </n-grid>
         </n-radio-group>
       </n-form-item>
 
@@ -118,7 +125,7 @@ const rules: NFormRules = {
   bucketSize: [],
 };
 
-const bucketSizes = [
+const bucketSizes: Array<NRadioOption> = [
   {
     value: 5,
     label: $i18n.t('form.bucketSizes.5gb'),
@@ -126,6 +133,7 @@ const bucketSizes = [
   {
     value: 100,
     label: $i18n.t('form.bucketSizes.100gb'),
+    disabled: true,
   },
 ];
 

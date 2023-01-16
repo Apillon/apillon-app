@@ -1,7 +1,11 @@
 <template>
   <Dashboard>
     <template #heading>
-      <h4>{{ $t('profile.mySettings') }}</h4>
+      <Heading>
+        <slot>
+          <h4>{{ $t('profile.mySettings') }}</h4>
+        </slot>
+      </Heading>
     </template>
     <slot>
       <!-- Edit user profile -->

@@ -1,27 +1,31 @@
 @layer base {
   /* Headline 1 */
-  h1 {
+  h1,
+  .h1 {
     @apply font-sans font-bold;
     font-size: 1.75rem;
     line-height: 1.43;
   }
 
   /* Headline 2 */
-  h2 {
+  h2,
+  .h2 {
     @apply font-sans font-bold;
     font-size: 1.5rem;
     line-height: 1.5;
   }
 
   /* Headline 3 */
-  h3 {
+  h3,
+  .h3 {
     @apply font-sans font-bold;
     font-size: 1.25rem;
     line-height: 1.6;
   }
 
   /* Headline 4 */
-  h4 {
+  h4,
+  .h4 {
     @apply font-sans font-bold;
     font-size: 1.125rem;
     line-height: 1.55;
@@ -32,7 +36,8 @@
   }
 
   /* Headline 5 */
-  h5 {
+  h5,
+  .h5 {
     @apply font-sans font-bold;
     font-size: 1rem;
     line-height: 1.6;
