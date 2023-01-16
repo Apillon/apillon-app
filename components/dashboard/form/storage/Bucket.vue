@@ -162,6 +162,7 @@ async function createBucket() {
     project_uuid: dataStore.currentProject?.project_uuid,
     bucketType: BucketType.STORAGE,
     name: formData.value.bucketName,
+    description: formData.value.bucketDescription,
     size: formData.value.bucketSize,
   };
 

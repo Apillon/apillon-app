@@ -7,16 +7,15 @@ declare global {
     iconName?: string;
   }
 
-  export type FileListItemType = {
-    id: string;
-    name: string;
-    status: FileUploadStatus;
+  export interface FileListItemType extends NFileInfo {
     percentage: number;
     size: number;
     timestamp: number;
     progress?: any;
     uploadSpeed?: number;
-  };
+    onFinish: any;
+    onError: any;
+  }
 
   interface MainNavItemInterface {
     name: string;

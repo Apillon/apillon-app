@@ -25,6 +25,7 @@ import {
   NForm,
   NFormItem,
   NFormItemGi,
+  NGi,
   NGrid,
   NH1,
   NH2,
@@ -63,9 +64,11 @@ import {
 import { InternalRowData } from 'naive-ui/es/data-table/src/interface';
 import { MenuOption, MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
+import { FileInfo } from 'naive-ui/es/upload/src/interface';
 
 declare global {
   interface NCollapseProps extends CollapseProps {}
+  interface NFileInfo extends FileInfo {}
   interface NFormInst extends FormInst {}
   interface NFormItemInst extends FormItemInst {}
   interface NFormRules extends FormRules {}
@@ -103,6 +106,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NForm,
         NFormItem,
         NFormItemGi,
+        NGi,
         NGrid,
         NH1,
         NH2,
