@@ -6,25 +6,30 @@
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
-    <div class="flex">
-      <strong>{{ $t('referral.connectTwitter') }}</strong>
-      <div class="relative mt-10">
-        <ReferralPoints :points="2" />
+    <div class="flex justify-between">
+      <div class="mt-4">
+        <strong>{{ $t('referral.connectTwitter') }}</strong>
       </div>
-    </div>
 
-    <!--  Submit -->
-    <n-form-item :show-label="false">
-      <input type="submit" class="hidden" :value="$t('form.connect')" />
-      <Btn type="primary" class="mt-2" :loading="loading" @click="handleSubmit">
-        {{ $t('form.connect') }}
-      </Btn>
-    </n-form-item>
+      <!-- <div class="relative mt-10">
+        <ReferralPoints :points="2" />
+      </div> -->
+
+      <!--  Submit -->
+      <n-form-item :show-label="false">
+        <input type="submit" class="hidden" :value="$t('form.connect')" />
+        <Btn type="primary" class="mt-2" :loading="loading" @click="handleSubmit">
+          {{ referralStore.twitter_id ? 'Disconnect' : $t('form.connect') }}
+        </Btn>
+      </n-form-item>
+    </div>
   </n-form>
 </template>
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
+
+const referralStore = useReferralStore();
 
 const $route = useRoute();
 
@@ -84,7 +89,12 @@ function handleSubmit(e: Event | MouseEvent) {
       //   '_self'
       // );
       console.log('Connect twitter');
-      await connectTwitter();
+
+      if (!referralStore.twitter_id) {
+        await connectTwitter();
+      } else {
+        // Disconnect twitter account
+      }
     }
   });
 }

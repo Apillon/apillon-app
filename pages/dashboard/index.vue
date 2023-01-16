@@ -34,25 +34,60 @@
       </div>
       <div class="max-w-[980px] p-8 mt-7 bg-bg-lighter">
         <p>
-          <strong>Referral code:</strong>
+          <strong>Referral link</strong>
         </p>
-        <div class="max-w-[480px]">
+        <Btn :loading="loading" type="primary" @click="enterReferral()">
+          Start your referral journey
+        </Btn>
+        <!-- <div class="max-w-[480px]">
           <div class="p-4 bg-bg-light mt-2">
             <p>
               {{ authStore.userUuid }}
             </p>
           </div>
-        </div>
+        </div> -->
       </div>
     </slot>
   </Dashboard>
+  <modal v-model:show="showModal" :title="$t('referral.enter.header')">
+    <ReferralAcceptTerms />
+  </modal>
 </template>
 
 <script lang="ts" setup>
 const { t } = useI18n();
 const authStore = useAuthStore();
+const referralStore = useReferralStore();
+const router = useRouter();
 
 useHead({
   title: t('dashboard.dashboard'),
 });
+
+function enterReferral() {
+  if (!termsAccepted.value) {
+    showModal.value = true;
+  } else {
+    router.push('/dashboard/referral');
+  }
+}
+
+const loading = ref(false);
+const termsAccepted = ref(false);
+
+getReferral();
+async function getReferral() {
+  loading.value = true;
+  try {
+    const res = await $api.get(endpoints.referral);
+    // If there is no error -> user already accepted terms & conditions
+    referralStore.initReferral(res.data);
+    termsAccepted.value = true;
+  } catch (e) {
+    console.error(e);
+  }
+  loading.value = false;
+}
+
+const showModal = ref(false);
 </script>

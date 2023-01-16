@@ -1,29 +1,55 @@
 <template>
   <Dashboard>
     <template #heading>
-      <div v-if="step === 1" class="flex">
-        <h4 class="-mb-2">{{ $t('referral.title') }}</h4>
-        <div class="mx-6 mt-2">|</div>
-        <p class="font-button text-sm mb-7 text-white mt-[10px]">
-          <strong>{{ $t('referral.learnMore') }}</strong>
-        </p>
+      <div ref="headingRef">
+        <h4>{{ $t('referral.title') }}</h4>
+      </div>
+      <div>
+        <n-tabs type="line" animated>
+          <n-tab-pane name="earnPoints" tab="Earn Points">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 font-button text-sm">
+              <!-- Content EARN POINTS -->
+              <div class="col-span-2">
+                <n-scrollbar y-scrollable :style="scrollStyle">
+                  <div v-if="loading" class="mt-40">
+                    <Spinner />
+                  </div>
+                  <Referral v-else @claim-reward="claimReward" />
+                </n-scrollbar>
+              </div>
+
+              <!-- Info EARN POINTS -->
+              <div>
+                <ReferralTabInfoEarnPoints />
+              </div>
+            </div>
+          </n-tab-pane>
+          <n-tab-pane name="rewards" tab="Rewards">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 font-button text-sm">
+              <!-- Content REWARDS -->
+              <div class="col-span-2">
+                <n-scrollbar y-scrollable :style="scrollStyle">
+                  <div v-if="loading" class="mt-40">
+                    <Spinner />
+                  </div>
+                  <ReferralRewardsSection @claim-reward="claimReward" />
+                </n-scrollbar>
+              </div>
+
+              <!-- Info REWARDS -->
+              <div>
+                <ReferralTabInfoRewards />
+              </div>
+            </div>
+          </n-tab-pane>
+        </n-tabs>
       </div>
     </template>
     <slot>
-      <div v-if="loading">
+      <!-- <div v-if="loading" class="mt-40">
         <Spinner />
       </div>
-      <div v-else>
-        <div v-if="step === 0">
-          <ReferralAcceptTerms @enter-referral="step = 1" />
-        </div>
-        <div v-else-if="step === 1">
-          <Referral @claim-reward="claimReward" />
-        </div>
-        <div v-else-if="step === 2">
-          <ReferralClaimReward :data="claimRewardData" />
-        </div>
-      </div>
+      <Referral v-else @claim-reward="claimReward" /> -->
     </slot>
   </Dashboard>
 </template>
@@ -32,6 +58,13 @@
 import { useI18n } from 'vue-i18n';
 
 const referralStore = useReferralStore();
+const headingRef = ref<HTMLElement>();
+
+const scrollStyle = computed(() => {
+  return {
+    maxHeight: `calc(100vh - ${210 + (headingRef.value?.clientHeight || 0)}px)`,
+  };
+});
 
 const $i18n = useI18n();
 
@@ -39,6 +72,9 @@ useHead({
   title: $i18n.t('referral.title'),
 });
 
+const step = ref(1);
+
+const claimRewardData = ref('');
 const loading = ref(false);
 
 getReferral();
@@ -48,20 +84,15 @@ async function getReferral() {
     const res = await $api.get(endpoints.referral);
     // If there is no error -> user already accepted terms & conditions
     referralStore.initReferral(res.data);
-    step.value = 1;
   } catch (e) {
     console.error(e);
   }
   loading.value = false;
 }
 
-const step = ref(0);
-
-const claimRewardData = ref(null);
-
 function claimReward(event) {
   console.log('event claim reward: ', event);
   claimRewardData.value = event;
-  step.value = 2;
+  // TODO open modal for claiming reward
 }
 </script>

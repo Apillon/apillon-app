@@ -1,9 +1,7 @@
 <template>
   <!-- Referral enter -->
 
-  <div class="text-white bg-black pt-8 pl-[100px] pb-20">
-    <h4>{{ $t('referral.enter.header') }}</h4>
-
+  <div class="">
     <p class="mt-7 font-button text-base">
       <strong>
         {{ $t('referral.enter.country') }}
@@ -14,7 +12,7 @@
         <n-select
           id="country"
           v-model:value="formData.country"
-          class="mt-2 mb-1 max-w-[522px]"
+          class="mt-2 mb-1 max-w-[522px] bg-primary"
           :options="options"
         >
           <template #arrow>
@@ -121,3 +119,12 @@ function openModal() {
   showModal.value = true;
 }
 </script>
+
+<style>
+.v-vl-visible-items {
+  padding: 0 !important;
+}
+.n-base-select-option {
+  background-color: #313442 !important;
+}
+</style>

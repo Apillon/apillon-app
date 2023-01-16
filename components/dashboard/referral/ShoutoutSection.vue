@@ -2,10 +2,13 @@
   <!-- Referral - sharing -->
   <h4 class="">{{ $t('referral.shoutout') }}</h4>
   <div></div>
+  <div v-if="loading" class="relative">
+    <Spinner />
+  </div>
   <div v-for="tweet in tweets" :key="tweet" class="relative">
-    <div class="absolute right-[36%] top-5">
+    <!-- <div class="absolute right-[36%] top-5">
       <ReferralPoints :points="1" />
-    </div>
+    </div> -->
     <Tweet :tweet-id="(tweet as any).id" theme="dark">
       <template #loading>
         <Spinner />
@@ -28,7 +31,10 @@ import Tweet from 'vue-tweet';
 
 const tweets = ref([]);
 
+const loading = ref(false);
+
 onMounted(async () => {
+  loading.value = true;
   try {
     const res = await $api.get(endpoints.referralTweets);
     tweets.value = res.data;
@@ -36,6 +42,7 @@ onMounted(async () => {
   } catch (e) {
     console.error(e);
   }
+  loading.value = false;
 });
 
 async function shareTweet(id: String) {

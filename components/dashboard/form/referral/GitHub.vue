@@ -6,25 +6,30 @@
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
-    <div class="flex">
-      <strong>{{ $t('referral.connectGithub') }}</strong>
-      <div class="relative mt-10">
-        <ReferralPoints :points="2" />
+    <div class="flex justify-between">
+      <div class="mt-4">
+        <strong>{{ $t('referral.connectGithub') }}</strong>
       </div>
+
+      <!-- <div class="relative mt-10">
+        <ReferralPoints :points="2" />
+      </div> -->
+      <n-form-item :show-label="false">
+        <input type="submit" class="hidden" :value="$t('form.connect')" />
+        <Btn type="primary" class="mt-2" :loading="loading" @click="handleSubmit">
+          {{ referralStore.github_id ? 'Disconnect' : $t('form.connect') }}
+        </Btn>
+      </n-form-item>
     </div>
 
     <!--  Submit -->
-    <n-form-item :show-label="false">
-      <input type="submit" class="hidden" :value="$t('form.connect')" />
-      <Btn type="primary" class="mt-2" :loading="loading" @click="handleSubmit">
-        {{ $t('form.connect') }}
-      </Btn>
-    </n-form-item>
   </n-form>
 </template>
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
+
+const referralStore = useReferralStore();
 
 const $route = useRoute();
 
@@ -74,13 +79,13 @@ function handleSubmit(e: Event | MouseEvent) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
-    } else {
+    } else if (!referralStore.github_id) {
       window.open(
         'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=http://localhost:3000/dashboard/referral',
         '_self'
       );
-      console.log('Connect twitter');
-      // await connectTwitter();
+    } else {
+      // Disconnect github account
     }
   });
 }
