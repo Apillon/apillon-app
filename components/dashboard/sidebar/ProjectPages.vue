@@ -1,25 +1,14 @@
 <template>
-  <div>
-    <n-menu v-model:value="selectedPage" :options="menuOptions" @update-value="handleUpdateValue" />
-  </div>
+  <Menu :options="menuOptions" />
 </template>
 
 <script lang="ts" setup>
 import { h } from 'vue';
-import type { MenuOption } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const NuxtLink = resolveComponent('NuxtLink');
-const { name } = useRoute();
-const selectedPage = ref<string>(name?.toString() || '');
 
-function handleUpdateValue(key: string, item: MenuOption) {
-  console.info('[onUpdate:value]: ' + JSON.stringify(key));
-  console.info('[onUpdate:value]: ' + JSON.stringify(item));
-}
-
-const menuOptions: MenuOption[] = [
+const menuOptions: NMenuOption[] = [
   {
     label: () => h(NuxtLink, { to: { name: 'dashboard-methods' } }, () => t('pageMenu.methods')),
     key: 'dashboard-methods',

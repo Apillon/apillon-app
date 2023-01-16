@@ -1,74 +1,71 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <n-space align="center" :size="32" class="-mb-4">
-        <NuxtLink :to="{ name: 'dashboard-service-storage' }">
-          <span class="icon-back"></span>
-        </NuxtLink>
-        <h4>{{ $t('storage.bucketManagement') }}</h4>
-      </n-space>
-    </template>
+      <Heading>
+        <slot>
+          <n-space align="center" :size="32">
+            <NuxtLink :to="{ name: 'dashboard-service-storage' }">
+              <span class="icon-back"></span>
+            </NuxtLink>
+            <h4>{{ dataStore.bucket.active.name }}</h4>
+          </n-space>
+        </slot>
 
-    <template #infobar>
-      <n-space align="center" justify="space-between" class="w-full">
-        <Tag color="violet">{{ dataStore.bucket.active.name }}</Tag>
-        <span>
-          <span class="icon-storage"></span>
-          {{ $t('storage.bucket') }}
-        </span>
-        <StorageProgress
-          class="w-1/2"
-          :key="dataStore.bucket.active.size || 0"
-          :percentage="dataStore.bucket.active.percentage"
-          :size="dataStore.bucket.active.size || 0"
-          :max-size="dataStore.bucket.active.maxSize"
-        />
-      </n-space>
-    </template>
+        <template #info>
+          <StorageProgress
+            class="w-1/2"
+            :key="dataStore.bucket.active.uploadedSize || 0"
+            :percentage="dataStore.bucket.active.percentage"
+            :size="dataStore.bucket.active.uploadedSize || 0"
+            :max-size="dataStore.bucket.active.maxSize"
+          />
+        </template>
 
-    <template #sidebar>
-      <SidebarBucketManagement />
-    </template>
-
-    <template #learn>
-      <LearnAlert>
-        Click on a service you want to attach to your project. After configuring it, the service
-        will become operational.
-        <strong>Keep in mind, you can always edit the attached services or add new ones.</strong>
-      </LearnAlert>
-      <LearnCollapse />
+        <template #submenu>
+          <MenuBucketManagement />
+        </template>
+      </Heading>
     </template>
 
     <slot>
       <!-- Breadcrumbs -->
-      <StorageBreadcrumbs v-if="dataStore.folder.selected" />
-      <n-h5 v-else-if="dataStore.folder.uploadActive" prefix="bar">{{
-        $t('storage.uploadFiles')
-      }}</n-h5>
+      <transition name="fade" appear>
+        <div v-show="dataStore.folder.selected" class="mb-4">
+          <StorageBreadcrumbs v-if="dataStore.folder.selected" />
+        </div>
+      </transition>
 
       <!-- Upload files -->
-      <FormStorageUploadFiles
-        v-show="dataStore.folder.uploadActive"
-        :bucketUuid="dataStore.currentBucket.bucket_uuid"
-        class="mt-4 pr-[2px] pb-1 mb-1"
-      />
+      <transition name="fade" appear>
+        <div v-show="dataStore.folder.uploadActive" class="mb-8">
+          <n-h5 v-if="dataStore.folder.uploadActive && !dataStore.folder.selected" prefix="bar">
+            {{ $t('storage.uploadFiles') }}
+          </n-h5>
+          <FormStorageUploadFiles
+            v-if="dataStore.folder.uploadActive"
+            :bucketUuid="dataStore.bucket.active.bucket_uuid || dataStore.currentBucket.bucket_uuid"
+            class="mt-4 pr-[2px] pb-1 mb-1"
+          />
+        </div>
+      </transition>
 
-      <n-h5 prefix="bar" class="mb-8">{{ $t('storage.yourFiles') }}</n-h5>
-      <n-space vertical :size="12">
-        <!-- Actions -->
-        <StorageActions />
+      <div>
+        <n-h5 v-if="dataStore.folder.uploadActive || !dataStore.folder.selected" prefix="bar">
+          {{ $t('storage.yourFiles') }}
+        </n-h5>
+        <n-space vertical :size="12" class="mt-8">
+          <!-- Actions -->
+          <StorageActions />
 
-        <!-- DataTable: files and directories -->
-        <TableFiles />
-      </n-space>
+          <!-- DataTable: files and directories -->
+          <TableFiles />
+        </n-space>
+      </div>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import colors from '~~/tailwind.colors';
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const { params } = useRoute();
 const dataStore = useDataStore();

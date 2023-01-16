@@ -12,7 +12,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   bucketId: { type: Number, required: true },
@@ -63,7 +62,7 @@ async function bucketDestroy() {
     dataStore.fetchBuckets();
     router.push({ name: 'dashboard-service-storage' });
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

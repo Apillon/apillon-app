@@ -3,9 +3,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const settingsStore = useSettingsStore();
 const loading = ref<boolean>(false);
@@ -14,12 +11,12 @@ const SelectRole = resolveComponent('SelectRole');
 onMounted(async () => {
   if (!settingsStore.hasUsers) {
     loading.value = true;
-    await settingsStore.fetchProjectUsers($i18n);
+    await settingsStore.fetchProjectUsers();
     loading.value = false;
   }
 });
 
-const createColumns = (): DataTableColumns<ProjectUserInterface> => {
+const createColumns = (): NDataTableColumns<ProjectUserInterface> => {
   return [
     {
       title: $i18n.t('dashboard.user'),

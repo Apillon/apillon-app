@@ -15,8 +15,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const dataStore = useDataStore();
 
@@ -44,6 +42,6 @@ function goToFolder(parentFolderId?: number | undefined) {
 
   /** Reset search string and refesh folders */
   dataStore.folderSearch();
-  dataStore.fetchDirectoryContent($i18n);
+  dataStore.fetchDirectoryContent();
 }
 </script>

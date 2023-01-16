@@ -14,14 +14,19 @@ export enum DefaultUserRole {
   USER = 99, // user with access to platform
 }
 export const DefaultUserRoles: { [k: number]: string } = {
-  [DefaultUserRole.ADMIN]: 'ADMIN',
-  [DefaultUserRole.SUPPORT]: 'SUPPORT',
-  [DefaultUserRole.ANALYTIC]: 'ANALYTIC',
   [DefaultUserRole.PROJECT_OWNER]: 'PROJECT_OWNER',
   [DefaultUserRole.PROJECT_ADMIN]: 'PROJECT_ADMIN',
   [DefaultUserRole.PROJECT_USER]: 'PROJECT_USER',
-  [DefaultUserRole.USER]: 'USER',
 };
+
+/**
+ * Instruction Type Enum { Helper, Video, Q&A }
+ */
+export enum InstructionType {
+  HELPER = 10,
+  VIDEO = 20,
+  QA = 30,
+}
 
 declare global {
   /**
@@ -30,7 +35,7 @@ declare global {
   interface FormProject {
     name: string | null;
     description: string | null;
-    terms: boolean | null;
+    terms?: boolean;
   }
 
   interface ProjectInterface {
@@ -40,6 +45,7 @@ declare global {
     description: string;
     shortDescription: string | null;
     imageFile_id: number | null;
+    myRole_id_onProject?: number;
     project_uuid: string;
     value?: number;
     label?: string;
@@ -48,6 +54,7 @@ declare global {
   interface ProjectResponse extends GeneralResponse<ProjectInterface> {}
   interface ProjectsResponse extends GeneralItemsResponse<ProjectInterface> {}
   interface CreateProjectResponse extends GeneralResponse<ProjectInterface> {}
+  interface ProjectsQuotaResponse extends GeneralResponse<boolean> {}
 
   /**
    * Project settings

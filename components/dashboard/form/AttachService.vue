@@ -10,6 +10,7 @@
         v-model:value="formData.serviceName"
         :input-props="{ id: 'serviceName' }"
         :placeholder="$t('form.placeholder.serviceName')"
+        clearable
       />
     </n-form-item>
     <n-tag :bordered="false" type="info" class="mb-8">Servicename.com/ </n-tag>
@@ -39,9 +40,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
-
 const props = defineProps({
   serviceType: {
     type: Number,
@@ -54,7 +52,6 @@ const $i18n = useI18n();
 const dataStore = useDataStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const message = useMessage();
 
 const formData = ref<FormService>({
   serviceName: '',
@@ -88,7 +85,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => window.$message.error(error.message || 'Error'))
+      );
     } else {
       await createService();
     }
@@ -113,7 +112,7 @@ async function createService() {
       console.log(res.data);
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    window.$message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

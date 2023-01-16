@@ -1,6 +1,7 @@
 <template>
   <n-data-table
     remote
+    ref="tableRef"
     :bordered="false"
     :columns="columns"
     :data="dataStore.folder.items"
@@ -10,6 +11,7 @@
     :row-props="rowProps"
     @update:checked-row-keys="handleCheck"
     @update:page="handlePageChange"
+    @update:sorter="handleSorterChange"
   />
 
   <!-- Drawer - File details -->
@@ -20,24 +22,37 @@
   </n-drawer>
 
   <!-- Modal - Delete file/folder -->
-  <modal v-model:show="showModalDelete" :title="$t(`storage.${currentRow.type}.delete`)">
-    <FormStorageFolderDelete
-      :id="currentRow.id"
-      :type="currentRow.type"
-      @submit-success="onDeleted"
-    />
+  <modal
+    v-model:show="showModalDelete"
+    :title="
+      $i18n.te(`storage.${currentRow.type}.delete`)
+        ? $t(`storage.${currentRow.type}.delete`)
+        : $t(`general.delete`)
+    "
+  >
+    <FormStorageFolderDelete :items="[currentRow]" @submit-success="onDeleted" />
   </modal>
 </template>
 
 <script lang="ts" setup>
 import { debounce } from 'lodash';
-import { DataTableColumns, DataTableRowKey, NButton, NDropdown, NTag } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
+import {
+  DataTableColumns,
+  DataTableRowKey,
+  NButton,
+  NDropdown,
+  NEllipsis,
+  NSpace,
+  useMessage,
+} from 'naive-ui';
 
 const $i18n = useI18n();
+const message = useMessage();
 const dataStore = useDataStore();
 const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
+const tableRef = ref<NDataTableInst | null>(null);
+const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
 
 const currentRow = ref<FolderInterface>({} as FolderInterface);
@@ -86,6 +101,15 @@ const dropdownFileOptions = [
     },
   },
   {
+    label: $i18n.t('general.download'),
+    key: 'download',
+    props: {
+      onClick: () => {
+        downloadFile(currentRow.value.CID);
+      },
+    },
+  },
+  {
     label: $i18n.t('general.delete'),
     key: 'delete',
     props: {
@@ -96,8 +120,19 @@ const dropdownFileOptions = [
   },
 ];
 
+/** Available columns - show/hide column */
+const selectedColumns = ref(['name', 'CID', 'link', 'size', 'createTime', 'contentType']);
+const availableColumns = ref([
+  { value: 'name', label: $i18n.t('storage.fileName') },
+  { value: 'CID', label: $i18n.t('storage.fileCid') },
+  { value: 'link', label: $i18n.t('storage.downloadLink') },
+  { value: 'size', label: $i18n.t('storage.fileSize') },
+  { value: 'createTime', label: $i18n.t('dashboard.created') },
+  { value: 'contentType', label: $i18n.t('storage.contentType') },
+]);
+
 /** Columns */
-const createColumns = (): DataTableColumns<FolderInterface> => {
+const columns = computed(() => {
   return [
     {
       type: 'selection',
@@ -105,16 +140,27 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
-      render(row) {
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        selectedColumns.value.includes('name') ? '' : 'hidden',
+      ],
+      sorter: 'default',
+      minWidth: 150,
+      render(row: FolderInterface) {
         return [
-          h(IconFolderFile, { isFile: row.type === 'file' }, ''),
           h(
-            'span',
+            NSpace,
+            { align: 'center', wrap: false },
             {
-              class: 'ml-2 text-blue cursor-pointer',
-              onClick: () => onItemOpen(row),
-            },
-            row.name
+              default: () => [
+                h(IconFolderFile, { isFile: row.type === BucketItemType.FILE }, ''),
+                h(
+                  NEllipsis,
+                  { class: 'text-blue align-bottom', 'line-clamp': 2 },
+                  { default: () => row.name }
+                ),
+              ],
+            }
           ),
         ];
       },
@@ -122,21 +168,105 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
     {
       title: $i18n.t('storage.fileCid'),
       key: 'CID',
-      render(row) {
-        return h(
-          'span',
-          { class: 'text-grey' },
-          {
-            default: () => truncateCid(row.CID || ''),
-          }
-        );
+      className: selectedColumns.value.includes('CID') ? '' : 'hidden',
+      sorter: 'default',
+      render(row: FolderInterface) {
+        if (row.CID) {
+          return [
+            h(
+              'div',
+              { class: 'flex' },
+              {
+                default: () => [
+                  h(
+                    'span',
+                    { class: 'text-grey whitespace-nowrap' },
+                    { default: () => truncateCid(row.CID || '') }
+                  ),
+                  h(
+                    'button',
+                    { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '') },
+                    h('span', { class: 'icon-copy text-grey' }, {})
+                  ),
+                ],
+              }
+            ),
+          ];
+        }
+        return '';
+      },
+    },
+    {
+      title: $i18n.t('storage.downloadLink'),
+      key: 'link',
+      className: selectedColumns.value.includes('link') ? '' : 'hidden',
+      sorter: 'default',
+      render(row: FolderInterface) {
+        if (row.CID) {
+          return [
+            h(
+              'div',
+              { class: 'flex' },
+              {
+                default: () => [
+                  h(
+                    NEllipsis,
+                    { class: 'text-grey align-bottom', 'line-clamp': 1 },
+                    { default: () => row.link }
+                  ),
+                  h(
+                    'button',
+                    { class: 'ml-2', onClick: () => copyToClipboard(row.link) },
+                    h('span', { class: 'icon-copy text-grey' }, {})
+                  ),
+                ],
+              }
+            ),
+          ];
+        }
+        return '';
       },
     },
     {
       title: $i18n.t('storage.fileSize'),
       key: 'size',
-      render(row) {
-        return h('span', {}, { default: () => formatBytes(row.size || 0) });
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        selectedColumns.value.includes('size') ? '' : 'hidden',
+      ],
+      sorter: 'default',
+      render(row: FolderInterface) {
+        if (row.size) {
+          return h('span', {}, { default: () => formatBytes(row.size || 0) });
+        }
+        return '';
+      },
+    },
+    {
+      title: $i18n.t('dashboard.created'),
+      key: 'createTime',
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        selectedColumns.value.includes('createTime') ? '' : 'hidden',
+      ],
+      sorter: 'default',
+      render(row: FolderInterface) {
+        return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
+      },
+    },
+    {
+      title: $i18n.t('storage.contentType'),
+      key: 'contentType',
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        selectedColumns.value.includes('contentType') ? '' : 'hidden',
+      ],
+      sorter: 'default',
+      render(row: FolderInterface) {
+        if (row.contentType) {
+          return h('span', {}, row.contentType);
+        }
+        return '';
       },
     },
     {
@@ -144,11 +274,11 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
       key: 'actions',
       align: 'right',
       className: '!py-0',
-      render(row) {
+      render(row: FolderInterface) {
         return h(
           NDropdown,
           {
-            options: row.type === 'file' ? dropdownFileOptions : dropdownFolderOptions,
+            options: row.type === BucketItemType.FILE ? dropdownFileOptions : dropdownFolderOptions,
             trigger: 'click',
           },
           {
@@ -162,20 +292,51 @@ const createColumns = (): DataTableColumns<FolderInterface> => {
         );
       },
     },
+    {
+      key: 'columns',
+      filter: 'default',
+      filterOptionValue: null,
+      renderFilterIcon: () => {
+        return h('span', { class: 'icon-more' }, '');
+      },
+      renderFilterMenu: ({ hide }) => {
+        return h(
+          TableColumns,
+          {
+            model: selectedColumns.value,
+            columns: availableColumns.value,
+            onColumnChange: handleColumnChange,
+          },
+          ''
+        );
+      },
+    },
   ];
-};
-const columns = createColumns();
+});
 
 const rowKey = (row: FolderInterface) => row.id;
 
-const handleCheck = (rowKeys: Array<number>) => {
-  dataStore.folder.selectedItems = rowKeys;
+const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
+  const rowKeyIds = rowKeys.map(item => intVal(item));
+
+  dataStore.folder.selectedItems = dataStore.folder.items.filter(item =>
+    rowKeyIds.includes(item.id)
+  );
 };
+
+function handleColumnChange(selectedValues: Array<string>) {
+  selectedColumns.value = selectedValues;
+  localStorage.setItem(LsTableColumnsKeys.FILES, JSON.stringify(selectedColumns.value));
+}
 
 function rowProps(row: FolderInterface) {
   return {
-    onClick: () => {
+    onClick: (e: Event) => {
       currentRow.value = row;
+
+      if (canOpenColumnCell(e.composedPath())) {
+        onItemOpen(row);
+      }
     },
   };
 }
@@ -205,19 +366,55 @@ async function onFolderOpen(folder: FolderInterface) {
 
   /** Fetch data in reset search string */
   dataStore.folderSearch();
-  getDirectoryContent(dataStore.currentBucket.bucket_uuid, folder.id);
+  await getDirectoryContent(dataStore.currentBucket.bucket_uuid, folder.id);
+  clearSorter();
 }
 
-/**
- * Load data on mounted
- */
 onMounted(() => {
+  /** Check if selected columns are stored in LS */
+  if (localStorage.getItem(LsTableColumnsKeys.FILES)) {
+    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.FILES) || '');
+  }
+
+  /**
+   * Load data on mounted
+   */
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await getDirectoryContent();
     });
   }, 100);
 });
+
+/** Sort column - fetch directory content with order params  */
+async function handleSorterChange(sorter?: NDataTableSortState) {
+  if (sorter && sorter.order === false) {
+    await getDirectoryContent();
+  } else if (sorter) {
+    await getDirectoryContent(
+      dataStore.currentBucket.bucket_uuid,
+      dataStore.folder.selected,
+      1,
+      `${sorter.columnKey}`,
+      `${sorter.order}`
+    );
+  }
+}
+
+/** Reset sort if user search change directory or search directory content */
+function clearSorter() {
+  if (tableRef.value) {
+    tableRef.value.sort(0, false);
+  }
+}
+
+/** Watch folder path, onCahnge clear sorter */
+watch(
+  () => dataStore.folder.path,
+  _ => {
+    clearSorter();
+  }
+);
 
 /** On page change, load data */
 async function handlePageChange(currentPage: number) {
@@ -242,22 +439,43 @@ watch(
   _ => {
     if (dataStore.folder.allowFetch) {
       debouncedSearchFilter();
+      clearSorter();
     }
   }
 );
 const debouncedSearchFilter = debounce(getDirectoryContent, 500);
 
 /** Function "Fetch directory content" wrapper  */
-async function getDirectoryContent(bucketUuid?: string, folderId?: number, page: number = 1) {
+async function getDirectoryContent(
+  bucketUuid?: string,
+  folderId?: number,
+  page: number = 1,
+  orderBy?: string,
+  order?: string
+) {
   await dataStore.fetchDirectoryContent(
-    $i18n,
     bucketUuid,
     folderId,
     page,
     PAGINATION_LIMIT,
-    dataStore.folder.search
+    dataStore.folder.search,
+    orderBy,
+    order
   );
 
   currentPage.value = page;
+}
+
+/** Download file - get file details and download content from downloadLink */
+async function downloadFile(CID?: string | null) {
+  if (!CID) {
+    console.warn('MISSING File CID!');
+    return;
+  }
+  if (!(CID in dataStore.file.items)) {
+    dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
+  }
+  const fileDetails: FileDetails = dataStore.file.items[CID].file;
+  download(fileDetails.downloadLink, fileDetails.name);
 }
 </script>

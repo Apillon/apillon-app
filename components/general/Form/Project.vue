@@ -1,66 +1,91 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
-    <!--  Project name -->
-    <n-form-item
-      path="name"
-      :label="$t('form.label.projectName')"
-      :label-props="{ for: 'projectName' }"
+  <div>
+    <Notification
+      v-if="dataStore.project.quotaReached === true"
+      type="warning"
+      class="w-full mb-4 !bg-bg"
     >
-      <n-input
-        v-model:value="formData.name"
-        :input-props="{ id: 'projectName' }"
-        :placeholder="$t('form.placeholder.projectName')"
-        @keydown.enter.prevent
-      />
-    </n-form-item>
+      {{ $t('project.quotaReached') }}
+    </Notification>
+    <n-form
+      ref="formRef"
+      :model="formData"
+      :rules="rules"
+      :disabled="dataStore.project.quotaReached === true"
+      @submit.prevent="handleSubmit"
+    >
+      <!--  Project name -->
+      <n-form-item
+        path="name"
+        :label="$t('form.label.projectName')"
+        :label-props="{ for: 'projectName' }"
+      >
+        <n-input
+          v-model:value="formData.name"
+          :input-props="{ id: 'projectName' }"
+          :placeholder="$t('form.placeholder.projectName')"
+          @keydown.enter.prevent
+        />
+      </n-form-item>
 
-    <!-- Project TAG - currently not in use
+      <!-- Project TAG - currently not in use
     <n-tag :bordered="false" type="info" class="mb-8">{{ projectNameText }}</n-tag>
     -->
 
-    <!--  Project description -->
-    <n-form-item
-      path="description"
-      :label="$t('form.label.projectDescription')"
-      :label-props="{ for: 'projectDescription' }"
-    >
-      <n-input
-        v-model:value="formData.description"
-        type="textarea"
-        :input-props="{ id: 'projectDescription' }"
-        :placeholder="$t('form.placeholder.projectDescription')"
-      />
-    </n-form-item>
+      <!--  Project description -->
+      <n-form-item
+        path="description"
+        :label="$t('form.label.projectDescription')"
+        :label-props="{ for: 'projectDescription' }"
+      >
+        <n-input
+          v-model:value="formData.description"
+          type="textarea"
+          :input-props="{ id: 'projectDescription' }"
+          :placeholder="$t('form.placeholder.projectDescription')"
+        />
+      </n-form-item>
 
-    <!--  Project terms -->
-    <n-form-item path="terms" :show-label="false">
-      <n-checkbox id="terms" v-model:checked="formData.terms" size="large" :label="termsLabel" />
-    </n-form-item>
+      <!--  Project terms -->
+      <n-form-item path="terms" :show-label="false">
+        <n-checkbox id="terms" v-model:checked="formData.terms" size="large" :label="termsLabel" />
+      </n-form-item>
 
-    <!--  Project submit -->
-    <n-form-item>
-      <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
-        <template v-if="dataStore.hasProjects">
-          {{ $t('form.createNewProject') }}
-        </template>
-        <template v-else>
-          {{ $t('form.startFirstProject') }}
-        </template>
-      </Btn>
-    </n-form-item>
-  </n-form>
+      <!--  Project submit -->
+      <n-form-item>
+        <input type="submit" class="hidden" :value="$t('form.login')" />
+        <Btn
+          type="primary"
+          class="w-full mt-2"
+          :loading="loading"
+          :disabled="dataStore.project.quotaReached === true"
+          @click="handleSubmit"
+        >
+          <template v-if="dataStore.hasProjects">
+            {{ $t('form.createNewProject') }}
+          </template>
+          <template v-else>
+            {{ $t('form.startFirstProject') }}
+          </template>
+        </Btn>
+      </n-form-item>
+    </n-form>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
+const $i18n = useI18n();
 const dataStore = useDataStore();
 const emit = defineEmits(['submitActive', 'submitSuccess']);
 
+onMounted(async () => {
+  /** GET Project quota */
+  await dataStore.fetchProjectsQuota();
+});
+
 /** Terms label with link */
-const $i18n = useI18n();
 const termsLabel = computed(() => {
   return h('span', {}, [
     $i18n.t('form.terms.project'),
@@ -83,7 +108,7 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 const formData = ref<FormProject>({
   name: null,
   description: null,
-  terms: null,
+  terms: undefined,
 });
 
 const rules: NFormRules = {
@@ -120,7 +145,7 @@ async function createProject() {
   emit('submitActive', true);
 
   try {
-    const res = await $api.post<CreateProjectResponse>(endpoints.project, formData.value);
+    const res = await $api.post<CreateProjectResponse>(endpoints.projects, formData.value);
 
     if (res.data) {
       /** Set new project as current project */
@@ -130,7 +155,7 @@ async function createProject() {
       emit('submitActive', false);
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
   emit('submitActive', false);

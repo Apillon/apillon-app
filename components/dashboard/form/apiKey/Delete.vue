@@ -12,7 +12,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   apiKeyId: { type: Number, required: true },
@@ -63,7 +62,7 @@ async function deleteApiKey() {
     settingsStore.fetchApiKeys();
     emit('submitSuccess');
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

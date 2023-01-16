@@ -8,14 +8,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
-
 const { t } = useI18n();
 const dataStore = useDataStore();
 
 // TODO: Project property: created
-const createColumns = (): DataTableColumns<ProjectInterface> => {
+const createColumns = (): NDataTableColumns<ProjectInterface> => {
   return [
     {
       title: t('dashboard.value'),

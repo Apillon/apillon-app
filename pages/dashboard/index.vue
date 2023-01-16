@@ -1,7 +1,7 @@
 <template>
   <Dashboard>
     <slot>
-      <div class="flex lg:flex-nowrap flex-wrap gap-8 max-w-[980px] p-8 bg-grey-lightBg">
+      <div class="flex lg:flex-nowrap flex-wrap gap-8 max-w-[980px] p-8 bg-bg-lighter">
         <div class="max-w-[480px]">
           <h4 class="mb-4">Welcome to Apillon</h4>
           <p>
@@ -18,7 +18,7 @@
             You’ll also be able to win Apillon’s merch pack as through Apillon’s referral system
             which is in progress as we speak.
           </p>
-          <div class="p-4 bg-grey-dark mt-8">
+          <div class="p-4 bg-bg-light mt-8">
             <p>
               <strong>I’m registered, now what?</strong>
             </p>
@@ -32,12 +32,12 @@
           <Image src="/images/dashboard/welcome.svg" :width="400" :height="470" alt="apillon" />
         </div>
       </div>
-      <div class="max-w-[980px] p-8 mt-7 bg-grey-lightBg">
+      <div class="max-w-[980px] p-8 mt-7 bg-bg-lighter">
         <p>
           <strong>Referral code:</strong>
         </p>
         <div class="max-w-[480px]">
-          <div class="p-4 bg-grey-dark mt-2">
+          <div class="p-4 bg-bg-light mt-2">
             <p>
               {{ authStore.userUuid }}
             </p>
@@ -49,8 +49,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const { t } = useI18n();
 const authStore = useAuthStore();
 

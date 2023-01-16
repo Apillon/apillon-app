@@ -42,7 +42,6 @@
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
 import { textMarshal } from 'text-marshal';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   bucketId: { type: Number },
@@ -123,14 +122,14 @@ async function createFolder() {
             ...formData.value,
             bucket_id: bucketId.value,
           };
-    const res = await $api.post<CreateFolderResponse>(endpoints.directory, params);
+    const res = await $api.post<CreateFolderResponse>(endpoints.directory(), params);
 
     if (res.data) {
-      message.success($i18n.t('form.success.folderCreated'));
+      message.success($i18n.t('form.success.created.directory'));
       emit('submitSuccess');
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

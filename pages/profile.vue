@@ -1,7 +1,7 @@
 <template>
   <Dashboard>
     <template #heading>
-      <h4 class="-mb-2">{{ $t('profile.mySettings') }}</h4>
+      <h4>{{ $t('profile.mySettings') }}</h4>
     </template>
     <slot>
       <!-- Edit user profile -->
@@ -31,8 +31,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const authStore = useAuthStore();
 

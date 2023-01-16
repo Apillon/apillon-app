@@ -38,7 +38,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   id: { type: String, default: '' },
@@ -49,20 +48,4 @@ const props = defineProps({
   project_uuid: { type: String, default: '' },
   apiKeySecret: { type: String, default: '' },
 });
-
-const { t } = useI18n();
-const message = useMessage();
-
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).then(
-    () => {
-      /* Resolved - text copied to clipboard successfully */
-      message.success(t('dashboard.clipboard.copied'));
-    },
-    () => {
-      /* Rejected - text failed to copy to the clipboard */
-      message.warning(t('dashboard.clipboard.error'));
-    }
-  );
-}
 </script>

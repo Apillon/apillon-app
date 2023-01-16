@@ -1,5 +1,11 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    :disabled="!settingsStore.isUserOwner()"
+    @submit.prevent="handleSubmit"
+  >
     <!--  Service name -->
     <n-form-item
       path="name"
@@ -11,6 +17,7 @@
         v-model:value="formData.name"
         :input-props="{ id: 'name' }"
         :placeholder="$t('form.placeholder.apiKeyName')"
+        clearable
       />
     </n-form-item>
 
@@ -75,7 +82,13 @@
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.generate')" />
-      <Btn type="secondary" class="w-full mt-8" :loading="loading" @click="handleSubmit">
+      <Btn
+        type="secondary"
+        class="w-full mt-8"
+        :loading="loading"
+        :disabled="!settingsStore.isUserOwner()"
+        @click="handleSubmit"
+      >
         {{ $t('form.generate') }}
       </Btn>
     </n-form-item>
@@ -95,7 +108,6 @@
 
 <script lang="ts" setup>
 import { useMessage, CollapseProps } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -235,7 +247,7 @@ async function createApiKey() {
       settingsStore.fetchApiKeys();
     }
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

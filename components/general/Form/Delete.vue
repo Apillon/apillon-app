@@ -13,7 +13,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   id: { type: Number, required: true },
@@ -69,7 +68,7 @@ async function deleteEntity() {
 
     emit('submitSuccess');
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }
@@ -82,7 +81,7 @@ function getUrl(type: string, id: number) {
     case 'bucket':
       return endpoints.bucket(id);
     case 'directory':
-      return `${endpoints.directory}${id}`;
+      return endpoints.directory(id);
     default:
       return `${endpoints.file}${id}`;
   }

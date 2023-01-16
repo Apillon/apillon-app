@@ -1,9 +1,19 @@
+import { crustTypes } from '@crustio/type-definitions';
+
 /**
  * Bucket type
  */
 export enum BucketType {
   STORAGE = 1,
   HOSTING = 2,
+}
+
+/**
+ * Bucket item
+ */
+export enum BucketItemType {
+  FILE = 'file',
+  DIRECTORY = 'directory',
 }
 
 /**
@@ -56,6 +66,7 @@ declare global {
     description: string;
     maxSize: number;
     size: number | null;
+    uploadedSize: number | null;
     CID: string | null;
     IPNS: string | null;
     sizeMb?: number;
@@ -65,10 +76,12 @@ declare global {
 
   interface FormNewBucket {
     bucketName: string;
-    bucketSize: string;
+    bucketDescription: string;
+    bucketSize: number;
   }
   interface BucketResponse extends GeneralResponse<BucketInterface> {}
   interface BucketsResponse extends GeneralItemsResponse<BucketInterface> {}
+  interface BucketQuotaResponse extends GeneralResponse<boolean> {}
 
   /**
    * File
@@ -90,6 +103,7 @@ declare global {
     bucket_id: number;
     contentType: string;
     directory_id: number;
+    downloadLink: string;
     file_uuid: string;
     id: number;
     name: string;
@@ -97,6 +111,7 @@ declare global {
     s3FileKey: string;
     size: number;
     status: number;
+    fileStatus?: number | null;
   }
   interface FileUploadInterface {
     id: number;
@@ -127,27 +142,17 @@ declare global {
     fileName: string;
     contentType: string;
     directory_uuid?: string;
+    session_uuid?: string;
     path?: string;
   }
-  interface FileUploadRequestResponse {
-    data: FileUploadRequestInterface;
-    status: number;
-  }
-  interface FileUploadSessionResponse {
-    data: boolean;
-    status: number;
-  }
-  interface FileDetailsResponse {
-    data: FileDetailsInterface;
-    status: number;
-  }
-  interface FileUploadsResponse {
-    data: {
-      items: Array<FileUploadInterface>;
-      total: number;
-    };
-    status: number;
-  }
+
+  type FileDetails = FileInterface | FileUploadInterface;
+  type FileCrust = typeof crustTypes.market.types.FileInfoV2;
+
+  interface FileDetailsResponse extends GeneralResponse<FileDetailsInterface> {}
+  interface FileUploadRequestResponse extends GeneralResponse<FileUploadRequestInterface> {}
+  interface FileUploadSessionResponse extends GeneralResponse<boolean> {}
+  interface FileUploadsResponse extends GeneralItemsResponse<FileUploadInterface> {}
 
   /**
    * Folder
@@ -157,6 +162,7 @@ declare global {
     contentType: string | null;
     id: number;
     name: string;
+    link: string;
     size: number | null;
     type: string;
     createTime: string;
@@ -168,20 +174,8 @@ declare global {
     name: string;
     description?: string | null;
   }
-  interface CreateFolderResponse {
-    data: {
-      folder: FolderInterface;
-      folderStatus: number;
-    };
-    status: number;
-  }
-  interface FolderResponse {
-    data: {
-      items: Array<FolderInterface>;
-      total: number;
-    };
-    status: number;
-  }
+  interface CreateFolderResponse extends GeneralResponse<FolderInterface> {}
+  interface FolderResponse extends GeneralItemsResponse<FolderInterface> {}
 
   /**
    * Webhook
@@ -201,8 +195,5 @@ declare global {
     param1: string;
     param2?: string;
   }
-  interface WebhookResponse {
-    data: WebhookInterface;
-    status: number;
-  }
+  interface WebhookResponse extends GeneralResponse<WebhookInterface> {}
 }

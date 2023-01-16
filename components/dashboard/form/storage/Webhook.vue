@@ -12,6 +12,7 @@
         v-model:value="formData.url"
         :input-props="{ id: 'url' }"
         :placeholder="$t('form.placeholder.webhookUrl')"
+        clearable
       />
     </n-form-item>
 
@@ -30,7 +31,7 @@
     </n-form-item>
 
     <!-- Basic auth: user and pass -->
-    <n-grid v-if="formData.authType === BucketWebhookAuthMethod.BASIC" :cols="2" :x-gap="8">
+    <n-grid v-if="formData.authType === BucketWebhookAuthMethod.BASIC" :cols="2" :x-gap="32">
       <n-form-item-gi
         :span="1"
         path="param1"
@@ -41,6 +42,7 @@
           v-model:value="formData.param1"
           :input-props="{ id: 'param1' }"
           :placeholder="$t('form.placeholder.webhookUsername')"
+          clearable
         />
       </n-form-item-gi>
 
@@ -54,12 +56,13 @@
           v-model:value="formData.param2"
           :input-props="{ id: 'param2' }"
           :placeholder="$t('form.placeholder.webhookPassword')"
+          clearable
         />
       </n-form-item-gi>
     </n-grid>
 
     <!-- Token auth: bearer token -->
-    <n-grid v-else-if="formData.authType === BucketWebhookAuthMethod.TOKEN" :cols="1" :x-gap="8">
+    <n-grid v-else-if="formData.authType === BucketWebhookAuthMethod.TOKEN" :cols="1" :x-gap="32">
       <n-form-item-gi
         :span="1"
         path="param1"
@@ -71,12 +74,13 @@
           type="textarea"
           :input-props="{ id: 'param1' }"
           :placeholder="$t('form.placeholder.bearerToken')"
+          clearable
         />
       </n-form-item-gi>
     </n-grid>
 
     <!--  Form submit -->
-    <n-grid :cols="3" :x-gap="8">
+    <n-grid :cols="3" :x-gap="32">
       <n-form-item-gi :span="webhook ? 2 : 3">
         <input type="submit" class="hidden" :value="$t('form.save')" />
         <Btn type="primary" class="w-full mt-2" :loading="loadingForm" @click="handleSubmit">
@@ -98,7 +102,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   bucketId: { type: Number, required: true },
@@ -206,10 +209,7 @@ function handleSubmit(e: Event | MouseEvent) {
 async function getWebhook() {
   loadingPage.value = true;
   try {
-    const res = await $api.get<WebhookResponse>(
-      endpoints.bucketWebhook(props.bucketId),
-      formData.value
-    );
+    const res = await $api.get<WebhookResponse>(endpoints.bucketWebhook(props.bucketId));
 
     webhook.value = res.data;
     updateFormData(res.data);
@@ -232,7 +232,7 @@ async function createWebhook() {
 
     message.success($i18n.t('form.success.created.webhook'));
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loadingForm.value = false;
 }
@@ -249,7 +249,7 @@ async function updateWebhook() {
 
     message.success($i18n.t('form.success.updated.webhook'));
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loadingForm.value = false;
 }
@@ -264,7 +264,7 @@ async function resetWebhook() {
 
     message.success($i18n.t('form.success.deleted.webhook'));
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loadingReset.value = false;
 }

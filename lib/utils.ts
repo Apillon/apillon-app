@@ -3,24 +3,29 @@ import dev from '../config/development';
 import prod from '../config/production';
 import local from '../config/local';
 import { Feature } from '~~/types/config';
+import { NuxtLink } from '~~/.nuxt/components';
 
 export function getAppConfig(env?: string) {
-  if (!env) {
-    return prod;
-  }
-  if (env === 'staging') {
-    return stg;
-  } else if (env === 'development') {
-    return dev;
-  } else if (env === 'local') {
-    return local;
-  } else {
-    return prod;
-  }
+  const configFile =
+    env === 'staging' ? stg : env === 'development' ? dev : env === 'local' ? local : prod;
+  return {
+    ...configFile,
+    ENV: env,
+  };
 }
 
+/**
+ * Numeric manipulations
+ */
 export function randomInteger(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+export function isNumeric(n: any): n is number | string {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+export function intVal(n: number | string): number {
+  return typeof n === 'number' ? n : parseInt(n, 10);
 }
 
 export function ActionReturn(success: boolean, data: any) {
@@ -111,11 +116,11 @@ export function datetimeToDate(datetime: string): string {
 /** Storage calculations */
 export function kbToMb(kb: number): number {
   if (!+kb) return 0;
-  return parseFloat(((kb / Math.pow(1024, 2)) * 1000).toFixed(2));
+  return parseFloat((kb / Math.pow(1024, 1)).toFixed(2));
 }
 export function bytesToMb(bytes: number): number {
   if (!+bytes) return 0;
-  return parseFloat(((bytes / Math.pow(1024, 3)) * 1000).toFixed(2));
+  return parseFloat((bytes / Math.pow(1024, 2)).toFixed(2));
 }
 
 export function storagePercantage(size: number, maxSize: number): number {
@@ -123,7 +128,7 @@ export function storagePercantage(size: number, maxSize: number): number {
 }
 
 export function formatBytes(bytes: number, decimals: number = 2): string {
-  if (!+bytes) return '';
+  if (!+bytes) return '0 KB';
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
@@ -134,8 +139,19 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
-export function fileExpiration(expiredAt: number): string {
-  const expiredAtDate = new Date(Date.now() + expiredAt);
+/**
+ * Calculate expiration date on CRUST
+ * @param calculatedAt block number when file has been created
+ * @param expiredAt block number when file will expire
+ * @returns
+ */
+export function fileExpiration(calculatedAt: number, expiredAt: number): string {
+  const TIME_TO_CREATE_NEW_BLOCK = 6000;
+  const numOfBlocksBeforeExpiratoin = expiredAt - calculatedAt;
+
+  const expiredAtDate = new Date(
+    Date.now() + TIME_TO_CREATE_NEW_BLOCK * numOfBlocksBeforeExpiratoin
+  );
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
@@ -157,12 +173,9 @@ export function addBucketAdditionalData(bucket: BucketInterface): BucketInterfac
 /**
  * Error messages
  */
-export function userFriendlyMsg(
-  error: ApiError | ReferenceError | TypeError | any,
-  $i18n: any = null
-) {
+export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | any) {
   // Check error exists and if translation is included
-  if (!$i18n || !($i18n instanceof Object) || !error) {
+  if (!window.$i18n || !(window.$i18n instanceof Object) || !error) {
     if (error instanceof ReferenceError || error instanceof TypeError) {
       return error.message;
     }
@@ -175,20 +188,24 @@ export function userFriendlyMsg(
     const err = error as ApiError;
     if (err.errors && Array.isArray(err.errors)) {
       return err.errors
-        .map(e => singleErrorMessage($i18n, e.message, takeFirstDigitsFromNumber(e.statusCode)))
+        .map(e =>
+          singleErrorMessage(window.$i18n, e.message, takeFirstDigitsFromNumber(e.statusCode))
+        )
         .join(', ');
     } else if (err.message) {
-      return singleErrorMessage($i18n, err.message, err.status);
+      return singleErrorMessage(window.$i18n, err.message, err.status);
     }
   } else if (error instanceof ReferenceError || error instanceof TypeError) {
-    return $i18n.te(`error.${error.message}`) ? $i18n.t(`error.${error.message}`) : error.message;
+    return window.$i18n.te(`error.${error.message}`)
+      ? window.$i18n.t(`error.${error.message}`)
+      : error.message;
   }
 
-  return $i18n.t('error.API');
+  return window.$i18n.t('error.API');
 }
 
 /** Translate single error message */
-function singleErrorMessage($i18n: any, message: string, code: number = 0) {
+function singleErrorMessage($i18n: i18nType, message: string, code: number = 0) {
   if ($i18n.te(`error.${message}`)) {
     return $i18n.t(`error.${message}`);
   } else if (code >= 500) {
@@ -213,4 +230,80 @@ function takeFirstDigitsFromNumber(num: number, numOfDigits: number = 3): number
 export function isFeatureEnabled(feature: Feature): boolean {
   const config = useRuntimeConfig();
   return config.public.features[feature] || false;
+}
+
+/** Check if any of elements contains class ${ON_COLUMN_CLICK_OPEN_CLASS}, which means this column is clickable */
+export function canOpenColumnCell(path: EventTarget[]) {
+  return (
+    path.find((item: EventTarget) =>
+      (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
+    ) !== undefined
+  );
+}
+
+/**
+ * Actions
+ */
+
+/**
+ * Download file
+ * @param url
+ * @param filename
+ */
+export async function download(url: string, filename: string) {
+  return fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
+    })
+    .catch(console.error);
+}
+
+/** Copy text to clipboard */
+export function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      /* Resolved - text copied to clipboard successfully */
+      if (window.$i18n?.te('dashboard.clipboard.copied')) {
+        window.$message.success(window.$i18n.t('dashboard.clipboard.copied'));
+      } else {
+        window.$message.success('Text has been copied to clipboard');
+      }
+    },
+    () => {
+      /* Rejected - text failed to copy to the clipboard */
+      if (window.$i18n?.te('dashboard.clipboard.error')) {
+        window.$message.success(window.$i18n.t('dashboard.clipboard.error'));
+      } else {
+        window.$message.success('Failed to copy');
+      }
+    }
+  );
+}
+export function copyToClipboardWithResponseTexts(
+  text: string,
+  successMsg?: string,
+  errorMsg?: string
+) {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      /* Resolved - text copied to clipboard successfully */
+      if (successMsg) {
+        window.$message.success(successMsg);
+      } else {
+        window.$message.success('Text has been copied to clipboard');
+      }
+    },
+    () => {
+      /* Rejected - text failed to copy to the clipboard */
+      if (errorMsg) {
+        window.$message.success(errorMsg);
+      } else {
+        window.$message.success('Failed to copy');
+      }
+    }
+  );
 }

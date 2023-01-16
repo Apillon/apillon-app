@@ -1,5 +1,5 @@
 body {
-  @apply body-md text-grey-light;
+  @apply body-md text-white;
   font-size: 16px;
 }
 
@@ -24,6 +24,6 @@ select:autofill,
 select:autofill:hover,
 select:autofill:focus {
   border: none;
-  -webkit-text-fill-color: theme('colors.primary');
-  -webkit-box-shadow: 0 0 0px 1000px theme('colors.grey.dark') inset;
+  -webkit-text-fill-color: theme('colors.white');
+  -webkit-box-shadow: 0 0 0px 1000px #1e212b inset;
 }

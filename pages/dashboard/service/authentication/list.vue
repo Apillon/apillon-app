@@ -10,14 +10,6 @@
         <n-button type="primary">{{ $t('general.attach') }}</n-button>
       </n-space>
     </template>
-    <template #learn>
-      <LearnAlert>
-        Click on a service you want to attach to your project. After configuring it, the service
-        will become operational.
-        <strong>Keep in mind, you can always edit the attached services or add new ones.</strong>
-      </LearnAlert>
-      <LearnCollapse />
-    </template>
     <slot>
       <TableAuthentication />
     </slot>
@@ -25,8 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
@@ -44,7 +34,7 @@ onMounted(() => {
 
 async function getServicesAuth() {
   if (!dataStore.hasServices(ServiceType.AUTHENTICATION)) {
-    await dataStore.getAuthServices($i18n);
+    await dataStore.getAuthServices();
   }
   pageLoading.value = false;
 }

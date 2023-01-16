@@ -1,7 +1,8 @@
-import { useMessage } from 'naive-ui';
 import { defineStore } from 'pinia';
 import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
 import { AnyJson } from '@polkadot/types-codec/types';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { typesBundleForPolkadot } from '@crustio/type-definitions';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
@@ -14,11 +15,15 @@ export const useDataStore = defineStore('data', {
       active: {} as BucketInterface,
       items: [] as Array<BucketInterface>,
       selected: 0,
+      quotaReached: undefined as Boolean | undefined,
     },
     crust: {} as Record<string, AnyJson>,
     currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
       ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
       : 0,
+    file: {
+      items: {} as Record<string, FileDetailsInterface>,
+    },
     folder: {
       allowFetch: true,
       items: [] as Array<FolderInterface>,
@@ -26,13 +31,18 @@ export const useDataStore = defineStore('data', {
       path: [] as Array<{ id: number; name: string }>,
       search: '',
       selected: 0,
-      selectedItems: [] as Array<number>,
+      selectedItems: [] as Array<FolderInterface>,
       total: 0,
       uploadActive: false,
     },
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
-    projects: [] as Array<ProjectInterface>,
+    project: {
+      active: {} as ProjectInterface,
+      items: [] as Array<ProjectInterface>,
+      selected: 0,
+      quotaReached: undefined as Boolean | undefined,
+    },
     promises: {
       projects: null as any,
       buckets: null as any,
@@ -49,17 +59,20 @@ export const useDataStore = defineStore('data', {
         return null;
       }
       /** Return project with currentProjectId, if this ID does not exists, return first project */
-      const project = state.projects.find(project => project.id === state.currentProjectId);
+      const project = state.project.items.find(project => project.id === state.currentProjectId);
       if (project) {
         return project;
       }
       /** Select first project as fallback if currentProjectId is not available */
-      this.currentProjectId = state.projects[0].id;
+      this.currentProjectId = state.project.items[0].id;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${this.currentProjectId}`);
-      return state.projects[0];
+      return state.project.items[0];
     },
     hasProjects(state) {
-      return Array.isArray(state.projects) && state.projects.length > 0;
+      return Array.isArray(state.project.items) && state.project.items.length > 0;
+    },
+    myRoleOnProject(state) {
+      return state.project.active.myRole_id_onProject || DefaultUserRole.PROJECT_USER;
     },
     currentBucket(state): BucketInterface {
       return (
@@ -85,6 +98,7 @@ export const useDataStore = defineStore('data', {
     resetData() {
       this.bucket.active = {} as BucketInterface;
       this.bucket.items = [] as Array<BucketInterface>;
+      this.file.items = {} as Record<string, FileDetailsInterface>;
       this.folder.items = [] as Array<FolderInterface>;
       this.services.authentication = [] as Array<ServiceInterface>;
       this.services.storage = [] as Array<ServiceInterface>;
@@ -97,6 +111,7 @@ export const useDataStore = defineStore('data', {
     },
 
     setBucketId(id: number) {
+      this.file.items = {} as Record<string, FileDetailsInterface>;
       this.folder.items = [] as Array<FolderInterface>;
       this.folder.total = 0;
       this.folder.path = [];
@@ -112,21 +127,14 @@ export const useDataStore = defineStore('data', {
 
     updateCurrentProject(project: ProjectInterface) {
       /** Find index of specific object using findIndex method. */
-      const projectIndex = this.projects.findIndex(item => item.id === project.id);
+      const projectIndex = this.project.items.findIndex(item => item.id === project.id);
 
       /** Update current project, add value and label, which are used in header dropdown */
-      this.projects[projectIndex] = {
+      this.project.items[projectIndex] = {
         ...project,
         value: project.id,
         label: project.name,
       };
-    },
-
-    getInstruction(key: string) {
-      if (key in this.instruction) {
-        return this.instruction[key];
-      }
-      return null;
     },
 
     hasServices(type: number) {
@@ -141,6 +149,15 @@ export const useDataStore = defineStore('data', {
       if (!fetch) {
         setTimeout(() => (this.folder.allowFetch = true), 1000);
       }
+    },
+
+    /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
+    async getBucket(bucketId: number): Promise<BucketInterface> {
+      const bucket = this.bucket.items.find(item => item.id === bucketId);
+      if (bucket !== undefined) {
+        return bucket;
+      }
+      return await this.fetchBucket(bucketId);
     },
 
     onBucketMounted(id: number) {
@@ -165,17 +182,25 @@ export const useDataStore = defineStore('data', {
       }
     },
 
+    hasInstructions(key: string) {
+      return (
+        key in this.instructions &&
+        Array.isArray(this.instructions[key]) &&
+        this.instructions[key].length > 0
+      );
+    },
+
     /**
      * API calls
      */
 
     /** Projects */
-    async fetchProjects(redirectToDashboard: boolean = false, $i18n: any = null) {
+    async fetchProjects(redirectToDashboard: boolean = false) {
       const router = useRouter();
       try {
-        const res = await $api.get<ProjectsResponse>(endpoints.projects);
+        const res = await $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
 
-        this.projects = res.data.items.map((project: ProjectInterface) => {
+        this.project.items = res.data.items.map((project: ProjectInterface) => {
           return {
             ...project,
             value: project.id,
@@ -185,7 +210,7 @@ export const useDataStore = defineStore('data', {
 
         /* If current project is not selected, take first one */
         if (this.currentProjectId === 0 && this.hasProjects) {
-          this.setCurrentProject(this.projects[0].id);
+          this.setCurrentProject(this.project.items[0].id);
         }
 
         /** If user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
@@ -197,17 +222,41 @@ export const useDataStore = defineStore('data', {
 
         return res;
       } catch (error) {
-        this.projects = [];
+        this.project.items = [];
 
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
       return null;
     },
 
+    /** Users */
+    async fetchProject() {
+      try {
+        const res = await $api.get<ProjectResponse>(endpoints.project(this.currentProjectId));
+        this.project.active = res.data;
+      } catch (error) {
+        this.project.active = {} as ProjectInterface;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+
+    async fetchProjectsQuota() {
+      try {
+        const res = await $api.get<ProjectsQuotaResponse>(endpoints.projectsQuota);
+        this.project.quotaReached = res.data;
+      } catch (error: any) {
+        this.project.quotaReached = undefined;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+
     /** Services */
-    async fetchServices($i18n?: any, type?: number) {
+    async fetchServices(type?: number) {
       if (!this.hasProjects) {
         alert('Please create your first project');
         return [] as Array<ServiceInterface>;
@@ -227,14 +276,13 @@ export const useDataStore = defineStore('data', {
         });
       } catch (error: any) {
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
       return [] as Array<ServiceInterface>;
     },
 
-    async getAllServices($i18n: any = null) {
-      const services = await this.fetchServices($i18n);
+    async getAllServices() {
+      const services = await this.fetchServices();
 
       Object.entries(ServiceTypeNames).map(([serviceType, typeName]) => {
         this.services[typeName] =
@@ -242,21 +290,21 @@ export const useDataStore = defineStore('data', {
           ([] as Array<ServiceInterface>);
       });
     },
-    async getAuthServices($i18n: any = null) {
-      this.services.authentication = await this.fetchServices($i18n, ServiceType.AUTHENTICATION);
+    async getAuthServices() {
+      this.services.authentication = await this.fetchServices(ServiceType.AUTHENTICATION);
     },
-    async getStorageServices($i18n: any = null) {
-      this.services.storage = await this.fetchServices($i18n, ServiceType.STORAGE);
+    async getStorageServices() {
+      this.services.storage = await this.fetchServices(ServiceType.STORAGE);
     },
-    async getComputingServices($i18n: any = null) {
-      this.services.computing = await this.fetchServices($i18n, ServiceType.COPMUTING);
+    async getComputingServices() {
+      this.services.computing = await this.fetchServices(ServiceType.COPMUTING);
     },
 
     /** Buckets */
-    async fetchBuckets($i18n: any = null) {
+    async fetchBuckets() {
       if (!this.hasProjects) {
         alert('Please create your first project');
-        return;
+        return null;
       }
 
       try {
@@ -270,38 +318,57 @@ export const useDataStore = defineStore('data', {
         });
         return res;
       } catch (error: any) {
-        this.bucket.items = [];
+        this.bucket.items = [] as Array<BucketInterface>;
 
-        /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        /** Show error message 
+        window.$message.error(userFriendlyMsg(error));*/
       }
       return null;
     },
 
-    async fetchBucket(bucketId: number, $i18n: any = null) {
+    async fetchBucket(bucketId: number): Promise<BucketInterface> {
       try {
         const res = await $api.get<BucketResponse>(endpoints.bucket(bucketId));
 
         this.bucket.active = addBucketAdditionalData(res.data);
-        return res;
+        return res.data;
       } catch (error: any) {
         this.bucket.active = {} as BucketInterface;
 
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
-      return null;
+      return {} as BucketInterface;
+    },
+
+    async fetchBucketQuota() {
+      if (!this.hasProjects) {
+        alert('Please create your first project');
+        return;
+      }
+      const params = {
+        project_uuid: this.currentProject?.project_uuid || '',
+        bucketType: BucketType.STORAGE,
+      };
+      try {
+        const res = await $api.get<BucketQuotaResponse>(endpoints.bucketsQuota, params);
+        this.bucket.quotaReached = res.data;
+      } catch (error: any) {
+        this.bucket.quotaReached = undefined;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
     },
 
     async fetchDirectoryContent(
-      $i18n: any,
       bucketUuid?: string,
       folderId?: number,
       page?: number,
       limit?: number,
-      search?: string
+      search?: string,
+      orderBy?: string,
+      order?: string
     ) {
       this.folder.loading = true;
 
@@ -330,6 +397,12 @@ export const useDataStore = defineStore('data', {
           params.page = page;
           params.limit = limit || PAGINATION_LIMIT;
         }
+        if (orderBy) {
+          params.orderBy = orderBy;
+        }
+        if (order) {
+          params.desc = order === 'descend' ? 'true' : 'false';
+        }
 
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
 
@@ -341,30 +414,25 @@ export const useDataStore = defineStore('data', {
         this.folder.total = 0;
 
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
 
       this.folder.loading = false;
     },
 
-    async fetchFileInfo(fileId: number, $i18n: any = null) {
+    async fetchFileInfo(fileId: number) {
       try {
         const res = await $api.get<FolderResponse>(`${endpoints.file}${fileId}`);
 
         return res.data;
       } catch (error: any) {
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
       return null;
     },
 
-    async fetchFileDetails(
-      fileUuidOrCID: string,
-      $i18n: any = null
-    ): Promise<FileDetailsInterface> {
+    async fetchFileDetails(fileUuidOrCID: string): Promise<FileDetailsInterface> {
       try {
         const url = endpoints.storageFileDetails(this.currentBucket.bucket_uuid, fileUuidOrCID);
         const res = await $api.get<FileDetailsResponse>(url);
@@ -372,10 +440,54 @@ export const useDataStore = defineStore('data', {
         return res.data;
       } catch (error: any) {
         /** Show error message */
-        const message = useMessage();
-        message.error(userFriendlyMsg(error, $i18n));
+        window.$message.error(userFriendlyMsg(error));
       }
       return {} as FileDetailsInterface;
+    },
+
+    async fetchFileDetailsFromCrust(cid: string) {
+      const api = new ApiPromise({
+        provider: new WsProvider('wss://rpc.crust.network'),
+        typesBundle: typesBundleForPolkadot,
+      });
+
+      await api.isReadyOrError;
+      const fileInfo = await api.query.market.filesV2(cid);
+      await api.disconnect();
+      return fileInfo.toJSON();
+    },
+
+    /**
+     * Instructions
+     */
+    async fetchInstruction(key: string) {
+      try {
+        const res = await $api.get<InstructionResponse>(endpoints.instructions(key));
+
+        if (res.data) {
+          this.instruction[key] = res.data;
+        }
+      } catch (error) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+    async fetchInstructions(key: string) {
+      try {
+        const res = await $api.get<InstructionsResponse>(endpoints.instructions(), {
+          forRoute: key,
+        });
+
+        if (res.data) {
+          this.instructions[key] = res.data.items;
+        } else {
+          this.instructions[key] = [];
+        }
+      } catch (error) {
+        this.instructions[key] = [];
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
     },
   },
 });

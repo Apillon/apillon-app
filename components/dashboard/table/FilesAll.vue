@@ -7,9 +7,13 @@
           type="text"
           name="search"
           size="small"
-          class="bg-grey-dark"
-          placeholder="Search files"
-        />
+          :placeholder="$t('storage.file.search')"
+          clearable
+        >
+          <template #prefix>
+            <span class="icon-search text-xl"></span>
+          </template>
+        </n-input>
       </div>
       <n-space>
         <!-- Fitlers -->
@@ -50,14 +54,13 @@
 
   <!-- Modal - Delete file -->
   <modal v-model:show="showModalDelete" :title="$t(`storage.file.delete`)">
-    <FormStorageFolderDelete :id="currentRow.id" type="file" @submit-success="onDeleted" />
+    <FormStorageFolderDelete :items="[currentRow]" @submit-success="onDeleted" />
   </modal>
 </template>
 
 <script lang="ts" setup>
 import { debounce } from 'lodash';
 import { DataTableColumns, NButton, NDropdown, useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -158,6 +161,7 @@ const createColumns = (): DataTableColumns<FileUploadInterface> => {
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
+      minWidth: 150,
       render(row) {
         return [
           h(IconFolderFile, { isFile: true }, ''),
@@ -314,7 +318,7 @@ async function fetchFiles(page?: number, limit?: number) {
     total.value = 0;
 
     /** Show error message */
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
 
   loading.value = false;

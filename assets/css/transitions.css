@@ -41,43 +41,6 @@
 }
 
 /**
- * Animation - new
-*/
-.icon-new,
-.icon-wow,
-.icon-soon {
-  animation: randomColor 0.3s infinite;
-
-  &.random-color-0 {
-    animation: randomColor 0.3s infinite;
-  }
-  &.random-color-1 {
-    animation: randomColor 0.5s infinite;
-  }
-  &.random-color-2 {
-    animation: randomColor 1s infinite;
-  }
-  &.random-color-3 {
-    animation: randomColor 2s infinite;
-  }
-}
-
-@keyframes randomColor {
-  0%,
-  33% {
-    color: theme('colors.blue');
-  }
-  34%,
-  66% {
-    color: theme('colors.pink');
-  }
-  67%,
-  100% {
-    color: theme('colors.green');
-  }
-}
-
-/**
  * Page transitions
 */
 .page-enter-active,

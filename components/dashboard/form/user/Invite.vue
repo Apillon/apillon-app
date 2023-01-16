@@ -1,6 +1,6 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
-    <n-grid :cols="12" :x-gap="12">
+    <n-grid :cols="12" :x-gap="32">
       <!--  Email -->
       <n-form-item-gi
         :span="colEmailWidth"
@@ -44,7 +44,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -53,12 +52,7 @@ const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const userRoles: Array<NSelectOption> = Object.entries(DefaultUserRoles).map(([roleId, role]) => {
-  return {
-    label: $i18n.t(`userRole.${role}`),
-    value: parseInt(roleId),
-  };
-});
+const userRoles: Array<NSelectOption> = CreateUserRoles();
 
 /** Col widths */
 const { width } = useWindowSize();
@@ -124,9 +118,9 @@ async function inviteUser() {
 
     /** Show success msg and refresh users */
     message.success($i18n.t('form.success.created.userInvite'));
-    await settingsStore.fetchProjectUsers($i18n);
+    await settingsStore.fetchProjectUsers();
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

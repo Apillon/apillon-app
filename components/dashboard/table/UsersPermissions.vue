@@ -10,8 +10,6 @@
 
 <script lang="ts" setup>
 import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
-import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -30,7 +28,7 @@ const createColumns = ({
   handleRoleChange,
 }: {
   handleRoleChange: (selected: number) => void;
-}): DataTableColumns<ProjectUserInterface> => {
+}): NDataTableColumns<ProjectUserInterface> => {
   return [
     {
       title: $i18n.t('dashboard.user'),
@@ -138,7 +136,7 @@ function isRoleChangeAllowed(user: ProjectUserInterface) {
 /** GET Users on project */
 async function getUsers() {
   loading.value = true;
-  await settingsStore.fetchProjectUsers($i18n);
+  await settingsStore.fetchProjectUsers();
   loading.value = false;
 }
 
@@ -154,7 +152,7 @@ async function updateRole(id: number, roleId: number) {
     message.success($i18n.t('form.success.updated.userRole'));
     await getUsers();
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   updateLoadingStatusOnUsersRole(id, false);
 }
@@ -170,7 +168,7 @@ async function deleteRole(id: number) {
     message.success($i18n.t('form.success.deleted.userRole'));
     await getUsers();
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   updateLoadingStatusOnUsersRole(id, false);
 }

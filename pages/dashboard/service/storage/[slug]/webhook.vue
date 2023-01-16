@@ -1,12 +1,20 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <n-space align="center" :size="32" class="-mb-4">
-        <NuxtLink :to="{ name: 'dashboard-service-storage' }">
-          <span class="icon-back"></span>
-        </NuxtLink>
-        <h4>{{ $t('storage.bucketManagement') }}</h4>
-      </n-space>
+      <Heading>
+        <slot>
+          <n-space align="center" :size="32">
+            <NuxtLink :to="{ name: 'dashboard-service-storage' }">
+              <span class="icon-back"></span>
+            </NuxtLink>
+            <h4>{{ dataStore.bucket.active.name }}</h4>
+          </n-space>
+        </slot>
+
+        <template #submenu>
+          <MenuBucketManagement />
+        </template>
+      </Heading>
     </template>
 
     <template #infobar>
@@ -14,7 +22,7 @@
         <Tag color="violet">{{ dataStore.currentBucket.name }}</Tag>
         <span>
           <span class="icon-storage"></span>
-          {{ $t('storage.bucket') }}
+          {{ $t('storage.bucket.storage') }}
         </span>
         <StorageProgress
           class="w-1/2"
@@ -29,15 +37,6 @@
       <SidebarBucketManagement />
     </template>
 
-    <template #learn>
-      <LearnAlert>
-        Click on a service you want to attach to your project. After configuring it, the service
-        will become operational.
-        <strong>Keep in mind, you can always edit the attached services or add new ones.</strong>
-      </LearnAlert>
-      <LearnCollapse />
-    </template>
-
     <slot>
       <n-h5 prefix="bar" class="mb-8">{{ $t('storage.webhook') }}</n-h5>
 
@@ -47,8 +46,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const { params } = useRoute();
 const dataStore = useDataStore();

@@ -8,48 +8,45 @@
 
   <!-- Sidebar -->
   <transition name="slide-left" appear>
-    <div
-      class="absolute left-0 top-0 bottom-0 w-full sm:w-64 min-h-full bg-dark transition-transform duration-300"
-      :class="sidebarClasses"
-    >
+    <div class="w-full min-h-full transition-transform duration-300" :class="sidebarClasses">
       <n-scrollbar style="max-height: 100vh" class="scrollbar--menu">
         <!-- Close - only on mobile -->
         <button v-if="!isLg" class="absolute top-4 right-4" @click="emit('toggleSidebar', false)">
           <span class="icon-close text-grey"></span>
         </button>
 
-        <n-space class="py-6" :size="24" vertical>
+        <n-space class="py-8" :size="32" vertical>
           <!-- LOGO -->
-          <div class="flex justify-center">
+          <div class="flex justify-left px-8">
             <Logo />
           </div>
 
-          <!-- NEW PROJECT -->
-          <div v-if="isFeatureEnabled(Feature.PROJECT)" class="text-center">
-            <Btn type="builders" size="tiny" @click="showModalNewProject = true">
-              {{ $t('project.new') }}
-            </Btn>
-          </div>
+          <!-- PROJECTS & NEW PROJECT -->
+          <div v-if="isFeatureEnabled(Feature.PROJECT)" class="px-8">
+            <n-space :size="20" vertical>
+              <!-- Projects dropdown -->
+              <div class="min-h-[48px]">
+                <SidebarSelectProject />
+              </div>
 
-          <!-- PROJECT OVERVIEW -->
-          <div class="pl-4 mt-6">
-            <NuxtLink
-              :to="{ name: 'dashboard' }"
-              class="block p-2 h-[38px] w-full text-left border-primary"
-              :class="{ 'bg-grey-dark border-l-3': currentRoute.name === 'dashboard' }"
-              @click.native="hideNavOnMobile"
-            >
-              <span class="icon-home text-primary"></span>
-              <strong class="ml-1">{{ $t('project.overview') }}</strong>
-            </NuxtLink>
+              <!-- Create new project -->
+              <Btn type="primary" color="white" size="large" @click="showModalNewProject = true">
+                {{ $t('project.new') }}
+              </Btn>
+            </n-space>
           </div>
 
           <!-- SIDEBAR NAVIGATION -->
-          <SidebarNav class="pl-4" @toggleSidebar="hideNavOnMobile" />
+          <MenuNav @toggleSidebar="hideNavOnMobile" />
         </n-space>
 
         <!-- SIDEBAR FOOTER -->
-        <SidebarFooter />
+        <div class="flex flex-col p-8">
+          <p class="text-sm text-body">
+            {{ $t('general.copyrights') }}
+            <span>{{ version }}</span>
+          </p>
+        </div>
       </n-scrollbar>
     </div>
   </transition>
@@ -68,20 +65,13 @@ const props = defineProps({
 });
 
 const { isLg } = useScreen();
+const dataStore = useDataStore();
+const showModalNewProject = ref(false);
 const emit = defineEmits(['toggleSidebar']);
 
-const sidebarClasses = computed(() => {
-  return [
-    {
-      'z-10 translate-x-0': props.showOnMobile && !isLg.value,
-      'z-10 -translate-x-full': !props.showOnMobile && !isLg.value,
-    },
-  ];
-});
-
-const dataStore = useDataStore();
-const { currentRoute } = useRouter();
-const showModalNewProject = ref(false);
+/** App version */
+const config = useRuntimeConfig();
+const version = ref(config.public.VERSION);
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(_ => {
@@ -89,6 +79,16 @@ onMounted(() => {
       showModalNewProject.value = true;
     }
   });
+});
+
+/** Classes */
+const sidebarClasses = computed(() => {
+  return [
+    {
+      'z-10 translate-x-0': props.showOnMobile && !isLg.value,
+      'z-10 -translate-x-full': !props.showOnMobile && !isLg.value,
+    },
+  ];
 });
 
 /** Hide sidebar navigation on mobile if user open to different page */

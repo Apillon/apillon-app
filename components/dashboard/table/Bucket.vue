@@ -5,21 +5,26 @@
     :data="dataStore.bucket.items"
     :row-props="rowProps"
   />
+
+  <!-- Modal - Edit bucket -->
+  <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
+    <FormStorageBucket :bucket-id="currentRow?.id || 0" />
+  </modal>
+
   <!-- Modal - Destroy bucket -->
-  <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucketDestroy')">
+  <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucket.destroy')">
     <FormStorageDestroy :bucket-id="currentRow?.id || 0" />
   </modal>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, useMessage } from 'naive-ui';
-import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
+import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const router = useRouter();
+const settingsStore = useSettingsStore();
 const NuxtLink = resolveComponent('NuxtLink');
+const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean>(false);
 const StorageProgress = resolveComponent('StorageProgress');
 
@@ -27,10 +32,10 @@ interface RowData extends BucketInterface {
   key: number;
 }
 
-const createColumns = (): DataTableColumns<RowData> => {
+const createColumns = (): NDataTableColumns<RowData> => {
   return [
     {
-      title: $i18n.t('storage.bucketName'),
+      title: $i18n.t('storage.bucket.name'),
       key: 'name',
       render(row) {
         return h(
@@ -59,12 +64,11 @@ const createColumns = (): DataTableColumns<RowData> => {
       },
     },
     {
-      title: $i18n.t('storage.traffic'),
-      key: 'traffic',
-    },
-    {
-      title: $i18n.t('storage.visits'),
-      key: 'visits',
+      title: $i18n.t('storage.bucket.description'),
+      key: 'description',
+      render(row) {
+        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
+      },
     },
     {
       title: $i18n.t('general.actions'),
@@ -106,15 +110,17 @@ const dropdownOptions = [
   {
     label: $i18n.t('storage.edit'),
     key: 'storageEdit',
+    disabled: settingsStore.isProjectUser(),
     props: {
       onClick: () => {
-        router.push(`/dashboard/service/storage/${currentRow.value?.id}`);
+        showModalEditBucket.value = true;
       },
     },
   },
   {
-    label: $i18n.t('storage.delete'),
-    key: 'storage.delete',
+    label: $i18n.t('storage.delete.bucket'),
+    key: 'storage.delete.bucket',
+    show: false,
     props: {
       onClick: () => {
         showModalDestroyBucket.value = true;
@@ -136,7 +142,7 @@ onMounted(() => {
 
 async function getBuckets() {
   if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
+    dataStore.promises.buckets = await dataStore.fetchBuckets();
   }
 }
 </script>

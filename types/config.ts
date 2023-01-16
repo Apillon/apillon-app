@@ -22,6 +22,12 @@ export enum Feature {
   TWO_FACTOR_AUTHENTICATION = 'TWO_FACTOR_AUTHENTICATION',
   WALLET_LOGIN = 'WALLET_LOGIN',
 }
+export enum AppEnv {
+  PROD = 'production',
+  STAGING = 'staging',
+  DEV = 'development',
+  LOCAL = 'local',
+}
 
 type SimpleSpread<L, R> = R & Pick<L, Exclude<keyof L, keyof R>>;
 interface PropsFeatures {
@@ -30,9 +36,11 @@ interface PropsFeatures {
 
 declare global {
   interface ConfigInterface extends SimpleSpread<PublicRuntimeConfig, PropsFeatures> {
+    ENV?: string;
     VERSION: string;
     url: string;
     apiUrl: string;
     CHAIN_ID: string;
+    captchaKey: string;
   }
 }

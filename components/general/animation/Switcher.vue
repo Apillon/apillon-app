@@ -15,7 +15,7 @@ defineProps({
 });
 
 function statusColor(on: boolean) {
-  return on ? colors.blue : colors.grey.light;
+  return on ? colors.blue : colors.white;
 }
 </script>
 

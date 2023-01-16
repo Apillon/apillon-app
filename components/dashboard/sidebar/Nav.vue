@@ -21,8 +21,8 @@
           :to="item.link || undefined"
           class="block h-[38px] w-full py-2 pl-2 pr-6 font-normal"
           :class="{
-            'bg-grey-lightBg border-l-3 border-primary': currentRoute.name === item.name,
-            'cursor-default opacity-70': item.disabled,
+            'border-l-3 border-primary': currentRoute.name === item.name,
+            'cursor-default': item.disabled,
           }"
           @click.native="emit('toggleSidebar')"
         >
@@ -31,11 +31,7 @@
           <span
             v-if="item.soon || item.new"
             class="float-right text-blue text-2xl"
-            :class="[
-              `random-color-${randomInteger(0, 3)}`,
-              { 'icon-soon': item.soon },
-              { 'icon-new': item.new },
-            ]"
+            :class="['text-violet', { 'icon-soon': item.soon }, { 'icon-new': item.new }]"
           ></span>
         </component>
       </div>
@@ -53,7 +49,7 @@ const { currentRoute } = useRouter();
 /** Naive UI - Theme overrides */
 const collapseNavOverrides = {
   textColor: colors.white,
-  titleTextColor: colors.grey.DEFAULT,
+  titleTextColor: colors.body,
 };
 
 const menu: MainNavInterface = {
@@ -63,7 +59,6 @@ const menu: MainNavInterface = {
         name: 'authentication',
         icon: 'icon-authentication',
         link: '/dashboard/service/authentication',
-        new: isFeatureEnabled(Feature.AUTHENTICATION),
         soon: !isFeatureEnabled(Feature.AUTHENTICATION),
         disabled: !isFeatureEnabled(Feature.AUTHENTICATION),
       },
@@ -71,14 +66,12 @@ const menu: MainNavInterface = {
         name: 'storage',
         icon: 'icon-storage',
         link: '/dashboard/service/storage',
-        new: isFeatureEnabled(Feature.STORAGE),
         soon: !isFeatureEnabled(Feature.STORAGE),
         disabled: !isFeatureEnabled(Feature.STORAGE),
       },
       {
         name: 'computing',
         icon: 'icon-computing',
-        new: isFeatureEnabled(Feature.COMPUTING),
         soon: !isFeatureEnabled(Feature.COMPUTING),
         disabled: !isFeatureEnabled(Feature.COMPUTING),
       },

@@ -10,6 +10,7 @@
         v-model:value="formData.cardHolder"
         :input-props="{ id: 'cardHolder' }"
         :placeholder="$t('form.placeholder.cardHolder')"
+        clearable
       />
     </n-form-item>
 
@@ -24,6 +25,7 @@
         :input-props="{ id: 'cardNumber' }"
         :placeholder="$t('form.placeholder.cardNumber')"
         @input="handleCreditCardInput"
+        clearable
       >
         <template #suffix>
           <Image src="/images/payment/mastercard.svg" :width="35" :height="24" alt="mastercard" />
@@ -31,7 +33,7 @@
       </n-input>
     </n-form-item>
 
-    <n-grid :cols="2" :span="2" :x-gap="8">
+    <n-grid :cols="2" :span="2" :x-gap="32">
       <!--  Expiration Date -->
       <n-form-item-gi
         :span="1"
@@ -44,6 +46,7 @@
           :input-props="{ id: 'expirationDate' }"
           :placeholder="$t('form.placeholder.expirationDate')"
           @input="handleExpirationDateInput"
+          clearable
         />
       </n-form-item-gi>
 
@@ -59,6 +62,7 @@
           :input-props="{ id: 'cvv' }"
           :placeholder="$t('form.placeholder.cvv')"
           @input="handleCvvInput"
+          clearable
         />
       </n-form-item-gi>
     </n-grid>
@@ -74,6 +78,7 @@
         :input-props="{ id: 'postalCode' }"
         :placeholder="$t('form.placeholder.postalCode')"
         @input="handlePostalCodeInput"
+        clearable
       />
     </n-form-item>
 
@@ -101,7 +106,6 @@
 import cardValidator from 'card-validator';
 import { textMarshal } from 'text-marshal';
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const loading = ref(false);
@@ -115,7 +119,7 @@ const formData = ref<FormBilling>({
   expirationDate: '',
   cvv: '',
   postalCode: '',
-  terms: null,
+  terms: false,
 });
 
 const rules: NFormRules = {
@@ -258,7 +262,7 @@ async function updateUserProfile() {
     }
     loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg(error, $i18n));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

@@ -1,45 +1,38 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
+      <Heading>
+        <slot>
+          <h4 class="mr-">{{ $t('nav.storage') }}</h4>
+        </slot>
+
+        <template #info>
+          <nuxt-link
+            v-show="!settingsStore.isProjectUser()"
+            :to="{ name: 'dashboard-service-storage-new' }"
+          >
+            <n-button type="primary">
+              {{ $t('storage.bucket.new') }}
+            </n-button>
+          </nuxt-link>
+        </template>
+      </Heading>
+    </template>
+    <slot>
       <!-- Banner for storage if project hasb't got any services -->
       <BannerStorage v-if="!dataStore.hasBuckets" />
 
-      <!-- Basic title -->
-      <n-space v-else justify="space-between" align="center">
-        <n-space size="large" align="center">
-          <h4 class="mr-">{{ $t('nav.storage') }}</h4>
-          <div class="w-[1px] h-[13px] bg-grey"></div>
-          <a href="#learn-more">{{ $t('general.learnMore') }}</a>
-        </n-space>
-        <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
-          <n-button type="primary">{{ $t('storage.newBucket') }}</n-button>
-        </nuxt-link>
-      </n-space>
-    </template>
-    <template #learn>
-      <LearnAlert>
-        Click on a service you want to attach to your project. After configuring it, the service
-        will become operational.
-        <strong>Keep in mind, you can always edit the attached services or add new ones.</strong>
-      </LearnAlert>
-      <LearnCollapse />
-    </template>
-    <slot>
       <TableBucket v-if="dataStore.hasBuckets" />
       <template v-else>
         <h5 class="mb-8">{{ $t('nav.storage') }}</h5>
-        <div
-          class="flex flex-col md:flex-row items-center justify-between bg-grey-lightBg px-6 py-4"
-        >
+        <div class="flex flex-col md:flex-row items-center justify-between bg-bg-lighter px-6 py-4">
           <div class="mb-4 md:mb-0">
-            <p class="body-md font-bold">Your project currently has no active service</p>
-            <p class="body-sm">
-              First attach a desired service and configure it, then start building.
-            </p>
+            <p class="body-md font-bold">{{ $t('storage.noActiveService') }}</p>
+            <p class="body-sm">{{ $t('storage.attachService') }}</p>
           </div>
           <div>
             <nuxt-link :to="{ name: 'dashboard-service-storage-new' }">
-              <Btn type="primary"> Add new bucket</Btn>
+              <Btn type="primary">{{ $t('storage.bucket.addNew') }}</Btn>
             </nuxt-link>
           </div>
         </div>
@@ -49,10 +42,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
@@ -65,11 +57,20 @@ onMounted(() => {
 
     pageLoading.value = false;
   });
+
+  getUsersOnProject();
 });
 
 async function getBuckets() {
   if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets($i18n);
+    dataStore.promises.buckets = await dataStore.fetchBuckets();
+  }
+}
+
+/** GET Users on project */
+async function getUsersOnProject() {
+  if (!settingsStore.hasUsers) {
+    await settingsStore.fetchProjectUsers();
   }
 }
 </script>

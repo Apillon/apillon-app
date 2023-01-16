@@ -54,7 +54,7 @@ setTimeout(() => (isBtnLocked.value = false), 1000);
 
 const btnClass = computed(() => {
   return [
-    props.type === 'link' ? 'font-content' : 'font-button',
+    props.type === 'link' ? 'font-sans' : 'font-mono',
     {
       'w-full': props.type !== 'link' && props.size === 'large',
       'text-primary': props.type === 'link',

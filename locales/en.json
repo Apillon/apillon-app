@@ -28,15 +28,38 @@
     "serviceName": "Service name",
     "serviceType": "Service type",
     "signup": "Sign up",
+    "skip": "Skip",
     "status": "Status",
     "tryAgain": "Try again",
     "terms": "",
     "test": "Test",
     "upload": "Upload",
     "uptime": "Uptime",
+    "uuid": "UUID",
     "view": "View"
   },
   "dashboard": {
+    "apiKey": {
+      "apiKey": "API key",
+      "apiKeySecret": "API key secet",
+      "delete": "Delete API key",
+      "details": "API key details",
+      "generate": "Generate new key",
+      "secredSaved": "I've saved API key's secret",
+      "title": "API keys",
+      "update": "Update API key"
+    },
+    "clipboard": {
+      "copied": "Text has been copied to clipboard",
+      "copy": "Copy to clipboard",
+      "copyApiKey": "Copy Api key to clipboard",
+      "error": "Failed to copy"
+    },
+    "permissions": {
+      "read": "Read permissions",
+      "write": "Write permissions",
+      "execute": "Execute permissions"
+    },
     "addPayment": "Add payment",
     "addPaymentMethod": "Add payment method",
     "addPaymentMethodText": " Add payment method and prepurchase the needed credits. Once the credits supply is depleated you will be charged again.",
@@ -65,6 +88,7 @@
     "name": "Name",
     "payment": "Payment",
     "role": "Role",
+    "searchDocs": "Search the docs",
     "secret": "Secret",
     "secrets": "Secrets",
     "selectServices": "Select services",
@@ -73,41 +97,21 @@
     "viewInvoice": "View Invoice",
     "yourPlan": "Your plan: ",
     "value": "Value",
-    "apiKey": {
-      "apiKey": "API key",
-      "apiKeySecret": "API key secet",
-      "delete": "Delete API key",
-      "details": "API key details",
-      "generate": "Generate new key",
-      "secredSaved": "I've saved API key's secret",
-      "title": "Credentials and API keys",
-      "update": "Update API key"
-    },
-    "clipboard": {
-      "copied": "Text has been copied to clipboard",
-      "copy": "Copy to clipboard",
-      "copyApiKey": "Copy Api key to clipboard",
-      "error": "Failed to copy"
-    },
-    "permissions": {
-      "read": "Read permissions",
-      "write": "Write permissions",
-      "execute": "Execute permissions"
-    }
+    "visibleColumns": "Visible columns"
   },
   "error": {
     "404": "Page not found",
 
-    "BAD_REQUEST": "Bad request",
+    "BAD_REQUEST": "There is a problem with this request. Please come back later when we fixed that problem.",
     "INVALID_PATH": "Invalid path",
     "INVALID_QUERY_PARAMETERS": "Invalid query parameters",
-    "UNAUTHORIZED": "Unauthorized",
+    "UNAUTHORIZED": "You are unauthorized for this action",
     "INVALID_TOKEN": "Invalid token",
     "USER_IS_NOT_AUTHENTICATED": "User is not authenticated",
-    "FORBIDDEN": "Forbidden",
+    "FORBIDDEN": "You don't have permission for this action",
     "USER_IS_NOT_AUTHORIZED": "User is not authorized",
 
-    "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error",
+    "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error, please fill the form",
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
     "ERR_CONNECTION_REFUSED": "Connection refused, please check your internet connection.",
     "Failed to fetch": "Connection refused, please check your internet connection.",
@@ -134,12 +138,15 @@
     "SESSION_UUID_NOT_PRESENT": "Session UUID is missing",
     "BUCKET_TYPE_NOT_PRESENT": "Bucket type is missing",
     "WEBHOOK_ALREADY_EXISTS_FOR_PROJECT": "Webhook already exists",
+    "MAX_BUCKETS_REACHED": "Maximum number of buckets is reached",
+    "MAX_PROJECTS_REACHED": "Maximum number of projects is reached",
 
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
     "FILE_CONTENT_TYPE_NOT_PRESENT": "File content is missing",
     "FILE_VERSION_NOT_PRESENT": "File version is missing",
     "FILE_BODY_NOT_PRESENT": "File body is missing",
+    "FILE_NOT_FOUND": "File not found",
 
     "STATUS_NOT_PRESENT": "Status not present",
     "INVALID_STATUS": "Invalid status",
@@ -166,17 +173,18 @@
     "SERVICE_UUID_NOT_PRESENT": "Service UUID is missing",
     "SERVICE_PROJECT_ID_NOT_PRESENT": "Project ID is missing",
 
-    "API": "Internal server error",
-    "DEFAULT_SYSTEM_ERROR": "System error",
-    "UNHANDLED_SYSTEM_ERROR": "Unhandled system error",
-    "SQL_SYSTEM_ERROR": "System error",
-    "AWS_SYSTEM_ERROR": "System error",
-    "MICROSERVICE_SYSTEM_ERROR": "System error",
-    "ERROR_WRITING_TO_DATABASE": "Internal server error",
-    "ERROR_READING_FROM_DATABASE": "Internal server error",
-    "SERVICE_ERROR": "Internal server error",
+    "API": "There has been an error. Please come back later when we fixed that problem.",
+    "DEFAULT_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+    "UNHANDLED_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+    "SQL_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+    "AWS_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+    "MICROSERVICE_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+    "ERROR_WRITING_TO_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
+    "ERROR_READING_FROM_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
+    "SERVICE_ERROR": "There has been an error. Please come back later when we fixed that problem.",
 
-    "walletSignature": "'Could not capture your signature, check your wallet connection"
+    "walletSignature": "'Could not capture your signature, check your wallet connection",
+    "fileDownload": "Download failed. Something went wrong during the download."
   },
   "footer": {
     "support": "Support",
@@ -209,6 +217,7 @@
       "apiKeyName": "API Key name",
       "apiKeyType": "API Key type",
       "bearerToken": "Bearer token",
+      "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
       "bucketSize": "Bucket size",
       "cardHolder": "Card holder",
@@ -240,6 +249,7 @@
     "placeholder": {
       "apiKeyName": "API Key name",
       "bearerToken": "Enter Bearer token",
+      "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
       "cardHolder": "John Doe",
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
@@ -287,6 +297,7 @@
         "directory": "Directory key has been deleted",
         "file": "File has been deleted",
         "item": "Item has been deleted",
+        "items": "Items has been deleted",
         "webhook": "Webhook has been deleted"
       },
       "updated": {
@@ -335,6 +346,7 @@
     "withEmail": "login with email"
   },
   "nav": {
+    "projectOverview": "Project overview",
     "services": "Services",
     "authentication": "Authentication",
     "storage": "Storage",
@@ -390,8 +402,8 @@
     "id": "Project ID",
     "new": "Add new project",
     "newBucket": "New storage bucket",
-    "overview": "Project overview",
     "owner": "Project owner",
+    "quotaReached": "Quota has been reached.",
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
@@ -459,9 +471,43 @@
     "withEmail": "sign up with email"
   },
   "storage": {
+    "bucket": {
+      "addNew": "Add new bucket",
+      "buckets": "Storage buckets",
+      "description": "Description",
+      "destroy": "Destroy",
+      "edit": "Edit bucket",
+      "management": "Bucket management",
+      "name": "Bucket name",
+      "new": "New bucket",
+      "storage": "Storage bucket",
+      "update": "Update bucket",
+      "quotaReached": "Quota has been reached."
+    },
+    "delete": {
+      "bucket": "Delete bucket",
+      "bucketItems": "Delete these items?",
+      "item": "Delete selected item",
+      "items": "Delete selected items"
+    },
+    "directory": {
+      "create": "Create directory",
+      "createNew": "Create new directory",
+      "delete": "Delete directory"
+    },
+    "download": {
+      "bucketItems": "Download selected items?",
+      "item": "Download selected item",
+      "items": "Download selected items"
+    },
     "file": {
       "create": "Create file",
-      "delete": "Delete file"
+      "clickToUpload": "Click to upload.",
+      "delete": "Delete file",
+      "downloadLink": "Download link",
+      "dragAndDrop": "Drag & drop files and folders you want to upload to your bucket, or",
+      "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab.",
+      "search": "Search files"
     },
     "fileStatus": {
       "1": "Signed URL for upload generated",
@@ -479,24 +525,21 @@
       "createNew": "Create new folder",
       "delete": "Delete folder"
     },
-    "bucket": "Storage bucket",
-    "bucketManagement": "Bucket management",
-    "bucketName": "Bucket name",
-    "buckets": "Storage buckets",
-    "delete": "Delete bucket",
-    "destroy": "Destroy",
+    "attachService": "First attach a desired service and configure it, then start building.",
+    "contentType": "Content type",
+    "downloadLink": "Download link",
     "edit": "Edit",
     "expiration": "Expired on blockchain",
-    "goToRootDirectory": "Go to root directory",
     "fileCid": "File CID",
     "fileName": "File name",
     "files": "Files",
     "filesAll": "All Files",
     "fileSize": "File size",
     "fileStatusName": "File status",
+    "goToRootDirectory": "Go to root directory",
     "history": "History",
-    "name": "Bucket name",
-    "newBucket": "New bucket",
+    "noActiveService": "Your project currently has no active service",
+    "refresh": "Refresh",
     "replicas": "Replicas",
     "selectFiles": "Select files",
     "snapshots": "Snapshots",
@@ -508,7 +551,10 @@
     "visits": "30d visits",
     "yourFiles": "Your files",
     "yourFilesAll": "All your files",
-    "webhook": "Webhook"
+    "webhook": "Webhook",
+    "wrapFiles": "Wrap files",
+    "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don’t want to do it just skip this process.",
+    "wrapToDirectory": "Wrap to directory"
   },
   "service": {
     "authentication": {
@@ -536,6 +582,7 @@
   "validation": {
     "apiKeyName": "API key name is required",
     "apiKeyIdRequired": "API key is required",
+    "bucketDescriptionTooLong": "Text is too long (max 255 characters)",
     "bucketNameRequired": "Please enter bucket name",
     "containsLowercase": "Must include a lowercase character",
     "containsNumber": "Must include a number character",
@@ -551,6 +598,7 @@
     "emailRequired": "Please enter your email",
     "expirationDate": "Date is expired",
     "expirationDateRequired": "Please enter expiration date",
+    "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",
     "passwordMinLength": "Password must contain at least 12 characters.",
     "passwordReenterSame": "Password is not same as re-entered password!",

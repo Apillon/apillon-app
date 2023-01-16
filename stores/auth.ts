@@ -11,14 +11,12 @@ export const AuthLsKeys = {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     jwt: '',
-    userUuid: '',
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
-    username: '',
-    phone: '',
     provider: 0,
     wallet: '',
     authStep: '',
     crypto: null,
+    user: {} as UserInterface,
     promises: {
       profile: null as any,
     },
@@ -26,6 +24,18 @@ export const useAuthStore = defineStore('auth', {
   getters: {
     loggedIn(state) {
       return !!state.email && !!state.jwt;
+    },
+    userId(state) {
+      return state.user.id;
+    },
+    userUuid(state) {
+      return state.user.user_uuid;
+    },
+    username(state) {
+      return state.user.name;
+    },
+    phone(state) {
+      return state.user.phone;
     },
     allowedEntry: state => !!state.jwt,
   },
@@ -40,16 +50,9 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    changeUser(userData: Record<string, string | number>) {
-      this.userUuid = userData?.user_uuid.toString();
+    changeUser(userData: UserInterface) {
+      this.user = { ...userData };
       this.saveEmail(userData.email.toString());
-
-      if (userData.name) {
-        this.username = userData?.name.toString();
-      }
-      if (userData.phone) {
-        this.phone = userData?.phone.toString();
-      }
     },
 
     saveEmail(email: string) {
@@ -86,7 +89,6 @@ export const useAuthStore = defineStore('auth', {
       $api.clearToken();
 
       this.jwt = '';
-      this.username = '';
       this.wallet = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.WALLET);
