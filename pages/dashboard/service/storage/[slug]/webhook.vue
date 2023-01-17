@@ -1,20 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <n-space align="center" :size="32">
-            <NuxtLink :to="{ name: 'dashboard-service-storage' }">
-              <span class="icon-back"></span>
-            </NuxtLink>
-            <h4>{{ dataStore.bucket.active.name }}</h4>
-          </n-space>
-        </slot>
-
-        <template #submenu>
-          <MenuBucketManagement />
-        </template>
-      </Heading>
+      <StorageHeading />
     </template>
 
     <template #infobar>

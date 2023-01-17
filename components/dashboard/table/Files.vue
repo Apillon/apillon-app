@@ -36,18 +36,9 @@
 
 <script lang="ts" setup>
 import { debounce } from 'lodash';
-import {
-  DataTableColumns,
-  DataTableRowKey,
-  NButton,
-  NDropdown,
-  NEllipsis,
-  NSpace,
-  useMessage,
-} from 'naive-ui';
+import { NButton, NDropdown, NEllipsis, NSpace } from 'naive-ui';
 
 const $i18n = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
 const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);

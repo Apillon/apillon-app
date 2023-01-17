@@ -1,17 +1,21 @@
 <template>
-  <n-progress
-    class="lg:min-w-[400px]"
-    type="line"
-    border-radius="0"
-    :height="4"
-    :percentage="percentage"
-    :status="status"
-  >
+  <n-space :wrap="false" align="center" justify="space-between">
     <span class="inline-block lg:min-w-[130px]">
-      <span class="whitespace-nowrap">{{ formatBytes(size) }}/</span>
-      <span class="whitespace-nowrap">{{ formatBytes(maxSize) }}</span>
+      <span class="whitespace-nowrap">
+        {{ $t('storage.usage', { used: formatBytes(size), max: formatBytes(maxSize) }) }}
+      </span>
     </span>
-  </n-progress>
+    <n-progress
+      class="xl:min-w-[400px] lg:min-w-[300px] md:min-w-[200px] min-w-[100px]"
+      type="line"
+      border-radius="3px"
+      :height="4"
+      :percentage="percentage"
+      status="warning"
+    >
+      <span></span>
+    </n-progress>
+  </n-space>
 </template>
 
 <script lang="ts" setup>
@@ -19,9 +23,5 @@ const props = defineProps({
   size: { type: Number, default: 0 },
   maxSize: { type: Number, default: 0 },
   percentage: { type: Number, default: 0 },
-});
-
-const status = computed(() => {
-  return props.percentage > 90 ? 'error' : props.percentage > 60 ? 'warning' : 'success';
 });
 </script>

@@ -87,7 +87,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     colorQuaternary: 'transparent',
     colorQuaternaryHover: colors.primary,
     colorQuaternaryPressed: colors.primary,
-    fontSizeSmall: '12px',
+    fontSizeSmall: '14px',
     fontSizeMedium: '14px',
     fontSizeLarge: '14px',
     fontWeight: 'bold',
@@ -97,7 +97,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     heightTiny: '24px',
     paddingLarge: '8px',
     paddingMedium: '8px 24px',
-    paddingSmall: '6px 20px',
+    paddingSmall: '6px 10px',
     paddingTiny: '1px',
   },
   Card: {
@@ -125,10 +125,13 @@ export const themeOverrides: GlobalThemeOverrides = {
   },
   DataTable: {
     borderColor: colors.bg.lighter,
-    thColor: colors.bg.light,
-    tdColor: colors.bg.lighter,
-    tdColorHover: colors.bg.DEFAULT,
+    tdColor: colors.bg.DEFAULT,
+    tdColorHover: colors.bg.dark,
+    tdTextColor: colors.white,
+    thColor: colors.bg.DEFAULT,
+    thColorHover: colors.bg.DEFAULT,
     thFontWeight: '700',
+    thTextColor: colors.white,
   },
   Dialog: {
     closeBorderRadius: '50%',
@@ -139,6 +142,9 @@ export const themeOverrides: GlobalThemeOverrides = {
     closeIconColorHover: colors.bg.DEFAULT,
     color: colors.bg.DEFAULT,
     contentMargin: '16px 0',
+  },
+  Divider: {
+    color: colors.white,
   },
   Drawer: {
     color: colors.bg.dark,
@@ -267,6 +273,10 @@ export const themeOverrides: GlobalThemeOverrides = {
       },
     },
   },
+  Popover: {
+    arrowHeight: '16px',
+    spaceArrow: '16px',
+  },
   Progress: {
     fillColor: colors.green,
     fillColorInfo: colors.green,
@@ -325,6 +335,13 @@ export const themeOverrides: GlobalThemeOverrides = {
     textColor: colors.body,
     textColorInfo: colors.bg.DEFAULT,
     textColorSuccess: colors.green,
+  },
+  Tooltip: {
+    borderRadius: '6px',
+    boxShadow: 'none',
+    color: colors.bg.lighter,
+    padding: '8px 12px',
+    textColor: colors.white,
   },
   Typography: {
     headerMargin5: '32px 0 16px 0',

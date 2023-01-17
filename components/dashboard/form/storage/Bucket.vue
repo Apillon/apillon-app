@@ -50,12 +50,19 @@
         <n-radio-group v-model:value="formData.bucketSize" name="bucketSize" class="w-full">
           <n-grid :cols="2" :x-gap="32" :y-gap="32">
             <n-gi v-for="(size, key) in bucketSizes">
-              <n-radio-button
-                :key="key"
-                :value="size.value"
-                :label="size.label"
-                :disabled="size?.disabled === true"
-              />
+              <!-- If option is disabled, show tooltip on hover -->
+              <n-tooltip v-if="size?.disabled" trigger="hover" :style="{ maxWidth: '220px' }">
+                <template #trigger>
+                  <n-radio-button
+                    :key="key"
+                    :value="size.value"
+                    :label="size.label"
+                    :disabled="true"
+                  />
+                </template>
+                {{ $t('dashboard.currentlyNotAvailable') }}
+              </n-tooltip>
+              <n-radio-button v-else :key="key" :value="size.value" :label="size.label" />
             </n-gi>
           </n-grid>
         </n-radio-group>
@@ -89,12 +96,12 @@ import { useMessage } from 'naive-ui';
 const props = defineProps({
   bucketId: { type: Number, default: 0 },
 });
+const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
-const router = useRouter();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -181,7 +188,13 @@ async function createBucket() {
 
     /** On new bucket created redirect to storage list in refresh data */
     dataStore.fetchBuckets();
-    router.push({ name: 'dashboard-service-storage' });
+
+    /** Reset bucket qouta limit */
+    dataStore.bucket.quotaReached = undefined;
+
+    /** Emit events */
+    emit('submitSuccess');
+    emit('createSuccess');
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -207,6 +220,10 @@ async function updateBucket() {
         item.name = res.data.name;
         item.description = res.data.description;
       }
+
+      /** Emit events */
+      emit('submitSuccess');
+      emit('updateSuccess');
     });
   } catch (error) {
     message.error(userFriendlyMsg(error));

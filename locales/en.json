@@ -71,6 +71,7 @@
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
+    "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
     "dashboard": "Dashboard",
     "date": "Date",
     "email": "Email",
@@ -468,12 +469,12 @@
     },
     "file": {
       "create": "Create file",
-      "clickToUpload": "Click to upload.",
       "delete": "Delete file",
       "downloadLink": "Download link",
-      "dragAndDrop": "Drag & drop files and folders you want to upload to your bucket, or",
+      "dragAndDrop": "Drag & drop or click to upload.",
       "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab.",
-      "search": "Search files"
+      "search": "Search files",
+      "upload": "Upload files and folders"
     },
     "fileStatus": {
       "1": "Signed URL for upload generated",
@@ -513,7 +514,8 @@
     "status": "Status",
     "traffic": "30d traffic",
     "uploadFiles": "Upload files",
-    "usage": "Storage usage",
+    "used": "Storage usage",
+    "usage": "{used} of {max} used",
     "visits": "30d visits",
     "yourFiles": "Your files",
     "yourFilesAll": "All your files",
@@ -583,5 +585,8 @@
     "webhookRequired": "Please enter Webhook URL",
     "webhookUsernameRequired": "Please enter username",
     "webhookTokenRequired": "Please enter token"
+  },
+  "w3Warn": {
+    "newBucket": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. Accumsan morbi lectus elit nunc. Arcu morbi pretium neque nibh eu vestibulum id sed adipiscing."
   }
 }

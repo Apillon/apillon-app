@@ -3,6 +3,7 @@ import {
   create,
   DataTableColumns,
   DataTableInst,
+  DataTableRowKey,
   DataTableSortState,
   NEllipsis,
   FormInst,
@@ -19,6 +20,7 @@ import {
   NCollapseItem,
   NConfigProvider,
   NDataTable,
+  NDivider,
   NDrawer,
   NDrawerContent,
   NDropdown,
@@ -88,6 +90,7 @@ declare global {
   }
 
   type NDataTableColumns<T = InternalRowData> = DataTableColumns<T>;
+  type NDataTableRowKey = DataTableRowKey;
   type NMenuOption = MenuOption;
   type NMenuMixedOption = MenuMixedOption;
 }
@@ -104,6 +107,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NCollapseItem,
         NConfigProvider,
         NDataTable,
+        NDivider,
         NDrawer,
         NDrawerContent,
         NDropdown,

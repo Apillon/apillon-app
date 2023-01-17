@@ -26,6 +26,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-success:before {
+  content: '\e93f';
+}
+.icon-create-folder:before {
+  content: '\e940';
+}
+.icon-refresh:before {
+  content: '\e941';
+}
 .icon-upload:before {
   content: '\e93e';
 }

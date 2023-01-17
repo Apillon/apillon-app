@@ -7,9 +7,14 @@
         </slot>
 
         <template #info>
-          <button @click="showModalW3Warn = true">
-            <span class="icon-info text-xl"></span>
-          </button>
+          <n-space :size="32" align="center">
+            <button class="align-sub" @click="showModalW3Warn = true">
+              <span class="icon-info text-xl"></span>
+            </button>
+            <Btn v-if="dataStore.hasBuckets" type="primary" size="small" @click="createNewBucket">
+              {{ $t('storage.bucket.new') }}
+            </Btn>
+          </n-space>
         </template>
       </Heading>
     </template>
@@ -36,15 +41,12 @@
       </template>
 
       <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
-        Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim
-        pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non.
-        Pretium aliquam tellus magna felis adipiscing. Accumsan morbi lectus elit nunc. Arcu morbi
-        pretium neque nibh eu vestibulum id sed adipiscing.
+        {{ $t('w3Warn.newBucket') }}
       </W3Warn>
 
       <!-- Modal - Create bucket -->
       <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
-        <FormStorageBucket />
+        <FormStorageBucket @submit-success="showModalNewBucket = false" />
       </modal>
     </slot>
   </Dashboard>
@@ -56,7 +58,7 @@ const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
-const showModalNewBucket = ref<boolean>(false);
+const showModalNewBucket = ref<boolean | null>(false);
 
 useHead({
   title: $i18n.t('nav.storage'),
@@ -65,6 +67,7 @@ useHead({
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     await getBuckets();
+    await geBucketQuota();
 
     pageLoading.value = false;
   });
@@ -72,9 +75,17 @@ onMounted(() => {
   getUsersOnProject();
 });
 
+/** GET Buckets if bucket list is empty */
 async function getBuckets() {
   if (!dataStore.hasBuckets) {
     dataStore.promises.buckets = await dataStore.fetchBuckets();
+  }
+}
+
+/** GET Bucket quota, if current value is null  */
+async function geBucketQuota() {
+  if (dataStore.bucket.quotaReached === undefined) {
+    await dataStore.fetchBucketQuota();
   }
 }
 
@@ -94,12 +105,13 @@ function createNewBucket() {
     showModalNewBucket.value = true;
   } else {
     showModalW3Warn.value = true;
+    showModalNewBucket.value = null;
   }
 }
 
 /** When user close W3Warn, allow him to create new bucket */
 function onModalW3WarnHide(value: boolean) {
-  if (!value) {
+  if (!value && showModalNewBucket.value !== false) {
     showModalNewBucket.value = true;
   }
 }
