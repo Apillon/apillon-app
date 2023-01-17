@@ -9,12 +9,10 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-24 font-button text-sm">
     <!-- Referral intro -->
-    <!-- <ReferralPointsSection :points="3" /> -->
   </div>
 
   <div class="grid grid-cols-1 gap-24 font-button text-sm mt-10 mb-20">
     <!-- Referral rewards -->
-    <!-- <ReferralRewardsSection @claim-reward="claimReward" /> -->
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-24 font-button text-sm">
@@ -30,9 +28,4 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-const emit = defineEmits(['claimReward']);
-function claimReward(event) {
-  emit('claimReward', event);
-}
-</script>
+<script lang="ts" setup></script>
