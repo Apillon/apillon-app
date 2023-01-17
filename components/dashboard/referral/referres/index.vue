@@ -1,10 +1,15 @@
 <template>
   <!-- Referral - intro -->
   <div class="bg-grey-dark px-10 py-5">
-    <div class="max-w-[700px]">
-      <h4 class="mb-6 mt-5">{{ $t('referral.invite') }}</h4>
+    <div class="">
+      <div class="mt-5 flex justify-between">
+        <h4 class="mb-6">{{ $t('referral.invite') }}</h4>
+        <div>
+          {{ '+2 per referral' }}
+        </div>
+      </div>
 
-      <p class="font-button text-sm text-white mt-3">
+      <p class="max-w-[700px] font-button text-sm text-white mt-3">
         {{ $t('referral.linkDesc') }}
       </p>
 

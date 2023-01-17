@@ -85,6 +85,9 @@ const Endpoints = {
   referralTweets: '/referral/twitter/tweets',
   referralRetweet: '/referral/twitter/confirm',
   referralTwitterAuth: '/referral/twitter/authenticate',
+
+  referralRewards: '/referral/products',
+  referralClaimReward: '/referral/product',
 };
 
 export default Endpoints;

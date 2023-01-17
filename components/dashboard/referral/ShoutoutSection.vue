@@ -1,7 +1,11 @@
 <template>
   <!-- Referral - sharing -->
+
   <h4 class="">{{ $t('referral.shoutout') }}</h4>
-  <div></div>
+  <div class="flex justify-end mr-10">
+    {{ '+2 per share' }}
+  </div>
+
   <div v-if="loading" class="relative">
     <Spinner />
   </div>
@@ -20,7 +24,12 @@
     <Btn class="mt-5 mr-5" type="primary" @click="shareTweet((tweet as any).id)">
       {{ $t('referral.share') }}
     </Btn>
-    <Btn class="mt-5" type="primary" @click="confirmShareTweet((tweet as any).id)">
+    <Btn
+      :loading="loadingConfirm"
+      class="mt-5"
+      type="primary"
+      @click="confirmShareTweet((tweet as any).id)"
+    >
       {{ $t('referral.confirm') }}
     </Btn>
   </div>
@@ -28,12 +37,19 @@
 
 <script lang="ts" setup>
 import Tweet from 'vue-tweet';
+import { createDiscreteApi, stepProps } from 'naive-ui';
+
+const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const tweets = ref([]);
 
 const loading = ref(false);
 
-onMounted(async () => {
+const loadingConfirm = ref(false);
+
+getReferrals();
+
+async function getReferrals() {
   loading.value = true;
   try {
     const res = await $api.get(endpoints.referralTweets);
@@ -43,9 +59,9 @@ onMounted(async () => {
     console.error(e);
   }
   loading.value = false;
-});
+}
 
-async function shareTweet(id: String) {
+function shareTweet(id: String) {
   try {
     window.open('https://twitter.com/Apillon/status/' + id);
   } catch (e) {
@@ -54,13 +70,20 @@ async function shareTweet(id: String) {
 }
 
 async function confirmShareTweet(id: String) {
+  loadingConfirm.value = true;
   try {
-    const res = await $api.post(endpoints.referralRetweet, {
+    const res = await $api.post<{ data: { retweeted: boolean } }>(endpoints.referralRetweet, {
       tweet_id: id,
     });
     console.log('My res share tweet: ', res);
+    if (res.data.retweeted) {
+      message.success('Tweet share confirmed!');
+    } else {
+      message.error('Tweet is not shared');
+    }
   } catch (e) {
     console.error(e);
   }
+  loadingConfirm.value = false;
 }
 </script>

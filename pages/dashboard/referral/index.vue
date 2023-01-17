@@ -1,8 +1,19 @@
 <template>
   <Dashboard>
     <template #heading>
-      <div ref="headingRef">
+      <div ref="headingRef" class="flex justify-between">
         <h4>{{ $t('referral.title') }}</h4>
+
+        <!-- User points -->
+
+        <div class="flex mr-10">
+          <div class="mr-10">
+            {{ 'XP points: ' + referralStore.balance }}
+          </div>
+          <div>
+            {{ 'Spending points: ' + referralStore.balance_all }}
+          </div>
+        </div>
       </div>
       <div>
         <n-tabs type="line" animated>
@@ -14,7 +25,7 @@
                   <div v-if="loading" class="mt-40">
                     <Spinner />
                   </div>
-                  <Referral v-else @claim-reward="claimReward" />
+                  <Referral v-else />
                 </n-scrollbar>
               </div>
 
@@ -32,7 +43,7 @@
                   <div v-if="loading" class="mt-40">
                     <Spinner />
                   </div>
-                  <ReferralRewardsSection @claim-reward="claimReward" />
+                  <ReferralRewardsSection />
                 </n-scrollbar>
               </div>
 
@@ -49,13 +60,15 @@
       <!-- <div v-if="loading" class="mt-40">
         <Spinner />
       </div>
-      <Referral v-else @claim-reward="claimReward" /> -->
+     -->
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
+
+const router = useRouter();
 
 const referralStore = useReferralStore();
 const headingRef = ref<HTMLElement>();
@@ -72,9 +85,6 @@ useHead({
   title: $i18n.t('referral.title'),
 });
 
-const step = ref(1);
-
-const claimRewardData = ref('');
 const loading = ref(false);
 
 getReferral();
@@ -85,14 +95,9 @@ async function getReferral() {
     // If there is no error -> user already accepted terms & conditions
     referralStore.initReferral(res.data);
   } catch (e) {
+    router.replace('/dashboard');
     console.error(e);
   }
   loading.value = false;
-}
-
-function claimReward(event) {
-  console.log('event claim reward: ', event);
-  claimRewardData.value = event;
-  // TODO open modal for claiming reward
 }
 </script>

@@ -412,7 +412,7 @@
       "country": "Choose your Country",
       "terms": "I accept Terms & conditions"
     },
-    "claim": "Claim",
+    "claim": "Claim now",
     "claimMerchPack": "Claim merch pack",
     "connectGithub": "Connect your Github account",
     "connectTwitter": "Connect your Twitter account",
@@ -606,6 +606,8 @@
     "passwordRequired": "Please enter your password",
     "postalCode": "Wrong postal code",
     "postalCodeRequired": "Please enter postal code",
+    "streetRequired": "Please enter your street",
+    "houseNumberRequired": "Please enter your house number",
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
     "captchaRequired": "Captcha challange required!",

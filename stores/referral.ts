@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useReferralStore = defineStore('referral', {
   state: () => ({
     balance: 0,
+    balance_all: 0,
     github_id: null,
     twitter_id: null,
 
@@ -19,6 +20,7 @@ export const useReferralStore = defineStore('referral', {
   actions: {
     initReferral(data: any) {
       this.balance = data.balance;
+      this.balance_all = data.balance_all;
       this.github_id = data.github_id;
       this.twitter_id = data.twitter_id;
       this.id = data.id;

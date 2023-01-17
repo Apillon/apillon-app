@@ -1,104 +1,131 @@
 <template>
   <!-- Referral enter -->
 
-  <div class="text-white bg-black pt-8 pl-[100px] pb-20">
-    <h4 class="mb-10">{{ $t('referral.rewardsClaim') }}</h4>
+  <div class="text-white">
+    <div>
+      {{ data.merchItem.description }}
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 font-button text-sm">
-      <!-- First col -->
-
-      <div>
-        <img :src="data" alt="apillon merch" />
-        <div class="max-w-[230px] mt-8">
-          {{ $t('referral.rewardsSize') }}
-        </div>
+    <div class="flex bg-bg-dark mt-10">
+      <div class="p-5">
+        <img class="max-w-[100px]" :src="data.merchItem.imageUrl" alt="apillon merch" />
       </div>
 
-      <!-- Second col -->
-      <n-form
-        ref="formRef"
-        class="pr-20"
-        :model="formData"
-        :rules="rules"
-        @submit.prevent="handleSubmit"
-      >
+      <div class="mt-8 pl-5">
+        <div>
+          {{ data.merchItem.name }}
+        </div>
+        <div>
+          {{
+            'Size: ' +
+            data.attributes.find(el => {
+              return el.name === 'size';
+            }).selectedValue
+          }}
+        </div>
+        <div class="cursor-pointer" @click="closeModal()">Change selection</div>
+      </div>
+    </div>
+
+    <!-- Second col -->
+    <n-form
+      ref="formRef"
+      class="mt-10"
+      :model="formData"
+      :rules="rules"
+      @submit.prevent="handleSubmit"
+    >
+      <div class="flex">
         <n-form-item
+          class="w-full mr-2"
           path="firstName"
-          :label="$t('form.label.firstName')"
+          :label="'First name'"
           :label-props="{ for: 'firstName' }"
         >
           <n-input
             v-model:value="formData.firstName"
             :input-props="{ id: 'firstName' }"
-            :placeholder="$t('form.placeholder.firstName')"
+            :placeholder="'Type here'"
           />
         </n-form-item>
 
         <n-form-item
           path="lastName"
-          :label="$t('form.label.lastName')"
+          class="w-full ml-2"
+          :label="'Last name'"
           :label-props="{ for: 'lastName' }"
         >
           <n-input
             v-model:value="formData.lastName"
             :input-props="{ id: 'lastName' }"
-            :placeholder="$t('form.placeholder.lastName')"
+            :placeholder="'Type here'"
           />
         </n-form-item>
+      </div>
 
+      <div class="flex">
         <n-form-item
+          class="w-full mr-2"
           path="street"
-          :label="$t('form.label.street')"
+          :label="'Street'"
           :label-props="{ for: 'street' }"
         >
           <n-input
             v-model:value="formData.street"
             :input-props="{ id: 'street' }"
-            :placeholder="$t('form.placeholder.street')"
+            :placeholder="'Type here'"
           />
         </n-form-item>
 
         <n-form-item
+          class="max-w-[125px] ml-2"
           path="number"
-          :label="$t('form.label.number')"
+          :label="'Number'"
           :label-props="{ for: 'number' }"
         >
           <n-input
             v-model:value="formData.number"
             :input-props="{ id: 'number' }"
-            :placeholder="$t('form.placeholder.number')"
+            :placeholder="'Type here'"
           />
         </n-form-item>
+      </div>
 
-        <n-form-item path="zip" :label="$t('form.label.zip')" :label-props="{ for: 'zip' }">
+      <div class="flex w-full">
+        <n-form-item
+          class="max-w-[125px] mr-2"
+          path="zip"
+          :label="'ZIP'"
+          :label-props="{ for: 'zip' }"
+        >
           <n-input
             v-model:value="formData.zip"
             :input-props="{ id: 'zip' }"
-            :placeholder="$t('form.placeholder.zip')"
+            :placeholder="'Type here'"
           />
         </n-form-item>
 
-        <n-form-item path="country" :show-label="false">
-          <n-select
-            id="country"
-            v-model:value="formData.country"
-            class="mt-2 mb-1"
-            :options="options"
-          >
+        <n-form-item
+          class="w-full ml-2"
+          path="country"
+          :label="'Country'"
+          :label-props="{ for: 'country' }"
+        >
+          <n-select id="country" v-model:value="formData.country" :options="options">
             <template #arrow>
               <span class="icon-down text-2xl"></span>
             </template>
           </n-select>
         </n-form-item>
+      </div>
 
-        <n-form-item>
-          <input type="submit" class="hidden" :value="$t('form.login')" />
-          <Btn :loading="loading" type="primary" class="-mt-4" @click="handleSubmit">
-            {{ $t('referral.enter.header') }}
-          </Btn>
-        </n-form-item>
-      </n-form>
-    </div>
+      <n-form-item class="w-full">
+        <input type="submit" class="hidden" :value="$t('form.login')" />
+        <Btn :loading="loading" type="primary" class="w-full -mt-4" @click="handleSubmit">
+          {{ 'Confirm and continue' }}
+        </Btn>
+      </n-form-item>
+    </n-form>
   </div>
 </template>
 
@@ -112,11 +139,18 @@ const formRef = ref<NFormInst | null>(null);
 const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const props = defineProps({
-  data: { type: String, required: true },
+  data: {
+    type: Object,
+    required: true,
+  },
 });
 
 const formData = ref({
-  terms: undefined,
+  firstName: '',
+  lastName: '',
+  street: '',
+  number: '',
+  zip: '',
   country: undefined,
 });
 
@@ -129,14 +163,40 @@ const options = [
 
 const loading = ref(false);
 
-const showModal = ref(false);
-
 const rules: NFormRules = {
-  terms: [
+  firstName: [
     {
       required: true,
-      validator: validateRequiredCheckbox,
-      message: $i18n.t('validation.terms'),
+      validator: validateRequiredDropdown,
+      message: $i18n.t('validation.cardHolderRequired'),
+    },
+  ],
+  lastName: [
+    {
+      required: true,
+      validator: validateRequiredDropdown,
+      message: $i18n.t('validation.cardHolderRequired'),
+    },
+  ],
+  street: [
+    {
+      required: true,
+      validator: validateRequiredDropdown,
+      message: $i18n.t('validation.streetRequired'),
+    },
+  ],
+  number: [
+    {
+      required: true,
+      validator: validateRequiredDropdown,
+      message: $i18n.t('validation.houseNumberRequired'),
+    },
+  ],
+  zip: [
+    {
+      required: true,
+      validator: validateRequiredDropdown,
+      message: $i18n.t('validation.postalCodeRequired'),
     },
   ],
   country: [
@@ -155,30 +215,40 @@ function handleSubmit(e: Event | MouseEvent) {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
-      enterReferral();
+      claimReward();
     }
   });
 }
 
-const emit = defineEmits(['enterReferral']);
+const emit = defineEmits(['closeModal']);
 
-async function enterReferral() {
+async function claimReward() {
   loading.value = true;
   try {
-    const res = await $api.post(endpoints.referral, {
-      termsAccepted: true,
+    const res = await $api.post(endpoints.referralClaimReward, {
+      id: props.data.merchItem.id,
+      info: {
+        firstName: formData.value.firstName,
+        lastName: formData.value.lastName,
+        street: formData.value.street,
+        houseNumber: formData.value.number,
+        postalCode: formData.value.zip,
+        country: formData.value.country,
+        selectedAttributes: props.data.attributes,
+      },
     });
-    referralStore.initReferral(res.data);
-    console.log('My res: ', res);
 
-    emit('enterReferral');
+    console.log('My res: ', res);
+    message.success('Reward claimed!');
   } catch (e) {
+    message.error('Error claiming reward. Please try again later');
     console.error(e);
   }
   loading.value = false;
 }
 
-function openModal() {
-  showModal.value = true;
+function closeModal() {
+  // Emit close modal
+  emit('closeModal');
 }
 </script>
