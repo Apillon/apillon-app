@@ -1,8 +1,14 @@
 <template>
   <div>
+    <p class="text-body mb-8">
+      {{ $t('storage.bucket.infoNew') }}
+    </p>
+
+    <!-- Notification - show if qouta has been reached -->
     <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
       {{ $t('storage.bucket.quotaReached') }}
     </Notification>
+
     <n-form
       ref="formRef"
       :model="formData"
@@ -41,16 +47,24 @@
 
       <!--  Bucket Sizes -->
       <n-form-item path="bucketSizes" :label="$t('form.label.bucketSize')">
-        <n-radio-group v-model:value="formData.bucketSize" name="radiogroup">
-          <n-space>
-            <n-radio
-              v-for="(size, key) in bucketSizes"
-              :key="key"
-              :value="size.value"
-              :label="size.label"
-              :disabled="true"
-            />
-          </n-space>
+        <n-radio-group v-model:value="formData.bucketSize" name="bucketSize" class="w-full">
+          <n-grid :cols="2" :x-gap="32" :y-gap="32">
+            <n-gi v-for="(size, key) in bucketSizes">
+              <!-- If option is disabled, show tooltip on hover -->
+              <n-tooltip v-if="size?.disabled" trigger="hover" :style="{ maxWidth: '220px' }">
+                <template #trigger>
+                  <n-radio-button
+                    :key="key"
+                    :value="size.value"
+                    :label="size.label"
+                    :disabled="true"
+                  />
+                </template>
+                {{ $t('dashboard.currentlyNotAvailable') }}
+              </n-tooltip>
+              <n-radio-button v-else :key="key" :value="size.value" :label="size.label" />
+            </n-gi>
+          </n-grid>
         </n-radio-group>
       </n-form-item>
 
@@ -82,12 +96,12 @@ import { useMessage } from 'naive-ui';
 const props = defineProps({
   bucketId: { type: Number, default: 0 },
 });
+const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
-const router = useRouter();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -118,7 +132,7 @@ const rules: NFormRules = {
   bucketSize: [],
 };
 
-const bucketSizes = [
+const bucketSizes: Array<NRadioOption> = [
   {
     value: 5,
     label: $i18n.t('form.bucketSizes.5gb'),
@@ -126,6 +140,7 @@ const bucketSizes = [
   {
     value: 100,
     label: $i18n.t('form.bucketSizes.100gb'),
+    disabled: true,
   },
 ];
 
@@ -173,7 +188,13 @@ async function createBucket() {
 
     /** On new bucket created redirect to storage list in refresh data */
     dataStore.fetchBuckets();
-    router.push({ name: 'dashboard-service-storage' });
+
+    /** Reset bucket qouta limit */
+    dataStore.bucket.quotaReached = undefined;
+
+    /** Emit events */
+    emit('submitSuccess');
+    emit('createSuccess');
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -199,6 +220,10 @@ async function updateBucket() {
         item.name = res.data.name;
         item.description = res.data.description;
       }
+
+      /** Emit events */
+      emit('submitSuccess');
+      emit('updateSuccess');
     });
   } catch (error) {
     message.error(userFriendlyMsg(error));

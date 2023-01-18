@@ -1,11 +1,22 @@
 <template>
   <Dashboard>
-    <template #sidebar>
-      <SidebarProjectSettings />
-    </template>
-    <slot>
-      <h4 class="mb-6">{{ $t('nav.projectSettings') }}</h4>
+    <template #heading>
+      <Heading>
+        <slot>
+          <h4>{{ $t('nav.projectSettings') }}</h4>
+        </slot>
 
+        <template #info>
+          <span class="icon-info"></span>
+        </template>
+
+        <template #submenu>
+          <MenuProjectSettings />
+        </template>
+      </Heading>
+    </template>
+
+    <slot>
       <!-- Edit project -->
       <FormProjectSettings />
 

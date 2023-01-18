@@ -96,16 +96,26 @@ export const useDataStore = defineStore('data', {
   },
   actions: {
     resetData() {
+      /** Bucket */
       this.bucket.active = {} as BucketInterface;
       this.bucket.items = [] as Array<BucketInterface>;
+      this.bucket.selected = 0;
+      this.bucket.quotaReached = undefined;
+
+      /** File/folder */
       this.file.items = {} as Record<string, FileDetailsInterface>;
       this.folder.items = [] as Array<FolderInterface>;
+
+      /** Services */
       this.services.authentication = [] as Array<ServiceInterface>;
       this.services.storage = [] as Array<ServiceInterface>;
       this.services.computing = [] as Array<ServiceInterface>;
     },
 
     setCurrentProject(id: number) {
+      /** Reset store data */
+      this.resetData();
+
       this.currentProjectId = id;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
     },
@@ -258,8 +268,7 @@ export const useDataStore = defineStore('data', {
     /** Services */
     async fetchServices(type?: number) {
       if (!this.hasProjects) {
-        alert('Please create your first project');
-        return [] as Array<ServiceInterface>;
+        await this.fetchProjects();
       }
 
       try {
@@ -303,8 +312,7 @@ export const useDataStore = defineStore('data', {
     /** Buckets */
     async fetchBuckets() {
       if (!this.hasProjects) {
-        alert('Please create your first project');
-        return null;
+        await this.fetchProjects();
       }
 
       try {
@@ -343,8 +351,7 @@ export const useDataStore = defineStore('data', {
 
     async fetchBucketQuota() {
       if (!this.hasProjects) {
-        alert('Please create your first project');
-        return;
+        await this.fetchProjects();
       }
       const params = {
         project_uuid: this.currentProject?.project_uuid || '',

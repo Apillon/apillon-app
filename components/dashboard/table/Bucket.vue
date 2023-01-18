@@ -8,7 +8,10 @@
 
   <!-- Modal - Edit bucket -->
   <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
-    <FormStorageBucket :bucket-id="currentRow?.id || 0" />
+    <FormStorageBucket
+      :bucket-id="currentRow?.id || 0"
+      @submit-success="showModalEditBucket = false"
+    />
   </modal>
 
   <!-- Modal - Destroy bucket -->
@@ -21,9 +24,9 @@
 import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const $i18n = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
-const NuxtLink = resolveComponent('NuxtLink');
 const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean>(false);
 const StorageProgress = resolveComponent('StorageProgress');
@@ -35,22 +38,17 @@ interface RowData extends BucketInterface {
 const createColumns = (): NDataTableColumns<RowData> => {
   return [
     {
-      title: $i18n.t('storage.bucket.name'),
       key: 'name',
+      title: $i18n.t('storage.bucket.name'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
-        return h(
-          NuxtLink,
-          {
-            class: 'ml-2 text-blue',
-            to: `/dashboard/service/storage/${row.id}`,
-          },
-          () => row.name
-        );
+        return h('strong', {}, { default: () => row.name });
       },
     },
     {
-      title: $i18n.t('storage.usage'),
       key: 'serviceType',
+      title: $i18n.t('storage.used'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(
           StorageProgress,
@@ -64,15 +62,16 @@ const createColumns = (): NDataTableColumns<RowData> => {
       },
     },
     {
-      title: $i18n.t('storage.bucket.description'),
       key: 'description',
+      title: $i18n.t('storage.bucket.description'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
     },
     {
-      title: $i18n.t('general.actions'),
       key: 'actions',
+      title: $i18n.t('general.actions'),
       align: 'right',
       className: '!py-0',
       render() {
@@ -100,8 +99,12 @@ const currentRow = ref<RowData | null>(null);
 
 const rowProps = (row: RowData) => {
   return {
-    onClick: () => {
+    onClick: (e: Event) => {
       currentRow.value = row;
+
+      if (canOpenColumnCell(e.composedPath())) {
+        router.push({ path: `/dashboard/service/storage/${row.id}` });
+      }
     },
   };
 };

@@ -3,6 +3,7 @@ import {
   create,
   DataTableColumns,
   DataTableInst,
+  DataTableRowKey,
   DataTableSortState,
   NEllipsis,
   FormInst,
@@ -19,6 +20,7 @@ import {
   NCollapseItem,
   NConfigProvider,
   NDataTable,
+  NDivider,
   NDrawer,
   NDrawerContent,
   NDropdown,
@@ -43,6 +45,7 @@ import {
   NLayoutSider,
   NProgress,
   NRadio,
+  NRadioButton,
   NRadioGroup,
   NScrollbar,
   NSkeleton,
@@ -84,7 +87,12 @@ declare global {
   interface NDataTableSortState extends DataTableSortState {}
   interface NMessageApiInjection extends MessageApiInjection {}
 
+  interface NRadioOption extends SelectOption {
+    label: string;
+  }
+
   type NDataTableColumns<T = InternalRowData> = DataTableColumns<T>;
+  type NDataTableRowKey = DataTableRowKey;
   type NMenuOption = MenuOption;
   type NMenuMixedOption = MenuMixedOption;
 }
@@ -101,6 +109,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NCollapseItem,
         NConfigProvider,
         NDataTable,
+        NDivider,
         NDrawer,
         NDrawerContent,
         NDropdown,
@@ -126,6 +135,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NLayoutSider,
         NProgress,
         NRadio,
+        NRadioButton,
         NRadioGroup,
         NScrollbar,
         NSkeleton,

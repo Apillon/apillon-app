@@ -3,14 +3,17 @@
     v-if="authStore.loggedIn"
     placement="bottom-end"
     trigger="click"
-    size="huge"
+    size="large"
     :options="options"
     @select="handleSelect"
   >
     <div class="flex cursor-pointer">
       <div class="flex items-center pr-2">
         <div class="relative w-10 h-10 flex justify-center items-center rounded-[50%] bg-white">
-          <span class="icon-apillon-icon text-bg text-lg"></span>
+          <span v-if="authStore.username" class="text-bg text-lg font-bold uppercase">
+            {{ initials(authStore.username) }}
+          </span>
+          <span v-else class="icon-apillon-icon text-bg text-lg"></span>
         </div>
       </div>
       <div class="hidden md:flex items-center">
@@ -43,5 +46,13 @@ function handleSelect(key: string | number) {
   } else if (key === 'profile') {
     router.push({ name: 'profile' });
   }
+}
+
+/** Initials from username (firstname and lastname) */
+function initials(username: string): string {
+  return username
+    .split(' ')
+    .map(part => part.slice(0, 1))
+    .join('');
 }
 </script>

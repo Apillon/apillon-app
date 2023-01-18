@@ -1,5 +1,5 @@
 <template>
-  <n-space justify="space-between">
+  <n-space v-bind="$attrs" justify="space-between">
     <div class="w-[20vw] max-w-xs">
       <n-input
         v-model:value="dataStore.folder.search"
@@ -14,14 +14,49 @@
         </template>
       </n-input>
     </div>
-    <n-space>
+
+    <n-space size="large">
+      <!-- Show only if user select files -->
+      <template v-if="dataStore.folder.selectedItems.length > 0">
+        <!-- Download files -->
+        <n-tooltip :show="showPopoverDownload" placement="bottom">
+          <template #trigger>
+            <n-button
+              class="w-10"
+              size="small"
+              :focus="true"
+              :loading="downloading"
+              @click="downloadSelectedFiles"
+            >
+              <span class="icon-download"></span>
+            </n-button>
+          </template>
+          <span>{{ $t('storage.downloadSelectedFiles') }}</span>
+        </n-tooltip>
+
+        <!-- Delete files -->
+        <n-tooltip placement="bottom" :show="showPopoverDelete">
+          <template #trigger>
+            <n-button class="w-10" size="small" :active="true" @click="deleteSelectedFiles">
+              <span class="icon-delete text-pink"></span>
+            </n-button>
+          </template>
+          <span>{{ $t('storage.deleteSelectedFiles') }}</span>
+        </n-tooltip>
+
+        <!-- Separator -->
+        <n-divider class="h-full mx-4" vertical />
+      </template>
+
       <!-- Refresh directory content -->
       <n-button size="small" @click="refreshDirectoryContent">
+        <span class="icon-refresh text-lg mr-2"></span>
         {{ $t('storage.refresh') }}
       </n-button>
 
       <!-- Create folder -->
       <n-button size="small" @click="showModalNewFolder = true">
+        <span class="icon-create-folder text-lg mr-2"></span>
         {{ $t('storage.folder.create') }}
       </n-button>
 
@@ -32,39 +67,9 @@
         ghost
         @click="dataStore.folder.uploadActive = !dataStore.folder.uploadActive"
       >
+        <span class="icon-upload text-lg mr-2"></span>
         {{ $t('general.upload') }}
       </n-button>
-
-      <!-- Download files -->
-      <n-tooltip placement="bottom" :show="showPopoverDownload">
-        <template #trigger>
-          <n-button
-            size="small"
-            :focus="true"
-            :title="$t('storage.selectFiles')"
-            :loading="downloading"
-            @click="downloadSelectedFiles"
-          >
-            {{ $t('general.download') }}
-          </n-button>
-        </template>
-        <span>{{ $t('storage.selectFiles') }}</span>
-      </n-tooltip>
-
-      <!-- Delete files -->
-      <n-tooltip placement="bottom" :show="showPopoverDelete">
-        <template #trigger>
-          <n-button
-            size="small"
-            :active="true"
-            :title="$t('storage.selectFiles')"
-            @click="deleteSelectedFiles"
-          >
-            {{ $t('general.delete') }}
-          </n-button>
-        </template>
-        <span>{{ $t('storage.selectFiles') }}</span>
-      </n-tooltip>
     </n-space>
   </n-space>
 

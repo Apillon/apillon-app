@@ -1,37 +1,60 @@
 <template>
   <div>
     <n-upload :show-file-list="false" multiple directory-dnd :custom-request="uploadFilesRequest">
-      <n-upload-dragger>
-        <div class="text-sm">
-          <span class="mr-1">{{ $t('storage.file.dragAndDrop') }}</span>
-          <strong class="text-primary">{{ $t('storage.file.clickToUpload') }}</strong>
+      <n-upload-dragger :style="uploadHeight">
+        <div class="py-2 text-center">
+          <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
+            <span class="icon-upload text-violet text-2xl"></span>
+          </div>
+
+          <h4 class="mb-1">{{ $t('storage.file.upload') }}</h4>
+          <span class="text-body">{{ $t('storage.file.dragAndDrop') }}</span>
         </div>
       </n-upload-dragger>
     </n-upload>
 
-    <n-scrollbar class="max-h-[50vh]" y-scrollable>
-      <div v-if="fileList" class="n-upload-file-list mt-4">
-        <div v-for="file in fileList" class="n-upload-file">
-          <StorageFileListItem v-bind="file" />
-        </div>
-      </div>
-    </n-scrollbar>
-
-    <n-space
+    <!-- Upload - File list  -->
+    <div
       v-if="fileList && fileList.length > 0"
-      class="upload-actions"
-      justify="end"
-      align="center"
+      class="fixed right-0 bottom-0 w-[30rem] bg-bg-light border-1 border-bg-lighter"
     >
-      <div class="wrap-directory">
-        <n-checkbox
-          v-model:checked="wrapToDirectory"
-          size="medium"
-          :label="$t('storage.wrapToDirectory')"
-        />
-      </div>
-      <n-button type="primary" @click="uploadFiles">{{ $t('general.upload') }}</n-button>
-    </n-space>
+      <!-- Header -->
+      <n-space justify="space-between" align="center">
+        <n-space justify="space-between" align="center">
+          <span class="icon-upload text-2xl mr-5"></span>
+          <div>
+            <strong>{{ $t('storage.file.confirmUpload') }}</strong>
+            <span class="text-body">
+              {{ $t('storage.file.files', { files: fileList.length }) }}
+            </span>
+          </div>
+        </n-space>
+        <button>
+          <span class="icon-delete text-2xl"></span>
+        </button>
+      </n-space>
+
+      <!-- LIST -->
+      <n-scrollbar class="max-h-72" y-scrollable>
+        <div v-if="fileList" class="n-upload-file-list mt-4">
+          <div v-for="file in fileList" class="n-upload-file">
+            <StorageFileListItem v-bind="file" />
+          </div>
+        </div>
+      </n-scrollbar>
+
+      <!-- Actions -->
+      <n-space class="upload-actions" justify="end" align="center">
+        <div class="wrap-directory">
+          <n-checkbox
+            v-model:checked="wrapToDirectory"
+            size="medium"
+            :label="$t('storage.wrapToDirectory')"
+          />
+        </div>
+        <n-button type="primary" @click="uploadFiles">{{ $t('general.upload') }}</n-button>
+      </n-space>
+    </div>
 
     <!-- Modal - Wrap files to folder -->
     <modal
@@ -88,6 +111,13 @@ const batchId = ref<string>('');
 const sessionUuid = ref<string>('');
 const fileList = ref<Array<FileListItemType>>([]);
 const promises = ref<Array<Promise<any>>>([]);
+
+/** Upload height */
+const uploadHeight = computed(() => {
+  return {
+    height: dataStore.folder.selectedItems.length ? 'auto' : 'calc(100vh - 370px)',
+  };
+});
 
 /** Wrap files to directory */
 const showModalWrapFolder = ref<boolean>(false);

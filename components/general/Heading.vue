@@ -1,7 +1,7 @@
 <template>
   <!-- Heading template -->
   <div class="mb-8 border-b-1 border-bg-lighter">
-    <n-space justify="space-between" align="center" class="pb-8">
+    <n-space justify="space-between" align="center" class="pb-8 min-h-[40px] box-content">
       <!-- Title - left side -->
       <slot />
 

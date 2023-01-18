@@ -1,29 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <n-space align="center" :size="32">
-            <NuxtLink :to="{ name: 'dashboard-service-storage' }">
-              <span class="icon-back"></span>
-            </NuxtLink>
-            <h4>{{ dataStore.bucket.active.name }}</h4>
-          </n-space>
-        </slot>
-
-        <template #info>
-          <StorageProgress
-            class="w-1/2"
-            :percentage="dataStore.currentBucket.percentage"
-            :size="dataStore.currentBucket.size || 0"
-            :max-size="dataStore.currentBucket.maxSize || 0"
-          />
-        </template>
-
-        <template #submenu>
-          <MenuBucketManagement />
-        </template>
-      </Heading>
+      <StorageHeading />
     </template>
 
     <slot>
