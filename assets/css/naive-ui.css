@@ -290,6 +290,7 @@ body > .n-message-container {
   /** Dialog */
   &.n-dialog {
     min-width: 660px;
+    border: var(--n-border);
 
     .n-dialog {
       &__close {

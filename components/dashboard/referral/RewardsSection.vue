@@ -3,7 +3,7 @@
     <Spinner />
   </div>
   <!-- Referral - rewards -->
-  <div v-else>
+  <div v-else class="pb-8">
     <div v-for="(item, index) in merchData" :key="index" class="bg-grey-dark px-10 py-5 mb-4">
       <!-- Item Name -->
 

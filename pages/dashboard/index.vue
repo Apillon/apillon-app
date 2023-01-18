@@ -1,7 +1,14 @@
 <template>
   <Dashboard>
+    <template #heading>
+      <Heading>
+        <slot>
+          <h4>{{ $t('dashboard.homepage') }}</h4>
+        </slot>
+      </Heading>
+    </template>
     <slot>
-      <div class="flex lg:flex-nowrap flex-wrap gap-8 max-w-[980px] p-8 bg-bg-lighter">
+      <div class="flex lg:flex-nowrap flex-wrap gap-8 max-w-[980px] p-8 mb-7 bg-bg-lighter">
         <div class="max-w-[480px]">
           <h4 class="mb-4">Welcome to Apillon</h4>
           <p>
@@ -32,23 +39,21 @@
           <Image src="/images/dashboard/welcome.svg" :width="400" :height="470" alt="apillon" />
         </div>
       </div>
-      <div class="max-w-[980px] p-8 mt-7 bg-bg-lighter">
-        <p>
-          <strong>Referral link</strong>
+
+      <!-- Referral -->
+      <div v-if="isFeatureEnabled(Feature.REFERRAL)" class="max-w-lg p-8 bg-bg-light">
+        <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
+        <p class="text-body mb-7">
+          {{ $t('referral.banner.description') }}
         </p>
-        <Btn :loading="loading" type="primary" @click="enterReferral()">
-          Start your referral journey
+        <Btn :loading="loading" type="primary" size="large" @click="enterReferral()">
+          {{ $t('referral.banner.btn') }}
         </Btn>
-        <!-- <div class="max-w-[480px]">
-          <div class="p-4 bg-bg-light mt-2">
-            <p>
-              {{ authStore.userUuid }}
-            </p>
-          </div>
-        </div> -->
       </div>
     </slot>
   </Dashboard>
+
+  <!-- Modal Referral -->
   <modal v-model:show="showModal" :title="$t('referral.enter.header')">
     <ReferralAcceptTerms />
   </modal>
@@ -56,9 +61,9 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const authStore = useAuthStore();
-const referralStore = useReferralStore();
 const router = useRouter();
+const config = useRuntimeConfig();
+const referralStore = useReferralStore();
 
 useHead({
   title: t('dashboard.dashboard'),
@@ -75,16 +80,23 @@ function enterReferral() {
 const loading = ref(false);
 const termsAccepted = ref(false);
 
-getReferral();
+onMounted(() => {
+  if (isFeatureEnabled(Feature.REFERRAL)) {
+    getReferral();
+  }
+});
+
 async function getReferral() {
   loading.value = true;
   try {
-    const res = await $api.get(endpoints.referral);
+    const res = await $api.get<ReferralResponse>(endpoints.referral);
     // If there is no error -> user already accepted terms & conditions
     referralStore.initReferral(res.data);
     termsAccepted.value = true;
   } catch (e) {
-    console.error(e);
+    if (config.public.ENV === AppEnv.LOCAL) {
+      console.error(e);
+    }
   }
   loading.value = false;
 }

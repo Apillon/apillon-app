@@ -1,24 +1,24 @@
 <template>
-  <n-form
-    ref="formRef"
-    class="max-w-lg"
-    :model="formData"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-  >
-    <div class="flex justify-between">
-      <div class="mt-4">
-        <strong>{{ $t('referral.connectTwitter') }}</strong>
-      </div>
-
-      <!-- <div class="relative mt-10">
-        <ReferralPoints :points="2" />
-      </div> -->
+  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+    <div class="flex gap-8">
+      <n-form-item
+        class="w-full"
+        path="name"
+        :label="$t('referral.connectTwitter')"
+        :label-props="{ for: 'email' }"
+      >
+        <n-input
+          v-model:value="formData.email"
+          :input-props="{ id: 'email' }"
+          placeholder=""
+          clearable
+        />
+      </n-form-item>
 
       <!--  Submit -->
-      <n-form-item :show-label="false">
+      <n-form-item class="min-w-[110px]" label="">
         <input type="submit" class="hidden" :value="$t('form.connect')" />
-        <Btn type="primary" class="mt-2" :loading="loading" @click="handleSubmit">
+        <Btn type="primary" size="large" :loading="loading" @click="handleSubmit">
           {{ referralStore.twitter_id ? 'Disconnect' : $t('form.connect') }}
         </Btn>
       </n-form-item>

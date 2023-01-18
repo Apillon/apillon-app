@@ -3,9 +3,9 @@
   <div class="bg-grey-dark px-10 py-5">
     <div class="mt-5 flex justify-between">
       <h4>{{ $t('referral.connect') }}</h4>
-      <div>
-        {{ '+2 per connection' }}
-      </div>
+      <n-tag type="info" size="large" round>
+        <strong>{{ '+2 per connection' }}</strong>
+      </n-tag>
     </div>
     <!-- Referral - connect Twitter -->
     <div class="mt-20">

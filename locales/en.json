@@ -80,6 +80,7 @@
     "expiration": "Expiration",
     "gotIt": "Got it, thanks!",
     "goToApiManagement": "Go to central API management",
+    "homepage": "Homepage",
     "inviteTeamMember": "Invite team member",
     "invoiceDate": "Next invoice issue date",
     "invoiceTotal": "Invoice total",
@@ -410,10 +411,21 @@
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
+    "banner": {
+      "title": "Referral link",
+      "description": "Nam cras mattis placerat sed suspendisse. In sollicitudin tincidunt at pretium. Sed consectetur nunc risus elementum pellentesque. Leo interdum velit sapien sed vitae quis.",
+      "btn": "Start your referral journey"
+    },
     "enter": {
-      "header": "Enter Referral",
+      "header": "Let’s see if we can work together",
+      "description": "Mauris pellentesque arcu adipiscing facilisi duis. Integer laoreet donec vivamus arcu viverra feugiat mauris faucibus.",
       "country": "Choose your Country",
-      "terms": "I accept Terms & conditions"
+      "terms": {
+        "accept": "I accept the",
+        "andConditions": "terms and conditions",
+        "info": "Text about Terms & conditions",
+        "title": "Terms referral"
+      }
     },
     "claim": "Claim now",
     "claimMerchPack": "Claim merch pack",
@@ -443,7 +455,7 @@
     },
     "rewardsClaim": "Claim reward",
     "rewardsSize": "Choose the desired size. In case the size is not available we will send you whatever we have left. ",
-    "connect": "Connect your Twitter and Github accounts",
+    "connect": "Connect your social accounts",
     "earnPoints": "Earn Some POINTS",
     "invite": "Invite other developers and score",
     "link": "This is your referral link",
@@ -456,7 +468,9 @@
     },
     "shoutout": "Help us with the shoutout",
     "share": "Share",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "xpPoints": "XP points:",
+    "spendingPoints": "Spending points:"
   },
   "signup": {
     "alreadyHaveAccount": "Already have an account?",

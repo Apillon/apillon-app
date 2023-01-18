@@ -1,20 +1,29 @@
 <template>
   <Dashboard>
     <template #heading>
-      <div ref="headingRef" class="flex justify-between">
-        <h4>{{ $t('referral.title') }}</h4>
+      <div ref="headingRef" class="flex justify-between items-center pb-8">
+        <h1>{{ $t('referral.title') }}</h1>
 
         <!-- User points -->
-
-        <div class="flex mr-10">
-          <div class="mr-10">
-            {{ 'XP points: ' + referralStore.balance }}
-          </div>
-          <div>
-            {{ 'Spending points: ' + referralStore.balance_all }}
-          </div>
-        </div>
+        <n-space class="body-md" size="large">
+          <n-space class="bg-bg-dark pr-3 rounded-[20px]" size="large" align="center">
+            <div class="h-10 p-2 rounded-full transition-all duration-300 hover:bg-bg-lighter">
+              <NuxtIcon name="referral/spendable-points" class="icon-auto" filled />
+            </div>
+            <span>{{ $t('referral.xpPoints') }}</span>
+            <strong class="text-base text-blue">{{ referralStore.balance }}</strong>
+          </n-space>
+          <n-space class="bg-bg-dark pr-3 rounded-[20px]" size="large" align="center">
+            <div class="h-10 p-2 rounded-full transition-all duration-300 hover:bg-bg-lighter">
+              <NuxtIcon name="referral/xp-points" class="icon-auto" filled />
+            </div>
+            <span>{{ $t('referral.spendingPoints') }}</span>
+            <strong class="text-base text-pink">{{ referralStore.balance_all }}</strong>
+          </n-space>
+        </n-space>
       </div>
+    </template>
+    <slot>
       <div>
         <n-tabs type="line" animated>
           <n-tab-pane name="earnPoints" tab="Earn Points">
@@ -43,7 +52,7 @@
                   <div v-if="loading" class="mt-40">
                     <Spinner />
                   </div>
-                  <ReferralRewardsSection />
+                  <ReferralRewardsSection class="pb-8" />
                 </n-scrollbar>
               </div>
 
@@ -55,43 +64,32 @@
           </n-tab-pane>
         </n-tabs>
       </div>
-    </template>
-    <slot>
-      <!-- <div v-if="loading" class="mt-40">
-        <Spinner />
-      </div>
-     -->
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
-const router = useRouter();
-
-const referralStore = useReferralStore();
-const headingRef = ref<HTMLElement>();
-
-const scrollStyle = computed(() => {
-  return {
-    maxHeight: `calc(100vh - ${210 + (headingRef.value?.clientHeight || 0)}px)`,
-  };
-});
-
 const $i18n = useI18n();
+const router = useRouter();
+const referralStore = useReferralStore();
+const loading = ref(false);
+const headingRef = ref<HTMLElement>();
 
 useHead({
   title: $i18n.t('referral.title'),
 });
 
-const loading = ref(false);
+const scrollStyle = computed(() => {
+  return {
+    maxHeight: `calc(100vh - ${194 + (headingRef.value?.clientHeight || 0)}px)`,
+  };
+});
 
 getReferral();
 async function getReferral() {
   loading.value = true;
   try {
-    const res = await $api.get(endpoints.referral);
+    const res = await $api.get<ReferralResponse>(endpoints.referral);
     // If there is no error -> user already accepted terms & conditions
     referralStore.initReferral(res.data);
   } catch (e) {

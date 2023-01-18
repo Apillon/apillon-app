@@ -16,7 +16,7 @@
         <n-layout>
           <Header @toggleSidebar="toggleSidebar" />
           <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
-            <div ref="messageRef" class="relative py-8 px-4 sm:px-8">
+            <div ref="messageRef" class="relative pt-8 px-4 sm:px-8">
               <slot />
             </div>
             <!-- <CookieConsent /> -->

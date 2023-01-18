@@ -4,9 +4,9 @@
     <div class="">
       <div class="mt-5 flex justify-between">
         <h4 class="mb-6">{{ $t('referral.invite') }}</h4>
-        <div>
-          {{ '+2 per referral' }}
-        </div>
+        <n-tag type="info" size="large" round>
+          <strong>{{ '+2 per referral' }}</strong>
+        </n-tag>
       </div>
 
       <p class="max-w-[700px] font-button text-sm text-white mt-3">
@@ -18,11 +18,13 @@
       </p>
 
       <div class="max-w-[480px]">
-        <div class="p-4 bg-grey-dark mt-2 border-1 border-grey flex justify-between">
+        <div class="px-5 py-2 bg-grey-dark mt-2 border-1 border-grey flex justify-between">
           <p>
             {{ referralCode }}
           </p>
-          <div class="mt-1 cursor-pointer" @click="copyWalletNumber()">ikona</div>
+          <div class="mt-1 cursor-pointer" @click="copyWalletNumber()">
+            <span class="icon-copy text-xl"></span>
+          </div>
         </div>
       </div>
     </div>

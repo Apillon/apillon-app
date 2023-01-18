@@ -6,17 +6,25 @@
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
-    <div class="flex justify-between">
-      <div class="mt-4">
-        <strong>{{ $t('referral.connectGithub') }}</strong>
-      </div>
+    <div class="flex gap-8">
+      <n-form-item
+        class="w-full"
+        path="name"
+        :label="$t('referral.connectTwitter')"
+        :label-props="{ for: 'email' }"
+      >
+        <n-input
+          v-model:value="formData.email"
+          :input-props="{ id: 'email' }"
+          placeholder=""
+          clearable
+        />
+      </n-form-item>
 
-      <!-- <div class="relative mt-10">
-        <ReferralPoints :points="2" />
-      </div> -->
-      <n-form-item :show-label="false">
+      <!--  Submit -->
+      <n-form-item class="min-w-[110px]" label="">
         <input type="submit" class="hidden" :value="$t('form.connect')" />
-        <Btn type="primary" class="mt-2" :loading="loading" @click="handleSubmit">
+        <Btn type="primary" size="large" :loading="loading" @click="handleSubmit">
           {{ referralStore.github_id ? 'Disconnect' : $t('form.connect') }}
         </Btn>
       </n-form-item>

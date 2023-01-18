@@ -1,20 +1,20 @@
 <template>
   <!-- Referral - intro -->
-  <div>
+  <div class="p-8 border-1 border-bg-lighter">
     <h4>Info</h4>
 
-    <p class="font-button text-sm mb-7 text-white">
+    <p class="mb-4 text-sm text-body">
       <strong>{{ $t('referral.subtitle') }}</strong>
     </p>
 
-    <p class="font-button text-sm text-white">{{ $t('referral.instructionsHeader') }}</p>
-    <div class="font-button text-sm text-white">
+    <p class="text-sm text-body">{{ $t('referral.instructionsHeader') }}</p>
+    <div class="text-sm text-body">
       {{ $t('referral.instructions.first') }}
     </div>
-    <div class="font-button text-sm text-white">
+    <div class="text-sm text-body">
       {{ $t('referral.instructions.second') }}
     </div>
-    <div class="font-button text-sm text-white max-w-[540px]">
+    <div class="text-sm text-body max-w-[540px]">
       {{ $t('referral.instructions.third') }}
     </div>
   </div>

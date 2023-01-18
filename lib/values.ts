@@ -134,6 +134,8 @@ export const themeOverrides: GlobalThemeOverrides = {
     thTextColor: colors.white,
   },
   Dialog: {
+    border: `1px solid ${colors.bg.lighter}`,
+    borderRadius: '0px',
     closeBorderRadius: '50%',
     closeColorHover: colors.white,
     closeColorPressed: colors.white,
@@ -260,12 +262,16 @@ export const themeOverrides: GlobalThemeOverrides = {
     color: colors.bg.DEFAULT,
     peers: {
       Card: {
+        borderColor: colors.bg.lighter,
+        borderRadius: '0px',
         paddingSmall: '28px 40px',
         paddingMedium: '32px 64px',
         paddingLarge: '32px 64px',
         paddingHuge: '32px 64px',
       },
       Dialog: {
+        border: `1px solid ${colors.bg.lighter}`,
+        borderRadius: '0px',
         closeColorHover: 'inherit',
         closeMargin: '-24px -24px 0 0',
         contentMargin: '16px 0',
@@ -328,13 +334,26 @@ export const themeOverrides: GlobalThemeOverrides = {
     buttonHeightMedium: '20px',
     buttonWidthMedium: '20px',
   },
+  Tabs: {
+    panePaddingMedium: '32px 0 0',
+    tabBorderColor: colors.grey.lightBg,
+  },
   Tag: {
+    border: `1px solid ${colors.bg.lighter}`,
+    borderError: `1px solid ${colors.pink}`,
+    borderInfo: `1px solid ${colors.blue}`,
+    borderPrimary: `1px solid ${colors.primary}`,
+    borderSuccess: `1px solid ${colors.green}`,
+    borderWarning: `1px solid ${colors.orange}`,
     color: colors.bg.light,
     colorInfo: colors.blue,
     colorSuccess: colors.bg.light,
+    fontWeightStrong: 'bold',
+    padding: '1px 16px',
     textColor: colors.body,
-    textColorInfo: colors.bg.DEFAULT,
+    textColorInfo: colors.blue,
     textColorSuccess: colors.green,
+    textColorWarning: colors.orange,
   },
   Tooltip: {
     borderRadius: '6px',

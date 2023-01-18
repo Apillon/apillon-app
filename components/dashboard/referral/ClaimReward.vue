@@ -130,13 +130,11 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi, stepProps } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
-const referralStore = useReferralStore();
+import { useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
 const formRef = ref<NFormInst | null>(null);
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const message = useMessage();
 
 const props = defineProps({
   data: {

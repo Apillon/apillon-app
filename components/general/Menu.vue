@@ -39,7 +39,9 @@ function routeNameToKey(name: string) {
  * Render functions
  */
 function renderMenuLabel(option: NMenuOption) {
-  if ('href' in option) {
+  if ('disabled' in option && option.disabled) {
+    return h('span', { class: 'text-body' }, { default: () => option.label as string });
+  } else if ('href' in option) {
     return h('a', { href: option.href, target: '_blank' }, () => option.label as string);
   } else if ('path' in option) {
     return h(NuxtLink, { to: { path: option.path } }, () => option.label as string);

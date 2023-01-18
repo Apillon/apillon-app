@@ -81,7 +81,7 @@ function handleSubmit(e: MouseEvent | null) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
-    } else if (!formData.value.captcha) {
+    } else if (!formData.value.captcha && config.public.ENV !== AppEnv.LOCAL) {
       loading.value = true;
       captchaInput.value.execute();
     } else {
@@ -95,7 +95,7 @@ async function signupWithEmail() {
   loading.value = true;
 
   try {
-    const res = await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
+    await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
 
     if (!props.sendAgain) {
       router.push({ name: 'register-email' });

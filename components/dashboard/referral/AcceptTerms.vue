@@ -1,14 +1,15 @@
 <template>
   <!-- Referral enter -->
-
   <div class="">
-    <p class="mt-7 font-button text-base">
-      <strong>
-        {{ $t('referral.enter.country') }}
-      </strong>
+    <p class="mb-8 text-body">
+      {{ $t('referral.enter.description') }}
     </p>
     <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
-      <n-form-item path="country" :show-label="false">
+      <n-form-item
+        path="country"
+        :label="$t('referral.enter.country')"
+        :label-props="{ for: 'country' }"
+      >
         <n-select
           id="country"
           v-model:value="formData.country"
@@ -24,33 +25,36 @@
         <div class="flex">
           <n-checkbox id="terms" v-model:checked="formData.terms" size="large" />
           <div class="cursor-pointer ml-2" @click="openModal()">
-            {{ $t('referral.enter.terms') }}
+            {{ $t('referral.enter.terms.accept') }}
+            <Tag color="yellow" :on-hover="true">
+              {{ $t('referral.enter.terms.andConditions') }}
+            </Tag>
           </div>
         </div>
       </n-form-item>
 
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('form.login')" />
-        <Btn :loading="loading" type="primary" class="-mt-4" @click="handleSubmit">
+        <Btn :loading="loading" type="primary" class="-mt-4" size="large" @click="handleSubmit">
           {{ $t('referral.enter.header') }}
         </Btn>
       </n-form-item>
     </n-form>
 
-    <Modal v-model:show="showModal">
-      <h4>Terms referral</h4>
+    <Modal v-model:show="showModal" :title="$t('referral.enter.terms.title')">
+      <p>{{ $t('referral.enter.terms.info') }}</p>
+      <br />
     </Modal>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi, stepProps } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
+import { useMessage } from 'naive-ui';
 const referralStore = useReferralStore();
 
 const $i18n = useI18n();
 const formRef = ref<NFormInst | null>(null);
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const message = useMessage();
 
 const formData = ref({
   terms: undefined,
@@ -102,7 +106,7 @@ const emit = defineEmits(['enterReferral']);
 async function enterReferral() {
   loading.value = true;
   try {
-    const res = await $api.post(endpoints.referral, {
+    const res = await $api.post<ReferralResponse>(endpoints.referral, {
       termsAccepted: true,
     });
     referralStore.initReferral(res.data);
@@ -119,12 +123,3 @@ function openModal() {
   showModal.value = true;
 }
 </script>
-
-<style>
-.v-vl-visible-items {
-  padding: 0 !important;
-}
-.n-base-select-option {
-  background-color: #313442 !important;
-}
-</style>
