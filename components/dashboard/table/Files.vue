@@ -307,7 +307,7 @@ const columns = computed(() => {
 
 const rowKey = (row: FolderInterface) => row.id;
 
-const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
+const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
   const rowKeyIds = rowKeys.map(item => intVal(item));
 
   dataStore.folder.selectedItems = dataStore.folder.items.filter(item =>

@@ -472,6 +472,7 @@
       "delete": "Delete file",
       "downloadLink": "Download link",
       "dragAndDrop": "Drag & drop or click to upload.",
+      "files": "({files} files)",
       "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab.",
       "search": "Search files",
       "upload": "Upload files and folders"
