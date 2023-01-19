@@ -1,16 +1,14 @@
 <template>
-  <div class="pb-8">
+  <n-space class="pb-8" :size="16" vertical>
     <!-- Referral referres -->
     <ReferralReferres />
 
     <!-- Connect social accounts -->
-    <div class="mt-5">
-      <ReferralConnectSection />
-    </div>
+    <ReferralConnectSection />
 
     <!-- Referral Share -->
     <ReferralShoutoutSection />
-  </div>
+  </n-space>
 </template>
 
 <script lang="ts" setup></script>

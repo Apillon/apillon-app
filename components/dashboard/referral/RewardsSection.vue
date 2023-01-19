@@ -4,7 +4,7 @@
   </div>
   <!-- Referral - rewards -->
   <div v-else class="pb-8">
-    <div v-for="(item, index) in merchData" :key="index" class="bg-grey-dark px-10 py-5 mb-4">
+    <div v-for="(item, index) in merchData" :key="index" class="bg-bg-light p8 mb-4">
       <!-- Item Name -->
 
       <!-- Item points cost -->

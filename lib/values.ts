@@ -339,7 +339,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     tabBorderColor: colors.grey.lightBg,
   },
   Tag: {
-    border: `1px solid ${colors.bg.lighter}`,
+    border: `1px solid ${colors.body}`,
     borderError: `1px solid ${colors.pink}`,
     borderInfo: `1px solid ${colors.blue}`,
     borderPrimary: `1px solid ${colors.primary}`,
@@ -347,12 +347,12 @@ export const themeOverrides: GlobalThemeOverrides = {
     borderWarning: `1px solid ${colors.orange}`,
     color: colors.bg.light,
     colorInfo: colors.blue,
-    colorSuccess: colors.bg.light,
+    colorSuccess: colors.green,
     fontWeightStrong: 'bold',
     padding: '1px 16px',
     textColor: colors.body,
     textColorInfo: colors.blue,
-    textColorSuccess: colors.green,
+    textColorSuccess: colors.bg.dark,
     textColorWarning: colors.orange,
   },
   Tooltip: {

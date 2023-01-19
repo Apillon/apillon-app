@@ -1,16 +1,10 @@
 <template>
-  <n-form
-    ref="formRef"
-    class="max-w-lg"
-    :model="formData"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <div class="flex gap-8">
       <n-form-item
         class="w-full"
         path="name"
-        :label="$t('referral.connectTwitter')"
+        :label="$t('referral.connectGithub')"
         :label-props="{ for: 'email' }"
       >
         <n-input

@@ -1,22 +1,23 @@
 <template>
   <!-- Referral - intro -->
-  <div class="bg-grey-dark px-10 py-5">
+  <div class="bg-bg-light p-8">
     <div class="mt-5 flex justify-between">
       <h4>{{ $t('referral.connect') }}</h4>
       <n-tag type="info" size="large" round>
         <strong>{{ '+2 per connection' }}</strong>
       </n-tag>
     </div>
+
     <!-- Referral - connect Twitter -->
-    <div class="mt-20">
+    <div class="mt-4">
       <FormReferralTwitter />
     </div>
-    <div class="mt-20 pt-10">
+
+    <!-- Referral - connect GitHub -->
+    <div>
       <FormReferralGitHub />
     </div>
   </div>
-
-  <!-- Referral - connect GitHub -->
 </template>
 
 <script lang="ts" setup></script>

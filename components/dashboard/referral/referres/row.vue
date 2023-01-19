@@ -1,21 +1,20 @@
 <template>
   <!-- Referral - intro -->
-  <div class="bg-grey-lightBg grid grid-cols-3 gap-4 py-4">
-    <div class="pl-5 text-secondary flex">
-      <div
-        class="w-[8px] h-[8px] rounded-full mr-3 mt-[6px]"
-        :class="[item.has_github ? 'bg-green' : 'bg-grey-dark']"
-      ></div>
+  <div class="border-b-1 border-bg-lighter grid grid-cols-3 gap-4 py-4">
+    <div class="pl-3">
       {{ item.name }}
     </div>
     <div class="text-dark">
-      <div class="w-auto">
-        <strong :class="[item.has_github ? 'bg-green' : 'bg-grey-rewardsBg']">
-          {{ item.has_github ? 'Added' : 'Missing' }}
-        </strong>
+      <div class="w-auto text-right">
+        <n-tag v-if="item.has_github" type="success" :bordered="false" round>
+          <strong>ADDED</strong>
+        </n-tag>
+        <n-tag v-else bordered round>
+          <strong>MISSING</strong>
+        </n-tag>
       </div>
     </div>
-    <div class="text-grey-light">
+    <div class="pr-3 text-grey-light text-right">
       {{ getTimeSince(item.joined) }}
     </div>
   </div>
@@ -28,13 +27,13 @@ defineProps({
     type: Object,
     default: () => ({
       name: '',
-      github: false,
+      has_github: false,
       joined: '',
     }),
   },
 });
 
-function getTimeSince(date) {
+function getTimeSince(date: string) {
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
   const firstDate = new Date();
   const secondDate = new Date(date);

@@ -1,8 +1,8 @@
 <template>
   <!-- Referral - intro -->
-  <div class="bg-grey-dark px-10 py-5">
+  <div class="bg-bg-light p-8">
     <div class="">
-      <div class="mt-5 flex justify-between">
+      <div class="flex justify-between">
         <h4 class="mb-6">{{ $t('referral.invite') }}</h4>
         <n-tag type="info" size="large" round>
           <strong>{{ '+2 per referral' }}</strong>
@@ -18,7 +18,7 @@
       </p>
 
       <div class="max-w-[480px]">
-        <div class="px-5 py-2 bg-grey-dark mt-2 border-1 border-grey flex justify-between">
+        <div class="px-5 py-2 bg-bg-light mt-2 border-1 border-grey flex justify-between">
           <p>
             {{ referralCode }}
           </p>
@@ -30,12 +30,12 @@
     </div>
 
     <!-- Referral - points -->
-    <div class="text-white">
-      <p class="font-button text-sm mb-8 text-white mt-20">
-        <strong>{{ $t('referral.referres.header') }}</strong>
-      </p>
+    <div class="mt-12 text-white">
+      <h4 class="mb-4">
+        {{ $t('referral.referres.header') }}
+      </h4>
 
-      <p class="font-button text-sm text-white mt-3 max-w-[700px] mb-5">
+      <p class="font-button text-sm text-body mb-6">
         {{ $t('referral.linkDesc') }}
       </p>
 
@@ -43,8 +43,9 @@
         <div class="pl-5">
           <strong>{{ $t('referral.referres.name') }}</strong>
         </div>
-        <div>
+        <div class="flex gap-1 items-center">
           <strong>{{ $t('referral.referres.github') }}</strong>
+          <span class="icon-info text-2xl"></span>
         </div>
         <div>
           <strong>{{ $t('referral.referres.joined') }}</strong>
@@ -73,25 +74,25 @@ function copyWalletNumber() {
 }
 
 const referres = referralStore.referrals;
-// [
+// const referres = [
 //   {
 //     name: 'f***.y***@g***.com',
-//     github: true,
+//     has_github: true,
 //     joined: '32d',
 //   },
 //   {
 //     name: 'f***.y***@g***.com',
-//     github: false,
+//     has_github: false,
 //     joined: '1d',
 //   },
 //   {
 //     name: 'f***.y***@g***.com',
-//     github: true,
+//     has_github: true,
 //     joined: '32d',
 //   },
 //   {
 //     name: 'f***.y***@g***.com',
-//     github: true,
+//     has_github: true,
 //     joined: '32d',
 //   },
 // ];
