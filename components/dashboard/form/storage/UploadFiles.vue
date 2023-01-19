@@ -16,79 +16,115 @@
     <!-- Upload - File list  -->
     <div
       v-if="fileList && fileList.length > 0"
-      class="fixed right-0 bottom-0 w-[30rem] bg-bg-light border-1 border-bg-lighter"
+      class="fixed right-0 bottom-0 w-[30rem] px-5 py-3 bg-bg-light border-1 border-bg-lighter z-10"
     >
       <!-- Header -->
-      <n-space justify="space-between" align="center">
+      <n-space v-if="allFilesSuccess" justify="space-between" align="center">
         <n-space justify="space-between" align="center">
-          <span class="icon-upload text-2xl mr-5"></span>
+          <IconSuccessful />
+          <div>
+            <strong>{{ $t('storage.file.uploadSuccessful') }}</strong>
+          </div>
+        </n-space>
+        <n-space align="center">
+          <button class="p-2" @click="fileListExpanded = !fileListExpanded">
+            <span
+              class="icon-down align-middle text-2xl"
+              :class="[fileListExpanded ? 'icon-down' : 'icon-up']"
+            ></span>
+          </button>
+          <button class="p-2" @click="clearFileList">
+            <span class="icon-close align-middle text-2xl"></span>
+          </button>
+        </n-space>
+      </n-space>
+      <n-space v-else justify="space-between" align="center">
+        <n-space justify="space-between" align="center">
+          <span class="icon-upload align-middle text-2xl mr-2"></span>
           <div>
             <strong>{{ $t('storage.file.confirmUpload') }}</strong>
-            <span class="text-body">
+            <span class="ml-1 text-body">
               {{ $t('storage.file.files', { files: fileList.length }) }}
             </span>
           </div>
         </n-space>
-        <button>
-          <span class="icon-delete text-2xl"></span>
+        <button class="p-2" @click="clearFileList">
+          <span class="icon-delete align-middle text-2xl"></span>
         </button>
       </n-space>
 
       <!-- LIST -->
-      <n-scrollbar class="max-h-72" y-scrollable>
-        <div v-if="fileList" class="n-upload-file-list mt-4">
-          <div v-for="file in fileList" class="n-upload-file">
-            <StorageFileListItem v-bind="file" />
-          </div>
+      <n-scrollbar v-if="fileList && fileListExpanded" class="max-h-72 mt-4" y-scrollable>
+        <div v-for="file in fileList" :key="file.id">
+          <StorageFileListItem
+            :id="file.id"
+            :name="file.name"
+            :full-path="file.fullPath || ''"
+            :percentage="file.percentage"
+            :status="file.status"
+            @remove-file="removeFileFromFileList"
+          />
         </div>
       </n-scrollbar>
 
       <!-- Actions -->
-      <n-space class="upload-actions" justify="end" align="center">
-        <div class="wrap-directory">
-          <n-checkbox
-            v-model:checked="wrapToDirectory"
-            size="medium"
-            :label="$t('storage.wrapToDirectory')"
-          />
+      <template v-if="fileListExpanded">
+        <div v-if="allFilesSuccess" class="w-full mt-10 mb-2">
+          <n-button class="w-full" @click="clearFileList(true)">
+            <span class="text-primary">{{ $t('storage.file.refresh') }}</span>
+          </n-button>
         </div>
-        <n-button type="primary" @click="uploadFiles">{{ $t('general.upload') }}</n-button>
-      </n-space>
-    </div>
+        <div v-else-if="allFilesFinished" class="w-full mt-10 mb-2">
+          <n-button class="w-full" type="primary" tertiary @click="retryUpload()">
+            <span class="text-primary">{{ $t('storage.file.retry') }}</span>
+          </n-button>
+        </div>
+        <n-grid v-else class="w-full mt-10 mb-2" :cols="2" :span="2" :x-gap="8">
+          <n-gi class="self-center">
+            <n-checkbox
+              v-model:checked="wrapToDirectory"
+              size="medium"
+              :label="$t('storage.wrapToDirectory')"
+            />
+          </n-gi>
+          <n-gi>
+            <Btn type="primary" size="large" :loading="uploading" @click="uploadFiles">
+              {{ $t('storage.file.uploadNow') }}
+            </Btn>
+          </n-gi>
+        </n-grid>
+      </template>
 
-    <!-- Modal - Wrap files to folder -->
-    <modal
-      v-model:show="showModalWrapFolder"
-      :title="$t('storage.wrapFiles')"
-      @update:show="onModalShow"
-    >
-      <p>{{ $t('storage.wrapFilesDescription') }}</p>
-      <br />
-      <!--  Folder name -->
-      <n-form-item
-        path="name"
-        :label="$t('form.label.folderName')"
-        :label-props="{ for: 'folderName' }"
-      >
-        <n-input
-          v-model:value="folderName"
-          :placeholder="$t('form.placeholder.folderName')"
-          @input="handleFolderNameInput"
-        />
-      </n-form-item>
-      <n-grid :cols="2" :span="2" :x-gap="8">
-        <n-gi>
-          <n-button class="w-full" type="primary" @click="uploadDirectory">
-            {{ $t('general.upload') }}
-          </n-button>
-        </n-gi>
-        <n-gi>
-          <n-button class="w-full" type="primary" ghost @click="uploadFiles">
-            {{ $t('general.skip') }}
-          </n-button>
-        </n-gi>
-      </n-grid>
-    </modal>
+      <!-- Modal - Wrap files to folder -->
+      <modal v-model:show="showModalWrapFolder" :title="$t('storage.wrapFiles')">
+        <p>{{ $t('storage.wrapFilesDescription') }}</p>
+        <br />
+        <!--  Folder name -->
+        <n-form-item
+          path="name"
+          :label="$t('form.label.folderName')"
+          :label-props="{ for: 'folderName' }"
+        >
+          <n-input
+            v-model:value="folderName"
+            :placeholder="$t('form.placeholder.folderName')"
+            @input="handleFolderNameInput"
+          />
+        </n-form-item>
+        <n-grid :cols="2" :span="2" :x-gap="8">
+          <n-gi>
+            <n-button class="w-full" type="primary" @click="uploadDirectory">
+              {{ $t('general.upload') }}
+            </n-button>
+          </n-gi>
+          <n-gi>
+            <n-button class="w-full" type="primary" ghost @click="uploadFiles">
+              {{ $t('general.skip') }}
+            </n-button>
+          </n-gi>
+        </n-grid>
+      </modal>
+    </div>
   </div>
 </template>
 
@@ -107,15 +143,17 @@ const dataStore = useDataStore();
 const config = useRuntimeConfig();
 
 const BASE_UPLOAD_SPEED = 1024;
+const uploading = ref<boolean>(false);
 const batchId = ref<string>('');
 const sessionUuid = ref<string>('');
 const fileList = ref<Array<FileListItemType>>([]);
+const fileListExpanded = ref<boolean>(true);
 const promises = ref<Array<Promise<any>>>([]);
 
 /** Upload height */
 const uploadHeight = computed(() => {
   return {
-    height: dataStore.folder.selectedItems.length ? 'auto' : 'calc(100vh - 370px)',
+    height: (dataStore.bucket?.active?.size || 0) > 0 ? 'auto' : 'calc(100vh - 370px)',
   };
 });
 
@@ -123,20 +161,6 @@ const uploadHeight = computed(() => {
 const showModalWrapFolder = ref<boolean>(false);
 const wrapToDirectory = ref<boolean>(false);
 const folderName = ref<string>('');
-
-watch(
-  () => wrapToDirectory.value,
-  wrap => {
-    if (wrap) {
-      // showModalWrapFolder.value = wrap;
-    }
-  }
-);
-function onModalShow(value: boolean) {
-  if (!value) {
-    // wrapToDirectory.value = false;
-  }
-}
 
 /** Calculate average upload speed from uploaded files */
 const avgUploadSpeed = computed(() => {
@@ -164,28 +188,44 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
     onFinish,
     onError,
   };
-  fileList.value.push(fileListItem);
+
+  if (fileAlreadyOnFileList(fileListItem)) {
+    onError();
+  } else {
+    fileList.value.push(fileListItem);
+  }
 }
 
-async function uploadFiles() {
+/** Upload wrapper functions */
+function uploadFiles() {
   if (wrapToDirectory.value && !showModalWrapFolder.value) {
     showModalWrapFolder.value = true;
     return;
   }
 
   fileList.value.forEach(file => {
-    uploadFile(file);
+    uploadFile(file, wrapToDirectory.value);
   });
   showModalWrapFolder.value = false;
 }
-async function uploadDirectory() {
+function uploadDirectory() {
   fileList.value.forEach(file => {
     uploadFile(file, true);
   });
   showModalWrapFolder.value = false;
 }
+function retryUpload() {
+  removeFinishedFilesFromList();
+
+  fileList.value.forEach(file => {
+    uploadFile(file, wrapToDirectory.value);
+  });
+}
 
 async function uploadFile(file: FileListItemType, wrapToFolder: Boolean = false) {
+  /** Loading animation */
+  uploading.value = true;
+
   /** Refresh timestamp */
   file.timestamp = Date.now();
 
@@ -206,6 +246,7 @@ async function uploadFile(file: FileListItemType, wrapToFolder: Boolean = false)
   }
 
   createFileProgress(file.id);
+  updateFileStatus(file.id, FileUploadStatusValue.UPLOADING);
 
   try {
     /** Upload file request */
@@ -217,12 +258,8 @@ async function uploadFile(file: FileListItemType, wrapToFolder: Boolean = false)
     const res = await request;
 
     /** Upload file to S3 */
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open('PUT', res.data.signedUrlForUpload, true);
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-      }
-    };
     xhr.onload = () => {
       file.onFinish();
       updateFileStatus(file.id, FileUploadStatusValue.FINISHED);
@@ -277,16 +314,29 @@ function wrapperFolderPath(path: string): string {
   );
 }
 
+/** Check if file is already on list */
+function fileAlreadyOnFileList(file: FileListItemType) {
+  return (
+    fileList.value.find(
+      item =>
+        item.name === file.name &&
+        item.fullPath === file.fullPath &&
+        item.status === file.status &&
+        item.file?.lastModified === file.file?.lastModified
+    ) !== undefined
+  );
+}
+
 /** Update file property */
 function updateFilePercentage(fileId: string, percent: number) {
-  fileList.value.map(item => {
+  fileList.value.forEach(item => {
     if (item.id === fileId) {
       item.percentage = percent;
     }
   });
 }
 function updateFileStatus(fileId: string, status: FileUploadStatus) {
-  fileList.value.map(item => {
+  fileList.value.forEach(item => {
     if (item.id === fileId) {
       item.status = status;
 
@@ -310,23 +360,40 @@ function updateFileStatus(fileId: string, status: FileUploadStatus) {
 
         clearInterval(item.progress);
 
-        /** Refresh diretory content */
-        if (allFilesFinished()) {
-          dataStore.fetchDirectoryContent();
-
-          /** After 3s, remove finished files */
-          setTimeout(() => {
-            removeFinishedFilesFromList();
-          }, 5000);
+        if (allFilesFinished.value) {
+          /** Loading animation */
+          uploading.value = false;
         }
       }
     }
   });
 }
 
+/** Clear file list */
+function clearFileList(refreshDirectoryContent: boolean = false) {
+  fileList.value.forEach(item => {
+    item.onError();
+  });
+  fileList.value = [] as Array<FileListItemType>;
+
+  if (refreshDirectoryContent) {
+    dataStore.fetchDirectoryContent();
+  }
+}
+
+/** Remove one file from file list */
+function removeFileFromFileList(fileId: string) {
+  fileList.value.forEach(item => {
+    if (item.id === fileId) {
+      item.onError();
+    }
+  });
+  fileList.value = fileList.value.filter(item => item.id !== fileId);
+}
+
 /** HOSTING: Upload Session End  */
 async function uploadSessionEnd(sessionUuid: string) {
-  if (!allFilesFinished()) {
+  if (!allFilesFinished.value) {
     return;
   }
   try {
@@ -345,18 +412,27 @@ async function uploadSessionEnd(sessionUuid: string) {
     message.error(userFriendlyMsg(error));
   }
   /** Refresh diretory content */
-  dataStore.fetchDirectoryContent();
+  await dataStore.fetchDirectoryContent();
+
+  /** Loading animation */
+  uploading.value = false;
 }
 
 /** Check if all files are finished (status FINISH or ERROR) */
-function allFilesFinished(): boolean {
-  const uploadingFiles = fileList.value.find(
-    file =>
-      file.status === FileUploadStatusValue.PENDING ||
-      file.status === FileUploadStatusValue.UPLOADING
+const allFilesFinished = computed<boolean>(() => {
+  return (
+    fileList.value.find(
+      file =>
+        file.status === FileUploadStatusValue.PENDING ||
+        file.status === FileUploadStatusValue.UPLOADING
+    ) === undefined
   );
-  return uploadingFiles === undefined;
-}
+});
+
+/** Check if all files are finished (status FINISH or ERROR) */
+const allFilesSuccess = computed<boolean>(() => {
+  return fileList.value.find(file => file.status !== FileUploadStatusValue.FINISHED) === undefined;
+});
 
 /** Remove finished files from list */
 function removeFinishedFilesFromList() {
@@ -366,7 +442,7 @@ function removeFinishedFilesFromList() {
 
 /** Calculate file upload progress */
 function createFileProgress(fileId: string) {
-  fileList.value.map(file => {
+  fileList.value.forEach(file => {
     if (file.id === fileId) {
       const timeFor1Percent = file.size / 100 / avgUploadSpeed.value;
 

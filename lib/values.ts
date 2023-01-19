@@ -117,7 +117,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     sizeLarge: '24px',
     fontSizeMedium: '14px',
     fontSizeLarge: '14px',
-    textColor: colors.body,
+    textColor: colors.white,
   },
   Collapse: {
     dividerColor: `${colors.body}66`,

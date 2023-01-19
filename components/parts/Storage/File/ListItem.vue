@@ -1,51 +1,42 @@
 <template>
-  <div class="flex pt-2 pb-1">
-    <div class="w-full">
-      <div class="flex justify-between">
-        <div class="">
-          <span class="inline-block text-sm mr-4 whitespace-nowrap">{{ name }}</span>
-          <span class="inline-block text-sm opacity-60 whitespace-nowrap">
-            {{ formatBytes(size) }}
-          </span>
-        </div>
-        <div v-if="status === FileUploadStatusValue.FINISHED" class="ml-4">
-          <span class="text-sm text-green">
-            {{ $t('storage.file.pinningToCrust') }}
-          </span>
-        </div>
+  <div class="flex p-3 border-b-1 border-bg-lighter">
+    <div class="w-full flex justify-between items-center">
+      <div class="flex flex-col w-full mr-4">
+        <strong class="body-md">{{ name }}</strong>
+        <span class="body-sm text-body">{{ folderPath(fullPath) }}</span>
+        <n-progress
+          v-if="status === FileUploadStatusValue.UPLOADING"
+          :key="percentage"
+          type="line"
+          :color="colors.primary"
+          :percentage="percentage"
+        />
       </div>
-      <n-progress
-        type="line"
-        :color="color"
-        :key="percentage"
-        :percentage="percentage"
-        :border-radius="0"
-        :height="4"
-      />
-    </div>
-    <div class="flex items-center justify-end min-w-[80px]">
-      <span
-        v-if="status === FileUploadStatusValue.FINISHED"
-        class="icon-check text-lg text-green"
-      ></span>
-      <span
-        v-else-if="status === FileUploadStatusValue.UPLOADING"
-        class="icon-delete text-lg"
-      ></span>
-      <span
-        v-else-if="status === FileUploadStatusValue.ERROR"
-        class="icon-close text-lg text-pink"
-      ></span>
+      <div class="flex items-center justify-end min-w-[40px]">
+        <button v-if="status === FileUploadStatusValue.PENDING" @click="onRemoveFile">
+          <span class="icon-close align-middle text-2xl"></span>
+        </button>
+        <span
+          v-else-if="status === FileUploadStatusValue.UPLOADING"
+          class="icon-delete align-middle text-2xl"
+        ></span>
+        <IconSuccessful v-else-if="status === FileUploadStatusValue.FINISHED" />
+        <span
+          v-else-if="status === FileUploadStatusValue.ERROR"
+          class="icon-close align-middle text-2xl text-pink"
+        ></span>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useThemeVars } from 'naive-ui';
+import colors from '~~/tailwind.colors';
 
 const props = defineProps({
+  id: { type: String, default: '' },
   name: { type: String, default: '' },
-  size: { type: Number, default: 0 },
+  fullPath: { type: String, default: '' },
   percentage: { type: Number, default: 0 },
   status: {
     type: String,
@@ -61,13 +52,17 @@ const props = defineProps({
   },
 });
 
-const themeVars = useThemeVars();
-const color = computed(() => {
-  switch (props.status) {
-    case FileUploadStatusValue.ERROR:
-      return themeVars.value.errorColor;
-    default:
-      return themeVars.value.successColor;
+/** Remove file from list */
+const emit = defineEmits(['removeFile']);
+function onRemoveFile() {
+  emit('removeFile', props.id);
+}
+
+function folderPath(pullPath: string) {
+  const parts = pullPath.split('/').filter(p => p);
+  if (parts.length <= 2) {
+    return '';
   }
-});
+  return parts.slice(0, -1).join(' / ');
+}
 </script>

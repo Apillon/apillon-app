@@ -468,14 +468,18 @@
       "items": "Download selected items"
     },
     "file": {
+      "confirmUpload": "Confirm your upload",
       "create": "Create file",
       "delete": "Delete file",
       "downloadLink": "Download link",
       "dragAndDrop": "Drag & drop or click to upload.",
       "files": "({files} files)",
       "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab.",
+      "refresh": "Refresh files",
+      "retry": "Retry upload",
       "search": "Search files",
-      "upload": "Upload files and folders"
+      "upload": "Upload files and folders",
+      "uploadNow": "Upload now"
     },
     "fileStatus": {
       "1": "Signed URL for upload generated",

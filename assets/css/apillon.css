@@ -26,8 +26,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-success:before {
+.icon-trash-restore:before {
   content: '\e93f';
+}
+.icon-restore:before {
+  content: '\e942';
 }
 .icon-create-folder:before {
   content: '\e940';
@@ -40,12 +43,6 @@
 }
 .icon-left-long:before {
   content: '\e938';
-}
-.icon-spendable-points:before {
-  content: '\e939';
-}
-.icon-xp-points:before {
-  content: '\e93a';
 }
 .icon-add:before {
   content: '\e93b';

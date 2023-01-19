@@ -1,5 +1,5 @@
 <template>
-  <n-space :wrap="false" align="center" justify="space-between">
+  <n-space :wrap="false" align="center">
     <span class="inline-block lg:min-w-[130px]">
       <span class="whitespace-nowrap">
         {{ $t('storage.usage', { used: formatBytes(size), max: formatBytes(maxSize) }) }}
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
+defineProps({
   size: { type: Number, default: 0 },
   maxSize: { type: Number, default: 0 },
   percentage: { type: Number, default: 0 },
