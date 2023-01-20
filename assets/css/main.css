@@ -7,6 +7,12 @@ body {
   margin-bottom: 0;
 }
 
+button.sm,
+button.small,
+.btn-small {
+  font-size: 13px;
+}
+
 .n-message-container {
   &.n-message-container--top {
     @apply absolute top-10;

@@ -53,6 +53,7 @@
       "copied": "Text has been copied to clipboard",
       "copy": "Copy to clipboard",
       "copyApiKey": "Copy Api key to clipboard",
+      "copyLink": "Copy link",
       "error": "Failed to copy"
     },
     "permissions": {
@@ -439,9 +440,10 @@
   "storage": {
     "bucket": {
       "addNew": "Add new bucket",
-      "buckets": "Storage buckets",
+      "buckets": "Buckets",
       "description": "Description",
       "destroy": "Destroy",
+      "destroyed": "Deleted buckets",
       "edit": "Edit bucket",
       "infoNew": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
       "management": "Bucket management",
@@ -474,11 +476,14 @@
       "downloadLink": "Download link",
       "dragAndDrop": "Drag & drop or click to upload.",
       "files": "({files} files)",
+      "filesUploading": "({uploading} of {files})",
       "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab.",
       "refresh": "Refresh files",
       "retry": "Retry upload",
       "search": "Search files",
       "upload": "Upload files and folders",
+      "uploading": "Uploading",
+      "uploadMore": "Add more files",
       "uploadNow": "Upload now"
     },
     "fileStatus": {
@@ -500,6 +505,7 @@
     "attachService": "First attach a desired service and configure it, then start building.",
     "contentType": "Content type",
     "downloadLink": "Download link",
+    "destroy": "Destroy",
     "edit": "Edit",
     "expiration": "Expired on blockchain",
     "fileCid": "File CID",
@@ -592,6 +598,9 @@
     "webhookTokenRequired": "Please enter token"
   },
   "w3Warn": {
-    "newBucket": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. Accumsan morbi lectus elit nunc. Arcu morbi pretium neque nibh eu vestibulum id sed adipiscing."
+    "bucket": {
+      "new": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. Accumsan morbi lectus elit nunc. Arcu morbi pretium neque nibh eu vestibulum id sed adipiscing.",
+      "destroyed": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. "
+    }
   }
 }

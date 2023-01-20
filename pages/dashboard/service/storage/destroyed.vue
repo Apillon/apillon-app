@@ -11,9 +11,6 @@
             <button class="align-sub" @click="showModalW3Warn = true">
               <span class="icon-info text-xl"></span>
             </button>
-            <Btn v-if="dataStore.hasBuckets" type="primary" size="small" @click="createNewBucket">
-              {{ $t('storage.bucket.new') }}
-            </Btn>
           </n-space>
         </template>
 
@@ -23,7 +20,7 @@
       </Heading>
     </template>
     <slot>
-      <TableBucket v-if="dataStore.hasBuckets" :buckets="dataStore.bucket.items" />
+      <TableBucket v-if="dataStore.hasDestroyedBuckets" :buckets="dataStore.bucket.destroyed" />
       <template v-else>
         <div
           class="flex flex-col items-center justify-center px-6 py-4"
@@ -36,22 +33,12 @@
             <h3 class="font-bold">{{ $t('storage.noActiveService') }}</h3>
             <p class="text-body">{{ $t('storage.attachService') }}</p>
           </div>
-          <div>
-            <Btn type="primary" @click="createNewBucket">
-              {{ $t('storage.bucket.new') }}
-            </Btn>
-          </div>
         </div>
       </template>
 
       <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
-        {{ $t('w3Warn.bucket.new') }}
+        {{ $t('w3Warn.bucket.destroyed') }}
       </W3Warn>
-
-      <!-- Modal - Create bucket -->
-      <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
-        <FormStorageBucket @submit-success="showModalNewBucket = false" />
-      </modal>
     </slot>
   </Dashboard>
 </template>

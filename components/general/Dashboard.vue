@@ -81,7 +81,6 @@ window.$message = useMessage();
 
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
-const $i18n = useI18n();
 const dataStore = useDataStore();
 const { isLg } = useScreen();
 const { name } = useRoute();

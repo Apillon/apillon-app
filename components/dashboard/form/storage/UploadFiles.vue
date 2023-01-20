@@ -19,7 +19,34 @@
       class="fixed right-0 bottom-0 w-[30rem] px-5 py-3 bg-bg-light border-1 border-bg-lighter z-10"
     >
       <!-- Header -->
-      <n-space v-if="allFilesSuccess" justify="space-between" align="center">
+      <n-space v-if="filesUploading" justify="space-between" align="center">
+        <n-space justify="space-between" align="center">
+          <IconUploading />
+          <div>
+            <strong>{{ $t('storage.file.uploading') }}</strong>
+            <span class="ml-1 text-body">
+              {{
+                $t('storage.file.filesUploading', {
+                  uploading: numOfUploadingFiles,
+                  files: fileList.length,
+                })
+              }}
+            </span>
+          </div>
+        </n-space>
+        <n-space align="center">
+          <button class="p-2" @click="fileListExpanded = !fileListExpanded">
+            <span
+              class="icon-down align-middle text-2xl"
+              :class="[fileListExpanded ? 'icon-down' : 'icon-up']"
+            ></span>
+          </button>
+          <button class="p-2" @click="clearFileList()">
+            <span class="icon-close align-middle text-2xl"></span>
+          </button>
+        </n-space>
+      </n-space>
+      <n-space v-else-if="allFilesSuccess" justify="space-between" align="center">
         <n-space justify="space-between" align="center">
           <IconSuccessful />
           <div>
@@ -48,7 +75,7 @@
             </span>
           </div>
         </n-space>
-        <button class="p-2" @click="clearFileList">
+        <button class="p-2" @click="clearFileList()">
           <span class="icon-delete align-middle text-2xl"></span>
         </button>
       </n-space>
@@ -69,7 +96,20 @@
 
       <!-- Actions -->
       <template v-if="fileListExpanded">
-        <div v-if="allFilesSuccess" class="w-full mt-10 mb-2">
+        <div v-if="filesUploading" class="w-full mt-10 mb-2">
+          <n-upload
+            class="w-full"
+            :show-file-list="false"
+            multiple
+            directory-dnd
+            :custom-request="uploadFilesRequest"
+          >
+            <n-button class="w-full">
+              <span class="text-primary">{{ $t('storage.file.uploadMore') }}</span>
+            </n-button>
+          </n-upload>
+        </div>
+        <div v-else-if="allFilesSuccess" class="w-full mt-10 mb-2">
           <n-button class="w-full" @click="clearFileList(true)">
             <span class="text-primary">{{ $t('storage.file.refresh') }}</span>
           </n-button>
@@ -88,7 +128,7 @@
             />
           </n-gi>
           <n-gi>
-            <Btn type="primary" size="large" :loading="uploading" @click="uploadFiles">
+            <Btn type="primary" size="large" @click="uploadFiles">
               {{ $t('storage.file.uploadNow') }}
             </Btn>
           </n-gi>
@@ -143,7 +183,6 @@ const dataStore = useDataStore();
 const config = useRuntimeConfig();
 
 const BASE_UPLOAD_SPEED = 1024;
-const uploading = ref<boolean>(false);
 const batchId = ref<string>('');
 const sessionUuid = ref<string>('');
 const fileList = ref<Array<FileListItemType>>([]);
@@ -223,9 +262,6 @@ function retryUpload() {
 }
 
 async function uploadFile(file: FileListItemType, wrapToFolder: Boolean = false) {
-  /** Loading animation */
-  uploading.value = true;
-
   /** Refresh timestamp */
   file.timestamp = Date.now();
 
@@ -321,7 +357,6 @@ function fileAlreadyOnFileList(file: FileListItemType) {
       item =>
         item.name === file.name &&
         item.fullPath === file.fullPath &&
-        item.status === file.status &&
         item.file?.lastModified === file.file?.lastModified
     ) !== undefined
   );
@@ -359,11 +394,6 @@ function updateFileStatus(fileId: string, status: FileUploadStatus) {
         }
 
         clearInterval(item.progress);
-
-        if (allFilesFinished.value) {
-          /** Loading animation */
-          uploading.value = false;
-        }
       }
     }
   });
@@ -413,18 +443,23 @@ async function uploadSessionEnd(sessionUuid: string) {
   }
   /** Refresh diretory content */
   await dataStore.fetchDirectoryContent();
-
-  /** Loading animation */
-  uploading.value = false;
 }
+
+/** Check if any file is uploading (status UPLOADING) */
+const filesUploading = computed<boolean>(() => {
+  return fileList.value.find(file => file.status === FileUploadStatusValue.UPLOADING) !== undefined;
+});
+const numOfUploadingFiles = computed<number>(() => {
+  return fileList.value.filter(file => file.status === FileUploadStatusValue.UPLOADING).length || 0;
+});
 
 /** Check if all files are finished (status FINISH or ERROR) */
 const allFilesFinished = computed<boolean>(() => {
   return (
     fileList.value.find(
       file =>
-        file.status === FileUploadStatusValue.PENDING ||
-        file.status === FileUploadStatusValue.UPLOADING
+        file.status !== FileUploadStatusValue.FINISHED &&
+        file.status !== FileUploadStatusValue.ERROR
     ) === undefined
   );
 });

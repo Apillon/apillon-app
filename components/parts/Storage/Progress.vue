@@ -1,5 +1,5 @@
 <template>
-  <n-space :wrap="false" align="center">
+  <n-space :wrap="false" justify="space-between" align="center">
     <span class="inline-block lg:min-w-[130px]">
       <span class="whitespace-nowrap">
         {{ $t('storage.usage', { used: formatBytes(size), max: formatBytes(maxSize) }) }}

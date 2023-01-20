@@ -41,6 +41,24 @@
 }
 
 /**
+ * Uploading
+*/
+.animation-uploading {
+  display: inline-block;
+  animation: uploading 0.8s infinite;
+}
+
+@keyframes uploading {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+
+/**
  * Page transitions
 */
 .page-enter-active,

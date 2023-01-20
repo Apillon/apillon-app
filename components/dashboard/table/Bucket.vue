@@ -1,10 +1,20 @@
 <template>
-  <n-data-table
-    :bordered="false"
-    :columns="columns"
-    :data="dataStore.bucket.items"
-    :row-props="rowProps"
-  />
+  <n-space :size="32" vertical>
+    <StorageActions />
+
+    <n-data-table
+      ref="tableRef"
+      v-bind="$attrs"
+      :bordered="false"
+      :columns="columns"
+      :data="data"
+      :loading="dataStore.bucket.loading"
+      :pagination="{ pageSize: PAGINATION_LIMIT }"
+      :row-key="rowKey"
+      :row-props="rowProps"
+      @update:checked-row-keys="handleCheck"
+    />
+  </n-space>
 
   <!-- Modal - Edit bucket -->
   <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
@@ -23,6 +33,10 @@
 <script lang="ts" setup>
 import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
+const props = defineProps({
+  buckets: { type: Array<BucketInterface>, default: [] },
+});
+
 const $i18n = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
@@ -31,12 +45,20 @@ const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean>(false);
 const StorageProgress = resolveComponent('StorageProgress');
 
-interface RowData extends BucketInterface {
-  key: number;
-}
+/** Data: filtered buckets */
+const data = computed<Array<BucketInterface>>(() => {
+  return (
+    props.buckets.filter(item =>
+      item.name.toLocaleLowerCase().includes(dataStore.bucket.search.toLocaleLowerCase())
+    ) || []
+  );
+});
 
-const createColumns = (): NDataTableColumns<RowData> => {
+const createColumns = (): NDataTableColumns<BucketInterface> => {
   return [
+    {
+      type: 'selection',
+    },
     {
       key: 'name',
       title: $i18n.t('storage.bucket.name'),
@@ -95,9 +117,19 @@ const createColumns = (): NDataTableColumns<RowData> => {
   ];
 };
 const columns = createColumns();
-const currentRow = ref<RowData | null>(null);
+const rowKey = (row: BucketItemInterface) => row.id;
+const currentRow = ref<BucketInterface | null>(null);
 
-const rowProps = (row: RowData) => {
+const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
+  const rowKeyIds = rowKeys.map(item => intVal(item));
+
+  dataStore.bucket.selectedItems = dataStore.bucket.items.filter(item =>
+    rowKeyIds.includes(item.id)
+  );
+};
+
+/** On row click */
+const rowProps = (row: BucketInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;

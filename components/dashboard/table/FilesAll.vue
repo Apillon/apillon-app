@@ -43,7 +43,7 @@
 
   <!-- Drawer - File details -->
   <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
-    <n-drawer-content v-if="drawerFileDetailsVisible">
+    <n-drawer-content v-if="drawerFileDetailsVisible" :title="currentRow.fileName" closable>
       <StorageFileDetails
         v-if="currentRow.CID || currentRow.file_uuid"
         :file-cid="currentRow.CID"
@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts" setup>
-import { debounce } from 'lodash';
+import debounce from 'lodash.debounce';
 import { DataTableColumns, NButton, NDropdown, useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
@@ -118,7 +118,7 @@ const fileStatuses = ref<Array<NSelectOption>>([
     label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.ERROR_BUCKET_FULL}`),
   },
 ]);
-async function handleFilesStatusChange(value: string, option: NSelectOption) {
+async function handleFilesStatusChange() {
   await getFiles();
 }
 
@@ -207,7 +207,7 @@ const createColumns = (): DataTableColumns<FileUploadInterface> => {
       key: 'actions',
       align: 'right',
       className: '!py-0',
-      render(row) {
+      render() {
         return h(
           NDropdown,
           {
@@ -238,7 +238,7 @@ function rowProps(row: FileUploadInterface) {
 }
 
 /** Action when user click on File name */
-async function onItemOpen(row: FileUploadInterface) {
+function onItemOpen(row: FileUploadInterface) {
   currentRow.value = row;
   drawerFileDetailsVisible.value = true;
 }
@@ -289,7 +289,7 @@ async function fetchFiles(page?: number, limit?: number) {
   try {
     const bucketUuid = dataStore.currentBucket.bucket_uuid;
 
-    let params: Record<string, string | number> = {
+    const params: Record<string, string | number> = {
       bucket_uuid: bucketUuid,
     };
 

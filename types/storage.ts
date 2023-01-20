@@ -84,6 +84,29 @@ declare global {
   interface BucketQuotaResponse extends GeneralResponse<boolean> {}
 
   /**
+   * Bucket item
+   */
+  interface BucketItemInterface {
+    CID: string | null;
+    contentType: string | null;
+    id: number;
+    name: string;
+    link: string;
+    size: number | null;
+    type: string;
+    createTime: string;
+    updateTime: string;
+    file_uuid?: string;
+    parentDirectoryId?: number;
+  }
+  interface FormFolder {
+    name: string;
+    description?: string | null;
+  }
+  interface CreateFolderResponse extends GeneralResponse<BucketItemInterface> {}
+  interface FolderResponse extends GeneralItemsResponse<BucketItemInterface> {}
+
+  /**
    * File
    */
   /** File status */
@@ -111,7 +134,9 @@ declare global {
     s3FileKey: string;
     size: number;
     status: number;
+    fileName?: string | null;
     fileStatus?: number | null;
+    path?: string | null;
   }
   interface FileUploadInterface {
     id: number;
@@ -153,29 +178,6 @@ declare global {
   interface FileUploadRequestResponse extends GeneralResponse<FileUploadRequestInterface> {}
   interface FileUploadSessionResponse extends GeneralResponse<boolean> {}
   interface FileUploadsResponse extends GeneralItemsResponse<FileUploadInterface> {}
-
-  /**
-   * Folder
-   */
-  interface FolderInterface {
-    CID: string | null;
-    contentType: string | null;
-    id: number;
-    name: string;
-    link: string;
-    size: number | null;
-    type: string;
-    createTime: string;
-    updateTime: string;
-    file_uuid?: string;
-    parentDirectoryId?: number;
-  }
-  interface FormFolder {
-    name: string;
-    description?: string | null;
-  }
-  interface CreateFolderResponse extends GeneralResponse<FolderInterface> {}
-  interface FolderResponse extends GeneralItemsResponse<FolderInterface> {}
 
   /**
    * Webhook
