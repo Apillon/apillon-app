@@ -4,6 +4,8 @@
     "actions": "Actions",
     "active": "active",
     "attach": "Attach",
+    "cancel": "No, cancel",
+    "confirm": "Yes, confirm",
     "copyrights": "© Apillon",
     "created": "created",
     "delete": "Delete",
@@ -144,6 +146,7 @@
     "WEBHOOK_ALREADY_EXISTS_FOR_PROJECT": "Webhook already exists",
     "MAX_BUCKETS_REACHED": "Maximum number of buckets is reached",
     "MAX_PROJECTS_REACHED": "Maximum number of projects is reached",
+    "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
 
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
@@ -440,15 +443,20 @@
   "storage": {
     "bucket": {
       "addNew": "Add new bucket",
+      "attachService": "First attach a desired service and configure it, then start building.",
       "buckets": "Buckets",
       "description": "Description",
-      "destroy": "Destroy",
+      "delete": "Delete bucket",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected bucket?",
       "destroyed": "Deleted buckets",
+      "destroyedBuckets": "Destroyed buckets",
       "edit": "Edit bucket",
       "infoNew": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
       "management": "Bucket management",
       "name": "Bucket name",
       "new": "New bucket",
+      "noActiveService": "Your project currently has no active service",
+      "nothingHere": "Nothing here",
       "storage": "Storage bucket",
       "update": "Update bucket",
       "quotaReached": "Quota has been reached."
@@ -458,11 +466,6 @@
       "bucketItems": "Delete these items?",
       "item": "Delete selected item",
       "items": "Delete selected items"
-    },
-    "directory": {
-      "create": "Create directory",
-      "createNew": "Create new directory",
-      "delete": "Delete directory"
     },
     "download": {
       "bucketItems": "Download selected items?",
@@ -502,7 +505,6 @@
       "createNew": "Create new folder",
       "delete": "Delete folder"
     },
-    "attachService": "First attach a desired service and configure it, then start building.",
     "contentType": "Content type",
     "downloadLink": "Download link",
     "destroy": "Destroy",
@@ -516,7 +518,6 @@
     "fileStatusName": "File status",
     "goToRootDirectory": "Go to root directory",
     "history": "History",
-    "noActiveService": "Your project currently has no active service",
     "refresh": "Refresh",
     "replicas": "Replicas",
     "selectFiles": "Select files",
@@ -600,7 +601,14 @@
   "w3Warn": {
     "bucket": {
       "new": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. Accumsan morbi lectus elit nunc. Arcu morbi pretium neque nibh eu vestibulum id sed adipiscing.",
+      "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
       "destroyed": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. "
+    },
+    "file": {
+      "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
+    },
+    "folder": {
+      "delete": "All items stored in this directory will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
     }
   }
 }

@@ -21,7 +21,7 @@
         <!-- Delete files -->
         <n-tooltip placement="bottom" :show="showPopoverDelete">
           <template #trigger>
-            <n-button class="w-10" size="small" :active="true" @click="showModalDelete = true">
+            <n-button class="w-10" size="small" :active="true" @click="emit('onBucketDelete')">
               <span class="icon-delete text-pink"></span>
             </n-button>
           </template>
@@ -39,17 +39,13 @@
       </n-button>
     </n-space>
   </n-space>
-
-  <!-- Modal - Destroy bucket -->
-  <modal v-model:show="showModalDelete" :title="$t('storage.bucket.destroy')">
-    <FormStorageDestroy :bucket-id="dataStore.bucket.selected" />
-  </modal>
 </template>
 
 <script lang="ts" setup>
 const dataStore = useDataStore();
 const showModalDelete = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
+const emit = defineEmits(['onBucketDelete']);
 
 /** Refresh directory content */
 async function refresh() {

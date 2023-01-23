@@ -30,13 +30,14 @@
             <NuxtIcon name="storage/empty" class="icon-auto" filled />
           </div>
           <div class="mb-10 text-center">
-            <h3 class="font-bold">{{ $t('storage.noActiveService') }}</h3>
-            <p class="text-body">{{ $t('storage.attachService') }}</p>
+            <h3 class="font-bold">{{ $t('storage.bucket.nothingHere') }}</h3>
+            <p class="text-body">{{ $t('storage.bucket.destroyedBucket') }}</p>
           </div>
         </div>
       </template>
 
-      <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+      <!-- W3Warn: destroyed buckets -->
+      <W3Warn v-model:show="showModalW3Warn">
         {{ $t('w3Warn.bucket.destroyed') }}
       </W3Warn>
     </slot>
@@ -48,7 +49,6 @@ const $i18n = useI18n();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
-const showModalNewBucket = ref<boolean | null>(false);
 
 useHead({
   title: $i18n.t('nav.storage'),
@@ -76,34 +76,4 @@ async function geBucketQuota() {
     await dataStore.fetchBucketQuota();
   }
 }
-
-/**
- * On createNewBucket click
- * If W3Warn has already been shown, show modal create new bucekt, otherwise show warn first
- * */
-function createNewBucket() {
-  if (sessionStorage.getItem(LsW3WarnKeys.NEW_BUCKET)) {
-    showModalNewBucket.value = true;
-  } else {
-    showModalW3Warn.value = true;
-    showModalNewBucket.value = null;
-  }
-}
-
-/** When user close W3Warn, allow him to create new bucket */
-function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalNewBucket.value !== false) {
-    showModalNewBucket.value = true;
-  }
-}
-
-/** Watch showModalNewBucket, onShow update timestamp of shown modal in session storage */
-watch(
-  () => showModalW3Warn.value,
-  shown => {
-    if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.NEW_BUCKET, Date.now().toString());
-    }
-  }
-);
 </script>

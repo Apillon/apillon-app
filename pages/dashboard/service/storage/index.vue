@@ -33,8 +33,8 @@
             <NuxtIcon name="storage/empty" class="icon-auto" filled />
           </div>
           <div class="mb-10 text-center">
-            <h3 class="font-bold">{{ $t('storage.noActiveService') }}</h3>
-            <p class="text-body">{{ $t('storage.attachService') }}</p>
+            <h3 class="font-bold">{{ $t('storage.bucket.noActiveService') }}</h3>
+            <p class="text-body">{{ $t('storage.bucket.attachService') }}</p>
           </div>
           <div>
             <Btn type="primary" @click="createNewBucket">
@@ -92,10 +92,10 @@ async function geBucketQuota() {
 
 /**
  * On createNewBucket click
- * If W3Warn has already been shown, show modal create new bucekt, otherwise show warn first
+ * If W3Warn has already been shown, show modal create new bucket, otherwise show warn first
  * */
 function createNewBucket() {
-  if (sessionStorage.getItem(LsW3WarnKeys.NEW_BUCKET)) {
+  if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_NEW)) {
     showModalNewBucket.value = true;
   } else {
     showModalW3Warn.value = true;
@@ -115,7 +115,7 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.NEW_BUCKET, Date.now().toString());
+      sessionStorage.setItem(LsW3WarnKeys.BUCKET_NEW, Date.now().toString());
     }
   }
 );

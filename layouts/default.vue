@@ -4,9 +4,8 @@
       <n-layout has-sider class="h-full">
         <n-layout-sider
           bordered
-          show-trigger
+          :show-trigger="false"
           collapse-mode="width"
-          :collapsed-width="64"
           :width="320"
           :native-scrollbar="false"
           style="max-height: 100vh"

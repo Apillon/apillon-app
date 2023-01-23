@@ -9,7 +9,9 @@ export const LsTableColumnsKeys = {
 };
 
 export const LsW3WarnKeys = {
-  NEW_BUCKET: 'al_w3warn_new_bucket',
+  BUCKET_NEW: 'al_w3warn_bucket_new',
+  BUCKET_DELETE: 'al_w3warn_bucket_delete',
+  BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
 };
 
 /** User roles */
