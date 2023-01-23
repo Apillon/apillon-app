@@ -103,6 +103,7 @@ async function updateProjectData() {
 
     if (res.data) {
       dataStore.updateCurrentProject(res.data);
+      window.$message.success($i18n.t('form.success.updated.project'));
     }
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));

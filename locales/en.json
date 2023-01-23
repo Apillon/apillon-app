@@ -311,6 +311,7 @@
         "directory": "Directory key has been updated",
         "file": "File has been updated",
         "item": "Item has been updated",
+        "project": "Project has been updated",
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated"
       }

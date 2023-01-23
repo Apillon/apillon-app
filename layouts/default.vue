@@ -1,6 +1,12 @@
 <template>
   <div ref="mainContentRef" class="relative h-screen">
-    <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="3000">
+    <n-message-provider
+      :to="messageRef"
+      placement="bottom-right"
+      :keep-alive-on-hover="true"
+      :duration="3000"
+      closable
+    >
       <n-layout has-sider class="h-full">
         <n-layout-sider
           bordered
