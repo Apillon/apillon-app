@@ -52,6 +52,8 @@
 import { useMessage } from 'naive-ui';
 const referralStore = useReferralStore();
 
+const router = useRouter();
+
 const $i18n = useI18n();
 const formRef = ref<NFormInst | null>(null);
 const message = useMessage();
@@ -101,8 +103,6 @@ function handleSubmit(e: Event | MouseEvent) {
   });
 }
 
-const emit = defineEmits(['enterReferral']);
-
 async function enterReferral() {
   loading.value = true;
   try {
@@ -112,7 +112,7 @@ async function enterReferral() {
     referralStore.initReferral(res.data);
     console.log('My res: ', res);
 
-    emit('enterReferral');
+    router.push('/dashboard/referral');
   } catch (e) {
     console.error(e);
   }

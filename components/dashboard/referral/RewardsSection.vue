@@ -4,19 +4,19 @@
   </div>
   <!-- Referral - rewards -->
   <div v-else class="pb-8">
-    <div v-for="(item, index) in merchData" :key="index" class="bg-bg-light p8 mb-4">
+    <div v-for="(item, index) in merchData" :key="index" class="bg-bg-light p-8 mb-4">
       <!-- Item Name -->
 
       <!-- Item points cost -->
       <div class="flex justify-between">
-        <h4>{{ item.merchItem.name }}</h4>
-        <div class="mt-2">
-          {{ 'Cost: ' + item.merchItem.price + ' points' }}
-        </div>
+        <h3>{{ item.merchItem.name }}</h3>
+        <n-tag type="info" size="large" round>
+          <strong>{{ 'Cost: ' + item.merchItem.price + ' points' }}</strong>
+        </n-tag>
       </div>
 
       <!-- Item description -->
-      <div class="font-button text-sm text-white mb-5 mt-8">
+      <div class="font-button text-sm text-white mb-5 mt-8 text-body">
         {{ item.merchItem.description }}
       </div>
       <!-- Item img -->
@@ -37,7 +37,7 @@
                 return { label: el, value: el };
               })
             "
-            :disabled="Number(item.merchItem.price) > referralStore.balance_all"
+            :disabled="Number(item.merchItem.price) > referralStore.balance"
           >
             <template #arrow>
               <span class="icon-down text-2xl"></span>
@@ -45,7 +45,7 @@
           </n-select>
         </div>
         <Btn
-          :disabled="Number(item.merchItem.price) > referralStore.balance_all"
+          :disabled="Number(item.merchItem.price) > referralStore.balance"
           class="mt-7 flex-grow"
           type="primary"
           @click="claimReward(item)"
@@ -78,6 +78,7 @@ const merchData = ref(
       id: number;
       imageUrl: string;
       maxOrderCount: number;
+      orderCount: number;
       name: string;
       price: number;
       status: number;
@@ -99,21 +100,7 @@ onMounted(async () => {
 async function getMerch() {
   loading.value = true;
   try {
-    const res = await $api.get<{
-      data: {
-        items: {
-          attributes: [];
-          description: string;
-          id: number;
-          imageUrl: string;
-          maxOrderCount: number;
-          name: string;
-          price: number;
-          status: number;
-          stock: number;
-        }[];
-      };
-    }>(endpoints.referralRewards);
+    const res = await $api.get<ReferralRewardsResponse>(endpoints.referralRewards);
 
     merchData.value = res.data.items.map(el => {
       return {
@@ -126,25 +113,16 @@ async function getMerch() {
         }),
       };
     });
-    console.log('merhcData: ', merchData.value[0]);
-    console.log('My res products: ', res);
   } catch (e) {
     console.error(e);
   }
   loading.value = false;
 }
 
-const emit = defineEmits(['claimReward']);
-
 const claimRewardData = ref({});
 
 function claimReward(item) {
-  console.log('Item: ', item.attributes);
-  console.log('Item size: ', item.attributes.find(el => el.name === 'size').selectedValue);
-  console.log('Data: ', merchData.value);
-
   claimRewardData.value = item;
   showModal.value = true;
-  // emit('claimReward', item);
 }
 </script>

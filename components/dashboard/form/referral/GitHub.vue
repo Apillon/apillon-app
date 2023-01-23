@@ -9,8 +9,13 @@
       >
         <n-input
           v-model:value="formData.email"
+          disabled
           :input-props="{ id: 'email' }"
-          placeholder=""
+          :placeholder="
+            referralStore.github_name
+              ? referralStore.github_name
+              : 'Connect your GitHub account and your handle will be displayed here'
+          "
           clearable
         />
       </n-form-item>
@@ -33,6 +38,8 @@ import { useMessage } from 'naive-ui';
 
 const referralStore = useReferralStore();
 
+const message = useMessage();
+
 const $route = useRoute();
 
 const $i18n = useI18n();
@@ -49,10 +56,12 @@ onMounted(async () => {
     console.log('My ouathToken', ouathToken.value);
     // Github link // Send oath token to backend
     try {
-      const res = await $api.post(endpoints.referralGithub, {
+      const res = await $api.post<ReferralResponse>(endpoints.referralGithub, {
         code: ouathToken.value,
       });
       console.log('My res github link: ', res);
+      referralStore.initReferral(res.data);
+      message.success('Github connected');
     } catch (e) {
       console.error(e);
     }
@@ -88,7 +97,23 @@ function handleSubmit(e: Event | MouseEvent) {
       );
     } else {
       // Disconnect github account
+      await disconnectGithub();
     }
   });
+}
+
+async function disconnectGithub() {
+  loading.value = true;
+  // Github link // Send oath token to backend
+  try {
+    const res = await $api.post<ReferralResponse>(endpoints.referralGithubDisc);
+    console.log('My res github unlink: ', res);
+    referralStore.initReferral(res.data);
+    message.success('Github disconnected');
+  } catch (e) {
+    console.error(e);
+  }
+
+  loading.value = false;
 }
 </script>

@@ -2,7 +2,7 @@
   <!-- Referral - intro -->
   <div class="bg-bg-light p-8">
     <div class="mt-5 flex justify-between">
-      <h4>{{ $t('referral.connect') }}</h4>
+      <h3>{{ $t('referral.connect') }}</h3>
       <n-tag type="info" size="large" round>
         <strong>{{ '+2 per connection' }}</strong>
       </n-tag>

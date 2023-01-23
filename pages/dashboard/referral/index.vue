@@ -11,14 +11,14 @@
               <NuxtIcon name="referral/spendable-points" class="icon-auto" filled />
             </div>
             <span>{{ $t('referral.xpPoints') }}</span>
-            <strong class="text-base text-blue">{{ referralStore.balance }}</strong>
+            <strong class="text-base text-blue">{{ referralStore.balance_all }}</strong>
           </n-space>
           <n-space class="bg-bg-dark pr-3 rounded-[20px]" size="large" align="center">
             <div class="h-10 p-2 rounded-full transition-all duration-300 hover:bg-bg-lighter">
               <NuxtIcon name="referral/xp-points" class="icon-auto" filled />
             </div>
             <span>{{ $t('referral.spendingPoints') }}</span>
-            <strong class="text-base text-pink">{{ referralStore.balance_all }}</strong>
+            <strong class="text-base text-pink">{{ referralStore.balance }}</strong>
           </n-space>
         </n-space>
       </div>

@@ -1,11 +1,13 @@
 <template>
   <!-- Referral - intro -->
-  <div class="border-b-1 border-bg-lighter grid grid-cols-3 gap-4 py-4">
-    <div class="pl-3">
+  <div
+    class="border-b-1 border-bg-lighter grid grid-cols-1 md:grid-cols-3 gap-4 font-content text-sm py-3"
+  >
+    <div class="pl-3 font-bold" style="line-height: 28px">
       {{ item.name }}
     </div>
     <div class="text-dark">
-      <div class="w-auto text-right">
+      <div class="w-auto">
         <n-tag v-if="item.has_github" type="success" :bordered="false" round>
           <strong>ADDED</strong>
         </n-tag>
@@ -14,14 +16,13 @@
         </n-tag>
       </div>
     </div>
-    <div class="pr-3 text-grey-light text-right">
+    <div class="pr-3 text-grey-light" style="line-height: 28px">
       {{ getTimeSince(item.joined) }}
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const referralCode = 'https://apillon.io/register/?REF=X5FGH';
 defineProps({
   item: {
     type: Object,
@@ -40,8 +41,8 @@ function getTimeSince(date: string) {
 
   const diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / oneDay));
   if (diffDays < 1) {
-    return '<1d';
+    return ' < 1 day ago';
   }
-  return diffDays.toString() + 'd';
+  return diffDays.toString() + ' days ago';
 }
 </script>

@@ -3,17 +3,17 @@
   <div class="bg-bg-light p-8">
     <div class="">
       <div class="flex justify-between">
-        <h4 class="mb-6">{{ $t('referral.invite') }}</h4>
+        <h3 class="mb-6">{{ $t('referral.invite') }}</h3>
         <n-tag type="info" size="large" round>
           <strong>{{ '+2 per referral' }}</strong>
         </n-tag>
       </div>
 
-      <p class="max-w-[700px] font-button text-sm text-white mt-3">
+      <p class="font-button text-sm text-body mt-3 mb-5">
         {{ $t('referral.linkDesc') }}
       </p>
 
-      <p class="font-button text-sm mb-4 text-white">
+      <p class="font-button text-sm text-white">
         <strong>{{ $t('referral.link') }}</strong>
       </p>
 
@@ -39,7 +39,9 @@
         {{ $t('referral.linkDesc') }}
       </p>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-content text-sm">
+      <div
+        class="grid grid-cols-1 md:grid-cols-3 gap-4 font-content text-sm border-b-1 border-bg-lighter pb-3"
+      >
         <div class="pl-5">
           <strong>{{ $t('referral.referres.name') }}</strong>
         </div>
@@ -51,7 +53,7 @@
           <strong>{{ $t('referral.referres.joined') }}</strong>
         </div>
       </div>
-      <div class="grid grid-cols-1 gap-4 font-content text-sm mt-4">
+      <div class="">
         <div v-for="(item, index) in referres" :key="index">
           <ReferralReferresRow :item="item" />
         </div>
@@ -70,7 +72,7 @@ const referralCode = `https://apillon.io/register/?REF=${referralStore.refCode}`
 
 function copyWalletNumber() {
   navigator.clipboard.writeText(referralCode);
-  message.info('Wallet number copied');
+  message.info('Ref code copied');
 }
 
 const referres = referralStore.referrals;

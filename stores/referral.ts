@@ -7,6 +7,9 @@ export const useReferralStore = defineStore('referral', {
     github_id: null as any,
     twitter_id: null as any,
 
+    twitter_name: null as any,
+    github_name: null as any,
+
     id: 0,
     refCode: '',
     referrals: [] as Array<any>,
@@ -23,6 +26,8 @@ export const useReferralStore = defineStore('referral', {
       this.balance_all = data.balance_all;
       this.github_id = data.github_id;
       this.twitter_id = data.twitter_id;
+      this.twitter_name = data.twitter_name;
+      this.github_name = data.github_name;
       this.id = data.id;
       this.refCode = data.refCode;
       this.referrals = data.referrals;

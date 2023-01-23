@@ -86,6 +86,9 @@ const Endpoints = {
   referralRetweet: '/referral/twitter/confirm',
   referralTwitterAuth: '/referral/twitter/authenticate',
 
+  referralTwitterDisc: '/referral/twitter/unlink',
+  referralGithubDisc: '/referral/github/unlink',
+
   referralRewards: '/referral/products',
   referralClaimReward: '/referral/product',
 };

@@ -2,7 +2,7 @@
   <!-- Referral - sharing -->
   <div class="bg-bg-light p-8">
     <div class="flex justify-between">
-      <h4 class="mb-6">{{ $t('referral.shoutout') }}</h4>
+      <h3 class="mb-6">{{ $t('referral.shoutout') }}</h3>
       <n-tag type="info" size="large" round>
         <strong>{{ '+2 per share' }}</strong>
       </n-tag>
@@ -11,29 +11,11 @@
     <div v-if="loading" class="relative">
       <Spinner />
     </div>
-    <div v-for="tweet in tweets" :key="tweet" class="relative">
+    <div v-for="tweet in tweets" :key="tweet" class="relative mx-auto w-auto">
       <!-- <div class="absolute right-[36%] top-5">
       <ReferralPoints :points="1" />
     </div> -->
-      <Tweet :tweet-id="(tweet as any).id" theme="dark">
-        <template #loading>
-          <Spinner />
-        </template>
-        <template #error>
-          <span>Sorry, that tweet doesn't exist!</span>
-        </template>
-      </Tweet>
-      <Btn class="mt-5 mr-5" type="primary" @click="shareTweet((tweet as any).id)">
-        {{ $t('referral.share') }}
-      </Btn>
-      <Btn
-        :loading="loadingConfirm"
-        class="mt-5"
-        type="primary"
-        @click="confirmShareTweet((tweet as any).id)"
-      >
-        {{ $t('referral.confirm') }}
-      </Btn>
+      <ReferralTweet :tweet="tweet" />
     </div>
   </div>
 </template>

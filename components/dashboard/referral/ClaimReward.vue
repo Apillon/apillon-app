@@ -15,7 +15,13 @@
         <div>
           {{ data.merchItem.name }}
         </div>
-        <div>
+        <div
+          v-if="
+            data.attributes.find(el => {
+              return el.name === 'size';
+            })
+          "
+        >
           {{
             'Size: ' +
             data.attributes.find(el => {
@@ -23,7 +29,9 @@
             }).selectedValue
           }}
         </div>
-        <div class="cursor-pointer" @click="closeModal()">Change selection</div>
+        <div v-if="data.attributes.length !== 0" class="cursor-pointer" @click="closeModal()">
+          Change selection
+        </div>
       </div>
     </div>
 
@@ -136,6 +144,19 @@ const $i18n = useI18n();
 const formRef = ref<NFormInst | null>(null);
 const message = useMessage();
 
+const referralStore = useReferralStore();
+
+onMounted(() => {
+  if (referralStore.shippingInfo) {
+    formData.value.firstName = referralStore.shippingInfo.firstName;
+    formData.value.lastName = referralStore.shippingInfo.lastName;
+    formData.value.street = referralStore.shippingInfo.street;
+    formData.value.number = referralStore.shippingInfo.houseNumber;
+    formData.value.zip = referralStore.shippingInfo.postalCode;
+    formData.value.country = referralStore.shippingInfo.country;
+  }
+});
+
 const props = defineProps({
   data: {
     type: Object,
@@ -238,6 +259,7 @@ async function claimReward() {
 
     console.log('My res: ', res);
     message.success('Reward claimed!');
+    closeModal();
   } catch (e) {
     message.error('Error claiming reward. Please try again later');
     console.error(e);

@@ -21,6 +21,8 @@ declare global {
     balance_all: number;
     github_id?: string;
     twitter_id?: string;
+    github_name?: string;
+    twitter_name?: string;
     refCode: string;
     referrals: Array<any>;
     referrer_id?: number;
@@ -30,6 +32,25 @@ declare global {
     termsAccepted: string;
   }
 
+  interface RewardsInterface {
+    attributes: {
+      name: string;
+      id: number;
+      options: string[];
+      description: string;
+      inputType: number;
+    }[];
+    description: string;
+    id: number;
+    imageUrl: string;
+    maxOrderCount: number;
+    orderCount: number;
+    name: string;
+    price: number;
+    status: number;
+    stock: number;
+  }
+
   interface ReferralResponse extends GeneralResponse<ReferralInterface> {}
-  interface ServicesResponse extends GeneralItemsResponse<ServiceInterface> {}
+  interface ReferralRewardsResponse extends GeneralItemsResponse<RewardsInterface> {}
 }

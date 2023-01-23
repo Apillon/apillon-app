@@ -9,8 +9,13 @@
       >
         <n-input
           v-model:value="formData.email"
+          disabled
           :input-props="{ id: 'email' }"
-          placeholder=""
+          :placeholder="
+            referralStore.twitter_name
+              ? referralStore.twitter_name
+              : 'Connect your Twitter account and your handle will be displayed here'
+          "
           clearable
         />
       </n-form-item>
@@ -19,7 +24,7 @@
       <n-form-item class="min-w-[110px]" label="">
         <input type="submit" class="hidden" :value="$t('form.connect')" />
         <Btn type="primary" size="large" :loading="loading" @click="handleSubmit">
-          {{ referralStore.twitter_id ? 'Disconnect' : $t('form.connect') }}
+          {{ referralStore.twitter_name ? 'Disconnect' : $t('form.connect') }}
         </Btn>
       </n-form-item>
     </div>
@@ -28,6 +33,8 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
+
+const message = useMessage();
 
 const referralStore = useReferralStore();
 
@@ -49,11 +56,12 @@ onMounted(async () => {
     loading.value = true;
     try {
       console.log('My ouathToken', ouathToken.value);
-      const res = await $api.post(endpoints.referralTwitter, {
+      const res = await $api.post<ReferralResponse>(endpoints.referralTwitter, {
         oauth_token: ouathToken.value,
         oauth_verifier: oauthVerifier.value,
       });
-      console.log('resLink: ', res);
+      referralStore.initReferral(res.data);
+      message.success('Twitter connected');
     } catch (e) {
       console.error(e);
     }
@@ -93,6 +101,7 @@ function handleSubmit(e: Event | MouseEvent) {
       if (!referralStore.twitter_id) {
         await connectTwitter();
       } else {
+        await disconnectTwitter();
         // Disconnect twitter account
       }
     }
@@ -108,6 +117,19 @@ async function connectTwitter() {
     console.log('My res twitter connect: ', res);
     window.open(res.data.url, '_self');
     console.log('Open window');
+  } catch (e) {
+    console.error(e);
+  }
+  loading.value = false;
+}
+
+async function disconnectTwitter() {
+  loading.value = true;
+  try {
+    const res = await $api.post<ReferralResponse>(endpoints.referralTwitterDisc);
+    console.log('resUnLink: ', res);
+    referralStore.initReferral(res.data);
+    message.success('Twitter disconnected');
   } catch (e) {
     console.error(e);
   }

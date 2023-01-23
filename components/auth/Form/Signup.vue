@@ -47,6 +47,8 @@ const props = defineProps({
   sendAgain: { type: Boolean, default: false },
 });
 
+const $route = useRoute();
+
 const $i18n = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
@@ -59,9 +61,13 @@ const config = useRuntimeConfig();
 const captchaKey = ref<string>(config.public.captchaKey);
 const captchaInput = ref<any>(null);
 
+const refCode = computed(() => $route.query.REF);
+console.log('RefCode: ', refCode.value);
+
 const formData = ref({
   email: authStore.email,
   captcha: null as any,
+  refCode,
 });
 const rules: NFormRules = {
   email: [

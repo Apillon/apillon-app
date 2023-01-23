@@ -429,8 +429,8 @@
     },
     "claim": "Claim now",
     "claimMerchPack": "Claim merch pack",
-    "connectGithub": "Connect your Github account",
-    "connectTwitter": "Connect your Twitter account",
+    "connectGithub": "Your GitHub",
+    "connectTwitter": "Your twitter",
     "content": "Welcome to Apillon referral programme. While we are working hard on first MVP and giving you access to beta test, you are free to invite other developers to Apillon, collect points and get your Apillon Merch pack 1.0. ",
     "included": "What is included?",
     "learnMore": "Learn more about referral",
@@ -467,8 +467,8 @@
       "joined": "Joined"
     },
     "shoutout": "Help us with the shoutout",
-    "share": "Share",
-    "confirm": "Confirm",
+    "share": "Retweet",
+    "confirm": "Claim",
     "xpPoints": "XP points:",
     "spendingPoints": "Spending points:"
   },
