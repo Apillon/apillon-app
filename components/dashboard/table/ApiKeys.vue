@@ -1,31 +1,48 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="data" :row-props="rowProps" />
+  <n-data-table
+    :bordered="false"
+    :columns="columns"
+    :data="settingsStore.apiKeys"
+    :row-props="rowProps"
+  />
+
+  <!-- Drawer - Update API Key -->
+  <n-drawer v-model:show="drawerUpdateApiKeyVisible" :width="495">
+    <n-drawer-content>
+      <template #header>
+        <h5>{{ $t('dashboard.apiKey.update') }}</h5>
+      </template>
+      <FormApiKeyUpdate :id="currentRow.id" @submit-success="drawerUpdateApiKeyVisible = false" />
+    </n-drawer-content>
+  </n-drawer>
+
+  <!-- Modal - Delete API key -->
+  <modal v-model:show="showModalDeleteApiKey" :title="$t('dashboard.apiKey.delete')">
+    <FormDelete :id="currentRow?.id || 0" type="apiKey" @submit-success="onApiKeyDeleted" />
+    <FormApiKeyDelete
+      :api-key-id="currentRow?.id || 0"
+      @submit-success="showModalDeleteApiKey = false"
+    />
+  </modal>
 </template>
 
 <script lang="ts" setup>
 import { NButton, NDropdown } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const settingsStore = useSettingsStore();
+const showModalDeleteApiKey = ref<boolean>(false);
+const drawerUpdateApiKeyVisible = ref<boolean>(false);
 
-type RowData = {
-  key: number;
-  secret: string;
-  name: string;
-  env: string;
-  created: string;
-};
-
-const createColumns = ({
-  handleSelectAction,
-}: {
-  handleSelectAction: (key: string | number) => void;
-}): DataTableColumns<RowData> => {
+const createColumns = (): DataTableColumns<ApiKeyInterface> => {
   return [
     {
       title: t('dashboard.secret'),
       key: 'secret',
+      render(row) {
+        return h('span', {}, hideSecret(row.apiKey));
+      },
     },
     {
       title: t('dashboard.name'),
@@ -34,10 +51,20 @@ const createColumns = ({
     {
       title: t('dashboard.env'),
       key: 'env',
+      render(row) {
+        return h(
+          'span',
+          {},
+          { default: () => (row.testNetwork === 1 ? t('general.test') : t('general.live')) }
+        );
+      },
     },
     {
       title: t('dashboard.created'),
       key: 'created',
+      render(row) {
+        return h('span', {}, { default: () => datetimeToDate(row.updateTime) });
+      },
     },
     {
       title: t('general.actions'),
@@ -50,7 +77,6 @@ const createColumns = ({
           {
             options: dropdownOptions,
             trigger: 'click',
-            onSelect: handleSelectAction,
           },
           {
             default: () =>
@@ -65,35 +91,14 @@ const createColumns = ({
     },
   ];
 };
-const createData = (): RowData[] => [
-  {
-    key: 0,
-    secret: '•••••••••••••••••••••••••••••••••••••••••••••••Q0I=',
-    name: 'Test key',
-    env: 'Live',
-    created: '20 Jul 2022',
-  },
-  {
-    key: 0,
-    secret: '•••••••••••••••••••••••••••••••••••••••••••••••R02I',
-    name: 'October key',
-    env: 'Test',
-    created: '21 Jul 2022',
-  },
-];
 
-const currentRow = ref<number>(0);
-const data = ref(createData());
-const columns = createColumns({
-  handleSelectAction(key: string | number) {
-    console.log(key);
-  },
-});
+const currentRow = ref<ApiKeyInterface>({} as ApiKeyInterface);
+const columns = createColumns();
 
-function rowProps(row: RowData) {
+function rowProps(row: ApiKeyInterface) {
   return {
     onClick: () => {
-      currentRow.value = row.key;
+      currentRow.value = row;
     },
   };
 }
@@ -103,31 +108,38 @@ function rowProps(row: RowData) {
  */
 const dropdownOptions = [
   {
-    label: 'Profile',
-    key: 'profile',
+    label: t('dashboard.clipboard.copyApiKey'),
+    key: 'copy',
     props: {
       onClick: () => {
-        console.log('Profile: ' + JSON.stringify(currentRow.value));
+        copyToClipboard(currentRow.value.apiKey, t);
       },
     },
   },
   {
-    label: 'Edit Profile',
-    key: 'editProfile',
+    label: t('general.edit'),
+    key: 'edit',
+    disabled: settingsStore.isProjectUser(),
     props: {
       onClick: () => {
-        console.warn('Edit Profile: ' + JSON.stringify(currentRow.value));
+        drawerUpdateApiKeyVisible.value = true;
       },
     },
   },
   {
-    label: 'Logout',
-    key: 'logout',
+    label: t('general.delete'),
+    key: 'delete',
+    disabled: settingsStore.isProjectUser(),
     props: {
       onClick: () => {
-        console.log('Logout: ' + JSON.stringify(currentRow.value));
+        showModalDeleteApiKey.value = true;
       },
     },
   },
 ];
+
+function onApiKeyDeleted() {
+  showModalDeleteApiKey.value = false;
+  settingsStore.fetchApiKeys();
+}
 </script>

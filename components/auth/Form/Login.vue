@@ -39,7 +39,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const authStore = useAuthStore();
@@ -72,12 +71,12 @@ const rules: NFormRules = {
   ],
 };
 
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       /** Login with mail and password */
       await login();
@@ -91,20 +90,15 @@ async function login() {
     // Logout first - delete LS and store if there is any data
     authStore.logout();
 
-    const { data, error } = await $api.post<LoginResponse>(endpoints.login, formData.value);
+    const data = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-    }
-    if (data) {
-      authStore.setUserToken(data.data.token);
-      authStore.changeUser(data.data);
+    authStore.setUserToken(data.data.token);
+    authStore.changeUser(data.data);
 
-      /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-      await dataStore.getProjects(true);
-    }
+    /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
+    await dataStore.fetchProjects(true);
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
+    message.error(userFriendlyMsg(error));
   }
   loading.value = false;
 }

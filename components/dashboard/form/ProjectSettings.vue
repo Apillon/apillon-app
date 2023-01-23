@@ -4,6 +4,7 @@
     class="max-w-lg"
     :model="formData"
     :rules="rules"
+    :disabled="!settingsStore.isUserOwner()"
     @submit.prevent="handleSubmit"
   >
     <!--  Project name -->
@@ -35,7 +36,13 @@
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.save')" />
-      <Btn type="primary" class="mt-2" :loading="loading" @click="handleSubmit">
+      <Btn
+        type="primary"
+        class="mt-2"
+        :loading="loading"
+        :disabled="!settingsStore.isUserOwner()"
+        @click="handleSubmit"
+      >
         {{ $t('form.save') }}
       </Btn>
     </n-form-item>
@@ -43,12 +50,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const message = useMessage();
+const settingsStore = useSettingsStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -74,38 +78,33 @@ const rules: NFormRules = {
 };
 
 // Submit
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => window.$message.error(error.message || 'Error'))
+      );
     } else {
-      await updateUserProfile();
+      await updateProjectData();
     }
   });
 }
-async function updateUserProfile() {
+async function updateProjectData() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.patch<ProjectSettingsResponse>(
-      `${endpoints.project}${dataStore.currentProjectId}`,
+    const res = await $api.patch<ProjectSettingsResponse>(
+      endpoints.project(dataStore.currentProjectId),
       formData.value
     );
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
+    if (res.data) {
+      dataStore.updateCurrentProject(res.data);
     }
-
-    if (data.data) {
-      dataStore.updateCurrentProject(data.data);
-    }
-    loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    window.$message.error(userFriendlyMsg(error));
   }
+  loading.value = false;
 }
 </script>

@@ -1,13 +1,15 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="data" :row-props="rowProps" />
+  <n-data-table
+    :bordered="false"
+    :columns="columns"
+    :data="dataStore.services.storage"
+    :row-props="rowProps"
+  />
 </template>
 
 <script lang="ts" setup>
 import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
-import { timeToDays } from '~~/lib/utils';
-import { useDataStore } from '~~/stores/data';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -22,11 +24,7 @@ type RowData = {
   uptime: string;
 };
 
-const createColumns = ({
-  handleSelect,
-}: {
-  handleSelect: (key: string | number) => void;
-}): DataTableColumns<RowData> => {
+const createColumns = (): DataTableColumns<RowData> => {
   return [
     {
       title: $i18n.t('general.serviceName'),
@@ -82,7 +80,6 @@ const createColumns = ({
           {
             options: dropdownOptions,
             trigger: 'click',
-            onSelect: handleSelect,
           },
           {
             default: () =>
@@ -97,34 +94,8 @@ const createColumns = ({
     },
   ];
 };
-const createData = (): RowData[] => dataStore.services.storage;
-const currentRow = ref(null);
-
-const data = createData();
-const columns = createColumns({
-  handleSelect(key: string | number) {
-    message.info(
-      () =>
-        h('span', {}, [
-          'Handle',
-          h('strong', { class: 'text-white' }, 'Select'),
-          JSON.stringify(key),
-          JSON.stringify(currentRow.value),
-        ]),
-      {
-        icon: () => h('span', { class: 'icon-info' }, {}),
-      }
-    );
-  },
-});
-
-function rowProps(row: RowData) {
-  return {
-    onClick: () => {
-      currentRow.value = row.key;
-    },
-  };
-}
+const columns = createColumns();
+const currentRow = ref<number>(0);
 
 const dropdownOptions = [
   {
@@ -161,4 +132,29 @@ const dropdownOptions = [
     },
   },
 ];
+
+function rowProps(row: RowData) {
+  return {
+    onClick: () => {
+      currentRow.value = row.key;
+    },
+  };
+}
+
+/**
+ * Load data on mounted
+ */
+onMounted(() => {
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      getServicesStorage();
+    });
+  }, 100);
+});
+
+async function getServicesStorage() {
+  if (!dataStore.hasServices(ServiceType.STORAGE)) {
+    await dataStore.getStorageServices();
+  }
+}
 </script>

@@ -1,44 +1,63 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="data" :row-props="rowProps" />
+  <n-data-table
+    :bordered="false"
+    :columns="columns"
+    :data="dataStore.bucket.items"
+    :row-props="rowProps"
+  />
+
+  <!-- Modal - Edit bucket -->
+  <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
+    <FormStorageBucket :bucket-id="currentRow?.id || 0" />
+  </modal>
+
+  <!-- Modal - Destroy bucket -->
+  <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucket.destroy')">
+    <FormStorageDestroy :bucket-id="currentRow?.id || 0" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, useMessage } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
-const message = useMessage();
+const $i18n = useI18n();
 const dataStore = useDataStore();
-const router = useRouter();
-const ProgressStorage = resolveComponent('ProgressStorage');
+const settingsStore = useSettingsStore();
+const NuxtLink = resolveComponent('NuxtLink');
+const showModalEditBucket = ref<boolean>(false);
+const showModalDestroyBucket = ref<boolean>(false);
+const StorageProgress = resolveComponent('StorageProgress');
 
 interface RowData extends BucketInterface {
   key: number;
 }
 
-const createColumns = ({
-  handleSelect,
-}: {
-  handleSelect: (key: string | number) => void;
-}): DataTableColumns<RowData> => {
+const createColumns = (): DataTableColumns<RowData> => {
   return [
     {
-      title: t('storage.bucketName'),
+      title: $i18n.t('storage.bucket.name'),
       key: 'name',
       render(row) {
-        return h('span', { class: 'ml-2 text-blue' }, row.name);
+        return h(
+          NuxtLink,
+          {
+            class: 'ml-2 text-blue',
+            to: `/dashboard/service/storage/${row.id}`,
+          },
+          () => row.name
+        );
       },
     },
     {
-      title: t('storage.usage'),
+      title: $i18n.t('storage.usage'),
       key: 'serviceType',
       render(row) {
         return h(
-          ProgressStorage,
+          StorageProgress,
           {
-            size: row.sizeMb,
-            maxSize: row.maxSizeMb,
+            size: row.size,
+            maxSize: row.maxSize,
             percentage: row.percentage,
           },
           null
@@ -46,15 +65,14 @@ const createColumns = ({
       },
     },
     {
-      title: t('storage.traffic'),
-      key: 'traffic',
+      title: $i18n.t('storage.bucket.description'),
+      key: 'description',
+      render(row) {
+        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
+      },
     },
     {
-      title: t('storage.visits'),
-      key: 'visits',
-    },
-    {
-      title: t('general.actions'),
+      title: $i18n.t('general.actions'),
       key: 'actions',
       align: 'right',
       className: '!py-0',
@@ -64,7 +82,6 @@ const createColumns = ({
           {
             options: dropdownOptions,
             trigger: 'click',
-            onSelect: handleSelect,
           },
           {
             default: () =>
@@ -79,55 +96,54 @@ const createColumns = ({
     },
   ];
 };
-const createData = (): RowData[] => dataStore.services.bucket;
+const columns = createColumns();
 const currentRow = ref<RowData | null>(null);
 
-const data = createData();
-const columns = createColumns({
-  handleSelect(key: string | number) {
-    message.info(
-      () =>
-        h('span', {}, [
-          'Handle',
-          h('strong', { class: 'text-white' }, 'Select'),
-          JSON.stringify(key),
-          JSON.stringify(currentRow.value),
-        ]),
-      {
-        icon: () => h('span', { class: 'icon-info' }, {}),
-      }
-    );
-  },
-});
-
-function rowProps(row: RowData) {
+const rowProps = (row: RowData) => {
   return {
     onClick: () => {
       currentRow.value = row;
     },
   };
-}
+};
 
 const dropdownOptions = [
   {
-    label: t('storage.edit'),
+    label: $i18n.t('storage.edit'),
     key: 'storageEdit',
+    disabled: settingsStore.isProjectUser(),
     props: {
       onClick: () => {
-        router.push(`/dashboard/service/storage/bucket/${currentRow.value.id}`);
+        showModalEditBucket.value = true;
       },
     },
   },
   {
-    label: t('storage.delete'),
-    key: 'storage.delete',
+    label: $i18n.t('storage.delete.bucket'),
+    key: 'storage.delete.bucket',
+    show: false,
     props: {
       onClick: () => {
-        message.error('TODO: DELETE' + JSON.stringify(currentRow.value), {
-          icon: () => h('span', { class: 'icon-close' }, {}),
-        });
+        showModalDestroyBucket.value = true;
       },
     },
   },
 ];
+
+/**
+ * Load data on mounted
+ */
+onMounted(() => {
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      getBuckets();
+    });
+  }, 100);
+});
+
+async function getBuckets() {
+  if (!dataStore.hasBuckets) {
+    dataStore.promises.buckets = await dataStore.fetchBuckets();
+  }
+}
 </script>

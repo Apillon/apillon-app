@@ -7,12 +7,11 @@
 <script lang="ts" setup>
 import { h } from 'vue';
 import type { MenuOption } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const { currentRoute } = useRouter();
+const { name } = useRoute();
+const selectedPage = ref(name?.toString() || '');
 const NuxtLink = resolveComponent('NuxtLink');
-const selectedPage = ref(currentRoute.value?.name);
 
 const menuOptions: MenuOption[] = [
   {
@@ -24,15 +23,14 @@ const menuOptions: MenuOption[] = [
   },
   {
     label: () =>
-      h(NuxtLink, { to: { name: 'dashboard-user-permissions' } }, () =>
+      h(NuxtLink, { to: { name: 'dashboard-users-permissions' } }, () =>
         t('pageMenu.usersPermissions')
       ),
-    key: 'dashboard-user-permissions',
+    key: 'dashboard-users-permissions',
   },
   {
-    label: () =>
-      h(NuxtLink, { to: { name: 'dashboard-credentials' } }, () => t('pageMenu.credentials')),
-    key: 'dashboard-credentials',
+    label: () => h(NuxtLink, { to: { name: 'dashboard-api-keys' } }, () => t('pageMenu.apiKeys')),
+    key: 'dashboard-api-keys',
   },
 ];
 </script>

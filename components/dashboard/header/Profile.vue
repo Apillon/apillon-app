@@ -36,9 +36,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-import { useAuthStore } from '~~/stores/auth';
-
 const authStore = useAuthStore();
 const router = useRouter();
 const $i18n = useI18n();

@@ -101,7 +101,6 @@
 import cardValidator from 'card-validator';
 import { textMarshal } from 'text-marshal';
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const loading = ref(false);
@@ -115,7 +114,7 @@ const formData = ref<FormBilling>({
   expirationDate: '',
   cvv: '',
   postalCode: '',
-  terms: null,
+  terms: false,
 });
 
 const rules: NFormRules = {
@@ -236,11 +235,11 @@ function handlePostalCodeInput(value: string | [string, string]) {
 }
 
 // Submit
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       await updateUserProfile();
     }
@@ -250,22 +249,16 @@ async function updateUserProfile() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<BillingResponse>(endpoints.billing, formData.value);
-
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
+    const res = await $api.post<BillingResponse>(endpoints.billing, formData.value);
 
     // TODO
-    if (data.data) {
-      console.log(data);
+    if (res.data) {
+      console.log(res.data);
     }
     loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error));
   }
+  loading.value = false;
 }
 </script>

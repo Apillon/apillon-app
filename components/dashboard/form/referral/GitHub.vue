@@ -31,7 +31,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const loading = ref(false);
@@ -53,12 +52,12 @@ const rules: NFormRules = {
 };
 
 // Submit
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   const message = useMessage();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       // await connectTwitter();
     }

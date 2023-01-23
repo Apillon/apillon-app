@@ -5,9 +5,9 @@
       <p class="mb-7">{{ $t('login.enterNewPassword') }}</p>
 
       <FormPassword
-        class="mx-auto max-w-[520px] text-left"
+        class="mx-auto max-w-lg text-left"
         :reset-password="true"
-        :token="query.token.toString()"
+        :token="query?.token?.toString()"
         @submit-success="passwordChanged"
       />
     </div>
@@ -15,8 +15,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const { t } = useI18n();
 const { query } = useRoute();
 const router = useRouter();

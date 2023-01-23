@@ -10,7 +10,7 @@
       <h3 class="mb-4">{{ $t('onboarding.web3ProjectName') }}</h3>
 
       <FormProject
-        class="md:max-w-[520px]"
+        class="md:max-w-lg"
         @submit-active="loaderStatus"
         @submit-success="projectCreated"
       />
@@ -26,8 +26,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const { t } = useI18n();
 const router = useRouter();
 const $style = useCssModule();

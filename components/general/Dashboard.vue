@@ -1,11 +1,20 @@
 <template>
-  <n-space v-if="loading" vertical>
+  <div v-if="loading" class="flex flex-col gap-8" style="height: calc(100vh - 116px)">
     <!-- Loading skeleton - on long page load show skeleten -->
-    <n-skeleton height="40px" width="33%" />
-    <n-skeleton height="40px" width="66%" :sharp="false" />
-    <n-skeleton height="40px" round />
-    <n-skeleton height="40px" circle />
-  </n-space>
+    <n-skeleton height="40px" width="100%" />
+    <n-skeleton height="40px" width="100%" />
+    <div class="flex gap-8 h-full">
+      <div style="width: 176px">
+        <n-skeleton height="200px" width="100%" />
+      </div>
+      <div style="width: 100%">
+        <n-skeleton height="100%" width="100%" />
+      </div>
+      <div style="width: 320px">
+        <n-skeleton height="400px" width="100%" />
+      </div>
+    </div>
+  </div>
   <div v-else>
     <div v-if="$slots.heading" class="mb-10">
       <slot name="heading"> </slot>
@@ -61,7 +70,9 @@
             </button>
           </div>
 
-          <slot v-if="!learnCollapsed" name="learn"></slot>
+          <slot v-if="!learnCollapsed" name="learn">
+            <learn-section />
+          </slot>
         </n-layout-sider>
       </n-layout>
     </div>
@@ -69,16 +80,41 @@
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
+
 defineProps({
   loading: { type: Boolean, default: false },
 });
 
+/** Global messages */
+window.$message = useMessage();
+
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
+const $i18n = useI18n();
+const dataStore = useDataStore();
 const { isLg } = useScreen();
+const { name } = useRoute();
+
+/** Instructions load */
+const key = computed(() => {
+  return name?.toString() || '';
+});
+
+onMounted(async () => {
+  // await getInstructions(key.value);
+});
+
+async function getInstructions(key: string) {
+  if (!dataStore.hasInstructions(key)) {
+    await dataStore.fetchInstructions(key);
+  }
+}
 
 const instructionsAvailable = computed(() => {
-  return $slots.learn && isFeatureEnabled(Feature.INSTRUCTIONS) && isLg.value;
+  return (
+    dataStore.hasInstructions(key.value) && isFeatureEnabled(Feature.INSTRUCTIONS) && isLg.value
+  );
 });
 
 // Keep info about collapsible section learn in local storage

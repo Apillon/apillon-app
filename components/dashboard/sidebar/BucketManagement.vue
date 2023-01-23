@@ -1,43 +1,75 @@
 <template>
   <div>
-    <n-menu v-model:value="selectedPage" :options="menuOptions" @update-value="handleUpdateValue" />
+    <n-menu v-model:value="selectedMenu" :options="menuOptions" />
+
+    <!-- Modal - Destroy bucket -->
+    <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucket.destroy')">
+      <FormStorageDestroy :bucket-id="dataStore.bucket.selected" />
+    </modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { h } from 'vue';
 import type { MenuOption } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const { name } = useRoute();
+const dataStore = useDataStore();
+const showModalDestroyBucket = ref<boolean>(false);
 const NuxtLink = resolveComponent('NuxtLink');
-const { currentRoute } = useRouter();
-const selectedPage = ref(currentRoute.value?.name);
 
-function handleUpdateValue(key: string, item: MenuOption) {
-  console.info('[onUpdate:value]: ' + JSON.stringify(key));
-  console.info('[onUpdate:value]: ' + JSON.stringify(item));
-}
+const selectedMenu = ref(name?.toString());
 
 const menuOptions: MenuOption[] = [
   {
     label: () =>
-      h(NuxtLink, { to: { path: '/dashboard/service/storage/bucket/:id/files' } }, () =>
+      h(NuxtLink, { to: { path: `/dashboard/service/storage/${dataStore.bucket.selected}` } }, () =>
         t('storage.files')
       ),
-    key: 'files',
+    key: 'dashboard-service-storage-id',
   },
   {
     label: () =>
-      h(NuxtLink, { to: { path: '/dashboard/service/storage/snapshots' } }, () =>
-        t('storage.snapshots')
+      h(
+        NuxtLink,
+        { to: { path: `/dashboard/service/storage/${dataStore.bucket.selected}/all` } },
+        () => t('storage.filesAll')
       ),
-    key: 'snapshots',
+    key: 'dashboard-service-storage-slug-all',
   },
   {
     label: () =>
-      h(NuxtLink, { href: '/dashboard/service/storage/stats' }, () => t('storage.stats')),
+      h(
+        NuxtLink,
+        { to: { path: `/dashboard/service/storage/${dataStore.bucket.selected}/webhook` } },
+        () => t('storage.webhook')
+      ),
+    key: 'dashboard-service-storage-slug-webhook',
+  },
+  {
+    label: () => h('span', {}, t('storage.snapshots')),
+    key: 'snapshots',
+    disabled: true,
+    show: false,
+  },
+  {
+    label: () => h('span', {}, t('storage.stats')),
     key: 'stats',
+    disabled: true,
+    show: false,
+  },
+  {
+    label: () => h('span', {}, t('storage.history')),
+    key: 'history',
+    disabled: true,
+    show: false,
+  },
+  {
+    label: () => h('span', {}, t('storage.destroy')),
+    key: 'delete',
+    show: false,
+    onClick: () => (showModalDestroyBucket.value = true),
   },
 ];
 </script>

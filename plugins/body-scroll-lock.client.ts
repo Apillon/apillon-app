@@ -1,7 +1,7 @@
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 export default defineNuxtPlugin(nuxtApp => {
-  const targetRef = ref(null);
+  const targetRef = ref<HTMLElement>();
 
   nuxtApp.vueApp.directive('scroll-lock', {
     mounted(el, _binding) {
@@ -11,8 +11,8 @@ export default defineNuxtPlugin(nuxtApp => {
 
   return {
     provide: {
-      enableBodyScroll: () => enableBodyScroll(targetRef),
-      disableBodyScroll: () => disableBodyScroll(targetRef),
+      enableBodyScroll: () => enableBodyScroll(targetRef.value as HTMLElement),
+      disableBodyScroll: () => disableBodyScroll(targetRef.value as HTMLElement),
       clearAllBodyScrollLocks: () => clearAllBodyScrollLocks(),
     },
   };

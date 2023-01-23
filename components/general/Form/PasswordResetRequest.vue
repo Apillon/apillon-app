@@ -2,7 +2,7 @@
   <n-form
     class="inline"
     ref="formRef"
-    :model="{ email: email }"
+    :model="formData"
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
@@ -15,7 +15,7 @@
     <!--  Email - hidden -->
     <div class="absolute invisible">
       <n-form-item path="email" :show-label="false" :show-feedback="false">
-        <n-input v-model:value="email" :input-props="{ type: 'email' }" readonly />
+        <n-input v-model:value="formData.email" :input-props="{ type: 'email' }" readonly />
       </n-form-item>
     </div>
   </n-form>
@@ -23,7 +23,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   btnType: {
@@ -39,8 +38,8 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const formData = ref<{ email: string }>({
-  email: props.email,
+const formData = computed<PasswordResetForm>(() => {
+  return { email: props.email };
 });
 const rules: NFormRules = {
   email: [
@@ -55,12 +54,12 @@ const rules: NFormRules = {
   ],
 };
 
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || '')));
     } else {
       /** Request password change */
       await passwordChangeRequest();
@@ -71,23 +70,17 @@ function handleSubmit(e: MouseEvent) {
 async function passwordChangeRequest() {
   loading.value = true;
   try {
-    const { data, error } = await $api.post<PasswordResetRequestResponse>(
+    const res = await $api.post<PasswordResetRequestResponse>(
       endpoints.passwordResetRequest,
-      { email: props.email }
+      formData.value
     );
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
-    if (data) {
+    if (res.data) {
       message.success($i18n.t('form.success.requestPasswordChange'));
     }
-    loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error));
   }
+  loading.value = false;
 }
 </script>

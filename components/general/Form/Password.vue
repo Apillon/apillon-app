@@ -46,7 +46,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   resetPassword: { type: Boolean, default: false },
@@ -99,6 +98,7 @@ const rules: NFormRules = {
   ],
 };
 // Custom validations
+/** Additional validatins
 function passwordContainsUppercase(_: NFormItemRule, value: string): boolean {
   return /[A-Z]/.test(value);
 }
@@ -110,7 +110,7 @@ function passwordContainsNumber(_: NFormItemRule, value: string): boolean {
 }
 function passwordContainsSpecial(_: NFormItemRule, value: string): boolean {
   return /[#?!@$%^&*-]/.test(value);
-}
+} */
 function validatePasswordStartWith(_: NFormItemRule, value: string): boolean {
   return (
     !!formData.value.password &&
@@ -129,11 +129,11 @@ function handlePasswordInput() {
 }
 
 // Submit
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (props.resetPassword) {
       await resetPassword();
     } else {
@@ -145,26 +145,19 @@ async function register() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<RegisterResponse>(endpoints.register, {
+    const res = await $api.post<RegisterResponse>(endpoints.register, {
       password: formData.value.password,
       token: query.token || authStore.jwt,
     });
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
-
-    authStore.setUserToken(data.data.token);
+    authStore.setUserToken(res.data.token);
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-    await dataStore.getProjects(true);
-    loading.value = false;
+    await dataStore.fetchProjects(true);
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error));
   }
+  loading.value = false;
 }
 async function resetPassword() {
   if (props.token) {
@@ -174,24 +167,18 @@ async function resetPassword() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
+    const res = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
       password: formData.value.password,
       token: props.token,
     });
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
-    if (data) {
+    if (res.data) {
       message.success($i18n.t('login.passwordReplaced'));
       emit('submitSuccess');
     }
-    loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error));
   }
+  loading.value = false;
 }
 </script>

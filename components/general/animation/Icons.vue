@@ -1,6 +1,13 @@
 <template>
   <div class="flex items-center">
-    <NuxtIcon :name="iconName" :class="btnClass" fill />
+    <NuxtIcon
+      v-for="icon in numOfIcons"
+      v-show="icon === iconIndex"
+      :name="`animation/${animationName}/${icon}`"
+      :key="icon"
+      :class="btnClass"
+      filled
+    />
   </div>
 </template>
 
@@ -35,7 +42,7 @@ const iconIndex = ref<number>(1);
 
 /** Name of currently visibile icon */
 const iconName = computed(() => {
-  return `Animation${props.animationName}${iconIndex.value}`;
+  return `animation/${props.animationName}/${iconIndex.value}`;
 });
 
 setInterval(() => {

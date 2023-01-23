@@ -7,14 +7,12 @@
       <h2 class="mb-6 text-center">{{ $t('signup.emailConfirmed') }}</h2>
       <p class="mb-7">{{ $t('signup.enterDesiredPassword') }}</p>
 
-      <FormPassword class="mx-auto max-w-[520px] text-left" />
+      <FormPassword class="mx-auto max-w-lg text-left" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const authStore = useAuthStore();
 

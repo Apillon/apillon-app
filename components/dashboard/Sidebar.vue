@@ -55,18 +55,9 @@
   </transition>
 
   <!-- Modal - Create new project -->
-  <n-modal v-model:show="showModalNewProject">
-    <n-card
-      style="width: 660px"
-      :title="$t('project.new')"
-      :bordered="false"
-      size="huge"
-      role="dialog"
-      aria-modal="true"
-    >
-      <FormProject @submit-success="showModalNewProject = false" />
-    </n-card>
-  </n-modal>
+  <modal v-model:show="showModalNewProject" :title="$t('project.new')">
+    <FormProject @submit-success="showModalNewProject = false" />
+  </modal>
 </template>
 
 <script lang="ts" setup>

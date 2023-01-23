@@ -11,21 +11,31 @@ export const AuthLsKeys = {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     jwt: '',
-    userUuid: '',
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
-    username: '',
-    phone: '',
-    provider: parseInt(localStorage.getItem(AuthLsKeys.PROVIDER)) || 0,
-    wallet: localStorage.getItem(AuthLsKeys.WALLET) || '',
+    provider: 0,
+    wallet: '',
     authStep: '',
     crypto: null,
+    user: {} as UserInterface,
     promises: {
-      profile: null,
+      profile: null as any,
     },
   }),
   getters: {
     loggedIn(state) {
       return !!state.email && !!state.jwt;
+    },
+    userId(state) {
+      return state.user.id;
+    },
+    userUuid(state) {
+      return state.user.user_uuid;
+    },
+    username(state) {
+      return state.user.name;
+    },
+    phone(state) {
+      return state.user.phone;
     },
     allowedEntry: state => !!state.jwt,
   },
@@ -40,11 +50,9 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    changeUser(userData) {
-      this.userUuid = userData?.user_uuid;
-      this.username = userData?.name;
-      this.phone = userData?.phone;
-      this.saveEmail(userData?.email);
+    changeUser(userData: UserInterface) {
+      this.user = { ...userData };
+      this.saveEmail(userData.email.toString());
     },
 
     saveEmail(email: string) {
@@ -52,7 +60,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem(AuthLsKeys.EMAIL, email);
     },
 
-    setUserToken(token) {
+    setUserToken(token: string) {
       this.jwt = token;
       localStorage.setItem(
         AuthLsKeys.AUTH,
@@ -65,17 +73,12 @@ export const useAuthStore = defineStore('auth', {
 
     async getUserData() {
       try {
-        const { response, data, error } = await $api.get<UserResponse>(endpoints.me, null);
+        const res = await $api.get<UserResponse>(endpoints.me);
 
-        if (error) {
-          this.promises.profile = null;
-          throw new Error(error.message);
+        if (res.data) {
+          this.changeUser(res.data);
         }
-
-        if (data.data) {
-          this.changeUser(data.data);
-        }
-        return response;
+        return res;
       } catch (error) {
         console.warn(error);
         return null;
@@ -86,7 +89,6 @@ export const useAuthStore = defineStore('auth', {
       $api.clearToken();
 
       this.jwt = '';
-      this.username = '';
       this.wallet = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.WALLET);

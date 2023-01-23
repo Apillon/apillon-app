@@ -1,6 +1,9 @@
 import {
   CollapseProps,
   create,
+  DataTableInst,
+  DataTableSortState,
+  NEllipsis,
   FormInst,
   FormItemInst,
   FormItemRule,
@@ -10,6 +13,7 @@ import {
   NButton,
   NCard,
   NCheckbox,
+  NCheckboxGroup,
   NCollapse,
   NCollapseItem,
   NConfigProvider,
@@ -20,6 +24,7 @@ import {
   NForm,
   NFormItem,
   NFormItemGi,
+  NGi,
   NGrid,
   NH1,
   NH2,
@@ -50,19 +55,29 @@ import {
   NUploadDragger,
   NUploadFileList,
   NUploadTrigger,
+  SelectOption,
+  SelectProps,
   UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
+import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
+import { FileInfo } from 'naive-ui/es/upload/src/interface';
 
 declare global {
   interface NCollapseProps extends CollapseProps {}
+  interface NFileInfo extends FileInfo {}
   interface NFormInst extends FormInst {}
   interface NFormItemInst extends FormItemInst {}
   interface NFormRules extends FormRules {}
   interface NFormItemRule extends FormItemRule {}
   interface NFormValidationError extends FormValidationError {}
+  interface NSelectOption extends SelectOption {}
+  interface NSelectProps extends SelectProps {}
   interface NUploadCustomRequestOptions extends UploadCustomRequestOptions {}
   interface NUploadFileInfo extends UploadFileInfo {}
+  interface NDataTableInst extends DataTableInst {}
+  interface NDataTableSortState extends DataTableSortState {}
+  interface NMessageApiInjection extends MessageApiInjection {}
 }
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(
@@ -72,6 +87,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NButton,
         NCard,
         NCheckbox,
+        NCheckboxGroup,
         NCollapse,
         NCollapseItem,
         NConfigProvider,
@@ -79,9 +95,11 @@ export default defineNuxtPlugin(nuxtApp => {
         NDrawer,
         NDrawerContent,
         NDropdown,
+        NEllipsis,
         NForm,
         NFormItem,
         NFormItemGi,
+        NGi,
         NGrid,
         NH1,
         NH2,

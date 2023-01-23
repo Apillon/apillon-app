@@ -15,6 +15,6 @@ import { clearAllBodyScrollLocks } from 'body-scroll-lock';
  * Disable body scroll
  */
 onUnmounted(() => {
-  clearAllBodyScrollLocks(document);
+  clearAllBodyScrollLocks();
 });
 </script>

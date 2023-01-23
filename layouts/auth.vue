@@ -6,7 +6,7 @@
         <AnimationIcons
           v-if="isLogin"
           :num-of-icons="4"
-          :animation-name="'Jet'"
+          :animation-name="'jet'"
           :size="'xl'"
           class="order-3 md:order-1"
         />
@@ -24,7 +24,7 @@
         <AnimationIcons
           v-if="isSignUp"
           :num-of-icons="6"
-          :animation-name="'Press'"
+          :animation-name="'press'"
           :size="'xl'"
           class="order-3"
         />
@@ -50,6 +50,6 @@ const isSignUp = computed(() => {
  * Disable body scroll
  */
 onUnmounted(() => {
-  clearAllBodyScrollLocks(document);
+  clearAllBodyScrollLocks();
 });
 </script>
