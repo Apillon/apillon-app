@@ -305,7 +305,7 @@ export const useDataStore = defineStore('data', {
     async getAllServices() {
       const services = await this.fetchServices();
 
-      Object.entries(ServiceTypeNames).map(([serviceType, typeName]) => {
+      Object.entries(ServiceTypeNames).forEach(([serviceType, typeName]) => {
         this.services[typeName] =
           services.filter(service => service.serviceType_id === parseInt(serviceType)) ||
           ([] as Array<ServiceInterface>);
@@ -447,7 +447,7 @@ export const useDataStore = defineStore('data', {
 
     async fetchFileInfo(fileId: number) {
       try {
-        const res = await $api.get<FolderResponse>(`${endpoints.file}${fileId}`);
+        const res = await $api.get<FolderResponse>(endpoints.file(fileId));
 
         return res.data;
       } catch (error: any) {

@@ -102,7 +102,7 @@
     :positive-text="$t('dashboard.apiKey.secredSaved')"
     @positive-click="emit('close')"
   >
-    <ApiKeyDetails v-bind="createdApiKey"></ApiKeyDetails>
+    <ApiKeyDetails v-bind="createdApiKey" />
   </n-modal>
 </template>
 
@@ -237,7 +237,7 @@ async function createApiKey() {
         .flat()
         .filter(item => item !== undefined),
     };
-    const res = await $api.post<ApiKeyCreatedResponse>(endpoints.apiKey, bodyData);
+    const res = await $api.post<ApiKeyCreatedResponse>(endpoints.apiKey(), bodyData);
 
     if (res.data) {
       createdApiKey.value = res.data;

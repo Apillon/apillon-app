@@ -2,6 +2,8 @@
   <div>
     <n-data-table
       ref="tableRef"
+      v-bind="$attrs"
+      v-model:checked-row-keys="checkedRowKeys"
       remote
       :bordered="false"
       :columns="columns"
@@ -23,16 +25,23 @@
     </n-drawer>
 
     <!-- Modal - Delete file/folder -->
-    <modal
+    <ModalDelete
       v-model:show="showModalDelete"
       :title="
         $i18n.te(`storage.${currentRow.type}.delete`)
           ? $t(`storage.${currentRow.type}.delete`)
-          : $t(`general.delete`)
+          : $t(`storage.delete.item`)
       "
     >
-      <FormStorageFolderDelete :items="[currentRow]" @submit-success="onDeleted" />
-    </modal>
+      <template #content>
+        <p class="text-body">
+          {{ $t(`storage.${currentRow.type}.deleteConfirm`, { num: 1 }) }}
+        </p>
+      </template>
+      <slot>
+        <FormDeleteItems :items="[currentRow]" @submit-success="onDeleted" />
+      </slot>
+    </ModalDelete>
   </div>
 </template>
 
@@ -49,6 +58,7 @@ const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
+const checkedRowKeys = ref<Array<string | number>>([]);
 
 /** Pagination data */
 const currentPage = ref<number>(0);
@@ -76,6 +86,7 @@ const dropdownFolderOptions = [
     label: $i18n.t('general.delete'),
     key: 'delete',
     props: {
+      class: '!text-pink',
       onClick: () => {
         showModalDelete.value = true;
       },
@@ -106,6 +117,7 @@ const dropdownFileOptions = [
     label: $i18n.t('general.delete'),
     key: 'delete',
     props: {
+      class: '!text-pink',
       onClick: () => {
         showModalDelete.value = true;
       },
@@ -292,7 +304,7 @@ const columns = computed(() => {
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },
-      renderFilterMenu: ({ hide }) => {
+      renderFilterMenu: () => {
         return h(
           TableColumns,
           {
@@ -310,6 +322,7 @@ const columns = computed(() => {
 const rowKey = (row: BucketItemInterface) => row.id;
 
 const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
+  checkedRowKeys.value = rowKeys;
   const rowKeyIds = rowKeys.map(item => intVal(item));
 
   dataStore.folder.selectedItems = dataStore.folder.items.filter(item =>
@@ -420,10 +433,19 @@ async function handlePageChange(currentPage: number) {
   }
 }
 
-/** On folder deleted, refresh folder list */
-async function onDeleted() {
-  await getDirectoryContent();
+/**
+ * On folder/file deleted
+ * Hide modal and refresh folder list
+ * */
+function onDeleted() {
   showModalDelete.value = false;
+
+  /** Reset selected items */
+  handleCheck([]);
+
+  setTimeout(() => {
+    getDirectoryContent();
+  }, 300);
 }
 
 /** Search folders and files */

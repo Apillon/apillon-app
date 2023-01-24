@@ -53,9 +53,16 @@
   </n-drawer>
 
   <!-- Modal - Delete file -->
-  <modal v-model:show="showModalDelete" :title="$t(`storage.file.delete`)">
-    <FormStorageFolderDelete :items="[currentRow]" @submit-success="onDeleted" />
-  </modal>
+  <ModalDelete v-model:show="showModalDelete" :title="$t('storage.file.delete')">
+    <template #content>
+      <p class="text-body">
+        {{ $t(`storage.file.deleteConfirm`, { num: 1 }) }}
+      </p>
+    </template>
+    <slot>
+      <FormDeleteItems :items="[currentRow]" @submit-success="onDeleted" />
+    </slot>
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -148,6 +155,7 @@ const dropdownFileOptions = [
     label: $i18n.t('general.delete'),
     key: 'delete',
     props: {
+      class: '!text-pink',
       onClick: () => {
         showModalDelete.value = true;
       },

@@ -41,7 +41,7 @@
               <span class="icon-delete text-pink"></span>
             </n-button>
           </template>
-          <span>{{ $t('storage.deleteSelectedFiles') }}</span>
+          <span>{{ $t('storage.delete.selectedFiles') }}</span>
         </n-tooltip>
 
         <!-- Separator -->
@@ -57,7 +57,7 @@
       <!-- Create folder -->
       <n-button size="small" @click="showModalNewFolder = true">
         <span class="icon-create-folder text-lg mr-2"></span>
-        {{ $t('storage.folder.create') }}
+        {{ $t('storage.directory.create') }}
       </n-button>
 
       <!-- Upload files -->
@@ -74,14 +74,21 @@
   </n-space>
 
   <!-- Modal - Create new folder -->
-  <modal v-model:show="showModalNewFolder" :title="$t('storage.folder.createNew')">
-    <FormStorageFolderCreate @submit-success="onFolderCreated" />
+  <modal v-model:show="showModalNewFolder" :title="$t('storage.directory.createNew')">
+    <FormStorageDirectory @submit-success="onFolderCreated" />
   </modal>
 
   <!-- Modal - Delete file/folder -->
-  <modal v-model:show="showModalDelete" :title="$t(`storage.delete.bucketItems`)">
-    <FormStorageFolderDelete :items="dataStore.folder.selectedItems" @submit-success="onDeleted" />
-  </modal>
+  <ModalDelete v-model:show="showModalDelete" :title="$t(`storage.delete.bucketItems`)">
+    <template #content>
+      <p class="text-body">
+        {{ $t(`storage.delete.deleteConfirm`, { num: dataStore.folder.selectedItems.length }) }}
+      </p>
+    </template>
+    <slot>
+      <FormDeleteItems :items="dataStore.folder.selectedItems" @submit-success="onDeleted" />
+    </slot>
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -131,9 +138,8 @@ async function downloadSelectedFiles() {
     await req;
   });
 
-  Promise.all(promises).then(async _ => {
+  await Promise.all(promises).then(_ => {
     downloading.value = false;
-    console.log('loaded');
   });
 }
 
@@ -173,8 +179,14 @@ function deleteSelectedFiles() {
 }
 
 /** On folder deleted, refresh folder list */
-async function onDeleted() {
-  await dataStore.fetchDirectoryContent();
+function onDeleted() {
   showModalDelete.value = false;
+
+  /** Reset selected items */
+  dataStore.folder.selectedItems = [];
+
+  setTimeout(() => {
+    dataStore.fetchDirectoryContent();
+  }, 300);
 }
 </script>

@@ -29,7 +29,9 @@ const Endpoints = {
   },
 
   /** File */
-  file: '/files/',
+  file: (key?: number) => {
+    return key ? `/files/${key}` : '/files';
+  },
 
   /** Services */
   services: '/services/',
@@ -73,7 +75,15 @@ const Endpoints = {
   },
 
   /** Api Keys */
-  apiKey: '/api-keys/',
+  apiKey: (key?: number) => {
+    return key ? `/api-keys/${key}` : '/api-keys';
+  },
+  apiKeyRole: (key: number) => {
+    return `/api-keys/${key}/role`;
+  },
+  apiKeyRoles: (key: number) => {
+    return `/api-keys/${key}/roles`;
+  },
 
   /** Billing */
   billing: '/billing/',

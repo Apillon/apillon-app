@@ -161,16 +161,12 @@ async function register() {
   loading.value = false;
 }
 async function resetPassword() {
-  if (props.token) {
-    message.warning('Missing token');
-    return;
-  }
   loading.value = true;
 
   try {
     const res = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
       password: formData.value.password,
-      token: props.token,
+      token: query.token || authStore.jwt,
     });
 
     if (res.data) {

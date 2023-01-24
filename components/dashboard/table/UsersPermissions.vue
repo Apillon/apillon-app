@@ -120,6 +120,7 @@ const dropdownOptions = (user: ProjectUserInterface) => {
       key: 'delete',
       disabled: !isRoleChangeAllowed(user),
       props: {
+        class: '!text-pink',
         onClick: () => {
           deleteRole(currentRow.value.id);
         },
