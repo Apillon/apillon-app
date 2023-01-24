@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
 import { AnyJson } from '@polkadot/types-codec/types';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { typesBundleForPolkadot } from '@crustio/type-definitions';
+import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
@@ -12,10 +12,16 @@ export const DataLsKeys = {
 export const useDataStore = defineStore('data', {
   state: () => ({
     bucket: {
+      allowFetch: true,
       active: {} as BucketInterface,
+      destroyed: [] as Array<BucketInterface>,
       items: [] as Array<BucketInterface>,
-      selected: 0,
+      loading: false,
       quotaReached: undefined as Boolean | undefined,
+      search: '',
+      selected: 0,
+      selectedItems: [] as Array<BucketInterface>,
+      total: 0,
     },
     crust: {} as Record<string, AnyJson>,
     currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
@@ -26,12 +32,12 @@ export const useDataStore = defineStore('data', {
     },
     folder: {
       allowFetch: true,
-      items: [] as Array<FolderInterface>,
+      items: [] as Array<BucketItemInterface>,
       loading: false,
       path: [] as Array<{ id: number; name: string }>,
       search: '',
       selected: 0,
-      selectedItems: [] as Array<FolderInterface>,
+      selectedItems: [] as Array<BucketItemInterface>,
       total: 0,
       uploadActive: false,
     },
@@ -83,6 +89,9 @@ export const useDataStore = defineStore('data', {
     hasBuckets(state): boolean {
       return Array.isArray(state.bucket.items) && state.bucket.items.length > 0;
     },
+    hasDestroyedBuckets(state): boolean {
+      return Array.isArray(state.bucket.destroyed) && state.bucket.destroyed.length > 0;
+    },
     hasSelectedBucket(state): boolean {
       return (
         state.bucket.items.find(
@@ -96,23 +105,36 @@ export const useDataStore = defineStore('data', {
   },
   actions: {
     resetData() {
+      /** Bucket */
       this.bucket.active = {} as BucketInterface;
+      this.bucket.destroyed = [] as Array<BucketInterface>;
       this.bucket.items = [] as Array<BucketInterface>;
+      this.bucket.quotaReached = undefined;
+      this.bucket.search = '';
+      this.bucket.selected = 0;
+      this.bucket.total = 0;
+
+      /** File/folder */
       this.file.items = {} as Record<string, FileDetailsInterface>;
-      this.folder.items = [] as Array<FolderInterface>;
+      this.folder.items = [] as Array<BucketItemInterface>;
+
+      /** Services */
       this.services.authentication = [] as Array<ServiceInterface>;
       this.services.storage = [] as Array<ServiceInterface>;
       this.services.computing = [] as Array<ServiceInterface>;
     },
 
     setCurrentProject(id: number) {
+      /** Reset store data */
+      this.resetData();
+
       this.currentProjectId = id;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
     },
 
     setBucketId(id: number) {
       this.file.items = {} as Record<string, FileDetailsInterface>;
-      this.folder.items = [] as Array<FolderInterface>;
+      this.folder.items = [] as Array<BucketItemInterface>;
       this.folder.total = 0;
       this.folder.path = [];
       this.folder.selected = 0;
@@ -258,12 +280,11 @@ export const useDataStore = defineStore('data', {
     /** Services */
     async fetchServices(type?: number) {
       if (!this.hasProjects) {
-        alert('Please create your first project');
-        return [] as Array<ServiceInterface>;
+        await this.fetchProjects();
       }
 
       try {
-        let params: Record<string, string | number> = {
+        const params: Record<string, string | number> = {
           project_id: this.currentProjectId,
         };
         if (type) {
@@ -303,12 +324,12 @@ export const useDataStore = defineStore('data', {
     /** Buckets */
     async fetchBuckets() {
       if (!this.hasProjects) {
-        alert('Please create your first project');
-        return null;
+        await this.fetchProjects();
       }
+      this.bucket.loading = true;
 
       try {
-        const params = {
+        const params: Record<string, string | number> = {
           project_uuid: this.currentProject?.project_uuid || '',
         };
         const res = await $api.get<BucketsResponse>(endpoints.buckets, params);
@@ -316,12 +337,17 @@ export const useDataStore = defineStore('data', {
         this.bucket.items = res.data.items.map((bucket: BucketInterface) => {
           return addBucketAdditionalData(bucket);
         });
+        this.bucket.total = res.data.total;
+        this.bucket.loading = false;
+        this.bucket.search = '';
         return res;
       } catch (error: any) {
         this.bucket.items = [] as Array<BucketInterface>;
+        this.bucket.total = 0;
+        this.bucket.loading = false;
 
-        /** Show error message 
-        window.$message.error(userFriendlyMsg(error));*/
+        /** Show error message  */
+        window.$message.error(userFriendlyMsg(error));
       }
       return null;
     },
@@ -343,8 +369,7 @@ export const useDataStore = defineStore('data', {
 
     async fetchBucketQuota() {
       if (!this.hasProjects) {
-        alert('Please create your first project');
-        return;
+        await this.fetchProjects();
       }
       const params = {
         project_uuid: this.currentProject?.project_uuid || '',
@@ -382,7 +407,7 @@ export const useDataStore = defineStore('data', {
 
       try {
         /** If subfolder is selected, search directory content in this sibfolder */
-        let params: Record<string, string | number> = {
+        const params: Record<string, string | number> = {
           bucket_uuid: bucket,
         };
 

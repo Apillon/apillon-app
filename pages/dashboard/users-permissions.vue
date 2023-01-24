@@ -1,11 +1,21 @@
 <template>
   <Dashboard>
-    <template #sidebar>
-      <SidebarProjectSettings />
+    <template #heading>
+      <Heading>
+        <slot>
+          <h4>{{ $t('project.usersAndPermissions') }}</h4>
+        </slot>
+
+        <template #info>
+          <span class="icon-info"></span>
+        </template>
+
+        <template #submenu>
+          <MenuProjectSettings />
+        </template>
+      </Heading>
     </template>
     <slot>
-      <!-- Project users & permissions -->
-      <h4 class="mb-6">{{ $t('project.usersAndPermissions') }}</h4>
       <TableUsersPermissions />
 
       <!-- Invite team member -->

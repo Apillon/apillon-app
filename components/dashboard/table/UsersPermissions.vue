@@ -10,7 +10,6 @@
 
 <script lang="ts" setup>
 import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
-import type { DataTableColumns } from 'naive-ui';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -29,7 +28,7 @@ const createColumns = ({
   handleRoleChange,
 }: {
   handleRoleChange: (selected: number) => void;
-}): DataTableColumns<ProjectUserInterface> => {
+}): NDataTableColumns<ProjectUserInterface> => {
   return [
     {
       title: $i18n.t('dashboard.user'),

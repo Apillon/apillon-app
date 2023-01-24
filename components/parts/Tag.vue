@@ -1,5 +1,5 @@
 <template>
-  <strong v-bind="$attrs" class="inline-block text-dark" :class="tagClass">
+  <strong v-bind="$attrs" class="inline-block text-bg" :class="tagClass">
     <slot />
   </strong>
 </template>

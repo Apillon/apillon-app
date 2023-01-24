@@ -12,6 +12,7 @@
         v-model:value="formData.url"
         :input-props="{ id: 'url' }"
         :placeholder="$t('form.placeholder.webhookUrl')"
+        clearable
       />
     </n-form-item>
 
@@ -30,7 +31,7 @@
     </n-form-item>
 
     <!-- Basic auth: user and pass -->
-    <n-grid v-if="formData.authType === BucketWebhookAuthMethod.BASIC" :cols="2" :x-gap="8">
+    <n-grid v-if="formData.authType === BucketWebhookAuthMethod.BASIC" :cols="2" :x-gap="32">
       <n-form-item-gi
         :span="1"
         path="param1"
@@ -41,6 +42,7 @@
           v-model:value="formData.param1"
           :input-props="{ id: 'param1' }"
           :placeholder="$t('form.placeholder.webhookUsername')"
+          clearable
         />
       </n-form-item-gi>
 
@@ -54,12 +56,13 @@
           v-model:value="formData.param2"
           :input-props="{ id: 'param2' }"
           :placeholder="$t('form.placeholder.webhookPassword')"
+          clearable
         />
       </n-form-item-gi>
     </n-grid>
 
     <!-- Token auth: bearer token -->
-    <n-grid v-else-if="formData.authType === BucketWebhookAuthMethod.TOKEN" :cols="1" :x-gap="8">
+    <n-grid v-else-if="formData.authType === BucketWebhookAuthMethod.TOKEN" :cols="1" :x-gap="32">
       <n-form-item-gi
         :span="1"
         path="param1"
@@ -71,12 +74,13 @@
           type="textarea"
           :input-props="{ id: 'param1' }"
           :placeholder="$t('form.placeholder.bearerToken')"
+          clearable
         />
       </n-form-item-gi>
     </n-grid>
 
     <!--  Form submit -->
-    <n-grid :cols="3" :x-gap="8">
+    <n-grid :cols="3" :x-gap="32">
       <n-form-item-gi :span="webhook ? 2 : 3">
         <input type="submit" class="hidden" :value="$t('form.save')" />
         <Btn type="primary" class="w-full mt-2" :loading="loadingForm" @click="handleSubmit">

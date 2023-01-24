@@ -6,6 +6,7 @@
         v-model:value="formData.email"
         :input-props="{ type: 'email' }"
         :placeholder="$t('form.placeholder.email', { afna: '@' })"
+        clearable
       />
     </n-form-item>
 

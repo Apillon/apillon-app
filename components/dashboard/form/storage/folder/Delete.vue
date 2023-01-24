@@ -13,7 +13,7 @@
 import { useMessage } from 'naive-ui';
 
 const props = defineProps({
-  items: { type: Array<FolderInterface>, required: true },
+  items: { type: Array<BucketItemInterface>, required: true },
 });
 
 const $i18n = useI18n();

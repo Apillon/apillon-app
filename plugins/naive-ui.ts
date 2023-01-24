@@ -1,7 +1,9 @@
 import {
   CollapseProps,
   create,
+  DataTableColumns,
   DataTableInst,
+  DataTableRowKey,
   DataTableSortState,
   NEllipsis,
   FormInst,
@@ -18,6 +20,7 @@ import {
   NCollapseItem,
   NConfigProvider,
   NDataTable,
+  NDivider,
   NDrawer,
   NDrawerContent,
   NDropdown,
@@ -42,6 +45,7 @@ import {
   NLayoutSider,
   NProgress,
   NRadio,
+  NRadioButton,
   NRadioGroup,
   NScrollbar,
   NSkeleton,
@@ -60,6 +64,8 @@ import {
   UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
+import { InternalRowData } from 'naive-ui/es/data-table/src/interface';
+import { MenuOption, MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
 import { FileInfo } from 'naive-ui/es/upload/src/interface';
 
@@ -78,6 +84,15 @@ declare global {
   interface NDataTableInst extends DataTableInst {}
   interface NDataTableSortState extends DataTableSortState {}
   interface NMessageApiInjection extends MessageApiInjection {}
+
+  interface NRadioOption extends SelectOption {
+    label: string;
+  }
+
+  type NDataTableColumns<T = InternalRowData> = DataTableColumns<T>;
+  type NDataTableRowKey = DataTableRowKey;
+  type NMenuOption = MenuOption;
+  type NMenuMixedOption = MenuMixedOption;
 }
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(
@@ -92,6 +107,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NCollapseItem,
         NConfigProvider,
         NDataTable,
+        NDivider,
         NDrawer,
         NDrawerContent,
         NDropdown,
@@ -117,6 +133,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NLayoutSider,
         NProgress,
         NRadio,
+        NRadioButton,
         NRadioGroup,
         NScrollbar,
         NSkeleton,

@@ -3,8 +3,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { DataTableColumns } from 'naive-ui';
-
 const { t } = useI18n();
 const emit = defineEmits(['changePaymentEmit']);
 
@@ -19,7 +17,7 @@ const createColumns = ({
   changePayment,
 }: {
   changePayment: (row: RowData) => void;
-}): DataTableColumns<RowData> => {
+}): NDataTableColumns<RowData> => {
   return [
     {
       title: '',

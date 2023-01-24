@@ -5,7 +5,7 @@
       <input type="hidden" name="id" :value="formData.id" readonly />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
         <slot v-if="$slots.default"></slot>
-        <template v-else>{{ $t('general.delete') }}</template>
+        <template v-else>{{ $t('general.confirm') }}</template>
       </Btn>
     </n-form-item>
   </n-form>

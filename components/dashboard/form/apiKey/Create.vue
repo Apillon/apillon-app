@@ -17,6 +17,7 @@
         v-model:value="formData.name"
         :input-props="{ id: 'name' }"
         :placeholder="$t('form.placeholder.apiKeyName')"
+        clearable
       />
     </n-form-item>
 

@@ -17,6 +17,7 @@
         v-model:value="formData.name"
         :input-props="{ id: 'projectName' }"
         :placeholder="$t('form.placeholder.projectName')"
+        clearable
       />
     </n-form-item>
 
@@ -30,6 +31,7 @@
         v-model:value="formData.description"
         :input-props="{ id: 'projectDescription' }"
         :placeholder="$t('form.placeholder.projectDescription')"
+        clearable
       />
     </n-form-item>
 
