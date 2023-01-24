@@ -1,9 +1,9 @@
 <template>
   <!-- Referral - intro -->
   <div
-    class="border-b-1 border-bg-lighter grid grid-cols-1 md:grid-cols-3 gap-4 font-content text-sm py-3"
+    class="border-b-1 border-bg-lighter grid grid-cols-1 md:grid-cols-4 gap-4 font-content text-sm py-3"
   >
-    <div class="pl-3 font-bold" style="line-height: 28px">
+    <div class="pl-3 font-bold col-span-2" style="line-height: 28px">
       {{ item.name }}
     </div>
     <div class="text-dark">

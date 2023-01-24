@@ -24,7 +24,7 @@
       </div>
     </template>
     <slot>
-      <div>
+      <div class="h-full">
         <n-tabs type="line" animated>
           <n-tab-pane name="earnPoints" tab="Earn Points">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 font-button text-sm">
@@ -81,7 +81,7 @@ useHead({
 
 const scrollStyle = computed(() => {
   return {
-    maxHeight: `calc(100vh - ${194 + (headingRef.value?.clientHeight || 0)}px)`,
+    maxHeight: `calc(100vh - ${196 + (headingRef.value?.clientHeight || 0)}px)`,
   };
 });
 

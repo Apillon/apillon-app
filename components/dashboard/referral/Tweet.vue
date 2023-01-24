@@ -3,7 +3,7 @@
 
   <Tweet :tweet-id="(tweet as any).id" theme="dark" @tweet-load-success="loadSuccess()">
     <template #loading>
-      <div class="h-[100px]">
+      <div class="h-[100px] relative">
         <Spinner />
       </div>
     </template>
@@ -11,23 +11,25 @@
       <span>Sorry, that tweet doesn't exist!</span>
     </template>
   </Tweet>
-  <Btn
-    v-if="buttonsVisible"
-    class="mt-3 mb-10 mr-5"
-    type="primary"
-    @click="shareTweet((tweet as any).id)"
-  >
-    {{ $t('referral.share') }}
-  </Btn>
-  <Btn
-    v-if="buttonsVisible"
-    :loading="loadingConfirm"
-    class="mt-3 mb-10"
-    type="primary"
-    @click="confirmShareTweet((tweet as any).id)"
-  >
-    {{ $t('referral.confirm') }}
-  </Btn>
+  <div class="grid grid-cols-2 gap-4">
+    <Btn
+      v-if="buttonsVisible"
+      class="mt-3 mb-10 w-full"
+      type="secondary"
+      @click="shareTweet((tweet as any).id)"
+    >
+      {{ $t('referral.share') }}
+    </Btn>
+    <Btn
+      v-if="buttonsVisible"
+      :loading="loadingConfirm"
+      class="mt-3 mb-10 w-full"
+      type="primary"
+      @click="confirmShareTweet((tweet as any).id)"
+    >
+      {{ $t('referral.confirm') }}
+    </Btn>
+  </div>
 </template>
 
 <script lang="ts" setup>

@@ -12,7 +12,7 @@
       </div>
 
       <div class="mt-8 pl-5">
-        <div>
+        <div class="text-base font-bold mb-1">
           {{ data.merchItem.name }}
         </div>
         <div
@@ -21,6 +21,7 @@
               return el.name === 'size';
             })
           "
+          class="mb-1"
         >
           {{
             'Size: ' +
@@ -29,7 +30,11 @@
             }).selectedValue
           }}
         </div>
-        <div v-if="data.attributes.length !== 0" class="cursor-pointer" @click="closeModal()">
+        <div
+          v-if="data.attributes.length !== 0"
+          class="cursor-pointer text-primary font-bold"
+          @click="closeModal()"
+        >
           Change selection
         </div>
       </div>

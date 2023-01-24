@@ -4,7 +4,7 @@
   </div>
   <!-- Referral - rewards -->
   <div v-else class="pb-8">
-    <div v-for="(item, index) in merchData" :key="index" class="bg-bg-light p-8 mb-4">
+    <div v-for="(item, index) in merchData" :key="index" class="bg-bg-light p-8 mb-4 w-full">
       <!-- Item Name -->
 
       <!-- Item points cost -->
@@ -16,18 +16,18 @@
       </div>
 
       <!-- Item description -->
-      <div class="font-button text-sm text-white mb-5 mt-8 text-body">
+      <div class="font-button text-sm mb-10 mt-8 text-body">
         {{ item.merchItem.description }}
       </div>
       <!-- Item img -->
-      <img :src="item.merchItem.imageUrl" alt="apillon merch" />
+      <img class="w-[50%] mx-auto" :src="item.merchItem.imageUrl" alt="apillon merch" />
 
       <div
         class="flex"
         :class="item.merchItem.attributes.length > 0 ? 'justify-between' : 'justify-center'"
       >
         <div v-for="(attr, idx) in item.merchItem.attributes" :key="attr.id" class="mr-4">
-          {{ attr.name }}
+          {{ attr.name === 'size' ? 'Size' : '' }}
           <n-select
             :id="attr.id"
             v-model:value="item.attributes[idx].selectedValue"
@@ -37,7 +37,10 @@
                 return { label: el, value: el };
               })
             "
-            :disabled="Number(item.merchItem.price) > referralStore.balance"
+            :disabled="
+              Number(item.merchItem.price) > referralStore.balance ||
+              item.merchItem.orderCount >= item.merchItem.maxOrderCount
+            "
           >
             <template #arrow>
               <span class="icon-down text-2xl"></span>
@@ -45,13 +48,21 @@
           </n-select>
         </div>
         <Btn
-          :disabled="Number(item.merchItem.price) > referralStore.balance"
+          :disabled="
+            Number(item.merchItem.price) > referralStore.balance ||
+            item.merchItem.orderCount >= item.merchItem.maxOrderCount
+          "
           class="mt-7 flex-grow"
           type="primary"
           @click="claimReward(item)"
         >
           {{ $t('referral.claim') }}
         </Btn>
+      </div>
+      <div v-if="item.merchItem.orderCount >= item.merchItem.maxOrderCount" class="mt-4">
+        <Notification type="warning" class="w-full mb-4 !bg-bg">
+          {{ $t('project.quotaReached') }}
+        </Notification>
       </div>
     </div>
   </div>

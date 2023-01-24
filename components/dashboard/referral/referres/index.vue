@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <!-- Referral - points -->
+    <!-- Referral - referres -->
     <div class="mt-12 text-white">
       <h4 class="mb-4">
         {{ $t('referral.referres.header') }}
@@ -40,9 +40,9 @@
       </p>
 
       <div
-        class="grid grid-cols-1 md:grid-cols-3 gap-4 font-content text-sm border-b-1 border-bg-lighter pb-3"
+        class="grid grid-cols-1 md:grid-cols-4 gap-4 font-content text-sm border-b-1 border-bg-lighter pb-3"
       >
-        <div class="pl-5">
+        <div class="pl-5 col-span-2">
           <strong>{{ $t('referral.referres.name') }}</strong>
         </div>
         <div class="flex gap-1 items-center">
