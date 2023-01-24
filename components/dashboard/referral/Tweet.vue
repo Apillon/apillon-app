@@ -30,12 +30,17 @@
       {{ $t('referral.confirm') }}
     </Btn>
   </div>
-  <div v-else>TEst</div>
+  <div v-else class="w-full bg-black flex justify-center py-[13px]">
+    <IconSuccessful class="mr-2 h-auto" />
+    {{ 'Point claimed' }}
+  </div>
 </template>
 
 <script lang="ts" setup>
 import Tweet from 'vue-tweet';
 import { useMessage } from 'naive-ui';
+
+const referralStore = useReferralStore();
 
 const props = defineProps({
   tweet: { type: String, required: true },
@@ -62,11 +67,15 @@ function shareTweet(id: String) {
 async function confirmShareTweet(id: String) {
   loadingConfirm.value = true;
   try {
-    const res = await $api.post<{ data: { retweeted: boolean } }>(endpoints.referralRetweet, {
-      tweet_id: id,
-    });
+    const res = await $api.post<{ data: { retweeted: boolean; player: ReferralInterface } }>(
+      endpoints.referralRetweet,
+      {
+        tweet_id: id,
+      }
+    );
     console.log('My res share tweet: ', res);
     if (res.data.retweeted) {
+      referralStore.initReferral(res.data.player);
       message.success('Tweet share confirmed!');
     } else {
       message.error('Tweet is not shared');
