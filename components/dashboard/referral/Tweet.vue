@@ -11,7 +11,7 @@
       <span>Sorry, that tweet doesn't exist!</span>
     </template>
   </Tweet>
-  <div class="grid grid-cols-2 gap-4">
+  <div v-if="!(tweet as any).retweeted" class="grid grid-cols-2 gap-4">
     <Btn
       v-if="buttonsVisible"
       class="mt-3 mb-10 w-full"
@@ -30,6 +30,7 @@
       {{ $t('referral.confirm') }}
     </Btn>
   </div>
+  <div v-else>TEst</div>
 </template>
 
 <script lang="ts" setup>
