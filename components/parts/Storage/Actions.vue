@@ -19,13 +19,13 @@
       <!-- Show only if user select files -->
       <template v-if="dataStore.bucket.selectedItems.length > 0">
         <!-- Delete files -->
-        <n-tooltip placement="bottom" :show="showPopoverDelete">
+        <n-tooltip placement="bottom">
           <template #trigger>
             <n-button class="w-10" size="small" :active="true" @click="emit('onBucketDelete')">
               <span class="icon-delete text-pink"></span>
             </n-button>
           </template>
-          <span>{{ $t('storage.deleteSelectedFiles') }}</span>
+          <span>{{ $t('storage.delete.selectedBuckets') }}</span>
         </n-tooltip>
 
         <!-- Separator -->
@@ -43,34 +43,10 @@
 
 <script lang="ts" setup>
 const dataStore = useDataStore();
-const showModalDelete = ref<boolean>(false);
-const showPopoverDelete = ref<boolean>(false);
 const emit = defineEmits(['onBucketDelete']);
 
 /** Refresh directory content */
 async function refresh() {
   dataStore.promises.buckets = await dataStore.fetchBuckets();
-}
-
-/**
- * Delete
- */
-function deleteSelectedFiles() {
-  if (dataStore.folder.selectedItems.length === 0) {
-    showPopoverDelete.value = true;
-
-    setTimeout(() => {
-      showPopoverDelete.value = false;
-    }, 3000);
-    return;
-  }
-
-  showModalDelete.value = true;
-}
-
-/** On folder deleted, refresh folder list */
-async function onDeleted() {
-  await dataStore.fetchDirectoryContent();
-  showModalDelete.value = false;
 }
 </script>

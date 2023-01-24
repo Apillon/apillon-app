@@ -446,8 +446,8 @@
       "attachService": "First attach a desired service and configure it, then start building.",
       "buckets": "Buckets",
       "description": "Description",
-      "delete": "Delete bucket",
-      "deleteConfirm": "Are you sure that you want to delete {num} selected bucket?",
+      "delete": "Delete bucket(s)",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected bucket(s)?",
       "destroyed": "Deleted buckets",
       "destroyedBuckets": "Destroyed buckets",
       "edit": "Edit bucket",
@@ -464,8 +464,17 @@
     "delete": {
       "bucket": "Delete bucket",
       "bucketItems": "Delete these items?",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected item(s)?",
       "item": "Delete selected item",
-      "items": "Delete selected items"
+      "items": "Delete selected items",
+      "selectedBuckets": "Delete selected buckets",
+      "selectedFiles": "Delete selected files and directories"
+    },
+    "directory": {
+      "create": "Create directory",
+      "createNew": "Create new directory",
+      "delete": "Delete directory",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected directory?"
     },
     "download": {
       "bucketItems": "Download selected items?",
@@ -475,7 +484,8 @@
     "file": {
       "confirmUpload": "Confirm your upload",
       "create": "Create file",
-      "delete": "Delete file",
+      "delete": "Delete file(s)",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected file(s)?",
       "downloadLink": "Download link",
       "dragAndDrop": "Drag & drop or click to upload.",
       "files": "({files} files)",
@@ -499,11 +509,6 @@
       "101": "Error while pinning to CRUST",
       "102": "Error: file does not exists on S3",
       "103": "Error: bucket is full"
-    },
-    "folder": {
-      "create": "Create folder",
-      "createNew": "Create new folder",
-      "delete": "Delete folder"
     },
     "contentType": "Content type",
     "downloadLink": "Download link",

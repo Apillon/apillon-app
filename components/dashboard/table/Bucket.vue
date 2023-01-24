@@ -5,6 +5,7 @@
     <n-data-table
       ref="tableRef"
       v-bind="$attrs"
+      v-model:checked-row-keys="checkedRowKeys"
       :bordered="false"
       :columns="columns"
       :data="data"
@@ -18,24 +19,19 @@
 
   <!-- Modal - Edit bucket -->
   <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
-    <FormStorageBucket
-      :bucket-id="currentRow?.id || 0"
-      @submit-success="showModalEditBucket = false"
-    />
+    <FormStorageBucket :bucket-id="currentRow.id" @submit-success="showModalEditBucket = false" />
   </modal>
 
   <!-- Modal - Destroy bucket -->
   <ModalDelete v-model:show="showModalDestroyBucket" :title="$t('storage.bucket.delete')">
     <template #content>
       <p class="text-body">
-        {{
-          $t('storage.bucket.deleteConfirm', { num: dataStore.bucket.selectedItems.length || 1 })
-        }}
+        {{ $t('storage.bucket.deleteConfirm', { num: bucketsToDelete.length || 1 }) }}
       </p>
     </template>
 
     <slot>
-      <FormDelete :id="currentRow?.id || 0" type="bucket" @submit-success="onBucketDeleted()" />
+      <FormDeleteItems :items="bucketsToDelete" @submit-success="onBucketDeleted()" />
     </slot>
   </ModalDelete>
 
@@ -60,6 +56,8 @@ const settingsStore = useSettingsStore();
 const showModalW3Warn = ref<boolean>(false);
 const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean | null>(false);
+const checkedRowKeys = ref<Array<string | number>>([]);
+const bucketsToDelete = ref<Array<BucketInterface>>([]);
 const StorageProgress = resolveComponent('StorageProgress');
 
 /** Data: filtered buckets */
@@ -135,9 +133,10 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
 };
 const columns = createColumns();
 const rowKey = (row: BucketItemInterface) => row.id;
-const currentRow = ref<BucketInterface | null>(null);
+const currentRow = ref<BucketInterface>(props.buckets[0]);
 
 const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
+  checkedRowKeys.value = rowKeys;
   const rowKeyIds = rowKeys.map(item => intVal(item));
 
   dataStore.bucket.selectedItems = dataStore.bucket.items.filter(item =>
@@ -170,11 +169,12 @@ const dropdownOptions = [
     },
   },
   {
-    label: $i18n.t('general.delete'),
     key: 'storage.delete.bucket',
+    label: $i18n.t('general.delete'),
     props: {
+      class: '!text-pink',
       onClick: () => {
-        deleteBucket();
+        deleteBucket(true);
       },
     },
   },
@@ -201,7 +201,9 @@ async function getBuckets() {
  * On deleteBucket click
  * If W3Warn has already been shown, show modal delete bucket, otherwise show warn first
  * */
-function deleteBucket() {
+function deleteBucket(isCurrentRow: boolean = false) {
+  bucketsToDelete.value = isCurrentRow ? [currentRow.value] : dataStore.bucket.selectedItems;
+
   if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_DELETE)) {
     showModalDestroyBucket.value = true;
   } else {
@@ -232,7 +234,14 @@ watch(
  * Hide modal and refresh bucket list
  * */
 function onBucketDeleted() {
-  dataStore.fetchBuckets();
+  dataStore.bucket.loading = true;
   showModalDestroyBucket.value = false;
+
+  /** Reset selected items */
+  handleCheck([]);
+
+  setTimeout(() => {
+    dataStore.fetchBuckets();
+  }, 300);
 }
 </script>

@@ -33,7 +33,7 @@
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
-        {{ $t('storage.folder.createNew') }}
+        {{ $t('storage.directory.createNew') }}
       </Btn>
     </n-form-item>
   </n-form>
@@ -44,8 +44,8 @@ import { createDiscreteApi } from 'naive-ui';
 import { textMarshal } from 'text-marshal';
 
 const props = defineProps({
-  bucketId: { type: Number },
-  parentFolderId: { type: Number },
+  bucketId: { type: Number, default: null },
+  parentFolderId: { type: Number, default: null },
 });
 
 const $i18n = useI18n();

@@ -77,13 +77,13 @@ async function deleteEntity() {
 function getUrl(type: string, id: number) {
   switch (type) {
     case 'apiKey':
-      return `${endpoints.apiKey}${id}`;
+      return endpoints.apiKey(id);
     case 'bucket':
       return endpoints.bucket(id);
     case 'directory':
       return endpoints.directory(id);
     default:
-      return `${endpoints.file}${id}`;
+      return endpoints.file(id);
   }
 }
 </script>

@@ -32,7 +32,6 @@ const menuOptions: NMenuMixedOption[] = [
         label: $i18n.t('nav.authentication'),
         to: 'dashboard-service-authentication',
         iconName: 'icon-authentication',
-        new: isFeatureEnabled(Feature.AUTHENTICATION),
         disabled: !isFeatureEnabled(Feature.AUTHENTICATION),
       },
       {
@@ -40,7 +39,6 @@ const menuOptions: NMenuMixedOption[] = [
         label: $i18n.t('nav.storage'),
         to: 'dashboard-service-storage',
         iconName: 'icon-storage',
-        new: isFeatureEnabled(Feature.STORAGE),
         disabled: !isFeatureEnabled(Feature.STORAGE),
       },
       {

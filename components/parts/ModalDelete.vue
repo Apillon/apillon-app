@@ -1,5 +1,5 @@
 <template>
-  <n-modal v-bind="$attrs" ref="modalRef" class="!pb-4" :mask-closable="false">
+  <n-modal v-bind="$attrs" ref="modalRef" :mask-closable="false">
     <n-card
       :title="title || $t(`dashboard.delete`)"
       :bordered="false"
@@ -7,11 +7,14 @@
       aria-modal="true"
     >
       <template #header-extra>
-        <button type="button" tabindex="0" aria-label="close" class="n-base-close n-card__close">
+        <button type="button" class="n-base-close n-card__close" @click="closeModal">
           <span class="icon-close align-sub text-xl"></span>
         </button>
       </template>
-      <slot name="content"> </slot>
+
+      <div v-if="$slots.content" class="pb-8">
+        <slot name="content"> </slot>
+      </div>
 
       <n-grid :cols="2" :x-gap="32" class="items-center">
         <n-gi>
