@@ -6,19 +6,20 @@
 
     <slot>
       <!-- Actions -->
-      <StorageActions class="mb-4" />
+      <StorageFileActions class="mb-4" />
 
       <!-- Upload files -->
       <transition name="fade" appear>
         <FormStorageUploadFiles
           v-if="dataStore.folder.uploadActive"
-          :bucketUuid="dataStore.bucket.active.bucket_uuid || dataStore.currentBucket.bucket_uuid"
-          class=""
+          :bucket-uuid="dataStore.bucket.active.bucket_uuid || dataStore.currentBucket.bucket_uuid"
         />
       </transition>
 
       <!-- Breadcrumbs -->
-      <StorageBreadcrumbs v-if="dataStore.folder.selected" />
+      <div v-if="dataStore.bucket.active?.size" class="relative h-12 py-2 mb-1">
+        <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+      </div>
 
       <!-- DataTable: files and directories -->
       <transition name="fade" appear>

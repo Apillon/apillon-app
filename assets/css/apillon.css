@@ -25,9 +25,28 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+@layer utilities {
+  .icon-apillon {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'apillon' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
 
-.icon-success:before {
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+.icon-trash-restore:before {
   content: '\e93f';
+}
+.icon-restore:before {
+  content: '\e942';
 }
 .icon-create-folder:before {
   content: '\e940';
@@ -40,12 +59,6 @@
 }
 .icon-left-long:before {
   content: '\e938';
-}
-.icon-spendable-points:before {
-  content: '\e939';
-}
-.icon-xp-points:before {
-  content: '\e93a';
 }
 .icon-add:before {
   content: '\e93b';

@@ -4,26 +4,6 @@
       <StorageHeading />
     </template>
 
-    <template #infobar>
-      <n-space align="center" justify="space-between" class="w-full">
-        <Tag color="violet">{{ dataStore.currentBucket.name }}</Tag>
-        <span>
-          <span class="icon-storage"></span>
-          {{ $t('storage.bucket.storage') }}
-        </span>
-        <StorageProgress
-          class="w-1/2"
-          :percentage="dataStore.currentBucket.percentage"
-          :size="dataStore.currentBucket.size || 0"
-          :max-size="dataStore.currentBucket.maxSize || 0"
-        />
-      </n-space>
-    </template>
-
-    <template #sidebar>
-      <SidebarBucketManagement />
-    </template>
-
     <slot>
       <n-h5 prefix="bar" class="mb-8">{{ $t('storage.webhook') }}</n-h5>
 

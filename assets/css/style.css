@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'apillon';
-  src:  url('fonts/apillon.eot?ml3ku3');
-  src:  url('fonts/apillon.eot?ml3ku3#iefix') format('embedded-opentype'),
-    url('fonts/apillon.ttf?ml3ku3') format('truetype'),
-    url('fonts/apillon.woff?ml3ku3') format('woff'),
-    url('fonts/apillon.svg?ml3ku3#apillon') format('svg');
+  src:  url('fonts/apillon.eot?nr5k3t');
+  src:  url('fonts/apillon.eot?nr5k3t#iefix') format('embedded-opentype'),
+    url('fonts/apillon.ttf?nr5k3t') format('truetype'),
+    url('fonts/apillon.woff?nr5k3t') format('woff'),
+    url('fonts/apillon.svg?nr5k3t#apillon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,8 +25,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-success:before {
+.icon-trash-restore:before {
   content: "\e93f";
+}
+.icon-restore:before {
+  content: "\e942";
 }
 .icon-create-folder:before {
   content: "\e940";
@@ -39,12 +42,6 @@
 }
 .icon-left-long:before {
   content: "\e938";
-}
-.icon-spendable-points:before {
-  content: "\e939";
-}
-.icon-xp-points:before {
-  content: "\e93a";
 }
 .icon-add:before {
   content: "\e93b";

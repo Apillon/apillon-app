@@ -74,11 +74,13 @@ const config = useRuntimeConfig();
 const version = ref(config.public.VERSION);
 
 onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(_ => {
-    if (!dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT_ON_STARTUP)) {
-      showModalNewProject.value = true;
-    }
-  });
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      if (!dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT_ON_STARTUP)) {
+        showModalNewProject.value = true;
+      }
+    });
+  }, 100);
 });
 
 /** Classes */

@@ -182,7 +182,7 @@ async function createBucket() {
   };
 
   try {
-    const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
+    await $api.post<BucketResponse>(endpoints.buckets, bodyData);
 
     message.success($i18n.t('form.success.created.bucket'));
 

@@ -9,7 +9,9 @@ export const LsTableColumnsKeys = {
 };
 
 export const LsW3WarnKeys = {
-  NEW_BUCKET: 'al_w3warn_new_bucket',
+  BUCKET_NEW: 'al_w3warn_bucket_new',
+  BUCKET_DELETE: 'al_w3warn_bucket_delete',
+  BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
 };
 
 /** User roles */
@@ -117,7 +119,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     sizeLarge: '24px',
     fontSizeMedium: '14px',
     fontSizeLarge: '14px',
-    textColor: colors.body,
+    textColor: colors.white,
   },
   Collapse: {
     dividerColor: `${colors.body}66`,
@@ -151,9 +153,9 @@ export const themeOverrides: GlobalThemeOverrides = {
   Drawer: {
     color: colors.bg.dark,
     headerBorderBottom: '0',
-    headerPadding: '32px 32px 16px 32px',
-    bodyPadding: '16px 32px 16px 32px',
-    footerPadding: '16px 32px 32px 32px',
+    headerPadding: '32px 32px 0px 32px',
+    bodyPadding: '32px 32px 32px 32px',
+    footerPadding: '0px 32px 32px 32px',
   },
   Dropdown: {
     borderRadius: '0px',

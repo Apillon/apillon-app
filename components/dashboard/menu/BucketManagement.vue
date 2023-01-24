@@ -1,16 +1,10 @@
 <template>
-  <Menu :options="menuOptions" mode="horizontal">
-    <!-- Modal - Destroy bucket -->
-    <modal v-model:show="showModalDestroyBucket" :title="$t('storage.bucket.destroy')">
-      <FormStorageDestroy :bucket-id="dataStore.bucket.selected" />
-    </modal>
-  </Menu>
+  <Menu :options="menuOptions" mode="horizontal" />
 </template>
 
 <script lang="ts" setup>
 const { t } = useI18n();
 const dataStore = useDataStore();
-const showModalDestroyBucket = ref<boolean>(false);
 
 const menuOptions: NMenuOption[] = [
   {
@@ -45,12 +39,6 @@ const menuOptions: NMenuOption[] = [
     label: t('storage.history'),
     disabled: true,
     show: false,
-  },
-  {
-    key: 'delete',
-    label: t('storage.destroy'),
-    show: false,
-    onClick: () => (showModalDestroyBucket.value = true),
   },
 ];
 </script>
