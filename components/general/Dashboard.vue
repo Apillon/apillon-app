@@ -19,9 +19,6 @@
 
     <div class="flex flex-auto w-full flex-col md:flex-row">
       <n-layout :has-sider="instructionsAvailable" sider-placement="right">
-        <n-layout-header v-if="$slots.title">
-          <slot name="title"></slot>
-        </n-layout-header>
         <n-layout-content>
           <n-scrollbar y-scrollable :style="scrollStyle">
             <slot />
@@ -88,8 +85,9 @@ const { name } = useRoute();
 /** Heading height */
 const headingRef = ref<HTMLElement>();
 const scrollStyle = computed(() => {
+  console.log(headingRef.value?.clientHeight);
   return {
-    maxHeight: `calc(100vh - ${184 + (headingRef.value?.clientHeight || 0)}px)`,
+    maxHeight: `calc(100vh - ${120 + (headingRef.value?.clientHeight || 0)}px)`,
   };
 });
 

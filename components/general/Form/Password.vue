@@ -148,6 +148,7 @@ async function register() {
     const res = await $api.post<RegisterResponse>(endpoints.register, {
       password: formData.value.password,
       token: query.token || authStore.jwt,
+      refCode: query.REF,
     });
 
     authStore.setUserToken(res.data.token);

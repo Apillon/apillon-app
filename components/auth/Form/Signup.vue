@@ -47,6 +47,8 @@ const props = defineProps({
   sendAgain: { type: Boolean, default: false },
 });
 
+const $route = useRoute();
+
 const $i18n = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
@@ -59,9 +61,13 @@ const config = useRuntimeConfig();
 const captchaKey = ref<string>(config.public.captchaKey);
 const captchaInput = ref<any>(null);
 
+const refCode = computed(() => $route.query.REF);
+console.log('RefCode: ', refCode.value);
+
 const formData = ref({
   email: authStore.email,
   captcha: null as any,
+  refCode,
 });
 const rules: NFormRules = {
   email: [
@@ -81,7 +87,7 @@ function handleSubmit(e: MouseEvent | null) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
-    } else if (!formData.value.captcha) {
+    } else if (!formData.value.captcha && config.public.ENV !== AppEnv.LOCAL) {
       loading.value = true;
       captchaInput.value.execute();
     } else {
@@ -95,7 +101,7 @@ async function signupWithEmail() {
   loading.value = true;
 
   try {
-    const res = await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
+    await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
 
     if (!props.sendAgain) {
       router.push({ name: 'register-email' });

@@ -87,6 +87,20 @@ const Endpoints = {
 
   /** Billing */
   billing: '/billing/',
+
+  /** Referral */
+  referral: '/referral',
+  referralGithub: '/referral/github/link',
+  referralTwitter: '/referral/twitter/link',
+  referralTweets: '/referral/twitter/tweets',
+  referralRetweet: '/referral/twitter/confirm',
+  referralTwitterAuth: '/referral/twitter/authenticate',
+
+  referralTwitterDisc: '/referral/twitter/unlink',
+  referralGithubDisc: '/referral/github/unlink',
+
+  referralRewards: '/referral/products',
+  referralClaimReward: '/referral/product',
 };
 
 export default Endpoints;

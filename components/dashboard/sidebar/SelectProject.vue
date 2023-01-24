@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts" setup>
-const dataStore = useDataStore();
 const router = useRouter();
+const dataStore = useDataStore();
 const componentSelectKey = ref(0);
 const loading = ref(false);
 
