@@ -83,6 +83,7 @@
     "expiration": "Expiration",
     "gotIt": "Got it, thanks!",
     "goToApiManagement": "Go to central API management",
+    "homepage": "Homepage",
     "inviteTeamMember": "Invite team member",
     "invoiceDate": "Next invoice issue date",
     "invoiceTotal": "Invoice total",
@@ -314,6 +315,7 @@
         "directory": "Directory key has been updated",
         "file": "File has been updated",
         "item": "Item has been updated",
+        "project": "Project has been updated",
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated"
       }
@@ -414,16 +416,66 @@
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
+    "banner": {
+      "title": "Referral link",
+      "description": "Nam cras mattis placerat sed suspendisse. In sollicitudin tincidunt at pretium. Sed consectetur nunc risus elementum pellentesque. Leo interdum velit sapien sed vitae quis.",
+      "btn": "Start your referral journey"
+    },
+    "enter": {
+      "header": "Let’s see if we can work together",
+      "description": "Mauris pellentesque arcu adipiscing facilisi duis. Integer laoreet donec vivamus arcu viverra feugiat mauris faucibus.",
+      "country": "Choose your Country",
+      "terms": {
+        "accept": "I accept the",
+        "andConditions": "terms and conditions",
+        "info": "Text about Terms & conditions",
+        "title": "Terms referral"
+      }
+    },
+    "claim": "Claim now",
     "claimMerchPack": "Claim merch pack",
-    "connectGithub": "Connect your Github account",
-    "connectTwitter": "Connect your Twitter account",
+    "connectGithub": "Your GitHub",
+    "connectTwitter": "Your twitter",
     "content": "Welcome to Apillon referral programme. While we are working hard on first MVP and giving you access to beta test, you are free to invite other developers to Apillon, collect points and get your Apillon Merch pack 1.0. ",
     "included": "What is included?",
     "learnMore": "Learn more about referral",
     "points": "points",
     "subtitle": "Get your Apillon Merch pack 1.0, by helping with referral. ",
     "title": "Referral programme",
-    "yourPoints": "Your points"
+    "yourPoints": "Your points",
+    "instructionsHeader": "Instructions:",
+    "instructions": {
+      "first": "1. Collect points by completing tasks",
+      "second": "2. Choose a desired reward and claim it, spending your points",
+      "third": "3. If you collect more points than you can spend, dont worry, the points are transferred to the next reward cycle"
+    },
+    "rewards": {
+      "title": "Rewards",
+      "shirt": {
+        "info": "Web3 instant Fashion. Show others you are a dev and Web3 supporter.",
+        "info1": "- Choose size",
+        "info2": "- Free shipping",
+        "info3": "- Instant SWAG"
+      }
+    },
+    "rewardsClaim": "Claim reward",
+    "rewardsSize": "Choose the desired size. In case the size is not available we will send you whatever we have left. ",
+    "connect": "Connect your social accounts",
+    "earnPoints": "Earn Some POINTS",
+    "invite": "Invite other developers and score",
+    "link": "This is your referral link",
+    "linkDesc": "Share this link with others before they register to ensure referral connection is set. Once they confirm the github account, you will earn 2 points per each referral.",
+    "referres": {
+      "header": "Your referres",
+      "name": "Service name",
+      "github": "Github profile",
+      "joined": "Joined"
+    },
+    "shoutout": "Help us with the shoutout",
+    "share": "Retweet on Twitter",
+    "confirm": "Claim now",
+    "xpPoints": "XP points:",
+    "spendingPoints": "Spending points:"
   },
   "signup": {
     "alreadyHaveAccount": "Already have an account?",
@@ -586,12 +638,15 @@
     "passwordRequired": "Please enter your password",
     "postalCode": "Wrong postal code",
     "postalCodeRequired": "Please enter postal code",
+    "streetRequired": "Please enter your street",
+    "houseNumberRequired": "Please enter your house number",
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
     "captchaRequired": "Captcha challange required!",
     "role": "Selected role is invalid",
     "roleRequired": "Please select role",
     "terms": "Please accept the terms",
+    "country": "Please select the country",
     "webhookAuthTypeRequired": "Please select Auth type",
     "webhookPasswordRequired": "Please enter password",
     "webhookRequired": "Please enter Webhook URL",

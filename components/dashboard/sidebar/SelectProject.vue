@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts" setup>
-const dataStore = useDataStore();
 const router = useRouter();
+const dataStore = useDataStore();
 const componentSelectKey = ref(0);
 const loading = ref(false);
 
@@ -22,7 +22,9 @@ onBeforeMount(() => {
     /** Fetch selected project data(get myRole_id_onProject) */
 
     Promise.all(Object.values(dataStore.promises)).then(_ => {
-      dataStore.fetchProject();
+      if (dataStore.hasProjects) {
+        dataStore.fetchProject();
+      }
     });
   }
 });

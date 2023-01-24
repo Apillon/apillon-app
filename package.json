@@ -44,6 +44,7 @@
     "query-string": "^7.1.1",
     "text-marshal": "^0.0.2",
     "uuid": "^9.0.0",
-    "v-lazy-image": "^2.1.1"
+    "v-lazy-image": "^2.1.1",
+    "vue-tweet": "^2.0.2"
   }
 }

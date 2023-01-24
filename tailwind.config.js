@@ -42,6 +42,7 @@ module.exports = {
         light: '#F0F2DA',
         lightBg: '#313442',
         dark: '#1E212B',
+        rewardsBg: '#a6a8ad',
       },
     },
 

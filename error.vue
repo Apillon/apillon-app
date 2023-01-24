@@ -7,7 +7,7 @@
         <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
           <div
             ref="messageRef"
-            class="flex justify-center items-center relative py-7 px-4 sm:px-8 lg:pr-10"
+            class="flex justify-center items-center relative pt-8 px-4 sm:px-8"
             style="height: calc(100vh - 88px)"
           >
             <div>

@@ -272,7 +272,8 @@
 
 /** Message */
 .n-message {
-  border-left: 4px solid theme('colors.bg.lighter');
+  @apply relative flex flex-wrap;
+  border: 3px solid theme('colors.bg.lighter');
 
   &--error-type {
     border-color: theme('colors.pink');
@@ -286,7 +287,43 @@
   &--warning-type {
     border-color: theme('colors.yellow');
   }
+
+  .n-message__icon {
+    @apply relative flex items-center w-full mb-2;
+
+    .n-base-icon {
+      @apply relative mr-3;
+    }
+  }
+
+  .n-message__close {
+    @apply absolute right-6 top-6;
+  }
+
+  .n-message__content {
+    @apply block w-full;
+  }
 }
+
+/** Message title */
+.n-message__icon,
+html[lang='en'] .n-message__icon {
+  @apply text-lg font-bold;
+
+  &--error-type::after {
+    content: 'Fail message';
+  }
+  &--info-type::after {
+    content: 'Info message';
+  }
+  &--success-type::after {
+    content: 'Success message';
+  }
+  &--warning-type::after {
+    content: 'Warning message';
+  }
+}
+
 /** Message provider */
 body > .n-message-container {
   &.n-message-container--top {
@@ -328,6 +365,7 @@ body > .n-message-container {
   /** Dialog */
   &.n-dialog {
     min-width: 660px;
+    border: var(--n-border);
 
     .n-dialog {
       &__close {
@@ -454,6 +492,17 @@ body > .n-message-container {
 
   .n-switch__rail {
     overflow: visible;
+  }
+}
+
+/** Tabs */
+.n-tabs {
+  .n-tabs-tab {
+    border-bottom: 2px solid transparent;
+
+    &:hover {
+      border-color: theme(colors.yellow);
+    }
   }
 }
 

@@ -63,6 +63,8 @@ import {
   SelectProps,
   UploadCustomRequestOptions,
   UploadFileInfo,
+  NTabs,
+  NTabPane,
 } from 'naive-ui';
 import { InternalRowData } from 'naive-ui/es/data-table/src/interface';
 import { MenuOption, MenuMixedOption } from 'naive-ui/es/menu/src/interface';
@@ -147,6 +149,8 @@ export default defineNuxtPlugin(nuxtApp => {
         NUploadDragger,
         NUploadFileList,
         NUploadTrigger,
+        NTabs,
+        NTabPane,
       ],
     })
   );
