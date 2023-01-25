@@ -40,7 +40,7 @@
 import Tweet from 'vue-tweet';
 import { useMessage } from 'naive-ui';
 
-const referralStore = useReferralStore();
+const emit = defineEmits(['success']);
 
 const props = defineProps({
   tweet: { type: String, required: true },
@@ -74,7 +74,7 @@ async function confirmShareTweet(id: String) {
       }
     );
     if (res.data.retweeted) {
-      referralStore.initReferral(res.data.player);
+      emit('success');
       message.success('Tweet share confirmed!');
     } else {
       message.error('Tweet is not shared');
