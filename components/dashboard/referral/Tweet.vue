@@ -30,9 +30,11 @@
       {{ $t('referral.confirm') }}
     </Btn>
   </div>
-  <div v-else class="w-full bg-black flex justify-center py-[13px]">
-    <IconSuccessful class="mr-2 h-auto" />
-    {{ 'Point claimed' }}
+  <div v-else>
+    <div v-if="buttonsVisible" class="w-full bg-black flex justify-center py-[13px]">
+      <IconSuccessful class="mr-2 h-auto" />
+      {{ 'Point claimed' }}
+    </div>
   </div>
 </template>
 
@@ -74,7 +76,7 @@ async function confirmShareTweet(id: String) {
       }
     );
     if (res.data.retweeted) {
-      emit('success', id);
+      emit('success');
       message.success('Tweet share confirmed!');
     } else {
       message.error('Tweet is not shared');
