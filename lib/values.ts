@@ -297,6 +297,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     itemTextColorActiveHorizontal: colors.white,
     itemTextColorActiveHoverHorizontal: colors.white,
     itemTextColorHoverHorizontal: colors.body,
+    itemTextColor: colors.white,
   },
   Message: messageOverrides,
   Modal: {

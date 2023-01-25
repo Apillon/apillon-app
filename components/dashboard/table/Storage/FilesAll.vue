@@ -310,7 +310,7 @@ async function fetchFiles(page?: number, limit?: number) {
     }
 
     const res = await $api.get<FileUploadsResponse>(
-      `${endpoints.storage}${bucketUuid}/file-uploads`,
+      endpoints.storageFileUploads(bucketUuid),
       params
     );
 
