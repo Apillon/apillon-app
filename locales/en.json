@@ -55,6 +55,7 @@
       "copied": "Text has been copied to clipboard",
       "copy": "Copy to clipboard",
       "copyApiKey": "Copy Api key to clipboard",
+      "copyCid": "Copy CID",
       "copyLink": "Copy link",
       "error": "Failed to copy"
     },

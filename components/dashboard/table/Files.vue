@@ -20,7 +20,7 @@
     <!-- Drawer - File details -->
     <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
       <n-drawer-content v-if="drawerFileDetailsVisible" :title="currentRow.name" closable>
-        <StorageFileDetails v-if="currentRow.CID" :file-cid="currentRow.CID" />
+        <StorageFileDetails :file="currentRow" @on-file-delete="deleteBucketItems" />
       </n-drawer-content>
     </n-drawer>
 
@@ -39,9 +39,14 @@
         </p>
       </template>
       <slot>
-        <FormDeleteItems :items="[currentRow]" @submit-success="onDeleted" />
+        <FormDeleteItems :items="[currentRow]" @submit-success="onBucketItemsDeleted" />
       </slot>
     </ModalDelete>
+
+    <!-- W3Warn: delete bucket -->
+    <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+      {{ $t('w3Warn.file.delete') }}
+    </W3Warn>
   </div>
 </template>
 
@@ -51,7 +56,8 @@ import { NButton, NDropdown, NEllipsis, NSpace } from 'naive-ui';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const showModalDelete = ref<boolean>(false);
+const showModalW3Warn = ref<boolean>(false);
+const showModalDelete = ref<boolean | null>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
 const tableRef = ref<NDataTableInst | null>(null);
 const TableColumns = resolveComponent('TableColumns');
@@ -59,6 +65,7 @@ const IconFolderFile = resolveComponent('IconFolderFile');
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 const checkedRowKeys = ref<Array<string | number>>([]);
+const bucketItemsToDelete = ref<Array<BucketItemInterface>>([]);
 
 /** Pagination data */
 const currentPage = ref<number>(0);
@@ -434,11 +441,48 @@ async function handlePageChange(currentPage: number) {
 }
 
 /**
+ * On deleteBucketItems click
+ * If W3Warn has already been shown, show modal delete items, otherwise show warn first
+ * */
+function deleteBucketItems(isCurrentRow: boolean = false) {
+  bucketItemsToDelete.value = isCurrentRow ? [currentRow.value] : dataStore.folder.selectedItems;
+  console.log(
+    'deleteBucketItems',
+    isCurrentRow,
+    sessionStorage.getItem(LsW3WarnKeys.BUCKET_ITEM_DELETE)
+  );
+  if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_ITEM_DELETE)) {
+    showModalDelete.value = true;
+  } else {
+    showModalW3Warn.value = true;
+    showModalDelete.value = null;
+  }
+}
+
+/** When user close W3Warn, allow him to create new bucket */
+function onModalW3WarnHide(value: boolean) {
+  if (!value && showModalDelete.value !== false) {
+    showModalDelete.value = true;
+  }
+}
+
+/** Watch showModalW3Warn, onShow update timestamp of shown modal in session storage */
+watch(
+  () => showModalW3Warn.value,
+  shown => {
+    if (shown) {
+      sessionStorage.setItem(LsW3WarnKeys.BUCKET_ITEM_DELETE, Date.now().toString());
+    }
+  }
+);
+
+/**
  * On folder/file deleted
  * Hide modal and refresh folder list
  * */
-function onDeleted() {
+function onBucketItemsDeleted() {
   showModalDelete.value = false;
+  drawerFileDetailsVisible.value = false;
 
   /** Reset selected items */
   handleCheck([]);
@@ -491,6 +535,6 @@ async function downloadFile(CID?: string | null) {
     dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
   }
   const fileDetails: FileDetails = dataStore.file.items[CID].file;
-  download(fileDetails.downloadLink, fileDetails.name);
+  download(fileDetails.link, fileDetails.name);
 }
 </script>

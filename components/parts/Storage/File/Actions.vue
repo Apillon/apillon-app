@@ -154,7 +154,7 @@ async function downloadFile(CID?: string | null) {
       dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
     }
     const fileDetails: FileDetails = dataStore.file.items[CID].file;
-    return download(fileDetails.downloadLink, fileDetails.name);
+    return download(fileDetails.link, fileDetails.name);
   } catch (error: any) {
     /** Show error message */
     message.error($i18n.t('error.fileDownload'));

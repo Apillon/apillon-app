@@ -98,17 +98,6 @@ function toggleSidebar(show?: boolean) {
   }
 }
 
-// Auth layout - if user is not logged in
-const isLogin = computed(() => {
-  return authStore.authStep === AuthStep.LOGIN;
-});
-const isSignUp = computed(() => {
-  return authStore.authStep === AuthStep.SIGN_UP;
-});
-
-// customise 404 message from script section
-const error = useError();
-
 // clear error and redirect to home page
 const handleError = () => clearError({ redirect: authStore.loggedIn ? '/dashboard' : '/login' });
 </script>

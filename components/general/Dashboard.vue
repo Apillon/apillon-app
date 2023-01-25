@@ -85,7 +85,6 @@ const { name } = useRoute();
 /** Heading height */
 const headingRef = ref<HTMLElement>();
 const scrollStyle = computed(() => {
-  console.log(headingRef.value?.clientHeight);
   return {
     maxHeight: `calc(100vh - ${120 + (headingRef.value?.clientHeight || 0)}px)`,
   };

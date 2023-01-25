@@ -506,11 +506,10 @@ body > .n-message-container {
   }
 }
 
-/** Tag 
+/** Tag */
 .n-tag {
   font-weight: bold;
 }
-*/
 
 /** Upload file */
 .n-upload {

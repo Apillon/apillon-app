@@ -219,6 +219,7 @@ const avgUploadSpeed = computed(() => {
  *  API calls
  */
 function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+  console.log(file);
   const fileListItem: FileListItemType = {
     ...file,
     percentage: 0,

@@ -1,33 +1,28 @@
 <template>
-  <n-space
-    v-if="fileDetails.CID || fileDetails.file_uuid"
-    class="h-full"
-    justify="space-between"
-    vertical
-  >
+  <n-space v-if="fileDetails.file_uuid" class="h-full" justify="space-between" vertical>
     <div>
       <!-- CID -->
-      <div v-if="fileDetails.CID" class="body-sm mb-4">
+      <div v-if="file?.CID" class="body-sm mb-4">
         <p class="body-sm">
           <span class="text-body">{{ $t('storage.fileCid') }}</span>
         </p>
         <div>
-          <strong>{{ fileDetails.CID }}</strong>
+          <strong>{{ file.CID }}</strong>
         </div>
-        <button class="text-primary btn-small" @click="copyToClipboard(fileDetails.CID)">
-          <strong>{{ $t('dashboard.clipboard.copyLink') }}</strong>
+        <button class="text-primary btn-small" @click="copyToClipboard(file.CID)">
+          <strong>{{ $t('dashboard.clipboard.copyCid') }}</strong>
         </button>
       </div>
 
       <!-- Link -->
-      <div v-if="fileDetails.downloadLink" class="body-sm mb-4">
+      <div v-if="file.link" class="body-sm mb-4">
         <p class="body-sm">
           <span class="text-body">{{ $t('storage.file.downloadLink') }}</span>
         </p>
         <div>
-          <strong>{{ fileDetails.downloadLink }}</strong>
+          <strong>{{ file.link }}</strong>
         </div>
-        <button class="text-primary btn-small" @click="copyToClipboard(fileDetails.downloadLink)">
+        <button class="text-primary btn-small" @click="copyToClipboard(file.link)">
           <strong>{{ $t('dashboard.clipboard.copyLink') }}</strong>
         </button>
       </div>
@@ -35,11 +30,11 @@
       <!-- Size -->
       <div class="body-sm mb-4">
         <p class="body-sm text-body">{{ $t('storage.fileSize') }}</p>
-        <strong>{{ formatBytes(fileDetails.size || 0) }}</strong>
+        <strong>{{ formatBytes(file.size || 0) }}</strong>
       </div>
 
       <!-- Expiration -->
-      <div v-if="fileDetails.CID" class="body-sm mb-4">
+      <div v-if="file?.CID" class="body-sm mb-4">
         <p class="body-sm text-body">{{ $t('storage.expiration') }}</p>
         <div class="relative min-h-[20px]">
           <strong v-if="crustFileStatus?.expired_at">
@@ -55,7 +50,7 @@
       </div>
 
       <!-- Replicas -->
-      <div v-if="fileDetails.CID" class="body-sm mb-4">
+      <div v-if="file?.CID" class="body-sm mb-4">
         <p class="body-sm text-body">{{ $t('storage.replicas') }}</p>
         <div class="relative min-h-[20px]">
           <strong v-if="crustFileStatus?.reported_replica_count">
@@ -68,48 +63,47 @@
       <!-- Status -->
       <div class="body-sm mb-6">
         <p class="body-sm mb-1 text-body">{{ $t('storage.status') }}</p>
-        <n-tag
-          v-if="fileStatus === FileStatus.PINNED_TO_CRUST"
-          type="success"
-          :bordered="false"
-          round
-        >
-          {{ $t(`storage.fileStatus.${fileStatus}`) }}
-        </n-tag>
-        <n-tag
-          v-else-if="
-            fileStatus === FileStatus.UPLOADED_TO_IPFS ||
-            fileStatus === FileStatus.UPLOADED_TO_S3 ||
-            fileStatus === FileStatus.REQUEST_FOR_UPLOAD_GENERATED
-          "
-          type="info"
-          :bordered="false"
-          round
-        >
-          {{ $t(`storage.fileStatus.${fileStatus}`) }}
-        </n-tag>
-        <n-tag v-else type="error" :bordered="false" round>
-          {{ $t(`storage.fileStatus.${fileStatus}`) }}
-        </n-tag>
+        <div class="uppercase">
+          <n-tag
+            v-if="fileStatus === FileStatus.PINNED_TO_CRUST"
+            type="success"
+            size="tiny"
+            :bordered="false"
+            round
+          >
+            {{ $t(`storage.fileStatus.${fileStatus}`) }}
+          </n-tag>
+          <n-tag
+            v-else-if="
+              fileStatus === FileStatus.UPLOADED_TO_IPFS ||
+              fileStatus === FileStatus.UPLOADED_TO_S3 ||
+              fileStatus === FileStatus.REQUEST_FOR_UPLOAD_GENERATED
+            "
+            type="info"
+            size="tiny"
+            :bordered="false"
+            round
+          >
+            {{ $t(`storage.fileStatus.${fileStatus}`) }}
+          </n-tag>
+          <n-tag v-else type="error" size="tiny" :bordered="false" round>
+            {{ $t(`storage.fileStatus.${fileStatus}`) }}
+          </n-tag>
+        </div>
       </div>
     </div>
 
     <!-- Actions -->
-    <n-grid v-if="fileDetails.CID" :cols="2" :x-gap="32">
+    <n-grid v-if="file?.CID" :cols="2" :x-gap="32">
       <n-gi>
-        <n-button
-          class="w-full"
-          type="primary"
-          size="large"
-          @click="download(fileDetails.downloadLink, fileDetails.name)"
-        >
+        <Btn type="primary" size="large" @click="download(file.link, file.name)">
           {{ $t('general.download') }}
-        </n-button>
+        </Btn>
       </n-gi>
       <n-gi>
-        <n-button class="w-full" type="error" ghost>
+        <Btn type="error" size="large" @click="emit('onFileDelete', true)">
           {{ $t('general.delete') }}
-        </n-button>
+        </Btn>
       </n-gi>
     </n-grid>
   </n-space>
@@ -118,9 +112,9 @@
 
 <script lang="ts" setup>
 const props = defineProps({
-  fileCid: { type: String, default: '' },
-  fileUuid: { type: String, default: '' },
+  file: { type: Object, required: true },
 });
+const emit = defineEmits(['onFileDelete']);
 
 const dataStore = useDataStore();
 const fileDetails = ref<FileInterface>({} as FileInterface);
@@ -128,11 +122,9 @@ const fileStatus = ref<number>(0);
 const crustFileStatus = ref<FileCrust>({} as FileCrust);
 
 onMounted(async () => {
-  if (props.fileCid) {
-    await getFileDetails(props.fileCid);
-    await getcrustFileStatus(props.fileCid);
-  } else if (props.fileUuid) {
-    await getFileDetails(props.fileUuid);
+  await getFileDetails(props.file?.CID || props.file.file_uuid);
+  if (props.file.CID) {
+    await getcrustFileStatus(props.file.CID);
   }
 });
 onDeactivated(() => {

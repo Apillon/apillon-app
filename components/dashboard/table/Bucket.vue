@@ -219,7 +219,7 @@ function onModalW3WarnHide(value: boolean) {
   }
 }
 
-/** Watch showModalNewBucket, onShow update timestamp of shown modal in session storage */
+/** Watch showModalW3Warn, onShow update timestamp of shown modal in session storage */
 watch(
   () => showModalW3Warn.value,
   shown => {
