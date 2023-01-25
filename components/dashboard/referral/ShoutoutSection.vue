@@ -18,7 +18,7 @@
     </div>
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
       <div v-for="(tweet, idx) in tweets" :key="idx" class="">
-        <ReferralTweet :tweet="tweet" @success="changeTweet" />
+        <ReferralTweet :tweet="tweet" @success="changeTweet(idx)" />
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@ onMounted(async () => {
 });
 
 function changeTweet(id) {
-  tweets.value[Number(id)].retweeted = true;
+  tweets.value[id].retweeted = true;
 }
 
 async function getReferrals() {

@@ -52,7 +52,6 @@ const formData = ref({ email: null });
 const ouathToken = computed(() => $route.query.code);
 
 onMounted(async () => {
-  console.log('Route: ', $route);
   if (ouathToken.value) {
     loading.value = true;
     // Github link // Send oath token to backend
