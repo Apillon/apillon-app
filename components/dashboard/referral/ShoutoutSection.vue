@@ -42,36 +42,9 @@ async function getReferrals() {
   try {
     const res = await $api.get(endpoints.referralTweets);
     tweets.value = res.data;
-    console.log(tweets.value);
   } catch (e) {
     console.error(e);
   }
   loading.value = false;
-}
-
-function shareTweet(id: String) {
-  try {
-    window.open('https://twitter.com/Apillon/status/' + id);
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-async function confirmShareTweet(id: String) {
-  loadingConfirm.value = true;
-  try {
-    const res = await $api.post<{ data: { retweeted: boolean } }>(endpoints.referralRetweet, {
-      tweet_id: id,
-    });
-    console.log('My res share tweet: ', res);
-    if (res.data.retweeted) {
-      message.success('Tweet share confirmed!');
-    } else {
-      message.error('Tweet is not shared');
-    }
-  } catch (e) {
-    console.error(e);
-  }
-  loadingConfirm.value = false;
 }
 </script>
