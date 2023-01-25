@@ -52,6 +52,7 @@ const formData = ref({ email: null });
 const ouathToken = computed(() => $route.query.code);
 
 onMounted(async () => {
+  console.log('Route: ', $route);
   if (ouathToken.value) {
     loading.value = true;
     // Github link // Send oath token to backend
@@ -92,7 +93,8 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (!referralStore.github_id) {
       window.open(
-        'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=http://localhost:3000/dashboard/referral',
+        'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=' +
+          window.location.href,
         '_self'
       );
     } else {
