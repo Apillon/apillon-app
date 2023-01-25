@@ -5,7 +5,7 @@
       <input type="hidden" name="id" :value="formData.id" readonly />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
         <slot v-if="$slots.default"></slot>
-        <template v-else>{{ $t('general.delete') }}</template>
+        <template v-else>{{ $t('general.confirm') }}</template>
       </Btn>
     </n-form-item>
   </n-form>
@@ -77,13 +77,13 @@ async function deleteEntity() {
 function getUrl(type: string, id: number) {
   switch (type) {
     case 'apiKey':
-      return `${endpoints.apiKey}${id}`;
+      return endpoints.apiKey(id);
     case 'bucket':
       return endpoints.bucket(id);
     case 'directory':
       return endpoints.directory(id);
     default:
-      return `${endpoints.file}${id}`;
+      return endpoints.file(id);
   }
 }
 </script>

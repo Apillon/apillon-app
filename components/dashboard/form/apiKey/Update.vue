@@ -202,7 +202,7 @@ async function getApiKeyRoles() {
   loadingRoles.value = true;
 
   try {
-    const res = await $api.get<ApiKeyRolesResponse>(`${endpoints.apiKey}${props.id}/roles`);
+    const res = await $api.get<ApiKeyRolesResponse>(endpoints.apiKeyRoles(props.id));
 
     if (res.data) {
       apiKeyRoles.value = res.data;
@@ -235,7 +235,7 @@ async function updateApiKey() {
       name: formData.value.name,
       testNetwork: formData.value.apiKeyType,
     };
-    const res = await $api.put<ApiKeyCreatedResponse>(endpoints.apiKey, bodyData);
+    const res = await $api.put<ApiKeyCreatedResponse>(endpoints.apiKey(), bodyData);
 
     if (res.data) {
       message.error($i18n.t('form.success.apiKey'));
@@ -272,7 +272,7 @@ function updatePermission(serviceUuid: string, roleId: number, value: boolean) {
 async function addPermission(serviceUuid: string, roleId: number) {
   const projectUuid = dataStore.currentProject?.project_uuid;
   try {
-    await $api.post<ApiKeyRoleUpdateResponse>(`${endpoints.apiKey}${props.id}/role`, {
+    await $api.post<ApiKeyRoleUpdateResponse>(endpoints.apiKeyRole(props.id), {
       project_uuid: projectUuid,
       service_uuid: serviceUuid,
       role_id: roleId,
@@ -287,7 +287,7 @@ async function addPermission(serviceUuid: string, roleId: number) {
 async function removePermission(serviceUuid: string, roleId: number) {
   const projectUuid = dataStore.currentProject?.project_uuid || '';
   try {
-    await $api.delete<DeleteResponse>(`${endpoints.apiKey}${props.id}/role`, {
+    await $api.delete<DeleteResponse>(endpoints.apiKeyRole(props.id), {
       project_uuid: projectUuid,
       service_uuid: serviceUuid,
       role_id: roleId,

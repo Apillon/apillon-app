@@ -1,46 +1,34 @@
 @layer base {
   /* Headline 1 */
-  h1 {
-    @apply font-heading font-black;
-    font-size: 3.25rem;
-    line-height: 1.33;
-
-    @screen md {
-      font-size: 5rem;
-    }
+  h1,
+  .h1 {
+    @apply font-sans font-bold;
+    font-size: 1.75rem;
+    line-height: 1.43;
   }
 
   /* Headline 2 */
-  h2 {
-    @apply font-heading font-black;
-    font-size: 2.5rem;
-    line-height: 1.22;
-
-    @screen md {
-      font-size: 3.5rem;
-    }
+  h2,
+  .h2 {
+    @apply font-sans font-bold;
+    font-size: 1.5rem;
+    line-height: 1.5;
   }
 
   /* Headline 3 */
-  h3 {
-    @apply font-heading font-black;
-    font-size: 1.625rem;
-    line-height: 1.5;
-
-    @screen md {
-      font-size: 1.75rem;
-    }
+  h3,
+  .h3 {
+    @apply font-sans font-bold;
+    font-size: 1.25rem;
+    line-height: 1.6;
   }
 
   /* Headline 4 */
-  h4 {
-    @apply font-heading font-black;
-    font-size: 1.375rem;
-    line-height: 1.5;
-
-    @screen md {
-      font-size: 1.5rem;
-    }
+  h4,
+  .h4 {
+    @apply font-sans font-bold;
+    font-size: 1.125rem;
+    line-height: 1.55;
 
     + p {
       @apply mt-2;
@@ -48,22 +36,23 @@
   }
 
   /* Headline 5 */
-  h5 {
-    @apply font-heading font-black;
-    font-size: 1.25rem;
+  h5,
+  .h5 {
+    @apply font-sans font-bold;
+    font-size: 1rem;
     line-height: 1.6;
   }
 
   /* Headline 6 */
   h6 {
-    @apply font-content font-bold uppercase;
+    @apply font-sans font-bold uppercase;
     font-size: 0.875rem;
     line-height: 1.6;
     letter-spacing: 0.25em;
   }
 
   p {
-    @apply body-md;
+    @apply body-lg;
 
     + p {
       @apply mt-2;
@@ -71,7 +60,7 @@
   }
 
   label {
-    @apply font-black cursor-pointer;
+    @apply font-bold cursor-pointer;
 
     > a {
       @apply text-primary;
@@ -82,24 +71,26 @@
   [role='button'],
   [type='reset'],
   [type='submit'] {
-    @apply relative font-button;
+    @apply relative font-mono;
+    font-size: 0.875rem;
+    line-height: 1.715;
   }
 
   .body-lg {
-    @apply font-content;
-    font-size: 1.375rem;
-    line-height: 1.5;
+    @apply font-sans;
+    font-size: 1rem;
+    line-height: 1.625;
   }
 
   .body-md {
-    @apply font-content;
-    font-size: 1.125rem;
-    line-height: 1.5;
+    @apply font-sans;
+    font-size: 0.875rem;
+    line-height: 1.715;
   }
 
   .body-sm {
-    @apply font-content;
-    font-size: 0.875rem;
-    line-height: 1.5;
+    @apply font-sans;
+    font-size: 0.75rem;
+    line-height: 1.666666;
   }
 }

@@ -29,7 +29,9 @@ const Endpoints = {
   },
 
   /** File */
-  file: '/files/',
+  file: (key?: number) => {
+    return key ? `/files/${key}` : '/files';
+  },
 
   /** Services */
   services: '/services/',
@@ -62,6 +64,9 @@ const Endpoints = {
       ? `/storage/${bucketUuid}/file-upload/${sessionUuid}/end`
       : `/storage/${bucketUuid}/file-upload`;
   },
+  storageFileUploads: (bucketUuid: string) => {
+    return `/storage/${bucketUuid}/file-uploads`;
+  },
   storageFileDetails: (bucketUuid: string, fileUuid: string) => {
     return `/storage/${bucketUuid}/file/${fileUuid}/detail`;
   },
@@ -71,12 +76,37 @@ const Endpoints = {
   storageFileDelete: (bucketUuid: string, fileUuid: string | number) => {
     return `/storage/${bucketUuid}/file/${fileUuid}`;
   },
+  storageFilesTrashed: (bucketUuid: string) => {
+    return `/storage/${bucketUuid}/trashed-files`;
+  },
 
   /** Api Keys */
-  apiKey: '/api-keys/',
+  apiKey: (key?: number) => {
+    return key ? `/api-keys/${key}` : '/api-keys';
+  },
+  apiKeyRole: (key: number) => {
+    return `/api-keys/${key}/role`;
+  },
+  apiKeyRoles: (key: number) => {
+    return `/api-keys/${key}/roles`;
+  },
 
   /** Billing */
   billing: '/billing/',
+
+  /** Referral */
+  referral: '/referral',
+  referralGithub: '/referral/github/link',
+  referralTwitter: '/referral/twitter/link',
+  referralTweets: '/referral/twitter/tweets',
+  referralRetweet: '/referral/twitter/confirm',
+  referralTwitterAuth: '/referral/twitter/authenticate',
+
+  referralTwitterDisc: '/referral/twitter/unlink',
+  referralGithubDisc: '/referral/github/unlink',
+
+  referralRewards: '/referral/products',
+  referralClaimReward: '/referral/product',
 };
 
 export default Endpoints;

@@ -37,15 +37,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
-const props = defineProps({
+defineProps({
   id: { type: String, default: '' },
   status: { type: String, default: '' },
   apiKey: { type: String, default: '' },
   name: { type: String, default: '' },
   testNetwork: { type: Boolean, default: null },
-  project_uuid: { type: String, default: '' },
+  projectUuid: { type: String, default: '' },
   apiKeySecret: { type: String, default: '' },
 });
 </script>

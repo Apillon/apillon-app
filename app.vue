@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="bg-dark">
+  <div id="app" class="bg-bg">
     <n-config-provider
       :theme="theme"
       :theme-overrides="themeOverrides"

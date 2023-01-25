@@ -53,7 +53,7 @@ export const useSettingsStore = defineStore('settings', {
       }
 
       try {
-        const res = await $api.get<ApiKeysResponse>(endpoints.apiKey, {
+        const res = await $api.get<ApiKeysResponse>(endpoints.apiKey(), {
           project_uuid: dataStore.currentProject?.project_uuid || '',
         });
 

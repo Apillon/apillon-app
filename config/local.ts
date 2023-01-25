@@ -7,7 +7,7 @@ const config: ConfigInterface = {
   CHAIN_ID: '0x5',
   captchaKey: 'f5f700a0-51b2-49f3-9ba5-46c7fe146af0',
   features: {
-    ACCESS: true,
+    ACCESS: false,
     APILLON_REGISTER: true,
     AUTHENTICATION: true,
     BILLING: true,
@@ -16,7 +16,7 @@ const config: ConfigInterface = {
     HOSTING: true,
     INSTRUCTIONS: true,
     MAGIC_LINK: true,
-    MONITORING: true,
+    MONITORING: false,
     ONBOARDING: true,
     PROJECT: true,
     PROJECT_ON_STARTUP: true,

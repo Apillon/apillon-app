@@ -46,7 +46,7 @@ const instructionQa = computed<Array<InstructionInterface>>(() => {
     @apply mt-2;
 
     .n-collapse-item__header {
-      @apply h-11 pl-4 py-2 pr-6 bg-grey-lightBg shadow-black;
+      @apply h-11 pl-4 py-2 pr-6 bg-bg-lighter shadow-black;
     }
     .n-collapse-item-arrow {
       @apply absolute right-1 text-primary;

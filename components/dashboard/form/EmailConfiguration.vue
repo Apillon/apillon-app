@@ -41,7 +41,6 @@
 <script lang="ts" setup>
 import { CollapseProps, useMessage } from 'naive-ui';
 
-const $i18n = useI18n();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const message = useMessage();
@@ -81,7 +80,7 @@ async function generateApiKey() {
   loading.value = true;
 
   try {
-    const res = await $api.post<EmailConfigurationResponse>(endpoints.apiKey, formData.value);
+    const res = await $api.post<EmailConfigurationResponse>(endpoints.apiKey(), formData.value);
 
     // TODO
     if (res.data) {

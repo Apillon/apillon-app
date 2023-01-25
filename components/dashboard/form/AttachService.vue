@@ -10,6 +10,7 @@
         v-model:value="formData.serviceName"
         :input-props="{ id: 'serviceName' }"
         :placeholder="$t('form.placeholder.serviceName')"
+        clearable
       />
     </n-form-item>
     <n-tag :bordered="false" type="info" class="mb-8">Servicename.com/ </n-tag>

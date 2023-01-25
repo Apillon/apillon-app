@@ -1,7 +1,9 @@
 import {
   CollapseProps,
   create,
+  DataTableColumns,
   DataTableInst,
+  DataTableRowKey,
   DataTableSortState,
   NEllipsis,
   FormInst,
@@ -18,12 +20,14 @@ import {
   NCollapseItem,
   NConfigProvider,
   NDataTable,
+  NDivider,
   NDrawer,
   NDrawerContent,
   NDropdown,
   NForm,
   NFormItem,
   NFormItemGi,
+  NGi,
   NGrid,
   NH1,
   NH2,
@@ -41,6 +45,7 @@ import {
   NLayoutSider,
   NProgress,
   NRadio,
+  NRadioButton,
   NRadioGroup,
   NScrollbar,
   NSkeleton,
@@ -58,11 +63,17 @@ import {
   SelectProps,
   UploadCustomRequestOptions,
   UploadFileInfo,
+  NTabs,
+  NTabPane,
 } from 'naive-ui';
+import { InternalRowData } from 'naive-ui/es/data-table/src/interface';
+import { MenuOption, MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
+import { FileInfo } from 'naive-ui/es/upload/src/interface';
 
 declare global {
   interface NCollapseProps extends CollapseProps {}
+  interface NFileInfo extends FileInfo {}
   interface NFormInst extends FormInst {}
   interface NFormItemInst extends FormItemInst {}
   interface NFormRules extends FormRules {}
@@ -75,6 +86,15 @@ declare global {
   interface NDataTableInst extends DataTableInst {}
   interface NDataTableSortState extends DataTableSortState {}
   interface NMessageApiInjection extends MessageApiInjection {}
+
+  interface NRadioOption extends SelectOption {
+    label: string;
+  }
+
+  type NDataTableColumns<T = InternalRowData> = DataTableColumns<T>;
+  type NDataTableRowKey = DataTableRowKey;
+  type NMenuOption = MenuOption;
+  type NMenuMixedOption = MenuMixedOption;
 }
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(
@@ -89,6 +109,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NCollapseItem,
         NConfigProvider,
         NDataTable,
+        NDivider,
         NDrawer,
         NDrawerContent,
         NDropdown,
@@ -96,6 +117,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NForm,
         NFormItem,
         NFormItemGi,
+        NGi,
         NGrid,
         NH1,
         NH2,
@@ -113,6 +135,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NLayoutSider,
         NProgress,
         NRadio,
+        NRadioButton,
         NRadioGroup,
         NScrollbar,
         NSkeleton,
@@ -126,6 +149,8 @@ export default defineNuxtPlugin(nuxtApp => {
         NUploadDragger,
         NUploadFileList,
         NUploadTrigger,
+        NTabs,
+        NTabPane,
       ],
     })
   );

@@ -35,7 +35,7 @@ declare global {
   interface FormProject {
     name: string | null;
     description: string | null;
-    terms: boolean | null;
+    terms?: boolean;
   }
 
   interface ProjectInterface {

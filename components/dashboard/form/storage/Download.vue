@@ -10,31 +10,24 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
-  items: { type: Array<FolderInterface>, required: true },
+  items: { type: Array<BucketItemInterface>, required: true },
 });
 
-const $i18n = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
 const emit = defineEmits(['submitSuccess']);
 
 const loading = ref(false);
 
-async function downloadFiles() {
+function downloadFiles() {
   loading.value = true;
   const promises: Array<Promise<any>> = [];
 
   props.items.map(async item => {
     const req = downloadFile(item.CID);
     promises.push(req);
-    const res = await req;
-    console.log(req);
-    console.log(res);
+    await req;
   });
-  console.log(promises);
 
   Promise.all(promises).then(_ => {
     loading.value = false;
@@ -52,6 +45,6 @@ async function downloadFile(CID?: string | null) {
     dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
   }
   const fileDetails: FileDetails = dataStore.file.items[CID].file;
-  return download(fileDetails.downloadLink, fileDetails.name);
+  return download(fileDetails.link, fileDetails.name);
 }
 </script>

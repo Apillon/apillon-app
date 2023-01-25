@@ -1,6 +1,6 @@
 {
   "name": "apillon-app",
-  "version": "0.2.2",
+  "version": "0.4.1",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -38,11 +38,13 @@
     "body-scroll-lock": "^4.0.0-beta.0",
     "card-validator": "^8.1.1",
     "ethers": "^5.7.2",
+    "lodash.debounce": "^4.0.8",
     "nuxt-icons": "^3.0.0",
     "pinia": "^2.0.26",
     "query-string": "^7.1.1",
     "text-marshal": "^0.0.2",
     "uuid": "^9.0.0",
-    "v-lazy-image": "^2.1.1"
+    "v-lazy-image": "^2.1.1",
+    "vue-tweet": "^2.0.2"
   }
 }
