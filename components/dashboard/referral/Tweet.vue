@@ -58,7 +58,7 @@ function loadSuccess() {
 
 function shareTweet(id: String) {
   try {
-    window.open('https://twitter.com/Apillon/status/' + id);
+    window.open('https://twitter.com/intent/retweet?tweet_id=' + id);
   } catch (e) {
     console.error(e);
   }

@@ -25,15 +25,9 @@
 </template>
 
 <script lang="ts" setup>
-import Tweet from 'vue-tweet';
-import { useMessage } from 'naive-ui';
-
-const message = useMessage();
-
 const tweets = ref([]);
 
 const loading = ref(false);
-const loadingConfirm = ref(false);
 
 getReferrals();
 
