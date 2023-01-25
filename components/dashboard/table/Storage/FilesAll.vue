@@ -1,5 +1,5 @@
 <template>
-  <n-space vertical :size="12">
+  <n-space class="pb-8" :size="12" vertical>
     <n-space justify="space-between">
       <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
         <n-input
@@ -33,7 +33,7 @@
       remote
       :bordered="false"
       :columns="columns"
-      :data="files"
+      :data="dataStore.file.all"
       :loading="loading"
       :pagination="pagination"
       :row-props="rowProps"
@@ -74,8 +74,6 @@ const IconFolderFile = resolveComponent('IconFolderFile');
 
 const search = ref<string>('');
 const loading = ref<boolean>(false);
-const files = ref<Array<FileUploadInterface>>([]);
-const total = ref<number>(0);
 
 const currentRow = ref<FileUploadInterface>({} as FileUploadInterface);
 
@@ -131,8 +129,8 @@ const pagination = computed(() => {
   return {
     page: currentPage.value,
     pageSize: PAGINATION_LIMIT,
-    pageCount: Math.ceil(total.value / PAGINATION_LIMIT),
-    itemCount: total.value,
+    pageCount: Math.ceil(dataStore.file.total / PAGINATION_LIMIT),
+    itemCount: dataStore.file.total,
   };
 });
 
@@ -253,7 +251,9 @@ function onItemOpen(row: FileUploadInterface) {
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await getFiles();
+      if (!dataStore.hasFileAll || isCacheExpired(LsCacheKeys.FILE_ALL)) {
+        await getFiles();
+      }
     });
   }, 100);
 });
@@ -314,12 +314,15 @@ async function fetchFiles(page?: number, limit?: number) {
       params
     );
 
-    files.value = res.data.items;
-    total.value = res.data.total;
+    dataStore.file.all = res.data.items;
+    dataStore.file.total = res.data.total;
+
+    /** Save timestamp to SS */
+    sessionStorage.setItem(LsCacheKeys.FILE_ALL, Date.now().toString());
   } catch (error: any) {
     /** Reset data */
-    files.value = [];
-    total.value = 0;
+    dataStore.file.all = [];
+    dataStore.file.total = 0;
 
     /** Show error message */
     message.error(userFriendlyMsg(error));

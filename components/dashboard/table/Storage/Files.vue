@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pb-8">
     <n-data-table
       ref="tableRef"
       v-bind="$attrs"
@@ -391,9 +391,11 @@ onMounted(() => {
   /**
    * Load data on mounted
    */
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await getDirectoryContent();
+  setTimeout(async () => {
+    await Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      if (!dataStore.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
+        await getDirectoryContent();
+      }
     });
   }, 100);
 });

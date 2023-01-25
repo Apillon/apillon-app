@@ -23,6 +23,11 @@ const menuOptions: NMenuOption[] = [
     path: `/dashboard/service/storage/${dataStore.bucket.selected}/webhook`,
   },
   {
+    key: 'dashboard-service-storage-slug-trash',
+    label: t('storage.trash'),
+    path: `/dashboard/service/storage/${dataStore.bucket.selected}/trash`,
+  },
+  {
     key: 'snapshots',
     label: t('storage.snapshots'),
     disabled: true,

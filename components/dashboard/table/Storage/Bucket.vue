@@ -1,5 +1,5 @@
 <template>
-  <n-space :size="32" vertical>
+  <n-space class="pb-8" :size="32" vertical>
     <StorageActions @on-bucket-delete="deleteBucket" />
 
     <n-data-table
@@ -179,23 +179,6 @@ const dropdownOptions = [
     },
   },
 ];
-
-/**
- * Load data on mounted
- */
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(_ => {
-      getBuckets();
-    });
-  }, 100);
-});
-
-async function getBuckets() {
-  if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets();
-  }
-}
 
 /**
  * On deleteBucket click

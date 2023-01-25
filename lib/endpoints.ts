@@ -64,6 +64,9 @@ const Endpoints = {
       ? `/storage/${bucketUuid}/file-upload/${sessionUuid}/end`
       : `/storage/${bucketUuid}/file-upload`;
   },
+  storageFileUploads: (bucketUuid: string) => {
+    return `/storage/${bucketUuid}/file-uploads`;
+  },
   storageFileDetails: (bucketUuid: string, fileUuid: string) => {
     return `/storage/${bucketUuid}/file/${fileUuid}/detail`;
   },
@@ -72,6 +75,9 @@ const Endpoints = {
   },
   storageFileDelete: (bucketUuid: string, fileUuid: string | number) => {
     return `/storage/${bucketUuid}/file/${fileUuid}`;
+  },
+  storageFilesTrashed: (bucketUuid: string) => {
+    return `/storage/${bucketUuid}/trashed-files`;
   },
 
   /** Api Keys */

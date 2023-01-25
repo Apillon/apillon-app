@@ -63,9 +63,9 @@
       <!-- Upload files -->
       <n-button
         size="small"
-        :color="dataStore.folder.uploadActive ? colors.primary : ''"
+        :color="dataStore.bucket.uploadActive ? colors.primary : ''"
         ghost
-        @click="dataStore.folder.uploadActive = !dataStore.folder.uploadActive"
+        @click="dataStore.bucket.uploadActive = !dataStore.bucket.uploadActive"
       >
         <span class="icon-upload text-lg mr-2"></span>
         {{ $t('general.upload') }}

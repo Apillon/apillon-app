@@ -17,8 +17,12 @@ export const LsW3WarnKeys = {
 };
 
 export const LsCacheKeys = {
-  BUCKET: 'al_cache_buckets',
+  BUCKET: 'al_cache_bucket',
+  BUCKETS: 'al_cache_buckets',
   BUCKET_ITEMS: 'al_cache_bucket_items',
+  BUCKET_DESTROYED: 'al_cache_bucket_destroyed',
+  FILE_ALL: 'al_cache_file_all',
+  FILE_DELETED: 'al_cache_file_deleted',
 };
 
 /** User roles */

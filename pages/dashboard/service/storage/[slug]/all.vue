@@ -8,7 +8,7 @@
       <n-h5 prefix="bar" class="mb-8">{{ $t('storage.yourFilesAll') }}</n-h5>
 
       <!-- DataTable: All files in bucket -->
-      <TableFilesAll />
+      <TableStorageFilesAll />
     </slot>
   </Dashboard>
 </template>

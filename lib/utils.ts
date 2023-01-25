@@ -60,13 +60,11 @@ export function hideSecret(source: string, partLength: number = 4): string {
  */
 /** Validate checkbox if it is checked */
 export function validateRequiredCheckbox(_: NFormItemRule, value: boolean | null): boolean {
-  console.log('Checkboy validation');
   return value === true;
 }
 
 /** Validate dropdown if it is selected */
 export function validateRequiredDropdown(_: NFormItemRule, value: String | null): boolean {
-  console.log('Dropdown validation');
   if (value) {
     return value.length !== 0;
   } else {
@@ -270,7 +268,7 @@ export function copyToClipboardWithResponseTexts(
 export function isCacheExpired(key: string) {
   const timestamp = sessionStorage.getItem(key);
   if (timestamp) {
-    return parseInt(timestamp) + CACHE_EXPIRATION_IN_MS > Date.now();
+    return parseInt(timestamp) + CACHE_EXPIRATION_IN_MS < Date.now();
   }
   return true;
 }

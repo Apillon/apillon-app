@@ -1,3 +1,5 @@
+import { textMarshal } from 'text-marshal';
+
 /** Size calculations */
 export function kbToMb(kb: number): number {
   if (!+kb) return 0;
@@ -46,4 +48,18 @@ export async function download(url: string, filename: string) {
  */
 export function getExtension(filename: string): string {
   return filename.split('.').pop() || '';
+}
+
+/** Format folder name (remove dissallowed characters) */
+export function stripFolderName(value: string | [string, string]) {
+  return textMarshal({
+    input: value,
+    template: 'x',
+    disallowCharacters: [/@/, /\\/, /\//, /\|/, /\!/, /\#/, /\$/, /\%/, /\^/, /\&/, /\*/],
+    isRepeat: {
+      value: true,
+      removeStart: true,
+      removeEnd: true,
+    },
+  }).marshaltext;
 }

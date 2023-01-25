@@ -22,6 +22,12 @@
         <n-layout-content>
           <n-scrollbar y-scrollable :style="scrollStyle">
             <slot />
+
+            <!-- Global component: File upload list -->
+            <FormStorageUploadFiles
+              v-if="dataStore.bucket.uploadActive && dataStore.currentBucket.bucket_uuid"
+              :bucket-uuid="dataStore.currentBucket.bucket_uuid"
+            />
           </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
