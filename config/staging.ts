@@ -19,7 +19,7 @@ const config: ConfigInterface = {
     REFERRAL: true,
     SEARCH: false,
     SERVICES: true,
-    STORAGE: false,
+    STORAGE: true,
     TWO_FACTOR_AUTHENTICATION: false,
   },
 };
