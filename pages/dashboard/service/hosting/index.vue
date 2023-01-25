@@ -16,7 +16,7 @@
           :to="{ name: 'dashboard-service-hosting-new' }"
         >
           <n-button type="primary">
-            {{ $t('storage.hosting.new') }}
+            {{ $t('hosting.new') }}
           </n-button>
         </nuxt-link>
       </n-space>
@@ -34,7 +34,7 @@
           </div>
           <div>
             <nuxt-link :to="{ name: 'dashboard-service-hosting-new' }">
-              <Btn type="primary">{{ $t('storage.hosting.addNew') }}</Btn>
+              <Btn type="primary">{{ $t('hosting.addNew') }}</Btn>
             </nuxt-link>
           </div>
         </div>

@@ -63,7 +63,7 @@
           @click="handleSubmit"
         >
           <template v-if="bucket">
-            {{ $t('storage.hosting.update') }}
+            {{ $t('hosting.update') }}
           </template>
           <template v-else>
             {{ $t('form.createHostingAndContinue') }}

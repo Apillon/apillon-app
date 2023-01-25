@@ -8,7 +8,7 @@
         <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
           <span class="icon-back"></span>
         </NuxtLink>
-        <h5>{{ $t('storage.hosting.new') }}</h5>
+        <h5>{{ $t('hosting.new') }}</h5>
       </n-space>
       <FormStorageHosting class="max-w-xl" />
     </slot>
@@ -21,7 +21,7 @@ const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: $i18n.t('storage.hosting.new'),
+  title: $i18n.t('hosting.new'),
 });
 
 onMounted(async () => {

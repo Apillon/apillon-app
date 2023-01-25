@@ -5,7 +5,7 @@
         <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
           <span class="icon-back"></span>
         </NuxtLink>
-        <h4>{{ $t('storage.hosting.management') }}</h4>
+        <h4>{{ $t('hosting.management') }}</h4>
       </n-space>
     </template>
 
