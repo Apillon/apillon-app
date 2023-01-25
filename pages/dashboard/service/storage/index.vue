@@ -69,19 +69,12 @@ useHead({
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await getBuckets();
+    await dataStore.getBuckets();
     await geBucketQuota();
 
     pageLoading.value = false;
   });
 });
-
-/** GET Buckets if bucket list is empty */
-async function getBuckets() {
-  if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets();
-  }
-}
 
 /** GET Bucket quota, if current value is null  */
 async function geBucketQuota() {

@@ -2,6 +2,7 @@ import { DiscreteApiOptions, GlobalThemeOverrides, MessageProviderProps } from '
 import colors from '~~/tailwind.colors';
 
 export const PAGINATION_LIMIT = 20;
+export const CACHE_EXPIRATION_IN_MS = 60 * 1000; // One minute
 export const ON_COLUMN_CLICK_OPEN_CLASS = 'onClickOpen';
 
 export const LsTableColumnsKeys = {
@@ -13,6 +14,11 @@ export const LsW3WarnKeys = {
   BUCKET_DELETE: 'al_w3warn_bucket_delete',
   BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
   BUCKET_ITEM_DELETE: 'al_w3warn_bucket_item_delete',
+};
+
+export const LsCacheKeys = {
+  BUCKET: 'al_cache_buckets',
+  BUCKET_ITEMS: 'al_cache_bucket_items',
 };
 
 /** User roles */

@@ -101,7 +101,7 @@
         </Btn>
       </n-gi>
       <n-gi>
-        <Btn type="error" size="large" @click="emit('onFileDelete', true)">
+        <Btn type="error" size="large" @click="emit('onFileDelete')">
           {{ $t('general.delete') }}
         </Btn>
       </n-gi>

@@ -173,15 +173,6 @@ export const useDataStore = defineStore('data', {
       }
     },
 
-    /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getBucket(bucketId: number): Promise<BucketInterface> {
-      const bucket = this.bucket.items.find(item => item.id === bucketId);
-      if (bucket !== undefined) {
-        return bucket;
-      }
-      return await this.fetchBucket(bucketId);
-    },
-
     onBucketMounted(id: number) {
       this.setBucketId(id);
 
@@ -210,6 +201,25 @@ export const useDataStore = defineStore('data', {
         Array.isArray(this.instructions[key]) &&
         this.instructions[key].length > 0
       );
+    },
+
+    /**
+     * Fetch wrappers
+     */
+
+    async getBuckets() {
+      if (!this.hasBuckets && !isCacheExpired(LsCacheKeys.BUCKET)) {
+        this.promises.buckets = await this.fetchBuckets();
+      }
+    },
+
+    /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
+    async getBucket(bucketId: number): Promise<BucketInterface> {
+      const bucket = this.bucket.items.find(item => item.id === bucketId);
+      if (bucket !== undefined) {
+        return bucket;
+      }
+      return await this.fetchBucket(bucketId);
     },
 
     /**
@@ -340,6 +350,10 @@ export const useDataStore = defineStore('data', {
         this.bucket.total = res.data.total;
         this.bucket.loading = false;
         this.bucket.search = '';
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.BUCKET, Date.now().toString());
+
         return res;
       } catch (error: any) {
         this.bucket.items = [] as Array<BucketInterface>;
@@ -433,6 +447,9 @@ export const useDataStore = defineStore('data', {
 
         this.folder.items = res.data.items;
         this.folder.total = res.data.total;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.BUCKET_ITEMS, Date.now().toString());
       } catch (error: any) {
         /** Reset data */
         this.folder.items = [];

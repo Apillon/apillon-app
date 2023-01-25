@@ -219,7 +219,6 @@ const avgUploadSpeed = computed(() => {
  *  API calls
  */
 function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-  console.log(file);
   const fileListItem: FileListItemType = {
     ...file,
     percentage: 0,
@@ -228,6 +227,7 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
     onFinish,
     onError,
   };
+  console.log(getExtension(fileListItem.name));
 
   if (fileAlreadyOnFileList(fileListItem)) {
     onError();
@@ -274,7 +274,7 @@ async function uploadFile(file: FileListItemType, wrapToFolder: Boolean = false)
 
   const fileData: FormFileUploadRequest = {
     fileName: file.name,
-    contentType: file.type || '',
+    contentType: file.type || getExtension(file.name),
     path: dataStore.getFolderPath + fileFolderPath(file.fullPath || ''),
   };
   if (wrapToFolder) {

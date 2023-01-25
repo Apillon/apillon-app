@@ -65,7 +65,6 @@ const IconFolderFile = resolveComponent('IconFolderFile');
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 const checkedRowKeys = ref<Array<string | number>>([]);
-const bucketItemsToDelete = ref<Array<BucketItemInterface>>([]);
 
 /** Pagination data */
 const currentPage = ref<number>(0);
@@ -444,13 +443,7 @@ async function handlePageChange(currentPage: number) {
  * On deleteBucketItems click
  * If W3Warn has already been shown, show modal delete items, otherwise show warn first
  * */
-function deleteBucketItems(isCurrentRow: boolean = false) {
-  bucketItemsToDelete.value = isCurrentRow ? [currentRow.value] : dataStore.folder.selectedItems;
-  console.log(
-    'deleteBucketItems',
-    isCurrentRow,
-    sessionStorage.getItem(LsW3WarnKeys.BUCKET_ITEM_DELETE)
-  );
+function deleteBucketItems() {
   if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_ITEM_DELETE)) {
     showModalDelete.value = true;
   } else {
