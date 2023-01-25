@@ -43,7 +43,7 @@ import { useMessage } from 'naive-ui';
 const emit = defineEmits(['success']);
 
 const props = defineProps({
-  tweet: { type: String, required: true },
+  tweet: { type: Object, required: true },
 });
 
 const message = useMessage();
@@ -74,7 +74,7 @@ async function confirmShareTweet(id: String) {
       }
     );
     if (res.data.retweeted) {
-      emit('success');
+      emit('success', id);
       message.success('Tweet share confirmed!');
     } else {
       message.error('Tweet is not shared');

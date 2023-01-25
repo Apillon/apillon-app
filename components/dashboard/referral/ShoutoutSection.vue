@@ -17,21 +17,25 @@
       <Spinner />
     </div>
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-      <div v-for="(tweet, idx) in tweets" :key="tweet" class="">
-        <ReferralTweet :tweet="tweet" @success="getReferrals()" />
+      <div v-for="(tweet, idx) in tweets" :key="idx" class="">
+        <ReferralTweet :tweet="tweet" @success="changeTweet" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const tweets = ref([]);
+const tweets = ref([] as { retweeted }[]);
 
 const loading = ref(false);
 
 onMounted(async () => {
   await getReferrals();
 });
+
+function changeTweet(id) {
+  tweets.value[Number(id)].retweeted = true;
+}
 
 async function getReferrals() {
   loading.value = true;
