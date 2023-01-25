@@ -14,8 +14,8 @@ declare global {
    *  Register
    */
   interface FormRegister {
-    password: string;
-    reenteredPassword: string;
+    password: string | null;
+    reenteredPassword: string | null;
   }
   interface RegisterResponse {
     data: {
@@ -100,4 +100,6 @@ declare global {
     };
     status: number;
   }
+
+  
 }

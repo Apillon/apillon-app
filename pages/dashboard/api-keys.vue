@@ -1,8 +1,21 @@
 <template>
   <Dashboard :loading="pageLoading">
-    <template #sidebar>
-      <SidebarProjectSettings />
+    <template #heading>
+      <Heading>
+        <slot>
+          <h4>{{ $t('dashboard.apiKey.title') }}</h4>
+        </slot>
+
+        <template #info>
+          <span class="icon-info"></span>
+        </template>
+
+        <template #submenu>
+          <MenuProjectSettings />
+        </template>
+      </Heading>
     </template>
+
     <slot>
       <h4 class="mb-6">{{ $t('dashboard.apiKey.title') }}</h4>
 

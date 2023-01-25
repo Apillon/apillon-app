@@ -7,9 +7,13 @@
           type="text"
           name="search"
           size="small"
-          class="bg-grey-dark"
-          placeholder="Search files"
-        />
+          :placeholder="$t('storage.file.search')"
+          clearable
+        >
+          <template #prefix>
+            <span class="icon-search text-xl"></span>
+          </template>
+        </n-input>
       </div>
       <n-space>
         <!-- Fitlers -->
@@ -39,7 +43,7 @@
 
   <!-- Drawer - File details -->
   <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
-    <n-drawer-content v-if="drawerFileDetailsVisible">
+    <n-drawer-content v-if="drawerFileDetailsVisible" :title="currentRow.fileName" closable>
       <StorageFileDetails
         v-if="currentRow.CID || currentRow.file_uuid"
         :file-cid="currentRow.CID"
@@ -49,13 +53,20 @@
   </n-drawer>
 
   <!-- Modal - Delete file -->
-  <modal v-model:show="showModalDelete" :title="$t(`storage.file.delete`)">
-    <FormStorageFolderDelete :items="[currentRow]" @submit-success="onDeleted" />
-  </modal>
+  <ModalDelete v-model:show="showModalDelete" :title="$t('storage.file.delete')">
+    <template #content>
+      <p class="text-body">
+        {{ $t(`storage.file.deleteConfirm`, { num: 1 }) }}
+      </p>
+    </template>
+    <slot>
+      <FormDeleteItems :items="[currentRow]" @submit-success="onDeleted" />
+    </slot>
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
-import { debounce } from 'lodash';
+import debounce from 'lodash.debounce';
 import { DataTableColumns, NButton, NDropdown, useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
@@ -114,7 +125,7 @@ const fileStatuses = ref<Array<NSelectOption>>([
     label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.ERROR_BUCKET_FULL}`),
   },
 ]);
-async function handleFilesStatusChange(value: string, option: NSelectOption) {
+async function handleFilesStatusChange() {
   await getFiles();
 }
 
@@ -144,6 +155,7 @@ const dropdownFileOptions = [
     label: $i18n.t('general.delete'),
     key: 'delete',
     props: {
+      class: '!text-pink',
       onClick: () => {
         showModalDelete.value = true;
       },
@@ -203,7 +215,7 @@ const createColumns = (): DataTableColumns<FileUploadInterface> => {
       key: 'actions',
       align: 'right',
       className: '!py-0',
-      render(row) {
+      render() {
         return h(
           NDropdown,
           {
@@ -234,7 +246,7 @@ function rowProps(row: FileUploadInterface) {
 }
 
 /** Action when user click on File name */
-async function onItemOpen(row: FileUploadInterface) {
+function onItemOpen(row: FileUploadInterface) {
   currentRow.value = row;
   drawerFileDetailsVisible.value = true;
 }
@@ -285,7 +297,7 @@ async function fetchFiles(page?: number, limit?: number) {
   try {
     const bucketUuid = dataStore.currentBucket.bucket_uuid;
 
-    let params: Record<string, string | number> = {
+    const params: Record<string, string | number> = {
       bucket_uuid: bucketUuid,
     };
 

@@ -3,8 +3,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { DataTableColumns } from 'naive-ui';
-
 const $i18n = useI18n();
 const settingsStore = useSettingsStore();
 const loading = ref<boolean>(false);
@@ -18,7 +16,7 @@ onMounted(async () => {
   }
 });
 
-const createColumns = (): DataTableColumns<ProjectUserInterface> => {
+const createColumns = (): NDataTableColumns<ProjectUserInterface> => {
   return [
     {
       title: $i18n.t('dashboard.user'),

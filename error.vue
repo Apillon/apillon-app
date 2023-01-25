@@ -1,14 +1,14 @@
 <template>
-  <div v-if="authStore.loggedIn" ref="mainContentRef" class="relative h-screen lg:pl-64">
+  <div v-if="authStore.loggedIn" ref="mainContentRef" class="relative h-screen lg:pl-80">
     <n-config-provider :theme-overrides="themeOverrides">
       <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="3000">
         <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
         <Header @toggleSidebar="toggleSidebar" />
-        <n-scrollbar class="bg-grey-dark" y-scrollable style="max-height: calc(100vh - 56px)">
+        <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
           <div
             ref="messageRef"
-            class="flex justify-center items-center relative py-7 px-4 sm:px-8 lg:pr-10"
-            style="height: calc(100vh - 56px)"
+            class="flex justify-center items-center relative pt-8 px-4 sm:px-8"
+            style="height: calc(100vh - 88px)"
           >
             <div>
               <!-- customise 404 message from template section -->
@@ -25,7 +25,7 @@
       </n-message-provider>
     </n-config-provider>
   </div>
-  <div v-else class="relative min-h-screen h-full pb-28 md:pb-20 bg-dark">
+  <div v-else class="relative min-h-screen h-full pb-28 md:pb-20">
     <n-config-provider :theme-overrides="themeOverrides">
       <AuthHeader />
 

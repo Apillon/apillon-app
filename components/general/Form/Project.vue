@@ -3,7 +3,7 @@
     <Notification
       v-if="dataStore.project.quotaReached === true"
       type="warning"
-      class="w-full mb-4 !bg-dark"
+      class="w-full mb-4 !bg-bg"
     >
       {{ $t('project.quotaReached') }}
     </Notification>
@@ -108,7 +108,7 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 const formData = ref<FormProject>({
   name: null,
   description: null,
-  terms: null,
+  terms: undefined,
 });
 
 const rules: NFormRules = {

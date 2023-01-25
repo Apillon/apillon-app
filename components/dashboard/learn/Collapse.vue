@@ -31,7 +31,7 @@ const props = defineProps({
     @apply mt-2;
 
     .n-collapse-item__header {
-      @apply h-11 pl-4 py-2 pr-6 bg-grey-lightBg shadow-black;
+      @apply h-11 pl-4 py-2 pr-6 bg-white shadow-black;
     }
     .n-collapse-item-arrow {
       @apply absolute right-1 text-primary;

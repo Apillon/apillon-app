@@ -1,53 +1,55 @@
 <template>
-  <n-data-table
-    remote
-    ref="tableRef"
-    :bordered="false"
-    :columns="columns"
-    :data="dataStore.folder.items"
-    :loading="dataStore.folder.loading"
-    :pagination="pagination"
-    :row-key="rowKey"
-    :row-props="rowProps"
-    @update:checked-row-keys="handleCheck"
-    @update:page="handlePageChange"
-    @update:sorter="handleSorterChange"
-  />
+  <div>
+    <n-data-table
+      ref="tableRef"
+      v-bind="$attrs"
+      v-model:checked-row-keys="checkedRowKeys"
+      remote
+      :bordered="false"
+      :columns="columns"
+      :data="dataStore.folder.items"
+      :loading="dataStore.folder.loading"
+      :pagination="pagination"
+      :row-key="rowKey"
+      :row-props="rowProps"
+      @update:checked-row-keys="handleCheck"
+      @update:page="handlePageChange"
+      @update:sorter="handleSorterChange"
+    />
 
-  <!-- Drawer - File details -->
-  <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
-    <n-drawer-content v-if="drawerFileDetailsVisible">
-      <StorageFileDetails v-if="currentRow.CID" :file-cid="currentRow.CID" />
-    </n-drawer-content>
-  </n-drawer>
+    <!-- Drawer - File details -->
+    <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
+      <n-drawer-content v-if="drawerFileDetailsVisible" :title="currentRow.name" closable>
+        <StorageFileDetails v-if="currentRow.CID" :file-cid="currentRow.CID" />
+      </n-drawer-content>
+    </n-drawer>
 
-  <!-- Modal - Delete file/folder -->
-  <modal
-    v-model:show="showModalDelete"
-    :title="
-      $i18n.te(`storage.${currentRow.type}.delete`)
-        ? $t(`storage.${currentRow.type}.delete`)
-        : $t(`general.delete`)
-    "
-  >
-    <FormStorageFolderDelete :items="[currentRow]" @submit-success="onDeleted" />
-  </modal>
+    <!-- Modal - Delete file/folder -->
+    <ModalDelete
+      v-model:show="showModalDelete"
+      :title="
+        $i18n.te(`storage.${currentRow.type}.delete`)
+          ? $t(`storage.${currentRow.type}.delete`)
+          : $t(`storage.delete.item`)
+      "
+    >
+      <template #content>
+        <p class="text-body">
+          {{ $t(`storage.${currentRow.type}.deleteConfirm`, { num: 1 }) }}
+        </p>
+      </template>
+      <slot>
+        <FormDeleteItems :items="[currentRow]" @submit-success="onDeleted" />
+      </slot>
+    </ModalDelete>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { debounce } from 'lodash';
-import {
-  DataTableColumns,
-  DataTableRowKey,
-  NButton,
-  NDropdown,
-  NEllipsis,
-  NSpace,
-  useMessage,
-} from 'naive-ui';
+import debounce from 'lodash.debounce';
+import { NButton, NDropdown, NEllipsis, NSpace } from 'naive-ui';
 
 const $i18n = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
 const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
@@ -55,7 +57,8 @@ const tableRef = ref<NDataTableInst | null>(null);
 const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
 
-const currentRow = ref<FolderInterface>({} as FolderInterface);
+const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
+const checkedRowKeys = ref<Array<string | number>>([]);
 
 /** Pagination data */
 const currentPage = ref<number>(0);
@@ -74,7 +77,7 @@ const dropdownFolderOptions = [
     label: $i18n.t('general.open'),
     key: 'open',
     props: {
-      onClick: async () => {
+      onClick: () => {
         onFolderOpen(currentRow.value);
       },
     },
@@ -83,6 +86,7 @@ const dropdownFolderOptions = [
     label: $i18n.t('general.delete'),
     key: 'delete',
     props: {
+      class: '!text-pink',
       onClick: () => {
         showModalDelete.value = true;
       },
@@ -113,6 +117,7 @@ const dropdownFileOptions = [
     label: $i18n.t('general.delete'),
     key: 'delete',
     props: {
+      class: '!text-pink',
       onClick: () => {
         showModalDelete.value = true;
       },
@@ -146,7 +151,7 @@ const columns = computed(() => {
       ],
       sorter: 'default',
       minWidth: 150,
-      render(row: FolderInterface) {
+      render(row: BucketItemInterface) {
         return [
           h(
             NSpace,
@@ -170,7 +175,7 @@ const columns = computed(() => {
       key: 'CID',
       className: selectedColumns.value.includes('CID') ? '' : 'hidden',
       sorter: 'default',
-      render(row: FolderInterface) {
+      render(row: BucketItemInterface) {
         if (row.CID) {
           return [
             h(
@@ -201,7 +206,7 @@ const columns = computed(() => {
       key: 'link',
       className: selectedColumns.value.includes('link') ? '' : 'hidden',
       sorter: 'default',
-      render(row: FolderInterface) {
+      render(row: BucketItemInterface) {
         if (row.CID) {
           return [
             h(
@@ -235,7 +240,7 @@ const columns = computed(() => {
         selectedColumns.value.includes('size') ? '' : 'hidden',
       ],
       sorter: 'default',
-      render(row: FolderInterface) {
+      render(row: BucketItemInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
         }
@@ -250,7 +255,7 @@ const columns = computed(() => {
         selectedColumns.value.includes('createTime') ? '' : 'hidden',
       ],
       sorter: 'default',
-      render(row: FolderInterface) {
+      render(row: BucketItemInterface) {
         return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
       },
     },
@@ -262,7 +267,7 @@ const columns = computed(() => {
         selectedColumns.value.includes('contentType') ? '' : 'hidden',
       ],
       sorter: 'default',
-      render(row: FolderInterface) {
+      render(row: BucketItemInterface) {
         if (row.contentType) {
           return h('span', {}, row.contentType);
         }
@@ -274,7 +279,7 @@ const columns = computed(() => {
       key: 'actions',
       align: 'right',
       className: '!py-0',
-      render(row: FolderInterface) {
+      render(row: BucketItemInterface) {
         return h(
           NDropdown,
           {
@@ -299,7 +304,7 @@ const columns = computed(() => {
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },
-      renderFilterMenu: ({ hide }) => {
+      renderFilterMenu: () => {
         return h(
           TableColumns,
           {
@@ -314,9 +319,10 @@ const columns = computed(() => {
   ];
 });
 
-const rowKey = (row: FolderInterface) => row.id;
+const rowKey = (row: BucketItemInterface) => row.id;
 
-const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
+const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
+  checkedRowKeys.value = rowKeys;
   const rowKeyIds = rowKeys.map(item => intVal(item));
 
   dataStore.folder.selectedItems = dataStore.folder.items.filter(item =>
@@ -329,7 +335,7 @@ function handleColumnChange(selectedValues: Array<string>) {
   localStorage.setItem(LsTableColumnsKeys.FILES, JSON.stringify(selectedColumns.value));
 }
 
-function rowProps(row: FolderInterface) {
+function rowProps(row: BucketItemInterface) {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;
@@ -342,7 +348,7 @@ function rowProps(row: FolderInterface) {
 }
 
 /** Action when user click on File/Folder name */
-async function onItemOpen(row: FolderInterface) {
+function onItemOpen(row: BucketItemInterface) {
   currentRow.value = row;
   switch (row.type) {
     case 'file':
@@ -357,7 +363,7 @@ async function onItemOpen(row: FolderInterface) {
 }
 
 /** Open directory - show subfolder content */
-async function onFolderOpen(folder: FolderInterface) {
+async function onFolderOpen(folder: BucketItemInterface) {
   /** Add subfolder to folder path */
   dataStore.folder.path.push({
     id: folder.id,
@@ -427,10 +433,19 @@ async function handlePageChange(currentPage: number) {
   }
 }
 
-/** On folder deleted, refresh folder list */
-async function onDeleted() {
-  await getDirectoryContent();
+/**
+ * On folder/file deleted
+ * Hide modal and refresh folder list
+ * */
+function onDeleted() {
   showModalDelete.value = false;
+
+  /** Reset selected items */
+  handleCheck([]);
+
+  setTimeout(() => {
+    getDirectoryContent();
+  }, 300);
 }
 
 /** Search folders and files */

@@ -3,10 +3,6 @@
     <template #heading>
       <h4>Methods</h4>
     </template>
-    <template #infobar> Infobar </template>
-    <template #sidebar>
-      <SidebarProjectPages />
-    </template>
     <slot>
       <TableWeb3Methods />
 

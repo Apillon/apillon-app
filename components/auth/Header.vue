@@ -14,7 +14,7 @@
               :to="{ name: 'register' }"
               class="text-sm"
               :class="[
-                !isLogin ? 'text-blue' : 'text-grey-light',
+                !isLogin ? 'text-blue' : 'text-white',
                 allowSwitchPage ? 'cursor-pointer' : 'cursor-default pointer-events-none',
               ]"
               @click.native="pageSwitched"
@@ -26,7 +26,7 @@
               :to="{ name: 'login' }"
               class="text-sm"
               :class="[
-                isLogin ? 'text-blue' : 'text-grey-light',
+                isLogin ? 'text-blue' : 'text-white',
                 allowSwitchPage ? 'cursor-pointer' : 'cursor-default pointer-events-none',
               ]"
               @click.native="pageSwitched"

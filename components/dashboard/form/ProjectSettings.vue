@@ -17,6 +17,7 @@
         v-model:value="formData.name"
         :input-props="{ id: 'projectName' }"
         :placeholder="$t('form.placeholder.projectName')"
+        clearable
       />
     </n-form-item>
 
@@ -30,6 +31,7 @@
         v-model:value="formData.description"
         :input-props="{ id: 'projectDescription' }"
         :placeholder="$t('form.placeholder.projectDescription')"
+        clearable
       />
     </n-form-item>
 
@@ -101,6 +103,7 @@ async function updateProjectData() {
 
     if (res.data) {
       dataStore.updateCurrentProject(res.data);
+      window.$message.success($i18n.t('form.success.updated.project'));
     }
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));

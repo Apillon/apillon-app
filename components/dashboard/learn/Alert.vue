@@ -20,7 +20,7 @@ const props = defineProps({
 const alertLearnOverrides = {
   color: colors.transparent,
   iconColor: colors.primary,
-  titleTextColor: colors.grey.light,
-  border: `1px solid ${colors.grey.DEFAULT}`,
+  titleTextColor: colors.white,
+  border: `1px solid ${colors.body}`,
 };
 </script>

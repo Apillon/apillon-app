@@ -9,7 +9,6 @@
 
 <script lang="ts" setup>
 import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
-import type { DataTableColumns } from 'naive-ui';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -24,7 +23,7 @@ type RowData = {
   uptime: string;
 };
 
-const createColumns = (): DataTableColumns<RowData> => {
+const createColumns = (): NDataTableColumns<RowData> => {
   return [
     {
       title: $i18n.t('general.serviceName'),

@@ -1,12 +1,9 @@
 <template>
-  <div v-if="loading" class="flex flex-col gap-8" style="height: calc(100vh - 116px)">
+  <div v-if="loading" class="flex flex-col gap-8" style="height: calc(100vh - 88px)">
     <!-- Loading skeleton - on long page load show skeleten -->
     <n-skeleton height="40px" width="100%" />
     <n-skeleton height="40px" width="100%" />
     <div class="flex gap-8 h-full">
-      <div style="width: 176px">
-        <n-skeleton height="200px" width="100%" />
-      </div>
       <div style="width: 100%">
         <n-skeleton height="100%" width="100%" />
       </div>
@@ -16,26 +13,16 @@
     </div>
   </div>
   <div v-else>
-    <div v-if="$slots.heading" class="mb-10">
+    <div v-if="$slots.heading" ref="headingRef">
       <slot name="heading"> </slot>
     </div>
 
-    <div v-if="$slots.infobar" class="px-9 py-3 mb-8 bg-grey-lightBg">
-      <slot name="infobar"> </slot>
-    </div>
-
     <div class="flex flex-auto w-full flex-col md:flex-row">
-      <div v-if="$slots.sidebar" class="w-full md:w-44 md:min-w-[11rem] h-fit md:mr-6 mb-6 md:mb-0">
-        <slot name="sidebar"></slot>
-      </div>
       <n-layout :has-sider="instructionsAvailable" sider-placement="right">
-        <n-layout-header v-if="$slots.title">
-          <slot name="title"></slot>
-        </n-layout-header>
         <n-layout-content>
-          <div class="pb-8">
+          <n-scrollbar y-scrollable :style="scrollStyle">
             <slot />
-          </div>
+          </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
           v-if="instructionsAvailable"
@@ -91,10 +78,18 @@ window.$message = useMessage();
 
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
-const $i18n = useI18n();
 const dataStore = useDataStore();
 const { isLg } = useScreen();
 const { name } = useRoute();
+
+/** Heading height */
+const headingRef = ref<HTMLElement>();
+const scrollStyle = computed(() => {
+  console.log(headingRef.value?.clientHeight);
+  return {
+    maxHeight: `calc(100vh - ${120 + (headingRef.value?.clientHeight || 0)}px)`,
+  };
+});
 
 /** Instructions load */
 const key = computed(() => {

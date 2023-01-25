@@ -3,7 +3,7 @@
     <template #heading>
       <n-space :size="24" align="center" class="h-12">
         <h4 class="">{{ $t('dashboard.attachNewService') }}</h4>
-        <div class="w-[1px] h-[13px] bg-grey-light"></div>
+        <div class="w-[1px] h-[13px] bg-white"></div>
         <strong class="body-sm">{{ $t('dashboard.learnMoreAboutServices') }}</strong>
       </n-space>
     </template>
@@ -15,7 +15,7 @@
           <div
             v-for="(service, key) in services"
             :key="key"
-            class="py-6 px-[22px] bg-grey-lightBg shadow-black"
+            class="py-6 px-[22px] bg-bg-lighter shadow-black"
             :class="{ 'text-grey': service.disabled }"
           >
             <div class="text-2xl">
@@ -50,7 +50,7 @@
       </div>
       <div
         v-else-if="isFeatureEnabled(Feature.SERVICES)"
-        class="flex flex-col md:flex-row items-center justify-between max-w-3xl bg-grey-lightBg px-6 py-4"
+        class="flex flex-col md:flex-row items-center justify-between max-w-3xl bg-bg-lighter px-6 py-4"
       >
         <div class="mb-4 md:mb-0">
           <p class="body-lg font-bold">Your project currently has no active service</p>

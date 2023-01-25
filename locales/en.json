@@ -4,6 +4,8 @@
     "actions": "Actions",
     "active": "active",
     "attach": "Attach",
+    "cancel": "No, cancel",
+    "confirm": "Yes, confirm",
     "copyrights": "© Apillon",
     "created": "created",
     "delete": "Delete",
@@ -53,6 +55,7 @@
       "copied": "Text has been copied to clipboard",
       "copy": "Copy to clipboard",
       "copyApiKey": "Copy Api key to clipboard",
+      "copyLink": "Copy link",
       "error": "Failed to copy"
     },
     "permissions": {
@@ -71,13 +74,16 @@
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
+    "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
     "dashboard": "Dashboard",
     "date": "Date",
     "email": "Email",
     "emailMethodConfiguration": "Email method configuration",
     "env": "ENV",
     "expiration": "Expiration",
+    "gotIt": "Got it, thanks!",
     "goToApiManagement": "Go to central API management",
+    "homepage": "Homepage",
     "inviteTeamMember": "Invite team member",
     "invoiceDate": "Next invoice issue date",
     "invoiceTotal": "Invoice total",
@@ -88,6 +94,7 @@
     "name": "Name",
     "payment": "Payment",
     "role": "Role",
+    "searchDocs": "Search the docs",
     "secret": "Secret",
     "secrets": "Secrets",
     "selectServices": "Select services",
@@ -96,7 +103,8 @@
     "viewInvoice": "View Invoice",
     "yourPlan": "Your plan: ",
     "value": "Value",
-    "visibleColumns": "Visible columns"
+    "visibleColumns": "Visible columns",
+    "w3Warn": "W3 warn"
   },
   "error": {
     "404": "Page not found",
@@ -139,6 +147,7 @@
     "WEBHOOK_ALREADY_EXISTS_FOR_PROJECT": "Webhook already exists",
     "MAX_BUCKETS_REACHED": "Maximum number of buckets is reached",
     "MAX_PROJECTS_REACHED": "Maximum number of projects is reached",
+    "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
 
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
@@ -306,6 +315,7 @@
         "directory": "Directory key has been updated",
         "file": "File has been updated",
         "item": "Item has been updated",
+        "project": "Project has been updated",
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated"
       }
@@ -345,6 +355,7 @@
     "withEmail": "login with email"
   },
   "nav": {
+    "projectOverview": "Project overview",
     "services": "Services",
     "authentication": "Authentication",
     "storage": "Storage",
@@ -400,22 +411,71 @@
     "id": "Project ID",
     "new": "Add new project",
     "newBucket": "New storage bucket",
-    "overview": "Project overview",
     "owner": "Project owner",
     "quotaReached": "Quota has been reached.",
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
+    "banner": {
+      "title": "Referral link",
+      "description": "Nam cras mattis placerat sed suspendisse. In sollicitudin tincidunt at pretium. Sed consectetur nunc risus elementum pellentesque. Leo interdum velit sapien sed vitae quis.",
+      "btn": "Start your referral journey"
+    },
+    "enter": {
+      "header": "Let’s see if we can work together",
+      "description": "Mauris pellentesque arcu adipiscing facilisi duis. Integer laoreet donec vivamus arcu viverra feugiat mauris faucibus.",
+      "country": "Choose your Country",
+      "terms": {
+        "accept": "I accept the",
+        "andConditions": "terms and conditions",
+        "info": "Text about Terms & conditions",
+        "title": "Terms referral"
+      }
+    },
+    "claim": "Claim now",
     "claimMerchPack": "Claim merch pack",
-    "connectGithub": "Connect your Github account",
-    "connectTwitter": "Connect your Twitter account",
+    "connectGithub": "Your GitHub",
+    "connectTwitter": "Your twitter",
     "content": "Welcome to Apillon referral programme. While we are working hard on first MVP and giving you access to beta test, you are free to invite other developers to Apillon, collect points and get your Apillon Merch pack 1.0. ",
     "included": "What is included?",
     "learnMore": "Learn more about referral",
     "points": "points",
     "subtitle": "Get your Apillon Merch pack 1.0, by helping with referral. ",
     "title": "Referral programme",
-    "yourPoints": "Your points"
+    "yourPoints": "Your points",
+    "instructionsHeader": "Instructions:",
+    "instructions": {
+      "first": "1. Collect points by completing tasks",
+      "second": "2. Choose a desired reward and claim it, spending your points",
+      "third": "3. If you collect more points than you can spend, dont worry, the points are transferred to the next reward cycle"
+    },
+    "rewards": {
+      "title": "Rewards",
+      "shirt": {
+        "info": "Web3 instant Fashion. Show others you are a dev and Web3 supporter.",
+        "info1": "- Choose size",
+        "info2": "- Free shipping",
+        "info3": "- Instant SWAG"
+      }
+    },
+    "rewardsClaim": "Claim reward",
+    "rewardsSize": "Choose the desired size. In case the size is not available we will send you whatever we have left. ",
+    "connect": "Connect your social accounts",
+    "earnPoints": "Earn Some POINTS",
+    "invite": "Invite other developers and score",
+    "link": "This is your referral link",
+    "linkDesc": "Share this link with others before they register to ensure referral connection is set. Once they confirm the github account, you will earn 2 points per each referral.",
+    "referres": {
+      "header": "Your referres",
+      "name": "Service name",
+      "github": "Github profile",
+      "joined": "Joined"
+    },
+    "shoutout": "Help us with the shoutout",
+    "share": "Retweet on Twitter",
+    "confirm": "Claim now",
+    "xpPoints": "XP points:",
+    "spendingPoints": "Spending points:"
   },
   "signup": {
     "alreadyHaveAccount": "Already have an account?",
@@ -435,13 +495,20 @@
   "storage": {
     "bucket": {
       "addNew": "Add new bucket",
-      "buckets": "Storage buckets",
+      "attachService": "First attach a desired service and configure it, then start building.",
+      "buckets": "Buckets",
       "description": "Description",
-      "destroy": "Destroy",
+      "delete": "Delete bucket(s)",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected bucket(s)?",
+      "destroyed": "Deleted buckets",
+      "destroyedBuckets": "Destroyed buckets",
       "edit": "Edit bucket",
+      "infoNew": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
       "management": "Bucket management",
       "name": "Bucket name",
       "new": "New bucket",
+      "noActiveService": "Your project currently has no active service",
+      "nothingHere": "Nothing here",
       "storage": "Storage bucket",
       "update": "Update bucket",
       "quotaReached": "Quota has been reached."
@@ -449,13 +516,17 @@
     "delete": {
       "bucket": "Delete bucket",
       "bucketItems": "Delete these items?",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected item(s)?",
       "item": "Delete selected item",
-      "items": "Delete selected items"
+      "items": "Delete selected items",
+      "selectedBuckets": "Delete selected buckets",
+      "selectedFiles": "Delete selected files and directories"
     },
     "directory": {
       "create": "Create directory",
       "createNew": "Create new directory",
-      "delete": "Delete directory"
+      "delete": "Delete directory",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected directory?"
     },
     "download": {
       "bucketItems": "Download selected items?",
@@ -463,13 +534,22 @@
       "items": "Download selected items"
     },
     "file": {
+      "confirmUpload": "Confirm your upload",
       "create": "Create file",
-      "clickToUpload": "Click to upload.",
-      "delete": "Delete file",
+      "delete": "Delete file(s)",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected file(s)?",
       "downloadLink": "Download link",
-      "dragAndDrop": "Drag & drop files and folders you want to upload to your bucket, or",
+      "dragAndDrop": "Drag & drop or click to upload.",
+      "files": "({files} files)",
+      "filesUploading": "({uploading} of {files})",
       "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab.",
-      "search": "Search files"
+      "refresh": "Refresh files",
+      "retry": "Retry upload",
+      "search": "Search files",
+      "upload": "Upload files and folders",
+      "uploading": "Uploading",
+      "uploadMore": "Add more files",
+      "uploadNow": "Upload now"
     },
     "fileStatus": {
       "1": "Signed URL for upload generated",
@@ -482,14 +562,9 @@
       "102": "Error: file does not exists on S3",
       "103": "Error: bucket is full"
     },
-    "folder": {
-      "create": "Create folder",
-      "createNew": "Create new folder",
-      "delete": "Delete folder"
-    },
-    "attachService": "First attach a desired service and configure it, then start building.",
     "contentType": "Content type",
     "downloadLink": "Download link",
+    "destroy": "Destroy",
     "edit": "Edit",
     "expiration": "Expired on blockchain",
     "fileCid": "File CID",
@@ -500,7 +575,6 @@
     "fileStatusName": "File status",
     "goToRootDirectory": "Go to root directory",
     "history": "History",
-    "noActiveService": "Your project currently has no active service",
     "refresh": "Refresh",
     "replicas": "Replicas",
     "selectFiles": "Select files",
@@ -509,7 +583,8 @@
     "status": "Status",
     "traffic": "30d traffic",
     "uploadFiles": "Upload files",
-    "usage": "Storage usage",
+    "used": "Storage usage",
+    "usage": "{used} of {max} used",
     "visits": "30d visits",
     "yourFiles": "Your files",
     "yourFilesAll": "All your files",
@@ -568,16 +643,32 @@
     "passwordRequired": "Please enter your password",
     "postalCode": "Wrong postal code",
     "postalCodeRequired": "Please enter postal code",
+    "streetRequired": "Please enter your street",
+    "houseNumberRequired": "Please enter your house number",
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
     "captchaRequired": "Captcha challange required!",
     "role": "Selected role is invalid",
     "roleRequired": "Please select role",
     "terms": "Please accept the terms",
+    "country": "Please select the country",
     "webhookAuthTypeRequired": "Please select Auth type",
     "webhookPasswordRequired": "Please enter password",
     "webhookRequired": "Please enter Webhook URL",
     "webhookUsernameRequired": "Please enter username",
     "webhookTokenRequired": "Please enter token"
+  },
+  "w3Warn": {
+    "bucket": {
+      "new": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. Accumsan morbi lectus elit nunc. Arcu morbi pretium neque nibh eu vestibulum id sed adipiscing.",
+      "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
+      "destroyed": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. "
+    },
+    "file": {
+      "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
+    },
+    "folder": {
+      "delete": "All items stored in this directory will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
+    }
   }
 }

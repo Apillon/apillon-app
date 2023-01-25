@@ -1,21 +1,23 @@
 <template>
-  <div>
-    <button class="p-1 mr-2" @click="goToParentFolder()">
-      <span class="icon-back text-lg"></span>
-    </button>
-    <template v-for="(folderPath, key) in dataStore.folder.path">
-      <span v-if="key === dataStore.folder.path.length - 1">
-        {{ folderPath.name }}
+  <n-scrollbar x-scrollable style="max-width: 100%">
+    <div class="flex flex-nowrap items-center">
+      <button class="px-1 mr-2" @click="goToParentFolder()">
+        <span class="icon-back align-sub text-lg"></span>
+      </button>
+      <span v-for="(folderPath, key) in dataStore.folder.path" :key="key" class="whitespace-nowrap">
+        <span v-if="key === dataStore.folder.path.length - 1">
+          {{ folderPath.name }}
+        </span>
+        <span v-else class="cursor-pointer" @click="goToFolder(folderPath.id)">
+          <span>{{ folderPath.name }}</span>
+          <span class="inline-block mx-[1px]">/</span>
+        </span>
       </span>
-      <span v-else class="cursor-pointer" @click="goToFolder(folderPath.id)">
-        {{ folderPath.name }}/
-      </span>
-    </template>
-  </div>
+    </div>
+  </n-scrollbar>
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
 const dataStore = useDataStore();
 
 /** Go to parent folder, if we are current in first level subfolder, than go to root folder */

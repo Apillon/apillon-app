@@ -17,25 +17,20 @@
   </n-drawer>
 
   <!-- Modal - Delete API key -->
-  <modal v-model:show="showModalDeleteApiKey" :title="$t('dashboard.apiKey.delete')">
+  <ModalDelete v-model:show="showModalDeleteApiKey" :title="$t('dashboard.apiKey.delete')">
     <FormDelete :id="currentRow?.id || 0" type="apiKey" @submit-success="onApiKeyDeleted" />
-    <FormApiKeyDelete
-      :api-key-id="currentRow?.id || 0"
-      @submit-success="showModalDeleteApiKey = false"
-    />
-  </modal>
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
 import { NButton, NDropdown } from 'naive-ui';
-import type { DataTableColumns } from 'naive-ui';
 
 const { t } = useI18n();
 const settingsStore = useSettingsStore();
 const showModalDeleteApiKey = ref<boolean>(false);
 const drawerUpdateApiKeyVisible = ref<boolean>(false);
 
-const createColumns = (): DataTableColumns<ApiKeyInterface> => {
+const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
   return [
     {
       title: t('dashboard.secret'),

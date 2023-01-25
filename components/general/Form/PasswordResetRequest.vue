@@ -1,7 +1,7 @@
 <template>
   <n-form
-    class="inline"
     ref="formRef"
+    class="inline"
     :model="formData"
     :rules="rules"
     @submit.prevent="handleSubmit"
