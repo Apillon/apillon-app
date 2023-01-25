@@ -113,7 +113,7 @@ async function connectTwitter() {
   loading.value = true;
   try {
     const res = await $api.get<ApiKeyRolesResponse>(endpoints.referralTwitterAuth, {
-      redirectUrl: window.location.origin + window.location.pathname,
+      url: window.location.origin + window.location.pathname,
     });
     window.open(res.data.url, '_self');
   } catch (e) {

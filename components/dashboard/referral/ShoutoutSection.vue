@@ -18,7 +18,7 @@
     </div>
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
       <div v-for="(tweet, idx) in tweets" :key="tweet" class="">
-        <ReferralTweet :tweet="tweet" />
+        <ReferralTweet :tweet="tweet" @success="getReferrals()" />
       </div>
     </div>
   </div>
@@ -29,7 +29,9 @@ const tweets = ref([]);
 
 const loading = ref(false);
 
-getReferrals();
+onMounted(async () => {
+  await getReferrals();
+});
 
 async function getReferrals() {
   loading.value = true;
