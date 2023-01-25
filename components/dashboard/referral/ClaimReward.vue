@@ -235,7 +235,6 @@ const rules: NFormRules = {
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    console.log('Errors: ', errors);
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
@@ -262,7 +261,6 @@ async function claimReward() {
       },
     });
 
-    console.log('My res: ', res);
     message.success('Reward claimed!');
     closeModal();
   } catch (e) {

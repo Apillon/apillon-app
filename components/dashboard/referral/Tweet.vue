@@ -73,7 +73,6 @@ async function confirmShareTweet(id: String) {
         tweet_id: id,
       }
     );
-    console.log('My res share tweet: ', res);
     if (res.data.retweeted) {
       referralStore.initReferral(res.data.player);
       message.success('Tweet share confirmed!');
