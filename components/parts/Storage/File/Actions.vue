@@ -63,9 +63,9 @@
       <!-- Upload files -->
       <n-button
         size="small"
-        :color="dataStore.folder.uploadActive ? colors.primary : ''"
+        :color="dataStore.bucket.uploadActive ? colors.primary : ''"
         ghost
-        @click="dataStore.folder.uploadActive = !dataStore.folder.uploadActive"
+        @click="dataStore.bucket.uploadActive = !dataStore.bucket.uploadActive"
       >
         <span class="icon-upload text-lg mr-2"></span>
         {{ $t('general.upload') }}
@@ -154,7 +154,7 @@ async function downloadFile(CID?: string | null) {
       dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
     }
     const fileDetails: FileDetails = dataStore.file.items[CID].file;
-    return download(fileDetails.downloadLink, fileDetails.name);
+    return download(fileDetails.link, fileDetails.name);
   } catch (error: any) {
     /** Show error message */
     message.error($i18n.t('error.fileDownload'));

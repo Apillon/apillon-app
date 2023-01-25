@@ -83,17 +83,7 @@ const parentFoldertId = computed(() => {
 
 /** Format credit card */
 function handleFolderNameInput(value: string | [string, string]) {
-  const data = textMarshal({
-    input: value,
-    template: 'x',
-    disallowCharacters: [/@/, /\\/, /\//, /\|/, /\!/, /\#/, /\$/, /\%/, /\^/, /\&/, /\*/],
-    isRepeat: {
-      value: true,
-      removeStart: true,
-      removeEnd: true,
-    },
-  });
-  formData.value.name = data.marshaltext;
+  formData.value.name = stripFolderName(value);
 }
 
 // Submit

@@ -23,11 +23,11 @@
       </Heading>
     </template>
     <slot>
-      <TableBucket v-if="dataStore.hasBuckets" :buckets="dataStore.bucket.items" />
+      <TableStorageBucket v-if="dataStore.hasBuckets" :buckets="dataStore.bucket.items" />
       <template v-else>
         <div
           class="flex flex-col items-center justify-center px-6 py-4"
-          style="min-height: calc(100vh - 250px)"
+          style="min-height: calc(100vh - 270px)"
         >
           <div class="mb-4">
             <NuxtIcon name="storage/empty" class="icon-auto" filled />
@@ -59,7 +59,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const pageLoading = ref<boolean>(true);
+const pageLoading = ref<boolean>(false);
 const showModalW3Warn = ref<boolean>(false);
 const showModalNewBucket = ref<boolean | null>(false);
 
@@ -68,20 +68,17 @@ useHead({
 });
 
 onMounted(() => {
+  if (!dataStore.hasBuckets) {
+    pageLoading.value = true;
+  }
+
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await getBuckets();
+    await dataStore.getBuckets();
     await geBucketQuota();
 
     pageLoading.value = false;
   });
 });
-
-/** GET Buckets if bucket list is empty */
-async function getBuckets() {
-  if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets();
-  }
-}
 
 /** GET Bucket quota, if current value is null  */
 async function geBucketQuota() {

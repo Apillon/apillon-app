@@ -39,6 +39,7 @@ const message = useMessage();
 const referralStore = useReferralStore();
 
 const $route = useRoute();
+const $router = useRouter();
 
 const $i18n = useI18n();
 const formRef = ref<NFormInst | null>(null);
@@ -55,12 +56,12 @@ onMounted(async () => {
   if (ouathToken.value && oauthVerifier.value) {
     loading.value = true;
     try {
-      console.log('My ouathToken', ouathToken.value);
       const res = await $api.post<ReferralResponse>(endpoints.referralTwitter, {
         oauth_token: ouathToken.value,
         oauth_verifier: oauthVerifier.value,
       });
       referralStore.initReferral(res.data);
+      $router.replace($route.path);
       message.success('Twitter connected');
     } catch (e) {
       console.error(e);
@@ -112,11 +113,9 @@ async function connectTwitter() {
   loading.value = true;
   try {
     const res = await $api.get<ApiKeyRolesResponse>(endpoints.referralTwitterAuth, {
-      redirectUrl: window.location.origin + window.location.pathname,
+      url: window.location.origin + window.location.pathname,
     });
-    console.log('My res twitter connect: ', res);
     window.open(res.data.url, '_self');
-    console.log('Open window');
   } catch (e) {
     console.error(e);
   }
@@ -127,7 +126,6 @@ async function disconnectTwitter() {
   loading.value = true;
   try {
     const res = await $api.post<ReferralResponse>(endpoints.referralTwitterDisc);
-    console.log('resUnLink: ', res);
     referralStore.initReferral(res.data);
     message.success('Twitter disconnected');
   } catch (e) {

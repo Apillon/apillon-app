@@ -126,7 +126,7 @@ declare global {
     bucket_id: number;
     contentType: string;
     directory_id: number;
-    downloadLink: string;
+    link: string;
     file_uuid: string;
     id: number;
     name: string;

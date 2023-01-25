@@ -1,7 +1,8 @@
-import { DiscreteApiOptions, GlobalThemeOverrides } from 'naive-ui';
+import { DiscreteApiOptions, GlobalThemeOverrides, MessageProviderProps } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 
 export const PAGINATION_LIMIT = 20;
+export const CACHE_EXPIRATION_IN_MS = 60 * 1000; // One minute
 export const ON_COLUMN_CLICK_OPEN_CLASS = 'onClickOpen';
 
 export const LsTableColumnsKeys = {
@@ -12,6 +13,16 @@ export const LsW3WarnKeys = {
   BUCKET_NEW: 'al_w3warn_bucket_new',
   BUCKET_DELETE: 'al_w3warn_bucket_delete',
   BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
+  BUCKET_ITEM_DELETE: 'al_w3warn_bucket_item_delete',
+};
+
+export const LsCacheKeys = {
+  BUCKET: 'al_cache_bucket',
+  BUCKETS: 'al_cache_buckets',
+  BUCKET_ITEMS: 'al_cache_bucket_items',
+  BUCKET_DESTROYED: 'al_cache_bucket_destroyed',
+  FILE_ALL: 'al_cache_file_all',
+  FILE_DELETED: 'al_cache_file_deleted',
 };
 
 /** User roles */
@@ -36,31 +47,60 @@ export function CreateUserRoles(): Array<NSelectOption> {
   });
 }
 
+type MessageThemeOverrides = NonNullable<MessageProviderProps['themeOverrides']>;
+const messageOverrides: MessageThemeOverrides = {
+  borderRadius: '8px',
+  closeIconColor: colors.bg.DEFAULT,
+  closeIconColorError: colors.bg.DEFAULT,
+  closeIconColorHover: colors.bg.DEFAULT,
+  closeIconColorHoverError: colors.bg.DEFAULT,
+  closeIconColorHoverInfo: colors.bg.DEFAULT,
+  closeIconColorHoverLoading: colors.bg.DEFAULT,
+  closeIconColorHoverSuccess: colors.bg.DEFAULT,
+  closeIconColorHoverWarning: colors.bg.DEFAULT,
+  closeIconColorInfo: colors.bg.DEFAULT,
+  closeIconColorLoading: colors.bg.DEFAULT,
+  closeIconColorPressed: colors.bg.DEFAULT,
+  closeIconColorPressedError: colors.bg.DEFAULT,
+  closeIconColorPressedInfo: colors.bg.DEFAULT,
+  closeIconColorPressedLoading: colors.bg.DEFAULT,
+  closeIconColorPressedSuccess: colors.bg.DEFAULT,
+  closeIconColorPressedWarning: colors.bg.DEFAULT,
+  closeIconColorSuccess: colors.bg.DEFAULT,
+  closeIconColorWarning: colors.bg.DEFAULT,
+  color: colors.white,
+  colorError: colors.white,
+  colorInfo: colors.white,
+  colorLoading: colors.white,
+  colorSuccess: colors.white,
+  colorWarning: colors.white,
+  iconColor: colors.bg.DEFAULT,
+  iconColorError: colors.bg.DEFAULT,
+  iconColorInfo: colors.bg.DEFAULT,
+  iconColorLoading: colors.bg.DEFAULT,
+  iconColorSuccess: colors.bg.DEFAULT,
+  iconColorWarning: colors.bg.DEFAULT,
+  maxWidth: '380px',
+  padding: '24px',
+  textColor: colors.bg.DEFAULT,
+  textColorError: colors.bg.DEFAULT,
+  textColorInfo: colors.bg.DEFAULT,
+  textColorLoading: colors.bg.DEFAULT,
+  textColorSuccess: colors.bg.DEFAULT,
+  textColorWarning: colors.bg.DEFAULT,
+};
+
 /**
  * Theme configs
  */
 export const MessageProviderOptoins: DiscreteApiOptions = {
   messageProviderProps: {
-    duration: 30000,
+    duration: 3000,
+    closable: true,
     keepAliveOnHover: true,
     max: 4,
-    themeOverrides: {
-      borderRadius: '0px',
-      color: colors.bg.lighter,
-      colorError: colors.bg.lighter,
-      colorInfo: colors.bg.lighter,
-      colorLoading: colors.bg.lighter,
-      colorSuccess: colors.bg.lighter,
-      colorWarning: colors.bg.lighter,
-      iconColorError: colors.pink,
-      iconColorInfo: colors.blue,
-      iconColorSuccess: colors.green,
-      iconColorWarning: colors.yellow,
-      textColorError: colors.pink,
-      textColorInfo: colors.blue,
-      textColorSuccess: colors.green,
-      textColorWarning: colors.yellow,
-    },
+    placement: 'bottom-right',
+    themeOverrides: messageOverrides,
   },
 };
 
@@ -257,48 +297,9 @@ export const themeOverrides: GlobalThemeOverrides = {
     itemTextColorActiveHorizontal: colors.white,
     itemTextColorActiveHoverHorizontal: colors.white,
     itemTextColorHoverHorizontal: colors.body,
+    itemTextColor: colors.white,
   },
-  Message: {
-    borderRadius: '8px',
-    closeIconColor: colors.bg.DEFAULT,
-    closeIconColorError: colors.bg.DEFAULT,
-    closeIconColorHover: colors.bg.DEFAULT,
-    closeIconColorHoverError: colors.bg.DEFAULT,
-    closeIconColorHoverInfo: colors.bg.DEFAULT,
-    closeIconColorHoverLoading: colors.bg.DEFAULT,
-    closeIconColorHoverSuccess: colors.bg.DEFAULT,
-    closeIconColorHoverWarning: colors.bg.DEFAULT,
-    closeIconColorInfo: colors.bg.DEFAULT,
-    closeIconColorLoading: colors.bg.DEFAULT,
-    closeIconColorPressed: colors.bg.DEFAULT,
-    closeIconColorPressedError: colors.bg.DEFAULT,
-    closeIconColorPressedInfo: colors.bg.DEFAULT,
-    closeIconColorPressedLoading: colors.bg.DEFAULT,
-    closeIconColorPressedSuccess: colors.bg.DEFAULT,
-    closeIconColorPressedWarning: colors.bg.DEFAULT,
-    closeIconColorSuccess: colors.bg.DEFAULT,
-    closeIconColorWarning: colors.bg.DEFAULT,
-    color: colors.white,
-    colorError: colors.white,
-    colorInfo: colors.white,
-    colorLoading: colors.white,
-    colorSuccess: colors.white,
-    colorWarning: colors.white,
-    iconColor: colors.bg.DEFAULT,
-    iconColorError: colors.bg.DEFAULT,
-    iconColorInfo: colors.bg.DEFAULT,
-    iconColorLoading: colors.bg.DEFAULT,
-    iconColorSuccess: colors.bg.DEFAULT,
-    iconColorWarning: colors.bg.DEFAULT,
-    maxWidth: '380px',
-    padding: '24px',
-    textColor: colors.bg.DEFAULT,
-    textColorError: colors.bg.DEFAULT,
-    textColorInfo: colors.bg.DEFAULT,
-    textColorLoading: colors.bg.DEFAULT,
-    textColorSuccess: colors.bg.DEFAULT,
-    textColorWarning: colors.bg.DEFAULT,
-  },
+  Message: messageOverrides,
   Modal: {
     color: colors.bg.DEFAULT,
     peers: {
@@ -434,12 +435,16 @@ export const themeOverrides: GlobalThemeOverrides = {
     color: colors.bg.light,
     colorInfo: colors.blue,
     colorSuccess: colors.green,
-    fontSizeTiny: '12px',
-    fontSizeSmall: '14px',
-    fontSizeMedium: '16px',
+    fontSizeTiny: '10px',
+    fontSizeSmall: '12px',
+    fontSizeMedium: '14px',
     fontSizeLarge: '18px',
-    fontWeightStrong: 'bold',
-    padding: '1px 16px',
+    fontWeightStrong: '700',
+    heightTiny: '24px',
+    heightSmall: '24px',
+    heightMedium: '24px',
+    heightLarge: '32px',
+    padding: '4px 12px 4px 12px',
     textColor: colors.body,
     textColorInfo: colors.blue,
     textColorSuccess: colors.bg.dark,

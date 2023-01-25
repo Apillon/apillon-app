@@ -30,9 +30,11 @@
       {{ $t('referral.confirm') }}
     </Btn>
   </div>
-  <div v-else class="w-full bg-black flex justify-center py-[13px]">
-    <IconSuccessful class="mr-2 h-auto" />
-    {{ 'Point claimed' }}
+  <div v-else>
+    <div v-if="buttonsVisible" class="w-full bg-black flex justify-center py-[13px]">
+      <IconSuccessful class="mr-2 h-auto" />
+      {{ 'Point claimed' }}
+    </div>
   </div>
 </template>
 
@@ -40,10 +42,10 @@
 import Tweet from 'vue-tweet';
 import { useMessage } from 'naive-ui';
 
-const referralStore = useReferralStore();
+const emit = defineEmits(['success']);
 
 const props = defineProps({
-  tweet: { type: String, required: true },
+  tweet: { type: Object, required: true },
 });
 
 const message = useMessage();
@@ -58,7 +60,7 @@ function loadSuccess() {
 
 function shareTweet(id: String) {
   try {
-    window.open('https://twitter.com/Apillon/status/' + id);
+    window.open('https://twitter.com/intent/retweet?tweet_id=' + id);
   } catch (e) {
     console.error(e);
   }
@@ -73,9 +75,8 @@ async function confirmShareTweet(id: String) {
         tweet_id: id,
       }
     );
-    console.log('My res share tweet: ', res);
     if (res.data.retweeted) {
-      referralStore.initReferral(res.data.player);
+      emit('success');
       message.success('Tweet share confirmed!');
     } else {
       message.error('Tweet is not shared');

@@ -17,61 +17,34 @@
       <Spinner />
     </div>
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-      <div v-for="(tweet, idx) in tweets" :key="tweet" class="">
-        <ReferralTweet :tweet="tweet" />
+      <div v-for="(tweet, idx) in tweets" :key="idx" class="">
+        <ReferralTweet :tweet="tweet" @success="changeTweet(idx)" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import Tweet from 'vue-tweet';
-import { useMessage } from 'naive-ui';
-
-const message = useMessage();
-
-const tweets = ref([]);
+const tweets = ref([] as { retweeted }[]);
 
 const loading = ref(false);
-const loadingConfirm = ref(false);
 
-getReferrals();
+onMounted(async () => {
+  await getReferrals();
+});
+
+function changeTweet(id) {
+  tweets.value[id].retweeted = true;
+}
 
 async function getReferrals() {
   loading.value = true;
   try {
     const res = await $api.get(endpoints.referralTweets);
     tweets.value = res.data;
-    console.log(tweets.value);
   } catch (e) {
     console.error(e);
   }
   loading.value = false;
-}
-
-function shareTweet(id: String) {
-  try {
-    window.open('https://twitter.com/Apillon/status/' + id);
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-async function confirmShareTweet(id: String) {
-  loadingConfirm.value = true;
-  try {
-    const res = await $api.post<{ data: { retweeted: boolean } }>(endpoints.referralRetweet, {
-      tweet_id: id,
-    });
-    console.log('My res share tweet: ', res);
-    if (res.data.retweeted) {
-      message.success('Tweet share confirmed!');
-    } else {
-      message.error('Tweet is not shared');
-    }
-  } catch (e) {
-    console.error(e);
-  }
-  loadingConfirm.value = false;
 }
 </script>

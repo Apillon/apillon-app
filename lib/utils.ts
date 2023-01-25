@@ -60,13 +60,11 @@ export function hideSecret(source: string, partLength: number = 4): string {
  */
 /** Validate checkbox if it is checked */
 export function validateRequiredCheckbox(_: NFormItemRule, value: boolean | null): boolean {
-  console.log('Checkboy validation');
   return value === true;
 }
 
 /** Validate dropdown if it is selected */
 export function validateRequiredDropdown(_: NFormItemRule, value: String | null): boolean {
-  console.log('Dropdown validation');
   if (value) {
     return value.length !== 0;
   } else {
@@ -110,32 +108,6 @@ export function datetimeToDate(datetime: string): string {
     day: 'numeric',
   };
   return date.toLocaleDateString('en-us', options);
-}
-
-/** Storage calculations */
-export function kbToMb(kb: number): number {
-  if (!+kb) return 0;
-  return parseFloat((kb / Math.pow(1024, 1)).toFixed(2));
-}
-export function bytesToMb(bytes: number): number {
-  if (!+bytes) return 0;
-  return parseFloat((bytes / Math.pow(1024, 2)).toFixed(2));
-}
-
-export function storagePercantage(size: number, maxSize: number): number {
-  return parseInt(((size / maxSize) * 100).toFixed(0));
-}
-
-export function formatBytes(bytes: number, decimals: number = 2): string {
-  if (!+bytes) return '0 KB';
-
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
 /**
@@ -244,23 +216,6 @@ export function canOpenColumnCell(path: EventTarget[]) {
  * Actions
  */
 
-/**
- * Download file
- * @param url
- * @param filename
- */
-export async function download(url: string, filename: string) {
-  return fetch(url)
-    .then(response => response.blob())
-    .then(blob => {
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      link.click();
-    })
-    .catch(console.error);
-}
-
 /** Copy text to clipboard */
 export function copyToClipboard(text: string) {
   navigator.clipboard.writeText(text).then(
@@ -305,4 +260,15 @@ export function copyToClipboardWithResponseTexts(
       }
     }
   );
+}
+
+/**
+ * Cache expiration
+ */
+export function isCacheExpired(key: string) {
+  const timestamp = sessionStorage.getItem(key);
+  if (timestamp) {
+    return parseInt(timestamp) + CACHE_EXPIRATION_IN_MS < Date.now();
+  }
+  return true;
 }

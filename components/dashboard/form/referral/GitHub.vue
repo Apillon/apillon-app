@@ -41,6 +41,7 @@ const referralStore = useReferralStore();
 const message = useMessage();
 
 const $route = useRoute();
+const $router = useRouter();
 
 const $i18n = useI18n();
 const loading = ref(false);
@@ -53,14 +54,13 @@ const ouathToken = computed(() => $route.query.code);
 onMounted(async () => {
   if (ouathToken.value) {
     loading.value = true;
-    console.log('My ouathToken', ouathToken.value);
     // Github link // Send oath token to backend
     try {
       const res = await $api.post<ReferralResponse>(endpoints.referralGithub, {
         code: ouathToken.value,
       });
-      console.log('My res github link: ', res);
       referralStore.initReferral(res.data);
+      $router.replace($route.path);
       message.success('Github connected');
     } catch (e) {
       console.error(e);
@@ -92,7 +92,8 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (!referralStore.github_id) {
       window.open(
-        'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=http://localhost:3000/dashboard/referral',
+        'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=' +
+          window.location.href,
         '_self'
       );
     } else {
@@ -107,7 +108,6 @@ async function disconnectGithub() {
   // Github link // Send oath token to backend
   try {
     const res = await $api.post<ReferralResponse>(endpoints.referralGithubDisc);
-    console.log('My res github unlink: ', res);
     referralStore.initReferral(res.data);
     message.success('Github disconnected');
   } catch (e) {

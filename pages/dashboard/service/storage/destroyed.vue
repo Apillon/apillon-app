@@ -20,7 +20,10 @@
       </Heading>
     </template>
     <slot>
-      <TableBucket v-if="dataStore.hasDestroyedBuckets" :buckets="dataStore.bucket.destroyed" />
+      <TableStorageBucket
+        v-if="dataStore.hasDestroyedBuckets"
+        :buckets="dataStore.bucket.destroyed"
+      />
       <template v-else>
         <div
           class="flex flex-col items-center justify-center px-6 py-4"
@@ -56,24 +59,9 @@ useHead({
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await getBuckets();
-    await geBucketQuota();
+    await dataStore.getBuckets(true);
 
     pageLoading.value = false;
   });
 });
-
-/** GET Buckets if bucket list is empty */
-async function getBuckets() {
-  if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets();
-  }
-}
-
-/** GET Bucket quota, if current value is null  */
-async function geBucketQuota() {
-  if (dataStore.bucket.quotaReached === undefined) {
-    await dataStore.fetchBucketQuota();
-  }
-}
 </script>

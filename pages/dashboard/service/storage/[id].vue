@@ -10,10 +10,7 @@
 
       <!-- Upload files -->
       <transition name="fade" appear>
-        <FormStorageUploadFiles
-          v-if="dataStore.folder.uploadActive"
-          :bucket-uuid="dataStore.bucket.active.bucket_uuid || dataStore.currentBucket.bucket_uuid"
-        />
+        <FormStorageDragAndDrop v-if="dataStore.bucket.uploadActive" />
       </transition>
 
       <!-- Breadcrumbs -->
@@ -23,7 +20,7 @@
 
       <!-- DataTable: files and directories -->
       <transition name="fade" appear>
-        <TableFiles v-if="dataStore.bucket.active?.size" />
+        <TableStorageFiles v-if="dataStore.bucket.active?.size" />
       </transition>
     </slot>
   </Dashboard>
@@ -44,10 +41,10 @@ onMounted(() => {
   dataStore.onBucketMounted(parseInt(`${params?.id}`));
 
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await dataStore.fetchBucket(parseInt(`${params?.id}`));
+    await dataStore.getBucket(parseInt(`${params?.id}`));
 
     if (!dataStore.bucket.active.size) {
-      dataStore.folder.uploadActive = true;
+      dataStore.bucket.uploadActive = true;
     }
     pageLoading.value = false;
   });

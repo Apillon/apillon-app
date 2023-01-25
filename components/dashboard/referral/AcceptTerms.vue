@@ -94,7 +94,6 @@ const rules: NFormRules = {
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    console.log('Errors: ', errors);
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
@@ -110,7 +109,6 @@ async function enterReferral() {
       termsAccepted: true,
     });
     referralStore.initReferral(res.data);
-    console.log('My res: ', res);
 
     router.push('/dashboard/referral');
   } catch (e) {
