@@ -22,6 +22,8 @@ export const useDataStore = defineStore('data', {
       selected: 0,
       selectedItems: [] as Array<BucketInterface>,
       total: 0,
+      uploadActive: false,
+      uploadFileList: [] as Array<FileListItemType>,
     },
     crust: {} as Record<string, AnyJson>,
     currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
@@ -29,6 +31,9 @@ export const useDataStore = defineStore('data', {
       : 0,
     file: {
       items: {} as Record<string, FileDetailsInterface>,
+      all: [] as Array<FileUploadInterface>,
+      total: 0,
+      trash: [] as Array<BucketItemInterface>,
     },
     folder: {
       allowFetch: true,
@@ -39,7 +44,6 @@ export const useDataStore = defineStore('data', {
       selected: 0,
       selectedItems: [] as Array<BucketItemInterface>,
       total: 0,
-      uploadActive: false,
     },
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
@@ -89,6 +93,9 @@ export const useDataStore = defineStore('data', {
     hasBuckets(state): boolean {
       return Array.isArray(state.bucket.items) && state.bucket.items.length > 0;
     },
+    hasBucketItems(state): boolean {
+      return Array.isArray(state.folder.items) && state.folder.items.length > 0;
+    },
     hasDestroyedBuckets(state): boolean {
       return Array.isArray(state.bucket.destroyed) && state.bucket.destroyed.length > 0;
     },
@@ -101,6 +108,12 @@ export const useDataStore = defineStore('data', {
     },
     getFolderPath(state) {
       return state.folder.path.map(p => p.name).join('/') || '';
+    },
+    hasFileAll(state): boolean {
+      return Array.isArray(state.file.all) && state.file.all.length > 0;
+    },
+    hasDeletedFiles(state): boolean {
+      return Array.isArray(state.file.trash) && state.file.trash.length > 0;
     },
   },
   actions: {
@@ -133,13 +146,15 @@ export const useDataStore = defineStore('data', {
     },
 
     setBucketId(id: number) {
-      this.file.items = {} as Record<string, FileDetailsInterface>;
-      this.folder.items = [] as Array<BucketItemInterface>;
-      this.folder.total = 0;
-      this.folder.path = [];
-      this.folder.selected = 0;
-      this.bucket.selected = id;
-      this.folderSearch();
+      if (this.bucket.selected !== id) {
+        this.file.items = {} as Record<string, FileDetailsInterface>;
+        this.folder.items = [] as Array<BucketItemInterface>;
+        this.folder.total = 0;
+        this.folder.path = [];
+        this.folder.selected = 0;
+        this.bucket.selected = id;
+        this.folderSearch();
+      }
     },
 
     setFolderId(id: number) {
@@ -173,15 +188,6 @@ export const useDataStore = defineStore('data', {
       }
     },
 
-    /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getBucket(bucketId: number): Promise<BucketInterface> {
-      const bucket = this.bucket.items.find(item => item.id === bucketId);
-      if (bucket !== undefined) {
-        return bucket;
-      }
-      return await this.fetchBucket(bucketId);
-    },
-
     onBucketMounted(id: number) {
       this.setBucketId(id);
 
@@ -210,6 +216,54 @@ export const useDataStore = defineStore('data', {
         Array.isArray(this.instructions[key]) &&
         this.instructions[key].length > 0
       );
+    },
+
+    /**
+     * Fetch wrappers
+     */
+
+    /** Services */
+    async getAllServices() {
+      const services = await this.fetchServices();
+
+      Object.entries(ServiceTypeNames).forEach(([serviceType, typeName]) => {
+        this.services[typeName] =
+          services.filter(service => service.serviceType_id === parseInt(serviceType)) ||
+          ([] as Array<ServiceInterface>);
+      });
+    },
+    async getAuthServices() {
+      this.services.authentication = await this.fetchServices(ServiceType.AUTHENTICATION);
+    },
+    async getStorageServices() {
+      this.services.storage = await this.fetchServices(ServiceType.STORAGE);
+    },
+    async getComputingServices() {
+      this.services.computing = await this.fetchServices(ServiceType.COPMUTING);
+    },
+
+    /** Buckets */
+    async getBuckets(statusDestroyed: boolean = false) {
+      if (
+        (statusDestroyed &&
+          (!this.hasDestroyedBuckets || isCacheExpired(LsCacheKeys.BUCKET_DESTROYED))) ||
+        !this.hasBuckets ||
+        isCacheExpired(LsCacheKeys.BUCKETS)
+      ) {
+        this.promises.buckets = await this.fetchBuckets(statusDestroyed);
+      }
+    },
+
+    /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
+    async getBucket(bucketId: number): Promise<BucketInterface> {
+      if (isCacheExpired(LsCacheKeys.BUCKET)) {
+        return await this.fetchBucket(bucketId);
+      }
+      const bucket = this.bucket.items.find(item => item.id === bucketId);
+      if (bucket !== undefined) {
+        return bucket;
+      }
+      return await this.fetchBucket(bucketId);
     },
 
     /**
@@ -302,27 +356,8 @@ export const useDataStore = defineStore('data', {
       return [] as Array<ServiceInterface>;
     },
 
-    async getAllServices() {
-      const services = await this.fetchServices();
-
-      Object.entries(ServiceTypeNames).forEach(([serviceType, typeName]) => {
-        this.services[typeName] =
-          services.filter(service => service.serviceType_id === parseInt(serviceType)) ||
-          ([] as Array<ServiceInterface>);
-      });
-    },
-    async getAuthServices() {
-      this.services.authentication = await this.fetchServices(ServiceType.AUTHENTICATION);
-    },
-    async getStorageServices() {
-      this.services.storage = await this.fetchServices(ServiceType.STORAGE);
-    },
-    async getComputingServices() {
-      this.services.computing = await this.fetchServices(ServiceType.COPMUTING);
-    },
-
     /** Buckets */
-    async fetchBuckets() {
+    async fetchBuckets(statusDeleted: boolean = false) {
       if (!this.hasProjects) {
         await this.fetchProjects();
       }
@@ -332,17 +367,34 @@ export const useDataStore = defineStore('data', {
         const params: Record<string, string | number> = {
           project_uuid: this.currentProject?.project_uuid || '',
         };
+        if (statusDeleted) {
+          params.status = 8;
+        }
         const res = await $api.get<BucketsResponse>(endpoints.buckets, params);
 
-        this.bucket.items = res.data.items.map((bucket: BucketInterface) => {
+        const items = res.data.items.map((bucket: BucketInterface) => {
           return addBucketAdditionalData(bucket);
         });
+
+        if (statusDeleted) {
+          this.bucket.destroyed = items;
+        } else {
+          this.bucket.items = items;
+        }
         this.bucket.total = res.data.total;
         this.bucket.loading = false;
         this.bucket.search = '';
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.BUCKETS, Date.now().toString());
+
         return res;
       } catch (error: any) {
-        this.bucket.items = [] as Array<BucketInterface>;
+        if (statusDeleted) {
+          this.bucket.items = [] as Array<BucketInterface>;
+        } else {
+          this.bucket.items = [] as Array<BucketInterface>;
+        }
         this.bucket.total = 0;
         this.bucket.loading = false;
 
@@ -357,6 +409,10 @@ export const useDataStore = defineStore('data', {
         const res = await $api.get<BucketResponse>(endpoints.bucket(bucketId));
 
         this.bucket.active = addBucketAdditionalData(res.data);
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.BUCKET, Date.now().toString());
+
         return res.data;
       } catch (error: any) {
         this.bucket.active = {} as BucketInterface;
@@ -433,6 +489,9 @@ export const useDataStore = defineStore('data', {
 
         this.folder.items = res.data.items;
         this.folder.total = res.data.total;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.BUCKET_ITEMS, Date.now().toString());
       } catch (error: any) {
         /** Reset data */
         this.folder.items = [];

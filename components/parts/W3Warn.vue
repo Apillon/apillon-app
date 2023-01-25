@@ -1,7 +1,7 @@
 <template>
   <n-modal v-bind="$attrs" ref="modalRef" :mask-closable="false">
     <n-card
-      class="w3-warn max-w-xl"
+      class="w3-warn !max-w-xl"
       :title="title || $t(`dashboard.w3Warn`)"
       :bordered="false"
       role="dialog"

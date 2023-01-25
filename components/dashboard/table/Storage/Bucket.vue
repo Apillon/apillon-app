@@ -1,5 +1,5 @@
 <template>
-  <n-space :size="32" vertical>
+  <n-space class="pb-8" :size="32" vertical>
     <StorageActions @on-bucket-delete="deleteBucket" />
 
     <n-data-table
@@ -181,23 +181,6 @@ const dropdownOptions = [
 ];
 
 /**
- * Load data on mounted
- */
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(_ => {
-      getBuckets();
-    });
-  }, 100);
-});
-
-async function getBuckets() {
-  if (!dataStore.hasBuckets) {
-    dataStore.promises.buckets = await dataStore.fetchBuckets();
-  }
-}
-
-/**
  * On deleteBucket click
  * If W3Warn has already been shown, show modal delete bucket, otherwise show warn first
  * */
@@ -219,7 +202,7 @@ function onModalW3WarnHide(value: boolean) {
   }
 }
 
-/** Watch showModalNewBucket, onShow update timestamp of shown modal in session storage */
+/** Watch showModalW3Warn, onShow update timestamp of shown modal in session storage */
 watch(
   () => showModalW3Warn.value,
   shown => {

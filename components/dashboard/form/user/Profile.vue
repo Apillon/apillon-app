@@ -34,6 +34,7 @@
         :input-props="{ id: 'phone' }"
         :placeholder="$t('form.placeholder.phone')"
         :loading="loadingForm"
+        @input="handlePhoneNumberInput"
       />
     </n-form-item>
 
@@ -49,6 +50,7 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
+import { textMarshal } from 'text-marshal';
 
 const message = useMessage();
 const $i18n = useI18n();
@@ -93,17 +95,44 @@ const rules: NFormRules = {
     {
       validator: validatePhone,
       message: $i18n.t('validation.phone'),
-      trigger: 'input',
     },
   ],
 };
 
 // Custom validations
 function validatePhone(_: NFormItemRule, value: string): boolean {
-  // const re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
-  const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+  const regex = /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
 
   return !value || regex.test(value);
+}
+
+/** Format phone number */
+function handlePhoneNumberInput(value: string | [string, string]) {
+  const data = textMarshal({
+    input: value,
+    template: 'x',
+    disallowCharacters: [
+      /[a-z]/,
+      /[A-Z]/,
+      /@/,
+      /\\/,
+      /\//,
+      /\|/,
+      /\!/,
+      /\#/,
+      /\$/,
+      /\%/,
+      /\^/,
+      /\&/,
+      /\*/,
+    ],
+    isRepeat: {
+      value: true,
+      removeStart: true,
+      removeEnd: true,
+    },
+  });
+  formData.value.phone = data.marshaltext;
 }
 
 // Submit

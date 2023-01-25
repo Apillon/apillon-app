@@ -7,10 +7,9 @@
       </div>
       <div class="flex items-center justify-end min-w-[40px]">
         <IconSuccessful v-if="status === FileUploadStatusValue.FINISHED" />
-        <span
-          v-else-if="status === FileUploadStatusValue.ERROR"
-          class="icon-close align-middle text-2xl text-pink"
-        ></span>
+        <button v-else-if="status === FileUploadStatusValue.ERROR" @click="onRemoveFile">
+          <span class="icon-close align-middle text-2xl text-pink"></span>
+        </button>
         <button v-else @click="onRemoveFile">
           <span class="icon-close align-middle text-2xl"></span>
         </button>
