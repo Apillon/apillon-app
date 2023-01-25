@@ -1,7 +1,13 @@
 <template>
   <div v-if="authStore.loggedIn" ref="mainContentRef" class="relative h-screen lg:pl-80">
     <n-config-provider :theme-overrides="themeOverrides">
-      <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="3000">
+      <n-message-provider
+        :to="messageRef"
+        placement="bottom-right"
+        :keep-alive-on-hover="true"
+        :duration="3000"
+        closable
+      >
         <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
         <Header @toggleSidebar="toggleSidebar" />
         <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
