@@ -17,7 +17,7 @@ const config: ConfigInterface = {
     PROJECT: true,
     PROJECT_ON_STARTUP: false,
     PROJECT_SETTINGS: false,
-    REFERRAL: true,
+    REFERRAL: false,
     SEARCH: false,
     SERVICES: true,
     STORAGE: false,
