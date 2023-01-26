@@ -167,7 +167,7 @@ async function register() {
   }
 }
 async function resetPassword() {
-  if (props.token) {
+  if (!props.token) {
     message.warning('Missing token');
     return;
   }

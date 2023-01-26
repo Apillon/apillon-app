@@ -7,7 +7,7 @@
       <FormPassword
         class="mx-auto max-w-[520px] text-left"
         :reset-password="true"
-        :token="query.token.toString()"
+        :token="query?.token?.toString()"
         @submit-success="passwordChanged"
       />
     </div>
