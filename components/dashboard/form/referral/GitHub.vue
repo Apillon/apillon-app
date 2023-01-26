@@ -38,6 +38,8 @@ import { useMessage } from 'naive-ui';
 
 const referralStore = useReferralStore();
 
+const config = useRuntimeConfig();
+
 const message = useMessage();
 
 const $route = useRoute();
@@ -92,7 +94,9 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (!referralStore.github_id) {
       window.open(
-        'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=' +
+        'https://github.com/login/oauth/authorize?client_id=' +
+          config.githubId +
+          '&redirect_uri=' +
           window.location.href,
         '_self'
       );
