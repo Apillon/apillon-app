@@ -45,12 +45,6 @@ export const useDataStore = defineStore('data', {
       selectedItems: [] as Array<BucketItemInterface>,
       total: 0,
     },
-    hosting: {
-      active: {} as BucketInterface,
-      items: [] as Array<BucketInterface>,
-      selected: 0,
-      quotaReached: undefined as Boolean | undefined,
-    },
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
     project: {
@@ -62,12 +56,21 @@ export const useDataStore = defineStore('data', {
     promises: {
       projects: null as any,
       buckets: null as any,
+      webpages: null as any,
     },
     services: {
       authentication: [] as Array<ServiceInterface>,
       storage: [] as Array<ServiceInterface>,
       computing: [] as Array<ServiceInterface>,
     } as Record<ServiceTypeName, Array<ServiceInterface>>,
+    webpage: {
+      active: {} as WebpageInterface,
+      items: [] as Array<WebpageInterface>,
+      loading: false,
+      search: '',
+      selected: 0,
+      quotaReached: undefined as Boolean | undefined,
+    },
   }),
   getters: {
     currentProject(state) {
@@ -106,16 +109,6 @@ export const useDataStore = defineStore('data', {
       }
       return false;
     },
-    hasHosting(state): boolean {
-      if (Array.isArray(state.bucket.items) && state.bucket.items.length > 0) {
-        return (
-          state.bucket.items.find(
-            (bucket: BucketInterface) => bucket.bucketType === BucketType.HOSTING
-          ) !== undefined
-        );
-      }
-      return false;
-    },
     hasBucketItems(state): boolean {
       return Array.isArray(state.folder.items) && state.folder.items.length > 0;
     },
@@ -128,6 +121,9 @@ export const useDataStore = defineStore('data', {
           (bucket: BucketInterface) => bucket.id === state.bucket.selected
         ) !== undefined
       );
+    },
+    hasWebpages(state): boolean {
+      return Array.isArray(state.webpage.items) && state.webpage.items.length > 0;
     },
     getFolderPath(state) {
       return state.folder.path.map(p => p.name).join('/') || '';
@@ -289,6 +285,18 @@ export const useDataStore = defineStore('data', {
       return await this.fetchBucket(bucketId);
     },
 
+    /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
+    async getWebpage(webpageId: number): Promise<WebpageInterface> {
+      if (isCacheExpired(LsCacheKeys.WEBPAGE)) {
+        return await this.fetchWebpage(webpageId);
+      }
+      const webpage = this.webpage.items.find(item => item.id === webpageId);
+      if (webpage !== undefined) {
+        return webpage;
+      }
+      return await this.fetchWebpage(webpageId);
+    },
+
     /**
      * API calls
      */
@@ -395,9 +403,11 @@ export const useDataStore = defineStore('data', {
         }
         const res = await $api.get<BucketsResponse>(endpoints.buckets, params);
 
-        const items = res.data.items.map((bucket: BucketInterface) => {
-          return addBucketAdditionalData(bucket);
-        });
+        const items = res.data.items
+          .filter((bucket: BucketInterface) => bucket.bucketType === BucketType.STORAGE)
+          .map((bucket: BucketInterface) => {
+            return addBucketAdditionalData(bucket);
+          });
 
         if (statusDeleted) {
           this.bucket.destroyed = items;
@@ -409,7 +419,8 @@ export const useDataStore = defineStore('data', {
         this.bucket.search = '';
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.BUCKETS, Date.now().toString());
+        const cacheKey = statusDeleted ? LsCacheKeys.BUCKET_DESTROYED : LsCacheKeys.BUCKETS;
+        sessionStorage.setItem(cacheKey, Date.now().toString());
 
         return res;
       } catch (error: any) {
@@ -452,7 +463,7 @@ export const useDataStore = defineStore('data', {
       }
       const params = {
         project_uuid: this.currentProject?.project_uuid || '',
-        bucketType: bucketType,
+        bucketType,
       };
       try {
         const res = await $api.get<BucketQuotaResponse>(endpoints.bucketsQuota, params);
@@ -460,13 +471,13 @@ export const useDataStore = defineStore('data', {
         if (bucketType === BucketType.STORAGE) {
           this.bucket.quotaReached = res.data;
         } else {
-          this.hosting.quotaReached = res.data;
+          this.webpage.quotaReached = res.data;
         }
       } catch (error: any) {
         if (bucketType === BucketType.STORAGE) {
           this.bucket.quotaReached = undefined;
         } else {
-          this.hosting.quotaReached = undefined;
+          this.webpage.quotaReached = undefined;
         }
 
         /** Show error message */
@@ -571,6 +582,26 @@ export const useDataStore = defineStore('data', {
       const fileInfo = await api.query.market.filesV2(cid);
       await api.disconnect();
       return fileInfo.toJSON();
+    },
+
+    /** Webpage */
+    async fetchWebpage(id: number): Promise<WebpageInterface> {
+      try {
+        const res = await $api.get<WebpageResponse>(endpoints.webpages(id));
+
+        this.webpage.active = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.WEBPAGE, Date.now().toString());
+
+        return res.data;
+      } catch (error: any) {
+        this.webpage.active = {} as WebpageInterface;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return {} as WebpageInterface;
     },
 
     /**

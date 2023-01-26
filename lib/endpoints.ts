@@ -80,6 +80,12 @@ const Endpoints = {
     return `/storage/${bucketUuid}/trashed-files`;
   },
 
+  /** Webpage */
+  webpage: '/storage/hosting/web-page',
+  webpages: (id?: number) => {
+    return id ? `/storage/hosting/web-pages/${id}` : '/storage/hosting/web-pages';
+  },
+
   /** Api Keys */
   apiKey: (key?: number) => {
     return key ? `/api-keys/${key}` : '/api-keys';

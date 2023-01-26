@@ -51,6 +51,13 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
           disabled: isMenuItemDisabled(Feature.STORAGE),
         },
         {
+          key: 'dashboard-service-hosting',
+          label: $i18n.t('nav.hosting'),
+          to: 'dashboard-service-hosting',
+          iconName: 'icon-web',
+          disabled: isMenuItemDisabled(Feature.HOSTING),
+        },
+        {
           key: 'dashboard-service-computing',
           label: $i18n.t('nav.computing'),
           iconName: 'icon-computing',

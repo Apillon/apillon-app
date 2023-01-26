@@ -169,7 +169,6 @@ declare global {
     directory_uuid?: string;
     session_uuid?: string;
     path?: string;
-    session_uuid?: string;
   }
 
   type FileDetails = FileInterface | FileUploadInterface;
@@ -199,4 +198,25 @@ declare global {
     param2?: string;
   }
   interface WebhookResponse extends GeneralResponse<WebhookInterface> {}
+
+  /**
+   * Webpage
+   */
+  interface FormWebpage {
+    name: string;
+    description: string;
+  }
+  interface WebpageInterface {
+    id: number;
+    status: number;
+    project_uuid: string;
+    bucket_id: number;
+    stagingBucket_id: number;
+    productionBucket_id: number;
+    name: string;
+    description: string;
+    domain: string;
+  }
+  interface WebpageResponse extends GeneralResponse<WebpageInterface> {}
+  interface WebpagesResponse extends GeneralItemsResponse<WebpageInterface> {}
 }

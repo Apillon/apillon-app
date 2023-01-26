@@ -17,11 +17,11 @@
           {{ $t('storage.bucket.storage') }}
         </span>
         <StorageProgress
-          class="w-1/2"
           :key="dataStore.bucket.active.uploadedSize || 0"
           :percentage="dataStore.bucket.active.percentage"
           :size="dataStore.bucket.active.uploadedSize || 0"
           :max-size="dataStore.bucket.active.maxSize"
+          class="w-1/2"
         />
       </n-space>
     </template>
@@ -36,20 +36,22 @@
 
       <!-- Upload files -->
       <transition name="fade" appear>
-        <div v-show="dataStore.folder.uploadActive" class="mb-8">
-          <n-h5 v-if="dataStore.folder.uploadActive && !dataStore.folder.selected" prefix="bar">
+        <div v-show="dataStore.bucket.uploadActive" class="mb-8">
+          <n-h5 v-if="dataStore.bucket.uploadActive && !dataStore.folder.selected" prefix="bar">
             {{ $t('storage.uploadFiles') }}
           </n-h5>
           <FormStorageUploadDirectory
-            v-if="dataStore.folder.uploadActive"
-            :bucketUuid="dataStore.bucket.active.bucket_uuid || dataStore.currentBucket.bucket_uuid"
+            v-if="dataStore.bucket.uploadActive"
+            :bucket-uuid="
+              dataStore.bucket.active.bucket_uuid || dataStore.currentBucket.bucket_uuid
+            "
             class="mt-4 pr-[2px] pb-1 mb-1"
           />
         </div>
       </transition>
 
       <div>
-        <n-h5 v-if="dataStore.folder.uploadActive || !dataStore.folder.selected" prefix="bar">
+        <n-h5 v-if="dataStore.bucket.uploadActive || !dataStore.folder.selected" prefix="bar">
           {{ $t('storage.yourFiles') }}
         </n-h5>
         <n-space vertical :size="12" class="mt-8">
@@ -82,7 +84,7 @@ onMounted(() => {
     await dataStore.fetchBucket(parseInt(`${params?.id}`));
 
     if (!dataStore.bucket.active.size) {
-      dataStore.folder.uploadActive = true;
+      dataStore.bucket.uploadActive = true;
     }
     pageLoading.value = false;
   });

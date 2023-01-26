@@ -25,7 +25,9 @@
     "open": "Open",
     "paused": "paused",
     "pending": "pending",
+    "refresh": "Refresh",
     "scope": "Scope",
+    "search": "Search",
     "secret": "Secret",
     "serviceName": "Service name",
     "serviceType": "Service type",
@@ -252,7 +254,9 @@
       "username": "First & Last name",
       "webhookPassword": "Password",
       "webhookUrl": "Webhook URL",
-      "webhookUsername": "User name"
+      "webhookUsername": "User name",
+      "webpageDescription": "Webpage description",
+      "webpageName": "Webpage name"
     },
     "networkTypes": {
       "test": "Test network",
@@ -286,7 +290,9 @@
       "username": "Enter yout First & Last name",
       "webhookPassword": "Enter password",
       "webhookUrl": "Webhook URL",
-      "webhookUsername": "Enter user name"
+      "webhookUsername": "Enter user name",
+      "webpageDescription": "Webpage description",
+      "webpageName": "Webpage name"
     },
     "success": {
       "apiKey": "Api key has been created",
@@ -351,16 +357,21 @@
     "update": "Update"
   },
   "hosting": {
-    "addNew": "Add new hosting",
-    "buckets": "Storage hostings",
-    "description": "Description",
-    "destroy": "Destroy",
-    "edit": "Edit hosting",
+    "webpage": {
+      "addFirst": "Add first website",
+      "create": "Create webpage",
+      "description": "Webpage description",
+      "edit": "Edit webpage",
+      "infoNew": "Info new",
+      "infoEdit": "Info edit",
+      "name": "Webpage name",
+      "new": "New hosting",
+      "quotaReached": "Quota has been reached.",
+      "update": "Update webpage"
+    },
     "management": "Hosting management",
-    "name": "Hosting name",
-    "new": "New hosting",
-    "update": "Update hosting",
-    "quotaReached": "Quota has been reached."
+    "web3Hosting": "Web3 hosting",
+    "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "login": {
     "description": "Web3 will not build itself. Go and add your block.",
@@ -526,7 +537,7 @@
       "destroyed": "Deleted buckets",
       "destroyedBuckets": "Destroyed buckets",
       "edit": "Edit bucket",
-      "infoNew": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
+      "infoNew": "",
       "management": "Bucket management",
       "name": "Bucket name",
       "new": "New bucket",
