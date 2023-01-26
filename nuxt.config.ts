@@ -32,6 +32,10 @@ const meta = {
 export default defineNuxtConfig({
   ssr: false,
 
+  nitro: {
+    plugins: ['~/lib/nitro-globals'],
+  },
+
   runtimeConfig: {
     public: appConfig,
   },
