@@ -1,46 +1,65 @@
 <template>
   <Dashboard>
     <slot>
-      <div class="flex lg:flex-nowrap flex-wrap gap-8 max-w-[980px] p-8 bg-grey-lightBg">
-        <div class="max-w-[480px]">
-          <h4 class="mb-4">Welcome to Apillon</h4>
-          <p>
-            Thank you for registering for Apillon platform and becoming one of the first Beta
-            testers!
-          </p>
-          <br />
-          <p>
-            The services are under development, but soon you’ll be able to test the available
-            features and build your first Web3 product with Apillon.
-          </p>
-          <br />
-          <p>
-            You’ll also be able to win Apillon’s merch pack as through Apillon’s referral system
-            which is in progress as we speak.
-          </p>
-          <div class="p-4 bg-grey-dark mt-8">
+      <div class="dashboard-wrapper">
+        <div class="flex lg:flex-nowrap flex-wrap gap-8 max-w-[1080px] p-8 bg-grey-lightBg">
+          <div class="max-w-xl">
+            <h4 class="mb-4">Apply for Closed Beta testing</h4>
             <p>
-              <strong>I’m registered, now what?</strong>
+              Apillon is currently in the Closed Beta stage. Anyone can register an account on
+              Apillon but only assigned users may get access to test the platform’s Beta features.
             </p>
-            <p>
-              Sit back and relax. Once the first feature is ready to be tested and used, we will
-              notify you via email so you can start your Web3 journey.
-            </p>
+            <br />
+            <p>To join the Apillon Closed Beta program, please follow the steps below.</p>
+            <br />
+            <ul class="list-disc pl-4">
+              <li>
+                If you do not yet have an Apillon account, create one on
+                <Btn href="http://apillon.io/register" target="_blank">
+                  <span class="font-content text-blue">apillon.io/register</span>
+                </Btn>
+                <span>.</span>
+              </li>
+              <li>Log in to your account.</li>
+              <li>
+                At the bottom of the welcome page, find an Closed beta code assigned to your
+                account.
+              </li>
+              <li>
+                Copy the Closed ceta code and paste it to our
+                <Btn href="https://discord.gg/n6gVzCnz9t" target="_blank">
+                  <span class="font-content text-blue">closed-beta channel</span>
+                </Btn>
+                on Discord.
+              </li>
+              <li>
+                Wait for an email with an invitation to join the Apillon Closed Beta program and
+                access the platform’s features.
+              </li>
+            </ul>
+
+            <div class="p-4 bg-grey-dark mt-8">
+              <p class="font-bold">Note:</p>
+              <p>
+                Keep in mind that Apillon Closed Beta delivers no guarantees related to
+                functionalities or access and is intended for testing purposes only. Beta features
+                also come with several limitations, which will be removed with each platform update
+                as more and more users deliver feedback on Closed Beta and help improve the
+                platform’s services.
+              </p>
+            </div>
+          </div>
+          <div>
+            <Image src="/images/dashboard/welcome.svg" :width="400" :height="470" alt="apillon" />
           </div>
         </div>
-        <div>
-          <Image src="/images/dashboard/welcome.svg" :width="400" :height="470" alt="apillon" />
-        </div>
-      </div>
-      <div class="max-w-[980px] p-8 mt-7 bg-grey-lightBg">
-        <p>
-          <strong>Referral code:</strong>
-        </p>
-        <div class="max-w-[480px]">
-          <div class="p-4 bg-grey-dark mt-2">
-            <p>
-              {{ authStore.userUuid }}
-            </p>
+        <!-- Referral code -->
+        <div class="max-w-[1080px] p-8 mt-7 bg-grey-lightBg">
+          <p class="font-bold">Closed beta code:</p>
+          <div class="max-w-xl">
+            <div class="p-4 bg-grey-dark mt-2">
+              <p>{{ authStore.userUuid }}</p>
+            </div>
           </div>
         </div>
       </div>
