@@ -129,6 +129,12 @@ export const useDataStore = defineStore('data', {
     hasWebpages(state): boolean {
       return Array.isArray(state.webpage.items) && state.webpage.items.length > 0;
     },
+    hasWebpageItems(state): boolean {
+      return (
+        (Array.isArray(state.webpage.items) && state.webpage.items.length > 0) ||
+        state.folder.selected > 0
+      );
+    },
     getFolderPath(state) {
       return state.folder.path.map(p => p.name).join('/') || '';
     },

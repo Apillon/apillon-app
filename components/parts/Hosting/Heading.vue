@@ -2,7 +2,7 @@
   <Heading>
     <slot>
       <n-space align="center" :size="32">
-        <NuxtLink :to="{ name: 'dashboard-service-storage' }">
+        <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
           <span class="icon-back"></span>
         </NuxtLink>
         <h4>{{ dataStore.webpage.active.name }}</h4>

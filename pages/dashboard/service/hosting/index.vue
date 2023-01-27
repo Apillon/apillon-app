@@ -21,7 +21,7 @@
       </Heading>
     </template>
     <slot>
-      <TableStorageWebpage
+      <TableHostingWebpage
         v-if="dataStore.hasWebpages"
         :webpages="dataStore.webpage.items"
         @refresh="fetchWebpages()"
