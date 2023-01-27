@@ -378,7 +378,7 @@ async function onFolderOpen(folder: BucketItemInterface) {
 
   /** Fetch data in reset search string */
   dataStore.folderSearch();
-  await getDirectoryContent(dataStore.currentBucket.bucket_uuid, folder.id);
+  await getDirectoryContent(dataStore.bucketUuid, folder.id);
   clearSorter();
 }
 
@@ -406,7 +406,7 @@ async function handleSorterChange(sorter?: NDataTableSortState) {
     await getDirectoryContent();
   } else if (sorter) {
     await getDirectoryContent(
-      dataStore.currentBucket.bucket_uuid,
+      dataStore.bucketUuid,
       dataStore.folder.selected,
       1,
       `${sorter.columnKey}`,
@@ -433,11 +433,7 @@ watch(
 /** On page change, load data */
 async function handlePageChange(currentPage: number) {
   if (!dataStore.folder.loading) {
-    await getDirectoryContent(
-      dataStore.currentBucket.bucket_uuid,
-      dataStore.folder.selected,
-      currentPage
-    );
+    await getDirectoryContent(dataStore.bucketUuid, dataStore.folder.selected, currentPage);
   }
 }
 

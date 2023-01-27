@@ -21,7 +21,7 @@
       </Heading>
     </template>
     <slot>
-      <TableHostingWebpage
+      <TableHosting
         v-if="dataStore.hasWebpages"
         :webpages="dataStore.webpage.items"
         @refresh="fetchWebpages()"
@@ -68,12 +68,14 @@ useHead({
 });
 
 onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await getWebpages();
-    await getWebpageQuota();
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await getWebpages();
+      await getWebpageQuota();
 
-    pageLoading.value = false;
-  });
+      pageLoading.value = false;
+    });
+  }, 100);
 });
 
 async function getWebpages() {

@@ -1,3 +1,4 @@
+import { stat } from 'fs';
 import { defineStore } from 'pinia';
 import { AnyJson } from '@polkadot/types-codec/types';
 import { ApiPromise, WsProvider } from '@polkadot/api';
@@ -93,6 +94,16 @@ export const useDataStore = defineStore('data', {
     },
     myRoleOnProject(state) {
       return state.project.active.myRole_id_onProject || DefaultUserRole.PROJECT_USER;
+    },
+    bucketUuid(state): string {
+      return (
+        state.bucket.active.bucket_uuid ||
+        (
+          state.bucket.items.find((item: BucketInterface) => item.id === state.bucket.selected) ||
+          ({} as BucketInterface)
+        )?.bucket_uuid ||
+        ''
+      );
     },
     currentBucket(state): BucketInterface {
       return (
@@ -514,7 +525,7 @@ export const useDataStore = defineStore('data', {
       this.folder.loading = true;
 
       /** Fallback for bucketUuid */
-      const bucket = bucketUuid || this.currentBucket.bucket_uuid;
+      const bucket = bucketUuid || this.bucketUuid;
 
       /** Update current folderId */
       if (folderId) {
@@ -578,7 +589,7 @@ export const useDataStore = defineStore('data', {
 
     async fetchFileDetails(fileUuidOrCID: string): Promise<FileDetailsInterface> {
       try {
-        const url = endpoints.storageFileDetails(this.currentBucket.bucket_uuid, fileUuidOrCID);
+        const url = endpoints.storageFileDetails(this.bucketUuid, fileUuidOrCID);
         const res = await $api.get<FileDetailsResponse>(url);
 
         return res.data;
@@ -603,6 +614,9 @@ export const useDataStore = defineStore('data', {
 
     /** Webpage */
     async fetchWebpage(id: number): Promise<WebpageInterface> {
+      if (!this.hasProjects) {
+        await this.fetchProjects();
+      }
       try {
         const res = await $api.get<WebpageResponse>(endpoints.webpages(id));
 
@@ -619,6 +633,27 @@ export const useDataStore = defineStore('data', {
         window.$message.error(userFriendlyMsg(error));
       }
       return {} as WebpageInterface;
+    },
+
+    /** Webpage deploy */
+    async deployWebpage(
+      webpageId: number,
+      env: number = DeploymentEnvironment.STAGING
+    ): Promise<any> {
+      try {
+        const config = useRuntimeConfig();
+        const params: Record<string, string | number | boolean | null> = {
+          // directDeploy: config.public.ENV === AppEnv.LOCAL,
+          environment: env,
+        };
+        const res = await $api.post<DeploymentResponse>(endpoints.webpageDeploy(webpageId), params);
+        console.log(res);
+
+        window.$message.success(window.$i18n.t('form.success.webpageDeployed'));
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
     },
 
     /**

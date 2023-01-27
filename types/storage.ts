@@ -52,6 +52,12 @@ export enum BucketWebhookAuthMethod {
   TOKEN = 'bearer-token',
 }
 
+/** Hosting deploy env */
+export enum DeploymentEnvironment {
+  STAGING = 1,
+  PRODUCTION = 2,
+}
+
 declare global {
   /**
    * Bucket
@@ -232,7 +238,17 @@ declare global {
     description: string;
     domain: string;
   }
+  interface DeploymentInterface {
+    id: number;
+    status: number;
+    bucket_id: number;
+    cid: string | null;
+    deploymentStatus: number;
+    environment: number;
+    webpage_id: number;
+  }
   interface WebpageResponse extends GeneralResponse<WebpageInterface> {}
   interface WebpageUpdateResponse extends GeneralResponse<WebpageInterface> {}
   interface WebpagesResponse extends GeneralItemsResponse<WebpageInterface> {}
+  interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
 }

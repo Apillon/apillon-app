@@ -21,6 +21,7 @@
     "method": "Method",
     "name": "Name",
     "notActive": "not active",
+    "nothingHere": "Nothing here",
     "ok": "OK",
     "open": "Open",
     "paused": "paused",
@@ -302,6 +303,7 @@
       "profile": "Your profile data has been updated",
       "requestPasswordChange": "We have send you a password reset request to your email.",
       "sendAgainEmail": "Email has been re-sent",
+      "webpageDeployed": "Webpage has been deployed.",
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
@@ -363,7 +365,7 @@
     "menu": {
       "preview": "Upload",
       "staging": "Staging",
-      "produciton": "Production"
+      "production": "Production"
     },
     "webpage": {
       "addFirst": "Add first website",
@@ -378,7 +380,12 @@
       "quotaReached": "Quota has been reached.",
       "update": "Update webpage"
     },
+    "deployStage": "Deploy to staging",
+    "deployProd": "Deploy to production",
+    "domainPreview": "Domain preview",
     "management": "Hosting management",
+    "productionEmpty": "Deploy files from staging to production",
+    "stagingEmpty": "Upload files and deploy them to staging",
     "web3Hosting": "Web3 hosting",
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },

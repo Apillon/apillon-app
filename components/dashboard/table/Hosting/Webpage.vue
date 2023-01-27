@@ -18,12 +18,41 @@
 
       <n-space size="large">
         <!-- Refresh webpages -->
-        <n-button size="small" :loading="dataStore.webpage.loading" @click="$emit('refresh')">
+        <n-button
+          size="small"
+          :loading="dataStore.folder.loading"
+          @click="dataStore.fetchDirectoryContent()"
+        >
           <span class="icon-refresh text-lg mr-2"></span>
           {{ $t('general.refresh') }}
         </n-button>
+
+        <!-- Deploy to production -->
+        <n-button
+          v-if="env === DeploymentEnvironment.STAGING"
+          size="small"
+          type="primary"
+          :loading="deploying"
+          ghost
+          @click="deployToProduction"
+        >
+          <span class="icon-upload text-lg mr-2"></span>
+          {{ $t('hosting.deployProd') }}
+        </n-button>
       </n-space>
     </n-space>
+
+    <!-- Domain preview -->
+    <div>
+      <div class="body-sm mb-2">
+        <strong>{{ $t('hosting.domainPreview') }}</strong>
+      </div>
+      <div class="bg-bg-dark px-4 py-2">
+        <a :href="dataStore.webpage.active.domain" target="_blank">
+          {{ dataStore.webpage.active.domain }}
+        </a>
+      </div>
+    </div>
 
     <n-data-table
       ref="tableRef"
@@ -37,114 +66,86 @@
       :row-props="rowProps"
     />
   </n-space>
-
-  <!-- Modal - Edit webpage -->
-  <modal v-model:show="showModalEditWebpage" :title="$t('hosting.webpage.edit')">
-    <FormStorageWebpage
-      :webpage-id="currentRow.id"
-      @submit-success="showModalEditWebpage = false"
-    />
-  </modal>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { NButton } from 'naive-ui';
 
 const props = defineProps({
-  webpages: { type: Array<WebpageInterface>, default: [] },
+  webpageItems: { type: Array<BucketItemInterface>, default: [] },
+  env: { type: Number, default: DeploymentEnvironment.STAGING },
 });
 const $emit = defineEmits(['refresh']);
 
 const $i18n = useI18n();
-const router = useRouter();
 const dataStore = useDataStore();
-const settingsStore = useSettingsStore();
-const showModalEditWebpage = ref<boolean>(false);
+const deploying = ref<boolean>(false);
+const IconFolderFile = resolveComponent('IconFolderFile');
 
 /** Data: filtered webpages */
-const data = computed<Array<WebpageInterface>>(() => {
+const data = computed<Array<BucketItemInterface>>(() => {
   return (
-    props.webpages.filter(item =>
+    props.webpageItems.filter(item =>
       item.name.toLocaleLowerCase().includes(dataStore.webpage.search.toLocaleLowerCase())
     ) || []
   );
 });
 
-const createColumns = (): NDataTableColumns<WebpageInterface> => {
+const createColumns = (): NDataTableColumns<BucketItemInterface> => {
   return [
     {
       key: 'name',
-      title: $i18n.t('hosting.webpage.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: $i18n.t('storage.fileName'),
+      minWidth: 150,
       render(row) {
-        return h('strong', {}, { default: () => row.name });
+        return [h(IconFolderFile, { isFile: true }, ''), h('span', { class: 'ml-2 ' }, row.name)];
       },
     },
     {
-      key: 'description',
-      title: $i18n.t('hosting.webpage.description'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
-      render(row) {
-        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
+      key: 'size',
+      title: $i18n.t('storage.fileSize'),
+      render(row: BucketItemInterface) {
+        if (row.size) {
+          return h('span', {}, { default: () => formatBytes(row.size || 0) });
+        }
+        return '';
       },
     },
     {
-      key: 'domain',
-      title: $i18n.t('hosting.webpage.domain'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: $i18n.t('dashboard.created'),
+      key: 'createTime',
+      render(row: BucketItemInterface) {
+        return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
+      },
     },
     {
-      key: 'actions',
-      title: $i18n.t('general.actions'),
-      align: 'right',
-      className: '!py-0',
-      render() {
-        return h(
-          NDropdown,
-          {
-            options: dropdownOptions,
-            trigger: 'click',
-          },
-          {
-            default: () =>
-              h(
-                NButton,
-                { size: 'small', quaternary: true },
-                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
-              ),
-          }
-        );
+      title: $i18n.t('storage.contentType'),
+      key: 'contentType',
+      render(row: BucketItemInterface) {
+        if (row.contentType) {
+          return h('span', {}, row.contentType);
+        }
+        return '';
       },
     },
   ];
 };
 const columns = createColumns();
 const rowKey = (row: BucketItemInterface) => row.id;
-const currentRow = ref<WebpageInterface>(props.webpages[0]);
+const currentRow = ref<BucketItemInterface>(props.webpageItems[0]);
 
 /** On row click */
-const rowProps = (row: WebpageInterface) => {
+const rowProps = (row: BucketItemInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;
-
-      if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/hosting/${row.id}` });
-      }
     },
   };
 };
 
-const dropdownOptions = [
-  {
-    label: $i18n.t('storage.edit'),
-    key: 'storageEdit',
-    disabled: settingsStore.isProjectUser(),
-    props: {
-      onClick: () => {
-        showModalEditWebpage.value = true;
-      },
-    },
-  },
-];
+async function deployToProduction() {
+  deploying.value = true;
+  await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.PRODUCTION);
+  deploying.value = false;
+}
 </script>

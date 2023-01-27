@@ -25,8 +25,8 @@
 
             <!-- Global component: File upload list -->
             <FormStorageUploadFiles
-              v-if="dataStore.bucket.uploadActive && dataStore.currentBucket.bucket_uuid"
-              :bucket-uuid="dataStore.currentBucket.bucket_uuid"
+              v-if="dataStore.bucket.uploadActive && dataStore.bucketUuid"
+              :bucket-uuid="dataStore.bucketUuid"
             />
           </n-scrollbar>
         </n-layout-content>

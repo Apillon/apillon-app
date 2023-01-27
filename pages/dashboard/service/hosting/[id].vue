@@ -6,23 +6,19 @@
 
     <slot>
       <!-- Actions -->
-      <StorageFileActions class="mb-4" />
+      <HostingWebsiteActions class="mb-4" />
 
       <!-- Upload files -->
-      <transition name="fade" appear>
-        <FormHostingUploadWebpage
-          v-if="dataStore.webpage.uploadActive || !dataStore.hasWebpageItems"
-        />
-      </transition>
+      <FormHostingUploadWebpage :bucket-uuid="dataStore.bucketUuid" />
 
       <!-- Breadcrumbs -->
-      <div v-if="dataStore.hasWebpageItems" class="relative h-12 py-2 mb-1">
+      <div class="relative h-12 py-2 mb-1">
         <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
       </div>
 
       <!-- DataTable: files and directories -->
       <transition name="fade" appear>
-        <TableStorageFiles v-if="dataStore.hasWebpageItems" />
+        <TableStorageFiles />
       </transition>
     </slot>
   </Dashboard>
@@ -42,15 +38,17 @@ onMounted(() => {
   /** Bucket ID from route, then load buckets */
   dataStore.setWebpageId(parseInt(`${params?.id}`));
 
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const webpage = await dataStore.getWebpage(parseInt(`${params?.id}`));
-    dataStore.bucket.active = webpage.bucket;
-    dataStore.setBucketId(webpage.bucket.id);
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      const webpage = await dataStore.getWebpage(parseInt(`${params?.id}`));
+      dataStore.bucket.active = webpage.bucket;
+      dataStore.setBucketId(webpage.bucket.id);
 
-    if (webpage.bucket.uploadedSize === 0) {
-      dataStore.bucket.uploadActive = true;
-    }
-    pageLoading.value = false;
-  });
+      if (webpage.bucket.uploadedSize === 0) {
+        dataStore.bucket.uploadActive = true;
+      }
+      pageLoading.value = false;
+    });
+  }, 100);
 });
 </script>
