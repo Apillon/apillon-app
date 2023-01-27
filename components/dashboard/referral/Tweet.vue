@@ -19,7 +19,7 @@
     </Tweet>
   </div>
 
-  <div v-if="!(tweet as any).retweeted" class="grid grid-cols-2 gap-4 max-w-[550px] mx-auto">
+  <div v-if="!(tweet as any).retweeted" class="grid grid-cols-2 gap-4 max-w-[550px] mx-auto mb-10">
     <Btn
       v-if="buttonsVisible"
       class="mt-3 mb-3 w-full"
@@ -38,7 +38,7 @@
       {{ $t('referral.confirm') }}
     </Btn>
   </div>
-  <div v-else class="max-w-[550px] mx-auto mb-3 mt-3">
+  <div v-else class="max-w-[550px] mx-auto mb-10 mt-3">
     <div v-if="buttonsVisible" class="w-full bg-black flex justify-center py-[13px]">
       <IconSuccessful class="mr-2 h-auto" />
       {{ 'Point claimed' }}
