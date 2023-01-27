@@ -94,7 +94,10 @@ export const useDataStore = defineStore('data', {
       return Array.isArray(state.bucket.items) && state.bucket.items.length > 0;
     },
     hasBucketItems(state): boolean {
-      return Array.isArray(state.folder.items) && state.folder.items.length > 0;
+      return (
+        (Array.isArray(state.folder.items) && state.folder.items.length > 0) ||
+        state.folder.selected > 0
+      );
     },
     hasDestroyedBuckets(state): boolean {
       return Array.isArray(state.bucket.destroyed) && state.bucket.destroyed.length > 0;

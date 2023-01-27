@@ -34,16 +34,32 @@
 
       <!-- Refresh storage content -->
       <n-button size="small" :loading="dataStore.bucket.loading" @click="refresh">
-        <span class="icon-refresh text-lg mr-2"></span>
+        <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('storage.refresh') }}
+      </n-button>
+      <n-button
+        v-if="dataStore.hasBuckets"
+        type="primary"
+        size="small"
+        ghost
+        @click="showModalNewBucket = true"
+      >
+        <span class="icon-create-folder text-xl mr-2"></span>
+        {{ $t('storage.bucket.new') }}
       </n-button>
     </n-space>
   </n-space>
+
+  <!-- Modal - Create bucket -->
+  <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
+    <FormStorageBucket @submit-success="showModalNewBucket = false" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
-const dataStore = useDataStore();
 const emit = defineEmits(['onBucketDelete']);
+const dataStore = useDataStore();
+const showModalNewBucket = ref<boolean | null>(false);
 
 /** Refresh directory content */
 async function refresh() {
