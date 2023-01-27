@@ -30,12 +30,7 @@
               </div>
 
               <!-- Create new project -->
-              <Btn
-                type="primary"
-                :color="colors.white"
-                size="large"
-                @click="showModalNewProject = true"
-              >
+              <Btn type="info" size="large" @click="showModalNewProject = true">
                 {{ $t('project.new') }}
               </Btn>
             </n-space>
@@ -64,7 +59,6 @@
 
 <script lang="ts" setup>
 import { useDataStore } from '~~/stores/data';
-import colors from '~~/tailwind.colors';
 
 const props = defineProps({
   showOnMobile: { type: Boolean, default: false },
