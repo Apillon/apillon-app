@@ -43,5 +43,6 @@ declare global {
     apiUrl: string;
     CHAIN_ID: string;
     captchaKey: string;
+    githubId: string;
   }
 }

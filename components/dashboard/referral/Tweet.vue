@@ -1,20 +1,28 @@
 <template>
   <!-- Referral - sharing -->
+  <div>
+    <Tweet
+      align="center"
+      class="max-w-[550px] mx-auto"
+      :tweet-id="(tweet as any).id"
+      theme="dark"
+      @tweet-load-success="loadSuccess()"
+    >
+      <template #loading>
+        <div class="h-[100px] relative">
+          <Spinner />
+        </div>
+      </template>
+      <template #error>
+        <span>Sorry, that tweet doesn't exist!</span>
+      </template>
+    </Tweet>
+  </div>
 
-  <Tweet :tweet-id="(tweet as any).id" theme="dark" @tweet-load-success="loadSuccess()">
-    <template #loading>
-      <div class="h-[100px] relative">
-        <Spinner />
-      </div>
-    </template>
-    <template #error>
-      <span>Sorry, that tweet doesn't exist!</span>
-    </template>
-  </Tweet>
-  <div v-if="!(tweet as any).retweeted" class="grid grid-cols-2 gap-4">
+  <div v-if="!(tweet as any).retweeted" class="grid grid-cols-2 gap-4 max-w-[550px] mx-auto">
     <Btn
       v-if="buttonsVisible"
-      class="mt-3 mb-10 w-full"
+      class="mt-3 mb-3 w-full"
       type="secondary"
       @click="shareTweet((tweet as any).id)"
     >
@@ -23,16 +31,18 @@
     <Btn
       v-if="buttonsVisible"
       :loading="loadingConfirm"
-      class="mt-3 mb-10 w-full"
+      class="mt-3 mb-3 w-full"
       type="primary"
       @click="confirmShareTweet((tweet as any).id)"
     >
       {{ $t('referral.confirm') }}
     </Btn>
   </div>
-  <div v-else class="w-full bg-black flex justify-center py-[13px]">
-    <IconSuccessful class="mr-2 h-auto" />
-    {{ 'Point claimed' }}
+  <div v-else class="max-w-[550px] mx-auto mb-3 mt-3">
+    <div v-if="buttonsVisible" class="w-full bg-black flex justify-center py-[13px]">
+      <IconSuccessful class="mr-2 h-auto" />
+      {{ 'Point claimed' }}
+    </div>
   </div>
 </template>
 
@@ -74,7 +84,7 @@ async function confirmShareTweet(id: String) {
       }
     );
     if (res.data.retweeted) {
-      emit('success', id);
+      emit('success');
       message.success('Tweet share confirmed!');
     } else {
       message.error('Tweet is not shared');

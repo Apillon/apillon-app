@@ -62,7 +62,6 @@ const captchaKey = ref<string>(config.public.captchaKey);
 const captchaInput = ref<any>(null);
 
 const refCode = computed(() => $route.query.REF);
-console.log('RefCode: ', refCode.value);
 
 const formData = ref({
   email: authStore.email,

@@ -19,10 +19,7 @@ const dataStore = useDataStore();
 /** Upload height */
 const uploadHeight = computed(() => {
   return {
-    height:
-      dataStore.hasBucketItems || (dataStore.bucket?.active?.size || 0) > 0
-        ? 'auto'
-        : 'calc(100vh - 370px)',
+    height: dataStore.hasBucketItems ? 'auto' : 'calc(100vh - 370px)',
   };
 });
 

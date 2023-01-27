@@ -21,6 +21,10 @@ export default defineNuxtConfig({
 
   typescript: { shim: false },
 
+  nitro: {
+    plugins: ['~/lib/nitro-globals'],
+  },
+
   runtimeConfig: {
     public: appConfig,
   },

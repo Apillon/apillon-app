@@ -141,13 +141,15 @@ function handleSubmit(e: Event | MouseEvent) {
     }
   });
 }
+
+/** Register (create new user) */
 async function register() {
   loading.value = true;
 
   try {
     const res = await $api.post<RegisterResponse>(endpoints.register, {
       password: formData.value.password,
-      token: query.token || authStore.jwt,
+      token: props.token || query.token || authStore.jwt,
       refCode: query.REF,
     });
 
@@ -160,13 +162,15 @@ async function register() {
   }
   loading.value = false;
 }
+
+/** Reset password (on page reset-password or in dashboard) */
 async function resetPassword() {
   loading.value = true;
 
   try {
     const res = await $api.post<PasswordResetResponse>(endpoints.passwordReset, {
       password: formData.value.password,
-      token: query.token || authStore.jwt,
+      token: props.token || query.token || authStore.jwt,
     });
 
     if (res.data) {
