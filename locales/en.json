@@ -235,6 +235,7 @@
       "cardNumber": "Card number",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
+      "domain": "Domain name",
       "email": "Email address",
       "folderName": "Folder name",
       "folderDescription": "Folder description",
@@ -271,6 +272,7 @@
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "complexPassword": "Enter complex password",
       "cvv": "311",
+      "domain": "Type your domain name here",
       "email": "youremail{afna}mail.com",
       "fileStatus": "Select file status",
       "folderName": "",
@@ -332,7 +334,8 @@
         "item": "Item has been updated",
         "project": "Project has been updated",
         "userRole": "User role has been updated",
-        "webhook": "Webhook has been updated"
+        "webhook": "Webhook has been updated",
+        "webpage": "Webpage has been updated"
       }
     },
     "terms": {
@@ -357,10 +360,16 @@
     "update": "Update"
   },
   "hosting": {
+    "menu": {
+      "preview": "Upload",
+      "staging": "Staging",
+      "produciton": "Production"
+    },
     "webpage": {
       "addFirst": "Add first website",
       "create": "Create webpage",
       "description": "Webpage description",
+      "domain": "Domain name",
       "edit": "Edit webpage",
       "infoNew": "Info new",
       "infoEdit": "Info edit",
@@ -668,6 +677,7 @@
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
     "cvvRequired": "Please enter CVV",
+    "webpageDomainUrl": "Domain name is not a valid URL",
     "email": "Email address is not valid",
     "emailRequired": "Please enter your email",
     "expirationDate": "Date is expired",

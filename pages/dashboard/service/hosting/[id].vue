@@ -1,67 +1,27 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <n-space align="center" :size="32" class="-mb-4">
-        <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
-          <span class="icon-back"></span>
-        </NuxtLink>
-        <h4>{{ $t('hosting.management') }}</h4>
-      </n-space>
-    </template>
-
-    <template #infobar>
-      <n-space align="center" justify="space-between" class="w-full">
-        <Tag color="violet">{{ dataStore.bucket.active.name }}</Tag>
-        <span>
-          <span class="icon-storage"></span>
-          {{ $t('storage.bucket.storage') }}
-        </span>
-        <StorageProgress
-          :key="dataStore.bucket.active.uploadedSize || 0"
-          :percentage="dataStore.bucket.active.percentage"
-          :size="dataStore.bucket.active.uploadedSize || 0"
-          :max-size="dataStore.bucket.active.maxSize"
-          class="w-1/2"
-        />
-      </n-space>
+      <HostingHeading />
     </template>
 
     <slot>
-      <!-- Breadcrumbs -->
-      <transition name="fade" appear>
-        <div v-show="dataStore.folder.selected" class="mb-4">
-          <StorageBreadcrumbs v-if="dataStore.folder.selected" />
-        </div>
-      </transition>
+      <!-- Actions -->
+      <StorageFileActions class="mb-4" />
 
       <!-- Upload files -->
       <transition name="fade" appear>
-        <div v-show="dataStore.bucket.uploadActive" class="mb-8">
-          <n-h5 v-if="dataStore.bucket.uploadActive && !dataStore.folder.selected" prefix="bar">
-            {{ $t('storage.uploadFiles') }}
-          </n-h5>
-          <FormStorageUploadDirectory
-            v-if="dataStore.bucket.uploadActive"
-            :bucket-uuid="
-              dataStore.bucket.active.bucket_uuid || dataStore.currentBucket.bucket_uuid
-            "
-            class="mt-4 pr-[2px] pb-1 mb-1"
-          />
-        </div>
+        <FormHostingUploadWebpage v-if="dataStore.webpage.uploadActive" />
       </transition>
 
-      <div>
-        <n-h5 v-if="dataStore.bucket.uploadActive || !dataStore.folder.selected" prefix="bar">
-          {{ $t('storage.yourFiles') }}
-        </n-h5>
-        <n-space vertical :size="12" class="mt-8">
-          <!-- Actions -->
-          <StorageActions />
-
-          <!-- DataTable: files and directories -->
-          <TableFiles />
-        </n-space>
+      <!-- Breadcrumbs -->
+      <div v-if="dataStore.bucket.active?.size" class="relative h-12 py-2 mb-1">
+        <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
       </div>
+
+      <!-- DataTable: files and directories -->
+      <transition name="fade" appear>
+        <TableStorageFiles v-if="dataStore.webpage.active?.bucket_id" />
+      </transition>
     </slot>
   </Dashboard>
 </template>

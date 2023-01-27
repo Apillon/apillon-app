@@ -89,6 +89,11 @@ const createColumns = (): NDataTableColumns<WebpageInterface> => {
       },
     },
     {
+      key: 'domain',
+      title: $i18n.t('hosting.webpage.domain'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+    },
+    {
       key: 'actions',
       title: $i18n.t('general.actions'),
       align: 'right',

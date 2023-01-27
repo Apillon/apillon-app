@@ -70,6 +70,7 @@ export const useDataStore = defineStore('data', {
       search: '',
       selected: 0,
       quotaReached: undefined as Boolean | undefined,
+      uploadActive: false,
     },
   }),
   getters: {
@@ -181,6 +182,17 @@ export const useDataStore = defineStore('data', {
       sessionStorage.setItem(DataLsKeys.CURRENT_FOLDER_ID, `${id}`);
     },
 
+    setWebpageId(id: number) {
+      if (this.webpage.selected !== id) {
+        this.folder.items = [] as Array<BucketItemInterface>;
+        this.folder.total = 0;
+        this.folder.path = [];
+        this.folder.selected = 0;
+        this.webpage.selected = id;
+        this.folderSearch();
+      }
+    },
+
     updateCurrentProject(project: ProjectInterface) {
       /** Find index of specific object using findIndex method. */
       const projectIndex = this.project.items.findIndex(item => item.id === project.id);
@@ -287,12 +299,8 @@ export const useDataStore = defineStore('data', {
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
     async getWebpage(webpageId: number): Promise<WebpageInterface> {
-      if (isCacheExpired(LsCacheKeys.WEBPAGE)) {
-        return await this.fetchWebpage(webpageId);
-      }
-      const webpage = this.webpage.items.find(item => item.id === webpageId);
-      if (webpage !== undefined) {
-        return webpage;
+      if (this.webpage.active?.id === webpageId && !isCacheExpired(LsCacheKeys.WEBPAGE)) {
+        return this.webpage.active;
       }
       return await this.fetchWebpage(webpageId);
     },

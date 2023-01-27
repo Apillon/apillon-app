@@ -19,7 +19,7 @@
       :disabled="isFormDisabled"
       @submit.prevent="handleSubmit"
     >
-      <!--  Service name -->
+      <!--  Webpage name -->
       <n-form-item path="name" :label="$t('form.label.webpageName')" :label-props="{ for: 'name' }">
         <n-input
           v-model:value="formData.name"
@@ -29,7 +29,7 @@
         />
       </n-form-item>
 
-      <!--  Bucket description -->
+      <!--  Webpage description -->
       <n-form-item
         path="description"
         :label="$t('form.label.webpageDescription')"
@@ -44,7 +44,17 @@
         />
       </n-form-item>
 
-      <!--  Service submit -->
+      <!--  Webpage domain -->
+      <n-form-item path="domain" :label="$t('form.label.domain')" :label-props="{ for: 'domain' }">
+        <n-input
+          v-model:value="formData.domain"
+          :input-props="{ id: 'domain', type: 'url' }"
+          :placeholder="$t('form.placeholder.domain')"
+          clearable
+        />
+      </n-form-item>
+
+      <!--  Form submit -->
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('hosting.webpage.create')" />
         <Btn
@@ -87,6 +97,7 @@ const webpage: WebpageInterface | null =
 const formData = ref<FormWebpage>({
   name: webpage?.name || '',
   description: webpage?.description || '',
+  domain: webpage?.domain || null,
 });
 
 const rules: NFormRules = {
@@ -102,6 +113,12 @@ const rules: NFormRules = {
       max: 255,
       message: $i18n.t('validation.webpageDescriptionTooLong'),
       trigger: 'input',
+    },
+  ],
+  domain: [
+    {
+      type: 'url',
+      message: $i18n.t('validation.webpageDomainUrl'),
     },
   ],
 };
@@ -120,14 +137,14 @@ function handleSubmit(e: Event | MouseEvent) {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (webpage) {
-      await updateBucket();
+      await updateWebpage();
     } else {
-      await createBucket();
+      await createWebpage();
     }
   });
 }
 
-async function createBucket() {
+async function createWebpage() {
   if (!dataStore.hasProjects) {
     await dataStore.fetchProjects();
   }
@@ -158,7 +175,7 @@ async function createBucket() {
   loading.value = false;
 }
 
-async function updateBucket() {
+async function updateWebpage() {
   loading.value = true;
 
   try {
@@ -174,11 +191,13 @@ async function updateBucket() {
       if (item.id === props.webpageId) {
         item.name = res.data.name;
         item.description = res.data.description;
+        item.domain = res.data.domain;
       }
     });
     if (dataStore.webpage.active.id === props.webpageId) {
       dataStore.webpage.active.name = res.data.name;
       dataStore.webpage.active.description = res.data.description;
+      dataStore.webpage.active.domain = res.data.domain;
     }
 
     /** Emit events */

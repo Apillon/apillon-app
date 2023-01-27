@@ -16,7 +16,7 @@
       :disabled="isFormDisabled"
       @submit.prevent="handleSubmit"
     >
-      <!--  Service name -->
+      <!--  Bucket name -->
       <n-form-item
         path="bucketName"
         :label="$t('form.label.bucketName')"
@@ -68,7 +68,7 @@
         </n-radio-group>
       </n-form-item>
 
-      <!--  Service submit -->
+      <!--  Form submit -->
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('form.createBucketAndContinue')" />
         <Btn

@@ -205,8 +205,9 @@ declare global {
   interface FormWebpage {
     name: string;
     description: string;
+    domain?: string | null;
   }
-  interface WebpageInterface {
+  interface WebpageBaseInterface {
     id: number;
     status: number;
     project_uuid: string;
@@ -217,6 +218,21 @@ declare global {
     description: string;
     domain: string;
   }
+  interface WebpageInterface {
+    id: number;
+    status: number;
+    project_uuid: string;
+    bucket: BucketInterface;
+    bucket_id: number;
+    stagingBucket: BucketInterface;
+    stagingBucket_id: number;
+    productionBucket: BucketInterface;
+    productionBucket_id: number;
+    name: string;
+    description: string;
+    domain: string;
+  }
   interface WebpageResponse extends GeneralResponse<WebpageInterface> {}
+  interface WebpageUpdateResponse extends GeneralResponse<WebpageInterface> {}
   interface WebpagesResponse extends GeneralItemsResponse<WebpageInterface> {}
 }
