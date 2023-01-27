@@ -7,9 +7,9 @@
         <strong class="body-sm">{{ $t('dashboard.learnMoreAboutServices') }}</strong>
       </n-space>
     </template>
-    <template v-if="showServices || !isFeatureEnabled(Feature.SERVICES)" #learn> </template>
+    <template v-if="showServices || !isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())" #learn> </template>
     <slot>
-      <div v-if="showServices && isFeatureEnabled(Feature.SERVICES)">
+      <div v-if="showServices && isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())">
         <h6 class="mb-6">{{ $t('dashboard.selectServices') }}</h6>
         <div class="grid gap-4 grid-cols-services">
           <div
@@ -49,7 +49,7 @@
         />
       </div>
       <div
-        v-else-if="isFeatureEnabled(Feature.SERVICES)"
+        v-else-if="isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())"
         class="flex flex-col md:flex-row items-center justify-between max-w-3xl bg-bg-lighter px-6 py-4"
       >
         <div class="mb-4 md:mb-0">
@@ -71,6 +71,7 @@ useHead({
   title: 'Dashboard',
 });
 
+const authStore = useAuthStore();
 const showServices = ref(false);
 const attachService = ref(null);
 
@@ -79,20 +80,20 @@ const services: Array<ServiceTypeItem> = [
     id: ServiceType.AUTHENTICATION,
     name: 'authentication',
     icon: 'icon-authentication',
-    disabled: !isFeatureEnabled(Feature.AUTHENTICATION),
+    disabled: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
   },
   {
     id: ServiceType.STORAGE,
     name: 'storage',
     icon: 'icon-storage',
     new: true,
-    disabled: !isFeatureEnabled(Feature.STORAGE),
+    disabled: !isFeatureEnabled(Feature.STORAGE, authStore.getUserRoles()),
   },
   {
     id: ServiceType.COPMUTING,
     name: 'computing',
     icon: 'icon-computing',
-    disabled: !isFeatureEnabled(Feature.COMPUTING),
+    disabled: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
   },
 ];
 </script>

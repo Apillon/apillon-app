@@ -15,6 +15,8 @@
 <script lang="ts" setup>
 import { Feature } from '~~/types/config';
 
+const authStore = useAuthStore();
+
 const $i18n = useI18n();
 const dataStore = useDataStore();
 
@@ -29,7 +31,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
       label: $i18n.t('nav.projectOverview'),
       to: 'dashboard',
       iconName: 'icon-home',
-      disabled: !isFeatureEnabled(Feature.PROJECT),
+      disabled: !isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles()),
     },
     {
       type: 'group',
@@ -54,7 +56,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
           key: 'dashboard-service-computing',
           label: $i18n.t('nav.computing'),
           iconName: 'icon-computing',
-          soon: !isFeatureEnabled(Feature.COMPUTING),
+          soon: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
           disabled: isMenuItemDisabled(Feature.COMPUTING),
         },
       ],
@@ -110,6 +112,6 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
 
 /** Check if user has projects and if fetaure is enabled */
 function isMenuItemDisabled(feature: Feature) {
-  return !isFeatureEnabled(feature) || dataStore.hasProjects === false;
+  return !isFeatureEnabled(feature, authStore.getUserRoles()) || dataStore.hasProjects === false;
 }
 </script>

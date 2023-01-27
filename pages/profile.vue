@@ -19,7 +19,7 @@
         </FormPasswordResetRequest>
 
         <!-- 2FA -->
-        <template v-if="isFeatureEnabled(Feature.TWO_FACTOR_AUTHENTICATION)">
+        <template v-if="isFeatureEnabled(Feature.TWO_FACTOR_AUTHENTICATION, authStore.getUserRoles())">
           <n-h5 class="mb-0" prefix="bar">{{ $t('profile.2fa') }}</n-h5>
           <p class="mb-6">{{ $t('profile.2faText') }}</p>
           <Btn type="secondary">{{ $t('profile.setup2fa') }}</Btn>
