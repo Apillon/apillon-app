@@ -50,7 +50,7 @@
 
       <!-- Refresh directory content -->
       <n-button size="small" @click="refreshDirectoryContent">
-        <span class="icon-refresh text-lg mr-2"></span>
+        <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('storage.refresh') }}
       </n-button>
 
@@ -64,8 +64,12 @@
       <n-button
         size="small"
         :color="dataStore.bucket.uploadActive ? colors.primary : ''"
+        type="primary"
         ghost
-        @click="dataStore.bucket.uploadActive = !dataStore.bucket.uploadActive"
+        @click="
+          dataStore.bucket.uploadActive =
+            !dataStore.bucket.uploadActive || !dataStore.hasBucketItems
+        "
       >
         <span class="icon-upload text-lg mr-2"></span>
         {{ $t('general.upload') }}

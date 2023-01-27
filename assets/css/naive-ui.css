@@ -28,35 +28,27 @@
     cursor: not-allowed;
   }
 
-  /** Actions buttons - border bg.lighter */
-  &.n-button--default-type.n-button--small-type,
-  &.n-button--default-type.n-button--small-type:active,
-  &.n-button--default-type.n-button--small-type:focus,
-  &.n-button--default-type.n-button--ghost,
-  &.n-button--default-type.n-button--ghost:active,
-  &.n-button--default-type.n-button--ghost:focus {
-    .n-button__border,
-    .n-button__state-border {
-      border-color: theme('colors.bg.lighter');
-    }
-    .n-base-wave {
-      display: none;
-    }
-  }
-  &.n-button--default-type.n-button--small-type:hover,
-  &.n-button--default-type.n-button--ghost:hover {
-    .n-button__border,
-    .n-button__state-border {
-      border-color: theme('colors.primary');
-    }
-  }
-
   /** Type error */
   &--error-type {
     @apply font-mono;
     .n-button__border {
       border-color: theme('colors.bg.lighter');
     }
+  }
+
+  /** Size small */
+  &--small-type {
+    .n-button__content {
+      @apply font-normal;
+    }
+  }
+
+  /** Fixes */
+  .n-base-wave {
+    display: none;
+  }
+  .n-button__icon {
+    width: auto;
   }
 }
 

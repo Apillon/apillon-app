@@ -19,6 +19,7 @@ const protectedRoutes: Array<ProtectedRouteInterface> = [
 ];
 const featureRoutes: Array<FeatureRouteInterface> = [
   { regex: /^\/onboarding/, redirect: '/dashboard', feature: Feature.ONBOARDING },
+  { regex: /^\/dashboard\/referral/, redirect: '/dashboard', feature: Feature.REFERRAL },
   { regex: /^\/dashboard\/service/, redirect: '/dashboard', feature: Feature.SERVICES },
   {
     regex: /^\/dashboard\/service\/authentication/,

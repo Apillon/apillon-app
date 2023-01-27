@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h4>{{ $t('nav.storage') }}</h4>
+          <h1>{{ $t('nav.storage') }}</h1>
         </slot>
 
         <template #info>
@@ -11,9 +11,6 @@
             <button class="align-sub" @click="showModalW3Warn = true">
               <span class="icon-info text-xl"></span>
             </button>
-            <Btn v-if="dataStore.hasBuckets" type="primary" size="small" @click="createNewBucket">
-              {{ $t('storage.bucket.new') }}
-            </Btn>
           </n-space>
         </template>
 
