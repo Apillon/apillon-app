@@ -391,7 +391,7 @@
   },
   "login": {
     "description": "Web3 will not build itself. Go and add your block.",
-    "dontHaveAccount": "I don’t have Authrail account yet?",
+    "dontHaveAccount": "I don’t have Apillon account yet?",
     "enterNewPassword": "Enter new password",
     "forgotPassword": "Did you forgot your password?",
     "magicLink": "Send me a Magic Link",

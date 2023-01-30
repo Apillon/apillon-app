@@ -22,7 +22,7 @@
         </template>
         <template v-else>
           <!-- Create new project -->
-          <Btn type="primary" color="white" size="large" @click="closeModal">
+          <Btn type="info" size="large" @click="closeModal">
             <template v-if="btnText">
               {{ btnText }}
             </template>
@@ -38,6 +38,7 @@
 
 <script lang="ts" setup>
 import { NModal } from 'naive-ui';
+import colors from '~~/tailwind.colors';
 
 defineProps({
   title: { type: String, default: null },
