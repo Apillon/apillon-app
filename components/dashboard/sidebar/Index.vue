@@ -7,8 +7,8 @@
   ></div>
 
   <!-- Sidebar -->
-  <transition name="slide-left" appear>
-    <div class="w-full min-h-full transition-transform duration-300" :class="sidebarClasses">
+  <transition name="slide-left" :appear="isLg || showOnMobile">
+    <div class="min-h-full bg-bg transition-transform duration-300" :class="sidebarClasses">
       <n-scrollbar style="max-height: 100vh" class="scrollbar--menu">
         <!-- Close - only on mobile -->
         <button v-if="!isLg" class="absolute top-4 right-4" @click="emit('toggleSidebar', false)">
@@ -64,7 +64,7 @@ const props = defineProps({
   showOnMobile: { type: Boolean, default: false },
 });
 
-const { isLg } = useScreen();
+const { isLg, isSm } = useScreen();
 const dataStore = useDataStore();
 const showModalNewProject = ref(false);
 const emit = defineEmits(['toggleSidebar']);
@@ -86,7 +86,9 @@ onMounted(() => {
 /** Classes */
 const sidebarClasses = computed(() => {
   return [
+    isLg.value || !isSm.value ? 'w-full' : 'w-80',
     {
+      'fixed top-0 left-0': !isLg.value,
       'z-10 translate-x-0': props.showOnMobile && !isLg.value,
       'z-10 -translate-x-full': !props.showOnMobile && !isLg.value,
     },
