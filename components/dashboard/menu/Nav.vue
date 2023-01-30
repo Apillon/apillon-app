@@ -41,6 +41,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
           label: $i18n.t('nav.authentication'),
           to: 'dashboard-service-authentication',
           iconName: 'icon-authentication',
+          soon: !isFeatureEnabled(Feature.AUTHENTICATION),
           disabled: isMenuItemDisabled(Feature.AUTHENTICATION),
         },
         {
@@ -48,7 +49,16 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
           label: $i18n.t('nav.storage'),
           to: 'dashboard-service-storage',
           iconName: 'icon-storage',
+          soon: !isFeatureEnabled(Feature.STORAGE),
           disabled: isMenuItemDisabled(Feature.STORAGE),
+        },
+        {
+          key: 'dashboard-service-hosting',
+          label: $i18n.t('nav.hosting'),
+          to: 'dashboard-service-hosting',
+          iconName: 'icon-web',
+          soon: !isFeatureEnabled(Feature.HOSTING),
+          disabled: isMenuItemDisabled(Feature.HOSTING),
         },
         {
           key: 'dashboard-service-computing',

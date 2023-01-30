@@ -21,11 +21,14 @@
     "method": "Method",
     "name": "Name",
     "notActive": "not active",
+    "nothingHere": "Nothing here",
     "ok": "OK",
     "open": "Open",
     "paused": "paused",
     "pending": "pending",
+    "refresh": "Refresh",
     "scope": "Scope",
+    "search": "Search",
     "secret": "Secret",
     "serviceName": "Service name",
     "serviceType": "Service type",
@@ -233,9 +236,13 @@
       "cardNumber": "Card number",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
+      "domain": "Domain name",
       "email": "Email address",
       "folderName": "Folder name",
       "folderDescription": "Folder description",
+      "hostingDescription": "Hosting description",
+      "hostingName": "Hosting name",
+      "hostingSize": "Hosting size",
       "inviteByEmail": "Invite by email",
       "expirationDate": "Expiration date",
       "networkType": "Choose the desired network",
@@ -249,7 +256,9 @@
       "username": "First & Last name",
       "webhookPassword": "Password",
       "webhookUrl": "Webhook URL",
-      "webhookUsername": "User name"
+      "webhookUsername": "User name",
+      "webpageDescription": "Webpage description",
+      "webpageName": "Webpage name"
     },
     "networkTypes": {
       "test": "Test network",
@@ -264,10 +273,13 @@
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "complexPassword": "Enter complex password",
       "cvv": "311",
+      "domain": "Type your domain name here",
       "email": "youremail{afna}mail.com",
       "fileStatus": "Select file status",
       "folderName": "",
       "folderDescription": "",
+      "hostingDescription": "Hosting description",
+      "hostingName": "Hosting name",
       "inviteByEmail": "Type e-mail",
       "expirationDate": "01/2023",
       "password": "password",
@@ -281,7 +293,9 @@
       "username": "Enter yout First & Last name",
       "webhookPassword": "Enter password",
       "webhookUrl": "Webhook URL",
-      "webhookUsername": "Enter user name"
+      "webhookUsername": "Enter user name",
+      "webpageDescription": "Webpage description",
+      "webpageName": "Webpage name"
     },
     "success": {
       "apiKey": "Api key has been created",
@@ -289,12 +303,14 @@
       "profile": "Your profile data has been updated",
       "requestPasswordChange": "We have send you a password reset request to your email.",
       "sendAgainEmail": "Email has been re-sent",
+      "webpageDeployed": "Webpage has been deployed.",
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
         "bucket": "Bucket has been created",
         "directory": "Directory key has been created",
         "file": "File has been created",
+        "hosting": "Hosting has been created",
         "item": "Item has been created",
         "userInvite": "User has been invited.",
         "webhook": "Webhook has been created"
@@ -305,6 +321,7 @@
         "bucket": "Bucket has been deleted",
         "directory": "Directory key has been deleted",
         "file": "File has been deleted",
+        "hosting": "Hosting has been deleted",
         "item": "Item has been deleted",
         "items": "Items has been deleted",
         "webhook": "Webhook has been deleted"
@@ -315,10 +332,12 @@
         "bucket": "Bucket has been updated",
         "directory": "Directory key has been updated",
         "file": "File has been updated",
+        "hosting": "Hosting has been updated",
         "item": "Item has been updated",
         "project": "Project has been updated",
         "userRole": "User role has been updated",
-        "webhook": "Webhook has been updated"
+        "webhook": "Webhook has been updated",
+        "webpage": "Webpage has been updated"
       }
     },
     "terms": {
@@ -327,6 +346,7 @@
     },
     "connect": "Connect",
     "createBucketAndContinue": "Create bucket & continue to management",
+    "createHostingAndContinue": "Create hosting & continue to management",
     "createNewProject": "Create new project",
     "createServiceAndContinue": "Create service & continue to management",
     "continue": "Continue",
@@ -340,6 +360,34 @@
     "sendInvite": "Send invite",
     "startFirstProject": "Start your first project",
     "update": "Update"
+  },
+  "hosting": {
+    "menu": {
+      "preview": "Upload",
+      "staging": "Staging",
+      "production": "Production"
+    },
+    "webpage": {
+      "addFirst": "Add first website",
+      "create": "Create webpage",
+      "description": "Webpage description",
+      "domain": "Domain name",
+      "edit": "Edit webpage",
+      "infoNew": "Info new",
+      "infoEdit": "Info edit",
+      "name": "Webpage name",
+      "new": "New hosting",
+      "quotaReached": "Quota has been reached.",
+      "update": "Update webpage"
+    },
+    "deployStage": "Deploy to staging",
+    "deployProd": "Deploy to production",
+    "domainPreview": "Domain preview",
+    "management": "Hosting management",
+    "productionEmpty": "Deploy files from staging to production",
+    "stagingEmpty": "Upload files and deploy them to staging",
+    "web3Hosting": "Web3 hosting",
+    "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "login": {
     "description": "Web3 will not build itself. Go and add your block.",
@@ -360,6 +408,7 @@
     "services": "Services",
     "authentication": "Authentication",
     "storage": "Storage",
+    "hosting": "Hosting",
     "computing": "Computing",
     "monitoring": "Monitoring",
     "analytics": "Analytics",
@@ -504,7 +553,7 @@
       "destroyed": "Deleted buckets",
       "destroyedBuckets": "Destroyed buckets",
       "edit": "Edit bucket",
-      "infoNew": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
+      "infoNew": "",
       "management": "Bucket management",
       "name": "Bucket name",
       "new": "New bucket",
@@ -635,6 +684,7 @@
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
     "cvvRequired": "Please enter CVV",
+    "webpageDomainUrl": "Domain name is not a valid URL",
     "email": "Email address is not valid",
     "emailRequired": "Please enter your email",
     "expirationDate": "Date is expired",

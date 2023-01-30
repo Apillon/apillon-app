@@ -291,7 +291,7 @@ async function fetchFiles(page?: number, limit?: number) {
   loading.value = true;
 
   try {
-    const bucketUuid = dataStore.currentBucket.bucket_uuid;
+    const bucketUuid = dataStore.bucketUuid;
 
     const params: Record<string, string | number> = {
       bucket_uuid: bucketUuid,

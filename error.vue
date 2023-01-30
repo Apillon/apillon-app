@@ -1,5 +1,5 @@
 <template>
-  <div v-if="authStore.loggedIn" ref="mainContentRef" class="relative h-screen lg:pl-80">
+  <div v-if="authStore.loggedIn" ref="mainContentRef" class="relative h-screen bg-bg">
     <n-config-provider :theme-overrides="themeOverrides">
       <n-message-provider
         :to="messageRef"
@@ -8,26 +8,39 @@
         :duration="3000"
         closable
       >
-        <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
-        <Header @toggleSidebar="toggleSidebar" />
-        <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
-          <div
-            ref="messageRef"
-            class="flex justify-center items-center relative pt-8 px-4 sm:px-8"
-            style="height: calc(100vh - 88px)"
+        <n-layout has-sider class="h-full">
+          <n-layout-sider
+            bordered
+            :show-trigger="false"
+            collapse-mode="width"
+            :width="320"
+            :native-scrollbar="false"
+            style="max-height: 100vh"
           >
-            <div>
-              <!-- customise 404 message from template section -->
-              <n-h4>{{ $t('error.404') }}</n-h4>
+            <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
+          </n-layout-sider>
+          <n-layout>
+            <Header @toggleSidebar="toggleSidebar" />
+            <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
+              <div
+                ref="messageRef"
+                class="flex justify-center items-center relative pt-8 px-4"
+                style="height: calc(100vh - 88px)"
+              >
+                <div>
+                  <!-- customise 404 message from template section -->
+                  <n-h4>{{ $t('error.404') }}</n-h4>
 
-              <!-- Redirect to home page -->
-              <Btn type="secondary" @click="handleError">
-                {{ $t('general.goHome') }}
-              </Btn>
-            </div>
-          </div>
-          <!-- <CookieConsent /> -->
-        </n-scrollbar>
+                  <!-- Redirect to home page -->
+                  <Btn type="secondary" @click="handleError">
+                    {{ $t('general.goHome') }}
+                  </Btn>
+                </div>
+              </div>
+              <!-- <CookieConsent /> -->
+            </n-scrollbar>
+          </n-layout>
+        </n-layout>
       </n-message-provider>
     </n-config-provider>
   </div>

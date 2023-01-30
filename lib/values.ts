@@ -23,6 +23,8 @@ export const LsCacheKeys = {
   BUCKET_DESTROYED: 'al_cache_bucket_destroyed',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
+  WEBPAGE: 'al_cache_webpage',
+  WEBPAGES: 'al_cache_webpages',
 };
 
 /** User roles */
