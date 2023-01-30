@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <p v-if="webpage && $i18n.te('hosting.webpage.infoNew')" class="text-body mb-8">
+  <Spinner v-if="webpageId > 0 && !webpage" />
+  <div v-else>
+    <p v-if="!webpage && $i18n.te('hosting.webpage.infoNew')" class="text-body mb-8">
       {{ $t('hosting.webpage.infoNew') }}
     </p>
-    <p v-else-if="!webpage && $i18n.te('hosting.webpage.infoEdit')" class="text-body mb-8">
+    <p v-else-if="webpage && $i18n.te('hosting.webpage.infoEdit')" class="text-body mb-8">
       {{ $t('hosting.webpage.infoEdit') }}
     </p>
 
@@ -91,13 +92,19 @@ const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const webpage: WebpageInterface | null =
-  props.webpageId > 0 ? await dataStore.getWebpage(props.webpageId) : null;
+const webpage = ref<WebpageInterface | null>(null);
+
+onMounted(async () => {
+  webpage.value = await dataStore.getWebpage(props.webpageId);
+  formData.value.name = webpage.value.name;
+  formData.value.description = webpage.value.description;
+  formData.value.domain = webpage.value.domain;
+});
 
 const formData = ref<FormWebpage>({
-  name: webpage?.name || '',
-  description: webpage?.description || '',
-  domain: webpage?.domain || null,
+  name: webpage.value?.name || '',
+  description: webpage.value?.description || '',
+  domain: webpage.value?.domain || null,
 });
 
 const rules: NFormRules = {
@@ -118,6 +125,7 @@ const rules: NFormRules = {
   domain: [
     {
       type: 'url',
+      validator: validateDomain,
       message: $i18n.t('validation.webpageDomainUrl'),
     },
   ],
@@ -129,6 +137,13 @@ const isQuotaReached = computed<boolean>(() => {
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
 });
+
+// Custom validations
+function validateDomain(_: NFormItemRule, value: string): boolean {
+  const regex = /^([A-Za-z0–9-]{1,63}\.)+[A-Za-z]{2,6}$/;
+
+  return !value || regex.test(value);
+}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -145,16 +160,16 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createWebpage() {
+  loading.value = true;
+
   if (!dataStore.hasProjects) {
     await dataStore.fetchProjects();
   }
 
-  loading.value = true;
-
   try {
     const bodyData = {
       ...formData.value,
-      project_uuid: dataStore.currentProject?.project_uuid,
+      project_uuid: dataStore.projectUuid,
     };
     const res = await $api.post<WebpageResponse>(endpoints.webpage, bodyData);
 

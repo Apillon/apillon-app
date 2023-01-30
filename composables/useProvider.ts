@@ -133,11 +133,11 @@ export const useProvider = () => {
   }
 
   const walletWarning = useDebounceFn(() => {
-    $alert.warning({
-      title: 'Wallet Error',
-      message:
-        'Current wallet is not associated with your account. Please select the appropriate wallet to use any wallet functionality.',
-    });
+    // $alert.warning({
+    //   title: 'Wallet Error',
+    //   message:
+    //     'Current wallet is not associated with your account. Please select the appropriate wallet to use any wallet functionality.',
+    // });
   }, 500);
 
   return {

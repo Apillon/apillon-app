@@ -18,12 +18,14 @@ const authRoutes: Array<RouteInterface> = [
  */
 export default defineNuxtRouteMiddleware(to => {
   const authStore = useAuthStore();
-  authStore.initUser();
-
   if (authStore.jwt) {
     // Store already init'ed
     $api.setToken(authStore.jwt);
+    return;
+  }
 
+  authStore.initUser();
+  if (authStore.jwt) {
     /** Redirect auth routes */
     for (const route of authRoutes) {
       if (to.name === route.name) {

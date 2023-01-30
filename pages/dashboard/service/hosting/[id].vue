@@ -6,7 +6,7 @@
 
     <slot>
       <!-- Actions -->
-      <HostingWebsiteActions class="mb-4" />
+      <HostingWebsiteActionsUpload class="mb-4" />
 
       <!-- Upload files -->
       <FormHostingUploadWebpage :bucket-uuid="dataStore.bucketUuid" />
@@ -18,7 +18,7 @@
 
       <!-- DataTable: files and directories -->
       <transition name="fade" appear>
-        <TableStorageFiles />
+        <TableStorageFiles :actions="false" />
       </transition>
     </slot>
   </Dashboard>
@@ -26,6 +26,7 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const router = useRouter();
 const { params } = useRoute();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
@@ -41,6 +42,13 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       const webpage = await dataStore.getWebpage(parseInt(`${params?.id}`));
+
+      /** Check of webpage exists */
+      if (!webpage?.id) {
+        router.push({ name: 'dashboard-service-hosting' });
+        return;
+      }
+
       dataStore.bucket.active = webpage.bucket;
       dataStore.setBucketId(webpage.bucket.id);
 

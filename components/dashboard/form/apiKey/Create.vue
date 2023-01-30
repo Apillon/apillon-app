@@ -217,22 +217,22 @@ async function createApiKey() {
   loading.value = true;
 
   try {
-    const projectUuid = dataStore.currentProject?.project_uuid;
+    const projectUuid = dataStore.projectUuid;
     const bodyData = {
       project_uuid: projectUuid,
       name: formData.value.name,
       testNetwork: formData.value.apiKeyType,
       roles: formData.value.roles
         .map(role => {
-          return role.permissions.map(permission => {
-            if (permission.value) {
+          return role.permissions
+            .filter(permission => !!permission.value)
+            .map(permission => {
               return {
                 role_id: permission.key,
                 project_uuid: projectUuid,
                 service_uuid: role.service_uuid,
               };
-            }
-          });
+            });
         })
         .flat()
         .filter(item => item !== undefined),

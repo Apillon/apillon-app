@@ -229,7 +229,7 @@ async function updateApiKey() {
   loadingForm.value = true;
 
   try {
-    const projectUuid = dataStore.currentProject?.project_uuid;
+    const projectUuid = dataStore.projectUuid;
     const bodyData = {
       project_uuid: projectUuid,
       name: formData.value.name,
@@ -249,7 +249,7 @@ async function updateApiKey() {
 
 /** Check if permission is enabled */
 function isPermissionEnabled(serviceUuid: string, roleId: number) {
-  const projectUuid = dataStore.currentProject?.project_uuid;
+  const projectUuid = dataStore.projectUuid;
   return (
     apiKeyRoles.value.find(
       role =>
@@ -270,7 +270,7 @@ function updatePermission(serviceUuid: string, roleId: number, value: boolean) {
 }
 
 async function addPermission(serviceUuid: string, roleId: number) {
-  const projectUuid = dataStore.currentProject?.project_uuid;
+  const projectUuid = dataStore.projectUuid;
   try {
     await $api.post<ApiKeyRoleUpdateResponse>(endpoints.apiKeyRole(props.id), {
       project_uuid: projectUuid,
@@ -285,7 +285,7 @@ async function addPermission(serviceUuid: string, roleId: number) {
 }
 
 async function removePermission(serviceUuid: string, roleId: number) {
-  const projectUuid = dataStore.currentProject?.project_uuid || '';
+  const projectUuid = dataStore.projectUuid || '';
   try {
     await $api.delete<DeleteResponse>(endpoints.apiKeyRole(props.id), {
       project_uuid: projectUuid,

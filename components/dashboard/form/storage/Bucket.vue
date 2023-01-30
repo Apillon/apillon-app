@@ -173,7 +173,7 @@ async function createBucket() {
   loading.value = true;
 
   const bodyData = {
-    project_uuid: dataStore.currentProject?.project_uuid,
+    project_uuid: dataStore.projectUuid,
     bucketType: BucketType.STORAGE,
     name: formData.value.bucketName,
     description: formData.value.bucketDescription,

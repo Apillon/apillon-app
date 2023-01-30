@@ -63,7 +63,7 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
-import { DataTableColumns, NButton, NDropdown, useMessage } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -134,31 +134,8 @@ const pagination = computed(() => {
   };
 });
 
-/** Dropdown options for files */
-const dropdownFileOptions = [
-  {
-    label: $i18n.t('general.view'),
-    key: 'view',
-    props: {
-      onClick: () => {
-        drawerFileDetailsVisible.value = true;
-      },
-    },
-  },
-  {
-    label: $i18n.t('general.delete'),
-    key: 'delete',
-    props: {
-      class: '!text-pink',
-      onClick: () => {
-        showModalDelete.value = true;
-      },
-    },
-  },
-];
-
 /** Columns */
-const createColumns = (): DataTableColumns<FileUploadInterface> => {
+const createColumns = (): NDataTableColumns<FileUploadInterface> => {
   return [
     {
       title: $i18n.t('storage.fileName'),
@@ -205,26 +182,13 @@ const createColumns = (): DataTableColumns<FileUploadInterface> => {
       },
     },
     {
-      title: $i18n.t('general.actions'),
-      key: 'actions',
-      align: 'right',
-      className: '!py-0',
-      render() {
-        return h(
-          NDropdown,
-          {
-            options: dropdownFileOptions,
-            trigger: 'click',
-          },
-          {
-            default: () =>
-              h(
-                NButton,
-                { size: 'small', quaternary: true },
-                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
-              ),
-          }
-        );
+      title: $i18n.t('storage.contentType'),
+      key: 'contentType',
+      render(row) {
+        if (row.contentType) {
+          return h('span', {}, row.contentType);
+        }
+        return '';
       },
     },
   ];

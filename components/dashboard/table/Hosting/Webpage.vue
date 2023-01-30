@@ -75,7 +75,6 @@ const props = defineProps({
   webpageItems: { type: Array<BucketItemInterface>, default: [] },
   env: { type: Number, default: DeploymentEnvironment.STAGING },
 });
-const $emit = defineEmits(['refresh']);
 
 const $i18n = useI18n();
 const dataStore = useDataStore();

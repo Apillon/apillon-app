@@ -41,7 +41,6 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import { textMarshal } from 'text-marshal';
 
 const props = defineProps({
   bucketId: { type: Number, default: null },

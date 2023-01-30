@@ -54,6 +54,10 @@
 import debounce from 'lodash.debounce';
 import { NButton, NDropdown, NEllipsis, NSpace } from 'naive-ui';
 
+const props = defineProps({
+  actions: { type: Boolean, default: true },
+});
+
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const showModalW3Warn = ref<boolean>(false);
@@ -147,15 +151,13 @@ const columns = computed(() => {
   return [
     {
       type: 'selection',
+      className: { hidden: props.actions === false },
     },
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
-      className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
-        selectedColumns.value.includes('name') ? '' : 'hidden',
-      ],
-      sorter: 'default',
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
+      sorter: props.actions ? 'default' : false,
       minWidth: 150,
       render(row: BucketItemInterface) {
         return [
@@ -179,8 +181,8 @@ const columns = computed(() => {
     {
       title: $i18n.t('storage.fileCid'),
       key: 'CID',
-      className: selectedColumns.value.includes('CID') ? '' : 'hidden',
-      sorter: 'default',
+      className: { hidden: !selectedColumns.value.includes('CID') },
+      sorter: props.actions ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [
@@ -210,8 +212,8 @@ const columns = computed(() => {
     {
       title: $i18n.t('storage.downloadLink'),
       key: 'link',
-      className: selectedColumns.value.includes('link') ? '' : 'hidden',
-      sorter: 'default',
+      className: { hidden: !selectedColumns.value.includes('link') },
+      sorter: props.actions ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [
@@ -241,11 +243,8 @@ const columns = computed(() => {
     {
       title: $i18n.t('storage.fileSize'),
       key: 'size',
-      className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
-        selectedColumns.value.includes('size') ? '' : 'hidden',
-      ],
-      sorter: 'default',
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('size') }],
+      sorter: props.actions ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
@@ -258,9 +257,9 @@ const columns = computed(() => {
       key: 'createTime',
       className: [
         ON_COLUMN_CLICK_OPEN_CLASS,
-        selectedColumns.value.includes('createTime') ? '' : 'hidden',
+        { hidden: !selectedColumns.value.includes('createTime') },
       ],
-      sorter: 'default',
+      sorter: props.actions ? 'default' : false,
       render(row: BucketItemInterface) {
         return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
       },
@@ -270,9 +269,9 @@ const columns = computed(() => {
       key: 'contentType',
       className: [
         ON_COLUMN_CLICK_OPEN_CLASS,
-        selectedColumns.value.includes('contentType') ? '' : 'hidden',
+        { hidden: !selectedColumns.value.includes('contentType') },
       ],
-      sorter: 'default',
+      sorter: props.actions ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.contentType) {
           return h('span', {}, row.contentType);
@@ -284,7 +283,7 @@ const columns = computed(() => {
       title: $i18n.t('general.actions'),
       key: 'actions',
       align: 'right',
-      className: '!py-0',
+      className: ['!py-0', { hidden: props.actions === false }],
       render(row: BucketItemInterface) {
         return h(
           NDropdown,
@@ -307,6 +306,7 @@ const columns = computed(() => {
       key: 'columns',
       filter: 'default',
       filterOptionValue: null,
+      className: { hidden: props.actions === false },
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },
@@ -346,7 +346,7 @@ function rowProps(row: BucketItemInterface) {
     onClick: (e: Event) => {
       currentRow.value = row;
 
-      if (canOpenColumnCell(e.composedPath())) {
+      if (canOpenColumnCell(e.composedPath()) && props.actions) {
         onItemOpen(row);
       }
     },
