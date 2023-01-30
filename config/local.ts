@@ -14,6 +14,7 @@ const config: ConfigInterface = {
   //   BILLING: true,
   //   CONFIGURATION: true,
   //   COMPUTING: false,
+  //   HOSTING: true,
   //   INSTRUCTIONS: true,
   //   MAGIC_LINK: true,
   //   MONITORING: false,
@@ -43,11 +44,11 @@ const config: ConfigInterface = {
     'REFERRAL',
     'SEARCH',
     'SERVICES',
-    ,
+    'MONITORING',
     'TWO_FACTOR_AUTHENTICATION',
     'WALLET_LOGIN',
   ],
-  betaFeatures: ['MONITORING', 'STORAGE'],
+  betaFeatures: ['STORAGE', 'HOSTING'],
 };
 
 export default config;

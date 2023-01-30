@@ -23,6 +23,8 @@ export const LsCacheKeys = {
   BUCKET_DESTROYED: 'al_cache_bucket_destroyed',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
+  WEBPAGE: 'al_cache_webpage',
+  WEBPAGES: 'al_cache_webpages',
 };
 
 /** User roles */
@@ -137,6 +139,11 @@ export const themeOverrides: GlobalThemeOverrides = {
     borderRadiusSmall: '0px',
     borderRadiusMedium: '0px',
     borderRadiusLarge: '0px',
+    colorInfo: colors.white,
+    colorHoverInfo: colors.white,
+    colorFocusInfo: colors.white,
+    colorPressedInfo: colors.white,
+    colorDisabledInfo: colors.white,
     colorQuaternary: 'transparent',
     colorQuaternaryHover: colors.primary,
     colorQuaternaryPressed: colors.primary,
@@ -152,6 +159,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     paddingMedium: '8px 24px',
     paddingSmall: '6px 10px',
     paddingTiny: '1px',
+    textColorInfo: colors.bg.DEFAULT,
     textColorFocus: colors.white,
     textColorFocusPrimary: colors.white,
     textColorError: colors.pink,

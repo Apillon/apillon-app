@@ -52,9 +52,9 @@ function renderMenuLabel(option: NMenuOption) {
 }
 
 function renderMenuExtra(option: NMenuOption) {
-  if ('new' in option) {
+  if ('new' in option && option.new) {
     return h('span', { class: 'icon-new align-middle text-blue text-2xl' }, '');
-  } else if ('soon' in option) {
+  } else if ('soon' in option && option.soon) {
     return h('span', { class: 'icon-soon align-middle text-violet text-2xl mr-2' }, '');
   }
   return null;

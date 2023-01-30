@@ -33,8 +33,8 @@
             <NuxtIcon name="storage/empty" class="icon-auto" filled />
           </div>
           <div class="mb-10 text-center">
-            <h3 class="font-bold">{{ $t('storage.bucket.nothingHere') }}</h3>
-            <p class="text-body">{{ $t('storage.bucket.destroyedBucket') }}</p>
+            <h3 class="font-bold">{{ $t('general.nothingHere') }}</h3>
+            <p class="text-body">{{ $t('storage.bucket.destroyedBuckets') }}</p>
           </div>
         </div>
       </template>

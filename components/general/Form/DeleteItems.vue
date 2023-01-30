@@ -71,7 +71,7 @@ function getUrl(type: string, id: number) {
     case 'directory':
       return endpoints.directory(id);
     case 'file':
-      return endpoints.storageFileDelete(dataStore.currentBucket.bucket_uuid, id);
+      return endpoints.storageFileDelete(dataStore.bucketUuid, id);
     default:
       console.warn('Wrong type');
       return '';
