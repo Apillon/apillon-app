@@ -19,7 +19,7 @@
         <span class="ml-1 text-body">
           {{
             $t('storage.file.filesUploading', {
-              uploading: numOfUploadingFiles,
+              uploading: numOfUploadingOrFinishedFiles,
               files: fileList.length,
             })
           }}
@@ -164,8 +164,8 @@ async function uploadSessionEnd(sessionUuid: string) {
 const filesUploading = computed<boolean>(() => {
   return fileList.value.find(file => file.status === FileUploadStatusValue.UPLOADING) !== undefined;
 });
-const numOfUploadingFiles = computed<number>(() => {
-  return fileList.value.filter(file => file.status === FileUploadStatusValue.UPLOADING).length || 0;
+const numOfUploadingOrFinishedFiles = computed<number>(() => {
+  return fileList.value.filter(file => file.status !== FileUploadStatusValue.PENDING).length || 0;
 });
 
 /** Check if all files are finished (status FINISH or ERROR) */

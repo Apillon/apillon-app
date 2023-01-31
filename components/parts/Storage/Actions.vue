@@ -33,10 +33,12 @@
       </template>
 
       <!-- Refresh storage content -->
-      <n-button size="small" :loading="dataStore.bucket.loading" @click="refresh">
+      <n-button size="small" :loading="dataStore.bucket.loading" @click="dataStore.fetchBuckets()">
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('storage.refresh') }}
       </n-button>
+
+      <!-- Create new bucket -->
       <n-button
         v-if="dataStore.hasBuckets"
         type="primary"
@@ -60,9 +62,4 @@
 const emit = defineEmits(['onBucketDelete']);
 const dataStore = useDataStore();
 const showModalNewBucket = ref<boolean | null>(false);
-
-/** Refresh directory content */
-async function refresh() {
-  dataStore.promises.buckets = await dataStore.fetchBuckets();
-}
 </script>

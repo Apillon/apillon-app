@@ -1,29 +1,6 @@
 <template>
   <n-space class="pb-8" :size="32" vertical>
-    <n-space justify="space-between">
-      <div class="w-[20vw] max-w-xs">
-        <n-input
-          v-model:value="dataStore.webpage.search"
-          type="text"
-          name="search"
-          size="small"
-          :placeholder="$t('general.search')"
-          clearable
-        >
-          <template #prefix>
-            <span class="icon-search text-xl"></span>
-          </template>
-        </n-input>
-      </div>
-
-      <n-space size="large">
-        <!-- Refresh webpages -->
-        <n-button size="small" :loading="dataStore.webpage.loading" @click="$emit('refresh')">
-          <span class="icon-refresh text-lg mr-2"></span>
-          {{ $t('general.refresh') }}
-        </n-button>
-      </n-space>
-    </n-space>
+    <HostingActions />
 
     <n-data-table
       ref="tableRef"
@@ -40,7 +17,7 @@
 
   <!-- Modal - Edit webpage -->
   <modal v-model:show="showModalEditWebpage" :title="$t('hosting.webpage.edit')">
-    <FormStorageWebpage
+    <FormHostingWebpage
       :webpage-id="currentRow.id"
       @submit-success="showModalEditWebpage = false"
     />
@@ -53,7 +30,6 @@ import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 const props = defineProps({
   webpages: { type: Array<WebpageInterface>, default: [] },
 });
-const $emit = defineEmits(['refresh']);
 
 const $i18n = useI18n();
 const router = useRouter();

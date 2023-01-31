@@ -14,6 +14,7 @@ export const LsW3WarnKeys = {
   BUCKET_DELETE: 'al_w3warn_bucket_delete',
   BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
   BUCKET_ITEM_DELETE: 'al_w3warn_bucket_item_delete',
+  HOSTING_NEW: 'al_w3warn_hosting_new',
 };
 
 export const LsCacheKeys = {
@@ -161,7 +162,6 @@ export const themeOverrides: GlobalThemeOverrides = {
     paddingTiny: '1px',
     textColorInfo: colors.bg.DEFAULT,
     textColorFocus: colors.white,
-    textColorFocusPrimary: colors.white,
     textColorError: colors.pink,
     textColorFocusError: colors.pink,
     textColorHoverError: colors.pink,

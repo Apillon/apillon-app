@@ -5,7 +5,20 @@
     </template>
     <slot>
       <template v-if="dataStore.folder.items.length || true">
-        <TableHostingWebpage :webpage-items="dataStore.folder.items" />
+        <n-space class="pb-8" :size="32" vertical>
+          <HostingWebsiteActions />
+
+          <!-- Domain preview 
+          <div>
+            <div class="body-sm mb-2">
+              <strong>{{ $t('hosting.domainPreview') }}</strong>
+            </div>
+            <div class="bg-bg-dark px-4 py-2"></div>
+          </div>
+        -->
+
+          <TableStorageFiles :actions="false" />
+        </n-space>
       </template>
       <template v-else>
         <div
@@ -27,9 +40,10 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const router = useRouter();
 const { params } = useRoute();
 const dataStore = useDataStore();
-const pageLoading = ref<boolean>(false);
+const pageLoading = ref<boolean>(true);
 
 useHead({
   title: $i18n.t('nav.hosting'),
@@ -43,6 +57,13 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       const webpage = await dataStore.getWebpage(websiteId);
+
+      /** Check of webpage exists */
+      if (!webpage?.id) {
+        router.push({ name: 'dashboard-service-hosting' });
+        return;
+      }
+
       dataStore.bucket.active = webpage.stagingBucket;
       dataStore.setBucketId(webpage.stagingBucket_id);
 

@@ -152,6 +152,7 @@
     "MAX_BUCKETS_REACHED": "Maximum number of buckets is reached",
     "MAX_PROJECTS_REACHED": "Maximum number of projects is reached",
     "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
+    "WEB_PAGE_NOT_FOUND": "Web page not found",
 
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
@@ -363,9 +364,9 @@
   },
   "hosting": {
     "menu": {
-      "preview": "Upload",
-      "staging": "Staging",
-      "production": "Production"
+      "preview": "1. Upload",
+      "staging": "2. Preview",
+      "production": "3. Production"
     },
     "webpage": {
       "addFirst": "Add first website",
@@ -373,10 +374,10 @@
       "description": "Webpage description",
       "domain": "Domain name",
       "edit": "Edit webpage",
-      "infoNew": "Info new",
-      "infoEdit": "Info edit",
+      "infoNew": "",
+      "infoEdit": "",
       "name": "Webpage name",
-      "new": "New hosting",
+      "new": "New webpage",
       "quotaReached": "Quota has been reached.",
       "update": "Update webpage"
     },
@@ -684,7 +685,6 @@
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
     "cvvRequired": "Please enter CVV",
-    "webpageDomainUrl": "Domain name is not a valid URL",
     "email": "Email address is not valid",
     "emailRequired": "Please enter your email",
     "expirationDate": "Date is expired",
@@ -710,7 +710,10 @@
     "webhookPasswordRequired": "Please enter password",
     "webhookRequired": "Please enter Webhook URL",
     "webhookUsernameRequired": "Please enter username",
-    "webhookTokenRequired": "Please enter token"
+    "webhookTokenRequired": "Please enter token",
+    "webpageNameRequired": "Please enter Webpage name",
+    "webpageDescriptionTooLong": "Description is too long (max 255 characters)",
+    "webpageDomainUrl": "Domain name is not a valid URL"
   },
   "w3Warn": {
     "bucket": {

@@ -75,6 +75,9 @@ export const useDataStore = defineStore('data', {
     },
   }),
   getters: {
+    hasProjects(state) {
+      return Array.isArray(state.project.items) && state.project.items.length > 0;
+    },
     currentProject(state) {
       if (!this.hasProjects) {
         return null;
@@ -89,8 +92,16 @@ export const useDataStore = defineStore('data', {
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${this.currentProjectId}`);
       return state.project.items[0];
     },
-    hasProjects(state) {
-      return Array.isArray(state.project.items) && state.project.items.length > 0;
+    projectUuid(state): string {
+      return (
+        state.project.active.project_uuid ||
+        (
+          state.project.items.find(
+            (item: ProjectInterface) => item.id === state.currentProjectId
+          ) || ({} as ProjectInterface)
+        )?.project_uuid ||
+        ''
+      );
     },
     myRoleOnProject(state) {
       return state.project.active.myRole_id_onProject || DefaultUserRole.PROJECT_USER;
@@ -244,7 +255,7 @@ export const useDataStore = defineStore('data', {
 
       if (!this.hasBuckets) {
         Promise.all(Object.values(this.promises)).then(_ => {
-          this.promises.buckets = this.fetchBuckets();
+          this.fetchBuckets();
 
           Promise.all(Object.values(this.promises)).then(_ => {
             this.checkIfBucketExistsElseRedirectHome();
@@ -301,7 +312,7 @@ export const useDataStore = defineStore('data', {
         !this.hasBuckets ||
         isCacheExpired(LsCacheKeys.BUCKETS)
       ) {
-        this.promises.buckets = await this.fetchBuckets(statusDestroyed);
+        await this.fetchBuckets(statusDestroyed);
       }
     },
 
@@ -315,6 +326,13 @@ export const useDataStore = defineStore('data', {
         return bucket;
       }
       return await this.fetchBucket(bucketId);
+    },
+
+    /** Webpages */
+    async getWebpages() {
+      if (!this.hasBuckets || isCacheExpired(LsCacheKeys.BUCKETS)) {
+        await this.fetchWebpages();
+      }
     },
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
@@ -424,12 +442,14 @@ export const useDataStore = defineStore('data', {
 
       try {
         const params: Record<string, string | number> = {
-          project_uuid: this.currentProject?.project_uuid || '',
+          project_uuid: this.projectUuid,
         };
         if (statusDeleted) {
           params.status = 8;
         }
-        const res = await $api.get<BucketsResponse>(endpoints.buckets, params);
+        const req = $api.get<BucketsResponse>(endpoints.buckets, params);
+        this.promises.buckets = req;
+        const res = await req;
 
         const items = res.data.items
           .filter((bucket: BucketInterface) => bucket.bucketType === BucketType.STORAGE)
@@ -485,28 +505,20 @@ export const useDataStore = defineStore('data', {
       return {} as BucketInterface;
     },
 
-    async fetchBucketQuota(bucketType: number = BucketType.STORAGE) {
+    async fetchBucketQuota() {
       if (!this.hasProjects) {
         await this.fetchProjects();
       }
       const params = {
-        project_uuid: this.currentProject?.project_uuid || '',
-        bucketType,
+        project_uuid: this.projectUuid,
+        bucketType: BucketType.STORAGE,
       };
       try {
         const res = await $api.get<BucketQuotaResponse>(endpoints.bucketsQuota, params);
 
-        if (bucketType === BucketType.STORAGE) {
-          this.bucket.quotaReached = res.data;
-        } else {
-          this.webpage.quotaReached = res.data;
-        }
+        this.bucket.quotaReached = res.data;
       } catch (error: any) {
-        if (bucketType === BucketType.STORAGE) {
-          this.bucket.quotaReached = undefined;
-        } else {
-          this.webpage.quotaReached = undefined;
-        }
+        this.bucket.quotaReached = undefined;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
@@ -612,7 +624,36 @@ export const useDataStore = defineStore('data', {
       return fileInfo.toJSON();
     },
 
-    /** Webpage */
+    /** Webpages */
+    async fetchWebpages() {
+      this.webpage.loading = true;
+      if (!this.hasProjects) {
+        await this.fetchProjects();
+      }
+
+      try {
+        const params: Record<string, string | number> = {
+          project_uuid: this.projectUuid,
+        };
+
+        const req = $api.get<WebpagesResponse>(endpoints.webpages(), params);
+        this.promises.webpages = req;
+        const res = await req;
+
+        this.webpage.items = res.data.items;
+        this.webpage.search = '';
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.WEBPAGES, Date.now().toString());
+      } catch (error: any) {
+        this.webpage.items = [] as Array<WebpageInterface>;
+
+        /** Show error message  */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      this.webpage.loading = false;
+    },
+
     async fetchWebpage(id: number): Promise<WebpageInterface> {
       if (!this.hasProjects) {
         await this.fetchProjects();
@@ -635,7 +676,25 @@ export const useDataStore = defineStore('data', {
       return {} as WebpageInterface;
     },
 
-    /** Webpage deploy */
+    async fetchWebpageQuota() {
+      if (!this.hasProjects) {
+        await this.fetchProjects();
+      }
+
+      try {
+        const res = await $api.get<WebpageQuotaResponse>(endpoints.webpageQuota, {
+          project_uuid: this.projectUuid,
+        });
+
+        this.webpage.quotaReached = res.data;
+      } catch (error: any) {
+        this.webpage.quotaReached = undefined;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+
     async deployWebpage(
       webpageId: number,
       env: number = DeploymentEnvironment.STAGING
@@ -643,11 +702,10 @@ export const useDataStore = defineStore('data', {
       try {
         const config = useRuntimeConfig();
         const params: Record<string, string | number | boolean | null> = {
-          // directDeploy: config.public.ENV === AppEnv.LOCAL,
+          directDeploy: config.public.ENV === AppEnv.LOCAL,
           environment: env,
         };
-        const res = await $api.post<DeploymentResponse>(endpoints.webpageDeploy(webpageId), params);
-        console.log(res);
+        await $api.post<DeploymentResponse>(endpoints.webpageDeploy(webpageId), params);
 
         window.$message.success(window.$i18n.t('form.success.webpageDeployed'));
       } catch (error: any) {

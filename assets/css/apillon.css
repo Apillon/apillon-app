@@ -42,7 +42,13 @@
   }
 }
 
-.icon-trash-restore:before {
+.icon-deploy:before {
+  content: '\e939';
+}
+.icon-hosting:before {
+  content: '\e93a';
+}
+.icon-preview:before {
   content: '\e93f';
 }
 .icon-restore:before {

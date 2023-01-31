@@ -54,7 +54,7 @@ export const useSettingsStore = defineStore('settings', {
 
       try {
         const res = await $api.get<ApiKeysResponse>(endpoints.apiKey(), {
-          project_uuid: dataStore.currentProject?.project_uuid || '',
+          project_uuid: dataStore.projectUuid,
         });
 
         this.apiKeys = res.data.items;

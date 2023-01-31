@@ -85,6 +85,7 @@ const Endpoints = {
   webpages: (id?: number) => {
     return id ? `/storage/hosting/web-pages/${id}` : '/storage/hosting/web-pages';
   },
+  webpageQuota: `/storage/hosting/web-pages/quota-reached`,
   webpageDeploy: (id?: number) => {
     return `/storage/hosting/web-pages/${id}/deploy`;
   },

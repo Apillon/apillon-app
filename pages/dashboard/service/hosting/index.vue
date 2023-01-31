@@ -8,24 +8,15 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <Btn
-              v-if="dataStore.hasWebpages"
-              type="primary"
-              size="small"
-              @click="showModalNewWebpage = true"
-            >
-              {{ $t('hosting.webpage.new') }}
-            </Btn>
+            <button class="align-sub" @click="showModalW3Warn = true">
+              <span class="icon-info text-xl"></span>
+            </button>
           </n-space>
         </template>
       </Heading>
     </template>
     <slot>
-      <TableHosting
-        v-if="dataStore.hasWebpages"
-        :webpages="dataStore.webpage.items"
-        @refresh="fetchWebpages()"
-      />
+      <TableHosting v-if="dataStore.hasWebpages" :webpages="dataStore.webpage.items" />
       <template v-else>
         <div
           class="flex flex-col items-center justify-center px-6 py-4"
@@ -39,12 +30,16 @@
             <p class="text-body">{{ $t('hosting.web3HostingEnable') }}</p>
           </div>
           <div>
-            <Btn type="primary" @click="showModalNewWebpage = true">
+            <Btn type="primary" @click="createNewWebpage">
               {{ $t('hosting.webpage.addFirst') }}
             </Btn>
           </div>
         </div>
       </template>
+
+      <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+        {{ $t('w3Warn.hosting.new') }}
+      </W3Warn>
 
       <!-- Modal - Create Webpage -->
       <modal v-model:show="showModalNewWebpage" :title="$t('hosting.webpage.new')">
@@ -55,12 +50,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const $i18n = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
+const showModalW3Warn = ref<boolean>(false);
 const showModalNewWebpage = ref<boolean | null>(false);
 
 useHead({
@@ -70,7 +63,7 @@ useHead({
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await getWebpages();
+      await dataStore.getWebpages();
       await getWebpageQuota();
 
       pageLoading.value = false;
@@ -78,49 +71,40 @@ onMounted(() => {
   }, 100);
 });
 
-async function getWebpages() {
-  if (!dataStore.hasWebpages || isCacheExpired(LsCacheKeys.WEBPAGES)) {
-    await fetchWebpages();
+/** GET Webpage quota, if current value is null  */
+async function getWebpageQuota() {
+  if (dataStore.webpage.quotaReached === undefined) {
+    await dataStore.fetchWebpageQuota();
   }
 }
 
 /**
- * API cals
+ * On createNewWebpage click
+ * If W3Warn has already been shown, show modal create new webpage, otherwise show warn first
  * */
-/** GET Webpages */
-async function fetchWebpages() {
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
-  dataStore.webpage.loading = true;
-
-  try {
-    const params: Record<string, string | number> = {
-      project_uuid: dataStore.currentProject?.project_uuid || '',
-    };
-
-    const req = $api.get<WebpagesResponse>(endpoints.webpages(), params);
-    dataStore.promises.webpages = req;
-    const res = await req;
-
-    dataStore.webpage.items = res.data.items;
-    dataStore.webpage.search = '';
-
-    /** Save timestamp to SS */
-    sessionStorage.setItem(LsCacheKeys.WEBPAGES, Date.now().toString());
-  } catch (error: any) {
-    dataStore.webpage.items = [] as Array<WebpageInterface>;
-
-    /** Show error message  */
-    message.error(userFriendlyMsg(error));
-  }
-  dataStore.webpage.loading = false;
-}
-
-/** GET Bucket quota, if current value is null  */
-async function getWebpageQuota() {
-  if (dataStore.webpage.quotaReached === undefined) {
-    await dataStore.fetchBucketQuota(BucketType.HOSTING);
+function createNewWebpage() {
+  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW)) {
+    showModalNewWebpage.value = true;
+  } else {
+    showModalW3Warn.value = true;
+    showModalNewWebpage.value = null;
   }
 }
+
+/** When user close W3Warn, allow him to create new webpage */
+function onModalW3WarnHide(value: boolean) {
+  if (!value && showModalNewWebpage.value !== false) {
+    showModalNewWebpage.value = true;
+  }
+}
+
+/** Watch showModalNewWebpage, onShow update timestamp of shown modal in session storage */
+watch(
+  () => showModalW3Warn.value,
+  shown => {
+    if (shown) {
+      sessionStorage.setItem(LsW3WarnKeys.HOSTING_NEW, Date.now().toString());
+    }
+  }
+);
 </script>

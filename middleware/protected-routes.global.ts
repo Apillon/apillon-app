@@ -1,4 +1,3 @@
-import { removeLastSlash } from '~/lib/utils';
 import { useAuthStore } from '~/stores/auth';
 interface ProtectedRouteInterface {
   path?: string;

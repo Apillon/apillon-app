@@ -58,7 +58,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
           key: 'dashboard-service-hosting',
           label: $i18n.t('nav.hosting'),
           to: 'dashboard-service-hosting',
-          iconName: 'icon-web',
+          iconName: 'icon-hosting',
           soon: !isFeatureEnabled(Feature.HOSTING),
           disabled: isMenuItemDisabled(Feature.HOSTING),
         },
