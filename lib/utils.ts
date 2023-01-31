@@ -208,9 +208,15 @@ function takeFirstDigitsFromNumber(num: number, numOfDigits: number = 3): number
 }
 
 /** Feature flags - check if feature is enabled */
-export function isFeatureEnabled(feature: Feature): boolean {
+export function isFeatureEnabled(feature: Feature | string, userRoles: number[]): boolean {
   const config = useRuntimeConfig();
-  return config.public.features[feature] || false;
+  let enabledFeatures = config.public.publishedFeatures;
+
+  if (userRoles?.length && userRoles.includes(DefaultUserRole.BETA_USER)) {
+    enabledFeatures = [...enabledFeatures, ...config.public.betaFeatures];
+  }
+
+  return enabledFeatures.includes(feature) || false;
 }
 
 /** Check if any of elements contains class ${ON_COLUMN_CLICK_OPEN_CLASS}, which means this column is clickable */
