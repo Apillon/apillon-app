@@ -346,7 +346,7 @@ function rowProps(row: BucketItemInterface) {
     onClick: (e: Event) => {
       currentRow.value = row;
 
-      if (canOpenColumnCell(e.composedPath()) && props.actions) {
+      if (canOpenColumnCell(e.composedPath())) {
         onItemOpen(row);
       }
     },
@@ -357,14 +357,21 @@ function rowProps(row: BucketItemInterface) {
 function onItemOpen(row: BucketItemInterface) {
   currentRow.value = row;
   switch (row.type) {
-    case 'file':
-      drawerFileDetailsVisible.value = true;
+    case BucketItemType.FILE:
+      onFileOpen();
       break;
-    case 'directory':
+    case BucketItemType.DIRECTORY:
       onFolderOpen(row);
       break;
     default:
       console.warn("Unknown item type: it should be of type 'file' or 'directory'!");
+  }
+}
+
+/** Show file details if actions are enabled */
+function onFileOpen() {
+  if (props.actions) {
+    drawerFileDetailsVisible.value = true;
   }
 }
 
