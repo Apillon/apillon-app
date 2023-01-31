@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex flex-col justify-center items-center">
-    <div class="text-center">
+    <div class="w-full text-center">
       <div class="mb-7 text-center text-blue">
         <span class="icon-new text-[34px]"></span>
       </div>
@@ -44,7 +44,7 @@ onMounted(() => {
 });
 
 /** If user has written his email on signup, then allow him to send email again */
-const hasEmail = computed(() => {
-  return authStore.email && authStore.email.length > 0;
+const hasEmail = computed<boolean>(() => {
+  return !!authStore.email && authStore.email.length > 0;
 });
 </script>

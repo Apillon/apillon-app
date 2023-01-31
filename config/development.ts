@@ -10,7 +10,6 @@ const config: ConfigInterface = {
   publishedFeatures: [
     'APILLON_REGISTER',
     'AUTHENTICATION',
-    'BILLING',
     'CONFIGURATION',
     'HOSTING',
     'INSTRUCTIONS',
@@ -27,7 +26,7 @@ const config: ConfigInterface = {
     'TWO_FACTOR_AUTHENTICATION',
     'WALLET_LOGIN',
   ],
-  betaFeatures: [],
+  betaFeatures: ['BILLING'],
 };
 
 export default config;

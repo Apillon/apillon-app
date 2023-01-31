@@ -196,6 +196,14 @@ export const useDataStore = defineStore('data', {
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
     },
 
+    resetCurrentProject() {
+      /** Reset store data */
+      this.resetData();
+
+      this.currentProjectId = 0;
+      localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
+    },
+
     setBucketId(id: number) {
       if (this.bucket.selected !== id) {
         this.file.items = {} as Record<string, FileDetailsInterface>;

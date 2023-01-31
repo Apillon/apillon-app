@@ -8,7 +8,7 @@ const config: ConfigInterface = {
   captchaKey: 'f5f700a0-51b2-49f3-9ba5-46c7fe146af0',
   githubId: '95223986c9689e1c7657',
   publishedFeatures: ['PROJECT', 'HOSTING', 'REFERRAL', 'SERVICES', 'STORAGE'],
-  betaFeatures: [],
+  betaFeatures: ['PROJECT_SETTINGS'],
 };
 
 export default config;
