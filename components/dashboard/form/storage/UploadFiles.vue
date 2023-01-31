@@ -36,7 +36,7 @@
       <n-space justify="space-between" align="center">
         <IconSuccessful />
         <div>
-          <strong>{{ $t('storage.file.uploadSuccessful') }}</strong>
+          <strong>{{ $t('form.success.filesUploaded') }}</strong>
         </div>
       </n-space>
       <n-space align="center">

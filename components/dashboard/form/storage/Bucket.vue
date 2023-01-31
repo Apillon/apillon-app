@@ -16,7 +16,7 @@
       :disabled="isFormDisabled"
       @submit.prevent="handleSubmit"
     >
-      <!--  Service name -->
+      <!--  Bucket name -->
       <n-form-item
         path="bucketName"
         :label="$t('form.label.bucketName')"
@@ -49,7 +49,7 @@
       <n-form-item path="bucketSizes" :label="$t('form.label.bucketSize')">
         <n-radio-group v-model:value="formData.bucketSize" name="bucketSize" class="w-full">
           <n-grid :cols="2" :x-gap="32" :y-gap="32">
-            <n-gi v-for="(size, key) in bucketSizes">
+            <n-gi v-for="(size, key) in bucketSizes" :key="key">
               <!-- If option is disabled, show tooltip on hover -->
               <n-tooltip v-if="size?.disabled" trigger="hover" :style="{ maxWidth: '220px' }">
                 <template #trigger>
@@ -68,7 +68,7 @@
         </n-radio-group>
       </n-form-item>
 
-      <!--  Service submit -->
+      <!--  Form submit -->
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('form.createBucketAndContinue')" />
         <Btn
@@ -166,15 +166,14 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createBucket() {
-  if (!dataStore.currentProjectId) {
-    alert('Please select your project');
-    return;
+  if (!dataStore.hasProjects) {
+    await dataStore.fetchProjects();
   }
 
   loading.value = true;
 
   const bodyData = {
-    project_uuid: dataStore.currentProject?.project_uuid,
+    project_uuid: dataStore.projectUuid,
     bucketType: BucketType.STORAGE,
     name: formData.value.bucketName,
     description: formData.value.bucketDescription,
@@ -215,16 +214,20 @@ async function updateBucket() {
     message.success($i18n.t('form.success.updated.bucket'));
 
     /** On bucket updated refresh bucket data */
-    dataStore.bucket.items.map((item: BucketInterface) => {
+    dataStore.bucket.items.forEach((item: BucketInterface) => {
       if (item.id === props.bucketId) {
         item.name = res.data.name;
         item.description = res.data.description;
       }
-
-      /** Emit events */
-      emit('submitSuccess');
-      emit('updateSuccess');
     });
+    if (dataStore.bucket.active.id === props.bucketId) {
+      dataStore.bucket.active.name = res.data.name;
+      dataStore.bucket.active.description = res.data.description;
+    }
+
+    /** Emit events */
+    emit('submitSuccess');
+    emit('updateSuccess');
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

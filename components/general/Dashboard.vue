@@ -25,8 +25,8 @@
 
             <!-- Global component: File upload list -->
             <FormStorageUploadFiles
-              v-if="dataStore.bucket.uploadActive && dataStore.currentBucket.bucket_uuid"
-              :bucket-uuid="dataStore.currentBucket.bucket_uuid"
+              v-if="dataStore.bucket.uploadActive && dataStore.bucketUuid"
+              :bucket-uuid="dataStore.bucketUuid"
             />
           </n-scrollbar>
         </n-layout-content>
@@ -87,6 +87,7 @@ const $slots = useSlots();
 const dataStore = useDataStore();
 const { isLg } = useScreen();
 const { name } = useRoute();
+const authStore = useAuthStore();
 
 /** Heading height */
 const headingRef = ref<HTMLElement>();
@@ -113,7 +114,7 @@ async function getInstructions(key: string) {
 
 const instructionsAvailable = computed(() => {
   return (
-    dataStore.hasInstructions(key.value) && isFeatureEnabled(Feature.INSTRUCTIONS) && isLg.value
+    dataStore.hasInstructions(key.value) && isFeatureEnabled(Feature.INSTRUCTIONS, authStore.getUserRoles()) && isLg.value
   );
 });
 

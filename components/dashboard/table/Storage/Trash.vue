@@ -95,7 +95,6 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
     {
       title: $i18n.t('storage.downloadLink'),
       key: 'link',
-      sorter: 'default',
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [
@@ -215,7 +214,7 @@ async function fetchFiles() {
   loading.value = true;
 
   try {
-    const bucketUuid = dataStore.currentBucket.bucket_uuid;
+    const bucketUuid = dataStore.bucketUuid;
 
     const res = await $api.get<FolderResponse>(endpoints.storageFilesTrashed(bucketUuid));
 

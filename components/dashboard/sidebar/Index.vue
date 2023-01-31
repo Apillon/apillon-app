@@ -7,8 +7,8 @@
   ></div>
 
   <!-- Sidebar -->
-  <transition name="slide-left" appear>
-    <div class="w-full min-h-full transition-transform duration-300" :class="sidebarClasses">
+  <transition name="slide-left" :appear="isLg || showOnMobile">
+    <div class="min-h-full bg-bg transition-transform duration-300" :class="sidebarClasses">
       <n-scrollbar style="max-height: 100vh" class="scrollbar--menu">
         <!-- Close - only on mobile -->
         <button v-if="!isLg" class="absolute top-4 right-4" @click="emit('toggleSidebar', false)">
@@ -22,7 +22,7 @@
           </div>
 
           <!-- PROJECTS & NEW PROJECT -->
-          <div v-if="isFeatureEnabled(Feature.PROJECT)" class="px-8">
+          <div v-if="isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())" class="px-8">
             <n-space :size="20" vertical>
               <!-- Projects dropdown -->
               <div class="min-h-[48px]">
@@ -60,11 +60,13 @@
 <script lang="ts" setup>
 import { useDataStore } from '~~/stores/data';
 
+const authStore = useAuthStore();
+
 const props = defineProps({
   showOnMobile: { type: Boolean, default: false },
 });
 
-const { isLg } = useScreen();
+const { isLg, isSm } = useScreen();
 const dataStore = useDataStore();
 const showModalNewProject = ref(false);
 const emit = defineEmits(['toggleSidebar']);
@@ -76,7 +78,7 @@ const version = ref(config.public.VERSION);
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
-      if (!dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT_ON_STARTUP)) {
+      if (!dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles())) {
         showModalNewProject.value = true;
       }
     });
@@ -86,7 +88,9 @@ onMounted(() => {
 /** Classes */
 const sidebarClasses = computed(() => {
   return [
+    isLg.value || !isSm.value ? 'w-full' : 'w-80',
     {
+      'fixed top-0 left-0': !isLg.value,
       'z-10 translate-x-0': props.showOnMobile && !isLg.value,
       'z-10 -translate-x-full': !props.showOnMobile && !isLg.value,
     },

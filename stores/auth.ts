@@ -71,6 +71,10 @@ export const useAuthStore = defineStore('auth', {
       $api.setToken(token);
     },
 
+    getUserRoles() {
+      return this.user?.userRoles || [];
+    },
+
     async getUserData() {
       try {
         const res = await $api.get<UserResponse>(endpoints.me);

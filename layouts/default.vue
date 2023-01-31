@@ -7,16 +7,18 @@
       :duration="3000"
       closable
     >
-      <n-layout has-sider class="h-full">
+      <n-layout class="h-full" :has-sider="isLg" sider-placement="left">
         <n-layout-sider
+          v-if="isLg"
           bordered
           :show-trigger="false"
           collapse-mode="width"
+          :collapsed-width="60"
           :width="320"
           :native-scrollbar="false"
           style="max-height: 100vh"
         >
-          <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
+          <Sidebar />
         </n-layout-sider>
         <n-layout>
           <Header @toggleSidebar="toggleSidebar" />
@@ -28,6 +30,9 @@
           </n-scrollbar>
         </n-layout>
       </n-layout>
+
+      <!-- Sidebar on mobile -->
+      <Sidebar v-if="!isLg" :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
     </n-message-provider>
   </div>
 </template>

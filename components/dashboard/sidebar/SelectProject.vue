@@ -1,6 +1,6 @@
 <template>
   <select-options
-    v-if="dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT)"
+    v-if="dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
     :key="componentSelectKey"
     v-model:value="dataStore.currentProjectId"
     :options="dataStore.project.items"
@@ -14,6 +14,7 @@ const router = useRouter();
 const dataStore = useDataStore();
 const componentSelectKey = ref(0);
 const loading = ref(false);
+const authStore = useAuthStore();
 
 onBeforeMount(() => {
   if (!dataStore.hasProjects) {

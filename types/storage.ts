@@ -12,8 +12,8 @@ export enum BucketType {
  * Bucket item
  */
 export enum BucketItemType {
-  FILE = 'file',
-  DIRECTORY = 'directory',
+  DIRECTORY = 1,
+  FILE = 2,
 }
 
 /**
@@ -50,6 +50,12 @@ export enum BucketWebhookAuthMethod {
   NONE = 'none',
   BASIC = 'basic',
   TOKEN = 'bearer-token',
+}
+
+/** Hosting deploy env */
+export enum DeploymentEnvironment {
+  STAGING = 1,
+  PRODUCTION = 2,
 }
 
 declare global {
@@ -93,7 +99,7 @@ declare global {
     name: string;
     link: string;
     size: number | null;
-    type: string;
+    type: number;
     createTime: string;
     updateTime: string;
     file_uuid?: string;
@@ -198,4 +204,52 @@ declare global {
     param2?: string;
   }
   interface WebhookResponse extends GeneralResponse<WebhookInterface> {}
+
+  /**
+   * Webpage
+   */
+  interface FormWebpage {
+    name: string;
+    description: string;
+    domain?: string | null;
+  }
+  interface WebpageBaseInterface {
+    id: number;
+    status: number;
+    project_uuid: string;
+    bucket_id: number;
+    stagingBucket_id: number;
+    productionBucket_id: number;
+    name: string;
+    description: string;
+    domain: string;
+  }
+  interface WebpageInterface {
+    id: number;
+    status: number;
+    project_uuid: string;
+    bucket: BucketInterface;
+    bucket_id: number;
+    stagingBucket: BucketInterface;
+    stagingBucket_id: number;
+    productionBucket: BucketInterface;
+    productionBucket_id: number;
+    name: string;
+    description: string;
+    domain: string;
+  }
+  interface DeploymentInterface {
+    id: number;
+    status: number;
+    bucket_id: number;
+    cid: string | null;
+    deploymentStatus: number;
+    environment: number;
+    webpage_id: number;
+  }
+  interface WebpageResponse extends GeneralResponse<WebpageInterface> {}
+  interface WebpageUpdateResponse extends GeneralResponse<WebpageInterface> {}
+  interface WebpagesResponse extends GeneralItemsResponse<WebpageInterface> {}
+  interface WebpageQuotaResponse extends GeneralResponse<boolean> {}
+  interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
 }

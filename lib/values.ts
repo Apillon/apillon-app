@@ -14,6 +14,7 @@ export const LsW3WarnKeys = {
   BUCKET_DELETE: 'al_w3warn_bucket_delete',
   BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
   BUCKET_ITEM_DELETE: 'al_w3warn_bucket_item_delete',
+  HOSTING_NEW: 'al_w3warn_hosting_new',
 };
 
 export const LsCacheKeys = {
@@ -23,6 +24,8 @@ export const LsCacheKeys = {
   BUCKET_DESTROYED: 'al_cache_bucket_destroyed',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
+  WEBPAGE: 'al_cache_webpage',
+  WEBPAGES: 'al_cache_webpages',
 };
 
 /** User roles */
@@ -33,6 +36,9 @@ export const UserRoleIds = [
   DefaultUserRole.PROJECT_OWNER,
   DefaultUserRole.PROJECT_ADMIN,
   DefaultUserRole.PROJECT_USER,
+  DefaultUserRole.INTERNAL_TEST_USER,
+  DefaultUserRole.EXTERNAL_TEST_USER,
+  DefaultUserRole.BETA_USER,
   DefaultUserRole.USER,
 ];
 
@@ -156,7 +162,6 @@ export const themeOverrides: GlobalThemeOverrides = {
     paddingTiny: '1px',
     textColorInfo: colors.bg.DEFAULT,
     textColorFocus: colors.white,
-    textColorFocusPrimary: colors.white,
     textColorError: colors.pink,
     textColorFocusError: colors.pink,
     textColorHoverError: colors.pink,
