@@ -110,7 +110,7 @@ async function uploadFile(file: FileListItemType) {
 
     /** Upload file to S3 */
     const xhr = new XMLHttpRequest();
-    xhr.open('PUT', res.data.signedUrlForUpload, true);
+    xhr.open('PUT', res.data.url, true);
     xhr.onload = () => {
       file.onFinish();
       updateFileStatus(file.id, FileUploadStatusValue.FINISHED);

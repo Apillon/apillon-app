@@ -125,7 +125,7 @@ declare global {
   interface FileUploadRequestInterface {
     fileUploadRequestId: number;
     file_uuid: string;
-    signedUrlForUpload: string;
+    url: string;
   }
   interface FileInterface {
     CID: string;
