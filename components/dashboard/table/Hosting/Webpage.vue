@@ -73,7 +73,7 @@ import { NButton } from 'naive-ui';
 
 const props = defineProps({
   webpageItems: { type: Array<BucketItemInterface>, default: [] },
-  env: { type: Number, default: DeploymentEnvironment.STAGING },
+  env: { type: Number, default: DeploymentEnvironment.PRODUCTION },
 });
 
 const $i18n = useI18n();

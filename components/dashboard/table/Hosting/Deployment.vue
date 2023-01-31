@@ -55,7 +55,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
     },
     {
       key: 'size',
-      title: $i18n.t('storage.fileSize'),
+      title: $i18n.t('hosting.size'),
       render(row: DeploymentInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
@@ -64,7 +64,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
       },
     },
     {
-      title: $i18n.t('dashboard.updateTime'),
+      title: $i18n.t('general.updateTime'),
       key: 'updateTime',
       render(row: DeploymentInterface) {
         return h('span', {}, { default: () => datetimeToDate(row.updateTime || '') });
