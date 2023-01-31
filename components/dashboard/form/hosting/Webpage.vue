@@ -95,10 +95,12 @@ const formRef = ref<NFormInst | null>(null);
 const webpage = ref<WebpageInterface | null>(null);
 
 onMounted(async () => {
-  webpage.value = await dataStore.getWebpage(props.webpageId);
-  formData.value.name = webpage.value.name;
-  formData.value.description = webpage.value.description;
-  formData.value.domain = webpage.value.domain;
+  if (props.webpageId) {
+    webpage.value = await dataStore.getWebpage(props.webpageId);
+    formData.value.name = webpage.value.name;
+    formData.value.description = webpage.value.description;
+    formData.value.domain = webpage.value.domain;
+  }
 });
 
 const formData = ref<FormWebpage>({
@@ -132,7 +134,7 @@ const rules: NFormRules = {
 };
 
 const isQuotaReached = computed<boolean>(() => {
-  return !webpage && dataStore.webpage.quotaReached === true;
+  return props.webpageId === 0 && dataStore.webpage.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
@@ -151,7 +153,7 @@ function handleSubmit(e: Event | MouseEvent) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
-    } else if (webpage) {
+    } else if (props.webpageId > 0) {
       await updateWebpage();
     } else {
       await createWebpage();

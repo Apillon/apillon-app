@@ -1,4 +1,3 @@
-import { stat } from 'fs';
 import { defineStore } from 'pinia';
 import { AnyJson } from '@polkadot/types-codec/types';
 import { ApiPromise, WsProvider } from '@polkadot/api';

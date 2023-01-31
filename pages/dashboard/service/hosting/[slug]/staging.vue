@@ -8,14 +8,18 @@
         <n-space class="pb-8" :size="32" vertical>
           <HostingWebsiteActions />
 
-          <!-- Domain preview 
+          <!-- Domain preview -->
           <div>
             <div class="body-sm mb-2">
               <strong>{{ $t('hosting.domainPreview') }}</strong>
             </div>
-            <div class="bg-bg-dark px-4 py-2"></div>
+            <a :href="previewLink" target="_blank">
+              <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
+                <span>{{ previewLink }}</span>
+                <span class="icon-preview text-xl align-middle"></span>
+              </n-space>
+            </a>
           </div>
-        -->
 
           <TableStorageFiles :actions="false" />
         </n-space>
@@ -75,5 +79,9 @@ onMounted(() => {
       pageLoading.value = false;
     });
   }, 100);
+});
+
+const previewLink = computed<string>(() => {
+  return `https://ipfs.apillon.io/ipfs/${dataStore.bucket.active.CID}`;
 });
 </script>

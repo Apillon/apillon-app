@@ -13,9 +13,9 @@
             <div class="body-sm mb-2">
               <strong>{{ $t('hosting.domainPreview') }}</strong>
             </div>
-            <a :href="dataStore.webpage.active.domain" target="_blank">
+            <a :href="previewLink" target="_blank">
               <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
-                <span>{{ dataStore.webpage.active.domain }}</span>
+                <span>{{ previewLink }}</span>
                 <span class="icon-preview text-xl align-middle"></span>
               </n-space>
             </a>
@@ -78,5 +78,11 @@ onMounted(() => {
       pageLoading.value = false;
     });
   }, 100);
+});
+
+const previewLink = computed<string>(() => {
+  return (
+    dataStore.webpage.active.domain || `https://ipfs.apillon.io/ipfs/${dataStore.bucket.active.CID}`
+  );
 });
 </script>
