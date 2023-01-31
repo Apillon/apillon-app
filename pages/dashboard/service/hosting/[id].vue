@@ -18,7 +18,7 @@
 
       <!-- DataTable: files and directories -->
       <transition name="fade" appear>
-        <TableStorageFiles :actions="false" />
+        <TableStorageFiles />
       </transition>
     </slot>
   </Dashboard>
