@@ -7,7 +7,7 @@
           <BtnHamburger class="flex lg:hidden mr-4" @click="emit('toggleSidebar')" />
 
           <!-- Search docs -->
-          <div v-if="isFeatureEnabled(Feature.SEARCH)" class="w-[20vw] max-w-xs">
+          <div v-if="isFeatureEnabled(Feature.SEARCH, authStore.getUserRoles())" class="w-[20vw] max-w-xs">
             <n-input
               type="text"
               name="search"
@@ -30,4 +30,5 @@
 
 <script lang="ts" setup>
 const emit = defineEmits(['toggleSidebar']);
+const authStore = useAuthStore();
 </script>

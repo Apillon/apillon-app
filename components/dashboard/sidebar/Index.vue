@@ -22,7 +22,7 @@
           </div>
 
           <!-- PROJECTS & NEW PROJECT -->
-          <div v-if="isFeatureEnabled(Feature.PROJECT)" class="px-8">
+          <div v-if="isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())" class="px-8">
             <n-space :size="20" vertical>
               <!-- Projects dropdown -->
               <div class="min-h-[48px]">
@@ -60,6 +60,8 @@
 <script lang="ts" setup>
 import { useDataStore } from '~~/stores/data';
 
+const authStore = useAuthStore();
+
 const props = defineProps({
   showOnMobile: { type: Boolean, default: false },
 });
@@ -76,7 +78,7 @@ const version = ref(config.public.VERSION);
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
-      if (!dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT_ON_STARTUP)) {
+      if (!dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles())) {
         showModalNewProject.value = true;
       }
     });

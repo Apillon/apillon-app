@@ -65,7 +65,7 @@
         </div>
 
         <!-- Referral -->
-        <div v-if="isFeatureEnabled(Feature.REFERRAL)" class="max-w-lg p-8 mb-8 bg-bg-light">
+        <div v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" class="max-w-lg p-8 mb-8 bg-bg-light">
           <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
           <p class="text-body mb-7">
             {{ $t('referral.banner.description') }}
@@ -107,7 +107,7 @@ const loading = ref(false);
 const termsAccepted = ref(false);
 
 onMounted(() => {
-  if (isFeatureEnabled(Feature.REFERRAL)) {
+  if (isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())) {
     getReferral();
   }
 });

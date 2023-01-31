@@ -2,10 +2,10 @@
   <div>
     <h2 class="mb-4 text-center sm:text-left">{{ $t('login.title') }}</h2>
     <p class="mb-11">{{ $t('login.description') }}</p>
-    <template v-if="isFeatureEnabled(Feature.WALLET_LOGIN)">
+    <template v-if="isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())">
       <AuthWalletConnect class="w-full mb-2" />
     </template>
-    <template v-if="isFeatureEnabled(Feature.MAGIC_LINK)">
+    <template v-if="isFeatureEnabled(Feature.MAGIC_LINK, authStore.getUserRoles())">
       <Btn type="secondary" class="w-full">
         {{ $t('login.magicLink') }}
       </Btn>
@@ -14,7 +14,7 @@
       <span class="bg-white h-[1px] w-full"></span>
       <strong class="inline-block px-5 mx-[8%] text-grey whitespace-nowrap">
         <template
-          v-if="isFeatureEnabled(Feature.WALLET_LOGIN) || isFeatureEnabled(Feature.MAGIC_LINK)"
+          v-if="isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles()) || isFeatureEnabled(Feature.MAGIC_LINK, authStore.getUserRoles())"
         >
           {{ $t('login.orUseEmail') }}
         </template>

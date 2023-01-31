@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-v-model-argument -->
 <template>
   <div
-    v-if="isFeatureEnabled(Feature.SOCIAL_ICONS)"
+    v-if="isFeatureEnabled(Feature.SOCIAL_ICONS, authStore.getUserRoles())"
     class="flex items-center justify-center text-xl mt-8"
   >
     <div v-for="(social, key) in socials" :key="key" class="mx-2">
@@ -18,6 +18,8 @@
 </template>
 
 <script lang="ts" setup>
+const authStore = useAuthStore();
+
 const socials: Array<SocialInterface> = [
   { name: 'GitHub', link: 'https://www.github.com', iconName: 'icon-github' },
   { name: 'Twitter', link: 'https://www.twitter.com', iconName: 'icon-twitter' },

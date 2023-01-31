@@ -35,6 +35,9 @@ export const UserRoleIds = [
   DefaultUserRole.PROJECT_OWNER,
   DefaultUserRole.PROJECT_ADMIN,
   DefaultUserRole.PROJECT_USER,
+  DefaultUserRole.INTERNAL_TEST_USER,
+  DefaultUserRole.EXTERNAL_TEST_USER,
+  DefaultUserRole.BETA_USER,
   DefaultUserRole.USER,
 ];
 

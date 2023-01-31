@@ -49,6 +49,7 @@ declare global {
     phone: string;
     status: number;
     user_uuid: string;
+    userRoles: number[];
   }
 
   interface UserResponse extends GeneralResponse<UserInterface> {}
@@ -100,6 +101,4 @@ declare global {
     };
     status: number;
   }
-
-  
 }
