@@ -314,7 +314,8 @@
         "hosting": "Hosting has been created",
         "item": "Item has been created",
         "userInvite": "User has been invited.",
-        "webhook": "Webhook has been created"
+        "webhook": "Webhook has been created",
+        "webpage": "Webpage has been created"
       },
       "deleted": {
         "apiKey": "Api key has been deleted",
@@ -325,7 +326,8 @@
         "hosting": "Hosting has been deleted",
         "item": "Item has been deleted",
         "items": "Items has been deleted",
-        "webhook": "Webhook has been deleted"
+        "webhook": "Webhook has been deleted",
+        "webpage": "Webpage has been deleted"
       },
       "updated": {
         "apiKey": "Api key has been updated",
