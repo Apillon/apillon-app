@@ -6,7 +6,7 @@
     <slot>
       <template v-if="dataStore.folder.items.length || dataStore.bucket.active.CID">
         <n-space class="pb-8" :size="32" vertical>
-          <HostingWebsiteActions />
+          <HostingWebsiteActions :env="DeploymentEnvironment.STAGING" />
 
           <!-- Domain preview -->
           <div>
@@ -20,6 +20,9 @@
               </n-space>
             </a>
           </div>
+
+          <!-- Deployments -->
+          <TableHostingDeployment :deployments="dataStore.webpage.deployment.staging" />
 
           <!-- Breadcrumbs -->
           <div>
@@ -61,23 +64,24 @@ useHead({
 
 onMounted(() => {
   /** Webpage ID from route, then load buckets */
-  const websiteId = parseInt(`${params?.slug}`) || 0;
-  dataStore.setWebpageId(websiteId);
+  const webpageId = parseInt(`${params?.slug}`) || 0;
+  dataStore.setWebpageId(webpageId);
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await dataStore.getWebpage(websiteId);
+      const webpage = await dataStore.getWebpage(webpageId);
 
       /** Check of webpage exists */
       if (!webpage?.id) {
         router.push({ name: 'dashboard-service-hosting' });
         return;
       }
+      /** Get deployments for this webpage */
+      dataStore.getDeployments(webpageId, DeploymentEnvironment.STAGING);
 
+      /** Show files from staging bucket */
       dataStore.bucket.active = webpage.stagingBucket;
       dataStore.setBucketId(webpage.stagingBucket_id);
-
-      dataStore.fetchDirectoryContent(webpage.stagingBucket.bucket_uuid);
 
       if (webpage.bucket.uploadedSize === 0) {
         dataStore.bucket.uploadActive = true;

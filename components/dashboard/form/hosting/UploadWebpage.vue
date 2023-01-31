@@ -19,7 +19,7 @@
         <span class="ml-1 text-body">
           {{
             $t('storage.file.filesUploading', {
-              uploading: numOfUploadingOrFinishedFiles,
+              uploading: numOfFinishedFiles,
               files: fileList.length,
             })
           }}
@@ -110,7 +110,7 @@ async function uploadFile(file: FileListItemType) {
 
     /** Upload file to S3 */
     const xhr = new XMLHttpRequest();
-    xhr.open('PUT', res.data.signedUrlForUpload, true);
+    xhr.open('PUT', res.data.url, true);
     xhr.onload = () => {
       file.onFinish();
       updateFileStatus(file.id, FileUploadStatusValue.FINISHED);
@@ -156,6 +156,9 @@ async function uploadSessionEnd(sessionUuid: string) {
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
+  /** Clear file list */
+  fileList.value = [] as Array<FileListItemType>;
+
   /** Refresh diretory content */
   await dataStore.fetchDirectoryContent();
 }
@@ -163,9 +166,6 @@ async function uploadSessionEnd(sessionUuid: string) {
 /** Check if any file is uploading (status UPLOADING) */
 const filesUploading = computed<boolean>(() => {
   return fileList.value.find(file => file.status === FileUploadStatusValue.UPLOADING) !== undefined;
-});
-const numOfUploadingOrFinishedFiles = computed<number>(() => {
-  return fileList.value.filter(file => file.status !== FileUploadStatusValue.PENDING).length || 0;
 });
 
 /** Check if all files are finished (status FINISH or ERROR) */
@@ -176,6 +176,15 @@ const allFilesFinished = computed<boolean>(() => {
         file.status !== FileUploadStatusValue.FINISHED &&
         file.status !== FileUploadStatusValue.ERROR
     ) === undefined
+  );
+});
+const numOfFinishedFiles = computed<number>(() => {
+  return (
+    fileList.value.filter(
+      file =>
+        file.status === FileUploadStatusValue.FINISHED ||
+        file.status === FileUploadStatusValue.ERROR
+    ).length || 0
   );
 });
 
@@ -241,13 +250,11 @@ function updateFileStatus(fileId: string, status: FileUploadStatus) {
 
 /** Remove one file from file list */
 function removeFileFromFileList(fileId: string) {
-  dataStore.bucket.uploadFileList.forEach(item => {
+  fileList.value.forEach(item => {
     if (item.id === fileId) {
       item.onError();
     }
   });
-  dataStore.bucket.uploadFileList = dataStore.bucket.uploadFileList.filter(
-    item => item.id !== fileId
-  );
+  fileList.value = fileList.value.filter(item => item.id !== fileId);
 }
 </script>

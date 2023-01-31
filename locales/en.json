@@ -13,6 +13,7 @@
     "edit": "Edit",
     "error": "Error",
     "goHome": "Go home",
+    "environment": "Environment",
     "learn": "Learn",
     "learnMore": "Learn more",
     "live": "Live",
@@ -26,6 +27,7 @@
     "open": "Open",
     "paused": "paused",
     "pending": "pending",
+    "production": "Production",
     "refresh": "Refresh",
     "scope": "Scope",
     "search": "Search",
@@ -34,10 +36,12 @@
     "serviceType": "Service type",
     "signup": "Sign up",
     "skip": "Skip",
+    "staging": "Staging",
     "status": "Status",
     "tryAgain": "Try again",
     "terms": "",
     "test": "Test",
+    "updateTime": "Update time",
     "upload": "Upload",
     "uptime": "Uptime",
     "uuid": "UUID",
@@ -365,6 +369,14 @@
     "update": "Update"
   },
   "hosting": {
+    "deployment": {
+      "status": {
+        "0": "INITIATED",
+        "1": "IN PROGRESS",
+        "10": "SUCCESSFUL",
+        "100": "FAILED"
+      }
+    },
     "menu": {
       "preview": "1. Upload",
       "staging": "2. Preview",
@@ -383,11 +395,13 @@
       "quotaReached": "Quota has been reached.",
       "update": "Update webpage"
     },
-    "deployStage": "Deploy to staging",
     "deployProd": "Deploy to production",
+    "deployStage": "Deploy to staging",
+    "deploymentStatus": "Deployment status",
     "domainPreview": "Domain preview",
     "management": "Hosting management",
     "productionEmpty": "Deploy files from staging to production",
+    "size": "Size",
     "stagingEmpty": "Upload files and deploy them to staging",
     "web3Hosting": "Web3 hosting",
     "web3HostingEnable": "Enable Web3 hosting to host your website."

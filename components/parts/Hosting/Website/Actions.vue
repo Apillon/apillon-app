@@ -17,11 +17,7 @@
 
     <n-space size="large">
       <!-- Refresh webpages -->
-      <n-button
-        size="small"
-        :loading="dataStore.folder.loading"
-        @click="dataStore.fetchDirectoryContent()"
-      >
+      <n-button size="small" :loading="dataStore.folder.loading" @click="refresh">
         <span class="icon-refresh text-lg mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
@@ -42,13 +38,19 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
   webpageItems: { type: Array<BucketItemInterface>, default: [] },
-  env: { type: Number, default: DeploymentEnvironment.STAGING },
+  env: { type: Number, default: DeploymentEnvironment.PRODUCTION },
 });
 
 const dataStore = useDataStore();
 const deploying = ref<boolean>(false);
+
+/** Refresh deyployment and hosting files */
+function refresh() {
+  dataStore.fetchDirectoryContent();
+  dataStore.fetchDeployments(dataStore.webpage.active.id, props.env);
+}
 
 /** Deploy to prod */
 async function deployToProduction() {

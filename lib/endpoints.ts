@@ -90,6 +90,14 @@ const Endpoints = {
     return `/storage/hosting/web-pages/${id}/deploy`;
   },
 
+  /** Deployment */
+  deployment: (webpageId: number, id: number) => {
+    return `/storage/hosting/web-pages/${webpageId}/deployments/${id}`;
+  },
+  deployments: (webpageId: number) => {
+    return `/storage/hosting/web-pages/${webpageId}/deployments`;
+  },
+
   /** Api Keys */
   apiKey: (key?: number) => {
     return key ? `/api-keys/${key}` : '/api-keys';
