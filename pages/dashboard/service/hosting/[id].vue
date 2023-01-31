@@ -39,18 +39,22 @@ useHead({
 
 onMounted(() => {
   /** Bucket ID from route, then load buckets */
-  dataStore.setWebpageId(parseInt(`${params?.id}`));
+  const webpageId = parseInt(`${params?.id}`);
+  dataStore.setWebpageId(webpageId);
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await dataStore.getWebpage(parseInt(`${params?.id}`));
+      const webpage = await dataStore.getWebpage(webpageId);
 
       /** Check of webpage exists */
       if (!webpage?.id) {
         router.push({ name: 'dashboard-service-hosting' });
         return;
       }
+      /** Get deployments for this webpage */
+      dataStore.getDeployments(webpageId);
 
+      /** Show files from main bucket */
       dataStore.bucket.active = webpage.bucket;
       dataStore.setBucketId(webpage.bucket.id);
 

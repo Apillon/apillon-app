@@ -3,6 +3,7 @@ import { AnyJson } from '@polkadot/types-codec/types';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { typesBundleForPolkadot } from '@crustio/type-definitions';
 import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
+import { DeploymentEnvironment } from '~~/types/storage';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
@@ -64,6 +65,12 @@ export const useDataStore = defineStore('data', {
       computing: [] as Array<ServiceInterface>,
     } as Record<ServiceTypeName, Array<ServiceInterface>>,
     webpage: {
+      deployment: {
+        active: {} as DeploymentInterface,
+        loading: false,
+        production: [] as Array<DeploymentInterface>,
+        staging: [] as Array<DeploymentInterface>,
+      },
       active: {} as WebpageInterface,
       items: [] as Array<WebpageInterface>,
       loading: false,
@@ -156,6 +163,18 @@ export const useDataStore = defineStore('data', {
         state.folder.selected > 0
       );
     },
+    hasProductionDeployments(state): boolean {
+      return (
+        Array.isArray(state.webpage.deployment.production) &&
+        state.webpage.deployment.production.length > 0
+      );
+    },
+    hasStagingDeployments(state): boolean {
+      return (
+        Array.isArray(state.webpage.deployment.staging) &&
+        state.webpage.deployment.staging.length > 0
+      );
+    },
     getFolderPath(state) {
       return state.folder.path.map(p => p.name).join('/') || '';
     },
@@ -185,6 +204,17 @@ export const useDataStore = defineStore('data', {
       this.services.authentication = [] as Array<ServiceInterface>;
       this.services.storage = [] as Array<ServiceInterface>;
       this.services.computing = [] as Array<ServiceInterface>;
+
+      /** Webpage */
+      this.webpage.active = {} as WebpageInterface;
+      this.webpage.items = [] as Array<WebpageInterface>;
+      this.webpage.search = '';
+      this.webpage.selected = 0;
+      this.webpage.quotaReached = undefined;
+
+      /** Deployment */
+      this.webpage.deployment.active = {} as DeploymentInterface;
+      this.webpage.deployment.items = [] as Array<DeploymentInterface>;
     },
 
     setCurrentProject(id: number) {
@@ -337,7 +367,7 @@ export const useDataStore = defineStore('data', {
 
     /** Webpages */
     async getWebpages() {
-      if (!this.hasBuckets || isCacheExpired(LsCacheKeys.BUCKETS)) {
+      if (!this.hasWebpages || isCacheExpired(LsCacheKeys.BUCKETS)) {
         await this.fetchWebpages();
       }
     },
@@ -348,6 +378,28 @@ export const useDataStore = defineStore('data', {
         return this.webpage.active;
       }
       return await this.fetchWebpage(webpageId);
+    },
+
+    /** Deployments */
+    async getDeployments(
+      webpageId: number,
+      env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION
+    ) {
+      if (env === DeploymentEnvironment.PRODUCTION) {
+        if (!this.hasProductionDeployments || isCacheExpired(LsCacheKeys.DEPLOYMENTS_PRODUCTION)) {
+          await this.fetchDeployments(webpageId, env);
+        }
+      } else if (!this.hasStagingDeployments || isCacheExpired(LsCacheKeys.DEPLOYMENTS_STAGING)) {
+        await this.fetchDeployments(webpageId, env);
+      }
+    },
+
+    /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
+    async getDeployment(webpageId: number, id: number): Promise<DeploymentInterface> {
+      if (this.webpage.deployment.active?.id === id && !isCacheExpired(LsCacheKeys.DEPLOYMENT)) {
+        return this.webpage.deployment.active;
+      }
+      return await this.fetchDeployment(webpageId, id);
     },
 
     /**
@@ -700,6 +752,60 @@ export const useDataStore = defineStore('data', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+    },
+
+    async fetchDeployments(
+      webpageId: number,
+      env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION
+    ) {
+      this.webpage.deployment.loading = true;
+      try {
+        const res = await $api.get<DeploymentsResponse>(endpoints.deployments(webpageId), {
+          environment: env,
+        });
+
+        if (env === DeploymentEnvironment.PRODUCTION) {
+          this.webpage.deployment.production = res.data.items;
+        } else {
+          this.webpage.deployment.staging = res.data.items;
+        }
+
+        /** Save timestamp to SS */
+        const cacheKey =
+          env === DeploymentEnvironment.PRODUCTION
+            ? LsCacheKeys.DEPLOYMENTS_PRODUCTION
+            : LsCacheKeys.DEPLOYMENTS_STAGING;
+        sessionStorage.setItem(cacheKey, Date.now().toString());
+      } catch (error: any) {
+        if (env === DeploymentEnvironment.PRODUCTION) {
+          this.webpage.deployment.production = [] as Array<DeploymentInterface>;
+        } else {
+          this.webpage.deployment.staging = [] as Array<DeploymentInterface>;
+        }
+
+        /** Show error message  */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      this.webpage.deployment.loading = false;
+    },
+
+    async fetchDeployment(webpageId: number, id: number): Promise<DeploymentInterface> {
+      try {
+        const res = await $api.get<DeploymentResponse>(endpoints.deployment(webpageId, id));
+
+        this.webpage.deployment.active = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.DEPLOYMENT, Date.now().toString());
+
+        return res.data;
+      } catch (error: any) {
+        this.webpage.deployment.active = {} as DeploymentInterface;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return {} as DeploymentInterface;
     },
 
     async deployWebpage(
