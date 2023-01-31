@@ -91,6 +91,7 @@ async function login() {
   try {
     // Logout first - delete LS and store if there is any data
     authStore.logout();
+    dataStore.resetCurrentProject();
 
     const data = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
