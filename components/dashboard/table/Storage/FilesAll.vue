@@ -40,25 +40,6 @@
       @update:page="handlePageChange"
     />
   </n-space>
-
-  <!-- Drawer - File details -->
-  <n-drawer v-model:show="drawerFileDetailsVisible" :width="495">
-    <n-drawer-content v-if="drawerFileDetailsVisible" :title="currentRow.fileName" closable>
-      <StorageFileDetails :file="currentRow" />
-    </n-drawer-content>
-  </n-drawer>
-
-  <!-- Modal - Delete file -->
-  <ModalDelete v-model:show="showModalDelete" :title="$t('storage.file.delete')">
-    <template #content>
-      <p class="text-body">
-        {{ $t(`storage.file.deleteConfirm`, { num: 1 }) }}
-      </p>
-    </template>
-    <slot>
-      <FormDeleteItems :items="[currentRow]" @submit-success="onDeleted" />
-    </slot>
-  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -144,14 +125,7 @@ const createColumns = (): NDataTableColumns<FileUploadInterface> => {
       render(row) {
         return [
           h(IconFolderFile, { isFile: true }, ''),
-          h(
-            'span',
-            {
-              class: 'ml-2 text-blue cursor-pointer',
-              onClick: () => onItemOpen(row),
-            },
-            row.fileName
-          ),
+          h('span', { class: 'ml-2 ' }, row.fileName),
         ];
       },
     },

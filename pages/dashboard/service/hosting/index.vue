@@ -74,7 +74,7 @@ onMounted(() => {
 /** GET Webpage quota, if current value is null  */
 async function getWebpageQuota() {
   if (dataStore.webpage.quotaReached === undefined) {
-    await dataStore.fetchBucketQuota(BucketType.HOSTING);
+    await dataStore.fetchWebpageQuota();
   }
 }
 

@@ -95,7 +95,6 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
     {
       title: $i18n.t('storage.downloadLink'),
       key: 'link',
-      sorter: 'default',
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [

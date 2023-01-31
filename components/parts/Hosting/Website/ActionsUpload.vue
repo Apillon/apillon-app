@@ -62,7 +62,7 @@
 
       <!-- Deploy to staging -->
       <n-button size="small" type="primary" :loading="deploying" @click="deployToStaging">
-        <span class="icon-upload text-lg mr-2"></span>
+        <span class="icon-deploy text-lg mr-2"></span>
         {{ $t('hosting.deployStage') }}
       </n-button>
     </n-space>

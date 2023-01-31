@@ -8,13 +8,15 @@
         <n-space class="pb-8" :size="32" vertical>
           <HostingWebsiteActions />
 
-          <!-- Domain preview -->
+          <!-- Domain preview 
           <div>
             <div class="body-sm mb-2">
               <strong>{{ $t('hosting.domainPreview') }}</strong>
             </div>
             <div class="bg-bg-dark px-4 py-2"></div>
           </div>
+        -->
+
           <TableStorageFiles :actions="false" />
         </n-space>
       </template>
@@ -41,7 +43,7 @@ const $i18n = useI18n();
 const router = useRouter();
 const { params } = useRoute();
 const dataStore = useDataStore();
-const pageLoading = ref<boolean>(false);
+const pageLoading = ref<boolean>(true);
 
 useHead({
   title: $i18n.t('nav.hosting'),

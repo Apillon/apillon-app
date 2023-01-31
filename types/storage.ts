@@ -12,8 +12,8 @@ export enum BucketType {
  * Bucket item
  */
 export enum BucketItemType {
-  FILE = 'file',
-  DIRECTORY = 'directory',
+  DIRECTORY = 1,
+  FILE = 2,
 }
 
 /**
@@ -99,7 +99,7 @@ declare global {
     name: string;
     link: string;
     size: number | null;
-    type: string;
+    type: number;
     createTime: string;
     updateTime: string;
     file_uuid?: string;
@@ -250,5 +250,6 @@ declare global {
   interface WebpageResponse extends GeneralResponse<WebpageInterface> {}
   interface WebpageUpdateResponse extends GeneralResponse<WebpageInterface> {}
   interface WebpagesResponse extends GeneralItemsResponse<WebpageInterface> {}
+  interface WebpageQuotaResponse extends GeneralResponse<boolean> {}
   interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
 }

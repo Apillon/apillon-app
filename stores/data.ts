@@ -505,28 +505,20 @@ export const useDataStore = defineStore('data', {
       return {} as BucketInterface;
     },
 
-    async fetchBucketQuota(bucketType: number = BucketType.STORAGE) {
+    async fetchBucketQuota() {
       if (!this.hasProjects) {
         await this.fetchProjects();
       }
       const params = {
         project_uuid: this.projectUuid,
-        bucketType,
+        bucketType: BucketType.STORAGE,
       };
       try {
         const res = await $api.get<BucketQuotaResponse>(endpoints.bucketsQuota, params);
 
-        if (bucketType === BucketType.STORAGE) {
-          this.bucket.quotaReached = res.data;
-        } else {
-          this.webpage.quotaReached = res.data;
-        }
+        this.bucket.quotaReached = res.data;
       } catch (error: any) {
-        if (bucketType === BucketType.STORAGE) {
-          this.bucket.quotaReached = undefined;
-        } else {
-          this.webpage.quotaReached = undefined;
-        }
+        this.bucket.quotaReached = undefined;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
@@ -662,7 +654,6 @@ export const useDataStore = defineStore('data', {
       this.webpage.loading = false;
     },
 
-    /** Webpage */
     async fetchWebpage(id: number): Promise<WebpageInterface> {
       if (!this.hasProjects) {
         await this.fetchProjects();
@@ -685,7 +676,25 @@ export const useDataStore = defineStore('data', {
       return {} as WebpageInterface;
     },
 
-    /** Webpage deploy */
+    async fetchWebpageQuota() {
+      if (!this.hasProjects) {
+        await this.fetchProjects();
+      }
+
+      try {
+        const res = await $api.get<WebpageQuotaResponse>(endpoints.webpageQuota, {
+          project_uuid: this.projectUuid,
+        });
+
+        this.webpage.quotaReached = res.data;
+      } catch (error: any) {
+        this.webpage.quotaReached = undefined;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+
     async deployWebpage(
       webpageId: number,
       env: number = DeploymentEnvironment.STAGING

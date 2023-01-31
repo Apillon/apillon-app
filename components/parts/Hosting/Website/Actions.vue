@@ -34,7 +34,7 @@
         :loading="deploying"
         @click="deploy"
       >
-        <span class="icon-upload text-lg mr-2"></span>
+        <span class="icon-deploy text-lg mr-2"></span>
         {{ $t('hosting.deployProd') }}
       </n-button>
     </n-space>
