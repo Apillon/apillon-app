@@ -40,9 +40,9 @@
     </n-space>
   </n-space>
 
-  <!-- Modal - Edit webpage -->
+  <!-- Modal - New webpage -->
   <modal v-model:show="showModalEditWebpage" :title="$t('hosting.webpage.new')">
-    <FormHostingWebpage @submit-success="showModalEditWebpage = false" />
+    <FormHostingWebpage />
   </modal>
 </template>
 

@@ -169,7 +169,7 @@ const columns = computed(() => {
                 h(IconFolderFile, { isFile: row.type === BucketItemType.FILE }, ''),
                 h(
                   NEllipsis,
-                  { class: 'text-blue align-bottom', 'line-clamp': 2 },
+                  { class: 'text-blue align-bottom min-w-[120px]', 'line-clamp': 2 },
                   { default: () => row.name }
                 ),
               ],

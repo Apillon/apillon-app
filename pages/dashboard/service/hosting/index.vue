@@ -43,7 +43,7 @@
 
       <!-- Modal - Create Webpage -->
       <modal v-model:show="showModalNewWebpage" :title="$t('hosting.webpage.new')">
-        <FormHostingWebpage @submit-success="showModalNewWebpage = false" />
+        <FormHostingWebpage />
       </modal>
     </slot>
   </Dashboard>
