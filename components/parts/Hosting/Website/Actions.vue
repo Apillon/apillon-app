@@ -32,7 +32,7 @@
         size="small"
         type="primary"
         :loading="deploying"
-        @click="deploy"
+        @click="deployToProduction"
       >
         <span class="icon-deploy text-lg mr-2"></span>
         {{ $t('hosting.deployProd') }}
@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
+defineProps({
   webpageItems: { type: Array<BucketItemInterface>, default: [] },
   env: { type: Number, default: DeploymentEnvironment.STAGING },
 });
@@ -50,11 +50,11 @@ const props = defineProps({
 const dataStore = useDataStore();
 const deploying = ref<boolean>(false);
 
-/** Deploy to stg/prod */
-async function deploy() {
+/** Deploy to prod */
+async function deployToProduction() {
   deploying.value = true;
 
-  await dataStore.deployWebpage(dataStore.webpage.active.id, props.env);
+  await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.PRODUCTION);
   deploying.value = false;
 }
 </script>
