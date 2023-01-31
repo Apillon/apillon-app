@@ -85,10 +85,10 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
-const message = useMessage();
 const $i18n = useI18n();
+const router = useRouter();
+const message = useMessage();
 const dataStore = useDataStore();
-const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -137,7 +137,7 @@ const isQuotaReached = computed<boolean>(() => {
   return props.webpageId === 0 && dataStore.webpage.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value || settingsStore.isProjectUser();
+  return isQuotaReached.value;
 });
 
 // Custom validations
@@ -186,6 +186,9 @@ async function createWebpage() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess');
+
+    /** Redirect to new web page */
+    router.push(`/dashboard/service/hosting/${res.data.id}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

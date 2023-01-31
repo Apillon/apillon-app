@@ -307,9 +307,11 @@ async function uploadSessionEnd(sessionUuid: string) {
       endpoints.storageFileUpload(props.bucketUuid, sessionUuid),
       params
     );
+
+    /** Unnecessary toast message
     if (resSessionEnd.data) {
       message.success($i18n.t('form.success.filesUploaded'));
-    }
+    } */
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

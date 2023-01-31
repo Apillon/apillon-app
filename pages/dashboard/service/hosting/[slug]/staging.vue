@@ -4,7 +4,7 @@
       <HostingHeading />
     </template>
     <slot>
-      <template v-if="dataStore.folder.items.length">
+      <template v-if="dataStore.folder.items.length || dataStore.bucket.active.CID">
         <n-space class="pb-8" :size="32" vertical>
           <HostingWebsiteActions />
 
@@ -21,7 +21,13 @@
             </a>
           </div>
 
-          <TableStorageFiles :actions="false" />
+          <!-- Breadcrumbs -->
+          <div>
+            <div class="relative h-8">
+              <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+            </div>
+            <TableStorageFiles :actions="false" />
+          </div>
         </n-space>
       </template>
       <template v-else>
