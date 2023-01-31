@@ -4,7 +4,7 @@
       <HostingHeading />
     </template>
     <slot>
-      <template v-if="dataStore.folder.items.length || true">
+      <template v-if="dataStore.folder.items.length">
         <n-space class="pb-8" :size="32" vertical>
           <HostingWebsiteActions :env="DeploymentEnvironment.PRODUCTION" />
 
