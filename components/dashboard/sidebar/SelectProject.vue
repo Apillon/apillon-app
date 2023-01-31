@@ -11,10 +11,11 @@
 
 <script lang="ts" setup>
 const router = useRouter();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
 const componentSelectKey = ref(0);
 const loading = ref(false);
-const authStore = useAuthStore();
 
 onBeforeMount(() => {
   if (!dataStore.hasProjects) {
@@ -50,6 +51,9 @@ watch(
 
     /** Reset store data */
     dataStore.resetData();
+
+    /** Reset settings store data */
+    settingsStore.resetData();
 
     /** Save current project ID to LS and redirect to Dashboard */
     localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${currentProjectId}`);

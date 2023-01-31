@@ -85,20 +85,22 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
-const message = useMessage();
 const $i18n = useI18n();
+const router = useRouter();
+const message = useMessage();
 const dataStore = useDataStore();
-const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
 const webpage = ref<WebpageInterface | null>(null);
 
 onMounted(async () => {
-  webpage.value = await dataStore.getWebpage(props.webpageId);
-  formData.value.name = webpage.value.name;
-  formData.value.description = webpage.value.description;
-  formData.value.domain = webpage.value.domain;
+  if (props.webpageId) {
+    webpage.value = await dataStore.getWebpage(props.webpageId);
+    formData.value.name = webpage.value.name;
+    formData.value.description = webpage.value.description;
+    formData.value.domain = webpage.value.domain;
+  }
 });
 
 const formData = ref<FormWebpage>({
@@ -132,10 +134,10 @@ const rules: NFormRules = {
 };
 
 const isQuotaReached = computed<boolean>(() => {
-  return !webpage && dataStore.webpage.quotaReached === true;
+  return props.webpageId === 0 && dataStore.webpage.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value || settingsStore.isProjectUser();
+  return isQuotaReached.value;
 });
 
 // Custom validations
@@ -151,7 +153,7 @@ function handleSubmit(e: Event | MouseEvent) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
-    } else if (webpage) {
+    } else if (props.webpageId > 0) {
       await updateWebpage();
     } else {
       await createWebpage();
@@ -184,6 +186,9 @@ async function createWebpage() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess');
+
+    /** Redirect to new web page */
+    router.push(`/dashboard/service/hosting/${res.data.id}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

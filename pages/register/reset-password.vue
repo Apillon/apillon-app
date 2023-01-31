@@ -1,6 +1,6 @@
 <template>
   <div class="container flex flex-col justify-center items-center">
-    <div class="text-center">
+    <div class="w-full text-center">
       <h1 class="mb-6">{{ $t('login.resetPassword') }}</h1>
       <p class="mb-7">{{ $t('login.enterNewPassword') }}</p>
 

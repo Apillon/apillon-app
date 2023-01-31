@@ -4,7 +4,7 @@
       <HostingHeading />
     </template>
     <slot>
-      <template v-if="dataStore.folder.items.length || true">
+      <template v-if="dataStore.folder.items.length || dataStore.bucket.active.CID">
         <n-space class="pb-8" :size="32" vertical>
           <HostingWebsiteActions :env="DeploymentEnvironment.PRODUCTION" />
 
@@ -13,14 +13,21 @@
             <div class="body-sm mb-2">
               <strong>{{ $t('hosting.domainPreview') }}</strong>
             </div>
-            <a :href="dataStore.webpage.active.domain" target="_blank">
+            <a :href="previewLink" target="_blank">
               <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
-                <span>{{ dataStore.webpage.active.domain }}</span>
+                <span>{{ previewLink }}</span>
                 <span class="icon-preview text-xl align-middle"></span>
               </n-space>
             </a>
           </div>
-          <TableStorageFiles :actions="false" />
+
+          <!-- Breadcrumbs -->
+          <div>
+            <div class="relative h-8">
+              <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+            </div>
+            <TableStorageFiles :actions="false" />
+          </div>
         </n-space>
       </template>
       <template v-else>
@@ -78,5 +85,11 @@ onMounted(() => {
       pageLoading.value = false;
     });
   }, 100);
+});
+
+const previewLink = computed<string>(() => {
+  return (
+    dataStore.webpage.active.domain || `https://ipfs.apillon.io/ipfs/${dataStore.bucket.active.CID}`
+  );
 });
 </script>

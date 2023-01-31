@@ -2,7 +2,7 @@
   <NuxtLink :to="link" class="inline-block text-center">
     <img
       v-if="version < 1"
-      :src="`/images/logo/apillon-beta.png?ver='${version}`"
+      :src="`/images/logo/apillon-beta@2x.png?ver='${version}`"
       :width="168"
       :height="24"
       :alt="alt"

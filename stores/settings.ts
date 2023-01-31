@@ -23,6 +23,11 @@ export const useSettingsStore = defineStore('settings', {
     },
   },
   actions: {
+    resetData() {
+      this.apiKeys = [] as Array<ApiKeyInterface>;
+      this.users = [] as Array<ProjectUserInterface>;
+    },
+
     getApiKeyById(id: number) {
       return this.apiKeys.find(item => item.id === id) || ({} as ApiKeyInterface);
     },
@@ -41,6 +46,17 @@ export const useSettingsStore = defineStore('settings', {
     },
 
     /**
+     * Fetch wrappers
+     */
+
+    /** API Keys */
+    async getApiKeys() {
+      if (!this.hasApiKeys || isCacheExpired(LsCacheKeys.API_KEYS)) {
+        await this.fetchApiKeys();
+      }
+    },
+
+    /**
      *
      * API calls
      */
@@ -49,7 +65,6 @@ export const useSettingsStore = defineStore('settings', {
     async fetchApiKeys() {
       if (!dataStore.hasProjects) {
         this.apiKeys = [] as Array<ApiKeyInterface>;
-        alert('Please create project first');
       }
 
       try {
@@ -58,6 +73,9 @@ export const useSettingsStore = defineStore('settings', {
         });
 
         this.apiKeys = res.data.items;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.API_KEYS, Date.now().toString());
       } catch (error: any) {
         this.apiKeys = [] as Array<ApiKeyInterface>;
 

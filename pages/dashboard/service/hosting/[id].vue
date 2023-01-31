@@ -5,21 +5,23 @@
     </template>
 
     <slot>
-      <!-- Actions -->
-      <HostingWebsiteActionsUpload class="mb-4" />
+      <div class="pb-8">
+        <!-- Actions -->
+        <HostingWebsiteActionsUpload class="mb-4" />
 
-      <!-- Upload files -->
-      <FormHostingUploadWebpage :bucket-uuid="dataStore.bucketUuid" />
+        <!-- Upload files -->
+        <FormHostingUploadWebpage :bucket-uuid="dataStore.bucketUuid" />
 
-      <!-- Breadcrumbs -->
-      <div class="relative h-12 py-2 mb-1">
-        <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+        <!-- Breadcrumbs -->
+        <div class="relative h-12 py-2 mb-1">
+          <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+        </div>
+
+        <!-- DataTable: files and directories -->
+        <transition name="fade" appear>
+          <TableStorageFiles />
+        </transition>
       </div>
-
-      <!-- DataTable: files and directories -->
-      <transition name="fade" appear>
-        <TableStorageFiles />
-      </transition>
     </slot>
   </Dashboard>
 </template>

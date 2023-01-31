@@ -1,4 +1,3 @@
-import { stat } from 'fs';
 import { defineStore } from 'pinia';
 import { AnyJson } from '@polkadot/types-codec/types';
 import { ApiPromise, WsProvider } from '@polkadot/api';
@@ -194,6 +193,14 @@ export const useDataStore = defineStore('data', {
 
       this.currentProjectId = id;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
+    },
+
+    resetCurrentProject() {
+      /** Reset store data */
+      this.resetData();
+
+      this.currentProjectId = 0;
+      localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
     setBucketId(id: number) {
