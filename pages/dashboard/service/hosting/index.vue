@@ -83,7 +83,7 @@ async function getWebpageQuota() {
  * If W3Warn has already been shown, show modal create new webpage, otherwise show warn first
  * */
 function createNewWebpage() {
-  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW)) {
+  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.new')) {
     showModalNewWebpage.value = true;
   } else {
     showModalW3Warn.value = true;
