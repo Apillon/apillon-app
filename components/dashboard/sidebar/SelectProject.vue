@@ -27,6 +27,11 @@ onBeforeMount(() => {
         dataStore.fetchProject();
       }
     });
+  } else if (!dataStore.project.active?.id) {
+    /** Fetch active project data(get myRole_id_onProject) */
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      dataStore.fetchProject();
+    });
   }
 });
 

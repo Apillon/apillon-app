@@ -1,16 +1,19 @@
 <template>
   <Spinner v-if="webpageId > 0 && !webpage" />
   <div v-else>
-    <p v-if="!webpage && $i18n.te('hosting.webpage.infoNew')" class="text-body mb-8">
+    <p v-if="webpageId === 0 && $i18n.te('hosting.webpage.infoNew')" class="text-body mb-8">
       {{ $t('hosting.webpage.infoNew') }}
     </p>
-    <p v-else-if="webpage && $i18n.te('hosting.webpage.infoEdit')" class="text-body mb-8">
+    <p v-else-if="webpageId > 0 && $i18n.te('hosting.webpage.infoEdit')" class="text-body mb-8">
       {{ $t('hosting.webpage.infoEdit') }}
     </p>
 
     <!-- Notification - show if qouta has been reached -->
     <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
       {{ $t('hosting.webpage.quotaReached') }}
+    </Notification>
+    <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
+      {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
 
     <n-form
@@ -89,6 +92,7 @@ const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -137,12 +141,12 @@ const isQuotaReached = computed<boolean>(() => {
   return props.webpageId === 0 && dataStore.webpage.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value;
+  return isQuotaReached.value || settingsStore.isProjectUser();
 });
 
 // Custom validations
 function validateDomain(_: NFormItemRule, value: string): boolean {
-  const regex = /^([A-Za-z0–9-]{1,63}\.)+[A-Za-z]{2,6}$/;
+  const regex = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
 
   return !value || regex.test(value);
 }
