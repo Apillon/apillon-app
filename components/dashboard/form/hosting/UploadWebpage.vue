@@ -76,7 +76,11 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
   };
 
   fileList.value.push(fileListItem);
-  uploadFile(fileListItem);
+  setTimeout(() => {
+    Promise.all(promises.value).then(_ => {
+      uploadFile(fileListItem);
+    });
+  }, fileList.value.length * 200);
 }
 
 async function uploadFile(file: FileListItemType) {
