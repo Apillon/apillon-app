@@ -1,6 +1,6 @@
 <template>
   <n-space class="pb-8" :size="32" vertical>
-    <StorageActions @on-bucket-delete="deleteBucket" />
+    <ActionsStorage @on-bucket-delete="deleteBucket" />
 
     <n-data-table
       ref="tableRef"

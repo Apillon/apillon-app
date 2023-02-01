@@ -1,27 +1,28 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HostingHeading />
+      <HeaderWebpage />
     </template>
 
     <slot>
-      <div class="pb-8">
+      <n-space class="pb-8" :size="32" vertical>
         <!-- Actions -->
-        <HostingWebsiteActionsUpload class="mb-4" />
+        <ActionsHostingWebsite />
 
         <!-- Upload files -->
         <FormHostingUploadWebpage :bucket-uuid="dataStore.bucketUuid" />
 
-        <!-- Breadcrumbs -->
-        <div class="relative h-12 py-2 mb-1">
-          <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+        <div>
+          <!-- Breadcrumbs -->
+          <div class="relative h-8">
+            <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+          </div>
+          <!-- DataTable: files and directories -->
+          <transition name="fade" appear>
+            <TableStorageFiles />
+          </transition>
         </div>
-
-        <!-- DataTable: files and directories -->
-        <transition name="fade" appear>
-          <TableStorageFiles />
-        </transition>
-      </div>
+      </n-space>
     </slot>
   </Dashboard>
 </template>

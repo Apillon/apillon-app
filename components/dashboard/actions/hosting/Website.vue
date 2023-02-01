@@ -17,7 +17,7 @@
 
     <n-space size="large">
       <!-- Show only if user select files -->
-      <template v-if="dataStore.folder.selectedItems.length > 0">
+      <template v-if="isUpload && dataStore.folder.selectedItems.length > 0">
         <!-- Download files -->
         <n-tooltip :show="showPopoverDownload" placement="bottom">
           <template #trigger>
@@ -48,22 +48,39 @@
         <n-divider class="h-full mx-4" vertical />
       </template>
 
-      <!-- Refresh directory content -->
-      <n-button size="small" @click="refreshDirectoryContent">
-        <span class="icon-refresh text-xl mr-2"></span>
-        {{ $t('storage.refresh') }}
+      <!-- Refresh -->
+      <n-button size="small" :loading="dataStore.folder.loading" @click="refresh">
+        <span class="icon-refresh text-lg mr-2"></span>
+        {{ $t('general.refresh') }}
       </n-button>
 
       <!-- Create folder -->
-      <n-button size="small" @click="showModalNewFolder = true">
+      <n-button v-if="isUpload" size="small" @click="showModalNewFolder = true">
         <span class="icon-create-folder text-lg mr-2"></span>
         {{ $t('storage.directory.create') }}
       </n-button>
 
       <!-- Deploy to staging -->
-      <n-button size="small" type="primary" :loading="deploying" @click="deployToStaging">
+      <n-button
+        v-if="isUpload"
+        size="small"
+        type="primary"
+        :loading="deploying"
+        @click="deployToStaging"
+      >
         <span class="icon-deploy text-lg mr-2"></span>
         {{ $t('hosting.deployStage') }}
+      </n-button>
+      <!-- Deploy to production -->
+      <n-button
+        v-if="env === DeploymentEnvironment.STAGING"
+        size="small"
+        type="primary"
+        :loading="deploying"
+        @click="deployToProduction"
+      >
+        <span class="icon-deploy text-lg mr-2"></span>
+        {{ $t('hosting.deployProd') }}
       </n-button>
     </n-space>
   </n-space>
@@ -88,9 +105,13 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
+const props = defineProps({
+  env: { type: Number, default: 0 },
+});
 
 const $i18n = useI18n();
 const router = useRouter();
+const { params } = useRoute();
 const message = useMessage();
 const dataStore = useDataStore();
 const downloading = ref<boolean>(false);
@@ -100,9 +121,30 @@ const showPopoverDelete = ref<boolean>(false);
 const showPopoverDownload = ref<boolean>(false);
 const deploying = ref<boolean>(false);
 
-/** Refresh directory content */
-function refreshDirectoryContent() {
+/** Webpage ID from route */
+const webpageId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
+
+const isUpload = computed<Boolean>(() => {
+  return (
+    props.env !== DeploymentEnvironment.STAGING && props.env !== DeploymentEnvironment.PRODUCTION
+  );
+});
+
+function refresh() {
+  /** Refresh hosting files */
   dataStore.fetchDirectoryContent();
+
+  /** On tab stg/prod refresh also webpage and deployments */
+  if (
+    props.env === DeploymentEnvironment.STAGING ||
+    props.env === DeploymentEnvironment.PRODUCTION
+  ) {
+    /** Refresh active webpage data */
+    dataStore.fetchWebpage(webpageId.value);
+
+    /** Refresh deyployments */
+    dataStore.fetchDeployments(webpageId.value, props.env);
+  }
 }
 
 function onFolderCreated() {
@@ -186,12 +228,26 @@ function onDeleted() {
   }, 300);
 }
 
+/** Deploy to stg */
 async function deployToStaging() {
   deploying.value = true;
+
   await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.STAGING);
 
   /** After successfull deploy redirect to production tab */
-  router.push(`/dashboard/service/hosting/${dataStore.webpage.active.id}/staging`);
+  router.push(`/dashboard/service/hosting/${webpageId.value}/staging`);
+
+  deploying.value = false;
+}
+
+/** Deploy to prod */
+async function deployToProduction() {
+  deploying.value = true;
+
+  await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.PRODUCTION);
+
+  /** After successfull deploy redirect to production tab */
+  router.push(`/dashboard/service/hosting/${webpageId.value}/production`);
 
   deploying.value = false;
 }

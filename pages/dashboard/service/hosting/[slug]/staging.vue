@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HostingHeading />
+      <HeaderWebpage />
     </template>
     <slot>
       <template
@@ -12,7 +12,7 @@
         "
       >
         <n-space class="pb-8" :size="32" vertical>
-          <HostingWebsiteActions :env="DeploymentEnvironment.STAGING" />
+          <ActionsHostingWebsite :env="DeploymentEnvironment.STAGING" />
 
           <!-- IPNS link -->
           <div v-if="dataStore.bucket.active.CID">

@@ -6,7 +6,7 @@
 
     <slot>
       <!-- Actions -->
-      <StorageFileActions class="mb-4" />
+      <ActionsStorageBucket class="mb-4" />
 
       <!-- Upload files -->
       <transition name="fade" appear>
