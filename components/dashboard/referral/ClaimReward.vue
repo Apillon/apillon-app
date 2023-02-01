@@ -11,24 +11,15 @@
         <img class="max-w-[100px]" :src="data.merchItem.imageUrl" alt="apillon merch" />
       </div>
 
-      <div class="mt-8 pl-5">
+      <div class="mt-4 pl-5">
         <div class="text-base font-bold mb-1">
           {{ data.merchItem.name }}
         </div>
-        <div
-          v-if="
-            data.attributes.find(el => {
-              return el.name === 'size';
-            })
-          "
-          class="mb-1"
-        >
-          {{
-            'Size: ' +
-            data.attributes.find(el => {
-              return el.name === 'size';
-            }).selectedValue
-          }}
+        <div v-for="(item, idx) in data.attributes" :key="idx" class="mb-1 flex">
+          {{ item.name + ': ' }}
+          <div class="ml-2">
+            {{ item.selectedValue }}
+          </div>
         </div>
         <div
           v-if="data.attributes.length !== 0"
