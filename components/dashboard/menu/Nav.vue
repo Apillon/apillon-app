@@ -43,7 +43,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
           label: $i18n.t('nav.authentication'),
           to: 'dashboard-service-authentication',
           iconName: 'icon-authentication',
-          soon: !isFeatureEnabled(Feature.AUTHENTICATION),
+          soon: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
           disabled: isMenuItemDisabled(Feature.AUTHENTICATION),
         },
         {
@@ -51,7 +51,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
           label: $i18n.t('nav.storage'),
           to: 'dashboard-service-storage',
           iconName: 'icon-storage',
-          soon: !isFeatureEnabled(Feature.STORAGE),
+          soon: !isFeatureEnabled(Feature.STORAGE, authStore.getUserRoles()),
           disabled: isMenuItemDisabled(Feature.STORAGE),
         },
         {
@@ -59,7 +59,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
           label: $i18n.t('nav.hosting'),
           to: 'dashboard-service-hosting',
           iconName: 'icon-hosting',
-          soon: !isFeatureEnabled(Feature.HOSTING),
+          soon: !isFeatureEnabled(Feature.HOSTING, authStore.getUserRoles()),
           disabled: isMenuItemDisabled(Feature.HOSTING),
         },
         {
