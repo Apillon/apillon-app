@@ -48,7 +48,12 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
           NTag,
           { type: getDeploymentStatus(row.deploymentStatus), round: true, bordered: false },
           {
-            default: () => $i18n.t(`hosting.deployment.status.${row.deploymentStatus}`),
+            default: () =>
+              h(
+                'span',
+                { class: 'text-bg-dark' },
+                { default: () => $i18n.t(`hosting.deployment.status.${row.deploymentStatus}`) }
+              ),
           }
         );
       },

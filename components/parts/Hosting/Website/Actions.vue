@@ -2,7 +2,7 @@
   <n-space justify="space-between">
     <div class="w-[20vw] max-w-xs">
       <n-input
-        v-model:value="dataStore.webpage.search"
+        v-model:value="dataStore.folder.search"
         type="text"
         name="search"
         size="small"
