@@ -69,7 +69,8 @@
     "permissions": {
       "read": "Read permissions",
       "write": "Write permissions",
-      "execute": "Execute permissions"
+      "execute": "Execute permissions",
+      "insufficient": "You don't have permissions to create or edit this item."
     },
     "addPayment": "Add payment",
     "addPaymentMethod": "Add payment method",
@@ -172,7 +173,7 @@
     "USER_EMAIL_NOT_PRESENT": "Email is missing",
     "USER_INVALID_LOGIN": "Wrong email or password",
     "USER_EMAIL_NOT_VALID": "Email is not valid",
-    "USER_EMAIL_NOT_EXISTS": "This email does not exist",
+    "USER_EMAIL_NOT_EXISTS": "Looks like your email is not in our books yet.",
     "USER_EMAIL_ALREADY_TAKEN": "Email is already taken",
     "USER_UUID_NOT_PRESENT": "user_uuid is missing",
     "USER_UUID_ALREADY_EXISTS": "user_uuid already exists",
@@ -306,7 +307,7 @@
       "apiKey": "Api key has been created",
       "filesUploaded": "Files has been successfully uploaded",
       "profile": "Your profile data has been updated",
-      "requestPasswordChange": "We have send you a password reset request to your email.",
+      "requestPasswordChange": "We’ve sent you a password reset request to your email",
       "sendAgainEmail": "Email has been re-sent",
       "webpageDeployed": "Webpage has been deployed.",
       "created": {
@@ -562,7 +563,7 @@
   "storage": {
     "bucket": {
       "addNew": "Add new bucket",
-      "attachService": "First attach a desired service and configure it, then start building.",
+      "attachService": "Create a new bucket and get immediate access to Web3 storage.",
       "buckets": "Buckets",
       "description": "Description",
       "delete": "Delete bucket(s)",
@@ -570,11 +571,12 @@
       "destroyed": "Deleted buckets",
       "destroyedBuckets": "Destroyed buckets",
       "edit": "Edit bucket",
-      "infoNew": "",
+      "infoEdit": "Desired name and description for the bucket so you can easily recognise it.",
+      "infoNew": "Enter the desired name and description for the bucket so you can easily recognise it.",
       "management": "Bucket management",
       "name": "Bucket name",
       "new": "New bucket",
-      "noActiveService": "Your project currently has no active service",
+      "noActiveService": "You need a storage bucket before you can start storing files. ",
       "nothingHere": "Nothing here",
       "storage": "Storage bucket",
       "update": "Update bucket",
@@ -702,7 +704,7 @@
     "cvv": "Wrong CVV",
     "cvvRequired": "Please enter CVV",
     "email": "Email address is not valid",
-    "emailRequired": "Please enter your email",
+    "emailRequired": "Typing in your email would definitely hit the spot :)",
     "expirationDate": "Date is expired",
     "expirationDateRequired": "Please enter expiration date",
     "folderNameRequired": "Please enter folder name",
@@ -733,7 +735,7 @@
   },
   "w3Warn": {
     "bucket": {
-      "new": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. Accumsan morbi lectus elit nunc. Arcu morbi pretium neque nibh eu vestibulum id sed adipiscing.",
+      "new": "Each file hosting that passes through Crust’s pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
       "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
       "destroyed": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. "
     },

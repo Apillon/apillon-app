@@ -22,11 +22,11 @@
               </li>
               <li>Log in to your account.</li>
               <li>
-                At the bottom of the welcome page, find an Closed beta code assigned to your
+                At the bottom of the welcome page, find an Closed Beta code assigned to your
                 account.
               </li>
               <li>
-                Copy the Closed ceta code and paste it to our
+                Copy the Closed Beta code and paste it to our
                 <Btn href="https://discord.gg/n6gVzCnz9t" target="_blank">
                   <span class="font-content text-blue">closed-beta channel</span>
                 </Btn>
@@ -56,7 +56,7 @@
 
         <!-- Referral code -->
         <div class="max-w-[1080px] p-8 my-8 bg-grey-lightBg">
-          <p class="font-bold">Closed beta code:</p>
+          <p class="font-bold">Closed Beta code:</p>
           <div class="max-w-xl">
             <div class="p-4 bg-grey-dark mt-2">
               <p>{{ authStore.userUuid }}</p>
@@ -65,7 +65,10 @@
         </div>
 
         <!-- Referral -->
-        <div v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" class="max-w-lg p-8 mb-8 bg-bg-light">
+        <div
+          v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())"
+          class="max-w-lg p-8 mb-8 bg-bg-light"
+        >
           <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
           <p class="text-body mb-7">
             {{ $t('referral.banner.description') }}
