@@ -820,7 +820,7 @@ export const useDataStore = defineStore('data', {
         };
         await $api.post<DeploymentResponse>(endpoints.webpageDeploy(webpageId), params);
 
-        window.$message.success(window.$i18n.t('form.success.webpageDeployed'));
+        window.$message.success(window.$i18n.t('form.success.webpageDeploying'));
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));

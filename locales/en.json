@@ -310,6 +310,7 @@
       "requestPasswordChange": "We’ve sent you a password reset request to your email",
       "sendAgainEmail": "Email has been re-sent",
       "webpageDeployed": "Webpage has been deployed.",
+      "webpageDeploying": "Done - deployment initiated",
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
@@ -400,6 +401,7 @@
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
     "domainPreview": "Domain preview",
+    "ipnsLink": "IPNS link",
     "management": "Hosting management",
     "productionEmpty": "Deploy files from staging to production",
     "size": "Size",
