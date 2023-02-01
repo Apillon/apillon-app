@@ -580,6 +580,7 @@
       "nothingHere": "Nothing here",
       "storage": "Storage bucket",
       "update": "Update bucket",
+      "uuid": "Bucket Uuid",
       "quotaReached": "Quota has been reached."
     },
     "delete": {
