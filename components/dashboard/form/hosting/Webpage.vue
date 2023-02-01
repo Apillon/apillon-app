@@ -148,7 +148,7 @@ const isFormDisabled = computed<boolean>(() => {
 
 // Custom validations
 function validateDomain(_: NFormItemRule, value: string): boolean {
-  const regex = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
+  const regex = /^[a-zA-Z0-9][a-zA-Z0-9-.]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
 
   return !value || regex.test(value);
 }

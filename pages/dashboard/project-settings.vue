@@ -32,7 +32,12 @@
       </div>
 
       <!-- Delete project -->
-      <template v-if="settingsStore.isUserOwner()">
+      <template
+        v-if="
+          settingsStore.isUserOwner() &&
+          isFeatureEnabled(Feature.PROJECT_DELETE, authStore.getUserRoles())
+        "
+      >
         <n-h5 class="mb-0" prefix="bar">{{ $t('project.delete') }}</n-h5>
         <p class="mb-6">{{ $t('project.deleteText') }}</p>
         <Btn type="primary">{{ $t('project.deleteRequest') }}</Btn>
@@ -43,6 +48,7 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
 
 useHead({

@@ -17,6 +17,7 @@ const config: ConfigInterface = {
     'MAGIC_LINK',
     'ONBOARDING',
     'PROJECT',
+    'PROJECT_DELETE',
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
     'REFERRAL',
