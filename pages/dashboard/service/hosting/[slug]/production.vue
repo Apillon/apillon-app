@@ -113,6 +113,6 @@ onMounted(() => {
 });
 
 const previewLink = computed<string>(() => {
-  return `https://ipfs.apillon.io/ipfs/${dataStore.bucket.active.CID}`;
+  return `https://ipfs.apillon.io/ipns/${dataStore.bucket.active.IPNS}`;
 });
 </script>
