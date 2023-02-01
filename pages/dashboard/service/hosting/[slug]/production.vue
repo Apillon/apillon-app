@@ -4,14 +4,32 @@
       <HostingHeading />
     </template>
     <slot>
-      <template v-if="dataStore.folder.items.length || dataStore.bucket.active.CID">
+      <template
+        v-if="
+          dataStore.folder.items.length ||
+          dataStore.bucket.active.CID ||
+          dataStore.webpage.deployment.production.length > 0
+        "
+      >
         <n-space class="pb-8" :size="32" vertical>
           <HostingWebsiteActions />
 
           <!-- Domain preview -->
-          <div>
+          <div v-if="dataStore.webpage.active.domain">
             <div class="body-sm mb-2">
               <strong>{{ $t('hosting.domainPreview') }}</strong>
+            </div>
+            <a :href="`https://${dataStore.webpage.active.domain}`" target="_blank">
+              <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
+                <span>{{ dataStore.webpage.active.domain }}</span>
+                <span class="icon-preview text-xl align-middle"></span>
+              </n-space>
+            </a>
+          </div>
+          <!-- IPNS link -->
+          <div v-if="dataStore.bucket.active.CID">
+            <div class="body-sm mb-2">
+              <strong>{{ $t('hosting.ipnsLink') }}</strong>
             </div>
             <a :href="previewLink" target="_blank">
               <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
@@ -64,7 +82,7 @@ useHead({
 
 onMounted(() => {
   /** Webpage ID from route, then load buckets */
-  const webpageId = parseInt(`${params?.slug}`) || 0;
+  const webpageId = parseInt(`${params?.slug}`);
   dataStore.setWebpageId(webpageId);
 
   setTimeout(() => {
@@ -95,8 +113,6 @@ onMounted(() => {
 });
 
 const previewLink = computed<string>(() => {
-  return (
-    dataStore.webpage.active.domain || `https://ipfs.apillon.io/ipfs/${dataStore.bucket.active.CID}`
-  );
+  return `https://ipfs.apillon.io/ipfs/${dataStore.bucket.active.CID}`;
 });
 </script>

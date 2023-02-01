@@ -43,13 +43,35 @@ const props = defineProps({
   env: { type: Number, default: DeploymentEnvironment.PRODUCTION },
 });
 
+const router = useRouter();
+const { params } = useRoute();
 const dataStore = useDataStore();
 const deploying = ref<boolean>(false);
 
-/** Refresh deyployment and hosting files */
+/** Webpage ID from route */
+const webpageId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
+
 function refresh() {
+  /** Refresh active webpage data */
+  dataStore.fetchWebpage(webpageId.value);
+
+  /** Refresh hosting files */
   dataStore.fetchDirectoryContent();
-  dataStore.fetchDeployments(dataStore.webpage.active.id, props.env);
+
+  /** Refresh deyployments */
+  dataStore.fetchDeployments(webpageId.value, props.env);
+}
+
+/** Deploy to stg */
+async function deployToStaging() {
+  deploying.value = true;
+
+  await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.STAGING);
+
+  /** After successfull deploy redirect to production tab */
+  router.push(`/dashboard/service/hosting/${webpageId.value}/staging`);
+
+  deploying.value = false;
 }
 
 /** Deploy to prod */
@@ -57,6 +79,10 @@ async function deployToProduction() {
   deploying.value = true;
 
   await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.PRODUCTION);
+
+  /** After successfull deploy redirect to production tab */
+  router.push(`/dashboard/service/hosting/${webpageId.value}/production`);
+
   deploying.value = false;
 }
 </script>

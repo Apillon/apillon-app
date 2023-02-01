@@ -4,14 +4,20 @@
       <HostingHeading />
     </template>
     <slot>
-      <template v-if="dataStore.folder.items.length || dataStore.bucket.active.CID">
+      <template
+        v-if="
+          dataStore.folder.items.length ||
+          dataStore.bucket.active.CID ||
+          dataStore.webpage.deployment.staging.length > 0
+        "
+      >
         <n-space class="pb-8" :size="32" vertical>
           <HostingWebsiteActions :env="DeploymentEnvironment.STAGING" />
 
-          <!-- Domain preview -->
-          <div>
+          <!-- IPNS link -->
+          <div v-if="dataStore.bucket.active.CID">
             <div class="body-sm mb-2">
-              <strong>{{ $t('hosting.domainPreview') }}</strong>
+              <strong>{{ $t('hosting.ipnsLink') }}</strong>
             </div>
             <a :href="previewLink" target="_blank">
               <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
@@ -64,7 +70,7 @@ useHead({
 
 onMounted(() => {
   /** Webpage ID from route, then load buckets */
-  const webpageId = parseInt(`${params?.slug}`) || 0;
+  const webpageId = parseInt(`${params?.slug}`);
   dataStore.setWebpageId(webpageId);
 
   setTimeout(() => {

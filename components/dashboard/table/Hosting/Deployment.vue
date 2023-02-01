@@ -72,7 +72,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
       title: $i18n.t('general.updateTime'),
       key: 'updateTime',
       render(row: DeploymentInterface) {
-        return h('span', {}, { default: () => datetimeToDate(row.updateTime || '') });
+        return h('span', {}, { default: () => datetimeToDateAndTime(row.updateTime || '') });
       },
     },
   ];
