@@ -23,15 +23,15 @@
       <img class="w-[50%] mx-auto" :src="item.merchItem.imageUrl" alt="apillon merch" />
 
       <div
-        class="flex"
+        class="flex mt-6"
         :class="item.merchItem.attributes.length > 0 ? 'justify-between' : 'justify-center'"
       >
         <div v-for="(attr, idx) in item.merchItem.attributes" :key="attr.id" class="mr-4">
-          {{ attr.name === 'size' ? 'Size' : '' }}
+          {{ attr.name }}
           <n-select
             :id="attr.id"
             v-model:value="item.attributes[idx].selectedValue"
-            class="mt-2 mb-1 w-[100px] bg-primary"
+            class="mt-2 mb-1 w-[108px] bg-primary"
             :options="
               attr.options.map(el => {
                 return { label: el, value: el };

@@ -84,7 +84,7 @@
             :bordered="false"
             round
           >
-            {{ $t(`storage.fileStatus.${fileStatus}`) }}
+            <span class="text-bg-dark">{{ $t(`storage.fileStatus.${fileStatus}`) }}</span>
           </n-tag>
           <n-tag v-else type="error" size="tiny" :bordered="false" round>
             {{ $t(`storage.fileStatus.${fileStatus}`) }}

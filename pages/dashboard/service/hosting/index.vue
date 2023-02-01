@@ -8,7 +8,11 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <button class="align-sub" @click="showModalW3Warn = true">
+            <button
+              v-if="$i18n.te('w3Warn.hosting.new')"
+              class="align-sub"
+              @click="showModalW3Warn = true"
+            >
               <span class="icon-info text-xl"></span>
             </button>
           </n-space>
@@ -64,7 +68,7 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await dataStore.getWebpages();
-      await getWebpageQuota();
+      getWebpageQuota();
 
       pageLoading.value = false;
     });

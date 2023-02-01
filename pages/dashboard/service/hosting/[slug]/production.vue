@@ -4,14 +4,32 @@
       <HostingHeading />
     </template>
     <slot>
-      <template v-if="dataStore.folder.items.length || dataStore.bucket.active.CID">
+      <template
+        v-if="
+          dataStore.folder.items.length ||
+          dataStore.bucket.active.CID ||
+          dataStore.webpage.deployment.production.length > 0
+        "
+      >
         <n-space class="pb-8" :size="32" vertical>
-          <HostingWebsiteActions :env="DeploymentEnvironment.PRODUCTION" />
+          <HostingWebsiteActions />
 
           <!-- Domain preview -->
-          <div>
+          <div v-if="dataStore.webpage.active.domain">
             <div class="body-sm mb-2">
               <strong>{{ $t('hosting.domainPreview') }}</strong>
+            </div>
+            <a :href="`https://${dataStore.webpage.active.domain}`" target="_blank">
+              <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
+                <span>{{ dataStore.webpage.active.domain }}</span>
+                <span class="icon-preview text-xl align-middle"></span>
+              </n-space>
+            </a>
+          </div>
+          <!-- IPNS link -->
+          <div v-if="dataStore.bucket.active.CID">
+            <div class="body-sm mb-2">
+              <strong>{{ $t('hosting.ipnsLink') }}</strong>
             </div>
             <a :href="previewLink" target="_blank">
               <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
@@ -20,6 +38,9 @@
               </n-space>
             </a>
           </div>
+
+          <!-- Deployments -->
+          <TableHostingDeployment :deployments="dataStore.webpage.deployment.production" />
 
           <!-- Breadcrumbs -->
           <div>
@@ -61,12 +82,12 @@ useHead({
 
 onMounted(() => {
   /** Webpage ID from route, then load buckets */
-  const websiteId = parseInt(`${params?.slug}`) || 0;
-  dataStore.setWebpageId(websiteId);
+  const webpageId = parseInt(`${params?.slug}`);
+  dataStore.setWebpageId(webpageId);
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await dataStore.getWebpage(websiteId);
+      const webpage = await dataStore.getWebpage(webpageId);
 
       /** Check of webpage exists */
       if (!webpage?.id) {
@@ -74,6 +95,10 @@ onMounted(() => {
         return;
       }
 
+      /** Get deployments for this webpage */
+      dataStore.getDeployments(webpageId);
+
+      /** Show files from staging bucket */
       dataStore.bucket.active = webpage.productionBucket;
       dataStore.setBucketId(webpage.productionBucket_id);
 
@@ -88,8 +113,6 @@ onMounted(() => {
 });
 
 const previewLink = computed<string>(() => {
-  return (
-    dataStore.webpage.active.domain || `https://ipfs.apillon.io/ipfs/${dataStore.bucket.active.CID}`
-  );
+  return `https://ipfs.apillon.io/ipfs/${dataStore.bucket.active.CID}`;
 });
 </script>

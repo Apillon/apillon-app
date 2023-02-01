@@ -1,13 +1,22 @@
 <template>
-  <div>
-    <p class="text-body mb-8">
-      {{ $t('storage.bucket.infoNew') }}
-    </p>
-
+  <Spinner v-if="bucketId > 0 && !bucket" />
+  <div v-else>
     <!-- Notification - show if qouta has been reached -->
     <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
       {{ $t('storage.bucket.quotaReached') }}
     </Notification>
+    <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
+      {{ $t('dashboard.permissions.insufficient') }}
+    </Notification>
+    <template v-else>
+      <!-- Info text -->
+      <p v-if="bucketId === 0 && $i18n.te('storage.bucket.infoNew')" class="text-body mb-8">
+        {{ $t('storage.bucket.infoNew') }}
+      </p>
+      <p v-else-if="bucketId > 0 && $i18n.te('storage.bucket.infoEdit')" class="text-body mb-8">
+        {{ $t('storage.bucket.infoEdit') }}
+      </p>
+    </template>
 
     <n-form
       ref="formRef"
@@ -105,12 +114,19 @@ const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const bucket: BucketInterface | null =
-  props.bucketId > 0 ? await dataStore.getBucket(props.bucketId) : null;
+const bucket = ref<BucketInterface | null>(null);
+
+onMounted(async () => {
+  if (props.bucketId) {
+    bucket.value = await dataStore.getBucket(props.bucketId);
+    formData.value.bucketName = bucket.value.name;
+    formData.value.bucketDescription = bucket.value.description;
+  }
+});
 
 const formData = ref<FormNewBucket>({
-  bucketName: bucket?.name || '',
-  bucketDescription: bucket?.description || '',
+  bucketName: bucket.value?.name || '',
+  bucketDescription: bucket.value?.description || '',
   bucketSize: 5,
 });
 
@@ -145,7 +161,7 @@ const bucketSizes: Array<NRadioOption> = [
 ];
 
 const isQuotaReached = computed<boolean>(() => {
-  return !bucket && dataStore.bucket.quotaReached === true;
+  return props.bucketId === 0 && dataStore.bucket.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
@@ -157,7 +173,7 @@ function handleSubmit(e: Event | MouseEvent) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
-    } else if (bucket) {
+    } else if (props.bucketId > 0) {
       await updateBucket();
     } else {
       await createBucket();

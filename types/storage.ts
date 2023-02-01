@@ -58,6 +58,14 @@ export enum DeploymentEnvironment {
   PRODUCTION = 2,
 }
 
+/** Hosting deployment status */
+export enum DeploymentStatus {
+  INITIATED = 0,
+  IN_PROGRESS = 1,
+  SUCCESSFUL = 10,
+  FAILED = 100,
+}
+
 declare global {
   /**
    * Bucket
@@ -125,7 +133,7 @@ declare global {
   interface FileUploadRequestInterface {
     fileUploadRequestId: number;
     file_uuid: string;
-    signedUrlForUpload: string;
+    url: string;
   }
   interface FileInterface {
     CID: string;
@@ -241,15 +249,19 @@ declare global {
   interface DeploymentInterface {
     id: number;
     status: number;
-    bucket_id: number;
-    cid: string | null;
-    deploymentStatus: number;
-    environment: number;
     webpage_id: number;
+    bucket_id: number;
+    environment: number;
+    deploymentStatus: number;
+    cid: string | null;
+    size: number;
+    number: number | null;
+    updateTime?: string;
   }
   interface WebpageResponse extends GeneralResponse<WebpageInterface> {}
   interface WebpageUpdateResponse extends GeneralResponse<WebpageInterface> {}
   interface WebpagesResponse extends GeneralItemsResponse<WebpageInterface> {}
   interface WebpageQuotaResponse extends GeneralResponse<boolean> {}
   interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
+  interface DeploymentsResponse extends GeneralItemsResponse<DeploymentInterface> {}
 }

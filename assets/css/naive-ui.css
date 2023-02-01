@@ -303,16 +303,16 @@ html[lang='en'] .n-message__icon {
   @apply text-lg font-bold;
 
   &--error-type::after {
-    content: 'Fail message';
+    content: 'Oops…';
   }
   &--info-type::after {
-    content: 'Info message';
+    content: 'Info';
   }
   &--success-type::after {
-    content: 'Success message';
+    content: 'Done!';
   }
   &--warning-type::after {
-    content: 'Warning message';
+    content: 'Well…';
   }
 }
 

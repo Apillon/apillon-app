@@ -83,6 +83,32 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       },
     },
     {
+      key: 'bucket_uuid',
+      title: $i18n.t('storage.bucket.uuid'),
+      render(row: BucketInterface) {
+        return [
+          h(
+            'div',
+            { class: 'flex' },
+            {
+              default: () => [
+                h(
+                  NEllipsis,
+                  { class: 'text-grey align-bottom', 'line-clamp': 1 },
+                  { default: () => row.bucket_uuid }
+                ),
+                h(
+                  'button',
+                  { class: 'ml-2', onClick: () => copyToClipboard(row.bucket_uuid) },
+                  h('span', { class: 'icon-copy text-grey' }, {})
+                ),
+              ],
+            }
+          ),
+        ];
+      },
+    },
+    {
       key: 'serviceType',
       title: $i18n.t('storage.used'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,

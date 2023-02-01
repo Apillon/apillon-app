@@ -13,7 +13,7 @@
           <span class="ml-1 text-body">
             {{
               $t('storage.file.filesUploading', {
-                uploading: numOfUploadingFiles,
+                uploading: numOfUploadedFiles,
                 files: dataStore.bucket.uploadFileList.length,
               })
             }}
@@ -161,7 +161,6 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
-const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const config = useRuntimeConfig();
@@ -227,11 +226,14 @@ function retryUpload() {
   removeFinishedFilesFromList();
   uploadFiles();
 }
-function uploadFiles() {
-  dataStore.bucket.uploadFileList.forEach(file => {
-    uploadFile(file);
-  });
+async function uploadFiles() {
+  /** Clear last upload file list */
+  removeFinishedFilesFromList();
   showModalWrapFolder.value = false;
+
+  for (const file of dataStore.bucket.uploadFileList) {
+    await uploadFile(file);
+  }
 }
 
 async function uploadFile(file: FileListItemType) {
@@ -265,7 +267,7 @@ async function uploadFile(file: FileListItemType) {
 
     /** Upload file to S3 */
     const xhr = new XMLHttpRequest();
-    xhr.open('PUT', res.data.signedUrlForUpload, true);
+    xhr.open('PUT', res.data.url, true);
     xhr.onload = () => {
       file.onFinish();
       updateFileStatus(file.id, FileUploadStatusValue.FINISHED);
@@ -303,7 +305,7 @@ async function uploadSessionEnd(sessionUuid: string) {
         ? dataStore.getFolderPath + wrapperFolderPath(folderName.value)
         : null,
     };
-    const resSessionEnd = await $api.post<PasswordResetResponse>(
+    await $api.post<PasswordResetResponse>(
       endpoints.storageFileUpload(props.bucketUuid, sessionUuid),
       params
     );
@@ -424,9 +426,9 @@ const filesUploading = computed<boolean>(() => {
     ) !== undefined
   );
 });
-const numOfUploadingFiles = computed<number>(() => {
+const numOfUploadedFiles = computed<number>(() => {
   return (
-    dataStore.bucket.uploadFileList.filter(file => file.status === FileUploadStatusValue.UPLOADING)
+    dataStore.bucket.uploadFileList.filter(file => file.status !== FileUploadStatusValue.PENDING)
       .length || 0
   );
 });
