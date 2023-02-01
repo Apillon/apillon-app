@@ -401,6 +401,7 @@
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
     "domainPreview": "Domain preview",
+    "ipnsAddress": "IPNS Address",
     "ipnsLink": "IPNS link",
     "management": "Hosting management",
     "productionEmpty": "Deploy files from staging to production",

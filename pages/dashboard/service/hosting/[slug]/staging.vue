@@ -26,6 +26,18 @@
               </n-space>
             </a>
           </div>
+          <!-- IPNS address -->
+          <div>
+            <div class="body-sm mb-2">
+              <strong>{{ $t('hosting.ipnsAddress') }}</strong>
+            </div>
+            <n-space class="bg-bg-dark text-body px-4 py-2" justify="space-between" align="center">
+              <span>https://ipfs.apillon.io</span>
+              <button class="text-body" @click="copyToClipboard('https://ipfs.apillon.io')">
+                <span class="icon-copy"></span>
+              </button>
+            </n-space>
+          </div>
 
           <!-- Deployments -->
           <TableHostingDeployment :deployments="dataStore.webpage.deployment.staging" />

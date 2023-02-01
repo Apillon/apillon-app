@@ -130,7 +130,7 @@ const isUpload = computed<Boolean>(() => {
   );
 });
 
-function refresh() {
+async function refresh() {
   /** Refresh hosting files */
   dataStore.fetchDirectoryContent();
 
@@ -139,11 +139,20 @@ function refresh() {
     props.env === DeploymentEnvironment.STAGING ||
     props.env === DeploymentEnvironment.PRODUCTION
   ) {
-    /** Refresh active webpage data */
-    dataStore.fetchWebpage(webpageId.value);
-
     /** Refresh deyployments */
     dataStore.fetchDeployments(webpageId.value, props.env);
+
+    /** Refresh active webpage data */
+    const webpage = await dataStore.fetchWebpage(webpageId.value);
+
+    /** Show files from staging bucket */
+    if (props.env === DeploymentEnvironment.STAGING) {
+      dataStore.bucket.active = webpage.stagingBucket;
+      dataStore.setBucketId(webpage.stagingBucket_id);
+    } else {
+      dataStore.bucket.active = webpage.productionBucket;
+      dataStore.setBucketId(webpage.productionBucket_id);
+    }
   }
 }
 
