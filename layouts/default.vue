@@ -1,15 +1,38 @@
 <template>
-  <div ref="mainContentRef" class="relative h-screen lg:pl-64">
-    <n-message-provider :to="messageRef" :keep-alive-on-hover="true" :duration="5000">
-      <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
-      <Header @toggleSidebar="toggleSidebar" />
-      <n-scrollbar class="bg-grey-dark" y-scrollable style="max-height: calc(100vh - 64px)">
-        <HeaderTabs v-if="routeName === 'index'" />
-        <div ref="messageRef" class="relative py-7 px-4 sm:px-8 lg:pr-10">
-          <slot />
-        </div>
-        <!-- <CookieConsent /> -->
-      </n-scrollbar>
+  <div ref="mainContentRef" class="relative h-screen">
+    <n-message-provider
+      :to="messageRef"
+      placement="bottom-right"
+      :keep-alive-on-hover="true"
+      :duration="3000"
+      closable
+    >
+      <n-layout class="h-full" :has-sider="isLg" sider-placement="left">
+        <n-layout-sider
+          v-if="isLg"
+          bordered
+          :show-trigger="false"
+          collapse-mode="width"
+          :collapsed-width="60"
+          :width="320"
+          :native-scrollbar="false"
+          style="max-height: 100vh"
+        >
+          <Sidebar />
+        </n-layout-sider>
+        <n-layout>
+          <Header @toggleSidebar="toggleSidebar" />
+          <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
+            <div ref="messageRef" class="relative pt-8 px-4 sm:px-8">
+              <slot />
+            </div>
+            <!-- <CookieConsent /> -->
+          </n-scrollbar>
+        </n-layout>
+      </n-layout>
+
+      <!-- Sidebar on mobile -->
+      <Sidebar v-if="!isLg" :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
     </n-message-provider>
   </div>
 </template>
@@ -18,24 +41,19 @@
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 const { isLg } = useScreen();
-const messageRef = ref(null);
-const mainContentRef = ref<HTMLDivElement>(null);
+const messageRef = ref<HTMLDivElement>();
+const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
-
-const route = useRoute();
-const routeName = computed(() => {
-  return route.name;
-});
 
 /**
  * Enable/disable body scroll
  */
 onMounted(() => {
-  disableBodyScroll(document);
+  disableBodyScroll(document.body as HTMLElement);
 });
 
 onUnmounted(() => {
-  clearAllBodyScrollLocks(document);
+  clearAllBodyScrollLocks();
 });
 
 /**

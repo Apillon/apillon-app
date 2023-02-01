@@ -13,11 +13,11 @@ declare global {
   /**
    *  Register
    */
-  export interface FormRegister {
-    password: string;
-    reenteredPassword: string;
+  interface FormRegister {
+    password: string | null;
+    reenteredPassword: string | null;
   }
-  export interface RegisterResponse {
+  interface RegisterResponse {
     data: {
       id: number;
       status: number;
@@ -26,7 +26,7 @@ declare global {
     };
     status: number;
   }
-  export interface ValidateMailResponse {
+  interface ValidateMailResponse {
     data: {
       data: boolean;
       status: number;
@@ -34,86 +34,71 @@ declare global {
     };
     status: number;
   }
-  export interface PasswordResetResponse {
-    data: boolean;
+  interface PasswordResetForm {
+    email: string;
+  }
+  interface PasswordResetResponse extends GeneralResponse<boolean> {}
+
+  /**
+   * User
+   */
+  interface UserInterface {
+    id: number;
+    email: string;
+    name: string;
+    phone: string;
     status: number;
+    user_uuid: string;
+    userRoles: number[];
+  }
+
+  interface UserResponse extends GeneralResponse<UserInterface> {}
+
+  /**
+   * User profile
+   */
+  interface FormUserProfile {
+    name?: string | null;
+    email: string;
+    phone?: string | null;
+  }
+  interface UserProfileResponse extends GeneralResponse<UserInterface> {}
+
+  /**
+   * User invite
+   */
+  interface FormUserInvite {
+    email: string;
+    role_id: number | null;
   }
 
   /**
    * Login
    */
-  export interface FormLogin {
+  interface FormLogin {
     email: string;
     password: string;
   }
-  export interface LoginResponse {
-    data: {
-      token: string;
-    };
-    status: number;
+  interface LoginInterface extends UserInterface {
+    token: string;
   }
-  export interface PasswordResetRequestResponse {
-    data: boolean;
-    status: number;
-  }
-
-  /**
-   * User
-   */
-  export interface UserResponse {
-    data: {
-      id: number;
-      status: number;
-      name: string;
-      user_uuid: string;
-    };
-    status: number;
-  }
-
-  /**
-   * User profile
-   */
-  export interface FormUserProfile {
-    name: string;
-    email: string;
-    phone: string;
-  }
-
-  export interface UserProfileResponse {
-    data: {
-      email: string;
-      id: number;
-      name: string;
-      phone: string;
-      status: number;
-      user_uuid: string;
-    };
-    status: number;
-  }
-
-  /**
-   * User invite
-   */
-  export interface FormUserInvite {
-    email: string;
-    role: string;
-  }
-
-  export interface UserInviteResponse {
-    data: {
-      id: number;
-      status: number;
-      name: string;
-      user_uuid: string;
-    };
-    status: number;
-  }
+  interface LoginResponse extends GeneralResponse<LoginInterface> {}
+  interface PasswordResetRequestResponse extends GeneralResponse<boolean> {}
 
   /**
    * Wallet
    */
-  export interface WalletResponse {
-    message: string;
-    timestamp: number;
+  interface WalletResponse {
+    data: {
+      message: string;
+      timestamp: number;
+    };
+    status: number;
+  }
+  interface WalletLoginResponse {
+    data: {
+      authToken: string;
+    };
+    status: number;
   }
 }

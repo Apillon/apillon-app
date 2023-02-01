@@ -1,32 +1,34 @@
 <template>
-  <n-space v-if="loading" vertical>
+  <div v-if="loading" class="flex flex-col gap-8" style="height: calc(100vh - 88px)">
     <!-- Loading skeleton - on long page load show skeleten -->
-    <n-skeleton height="40px" width="33%" />
-    <n-skeleton height="40px" width="66%" :sharp="false" />
-    <n-skeleton height="40px" round />
-    <n-skeleton height="40px" circle />
-  </n-space>
+    <n-skeleton height="40px" width="100%" />
+    <n-skeleton height="40px" width="100%" />
+    <div class="flex gap-8 h-full">
+      <div style="width: 100%">
+        <n-skeleton height="100%" width="100%" />
+      </div>
+      <div style="width: 320px">
+        <n-skeleton height="400px" width="100%" />
+      </div>
+    </div>
+  </div>
   <div v-else>
-    <div v-if="$slots.heading" class="mb-10">
+    <div v-if="$slots.heading" ref="headingRef">
       <slot name="heading"> </slot>
     </div>
 
-    <div v-if="$slots.infobar" class="px-9 py-3 mb-8 bg-grey-lightBg">
-      <slot name="infobar"> </slot>
-    </div>
-
     <div class="flex flex-auto w-full flex-col md:flex-row">
-      <div v-if="$slots.sidebar" class="w-full md:w-44 md:min-w-[11rem] h-fit md:mr-6 mb-6 md:mb-0">
-        <slot name="sidebar"></slot>
-      </div>
       <n-layout :has-sider="instructionsAvailable" sider-placement="right">
-        <n-layout-header v-if="$slots.title">
-          <slot name="title"></slot>
-        </n-layout-header>
         <n-layout-content>
-          <div class="pb-8">
+          <n-scrollbar y-scrollable :style="scrollStyle">
             <slot />
-          </div>
+
+            <!-- Global component: File upload list -->
+            <FormStorageUploadFiles
+              v-if="dataStore.bucket.uploadActive && dataStore.bucketUuid"
+              :bucket-uuid="dataStore.bucketUuid"
+            />
+          </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
           v-if="instructionsAvailable"
@@ -61,7 +63,9 @@
             </button>
           </div>
 
-          <slot v-if="!learnCollapsed" name="learn"></slot>
+          <slot v-if="!learnCollapsed" name="learn">
+            <learn-section />
+          </slot>
         </n-layout-sider>
       </n-layout>
     </div>
@@ -69,16 +73,49 @@
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
+
 defineProps({
   loading: { type: Boolean, default: false },
 });
 
+/** Global messages */
+window.$message = useMessage();
+
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
+const dataStore = useDataStore();
 const { isLg } = useScreen();
+const { name } = useRoute();
+const authStore = useAuthStore();
+
+/** Heading height */
+const headingRef = ref<HTMLElement>();
+const scrollStyle = computed(() => {
+  return {
+    maxHeight: `calc(100vh - ${120 + (headingRef.value?.clientHeight || 0)}px)`,
+  };
+});
+
+/** Instructions load */
+const key = computed(() => {
+  return name?.toString() || '';
+});
+
+onMounted(async () => {
+  // await getInstructions(key.value);
+});
+
+async function getInstructions(key: string) {
+  if (!dataStore.hasInstructions(key)) {
+    await dataStore.fetchInstructions(key);
+  }
+}
 
 const instructionsAvailable = computed(() => {
-  return $slots.learn && isFeatureEnabled(Feature.INSTRUCTIONS) && isLg.value;
+  return (
+    dataStore.hasInstructions(key.value) && isFeatureEnabled(Feature.INSTRUCTIONS, authStore.getUserRoles()) && isLg.value
+  );
 });
 
 // Keep info about collapsible section learn in local storage

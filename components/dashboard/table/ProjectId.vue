@@ -1,39 +1,31 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="data" />
+  <n-data-table
+    v-if="dataStore.currentProject"
+    :bordered="false"
+    :columns="columns"
+    :data="[dataStore.currentProject]"
+  />
 </template>
 
 <script lang="ts" setup>
-import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
-
 const { t } = useI18n();
+const dataStore = useDataStore();
 
-type RowData = {
-  key: number;
-  value: string;
-  created: string;
-};
-
-const createColumns = (): DataTableColumns<RowData> => {
+// TODO: Project property: created
+const createColumns = (): NDataTableColumns<ProjectInterface> => {
   return [
     {
       title: t('dashboard.value'),
-      key: 'value',
+      key: 'project_uuid',
     },
     {
       title: t('dashboard.created'),
       key: 'created',
+      render(row) {
+        return h('span', {}, { default: () => datetimeToDate('2022-12-13T07:21:50.000Z') });
+      },
     },
   ];
 };
-const createData = (): RowData[] => [
-  {
-    key: 0,
-    value: 'project-test-40d53a31-8dac-4d1b-a743-1d88d980fc95',
-    created: '20 Jul 2022',
-  },
-];
-
-const data = createData();
 const columns = createColumns();
 </script>

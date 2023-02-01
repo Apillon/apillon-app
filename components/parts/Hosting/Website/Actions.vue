@@ -1,0 +1,88 @@
+<template>
+  <n-space justify="space-between">
+    <div class="w-[20vw] max-w-xs">
+      <n-input
+        v-model:value="dataStore.folder.search"
+        type="text"
+        name="search"
+        size="small"
+        :placeholder="$t('general.search')"
+        clearable
+      >
+        <template #prefix>
+          <span class="icon-search text-xl"></span>
+        </template>
+      </n-input>
+    </div>
+
+    <n-space size="large">
+      <!-- Refresh webpages -->
+      <n-button size="small" :loading="dataStore.folder.loading" @click="refresh">
+        <span class="icon-refresh text-lg mr-2"></span>
+        {{ $t('general.refresh') }}
+      </n-button>
+
+      <!-- Deploy to production -->
+      <n-button
+        v-if="env === DeploymentEnvironment.STAGING"
+        size="small"
+        type="primary"
+        :loading="deploying"
+        @click="deployToProduction"
+      >
+        <span class="icon-deploy text-lg mr-2"></span>
+        {{ $t('hosting.deployProd') }}
+      </n-button>
+    </n-space>
+  </n-space>
+</template>
+
+<script lang="ts" setup>
+const props = defineProps({
+  webpageItems: { type: Array<BucketItemInterface>, default: [] },
+  env: { type: Number, default: DeploymentEnvironment.PRODUCTION },
+});
+
+const router = useRouter();
+const { params } = useRoute();
+const dataStore = useDataStore();
+const deploying = ref<boolean>(false);
+
+/** Webpage ID from route */
+const webpageId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
+
+function refresh() {
+  /** Refresh active webpage data */
+  dataStore.fetchWebpage(webpageId.value);
+
+  /** Refresh hosting files */
+  dataStore.fetchDirectoryContent();
+
+  /** Refresh deyployments */
+  dataStore.fetchDeployments(webpageId.value, props.env);
+}
+
+/** Deploy to stg */
+async function deployToStaging() {
+  deploying.value = true;
+
+  await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.STAGING);
+
+  /** After successfull deploy redirect to production tab */
+  router.push(`/dashboard/service/hosting/${webpageId.value}/staging`);
+
+  deploying.value = false;
+}
+
+/** Deploy to prod */
+async function deployToProduction() {
+  deploying.value = true;
+
+  await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.PRODUCTION);
+
+  /** After successfull deploy redirect to production tab */
+  router.push(`/dashboard/service/hosting/${webpageId.value}/production`);
+
+  deploying.value = false;
+}
+</script>

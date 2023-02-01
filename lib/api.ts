@@ -1,153 +1,127 @@
 import { stringify } from 'query-string';
+import { getAppConfig } from './utils';
 
 export const APISettings = {
   headers: new Headers({
     Accept: 'application/json',
     'Content-Type': 'application/json',
   }),
-  basePath: '',
+  basePath: removeLastSlash(getAppConfig().apiUrl),
 };
 
-export const $api = {
+class Api {
   async post<T>(path: string, data?: any) {
-    const response = await fetch(APISettings.basePath + path, {
-      method: 'POST',
-      headers: APISettings.headers,
-      body: data ? JSON.stringify(data) : null,
-    });
+    const response = await fetch(
+      APISettings.basePath + path,
+      this.onRequest({
+        method: 'POST',
+        body: data ? JSON.stringify(data) : null,
+      })
+    );
+    return this.onResponse<T>(response);
+  }
 
-    if (response.status > 250) {
-      const error: ApiErrorResponse = await response.json();
-      if ($api.isUnauthorized(response, error)) {
-        $api.backToLogin();
-      }
-      return {
-        error,
-        response,
-      };
-    }
-
-    return {
-      response,
-      data: (await response.json()) as T,
-    };
-  },
-  async get<T>(
-    path: string,
-    query?: { [k: string]: string | number | Array<string | number> }
-  ): Promise<any> {
+  async get<T>(path: string, query?: { [k: string]: string | number | Array<string | number> }) {
     const q = !query ? '' : '?' + stringify(query, { arrayFormat: 'bracket' });
-    const response = await fetch(APISettings.basePath + path + q, {
-      method: 'GET',
-      headers: APISettings.headers,
-    });
-    if (response.status > 250) {
-      const error: ApiErrorResponse = await response.json();
-      if ($api.isUnauthorized(response, error)) {
-        $api.backToLogin();
-      }
-      return {
-        error,
-        response,
-      };
-    }
-
-    return {
-      response,
-      data: (await response.json()) as T,
-    };
-  },
+    const response = await fetch(
+      APISettings.basePath + path + q,
+      this.onRequest({
+        method: 'GET',
+      })
+    );
+    return this.onResponse<T>(response);
+  }
 
   async put<T>(path: string, data?: any) {
-    const response = await fetch(APISettings.basePath + path, {
-      method: 'PUT',
-      headers: APISettings.headers,
-      body: data ? JSON.stringify(data) : null,
-    });
-    if (response.status > 250) {
-      const error: ApiErrorResponse = await response.json();
-      if ($api.isUnauthorized(response, error)) {
-        $api.backToLogin();
-      }
-      return {
-        error,
-        response,
-      };
-    }
-
-    return {
-      response,
-      data: (await response.json()) as T,
-    };
-  },
+    const response = await fetch(
+      APISettings.basePath + path,
+      this.onRequest({
+        method: 'PUT',
+        body: data ? JSON.stringify(data) : null,
+      })
+    );
+    return this.onResponse<T>(response);
+  }
 
   async patch<T>(path: string, data?: any) {
-    const response = await fetch(APISettings.basePath + path, {
-      method: 'PATCH',
-      headers: APISettings.headers,
-      body: data ? JSON.stringify(data) : null,
-    });
-    if (response.status > 250) {
-      const error: ApiErrorResponse = await response.json();
-      if ($api.isUnauthorized(response, error)) {
-        $api.backToLogin();
-      }
-      return {
-        error,
-        response,
-      };
-    }
+    const response = await fetch(
+      APISettings.basePath + path,
+      this.onRequest({
+        method: 'PATCH',
+        body: data ? JSON.stringify(data) : null,
+      })
+    );
+    return this.onResponse<T>(response);
+  }
 
-    return {
-      response,
-      data: (await response.json()) as T,
-    };
-  },
-
-  async delete(path: string) {
-    const response = await fetch(APISettings.basePath + path, {
-      method: 'DELETE',
-      headers: APISettings.headers,
-    });
-    if (response.status > 250) {
-      const error: ApiErrorResponse = await response.json();
-      if ($api.isUnauthorized(response, error)) {
-        $api.backToLogin();
-      }
-      return {
-        error,
-        response,
-      };
-    }
-
-    return {
-      response,
-    };
-  },
+  async delete<T>(path: string, data?: any) {
+    const response = await fetch(
+      APISettings.basePath + path,
+      this.onRequest({
+        method: 'DELETE',
+        body: data ? JSON.stringify(data) : null,
+        headers: APISettings.headers,
+      })
+    );
+    return this.onResponse<T>(response);
+  }
 
   setBaseUrl(baseUrl: string) {
     APISettings.basePath = baseUrl;
-  },
+  }
 
   setToken(token: string) {
     APISettings.headers.set('Authorization', 'Bearer ' + token);
-  },
+  }
 
   clearToken() {
     APISettings.headers.delete('Authorization');
-  },
-
-  isUnauthorized(response: Response, error: ApiErrorResponse) {
-    return (
-      (response.status === 401 && error.message !== 'USER_INVALID_LOGIN') ||
-      (response.status === 500 && error.message === 'jwt expired')
-    );
-  },
+  }
 
   backToLogin() {
     const authStore = useAuthStore();
     authStore.logout();
     const router = useRouter();
     router.push({ name: 'login' });
-  },
-};
+  }
+
+  preventForbiddenAccess() {
+    const router = useRouter();
+    router.push({ name: 'dashboard-error' });
+  }
+
+  onRequest(request: Request | any) {
+    const modifiedRequest = { ...request };
+
+    modifiedRequest.headers = APISettings.headers;
+
+    return modifiedRequest;
+  }
+
+  async onResponse<T>(response: Response) {
+    if (response.status > 250) {
+      const error: ApiError = await response.json();
+
+      if (!error.code) {
+        error.code = response.status;
+      }
+
+      /** Unauthorized or session expired */
+      if (
+        (response.status === 401 && error.message !== UserError.USER_INVALID_LOGIN) ||
+        (response.status === 500 && error.message === UserError.JWT_TOKEN_EXPIRED) ||
+        (response.status === 500 && error.message === UserError.INVALID_SIGNATURE)
+      ) {
+        this.backToLogin();
+      } else if (response.status === 403) {
+        this.preventForbiddenAccess();
+      }
+
+      throw error;
+    }
+
+    return (await response.json()) as T;
+  }
+}
+
+export const $api = new Api();

@@ -1,20 +1,18 @@
 <template>
   <div class="w-full flex flex-col justify-center items-center">
-    <div class="text-center">
+    <div class="w-full text-center">
       <div class="mb-7 text-center text-blue">
         <span class="icon-wow text-[34px]"></span>
       </div>
       <h2 class="mb-6 text-center">{{ $t('signup.emailConfirmed') }}</h2>
       <p class="mb-7">{{ $t('signup.enterDesiredPassword') }}</p>
 
-      <FormPassword class="mx-auto max-w-[520px] text-left" />
+      <FormPassword class="mx-auto max-w-lg text-left" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const authStore = useAuthStore();
 

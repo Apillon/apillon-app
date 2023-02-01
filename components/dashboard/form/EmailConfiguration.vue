@@ -13,7 +13,7 @@
         <template #header-extra>
           <n-switch v-model:value="formData.email" />
         </template>
-        <p class="body-sm text-grey max-w-[350px]">{{ $t('form.emailConfiguration.emailText') }}</p>
+        <p class="body-sm text-grey max-w-sm">{{ $t('form.emailConfiguration.emailText') }}</p>
       </n-collapse-item>
 
       <!-- DID Vault -->
@@ -24,7 +24,7 @@
         <template #header-extra>
           <n-switch v-model:value="formData.did" />
         </template>
-        <p class="body-sm text-grey max-w-[350px]">{{ $t('form.emailConfiguration.didText') }}</p>
+        <p class="body-sm text-grey max-w-sm">{{ $t('form.emailConfiguration.didText') }}</p>
       </n-collapse-item>
     </n-collapse>
 
@@ -40,9 +40,7 @@
 
 <script lang="ts" setup>
 import { CollapseProps, useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
-const $i18n = useI18n();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const message = useMessage();
@@ -68,11 +66,11 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, event
 };
 
 // Submit
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       await generateApiKey();
     }
@@ -82,25 +80,15 @@ async function generateApiKey() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.post<EmailConfigurationResponse>(
-      endpoints.apiKey,
-      formData.value
-    );
-
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
+    const res = await $api.post<EmailConfigurationResponse>(endpoints.apiKey(), formData.value);
 
     // TODO
-    if (data.data) {
-      console.log(data);
+    if (res.data) {
+      console.log(res.data);
     }
-    loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error));
   }
+  loading.value = false;
 }
 </script>

@@ -1,12 +1,14 @@
 <template>
-  <div class="relative min-h-screen h-full pb-28 md:pb-20">
+  <div class="relative flex flex-col min-h-screen h-full pb-28 md:pb-20">
     <AuthHeader />
-    <div class="container flex md:flex-auto py-10 relative z-1 flex-wrap md:flex-nowrap">
+    <div
+      class="container flex items-center md:flex-auto py-10 relative z-1 flex-wrap md:flex-nowrap"
+    >
       <transition name="width" :duration="1000">
         <AnimationIcons
           v-if="isLogin"
           :num-of-icons="4"
-          :animation-name="'Jet'"
+          :animation-name="'jet'"
           :size="'xl'"
           class="order-3 md:order-1"
         />
@@ -24,7 +26,7 @@
         <AnimationIcons
           v-if="isSignUp"
           :num-of-icons="6"
-          :animation-name="'Press'"
+          :animation-name="'press'"
           :size="'xl'"
           class="order-3"
         />
@@ -50,6 +52,6 @@ const isSignUp = computed(() => {
  * Disable body scroll
  */
 onUnmounted(() => {
-  clearAllBodyScrollLocks(document);
+  clearAllBodyScrollLocks();
 });
 </script>

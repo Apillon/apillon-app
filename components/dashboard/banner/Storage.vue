@@ -1,11 +1,11 @@
 <template>
-  <div class="relative bg-black px-12 pt-5 pb-10 overflow-hidden rounded">
+  <div class="relative bg-bg-dark px-12 pt-5 pb-10 overflow-hidden rounded">
     <div class="max-w-[600px] w-2/3">
       <n-space size="large" align="center" class="h-12">
         <h4 class="">{{ $t('nav.storage') }}</h4>
-        <div class="w-[1px] h-[13px] bg-grey-light"></div>
+        <div class="w-[1px] h-[13px] bg-white"></div>
         <div class="flex items-center h-12">
-          <NuxtIcon name="StorageCrust" class="text-[80px]" fill />
+          <NuxtIcon name="storage/crust" class="text-[80px]" filled />
         </div>
       </n-space>
       <p class="mb-7 text-sm">
@@ -17,7 +17,7 @@
       </Notification>
     </div>
     <div class="absolute top-1/2 right-0 -translate-y-1/2">
-      <AnimationIcons :num-of-icons="8" :animation-name="'Labirynth'" :size="'md'" />
+      <AnimationIcons :num-of-icons="8" :animation-name="'labirynth'" :size="'md'" />
     </div>
   </div>
 </template>

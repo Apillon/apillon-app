@@ -1,4 +1,3 @@
-import { removeLastSlash } from '~/lib/utils';
 import { useAuthStore } from '~/stores/auth';
 interface ProtectedRouteInterface {
   path?: string;
@@ -19,6 +18,7 @@ const protectedRoutes: Array<ProtectedRouteInterface> = [
 ];
 const featureRoutes: Array<FeatureRouteInterface> = [
   { regex: /^\/onboarding/, redirect: '/dashboard', feature: Feature.ONBOARDING },
+  { regex: /^\/dashboard\/referral/, redirect: '/dashboard', feature: Feature.REFERRAL },
   { regex: /^\/dashboard\/service/, redirect: '/dashboard', feature: Feature.SERVICES },
   {
     regex: /^\/dashboard\/service\/authentication/,
@@ -66,7 +66,7 @@ export default defineNuxtRouteMiddleware(to => {
     if (
       ((featureRoute.regex && featureRoute.regex.test(decodedUrl)) ||
         decodedUrl === featureRoute.path) &&
-      !isFeatureEnabled(featureRoute.feature)
+      !isFeatureEnabled(featureRoute.feature, authStore.getUserRoles())
     ) {
       return navigateTo(featureRoute.redirect, { redirectCode: 301 });
     }

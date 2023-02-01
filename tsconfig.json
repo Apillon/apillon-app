@@ -1,9 +1,10 @@
 {
   // https://v3.nuxtjs.org/concepts/typescript
   "extends": "./.nuxt/tsconfig.json",
-
   "compilerOptions": {
-    "types": ["node", "naive-ui/volar"],
-    "typeRoots": ["./node_modules/@types", "./types"]
+    "isolatedModules": true,
+    "noImplicitAny": false,
+    "types": ["node", "naive-ui/volar", "@nuxt/types", "@nuxtjs/i18n"],
+    "typeRoots": ["./node_modules/@types", "./types", "./node_modules/@types/body-scroll-lock"]
   }
 }

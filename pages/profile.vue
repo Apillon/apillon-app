@@ -1,7 +1,11 @@
 <template>
   <Dashboard>
     <template #heading>
-      <h4 class="-mb-2">{{ $t('profile.mySettings') }}</h4>
+      <Heading>
+        <slot>
+          <h4>{{ $t('profile.mySettings') }}</h4>
+        </slot>
+      </Heading>
     </template>
     <slot>
       <!-- Edit user profile -->
@@ -15,7 +19,7 @@
         </FormPasswordResetRequest>
 
         <!-- 2FA -->
-        <template v-if="isFeatureEnabled(Feature.TWO_FACTOR_AUTHENTICATION)">
+        <template v-if="isFeatureEnabled(Feature.TWO_FACTOR_AUTHENTICATION, authStore.getUserRoles())">
           <n-h5 class="mb-0" prefix="bar">{{ $t('profile.2fa') }}</n-h5>
           <p class="mb-6">{{ $t('profile.2faText') }}</p>
           <Btn type="secondary">{{ $t('profile.setup2fa') }}</Btn>
@@ -23,25 +27,14 @@
       </div>
 
       <!-- Modal - Change password -->
-      <n-modal v-model:show="showModalChangePassword">
-        <n-card
-          style="width: 660px"
-          :title="$t('profile.changePassword')"
-          :bordered="false"
-          size="huge"
-          role="dialog"
-          aria-modal="true"
-        >
-          <FormPassword :token="authStore.jwt" @submit-success="passwordChanged" />
-        </n-card>
-      </n-modal>
+      <modal v-model:show="showModalChangePassword" :title="$t('profile.changePassword')">
+        <FormPassword :token="authStore.jwt" @submit-success="passwordChanged" />
+      </modal>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const $i18n = useI18n();
 const authStore = useAuthStore();
 

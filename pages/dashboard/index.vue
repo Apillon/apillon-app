@@ -22,11 +22,11 @@
               </li>
               <li>Log in to your account.</li>
               <li>
-                At the bottom of the welcome page, find an Closed beta code assigned to your
+                At the bottom of the welcome page, find an Closed Beta code assigned to your
                 account.
               </li>
               <li>
-                Copy the Closed ceta code and paste it to our
+                Copy the Closed Beta code and paste it to our
                 <Btn href="https://discord.gg/n6gVzCnz9t" target="_blank">
                   <span class="font-content text-blue">closed-beta channel</span>
                 </Btn>
@@ -53,27 +53,82 @@
             <Image src="/images/dashboard/welcome.svg" :width="400" :height="470" alt="apillon" />
           </div>
         </div>
+
         <!-- Referral code -->
-        <div class="max-w-[1080px] p-8 mt-7 bg-grey-lightBg">
-          <p class="font-bold">Closed beta code:</p>
+        <div class="max-w-[1080px] p-8 my-8 bg-grey-lightBg">
+          <p class="font-bold">Closed Beta code:</p>
           <div class="max-w-xl">
             <div class="p-4 bg-grey-dark mt-2">
               <p>{{ authStore.userUuid }}</p>
             </div>
           </div>
         </div>
+
+        <!-- Referral -->
+        <div
+          v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())"
+          class="max-w-lg p-8 mb-8 bg-bg-light"
+        >
+          <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
+          <p class="text-body mb-7">
+            {{ $t('referral.banner.description') }}
+          </p>
+          <Btn :loading="loading" type="primary" size="large" @click="enterReferral()">
+            {{ $t('referral.banner.btn') }}
+          </Btn>
+        </div>
       </div>
     </slot>
   </Dashboard>
+
+  <!-- Modal Referral -->
+  <modal v-model:show="showModal" :title="$t('referral.enter.header')">
+    <ReferralAcceptTerms />
+  </modal>
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const { t } = useI18n();
 const authStore = useAuthStore();
+const router = useRouter();
+const config = useRuntimeConfig();
+const referralStore = useReferralStore();
 
 useHead({
   title: t('dashboard.dashboard'),
 });
+
+function enterReferral() {
+  if (!termsAccepted.value) {
+    showModal.value = true;
+  } else {
+    router.push('/dashboard/referral');
+  }
+}
+
+const loading = ref(false);
+const termsAccepted = ref(false);
+
+onMounted(() => {
+  if (isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())) {
+    getReferral();
+  }
+});
+
+async function getReferral() {
+  loading.value = true;
+  try {
+    const res = await $api.get<ReferralResponse>(endpoints.referral);
+    // If there is no error -> user already accepted terms & conditions
+    referralStore.initReferral(res.data);
+    termsAccepted.value = true;
+  } catch (e) {
+    if (config.public.ENV === AppEnv.LOCAL) {
+      console.error(e);
+    }
+  }
+  loading.value = false;
+}
+
+const showModal = ref(false);
 </script>

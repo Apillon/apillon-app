@@ -1,7 +1,7 @@
 <template>
   <Dashboard>
     <template #heading>
-      <h4 class="-mb-4">{{ $t('dashboard.billing') }}</h4>
+      <h4>{{ $t('dashboard.billing') }}</h4>
     </template>
     <slot>
       <div class="grid grid-cols-billing gap-5">
@@ -55,8 +55,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
 const { t } = useI18n();
 
 useHead({

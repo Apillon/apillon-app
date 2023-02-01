@@ -4,7 +4,6 @@
 
 <script lang="ts" setup>
 import { DataTableColumns, NSwitch, NTag } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 

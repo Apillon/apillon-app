@@ -3,30 +3,18 @@
     v-if="authStore.loggedIn"
     placement="bottom-end"
     trigger="click"
-    size="huge"
+    size="large"
     :options="options"
     @select="handleSelect"
   >
     <div class="flex cursor-pointer">
       <div class="flex items-center pr-2">
-        <div
-          class="relative w-10 h-10 flex justify-center items-center rounded-[50%] bg-grey-light"
-        >
-          <span class="icon-apillon-icon text-dark text-lg"></span>
-          <span
-            class="absolute right-0 bottom-0 icon-status text-green translate-x-1/4 translate-y-1/4 text-xl"
-          ></span>
+        <div class="relative w-10 h-10 flex justify-center items-center rounded-[50%] bg-white">
+          <span v-if="authStore.username" class="text-bg text-lg font-bold uppercase">
+            {{ initials(authStore.username) }}
+          </span>
+          <span v-else class="icon-apillon-icon text-bg text-lg"></span>
         </div>
-      </div>
-      <div class="hidden md:flex flex-col justify-center min-w-[120px] pr-1">
-        <strong v-if="authStore.username">{{ authStore.username }}</strong>
-        <strong v-else>{{ authStore.email }}</strong>
-        <span v-if="authStore.wallet" class="text-grey">
-          {{ truncateWallet(authStore.wallet) }}
-        </span>
-        <span v-else-if="authStore.username" class="text-grey">
-          {{ authStore.email }}
-        </span>
       </div>
       <div class="hidden md:flex items-center">
         <span class="icon-down text-2xl"></span>
@@ -36,9 +24,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-import { useAuthStore } from '~~/stores/auth';
-
 const authStore = useAuthStore();
 const router = useRouter();
 const $i18n = useI18n();
@@ -61,5 +46,13 @@ function handleSelect(key: string | number) {
   } else if (key === 'profile') {
     router.push({ name: 'profile' });
   }
+}
+
+/** Initials from username (firstname and lastname) */
+function initials(username: string): string {
+  return username
+    .split(' ')
+    .map(part => part.slice(0, 1))
+    .join('');
 }
 </script>

@@ -25,7 +25,56 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+@layer utilities {
+  .icon-apillon {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'apillon' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
 
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+.icon-deploy:before {
+  content: '\e939';
+}
+.icon-hosting:before {
+  content: '\e93a';
+}
+.icon-preview:before {
+  content: '\e93f';
+}
+.icon-restore:before {
+  content: '\e942';
+}
+.icon-create-folder:before {
+  content: '\e940';
+}
+.icon-refresh:before {
+  content: '\e941';
+}
+.icon-upload:before {
+  content: '\e93e';
+}
+.icon-left-long:before {
+  content: '\e938';
+}
+.icon-add:before {
+  content: '\e93b';
+}
+.icon-clear:before {
+  content: '\e93c';
+}
+.icon-search:before {
+  content: '\e93d';
+}
 .icon-file:before {
   content: '\e935';
 }

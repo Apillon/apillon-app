@@ -3,27 +3,19 @@
     <template #heading>
       <n-space :size="24" align="center" class="h-12">
         <h4 class="">{{ $t('dashboard.attachNewService') }}</h4>
-        <div class="w-[1px] h-[13px] bg-grey-light"></div>
+        <div class="w-[1px] h-[13px] bg-white"></div>
         <strong class="body-sm">{{ $t('dashboard.learnMoreAboutServices') }}</strong>
       </n-space>
     </template>
-    <template v-if="showServices || !isFeatureEnabled(Feature.SERVICES)" #learn>
-      <LearnAlert>
-        Click on a service you want to attach to your project. After configuring it, the service
-        will become operational.
-        <strong>Keep in mind, you can always edit the attached services or add new ones.</strong>
-      </LearnAlert>
-      <LearnVideo />
-      <LearnClientLibraries />
-    </template>
+    <template v-if="showServices || !isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())" #learn> </template>
     <slot>
-      <div v-if="showServices && isFeatureEnabled(Feature.SERVICES)">
+      <div v-if="showServices && isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())">
         <h6 class="mb-6">{{ $t('dashboard.selectServices') }}</h6>
         <div class="grid gap-4 grid-cols-services">
           <div
             v-for="(service, key) in services"
             :key="key"
-            class="py-6 px-[22px] bg-grey-lightBg shadow-black"
+            class="py-6 px-[22px] bg-bg-lighter shadow-black"
             :class="{ 'text-grey': service.disabled }"
           >
             <div class="text-2xl">
@@ -53,12 +45,12 @@
         <FormAttachService
           v-if="attachService"
           :service-type="attachService"
-          class="max-w-[520px] mt-5"
+          class="max-w-lg mt-5"
         />
       </div>
       <div
-        v-else-if="isFeatureEnabled(Feature.SERVICES)"
-        class="flex flex-col md:flex-row items-center justify-between max-w-3xl bg-grey-lightBg px-6 py-4"
+        v-else-if="isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())"
+        class="flex flex-col md:flex-row items-center justify-between max-w-3xl bg-bg-lighter px-6 py-4"
       >
         <div class="mb-4 md:mb-0">
           <p class="body-lg font-bold">Your project currently has no active service</p>
@@ -79,6 +71,7 @@ useHead({
   title: 'Dashboard',
 });
 
+const authStore = useAuthStore();
 const showServices = ref(false);
 const attachService = ref(null);
 
@@ -87,20 +80,20 @@ const services: Array<ServiceTypeItem> = [
     id: ServiceType.AUTHENTICATION,
     name: 'authentication',
     icon: 'icon-authentication',
-    disabled: !isFeatureEnabled(Feature.AUTHENTICATION),
+    disabled: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
   },
   {
     id: ServiceType.STORAGE,
     name: 'storage',
     icon: 'icon-storage',
     new: true,
-    disabled: !isFeatureEnabled(Feature.STORAGE),
+    disabled: !isFeatureEnabled(Feature.STORAGE, authStore.getUserRoles()),
   },
   {
     id: ServiceType.COPMUTING,
     name: 'computing',
     icon: 'icon-computing',
-    disabled: !isFeatureEnabled(Feature.COMPUTING),
+    disabled: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
   },
 ];
 </script>

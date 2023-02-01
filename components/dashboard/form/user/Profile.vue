@@ -34,6 +34,7 @@
         :input-props="{ id: 'phone' }"
         :placeholder="$t('form.placeholder.phone')"
         :loading="loadingForm"
+        @input="handlePhoneNumberInput"
       />
     </n-form-item>
 
@@ -49,7 +50,7 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
+import { textMarshal } from 'text-marshal';
 
 const message = useMessage();
 const $i18n = useI18n();
@@ -94,25 +95,52 @@ const rules: NFormRules = {
     {
       validator: validatePhone,
       message: $i18n.t('validation.phone'),
-      trigger: 'input',
     },
   ],
 };
 
 // Custom validations
 function validatePhone(_: NFormItemRule, value: string): boolean {
-  // const re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
-  const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+  const regex = /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
 
   return !value || regex.test(value);
 }
 
+/** Format phone number */
+function handlePhoneNumberInput(value: string | [string, string]) {
+  const data = textMarshal({
+    input: value,
+    template: 'x',
+    disallowCharacters: [
+      /[a-z]/,
+      /[A-Z]/,
+      /@/,
+      /\\/,
+      /\//,
+      /\|/,
+      /\!/,
+      /\#/,
+      /\$/,
+      /\%/,
+      /\^/,
+      /\&/,
+      /\*/,
+    ],
+    isRepeat: {
+      value: true,
+      removeStart: true,
+      removeEnd: true,
+    },
+  });
+  formData.value.phone = data.marshaltext;
+}
+
 // Submit
-function handleSubmit(e: MouseEvent) {
+function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message)));
+      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else {
       await updateUserProfile();
     }
@@ -122,22 +150,15 @@ async function updateUserProfile() {
   loading.value = true;
 
   try {
-    const { data, error } = await $api.patch<UserProfileResponse>(endpoints.me, formData.value);
+    const res = await $api.patch<UserProfileResponse>(endpoints.me, formData.value);
 
-    if (error) {
-      message.error(userFriendlyMsg($i18n, error));
-      loading.value = false;
-      return;
-    }
-
-    if (data.data) {
-      authStore.changeUser(data.data);
+    if (res.data) {
+      authStore.changeUser(res.data);
       message.success($i18n.t('form.success.profile'));
     }
-    loading.value = false;
   } catch (error) {
-    message.error(userFriendlyMsg($i18n, error));
-    loading.value = false;
+    message.error(userFriendlyMsg(error));
   }
+  loading.value = false;
 }
 </script>

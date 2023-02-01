@@ -10,7 +10,7 @@
             <div
               class="bg-white border-grey border-[1px] inline-flex justify-center items-center w-12 h-12"
             >
-              <NuxtIcon :name="library.icon" class="icon-library text-[22px]" fill />
+              <NuxtIcon :name="library.icon" class="icon-library text-[22px]" filled />
             </div>
           </template>
           <span>{{ library.name }}</span>
@@ -30,11 +30,11 @@ const props = defineProps({
 });
 
 const libraries = [
-  { name: 'AT-React', show: props.react, icon: 'LibrariesReact' },
-  { name: 'AT-Vue', show: props.vue, icon: 'LibrariesVue' },
-  { name: 'AT-Java', show: props.java, icon: 'LibrariesJava' },
-  { name: 'AT-Python', show: props.python, icon: 'LibrariesPython' },
-  { name: 'AT-Typescript', show: props.ts, icon: 'LibrariesTs' },
+  { name: 'AT-React', show: props.react, icon: 'libraries/react' },
+  { name: 'AT-Vue', show: props.vue, icon: 'libraries/vue' },
+  { name: 'AT-Java', show: props.java, icon: 'libraries/java' },
+  { name: 'AT-Python', show: props.python, icon: 'libraries/python' },
+  { name: 'AT-Typescript', show: props.ts, icon: 'libraries/ts' },
 ];
 </script>
 

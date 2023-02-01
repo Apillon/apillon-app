@@ -1,9 +1,11 @@
 <template>
   <div class="bg-gradientDarkReverse">
-    <div v-if="!isFooterHidden" class="container py-6 pt-24">
+    <div v-if="!isFooterHidden" class="container py-6">
       <div class="flex items-center flex-wrap-reverse md:flex-nowrap">
         <div class="flex w-full md:w-1/2 justify-center md:justify-start">
-          <span class="text-grey-light">{{ $t('general.copyrights') }}</span>
+          <span class="text-white">{{ $t('general.copyrights') }}</span>
+          &nbsp;
+          <span>{{ new Date().getFullYear() }}</span>
         </div>
         <div class="flex w-full md:w-1/2 justify-center md:justify-end mb-4 md:mb-0">
           <ul class="body-sm flex text-white">

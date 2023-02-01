@@ -5,9 +5,10 @@
     :href="href || undefined"
     :to="to"
     :class="btnClass"
-    :type="!href && !to ? 'primary' : ''"
+    :type="!href && !to ? (type === 'secondary' ? 'primary' : type) : ''"
     :size="size"
-    :ghost="type === 'secondary' ? true : false"
+    :bordered="type === 'secondary' || type === 'error' ? true : false"
+    :ghost="type === 'secondary' || type === 'error' ? true : false"
     :quaternary="quaternary || type === 'builders' ? true : false"
     @click="onClick"
   >
@@ -29,7 +30,8 @@ const props = defineProps({
 
   type: {
     type: String,
-    validator: (value: string) => ['primary', 'secondary', 'builders', 'link'].includes(value),
+    validator: (value: string) =>
+      ['primary', 'secondary', 'builders', 'error', 'info', 'link'].includes(value),
     default: 'primary',
   },
   size: {
@@ -54,7 +56,7 @@ setTimeout(() => (isBtnLocked.value = false), 1000);
 
 const btnClass = computed(() => {
   return [
-    props.type === 'link' ? 'font-content' : 'font-button',
+    props.type === 'link' ? 'font-sans' : 'font-mono',
     {
       'w-full': props.type !== 'link' && props.size === 'large',
       'text-primary': props.type === 'link',

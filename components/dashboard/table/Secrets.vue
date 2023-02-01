@@ -5,8 +5,6 @@
 <script lang="ts" setup>
 import { h } from 'vue';
 import { NButton, NInput, useMessage } from 'naive-ui';
-import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -24,7 +22,7 @@ const createColumns = ({
 }: {
   viewRow: (rowData: RowData) => void;
   deleteRow: (rowData: RowData) => void;
-}): DataTableColumns<RowData> => {
+}): NDataTableColumns<RowData> => {
   return [
     {
       title: $i18n.t('general.secret'),

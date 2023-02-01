@@ -6,14 +6,20 @@ export enum ServiceType {
   STORAGE = 2,
   COPMUTING = 3,
 }
+export enum ServiceTypeName {
+  AUTHENTICATION = 'authentication',
+  STORAGE = 'storage',
+  COPMUTING = 'computing',
+}
 
 /**
- * Bucket type
+ * Service type names (used in store)
  */
-export enum BucketType {
-  STORAGE = 1,
-  HOSTING = 2,
-}
+export const ServiceTypeNames: { [k: number]: ServiceTypeName } = {
+  [ServiceType.AUTHENTICATION]: ServiceTypeName.AUTHENTICATION,
+  [ServiceType.STORAGE]: ServiceTypeName.STORAGE,
+  [ServiceType.COPMUTING]: ServiceTypeName.COPMUTING,
+};
 
 declare global {
   /**
@@ -37,66 +43,22 @@ declare global {
   /**
    * Service
    */
-  interface ServicesInterface {
-    name: string;
-    serviceType: string;
-    active: number;
-    uptime: string;
-  }
-
-  interface ServicesResponse {
-    data: {
-      items: ServicesInterface[];
-      total: number;
-    };
-    status: number;
-  }
-
   interface FormService {
     serviceName: string;
     networkType: boolean;
   }
-  interface CreateServiceResponse {
-    data: {
-      id: number;
-      status: number;
-    };
-    status: number;
-  }
-
-  /**
-   * Bucket
-   */
-  interface BucketInterface {
+  interface ServiceInterface {
+    active: number;
     id: number;
-    status: number;
-    bucket_uuid: string;
-    project_uuid: string;
-    bucketType: number;
     name: string;
     description: string;
-    maxSize: number;
-    size: number | null;
-    CID: string | null;
-    IPNS: string | null;
-    sizeMb?: number;
-    maxSizeMb?: number;
-    percentage?: number;
-  }
-
-  interface FormNewBucket {
-    bucketName: string;
-    bucketSize: string;
-  }
-  interface NewBucketResponse {
-    data: BucketInterface;
+    serviceType: string;
+    serviceType_id: number;
+    service_uuid: string;
     status: number;
+    key?: number;
+    uptime?: string;
   }
-  interface BucketResponse {
-    data: {
-      items: BucketInterface;
-      total: number;
-    };
-    status: number;
-  }
+  interface CreateServiceResponse extends GeneralResponse<{ id: number; status: number }> {}
+  interface ServicesResponse extends GeneralItemsResponse<ServiceInterface> {}
 }

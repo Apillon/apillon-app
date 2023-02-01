@@ -4,26 +4,74 @@
     "actions": "Actions",
     "active": "active",
     "attach": "Attach",
+    "cancel": "No, cancel",
+    "confirm": "Yes, confirm",
     "copyrights": "© Apillon",
     "created": "created",
+    "delete": "Delete",
+    "download": "Download",
+    "edit": "Edit",
+    "error": "Error",
+    "goHome": "Go home",
+    "environment": "Environment",
     "learn": "Learn",
     "learnMore": "Learn more",
+    "live": "Live",
     "login": "Log in",
     "logout": "Log out",
     "method": "Method",
     "name": "Name",
     "notActive": "not active",
+    "nothingHere": "Nothing here",
+    "ok": "OK",
+    "open": "Open",
     "paused": "paused",
+    "pending": "pending",
+    "production": "Production",
+    "refresh": "Refresh",
+    "scope": "Scope",
+    "search": "Search",
     "secret": "Secret",
     "serviceName": "Service name",
     "serviceType": "Service type",
     "signup": "Sign up",
+    "skip": "Skip",
+    "staging": "Staging",
     "status": "Status",
     "tryAgain": "Try again",
     "terms": "",
-    "uptime": "Uptime"
+    "test": "Test",
+    "updateTime": "Update time",
+    "upload": "Upload",
+    "uptime": "Uptime",
+    "uuid": "UUID",
+    "view": "View"
   },
   "dashboard": {
+    "apiKey": {
+      "apiKey": "API key",
+      "apiKeySecret": "API key secet",
+      "delete": "Delete API key",
+      "details": "API key details",
+      "generate": "Generate new key",
+      "secredSaved": "I've saved API key's secret",
+      "title": "API keys",
+      "update": "Update API key"
+    },
+    "clipboard": {
+      "copied": "Text has been copied to clipboard",
+      "copy": "Copy to clipboard",
+      "copyApiKey": "Copy Api key to clipboard",
+      "copyCid": "Copy CID",
+      "copyLink": "Copy link",
+      "error": "Failed to copy"
+    },
+    "permissions": {
+      "read": "Read permissions",
+      "write": "Write permissions",
+      "execute": "Execute permissions",
+      "insufficient": "You don't have permissions to create or edit this item."
+    },
     "addPayment": "Add payment",
     "addPaymentMethod": "Add payment method",
     "addPaymentMethodText": " Add payment method and prepurchase the needed credits. Once the credits supply is depleated you will be charged again.",
@@ -35,15 +83,16 @@
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
-    "credentialsAndApiKeys": "Credentials and API keys",
+    "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
     "dashboard": "Dashboard",
     "date": "Date",
     "email": "Email",
     "emailMethodConfiguration": "Email method configuration",
     "env": "ENV",
     "expiration": "Expiration",
-    "generateNewKey": "Generate new key",
+    "gotIt": "Got it, thanks!",
     "goToApiManagement": "Go to central API management",
+    "homepage": "Homepage",
     "inviteTeamMember": "Invite team member",
     "invoiceDate": "Next invoice issue date",
     "invoiceTotal": "Invoice total",
@@ -54,6 +103,7 @@
     "name": "Name",
     "payment": "Payment",
     "role": "Role",
+    "searchDocs": "Search the docs",
     "secret": "Secret",
     "secrets": "Secrets",
     "selectServices": "Select services",
@@ -61,22 +111,27 @@
     "user": "User",
     "viewInvoice": "View Invoice",
     "yourPlan": "Your plan: ",
-    "value": "Value"
+    "value": "Value",
+    "visibleColumns": "Visible columns",
+    "w3Warn": "W3 warn"
   },
   "error": {
-    "BAD_REQUEST": "Bad request",
+    "404": "Page not found",
+
+    "BAD_REQUEST": "There is a problem with this request. Please come back later when we fixed that problem.",
     "INVALID_PATH": "Invalid path",
     "INVALID_QUERY_PARAMETERS": "Invalid query parameters",
-    "UNAUTHORIZED": "Unauthorized",
+    "UNAUTHORIZED": "You are unauthorized for this action",
     "INVALID_TOKEN": "Invalid token",
     "USER_IS_NOT_AUTHENTICATED": "User is not authenticated",
-    "FORBIDDEN": "Forbidden",
+    "FORBIDDEN": "You don't have permission for this action",
     "USER_IS_NOT_AUTHORIZED": "User is not authorized",
 
-    "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error",
+    "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error, please fill the form",
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
     "ERR_CONNECTION_REFUSED": "Connection refused, please check your internet connection.",
     "Failed to fetch": "Connection refused, please check your internet connection.",
+    "jwt expired": "Your session has expired, please log in again.",
 
     "API_KEY_NOT_PRESENT": "API key is missing",
     "API_KEY_SECRET_NOT_PRESENT": "API key secret is missing",
@@ -98,12 +153,18 @@
     "CONTENT_TYPE_NOT_PRESENT": "Content type is missing",
     "SESSION_UUID_NOT_PRESENT": "Session UUID is missing",
     "BUCKET_TYPE_NOT_PRESENT": "Bucket type is missing",
+    "WEBHOOK_ALREADY_EXISTS_FOR_PROJECT": "Webhook already exists",
+    "MAX_BUCKETS_REACHED": "Maximum number of buckets is reached",
+    "MAX_PROJECTS_REACHED": "Maximum number of projects is reached",
+    "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
+    "WEB_PAGE_NOT_FOUND": "Web page not found",
 
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
     "FILE_CONTENT_TYPE_NOT_PRESENT": "File content is missing",
     "FILE_VERSION_NOT_PRESENT": "File version is missing",
     "FILE_BODY_NOT_PRESENT": "File body is missing",
+    "FILE_NOT_FOUND": "File not found",
 
     "STATUS_NOT_PRESENT": "Status not present",
     "INVALID_STATUS": "Invalid status",
@@ -112,6 +173,7 @@
     "USER_EMAIL_NOT_PRESENT": "Email is missing",
     "USER_INVALID_LOGIN": "Wrong email or password",
     "USER_EMAIL_NOT_VALID": "Email is not valid",
+    "USER_EMAIL_NOT_EXISTS": "Looks like your email is not in our books yet.",
     "USER_EMAIL_ALREADY_TAKEN": "Email is already taken",
     "USER_UUID_NOT_PRESENT": "user_uuid is missing",
     "USER_UUID_ALREADY_EXISTS": "user_uuid already exists",
@@ -119,6 +181,7 @@
     "USER_AUTH_TOKEN_NOT_PRESENT": "AUTH_TOKEN is missing",
     "USER_AUTH_TOKEN_EXPIRES_IN_NOT_PRESENT": "AUTH_TOKEN_EXPIRES is missing",
     "USER_AUTH_TOKEN_TYPE_NOT_PRESENT": "AUTH_TOKEN_TYPE is missing",
+    "CANNOT_MODIFY_PROJECT_OWNER": "Can't modify project owner",
 
     "PROJECT_NAME_NOT_PRESENT": "Project name is missing",
     "PROJECT_UUID_NOT_PRESENT": "Project UUID is missing",
@@ -128,17 +191,18 @@
     "SERVICE_UUID_NOT_PRESENT": "Service UUID is missing",
     "SERVICE_PROJECT_ID_NOT_PRESENT": "Project ID is missing",
 
-    "API": "Internal server error",
-    "DEFAULT_SYSTEM_ERROR": "System error",
-    "UNHANDLED_SYSTEM_ERROR": "Unhandled system error",
-    "SQL_SYSTEM_ERROR": "System error",
-    "AWS_SYSTEM_ERROR": "System error",
-    "MICROSERVICE_SYSTEM_ERROR": "System error",
-    "ERROR_WRITING_TO_DATABASE": "Internal server error",
-    "ERROR_READING_FROM_DATABASE": "Internal server error",
-    "SERVICE_ERROR": "Internal server error",
+    "API": "There has been an error. Please come back later when we fixed that problem.",
+    "DEFAULT_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+    "UNHANDLED_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+    "SQL_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+    "AWS_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+    "MICROSERVICE_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+    "ERROR_WRITING_TO_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
+    "ERROR_READING_FROM_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
+    "SERVICE_ERROR": "There has been an error. Please come back later when we fixed that problem.",
 
-    "walletSignature": "'Could not capture your signature, check your wallet connection"
+    "walletSignature": "'Could not capture your signature, check your wallet connection",
+    "fileDownload": "Download failed. Something went wrong during the download."
   },
   "footer": {
     "support": "Support",
@@ -147,6 +211,15 @@
     "privacy": "Privacy"
   },
   "form": {
+    "apiKeyTypes": {
+      "test": "Test",
+      "live": "Live"
+    },
+    "authTypes": {
+      "basic": "Basic",
+      "bearer-token": "Bearer token",
+      "none": "None"
+    },
     "bucketSizes": {
       "5gb": "5GB - Free",
       "100gb": "100GB - Not available"
@@ -158,13 +231,24 @@
       "didText": "DIDs generated by the KILT protocol will be saved to Apillon DID Vault and become available for quick login for end-users."
     },
     "label": {
+      "authType": "Auth type",
+      "apiKeyName": "API Key name",
+      "apiKeyType": "API Key type",
+      "bearerToken": "Bearer token",
+      "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
       "bucketSize": "Bucket size",
       "cardHolder": "Card holder",
       "cardNumber": "Card number",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
+      "domain": "Domain name",
       "email": "Email address",
+      "folderName": "Folder name",
+      "folderDescription": "Folder description",
+      "hostingDescription": "Hosting description",
+      "hostingName": "Hosting name",
+      "hostingSize": "Hosting size",
       "inviteByEmail": "Invite by email",
       "expirationDate": "Expiration date",
       "networkType": "Choose the desired network",
@@ -175,19 +259,33 @@
       "projectDescription": "Project description",
       "role": "Role",
       "serviceName": "Service name",
-      "username": "First & Last name"
+      "username": "First & Last name",
+      "webhookPassword": "Password",
+      "webhookUrl": "Webhook URL",
+      "webhookUsername": "User name",
+      "webpageDescription": "Webpage description",
+      "webpageName": "Webpage name"
     },
     "networkTypes": {
       "test": "Test network",
       "live": "Live network"
     },
     "placeholder": {
+      "apiKeyName": "API Key name",
+      "bearerToken": "Enter Bearer token",
+      "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
       "cardHolder": "John Doe",
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "complexPassword": "Enter complex password",
       "cvv": "311",
+      "domain": "Type your domain name here",
       "email": "youremail{afna}mail.com",
+      "fileStatus": "Select file status",
+      "folderName": "",
+      "folderDescription": "",
+      "hostingDescription": "Hosting description",
+      "hostingName": "Hosting name",
       "inviteByEmail": "Type e-mail",
       "expirationDate": "01/2023",
       "password": "password",
@@ -198,12 +296,58 @@
       "reenterPassword": "Re-enter your complex password",
       "role": "Select role",
       "serviceName": "Enter the name for the new service",
-      "username": "Enter yout First & Last name"
+      "username": "Enter yout First & Last name",
+      "webhookPassword": "Enter password",
+      "webhookUrl": "Webhook URL",
+      "webhookUsername": "Enter user name",
+      "webpageDescription": "Webpage description",
+      "webpageName": "Webpage name"
     },
     "success": {
-      "requestPasswordChange": "We have send you a password reset request to your email.",
+      "apiKey": "Api key has been created",
+      "filesUploaded": "Files has been successfully uploaded",
       "profile": "Your profile data has been updated",
-      "sendAgainEmail": "Email has been re-sent"
+      "requestPasswordChange": "We’ve sent you a password reset request to your email",
+      "sendAgainEmail": "Email has been re-sent",
+      "webpageDeployed": "Webpage has been deployed.",
+      "webpageDeploying": "Done - deployment initiated",
+      "created": {
+        "apiKey": "Api key has been created",
+        "apiKeyRole": "Api key permission has been added",
+        "bucket": "Bucket has been created",
+        "directory": "Directory key has been created",
+        "file": "File has been created",
+        "hosting": "Hosting has been created",
+        "item": "Item has been created",
+        "userInvite": "User has been invited.",
+        "webhook": "Webhook has been created",
+        "webpage": "Webpage has been created"
+      },
+      "deleted": {
+        "apiKey": "Api key has been deleted",
+        "apiKeyRole": "Api key permission has been removed",
+        "bucket": "Bucket has been deleted",
+        "directory": "Directory key has been deleted",
+        "file": "File has been deleted",
+        "hosting": "Hosting has been deleted",
+        "item": "Item has been deleted",
+        "items": "Items has been deleted",
+        "webhook": "Webhook has been deleted",
+        "webpage": "Webpage has been deleted"
+      },
+      "updated": {
+        "apiKey": "Api key has been updated",
+        "apiKeyRole": "Api key permission has been added",
+        "bucket": "Bucket has been updated",
+        "directory": "Directory key has been updated",
+        "file": "File has been updated",
+        "hosting": "Hosting has been updated",
+        "item": "Item has been updated",
+        "project": "Project has been updated",
+        "userRole": "User role has been updated",
+        "webhook": "Webhook has been updated",
+        "webpage": "Webpage has been updated"
+      }
     },
     "terms": {
       "project": "I understand product is in beta stage",
@@ -211,17 +355,59 @@
     },
     "connect": "Connect",
     "createBucketAndContinue": "Create bucket & continue to management",
+    "createHostingAndContinue": "Create hosting & continue to management",
     "createNewProject": "Create new project",
     "createServiceAndContinue": "Create service & continue to management",
     "continue": "Continue",
     "generate": "Generate",
     "login": "Log in",
     "proceed": "Proceed",
+    "reset": "Reset",
     "save": "Save",
     "saveCard": "Save card",
     "saveExit": "Save & exit",
     "sendInvite": "Send invite",
-    "startFirstProject": "Start your first project"
+    "startFirstProject": "Start your first project",
+    "update": "Update"
+  },
+  "hosting": {
+    "deployment": {
+      "status": {
+        "0": "INITIATED",
+        "1": "IN PROGRESS",
+        "10": "SUCCESSFUL",
+        "100": "FAILED"
+      }
+    },
+    "menu": {
+      "preview": "1. Upload",
+      "staging": "2. Preview",
+      "production": "3. Production"
+    },
+    "webpage": {
+      "addFirst": "Add first website",
+      "create": "Create webpage",
+      "description": "Webpage description",
+      "domain": "Domain name",
+      "edit": "Edit webpage",
+      "infoNew": "",
+      "infoEdit": "",
+      "name": "Webpage name",
+      "new": "New webpage",
+      "quotaReached": "Quota has been reached.",
+      "update": "Update webpage"
+    },
+    "deployProd": "Deploy to production",
+    "deployStage": "Deploy to staging",
+    "deploymentStatus": "Deployment status",
+    "domainPreview": "Domain preview",
+    "ipnsLink": "IPNS link",
+    "management": "Hosting management",
+    "productionEmpty": "Deploy files from staging to production",
+    "size": "Size",
+    "stagingEmpty": "Upload files and deploy them to staging",
+    "web3Hosting": "Web3 hosting",
+    "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "login": {
     "description": "Web3 will not build itself. Go and add your block.",
@@ -238,9 +424,11 @@
     "withEmail": "login with email"
   },
   "nav": {
+    "projectOverview": "Project overview",
     "services": "Services",
     "authentication": "Authentication",
     "storage": "Storage",
+    "hosting": "Hosting",
     "computing": "Computing",
     "monitoring": "Monitoring",
     "analytics": "Analytics",
@@ -265,6 +453,17 @@
     "web3Gateway": "Your Gateway to Web3",
     "web3ProjectName": "Your  Web3 project needs a name"
   },
+  "pageMenu": {
+    "methods": "Methods",
+    "access": "Access",
+    "apiKeys": "API keys",
+    "charts": "Charts",
+    "history": "History",
+    "Destroy": "Destroy",
+    "projectSettings": "Project settings",
+    "usersPermissions": "Users & permissions",
+    "credentials": "Credentials & API keys"
+  },
   "profile": {
     "2fa": "Two-factor authentication",
     "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
@@ -282,21 +481,71 @@
     "id": "Project ID",
     "new": "Add new project",
     "newBucket": "New storage bucket",
-    "overview": "Project overview",
     "owner": "Project owner",
+    "quotaReached": "Quota has been reached.",
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
+    "banner": {
+      "title": "Referral link",
+      "description": "Nam cras mattis placerat sed suspendisse. In sollicitudin tincidunt at pretium. Sed consectetur nunc risus elementum pellentesque. Leo interdum velit sapien sed vitae quis.",
+      "btn": "Start your referral journey"
+    },
+    "enter": {
+      "header": "Let’s see if we can work together",
+      "description": "Mauris pellentesque arcu adipiscing facilisi duis. Integer laoreet donec vivamus arcu viverra feugiat mauris faucibus.",
+      "country": "Choose your Country",
+      "terms": {
+        "accept": "I accept the",
+        "andConditions": "terms and conditions",
+        "info": "Text about Terms & conditions",
+        "title": "Terms referral"
+      }
+    },
+    "claim": "Claim now",
     "claimMerchPack": "Claim merch pack",
-    "connectGithub": "Connect your Github account",
-    "connectTwitter": "Connect your Twitter account",
+    "connectGithub": "Your GitHub",
+    "connectTwitter": "Your twitter",
     "content": "Welcome to Apillon referral programme. While we are working hard on first MVP and giving you access to beta test, you are free to invite other developers to Apillon, collect points and get your Apillon Merch pack 1.0. ",
     "included": "What is included?",
     "learnMore": "Learn more about referral",
     "points": "points",
     "subtitle": "Get your Apillon Merch pack 1.0, by helping with referral. ",
     "title": "Referral programme",
-    "yourPoints": "Your points"
+    "yourPoints": "Your points",
+    "instructionsHeader": "Instructions:",
+    "instructions": {
+      "first": "1. Collect points by completing tasks",
+      "second": "2. Choose a desired reward and claim it, spending your points",
+      "third": "3. If you collect more points than you can spend, dont worry, the points are transferred to the next reward cycle"
+    },
+    "rewards": {
+      "title": "Rewards",
+      "shirt": {
+        "info": "Web3 instant Fashion. Show others you are a dev and Web3 supporter.",
+        "info1": "- Choose size",
+        "info2": "- Free shipping",
+        "info3": "- Instant SWAG"
+      }
+    },
+    "rewardsClaim": "Claim reward",
+    "rewardsSize": "Choose the desired size. In case the size is not available we will send you whatever we have left. ",
+    "connect": "Connect your social accounts",
+    "earnPoints": "Earn Some POINTS",
+    "invite": "Invite other developers and score",
+    "link": "This is your referral link",
+    "linkDesc": "Share this link with others before they register to ensure referral connection is set. Once they confirm the github account, you will earn 2 points per each referral.",
+    "referres": {
+      "header": "Your referres",
+      "name": "Service name",
+      "github": "Github profile",
+      "joined": "Joined"
+    },
+    "shoutout": "Help us with the shoutout",
+    "share": "Retweet on Twitter",
+    "confirm": "Claim now",
+    "xpPoints": "XP points:",
+    "spendingPoints": "Spending points:"
   },
   "signup": {
     "alreadyHaveAccount": "Already have an account?",
@@ -314,50 +563,110 @@
     "withEmail": "sign up with email"
   },
   "storage": {
-    "bucket": "Storage bucket",
-    "buckets": "Storage buckets",
-    "bucketName": "Bucket name",
-    "delete": "Delete bucket",
-    "edit": "Edit bucket",
-    "name": "Bucket name",
-    "newBucket": "New bucket",
-    "traffic": "30d traffic",
-    "usage": "Storage usage",
-    "visits": "30d visits"
-  },
-  "pageMenu": {
-    "methods": "Methods",
-    "access": "Access",
-    "apiKeys": "API keys",
-    "charts": "Charts",
+    "bucket": {
+      "addNew": "Add new bucket",
+      "attachService": "Create a new bucket and get immediate access to Web3 storage.",
+      "buckets": "Buckets",
+      "description": "Description",
+      "delete": "Delete bucket(s)",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected bucket(s)?",
+      "destroyed": "Deleted buckets",
+      "destroyedBuckets": "Destroyed buckets",
+      "edit": "Edit bucket",
+      "infoEdit": "Edit name and description for the bucket so you can easily recognise it.",
+      "infoNew": "Enter the desired name and description for the bucket so you can easily recognise it.",
+      "management": "Bucket management",
+      "name": "Bucket name",
+      "new": "New bucket",
+      "noActiveService": "You need a storage bucket before you can start storing files. ",
+      "nothingHere": "Nothing here",
+      "storage": "Storage bucket",
+      "update": "Update bucket",
+      "uuid": "Bucket Uuid",
+      "quotaReached": "Quota has been reached."
+    },
+    "delete": {
+      "bucket": "Delete bucket",
+      "bucketItems": "Delete these items?",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected item(s)?",
+      "item": "Delete selected item",
+      "items": "Delete selected items",
+      "selectedBuckets": "Delete selected buckets",
+      "selectedFiles": "Delete selected files and directories"
+    },
+    "directory": {
+      "create": "Create directory",
+      "createNew": "Create new directory",
+      "delete": "Delete directory",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected directory?"
+    },
+    "download": {
+      "bucketItems": "Download selected items?",
+      "item": "Download selected item",
+      "items": "Download selected items"
+    },
+    "file": {
+      "confirmUpload": "Confirm your upload",
+      "create": "Create file",
+      "delete": "Delete file(s)",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected file(s)?",
+      "deletedFiles": "Deleted buckets",
+      "downloadLink": "Download link",
+      "dragAndDrop": "Drag & drop or click to upload.",
+      "files": "({files} files)",
+      "filesUploading": "({uploading} of {files})",
+      "nothingHere": "Nothing here",
+      "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab.",
+      "refresh": "Refresh files",
+      "retry": "Retry upload",
+      "search": "Search files",
+      "upload": "Upload files and folders",
+      "uploading": "Uploading",
+      "uploadMore": "Add more files",
+      "uploadNow": "Upload now"
+    },
+    "fileStatus": {
+      "1": "Signed URL for upload generated",
+      "2": "Uploaded to S3",
+      "3": "Uploaded to IPFS",
+      "4": "Pinned to CRUST",
+      "5": "Upload completed",
+      "100": "Error while uploading to S3",
+      "101": "Error while pinning to CRUST",
+      "102": "Error: file does not exists on S3",
+      "103": "Error: bucket is full"
+    },
+    "contentType": "Content type",
+    "downloadLink": "Download link",
+    "destroy": "Destroy",
+    "edit": "Edit",
+    "expiration": "Expired on blockchain",
+    "fileCid": "File CID",
+    "fileName": "File name",
+    "files": "Files",
+    "filesAll": "All Files",
+    "fileSize": "File size",
+    "fileStatusName": "File status",
+    "goToRootDirectory": "Go to root directory",
     "history": "History",
-    "Destroy": "Destroy",
-    "projectSettings": "Project settings",
-    "usersPermissions": "Users & permissions",
-    "credentials": "Credentials & API keys"
-  },
-  "permissions": {
-    "authentication": {
-      "name": "Authentication",
-      "read": "Read permissions",
-      "write": "Write permissions",
-      "xy": "XY permissions",
-      "zzz": "ZZZ permissions"
-    },
-    "storage": {
-      "name": "Storage",
-      "read": "Read permissions",
-      "write": "Write permissions",
-      "xy": "XY permissions",
-      "zzz": "ZZZ permissions"
-    },
-    "computing": {
-      "name": "Copmuting",
-      "read": "Read permissions",
-      "write": "Write permissions",
-      "xy": "XY permissions",
-      "zzz": "ZZZ permissions"
-    }
+    "refresh": "Refresh",
+    "replicas": "Replicas",
+    "selectFiles": "Select files",
+    "snapshots": "Snapshots",
+    "stats": "Stats",
+    "status": "Status",
+    "traffic": "30d traffic",
+    "trash": "Deleted items",
+    "uploadFiles": "Upload files",
+    "used": "Storage usage",
+    "usage": "{used} of {max} used",
+    "visits": "30d visits",
+    "yourFiles": "Your files",
+    "yourFilesAll": "All your files",
+    "webhook": "Webhook",
+    "wrapFiles": "Wrap files",
+    "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don’t want to do it just skip this process.",
+    "wrapToDirectory": "Wrap to directory"
   },
   "service": {
     "authentication": {
@@ -373,7 +682,19 @@
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
     }
   },
+  "userRole": {
+    "ADMIN": "Admin",
+    "SUPPORT": "Support",
+    "ANALYTIC": "Analytic",
+    "PROJECT_OWNER": "Project owner",
+    "PROJECT_ADMIN": "Project admin",
+    "PROJECT_USER": "Project user",
+    "USER": "User"
+  },
   "validation": {
+    "apiKeyName": "API key name is required",
+    "apiKeyIdRequired": "API key is required",
+    "bucketDescriptionTooLong": "Text is too long (max 255 characters)",
     "bucketNameRequired": "Please enter bucket name",
     "containsLowercase": "Must include a lowercase character",
     "containsNumber": "Must include a number character",
@@ -386,18 +707,46 @@
     "cvv": "Wrong CVV",
     "cvvRequired": "Please enter CVV",
     "email": "Email address is not valid",
-    "emailRequired": "Please enter your email",
+    "emailRequired": "Typing in your email would definitely hit the spot :)",
     "expirationDate": "Date is expired",
     "expirationDateRequired": "Please enter expiration date",
+    "folderNameRequired": "Please enter folder name",
+    "idRequired": "ID is required",
     "passwordMinLength": "Password must contain at least 12 characters.",
     "passwordReenterSame": "Password is not same as re-entered password!",
     "passwordReenterRequired": "Re-entered password is required",
     "passwordRequired": "Please enter your password",
     "postalCode": "Wrong postal code",
     "postalCodeRequired": "Please enter postal code",
+    "streetRequired": "Please enter your street",
+    "houseNumberRequired": "Please enter your house number",
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
-    "role": "Role validation error",
-    "terms": "Please accept the terms"
+    "captchaRequired": "Captcha challange required!",
+    "role": "Selected role is invalid",
+    "roleRequired": "Please select role",
+    "terms": "Please accept the terms",
+    "country": "Please select the country",
+    "webhookAuthTypeRequired": "Please select Auth type",
+    "webhookPasswordRequired": "Please enter password",
+    "webhookRequired": "Please enter Webhook URL",
+    "webhookUsernameRequired": "Please enter username",
+    "webhookTokenRequired": "Please enter token",
+    "webpageNameRequired": "Please enter Webpage name",
+    "webpageDescriptionTooLong": "Description is too long (max 255 characters)",
+    "webpageDomainUrl": "Domain name is not a valid URL"
+  },
+  "w3Warn": {
+    "bucket": {
+      "new": "Each file hosting that passes through Crust’s pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
+      "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
+      "destroyed": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. "
+    },
+    "file": {
+      "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
+    },
+    "folder": {
+      "delete": "All items stored in this directory will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
+    }
   }
 }

@@ -4,8 +4,6 @@
 
 <script lang="ts" setup>
 import { NTag } from 'naive-ui';
-import type { DataTableColumns } from 'naive-ui';
-import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
@@ -21,7 +19,7 @@ const createColumns = ({
   viewInvoice,
 }: {
   viewInvoice: (row: RowData) => void;
-}): DataTableColumns<RowData> => {
+}): NDataTableColumns<RowData> => {
   return [
     {
       title: t('dashboard.date'),

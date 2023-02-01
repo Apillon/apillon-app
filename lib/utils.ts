@@ -1,5 +1,40 @@
+import stg from '../config/staging';
+import dev from '../config/development';
+import prod from '../config/production';
+import local from '../config/local';
+import { Feature } from '~~/types/config';
+
+export function getAppConfig(env?: string) {
+  const configFile =
+    env === 'staging' ? stg : env === 'development' ? dev : env === 'local' ? local : prod;
+  return {
+    ...configFile,
+    ENV: env,
+  };
+}
+
+/**
+ * Enum
+ */
+export function enumKeys(E: any): string[] {
+  return Object.keys(E).filter(k => isNaN(Number(k)));
+}
+export function enumValues(E: any): string[] | number[] {
+  return enumKeys(E).map(k => E[k as any]);
+}
+
+/**
+ * Numeric manipulations
+ */
 export function randomInteger(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+export function isNumeric(n: any): n is number | string {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+export function intVal(n: number | string): number {
+  return typeof n === 'number' ? n : parseInt(n, 10);
 }
 
 export function ActionReturn(success: boolean, data: any) {
@@ -20,6 +55,15 @@ export function truncateWallet(source: string, partLength: number = 4): string {
     ? source.slice(0, partLength) + '…' + source.slice(source.length - partLength, source.length)
     : source;
 }
+export function truncateCid(source: string, partLength: number = 4): string {
+  return source && source.length > 9 ? source.slice(0, partLength) + '…' : source;
+}
+export function hideSecret(source: string, partLength: number = 4): string {
+  return source && source.length > partLength
+    ? '•'.repeat(source.length - partLength) +
+        source.slice(source.length - partLength, source.length)
+    : source;
+}
 
 /**
  * Custom validations
@@ -29,15 +73,24 @@ export function validateRequiredCheckbox(_: NFormItemRule, value: boolean | null
   return value === true;
 }
 
+/** Validate dropdown if it is selected */
+export function validateRequiredDropdown(_: NFormItemRule, value: String | null): boolean {
+  if (value) {
+    return value.length !== 0;
+  } else {
+    return false;
+  }
+}
+
 /**
  *  Date and time functions
  */
 /** Time to days and hours */
-export function timeToDays(time: String) {
-  if (!time) return;
+export function timeToDays(time: String): string {
+  if (!time) return '';
 
   const [d, h, s] = time.split(':');
-  if (!d || !h || !s) return time;
+  if (!d || !h || !s) return `${time}`;
 
   const days = parseInt(d);
   const hours = parseInt(h);
@@ -56,47 +109,97 @@ export function timeToDays(time: String) {
   }
 }
 
-/** Storage calculations */
-export function kbToMb(kb: number) {
-  if (!+kb) return 0;
-  return parseFloat(((kb / Math.pow(1024, 2)) * 1000).toFixed(0));
+/** Datetime to date: "2022-12-13T07:21:50.000Z" -> 13 Dec, 2022  */
+export function datetimeToDate(datetime: string): string {
+  const date = new Date(datetime);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+  return date.toLocaleDateString('en-us', options);
+}
+export function datetimeToDateAndTime(datetime: string): string {
+  const date = new Date(datetime);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  };
+  return date.toLocaleDateString('en-us', options);
 }
 
-export function storagePercantage(size: number, maxSize: number) {
-  return ((size / maxSize) * 100).toFixed(0);
+/**
+ * Calculate expiration date on CRUST
+ * @param calculatedAt block number when file has been created
+ * @param expiredAt block number when file will expire
+ * @returns
+ */
+export function fileExpiration(calculatedAt: number, expiredAt: number): string {
+  const TIME_TO_CREATE_NEW_BLOCK = 6000;
+  const numOfBlocksBeforeExpiratoin = expiredAt - calculatedAt;
+
+  const expiredAtDate = new Date(
+    Date.now() + TIME_TO_CREATE_NEW_BLOCK * numOfBlocksBeforeExpiratoin
+  );
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+  return expiredAtDate.toLocaleDateString('en-us', options);
+}
+
+/** Bucket - calculate additional data */
+export function addBucketAdditionalData(bucket: BucketInterface): BucketInterface {
+  return {
+    ...bucket,
+    sizeMb: bytesToMb(bucket.size || 0),
+    maxSizeMb: bytesToMb(bucket.maxSize),
+    percentage: storagePercantage(bucket.size || 0, bucket.maxSize),
+  };
 }
 
 /**
  * Error messages
  */
-export function userFriendlyMsg($i18n, error: ApiErrorResponse | ReferenceError | TypeError | any) {
+export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | any) {
   // Check error exists and if translation is included
-  if (!$i18n || !$i18n.te('error.API') || !$i18n.t('error.API') || !error) {
+  if (!window.$i18n || !(window.$i18n instanceof Object) || !error) {
+    if (error instanceof ReferenceError || error instanceof TypeError) {
+      return error.message;
+    }
     return 'Internal server error';
   }
+
   // Check error type
-  if (error instanceof ReferenceError) {
-    return error.message;
-  } else if (error instanceof TypeError) {
-    return $i18n.te(`error.${error.message}`) ? $i18n.t(`error.${error.message}`) : error.message;
-  } else if (!instanceOfApiError(error)) {
-    return $i18n.t('error.API');
+  if (instanceOfApiError(error)) {
+    // Beautify API error
+    const err = error as ApiError;
+    if (err.errors && Array.isArray(err.errors)) {
+      return err.errors
+        .map(e =>
+          singleErrorMessage(window.$i18n, e.message, takeFirstDigitsFromNumber(e.statusCode))
+        )
+        .join(', ');
+    } else if (err.message) {
+      return singleErrorMessage(window.$i18n, err.message, err.status);
+    }
+  } else if (error instanceof ReferenceError || error instanceof TypeError) {
+    return window.$i18n.te(`error.${error.message}`)
+      ? window.$i18n.t(`error.${error.message}`)
+      : error.message;
   }
 
-  // Beautify API error
-  const err = error as ApiErrorResponse;
-  if (err.errors && Array.isArray(err.errors)) {
-    return err.errors
-      .map(e => singleErrorMessage($i18n, e.message, takeFirstDigitsFromNumber(e.statusCode)))
-      .join(', ');
-  } else if (err.message) {
-    return singleErrorMessage($i18n, err.message, err.status);
-  }
-  return $i18n.t('error.API');
+  return window.$i18n.t('error.API');
 }
 
 /** Translate single error message */
-function singleErrorMessage($i18n, message: string, code: number = 0) {
+function singleErrorMessage($i18n: i18nType, message: string, code: number = 0) {
   if ($i18n.te(`error.${message}`)) {
     return $i18n.t(`error.${message}`);
   } else if (code >= 500) {
@@ -107,9 +210,9 @@ function singleErrorMessage($i18n, message: string, code: number = 0) {
   return $i18n.t('error.API');
 }
 
-/** Check if object is instance of ApiErrorResponse  */
-function instanceOfApiError(object: any): object is ApiErrorResponse {
-  return 'status' in object && ('errors' in object || 'message' in object);
+/** Check if object is instance of ApiError  */
+function instanceOfApiError(object: any): object is ApiError {
+  return ('code' in object || 'status' in object) && ('errors' in object || 'message' in object);
 }
 
 /** statusCode to HTTP code */
@@ -118,7 +221,83 @@ function takeFirstDigitsFromNumber(num: number, numOfDigits: number = 3): number
 }
 
 /** Feature flags - check if feature is enabled */
-export function isFeatureEnabled(feature: string): boolean {
+export function isFeatureEnabled(feature: Feature | string, userRoles: number[]): boolean {
   const config = useRuntimeConfig();
-  return config.public.features[feature] || false;
+  let enabledFeatures = config.public.publishedFeatures;
+
+  if (userRoles?.length && userRoles.includes(DefaultUserRole.BETA_USER)) {
+    enabledFeatures = [...enabledFeatures, ...config.public.betaFeatures];
+  }
+
+  return enabledFeatures.includes(feature) || false;
+}
+
+/** Check if any of elements contains class ${ON_COLUMN_CLICK_OPEN_CLASS}, which means this column is clickable */
+export function canOpenColumnCell(path: EventTarget[]) {
+  return (
+    path.find((item: EventTarget) =>
+      (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
+    ) !== undefined
+  );
+}
+
+/**
+ * Actions
+ */
+
+/** Copy text to clipboard */
+export function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      /* Resolved - text copied to clipboard successfully */
+      if (window.$i18n?.te('dashboard.clipboard.copied')) {
+        window.$message.success(window.$i18n.t('dashboard.clipboard.copied'));
+      } else {
+        window.$message.success('Text has been copied to clipboard');
+      }
+    },
+    () => {
+      /* Rejected - text failed to copy to the clipboard */
+      if (window.$i18n?.te('dashboard.clipboard.error')) {
+        window.$message.success(window.$i18n.t('dashboard.clipboard.error'));
+      } else {
+        window.$message.success('Failed to copy');
+      }
+    }
+  );
+}
+export function copyToClipboardWithResponseTexts(
+  text: string,
+  successMsg?: string,
+  errorMsg?: string
+) {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      /* Resolved - text copied to clipboard successfully */
+      if (successMsg) {
+        window.$message.success(successMsg);
+      } else {
+        window.$message.success('Text has been copied to clipboard');
+      }
+    },
+    () => {
+      /* Rejected - text failed to copy to the clipboard */
+      if (errorMsg) {
+        window.$message.success(errorMsg);
+      } else {
+        window.$message.success('Failed to copy');
+      }
+    }
+  );
+}
+
+/**
+ * Cache expiration
+ */
+export function isCacheExpired(key: string) {
+  const timestamp = sessionStorage.getItem(key);
+  if (timestamp) {
+    return parseInt(timestamp) + CACHE_EXPIRATION_IN_MS < Date.now();
+  }
+  return true;
 }

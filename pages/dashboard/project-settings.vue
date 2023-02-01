@@ -1,11 +1,22 @@
 <template>
   <Dashboard>
-    <template #sidebar>
-      <SidebarProjectSettings />
-    </template>
-    <slot>
-      <h4 class="mb-6">{{ $t('nav.projectSettings') }}</h4>
+    <template #heading>
+      <Heading>
+        <slot>
+          <h4>{{ $t('nav.projectSettings') }}</h4>
+        </slot>
 
+        <template #info>
+          <span class="icon-info"></span>
+        </template>
+
+        <template #submenu>
+          <MenuProjectSettings />
+        </template>
+      </Heading>
+    </template>
+
+    <slot>
       <!-- Edit project -->
       <FormProjectSettings />
 
@@ -13,25 +24,34 @@
       <n-h5 prefix="bar">{{ $t('project.owner') }}</n-h5>
       <TableProjectOwner />
       <div class="text-right">
-        <Btn type="builders">
-          {{ $t('dashboard.manageRoles') }}
-        </Btn>
+        <NuxtLink :to="{ name: 'dashboard-users-permissions' }">
+          <Btn type="builders">
+            {{ $t('dashboard.manageRoles') }}
+          </Btn>
+        </NuxtLink>
       </div>
 
       <!-- Delete project -->
-      <n-h5 class="mb-0" prefix="bar">{{ $t('project.delete') }}</n-h5>
-      <p class="mb-6">{{ $t('project.deleteText') }}</p>
-      <Btn type="primary">{{ $t('project.deleteRequest') }}</Btn>
+      <template
+        v-if="
+          settingsStore.isUserOwner() &&
+          isFeatureEnabled(Feature.PROJECT_DELETE, authStore.getUserRoles())
+        "
+      >
+        <n-h5 class="mb-0" prefix="bar">{{ $t('project.delete') }}</n-h5>
+        <p class="mb-6">{{ $t('project.deleteText') }}</p>
+        <Btn type="primary">{{ $t('project.deleteRequest') }}</Btn>
+      </template>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
-
-const { t } = useI18n();
+const $i18n = useI18n();
+const authStore = useAuthStore();
+const settingsStore = useSettingsStore();
 
 useHead({
-  title: t('nav.projectSettings'),
+  title: $i18n.t('nav.projectSettings'),
 });
 </script>
