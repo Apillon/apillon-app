@@ -571,7 +571,7 @@
       "destroyed": "Deleted buckets",
       "destroyedBuckets": "Destroyed buckets",
       "edit": "Edit bucket",
-      "infoEdit": "Desired name and description for the bucket so you can easily recognise it.",
+      "infoEdit": "Edit name and description for the bucket so you can easily recognise it.",
       "infoNew": "Enter the desired name and description for the bucket so you can easily recognise it.",
       "management": "Bucket management",
       "name": "Bucket name",
@@ -580,6 +580,7 @@
       "nothingHere": "Nothing here",
       "storage": "Storage bucket",
       "update": "Update bucket",
+      "uuid": "Bucket Uuid",
       "quotaReached": "Quota has been reached."
     },
     "delete": {

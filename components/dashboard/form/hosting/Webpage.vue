@@ -1,13 +1,6 @@
 <template>
   <Spinner v-if="webpageId > 0 && !webpage" />
   <div v-else>
-    <p v-if="webpageId === 0 && $i18n.te('hosting.webpage.infoNew')" class="text-body mb-8">
-      {{ $t('hosting.webpage.infoNew') }}
-    </p>
-    <p v-else-if="webpageId > 0 && $i18n.te('hosting.webpage.infoEdit')" class="text-body mb-8">
-      {{ $t('hosting.webpage.infoEdit') }}
-    </p>
-
     <!-- Notification - show if qouta has been reached -->
     <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
       {{ $t('hosting.webpage.quotaReached') }}
@@ -15,6 +8,15 @@
     <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
+    <template v-else>
+      <!-- Info text -->
+      <p v-if="webpageId === 0 && $i18n.te('hosting.webpage.infoNew')" class="text-body mb-8">
+        {{ $t('hosting.webpage.infoNew') }}
+      </p>
+      <p v-else-if="webpageId > 0 && $i18n.te('hosting.webpage.infoEdit')" class="text-body mb-8">
+        {{ $t('hosting.webpage.infoEdit') }}
+      </p>
+    </template>
 
     <n-form
       ref="formRef"

@@ -1,13 +1,6 @@
 <template>
   <Spinner v-if="bucketId > 0 && !bucket" />
   <div v-else>
-    <p v-if="bucketId === 0 && $i18n.te('storage.bucket.infoNew')" class="text-body mb-8">
-      {{ $t('storage.bucket.infoNew') }}
-    </p>
-    <p v-else-if="bucketId > 0 && $i18n.te('storage.bucket.infoEdit')" class="text-body mb-8">
-      {{ $t('storage.bucket.infoEdit') }}
-    </p>
-
     <!-- Notification - show if qouta has been reached -->
     <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
       {{ $t('storage.bucket.quotaReached') }}
@@ -15,6 +8,15 @@
     <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
+    <template v-else>
+      <!-- Info text -->
+      <p v-if="bucketId === 0 && $i18n.te('storage.bucket.infoNew')" class="text-body mb-8">
+        {{ $t('storage.bucket.infoNew') }}
+      </p>
+      <p v-else-if="bucketId > 0 && $i18n.te('storage.bucket.infoEdit')" class="text-body mb-8">
+        {{ $t('storage.bucket.infoEdit') }}
+      </p>
+    </template>
 
     <n-form
       ref="formRef"

@@ -463,7 +463,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     heightLarge: '32px',
     padding: '4px 12px 4px 12px',
     textColor: colors.body,
-    textColorInfo: colors.bg.dark,
+    textColorInfo: colors.blue,
     textColorSuccess: colors.bg.dark,
     textColorWarning: colors.orange,
   },
