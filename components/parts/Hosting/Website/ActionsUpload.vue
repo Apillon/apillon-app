@@ -90,6 +90,7 @@
 import { useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
+const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const downloading = ref<boolean>(false);
@@ -188,6 +189,10 @@ function onDeleted() {
 async function deployToStaging() {
   deploying.value = true;
   await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.STAGING);
+
+  /** After successfull deploy redirect to production tab */
+  router.push(`/dashboard/service/hosting/${dataStore.webpage.active.id}/staging`);
+
   deploying.value = false;
 }
 </script>
