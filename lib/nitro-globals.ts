@@ -3,7 +3,7 @@ const meta = {
   description:
     'Apillon is a Web3 development platform empowering developers to build in the Polkadot ecosystem.',
   url: 'https://app.apillon.io/',
-  image: 'https://app.apillon.io/closed_beta_OG.jpg',
+  image: 'https://app.apillon.io/register-now.jpg',
 };
 
 export default defineNitroPlugin((nitroApp: any) => {
