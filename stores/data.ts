@@ -257,6 +257,9 @@ export const useDataStore = defineStore('data', {
         this.folder.path = [];
         this.folder.selected = 0;
         this.webpage.selected = id;
+        this.webpage.deployment.active = {} as DeploymentInterface;
+        this.webpage.deployment.staging = [] as Array<DeploymentInterface>;
+        this.webpage.deployment.production = [] as Array<DeploymentInterface>;
         this.folderSearch();
       }
     },

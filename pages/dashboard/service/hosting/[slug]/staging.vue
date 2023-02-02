@@ -15,7 +15,7 @@
           <ActionsHostingWebsite :env="DeploymentEnvironment.STAGING" />
 
           <!-- IPNS link -->
-          <div v-if="dataStore.bucket.active.CID">
+          <div v-if="dataStore.bucket.active.IPNS">
             <div class="body-sm mb-2">
               <strong>{{ $t('hosting.ipnsLink') }}</strong>
             </div>
