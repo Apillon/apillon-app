@@ -7,7 +7,11 @@
         <strong class="body-sm">{{ $t('dashboard.learnMoreAboutServices') }}</strong>
       </n-space>
     </template>
-    <template v-if="showServices || !isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())" #learn> </template>
+    <template
+      v-if="showServices || !isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())"
+      #learn
+    >
+    </template>
     <slot>
       <div v-if="showServices && isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())">
         <h6 class="mb-6">{{ $t('dashboard.selectServices') }}</h6>
@@ -16,7 +20,7 @@
             v-for="(service, key) in services"
             :key="key"
             class="py-6 px-[22px] bg-bg-lighter shadow-black"
-            :class="{ 'text-grey': service.disabled }"
+            :class="{ 'text-body': service.disabled }"
           >
             <div class="text-2xl">
               <span :class="service.icon"></span>

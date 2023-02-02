@@ -85,7 +85,14 @@ function getItemType(item: Item) {
   } else if ('bucketType' in item) {
     return 'bucket';
   } else if ('type' in item) {
-    return item.type;
+    switch (item.type) {
+      case BucketItemType.DIRECTORY:
+        return 'directory';
+      case BucketItemType.FILE:
+        return 'file';
+      default:
+        return 'file';
+    }
   }
   return 'file';
 }

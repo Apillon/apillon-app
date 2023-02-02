@@ -12,7 +12,7 @@
         "
       >
         <n-space class="pb-8" :size="32" vertical>
-          <ActionsHostingWebsite :env="DeploymentEnvironment.PRODUCTION" />
+          <ActionsHostingWebpage :env="DeploymentEnvironment.PRODUCTION" />
 
           <!-- Domain preview -->
           <div v-if="dataStore.webpage.active.domain">
@@ -20,10 +20,10 @@
               <strong>{{ $t('hosting.domainPreview') }}</strong>
             </div>
             <a :href="`https://${dataStore.webpage.active.domain}`" target="_blank">
-              <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
+              <div class="flex justify-between items-center bg-bg-dark px-4 py-2">
                 <span>{{ dataStore.webpage.active.domain }}</span>
-                <span class="icon-preview text-xl align-middle"></span>
-              </n-space>
+                <span class="icon-preview text-xl align-middle ml-2"></span>
+              </div>
             </a>
           </div>
           <!-- IPNS link -->
@@ -32,10 +32,12 @@
               <strong>{{ $t('hosting.ipnsLink') }}</strong>
             </div>
             <a :href="previewLink" target="_blank">
-              <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
-                <span>{{ previewLink }}</span>
-                <span class="icon-preview text-xl align-middle"></span>
-              </n-space>
+              <div class="flex justify-between items-center bg-bg-dark px-4 py-2">
+                <n-ellipsis class="align-bottom" :line-clamp="1">
+                  {{ previewLink }}
+                </n-ellipsis>
+                <span class="icon-preview text-xl align-middle ml-2"></span>
+              </div>
             </a>
           </div>
 

@@ -42,14 +42,16 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
 
 const props = defineProps({
   buckets: { type: Array<BucketInterface>, default: [] },
+  deleted: { type: Boolean, default: false },
 });
 
 const $i18n = useI18n();
 const router = useRouter();
+const message = useMessage();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
 
@@ -73,11 +75,12 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
   return [
     {
       type: 'selection',
+      className: props.deleted ? 'hidden' : '',
     },
     {
       key: 'name',
       title: $i18n.t('storage.bucket.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
@@ -94,13 +97,13 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
               default: () => [
                 h(
                   NEllipsis,
-                  { class: 'text-grey align-bottom', 'line-clamp': 1 },
+                  { class: 'text-body align-bottom', 'line-clamp': 1 },
                   { default: () => row.bucket_uuid }
                 ),
                 h(
                   'button',
                   { class: 'ml-2', onClick: () => copyToClipboard(row.bucket_uuid) },
-                  h('span', { class: 'icon-copy text-grey' }, {})
+                  h('span', { class: 'icon-copy text-body' }, {})
                 ),
               ],
             }
@@ -111,7 +114,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
     {
       key: 'serviceType',
       title: $i18n.t('storage.used'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(
           StorageProgress,
@@ -127,7 +130,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
     {
       key: 'description',
       title: $i18n.t('storage.bucket.description'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
@@ -141,7 +144,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
         return h(
           NDropdown,
           {
-            options: dropdownOptions,
+            options: props.deleted ? dropdownDeletedOptions : dropdownOptions,
             trigger: 'click',
           },
           {
@@ -195,12 +198,25 @@ const dropdownOptions = [
     },
   },
   {
-    key: 'storage.delete.bucket',
+    key: 'storageDelete',
     label: $i18n.t('general.delete'),
     props: {
       class: '!text-pink',
       onClick: () => {
         deleteBucket(true);
+      },
+    },
+  },
+];
+
+const dropdownDeletedOptions = [
+  {
+    key: 'storageRestore',
+    label: $i18n.t('general.restore'),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        restoreBucket();
       },
     },
   },
@@ -252,5 +268,25 @@ function onBucketDeleted() {
   setTimeout(() => {
     dataStore.fetchBuckets();
   }, 300);
+}
+
+/**
+ * Restore bucket
+ * */
+async function restoreBucket() {
+  dataStore.bucket.loading = true;
+
+  try {
+    await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.id));
+
+    message.success($i18n.t('form.success.restored.bucket'));
+  } catch (error) {
+    window.$message.error(userFriendlyMsg(error));
+  }
+  dataStore.bucket.loading = false;
+
+  setTimeout(() => {
+    router.push({ name: 'dashboard-service-storage' });
+  }, 1000);
 }
 </script>

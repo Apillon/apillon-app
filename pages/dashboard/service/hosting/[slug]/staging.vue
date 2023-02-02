@@ -12,7 +12,7 @@
         "
       >
         <n-space class="pb-8" :size="32" vertical>
-          <ActionsHostingWebsite :env="DeploymentEnvironment.STAGING" />
+          <ActionsHostingWebpage :env="DeploymentEnvironment.STAGING" />
 
           <!-- IPNS link -->
           <div v-if="dataStore.bucket.active.IPNS">
@@ -20,23 +20,30 @@
               <strong>{{ $t('hosting.ipnsLink') }}</strong>
             </div>
             <a :href="previewLink" target="_blank">
-              <n-space class="bg-bg-dark px-4 py-2" justify="space-between" align="center">
-                <span>{{ previewLink }}</span>
-                <span class="icon-preview text-xl align-middle"></span>
-              </n-space>
+              <div class="flex justify-between items-center bg-bg-dark px-4 py-2">
+                <n-ellipsis class="align-bottom" :line-clamp="1">
+                  {{ previewLink }}
+                </n-ellipsis>
+                <span class="icon-preview text-xl align-middle ml-2"></span>
+              </div>
             </a>
           </div>
           <!-- IPNS address -->
-          <div>
+          <div v-if="dataStore.bucket.active.IPNS">
             <div class="body-sm mb-2">
-              <strong>{{ $t('hosting.ipnsAddress') }}</strong>
+              <strong>{{ $t('hosting.ipns') }}</strong>
             </div>
-            <n-space class="bg-bg-dark text-body px-4 py-2" justify="space-between" align="center">
-              <span>https://ipfs.apillon.io</span>
-              <button class="text-body" @click="copyToClipboard('https://ipfs.apillon.io')">
+            <div class="flex justify-between items-center bg-bg-dark text-body px-4 py-2">
+              <n-ellipsis class="align-bottom" :line-clamp="1">
+                {{ dataStore.bucket.active.IPNS }}
+              </n-ellipsis>
+              <button
+                class="text-body ml-2"
+                @click="copyToClipboard(dataStore.bucket.active.IPNS || '')"
+              >
                 <span class="icon-copy"></span>
               </button>
-            </n-space>
+            </div>
           </div>
 
           <!-- Deployments -->

@@ -7,7 +7,7 @@
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <!-- Actions -->
-        <ActionsHostingWebsite />
+        <ActionsHostingWebpage />
 
         <!-- Upload files -->
         <FormHostingUploadWebpage :bucket-uuid="dataStore.bucketUuid" />

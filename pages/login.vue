@@ -12,9 +12,12 @@
     </template>
     <div class="my-8 flex items-center">
       <span class="bg-white h-[1px] w-full"></span>
-      <strong class="inline-block px-5 mx-[8%] text-grey whitespace-nowrap">
+      <strong class="inline-block px-5 mx-[8%] text-body whitespace-nowrap">
         <template
-          v-if="isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles()) || isFeatureEnabled(Feature.MAGIC_LINK, authStore.getUserRoles())"
+          v-if="
+            isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles()) ||
+            isFeatureEnabled(Feature.MAGIC_LINK, authStore.getUserRoles())
+          "
         >
           {{ $t('login.orUseEmail') }}
         </template>
@@ -26,7 +29,7 @@
     <AuthFormLogin />
 
     <div class="mt-2 text-center">
-      <span class="text-sm text-grey">{{ $t('login.dontHaveAccount') }} </span>&nbsp;
+      <span class="text-sm text-body">{{ $t('login.dontHaveAccount') }} </span>&nbsp;
       <Btn :to="{ name: 'register' }" type="link">
         {{ $t('general.signup') }}
       </Btn>

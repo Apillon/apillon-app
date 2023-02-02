@@ -33,7 +33,7 @@
   </n-form>
   <div class="min-h-[30px] text-center">
     <div>
-      <span class="text-sm text-grey">{{ $t('login.forgotPassword') }} </span>&nbsp;
+      <span class="text-sm text-body">{{ $t('login.forgotPassword') }} </span>&nbsp;
       <FormPasswordResetRequest :email="formData.email" btn-type="link" size="tiny" quaternary />
     </div>
   </div>
@@ -78,7 +78,9 @@ function handleSubmit(e: Event | MouseEvent) {
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => message.warning(error.message || 'Error'))
+      );
     } else {
       /** Login with mail and password */
       await login();

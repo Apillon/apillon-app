@@ -29,6 +29,7 @@
     "pending": "pending",
     "production": "Production",
     "refresh": "Refresh",
+    "restore": "Restore",
     "scope": "Scope",
     "search": "Search",
     "secret": "Secret",
@@ -50,7 +51,7 @@
   "dashboard": {
     "apiKey": {
       "apiKey": "API key",
-      "apiKeySecret": "API key secet",
+      "apiKeySecret": "API key secret",
       "delete": "Delete API key",
       "details": "API key details",
       "generate": "Generate new key",
@@ -335,6 +336,11 @@
         "webhook": "Webhook has been deleted",
         "webpage": "Webpage has been deleted"
       },
+      "restored": {
+        "bucket": "Bucket has been restored",
+        "directory": "Directory key has been restored",
+        "file": "File has been restored"
+      },
       "updated": {
         "apiKey": "Api key has been updated",
         "apiKeyRole": "Api key permission has been added",
@@ -401,6 +407,7 @@
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
     "domainPreview": "Domain preview",
+    "ipns": "IPNS",
     "ipnsAddress": "IPNS Address",
     "ipnsLink": "IPNS link",
     "management": "Hosting management",
@@ -741,7 +748,7 @@
     "bucket": {
       "new": "Each file hosting that passes through Crust’s pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
       "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
-      "destroyed": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. "
+      "destroyed": ""
     },
     "file": {
       "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."

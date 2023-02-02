@@ -41,7 +41,7 @@ const createColumns = (): NDataTableColumns<RowData> => {
       render(row) {
         return h(
           'span',
-          { class: 'text-grey' },
+          { class: 'text-body' },
           {
             default: () => row.serviceType,
           }

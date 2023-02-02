@@ -12,14 +12,13 @@
 </template>
 
 <script lang="ts" setup>
-import { NTag } from 'naive-ui';
-
-const props = defineProps({
+defineProps({
   deployments: { type: Array<DeploymentInterface>, default: [] },
 });
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const DeploymentStatus = resolveComponent('DeploymentStatus');
 
 const createColumns = (): NDataTableColumns<DeploymentInterface> => {
   return [
@@ -44,18 +43,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
       title: $i18n.t('hosting.deploymentStatus'),
       key: 'deploymentStatus',
       render(row) {
-        return h(
-          NTag,
-          { type: getDeploymentStatus(row.deploymentStatus), round: true, bordered: false },
-          {
-            default: () =>
-              h(
-                'span',
-                { class: 'text-bg-dark' },
-                { default: () => $i18n.t(`hosting.deployment.status.${row.deploymentStatus}`) }
-              ),
-          }
-        );
+        return h(DeploymentStatus, { deploymentStatus: row.deploymentStatus }, '');
       },
     },
     {
@@ -79,18 +67,4 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
 };
 const columns = createColumns();
 const rowKey = (row: DeploymentInterface) => row.id;
-
-/** Deployment status */
-function getDeploymentStatus(status: number) {
-  switch (status) {
-    case DeploymentStatus.IN_PROGRESS:
-      return 'info';
-    case DeploymentStatus.SUCCESSFUL:
-      return 'success';
-    case DeploymentStatus.FAILED:
-      return 'error';
-    default:
-      return '';
-  }
-}
 </script>

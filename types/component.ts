@@ -31,4 +31,6 @@ declare global {
       items: Array<MainNavItemInterface>;
     };
   }
+
+  type TagType = 'default' | 'error' | 'primary' | 'info' | 'success' | 'warning';
 }

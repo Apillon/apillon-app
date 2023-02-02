@@ -23,6 +23,7 @@
       <TableStorageBucket
         v-if="dataStore.hasDestroyedBuckets"
         :buckets="dataStore.bucket.destroyed"
+        :deleted="true"
       />
       <template v-else>
         <div
@@ -41,7 +42,7 @@
 
       <!-- W3Warn: destroyed buckets -->
       <W3Warn v-model:show="showModalW3Warn">
-        {{ $t('w3Warn.bucket.destroyed') }}
+        {{ $t('w3Warn.bucket.delete') }}
       </W3Warn>
     </slot>
   </Dashboard>
