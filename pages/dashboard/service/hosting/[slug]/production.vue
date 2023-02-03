@@ -15,31 +15,16 @@
           <ActionsHostingWebpage :env="DeploymentEnvironment.PRODUCTION" />
 
           <!-- Domain preview -->
-          <div v-if="dataStore.webpage.active.domain">
-            <div class="body-sm mb-2">
-              <strong>{{ $t('hosting.domainPreview') }}</strong>
-            </div>
-            <a :href="`https://${dataStore.webpage.active.domain}`" target="_blank">
-              <div class="flex justify-between items-center bg-bg-dark px-4 py-2">
-                <span>{{ dataStore.webpage.active.domain }}</span>
-                <span class="icon-preview text-xl align-middle ml-2"></span>
-              </div>
-            </a>
-          </div>
+          <PreviewLink
+            v-if="dataStore.webpage.active.domain"
+            :link="`https://${dataStore.webpage.active.domain}`"
+            :title="$t('hosting.domainPreview')"
+          />
+
           <!-- IPNS link -->
-          <div v-if="dataStore.bucket.active.IPNS">
-            <div class="body-sm mb-2">
-              <strong>{{ $t('hosting.ipnsLink') }}</strong>
-            </div>
-            <a :href="previewLink" target="_blank">
-              <div class="flex justify-between items-center bg-bg-dark px-4 py-2">
-                <n-ellipsis class="align-bottom" :line-clamp="1">
-                  {{ previewLink }}
-                </n-ellipsis>
+          <PreviewLink :link="dataStore.webpage.active.ipnsProductionLink || ''" />
                 <span class="icon-preview text-xl align-middle ml-2"></span>
               </div>
-            </a>
-          </div>
 
           <!-- Deployments -->
           <TableHostingDeployment :deployments="dataStore.webpage.deployment.production" />
@@ -112,9 +97,5 @@ onMounted(() => {
       pageLoading.value = false;
     });
   }, 100);
-});
-
-const previewLink = computed<string>(() => {
-  return `https://ipfs.apillon.io/ipns/${dataStore.bucket.active.IPNS}`;
 });
 </script>
