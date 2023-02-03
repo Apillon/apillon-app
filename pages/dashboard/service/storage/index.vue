@@ -56,7 +56,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const pageLoading = ref<boolean>(false);
+const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 const showModalNewBucket = ref<boolean | null>(false);
 
@@ -65,10 +65,6 @@ useHead({
 });
 
 onMounted(() => {
-  if (!dataStore.hasBuckets) {
-    pageLoading.value = true;
-  }
-
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     await dataStore.getBuckets();
     await geBucketQuota();

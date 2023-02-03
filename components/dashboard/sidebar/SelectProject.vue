@@ -38,7 +38,7 @@ onBeforeMount(() => {
 /** Watcher - project change */
 watch(
   () => dataStore.currentProjectId,
-  async currentProjectId => {
+  async (currentProjectId, oldProjectId) => {
     /** Reload projects if currentProjectId is new project */
     if (!dataStore.project.items[currentProjectId]) {
       loading.value = true;
@@ -62,7 +62,9 @@ watch(
 
     /** Save current project ID to LS and redirect to Dashboard */
     localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${currentProjectId}`);
-    router.push({ name: 'dashboard' });
+    if (currentProjectId !== oldProjectId && oldProjectId > 0) {
+      router.push({ name: 'dashboard' });
+    }
   }
 );
 </script>
