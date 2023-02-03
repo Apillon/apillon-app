@@ -1,8 +1,7 @@
 <template>
   <div v-if="link">
-    <div class="body-sm mb-2">
-      <strong v-if="title">{{ title }}</strong>
-      <strong v-else>{{ $t('hosting.ipnsLink') }}</strong>
+    <div v-if="title" class="body-sm mb-2">
+      <strong>{{ title }}</strong>
     </div>
     <div v-if="copy" class="flex justify-between items-center bg-bg-dark text-body px-4 py-2">
       <n-ellipsis class="align-bottom" :line-clamp="1">

@@ -382,6 +382,13 @@
         "100": "FAILED"
       }
     },
+    "domain": {
+      "add": "Add domain",
+      "configure": "Configure domain",
+      "preview": "Domain preview",
+      "setup": "Setup domain",
+      "update": "Update domain"
+    },
     "menu": {
       "preview": "1. Upload",
       "staging": "2. Preview",
@@ -403,7 +410,7 @@
     "deployProd": "Deploy to production",
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
-    "domainPreview": "Domain preview",
+
     "ipns": "IPNS",
     "ipnsAddress": "IPNS Address",
     "ipnsLink": "IPNS link",

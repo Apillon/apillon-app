@@ -6,21 +6,30 @@
       <n-form-item path="domain" :label="$t('form.label.domain')" :label-props="{ for: 'domain' }">
         <n-input
           v-model:value="formData.domain"
-          :input-props="{ id: 'domain', type: 'url' }"
+          :input-props="{ id: 'domain', type: 'text' }"
           :placeholder="$t('form.placeholder.domain')"
           clearable
         />
       </n-form-item>
 
+      <!-- Instructions to configure DNS -->
+      <HostingDomainConfiguration v-if="!domain" :domain="formData.domain || ''" />
+
       <!--  Form submit -->
-      <n-form-item>
-        <input type="submit" class="hidden" :value="$t('hosting.webpage.create')" />
-        <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
-          <template v-if="webpage">
-            {{ $t('hosting.webpage.update') }}
+      <n-form-item :show-label="false">
+        <input type="submit" class="hidden" :value="$t('hosting.domain.add')" />
+        <Btn
+          type="primary"
+          class="w-full mt-2"
+          :loading="loading"
+          :disabled="!domain && formData.domain?.length === 0"
+          @click="handleSubmit"
+        >
+          <template v-if="domain">
+            {{ $t('hosting.domain.update') }}
           </template>
           <template v-else>
-            {{ $t('hosting.webpage.create') }}
+            {{ $t('hosting.domain.add') }}
           </template>
         </Btn>
       </n-form-item>
@@ -33,6 +42,7 @@ import { useMessage } from 'naive-ui';
 
 const props = defineProps({
   webpageId: { type: Number, default: 0 },
+  domain: { type: String, default: '' },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
@@ -53,7 +63,7 @@ onMounted(async () => {
 });
 
 const formData = ref<FormWebpageDomain>({
-  domain: webpage.value?.domain || null,
+  domain: props.domain || null,
 });
 
 const rules: NFormRules = {
@@ -79,7 +89,7 @@ function handleSubmit(e: Event | MouseEvent) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
-    } else if (props.webpageId > 0) {
+    } else if (props.domain) {
       await updateWebpageDomain();
     } else {
       await createWebpageDomain();
@@ -95,11 +105,10 @@ async function createWebpageDomain() {
   }
 
   try {
-    const bodyData = {
-      ...formData.value,
-      project_uuid: dataStore.projectUuid,
-    };
-    const res = await $api.post<WebpageResponse>(endpoints.webpage, bodyData);
+    const res = await $api.patch<WebpageResponse>(
+      endpoints.webpages(props.webpageId),
+      formData.value
+    );
 
     message.success($i18n.t('form.success.created.domain'));
 
