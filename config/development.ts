@@ -20,7 +20,6 @@ const config: ConfigInterface = {
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
     'REFERRAL',
-    'SEARCH',
     'SERVICES',
     'SOCIAL_ICONS',
     'STORAGE',
