@@ -75,6 +75,10 @@ export const useAuthStore = defineStore('auth', {
       return this.user?.userRoles || [];
     },
 
+    isBetaUser() {
+      return !!(this.user?.userRoles || []).includes(DefaultUserRole.BETA_USER);
+    },
+
     async getUserData() {
       try {
         const res = await $api.get<UserResponse>(endpoints.me);
