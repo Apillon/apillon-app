@@ -219,6 +219,8 @@ declare global {
   interface FormWebpage {
     name: string;
     description: string;
+  }
+  interface FormWebpageDomain {
     domain?: string | null;
   }
   interface WebpageBaseInterface {

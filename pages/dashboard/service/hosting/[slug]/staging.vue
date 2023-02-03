@@ -15,14 +15,17 @@
           <HostingWebsiteActions :env="DeploymentEnvironment.STAGING" />
 
           <!-- IPNS link -->
-          <PreviewLink :link="dataStore.webpage.active.ipnsStagingLink || ''" />
+          <HostingPreviewLink
+            :link="dataStore.webpage.active.ipnsStagingLink || ''"
+            :title="$t('hosting.ipnsLink')"
+          />
 
-          <!-- IPNS address -->
-          <PreviewLink
+          <!-- IPNS address
+          <HostingPreviewLink
             :link="dataStore.bucket.active.IPNS || ''"
             :title="$t('hosting.ipns')"
             copy
-          />
+          /> -->
 
           <!-- Deployments -->
           <TableHostingDeployment :deployments="dataStore.webpage.deployment.staging" />
