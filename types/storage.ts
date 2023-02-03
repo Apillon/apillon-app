@@ -245,6 +245,8 @@ declare global {
     name: string;
     description: string;
     domain: string;
+    ipnsStagingLink: string | null;
+    ipnsProductionLink: string | null;
   }
   interface DeploymentInterface {
     id: number;
