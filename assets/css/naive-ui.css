@@ -356,7 +356,7 @@ body > .n-message-container {
 
   /** Dialog */
   &.n-dialog {
-    min-width: 660px;
+    @apply lg:min-w-[660px];
     border: var(--n-border);
 
     .n-dialog {
