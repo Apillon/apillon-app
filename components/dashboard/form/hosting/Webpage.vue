@@ -50,16 +50,6 @@
         />
       </n-form-item>
 
-      <!--  Webpage domain -->
-      <n-form-item path="domain" :label="$t('form.label.domain')" :label-props="{ for: 'domain' }">
-        <n-input
-          v-model:value="formData.domain"
-          :input-props="{ id: 'domain', type: 'url' }"
-          :placeholder="$t('form.placeholder.domain')"
-          clearable
-        />
-      </n-form-item>
-
       <!--  Form submit -->
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('hosting.webpage.create')" />
@@ -105,14 +95,12 @@ onMounted(async () => {
     webpage.value = await dataStore.getWebpage(props.webpageId);
     formData.value.name = webpage.value.name;
     formData.value.description = webpage.value.description;
-    formData.value.domain = webpage.value.domain;
   }
 });
 
 const formData = ref<FormWebpage>({
   name: webpage.value?.name || '',
   description: webpage.value?.description || '',
-  domain: webpage.value?.domain || null,
 });
 
 const rules: NFormRules = {
@@ -130,13 +118,6 @@ const rules: NFormRules = {
       trigger: 'input',
     },
   ],
-  domain: [
-    {
-      type: 'url',
-      validator: validateDomain,
-      message: $i18n.t('validation.webpageDomainUrl'),
-    },
-  ],
 };
 
 const isQuotaReached = computed<boolean>(() => {
@@ -145,13 +126,6 @@ const isQuotaReached = computed<boolean>(() => {
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
 });
-
-// Custom validations
-function validateDomain(_: NFormItemRule, value: string): boolean {
-  const regex = /^[a-zA-Z0-9][a-zA-Z0-9-.]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
-
-  return !value || regex.test(value);
-}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -219,13 +193,11 @@ async function updateWebpage() {
       if (item.id === props.webpageId) {
         item.name = res.data.name;
         item.description = res.data.description;
-        item.domain = res.data.domain;
       }
     });
     if (dataStore.webpage.active.id === props.webpageId) {
       dataStore.webpage.active.name = res.data.name;
       dataStore.webpage.active.description = res.data.description;
-      dataStore.webpage.active.domain = res.data.domain;
     }
 
     /** Emit events */

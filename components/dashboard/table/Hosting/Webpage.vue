@@ -45,7 +45,7 @@
     <!-- Domain preview -->
     <div>
       <div class="body-sm mb-2">
-        <strong>{{ $t('hosting.domainPreview') }}</strong>
+        <strong>{{ $t('hosting.domain.preview') }}</strong>
       </div>
       <div class="bg-bg-dark px-4 py-2">
         <a :href="dataStore.webpage.active.domain" target="_blank">

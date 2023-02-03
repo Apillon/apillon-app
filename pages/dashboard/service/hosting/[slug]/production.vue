@@ -15,16 +15,13 @@
           <ActionsHostingWebpage :env="DeploymentEnvironment.PRODUCTION" />
 
           <!-- Domain preview -->
-          <PreviewLink
-            v-if="dataStore.webpage.active.domain"
-            :link="`https://${dataStore.webpage.active.domain}`"
-            :title="$t('hosting.domainPreview')"
-          />
+          <HostingDomain />
 
           <!-- IPNS link -->
-          <PreviewLink :link="dataStore.webpage.active.ipnsProductionLink || ''" />
-                <span class="icon-preview text-xl align-middle ml-2"></span>
-              </div>
+          <HostingPreviewLink
+            :link="dataStore.webpage.active.ipnsProductionLink || ''"
+            :title="$t('hosting.ipnsLink')"
+          />
 
           <!-- Deployments -->
           <TableHostingDeployment :deployments="dataStore.webpage.deployment.production" />
@@ -61,6 +58,8 @@ const $i18n = useI18n();
 const router = useRouter();
 const { params } = useRoute();
 const dataStore = useDataStore();
+
+const webpageId = ref<number>(parseInt(`${params?.slug}`));
 const pageLoading = ref<boolean>(true);
 
 useHead({
@@ -69,12 +68,11 @@ useHead({
 
 onMounted(() => {
   /** Webpage ID from route, then load buckets */
-  const webpageId = parseInt(`${params?.slug}`);
-  dataStore.setWebpageId(webpageId);
+  dataStore.setWebpageId(webpageId.value);
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await dataStore.getWebpage(webpageId);
+      const webpage = await dataStore.getWebpage(webpageId.value);
 
       /** Check of webpage exists */
       if (!webpage?.id) {
@@ -83,7 +81,7 @@ onMounted(() => {
       }
 
       /** Get deployments for this webpage */
-      dataStore.getDeployments(webpageId);
+      dataStore.getDeployments(webpageId.value);
 
       /** Show files from staging bucket */
       dataStore.bucket.active = webpage.productionBucket;

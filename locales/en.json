@@ -317,6 +317,7 @@
         "apiKeyRole": "Api key permission has been added",
         "bucket": "Bucket has been created",
         "directory": "Directory key has been created",
+        "domain": "Domain has been added to Webpage",
         "file": "File has been created",
         "hosting": "Hosting has been created",
         "item": "Item has been created",
@@ -329,6 +330,7 @@
         "apiKeyRole": "Api key permission has been removed",
         "bucket": "Bucket has been deleted",
         "directory": "Directory key has been deleted",
+        "domain": "Domain has been deleted",
         "file": "File has been deleted",
         "hosting": "Hosting has been deleted",
         "item": "Item has been deleted",
@@ -346,6 +348,7 @@
         "apiKeyRole": "Api key permission has been added",
         "bucket": "Bucket has been updated",
         "directory": "Directory key has been updated",
+        "domain": "Domain has been updated",
         "file": "File has been updated",
         "hosting": "Hosting has been updated",
         "item": "Item has been updated",
@@ -385,6 +388,13 @@
         "100": "FAILED"
       }
     },
+    "domain": {
+      "add": "Add domain",
+      "configure": "Configure domain",
+      "preview": "Domain preview",
+      "setup": "Setup domain",
+      "update": "Update domain"
+    },
     "menu": {
       "preview": "1. Upload",
       "staging": "2. Preview",
@@ -406,7 +416,7 @@
     "deployProd": "Deploy to production",
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
-    "domainPreview": "Domain preview",
+
     "ipns": "IPNS",
     "ipnsAddress": "IPNS Address",
     "ipnsLink": "IPNS link",
