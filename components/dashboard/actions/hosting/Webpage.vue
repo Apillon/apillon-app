@@ -61,6 +61,12 @@
           {{ $t('storage.directory.create') }}
         </n-button>
 
+        <!-- Clear all files -->
+        <n-button v-if="isUpload" size="small" type="error" ghost @click="showModalClearAll = true">
+          <span class="icon-delete text-lg mr-2"></span>
+          {{ $t('hosting.clearAll') }}
+        </n-button>
+
         <!-- Deploy to staging -->
         <n-button
           v-if="isUpload"
@@ -102,6 +108,22 @@
         <FormDeleteItems :items="dataStore.folder.selectedItems" @submit-success="onDeleted" />
       </slot>
     </ModalDelete>
+
+    <!-- Modal - Clear all files -->
+    <ModalDelete v-model:show="showModalClearAll" :title="$t(`hosting.clearAllFiles`)">
+      <template #content>
+        <p v-if="$i18n.te(`hosting.clearAllWarn`)" class="text-body">
+          {{ $t(`hosting.clearAllWarn`) }}
+        </p>
+      </template>
+      <slot>
+        <FormDelete
+          :id="dataStore.bucket.active.id"
+          type="bucketContent"
+          @submit-success="onAllFilesDeleted"
+        />
+      </slot>
+    </ModalDelete>
   </div>
 </template>
 
@@ -119,6 +141,7 @@ const dataStore = useDataStore();
 const downloading = ref<boolean>(false);
 const showModalNewFolder = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
+const showModalClearAll = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
 const showPopoverDownload = ref<boolean>(false);
 const deploying = ref<boolean>(false);
@@ -237,6 +260,17 @@ function onDeleted() {
   setTimeout(() => {
     dataStore.fetchDirectoryContent();
   }, 300);
+}
+
+/** On all files deleted, refresh folder list */
+function onAllFilesDeleted() {
+  showModalClearAll.value = false;
+
+  dataStore.folder.items = [];
+  dataStore.folder.path = [];
+  dataStore.folder.selected = 0;
+  dataStore.folder.total = 0;
+  dataStore.folderSearch();
 }
 
 /** Deploy to stg */

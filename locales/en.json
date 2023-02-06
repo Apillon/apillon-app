@@ -332,6 +332,7 @@
         "apiKey": "Api key has been deleted",
         "apiKeyRole": "Api key permission has been removed",
         "bucket": "Bucket has been deleted",
+        "bucketContent": "Bucket items has been deleted",
         "directory": "Directory key has been deleted",
         "domain": "Domain has been deleted",
         "file": "File has been deleted",
@@ -416,10 +417,12 @@
       "quotaReached": "Quota has been reached.",
       "update": "Update webpage"
     },
+    "clearAll": "Clear all",
+    "clearAllFiles": "Do you want to remove all files?",
+    "clearAllWarn": "With this action you will erase all files. To deploy new version to preview, you will have to upload whole webpage.",
     "deployProd": "Deploy to production",
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
-
     "ipns": "IPNS",
     "ipnsAddress": "IPNS Address",
     "ipnsLink": "IPNS link",

@@ -47,6 +47,9 @@ const Endpoints = {
   bucket: (buckeId: number) => {
     return `/buckets/${buckeId}`;
   },
+  bucketContent: (buckeId: number) => {
+    return `/buckets/${buckeId}/content`;
+  },
   bucketRestore: (buckeId: number) => {
     return `/buckets/${buckeId}/cancel-deletion`;
   },

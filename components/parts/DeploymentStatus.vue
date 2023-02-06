@@ -1,7 +1,6 @@
 <template>
   <n-tag
     v-bind="$attrs"
-    :class="{ '!pl-0': deploymentStatus < DeploymentStatus.SUCCESSFUL }"
     :type="getDeploymentStatus(deploymentStatus)"
     :bordered="deploymentStatus === DeploymentStatus.INITIATED"
     size="tiny"
@@ -9,13 +8,14 @@
   >
     <n-space
       :class="deploymentStatus === DeploymentStatus.INITIATED ? 'text-body' : 'text-bg-dark'"
+      :size="0"
       align="center"
     >
+      <span class="mx-1">{{ $t(`hosting.deployment.status.${deploymentStatus}`) }}</span>
       <Spinner
         v-if="deploymentStatus < DeploymentStatus.SUCCESSFUL"
-        class="!relative !w-5 !h-5 !m-0"
+        class="!relative !w-5 !h-5 !m-0 !left-0"
       />
-      <span class="mx-1">{{ $t(`hosting.deployment.status.${deploymentStatus}`) }}</span>
     </n-space>
   </n-tag>
 </template>
