@@ -60,7 +60,7 @@
         </Btn>
       </div>
       <div v-if="item.merchItem.orderCount >= item.merchItem.maxOrderCount" class="mt-4">
-        <Notification type="warning" class="w-full mb-4 !bg-bg">
+        <Notification type="warning" class="w-full mb-4">
           {{ $t('project.quotaReached') }}
         </Notification>
       </div>

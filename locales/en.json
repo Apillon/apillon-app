@@ -39,7 +39,9 @@
     "staging": "Staging",
     "status": "Status",
     "tryAgain": "Try again",
-    "terms": "",
+    "terms": "terms and conditions",
+    "termsAccept": "I accept the ",
+    "termsAndConditions": "Terms and conditions",
     "test": "Test",
     "updateTime": "Update time",
     "upload": "Upload",
@@ -354,7 +356,7 @@
       }
     },
     "terms": {
-      "project": "I understand product is in beta stage",
+      "project": "The Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform’s services.",
       "payment": "I understand the billing process and some other legal stuff."
     },
     "connect": "Connect",

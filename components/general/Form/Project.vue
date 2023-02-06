@@ -1,10 +1,6 @@
 <template>
   <div>
-    <Notification
-      v-if="dataStore.project.quotaReached === true"
-      type="warning"
-      class="w-full mb-4 !bg-bg"
-    >
+    <Notification v-if="dataStore.project.quotaReached === true" type="warning" class="mb-4">
       {{ $t('project.quotaReached') }}
     </Notification>
     <n-form
@@ -27,10 +23,6 @@
           @keydown.enter.prevent
         />
       </n-form-item>
-
-      <!-- Project TAG - currently not in use
-    <n-tag :bordered="false" type="info" class="mb-8">{{ projectNameText }}</n-tag>
-    -->
 
       <!--  Project description -->
       <n-form-item
@@ -70,14 +62,21 @@
         </Btn>
       </n-form-item>
     </n-form>
+    <Modal v-model:show="modalTermsVisible" :title="$t('general.termsAndConditions')">
+      <p class="text-sm mb-8">
+        {{ $t('form.terms.project') }}
+      </p>
+    </Modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
+import Tag from '~~/components/parts/Tag.vue';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const modalTermsVisible = ref<boolean>(false);
 const emit = defineEmits(['submitActive', 'submitSuccess']);
 
 onMounted(async () => {
@@ -88,17 +87,14 @@ onMounted(async () => {
 /** Terms label with link */
 const termsLabel = computed(() => {
   return h('span', {}, [
-    $i18n.t('form.terms.project'),
-    h('a', { href: '#terms', target: '_blank' }, $i18n.t('general.terms')),
+    $i18n.t('general.termsAccept'),
+    h(
+      Tag,
+      { color: 'yellow', onHover: true, onClick: showModalTerms },
+      { default: () => $i18n.t('general.terms') }
+    ),
   ]);
 });
-
-/** Tag Project_name text - Currently not in use
-const projectNameText = computed(() => {
-  return formData.value.name
-    ? `${formData.value.name}.Appilon.io`
-    : `${$i18n.t('login.projectName')}.Appilon.io`;
-}); */
 
 /** Form project */
 const loading = ref(false);
@@ -128,6 +124,11 @@ const rules: NFormRules = {
     },
   ],
 };
+
+function showModalTerms(e: Event | MouseEvent) {
+  e.stopPropagation();
+  modalTermsVisible.value = true;
+}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
