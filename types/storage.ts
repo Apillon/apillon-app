@@ -237,13 +237,11 @@ declare global {
   interface WebpageInterface {
     id: number;
     status: number;
-    project_uuid: string;
+    webpage_uuid: string;
+    bucket_uuid: string;
     bucket: BucketInterface;
-    bucket_id: number;
     stagingBucket: BucketInterface;
-    stagingBucket_id: number;
     productionBucket: BucketInterface;
-    productionBucket_id: number;
     name: string;
     description: string;
     domain: string;
