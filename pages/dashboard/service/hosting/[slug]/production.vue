@@ -85,7 +85,7 @@ onMounted(() => {
 
       /** Show files from staging bucket */
       dataStore.bucket.active = webpage.productionBucket;
-      dataStore.setBucketId(webpage.productionBucket_id);
+      dataStore.setBucketId(webpage.productionBucket.id);
 
       dataStore.fetchDirectoryContent(webpage.productionBucket.bucket_uuid);
 

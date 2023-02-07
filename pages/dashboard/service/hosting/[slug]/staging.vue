@@ -87,7 +87,7 @@ onMounted(() => {
 
       /** Show files from staging bucket */
       dataStore.bucket.active = webpage.stagingBucket;
-      dataStore.setBucketId(webpage.stagingBucket_id);
+      dataStore.setBucketId(webpage.stagingBucket.id);
 
       if (webpage.bucket.uploadedSize === 0) {
         dataStore.bucket.uploadActive = true;
