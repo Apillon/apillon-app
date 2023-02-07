@@ -15,6 +15,7 @@
 
 <script lang="ts" setup>
 const dataStore = useDataStore();
+const { uploadFilesRequest } = useUpload();
 
 /** Upload height */
 const uploadHeight = computed(() => {
@@ -22,36 +23,4 @@ const uploadHeight = computed(() => {
     height: dataStore.hasBucketItems ? 'auto' : 'calc(100vh - 370px)',
   };
 });
-
-/**
- *  API calls
- */
-function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-  const fileListItem: FileListItemType = {
-    ...file,
-    percentage: 0,
-    size: file.file?.size || 0,
-    timestamp: Date.now(),
-    onFinish,
-    onError,
-  };
-
-  if (fileAlreadyOnFileList(fileListItem)) {
-    onError();
-  } else {
-    dataStore.bucket.uploadFileList.push(fileListItem);
-  }
-}
-
-/** Check if file is already on list */
-function fileAlreadyOnFileList(file: FileListItemType) {
-  return (
-    dataStore.bucket.uploadFileList.find(
-      item =>
-        item.name === file.name &&
-        item.fullPath === file.fullPath &&
-        item.file?.lastModified === file.file?.lastModified
-    ) !== undefined
-  );
-}
 </script>
