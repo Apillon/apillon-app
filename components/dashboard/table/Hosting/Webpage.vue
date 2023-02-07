@@ -136,7 +136,7 @@ const currentRow = ref<BucketItemInterface>(props.webpageItems[0]);
 /** On row click */
 const rowProps = (row: BucketItemInterface) => {
   return {
-    onClick: (e: Event) => {
+    onClick: () => {
       currentRow.value = row;
     },
   };

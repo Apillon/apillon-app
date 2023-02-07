@@ -70,6 +70,9 @@ const Endpoints = {
       ? `/storage/${bucketUuid}/file-upload/${sessionUuid}/end`
       : `/storage/${bucketUuid}/file-upload`;
   },
+  storageFilesUpload: (bucketUuid: string) => {
+    return `/storage/${bucketUuid}/files-upload`;
+  },
   storageFileUploads: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/file-uploads`;
   },

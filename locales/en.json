@@ -206,7 +206,9 @@
     "SERVICE_ERROR": "There has been an error. Please come back later when we fixed that problem.",
 
     "walletSignature": "'Could not capture your signature, check your wallet connection",
-    "fileDownload": "Download failed. Something went wrong during the download."
+    "fileDownload": "Download failed. Something went wrong during the download.",
+    "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
+    "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again."
   },
   "footer": {
     "support": "Support",

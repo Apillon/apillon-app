@@ -28,7 +28,7 @@ onMounted(() => {
   dataStore.onBucketMounted(bucketId.value);
 
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await dataStore.getBucket(bucketId.value);
+    dataStore.bucket.active = await dataStore.getBucket(bucketId.value);
     pageLoading.value = false;
   });
 });

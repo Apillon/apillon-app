@@ -161,6 +161,7 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
+const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const config = useRuntimeConfig();
@@ -231,8 +232,105 @@ async function uploadFiles() {
   removeFinishedFilesFromList();
   showModalWrapFolder.value = false;
 
-  for (const file of dataStore.bucket.uploadFileList) {
-    await uploadFile(file);
+  await uploadFilesAction(dataStore.bucket.uploadFileList);
+}
+
+async function uploadFilesAction(files: Array<FileListItemType>) {
+  /** Refresh sessionUuid if batchId is new */
+  sessionUuid.value = uuidv4();
+
+  /** Files data for upload params */
+  const filesUpload: Array<UploadFileType> = files.map(file => {
+    file.path = fileFolderPath(file.fullPath || '');
+
+    return {
+      fileName: file.name,
+      contentType: file.type || getExtension(file.name),
+      path: file.path,
+    };
+  });
+
+  files.forEach(file => {
+    createFileProgress(file.id);
+    updateFileStatus(file.id, FileUploadStatusValue.UPLOADING);
+  });
+
+  try {
+    const params = {
+      session_uuid: sessionUuid.value,
+      files: filesUpload,
+    };
+
+    /** Upload files request */
+    const fileRequests = await $api.post<FilesUploadRequestResponse>(
+      endpoints.storageFilesUpload(props.bucketUuid),
+      params
+    );
+
+    if (fileRequests.data) {
+      uploadFilesToS3(files, fileRequests.data);
+    } else {
+      /** Show warning message - zero files uploaded */
+      message.warning($i18n.t('errror.fileUploadStopped'));
+    }
+  } catch (error) {
+    files.forEach(file => {
+      file.onError();
+      updateFileStatus(file.id, FileUploadStatusValue.ERROR);
+    });
+
+    /** Show error message */
+    message.error(userFriendlyMsg(error));
+  }
+}
+
+function uploadFilesToS3(
+  files: Array<FileListItemType>,
+  uploadFilesRequests: Array<FilesUploadRequestInterface>
+) {
+  uploadFilesRequests.forEach(uploadFileRequest => {
+    const file = files.find(
+      file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path
+    );
+    if (file) {
+      uploadFileToS3(file, uploadFileRequest);
+    } else {
+      console.log('file missing');
+      console.log(files);
+      console.log(file);
+      console.log(uploadFileRequest);
+      /** Show warning message - file not found by name */
+      message.warning($i18n.t('errror.fileUploadMissing', { name: uploadFileRequest.fileName }));
+    }
+  });
+}
+
+function uploadFileToS3(file: FileListItemType, uploadFilesRequest: FilesUploadRequestInterface) {
+  try {
+    /** Upload file to S3 */
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', uploadFilesRequest.url, true);
+    xhr.onload = () => {
+      file.onFinish();
+      updateFileStatus(file.id, FileUploadStatusValue.FINISHED);
+      updateFilePercentage(file.id, 100);
+      uploadSessionEnd(sessionUuid.value);
+    };
+    xhr.onerror = error => {
+      file.onError();
+      updateFileStatus(file.id, FileUploadStatusValue.ERROR);
+      uploadSessionEnd(sessionUuid.value);
+
+      /** Show error message */
+      message.error(userFriendlyMsg(error));
+    };
+    xhr.send(file.file);
+  } catch (error) {
+    file.onError();
+    updateFileStatus(file.id, FileUploadStatusValue.ERROR);
+
+    /** Show error message */
+    message.error(userFriendlyMsg(error));
   }
 }
 
@@ -317,14 +415,14 @@ async function uploadSessionEnd(sessionUuid: string) {
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
-  /** Refresh diretory content */
-  await dataStore.fetchDirectoryContent();
+  /** Refresh diretory content 
+  await dataStore.fetchDirectoryContent(); */
 }
 
 /** Get folder path from fullPath */
 function fileFolderPath(fullPath: string): string {
-  const parts = fullPath.split('/');
-  const filePath = parts.length <= 2 ? '' : parts.slice(0, -1).join('/');
+  const parts = fullPath.split('/').filter(p => p);
+  const filePath = parts.length <= 1 ? '' : parts.slice(0, -1).join('/') + '/';
 
   return wrapToDirectory.value ? filePath : dataStore.getFolderPath + filePath;
 }
@@ -334,13 +432,10 @@ function wrapperFolderPath(path: string): string {
   if (path.length < 1) {
     return '';
   }
-  return (
-    '/' +
-    path
-      .split('/')
-      .filter(p => p)
-      .join('/')
-  );
+  return path
+    .split('/')
+    .filter(p => p)
+    .join('/');
 }
 
 /** Check if file is already on list */

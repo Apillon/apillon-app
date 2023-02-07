@@ -1,20 +1,27 @@
 export {};
 declare global {
-  export interface SocialInterface {
+  interface SocialInterface {
     name: string;
     link: string;
     icon?: string;
     iconName?: string;
   }
 
-  export interface FileListItemType extends NFileInfo {
+  interface FileListItemType extends NFileInfo {
     percentage: number;
     size: number;
     timestamp: number;
+    path?: string;
     progress?: any;
     uploadSpeed?: number;
     onFinish: any;
     onError: any;
+  }
+
+  interface UploadFileType {
+    contentType: string;
+    fileName: string;
+    path: string;
   }
 
   interface MainNavItemInterface {

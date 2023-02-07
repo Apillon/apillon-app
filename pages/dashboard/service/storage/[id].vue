@@ -43,7 +43,7 @@ onMounted(() => {
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await dataStore.getBucket(bucketId.value);
+      dataStore.bucket.active = await dataStore.getBucket(bucketId.value);
 
       if (!dataStore.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
         await dataStore.fetchDirectoryContent();

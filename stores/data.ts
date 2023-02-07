@@ -176,7 +176,8 @@ export const useDataStore = defineStore('data', {
       );
     },
     getFolderPath(state) {
-      return state.folder.path.map(p => p.name).join('/') || '';
+      const path = state.folder.path.map(p => p.name).join('/');
+      return path ? path + '/' : '';
     },
     hasFileAll(state): boolean {
       return Array.isArray(state.file.all) && state.file.all.length > 0;
@@ -358,11 +359,11 @@ export const useDataStore = defineStore('data', {
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
     async getBucket(bucketId: number): Promise<BucketInterface> {
-      if (isCacheExpired(LsCacheKeys.BUCKET)) {
+      if (this.bucket.active?.id !== bucketId || isCacheExpired(LsCacheKeys.BUCKET)) {
         return await this.fetchBucket(bucketId);
       }
       const bucket = this.bucket.items.find(item => item.id === bucketId);
-      if (bucket !== undefined) {
+      if (bucket !== undefined && !isCacheExpired(LsCacheKeys.BUCKETS)) {
         return bucket;
       }
       return await this.fetchBucket(bucketId);

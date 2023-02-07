@@ -136,6 +136,14 @@ declare global {
     file_uuid: string;
     url: string;
   }
+  interface FilesUploadRequestInterface {
+    contentType: string;
+    fileName: string;
+    file_uuid: string;
+    path: string;
+    url: string;
+  }
+
   interface FileInterface {
     CID: string;
     bucket_id: number;
@@ -191,6 +199,8 @@ declare global {
 
   interface FileDetailsResponse extends GeneralResponse<FileDetailsInterface> {}
   interface FileUploadRequestResponse extends GeneralResponse<FileUploadRequestInterface> {}
+  interface FilesUploadRequestResponse
+    extends GeneralResponse<Array<FilesUploadRequestInterface>> {}
   interface FileUploadSessionResponse extends GeneralResponse<boolean> {}
   interface FileUploadsResponse extends GeneralItemsResponse<FileUploadInterface> {}
 
