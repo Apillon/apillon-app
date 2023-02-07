@@ -108,7 +108,7 @@
       <n-grid v-else class="w-full mt-10 mb-2" :cols="2" :span="2" :x-gap="8">
         <n-gi class="self-center">
           <n-checkbox
-            v-model:checked="wrapToDirectory"
+            v-model:checked="wrapToDirectoryCheckbox"
             size="medium"
             :label="$t('storage.wrapToDirectory')"
           />
@@ -174,7 +174,7 @@ const promises = ref<Array<Promise<any>>>([]);
 
 /** Wrap files to directory */
 const showModalWrapFolder = ref<boolean>(false);
-const wrapToDirectory = ref<boolean>(false);
+const wrapToDirectoryCheckbox = ref<boolean>(false);
 const folderName = ref<string>('');
 
 /** Calculate average upload speed from uploaded files */
@@ -213,14 +213,14 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
 
 /** Upload wrapper functions */
 function uploadNow() {
-  if (wrapToDirectory.value && !showModalWrapFolder.value) {
+  if (wrapToDirectoryCheckbox.value && !showModalWrapFolder.value) {
     showModalWrapFolder.value = true;
     return;
   }
   uploadFiles();
 }
 function uploadSkipDirectory() {
-  wrapToDirectory.value = false;
+  wrapToDirectoryCheckbox.value = false;
   uploadFiles();
 }
 function retryUpload() {
@@ -232,16 +232,16 @@ async function uploadFiles() {
   removeFinishedFilesFromList();
   showModalWrapFolder.value = false;
 
-  await uploadFilesAction(dataStore.bucket.uploadFileList);
+  await uploadFilesAction(dataStore.bucket.uploadFileList, wrapToDirectoryCheckbox.value);
 }
 
-async function uploadFilesAction(files: Array<FileListItemType>) {
+async function uploadFilesAction(files: Array<FileListItemType>, wrapToDirectory: boolean) {
   /** Refresh sessionUuid if batchId is new */
   sessionUuid.value = uuidv4();
 
   /** Files data for upload params */
   const filesUpload: Array<UploadFileType> = files.map(file => {
-    file.path = fileFolderPath(file.fullPath || '');
+    file.path = fileFolderPath(file.fullPath || '', wrapToDirectory);
 
     return {
       fileName: file.name,
@@ -268,7 +268,7 @@ async function uploadFilesAction(files: Array<FileListItemType>) {
     );
 
     if (fileRequests.data) {
-      uploadFilesToS3(files, fileRequests.data);
+      uploadFilesToS3(files, fileRequests.data, wrapToDirectory);
     } else {
       /** Show warning message - zero files uploaded */
       message.warning($i18n.t('errror.fileUploadStopped'));
@@ -286,26 +286,27 @@ async function uploadFilesAction(files: Array<FileListItemType>) {
 
 function uploadFilesToS3(
   files: Array<FileListItemType>,
-  uploadFilesRequests: Array<FilesUploadRequestInterface>
+  uploadFilesRequests: Array<FilesUploadRequestInterface>,
+  wrapToDirectory: boolean
 ) {
   uploadFilesRequests.forEach(uploadFileRequest => {
     const file = files.find(
       file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path
     );
     if (file) {
-      uploadFileToS3(file, uploadFileRequest);
+      uploadFileToS3(file, uploadFileRequest, wrapToDirectory);
     } else {
-      console.log('file missing');
-      console.log(files);
-      console.log(file);
-      console.log(uploadFileRequest);
       /** Show warning message - file not found by name */
       message.warning($i18n.t('errror.fileUploadMissing', { name: uploadFileRequest.fileName }));
     }
   });
 }
 
-function uploadFileToS3(file: FileListItemType, uploadFilesRequest: FilesUploadRequestInterface) {
+function uploadFileToS3(
+  file: FileListItemType,
+  uploadFilesRequest: FilesUploadRequestInterface,
+  wrapToDirectory: boolean
+) {
   try {
     /** Upload file to S3 */
     const xhr = new XMLHttpRequest();
@@ -314,68 +315,12 @@ function uploadFileToS3(file: FileListItemType, uploadFilesRequest: FilesUploadR
       file.onFinish();
       updateFileStatus(file.id, FileUploadStatusValue.FINISHED);
       updateFilePercentage(file.id, 100);
-      uploadSessionEnd(sessionUuid.value);
+      uploadSessionEnd(sessionUuid.value, wrapToDirectory);
     };
     xhr.onerror = error => {
       file.onError();
       updateFileStatus(file.id, FileUploadStatusValue.ERROR);
-      uploadSessionEnd(sessionUuid.value);
-
-      /** Show error message */
-      message.error(userFriendlyMsg(error));
-    };
-    xhr.send(file.file);
-  } catch (error) {
-    file.onError();
-    updateFileStatus(file.id, FileUploadStatusValue.ERROR);
-
-    /** Show error message */
-    message.error(userFriendlyMsg(error));
-  }
-}
-
-async function uploadFile(file: FileListItemType) {
-  /** Refresh timestamp */
-  file.timestamp = Date.now();
-
-  /** Refresh sessionUuid if batchId is new */
-  if (file.batchId !== batchId.value) {
-    sessionUuid.value = uuidv4();
-    batchId.value = file.batchId || '';
-  }
-
-  const fileData: FormFileUploadRequest = {
-    fileName: file.name,
-    contentType: file.type || getExtension(file.name),
-    path: fileFolderPath(file.fullPath || ''),
-    session_uuid: sessionUuid.value,
-  };
-
-  createFileProgress(file.id);
-  updateFileStatus(file.id, FileUploadStatusValue.UPLOADING);
-
-  try {
-    /** Upload file request */
-    const request = $api.post<FileUploadRequestResponse>(
-      endpoints.storageFileUpload(props.bucketUuid),
-      fileData
-    );
-    promises.value.push(request);
-    const res = await request;
-
-    /** Upload file to S3 */
-    const xhr = new XMLHttpRequest();
-    xhr.open('PUT', res.data.url, true);
-    xhr.onload = () => {
-      file.onFinish();
-      updateFileStatus(file.id, FileUploadStatusValue.FINISHED);
-      updateFilePercentage(file.id, 100);
-      uploadSessionEnd(sessionUuid.value);
-    };
-    xhr.onerror = error => {
-      file.onError();
-      updateFileStatus(file.id, FileUploadStatusValue.ERROR);
-      uploadSessionEnd(sessionUuid.value);
+      uploadSessionEnd(sessionUuid.value, wrapToDirectory);
 
       /** Show error message */
       message.error(userFriendlyMsg(error));
@@ -391,15 +336,15 @@ async function uploadFile(file: FileListItemType) {
 }
 
 /** Upload Session End  */
-async function uploadSessionEnd(sessionUuid: string) {
+async function uploadSessionEnd(sessionUuid: string, wrapToDirectory: boolean) {
   if (!allFilesFinished.value) {
     return;
   }
   try {
     const params: Record<string, string | number | boolean | null> = {
       directSync: config.public.ENV === AppEnv.LOCAL,
-      wrapWithDirectory: wrapToDirectory.value,
-      directoryPath: wrapToDirectory.value
+      wrapWithDirectory: wrapToDirectory,
+      directoryPath: wrapToDirectory
         ? dataStore.getFolderPath + wrapperFolderPath(folderName.value)
         : null,
     };
@@ -420,11 +365,11 @@ async function uploadSessionEnd(sessionUuid: string) {
 }
 
 /** Get folder path from fullPath */
-function fileFolderPath(fullPath: string): string {
+function fileFolderPath(fullPath: string, wrapToDirectory: boolean): string {
   const parts = fullPath.split('/').filter(p => p);
   const filePath = parts.length <= 1 ? '' : parts.slice(0, -1).join('/') + '/';
 
-  return wrapToDirectory.value ? filePath : dataStore.getFolderPath + filePath;
+  return wrapToDirectory ? filePath : dataStore.getFolderPath + filePath;
 }
 
 /** Get wrapper folder path from user's input */
