@@ -158,7 +158,7 @@ const columns = computed(() => {
       key: 'name',
       className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
       sorter: props.actions ? 'default' : false,
-      minWidth: 150,
+      minWidth: 200,
       render(row: BucketItemInterface) {
         return [
           h(
@@ -193,13 +193,13 @@ const columns = computed(() => {
                 default: () => [
                   h(
                     'span',
-                    { class: 'text-grey whitespace-nowrap' },
+                    { class: 'text-body whitespace-nowrap' },
                     { default: () => truncateCid(row.CID || '') }
                   ),
                   h(
                     'button',
                     { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '') },
-                    h('span', { class: 'icon-copy text-grey' }, {})
+                    h('span', { class: 'icon-copy text-body' }, {})
                   ),
                 ],
               }
@@ -224,13 +224,13 @@ const columns = computed(() => {
                 default: () => [
                   h(
                     NEllipsis,
-                    { class: 'text-grey align-bottom', 'line-clamp': 1 },
+                    { class: 'text-body align-bottom', 'line-clamp': 1 },
                     { default: () => row.link }
                   ),
                   h(
                     'button',
                     { class: 'ml-2', onClick: () => copyToClipboard(row.link) },
-                    h('span', { class: 'icon-copy text-grey' }, {})
+                    h('span', { class: 'icon-copy text-body' }, {})
                   ),
                 ],
               }

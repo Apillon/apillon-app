@@ -121,7 +121,7 @@ const createColumns = (): NDataTableColumns<FileUploadInterface> => {
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
-      minWidth: 150,
+      minWidth: 200,
       render(row) {
         return [
           h(IconFolderFile, { isFile: true }, ''),
@@ -135,7 +135,7 @@ const createColumns = (): NDataTableColumns<FileUploadInterface> => {
       render(row) {
         return h(
           'span',
-          { class: 'text-grey' },
+          { class: 'text-body' },
           {
             default: () => $i18n.t(`storage.fileStatus.${row.fileStatus}`),
           }
@@ -148,7 +148,7 @@ const createColumns = (): NDataTableColumns<FileUploadInterface> => {
       render(row) {
         return h(
           'span',
-          { class: 'text-grey' },
+          { class: 'text-body' },
           {
             default: () => truncateCid(row.CID || ''),
           }

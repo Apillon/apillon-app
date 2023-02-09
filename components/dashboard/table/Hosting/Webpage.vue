@@ -95,7 +95,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
     {
       key: 'name',
       title: $i18n.t('storage.fileName'),
-      minWidth: 150,
+      minWidth: 200,
       render(row) {
         return [h(IconFolderFile, { isFile: true }, ''), h('span', { class: 'ml-2 ' }, row.name)];
       },

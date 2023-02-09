@@ -449,7 +449,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     borderPrimary: `1px solid ${colors.primary}`,
     borderSuccess: `1px solid ${colors.green}`,
     borderWarning: `1px solid ${colors.orange}`,
-    color: colors.bg.light,
+    color: colors.body,
     colorError: colors.pink,
     colorInfo: colors.blue,
     colorSuccess: colors.green,

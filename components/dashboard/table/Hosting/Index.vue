@@ -1,6 +1,6 @@
 <template>
   <n-space class="pb-8" :size="32" vertical>
-    <HostingActions />
+    <ActionsHosting />
 
     <n-data-table
       ref="tableRef"

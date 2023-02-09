@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h4>{{ $t('nav.hosting') }}</h4>
+          <h1>{{ $t('nav.hosting') }}</h1>
         </slot>
 
         <template #info>

@@ -118,6 +118,7 @@ declare global {
     description?: string | null;
   }
   interface CreateFolderResponse extends GeneralResponse<BucketItemInterface> {}
+  interface BucketItemResponse extends GeneralResponse<BucketItemInterface> {}
   interface FolderResponse extends GeneralItemsResponse<BucketItemInterface> {}
 
   /**

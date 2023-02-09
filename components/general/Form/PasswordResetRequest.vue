@@ -59,7 +59,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || '')));
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || '')));
     } else {
       /** Request password change */
       await passwordChangeRequest();

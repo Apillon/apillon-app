@@ -513,11 +513,9 @@ export const useDataStore = defineStore('data', {
         this.promises.buckets = req;
         const res = await req;
 
-        const items = res.data.items
-          .filter((bucket: BucketInterface) => bucket.bucketType === BucketType.STORAGE)
-          .map((bucket: BucketInterface) => {
-            return addBucketAdditionalData(bucket);
-          });
+        const items = res.data.items.map((bucket: BucketInterface) => {
+          return addBucketAdditionalData(bucket);
+        });
 
         if (statusDeleted) {
           this.bucket.destroyed = items;
@@ -594,7 +592,8 @@ export const useDataStore = defineStore('data', {
       limit?: number,
       search?: string,
       orderBy?: string,
-      order?: string
+      order?: string,
+      markedForDeletion?: boolean
     ) {
       this.folder.loading = true;
 
@@ -628,6 +627,9 @@ export const useDataStore = defineStore('data', {
         }
         if (order) {
           params.desc = order === 'descend' ? 'true' : 'false';
+        }
+        if (markedForDeletion) {
+          params.markedForDeletion = markedForDeletion ? 1 : 0;
         }
 
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
