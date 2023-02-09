@@ -67,8 +67,9 @@ import { useMessage } from 'naive-ui';
 // const authStore = useAuthStore();
 const referralStore = useReferralStore();
 const message = useMessage();
+const config = useRuntimeConfig();
 
-const referralCode = `https://apillon.io/register/?REF=${referralStore.refCode}`;
+const referralCode = `${config.public.url}/register/?REF=${referralStore.refCode}`;
 
 function copyWalletNumber() {
   navigator.clipboard.writeText(referralCode);
