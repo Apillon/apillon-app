@@ -277,12 +277,17 @@ function onAllFilesDeleted() {
 async function deployToStaging() {
   deploying.value = true;
 
-  await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.STAGING);
+  const deployment = await dataStore.deployWebpage(
+    dataStore.webpage.active.id,
+    DeploymentEnvironment.STAGING
+  );
 
   /** After successfull deploy redirect to production tab */
-  setTimeout(() => {
-    router.push(`/dashboard/service/hosting/${webpageId.value}/staging`);
-  }, 1000);
+  if (deployment) {
+    setTimeout(() => {
+      router.push(`/dashboard/service/hosting/${webpageId.value}/staging`);
+    }, 1000);
+  }
 
   deploying.value = false;
 }
@@ -291,12 +296,17 @@ async function deployToStaging() {
 async function deployToProduction() {
   deploying.value = true;
 
-  await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.PRODUCTION);
+  const deployment = await dataStore.deployWebpage(
+    dataStore.webpage.active.id,
+    DeploymentEnvironment.PRODUCTION
+  );
 
   /** After successfull deploy redirect to production tab */
-  setTimeout(() => {
-    router.push(`/dashboard/service/hosting/${webpageId.value}/production`);
-  }, 1000);
+  if (deployment) {
+    setTimeout(() => {
+      router.push(`/dashboard/service/hosting/${webpageId.value}/production`);
+    }, 1000);
+  }
 
   deploying.value = false;
 }

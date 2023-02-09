@@ -130,6 +130,7 @@
     "USER_IS_NOT_AUTHENTICATED": "User is not authenticated",
     "FORBIDDEN": "You don't have permission for this action",
     "USER_IS_NOT_AUTHORIZED": "User is not authorized",
+    "Insufficient permissions to modify this record": "You don't have permission for this action",
 
     "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error, please fill the form",
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
@@ -204,6 +205,8 @@
     "ERROR_WRITING_TO_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
     "ERROR_READING_FROM_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
     "SERVICE_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+
+    "NO_CHANGES_TO_DEPLOY": "There have been no changes to your website. First, make some changes and deploy them to the staging.",
 
     "walletSignature": "'Could not capture your signature, check your wallet connection",
     "fileDownload": "Download failed. Something went wrong during the download."

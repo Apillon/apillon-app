@@ -816,20 +816,25 @@ export const useDataStore = defineStore('data', {
     async deployWebpage(
       webpageId: number,
       env: number = DeploymentEnvironment.STAGING
-    ): Promise<any> {
+    ): Promise<DeploymentInterface | null> {
       try {
         const config = useRuntimeConfig();
         const params: Record<string, string | number | boolean | null> = {
           directDeploy: config.public.ENV === AppEnv.LOCAL,
           environment: env,
         };
-        await $api.post<DeploymentResponse>(endpoints.webpageDeploy(webpageId), params);
+        const deployment = await $api.post<DeploymentResponse>(
+          endpoints.webpageDeploy(webpageId),
+          params
+        );
 
         window.$message.success(window.$i18n.t('form.success.webpageDeploying'));
+        return deployment.data;
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      return null;
     },
 
     /**
