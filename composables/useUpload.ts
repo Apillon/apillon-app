@@ -12,67 +12,10 @@ export default function useUpload() {
   const bucketUuid = ref<string>('');
   const sessionUuid = ref<string>('');
   const folderName = ref<string>('');
+  // const fileList = ref<Array<FileListItemType>>([]);
 
   /**
-   * Copmuted
-   */
-
-  /** Calculate average upload speed from uploaded files */
-  const avgUploadSpeed = computed(() => {
-    const uploadSpeeds = dataStore.bucket.uploadFileList.filter(
-      item => (item.uploadSpeed || 0) > 0
-    );
-    if (uploadSpeeds.length === 0) {
-      return BASE_UPLOAD_SPEED;
-    }
-
-    const sumSpeeds = dataStore.bucket.uploadFileList.reduce(
-      (acc, file) => acc + (file.uploadSpeed || BASE_UPLOAD_SPEED),
-      0
-    );
-    return sumSpeeds / uploadSpeeds.length;
-  });
-
-  /** Check if all files are finished (status FINISH or ERROR) */
-  const allFilesFinished = computed<boolean>(() => {
-    return (
-      dataStore.bucket.uploadFileList.find(
-        file =>
-          file.status !== FileUploadStatusValue.FINISHED &&
-          file.status !== FileUploadStatusValue.ERROR
-      ) === undefined
-    );
-  });
-
-  /** Check if all files are finished (status FINISH or ERROR) */
-  const allFilesSuccess = computed<boolean>(() => {
-    return (
-      dataStore.bucket.uploadFileList.find(
-        file => file.status !== FileUploadStatusValue.FINISHED
-      ) === undefined
-    );
-  });
-
-  /** Check if any file is uploading (status UPLOADING) */
-  const filesUploading = computed<boolean>(() => {
-    return (
-      dataStore.bucket.uploadFileList.find(
-        file => file.status === FileUploadStatusValue.UPLOADING
-      ) !== undefined
-    );
-  });
-
-  /** Num of uploaded files (status UPLOADING/FINISHED) */
-  const numOfUploadedFiles = computed<number>(() => {
-    return (
-      dataStore.bucket.uploadFileList.filter(file => file.status !== FileUploadStatusValue.PENDING)
-        .length || 0
-    );
-  });
-
-  /**
-   *
-   * @param  Methods
+   *  Methods
    */
 
   /** Upload file request - add file to list */
@@ -105,12 +48,17 @@ export default function useUpload() {
     );
   }
 
-  async function uploadFiles(uploadBucketUuid: string, wrapToDirectory: boolean = false) {
-    bucketUuid.value = uploadBucketUuid;
+  async function uploadFiles(
+    uploadBucketUuid: string,
+    uploadFileList: Array<FileListItemType>,
+    wrapToDirectory: boolean = false
+  ) {
     sessionUuid.value = uuidv4();
+    bucketUuid.value = uploadBucketUuid;
+    console.log('Session: ', sessionUuid.value);
 
     /** Files data for upload params */
-    const filesUpload: Array<UploadFileType> = dataStore.bucket.uploadFileList.map(file => {
+    const filesUpload: Array<UploadFileType> = uploadFileList.map(file => {
       file.path = fileFolderPath(file.fullPath || '', wrapToDirectory);
 
       return {
@@ -120,9 +68,9 @@ export default function useUpload() {
       };
     });
 
-    dataStore.bucket.uploadFileList.forEach(file => {
-      createFileProgress(file.id);
-      updateFileStatus(file.id, FileUploadStatusValue.UPLOADING);
+    uploadFileList.forEach(file => {
+      createFileProgress(uploadFileList, file);
+      updateFileStatus(file, FileUploadStatusValue.UPLOADING);
     });
 
     try {
@@ -138,15 +86,15 @@ export default function useUpload() {
       );
 
       if (fileRequests.data) {
-        uploadFilesToS3(fileRequests.data, wrapToDirectory);
+        uploadFilesToS3(uploadFileList, fileRequests.data, wrapToDirectory);
       } else {
         /** Show warning message - zero files uploaded */
         message.warning($i18n.t('errror.fileUploadStopped'));
       }
     } catch (error) {
-      dataStore.bucket.uploadFileList.forEach(file => {
+      uploadFileList.forEach(file => {
         file.onError();
-        updateFileStatus(file.id, FileUploadStatusValue.ERROR);
+        updateFileStatus(file, FileUploadStatusValue.ERROR);
       });
 
       /** Show error message */
@@ -155,15 +103,16 @@ export default function useUpload() {
   }
 
   function uploadFilesToS3(
+    uploadFileList: Array<FileListItemType>,
     uploadFilesRequests: Array<FilesUploadRequestInterface>,
     wrapToDirectory: boolean
   ) {
     uploadFilesRequests.forEach(uploadFileRequest => {
-      const file = dataStore.bucket.uploadFileList.find(
+      const file = uploadFileList.find(
         file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path
       );
       if (file) {
-        uploadFileToS3(file, uploadFileRequest, wrapToDirectory);
+        uploadFileToS3(uploadFileList, file, uploadFileRequest, wrapToDirectory);
       } else {
         /** Show warning message - file not found by name */
         message.warning($i18n.t('errror.fileUploadMissing', { name: uploadFileRequest.fileName }));
@@ -172,6 +121,7 @@ export default function useUpload() {
   }
 
   function uploadFileToS3(
+    uploadFileList: Array<FileListItemType>,
     file: FileListItemType,
     uploadFilesRequest: FilesUploadRequestInterface,
     wrapToDirectory: boolean
@@ -182,14 +132,14 @@ export default function useUpload() {
       xhr.open('PUT', uploadFilesRequest.url, true);
       xhr.onload = () => {
         file.onFinish();
-        updateFileStatus(file.id, FileUploadStatusValue.FINISHED);
-        updateFilePercentage(file.id, 100);
-        uploadSessionEnd(sessionUuid.value, wrapToDirectory);
+        updateFileStatus(file, FileUploadStatusValue.FINISHED);
+        updateFilePercentage(file, 100);
+        uploadSessionEnd(sessionUuid.value, uploadFileList, wrapToDirectory);
       };
       xhr.onerror = error => {
         file.onError();
-        updateFileStatus(file.id, FileUploadStatusValue.ERROR);
-        uploadSessionEnd(sessionUuid.value, wrapToDirectory);
+        updateFileStatus(file, FileUploadStatusValue.ERROR);
+        uploadSessionEnd(sessionUuid.value, uploadFileList, wrapToDirectory);
 
         /** Show error message */
         message.error(userFriendlyMsg(error));
@@ -197,7 +147,7 @@ export default function useUpload() {
       xhr.send(file.file);
     } catch (error) {
       file.onError();
-      updateFileStatus(file.id, FileUploadStatusValue.ERROR);
+      updateFileStatus(file, FileUploadStatusValue.ERROR);
 
       /** Show error message */
       message.error(userFriendlyMsg(error));
@@ -205,8 +155,12 @@ export default function useUpload() {
   }
 
   /** Upload Session End  */
-  async function uploadSessionEnd(sessionUuid: string, wrapToDirectory: boolean) {
-    if (!allFilesFinished.value) {
+  async function uploadSessionEnd(
+    sessionUuid: string,
+    uploadFileList: Array<FileListItemType>,
+    wrapToDirectory: boolean
+  ) {
+    if (!allFilesFinished(uploadFileList)) {
       return;
     }
     try {
@@ -233,6 +187,17 @@ export default function useUpload() {
     await dataStore.fetchDirectoryContent(); */
   }
 
+  /** Check if all files are finished (status FINISH or ERROR) */
+  function allFilesFinished(uploadFileList: Array<FileListItemType>) {
+    return (
+      uploadFileList.find(
+        file =>
+          file.status !== FileUploadStatusValue.FINISHED &&
+          file.status !== FileUploadStatusValue.ERROR
+      ) === undefined
+    );
+  }
+
   /** Get folder path from fullPath */
   function fileFolderPath(fullPath: string, wrapToDirectory: boolean): string {
     const parts = fullPath.split('/').filter(p => p);
@@ -253,67 +218,67 @@ export default function useUpload() {
   }
 
   /** Update file property */
-  function updateFilePercentage(fileId: string, percent: number) {
-    dataStore.bucket.uploadFileList.forEach(item => {
-      if (item.id === fileId) {
-        item.percentage = percent;
-      }
-    });
+  function updateFilePercentage(file: FileListItemType, percent: number) {
+    file.percentage = percent;
   }
 
   /** Update file status */
-  function updateFileStatus(fileId: string, status: FileUploadStatus) {
-    dataStore.bucket.uploadFileList.forEach(item => {
-      if (item.id === fileId) {
-        item.status = status;
+  function updateFileStatus(file: FileListItemType, status: FileUploadStatus) {
+    file.status = status;
 
-        if (status === FileUploadStatusValue.ERROR) {
-          item.percentage = 0;
-          clearInterval(item.progress);
-        }
-        if (status === FileUploadStatusValue.FINISHED) {
-          /** Calculate upload speed */
-          const timeDiff = Date.now() - item.timestamp;
-          if (timeDiff > 0) {
-            item.uploadSpeed = item.size / timeDiff;
-          }
-
-          /** Increase bucket size */
-          if (dataStore.bucket.active?.size) {
-            dataStore.bucket.active.size += item.size;
-          } else {
-            dataStore.bucket.active.size = item.size;
-          }
-
-          clearInterval(item.progress);
-        }
+    if (status === FileUploadStatusValue.ERROR) {
+      file.percentage = 0;
+      clearInterval(file.progress);
+    }
+    if (status === FileUploadStatusValue.FINISHED) {
+      /** Calculate upload speed */
+      const timeDiff = Date.now() - file.timestamp;
+      if (timeDiff > 0) {
+        file.uploadSpeed = file.size / timeDiff;
       }
-    });
+
+      /** Increase bucket size */
+      if (dataStore.bucket.active?.size) {
+        dataStore.bucket.active.size += file.size;
+      } else {
+        dataStore.bucket.active.size = file.size;
+      }
+
+      clearInterval(file.progress);
+    }
+  }
+
+  /** Calculate average upload speed from uploaded files */
+  function avgUploadSpeed(uploadFileList: Array<FileListItemType>) {
+    const uploadSpeeds = uploadFileList.filter(item => (item.uploadSpeed || 0) > 0);
+    if (uploadSpeeds.length === 0) {
+      return BASE_UPLOAD_SPEED;
+    }
+
+    const sumSpeeds = uploadFileList.reduce(
+      (acc, file) => acc + (file.uploadSpeed || BASE_UPLOAD_SPEED),
+      0
+    );
+    return sumSpeeds / uploadSpeeds.length;
   }
 
   /** Calculate file upload progress */
-  function createFileProgress(fileId: string) {
-    dataStore.bucket.uploadFileList.forEach(file => {
-      if (file.id === fileId) {
-        const timeFor1Percent = file.size / 100 / avgUploadSpeed.value;
+  function createFileProgress(uploadFileList: Array<FileListItemType>, file: FileListItemType) {
+    const timeFor1Percent = file.size / 100 / avgUploadSpeed(uploadFileList);
 
-        file.progress = setInterval(() => {
-          if (file.percentage < 100) {
-            file.percentage += 1;
-          }
-        }, timeFor1Percent);
+    file.progress = setInterval(() => {
+      if (file.percentage < 100) {
+        file.percentage += 1;
       }
-    });
+    }, timeFor1Percent);
   }
 
   return {
+    sessionUuid,
     uploadFiles,
     uploadFilesRequest,
     fileAlreadyOnFileList,
     allFilesFinished,
-    allFilesSuccess,
-    filesUploading,
-    numOfUploadedFiles,
     folderName,
   };
 }

@@ -14,8 +14,8 @@
 </template>
 
 <script lang="ts" setup>
-const dataStore = useDataStore();
 const { uploadFilesRequest } = useUpload();
+const dataStore = useDataStore();
 
 /** Upload height */
 const uploadHeight = computed(() => {
