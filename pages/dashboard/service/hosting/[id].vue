@@ -52,9 +52,6 @@ onMounted(() => {
         router.push({ name: 'dashboard-service-hosting' });
         return;
       }
-      /** Get deployments for this webpage */
-      dataStore.getDeployments(webpageId);
-
       /** Show files from main bucket */
       dataStore.bucket.active = webpage.bucket;
       dataStore.setBucketId(webpage.bucket.id);

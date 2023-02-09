@@ -114,7 +114,7 @@ export const useDataStore = defineStore('data', {
     },
     bucketUuid(state): string {
       return (
-        state.bucket.active.bucket_uuid ||
+        state.bucket.active?.bucket_uuid ||
         (
           state.bucket.items.find((item: BucketInterface) => item.id === state.bucket.selected) ||
           ({} as BucketInterface)
@@ -196,10 +196,13 @@ export const useDataStore = defineStore('data', {
       this.bucket.search = '';
       this.bucket.selected = 0;
       this.bucket.total = 0;
+      this.bucket.uploadFileList = [] as Array<FileListItemType>;
 
       /** File/folder */
       this.file.items = {} as Record<string, FileDetailsInterface>;
       this.folder.items = [] as Array<BucketItemInterface>;
+      this.folder.path = [];
+      this.folder.selected = 0;
 
       /** Services */
       this.services.authentication = [] as Array<ServiceInterface>;
@@ -215,7 +218,8 @@ export const useDataStore = defineStore('data', {
 
       /** Deployment */
       this.webpage.deployment.active = {} as DeploymentInterface;
-      this.webpage.deployment.items = [] as Array<DeploymentInterface>;
+      this.webpage.deployment.staging = [] as Array<DeploymentInterface>;
+      this.webpage.deployment.production = [] as Array<DeploymentInterface>;
     },
 
     setCurrentProject(id: number) {
@@ -242,6 +246,7 @@ export const useDataStore = defineStore('data', {
         this.folder.path = [];
         this.folder.selected = 0;
         this.bucket.selected = id;
+        this.bucket.uploadFileList = [] as Array<FileListItemType>;
         this.folderSearch();
       }
     },

@@ -11,7 +11,7 @@
       </div>
     </n-upload-dragger>
   </n-upload>
-  <n-space v-if="filesUploading" class="min-h-[32px] my-4" justify="center" align="center">
+  <n-space v-if="uploadFileList.length" class="min-h-[32px] my-4" justify="center" align="center">
     <n-space justify="space-between" align="center">
       <IconUploading />
       <div>
@@ -20,7 +20,7 @@
           {{
             $t('storage.file.filesUploading', {
               uploading: numOfFinishedFiles,
-              files: fileList.length,
+              files: uploadFileList.length,
             })
           }}
         </span>
@@ -30,21 +30,16 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-import { v4 as uuidv4 } from 'uuid';
-
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
-const $i18n = useI18n();
-const message = useMessage();
-const dataStore = useDataStore();
-const config = useRuntimeConfig();
-const { sessionUuid, uploadFiles, fileAlreadyOnFileList, filesUploading } = useUpload();
+const { uploadFiles, fileAlreadyOnFileList, numOfFinishedFiles } = useUpload();
 
 const fileNum = ref<number>(0);
 const uploadFileList = ref<Array<FileListItemType>>([]);
+const uploadInterval = ref<any>(null);
+
 /**
  *  API call
  */
@@ -58,17 +53,24 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
     onError,
   };
 
-  if (fileAlreadyOnFileList(fileListItem)) {
+  if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
+    console.log(uploadFileList.value);
     onError();
   } else {
     uploadFileList.value.push(fileListItem);
+
+    if (uploadFileList.value.length === 1) {
+      uploadInterval.value = setInterval(() => {
+        if (fileNum.value === uploadFileList.value.length) {
+          /** When all files are on file list, start uploading files */
+          uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+
+          /** Clear interval, upload started */
+          clearInterval(uploadInterval.value);
+        }
+      }, 10);
+    }
     fileNum.value = uploadFileList.value.length;
   }
-  console.log('Hosting: ', sessionUuid.value);
-
-  setTimeout(() => {
-    console.log('10', fileNum.value, uploadFileList.value.length);
-    uploadFiles(props.bucketUuid, uploadFileList.value);
-  }, 10);
 }
 </script>

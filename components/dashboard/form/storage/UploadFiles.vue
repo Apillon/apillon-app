@@ -159,9 +159,16 @@ const props = defineProps({
 });
 
 const dataStore = useDataStore();
-const { sessionUuid, uploadFiles, uploadFilesRequest, folderName } = useUpload();
+const {
+  uploadFiles,
+  fileAlreadyOnFileList,
+  allFilesSuccess,
+  allFilesFinished,
+  filesUploading,
+  numOfUploadedFiles,
+  folderName,
+} = useUpload();
 
-const BASE_UPLOAD_SPEED = 1024;
 const fileListExpanded = ref<boolean>(true);
 
 /** Wrap files to directory */
@@ -169,73 +176,26 @@ const showModalWrapFolder = ref<boolean>(false);
 const wrapToDirectoryCheckbox = ref<boolean>(false);
 
 /**
- * Copmuted
- */
-
-/** Calculate average upload speed from uploaded files */
-const avgUploadSpeed = computed(() => {
-  const uploadSpeeds = dataStore.bucket.uploadFileList.filter(item => (item.uploadSpeed || 0) > 0);
-  if (uploadSpeeds.length === 0) {
-    return BASE_UPLOAD_SPEED;
-  }
-
-  const sumSpeeds = dataStore.bucket.uploadFileList.reduce(
-    (acc, file) => acc + (file.uploadSpeed || BASE_UPLOAD_SPEED),
-    0
-  );
-  return sumSpeeds / uploadSpeeds.length;
-});
-
-/** Check if all files are finished (status FINISH or ERROR) */
-const allFilesFinished = computed<boolean>(() => {
-  return (
-    dataStore.bucket.uploadFileList.find(
-      file =>
-        file.status !== FileUploadStatusValue.FINISHED &&
-        file.status !== FileUploadStatusValue.ERROR
-    ) === undefined
-  );
-});
-
-/** Check if all files are finished (status FINISH or ERROR) */
-const allFilesSuccess = computed<boolean>(() => {
-  return (
-    dataStore.bucket.uploadFileList.find(file => file.status !== FileUploadStatusValue.FINISHED) ===
-    undefined
-  );
-});
-
-/** Check if any file is uploading (status UPLOADING) */
-const filesUploading = computed<boolean>(() => {
-  return (
-    dataStore.bucket.uploadFileList.find(
-      file => file.status === FileUploadStatusValue.UPLOADING
-    ) !== undefined
-  );
-});
-
-/** Num of uploaded files (status UPLOADING/FINISHED) */
-const numOfUploadedFiles = computed<number>(() => {
-  return (
-    dataStore.bucket.uploadFileList.filter(file => file.status !== FileUploadStatusValue.PENDING)
-      .length || 0
-  );
-});
-
-/** Num of uploaded files (status FINISHED/ERROR) */
-const numOfFinishedFiles = computed<number>(() => {
-  return (
-    dataStore.bucket.uploadFileList.filter(
-      file =>
-        file.status === FileUploadStatusValue.FINISHED ||
-        file.status === FileUploadStatusValue.ERROR
-    ).length || 0
-  );
-});
-
-/**
  * Methods
  */
+
+/** Upload file request - add file to list */
+function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+  const fileListItem: FileListItemType = {
+    ...file,
+    percentage: 0,
+    size: file.file?.size || 0,
+    timestamp: Date.now(),
+    onFinish,
+    onError,
+  };
+
+  if (fileAlreadyOnFileList(dataStore.bucket.uploadFileList, fileListItem)) {
+    onError();
+  } else {
+    dataStore.bucket.uploadFileList.push(fileListItem);
+  }
+}
 
 /** Upload wrapper functions - check if user want to wrap files */
 function requestUpload() {
@@ -254,14 +214,15 @@ function upload() {
   removeFinishedFilesFromList();
   showModalWrapFolder.value = false;
 
-  console.log('Storage: ', sessionUuid.value);
   uploadFiles(props.bucketUuid, dataStore.bucket.uploadFileList, wrapToDirectoryCheckbox.value);
 }
 
 /** Clear file list */
 function clearFileList(refreshDirectoryContent: boolean = false) {
   dataStore.bucket.uploadFileList.forEach(item => {
-    item.onError();
+    if (item.status !== FileUploadStatusValue.FINISHED) {
+      item.onError();
+    }
   });
   dataStore.bucket.uploadFileList = [] as Array<FileListItemType>;
 
