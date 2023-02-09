@@ -78,7 +78,10 @@ const version = ref(config.public.VERSION);
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
-      if (!dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles())) {
+      if (
+        !dataStore.hasProjects &&
+        isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles())
+      ) {
         showModalNewProject.value = true;
       }
     });

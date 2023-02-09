@@ -46,7 +46,11 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
       render(row) {
         return h(
           NTag,
-          { type: getDeploymentStatus(row.deploymentStatus), round: true, bordered: false },
+          {
+            type: getDeploymentStatus(row.deploymentStatus),
+            round: true,
+            bordered: false,
+          },
           {
             default: () =>
               h(

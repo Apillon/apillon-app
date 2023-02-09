@@ -142,6 +142,15 @@
   }
 }
 
+/** Form */
+.n-form {
+  .n-checkbox {
+    &--disabled .n-checkbox__label strong {
+      opacity: 0.4;
+    }
+  }
+}
+
 /** Headings */
 .n-h {
   font-size: inherit;
