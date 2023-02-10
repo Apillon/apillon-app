@@ -4,7 +4,7 @@
       <HeaderBucket />
     </template>
     <slot>
-      <TableStorageTrash v-if="dataStore.hasDeletedFiles || true" />
+      <TableStorageTrash v-if="fileStore.hasDeletedFiles || true" />
       <template v-else>
         <div
           class="flex flex-col items-center justify-center px-6 py-4"
@@ -32,6 +32,8 @@
 const $i18n = useI18n();
 const { params } = useRoute();
 const dataStore = useDataStore();
+const fileStore = useFileStore();
+const bucketStore = useBucketStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 const bucketId = ref<number>(parseInt(`${params?.slug}`));
@@ -42,10 +44,10 @@ useHead({
 
 onMounted(() => {
   /** Bucket ID from route, then load buckets */
-  dataStore.onBucketMounted(bucketId.value);
+  bucketStore.onBucketMounted(bucketId.value);
 
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    dataStore.bucket.active = await dataStore.getBucket(bucketId.value);
+    bucketStore.active = await bucketStore.getBucket(bucketId.value);
     pageLoading.value = false;
   });
 });

@@ -50,6 +50,7 @@ const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
+const webpageStore = useWebpageStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -57,7 +58,7 @@ const webpage = ref<WebpageInterface | null>(null);
 
 onMounted(async () => {
   if (props.webpageId) {
-    webpage.value = await dataStore.getWebpage(props.webpageId);
+    webpage.value = await webpageStore.getWebpage(props.webpageId);
     formData.value.domain = webpage.value.domain;
   }
 });
@@ -150,13 +151,13 @@ async function updateWebpageDomain() {
 
 function updateWebpageDomainValue(domain) {
   /** On webpage updated refresh webpage data */
-  dataStore.webpage.items.forEach((item: WebpageInterface) => {
+  webpageStore.items.forEach((item: WebpageInterface) => {
     if (item.id === props.webpageId) {
       item.domain = domain;
     }
   });
-  if (dataStore.webpage.active.id === props.webpageId) {
-    dataStore.webpage.active.domain = domain;
+  if (webpageStore.active.id === props.webpageId) {
+    webpageStore.active.domain = domain;
   }
 }
 </script>

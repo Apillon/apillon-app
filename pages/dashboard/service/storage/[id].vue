@@ -10,17 +10,17 @@
 
       <!-- Upload files -->
       <transition name="fade" appear>
-        <FormStorageDragAndDrop v-if="dataStore.bucket.uploadActive || !dataStore.hasBucketItems" />
+        <FormStorageDragAndDrop v-if="bucketStore.uploadActive || !bucketStore.hasBucketItems" />
       </transition>
 
       <!-- Breadcrumbs -->
-      <div v-if="dataStore.hasBucketItems" class="relative h-12 py-2 mb-1">
-        <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+      <div v-if="bucketStore.hasBucketItems" class="relative h-12 py-2 mb-1">
+        <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
       </div>
 
       <!-- DataTable: files and directories -->
       <transition name="fade" appear>
-        <TableStorageFiles v-if="dataStore.hasBucketItems" />
+        <TableStorageFiles v-if="bucketStore.hasBucketItems" />
       </transition>
     </slot>
   </Dashboard>
@@ -30,6 +30,7 @@
 const $i18n = useI18n();
 const { params } = useRoute();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const pageLoading = ref<boolean>(true);
 const bucketId = ref<number>(parseInt(`${params?.id}`));
 
@@ -39,17 +40,17 @@ useHead({
 
 onMounted(() => {
   /** Bucket ID from route, then load buckets */
-  dataStore.onBucketMounted(bucketId.value);
+  bucketStore.onBucketMounted(bucketId.value);
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      dataStore.bucket.active = await dataStore.getBucket(bucketId.value);
+      bucketStore.active = await bucketStore.getBucket(bucketId.value);
 
-      if (!dataStore.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
-        await dataStore.fetchDirectoryContent();
+      if (!bucketStore.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
+        await bucketStore.fetchDirectoryContent();
       }
-      if (!dataStore.hasBucketItems) {
-        dataStore.bucket.uploadActive = true;
+      if (!bucketStore.hasBucketItems) {
+        bucketStore.uploadActive = true;
       }
       pageLoading.value = false;
     });

@@ -7,8 +7,8 @@
       remote
       :bordered="false"
       :columns="columns"
-      :data="dataStore.folder.items"
-      :loading="dataStore.folder.loading"
+      :data="bucketStore.folder.items"
+      :loading="bucketStore.folder.loading"
       :pagination="pagination"
       :row-key="rowKey"
       :row-props="rowProps"
@@ -60,6 +60,7 @@ const props = defineProps({
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const showModalW3Warn = ref<boolean>(false);
 const showModalDelete = ref<boolean | null>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
@@ -76,8 +77,8 @@ const pagination = computed(() => {
   return {
     page: currentPage.value,
     pageSize: PAGINATION_LIMIT,
-    pageCount: Math.ceil(dataStore.folder.total / PAGINATION_LIMIT),
-    itemCount: dataStore.folder.total,
+    pageCount: Math.ceil(bucketStore.folder.total / PAGINATION_LIMIT),
+    itemCount: bucketStore.folder.total,
   };
 });
 
@@ -331,7 +332,7 @@ const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
   checkedRowKeys.value = rowKeys;
   const rowKeyIds = rowKeys.map(item => intVal(item));
 
-  dataStore.folder.selectedItems = dataStore.folder.items.filter(item =>
+  bucketStore.folder.selectedItems = bucketStore.folder.items.filter(item =>
     rowKeyIds.includes(item.id)
   );
 };
@@ -378,14 +379,14 @@ function onFileOpen() {
 /** Open directory - show subfolder content */
 async function onFolderOpen(folder: BucketItemInterface) {
   /** Add subfolder to folder path */
-  dataStore.folder.path.push({
+  bucketStore.folder.path.push({
     id: folder.id,
     name: folder.name,
   });
 
   /** Fetch data in reset search string */
-  dataStore.folderSearch();
-  await getDirectoryContent(dataStore.bucketUuid, folder.id);
+  bucketStore.folderSearch();
+  await getDirectoryContent(bucketStore.bucketUuid, folder.id);
   clearSorter();
 }
 
@@ -400,7 +401,7 @@ onMounted(() => {
    */
   setTimeout(async () => {
     await Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      if (!dataStore.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
+      if (!bucketStore.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
         await getDirectoryContent();
       }
     });
@@ -413,8 +414,8 @@ async function handleSorterChange(sorter?: NDataTableSortState) {
     await getDirectoryContent();
   } else if (sorter) {
     await getDirectoryContent(
-      dataStore.bucketUuid,
-      dataStore.folder.selected,
+      bucketStore.bucketUuid,
+      bucketStore.folder.selected,
       1,
       `${sorter.columnKey}`,
       `${sorter.order}`
@@ -431,7 +432,7 @@ function clearSorter() {
 
 /** Watch folder path, onCahnge clear sorter */
 watch(
-  () => dataStore.folder.path,
+  () => bucketStore.folder.path,
   _ => {
     clearSorter();
   }
@@ -439,8 +440,8 @@ watch(
 
 /** On page change, load data */
 async function handlePageChange(currentPage: number) {
-  if (!dataStore.folder.loading) {
-    await getDirectoryContent(dataStore.bucketUuid, dataStore.folder.selected, currentPage);
+  if (!bucketStore.folder.loading) {
+    await getDirectoryContent(bucketStore.bucketUuid, bucketStore.folder.selected, currentPage);
   }
 }
 
@@ -492,9 +493,9 @@ function onBucketItemsDeleted() {
 
 /** Search folders and files */
 watch(
-  () => dataStore.folder.search,
+  () => bucketStore.folder.search,
   _ => {
-    if (dataStore.folder.allowFetch) {
+    if (bucketStore.folder.allowFetch) {
       debouncedSearchFilter();
       clearSorter();
     }
@@ -510,12 +511,12 @@ async function getDirectoryContent(
   orderBy?: string,
   order?: string
 ) {
-  await dataStore.fetchDirectoryContent(
+  await bucketStore.fetchDirectoryContent(
     bucketUuid,
     folderId,
     page,
     PAGINATION_LIMIT,
-    dataStore.folder.search,
+    bucketStore.folder.search,
     orderBy,
     order
   );
@@ -529,10 +530,10 @@ async function downloadFile(CID?: string | null) {
     console.warn('MISSING File CID!');
     return;
   }
-  if (!(CID in dataStore.file.items)) {
-    dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
+  if (!(CID in fileStore.items)) {
+    fileStore.items[CID] = await dataStore.fetchFileDetails(CID);
   }
-  const fileDetails: FileDetails = dataStore.file.items[CID].file;
+  const fileDetails: FileDetails = fileStore.items[CID].file;
   download(fileDetails.link, fileDetails.name);
 }
 </script>

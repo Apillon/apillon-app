@@ -5,7 +5,7 @@
         <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
           <span class="icon-back"></span>
         </NuxtLink>
-        <h4>{{ dataStore.webpage.active.name }}</h4>
+        <h4>{{ webpageStore.active.name }}</h4>
       </n-space>
     </slot>
 
@@ -18,5 +18,5 @@
 </template>
 
 <script lang="ts" setup>
-const dataStore = useDataStore();
+const webpageStore = useWebpageStore();
 </script>

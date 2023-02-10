@@ -28,6 +28,8 @@ export const LsCacheKeys = {
   DEPLOYMENTS_STAGING: 'al_cache_deployments_staging',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
+  PROJECT: 'al_cache_project',
+  PROJECTS: 'al_cache_projects',
   WEBPAGE: 'al_cache_webpage',
   WEBPAGES: 'al_cache_webpages',
 };

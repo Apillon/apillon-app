@@ -2,7 +2,7 @@
   <n-space v-bind="$attrs" justify="space-between">
     <div class="w-[20vw] max-w-xs">
       <n-input
-        v-model:value="dataStore.webpage.search"
+        v-model:value="webpageStore.search"
         type="text"
         name="search"
         size="small"
@@ -17,18 +17,14 @@
 
     <n-space size="large">
       <!-- Refresh webpages -->
-      <n-button
-        size="small"
-        :loading="dataStore.webpage.loading"
-        @click="dataStore.fetchWebpages()"
-      >
+      <n-button size="small" :loading="webpageStore.loading" @click="webpageStore.fetchWebpages()">
         <span class="icon-refresh text-lg mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
       <!-- Create new webpage -->
       <n-button
-        v-if="dataStore.hasWebpages"
+        v-if="webpageStore.hasWebpages"
         type="primary"
         size="small"
         ghost
@@ -47,6 +43,6 @@
 </template>
 
 <script lang="ts" setup>
-const dataStore = useDataStore();
+const webpageStore = useWebpageStore();
 const showModalEditWebpage = ref<boolean>(false);
 </script>

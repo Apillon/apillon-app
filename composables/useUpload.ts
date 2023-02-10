@@ -5,7 +5,7 @@ import { ref } from 'vue';
 export default function useUpload() {
   const $i18n = useI18n();
   const message = useMessage();
-  const dataStore = useDataStore();
+  const bucketStore = useBucketStore();
   const config = useRuntimeConfig();
 
   const BASE_UPLOAD_SPEED = 1024;
@@ -172,7 +172,7 @@ export default function useUpload() {
         directSync: config.public.ENV === AppEnv.LOCAL,
         wrapWithDirectory: wrapToDirectory,
         directoryPath: wrapToDirectory
-          ? dataStore.getFolderPath + wrapperFolderPath(folderName.value)
+          ? bucketStore.getFolderPath + wrapperFolderPath(folderName.value)
           : null,
       };
       await $api.post<PasswordResetResponse>(
@@ -201,7 +201,7 @@ export default function useUpload() {
         }
       }
       /** Refresh diretory content  */
-      dataStore.fetchDirectoryContent();
+      bucketStore.fetchDirectoryContent();
     }, 500);
   }
 
@@ -210,7 +210,7 @@ export default function useUpload() {
     const parts = fullPath.split('/').filter(p => p);
     const filePath = parts.length <= 1 ? '' : parts.slice(0, -1).join('/') + '/';
 
-    return wrapToDirectory ? filePath : dataStore.getFolderPath + filePath;
+    return wrapToDirectory ? filePath : bucketStore.getFolderPath + filePath;
   }
 
   /** Get wrapper folder path from user's input */
@@ -240,10 +240,10 @@ export default function useUpload() {
       }
 
       /** Increase bucket size */
-      if (dataStore.bucket.active?.size) {
-        dataStore.bucket.active.size += file.size;
+      if (bucketStore.active?.size) {
+        bucketStore.active.size += file.size;
       } else {
-        dataStore.bucket.active.size = file.size;
+        bucketStore.active.size = file.size;
       }
 
       clearInterval(file.progress);

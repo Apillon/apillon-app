@@ -84,6 +84,7 @@ const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
+const webpageStore = useWebpageStore();
 const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -92,7 +93,7 @@ const webpage = ref<WebpageInterface | null>(null);
 
 onMounted(async () => {
   if (props.webpageId) {
-    webpage.value = await dataStore.getWebpage(props.webpageId);
+    webpage.value = await webpageStore.getWebpage(props.webpageId);
     formData.value.name = webpage.value.name;
     formData.value.description = webpage.value.description;
   }
@@ -121,7 +122,7 @@ const rules: NFormRules = {
 };
 
 const isQuotaReached = computed<boolean>(() => {
-  return props.webpageId === 0 && dataStore.webpage.quotaReached === true;
+  return props.webpageId === 0 && webpageStore.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
@@ -160,10 +161,10 @@ async function createWebpage() {
     message.success($i18n.t('form.success.created.webpage'));
 
     /** On new webpage created add new webpage to list */
-    dataStore.webpage.items.push(res.data);
+    webpageStore.items.push(res.data);
 
     /** Reset webpage qouta limit */
-    dataStore.webpage.quotaReached = undefined;
+    webpageStore.quotaReached = undefined;
 
     /** Emit events */
     emit('submitSuccess');
@@ -189,15 +190,15 @@ async function updateWebpage() {
     message.success($i18n.t('form.success.updated.webpage'));
 
     /** On webpage updated refresh webpage data */
-    dataStore.webpage.items.forEach((item: WebpageInterface) => {
+    webpageStore.items.forEach((item: WebpageInterface) => {
       if (item.id === props.webpageId) {
         item.name = res.data.name;
         item.description = res.data.description;
       }
     });
-    if (dataStore.webpage.active.id === props.webpageId) {
-      dataStore.webpage.active.name = res.data.name;
-      dataStore.webpage.active.description = res.data.description;
+    if (webpageStore.active.id === props.webpageId) {
+      webpageStore.active.name = res.data.name;
+      webpageStore.active.description = res.data.description;
     }
 
     /** Emit events */

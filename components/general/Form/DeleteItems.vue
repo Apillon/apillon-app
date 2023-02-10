@@ -19,7 +19,7 @@ const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
-const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const loading = ref(false);
 
 onMounted(() => {
@@ -71,7 +71,7 @@ function getUrl(type: string, id: number) {
     case 'directory':
       return endpoints.directory(id);
     case 'file':
-      return endpoints.storageFileDelete(dataStore.bucketUuid, id);
+      return endpoints.storageFileDelete(bucketStore.bucketUuid, id);
     default:
       console.warn('Wrong type');
       return '';

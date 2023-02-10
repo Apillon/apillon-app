@@ -21,8 +21,8 @@
     </template>
     <slot>
       <TableStorageBucket
-        v-if="dataStore.hasDestroyedBuckets"
-        :buckets="dataStore.bucket.destroyed"
+        v-if="bucketStore.hasDestroyedBuckets"
+        :buckets="bucketStore.destroyed"
         :deleted="true"
       />
       <template v-else>
@@ -51,6 +51,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 
@@ -60,7 +61,7 @@ useHead({
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await dataStore.getBuckets(true);
+    await bucketStore.getBuckets(true);
 
     pageLoading.value = false;
   });

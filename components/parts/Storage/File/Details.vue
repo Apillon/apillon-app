@@ -116,7 +116,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['onFileDelete']);
 
-const dataStore = useDataStore();
+const fileStore = useFileStore();
 const fileDetails = ref<FileInterface>({} as FileInterface);
 const fileStatus = ref<number>(0);
 const crustFileStatus = ref<FileCrust>({} as FileCrust);
@@ -135,18 +135,18 @@ onDeactivated(() => {
 
 /** Get File details */
 async function getFileDetails(uuidOrCID: string) {
-  if (!(uuidOrCID in dataStore.file.items)) {
-    dataStore.file.items[uuidOrCID] = await dataStore.fetchFileDetails(uuidOrCID);
+  if (!(uuidOrCID in fileStore.items)) {
+    fileStore.items[uuidOrCID] = await fileStore.fetchFileDetails(uuidOrCID);
   }
-  fileDetails.value = dataStore.file.items[uuidOrCID].file;
-  fileStatus.value = fileDetails.value?.fileStatus || dataStore.file.items[uuidOrCID].fileStatus;
+  fileDetails.value = fileStore.items[uuidOrCID].file;
+  fileStatus.value = fileDetails.value?.fileStatus || fileStore.items[uuidOrCID].fileStatus;
 }
 
 /** Get File details from CRUST */
 async function getcrustFileStatus(cid: string) {
-  if (!(cid in dataStore.crust)) {
-    dataStore.crust[cid] = await dataStore.fetchFileDetailsFromCrust(cid);
+  if (!(cid in fileStore.crust)) {
+    fileStore.crust[cid] = await fileStore.fetchFileDetailsFromCrust(cid);
   }
-  crustFileStatus.value = dataStore.crust[cid] as FileCrust;
+  crustFileStatus.value = fileStore.crust[cid] as FileCrust;
 }
 </script>

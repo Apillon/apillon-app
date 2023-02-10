@@ -3,7 +3,7 @@
     <n-space justify="space-between">
       <div class="w-[20vw] max-w-xs">
         <n-input
-          v-model:value="dataStore.webpage.search"
+          v-model:value="webpageStore.search"
           type="text"
           name="search"
           size="small"
@@ -20,8 +20,8 @@
         <!-- Refresh webpages -->
         <n-button
           size="small"
-          :loading="dataStore.folder.loading"
-          @click="dataStore.fetchDirectoryContent()"
+          :loading="bucketStore.folder.loading"
+          @click="bucketStore.fetchDirectoryContent()"
         >
           <span class="icon-refresh text-lg mr-2"></span>
           {{ $t('general.refresh') }}
@@ -48,8 +48,8 @@
         <strong>{{ $t('hosting.domain.preview') }}</strong>
       </div>
       <div class="bg-bg-dark px-4 py-2">
-        <a :href="dataStore.webpage.active.domain" target="_blank">
-          {{ dataStore.webpage.active.domain }}
+        <a :href="webpageStore.active.domain" target="_blank">
+          {{ webpageStore.active.domain }}
         </a>
       </div>
     </div>
@@ -60,7 +60,7 @@
       :bordered="false"
       :columns="columns"
       :data="data"
-      :loading="dataStore.webpage.loading"
+      :loading="webpageStore.loading"
       :pagination="{ pageSize: PAGINATION_LIMIT }"
       :row-key="rowKey"
       :row-props="rowProps"
@@ -77,7 +77,10 @@ const props = defineProps({
 });
 
 const $i18n = useI18n();
-const dataStore = useDataStore();
+const bucketStore = useBucketStore();
+const webpageStore = useWebpageStore();
+const deploymentStore = useDeploymentStore();
+
 const deploying = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
 
@@ -85,7 +88,7 @@ const IconFolderFile = resolveComponent('IconFolderFile');
 const data = computed<Array<BucketItemInterface>>(() => {
   return (
     props.webpageItems.filter(item =>
-      item.name.toLocaleLowerCase().includes(dataStore.webpage.search.toLocaleLowerCase())
+      item.name.toLocaleLowerCase().includes(webpageStore.search.toLocaleLowerCase())
     ) || []
   );
 });
@@ -144,7 +147,7 @@ const rowProps = (row: BucketItemInterface) => {
 
 async function deployToProduction() {
   deploying.value = true;
-  await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.PRODUCTION);
+  await deploymentStore.deploy(webpageStore.active.id, DeploymentEnvironment.PRODUCTION);
   deploying.value = false;
 }
 </script>

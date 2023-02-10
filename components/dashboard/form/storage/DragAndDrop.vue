@@ -15,12 +15,12 @@
 
 <script lang="ts" setup>
 const { fileAlreadyOnFileList } = useUpload();
-const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 
 /** Upload height */
 const uploadHeight = computed(() => {
   return {
-    height: dataStore.hasBucketItems ? 'auto' : 'calc(100vh - 370px)',
+    height: bucketStore.hasBucketItems ? 'auto' : 'calc(100vh - 370px)',
   };
 });
 
@@ -35,10 +35,10 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
     onError,
   };
 
-  if (fileAlreadyOnFileList(dataStore.bucket.uploadFileList, fileListItem)) {
+  if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
     onError();
   } else {
-    dataStore.bucket.uploadFileList.push(fileListItem);
+    bucketStore.uploadFileList.push(fileListItem);
   }
 }
 </script>

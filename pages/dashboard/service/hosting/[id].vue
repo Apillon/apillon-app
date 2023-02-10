@@ -10,12 +10,12 @@
         <ActionsHostingWebpage />
 
         <!-- Upload files -->
-        <FormHostingUploadWebpage :bucket-uuid="dataStore.bucketUuid" />
+        <FormHostingUploadWebpage :bucket-uuid="bucketStore.bucketUuid" />
 
         <div>
           <!-- Breadcrumbs -->
           <div class="relative h-8">
-            <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+            <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
           </div>
           <!-- DataTable: files and directories -->
           <transition name="fade" appear>
@@ -32,6 +32,8 @@ const $i18n = useI18n();
 const router = useRouter();
 const { params } = useRoute();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
+const webpageStore = useWebpageStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
@@ -41,11 +43,11 @@ useHead({
 onMounted(() => {
   /** Bucket ID from route, then load buckets */
   const webpageId = parseInt(`${params?.id}`);
-  dataStore.setWebpageId(webpageId);
+  webpageStore.setWebpageId(webpageId);
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await dataStore.getWebpage(webpageId);
+      const webpage = await webpageStore.getWebpage(webpageId);
 
       /** Check of webpage exists */
       if (!webpage?.id) {
@@ -53,11 +55,11 @@ onMounted(() => {
         return;
       }
       /** Show files from main bucket */
-      dataStore.bucket.active = webpage.bucket;
-      dataStore.setBucketId(webpage.bucket.id);
+      bucketStore.active = webpage.bucket;
+      bucketStore.setBucketId(webpage.bucket.id);
 
       if (webpage.bucket.uploadedSize === 0) {
-        dataStore.bucket.uploadActive = true;
+        bucketStore.uploadActive = true;
       }
       pageLoading.value = false;
     });

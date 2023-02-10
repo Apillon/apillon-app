@@ -5,13 +5,13 @@
         <NuxtLink :to="{ name: 'dashboard-service-storage' }">
           <span class="icon-back"></span>
         </NuxtLink>
-        <h4 class="whitespace-nowrap">{{ dataStore.bucket.active.name }}</h4>
+        <h4 class="whitespace-nowrap">{{ bucketStore.active.name }}</h4>
 
         <n-space align="center" size="small" :wrap="false">
           <n-ellipsis class="text-body align-bottom" :line-clamp="1">
-            {{ dataStore.bucket.active.bucket_uuid }}
+            {{ bucketStore.active.bucket_uuid }}
           </n-ellipsis>
-          <button class="text-body" @click="copyToClipboard(dataStore.bucket.active.bucket_uuid)">
+          <button class="text-body" @click="copyToClipboard(bucketStore.active.bucket_uuid)">
             <span class="icon-copy"></span>
           </button>
         </n-space>
@@ -20,11 +20,11 @@
 
     <template #info>
       <StorageProgress
-        :key="dataStore.bucket.active.uploadedSize || 0"
+        :key="bucketStore.active.uploadedSize || 0"
         class="w-1/2"
-        :percentage="dataStore.bucket.active.percentage"
-        :size="dataStore.bucket.active.uploadedSize || 0"
-        :max-size="dataStore.bucket.active.maxSize"
+        :percentage="bucketStore.active.percentage"
+        :size="bucketStore.active.uploadedSize || 0"
+        :max-size="bucketStore.active.maxSize"
       />
     </template>
 
@@ -35,5 +35,5 @@
 </template>
 
 <script lang="ts" setup>
-const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 </script>

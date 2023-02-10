@@ -1,7 +1,7 @@
 <template>
   <!-- Upload - File list  -->
   <div
-    v-if="dataStore.bucket.uploadFileList.length > 0"
+    v-if="bucketStore.uploadFileList.length > 0"
     class="fixed right-0 bottom-0 w-[30rem] px-5 py-3 bg-bg-light border-1 border-bg-lighter z-10"
   >
     <!-- Header -->
@@ -14,7 +14,7 @@
             {{
               $t('storage.file.filesUploading', {
                 uploading: numOfUploadedFiles,
-                files: dataStore.bucket.uploadFileList.length,
+                files: bucketStore.uploadFileList.length,
               })
             }}
           </span>
@@ -57,7 +57,7 @@
         <div>
           <strong>{{ $t('storage.file.confirmUpload') }}</strong>
           <span class="ml-1 text-body">
-            {{ $t('storage.file.files', { files: dataStore.bucket.uploadFileList.length }) }}
+            {{ $t('storage.file.files', { files: bucketStore.uploadFileList.length }) }}
           </span>
         </div>
       </n-space>
@@ -68,7 +68,7 @@
 
     <!-- LIST -->
     <n-scrollbar v-if="fileListExpanded" class="max-h-72 mt-4" y-scrollable>
-      <div v-for="file in dataStore.bucket.uploadFileList" :key="file.id">
+      <div v-for="file in bucketStore.uploadFileList" :key="file.id">
         <StorageFileListItem
           :id="file.id"
           :name="file.name"
@@ -158,7 +158,7 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
-const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const {
   uploadFiles,
   fileAlreadyOnFileList,
@@ -190,10 +190,10 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
     onError,
   };
 
-  if (fileAlreadyOnFileList(dataStore.bucket.uploadFileList, fileListItem)) {
+  if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
     onError();
   } else {
-    dataStore.bucket.uploadFileList.push(fileListItem);
+    bucketStore.uploadFileList.push(fileListItem);
   }
 }
 
@@ -214,43 +214,39 @@ function upload() {
   removeFinishedFilesFromList();
   showModalWrapFolder.value = false;
 
-  uploadFiles(props.bucketUuid, dataStore.bucket.uploadFileList, wrapToDirectoryCheckbox.value);
+  uploadFiles(props.bucketUuid, bucketStore.uploadFileList, wrapToDirectoryCheckbox.value);
 }
 
 /** Clear file list */
 function clearFileList(refreshDirectoryContent: boolean = false) {
-  dataStore.bucket.uploadFileList.forEach(item => {
+  bucketStore.uploadFileList.forEach(item => {
     if (item.status !== FileUploadStatusValue.FINISHED) {
       item.onError();
     }
   });
-  dataStore.bucket.uploadFileList = [] as Array<FileListItemType>;
+  bucketStore.uploadFileList = [] as Array<FileListItemType>;
 
   if (refreshDirectoryContent) {
     setTimeout(() => {
-      dataStore.fetchDirectoryContent();
+      bucketStore.fetchDirectoryContent();
     }, 1000);
   }
 }
 
 /** Remove one file from file list */
 function removeFileFromFileList(fileId: string) {
-  dataStore.bucket.uploadFileList.forEach(item => {
+  bucketStore.uploadFileList.forEach(item => {
     if (item.id === fileId) {
       item.onError();
     }
   });
-  dataStore.bucket.uploadFileList = dataStore.bucket.uploadFileList.filter(
-    item => item.id !== fileId
-  );
+  bucketStore.uploadFileList = bucketStore.uploadFileList.filter(item => item.id !== fileId);
 }
 
 /** Remove finished files from list */
 function removeFinishedFilesFromList() {
-  dataStore.bucket.uploadFileList =
-    dataStore.bucket.uploadFileList.filter(
-      file => file.status !== FileUploadStatusValue.FINISHED
-    ) || [];
+  bucketStore.uploadFileList =
+    bucketStore.uploadFileList.filter(file => file.status !== FileUploadStatusValue.FINISHED) || [];
 }
 
 /** Format folder name (remove dissallowed characters) */

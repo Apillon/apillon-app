@@ -41,10 +41,10 @@ async function downloadFile(CID?: string | null) {
     console.warn('MISSING File CID!');
     return;
   }
-  if (!(CID in dataStore.file.items)) {
-    dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
+  if (!(CID in fileStore.items)) {
+    fileStore.items[CID] = await dataStore.fetchFileDetails(CID);
   }
-  const fileDetails: FileDetails = dataStore.file.items[CID].file;
+  const fileDetails: FileDetails = fileStore.items[CID].file;
   return download(fileDetails.link, fileDetails.name);
 }
 </script>

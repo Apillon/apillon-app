@@ -33,7 +33,7 @@
       remote
       :bordered="false"
       :columns="columns"
-      :data="dataStore.file.all"
+      :data="fileStore.all"
       :loading="loading"
       :pagination="pagination"
       :row-props="rowProps"
@@ -49,6 +49,7 @@ import { useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
@@ -110,8 +111,8 @@ const pagination = computed(() => {
   return {
     page: currentPage.value,
     pageSize: PAGINATION_LIMIT,
-    pageCount: Math.ceil(dataStore.file.total / PAGINATION_LIMIT),
-    itemCount: dataStore.file.total,
+    pageCount: Math.ceil(fileStore.total / PAGINATION_LIMIT),
+    itemCount: fileStore.total,
   };
 });
 
@@ -229,7 +230,7 @@ async function fetchFiles(page?: number, limit?: number) {
   loading.value = true;
 
   try {
-    const bucketUuid = dataStore.bucketUuid;
+    const bucketUuid = bucketStore.bucketUuid;
 
     const params: Record<string, string | number> = {
       bucket_uuid: bucketUuid,
@@ -252,15 +253,15 @@ async function fetchFiles(page?: number, limit?: number) {
       params
     );
 
-    dataStore.file.all = res.data.items;
-    dataStore.file.total = res.data.total;
+    fileStore.all = res.data.items;
+    fileStore.total = res.data.total;
 
     /** Save timestamp to SS */
     sessionStorage.setItem(LsCacheKeys.FILE_ALL, Date.now().toString());
   } catch (error: any) {
     /** Reset data */
-    dataStore.file.all = [];
-    dataStore.file.total = 0;
+    fileStore.all = [];
+    fileStore.total = 0;
 
     /** Show error message */
     message.error(userFriendlyMsg(error));

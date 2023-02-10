@@ -6,9 +6,9 @@
     <slot>
       <template
         v-if="
-          dataStore.folder.items.length ||
-          dataStore.bucket.active.CID ||
-          dataStore.webpage.deployment.production.length > 0
+          bucketStore.folder.items.length ||
+          bucketStore.active.CID ||
+          deploymentStore.production.length > 0
         "
       >
         <n-space class="pb-8" :size="32" vertical>
@@ -19,17 +19,17 @@
 
           <!-- IPNS link -->
           <HostingPreviewLink
-            :link="dataStore.webpage.active.ipnsProductionLink || ''"
+            :link="webpageStore.active.ipnsProductionLink || ''"
             :title="$t('hosting.ipnsLink')"
           />
 
           <!-- Deployments -->
-          <TableHostingDeployment :deployments="dataStore.webpage.deployment.production" />
+          <TableHostingDeployment :deployments="deploymentStore.production" />
 
           <!-- Breadcrumbs -->
           <div>
             <div class="relative h-8">
-              <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+              <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
             </div>
             <TableStorageFiles :actions="false" />
           </div>
@@ -58,8 +58,10 @@ const $i18n = useI18n();
 const router = useRouter();
 const { params } = useRoute();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
+const webpageStore = useWebpageStore();
+const deploymentStore = useDeploymentStore();
 
-const webpageId = ref<number>(parseInt(`${params?.slug}`));
 const pageLoading = ref<boolean>(true);
 
 useHead({
@@ -68,11 +70,12 @@ useHead({
 
 onMounted(() => {
   /** Webpage ID from route, then load buckets */
-  dataStore.setWebpageId(webpageId.value);
+  const webpageId = parseInt(`${params?.slug}`);
+  webpageStore.setWebpageId(webpageId);
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await dataStore.getWebpage(webpageId.value);
+      const webpage = await webpageStore.getWebpage(webpageId);
 
       /** Check of webpage exists */
       if (!webpage?.id) {
@@ -81,16 +84,16 @@ onMounted(() => {
       }
 
       /** Get deployments for this webpage */
-      dataStore.getDeployments(webpageId.value);
+      deploymentStore.getDeployments(webpageId);
 
       /** Show files from staging bucket */
-      dataStore.bucket.active = webpage.productionBucket;
-      dataStore.setBucketId(webpage.productionBucket.id);
+      bucketStore.active = webpage.productionBucket;
+      bucketStore.setBucketId(webpage.productionBucket.id);
 
-      dataStore.fetchDirectoryContent(webpage.productionBucket.bucket_uuid);
+      bucketStore.fetchDirectoryContent(webpage.productionBucket.bucket_uuid);
 
       if (webpage.bucket.uploadedSize === 0) {
-        dataStore.bucket.uploadActive = true;
+        bucketStore.uploadActive = true;
       }
       pageLoading.value = false;
     });
