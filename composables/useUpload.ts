@@ -16,7 +16,7 @@ export default function useUpload() {
   const clearFileList = ref<boolean>(false);
 
   /**
-   * Copmuted
+   * Computed
    */
 
   /** Calculate average upload speed from uploaded files */
@@ -33,44 +33,12 @@ export default function useUpload() {
     return sumSpeeds / uploadSpeeds.length;
   });
 
-  /** Check if all files are finished (status FINISH or ERROR) */
+  /** Check if all files are finished (status FINISHED or ERROR) */
   const allFilesFinished = computed<boolean>(() => {
-    return (
-      fileList.value.find(
-        file =>
-          file.status !== FileUploadStatusValue.FINISHED &&
-          file.status !== FileUploadStatusValue.ERROR
-      ) === undefined
-    );
-  });
-
-  /** Check if all files are finished (status FINISH or ERROR) */
-  const allFilesSuccess = computed<boolean>(() => {
-    return (
-      fileList.value.find(file => file.status !== FileUploadStatusValue.FINISHED) === undefined
-    );
-  });
-
-  /** Check if any file is uploading (status UPLOADING) */
-  const filesUploading = computed<boolean>(() => {
-    return (
-      fileList.value.find(file => file.status === FileUploadStatusValue.UPLOADING) !== undefined
-    );
-  });
-
-  /** Num of uploaded files (status UPLOADING/FINISHED) */
-  const numOfUploadedFiles = computed<number>(() => {
-    return fileList.value.filter(file => file.status !== FileUploadStatusValue.PENDING).length || 0;
-  });
-
-  /** Num of uploaded files (status FINISHED/ERROR) */
-  const numOfFinishedFiles = computed<number>(() => {
-    return (
-      fileList.value.filter(
-        file =>
-          file.status === FileUploadStatusValue.FINISHED ||
-          file.status === FileUploadStatusValue.ERROR
-      ).length || 0
+    return !fileList.value.some(
+      file =>
+        file.status === FileUploadStatusValue.PENDING ||
+        file.status === FileUploadStatusValue.UPLOADING
     );
   });
 
@@ -80,13 +48,11 @@ export default function useUpload() {
 
   /** Check if file is already on list */
   function fileAlreadyOnFileList(uploadFileList: Array<FileListItemType>, file: FileListItemType) {
-    return (
-      uploadFileList.find(
-        item =>
-          item.name === file.name &&
-          item.fullPath === file.fullPath &&
-          item.file?.lastModified === file.file?.lastModified
-      ) !== undefined
+    return uploadFileList.some(
+      item =>
+        item.name === file.name &&
+        item.fullPath === file.fullPath &&
+        item.file?.lastModified === file.file?.lastModified
     );
   }
 
@@ -163,33 +129,33 @@ export default function useUpload() {
     });
   }
 
-  function uploadFileToS3(
+  async function uploadFileToS3(
     file: FileListItemType,
     uploadFilesRequest: FilesUploadRequestInterface,
     wrapToDirectory: boolean
   ) {
     try {
-      /** Upload file to S3 */
-      const xhr = new XMLHttpRequest();
-      xhr.open('PUT', uploadFilesRequest.url, true);
-      xhr.onload = () => {
-        file.onFinish();
-        updateFileStatus(file, FileUploadStatusValue.FINISHED);
-        updateFilePercentage(file, 100);
-        uploadSessionEnd(sessionUuid.value, wrapToDirectory);
-      };
-      xhr.onerror = error => {
-        file.onError();
-        updateFileStatus(file, FileUploadStatusValue.ERROR);
-        uploadSessionEnd(sessionUuid.value, wrapToDirectory);
+      /** Upload file to S3 using fetch */
+      const res = await fetch(uploadFilesRequest.url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: file.file,
+      });
 
-        /** Show error message */
-        message.error(userFriendlyMsg(error));
-      };
-      xhr.send(file.file);
+      if (res.status !== 200) {
+        throw new Error('File upload error');
+      }
+
+      file.onFinish();
+      file.percentage = 100;
+      updateFileStatus(file, FileUploadStatusValue.FINISHED);
+      uploadSessionEnd(sessionUuid.value, wrapToDirectory);
     } catch (error) {
       file.onError();
       updateFileStatus(file, FileUploadStatusValue.ERROR);
+      uploadSessionEnd(sessionUuid.value, wrapToDirectory);
 
       /** Show error message */
       message.error(userFriendlyMsg(error));
@@ -258,11 +224,6 @@ export default function useUpload() {
       .join('/');
   }
 
-  /** Update file property */
-  function updateFilePercentage(file: FileListItemType, percent: number) {
-    file.percentage = percent;
-  }
-
   /** Update file status */
   function updateFileStatus(file: FileListItemType, status: FileUploadStatus) {
     file.status = status;
@@ -301,13 +262,29 @@ export default function useUpload() {
   }
 
   return {
-    folderName,
-    allFilesFinished,
-    allFilesSuccess,
-    filesUploading,
-    numOfFinishedFiles,
-    numOfUploadedFiles,
     uploadFiles,
     fileAlreadyOnFileList,
+    folderName,
+    allFilesFinished,
+    numOfFinishedFiles: computed<number>(() => {
+      return (
+        fileList.value.filter(
+          file =>
+            file.status === FileUploadStatusValue.FINISHED ||
+            file.status === FileUploadStatusValue.ERROR
+        ).length || 0
+      );
+    }),
+    numOfUploadedFiles: computed<number>(() => {
+      return (
+        fileList.value.filter(file => file.status !== FileUploadStatusValue.PENDING).length || 0
+      );
+    }),
+    allFilesSuccess: computed<boolean>(() => {
+      return !fileList.value.some(file => file.status !== FileUploadStatusValue.FINISHED);
+    }),
+    filesUploading: computed<boolean>(() => {
+      return fileList.value.some(file => file.status === FileUploadStatusValue.UPLOADING);
+    }),
   };
 }

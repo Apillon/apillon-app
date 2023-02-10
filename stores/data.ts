@@ -130,10 +130,8 @@ export const useDataStore = defineStore('data', {
     },
     hasBuckets(state): boolean {
       if (Array.isArray(state.bucket.items) && state.bucket.items.length > 0) {
-        return (
-          state.bucket.items.find(
-            (bucket: BucketInterface) => bucket.bucketType === BucketType.STORAGE
-          ) !== undefined
+        return state.bucket.items.some(
+          (bucket: BucketInterface) => bucket.bucketType === BucketType.STORAGE
         );
       }
       return false;
@@ -148,10 +146,8 @@ export const useDataStore = defineStore('data', {
       return Array.isArray(state.bucket.destroyed) && state.bucket.destroyed.length > 0;
     },
     hasSelectedBucket(state): boolean {
-      return (
-        state.bucket.items.find(
-          (bucket: BucketInterface) => bucket.id === state.bucket.selected
-        ) !== undefined
+      return state.bucket.items.some(
+        (bucket: BucketInterface) => bucket.id === state.bucket.selected
       );
     },
     hasWebpages(state): boolean {
