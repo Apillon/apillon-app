@@ -58,6 +58,7 @@ const props = defineProps({
   actions: { type: Boolean, default: true },
 });
 
+const { downloadFile } = useFile();
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
@@ -522,18 +523,5 @@ async function getDirectoryContent(
   );
 
   currentPage.value = page;
-}
-
-/** Download file - get file details and download content from downloadLink */
-async function downloadFile(CID?: string | null) {
-  if (!CID) {
-    console.warn('MISSING File CID!');
-    return;
-  }
-  if (!(CID in fileStore.items)) {
-    fileStore.items[CID] = await dataStore.fetchFileDetails(CID);
-  }
-  const fileDetails: FileDetails = fileStore.items[CID].file;
-  download(fileDetails.link, fileDetails.name);
 }
 </script>

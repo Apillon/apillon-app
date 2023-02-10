@@ -128,17 +128,15 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 const props = defineProps({
   env: { type: Number, default: 0 },
 });
 
+const { downloadFile } = useFile();
 const $i18n = useI18n();
 const router = useRouter();
 const { params } = useRoute();
-const message = useMessage();
 const bucketStore = useBucketStore();
-const fileStore = useFileStore();
 const webpageStore = useWebpageStore();
 const deploymentStore = useDeploymentStore();
 
@@ -217,25 +215,6 @@ async function downloadSelectedFiles() {
   await Promise.all(promises).then(_ => {
     downloading.value = false;
   });
-}
-
-/** Download file - get file details and download content from downloadLink */
-async function downloadFile(CID?: string | null) {
-  if (!CID) {
-    console.warn('MISSING File CID!');
-    return;
-  }
-  try {
-    if (!(CID in fileStore.items)) {
-      fileStore.items[CID] = await fileStore.fetchFileDetails(CID);
-    }
-    const fileDetails: FileDetails = fileStore.items[CID].file;
-    return download(fileDetails.link, fileDetails.name);
-  } catch (error: any) {
-    /** Show error message */
-    message.error($i18n.t('error.fileDownload'));
-  }
-  return null;
 }
 
 /**

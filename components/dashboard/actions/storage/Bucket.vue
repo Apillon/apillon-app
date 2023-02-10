@@ -93,12 +93,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 
-const $i18n = useI18n();
-const message = useMessage();
-const fileStore = useFileStore();
+const { downloadFile } = useFile();
 const bucketStore = useBucketStore();
 
 const downloading = ref<boolean>(false);
@@ -144,25 +141,6 @@ async function downloadSelectedFiles() {
   await Promise.all(promises).then(_ => {
     downloading.value = false;
   });
-}
-
-/** Download file - get file details and download content from downloadLink */
-async function downloadFile(CID?: string | null) {
-  if (!CID) {
-    console.warn('MISSING File CID!');
-    return;
-  }
-  try {
-    if (!(CID in fileStore.items)) {
-      fileStore.items[CID] = await fileStore.fetchFileDetails(CID);
-    }
-    const fileDetails: FileDetails = fileStore.items[CID].file;
-    return download(fileDetails.link, fileDetails.name);
-  } catch (error: any) {
-    /** Show error message */
-    message.error($i18n.t('error.fileDownload'));
-  }
-  return null;
 }
 
 /**

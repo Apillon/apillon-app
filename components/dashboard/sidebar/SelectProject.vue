@@ -19,7 +19,7 @@ const loading = ref(false);
 
 onBeforeMount(() => {
   if (!dataStore.hasProjects) {
-    dataStore.promises.projects = dataStore.fetchProjects(false);
+    dataStore.fetchProjects(false);
 
     /** Fetch selected project data(get myRole_id_onProject) */
     Promise.all(Object.values(dataStore.promises)).then(_ => {

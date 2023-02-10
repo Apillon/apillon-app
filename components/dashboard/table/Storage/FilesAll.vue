@@ -49,6 +49,7 @@ import { useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const fileStore = useFileStore();
 const bucketStore = useBucketStore();
 const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
@@ -190,7 +191,7 @@ function onItemOpen(row: FileUploadInterface) {
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      if (!dataStore.hasFileAll || isCacheExpired(LsCacheKeys.FILE_ALL)) {
+      if (!fileStore.hasFileAll || isCacheExpired(LsCacheKeys.FILE_ALL)) {
         await getFiles();
       }
     });

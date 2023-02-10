@@ -14,7 +14,7 @@ const props = defineProps({
   items: { type: Array<BucketItemInterface>, required: true },
 });
 
-const dataStore = useDataStore();
+const { downloadFile } = useFile();
 const emit = defineEmits(['submitSuccess']);
 
 const loading = ref(false);
@@ -33,18 +33,5 @@ function downloadFiles() {
     loading.value = false;
     emit('submitSuccess');
   });
-}
-
-/** Download file - get file details and download content from downloadLink */
-async function downloadFile(CID?: string | null) {
-  if (!CID) {
-    console.warn('MISSING File CID!');
-    return;
-  }
-  if (!(CID in fileStore.items)) {
-    fileStore.items[CID] = await dataStore.fetchFileDetails(CID);
-  }
-  const fileDetails: FileDetails = fileStore.items[CID].file;
-  return download(fileDetails.link, fileDetails.name);
 }
 </script>
