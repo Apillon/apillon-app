@@ -11,35 +11,6 @@ export enum AuthStep {
 
 declare global {
   /**
-   *  Register
-   */
-  interface FormRegister {
-    password: string | null;
-    reenteredPassword: string | null;
-  }
-  interface RegisterResponse {
-    data: {
-      id: number;
-      status: number;
-      name: string;
-      token: string;
-    };
-    status: number;
-  }
-  interface ValidateMailResponse {
-    data: {
-      data: boolean;
-      status: number;
-      success: boolean;
-    };
-    status: number;
-  }
-  interface PasswordResetForm {
-    email: string;
-  }
-  interface PasswordResetResponse extends GeneralResponse<boolean> {}
-
-  /**
    * User
    */
   interface UserInterface {
@@ -71,6 +42,31 @@ declare global {
     email: string;
     role_id: number | null;
   }
+
+  /**
+   *  Register
+   */
+  interface FormRegister {
+    password: string | null;
+    reenteredPassword: string | null;
+  }
+  interface PasswordResetForm {
+    email: string;
+  }
+  interface RegisterInterface extends UserInterface {
+    token: string;
+  }
+  interface ValidateMailInterface {
+    data: {
+      result: boolean;
+    };
+    status: number;
+    success: boolean;
+  }
+
+  interface RegisterResponse extends GeneralResponse<RegisterInterface> {}
+  interface ValidateMailResponse extends GeneralResponse<ValidateMailInterface> {}
+  interface PasswordResetResponse extends GeneralResponse<boolean> {}
 
   /**
    * Login

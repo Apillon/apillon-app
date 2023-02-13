@@ -179,6 +179,7 @@
     "USER_INVALID_LOGIN": "Wrong email or password",
     "USER_EMAIL_NOT_VALID": "Email is not valid",
     "USER_EMAIL_NOT_EXISTS": "Looks like your email is not in our books yet.",
+    "USER_ALREADY_REGISTERED": "User already registered",
     "USER_EMAIL_ALREADY_TAKEN": "Email is already taken",
     "USER_UUID_NOT_PRESENT": "user_uuid is missing",
     "USER_UUID_ALREADY_EXISTS": "user_uuid already exists",

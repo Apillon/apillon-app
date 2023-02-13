@@ -95,10 +95,10 @@ async function login() {
     authStore.logout();
     dataStore.resetCurrentProject();
 
-    const data = await $api.post<LoginResponse>(endpoints.login, formData.value);
+    const res = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
-    authStore.setUserToken(data.data.token);
-    authStore.changeUser(data.data);
+    authStore.setUserToken(res.data.token);
+    authStore.changeUser(res.data);
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     await dataStore.fetchProjects(true);
