@@ -20,7 +20,9 @@
           <span class="text-body">{{ $t('storage.file.downloadLink') }}</span>
         </p>
         <div>
-          <strong>{{ file.link }}</strong>
+          <a :href="file.link" target="_blank">
+            <strong>{{ file.link }}</strong>
+          </a>
         </div>
         <button class="text-primary btn-small" @click="copyToClipboard(file.link)">
           <strong>{{ $t('dashboard.clipboard.copyLink') }}</strong>

@@ -228,9 +228,13 @@ const columns = computed(() => {
               {
                 default: () => [
                   h(
-                    NEllipsis,
-                    { class: 'text-body align-bottom', 'line-clamp': 1 },
-                    { default: () => row.link }
+                    'a',
+                    { href: row.link, target: '_blank' },
+                    h(
+                      NEllipsis,
+                      { class: 'text-body align-bottom', 'line-clamp': 1 },
+                      { default: () => row.link }
+                    )
                   ),
                   h(
                     'button',
