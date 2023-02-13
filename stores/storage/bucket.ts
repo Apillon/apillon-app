@@ -154,8 +154,16 @@ export const useBucketStore = defineStore('bucket', {
       if (bucket !== undefined && !isCacheExpired(LsCacheKeys.BUCKETS)) {
         return bucket;
       }
-      return await this.fetchBucket(bucketId);
+      return this.active;
     },
+
+    async getDirectoryContent() {
+      if (!this.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
+        await this.fetchDirectoryContent();
+      }
+      return this.folder.items;
+    },
+
     /**
      * API calls
      */

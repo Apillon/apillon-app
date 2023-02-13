@@ -59,44 +59,16 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
-const router = useRouter();
-const { params } = useRoute();
-const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const webpageStore = useWebpageStore();
 const deploymentStore = useDeploymentStore();
-const pageLoading = ref<boolean>(true);
+const { pageLoading, initWebpage } = useHosting();
 
 useHead({
   title: $i18n.t('nav.hosting'),
 });
 
 onMounted(() => {
-  /** Webpage ID from route, then load buckets */
-  const webpageId = parseInt(`${params?.slug}`);
-  webpageStore.setWebpageId(webpageId);
-
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await webpageStore.getWebpage(webpageId);
-
-      /** Check of webpage exists */
-      if (!webpage?.id) {
-        router.push({ name: 'dashboard-service-hosting' });
-        return;
-      }
-      /** Get deployments for this webpage */
-      deploymentStore.getDeployments(webpageId, DeploymentEnvironment.STAGING);
-
-      /** Show files from staging bucket */
-      bucketStore.active = webpage.stagingBucket;
-      bucketStore.setBucketId(webpage.stagingBucket.id);
-
-      if (webpage.bucket.uploadedSize === 0) {
-        bucketStore.uploadActive = true;
-      }
-      pageLoading.value = false;
-    });
-  }, 100);
+  initWebpage(DeploymentEnvironment.STAGING);
 });
 </script>

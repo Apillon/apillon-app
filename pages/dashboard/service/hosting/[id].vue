@@ -29,40 +29,14 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
-const router = useRouter();
-const { params } = useRoute();
-const dataStore = useDataStore();
 const bucketStore = useBucketStore();
-const webpageStore = useWebpageStore();
-const pageLoading = ref<boolean>(true);
+const { pageLoading, initWebpage } = useHosting();
 
 useHead({
   title: $i18n.t('nav.hosting'),
 });
 
 onMounted(() => {
-  /** Bucket ID from route, then load buckets */
-  const webpageId = parseInt(`${params?.id}`);
-  webpageStore.setWebpageId(webpageId);
-
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await webpageStore.getWebpage(webpageId);
-
-      /** Check of webpage exists */
-      if (!webpage?.id) {
-        router.push({ name: 'dashboard-service-hosting' });
-        return;
-      }
-      /** Show files from main bucket */
-      bucketStore.active = webpage.bucket;
-      bucketStore.setBucketId(webpage.bucket.id);
-
-      if (webpage.bucket.uploadedSize === 0) {
-        bucketStore.uploadActive = true;
-      }
-      pageLoading.value = false;
-    });
-  }, 100);
+  initWebpage();
 });
 </script>

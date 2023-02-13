@@ -48,7 +48,7 @@ export const useWebpageStore = defineStore('webpage', {
      * Fetch wrappers
      */
     async getWebpages() {
-      if (!this.hasWebpages || isCacheExpired(LsCacheKeys.BUCKETS)) {
+      if (!this.hasWebpages || isCacheExpired(LsCacheKeys.WEBPAGES)) {
         await this.fetchWebpages();
       }
     },

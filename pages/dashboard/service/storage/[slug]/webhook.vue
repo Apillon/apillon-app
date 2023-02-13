@@ -14,23 +14,14 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
-const { params } = useRoute();
-const dataStore = useDataStore();
 const bucketStore = useBucketStore();
-const pageLoading = ref<boolean>(true);
-const bucketId = ref<number>(parseInt(`${params?.slug}`));
+const { pageLoading, initBucket } = useStorage();
 
 useHead({
   title: $i18n.t('nav.storage'),
 });
 
 onMounted(() => {
-  /** Bucket ID from route, then load buckets */
-  bucketStore.onBucketMounted(bucketId.value);
-
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    bucketStore.active = await bucketStore.getBucket(bucketId.value);
-    pageLoading.value = false;
-  });
+  initBucket();
 });
 </script>

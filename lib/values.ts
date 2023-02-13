@@ -2,7 +2,7 @@ import { DiscreteApiOptions, GlobalThemeOverrides, MessageProviderProps } from '
 import colors from '~~/tailwind.colors';
 
 export const PAGINATION_LIMIT = 20;
-export const CACHE_EXPIRATION_IN_MS = 60 * 1000; // One minute
+export const CACHE_EXPIRATION_IN_MS = 10 * 60 * 1000; // 10 minutes
 export const ON_COLUMN_CLICK_OPEN_CLASS = 'onClickOpen';
 
 export const LsTableColumnsKeys = {

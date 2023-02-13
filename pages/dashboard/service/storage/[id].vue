@@ -28,32 +28,14 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
-const { params } = useRoute();
-const dataStore = useDataStore();
 const bucketStore = useBucketStore();
-const pageLoading = ref<boolean>(true);
-const bucketId = ref<number>(parseInt(`${params?.id}`));
+const { pageLoading, initBucket } = useStorage();
 
 useHead({
   title: $i18n.t('nav.storage'),
 });
 
 onMounted(() => {
-  /** Bucket ID from route, then load buckets */
-  bucketStore.onBucketMounted(bucketId.value);
-
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      bucketStore.active = await bucketStore.getBucket(bucketId.value);
-
-      if (!bucketStore.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
-        await bucketStore.fetchDirectoryContent();
-      }
-      if (!bucketStore.hasBucketItems) {
-        bucketStore.uploadActive = true;
-      }
-      pageLoading.value = false;
-    });
-  }, 100);
+  initBucket(true);
 });
 </script>

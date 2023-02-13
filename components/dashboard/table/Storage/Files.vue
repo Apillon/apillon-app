@@ -400,11 +400,9 @@ onMounted(() => {
   /**
    * Load data on mounted
    */
-  setTimeout(async () => {
-    await Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      if (!bucketStore.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
-        await getDirectoryContent();
-      }
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      bucketStore.getDirectoryContent();
     });
   }, 100);
 });

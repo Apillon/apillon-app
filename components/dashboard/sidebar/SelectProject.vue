@@ -13,7 +13,8 @@
 const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const settingsStore = useSettingsStore();
+const { clearAll } = useStore();
+
 const componentSelectKey = ref(0);
 const loading = ref(false);
 
@@ -39,6 +40,9 @@ onBeforeMount(() => {
 watch(
   () => dataStore.currentProjectId,
   async (currentProjectId, oldProjectId) => {
+    /** Clear all stored data */
+    clearAll();
+
     /** Reload projects if currentProjectId is new project */
     if (!dataStore.project.items[currentProjectId]) {
       loading.value = true;
@@ -53,12 +57,6 @@ watch(
     }
     /** Fetch selected project data(get myRole_id_onProject) */
     await dataStore.fetchProject();
-
-    /** Reset store data */
-    dataStore.resetData();
-
-    /** Reset settings store data */
-    settingsStore.resetData();
 
     /** Save current project ID to LS and redirect to Dashboard */
     localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${currentProjectId}`);
