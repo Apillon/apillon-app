@@ -40,7 +40,12 @@
 
       <!--  Project terms -->
       <n-form-item path="terms" :show-label="false">
-        <n-checkbox id="terms" v-model:checked="formData.terms" size="large" :label="termsLabel" />
+        <n-checkbox
+          id="terms"
+          v-model:checked="formData.terms"
+          size="large"
+          :label="$t('form.terms.project')"
+        />
       </n-form-item>
 
       <!--  Project submit -->
@@ -62,23 +67,16 @@
         </Btn>
       </n-form-item>
     </n-form>
-    <Modal v-model:show="modalTermsVisible" :title="$t('general.termsAndConditions')">
-      <p class="text-sm mb-8">
-        {{ $t('form.terms.project') }}
-      </p>
-    </Modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
-import Tag from '~~/components/parts/Tag.vue';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
 
-const modalTermsVisible = ref<boolean>(false);
 const emit = defineEmits(['submitActive', 'submitSuccess']);
 
 onMounted(async () => {
@@ -86,7 +84,7 @@ onMounted(async () => {
   await dataStore.fetchProjectsQuota();
 });
 
-/** Terms label with link */
+/** Terms label with link 
 const termsLabel = computed(() => {
   return h('span', {}, [
     $i18n.t('general.termsAccept'),
@@ -96,7 +94,7 @@ const termsLabel = computed(() => {
       { default: () => $i18n.t('general.terms') }
     ),
   ]);
-});
+}); */
 
 /** Form project */
 const loading = ref(false);
@@ -126,11 +124,6 @@ const rules: NFormRules = {
     },
   ],
 };
-
-function showModalTerms(e: Event | MouseEvent) {
-  e.stopPropagation();
-  modalTermsVisible.value = true;
-}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {

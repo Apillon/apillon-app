@@ -28,14 +28,14 @@
     <ModalDelete
       v-model:show="showModalDelete"
       :title="
-        $i18n.te(`storage.${currentRow.type}.delete`)
-          ? $t(`storage.${currentRow.type}.delete`)
+        $i18n.te(`storage.${currentRowType}.delete`)
+          ? $t(`storage.${currentRowType}.delete`)
           : $t(`storage.delete.item`)
       "
     >
       <template #content>
         <p class="text-body">
-          {{ $t(`storage.${currentRow.type}.deleteConfirm`, { num: 1 }) }}
+          {{ $t(`storage.${currentRowType}.deleteConfirm`, { num: 1 }) }}
         </p>
       </template>
       <slot>
@@ -71,6 +71,11 @@ const IconFolderFile = resolveComponent('IconFolderFile');
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 const checkedRowKeys = ref<Array<string | number>>([]);
+
+/** Current row type */
+const currentRowType = computed<string>(() => {
+  return currentRow.value.type === BucketItemType.DIRECTORY ? 'directory' : 'file';
+});
 
 /** Pagination data */
 const currentPage = ref<number>(0);
@@ -225,9 +230,13 @@ const columns = computed(() => {
               {
                 default: () => [
                   h(
-                    NEllipsis,
-                    { class: 'text-body align-bottom', 'line-clamp': 1 },
-                    { default: () => row.link }
+                    'a',
+                    { href: row.link, target: '_blank' },
+                    h(
+                      NEllipsis,
+                      { class: 'text-body align-bottom', 'line-clamp': 1 },
+                      { default: () => row.link }
+                    )
                   ),
                   h(
                     'button',

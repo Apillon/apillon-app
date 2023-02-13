@@ -62,7 +62,11 @@ const createColumns = ({
       render(row) {
         return h(
           NTag,
-          { type: row.pendingInvitation ? 'default' : 'success', round: true, bordered: false },
+          {
+            type: row.pendingInvitation ? 'default' : 'success',
+            round: true,
+            bordered: row.pendingInvitation,
+          },
           {
             default: () =>
               row.pendingInvitation ? $i18n.t('general.pending') : $i18n.t('general.active'),
