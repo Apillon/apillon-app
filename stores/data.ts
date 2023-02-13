@@ -64,6 +64,11 @@ export const useDataStore = defineStore('data', {
   },
   actions: {
     resetData() {
+      /** Project */
+      this.project.active = {} as ProjectInterface;
+      this.project.items = [] as Array<ProjectInterface>;
+      this.project.selected = 0;
+      this.project.quotaReached = undefined as Boolean | undefined;
       /** Services */
       this.services.authentication = [] as Array<ServiceInterface>;
       this.services.storage = [] as Array<ServiceInterface>;

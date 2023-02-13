@@ -159,21 +159,34 @@ const props = defineProps({
 });
 
 const bucketStore = useBucketStore();
-const {
-  uploadFiles,
-  fileAlreadyOnFileList,
-  allFilesSuccess,
-  allFilesFinished,
-  filesUploading,
-  numOfUploadedFiles,
-  folderName,
-} = useUpload();
+const { uploadFiles, fileAlreadyOnFileList, folderName } = useUpload();
 
 const fileListExpanded = ref<boolean>(true);
 
 /** Wrap files to directory */
 const showModalWrapFolder = ref<boolean>(false);
 const wrapToDirectoryCheckbox = ref<boolean>(false);
+
+/** Check if all files are finished (status FINISHED or ERROR) */
+const allFilesFinished = computed<boolean>(() => {
+  return !bucketStore.uploadFileList.some(
+    file =>
+      file.status === FileUploadStatusValue.PENDING ||
+      file.status === FileUploadStatusValue.UPLOADING
+  );
+});
+const allFilesSuccess = computed<boolean>(() => {
+  return !bucketStore.uploadFileList.some(file => file.status !== FileUploadStatusValue.FINISHED);
+});
+const filesUploading = computed<boolean>(() => {
+  return bucketStore.uploadFileList.some(file => file.status === FileUploadStatusValue.UPLOADING);
+});
+const numOfUploadedFiles = computed<number>(() => {
+  return (
+    bucketStore.uploadFileList.filter(file => file.status !== FileUploadStatusValue.PENDING)
+      .length || 0
+  );
+});
 
 /**
  * Methods

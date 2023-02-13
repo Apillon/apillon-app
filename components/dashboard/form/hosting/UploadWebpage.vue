@@ -34,11 +34,21 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
-const { uploadFiles, fileAlreadyOnFileList, numOfFinishedFiles } = useUpload();
+const { uploadFiles, fileAlreadyOnFileList } = useUpload();
 
 const fileNum = ref<number>(0);
 const uploadFileList = ref<Array<FileListItemType>>([]);
 const uploadInterval = ref<any>(null);
+
+const numOfFinishedFiles = computed<number>(() => {
+  return (
+    uploadFileList.value.filter(
+      file =>
+        file.status === FileUploadStatusValue.FINISHED ||
+        file.status === FileUploadStatusValue.ERROR
+    ).length || 0
+  );
+});
 
 /**
  *  API call

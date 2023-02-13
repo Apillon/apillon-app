@@ -45,7 +45,6 @@ export default function useUpload() {
   /**
    *  Methods
    */
-
   /** Check if file is already on list */
   function fileAlreadyOnFileList(uploadFileList: Array<FileListItemType>, file: FileListItemType) {
     return uploadFileList.some(
@@ -265,26 +264,5 @@ export default function useUpload() {
     uploadFiles,
     fileAlreadyOnFileList,
     folderName,
-    allFilesFinished,
-    numOfFinishedFiles: computed<number>(() => {
-      return (
-        fileList.value.filter(
-          file =>
-            file.status === FileUploadStatusValue.FINISHED ||
-            file.status === FileUploadStatusValue.ERROR
-        ).length || 0
-      );
-    }),
-    numOfUploadedFiles: computed<number>(() => {
-      return (
-        fileList.value.filter(file => file.status !== FileUploadStatusValue.PENDING).length || 0
-      );
-    }),
-    allFilesSuccess: computed<boolean>(() => {
-      return !fileList.value.some(file => file.status !== FileUploadStatusValue.FINISHED);
-    }),
-    filesUploading: computed<boolean>(() => {
-      return fileList.value.some(file => file.status === FileUploadStatusValue.UPLOADING);
-    }),
   };
 }
