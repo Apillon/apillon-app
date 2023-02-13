@@ -57,17 +57,46 @@ const createColumns = (): NDataTableColumns<WebpageInterface> => {
       },
     },
     {
-      key: 'description',
-      title: $i18n.t('hosting.webpage.description'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
-      render(row) {
-        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
+      key: 'webpage_uuid',
+      title: $i18n.t('hosting.webpage.uuid'),
+      render(row: WebpageInterface) {
+        if (!row.bucket_uuid) {
+          return '';
+        }
+        return [
+          h(
+            'div',
+            { class: 'flex' },
+            {
+              default: () => [
+                h(
+                  NEllipsis,
+                  { class: 'text-body align-bottom', 'line-clamp': 1 },
+                  { default: () => row.webpage_uuid }
+                ),
+                h(
+                  'button',
+                  { class: 'ml-2', onClick: () => copyToClipboard(row.webpage_uuid) },
+                  h('span', { class: 'icon-copy text-body' }, {})
+                ),
+              ],
+            }
+          ),
+        ];
       },
     },
     {
       key: 'domain',
       title: $i18n.t('hosting.webpage.domain'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
+    },
+    {
+      key: 'description',
+      title: $i18n.t('hosting.webpage.description'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row) {
+        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
+      },
     },
     {
       key: 'actions',

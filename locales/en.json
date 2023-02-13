@@ -419,7 +419,8 @@
       "name": "Webpage name",
       "new": "New webpage",
       "quotaReached": "Quota has been reached.",
-      "update": "Update webpage"
+      "update": "Update webpage",
+      "uuid": "Webpage Uuid"
     },
     "clearAll": "Clear all",
     "clearAllFiles": "Do you want to remove all files?",
