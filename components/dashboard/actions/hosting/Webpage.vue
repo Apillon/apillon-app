@@ -20,20 +20,15 @@
         <!-- Show only if user select files -->
         <template v-if="isUpload && bucketStore.folder.selectedItems.length > 0">
           <!-- Download files -->
-          <n-tooltip :show="showPopoverDownload" placement="bottom">
-            <template #trigger>
-              <n-button
-                class="w-10"
-                size="small"
-                :focus="true"
-                :loading="downloading"
-                @click="downloadSelectedFiles"
-              >
-                <span class="icon-download"></span>
-              </n-button>
-            </template>
-            <span>{{ $t('storage.downloadSelectedFiles') }}</span>
-          </n-tooltip>
+          <n-button
+            class="w-10"
+            size="small"
+            :focus="true"
+            :loading="downloading"
+            @click="downloadSelectedFiles"
+          >
+            <span class="icon-download"></span>
+          </n-button>
 
           <!-- Delete files -->
           <n-tooltip placement="bottom" :show="showPopoverDelete">
@@ -73,7 +68,7 @@
           size="small"
           type="primary"
           :loading="deploying"
-          @click="deployToStaging"
+          @click="deploy(DeploymentEnvironment.STAGING)"
         >
           <span class="icon-deploy text-lg mr-2"></span>
           {{ $t('hosting.deployStage') }}
@@ -84,7 +79,7 @@
           size="small"
           type="primary"
           :loading="deploying"
-          @click="deployToProduction"
+          @click="deploy(DeploymentEnvironment.PRODUCTION)"
         >
           <span class="icon-deploy text-lg mr-2"></span>
           {{ $t('hosting.deployProd') }}
@@ -132,7 +127,7 @@ const props = defineProps({
   env: { type: Number, default: 0 },
 });
 
-const { downloadFile } = useFile();
+const { downloading, downloadSelectedFiles } = useFile();
 const $i18n = useI18n();
 const router = useRouter();
 const { params } = useRoute();
@@ -140,12 +135,10 @@ const bucketStore = useBucketStore();
 const webpageStore = useWebpageStore();
 const deploymentStore = useDeploymentStore();
 
-const downloading = ref<boolean>(false);
 const showModalNewFolder = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
 const showModalClearAll = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
-const showPopoverDownload = ref<boolean>(false);
 const deploying = ref<boolean>(false);
 
 /** Webpage ID from route */
@@ -191,33 +184,6 @@ function onFolderCreated() {
 }
 
 /**
- * Download
- */
-async function downloadSelectedFiles() {
-  if (bucketStore.folder.selectedItems.length === 0) {
-    showPopoverDownload.value = true;
-
-    setTimeout(() => {
-      showPopoverDownload.value = false;
-    }, 3000);
-    return;
-  }
-
-  const promises: Array<Promise<any>> = [];
-  downloading.value = true;
-
-  bucketStore.folder.selectedItems.forEach(async item => {
-    const req = downloadFile(item.CID);
-    promises.push(req);
-    await req;
-  });
-
-  await Promise.all(promises).then(_ => {
-    downloading.value = false;
-  });
-}
-
-/**
  * Delete
  */
 function deleteSelectedFiles() {
@@ -256,36 +222,21 @@ function onAllFilesDeleted() {
   bucketStore.folderSearch();
 }
 
-/** Deploy to stg */
-async function deployToStaging() {
+/** Deploy to stg/prod */
+async function deploy(env: number) {
   deploying.value = true;
 
-  const deployment = await deploymentStore.deploy(
-    webpageStore.active.id,
-    DeploymentEnvironment.STAGING
-  );
+  const deployment = await deploymentStore.deploy(webpageStore.active.id, env);
 
-  /** After successfull deploy redirect to production tab */
-  if (deployment) {
+  /** After successfull deploy redirect to next tab */
+  if (deployment && env === DeploymentEnvironment.STAGING) {
+    deploymentStore.staging = [] as Array<DeploymentInterface>;
     setTimeout(() => {
       router.push(`/dashboard/service/hosting/${webpageId.value}/staging`);
     }, 1000);
   }
-
-  deploying.value = false;
-}
-
-/** Deploy to prod */
-async function deployToProduction() {
-  deploying.value = true;
-
-  const deployment = await deploymentStore.deploy(
-    webpageStore.active.id,
-    DeploymentEnvironment.PRODUCTION
-  );
-
-  /** After successfull deploy redirect to production tab */
-  if (deployment) {
+  if (deployment && env === DeploymentEnvironment.PRODUCTION) {
+    deploymentStore.production = [] as Array<DeploymentInterface>;
     setTimeout(() => {
       router.push(`/dashboard/service/hosting/${webpageId.value}/production`);
     }, 1000);

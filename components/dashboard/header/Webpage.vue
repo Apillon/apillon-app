@@ -6,6 +6,31 @@
           <span class="icon-back"></span>
         </NuxtLink>
         <h4>{{ webpageStore.active.name }}</h4>
+        <div class="text-sm">
+          <n-space v-if="webpageStore.active.bucket_uuid" align="center" size="small" :wrap="false">
+            <span>{{ $t('storage.bucket.uuid') }}:</span>
+            <n-ellipsis class="text-body align-bottom" :line-clamp="1">
+              {{ webpageStore.active.bucket_uuid }}
+            </n-ellipsis>
+            <button class="text-body" @click="copyToClipboard(webpageStore.active.bucket_uuid)">
+              <span class="icon-copy"></span>
+            </button>
+          </n-space>
+          <n-space
+            v-if="webpageStore.active.webpage_uuid"
+            align="center"
+            size="small"
+            :wrap="false"
+          >
+            <span>{{ $t('hosting.webpage.uuid') }}:</span>
+            <n-ellipsis class="text-body align-bottom" :line-clamp="1">
+              {{ webpageStore.active.webpage_uuid }}
+            </n-ellipsis>
+            <button class="text-body" @click="copyToClipboard(webpageStore.active.webpage_uuid)">
+              <span class="icon-copy"></span>
+            </button>
+          </n-space>
+        </div>
       </n-space>
     </slot>
 

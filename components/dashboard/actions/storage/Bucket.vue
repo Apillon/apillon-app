@@ -19,20 +19,15 @@
       <!-- Show only if user select files -->
       <template v-if="bucketStore.folder.selectedItems.length > 0">
         <!-- Download files -->
-        <n-tooltip :show="showPopoverDownload" placement="bottom">
-          <template #trigger>
-            <n-button
-              class="w-10"
-              size="small"
-              :focus="true"
-              :loading="downloading"
-              @click="downloadSelectedFiles"
-            >
-              <span class="icon-download"></span>
-            </n-button>
-          </template>
-          <span>{{ $t('storage.downloadSelectedFiles') }}</span>
-        </n-tooltip>
+        <n-button
+          class="w-10"
+          size="small"
+          :focus="true"
+          :loading="downloading"
+          @click="downloadSelectedFiles"
+        >
+          <span class="icon-download"></span>
+        </n-button>
 
         <!-- Delete files -->
         <n-tooltip placement="bottom" :show="showPopoverDelete">
@@ -95,14 +90,12 @@
 <script lang="ts" setup>
 import colors from '~~/tailwind.colors';
 
-const { downloadFile } = useFile();
+const { downloading, downloadSelectedFiles } = useFile();
 const bucketStore = useBucketStore();
 
-const downloading = ref<boolean>(false);
 const showModalNewFolder = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
-const showPopoverDownload = ref<boolean>(false);
 
 /** Refresh directory content */
 function refreshDirectoryContent() {
@@ -114,33 +107,6 @@ function onFolderCreated() {
 
   /** Refresh directory content */
   bucketStore.fetchDirectoryContent();
-}
-
-/**
- * Download
- */
-async function downloadSelectedFiles() {
-  if (bucketStore.folder.selectedItems.length === 0) {
-    showPopoverDownload.value = true;
-
-    setTimeout(() => {
-      showPopoverDownload.value = false;
-    }, 3000);
-    return;
-  }
-
-  const promises: Array<Promise<any>> = [];
-  downloading.value = true;
-
-  bucketStore.folder.selectedItems.forEach(async item => {
-    const req = downloadFile(item.CID);
-    promises.push(req);
-    await req;
-  });
-
-  await Promise.all(promises).then(_ => {
-    downloading.value = false;
-  });
 }
 
 /**

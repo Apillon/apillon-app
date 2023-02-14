@@ -6,6 +6,11 @@ export default function useScreen() {
   const webpageStore = useWebpageStore();
   const deploymentStore = useDeploymentStore();
   const pageLoading = ref<boolean>(true);
+  let deploymentInterval: any = null as any;
+
+  onUnmounted(() => {
+    clearInterval(deploymentInterval);
+  });
 
   function initWebpage(env: number = 0) {
     /** Webpage ID from route, then load buckets */
@@ -24,17 +29,23 @@ export default function useScreen() {
         }
         /** Get deployments for this webpage */
         if (env > 0) {
-          deploymentStore.getDeployments(webpageId, env);
+          await deploymentStore.getDeployments(webpageId, env);
         }
 
         if (env === DeploymentEnvironment.PRODUCTION) {
           /** Show files from production bucket */
           bucketStore.active = webpage.productionBucket;
           bucketStore.setBucketId(webpage.productionBucket.id);
+
+          /** Deployments pooling */
+          checkUnfinishedDeployments(deploymentStore.production);
         } else if (env === DeploymentEnvironment.STAGING) {
           /** Show files from staging bucket */
           bucketStore.active = webpage.stagingBucket;
           bucketStore.setBucketId(webpage.stagingBucket.id);
+
+          /** Deployments pooling */
+          checkUnfinishedDeployments(deploymentStore.staging);
         } else {
           /** Show files from main bucket */
           bucketStore.active = webpage.bucket;
@@ -50,6 +61,29 @@ export default function useScreen() {
         pageLoading.value = false;
       });
     }, 100);
+  }
+
+  function checkUnfinishedDeployments(deployments: Array<DeploymentInterface>) {
+    const unfinishedDeployment = deployments.find(
+      deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL
+    );
+    if (unfinishedDeployment === undefined) {
+      return;
+    }
+
+    deploymentInterval = setInterval(async () => {
+      const deployment = await deploymentStore.fetchDeployment(
+        webpageStore.active.id,
+        unfinishedDeployment.id
+      );
+      if (unfinishedDeployment.deploymentStatus !== deployment.deploymentStatus) {
+        unfinishedDeployment.deploymentStatus = deployment.deploymentStatus;
+      }
+      if (deployment.deploymentStatus >= DeploymentStatus.SUCCESSFUL) {
+        unfinishedDeployment.size = deployment.size;
+        clearInterval(deploymentInterval);
+      }
+    }, 10000);
   }
 
   return {

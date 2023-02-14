@@ -8,9 +8,8 @@
       </n-tag>
     </div>
     <div class="text-body mb-6">
-      Sed tempor imperdiet cursus velit. Nulla viverra duis dictum eget eget. Scelerisque sit auctor
-      lacus commodo id at consectetur netus donec. Pellentesque eu in et tristique. Porttitor sem
-      aliquam.
+      Spread the word about Apillon and its killer features of the platform. Follow us on Twitter,
+      retweet the posts and earn reward points.
     </div>
 
     <div v-if="loading" class="relative">
