@@ -86,7 +86,7 @@
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
 
-defineProps({
+const props = defineProps({
   loading: { type: Boolean, default: false },
   learnCollapsible: { type: Boolean, default: true },
 });
@@ -134,7 +134,9 @@ const instructionsAvailable = computed<boolean>(() => {
 });
 
 // Keep info about collapsible section learn in local storage
-const learnCollapsed = ref<boolean>(localStorage.getItem('learnCollapsed') === '1' || false);
+const learnCollapsed = ref<boolean>(
+  props.learnCollapsible && localStorage.getItem('learnCollapsed') === '1'
+);
 
 function handleOnUpdateCollapse(value: boolean) {
   localStorage.setItem('learnCollapsed', value ? '1' : '0');
