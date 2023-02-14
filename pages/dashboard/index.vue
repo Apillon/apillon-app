@@ -104,43 +104,8 @@
           </ul>
         </template>
 
-        <div class="p-4 bg-bg mt-10">
-          <h4 class="text-white">Note:</h4>
-          <p>
-            Keep in mind that Apillon Closed Beta delivers no guarantees related to functionalities
-            or access and is intended for testing purposes only. Beta features also come with
-            several limitations, which will be removed with each platform update as more and more
-            users deliver feedback on Closed Beta and help improve the platform’s services.
-          </p>
-        </div>
-      </div>
-    </slot>
-
-    <template #learn>
-      <!-- Referral -->
-      <div
-        v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())"
-        class="md:max-w-lg p-8 mb-6 border-card"
-      >
-        <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
-        <p class="text-body mb-6">
-          {{ $t('referral.banner.description') }}
-        </p>
-        <Image
-          src="/images/dashboard/referral.svg"
-          class="mb-7"
-          :width="359"
-          :height="64"
-          alt="apillon referral"
-        />
-        <Btn :loading="loading" type="primary" size="large" @click="enterReferral()">
-          {{ $t('referral.banner.btn') }}
-        </Btn>
-      </div>
-
-      <!-- Referral code -->
-      <div class="p-8 my-8 border-card">
-        <h3>Closed Beta code:</h3>
+        <!-- Referral code -->
+        <h3 class="mt-8 text-white">Closed Beta code:</h3>
         <n-space
           class="p-4 bg-bg-light border-card mt-2"
           align="center"
@@ -155,6 +120,36 @@
             <span class="icon-copy text-xl align-sub"></span>
           </button>
         </n-space>
+
+        <div class="p-4 bg-bg mt-10">
+          <h4 class="text-white">Note:</h4>
+          <p>
+            Keep in mind that Apillon Closed Beta delivers no guarantees related to functionalities
+            or access and is intended for testing purposes only. Beta features also come with
+            several limitations, which will be removed with each platform update as more and more
+            users deliver feedback on Closed Beta and help improve the platform’s services.
+          </p>
+        </div>
+      </div>
+    </slot>
+
+    <template v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" #learn>
+      <!-- Referral -->
+      <div class="md:max-w-lg p-8 mb-6 border-card">
+        <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
+        <p class="text-body mb-6">
+          {{ $t('referral.banner.description') }}
+        </p>
+        <Image
+          src="/images/dashboard/referral.svg"
+          class="mb-7"
+          :width="359"
+          :height="64"
+          alt="apillon referral"
+        />
+        <Btn :loading="loading" type="primary" size="large" @click="enterReferral()">
+          {{ $t('referral.banner.btn') }}
+        </Btn>
       </div>
     </template>
   </Dashboard>
