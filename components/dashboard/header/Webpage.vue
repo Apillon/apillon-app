@@ -7,7 +7,12 @@
         </NuxtLink>
         <h4>{{ dataStore.webpage.active.name }}</h4>
         <div class="text-sm">
-          <n-space align="center" size="small" :wrap="false">
+          <n-space
+            v-if="dataStore.webpage.active.bucket_uuid"
+            align="center"
+            size="small"
+            :wrap="false"
+          >
             <span>{{ $t('storage.bucket.uuid') }}:</span>
             <n-ellipsis class="text-body align-bottom" :line-clamp="1">
               {{ dataStore.webpage.active.bucket_uuid }}

@@ -26,6 +26,7 @@ const featureRoutes: Array<FeatureRouteInterface> = [
     feature: Feature.AUTHENTICATION,
   },
   { regex: /^\/dashboard\/service\/storage/, redirect: '/dashboard', feature: Feature.STORAGE },
+  { regex: /^\/dashboard\/service\/hosting/, redirect: '/dashboard', feature: Feature.HOSTING },
   { regex: /^\/dashboard\/service\/computing/, redirect: '/dashboard', feature: Feature.COMPUTING },
   { regex: /^\/dashboard\/monitoring/, redirect: '/dashboard', feature: Feature.MONITORING },
   {
