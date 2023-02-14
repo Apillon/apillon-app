@@ -173,10 +173,10 @@ async function refresh() {
     /** Show files from staging bucket */
     if (props.env === DeploymentEnvironment.STAGING) {
       dataStore.bucket.active = webpage.stagingBucket;
-      dataStore.setBucketId(webpage.stagingBucket_id);
+      dataStore.setBucketId(webpage.stagingBucket.id);
     } else {
       dataStore.bucket.active = webpage.productionBucket;
-      dataStore.setBucketId(webpage.productionBucket_id);
+      dataStore.setBucketId(webpage.productionBucket.id);
     }
   }
 }
@@ -284,6 +284,7 @@ async function deployToStaging() {
 
   /** After successfull deploy redirect to production tab */
   if (deployment) {
+    dataStore.webpage.deployment.staging = [] as Array<DeploymentInterface>;
     setTimeout(() => {
       router.push(`/dashboard/service/hosting/${webpageId.value}/staging`);
     }, 1000);
@@ -303,6 +304,7 @@ async function deployToProduction() {
 
   /** After successfull deploy redirect to production tab */
   if (deployment) {
+    dataStore.webpage.deployment.production = [] as Array<DeploymentInterface>;
     setTimeout(() => {
       router.push(`/dashboard/service/hosting/${webpageId.value}/production`);
     }, 1000);
