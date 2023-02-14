@@ -14,7 +14,7 @@
           id="country"
           v-model:value="formData.country"
           class="mt-2 mb-1 max-w-[522px] bg-primary"
-          :options="options"
+          :options="referralCountries"
         >
           <template #arrow>
             <span class="icon-down text-2xl"></span>
@@ -36,22 +36,22 @@
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('form.login')" />
         <Btn :loading="loading" type="primary" class="-mt-4" size="large" @click="handleSubmit">
-          {{ $t('referral.enter.header') }}
+          {{ $t('referral.enter.btn') }}
         </Btn>
       </n-form-item>
     </n-form>
 
     <Modal v-model:show="showModal" title="Apillon Referral Program">
-      <h2 class="h2-terms">Introduction</h2>
-      <p class="p-terms">
+      <h3>Introduction</h3>
+      <p>
         Apillon launches a Referral program to incentivize the Apillon followers and users to spread
         the word about Apillon and introduce the platform to new communities. For this purpose, the
         Apillon Referral program will issue various rewards, both physical and digital, claimable
         according to the number of points collected by program participants.
       </p>
 
-      <h2 class="h2-terms">How does it work?</h2>
-      <ul>
+      <h3>How does it work?</h3>
+      <ul class="list-disc pl-4 mb-4">
         <li class="li-terms">Participant creates an account on apillon.io.</li>
         <li class="li-terms">Participant logs in.</li>
         <li class="li-terms">Participant clicks or lands on the Referral program page.</li>
@@ -79,55 +79,55 @@
         </li>
       </ul>
 
-      <h2 class="h2-terms">Key terms</h2>
-      <h3 class="h3-terms">Referral program</h3>
-      <p class="p-terms">
+      <h3>Key terms</h3>
+      <h4>Referral program</h4>
+      <p>
         Apillon's Referral program is a campaign that allows eligible Apillon users and followers
         (i. e., Referral program participants) to earn rewards in exchange for the execution of
         specific tasks as described on the Referral program page.
       </p>
-      <h3 class="h3-terms">Participant</h3>
-      <p class="p-terms">
+      <h4>Participant</h4>
+      <p>
         A participant in Apillon's Referral program is a person who registers an account on
         apillon.io and performs tasks listed on the Referral program page in order to earn rewards.
         By participating in the Referral program, they agree to have read and understood the Terms
         and Conditions of the program and their participation in it.
       </p>
 
-      <h2 class="h2-terms">Reward points</h2>
-      <p class="p-terms">
+      <h3>Reward points</h3>
+      <p>
         Apillon's Referral program implements two kinds of metrics to establish the relationship
         between Apillon and the program participant.
       </p>
-      <h3 class="h3-terms">Points</h3>
-      <p class="p-terms">
+      <h4>Points</h4>
+      <p>
         Points are collected by participants for each task they complete. Points are the core metric
         and base for allocating rewards through the Apillon Referral program.
       </p>
-      <p class="p-terms">
+      <p>
         Some points are delegated automatically by the system, while others are human-reviewed by
         appointed members of the Apillon team and are scored in the discretion of those members.
       </p>
-      <p class="p-terms">
+      <p>
         Participants spend accumulated points to acquire different rewards. Upon spending their
         points on a specific reward, the value of the acquired reward is deducted from the total
         points they collected.
       </p>
 
-      <h3 class="h3-terms">Experience points</h3>
-      <p class="p-terms">
+      <h4>Experience points</h4>
+      <p>
         Experience points represent an informative number of total points earned by a participant.
         When a participant claims a specific reward, only the “Points” from the previous article are
         deducted from the total amount by the value of the chosen reward, while Experience points
         remain the same.
       </p>
 
-      <h2 class="h2-terms">Rewards</h2>
-      <p class="p-terms">
+      <h3>Rewards</h3>
+      <p>
         Participants can spend the points collected through Apillon’s Referral program on rewards of
         their choice.
       </p>
-      <p class="p-terms">
+      <p>
         The Reward section on the Referral program page always shows all available rewards at the
         time, ranging from merchandise rewards to digital rewards, NFTs, or even liquid assets. Each
         reward shows a total value, defined in the “Points” article in the “Reward points” chapter.
@@ -136,7 +136,7 @@
         null and void and cannot be redeemed.
       </p>
 
-      <p class="p-terms">
+      <p>
         Eligible participants who decide to spend their collected points on rewards do not bear any
         other expenses associated with collecting their rewards - the whole process is free of
         charge, including shipping, handling, and other associated costs. Note however, that it is
@@ -146,7 +146,7 @@
         requirements.
       </p>
 
-      <p class="p-terms">
+      <p>
         Upon claiming a chosen reward, a participant spends all or a part of the collected points
         and enters a claim process where an address of deliverability is defined. If a participant
         claims a reward that is later proven to be undeliverable (due to, but not limited to lack of
@@ -155,27 +155,27 @@
         timestamp before the points were spent.
       </p>
 
-      <h2 class="h2-terms">Eligibility</h2>
-      <p class="p-terms">
+      <h3>Eligibility</h3>
+      <p>
         Only participants with a registered account on
         <a href="https://app.apillon.io/dashboard">apillon.io/dashboard</a> may enter and
         participate in the Apillon Referral program.
       </p>
 
-      <p class="p-terms">
+      <p>
         Persons who applied for or entered the Apillon Ambassador program are not eligible for
         collecting rewards from the Apillon Referral program but can earn rewards as defined in the
         Ambassador program.
       </p>
 
-      <p class="p-terms">
+      <p>
         Upon entering the Apillon Referral program, participants agree to accept the present Terms
         and Conditions and pass the “Eligible country” check. Eligible countries of participants are
         defined on the Referral program page and are limited to the countries where Apillon can
         deliver the rewards. The list might be subject to amendment in the future.
       </p>
 
-      <p class="p-terms">
+      <p>
         Apillon may suspend, terminate or modify, without liability, all or any part of the Apillon
         Referral Program (including the terms, type, and amount of rewards and eligibility criteria
         under the program), in its sole discretion, with or without notice. Apillon reserves the
@@ -188,44 +188,45 @@
         website.
       </p>
 
-      <p class="p-terms">
+      <p>
         For avoidance of doubt, participants can be denied eligibility for rewards at any time at
         the sole discretion of the Apillon team. In such cases, all collected points will be reset
         to 0 and the participant will not be eligible to claim any rewards or re-enter the Referral
         program.
       </p>
 
-      <h2 class="h2-terms">Duration</h2>
-      <p class="p-terms">
+      <h3>Duration</h3>
+      <p>
         The Apillon Referral program remains active indefinitely or until it is discontinued or
         removed by the Apillon team. In case of discontinuing the Referral program, all collected
         points become unclaimable in every way, with the exception of Experience points which remain
         attached to the participant’s account as an informative value of their past achievements.
       </p>
 
-      <h2 class="h2-terms">Reward deliverability</h2>
-      <p class="p-terms">
+      <h3>Reward deliverability</h3>
+      <p>
         To claim physical rewards, participants should provide their delivery address, which has to
         be in the same country as initially selected by the participant in the “Eligible Country”
         check phase of the Referral program. Only participants from eligible countries are eligible
         to receive physical rewards.
       </p>
-      <p class="p-terms">
+      <p>
         The delivery of digital rewards will be defined on a case-by-case basis, where the delivery
         channel could be defined as an Apillon platform-compatible blockchain address or any other
         digital channel, as defined by Apillon in the details of such rewards.
       </p>
-      <p class="p-terms">
+      <p>
         The time in which rewards are delivered is at the discretion of the Apillon team without
         guarantees.
       </p>
 
-      <h2 class="h2-terms">User data</h2>
-      <p class="p-terms">
+      <h3>User data</h3>
+      <p>
         Participant's private data collected during the duration of the Referral program is treated
         within our Privacy Policies as defined
         <a href="https://apillon.io/privacy-policy">here</a>
       </p>
+      <div class="mb-8"></div>
     </Modal>
   </div>
 </template>
@@ -244,13 +245,6 @@ const formData = ref({
   terms: undefined,
   country: undefined,
 });
-
-const options = [
-  {
-    label: 'Slovenia',
-    value: 'slo',
-  },
-];
 
 const loading = ref(false);
 
@@ -307,22 +301,7 @@ function openModal() {
 </script>
 
 <style lang="postcss" scoped>
-.h2-terms {
-  font-size: 16px;
-  margin-top: 12px;
-  margin-bottom: 6px;
-}
-.h3-terms {
-  font-size: 14px;
-  margin-top: 8px;
-  margin-bottom: 4px;
-}
-
-.p-terms {
-  font-size: 12px;
-}
-
 .li-terms {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 </style>

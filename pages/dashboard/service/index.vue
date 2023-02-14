@@ -1,5 +1,5 @@
 <template>
-  <Dashboard>
+  <Dashboard :loading="true">
     <template #heading>
       <n-space :size="24" align="center" class="h-12">
         <h4 class="">{{ $t('dashboard.attachNewService') }}</h4>

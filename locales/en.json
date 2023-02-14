@@ -367,7 +367,7 @@
       }
     },
     "terms": {
-      "project": "The Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform’s services.",
+      "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform’s services.",
       "payment": "I understand the billing process and some other legal stuff."
     },
     "connect": "Connect",
@@ -516,17 +516,18 @@
   },
   "referral": {
     "banner": {
-      "title": "Referral link",
-      "description": "Nam cras mattis placerat sed suspendisse. In sollicitudin tincidunt at pretium. Sed consectetur nunc risus elementum pellentesque. Leo interdum velit sapien sed vitae quis.",
-      "btn": "Start your referral journey"
+      "title": "Apillon Referral program",
+      "description": "Are you a true Web3 believer and want to build the future together with your friends? Share the news, invite your friends and collect points!",
+      "btn": "Start your Referral journey"
     },
     "enter": {
-      "header": "Let’s see if we can work together",
-      "description": "Mauris pellentesque arcu adipiscing facilisi duis. Integer laoreet donec vivamus arcu viverra feugiat mauris faucibus.",
-      "country": "Choose your Country",
+      "header": "Can we work together?",
+      "description": "Currently we are working with a limited list of countries so the reward shipments can be carried out. Please select your country in the list below.",
+      "country": "Select your country",
+      "btn": "Let’s see if we can work together",
       "terms": {
         "accept": "I accept the",
-        "andConditions": "terms and conditions",
+        "andConditions": "Terms and conditions",
         "info": "Text about Terms & conditions",
         "title": "Terms referral"
       }

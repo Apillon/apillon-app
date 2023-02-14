@@ -59,7 +59,7 @@ const btnClass = computed(() => {
     props.type === 'link' ? 'font-sans' : 'font-mono',
     {
       'w-full': props.type !== 'link' && props.size === 'large',
-      'text-primary': props.type === 'link',
+      'text-primary underline': props.type === 'link',
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,
       'opacity-60': props.disabled,
