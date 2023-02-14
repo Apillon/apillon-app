@@ -115,7 +115,7 @@
           :label="'Country'"
           :label-props="{ for: 'country' }"
         >
-          <n-select id="country" v-model:value="formData.country" :options="options">
+          <n-select id="country" v-model:value="formData.country" :options="referralCountries">
             <template #arrow>
               <span class="icon-down text-2xl"></span>
             </template>
@@ -168,13 +168,6 @@ const formData = ref({
   zip: '',
   country: undefined,
 });
-
-const options = [
-  {
-    label: 'Slovenia',
-    value: 'slo',
-  },
-];
 
 const loading = ref(false);
 

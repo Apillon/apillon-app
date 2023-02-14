@@ -13,6 +13,10 @@
     @apply font-sans font-bold;
     font-size: 1.5rem;
     line-height: 1.5;
+
+    + p {
+      @apply mt-2;
+    }
   }
 
   /* Headline 3 */
@@ -21,6 +25,13 @@
     @apply font-sans font-bold;
     font-size: 1.25rem;
     line-height: 1.6;
+
+    + h4,
+    + .h4,
+    + p,
+    + ul {
+      @apply mt-2;
+    }
   }
 
   /* Headline 4 */
@@ -30,7 +41,8 @@
     font-size: 1.125rem;
     line-height: 1.55;
 
-    + p {
+    + p,
+    + ul {
       @apply mt-2;
     }
   }
@@ -52,11 +64,22 @@
   }
 
   p {
-    @apply body-lg;
+    @apply body-md;
 
-    + p {
-      @apply mt-2;
+    + h2,
+    + .h2,
+    + h3,
+    + .h3,
+    + h4,
+    + .h4,
+    + p,
+    + ul {
+      @apply mt-4;
     }
+  }
+
+  ul {
+    @apply body-md;
   }
 
   label {
