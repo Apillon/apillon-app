@@ -36,7 +36,7 @@
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('form.login')" />
         <Btn :loading="loading" type="primary" class="-mt-4" size="large" @click="handleSubmit">
-          {{ $t('referral.enter.header') }}
+          {{ $t('referral.enter.btn') }}
         </Btn>
       </n-form-item>
     </n-form>
