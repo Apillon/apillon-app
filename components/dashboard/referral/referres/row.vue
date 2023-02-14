@@ -16,7 +16,7 @@
         </n-tag>
       </div>
     </div>
-    <div class="pr-3 text-grey-light" style="line-height: 28px">
+    <div class="pr-3 text-white" style="line-height: 28px">
       {{ getTimeSince(item.joined) }}
     </div>
   </div>

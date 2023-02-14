@@ -33,7 +33,7 @@
   </n-form>
   <div class="min-h-[30px] text-center">
     <div>
-      <span class="text-sm text-grey">{{ $t('login.forgotPassword') }} </span>&nbsp;
+      <span class="text-sm text-body">{{ $t('login.forgotPassword') }} </span>&nbsp;
       <FormPasswordResetRequest :email="formData.email" btn-type="link" size="tiny" quaternary />
     </div>
   </div>
@@ -78,7 +78,9 @@ function handleSubmit(e: Event | MouseEvent) {
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => message.warning(error.message || 'Error'))
+      );
     } else {
       /** Login with mail and password */
       await login();
@@ -93,10 +95,10 @@ async function login() {
     authStore.logout();
     dataStore.resetCurrentProject();
 
-    const data = await $api.post<LoginResponse>(endpoints.login, formData.value);
+    const res = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
-    authStore.setUserToken(data.data.token);
-    authStore.changeUser(data.data);
+    authStore.setUserToken(res.data.token);
+    authStore.changeUser(res.data);
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     await dataStore.fetchProjects(true);

@@ -47,6 +47,12 @@ const Endpoints = {
   bucket: (buckeId: number) => {
     return `/buckets/${buckeId}`;
   },
+  bucketContent: (buckeId: number) => {
+    return `/buckets/${buckeId}/content`;
+  },
+  bucketRestore: (buckeId: number) => {
+    return `/buckets/${buckeId}/cancel-deletion`;
+  },
   bucketWebhook: (buckeId: number, webhookId?: number) => {
     return webhookId ? `/buckets/${buckeId}/webhook/${webhookId}` : `/buckets/${buckeId}/webhook`;
   },
@@ -75,6 +81,9 @@ const Endpoints = {
   },
   storageFileDelete: (bucketUuid: string, fileUuid: string | number) => {
     return `/storage/${bucketUuid}/file/${fileUuid}`;
+  },
+  storageFileRestore: (bucketUuid: string, fileUuid: string | number) => {
+    return `/storage/${bucketUuid}/file/${fileUuid}/cancel-deletion`;
   },
   storageFilesTrashed: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/trashed-files`;

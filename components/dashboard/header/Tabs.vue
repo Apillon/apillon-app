@@ -3,8 +3,8 @@
     <div class="flex items-end">
       <n-space align="center" :size="32">
         <button class="font-bold border-b-3 border-primary">Resource</button>
-        <button class="text-grey">Active</button>
-        <button class="text-grey">Settings</button>
+        <button class="text-body">Active</button>
+        <button class="text-body">Settings</button>
       </n-space>
     </div>
   </transition>

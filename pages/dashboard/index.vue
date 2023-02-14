@@ -2,7 +2,7 @@
   <Dashboard>
     <slot>
       <div class="dashboard-wrapper">
-        <div class="flex lg:flex-nowrap flex-wrap gap-8 max-w-[1080px] p-8 bg-grey-lightBg">
+        <div class="flex lg:flex-nowrap flex-wrap gap-8 max-w-[1080px] p-8 bg-bg-lighter">
           <div class="max-w-xl">
             <template v-if="authStore.isBetaUser()">
               <h4 class="mb-4">Welcome to the Apillon Closed Beta test</h4>
@@ -80,7 +80,7 @@
               </ul>
             </template>
 
-            <div class="p-4 bg-grey-dark mt-8">
+            <div class="p-4 bg-bg-light mt-8">
               <p class="font-bold">Note:</p>
               <p>
                 Keep in mind that Apillon Closed Beta delivers no guarantees related to
@@ -97,10 +97,10 @@
         </div>
 
         <!-- Referral code -->
-        <div class="max-w-[1080px] p-8 my-8 bg-grey-lightBg">
+        <div class="max-w-[1080px] p-8 my-8 bg-bg-lighter">
           <p class="font-bold">Closed Beta code:</p>
           <div class="max-w-xl">
-            <div class="p-4 bg-grey-dark mt-2">
+            <div class="p-4 bg-bg-light mt-2">
               <p>{{ authStore.userUuid }}</p>
             </div>
           </div>

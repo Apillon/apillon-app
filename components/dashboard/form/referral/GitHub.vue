@@ -91,7 +91,9 @@ function handleSubmit(e: Event | MouseEvent) {
   const message = useMessage();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => message.warning(error.message || 'Error'))
+      );
     } else if (!referralStore.github_id) {
       window.open(
         'https://github.com/login/oauth/authorize?client_id=' +

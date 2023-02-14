@@ -16,7 +16,7 @@
       />
 
       <div class="mt-10">
-        <NuxtLink :to="{ name: 'dashboard' }" class="text-grey text-bold">
+        <NuxtLink :to="{ name: 'dashboard' }" class="text-body text-bold">
           {{ $t('onboarding.skip') }}
         </NuxtLink>
       </div>

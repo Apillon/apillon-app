@@ -133,7 +133,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => message.warning(error.message || 'Error'))
+      );
     } else if (props.resetPassword) {
       await resetPassword();
     } else {
@@ -154,6 +156,7 @@ async function register() {
     });
 
     authStore.setUserToken(res.data.token);
+    authStore.changeUser(res.data);
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     await dataStore.fetchProjects(true);

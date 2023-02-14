@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2 class="text-center sm:text-left">{{ $t('signup.title') }}</h2>
-    <p class="text-grey-bright mb-10">{{ $t('signup.description') }}</p>
+    <h2 class="mb-4 text-center sm:text-left">{{ $t('signup.title') }}</h2>
+    <p class="mb-10">{{ $t('signup.description') }}</p>
 
     <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
       <Btn type="secondary" class="w-full">
@@ -11,7 +11,7 @@
     </template>
     <div class="my-8 flex items-center">
       <span class="bg-white h-[1px] w-full"></span>
-      <strong class="inline-block px-5 mx-[8%] text-grey whitespace-nowrap">
+      <strong class="inline-block px-5 mx-[8%] text-body whitespace-nowrap">
         <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
           {{ $t('signup.orUseEmail') }}
         </template>
@@ -23,7 +23,7 @@
     <AuthFormSignup />
 
     <div class="mt-10 text-center">
-      <span class="text-sm text-grey"> {{ $t('signup.alreadyHaveAccount') }} </span>&nbsp;
+      <span class="text-sm text-body"> {{ $t('signup.alreadyHaveAccount') }} </span>&nbsp;
       <Btn :to="{ name: 'login' }" type="link">
         {{ $t('general.login') }}
       </Btn>

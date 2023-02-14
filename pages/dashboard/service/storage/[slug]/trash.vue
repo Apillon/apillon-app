@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <StorageHeading />
+      <HeaderBucket />
     </template>
     <slot>
       <TableStorageTrash v-if="dataStore.hasDeletedFiles || true" />
@@ -30,11 +30,23 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const { params } = useRoute();
 const dataStore = useDataStore();
-const pageLoading = ref<boolean>(false);
+const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
+const bucketId = ref<number>(parseInt(`${params?.slug}`));
 
 useHead({
   title: $i18n.t('nav.storage'),
+});
+
+onMounted(() => {
+  /** Bucket ID from route, then load buckets */
+  dataStore.onBucketMounted(bucketId.value);
+
+  Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    await dataStore.getBucket(bucketId.value);
+    pageLoading.value = false;
+  });
 });
 </script>

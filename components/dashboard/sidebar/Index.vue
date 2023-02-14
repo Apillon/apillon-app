@@ -12,7 +12,7 @@
       <n-scrollbar style="max-height: 100vh" class="scrollbar--menu">
         <!-- Close - only on mobile -->
         <button v-if="!isLg" class="absolute top-4 right-4" @click="emit('toggleSidebar', false)">
-          <span class="icon-close text-grey"></span>
+          <span class="icon-close text-body"></span>
         </button>
 
         <n-space class="py-8" :size="32" vertical>
