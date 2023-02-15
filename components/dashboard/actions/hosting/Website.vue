@@ -234,8 +234,7 @@ async function deploy(env: number) {
     setTimeout(() => {
       router.push(`/dashboard/service/hosting/${websiteId.value}/staging`);
     }, 1000);
-  }
-  if (deployment && env === DeploymentEnvironment.PRODUCTION) {
+  } else if (deployment && env === DeploymentEnvironment.PRODUCTION) {
     deploymentStore.production = [] as Array<DeploymentInterface>;
     setTimeout(() => {
       router.push(`/dashboard/service/hosting/${websiteId.value}/production`);

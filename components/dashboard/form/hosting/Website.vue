@@ -32,6 +32,7 @@
           :input-props="{ id: 'name' }"
           :placeholder="$t('form.placeholder.websiteName')"
           clearable
+          @keyup.enter="handleSubmit"
         />
       </n-form-item>
 
