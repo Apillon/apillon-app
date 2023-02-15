@@ -36,8 +36,6 @@ import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const showModalDelete = ref<boolean>(false);
-const drawerFileDetailsVisible = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
 
 const search = ref<string>('');
@@ -45,36 +43,13 @@ const loading = ref<boolean>(false);
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 
-/** Dropdown options for files */
-const dropdownFileOptions = [
-  {
-    label: $i18n.t('general.view'),
-    key: 'view',
-    props: {
-      onClick: () => {
-        drawerFileDetailsVisible.value = true;
-      },
-    },
-  },
-  {
-    label: $i18n.t('general.delete'),
-    key: 'delete',
-    props: {
-      class: '!text-pink',
-      onClick: () => {
-        showModalDelete.value = true;
-      },
-    },
-  },
-];
-
 /** Columns */
 const createColumns = (): NDataTableColumns<BucketItemInterface> => {
   return [
     {
-      title: $i18n.t('storage.fileName'),
       key: 'name',
-      minWidth: 150,
+      title: $i18n.t('storage.fileName'),
+      minWidth: 200,
       render(row) {
         return [h(IconFolderFile, { isFile: true }, ''), h('span', { class: 'ml-2 ' }, row.name)];
       },
@@ -85,7 +60,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       render(row) {
         return h(
           'span',
-          { class: 'text-grey' },
+          { class: 'text-body' },
           {
             default: () => truncateCid(row.CID || ''),
           }
@@ -105,13 +80,13 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
                 default: () => [
                   h(
                     NEllipsis,
-                    { class: 'text-grey align-bottom', 'line-clamp': 1 },
+                    { class: 'text-body align-bottom', 'line-clamp': 1 },
                     { default: () => row.link }
                   ),
                   h(
                     'button',
                     { class: 'ml-2', onClick: () => copyToClipboard(row.link) },
-                    h('span', { class: 'icon-copy text-grey' }, {})
+                    h('span', { class: 'icon-copy text-body' }, {})
                   ),
                 ],
               }
@@ -152,12 +127,12 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       title: $i18n.t('general.actions'),
       key: 'actions',
       align: 'right',
-      className: '!py-0 hidden',
+      className: '!py-0',
       render() {
         return h(
           NDropdown,
           {
-            options: dropdownFileOptions,
+            options: dropdownOptions,
             trigger: 'click',
           },
           {
@@ -174,6 +149,20 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
   ];
 };
 const columns = createColumns();
+
+/** Dropdown options for files */
+const dropdownOptions = [
+  {
+    key: 'restore',
+    label: $i18n.t('general.restore'),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        restore();
+      },
+    },
+  },
+];
 
 function rowProps(row: BucketItemInterface) {
   return {
@@ -210,13 +199,12 @@ async function getFiles() {
   }
 }
 
+/** Fetch deleted files */
 async function fetchFiles() {
   loading.value = true;
 
   try {
-    const bucketUuid = dataStore.bucketUuid;
-
-    const res = await $api.get<FolderResponse>(endpoints.storageFilesTrashed(bucketUuid));
+    const res = await $api.get<FolderResponse>(endpoints.storageFilesTrashed(dataStore.bucketUuid));
 
     dataStore.file.trash = res.data.items;
 
@@ -231,5 +219,28 @@ async function fetchFiles() {
   }
 
   loading.value = false;
+}
+
+/**
+ * Restore file
+ * */
+async function restore() {
+  dataStore.bucket.loading = true;
+
+  try {
+    const restoredFile = await $api.patch<BucketItemResponse>(
+      endpoints.storageFileRestore(dataStore.bucketUuid, currentRow.value.id)
+    );
+
+    removeTrashedFileFromList(restoredFile.data.id);
+    message.success($i18n.t('form.success.restored.file'));
+  } catch (error) {
+    window.$message.error(userFriendlyMsg(error));
+  }
+  dataStore.bucket.loading = false;
+}
+
+function removeTrashedFileFromList(id: number) {
+  dataStore.file.trash = dataStore.file.trash.filter(item => item.id !== id);
 }
 </script>

@@ -11,6 +11,6 @@ const props = defineProps({
 });
 
 const statusClass = computed(() => {
-  return [props.active ? 'text-green' : 'text-grey/24'];
+  return [props.active ? 'text-green' : 'text-body/24'];
 });
 </script>

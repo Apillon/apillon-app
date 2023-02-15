@@ -13,7 +13,7 @@
       <AuthFormSignup :send-again="hasEmail" />
 
       <div class="mt-10 text-center">
-        <span class="text-sm text-grey"> {{ $t('signup.madeMistake') }} </span>&nbsp;
+        <span class="text-sm text-body"> {{ $t('signup.madeMistake') }} </span>&nbsp;
         <Btn type="link" :to="{ name: 'register' }">
           {{ $t('general.tryAgain') }}
         </Btn>

@@ -513,11 +513,9 @@ export const useDataStore = defineStore('data', {
         this.promises.buckets = req;
         const res = await req;
 
-        const items = res.data.items
-          .filter((bucket: BucketInterface) => bucket.bucketType === BucketType.STORAGE)
-          .map((bucket: BucketInterface) => {
-            return addBucketAdditionalData(bucket);
-          });
+        const items = res.data.items.map((bucket: BucketInterface) => {
+          return addBucketAdditionalData(bucket);
+        });
 
         if (statusDeleted) {
           this.bucket.destroyed = items;
@@ -594,7 +592,8 @@ export const useDataStore = defineStore('data', {
       limit?: number,
       search?: string,
       orderBy?: string,
-      order?: string
+      order?: string,
+      markedForDeletion?: boolean
     ) {
       this.folder.loading = true;
 
@@ -628,6 +627,9 @@ export const useDataStore = defineStore('data', {
         }
         if (order) {
           params.desc = order === 'descend' ? 'true' : 'false';
+        }
+        if (markedForDeletion) {
+          params.markedForDeletion = markedForDeletion ? 1 : 0;
         }
 
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
@@ -814,20 +816,25 @@ export const useDataStore = defineStore('data', {
     async deployWebpage(
       webpageId: number,
       env: number = DeploymentEnvironment.STAGING
-    ): Promise<any> {
+    ): Promise<DeploymentInterface | null> {
       try {
         const config = useRuntimeConfig();
         const params: Record<string, string | number | boolean | null> = {
           directDeploy: config.public.ENV === AppEnv.LOCAL,
           environment: env,
         };
-        await $api.post<DeploymentResponse>(endpoints.webpageDeploy(webpageId), params);
+        const deployment = await $api.post<DeploymentResponse>(
+          endpoints.webpageDeploy(webpageId),
+          params
+        );
 
         window.$message.success(window.$i18n.t('form.success.webpageDeploying'));
+        return deployment.data;
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      return null;
     },
 
     /**

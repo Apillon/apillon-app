@@ -1,12 +1,12 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <StorageHeading />
+      <HeaderBucket />
     </template>
 
     <slot>
       <!-- Actions -->
-      <StorageFileActions class="mb-4" />
+      <ActionsStorageBucket class="mb-4" />
 
       <!-- Upload files -->
       <transition name="fade" appear>
@@ -31,6 +31,7 @@ const $i18n = useI18n();
 const { params } = useRoute();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
+const bucketId = ref<number>(parseInt(`${params?.id}`));
 
 useHead({
   title: $i18n.t('nav.storage'),
@@ -38,11 +39,11 @@ useHead({
 
 onMounted(() => {
   /** Bucket ID from route, then load buckets */
-  dataStore.onBucketMounted(parseInt(`${params?.id}`));
+  dataStore.onBucketMounted(bucketId.value);
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await dataStore.getBucket(parseInt(`${params?.id}`));
+      await dataStore.getBucket(bucketId.value);
 
       if (!dataStore.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
         await dataStore.fetchDirectoryContent();
@@ -52,6 +53,6 @@ onMounted(() => {
       }
       pageLoading.value = false;
     });
-  }, 300);
+  }, 100);
 });
 </script>

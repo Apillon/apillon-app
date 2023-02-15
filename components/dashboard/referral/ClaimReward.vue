@@ -115,7 +115,7 @@
           :label="'Country'"
           :label-props="{ for: 'country' }"
         >
-          <n-select id="country" v-model:value="formData.country" :options="options">
+          <n-select id="country" v-model:value="formData.country" :options="referralCountries">
             <template #arrow>
               <span class="icon-down text-2xl"></span>
             </template>
@@ -169,13 +169,6 @@ const formData = ref({
   country: undefined,
 });
 
-const options = [
-  {
-    label: 'Slovenia',
-    value: 'slo',
-  },
-];
-
 const loading = ref(false);
 
 const rules: NFormRules = {
@@ -227,7 +220,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => message.warning(error.message || 'Error'))
+      );
     } else {
       claimReward();
     }

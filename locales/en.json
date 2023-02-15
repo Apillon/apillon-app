@@ -29,6 +29,7 @@
     "pending": "pending",
     "production": "Production",
     "refresh": "Refresh",
+    "restore": "Restore",
     "scope": "Scope",
     "search": "Search",
     "secret": "Secret",
@@ -39,7 +40,9 @@
     "staging": "Staging",
     "status": "Status",
     "tryAgain": "Try again",
-    "terms": "",
+    "terms": "terms and conditions",
+    "termsAccept": "I accept the ",
+    "termsAndConditions": "Terms and conditions",
     "test": "Test",
     "updateTime": "Update time",
     "upload": "Upload",
@@ -50,7 +53,7 @@
   "dashboard": {
     "apiKey": {
       "apiKey": "API key",
-      "apiKeySecret": "API key secet",
+      "apiKeySecret": "API key secret",
       "delete": "Delete API key",
       "details": "API key details",
       "generate": "Generate new key",
@@ -127,6 +130,7 @@
     "USER_IS_NOT_AUTHENTICATED": "User is not authenticated",
     "FORBIDDEN": "You don't have permission for this action",
     "USER_IS_NOT_AUTHORIZED": "User is not authorized",
+    "Insufficient permissions to modify this record": "You don't have permission for this action",
 
     "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error, please fill the form",
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
@@ -175,6 +179,7 @@
     "USER_INVALID_LOGIN": "Wrong email or password",
     "USER_EMAIL_NOT_VALID": "Email is not valid",
     "USER_EMAIL_NOT_EXISTS": "Looks like your email is not in our books yet.",
+    "USER_ALREADY_REGISTERED": "User already registered",
     "USER_EMAIL_ALREADY_TAKEN": "Email is already taken",
     "USER_UUID_NOT_PRESENT": "user_uuid is missing",
     "USER_UUID_ALREADY_EXISTS": "user_uuid already exists",
@@ -201,6 +206,8 @@
     "ERROR_WRITING_TO_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
     "ERROR_READING_FROM_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
     "SERVICE_ERROR": "There has been an error. Please come back later when we fixed that problem.",
+
+    "NO_CHANGES_TO_DEPLOY": "There have been no changes to your website. First, make some changes and deploy them to the staging.",
 
     "walletSignature": "'Could not capture your signature, check your wallet connection",
     "fileDownload": "Download failed. Something went wrong during the download."
@@ -329,6 +336,7 @@
         "apiKey": "Api key has been deleted",
         "apiKeyRole": "Api key permission has been removed",
         "bucket": "Bucket has been deleted",
+        "bucketContent": "Bucket items has been deleted",
         "directory": "Directory key has been deleted",
         "domain": "Domain has been deleted",
         "file": "File has been deleted",
@@ -337,6 +345,11 @@
         "items": "Items has been deleted",
         "webhook": "Webhook has been deleted",
         "webpage": "Webpage has been deleted"
+      },
+      "restored": {
+        "bucket": "Bucket has been restored",
+        "directory": "Directory key has been restored",
+        "file": "File has been restored"
       },
       "updated": {
         "apiKey": "Api key has been updated",
@@ -354,7 +367,7 @@
       }
     },
     "terms": {
-      "project": "I understand product is in beta stage",
+      "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform’s services.",
       "payment": "I understand the billing process and some other legal stuff."
     },
     "connect": "Connect",
@@ -406,12 +419,15 @@
       "name": "Webpage name",
       "new": "New webpage",
       "quotaReached": "Quota has been reached.",
-      "update": "Update webpage"
+      "update": "Update webpage",
+      "uuid": "Webpage Uuid"
     },
+    "clearAll": "Clear all",
+    "clearAllFiles": "Do you want to remove all files?",
+    "clearAllWarn": "With this action you will erase all files. To deploy new version to preview, you will have to upload whole webpage.",
     "deployProd": "Deploy to production",
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
-
     "ipns": "IPNS",
     "ipnsAddress": "IPNS Address",
     "ipnsLink": "IPNS link",
@@ -500,17 +516,18 @@
   },
   "referral": {
     "banner": {
-      "title": "Referral link",
-      "description": "Nam cras mattis placerat sed suspendisse. In sollicitudin tincidunt at pretium. Sed consectetur nunc risus elementum pellentesque. Leo interdum velit sapien sed vitae quis.",
-      "btn": "Start your referral journey"
+      "title": "Apillon Referral program",
+      "description": "Are you a true Web3 believer and want to build the future together with your friends? Share the news, invite your friends and collect points!",
+      "btn": "Start your Referral journey"
     },
     "enter": {
-      "header": "Let’s see if we can work together",
-      "description": "Mauris pellentesque arcu adipiscing facilisi duis. Integer laoreet donec vivamus arcu viverra feugiat mauris faucibus.",
-      "country": "Choose your Country",
+      "header": "Can we work together?",
+      "description": "Currently we are working with a limited list of countries so the reward shipments can be carried out. Please select your country in the list below.",
+      "country": "Select your country",
+      "btn": "Let’s see if we can work together",
       "terms": {
         "accept": "I accept the",
-        "andConditions": "terms and conditions",
+        "andConditions": "Terms and conditions",
         "info": "Text about Terms & conditions",
         "title": "Terms referral"
       }
@@ -753,7 +770,7 @@
     "bucket": {
       "new": "Each file hosting that passes through Crust’s pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
       "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
-      "destroyed": "Id magnis faucibus posuere leo leo scelerisque. Volutpat dui senectus ut tristique enim pellentesque lorem placerat mi. Sit nulla ultricies magna euismod imperdiet mattis sed non. Pretium aliquam tellus magna felis adipiscing. "
+      "destroyed": ""
     },
     "file": {
       "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."

@@ -8,10 +8,10 @@
         <h4 class="whitespace-nowrap">{{ dataStore.bucket.active.name }}</h4>
 
         <n-space align="center" size="small" :wrap="false">
-          <n-ellipsis class="text-grey align-bottom" :line-clamp="1">
+          <n-ellipsis class="text-body align-bottom" :line-clamp="1">
             {{ dataStore.bucket.active.bucket_uuid }}
           </n-ellipsis>
-          <button class="text-grey" @click="copyToClipboard(dataStore.bucket.active.bucket_uuid)">
+          <button class="text-body" @click="copyToClipboard(dataStore.bucket.active.bucket_uuid)">
             <span class="icon-copy"></span>
           </button>
         </n-space>

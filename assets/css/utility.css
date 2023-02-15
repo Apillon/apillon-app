@@ -14,4 +14,9 @@
     -webkit-clip-path: ellipse(60% 85% at 60% 50%);
     clip-path: ellipse(60% 85% at 60% 50%);
   }
+
+  /** Border */
+  .border-card {
+    @apply border-1 border-bg-lighter;
+  }
 }

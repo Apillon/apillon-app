@@ -24,8 +24,8 @@
         v-model:value="formData.cardNumber"
         :input-props="{ id: 'cardNumber' }"
         :placeholder="$t('form.placeholder.cardNumber')"
-        @input="handleCreditCardInput"
         clearable
+        @input="handleCreditCardInput"
       >
         <template #suffix>
           <Image src="/images/payment/mastercard.svg" :width="35" :height="24" alt="mastercard" />
@@ -45,8 +45,8 @@
           v-model:value="formData.expirationDate"
           :input-props="{ id: 'expirationDate' }"
           :placeholder="$t('form.placeholder.expirationDate')"
-          @input="handleExpirationDateInput"
           clearable
+          @input="handleExpirationDateInput"
         />
       </n-form-item-gi>
 
@@ -61,8 +61,8 @@
           v-model:value="formData.cvv"
           :input-props="{ id: 'cvv' }"
           :placeholder="$t('form.placeholder.cvv')"
-          @input="handleCvvInput"
           clearable
+          @input="handleCvvInput"
         />
       </n-form-item-gi>
     </n-grid>
@@ -77,8 +77,8 @@
         v-model:value="formData.postalCode"
         :input-props="{ id: 'postalCode' }"
         :placeholder="$t('form.placeholder.postalCode')"
-        @input="handlePostalCodeInput"
         clearable
+        @input="handlePostalCodeInput"
       />
     </n-form-item>
 
@@ -244,7 +244,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => message.warning(error.message || 'Error'))
+      );
     } else {
       await updateUserProfile();
     }

@@ -18,7 +18,8 @@ const props = defineProps({
   id: { type: Number, required: true },
   type: {
     type: String,
-    validator: (type: string) => ['apiKey', 'bucket', 'directory', 'file'].includes(type),
+    validator: (type: string) =>
+      ['apiKey', 'bucket', 'bucketContent', 'directory', 'file'].includes(type),
     required: true,
   },
 });
@@ -49,7 +50,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => message.warning(error.message || 'Error'))
+      );
     } else {
       await deleteEntity();
     }
@@ -80,6 +83,8 @@ function getUrl(type: string, id: number) {
       return endpoints.apiKey(id);
     case 'bucket':
       return endpoints.bucket(id);
+    case 'bucketContent':
+      return endpoints.bucketContent(id);
     case 'directory':
       return endpoints.directory(id);
     default:

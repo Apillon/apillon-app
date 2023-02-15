@@ -1,10 +1,6 @@
 <template>
   <div>
-    <Notification
-      v-if="dataStore.project.quotaReached === true"
-      type="warning"
-      class="w-full mb-4 !bg-bg"
-    >
+    <Notification v-if="dataStore.project.quotaReached === true" type="warning" class="mb-4">
       {{ $t('project.quotaReached') }}
     </Notification>
     <n-form
@@ -28,10 +24,6 @@
         />
       </n-form-item>
 
-      <!-- Project TAG - currently not in use
-    <n-tag :bordered="false" type="info" class="mb-8">{{ projectNameText }}</n-tag>
-    -->
-
       <!--  Project description -->
       <n-form-item
         path="description"
@@ -48,7 +40,12 @@
 
       <!--  Project terms -->
       <n-form-item path="terms" :show-label="false">
-        <n-checkbox id="terms" v-model:checked="formData.terms" size="large" :label="termsLabel" />
+        <n-checkbox
+          id="terms"
+          v-model:checked="formData.terms"
+          size="large"
+          :label="$t('form.terms.project')"
+        />
       </n-form-item>
 
       <!--  Project submit -->
@@ -85,19 +82,16 @@ onMounted(async () => {
   await dataStore.fetchProjectsQuota();
 });
 
-/** Terms label with link */
+/** Terms label with link 
 const termsLabel = computed(() => {
   return h('span', {}, [
-    $i18n.t('form.terms.project'),
-    h('a', { href: '#terms', target: '_blank' }, $i18n.t('general.terms')),
+    $i18n.t('general.termsAccept'),
+    h(
+      Tag,
+      { color: 'yellow', onHover: true, onClick: showModalTerms },
+      { default: () => $i18n.t('general.terms') }
+    ),
   ]);
-});
-
-/** Tag Project_name text - Currently not in use
-const projectNameText = computed(() => {
-  return formData.value.name
-    ? `${formData.value.name}.Appilon.io`
-    : `${$i18n.t('login.projectName')}.Appilon.io`;
 }); */
 
 /** Form project */
@@ -134,7 +128,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => message.warning(error.message || 'Error'))
+      );
     } else {
       await createProject();
     }

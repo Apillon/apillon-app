@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HostingHeading />
+      <HeaderWebpage />
     </template>
     <slot>
       <template
@@ -12,7 +12,7 @@
         "
       >
         <n-space class="pb-8" :size="32" vertical>
-          <HostingWebsiteActions :env="DeploymentEnvironment.STAGING" />
+          <ActionsHostingWebpage :env="DeploymentEnvironment.STAGING" />
 
           <!-- IPNS link -->
           <HostingPreviewLink
@@ -64,6 +64,7 @@ const { params } = useRoute();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 
+let deploymentInterval: any = null as any;
 useHead({
   title: $i18n.t('nav.hosting'),
 });
@@ -83,11 +84,12 @@ onMounted(() => {
         return;
       }
       /** Get deployments for this webpage */
-      dataStore.getDeployments(webpageId, DeploymentEnvironment.STAGING);
+      await dataStore.getDeployments(webpageId, DeploymentEnvironment.STAGING);
+      checkUnfinishedDeployments();
 
       /** Show files from staging bucket */
       dataStore.bucket.active = webpage.stagingBucket;
-      dataStore.setBucketId(webpage.stagingBucket_id);
+      dataStore.setBucketId(webpage.stagingBucket.id);
 
       if (webpage.bucket.uploadedSize === 0) {
         dataStore.bucket.uploadActive = true;
@@ -96,4 +98,31 @@ onMounted(() => {
     });
   }, 100);
 });
+
+onUnmounted(() => {
+  clearInterval(deploymentInterval);
+});
+
+function checkUnfinishedDeployments() {
+  const unfinishedDeployment = dataStore.webpage.deployment.staging.find(
+    deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL
+  );
+  if (unfinishedDeployment === undefined) {
+    return;
+  }
+
+  deploymentInterval = setInterval(async () => {
+    const deployment = await dataStore.fetchDeployment(
+      dataStore.webpage.active.id,
+      unfinishedDeployment.id
+    );
+    if (unfinishedDeployment.deploymentStatus !== deployment.deploymentStatus) {
+      unfinishedDeployment.deploymentStatus = deployment.deploymentStatus;
+    }
+    if (deployment.deploymentStatus >= DeploymentStatus.SUCCESSFUL) {
+      unfinishedDeployment.size = deployment.size;
+      clearInterval(deploymentInterval);
+    }
+  }, 10000);
+}
 </script>
