@@ -532,6 +532,7 @@ export const useDataStore = defineStore('data', {
 
         return res;
       } catch (error: any) {
+        this.promises.buckets = null;
         if (statusDeleted) {
           this.bucket.items = [] as Array<BucketInterface>;
         } else {
@@ -710,6 +711,7 @@ export const useDataStore = defineStore('data', {
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.WEBPAGES, Date.now().toString());
       } catch (error: any) {
+        this.promises.webpages = null;
         this.webpage.items = [] as Array<WebpageInterface>;
 
         /** Show error message  */
