@@ -185,8 +185,11 @@ export const useDataStore = defineStore('data', {
           router.push({ name: 'dashboard' });
         }
 
-        return res;
+        return res.data.items;
       } catch (error) {
+        /** Clear promise */
+        this.promises.buckets = null;
+
         this.project.items = [];
 
         /** Show error message */

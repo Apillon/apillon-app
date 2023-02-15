@@ -85,6 +85,8 @@ export const useWebpageStore = defineStore('webpage', {
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.WEBPAGES, Date.now().toString());
       } catch (error: any) {
+        /** Clear promise */
+        dataStore.promises.webpages = null;
         this.items = [] as Array<WebpageInterface>;
 
         /** Show error message  */

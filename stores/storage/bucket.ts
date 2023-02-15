@@ -203,6 +203,9 @@ export const useBucketStore = defineStore('bucket', {
 
         return res;
       } catch (error: any) {
+        /** Clear promise */
+        dataStore.promises.buckets = null;
+
         if (statusDeleted) {
           this.items = [] as Array<BucketInterface>;
         } else {
