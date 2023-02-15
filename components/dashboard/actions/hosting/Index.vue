@@ -2,7 +2,7 @@
   <n-space v-bind="$attrs" justify="space-between">
     <div class="w-[20vw] max-w-xs">
       <n-input
-        v-model:value="webpageStore.search"
+        v-model:value="websiteStore.search"
         type="text"
         name="search"
         size="small"
@@ -16,33 +16,33 @@
     </div>
 
     <n-space size="large">
-      <!-- Refresh webpages -->
-      <n-button size="small" :loading="webpageStore.loading" @click="webpageStore.fetchWebpages()">
+      <!-- Refresh websites -->
+      <n-button size="small" :loading="websiteStore.loading" @click="websiteStore.fetchWebsites()">
         <span class="icon-refresh text-lg mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
-      <!-- Create new webpage -->
+      <!-- Create new website -->
       <n-button
-        v-if="webpageStore.hasWebpages"
+        v-if="websiteStore.hasWebsites"
         type="primary"
         size="small"
         ghost
-        @click="showModalEditWebpage = true"
+        @click="showModalEditWebsite = true"
       >
         <span class="icon-create-folder text-xl mr-2"></span>
-        {{ $t('hosting.webpage.new') }}
+        {{ $t('hosting.website.new') }}
       </n-button>
     </n-space>
   </n-space>
 
-  <!-- Modal - New webpage -->
-  <modal v-model:show="showModalEditWebpage" :title="$t('hosting.webpage.new')">
-    <FormHostingWebpage />
+  <!-- Modal - New website -->
+  <modal v-model:show="showModalEditWebsite" :title="$t('hosting.website.new')">
+    <FormHostingWebsite />
   </modal>
 </template>
 
 <script lang="ts" setup>
-const webpageStore = useWebpageStore();
-const showModalEditWebpage = ref<boolean>(false);
+const websiteStore = useWebsiteStore();
+const showModalEditWebsite = ref<boolean>(false);
 </script>

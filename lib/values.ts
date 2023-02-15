@@ -30,8 +30,8 @@ export const LsCacheKeys = {
   FILE_DELETED: 'al_cache_file_deleted',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
-  WEBPAGE: 'al_cache_webpage',
-  WEBPAGES: 'al_cache_webpages',
+  WEBSITE: 'al_cache_website',
+  WEBSITES: 'al_cache_websites',
 };
 
 /** User roles */

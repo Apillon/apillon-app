@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderWebpage />
+      <HeaderWebsite />
     </template>
     <slot>
       <template
@@ -12,14 +12,14 @@
         "
       >
         <n-space class="pb-8" :size="32" vertical>
-          <ActionsHostingWebpage :env="DeploymentEnvironment.PRODUCTION" />
+          <ActionsHostingWebsite :env="DeploymentEnvironment.PRODUCTION" />
 
           <!-- Domain preview -->
           <HostingDomain />
 
           <!-- IPNS link -->
           <HostingPreviewLink
-            :link="webpageStore.active.ipnsProductionLink || ''"
+            :link="websiteStore.active.ipnsProductionLink || ''"
             :title="$t('hosting.ipnsLink')"
           />
 
@@ -56,15 +56,15 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const bucketStore = useBucketStore();
-const webpageStore = useWebpageStore();
+const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
-const { pageLoading, initWebpage } = useHosting();
+const { pageLoading, initWebsite } = useHosting();
 
 useHead({
   title: $i18n.t('nav.hosting'),
 });
 
 onMounted(() => {
-  initWebpage(DeploymentEnvironment.PRODUCTION);
+  initWebsite(DeploymentEnvironment.PRODUCTION);
 });
 </script>

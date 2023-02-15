@@ -132,7 +132,7 @@ const $i18n = useI18n();
 const router = useRouter();
 const { params } = useRoute();
 const bucketStore = useBucketStore();
-const webpageStore = useWebpageStore();
+const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 
 const showModalNewFolder = ref<boolean>(false);
@@ -141,8 +141,8 @@ const showModalClearAll = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
 const deploying = ref<boolean>(false);
 
-/** Webpage ID from route */
-const webpageId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
+/** Website ID from route */
+const websiteId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
 
 const isUpload = computed<Boolean>(() => {
   return (
@@ -154,24 +154,24 @@ async function refresh() {
   /** Refresh hosting files */
   bucketStore.fetchDirectoryContent();
 
-  /** On tab stg/prod refresh also webpage and deployments */
+  /** On tab stg/prod refresh also website and deployments */
   if (
     props.env === DeploymentEnvironment.STAGING ||
     props.env === DeploymentEnvironment.PRODUCTION
   ) {
     /** Refresh deyployments */
-    deploymentStore.fetchDeployments(webpageId.value, props.env);
+    deploymentStore.fetchDeployments(websiteId.value, props.env);
 
-    /** Refresh active webpage data */
-    const webpage = await webpageStore.fetchWebpage(webpageId.value);
+    /** Refresh active website data */
+    const website = await websiteStore.fetchWebsite(websiteId.value);
 
     /** Show files from staging bucket */
     if (props.env === DeploymentEnvironment.STAGING) {
-      bucketStore.active = webpage.stagingBucket;
-      bucketStore.setBucketId(webpage.stagingBucket.id);
+      bucketStore.active = website.stagingBucket;
+      bucketStore.setBucketId(website.stagingBucket.id);
     } else {
-      bucketStore.active = webpage.productionBucket;
-      bucketStore.setBucketId(webpage.productionBucket.id);
+      bucketStore.active = website.productionBucket;
+      bucketStore.setBucketId(website.productionBucket.id);
     }
   }
 }
@@ -226,19 +226,19 @@ function onAllFilesDeleted() {
 async function deploy(env: number) {
   deploying.value = true;
 
-  const deployment = await deploymentStore.deploy(webpageStore.active.id, env);
+  const deployment = await deploymentStore.deploy(websiteStore.active.id, env);
 
   /** After successfull deploy redirect to next tab */
   if (deployment && env === DeploymentEnvironment.STAGING) {
     deploymentStore.staging = [] as Array<DeploymentInterface>;
     setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${webpageId.value}/staging`);
+      router.push(`/dashboard/service/hosting/${websiteId.value}/staging`);
     }, 1000);
   }
   if (deployment && env === DeploymentEnvironment.PRODUCTION) {
     deploymentStore.production = [] as Array<DeploymentInterface>;
     setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${webpageId.value}/production`);
+      router.push(`/dashboard/service/hosting/${websiteId.value}/production`);
     }, 1000);
   }
 

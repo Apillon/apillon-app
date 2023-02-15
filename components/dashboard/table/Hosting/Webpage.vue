@@ -3,7 +3,7 @@
     <n-space justify="space-between">
       <div class="w-[20vw] max-w-xs">
         <n-input
-          v-model:value="webpageStore.search"
+          v-model:value="websiteStore.search"
           type="text"
           name="search"
           size="small"
@@ -17,7 +17,7 @@
       </div>
 
       <n-space size="large">
-        <!-- Refresh webpages -->
+        <!-- Refresh websites -->
         <n-button
           size="small"
           :loading="bucketStore.folder.loading"
@@ -48,8 +48,8 @@
         <strong>{{ $t('hosting.domain.preview') }}</strong>
       </div>
       <div class="bg-bg-dark px-4 py-2">
-        <a :href="webpageStore.active.domain" target="_blank">
-          {{ webpageStore.active.domain }}
+        <a :href="websiteStore.active.domain" target="_blank">
+          {{ websiteStore.active.domain }}
         </a>
       </div>
     </div>
@@ -60,7 +60,7 @@
       :bordered="false"
       :columns="columns"
       :data="data"
-      :loading="webpageStore.loading"
+      :loading="websiteStore.loading"
       :pagination="{ pageSize: PAGINATION_LIMIT }"
       :row-key="rowKey"
       :row-props="rowProps"
@@ -72,23 +72,23 @@
 import { NButton } from 'naive-ui';
 
 const props = defineProps({
-  webpageItems: { type: Array<BucketItemInterface>, default: [] },
+  websiteItems: { type: Array<BucketItemInterface>, default: [] },
   env: { type: Number, default: DeploymentEnvironment.PRODUCTION },
 });
 
 const $i18n = useI18n();
 const bucketStore = useBucketStore();
-const webpageStore = useWebpageStore();
+const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 
 const deploying = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
 
-/** Data: filtered webpages */
+/** Data: filtered websites */
 const data = computed<Array<BucketItemInterface>>(() => {
   return (
-    props.webpageItems.filter(item =>
-      item.name.toLocaleLowerCase().includes(webpageStore.search.toLocaleLowerCase())
+    props.websiteItems.filter(item =>
+      item.name.toLocaleLowerCase().includes(websiteStore.search.toLocaleLowerCase())
     ) || []
   );
 });
@@ -134,7 +134,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
 };
 const columns = createColumns();
 const rowKey = (row: BucketItemInterface) => row.id;
-const currentRow = ref<BucketItemInterface>(props.webpageItems[0]);
+const currentRow = ref<BucketItemInterface>(props.websiteItems[0]);
 
 /** On row click */
 const rowProps = (row: BucketItemInterface) => {
@@ -147,7 +147,7 @@ const rowProps = (row: BucketItemInterface) => {
 
 async function deployToProduction() {
   deploying.value = true;
-  await deploymentStore.deploy(webpageStore.active.id, DeploymentEnvironment.PRODUCTION);
+  await deploymentStore.deploy(websiteStore.active.id, DeploymentEnvironment.PRODUCTION);
   deploying.value = false;
 }
 </script>

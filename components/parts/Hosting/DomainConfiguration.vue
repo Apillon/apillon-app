@@ -14,9 +14,9 @@
     <h4>A Record:</h4>
     <p>
       <strong>Hostname: </strong>
-      <template v-if="webpageStore.active.domain || domain">
-        <span> {{ webpageStore.active.domain || domain }} </span>
-        <button class="ml-2" @click="copyToClipboard(`${webpageStore.active.domain || domain}`)">
+      <template v-if="websiteStore.active.domain || domain">
+        <span> {{ websiteStore.active.domain || domain }} </span>
+        <button class="ml-2" @click="copyToClipboard(`${websiteStore.active.domain || domain}`)">
           <span class="icon-copy"></span>
         </button>
       </template>
@@ -34,11 +34,11 @@
     <h4>TXT Record:</h4>
     <p>
       <strong>Hostname: </strong>
-      <template v-if="webpageStore.active.domain || domain">
-        <span> _dnslink.{{ webpageStore.active.domain || domain }} </span>
+      <template v-if="websiteStore.active.domain || domain">
+        <span> _dnslink.{{ websiteStore.active.domain || domain }} </span>
         <button
           class="ml-2"
-          @click="copyToClipboard(`_dnslink.${webpageStore.active.domain || domain}`)"
+          @click="copyToClipboard(`_dnslink.${websiteStore.active.domain || domain}`)"
         >
           <span class="icon-copy"></span>
         </button>
@@ -77,5 +77,5 @@ defineProps({
 });
 
 const bucketStore = useBucketStore();
-const webpageStore = useWebpageStore();
+const websiteStore = useWebsiteStore();
 </script>

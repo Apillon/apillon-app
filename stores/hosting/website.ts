@@ -4,10 +4,10 @@ const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const deploymentStore = useDeploymentStore();
 
-export const useWebpageStore = defineStore('webpage', {
+export const useWebsiteStore = defineStore('website', {
   state: () => ({
-    active: {} as WebpageInterface,
-    items: [] as Array<WebpageInterface>,
+    active: {} as WebsiteInterface,
+    items: [] as Array<WebsiteInterface>,
     loading: false,
     search: '',
     selected: 0,
@@ -15,22 +15,22 @@ export const useWebpageStore = defineStore('webpage', {
     uploadActive: false,
   }),
   getters: {
-    hasWebpages(state): boolean {
+    hasWebsites(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
     },
-    hasWebpageItems(state): boolean {
+    hasWebsiteItems(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
     },
   },
   actions: {
     resetData() {
-      this.active = {} as WebpageInterface;
-      this.items = [] as Array<WebpageInterface>;
+      this.active = {} as WebsiteInterface;
+      this.items = [] as Array<WebsiteInterface>;
       this.search = '';
       this.selected = 0;
       this.quotaReached = undefined;
     },
-    setWebpageId(id: number) {
+    setWebsiteId(id: number) {
       if (this.selected !== id) {
         this.selected = id;
         deploymentStore.active = {} as DeploymentInterface;
@@ -47,24 +47,24 @@ export const useWebpageStore = defineStore('webpage', {
     /**
      * Fetch wrappers
      */
-    async getWebpages() {
-      if (!this.hasWebpages || isCacheExpired(LsCacheKeys.WEBPAGES)) {
-        await this.fetchWebpages();
+    async getWebsites() {
+      if (!this.hasWebsites || isCacheExpired(LsCacheKeys.WEBSITES)) {
+        await this.fetchWebsites();
       }
     },
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getWebpage(webpageId: number): Promise<WebpageInterface> {
-      if (this.active?.id === webpageId && !isCacheExpired(LsCacheKeys.WEBPAGE)) {
+    async getWebsite(websiteId: number): Promise<WebsiteInterface> {
+      if (this.active?.id === websiteId && !isCacheExpired(LsCacheKeys.WEBSITE)) {
         return this.active;
       }
-      return await this.fetchWebpage(webpageId);
+      return await this.fetchWebsite(websiteId);
     },
 
     /**
      * API calls
      */
-    async fetchWebpages() {
+    async fetchWebsites() {
       this.loading = true;
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -75,19 +75,19 @@ export const useWebpageStore = defineStore('webpage', {
           project_uuid: dataStore.projectUuid,
         };
 
-        const req = $api.get<WebpagesResponse>(endpoints.webpages(), params);
-        dataStore.promises.webpages = req;
+        const req = $api.get<WebsitesResponse>(endpoints.websites(), params);
+        dataStore.promises.websites = req;
         const res = await req;
 
         this.items = res.data.items;
         this.search = '';
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.WEBPAGES, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.WEBSITES, Date.now().toString());
       } catch (error: any) {
         /** Clear promise */
-        dataStore.promises.webpages = null;
-        this.items = [] as Array<WebpageInterface>;
+        dataStore.promises.websites = null;
+        this.items = [] as Array<WebsiteInterface>;
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
@@ -95,35 +95,35 @@ export const useWebpageStore = defineStore('webpage', {
       this.loading = false;
     },
 
-    async fetchWebpage(id: number): Promise<WebpageInterface> {
+    async fetchWebsite(id: number): Promise<WebsiteInterface> {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
       try {
-        const res = await $api.get<WebpageResponse>(endpoints.webpages(id));
+        const res = await $api.get<WebsiteResponse>(endpoints.websites(id));
 
         this.active = res.data;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.WEBPAGE, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.WEBSITE, Date.now().toString());
 
         return res.data;
       } catch (error: any) {
-        this.active = {} as WebpageInterface;
+        this.active = {} as WebsiteInterface;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
-      return {} as WebpageInterface;
+      return {} as WebsiteInterface;
     },
 
-    async fetchWebpageQuota() {
+    async fetchWebsiteQuota() {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
 
       try {
-        const res = await $api.get<WebpageQuotaResponse>(endpoints.webpageQuota, {
+        const res = await $api.get<WebsiteQuotaResponse>(endpoints.websiteQuota, {
           project_uuid: dataStore.projectUuid,
         });
 

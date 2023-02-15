@@ -16,20 +16,20 @@
       </Btn>
     </n-space>
   </div>
-  <!-- Modal - Webpage domain -->
+  <!-- Modal - Website domain -->
   <modal
     v-model:show="showModalDomain"
     class="!w-auto"
     :title="domain ? $t('hosting.domain.update') : $t('hosting.domain.add')"
   >
     <FormHostingDomain
-      :webpage-id="webpageId"
+      :website-id="websiteId"
       :domain="domain"
       @submit-success="showModalDomain = false"
     />
   </modal>
 
-  <!-- Modal - Webpage domain configuration -->
+  <!-- Modal - Website domain configuration -->
   <modal
     v-model:show="showModalConfiguration"
     class="!w-auto"
@@ -42,12 +42,12 @@
 <script lang="ts" setup>
 const { isLg } = useScreen();
 const { params } = useRoute();
-const webpageStore = useWebpageStore();
+const websiteStore = useWebsiteStore();
 const showModalDomain = ref<boolean>(false);
 const showModalConfiguration = ref<boolean>(false);
-const webpageId = ref<number>(parseInt(`${params?.slug}`));
+const websiteId = ref<number>(parseInt(`${params?.slug}`));
 
 const domain = computed<string>(() => {
-  return webpageStore.active.domain;
+  return websiteStore.active.domain;
 });
 </script>

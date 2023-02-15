@@ -92,22 +92,22 @@ const Endpoints = {
     return `/storage/${bucketUuid}/trashed-files`;
   },
 
-  /** Webpage */
-  webpage: '/storage/hosting/web-page',
-  webpages: (id?: number) => {
-    return id ? `/storage/hosting/web-pages/${id}` : '/storage/hosting/web-pages';
+  /** Website */
+  website: '/storage/hosting/website',
+  websites: (id?: number) => {
+    return id ? `/storage/hosting/websites/${id}` : '/storage/hosting/websites';
   },
-  webpageQuota: `/storage/hosting/web-pages/quota-reached`,
-  webpageDeploy: (id?: number) => {
-    return `/storage/hosting/web-pages/${id}/deploy`;
+  websiteQuota: `/storage/hosting/websites/quota-reached`,
+  websiteDeploy: (id?: number) => {
+    return `/storage/hosting/websites/${id}/deploy`;
   },
 
   /** Deployment */
-  deployment: (webpageId: number, id: number) => {
-    return `/storage/hosting/web-pages/${webpageId}/deployments/${id}`;
+  deployment: (websiteId: number, id: number) => {
+    return `/storage/hosting/websites/${websiteId}/deployments/${id}`;
   },
-  deployments: (webpageId: number) => {
-    return `/storage/hosting/web-pages/${webpageId}/deployments`;
+  deployments: (websiteId: number) => {
+    return `/storage/hosting/websites/${websiteId}/deployments`;
   },
 
   /** Api Keys */

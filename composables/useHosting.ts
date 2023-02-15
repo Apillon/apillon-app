@@ -3,7 +3,7 @@ export default function useScreen() {
   const { params } = useRoute();
   const dataStore = useDataStore();
   const bucketStore = useBucketStore();
-  const webpageStore = useWebpageStore();
+  const websiteStore = useWebsiteStore();
   const deploymentStore = useDeploymentStore();
   const pageLoading = ref<boolean>(true);
   let deploymentInterval: any = null as any;
@@ -12,50 +12,50 @@ export default function useScreen() {
     clearInterval(deploymentInterval);
   });
 
-  function initWebpage(env: number = 0) {
-    /** Webpage ID from route, then load buckets */
+  function initWebsite(env: number = 0) {
+    /** Website ID from route, then load buckets */
     const paramId = params?.id || params?.slug;
-    const webpageId = parseInt(`${paramId}`);
-    webpageStore.setWebpageId(webpageId);
+    const websiteId = parseInt(`${paramId}`);
+    websiteStore.setWebsiteId(websiteId);
 
     setTimeout(() => {
       Promise.all(Object.values(dataStore.promises)).then(async _ => {
-        const webpage = await webpageStore.getWebpage(webpageId);
+        const website = await websiteStore.getWebsite(websiteId);
 
-        /** Check of webpage exists */
-        if (!webpage?.id) {
+        /** Check of website exists */
+        if (!website?.id) {
           router.push({ name: 'dashboard-service-hosting' });
           return;
         }
-        /** Get deployments for this webpage */
+        /** Get deployments for this website */
         if (env > 0) {
-          await deploymentStore.getDeployments(webpageId, env);
+          await deploymentStore.getDeployments(websiteId, env);
         }
 
         if (env === DeploymentEnvironment.PRODUCTION) {
           /** Show files from production bucket */
-          bucketStore.active = webpage.productionBucket;
-          bucketStore.setBucketId(webpage.productionBucket.id);
+          bucketStore.active = website.productionBucket;
+          bucketStore.setBucketId(website.productionBucket.id);
 
           /** Deployments pooling */
           checkUnfinishedDeployments(deploymentStore.production);
         } else if (env === DeploymentEnvironment.STAGING) {
           /** Show files from staging bucket */
-          bucketStore.active = webpage.stagingBucket;
-          bucketStore.setBucketId(webpage.stagingBucket.id);
+          bucketStore.active = website.stagingBucket;
+          bucketStore.setBucketId(website.stagingBucket.id);
 
           /** Deployments pooling */
           checkUnfinishedDeployments(deploymentStore.staging);
         } else {
           /** Show files from main bucket */
-          bucketStore.active = webpage.bucket;
-          bucketStore.setBucketId(webpage.bucket.id);
+          bucketStore.active = website.bucket;
+          bucketStore.setBucketId(website.bucket.id);
         }
 
         /** Fetch directory content for bucket */
         bucketStore.fetchDirectoryContent(bucketStore.active.bucket_uuid);
 
-        if (webpage.bucket.uploadedSize === 0) {
+        if (website.bucket.uploadedSize === 0) {
           bucketStore.uploadActive = true;
         }
         pageLoading.value = false;
@@ -73,7 +73,7 @@ export default function useScreen() {
 
     deploymentInterval = setInterval(async () => {
       const deployment = await deploymentStore.fetchDeployment(
-        webpageStore.active.id,
+        websiteStore.active.id,
         unfinishedDeployment.id
       );
       if (unfinishedDeployment.deploymentStatus !== deployment.deploymentStatus) {
@@ -88,6 +88,6 @@ export default function useScreen() {
 
   return {
     pageLoading,
-    initWebpage,
+    initWebsite,
   };
 }

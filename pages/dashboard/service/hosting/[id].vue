@@ -1,16 +1,16 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderWebpage />
+      <HeaderWebsite />
     </template>
 
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <!-- Actions -->
-        <ActionsHostingWebpage />
+        <ActionsHostingWebsite />
 
         <!-- Upload files -->
-        <FormHostingUploadWebpage :bucket-uuid="bucketStore.bucketUuid" />
+        <FormHostingUploadWebsite :bucket-uuid="bucketStore.bucketUuid" />
 
         <div>
           <!-- Breadcrumbs -->
@@ -30,13 +30,13 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const bucketStore = useBucketStore();
-const { pageLoading, initWebpage } = useHosting();
+const { pageLoading, initWebsite } = useHosting();
 
 useHead({
   title: $i18n.t('nav.hosting'),
 });
 
 onMounted(() => {
-  initWebpage();
+  initWebsite();
 });
 </script>

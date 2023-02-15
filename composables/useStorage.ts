@@ -6,7 +6,7 @@ export default function useScreen() {
   const pageLoading = ref<boolean>(true);
 
   function initBucket(isBucketUpload: boolean = false) {
-    /** Webpage ID from route, then load buckets */
+    /** Website ID from route, then load buckets */
     const paramId = params?.id || params?.slug;
     const bucketId = parseInt(`${paramId}`);
     bucketStore.setBucketId(bucketId);
@@ -15,7 +15,7 @@ export default function useScreen() {
       Promise.all(Object.values(dataStore.promises)).then(async _ => {
         bucketStore.active = await bucketStore.getBucket(bucketId);
 
-        /** Check of webpage exists */
+        /** Check of website exists */
         if (!bucketStore.active?.id) {
           router.push({ name: 'dashboard-service-storage' });
           return;

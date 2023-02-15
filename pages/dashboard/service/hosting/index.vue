@@ -20,7 +20,7 @@
       </Heading>
     </template>
     <slot>
-      <TableHosting v-if="webpageStore.hasWebpages" :webpages="webpageStore.items" />
+      <TableHosting v-if="websiteStore.hasWebsites" :websites="websiteStore.items" />
       <template v-else>
         <div
           class="flex flex-col items-center justify-center px-6 py-4"
@@ -34,8 +34,8 @@
             <p class="text-body">{{ $t('hosting.web3HostingEnable') }}</p>
           </div>
           <div>
-            <Btn type="primary" @click="createNewWebpage">
-              {{ $t('hosting.webpage.addFirst') }}
+            <Btn type="primary" @click="createNewWebsite">
+              {{ $t('hosting.website.addFirst') }}
             </Btn>
           </div>
         </div>
@@ -45,9 +45,9 @@
         {{ $t('w3Warn.hosting.new') }}
       </W3Warn>
 
-      <!-- Modal - Create Webpage -->
-      <modal v-model:show="showModalNewWebpage" :title="$t('hosting.webpage.new')">
-        <FormHostingWebpage />
+      <!-- Modal - Create Website -->
+      <modal v-model:show="showModalNewWebsite" :title="$t('hosting.website.new')">
+        <FormHostingWebsite />
       </modal>
     </slot>
   </Dashboard>
@@ -56,10 +56,10 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const webpageStore = useWebpageStore();
+const websiteStore = useWebsiteStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
-const showModalNewWebpage = ref<boolean | null>(false);
+const showModalNewWebsite = ref<boolean | null>(false);
 
 useHead({
   title: $i18n.t('nav.hosting'),
@@ -68,42 +68,42 @@ useHead({
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await webpageStore.getWebpages();
-      getWebpageQuota();
+      await websiteStore.getWebsites();
+      getWebsiteQuota();
 
       pageLoading.value = false;
     });
   }, 100);
 });
 
-/** GET Webpage quota, if current value is null  */
-async function getWebpageQuota() {
-  if (webpageStore.quotaReached === undefined) {
-    await webpageStore.fetchWebpageQuota();
+/** GET Website quota, if current value is null  */
+async function getWebsiteQuota() {
+  if (websiteStore.quotaReached === undefined) {
+    await websiteStore.fetchWebsiteQuota();
   }
 }
 
 /**
- * On createNewWebpage click
- * If W3Warn has already been shown, show modal create new webpage, otherwise show warn first
+ * On createNewWebsite click
+ * If W3Warn has already been shown, show modal create new website, otherwise show warn first
  * */
-function createNewWebpage() {
+function createNewWebsite() {
   if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.new')) {
-    showModalNewWebpage.value = true;
+    showModalNewWebsite.value = true;
   } else {
     showModalW3Warn.value = true;
-    showModalNewWebpage.value = null;
+    showModalNewWebsite.value = null;
   }
 }
 
-/** When user close W3Warn, allow him to create new webpage */
+/** When user close W3Warn, allow him to create new website */
 function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalNewWebpage.value !== false) {
-    showModalNewWebpage.value = true;
+  if (!value && showModalNewWebsite.value !== false) {
+    showModalNewWebsite.value = true;
   }
 }
 
-/** Watch showModalNewWebpage, onShow update timestamp of shown modal in session storage */
+/** Watch showModalNewWebsite, onShow update timestamp of shown modal in session storage */
 watch(
   () => showModalW3Warn.value,
   shown => {

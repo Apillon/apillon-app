@@ -21,7 +21,7 @@ export const useDataStore = defineStore('data', {
     promises: {
       projects: null as any,
       buckets: null as any,
-      webpages: null as any,
+      websites: null as any,
     },
     services: {
       authentication: [] as Array<ServiceInterface>,

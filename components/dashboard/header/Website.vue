@@ -5,28 +5,28 @@
         <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
           <span class="icon-back"></span>
         </NuxtLink>
-        <h4>{{ webpageStore.active.name }}</h4>
+        <h4>{{ websiteStore.active.name }}</h4>
         <div class="text-sm">
-          <n-space v-if="webpageStore.active.bucket_uuid" align="center" size="small" :wrap="false">
+          <n-space v-if="websiteStore.active.bucket_uuid" align="center" size="small" :wrap="false">
             <span>{{ $t('storage.bucket.uuid') }}:</span>
             <n-ellipsis class="text-body align-bottom" :line-clamp="1">
-              {{ webpageStore.active.bucket_uuid }}
+              {{ websiteStore.active.bucket_uuid }}
             </n-ellipsis>
-            <button class="text-body" @click="copyToClipboard(webpageStore.active.bucket_uuid)">
+            <button class="text-body" @click="copyToClipboard(websiteStore.active.bucket_uuid)">
               <span class="icon-copy"></span>
             </button>
           </n-space>
           <n-space
-            v-if="webpageStore.active.webpage_uuid"
+            v-if="websiteStore.active.website_uuid"
             align="center"
             size="small"
             :wrap="false"
           >
-            <span>{{ $t('hosting.webpage.uuid') }}:</span>
+            <span>{{ $t('hosting.website.uuid') }}:</span>
             <n-ellipsis class="text-body align-bottom" :line-clamp="1">
-              {{ webpageStore.active.webpage_uuid }}
+              {{ websiteStore.active.website_uuid }}
             </n-ellipsis>
-            <button class="text-body" @click="copyToClipboard(webpageStore.active.webpage_uuid)">
+            <button class="text-body" @click="copyToClipboard(websiteStore.active.website_uuid)">
               <span class="icon-copy"></span>
             </button>
           </n-space>
@@ -43,5 +43,5 @@
 </template>
 
 <script lang="ts" setup>
-const webpageStore = useWebpageStore();
+const websiteStore = useWebsiteStore();
 </script>
