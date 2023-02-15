@@ -14,11 +14,11 @@
     <h4>A Record:</h4>
     <p>
       <strong>Hostname: </strong>
-      <template v-if="dataStore.webpage.active.domain || domain">
-        <span> {{ dataStore.webpage.active.domain || domain }} </span>
+      <template v-if="dataStore.website.active.domain || domain">
+        <span> {{ dataStore.website.active.domain || domain }} </span>
         <button
           class="ml-2"
-          @click="copyToClipboard(`${dataStore.webpage.active.domain || domain}`)"
+          @click="copyToClipboard(`${dataStore.website.active.domain || domain}`)"
         >
           <span class="icon-copy"></span>
         </button>
@@ -37,11 +37,11 @@
     <h4>TXT Record:</h4>
     <p>
       <strong>Hostname: </strong>
-      <template v-if="dataStore.webpage.active.domain || domain">
-        <span> _dnslink.{{ dataStore.webpage.active.domain || domain }} </span>
+      <template v-if="dataStore.website.active.domain || domain">
+        <span> _dnslink.{{ dataStore.website.active.domain || domain }} </span>
         <button
           class="ml-2"
-          @click="copyToClipboard(`_dnslink.${dataStore.webpage.active.domain || domain}`)"
+          @click="copyToClipboard(`_dnslink.${dataStore.website.active.domain || domain}`)"
         >
           <span class="icon-copy"></span>
         </button>

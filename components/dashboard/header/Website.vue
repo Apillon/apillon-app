@@ -5,38 +5,38 @@
         <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
           <span class="icon-back"></span>
         </NuxtLink>
-        <h4>{{ dataStore.webpage.active.name }}</h4>
+        <h4>{{ dataStore.website.active.name }}</h4>
         <div class="text-sm">
           <n-space
-            v-if="dataStore.webpage.active.bucket_uuid"
+            v-if="dataStore.website.active.bucket_uuid"
             align="center"
             size="small"
             :wrap="false"
           >
             <span>{{ $t('storage.bucket.uuid') }}:</span>
             <n-ellipsis class="text-body align-bottom" :line-clamp="1">
-              {{ dataStore.webpage.active.bucket_uuid }}
+              {{ dataStore.website.active.bucket_uuid }}
             </n-ellipsis>
             <button
               class="text-body"
-              @click="copyToClipboard(dataStore.webpage.active.bucket_uuid)"
+              @click="copyToClipboard(dataStore.website.active.bucket_uuid)"
             >
               <span class="icon-copy"></span>
             </button>
           </n-space>
           <n-space
-            v-if="dataStore.webpage.active.webpage_uuid"
+            v-if="dataStore.website.active.website_uuid"
             align="center"
             size="small"
             :wrap="false"
           >
-            <span>{{ $t('hosting.webpage.uuid') }}:</span>
+            <span>{{ $t('hosting.website.uuid') }}:</span>
             <n-ellipsis class="text-body align-bottom" :line-clamp="1">
-              {{ dataStore.webpage.active.webpage_uuid }}
+              {{ dataStore.website.active.website_uuid }}
             </n-ellipsis>
             <button
               class="text-body"
-              @click="copyToClipboard(dataStore.webpage.active.webpage_uuid)"
+              @click="copyToClipboard(dataStore.website.active.website_uuid)"
             >
               <span class="icon-copy"></span>
             </button>

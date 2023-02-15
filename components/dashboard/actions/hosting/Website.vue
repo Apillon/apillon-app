@@ -146,8 +146,8 @@ const showPopoverDelete = ref<boolean>(false);
 const showPopoverDownload = ref<boolean>(false);
 const deploying = ref<boolean>(false);
 
-/** Webpage ID from route */
-const webpageId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
+/** Website ID from route */
+const websiteId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
 
 const isUpload = computed<Boolean>(() => {
   return (
@@ -159,24 +159,24 @@ async function refresh() {
   /** Refresh hosting files */
   dataStore.fetchDirectoryContent();
 
-  /** On tab stg/prod refresh also webpage and deployments */
+  /** On tab stg/prod refresh also website and deployments */
   if (
     props.env === DeploymentEnvironment.STAGING ||
     props.env === DeploymentEnvironment.PRODUCTION
   ) {
     /** Refresh deyployments */
-    dataStore.fetchDeployments(webpageId.value, props.env);
+    dataStore.fetchDeployments(websiteId.value, props.env);
 
-    /** Refresh active webpage data */
-    const webpage = await dataStore.fetchWebpage(webpageId.value);
+    /** Refresh active website data */
+    const website = await dataStore.fetchWebsite(websiteId.value);
 
     /** Show files from staging bucket */
     if (props.env === DeploymentEnvironment.STAGING) {
-      dataStore.bucket.active = webpage.stagingBucket;
-      dataStore.setBucketId(webpage.stagingBucket.id);
+      dataStore.bucket.active = website.stagingBucket;
+      dataStore.setBucketId(website.stagingBucket.id);
     } else {
-      dataStore.bucket.active = webpage.productionBucket;
-      dataStore.setBucketId(webpage.productionBucket.id);
+      dataStore.bucket.active = website.productionBucket;
+      dataStore.setBucketId(website.productionBucket.id);
     }
   }
 }
@@ -277,16 +277,16 @@ function onAllFilesDeleted() {
 async function deployToStaging() {
   deploying.value = true;
 
-  const deployment = await dataStore.deployWebpage(
-    dataStore.webpage.active.id,
+  const deployment = await dataStore.deployWebsite(
+    dataStore.website.active.id,
     DeploymentEnvironment.STAGING
   );
 
   /** After successfull deploy redirect to production tab */
   if (deployment) {
-    dataStore.webpage.deployment.staging = [] as Array<DeploymentInterface>;
+    dataStore.website.deployment.staging = [] as Array<DeploymentInterface>;
     setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${webpageId.value}/staging`);
+      router.push(`/dashboard/service/hosting/${websiteId.value}/staging`);
     }, 1000);
   }
 
@@ -297,16 +297,16 @@ async function deployToStaging() {
 async function deployToProduction() {
   deploying.value = true;
 
-  const deployment = await dataStore.deployWebpage(
-    dataStore.webpage.active.id,
+  const deployment = await dataStore.deployWebsite(
+    dataStore.website.active.id,
     DeploymentEnvironment.PRODUCTION
   );
 
   /** After successfull deploy redirect to production tab */
   if (deployment) {
-    dataStore.webpage.deployment.production = [] as Array<DeploymentInterface>;
+    dataStore.website.deployment.production = [] as Array<DeploymentInterface>;
     setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${webpageId.value}/production`);
+      router.push(`/dashboard/service/hosting/${websiteId.value}/production`);
     }, 1000);
   }
 

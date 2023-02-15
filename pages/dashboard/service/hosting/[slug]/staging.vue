@@ -1,22 +1,22 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderWebpage />
+      <HeaderWebsite />
     </template>
     <slot>
       <template
         v-if="
           dataStore.folder.items.length ||
           dataStore.bucket.active.CID ||
-          dataStore.webpage.deployment.staging.length > 0
+          dataStore.website.deployment.staging.length > 0
         "
       >
         <n-space class="pb-8" :size="32" vertical>
-          <ActionsHostingWebpage :env="DeploymentEnvironment.STAGING" />
+          <ActionsHostingWebsite :env="DeploymentEnvironment.STAGING" />
 
           <!-- IPNS link -->
           <HostingPreviewLink
-            :link="dataStore.webpage.active.ipnsStagingLink || ''"
+            :link="dataStore.website.active.ipnsStagingLink || ''"
             :title="$t('hosting.ipnsLink')"
           />
 
@@ -28,7 +28,7 @@
           /> -->
 
           <!-- Deployments -->
-          <TableHostingDeployment :deployments="dataStore.webpage.deployment.staging" />
+          <TableHostingDeployment :deployments="dataStore.website.deployment.staging" />
 
           <!-- Breadcrumbs -->
           <div>
@@ -70,28 +70,28 @@ useHead({
 });
 
 onMounted(() => {
-  /** Webpage ID from route, then load buckets */
-  const webpageId = parseInt(`${params?.slug}`);
-  dataStore.setWebpageId(webpageId);
+  /** Website ID from route, then load buckets */
+  const websiteId = parseInt(`${params?.slug}`);
+  dataStore.setWebsiteId(websiteId);
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await dataStore.getWebpage(webpageId);
+      const website = await dataStore.getWebsite(websiteId);
 
-      /** Check of webpage exists */
-      if (!webpage?.id) {
+      /** Check of website exists */
+      if (!website?.id) {
         router.push({ name: 'dashboard-service-hosting' });
         return;
       }
-      /** Get deployments for this webpage */
-      await dataStore.getDeployments(webpageId, DeploymentEnvironment.STAGING);
+      /** Get deployments for this website */
+      await dataStore.getDeployments(websiteId, DeploymentEnvironment.STAGING);
       checkUnfinishedDeployments();
 
       /** Show files from staging bucket */
-      dataStore.bucket.active = webpage.stagingBucket;
-      dataStore.setBucketId(webpage.stagingBucket.id);
+      dataStore.bucket.active = website.stagingBucket;
+      dataStore.setBucketId(website.stagingBucket.id);
 
-      if (webpage.bucket.uploadedSize === 0) {
+      if (website.bucket.uploadedSize === 0) {
         dataStore.bucket.uploadActive = true;
       }
       pageLoading.value = false;
@@ -104,7 +104,7 @@ onUnmounted(() => {
 });
 
 function checkUnfinishedDeployments() {
-  const unfinishedDeployment = dataStore.webpage.deployment.staging.find(
+  const unfinishedDeployment = dataStore.website.deployment.staging.find(
     deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL
   );
   if (unfinishedDeployment === undefined) {
@@ -113,7 +113,7 @@ function checkUnfinishedDeployments() {
 
   deploymentInterval = setInterval(async () => {
     const deployment = await dataStore.fetchDeployment(
-      dataStore.webpage.active.id,
+      dataStore.website.active.id,
       unfinishedDeployment.id
     );
     if (unfinishedDeployment.deploymentStatus !== deployment.deploymentStatus) {

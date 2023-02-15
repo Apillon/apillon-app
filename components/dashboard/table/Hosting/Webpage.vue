@@ -3,7 +3,7 @@
     <n-space justify="space-between">
       <div class="w-[20vw] max-w-xs">
         <n-input
-          v-model:value="dataStore.webpage.search"
+          v-model:value="dataStore.website.search"
           type="text"
           name="search"
           size="small"
@@ -17,7 +17,7 @@
       </div>
 
       <n-space size="large">
-        <!-- Refresh webpages -->
+        <!-- Refresh websites -->
         <n-button
           size="small"
           :loading="dataStore.folder.loading"
@@ -48,8 +48,8 @@
         <strong>{{ $t('hosting.domain.preview') }}</strong>
       </div>
       <div class="bg-bg-dark px-4 py-2">
-        <a :href="dataStore.webpage.active.domain" target="_blank">
-          {{ dataStore.webpage.active.domain }}
+        <a :href="dataStore.website.active.domain" target="_blank">
+          {{ dataStore.website.active.domain }}
         </a>
       </div>
     </div>
@@ -60,7 +60,7 @@
       :bordered="false"
       :columns="columns"
       :data="data"
-      :loading="dataStore.webpage.loading"
+      :loading="dataStore.website.loading"
       :pagination="{ pageSize: PAGINATION_LIMIT }"
       :row-key="rowKey"
       :row-props="rowProps"
@@ -72,7 +72,7 @@
 import { NButton } from 'naive-ui';
 
 const props = defineProps({
-  webpageItems: { type: Array<BucketItemInterface>, default: [] },
+  websiteItems: { type: Array<BucketItemInterface>, default: [] },
   env: { type: Number, default: DeploymentEnvironment.PRODUCTION },
 });
 
@@ -81,11 +81,11 @@ const dataStore = useDataStore();
 const deploying = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
 
-/** Data: filtered webpages */
+/** Data: filtered websites */
 const data = computed<Array<BucketItemInterface>>(() => {
   return (
-    props.webpageItems.filter(item =>
-      item.name.toLocaleLowerCase().includes(dataStore.webpage.search.toLocaleLowerCase())
+    props.websiteItems.filter(item =>
+      item.name.toLocaleLowerCase().includes(dataStore.website.search.toLocaleLowerCase())
     ) || []
   );
 });
@@ -131,7 +131,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
 };
 const columns = createColumns();
 const rowKey = (row: BucketItemInterface) => row.id;
-const currentRow = ref<BucketItemInterface>(props.webpageItems[0]);
+const currentRow = ref<BucketItemInterface>(props.websiteItems[0]);
 
 /** On row click */
 const rowProps = (row: BucketItemInterface) => {
@@ -144,7 +144,7 @@ const rowProps = (row: BucketItemInterface) => {
 
 async function deployToProduction() {
   deploying.value = true;
-  await dataStore.deployWebpage(dataStore.webpage.active.id, DeploymentEnvironment.PRODUCTION);
+  await dataStore.deployWebsite(dataStore.website.active.id, DeploymentEnvironment.PRODUCTION);
   deploying.value = false;
 }
 </script>

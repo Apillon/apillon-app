@@ -1,16 +1,16 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderWebpage />
+      <HeaderWebsite />
     </template>
 
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <!-- Actions -->
-        <ActionsHostingWebpage />
+        <ActionsHostingWebsite />
 
         <!-- Upload files -->
-        <FormHostingUploadWebpage :bucket-uuid="dataStore.bucketUuid" />
+        <FormHostingUploadWebsite :bucket-uuid="dataStore.bucketUuid" />
 
         <div>
           <!-- Breadcrumbs -->
@@ -40,26 +40,26 @@ useHead({
 
 onMounted(() => {
   /** Bucket ID from route, then load buckets */
-  const webpageId = parseInt(`${params?.id}`);
-  dataStore.setWebpageId(webpageId);
+  const websiteId = parseInt(`${params?.id}`);
+  dataStore.setWebsiteId(websiteId);
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await dataStore.getWebpage(webpageId);
+      const website = await dataStore.getWebsite(websiteId);
 
-      /** Check of webpage exists */
-      if (!webpage?.id) {
+      /** Check of website exists */
+      if (!website?.id) {
         router.push({ name: 'dashboard-service-hosting' });
         return;
       }
-      /** Get deployments for this webpage */
-      dataStore.getDeployments(webpageId);
+      /** Get deployments for this website */
+      dataStore.getDeployments(websiteId);
 
       /** Show files from main bucket */
-      dataStore.bucket.active = webpage.bucket;
-      dataStore.setBucketId(webpage.bucket.id);
+      dataStore.bucket.active = website.bucket;
+      dataStore.setBucketId(website.bucket.id);
 
-      if (webpage.bucket.uploadedSize === 0) {
+      if (website.bucket.uploadedSize === 0) {
         dataStore.bucket.uploadActive = true;
       }
       pageLoading.value = false;

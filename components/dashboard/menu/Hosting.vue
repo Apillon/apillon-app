@@ -10,17 +10,17 @@ const menuOptions: NMenuOption[] = [
   {
     key: 'dashboard-service-hosting-id',
     label: t('hosting.menu.preview'),
-    path: `/dashboard/service/hosting/${dataStore.webpage.selected}`,
+    path: `/dashboard/service/hosting/${dataStore.website.selected}`,
   },
   {
     key: 'dashboard-service-hosting-slug-staging',
     label: t('hosting.menu.staging'),
-    path: `/dashboard/service/hosting/${dataStore.webpage.selected}/staging`,
+    path: `/dashboard/service/hosting/${dataStore.website.selected}/staging`,
   },
   {
     key: 'dashboard-service-hosting-slug-production',
     label: t('hosting.menu.production'),
-    path: `/dashboard/service/hosting/${dataStore.webpage.selected}/production`,
+    path: `/dashboard/service/hosting/${dataStore.website.selected}/production`,
   },
 ];
 </script>

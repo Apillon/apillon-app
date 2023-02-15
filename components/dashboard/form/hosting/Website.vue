@@ -1,20 +1,20 @@
 <template>
-  <Spinner v-if="webpageId > 0 && !webpage" />
+  <Spinner v-if="websiteId > 0 && !website" />
   <div v-else>
     <!-- Notification - show if qouta has been reached -->
     <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
-      {{ $t('hosting.webpage.quotaReached') }}
+      {{ $t('hosting.website.quotaReached') }}
     </Notification>
     <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="webpageId === 0 && $i18n.te('hosting.webpage.infoNew')" class="text-body mb-8">
-        {{ $t('hosting.webpage.infoNew') }}
+      <p v-if="websiteId === 0 && $i18n.te('hosting.website.infoNew')" class="text-body mb-8">
+        {{ $t('hosting.website.infoNew') }}
       </p>
-      <p v-else-if="webpageId > 0 && $i18n.te('hosting.webpage.infoEdit')" class="text-body mb-8">
-        {{ $t('hosting.webpage.infoEdit') }}
+      <p v-else-if="websiteId > 0 && $i18n.te('hosting.website.infoEdit')" class="text-body mb-8">
+        {{ $t('hosting.website.infoEdit') }}
       </p>
     </template>
 
@@ -25,34 +25,35 @@
       :disabled="isFormDisabled"
       @submit.prevent="handleSubmit"
     >
-      <!--  Webpage name -->
-      <n-form-item path="name" :label="$t('form.label.webpageName')" :label-props="{ for: 'name' }">
+      <!--  Website name -->
+      <n-form-item path="name" :label="$t('form.label.websiteName')" :label-props="{ for: 'name' }">
         <n-input
           v-model:value="formData.name"
           :input-props="{ id: 'name' }"
-          :placeholder="$t('form.placeholder.webpageName')"
+          :placeholder="$t('form.placeholder.websiteName')"
           clearable
+          @keyup.enter="handleSubmit"
         />
       </n-form-item>
 
-      <!--  Webpage description -->
+      <!--  Website description -->
       <n-form-item
         path="description"
-        :label="$t('form.label.webpageDescription')"
+        :label="$t('form.label.websiteDescription')"
         :label-props="{ for: 'description' }"
       >
         <n-input
           v-model:value="formData.description"
           type="textarea"
           :input-props="{ id: 'description' }"
-          :placeholder="$t('form.placeholder.webpageDescription')"
+          :placeholder="$t('form.placeholder.websiteDescription')"
           clearable
         />
       </n-form-item>
 
       <!--  Form submit -->
       <n-form-item>
-        <input type="submit" class="hidden" :value="$t('hosting.webpage.create')" />
+        <input type="submit" class="hidden" :value="$t('hosting.website.create')" />
         <Btn
           type="primary"
           class="w-full mt-2"
@@ -60,11 +61,11 @@
           :disabled="isFormDisabled"
           @click="handleSubmit"
         >
-          <template v-if="webpage">
-            {{ $t('hosting.webpage.update') }}
+          <template v-if="website">
+            {{ $t('hosting.website.update') }}
           </template>
           <template v-else>
-            {{ $t('hosting.webpage.create') }}
+            {{ $t('hosting.website.create') }}
           </template>
         </Btn>
       </n-form-item>
@@ -76,7 +77,7 @@
 import { useMessage } from 'naive-ui';
 
 const props = defineProps({
-  webpageId: { type: Number, default: 0 },
+  websiteId: { type: Number, default: 0 },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
@@ -88,40 +89,40 @@ const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const webpage = ref<WebpageInterface | null>(null);
+const website = ref<WebsiteInterface | null>(null);
 
 onMounted(async () => {
-  if (props.webpageId) {
-    webpage.value = await dataStore.getWebpage(props.webpageId);
-    formData.value.name = webpage.value.name;
-    formData.value.description = webpage.value.description;
+  if (props.websiteId) {
+    website.value = await dataStore.getWebsite(props.websiteId);
+    formData.value.name = website.value.name;
+    formData.value.description = website.value.description;
   }
 });
 
-const formData = ref<FormWebpage>({
-  name: webpage.value?.name || '',
-  description: webpage.value?.description || '',
+const formData = ref<FormWebsite>({
+  name: website.value?.name || '',
+  description: website.value?.description || '',
 });
 
 const rules: NFormRules = {
   name: [
     {
       required: true,
-      message: $i18n.t('validation.webpageNameRequired'),
+      message: $i18n.t('validation.websiteNameRequired'),
       trigger: 'input',
     },
   ],
   description: [
     {
       max: 255,
-      message: $i18n.t('validation.webpageDescriptionTooLong'),
+      message: $i18n.t('validation.websiteDescriptionTooLong'),
       trigger: 'input',
     },
   ],
 };
 
 const isQuotaReached = computed<boolean>(() => {
-  return props.webpageId === 0 && dataStore.webpage.quotaReached === true;
+  return props.websiteId === 0 && dataStore.website.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
@@ -135,15 +136,15 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (props.webpageId > 0) {
-      await updateWebpage();
+    } else if (props.websiteId > 0) {
+      await updateWebsite();
     } else {
-      await createWebpage();
+      await createWebsite();
     }
   });
 }
 
-async function createWebpage() {
+async function createWebsite() {
   loading.value = true;
 
   if (!dataStore.hasProjects) {
@@ -155,15 +156,15 @@ async function createWebpage() {
       ...formData.value,
       project_uuid: dataStore.projectUuid,
     };
-    const res = await $api.post<WebpageResponse>(endpoints.webpage, bodyData);
+    const res = await $api.post<WebsiteResponse>(endpoints.website, bodyData);
 
-    message.success($i18n.t('form.success.created.webpage'));
+    message.success($i18n.t('form.success.created.website'));
 
-    /** On new webpage created add new webpage to list */
-    dataStore.webpage.items.push(res.data);
+    /** On new website created add new website to list */
+    dataStore.website.items.push(res.data);
 
-    /** Reset webpage qouta limit */
-    dataStore.webpage.quotaReached = undefined;
+    /** Reset website qouta limit */
+    dataStore.website.quotaReached = undefined;
 
     /** Emit events */
     emit('submitSuccess');
@@ -177,27 +178,27 @@ async function createWebpage() {
   loading.value = false;
 }
 
-async function updateWebpage() {
+async function updateWebsite() {
   loading.value = true;
 
   try {
-    const res = await $api.patch<WebpageResponse>(
-      endpoints.webpages(props.webpageId),
+    const res = await $api.patch<WebsiteResponse>(
+      endpoints.websites(props.websiteId),
       formData.value
     );
 
-    message.success($i18n.t('form.success.updated.webpage'));
+    message.success($i18n.t('form.success.updated.website'));
 
-    /** On webpage updated refresh webpage data */
-    dataStore.webpage.items.forEach((item: WebpageInterface) => {
-      if (item.id === props.webpageId) {
+    /** On website updated refresh website data */
+    dataStore.website.items.forEach((item: WebsiteInterface) => {
+      if (item.id === props.websiteId) {
         item.name = res.data.name;
         item.description = res.data.description;
       }
     });
-    if (dataStore.webpage.active.id === props.webpageId) {
-      dataStore.webpage.active.name = res.data.name;
-      dataStore.webpage.active.description = res.data.description;
+    if (dataStore.website.active.id === props.websiteId) {
+      dataStore.website.active.name = res.data.name;
+      dataStore.website.active.description = res.data.description;
     }
 
     /** Emit events */

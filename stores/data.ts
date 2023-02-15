@@ -57,22 +57,22 @@ export const useDataStore = defineStore('data', {
     promises: {
       projects: null as any,
       buckets: null as any,
-      webpages: null as any,
+      websites: null as any,
     },
     services: {
       authentication: [] as Array<ServiceInterface>,
       storage: [] as Array<ServiceInterface>,
       computing: [] as Array<ServiceInterface>,
     } as Record<ServiceTypeName, Array<ServiceInterface>>,
-    webpage: {
+    website: {
       deployment: {
         active: {} as DeploymentInterface,
         loading: false,
         production: [] as Array<DeploymentInterface>,
         staging: [] as Array<DeploymentInterface>,
       },
-      active: {} as WebpageInterface,
-      items: [] as Array<WebpageInterface>,
+      active: {} as WebsiteInterface,
+      items: [] as Array<WebsiteInterface>,
       loading: false,
       search: '',
       selected: 0,
@@ -154,25 +154,25 @@ export const useDataStore = defineStore('data', {
         ) !== undefined
       );
     },
-    hasWebpages(state): boolean {
-      return Array.isArray(state.webpage.items) && state.webpage.items.length > 0;
+    hasWebsites(state): boolean {
+      return Array.isArray(state.website.items) && state.website.items.length > 0;
     },
-    hasWebpageItems(state): boolean {
+    hasWebsiteItems(state): boolean {
       return (
-        (Array.isArray(state.webpage.items) && state.webpage.items.length > 0) ||
+        (Array.isArray(state.website.items) && state.website.items.length > 0) ||
         state.folder.selected > 0
       );
     },
     hasProductionDeployments(state): boolean {
       return (
-        Array.isArray(state.webpage.deployment.production) &&
-        state.webpage.deployment.production.length > 0
+        Array.isArray(state.website.deployment.production) &&
+        state.website.deployment.production.length > 0
       );
     },
     hasStagingDeployments(state): boolean {
       return (
-        Array.isArray(state.webpage.deployment.staging) &&
-        state.webpage.deployment.staging.length > 0
+        Array.isArray(state.website.deployment.staging) &&
+        state.website.deployment.staging.length > 0
       );
     },
     getFolderPath(state) {
@@ -205,16 +205,16 @@ export const useDataStore = defineStore('data', {
       this.services.storage = [] as Array<ServiceInterface>;
       this.services.computing = [] as Array<ServiceInterface>;
 
-      /** Webpage */
-      this.webpage.active = {} as WebpageInterface;
-      this.webpage.items = [] as Array<WebpageInterface>;
-      this.webpage.search = '';
-      this.webpage.selected = 0;
-      this.webpage.quotaReached = undefined;
+      /** Website */
+      this.website.active = {} as WebsiteInterface;
+      this.website.items = [] as Array<WebsiteInterface>;
+      this.website.search = '';
+      this.website.selected = 0;
+      this.website.quotaReached = undefined;
 
       /** Deployment */
-      this.webpage.deployment.active = {} as DeploymentInterface;
-      this.webpage.deployment.items = [] as Array<DeploymentInterface>;
+      this.website.deployment.active = {} as DeploymentInterface;
+      this.website.deployment.items = [] as Array<DeploymentInterface>;
     },
 
     setCurrentProject(id: number) {
@@ -250,16 +250,16 @@ export const useDataStore = defineStore('data', {
       sessionStorage.setItem(DataLsKeys.CURRENT_FOLDER_ID, `${id}`);
     },
 
-    setWebpageId(id: number) {
-      if (this.webpage.selected !== id) {
+    setWebsiteId(id: number) {
+      if (this.website.selected !== id) {
         this.folder.items = [] as Array<BucketItemInterface>;
         this.folder.total = 0;
         this.folder.path = [];
         this.folder.selected = 0;
-        this.webpage.selected = id;
-        this.webpage.deployment.active = {} as DeploymentInterface;
-        this.webpage.deployment.staging = [] as Array<DeploymentInterface>;
-        this.webpage.deployment.production = [] as Array<DeploymentInterface>;
+        this.website.selected = id;
+        this.website.deployment.active = {} as DeploymentInterface;
+        this.website.deployment.staging = [] as Array<DeploymentInterface>;
+        this.website.deployment.production = [] as Array<DeploymentInterface>;
         this.folderSearch();
       }
     },
@@ -368,41 +368,41 @@ export const useDataStore = defineStore('data', {
       return await this.fetchBucket(bucketId);
     },
 
-    /** Webpages */
-    async getWebpages() {
-      if (!this.hasWebpages || isCacheExpired(LsCacheKeys.BUCKETS)) {
-        await this.fetchWebpages();
+    /** Websites */
+    async getWebsites() {
+      if (!this.hasWebsites || isCacheExpired(LsCacheKeys.BUCKETS)) {
+        await this.fetchWebsites();
       }
     },
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getWebpage(webpageId: number): Promise<WebpageInterface> {
-      if (this.webpage.active?.id === webpageId && !isCacheExpired(LsCacheKeys.WEBPAGE)) {
-        return this.webpage.active;
+    async getWebsite(websiteId: number): Promise<WebsiteInterface> {
+      if (this.website.active?.id === websiteId && !isCacheExpired(LsCacheKeys.WEBSITE)) {
+        return this.website.active;
       }
-      return await this.fetchWebpage(webpageId);
+      return await this.fetchWebsite(websiteId);
     },
 
     /** Deployments */
     async getDeployments(
-      webpageId: number,
+      websiteId: number,
       env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION
     ) {
       if (env === DeploymentEnvironment.PRODUCTION) {
         if (!this.hasProductionDeployments || isCacheExpired(LsCacheKeys.DEPLOYMENTS_PRODUCTION)) {
-          await this.fetchDeployments(webpageId, env);
+          await this.fetchDeployments(websiteId, env);
         }
       } else if (!this.hasStagingDeployments || isCacheExpired(LsCacheKeys.DEPLOYMENTS_STAGING)) {
-        await this.fetchDeployments(webpageId, env);
+        await this.fetchDeployments(websiteId, env);
       }
     },
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getDeployment(webpageId: number, id: number): Promise<DeploymentInterface> {
-      if (this.webpage.deployment.active?.id === id && !isCacheExpired(LsCacheKeys.DEPLOYMENT)) {
-        return this.webpage.deployment.active;
+    async getDeployment(websiteId: number, id: number): Promise<DeploymentInterface> {
+      if (this.website.deployment.active?.id === id && !isCacheExpired(LsCacheKeys.DEPLOYMENT)) {
+        return this.website.deployment.active;
       }
-      return await this.fetchDeployment(webpageId, id);
+      return await this.fetchDeployment(websiteId, id);
     },
 
     /**
@@ -689,9 +689,9 @@ export const useDataStore = defineStore('data', {
       return fileInfo.toJSON();
     },
 
-    /** Webpages */
-    async fetchWebpages() {
-      this.webpage.loading = true;
+    /** Websites */
+    async fetchWebsites() {
+      this.website.loading = true;
       if (!this.hasProjects) {
         await this.fetchProjects();
       }
@@ -701,60 +701,60 @@ export const useDataStore = defineStore('data', {
           project_uuid: this.projectUuid,
         };
 
-        const req = $api.get<WebpagesResponse>(endpoints.webpages(), params);
-        this.promises.webpages = req;
+        const req = $api.get<WebsitesResponse>(endpoints.websites(), params);
+        this.promises.websites = req;
         const res = await req;
 
-        this.webpage.items = res.data.items;
-        this.webpage.search = '';
+        this.website.items = res.data.items;
+        this.website.search = '';
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.WEBPAGES, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.WEBSITES, Date.now().toString());
       } catch (error: any) {
-        this.promises.webpages = null;
-        this.webpage.items = [] as Array<WebpageInterface>;
+        this.promises.websites = null;
+        this.website.items = [] as Array<WebsiteInterface>;
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
-      this.webpage.loading = false;
+      this.website.loading = false;
     },
 
-    async fetchWebpage(id: number): Promise<WebpageInterface> {
+    async fetchWebsite(id: number): Promise<WebsiteInterface> {
       if (!this.hasProjects) {
         await this.fetchProjects();
       }
       try {
-        const res = await $api.get<WebpageResponse>(endpoints.webpages(id));
+        const res = await $api.get<WebsiteResponse>(endpoints.websites(id));
 
-        this.webpage.active = res.data;
+        this.website.active = res.data;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.WEBPAGE, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.WEBSITE, Date.now().toString());
 
         return res.data;
       } catch (error: any) {
-        this.webpage.active = {} as WebpageInterface;
+        this.website.active = {} as WebsiteInterface;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
-      return {} as WebpageInterface;
+      return {} as WebsiteInterface;
     },
 
-    async fetchWebpageQuota() {
+    async fetchWebsiteQuota() {
       if (!this.hasProjects) {
         await this.fetchProjects();
       }
 
       try {
-        const res = await $api.get<WebpageQuotaResponse>(endpoints.webpageQuota, {
+        const res = await $api.get<WebsiteQuotaResponse>(endpoints.websiteQuota, {
           project_uuid: this.projectUuid,
         });
 
-        this.webpage.quotaReached = res.data;
+        this.website.quotaReached = res.data;
       } catch (error: any) {
-        this.webpage.quotaReached = undefined;
+        this.website.quotaReached = undefined;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
@@ -762,19 +762,19 @@ export const useDataStore = defineStore('data', {
     },
 
     async fetchDeployments(
-      webpageId: number,
+      websiteId: number,
       env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION
     ) {
-      this.webpage.deployment.loading = true;
+      this.website.deployment.loading = true;
       try {
-        const res = await $api.get<DeploymentsResponse>(endpoints.deployments(webpageId), {
+        const res = await $api.get<DeploymentsResponse>(endpoints.deployments(websiteId), {
           environment: env,
         });
 
         if (env === DeploymentEnvironment.PRODUCTION) {
-          this.webpage.deployment.production = res.data.items;
+          this.website.deployment.production = res.data.items;
         } else {
-          this.webpage.deployment.staging = res.data.items;
+          this.website.deployment.staging = res.data.items;
         }
 
         /** Save timestamp to SS */
@@ -785,29 +785,29 @@ export const useDataStore = defineStore('data', {
         sessionStorage.setItem(cacheKey, Date.now().toString());
       } catch (error: any) {
         if (env === DeploymentEnvironment.PRODUCTION) {
-          this.webpage.deployment.production = [] as Array<DeploymentInterface>;
+          this.website.deployment.production = [] as Array<DeploymentInterface>;
         } else {
-          this.webpage.deployment.staging = [] as Array<DeploymentInterface>;
+          this.website.deployment.staging = [] as Array<DeploymentInterface>;
         }
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
-      this.webpage.deployment.loading = false;
+      this.website.deployment.loading = false;
     },
 
-    async fetchDeployment(webpageId: number, id: number): Promise<DeploymentInterface> {
+    async fetchDeployment(websiteId: number, id: number): Promise<DeploymentInterface> {
       try {
-        const res = await $api.get<DeploymentResponse>(endpoints.deployment(webpageId, id));
+        const res = await $api.get<DeploymentResponse>(endpoints.deployment(websiteId, id));
 
-        this.webpage.deployment.active = res.data;
+        this.website.deployment.active = res.data;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.DEPLOYMENT, Date.now().toString());
 
         return res.data;
       } catch (error: any) {
-        this.webpage.deployment.active = {} as DeploymentInterface;
+        this.website.deployment.active = {} as DeploymentInterface;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
@@ -815,8 +815,8 @@ export const useDataStore = defineStore('data', {
       return {} as DeploymentInterface;
     },
 
-    async deployWebpage(
-      webpageId: number,
+    async deployWebsite(
+      websiteId: number,
       env: number = DeploymentEnvironment.STAGING
     ): Promise<DeploymentInterface | null> {
       try {
@@ -826,11 +826,11 @@ export const useDataStore = defineStore('data', {
           environment: env,
         };
         const deployment = await $api.post<DeploymentResponse>(
-          endpoints.webpageDeploy(webpageId),
+          endpoints.websiteDeploy(websiteId),
           params
         );
 
-        window.$message.success(window.$i18n.t('form.success.webpageDeploying'));
+        window.$message.success(window.$i18n.t('form.success.websiteDeploying'));
         return deployment.data;
       } catch (error: any) {
         /** Show error message */

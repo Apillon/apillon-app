@@ -215,16 +215,16 @@ declare global {
   interface WebhookResponse extends GeneralResponse<WebhookInterface> {}
 
   /**
-   * Webpage
+   * Website
    */
-  interface FormWebpage {
+  interface FormWebsite {
     name: string;
     description: string;
   }
-  interface FormWebpageDomain {
+  interface FormWebsiteDomain {
     domain?: string | null;
   }
-  interface WebpageBaseInterface {
+  interface WebsiteBaseInterface {
     id: number;
     status: number;
     project_uuid: string;
@@ -235,10 +235,10 @@ declare global {
     description: string;
     domain: string;
   }
-  interface WebpageInterface {
+  interface WebsiteInterface {
     id: number;
     status: number;
-    webpage_uuid: string;
+    website_uuid: string;
     bucket_uuid: string;
     bucket: BucketInterface;
     stagingBucket: BucketInterface;
@@ -252,7 +252,7 @@ declare global {
   interface DeploymentInterface {
     id: number;
     status: number;
-    webpage_id: number;
+    website_id: number;
     bucket_id: number;
     environment: number;
     deploymentStatus: number;
@@ -261,10 +261,10 @@ declare global {
     number: number | null;
     updateTime?: string;
   }
-  interface WebpageResponse extends GeneralResponse<WebpageInterface> {}
-  interface WebpageUpdateResponse extends GeneralResponse<WebpageInterface> {}
-  interface WebpagesResponse extends GeneralItemsResponse<WebpageInterface> {}
-  interface WebpageQuotaResponse extends GeneralResponse<boolean> {}
+  interface WebsiteResponse extends GeneralResponse<WebsiteInterface> {}
+  interface WebsiteUpdateResponse extends GeneralResponse<WebsiteInterface> {}
+  interface WebsitesResponse extends GeneralItemsResponse<WebsiteInterface> {}
+  interface WebsiteQuotaResponse extends GeneralResponse<boolean> {}
   interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
   interface DeploymentsResponse extends GeneralItemsResponse<DeploymentInterface> {}
 }

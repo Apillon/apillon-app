@@ -5,7 +5,7 @@
     :bordered="false"
     :columns="columns"
     :data="deployments"
-    :loading="dataStore.webpage.deployment.loading"
+    :loading="dataStore.website.deployment.loading"
     :pagination="{ pageSize: PAGINATION_LIMIT }"
     :row-key="rowKey"
   />
