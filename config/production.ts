@@ -7,7 +7,7 @@ const config: ConfigInterface = {
   CHAIN_ID: '0x5',
   captchaKey: 'f5f700a0-51b2-49f3-9ba5-46c7fe146af0',
   githubId: '70d0aa8922fe05268341',
-  publishedFeatures: ['PROJECT', 'PROJECT_ON_STARTUP', 'PROJECT_SETTINGS', 'SERVICES'],
+  publishedFeatures: ['PROJECT', 'PROJECT_ON_STARTUP', 'PROJECT_SETTINGS', 'REFERRAL', 'SERVICES'],
   betaFeatures: ['STORAGE', 'HOSTING'],
 };
 
