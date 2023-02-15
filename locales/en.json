@@ -271,8 +271,8 @@
       "webhookPassword": "Password",
       "webhookUrl": "Webhook URL",
       "webhookUsername": "User name",
-      "webpageDescription": "Webpage description",
-      "webpageName": "Webpage name"
+      "webpageDescription": "Website description",
+      "webpageName": "Website name"
     },
     "networkTypes": {
       "test": "Test network",
@@ -308,8 +308,8 @@
       "webhookPassword": "Enter password",
       "webhookUrl": "Webhook URL",
       "webhookUsername": "Enter user name",
-      "webpageDescription": "Webpage description",
-      "webpageName": "Webpage name"
+      "webpageDescription": "Website description",
+      "webpageName": "Website name"
     },
     "success": {
       "apiKey": "Api key has been created",
@@ -317,20 +317,20 @@
       "profile": "Your profile data has been updated",
       "requestPasswordChange": "We’ve sent you a password reset request to your email",
       "sendAgainEmail": "Email has been re-sent",
-      "webpageDeployed": "Webpage has been deployed.",
+      "webpageDeployed": "Website has been deployed.",
       "webpageDeploying": "Done - deployment initiated",
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
         "bucket": "Bucket has been created",
         "directory": "Directory key has been created",
-        "domain": "Domain has been added to Webpage",
+        "domain": "Domain has been added to Website",
         "file": "File has been created",
         "hosting": "Hosting has been created",
         "item": "Item has been created",
         "userInvite": "User has been invited.",
         "webhook": "Webhook has been created",
-        "webpage": "Webpage has been created"
+        "webpage": "Website has been created"
       },
       "deleted": {
         "apiKey": "Api key has been deleted",
@@ -344,7 +344,7 @@
         "item": "Item has been deleted",
         "items": "Items has been deleted",
         "webhook": "Webhook has been deleted",
-        "webpage": "Webpage has been deleted"
+        "webpage": "Website has been deleted"
       },
       "restored": {
         "bucket": "Bucket has been restored",
@@ -363,7 +363,7 @@
         "project": "Project has been updated",
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated",
-        "webpage": "Webpage has been updated"
+        "webpage": "Website has been updated"
       }
     },
     "terms": {
@@ -410,21 +410,21 @@
     },
     "webpage": {
       "addFirst": "Add first website",
-      "create": "Create webpage",
-      "description": "Webpage description",
+      "create": "Create website",
+      "description": "Website description",
       "domain": "Domain name",
-      "edit": "Edit webpage",
+      "edit": "Edit website",
       "infoNew": "",
       "infoEdit": "",
-      "name": "Webpage name",
-      "new": "New webpage",
+      "name": "Website name",
+      "new": "New website",
       "quotaReached": "Quota has been reached.",
-      "update": "Update webpage",
-      "uuid": "Webpage Uuid"
+      "update": "Update website",
+      "uuid": "Website Uuid"
     },
     "clearAll": "Clear all",
     "clearAllFiles": "Do you want to remove all files?",
-    "clearAllWarn": "With this action you will erase all files. To deploy new version to preview, you will have to upload whole webpage.",
+    "clearAllWarn": "With this action you will erase all files. To deploy new version to preview, you will have to upload whole website.",
     "deployProd": "Deploy to production",
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
@@ -762,7 +762,7 @@
     "webhookRequired": "Please enter Webhook URL",
     "webhookUsernameRequired": "Please enter username",
     "webhookTokenRequired": "Please enter token",
-    "webpageNameRequired": "Please enter Webpage name",
+    "webpageNameRequired": "Please enter Website name",
     "webpageDescriptionTooLong": "Description is too long (max 255 characters)",
     "webpageDomainUrl": "Domain name is not a valid URL"
   },
