@@ -122,6 +122,27 @@ declare global {
   interface FolderResponse extends GeneralItemsResponse<BucketItemInterface> {}
 
   /**
+   * IPNS
+   */
+  interface IpnsInterface {
+    id: number;
+    status: number;
+    name: string;
+    description: string | null;
+    ipnsName: string | null;
+    ipnsValue: string | null;
+    link: string | null;
+    updateTime: string;
+  }
+  interface FormIpns {
+    name: string;
+    description?: string | null;
+  }
+  interface CreateIpnsResponse extends GeneralResponse<IpnsInterface> {}
+  interface UpdateIpnsResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsResponse extends GeneralItemsResponse<IpnsInterface> {}
+
+  /**
    * File
    */
   /** File status */

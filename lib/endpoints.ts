@@ -91,6 +91,13 @@ const Endpoints = {
   storageFilesTrashed: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/trashed-files`;
   },
+  /** IPNS */
+  ipns: (bucketId: number) => {
+    return `/buckets/${bucketId}/ipns`;
+  },
+  ipnsPublish: (bucketId: number, id: number) => {
+    return `/buckets/${bucketId}/ipns/${id}/publish`;
+  },
 
   /** Website */
   website: '/storage/hosting/website',

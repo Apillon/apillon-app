@@ -7,9 +7,11 @@ const bucketStore = useBucketStore();
 
 export const useFileStore = defineStore('file', {
   state: () => ({
+    all: [] as Array<FileUploadInterface>,
     crust: {} as Record<string, AnyJson>,
     items: {} as Record<string, FileDetailsInterface>,
-    all: [] as Array<FileUploadInterface>,
+    loading: false,
+    search: '',
     total: 0,
     trash: [] as Array<BucketItemInterface>,
   }),
@@ -23,10 +25,20 @@ export const useFileStore = defineStore('file', {
   },
   actions: {
     resetData() {
-      this.items = {} as Record<string, FileDetailsInterface>;
       this.all = [] as Array<FileUploadInterface>;
+      this.items = {} as Record<string, FileDetailsInterface>;
+      this.loading = false;
       this.total = 0;
       this.trash = [] as Array<BucketItemInterface>;
+    },
+
+    /**
+     * Fetch wrappers
+     */
+    async getDeletedFiles() {
+      if (!this.hasDeletedFiles || isCacheExpired(LsCacheKeys.FILE_DELETED)) {
+        await this.fetchDeletedFiles();
+      }
     },
     /**
      * API calls
@@ -66,6 +78,31 @@ export const useFileStore = defineStore('file', {
       const fileInfo = await api.query.market.filesV2(cid);
       await api.disconnect();
       return fileInfo.toJSON();
+    },
+
+    /** Fetch deleted files */
+    async fetchDeletedFiles() {
+      this.loading = true;
+
+      try {
+        const res = await $api.get<FolderResponse>(
+          endpoints.storageFilesTrashed(bucketStore.bucketUuid)
+        );
+
+        this.trash = res.data.items;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.FILE_DELETED, Date.now().toString());
+      } catch (error: any) {
+        /** Reset data */
+        this.trash = [];
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+
+      this.search = '';
+      this.loading = false;
     },
   },
 });

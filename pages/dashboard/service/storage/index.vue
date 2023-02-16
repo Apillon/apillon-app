@@ -15,7 +15,7 @@
         </template>
 
         <template #submenu>
-          <MenuStorageManagement />
+          <MenuStorage />
         </template>
       </Heading>
     </template>

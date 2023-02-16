@@ -29,7 +29,7 @@
     </template>
 
     <template #submenu>
-      <MenuBucketManagement />
+      <MenuBucket />
     </template>
   </Heading>
 </template>

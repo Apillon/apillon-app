@@ -637,6 +637,12 @@
       "item": "Download selected item",
       "items": "Download selected items"
     },
+    "ipns": {
+      "name": "Name",
+      "ipnsName": "IPNS name",
+      "ipnsValue": "IPNS value",
+      "title": "IPNS"
+    },
     "file": {
       "confirmUpload": "Confirm your upload",
       "create": "Create file",
