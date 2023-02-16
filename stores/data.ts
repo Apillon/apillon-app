@@ -22,6 +22,7 @@ export const useDataStore = defineStore('data', {
       projects: null as any,
       buckets: null as any,
       websites: null as any,
+      collections: null as any,
     },
     services: {
       authentication: [] as Array<ServiceInterface>,

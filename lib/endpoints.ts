@@ -1,4 +1,7 @@
 const Endpoints = {
+  /**
+   * AUTH
+   */
   /** Auth */
   walletMsg: '/auth/wallet-auth-msg',
   loginWallet: '/auth/loginWallet',
@@ -10,6 +13,10 @@ const Endpoints = {
   validateMail: '/users/validate-email',
   passwordReset: '/users/password-reset',
   passwordResetRequest: '/users/password-reset-request',
+
+  /**
+   * Dashboard
+   */
 
   /** Project */
   projects: '/projects',
@@ -27,19 +34,16 @@ const Endpoints = {
   projectUserRole: (id: number) => {
     return `/projects/user/${id}`;
   },
-
-  /** File */
-  file: (key?: number) => {
-    return key ? `/files/${key}` : '/files';
-  },
-
   /** Services */
   services: '/services/',
-
   /** Instructions */
   instructions: (key?: string) => {
     return key ? `/instructions/${key}` : '/instructions';
   },
+
+  /**
+   * Storage
+   */
 
   /** Bucket */
   buckets: '/buckets/',
@@ -62,6 +66,11 @@ const Endpoints = {
     return id ? `/directories/${id}` : '/directories';
   },
   directoryContent: '/directories/directory-content',
+
+  /** File */
+  file: (key?: number) => {
+    return key ? `/files/${key}` : '/files';
+  },
 
   /** Storage */
   storage: '/storage/',
@@ -92,6 +101,10 @@ const Endpoints = {
     return `/storage/${bucketUuid}/trashed-files`;
   },
 
+  /**
+   * Hosting
+   */
+
   /** Website */
   website: '/storage/hosting/website',
   websites: (id?: number) => {
@@ -109,6 +122,21 @@ const Endpoints = {
   deployments: (websiteId: number) => {
     return `/storage/hosting/websites/${websiteId}/deployments`;
   },
+
+  /**
+   * NFT
+   */
+
+  /** Collection */
+  collection: '/storage/nft/collection',
+  collections: (id?: number) => {
+    return id ? `/storage/nft/collections/${id}` : '/storage/nft/collections';
+  },
+  collectionQuota: `/storage/nft/collections/quota-reached`,
+
+  /**
+   * Project settings
+   */
 
   /** Api Keys */
   apiKey: (key?: number) => {

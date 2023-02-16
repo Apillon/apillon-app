@@ -459,15 +459,38 @@
     "services": "Services",
     "authentication": "Authentication",
     "storage": "Storage",
-    "hosting": "Hosting",
+    "hosting": "NFT collections",
     "computing": "Computing",
     "monitoring": "Monitoring",
+    "nft": "Hosting",
     "analytics": "Analytics",
     "serviceMonitor": "Service monitor",
     "configuration": "Configuration",
     "projectSettings": "Project settings",
     "access": "Access",
     "billing": "Billing"
+  },
+  "nft": {
+    "collection": {
+      "addNew": "Add new collection",
+      "addNewDesc": "Add info",
+      "addNewValue": "Add new value",
+      "empty": "Your project has currently no NFTs",
+      "new": "New NFT collection",
+      "numOfData": "Number of data",
+      "title": "Collection title",
+      "upload": "Upload NFTs",
+      "uploadYourFirst": "Upload your first NFTs and start building your collection."
+    },
+    "upload": {
+      "csvFile": "CSV file",
+      "csvFileDesc": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
+      "images": "Images",
+      "imagesDesc": "",
+      "preview": "Preview upload"
+    },
+    "collectionsEmpty": "Your project has currently no NFT collections",
+    "collectionsCreate": "First create an NFT collection and then start uploading NFTs."
   },
   "onboarding": {
     "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
