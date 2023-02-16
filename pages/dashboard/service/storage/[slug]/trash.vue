@@ -4,7 +4,7 @@
       <HeaderBucket />
     </template>
     <slot>
-      <TableStorageTrash v-if="fileStore.hasDeletedFiles || true" />
+      <TableStorageTrash v-if="fileStore.hasDeletedFiles" />
       <template v-else>
         <div
           class="flex flex-col items-center justify-center px-6 py-4"
