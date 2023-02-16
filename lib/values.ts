@@ -2,7 +2,7 @@ import { DiscreteApiOptions, GlobalThemeOverrides, MessageProviderProps } from '
 import colors from '~~/tailwind.colors';
 
 export const PAGINATION_LIMIT = 20;
-export const CACHE_EXPIRATION_IN_MS = 60 * 1000; // One minute
+export const CACHE_EXPIRATION_IN_MS = 10 * 60 * 1000; // 10 minutes
 export const ON_COLUMN_CLICK_OPEN_CLASS = 'onClickOpen';
 
 export const LsTableColumnsKeys = {
@@ -28,6 +28,8 @@ export const LsCacheKeys = {
   DEPLOYMENTS_STAGING: 'al_cache_deployments_staging',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
+  PROJECT: 'al_cache_project',
+  PROJECTS: 'al_cache_projects',
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
 };

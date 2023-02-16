@@ -21,7 +21,7 @@
       remote
       :bordered="false"
       :columns="columns"
-      :data="dataStore.file.trash"
+      :data="fileStore.trash"
       :loading="loading"
       :pagination="{ pageSize: PAGINATION_LIMIT }"
       :row-props="rowProps"
@@ -36,6 +36,8 @@ import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
+const fileStore = useFileStore();
 const IconFolderFile = resolveComponent('IconFolderFile');
 
 const search = ref<string>('');
@@ -194,7 +196,7 @@ const debouncedSearchFilter = debounce(fetchFiles, 500);
 
 /** Function "Fetch directory content" wrapper  */
 async function getFiles() {
-  if (!dataStore.hasDeletedFiles || isCacheExpired(LsCacheKeys.FILE_DELETED)) {
+  if (!fileStore.hasDeletedFiles || isCacheExpired(LsCacheKeys.FILE_DELETED)) {
     await fetchFiles();
   }
 }
@@ -204,15 +206,17 @@ async function fetchFiles() {
   loading.value = true;
 
   try {
-    const res = await $api.get<FolderResponse>(endpoints.storageFilesTrashed(dataStore.bucketUuid));
+    const res = await $api.get<FolderResponse>(
+      endpoints.storageFilesTrashed(bucketStore.bucketUuid)
+    );
 
-    dataStore.file.trash = res.data.items;
+    fileStore.trash = res.data.items;
 
     /** Save timestamp to SS */
     sessionStorage.setItem(LsCacheKeys.FILE_DELETED, Date.now().toString());
   } catch (error: any) {
     /** Reset data */
-    dataStore.file.trash = [];
+    fileStore.trash = [];
 
     /** Show error message */
     message.error(userFriendlyMsg(error));
@@ -225,11 +229,11 @@ async function fetchFiles() {
  * Restore file
  * */
 async function restore() {
-  dataStore.bucket.loading = true;
+  bucketStore.loading = true;
 
   try {
     const restoredFile = await $api.patch<BucketItemResponse>(
-      endpoints.storageFileRestore(dataStore.bucketUuid, currentRow.value.id)
+      endpoints.storageFileRestore(bucketStore.bucketUuid, currentRow.value.id)
     );
 
     removeTrashedFileFromList(restoredFile.data.id);
@@ -237,10 +241,10 @@ async function restore() {
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));
   }
-  dataStore.bucket.loading = false;
+  bucketStore.loading = false;
 }
 
 function removeTrashedFileFromList(id: number) {
-  dataStore.file.trash = dataStore.file.trash.filter(item => item.id !== id);
+  fileStore.trash = fileStore.trash.filter(item => item.id !== id);
 }
 </script>

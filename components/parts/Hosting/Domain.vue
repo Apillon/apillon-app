@@ -42,12 +42,12 @@
 <script lang="ts" setup>
 const { isLg } = useScreen();
 const { params } = useRoute();
-const dataStore = useDataStore();
+const websiteStore = useWebsiteStore();
 const showModalDomain = ref<boolean>(false);
 const showModalConfiguration = ref<boolean>(false);
 const websiteId = ref<number>(parseInt(`${params?.slug}`));
 
 const domain = computed<string>(() => {
-  return dataStore.website.active.domain;
+  return websiteStore.active.domain;
 });
 </script>

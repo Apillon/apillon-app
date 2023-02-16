@@ -8,7 +8,7 @@
       :bordered="false"
       :columns="columns"
       :data="data"
-      :loading="dataStore.website.loading"
+      :loading="websiteStore.loading"
       :pagination="{ pageSize: PAGINATION_LIMIT }"
       :row-key="rowKey"
       :row-props="rowProps"
@@ -33,7 +33,7 @@ const props = defineProps({
 
 const $i18n = useI18n();
 const router = useRouter();
-const dataStore = useDataStore();
+const websiteStore = useWebsiteStore();
 const settingsStore = useSettingsStore();
 const showModalEditWebsite = ref<boolean>(false);
 
@@ -41,7 +41,7 @@ const showModalEditWebsite = ref<boolean>(false);
 const data = computed<Array<WebsiteInterface>>(() => {
   return (
     props.websites.filter(item =>
-      item.name.toLocaleLowerCase().includes(dataStore.website.search.toLocaleLowerCase())
+      item.name.toLocaleLowerCase().includes(websiteStore.search.toLocaleLowerCase())
     ) || []
   );
 });

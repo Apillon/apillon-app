@@ -1,51 +1,15 @@
 import { defineStore } from 'pinia';
-import { AnyJson } from '@polkadot/types-codec/types';
-import { ApiPromise, WsProvider } from '@polkadot/api';
-import { typesBundleForPolkadot } from '@crustio/type-definitions';
 import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
-import { DeploymentEnvironment } from '~~/types/storage';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_id',
-  CURRENT_FOLDER_ID: 'al_current_folder_id',
 };
 
 export const useDataStore = defineStore('data', {
   state: () => ({
-    bucket: {
-      allowFetch: true,
-      active: {} as BucketInterface,
-      destroyed: [] as Array<BucketInterface>,
-      items: [] as Array<BucketInterface>,
-      loading: false,
-      quotaReached: undefined as Boolean | undefined,
-      search: '',
-      selected: 0,
-      selectedItems: [] as Array<BucketInterface>,
-      total: 0,
-      uploadActive: false,
-      uploadFileList: [] as Array<FileListItemType>,
-    },
-    crust: {} as Record<string, AnyJson>,
     currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
       ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
       : 0,
-    file: {
-      items: {} as Record<string, FileDetailsInterface>,
-      all: [] as Array<FileUploadInterface>,
-      total: 0,
-      trash: [] as Array<BucketItemInterface>,
-    },
-    folder: {
-      allowFetch: true,
-      items: [] as Array<BucketItemInterface>,
-      loading: false,
-      path: [] as Array<{ id: number; name: string }>,
-      search: '',
-      selected: 0,
-      selectedItems: [] as Array<BucketItemInterface>,
-      total: 0,
-    },
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
     project: {
@@ -64,21 +28,6 @@ export const useDataStore = defineStore('data', {
       storage: [] as Array<ServiceInterface>,
       computing: [] as Array<ServiceInterface>,
     } as Record<ServiceTypeName, Array<ServiceInterface>>,
-    website: {
-      deployment: {
-        active: {} as DeploymentInterface,
-        loading: false,
-        production: [] as Array<DeploymentInterface>,
-        staging: [] as Array<DeploymentInterface>,
-      },
-      active: {} as WebsiteInterface,
-      items: [] as Array<WebsiteInterface>,
-      loading: false,
-      search: '',
-      selected: 0,
-      quotaReached: undefined as Boolean | undefined,
-      uploadActive: false,
-    },
   }),
   getters: {
     hasProjects(state) {
@@ -112,109 +61,18 @@ export const useDataStore = defineStore('data', {
     myRoleOnProject(state) {
       return state.project.active.myRole_id_onProject || DefaultUserRole.PROJECT_USER;
     },
-    bucketUuid(state): string {
-      return (
-        state.bucket.active.bucket_uuid ||
-        (
-          state.bucket.items.find((item: BucketInterface) => item.id === state.bucket.selected) ||
-          ({} as BucketInterface)
-        )?.bucket_uuid ||
-        ''
-      );
-    },
-    currentBucket(state): BucketInterface {
-      return (
-        state.bucket.items.find((item: BucketInterface) => item.id === state.bucket.selected) ||
-        ({} as BucketInterface)
-      );
-    },
-    hasBuckets(state): boolean {
-      if (Array.isArray(state.bucket.items) && state.bucket.items.length > 0) {
-        return (
-          state.bucket.items.find(
-            (bucket: BucketInterface) => bucket.bucketType === BucketType.STORAGE
-          ) !== undefined
-        );
-      }
-      return false;
-    },
-    hasBucketItems(state): boolean {
-      return (
-        (Array.isArray(state.folder.items) && state.folder.items.length > 0) ||
-        state.folder.selected > 0
-      );
-    },
-    hasDestroyedBuckets(state): boolean {
-      return Array.isArray(state.bucket.destroyed) && state.bucket.destroyed.length > 0;
-    },
-    hasSelectedBucket(state): boolean {
-      return (
-        state.bucket.items.find(
-          (bucket: BucketInterface) => bucket.id === state.bucket.selected
-        ) !== undefined
-      );
-    },
-    hasWebsites(state): boolean {
-      return Array.isArray(state.website.items) && state.website.items.length > 0;
-    },
-    hasWebsiteItems(state): boolean {
-      return (
-        (Array.isArray(state.website.items) && state.website.items.length > 0) ||
-        state.folder.selected > 0
-      );
-    },
-    hasProductionDeployments(state): boolean {
-      return (
-        Array.isArray(state.website.deployment.production) &&
-        state.website.deployment.production.length > 0
-      );
-    },
-    hasStagingDeployments(state): boolean {
-      return (
-        Array.isArray(state.website.deployment.staging) &&
-        state.website.deployment.staging.length > 0
-      );
-    },
-    getFolderPath(state) {
-      return state.folder.path.map(p => p.name).join('/') || '';
-    },
-    hasFileAll(state): boolean {
-      return Array.isArray(state.file.all) && state.file.all.length > 0;
-    },
-    hasDeletedFiles(state): boolean {
-      return Array.isArray(state.file.trash) && state.file.trash.length > 0;
-    },
   },
   actions: {
     resetData() {
-      /** Bucket */
-      this.bucket.active = {} as BucketInterface;
-      this.bucket.destroyed = [] as Array<BucketInterface>;
-      this.bucket.items = [] as Array<BucketInterface>;
-      this.bucket.quotaReached = undefined;
-      this.bucket.search = '';
-      this.bucket.selected = 0;
-      this.bucket.total = 0;
-
-      /** File/folder */
-      this.file.items = {} as Record<string, FileDetailsInterface>;
-      this.folder.items = [] as Array<BucketItemInterface>;
-
+      /** Project */
+      this.project.active = {} as ProjectInterface;
+      this.project.items = [] as Array<ProjectInterface>;
+      this.project.selected = 0;
+      this.project.quotaReached = undefined as Boolean | undefined;
       /** Services */
       this.services.authentication = [] as Array<ServiceInterface>;
       this.services.storage = [] as Array<ServiceInterface>;
       this.services.computing = [] as Array<ServiceInterface>;
-
-      /** Website */
-      this.website.active = {} as WebsiteInterface;
-      this.website.items = [] as Array<WebsiteInterface>;
-      this.website.search = '';
-      this.website.selected = 0;
-      this.website.quotaReached = undefined;
-
-      /** Deployment */
-      this.website.deployment.active = {} as DeploymentInterface;
-      this.website.deployment.items = [] as Array<DeploymentInterface>;
     },
 
     setCurrentProject(id: number) {
@@ -231,37 +89,6 @@ export const useDataStore = defineStore('data', {
 
       this.currentProjectId = 0;
       localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
-    },
-
-    setBucketId(id: number) {
-      if (this.bucket.selected !== id) {
-        this.file.items = {} as Record<string, FileDetailsInterface>;
-        this.folder.items = [] as Array<BucketItemInterface>;
-        this.folder.total = 0;
-        this.folder.path = [];
-        this.folder.selected = 0;
-        this.bucket.selected = id;
-        this.folderSearch();
-      }
-    },
-
-    setFolderId(id: number) {
-      this.folder.selected = id;
-      sessionStorage.setItem(DataLsKeys.CURRENT_FOLDER_ID, `${id}`);
-    },
-
-    setWebsiteId(id: number) {
-      if (this.website.selected !== id) {
-        this.folder.items = [] as Array<BucketItemInterface>;
-        this.folder.total = 0;
-        this.folder.path = [];
-        this.folder.selected = 0;
-        this.website.selected = id;
-        this.website.deployment.active = {} as DeploymentInterface;
-        this.website.deployment.staging = [] as Array<DeploymentInterface>;
-        this.website.deployment.production = [] as Array<DeploymentInterface>;
-        this.folderSearch();
-      }
     },
 
     updateCurrentProject(project: ProjectInterface) {
@@ -281,37 +108,6 @@ export const useDataStore = defineStore('data', {
       return Array.isArray(this.services[key]) && this.services[key].length > 0;
     },
 
-    folderSearch(search: string = '', fetch: boolean = false) {
-      this.folder.allowFetch = fetch;
-      this.folder.search = search;
-
-      if (!fetch) {
-        setTimeout(() => (this.folder.allowFetch = true), 1000);
-      }
-    },
-
-    onBucketMounted(id: number) {
-      this.setBucketId(id);
-
-      if (!this.hasBuckets) {
-        Promise.all(Object.values(this.promises)).then(_ => {
-          this.fetchBuckets();
-
-          Promise.all(Object.values(this.promises)).then(_ => {
-            this.checkIfBucketExistsElseRedirectHome();
-          });
-        });
-      } else {
-        this.checkIfBucketExistsElseRedirectHome();
-      }
-    },
-    checkIfBucketExistsElseRedirectHome() {
-      if (!this.hasSelectedBucket) {
-        const router = useRouter();
-        router.push({ name: 'dashboard' });
-      }
-    },
-
     hasInstructions(key: string) {
       return (
         key in this.instructions &&
@@ -323,6 +119,19 @@ export const useDataStore = defineStore('data', {
     /**
      * Fetch wrappers
      */
+    async getProjects(redirectToDashboard: boolean = false) {
+      if (!this.hasProjects || isCacheExpired(LsCacheKeys.PROJECTS)) {
+        return await this.fetchProjects(redirectToDashboard);
+      }
+      return this.project.items;
+    },
+
+    async getProject(projectId: number): Promise<ProjectInterface> {
+      if (this.project.active?.id === projectId && !isCacheExpired(LsCacheKeys.PROJECT)) {
+        return this.project.active;
+      }
+      return await this.fetchProject(projectId);
+    },
 
     /** Services */
     async getAllServices() {
@@ -344,67 +153,6 @@ export const useDataStore = defineStore('data', {
       this.services.computing = await this.fetchServices(ServiceType.COPMUTING);
     },
 
-    /** Buckets */
-    async getBuckets(statusDestroyed: boolean = false) {
-      if (
-        (statusDestroyed &&
-          (!this.hasDestroyedBuckets || isCacheExpired(LsCacheKeys.BUCKET_DESTROYED))) ||
-        !this.hasBuckets ||
-        isCacheExpired(LsCacheKeys.BUCKETS)
-      ) {
-        await this.fetchBuckets(statusDestroyed);
-      }
-    },
-
-    /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getBucket(bucketId: number): Promise<BucketInterface> {
-      if (isCacheExpired(LsCacheKeys.BUCKET)) {
-        return await this.fetchBucket(bucketId);
-      }
-      const bucket = this.bucket.items.find(item => item.id === bucketId);
-      if (bucket !== undefined) {
-        return bucket;
-      }
-      return await this.fetchBucket(bucketId);
-    },
-
-    /** Websites */
-    async getWebsites() {
-      if (!this.hasWebsites || isCacheExpired(LsCacheKeys.BUCKETS)) {
-        await this.fetchWebsites();
-      }
-    },
-
-    /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getWebsite(websiteId: number): Promise<WebsiteInterface> {
-      if (this.website.active?.id === websiteId && !isCacheExpired(LsCacheKeys.WEBSITE)) {
-        return this.website.active;
-      }
-      return await this.fetchWebsite(websiteId);
-    },
-
-    /** Deployments */
-    async getDeployments(
-      websiteId: number,
-      env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION
-    ) {
-      if (env === DeploymentEnvironment.PRODUCTION) {
-        if (!this.hasProductionDeployments || isCacheExpired(LsCacheKeys.DEPLOYMENTS_PRODUCTION)) {
-          await this.fetchDeployments(websiteId, env);
-        }
-      } else if (!this.hasStagingDeployments || isCacheExpired(LsCacheKeys.DEPLOYMENTS_STAGING)) {
-        await this.fetchDeployments(websiteId, env);
-      }
-    },
-
-    /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getDeployment(websiteId: number, id: number): Promise<DeploymentInterface> {
-      if (this.website.deployment.active?.id === id && !isCacheExpired(LsCacheKeys.DEPLOYMENT)) {
-        return this.website.deployment.active;
-      }
-      return await this.fetchDeployment(websiteId, id);
-    },
-
     /**
      * API calls
      */
@@ -413,7 +161,9 @@ export const useDataStore = defineStore('data', {
     async fetchProjects(redirectToDashboard: boolean = false) {
       const router = useRouter();
       try {
-        const res = await $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
+        const req = $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
+        this.promises.projects = req;
+        const res = await req;
 
         this.project.items = res.data.items.map((project: ProjectInterface) => {
           return {
@@ -435,8 +185,11 @@ export const useDataStore = defineStore('data', {
           router.push({ name: 'dashboard' });
         }
 
-        return res;
+        return res.data.items;
       } catch (error) {
+        /** Clear promise */
+        this.promises.buckets = null;
+
         this.project.items = [];
 
         /** Show error message */
@@ -445,17 +198,21 @@ export const useDataStore = defineStore('data', {
       return null;
     },
 
-    /** Users */
-    async fetchProject() {
+    async fetchProject(projectId?: number) {
       try {
-        const res = await $api.get<ProjectResponse>(endpoints.project(this.currentProjectId));
+        const res = await $api.get<ProjectResponse>(
+          endpoints.project(projectId || this.currentProjectId)
+        );
         this.project.active = res.data;
+
+        return res.data;
       } catch (error) {
         this.project.active = {} as ProjectInterface;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      return {} as ProjectInterface;
     },
 
     async fetchProjectsQuota() {
@@ -493,350 +250,6 @@ export const useDataStore = defineStore('data', {
         window.$message.error(userFriendlyMsg(error));
       }
       return [] as Array<ServiceInterface>;
-    },
-
-    /** Buckets */
-    async fetchBuckets(statusDeleted: boolean = false) {
-      if (!this.hasProjects) {
-        await this.fetchProjects();
-      }
-      this.bucket.loading = true;
-
-      try {
-        const params: Record<string, string | number> = {
-          project_uuid: this.projectUuid,
-        };
-        if (statusDeleted) {
-          params.status = 8;
-        }
-        const req = $api.get<BucketsResponse>(endpoints.buckets, params);
-        this.promises.buckets = req;
-        const res = await req;
-
-        const items = res.data.items.map((bucket: BucketInterface) => {
-          return addBucketAdditionalData(bucket);
-        });
-
-        if (statusDeleted) {
-          this.bucket.destroyed = items;
-        } else {
-          this.bucket.items = items;
-        }
-        this.bucket.total = res.data.total;
-        this.bucket.loading = false;
-        this.bucket.search = '';
-
-        /** Save timestamp to SS */
-        const cacheKey = statusDeleted ? LsCacheKeys.BUCKET_DESTROYED : LsCacheKeys.BUCKETS;
-        sessionStorage.setItem(cacheKey, Date.now().toString());
-
-        return res;
-      } catch (error: any) {
-        this.promises.buckets = null;
-        if (statusDeleted) {
-          this.bucket.items = [] as Array<BucketInterface>;
-        } else {
-          this.bucket.items = [] as Array<BucketInterface>;
-        }
-        this.bucket.total = 0;
-        this.bucket.loading = false;
-
-        /** Show error message  */
-        window.$message.error(userFriendlyMsg(error));
-      }
-      return null;
-    },
-
-    async fetchBucket(bucketId: number): Promise<BucketInterface> {
-      try {
-        const res = await $api.get<BucketResponse>(endpoints.bucket(bucketId));
-
-        this.bucket.active = addBucketAdditionalData(res.data);
-
-        /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.BUCKET, Date.now().toString());
-
-        return res.data;
-      } catch (error: any) {
-        this.bucket.active = {} as BucketInterface;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-      return {} as BucketInterface;
-    },
-
-    async fetchBucketQuota() {
-      if (!this.hasProjects) {
-        await this.fetchProjects();
-      }
-      const params = {
-        project_uuid: this.projectUuid,
-        bucketType: BucketType.STORAGE,
-      };
-      try {
-        const res = await $api.get<BucketQuotaResponse>(endpoints.bucketsQuota, params);
-
-        this.bucket.quotaReached = res.data;
-      } catch (error: any) {
-        this.bucket.quotaReached = undefined;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-    },
-
-    async fetchDirectoryContent(
-      bucketUuid?: string,
-      folderId?: number,
-      page?: number,
-      limit?: number,
-      search?: string,
-      orderBy?: string,
-      order?: string,
-      markedForDeletion?: boolean
-    ) {
-      this.folder.loading = true;
-
-      /** Fallback for bucketUuid */
-      const bucket = bucketUuid || this.bucketUuid;
-
-      /** Update current folderId */
-      if (folderId) {
-        this.setFolderId(folderId);
-      }
-
-      try {
-        /** If subfolder is selected, search directory content in this sibfolder */
-        const params: Record<string, string | number> = {
-          bucket_uuid: bucket,
-        };
-
-        /** Add additional parameters */
-        if (this.folder.selected > 0) {
-          params.directory_id = this.folder.selected;
-        }
-        if (search) {
-          params.search = search;
-        }
-        if (page) {
-          params.page = page;
-          params.limit = limit || PAGINATION_LIMIT;
-        }
-        if (orderBy) {
-          params.orderBy = orderBy;
-        }
-        if (order) {
-          params.desc = order === 'descend' ? 'true' : 'false';
-        }
-        if (markedForDeletion) {
-          params.markedForDeletion = markedForDeletion ? 1 : 0;
-        }
-
-        const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
-
-        this.folder.items = res.data.items;
-        this.folder.total = res.data.total;
-
-        /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.BUCKET_ITEMS, Date.now().toString());
-      } catch (error: any) {
-        /** Reset data */
-        this.folder.items = [];
-        this.folder.total = 0;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-
-      this.folder.loading = false;
-    },
-
-    async fetchFileInfo(fileId: number) {
-      try {
-        const res = await $api.get<FolderResponse>(endpoints.file(fileId));
-
-        return res.data;
-      } catch (error: any) {
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-      return null;
-    },
-
-    async fetchFileDetails(fileUuidOrCID: string): Promise<FileDetailsInterface> {
-      try {
-        const url = endpoints.storageFileDetails(this.bucketUuid, fileUuidOrCID);
-        const res = await $api.get<FileDetailsResponse>(url);
-
-        return res.data;
-      } catch (error: any) {
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-      return {} as FileDetailsInterface;
-    },
-
-    async fetchFileDetailsFromCrust(cid: string) {
-      const api = new ApiPromise({
-        provider: new WsProvider('wss://rpc.crust.network'),
-        typesBundle: typesBundleForPolkadot,
-      });
-
-      await api.isReadyOrError;
-      const fileInfo = await api.query.market.filesV2(cid);
-      await api.disconnect();
-      return fileInfo.toJSON();
-    },
-
-    /** Websites */
-    async fetchWebsites() {
-      this.website.loading = true;
-      if (!this.hasProjects) {
-        await this.fetchProjects();
-      }
-
-      try {
-        const params: Record<string, string | number> = {
-          project_uuid: this.projectUuid,
-        };
-
-        const req = $api.get<WebsitesResponse>(endpoints.websites(), params);
-        this.promises.websites = req;
-        const res = await req;
-
-        this.website.items = res.data.items;
-        this.website.search = '';
-
-        /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.WEBSITES, Date.now().toString());
-      } catch (error: any) {
-        this.promises.websites = null;
-        this.website.items = [] as Array<WebsiteInterface>;
-
-        /** Show error message  */
-        window.$message.error(userFriendlyMsg(error));
-      }
-      this.website.loading = false;
-    },
-
-    async fetchWebsite(id: number): Promise<WebsiteInterface> {
-      if (!this.hasProjects) {
-        await this.fetchProjects();
-      }
-      try {
-        const res = await $api.get<WebsiteResponse>(endpoints.websites(id));
-
-        this.website.active = res.data;
-
-        /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.WEBSITE, Date.now().toString());
-
-        return res.data;
-      } catch (error: any) {
-        this.website.active = {} as WebsiteInterface;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-      return {} as WebsiteInterface;
-    },
-
-    async fetchWebsiteQuota() {
-      if (!this.hasProjects) {
-        await this.fetchProjects();
-      }
-
-      try {
-        const res = await $api.get<WebsiteQuotaResponse>(endpoints.websiteQuota, {
-          project_uuid: this.projectUuid,
-        });
-
-        this.website.quotaReached = res.data;
-      } catch (error: any) {
-        this.website.quotaReached = undefined;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-    },
-
-    async fetchDeployments(
-      websiteId: number,
-      env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION
-    ) {
-      this.website.deployment.loading = true;
-      try {
-        const res = await $api.get<DeploymentsResponse>(endpoints.deployments(websiteId), {
-          environment: env,
-        });
-
-        if (env === DeploymentEnvironment.PRODUCTION) {
-          this.website.deployment.production = res.data.items;
-        } else {
-          this.website.deployment.staging = res.data.items;
-        }
-
-        /** Save timestamp to SS */
-        const cacheKey =
-          env === DeploymentEnvironment.PRODUCTION
-            ? LsCacheKeys.DEPLOYMENTS_PRODUCTION
-            : LsCacheKeys.DEPLOYMENTS_STAGING;
-        sessionStorage.setItem(cacheKey, Date.now().toString());
-      } catch (error: any) {
-        if (env === DeploymentEnvironment.PRODUCTION) {
-          this.website.deployment.production = [] as Array<DeploymentInterface>;
-        } else {
-          this.website.deployment.staging = [] as Array<DeploymentInterface>;
-        }
-
-        /** Show error message  */
-        window.$message.error(userFriendlyMsg(error));
-      }
-      this.website.deployment.loading = false;
-    },
-
-    async fetchDeployment(websiteId: number, id: number): Promise<DeploymentInterface> {
-      try {
-        const res = await $api.get<DeploymentResponse>(endpoints.deployment(websiteId, id));
-
-        this.website.deployment.active = res.data;
-
-        /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.DEPLOYMENT, Date.now().toString());
-
-        return res.data;
-      } catch (error: any) {
-        this.website.deployment.active = {} as DeploymentInterface;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-      return {} as DeploymentInterface;
-    },
-
-    async deployWebsite(
-      websiteId: number,
-      env: number = DeploymentEnvironment.STAGING
-    ): Promise<DeploymentInterface | null> {
-      try {
-        const config = useRuntimeConfig();
-        const params: Record<string, string | number | boolean | null> = {
-          directDeploy: config.public.ENV === AppEnv.LOCAL,
-          environment: env,
-        };
-        const deployment = await $api.post<DeploymentResponse>(
-          endpoints.websiteDeploy(websiteId),
-          params
-        );
-
-        window.$message.success(window.$i18n.t('form.success.websiteDeploying'));
-        return deployment.data;
-      } catch (error: any) {
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-      return null;
     },
 
     /**

@@ -2,7 +2,7 @@
   <n-space v-bind="$attrs" justify="space-between">
     <div class="w-[20vw] max-w-xs">
       <n-input
-        v-model:value="dataStore.folder.search"
+        v-model:value="bucketStore.folder.search"
         type="text"
         name="search"
         size="small"
@@ -17,22 +17,17 @@
 
     <n-space size="large">
       <!-- Show only if user select files -->
-      <template v-if="dataStore.folder.selectedItems.length > 0">
+      <template v-if="bucketStore.folder.selectedItems.length > 0">
         <!-- Download files -->
-        <n-tooltip :show="showPopoverDownload" placement="bottom">
-          <template #trigger>
-            <n-button
-              class="w-10"
-              size="small"
-              :focus="true"
-              :loading="downloading"
-              @click="downloadSelectedFiles"
-            >
-              <span class="icon-download"></span>
-            </n-button>
-          </template>
-          <span>{{ $t('storage.downloadSelectedFiles') }}</span>
-        </n-tooltip>
+        <n-button
+          class="w-10"
+          size="small"
+          :focus="true"
+          :loading="downloading"
+          @click="downloadSelectedFiles"
+        >
+          <span class="icon-download"></span>
+        </n-button>
 
         <!-- Delete files -->
         <n-tooltip placement="bottom" :show="showPopoverDelete">
@@ -63,13 +58,10 @@
       <!-- Upload files -->
       <n-button
         size="small"
-        :color="dataStore.bucket.uploadActive ? colors.primary : ''"
+        :color="bucketStore.uploadActive ? colors.primary : ''"
         type="primary"
         ghost
-        @click="
-          dataStore.bucket.uploadActive =
-            !dataStore.bucket.uploadActive || !dataStore.hasBucketItems
-        "
+        @click="bucketStore.uploadActive = !bucketStore.uploadActive || !bucketStore.hasBucketItems"
       >
         <span class="icon-upload text-lg mr-2"></span>
         {{ $t('general.upload') }}
@@ -86,91 +78,42 @@
   <ModalDelete v-model:show="showModalDelete" :title="$t(`storage.delete.bucketItems`)">
     <template #content>
       <p class="text-body">
-        {{ $t(`storage.delete.deleteConfirm`, { num: dataStore.folder.selectedItems.length }) }}
+        {{ $t(`storage.delete.deleteConfirm`, { num: bucketStore.folder.selectedItems.length }) }}
       </p>
     </template>
     <slot>
-      <FormDeleteItems :items="dataStore.folder.selectedItems" @submit-success="onDeleted" />
+      <FormDeleteItems :items="bucketStore.folder.selectedItems" @submit-success="onDeleted" />
     </slot>
   </ModalDelete>
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 
-const $i18n = useI18n();
-const message = useMessage();
-const dataStore = useDataStore();
-const downloading = ref<boolean>(false);
+const { downloading, downloadSelectedFiles } = useFile();
+const bucketStore = useBucketStore();
+
 const showModalNewFolder = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
-const showPopoverDownload = ref<boolean>(false);
 
 /** Refresh directory content */
 function refreshDirectoryContent() {
-  dataStore.fetchDirectoryContent();
+  bucketStore.fetchDirectoryContent();
 }
 
 function onFolderCreated() {
   showModalNewFolder.value = false;
 
   /** Refresh directory content */
-  dataStore.fetchDirectoryContent();
-}
-
-/**
- * Download
- */
-async function downloadSelectedFiles() {
-  if (dataStore.folder.selectedItems.length === 0) {
-    showPopoverDownload.value = true;
-
-    setTimeout(() => {
-      showPopoverDownload.value = false;
-    }, 3000);
-    return;
-  }
-
-  const promises: Array<Promise<any>> = [];
-  downloading.value = true;
-
-  dataStore.folder.selectedItems.forEach(async item => {
-    const req = downloadFile(item.CID);
-    promises.push(req);
-    await req;
-  });
-
-  await Promise.all(promises).then(_ => {
-    downloading.value = false;
-  });
-}
-
-/** Download file - get file details and download content from downloadLink */
-async function downloadFile(CID?: string | null) {
-  if (!CID) {
-    console.warn('MISSING File CID!');
-    return;
-  }
-  try {
-    if (!(CID in dataStore.file.items)) {
-      dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
-    }
-    const fileDetails: FileDetails = dataStore.file.items[CID].file;
-    return download(fileDetails.link, fileDetails.name);
-  } catch (error: any) {
-    /** Show error message */
-    message.error($i18n.t('error.fileDownload'));
-  }
-  return null;
+  bucketStore.fetchDirectoryContent();
 }
 
 /**
  * Delete
  */
 function deleteSelectedFiles() {
-  if (dataStore.folder.selectedItems.length === 0) {
+  if (bucketStore.folder.selectedItems.length === 0) {
     showPopoverDelete.value = true;
 
     setTimeout(() => {
@@ -187,10 +130,10 @@ function onDeleted() {
   showModalDelete.value = false;
 
   /** Reset selected items */
-  dataStore.folder.selectedItems = [];
+  bucketStore.folder.selectedItems = [];
 
   setTimeout(() => {
-    dataStore.fetchDirectoryContent();
+    bucketStore.fetchDirectoryContent();
   }, 300);
 }
 </script>

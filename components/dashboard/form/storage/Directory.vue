@@ -46,10 +46,10 @@ const props = defineProps({
   bucketId: { type: Number, default: null },
   parentFolderId: { type: Number, default: null },
 });
+const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
-const dataStore = useDataStore();
-const emit = defineEmits(['submitSuccess']);
+const bucketStore = useBucketStore();
 
 /** Form folder */
 const loading = ref(false);
@@ -74,10 +74,10 @@ const rules: NFormRules = {
 
 /** Computed values - bucketId and parentFolderID (use fallback data from dataStore) */
 const bucketId = computed(() => {
-  return props.bucketId || dataStore.bucket.selected;
+  return props.bucketId || bucketStore.selected;
 });
 const parentFoldertId = computed(() => {
-  return props.parentFolderId || dataStore.folder.selected;
+  return props.parentFolderId || bucketStore.folder.selected;
 });
 
 /** Format credit card */

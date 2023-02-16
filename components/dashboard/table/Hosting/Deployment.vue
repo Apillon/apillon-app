@@ -5,7 +5,7 @@
     :bordered="false"
     :columns="columns"
     :data="deployments"
-    :loading="dataStore.website.deployment.loading"
+    :loading="deploymentStore.loading"
     :pagination="{ pageSize: PAGINATION_LIMIT }"
     :row-key="rowKey"
   />
@@ -17,7 +17,7 @@ defineProps({
 });
 
 const $i18n = useI18n();
-const dataStore = useDataStore();
+const deploymentStore = useDeploymentStore();
 const DeploymentStatus = resolveComponent('DeploymentStatus');
 
 const createColumns = (): NDataTableColumns<DeploymentInterface> => {

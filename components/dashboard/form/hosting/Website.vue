@@ -85,6 +85,7 @@ const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
+const websiteStore = useWebsiteStore();
 const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -93,7 +94,7 @@ const website = ref<WebsiteInterface | null>(null);
 
 onMounted(async () => {
   if (props.websiteId) {
-    website.value = await dataStore.getWebsite(props.websiteId);
+    website.value = await websiteStore.getWebsite(props.websiteId);
     formData.value.name = website.value.name;
     formData.value.description = website.value.description;
   }
@@ -122,7 +123,7 @@ const rules: NFormRules = {
 };
 
 const isQuotaReached = computed<boolean>(() => {
-  return props.websiteId === 0 && dataStore.website.quotaReached === true;
+  return props.websiteId === 0 && websiteStore.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
@@ -161,10 +162,10 @@ async function createWebsite() {
     message.success($i18n.t('form.success.created.website'));
 
     /** On new website created add new website to list */
-    dataStore.website.items.push(res.data);
+    websiteStore.items.push(res.data);
 
     /** Reset website qouta limit */
-    dataStore.website.quotaReached = undefined;
+    websiteStore.quotaReached = undefined;
 
     /** Emit events */
     emit('submitSuccess');
@@ -190,15 +191,15 @@ async function updateWebsite() {
     message.success($i18n.t('form.success.updated.website'));
 
     /** On website updated refresh website data */
-    dataStore.website.items.forEach((item: WebsiteInterface) => {
+    websiteStore.items.forEach((item: WebsiteInterface) => {
       if (item.id === props.websiteId) {
         item.name = res.data.name;
         item.description = res.data.description;
       }
     });
-    if (dataStore.website.active.id === props.websiteId) {
-      dataStore.website.active.name = res.data.name;
-      dataStore.website.active.description = res.data.description;
+    if (websiteStore.active.id === props.websiteId) {
+      websiteStore.active.name = res.data.name;
+      websiteStore.active.description = res.data.description;
     }
 
     /** Emit events */

@@ -20,7 +20,7 @@
       </Heading>
     </template>
     <slot>
-      <TableHosting v-if="dataStore.hasWebsites" :websites="dataStore.website.items" />
+      <TableHosting v-if="websiteStore.hasWebsites" :websites="websiteStore.items" />
       <template v-else>
         <div
           class="flex flex-col items-center justify-center px-6 py-4"
@@ -56,6 +56,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const websiteStore = useWebsiteStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 const showModalNewWebsite = ref<boolean | null>(false);
@@ -67,7 +68,7 @@ useHead({
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await dataStore.getWebsites();
+      await websiteStore.getWebsites();
       getWebsiteQuota();
 
       pageLoading.value = false;
@@ -77,8 +78,8 @@ onMounted(() => {
 
 /** GET Website quota, if current value is null  */
 async function getWebsiteQuota() {
-  if (dataStore.website.quotaReached === undefined) {
-    await dataStore.fetchWebsiteQuota();
+  if (websiteStore.quotaReached === undefined) {
+    await websiteStore.fetchWebsiteQuota();
   }
 }
 
