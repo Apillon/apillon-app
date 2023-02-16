@@ -10,7 +10,6 @@
         v-model:value="formData.name"
         :input-props="{ id: 'folderName' }"
         :placeholder="$t('form.placeholder.folderName')"
-        @keydown.enter.prevent
         @input="handleFolderNameInput"
       />
     </n-form-item>

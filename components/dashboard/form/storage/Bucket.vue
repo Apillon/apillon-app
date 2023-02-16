@@ -109,6 +109,7 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
 const $i18n = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const settingsStore = useSettingsStore();
@@ -201,7 +202,7 @@ async function createBucket() {
   };
 
   try {
-    await $api.post<BucketResponse>(endpoints.buckets, bodyData);
+    const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
 
     message.success($i18n.t('form.success.created.bucket'));
 
@@ -214,6 +215,9 @@ async function createBucket() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess');
+
+    /** Redirect to new web page */
+    router.push(`/dashboard/service/storage/${res.data.id}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
