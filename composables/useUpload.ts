@@ -95,7 +95,7 @@ export default function useUpload() {
       );
 
       if (fileRequests.data) {
-        uploadFilesToS3(fileRequests.data, wrapToDirectory);
+        uploadFilesToS3(fileRequests.data.files, wrapToDirectory);
       } else {
         /** Show warning message - zero files uploaded */
         message.warning($i18n.t('errror.fileUploadStopped'));
@@ -243,6 +243,11 @@ export default function useUpload() {
         bucketStore.active.size += file.size;
       } else {
         bucketStore.active.size = file.size;
+      }
+      if (bucketStore.active?.uploadedSize) {
+        bucketStore.active.uploadedSize += file.size;
+      } else {
+        bucketStore.active.uploadedSize = file.size;
       }
 
       clearInterval(file.progress);
