@@ -25,9 +25,25 @@
 
           <n-space size="large">
             <!-- Refresh files -->
-            <n-button size="small" :loading="ipnsStore.loading" @click="ipnsStore.fetchIpns()">
+            <n-button
+              size="small"
+              :loading="ipnsStore.loading"
+              @click="ipnsStore.fetchIpns(bucketId)"
+            >
               <span class="icon-refresh text-lg mr-2"></span>
               {{ $t('general.refresh') }}
+            </n-button>
+
+            <!-- Create new website -->
+            <n-button
+              v-if="ipnsStore.hasIpns"
+              type="primary"
+              size="small"
+              ghost
+              @click="modalCreateIpnsVisible = true"
+            >
+              <span class="icon-create-folder text-xl mr-2"></span>
+              {{ $t('general.addNew') }}
             </n-button>
           </n-space>
         </n-space>
@@ -35,6 +51,11 @@
         <!-- DataTable: IPNS -->
         <TableStorageIpns />
       </n-space>
+
+      <!-- Modal - New IPNS -->
+      <modal v-model:show="modalCreateIpnsVisible" :title="$t('storage.ipns.new')">
+        <FormStorageIpns @submit-success="modalCreateIpnsVisible = false" />
+      </modal>
     </slot>
   </Dashboard>
 </template>
@@ -46,6 +67,7 @@ const { pageLoading, initBucket } = useStorage();
 
 const { params } = useRoute();
 const bucketId = ref<number>(parseInt(`${params?.slug}`));
+const modalCreateIpnsVisible = ref<boolean>(false);
 
 useHead({
   title: $i18n.t('nav.storage'),

@@ -21,17 +21,22 @@ export const useIpnsStore = defineStore('ipns', {
     /**
      * Fetch wrappers
      */
-    async getIPNSs(bucketId: number) {
+    async getIPNSs(bucketId: number): Promise<Array<IpnsInterface>> {
       if (!this.hasIpns || isCacheExpired(LsCacheKeys.IPNS)) {
         return await this.fetchIpns(bucketId);
       }
       return this.items;
     },
 
+    async getIpnsById(bucketId: number, ipnsId: number): Promise<IpnsInterface | undefined> {
+      const IPNSs = await this.getIPNSs(bucketId);
+      return IPNSs.find(item => item.id === ipnsId);
+    },
+
     /**
      * API calls
      */
-    async fetchIpns(bucketId: number) {
+    async fetchIpns(bucketId: number): Promise<Array<IpnsInterface>> {
       this.loading = true;
 
       try {
@@ -44,7 +49,7 @@ export const useIpnsStore = defineStore('ipns', {
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.IPNS, Date.now().toString());
 
-        return res;
+        return res.data.items;
       } catch (error: any) {
         this.items = [] as Array<IpnsInterface>;
 
@@ -53,7 +58,7 @@ export const useIpnsStore = defineStore('ipns', {
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
-      return null;
+      return [];
     },
   },
 });

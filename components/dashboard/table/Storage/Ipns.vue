@@ -1,5 +1,6 @@
 <template>
   <n-data-table
+    v-bind="$attrs"
     remote
     :bordered="false"
     :columns="columns"
@@ -8,15 +9,30 @@
     :pagination="{ pageSize: PAGINATION_LIMIT }"
     :row-props="rowProps"
   />
+
+  <!-- Modal - Edit IPNS -->
+  <modal v-model:show="modalEditIpnsVisible" :title="$t('storage.ipns.edit')">
+    <FormStorageIpns
+      :ipns-id="currentRow?.id || 0"
+      @submit-success="modalEditIpnsVisible = false"
+    />
+  </modal>
+
+  <!-- Modal - Delete API key -->
+  <ModalDelete v-model:show="modalDeleteIpnsVisible" :title="$t('storage.ipns.delete')">
+    <FormDelete :id="currentRow?.id || 0" type="ipns" @submit-success="onIpnsDeleted" />
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const $i18n = useI18n();
 const ipnsStore = useIpnsStore();
 
 const currentRow = ref<IpnsInterface>({} as IpnsInterface);
+const modalEditIpnsVisible = ref<boolean>(false);
+const modalDeleteIpnsVisible = ref<boolean>(false);
 
 /** Columns */
 const createColumns = (): NDataTableColumns<IpnsInterface> => {
@@ -24,7 +40,11 @@ const createColumns = (): NDataTableColumns<IpnsInterface> => {
     {
       key: 'name',
       title: $i18n.t('storage.ipns.name'),
-      minWidth: 200,
+      minWidth: 100,
+    },
+    {
+      key: 'description',
+      title: $i18n.t('storage.ipns.description'),
     },
     {
       key: 'ipnsName',
@@ -57,9 +77,9 @@ const createColumns = (): NDataTableColumns<IpnsInterface> => {
     },
     {
       key: 'ipnsValue',
-      title: $i18n.t('storage.ipns.ipnsValue'),
+      title: $i18n.t('storage.ipns.link'),
       render(row: IpnsInterface) {
-        if (row.ipnsValue) {
+        if (row.link) {
           return [
             h(
               'div',
@@ -67,13 +87,17 @@ const createColumns = (): NDataTableColumns<IpnsInterface> => {
               {
                 default: () => [
                   h(
-                    NEllipsis,
-                    { class: 'text-body align-bottom', 'line-clamp': 1 },
-                    { default: () => row.ipnsValue }
+                    'a',
+                    { href: row.link, target: '_blank' },
+                    h(
+                      NEllipsis,
+                      { class: 'text-body align-bottom', 'line-clamp': 1 },
+                      { default: () => row.link }
+                    )
                   ),
                   h(
                     'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.ipnsValue || '') },
+                    { class: 'ml-2', onClick: () => copyToClipboard(row.link || '') },
                     h('span', { class: 'icon-copy text-body' }, {})
                   ),
                 ],
@@ -121,12 +145,21 @@ const columns = createColumns();
 /** Dropdown options for files */
 const dropdownOptions = [
   {
-    key: 'restore',
-    label: $i18n.t('general.restore'),
+    label: $i18n.t('general.edit'),
+    key: 'edit',
+    props: {
+      onClick: () => {
+        modalEditIpnsVisible.value = true;
+      },
+    },
+  },
+  {
+    key: 'delete',
+    label: $i18n.t('general.delete'),
     props: {
       class: '!text-pink',
       onClick: () => {
-        restore();
+        modalDeleteIpnsVisible.value = true;
       },
     },
   },
@@ -150,26 +183,10 @@ const data = computed<Array<IpnsInterface>>(() => {
 });
 
 /**
- * Restore file
- * 
-async function restore() {
-  bucketStore.loading = true;
-
-  try {
-    const restoredFile = await $api.patch<BucketItemResponse>(
-      endpoints.storageFileRestore(bucketStore.bucketUuid, currentRow.value.id)
-    );
-
-    removeTrashedFileFromList(restoredFile.data.id);
-    message.success($i18n.t('form.success.restored.file'));
-  } catch (error) {
-    window.$message.error(userFriendlyMsg(error));
-  }
-  bucketStore.loading = false;
+ * Delete Ipns
+ */
+async function onIpnsDeleted() {
+  modalDeleteIpnsVisible.value = false;
+  ipnsStore.items = ipnsStore.items.filter(item => item.id !== currentRow.value.id);
 }
-
-function removeTrashedFileFromList(id: number) {
-  fileStore.trash = fileStore.trash.filter(item => item.id !== id);
-}
-*/
 </script>

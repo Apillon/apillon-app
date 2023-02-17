@@ -138,8 +138,8 @@ declare global {
     name: string;
     description?: string | null;
   }
-  interface CreateIpnsResponse extends GeneralResponse<IpnsInterface> {}
-  interface UpdateIpnsResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsCreateResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsUpdateResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsResponse extends GeneralItemsResponse<IpnsInterface> {}
 
   /**

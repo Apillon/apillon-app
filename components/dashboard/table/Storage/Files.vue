@@ -43,6 +43,14 @@
       </slot>
     </ModalDelete>
 
+    <!-- Modal - Publish IPNS -->
+    <modal v-model:show="modalIpnsPublishVisible" :title="$t('storage.ipns.publish')">
+      <FormStorageIpnsPublish
+        :cid="currentRow.CID"
+        @submit-success="modalIpnsPublishVisible = false"
+      />
+    </modal>
+
     <!-- W3Warn: delete bucket -->
     <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
       {{ $t('w3Warn.file.delete') }}
@@ -65,6 +73,7 @@ const bucketStore = useBucketStore();
 const showModalW3Warn = ref<boolean>(false);
 const showModalDelete = ref<boolean | null>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
+const modalIpnsPublishVisible = ref<boolean>(false);
 const tableRef = ref<NDataTableInst | null>(null);
 const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
@@ -100,6 +109,16 @@ const dropdownFolderOptions = [
     },
   },
   {
+    label: $i18n.t('storage.ipns.pusblish'),
+    key: 'ipns',
+    disabled: !currentRow.value.CID,
+    props: {
+      onClick: () => {
+        modalIpnsPublishVisible.value = true;
+      },
+    },
+  },
+  {
     label: $i18n.t('general.delete'),
     key: 'delete',
     props: {
@@ -127,6 +146,16 @@ const dropdownFileOptions = [
     props: {
       onClick: () => {
         downloadFile(currentRow.value.CID);
+      },
+    },
+  },
+  {
+    label: $i18n.t('storage.ipns.pusblish'),
+    key: 'ipns',
+    disabled: !currentRow.value.CID,
+    props: {
+      onClick: () => {
+        modalIpnsPublishVisible.value = true;
       },
     },
   },
