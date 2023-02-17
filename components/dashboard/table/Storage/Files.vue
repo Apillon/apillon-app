@@ -45,8 +45,8 @@
 
     <!-- Modal - Publish IPNS -->
     <modal v-model:show="modalIpnsPublishVisible" :title="$t('storage.ipns.publish')">
-      <FormStorageIpnsPublish
-        :cid="currentRow.CID"
+      <FormStorageIpnsPublishFile
+        :cid="currentRow?.CID || ''"
         @submit-success="modalIpnsPublishVisible = false"
       />
     </modal>
@@ -63,7 +63,12 @@ import debounce from 'lodash.debounce';
 import { NButton, NDropdown, NEllipsis, NSpace } from 'naive-ui';
 
 const props = defineProps({
-  actions: { type: Boolean, default: true },
+  type: {
+    type: Number,
+    validator: (type: number) =>
+      [TableFilesType.BUCKET, TableFilesType.DEPLOYMENT, TableFilesType.HOSTING].includes(type),
+    default: 0,
+  },
 });
 
 const { downloadFile } = useFile();
@@ -98,85 +103,72 @@ const pagination = computed(() => {
 });
 
 /** Dropdown options for folder and file */
-const dropdownFolderOptions = [
-  {
-    label: $i18n.t('general.open'),
-    key: 'open',
-    props: {
-      onClick: () => {
-        onFolderOpen(currentRow.value);
+const dropdownOptions = (bucketItem: BucketItemInterface) => {
+  return [
+    {
+      label: $i18n.t('general.view'),
+      key: 'view',
+      show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
+      props: {
+        onClick: () => {
+          drawerFileDetailsVisible.value = true;
+        },
       },
     },
-  },
-  {
-    label: $i18n.t('storage.ipns.pusblish'),
-    key: 'ipns',
-    disabled: !currentRow.value.CID,
-    props: {
-      onClick: () => {
-        modalIpnsPublishVisible.value = true;
+    {
+      label: $i18n.t('general.open'),
+      key: 'open',
+      show: bucketItem.type === BucketItemType.DIRECTORY,
+      props: {
+        onClick: () => {
+          onFolderOpen(currentRow.value);
+        },
       },
     },
-  },
-  {
-    label: $i18n.t('general.delete'),
-    key: 'delete',
-    props: {
-      class: '!text-pink',
-      onClick: () => {
-        showModalDelete.value = true;
+    {
+      label: $i18n.t('general.download'),
+      key: 'download',
+      show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
+      props: {
+        onClick: () => {
+          downloadFile(currentRow.value.CID);
+        },
       },
     },
-  },
-];
-
-const dropdownFileOptions = [
-  {
-    label: $i18n.t('general.view'),
-    key: 'view',
-    props: {
-      onClick: () => {
-        drawerFileDetailsVisible.value = true;
+    {
+      label: $i18n.t('storage.ipns.publish'),
+      key: 'ipns',
+      disabled: !bucketItem.CID,
+      show: props.type === TableFilesType.BUCKET,
+      props: {
+        onClick: () => {
+          modalIpnsPublishVisible.value = true;
+        },
       },
     },
-  },
-  {
-    label: $i18n.t('general.download'),
-    key: 'download',
-    props: {
-      onClick: () => {
-        downloadFile(currentRow.value.CID);
+    {
+      label: $i18n.t('general.delete'),
+      key: 'delete',
+      props: {
+        class: '!text-pink',
+        onClick: () => {
+          showModalDelete.value = true;
+        },
       },
     },
-  },
-  {
-    label: $i18n.t('storage.ipns.pusblish'),
-    key: 'ipns',
-    disabled: !currentRow.value.CID,
-    props: {
-      onClick: () => {
-        modalIpnsPublishVisible.value = true;
-      },
-    },
-  },
-  {
-    label: $i18n.t('general.delete'),
-    key: 'delete',
-    props: {
-      class: '!text-pink',
-      onClick: () => {
-        showModalDelete.value = true;
-      },
-    },
-  },
-];
+  ];
+};
 
 /** Available columns - show/hide column */
 const selectedColumns = ref(['name', 'CID', 'link', 'size', 'createTime', 'contentType']);
 const availableColumns = ref([
   { value: 'name', label: $i18n.t('storage.fileName') },
-  { value: 'CID', label: $i18n.t('storage.fileCid') },
-  { value: 'link', label: $i18n.t('storage.downloadLink') },
+  { value: 'CID', label: $i18n.t('storage.fileCid'), hidden: props.type !== TableFilesType.BUCKET },
+  {
+    value: 'link',
+    label: $i18n.t('storage.downloadLink'),
+    hidden: props.type !== TableFilesType.BUCKET,
+  },
   { value: 'size', label: $i18n.t('storage.fileSize') },
   { value: 'createTime', label: $i18n.t('dashboard.created') },
   { value: 'contentType', label: $i18n.t('storage.contentType') },
@@ -187,13 +179,13 @@ const columns = computed(() => {
   return [
     {
       type: 'selection',
-      className: { hidden: props.actions === false },
+      className: { hidden: props.type === TableFilesType.DEPLOYMENT },
     },
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
       className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
-      sorter: props.actions ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       minWidth: 200,
       render(row: BucketItemInterface) {
         return [
@@ -217,8 +209,10 @@ const columns = computed(() => {
     {
       title: $i18n.t('storage.fileCid'),
       key: 'CID',
-      className: { hidden: !selectedColumns.value.includes('CID') },
-      sorter: props.actions ? 'default' : false,
+      className: {
+        hidden: !selectedColumns.value.includes('CID') || props.type !== TableFilesType.BUCKET,
+      },
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [
@@ -248,8 +242,10 @@ const columns = computed(() => {
     {
       title: $i18n.t('storage.downloadLink'),
       key: 'link',
-      className: { hidden: !selectedColumns.value.includes('link') },
-      sorter: props.actions ? 'default' : false,
+      className: {
+        hidden: !selectedColumns.value.includes('link') || props.type !== TableFilesType.BUCKET,
+      },
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [
@@ -284,7 +280,7 @@ const columns = computed(() => {
       title: $i18n.t('storage.fileSize'),
       key: 'size',
       className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('size') }],
-      sorter: props.actions ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
@@ -299,7 +295,7 @@ const columns = computed(() => {
         ON_COLUMN_CLICK_OPEN_CLASS,
         { hidden: !selectedColumns.value.includes('createTime') },
       ],
-      sorter: props.actions ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
         return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
       },
@@ -311,7 +307,7 @@ const columns = computed(() => {
         ON_COLUMN_CLICK_OPEN_CLASS,
         { hidden: !selectedColumns.value.includes('contentType') },
       ],
-      sorter: props.actions ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.contentType) {
           return h('span', {}, row.contentType);
@@ -323,12 +319,12 @@ const columns = computed(() => {
       title: $i18n.t('general.actions'),
       key: 'actions',
       align: 'right',
-      className: ['!py-0', { hidden: props.actions === false }],
+      className: ['!py-0', { hidden: props.type === TableFilesType.DEPLOYMENT }],
       render(row: BucketItemInterface) {
         return h(
           NDropdown,
           {
-            options: row.type === BucketItemType.FILE ? dropdownFileOptions : dropdownFolderOptions,
+            options: dropdownOptions(row),
             trigger: 'click',
           },
           {
@@ -346,7 +342,7 @@ const columns = computed(() => {
       key: 'columns',
       filter: 'default',
       filterOptionValue: null,
-      className: { hidden: props.actions === false },
+      className: { hidden: props.type === TableFilesType.DEPLOYMENT },
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },

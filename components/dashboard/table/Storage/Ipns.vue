@@ -18,6 +18,14 @@
     />
   </modal>
 
+  <!-- Modal - Publish File on IPNS -->
+  <modal v-model:show="modalPublishIpnsVisible" :title="$t('storage.ipns.publish')">
+    <FormStorageIpnsPublish
+      :ipns-id="currentRow?.id || 0"
+      @submit-success="modalPublishIpnsVisible = false"
+    />
+  </modal>
+
   <!-- Modal - Delete API key -->
   <ModalDelete v-model:show="modalDeleteIpnsVisible" :title="$t('storage.ipns.delete')">
     <FormDelete :id="currentRow?.id || 0" type="ipns" @submit-success="onIpnsDeleted" />
@@ -32,6 +40,7 @@ const ipnsStore = useIpnsStore();
 
 const currentRow = ref<IpnsInterface>({} as IpnsInterface);
 const modalEditIpnsVisible = ref<boolean>(false);
+const modalPublishIpnsVisible = ref<boolean>(false);
 const modalDeleteIpnsVisible = ref<boolean>(false);
 
 /** Columns */
@@ -145,11 +154,20 @@ const columns = createColumns();
 /** Dropdown options for files */
 const dropdownOptions = [
   {
-    label: $i18n.t('general.edit'),
     key: 'edit',
+    label: $i18n.t('general.edit'),
     props: {
       onClick: () => {
         modalEditIpnsVisible.value = true;
+      },
+    },
+  },
+  {
+    key: 'publish',
+    label: $i18n.t('storage.ipns.publishFile'),
+    props: {
+      onClick: () => {
+        modalPublishIpnsVisible.value = true;
       },
     },
   },

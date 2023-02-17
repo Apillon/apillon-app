@@ -61,44 +61,44 @@ const loading = ref<boolean>(false);
 const currentRow = ref<FileUploadInterface>({} as FileUploadInterface);
 
 /** File status */
-const fileStatus = ref<number | null>(null);
+const fileStatus = ref<number | undefined>();
 const fileStatuses = ref<Array<NSelectOption>>([
   {
-    value: 1,
+    value: FileUploadRequestFileStatus.SIGNED_URL_FOR_UPLOAD_GENERATED,
     label: $i18n.t(
       `storage.fileStatus.${FileUploadRequestFileStatus.SIGNED_URL_FOR_UPLOAD_GENERATED}`
     ),
   },
   {
-    value: 2,
+    value: FileUploadRequestFileStatus.UPLOADED_TO_S3,
     label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.UPLOADED_TO_S3}`),
   },
   {
-    value: 3,
+    value: FileUploadRequestFileStatus.UPLOADED_TO_IPFS,
     label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.UPLOADED_TO_IPFS}`),
   },
   {
-    value: 4,
+    value: FileUploadRequestFileStatus.PINNED_TO_CRUST,
     label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.PINNED_TO_CRUST}`),
   },
   {
-    value: 5,
+    value: FileUploadRequestFileStatus.UPLOAD_COMPLETED,
     label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.UPLOAD_COMPLETED}`),
   },
   {
-    value: 100,
+    value: FileUploadRequestFileStatus.ERROR_UPLOADING_TO_IPFS,
     label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.ERROR_UPLOADING_TO_IPFS}`),
   },
   {
-    value: 101,
+    value: FileUploadRequestFileStatus.ERROR_PINING_TO_CRUST,
     label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.ERROR_PINING_TO_CRUST}`),
   },
   {
-    value: 102,
+    value: FileUploadRequestFileStatus.ERROR_FILE_NOT_EXISTS_ON_S3,
     label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.ERROR_FILE_NOT_EXISTS_ON_S3}`),
   },
   {
-    value: 103,
+    value: FileUploadRequestFileStatus.ERROR_BUCKET_FULL,
     label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.ERROR_BUCKET_FULL}`),
   },
 ]);
@@ -222,52 +222,8 @@ const debouncedSearchFilter = debounce(getFiles, 500);
 
 /** Function "Fetch directory content" wrapper  */
 async function getFiles(page: number = 1) {
-  await fetchFiles(page, PAGINATION_LIMIT);
+  await fileStore.fetchAllFiles(fileStatus.value, page, PAGINATION_LIMIT);
 
   currentPage.value = page;
-}
-
-async function fetchFiles(page?: number, limit?: number) {
-  loading.value = true;
-
-  try {
-    const bucketUuid = bucketStore.bucketUuid;
-
-    const params: Record<string, string | number> = {
-      bucket_uuid: bucketUuid,
-    };
-
-    /** Add additional parameters */
-    if (search.value) {
-      params.search = search.value;
-    }
-    if (fileStatus.value) {
-      params.fileStatus = fileStatus.value;
-    }
-    if (page) {
-      params.page = page;
-      params.limit = limit || PAGINATION_LIMIT;
-    }
-
-    const res = await $api.get<FileUploadsResponse>(
-      endpoints.storageFileUploads(bucketUuid),
-      params
-    );
-
-    fileStore.all = res.data.items;
-    fileStore.total = res.data.total;
-
-    /** Save timestamp to SS */
-    sessionStorage.setItem(LsCacheKeys.FILE_ALL, Date.now().toString());
-  } catch (error: any) {
-    /** Reset data */
-    fileStore.all = [];
-    fileStore.total = 0;
-
-    /** Show error message */
-    message.error(userFriendlyMsg(error));
-  }
-
-  loading.value = false;
 }
 </script>

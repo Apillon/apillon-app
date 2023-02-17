@@ -31,7 +31,7 @@
             <div class="relative h-8">
               <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
             </div>
-            <TableStorageFiles :actions="false" />
+            <TableStorageFiles :type="TableFilesType.DEPLOYMENT" />
           </div>
         </n-space>
       </template>

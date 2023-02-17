@@ -40,6 +40,7 @@ export const useFileStore = defineStore('file', {
         await this.fetchDeletedFiles();
       }
     },
+
     /**
      * API calls
      */
@@ -78,6 +79,50 @@ export const useFileStore = defineStore('file', {
       const fileInfo = await api.query.market.filesV2(cid);
       await api.disconnect();
       return fileInfo.toJSON();
+    },
+
+    async fetchAllFiles(fileStatus?: number, page?: number, limit?: number) {
+      this.loading = true;
+
+      try {
+        const bucketUuid = bucketStore.bucketUuid;
+
+        const params: Record<string, string | number> = {
+          bucket_uuid: bucketUuid,
+        };
+
+        /** Add additional parameters */
+        if (this.search) {
+          params.search = this.search;
+        }
+        if (fileStatus) {
+          params.fileStatus = fileStatus;
+        }
+        if (page) {
+          params.page = page;
+          params.limit = limit || PAGINATION_LIMIT;
+        }
+
+        const res = await $api.get<FileUploadsResponse>(
+          endpoints.storageFileUploads(bucketUuid),
+          params
+        );
+
+        this.all = res.data.items;
+        this.total = res.data.total;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.FILE_ALL, Date.now().toString());
+      } catch (error: any) {
+        /** Reset data */
+        this.all = [];
+        this.total = 0;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+
+      this.loading = false;
     },
 
     /** Fetch deleted files */

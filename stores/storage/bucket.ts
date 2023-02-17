@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 
 const dataStore = useDataStore();
+const ipnsStore = useIpnsStore();
 
 export const useBucketStore = defineStore('bucket', {
   state: () => ({
@@ -96,6 +97,7 @@ export const useBucketStore = defineStore('bucket', {
         this.folder.path = [];
         this.folder.selected = 0;
         this.folderSearch();
+        ipnsStore.resetData();
       }
     },
 
@@ -105,28 +107,6 @@ export const useBucketStore = defineStore('bucket', {
 
       if (!fetch) {
         setTimeout(() => (this.folder.allowFetch = true), 1000);
-      }
-    },
-
-    onBucketMounted(id: number) {
-      this.setBucketId(id);
-
-      if (!this.hasBuckets) {
-        Promise.all(Object.values(dataStore.promises)).then(_ => {
-          this.fetchBuckets();
-
-          Promise.all(Object.values(dataStore.promises)).then(_ => {
-            this.checkIfBucketExistsElseRedirectHome();
-          });
-        });
-      } else {
-        this.checkIfBucketExistsElseRedirectHome();
-      }
-    },
-    checkIfBucketExistsElseRedirectHome() {
-      if (!this.hasSelectedBucket) {
-        const router = useRouter();
-        router.push({ name: 'dashboard' });
       }
     },
 
