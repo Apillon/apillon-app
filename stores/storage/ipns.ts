@@ -5,6 +5,7 @@ export const useIpnsStore = defineStore('ipns', {
     items: [] as Array<IpnsInterface>,
     loading: false,
     search: '',
+    total: 0,
   }),
   getters: {
     hasIpns(state): boolean {
@@ -16,12 +17,13 @@ export const useIpnsStore = defineStore('ipns', {
       /** Ipns */
       this.items = [] as Array<IpnsInterface>;
       this.search = '';
+      this.total = 0;
     },
 
     /**
      * Fetch wrappers
      */
-    async getIPNSs(bucketId: number): Promise<Array<IpnsInterface>> {
+    async getIPNSs(bucketId: number): Promise<IpnsInterface[]> {
       if (!this.hasIpns || isCacheExpired(LsCacheKeys.IPNS)) {
         return await this.fetchIpns(bucketId);
       }
@@ -36,13 +38,14 @@ export const useIpnsStore = defineStore('ipns', {
     /**
      * API calls
      */
-    async fetchIpns(bucketId: number): Promise<Array<IpnsInterface>> {
+    async fetchIpns(bucketId: number): Promise<IpnsInterface[]> {
       this.loading = true;
 
       try {
-        const res = await $api.get<IpnsResponse>(endpoints.ipns(bucketId));
+        const res = await $api.get<IpnsResponse>(endpoints.ipns(bucketId), PARAMS_ALL_ITEMS);
 
         this.items = res.data.items;
+        this.total = res.data.total;
         this.loading = false;
         this.search = '';
 
@@ -52,6 +55,7 @@ export const useIpnsStore = defineStore('ipns', {
         return res.data.items;
       } catch (error: any) {
         this.items = [] as Array<IpnsInterface>;
+        this.total = 0;
 
         this.loading = false;
 

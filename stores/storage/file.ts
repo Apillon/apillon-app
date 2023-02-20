@@ -16,7 +16,7 @@ export const useFileStore = defineStore('file', {
     trash: [] as Array<BucketItemInterface>,
   }),
   getters: {
-    hasFileAll(state): boolean {
+    hasAllFiles(state): boolean {
       return Array.isArray(state.all) && state.all.length > 0;
     },
     hasDeletedFiles(state): boolean {
@@ -35,6 +35,11 @@ export const useFileStore = defineStore('file', {
     /**
      * Fetch wrappers
      */
+    async getAllFiles() {
+      if (!this.hasAllFiles || isCacheExpired(LsCacheKeys.FILE_ALL)) {
+        await this.fetchAllFiles();
+      }
+    },
     async getDeletedFiles() {
       if (!this.hasDeletedFiles || isCacheExpired(LsCacheKeys.FILE_DELETED)) {
         await this.fetchDeletedFiles();
@@ -107,6 +112,7 @@ export const useFileStore = defineStore('file', {
           endpoints.storageFileUploads(bucketUuid),
           params
         );
+        this.loading = false;
 
         this.all = res.data.items;
         this.total = res.data.total;
@@ -121,7 +127,6 @@ export const useFileStore = defineStore('file', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
-
       this.loading = false;
     },
 
@@ -131,7 +136,8 @@ export const useFileStore = defineStore('file', {
 
       try {
         const res = await $api.get<FolderResponse>(
-          endpoints.storageFilesTrashed(bucketStore.bucketUuid)
+          endpoints.storageFilesTrashed(bucketStore.bucketUuid),
+          PARAMS_ALL_ITEMS
         );
 
         this.trash = res.data.items;

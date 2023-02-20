@@ -1,7 +1,6 @@
 <template>
   <n-data-table
     v-bind="$attrs"
-    remote
     :bordered="false"
     :columns="columns"
     :data="data"
@@ -15,14 +14,6 @@
     <FormStorageIpns
       :ipns-id="currentRow?.id || 0"
       @submit-success="modalEditIpnsVisible = false"
-    />
-  </modal>
-
-  <!-- Modal - Publish File on IPNS -->
-  <modal v-model:show="modalPublishIpnsVisible" :title="$t('storage.ipns.publish')">
-    <FormStorageIpnsPublish
-      :ipns-id="currentRow?.id || 0"
-      @submit-success="modalPublishIpnsVisible = false"
     />
   </modal>
 
@@ -40,7 +31,6 @@ const ipnsStore = useIpnsStore();
 
 const currentRow = ref<IpnsInterface>({} as IpnsInterface);
 const modalEditIpnsVisible = ref<boolean>(false);
-const modalPublishIpnsVisible = ref<boolean>(false);
 const modalDeleteIpnsVisible = ref<boolean>(false);
 
 /** Columns */
@@ -159,15 +149,6 @@ const dropdownOptions = [
     props: {
       onClick: () => {
         modalEditIpnsVisible.value = true;
-      },
-    },
-  },
-  {
-    key: 'publish',
-    label: $i18n.t('storage.ipns.publishFile'),
-    props: {
-      onClick: () => {
-        modalPublishIpnsVisible.value = true;
       },
     },
   },

@@ -45,7 +45,7 @@
 
     <!-- Modal - Publish IPNS -->
     <modal v-model:show="modalIpnsPublishVisible" :title="$t('storage.ipns.publish')">
-      <FormStorageIpnsPublishFile
+      <FormStorageIpnsPublish
         :cid="currentRow?.CID || ''"
         @submit-success="modalIpnsPublishVisible = false"
       />
@@ -92,7 +92,7 @@ const currentRowType = computed<string>(() => {
 });
 
 /** Pagination data */
-const currentPage = ref<number>(0);
+const currentPage = ref<number>(1);
 const pagination = computed(() => {
   return {
     page: currentPage.value,

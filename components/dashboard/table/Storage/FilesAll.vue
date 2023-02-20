@@ -44,13 +44,10 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
-import { useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
-const message = useMessage();
 const dataStore = useDataStore();
 const fileStore = useFileStore();
-const bucketStore = useBucketStore();
 const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
@@ -107,7 +104,7 @@ async function handleFilesStatusChange() {
 }
 
 /** Pagination data */
-const currentPage = ref<number>(0);
+const currentPage = ref<number>(1);
 const pagination = computed(() => {
   return {
     page: currentPage.value,
@@ -191,9 +188,7 @@ function onItemOpen(row: FileUploadInterface) {
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      if (!fileStore.hasFileAll || isCacheExpired(LsCacheKeys.FILE_ALL)) {
-        await getFiles();
-      }
+      fileStore.getAllFiles();
     });
   }, 100);
 });

@@ -1,4 +1,4 @@
-export default function useScreen() {
+export default function useStore() {
   const dataStore = useDataStore();
   const bucketStore = useBucketStore();
   const fileStore = useFileStore();

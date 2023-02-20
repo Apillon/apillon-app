@@ -1,4 +1,4 @@
-export default function useScreen() {
+export default function useStorage() {
   const router = useRouter();
   const { name, params } = useRoute();
   const dataStore = useDataStore();

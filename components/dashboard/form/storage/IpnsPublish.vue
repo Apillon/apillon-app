@@ -1,17 +1,17 @@
 <template>
-  <Spinner v-if="fileStore.loading" />
-  <div v-else>
-    <div v-if="fileStore.all.length">
+  <Spinner v-if="ipnsStore.loading" />
+  <div v-else class="mb-8">
+    <div v-if="ipnsStore.hasIpns">
       <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
         <n-form-item
           path="file"
-          :label="$t('storage.ipns.selectFile')"
+          :label="$t('storage.ipns.selectIpns')"
           :label-props="{ for: 'file' }"
         >
           <select-options
-            v-model:value="formData.file"
-            :options="files"
-            :placeholder="$t('storage.ipns.selectFile')"
+            v-model:value="formData.ipns"
+            :options="ipnsItems"
+            :placeholder="$t('storage.ipns.selectIpns')"
             filterable
             clearable
           />
@@ -25,8 +25,26 @@
           </Btn>
         </n-form-item>
       </n-form>
+
+      <div class="mb-8 flex items-center">
+        <span class="bg-white h-[1px] w-full"></span>
+        <strong class="inline-block px-5 mx-[8%] text-body whitespace-nowrap">
+          {{ $t('storage.ipns.orCreateNew') }}
+        </strong>
+        <span class="bg-white h-[1px] w-full"></span>
+      </div>
     </div>
-    <div v-else>No files</div>
+    <div v-else>
+      <h4 class="text-center mt-8 mb-4">{{ $t('storage.ipns.createFirst') }}</h4>
+    </div>
+    <Btn type="secondary" size="large" @click="modalCreateIpnsVisible = true">
+      {{ $t('storage.ipns.create') }}
+    </Btn>
+
+    <!-- Modal - New IPNS -->
+    <modal v-model:show="modalCreateIpnsVisible" :title="$t('storage.ipns.new')">
+      <FormStorageIpns @submit-success="modalCreateIpnsVisible = false" />
+    </modal>
   </div>
 </template>
 
@@ -34,40 +52,39 @@
 import { useMessage } from 'naive-ui';
 
 const props = defineProps({
-  ipnsId: { type: Number, required: true },
+  cid: { type: String, required: true },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
 const $i18n = useI18n();
 const bucketStore = useBucketStore();
-const fileStore = useFileStore();
 const ipnsStore = useIpnsStore();
 
 const loading = ref(false);
 const modalCreateIpnsVisible = ref<boolean>(false);
 
 const formRef = ref<NFormInst | null>(null);
-const formData = ref<FormIpnsPublishFile>({
-  file: '',
+const formData = ref<FormIpnsPublish>({
+  ipns: undefined,
 });
 const rules: NFormRules = {
-  file: [
+  ipns: [
     {
       required: true,
-      message: $i18n.t('validation.fileRequired'),
+      message: $i18n.t('validation.ipnsRequired'),
     },
   ],
 };
 
-const files = fileStore.all
-  .filter(item => !!item.CID)
-  .map(item => {
-    return { label: item.fileName, value: item.CID };
+const ipnsItems = computed<Array<NSelectOption>>(() => {
+  return ipnsStore.items.map(item => {
+    return { label: item.name, value: item.id };
   });
+});
 
 onMounted(async () => {
-  await fileStore.fetchAllFiles(FileUploadRequestFileStatus.UPLOAD_COMPLETED);
+  await ipnsStore.getIPNSs(bucketStore.selected);
 });
 
 function handleSubmit(e: Event | MouseEvent) {
@@ -77,8 +94,10 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
+    } else if (formData.value.ipns) {
+      publishToIpns(formData.value.ipns);
     } else {
-      publishToIpns(props.ipnsId);
+      message.warning($i18n.t('validation.ipnsRequired'));
     }
   });
 }
@@ -89,16 +108,17 @@ async function publishToIpns(ipnsId: number) {
   try {
     const res = await $api.post<IpnsPublishResponse>(
       endpoints.ipnsPublish(bucketStore.selected, ipnsId),
-      { cid: formData.value?.file }
+      { cid: props.cid }
     );
 
-    message.success($i18n.t('form.success.created.ipns'));
+    message.success($i18n.t('form.success.ipnsPublished'));
 
     /** On  ipns publish, update data */
     ipnsStore.items.forEach(ipns => {
       if (ipns.id === res.data.id) {
         ipns.ipnsName = res.data.ipnsName;
         ipns.ipnsValue = res.data.ipnsValue;
+        ipns.link = res.data.link;
       }
     });
 

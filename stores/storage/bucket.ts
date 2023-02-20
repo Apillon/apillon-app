@@ -56,7 +56,8 @@ export const useBucketStore = defineStore('bucket', {
     hasBucketItems(state): boolean {
       return (
         (Array.isArray(state.folder.items) && state.folder.items.length > 0) ||
-        state.folder.selected > 0
+        state.folder.selected > 0 ||
+        state.folder.loading
       );
     },
     hasDestroyedBuckets(state): boolean {
@@ -156,6 +157,7 @@ export const useBucketStore = defineStore('bucket', {
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
+          ...PARAMS_ALL_ITEMS,
         };
         if (statusDeleted) {
           params.status = 8;

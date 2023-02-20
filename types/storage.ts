@@ -143,8 +143,8 @@ declare global {
     name: string;
     description?: string | null;
   }
-  interface FormIpnsPublishFile {
-    file: string;
+  interface FormIpnsPublish {
+    ipns?: number;
   }
   interface IpnsCreateResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsUpdateResponse extends GeneralResponse<IpnsInterface> {}
