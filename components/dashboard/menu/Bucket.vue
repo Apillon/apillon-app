@@ -23,6 +23,11 @@ const menuOptions: NMenuOption[] = [
     path: `/dashboard/service/storage/${bucketStore.selected}/webhook`,
   },
   {
+    key: 'dashboard-service-storage-slug-ipns',
+    label: t('storage.ipns.title'),
+    path: `/dashboard/service/storage/${bucketStore.selected}/ipns`,
+  },
+  {
     key: 'dashboard-service-storage-slug-trash',
     label: t('storage.trash'),
     path: `/dashboard/service/storage/${bucketStore.selected}/trash`,

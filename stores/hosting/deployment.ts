@@ -60,6 +60,7 @@ export const useDeploymentStore = defineStore('deployment', {
       try {
         const res = await $api.get<DeploymentsResponse>(endpoints.deployments(websiteId), {
           environment: env,
+          ...PARAMS_ALL_ITEMS,
         });
 
         if (env === DeploymentEnvironment.PRODUCTION) {

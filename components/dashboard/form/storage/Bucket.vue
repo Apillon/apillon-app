@@ -138,7 +138,6 @@ const rules: NFormRules = {
     {
       required: true,
       message: $i18n.t('validation.bucketNameRequired'),
-      trigger: 'input',
     },
   ],
   bucketDescription: [
