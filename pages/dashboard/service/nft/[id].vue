@@ -1,27 +1,13 @@
 <template>
   <Dashboard :loading="false">
     <template #heading>
-      <HeaderWebsite />
+      <HeaderCollection />
     </template>
 
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <!-- Actions -->
-        <ActionsHostingWebsite />
-
-        <!-- Upload files -->
-        <FormHostingUploadWebsite :bucket-uuid="bucketStore.bucketUuid" />
-
-        <div>
-          <!-- Breadcrumbs -->
-          <div class="relative h-8">
-            <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
-          </div>
-          <!-- DataTable: files and directories -->
-          <transition name="fade" appear>
-            <TableStorageFiles />
-          </transition>
-        </div>
+        <ActionsNftCollection />
       </n-space>
     </slot>
   </Dashboard>
@@ -29,11 +15,25 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
-const bucketStore = useBucketStore();
+const router = useRouter();
+const { params } = useRoute();
+const collectionStore = useCollectionStore();
+
+/** Website ID from route */
+const collectionId = ref<number>(parseInt(`${params?.slug}`) || 0);
 
 useHead({
   title: $i18n.t('nav.hosting'),
 });
 
-onMounted(() => {});
+onMounted(async () => {
+  const collections = await collectionStore.getCollections();
+  const currentCollection = collections.find(item => item.id === collectionId.value);
+
+  if (!currentCollection) {
+    router.push({ name: 'dashboard-service-nft' });
+  } else {
+    collectionStore.active = currentCollection;
+  }
+});
 </script>

@@ -133,13 +133,23 @@ const Endpoints = {
   /**
    * NFT
    */
+  nftCheckTransactionsStatus: '/nfts/check-transactions-status',
+  nftTransferOwnership: (collectionUuid?: string) => {
+    return `/nfts/${collectionUuid}/transferOwnership`;
+  },
+  nftMint: (collectionUuid?: string) => {
+    return `/nfts/${collectionUuid}/mint`;
+  },
+  nftSetBaseUri: (collectionUuid?: string) => {
+    return `/nfts/${collectionUuid}/setBaseUri`;
+  },
 
   /** Collection */
-  collection: '/storage/nft/collection',
-  collections: (id?: number) => {
-    return id ? `/storage/nft/collections/${id}` : '/storage/nft/collections';
+  collection: '/nfts/collection',
+  collections: '/nfts/collections',
+  collectionTransactions: (collectionUuid?: string) => {
+    return `/nfts/collections/${collectionUuid}/transactions`;
   },
-  collectionQuota: `/storage/nft/collections/quota-reached`,
 
   /**
    * Project settings

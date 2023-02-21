@@ -42,6 +42,15 @@
   }
 }
 
+.icon-image:before {
+  content: '\e944';
+}
+.icon-NFTs:before {
+  content: '\e945';
+}
+.icon-docs:before {
+  content: '\e943';
+}
 .icon-deploy:before {
   content: '\e939';
 }

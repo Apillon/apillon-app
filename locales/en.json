@@ -470,20 +470,20 @@
     "withEmail": "login with email"
   },
   "nav": {
-    "projectOverview": "Project overview",
-    "services": "Services",
-    "authentication": "Authentication",
-    "storage": "Storage",
-    "hosting": "NFT collections",
-    "computing": "Computing",
-    "monitoring": "Monitoring",
-    "nft": "Hosting",
-    "analytics": "Analytics",
-    "serviceMonitor": "Service monitor",
-    "configuration": "Configuration",
-    "projectSettings": "Project settings",
     "access": "Access",
-    "billing": "Billing"
+    "analytics": "Analytics",
+    "authentication": "Authentication",
+    "billing": "Billing",
+    "computing": "Computing",
+    "configuration": "Configuration",
+    "hosting": "Hosting",
+    "monitoring": "Monitoring",
+    "nft": "dApps",
+    "projectOverview": "Project overview",
+    "projectSettings": "Project settings",
+    "services": "Services",
+    "serviceMonitor": "Service monitor",
+    "storage": "Storage"
   },
   "nft": {
     "collection": {

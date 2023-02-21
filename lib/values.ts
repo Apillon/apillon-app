@@ -303,6 +303,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     textColor: colors.white,
     textColorDisabled: colors.bodyDark,
   },
+  InputNumber: {},
   Layout: {
     textColor: colors.white,
     siderBorderColor: colors.bg.lighter,

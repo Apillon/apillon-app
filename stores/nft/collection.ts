@@ -7,9 +7,10 @@ export const useCollectionStore = defineStore('collection', {
     active: {} as CollectionInterface,
     items: [] as Array<CollectionInterface>,
     loading: false,
+    quotaReached: undefined as Boolean | undefined,
     search: '',
     selected: 0,
-    quotaReached: undefined as Boolean | undefined,
+    total: 0,
     uploadActive: false,
   }),
   getters: {
@@ -37,10 +38,11 @@ export const useCollectionStore = defineStore('collection', {
     /**
      * Fetch wrappers
      */
-    async getCollections() {
+    async getCollections(): Promise<CollectionInterface[]> {
       if (!this.hasCollections || isCacheExpired(LsCacheKeys.COLLECTIONS)) {
-        await this.fetchCollections();
+        return await this.fetchCollections();
       }
+      return this.items;
     },
 
     async getCollection(collectionId: number): Promise<CollectionInterface> {
@@ -49,11 +51,16 @@ export const useCollectionStore = defineStore('collection', {
       }
       return await this.fetchCollection(collectionId);
     },
+    async getCollectionQuota() {
+      if (this.quotaReached === undefined) {
+        await this.fetchCollectionQuota();
+      }
+    },
 
     /**
      * API calls
      */
-    async fetchCollections() {
+    async fetchCollections(): Promise<CollectionInterface[]> {
       this.loading = true;
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -62,26 +69,34 @@ export const useCollectionStore = defineStore('collection', {
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
+          ...PARAMS_ALL_ITEMS,
         };
 
-        const req = $api.get<CollectionsResponse>(endpoints.collections(), params);
+        const req = $api.get<CollectionsResponse>(endpoints.collections, params);
         dataStore.promises.collections = req;
         const res = await req;
 
         this.items = res.data.items;
+        this.total = res.data.total;
         this.search = '';
+        this.loading = false;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.WEBSITES, Date.now().toString());
+
+        return res.data.items;
       } catch (error: any) {
         /** Clear promise */
         dataStore.promises.collections = null;
         this.items = [] as Array<CollectionInterface>;
+        this.total = 0;
+        this.loading = false;
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
-      this.loading = false;
+
+      return [];
     },
 
     async fetchCollection(id: number): Promise<CollectionInterface> {
@@ -89,7 +104,7 @@ export const useCollectionStore = defineStore('collection', {
         await dataStore.fetchProjects();
       }
       try {
-        const res = await $api.get<CollectionResponse>(endpoints.collections(id));
+        const res = await $api.get<CollectionResponse>(endpoints.collections);
 
         this.active = res.data;
 
@@ -112,7 +127,7 @@ export const useCollectionStore = defineStore('collection', {
       }
 
       try {
-        const res = await $api.get<CollectionQuotaResponse>(endpoints.collectionQuota, {
+        const res = await $api.get<CollectionQuotaResponse>(endpoints.collection, {
           project_uuid: dataStore.projectUuid,
         });
 

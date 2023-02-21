@@ -218,6 +218,13 @@
     @apply mr-2;
   }
 }
+.n-input-number {
+  @apply w-full;
+
+  .n-button__icon {
+    width: var(--n-icon-size);
+  }
+}
 
 /** Layout */
 .n-layout {

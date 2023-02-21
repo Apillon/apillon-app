@@ -20,26 +20,17 @@
       </Heading>
     </template>
     <slot>
-      <TableHosting v-if="collectionStore.hasCollections" :collections="collectionStore.items" />
-      <template v-else>
-        <div
-          class="flex flex-col items-center justify-center px-6 py-4"
-          style="min-height: calc(100vh - 270px)"
-        >
-          <div class="mb-4">
-            <NuxtIcon name="nft/illustration" class="icon-auto" filled />
-          </div>
-          <div class="mb-10 text-center">
-            <h3 class="font-bold">{{ $t('nft.collectionsEmpty') }}</h3>
-            <p class="text-body">{{ $t('nft.collectionsCreate') }}</p>
-          </div>
-          <div>
-            <Btn type="primary" @click="createNewCollection">
-              {{ $t('nft.collection.new') }}
-            </Btn>
-          </div>
-        </div>
-      </template>
+      <TableNft v-if="collectionStore.hasCollections" :collections="collectionStore.items" />
+      <Empty
+        v-else
+        :title="$t('nft.collectionsEmpty')"
+        :info="$t('nft.collectionsCreate')"
+        icon="nft/illustration"
+      >
+        <Btn type="primary" @click="createNewCollection">
+          {{ $t('nft.collection.new') }}
+        </Btn>
+      </Empty>
 
       <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
         {{ $t('w3Warn.nft.new') }}
@@ -69,19 +60,11 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await collectionStore.getCollections();
-      getCollectionQuota();
 
       pageLoading.value = false;
     });
   }, 100);
 });
-
-/** GET Collection quota, if current value is null  */
-async function getCollectionQuota() {
-  if (collectionStore.quotaReached === undefined) {
-    await collectionStore.fetchCollectionQuota();
-  }
-}
 
 /**
  * On createNewCollection click
