@@ -173,14 +173,15 @@ export const useDataStore = defineStore('data', {
             label: project.name,
           };
         });
+        const hasProjects = res.data.total > 0;
 
         /* If current project is not selected, take first one */
-        if (this.currentProjectId === 0 && this.hasProjects) {
+        if (this.currentProjectId === 0 && hasProjects) {
           this.setCurrentProject(this.project.items[0].id);
         }
 
         /** If user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-        if (redirectToDashboard && !this.hasProjects) {
+        if (redirectToDashboard && !hasProjects) {
           router.push({ name: 'onboarding' });
         } else if (redirectToDashboard) {
           router.push({ name: 'dashboard' });
