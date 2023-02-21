@@ -1,4 +1,4 @@
-export default function useScreen() {
+export default function useHosting() {
   const router = useRouter();
   const { params } = useRoute();
   const dataStore = useDataStore();

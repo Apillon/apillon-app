@@ -19,7 +19,7 @@
           </div>
           <!-- DataTable: files and directories -->
           <transition name="fade" appear>
-            <TableStorageFiles />
+            <TableStorageFiles :type="TableFilesType.HOSTING" />
           </transition>
         </div>
       </n-space>

@@ -1,12 +1,15 @@
-export default function useScreen() {
+export default function useStorage() {
   const router = useRouter();
-  const { params } = useRoute();
+  const { name, params } = useRoute();
   const dataStore = useDataStore();
   const bucketStore = useBucketStore();
+  const fileStore = useFileStore();
+  const ipnsStore = useIpnsStore();
   const pageLoading = ref<boolean>(true);
 
   function initBucket(isBucketUpload: boolean = false) {
     /** Website ID from route, then load buckets */
+    const routeName = name?.toString() || '';
     const paramId = params?.id || params?.slug;
     const bucketId = parseInt(`${paramId}`);
     bucketStore.setBucketId(bucketId);
@@ -28,6 +31,10 @@ export default function useScreen() {
           if (bucketStore.active.uploadedSize === 0) {
             bucketStore.uploadActive = true;
           }
+        } else if (routeName.includes('ipns')) {
+          await ipnsStore.getIPNSs(bucketId);
+        } else if (routeName.includes('trash')) {
+          await fileStore.getDeletedFiles();
         }
 
         pageLoading.value = false;

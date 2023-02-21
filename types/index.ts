@@ -32,6 +32,7 @@ declare global {
    */
   type GeneralResponse<T> = {
     data: T;
+    id: string;
     status: number;
   };
   type GeneralItemsResponse<T> = {
@@ -39,6 +40,7 @@ declare global {
       items: Array<T>;
       total: number;
     };
+    id: string;
     status: number;
   };
   interface DeleteResponse {

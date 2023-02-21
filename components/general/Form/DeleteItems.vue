@@ -6,12 +6,20 @@
 </template>
 
 <script lang="ts" setup>
+import { bool } from '@polkadot/types-codec';
 import { useMessage } from 'naive-ui';
-type Item = ApiKeyInterface | BucketInterface | BucketItemInterface | FileUploadInterface;
+type Item =
+  | ApiKeyInterface
+  | BucketInterface
+  | BucketItemInterface
+  | FileUploadInterface
+  | IpnsInterface;
 
 const props = defineProps({
   items: {
-    type: Array<ApiKeyInterface | BucketInterface | BucketItemInterface | FileUploadInterface>,
+    type: Array<
+      ApiKeyInterface | BucketInterface | BucketItemInterface | FileUploadInterface | IpnsInterface
+    >,
     required: true,
   },
 });
@@ -20,13 +28,7 @@ const emit = defineEmits(['submitSuccess']);
 const $i18n = useI18n();
 const message = useMessage();
 const bucketStore = useBucketStore();
-const loading = ref(false);
-
-onMounted(() => {
-  props.items.forEach((item: Item) => {
-    getItemType(item);
-  });
-});
+const loading = ref<boolean>(false);
 
 /** Delete multiple items of type apiKey, Bucket, Directory or File */
 async function deleteItems() {
@@ -72,6 +74,8 @@ function getUrl(type: string, id: number) {
       return endpoints.directory(id);
     case 'file':
       return endpoints.storageFileDelete(bucketStore.bucketUuid, id);
+    case 'ipns':
+      return endpoints.ipns(bucketStore.selected, id);
     default:
       console.warn('Wrong type');
       return '';
@@ -82,6 +86,8 @@ function getUrl(type: string, id: number) {
 function getItemType(item: Item) {
   if ('apiKey' in item) {
     return 'apiKey';
+  } else if ('ipnsName' in item) {
+    return 'ipns';
   } else if ('bucketType' in item) {
     return 'bucket';
   } else if ('type' in item) {

@@ -44,6 +44,11 @@ export enum FileUploadStatusValue {
   REMOVED = 'removed',
   ERROR = 'error',
 }
+export enum TableFilesType {
+  BUCKET = 0,
+  HOSTING = 1,
+  DEPLOYMENT = 2,
+}
 
 /** Webhook Auth method */
 export enum BucketWebhookAuthMethod {
@@ -120,6 +125,31 @@ declare global {
   interface CreateFolderResponse extends GeneralResponse<BucketItemInterface> {}
   interface BucketItemResponse extends GeneralResponse<BucketItemInterface> {}
   interface FolderResponse extends GeneralItemsResponse<BucketItemInterface> {}
+
+  /**
+   * IPNS
+   */
+  interface IpnsInterface {
+    id: number;
+    status: number;
+    name: string;
+    description: string | null;
+    ipnsName: string | null;
+    ipnsValue: string | null;
+    link: string | null;
+    updateTime: string;
+  }
+  interface FormIpns {
+    name: string;
+    description?: string | null;
+  }
+  interface FormIpnsPublish {
+    ipns?: number;
+  }
+  interface IpnsCreateResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsUpdateResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsPublishResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsResponse extends GeneralItemsResponse<IpnsInterface> {}
 
   /**
    * File

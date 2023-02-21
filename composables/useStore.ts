@@ -1,7 +1,8 @@
-export default function useScreen() {
+export default function useStore() {
   const dataStore = useDataStore();
   const bucketStore = useBucketStore();
   const fileStore = useFileStore();
+  const ipnsStore = useIpnsStore();
   const websiteStore = useWebsiteStore();
   const deploymentStore = useDeploymentStore();
   const settingsStore = useSettingsStore();
@@ -10,6 +11,7 @@ export default function useScreen() {
     dataStore.resetData();
     bucketStore.resetData();
     fileStore.resetData();
+    ipnsStore.resetData();
     websiteStore.resetData();
     deploymentStore.resetData();
     settingsStore.resetData();
@@ -18,6 +20,7 @@ export default function useScreen() {
   function clearStorage() {
     bucketStore.resetData();
     fileStore.resetData();
+    ipnsStore.resetData();
     websiteStore.resetData();
     deploymentStore.resetData();
   }

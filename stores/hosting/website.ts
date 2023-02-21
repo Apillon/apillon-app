@@ -73,6 +73,7 @@ export const useWebsiteStore = defineStore('website', {
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
+          ...PARAMS_ALL_ITEMS,
         };
 
         const req = $api.get<WebsitesResponse>(endpoints.websites(), params);

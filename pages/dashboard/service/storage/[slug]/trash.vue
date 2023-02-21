@@ -38,7 +38,7 @@ useHead({
   title: $i18n.t('nav.storage'),
 });
 
-onMounted(() => {
+onMounted(async () => {
   initBucket();
 });
 </script>

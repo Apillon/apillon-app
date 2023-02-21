@@ -111,6 +111,8 @@ export function timeToDays(time: String): string {
 
 /** Datetime to date: "2022-12-13T07:21:50.000Z" -> 13 Dec, 2022  */
 export function datetimeToDate(datetime: string): string {
+  if (!datetime) return '';
+
   const date = new Date(datetime);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
@@ -120,6 +122,8 @@ export function datetimeToDate(datetime: string): string {
   return date.toLocaleDateString('en-us', options);
 }
 export function datetimeToDateAndTime(datetime: string): string {
+  if (!datetime) return '';
+
   const date = new Date(datetime);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
