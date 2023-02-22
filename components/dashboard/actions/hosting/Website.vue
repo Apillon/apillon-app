@@ -45,7 +45,7 @@
         </template>
 
         <!-- Refresh -->
-        <n-button size="small" :loading="bucketStore.folder.loading" @click="refresh">
+        <n-button size="small" :loading="bucketStore.folder.loading" @click="refreshWebpage(env)">
           <span class="icon-refresh text-lg mr-2"></span>
           {{ $t('general.refresh') }}
         </n-button>
@@ -128,9 +128,9 @@ const props = defineProps({
 });
 
 const { downloading, downloadSelectedFiles } = useFile();
+const { websiteId, refreshWebpage } = useHosting();
 const $i18n = useI18n();
 const router = useRouter();
-const { params } = useRoute();
 const bucketStore = useBucketStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
@@ -141,40 +141,11 @@ const showModalClearAll = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
 const deploying = ref<boolean>(false);
 
-/** Website ID from route */
-const websiteId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
-
 const isUpload = computed<Boolean>(() => {
   return (
     props.env !== DeploymentEnvironment.STAGING && props.env !== DeploymentEnvironment.PRODUCTION
   );
 });
-
-async function refresh() {
-  /** Refresh hosting files */
-  bucketStore.fetchDirectoryContent();
-
-  /** On tab stg/prod refresh also website and deployments */
-  if (
-    props.env === DeploymentEnvironment.STAGING ||
-    props.env === DeploymentEnvironment.PRODUCTION
-  ) {
-    /** Refresh deyployments */
-    deploymentStore.fetchDeployments(websiteId.value, props.env);
-
-    /** Refresh active website data */
-    const website = await websiteStore.fetchWebsite(websiteId.value);
-
-    /** Show files from staging bucket */
-    if (props.env === DeploymentEnvironment.STAGING) {
-      bucketStore.active = website.stagingBucket;
-      bucketStore.setBucketId(website.stagingBucket.id);
-    } else {
-      bucketStore.active = website.productionBucket;
-      bucketStore.setBucketId(website.productionBucket.id);
-    }
-  }
-}
 
 function onFolderCreated() {
   showModalNewFolder.value = false;
