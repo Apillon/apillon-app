@@ -1,4 +1,10 @@
-export {};
+/** Hosting Collection status */
+export enum CollectionStatus {
+  INITIATED = 0,
+  IN_PROGRESS = 1,
+  SUCCESSFUL = 5,
+  FAILED = 100,
+}
 
 declare global {
   /**

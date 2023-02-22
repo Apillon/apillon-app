@@ -505,11 +505,21 @@ body > .n-message-container {
 
 /** Tabs */
 .n-tabs {
-  .n-tabs-tab {
-    border-bottom: 2px solid transparent;
+  &--line-type {
+    .n-tabs-tab {
+      border-bottom: 2px solid transparent;
 
-    &:hover {
-      border-color: theme(colors.yellow);
+      &:hover {
+        border-color: theme(colors.yellow);
+      }
+    }
+  }
+  &--segment-type {
+    .n-tabs-rail {
+      padding: 0;
+    }
+    .n-tabs-tab {
+      border: 1px solid theme(colors.bg.light);
     }
   }
 }

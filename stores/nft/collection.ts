@@ -5,6 +5,7 @@ const dataStore = useDataStore();
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
+    csvFile: {} as FileListItemType,
     items: [] as Array<CollectionInterface>,
     loading: false,
     quotaReached: undefined as Boolean | undefined,

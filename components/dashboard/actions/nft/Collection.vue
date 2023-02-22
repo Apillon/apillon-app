@@ -22,6 +22,16 @@
           <span class="icon-refresh text-lg mr-2"></span>
           {{ $t('general.refresh') }}
         </n-button>
+
+        <!-- Actions -->
+        <n-dropdown placement="bottom-end" trigger="click" :options="options">
+          <n-button type="primary" size="small" ghost>
+            {{ $t('general.actions') }}
+            <div class="hidden md:flex items-center relative left-1">
+              <span class="icon-down text-2xl"></span>
+            </div>
+          </n-button>
+        </n-dropdown>
       </n-space>
     </n-space>
   </div>
@@ -32,7 +42,38 @@ const props = defineProps({
   env: { type: Number, default: 0 },
 });
 
-const collectionStore = useBucketStore();
+const $i18n = useI18n();
+const collectionStore = useCollectionStore();
+
+const options = [
+  {
+    label: $i18n.t('nft.collection.mint'),
+    key: 'mint',
+    props: {
+      onClick: () => {
+        copyToClipboard('');
+      },
+    },
+  },
+  {
+    label: $i18n.t('nft.collection.revoke'),
+    key: 'revoke',
+    props: {
+      onClick: () => {
+        copyToClipboard('');
+      },
+    },
+  },
+  {
+    label: $i18n.t('nft.collection.transfer'),
+    key: 'transfer',
+    props: {
+      onClick: () => {
+        copyToClipboard('');
+      },
+    },
+  },
+];
 
 async function refresh() {}
 </script>

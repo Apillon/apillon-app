@@ -492,11 +492,22 @@
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
       "empty": "Your project has currently no NFTs",
+      "maxSupply": "Max supply",
+      "mint": "Mint",
+      "mintNfts": "Mint NFTs",
+      "mintPrice": "Mint price",
+      "name": "Collection name",
       "new": "New NFT collection",
       "numOfData": "Number of data",
+      "revoke": "Revoke",
+      "symbol": "Symbol",
       "title": "Collection title",
+      "transfer": "Transfer ownership",
       "upload": "Upload NFTs",
-      "uploadYourFirst": "Upload your first NFTs and start building your collection."
+      "uploadImages": "Upload images",
+      "uploadMetadata": "Upload metadata",
+      "uploadYourFirst": "Upload your first NFTs and start building your collection.",
+      "status": {}
     },
     "upload": {
       "csvFile": "CSV file",

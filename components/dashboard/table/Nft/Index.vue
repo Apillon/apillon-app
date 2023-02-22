@@ -36,6 +36,7 @@ const router = useRouter();
 const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
 const modalEditCollectionVisible = ref<boolean>(false);
+const CollectionStatus = resolveComponent('CollectionStatus');
 
 /** Data: filtered collections */
 const data = computed<Array<CollectionInterface>>(() => {
@@ -49,6 +50,14 @@ const data = computed<Array<CollectionInterface>>(() => {
 const createColumns = (): NDataTableColumns<CollectionInterface> => {
   return [
     {
+      key: 'symbol',
+      title: $i18n.t('nft.collection.symbol'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row) {
+        return h('strong', {}, { default: () => row.symbol });
+      },
+    },
+    {
       key: 'name',
       title: $i18n.t('nft.collection.name'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
@@ -59,8 +68,9 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
     {
       key: 'collection_uuid',
       title: $i18n.t('nft.collection.uuid'),
+      className: 'hidden',
       render(row: CollectionInterface) {
-        if (!row.bucket_uuid) {
+        if (!row.collection_uuid) {
           return '';
         }
         return [
@@ -86,16 +96,20 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       },
     },
     {
-      key: 'domain',
-      title: $i18n.t('nft.collection.domain'),
+      key: 'mintPrice',
+      title: $i18n.t('nft.collection.mintPrice'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      key: 'description',
-      title: $i18n.t('nft.collection.description'),
+      key: 'maxSupply',
+      title: $i18n.t('nft.collection.maxSupply'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
+    },
+    {
+      key: 'status',
+      title: $i18n.t('general.status'),
       render(row) {
-        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
+        return h(CollectionStatus, { collectionStatus: row.status }, '');
       },
     },
     {
