@@ -45,7 +45,7 @@ const { params } = useRoute();
 const websiteStore = useWebsiteStore();
 const showModalDomain = ref<boolean>(false);
 const showModalConfiguration = ref<boolean>(false);
-const websiteId = ref<number>(parseInt(`${params?.slug}`));
+const { websiteId } = useHosting();
 
 const domain = computed<string>(() => {
   return websiteStore.active.domain;

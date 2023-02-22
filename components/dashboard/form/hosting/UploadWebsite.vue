@@ -23,7 +23,7 @@
       class="absolute inline-block w-auto left-1/2 bottom-4 -translate-x-1/2"
       :show-file-list="false"
       directory
-      :custom-request="uploadFileRequest"
+      :custom-request="uploadDirectoryRequest"
     >
       <n-button>{{ $t('hosting.upload.directory') }}</n-button>
     </n-upload>
@@ -67,9 +67,7 @@ const numOfFinishedFiles = computed<number>(() => {
   );
 });
 
-/**
- *  API call
- */
+/** Upload files */
 function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
@@ -83,20 +81,52 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
   if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
     onError();
   } else {
-    uploadFileList.value.push(fileListItem);
-
-    if (uploadFileList.value.length === 1) {
-      uploadInterval.value = setInterval(() => {
-        if (fileNum.value === uploadFileList.value.length) {
-          /** When all files are on file list, start uploading files */
-          uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
-
-          /** Clear interval, upload started */
-          clearInterval(uploadInterval.value);
-        }
-      }, 10);
-    }
-    fileNum.value = uploadFileList.value.length;
+    addFileToListAndUpload(fileListItem);
   }
+}
+
+/** Upload directory */
+function uploadDirectoryRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+  const fileListItem: FileListItemType = {
+    ...file,
+    fullPath: removeBaseDirectoryFromFullPath(file.fullPath),
+    percentage: 0,
+    size: file.file?.size || 0,
+    timestamp: Date.now(),
+    onFinish,
+    onError,
+  };
+
+  if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
+    onError();
+  } else {
+    addFileToListAndUpload(fileListItem);
+  }
+}
+
+/** Remove first (base) directory, if user upload entire folder */
+function removeBaseDirectoryFromFullPath(fullPath?: string | null) {
+  if (!fullPath) return '';
+
+  const pathParts = fullPath.split('/').filter(p => p);
+  return pathParts.length <= 1 ? fullPath : '/' + pathParts.slice(1).join('/');
+}
+
+/** Add file to list and upload it */
+function addFileToListAndUpload(fileListItem: FileListItemType) {
+  uploadFileList.value.push(fileListItem);
+
+  if (uploadFileList.value.length === 1) {
+    uploadInterval.value = setInterval(() => {
+      if (fileNum.value === uploadFileList.value.length) {
+        /** When all files are on file list, start uploading files */
+        uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+
+        /** Clear interval, upload started */
+        clearInterval(uploadInterval.value);
+      }
+    }, 10);
+  }
+  fileNum.value = uploadFileList.value.length;
 }
 </script>
