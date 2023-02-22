@@ -81,7 +81,6 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
   };
 
   if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
-    console.log(uploadFileList.value);
     onError();
   } else {
     uploadFileList.value.push(fileListItem);

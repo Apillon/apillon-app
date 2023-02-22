@@ -60,7 +60,7 @@ const createColumns = (): NDataTableColumns<WebsiteInterface> => {
       key: 'website_uuid',
       title: $i18n.t('hosting.website.uuid'),
       render(row: WebsiteInterface) {
-        if (!row.bucket_uuid) {
+        if (!row.website_uuid) {
           return '';
         }
         return [

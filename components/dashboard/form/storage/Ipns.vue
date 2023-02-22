@@ -95,7 +95,7 @@ const ipns = ref<IpnsInterface | undefined>();
 
 onMounted(async () => {
   if (props.ipnsId) {
-    ipns.value = await ipnsStore.getIpnsById(bucketStore.selected, props.ipnsId);
+    ipns.value = await ipnsStore.getIpnsFromList(bucketStore.selected, props.ipnsId);
 
     if (ipns.value) {
       formData.value.name = ipns.value.name;

@@ -33,6 +33,7 @@ export const LsCacheKeys = {
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
   IPNS: 'al_cache_ipns',
+  IPNS_ITEM: 'al_cache_ipns_item',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
   WEBSITE: 'al_cache_website',
