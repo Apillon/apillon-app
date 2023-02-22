@@ -75,6 +75,8 @@ import { createDiscreteApi } from 'naive-ui';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const { clearAll } = useStore();
+
 const emit = defineEmits(['submitActive', 'submitSuccess']);
 
 onMounted(async () => {
@@ -144,6 +146,9 @@ async function createProject() {
     const res = await $api.post<CreateProjectResponse>(endpoints.projects, formData.value);
 
     if (res.data) {
+      /** Clear all stored data */
+      clearAll();
+
       /** Set new project as current project */
       dataStore.setCurrentProject(res.data.id);
 

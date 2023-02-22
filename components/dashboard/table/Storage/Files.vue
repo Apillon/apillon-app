@@ -7,8 +7,8 @@
       remote
       :bordered="false"
       :columns="columns"
-      :data="dataStore.folder.items"
-      :loading="dataStore.folder.loading"
+      :data="bucketStore.folder.items"
+      :loading="bucketStore.folder.loading"
       :pagination="pagination"
       :row-key="rowKey"
       :row-props="rowProps"
@@ -43,6 +43,14 @@
       </slot>
     </ModalDelete>
 
+    <!-- Modal - Publish IPNS -->
+    <modal v-model:show="modalIpnsPublishVisible" :title="$t('storage.ipns.publish')">
+      <FormStorageIpnsPublish
+        :cid="currentRow?.CID || ''"
+        @submit-success="modalIpnsPublishVisible = false"
+      />
+    </modal>
+
     <!-- W3Warn: delete bucket -->
     <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
       {{ $t('w3Warn.file.delete') }}
@@ -55,14 +63,22 @@ import debounce from 'lodash.debounce';
 import { NButton, NDropdown, NEllipsis, NSpace } from 'naive-ui';
 
 const props = defineProps({
-  actions: { type: Boolean, default: true },
+  type: {
+    type: Number,
+    validator: (type: number) =>
+      [TableFilesType.BUCKET, TableFilesType.DEPLOYMENT, TableFilesType.HOSTING].includes(type),
+    default: 0,
+  },
 });
 
+const { downloadFile } = useFile();
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const showModalW3Warn = ref<boolean>(false);
 const showModalDelete = ref<boolean | null>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
+const modalIpnsPublishVisible = ref<boolean>(false);
 const tableRef = ref<NDataTableInst | null>(null);
 const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
@@ -76,76 +92,83 @@ const currentRowType = computed<string>(() => {
 });
 
 /** Pagination data */
-const currentPage = ref<number>(0);
+const currentPage = ref<number>(1);
 const pagination = computed(() => {
   return {
     page: currentPage.value,
     pageSize: PAGINATION_LIMIT,
-    pageCount: Math.ceil(dataStore.folder.total / PAGINATION_LIMIT),
-    itemCount: dataStore.folder.total,
+    pageCount: Math.ceil(bucketStore.folder.total / PAGINATION_LIMIT),
+    itemCount: bucketStore.folder.total,
   };
 });
 
 /** Dropdown options for folder and file */
-const dropdownFolderOptions = [
-  {
-    label: $i18n.t('general.open'),
-    key: 'open',
-    props: {
-      onClick: () => {
-        onFolderOpen(currentRow.value);
+const dropdownOptions = (bucketItem: BucketItemInterface) => {
+  return [
+    {
+      label: $i18n.t('general.view'),
+      key: 'view',
+      show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
+      props: {
+        onClick: () => {
+          drawerFileDetailsVisible.value = true;
+        },
       },
     },
-  },
-  {
-    label: $i18n.t('general.delete'),
-    key: 'delete',
-    props: {
-      class: '!text-pink',
-      onClick: () => {
-        showModalDelete.value = true;
+    {
+      label: $i18n.t('general.open'),
+      key: 'open',
+      show: bucketItem.type === BucketItemType.DIRECTORY,
+      props: {
+        onClick: () => {
+          onFolderOpen(currentRow.value);
+        },
       },
     },
-  },
-];
-
-const dropdownFileOptions = [
-  {
-    label: $i18n.t('general.view'),
-    key: 'view',
-    props: {
-      onClick: () => {
-        drawerFileDetailsVisible.value = true;
+    {
+      label: $i18n.t('general.download'),
+      key: 'download',
+      show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
+      props: {
+        onClick: () => {
+          downloadFile(currentRow.value.CID);
+        },
       },
     },
-  },
-  {
-    label: $i18n.t('general.download'),
-    key: 'download',
-    props: {
-      onClick: () => {
-        downloadFile(currentRow.value.CID);
+    {
+      label: $i18n.t('storage.ipns.publish'),
+      key: 'ipns',
+      disabled: !bucketItem.CID,
+      show: props.type === TableFilesType.BUCKET,
+      props: {
+        onClick: () => {
+          modalIpnsPublishVisible.value = true;
+        },
       },
     },
-  },
-  {
-    label: $i18n.t('general.delete'),
-    key: 'delete',
-    props: {
-      class: '!text-pink',
-      onClick: () => {
-        showModalDelete.value = true;
+    {
+      label: $i18n.t('general.delete'),
+      key: 'delete',
+      props: {
+        class: '!text-pink',
+        onClick: () => {
+          showModalDelete.value = true;
+        },
       },
     },
-  },
-];
+  ];
+};
 
 /** Available columns - show/hide column */
 const selectedColumns = ref(['name', 'CID', 'link', 'size', 'createTime', 'contentType']);
 const availableColumns = ref([
   { value: 'name', label: $i18n.t('storage.fileName') },
-  { value: 'CID', label: $i18n.t('storage.fileCid') },
-  { value: 'link', label: $i18n.t('storage.downloadLink') },
+  { value: 'CID', label: $i18n.t('storage.fileCid'), hidden: props.type !== TableFilesType.BUCKET },
+  {
+    value: 'link',
+    label: $i18n.t('storage.downloadLink'),
+    hidden: props.type !== TableFilesType.BUCKET,
+  },
   { value: 'size', label: $i18n.t('storage.fileSize') },
   { value: 'createTime', label: $i18n.t('dashboard.created') },
   { value: 'contentType', label: $i18n.t('storage.contentType') },
@@ -156,13 +179,13 @@ const columns = computed(() => {
   return [
     {
       type: 'selection',
-      className: { hidden: props.actions === false },
+      className: { hidden: props.type === TableFilesType.DEPLOYMENT },
     },
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
       className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
-      sorter: props.actions ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       minWidth: 200,
       render(row: BucketItemInterface) {
         return [
@@ -186,8 +209,10 @@ const columns = computed(() => {
     {
       title: $i18n.t('storage.fileCid'),
       key: 'CID',
-      className: { hidden: !selectedColumns.value.includes('CID') },
-      sorter: props.actions ? 'default' : false,
+      className: {
+        hidden: !selectedColumns.value.includes('CID') || props.type !== TableFilesType.BUCKET,
+      },
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [
@@ -217,8 +242,10 @@ const columns = computed(() => {
     {
       title: $i18n.t('storage.downloadLink'),
       key: 'link',
-      className: { hidden: !selectedColumns.value.includes('link') },
-      sorter: props.actions ? 'default' : false,
+      className: {
+        hidden: !selectedColumns.value.includes('link') || props.type !== TableFilesType.BUCKET,
+      },
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [
@@ -253,7 +280,7 @@ const columns = computed(() => {
       title: $i18n.t('storage.fileSize'),
       key: 'size',
       className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('size') }],
-      sorter: props.actions ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
@@ -268,7 +295,7 @@ const columns = computed(() => {
         ON_COLUMN_CLICK_OPEN_CLASS,
         { hidden: !selectedColumns.value.includes('createTime') },
       ],
-      sorter: props.actions ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
         return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
       },
@@ -280,7 +307,7 @@ const columns = computed(() => {
         ON_COLUMN_CLICK_OPEN_CLASS,
         { hidden: !selectedColumns.value.includes('contentType') },
       ],
-      sorter: props.actions ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
         if (row.contentType) {
           return h('span', {}, row.contentType);
@@ -292,12 +319,12 @@ const columns = computed(() => {
       title: $i18n.t('general.actions'),
       key: 'actions',
       align: 'right',
-      className: ['!py-0', { hidden: props.actions === false }],
+      className: ['!py-0', { hidden: props.type === TableFilesType.DEPLOYMENT }],
       render(row: BucketItemInterface) {
         return h(
           NDropdown,
           {
-            options: row.type === BucketItemType.FILE ? dropdownFileOptions : dropdownFolderOptions,
+            options: dropdownOptions(row),
             trigger: 'click',
           },
           {
@@ -315,7 +342,7 @@ const columns = computed(() => {
       key: 'columns',
       filter: 'default',
       filterOptionValue: null,
-      className: { hidden: props.actions === false },
+      className: { hidden: props.type === TableFilesType.DEPLOYMENT },
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },
@@ -340,7 +367,7 @@ const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
   checkedRowKeys.value = rowKeys;
   const rowKeyIds = rowKeys.map(item => intVal(item));
 
-  dataStore.folder.selectedItems = dataStore.folder.items.filter(item =>
+  bucketStore.folder.selectedItems = bucketStore.folder.items.filter(item =>
     rowKeyIds.includes(item.id)
   );
 };
@@ -387,14 +414,14 @@ function onFileOpen() {
 /** Open directory - show subfolder content */
 async function onFolderOpen(folder: BucketItemInterface) {
   /** Add subfolder to folder path */
-  dataStore.folder.path.push({
+  bucketStore.folder.path.push({
     id: folder.id,
     name: folder.name,
   });
 
   /** Fetch data in reset search string */
-  dataStore.folderSearch();
-  await getDirectoryContent(dataStore.bucketUuid, folder.id);
+  bucketStore.folderSearch();
+  await getDirectoryContent(bucketStore.bucketUuid, folder.id);
   clearSorter();
 }
 
@@ -407,11 +434,9 @@ onMounted(() => {
   /**
    * Load data on mounted
    */
-  setTimeout(async () => {
-    await Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      if (!dataStore.hasBucketItems || isCacheExpired(LsCacheKeys.BUCKET_ITEMS)) {
-        await getDirectoryContent();
-      }
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      bucketStore.getDirectoryContent();
     });
   }, 100);
 });
@@ -422,8 +447,8 @@ async function handleSorterChange(sorter?: NDataTableSortState) {
     await getDirectoryContent();
   } else if (sorter) {
     await getDirectoryContent(
-      dataStore.bucketUuid,
-      dataStore.folder.selected,
+      bucketStore.bucketUuid,
+      bucketStore.folder.selected,
       1,
       `${sorter.columnKey}`,
       `${sorter.order}`
@@ -440,7 +465,7 @@ function clearSorter() {
 
 /** Watch folder path, onCahnge clear sorter */
 watch(
-  () => dataStore.folder.path,
+  () => bucketStore.folder.path,
   _ => {
     clearSorter();
   }
@@ -448,8 +473,8 @@ watch(
 
 /** On page change, load data */
 async function handlePageChange(currentPage: number) {
-  if (!dataStore.folder.loading) {
-    await getDirectoryContent(dataStore.bucketUuid, dataStore.folder.selected, currentPage);
+  if (!bucketStore.folder.loading) {
+    await getDirectoryContent(bucketStore.bucketUuid, bucketStore.folder.selected, currentPage);
   }
 }
 
@@ -501,9 +526,9 @@ function onBucketItemsDeleted() {
 
 /** Search folders and files */
 watch(
-  () => dataStore.folder.search,
+  () => bucketStore.folder.search,
   _ => {
-    if (dataStore.folder.allowFetch) {
+    if (bucketStore.folder.allowFetch) {
       debouncedSearchFilter();
       clearSorter();
     }
@@ -519,29 +544,16 @@ async function getDirectoryContent(
   orderBy?: string,
   order?: string
 ) {
-  await dataStore.fetchDirectoryContent(
+  await bucketStore.fetchDirectoryContent(
     bucketUuid,
     folderId,
     page,
     PAGINATION_LIMIT,
-    dataStore.folder.search,
+    bucketStore.folder.search,
     orderBy,
     order
   );
 
   currentPage.value = page;
-}
-
-/** Download file - get file details and download content from downloadLink */
-async function downloadFile(CID?: string | null) {
-  if (!CID) {
-    console.warn('MISSING File CID!');
-    return;
-  }
-  if (!(CID in dataStore.file.items)) {
-    dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
-  }
-  const fileDetails: FileDetails = dataStore.file.items[CID].file;
-  download(fileDetails.link, fileDetails.name);
 }
 </script>

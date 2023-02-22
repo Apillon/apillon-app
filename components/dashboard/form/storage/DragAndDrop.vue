@@ -14,18 +14,17 @@
 </template>
 
 <script lang="ts" setup>
-const dataStore = useDataStore();
+const { fileAlreadyOnFileList } = useUpload();
+const bucketStore = useBucketStore();
 
 /** Upload height */
 const uploadHeight = computed(() => {
   return {
-    height: dataStore.hasBucketItems ? 'auto' : 'calc(100vh - 370px)',
+    height: bucketStore.hasBucketItems ? 'auto' : 'calc(100vh - 370px)',
   };
 });
 
-/**
- *  API calls
- */
+/** Upload file request - add file to list */
 function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
@@ -36,22 +35,10 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
     onError,
   };
 
-  if (fileAlreadyOnFileList(fileListItem)) {
+  if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
     onError();
   } else {
-    dataStore.bucket.uploadFileList.push(fileListItem);
+    bucketStore.uploadFileList.push(fileListItem);
   }
-}
-
-/** Check if file is already on list */
-function fileAlreadyOnFileList(file: FileListItemType) {
-  return (
-    dataStore.bucket.uploadFileList.find(
-      item =>
-        item.name === file.name &&
-        item.fullPath === file.fullPath &&
-        item.file?.lastModified === file.file?.lastModified
-    ) !== undefined
-  );
 }
 </script>

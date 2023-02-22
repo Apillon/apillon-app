@@ -44,6 +44,11 @@ export enum FileUploadStatusValue {
   REMOVED = 'removed',
   ERROR = 'error',
 }
+export enum TableFilesType {
+  BUCKET = 0,
+  HOSTING = 1,
+  DEPLOYMENT = 2,
+}
 
 /** Webhook Auth method */
 export enum BucketWebhookAuthMethod {
@@ -122,6 +127,32 @@ declare global {
   interface FolderResponse extends GeneralItemsResponse<BucketItemInterface> {}
 
   /**
+   * IPNS
+   */
+  interface IpnsInterface {
+    id: number;
+    status: number;
+    name: string;
+    description: string | null;
+    ipnsName: string | null;
+    ipnsValue: string | null;
+    link: string | null;
+    updateTime: string;
+  }
+  interface FormIpns {
+    name: string;
+    description?: string | null;
+  }
+  interface FormIpnsPublish {
+    ipns?: number;
+  }
+  interface IpnsCreateResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsUpdateResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsPublishResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsItemResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsResponse extends GeneralItemsResponse<IpnsInterface> {}
+
+  /**
    * File
    */
   /** File status */
@@ -136,6 +167,18 @@ declare global {
     file_uuid: string;
     url: string;
   }
+  interface S3FileUploadRequestInterface {
+    contentType: string;
+    fileName: string;
+    file_uuid: string;
+    path: string;
+    url: string;
+  }
+  interface S3FilesUploadRequestInterface {
+    files: Array<S3FileUploadRequestInterface>;
+    session_uuid: string;
+  }
+
   interface FileInterface {
     CID: string;
     bucket_id: number;
@@ -191,6 +234,7 @@ declare global {
 
   interface FileDetailsResponse extends GeneralResponse<FileDetailsInterface> {}
   interface FileUploadRequestResponse extends GeneralResponse<FileUploadRequestInterface> {}
+  interface FilesUploadRequestResponse extends GeneralResponse<S3FilesUploadRequestInterface> {}
   interface FileUploadSessionResponse extends GeneralResponse<boolean> {}
   interface FileUploadsResponse extends GeneralItemsResponse<FileUploadInterface> {}
 
@@ -215,16 +259,16 @@ declare global {
   interface WebhookResponse extends GeneralResponse<WebhookInterface> {}
 
   /**
-   * Webpage
+   * Website
    */
-  interface FormWebpage {
+  interface FormWebsite {
     name: string;
     description: string;
   }
-  interface FormWebpageDomain {
+  interface FormWebsiteDomain {
     domain?: string | null;
   }
-  interface WebpageBaseInterface {
+  interface WebsiteBaseInterface {
     id: number;
     status: number;
     project_uuid: string;
@@ -235,10 +279,10 @@ declare global {
     description: string;
     domain: string;
   }
-  interface WebpageInterface {
+  interface WebsiteInterface {
     id: number;
     status: number;
-    webpage_uuid: string;
+    website_uuid: string;
     bucket_uuid: string;
     bucket: BucketInterface;
     stagingBucket: BucketInterface;
@@ -252,7 +296,7 @@ declare global {
   interface DeploymentInterface {
     id: number;
     status: number;
-    webpage_id: number;
+    website_id: number;
     bucket_id: number;
     environment: number;
     deploymentStatus: number;
@@ -261,10 +305,10 @@ declare global {
     number: number | null;
     updateTime?: string;
   }
-  interface WebpageResponse extends GeneralResponse<WebpageInterface> {}
-  interface WebpageUpdateResponse extends GeneralResponse<WebpageInterface> {}
-  interface WebpagesResponse extends GeneralItemsResponse<WebpageInterface> {}
-  interface WebpageQuotaResponse extends GeneralResponse<boolean> {}
+  interface WebsiteResponse extends GeneralResponse<WebsiteInterface> {}
+  interface WebsiteUpdateResponse extends GeneralResponse<WebsiteInterface> {}
+  interface WebsitesResponse extends GeneralItemsResponse<WebsiteInterface> {}
+  interface WebsiteQuotaResponse extends GeneralResponse<boolean> {}
   interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
   interface DeploymentsResponse extends GeneralItemsResponse<DeploymentInterface> {}
 }

@@ -1,64 +1,31 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules">
-    <!--  Folder submit -->
-    <n-form-item>
-      <input type="hidden" name="id" :value="formData.id" readonly />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
-        <slot v-if="$slots.default"></slot>
-        <template v-else>{{ $t('general.confirm') }}</template>
-      </Btn>
-    </n-form-item>
-  </n-form>
+  <Btn type="primary" class="w-full mt-2" :loading="loading" @click="deleteItem">
+    <slot v-if="$slots.default"></slot>
+    <template v-else>{{ $t('general.confirm') }}</template>
+  </Btn>
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 
 const props = defineProps({
   id: { type: Number, required: true },
   type: {
     type: String,
     validator: (type: string) =>
-      ['apiKey', 'bucket', 'bucketContent', 'directory', 'file'].includes(type),
+      ['apiKey', 'bucket', 'bucketContent', 'directory', 'file', 'ipns'].includes(type),
     required: true,
   },
 });
-
-const $i18n = useI18n();
 const emit = defineEmits(['submitSuccess']);
 
-/** Form folder */
-const loading = ref(false);
-const formRef = ref<NFormInst | null>(null);
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const $i18n = useI18n();
+const message = useMessage();
+const bucketStore = useBucketStore();
+const loading = ref<boolean>(false);
 
-const formData = ref<{ id: number }>({
-  id: props.id,
-});
-
-const rules: NFormRules = {
-  id: [
-    {
-      required: true,
-      message: $i18n.t('validation.idRequired'),
-    },
-  ],
-};
-
-// Submit
-function handleSubmit(e: Event | MouseEvent) {
-  e.preventDefault();
-  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
-    } else {
-      await deleteEntity();
-    }
-  });
-}
-async function deleteEntity() {
+/** Delete item */
+async function deleteItem() {
   loading.value = true;
 
   try {
@@ -87,6 +54,10 @@ function getUrl(type: string, id: number) {
       return endpoints.bucketContent(id);
     case 'directory':
       return endpoints.directory(id);
+    case 'file':
+      return endpoints.storageFileDelete(bucketStore.bucketUuid, id);
+    case 'ipns':
+      return endpoints.ipns(bucketStore.selected, id);
     default:
       return endpoints.file(id);
   }

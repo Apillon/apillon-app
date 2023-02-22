@@ -1,37 +1,37 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderWebpage />
+      <HeaderWebsite />
     </template>
     <slot>
       <template
         v-if="
-          dataStore.folder.items.length ||
-          dataStore.bucket.active.CID ||
-          dataStore.webpage.deployment.production.length > 0
+          bucketStore.folder.items.length ||
+          bucketStore.active.CID ||
+          deploymentStore.production.length > 0
         "
       >
         <n-space class="pb-8" :size="32" vertical>
-          <ActionsHostingWebpage :env="DeploymentEnvironment.PRODUCTION" />
+          <ActionsHostingWebsite :env="DeploymentEnvironment.PRODUCTION" />
 
           <!-- Domain preview -->
           <HostingDomain />
 
           <!-- IPNS link -->
           <HostingPreviewLink
-            :link="dataStore.webpage.active.ipnsProductionLink || ''"
+            :link="websiteStore.active.ipnsProductionLink || ''"
             :title="$t('hosting.ipnsLink')"
           />
 
           <!-- Deployments -->
-          <TableHostingDeployment :deployments="dataStore.webpage.deployment.production" />
+          <TableHostingDeployment :deployments="deploymentStore.production" />
 
           <!-- Breadcrumbs -->
           <div>
             <div class="relative h-8">
-              <StorageBreadcrumbs v-if="dataStore.folder.selected" class="absolute" />
+              <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
             </div>
-            <TableStorageFiles :actions="false" />
+            <TableStorageFiles :type="TableFilesType.DEPLOYMENT" />
           </div>
         </n-space>
       </template>
@@ -55,74 +55,16 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
-const router = useRouter();
-const { params } = useRoute();
-const dataStore = useDataStore();
+const bucketStore = useBucketStore();
+const websiteStore = useWebsiteStore();
+const deploymentStore = useDeploymentStore();
+const { pageLoading, initWebsite } = useHosting();
 
-const webpageId = ref<number>(parseInt(`${params?.slug}`));
-const pageLoading = ref<boolean>(true);
-
-let deploymentInterval: any = null as any;
 useHead({
   title: $i18n.t('nav.hosting'),
 });
 
 onMounted(() => {
-  /** Webpage ID from route, then load buckets */
-  dataStore.setWebpageId(webpageId.value);
-
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const webpage = await dataStore.getWebpage(webpageId.value);
-
-      /** Check of webpage exists */
-      if (!webpage?.id) {
-        router.push({ name: 'dashboard-service-hosting' });
-        return;
-      }
-
-      /** Get deployments for this webpage */
-      await dataStore.getDeployments(webpageId.value);
-      checkUnfinishedDeployments();
-
-      /** Show files from production bucket */
-      dataStore.bucket.active = webpage.productionBucket;
-      dataStore.setBucketId(webpage.productionBucket.id);
-
-      dataStore.fetchDirectoryContent(webpage.productionBucket.bucket_uuid);
-
-      if (webpage.bucket.uploadedSize === 0) {
-        dataStore.bucket.uploadActive = true;
-      }
-      pageLoading.value = false;
-    });
-  }, 100);
+  initWebsite(DeploymentEnvironment.PRODUCTION);
 });
-
-onUnmounted(() => {
-  clearInterval(deploymentInterval);
-});
-
-function checkUnfinishedDeployments() {
-  const unfinishedDeployment = dataStore.webpage.deployment.production.find(
-    deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL
-  );
-  if (unfinishedDeployment === undefined) {
-    return;
-  }
-
-  deploymentInterval = setInterval(async () => {
-    const deployment = await dataStore.fetchDeployment(
-      dataStore.webpage.active.id,
-      unfinishedDeployment.id
-    );
-    if (unfinishedDeployment.deploymentStatus !== deployment.deploymentStatus) {
-      unfinishedDeployment.deploymentStatus = deployment.deploymentStatus;
-    }
-    if (deployment.deploymentStatus >= DeploymentStatus.SUCCESSFUL) {
-      unfinishedDeployment.size = deployment.size;
-      clearInterval(deploymentInterval);
-    }
-  }, 10000);
-}
 </script>

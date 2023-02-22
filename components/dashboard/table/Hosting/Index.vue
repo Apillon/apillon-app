@@ -8,18 +8,18 @@
       :bordered="false"
       :columns="columns"
       :data="data"
-      :loading="dataStore.webpage.loading"
+      :loading="websiteStore.loading"
       :pagination="{ pageSize: PAGINATION_LIMIT }"
       :row-key="rowKey"
       :row-props="rowProps"
     />
   </n-space>
 
-  <!-- Modal - Edit webpage -->
-  <modal v-model:show="showModalEditWebpage" :title="$t('hosting.webpage.edit')">
-    <FormHostingWebpage
-      :webpage-id="currentRow.id"
-      @submit-success="showModalEditWebpage = false"
+  <!-- Modal - Edit website -->
+  <modal v-model:show="showModalEditWebsite" :title="$t('hosting.website.edit')">
+    <FormHostingWebsite
+      :website-id="currentRow.id"
+      @submit-success="showModalEditWebsite = false"
     />
   </modal>
 </template>
@@ -28,39 +28,39 @@
 import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
-  webpages: { type: Array<WebpageInterface>, default: [] },
+  websites: { type: Array<WebsiteInterface>, default: [] },
 });
 
 const $i18n = useI18n();
 const router = useRouter();
-const dataStore = useDataStore();
+const websiteStore = useWebsiteStore();
 const settingsStore = useSettingsStore();
-const showModalEditWebpage = ref<boolean>(false);
+const showModalEditWebsite = ref<boolean>(false);
 
-/** Data: filtered webpages */
-const data = computed<Array<WebpageInterface>>(() => {
+/** Data: filtered websites */
+const data = computed<Array<WebsiteInterface>>(() => {
   return (
-    props.webpages.filter(item =>
-      item.name.toLocaleLowerCase().includes(dataStore.webpage.search.toLocaleLowerCase())
+    props.websites.filter(item =>
+      item.name.toLocaleLowerCase().includes(websiteStore.search.toLocaleLowerCase())
     ) || []
   );
 });
 
-const createColumns = (): NDataTableColumns<WebpageInterface> => {
+const createColumns = (): NDataTableColumns<WebsiteInterface> => {
   return [
     {
       key: 'name',
-      title: $i18n.t('hosting.webpage.name'),
+      title: $i18n.t('hosting.website.name'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
     },
     {
-      key: 'webpage_uuid',
-      title: $i18n.t('hosting.webpage.uuid'),
-      render(row: WebpageInterface) {
-        if (!row.bucket_uuid) {
+      key: 'website_uuid',
+      title: $i18n.t('hosting.website.uuid'),
+      render(row: WebsiteInterface) {
+        if (!row.website_uuid) {
           return '';
         }
         return [
@@ -72,11 +72,11 @@ const createColumns = (): NDataTableColumns<WebpageInterface> => {
                 h(
                   NEllipsis,
                   { class: 'text-body align-bottom', 'line-clamp': 1 },
-                  { default: () => row.webpage_uuid }
+                  { default: () => row.website_uuid }
                 ),
                 h(
                   'button',
-                  { class: 'ml-2', onClick: () => copyToClipboard(row.webpage_uuid) },
+                  { class: 'ml-2', onClick: () => copyToClipboard(row.website_uuid) },
                   h('span', { class: 'icon-copy text-body' }, {})
                 ),
               ],
@@ -87,12 +87,12 @@ const createColumns = (): NDataTableColumns<WebpageInterface> => {
     },
     {
       key: 'domain',
-      title: $i18n.t('hosting.webpage.domain'),
+      title: $i18n.t('hosting.website.domain'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
       key: 'description',
-      title: $i18n.t('hosting.webpage.description'),
+      title: $i18n.t('hosting.website.description'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
@@ -125,10 +125,10 @@ const createColumns = (): NDataTableColumns<WebpageInterface> => {
 };
 const columns = createColumns();
 const rowKey = (row: BucketItemInterface) => row.id;
-const currentRow = ref<WebpageInterface>(props.webpages[0]);
+const currentRow = ref<WebsiteInterface>(props.websites[0]);
 
 /** On row click */
-const rowProps = (row: WebpageInterface) => {
+const rowProps = (row: WebsiteInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;
@@ -147,7 +147,7 @@ const dropdownOptions = [
     disabled: settingsStore.isProjectUser(),
     props: {
       onClick: () => {
-        showModalEditWebpage.value = true;
+        showModalEditWebsite.value = true;
       },
     },
   },

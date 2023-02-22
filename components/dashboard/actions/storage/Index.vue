@@ -2,7 +2,7 @@
   <n-space v-bind="$attrs" justify="space-between">
     <div class="w-[20vw] max-w-xs">
       <n-input
-        v-model:value="dataStore.bucket.search"
+        v-model:value="bucketStore.search"
         type="text"
         name="search"
         size="small"
@@ -17,7 +17,7 @@
 
     <n-space size="large">
       <!-- Show only if user select files -->
-      <template v-if="dataStore.bucket.selectedItems.length > 0">
+      <template v-if="bucketStore.selectedItems.length > 0">
         <!-- Delete files -->
         <n-tooltip placement="bottom">
           <template #trigger>
@@ -33,14 +33,14 @@
       </template>
 
       <!-- Refresh storage content -->
-      <n-button size="small" :loading="dataStore.bucket.loading" @click="dataStore.fetchBuckets()">
+      <n-button size="small" :loading="bucketStore.loading" @click="bucketStore.fetchBuckets()">
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('storage.refresh') }}
       </n-button>
 
       <!-- Create new bucket -->
       <n-button
-        v-if="dataStore.hasBuckets"
+        v-if="bucketStore.hasBuckets"
         type="primary"
         size="small"
         ghost
@@ -60,6 +60,7 @@
 
 <script lang="ts" setup>
 const emit = defineEmits(['onBucketDelete']);
-const dataStore = useDataStore();
+
+const bucketStore = useBucketStore();
 const showModalNewBucket = ref<boolean | null>(false);
 </script>

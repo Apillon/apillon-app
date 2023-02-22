@@ -4,28 +4,33 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 
 const menuOptions: NMenuOption[] = [
   {
     key: 'dashboard-service-storage-id',
     label: t('storage.files'),
-    path: `/dashboard/service/storage/${dataStore.bucket.selected}`,
+    path: `/dashboard/service/storage/${bucketStore.selected}`,
   },
   {
     key: 'dashboard-service-storage-slug-all',
     label: t('storage.filesAll'),
-    path: `/dashboard/service/storage/${dataStore.bucket.selected}/all`,
+    path: `/dashboard/service/storage/${bucketStore.selected}/all`,
   },
   {
     key: 'dashboard-service-storage-slug-webhook',
     label: t('storage.webhook'),
-    path: `/dashboard/service/storage/${dataStore.bucket.selected}/webhook`,
+    path: `/dashboard/service/storage/${bucketStore.selected}/webhook`,
+  },
+  {
+    key: 'dashboard-service-storage-slug-ipns',
+    label: t('storage.ipns.title'),
+    path: `/dashboard/service/storage/${bucketStore.selected}/ipns`,
   },
   {
     key: 'dashboard-service-storage-slug-trash',
     label: t('storage.trash'),
-    path: `/dashboard/service/storage/${dataStore.bucket.selected}/trash`,
+    path: `/dashboard/service/storage/${bucketStore.selected}/trash`,
   },
   {
     key: 'snapshots',

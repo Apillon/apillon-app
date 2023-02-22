@@ -57,9 +57,9 @@ const props = defineProps({
 });
 
 const message = useMessage();
+const referralStore = useReferralStore();
 
 const loadingConfirm = ref(false);
-
 const buttonsVisible = ref(false);
 
 function loadSuccess() {
@@ -84,6 +84,10 @@ async function confirmShareTweet(id: String) {
       }
     );
     if (res.data.retweeted) {
+      /** Update points in referral store */
+      referralStore.balance = res.data.player.balance;
+      referralStore.balance_all = res.data.player.balance_all;
+
       emit('success');
       message.success('Tweet share confirmed!');
     } else {

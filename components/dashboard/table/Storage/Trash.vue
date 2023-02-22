@@ -3,7 +3,7 @@
     <n-space justify="space-between">
       <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
         <n-input
-          v-model:value="search"
+          v-model:value="fileStore.search"
           type="text"
           name="search"
           size="small"
@@ -15,14 +15,21 @@
           </template>
         </n-input>
       </div>
-      <n-space />
+
+      <n-space size="large">
+        <!-- Refresh files -->
+        <n-button size="small" :loading="fileStore.loading" @click="fileStore.fetchDeletedFiles()">
+          <span class="icon-refresh text-lg mr-2"></span>
+          {{ $t('general.refresh') }}
+        </n-button>
+      </n-space>
     </n-space>
     <n-data-table
       remote
       :bordered="false"
       :columns="columns"
-      :data="dataStore.file.trash"
-      :loading="loading"
+      :data="data"
+      :loading="fileStore.loading"
       :pagination="{ pageSize: PAGINATION_LIMIT }"
       :row-props="rowProps"
     />
@@ -30,16 +37,13 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
 import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
 const message = useMessage();
-const dataStore = useDataStore();
+const bucketStore = useBucketStore();
+const fileStore = useFileStore();
 const IconFolderFile = resolveComponent('IconFolderFile');
-
-const search = ref<string>('');
-const loading = ref<boolean>(false);
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 
@@ -172,64 +176,24 @@ function rowProps(row: BucketItemInterface) {
   };
 }
 
-/**
- * Load data on mounted
- */
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await getFiles();
-    });
-  }, 100);
+/** Data: filtered files */
+const data = computed<Array<BucketItemInterface>>(() => {
+  return (
+    fileStore.trash.filter(item =>
+      item.name.toLocaleLowerCase().includes(fileStore.search.toLocaleLowerCase())
+    ) || []
+  );
 });
-
-/** Search files */
-watch(
-  () => search.value,
-  _ => {
-    debouncedSearchFilter();
-  }
-);
-const debouncedSearchFilter = debounce(fetchFiles, 500);
-
-/** Function "Fetch directory content" wrapper  */
-async function getFiles() {
-  if (!dataStore.hasDeletedFiles || isCacheExpired(LsCacheKeys.FILE_DELETED)) {
-    await fetchFiles();
-  }
-}
-
-/** Fetch deleted files */
-async function fetchFiles() {
-  loading.value = true;
-
-  try {
-    const res = await $api.get<FolderResponse>(endpoints.storageFilesTrashed(dataStore.bucketUuid));
-
-    dataStore.file.trash = res.data.items;
-
-    /** Save timestamp to SS */
-    sessionStorage.setItem(LsCacheKeys.FILE_DELETED, Date.now().toString());
-  } catch (error: any) {
-    /** Reset data */
-    dataStore.file.trash = [];
-
-    /** Show error message */
-    message.error(userFriendlyMsg(error));
-  }
-
-  loading.value = false;
-}
 
 /**
  * Restore file
  * */
 async function restore() {
-  dataStore.bucket.loading = true;
+  bucketStore.loading = true;
 
   try {
     const restoredFile = await $api.patch<BucketItemResponse>(
-      endpoints.storageFileRestore(dataStore.bucketUuid, currentRow.value.id)
+      endpoints.storageFileRestore(bucketStore.bucketUuid, currentRow.value.id)
     );
 
     removeTrashedFileFromList(restoredFile.data.id);
@@ -237,10 +201,10 @@ async function restore() {
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));
   }
-  dataStore.bucket.loading = false;
+  bucketStore.loading = false;
 }
 
 function removeTrashedFileFromList(id: number) {
-  dataStore.file.trash = dataStore.file.trash.filter(item => item.id !== id);
+  fileStore.trash = fileStore.trash.filter(item => item.id !== id);
 }
 </script>

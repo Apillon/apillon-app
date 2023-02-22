@@ -1,9 +1,13 @@
 import { DiscreteApiOptions, GlobalThemeOverrides, MessageProviderProps } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 
-export const PAGINATION_LIMIT = 20;
-export const CACHE_EXPIRATION_IN_MS = 60 * 1000; // One minute
+export const CACHE_EXPIRATION_IN_MS = 10 * 60 * 1000; // 10 minutes
 export const ON_COLUMN_CLICK_OPEN_CLASS = 'onClickOpen';
+export const PAGINATION_LIMIT = 20;
+export const PARAMS_ALL_ITEMS = {
+  page: 1,
+  limit: 1000,
+};
 
 export const LsTableColumnsKeys = {
   FILES: 'al_table_files_columns',
@@ -28,8 +32,12 @@ export const LsCacheKeys = {
   DEPLOYMENTS_STAGING: 'al_cache_deployments_staging',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
-  WEBPAGE: 'al_cache_webpage',
-  WEBPAGES: 'al_cache_webpages',
+  IPNS: 'al_cache_ipns',
+  IPNS_ITEM: 'al_cache_ipns_item',
+  PROJECT: 'al_cache_project',
+  PROJECTS: 'al_cache_projects',
+  WEBSITE: 'al_cache_website',
+  WEBSITES: 'al_cache_websites',
 };
 
 /** User roles */

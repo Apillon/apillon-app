@@ -1,8 +1,8 @@
 <template>
-  <Spinner v-if="webpageId > 0 && !webpage" />
+  <Spinner v-if="websiteId > 0 && !website" />
   <div v-else>
     <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
-      <!--  Webpage domain -->
+      <!--  Website domain -->
       <n-form-item path="domain" :label="$t('form.label.domain')" :label-props="{ for: 'domain' }">
         <n-input
           v-model:value="formData.domain"
@@ -41,7 +41,7 @@
 import { useMessage } from 'naive-ui';
 
 const props = defineProps({
-  webpageId: { type: Number, default: 0 },
+  websiteId: { type: Number, default: 0 },
   domain: { type: String, default: '' },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
@@ -50,19 +50,20 @@ const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
+const websiteStore = useWebsiteStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const webpage = ref<WebpageInterface | null>(null);
+const website = ref<WebsiteInterface | null>(null);
 
 onMounted(async () => {
-  if (props.webpageId) {
-    webpage.value = await dataStore.getWebpage(props.webpageId);
-    formData.value.domain = webpage.value.domain;
+  if (props.websiteId) {
+    website.value = await websiteStore.getWebsite(props.websiteId);
+    formData.value.domain = website.value.domain;
   }
 });
 
-const formData = ref<FormWebpageDomain>({
+const formData = ref<FormWebsiteDomain>({
   domain: props.domain || null,
 });
 
@@ -71,7 +72,7 @@ const rules: NFormRules = {
     {
       type: 'url',
       validator: validateDomain,
-      message: $i18n.t('validation.webpageDomainUrl'),
+      message: $i18n.t('validation.websiteDomainUrl'),
     },
   ],
 };
@@ -90,14 +91,14 @@ function handleSubmit(e: Event | MouseEvent) {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (props.domain) {
-      await updateWebpageDomain();
+      await updateWebsiteDomain();
     } else {
-      await createWebpageDomain();
+      await createWebsiteDomain();
     }
   });
 }
 
-async function createWebpageDomain() {
+async function createWebsiteDomain() {
   loading.value = true;
 
   if (!dataStore.hasProjects) {
@@ -105,14 +106,14 @@ async function createWebpageDomain() {
   }
 
   try {
-    const res = await $api.patch<WebpageResponse>(
-      endpoints.webpages(props.webpageId),
+    const res = await $api.patch<WebsiteResponse>(
+      endpoints.websites(props.websiteId),
       formData.value
     );
 
     message.success($i18n.t('form.success.created.domain'));
 
-    updateWebpageDomainValue(res.data.domain);
+    updateWebsiteDomainValue(res.data.domain);
 
     /** Emit events */
     emit('submitSuccess');
@@ -126,16 +127,16 @@ async function createWebpageDomain() {
   loading.value = false;
 }
 
-async function updateWebpageDomain() {
+async function updateWebsiteDomain() {
   loading.value = true;
 
   try {
-    const res = await $api.patch<WebpageResponse>(
-      endpoints.webpages(props.webpageId),
+    const res = await $api.patch<WebsiteResponse>(
+      endpoints.websites(props.websiteId),
       formData.value
     );
 
-    updateWebpageDomainValue(res.data.domain);
+    updateWebsiteDomainValue(res.data.domain);
 
     message.success($i18n.t('form.success.updated.domain'));
 
@@ -148,15 +149,15 @@ async function updateWebpageDomain() {
   loading.value = false;
 }
 
-function updateWebpageDomainValue(domain) {
-  /** On webpage updated refresh webpage data */
-  dataStore.webpage.items.forEach((item: WebpageInterface) => {
-    if (item.id === props.webpageId) {
+function updateWebsiteDomainValue(domain) {
+  /** On website updated refresh website data */
+  websiteStore.items.forEach((item: WebsiteInterface) => {
+    if (item.id === props.websiteId) {
       item.domain = domain;
     }
   });
-  if (dataStore.webpage.active.id === props.webpageId) {
-    dataStore.webpage.active.domain = domain;
+  if (websiteStore.active.id === props.websiteId) {
+    websiteStore.active.domain = domain;
   }
 }
 </script>

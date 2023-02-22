@@ -1,16 +1,24 @@
 <template>
-  <div v-if="loading" class="flex flex-col gap-8" style="height: calc(100vh - 88px)">
-    <!-- Loading skeleton - on long page load show skeleten -->
-    <n-skeleton height="40px" width="100%" />
-    <n-skeleton height="40px" width="100%" />
-    <div class="flex gap-8 h-full">
-      <div style="width: 100%">
-        <n-skeleton height="100%" width="100%" />
+  <div v-if="loading">
+    <transition name="fade" appear>
+      <div
+        v-if="loadingAnimation"
+        class="w-full flex flex-col gap-8"
+        style="height: calc(100vh - 88px)"
+      >
+        <!-- Loading skeleton - on long page load show skeleten -->
+        <n-skeleton height="40px" width="100%" />
+        <n-skeleton height="40px" width="100%" />
+        <div class="flex gap-8 h-full">
+          <div style="width: 100%">
+            <n-skeleton height="100%" width="100%" />
+          </div>
+          <div style="width: 320px">
+            <n-skeleton height="400px" width="100%" />
+          </div>
+        </div>
       </div>
-      <div style="width: 320px">
-        <n-skeleton height="400px" width="100%" />
-      </div>
-    </div>
+    </transition>
   </div>
   <div v-else>
     <div v-if="$slots.heading" ref="headingRef">
@@ -29,8 +37,8 @@
 
             <!-- Global component: File upload list -->
             <FormStorageUploadFiles
-              v-if="dataStore.bucket.uploadActive && dataStore.bucketUuid"
-              :bucket-uuid="dataStore.bucketUuid"
+              v-if="bucketStore.uploadActive && bucketStore.bucketUuid"
+              :bucket-uuid="bucketStore.bucketUuid"
             />
           </n-scrollbar>
         </n-layout-content>
@@ -91,12 +99,31 @@ const props = defineProps({
   learnCollapsible: { type: Boolean, default: true },
 });
 
+/** Delay animation */
+const loadingAnimation = ref<boolean>(false);
+onMounted(() => {
+  setLoadingAnimation(props.loading);
+});
+watch(
+  () => props.loading,
+  isLoading => {
+    setLoadingAnimation(isLoading);
+  }
+);
+function setLoadingAnimation(isLoading: boolean) {
+  const delay = isLoading ? 10 : 0;
+  setTimeout(() => {
+    loadingAnimation.value = isLoading;
+  }, delay);
+}
+
 /** Global messages */
 window.$message = useMessage();
 
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const { isMd, isLg, isXl } = useScreen();
 const { name } = useRoute();
 const authStore = useAuthStore();
