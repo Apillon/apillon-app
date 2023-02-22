@@ -322,6 +322,7 @@
     "success": {
       "apiKey": "Api key has been created",
       "filesUploaded": "Files has been successfully uploaded",
+      "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
       "profile": "Your profile data has been updated",
       "requestPasswordChange": "We’ve sent you a password reset request to your email",

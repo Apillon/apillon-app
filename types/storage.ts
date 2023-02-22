@@ -149,6 +149,7 @@ declare global {
   interface IpnsCreateResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsUpdateResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsPublishResponse extends GeneralResponse<IpnsInterface> {}
+  interface IpnsItemResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsResponse extends GeneralItemsResponse<IpnsInterface> {}
 
   /**

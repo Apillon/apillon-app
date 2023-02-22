@@ -63,6 +63,7 @@ const ipnsStore = useIpnsStore();
 
 const loading = ref(false);
 const modalCreateIpnsVisible = ref<boolean>(false);
+let ipnsPublishInterval: any = null as any;
 
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormIpnsPublish>({
@@ -85,6 +86,12 @@ const ipnsItems = computed<Array<NSelectOption>>(() => {
 
 onMounted(async () => {
   await ipnsStore.getIPNSs(bucketStore.selected);
+});
+onUnmounted(() => {
+  /** Fallback to cancel interval in case of any errors */
+  setTimeout(() => {
+    clearInterval(ipnsPublishInterval);
+  }, 100000);
 });
 
 function handleSubmit(e: Event | MouseEvent) {
@@ -111,16 +118,10 @@ async function publishToIpns(ipnsId: number) {
       { cid: props.cid }
     );
 
-    message.success($i18n.t('form.success.ipnsPublished'));
+    message.success($i18n.t('form.success.ipnsPublish'));
 
-    /** On  ipns publish, update data */
-    ipnsStore.items.forEach(ipns => {
-      if (ipns.id === res.data.id) {
-        ipns.ipnsName = res.data.ipnsName;
-        ipns.ipnsValue = res.data.ipnsValue;
-        ipns.link = res.data.link;
-      }
-    });
+    /** IPNS Publish pooling */
+    checkIfIpnsPublished(ipnsId);
 
     /** Emit events */
     emit('submitSuccess');
@@ -129,5 +130,29 @@ async function publishToIpns(ipnsId: number) {
     message.error(userFriendlyMsg(error));
   }
   loading.value = false;
+}
+
+function checkIfIpnsPublished(ipnsId: number) {
+  ipnsPublishInterval = setInterval(async () => {
+    const publishedIpns = await ipnsStore.fetchIpnsById(bucketStore.selected, ipnsId);
+
+    if (publishedIpns.ipnsValue) {
+      /** On  ipns publish, update data */
+      updateIpnsInList(publishedIpns);
+
+      message.success($i18n.t('form.success.ipnsPublished'));
+      clearInterval(ipnsPublishInterval);
+    }
+  }, 10000);
+}
+
+function updateIpnsInList(ipns: IpnsInterface) {
+  ipnsStore.items.forEach(item => {
+    if (item.id === ipns.id) {
+      item.ipnsName = ipns.ipnsName;
+      item.ipnsValue = ipns.ipnsValue;
+      item.link = ipns.link;
+    }
+  });
 }
 </script>
