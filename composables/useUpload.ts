@@ -112,7 +112,7 @@ export default function useUpload() {
   }
 
   function uploadFilesToS3(
-    uploadFilesRequests: Array<FilesUploadRequestInterface>,
+    uploadFilesRequests: S3FileUploadRequestInterface[],
     wrapToDirectory: boolean
   ) {
     uploadFilesRequests.forEach(uploadFileRequest => {
@@ -130,7 +130,7 @@ export default function useUpload() {
 
   async function uploadFileToS3(
     file: FileListItemType,
-    uploadFilesRequest: FilesUploadRequestInterface,
+    uploadFilesRequest: S3FileUploadRequestInterface,
     wrapToDirectory: boolean
   ) {
     try {

@@ -29,7 +29,7 @@ defineProps({
       [CollectionStatus.PENDING, CollectionStatus.DEPLOYED, CollectionStatus.TRANSFERED].includes(
         collectionStatus
       ),
-    required: true,
+    default: CollectionStatus.PENDING,
   },
 });
 

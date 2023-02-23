@@ -14,33 +14,16 @@
           v-if="collectionStore.hasCollectionItems && false"
           :collections="collectionStore.items"
         />
-        <template v-else>
-          <n-tabs v-model:value="currentTab" type="segment" animated>
-            <n-tab-pane name="uploadMetadata">
-              <template #tab>
-                <IconNumber :number="1" :active="currentTab === 'uploadMetadata'" />
-                <span class="ml-2">{{ $t('nft.collection.uploadMetadata') }}</span>
-              </template>
-              <slot>
-                <FormNftUploadCsvFile />
-              </slot>
-            </n-tab-pane>
-            <n-tab-pane name="uploadImages">
-              <template #tab>
-                <IconNumber :number="2" :active="currentTab === 'uploadImages'" />
-                <span class="ml-2">{{ $t('nft.collection.uploadImages') }}</span>
-              </template>
-              Hey Jude
-            </n-tab-pane>
-            <n-tab-pane name="mintNfts">
-              <template #tab>
-                <IconNumber :number="3" :active="currentTab === 'mintNfts'" />
-                <span class="ml-2">{{ $t('nft.collection.mintNfts') }}</span>
-              </template>
-              Qilixiang
-            </n-tab-pane>
-          </n-tabs>
-        </template>
+        <Empty
+          v-else
+          :title="$t('nft.collectionsEmpty')"
+          :info="$t('nft.collectionsCreate')"
+          icon="nft/illustration"
+        >
+          <Btn type="primary" @click="">
+            {{ $t('nft.collection.mint') }}
+          </Btn>
+        </Empty>
       </n-space>
     </slot>
   </Dashboard>
@@ -52,17 +35,8 @@ const router = useRouter();
 const { params } = useRoute();
 const collectionStore = useCollectionStore();
 
-/** Active tab value */
-const currentTab = ref<string>('uploadMetadata');
-
 /** Website ID from route */
 const collectionId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
-watch(
-  () => currentTab.value,
-  tab => {
-    console.log(tab);
-  }
-);
 
 useHead({
   title: $i18n.t('nav.hosting'),

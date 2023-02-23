@@ -53,28 +53,6 @@
         />
       </n-form-item>
 
-      <n-grid :cols="2" :x-gap="32">
-        <!--  Collection Mint price -->
-        <n-form-item-gi path="mintPrice" :label="$t('form.label.collectionMintPrice')">
-          <n-input-number
-            v-model:value="formData.mintPrice"
-            :min="0"
-            :placeholder="$t('form.placeholder.collectionMintPrice')"
-            clearable
-          />
-        </n-form-item-gi>
-
-        <!--  Collection Max supply -->
-        <n-form-item-gi path="maxSupply" :label="$t('form.label.collectionMaxSupply')">
-          <n-input-number
-            v-model:value="formData.maxSupply"
-            :min="0"
-            :placeholder="$t('form.placeholder.collectionMaxSupply')"
-            clearable
-          />
-        </n-form-item-gi>
-      </n-grid>
-
       <!--  Collection Base URI -->
       <n-form-item
         path="baseUri"
@@ -103,12 +81,36 @@
         />
       </n-form-item>
 
-      <n-grid :cols="3" :x-gap="32">
-        <!--  Collection Is Drop -->
-        <n-form-item-gi path="isDrop" :label="$t('form.label.collectionIsDrop')">
-          <n-switch v-model:value="formData.isDrop" />
-        </n-form-item-gi>
+      <!--  Collection Max supply -->
+      <n-form-item path="maxSupply" :label="$t('form.label.collectionMaxSupply')">
+        <n-input-number
+          v-model:value="formData.maxSupply"
+          :min="0"
+          :placeholder="$t('form.placeholder.collectionMaxSupply')"
+          clearable
+        />
+      </n-form-item>
 
+      <!--  Collection Is Drop -->
+      <n-form-item path="isDrop" :label="$t('form.label.collectionIsDrop')">
+        <n-switch v-model:value="formData.isDrop" />
+      </n-form-item>
+
+      <!--  Collection Mint price -->
+      <n-form-item
+        path="mintPrice"
+        v-show="formData.isDrop"
+        :label="$t('form.label.collectionMintPrice')"
+      >
+        <n-input-number
+          v-model:value="formData.mintPrice"
+          :min="0"
+          :placeholder="$t('form.placeholder.collectionMintPrice')"
+          clearable
+        />
+      </n-form-item>
+
+      <n-grid :cols="2" :x-gap="32" v-show="formData.isDrop">
         <!--  Collection Drop start -->
         <n-form-item-gi path="dropStart" :label="$t('form.label.collectionDropStart')">
           <n-switch v-model:value="formData.dropStart" />
@@ -180,7 +182,7 @@ const formData = ref<FormCollection>({
   name: collection.value?.name || '',
   symbol: collection.value?.symbol || '',
   mintPrice: collection.value?.mintPrice || 0,
-  maxSupply: collection.value?.maxSupply || 0,
+  maxSupply: collection.value?.maxSupply || null,
   baseUri: collection.value?.baseUri || '',
   baseExtension: collection.value?.baseExtension || '',
   isDrop: collection.value?.isDrop || false,

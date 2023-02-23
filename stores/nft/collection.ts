@@ -6,6 +6,7 @@ export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
     csvFile: {} as FileListItemType,
+    images: [] as Array<FileListItemType>,
     items: [] as Array<CollectionInterface>,
     loading: false,
     quotaReached: undefined as Boolean | undefined,

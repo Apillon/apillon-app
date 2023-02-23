@@ -19,6 +19,10 @@ import { useMessage } from 'naive-ui';
 const message = useMessage();
 const collectionStore = useCollectionStore();
 
+/** Papa parser */
+const { vueApp } = useNuxtApp();
+const $papa = vueApp.config.globalProperties.$papa;
+
 /** Upload file request - add file to list */
 function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
   if (file.type !== 'text/csv') {
@@ -34,15 +38,13 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
     onFinish,
     onError,
   };
-  console.log(collectionStore.csvFile);
-  console.log(file.file);
 
-  var reader = new FileReader();
-  var fileinput: any;
-  reader.onload = e => {
-    fileinput = reader.result;
-  };
-  reader.readAsText(file.file);
-  console.log(fileinput);
+  $papa.parse(file.file, {
+    header: true,
+    skipEmptyLines: true,
+    complete: function (results) {
+      console.log(results);
+    },
+  });
 }
 </script>

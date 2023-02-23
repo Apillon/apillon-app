@@ -36,7 +36,7 @@ const router = useRouter();
 const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
 const modalEditCollectionVisible = ref<boolean>(false);
-const CollectionStatus = resolveComponent('CollectionStatus');
+const CollectionStatus = resolveComponent('NftCollectionStatus');
 
 /** Data: filtered collections */
 const data = computed<Array<CollectionInterface>>(() => {

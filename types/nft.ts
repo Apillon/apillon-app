@@ -13,12 +13,12 @@ declare global {
     symbol: string;
     name: string;
     mintPrice: number;
-    maxSupply: number;
+    maxSupply?: number | null;
     baseUri: string;
     baseExtension: string;
     isDrop: boolean;
-    dropStart: boolean;
-    reserve: boolean;
+    dropStart?: boolean;
+    reserve?: boolean;
     description?: string;
   }
 
