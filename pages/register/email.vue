@@ -41,7 +41,11 @@ onMounted(() => {
   if (!hasEmail.value) {
     router.push({ name: 'register' });
   }
+
+  /** Track Registration start */
+  tractEvent('registration', 'registration_email_sent', 'Email confirmation sent');
 });
+
 
 /** If user has written his email on signup, then allow him to send email again */
 const hasEmail = computed<boolean>(() => {
