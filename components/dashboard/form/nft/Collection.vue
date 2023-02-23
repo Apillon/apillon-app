@@ -53,25 +53,72 @@
         />
       </n-form-item>
 
-      <!--  Collection Mint price -->
-      <n-form-item path="mintPrice" :label="$t('form.label.collectionMintPrice')">
-        <n-input-number
-          v-model:value="formData.mintPrice"
-          :min="0"
-          :placeholder="$t('form.placeholder.collectionMintPrice')"
+      <n-grid :cols="2" :x-gap="32">
+        <!--  Collection Mint price -->
+        <n-form-item-gi path="mintPrice" :label="$t('form.label.collectionMintPrice')">
+          <n-input-number
+            v-model:value="formData.mintPrice"
+            :min="0"
+            :placeholder="$t('form.placeholder.collectionMintPrice')"
+            clearable
+          />
+        </n-form-item-gi>
+
+        <!--  Collection Max supply -->
+        <n-form-item-gi path="maxSupply" :label="$t('form.label.collectionMaxSupply')">
+          <n-input-number
+            v-model:value="formData.maxSupply"
+            :min="0"
+            :placeholder="$t('form.placeholder.collectionMaxSupply')"
+            clearable
+          />
+        </n-form-item-gi>
+      </n-grid>
+
+      <!--  Collection Base URI -->
+      <n-form-item
+        path="baseUri"
+        :label="$t('form.label.collectionBaseUri')"
+        :label-props="{ for: 'baseUri' }"
+      >
+        <n-input
+          v-model:value="formData.baseUri"
+          :input-props="{ id: 'baseUri' }"
+          :placeholder="$t('form.placeholder.collectionBaseUri')"
           clearable
         />
       </n-form-item>
 
-      <!--  Collection Max supply -->
-      <n-form-item path="maxSupply" :label="$t('form.label.collectionMaxSupply')">
-        <n-input-number
-          v-model:value="formData.maxSupply"
-          :min="0"
-          :placeholder="$t('form.placeholder.collectionMaxSupply')"
+      <!--  Collection Base Extension -->
+      <n-form-item
+        path="baseExtension"
+        :label="$t('form.label.collectionBaseExtension')"
+        :label-props="{ for: 'baseExtension' }"
+      >
+        <n-input
+          v-model:value="formData.baseExtension"
+          :input-props="{ id: 'baseExtension' }"
+          :placeholder="$t('form.placeholder.collectionBaseExtension')"
           clearable
         />
       </n-form-item>
+
+      <n-grid :cols="3" :x-gap="32">
+        <!--  Collection Is Drop -->
+        <n-form-item-gi path="isDrop" :label="$t('form.label.collectionIsDrop')">
+          <n-switch v-model:value="formData.isDrop" />
+        </n-form-item-gi>
+
+        <!--  Collection Drop start -->
+        <n-form-item-gi path="dropStart" :label="$t('form.label.collectionDropStart')">
+          <n-switch v-model:value="formData.dropStart" />
+        </n-form-item-gi>
+
+        <!--  Collection Reserve -->
+        <n-form-item-gi path="reserve" :label="$t('form.label.collectionReserve')">
+          <n-switch v-model:value="formData.reserve" />
+        </n-form-item-gi>
+      </n-grid>
 
       <!--  Form submit -->
       <n-form-item>
@@ -118,7 +165,14 @@ onMounted(async () => {
   if (props.collectionId) {
     collection.value = await collectionStore.getCollection(props.collectionId);
     formData.value.name = collection.value.name;
-    formData.value.description = collection.value.description;
+    formData.value.symbol = collection.value.symbol;
+    formData.value.mintPrice = collection.value.mintPrice;
+    formData.value.maxSupply = collection.value.maxSupply;
+    formData.value.baseUri = collection.value.baseUri;
+    formData.value.baseExtension = collection.value.baseExtension;
+    formData.value.isDrop = collection.value.isDrop;
+    formData.value.dropStart = collection.value.dropStart;
+    formData.value.reserve = collection.value.reserve;
   }
 });
 
@@ -127,6 +181,11 @@ const formData = ref<FormCollection>({
   symbol: collection.value?.symbol || '',
   mintPrice: collection.value?.mintPrice || 0,
   maxSupply: collection.value?.maxSupply || 0,
+  baseUri: collection.value?.baseUri || '',
+  baseExtension: collection.value?.baseExtension || '',
+  isDrop: collection.value?.isDrop || false,
+  dropStart: collection.value?.dropStart || false,
+  reserve: collection.value?.reserve || false,
 });
 
 const rules: NFormRules = {

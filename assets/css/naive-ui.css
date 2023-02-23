@@ -309,7 +309,7 @@
   }
 
   .n-message__content {
-    @apply block w-full;
+    @apply block w-full whitespace-pre-line;
   }
 }
 

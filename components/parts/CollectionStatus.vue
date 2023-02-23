@@ -2,19 +2,19 @@
   <n-tag
     v-bind="$attrs"
     :type="getCollectionStatus(collectionStatus)"
-    :bordered="collectionStatus === CollectionStatus.INITIATED"
+    :bordered="collectionStatus === CollectionStatus.PENDING"
     size="tiny"
     round
   >
     <n-space
-      :class="collectionStatus === CollectionStatus.INITIATED ? 'text-body' : 'text-bg-dark'"
+      :class="collectionStatus === CollectionStatus.PENDING ? 'text-body' : 'text-bg-dark'"
       :size="0"
       align="center"
       :wrap="false"
     >
       <span class="mx-1 uppercase">{{ $t(`nft.collection.status.${collectionStatus}`) }}</span>
       <Spinner
-        v-if="collectionStatus < CollectionStatus.SUCCESSFUL"
+        v-if="collectionStatus < CollectionStatus.TRANSFERED"
         class="!relative !w-5 !h-5 !m-0 !left-0"
       />
     </n-space>
@@ -26,25 +26,20 @@ defineProps({
   collectionStatus: {
     type: Number,
     validator: (collectionStatus: number) =>
-      [
-        CollectionStatus.INITIATED,
-        CollectionStatus.IN_PROGRESS,
-        CollectionStatus.SUCCESSFUL,
-        CollectionStatus.FAILED,
-      ].includes(collectionStatus),
-    default: CollectionStatus.INITIATED,
+      [CollectionStatus.PENDING, CollectionStatus.DEPLOYED, CollectionStatus.TRANSFERED].includes(
+        collectionStatus
+      ),
+    required: true,
   },
 });
 
 /** Deployment status */
 function getCollectionStatus(status: number): TagType {
   switch (status) {
-    case CollectionStatus.IN_PROGRESS:
+    case CollectionStatus.DEPLOYED:
       return 'warning';
-    case CollectionStatus.SUCCESSFUL:
+    case CollectionStatus.TRANSFERED:
       return 'success';
-    case CollectionStatus.FAILED:
-      return 'error';
     default:
       return 'warning';
   }

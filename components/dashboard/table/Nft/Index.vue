@@ -106,10 +106,10 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      key: 'status',
+      key: 'collectionStatus',
       title: $i18n.t('general.status'),
       render(row) {
-        return h(CollectionStatus, { collectionStatus: row.status }, '');
+        return h(CollectionStatus, { collectionStatus: row.collectionStatus }, '');
       },
     },
     {

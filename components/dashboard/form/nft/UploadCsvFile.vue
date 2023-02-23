@@ -35,5 +35,14 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
     onError,
   };
   console.log(collectionStore.csvFile);
+  console.log(file.file);
+
+  var reader = new FileReader();
+  var fileinput: any;
+  reader.onload = e => {
+    fileinput = reader.result;
+  };
+  reader.readAsText(file.file);
+  console.log(fileinput);
 }
 </script>

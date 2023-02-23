@@ -1,9 +1,8 @@
 /** Hosting Collection status */
 export enum CollectionStatus {
-  INITIATED = 0,
-  IN_PROGRESS = 1,
-  SUCCESSFUL = 5,
-  FAILED = 100,
+  PENDING = 0,
+  DEPLOYED = 1,
+  TRANSFERED = 2,
 }
 
 declare global {
@@ -15,21 +14,35 @@ declare global {
     name: string;
     mintPrice: number;
     maxSupply: number;
+    baseUri: string;
+    baseExtension: string;
+    isDrop: boolean;
+    dropStart: boolean;
+    reserve: boolean;
     description?: string;
   }
 
   interface CollectionInterface {
-    id: number;
-    status: number;
+    baseExtension: string;
+    baseUri: string;
+    bucket_uuid: string;
+    collectionStatus: number;
     collection_uuid: string;
-    symbol: string;
-    name: string;
+    contractAddress: string | null;
     description: string;
+    dropStart: boolean;
+    id: number;
+    isDrop: boolean;
+    isRevokable: boolean;
+    isSoulbound: boolean;
     maxSupply: number;
     mintPrice: number;
-    bucket_uuid: string;
-    baseUri: string | null;
-    contractAddress: string | null;
+    name: string;
+    reserve: boolean;
+    royaltiesAddress: string;
+    royaltiesFees: number;
+    status: number;
+    symbol: string;
     transactionHash: string | null;
     updateTime: string;
   }
