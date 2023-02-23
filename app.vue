@@ -19,8 +19,11 @@ import { lightTheme, darkTheme, enUS, dateEnUS } from 'naive-ui';
 
 /** Matomo analytics */
 const router = useRouter();
-router.afterEach(_ => {
-  window._paq.push(['trackPageView']);
+router.afterEach(to => {
+  if (!!window._paq) {
+    window._paq.push(['setDocumentTitle', to.fullPath]);
+    window._paq.push(['trackPageView']);
+  }
 });
 
 const $i18n = useI18n();

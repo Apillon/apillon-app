@@ -24,7 +24,11 @@
 
     <div class="mt-10 text-center">
       <span class="text-sm text-body"> {{ $t('signup.alreadyHaveAccount') }} </span>&nbsp;
-      <Btn :to="{ name: 'login' }" type="link">
+      <Btn
+        :to="{ name: 'login' }"
+        type="link"
+        @click.native="tractEvent('registration', 'registration_login', 'Change to login')"
+      >
         {{ $t('general.login') }}
       </Btn>
     </div>
@@ -43,5 +47,10 @@ useHead({
 
 onBeforeMount(() => {
   authStore.authStep = AuthStep.SIGN_UP;
+});
+
+onMounted(() => {
+  /** Track Registration start */
+  tractEvent('registration', 'registration_start', 'Registration landing');
 });
 </script>

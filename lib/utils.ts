@@ -14,6 +14,15 @@ export function getAppConfig(env?: string) {
 }
 
 /**
+ * Analytics Matomo
+ */
+export function tractEvent(eventCategory: string, eventAction: string, eventName: string) {
+  if (!!window._paq) {
+    window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
+  }
+}
+
+/**
  * Enum
  */
 export function enumKeys(E: any): string[] {
