@@ -138,16 +138,16 @@ const Endpoints = {
   /** Collection */
   collection: '/nfts/collection',
   collections: '/nfts/collections',
-  collectionTransactions: (collectionUuid?: string) => {
+  collectionTransactions: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/transactions`;
   },
-  collectionSetBaseUri: (collectionUuid?: string) => {
+  collectionSetBaseUri: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/setBaseUri`;
   },
-  collectionTransferOwnership: (collectionUuid?: string) => {
+  collectionTransferOwnership: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/transferOwnership`;
   },
-  collectionMint: (collectionUuid?: string) => {
+  collectionMint: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/mint`;
   },
 

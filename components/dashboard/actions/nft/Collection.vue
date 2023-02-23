@@ -41,6 +41,7 @@
 const props = defineProps({
   env: { type: Number, default: 0 },
 });
+const emit = defineEmits(['mint']);
 
 const $i18n = useI18n();
 const collectionStore = useCollectionStore();
@@ -51,7 +52,7 @@ const options = [
     key: 'mint',
     props: {
       onClick: () => {
-        copyToClipboard('');
+        emit('mint');
       },
     },
   },

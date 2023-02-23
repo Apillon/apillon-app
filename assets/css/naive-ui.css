@@ -118,6 +118,16 @@
   }
 }
 
+/** Date picker */
+.n-date-panel {
+  .n-button {
+    .n-button__border,
+    .n-button__state-border {
+      display: none;
+    }
+  }
+}
+
 /** Divider */
 .n-divider {
   &.n-divider--vertical {

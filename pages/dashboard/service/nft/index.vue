@@ -37,7 +37,7 @@
       </W3Warn>
 
       <!-- Modal - Create Collection -->
-      <modal v-model:show="showModalNewCollection" :title="$t('nft.collection.addNew')">
+      <modal v-model:show="modalNewCollectionVisible" :title="$t('nft.collection.addNew')">
         <FormNftCollection />
       </modal>
     </slot>
@@ -50,7 +50,7 @@ const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
-const showModalNewCollection = ref<boolean | null>(false);
+const modalNewCollectionVisible = ref<boolean | null>(false);
 
 useHead({
   title: $i18n.t('nav.nft'),
@@ -72,21 +72,21 @@ onMounted(() => {
  * */
 function createNewCollection() {
   if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.nft.new')) {
-    showModalNewCollection.value = true;
+    modalNewCollectionVisible.value = true;
   } else {
     showModalW3Warn.value = true;
-    showModalNewCollection.value = null;
+    modalNewCollectionVisible.value = null;
   }
 }
 
 /** When user close W3Warn, allow him to create new collection */
 function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalNewCollection.value !== false) {
-    showModalNewCollection.value = true;
+  if (!value && modalNewCollectionVisible.value !== false) {
+    modalNewCollectionVisible.value = true;
   }
 }
 
-/** Watch showModalNewCollection, onShow update timestamp of shown modal in session storage */
+/** Watch modalNewCollectionVisible, onShow update timestamp of shown modal in session storage */
 watch(
   () => showModalW3Warn.value,
   shown => {

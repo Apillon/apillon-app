@@ -13,14 +13,15 @@ export const useCollectionStore = defineStore('collection', {
     search: '',
     selected: 0,
     total: 0,
+    transaction: [] as Array<TransactionInterface>,
     uploadActive: false,
   }),
   getters: {
     hasCollections(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
     },
-    hasCollectionItems(state): boolean {
-      return Array.isArray(state.items) && state.items.length > 0;
+    hasCollectionTransactions(state): boolean {
+      return Array.isArray(state.transaction) && state.transaction.length > 0;
     },
   },
   actions: {
@@ -47,16 +48,14 @@ export const useCollectionStore = defineStore('collection', {
       return this.items;
     },
 
-    async getCollection(collectionId: number): Promise<CollectionInterface> {
-      if (this.active?.id === collectionId && !isCacheExpired(LsCacheKeys.COLLECTION)) {
-        return this.active;
+    async getCollectionTransactions(collectionUuid: string): Promise<any> {
+      if (
+        this.active?.collection_uuid === collectionUuid &&
+        (!this.hasCollectionTransactions || !isCacheExpired(LsCacheKeys.COLLECTION_TRANSACTIONS))
+      ) {
+        return this.transaction;
       }
-      return await this.fetchCollection(collectionId);
-    },
-    async getCollectionQuota() {
-      if (this.quotaReached === undefined) {
-        await this.fetchCollectionQuota();
-      }
+      return await this.fetchCollectionTransactions(collectionUuid);
     },
 
     /**
@@ -84,7 +83,7 @@ export const useCollectionStore = defineStore('collection', {
         this.loading = false;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.WEBSITES, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.COLLECTIONS, Date.now().toString());
 
         return res.data.items;
       } catch (error: any) {
@@ -101,45 +100,27 @@ export const useCollectionStore = defineStore('collection', {
       return [];
     },
 
-    async fetchCollection(id: number): Promise<CollectionInterface> {
+    async fetchCollectionTransactions(collectionUuid: string): Promise<TransactionInterface[]> {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
       try {
-        const res = await $api.get<CollectionResponse>(endpoints.collections);
-
-        this.active = res.data;
+        const res = await $api.get<TransactionResponse>(
+          endpoints.collectionTransactions(collectionUuid)
+        );
+        this.transaction = res.data.items;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.WEBSITE, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.COLLECTION_TRANSACTIONS, Date.now().toString());
 
-        return res.data;
+        return res.data.items;
       } catch (error: any) {
-        this.active = {} as CollectionInterface;
+        this.transaction = [];
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
-      return {} as CollectionInterface;
-    },
-
-    async fetchCollectionQuota() {
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-
-      try {
-        const res = await $api.get<CollectionQuotaResponse>(endpoints.collection, {
-          project_uuid: dataStore.projectUuid,
-        });
-
-        this.quotaReached = res.data;
-      } catch (error: any) {
-        this.quotaReached = undefined;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
+      return [];
     },
   },
 });

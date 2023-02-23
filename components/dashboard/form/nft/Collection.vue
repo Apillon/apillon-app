@@ -96,29 +96,39 @@
         <n-switch v-model:value="formData.isDrop" />
       </n-form-item>
 
-      <!--  Collection Mint price -->
+      <!--  Collection Drop start -->
       <n-form-item
-        path="mintPrice"
+        path="dropStart"
         v-show="formData.isDrop"
-        :label="$t('form.label.collectionMintPrice')"
+        :label="$t('form.label.collectionDropStart')"
       >
-        <n-input-number
-          v-model:value="formData.mintPrice"
-          :min="0"
-          :placeholder="$t('form.placeholder.collectionMintPrice')"
+        <n-date-picker
+          v-model="formData.dropStart"
+          type="datetime"
+          :is-date-disabled="disablePasteDate"
           clearable
         />
       </n-form-item>
 
       <n-grid :cols="2" :x-gap="32" v-show="formData.isDrop">
-        <!--  Collection Drop start -->
-        <n-form-item-gi path="dropStart" :label="$t('form.label.collectionDropStart')">
-          <n-switch v-model:value="formData.dropStart" />
+        <!--  Collection Mint price -->
+        <n-form-item-gi path="mintPrice" :label="$t('form.label.collectionMintPrice')">
+          <n-input-number
+            v-model:value="formData.mintPrice"
+            :min="0"
+            :placeholder="$t('form.placeholder.collectionMintPrice')"
+            clearable
+          />
         </n-form-item-gi>
 
         <!--  Collection Reserve -->
         <n-form-item-gi path="reserve" :label="$t('form.label.collectionReserve')">
-          <n-switch v-model:value="formData.reserve" />
+          <n-input-number
+            v-model:value="formData.reserve"
+            :min="0"
+            :placeholder="$t('form.placeholder.collectionReserve')"
+            clearable
+          />
         </n-form-item-gi>
       </n-grid>
 
@@ -165,29 +175,29 @@ const collection = ref<CollectionInterface | null>(null);
 
 onMounted(async () => {
   if (props.collectionId) {
-    collection.value = await collectionStore.getCollection(props.collectionId);
-    formData.value.name = collection.value.name;
-    formData.value.symbol = collection.value.symbol;
-    formData.value.mintPrice = collection.value.mintPrice;
-    formData.value.maxSupply = collection.value.maxSupply;
-    formData.value.baseUri = collection.value.baseUri;
-    formData.value.baseExtension = collection.value.baseExtension;
-    formData.value.isDrop = collection.value.isDrop;
-    formData.value.dropStart = collection.value.dropStart;
-    formData.value.reserve = collection.value.reserve;
+    // collection.value = await collectionStore.getCollection(props.collectionId);
+    // formData.value.name = collection.value.name;
+    // formData.value.symbol = collection.value.symbol;
+    // formData.value.mintPrice = collection.value.mintPrice;
+    // formData.value.maxSupply = collection.value.maxSupply;
+    // formData.value.baseUri = collection.value.baseUri;
+    // formData.value.baseExtension = collection.value.baseExtension;
+    // formData.value.isDrop = collection.value.isDrop;
+    // formData.value.dropStart = collection.value.dropStart;
+    // formData.value.reserve = collection.value.reserve;
   }
 });
 
 const formData = ref<FormCollection>({
   name: collection.value?.name || '',
   symbol: collection.value?.symbol || '',
-  mintPrice: collection.value?.mintPrice || 0,
+  mintPrice: collection.value?.mintPrice,
   maxSupply: collection.value?.maxSupply || null,
   baseUri: collection.value?.baseUri || '',
   baseExtension: collection.value?.baseExtension || '',
   isDrop: collection.value?.isDrop || false,
-  dropStart: collection.value?.dropStart || false,
-  reserve: collection.value?.reserve || false,
+  dropStart: collection.value?.dropStart,
+  reserve: collection.value?.reserve,
 });
 
 const rules: NFormRules = {
@@ -203,18 +213,6 @@ const rules: NFormRules = {
       message: $i18n.t('validation.collectionSymbolRequired'),
     },
   ],
-  mintPrice: [
-    {
-      required: true,
-      message: $i18n.t('validation.collectionMintPriceRequired'),
-    },
-  ],
-  maxSupply: [
-    {
-      required: true,
-      message: $i18n.t('validation.collectionMaxSupplyRequired'),
-    },
-  ],
 };
 
 const isQuotaReached = computed<boolean>(() => {
@@ -223,6 +221,10 @@ const isQuotaReached = computed<boolean>(() => {
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
 });
+
+function disablePasteDate(ts: number) {
+  return ts < Date.now();
+}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {

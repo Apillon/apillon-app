@@ -7,12 +7,12 @@
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <!-- Actions -->
-        <ActionsNftCollection />
+        <ActionsNftCollection @mint="modalMintCollectionVisible = true" />
 
         <!-- Table -->
         <TableNftCollection
-          v-if="collectionStore.hasCollectionItems && false"
-          :collections="collectionStore.items"
+          v-if="collectionStore.hasCollectionTransactions"
+          :transactions="collectionStore.transaction"
         />
         <Empty
           v-else
@@ -20,20 +20,26 @@
           :info="$t('nft.collectionsCreate')"
           icon="nft/illustration"
         >
-          <Btn type="primary" @click="">
+          <Btn type="primary" @click="modalMintCollectionVisible = true">
             {{ $t('nft.collection.mint') }}
           </Btn>
         </Empty>
       </n-space>
+
+      <!-- Modal - Create Collection -->
+      <modal v-model:show="modalMintCollectionVisible" :title="$t('nft.collection.addNew')">
+        <FormNftMint :collection-uuid="collectionStore.active.collection_uuid" />
+      </modal>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
 const router = useRouter();
 const { params } = useRoute();
+const $i18n = useI18n();
 const collectionStore = useCollectionStore();
+const modalMintCollectionVisible = ref<boolean | null>(false);
 
 /** Website ID from route */
 const collectionId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
@@ -49,6 +55,11 @@ onMounted(async () => {
   if (!currentCollection) {
     router.push({ name: 'dashboard-service-nft' });
   } else {
+    const transactions = await collectionStore.getCollectionTransactions(
+      currentCollection.collection_uuid
+    );
+    console.log(transactions);
+
     collectionStore.active = currentCollection;
   }
 });

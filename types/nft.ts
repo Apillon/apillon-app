@@ -12,13 +12,13 @@ declare global {
   interface FormCollection {
     symbol: string;
     name: string;
-    mintPrice: number;
+    mintPrice?: number;
     maxSupply?: number | null;
     baseUri: string;
     baseExtension: string;
     isDrop: boolean;
-    dropStart?: boolean;
-    reserve?: boolean;
+    dropStart?: number;
+    reserve?: number;
     description?: string;
   }
 
@@ -30,7 +30,7 @@ declare global {
     collection_uuid: string;
     contractAddress: string | null;
     description: string;
-    dropStart: boolean;
+    dropStart: number;
     id: number;
     isDrop: boolean;
     isRevokable: boolean;
@@ -38,7 +38,7 @@ declare global {
     maxSupply: number;
     mintPrice: number;
     name: string;
-    reserve: boolean;
+    reserve: number;
     royaltiesAddress: string;
     royaltiesFees: number;
     status: number;
@@ -51,4 +51,23 @@ declare global {
   interface CollectionUpdateResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionsResponse extends GeneralItemsResponse<CollectionInterface> {}
   interface CollectionQuotaResponse extends GeneralResponse<boolean> {}
+
+  /**
+   * NFT
+   */
+  interface FormNftMint {
+    receivingAddress: string;
+    quantity?: number | null;
+  }
+  interface TransactionInterface {
+    chainId: number;
+    id: number;
+    status: number;
+    transactionHash: string | null;
+    transactionStatus: number;
+    transactionType: number;
+    updateTime: string;
+  }
+
+  interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}
 }

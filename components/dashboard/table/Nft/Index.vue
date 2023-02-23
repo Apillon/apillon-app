@@ -36,7 +36,7 @@ const router = useRouter();
 const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
 const modalEditCollectionVisible = ref<boolean>(false);
-const CollectionStatus = resolveComponent('NftCollectionStatus');
+const NftCollectionStatus = resolveComponent('NftCollectionStatus');
 
 /** Data: filtered collections */
 const data = computed<Array<CollectionInterface>>(() => {
@@ -109,7 +109,7 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       key: 'collectionStatus',
       title: $i18n.t('general.status'),
       render(row) {
-        return h(CollectionStatus, { collectionStatus: row.collectionStatus }, '');
+        return h(NftCollectionStatus, { collectionStatus: row.collectionStatus }, '');
       },
     },
     {

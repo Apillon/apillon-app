@@ -151,6 +151,9 @@ export const themeOverrides: GlobalThemeOverrides = {
     thFontWeight: '700',
     thTextColor: colors.white,
   },
+  DatePicker: {
+    panelBorderRadius: '0px',
+  },
   Dialog: {
     border: `1px solid ${colors.bg.lighter}`,
     borderRadius: '0px',
