@@ -25,6 +25,7 @@ declare global {
   interface Window {
     $message: NMessageApiInjection;
     $i18n: i18nType;
+    _paq: [];
   }
 
   /**
