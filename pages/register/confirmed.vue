@@ -26,4 +26,9 @@ useHead({
 onBeforeMount(() => {
   authStore.authStep = AuthStep.SIGN_UP_CONFIRMED;
 });
+
+onMounted(() => {
+  /** Track Registration start */
+  tractEvent('registration', 'registration_email_confirmed', 'Email confirmed');
+});
 </script>

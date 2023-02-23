@@ -16,7 +16,7 @@ export function getAppConfig(env?: string) {
 /**
  * Analytics Matomo
  */
-export function tractEvent(eventCategory: string, eventAction: string, eventName: string) {
+export function tractEvent(eventCategory: string, eventAction: string, eventName: string, eventValue?: number) {
   if (!!window._paq) {
     window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
   }
