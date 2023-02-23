@@ -17,6 +17,12 @@
 <script lang="ts" setup>
 import { lightTheme, darkTheme, enUS, dateEnUS } from 'naive-ui';
 
+/** Matomo analytics */
+const router = useRouter();
+router.afterEach(_ => {
+  window._paq.push(['trackPageView']);
+});
+
 const $i18n = useI18n();
 window.$i18n = $i18n;
 
