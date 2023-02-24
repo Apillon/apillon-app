@@ -1,80 +1,52 @@
 <template>
-  <div>
-    <n-space v-bind="$attrs" justify="space-between">
-      <div class="w-[20vw] max-w-xs">
-        <n-input
-          v-model:value="collectionStore.search"
-          type="text"
-          name="search"
-          size="small"
-          :placeholder="$t('general.search')"
-          clearable
-        >
-          <template #prefix>
-            <span class="icon-search text-xl"></span>
-          </template>
-        </n-input>
-      </div>
+  <n-space v-bind="$attrs" justify="space-between">
+    <div class="w-[20vw] max-w-xs">
+      <n-input
+        v-model:value="collectionStore.search"
+        type="text"
+        name="search"
+        size="small"
+        :placeholder="$t('general.search')"
+        clearable
+      >
+        <template #prefix>
+          <span class="icon-search text-xl"></span>
+        </template>
+      </n-input>
+    </div>
 
-      <n-space size="large">
-        <!-- Refresh -->
-        <n-button size="small" :loading="collectionStore.loading" @click="refresh">
-          <span class="icon-refresh text-lg mr-2"></span>
-          {{ $t('general.refresh') }}
-        </n-button>
+    <n-space size="large">
+      <!-- Refresh collections -->
+      <n-button
+        size="small"
+        :loading="collectionStore.loading"
+        @click="collectionStore.fetchCollections()"
+      >
+        <span class="icon-refresh text-lg mr-2"></span>
+        {{ $t('general.refresh') }}
+      </n-button>
 
-        <!-- Actions -->
-        <n-dropdown placement="bottom-end" trigger="click" :options="options">
-          <n-button type="primary" size="small" ghost>
-            {{ $t('general.actions') }}
-            <div class="hidden md:flex items-center relative left-1">
-              <span class="icon-down text-2xl"></span>
-            </div>
-          </n-button>
-        </n-dropdown>
-      </n-space>
+      <!-- Create new collection -->
+      <n-button
+        v-if="collectionStore.hasCollections"
+        type="primary"
+        size="small"
+        ghost
+        @click="modalEditCollectionVisible = true"
+      >
+        <span class="icon-create-folder text-xl mr-2"></span>
+        {{ $t('nft.collection.new') }}
+      </n-button>
     </n-space>
-  </div>
+  </n-space>
+
+  <!-- Modal - New collection -->
+  <modal v-model:show="modalEditCollectionVisible" :title="$t('nft.collection.new')">
+    <FormNftCollection />
+  </modal>
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-  env: { type: Number, default: 0 },
-});
-const emit = defineEmits(['mint']);
-
-const $i18n = useI18n();
 const collectionStore = useCollectionStore();
-
-const options = [
-  {
-    label: $i18n.t('nft.collection.mint'),
-    key: 'mint',
-    props: {
-      onClick: () => {
-        emit('mint');
-      },
-    },
-  },
-  {
-    label: $i18n.t('nft.collection.revoke'),
-    key: 'revoke',
-    props: {
-      onClick: () => {
-        copyToClipboard('');
-      },
-    },
-  },
-  {
-    label: $i18n.t('nft.collection.transfer'),
-    key: 'transfer',
-    props: {
-      onClick: () => {
-        copyToClipboard('');
-      },
-    },
-  },
-];
-
-async function refresh() {}
+const modalEditCollectionVisible = ref<boolean>(false);
 </script>

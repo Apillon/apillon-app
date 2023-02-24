@@ -66,7 +66,10 @@ declare global {
    */
   interface FormNftMint {
     receivingAddress: string;
-    quantity?: number | null;
+    quantity: number | null;
+  }
+  interface FormNftTransfer {
+    address: string;
   }
   interface TransactionInterface {
     chainId: number;

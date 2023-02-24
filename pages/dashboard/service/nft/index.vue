@@ -20,7 +20,10 @@
       </Heading>
     </template>
     <slot>
-      <TableNft v-if="collectionStore.hasCollections" :collections="collectionStore.items" />
+      <TableNftCollection
+        v-if="collectionStore.hasCollections"
+        :collections="collectionStore.items"
+      />
       <Empty
         v-else
         :title="$t('nft.collectionsEmpty')"

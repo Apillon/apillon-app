@@ -142,12 +142,7 @@
           :disabled="isFormDisabled"
           @click="handleSubmit"
         >
-          <template v-if="collection">
-            {{ $t('nft.collection.update') }}
-          </template>
-          <template v-else>
-            {{ $t('nft.collection.create') }}
-          </template>
+          {{ $t('nft.collection.create') }}
         </Btn>
       </n-form-item>
     </n-form>
@@ -171,26 +166,56 @@ const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormCollection>({
   name: '',
   symbol: '',
-  mintPrice: undefined,
-  maxSupply: null,
+  mintPrice: 0,
+  maxSupply: 0,
   baseUri: '',
   baseExtension: '',
   isDrop: false,
   dropStart: Date.now() + 3600000,
-  reserve: undefined,
+  reserve: 0,
 });
 
 const rules: NFormRules = {
+  symbol: [
+    {
+      required: true,
+      message: $i18n.t('validation.collectionSymbolRequired'),
+    },
+  ],
   name: [
     {
       required: true,
       message: $i18n.t('validation.collectionNameRequired'),
     },
   ],
-  symbol: [
+  baseUri: [
     {
       required: true,
-      message: $i18n.t('validation.collectionSymbolRequired'),
+      message: $i18n.t('validation.collectionBaseUriRequired'),
+    },
+  ],
+  baseExtension: [
+    {
+      required: true,
+      message: $i18n.t('validation.collectionBaseExtensionRequired'),
+    },
+  ],
+  maxSupply: [
+    {
+      required: true,
+      message: $i18n.t('validation.collectionMaxSupplyRequired'),
+    },
+  ],
+  mintPrice: [
+    {
+      required: true,
+      message: $i18n.t('validation.collectionMintPriceRequired'),
+    },
+  ],
+  reserve: [
+    {
+      required: true,
+      message: $i18n.t('validation.collectionReserveRequired'),
     },
   ],
 };

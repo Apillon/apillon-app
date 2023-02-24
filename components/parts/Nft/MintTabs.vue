@@ -14,14 +14,12 @@
         <IconNumber :number="2" :active="currentTab === 'uploadImages'" />
         <span class="ml-2">{{ $t('nft.collection.uploadImages') }}</span>
       </template>
-      Hey Jude
     </n-tab-pane>
     <n-tab-pane name="mintNfts">
       <template #tab>
         <IconNumber :number="3" :active="currentTab === 'mintNfts'" />
         <span class="ml-2">{{ $t('nft.collection.mintNfts') }}</span>
       </template>
-      Qilixiang
     </n-tab-pane>
   </n-tabs>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="loading">
+  <Dashboard :loading="pageLoading">
     <template #heading>
       <HeaderCollection />
     </template>
@@ -7,10 +7,13 @@
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <!-- Actions -->
-        <ActionsNftCollection @mint="modalMintCollectionVisible = true" />
+        <ActionsNftTransaction
+          @mint="modalMintCollectionVisible = true"
+          @transfer="modalTransferOwnershipVisible = true"
+        />
 
         <!-- Table -->
-        <TableNftCollection
+        <TableNftTransaction
           v-if="collectionStore.hasCollectionTransactions"
           :transactions="collectionStore.transaction"
         />
@@ -30,6 +33,11 @@
       <modal v-model:show="modalMintCollectionVisible" :title="$t('nft.collection.mint')">
         <FormNftMint :collection-uuid="collectionStore.active.collection_uuid" />
       </modal>
+
+      <!-- Modal - Create Collection -->
+      <modal v-model:show="modalTransferOwnershipVisible" :title="$t('nft.collection.transfer')">
+        <FormNftTransfer :collection-uuid="collectionStore.active.collection_uuid" />
+      </modal>
     </slot>
   </Dashboard>
 </template>
@@ -38,10 +46,12 @@
 const router = useRouter();
 const { params } = useRoute();
 const $i18n = useI18n();
+const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 
-const loading = ref<boolean>(true);
+const pageLoading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
+const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
 /** Website ID from route */
 const collectionId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
@@ -51,20 +61,18 @@ useHead({
 });
 
 onMounted(async () => {
-  const collections = await collectionStore.getCollections();
-  const currentCollection = collections.find(item => item.id === collectionId.value);
+  Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    const collections = await collectionStore.getCollections();
+    const currentCollection = collections.find(item => item.id === collectionId.value);
 
-  if (!currentCollection) {
-    router.push({ name: 'dashboard-service-nft' });
-  } else {
-    const transactions = await collectionStore.getCollectionTransactions(
-      currentCollection.collection_uuid
-    );
-    console.log(transactions);
+    if (!currentCollection) {
+      router.push({ name: 'dashboard-service-nft' });
+    } else {
+      await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
+      collectionStore.active = currentCollection;
 
-    collectionStore.active = currentCollection;
-
-    loading.value = false;
-  }
+      pageLoading.value = false;
+    }
+  });
 });
 </script>

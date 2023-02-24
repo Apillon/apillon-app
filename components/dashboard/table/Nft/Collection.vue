@@ -1,22 +1,34 @@
 <template>
-  <n-data-table
-    ref="tableRef"
-    v-bind="$attrs"
-    :bordered="false"
-    :columns="columns"
-    :data="data"
-    :loading="collectionStore.loading"
-    :pagination="{ pageSize: PAGINATION_LIMIT }"
-    :row-key="rowKey"
-    :row-props="rowProps"
-  />
+  <n-space class="pb-8" :size="32" vertical>
+    <ActionsNftCollection />
+
+    <n-data-table
+      ref="tableRef"
+      v-bind="$attrs"
+      :bordered="false"
+      :columns="columns"
+      :data="data"
+      :loading="collectionStore.loading"
+      :pagination="{ pageSize: PAGINATION_LIMIT }"
+      :row-key="rowKey"
+      :row-props="rowProps"
+    />
+  </n-space>
+
+  <!-- Modal - Edit collection -->
+  <modal v-model:show="modalEditCollectionVisible" :title="$t('nft.collection.edit')">
+    <FormNftCollection
+      :collection-id="currentRow.id"
+      @submit-success="modalEditCollectionVisible = false"
+    />
+  </modal>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
-  transactions: { type: Array<TransactionInterface>, default: [] },
+  collections: { type: Array<CollectionInterface>, default: [] },
 });
 
 const $i18n = useI18n();
@@ -26,34 +38,78 @@ const settingsStore = useSettingsStore();
 const modalEditCollectionVisible = ref<boolean>(false);
 const NftCollectionStatus = resolveComponent('NftCollectionStatus');
 
-/** Data: filtered transactions */
-const data = computed<Array<TransactionInterface>>(() => {
+/** Data: filtered collections */
+const data = computed<Array<CollectionInterface>>(() => {
   return (
-    props.transactions.filter(item =>
-      item.updateTime.toLocaleLowerCase().includes(collectionStore.search.toLocaleLowerCase())
+    props.collections.filter(item =>
+      item.name.toLocaleLowerCase().includes(collectionStore.search.toLocaleLowerCase())
     ) || []
   );
 });
 
-const createColumns = (): NDataTableColumns<TransactionInterface> => {
+const createColumns = (): NDataTableColumns<CollectionInterface> => {
   return [
     {
-      key: 'chainId',
-      title: $i18n.t('nft.transaction.chainId'),
+      key: 'symbol',
+      title: $i18n.t('nft.collection.symbol'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row) {
+        return h('strong', {}, { default: () => row.symbol });
+      },
     },
     {
-      key: 'transactionHash',
-      title: $i18n.t('nft.transaction.hash'),
+      key: 'name',
+      title: $i18n.t('nft.collection.name'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row) {
+        return h('strong', {}, { default: () => row.name });
+      },
     },
     {
-      key: 'transactionType',
-      title: $i18n.t('nft.transaction.type'),
+      key: 'collection_uuid',
+      title: $i18n.t('nft.collection.uuid'),
+      className: 'hidden',
+      render(row: CollectionInterface) {
+        if (!row.collection_uuid) {
+          return '';
+        }
+        return [
+          h(
+            'div',
+            { class: 'flex' },
+            {
+              default: () => [
+                h(
+                  NEllipsis,
+                  { class: 'text-body align-bottom', 'line-clamp': 1 },
+                  { default: () => row.collection_uuid }
+                ),
+                h(
+                  'button',
+                  { class: 'ml-2', onClick: () => copyToClipboard(row.collection_uuid) },
+                  h('span', { class: 'icon-copy text-body' }, {})
+                ),
+              ],
+            }
+          ),
+        ];
+      },
     },
     {
-      key: 'transactionStatus',
+      key: 'mintPrice',
+      title: $i18n.t('nft.collection.mintPrice'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+    },
+    {
+      key: 'maxSupply',
+      title: $i18n.t('nft.collection.maxSupply'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+    },
+    {
+      key: 'collectionStatus',
       title: $i18n.t('general.status'),
       render(row) {
-        return h(NftCollectionStatus, { collectionStatus: row.transactionStatus }, '');
+        return h(NftCollectionStatus, { collectionStatus: row.collectionStatus }, '');
       },
     },
     {
@@ -82,11 +138,11 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: TransactionInterface) => row.id;
-const currentRow = ref<TransactionInterface>(props.transactions[0]);
+const rowKey = (row: CollectionInterface) => row.id;
+const currentRow = ref<CollectionInterface>(props.collections[0]);
 
 /** On row click */
-const rowProps = (row: TransactionInterface) => {
+const rowProps = (row: CollectionInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;

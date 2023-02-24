@@ -6,11 +6,12 @@
           <span class="icon-upload text-violet text-2xl"></span>
         </div>
 
-        <h4 class="mb-1">{{ $t('storage.file.upload') }}</h4>
-        <span class="text-body">{{ $t('storage.file.dragAndDrop') }}</span>
+        <h4 class="mb-1">{{ $t('nft.upload.csvFile') }}</h4>
+        <span class="text-body">{{ $t('nft.upload.dragAndDrop') }}</span>
       </div>
     </n-upload-dragger>
   </n-upload>
+  <n-data-table v-if="collectionStore.csvFile" :columns="columns" :data="data" />
 </template>
 
 <script lang="ts" setup>
@@ -19,9 +20,30 @@ import { useMessage } from 'naive-ui';
 const message = useMessage();
 const collectionStore = useCollectionStore();
 
+const columns = ref<Array<any>>([]);
+const data = ref<Array<any>>([]);
+
 /** Papa parser */
+type CsvFileData = {
+  data: Array<any>;
+  errors: Array<any>;
+  meta: {
+    aborted: boolean;
+    cursor: number;
+    delimeter: string;
+    fields: Array<string>;
+    linebreak: string;
+    truncated: boolean;
+  };
+};
 const { vueApp } = useNuxtApp();
 const $papa = vueApp.config.globalProperties.$papa;
+
+onMounted(() => {
+  if (collectionStore.csvFile) {
+    parseUploadedFile(collectionStore.csvFile.file);
+  }
+});
 
 /** Upload file request - add file to list */
 function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
@@ -39,11 +61,21 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
     onError,
   };
 
-  $papa.parse(file.file, {
+  parseUploadedFile(file.file);
+}
+
+function parseUploadedFile(file) {
+  $papa.parse(file, {
     header: true,
     skipEmptyLines: true,
-    complete: function (results) {
-      console.log(results);
+    complete: function (results: CsvFileData) {
+      data.value = results.data;
+      columns.value = results.meta.fields.map(item => {
+        return {
+          title: item,
+          key: item,
+        };
+      });
     },
   });
 }
