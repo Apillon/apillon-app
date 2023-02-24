@@ -14,6 +14,9 @@
         <IconNumber :number="2" :active="currentTab === 'uploadImages'" />
         <span class="ml-2">{{ $t('nft.collection.uploadImages') }}</span>
       </template>
+      <slot>
+        <FormNftUploadImages />
+      </slot>
     </n-tab-pane>
     <n-tab-pane name="mintNfts">
       <template #tab>

@@ -27,6 +27,8 @@
             {{ $t('nft.collection.mint') }}
           </Btn>
         </Empty>
+
+        <NftMintTabs />
       </n-space>
 
       <!-- Modal - Create Collection -->

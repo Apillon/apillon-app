@@ -40,7 +40,7 @@ const { vueApp } = useNuxtApp();
 const $papa = vueApp.config.globalProperties.$papa;
 
 onMounted(() => {
-  if (collectionStore.csvFile) {
+  if (collectionStore.csvFile?.file) {
     parseUploadedFile(collectionStore.csvFile.file);
   }
 });
