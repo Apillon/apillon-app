@@ -1,8 +1,17 @@
-/** Hosting Collection status */
+/** NFT Collection status */
 export enum CollectionStatus {
   PENDING = 0,
   DEPLOYED = 1,
   TRANSFERED = 2,
+}
+
+/** NFT Transaction status */
+export enum TransactionStatus {
+  REQUESTED = 0,
+  PENDING = 1,
+  FINISHED = 2,
+  VERIFIED = 3,
+  FAILED = 4,
 }
 
 declare global {

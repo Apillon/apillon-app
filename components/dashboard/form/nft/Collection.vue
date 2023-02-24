@@ -1,6 +1,5 @@
 <template>
-  <Spinner v-if="collectionId > 0 && !collection" />
-  <div v-else>
+  <div>
     <!-- Notification - show if qouta has been reached -->
     <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
       {{ $t('nft.collection.quotaReached') }}
@@ -10,11 +9,8 @@
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="collectionId === 0 && $i18n.te('nft.collection.infoNew')" class="text-body mb-8">
+      <p v-if="$i18n.te('nft.collection.infoNew')" class="text-body mb-8">
         {{ $t('nft.collection.infoNew') }}
-      </p>
-      <p v-else-if="collectionId > 0 && $i18n.te('nft.collection.infoEdit')" class="text-body mb-8">
-        {{ $t('nft.collection.infoEdit') }}
       </p>
     </template>
 
@@ -91,28 +87,32 @@
         />
       </n-form-item>
 
-      <!--  Collection Is Drop -->
-      <n-form-item path="isDrop" :label="$t('form.label.collectionIsDrop')">
-        <n-switch v-model:value="formData.isDrop" />
-      </n-form-item>
+      <n-grid :cols="2" :x-gap="32">
+        <!--  Collection Is Drop -->
+        <n-form-item-gi path="isDrop" :span="1" :label="$t('form.label.collectionIsDrop')">
+          <n-switch v-model:value="formData.isDrop" />
+        </n-form-item-gi>
 
-      <!--  Collection Drop start -->
-      <n-form-item
-        path="dropStart"
-        v-show="formData.isDrop"
-        :label="$t('form.label.collectionDropStart')"
-      >
-        <n-date-picker
-          v-model="formData.dropStart"
-          type="datetime"
-          :is-date-disabled="disablePasteDate"
-          clearable
-        />
-      </n-form-item>
+        <!--  Collection Drop start -->
+        <n-form-item-gi
+          v-if="!!formData.isDrop"
+          path="dropStart"
+          :span="1"
+          :label="$t('form.label.collectionDropStart')"
+        >
+          <n-date-picker
+            v-model:value="formData.dropStart"
+            class="w-full"
+            type="datetime"
+            :is-date-disabled="disablePasteDate"
+            clearable
+          />
+        </n-form-item-gi>
+      </n-grid>
 
-      <n-grid :cols="2" :x-gap="32" v-show="formData.isDrop">
+      <n-grid v-if="!!formData.isDrop" :cols="2" :x-gap="32">
         <!--  Collection Mint price -->
-        <n-form-item-gi path="mintPrice" :label="$t('form.label.collectionMintPrice')">
+        <n-form-item-gi path="mintPrice" :span="1" :label="$t('form.label.collectionMintPrice')">
           <n-input-number
             v-model:value="formData.mintPrice"
             :min="0"
@@ -122,7 +122,7 @@
         </n-form-item-gi>
 
         <!--  Collection Reserve -->
-        <n-form-item-gi path="reserve" :label="$t('form.label.collectionReserve')">
+        <n-form-item-gi path="reserve" :span="1" :label="$t('form.label.collectionReserve')">
           <n-input-number
             v-model:value="formData.reserve"
             :min="0"
@@ -157,10 +157,7 @@
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
 
-const props = defineProps({
-  collectionId: { type: Number, default: 0 },
-});
-const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
+const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const router = useRouter();
@@ -171,33 +168,16 @@ const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const collection = ref<CollectionInterface | null>(null);
-
-onMounted(async () => {
-  if (props.collectionId) {
-    // collection.value = await collectionStore.getCollection(props.collectionId);
-    // formData.value.name = collection.value.name;
-    // formData.value.symbol = collection.value.symbol;
-    // formData.value.mintPrice = collection.value.mintPrice;
-    // formData.value.maxSupply = collection.value.maxSupply;
-    // formData.value.baseUri = collection.value.baseUri;
-    // formData.value.baseExtension = collection.value.baseExtension;
-    // formData.value.isDrop = collection.value.isDrop;
-    // formData.value.dropStart = collection.value.dropStart;
-    // formData.value.reserve = collection.value.reserve;
-  }
-});
-
 const formData = ref<FormCollection>({
-  name: collection.value?.name || '',
-  symbol: collection.value?.symbol || '',
-  mintPrice: collection.value?.mintPrice,
-  maxSupply: collection.value?.maxSupply || null,
-  baseUri: collection.value?.baseUri || '',
-  baseExtension: collection.value?.baseExtension || '',
-  isDrop: collection.value?.isDrop || false,
-  dropStart: collection.value?.dropStart,
-  reserve: collection.value?.reserve,
+  name: '',
+  symbol: '',
+  mintPrice: undefined,
+  maxSupply: null,
+  baseUri: '',
+  baseExtension: '',
+  isDrop: false,
+  dropStart: Date.now() + 3600000,
+  reserve: undefined,
 });
 
 const rules: NFormRules = {
@@ -216,7 +196,7 @@ const rules: NFormRules = {
 };
 
 const isQuotaReached = computed<boolean>(() => {
-  return props.collectionId === 0 && collectionStore.quotaReached === true;
+  return collectionStore.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
@@ -234,8 +214,6 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (props.collectionId > 0) {
-      await updateCollection();
     } else {
       await createCollection();
     }
@@ -254,7 +232,7 @@ async function createCollection() {
       ...formData.value,
       project_uuid: dataStore.projectUuid,
     };
-    const res = await $api.post<CollectionResponse>(endpoints.collection, bodyData);
+    const res = await $api.post<CollectionResponse>(endpoints.collections, bodyData);
 
     message.success($i18n.t('form.success.created.collection'));
 
@@ -266,39 +244,9 @@ async function createCollection() {
 
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess');
 
     /** Redirect to new web page */
     router.push(`/dashboard/service/nft/${res.data.id}`);
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
-  }
-  loading.value = false;
-}
-
-async function updateCollection() {
-  loading.value = true;
-
-  try {
-    const res = await $api.patch<CollectionResponse>(endpoints.collection, formData.value);
-
-    message.success($i18n.t('form.success.updated.collection'));
-
-    /** On collection updated refresh collection data */
-    collectionStore.items.forEach((item: CollectionInterface) => {
-      if (item.id === props.collectionId) {
-        item.name = res.data.name;
-        item.description = res.data.description;
-      }
-    });
-    if (collectionStore.active.id === props.collectionId) {
-      collectionStore.active.name = res.data.name;
-      collectionStore.active.description = res.data.description;
-    }
-
-    /** Emit events */
-    emit('submitSuccess');
-    emit('updateSuccess');
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

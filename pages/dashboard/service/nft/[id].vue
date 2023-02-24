@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="false">
+  <Dashboard :loading="loading">
     <template #heading>
       <HeaderCollection />
     </template>
@@ -27,7 +27,7 @@
       </n-space>
 
       <!-- Modal - Create Collection -->
-      <modal v-model:show="modalMintCollectionVisible" :title="$t('nft.collection.addNew')">
+      <modal v-model:show="modalMintCollectionVisible" :title="$t('nft.collection.mint')">
         <FormNftMint :collection-uuid="collectionStore.active.collection_uuid" />
       </modal>
     </slot>
@@ -39,6 +39,8 @@ const router = useRouter();
 const { params } = useRoute();
 const $i18n = useI18n();
 const collectionStore = useCollectionStore();
+
+const loading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
 
 /** Website ID from route */
@@ -61,6 +63,8 @@ onMounted(async () => {
     console.log(transactions);
 
     collectionStore.active = currentCollection;
+
+    loading.value = false;
   }
 });
 </script>

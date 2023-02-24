@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { NButton, NDropdown } from 'naive-ui';
 
 const props = defineProps({
   transactions: { type: Array<TransactionInterface>, default: [] },
@@ -39,26 +39,18 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
   return [
     {
       key: 'chainId',
-      title: $i18n.t('nft.collection.chainId'),
-    },
-    {
-      key: 'id',
-      title: $i18n.t('nft.collection.id'),
+      title: $i18n.t('nft.transaction.chainId'),
     },
     {
       key: 'transactionHash',
-      title: $i18n.t('nft.collection.transactionHash'),
-    },
-    {
-      key: 'transactionStatus',
-      title: $i18n.t('nft.collection.transactionStatus'),
+      title: $i18n.t('nft.transaction.hash'),
     },
     {
       key: 'transactionType',
-      title: $i18n.t('nft.collection.transactionType'),
+      title: $i18n.t('nft.transaction.type'),
     },
     {
-      key: 'status',
+      key: 'transactionStatus',
       title: $i18n.t('general.status'),
       render(row) {
         return h(NftCollectionStatus, { collectionStatus: row.transactionStatus }, '');
@@ -68,7 +60,7 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       key: 'actions',
       title: $i18n.t('general.actions'),
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 hidden',
       render() {
         return h(
           NDropdown,
@@ -90,11 +82,11 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: BucketItemInterface) => row.id;
-const currentRow = ref<CollectionInterface>(props.transactions[0]);
+const rowKey = (row: TransactionInterface) => row.id;
+const currentRow = ref<TransactionInterface>(props.transactions[0]);
 
 /** On row click */
-const rowProps = (row: CollectionInterface) => {
+const rowProps = (row: TransactionInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;

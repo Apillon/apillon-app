@@ -116,7 +116,7 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       key: 'actions',
       title: $i18n.t('general.actions'),
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 hidden',
       render() {
         return h(
           NDropdown,
@@ -138,7 +138,7 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: BucketItemInterface) => row.id;
+const rowKey = (row: CollectionInterface) => row.id;
 const currentRow = ref<CollectionInterface>(props.collections[0]);
 
 /** On row click */
