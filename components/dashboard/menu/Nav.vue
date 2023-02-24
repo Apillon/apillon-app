@@ -63,6 +63,14 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
           disabled: isMenuItemDisabled(Feature.HOSTING),
         },
         {
+          key: 'dashboard-service-nft',
+          label: $i18n.t('nav.nft'),
+          to: 'dashboard-service-nft',
+          iconName: 'icon-NFTs',
+          soon: !isFeatureEnabled(Feature.NFT, authStore.getUserRoles()),
+          disabled: isMenuItemDisabled(Feature.NFT),
+        },
+        {
           key: 'dashboard-service-computing',
           label: $i18n.t('nav.computing'),
           iconName: 'icon-computing',

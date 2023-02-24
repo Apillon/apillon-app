@@ -194,11 +194,10 @@ export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | a
     // Beautify API error
     const err = error as ApiError;
     if (err.errors && Array.isArray(err.errors)) {
-      return err.errors
-        .map(e =>
-          singleErrorMessage(window.$i18n, e.message, takeFirstDigitsFromNumber(e.statusCode))
-        )
-        .join(', ');
+      const errorMessages = err.errors.map(e =>
+        singleErrorMessage(window.$i18n, e.message, takeFirstDigitsFromNumber(e.statusCode))
+      );
+      return [...new Set(errorMessages)].join('\n');
     } else if (err.message) {
       return singleErrorMessage(window.$i18n, err.message, err.status);
     }

@@ -118,6 +118,16 @@
   }
 }
 
+/** Date picker */
+.n-date-panel {
+  .n-button {
+    .n-button__border,
+    .n-button__state-border {
+      display: none;
+    }
+  }
+}
+
 /** Divider */
 .n-divider {
   &.n-divider--vertical {
@@ -218,6 +228,13 @@
     @apply mr-2;
   }
 }
+.n-input-number {
+  @apply w-full;
+
+  .n-button__icon {
+    width: var(--n-icon-size);
+  }
+}
 
 /** Layout */
 .n-layout {
@@ -302,7 +319,7 @@
   }
 
   .n-message__content {
-    @apply block w-full;
+    @apply block w-full whitespace-pre-line;
   }
 }
 
@@ -498,11 +515,21 @@ body > .n-message-container {
 
 /** Tabs */
 .n-tabs {
-  .n-tabs-tab {
-    border-bottom: 2px solid transparent;
+  &--line-type {
+    .n-tabs-tab {
+      border-bottom: 2px solid transparent;
 
-    &:hover {
-      border-color: theme(colors.yellow);
+      &:hover {
+        border-color: theme(colors.yellow);
+      }
+    }
+  }
+  &--segment-type {
+    .n-tabs-rail {
+      padding: 0;
+    }
+    .n-tabs-tab {
+      border: 1px solid theme(colors.bg.light);
     }
   }
 }
