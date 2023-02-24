@@ -3,7 +3,7 @@
     <n-space v-bind="$attrs" justify="space-between">
       <div class="w-[20vw] max-w-xs">
         <n-input
-          v-model:value="dataStore.folder.search"
+          v-model:value="bucketStore.folder.search"
           type="text"
           name="search"
           size="small"
@@ -18,22 +18,17 @@
 
       <n-space size="large">
         <!-- Show only if user select files -->
-        <template v-if="isUpload && dataStore.folder.selectedItems.length > 0">
+        <template v-if="isUpload && bucketStore.folder.selectedItems.length > 0">
           <!-- Download files -->
-          <n-tooltip :show="showPopoverDownload" placement="bottom">
-            <template #trigger>
-              <n-button
-                class="w-10"
-                size="small"
-                :focus="true"
-                :loading="downloading"
-                @click="downloadSelectedFiles"
-              >
-                <span class="icon-download"></span>
-              </n-button>
-            </template>
-            <span>{{ $t('storage.downloadSelectedFiles') }}</span>
-          </n-tooltip>
+          <n-button
+            class="w-10"
+            size="small"
+            :focus="true"
+            :loading="downloading"
+            @click="downloadSelectedFiles"
+          >
+            <span class="icon-download"></span>
+          </n-button>
 
           <!-- Delete files -->
           <n-tooltip placement="bottom" :show="showPopoverDelete">
@@ -50,7 +45,7 @@
         </template>
 
         <!-- Refresh -->
-        <n-button size="small" :loading="dataStore.folder.loading" @click="refresh">
+        <n-button size="small" :loading="bucketStore.folder.loading" @click="refreshWebpage(env)">
           <span class="icon-refresh text-lg mr-2"></span>
           {{ $t('general.refresh') }}
         </n-button>
@@ -73,7 +68,7 @@
           size="small"
           type="primary"
           :loading="deploying"
-          @click="deployToStaging"
+          @click="deploy(DeploymentEnvironment.STAGING)"
         >
           <span class="icon-deploy text-lg mr-2"></span>
           {{ $t('hosting.deployStage') }}
@@ -84,7 +79,7 @@
           size="small"
           type="primary"
           :loading="deploying"
-          @click="deployToProduction"
+          @click="deploy(DeploymentEnvironment.PRODUCTION)"
         >
           <span class="icon-deploy text-lg mr-2"></span>
           {{ $t('hosting.deployProd') }}
@@ -101,11 +96,11 @@
     <ModalDelete v-model:show="showModalDelete" :title="$t(`storage.delete.bucketItems`)">
       <template #content>
         <p class="text-body">
-          {{ $t(`storage.delete.deleteConfirm`, { num: dataStore.folder.selectedItems.length }) }}
+          {{ $t(`storage.delete.deleteConfirm`, { num: bucketStore.folder.selectedItems.length }) }}
         </p>
       </template>
       <slot>
-        <FormDeleteItems :items="dataStore.folder.selectedItems" @submit-success="onDeleted" />
+        <FormDeleteItems :items="bucketStore.folder.selectedItems" @submit-success="onDeleted" />
       </slot>
     </ModalDelete>
 
@@ -118,7 +113,7 @@
       </template>
       <slot>
         <FormDelete
-          :id="dataStore.bucket.active.id"
+          :id="bucketStore.active.id"
           type="bucketContent"
           @submit-success="onAllFilesDeleted"
         />
@@ -128,26 +123,23 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 const props = defineProps({
   env: { type: Number, default: 0 },
 });
 
+const { downloading, downloadSelectedFiles } = useFile();
+const { websiteId, refreshWebpage } = useHosting();
 const $i18n = useI18n();
 const router = useRouter();
-const { params } = useRoute();
-const message = useMessage();
-const dataStore = useDataStore();
-const downloading = ref<boolean>(false);
+const bucketStore = useBucketStore();
+const websiteStore = useWebsiteStore();
+const deploymentStore = useDeploymentStore();
+
 const showModalNewFolder = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
 const showModalClearAll = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
-const showPopoverDownload = ref<boolean>(false);
 const deploying = ref<boolean>(false);
-
-/** Webpage ID from route */
-const webpageId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
 
 const isUpload = computed<Boolean>(() => {
   return (
@@ -155,90 +147,18 @@ const isUpload = computed<Boolean>(() => {
   );
 });
 
-async function refresh() {
-  /** Refresh hosting files */
-  dataStore.fetchDirectoryContent();
-
-  /** On tab stg/prod refresh also webpage and deployments */
-  if (
-    props.env === DeploymentEnvironment.STAGING ||
-    props.env === DeploymentEnvironment.PRODUCTION
-  ) {
-    /** Refresh deyployments */
-    dataStore.fetchDeployments(webpageId.value, props.env);
-
-    /** Refresh active webpage data */
-    const webpage = await dataStore.fetchWebpage(webpageId.value);
-
-    /** Show files from staging bucket */
-    if (props.env === DeploymentEnvironment.STAGING) {
-      dataStore.bucket.active = webpage.stagingBucket;
-      dataStore.setBucketId(webpage.stagingBucket.id);
-    } else {
-      dataStore.bucket.active = webpage.productionBucket;
-      dataStore.setBucketId(webpage.productionBucket.id);
-    }
-  }
-}
-
 function onFolderCreated() {
   showModalNewFolder.value = false;
 
   /** Refresh directory content */
-  dataStore.fetchDirectoryContent();
-}
-
-/**
- * Download
- */
-async function downloadSelectedFiles() {
-  if (dataStore.folder.selectedItems.length === 0) {
-    showPopoverDownload.value = true;
-
-    setTimeout(() => {
-      showPopoverDownload.value = false;
-    }, 3000);
-    return;
-  }
-
-  const promises: Array<Promise<any>> = [];
-  downloading.value = true;
-
-  dataStore.folder.selectedItems.forEach(async item => {
-    const req = downloadFile(item.CID);
-    promises.push(req);
-    await req;
-  });
-
-  await Promise.all(promises).then(_ => {
-    downloading.value = false;
-  });
-}
-
-/** Download file - get file details and download content from downloadLink */
-async function downloadFile(CID?: string | null) {
-  if (!CID) {
-    console.warn('MISSING File CID!');
-    return;
-  }
-  try {
-    if (!(CID in dataStore.file.items)) {
-      dataStore.file.items[CID] = await dataStore.fetchFileDetails(CID);
-    }
-    const fileDetails: FileDetails = dataStore.file.items[CID].file;
-    return download(fileDetails.link, fileDetails.name);
-  } catch (error: any) {
-    /** Show error message */
-    message.error($i18n.t('error.fileDownload'));
-  }
-  return null;
+  bucketStore.fetchDirectoryContent();
 }
 
 /**
  * Delete
  */
 function deleteSelectedFiles() {
-  if (dataStore.folder.selectedItems.length === 0) {
+  if (bucketStore.folder.selectedItems.length === 0) {
     showPopoverDelete.value = true;
 
     setTimeout(() => {
@@ -255,10 +175,10 @@ function onDeleted() {
   showModalDelete.value = false;
 
   /** Reset selected items */
-  dataStore.folder.selectedItems = [];
+  bucketStore.folder.selectedItems = [];
 
   setTimeout(() => {
-    dataStore.fetchDirectoryContent();
+    bucketStore.fetchDirectoryContent();
   }, 300);
 }
 
@@ -266,47 +186,29 @@ function onDeleted() {
 function onAllFilesDeleted() {
   showModalClearAll.value = false;
 
-  dataStore.folder.items = [];
-  dataStore.folder.path = [];
-  dataStore.folder.selected = 0;
-  dataStore.folder.total = 0;
-  dataStore.folderSearch();
+  bucketStore.folder.items = [];
+  bucketStore.folder.path = [];
+  bucketStore.folder.selected = 0;
+  bucketStore.folder.total = 0;
+  bucketStore.folderSearch();
 }
 
-/** Deploy to stg */
-async function deployToStaging() {
+/** Deploy to stg/prod */
+async function deploy(env: number) {
   deploying.value = true;
 
-  const deployment = await dataStore.deployWebpage(
-    dataStore.webpage.active.id,
-    DeploymentEnvironment.STAGING
-  );
+  const deployment = await deploymentStore.deploy(websiteStore.active.id, env);
 
-  /** After successfull deploy redirect to production tab */
-  if (deployment) {
-    dataStore.webpage.deployment.staging = [] as Array<DeploymentInterface>;
+  /** After successfull deploy redirect to next tab */
+  if (deployment && env === DeploymentEnvironment.STAGING) {
+    deploymentStore.staging = [] as Array<DeploymentInterface>;
     setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${webpageId.value}/staging`);
+      router.push(`/dashboard/service/hosting/${websiteId.value}/staging`);
     }, 1000);
-  }
-
-  deploying.value = false;
-}
-
-/** Deploy to prod */
-async function deployToProduction() {
-  deploying.value = true;
-
-  const deployment = await dataStore.deployWebpage(
-    dataStore.webpage.active.id,
-    DeploymentEnvironment.PRODUCTION
-  );
-
-  /** After successfull deploy redirect to production tab */
-  if (deployment) {
-    dataStore.webpage.deployment.production = [] as Array<DeploymentInterface>;
+  } else if (deployment && env === DeploymentEnvironment.PRODUCTION) {
+    deploymentStore.production = [] as Array<DeploymentInterface>;
     setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${webpageId.value}/production`);
+      router.push(`/dashboard/service/hosting/${websiteId.value}/production`);
     }, 1000);
   }
 

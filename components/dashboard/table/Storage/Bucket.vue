@@ -9,7 +9,7 @@
       :bordered="false"
       :columns="columns"
       :data="data"
-      :loading="dataStore.bucket.loading"
+      :loading="bucketStore.loading"
       :pagination="{ pageSize: PAGINATION_LIMIT }"
       :row-key="rowKey"
       :row-props="rowProps"
@@ -52,7 +52,7 @@ const props = defineProps({
 const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
-const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const settingsStore = useSettingsStore();
 
 const showModalW3Warn = ref<boolean>(false);
@@ -66,7 +66,7 @@ const StorageProgress = resolveComponent('StorageProgress');
 const data = computed<Array<BucketInterface>>(() => {
   return (
     props.buckets.filter(item =>
-      item.name.toLocaleLowerCase().includes(dataStore.bucket.search.toLocaleLowerCase())
+      item.name.toLocaleLowerCase().includes(bucketStore.search.toLocaleLowerCase())
     ) || []
   );
 });
@@ -168,9 +168,7 @@ const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
   checkedRowKeys.value = rowKeys;
   const rowKeyIds = rowKeys.map(item => intVal(item));
 
-  dataStore.bucket.selectedItems = dataStore.bucket.items.filter(item =>
-    rowKeyIds.includes(item.id)
-  );
+  bucketStore.selectedItems = bucketStore.items.filter(item => rowKeyIds.includes(item.id));
 };
 
 /** On row click */
@@ -227,7 +225,7 @@ const dropdownDeletedOptions = [
  * If W3Warn has already been shown, show modal delete bucket, otherwise show warn first
  * */
 function deleteBucket(isCurrentRow: boolean = false) {
-  bucketsToDelete.value = isCurrentRow ? [currentRow.value] : dataStore.bucket.selectedItems;
+  bucketsToDelete.value = isCurrentRow ? [currentRow.value] : bucketStore.selectedItems;
 
   if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_DELETE)) {
     showModalDestroyBucket.value = true;
@@ -259,14 +257,14 @@ watch(
  * Hide modal and refresh bucket list
  * */
 function onBucketDeleted() {
-  dataStore.bucket.loading = true;
+  bucketStore.loading = true;
   showModalDestroyBucket.value = false;
 
   /** Reset selected items */
   handleCheck([]);
 
   setTimeout(() => {
-    dataStore.fetchBuckets();
+    bucketStore.fetchBuckets();
   }, 300);
 }
 
@@ -274,7 +272,7 @@ function onBucketDeleted() {
  * Restore bucket
  * */
 async function restoreBucket() {
-  dataStore.bucket.loading = true;
+  bucketStore.loading = true;
 
   try {
     await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.id));
@@ -283,7 +281,7 @@ async function restoreBucket() {
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));
   }
-  dataStore.bucket.loading = false;
+  bucketStore.loading = false;
 
   setTimeout(() => {
     router.push({ name: 'dashboard-service-storage' });

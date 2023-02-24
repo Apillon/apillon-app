@@ -14,6 +14,15 @@ export function getAppConfig(env?: string) {
 }
 
 /**
+ * Analytics Matomo
+ */
+export function tractEvent(eventCategory: string, eventAction: string, eventName: string, eventValue?: number) {
+  if (!!window._paq) {
+    window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
+  }
+}
+
+/**
  * Enum
  */
 export function enumKeys(E: any): string[] {
@@ -111,6 +120,8 @@ export function timeToDays(time: String): string {
 
 /** Datetime to date: "2022-12-13T07:21:50.000Z" -> 13 Dec, 2022  */
 export function datetimeToDate(datetime: string): string {
+  if (!datetime) return '';
+
   const date = new Date(datetime);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
@@ -120,6 +131,8 @@ export function datetimeToDate(datetime: string): string {
   return date.toLocaleDateString('en-us', options);
 }
 export function datetimeToDateAndTime(datetime: string): string {
+  if (!datetime) return '';
+
   const date = new Date(datetime);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
@@ -234,10 +247,8 @@ export function isFeatureEnabled(feature: Feature | string, userRoles: number[])
 
 /** Check if any of elements contains class ${ON_COLUMN_CLICK_OPEN_CLASS}, which means this column is clickable */
 export function canOpenColumnCell(path: EventTarget[]) {
-  return (
-    path.find((item: EventTarget) =>
-      (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
-    ) !== undefined
+  return path.some((item: EventTarget) =>
+    (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
   );
 }
 

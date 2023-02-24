@@ -14,12 +14,9 @@
     <h4>A Record:</h4>
     <p>
       <strong>Hostname: </strong>
-      <template v-if="dataStore.webpage.active.domain || domain">
-        <span> {{ dataStore.webpage.active.domain || domain }} </span>
-        <button
-          class="ml-2"
-          @click="copyToClipboard(`${dataStore.webpage.active.domain || domain}`)"
-        >
+      <template v-if="websiteStore.active.domain || domain">
+        <span> {{ websiteStore.active.domain || domain }} </span>
+        <button class="ml-2" @click="copyToClipboard(`${websiteStore.active.domain || domain}`)">
           <span class="icon-copy"></span>
         </button>
       </template>
@@ -37,24 +34,21 @@
     <h4>TXT Record:</h4>
     <p>
       <strong>Hostname: </strong>
-      <template v-if="dataStore.webpage.active.domain || domain">
-        <span> _dnslink.{{ dataStore.webpage.active.domain || domain }} </span>
+      <template v-if="websiteStore.active.domain || domain">
+        <span> _dnslink.{{ websiteStore.active.domain || domain }} </span>
         <button
           class="ml-2"
-          @click="copyToClipboard(`_dnslink.${dataStore.webpage.active.domain || domain}`)"
+          @click="copyToClipboard(`_dnslink.${websiteStore.active.domain || domain}`)"
         >
           <span class="icon-copy"></span>
         </button>
       </template>
       <span v-else>_dnslink.&lt;your domain name&gt;</span>
     </p>
-    <p v-if="dataStore.bucket.active.IPNS" class="lg:whitespace-nowrap">
+    <p v-if="bucketStore.active.IPNS" class="lg:whitespace-nowrap">
       <strong>Value: </strong>
-      <span>dnslink=/ipns/{{ dataStore.bucket.active.IPNS }}</span>
-      <button
-        class="ml-2"
-        @click="copyToClipboard(`dnslink=/ipns/${dataStore.bucket.active.IPNS}`)"
-      >
+      <span>dnslink=/ipns/{{ bucketStore.active.IPNS }}</span>
+      <button class="ml-2" @click="copyToClipboard(`dnslink=/ipns/${bucketStore.active.IPNS}`)">
         <span class="icon-copy"></span>
       </button>
     </p>
@@ -82,5 +76,6 @@ defineProps({
   domain: { type: String, default: '' },
 });
 
-const dataStore = useDataStore();
+const bucketStore = useBucketStore();
+const websiteStore = useWebsiteStore();
 </script>

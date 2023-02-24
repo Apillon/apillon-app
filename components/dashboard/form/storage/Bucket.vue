@@ -109,8 +109,11 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
 const $i18n = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const settingsStore = useSettingsStore();
+
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -118,7 +121,7 @@ const bucket = ref<BucketInterface | null>(null);
 
 onMounted(async () => {
   if (props.bucketId) {
-    bucket.value = await dataStore.getBucket(props.bucketId);
+    bucket.value = await bucketStore.getBucket(props.bucketId);
     formData.value.bucketName = bucket.value.name;
     formData.value.bucketDescription = bucket.value.description;
   }
@@ -135,7 +138,6 @@ const rules: NFormRules = {
     {
       required: true,
       message: $i18n.t('validation.bucketNameRequired'),
-      trigger: 'input',
     },
   ],
   bucketDescription: [
@@ -161,7 +163,7 @@ const bucketSizes: Array<NRadioOption> = [
 ];
 
 const isQuotaReached = computed<boolean>(() => {
-  return props.bucketId === 0 && dataStore.bucket.quotaReached === true;
+  return props.bucketId === 0 && bucketStore.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
@@ -199,19 +201,22 @@ async function createBucket() {
   };
 
   try {
-    await $api.post<BucketResponse>(endpoints.buckets, bodyData);
+    const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
 
     message.success($i18n.t('form.success.created.bucket'));
 
     /** On new bucket created redirect to storage list in refresh data */
-    dataStore.fetchBuckets();
+    bucketStore.fetchBuckets();
 
     /** Reset bucket qouta limit */
-    dataStore.bucket.quotaReached = undefined;
+    bucketStore.quotaReached = undefined;
 
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess');
+
+    /** Redirect to new web page */
+    router.push(`/dashboard/service/storage/${res.data.id}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -232,15 +237,15 @@ async function updateBucket() {
     message.success($i18n.t('form.success.updated.bucket'));
 
     /** On bucket updated refresh bucket data */
-    dataStore.bucket.items.forEach((item: BucketInterface) => {
+    bucketStore.items.forEach((item: BucketInterface) => {
       if (item.id === props.bucketId) {
         item.name = res.data.name;
         item.description = res.data.description;
       }
     });
-    if (dataStore.bucket.active.id === props.bucketId) {
-      dataStore.bucket.active.name = res.data.name;
-      dataStore.bucket.active.description = res.data.description;
+    if (bucketStore.active.id === props.bucketId) {
+      bucketStore.active.name = res.data.name;
+      bucketStore.active.description = res.data.description;
     }
 
     /** Emit events */

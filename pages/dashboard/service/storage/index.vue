@@ -15,12 +15,12 @@
         </template>
 
         <template #submenu>
-          <MenuStorageManagement />
+          <MenuStorage />
         </template>
       </Heading>
     </template>
     <slot>
-      <TableStorageBucket v-if="dataStore.hasBuckets" :buckets="dataStore.bucket.items" />
+      <TableStorageBucket v-if="bucketStore.hasBuckets" :buckets="bucketStore.items" />
       <template v-else>
         <div
           class="flex flex-col items-center justify-center px-6 py-4"
@@ -56,6 +56,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 const showModalNewBucket = ref<boolean | null>(false);
@@ -66,7 +67,7 @@ useHead({
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await dataStore.getBuckets();
+    await bucketStore.getBuckets();
     await geBucketQuota();
 
     pageLoading.value = false;
@@ -75,8 +76,8 @@ onMounted(() => {
 
 /** GET Bucket quota, if current value is null  */
 async function geBucketQuota() {
-  if (dataStore.bucket.quotaReached === undefined) {
-    await dataStore.fetchBucketQuota();
+  if (bucketStore.quotaReached === undefined) {
+    await bucketStore.fetchBucketQuota();
   }
 }
 

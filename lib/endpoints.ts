@@ -70,6 +70,9 @@ const Endpoints = {
       ? `/storage/${bucketUuid}/file-upload/${sessionUuid}/end`
       : `/storage/${bucketUuid}/file-upload`;
   },
+  storageFilesUpload: (bucketUuid: string) => {
+    return `/storage/${bucketUuid}/files-upload`;
+  },
   storageFileUploads: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/file-uploads`;
   },
@@ -88,23 +91,30 @@ const Endpoints = {
   storageFilesTrashed: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/trashed-files`;
   },
-
-  /** Webpage */
-  webpage: '/storage/hosting/web-page',
-  webpages: (id?: number) => {
-    return id ? `/storage/hosting/web-pages/${id}` : '/storage/hosting/web-pages';
+  /** IPNS */
+  ipns: (bucketId: number, id?: number) => {
+    return id ? `/buckets/${bucketId}/ipns/${id}` : `/buckets/${bucketId}/ipns`;
   },
-  webpageQuota: `/storage/hosting/web-pages/quota-reached`,
-  webpageDeploy: (id?: number) => {
-    return `/storage/hosting/web-pages/${id}/deploy`;
+  ipnsPublish: (bucketId: number, id: number) => {
+    return `/buckets/${bucketId}/ipns/${id}/publish`;
+  },
+
+  /** Website */
+  website: '/storage/hosting/website',
+  websites: (id?: number) => {
+    return id ? `/storage/hosting/websites/${id}` : '/storage/hosting/websites';
+  },
+  websiteQuota: `/storage/hosting/websites/quota-reached`,
+  websiteDeploy: (id?: number) => {
+    return `/storage/hosting/websites/${id}/deploy`;
   },
 
   /** Deployment */
-  deployment: (webpageId: number, id: number) => {
-    return `/storage/hosting/web-pages/${webpageId}/deployments/${id}`;
+  deployment: (websiteId: number, id: number) => {
+    return `/storage/hosting/websites/${websiteId}/deployments/${id}`;
   },
-  deployments: (webpageId: number) => {
-    return `/storage/hosting/web-pages/${webpageId}/deployments`;
+  deployments: (websiteId: number) => {
+    return `/storage/hosting/websites/${websiteId}/deployments`;
   },
 
   /** Api Keys */

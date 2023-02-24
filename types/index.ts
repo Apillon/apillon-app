@@ -25,6 +25,7 @@ declare global {
   interface Window {
     $message: NMessageApiInjection;
     $i18n: i18nType;
+    _paq: [];
   }
 
   /**
@@ -32,6 +33,7 @@ declare global {
    */
   type GeneralResponse<T> = {
     data: T;
+    id: string;
     status: number;
   };
   type GeneralItemsResponse<T> = {
@@ -39,6 +41,7 @@ declare global {
       items: Array<T>;
       total: number;
     };
+    id: string;
     status: number;
   };
   interface DeleteResponse {

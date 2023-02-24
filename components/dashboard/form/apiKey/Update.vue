@@ -252,13 +252,11 @@ async function updateApiKey() {
 /** Check if permission is enabled */
 function isPermissionEnabled(serviceUuid: string, roleId: number) {
   const projectUuid = dataStore.projectUuid;
-  return (
-    apiKeyRoles.value.find(
-      role =>
-        role.project_uuid === projectUuid &&
-        role.service_uuid === serviceUuid &&
-        role.role_id === roleId
-    ) !== undefined
+  return apiKeyRoles.value.some(
+    role =>
+      role.project_uuid === projectUuid &&
+      role.service_uuid === serviceUuid &&
+      role.role_id === roleId
   );
 }
 

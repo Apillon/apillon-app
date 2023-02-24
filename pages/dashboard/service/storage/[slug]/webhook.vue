@@ -7,29 +7,21 @@
     <slot>
       <n-h5 prefix="bar" class="mb-8">{{ $t('storage.webhook') }}</n-h5>
 
-      <FormStorageWebhook class="max-w-xl" :bucket-id="dataStore.bucket.selected" />
+      <FormStorageWebhook class="max-w-xl" :bucket-id="bucketStore.selected" />
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 const $i18n = useI18n();
-const { params } = useRoute();
-const dataStore = useDataStore();
-const pageLoading = ref<boolean>(true);
-const bucketId = ref<number>(parseInt(`${params?.slug}`));
+const bucketStore = useBucketStore();
+const { pageLoading, initBucket } = useStorage();
 
 useHead({
   title: $i18n.t('nav.storage'),
 });
 
 onMounted(() => {
-  /** Bucket ID from route, then load buckets */
-  dataStore.onBucketMounted(bucketId.value);
-
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await dataStore.getBucket(bucketId.value);
-    pageLoading.value = false;
-  });
+  initBucket();
 });
 </script>
