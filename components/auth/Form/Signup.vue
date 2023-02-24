@@ -106,6 +106,9 @@ async function signupWithEmail() {
 
     if (!props.sendAgain) {
       router.push({ name: 'register-email' });
+
+      /** Track new registration */
+      tractEvent('registration', 'registration_email_input', 'Email signup');
     } else {
       message.success($i18n.t('form.success.sendAgainEmail'));
     }
