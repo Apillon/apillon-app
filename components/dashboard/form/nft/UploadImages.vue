@@ -1,6 +1,7 @@
 <template>
   <n-upload
-    v-if="collectionStore.images.length"
+    v-if="collectionStore.hasImages"
+    ref="NUploadRef"
     :default-file-list="collectionStore.images"
     :show-preview-button="false"
     :show-remove-button="false"
@@ -16,6 +17,7 @@
   <n-upload
     v-else
     :default-file-list="collectionStore.images"
+    :show-file-list="false"
     multiple
     directory-dnd
     :custom-request="uploadImagesRequest"
@@ -31,6 +33,13 @@
       </div>
     </n-upload-dragger>
   </n-upload>
+  <Btn
+    v-if="collectionStore.hasImages"
+    type="primary"
+    @click="collectionStore.mintTab = NftMintTab.MINT"
+  >
+    {{ $t('nft.upload.imagesConfirm') }}
+  </Btn>
 </template>
 
 <script lang="ts" setup>
@@ -67,10 +76,14 @@ function handleChange(options: {
   event?: Event;
 }) {
   var index = options.fileList.indexOf(options.file);
-  if (!isImage(options.file.type) && index !== -1) {
+  var indexImage = collectionStore.images.findIndex(
+    item => item.name === options.file.name && item.fullPath === options.file.fullPath
+  );
+
+  if (!isImage(options.file.type)) {
     options.fileList.splice(index, 1);
     message.warning(options.file.name + ' is not an image');
-  } else if (index !== -1) {
+  } else if (indexImage !== -1) {
     options.fileList.splice(index, 1);
     message.warning(options.file.name + ' is already on list');
   }

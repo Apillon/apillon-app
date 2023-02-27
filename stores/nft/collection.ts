@@ -9,6 +9,7 @@ export const useCollectionStore = defineStore('collection', {
     images: [] as Array<FileListItemType>,
     items: [] as Array<CollectionInterface>,
     loading: false,
+    mintTab: NftMintTab.METADATA,
     quotaReached: undefined as Boolean | undefined,
     search: '',
     selected: 0,
@@ -22,6 +23,12 @@ export const useCollectionStore = defineStore('collection', {
     },
     hasCollectionTransactions(state): boolean {
       return Array.isArray(state.transaction) && state.transaction.length > 0;
+    },
+    hasCsvFile(state): boolean {
+      return !!state.csvFile?.id;
+    },
+    hasImages(state): boolean {
+      return Array.isArray(state.images) && state.images.length > 0;
     },
   },
   actions: {
@@ -91,24 +98,23 @@ export const useCollectionStore = defineStore('collection', {
         dataStore.promises.collections = null;
         this.items = [] as Array<CollectionInterface>;
         this.total = 0;
-        this.loading = false;
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
 
+      this.loading = false;
       return [];
     },
 
     async fetchCollectionTransactions(collectionUuid: string): Promise<TransactionInterface[]> {
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      this.loading = true;
       try {
         const res = await $api.get<TransactionResponse>(
           endpoints.collectionTransactions(collectionUuid)
         );
         this.transaction = res.data.items;
+        this.loading = false;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.COLLECTION_TRANSACTIONS, Date.now().toString());
@@ -120,6 +126,7 @@ export const useCollectionStore = defineStore('collection', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      this.loading = false;
       return [];
     },
   },

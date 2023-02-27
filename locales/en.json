@@ -565,9 +565,12 @@
       }
     },
     "upload": {
+      "csvConfirm": "Confirm CSV data",
       "csvFile": "CSV file",
       "csvFileDesc": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
-      "images": "Images",
+      "dragAndDrop": "Drag & drop or click to upload.",
+      "images": "Upload images",
+      "imagesConfirm": "Confirm & save images",
       "imagesDesc": "",
       "preview": "Preview upload"
     },
