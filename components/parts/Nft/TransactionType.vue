@@ -33,7 +33,7 @@ function getTransactionType(status: number): TagType {
     case TransactionType.DEPLOY_CONTRACT:
       return 'info';
     default:
-      return 'success';
+      return 'info';
   }
 }
 </script>
