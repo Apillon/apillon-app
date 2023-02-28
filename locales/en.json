@@ -165,6 +165,7 @@
     "MAX_PROJECTS_REACHED": "Maximum number of projects is reached",
     "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
     "WEB_PAGE_NOT_FOUND": "Web page not found",
+    "PUBLISH_IPNS_CID_NOT_PRESENT": "CID is missing",
 
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
@@ -766,6 +767,7 @@
       "createFirst": "Create your first IPNS",
       "delete": "Are you sure that you want to delete IPNS?",
       "description": "Description",
+      "disabled": "IPNS is disabled. This item needs a CID.",
       "edit": "Edit IPNS",
       "infoNew": "Create new IPNS record",
       "infoEdit": "Update IPNS record",

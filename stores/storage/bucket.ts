@@ -57,7 +57,8 @@ export const useBucketStore = defineStore('bucket', {
       return (
         (Array.isArray(state.folder.items) && state.folder.items.length > 0) ||
         state.folder.selected > 0 ||
-        state.folder.loading
+        state.folder.loading ||
+        state.folder.search.length > 0
       );
     },
     hasDestroyedBuckets(state): boolean {

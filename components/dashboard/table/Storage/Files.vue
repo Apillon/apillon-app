@@ -60,7 +60,7 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
-import { NButton, NDropdown, NEllipsis, NSpace } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
 
 const props = defineProps({
   type: {
@@ -144,7 +144,9 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       show: props.type === TableFilesType.BUCKET,
       props: {
         onClick: () => {
-          modalIpnsPublishVisible.value = true;
+          if (bucketItem.CID) {
+            modalIpnsPublishVisible.value = true;
+          }
         },
       },
     },
@@ -160,6 +162,20 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
     },
   ];
 };
+
+function renderOption({ node, option }: DropdownRenderOption) {
+  if (option.key === 'ipns' && option.disabled) {
+    return h(
+      NTooltip,
+      { keepAliveOnHover: false, style: { width: 'max-content' } },
+      {
+        trigger: () => [node],
+        default: () => $i18n.t('storage.ipns.disabled'),
+      }
+    );
+  }
+  return [node];
+}
 
 /** Available columns - show/hide column */
 const selectedColumns = ref(['name', 'CID', 'link', 'size', 'createTime', 'contentType']);
@@ -279,6 +295,7 @@ const columns = computed(() => {
           NDropdown,
           {
             options: dropdownOptions(row),
+            renderOption: renderOption,
             trigger: 'click',
           },
           {

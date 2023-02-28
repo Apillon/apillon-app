@@ -5,6 +5,8 @@ import {
   DataTableInst,
   DataTableRowKey,
   DataTableSortState,
+  DropdownOption,
+  DropdownGroupOption,
   FormInst,
   FormItemInst,
   FormItemRule,
@@ -97,8 +99,15 @@ declare global {
 
   type NDataTableColumns<T = InternalRowData> = DataTableColumns<T>;
   type NDataTableRowKey = DataTableRowKey;
+  type NDropdownOption = DropdownOption;
+  type NDropdownGroupOption = DropdownGroupOption;
   type NMenuOption = MenuOption;
   type NMenuMixedOption = MenuMixedOption;
+
+  type DropdownRenderOption = {
+    node: VNode;
+    option: NDropdownOption | NDropdownGroupOption;
+  };
 }
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(
