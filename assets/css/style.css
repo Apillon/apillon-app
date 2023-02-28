@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'apillon';
-  src:  url('fonts/apillon.eot?24kne4');
-  src:  url('fonts/apillon.eot?24kne4#iefix') format('embedded-opentype'),
-    url('fonts/apillon.ttf?24kne4') format('truetype'),
-    url('fonts/apillon.woff?24kne4') format('woff'),
-    url('fonts/apillon.svg?24kne4#apillon') format('svg');
+  src:  url('fonts/apillon.eot?1gbz5b');
+  src:  url('fonts/apillon.eot?1gbz5b#iefix') format('embedded-opentype'),
+    url('fonts/apillon.ttf?1gbz5b') format('truetype'),
+    url('fonts/apillon.woff?1gbz5b') format('woff'),
+    url('fonts/apillon.svg?1gbz5b#apillon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-image:before {
+  content: "\e944";
+}
+.icon-NFTs:before {
+  content: "\e945";
+}
+.icon-docs:before {
+  content: "\e943";
+}
 .icon-deploy:before {
   content: "\e939";
 }
