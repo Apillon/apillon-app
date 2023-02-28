@@ -18,7 +18,7 @@ defineProps({
 
 const $i18n = useI18n();
 const deploymentStore = useDeploymentStore();
-const DeploymentStatus = resolveComponent('DeploymentStatus');
+const DeploymentStatus = resolveComponent('HostingDeploymentStatus');
 
 const createColumns = (): NDataTableColumns<DeploymentInterface> => {
   return [

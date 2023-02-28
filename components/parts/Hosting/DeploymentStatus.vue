@@ -10,6 +10,7 @@
       :class="deploymentStatus === DeploymentStatus.INITIATED ? 'text-body' : 'text-bg-dark'"
       :size="0"
       align="center"
+      :wrap="false"
     >
       <span class="mx-1">{{ $t(`hosting.deployment.status.${deploymentStatus}`) }}</span>
       <Spinner

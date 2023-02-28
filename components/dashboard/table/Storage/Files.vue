@@ -60,7 +60,7 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
-import { NButton, NDropdown, NEllipsis, NSpace } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
 
 const props = defineProps({
   type: {
@@ -82,6 +82,8 @@ const modalIpnsPublishVisible = ref<boolean>(false);
 const tableRef = ref<NDataTableInst | null>(null);
 const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
+const TableEllipsis = resolveComponent('TableEllipsis');
+const TableLink = resolveComponent('TableLink');
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 const checkedRowKeys = ref<Array<string | number>>([]);
@@ -142,7 +144,9 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       show: props.type === TableFilesType.BUCKET,
       props: {
         onClick: () => {
-          modalIpnsPublishVisible.value = true;
+          if (bucketItem.CID) {
+            modalIpnsPublishVisible.value = true;
+          }
         },
       },
     },
@@ -158,6 +162,20 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
     },
   ];
 };
+
+function renderOption({ node, option }: DropdownRenderOption) {
+  if (option.key === 'ipns' && option.disabled) {
+    return h(
+      NTooltip,
+      { keepAliveOnHover: false, style: { width: 'max-content' } },
+      {
+        trigger: () => [node],
+        default: () => $i18n.t('storage.ipns.disabled'),
+      }
+    );
+  }
+  return [node];
+}
 
 /** Available columns - show/hide column */
 const selectedColumns = ref(['name', 'CID', 'link', 'size', 'createTime', 'contentType']);
@@ -214,29 +232,7 @@ const columns = computed(() => {
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
-        if (row.CID) {
-          return [
-            h(
-              'div',
-              { class: 'flex' },
-              {
-                default: () => [
-                  h(
-                    'span',
-                    { class: 'text-body whitespace-nowrap' },
-                    { default: () => truncateCid(row.CID || '') }
-                  ),
-                  h(
-                    'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '') },
-                    h('span', { class: 'icon-copy text-body' }, {})
-                  ),
-                ],
-              }
-            ),
-          ];
-        }
-        return '';
+        return h(TableEllipsis, { text: row.CID }, '');
       },
     },
     {
@@ -247,33 +243,7 @@ const columns = computed(() => {
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
-        if (row.CID) {
-          return [
-            h(
-              'div',
-              { class: 'flex' },
-              {
-                default: () => [
-                  h(
-                    'a',
-                    { href: row.link, target: '_blank' },
-                    h(
-                      NEllipsis,
-                      { class: 'text-body align-bottom', 'line-clamp': 1 },
-                      { default: () => row.link }
-                    )
-                  ),
-                  h(
-                    'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.link) },
-                    h('span', { class: 'icon-copy text-body' }, {})
-                  ),
-                ],
-              }
-            ),
-          ];
-        }
-        return '';
+        return h(TableLink, { link: row.link }, '');
       },
     },
     {
@@ -325,6 +295,7 @@ const columns = computed(() => {
           NDropdown,
           {
             options: dropdownOptions(row),
+            renderOption: renderOption,
             trigger: 'click',
           },
           {

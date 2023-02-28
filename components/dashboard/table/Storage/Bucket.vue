@@ -61,6 +61,7 @@ const showModalDestroyBucket = ref<boolean | null>(false);
 const checkedRowKeys = ref<Array<string | number>>([]);
 const bucketsToDelete = ref<Array<BucketInterface>>([]);
 const StorageProgress = resolveComponent('StorageProgress');
+const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered buckets */
 const data = computed<Array<BucketInterface>>(() => {
@@ -89,26 +90,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       key: 'bucket_uuid',
       title: $i18n.t('storage.bucket.uuid'),
       render(row: BucketInterface) {
-        return [
-          h(
-            'div',
-            { class: 'flex' },
-            {
-              default: () => [
-                h(
-                  NEllipsis,
-                  { class: 'text-body align-bottom', 'line-clamp': 1 },
-                  { default: () => row.bucket_uuid }
-                ),
-                h(
-                  'button',
-                  { class: 'ml-2', onClick: () => copyToClipboard(row.bucket_uuid) },
-                  h('span', { class: 'icon-copy text-body' }, {})
-                ),
-              ],
-            }
-          ),
-        ];
+        return h(TableEllipsis, { text: row.bucket_uuid }, '');
       },
     },
     {
@@ -123,7 +105,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
             maxSize: row.maxSize,
             percentage: row.percentage,
           },
-          null
+          ''
         );
       },
     },

@@ -5,16 +5,14 @@ export default function useStore() {
   const ipnsStore = useIpnsStore();
   const websiteStore = useWebsiteStore();
   const deploymentStore = useDeploymentStore();
+  const collectionStore = useCollectionStore();
   const settingsStore = useSettingsStore();
 
   function clearAll() {
     dataStore.resetData();
-    bucketStore.resetData();
-    fileStore.resetData();
-    ipnsStore.resetData();
-    websiteStore.resetData();
-    deploymentStore.resetData();
-    settingsStore.resetData();
+    clearStorage();
+    clearCollection();
+    clearSettings();
   }
 
   function clearStorage() {
@@ -30,6 +28,10 @@ export default function useStore() {
     deploymentStore.resetData();
   }
 
+  function clearCollection() {
+    collectionStore.resetData();
+  }
+
   function clearSettings() {
     settingsStore.resetData();
   }
@@ -38,6 +40,7 @@ export default function useStore() {
     clearAll,
     clearStorage,
     clearHosting,
+    clearCollection,
     clearSettings,
   };
 }

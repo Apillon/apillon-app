@@ -16,7 +16,12 @@ export function getAppConfig(env?: string) {
 /**
  * Analytics Matomo
  */
-export function tractEvent(eventCategory: string, eventAction: string, eventName: string, eventValue?: number) {
+export function tractEvent(
+  eventCategory: string,
+  eventAction: string,
+  eventName: string,
+  eventValue?: number
+) {
   if (!!window._paq) {
     window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
   }
@@ -145,6 +150,22 @@ export function datetimeToDateAndTime(datetime: string): string {
   };
   return date.toLocaleDateString('en-us', options);
 }
+/** Timestamp in seconds to DateTime */
+export function timestampToDateAndTime(timestamp: number): string {
+  if (!timestamp) return '';
+
+  const date = new Date(timestamp * 1000);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  };
+  return date.toLocaleDateString('en-us', options);
+}
 
 /**
  * Calculate expiration date on CRUST
@@ -194,11 +215,10 @@ export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | a
     // Beautify API error
     const err = error as ApiError;
     if (err.errors && Array.isArray(err.errors)) {
-      return err.errors
-        .map(e =>
-          singleErrorMessage(window.$i18n, e.message, takeFirstDigitsFromNumber(e.statusCode))
-        )
-        .join(', ');
+      const errorMessages = err.errors.map(e =>
+        singleErrorMessage(window.$i18n, e.message, takeFirstDigitsFromNumber(e.statusCode))
+      );
+      return [...new Set(errorMessages)].join('\n');
     } else if (err.message) {
       return singleErrorMessage(window.$i18n, err.message, err.status);
     }
