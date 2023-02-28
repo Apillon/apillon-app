@@ -61,6 +61,10 @@ const pageLoading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
+/** Pooling */
+let collectionInterval: any = null as any;
+let transactionInterval: any = null as any;
+
 /** Website ID from route */
 const collectionId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
 
@@ -79,15 +83,25 @@ onMounted(async () => {
       await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
       collectionStore.active = currentCollection;
 
+      checkIfCollectionUnfinished();
+      checkUnfinishedTransactions();
       pageLoading.value = false;
     }
   });
+});
+onUnmounted(() => {
+  clearInterval(transactionInterval);
+  clearInterval(collectionInterval);
 });
 
 function onNftMinted() {
   modalMintCollectionVisible.value = false;
   setTimeout(() => {
-    collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
+    collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
+
+    setTimeout(() => {
+      checkUnfinishedTransactions();
+    }, 3000);
   }, 3000);
 }
 
@@ -95,6 +109,55 @@ function onNftTrasnfered() {
   modalTransferOwnershipVisible.value = false;
   setTimeout(() => {
     collectionStore.fetchCollections();
+
+    setTimeout(() => {
+      checkUnfinishedTransactions();
+    }, 10000);
   }, 3000);
+}
+
+/** Collection pooling */
+function checkIfCollectionUnfinished() {
+  if (collectionStore.active.collectionStatus >= CollectionStatus.DEPLOYED) {
+    return;
+  }
+
+  collectionInterval = setInterval(async () => {
+    const collections = await collectionStore.fetchCollections(false);
+    const collection = collections.find(collection => collection.id === collectionStore.active.id);
+    if (!collection) {
+      clearInterval(collectionInterval);
+      return;
+    } else if (collection.collectionStatus >= CollectionStatus.DEPLOYED) {
+      collectionStore.active = collection;
+      clearInterval(collectionInterval);
+    }
+  }, 30000);
+}
+
+/** Transactions pooling */
+function checkUnfinishedTransactions() {
+  const unfinishedTransaction = collectionStore.transaction.find(
+    transaction => transaction.transactionStatus < TransactionStatus.FINISHED
+  );
+  if (unfinishedTransaction === undefined) {
+    return;
+  }
+
+  transactionInterval = setInterval(async () => {
+    const transactions = await collectionStore.fetchCollectionTransactions(
+      collectionStore.active.collection_uuid,
+      false
+    );
+    const transaction = transactions.find(
+      transaction => transaction.id === unfinishedTransaction.id
+    );
+    if (!transaction) {
+      clearInterval(transactionInterval);
+      return;
+    } else if (transaction.transactionStatus >= TransactionStatus.FINISHED) {
+      clearInterval(transactionInterval);
+    }
+  }, 30000);
 }
 </script>

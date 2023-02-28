@@ -34,9 +34,12 @@ export const useCollectionStore = defineStore('collection', {
   actions: {
     resetData() {
       this.active = {} as CollectionInterface;
+      this.csvFile = {} as FileListItemType;
+      this.images = [] as Array<FileListItemType>;
       this.items = [] as Array<CollectionInterface>;
       this.search = '';
       this.selected = 0;
+      this.transaction = [] as Array<TransactionInterface>;
       this.quotaReached = undefined;
     },
     setCollectionId(id: number) {
@@ -68,8 +71,8 @@ export const useCollectionStore = defineStore('collection', {
     /**
      * API calls
      */
-    async fetchCollections(): Promise<CollectionInterface[]> {
-      this.loading = true;
+    async fetchCollections(showLoader: boolean = true): Promise<CollectionInterface[]> {
+      this.loading = showLoader;
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -107,8 +110,11 @@ export const useCollectionStore = defineStore('collection', {
       return [];
     },
 
-    async fetchCollectionTransactions(collectionUuid: string): Promise<TransactionInterface[]> {
-      this.loading = true;
+    async fetchCollectionTransactions(
+      collectionUuid: string,
+      showLoader: boolean = true
+    ): Promise<TransactionInterface[]> {
+      this.loading = showLoader;
       try {
         const res = await $api.get<TransactionResponse>(
           endpoints.collectionTransactions(collectionUuid)

@@ -60,6 +60,7 @@ declare global {
     isSoulbound: boolean;
     maxSupply: number;
     mintPrice: number;
+    minted: number;
     name: string;
     reserve: number;
     royaltiesAddress: string;

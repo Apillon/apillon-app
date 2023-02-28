@@ -41,7 +41,7 @@
 
       <!-- Modal - Create Collection -->
       <modal v-model:show="modalNewCollectionVisible" :title="$t('nft.collection.addNew')">
-        <FormNftCollection @submit-success="modalNewCollectionVisible = false" />
+        <FormNftCollection @submit-success="onCollectionCreated" />
       </modal>
     </slot>
   </Dashboard>
@@ -54,6 +54,7 @@ const collectionStore = useCollectionStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 const modalNewCollectionVisible = ref<boolean | null>(false);
+let collectionInterval: any = null as any;
 
 useHead({
   title: $i18n.t('nav.nft'),
@@ -63,10 +64,14 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await collectionStore.getCollections();
+      checkUnfinishedCollections();
 
       pageLoading.value = false;
     });
   }, 100);
+});
+onUnmounted(() => {
+  clearInterval(collectionInterval);
 });
 
 /**
@@ -98,4 +103,32 @@ watch(
     }
   }
 );
+
+function onCollectionCreated() {
+  modalNewCollectionVisible.value = false;
+  setTimeout(() => {
+    checkUnfinishedCollections();
+  }, 3000);
+}
+
+/** Collection pooling */
+function checkUnfinishedCollections() {
+  const unfinishedCollection = collectionStore.items.find(
+    collection => collection.collectionStatus < CollectionStatus.DEPLOYED
+  );
+  if (unfinishedCollection === undefined) {
+    return;
+  }
+
+  collectionInterval = setInterval(async () => {
+    const collections = await collectionStore.fetchCollections(false);
+    const collection = collections.find(collection => collection.id === unfinishedCollection.id);
+    if (!collection) {
+      clearInterval(collectionInterval);
+      return;
+    } else if (collection.collectionStatus >= CollectionStatus.DEPLOYED) {
+      clearInterval(collectionInterval);
+    }
+  }, 30000);
+}
 </script>

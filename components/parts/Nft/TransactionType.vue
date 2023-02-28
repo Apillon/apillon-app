@@ -14,17 +14,7 @@
 
 <script lang="ts" setup>
 defineProps({
-  transactionType: {
-    type: Number,
-    validator: (transactionType: number) =>
-      [
-        TransactionType.DEPLOY_CONTRACT,
-        TransactionType.TRANSFER_CONTRACT_OWNERSHIP,
-        TransactionType.SET_COLLECTION_BASE_URI,
-        TransactionType.SET_COLLECTION_BASE_URI,
-      ].includes(transactionType),
-    default: 1,
-  },
+  transactionType: { type: Number, default: 1 },
 });
 
 /** Deployment status */

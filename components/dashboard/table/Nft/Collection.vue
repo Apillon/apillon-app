@@ -26,7 +26,6 @@ const props = defineProps({
 const $i18n = useI18n();
 const router = useRouter();
 const collectionStore = useCollectionStore();
-const settingsStore = useSettingsStore();
 const NftCollectionStatus = resolveComponent('NftCollectionStatus');
 const TableEllipsis = resolveComponent('TableEllipsis');
 
@@ -67,7 +66,7 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
     },
     {
       key: 'contractAddress',
-      title: $i18n.t('nft.transaction.contractAddress'),
+      title: $i18n.t('nft.collection.contractAddress'),
       render(row: CollectionInterface) {
         return h(TableEllipsis, { text: row.contractAddress }, '');
       },
@@ -79,8 +78,11 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
     },
     {
       key: 'maxSupply',
-      title: $i18n.t('nft.collection.maxSupply'),
+      title: $i18n.t('nft.collection.minted') + '/' + $i18n.t('nft.collection.maxSupply'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row: CollectionInterface) {
+        return h('span', {}, { default: () => row.minted + '/' + row.maxSupply });
+      },
     },
     {
       key: 'collectionStatus',

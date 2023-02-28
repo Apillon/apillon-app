@@ -2,12 +2,12 @@
   <n-tag
     v-bind="$attrs"
     :type="getTransactionStatus(transactionStatus)"
-    :bordered="transactionStatus === TransactionStatus.REQUESTED"
+    :bordered="transactionStatus < TransactionStatus.FINISHED"
     size="tiny"
     round
   >
     <n-space
-      :class="transactionStatus === TransactionStatus.REQUESTED ? 'text-body' : 'text-bg-dark'"
+      :class="transactionStatus < TransactionStatus.FINISHED ? 'text-body' : 'text-bg-dark'"
       :size="0"
       align="center"
       :wrap="false"
@@ -41,7 +41,7 @@ defineProps({
 function getTransactionStatus(status: number): TagType {
   switch (status) {
     case TransactionStatus.PENDING:
-      return 'info';
+      return 'warning';
     case TransactionStatus.FINISHED:
       return 'success';
     case TransactionStatus.VERIFIED:

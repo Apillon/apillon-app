@@ -24,7 +24,12 @@
         </n-button>
 
         <!-- Actions -->
-        <n-dropdown placement="bottom-end" trigger="click" :options="options">
+        <n-dropdown
+          placement="bottom-end"
+          trigger="click"
+          :key="collectionStore.active.collectionStatus"
+          :options="options"
+        >
           <n-button type="primary" size="small" ghost>
             {{ $t('general.actions') }}
             <div class="hidden md:flex items-center relative left-1">
@@ -46,39 +51,42 @@ const emit = defineEmits(['mint', 'transfer']);
 const $i18n = useI18n();
 const collectionStore = useCollectionStore();
 
-const options = [
-  {
-    label: $i18n.t('nft.collection.mint'),
-    key: 'mint',
-    disabled: collectionStore.active?.collectionStatus === CollectionStatus.PENDING,
-    props: {
-      onClick: () => {
-        console.log(collectionStore.active?.collectionStatus);
-        emit('mint');
+const options = computed(() => {
+  return [
+    {
+      label: $i18n.t('nft.collection.mint'),
+      key: 'mint',
+      disabled: collectionStore.active?.collectionStatus === CollectionStatus.PENDING,
+      props: {
+        onClick: () => {
+          if (collectionStore.active?.collectionStatus !== CollectionStatus.PENDING) {
+            emit('mint');
+          }
+        },
       },
     },
-  },
-  {
-    label: $i18n.t('nft.collection.revoke'),
-    key: 'revoke',
-    disabled: true,
-    props: {
-      onClick: () => {
-        copyToClipboard('');
+    {
+      label: $i18n.t('nft.collection.revoke'),
+      key: 'revoke',
+      disabled: true,
+      props: {
+        onClick: () => {},
       },
     },
-  },
-  {
-    label: $i18n.t('nft.collection.transfer'),
-    key: 'transfer',
-    disabled: collectionStore.active?.collectionStatus === CollectionStatus.TRANSFERED,
-    props: {
-      onClick: () => {
-        emit('transfer');
+    {
+      label: $i18n.t('nft.collection.transfer'),
+      key: 'transfer',
+      disabled: collectionStore.active?.collectionStatus !== CollectionStatus.DEPLOYED,
+      props: {
+        onClick: () => {
+          if (collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED) {
+            emit('transfer');
+          }
+        },
       },
     },
-  },
-];
+  ];
+});
 
 async function refresh() {
   collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);

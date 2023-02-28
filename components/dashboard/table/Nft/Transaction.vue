@@ -13,9 +13,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
-import chains from '~~/config/chains';
-
 const props = defineProps({
   transactions: { type: Array<TransactionInterface>, default: [] },
 });
@@ -25,7 +22,6 @@ const router = useRouter();
 const collectionStore = useCollectionStore();
 const NftTransactionStatus = resolveComponent('NftTransactionStatus');
 const NftTransactionType = resolveComponent('NftTransactionType');
-const TableEllipsis = resolveComponent('TableEllipsis');
 const TableLink = resolveComponent('TableLink');
 
 /** Data: filtered transactions */
@@ -42,6 +38,7 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
     {
       key: 'chainId',
       title: $i18n.t('nft.transaction.chainId'),
+      minWidth: 120,
       render(row: TransactionInterface) {
         return h('span', {}, { default: () => $i18n.t(`nft.chain.${row.chainId}`) });
       },
@@ -60,14 +57,14 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
     {
       key: 'transactionType',
       title: $i18n.t('nft.transactionType'),
-      render(row) {
+      render(row: TransactionInterface) {
         return h(NftTransactionType, { transactionType: row.transactionType }, '');
       },
     },
     {
       key: 'transactionStatus',
       title: $i18n.t('general.status'),
-      render(row) {
+      render(row: TransactionInterface) {
         return h(NftTransactionStatus, { transactionStatus: row.transactionStatus }, '');
       },
     },
