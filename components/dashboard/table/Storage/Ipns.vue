@@ -32,6 +32,8 @@ const ipnsStore = useIpnsStore();
 const currentRow = ref<IpnsInterface>({} as IpnsInterface);
 const modalEditIpnsVisible = ref<boolean>(false);
 const modalDeleteIpnsVisible = ref<boolean>(false);
+const TableEllipsis = resolveComponent('TableEllipsis');
+const TableLink = resolveComponent('TableLink');
 
 /** Columns */
 const createColumns = (): NDataTableColumns<IpnsInterface> => {
@@ -49,62 +51,14 @@ const createColumns = (): NDataTableColumns<IpnsInterface> => {
       key: 'ipnsName',
       title: $i18n.t('storage.ipns.ipnsName'),
       render(row: IpnsInterface) {
-        if (row.ipnsName) {
-          return [
-            h(
-              'div',
-              { class: 'flex' },
-              {
-                default: () => [
-                  h(
-                    NEllipsis,
-                    { class: 'text-body align-bottom', 'line-clamp': 1 },
-                    { default: () => row.ipnsName }
-                  ),
-                  h(
-                    'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.ipnsName || '') },
-                    h('span', { class: 'icon-copy text-body' }, {})
-                  ),
-                ],
-              }
-            ),
-          ];
-        }
-        return '';
+        return h(TableEllipsis, { text: row.ipnsName }, '');
       },
     },
     {
       key: 'ipnsValue',
       title: $i18n.t('storage.ipns.link'),
       render(row: IpnsInterface) {
-        if (row.link) {
-          return [
-            h(
-              'div',
-              { class: 'flex' },
-              {
-                default: () => [
-                  h(
-                    'a',
-                    { href: row.link, target: '_blank' },
-                    h(
-                      NEllipsis,
-                      { class: 'text-body align-bottom', 'line-clamp': 1 },
-                      { default: () => row.link }
-                    )
-                  ),
-                  h(
-                    'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.link || '') },
-                    h('span', { class: 'icon-copy text-body' }, {})
-                  ),
-                ],
-              }
-            ),
-          ];
-        }
-        return '';
+        return h(TableLink, { link: row.link }, '');
       },
     },
     {

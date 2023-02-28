@@ -369,6 +369,7 @@
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
         "bucket": "Bucket has been created",
+        "collection": "NFT Collection has been created",
         "directory": "Directory key has been created",
         "domain": "Domain has been added to Website",
         "file": "File has been created",
@@ -523,11 +524,16 @@
     "storage": "Storage"
   },
   "nft": {
+    "chain": {
+      "1": "MOONBEAM",
+      "2": "MOONBASE"
+    },
     "collection": {
       "addNew": "Add new collection",
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
       "create": "Deploy",
+      "dropStart": "Drop start",
       "edit": "Edit",
       "empty": "Your project has currently no NFTs",
       "maxSupply": "Max supply",
@@ -548,20 +554,27 @@
       "uuid": "Collection UUID",
       "status": {
         "0": "PENDING",
-        "1": "DEPLOYED",
+        "1": "CONFIRMED",
         "2": "TRANSFERED"
       }
     },
     "transaction": {
       "chainId": "Chain ID",
+      "contractAddress": "Contract address",
       "hash": "Transaction Hash",
-      "type": "Transaction Type",
+      "link": "Transaction Link",
       "status": {
         "0": "REQUESTED",
         "1": "PENDING",
-        "2": "FINISHED",
+        "2": "CONFIRMED",
         "3": "VERIFIED",
         "4": "FAILED"
+      },
+      "type": {
+        "1": "DEPLOY CONTRACT",
+        "2": "TRANSFER CONTRACT OWNERSHIP",
+        "3": "MINT NFT",
+        "4": "SET COLLECTION BASE URI"
       }
     },
     "upload": {
@@ -575,7 +588,8 @@
       "preview": "Preview upload"
     },
     "collectionsEmpty": "Your project has currently no NFT collections",
-    "collectionsCreate": "First create an NFT collection and then start uploading NFTs."
+    "collectionsCreate": "First create an NFT collection and then start uploading NFTs.",
+    "transactionType": "Transaction Type"
   },
   "onboarding": {
     "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",

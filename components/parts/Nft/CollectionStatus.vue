@@ -14,7 +14,7 @@
     >
       <span class="mx-1 uppercase">{{ $t(`nft.collection.status.${collectionStatus}`) }}</span>
       <Spinner
-        v-if="collectionStatus < CollectionStatus.TRANSFERED"
+        v-if="collectionStatus < CollectionStatus.DEPLOYED"
         class="!relative !w-5 !h-5 !m-0 !left-0"
       />
     </n-space>
@@ -37,7 +37,7 @@ defineProps({
 function getCollectionStatus(status: number): TagType {
   switch (status) {
     case CollectionStatus.DEPLOYED:
-      return 'warning';
+      return 'info';
     case CollectionStatus.TRANSFERED:
       return 'success';
     default:

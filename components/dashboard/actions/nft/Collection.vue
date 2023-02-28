@@ -32,7 +32,7 @@
         type="primary"
         size="small"
         ghost
-        @click="modalEditCollectionVisible = true"
+        @click="modalNewCollectionVisible = true"
       >
         <span class="icon-create-folder text-xl mr-2"></span>
         {{ $t('nft.collection.new') }}
@@ -41,12 +41,12 @@
   </n-space>
 
   <!-- Modal - New collection -->
-  <modal v-model:show="modalEditCollectionVisible" :title="$t('nft.collection.new')">
-    <FormNftCollection />
+  <modal v-model:show="modalNewCollectionVisible" :title="$t('nft.collection.new')">
+    <FormNftCollection @submit-success="modalNewCollectionVisible = false" />
   </modal>
 </template>
 
 <script lang="ts" setup>
 const collectionStore = useCollectionStore();
-const modalEditCollectionVisible = ref<boolean>(false);
+const modalNewCollectionVisible = ref<boolean>(false);
 </script>

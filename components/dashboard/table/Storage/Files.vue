@@ -82,6 +82,8 @@ const modalIpnsPublishVisible = ref<boolean>(false);
 const tableRef = ref<NDataTableInst | null>(null);
 const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
+const TableEllipsis = resolveComponent('TableEllipsis');
+const TableLink = resolveComponent('TableLink');
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 const checkedRowKeys = ref<Array<string | number>>([]);
@@ -214,29 +216,7 @@ const columns = computed(() => {
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
-        if (row.CID) {
-          return [
-            h(
-              'div',
-              { class: 'flex' },
-              {
-                default: () => [
-                  h(
-                    'span',
-                    { class: 'text-body whitespace-nowrap' },
-                    { default: () => truncateCid(row.CID || '') }
-                  ),
-                  h(
-                    'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '') },
-                    h('span', { class: 'icon-copy text-body' }, {})
-                  ),
-                ],
-              }
-            ),
-          ];
-        }
-        return '';
+        return h(TableEllipsis, { text: row.CID }, '');
       },
     },
     {
@@ -247,33 +227,7 @@ const columns = computed(() => {
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
       render(row: BucketItemInterface) {
-        if (row.CID) {
-          return [
-            h(
-              'div',
-              { class: 'flex' },
-              {
-                default: () => [
-                  h(
-                    'a',
-                    { href: row.link, target: '_blank' },
-                    h(
-                      NEllipsis,
-                      { class: 'text-body align-bottom', 'line-clamp': 1 },
-                      { default: () => row.link }
-                    )
-                  ),
-                  h(
-                    'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.link) },
-                    h('span', { class: 'icon-copy text-body' }, {})
-                  ),
-                ],
-              }
-            ),
-          ];
-        }
-        return '';
+        return h(TableLink, { link: row.link }, '');
       },
     },
     {

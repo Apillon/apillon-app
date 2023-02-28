@@ -28,17 +28,23 @@
           </Btn>
         </Empty>
 
-        <NftMintTabs />
+        <!-- <NftMintTabs /> -->
       </n-space>
 
-      <!-- Modal - Create Collection -->
+      <!-- Modal - Collection Mint -->
       <modal v-model:show="modalMintCollectionVisible" :title="$t('nft.collection.mint')">
-        <FormNftMint :collection-uuid="collectionStore.active.collection_uuid" />
+        <FormNftMint
+          :collection-uuid="collectionStore.active.collection_uuid"
+          @submit-success="onNftMinted"
+        />
       </modal>
 
-      <!-- Modal - Create Collection -->
+      <!-- Modal - Collection Transfer -->
       <modal v-model:show="modalTransferOwnershipVisible" :title="$t('nft.collection.transfer')">
-        <FormNftTransfer :collection-uuid="collectionStore.active.collection_uuid" />
+        <FormNftTransfer
+          :collection-uuid="collectionStore.active.collection_uuid"
+          @submit-success="onNftTrasnfered"
+        />
       </modal>
     </slot>
   </Dashboard>
@@ -77,4 +83,18 @@ onMounted(async () => {
     }
   });
 });
+
+function onNftMinted() {
+  modalMintCollectionVisible.value = false;
+  setTimeout(() => {
+    collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
+  }, 3000);
+}
+
+function onNftTrasnfered() {
+  modalTransferOwnershipVisible.value = false;
+  setTimeout(() => {
+    collectionStore.fetchCollections();
+  }, 3000);
+}
 </script>

@@ -13,7 +13,8 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import chains from '~~/config/chains';
 
 const props = defineProps({
   transactions: { type: Array<TransactionInterface>, default: [] },
@@ -22,9 +23,10 @@ const props = defineProps({
 const $i18n = useI18n();
 const router = useRouter();
 const collectionStore = useCollectionStore();
-const settingsStore = useSettingsStore();
-const modalEditCollectionVisible = ref<boolean>(false);
-const NftCollectionStatus = resolveComponent('NftCollectionStatus');
+const NftTransactionStatus = resolveComponent('NftTransactionStatus');
+const NftTransactionType = resolveComponent('NftTransactionType');
+const TableEllipsis = resolveComponent('TableEllipsis');
+const TableLink = resolveComponent('TableLink');
 
 /** Data: filtered transactions */
 const data = computed<Array<TransactionInterface>>(() => {
@@ -40,43 +42,43 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
     {
       key: 'chainId',
       title: $i18n.t('nft.transaction.chainId'),
+      render(row: TransactionInterface) {
+        return h('span', {}, { default: () => $i18n.t(`nft.chain.${row.chainId}`) });
+      },
     },
     {
       key: 'transactionHash',
       title: $i18n.t('nft.transaction.hash'),
+      render(row: TransactionInterface) {
+        return h(TableEllipsis, { text: row.transactionHash }, '');
+      },
+    },
+    {
+      key: 'link',
+      title: $i18n.t('nft.transaction.link'),
+      render(row: TransactionInterface) {
+        return h(TableLink, { link: moonbaseLink(row.transactionHash, row.chainId) }, '');
+      },
     },
     {
       key: 'transactionType',
-      title: $i18n.t('nft.transaction.type'),
+      title: $i18n.t('nft.transactionType'),
+      render(row) {
+        return h(NftTransactionType, { transactionType: row.transactionType }, '');
+      },
     },
     {
       key: 'transactionStatus',
       title: $i18n.t('general.status'),
       render(row) {
-        return h(NftCollectionStatus, { collectionStatus: row.transactionStatus }, '');
+        return h(NftTransactionStatus, { transactionStatus: row.transactionStatus }, '');
       },
     },
     {
-      key: 'actions',
-      title: $i18n.t('general.actions'),
-      align: 'right',
-      className: '!py-0 hidden',
-      render() {
-        return h(
-          NDropdown,
-          {
-            options: dropdownOptions,
-            trigger: 'click',
-          },
-          {
-            default: () =>
-              h(
-                NButton,
-                { size: 'small', quaternary: true },
-                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
-              ),
-          }
-        );
+      key: 'updateTime',
+      title: $i18n.t('general.updateTime'),
+      render(row: TransactionInterface) {
+        return h('span', {}, { default: () => datetimeToDateAndTime(row.updateTime || '') });
       },
     },
   ];
@@ -98,16 +100,9 @@ const rowProps = (row: TransactionInterface) => {
   };
 };
 
-const dropdownOptions = [
-  {
-    label: $i18n.t('storage.edit'),
-    key: 'storageEdit',
-    disabled: settingsStore.isProjectUser(),
-    props: {
-      onClick: () => {
-        modalEditCollectionVisible.value = true;
-      },
-    },
-  },
-];
+function moonbaseLink(transactionHash?: string | null, chainId?: number): string {
+  if (!transactionHash || !chainId) return '';
+  if (chainId === Chains.MOONBEAM) return `https://moonbeam.moonscan.io/tx/${transactionHash}`;
+  return `https://moonbase.moonscan.io/tx/${transactionHash}`;
+}
 </script>

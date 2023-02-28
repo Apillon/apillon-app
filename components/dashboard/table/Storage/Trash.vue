@@ -44,6 +44,7 @@ const message = useMessage();
 const bucketStore = useBucketStore();
 const fileStore = useFileStore();
 const IconFolderFile = resolveComponent('IconFolderFile');
+const TableEllipsis = resolveComponent('TableEllipsis');
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 
@@ -62,13 +63,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       title: $i18n.t('storage.fileCid'),
       key: 'CID',
       render(row) {
-        return h(
-          'span',
-          { class: 'text-body' },
-          {
-            default: () => truncateCid(row.CID || ''),
-          }
-        );
+        return h(TableEllipsis, { text: row.CID }, '');
       },
     },
     {

@@ -254,8 +254,16 @@ async function createCollection() {
 
   try {
     const bodyData = {
-      ...formData.value,
       project_uuid: dataStore.projectUuid,
+      name: formData.value.name,
+      symbol: formData.value.symbol,
+      mintPrice: formData.value.mintPrice,
+      maxSupply: formData.value.maxSupply,
+      baseUri: formData.value.baseUri,
+      baseExtension: formData.value.baseExtension,
+      isDrop: formData.value.isDrop,
+      dropStart: Math.floor((formData.value.dropStart || Date.now()) / 1000),
+      reserve: formData.value.reserve,
     };
     const res = await $api.post<CollectionResponse>(endpoints.collections, bodyData);
 

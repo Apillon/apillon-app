@@ -1,3 +1,9 @@
+/** NFT Chains */
+export enum Chains {
+  MOONBEAM = 1,
+  MOONBASE = 2,
+}
+
 /** NFT Collection status */
 export enum CollectionStatus {
   PENDING = 0,
@@ -12,6 +18,14 @@ export enum TransactionStatus {
   FINISHED = 2,
   VERIFIED = 3,
   FAILED = 4,
+}
+
+/** NFT Transaction type */
+export enum TransactionType {
+  DEPLOY_CONTRACT = 1,
+  TRANSFER_CONTRACT_OWNERSHIP = 2,
+  MINT_NFT = 3,
+  SET_COLLECTION_BASE_URI = 4,
 }
 
 declare global {

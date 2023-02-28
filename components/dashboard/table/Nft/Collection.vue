@@ -14,14 +14,6 @@
       :row-props="rowProps"
     />
   </n-space>
-
-  <!-- Modal - Edit collection -->
-  <modal v-model:show="modalEditCollectionVisible" :title="$t('nft.collection.edit')">
-    <FormNftCollection
-      :collection-id="currentRow.id"
-      @submit-success="modalEditCollectionVisible = false"
-    />
-  </modal>
 </template>
 
 <script lang="ts" setup>
@@ -35,8 +27,8 @@ const $i18n = useI18n();
 const router = useRouter();
 const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
-const modalEditCollectionVisible = ref<boolean>(false);
 const NftCollectionStatus = resolveComponent('NftCollectionStatus');
+const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered collections */
 const data = computed<Array<CollectionInterface>>(() => {
@@ -70,29 +62,14 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       title: $i18n.t('nft.collection.uuid'),
       className: 'hidden',
       render(row: CollectionInterface) {
-        if (!row.collection_uuid) {
-          return '';
-        }
-        return [
-          h(
-            'div',
-            { class: 'flex' },
-            {
-              default: () => [
-                h(
-                  NEllipsis,
-                  { class: 'text-body align-bottom', 'line-clamp': 1 },
-                  { default: () => row.collection_uuid }
-                ),
-                h(
-                  'button',
-                  { class: 'ml-2', onClick: () => copyToClipboard(row.collection_uuid) },
-                  h('span', { class: 'icon-copy text-body' }, {})
-                ),
-              ],
-            }
-          ),
-        ];
+        return h(TableEllipsis, { text: row.collection_uuid }, '');
+      },
+    },
+    {
+      key: 'contractAddress',
+      title: $i18n.t('nft.transaction.contractAddress'),
+      render(row: CollectionInterface) {
+        return h(TableEllipsis, { text: row.contractAddress }, '');
       },
     },
     {
@@ -113,26 +90,17 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       },
     },
     {
-      key: 'actions',
-      title: $i18n.t('general.actions'),
-      align: 'right',
-      className: '!py-0 hidden',
-      render() {
-        return h(
-          NDropdown,
-          {
-            options: dropdownOptions,
-            trigger: 'click',
-          },
-          {
-            default: () =>
-              h(
-                NButton,
-                { size: 'small', quaternary: true },
-                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
-              ),
-          }
-        );
+      key: 'dropStart',
+      title: $i18n.t('nft.collection.dropStart'),
+      render(row: CollectionInterface) {
+        return h('span', {}, { default: () => timestampToDateAndTime(row.dropStart) });
+      },
+    },
+    {
+      key: 'updateTime',
+      title: $i18n.t('general.updateTime'),
+      render(row: CollectionInterface) {
+        return h('span', {}, { default: () => datetimeToDateAndTime(row.updateTime || '') });
       },
     },
   ];
@@ -153,17 +121,4 @@ const rowProps = (row: CollectionInterface) => {
     },
   };
 };
-
-const dropdownOptions = [
-  {
-    label: $i18n.t('storage.edit'),
-    key: 'storageEdit',
-    disabled: settingsStore.isProjectUser(),
-    props: {
-      onClick: () => {
-        modalEditCollectionVisible.value = true;
-      },
-    },
-  },
-];
 </script>
