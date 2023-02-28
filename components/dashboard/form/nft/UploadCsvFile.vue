@@ -11,7 +11,14 @@
       </div>
     </n-upload-dragger>
   </n-upload>
-  <n-data-table v-if="collectionStore.csvFile" :columns="columns" :data="data" />
+  <n-data-table v-if="collectionStore.hasCsvFile" :columns="columns" :data="data" />
+  <Btn
+    v-if="collectionStore.hasCsvFile"
+    type="primary"
+    @click="collectionStore.mintTab = NftMintTab.IMAGES"
+  >
+    {{ $t('nft.upload.csvConfirm') }}
+  </Btn>
 </template>
 
 <script lang="ts" setup>
@@ -40,7 +47,7 @@ const { vueApp } = useNuxtApp();
 const $papa = vueApp.config.globalProperties.$papa;
 
 onMounted(() => {
-  if (collectionStore.csvFile) {
+  if (collectionStore.csvFile?.file) {
     parseUploadedFile(collectionStore.csvFile.file);
   }
 });

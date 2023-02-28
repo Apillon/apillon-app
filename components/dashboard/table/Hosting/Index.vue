@@ -36,6 +36,7 @@ const router = useRouter();
 const websiteStore = useWebsiteStore();
 const settingsStore = useSettingsStore();
 const showModalEditWebsite = ref<boolean>(false);
+const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered websites */
 const data = computed<Array<WebsiteInterface>>(() => {
@@ -60,29 +61,7 @@ const createColumns = (): NDataTableColumns<WebsiteInterface> => {
       key: 'website_uuid',
       title: $i18n.t('hosting.website.uuid'),
       render(row: WebsiteInterface) {
-        if (!row.website_uuid) {
-          return '';
-        }
-        return [
-          h(
-            'div',
-            { class: 'flex' },
-            {
-              default: () => [
-                h(
-                  NEllipsis,
-                  { class: 'text-body align-bottom', 'line-clamp': 1 },
-                  { default: () => row.website_uuid }
-                ),
-                h(
-                  'button',
-                  { class: 'ml-2', onClick: () => copyToClipboard(row.website_uuid) },
-                  h('span', { class: 'icon-copy text-body' }, {})
-                ),
-              ],
-            }
-          ),
-        ];
+        return h(TableEllipsis, { text: row.website_uuid }, '');
       },
     },
     {

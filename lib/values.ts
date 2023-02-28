@@ -97,3 +97,12 @@ export const referralCountries = [
   { label: 'Sweden', value: 'Sweden' },
   { label: 'United Kingdom', value: 'United Kingdom' },
 ];
+
+/**
+ * NFT
+ */
+export const NftMintTab = {
+  METADATA: 'uploadMetadata',
+  IMAGES: 'uploadImages',
+  MINT: 'mintNfts',
+};

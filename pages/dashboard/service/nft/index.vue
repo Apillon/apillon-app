@@ -41,7 +41,7 @@
 
       <!-- Modal - Create Collection -->
       <modal v-model:show="modalNewCollectionVisible" :title="$t('nft.collection.addNew')">
-        <FormNftCollection />
+        <FormNftCollection @submit-success="modalNewCollectionVisible = false" />
       </modal>
     </slot>
   </Dashboard>

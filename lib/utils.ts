@@ -16,7 +16,12 @@ export function getAppConfig(env?: string) {
 /**
  * Analytics Matomo
  */
-export function tractEvent(eventCategory: string, eventAction: string, eventName: string, eventValue?: number) {
+export function tractEvent(
+  eventCategory: string,
+  eventAction: string,
+  eventName: string,
+  eventValue?: number
+) {
   if (!!window._paq) {
     window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
   }
@@ -134,6 +139,22 @@ export function datetimeToDateAndTime(datetime: string): string {
   if (!datetime) return '';
 
   const date = new Date(datetime);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  };
+  return date.toLocaleDateString('en-us', options);
+}
+/** Timestamp in seconds to DateTime */
+export function timestampToDateAndTime(timestamp: number): string {
+  if (!timestamp) return '';
+
+  const date = new Date(timestamp * 1000);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',

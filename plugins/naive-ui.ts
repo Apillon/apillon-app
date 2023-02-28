@@ -65,6 +65,7 @@ import {
   NUploadTrigger,
   SelectOption,
   SelectProps,
+  TabsInst,
   UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
@@ -88,6 +89,7 @@ declare global {
   interface NDataTableInst extends DataTableInst {}
   interface NDataTableSortState extends DataTableSortState {}
   interface NMessageApiInjection extends MessageApiInjection {}
+  interface NTabsInst extends TabsInst {}
 
   interface NRadioOption extends SelectOption {
     label: string;
