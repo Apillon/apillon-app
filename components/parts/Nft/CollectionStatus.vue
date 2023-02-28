@@ -37,7 +37,7 @@ defineProps({
 function getCollectionStatus(status: number): TagType {
   switch (status) {
     case CollectionStatus.DEPLOYED:
-      return 'info';
+      return 'success';
     case CollectionStatus.TRANSFERED:
       return 'success';
     default:

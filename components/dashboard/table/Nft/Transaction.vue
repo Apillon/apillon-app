@@ -50,14 +50,11 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       key: 'transactionHash',
       title: $i18n.t('nft.transaction.hash'),
       render(row: TransactionInterface) {
-        return h(TableEllipsis, { text: row.transactionHash }, '');
-      },
-    },
-    {
-      key: 'link',
-      title: $i18n.t('nft.transaction.link'),
-      render(row: TransactionInterface) {
-        return h(TableLink, { link: moonbaseLink(row.transactionHash, row.chainId) }, '');
+        return h(
+          TableLink,
+          { link: moonbaseLink(row.transactionHash, row.chainId), text: row.transactionHash },
+          ''
+        );
       },
     },
     {
