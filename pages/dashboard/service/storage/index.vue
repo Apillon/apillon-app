@@ -22,6 +22,7 @@
     <slot>
       <TableStorageBucket v-if="bucketStore.hasBuckets" :buckets="bucketStore.items" />
       <Empty
+        v-else
         :title="$t('storage.bucket.noActiveService')"
         :info="$t('storage.bucket.attachService')"
         icon="storage/empty"
