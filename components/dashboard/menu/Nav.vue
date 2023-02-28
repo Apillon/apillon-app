@@ -39,14 +39,6 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
       key: 'services',
       children: [
         {
-          key: 'dashboard-service-authentication',
-          label: $i18n.t('nav.authentication'),
-          to: 'dashboard-service-authentication',
-          iconName: 'icon-authentication',
-          soon: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
-          disabled: isMenuItemDisabled(Feature.AUTHENTICATION),
-        },
-        {
           key: 'dashboard-service-storage',
           label: $i18n.t('nav.storage'),
           to: 'dashboard-service-storage',
@@ -61,6 +53,22 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
           iconName: 'icon-hosting',
           soon: !isFeatureEnabled(Feature.HOSTING, authStore.getUserRoles()),
           disabled: isMenuItemDisabled(Feature.HOSTING),
+        },
+        {
+          key: 'dashboard-service-nft',
+          label: $i18n.t('nav.nft'),
+          to: 'dashboard-service-nft',
+          iconName: 'icon-NFTs',
+          soon: !isFeatureEnabled(Feature.NFT, authStore.getUserRoles()),
+          disabled: isMenuItemDisabled(Feature.NFT),
+        },
+        {
+          key: 'dashboard-service-authentication',
+          label: $i18n.t('nav.authentication'),
+          to: 'dashboard-service-authentication',
+          iconName: 'icon-authentication',
+          soon: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
+          disabled: isMenuItemDisabled(Feature.AUTHENTICATION),
         },
         {
           key: 'dashboard-service-computing',
