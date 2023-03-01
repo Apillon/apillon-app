@@ -216,11 +216,11 @@ export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | a
     const err = error as ApiError;
     if (err.errors && Array.isArray(err.errors)) {
       const errorMessages = err.errors.map(e =>
-        singleErrorMessage(window.$i18n, e.message, takeFirstDigitsFromNumber(e.statusCode))
+        singleErrorMessage(window.$i18n, e.message, e.statusCode)
       );
       return [...new Set(errorMessages)].join('\n');
     } else if (err.message) {
-      return singleErrorMessage(window.$i18n, err.message, err.status);
+      return singleErrorMessage(window.$i18n, err.message, err.code || err.status);
     }
   } else if (error instanceof ReferenceError || error instanceof TypeError) {
     return window.$i18n.te(`error.${error.message}`)
@@ -232,9 +232,12 @@ export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | a
 }
 
 /** Translate single error message */
-function singleErrorMessage($i18n: i18nType, message: string, code: number = 0) {
+function singleErrorMessage($i18n: i18nType, message: string, statusCode: number = 0) {
+  const code = takeFirstDigitsFromNumber(statusCode);
   if ($i18n.te(`error.${message}`)) {
     return $i18n.t(`error.${message}`);
+  } else if ($i18n.te(`error.${statusCode}`)) {
+    return $i18n.t(`error.${statusCode}`);
   } else if (code >= 500) {
     return $i18n.t('error.DEFAULT_SYSTEM_ERROR');
   } else if (code >= 400) {
