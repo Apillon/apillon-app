@@ -621,6 +621,16 @@
     "credentials": "Credentials & API keys"
   },
   "profile": {
+    "discord": {
+      "connect": "Discord connect",
+      "connected": "Discord connected",
+      "disconnect": "Discord disconnect",
+      "disconnected": "You have successfully disconnected your discord",
+      "infoConnected": "Disconnect your Discord account",
+      "infoDisconnected": "Connect your Discord account",
+      "titleConnected": "Discord connected",
+      "titleDisconnected": "Discord"
+    },
     "2fa": "Two-factor authentication",
     "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
     "changePassword": "Change password",
