@@ -84,6 +84,10 @@ const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
 const TableEllipsis = resolveComponent('TableEllipsis');
 const TableLink = resolveComponent('TableLink');
+const StorageFileStatus = resolveComponent('StorageFileStatus');
+
+/** Pooling */
+let fileInterval: any = null as any;
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 const checkedRowKeys = ref<Array<string | number>>([]);
@@ -178,7 +182,15 @@ function renderOption({ node, option }: DropdownRenderOption) {
 }
 
 /** Available columns - show/hide column */
-const selectedColumns = ref(['name', 'CID', 'link', 'size', 'createTime', 'contentType']);
+const selectedColumns = ref([
+  'name',
+  'CID',
+  'link',
+  'size',
+  'createTime',
+  'contentType',
+  'fileStatus',
+]);
 const availableColumns = ref([
   { value: 'name', label: $i18n.t('storage.fileName') },
   { value: 'CID', label: $i18n.t('storage.fileCid'), hidden: props.type !== TableFilesType.BUCKET },
@@ -190,6 +202,7 @@ const availableColumns = ref([
   { value: 'size', label: $i18n.t('storage.fileSize') },
   { value: 'createTime', label: $i18n.t('dashboard.created') },
   { value: 'contentType', label: $i18n.t('storage.contentType') },
+  { value: 'fileStatus', label: $i18n.t('storage.fileStatusName') },
 ]);
 
 /** Columns */
@@ -203,7 +216,7 @@ const columns = computed(() => {
       title: $i18n.t('storage.fileName'),
       key: 'name',
       className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       minWidth: 200,
       render(row: BucketItemInterface) {
         return [
@@ -230,7 +243,7 @@ const columns = computed(() => {
       className: {
         hidden: !selectedColumns.value.includes('CID') || props.type !== TableFilesType.BUCKET,
       },
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         return h(TableEllipsis, { text: row.CID }, '');
       },
@@ -241,7 +254,7 @@ const columns = computed(() => {
       className: {
         hidden: !selectedColumns.value.includes('link') || props.type !== TableFilesType.BUCKET,
       },
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         return h(TableLink, { link: row.link }, '');
       },
@@ -250,7 +263,7 @@ const columns = computed(() => {
       title: $i18n.t('storage.fileSize'),
       key: 'size',
       className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('size') }],
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
@@ -265,22 +278,37 @@ const columns = computed(() => {
         ON_COLUMN_CLICK_OPEN_CLASS,
         { hidden: !selectedColumns.value.includes('createTime') },
       ],
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
       },
     },
     {
-      title: $i18n.t('storage.contentType'),
       key: 'contentType',
+      title: $i18n.t('storage.contentType'),
       className: [
         ON_COLUMN_CLICK_OPEN_CLASS,
         { hidden: !selectedColumns.value.includes('contentType') },
       ],
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (row.contentType) {
           return h('span', {}, row.contentType);
+        }
+        return '';
+      },
+    },
+    {
+      key: 'fileStatus',
+      title: $i18n.t('general.status'),
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        { hidden: !selectedColumns.value.includes('fileStatus') },
+      ],
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
+      render(row: BucketItemInterface) {
+        if (row.fileStatus) {
+          return h(StorageFileStatus, { fileStatus: row.fileStatus }, '');
         }
         return '';
       },
@@ -365,20 +393,13 @@ function onItemOpen(row: BucketItemInterface) {
   currentRow.value = row;
   switch (row.type) {
     case BucketItemType.FILE:
-      onFileOpen();
+      drawerFileDetailsVisible.value = true;
       break;
     case BucketItemType.DIRECTORY:
       onFolderOpen(row);
       break;
     default:
       console.warn("Unknown item type: it should be of type 'file' or 'directory'!");
-  }
-}
-
-/** Show file details if actions are enabled */
-function onFileOpen() {
-  if (props.actions) {
-    drawerFileDetailsVisible.value = true;
   }
 }
 
@@ -406,10 +427,14 @@ onMounted(() => {
    * Load data on mounted
    */
   setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(_ => {
-      bucketStore.getDirectoryContent();
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await bucketStore.getDirectoryContent();
+      checkUnfinishedFiles();
     });
   }, 100);
+});
+onUnmounted(() => {
+  clearInterval(fileInterval);
 });
 
 /** Sort column - fetch directory content with order params  */
@@ -515,16 +540,37 @@ async function getDirectoryContent(
   orderBy?: string,
   order?: string
 ) {
-  await bucketStore.fetchDirectoryContent(
+  clearInterval(fileInterval);
+
+  await bucketStore.fetchDirectoryContent({
     bucketUuid,
     folderId,
     page,
-    PAGINATION_LIMIT,
-    bucketStore.folder.search,
+    limit: PAGINATION_LIMIT,
+    search: bucketStore.folder.search,
     orderBy,
-    order
-  );
+    order,
+  });
 
+  checkUnfinishedFiles();
   currentPage.value = page;
+}
+
+/** Files pooling */
+function checkUnfinishedFiles() {
+  if (!hasUnfinishedFiles()) {
+    return;
+  }
+
+  fileInterval = setInterval(async () => {
+    await bucketStore.fetchDirectoryContent({ loader: false });
+    if (!hasUnfinishedFiles()) {
+      clearInterval(fileInterval);
+      return;
+    }
+  }, 30000);
+}
+function hasUnfinishedFiles(): boolean {
+  return bucketStore.folder.items.some(file => file.fileStatus < FileStatus.UPLOADED_TO_IPFS);
 }
 </script>

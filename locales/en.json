@@ -624,6 +624,15 @@
     "credentials": "Credentials & API keys"
   },
   "profile": {
+    "userRole": {
+      "ADMIN": "Admin",
+      "SUPPORT": "Support",
+      "ANALYTIC": "Analytic",
+      "PROJECT_OWNER": "Project owner",
+      "PROJECT_ADMIN": "Project admin",
+      "PROJECT_USER": "Project user",
+      "USER": "User"
+    },
     "2fa": "Two-factor authentication",
     "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
     "changePassword": "Change password",
@@ -786,6 +795,17 @@
       "update": "Update IPNS"
     },
     "file": {
+      "status": {
+        "1": "Signed URL for upload generated",
+        "2": "Uploaded to S3",
+        "3": "Uploaded to IPFS",
+        "4": "Pinned to CRUST",
+        "5": "Upload completed",
+        "100": "Error while uploading to S3",
+        "101": "Error while pinning to CRUST",
+        "102": "Error: file does not exists on S3",
+        "103": "Error: bucket is full"
+      },
       "confirmUpload": "Confirm your upload",
       "create": "Create file",
       "delete": "Delete file(s)",
@@ -804,17 +824,6 @@
       "uploading": "Uploading",
       "uploadMore": "Add more files",
       "uploadNow": "Upload now"
-    },
-    "fileStatus": {
-      "1": "Signed URL for upload generated",
-      "2": "Uploaded to S3",
-      "3": "Uploaded to IPFS",
-      "4": "Pinned to CRUST",
-      "5": "Upload completed",
-      "100": "Error while uploading to S3",
-      "101": "Error while pinning to CRUST",
-      "102": "Error: file does not exists on S3",
-      "103": "Error: bucket is full"
     },
     "contentType": "Content type",
     "downloadLink": "Download link",
@@ -861,15 +870,6 @@
       "name": "Computing",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
     }
-  },
-  "userRole": {
-    "ADMIN": "Admin",
-    "SUPPORT": "Support",
-    "ANALYTIC": "Analytic",
-    "PROJECT_OWNER": "Project owner",
-    "PROJECT_ADMIN": "Project admin",
-    "PROJECT_USER": "Project user",
-    "USER": "User"
   },
   "validation": {
     "apiKeyName": "API key name is required",
