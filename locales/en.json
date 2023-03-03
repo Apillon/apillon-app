@@ -820,6 +820,7 @@
       "refresh": "Refresh files",
       "retry": "Retry upload",
       "search": "Search files",
+      "stillUploading": "This file is pinning to CRUST. When it will be pinned, you will be able to see file details.",
       "upload": "Upload files and folders",
       "uploading": "Uploading",
       "uploadMore": "Add more files",

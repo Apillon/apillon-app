@@ -60,7 +60,7 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
-import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis, NSpace, NTooltip, useMessage } from 'naive-ui';
 
 const props = defineProps({
   type: {
@@ -73,6 +73,7 @@ const props = defineProps({
 
 const { downloadFile } = useFile();
 const $i18n = useI18n();
+const message = useMessage();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const showModalW3Warn = ref<boolean>(false);
@@ -117,7 +118,7 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
       props: {
         onClick: () => {
-          drawerFileDetailsVisible.value = true;
+          onFileOpen();
         },
       },
     },
@@ -393,13 +394,25 @@ function onItemOpen(row: BucketItemInterface) {
   currentRow.value = row;
   switch (row.type) {
     case BucketItemType.FILE:
-      drawerFileDetailsVisible.value = true;
+      onFileOpen();
       break;
     case BucketItemType.DIRECTORY:
       onFolderOpen(row);
       break;
     default:
       console.warn("Unknown item type: it should be of type 'file' or 'directory'!");
+  }
+}
+
+/** Show file details if actions are enabled */
+function onFileOpen() {
+  if (
+    currentRow.value.type === BucketItemType.FILE &&
+    currentRow.value.fileStatus > FileStatus.UPLOADED_TO_S3
+  ) {
+    drawerFileDetailsVisible.value = true;
+  } else {
+    message.warning($i18n.t('storage.file.stillUploading'));
   }
 }
 
