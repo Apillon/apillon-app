@@ -6,7 +6,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "local": "cross-env ENV=local nuxt dev",
-    "generate": "nuxt generate",
+    "generate": "cross-env nuxt generate",
     "preview": "nuxt preview"
   },
   "devDependencies": {
