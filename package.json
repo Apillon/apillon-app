@@ -25,12 +25,13 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.4.0",
     "naive-ui": "^2.33.3",
-    "nuxt": "^3.0.0",
+    "nuxt": "3.2.2",
     "prettier": "^2.7.1"
   },
   "dependencies": {
     "@crustio/type-definitions": "^1.3.0",
     "@hcaptcha/vue3-hcaptcha": "^1.0.1",
+    "@huntersofbook/naive-ui-nuxt": "^0.7.1",
     "@metamask/detect-provider": "^2.0.0",
     "@nuxt/webpack-builder": "^3.2.3",
     "@pinia/nuxt": "^0.4.6",

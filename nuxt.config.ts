@@ -41,6 +41,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-icons',
+    '@huntersofbook/naive-ui-nuxt',
     [
       '@nuxtjs/google-fonts',
       {
