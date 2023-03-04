@@ -365,7 +365,7 @@
       "nftMint": "Minting NFT requested.",
       "nftTransfer": "NFT ownership has been transferred",
       "profile": "Your profile data has been updated",
-      "requestPasswordChange": "We’ve sent you a password reset request to your email",
+      "requestPasswordChange": "We've sent you a password reset request to your email",
       "sendAgainEmail": "Email has been re-sent",
       "websiteDeployed": "Website has been deployed.",
       "websiteDeploying": "Done - deployment initiated",
@@ -421,7 +421,7 @@
       }
     },
     "terms": {
-      "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform’s services.",
+      "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform's services.",
       "payment": "I understand the billing process and some other legal stuff."
     },
     "connect": "Connect",
@@ -499,7 +499,7 @@
   },
   "login": {
     "description": "Web3 will not build itself. Go and add your block.",
-    "dontHaveAccount": "I don’t have Apillon account yet?",
+    "dontHaveAccount": "I don't have Apillon account yet?",
     "enterNewPassword": "Enter new password",
     "forgotPassword": "Did you forgot your password?",
     "magicLink": "Send me a Magic Link",
@@ -599,7 +599,7 @@
   },
   "onboarding": {
     "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
-    "buildDemo": "OK, let’s do demo first",
+    "buildDemo": "OK, let's do demo first",
     "buildWeb3": "“Build versatile and high-performing Web3 solutions with Apillon. Harness the power of blockchain technology and create next-gen dapps through simple yet robust APIs”",
     "createWeb3Project": "Create Web3 project",
     "demoProject": "Demo project",
@@ -663,7 +663,7 @@
       "header": "Can we work together?",
       "description": "Currently we are working with a limited list of countries so the reward shipments can be carried out. Please select your country in the list below.",
       "country": "Select your country",
-      "btn": "Let’s see if we can work together",
+      "btn": "Let's see if we can work together",
       "terms": {
         "accept": "I accept the",
         "andConditions": "Terms and conditions",
@@ -855,7 +855,7 @@
     "yourFilesAll": "All your files",
     "webhook": "Webhook",
     "wrapFiles": "Wrap files",
-    "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don’t want to do it just skip this process.",
+    "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don't want to do it just skip this process.",
     "wrapToDirectory": "Wrap to directory"
   },
   "service": {
@@ -932,7 +932,7 @@
   },
   "w3Warn": {
     "bucket": {
-      "new": "Each file hosting that passes through Crust’s pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
+      "new": "Each file hosting that passes through Crust's pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
       "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
       "destroyed": ""
     },

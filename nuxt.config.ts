@@ -60,7 +60,7 @@ export default defineNuxtConfig({
       },
 
       title: meta.title,
-      titleTemplate: `%s – ${meta.title}`,
+      titleTemplate: `%s - ${meta.title}`,
       charset: 'utf-9',
       viewport: 'width=device-width, initial-scale=1',
 
