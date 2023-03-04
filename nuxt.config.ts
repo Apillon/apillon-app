@@ -41,7 +41,22 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-icons',
-    // '@nuxtjs/google-fonts',
+    [
+      '@nuxtjs/google-fonts',
+      {
+        useStylesheet: true,
+        display: 'swap',
+        download: false,
+        families: {
+          'IBM Plex Mono': {
+            wght: [400, 700],
+          },
+          'IBM Plex Sans': {
+            wght: [400, 700],
+          },
+        },
+      },
+    ],
     '@nuxtjs/i18n',
   ],
 
@@ -120,20 +135,6 @@ export default defineNuxtConfig({
       ],
     },
   },
-
-  // googleFonts: {
-  //   useStylesheet: true,
-  //   display: 'swap',
-  //   download: false,
-  //   families: {
-  //     'IBM Plex Mono': {
-  //       wght: [400, 700],
-  //     },
-  //     'IBM Plex Sans': {
-  //       wght: [400, 700],
-  //     },
-  //   },
-  // },
 
   i18n: {
     // add `vueI18n` option to `@nuxtjs/i18n` module options
