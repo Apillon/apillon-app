@@ -21,6 +21,13 @@ export default defineNuxtConfig({
 
   typescript: { shim: false },
 
+  webpack: {
+    terser: {
+      isModern: false,
+      safari10: true,
+    },
+  },
+
   nitro: {
     plugins: ['~/lib/nitro-globals'],
   },
