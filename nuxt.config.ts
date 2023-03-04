@@ -25,9 +25,9 @@ export default defineNuxtConfig({
     plugins: ['~/lib/nitro-globals'],
   },
 
-  // build: {
-  //   transpile: ['naive-ui', 'vueuc'],
-  // },
+  build: {
+    transpile: ['naive-ui', 'vueuc', '@css-render/vue3-ssr', '@juggle/resize-observer'],
+  },
 
   runtimeConfig: {
     public: appConfig,

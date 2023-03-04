@@ -1,6 +1,6 @@
 <template>
   <div v-if="authStore.loggedIn" ref="mainContentRef" class="relative h-screen bg-bg">
-    <n-config-provider :theme-overrides="themeOverrides">
+    <n-config-provider :theme-overrides="themeOverrides" inline-theme-disabled>
       <n-message-provider
         :to="messageRef"
         placement="bottom-right"
@@ -45,7 +45,7 @@
     </n-config-provider>
   </div>
   <div v-else class="relative min-h-screen h-full pb-28 md:pb-20">
-    <n-config-provider :theme-overrides="themeOverrides">
+    <n-config-provider :theme-overrides="themeOverrides" inline-theme-disabled>
       <AuthHeader />
 
       <div class="container flex justify-center items-center min-h-[70vh]">
