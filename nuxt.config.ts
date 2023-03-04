@@ -21,10 +21,6 @@ export default defineNuxtConfig({
 
   typescript: { shim: false },
 
-  webpack: {
-    terser: false,
-  },
-
   nitro: {
     plugins: ['~/lib/nitro-globals'],
   },
@@ -126,8 +122,9 @@ export default defineNuxtConfig({
   },
 
   googleFonts: {
+    useStylesheet: true,
     display: 'swap',
-    download: true,
+    download: false,
     families: {
       'IBM Plex Mono': {
         wght: [400, 700],
