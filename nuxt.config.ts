@@ -68,6 +68,10 @@ export default defineNuxtConfig({
     dirs: ['./lib', './types', './stores', './stores/hosting', './stores/nft', './stores/storage'],
   },
 
+  build: {
+    transpile: ['naive-ui', 'vueuc', '@css-render/vue3-ssr', '@juggle/resize-observer'],
+  },
+
   app: {
     head: {
       htmlAttrs: {
