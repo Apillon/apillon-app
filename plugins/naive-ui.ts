@@ -121,7 +121,7 @@ export default defineNuxtPlugin(nuxtApp => {
         // NCheckboxGroup,
         // NCollapse,
         // NCollapseItem,
-        // NConfigProvider,
+        NConfigProvider,
         // NDataTable,
         // NDatePicker,
         // NDivider,
