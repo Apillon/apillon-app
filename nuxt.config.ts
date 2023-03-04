@@ -25,6 +25,10 @@ export default defineNuxtConfig({
     plugins: ['~/lib/nitro-globals'],
   },
 
+  // build: {
+  //   transpile: ['naive-ui', 'vueuc'],
+  // },
+
   runtimeConfig: {
     public: appConfig,
   },
@@ -41,7 +45,6 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-icons',
-    '@huntersofbook/naive-ui-nuxt',
     [
       '@nuxtjs/google-fonts',
       {
