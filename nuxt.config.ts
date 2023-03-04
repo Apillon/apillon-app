@@ -25,6 +25,10 @@ export default defineNuxtConfig({
     terser: {
       isModern: false,
       safari10: true,
+      terserOptions: {
+        safari10: true,
+        isModern: false,
+      },
     },
   },
 
