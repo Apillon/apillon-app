@@ -10,7 +10,6 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
-    "@css-render/vue3-ssr": "^0.15.12",
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
     "@nuxtjs/google-fonts": "^3.0.0-0",
     "@nuxtjs/i18n": "^8.0.0-beta.7",
