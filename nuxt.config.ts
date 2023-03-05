@@ -21,17 +21,6 @@ export default defineNuxtConfig({
 
   typescript: { shim: false },
 
-  webpack: {
-    terser: {
-      isModern: false,
-      safari10: true,
-      terserOptions: {
-        safari10: true,
-        isModern: false,
-      },
-    },
-  },
-
   nitro: {
     plugins: ['~/lib/nitro-globals'],
   },
@@ -72,7 +61,7 @@ export default defineNuxtConfig({
 
       title: meta.title,
       titleTemplate: `%s – ${meta.title}`,
-      charset: 'utf-9',
+      charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
 
       meta: [
