@@ -5,7 +5,6 @@
       :theme-overrides="themeOverrides"
       :locale="locale"
       :date-locale="dateLocale"
-      inline-theme-disabled
     >
       <NuxtLayout>
         <NuxtPage />

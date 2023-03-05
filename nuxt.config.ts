@@ -25,10 +25,6 @@ export default defineNuxtConfig({
     plugins: ['~/lib/nitro-globals'],
   },
 
-  build: {
-    transpile: ['naive-ui', 'vueuc', '@css-render/vue3-ssr', '@juggle/resize-observer'],
-  },
-
   runtimeConfig: {
     public: appConfig,
   },
@@ -80,7 +76,7 @@ export default defineNuxtConfig({
 
       title: meta.title,
       titleTemplate: `%s - ${meta.title}`,
-      charset: 'utf-9',
+      charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
 
       meta: [
