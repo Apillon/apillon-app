@@ -136,7 +136,9 @@ const Endpoints = {
   nftCheckTransactionsStatus: '/nfts/check-transactions-status',
 
   /** Collection */
-  collections: '/nfts/collections',
+  collections: (id?: number) => {
+    return id ? `/nfts/collections/${id}` : '/nfts/collections';
+  },
   collectionTransactions: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/transactions`;
   },

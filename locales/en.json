@@ -223,6 +223,7 @@
     "NFT_MINT_QUANTITY_NOT_PRESENT": "Mint Quantity not present",
     "NFT_MINT_QUANTITY_NOT_VALID": "Mint Quantity not valid. Enter a number between 1 and 20.",
     "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
+    "NFT_CONTRACT_OWNER_ERROR": "NFT contract has been transferred to another wallet.",
 
     "walletSignature": "'Could not capture your signature, check your wallet connection",
     "fileDownload": "Download failed. Something went wrong during the download.",
@@ -888,7 +889,7 @@
     "collectionMaxSupplyRequired": "Please enter Max supply",
     "collectionMintPriceRequired": "Please enter Mint price",
     "collectionNameRequired": "Please enter Collection name",
-    "collectionReserveRequired": "Please enter Reserve",
+    "collectionReserve": "Number of reserved NFTs can be equal or lower than max supply.",
     "collectionSymbolRequired": "Please enter Collection symbol",
     "creditCard": "Credit card validation error",
     "creditCardRequired": "Please enter credit card number",

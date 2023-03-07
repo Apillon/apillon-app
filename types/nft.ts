@@ -8,7 +8,7 @@ export enum Chains {
 export enum CollectionStatus {
   PENDING = 0,
   DEPLOYED = 1,
-  TRANSFERED = 2,
+  TRANSFERRED = 2,
 }
 
 /** NFT Transaction status */

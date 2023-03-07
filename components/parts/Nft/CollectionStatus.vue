@@ -26,7 +26,7 @@ defineProps({
   collectionStatus: {
     type: Number,
     validator: (collectionStatus: number) =>
-      [CollectionStatus.PENDING, CollectionStatus.DEPLOYED, CollectionStatus.TRANSFERED].includes(
+      [CollectionStatus.PENDING, CollectionStatus.DEPLOYED, CollectionStatus.TRANSFERRED].includes(
         collectionStatus
       ),
     default: 0,
@@ -38,7 +38,7 @@ function getCollectionStatus(status: number): TagType {
   switch (status) {
     case CollectionStatus.DEPLOYED:
       return 'success';
-    case CollectionStatus.TRANSFERED:
+    case CollectionStatus.TRANSFERRED:
       return 'success';
     default:
       return 'warning';

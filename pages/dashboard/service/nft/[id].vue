@@ -69,15 +69,14 @@ let transactionInterval: any = null as any;
 const collectionId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
 
 useHead({
-  title: $i18n.t('nav.hosting'),
+  title: $i18n.t('nav.nft'),
 });
 
 onMounted(async () => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const collections = await collectionStore.getCollections();
-    const currentCollection = collections.find(item => item.id === collectionId.value);
+    const currentCollection = await collectionStore.getCollection(collectionId.value);
 
-    if (!currentCollection) {
+    if (!currentCollection?.collection_uuid) {
       router.push({ name: 'dashboard-service-nft' });
     } else {
       await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
@@ -123,13 +122,8 @@ function checkIfCollectionUnfinished() {
   }
 
   collectionInterval = setInterval(async () => {
-    const collections = await collectionStore.fetchCollections(false);
-    const collection = collections.find(collection => collection.id === collectionStore.active.id);
-    if (!collection) {
-      clearInterval(collectionInterval);
-      return;
-    } else if (collection.collectionStatus >= CollectionStatus.DEPLOYED) {
-      collectionStore.active = collection;
+    const collection = await collectionStore.fetchCollection(collectionId.value);
+    if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
       clearInterval(collectionInterval);
     }
   }, 30000);
@@ -152,11 +146,9 @@ function checkUnfinishedTransactions() {
     const transaction = transactions.find(
       transaction => transaction.id === unfinishedTransaction.id
     );
-    if (!transaction) {
+    if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
       clearInterval(transactionInterval);
-      return;
-    } else if (transaction.transactionStatus >= TransactionStatus.FINISHED) {
-      clearInterval(transactionInterval);
+      await collectionStore.fetchCollection(collectionId.value);
     }
   }, 30000);
 }

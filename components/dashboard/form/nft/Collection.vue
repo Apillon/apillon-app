@@ -214,8 +214,8 @@ const rules: NFormRules = {
   ],
   reserve: [
     {
-      required: true,
-      message: $i18n.t('validation.collectionReserveRequired'),
+      validator: validateReserve,
+      message: $i18n.t('validation.collectionReserve'),
     },
   ],
 };
@@ -226,6 +226,10 @@ const isQuotaReached = computed<boolean>(() => {
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
 });
+
+function validateReserve(_: NFormItemRule, value: number): boolean {
+  return value <= (formData.value?.maxSupply || 0);
+}
 
 function disablePasteDate(ts: number) {
   return ts < Date.now();
@@ -265,7 +269,7 @@ async function createCollection() {
       dropStart: Math.floor((formData.value.dropStart || Date.now()) / 1000),
       reserve: formData.value.reserve,
     };
-    const res = await $api.post<CollectionResponse>(endpoints.collections, bodyData);
+    const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
 
     message.success($i18n.t('form.success.created.collection'));
 

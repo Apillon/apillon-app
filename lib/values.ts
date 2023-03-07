@@ -24,6 +24,7 @@ export const LsCacheKeys = {
   BUCKETS: 'al_cache_buckets',
   BUCKET_ITEMS: 'al_cache_bucket_items',
   BUCKET_DESTROYED: 'al_cache_bucket_destroyed',
+  COLLECTION: 'al_cache_collection',
   COLLECTIONS: 'al_cache_collections',
   COLLECTION_TRANSACTIONS: 'al_cache_collection_transactions',
   DEPLOYMENT: 'al_cache_deployment',
