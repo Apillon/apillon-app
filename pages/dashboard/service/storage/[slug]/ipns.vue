@@ -18,7 +18,7 @@
               clearable
             >
               <template #prefix>
-                <span class="icon-search text-xl"></span>
+                <span class="icon-search text-2xl"></span>
               </template>
             </n-input>
           </div>
@@ -30,20 +30,14 @@
               :loading="ipnsStore.loading"
               @click="ipnsStore.fetchIpns(bucketId)"
             >
-              <span class="icon-refresh text-lg mr-2"></span>
+              <span class="icon-refresh text-xl mr-2"></span>
               {{ $t('general.refresh') }}
             </n-button>
 
             <!-- Create new website -->
-            <n-button
-              v-if="ipnsStore.hasIpns"
-              type="primary"
-              size="small"
-              ghost
-              @click="modalCreateIpnsVisible = true"
-            >
-              <span class="icon-create-folder text-xl mr-2"></span>
-              {{ $t('general.addNew') }}
+            <n-button v-if="ipnsStore.hasIpns" size="small" @click="modalCreateIpnsVisible = true">
+              <span class="icon-create-folder text-xl text-primary mr-2"></span>
+              <span class="text-primary">{{ $t('general.addNew') }}</span>
             </n-button>
           </n-space>
         </n-space>

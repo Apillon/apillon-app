@@ -24,7 +24,7 @@
                 clearable
               >
                 <template #prefix>
-                  <span class="icon-search text-bodyDark text-xl"></span>
+                  <span class="icon-search text-2xl text-bodyDark"></span>
                 </template>
               </n-input>
             </a>
@@ -35,7 +35,7 @@
               href="https://wiki.apillon.io/build/3-apillon-api.html"
               target="_blank"
             >
-              <n-button size="small" ghost>
+              <n-button size="small">
                 <NuxtIcon name="icon/docs" class="text-xl mr-2" />
                 {{ $t('dashboard.readDocs') }}
               </n-button>

@@ -6,9 +6,7 @@
           <h4>{{ $t('dashboard.apiKey.title') }}</h4>
         </slot>
 
-        <template #info>
-          <span class="icon-info"></span>
-        </template>
+        <template #info> </template>
 
         <template #submenu>
           <MenuProjectSettings />

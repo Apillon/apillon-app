@@ -10,7 +10,7 @@
         clearable
       >
         <template #prefix>
-          <span class="icon-search text-xl"></span>
+          <span class="icon-search text-2xl"></span>
         </template>
       </n-input>
     </div>
@@ -22,20 +22,18 @@
         :loading="collectionStore.loading"
         @click="collectionStore.fetchCollections()"
       >
-        <span class="icon-refresh text-lg mr-2"></span>
+        <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
       <!-- Create new collection -->
       <n-button
         v-if="collectionStore.hasCollections"
-        type="primary"
         size="small"
-        ghost
         @click="modalNewCollectionVisible = true"
       >
-        <span class="icon-create-folder text-xl mr-2"></span>
-        {{ $t('nft.collection.new') }}
+        <span class="icon-create-folder text-xl text-primary mr-2"></span>
+        <span class="text-primary">{{ $t('nft.collection.new') }}</span>
       </n-button>
     </n-space>
   </n-space>

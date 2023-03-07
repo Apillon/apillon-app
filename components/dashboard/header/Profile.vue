@@ -8,7 +8,7 @@
     @select="handleSelect"
   >
     <div class="flex cursor-pointer">
-      <div class="flex items-center pr-2">
+      <div class="flex items-center pr-1">
         <div class="relative w-10 h-10 flex justify-center items-center rounded-[50%] bg-white">
           <span v-if="authStore.username" class="text-bg text-lg font-bold uppercase">
             {{ initials(authStore.username) }}
@@ -17,7 +17,9 @@
         </div>
       </div>
       <div class="hidden md:flex items-center">
-        <span class="icon-down text-2xl"></span>
+        <n-button class="w-10 px-1" size="small" type="tertiary" quaternary round>
+          <span class="icon-down text-3xl"></span>
+        </n-button>
       </div>
     </div>
   </n-dropdown>

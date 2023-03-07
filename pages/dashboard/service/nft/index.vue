@@ -8,13 +8,17 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <button
+            <n-button
               v-if="$i18n.te('w3Warn.nft.new')"
-              class="align-sub"
+              class="align-sub px-2"
+              size="small"
+              type="tertiary"
+              quaternary
+              round
               @click="showModalW3Warn = true"
             >
-              <span class="icon-info text-xl"></span>
-            </button>
+              <span class="icon-info text-2xl"></span>
+            </n-button>
           </n-space>
         </template>
       </Heading>

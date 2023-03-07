@@ -11,7 +11,7 @@
           clearable
         >
           <template #prefix>
-            <span class="icon-search text-xl"></span>
+            <span class="icon-search text-2xl"></span>
           </template>
         </n-input>
       </div>

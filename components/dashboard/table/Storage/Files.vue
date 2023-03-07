@@ -315,7 +315,7 @@ const columns = computed(() => {
       },
     },
     {
-      title: $i18n.t('general.actions'),
+      title: '',
       key: 'actions',
       align: 'right',
       className: ['!py-0', { hidden: props.type === TableFilesType.DEPLOYMENT }],
@@ -331,8 +331,8 @@ const columns = computed(() => {
             default: () =>
               h(
                 NButton,
-                { size: 'small', quaternary: true },
-                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
+                { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
               ),
           }
         );

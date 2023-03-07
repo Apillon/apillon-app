@@ -70,7 +70,7 @@ const createColumns = (): NDataTableColumns<IpnsInterface> => {
     },
     {
       key: 'actions',
-      title: $i18n.t('general.actions'),
+      title: '',
       align: 'right',
       className: '!py-0',
       render() {
@@ -84,8 +84,8 @@ const createColumns = (): NDataTableColumns<IpnsInterface> => {
             default: () =>
               h(
                 NButton,
-                { size: 'small', quaternary: true },
-                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
+                { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
               ),
           }
         );

@@ -11,7 +11,7 @@
           clearable
         >
           <template #prefix>
-            <span class="icon-search text-xl"></span>
+            <span class="icon-search text-2xl"></span>
           </template>
         </n-input>
       </div>
@@ -19,7 +19,7 @@
       <n-space size="large">
         <!-- Refresh -->
         <n-button size="small" :loading="collectionStore.loading" @click="refresh">
-          <span class="icon-refresh text-lg mr-2"></span>
+          <span class="icon-refresh text-xl mr-2"></span>
           {{ $t('general.refresh') }}
         </n-button>
 
@@ -30,10 +30,10 @@
           :key="collectionStore.active.collectionStatus"
           :options="options"
         >
-          <n-button type="primary" size="small" ghost>
-            {{ $t('general.actions') }}
+          <n-button size="small">
+            <span class="text-primary">{{ $t('general.actions') }}</span>
             <div class="hidden md:flex items-center relative left-1">
-              <span class="icon-down text-2xl"></span>
+              <span class="icon-down text-2xl text-primary"></span>
             </div>
           </n-button>
         </n-dropdown>
