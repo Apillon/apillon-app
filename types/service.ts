@@ -58,7 +58,9 @@ declare global {
     status: number;
     key?: number;
     uptime?: string;
+    updateTime?: string;
   }
   interface CreateServiceResponse extends GeneralResponse<{ id: number; status: number }> {}
+  interface ServiceResponse extends GeneralResponse<ServiceInterface> {}
   interface ServicesResponse extends GeneralItemsResponse<ServiceInterface> {}
 }
