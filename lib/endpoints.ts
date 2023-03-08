@@ -169,6 +169,14 @@ const Endpoints = {
     return `/api-keys/${key}/roles`;
   },
 
+  /** Oauth links */
+  oauthLinks: '/users/oauth-links/',
+
+  /** Discord */
+  discordLink: '/users/discord-url/',
+  discordConnect: '/users/discord-connect/',
+  discordDisconnect: '/users/discord-disconnect/',
+
   /** Billing */
   billing: '/billing/',
 

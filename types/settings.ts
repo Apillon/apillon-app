@@ -4,6 +4,13 @@ export enum ApiKeyRole {
   READ = 52,
 }
 
+/* OAuth link type*/
+export enum OauthLinkType {
+  DISCORD = 1,
+  TWEETER = 2,
+  GITHUB = 3,
+}
+
 declare global {
   /**
    * Billing
@@ -85,4 +92,34 @@ declare global {
     did: boolean;
   }
   interface EmailConfigurationResponse extends GeneralResponse<any> {}
+
+  /**
+   * Oauth Link
+   */
+  interface OauthLinkInterface {
+    createTime: string;
+    email: string;
+    externalUserId: string;
+    externalUsername: string;
+    type: number;
+    user_uuid: string;
+  }
+  interface OauthLinkResponse extends GeneralResponse<OauthLinkInterface> {}
+  interface OauthLinksResponse {
+    data: {
+      data: Array<OauthLinkInterface>;
+      status: number;
+      success: boolean;
+    };
+    id: string;
+    status: number;
+  }
+
+  /**
+   * Discord
+   */
+  interface DiscordLinkInterface {
+    url: string;
+  }
+  interface DiscordLinkResponse extends GeneralResponse<DiscordLinkInterface> {}
 }
