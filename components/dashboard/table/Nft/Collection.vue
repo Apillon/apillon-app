@@ -77,6 +77,11 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
+      key: 'reserve',
+      title: $i18n.t('nft.collection.reserve'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+    },
+    {
       key: 'maxSupply',
       title: $i18n.t('nft.collection.minted') + '/' + $i18n.t('nft.collection.maxSupply'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,

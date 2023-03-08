@@ -123,6 +123,8 @@
   },
   "error": {
     "404": "Page not found",
+    "50012007": "Nfts out of stock!",
+    "50012008": "Mint reserve supply out of stock!",
 
     "BAD_REQUEST": "There is a problem with this request. Please come back later when we fixed that problem.",
     "INVALID_PATH": "Invalid path",
@@ -360,24 +362,26 @@
       "filesUploaded": "Files has been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
-      "nftMint": "NFTs have been minted",
+      "nftMint": "Minting NFT requested.",
       "nftTransfer": "NFT ownership has been transferred",
       "profile": "Your profile data has been updated",
-      "requestPasswordChange": "We’ve sent you a password reset request to your email",
+      "requestPasswordChange": "We've sent you a password reset request to your email",
       "sendAgainEmail": "Email has been re-sent",
       "websiteDeployed": "Website has been deployed.",
       "websiteDeploying": "Done - deployment initiated",
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
+        "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
-        "collection": "NFT Collection has been created",
+        "collection": "Creating NFT collection requested.",
         "directory": "Directory key has been created",
         "domain": "Domain has been added to Website",
         "file": "File has been created",
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
         "item": "Item has been created",
+        "service": "Service has been created",
         "userInvite": "User has been invited.",
         "webhook": "Webhook has been created",
         "website": "Website has been created"
@@ -385,6 +389,7 @@
       "deleted": {
         "apiKey": "Api key has been deleted",
         "apiKeyRole": "Api key permission has been removed",
+        "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
         "directory": "Directory key has been deleted",
@@ -394,6 +399,7 @@
         "ipns": "IPNS has been deleted",
         "item": "Item has been deleted",
         "items": "Items has been deleted",
+        "service": "Service has been deleted",
         "webhook": "Webhook has been deleted",
         "website": "Website has been deleted"
       },
@@ -405,6 +411,7 @@
       "updated": {
         "apiKey": "Api key has been updated",
         "apiKeyRole": "Api key permission has been added",
+        "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "directory": "Directory key has been updated",
         "domain": "Domain has been updated",
@@ -413,13 +420,14 @@
         "ipns": "IPNS has been updated",
         "item": "Item has been updated",
         "project": "Project has been updated",
+        "service": "Service has been updated",
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated",
         "website": "Website has been updated"
       }
     },
     "terms": {
-      "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform’s services.",
+      "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform's services.",
       "payment": "I understand the billing process and some other legal stuff."
     },
     "connect": "Connect",
@@ -497,7 +505,7 @@
   },
   "login": {
     "description": "Web3 will not build itself. Go and add your block.",
-    "dontHaveAccount": "I don’t have Apillon account yet?",
+    "dontHaveAccount": "I don't have Apillon account yet?",
     "enterNewPassword": "Enter new password",
     "forgotPassword": "Did you forgot your password?",
     "magicLink": "Send me a Magic Link",
@@ -547,6 +555,7 @@
       "name": "Collection name",
       "new": "New NFT collection",
       "numOfData": "Number of data",
+      "reserve": "Reserved",
       "revoke": "Revoke",
       "symbol": "Symbol",
       "title": "Collection title",
@@ -596,7 +605,7 @@
   },
   "onboarding": {
     "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
-    "buildDemo": "OK, let’s do demo first",
+    "buildDemo": "OK, let's do demo first",
     "buildWeb3": "“Build versatile and high-performing Web3 solutions with Apillon. Harness the power of blockchain technology and create next-gen dapps through simple yet robust APIs”",
     "createWeb3Project": "Create Web3 project",
     "demoProject": "Demo project",
@@ -621,6 +630,15 @@
     "credentials": "Credentials & API keys"
   },
   "profile": {
+    "userRole": {
+      "ADMIN": "Admin",
+      "SUPPORT": "Support",
+      "ANALYTIC": "Analytic",
+      "PROJECT_OWNER": "Project owner",
+      "PROJECT_ADMIN": "Project admin",
+      "PROJECT_USER": "Project user",
+      "USER": "User"
+    },
     "discord": {
       "connect": "Discord connect",
       "connected": "Discord connected",
@@ -661,7 +679,7 @@
       "header": "Can we work together?",
       "description": "Currently we are working with a limited list of countries so the reward shipments can be carried out. Please select your country in the list below.",
       "country": "Select your country",
-      "btn": "Let’s see if we can work together",
+      "btn": "Let's see if we can work together",
       "terms": {
         "accept": "I accept the",
         "andConditions": "Terms and conditions",
@@ -793,6 +811,17 @@
       "update": "Update IPNS"
     },
     "file": {
+      "status": {
+        "1": "Signed URL for upload generated",
+        "2": "Uploaded to S3",
+        "3": "Uploaded to IPFS",
+        "4": "Pinned to CRUST",
+        "5": "Upload completed",
+        "100": "Error while uploading to S3",
+        "101": "Error while pinning to CRUST",
+        "102": "Error: file does not exists on S3",
+        "103": "Error: bucket is full"
+      },
       "confirmUpload": "Confirm your upload",
       "create": "Create file",
       "delete": "Delete file(s)",
@@ -807,21 +836,11 @@
       "refresh": "Refresh files",
       "retry": "Retry upload",
       "search": "Search files",
+      "stillUploading": "This file is pinning to CRUST. When it will be pinned, you will be able to see file details.",
       "upload": "Upload files and folders",
       "uploading": "Uploading",
       "uploadMore": "Add more files",
       "uploadNow": "Upload now"
-    },
-    "fileStatus": {
-      "1": "Signed URL for upload generated",
-      "2": "Uploaded to S3",
-      "3": "Uploaded to IPFS",
-      "4": "Pinned to CRUST",
-      "5": "Upload completed",
-      "100": "Error while uploading to S3",
-      "101": "Error while pinning to CRUST",
-      "102": "Error: file does not exists on S3",
-      "103": "Error: bucket is full"
     },
     "contentType": "Content type",
     "downloadLink": "Download link",
@@ -852,13 +871,15 @@
     "yourFilesAll": "All your files",
     "webhook": "Webhook",
     "wrapFiles": "Wrap files",
-    "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don’t want to do it just skip this process.",
+    "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don't want to do it just skip this process.",
     "wrapToDirectory": "Wrap to directory"
   },
   "service": {
     "authentication": {
       "name": "Authentication",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum.",
+      "emptyTitle": "Your project has currently no authentication services",
+      "emptyInfo": "First create a authentication service and then create API key."
     },
     "storage": {
       "name": "Storage",
@@ -867,16 +888,11 @@
     "computing": {
       "name": "Computing",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
-    }
-  },
-  "userRole": {
-    "ADMIN": "Admin",
-    "SUPPORT": "Support",
-    "ANALYTIC": "Analytic",
-    "PROJECT_OWNER": "Project owner",
-    "PROJECT_ADMIN": "Project admin",
-    "PROJECT_USER": "Project user",
-    "USER": "User"
+    },
+    "addFirst": "Add first service",
+    "delete": "Delete service",
+    "edit": "Edit service",
+    "new": "New service"
   },
   "validation": {
     "apiKeyName": "API key name is required",
@@ -938,7 +954,7 @@
   },
   "w3Warn": {
     "bucket": {
-      "new": "Each file hosting that passes through Crust’s pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
+      "new": "Each file hosting that passes through Crust's pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
       "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
       "destroyed": ""
     },

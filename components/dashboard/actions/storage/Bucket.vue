@@ -10,7 +10,7 @@
         clearable
       >
         <template #prefix>
-          <span class="icon-search text-xl"></span>
+          <span class="icon-search text-2xl"></span>
         </template>
       </n-input>
     </div>
@@ -26,14 +26,14 @@
           :loading="downloading"
           @click="downloadSelectedFiles"
         >
-          <span class="icon-download"></span>
+          <span class="icon-download text-xl"></span>
         </n-button>
 
         <!-- Delete files -->
         <n-tooltip placement="bottom" :show="showPopoverDelete">
           <template #trigger>
-            <n-button class="w-10" size="small" :active="true" @click="deleteSelectedFiles">
-              <span class="icon-delete text-pink"></span>
+            <n-button class="w-10" size="small" type="error" ghost @click="deleteSelectedFiles">
+              <span class="icon-delete text-xl"></span>
             </n-button>
           </template>
           <span>{{ $t('storage.delete.selectedFiles') }}</span>
@@ -51,19 +51,19 @@
 
       <!-- Create folder -->
       <n-button size="small" @click="showModalNewFolder = true">
-        <span class="icon-create-folder text-lg mr-2"></span>
+        <span class="icon-create-folder text-xl mr-2"></span>
         {{ $t('storage.directory.create') }}
       </n-button>
 
       <!-- Upload files -->
       <n-button
-        size="small"
         :color="bucketStore.uploadActive ? colors.primary : ''"
+        size="small"
         type="primary"
         ghost
         @click="bucketStore.uploadActive = !bucketStore.uploadActive || !bucketStore.hasBucketItems"
       >
-        <span class="icon-upload text-lg mr-2"></span>
+        <span class="icon-upload text-xl mr-2"></span>
         {{ $t('general.upload') }}
       </n-button>
     </n-space>

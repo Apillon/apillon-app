@@ -11,6 +11,7 @@ export const LsTableColumnsKeys = {
 };
 
 export const LsW3WarnKeys = {
+  AUTH_NEW: 'al_w3warn_auth_new',
   BUCKET_NEW: 'al_w3warn_bucket_new',
   BUCKET_DELETE: 'al_w3warn_bucket_delete',
   BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
@@ -24,6 +25,7 @@ export const LsCacheKeys = {
   BUCKETS: 'al_cache_buckets',
   BUCKET_ITEMS: 'al_cache_bucket_items',
   BUCKET_DESTROYED: 'al_cache_bucket_destroyed',
+  COLLECTION: 'al_cache_collection',
   COLLECTIONS: 'al_cache_collections',
   COLLECTION_TRANSACTIONS: 'al_cache_collection_transactions',
   DEPLOYMENT: 'al_cache_deployment',
@@ -37,6 +39,10 @@ export const LsCacheKeys = {
   OAUTH_LINKS: 'al_cache_oauth_links',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
+  SERVICES: 'al_cache_services',
+  SERVICE_AUTH: 'al_cache_service_auth',
+  SERVICE_COMPUTING: 'al_cache_service_computing',
+  SERVICE_STORAGE: 'al_cache_service_storage',
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
 };
@@ -59,7 +65,7 @@ export const UserRoleIds = [
 export function CreateUserRoles(): Array<NSelectOption> {
   return Object.entries(DefaultUserRoles).map(([roleId, role]) => {
     return {
-      label: window.$i18n.t(`userRole.${role}`),
+      label: window.$i18n.t(`profile.userRole.${role}`),
       value: parseInt(roleId),
       disabled: parseInt(roleId) === DefaultUserRole.PROJECT_OWNER,
     };

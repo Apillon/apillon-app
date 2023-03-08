@@ -242,24 +242,15 @@ export const useBucketStore = defineStore('bucket', {
       }
     },
 
-    async fetchDirectoryContent(
-      bucketUuid?: string,
-      folderId?: number,
-      page?: number,
-      limit?: number,
-      search?: string,
-      orderBy?: string,
-      order?: string,
-      markedForDeletion?: boolean
-    ) {
-      this.folder.loading = true;
+    async fetchDirectoryContent(arg: FetchDirectoryParams = {}) {
+      this.folder.loading = arg.loader !== undefined ? arg.loader : true;
 
       /** Fallback for bucketUuid */
-      const bucket = bucketUuid || this.bucketUuid;
+      const bucket = arg.bucketUuid || this.bucketUuid;
 
       /** Update current folderId */
-      if (folderId) {
-        this.folder.selected = folderId;
+      if (arg.folderId) {
+        this.folder.selected = arg.folderId;
       }
 
       try {
@@ -272,21 +263,21 @@ export const useBucketStore = defineStore('bucket', {
         if (this.folder.selected > 0) {
           params.directory_id = this.folder.selected;
         }
-        if (search) {
-          params.search = search;
+        if (arg.search) {
+          params.search = params.search;
         }
-        if (page) {
-          params.page = page;
-          params.limit = limit || PAGINATION_LIMIT;
+        if (arg.page) {
+          params.page = arg.page;
+          params.limit = arg.limit || PAGINATION_LIMIT;
         }
-        if (orderBy) {
-          params.orderBy = orderBy;
+        if (arg.orderBy) {
+          params.orderBy = arg.orderBy;
         }
-        if (order) {
-          params.desc = order === 'descend' ? 'true' : 'false';
+        if (arg.order) {
+          params.desc = arg.order === 'descend' ? 'true' : 'false';
         }
-        if (markedForDeletion) {
-          params.markedForDeletion = markedForDeletion ? 1 : 0;
+        if (arg.markedForDeletion) {
+          params.markedForDeletion = arg.markedForDeletion ? 1 : 0;
         }
 
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);

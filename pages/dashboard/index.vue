@@ -14,7 +14,7 @@
             other services are yet to be added and released at a later date.
           </p>
           <p>
-            To make your To make your testing journey smooth, please refer to Apillon’s Wiki on the
+            To make your To make your testing journey smooth, please refer to Apillon's Wiki on the
             following two sections:
           </p>
           <p>
@@ -65,7 +65,7 @@
           <h3 class="mb-4 text-white">Apply for Closed Beta testing</h3>
           <p>
             Apillon is currently in the Closed Beta stage. Anyone can register an account on Apillon
-            but only assigned users may get access to test the platform’s Beta features.
+            but only assigned users may get access to test the platform's Beta features.
           </p>
           <p>To join the Apillon Closed Beta program, please follow the steps below.</p>
           <ul class="list-disc pl-5">
@@ -99,7 +99,7 @@
             </li>
             <li>
               Wait for an email with an invitation to join the Apillon Closed Beta program and
-              access the platform’s features.
+              access the platform's features.
             </li>
           </ul>
         </template>
@@ -127,7 +127,7 @@
             Keep in mind that Apillon Closed Beta delivers no guarantees related to functionalities
             or access and is intended for testing purposes only. Beta features also come with
             several limitations, which will be removed with each platform update as more and more
-            users deliver feedback on Closed Beta and help improve the platform’s services.
+            users deliver feedback on Closed Beta and help improve the platform's services.
           </p>
         </div>
       </div>

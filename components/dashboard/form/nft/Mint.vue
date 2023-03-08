@@ -19,7 +19,7 @@
       <n-input-number
         v-model:value="formData.quantity"
         :min="1"
-        :miax="20"
+        :max="20"
         :placeholder="$t('form.placeholder.nftMintQuantity')"
         clearable
       />

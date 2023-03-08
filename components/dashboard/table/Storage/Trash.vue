@@ -11,7 +11,7 @@
           clearable
         >
           <template #prefix>
-            <span class="icon-search text-xl"></span>
+            <span class="icon-search text-2xl"></span>
           </template>
         </n-input>
       </div>
@@ -19,7 +19,7 @@
       <n-space size="large">
         <!-- Refresh files -->
         <n-button size="small" :loading="fileStore.loading" @click="fileStore.fetchDeletedFiles()">
-          <span class="icon-refresh text-lg mr-2"></span>
+          <span class="icon-refresh text-xl mr-2"></span>
           {{ $t('general.refresh') }}
         </n-button>
       </n-space>
@@ -123,7 +123,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       },
     },
     {
-      title: $i18n.t('general.actions'),
+      title: '',
       key: 'actions',
       align: 'right',
       className: '!py-0',
@@ -138,8 +138,8 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
             default: () =>
               h(
                 NButton,
-                { size: 'small', quaternary: true },
-                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
+                { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
               ),
           }
         );

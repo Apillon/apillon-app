@@ -81,7 +81,7 @@ const emit = defineEmits(['submitActive', 'submitSuccess']);
 
 onMounted(async () => {
   /** GET Project quota */
-  await dataStore.fetchProjectsQuota();
+  await dataStore.getProjectQuota();
 });
 
 /** Terms label with link 

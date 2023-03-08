@@ -198,7 +198,7 @@ declare global {
   interface ApiError {
     errors?: Array<EntityErrorMessageInterface>;
     code?: number;
-    status: number;
+    status?: number;
     message?: string;
     path?: string;
     timestamp?: string;

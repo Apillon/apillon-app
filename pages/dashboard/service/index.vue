@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="true">
+  <Dashboard :loading="false">
     <template #heading>
       <n-space :size="24" align="center" class="h-12">
         <h4 class="">{{ $t('dashboard.attachNewService') }}</h4>
@@ -37,7 +37,7 @@
             <Btn
               class="w-full"
               :type="attachService === service.id ? 'secondary' : 'primary'"
-              :disabled="service.disabled"
+              :disabled="service.disabled || false"
               @click="attachService = service.id"
             >
               <span v-if="attachService === service.id">{{ $t('dashboard.attached') }}</span>
@@ -46,11 +46,7 @@
           </div>
         </div>
 
-        <FormAttachService
-          v-if="attachService"
-          :service-type="attachService"
-          class="max-w-lg mt-5"
-        />
+        <FormService v-if="attachService" :service-type="attachService" class="max-w-lg mt-5" />
       </div>
       <div
         v-else-if="isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())"
@@ -77,7 +73,7 @@ useHead({
 
 const authStore = useAuthStore();
 const showServices = ref(false);
-const attachService = ref(null);
+const attachService = ref<number>();
 
 const services: Array<ServiceTypeItem> = [
   {

@@ -11,7 +11,7 @@
           clearable
         >
           <template #prefix>
-            <span class="icon-search text-xl"></span>
+            <span class="icon-search text-2xl"></span>
           </template>
         </n-input>
       </div>
@@ -27,14 +27,14 @@
             :loading="downloading"
             @click="downloadSelectedFiles"
           >
-            <span class="icon-download"></span>
+            <span class="icon-download text-xl"></span>
           </n-button>
 
           <!-- Delete files -->
           <n-tooltip placement="bottom" :show="showPopoverDelete">
             <template #trigger>
-              <n-button class="w-10" size="small" :active="true" @click="deleteSelectedFiles">
-                <span class="icon-delete text-pink"></span>
+              <n-button class="w-10" size="small" type="error" ghost @click="deleteSelectedFiles">
+                <span class="icon-delete text-xl"></span>
               </n-button>
             </template>
             <span>{{ $t('storage.delete.selectedFiles') }}</span>
@@ -46,19 +46,19 @@
 
         <!-- Refresh -->
         <n-button size="small" :loading="bucketStore.folder.loading" @click="refreshWebpage(env)">
-          <span class="icon-refresh text-lg mr-2"></span>
+          <span class="icon-refresh text-xl mr-2"></span>
           {{ $t('general.refresh') }}
         </n-button>
 
         <!-- Create folder -->
         <n-button v-if="isUpload" size="small" @click="showModalNewFolder = true">
-          <span class="icon-create-folder text-lg mr-2"></span>
+          <span class="icon-create-folder text-xl mr-2"></span>
           {{ $t('storage.directory.create') }}
         </n-button>
 
         <!-- Clear all files -->
         <n-button v-if="isUpload" size="small" type="error" ghost @click="showModalClearAll = true">
-          <span class="icon-delete text-lg mr-2"></span>
+          <span class="icon-delete text-xl mr-2"></span>
           {{ $t('hosting.clearAll') }}
         </n-button>
 
@@ -70,7 +70,7 @@
           :loading="deploying"
           @click="deploy(DeploymentEnvironment.STAGING)"
         >
-          <span class="icon-deploy text-lg mr-2"></span>
+          <span class="icon-deploy text-xl mr-2"></span>
           {{ $t('hosting.deployStage') }}
         </n-button>
         <!-- Deploy to production -->
@@ -81,7 +81,7 @@
           :loading="deploying"
           @click="deploy(DeploymentEnvironment.PRODUCTION)"
         >
-          <span class="icon-deploy text-lg mr-2"></span>
+          <span class="icon-deploy text-xl mr-2"></span>
           {{ $t('hosting.deployProd') }}
         </n-button>
       </n-space>
