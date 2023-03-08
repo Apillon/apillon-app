@@ -1,23 +1,55 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <BannerAuthentication />
+      <Heading>
+        <slot>
+          <h1>{{ $t('nav.authentication') }}</h1>
+        </slot>
+
+        <template #info>
+          <n-space :size="32" align="center">
+            <n-button
+              v-if="$i18n.te('w3Warn.auth.new')"
+              class="align-sub px-2"
+              type="tertiary"
+              size="small"
+              quaternary
+              round
+              @click="showModalW3Warn = true"
+            >
+              <span class="icon-info text-2xl"></span>
+            </n-button>
+          </n-space>
+        </template>
+      </Heading>
     </template>
     <slot>
-      <h5 class="mb-8">{{ $t('nav.services') }}</h5>
-      <div class="flex flex-col md:flex-row items-center justify-between bg-bg-lighter px-6 py-4">
-        <div class="mb-4 md:mb-0">
-          <p class="body-md font-bold">Your project currently has no active service</p>
-          <p class="body-sm">
-            First attach a desired service and configure it, then start building.
-          </p>
-        </div>
-        <div>
-          <nuxt-link :to="{ name: 'dashboard-service-authentication-list' }">
-            <Btn type="primary"> Attach services</Btn>
-          </nuxt-link>
-        </div>
-      </div>
+      <TableServices
+        v-if="dataStore.hasServices(ServiceType.AUTHENTICATION)"
+        :serviceType="ServiceType.AUTHENTICATION"
+      />
+      <Empty
+        v-else
+        :title="$t('service.authentication.emptyTitle')"
+        :info="$t('service.authentication.emptyInfo')"
+        icon="storage/empty"
+      >
+        <Btn type="primary" @click="createNewService">
+          {{ $t('service.addFirst') }}
+        </Btn>
+      </Empty>
+
+      <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+        {{ $t('w3Warn.auth.new') }}
+      </W3Warn>
+
+      <!-- Modal - Create Service -->
+      <modal v-model:show="showModalNewService" :title="$t('service.new')">
+        <FormService
+          :service-type="ServiceType.AUTHENTICATION"
+          @submit-success="showModalNewService = false"
+        />
+      </modal>
     </slot>
   </Dashboard>
 </template>
@@ -26,22 +58,49 @@
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
+const showModalW3Warn = ref<boolean>(false);
+const showModalNewService = ref<boolean | null>(false);
 
 useHead({
-  title: 'Authentication',
-  meta: [{ hid: 'og-type', name: 'og:type', property: 'og:type', content: 'website' }],
+  title: $i18n.t('nav.authentication'),
 });
 
 onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(_ => {
-    getServicesAuth();
-  });
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await dataStore.getAuthServices();
+      pageLoading.value = false;
+    });
+  }, 100);
 });
 
-async function getServicesAuth() {
-  if (!dataStore.hasServices(ServiceType.AUTHENTICATION)) {
-    await dataStore.getAuthServices();
+/**
+ * On createNewService click
+ * If W3Warn has already been shown, show modal create new service, otherwise show warn first
+ * */
+function createNewService() {
+  if (sessionStorage.getItem(LsW3WarnKeys.AUTH_NEW) || !$i18n.te('w3Warn.auth.new')) {
+    showModalNewService.value = true;
+  } else {
+    showModalW3Warn.value = true;
+    showModalNewService.value = null;
   }
-  pageLoading.value = false;
 }
+
+/** When user close W3Warn, allow him to create new service */
+function onModalW3WarnHide(value: boolean) {
+  if (!value && showModalNewService.value !== false) {
+    showModalNewService.value = true;
+  }
+}
+
+/** Watch showModalNewService, onShow update timestamp of shown modal in session storage */
+watch(
+  () => showModalW3Warn.value,
+  shown => {
+    if (shown) {
+      sessionStorage.setItem(LsW3WarnKeys.AUTH_NEW, Date.now().toString());
+    }
+  }
+);
 </script>

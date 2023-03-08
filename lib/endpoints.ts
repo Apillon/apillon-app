@@ -34,8 +34,12 @@ const Endpoints = {
   projectUserRole: (id: number) => {
     return `/projects/user/${id}`;
   },
+
   /** Services */
-  services: '/services/',
+  services: (id?: number) => {
+    return id ? `/services/${id}` : '/services';
+  },
+
   /** Instructions */
   instructions: (key?: string) => {
     return key ? `/instructions/${key}` : '/instructions';
