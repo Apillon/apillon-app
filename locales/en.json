@@ -373,6 +373,7 @@
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
+        "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
         "collection": "Creating NFT collection requested.",
         "directory": "Directory key has been created",
@@ -381,6 +382,7 @@
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
         "item": "Item has been created",
+        "service": "Service has been created",
         "userInvite": "User has been invited.",
         "webhook": "Webhook has been created",
         "website": "Website has been created"
@@ -388,6 +390,7 @@
       "deleted": {
         "apiKey": "Api key has been deleted",
         "apiKeyRole": "Api key permission has been removed",
+        "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
         "directory": "Directory key has been deleted",
@@ -397,6 +400,7 @@
         "ipns": "IPNS has been deleted",
         "item": "Item has been deleted",
         "items": "Items has been deleted",
+        "service": "Service has been deleted",
         "webhook": "Webhook has been deleted",
         "website": "Website has been deleted"
       },
@@ -408,6 +412,7 @@
       "updated": {
         "apiKey": "Api key has been updated",
         "apiKeyRole": "Api key permission has been added",
+        "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "directory": "Directory key has been updated",
         "domain": "Domain has been updated",
@@ -416,6 +421,7 @@
         "ipns": "IPNS has been updated",
         "item": "Item has been updated",
         "project": "Project has been updated",
+        "service": "Service has been updated",
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated",
         "website": "Website has been updated"
@@ -633,6 +639,16 @@
       "PROJECT_ADMIN": "Project admin",
       "PROJECT_USER": "Project user",
       "USER": "User"
+    },
+    "discord": {
+      "connect": "Discord connect",
+      "connected": "Discord connected",
+      "disconnect": "Discord disconnect",
+      "disconnected": "You have successfully disconnected your discord",
+      "infoConnected": "Disconnect your Discord account",
+      "infoDisconnected": "Connect your Discord account",
+      "titleConnected": "Discord connected",
+      "titleDisconnected": "Discord"
     },
     "2fa": "Two-factor authentication",
     "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
@@ -862,7 +878,9 @@
   "service": {
     "authentication": {
       "name": "Authentication",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum.",
+      "emptyTitle": "Your project has currently no authentication services",
+      "emptyInfo": "First create a authentication service and then create API key."
     },
     "storage": {
       "name": "Storage",
@@ -871,7 +889,11 @@
     "computing": {
       "name": "Computing",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
-    }
+    },
+    "addFirst": "Add first service",
+    "delete": "Delete service",
+    "edit": "Edit service",
+    "new": "New service"
   },
   "validation": {
     "apiKeyName": "API key name is required",

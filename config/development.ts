@@ -11,6 +11,7 @@ const config: ConfigInterface = {
     'APILLON_REGISTER',
     'AUTHENTICATION',
     'CONFIGURATION',
+    'DISCORD',
     'HOSTING',
     'INSTRUCTIONS',
     'MAGIC_LINK',

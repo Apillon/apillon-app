@@ -11,6 +11,7 @@ export const LsTableColumnsKeys = {
 };
 
 export const LsW3WarnKeys = {
+  AUTH_NEW: 'al_w3warn_auth_new',
   BUCKET_NEW: 'al_w3warn_bucket_new',
   BUCKET_DELETE: 'al_w3warn_bucket_delete',
   BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
@@ -30,12 +31,18 @@ export const LsCacheKeys = {
   DEPLOYMENT: 'al_cache_deployment',
   DEPLOYMENTS_PRODUCTION: 'al_cache_deployments_production',
   DEPLOYMENTS_STAGING: 'al_cache_deployments_staging',
+  DISCORD_LINK: 'al_cache_discord_link',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
   IPNS: 'al_cache_ipns',
   IPNS_ITEM: 'al_cache_ipns_item',
+  OAUTH_LINKS: 'al_cache_oauth_links',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
+  SERVICES: 'al_cache_services',
+  SERVICE_AUTH: 'al_cache_service_auth',
+  SERVICE_COMPUTING: 'al_cache_service_computing',
+  SERVICE_STORAGE: 'al_cache_service_storage',
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
 };

@@ -3,6 +3,7 @@ import dev from '../config/development';
 import prod from '../config/production';
 import local from '../config/local';
 import { Feature } from '~~/types/config';
+import { LocationQueryValue } from 'vue-router';
 
 export function getAppConfig(env?: string) {
   const configFile =
@@ -77,6 +78,9 @@ export function hideSecret(source: string, partLength: number = 4): string {
     ? '•'.repeat(source.length - partLength) +
         source.slice(source.length - partLength, source.length)
     : source;
+}
+export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
+  return !!s ? s.toString() : '';
 }
 
 /**

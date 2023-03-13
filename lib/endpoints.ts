@@ -34,8 +34,12 @@ const Endpoints = {
   projectUserRole: (id: number) => {
     return `/projects/user/${id}`;
   },
+
   /** Services */
-  services: '/services/',
+  services: (id?: number) => {
+    return id ? `/services/${id}` : '/services';
+  },
+
   /** Instructions */
   instructions: (key?: string) => {
     return key ? `/instructions/${key}` : '/instructions';
@@ -166,6 +170,14 @@ const Endpoints = {
   apiKeyRoles: (key: number) => {
     return `/api-keys/${key}/roles`;
   },
+
+  /** Oauth links */
+  oauthLinks: '/users/oauth-links/',
+
+  /** Discord */
+  discordLink: '/users/discord-url/',
+  discordConnect: '/users/discord-connect/',
+  discordDisconnect: '/users/discord-disconnect/',
 
   /** Billing */
   billing: '/billing/',

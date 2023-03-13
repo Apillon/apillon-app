@@ -12,12 +12,14 @@ interface FeatureRouteInterface {
 }
 
 const protectedRoutes: Array<ProtectedRouteInterface> = [
+  { regex: /^\/connect/, redirect: '/login' },
   { regex: /^\/dashboard/, redirect: '/login' },
   { regex: /^\/onboarding/, redirect: '/login' },
   { path: '/profile', redirect: '/login' },
 ];
 const featureRoutes: Array<FeatureRouteInterface> = [
   { regex: /^\/onboarding/, redirect: '/dashboard', feature: Feature.ONBOARDING },
+  { regex: /^\/connect\/discord/, redirect: '/dashboard', feature: Feature.DISCORD },
   { regex: /^\/dashboard\/referral/, redirect: '/dashboard', feature: Feature.REFERRAL },
   { regex: /^\/dashboard\/service/, redirect: '/dashboard', feature: Feature.SERVICES },
   {

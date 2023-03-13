@@ -12,6 +12,7 @@ const config: ConfigInterface = {
     'AUTHENTICATION',
     'BILLING',
     'CONFIGURATION',
+    'DISCORD',
     'HOSTING',
     'INSTRUCTIONS',
     'MAGIC_LINK',
