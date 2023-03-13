@@ -5,7 +5,8 @@
     </template>
 
     <slot>
-      <n-space class="pb-8" :size="32" vertical>
+      <NftMintTabs v-if="!collectionStore.active?.baseUri" />
+      <n-space v-else class="pb-8" :size="32" vertical>
         <!-- Actions -->
         <ActionsNftTransaction
           @mint="modalMintCollectionVisible = true"
@@ -27,8 +28,6 @@
             {{ $t('nft.collection.mint') }}
           </Btn>
         </Empty>
-
-        <!-- <NftMintTabs /> -->
       </n-space>
 
       <!-- Modal - Collection Mint -->

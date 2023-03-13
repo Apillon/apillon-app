@@ -82,6 +82,7 @@
         <n-input-number
           v-model:value="formData.maxSupply"
           :min="0"
+          :max="NFT_MAX_SUPPLY"
           :placeholder="$t('form.placeholder.collectionMaxSupply')"
           clearable
         />
@@ -188,12 +189,6 @@ const rules: NFormRules = {
       message: $i18n.t('validation.collectionNameRequired'),
     },
   ],
-  baseUri: [
-    {
-      required: true,
-      message: $i18n.t('validation.collectionBaseUriRequired'),
-    },
-  ],
   baseExtension: [
     {
       required: true,
@@ -204,6 +199,11 @@ const rules: NFormRules = {
     {
       required: true,
       message: $i18n.t('validation.collectionMaxSupplyRequired'),
+    },
+    {
+      max: NFT_MAX_SUPPLY,
+      validator: validateMaxSupply,
+      message: $i18n.t('validation.collectionMaxSupplyReached', { max: NFT_MAX_SUPPLY }),
     },
   ],
   mintPrice: [
@@ -229,6 +229,9 @@ const isFormDisabled = computed<boolean>(() => {
 
 function validateReserve(_: NFormItemRule, value: number): boolean {
   return value <= (formData.value?.maxSupply || 0);
+}
+function validateMaxSupply(_: NFormItemRule, value: number): boolean {
+  return value <= NFT_MAX_SUPPLY;
 }
 
 function disablePasteDate(ts: number) {

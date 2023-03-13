@@ -71,14 +71,14 @@ import {
   UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
-import { InternalRowData } from 'naive-ui/es/data-table/src/interface';
+import { InternalRowData, TableColumn, TableColumns } from 'naive-ui/es/data-table/src/interface';
 import { MenuOption, MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
-import { FileInfo } from 'naive-ui/es/upload/src/interface';
+import { FileInfo, SettledFileInfo } from 'naive-ui/es/upload/src/interface';
 
 declare global {
   interface NCollapseProps extends CollapseProps {}
-  interface NFileInfo extends FileInfo {}
+  interface NFileInfo extends SettledFileInfo {}
   interface NFormInst extends FormInst {}
   interface NFormItemInst extends FormItemInst {}
   interface NFormRules extends FormRules {}
@@ -98,6 +98,7 @@ declare global {
   }
 
   type NDataTableColumns<T = InternalRowData> = DataTableColumns<T>;
+  type NTableColumns<T = InternalRowData> = Array<TableColumn<T>>;
   type NDataTableRowKey = DataTableRowKey;
   type NDropdownOption = DropdownOption;
   type NDropdownGroupOption = DropdownGroupOption;

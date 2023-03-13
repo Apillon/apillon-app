@@ -574,6 +574,10 @@ body > .n-message-container {
     }
   }
 
+  .n-progress--line {
+    display: none;
+  }
+
   &.w-full .n-upload-trigger {
     display: block;
   }

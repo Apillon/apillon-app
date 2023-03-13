@@ -5,8 +5,12 @@ const dataStore = useDataStore();
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
+    csvColumns: [] as NTableColumns<Record<string, string>>,
+    csvData: [] as Array<Record<string, string>>,
     csvFile: {} as FileListItemType,
+    csvSession: '',
     images: [] as Array<FileListItemType>,
+    imagesSession: '',
     items: [] as Array<CollectionInterface>,
     loading: false,
     mintTab: NftMintTab.METADATA,
@@ -25,7 +29,7 @@ export const useCollectionStore = defineStore('collection', {
       return Array.isArray(state.transaction) && state.transaction.length > 0;
     },
     hasCsvFile(state): boolean {
-      return !!state.csvFile?.id;
+      return !!state.csvFile?.id && Array.isArray(state.csvData) && state.csvData.length > 0;
     },
     hasImages(state): boolean {
       return Array.isArray(state.images) && state.images.length > 0;
