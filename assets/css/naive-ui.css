@@ -31,9 +31,11 @@
 
   /** Type error */
   &--error-type {
-    @apply font-mono;
     .n-button__border {
       border-color: theme('colors.bg.lighter');
+    }
+    &:not(.n-button--small-type) {
+      @apply font-mono;
     }
   }
 

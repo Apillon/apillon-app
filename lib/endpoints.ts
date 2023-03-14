@@ -138,6 +138,9 @@ const Endpoints = {
    * NFT
    */
   nftCheckTransactionsStatus: '/nfts/check-transactions-status',
+  nftDeploy: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/deploy`;
+  },
 
   /** Collection */
   collections: (id?: number) => {

@@ -71,12 +71,31 @@ import {
   UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
-import { InternalRowData, TableColumn, TableColumns } from 'naive-ui/es/data-table/src/interface';
+import {
+  InternalRowData,
+  TableBaseColumn,
+  TableColumn,
+  TableColumnGroup,
+  TableColumns,
+  TableExpandColumn,
+  TableSelectionColumn,
+} from 'naive-ui/es/data-table/src/interface';
 import { MenuOption, MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
 import { FileInfo, SettledFileInfo } from 'naive-ui/es/upload/src/interface';
 
 declare global {
+  type KeyTitle = {
+    title: string;
+    key: string;
+  };
+  type MetadataAttributes = {
+    value: string;
+    label: string;
+    display_type: string;
+    hidden?: boolean;
+  };
+
   interface NCollapseProps extends CollapseProps {}
   interface NFileInfo extends SettledFileInfo {}
   interface NFormInst extends FormInst {}
@@ -98,12 +117,18 @@ declare global {
   }
 
   type NDataTableColumns<T = InternalRowData> = DataTableColumns<T>;
-  type NTableColumns<T = InternalRowData> = Array<TableColumn<T>>;
   type NDataTableRowKey = DataTableRowKey;
   type NDropdownOption = DropdownOption;
   type NDropdownGroupOption = DropdownGroupOption;
   type NMenuOption = MenuOption;
   type NMenuMixedOption = MenuMixedOption;
+
+  type NTableColumns<T = InternalRowData> = Array<TableColumn<T>>;
+  type NTableColumn<T = InternalRowData> =
+    | TableColumnGroup<T>
+    | TableBaseColumn<T>
+    | TableSelectionColumn<T>
+    | TableExpandColumn<T>;
 
   type DropdownRenderOption = {
     node: VNode;

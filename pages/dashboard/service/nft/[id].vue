@@ -116,7 +116,10 @@ function onNftTrasnfered() {
 
 /** Collection pooling */
 function checkIfCollectionUnfinished() {
-  if (collectionStore.active.collectionStatus >= CollectionStatus.DEPLOYED) {
+  if (
+    collectionStore.active.collectionStatus >= CollectionStatus.DEPLOYED ||
+    !collectionStore.active.baseUri
+  ) {
     return;
   }
 

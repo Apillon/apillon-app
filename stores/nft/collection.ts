@@ -5,11 +5,14 @@ const dataStore = useDataStore();
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
-    csvColumns: [] as NTableColumns<Record<string, string>>,
+    csvAttributes: [] as Array<MetadataAttributes>,
+    csvColumns: [] as NTableColumns<KeyTitle>,
     csvData: [] as Array<Record<string, string>>,
     csvFile: {} as FileListItemType,
+    csvSelectedAttributes: [] as Array<string>,
     csvSession: '',
-    images: [] as Array<FileListItemType>,
+    filesMetadata: [] as FileListItemType[],
+    images: [] as FileListItemType[],
     imagesSession: '',
     items: [] as Array<CollectionInterface>,
     loading: false,

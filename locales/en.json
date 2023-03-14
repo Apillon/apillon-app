@@ -10,6 +10,7 @@
     "copyrights": "© Apillon",
     "created": "created",
     "delete": "Delete",
+    "deselectAll": "Deselect All",
     "download": "Download",
     "edit": "Edit",
     "error": "Error",
@@ -35,6 +36,7 @@
     "scope": "Scope",
     "search": "Search",
     "secret": "Secret",
+    "selectAll": "Select All",
     "serviceName": "Service name",
     "serviceType": "Service type",
     "signup": "Sign up",
@@ -363,6 +365,7 @@
       "filesUploaded": "Files has been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
+      "nftDeployed": "NFT deploy requested.",
       "nftMint": "Minting NFT requested.",
       "nftTransfer": "NFT ownership has been transferred",
       "profile": "Your profile data has been updated",
@@ -567,9 +570,12 @@
       "uploadYourFirst": "Upload your first NFTs and start building your collection.",
       "uuid": "Collection UUID",
       "status": {
-        "0": "PENDING",
-        "1": "CONFIRMED",
-        "2": "TRANSFERED"
+        "0": "CREATED",
+        "1": "INITIATED",
+        "2": "DEPLOYING",
+        "3": "DEPLOYED",
+        "4": "TRANSFERRED",
+        "5": "FAILED"
       }
     },
     "transaction": {
@@ -591,7 +597,9 @@
       }
     },
     "upload": {
+      "attributes": "Metadata attributes",
       "csvConfirm": "Confirm CSV data",
+      "csvConfirmAttributes": "Confirm attributes",
       "csvFile": "CSV file",
       "csvFileDesc": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
       "deploy": "Deploy",
@@ -600,7 +608,8 @@
       "images": "Upload images",
       "imagesConfirm": "Confirm & save images",
       "imagesDesc": "",
-      "preview": "Preview upload"
+      "preview": "Preview upload",
+      "selectAttributes": "Select attributes"
     },
     "collectionsEmpty": "Your project has currently no NFT collections",
     "collectionsCreate": "First create an NFT collection and then start uploading NFTs.",

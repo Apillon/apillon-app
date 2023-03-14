@@ -129,14 +129,13 @@ function isImage(type: string | null = '') {
 async function uploadImages() {
   loading.value = true;
 
-  collectionStore.csvSession = await uploadFiles(
+  collectionStore.imagesSession = await uploadFiles(
     collectionStore.active.bucket_uuid,
     collectionStore.images,
-    true,
+    false,
     true,
     false
   );
-  console.log(collectionStore.csvSession);
 
   loading.value = false;
   collectionStore.mintTab = NftMintTab.MINT;
