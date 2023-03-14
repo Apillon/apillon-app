@@ -62,7 +62,7 @@
         </div>
       </n-space>
       <button class="p-2" @click="clearFileList()">
-        <span class="icon-delete align-middle text-2xl"></span>
+        <span class="icon-delete text-2xl align-middle"></span>
       </button>
     </n-space>
 

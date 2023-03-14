@@ -109,6 +109,7 @@ declare global {
     option: NDropdownOption | NDropdownGroupOption;
   };
 }
+
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(
     create({

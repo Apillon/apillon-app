@@ -41,7 +41,22 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-icons',
-    '@nuxtjs/google-fonts',
+    [
+      '@nuxtjs/google-fonts',
+      {
+        useStylesheet: true,
+        display: 'swap',
+        download: false,
+        families: {
+          'IBM Plex Mono': {
+            wght: [400, 700],
+          },
+          'IBM Plex Sans': {
+            wght: [400, 700],
+          },
+        },
+      },
+    ],
     '@nuxtjs/i18n',
   ],
 
@@ -60,8 +75,8 @@ export default defineNuxtConfig({
       },
 
       title: meta.title,
-      titleTemplate: `%s – ${meta.title}`,
-      charset: 'utf-9',
+      titleTemplate: `%s - ${meta.title}`,
+      charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
 
       meta: [
@@ -118,19 +133,6 @@ export default defineNuxtConfig({
               : '',
         },
       ],
-    },
-  },
-
-  googleFonts: {
-    display: 'swap',
-    download: true,
-    families: {
-      'IBM Plex Mono': {
-        wght: [400, 700],
-      },
-      'IBM Plex Sans': {
-        wght: [400, 700],
-      },
     },
   },
 

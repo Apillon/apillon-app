@@ -57,3 +57,4 @@ Thumbs.db
 .env
 .eslintcache
 stats.html
+dist

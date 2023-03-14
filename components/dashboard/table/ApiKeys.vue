@@ -62,7 +62,7 @@ const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
       },
     },
     {
-      title: t('general.actions'),
+      title: '',
       key: 'actions',
       align: 'right',
       className: '!py-0',
@@ -77,8 +77,8 @@ const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
             default: () =>
               h(
                 NButton,
-                { size: 'small', quaternary: true },
-                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
+                { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
               ),
           }
         );

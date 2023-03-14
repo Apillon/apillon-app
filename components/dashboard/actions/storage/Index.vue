@@ -10,7 +10,7 @@
         clearable
       >
         <template #prefix>
-          <span class="icon-search text-xl"></span>
+          <span class="icon-search text-2xl"></span>
         </template>
       </n-input>
     </div>
@@ -21,8 +21,8 @@
         <!-- Delete files -->
         <n-tooltip placement="bottom">
           <template #trigger>
-            <n-button class="w-10" size="small" :active="true" @click="emit('onBucketDelete')">
-              <span class="icon-delete text-pink"></span>
+            <n-button class="w-10" size="small" type="error" ghost @click="emit('onBucketDelete')">
+              <span class="icon-delete text-xl"></span>
             </n-button>
           </template>
           <span>{{ $t('storage.delete.selectedBuckets') }}</span>
@@ -39,15 +39,9 @@
       </n-button>
 
       <!-- Create new bucket -->
-      <n-button
-        v-if="bucketStore.hasBuckets"
-        type="primary"
-        size="small"
-        ghost
-        @click="showModalNewBucket = true"
-      >
-        <span class="icon-create-folder text-xl mr-2"></span>
-        {{ $t('storage.bucket.new') }}
+      <n-button v-if="bucketStore.hasBuckets" size="small" @click="showModalNewBucket = true">
+        <span class="icon-create-folder text-xl text-primary mr-2"></span>
+        <span class="text-primary">{{ $t('storage.bucket.new') }}</span>
       </n-button>
     </n-space>
   </n-space>

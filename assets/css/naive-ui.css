@@ -17,11 +17,12 @@
       color: transparent;
     }
   }
-  &.quaternary:not(.n-button--disabled):hover,
-  &.quaternary:not(.n-button--disabled):focus,
-  &:not(.n-button--disabled):hover .icon-more,
-  &:not(.n-button--disabled):focus .icon-more {
-    @apply text-bg;
+
+  &--tertiary-type:not(.n-button--disabled):focus {
+    @apply bg-transparent;
+  }
+  &--tertiary-type:not(.n-button--disabled):hover {
+    @apply bg-bg-lighter;
   }
 
   &.pointer-events-none {
@@ -54,9 +55,6 @@
 
 /** Checkbox */
 .n-checkbox {
-  .n-checkbox-box .n-checkbox-box__border {
-    border-width: 3px;
-  }
   .n-checkbox__label a {
     @apply text-primary;
   }
@@ -90,6 +88,9 @@
 
 /** Data table */
 .n-data-table {
+  .n-data-table-thead {
+    @apply body-sm;
+  }
   .n-data-table-th .n-data-table-th__title-wrapper .n-data-table-th__title {
     white-space: nowrap;
   }
@@ -212,6 +213,11 @@
     &.text-2xl {
       width: 1.5rem;
       height: 1.25rem;
+    }
+
+    &.text-3xl {
+      width: 1.875rem;
+      height: 1.7rem;
     }
   }
 }
@@ -489,6 +495,11 @@ body > .n-message-container {
       }
     }
   }
+}
+
+/** Selection */
+.n-base-selection .n-base-suffix {
+  @apply right-4;
 }
 
 /** Select menu */
