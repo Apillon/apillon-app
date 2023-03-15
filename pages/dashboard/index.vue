@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :learn-collapsible="false">
+  <Dashboard :loading="authStore.loadingProfile" :learn-collapsible="false">
     <template #heading>
       <Heading>
         <h1>{{ $t('dashboard.homepage') }}</h1>
