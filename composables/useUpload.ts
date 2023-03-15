@@ -12,6 +12,8 @@ export default function useUpload() {
   const bucketUuid = ref<string>('');
   const sessionUuid = ref<string>('');
   const folderName = ref<string>('');
+  const wrapToDirectory = ref<boolean>(false);
+  const endSession = ref<boolean>(true);
   const fileList = ref<Array<FileListItemType>>([]);
   const clearFileList = ref<boolean>(false);
 
@@ -58,17 +60,20 @@ export default function useUpload() {
   async function uploadFiles(
     uploadBucketUuid: string,
     uploadFileList: Array<FileListItemType>,
-    wrapToDirectory: boolean = false,
-    clearFileListOnFinish: boolean = false
-  ) {
+    wrapFilesToDirectory: boolean = false,
+    clearFileListOnFinish: boolean = false,
+    endSessionOnUploadEnd: boolean = true
+  ): Promise<string> {
     sessionUuid.value = uuidv4();
     bucketUuid.value = uploadBucketUuid;
     fileList.value = uploadFileList;
+    wrapToDirectory.value = wrapFilesToDirectory;
     clearFileList.value = clearFileListOnFinish;
+    endSession.value = endSessionOnUploadEnd;
 
     /** Files data for upload params */
     const filesUpload: Array<UploadFileType> = fileList.value.map(file => {
-      file.path = fileFolderPath(file.fullPath || '', wrapToDirectory);
+      file.path = fileFolderPath(file.fullPath || '', wrapFilesToDirectory);
 
       return {
         fileName: file.name,
@@ -95,7 +100,7 @@ export default function useUpload() {
       );
 
       if (fileRequests.data) {
-        uploadFilesToS3(fileRequests.data.files, wrapToDirectory);
+        uploadFilesToS3(fileRequests.data.files);
       } else {
         /** Show warning message - zero files uploaded */
         message.warning($i18n.t('errror.fileUploadStopped'));
@@ -109,18 +114,16 @@ export default function useUpload() {
       /** Show error message */
       message.error(userFriendlyMsg(error));
     }
+    return sessionUuid.value;
   }
 
-  function uploadFilesToS3(
-    uploadFilesRequests: S3FileUploadRequestInterface[],
-    wrapToDirectory: boolean
-  ) {
+  function uploadFilesToS3(uploadFilesRequests: S3FileUploadRequestInterface[]) {
     uploadFilesRequests.forEach(uploadFileRequest => {
       const file = fileList.value.find(
         file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path
       );
       if (file) {
-        uploadFileToS3(file, uploadFileRequest, wrapToDirectory);
+        uploadFileToS3(file, uploadFileRequest);
       } else {
         /** Show warning message - file not found by name */
         message.warning($i18n.t('errror.fileUploadMissing', { name: uploadFileRequest.fileName }));
@@ -130,8 +133,7 @@ export default function useUpload() {
 
   async function uploadFileToS3(
     file: FileListItemType,
-    uploadFilesRequest: S3FileUploadRequestInterface,
-    wrapToDirectory: boolean
+    uploadFilesRequest: S3FileUploadRequestInterface
   ) {
     try {
       /** Upload file to S3 using fetch */
@@ -150,11 +152,11 @@ export default function useUpload() {
       file.onFinish();
       file.percentage = 100;
       updateFileStatus(file, FileUploadStatusValue.FINISHED);
-      uploadSessionEnd(sessionUuid.value, wrapToDirectory);
+      uploadSessionEnd(sessionUuid.value);
     } catch (error) {
       file.onError();
       updateFileStatus(file, FileUploadStatusValue.ERROR);
-      uploadSessionEnd(sessionUuid.value, wrapToDirectory);
+      uploadSessionEnd(sessionUuid.value);
 
       /** Show error message */
       message.error(userFriendlyMsg(error));
@@ -162,15 +164,15 @@ export default function useUpload() {
   }
 
   /** Upload Session End  */
-  async function uploadSessionEnd(sessionUuid: string, wrapToDirectory: boolean) {
-    if (!allFilesFinished.value) {
+  async function uploadSessionEnd(sessionUuid: string) {
+    if (!allFilesFinished.value || !endSession.value) {
       return;
     }
     try {
       const params: Record<string, string | number | boolean | null> = {
         directSync: config.public.ENV === AppEnv.LOCAL,
-        wrapWithDirectory: wrapToDirectory,
-        directoryPath: wrapToDirectory
+        wrapWithDirectory: wrapToDirectory.value,
+        directoryPath: wrapToDirectory.value
           ? bucketStore.getFolderPath + wrapperFolderPath(folderName.value)
           : null,
       };
@@ -205,11 +207,11 @@ export default function useUpload() {
   }
 
   /** Get folder path from fullPath */
-  function fileFolderPath(fullPath: string, wrapToDirectory: boolean): string {
+  function fileFolderPath(fullPath: string, wrapFilesToDirectory: boolean): string {
     const parts = fullPath.split('/').filter(p => p);
     const filePath = parts.length <= 1 ? '' : parts.slice(0, -1).join('/') + '/';
 
-    return wrapToDirectory ? filePath : bucketStore.getFolderPath + filePath;
+    return wrapFilesToDirectory ? filePath : bucketStore.getFolderPath + filePath;
   }
 
   /** Get wrapper folder path from user's input */

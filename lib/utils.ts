@@ -339,3 +339,9 @@ export function isCacheExpired(key: string) {
   }
   return true;
 }
+
+/**
+ * Compare arrays
+ */
+export const compareArrays = (a: Array<any>, b: Array<any>) =>
+  a.length === b.length && a.every((element, index) => element === b[index]);

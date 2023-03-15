@@ -31,9 +31,11 @@
 
   /** Type error */
   &--error-type {
-    @apply font-mono;
     .n-button__border {
       border-color: theme('colors.bg.lighter');
+    }
+    &:not(.n-button--small-type) {
+      @apply font-mono;
     }
   }
 
@@ -572,6 +574,10 @@ body > .n-message-container {
         width: var(--n-icon-size);
       }
     }
+  }
+
+  .n-progress--line {
+    display: none;
   }
 
   &.w-full .n-upload-trigger {

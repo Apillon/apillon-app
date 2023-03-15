@@ -6,9 +6,12 @@ export enum Chains {
 
 /** NFT Collection status */
 export enum CollectionStatus {
-  PENDING = 0,
-  DEPLOYED = 1,
-  TRANSFERED = 2,
+  CREATED = 0,
+  DEPLOY_INITIATED = 1,
+  DEPLOYING = 2,
+  DEPLOYED = 3,
+  TRANSFERRED = 4,
+  FAILED = 5,
 }
 
 /** NFT Transaction status */
@@ -29,6 +32,20 @@ export enum TransactionType {
 }
 
 declare global {
+  /** Papa parser */
+  type CsvFileData = {
+    data: Array<any>;
+    errors: Array<any>;
+    meta: {
+      aborted: boolean;
+      cursor: number;
+      delimeter: string;
+      fields: Array<string>;
+      linebreak: string;
+      truncated: boolean;
+    };
+  };
+
   /**
    * Collection
    */

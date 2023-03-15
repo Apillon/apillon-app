@@ -1,5 +1,18 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <Notification v-if="isReserveMinted" type="error" class="w-full mb-8">
+    {{ $t('error.50012008') }}
+  </Notification>
+  <Notification v-else-if="isTransferred" type="error" class="w-full mb-8">
+    {{ $t('error.NFT_CONTRACT_OWNER_ERROR') }}
+  </Notification>
+  <n-form
+    v-bind="$attrs"
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    :disabled="isFormDisabled"
+    @submit.prevent="handleSubmit"
+  >
     <!--  NFT Mint Address -->
     <n-form-item
       path="receivingAddress"
@@ -28,7 +41,13 @@
     <!--  Form submit -->
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('nft.collection.mint')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn
+        type="primary"
+        class="w-full mt-2"
+        :loading="loading"
+        :disabled="isFormDisabled"
+        @click="handleSubmit"
+      >
         {{ $t('nft.collection.mint') }}
       </Btn>
     </n-form-item>
@@ -45,6 +64,7 @@ const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
+const collectionStore = useCollectionStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -67,6 +87,19 @@ const rules: NFormRules = {
     },
   ],
 };
+
+const isReserveMinted = computed<boolean>(() => {
+  return (
+    collectionStore.active?.reserve > 0 &&
+    collectionStore.active?.reserve === collectionStore.active?.minted
+  );
+});
+const isTransferred = computed<boolean>(() => {
+  return collectionStore.active.collectionStatus === CollectionStatus.TRANSFERRED;
+});
+const isFormDisabled = computed<boolean>(() => {
+  return isReserveMinted.value || isTransferred.value;
+});
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {

@@ -14,7 +14,10 @@
         <FormNftUploadCsvFile />
       </slot>
     </n-tab-pane>
-    <n-tab-pane :name="NftMintTab.IMAGES" :disabled="!collectionStore.hasCsvFile">
+    <n-tab-pane
+      :name="NftMintTab.IMAGES"
+      :disabled="!collectionStore.hasCsvFile || !collectionStore.csvSelectedAttributes"
+    >
       <template #tab>
         <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
         <IconNumber v-else :number="2" :active="collectionStore.mintTab === NftMintTab.IMAGES" />
@@ -33,20 +36,7 @@
         <span class="ml-2">{{ $t('nft.collection.mintNfts') }}</span>
       </template>
       <slot>
-        <div class="grid gap-8 grid-flow-col auto-cols-[minmax(0,250px)]">
-          <div v-for="image in collectionStore.images" :key="image.id">
-            <figure class="flex flex-col h-full">
-              <img
-                :src="createThumbnailUrl(image)"
-                class="w-full h-full object-contain"
-                :alt="image.name"
-              />
-              <figcaption class="block h-12 px-4 py-3 bg-white text-bg font-bold">
-                {{ image.name }}
-              </figcaption>
-            </figure>
-          </div>
-        </div>
+        <FormNftDeploy />
       </slot>
     </n-tab-pane>
   </n-tabs>
@@ -70,11 +60,4 @@ watch(
     }
   }
 );
-
-function createThumbnailUrl(file: FileListItemType): string {
-  if (file.file) {
-    return window.URL.createObjectURL(file.file);
-  }
-  return '';
-}
 </script>

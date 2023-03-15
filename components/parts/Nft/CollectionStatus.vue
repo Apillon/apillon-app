@@ -2,12 +2,12 @@
   <n-tag
     v-bind="$attrs"
     :type="getCollectionStatus(collectionStatus)"
-    :bordered="collectionStatus === CollectionStatus.PENDING"
+    :bordered="collectionStatus < CollectionStatus.DEPLOYED"
     size="tiny"
     round
   >
     <n-space
-      :class="collectionStatus === CollectionStatus.PENDING ? 'text-body' : 'text-bg-dark'"
+      :class="collectionStatus < CollectionStatus.DEPLOYED ? 'text-body' : 'text-bg-dark'"
       :size="0"
       align="center"
       :wrap="false"
@@ -26,9 +26,7 @@ defineProps({
   collectionStatus: {
     type: Number,
     validator: (collectionStatus: number) =>
-      [CollectionStatus.PENDING, CollectionStatus.DEPLOYED, CollectionStatus.TRANSFERED].includes(
-        collectionStatus
-      ),
+      Object.values(CollectionStatus).includes(collectionStatus),
     default: 0,
   },
 });
@@ -38,10 +36,12 @@ function getCollectionStatus(status: number): TagType {
   switch (status) {
     case CollectionStatus.DEPLOYED:
       return 'success';
-    case CollectionStatus.TRANSFERED:
+    case CollectionStatus.TRANSFERRED:
       return 'success';
+    case CollectionStatus.FAILED:
+      return 'error';
     default:
-      return 'warning';
+      return 'default';
   }
 }
 </script>
