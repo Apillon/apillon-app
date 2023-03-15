@@ -75,6 +75,11 @@ onMounted(async () => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     const currentCollection = await collectionStore.getCollection(collectionId.value);
 
+    /** Reset state if user opens different collection */
+    if (collectionId.value !== collectionStore.active?.id) {
+      collectionStore.resetMetadata();
+    }
+
     if (!currentCollection?.collection_uuid) {
       router.push({ name: 'dashboard-service-nft' });
     } else {
