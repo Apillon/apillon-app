@@ -5,7 +5,7 @@
     </template>
 
     <slot>
-      <NftMintTabs v-if="!collectionStore.active?.baseUri" />
+      <NftMintTabs v-if="collectionStore.active?.collectionStatus === CollectionStatus.CREATED" />
       <n-space v-else class="pb-8" :size="32" vertical>
         <!-- Actions -->
         <ActionsNftTransaction

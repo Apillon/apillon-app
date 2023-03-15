@@ -49,7 +49,11 @@ async function deploy() {
       metadataSession: collectionStore.csvSession,
       imagesSession: collectionStore.imagesSession,
     };
-    await $api.post<any>(endpoints.nftDeploy(collectionStore.active.collection_uuid), bodyData);
+    const res = await $api.post<CollectionResponse>(
+      endpoints.nftDeploy(collectionStore.active.collection_uuid),
+      bodyData
+    );
+    collectionStore.active = res.data;
 
     message.success($i18n.t('form.success.nftDeployed'));
   } catch (error) {
