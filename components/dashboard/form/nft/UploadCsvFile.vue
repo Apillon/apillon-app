@@ -109,7 +109,11 @@ onMounted(() => {
 /** Upload file request - add file to list */
 function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
   if (file.type !== 'text/csv') {
+    console.warn(file.type);
     message.warning($i18n.t('validation.fileTypeNotCsv'));
+
+    /** Mark file as failed */
+    onError();
     return;
   }
   collectionStore.csvAttributes = [];
