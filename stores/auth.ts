@@ -10,16 +10,17 @@ export const AuthLsKeys = {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    jwt: '',
-    email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
-    provider: 0,
-    wallet: '',
     authStep: '',
     crypto: null,
-    user: {} as UserInterface,
+    email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
+    jwt: '',
+    loadingProfile: false,
     promises: {
       profile: null as any,
     },
+    provider: 0,
+    user: {} as UserInterface,
+    wallet: '',
   }),
   getters: {
     loggedIn(state) {
@@ -80,17 +81,20 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async getUserData() {
+      this.loadingProfile = true;
       try {
         const res = await $api.get<UserResponse>(endpoints.me);
 
         if (res.data) {
           this.changeUser(res.data);
         }
+        this.loadingProfile = false;
         return res;
       } catch (error) {
         /** On error - logout */
         this.logout();
 
+        this.loadingProfile = false;
         return null;
       }
     },

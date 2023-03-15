@@ -1,5 +1,5 @@
 <template>
-  <Dashboard>
+  <Dashboard :loading="authStore.loadingProfile">
     <template #heading>
       <Heading>
         <slot>
