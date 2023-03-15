@@ -14,14 +14,14 @@ export const useCollectionStore = defineStore('collection', {
     filesMetadata: [] as FileListItemType[],
     images: [] as FileListItemType[],
     imagesSession: '',
-    items: [] as Array<CollectionInterface>,
+    items: [] as CollectionInterface[],
     loading: false,
     mintTab: NftMintTab.METADATA,
     quotaReached: undefined as Boolean | undefined,
     search: '',
     selected: 0,
     total: 0,
-    transaction: [] as Array<TransactionInterface>,
+    transaction: [] as TransactionInterface[],
     uploadActive: false,
   }),
   getters: {
@@ -41,13 +41,24 @@ export const useCollectionStore = defineStore('collection', {
   actions: {
     resetData() {
       this.active = {} as CollectionInterface;
-      this.csvFile = {} as FileListItemType;
-      this.images = [] as Array<FileListItemType>;
-      this.items = [] as Array<CollectionInterface>;
+      this.items = [] as CollectionInterface[];
+      this.quotaReached = undefined;
       this.search = '';
       this.selected = 0;
-      this.transaction = [] as Array<TransactionInterface>;
-      this.quotaReached = undefined;
+      this.transaction = [] as TransactionInterface[];
+      this.resetMetadata();
+    },
+    resetMetadata() {
+      this.csvAttributes = [] as MetadataAttributes[];
+      this.csvColumns = [] as NTableColumns<KeyTitle>;
+      this.csvData = [] as Array<Record<string, string>>;
+      this.csvFile = {} as FileListItemType;
+      this.csvSelectedAttributes = [] as Array<string>;
+      this.csvSession = '';
+      this.filesMetadata = [] as FileListItemType[];
+      this.images = [] as FileListItemType[];
+      this.imagesSession = '';
+      this.mintTab = NftMintTab.METADATA;
     },
     setCollectionId(id: number) {
       if (this.selected !== id) {
