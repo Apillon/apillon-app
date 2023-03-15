@@ -16,7 +16,7 @@
     </n-tab-pane>
     <n-tab-pane
       :name="NftMintTab.IMAGES"
-      :disabled="!collectionStore.hasCsvFile || !collectionStore.csvSelectedAttributes"
+      :disabled="!collectionStore.hasCsvFile || !collectionStore.csvSession"
     >
       <template #tab>
         <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
@@ -29,7 +29,12 @@
     </n-tab-pane>
     <n-tab-pane
       :name="NftMintTab.MINT"
-      :disabled="!collectionStore.hasCsvFile || !collectionStore.hasImages"
+      :disabled="
+        !collectionStore.hasCsvFile ||
+        !collectionStore.csvSession ||
+        !collectionStore.hasImages ||
+        !collectionStore.imagesSession
+      "
     >
       <template #tab>
         <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
