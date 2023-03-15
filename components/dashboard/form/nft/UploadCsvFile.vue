@@ -15,7 +15,11 @@
           </Notification>
         </div>
         <n-space justify="end">
-          <n-upload :show-file-list="false" :custom-request="uploadFileRequest">
+          <n-upload
+            :show-file-list="false"
+            accept=".csv, application/vnd.ms-excel"
+            :custom-request="uploadFileRequest"
+          >
             <Btn type="secondary">
               {{ $t('nft.upload.differentFile') }}
             </Btn>
@@ -30,7 +34,12 @@
         </n-space>
       </n-space>
     </template>
-    <n-upload v-else :show-file-list="false" :custom-request="uploadFileRequest">
+    <n-upload
+      v-else
+      :show-file-list="false"
+      accept=".csv, application/vnd.ms-excel"
+      :custom-request="uploadFileRequest"
+    >
       <n-upload-dragger style="height: calc(100vh - 420px)">
         <div class="py-2 text-center">
           <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
@@ -108,7 +117,7 @@ onMounted(() => {
 
 /** Upload file request - add file to list */
 function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-  if (file.type !== 'text/csv') {
+  if (file.type !== 'text/csv' && file.type !== 'application/vnd.ms-excel') {
     console.warn(file.type);
     message.warning($i18n.t('validation.fileTypeNotCsv'));
 

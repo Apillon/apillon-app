@@ -3,6 +3,7 @@
     <n-upload
       v-if="collectionStore.hasImages"
       ref="NUploadRef"
+      accept="image/png, image/jpeg"
       :default-file-list="collectionStore.images"
       :show-preview-button="false"
       :show-remove-button="false"
@@ -18,6 +19,7 @@
     </n-upload>
     <n-upload
       v-else
+      accept="image/png, image/jpeg"
       :default-file-list="collectionStore.images"
       :show-file-list="false"
       :max="collectionStore.csvData?.length || undefined"
