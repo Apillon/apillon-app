@@ -2,24 +2,28 @@
   <n-checkbox-group v-bind="$attrs" v-model:value="collectionStore.csvSelectedAttributes">
     <n-space vertical class="p-3" size="small">
       <strong class="text-body mr-4">{{ $t('nft.upload.selectAttributes') }}:</strong>
-      <template v-for="column in collectionStore.csvAttributes">
-        <n-space class="min-h-[40px]" align="center" justify="space-between">
-          <n-checkbox
-            v-if="!column?.hidden"
-            :class="{ hidden: !!column?.hidden }"
-            :value="column.value"
-            :label="column.label"
-          />
-          <select-options
-            v-if="collectionStore.csvSelectedAttributes.includes(column.value)"
-            v-model:value="column.display_type"
-            :options="displayTypes"
-            size="small"
-            filterable
-            clearable
-          />
-        </n-space>
-      </template>
+      <n-space
+        v-for="(column, key) in collectionStore.csvAttributes"
+        :key="key"
+        class="min-h-[40px]"
+        align="center"
+        justify="space-between"
+      >
+        <n-checkbox
+          v-if="!column?.hidden"
+          :class="{ hidden: !!column?.hidden }"
+          :value="column.value"
+          :label="column.label"
+        />
+        <select-options
+          v-if="collectionStore.csvSelectedAttributes.includes(column.value)"
+          v-model:value="column.display_type"
+          :options="displayTypes"
+          size="small"
+          filterable
+          clearable
+        />
+      </n-space>
     </n-space>
     <!-- Select/deselect all -->
     <n-button

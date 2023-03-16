@@ -8,6 +8,7 @@
 
         <template #info>
           <n-space :size="32" align="center">
+            <IconInfo @click="showModalW3Warn = true" />
             <n-button
               class="align-sub px-2"
               size="small"

@@ -546,11 +546,13 @@
       "addNew": "Add new collection",
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
+      "baseUriInfo": "If you already have collection metadata, paste the base URI here. Otherwise, you will go through the metadata creation process.",
       "contractAddress": "Contract address",
-      "create": "Deploy",
+      "create": "Create collection",
       "dropStart": "Drop start",
       "edit": "Edit",
       "empty": "Your project has currently no NFTs",
+      "emptyInfo": "First create an NFT collection and then start uploading NFTs.",
       "maxSupply": "Max supply",
       "mint": "Mint",
       "minted": "Minted",
@@ -564,9 +566,9 @@
       "symbol": "Symbol",
       "title": "Collection title",
       "transfer": "Transfer ownership",
-      "upload": "Upload NFTs",
-      "uploadImages": "Upload images",
-      "uploadMetadata": "Upload metadata",
+      "upload": "Deploy NFT collection",
+      "uploadImages": "Load images",
+      "uploadMetadata": "Load metadata",
       "uploadYourFirst": "Upload your first NFTs and start building your collection.",
       "uuid": "Collection UUID",
       "status": {
@@ -580,6 +582,8 @@
     },
     "transaction": {
       "chainId": "Chain ID",
+      "empty": "Your project has currently no transactions",
+      "emptyInfo": "If you just deployed your collection, please wait a minute for the collection to deploy.",
       "hash": "Transaction Hash",
       "link": "Transaction Link",
       "status": {
@@ -606,13 +610,11 @@
       "differentFile": "Upload different file",
       "dragAndDrop": "Drag & drop or click to upload.",
       "images": "Upload images",
-      "imagesConfirm": "Confirm & save images",
+      "imagesConfirm": "Confirm & upload images",
       "imagesDesc": "",
       "preview": "Preview upload",
       "selectAttributes": "Select attributes"
     },
-    "collectionsEmpty": "Your project has currently no NFT collections",
-    "collectionsCreate": "First create an NFT collection and then start uploading NFTs.",
     "transactionType": "Transaction Type"
   },
   "onboarding": {

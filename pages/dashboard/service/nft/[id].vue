@@ -20,14 +20,10 @@
         />
         <Empty
           v-else
-          :title="$t('nft.collectionsEmpty')"
-          :info="$t('nft.collectionsCreate')"
+          :title="$t('nft.transaction.empty')"
+          :info="$t('nft.transaction.emptyInfo')"
           icon="nft/illustration"
-        >
-          <Btn type="primary" @click="modalMintCollectionVisible = true">
-            {{ $t('nft.collection.mint') }}
-          </Btn>
-        </Empty>
+        />
       </n-space>
 
       <!-- Modal - Collection Mint -->
@@ -60,7 +56,7 @@ const pageLoading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
-/** Pooling */
+/** Polling */
 let collectionInterval: any = null as any;
 let transactionInterval: any = null as any;
 
@@ -71,7 +67,7 @@ useHead({
   title: $i18n.t('nav.nft'),
 });
 
-onMounted(async () => {
+onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     const currentCollection = await collectionStore.getCollection(collectionId.value);
 
@@ -97,6 +93,16 @@ onUnmounted(() => {
   clearInterval(collectionInterval);
 });
 
+/** Watch collectionStatus, if status changed from Created to Initiated, start polling */
+watch(
+  () => collectionStore.active?.collectionStatus,
+  (status, oldStatus) => {
+    if (status === CollectionStatus.DEPLOY_INITIATED && oldStatus === CollectionStatus.CREATED) {
+      checkIfCollectionUnfinished();
+    }
+  }
+);
+
 function onNftMinted() {
   modalMintCollectionVisible.value = false;
   setTimeout(() => {
@@ -119,29 +125,35 @@ function onNftTrasnfered() {
   }, 3000);
 }
 
-/** Collection pooling */
+/** Collection polling */
 function checkIfCollectionUnfinished() {
-  if (
-    collectionStore.active.collectionStatus >= CollectionStatus.DEPLOYED ||
-    !collectionStore.active.baseUri
-  ) {
+  if (collectionStore.active.collectionStatus >= CollectionStatus.DEPLOYED) {
+    clearInterval(collectionInterval);
     return;
   }
 
   collectionInterval = setInterval(async () => {
     const collection = await collectionStore.fetchCollection(collectionId.value);
+    await collectionStore.fetchCollectionTransactions(
+      collectionStore.active.collection_uuid,
+      false
+    );
     if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
       clearInterval(collectionInterval);
+
+      /** On collection deploy, start transaction polling */
+      checkUnfinishedTransactions();
     }
   }, 30000);
 }
 
-/** Transactions pooling */
+/** Transactions polling */
 function checkUnfinishedTransactions() {
   const unfinishedTransaction = collectionStore.transaction.find(
     transaction => transaction.transactionStatus < TransactionStatus.FINISHED
   );
   if (unfinishedTransaction === undefined) {
+    clearInterval(transactionInterval);
     return;
   }
 
