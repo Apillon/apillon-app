@@ -1,5 +1,5 @@
 <template>
-  <n-tabs v-model:value="collectionStore.mintTab" ref="mintTabsRef" type="segment" animated>
+  <n-tabs ref="mintTabsRef" v-model:value="collectionStore.mintTab" type="segment" animated>
     <n-tab-pane :name="NftMintTab.METADATA">
       <template #tab>
         <IconNumber
@@ -38,7 +38,7 @@
     >
       <template #tab>
         <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
-        <span class="ml-2">{{ $t('nft.collection.mintNfts') }}</span>
+        <span class="ml-2">{{ $t('nft.collection.upload') }}</span>
       </template>
       <slot>
         <FormNftDeploy />
