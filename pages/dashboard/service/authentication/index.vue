@@ -8,17 +8,7 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <n-button
-              v-if="$i18n.te('w3Warn.auth.new')"
-              class="align-sub px-2"
-              type="tertiary"
-              size="small"
-              quaternary
-              round
-              @click="showModalW3Warn = true"
-            >
-              <span class="icon-info text-2xl"></span>
-            </n-button>
+            <IconInfo v-if="$i18n.te('w3Warn.auth.new')" @click="showModalW3Warn = true" />
           </n-space>
         </template>
       </Heading>
@@ -26,7 +16,7 @@
     <slot>
       <TableServices
         v-if="dataStore.hasServices(ServiceType.AUTHENTICATION)"
-        :serviceType="ServiceType.AUTHENTICATION"
+        :service-type="ServiceType.AUTHENTICATION"
       />
       <Empty
         v-else

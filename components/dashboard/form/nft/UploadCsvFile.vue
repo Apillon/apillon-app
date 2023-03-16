@@ -55,7 +55,7 @@
   <modal v-model:show="modalMetadataAttributesVisible" :title="$t('nft.upload.attributes')">
     <n-space class="pb-8" :size="32" vertical>
       <NftMetadataAttributes />
-      <Btn type="primary" :loading="loading" @click="uploadMetadata">
+      <Btn class="float-right" type="primary" :loading="loading" @click="uploadMetadata">
         {{ $t('nft.upload.csvConfirmAttributes') }}
       </Btn>
     </n-space>
@@ -78,7 +78,7 @@ const $papa = vueApp.config.globalProperties.$papa;
  * Attributes
  */
 const modalMetadataAttributesVisible = ref<boolean>(false);
-const metadataRequired = ['name', 'image'];
+const metadataRequired = ['name', 'description', 'image'];
 const metadataProperties = [
   'name',
   'description',
@@ -149,7 +149,7 @@ function parseUploadedFile(file?: File | null) {
     header: true,
     skipEmptyLines: true,
     complete: function (results: CsvFileData) {
-      if (!!results.data.length) {
+      if (results.data.length) {
         collectionStore.csvData = results.data;
         collectionStore.csvColumns = results.meta.fields.map(item => {
           return {
@@ -204,14 +204,14 @@ async function uploadMetadata() {
  */
 function createNftData(): Array<Record<string, any>> {
   return collectionStore.csvData.map(item => {
-    let nft: Record<string, any> = {};
+    const nft: Record<string, any> = {};
     Object.entries(item).forEach(([key, value]) => {
       if (!collectionStore.csvSelectedAttributes.includes(key)) {
         nft[key] = value;
       }
     });
 
-    let attributes: Array<Record<string, any>> = [];
+    const attributes: Array<Record<string, any>> = [];
     collectionStore.csvAttributes.forEach(attribute => {
       if (collectionStore.csvSelectedAttributes.includes(attribute.value)) {
         attributes.push(attribute);
@@ -221,7 +221,6 @@ function createNftData(): Array<Record<string, any>> {
       nft.attributes = attributes;
     }
 
-    console.log(nft);
     return nft;
   });
 }

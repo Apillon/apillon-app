@@ -15,8 +15,7 @@
       :custom-request="uploadImagesRequest"
       @change="handleChange"
       @remove="handleRemove"
-    >
-    </n-upload>
+    />
     <n-upload
       v-else
       accept="image/png, image/jpeg"
@@ -50,7 +49,13 @@
           Invalid image names. Example: 1.jpg, 2.jpg, 3.jpg, ...
         </Notification>
       </div>
-      <Btn v-if="collectionStore.hasImages" type="primary" @click="uploadImages">
+      <Btn
+        v-if="collectionStore.hasImages"
+        type="primary"
+        :loading="loading"
+        :disabled="!collectionStore.hasImages || !allImagesUploaded"
+        @click="uploadImages"
+      >
         {{ $t('nft.upload.imagesConfirm') }}
       </Btn>
     </n-space>
@@ -67,6 +72,9 @@ const { uploadFiles, fileAlreadyOnFileList } = useUpload();
 
 const loading = ref<boolean>(false);
 
+/**
+ * Validation
+ */
 const allImagesUploaded = computed<boolean>(() => {
   if (collectionStore.images?.length !== collectionStore.csvData?.length) {
     return false;
@@ -105,8 +113,8 @@ function handleChange(options: {
   fileList: NUploadFileInfo[];
   event?: Event;
 }) {
-  var index = options.fileList.indexOf(options.file);
-  var indexImage = collectionStore.images.findIndex(
+  const index = options.fileList.indexOf(options.file);
+  const indexImage = collectionStore.images.findIndex(
     item => item.name === options.file.name && item.fullPath === options.file.fullPath
   );
 
@@ -115,7 +123,9 @@ function handleChange(options: {
     message.warning($i18n.t('validation.notImage', { name: options.file.name }));
   } else if (indexImage !== -1) {
     options.fileList.splice(index, 1);
-    message.warning($i18n.t('validation.alreadyOnList', { name: options.file.name }));
+    if (!allImagesUploaded.value) {
+      message.warning($i18n.t('validation.alreadyOnList', { name: options.file.name }));
+    }
   }
 }
 

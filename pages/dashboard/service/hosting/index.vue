@@ -8,17 +8,7 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <n-button
-              v-if="$i18n.te('w3Warn.hosting.new')"
-              class="align-sub px-2"
-              type="tertiary"
-              size="small"
-              quaternary
-              round
-              @click="showModalW3Warn = true"
-            >
-              <span class="icon-info text-2xl"></span>
-            </n-button>
+            <IconInfo v-if="$i18n.te('w3Warn.hosting.new')" @click="showModalW3Warn = true" />
           </n-space>
         </template>
       </Heading>

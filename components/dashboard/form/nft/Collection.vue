@@ -50,11 +50,7 @@
       </n-form-item>
 
       <!--  Collection Base URI -->
-      <n-form-item
-        path="baseUri"
-        :label="$t('form.label.collectionBaseUri')"
-        :label-props="{ for: 'baseUri' }"
-      >
+      <n-form-item path="baseUri" :label="baseUriLabel" :label-props="{ for: 'baseUri' }">
         <n-input
           v-model:value="formData.baseUri"
           :input-props="{ id: 'baseUri' }"
@@ -163,6 +159,7 @@ const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
+const IconInfo = resolveComponent('IconInfo');
 
 const formData = ref<FormCollection>({
   name: '',
@@ -219,6 +216,13 @@ const rules: NFormRules = {
     },
   ],
 };
+
+const baseUriLabel = computed(() => {
+  return [
+    h('span', { class: 'mr-1' }, $i18n.t('form.label.collectionBaseUri')),
+    h(IconInfo, { size: 'sm', tooltip: $i18n.t('nft.collection.baseUriInfo') }, ''),
+  ];
+});
 
 const isQuotaReached = computed<boolean>(() => {
   return collectionStore.quotaReached === true;

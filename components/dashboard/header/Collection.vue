@@ -25,17 +25,7 @@
     </slot>
     <template #info>
       <n-space :size="32" align="center">
-        <n-button
-          v-if="$i18n.te('w3Warn.nft.info')"
-          class="align-sub px-2"
-          size="small"
-          type="tertiary"
-          quaternary
-          round
-          @click="modalW3WarnVisible = true"
-        >
-          <span class="icon-info text-2xl"></span>
-        </n-button>
+        <IconInfo v-if="$i18n.te('w3Warn.nft.info')" @click="modalW3WarnVisible = true" />
       </n-space>
     </template>
   </Heading>

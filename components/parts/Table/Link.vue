@@ -1,14 +1,14 @@
 <template>
-  <div class="flex" v-if="link">
+  <div v-if="link" class="flex">
     <a :href="link" target="_blank">
       <NEllipsis class="text-body align-bottom" :line-clamp="1">
-        {{ linkOrText }}
+        {{ textOrLink }}
         <template #tooltip>
           {{ link }}
         </template>
       </NEllipsis>
     </a>
-    <button class="ml-2" @click="copyToClipboard(link)">
+    <button class="ml-2" @click="copyToClipboard(textOrLink)">
       <span class="icon-copy text-body"></span>
     </button>
   </div>
@@ -20,7 +20,7 @@ const props = defineProps({
   text: { type: String, default: '' },
 });
 
-const linkOrText = computed(() => {
+const textOrLink = computed(() => {
   return props.text || props.link;
 });
 </script>
