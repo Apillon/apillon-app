@@ -1,3 +1,4 @@
+import { lstat } from 'fs';
 import { defineStore } from 'pinia';
 import { DataLsKeys } from './data';
 
@@ -5,11 +6,11 @@ export const AuthLsKeys = {
   AUTH: 'al_auth',
   EMAIL: 'al_email',
   WALLET: 'al_wallet',
-  PROVIDER: 'al_provider',
 };
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
+    accounts: [] as WalletAccount[],
     authStep: '',
     crypto: null,
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
@@ -18,9 +19,9 @@ export const useAuthStore = defineStore('auth', {
     promises: {
       profile: null as any,
     },
-    provider: 0,
     user: {} as UserInterface,
-    wallet: '',
+    wallet: getWalletBySource(localStorage.getItem(AuthLsKeys.WALLET)) || ({} as Wallet),
+    walletKey: localStorage.getItem(AuthLsKeys.WALLET) || '',
   }),
   getters: {
     loggedIn(state) {
@@ -41,19 +42,27 @@ export const useAuthStore = defineStore('auth', {
     allowedEntry: state => !!state.jwt,
   },
   actions: {
-    async initUser() {
-      let lsAuth = localStorage.getItem(AuthLsKeys.AUTH) as any;
-      if (lsAuth) {
-        lsAuth = JSON.parse(lsAuth);
-
-        this.setUserToken(lsAuth.jwt);
-        this.promises.profile = await this.getUserData();
-      }
-    },
-
     changeUser(userData: UserInterface) {
       this.user = { ...userData };
       this.saveEmail(userData.email.toString());
+    },
+
+    getUserRoles() {
+      return this.user?.userRoles || [];
+    },
+
+    isBetaUser() {
+      return !!(this.user?.userRoles || []).includes(DefaultUserRole.BETA_USER);
+    },
+
+    logout() {
+      $api.clearToken();
+
+      this.jwt = '';
+      this.walletKey = '';
+      localStorage.removeItem(AuthLsKeys.AUTH);
+      localStorage.removeItem(AuthLsKeys.WALLET);
+      localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
     saveEmail(email: string) {
@@ -72,12 +81,19 @@ export const useAuthStore = defineStore('auth', {
       $api.setToken(token);
     },
 
-    getUserRoles() {
-      return this.user?.userRoles || [];
+    setWalletKey(wallet: Wallet) {
+      this.walletKey = wallet.extensionName;
+      localStorage.setItem(AuthLsKeys.WALLET, wallet.extensionName);
     },
 
-    isBetaUser() {
-      return !!(this.user?.userRoles || []).includes(DefaultUserRole.BETA_USER);
+    async initUser() {
+      let lsAuth = localStorage.getItem(AuthLsKeys.AUTH) as any;
+      if (lsAuth) {
+        lsAuth = JSON.parse(lsAuth);
+
+        this.setUserToken(lsAuth.jwt);
+        this.promises.profile = await this.getUserData();
+      }
     },
 
     async getUserData() {
@@ -99,14 +115,16 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    logout() {
-      $api.clearToken();
+    async setWallet(wallet: Wallet) {
+      this.wallet = wallet;
+      this.setWalletKey(wallet);
 
-      this.jwt = '';
-      this.wallet = '';
-      localStorage.removeItem(AuthLsKeys.AUTH);
-      localStorage.removeItem(AuthLsKeys.WALLET);
-      localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
+      console.log(wallet);
+      console.log(await wallet.getAccounts());
+
+      await wallet.enable();
+
+      this.accounts = (await wallet.getAccounts()) || [];
     },
   },
 });

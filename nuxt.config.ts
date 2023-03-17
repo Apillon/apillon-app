@@ -65,7 +65,15 @@ export default defineNuxtConfig({
   },
 
   imports: {
-    dirs: ['./lib', './types', './stores', './stores/hosting', './stores/nft', './stores/storage'],
+    dirs: [
+      './lib',
+      './lib/wallet',
+      './types',
+      './stores',
+      './stores/hosting',
+      './stores/nft',
+      './stores/storage',
+    ],
   },
 
   app: {
