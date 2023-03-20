@@ -265,7 +265,7 @@
     "EMAIL_NOT_PRESENT": "Email is missing",
     "TOKEN_NOT_PRESENT": "Token is missing",
     "USER_EMAIL_NOT_PRESENT": "Email is missing",
-    "USER_INVALID_LOGIN": "Wrong email or password",
+    "USER_INVALID_LOGIN": "Wrong credentials",
     "USER_EMAIL_NOT_VALID": "Email is not valid",
     "USER_EMAIL_NOT_EXISTS": "Looks like your email is not in our books yet.",
     "USER_ALREADY_REGISTERED": "User already registered",

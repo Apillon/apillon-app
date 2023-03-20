@@ -21,6 +21,7 @@ declare global {
     status: number;
     user_uuid: string;
     userRoles: number[];
+    token?: any;
   }
 
   interface UserResponse extends GeneralResponse<UserInterface> {}
@@ -84,17 +85,15 @@ declare global {
   /**
    * Wallet
    */
-  interface WalletResponse {
-    data: {
-      message: string;
-      timestamp: number;
-    };
-    status: number;
+  interface WalletMsgInterface {
+    message: string;
+    timestamp: number;
   }
-  interface WalletLoginResponse {
-    data: {
-      authToken: string;
-    };
-    status: number;
+  interface WalletLoginInterface extends UserInterface {
+    authToken: string;
   }
+  interface WalletMsgResponse extends GeneralResponse<WalletMsgInterface> {}
+  interface WalletLoginResponse extends GeneralResponse<WalletLoginInterface> {}
+
+  type AuthInterface = LoginInterface | UserInterface | WalletLoginInterface;
 }

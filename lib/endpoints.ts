@@ -3,8 +3,9 @@ const Endpoints = {
    * AUTH
    */
   /** Auth */
-  walletMsg: '/auth/wallet-auth-msg',
-  loginWallet: '/auth/loginWallet',
+  walletMsg: '/users/auth-msg',
+  walletLogin: '/users/login/wallet',
+  walletConnect: '/users/wallet-connect',
 
   /** User */
   me: '/users/me',

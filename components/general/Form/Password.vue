@@ -155,8 +155,7 @@ async function register() {
       refCode: query.REF,
     });
 
-    authStore.setUserToken(res.data.token);
-    authStore.changeUser(res.data);
+    authStore.saveUser(res.data);
 
     /** Track Registration created */
     tractEvent('registration', 'registration_done', 'Password set');

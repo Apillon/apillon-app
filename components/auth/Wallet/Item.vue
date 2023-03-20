@@ -22,7 +22,7 @@
         </Btn>
       </div>
     </div>
-    <div v-if="wallet.extensionName === authStore.walletKey">
+    <div v-if="wallet.extensionName === authStore.wallet.key">
       <div v-for="(account, key) in authStore.accounts" :key="key" class="flex justify-between">
         <div>
           <div>
@@ -61,7 +61,7 @@ function onSelect(wallet: Wallet) {
 }
 
 function onSignClicked(account: WalletAccount) {
-  const signer = authStore.wallet?.signer;
+  const signer = authStore.wallet.provider?.signer;
 
   if (signer && signer.signRaw) {
     const signPromise = signer.signRaw({

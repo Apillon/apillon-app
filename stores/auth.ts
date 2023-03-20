@@ -10,7 +10,6 @@ export const AuthLsKeys = {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    accounts: [] as WalletAccount[],
     authStep: '',
     crypto: null,
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
@@ -20,8 +19,12 @@ export const useAuthStore = defineStore('auth', {
       profile: null as any,
     },
     user: {} as UserInterface,
-    wallet: getWalletBySource(localStorage.getItem(AuthLsKeys.WALLET)) || ({} as Wallet),
-    walletKey: localStorage.getItem(AuthLsKeys.WALLET) || '',
+    wallet: {
+      accounts: [] as WalletAccount[],
+      address: '',
+      key: localStorage.getItem(AuthLsKeys.WALLET) || '',
+      provider: getWalletBySource(localStorage.getItem(AuthLsKeys.WALLET)) || ({} as Wallet),
+    },
   }),
   getters: {
     loggedIn(state) {
@@ -42,11 +45,6 @@ export const useAuthStore = defineStore('auth', {
     allowedEntry: state => !!state.jwt,
   },
   actions: {
-    changeUser(userData: UserInterface) {
-      this.user = { ...userData };
-      this.saveEmail(userData.email.toString());
-    },
-
     getUserRoles() {
       return this.user?.userRoles || [];
     },
@@ -59,7 +57,7 @@ export const useAuthStore = defineStore('auth', {
       $api.clearToken();
 
       this.jwt = '';
-      this.walletKey = '';
+      this.wallet.key = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.WALLET);
       localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
@@ -68,6 +66,15 @@ export const useAuthStore = defineStore('auth', {
     saveEmail(email: string) {
       this.email = email;
       localStorage.setItem(AuthLsKeys.EMAIL, email);
+    },
+
+    saveUser(userData: AuthInterface) {
+      this.user = { ...userData };
+      this.saveEmail(userData.email.toString());
+
+      if (userData.token) {
+        this.setUserToken(userData.token);
+      }
     },
 
     setUserToken(token: string) {
@@ -82,10 +89,13 @@ export const useAuthStore = defineStore('auth', {
     },
 
     setWalletKey(wallet: Wallet) {
-      this.walletKey = wallet.extensionName;
+      this.wallet.key = wallet.extensionName;
       localStorage.setItem(AuthLsKeys.WALLET, wallet.extensionName);
     },
 
+    /**
+     * API cals
+     */
     async initUser() {
       let lsAuth = localStorage.getItem(AuthLsKeys.AUTH) as any;
       if (lsAuth) {
@@ -102,7 +112,7 @@ export const useAuthStore = defineStore('auth', {
         const res = await $api.get<UserResponse>(endpoints.me);
 
         if (res.data) {
-          this.changeUser(res.data);
+          this.saveUser(res.data);
         }
         this.loadingProfile = false;
         return res;
@@ -115,16 +125,25 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    /** wallet */
+    async getAuthMsg(): Promise<WalletMsgInterface> {
+      try {
+        const res = await $api.get<WalletMsgResponse>(endpoints.walletMsg);
+
+        return res.data;
+      } catch (error) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return {} as WalletMsgInterface;
+    },
+
     async setWallet(wallet: Wallet) {
-      this.wallet = wallet;
+      this.wallet.provider = wallet;
       this.setWalletKey(wallet);
 
-      console.log(wallet);
-      console.log(await wallet.getAccounts());
-
       await wallet.enable();
-
-      this.accounts = (await wallet.getAccounts()) || [];
+      this.wallet.accounts = (await wallet.getAccounts()) || [];
     },
   },
 });
