@@ -1,4 +1,59 @@
 {
+  "auth": {
+    "footer": {
+      "support": "Support",
+      "docs": "Docs",
+      "terms": "Terms",
+      "privacy": "Privacy"
+    },
+    "login": {
+      "description": "Web3 will not build itself. Go and add your block.",
+      "dontHaveAccount": "I don't have Apillon account yet?",
+      "enterNewPassword": "Enter new password",
+      "forgotPassword": "Did you forgot your password?",
+      "magicLink": "Send me a Magic Link",
+      "orUseEmail": "or log in using email",
+      "passwordReplaced": "Your password has been replaced",
+      "projectName": "Project_name",
+      "resetPassword": "Reset password",
+      "title": "Log in to Apillon",
+      "wallet": "Log in with Wallet",
+      "withEmail": "login with email"
+    },
+    "onboarding": {
+      "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
+      "buildDemo": "OK, let's do demo first",
+      "buildWeb3": "“Build versatile and high-performing Web3 solutions with Apillon. Harness the power of blockchain technology and create next-gen dapps through simple yet robust APIs”",
+      "createWeb3Project": "Create Web3 project",
+      "demoProject": "Demo project",
+      "getStarted": "Get started",
+      "goToDocs": "Go to Docs",
+      "loader": "Put your Web3 hat on, your dashboard is getting ready.",
+      "skip": "Skip to the dashboard",
+      "startBuilding": "Start building",
+      "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
+      "web3Gateway": "Your Gateway to Web3",
+      "web3ProjectName": "Your  Web3 project needs a name"
+    },
+    "signup": {
+      "alreadyHaveAccount": "Already have an account?",
+      "checkEmail": "Check your e-mail",
+      "checkInbox": "Crickets in your inbox?",
+      "continueWithAT": "Continue with Apillon",
+      "description": "Build your first Web3 application with Apillon. Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
+      "emailConfirmed": "Email confirmed",
+      "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
+      "enterDesiredPassword": "Enter a password to finish creating the account.",
+      "madeMistake": "Made a mistake?",
+      "orUseEmail": "or sign up using email",
+      "sendAgain": "Send again",
+      "title": "Build your first Web3 project - FREE",
+      "withEmail": "sign up with email"
+    },
+    "wallet": {
+      "connect": "Connect wallet"
+    }
+  },
   "general": {
     "action": "Action",
     "actions": "Actions",
@@ -72,6 +127,33 @@
       "copyCid": "Copy CID",
       "copyLink": "Copy link",
       "error": "Failed to copy"
+    },
+    "nav": {
+      "access": "Access",
+      "analytics": "Analytics",
+      "authentication": "Authentication",
+      "billing": "Billing",
+      "nft": "NFTs",
+      "computing": "Computing",
+      "configuration": "Configuration",
+      "hosting": "Hosting",
+      "monitoring": "Monitoring",
+      "projectOverview": "Project overview",
+      "projectSettings": "Project settings",
+      "services": "Services",
+      "serviceMonitor": "Service monitor",
+      "storage": "Storage"
+    },
+    "pageMenu": {
+      "methods": "Methods",
+      "access": "Access",
+      "apiKeys": "API keys",
+      "charts": "Charts",
+      "history": "History",
+      "Destroy": "Destroy",
+      "projectSettings": "Project settings",
+      "usersPermissions": "Users & permissions",
+      "credentials": "Credentials & API keys"
     },
     "permissions": {
       "read": "Read permissions",
@@ -232,12 +314,6 @@
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
     "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again.",
     "Unable to mint new NFTs, out of supply!": "Nfts out of stock!"
-  },
-  "footer": {
-    "support": "Support",
-    "docs": "Docs",
-    "terms": "Terms",
-    "privacy": "Privacy"
   },
   "form": {
     "apiKeyTypes": {
@@ -507,36 +583,6 @@
     "web3Hosting": "Web3 hosting",
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
-  "login": {
-    "description": "Web3 will not build itself. Go and add your block.",
-    "dontHaveAccount": "I don't have Apillon account yet?",
-    "enterNewPassword": "Enter new password",
-    "forgotPassword": "Did you forgot your password?",
-    "magicLink": "Send me a Magic Link",
-    "orUseEmail": "or log in using email",
-    "passwordReplaced": "Your password has been replaced",
-    "projectName": "Project_name",
-    "resetPassword": "Reset password",
-    "title": "Log in to Apillon",
-    "wallet": "Log in with Wallet",
-    "withEmail": "login with email"
-  },
-  "nav": {
-    "access": "Access",
-    "analytics": "Analytics",
-    "authentication": "Authentication",
-    "billing": "Billing",
-    "nft": "NFTs",
-    "computing": "Computing",
-    "configuration": "Configuration",
-    "hosting": "Hosting",
-    "monitoring": "Monitoring",
-    "projectOverview": "Project overview",
-    "projectSettings": "Project settings",
-    "services": "Services",
-    "serviceMonitor": "Service monitor",
-    "storage": "Storage"
-  },
   "nft": {
     "chain": {
       "1": "MOONBEAM",
@@ -616,32 +662,6 @@
       "selectAttributes": "Select attributes"
     },
     "transactionType": "Transaction Type"
-  },
-  "onboarding": {
-    "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
-    "buildDemo": "OK, let's do demo first",
-    "buildWeb3": "“Build versatile and high-performing Web3 solutions with Apillon. Harness the power of blockchain technology and create next-gen dapps through simple yet robust APIs”",
-    "createWeb3Project": "Create Web3 project",
-    "demoProject": "Demo project",
-    "getStarted": "Get started",
-    "goToDocs": "Go to Docs",
-    "loader": "Put your Web3 hat on, your dashboard is getting ready.",
-    "skip": "Skip to the dashboard",
-    "startBuilding": "Start building",
-    "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
-    "web3Gateway": "Your Gateway to Web3",
-    "web3ProjectName": "Your  Web3 project needs a name"
-  },
-  "pageMenu": {
-    "methods": "Methods",
-    "access": "Access",
-    "apiKeys": "API keys",
-    "charts": "Charts",
-    "history": "History",
-    "Destroy": "Destroy",
-    "projectSettings": "Project settings",
-    "usersPermissions": "Users & permissions",
-    "credentials": "Credentials & API keys"
   },
   "profile": {
     "userRole": {
@@ -746,21 +766,6 @@
     "confirm": "Claim now",
     "xpPoints": "XP points:",
     "spendingPoints": "Spending points:"
-  },
-  "signup": {
-    "alreadyHaveAccount": "Already have an account?",
-    "checkEmail": "Check your e-mail",
-    "checkInbox": "Crickets in your inbox?",
-    "continueWithAT": "Continue with Apillon",
-    "description": "Build your first Web3 application with Apillon. Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
-    "emailConfirmed": "Email confirmed",
-    "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
-    "enterDesiredPassword": "Enter a password to finish creating the account.",
-    "madeMistake": "Made a mistake?",
-    "orUseEmail": "or sign up using email",
-    "sendAgain": "Send again",
-    "title": "Build your first Web3 project - FREE",
-    "withEmail": "sign up with email"
   },
   "storage": {
     "bucket": {

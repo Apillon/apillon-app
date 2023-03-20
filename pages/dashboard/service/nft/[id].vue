@@ -64,7 +64,7 @@ let transactionInterval: any = null as any;
 const collectionId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
 
 useHead({
-  title: $i18n.t('nav.nft'),
+  title: $i18n.t('dashboard.nav.nft'),
 });
 
 onMounted(() => {

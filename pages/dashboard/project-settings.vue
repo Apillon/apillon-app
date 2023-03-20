@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h4>{{ $t('nav.projectSettings') }}</h4>
+          <h4>{{ $t('dashboard.nav.projectSettings') }}</h4>
         </slot>
 
         <template #info> </template>
@@ -50,6 +50,6 @@ const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
 
 useHead({
-  title: $i18n.t('nav.projectSettings'),
+  title: $i18n.t('dashboard.nav.projectSettings'),
 });
 </script>

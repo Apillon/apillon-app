@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('nav.authentication') }}</h1>
+          <h1>{{ $t('dashboard.nav.authentication') }}</h1>
         </slot>
 
         <template #info>
@@ -52,7 +52,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalNewService = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('nav.authentication'),
+  title: $i18n.t('dashboard.nav.authentication'),
 });
 
 onMounted(() => {

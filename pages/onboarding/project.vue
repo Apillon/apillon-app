@@ -2,12 +2,12 @@
   <div v-show="loading" class="w-full flex justify-center items-center" :class="$style.loader">
     <div>
       <AnimationLoader />
-      <h3>{{ $t('onboarding.loader') }}</h3>
+      <h3>{{ $t('auth.onboarding.loader') }}</h3>
     </div>
   </div>
   <div v-show="!loading" class="flex flex-wrap w-full xl:pt-10 lg:pt-8 md:pt-6 pt-4">
     <div class="w-full md:w-1/2">
-      <h3 class="mb-4">{{ $t('onboarding.web3ProjectName') }}</h3>
+      <h3 class="mb-4">{{ $t('auth.onboarding.web3ProjectName') }}</h3>
 
       <FormProject
         class="md:max-w-lg"
@@ -17,7 +17,7 @@
 
       <div class="mt-10">
         <NuxtLink :to="{ name: 'dashboard' }" class="text-body text-bold">
-          {{ $t('onboarding.skip') }}
+          {{ $t('auth.onboarding.skip') }}
         </NuxtLink>
       </div>
     </div>
@@ -36,7 +36,7 @@ definePageMeta({
   layout: 'onboarding',
 });
 useHead({
-  title: t('signup.emailConfirmed'),
+  title: t('auth.signup.emailConfirmed'),
 });
 
 onBeforeMount(() => {

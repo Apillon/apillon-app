@@ -27,7 +27,7 @@ const { pageLoading, initBucket } = useStorage();
 const showModalW3Warn = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('dashboard.nav.storage'),
 });
 
 onMounted(async () => {

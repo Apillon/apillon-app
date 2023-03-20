@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('nav.storage') }}</h1>
+          <h1>{{ $t('dashboard.nav.storage') }}</h1>
         </slot>
 
         <template #info>
@@ -51,7 +51,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalNewBucket = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

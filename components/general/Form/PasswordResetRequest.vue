@@ -9,7 +9,7 @@
     <!--  Btn submit -->
     <Btn v-bind="$attrs" :type="btnType" :loading="loading" @click="handleSubmit">
       <slot v-if="$slots.default"></slot>
-      <span v-else>{{ $t('login.resetPassword') }}</span>
+      <span v-else>{{ $t('auth.login.resetPassword') }}</span>
     </Btn>
 
     <!--  Email - hidden -->

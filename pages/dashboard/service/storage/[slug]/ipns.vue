@@ -74,7 +74,7 @@ const bucketId = ref<number>(parseInt(`${params?.slug}`));
 const modalCreateIpnsVisible = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

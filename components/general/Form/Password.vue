@@ -180,7 +180,7 @@ async function resetPassword() {
     });
 
     if (res.data) {
-      message.success($i18n.t('login.passwordReplaced'));
+      message.success($i18n.t('auth.login.passwordReplaced'));
       emit('submitSuccess');
     }
   } catch (error) {

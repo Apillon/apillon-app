@@ -28,19 +28,19 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
   return [
     {
       key: 'dashboard',
-      label: $i18n.t('nav.projectOverview'),
+      label: $i18n.t('dashboard.nav.projectOverview'),
       to: 'dashboard',
       iconName: 'icon-home',
       disabled: !isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles()),
     },
     {
       type: 'group',
-      label: $i18n.t('nav.services'),
+      label: $i18n.t('dashboard.nav.services'),
       key: 'services',
       children: [
         {
           key: 'dashboard-service-storage',
-          label: $i18n.t('nav.storage'),
+          label: $i18n.t('dashboard.nav.storage'),
           to: 'dashboard-service-storage',
           iconName: 'icon-storage',
           soon: !isFeatureEnabled(Feature.STORAGE, authStore.getUserRoles()),
@@ -48,7 +48,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
         },
         {
           key: 'dashboard-service-hosting',
-          label: $i18n.t('nav.hosting'),
+          label: $i18n.t('dashboard.nav.hosting'),
           to: 'dashboard-service-hosting',
           iconName: 'icon-hosting',
           soon: !isFeatureEnabled(Feature.HOSTING, authStore.getUserRoles()),
@@ -56,7 +56,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
         },
         {
           key: 'dashboard-service-nft',
-          label: $i18n.t('nav.nft'),
+          label: $i18n.t('dashboard.nav.nft'),
           to: 'dashboard-service-nft',
           iconName: 'icon-NFTs',
           soon: !isFeatureEnabled(Feature.NFT, authStore.getUserRoles()),
@@ -64,7 +64,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
         },
         {
           key: 'dashboard-service-authentication',
-          label: $i18n.t('nav.authentication'),
+          label: $i18n.t('dashboard.nav.authentication'),
           to: 'dashboard-service-authentication',
           iconName: 'icon-authentication',
           soon: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
@@ -72,7 +72,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
         },
         {
           key: 'dashboard-service-computing',
-          label: $i18n.t('nav.computing'),
+          label: $i18n.t('dashboard.nav.computing'),
           iconName: 'icon-computing',
           soon: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
           disabled: isMenuItemDisabled(Feature.COMPUTING),
@@ -81,18 +81,18 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
     },
     {
       type: 'group',
-      label: $i18n.t('nav.monitoring'),
+      label: $i18n.t('dashboard.nav.monitoring'),
       key: 'monitoring',
       children: [
         {
           key: 'dashboard-analytics',
-          label: $i18n.t('nav.analytics'),
+          label: $i18n.t('dashboard.nav.analytics'),
           iconName: 'icon-analytics',
           disabled: isMenuItemDisabled(Feature.MONITORING),
         },
         {
           key: 'dashboard-service-monitor',
-          label: $i18n.t('nav.serviceMonitor'),
+          label: $i18n.t('dashboard.nav.serviceMonitor'),
           iconName: 'icon-service-monitor',
           disabled: isMenuItemDisabled(Feature.MONITORING),
         },
@@ -100,25 +100,25 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
     },
     {
       type: 'group',
-      label: $i18n.t('nav.configuration'),
+      label: $i18n.t('dashboard.nav.configuration'),
       key: 'configuration',
       children: [
         {
           key: 'dashboard-project-settings',
-          label: $i18n.t('nav.projectSettings'),
+          label: $i18n.t('dashboard.nav.projectSettings'),
           to: 'dashboard-project-settings',
           iconName: 'icon-project-setting',
           disabled: isMenuItemDisabled(Feature.PROJECT_SETTINGS),
         },
         {
           key: 'dashboard-access',
-          label: $i18n.t('nav.access'),
+          label: $i18n.t('dashboard.nav.access'),
           iconName: 'icon-acess',
           disabled: isMenuItemDisabled(Feature.ACCESS),
         },
         {
           key: 'dashboard-billing',
-          label: $i18n.t('nav.billing'),
+          label: $i18n.t('dashboard.nav.billing'),
           to: 'dashboard-billing',
           iconName: 'icon-billing',
           disabled: isMenuItemDisabled(Feature.BILLING),

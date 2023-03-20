@@ -22,22 +22,22 @@
         </Btn>
       </div>
     </div>
-    <div v-if="wallet.extensionName === authStore.walletKey" class="account-list">
-      <div v-for="(account, key) in authStore.accounts" :key="key" class="account-item">
-        <div class="info">
-          <div class="account-item-info">
-            <span class="account-item__title">Name:</span>
-            <span class="account-item__content">{{ account.name }}</span>
+    <div v-if="wallet.extensionName === authStore.walletKey">
+      <div v-for="(account, key) in authStore.accounts" :key="key" class="flex justify-between">
+        <div>
+          <div>
+            <strong>Name:</strong><br />
+            <span>{{ account.name }}</span>
           </div>
-          <div class="account-item-info">
-            <span class="account-item__title">Address:</span>
-            <span class="account-item__content">{{ account.address }}</span>
+          <div>
+            <strong>Address:</strong><br />
+            <span>{{ account.address }}</span>
           </div>
         </div>
-        <div class="actions">
-          <Button class="sub-wallet-btn sub-wallet-sign-btn" @click="onSignClicked(account)">
-            Sign Dummy
-          </Button>
+        <div class="whitespace-nowrap">
+          <Btn type="secondary" @click="onSignClicked(account)">
+            <span class="whitespace-nowrap"> Sign Dummy </span>
+          </Btn>
         </div>
       </div>
     </div>

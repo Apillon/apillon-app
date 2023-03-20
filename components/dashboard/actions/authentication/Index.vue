@@ -20,7 +20,7 @@
       <NuxtLink :to="{ name: 'dashboard-api-keys' }">
         <n-button size="small">
           <span class="icon-acess text-xl mr-2"></span>
-          {{ $t('pageMenu.apiKeys') }}
+          {{ $t('dashboard.pageMenu.apiKeys') }}
         </n-button>
       </NuxtLink>
 
