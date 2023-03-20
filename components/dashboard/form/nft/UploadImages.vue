@@ -80,11 +80,13 @@ const allImagesUploaded = computed<boolean>(() => {
     return false;
   }
 
-  const names = [...Array(collectionStore.images?.length).keys()].map(x => `${++x}`);
-  const imagesNames = collectionStore.images.map(item => {
-    return item.name.replace(/\.[^/.]+$/, '');
+  const dataImages = collectionStore.csvData.map(item => {
+    return item.image;
   });
-  return compareArrays(names, imagesNames);
+  const imagesNames = collectionStore.images.map(item => {
+    return item.name;
+  });
+  return compareArrays(dataImages, imagesNames);
 });
 
 /** Upload file request - add file to list */
