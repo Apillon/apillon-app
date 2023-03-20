@@ -1,9 +1,9 @@
+import { LocationQueryValue } from 'vue-router';
 import stg from '../config/staging';
 import dev from '../config/development';
 import prod from '../config/production';
 import local from '../config/local';
 import { Feature } from '~~/types/config';
-import { LocationQueryValue } from 'vue-router';
 
 export function getAppConfig(env?: string) {
   const configFile =
@@ -23,7 +23,7 @@ export function tractEvent(
   eventName: string,
   eventValue?: number
 ) {
-  if (!!window._paq) {
+  if (window._paq) {
     window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
   }
 }
@@ -80,7 +80,7 @@ export function hideSecret(source: string, partLength: number = 4): string {
     : source;
 }
 export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
-  return !!s ? s.toString() : '';
+  return s ? s.toString() : '';
 }
 
 /**
@@ -343,5 +343,7 @@ export function isCacheExpired(key: string) {
 /**
  * Compare arrays
  */
-export const compareArrays = (a: Array<any>, b: Array<any>) =>
-  a.length === b.length && a.every((element, index) => element === b[index]);
+export const compareArrays = (a: Array<any>, b: Array<any>) => {
+  const bs = b.sort();
+  return a.length === b.length && a.sort().every((element, index) => element === bs[index]);
+};
