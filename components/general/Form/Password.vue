@@ -162,7 +162,7 @@ async function register() {
     tractEvent('registration', 'registration_done', 'Password set');
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-    await dataStore.fetchProjects(true);
+    dataStore.project.items = await dataStore.fetchProjects(true);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
