@@ -22,6 +22,7 @@ declare global {
     user_uuid: string;
     userRoles: number[];
     token?: any;
+    wallet?: string | null;
   }
 
   interface UserResponse extends GeneralResponse<UserInterface> {}

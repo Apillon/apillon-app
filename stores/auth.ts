@@ -22,8 +22,8 @@ export const useAuthStore = defineStore('auth', {
     wallet: {
       accounts: [] as WalletAccount[],
       address: '',
-      key: localStorage.getItem(AuthLsKeys.WALLET) || '',
       provider: getWalletBySource(localStorage.getItem(AuthLsKeys.WALLET)) || ({} as Wallet),
+      type: localStorage.getItem(AuthLsKeys.WALLET) || '',
     },
   }),
   getters: {
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore('auth', {
       $api.clearToken();
 
       this.jwt = '';
-      this.wallet.key = '';
+      this.wallet.type = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.WALLET);
       localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
@@ -89,7 +89,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     setWalletKey(wallet: Wallet) {
-      this.wallet.key = wallet.extensionName;
+      this.wallet.type = wallet.extensionName;
       localStorage.setItem(AuthLsKeys.WALLET, wallet.extensionName);
     },
 
@@ -103,6 +103,10 @@ export const useAuthStore = defineStore('auth', {
 
         this.setUserToken(lsAuth.jwt);
         this.promises.profile = await this.getUserData();
+      }
+
+      if (this.wallet.provider) {
+        this.setWallet(this.wallet.provider);
       }
     },
 
@@ -139,11 +143,11 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async setWallet(wallet: Wallet) {
-      this.wallet.provider = wallet;
-      this.setWalletKey(wallet);
-
       await wallet.enable();
       this.wallet.accounts = (await wallet.getAccounts()) || [];
+
+      this.wallet.provider = wallet;
+      this.setWalletKey(wallet);
     },
   },
 });

@@ -51,7 +51,25 @@
       "withEmail": "sign up with email"
     },
     "wallet": {
-      "connect": "Connect wallet"
+      "connect": {
+        "btn": "Connect wallet",
+        "info": "Connect with one of Polkadot's wallet",
+        "success": "Wallet has been successfully connected",
+        "title": "Connect wallet",
+        "different": "Connect different wallet"
+      },
+      "connected": {
+        "info": "Wallet is connected with your account",
+        "success": "Wallet has been successfully connected",
+        "title": "Wallet connected"
+      },
+      "disconnect": {
+        "success": "Wallet has been successfully disconnected",
+        "wallet": "Disconnect wallet"
+      },
+      "address": "Wallet address",
+      "createAccount": "This wallet hasn't got any account. Create an account first.",
+      "login": "Login with wallet"
     }
   },
   "general": {
@@ -59,6 +77,7 @@
     "actions": "Actions",
     "active": "active",
     "addNew": "Add new",
+    "address": "Address",
     "attach": "Attach",
     "cancel": "No, cancel",
     "confirm": "Yes, confirm",
@@ -68,9 +87,10 @@
     "deselectAll": "Deselect All",
     "download": "Download",
     "edit": "Edit",
+    "environment": "Environment",
     "error": "Error",
     "goHome": "Go home",
-    "environment": "Environment",
+    "install": "Install",
     "learn": "Learn",
     "learnMore": "Learn more",
     "live": "Live",

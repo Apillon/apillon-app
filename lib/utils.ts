@@ -1,9 +1,9 @@
+import { LocationQueryValue } from 'vue-router';
 import stg from '../config/staging';
 import dev from '../config/development';
 import prod from '../config/production';
 import local from '../config/local';
 import { Feature } from '~~/types/config';
-import { LocationQueryValue } from 'vue-router';
 
 export function getAppConfig(env?: string) {
   const configFile =
@@ -23,7 +23,7 @@ export function tractEvent(
   eventName: string,
   eventValue?: number
 ) {
-  if (!!window._paq) {
+  if (window._paq) {
     window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
   }
 }
@@ -80,7 +80,7 @@ export function hideSecret(source: string, partLength: number = 4): string {
     : source;
 }
 export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
-  return !!s ? s.toString() : '';
+  return s ? s.toString() : '';
 }
 
 /**
@@ -287,6 +287,7 @@ export function canOpenColumnCell(path: EventTarget[]) {
 export function copyToClipboard(text: string) {
   navigator.clipboard.writeText(text).then(
     () => {
+      if (!window.$message) return;
       /* Resolved - text copied to clipboard successfully */
       if (window.$i18n?.te('dashboard.clipboard.copied')) {
         window.$message.success(window.$i18n.t('dashboard.clipboard.copied'));
@@ -295,6 +296,7 @@ export function copyToClipboard(text: string) {
       }
     },
     () => {
+      if (!window.$message) return;
       /* Rejected - text failed to copy to the clipboard */
       if (window.$i18n?.te('dashboard.clipboard.error')) {
         window.$message.success(window.$i18n.t('dashboard.clipboard.error'));

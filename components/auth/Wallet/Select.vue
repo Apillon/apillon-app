@@ -19,33 +19,44 @@
             :href="wallet.installUrl"
             target="_blank"
           >
-            Install
+            {{ $t('general.install') }}
           </Btn>
         </div>
       </div>
-      <div v-if="wallet.extensionName === authStore.wallet.key">
-        <div
-          v-for="(account, accountKey) in authStore.wallet.accounts"
-          :key="accountKey"
-          class="flex justify-between"
-        >
-          <div>
-            <div>
-              <strong>Name:</strong><br />
-              <span>{{ account.name }}</span>
-            </div>
-            <div>
-              <strong>Address:</strong><br />
-              <span>{{ account.address }}</span>
-            </div>
+      <div v-if="wallet.extensionName === authStore.wallet.type" class="overflow-hidden">
+        <transition name="slide-down" appear>
+          <n-table
+            v-if="authStore.wallet.accounts && authStore.wallet.accounts.length > 0"
+            class="text-left"
+          >
+            <thead>
+              <tr>
+                <th>{{ $t('general.name') }}:</th>
+                <th>{{ $t('general.address') }}:</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(account, accountKey) in authStore.wallet.accounts" :key="accountKey">
+                <td class="whitespace-nowrap">{{ account.name }}</td>
+                <td>
+                  <TableEllipsis :text="account.address" />
+                </td>
+                <td>
+                  <Btn type="secondary" :loading="loading" @click="emit('sign', account)">
+                    <span v-if="actionText" class="whitespace-nowrap"> {{ actionText }} </span>
+                    <span v-else class="whitespace-nowrap">
+                      {{ $t('auth.wallet.connect.title') }}
+                    </span>
+                  </Btn>
+                </td>
+              </tr>
+            </tbody>
+          </n-table>
+          <div v-else class="p-4 text-center">
+            <h5>{{ $t('auth.wallet.createAccount') }}</h5>
           </div>
-          <div class="whitespace-nowrap">
-            <Btn type="secondary" :loading="loading" @click="emit('sign', account)">
-              <span v-if="btn" class="whitespace-nowrap"> {{ btn }} </span>
-              <span v-else class="whitespace-nowrap"> Sign Dummy </span>
-            </Btn>
-          </div>
-        </div>
+        </transition>
       </div>
     </div>
   </n-space>
@@ -53,7 +64,7 @@
 
 <script lang="ts" setup>
 defineProps({
-  btn: { type: String, default: '' },
+  actionText: { type: String, default: '' },
   loading: { type: Boolean, default: false },
 });
 const emit = defineEmits(['sign']);
