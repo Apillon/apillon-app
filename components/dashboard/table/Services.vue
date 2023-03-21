@@ -15,7 +15,7 @@
   <!-- Modal - Edit IPNS -->
   <modal v-model:show="modalEditAuthVisible" :title="$t('service.edit')">
     <FormService
-      :serviceId="currentRow?.id || 0"
+      :service-id="currentRow?.id || 0"
       :service-type="ServiceType.AUTHENTICATION"
       @submit-success="modalEditAuthVisible = false"
     />
@@ -41,6 +41,8 @@ const props = defineProps({
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const IconStatus = resolveComponent('IconStatus');
+const TableEllipsis = resolveComponent('TableEllipsis');
+
 const modalEditAuthVisible = ref<boolean>(false);
 const modalDeleteAuthVisible = ref<boolean>(false);
 
@@ -54,6 +56,13 @@ const createColumns = (): DataTableColumns<ServiceInterface> => {
           h(IconStatus, { active: row.active === 1 }, ''),
           h('span', { class: 'ml-2 text-blue' }, row.name),
         ];
+      },
+    },
+    {
+      key: 'service_uuid',
+      title: $i18n.t('general.uuid'),
+      render(row: ServiceInterface) {
+        return h(TableEllipsis, { text: row.service_uuid }, '');
       },
     },
     {
