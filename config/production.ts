@@ -14,6 +14,7 @@ const config: ConfigInterface = {
     'PROJECT_SETTINGS',
     'REFERRAL',
     'SERVICES',
+    'WALLET_LOGIN',
   ],
   betaFeatures: ['STORAGE', 'HOSTING'],
 };
