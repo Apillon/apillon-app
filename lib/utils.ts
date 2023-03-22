@@ -287,6 +287,7 @@ export function canOpenColumnCell(path: EventTarget[]) {
 export function copyToClipboard(text: string) {
   navigator.clipboard.writeText(text).then(
     () => {
+      if (!window.$message) return;
       /* Resolved - text copied to clipboard successfully */
       if (window.$i18n?.te('dashboard.clipboard.copied')) {
         window.$message.success(window.$i18n.t('dashboard.clipboard.copied'));
@@ -295,6 +296,7 @@ export function copyToClipboard(text: string) {
       }
     },
     () => {
+      if (!window.$message) return;
       /* Rejected - text failed to copy to the clipboard */
       if (window.$i18n?.te('dashboard.clipboard.error')) {
         window.$message.success(window.$i18n.t('dashboard.clipboard.error'));

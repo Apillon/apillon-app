@@ -18,7 +18,7 @@ const $i18n = useI18n();
 const { pageLoading, initBucket } = useStorage();
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

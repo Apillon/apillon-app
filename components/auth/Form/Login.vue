@@ -33,7 +33,7 @@
   </n-form>
   <div class="min-h-[30px] text-center">
     <div>
-      <span class="text-sm text-body">{{ $t('login.forgotPassword') }} </span>&nbsp;
+      <span class="text-sm text-body">{{ $t('auth.login.forgotPassword') }} </span>&nbsp;
       <FormPasswordResetRequest :email="formData.email" btn-type="link" size="tiny" quaternary />
     </div>
   </div>
@@ -97,8 +97,7 @@ async function login() {
 
     const res = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
-    authStore.setUserToken(res.data.token);
-    authStore.changeUser(res.data);
+    authStore.saveUser(res.data);
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     dataStore.project.items = await dataStore.fetchProjects(true);

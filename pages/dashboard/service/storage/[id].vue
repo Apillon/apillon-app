@@ -32,7 +32,7 @@ const bucketStore = useBucketStore();
 const { pageLoading, initBucket } = useStorage();
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

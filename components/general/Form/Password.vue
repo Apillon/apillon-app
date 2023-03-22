@@ -155,8 +155,7 @@ async function register() {
       refCode: query.REF,
     });
 
-    authStore.setUserToken(res.data.token);
-    authStore.changeUser(res.data);
+    authStore.saveUser(res.data);
 
     /** Track Registration created */
     tractEvent('registration', 'registration_done', 'Password set');
@@ -180,7 +179,7 @@ async function resetPassword() {
     });
 
     if (res.data) {
-      message.success($i18n.t('login.passwordReplaced'));
+      message.success($i18n.t('auth.login.passwordReplaced'));
       emit('submitSuccess');
     }
   } catch (error) {

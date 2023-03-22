@@ -57,7 +57,7 @@ const deploymentStore = useDeploymentStore();
 const { pageLoading, initWebsite } = useHosting();
 
 useHead({
-  title: $i18n.t('nav.hosting'),
+  title: $i18n.t('dashboard.nav.hosting'),
 });
 
 onMounted(() => {

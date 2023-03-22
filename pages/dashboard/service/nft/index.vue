@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('nav.nft') }}</h1>
+          <h1>{{ $t('dashboard.nav.nft') }}</h1>
         </slot>
 
         <template #info>
@@ -51,7 +51,7 @@ const modalNewCollectionVisible = ref<boolean | null>(false);
 let collectionInterval: any = null as any;
 
 useHead({
-  title: $i18n.t('nav.nft'),
+  title: $i18n.t('dashboard.nav.nft'),
 });
 
 onMounted(() => {

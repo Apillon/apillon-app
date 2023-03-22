@@ -4,8 +4,8 @@
       <div class="mb-7 text-center text-blue">
         <span class="icon-wow text-[34px]"></span>
       </div>
-      <h2 class="mb-6 text-center">{{ $t('signup.emailConfirmed') }}</h2>
-      <p class="mb-7">{{ $t('signup.enterDesiredPassword') }}</p>
+      <h2 class="mb-6 text-center">{{ $t('auth.signup.emailConfirmed') }}</h2>
+      <p class="mb-7">{{ $t('auth.signup.enterDesiredPassword') }}</p>
 
       <FormPassword class="mx-auto max-w-lg text-left" />
     </div>
@@ -20,7 +20,7 @@ definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: $i18n.t('signup.emailConfirmed'),
+  title: $i18n.t('auth.signup.emailConfirmed'),
 });
 
 onBeforeMount(() => {

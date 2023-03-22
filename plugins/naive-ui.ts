@@ -56,6 +56,7 @@ import {
   NSelect,
   NSpace,
   NSwitch,
+  NTable,
   NTabs,
   NTabPane,
   NTag,
@@ -76,13 +77,12 @@ import {
   TableBaseColumn,
   TableColumn,
   TableColumnGroup,
-  TableColumns,
   TableExpandColumn,
   TableSelectionColumn,
 } from 'naive-ui/es/data-table/src/interface';
 import { MenuOption, MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
-import { FileInfo, SettledFileInfo } from 'naive-ui/es/upload/src/interface';
+import { SettledFileInfo } from 'naive-ui/es/upload/src/interface';
 
 declare global {
   type KeyTitle = {
@@ -184,6 +184,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NSelect,
         NSpace,
         NSwitch,
+        NTable,
         NTabs,
         NTabPane,
         NTag,
