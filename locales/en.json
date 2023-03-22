@@ -697,7 +697,7 @@
       "connect": "Discord connect",
       "connected": "Discord connected",
       "disconnect": "Discord disconnect",
-      "disconnected": "You have successfully disconnected your discord",
+      "disconnected": "You have successfully disconnected your Discord account",
       "infoConnected": "Disconnect your Discord account",
       "infoDisconnected": "Connect your Discord account",
       "titleConnected": "Discord connected",

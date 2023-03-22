@@ -23,7 +23,10 @@
           </Btn>
         </div>
       </div>
-      <div v-if="wallet.extensionName === authStore.wallet.type" class="overflow-hidden">
+      <div
+        v-if="wallet.extensionName === authStore.wallet.type"
+        class="overflow-auto md:overflow-hidden"
+      >
         <transition name="slide-down" appear>
           <n-table
             v-if="authStore.wallet.accounts && authStore.wallet.accounts.length > 0"

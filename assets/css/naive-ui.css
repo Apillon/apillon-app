@@ -390,7 +390,7 @@ body > .n-message-container {
 
   /** Dialog */
   &.n-dialog {
-    @apply lg:min-w-[660px];
+    @apply min-w-[90vw] md:min-w-[660px] mobile:px-[6%];
     border: var(--n-border);
 
     .n-dialog {
