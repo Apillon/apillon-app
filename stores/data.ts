@@ -117,7 +117,7 @@ export const useDataStore = defineStore('data', {
         .map(([serviceType, typeName]) => {
           return Array.isArray(this.services[typeName]) && this.services[typeName].length > 0;
         })
-        .some(item => item === false);
+        .includes(false);
     },
 
     hasInstructions(key: string) {
@@ -214,13 +214,14 @@ export const useDataStore = defineStore('data', {
         this.promises.projects = req;
         const res = await req;
 
-        this.project.items = res.data.items.map((project: ProjectInterface) => {
+        const projects = res.data.items.map((project: ProjectInterface) => {
           return {
             ...project,
             value: project.id,
             label: project.name,
           };
         });
+        this.project.items = projects;
         const hasProjects = res.data.total > 0;
 
         /* If current project is not selected, take first one */
@@ -238,7 +239,7 @@ export const useDataStore = defineStore('data', {
           router.push({ name: 'dashboard' });
         }
 
-        return res.data.items;
+        return projects;
       } catch (error) {
         /** Clear promise */
         this.promises.buckets = null;
@@ -248,7 +249,7 @@ export const useDataStore = defineStore('data', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
-      return null;
+      return [];
     },
 
     async fetchProject(projectId?: number) {

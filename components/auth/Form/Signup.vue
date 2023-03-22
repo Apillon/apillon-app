@@ -30,7 +30,7 @@
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn v-if="sendAgain" class="mx-auto" type="primary" size="medium" @click="handleSubmit">
-        {{ $t('signup.sendAgain') }}
+        {{ $t('auth.signup.sendAgain') }}
       </Btn>
       <Btn v-else type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.continue') }}
@@ -120,25 +120,20 @@ async function signupWithEmail() {
 }
 
 function onCaptchaError(err) {
-  console.log('error');
-  console.log(err);
+  console.warn(err);
   loading.value = false;
 }
 
 function onCaptchaChallengeExpire(err) {
-  console.log('expired challenge');
-  console.log(err);
+  console.warn(err);
   loading.value = false;
 }
 function onCaptchaExpire(err) {
-  console.log('expired');
-  console.log(err);
+  console.warn(err);
   loading.value = false;
 }
 
 function onCaptchaVerify(token, eKey) {
-  console.log('verified');
-  // console.log(token, eKey);
   formData.value.captcha = { token, eKey };
   handleSubmit(null);
   loading.value = false;
@@ -146,6 +141,5 @@ function onCaptchaVerify(token, eKey) {
 
 function onCaptchaClose() {
   loading.value = false;
-  console.log('closed');
 }
 </script>

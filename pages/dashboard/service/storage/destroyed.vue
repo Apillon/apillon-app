@@ -3,11 +3,12 @@
     <template #heading>
       <Heading>
         <slot>
-          <h4>{{ $t('nav.storage') }}</h4>
+          <h4>{{ $t('dashboard.nav.storage') }}</h4>
         </slot>
 
         <template #info>
           <n-space :size="32" align="center">
+            <IconInfo @click="showModalW3Warn = true" />
             <n-button
               class="align-sub px-2"
               size="small"
@@ -55,7 +56,7 @@ const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

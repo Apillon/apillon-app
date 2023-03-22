@@ -5,16 +5,23 @@ const dataStore = useDataStore();
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
+    csvAttributes: [] as Array<MetadataAttributes>,
+    csvColumns: [] as NTableColumns<KeyTitle>,
+    csvData: [] as Array<Record<string, string>>,
     csvFile: {} as FileListItemType,
-    images: [] as Array<FileListItemType>,
-    items: [] as Array<CollectionInterface>,
+    csvSelectedAttributes: [] as Array<string>,
+    csvSession: '',
+    filesMetadata: [] as FileListItemType[],
+    images: [] as FileListItemType[],
+    imagesSession: '',
+    items: [] as CollectionInterface[],
     loading: false,
     mintTab: NftMintTab.METADATA,
     quotaReached: undefined as Boolean | undefined,
     search: '',
     selected: 0,
     total: 0,
-    transaction: [] as Array<TransactionInterface>,
+    transaction: [] as TransactionInterface[],
     uploadActive: false,
   }),
   getters: {
@@ -25,7 +32,7 @@ export const useCollectionStore = defineStore('collection', {
       return Array.isArray(state.transaction) && state.transaction.length > 0;
     },
     hasCsvFile(state): boolean {
-      return !!state.csvFile?.id;
+      return !!state.csvFile?.id && Array.isArray(state.csvData) && state.csvData.length > 0;
     },
     hasImages(state): boolean {
       return Array.isArray(state.images) && state.images.length > 0;
@@ -34,13 +41,24 @@ export const useCollectionStore = defineStore('collection', {
   actions: {
     resetData() {
       this.active = {} as CollectionInterface;
-      this.csvFile = {} as FileListItemType;
-      this.images = [] as Array<FileListItemType>;
-      this.items = [] as Array<CollectionInterface>;
+      this.items = [] as CollectionInterface[];
+      this.quotaReached = undefined;
       this.search = '';
       this.selected = 0;
-      this.transaction = [] as Array<TransactionInterface>;
-      this.quotaReached = undefined;
+      this.transaction = [] as TransactionInterface[];
+      this.resetMetadata();
+    },
+    resetMetadata() {
+      this.csvAttributes = [] as MetadataAttributes[];
+      this.csvColumns = [] as NTableColumns<KeyTitle>;
+      this.csvData = [] as Array<Record<string, string>>;
+      this.csvFile = {} as FileListItemType;
+      this.csvSelectedAttributes = [] as Array<string>;
+      this.csvSession = '';
+      this.filesMetadata = [] as FileListItemType[];
+      this.images = [] as FileListItemType[];
+      this.imagesSession = '';
+      this.mintTab = NftMintTab.METADATA;
     },
     setCollectionId(id: number) {
       if (this.selected !== id) {
@@ -58,14 +76,22 @@ export const useCollectionStore = defineStore('collection', {
       return this.items;
     },
 
+    async getCollection(collectionId: number): Promise<CollectionInterface> {
+      if (this.active?.id === collectionId && !isCacheExpired(LsCacheKeys.COLLECTION)) {
+        return this.active;
+      }
+      return await this.fetchCollection(collectionId);
+    },
+
     async getCollectionTransactions(collectionUuid: string): Promise<any> {
       if (
-        this.active?.collection_uuid === collectionUuid &&
-        (!this.hasCollectionTransactions || !isCacheExpired(LsCacheKeys.COLLECTION_TRANSACTIONS))
+        this.active?.collection_uuid !== collectionUuid ||
+        !this.hasCollectionTransactions ||
+        isCacheExpired(LsCacheKeys.COLLECTION_TRANSACTIONS)
       ) {
-        return this.transaction;
+        return await this.fetchCollectionTransactions(collectionUuid);
       }
-      return await this.fetchCollectionTransactions(collectionUuid);
+      return this.transaction;
     },
 
     /**
@@ -83,7 +109,7 @@ export const useCollectionStore = defineStore('collection', {
           ...PARAMS_ALL_ITEMS,
         };
 
-        const req = $api.get<CollectionsResponse>(endpoints.collections, params);
+        const req = $api.get<CollectionsResponse>(endpoints.collections(), params);
         dataStore.promises.collections = req;
         const res = await req;
 
@@ -108,6 +134,23 @@ export const useCollectionStore = defineStore('collection', {
 
       this.loading = false;
       return [];
+    },
+
+    async fetchCollection(id: number): Promise<CollectionInterface> {
+      try {
+        const res = await $api.get<CollectionResponse>(endpoints.collections(id));
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.COLLECTION, Date.now().toString());
+
+        return res.data;
+      } catch (error: any) {
+        this.active = {} as CollectionInterface;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return {} as CollectionInterface;
     },
 
     async fetchCollectionTransactions(

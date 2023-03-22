@@ -51,15 +51,19 @@ const emit = defineEmits(['mint', 'transfer']);
 const $i18n = useI18n();
 const collectionStore = useCollectionStore();
 
+const actionsDisabled = computed<boolean>(() => {
+  return collectionStore.active?.collectionStatus !== CollectionStatus.DEPLOYED;
+});
+
 const options = computed(() => {
   return [
     {
       label: $i18n.t('nft.collection.mint'),
       key: 'mint',
-      disabled: collectionStore.active?.collectionStatus === CollectionStatus.PENDING,
+      disabled: actionsDisabled.value,
       props: {
         onClick: () => {
-          if (collectionStore.active?.collectionStatus !== CollectionStatus.PENDING) {
+          if (!actionsDisabled.value) {
             emit('mint');
           }
         },
@@ -68,7 +72,7 @@ const options = computed(() => {
     {
       label: $i18n.t('nft.collection.revoke'),
       key: 'revoke',
-      disabled: true,
+      disabled: actionsDisabled.value,
       props: {
         onClick: () => {},
       },
@@ -76,10 +80,10 @@ const options = computed(() => {
     {
       label: $i18n.t('nft.collection.transfer'),
       key: 'transfer',
-      disabled: collectionStore.active?.collectionStatus !== CollectionStatus.DEPLOYED,
+      disabled: actionsDisabled.value,
       props: {
         onClick: () => {
-          if (collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED) {
+          if (!actionsDisabled.value) {
             emit('transfer');
           }
         },

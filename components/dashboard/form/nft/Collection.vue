@@ -50,11 +50,7 @@
       </n-form-item>
 
       <!--  Collection Base URI -->
-      <n-form-item
-        path="baseUri"
-        :label="$t('form.label.collectionBaseUri')"
-        :label-props="{ for: 'baseUri' }"
-      >
+      <n-form-item path="baseUri" :label="baseUriLabel" :label-props="{ for: 'baseUri' }">
         <n-input
           v-model:value="formData.baseUri"
           :input-props="{ id: 'baseUri' }"
@@ -82,6 +78,7 @@
         <n-input-number
           v-model:value="formData.maxSupply"
           :min="0"
+          :max="NFT_MAX_SUPPLY"
           :placeholder="$t('form.placeholder.collectionMaxSupply')"
           clearable
         />
@@ -162,6 +159,7 @@ const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
+const IconInfo = resolveComponent('IconInfo');
 
 const formData = ref<FormCollection>({
   name: '',
@@ -188,12 +186,6 @@ const rules: NFormRules = {
       message: $i18n.t('validation.collectionNameRequired'),
     },
   ],
-  baseUri: [
-    {
-      required: true,
-      message: $i18n.t('validation.collectionBaseUriRequired'),
-    },
-  ],
   baseExtension: [
     {
       required: true,
@@ -205,6 +197,11 @@ const rules: NFormRules = {
       required: true,
       message: $i18n.t('validation.collectionMaxSupplyRequired'),
     },
+    {
+      max: NFT_MAX_SUPPLY,
+      validator: validateMaxSupply,
+      message: $i18n.t('validation.collectionMaxSupplyReached', { max: NFT_MAX_SUPPLY }),
+    },
   ],
   mintPrice: [
     {
@@ -214,11 +211,18 @@ const rules: NFormRules = {
   ],
   reserve: [
     {
-      required: true,
-      message: $i18n.t('validation.collectionReserveRequired'),
+      validator: validateReserve,
+      message: $i18n.t('validation.collectionReserve'),
     },
   ],
 };
+
+const baseUriLabel = computed(() => {
+  return [
+    h('span', { class: 'mr-1' }, $i18n.t('form.label.collectionBaseUri')),
+    h(IconInfo, { size: 'sm', tooltip: $i18n.t('nft.collection.baseUriInfo') }, ''),
+  ];
+});
 
 const isQuotaReached = computed<boolean>(() => {
   return collectionStore.quotaReached === true;
@@ -226,6 +230,13 @@ const isQuotaReached = computed<boolean>(() => {
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
 });
+
+function validateReserve(_: NFormItemRule, value: number): boolean {
+  return value <= (formData.value?.maxSupply || 0);
+}
+function validateMaxSupply(_: NFormItemRule, value: number): boolean {
+  return value <= NFT_MAX_SUPPLY;
+}
 
 function disablePasteDate(ts: number) {
   return ts < Date.now();
@@ -265,7 +276,7 @@ async function createCollection() {
       dropStart: Math.floor((formData.value.dropStart || Date.now()) / 1000),
       reserve: formData.value.reserve,
     };
-    const res = await $api.post<CollectionResponse>(endpoints.collections, bodyData);
+    const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
 
     message.success($i18n.t('form.success.created.collection'));
 

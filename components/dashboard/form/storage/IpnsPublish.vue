@@ -120,7 +120,7 @@ async function publishToIpns(ipnsId: number) {
 
     message.success($i18n.t('form.success.ipnsPublish'));
 
-    /** IPNS Publish pooling */
+    /** IPNS Publish polling */
     checkIfIpnsPublished(ipnsId);
 
     /** Emit events */

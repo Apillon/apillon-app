@@ -2,7 +2,7 @@
   <div class="relative bg-bg-dark px-12 pt-5 pb-10 overflow-hidden rounded">
     <div class="max-w-xl w-1/2">
       <n-space size="large" align="center" class="h-12">
-        <h4 class="mr-">{{ $t('nav.authentication') }}</h4>
+        <h4 class="mr-">{{ $t('dashboard.nav.authentication') }}</h4>
         <div class="w-[1px] h-[13px] bg-white"></div>
         <NuxtIcon name="auth/kilt" class="text-[50px]" filled />
       </n-space>

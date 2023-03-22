@@ -87,7 +87,7 @@ const TableEllipsis = resolveComponent('TableEllipsis');
 const TableLink = resolveComponent('TableLink');
 const StorageFileStatus = resolveComponent('StorageFileStatus');
 
-/** Pooling */
+/** Polling */
 let fileInterval: any = null as any;
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
@@ -324,7 +324,7 @@ const columns = computed(() => {
           NDropdown,
           {
             options: dropdownOptions(row),
-            renderOption: renderOption,
+            renderOption,
             trigger: 'click',
           },
           {
@@ -569,7 +569,7 @@ async function getDirectoryContent(
   currentPage.value = page;
 }
 
-/** Files pooling */
+/** Files polling */
 function checkUnfinishedFiles() {
   if (!hasUnfinishedFiles()) {
     return;
@@ -579,7 +579,6 @@ function checkUnfinishedFiles() {
     await bucketStore.fetchDirectoryContent({ loader: false });
     if (!hasUnfinishedFiles()) {
       clearInterval(fileInterval);
-      return;
     }
   }, 30000);
 }

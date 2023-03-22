@@ -3,21 +3,12 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('nav.storage') }}</h1>
+          <h1>{{ $t('dashboard.nav.storage') }}</h1>
         </slot>
 
         <template #info>
           <n-space :size="32" align="center">
-            <n-button
-              class="align-sub px-2"
-              size="small"
-              type="tertiary"
-              quaternary
-              round
-              @click="showModalW3Warn = true"
-            >
-              <span class="icon-info text-2xl"></span>
-            </n-button>
+            <IconInfo @click="showModalW3Warn = true" />
           </n-space>
         </template>
 
@@ -60,7 +51,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalNewBucket = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

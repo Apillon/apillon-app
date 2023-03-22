@@ -18,6 +18,9 @@
           {{ $t('profile.changePassword') }}
         </FormPasswordResetRequest>
 
+        <!-- Wallet Connect -->
+        <AuthWalletConnect />
+
         <!-- 2FA -->
         <template
           v-if="isFeatureEnabled(Feature.TWO_FACTOR_AUTHENTICATION, authStore.getUserRoles())"
@@ -32,16 +35,16 @@
           <template v-if="discordLink">
             <n-h5 class="mb-0" prefix="bar">{{ $t('profile.discord.titleConnected') }}</n-h5>
             <p class="mb-6">{{ $t('profile.discord.infoConnected') }}</p>
-            <Btn type="error" :loading="loadingDiscord" @click="discordDisconnect">{{
-              $t('profile.discord.disconnect')
-            }}</Btn>
+            <Btn type="error" :loading="loadingDiscord" @click="discordDisconnect">
+              {{ $t('profile.discord.disconnect') }}
+            </Btn>
           </template>
           <template v-else>
             <n-h5 class="mb-0" prefix="bar">{{ $t('profile.discord.titleDisconnected') }}</n-h5>
             <p class="mb-6">{{ $t('profile.discord.infoDisconnected') }}</p>
-            <Btn type="secondary" :loading="loadingDiscord" @click="discordConnect">{{
-              $t('profile.discord.connect')
-            }}</Btn>
+            <Btn type="secondary" :loading="loadingDiscord" @click="discordConnect">
+              {{ $t('profile.discord.connect') }}
+            </Btn>
           </template>
         </template>
       </div>

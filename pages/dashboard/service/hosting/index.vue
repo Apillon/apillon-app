@@ -3,22 +3,12 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('nav.hosting') }}</h1>
+          <h1>{{ $t('dashboard.nav.hosting') }}</h1>
         </slot>
 
         <template #info>
           <n-space :size="32" align="center">
-            <n-button
-              v-if="$i18n.te('w3Warn.hosting.new')"
-              class="align-sub px-2"
-              type="tertiary"
-              size="small"
-              quaternary
-              round
-              @click="showModalW3Warn = true"
-            >
-              <span class="icon-info text-2xl"></span>
-            </n-button>
+            <IconInfo v-if="$i18n.te('w3Warn.hosting.new')" @click="showModalW3Warn = true" />
           </n-space>
         </template>
       </Heading>
@@ -57,7 +47,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalNewWebsite = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('nav.hosting'),
+  title: $i18n.t('dashboard.nav.hosting'),
 });
 
 onMounted(() => {

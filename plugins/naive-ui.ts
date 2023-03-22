@@ -56,6 +56,7 @@ import {
   NSelect,
   NSpace,
   NSwitch,
+  NTable,
   NTabs,
   NTabPane,
   NTag,
@@ -71,14 +72,32 @@ import {
   UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
-import { InternalRowData } from 'naive-ui/es/data-table/src/interface';
+import {
+  InternalRowData,
+  TableBaseColumn,
+  TableColumn,
+  TableColumnGroup,
+  TableExpandColumn,
+  TableSelectionColumn,
+} from 'naive-ui/es/data-table/src/interface';
 import { MenuOption, MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
-import { FileInfo } from 'naive-ui/es/upload/src/interface';
+import { SettledFileInfo } from 'naive-ui/es/upload/src/interface';
 
 declare global {
+  type KeyTitle = {
+    title: string;
+    key: string;
+  };
+  type MetadataAttributes = {
+    value: string;
+    label: string;
+    display_type: string;
+    hidden?: boolean;
+  };
+
   interface NCollapseProps extends CollapseProps {}
-  interface NFileInfo extends FileInfo {}
+  interface NFileInfo extends SettledFileInfo {}
   interface NFormInst extends FormInst {}
   interface NFormItemInst extends FormItemInst {}
   interface NFormRules extends FormRules {}
@@ -103,6 +122,13 @@ declare global {
   type NDropdownGroupOption = DropdownGroupOption;
   type NMenuOption = MenuOption;
   type NMenuMixedOption = MenuMixedOption;
+
+  type NTableColumns<T = InternalRowData> = Array<TableColumn<T>>;
+  type NTableColumn<T = InternalRowData> =
+    | TableColumnGroup<T>
+    | TableBaseColumn<T>
+    | TableSelectionColumn<T>
+    | TableExpandColumn<T>;
 
   type DropdownRenderOption = {
     node: VNode;
@@ -158,6 +184,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NSelect,
         NSpace,
         NSwitch,
+        NTable,
         NTabs,
         NTabPane,
         NTag,

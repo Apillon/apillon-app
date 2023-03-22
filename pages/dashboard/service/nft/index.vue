@@ -3,22 +3,12 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('nav.nft') }}</h1>
+          <h1>{{ $t('dashboard.nav.nft') }}</h1>
         </slot>
 
         <template #info>
           <n-space :size="32" align="center">
-            <n-button
-              v-if="$i18n.te('w3Warn.nft.new')"
-              class="align-sub px-2"
-              size="small"
-              type="tertiary"
-              quaternary
-              round
-              @click="showModalW3Warn = true"
-            >
-              <span class="icon-info text-2xl"></span>
-            </n-button>
+            <IconInfo v-if="$i18n.te('w3Warn.nft.new')" @click="showModalW3Warn = true" />
           </n-space>
         </template>
       </Heading>
@@ -30,8 +20,8 @@
       />
       <Empty
         v-else
-        :title="$t('nft.collectionsEmpty')"
-        :info="$t('nft.collectionsCreate')"
+        :title="$t('nft.collection.empty')"
+        :info="$t('nft.collection.emptyInfo')"
         icon="nft/illustration"
       >
         <Btn type="primary" @click="createNewCollection">
@@ -61,7 +51,7 @@ const modalNewCollectionVisible = ref<boolean | null>(false);
 let collectionInterval: any = null as any;
 
 useHead({
-  title: $i18n.t('nav.nft'),
+  title: $i18n.t('dashboard.nav.nft'),
 });
 
 onMounted(() => {
@@ -115,7 +105,7 @@ function onCollectionCreated() {
   }, 3000);
 }
 
-/** Collection pooling */
+/** Collection polling */
 function checkUnfinishedCollections() {
   const unfinishedCollection = collectionStore.items.find(
     collection => collection.collectionStatus < CollectionStatus.DEPLOYED
@@ -129,7 +119,6 @@ function checkUnfinishedCollections() {
     const collection = collections.find(collection => collection.id === unfinishedCollection.id);
     if (!collection) {
       clearInterval(collectionInterval);
-      return;
     } else if (collection.collectionStatus >= CollectionStatus.DEPLOYED) {
       clearInterval(collectionInterval);
     }

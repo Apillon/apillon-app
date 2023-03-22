@@ -3,22 +3,12 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('nav.authentication') }}</h1>
+          <h1>{{ $t('dashboard.nav.authentication') }}</h1>
         </slot>
 
         <template #info>
           <n-space :size="32" align="center">
-            <n-button
-              v-if="$i18n.te('w3Warn.auth.new')"
-              class="align-sub px-2"
-              type="tertiary"
-              size="small"
-              quaternary
-              round
-              @click="showModalW3Warn = true"
-            >
-              <span class="icon-info text-2xl"></span>
-            </n-button>
+            <IconInfo v-if="$i18n.te('w3Warn.auth.new')" @click="showModalW3Warn = true" />
           </n-space>
         </template>
       </Heading>
@@ -26,7 +16,7 @@
     <slot>
       <TableServices
         v-if="dataStore.hasServices(ServiceType.AUTHENTICATION)"
-        :serviceType="ServiceType.AUTHENTICATION"
+        :service-type="ServiceType.AUTHENTICATION"
       />
       <Empty
         v-else
@@ -62,7 +52,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalNewService = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('nav.authentication'),
+  title: $i18n.t('dashboard.nav.authentication'),
 });
 
 onMounted(() => {

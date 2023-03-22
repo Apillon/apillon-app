@@ -401,6 +401,17 @@ export const themeOverrides: GlobalThemeOverrides = {
     buttonHeightMedium: '20px',
     buttonWidthMedium: '20px',
   },
+  Table: {
+    borderColor: colors.bg.lighter,
+    borderRadius: '0px',
+    tdColor: colors.bg.DEFAULT,
+    tdColorModal: colors.bg.DEFAULT,
+    tdTextColor: colors.white,
+    thColor: colors.bg.DEFAULT,
+    thColorModal: colors.bg.light,
+    thFontWeight: '700',
+    thTextColor: colors.white,
+  },
   Tabs: {
     colorSegment: colors.bg.DEFAULT,
     panePaddingMedium: '32px 0 0',

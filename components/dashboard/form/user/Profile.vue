@@ -155,7 +155,7 @@ async function updateUserProfile() {
     const res = await $api.patch<UserProfileResponse>(endpoints.me, formData.value);
 
     if (res.data) {
-      authStore.changeUser(res.data);
+      authStore.saveUser(res.data);
       message.success($i18n.t('form.success.profile'));
     }
   } catch (error) {

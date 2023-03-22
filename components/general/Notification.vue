@@ -1,6 +1,6 @@
 <template>
   <div
-    class="inline-block py-2 pl-5 pr-3 border-l-4 w-full bg-bg-dark text-sm"
+    class="inline-block py-2 px-5 border-l-4 w-full bg-bg-dark text-sm"
     :class="notificationClass"
   >
     <span :class="iconClass"></span>

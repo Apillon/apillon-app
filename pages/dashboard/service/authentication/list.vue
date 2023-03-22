@@ -3,7 +3,7 @@
     <template #heading>
       <n-space justify="space-between" align="center">
         <n-space size="large" align="center">
-          <h4 class="mr-">{{ $t('nav.authentication') }}</h4>
+          <h4 class="mr-">{{ $t('dashboard.nav.authentication') }}</h4>
           <div class="w-[1px] h-[13px] bg-body"></div>
           <a href="#learn-more">{{ $t('general.learnMore') }}</a>
         </n-space>
