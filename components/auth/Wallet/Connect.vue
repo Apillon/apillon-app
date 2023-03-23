@@ -1,5 +1,5 @@
 <template>
-  <template v-if="isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())">
+  <template v-if="isLg && isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())">
     <!-- Wallet is connected -->
     <template v-if="!!authStore.user?.wallet">
       <n-h5 class="mb-0" prefix="bar">{{ $t('auth.wallet.connected.title') }}</n-h5>
@@ -54,6 +54,7 @@ import { createDiscreteApi } from 'naive-ui';
 
 const $i18n = useI18n();
 const authStore = useAuthStore();
+const { isLg } = useScreen();
 const { getMessageSignature } = useProvider();
 const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 

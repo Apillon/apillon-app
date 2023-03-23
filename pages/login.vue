@@ -2,7 +2,7 @@
   <div>
     <h2 class="mb-4 text-center sm:text-left">{{ $t('auth.login.title') }}</h2>
     <p class="mb-11">{{ $t('auth.login.description') }}</p>
-    <template v-if="isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())">
+    <template v-if="isLg && isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())">
       <AuthWalletLogin class="w-full mb-2" />
     </template>
     <template v-if="isFeatureEnabled(Feature.MAGIC_LINK, authStore.getUserRoles())">
@@ -15,7 +15,7 @@
       <strong class="inline-block px-5 mx-[8%] text-body whitespace-nowrap">
         <template
           v-if="
-            isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles()) ||
+            (isLg && isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())) ||
             isFeatureEnabled(Feature.MAGIC_LINK, authStore.getUserRoles())
           "
         >
@@ -41,6 +41,7 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
+const { isLg } = useScreen();
 const authStore = useAuthStore();
 
 definePageMeta({
