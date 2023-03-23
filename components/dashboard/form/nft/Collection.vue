@@ -229,6 +229,16 @@ const rules: NFormRules = {
       required: true,
       message: $i18n.t('validation.collectionMintPriceRequired'),
     },
+    {
+      max: 10000,
+      message: $i18n.t('validation.collectionMintPrice'),
+    },
+  ],
+  dropStart: [
+    {
+      validator: validateDropStart,
+      message: $i18n.t('validation.collectionDropStart'),
+    },
   ],
   reserve: [
     {
@@ -268,7 +278,9 @@ function validateMaxSupply(_: NFormItemRule, value: number): boolean {
 function validateBaseExtension(_: NFormItemRule, value: number): boolean {
   return !formData.value.baseUri || !!value;
 }
-
+function validateDropStart(_: NFormItemRule, value: number): boolean {
+  return !formData.value.isDrop || value > Date.now();
+}
 function disablePasteDate(ts: number) {
   return ts < Date.now();
 }

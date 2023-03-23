@@ -684,9 +684,10 @@
       "selectAttributes": "Select attributes"
     },
     "validation": {
+      "csvMissingAttributes": "Are you sure you want to continue with no attirubtes?",
       "csvMissingData": "Missing metadata, num of row must be same as maxSupply",
       "csvRequiredColumns": "Missing metadata columns, required columns:",
-      "imagesMissing": "Missing images",
+      "imagesMissing": "Missing images:",
       "imagesInvalid": "Invalid image names. Example: "
     },
     "transactionType": "Transaction Type"
@@ -957,8 +958,10 @@
     "collectionBaseUri": "Base URI is not valid",
     "collectionBaseUriRequired": "Please enter Base URI",
     "collectionBaseExtensionRequired": "Please enter Base Extension",
+    "collectionDropStart": "Drop start is not a valid date or has already passed by",
     "collectionMaxSupplyReached": "Please enter lower number, max supply is {max}",
     "collectionMaxSupplyRequired": "Please enter Max supply",
+    "collectionMintPrice": "Please enter a valid Mint price",
     "collectionMintPriceRequired": "Please enter Mint price",
     "collectionNameRequired": "Please enter Collection name",
     "collectionReserve": "Number of reserved NFTs can be equal or lower than max supply.",

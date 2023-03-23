@@ -43,7 +43,7 @@
           v-if="collectionStore.images?.length < collectionStore.csvData?.length"
           type="warning"
         >
-          {{ $t('nft.validation.imagesMissing') }}
+          {{ $t('nft.validation.imagesMissing') }} {{ missingImages }}
         </Notification>
         <Notification v-else-if="!allImagesUploaded" type="error">
           {{ $t('nft.validation.imagesInvalid') }} {{ imagesNames }}
@@ -69,6 +69,17 @@ const message = useMessage();
 const collectionStore = useCollectionStore();
 const { fileAlreadyOnFileList } = useUpload();
 const { allImagesUploaded } = useNft();
+
+const missingImages = computed<string>(() => {
+  if (collectionStore.csvData.length - collectionStore.images.length > 5) {
+    return '(' + collectionStore.images.length + '/' + collectionStore.csvData.length + ')';
+  }
+  const uploadedImagesNames = collectionStore.images.map(img => img.name);
+  return collectionStore.csvData
+    .filter(item => !uploadedImagesNames.includes(item.image))
+    .map(item => item.image)
+    .join(', ');
+});
 
 const imagesNames = computed<string>(() => {
   return collectionStore.csvData
