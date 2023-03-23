@@ -1,8 +1,8 @@
 <template>
   <div class="container flex flex-col justify-center items-center">
     <div class="w-full text-center">
-      <h1 class="mb-6">{{ $t('login.resetPassword') }}</h1>
-      <p class="mb-7">{{ $t('login.enterNewPassword') }}</p>
+      <h1 class="mb-6">{{ $t('auth.login.resetPassword') }}</h1>
+      <p class="mb-7">{{ $t('auth.login.enterNewPassword') }}</p>
 
       <FormPassword
         class="mx-auto max-w-lg text-left"
@@ -24,7 +24,7 @@ definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: t('login.resetPassword'),
+  title: t('auth.login.resetPassword'),
 });
 
 onBeforeMount(() => {

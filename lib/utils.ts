@@ -1,3 +1,4 @@
+import { LocationQueryValue } from 'vue-router';
 import stg from '../config/staging';
 import dev from '../config/development';
 import prod from '../config/production';
@@ -16,8 +17,13 @@ export function getAppConfig(env?: string) {
 /**
  * Analytics Matomo
  */
-export function tractEvent(eventCategory: string, eventAction: string, eventName: string, eventValue?: number) {
-  if (!!window._paq) {
+export function tractEvent(
+  eventCategory: string,
+  eventAction: string,
+  eventName: string,
+  eventValue?: number
+) {
+  if (window._paq) {
     window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
   }
 }
@@ -72,6 +78,9 @@ export function hideSecret(source: string, partLength: number = 4): string {
     ? '•'.repeat(source.length - partLength) +
         source.slice(source.length - partLength, source.length)
     : source;
+}
+export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
+  return s ? s.toString() : '';
 }
 
 /**
@@ -145,6 +154,22 @@ export function datetimeToDateAndTime(datetime: string): string {
   };
   return date.toLocaleDateString('en-us', options);
 }
+/** Timestamp in seconds to DateTime */
+export function timestampToDateAndTime(timestamp: number): string {
+  if (!timestamp) return '';
+
+  const date = new Date(timestamp * 1000);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  };
+  return date.toLocaleDateString('en-us', options);
+}
 
 /**
  * Calculate expiration date on CRUST
@@ -194,13 +219,12 @@ export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | a
     // Beautify API error
     const err = error as ApiError;
     if (err.errors && Array.isArray(err.errors)) {
-      return err.errors
-        .map(e =>
-          singleErrorMessage(window.$i18n, e.message, takeFirstDigitsFromNumber(e.statusCode))
-        )
-        .join(', ');
+      const errorMessages = err.errors.map(e =>
+        singleErrorMessage(window.$i18n, e.message, e.statusCode)
+      );
+      return [...new Set(errorMessages)].join('\n');
     } else if (err.message) {
-      return singleErrorMessage(window.$i18n, err.message, err.status);
+      return singleErrorMessage(window.$i18n, err.message, err.code || err.status);
     }
   } else if (error instanceof ReferenceError || error instanceof TypeError) {
     return window.$i18n.te(`error.${error.message}`)
@@ -212,9 +236,12 @@ export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | a
 }
 
 /** Translate single error message */
-function singleErrorMessage($i18n: i18nType, message: string, code: number = 0) {
+function singleErrorMessage($i18n: i18nType, message: string, statusCode: number = 0) {
+  const code = takeFirstDigitsFromNumber(statusCode);
   if ($i18n.te(`error.${message}`)) {
     return $i18n.t(`error.${message}`);
+  } else if ($i18n.te(`error.${statusCode}`)) {
+    return $i18n.t(`error.${statusCode}`);
   } else if (code >= 500) {
     return $i18n.t('error.DEFAULT_SYSTEM_ERROR');
   } else if (code >= 400) {
@@ -260,6 +287,7 @@ export function canOpenColumnCell(path: EventTarget[]) {
 export function copyToClipboard(text: string) {
   navigator.clipboard.writeText(text).then(
     () => {
+      if (!window.$message) return;
       /* Resolved - text copied to clipboard successfully */
       if (window.$i18n?.te('dashboard.clipboard.copied')) {
         window.$message.success(window.$i18n.t('dashboard.clipboard.copied'));
@@ -268,6 +296,7 @@ export function copyToClipboard(text: string) {
       }
     },
     () => {
+      if (!window.$message) return;
       /* Rejected - text failed to copy to the clipboard */
       if (window.$i18n?.te('dashboard.clipboard.error')) {
         window.$message.success(window.$i18n.t('dashboard.clipboard.error'));
@@ -312,3 +341,11 @@ export function isCacheExpired(key: string) {
   }
   return true;
 }
+
+/**
+ * Compare arrays
+ */
+export const compareArrays = (a: Array<any>, b: Array<any>) => {
+  const bs = b.sort();
+  return a.length === b.length && a.sort().every((element, index) => element === bs[index]);
+};

@@ -60,7 +60,7 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
-import { NButton, NDropdown, NEllipsis, NSpace } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis, NSpace, NTooltip, useMessage } from 'naive-ui';
 
 const props = defineProps({
   type: {
@@ -73,6 +73,7 @@ const props = defineProps({
 
 const { downloadFile } = useFile();
 const $i18n = useI18n();
+const message = useMessage();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const showModalW3Warn = ref<boolean>(false);
@@ -82,6 +83,12 @@ const modalIpnsPublishVisible = ref<boolean>(false);
 const tableRef = ref<NDataTableInst | null>(null);
 const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
+const TableEllipsis = resolveComponent('TableEllipsis');
+const TableLink = resolveComponent('TableLink');
+const StorageFileStatus = resolveComponent('StorageFileStatus');
+
+/** Polling */
+let fileInterval: any = null as any;
 
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 const checkedRowKeys = ref<Array<string | number>>([]);
@@ -111,7 +118,7 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
       props: {
         onClick: () => {
-          drawerFileDetailsVisible.value = true;
+          onFileOpen();
         },
       },
     },
@@ -142,7 +149,9 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       show: props.type === TableFilesType.BUCKET,
       props: {
         onClick: () => {
-          modalIpnsPublishVisible.value = true;
+          if (bucketItem.CID) {
+            modalIpnsPublishVisible.value = true;
+          }
         },
       },
     },
@@ -159,8 +168,30 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
   ];
 };
 
+function renderOption({ node, option }: DropdownRenderOption) {
+  if (option.key === 'ipns' && option.disabled) {
+    return h(
+      NTooltip,
+      { keepAliveOnHover: false, style: { width: 'max-content' } },
+      {
+        trigger: () => [node],
+        default: () => $i18n.t('storage.ipns.disabled'),
+      }
+    );
+  }
+  return [node];
+}
+
 /** Available columns - show/hide column */
-const selectedColumns = ref(['name', 'CID', 'link', 'size', 'createTime', 'contentType']);
+const selectedColumns = ref([
+  'name',
+  'CID',
+  'link',
+  'size',
+  'createTime',
+  'contentType',
+  'fileStatus',
+]);
 const availableColumns = ref([
   { value: 'name', label: $i18n.t('storage.fileName') },
   { value: 'CID', label: $i18n.t('storage.fileCid'), hidden: props.type !== TableFilesType.BUCKET },
@@ -172,6 +203,7 @@ const availableColumns = ref([
   { value: 'size', label: $i18n.t('storage.fileSize') },
   { value: 'createTime', label: $i18n.t('dashboard.created') },
   { value: 'contentType', label: $i18n.t('storage.contentType') },
+  { value: 'fileStatus', label: $i18n.t('storage.fileStatusName') },
 ]);
 
 /** Columns */
@@ -185,7 +217,7 @@ const columns = computed(() => {
       title: $i18n.t('storage.fileName'),
       key: 'name',
       className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       minWidth: 200,
       render(row: BucketItemInterface) {
         return [
@@ -212,31 +244,9 @@ const columns = computed(() => {
       className: {
         hidden: !selectedColumns.value.includes('CID') || props.type !== TableFilesType.BUCKET,
       },
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        if (row.CID) {
-          return [
-            h(
-              'div',
-              { class: 'flex' },
-              {
-                default: () => [
-                  h(
-                    'span',
-                    { class: 'text-body whitespace-nowrap' },
-                    { default: () => truncateCid(row.CID || '') }
-                  ),
-                  h(
-                    'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.CID || '') },
-                    h('span', { class: 'icon-copy text-body' }, {})
-                  ),
-                ],
-              }
-            ),
-          ];
-        }
-        return '';
+        return h(TableEllipsis, { text: row.CID }, '');
       },
     },
     {
@@ -245,42 +255,16 @@ const columns = computed(() => {
       className: {
         hidden: !selectedColumns.value.includes('link') || props.type !== TableFilesType.BUCKET,
       },
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        if (row.CID) {
-          return [
-            h(
-              'div',
-              { class: 'flex' },
-              {
-                default: () => [
-                  h(
-                    'a',
-                    { href: row.link, target: '_blank' },
-                    h(
-                      NEllipsis,
-                      { class: 'text-body align-bottom', 'line-clamp': 1 },
-                      { default: () => row.link }
-                    )
-                  ),
-                  h(
-                    'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.link) },
-                    h('span', { class: 'icon-copy text-body' }, {})
-                  ),
-                ],
-              }
-            ),
-          ];
-        }
-        return '';
+        return h(TableLink, { link: row.link }, '');
       },
     },
     {
       title: $i18n.t('storage.fileSize'),
       key: 'size',
       className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('size') }],
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
@@ -295,19 +279,19 @@ const columns = computed(() => {
         ON_COLUMN_CLICK_OPEN_CLASS,
         { hidden: !selectedColumns.value.includes('createTime') },
       ],
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
       },
     },
     {
-      title: $i18n.t('storage.contentType'),
       key: 'contentType',
+      title: $i18n.t('storage.contentType'),
       className: [
         ON_COLUMN_CLICK_OPEN_CLASS,
         { hidden: !selectedColumns.value.includes('contentType') },
       ],
-      sorter: props.type === TableFilesType.DEPLOYMENT ? 'default' : false,
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (row.contentType) {
           return h('span', {}, row.contentType);
@@ -316,7 +300,22 @@ const columns = computed(() => {
       },
     },
     {
-      title: $i18n.t('general.actions'),
+      key: 'fileStatus',
+      title: $i18n.t('general.status'),
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        { hidden: !selectedColumns.value.includes('fileStatus') },
+      ],
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
+      render(row: BucketItemInterface) {
+        if (row.fileStatus) {
+          return h(StorageFileStatus, { fileStatus: row.fileStatus }, '');
+        }
+        return '';
+      },
+    },
+    {
+      title: '',
       key: 'actions',
       align: 'right',
       className: ['!py-0', { hidden: props.type === TableFilesType.DEPLOYMENT }],
@@ -325,14 +324,15 @@ const columns = computed(() => {
           NDropdown,
           {
             options: dropdownOptions(row),
+            renderOption,
             trigger: 'click',
           },
           {
             default: () =>
               h(
                 NButton,
-                { size: 'small', quaternary: true },
-                { default: () => h('span', { class: 'icon-more text-lg' }, {}) }
+                { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
               ),
           }
         );
@@ -406,8 +406,13 @@ function onItemOpen(row: BucketItemInterface) {
 
 /** Show file details if actions are enabled */
 function onFileOpen() {
-  if (props.actions) {
+  if (
+    currentRow.value.type === BucketItemType.FILE &&
+    currentRow.value.fileStatus > FileStatus.UPLOADED_TO_S3
+  ) {
     drawerFileDetailsVisible.value = true;
+  } else {
+    message.warning($i18n.t('storage.file.stillUploading'));
   }
 }
 
@@ -435,10 +440,14 @@ onMounted(() => {
    * Load data on mounted
    */
   setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(_ => {
-      bucketStore.getDirectoryContent();
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await bucketStore.getDirectoryContent();
+      checkUnfinishedFiles();
     });
   }, 100);
+});
+onUnmounted(() => {
+  clearInterval(fileInterval);
 });
 
 /** Sort column - fetch directory content with order params  */
@@ -544,16 +553,36 @@ async function getDirectoryContent(
   orderBy?: string,
   order?: string
 ) {
-  await bucketStore.fetchDirectoryContent(
+  clearInterval(fileInterval);
+
+  await bucketStore.fetchDirectoryContent({
     bucketUuid,
     folderId,
     page,
-    PAGINATION_LIMIT,
-    bucketStore.folder.search,
+    limit: PAGINATION_LIMIT,
+    search: bucketStore.folder.search,
     orderBy,
-    order
-  );
+    order,
+  });
 
+  checkUnfinishedFiles();
   currentPage.value = page;
+}
+
+/** Files polling */
+function checkUnfinishedFiles() {
+  if (!hasUnfinishedFiles()) {
+    return;
+  }
+
+  fileInterval = setInterval(async () => {
+    await bucketStore.fetchDirectoryContent({ loader: false });
+    if (!hasUnfinishedFiles()) {
+      clearInterval(fileInterval);
+    }
+  }, 30000);
+}
+function hasUnfinishedFiles(): boolean {
+  return bucketStore.folder.items.some(file => file.fileStatus < FileStatus.UPLOADED_TO_IPFS);
 }
 </script>

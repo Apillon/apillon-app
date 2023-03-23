@@ -16,24 +16,17 @@ const dataStore = useDataStore();
 const { clearAll } = useStore();
 
 const componentSelectKey = ref(0);
-const loading = ref(false);
+const loading = ref<boolean>(false);
 
-onBeforeMount(() => {
-  if (!dataStore.hasProjects) {
-    dataStore.fetchProjects(false);
+onMounted(() => {
+  Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    await dataStore.getProjects();
 
-    /** Fetch selected project data(get myRole_id_onProject) */
-    Promise.all(Object.values(dataStore.promises)).then(_ => {
-      if (dataStore.hasProjects) {
-        dataStore.fetchProject();
-      }
-    });
-  } else if (!dataStore.project.active?.id) {
     /** Fetch active project data(get myRole_id_onProject) */
-    Promise.all(Object.values(dataStore.promises)).then(_ => {
-      dataStore.fetchProject();
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await dataStore.getProject(dataStore.project.selected);
     });
-  }
+  });
 });
 
 /** Watcher - project change */

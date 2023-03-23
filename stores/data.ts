@@ -22,6 +22,11 @@ export const useDataStore = defineStore('data', {
       projects: null as any,
       buckets: null as any,
       websites: null as any,
+      collections: null as any,
+    },
+    service: {
+      loading: false,
+      search: '',
     },
     services: {
       authentication: [] as Array<ServiceInterface>,
@@ -107,6 +112,13 @@ export const useDataStore = defineStore('data', {
       const key: ServiceTypeName = ServiceTypeNames[type];
       return Array.isArray(this.services[key]) && this.services[key].length > 0;
     },
+    hasAllServices(): boolean {
+      return !Object.entries(ServiceTypeNames)
+        .map(([serviceType, typeName]) => {
+          return Array.isArray(this.services[typeName]) && this.services[typeName].length > 0;
+        })
+        .includes(false);
+    },
 
     hasInstructions(key: string) {
       return (
@@ -114,6 +126,19 @@ export const useDataStore = defineStore('data', {
         Array.isArray(this.instructions[key]) &&
         this.instructions[key].length > 0
       );
+    },
+
+    getServiceCacheKey(type?: number): string {
+      switch (type) {
+        case ServiceType.AUTHENTICATION:
+          return LsCacheKeys.SERVICE_AUTH;
+        case ServiceType.COPMUTING:
+          return LsCacheKeys.SERVICE_COMPUTING;
+        case ServiceType.STORAGE:
+          return LsCacheKeys.SERVICE_STORAGE;
+        default:
+          return LsCacheKeys.SERVICES;
+      }
     },
 
     /**
@@ -133,24 +158,48 @@ export const useDataStore = defineStore('data', {
       return await this.fetchProject(projectId);
     },
 
+    /** GET Project quota, if current value is undefined  */
+    async getProjectQuota() {
+      if (this.project.quotaReached === undefined) {
+        await this.fetchProjectsQuota();
+      }
+    },
+
     /** Services */
     async getAllServices() {
-      const services = await this.fetchServices();
+      if (!this.hasAllServices() || isCacheExpired(LsCacheKeys.SERVICES)) {
+        const services = await this.fetchServices();
 
-      Object.entries(ServiceTypeNames).forEach(([serviceType, typeName]) => {
-        this.services[typeName] =
-          services.filter(service => service.serviceType_id === parseInt(serviceType)) ||
-          ([] as Array<ServiceInterface>);
-      });
+        Object.entries(ServiceTypeNames).forEach(([serviceType, typeName]) => {
+          this.services[typeName] =
+            services.filter(service => service.serviceType_id === parseInt(serviceType)) ||
+            ([] as Array<ServiceInterface>);
+        });
+      }
     },
     async getAuthServices() {
-      this.services.authentication = await this.fetchServices(ServiceType.AUTHENTICATION);
+      if (
+        !this.hasServices(ServiceType.AUTHENTICATION) ||
+        (isCacheExpired(LsCacheKeys.SERVICE_AUTH) && isCacheExpired(LsCacheKeys.SERVICES))
+      ) {
+        this.services.authentication = await this.fetchServices(ServiceType.AUTHENTICATION);
+      }
     },
     async getStorageServices() {
-      this.services.storage = await this.fetchServices(ServiceType.STORAGE);
+      if (
+        !this.hasServices(ServiceType.STORAGE) ||
+        (isCacheExpired(LsCacheKeys.SERVICE_STORAGE) && isCacheExpired(LsCacheKeys.SERVICES))
+      ) {
+        this.services.storage = await this.fetchServices(ServiceType.STORAGE);
+      }
     },
     async getComputingServices() {
-      this.services.computing = await this.fetchServices(ServiceType.COPMUTING);
+      if (
+        !this.hasServices(ServiceType.COPMUTING) ||
+        (isCacheExpired(LsCacheKeys.SERVICE_COMPUTING) && isCacheExpired(LsCacheKeys.SERVICES))
+      ) {
+        this.services.computing = await this.fetchServices(ServiceType.COPMUTING);
+      }
     },
 
     /**
@@ -165,19 +214,23 @@ export const useDataStore = defineStore('data', {
         this.promises.projects = req;
         const res = await req;
 
-        this.project.items = res.data.items.map((project: ProjectInterface) => {
+        const projects = res.data.items.map((project: ProjectInterface) => {
           return {
             ...project,
             value: project.id,
             label: project.name,
           };
         });
+        this.project.items = projects;
         const hasProjects = res.data.total > 0;
 
         /* If current project is not selected, take first one */
         if (this.currentProjectId === 0 && hasProjects) {
           this.setCurrentProject(this.project.items[0].id);
         }
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.PROJECTS, Date.now().toString());
 
         /** If user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
         if (redirectToDashboard && !hasProjects) {
@@ -186,7 +239,7 @@ export const useDataStore = defineStore('data', {
           router.push({ name: 'dashboard' });
         }
 
-        return res.data.items;
+        return projects;
       } catch (error) {
         /** Clear promise */
         this.promises.buckets = null;
@@ -196,7 +249,7 @@ export const useDataStore = defineStore('data', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
-      return null;
+      return [];
     },
 
     async fetchProject(projectId?: number) {
@@ -205,6 +258,9 @@ export const useDataStore = defineStore('data', {
           endpoints.project(projectId || this.currentProjectId)
         );
         this.project.active = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.PROJECT, Date.now().toString());
 
         return res.data;
       } catch (error) {
@@ -233,23 +289,32 @@ export const useDataStore = defineStore('data', {
       if (!this.hasProjects) {
         await this.fetchProjects();
       }
+      this.service.loading = true;
 
       try {
         const params: Record<string, string | number> = {
           project_id: this.currentProjectId,
+          ...PARAMS_ALL_ITEMS,
         };
         if (type) {
           params.serviceType_id = type;
         }
-        const res = await $api.get<ServicesResponse>(endpoints.services, params);
+        const res = await $api.get<ServicesResponse>(endpoints.services(), params);
+        this.service.loading = false;
 
-        return res.data.items.map((service: ServiceInterface, key: number) => {
-          return { key, ...service };
-        });
+        /** Save timestamp to SS */
+        sessionStorage.setItem(this.getServiceCacheKey(type), Date.now().toString());
+
+        return res.data.items
+          .filter(item => item.status === 5)
+          .map((service: ServiceInterface, key: number) => {
+            return { key, ...service };
+          });
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      this.service.loading = false;
       return [] as Array<ServiceInterface>;
     },
 

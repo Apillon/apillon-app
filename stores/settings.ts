@@ -6,6 +6,8 @@ const dataStore = useDataStore();
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
     apiKeys: [] as Array<ApiKeyInterface>,
+    discordLink: '' as string,
+    oauthLinks: [] as Array<OauthLinkInterface>,
     users: [] as Array<ProjectUserInterface>,
   }),
   getters: {
@@ -20,6 +22,9 @@ export const useSettingsStore = defineStore('settings', {
         return state.users.find(user => user.user_id === authStore.userId);
       }
       return {} as ProjectUserInterface;
+    },
+    hasOauthLinks(state) {
+      return Array.isArray(state.oauthLinks) && state.oauthLinks.length > 0;
     },
   },
   actions: {
@@ -54,6 +59,22 @@ export const useSettingsStore = defineStore('settings', {
       if (!this.hasApiKeys || isCacheExpired(LsCacheKeys.API_KEYS)) {
         await this.fetchApiKeys();
       }
+    },
+
+    /** Oauth Links */
+    async getOauthLinks(): Promise<any> {
+      if (!this.hasOauthLinks || isCacheExpired(LsCacheKeys.OAUTH_LINKS)) {
+        await this.fetchOauthLinks();
+      }
+      return this.oauthLinks;
+    },
+
+    /** Discord */
+    async getDiscordLink(): Promise<string> {
+      if (!this.discordLink || isCacheExpired(LsCacheKeys.DISCORD_LINK)) {
+        await this.fetchDiscordLink();
+      }
+      return this.discordLink;
     },
 
     /**
@@ -97,6 +118,40 @@ export const useSettingsStore = defineStore('settings', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+    },
+
+    /** Oauth Links */
+    async fetchOauthLinks(): Promise<any> {
+      try {
+        const res = await $api.get<OauthLinksResponse>(endpoints.oauthLinks);
+        this.oauthLinks = res.data.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.OAUTH_LINKS, Date.now().toString());
+      } catch (error) {
+        this.oauthLinks = [];
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return this.oauthLinks;
+    },
+
+    /** Discord */
+    async fetchDiscordLink(): Promise<string> {
+      try {
+        const res = await $api.get<DiscordLinkResponse>(endpoints.discordLink);
+        this.discordLink = res.data.url;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.DISCORD_LINK, Date.now().toString());
+      } catch (error) {
+        this.discordLink = '';
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return this.discordLink;
     },
   },
 });

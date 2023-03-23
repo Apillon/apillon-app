@@ -13,7 +13,7 @@ const props = defineProps({
   type: {
     type: String,
     validator: (type: string) =>
-      ['apiKey', 'bucket', 'bucketContent', 'directory', 'file', 'ipns'].includes(type),
+      ['apiKey', 'bucket', 'bucketContent', 'directory', 'file', 'ipns', 'service'].includes(type),
     required: true,
   },
 });
@@ -58,6 +58,8 @@ function getUrl(type: string, id: number) {
       return endpoints.storageFileDelete(bucketStore.bucketUuid, id);
     case 'ipns':
       return endpoints.ipns(bucketStore.selected, id);
+    case 'service':
+      return endpoints.services(id);
     default:
       return endpoints.file(id);
   }

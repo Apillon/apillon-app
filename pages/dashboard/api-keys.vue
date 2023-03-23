@@ -6,9 +6,7 @@
           <h4>{{ $t('dashboard.apiKey.title') }}</h4>
         </slot>
 
-        <template #info>
-          <span class="icon-info"></span>
-        </template>
+        <template #info> </template>
 
         <template #submenu>
           <MenuProjectSettings />
@@ -68,17 +66,10 @@ const showDrawerGenerateApiKey = () => {
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     /** Fetch all services if there is any service type unloaded */
-    if (
-      !dataStore.hasServices(ServiceType.AUTHENTICATION) ||
-      !dataStore.hasServices(ServiceType.STORAGE) ||
-      !dataStore.hasServices(ServiceType.COPMUTING)
-    ) {
-      await dataStore.getAllServices();
-    }
+    await dataStore.getAllServices();
+
     /** Fetch all api keys if they are not stored in settings store */
-    if (!settingsStore.hasApiKeys) {
-      await settingsStore.fetchApiKeys();
-    }
+    await settingsStore.getApiKeys();
 
     pageLoading.value = false;
   });

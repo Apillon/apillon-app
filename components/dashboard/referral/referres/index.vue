@@ -36,7 +36,7 @@
       </h4>
 
       <p class="font-button text-sm text-body mb-6">
-        {{ $t('referral.linkDesc') }}
+        {{ $t('referral.referres.info') }}
       </p>
 
       <div

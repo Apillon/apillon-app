@@ -3,43 +3,28 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('nav.hosting') }}</h1>
+          <h1>{{ $t('dashboard.nav.hosting') }}</h1>
         </slot>
 
         <template #info>
           <n-space :size="32" align="center">
-            <button
-              v-if="$i18n.te('w3Warn.hosting.new')"
-              class="align-sub"
-              @click="showModalW3Warn = true"
-            >
-              <span class="icon-info text-xl"></span>
-            </button>
+            <IconInfo v-if="$i18n.te('w3Warn.hosting.new')" @click="showModalW3Warn = true" />
           </n-space>
         </template>
       </Heading>
     </template>
     <slot>
       <TableHosting v-if="websiteStore.hasWebsites" :websites="websiteStore.items" />
-      <template v-else>
-        <div
-          class="flex flex-col items-center justify-center px-6 py-4"
-          style="min-height: calc(100vh - 270px)"
-        >
-          <div class="mb-4">
-            <NuxtIcon name="storage/empty" class="icon-auto" filled />
-          </div>
-          <div class="mb-10 text-center">
-            <h3 class="font-bold">{{ $t('hosting.web3Hosting') }}</h3>
-            <p class="text-body">{{ $t('hosting.web3HostingEnable') }}</p>
-          </div>
-          <div>
-            <Btn type="primary" @click="createNewWebsite">
-              {{ $t('hosting.website.addFirst') }}
-            </Btn>
-          </div>
-        </div>
-      </template>
+      <Empty
+        v-else
+        :title="$t('hosting.web3Hosting')"
+        :info="$t('hosting.web3HostingEnable')"
+        icon="storage/empty"
+      >
+        <Btn type="primary" @click="createNewWebsite">
+          {{ $t('hosting.website.addFirst') }}
+        </Btn>
+      </Empty>
 
       <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
         {{ $t('w3Warn.hosting.new') }}
@@ -62,7 +47,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalNewWebsite = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('nav.hosting'),
+  title: $i18n.t('dashboard.nav.hosting'),
 });
 
 onMounted(() => {

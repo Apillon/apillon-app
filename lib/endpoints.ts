@@ -1,7 +1,11 @@
 const Endpoints = {
+  /**
+   * AUTH
+   */
   /** Auth */
-  walletMsg: '/auth/wallet-auth-msg',
-  loginWallet: '/auth/loginWallet',
+  walletMsg: '/users/auth-msg',
+  walletLogin: '/users/login/wallet',
+  walletConnect: '/users/wallet-connect',
 
   /** User */
   me: '/users/me',
@@ -10,6 +14,10 @@ const Endpoints = {
   validateMail: '/users/validate-email',
   passwordReset: '/users/password-reset',
   passwordResetRequest: '/users/password-reset-request',
+
+  /**
+   * Dashboard
+   */
 
   /** Project */
   projects: '/projects',
@@ -28,18 +36,19 @@ const Endpoints = {
     return `/projects/user/${id}`;
   },
 
-  /** File */
-  file: (key?: number) => {
-    return key ? `/files/${key}` : '/files';
-  },
-
   /** Services */
-  services: '/services/',
+  services: (id?: number) => {
+    return id ? `/services/${id}` : '/services';
+  },
 
   /** Instructions */
   instructions: (key?: string) => {
     return key ? `/instructions/${key}` : '/instructions';
   },
+
+  /**
+   * Storage
+   */
 
   /** Bucket */
   buckets: '/buckets/',
@@ -62,6 +71,11 @@ const Endpoints = {
     return id ? `/directories/${id}` : '/directories';
   },
   directoryContent: '/directories/directory-content',
+
+  /** File */
+  file: (key?: number) => {
+    return key ? `/files/${key}` : '/files';
+  },
 
   /** Storage */
   storage: '/storage/',
@@ -99,6 +113,10 @@ const Endpoints = {
     return `/buckets/${bucketId}/ipns/${id}/publish`;
   },
 
+  /**
+   * Hosting
+   */
+
   /** Website */
   website: '/storage/hosting/website',
   websites: (id?: number) => {
@@ -117,6 +135,35 @@ const Endpoints = {
     return `/storage/hosting/websites/${websiteId}/deployments`;
   },
 
+  /**
+   * NFT
+   */
+  nftCheckTransactionsStatus: '/nfts/check-transactions-status',
+  nftDeploy: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/deploy`;
+  },
+
+  /** Collection */
+  collections: (id?: number) => {
+    return id ? `/nfts/collections/${id}` : '/nfts/collections';
+  },
+  collectionTransactions: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/transactions`;
+  },
+  collectionSetBaseUri: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/setBaseUri`;
+  },
+  collectionTransferOwnership: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/transferOwnership`;
+  },
+  collectionMint: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/mint`;
+  },
+
+  /**
+   * Project settings
+   */
+
   /** Api Keys */
   apiKey: (key?: number) => {
     return key ? `/api-keys/${key}` : '/api-keys';
@@ -127,6 +174,14 @@ const Endpoints = {
   apiKeyRoles: (key: number) => {
     return `/api-keys/${key}/roles`;
   },
+
+  /** Oauth links */
+  oauthLinks: '/users/oauth-links/',
+
+  /** Discord */
+  discordLink: '/users/discord-url/',
+  discordConnect: '/users/discord-connect/',
+  discordDisconnect: '/users/discord-disconnect/',
 
   /** Billing */
   billing: '/billing/',

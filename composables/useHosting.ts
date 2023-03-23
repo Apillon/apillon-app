@@ -37,14 +37,14 @@ export default function useHosting() {
           bucketStore.active = website.productionBucket;
           bucketStore.setBucketId(website.productionBucket.id);
 
-          /** Deployments pooling */
+          /** Deployments polling */
           checkUnfinishedDeployments(deploymentStore.production, env);
         } else if (env === DeploymentEnvironment.STAGING) {
           /** Show files from staging bucket */
           bucketStore.active = website.stagingBucket;
           bucketStore.setBucketId(website.stagingBucket.id);
 
-          /** Deployments pooling */
+          /** Deployments polling */
           checkUnfinishedDeployments(deploymentStore.staging, env);
         } else {
           /** Show files from main bucket */
@@ -53,7 +53,7 @@ export default function useHosting() {
         }
 
         /** Fetch directory content for bucket */
-        bucketStore.fetchDirectoryContent(bucketStore.active.bucket_uuid);
+        bucketStore.fetchDirectoryContent({ bucketUuid: bucketStore.active.bucket_uuid });
 
         if (website.bucket.uploadedSize === 0) {
           bucketStore.uploadActive = true;

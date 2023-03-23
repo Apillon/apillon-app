@@ -3,14 +3,22 @@
     <template #heading>
       <Heading>
         <slot>
-          <h4>{{ $t('nav.storage') }}</h4>
+          <h4>{{ $t('dashboard.nav.storage') }}</h4>
         </slot>
 
         <template #info>
           <n-space :size="32" align="center">
-            <button class="align-sub" @click="showModalW3Warn = true">
-              <span class="icon-info text-xl"></span>
-            </button>
+            <IconInfo @click="showModalW3Warn = true" />
+            <n-button
+              class="align-sub px-2"
+              size="small"
+              type="tertiary"
+              quaternary
+              round
+              @click="showModalW3Warn = true"
+            >
+              <span class="icon-info text-2xl"></span>
+            </n-button>
           </n-space>
         </template>
 
@@ -25,20 +33,12 @@
         :buckets="bucketStore.destroyed"
         :deleted="true"
       />
-      <template v-else>
-        <div
-          class="flex flex-col items-center justify-center px-6 py-4"
-          style="min-height: calc(100vh - 250px)"
-        >
-          <div class="mb-4">
-            <NuxtIcon name="storage/empty" class="icon-auto" filled />
-          </div>
-          <div class="mb-10 text-center">
-            <h3 class="font-bold">{{ $t('general.nothingHere') }}</h3>
-            <p class="text-body">{{ $t('storage.bucket.destroyedBuckets') }}</p>
-          </div>
-        </div>
-      </template>
+      <Empty
+        v-else
+        :title="$t('general.nothingHere')"
+        :info="$t('storage.bucket.destroyedBuckets')"
+        icon="storage/empty"
+      />
 
       <!-- W3Warn: destroyed buckets -->
       <W3Warn v-model:show="showModalW3Warn">
@@ -56,7 +56,7 @@ const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

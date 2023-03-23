@@ -108,6 +108,8 @@ declare global {
   interface BucketItemInterface {
     CID: string | null;
     contentType: string | null;
+    fileStatus: number;
+    file_uuid?: string;
     id: number;
     name: string;
     link: string;
@@ -115,7 +117,6 @@ declare global {
     type: number;
     createTime: string;
     updateTime: string;
-    file_uuid?: string;
     parentDirectoryId?: number;
   }
   interface FormFolder {
@@ -125,6 +126,18 @@ declare global {
   interface CreateFolderResponse extends GeneralResponse<BucketItemInterface> {}
   interface BucketItemResponse extends GeneralResponse<BucketItemInterface> {}
   interface FolderResponse extends GeneralItemsResponse<BucketItemInterface> {}
+
+  type FetchDirectoryParams = {
+    bucketUuid?: string;
+    folderId?: number;
+    page?: number;
+    limit?: number;
+    search?: string;
+    orderBy?: string;
+    order?: string;
+    markedForDeletion?: boolean;
+    loader?: boolean;
+  };
 
   /**
    * IPNS

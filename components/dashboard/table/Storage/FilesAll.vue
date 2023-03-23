@@ -11,7 +11,7 @@
           clearable
         >
           <template #prefix>
-            <span class="icon-search text-xl"></span>
+            <span class="icon-search text-2xl"></span>
           </template>
         </n-input>
       </div>
@@ -63,40 +63,42 @@ const fileStatuses = ref<Array<NSelectOption>>([
   {
     value: FileUploadRequestFileStatus.SIGNED_URL_FOR_UPLOAD_GENERATED,
     label: $i18n.t(
-      `storage.fileStatus.${FileUploadRequestFileStatus.SIGNED_URL_FOR_UPLOAD_GENERATED}`
+      `storage.file.status.${FileUploadRequestFileStatus.SIGNED_URL_FOR_UPLOAD_GENERATED}`
     ),
   },
   {
     value: FileUploadRequestFileStatus.UPLOADED_TO_S3,
-    label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.UPLOADED_TO_S3}`),
+    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.UPLOADED_TO_S3}`),
   },
   {
     value: FileUploadRequestFileStatus.UPLOADED_TO_IPFS,
-    label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.UPLOADED_TO_IPFS}`),
+    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.UPLOADED_TO_IPFS}`),
   },
   {
     value: FileUploadRequestFileStatus.PINNED_TO_CRUST,
-    label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.PINNED_TO_CRUST}`),
+    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.PINNED_TO_CRUST}`),
   },
   {
     value: FileUploadRequestFileStatus.UPLOAD_COMPLETED,
-    label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.UPLOAD_COMPLETED}`),
+    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.UPLOAD_COMPLETED}`),
   },
   {
     value: FileUploadRequestFileStatus.ERROR_UPLOADING_TO_IPFS,
-    label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.ERROR_UPLOADING_TO_IPFS}`),
+    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.ERROR_UPLOADING_TO_IPFS}`),
   },
   {
     value: FileUploadRequestFileStatus.ERROR_PINING_TO_CRUST,
-    label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.ERROR_PINING_TO_CRUST}`),
+    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.ERROR_PINING_TO_CRUST}`),
   },
   {
     value: FileUploadRequestFileStatus.ERROR_FILE_NOT_EXISTS_ON_S3,
-    label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.ERROR_FILE_NOT_EXISTS_ON_S3}`),
+    label: $i18n.t(
+      `storage.file.status.${FileUploadRequestFileStatus.ERROR_FILE_NOT_EXISTS_ON_S3}`
+    ),
   },
   {
     value: FileUploadRequestFileStatus.ERROR_BUCKET_FULL,
-    label: $i18n.t(`storage.fileStatus.${FileUploadRequestFileStatus.ERROR_BUCKET_FULL}`),
+    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.ERROR_BUCKET_FULL}`),
   },
 ]);
 async function handleFilesStatusChange() {
@@ -136,7 +138,7 @@ const createColumns = (): NDataTableColumns<FileUploadInterface> => {
           'span',
           { class: 'text-body' },
           {
-            default: () => $i18n.t(`storage.fileStatus.${row.fileStatus}`),
+            default: () => $i18n.t(`storage.file.status.${row.fileStatus}`),
           }
         );
       },

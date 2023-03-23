@@ -155,14 +155,13 @@ async function register() {
       refCode: query.REF,
     });
 
-    authStore.setUserToken(res.data.token);
-    authStore.changeUser(res.data);
+    authStore.saveUser(res.data);
 
     /** Track Registration created */
     tractEvent('registration', 'registration_done', 'Password set');
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-    await dataStore.fetchProjects(true);
+    dataStore.project.items = await dataStore.fetchProjects(true);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -180,7 +179,7 @@ async function resetPassword() {
     });
 
     if (res.data) {
-      message.success($i18n.t('login.passwordReplaced'));
+      message.success($i18n.t('auth.login.passwordReplaced'));
       emit('submitSuccess');
     }
   } catch (error) {

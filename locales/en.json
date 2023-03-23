@@ -1,20 +1,96 @@
 {
+  "auth": {
+    "footer": {
+      "support": "Support",
+      "docs": "Docs",
+      "terms": "Terms",
+      "privacy": "Privacy"
+    },
+    "login": {
+      "description": "Web3 will not build itself. Go and add your block.",
+      "dontHaveAccount": "I don't have Apillon account yet?",
+      "enterNewPassword": "Enter new password",
+      "forgotPassword": "Did you forgot your password?",
+      "magicLink": "Send me a Magic Link",
+      "orUseEmail": "or log in using email",
+      "passwordReplaced": "Your password has been replaced",
+      "projectName": "Project_name",
+      "resetPassword": "Reset password",
+      "title": "Log in to Apillon",
+      "wallet": "Log in with Wallet",
+      "withEmail": "login with email"
+    },
+    "onboarding": {
+      "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
+      "buildDemo": "OK, let's do demo first",
+      "buildWeb3": "“Build versatile and high-performing Web3 solutions with Apillon. Harness the power of blockchain technology and create next-gen dapps through simple yet robust APIs”",
+      "createWeb3Project": "Create Web3 project",
+      "demoProject": "Demo project",
+      "getStarted": "Get started",
+      "goToDocs": "Go to Docs",
+      "loader": "Put your Web3 hat on, your dashboard is getting ready.",
+      "skip": "Skip to the dashboard",
+      "startBuilding": "Start building",
+      "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
+      "web3Gateway": "Your Gateway to Web3",
+      "web3ProjectName": "Your  Web3 project needs a name"
+    },
+    "signup": {
+      "alreadyHaveAccount": "Already have an account?",
+      "checkEmail": "Check your e-mail",
+      "checkInbox": "Crickets in your inbox?",
+      "continueWithAT": "Continue with Apillon",
+      "description": "Build your first Web3 application with Apillon. Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
+      "emailConfirmed": "Email confirmed",
+      "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
+      "enterDesiredPassword": "Enter a password to finish creating the account.",
+      "madeMistake": "Made a mistake?",
+      "orUseEmail": "or sign up using email",
+      "sendAgain": "Send again",
+      "title": "Build your first Web3 project - FREE",
+      "withEmail": "sign up with email"
+    },
+    "wallet": {
+      "connect": {
+        "btn": "Connect wallet",
+        "info": "Connect with one of Polkadot's wallet",
+        "success": "Wallet has been successfully connected",
+        "title": "Connect wallet",
+        "different": "Connect different wallet"
+      },
+      "connected": {
+        "info": "Wallet is connected with your account",
+        "success": "Wallet has been successfully connected",
+        "title": "Wallet connected"
+      },
+      "disconnect": {
+        "success": "Wallet has been successfully disconnected",
+        "wallet": "Disconnect wallet"
+      },
+      "address": "Wallet address",
+      "createAccount": "This wallet hasn't got any account. Create an account first.",
+      "login": "Login with wallet"
+    }
+  },
   "general": {
     "action": "Action",
     "actions": "Actions",
     "active": "active",
     "addNew": "Add new",
+    "address": "Address",
     "attach": "Attach",
     "cancel": "No, cancel",
     "confirm": "Yes, confirm",
     "copyrights": "© Apillon",
     "created": "created",
     "delete": "Delete",
+    "deselectAll": "Deselect All",
     "download": "Download",
     "edit": "Edit",
+    "environment": "Environment",
     "error": "Error",
     "goHome": "Go home",
-    "environment": "Environment",
+    "install": "Install",
     "learn": "Learn",
     "learnMore": "Learn more",
     "live": "Live",
@@ -35,6 +111,7 @@
     "scope": "Scope",
     "search": "Search",
     "secret": "Secret",
+    "selectAll": "Select All",
     "serviceName": "Service name",
     "serviceType": "Service type",
     "signup": "Sign up",
@@ -70,6 +147,33 @@
       "copyCid": "Copy CID",
       "copyLink": "Copy link",
       "error": "Failed to copy"
+    },
+    "nav": {
+      "access": "Access",
+      "analytics": "Analytics",
+      "authentication": "Authentication",
+      "billing": "Billing",
+      "nft": "NFTs",
+      "computing": "Computing",
+      "configuration": "Configuration",
+      "hosting": "Hosting",
+      "monitoring": "Monitoring",
+      "projectOverview": "Project overview",
+      "projectSettings": "Project settings",
+      "services": "Services",
+      "serviceMonitor": "Service monitor",
+      "storage": "Storage"
+    },
+    "pageMenu": {
+      "methods": "Methods",
+      "access": "Access",
+      "apiKeys": "API keys",
+      "charts": "Charts",
+      "history": "History",
+      "Destroy": "Destroy",
+      "projectSettings": "Project settings",
+      "usersPermissions": "Users & permissions",
+      "credentials": "Credentials & API keys"
     },
     "permissions": {
       "read": "Read permissions",
@@ -123,6 +227,8 @@
   },
   "error": {
     "404": "Page not found",
+    "50012007": "Nfts out of stock!",
+    "50012008": "Mint reserve supply out of stock!",
 
     "BAD_REQUEST": "There is a problem with this request. Please come back later when we fixed that problem.",
     "INVALID_PATH": "Invalid path",
@@ -165,6 +271,7 @@
     "MAX_PROJECTS_REACHED": "Maximum number of projects is reached",
     "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
     "WEB_PAGE_NOT_FOUND": "Web page not found",
+    "PUBLISH_IPNS_CID_NOT_PRESENT": "CID is missing",
 
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
@@ -178,7 +285,7 @@
     "EMAIL_NOT_PRESENT": "Email is missing",
     "TOKEN_NOT_PRESENT": "Token is missing",
     "USER_EMAIL_NOT_PRESENT": "Email is missing",
-    "USER_INVALID_LOGIN": "Wrong email or password",
+    "USER_INVALID_LOGIN": "Wrong credentials",
     "USER_EMAIL_NOT_VALID": "Email is not valid",
     "USER_EMAIL_NOT_EXISTS": "Looks like your email is not in our books yet.",
     "USER_ALREADY_REGISTERED": "User already registered",
@@ -211,16 +318,22 @@
 
     "NO_CHANGES_TO_DEPLOY": "There have been no changes to your website. First, make some changes and deploy them to the staging.",
 
+    "NFT_BASE_URI_NOT_PRESENT": "NFT base uri not present",
+    "NFT_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
+    "NFT_DROP_BOOL_NOT_PRESENT": "NFT drop not present",
+    "NFT_DROP_TIMESTAMP_NOT_PRESENT": "NFT drop timestamp not present",
+    "NFT_RESERVE_NOT_PRESENT": "NFT reserve not present",
+    "NFT_MINT_ADDRESS_NOT_VALID": "Mint address not valid",
+    "NFT_MINT_QUANTITY_NOT_PRESENT": "Mint Quantity not present",
+    "NFT_MINT_QUANTITY_NOT_VALID": "Mint Quantity not valid. Enter a number between 1 and 20.",
+    "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
+    "NFT_CONTRACT_OWNER_ERROR": "NFT contract has been transferred to another wallet.",
+
     "walletSignature": "'Could not capture your signature, check your wallet connection",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
-    "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again."
-  },
-  "footer": {
-    "support": "Support",
-    "docs": "Docs",
-    "terms": "Terms",
-    "privacy": "Privacy"
+    "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again.",
+    "Unable to mint new NFTs, out of supply!": "Nfts out of stock!"
   },
   "form": {
     "apiKeyTypes": {
@@ -252,6 +365,15 @@
       "bucketSize": "Bucket size",
       "cardHolder": "Card holder",
       "cardNumber": "Card number",
+      "collectionBaseUri": "Base URI",
+      "collectionBaseExtension": "Base Extension",
+      "collectionDropStart": "Drop start",
+      "collectionIsDrop": "Drop",
+      "collectionMaxSupply": "Max supply",
+      "collectionMintPrice": "Mint price",
+      "collectionName": "Name",
+      "collectionReserve": "Reserve",
+      "collectionSymbol": "Symbol",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "domain": "Domain name",
@@ -266,6 +388,9 @@
       "ipnsName": "IPNS name",
       "expirationDate": "Expiration date",
       "networkType": "Choose the desired network",
+      "nftMintAddress": "Address",
+      "nftMintQuantity": "Quantity",
+      "nftTransferAddress": "Address",
       "password": "Enter a 12-character password",
       "phone": "Phone",
       "postalCode": "Postal code",
@@ -291,6 +416,15 @@
       "bucketName": "Bucket name",
       "cardHolder": "John Doe",
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
+      "collectionBaseUri": "Base URI",
+      "collectionBaseExtension": "Base Extension",
+      "collectionDropStart": "Drop start",
+      "collectionIsDrop": "Drop",
+      "collectionMaxSupply": "Empty value or 0 means unlimited",
+      "collectionMintPrice": "Mint price",
+      "collectionName": "Name",
+      "collectionReserve": "Reserve",
+      "collectionSymbol": "Symbol",
       "complexPassword": "Enter complex password",
       "cvv": "311",
       "domain": "Type your domain name here",
@@ -304,6 +438,9 @@
       "ipnsDescription": "IPNS description",
       "ipnsName": "IPNS name",
       "expirationDate": "01/2023",
+      "nftMintAddress": "Address",
+      "nftMintQuantity": "Quantity",
+      "nftTransferAddress": "Address",
       "password": "password",
       "phone": "+000 12345678",
       "postalCode": "4223",
@@ -324,21 +461,27 @@
       "filesUploaded": "Files has been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
+      "nftDeployed": "NFT deploy requested.",
+      "nftMint": "Minting NFT requested.",
+      "nftTransfer": "NFT ownership has been transferred",
       "profile": "Your profile data has been updated",
-      "requestPasswordChange": "We’ve sent you a password reset request to your email",
+      "requestPasswordChange": "We've sent you a password reset request to your email",
       "sendAgainEmail": "Email has been re-sent",
       "websiteDeployed": "Website has been deployed.",
       "websiteDeploying": "Done - deployment initiated",
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
+        "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
+        "collection": "Creating NFT collection requested.",
         "directory": "Directory key has been created",
         "domain": "Domain has been added to Website",
         "file": "File has been created",
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
         "item": "Item has been created",
+        "service": "Service has been created",
         "userInvite": "User has been invited.",
         "webhook": "Webhook has been created",
         "website": "Website has been created"
@@ -346,6 +489,7 @@
       "deleted": {
         "apiKey": "Api key has been deleted",
         "apiKeyRole": "Api key permission has been removed",
+        "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
         "directory": "Directory key has been deleted",
@@ -355,6 +499,7 @@
         "ipns": "IPNS has been deleted",
         "item": "Item has been deleted",
         "items": "Items has been deleted",
+        "service": "Service has been deleted",
         "webhook": "Webhook has been deleted",
         "website": "Website has been deleted"
       },
@@ -366,6 +511,7 @@
       "updated": {
         "apiKey": "Api key has been updated",
         "apiKeyRole": "Api key permission has been added",
+        "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "directory": "Directory key has been updated",
         "domain": "Domain has been updated",
@@ -374,13 +520,14 @@
         "ipns": "IPNS has been updated",
         "item": "Item has been updated",
         "project": "Project has been updated",
+        "service": "Service has been updated",
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated",
         "website": "Website has been updated"
       }
     },
     "terms": {
-      "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform’s services.",
+      "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform's services.",
       "payment": "I understand the billing process and some other legal stuff."
     },
     "connect": "Connect",
@@ -456,63 +603,106 @@
     "web3Hosting": "Web3 hosting",
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
-  "login": {
-    "description": "Web3 will not build itself. Go and add your block.",
-    "dontHaveAccount": "I don’t have Apillon account yet?",
-    "enterNewPassword": "Enter new password",
-    "forgotPassword": "Did you forgot your password?",
-    "magicLink": "Send me a Magic Link",
-    "orUseEmail": "or log in using email",
-    "passwordReplaced": "Your password has been replaced",
-    "projectName": "Project_name",
-    "resetPassword": "Reset password",
-    "title": "Log in to Apillon",
-    "wallet": "Log in with Wallet",
-    "withEmail": "login with email"
-  },
-  "nav": {
-    "projectOverview": "Project overview",
-    "services": "Services",
-    "authentication": "Authentication",
-    "storage": "Storage",
-    "hosting": "Hosting",
-    "nft": "NFTs",
-    "computing": "Computing",
-    "monitoring": "Monitoring",
-    "analytics": "Analytics",
-    "serviceMonitor": "Service monitor",
-    "configuration": "Configuration",
-    "projectSettings": "Project settings",
-    "access": "Access",
-    "billing": "Billing"
-  },
-  "onboarding": {
-    "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
-    "buildDemo": "OK, let’s do demo first",
-    "buildWeb3": "“Build versatile and high-performing Web3 solutions with Apillon. Harness the power of blockchain technology and create next-gen dapps through simple yet robust APIs”",
-    "createWeb3Project": "Create Web3 project",
-    "demoProject": "Demo project",
-    "getStarted": "Get started",
-    "goToDocs": "Go to Docs",
-    "loader": "Put your Web3 hat on, your dashboard is getting ready.",
-    "skip": "Skip to the dashboard",
-    "startBuilding": "Start building",
-    "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
-    "web3Gateway": "Your Gateway to Web3",
-    "web3ProjectName": "Your  Web3 project needs a name"
-  },
-  "pageMenu": {
-    "methods": "Methods",
-    "access": "Access",
-    "apiKeys": "API keys",
-    "charts": "Charts",
-    "history": "History",
-    "Destroy": "Destroy",
-    "projectSettings": "Project settings",
-    "usersPermissions": "Users & permissions",
-    "credentials": "Credentials & API keys"
+  "nft": {
+    "chain": {
+      "1": "MOONBEAM",
+      "2": "MOONBASE"
+    },
+    "collection": {
+      "addNew": "Add new collection",
+      "addNewDesc": "Add info",
+      "addNewValue": "Add new value",
+      "baseUriInfo": "If you already have collection metadata, paste the base URI here. Otherwise, you will go through the metadata creation process.",
+      "contractAddress": "Contract address",
+      "create": "Create collection",
+      "dropStart": "Drop start",
+      "edit": "Edit",
+      "empty": "Your project has currently no NFTs",
+      "emptyInfo": "First create an NFT collection and then start uploading NFTs.",
+      "maxSupply": "Max supply",
+      "mint": "Mint",
+      "minted": "Minted",
+      "mintNfts": "Mint NFTs",
+      "mintPrice": "Mint price",
+      "name": "Collection name",
+      "new": "New NFT collection",
+      "numOfData": "Number of data",
+      "reserve": "Reserved",
+      "revoke": "Revoke",
+      "symbol": "Symbol",
+      "title": "Collection title",
+      "transfer": "Transfer ownership",
+      "upload": "Deploy NFT collection",
+      "uploadImages": "Load images",
+      "uploadMetadata": "Load metadata",
+      "uploadYourFirst": "Upload your first NFTs and start building your collection.",
+      "uuid": "Collection UUID",
+      "status": {
+        "0": "CREATED",
+        "1": "INITIATED",
+        "2": "DEPLOYING",
+        "3": "DEPLOYED",
+        "4": "TRANSFERRED",
+        "5": "FAILED"
+      }
+    },
+    "transaction": {
+      "chainId": "Chain ID",
+      "empty": "Your project has currently no transactions",
+      "emptyInfo": "If you just deployed your collection, please wait a minute for the collection to deploy.",
+      "hash": "Transaction Hash",
+      "link": "Transaction Link",
+      "status": {
+        "0": "REQUESTED",
+        "1": "PENDING",
+        "2": "CONFIRMED",
+        "3": "VERIFIED",
+        "4": "FAILED"
+      },
+      "type": {
+        "1": "DEPLOY CONTRACT",
+        "2": "TRANSFER CONTRACT OWNERSHIP",
+        "3": "MINT NFT",
+        "4": "SET COLLECTION BASE URI"
+      }
+    },
+    "upload": {
+      "attributes": "Metadata attributes",
+      "csvConfirm": "Confirm CSV data",
+      "csvConfirmAttributes": "Confirm attributes",
+      "csvFile": "CSV file",
+      "csvFileDesc": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
+      "deploy": "Deploy",
+      "differentFile": "Upload different file",
+      "dragAndDrop": "Drag & drop or click to upload.",
+      "images": "Upload images",
+      "imagesConfirm": "Confirm & upload images",
+      "imagesDesc": "",
+      "preview": "Preview upload",
+      "selectAttributes": "Select attributes"
+    },
+    "transactionType": "Transaction Type"
   },
   "profile": {
+    "userRole": {
+      "ADMIN": "Admin",
+      "SUPPORT": "Support",
+      "ANALYTIC": "Analytic",
+      "PROJECT_OWNER": "Project owner",
+      "PROJECT_ADMIN": "Project admin",
+      "PROJECT_USER": "Project user",
+      "USER": "User"
+    },
+    "discord": {
+      "connect": "Discord connect",
+      "connected": "Discord connected",
+      "disconnect": "Discord disconnect",
+      "disconnected": "You have successfully disconnected your Discord account",
+      "infoConnected": "Disconnect your Discord account",
+      "infoDisconnected": "Connect your Discord account",
+      "titleConnected": "Discord connected",
+      "titleDisconnected": "Discord"
+    },
     "2fa": "Two-factor authentication",
     "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
     "changePassword": "Change password",
@@ -543,7 +733,7 @@
       "header": "Can we work together?",
       "description": "Currently we are working with a limited list of countries so the reward shipments can be carried out. Please select your country in the list below.",
       "country": "Select your country",
-      "btn": "Let’s see if we can work together",
+      "btn": "Let's see if we can work together",
       "terms": {
         "accept": "I accept the",
         "andConditions": "Terms and conditions",
@@ -555,12 +745,12 @@
     "claimMerchPack": "Claim merch pack",
     "connectGithub": "Your GitHub",
     "connectTwitter": "Your twitter",
-    "content": "Welcome to Apillon referral programme. While we are working hard on first MVP and giving you access to beta test, you are free to invite other developers to Apillon, collect points and get your Apillon Merch pack 1.0. ",
+    "content": "Welcome to Apillon referral program. While we are working hard on first MVP and giving you access to beta test, you are free to invite other developers to Apillon, collect points and get your Apillon Merch pack 1.0. ",
     "included": "What is included?",
     "learnMore": "Learn more about referral",
     "points": "points",
-    "subtitle": "Get your Apillon Merch pack 1.0, by helping with referral. ",
-    "title": "Referral programme",
+    "subtitle": "Get your Apillon Merch pack 1.0 by helping with referral.",
+    "title": "Referral program",
     "yourPoints": "Your points",
     "instructionsHeader": "Instructions:",
     "instructions": {
@@ -581,35 +771,21 @@
     "rewardsSize": "Choose the desired size. In case the size is not available we will send you whatever we have left. ",
     "connect": "Connect your social accounts",
     "earnPoints": "Earn Some POINTS",
-    "invite": "Invite other developers and score",
-    "link": "This is your referral link",
-    "linkDesc": "Share this link with others before they register to ensure referral connection is set. Once they confirm the github account, you will earn 2 points per each referral.",
+    "invite": "Invite your developer friends and score",
+    "link": "This is your referral link:",
+    "linkDesc": "Share the link below before they register to set the referral progress. Once they confirm their GitHub accounts, you will earn 2 points per each active referral.",
     "referres": {
-      "header": "Your referres",
+      "header": "Your referrees",
+      "info": "Keep track of the referral links, active connections and points earned.",
       "name": "Service name",
-      "github": "Github profile",
-      "joined": "Joined"
+      "github": "GitHub profile",
+      "joined": "Joined on"
     },
     "shoutout": "Help us with the shoutout",
     "share": "Retweet on Twitter",
     "confirm": "Claim now",
     "xpPoints": "XP points:",
     "spendingPoints": "Spending points:"
-  },
-  "signup": {
-    "alreadyHaveAccount": "Already have an account?",
-    "checkEmail": "Check your e-mail",
-    "checkInbox": "Crickets in your inbox?",
-    "continueWithAT": "Continue with Apillon",
-    "description": "Build your first Web3 application with Apillon. Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
-    "emailConfirmed": "Email confirmed",
-    "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
-    "enterDesiredPassword": "Enter a password to finish creating the account.",
-    "madeMistake": "Made a mistake?",
-    "orUseEmail": "or sign up using email",
-    "sendAgain": "Send again",
-    "title": "Build your first Web3 project - FREE",
-    "withEmail": "sign up with email"
   },
   "storage": {
     "bucket": {
@@ -659,6 +835,7 @@
       "createFirst": "Create your first IPNS",
       "delete": "Are you sure that you want to delete IPNS?",
       "description": "Description",
+      "disabled": "IPNS is disabled. This item needs a CID.",
       "edit": "Edit IPNS",
       "infoNew": "Create new IPNS record",
       "infoEdit": "Update IPNS record",
@@ -674,6 +851,17 @@
       "update": "Update IPNS"
     },
     "file": {
+      "status": {
+        "1": "Signed URL for upload generated",
+        "2": "Uploaded to S3",
+        "3": "Uploaded to IPFS",
+        "4": "Pinned to CRUST",
+        "5": "Upload completed",
+        "100": "Error while uploading to S3",
+        "101": "Error while pinning to CRUST",
+        "102": "Error: file does not exists on S3",
+        "103": "Error: bucket is full"
+      },
       "confirmUpload": "Confirm your upload",
       "create": "Create file",
       "delete": "Delete file(s)",
@@ -688,21 +876,11 @@
       "refresh": "Refresh files",
       "retry": "Retry upload",
       "search": "Search files",
+      "stillUploading": "This file is pinning to CRUST. When it will be pinned, you will be able to see file details.",
       "upload": "Upload files and folders",
       "uploading": "Uploading",
       "uploadMore": "Add more files",
       "uploadNow": "Upload now"
-    },
-    "fileStatus": {
-      "1": "Signed URL for upload generated",
-      "2": "Uploaded to S3",
-      "3": "Uploaded to IPFS",
-      "4": "Pinned to CRUST",
-      "5": "Upload completed",
-      "100": "Error while uploading to S3",
-      "101": "Error while pinning to CRUST",
-      "102": "Error: file does not exists on S3",
-      "103": "Error: bucket is full"
     },
     "contentType": "Content type",
     "downloadLink": "Download link",
@@ -733,13 +911,15 @@
     "yourFilesAll": "All your files",
     "webhook": "Webhook",
     "wrapFiles": "Wrap files",
-    "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don’t want to do it just skip this process.",
+    "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don't want to do it just skip this process.",
     "wrapToDirectory": "Wrap to directory"
   },
   "service": {
     "authentication": {
       "name": "Authentication",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum.",
+      "emptyTitle": "Your project has currently no authentication services",
+      "emptyInfo": "First create a authentication service and then create API key."
     },
     "storage": {
       "name": "Storage",
@@ -748,18 +928,14 @@
     "computing": {
       "name": "Computing",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
-    }
-  },
-  "userRole": {
-    "ADMIN": "Admin",
-    "SUPPORT": "Support",
-    "ANALYTIC": "Analytic",
-    "PROJECT_OWNER": "Project owner",
-    "PROJECT_ADMIN": "Project admin",
-    "PROJECT_USER": "Project user",
-    "USER": "User"
+    },
+    "addFirst": "Add first service",
+    "delete": "Delete service",
+    "edit": "Edit service",
+    "new": "New service"
   },
   "validation": {
+    "alreadyOnList": "{name} is already on list",
     "apiKeyName": "API key name is required",
     "apiKeyIdRequired": "API key is required",
     "bucketDescriptionTooLong": "Text is too long (max 255 characters)",
@@ -770,6 +946,14 @@
     "containsUppercase": "Must include an uppercase character",
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
+    "collectionBaseUriRequired": "Please enter Base URI",
+    "collectionBaseExtensionRequired": "Please enter Base Extension",
+    "collectionMaxSupplyReached": "Please enter lower number, max supply is {max}",
+    "collectionMaxSupplyRequired": "Please enter Max supply",
+    "collectionMintPriceRequired": "Please enter Mint price",
+    "collectionNameRequired": "Please enter Collection name",
+    "collectionReserve": "Number of reserved NFTs can be equal or lower than max supply.",
+    "collectionSymbolRequired": "Please enter Collection symbol",
     "creditCard": "Credit card validation error",
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
@@ -778,11 +962,17 @@
     "emailRequired": "Typing in your email would definitely hit the spot :)",
     "expirationDate": "Date is expired",
     "expirationDateRequired": "Please enter expiration date",
+    "fileNoData": "The file is empty or has no data",
+    "fileTypeNotCsv": "File must be of type CSV",
     "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",
     "ipnsDescriptionTooLong": "Text is too long (max 255 characters)",
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
+    "nftMintAddressRequired": "Please enter your wallet address for minting",
+    "nftMintQuantityRequired": "Please enter mint Quantity",
+    "nftTransfertAddressRequired": "Please enter wallet address",
+    "notImage": "{name} is not an image",
     "passwordMinLength": "Password must contain at least 12 characters.",
     "passwordReenterSame": "Password is not same as re-entered password!",
     "passwordReenterRequired": "Re-entered password is required",
@@ -809,7 +999,7 @@
   },
   "w3Warn": {
     "bucket": {
-      "new": "Each file hosting that passes through Crust’s pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
+      "new": "Each file hosting that passes through Crust's pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
       "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
       "destroyed": ""
     },

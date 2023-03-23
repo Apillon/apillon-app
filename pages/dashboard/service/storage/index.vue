@@ -3,14 +3,12 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('nav.storage') }}</h1>
+          <h1>{{ $t('dashboard.nav.storage') }}</h1>
         </slot>
 
         <template #info>
           <n-space :size="32" align="center">
-            <button class="align-sub" @click="showModalW3Warn = true">
-              <span class="icon-info text-xl"></span>
-            </button>
+            <IconInfo @click="showModalW3Warn = true" />
           </n-space>
         </template>
 
@@ -21,25 +19,16 @@
     </template>
     <slot>
       <TableStorageBucket v-if="bucketStore.hasBuckets" :buckets="bucketStore.items" />
-      <template v-else>
-        <div
-          class="flex flex-col items-center justify-center px-6 py-4"
-          style="min-height: calc(100vh - 270px)"
-        >
-          <div class="mb-4">
-            <NuxtIcon name="storage/empty" class="icon-auto" filled />
-          </div>
-          <div class="mb-10 text-center">
-            <h3 class="font-bold">{{ $t('storage.bucket.noActiveService') }}</h3>
-            <p class="text-body">{{ $t('storage.bucket.attachService') }}</p>
-          </div>
-          <div>
-            <Btn type="primary" @click="createNewBucket">
-              {{ $t('storage.bucket.new') }}
-            </Btn>
-          </div>
-        </div>
-      </template>
+      <Empty
+        v-else
+        :title="$t('storage.bucket.noActiveService')"
+        :info="$t('storage.bucket.attachService')"
+        icon="storage/empty"
+      >
+        <Btn type="primary" @click="createNewBucket">
+          {{ $t('storage.bucket.new') }}
+        </Btn>
+      </Empty>
 
       <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
         {{ $t('w3Warn.bucket.new') }}
@@ -62,7 +51,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalNewBucket = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

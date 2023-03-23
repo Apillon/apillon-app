@@ -41,7 +41,22 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-icons',
-    '@nuxtjs/google-fonts',
+    [
+      '@nuxtjs/google-fonts',
+      {
+        useStylesheet: true,
+        display: 'swap',
+        download: false,
+        families: {
+          'IBM Plex Mono': {
+            wght: [400, 700],
+          },
+          'IBM Plex Sans': {
+            wght: [400, 700],
+          },
+        },
+      },
+    ],
     '@nuxtjs/i18n',
   ],
 
@@ -50,7 +65,15 @@ export default defineNuxtConfig({
   },
 
   imports: {
-    dirs: ['./lib', './types', './stores', './stores/hosting', './stores/storage'],
+    dirs: [
+      './lib',
+      './lib/wallet',
+      './types',
+      './stores',
+      './stores/hosting',
+      './stores/nft',
+      './stores/storage',
+    ],
   },
 
   app: {
@@ -60,7 +83,7 @@ export default defineNuxtConfig({
       },
 
       title: meta.title,
-      titleTemplate: `%s – ${meta.title}`,
+      titleTemplate: `%s - ${meta.title}`,
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
 
@@ -118,19 +141,6 @@ export default defineNuxtConfig({
               : '',
         },
       ],
-    },
-  },
-
-  googleFonts: {
-    display: 'swap',
-    download: true,
-    families: {
-      'IBM Plex Mono': {
-        wght: [400, 700],
-      },
-      'IBM Plex Sans': {
-        wght: [400, 700],
-      },
     },
   },
 

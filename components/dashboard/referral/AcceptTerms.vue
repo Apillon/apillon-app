@@ -124,7 +124,7 @@
 
       <h3>Rewards</h3>
       <p>
-        Participants can spend the points collected through Apillon’s Referral program on rewards of
+        Participants can spend the points collected through Apillon's Referral program on rewards of
         their choice.
       </p>
       <p>
@@ -179,7 +179,7 @@
         Apillon may suspend, terminate or modify, without liability, all or any part of the Apillon
         Referral Program (including the terms, type, and amount of rewards and eligibility criteria
         under the program), in its sole discretion, with or without notice. Apillon reserves the
-        right to suspend or terminate any customer’s participation in the Apillon Referral Program
+        right to suspend or terminate any customer's participation in the Apillon Referral Program
         for fraud, abuse, misuse, harassment, or other inappropriate or suspicious activity that
         Apillon determines, in its sole discretion, compromises the fairness or integrity of the
         Program in any way. Apillon may change these Program Terms at any time, and by your
@@ -200,7 +200,7 @@
         The Apillon Referral program remains active indefinitely or until it is discontinued or
         removed by the Apillon team. In case of discontinuing the Referral program, all collected
         points become unclaimable in every way, with the exception of Experience points which remain
-        attached to the participant’s account as an informative value of their past achievements.
+        attached to the participant's account as an informative value of their past achievements.
       </p>
 
       <h3>Reward deliverability</h3>

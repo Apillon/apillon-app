@@ -18,7 +18,7 @@
               clearable
             >
               <template #prefix>
-                <span class="icon-search text-xl"></span>
+                <span class="icon-search text-2xl"></span>
               </template>
             </n-input>
           </div>
@@ -30,45 +30,30 @@
               :loading="ipnsStore.loading"
               @click="ipnsStore.fetchIpns(bucketId)"
             >
-              <span class="icon-refresh text-lg mr-2"></span>
+              <span class="icon-refresh text-xl mr-2"></span>
               {{ $t('general.refresh') }}
             </n-button>
 
             <!-- Create new website -->
-            <n-button
-              v-if="ipnsStore.hasIpns"
-              type="primary"
-              size="small"
-              ghost
-              @click="modalCreateIpnsVisible = true"
-            >
-              <span class="icon-create-folder text-xl mr-2"></span>
-              {{ $t('general.addNew') }}
+            <n-button v-if="ipnsStore.hasIpns" size="small" @click="modalCreateIpnsVisible = true">
+              <span class="icon-create-folder text-xl text-primary mr-2"></span>
+              <span class="text-primary">{{ $t('general.addNew') }}</span>
             </n-button>
           </n-space>
         </n-space>
 
         <!-- DataTable: IPNS -->
         <TableStorageIpns v-if="ipnsStore.hasIpns" />
-        <template v-else>
-          <div
-            class="flex flex-col items-center justify-center px-6 py-4"
-            style="min-height: calc(100vh - 270px)"
-          >
-            <div class="mb-4">
-              <NuxtIcon name="storage/empty" class="icon-auto" filled />
-            </div>
-            <div class="mb-10 text-center">
-              <h3 class="font-bold">{{ $t('general.nothingHere') }}</h3>
-              <p class="text-body">{{ $t('storage.ipns.createFirst') }}</p>
-            </div>
-            <div>
-              <Btn type="primary" @click="modalCreateIpnsVisible = true">
-                {{ $t('storage.ipns.new') }}
-              </Btn>
-            </div>
-          </div>
-        </template>
+        <Empty
+          v-else
+          :title="$t('general.nothingHere')"
+          :info="$t('storage.ipns.createFirst')"
+          icon="storage/empty"
+        >
+          <Btn type="primary" @click="modalCreateIpnsVisible = true">
+            {{ $t('storage.ipns.new') }}
+          </Btn>
+        </Empty>
       </n-space>
 
       <!-- Modal - New IPNS -->
@@ -89,7 +74,7 @@ const bucketId = ref<number>(parseInt(`${params?.slug}`));
 const modalCreateIpnsVisible = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('nav.storage'),
+  title: $i18n.t('dashboard.nav.storage'),
 });
 
 onMounted(() => {

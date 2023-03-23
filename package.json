@@ -1,12 +1,12 @@
 {
   "name": "apillon-app",
-  "version": "0.4.4",
+  "version": "0.5.1",
   "private": true,
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "local": "cross-env ENV=local nuxt dev",
-    "generate": "nuxt generate",
+    "generate": "cross-env nuxt generate",
     "preview": "nuxt preview"
   },
   "devDependencies": {
@@ -25,7 +25,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.4.0",
     "naive-ui": "^2.33.3",
-    "nuxt": "^3.0.0",
+    "nuxt": "3.2.2",
     "prettier": "^2.7.1"
   },
   "dependencies": {
@@ -34,17 +34,20 @@
     "@metamask/detect-provider": "^2.0.0",
     "@pinia/nuxt": "^0.4.6",
     "@polkadot/api": "^9.10.2",
+    "@polkadot/extension-inject": "^0.45.2",
     "@types/uuid": "^9.0.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "card-validator": "^8.1.1",
     "ethers": "^5.7.2",
     "lodash.debounce": "^4.0.8",
     "nuxt-icons": "^3.0.0",
+    "passive-events-support": "^1.0.33",
     "pinia": "^2.0.30",
     "query-string": "^7.1.1",
     "text-marshal": "^0.0.2",
     "uuid": "^9.0.0",
     "v-lazy-image": "^2.1.1",
+    "vue-papa-parse": "^3.1.0",
     "vue-tweet": "^2.0.2"
   }
 }
