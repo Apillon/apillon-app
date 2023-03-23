@@ -43,18 +43,17 @@
           v-if="collectionStore.images?.length < collectionStore.csvData?.length"
           type="warning"
         >
-          Missing images
+          {{ $t('nft.validation.imagesMissing') }} {{ missingImages }}
         </Notification>
         <Notification v-else-if="!allImagesUploaded" type="error">
-          Invalid image names. Example: 1.jpg, 2.jpg, 3.jpg, ...
+          {{ $t('nft.validation.imagesInvalid') }} {{ imagesNames }}
         </Notification>
       </div>
       <Btn
         v-if="collectionStore.hasImages"
         type="primary"
-        :loading="loading"
-        :disabled="!collectionStore.hasImages || !allImagesUploaded"
-        @click="uploadImages"
+        :disabled="!allImagesUploaded"
+        @click="collectionStore.mintTab = NftMintTab.MINT"
       >
         {{ $t('nft.upload.imagesConfirm') }}
       </Btn>
@@ -68,25 +67,26 @@ import { useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { uploadFiles, fileAlreadyOnFileList } = useUpload();
+const { fileAlreadyOnFileList } = useUpload();
+const { allImagesUploaded } = useNft();
 
-const loading = ref<boolean>(false);
-
-/**
- * Validation
- */
-const allImagesUploaded = computed<boolean>(() => {
-  if (collectionStore.images?.length !== collectionStore.csvData?.length) {
-    return false;
+const missingImages = computed<string>(() => {
+  if (collectionStore.csvData.length - collectionStore.images.length > 5) {
+    return '(' + collectionStore.images.length + '/' + collectionStore.csvData.length + ')';
   }
+  const uploadedImagesNames = collectionStore.images.map(img => img.name);
+  return collectionStore.csvData
+    .filter(item => !uploadedImagesNames.includes(item.image))
+    .map(item => item.image)
+    .join(', ');
+});
 
-  const dataImages = collectionStore.csvData.map(item => {
-    return item.image;
-  });
-  const imagesNames = collectionStore.images.map(item => {
-    return item.name;
-  });
-  return compareArrays(dataImages, imagesNames);
+const imagesNames = computed<string>(() => {
+  return collectionStore.csvData
+    .map(item => {
+      return item.image;
+    })
+    .join(',');
 });
 
 /** Upload file request - add file to list */
@@ -138,20 +138,5 @@ function handleRemove(data: { file: NUploadFileInfo; fileList: NUploadFileInfo[]
 function isImage(type: string | null = '') {
   if (!type) return false;
   return type.includes('image/');
-}
-
-async function uploadImages() {
-  loading.value = true;
-
-  collectionStore.imagesSession = await uploadFiles(
-    collectionStore.active.bucket_uuid,
-    collectionStore.images,
-    false,
-    true,
-    false
-  );
-
-  loading.value = false;
-  collectionStore.mintTab = NftMintTab.MINT;
 }
 </script>

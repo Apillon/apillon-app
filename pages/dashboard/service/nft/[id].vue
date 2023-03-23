@@ -127,11 +127,15 @@ function onNftTrasnfered() {
 
 /** Collection polling */
 function checkIfCollectionUnfinished() {
+  if (collectionStore.active.collectionStatus === CollectionStatus.CREATED) {
+    return;
+  }
   if (collectionStore.active.collectionStatus >= CollectionStatus.DEPLOYED) {
     clearInterval(collectionInterval);
     return;
   }
 
+  clearInterval(collectionInterval);
   collectionInterval = setInterval(async () => {
     const collection = await collectionStore.fetchCollection(collectionId.value);
     await collectionStore.fetchCollectionTransactions(
@@ -157,6 +161,7 @@ function checkUnfinishedTransactions() {
     return;
   }
 
+  clearInterval(transactionInterval);
   transactionInterval = setInterval(async () => {
     const transactions = await collectionStore.fetchCollectionTransactions(
       collectionStore.active.collection_uuid,

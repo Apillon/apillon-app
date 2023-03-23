@@ -16,6 +16,7 @@
 
     <n-form
       ref="formRef"
+      :class="{ 'form-errors': formErrors }"
       :model="formData"
       :rules="rules"
       :disabled="isFormDisabled"
@@ -49,29 +50,42 @@
         />
       </n-form-item>
 
-      <!--  Collection Base URI -->
-      <n-form-item path="baseUri" :label="baseUriLabel" :label-props="{ for: 'baseUri' }">
-        <n-input
-          v-model:value="formData.baseUri"
-          :input-props="{ id: 'baseUri' }"
-          :placeholder="$t('form.placeholder.collectionBaseUri')"
-          clearable
-        />
-      </n-form-item>
+      <n-grid class="items-end" :cols="12" :x-gap="16">
+        <!--  Collection Base URI -->
+        <n-form-item-gi
+          :class="{ 'hide-feedback': !!metadataUri }"
+          :span="8"
+          path="baseUri"
+          :label="baseUriLabel"
+          :label-props="{ for: 'baseUri' }"
+        >
+          <n-input
+            v-model:value="formData.baseUri"
+            :input-props="{ id: 'baseUri' }"
+            :placeholder="$t('form.placeholder.collectionBaseUri')"
+            clearable
+          />
+        </n-form-item-gi>
 
-      <!--  Collection Base Extension -->
-      <n-form-item
-        path="baseExtension"
-        :label="$t('form.label.collectionBaseExtension')"
-        :label-props="{ for: 'baseExtension' }"
-      >
-        <n-input
-          v-model:value="formData.baseExtension"
-          :input-props="{ id: 'baseExtension' }"
-          :placeholder="$t('form.placeholder.collectionBaseExtension')"
-          clearable
-        />
-      </n-form-item>
+        <!--  Collection Base Extension -->
+        <n-form-item-gi
+          :class="{ 'hide-feedback': !!metadataUri }"
+          :span="4"
+          path="baseExtension"
+          :label="$t('form.label.collectionBaseExtension')"
+          :label-props="{ for: 'baseExtension' }"
+        >
+          <n-input
+            v-model:value="formData.baseExtension"
+            :input-props="{ id: 'baseExtension' }"
+            :placeholder="$t('form.placeholder.collectionBaseExtension')"
+            clearable
+          />
+        </n-form-item-gi>
+        <n-form-item-gi v-if="metadataUri" :span="12" :show-label="false">
+          {{ metadataUri }}
+        </n-form-item-gi>
+      </n-grid>
 
       <!--  Collection Max supply -->
       <n-form-item path="maxSupply" :label="$t('form.label.collectionMaxSupply')">
@@ -161,11 +175,12 @@ const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const IconInfo = resolveComponent('IconInfo');
 
+const formErrors = ref<boolean>(false);
 const formData = ref<FormCollection>({
   name: '',
   symbol: '',
   mintPrice: 0,
-  maxSupply: 0,
+  maxSupply: null,
   baseUri: '',
   baseExtension: '',
   isDrop: false,
@@ -186,9 +201,15 @@ const rules: NFormRules = {
       message: $i18n.t('validation.collectionNameRequired'),
     },
   ],
+  baseUri: [
+    {
+      type: 'url',
+      message: $i18n.t('validation.collectionBaseUri'),
+    },
+  ],
   baseExtension: [
     {
-      required: true,
+      validator: validateBaseExtension,
       message: $i18n.t('validation.collectionBaseExtensionRequired'),
     },
   ],
@@ -208,6 +229,16 @@ const rules: NFormRules = {
       required: true,
       message: $i18n.t('validation.collectionMintPriceRequired'),
     },
+    {
+      max: 10000,
+      message: $i18n.t('validation.collectionMintPrice'),
+    },
+  ],
+  dropStart: [
+    {
+      validator: validateDropStart,
+      message: $i18n.t('validation.collectionDropStart'),
+    },
   ],
   reserve: [
     {
@@ -217,6 +248,13 @@ const rules: NFormRules = {
   ],
 };
 
+const metadataUri = computed<string>(() => {
+  return formData.value.baseUri && formData.value.baseExtension
+    ? formData.value.baseUri + '1' + formData.value.baseExtension
+    : formData.value.baseUri
+    ? formData.value.baseUri + '1.' + $i18n.t('nft.collection.extension')
+    : '';
+});
 const baseUriLabel = computed(() => {
   return [
     h('span', { class: 'mr-1' }, $i18n.t('form.label.collectionBaseUri')),
@@ -237,7 +275,12 @@ function validateReserve(_: NFormItemRule, value: number): boolean {
 function validateMaxSupply(_: NFormItemRule, value: number): boolean {
   return value <= NFT_MAX_SUPPLY;
 }
-
+function validateBaseExtension(_: NFormItemRule, value: number): boolean {
+  return !formData.value.baseUri || !!value;
+}
+function validateDropStart(_: NFormItemRule, value: number): boolean {
+  return !formData.value.isDrop || value > Date.now();
+}
 function disablePasteDate(ts: number) {
   return ts < Date.now();
 }
@@ -246,6 +289,7 @@ function disablePasteDate(ts: number) {
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
+    formErrors.value = !!errors;
     if (errors) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))

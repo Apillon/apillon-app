@@ -1,5 +1,9 @@
 <template>
-  <n-checkbox-group v-bind="$attrs" v-model:value="collectionStore.csvSelectedAttributes">
+  <n-checkbox-group
+    v-if="collectionStore.csvAttributes.length > 0"
+    v-bind="$attrs"
+    v-model:value="collectionStore.csvSelectedAttributes"
+  >
     <n-space vertical class="p-3" size="small">
       <strong class="text-body mr-4">{{ $t('nft.upload.selectAttributes') }}:</strong>
       <n-space
@@ -40,6 +44,9 @@
       {{ $t('general.selectAll') }}
     </n-button>
   </n-checkbox-group>
+  <div v-else>
+    <h5>{{ $t('nft.validation.csvMissingAttributes') }}</h5>
+  </div>
 </template>
 
 <script lang="ts" setup>
