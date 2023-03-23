@@ -5,12 +5,11 @@
       <n-space justify="space-between">
         <div>
           <Notification v-if="!isSameNumOfRows" type="warning">
-            Missing metadata, num of row must be same as maxSupply(
-            {{ collectionStore.active?.maxSupply }}
-            )
+            {{ $t('nft.validation.csvMissingData') }}
+            ( {{ collectionStore.active?.maxSupply }} )
           </Notification>
           <Notification v-else-if="!hasRequiredMetadata" type="error">
-            Missing metadata columns, required columns:
+            {{ $t('nft.validation.csvRequiredColumns') }}
             {{ metadataRequired.join(',') }}
           </Notification>
         </div>
@@ -55,7 +54,7 @@
   <modal v-model:show="modalMetadataAttributesVisible" :title="$t('nft.upload.attributes')">
     <n-space class="pb-8" :size="32" vertical>
       <NftMetadataAttributes />
-      <Btn class="float-right" type="primary" :loading="loading" @click="uploadMetadata">
+      <Btn class="float-right" type="primary" :loading="loading" @click="createMetadata">
         {{ $t('nft.upload.csvConfirmAttributes') }}
       </Btn>
     </n-space>
@@ -68,7 +67,6 @@ import { useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { uploadFiles } = useUpload();
 const loading = ref<boolean>(false);
 
 const { vueApp } = useNuxtApp();
@@ -95,7 +93,10 @@ const metadataProperties = [
  * Validation
  */
 const isSameNumOfRows = computed<boolean>(() => {
-  return collectionStore.active?.maxSupply === collectionStore.csvData?.length;
+  return (
+    collectionStore.active?.maxSupply === 0 ||
+    collectionStore.active?.maxSupply === collectionStore.csvData?.length
+  );
 });
 const hasRequiredMetadata = computed<boolean>(() => {
   const csvColumns: Array<string> = collectionStore.csvColumns.map(
@@ -182,18 +183,9 @@ function parseUploadedFile(file?: File | null) {
   });
 }
 
-async function uploadMetadata() {
+function createMetadata() {
   loading.value = true;
-  const nftData = createNftData();
-  const nftMetadataFiles = createNftFiles(nftData);
-
-  collectionStore.csvSession = await uploadFiles(
-    collectionStore.active.bucket_uuid,
-    nftMetadataFiles,
-    false,
-    true,
-    false
-  );
+  collectionStore.metadata = createNftData();
 
   loading.value = false;
   collectionStore.mintTab = NftMintTab.IMAGES;
@@ -222,30 +214,6 @@ function createNftData(): Array<Record<string, any>> {
     }
 
     return nft;
-  });
-}
-
-/**
- * Prepare NFT files: parse NFT data to JSON files
- */
-function createNftFiles(nftData: Array<Record<string, any>>): FileListItemType[] {
-  return nftData.map((nft, index) => {
-    const nftFile = new Blob([JSON.stringify(nft, null, 2)], {
-      type: 'application/json',
-    });
-
-    return {
-      id: `${index + 1}-${nft.name}`,
-      name: `${index + 1}.json`,
-      status: 'pending',
-      percentage: 0,
-      file: nftFile,
-      type: nftFile.type,
-      size: nftFile.size || 0,
-      timestamp: Date.now(),
-      onFinish: () => {},
-      onError: () => {},
-    } as FileListItemType;
   });
 }
 </script>

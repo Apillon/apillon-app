@@ -29,6 +29,7 @@ import { useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
+const { uploadFiles } = useUpload();
 
 const loading = ref<boolean>(false);
 
@@ -45,13 +46,12 @@ function createThumbnailUrl(file: FileListItemType): string {
 async function deploy() {
   loading.value = true;
   try {
-    const bodyData = {
-      metadataSession: collectionStore.csvSession,
-      imagesSession: collectionStore.imagesSession,
-    };
+    const metadataSession = await uploadMetadata();
+    const imagesSession = await uploadImages();
+
     const res = await $api.post<CollectionResponse>(
       endpoints.nftDeploy(collectionStore.active.collection_uuid),
-      bodyData
+      { metadataSession, imagesSession }
     );
     collectionStore.active = res.data;
 
@@ -60,5 +60,51 @@ async function deploy() {
     message.error(userFriendlyMsg(error));
   }
   loading.value = false;
+}
+
+async function uploadImages() {
+  return await uploadFiles(
+    collectionStore.active.bucket_uuid,
+    collectionStore.images,
+    false,
+    true,
+    false
+  );
+}
+
+async function uploadMetadata() {
+  const nftMetadataFiles = createNftFiles(collectionStore.metadata);
+
+  return await uploadFiles(
+    collectionStore.active.bucket_uuid,
+    nftMetadataFiles,
+    false,
+    true,
+    false
+  );
+}
+
+/**
+ * Prepare NFT files: parse NFT data to JSON files
+ */
+function createNftFiles(nftData: Array<Record<string, any>>): FileListItemType[] {
+  return nftData.map((nft, index) => {
+    const nftFile = new Blob([JSON.stringify(nft, null, 2)], {
+      type: 'application/json',
+    });
+
+    return {
+      id: `${index + 1}-${nft.name}`,
+      name: `${index + 1}.json`,
+      status: 'pending',
+      percentage: 0,
+      file: nftFile,
+      type: nftFile.type,
+      size: nftFile.size || 0,
+      timestamp: Date.now(),
+      onFinish: () => {},
+      onError: () => {},
+    } as FileListItemType;
+  });
 }
 </script>

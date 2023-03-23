@@ -108,12 +108,15 @@ function onCollectionCreated() {
 /** Collection polling */
 function checkUnfinishedCollections() {
   const unfinishedCollection = collectionStore.items.find(
-    collection => collection.collectionStatus < CollectionStatus.DEPLOYED
+    collection =>
+      collection.collectionStatus === CollectionStatus.DEPLOY_INITIATED ||
+      collection.collectionStatus === CollectionStatus.DEPLOYING
   );
   if (unfinishedCollection === undefined) {
     return;
   }
 
+  clearInterval(collectionInterval);
   collectionInterval = setInterval(async () => {
     const collections = await collectionStore.fetchCollections(false);
     const collection = collections.find(collection => collection.id === unfinishedCollection.id);

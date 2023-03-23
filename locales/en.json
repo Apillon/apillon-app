@@ -328,6 +328,7 @@
     "NFT_MINT_QUANTITY_NOT_VALID": "Mint Quantity not valid. Enter a number between 1 and 20.",
     "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
     "NFT_CONTRACT_OWNER_ERROR": "NFT contract has been transferred to another wallet.",
+    "NFT_DEPLOY_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
 
     "walletSignature": "'Could not capture your signature, check your wallet connection",
     "fileDownload": "Download failed. Something went wrong during the download.",
@@ -617,6 +618,7 @@
       "create": "Create collection",
       "dropStart": "Drop start",
       "edit": "Edit",
+      "extension": "[extension]",
       "empty": "Your project has currently no NFTs",
       "emptyInfo": "First create an NFT collection and then start uploading NFTs.",
       "maxSupply": "Max supply",
@@ -680,6 +682,12 @@
       "imagesDesc": "",
       "preview": "Preview upload",
       "selectAttributes": "Select attributes"
+    },
+    "validation": {
+      "csvMissingData": "Missing metadata, num of row must be same as maxSupply",
+      "csvRequiredColumns": "Missing metadata columns, required columns:",
+      "imagesMissing": "Missing images",
+      "imagesInvalid": "Invalid image names. Example: "
     },
     "transactionType": "Transaction Type"
   },
@@ -946,6 +954,7 @@
     "containsUppercase": "Must include an uppercase character",
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
+    "collectionBaseUri": "Base URI is not valid",
     "collectionBaseUriRequired": "Please enter Base URI",
     "collectionBaseExtensionRequired": "Please enter Base Extension",
     "collectionMaxSupplyReached": "Please enter lower number, max supply is {max}",

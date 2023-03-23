@@ -10,12 +10,11 @@ export const useCollectionStore = defineStore('collection', {
     csvData: [] as Array<Record<string, string>>,
     csvFile: {} as FileListItemType,
     csvSelectedAttributes: [] as Array<string>,
-    csvSession: '',
     filesMetadata: [] as FileListItemType[],
     images: [] as FileListItemType[],
-    imagesSession: '',
     items: [] as CollectionInterface[],
     loading: false,
+    metadata: [] as Array<Record<string, any>>,
     mintTab: NftMintTab.METADATA,
     quotaReached: undefined as Boolean | undefined,
     search: '',
@@ -37,6 +36,9 @@ export const useCollectionStore = defineStore('collection', {
     hasImages(state): boolean {
       return Array.isArray(state.images) && state.images.length > 0;
     },
+    hasMetadata(state): boolean {
+      return Array.isArray(state.metadata) && state.metadata.length > 0;
+    },
   },
   actions: {
     resetData() {
@@ -54,10 +56,9 @@ export const useCollectionStore = defineStore('collection', {
       this.csvData = [] as Array<Record<string, string>>;
       this.csvFile = {} as FileListItemType;
       this.csvSelectedAttributes = [] as Array<string>;
-      this.csvSession = '';
       this.filesMetadata = [] as FileListItemType[];
       this.images = [] as FileListItemType[];
-      this.imagesSession = '';
+      this.metadata = [];
       this.mintTab = NftMintTab.METADATA;
     },
     setCollectionId(id: number) {
