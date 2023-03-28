@@ -56,7 +56,11 @@
                     <TableEllipsis :text="account.address" />
                   </td>
                   <td>
-                    <Btn type="secondary" :loading="loading" @click="emit('sign', account)">
+                    <Btn
+                      type="secondary"
+                      :loading="loading && selectedAddress === account.address"
+                      @click="connectAccount(account)"
+                    >
                       <span v-if="actionText" class="whitespace-nowrap"> {{ actionText }} </span>
                       <span v-else class="whitespace-nowrap">
                         {{ $t('auth.wallet.connect.title') }}
@@ -86,6 +90,7 @@ const emit = defineEmits(['sign']);
 const { isLg } = useScreen();
 const authStore = useAuthStore();
 const wallets = ref<Wallet[]>([]);
+const selectedAddress = ref<string>('');
 
 onMounted(() => {
   wallets.value = getWallets();
@@ -95,6 +100,10 @@ function onSelect(wallet: Wallet) {
   if (wallet.installed) {
     authStore.setWallet(wallet);
   }
+}
+function connectAccount(account: WalletAccount) {
+  selectedAddress.value = account.address;
+  emit('sign', account);
 }
 
 /** Wallet is available if is large screen and wallet type is desktop or is small screen and wallet type is mobile */
