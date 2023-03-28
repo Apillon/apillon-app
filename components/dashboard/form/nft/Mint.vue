@@ -32,7 +32,7 @@
       <n-input-number
         v-model:value="formData.quantity"
         :min="1"
-        :max="20"
+        :max="collectionStore.active?.reserve"
         :placeholder="$t('form.placeholder.nftMintQuantity')"
         clearable
       />
@@ -85,8 +85,16 @@ const rules: NFormRules = {
       required: true,
       message: $i18n.t('validation.nftMintQuantityRequired'),
     },
+    {
+      validator: validateQuantity,
+      message: $i18n.t('validation.nftMintQuantity'),
+    },
   ],
 };
+
+function validateQuantity(_: NFormItemRule, value: number): boolean {
+  return value > 0 && value < collectionStore.active?.reserve;
+}
 
 const isReserveMinted = computed<boolean>(() => {
   return (

@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
+defineProps({
   env: { type: Number, default: 0 },
 });
 const emit = defineEmits(['mint', 'transfer']);
