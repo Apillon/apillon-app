@@ -1,25 +1,48 @@
 const PREDEFINED_WALLETS: WalletInfo[] = [
   {
+    type: 'desktop',
     extensionName: 'polkadot-js',
     title: 'Polkadot{.js}',
-    installUrl:
-      'https://chrome.google.com/webstore/detail/polkadot%7Bjs%7D-extension/mopnmbcafieddcagagdcbnhejhlodfdd',
+    installUrl: {
+      firefox: 'https://addons.mozilla.org/en-US/firefox/addon/polkadot-js-extension/',
+      default:
+        'https://chrome.google.com/webstore/detail/polkadot%7Bjs%7D-extension/mopnmbcafieddcagagdcbnhejhlodfdd',
+    },
     icon: 'wallet/polkadot',
   },
   {
+    type: 'desktop',
     extensionName: 'subwallet-js',
     title: 'SubWallet',
-    installUrl:
-      'https://chrome.google.com/webstore/detail/subwallet/onhogfjeacnfoofkfgppdlbmlmnplgbn',
+    installUrl: {
+      firefox: 'https://addons.mozilla.org/en-US/firefox/addon/subwallet/',
+      default:
+        'https://chrome.google.com/webstore/detail/subwallet/onhogfjeacnfoofkfgppdlbmlmnplgbn',
+    },
     icon: 'wallet/subwallet',
   },
   {
+    type: 'desktop',
     extensionName: 'talisman',
     title: 'Talisman',
-    installUrl:
-      'https://chrome.google.com/webstore/detail/talisman-wallet/fijngjgcjhjmmpcmkeiomlglpeiijkld',
+    installUrl: {
+      firefox: 'https://addons.mozilla.org/en-US/firefox/addon/talisman-wallet-extension/',
+      default:
+        'https://chrome.google.com/webstore/detail/talisman-wallet/fijngjgcjhjmmpcmkeiomlglpeiijkld',
+    },
     icon: 'wallet/talisman',
   },
+  // {
+  //   type: 'mobile',
+  //   extensionName: 'nova',
+  //   title: 'Nova wallet',
+  //   installUrl: {
+  //     android: 'https://play.google.com/store/apps/details?id=io.novafoundation.nova.market',
+  //     ios: 'https://apps.apple.com/app/nova-polkadot-kusama-wallet/id1597119355',
+  //     default: 'https://novawallet.io/',
+  //   },
+  //   image: '/images/auth/nova_wallet.png',
+  // },
 ];
 
 const walletList: Wallet[] = [];

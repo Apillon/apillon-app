@@ -1,67 +1,78 @@
 <template>
   <n-space class="my-8" :size="24" vertical>
-    <div v-for="(wallet, key) in wallets" :key="key">
-      <div
-        class="flex items-center p-4 bg-bg-light border-1 border-bg-lighter"
-        :class="{ 'cursor-pointer': wallet.installed }"
-        @click="onSelect(wallet)"
-      >
-        <NuxtIcon :name="wallet.icon" class="text-xl mr-2" filled />
+    <template v-for="(wallet, key) in wallets">
+      <div v-if="isWalletAvailable(wallet)" :key="key">
+        <div
+          class="flex items-center p-4 bg-bg-light border-1 border-bg-lighter"
+          :class="{ 'cursor-pointer': wallet.installed }"
+          @click="onSelect(wallet)"
+        >
+          <NuxtIcon v-if="wallet.icon" :name="wallet.icon" class="text-xl mr-2" filled />
+          <Image
+            v-else-if="wallet.image"
+            :src="wallet.image"
+            :alt="wallet.extensionName"
+            class="mr-2"
+            width="20"
+            height="20"
+          />
+          <div v-else class="w-5 h-5 mr-2"></div>
 
-        <div class="flex-1">
-          {{ wallet.title }}
-        </div>
-        <div class="wallet-install">
-          <Btn
-            v-if="!wallet.installed"
-            class="inline-block"
-            type="link"
-            :href="wallet.installUrl"
-            target="_blank"
-          >
-            {{ $t('general.install') }}
-          </Btn>
-        </div>
-      </div>
-      <div
-        v-if="wallet.extensionName === authStore.wallet.type"
-        class="overflow-auto md:overflow-hidden"
-      >
-        <transition name="slide-down" appear>
-          <n-table
-            v-if="authStore.wallet.accounts && authStore.wallet.accounts.length > 0"
-            class="text-left"
-          >
-            <thead>
-              <tr>
-                <th>{{ $t('general.name') }}:</th>
-                <th>{{ $t('general.address') }}:</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(account, accountKey) in authStore.wallet.accounts" :key="accountKey">
-                <td class="whitespace-nowrap">{{ account.name }}</td>
-                <td>
-                  <TableEllipsis :text="account.address" />
-                </td>
-                <td>
-                  <Btn type="secondary" :loading="loading" @click="emit('sign', account)">
-                    <span v-if="actionText" class="whitespace-nowrap"> {{ actionText }} </span>
-                    <span v-else class="whitespace-nowrap">
-                      {{ $t('auth.wallet.connect.title') }}
-                    </span>
-                  </Btn>
-                </td>
-              </tr>
-            </tbody>
-          </n-table>
-          <div v-else class="p-4 text-center">
-            <h5>{{ $t('auth.wallet.createAccount') }}</h5>
+          <div class="flex-1">
+            {{ wallet.title }}
           </div>
-        </transition>
+          <div class="wallet-install">
+            <Btn
+              v-if="!wallet.installed"
+              class="inline-block"
+              type="link"
+              :href="getWalletInstallUrl(wallet.installUrl)"
+              target="_blank"
+            >
+              {{ $t('general.install') }}
+            </Btn>
+          </div>
+        </div>
+        <div
+          v-if="isWalletAvailable(wallet) && wallet.extensionName === authStore.wallet.name"
+          class="overflow-auto md:overflow-hidden"
+        >
+          <transition name="slide-down" appear>
+            <n-table
+              v-if="authStore.wallet.accounts && authStore.wallet.accounts.length > 0"
+              class="text-left"
+            >
+              <thead>
+                <tr>
+                  <th>{{ $t('general.name') }}:</th>
+                  <th>{{ $t('general.address') }}:</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(account, accountKey) in authStore.wallet.accounts" :key="accountKey">
+                  <td class="whitespace-nowrap">{{ account.name }}</td>
+                  <td>
+                    <TableEllipsis :text="account.address" />
+                  </td>
+                  <td>
+                    <Btn type="secondary" :loading="loading" @click="emit('sign', account)">
+                      <span v-if="actionText" class="whitespace-nowrap"> {{ actionText }} </span>
+                      <span v-else class="whitespace-nowrap">
+                        {{ $t('auth.wallet.connect.title') }}
+                      </span>
+                    </Btn>
+                  </td>
+                </tr>
+              </tbody>
+            </n-table>
+            <div v-else class="p-4 text-center">
+              <h5>{{ $t('auth.wallet.createAccount') }}</h5>
+            </div>
+          </transition>
+        </div>
       </div>
-    </div>
+    </template>
   </n-space>
 </template>
 
@@ -72,6 +83,7 @@ defineProps({
 });
 const emit = defineEmits(['sign']);
 
+const { isLg } = useScreen();
 const authStore = useAuthStore();
 const wallets = ref<Wallet[]>([]);
 
@@ -83,5 +95,20 @@ function onSelect(wallet: Wallet) {
   if (wallet.installed) {
     authStore.setWallet(wallet);
   }
+}
+
+/** Wallet is available if is large screen and wallet type is desktop or is small screen and wallet type is mobile */
+function isWalletAvailable(wallet: WalletInfo) {
+  return (isLg.value && wallet.type === 'desktop') || (!isLg.value && wallet.type === 'mobile');
+}
+
+/** Get url by browser or by device, if this install url does not exists, use default value */
+function getWalletInstallUrl(urls: Record<string, string>) {
+  if (isLg.value) {
+    const bn = getBrowserName();
+    return bn in urls ? urls[bn] : urls.default;
+  }
+  const dn = getDeviceName();
+  return dn in urls ? urls[dn] : urls.default;
 }
 </script>
