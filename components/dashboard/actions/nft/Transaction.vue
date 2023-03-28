@@ -25,9 +25,9 @@
 
         <!-- Actions -->
         <n-dropdown
+          :key="collectionStore.active.collectionStatus"
           placement="bottom-end"
           trigger="click"
-          :key="collectionStore.active.collectionStatus"
           :options="options"
         >
           <n-button size="small">
@@ -72,7 +72,7 @@ const options = computed(() => {
     {
       label: $i18n.t('nft.collection.revoke'),
       key: 'revoke',
-      disabled: actionsDisabled.value,
+      disabled: actionsDisabled.value || true,
       props: {
         onClick: () => {},
       },

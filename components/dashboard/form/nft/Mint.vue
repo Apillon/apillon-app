@@ -123,9 +123,12 @@ async function mint() {
       ...formData.value,
       collection_uuid: props.collectionUuid,
     };
-    const res = await $api.post<any>(endpoints.collectionMint(props.collectionUuid), bodyData);
+    await $api.post<any>(endpoints.collectionMint(props.collectionUuid), bodyData);
 
     message.success($i18n.t('form.success.nftMint'));
+
+    /** Invalidate local cache */
+    sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
 
     /** Emit events */
     emit('submitSuccess');
