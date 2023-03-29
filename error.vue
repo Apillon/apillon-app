@@ -44,11 +44,13 @@
       </n-message-provider>
     </n-config-provider>
   </div>
-  <div v-else class="relative min-h-screen h-full pb-28 md:pb-20">
+  <div
+    v-else
+    class="relative flex flex-col justify-center align-middle min-h-screen h-full bg-bg-dark"
+  >
     <n-config-provider :theme-overrides="themeOverrides">
-      <AuthHeader />
-
-      <div class="container flex justify-center items-center min-h-[70vh]">
+      <div class="container relative max-w-lg py-16 sm:px-8 md:px-12 lg:px-16 card">
+        <AuthHeader />
         <div>
           <!-- customise 404 message from template section -->
           <n-h4>{{ $t('error.404') }}</n-h4>
@@ -58,9 +60,8 @@
             {{ $t('general.goHome') }}
           </Btn>
         </div>
+        <AuthFooter />
       </div>
-
-      <AuthFooter class="absolute left-0 right-0 bottom-0 w-full" />
     </n-config-provider>
   </div>
 </template>

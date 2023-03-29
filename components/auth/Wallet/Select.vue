@@ -2,7 +2,7 @@
   <n-space class="my-8" :size="24" vertical>
     <div v-for="(wallet, key) in wallets" :key="key">
       <div
-        class="flex items-center p-4 bg-bg-light border-1 border-bg-lighter"
+        class="card flex items-center p-4"
         :class="{ 'cursor-pointer': wallet.installed }"
         @click="onSelect(wallet)"
       >

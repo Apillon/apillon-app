@@ -25,6 +25,14 @@
     @apply bg-bg-lighter;
   }
 
+  &--builders-type:not(.n-button--disabled) {
+    @apply text-primary;
+
+    &:hover {
+      @apply text-bg;
+    }
+  }
+
   &.pointer-events-none {
     cursor: not-allowed;
   }
@@ -245,6 +253,9 @@
 .n-input {
   .n-input__prefix {
     @apply mr-2;
+  }
+  .n-input__eye {
+    display: flex;
   }
 }
 .n-input-number {

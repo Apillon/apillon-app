@@ -107,7 +107,7 @@
         <!-- Referral code -->
         <h3 class="mt-8 text-white">Closed Beta code:</h3>
         <n-space
-          class="p-4 bg-bg-light border-card mt-2"
+          class="p-4 bg-bg-light card-border mt-2"
           align="center"
           size="small"
           justify="space-between"
@@ -135,7 +135,7 @@
 
     <template v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" #learn>
       <!-- Referral -->
-      <div class="md:max-w-lg p-8 mb-6 border-card">
+      <div class="md:max-w-lg p-8 mb-6 card-border">
         <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
         <p class="text-body mb-6">
           {{ $t('referral.banner.description') }}
