@@ -55,7 +55,7 @@ const isSignUp = computed(() => {
 /**
  * Disable body scroll
  */
-onUnmounted(() => {
+onMounted(() => {
   clearAllBodyScrollLocks();
 });
 </script>

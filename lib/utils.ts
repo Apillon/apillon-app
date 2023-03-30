@@ -17,12 +17,7 @@ export function getAppConfig(env?: string) {
 /**
  * Analytics Matomo
  */
-export function tractEvent(
-  eventCategory: string,
-  eventAction: string,
-  eventName: string,
-  eventValue?: number
-) {
+export function tractEvent(eventCategory: string, eventAction: string, eventName: string) {
   if (window._paq) {
     window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
   }
@@ -349,3 +344,39 @@ export const compareArrays = (a: Array<any>, b: Array<any>) => {
   const bs = b.sort();
   return a.length === b.length && a.sort().every((element, index) => element === bs[index]);
 };
+
+/** Browser, device */
+export function getBrowserName(): string {
+  if (navigator.userAgent.includes('Firefox')) {
+    return 'firefox';
+  } else if (navigator.userAgent.includes('MSIE')) {
+    return 'ie';
+  } else if (navigator.userAgent.includes('Edge')) {
+    return 'edge';
+  } else if (navigator.userAgent.includes('Safari')) {
+    return 'safari';
+  } else if (navigator.userAgent.includes('Opera')) {
+    return 'opera';
+  }
+  return 'chrome';
+}
+export function getDeviceName() {
+  const userAgent = window.navigator.userAgent;
+  const platform = window.navigator?.userAgentData?.platform || window.navigator.platform;
+  const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
+  const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
+  const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+
+  if (macosPlatforms.includes(platform)) {
+    return 'mac';
+  } else if (iosPlatforms.includes(platform)) {
+    return 'ios';
+  } else if (windowsPlatforms.includes(platform)) {
+    return 'windows';
+  } else if (/Android/.test(userAgent)) {
+    return 'android';
+  } else if (/Linux/.test(platform)) {
+    return 'linux';
+  }
+  return '';
+}
