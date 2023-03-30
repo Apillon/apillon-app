@@ -2,7 +2,6 @@
   <n-space class="pb-8" :size="32" vertical>
     <n-upload
       v-if="collectionStore.hasImages"
-      ref="NUploadRef"
       accept="image/png, image/jpeg"
       :default-file-list="collectionStore.images"
       :show-preview-button="false"

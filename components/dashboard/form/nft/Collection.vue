@@ -269,7 +269,7 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 function validateReserve(_: NFormItemRule, value: number): boolean {
-  return value <= (formData.value?.maxSupply || 0);
+  return formData.value?.maxSupply === 0 || value <= (formData.value?.maxSupply || 0);
 }
 function validateMaxSupply(_: NFormItemRule, value: number): boolean {
   return value <= NFT_MAX_SUPPLY;
@@ -281,7 +281,7 @@ function validateDropStart(_: NFormItemRule, value: number): boolean {
   return !formData.value.isDrop || value > Date.now();
 }
 function validateMintPrice(_: NFormItemRule, value: number): boolean {
-  return !formData.value.isDrop || (value > 0 && value < 999999);
+  return !formData.value.isDrop || (value >= 0 && value < 999999);
 }
 function disablePasteDate(ts: number) {
   return ts < Date.now();
