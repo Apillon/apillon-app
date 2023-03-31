@@ -9,6 +9,7 @@ const config: ConfigInterface = {
   githubId: '95223986c9689e1c7657',
   publishedFeatures: [
     'DISCORD',
+    'NFT',
     'PROJECT',
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
