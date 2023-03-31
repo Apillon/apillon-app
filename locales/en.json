@@ -982,6 +982,7 @@
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
     "nftMintAddressRequired": "Please enter your wallet address for minting",
+    "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
     "nftTransfertAddressRequired": "Please enter wallet address",
     "notImage": "{name} is not an image",

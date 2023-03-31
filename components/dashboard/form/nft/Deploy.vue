@@ -1,6 +1,6 @@
 <template>
   <n-space class="pb-8" :size="32" vertical>
-    <div class="grid gap-8 grid-flow-col auto-cols-[minmax(0,250px)]">
+    <div class="grid gap-8 grid-cols-nft">
       <div v-for="image in collectionStore.images" :key="image.id">
         <figure class="flex flex-col h-full">
           <img

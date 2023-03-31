@@ -126,7 +126,6 @@
         <n-form-item-gi path="mintPrice" :span="1" :label="$t('form.label.collectionMintPrice')">
           <n-input-number
             v-model:value="formData.mintPrice"
-            :min="0"
             :placeholder="$t('form.placeholder.collectionMintPrice')"
             clearable
           />
@@ -230,7 +229,7 @@ const rules: NFormRules = {
       message: $i18n.t('validation.collectionMintPriceRequired'),
     },
     {
-      max: 10000,
+      validator: validateMintPrice,
       message: $i18n.t('validation.collectionMintPrice'),
     },
   ],
@@ -270,7 +269,7 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 function validateReserve(_: NFormItemRule, value: number): boolean {
-  return value <= (formData.value?.maxSupply || 0);
+  return formData.value?.maxSupply === 0 || value <= (formData.value?.maxSupply || 0);
 }
 function validateMaxSupply(_: NFormItemRule, value: number): boolean {
   return value <= NFT_MAX_SUPPLY;
@@ -280,6 +279,9 @@ function validateBaseExtension(_: NFormItemRule, value: number): boolean {
 }
 function validateDropStart(_: NFormItemRule, value: number): boolean {
   return !formData.value.isDrop || value > Date.now();
+}
+function validateMintPrice(_: NFormItemRule, value: number): boolean {
+  return !formData.value.isDrop || (value >= 0 && value < 999999);
 }
 function disablePasteDate(ts: number) {
   return ts < Date.now();
