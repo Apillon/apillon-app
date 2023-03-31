@@ -157,9 +157,20 @@
 
 /** Form */
 .n-form {
+  &:not(.form-errors) {
+    .hide-feedback .n-form-item-feedback-wrapper {
+      display: none;
+    }
+  }
+
   .n-checkbox {
     &--disabled .n-checkbox__label strong {
       opacity: 0.4;
+    }
+  }
+  .n-grid {
+    .n-form-item-feedback__line {
+      height: 1.25em;
     }
   }
 }

@@ -328,6 +328,7 @@
     "NFT_MINT_QUANTITY_NOT_VALID": "Mint Quantity not valid. Enter a number between 1 and 20.",
     "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
     "NFT_CONTRACT_OWNER_ERROR": "NFT contract has been transferred to another wallet.",
+    "NFT_DEPLOY_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
 
     "walletSignature": "'Could not capture your signature, check your wallet connection",
     "fileDownload": "Download failed. Something went wrong during the download.",
@@ -617,6 +618,7 @@
       "create": "Create collection",
       "dropStart": "Drop start",
       "edit": "Edit",
+      "extension": "[extension]",
       "empty": "Your project has currently no NFTs",
       "emptyInfo": "First create an NFT collection and then start uploading NFTs.",
       "maxSupply": "Max supply",
@@ -680,6 +682,13 @@
       "imagesDesc": "",
       "preview": "Preview upload",
       "selectAttributes": "Select attributes"
+    },
+    "validation": {
+      "csvMissingAttributes": "Are you sure you want to continue with no attirubtes?",
+      "csvMissingData": "Missing metadata, num of row must be same as maxSupply",
+      "csvRequiredColumns": "Missing metadata columns, required columns:",
+      "imagesMissing": "Missing images:",
+      "imagesInvalid": "Invalid image names. Example: "
     },
     "transactionType": "Transaction Type"
   },
@@ -946,10 +955,13 @@
     "containsUppercase": "Must include an uppercase character",
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
+    "collectionBaseUri": "Base URI is not valid",
     "collectionBaseUriRequired": "Please enter Base URI",
     "collectionBaseExtensionRequired": "Please enter Base Extension",
+    "collectionDropStart": "Drop start is not a valid date or has already passed by",
     "collectionMaxSupplyReached": "Please enter lower number, max supply is {max}",
     "collectionMaxSupplyRequired": "Please enter Max supply",
+    "collectionMintPrice": "Please enter a valid Mint price",
     "collectionMintPriceRequired": "Please enter Mint price",
     "collectionNameRequired": "Please enter Collection name",
     "collectionReserve": "Number of reserved NFTs can be equal or lower than max supply.",
@@ -970,6 +982,7 @@
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
     "nftMintAddressRequired": "Please enter your wallet address for minting",
+    "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
     "nftTransfertAddressRequired": "Please enter wallet address",
     "notImage": "{name} is not an image",

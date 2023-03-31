@@ -19,7 +19,7 @@ window.$message = message;
 /**
  * Disable body scroll
  */
-onUnmounted(() => {
+onMounted(() => {
   clearAllBodyScrollLocks();
 });
 </script>
