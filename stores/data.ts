@@ -207,7 +207,7 @@ export const useDataStore = defineStore('data', {
      */
 
     /** Projects */
-    async fetchProjects(redirectToDashboard: boolean = false) {
+    async fetchProjects(redirectToDashboard: boolean = false): Promise<ProjectInterface[]> {
       const router = useRouter();
       try {
         const req = $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
@@ -252,11 +252,13 @@ export const useDataStore = defineStore('data', {
       return [];
     },
 
-    async fetchProject(projectId?: number) {
+    async fetchProject(projectId?: number): Promise<ProjectInterface> {
+      const id = projectId || this.currentProjectId;
+      if (!id || id < 1) {
+        return {} as ProjectInterface;
+      }
       try {
-        const res = await $api.get<ProjectResponse>(
-          endpoints.project(projectId || this.currentProjectId)
-        );
+        const res = await $api.get<ProjectResponse>(endpoints.project(id));
         this.project.active = res.data;
 
         /** Save timestamp to SS */
