@@ -97,7 +97,7 @@ async function updateProjectData() {
 
   try {
     const res = await $api.patch<ProjectSettingsResponse>(
-      endpoints.project(dataStore.currentProjectId),
+      endpoints.project(dataStore.project.selected),
       formData.value
     );
 

@@ -130,7 +130,7 @@ async function createService() {
   loading.value = true;
 
   const bodyData = {
-    project_id: dataStore.currentProjectId,
+    project_id: dataStore.project.selected,
     serviceType_id: props.serviceType,
     name: formData.value.serviceName,
     active: 1,
@@ -161,7 +161,7 @@ async function updateService() {
   loading.value = true;
 
   const bodyData = {
-    project_id: dataStore.currentProjectId,
+    project_id: dataStore.project.selected,
     serviceType_id: props.serviceType,
     name: formData.value.serviceName,
     active: 1,

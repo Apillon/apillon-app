@@ -109,7 +109,7 @@ export const useSettingsStore = defineStore('settings', {
     async fetchProjectUsers() {
       try {
         const res = await $api.get<ProjectUsersResponse>(
-          endpoints.projectUsers(dataStore.currentProjectId)
+          endpoints.projectUsers(dataStore.project.selected)
         );
         this.users = res.data.items;
       } catch (error) {
