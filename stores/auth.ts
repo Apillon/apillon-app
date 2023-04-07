@@ -60,7 +60,6 @@ export const useAuthStore = defineStore('auth', {
       this.wallet.type = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.WALLET);
-      localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
     saveEmail(email: string) {
