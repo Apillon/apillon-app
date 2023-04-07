@@ -17,9 +17,18 @@ export function getAppConfig(env?: string) {
 /**
  * Analytics Matomo
  */
-export function tractEvent(eventCategory: string, eventAction: string, eventName: string) {
+export function tractEvent(
+  eventCategory: string,
+  eventAction: string,
+  eventName: string,
+  userUuid?: string
+) {
   if (window._paq) {
     window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
+
+    if (userUuid) {
+      window._paq.push(['setCustomVariable', '1', 'userUUid', userUuid, 'visit']);
+    }
   }
 }
 

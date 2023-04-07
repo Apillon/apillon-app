@@ -17,10 +17,13 @@
 <script lang="ts" setup>
 import { lightTheme, darkTheme, enUS, dateEnUS } from 'naive-ui';
 
+const authStore = useAuthStore();
+
 /** Matomo analytics */
 const router = useRouter();
 router.afterEach(to => {
   if (window._paq) {
+    window._paq.push(['setCustomVariable', '1', 'userUUid', authStore.userUuid, 'visit']);
     window._paq.push(['setDocumentTitle', to.fullPath]);
     window._paq.push(['trackPageView']);
   }
