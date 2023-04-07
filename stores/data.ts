@@ -7,15 +7,14 @@ export const DataLsKeys = {
 
 export const useDataStore = defineStore('data', {
   state: () => ({
-    currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
-      ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
-      : 0,
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
     project: {
       active: {} as ProjectInterface,
       items: [] as Array<ProjectInterface>,
-      selected: 0,
+      selected: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
+        ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
+        : 0,
       quotaReached: undefined as Boolean | undefined,
     },
     promises: {
@@ -43,13 +42,13 @@ export const useDataStore = defineStore('data', {
         return null;
       }
       /** Return project with currentProjectId, if this ID does not exists, return first project */
-      const project = state.project.items.find(project => project.id === state.currentProjectId);
+      const project = state.project.items.find(project => project.id === state.project.selected);
       if (project) {
         return project;
       }
       /** Select first project as fallback if currentProjectId is not available */
-      this.currentProjectId = state.project.items[0].id;
-      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${this.currentProjectId}`);
+      this.project.selected = state.project.items[0].id;
+      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${this.project.selected}`);
       return state.project.items[0];
     },
     projectUuid(state): string {
@@ -57,7 +56,7 @@ export const useDataStore = defineStore('data', {
         state.project.active.project_uuid ||
         (
           state.project.items.find(
-            (item: ProjectInterface) => item.id === state.currentProjectId
+            (item: ProjectInterface) => item.id === state.project.selected
           ) || ({} as ProjectInterface)
         )?.project_uuid ||
         ''
@@ -72,7 +71,6 @@ export const useDataStore = defineStore('data', {
       /** Project */
       this.project.active = {} as ProjectInterface;
       this.project.items = [] as Array<ProjectInterface>;
-      this.project.selected = 0;
       this.project.quotaReached = undefined as Boolean | undefined;
       /** Services */
       this.services.authentication = [] as Array<ServiceInterface>;
@@ -84,7 +82,7 @@ export const useDataStore = defineStore('data', {
       /** Reset store data */
       this.resetData();
 
-      this.currentProjectId = id;
+      this.project.selected = id;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
     },
 
@@ -92,7 +90,7 @@ export const useDataStore = defineStore('data', {
       /** Reset store data */
       this.resetData();
 
-      this.currentProjectId = 0;
+      this.project.selected = 0;
       localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
@@ -225,7 +223,7 @@ export const useDataStore = defineStore('data', {
         const hasProjects = res.data.total > 0;
 
         /* If current project is not selected, take first one */
-        if (this.currentProjectId === 0 && hasProjects) {
+        if (this.project.selected === 0 && hasProjects) {
           this.setCurrentProject(this.project.items[0].id);
         }
 
@@ -253,7 +251,7 @@ export const useDataStore = defineStore('data', {
     },
 
     async fetchProject(projectId?: number): Promise<ProjectInterface> {
-      const id = projectId || this.currentProjectId;
+      const id = projectId || this.project.selected;
       if (!id || id < 1) {
         return {} as ProjectInterface;
       }
@@ -295,7 +293,7 @@ export const useDataStore = defineStore('data', {
 
       try {
         const params: Record<string, string | number> = {
-          project_id: this.currentProjectId,
+          project_id: this.project.selected,
           ...PARAMS_ALL_ITEMS,
         };
         if (type) {
