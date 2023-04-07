@@ -111,7 +111,8 @@ export const referralCountries = [
  * NFT
  */
 export const NftMintTab = {
-  METADATA: 'uploadMetadata',
+  METADATA: 'metadata',
+  UPLOAD: 'upload',
   IMAGES: 'uploadImages',
   MINT: 'mintNfts',
 };

@@ -73,35 +73,24 @@
             <FormNftBucket v-else-if="!collectionStore.metadataStored" />
           </slot>
         </n-tab-pane>
-        <n-tab-pane
-          :name="NftMintTab.IMAGES"
-          :disabled="!collectionStore.hasCsvFile || !collectionStore.hasMetadata"
-        >
+        <n-tab-pane :name="NftMintTab.UPLOAD" :disabled="false">
           <template #tab>
             <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
             <IconNumber
               v-else
               :number="2"
-              :active="collectionStore.mintTab === NftMintTab.IMAGES"
+              :active="collectionStore.mintTab === NftMintTab.UPLOAD"
             />
-            <span class="ml-2">{{ $t('nft.collection.uploadImages') }}</span>
+            <span class="ml-2 text-sm text-white">{{ $t('nft.collection.uploadData') }}</span>
           </template>
           <slot>
-            <FormNftUploadImages />
+            <FormNftUpload />
           </slot>
         </n-tab-pane>
-        <n-tab-pane
-          :name="NftMintTab.MINT"
-          :disabled="
-            !collectionStore.hasCsvFile ||
-            !collectionStore.hasMetadata ||
-            !collectionStore.hasImages ||
-            !allImagesUploaded
-          "
-        >
+        <n-tab-pane :name="NftMintTab.MINT" :disabled="false">
           <template #tab>
             <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
-            <span class="ml-2">{{ $t('nft.collection.upload') }}</span>
+            <span class="ml-2 text-sm text-white">{{ $t('nft.collection.upload') }}</span>
           </template>
           <slot>
             <FormNftDeploy />
