@@ -105,6 +105,7 @@
     "or": "or",
     "paused": "paused",
     "pending": "pending",
+    "pleaseSelect": "Please select",
     "production": "Production",
     "refresh": "Refresh",
     "restore": "Restore",
@@ -116,6 +117,7 @@
     "serviceType": "Service type",
     "signup": "Sign up",
     "skip": "Skip",
+    "smBy": "Smart contracts by",
     "staging": "Staging",
     "status": "Status",
     "tryAgain": "Try again",
@@ -647,6 +649,17 @@
         "4": "TRANSFERRED",
         "5": "FAILED"
       }
+    },
+    "metadata": {
+      "createBucket": "Create a bucket",
+      "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files. ",
+      "infoNew": "Before creating your NFT collection, you need to store NFT files, meaning NFT metadata and NFT images, on the internet. \n\nDo you have your NFT metadata already stored somewhere?",
+      "no": "No, I don’t",
+      "orSelectExisting": "or select existing bucket",
+      "selectBucket": "Continue with selected bucket",
+      "title": "NFT metadata",
+      "titleBucket": "Let’s get you a bucket",
+      "yes": "Yes, I do"
     },
     "transaction": {
       "chainId": "Chain ID",

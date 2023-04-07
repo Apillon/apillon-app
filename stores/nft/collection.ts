@@ -15,6 +15,7 @@ export const useCollectionStore = defineStore('collection', {
     items: [] as CollectionInterface[],
     loading: false,
     metadata: [] as Array<Record<string, any>>,
+    metadataStored: null as Boolean | null,
     mintTab: NftMintTab.METADATA,
     quotaReached: undefined as Boolean | undefined,
     search: '',
