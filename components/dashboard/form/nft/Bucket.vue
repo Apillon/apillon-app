@@ -1,11 +1,25 @@
 <template>
   <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
-    <div class="w-full max-w-lg text-center">
+    <!-- Creating new bucket -->
+    <div v-if="loadingBucket" class="w-full max-w-lg text-center">
+      <AnimationLoader />
+      <h2>{{ $t('nft.metadata.titleBucketCreation') }}</h2>
+      <p class="mb-8 text-body whitespace-pre-line">{{ $t('nft.metadata.infoBucketCreation') }}</p>
+    </div>
+
+    <!-- New bucket created -->
+    <div v-else-if="collectionStore.bucketId && loadingBucket === false">
+      <h2>{{ $t('nft.metadata.titleBucketCreation') }}</h2>
+      <p class="mb-8 text-body whitespace-pre-line">{{ $t('nft.metadata.infoBucketCreation') }}</p>
+    </div>
+
+    <!-- Select/create bucket  -->
+    <div v-else class="w-full max-w-lg text-center">
       <h2>{{ $t('nft.metadata.titleBucket') }}</h2>
-      <p class="mb-8 whitespace-pre-line">
+      <p class="mb-8 text-body whitespace-pre-line">
         {{ $t('nft.metadata.infoBucket') }}
       </p>
-      <Btn type="secondary" size="large" @click="">
+      <Btn type="secondary" size="large" @click="modalNewBucketVisible = true">
         {{ $t('nft.metadata.createBucket') }}
       </Btn>
 
@@ -17,12 +31,12 @@
 
       <n-form
         ref="formRef"
+        class="text-left"
         :model="formData"
         :rules="rules"
-        :disabled="isFormDisabled"
         @submit.prevent="handleSubmit"
       >
-        <n-form-item path="file" :show-label="false" :label-props="{ for: 'file' }">
+        <n-form-item path="bucket" :show-label="false" :label-props="{ for: 'bucket' }">
           <select-options
             v-model:value="formData.bucket"
             :options="buckets"
@@ -32,20 +46,23 @@
           />
         </n-form-item>
         <!--  Form submit -->
-        <n-form-item>
+        <n-form-item :show-label="false">
           <input type="submit" class="hidden" :value="$t('nft.metadata.selectBucket')" />
-          <Btn
-            type="primary"
-            class="w-full mt-2"
-            :loading="loading"
-            :disabled="isFormDisabled"
-            @click="handleSubmit"
-          >
+          <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
             {{ $t('nft.metadata.selectBucket') }}
           </Btn>
         </n-form-item>
       </n-form>
     </div>
+
+    <!-- Modal - Create bucket -->
+    <modal v-model:show="modalNewBucketVisible" :title="$t('project.newBucket')">
+      <FormStorageBucket
+        :bucket-type="BucketType.NFT_METADATA"
+        @submit="loadingBucket = true"
+        @crate-success="onBucketCreated"
+      />
+    </modal>
   </div>
 </template>
 
@@ -63,6 +80,8 @@ const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
 
 const loading = ref<boolean>(false);
+const loadingBucket = ref<boolean | null>(null);
+const modalNewBucketVisible = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 
 onMounted(() => {
@@ -75,8 +94,8 @@ const buckets = computed<Array<NSelectOption>>(() => {
   });
 });
 
-const formData = ref({
-  bucket: '',
+const formData = ref<{ bucket: any }>({
+  bucket: null,
 });
 
 const rules: NFormRules = {
@@ -88,20 +107,26 @@ const rules: NFormRules = {
   ],
 };
 
-const isFormDisabled = computed<boolean>(() => {
-  return settingsStore.isProjectUser();
-});
-
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
+  formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
+      collectionStore.bucketId = formData.value.bucket;
     }
   });
+}
+
+function onBucketCreated(bucket: BucketInterface) {
+  modalNewBucketVisible.value = false;
+  collectionStore.bucketId = bucket.id;
+
+  setTimeout(() => {
+    loadingBucket.value = false;
+  }, 3000);
 }
 </script>

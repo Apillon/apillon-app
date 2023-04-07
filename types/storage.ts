@@ -6,6 +6,7 @@ import { crustTypes } from '@crustio/type-definitions';
 export enum BucketType {
   STORAGE = 1,
   HOSTING = 2,
+  NFT_METADATA = 3,
 }
 
 /**

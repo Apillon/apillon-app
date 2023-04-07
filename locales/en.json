@@ -652,13 +652,15 @@
     },
     "metadata": {
       "createBucket": "Create a bucket",
-      "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files. ",
+      "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
+      "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoNew": "Before creating your NFT collection, you need to store NFT files, meaning NFT metadata and NFT images, on the internet. \n\nDo you have your NFT metadata already stored somewhere?",
       "no": "No, I don’t",
       "orSelectExisting": "or select existing bucket",
       "selectBucket": "Continue with selected bucket",
       "title": "NFT metadata",
       "titleBucket": "Let’s get you a bucket",
+      "titleBucketCreation": "Bucket creation in progress",
       "yes": "Yes, I do"
     },
     "transaction": {
@@ -994,6 +996,7 @@
     "ipnsDescriptionTooLong": "Text is too long (max 255 characters)",
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
+    "nftBucketRequired": "Please select a bucket",
     "nftMintAddressRequired": "Please enter your wallet address for minting",
     "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",

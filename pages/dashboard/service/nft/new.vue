@@ -28,6 +28,7 @@
         justify-content="space-evenly"
         animated
       >
+        <!-- METADATA -->
         <n-tab-pane :name="NftMintTab.METADATA">
           <template #tab>
             <IconNumber
@@ -39,6 +40,7 @@
             <span class="ml-2 text-sm text-white">{{ $t('nft.collection.uploadMetadata') }}</span>
           </template>
           <slot>
+            <!-- METADATA: storage type -->
             <div
               v-if="collectionStore.metadataStored === null"
               class="flex justify-center items-center"
@@ -46,7 +48,7 @@
             >
               <div class="max-w-lg text-center">
                 <h2>{{ $t('nft.metadata.title') }}</h2>
-                <p class="whitespace-pre-line">
+                <p class="text-body whitespace-pre-line">
                   {{ $t('nft.metadata.infoNew') }}
                 </p>
                 <div class="flex justify-center gap-4 px-2 mt-8">
@@ -67,7 +69,8 @@
                 </div>
               </div>
             </div>
-            <FormNftBucket v-else />
+            <!-- METADATA: create/select Bucket -->
+            <FormNftBucket v-else-if="!collectionStore.metadataStored" />
           </slot>
         </n-tab-pane>
         <n-tab-pane
