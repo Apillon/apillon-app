@@ -419,6 +419,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     tabBorderRadius: '0',
     tabColor: colors.green,
     tabColorSegment: colors.bg.light,
+    tabGapLargeBar: '4vw',
     tabPaddingMediumSegment: '16px 0',
     tabTextColorLine: colors.bodyDark,
     tabTextColorActiveLine: colors.white,

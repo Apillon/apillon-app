@@ -62,53 +62,22 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
-const $i18n = useI18n();
-const message = useMessage();
-const collectionStore = useCollectionStore();
 const loading = ref<boolean>(false);
-
-const { vueApp } = useNuxtApp();
-const $papa = vueApp.config.globalProperties.$papa;
+const collectionStore = useCollectionStore();
+const {
+  hasRequiredMetadata,
+  isCsvValid,
+  isSameNumOfRows,
+  metadataRequired,
+  createNftData,
+  uploadFileRequest,
+  parseUploadedFile,
+} = useNft();
 
 /**
  * Attributes
  */
 const modalMetadataAttributesVisible = ref<boolean>(false);
-const metadataRequired = ['name', 'description', 'image'];
-const metadataProperties = [
-  'name',
-  'description',
-  'external_url',
-  'image',
-  'image_data',
-  'attributes',
-  'background_color',
-  'animation_url',
-  'youtube_url',
-];
-
-/**
- * Validation
- */
-const isSameNumOfRows = computed<boolean>(() => {
-  return (
-    collectionStore.active?.maxSupply === 0 ||
-    collectionStore.active?.maxSupply === collectionStore.csvData?.length
-  );
-});
-const hasRequiredMetadata = computed<boolean>(() => {
-  const csvColumns: Array<string> = collectionStore.csvColumns.map(
-    (item: NTableColumn<KeyTitle>) => {
-      return (item as KeyTitle).key;
-    }
-  );
-  return metadataRequired.every(item => csvColumns.includes(item));
-});
-const isCsvValid = computed<boolean>(() => {
-  return isSameNumOfRows.value && hasRequiredMetadata.value;
-});
 
 onMounted(() => {
   if (!!collectionStore.csvFile?.file && !collectionStore.csvData) {
@@ -116,104 +85,9 @@ onMounted(() => {
   }
 });
 
-/** Upload file request - add file to list */
-function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-  if (file.type !== 'text/csv' && file.type !== 'application/vnd.ms-excel') {
-    console.warn(file.type);
-    message.warning($i18n.t('validation.fileTypeNotCsv'));
-
-    /** Mark file as failed */
-    onError();
-    return;
-  }
-  collectionStore.csvAttributes = [];
-  collectionStore.csvFile = {
-    ...file,
-    percentage: 0,
-    size: file.file?.size || 0,
-    timestamp: Date.now(),
-    onFinish,
-    onError,
-  };
-  parseUploadedFile(collectionStore.csvFile.file);
-}
-
-/**
- * Parse CSV file and prepare data, columns and attributes
- */
-function parseUploadedFile(file?: File | null) {
-  if (!file) {
-    return;
-  }
-
-  $papa.parse(file, {
-    header: true,
-    skipEmptyLines: true,
-    complete: function (results: CsvFileData) {
-      if (results.data.length) {
-        collectionStore.csvData = results.data;
-        collectionStore.csvColumns = results.meta.fields.map(item => {
-          return {
-            title: item,
-            key: item,
-          };
-        });
-        collectionStore.csvAttributes = results.meta.fields
-          .filter(item => !metadataProperties.includes(item))
-          .map(item => {
-            return {
-              value: item,
-              label: item,
-              display_type: 'string',
-            };
-          });
-      } else {
-        message.warning($i18n.t('validation.fileNoData'));
-
-        collectionStore.csvFile.onError();
-        collectionStore.csvFile = {} as FileListItemType;
-      }
-    },
-    error: function (error: string) {
-      console.warn(error);
-
-      collectionStore.csvFile.onError();
-      collectionStore.csvFile = {} as FileListItemType;
-    },
-  });
-}
-
 function createMetadata() {
   loading.value = true;
   collectionStore.metadata = createNftData();
-
   loading.value = false;
-  collectionStore.mintTab = NftMintTab.IMAGES;
-}
-
-/**
- * Prepare NFT data: array of JSONs with formatted properties and attributes
- */
-function createNftData(): Array<Record<string, any>> {
-  return collectionStore.csvData.map(item => {
-    const nft: Record<string, any> = {};
-    Object.entries(item).forEach(([key, value]) => {
-      if (!collectionStore.csvSelectedAttributes.includes(key)) {
-        nft[key] = value;
-      }
-    });
-
-    const attributes: Array<Record<string, any>> = [];
-    collectionStore.csvAttributes.forEach(attribute => {
-      if (collectionStore.csvSelectedAttributes.includes(attribute.value)) {
-        attributes.push(attribute);
-      }
-    });
-    if (attributes.length > 0) {
-      nft.attributes = attributes;
-    }
-
-    return nft;
-  });
 }
 </script>

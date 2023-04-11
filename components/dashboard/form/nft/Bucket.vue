@@ -78,15 +78,10 @@
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
 
-const emit = defineEmits(['submitSuccess']);
-
 const $i18n = useI18n();
-const router = useRouter();
 const message = useMessage();
-const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
-const settingsStore = useSettingsStore();
 
 const loading = ref<boolean>(false);
 const loadingBucket = ref<boolean | null>(null);
@@ -104,7 +99,7 @@ const buckets = computed<Array<NSelectOption>>(() => {
 });
 
 const formData = ref<{ bucket: any }>({
-  bucket: null,
+  bucket: collectionStore.bucketId || null,
 });
 
 const rules: NFormRules = {

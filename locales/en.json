@@ -80,7 +80,7 @@
     "address": "Address",
     "attach": "Attach",
     "cancel": "No, cancel",
-    "confirm": "Yes, confirm",
+    "confirm": "Confirm",
     "copyrights": "© Apillon",
     "created": "created",
     "delete": "Delete",
@@ -91,6 +91,7 @@
     "error": "Error",
     "goHome": "Go home",
     "install": "Install",
+    "images": "images",
     "learn": "Learn",
     "learnMore": "Learn more",
     "live": "Live",
@@ -533,6 +534,7 @@
       "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform's services.",
       "payment": "I understand the billing process and some other legal stuff."
     },
+    "confirm": "Yes, confirm",
     "connect": "Connect",
     "createBucketAndContinue": "Create bucket & continue to management",
     "createHostingAndContinue": "Create hosting & continue to management",
@@ -656,6 +658,7 @@
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
+      "infoCollectionName": "Enter the name and the symbol for your NFT collection.",
       "infoNew": "Before creating your NFT collection, you need to store NFT files, meaning NFT metadata and NFT images, on the internet. \n\nDo you have your NFT metadata already stored somewhere?",
       "no": "No, I don’t",
       "orSelectExisting": "or select existing bucket",
@@ -665,6 +668,7 @@
       "titleBucket": "Let’s get you a bucket",
       "titleBucketCreation": "Bucket creation in progress",
       "titleBucketCreated": "Bucket successfully created",
+      "titleCollectionName": "Name and symbol",
       "yes": "Yes, I do"
     },
     "transaction": {
@@ -697,12 +701,15 @@
       "downloadCsv": "Download CSV example",
       "differentFile": "Upload different file",
       "dragAndDrop": "Drag & drop or click to upload.",
-      "images": "Upload images",
+      "images": "Upload NFT images",
       "imagesConfirm": "Confirm & upload images",
       "imagesDesc": "",
       "infoFile": "Upload CSV file with NFT metadata in order to create your collection.",
+      "infoImages": "Now, upload NFT images that match your CSV file in order to create your NFT collection.",
       "preview": "Preview upload",
-      "selectAttributes": "Select attributes"
+      "previewNfts": "Preview your NFTs",
+      "selectAttributes": "Select attributes",
+      "takeMeBack": "Take me back"
     },
     "validation": {
       "csvMissingAttributes": "Are you sure you want to continue with no attirubtes?",

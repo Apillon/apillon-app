@@ -116,3 +116,13 @@ export const NftMintTab = {
   IMAGES: 'uploadImages',
   MINT: 'mintNfts',
 };
+export const NftUploadStep = {
+  FILE: 1,
+  IMAGES: 2,
+  PREVIEW: 3,
+};
+export const NftMintStep = {
+  NAME: 1,
+  BEHAVIOUR: 2,
+  DEPLOY: 3,
+};

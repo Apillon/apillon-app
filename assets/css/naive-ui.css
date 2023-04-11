@@ -556,6 +556,24 @@ body > .n-message-container {
       border: 1px solid theme(colors.bg.light);
     }
   }
+  &--bar-type {
+    .n-tabs-wrapper {
+      @apply mobile:flex-col mobile:items-center;
+    }
+    .n-tabs-tab-pad {
+      @apply mobile:hidden;
+    }
+    .n-tabs-tab {
+      @apply mobile:py-1;
+    }
+    .n-tab-pane {
+      @apply mobile:pt-0;
+
+      > div {
+        @apply mobile:py-4 mobile:-my-4;
+      }
+    }
+  }
 }
 
 /** Tag */

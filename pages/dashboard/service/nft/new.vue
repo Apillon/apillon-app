@@ -25,7 +25,7 @@
         type="bar"
         :bar-width="0"
         size="large"
-        justify-content="space-evenly"
+        justify-content="center"
         animated
       >
         <!-- METADATA -->
@@ -90,10 +90,10 @@
         <n-tab-pane :name="NftMintTab.MINT" :disabled="false">
           <template #tab>
             <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
-            <span class="ml-2 text-sm text-white">{{ $t('nft.collection.upload') }}</span>
+            <span class="ml-2 text-sm text-white">{{ $t('nft.collection.mintNfts') }}</span>
           </template>
           <slot>
-            <FormNftDeploy />
+            <FormNftMintNft />
           </slot>
         </n-tab-pane>
       </n-tabs>
@@ -102,12 +102,8 @@
 </template>
 
 <script lang="ts" setup>
-const router = useRouter();
-const { params } = useRoute();
 const $i18n = useI18n();
-const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
-const { allImagesUploaded } = useNft();
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),

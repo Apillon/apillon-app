@@ -21,6 +21,8 @@ export const useCollectionStore = defineStore('collection', {
     quotaReached: undefined as Boolean | undefined,
     search: '',
     selected: 0,
+    stepDeploy: NftMintStep.NAME,
+    stepUpload: NftUploadStep.FILE,
     total: 0,
     transaction: [] as TransactionInterface[],
     uploadActive: false,
@@ -53,15 +55,21 @@ export const useCollectionStore = defineStore('collection', {
       this.resetMetadata();
     },
     resetMetadata() {
+      this.resetFile();
+      this.resetImages();
+      this.mintTab = NftMintTab.METADATA;
+    },
+    resetFile() {
       this.csvAttributes = [] as MetadataAttributes[];
       this.csvColumns = [] as NTableColumns<KeyTitle>;
       this.csvData = [] as Array<Record<string, string>>;
       this.csvFile = {} as FileListItemType;
       this.csvSelectedAttributes = [] as Array<string>;
       this.filesMetadata = [] as FileListItemType[];
+      this.metadata = [] as Array<Record<string, any>>;
+    },
+    resetImages() {
       this.images = [] as FileListItemType[];
-      this.metadata = [];
-      this.mintTab = NftMintTab.METADATA;
     },
     setCollectionId(id: number) {
       if (this.selected !== id) {
