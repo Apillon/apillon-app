@@ -89,5 +89,6 @@ function createMetadata() {
   loading.value = true;
   collectionStore.metadata = createNftData();
   loading.value = false;
+  collectionStore.mintTab = NftMintTab.IMAGES;
 }
 </script>

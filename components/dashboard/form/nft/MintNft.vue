@@ -445,10 +445,12 @@ async function deploy() {
     /** On new collection created add new collection to list */
     collectionStore.items.push(res.data);
 
-    /** Reset collection qouta limit */
-    collectionStore.quotaReached = undefined;
-
     await deployCollection();
+
+    /** Reset collection qouta limit, metadata, forms */
+    collectionStore.quotaReached = undefined;
+    collectionStore.resetMetadata();
+    collectionStore.resetForms();
 
     /** Emit events */
     emit('submitSuccess');

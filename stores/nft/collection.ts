@@ -89,6 +89,21 @@ export const useCollectionStore = defineStore('collection', {
     resetImages() {
       this.images = [] as FileListItemType[];
     },
+    resetForms() {
+      this.form.base.name = '';
+      this.form.base.symbol = '';
+      this.form.base.chain = 1;
+
+      this.form.behaviour.baseExtension = '.json';
+      this.form.behaviour.dropStart = Date.now() + 3600000;
+      this.form.behaviour.isDrop = false;
+      this.form.behaviour.maxSupply = 0;
+      this.form.behaviour.mintPrice = 0;
+      this.form.behaviour.reserve = 0;
+      this.form.behaviour.revocable = null;
+      this.form.behaviour.soulbound = null;
+      this.form.behaviour.supplyLimited = false;
+    },
     setCollectionId(id: number) {
       if (this.selected !== id) {
         this.selected = id;

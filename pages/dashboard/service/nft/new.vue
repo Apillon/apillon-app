@@ -11,9 +11,7 @@
           </n-space>
         </slot>
         <template #info>
-          <div
-            class="flex items-center h-10 px-4 py-2 bg-bg-light border-1 border-bg-lighter rounded-lg"
-          >
+          <div class="card-light flex items-center h-10 px-4 py-2 rounded-lg">
             <span>{{ $t('general.smBy') }}</span>
             <NuxtIcon name="nft/moonbeam" class="icon-auto" filled />
           </div>
@@ -41,11 +39,7 @@
             <span class="inline-block mx-1">{{ $t('nft.collection.created.view') }}</span>
             <NuxtLink href="https://moonscan.io/" target="_blank">
               <Btn type="builders" size="tiny">
-                <span
-                  class="inline-block leading-6 text-primary active:text-bg-dark hover:text-bg-dark"
-                >
-                  {{ $t('nft.collection.created.explorer') }}
-                </span>
+                {{ $t('nft.collection.created.explorer') }}
               </Btn>
             </NuxtLink>
             <span class="inline-block mx-1">{{ $t('nft.collection.created.or') }}</span>
@@ -54,15 +48,11 @@
               target="_blank"
             >
               <Btn type="builders" size="tiny">
-                <span
-                  class="inline-block leading-6 text-primary active:text-bg-dark hover:text-bg-dark"
-                >
-                  {{ $t('nft.collection.created.bucket') }}
-                </span>
+                {{ $t('nft.collection.created.bucket') }}
               </Btn>
             </NuxtLink>
           </p>
-          <NuxtLink :to="`/dashboard/service/nft/${collectionStore.active.id}`" target="_blank">
+          <NuxtLink :to="`/dashboard/service/nft/${collectionStore.active.id}`">
             <Btn>
               {{ $t('nft.collection.view') }}
             </Btn>
@@ -133,7 +123,7 @@
             <FormNftBucket v-else-if="!collectionStore.metadataStored" />
           </slot>
         </n-tab-pane>
-        <n-tab-pane :name="NftMintTab.UPLOAD" :disabled="false">
+        <n-tab-pane :name="NftMintTab.UPLOAD" :disabled="!collectionStore.bucketId">
           <template #tab>
             <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
             <IconNumber
@@ -147,7 +137,14 @@
             <FormNftUpload />
           </slot>
         </n-tab-pane>
-        <n-tab-pane :name="NftMintTab.MINT" :disabled="false">
+        <n-tab-pane
+          :name="NftMintTab.MINT"
+          :disabled="
+            !collectionStore.hasCsvFile ||
+            !collectionStore.hasMetadata ||
+            !collectionStore.hasImages
+          "
+        >
           <template #tab>
             <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
             <span class="ml-2 text-sm text-white">{{ $t('nft.collection.mintNfts') }}</span>

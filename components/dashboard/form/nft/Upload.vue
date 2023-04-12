@@ -55,9 +55,7 @@
         <p class="mb-6">
           <NuxtLink href="https://wiki.apillon.io/build/3-apillon-api.html" target="_blank">
             <Btn type="builders" size="tiny">
-              <span class="inline-block leading-6 text-primary hover:text-bg-dark">
-                {{ $t('general.learnMore') }}
-              </span>
+              {{ $t('general.learnMore') }}
             </Btn>
           </NuxtLink>
         </p>
@@ -94,7 +92,7 @@
             @change="handleImageChange"
             @remove="handleImageRemove"
           >
-            <div class="px-4 py-2 border-1 border-bg-lighter">
+            <div class="card px-4 py-2">
               <span class="icon-image text-xl align-sub mr-3"></span>
               <span>{{ collectionStore.images.length }}</span>
               &nbsp;
@@ -143,21 +141,13 @@
         <p class="mb-6 text-body whitespace-pre-line">
           <NuxtLink href="https://wiki.apillon.io/build/3-apillon-api.html" target="_blank">
             <Btn type="builders" size="tiny">
-              <span
-                class="inline-block leading-6 text-primary active:text-bg-dark hover:text-bg-dark"
-              >
-                {{ $t('general.learnMore') }}
-              </span>
+              {{ $t('general.learnMore') }}
             </Btn>
           </NuxtLink>
           <span class="inline-block mx-1">{{ $t('general.or') }}</span>
           <NuxtLink href="/files/example.csv" target="_blank">
             <Btn type="builders" size="tiny">
-              <span
-                class="inline-block leading-6 text-primary active:text-bg-dark hover:text-bg-dark"
-              >
-                {{ $t('nft.upload.downloadCsv') }}
-              </span>
+              {{ $t('nft.upload.downloadCsv') }}
             </Btn>
           </NuxtLink>
         </p>
@@ -179,7 +169,7 @@
           </n-upload-dragger>
         </n-upload>
         <div v-else class="flex text-left">
-          <div class="flex-1 px-4 py-2 border-1 border-bg-lighter">
+          <div class="card flex-1 px-4 py-2">
             <span class="icon-file text-xl align-sub mr-3"></span>
             <span>{{ collectionStore.csvFile.name }}</span>
           </div>
