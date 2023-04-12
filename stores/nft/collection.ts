@@ -21,11 +21,29 @@ export const useCollectionStore = defineStore('collection', {
     quotaReached: undefined as Boolean | undefined,
     search: '',
     selected: 0,
-    stepDeploy: NftMintStep.NAME,
+    stepDeploy: NftDeployStep.NAME,
     stepUpload: NftUploadStep.FILE,
     total: 0,
     transaction: [] as TransactionInterface[],
     uploadActive: false,
+    form: {
+      base: {
+        name: '',
+        symbol: '',
+        chain: 1,
+      },
+      behaviour: {
+        baseExtension: '.json',
+        dropStart: Date.now() + 3600000,
+        isDrop: false,
+        maxSupply: 0,
+        mintPrice: 0,
+        reserve: 0,
+        revocable: null,
+        soulbound: null,
+        supplyLimited: false,
+      },
+    },
   }),
   getters: {
     hasCollections(state): boolean {

@@ -143,7 +143,9 @@
         <p class="mb-6 text-body whitespace-pre-line">
           <NuxtLink href="https://wiki.apillon.io/build/3-apillon-api.html" target="_blank">
             <Btn type="builders" size="tiny">
-              <span class="inline-block leading-6 text-primary hover:text-bg-dark">
+              <span
+                class="inline-block leading-6 text-primary active:text-bg-dark hover:text-bg-dark"
+              >
                 {{ $t('general.learnMore') }}
               </span>
             </Btn>
@@ -151,7 +153,9 @@
           <span class="inline-block mx-1">{{ $t('general.or') }}</span>
           <NuxtLink href="/files/example.csv" target="_blank">
             <Btn type="builders" size="tiny">
-              <span class="inline-block leading-6 text-primary hover:text-bg-dark">
+              <span
+                class="inline-block leading-6 text-primary active:text-bg-dark hover:text-bg-dark"
+              >
                 {{ $t('nft.upload.downloadCsv') }}
               </span>
             </Btn>

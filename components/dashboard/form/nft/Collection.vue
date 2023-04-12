@@ -22,35 +22,39 @@
       :disabled="isFormDisabled"
       @submit.prevent="handleSubmit"
     >
-      <!--  Collection Symbol -->
-      <n-form-item
-        path="symbol"
-        :label="$t('form.label.collectionSymbol')"
-        :label-props="{ for: 'symbol' }"
-      >
-        <n-input
-          v-model:value="formData.symbol"
-          :input-props="{ id: 'symbol' }"
-          :placeholder="$t('form.placeholder.collectionSymbol')"
-          clearable
-        />
-      </n-form-item>
+      <n-grid class="items-end" :cols="12" :x-gap="32">
+        <!--  Collection name -->
+        <n-form-item-gi
+          :span="8"
+          path="name"
+          :label="$t('form.label.collectionName')"
+          :label-props="{ for: 'name' }"
+        >
+          <n-input
+            v-model:value="formData.name"
+            :input-props="{ id: 'name' }"
+            :placeholder="$t('form.placeholder.collectionName')"
+            clearable
+          />
+        </n-form-item-gi>
 
-      <!--  Collection name -->
-      <n-form-item
-        path="name"
-        :label="$t('form.label.collectionName')"
-        :label-props="{ for: 'name' }"
-      >
-        <n-input
-          v-model:value="formData.name"
-          :input-props="{ id: 'name' }"
-          :placeholder="$t('form.placeholder.collectionName')"
-          clearable
-        />
-      </n-form-item>
+        <!--  Collection Symbol -->
+        <n-form-item-gi
+          :span="4"
+          path="symbol"
+          :label="$t('form.label.collectionSymbol')"
+          :label-props="{ for: 'symbol' }"
+        >
+          <n-input
+            v-model:value="formData.symbol"
+            :input-props="{ id: 'symbol' }"
+            :placeholder="$t('form.placeholder.collectionSymbol')"
+            clearable
+          />
+        </n-form-item-gi>
+      </n-grid>
 
-      <n-grid class="items-end" :cols="12" :x-gap="16">
+      <n-grid class="items-end" :cols="12" :x-gap="32">
         <!--  Collection Base URI -->
         <n-form-item-gi
           :class="{ 'hide-feedback': !!metadataUri }"
@@ -87,30 +91,68 @@
         </n-form-item-gi>
       </n-grid>
 
-      <!--  Collection Max supply -->
-      <n-form-item path="maxSupply" :label="$t('form.label.collectionMaxSupply')">
-        <n-input-number
-          v-model:value="formData.maxSupply"
-          :min="0"
-          :max="NFT_MAX_SUPPLY"
-          :placeholder="$t('form.placeholder.collectionMaxSupply')"
-          clearable
+      <n-grid class="items-end" :cols="12" :x-gap="32">
+        <!-- Collection Total supply -->
+        <n-form-item-gi
+          path="supplyLimited"
+          :span="6"
+          :label="infoLabel('collectionTotalSupply')"
+          :label-props="{ for: 'supplyLimited' }"
+        >
+          <select-options
+            v-model:value="formData.supplyLimited"
+            :options="supplyTypes"
+            :input-props="{ id: 'supplyLimited' }"
+            :placeholder="$t('general.pleaseSelect')"
+            filterable
+            clearable
+          />
+        </n-form-item-gi>
+
+        <!--  Collection Max supply -->
+        <n-form-item-gi
+          path="maxSupply"
+          :span="6"
+          :label="infoLabel('collectionMaxSupply')"
+          :label-props="{ for: 'maxSupply' }"
+        >
+          <n-input-number
+            v-model:value="formData.maxSupply"
+            :min="0"
+            :max="NFT_MAX_SUPPLY"
+            :disabled="!formData.supplyLimited"
+            :input-props="{ id: 'maxSupply' }"
+            :placeholder="
+              formData.supplyLimited
+                ? $t('form.placeholder.collectionMaxSupply')
+                : $t('form.disabled')
+            "
+            clearable
+          />
+        </n-form-item-gi>
+      </n-grid>
+
+      <!--  Collection Is Drop -->
+      <n-form-item path="isDrop" :span="1" :show-label="false">
+        <n-checkbox
+          v-model:checked="formData.isDrop"
+          size="medium"
+          :label="$t('form.label.collectionIsDrop')"
         />
       </n-form-item>
 
-      <n-grid :cols="2" :x-gap="32">
-        <!--  Collection Is Drop -->
-        <n-form-item-gi path="isDrop" :span="1" :label="$t('form.label.collectionIsDrop')">
-          <n-switch v-model:value="formData.isDrop" />
+      <n-grid v-if="!!formData.isDrop" :cols="12" :x-gap="32">
+        <!--  Collection Mint price -->
+        <n-form-item-gi path="mintPrice" :span="6" :label="$t('form.label.collectionMintPrice')">
+          <n-input-number
+            v-model:value="formData.mintPrice"
+            :placeholder="$t('form.placeholder.collectionMintPrice')"
+            clearable
+          />
         </n-form-item-gi>
 
         <!--  Collection Drop start -->
-        <n-form-item-gi
-          v-if="!!formData.isDrop"
-          path="dropStart"
-          :span="1"
-          :label="$t('form.label.collectionDropStart')"
-        >
+        <n-form-item-gi path="dropStart" :span="6" :label="$t('form.label.collectionDropStart')">
           <n-date-picker
             v-model:value="formData.dropStart"
             class="w-full"
@@ -121,18 +163,9 @@
         </n-form-item-gi>
       </n-grid>
 
-      <n-grid v-if="!!formData.isDrop" :cols="2" :x-gap="32">
-        <!--  Collection Mint price -->
-        <n-form-item-gi path="mintPrice" :span="1" :label="$t('form.label.collectionMintPrice')">
-          <n-input-number
-            v-model:value="formData.mintPrice"
-            :placeholder="$t('form.placeholder.collectionMintPrice')"
-            clearable
-          />
-        </n-form-item-gi>
-
+      <n-grid v-if="!!formData.isDrop" :cols="12" :x-gap="32">
         <!--  Collection Reserve -->
-        <n-form-item-gi path="reserve" :span="1" :label="$t('form.label.collectionReserve')">
+        <n-form-item-gi path="reserve" :span="6" :label="$t('form.label.collectionReserve')">
           <n-input-number
             v-model:value="formData.reserve"
             :min="0"
@@ -143,11 +176,11 @@
       </n-grid>
 
       <!--  Form submit -->
-      <n-form-item>
+      <n-form-item :show-label="false">
         <input type="submit" class="hidden" :value="$t('nft.collection.create')" />
         <Btn
           type="primary"
-          class="w-full mt-2"
+          size="large"
           :loading="loading"
           :disabled="isFormDisabled"
           @click="handleSubmit"
@@ -163,6 +196,7 @@
 import { useMessage } from 'naive-ui';
 
 const emit = defineEmits(['submitSuccess']);
+const { infoLabel } = useNft();
 
 const $i18n = useI18n();
 const router = useRouter();
@@ -170,6 +204,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
+
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const IconInfo = resolveComponent('IconInfo');
@@ -179,6 +214,7 @@ const formData = ref<FormCollection>({
   name: '',
   symbol: '',
   mintPrice: 0,
+  supplyLimited: false,
   maxSupply: null,
   baseUri: '',
   baseExtension: '',
@@ -186,6 +222,15 @@ const formData = ref<FormCollection>({
   dropStart: Date.now() + 3600000,
   reserve: 0,
 });
+
+const supplyTypes = [
+  { label: $i18n.t('form.supplyTypes.unlimited'), value: false },
+  { label: $i18n.t('form.supplyTypes.limited'), value: true },
+];
+const booleanSelect = [
+  { label: $i18n.t('form.booleanSelect.true'), value: 1 },
+  { label: $i18n.t('form.booleanSelect.false'), value: 0 },
+];
 
 const rules: NFormRules = {
   symbol: [
@@ -202,21 +247,21 @@ const rules: NFormRules = {
   ],
   baseUri: [
     {
+      required: true,
+      message: $i18n.t('validation.collectionBaseUriRequired'),
+    },
+    {
       type: 'url',
       message: $i18n.t('validation.collectionBaseUri'),
     },
   ],
   baseExtension: [
     {
-      validator: validateBaseExtension,
+      required: true,
       message: $i18n.t('validation.collectionBaseExtensionRequired'),
     },
   ],
   maxSupply: [
-    {
-      required: true,
-      message: $i18n.t('validation.collectionMaxSupplyRequired'),
-    },
     {
       max: NFT_MAX_SUPPLY,
       validator: validateMaxSupply,

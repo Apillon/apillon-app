@@ -349,6 +349,10 @@
       "bearer-token": "Bearer token",
       "none": "None"
     },
+    "booleanSelect": {
+      "true": "Yes",
+      "false": "No"
+    },
     "bucketSizes": {
       "5gb": "5GB - Free",
       "100gb": "100GB - Not available"
@@ -371,13 +375,17 @@
       "cardNumber": "Card number",
       "collectionBaseUri": "Base URI",
       "collectionBaseExtension": "Base Extension",
+      "collectionChain": "Chain",
       "collectionDropStart": "Drop start",
       "collectionIsDrop": "Drop",
-      "collectionMaxSupply": "Max supply",
-      "collectionMintPrice": "Mint price",
+      "collectionMaxSupply": "How much",
+      "collectionMintPrice": "Price in GLMR",
       "collectionName": "Name",
       "collectionReserve": "Reserve",
+      "collectionRevocable": "Revocable",
+      "collectionSoulbound": "Soulbound",
       "collectionSymbol": "Symbol",
+      "collectionTotalSupply": "Total supply",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "domain": "Domain name",
@@ -413,6 +421,10 @@
       "test": "Test network",
       "live": "Live network"
     },
+    "supplyTypes": {
+      "limited": "Limited",
+      "unlimited": "Unlimited"
+    },
     "placeholder": {
       "apiKeyName": "API Key name",
       "bearerToken": "Enter Bearer token",
@@ -424,7 +436,7 @@
       "collectionBaseExtension": "Base Extension",
       "collectionDropStart": "Drop start",
       "collectionIsDrop": "Drop",
-      "collectionMaxSupply": "Empty value or 0 means unlimited",
+      "collectionMaxSupply": "Enter number",
       "collectionMintPrice": "Mint price",
       "collectionName": "Name",
       "collectionReserve": "Reserve",
@@ -541,6 +553,7 @@
     "createNewProject": "Create new project",
     "createServiceAndContinue": "Create service & continue to management",
     "continue": "Continue",
+    "disabled": "Disabled",
     "generate": "Generate",
     "login": "Log in",
     "proceed": "Proceed",
@@ -620,6 +633,8 @@
       "baseUriInfo": "If you already have collection metadata, paste the base URI here. Otherwise, you will go through the metadata creation process.",
       "contractAddress": "Contract address",
       "create": "Create collection",
+      "createInfo": "",
+      "deploy": "Deploy to blockchain",
       "dropStart": "Drop start",
       "edit": "Edit",
       "extension": "[extension]",
@@ -644,6 +659,23 @@
       "uploadMetadata": "Store NFT metadata",
       "uploadYourFirst": "Upload your first NFTs and start building your collection.",
       "uuid": "Collection UUID",
+      "view": "View NFT collection",
+      "created": {
+        "bucket": "newly created bucket",
+        "explorer": "blockchain explorer",
+        "info": "Your NFT collection “{name}” was successfully deployed.",
+        "or": "or check out your",
+        "title": "NFT collection successfully created",
+        "view": "View the"
+      },
+      "labelInfo": {
+        "collectionDropStart": "",
+        "collectionMaxSupply": "",
+        "collectionReserve": "",
+        "collectionRevocable": "",
+        "collectionSoulbound": "",
+        "collectionTotalSupply": "Limit or unlimited?"
+      },
       "status": {
         "0": "CREATED",
         "1": "INITIATED",
@@ -658,6 +690,7 @@
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
+      "infoCollectionBehaviour": "Configure the behaviour of your NFT collection. ",
       "infoCollectionName": "Enter the name and the symbol for your NFT collection.",
       "infoNew": "Before creating your NFT collection, you need to store NFT files, meaning NFT metadata and NFT images, on the internet. \n\nDo you have your NFT metadata already stored somewhere?",
       "no": "No, I don’t",
@@ -668,6 +701,7 @@
       "titleBucket": "Let’s get you a bucket",
       "titleBucketCreation": "Bucket creation in progress",
       "titleBucketCreated": "Bucket successfully created",
+      "titleCollectionBehaviour": "Behaviour",
       "titleCollectionName": "Name and symbol",
       "yes": "Yes, I do"
     },

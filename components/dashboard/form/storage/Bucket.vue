@@ -210,8 +210,8 @@ async function createBucket() {
 
     message.success($i18n.t('form.success.created.bucket'));
 
-    /** On new bucket created redirect to storage list in refresh data */
-    bucketStore.fetchBuckets();
+    /** On new bucket created push data to list */
+    bucketStore.items.push(res.data);
 
     /** Reset bucket qouta limit */
     bucketStore.quotaReached = undefined;

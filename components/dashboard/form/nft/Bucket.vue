@@ -16,7 +16,7 @@
         <h2>{{ $t('nft.metadata.titleBucketCreated') }}</h2>
         <p class="mb-9 text-body whitespace-pre-line">{{ $t('nft.metadata.infoBucketCreated') }}</p>
 
-        <Btn size="large" @click="collectionStore.mintTab === NftMintTab.UPLOAD">
+        <Btn size="large" @click="collectionStore.mintTab = NftMintTab.UPLOAD">
           {{ $t('nft.metadata.proceedUpload') }}
         </Btn>
       </template>
@@ -68,7 +68,7 @@
         <FormStorageBucket
           :bucket-type="BucketType.NFT_METADATA"
           @submit="loadingBucket = true"
-          @crate-success="onBucketCreated"
+          @createSuccess="onBucketCreated"
         />
       </modal>
     </div>
