@@ -42,6 +42,12 @@
   }
 }
 
+.icon-magic-link:before {
+  content: '\e946';
+}
+.icon-wallet:before {
+  content: '\e947';
+}
 .icon-image:before {
   content: '\e944';
 }

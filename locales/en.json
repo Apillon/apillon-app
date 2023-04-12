@@ -10,11 +10,13 @@
       "description": "Web3 will not build itself. Go and add your block.",
       "dontHaveAccount": "I don't have Apillon account yet?",
       "enterNewPassword": "Enter new password",
+      "enterYourEmail": "Enter your e-mail",
       "forgotPassword": "Did you forgot your password?",
       "magicLink": "Send me a Magic Link",
       "orUseEmail": "or log in using email",
       "passwordReplaced": "Your password has been replaced",
       "projectName": "Project_name",
+      "resetHere": "Reset here",
       "resetPassword": "Reset password",
       "title": "Log in to Apillon",
       "wallet": "Log in with Wallet",
@@ -47,7 +49,7 @@
       "madeMistake": "Made a mistake?",
       "orUseEmail": "or sign up using email",
       "sendAgain": "Send again",
-      "title": "Build your first Web3 project - FREE",
+      "title": "Build your first Web3 project",
       "withEmail": "sign up with email"
     },
     "wallet": {

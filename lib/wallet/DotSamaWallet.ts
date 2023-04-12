@@ -7,24 +7,28 @@ import {
 } from '@polkadot/extension-inject/types';
 import { Signer } from '@polkadot/types/types';
 
-const DAPP_NAME = 'SubWallet Connect';
+const DAPP_NAME = 'Apillon SubWallet Connect';
 
 export class DotSamaWallet implements Wallet {
+  type: WalletDeviceType;
   extensionName: string;
   title: string;
-  installUrl: string;
+  installUrl: Record<string, string>;
   icon: string;
+  image: string;
 
   _extension: InjectedExtension | undefined;
   _signer: Signer | undefined;
   _metadata: InjectedMetadata | undefined;
   _provider: InjectedProvider | undefined;
 
-  constructor({ extensionName, installUrl, icon, title }: WalletInfo) {
+  constructor({ type, extensionName, installUrl, icon, image, title }: WalletInfo) {
+    this.type = type;
     this.extensionName = extensionName;
     this.title = title;
     this.installUrl = installUrl;
-    this.icon = icon;
+    this.icon = icon || '';
+    this.image = image || '';
 
     return this;
   }
@@ -50,8 +54,9 @@ export class DotSamaWallet implements Wallet {
   get installed() {
     const injectedWindow = window as Window & InjectedWindow;
     const injectedExtension = injectedWindow?.injectedWeb3?.[this.extensionName];
+    const novaWalletExtension = injectedWindow?.walletExtension?.isNovaWallet;
 
-    return !!injectedExtension;
+    return !!injectedExtension || !!novaWalletExtension;
   }
 
   get rawExtension() {

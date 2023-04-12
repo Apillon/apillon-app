@@ -1,4 +1,3 @@
-import { lstat } from 'fs';
 import { defineStore } from 'pinia';
 import { DataLsKeys } from './data';
 
@@ -10,7 +9,6 @@ export const AuthLsKeys = {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    authStep: '',
     crypto: null,
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
     jwt: '',
@@ -23,7 +21,7 @@ export const useAuthStore = defineStore('auth', {
       accounts: [] as WalletAccount[],
       address: '',
       provider: getWalletBySource(localStorage.getItem(AuthLsKeys.WALLET)),
-      type: localStorage.getItem(AuthLsKeys.WALLET) || '',
+      name: localStorage.getItem(AuthLsKeys.WALLET) || '',
     },
   }),
   getters: {
@@ -57,10 +55,9 @@ export const useAuthStore = defineStore('auth', {
       $api.clearToken();
 
       this.jwt = '';
-      this.wallet.type = '';
+      this.wallet.name = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.WALLET);
-      localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
     saveEmail(email: string) {
@@ -89,7 +86,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     setWalletKey(wallet: Wallet) {
-      this.wallet.type = wallet.extensionName;
+      this.wallet.name = wallet.extensionName;
       localStorage.setItem(AuthLsKeys.WALLET, wallet.extensionName);
     },
 

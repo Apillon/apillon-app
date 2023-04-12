@@ -11,7 +11,7 @@
 <script lang="ts" setup>
 import colors from '~~/tailwind.colors';
 
-const props = defineProps({
+defineProps({
   title: { type: String, default: '' },
   htmlContent: { type: String, default: '' },
   extendedHtmlContent: { type: String, default: '' },

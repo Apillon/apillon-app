@@ -1,6 +1,6 @@
 <template>
   <!-- Referral - intro -->
-  <div class="p-8 border-1 border-bg-lighter">
+  <div class="p-8 card-border">
     <h4>Info</h4>
 
     <p class="mb-4 text-sm text-body">

@@ -2,7 +2,7 @@
   <select-options
     v-if="dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
     :key="componentSelectKey"
-    v-model:value="dataStore.currentProjectId"
+    v-model:value="dataStore.project.selected"
     :options="dataStore.project.items"
     class="select-project"
     :loading="loading"
@@ -31,13 +31,14 @@ onMounted(() => {
 
 /** Watcher - project change */
 watch(
-  () => dataStore.currentProjectId,
-  async (currentProjectId, oldProjectId) => {
+  () => dataStore.project.selected,
+  async (projectId, oldProjectId) => {
     /** Clear all stored data */
     clearAll();
+    console.log('Watcher - project change', projectId, oldProjectId);
 
-    /** Reload projects if currentProjectId is new project */
-    if (!dataStore.project.items[currentProjectId]) {
+    /** Reload projects if projectId is new project */
+    if (!dataStore.project.items.some(project => project.id === projectId)) {
       loading.value = true;
       dataStore.project.items = [];
 
@@ -48,12 +49,12 @@ watch(
         componentSelectKey.value += 1;
       }, 1000);
     }
-    /** Fetch selected project data(get myRole_id_onProject) */
+    /** Fetch selected project data(get myRole_id_onProject)  */
     await dataStore.fetchProject();
 
     /** Save current project ID to LS and redirect to Dashboard */
-    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${currentProjectId}`);
-    if (currentProjectId !== oldProjectId && oldProjectId > 0) {
+    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${projectId}`);
+    if (projectId !== oldProjectId && oldProjectId > 0) {
       router.push({ name: 'dashboard' });
     }
   }

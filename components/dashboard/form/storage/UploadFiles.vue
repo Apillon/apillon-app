@@ -2,7 +2,7 @@
   <!-- Upload - File list  -->
   <div
     v-if="bucketStore.uploadFileList.length > 0"
-    class="fixed right-0 bottom-0 w-[30rem] px-5 py-3 bg-bg-light border-1 border-bg-lighter z-10"
+    class="card fixed right-0 bottom-0 w-[30rem] px-5 py-3 z-10"
   >
     <!-- Header -->
     <n-space v-if="filesUploading" justify="space-between" align="center">
