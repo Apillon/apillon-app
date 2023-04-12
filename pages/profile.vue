@@ -14,7 +14,7 @@
       <div class="pb-8">
         <!-- Change password -->
         <n-h5 prefix="bar">{{ $t('profile.password') }}</n-h5>
-        <FormPasswordResetRequest :email="authStore.email">
+        <FormPasswordResetRequest class="-mb-8" :email="authStore.email">
           {{ $t('profile.changePassword') }}
         </FormPasswordResetRequest>
 

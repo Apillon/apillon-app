@@ -1,16 +1,15 @@
 <template>
-  <div class="container flex flex-col justify-center items-center">
-    <div class="w-full text-center">
-      <h1 class="mb-6">{{ $t('auth.login.resetPassword') }}</h1>
-      <p class="mb-7">{{ $t('auth.login.enterNewPassword') }}</p>
+  <div>
+    <!-- Heading -->
+    <h1 class="mb-2">{{ $t('auth.login.resetPassword') }}</h1>
+    <p class="mb-7 text-body">{{ $t('auth.login.enterNewPassword') }}</p>
 
-      <FormPassword
-        class="mx-auto max-w-lg text-left"
-        :reset-password="true"
-        :token="query?.token?.toString()"
-        @submit-success="passwordChanged"
-      />
-    </div>
+    <!-- Form -->
+    <FormPassword
+      :reset-password="true"
+      :token="query?.token?.toString()"
+      @submit-success="passwordChanged"
+    />
   </div>
 </template>
 
@@ -18,17 +17,12 @@
 const { t } = useI18n();
 const { query } = useRoute();
 const router = useRouter();
-const authStore = useAuthStore();
 
 definePageMeta({
   layout: 'auth',
 });
 useHead({
   title: t('auth.login.resetPassword'),
-});
-
-onBeforeMount(() => {
-  authStore.authStep = AuthStep.PASSWORD_RESET;
 });
 
 onMounted(() => {

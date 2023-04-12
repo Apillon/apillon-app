@@ -14,7 +14,6 @@ const config: ConfigInterface = {
     'DISCORD',
     'HOSTING',
     'INSTRUCTIONS',
-    'MAGIC_LINK',
     'NFT',
     'ONBOARDING',
     'PROJECT',

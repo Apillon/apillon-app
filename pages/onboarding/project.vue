@@ -29,7 +29,6 @@
 const { t } = useI18n();
 const router = useRouter();
 const $style = useCssModule();
-const authStore = useAuthStore();
 const loading = ref<boolean>(false);
 
 definePageMeta({
@@ -37,10 +36,6 @@ definePageMeta({
 });
 useHead({
   title: t('auth.signup.emailConfirmed'),
-});
-
-onBeforeMount(() => {
-  authStore.authStep = AuthStep.LOGIN_FIRST;
 });
 
 function loaderStatus(status: boolean) {

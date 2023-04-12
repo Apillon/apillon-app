@@ -136,6 +136,33 @@
   opacity: 0;
 }
 
+/* fadeBlur */
+.fadeBlur-enter-active,
+.fadeBlur-leave-active {
+  transition: opacity 0.5s, filter 0.5s;
+}
+.fadeBlur-leave-active {
+  position: absolute;
+}
+.fadeBlur-enter,
+.fadeBlur-enter-from,
+.fadeBlur-leave-to {
+  opacity: 0;
+  filter: blur(4px);
+}
+.fadeBlur-leave-to {
+  filter: blur(0px);
+}
+.fadeBlur-enter-to,
+.fadeBlur-leave-from {
+  opacity: 1;
+  filter: blur(0px);
+}
+.fadeBlur-leave-to {
+  opacity: 0;
+  filter: blur(4px);
+}
+
 /* Width */
 .width-enter-active,
 .width-leave-active {

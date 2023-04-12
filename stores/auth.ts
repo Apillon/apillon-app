@@ -9,7 +9,6 @@ export const AuthLsKeys = {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    authStep: '',
     crypto: null,
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
     jwt: '',
