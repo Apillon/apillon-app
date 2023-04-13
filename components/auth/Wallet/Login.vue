@@ -1,6 +1,7 @@
 <template>
-  <Btn v-bind="$attrs" type="secondary" @click="modalWalletSelectVisible = true">
-    {{ $t('auth.login.wallet') }}
+  <Btn v-bind="$attrs" type="info" :color="colors.blue" @click="modalWalletSelectVisible = true">
+    <span class="icon-wallet text-xl align-sub mr-2"></span>
+    <span>{{ $t('auth.login.wallet') }}</span>
   </Btn>
   <!-- Modal - Wallet select -->
   <modal v-model:show="modalWalletSelectVisible" :title="$t('auth.wallet.connect.title')">
@@ -14,6 +15,7 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
+import colors from '~~/tailwind.colors';
 
 const authStore = useAuthStore();
 const dataStore = useDataStore();

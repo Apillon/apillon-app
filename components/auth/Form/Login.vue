@@ -31,12 +31,6 @@
       </Btn>
     </n-form-item>
   </n-form>
-  <div class="min-h-[30px] text-center">
-    <div>
-      <span class="text-sm text-body">{{ $t('auth.login.forgotPassword') }} </span>&nbsp;
-      <FormPasswordResetRequest :email="formData.email" btn-type="link" size="tiny" quaternary />
-    </div>
-  </div>
 </template>
 
 <script lang="ts" setup>

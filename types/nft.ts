@@ -31,6 +31,24 @@ export enum TransactionType {
   SET_COLLECTION_BASE_URI = 4,
 }
 
+/** Mint steps */
+export enum NftMintTab {
+  METADATA = 1,
+  UPLOAD = 2,
+  IMAGES = 3,
+  MINT = 4,
+}
+export enum NftUploadStep {
+  FILE = 1,
+  IMAGES = 2,
+  PREVIEW = 3,
+}
+export enum NftDeployStep {
+  NAME = 1,
+  BEHAVIOUR = 2,
+  DEPLOY = 3,
+}
+
 declare global {
   /** Papa parser */
   type CsvFileData = {
@@ -49,16 +67,25 @@ declare global {
   /**
    * Collection
    */
-  interface FormCollection {
+  interface FormCollectionName {
     symbol: string;
     name: string;
-    mintPrice?: number;
-    maxSupply?: number | null;
-    baseUri: string;
+    chain?: number;
+  }
+
+  interface FormCollectionBehaviour {
     baseExtension: string;
-    isDrop: boolean;
     dropStart?: number;
+    isDrop: boolean;
+    maxSupply?: number | null;
+    mintPrice?: number;
     reserve?: number;
+    revocable?: number | null;
+    soulbound?: number | null;
+    supplyLimited?: number;
+  }
+  interface FormCollection extends FormCollectionName, FormCollectionBehaviour {
+    baseUri: string;
     description?: string;
   }
 

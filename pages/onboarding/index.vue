@@ -35,16 +35,11 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const router = useRouter();
-const authStore = useAuthStore();
 
 definePageMeta({
   layout: 'onboarding',
 });
 useHead({
   title: t('auth.signup.emailConfirmed'),
-});
-
-onBeforeMount(() => {
-  authStore.authStep = AuthStep.LOGIN_FIRST;
 });
 </script>

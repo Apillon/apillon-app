@@ -5,6 +5,7 @@ const dataStore = useDataStore();
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
+    bucketId: 0,
     csvAttributes: [] as Array<MetadataAttributes>,
     csvColumns: [] as NTableColumns<KeyTitle>,
     csvData: [] as Array<Record<string, string>>,
@@ -15,13 +16,34 @@ export const useCollectionStore = defineStore('collection', {
     items: [] as CollectionInterface[],
     loading: false,
     metadata: [] as Array<Record<string, any>>,
+    metadataStored: null as Boolean | null,
     mintTab: NftMintTab.METADATA,
     quotaReached: undefined as Boolean | undefined,
     search: '',
     selected: 0,
+    stepDeploy: NftDeployStep.NAME,
+    stepUpload: NftUploadStep.FILE,
     total: 0,
     transaction: [] as TransactionInterface[],
     uploadActive: false,
+    form: {
+      base: {
+        name: '',
+        symbol: '',
+        chain: 1,
+      },
+      behaviour: {
+        baseExtension: '.json',
+        dropStart: Date.now() + 3600000,
+        isDrop: false,
+        maxSupply: 0,
+        mintPrice: 0,
+        reserve: 0,
+        revocable: null,
+        soulbound: null,
+        supplyLimited: false,
+      },
+    },
   }),
   getters: {
     hasCollections(state): boolean {
@@ -51,15 +73,36 @@ export const useCollectionStore = defineStore('collection', {
       this.resetMetadata();
     },
     resetMetadata() {
+      this.resetFile();
+      this.resetImages();
+      this.mintTab = NftMintTab.METADATA;
+    },
+    resetFile() {
       this.csvAttributes = [] as MetadataAttributes[];
       this.csvColumns = [] as NTableColumns<KeyTitle>;
       this.csvData = [] as Array<Record<string, string>>;
       this.csvFile = {} as FileListItemType;
       this.csvSelectedAttributes = [] as Array<string>;
       this.filesMetadata = [] as FileListItemType[];
+      this.metadata = [] as Array<Record<string, any>>;
+    },
+    resetImages() {
       this.images = [] as FileListItemType[];
-      this.metadata = [];
-      this.mintTab = NftMintTab.METADATA;
+    },
+    resetForms() {
+      this.form.base.name = '';
+      this.form.base.symbol = '';
+      this.form.base.chain = 1;
+
+      this.form.behaviour.baseExtension = '.json';
+      this.form.behaviour.dropStart = Date.now() + 3600000;
+      this.form.behaviour.isDrop = false;
+      this.form.behaviour.maxSupply = 0;
+      this.form.behaviour.mintPrice = 0;
+      this.form.behaviour.reserve = 0;
+      this.form.behaviour.revocable = null;
+      this.form.behaviour.soulbound = null;
+      this.form.behaviour.supplyLimited = false;
     },
     setCollectionId(id: number) {
       if (this.selected !== id) {

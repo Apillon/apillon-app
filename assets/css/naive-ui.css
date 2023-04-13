@@ -25,6 +25,14 @@
     @apply bg-bg-lighter;
   }
 
+  &--builders-type:not(.n-button--disabled) {
+    @apply text-primary;
+
+    &:hover {
+      @apply text-bg;
+    }
+  }
+
   &.pointer-events-none {
     cursor: not-allowed;
   }
@@ -245,6 +253,9 @@
 .n-input {
   .n-input__prefix {
     @apply mr-2;
+  }
+  .n-input__eye {
+    display: flex;
   }
 }
 .n-input-number {
@@ -554,6 +565,24 @@ body > .n-message-container {
     }
     .n-tabs-tab {
       border: 1px solid theme(colors.bg.light);
+    }
+  }
+  &--bar-type {
+    .n-tabs-wrapper {
+      @apply mobile:flex-col mobile:items-center;
+    }
+    .n-tabs-tab-pad {
+      @apply mobile:hidden;
+    }
+    .n-tabs-tab {
+      @apply mobile:py-1;
+    }
+    .n-tab-pane {
+      @apply mobile:pt-0;
+
+      > div {
+        @apply mobile:py-4 mobile:-my-4;
+      }
     }
   }
 }
