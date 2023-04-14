@@ -264,7 +264,7 @@ export const useBucketStore = defineStore('bucket', {
           params.directory_id = this.folder.selected;
         }
         if (arg.search) {
-          params.search = params.search;
+          params.search = arg.search;
         }
         if (arg.page) {
           params.page = arg.page;
