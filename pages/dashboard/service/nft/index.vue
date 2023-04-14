@@ -24,7 +24,7 @@
         :info="$t('nft.collection.emptyInfo')"
         icon="nft/illustration"
       >
-        <Btn type="primary" @click="createNewCollection">
+        <Btn type="primary" @click="router.push({ name: 'dashboard-service-nft-new' })">
           {{ $t('nft.collection.new') }}
         </Btn>
       </Empty>
@@ -33,16 +33,17 @@
         {{ $t('w3Warn.nft.new') }}
       </W3Warn>
 
-      <!-- Modal - Create Collection -->
+      <!-- Modal - Create Collection 
       <modal v-model:show="modalNewCollectionVisible" :title="$t('nft.collection.addNew')">
         <FormNftCollection @submit-success="onCollectionCreated" />
-      </modal>
+      </modal>-->
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 const pageLoading = ref<boolean>(true);
