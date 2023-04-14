@@ -35,7 +35,6 @@ watch(
   async (projectId, oldProjectId) => {
     /** Clear all stored data */
     clearAll();
-    console.log('Watcher - project change', projectId, oldProjectId);
 
     /** Reload projects if projectId is new project */
     if (!dataStore.project.items.some(project => project.id === projectId)) {
