@@ -43,16 +43,12 @@ const page = ref<number>(1);
 const pageSize = ref<number>(collectionStore.images.length > 100 ? 100 : 10);
 
 const images = computed(() => {
-  console.log(page.value);
-  console.log(pageSize.value);
   const first = (page.value - 1) * pageSize.value;
   let last = first + pageSize.value;
   if (last > collectionStore.images.length) {
     last = collectionStore.images.length;
   }
 
-  console.log(first);
-  console.log(last);
   return collectionStore.images.slice(first, last);
 });
 </script>
