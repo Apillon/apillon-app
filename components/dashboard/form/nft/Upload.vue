@@ -11,34 +11,18 @@
           collectionStore.stepUpload === NftUploadStep.PREVIEW
         "
       >
-        <n-space class="pb-8" :size="32" vertical>
-          <div class="grid gap-8 grid-cols-nft">
-            <div v-for="image in collectionStore.images" :key="image.id">
-              <figure class="flex flex-col h-full">
-                <img
-                  :src="createThumbnailUrl(image)"
-                  class="w-full h-full object-contain"
-                  :alt="image.name"
-                />
-                <!-- <figcaption class="block h-12 px-4 py-3 bg-white text-bg font-bold">
-                  {{ image.name }}
-                </figcaption> -->
-              </figure>
-            </div>
-          </div>
-          <n-space class="w-auto mx-auto" justify="center">
-            <Btn
-              class="w-60"
-              type="secondary"
-              @click="collectionStore.stepUpload = NftUploadStep.IMAGES"
-            >
-              {{ $t('nft.upload.takeMeBack') }}
-            </Btn>
-            <Btn class="w-60" type="primary" @click="collectionStore.mintTab = NftMintTab.MINT">
-              {{ $t('general.confirm') }}
-            </Btn>
-          </n-space>
-        </n-space>
+        <NftPreview>
+          <Btn
+            class="w-60"
+            type="secondary"
+            @click="collectionStore.stepUpload = NftUploadStep.IMAGES"
+          >
+            {{ $t('nft.upload.takeMeBack') }}
+          </Btn>
+          <Btn class="w-60" type="primary" @click="collectionStore.mintTab = NftMintTab.MINT">
+            {{ $t('general.confirm') }}
+          </Btn>
+        </NftPreview>
       </template>
 
       <!-- Upload Img -->
@@ -214,7 +198,6 @@ const {
   imagesNames,
   missingImages,
   createNftData,
-  createThumbnailUrl,
   uploadFileRequest,
   parseUploadedFile,
   handleImageChange,
@@ -246,10 +229,4 @@ function createMetadata() {
   collectionStore.stepUpload = NftUploadStep.IMAGES;
   modalMetadataAttributesVisible.value = false;
 }
-
-// async function deploy() {
-//   loading.value = true;
-//   await deployCollection();
-//   loading.value = false;
-// }
 </script>
