@@ -36,8 +36,8 @@
 </template>
 
 <script lang="ts" setup>
-const collectionStore = useCollectionStore();
 const { createThumbnailUrl } = useNft();
+const collectionStore = useCollectionStore();
 
 const page = ref<number>(1);
 const pageSize = ref<number>(collectionStore.images.length > 100 ? 100 : 10);

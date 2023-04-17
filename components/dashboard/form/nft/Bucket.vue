@@ -48,6 +48,7 @@
             <select-options
               v-model:value="formData.bucket"
               :options="buckets"
+              :loading="loading"
               :placeholder="$t('general.pleaseSelect')"
               filterable
               clearable
@@ -88,8 +89,10 @@ const loadingBucket = ref<boolean | null>(null);
 const modalNewBucketVisible = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 
-onMounted(() => {
-  bucketStore.getBuckets();
+onMounted(async () => {
+  loading.value = true;
+  await bucketStore.getBuckets();
+  loading.value = false;
 });
 
 const buckets = computed<Array<NSelectOption>>(() => {

@@ -52,6 +52,7 @@
           multiple
           directory-dnd
           :custom-request="uploadImagesRequest"
+          @click="loadingImages = true"
         >
           <n-upload-dragger class="h-40">
             <div class="py-2 text-center">
@@ -75,6 +76,7 @@
             :custom-request="uploadImagesRequest"
             @change="handleImageChange"
             @remove="handleImageRemove"
+            @click="loadingImages = true"
           >
             <div class="card px-4 py-2">
               <span class="icon-image text-xl align-sub mr-3"></span>
@@ -101,13 +103,14 @@
             >
               {{ $t('nft.validation.imagesMissing') }} {{ missingImages }}
             </Notification>
-            <Notification v-else-if="!allImagesUploaded" type="error">
+            <Notification v-else-if="!allImagesUploaded" type="error" class="overflow-hidden">
               {{ $t('nft.validation.imagesInvalid') }} {{ imagesNames }}
             </Notification>
           </div>
           <Btn
             type="secondary"
             size="large"
+            :loading="loadingImages"
             :disabled="!collectionStore.hasImages || !allImagesUploaded"
             @click="collectionStore.stepUpload = NftUploadStep.PREVIEW"
           >
@@ -196,6 +199,7 @@ const {
   allImagesUploaded,
   hasRequiredMetadata,
   imagesNames,
+  loadingImages,
   missingImages,
   createNftData,
   uploadFileRequest,

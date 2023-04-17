@@ -4,9 +4,15 @@
       <Heading>
         <slot>
           <n-space align="center" :size="32">
-            <NuxtLink :to="{ name: 'dashboard-service-nft' }">
-              <span class="icon-back"></span>
+            <NuxtLink
+              v-if="collectionStore.metadataStored === null"
+              :to="{ name: 'dashboard-service-nft' }"
+            >
+              <span class="icon-back text-base"></span>
             </NuxtLink>
+            <button v-else @click="goToPreviousStep">
+              <span class="icon-back text-base"></span>
+            </button>
             <h4>{{ $t('nft.collection.new') }}</h4>
           </n-space>
         </slot>
@@ -187,4 +193,14 @@ watch(
     }
   }
 );
+
+function goToPreviousStep() {
+  if (collectionStore.mintTab === NftMintTab.MINT) {
+    collectionStore.mintTab = NftMintTab.UPLOAD;
+  } else if (collectionStore.mintTab === NftMintTab.UPLOAD) {
+    collectionStore.mintTab = NftMintTab.METADATA;
+  } else {
+    collectionStore.metadataStored = null;
+  }
+}
 </script>

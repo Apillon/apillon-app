@@ -338,6 +338,18 @@ export function isCacheExpired(key: string) {
 }
 
 /**
+ * Slice array in chunks
+ */
+export function sliceIntoChunks(arr: Array<any>, chunkSize: number) {
+  const res: Array<any> = [];
+  for (let i = 0; i < arr.length; i += chunkSize) {
+    const chunk = arr.slice(i, i + chunkSize);
+    res.push(chunk);
+  }
+  return res;
+}
+
+/**
  * Compare arrays
  */
 export const compareArrays = (a: Array<any>, b: Array<any>) => {

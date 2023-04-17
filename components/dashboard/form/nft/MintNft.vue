@@ -268,7 +268,7 @@
 import { useMessage } from 'naive-ui';
 
 const emit = defineEmits(['submitSuccess']);
-const { createThumbnailUrl, deployCollection, infoLabel } = useNft();
+const { deployCollection, infoLabel } = useNft();
 
 const $i18n = useI18n();
 const message = useMessage();

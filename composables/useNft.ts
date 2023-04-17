@@ -10,6 +10,7 @@ export default function useNft() {
   const { vueApp } = useNuxtApp();
   const $papa = vueApp.config.globalProperties.$papa;
 
+  const loadingImages = ref<boolean>(false);
   const metadataRequired = ['name', 'description', 'image'];
   const metadataProperties = [
     'name',
@@ -171,7 +172,6 @@ export default function useNft() {
       if (attributes.length > 0) {
         nft.attributes = attributes;
       }
-
       return nft;
     });
   }
@@ -181,7 +181,12 @@ export default function useNft() {
    */
 
   /** Upload image request - add file to list */
-  function uploadImagesRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+  function uploadImagesRequest({
+    file,
+    onProgress,
+    onError,
+    onFinish,
+  }: NUploadCustomRequestOptions) {
     if (!isImage(file.type)) {
       message.warning($i18n.t('validation.notImage', { name: file.name }));
       return;
@@ -196,9 +201,16 @@ export default function useNft() {
       onError,
     };
 
-    if (!fileAlreadyOnFileList(collectionStore.images, image)) {
+    if (fileAlreadyOnFileList(collectionStore.images, image)) {
+      message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));
+    } else {
+      onProgress({ percent: 0 });
       collectionStore.images.push(image);
     }
+
+    setTimeout(() => {
+      loadingImages.value = false;
+    }, 300);
   }
 
   function handleImageChange(options: {
@@ -245,39 +257,53 @@ export default function useNft() {
     try {
       const metadataSession = await uploadMetadata();
       const imagesSession = await uploadImages();
+      console.log(metadataSession);
 
-      const res = await $api.post<CollectionResponse>(
-        endpoints.nftDeploy(collectionStore.active.collection_uuid),
-        { metadataSession, imagesSession }
-      );
-      collectionStore.active = res.data;
+      if (!!metadataSession && !!imagesSession) {
+        const res = await $api.post<CollectionResponse>(
+          endpoints.nftDeploy(collectionStore.active.collection_uuid),
+          { metadataSession, imagesSession }
+        );
+        collectionStore.active = res.data;
 
-      message.success($i18n.t('form.success.nftDeployed'));
+        message.success($i18n.t('form.success.nftDeployed'));
+      }
     } catch (error) {
       message.error(userFriendlyMsg(error));
+      throw error;
     }
   }
 
   async function uploadImages() {
-    return await uploadFiles(
-      collectionStore.active.bucket_uuid,
-      collectionStore.images,
-      false,
-      true,
-      false
-    );
+    try {
+      return await uploadFiles(
+        collectionStore.active.bucket_uuid,
+        collectionStore.images,
+        false,
+        true,
+        false
+      );
+    } catch (error) {
+      message.error(userFriendlyMsg(error));
+      return null;
+    }
   }
 
   async function uploadMetadata() {
     const nftMetadataFiles = createNftFiles(collectionStore.metadata);
 
-    return await uploadFiles(
-      collectionStore.active.bucket_uuid,
-      nftMetadataFiles,
-      false,
-      true,
-      false
-    );
+    try {
+      return await uploadFiles(
+        collectionStore.active.bucket_uuid,
+        nftMetadataFiles,
+        false,
+        true,
+        false
+      );
+    } catch (error) {
+      message.error(userFriendlyMsg(error));
+      return null;
+    }
   }
 
   /**
@@ -324,6 +350,7 @@ export default function useNft() {
     imagesNames,
     isCsvValid,
     isSameNumOfRows,
+    loadingImages,
     metadataRequired,
     missingImages,
     createNftData,
@@ -336,5 +363,6 @@ export default function useNft() {
     isImage,
     parseUploadedFile,
     uploadFileRequest,
+    uploadMetadata,
   };
 }
