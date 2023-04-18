@@ -154,10 +154,13 @@
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
+
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
+const message = useMessage();
 const bucketStore = useBucketStore();
 const { uploadFiles, fileAlreadyOnFileList, folderName } = useUpload();
 
@@ -227,7 +230,12 @@ function upload() {
   removeFinishedFilesFromList();
   showModalWrapFolder.value = false;
 
-  uploadFiles(props.bucketUuid, bucketStore.uploadFileList, wrapToDirectoryCheckbox.value);
+  try {
+    uploadFiles(props.bucketUuid, bucketStore.uploadFileList, wrapToDirectoryCheckbox.value);
+  } catch (error) {
+    /** Show error message */
+    message.error(userFriendlyMsg(error));
+  }
 }
 
 /** Clear file list */

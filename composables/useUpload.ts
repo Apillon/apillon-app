@@ -87,33 +87,39 @@ export default function useUpload() {
       updateFileStatus(file, FileUploadStatusValue.UPLOADING);
     });
 
-    try {
-      const params = {
-        session_uuid: sessionUuid.value,
-        files: filesUpload,
-      };
+    const filesChunks = sliceIntoChunks(filesUpload, 200);
 
-      /** Upload files request */
-      const fileRequests = await $api.post<FilesUploadRequestResponse>(
-        endpoints.storageFilesUpload(bucketUuid.value),
-        params
-      );
+    for (let i = 0; filesChunks.length; i++) {
+      if (filesChunks[i] && filesChunks[i].length) {
+        try {
+          const params = {
+            session_uuid: sessionUuid.value,
+            files: filesChunks[i],
+          };
 
-      if (fileRequests.data) {
-        uploadFilesToS3(fileRequests.data.files);
-      } else {
-        /** Show warning message - zero files uploaded */
-        message.warning($i18n.t('errror.fileUploadStopped'));
+          /** Upload files request */
+          const fileRequests = await $api.post<FilesUploadRequestResponse>(
+            endpoints.storageFilesUpload(bucketUuid.value),
+            params
+          );
+
+          if (fileRequests.data) {
+            uploadFilesToS3(fileRequests.data.files);
+          } else {
+            /** Show warning message - zero files uploaded */
+            message.warning($i18n.t('errror.fileUploadStopped'));
+          }
+        } catch (error) {
+          fileList.value.forEach(file => {
+            file.onError();
+            updateFileStatus(file, FileUploadStatusValue.ERROR);
+          });
+
+          throw error;
+        }
       }
-    } catch (error) {
-      fileList.value.forEach(file => {
-        file.onError();
-        updateFileStatus(file, FileUploadStatusValue.ERROR);
-      });
-
-      /** Show error message */
-      message.error(userFriendlyMsg(error));
     }
+
     return sessionUuid.value;
   }
 

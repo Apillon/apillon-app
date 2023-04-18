@@ -632,7 +632,6 @@
       "addNew": "Add new collection",
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
-      "baseUriInfo": "If you already have collection metadata, paste the base URI here. Otherwise, you will go through the metadata creation process.",
       "contractAddress": "Contract address",
       "create": "Create collection",
       "createInfo": "",
@@ -671,12 +670,15 @@
         "view": "View the"
       },
       "labelInfo": {
+        "collectionBaseExtension": "",
+        "collectionBaseUri": "If you already have collection metadata, paste the base URI here. Otherwise, you will go through the metadata creation process.",
         "collectionDropStart": "",
         "collectionMaxSupply": "",
+        "collectionMintPrice": "",
         "collectionReserve": "",
         "collectionRevocable": "",
         "collectionSoulbound": "",
-        "collectionTotalSupply": "Limit or unlimited?"
+        "collectionTotalSupply": "Limited or unlimited?"
       },
       "status": {
         "0": "CREATED",

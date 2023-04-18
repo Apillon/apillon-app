@@ -41,7 +41,7 @@ export const useCollectionStore = defineStore('collection', {
         reserve: 0,
         revocable: null,
         soulbound: null,
-        supplyLimited: false,
+        supplyLimited: 0,
       },
     },
   }),

@@ -268,7 +268,7 @@
 import { useMessage } from 'naive-ui';
 
 const emit = defineEmits(['submitSuccess']);
-const { createThumbnailUrl, deployCollection, infoLabel } = useNft();
+const { deployCollection } = useNft();
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -284,8 +284,8 @@ const chains = [
   { label: 'Moonbase', value: Chains.MOONBASE },
 ];
 const supplyTypes = [
-  { label: $i18n.t('form.supplyTypes.unlimited'), value: false },
-  { label: $i18n.t('form.supplyTypes.limited'), value: true },
+  { label: $i18n.t('form.supplyTypes.unlimited'), value: 0 },
+  { label: $i18n.t('form.supplyTypes.limited'), value: 1 },
 ];
 const booleanSelect = [
   { label: $i18n.t('form.booleanSelect.true'), value: 1 },
@@ -312,11 +312,11 @@ const rules: NFormRules = {
     },
   ],
   maxSupply: [
-    // {
-    //   max: NFT_MAX_SUPPLY,
-    //   validator: validateMaxSupply,
-    //   message: $i18n.t('validation.collectionMaxSupplyReached', { max: NFT_MAX_SUPPLY }),
-    // },
+    {
+      max: NFT_MAX_SUPPLY,
+      validator: validateMaxSupply,
+      message: $i18n.t('validation.collectionMaxSupplyReached', { max: NFT_MAX_SUPPLY }),
+    },
   ],
   mintPrice: [
     {
@@ -351,19 +351,37 @@ function isStepAvailable(step: number) {
   return true;
 }
 
+function infoLabel(field: string) {
+  if (
+    $i18n.te(`form.label.${field}`) &&
+    $i18n.te(`nft.collection.labelInfo.${field}`) &&
+    $i18n.t(`nft.collection.labelInfo.${field}`)
+  ) {
+    return [
+      h('span', { class: 'mr-1' }, $i18n.t(`form.label.${field}`)),
+      h(
+        resolveComponent('IconInfo'),
+        { size: 'sm', tooltip: $i18n.t(`nft.collection.labelInfo.${field}`) },
+        ''
+      ),
+    ];
+  }
+  return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
+}
+
 /**
  * Validations
  */
 function validateReserve(_: NFormItemRule, value: number): boolean {
   return (
-    !collectionStore.form.behaviour?.supplyLimited ||
-    collectionStore.form.behaviour?.maxSupply === 0 ||
-    value <= (collectionStore.form.behaviour?.maxSupply || 0)
+    collectionStore.form.behaviour.supplyLimited === 0 ||
+    collectionStore.form.behaviour.maxSupply === 0 ||
+    value <= collectionStore.form.behaviour.maxSupply
   );
 }
-// function validateMaxSupply(_: NFormItemRule, value: number): boolean {
-//   return value <= NFT_MAX_SUPPLY;
-// }
+function validateMaxSupply(_: NFormItemRule, value: number): boolean {
+  return value <= NFT_MAX_SUPPLY;
+}
 function validateDropStart(_: NFormItemRule, value: number): boolean {
   return !collectionStore.form.behaviour.isDrop || value > Date.now();
 }
@@ -414,9 +432,10 @@ async function deploy() {
       chain: collectionStore.form.base.chain,
       baseExtension: collectionStore.form.behaviour.baseExtension,
       mintPrice: collectionStore.form.behaviour.mintPrice,
-      maxSupply: collectionStore.form.behaviour.supplyLimited
-        ? collectionStore.form.behaviour.maxSupply
-        : 0,
+      maxSupply:
+        collectionStore.form.behaviour.supplyLimited === 1
+          ? collectionStore.form.behaviour.maxSupply
+          : 0,
       isDrop: collectionStore.form.behaviour.isDrop,
       dropStart: Math.floor((collectionStore.form.behaviour.dropStart || Date.now()) / 1000),
       reserve: collectionStore.form.behaviour.reserve,
