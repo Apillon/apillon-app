@@ -60,8 +60,8 @@
           :class="{ 'hide-feedback': !!metadataUri }"
           :span="8"
           path="baseUri"
-          :label="baseUriLabel"
           :label-props="{ for: 'baseUri' }"
+          :label="infoLabel('collectionBaseUri')"
         >
           <n-input
             v-model:value="formData.baseUri"
@@ -76,7 +76,7 @@
           :class="{ 'hide-feedback': !!metadataUri }"
           :span="4"
           path="baseExtension"
-          :label="$t('form.label.collectionBaseExtension')"
+          :label="infoLabel('collectionBaseExtension')"
           :label-props="{ for: 'baseExtension' }"
         >
           <n-input
@@ -96,8 +96,8 @@
         <n-form-item-gi
           path="supplyLimited"
           :span="6"
-          :label="infoLabel('collectionTotalSupply')"
           :label-props="{ for: 'supplyLimited' }"
+          :label="infoLabel('collectionTotalSupply')"
         >
           <select-options
             v-model:value="formData.supplyLimited"
@@ -113,8 +113,8 @@
         <n-form-item-gi
           path="maxSupply"
           :span="6"
-          :label="infoLabel('collectionMaxSupply')"
           :label-props="{ for: 'maxSupply' }"
+          :label="infoLabel('collectionMaxSupply')"
         >
           <n-input-number
             v-model:value="formData.maxSupply"
@@ -132,6 +132,42 @@
         </n-form-item-gi>
       </n-grid>
 
+      <n-grid class="items-end" :cols="12" :x-gap="32">
+        <!-- Collection Revocable -->
+        <n-form-item-gi
+          path="revocable"
+          :span="6"
+          :label-props="{ for: 'revocable' }"
+          :label="infoLabel('collectionRevocable')"
+        >
+          <select-options
+            v-model:value="formData.revocable"
+            :options="booleanSelect"
+            :input-props="{ id: 'revocable' }"
+            :placeholder="$t('general.pleaseSelect')"
+            filterable
+            clearable
+          />
+        </n-form-item-gi>
+
+        <!-- Collection Soulbound -->
+        <n-form-item-gi
+          path="soulbound"
+          :span="6"
+          :label-props="{ for: 'soulbound' }"
+          :label="infoLabel('collectionSoulbound')"
+        >
+          <select-options
+            v-model:value="formData.soulbound"
+            :options="booleanSelect"
+            :input-props="{ id: 'soulbound' }"
+            :placeholder="$t('general.pleaseSelect')"
+            filterable
+            clearable
+          />
+        </n-form-item-gi>
+      </n-grid>
+
       <!--  Collection Is Drop -->
       <n-form-item path="isDrop" :span="1" :show-label="false">
         <n-checkbox
@@ -143,7 +179,7 @@
 
       <n-grid v-if="!!formData.isDrop" :cols="12" :x-gap="32">
         <!--  Collection Mint price -->
-        <n-form-item-gi path="mintPrice" :span="6" :label="$t('form.label.collectionMintPrice')">
+        <n-form-item-gi path="mintPrice" :span="6" :label="infoLabel('collectionMintPrice')">
           <n-input-number
             v-model:value="formData.mintPrice"
             :placeholder="$t('form.placeholder.collectionMintPrice')"
@@ -152,7 +188,7 @@
         </n-form-item-gi>
 
         <!--  Collection Drop start -->
-        <n-form-item-gi path="dropStart" :span="6" :label="$t('form.label.collectionDropStart')">
+        <n-form-item-gi path="dropStart" :span="6" :label="infoLabel('collectionDropStart')">
           <n-date-picker
             v-model:value="formData.dropStart"
             class="w-full"
@@ -194,9 +230,9 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
+import { h } from 'vue';
 
 const emit = defineEmits(['submitSuccess']);
-const { infoLabel } = useNft();
 
 const $i18n = useI18n();
 const router = useRouter();
@@ -207,25 +243,26 @@ const settingsStore = useSettingsStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const IconInfo = resolveComponent('IconInfo');
 
 const formErrors = ref<boolean>(false);
 const formData = ref<FormCollection>({
   name: '',
   symbol: '',
   mintPrice: 0,
-  supplyLimited: false,
-  maxSupply: null,
+  supplyLimited: 0,
+  maxSupply: 0,
   baseUri: '',
   baseExtension: '',
   isDrop: false,
   dropStart: Date.now() + 3600000,
   reserve: 0,
+  revocable: null,
+  soulbound: null,
 });
 
 const supplyTypes = [
-  { label: $i18n.t('form.supplyTypes.unlimited'), value: false },
-  { label: $i18n.t('form.supplyTypes.limited'), value: true },
+  { label: $i18n.t('form.supplyTypes.unlimited'), value: 0 },
+  { label: $i18n.t('form.supplyTypes.limited'), value: 1 },
 ];
 const booleanSelect = [
   { label: $i18n.t('form.booleanSelect.true'), value: 1 },
@@ -299,12 +336,6 @@ const metadataUri = computed<string>(() => {
     ? formData.value.baseUri + '1.' + $i18n.t('nft.collection.extension')
     : '';
 });
-const baseUriLabel = computed(() => {
-  return [
-    h('span', { class: 'mr-1' }, $i18n.t('form.label.collectionBaseUri')),
-    h(IconInfo, { size: 'sm', tooltip: $i18n.t('nft.collection.baseUriInfo') }, ''),
-  ];
-});
 
 const isQuotaReached = computed<boolean>(() => {
   return collectionStore.quotaReached === true;
@@ -312,7 +343,27 @@ const isQuotaReached = computed<boolean>(() => {
 const isFormDisabled = computed<boolean>(() => {
   return isQuotaReached.value || settingsStore.isProjectUser();
 });
+function infoLabel(field: string) {
+  if (
+    $i18n.te(`form.label.${field}`) &&
+    $i18n.te(`nft.collection.labelInfo.${field}`) &&
+    $i18n.t(`nft.collection.labelInfo.${field}`)
+  ) {
+    return [
+      h('span', { class: 'mr-1' }, $i18n.t(`form.label.${field}`)),
+      h(
+        resolveComponent('IconInfo'),
+        { size: 'sm', tooltip: $i18n.t(`nft.collection.labelInfo.${field}`) },
+        ''
+      ),
+    ];
+  }
+  return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
+}
 
+/**
+ * Validations
+ */
 function validateReserve(_: NFormItemRule, value: number): boolean {
   return formData.value?.maxSupply === 0 || value <= (formData.value?.maxSupply || 0);
 }
@@ -360,12 +411,14 @@ async function createCollection() {
       name: formData.value.name,
       symbol: formData.value.symbol,
       mintPrice: formData.value.mintPrice,
-      maxSupply: formData.value.maxSupply,
+      maxSupply: formData.value.supplyLimited === 1 ? formData.value.maxSupply : 0,
       baseUri: formData.value.baseUri,
       baseExtension: formData.value.baseExtension,
       isDrop: formData.value.isDrop,
       dropStart: Math.floor((formData.value.dropStart || Date.now()) / 1000),
       reserve: formData.value.reserve,
+      revocable: formData.value.revocable,
+      soulbound: formData.value.soulbound,
     };
     const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
 

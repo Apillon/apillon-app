@@ -99,7 +99,6 @@ function handleSubmit(e: Event | MouseEvent) {
       //   'https://github.com/login/oauth/authorize?client_id=d0482598d8adbd8adffa&redirect_uri=http://localhost:3000/dashboard/referral',
       //   '_self'
       // );
-      console.log('Connect twitter');
 
       if (!referralStore.twitter_id) {
         await connectTwitter();

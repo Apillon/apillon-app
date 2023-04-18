@@ -9,7 +9,9 @@
 
           <h4 class="mb-1">{{ $t('hosting.upload.files') }}</h4>
           <span class="text-body">{{ $t('hosting.upload.dragAndDrop') }}</span>
-          <SeparatorText class="my-1" :border-left="true">{{ $t('general.or') }}</SeparatorText>
+          <SeparatorText class="mt-1 mb-1" :border-left="true">
+            {{ $t('general.or') }}
+          </SeparatorText>
         </div>
       </n-upload-dragger>
     </n-upload>

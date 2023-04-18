@@ -5,7 +5,6 @@ export default function useNft() {
   const message = useMessage();
   const { fileAlreadyOnFileList, uploadFiles } = useUpload();
   const collectionStore = useCollectionStore();
-  const IconInfo = resolveComponent('IconInfo');
 
   const { vueApp } = useNuxtApp();
   const $papa = vueApp.config.globalProperties.$papa;
@@ -257,7 +256,6 @@ export default function useNft() {
     try {
       const metadataSession = await uploadMetadata();
       const imagesSession = await uploadImages();
-      console.log(metadataSession);
 
       if (!!metadataSession && !!imagesSession) {
         const res = await $api.post<CollectionResponse>(
@@ -330,20 +328,6 @@ export default function useNft() {
     });
   }
 
-  function infoLabel(field: string) {
-    if (
-      $i18n.te(`form.label.${field}`) &&
-      $i18n.te(`nft.collection.labelInfo.${field}`) &&
-      $i18n.t(`nft.collection.labelInfo.${field}`)
-    ) {
-      return [
-        h('span', { class: 'mr-1' }, $i18n.t(`form.label.${field}`)),
-        h(IconInfo, { size: 'sm', tooltip: $i18n.t(`nft.collection.labelInfo.${field}`) }, ''),
-      ];
-    }
-    return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
-  }
-
   return {
     allImagesUploaded,
     hasRequiredMetadata,
@@ -359,7 +343,6 @@ export default function useNft() {
     uploadImagesRequest,
     handleImageChange,
     handleImageRemove,
-    infoLabel,
     isImage,
     parseUploadedFile,
     uploadFileRequest,
