@@ -36,6 +36,12 @@ watch(
     /** Clear all stored data */
     clearAll();
 
+    /** Save current project ID to LS and redirect to Dashboard */
+    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${projectId}`);
+    if (projectId !== oldProjectId && oldProjectId > 0) {
+      router.push({ name: 'dashboard' });
+    }
+
     /** Reload projects if projectId is new project */
     if (!dataStore.project.items.some(project => project.id === projectId)) {
       loading.value = true;
@@ -50,12 +56,6 @@ watch(
     }
     /** Fetch selected project data(get myRole_id_onProject)  */
     await dataStore.fetchProject();
-
-    /** Save current project ID to LS and redirect to Dashboard */
-    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${projectId}`);
-    if (projectId !== oldProjectId && oldProjectId > 0) {
-      router.push({ name: 'dashboard' });
-    }
   }
 );
 </script>

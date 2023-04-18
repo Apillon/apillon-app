@@ -17,10 +17,7 @@
           </n-space>
         </slot>
         <template #info>
-          <div class="card-light flex items-center h-10 px-4 py-2 rounded-lg">
-            <span>{{ $t('general.smBy') }}</span>
-            <NuxtIcon name="nft/moonbeam" class="icon-auto" filled />
-          </div>
+          <Badge icon="nft/moonbeam" />
         </template>
       </Heading>
     </template>
