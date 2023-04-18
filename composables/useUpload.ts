@@ -1,6 +1,5 @@
 import { useMessage } from 'naive-ui';
 import { v4 as uuidv4 } from 'uuid';
-import { ref } from 'vue';
 
 export default function useUpload() {
   const $i18n = useI18n();
@@ -89,8 +88,8 @@ export default function useUpload() {
 
     const filesChunks = sliceIntoChunks(filesUpload, 200);
 
-    for (let i = 0; filesChunks.length; i++) {
-      if (filesChunks[i] && filesChunks[i].length) {
+    for (let i = 0; i < filesChunks.length; i++) {
+      if (filesChunks[i] && filesChunks[i].length > 0) {
         try {
           const params = {
             session_uuid: sessionUuid.value,
