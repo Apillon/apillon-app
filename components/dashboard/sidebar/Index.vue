@@ -22,7 +22,10 @@
           </div>
 
           <!-- PROJECTS & NEW PROJECT -->
-          <div v-if="isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())" class="px-8">
+          <div
+            v-if="isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
+            :class="collapsed ? 'px-4' : 'px-8'"
+          >
             <n-space :size="20" vertical>
               <!-- Projects dropdown -->
               <div class="min-h-[48px]">
@@ -31,7 +34,12 @@
 
               <!-- Create new project -->
               <Btn type="info" size="large" @click="showModalNewProject = true">
-                {{ $t('project.new') }}
+                <template v-if="collapsed">
+                  <span class="icon-add text-lg"></span>
+                </template>
+                <template v-else>
+                  {{ $t('project.new') }}
+                </template>
               </Btn>
             </n-space>
           </div>
@@ -63,6 +71,7 @@ import { useDataStore } from '~~/stores/data';
 const authStore = useAuthStore();
 
 const props = defineProps({
+  collapsed: { type: Boolean, default: false },
   showOnMobile: { type: Boolean, default: false },
 });
 

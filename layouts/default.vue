@@ -10,15 +10,16 @@
       <n-layout class="h-full" :has-sider="isLg" sider-placement="left">
         <n-layout-sider
           v-if="isLg"
-          bordered
-          :show-trigger="false"
+          :show-trigger="true"
           collapse-mode="width"
-          :collapsed-width="60"
+          :collapsed-width="72"
           :width="320"
           :native-scrollbar="false"
+          bordered
           style="max-height: 100vh"
+          @update-collapsed="onCollapse"
         >
-          <Sidebar />
+          <Sidebar :collapsed="sidebarCollapsed" />
         </n-layout-sider>
         <n-layout>
           <Header @toggleSidebar="toggleSidebar" />
@@ -44,6 +45,7 @@ const { isLg } = useScreen();
 const messageRef = ref<HTMLDivElement>();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
+const sidebarCollapsed = ref<boolean>(false);
 
 /**
  * Enable/disable body scroll
@@ -86,5 +88,9 @@ function toggleSidebar(show?: boolean) {
   } else {
     showMobileSidebar.value = show;
   }
+}
+
+function onCollapse(collapsed: boolean) {
+  sidebarCollapsed.value = collapsed;
 }
 </script>
