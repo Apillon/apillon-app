@@ -23,7 +23,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 router.afterEach(to => {
   if (window._paq) {
-    window._paq.push(['setCustomVariable', '1', 'userUUid', authStore.userUuid, 'visit']);
+    window._paq.push(['setCustomDimension', '1', authStore.userUuid]);
     window._paq.push(['setDocumentTitle', to.fullPath]);
     window._paq.push(['trackPageView']);
   }
