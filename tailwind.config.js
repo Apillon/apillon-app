@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     screens: {
       mobile: { max: '767px' },
+      tablet: { max: '1023px' },
       sm: '640px',
       md: '768px',
       lg: '1024px',

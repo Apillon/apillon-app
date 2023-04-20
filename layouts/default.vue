@@ -11,8 +11,9 @@
         <n-layout-sider
           v-if="isLg"
           :show-trigger="true"
-          collapse-mode="width"
+          :collapsed="sidebarCollapsed"
           :collapsed-width="72"
+          collapse-mode="width"
           :width="320"
           :native-scrollbar="false"
           bordered
@@ -41,7 +42,7 @@
 <script lang="ts" setup>
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
-const { isLg } = useScreen();
+const { isLg, isXl } = useScreen();
 const messageRef = ref<HTMLDivElement>();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
@@ -82,11 +83,26 @@ watch(
   }
 );
 
+watch(
+  () => isXl.value,
+  isXl => {
+    toggleCollapse(!isXl);
+  }
+);
+
 function toggleSidebar(show?: boolean) {
   if (show === undefined) {
     showMobileSidebar.value = !showMobileSidebar.value;
   } else {
     showMobileSidebar.value = show;
+  }
+}
+
+function toggleCollapse(show?: boolean) {
+  if (show === undefined) {
+    sidebarCollapsed.value = !sidebarCollapsed.value;
+  } else {
+    sidebarCollapsed.value = show;
   }
 }
 
