@@ -1,7 +1,7 @@
 <template>
   <n-form
     ref="formRef"
-    class="max-w-lg"
+    class="w-full max-w-lg"
     :model="formData"
     :rules="rules"
     @submit.prevent="handleSubmit"
@@ -41,7 +41,13 @@
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.save')" />
-      <Btn type="primary" class="mt-2" :loading="loading || loadingForm" @click="handleSubmit">
+      <Btn
+        class="mt-2"
+        size="large"
+        type="secondary"
+        :loading="loading || loadingForm"
+        @click="handleSubmit"
+      >
         {{ $t('form.save') }}
       </Btn>
     </n-form-item>

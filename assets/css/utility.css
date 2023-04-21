@@ -24,6 +24,9 @@
   .card {
     @apply bg-bg card-border;
   }
+  .card-dark {
+    @apply bg-bg-dark card-border;
+  }
   .card-light {
     @apply bg-bg-light card-border;
   }

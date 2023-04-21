@@ -208,7 +208,6 @@
   }
   &.n-h5 {
     @apply font-bold;
-    font-size: 1.25rem;
   }
   &.n-h6 {
     @apply font-bold;
