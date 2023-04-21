@@ -1,6 +1,25 @@
-<template>
+<template
+  v-if="dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
+>
+  <n-dropdown
+    v-if="collapsed"
+    :options="dropdownOptions"
+    trigger="click"
+    @select="onDropdownSelect"
+  >
+    <n-button
+      v-bind="$attrs"
+      class="w-full h-10 bg-bg-light"
+      size="tiny"
+      icon-placement="right"
+      :loading="loading"
+    >
+      <span class="icon-down text-3xl"></span>
+    </n-button>
+  </n-dropdown>
   <select-options
-    v-if="dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
+    v-else
+    v-bind="$attrs"
     :key="componentSelectKey"
     v-model:value="dataStore.project.selected"
     :options="dataStore.project.items"
@@ -10,13 +29,31 @@
 </template>
 
 <script lang="ts" setup>
+defineProps({
+  collapsed: { type: Boolean, default: false },
+});
+
 const router = useRouter();
-const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
 
 const componentSelectKey = ref(0);
 const loading = ref<boolean>(false);
+
+const dropdownOptions = computed(() => {
+  return dataStore.project.items.map(item => {
+    return {
+      key: item.id,
+      label: item.label,
+      value: item.value,
+      active: item.id === dataStore.project.selected,
+      props: {
+        class: item.id === dataStore.project.selected ? 'active' : '',
+        onClick: () => {},
+      },
+    };
+  });
+});
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
@@ -58,6 +95,10 @@ watch(
     await dataStore.fetchProject();
   }
 );
+
+function onDropdownSelect(key: string | number) {
+  dataStore.project.selected = Number(key);
+}
 </script>
 
 <style lang="postcss"></style>

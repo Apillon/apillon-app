@@ -93,6 +93,6 @@ const options = computed(() => {
 });
 
 async function refresh() {
-  collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
+  await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
 }
 </script>
