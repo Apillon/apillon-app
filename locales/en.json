@@ -1026,7 +1026,7 @@
     "collectionBaseUriRequired": "Please enter Base URI",
     "collectionBaseExtensionRequired": "Please enter Base Extension",
     "collectionDropStart": "Drop start is not a valid date or has already passed by",
-    "collectionMaxSupplyReached": "Please enter lower number, max supply is {max}",
+    "collectionMaxSupplyReached": "Enter lower value, max supply is {max}",
     "collectionMaxSupplyRequired": "Please enter Max supply",
     "collectionMintPrice": "Please enter a valid Mint price",
     "collectionMintPriceRequired": "Please enter Mint price",

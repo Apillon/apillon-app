@@ -27,6 +27,7 @@
       </div>
       <n-form
         ref="formBehaviourRef"
+        class="max-w-xl"
         :model="collectionStore.form.behaviour"
         :rules="rules"
         @submit.prevent="handleSubmitFormBehaviours"
@@ -134,6 +135,9 @@
           >
             <n-input-number
               v-model:value="collectionStore.form.behaviour.mintPrice"
+              :min="0"
+              :max="1000"
+              :step="0.001"
               :input-props="{ id: 'mintPrice' }"
               :placeholder="$t('form.placeholder.collectionMintPrice')"
               clearable
@@ -200,6 +204,7 @@
       </div>
       <n-form
         ref="formNameRef"
+        class="max-w-xl"
         :model="collectionStore.form.base"
         :rules="rules"
         @submit.prevent="handleSubmitFormName"
@@ -292,6 +297,12 @@ const booleanSelect = [
   { label: $i18n.t('form.booleanSelect.false'), value: 0 },
 ];
 
+const maxNft = computed(() => {
+  return collectionStore.form.behaviour.supplyLimited === 1
+    ? collectionStore.csvData?.length
+    : NFT_MAX_SUPPLY;
+});
+
 const rules: NFormRules = {
   symbol: [
     {
@@ -313,9 +324,11 @@ const rules: NFormRules = {
   ],
   maxSupply: [
     {
-      max: NFT_MAX_SUPPLY,
+      max: maxNft.value,
       validator: validateMaxSupply,
-      message: $i18n.t('validation.collectionMaxSupplyReached', { max: NFT_MAX_SUPPLY }),
+      message: $i18n.t('validation.collectionMaxSupplyReached', {
+        max: collectionStore.csvData?.length || NFT_MAX_SUPPLY,
+      }),
     },
   ],
   mintPrice: [
@@ -380,7 +393,7 @@ function validateReserve(_: NFormItemRule, value: number): boolean {
   );
 }
 function validateMaxSupply(_: NFormItemRule, value: number): boolean {
-  return value <= NFT_MAX_SUPPLY;
+  return value <= maxNft.value;
 }
 function validateDropStart(_: NFormItemRule, value: number): boolean {
   return !collectionStore.form.behaviour.isDrop || value > Date.now();

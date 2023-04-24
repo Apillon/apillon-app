@@ -87,7 +87,7 @@
           />
         </n-form-item-gi>
         <n-form-item-gi v-if="metadataUri" :span="12" :show-label="false">
-          {{ metadataUri }}
+          <div class="w-full text-sm break-words">{{ metadataUri }}</div>
         </n-form-item-gi>
       </n-grid>
 
@@ -179,9 +179,18 @@
 
       <n-grid v-if="!!formData.isDrop" :cols="12" :x-gap="32">
         <!--  Collection Mint price -->
-        <n-form-item-gi path="mintPrice" :span="6" :label="infoLabel('collectionMintPrice')">
+        <n-form-item-gi
+          path="mintPrice"
+          :span="6"
+          :label="infoLabel('collectionMintPrice')"
+          :label-props="{ for: 'mintPrice' }"
+        >
           <n-input-number
             v-model:value="formData.mintPrice"
+            :min="0"
+            :max="1000"
+            :step="0.001"
+            :input-props="{ id: 'mintPrice' }"
             :placeholder="$t('form.placeholder.collectionMintPrice')"
             clearable
           />
@@ -429,6 +438,8 @@ async function createCollection() {
 
     /** Reset collection qouta limit */
     collectionStore.quotaReached = undefined;
+    collectionStore.resetMetadata();
+    collectionStore.resetForms();
 
     /** Emit events */
     emit('submitSuccess');

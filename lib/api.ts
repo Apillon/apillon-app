@@ -110,8 +110,8 @@ class Api {
       if (
         (response.status === 500 && error.message === UserError.INVALID_SIGNATURE) ||
         (response.status === 500 && error.message === UserError.JWT_TOKEN_EXPIRED) ||
-        (response.status === 401 && error.message !== UserError.USER_INVALID_LOGIN) ||
-        (response.status === 400 && error.message !== UserError.USER_DOES_NOT_EXISTS)
+        (response.status === 400 && error.message === UserError.USER_DOES_NOT_EXISTS) ||
+        (response.status === 401 && error.message !== UserError.USER_INVALID_LOGIN)
       ) {
         this.backToLogin();
       } else if (response.status === 403) {
