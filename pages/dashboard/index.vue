@@ -162,46 +162,26 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const authStore = useAuthStore();
 const router = useRouter();
-const config = useRuntimeConfig();
+const authStore = useAuthStore();
 const referralStore = useReferralStore();
+const showModal = ref(false);
 
 useHead({
   title: t('dashboard.dashboard'),
 });
 
 function enterReferral() {
-  if (!termsAccepted.value) {
+  if (!referralStore.termsAccepted) {
     showModal.value = true;
   } else {
     router.push('/dashboard/referral');
   }
 }
 
-const loading = ref(false);
-const termsAccepted = ref(false);
-
 onMounted(() => {
   if (isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())) {
-    getReferral();
+    referralStore.getReferral();
   }
 });
-
-async function getReferral() {
-  loading.value = true;
-  try {
-    const res = await $api.get<ReferralResponse>(endpoints.referral);
-    // If there is no error -> user already accepted terms & conditions
-    referralStore.initReferral(res.data);
-    termsAccepted.value = true;
-  } catch (e) {
-    if (config.public.ENV === AppEnv.LOCAL) {
-      console.error(e);
-    }
-  }
-  loading.value = false;
-}
-
-const showModal = ref(false);
 </script>

@@ -170,15 +170,17 @@
       "storage": "Storage"
     },
     "pageMenu": {
-      "methods": "Methods",
       "access": "Access",
+      "accountManagement": "Account management",
       "apiKeys": "API keys",
       "charts": "Charts",
+      "credentials": "Credentials & API keys",
+      "destroy": "Destroy",
       "history": "History",
-      "Destroy": "Destroy",
+      "methods": "Methods",
+      "profile": "Profile",
       "projectSettings": "Project settings",
-      "usersPermissions": "Users & permissions",
-      "credentials": "Credentials & API keys"
+      "usersPermissions": "Users & permissions"
     },
     "permissions": {
       "read": "Read permissions",
@@ -774,17 +776,26 @@
       "disconnect": "Discord disconnect",
       "disconnected": "You have successfully disconnected your Discord account",
       "infoConnected": "Disconnect your Discord account",
-      "infoDisconnected": "Connect your Discord account",
+      "infoDisconnected": "Right now we are releasing Discord connect feature which will enable users to connect their Apillon accounts to our Discord server and get access to two channels. Governance debate and governance vote.",
       "titleConnected": "Discord connected",
-      "titleDisconnected": "Discord"
+      "titleDisconnected": "Apillon and Discord"
+    },
+    "password": {
+      "btn": "Send e-mail",
+      "info": "Explanation that we will send an e-mail bla bla Tellus ut sapien tristique lectus faucibus et. Adipiscing nibh nulla in aenean. Senectus egestas venenatis volutpat tortor pulvinar ullamcorper eget viverra.",
+      "title": "Password reset"
     },
     "2fa": "Two-factor authentication",
     "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
-    "changePassword": "Change password",
+    "account": "Account",
+    "accountInformation": "Account information",
     "logout": "Logout",
-    "mySettings": "My settings",
-    "password": "Password",
+    "marketing": "Marketing",
+    "marketingCheck": "I want to recieve marketing email from Apillon",
+    "marketingInfo": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
+    "mySettings": "Settings",
     "profile": "Profile",
+    "security": "Security",
     "setup2fa": "Set up 2FA"
   },
   "project": {
@@ -800,9 +811,11 @@
   },
   "referral": {
     "banner": {
+      "hello": "Hello Apillonian!",
       "title": "Apillon Referral program",
       "description": "Are you a true Web3 believer and want to build the future together with your friends? Share the news, invite your friends and collect points!",
-      "btn": "Start your Referral journey"
+      "btn": "Start your Referral journey",
+      "goTo": "Go to referral"
     },
     "enter": {
       "header": "Can we work together?",

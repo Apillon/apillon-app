@@ -45,7 +45,9 @@ const createColumns = ({
           { type: row.active ? 'success' : 'default', round: true, bordered: false },
           {
             default: () =>
-              row.active ? h('strong', {}, t('general.active')) : t('general.notActive'),
+              row.active
+                ? h('strong', { class: 'text-black' }, t('general.active'))
+                : h('strong', { class: 'text-white' }, t('general.notActive')),
           }
         );
       },

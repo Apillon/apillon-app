@@ -12,6 +12,7 @@ export default {
   green: '#A9DC76',
   violet: '#AB9DF2',
   blue: '#78DCE8',
+  discord: '#4554E9',
 
   body: '#9D9E91',
   bodyDark: '#6A6B63',
