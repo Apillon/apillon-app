@@ -814,7 +814,8 @@
       "hello": "Hello Apillonian!",
       "title": "Apillon Referral program",
       "description": "Are you a true Web3 believer and want to build the future together with your friends? Share the news, invite your friends and collect points!",
-      "btn": "Start your Referral journey"
+      "btn": "Start your Referral journey",
+      "goTo": "Go to referral"
     },
     "enter": {
       "header": "Can we work together?",

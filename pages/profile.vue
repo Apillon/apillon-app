@@ -17,12 +17,12 @@
         <template v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())">
           <div class="card-dark p-8 flex gap-8 justify-between mobile:flex-wrap">
             <div class="md:max-w-lg">
-              <h3 class="mb-4">{{ $t('referral.banner.hello') }}</h3>
+              <h3 class="mb-2">{{ $t('referral.banner.hello') }}</h3>
               <p class="text-body mb-6">
                 {{ $t('referral.banner.description') }}
               </p>
-              <Btn type="primary" size="large" @click="enterReferral()">
-                {{ $t('referral.banner.btn') }}
+              <Btn type="primary" @click="enterReferral()">
+                {{ $t('referral.banner.goTo') }}
               </Btn>
             </div>
 
@@ -61,15 +61,15 @@
           <div class="card-light p-8 flex gap-8 justify-between mobile:flex-wrap">
             <div class="md:max-w-lg">
               <template v-if="discordLink">
-                <n-h5 class="mb-0" prefix="bar">{{ $t('profile.discord.titleConnected') }}</n-h5>
-                <p class="mb-6">{{ $t('profile.discord.infoConnected') }}</p>
+                <h3 class="mb-2">{{ $t('profile.discord.titleConnected') }}</h3>
+                <p class="mb-6 text-body">{{ $t('profile.discord.infoConnected') }}</p>
                 <Btn type="error" :loading="loadingDiscord" @click="discordDisconnect">
                   {{ $t('profile.discord.disconnect') }}
                 </Btn>
               </template>
               <template v-else>
-                <n-h5 class="mb-0" prefix="bar">{{ $t('profile.discord.titleDisconnected') }}</n-h5>
-                <p class="mb-6">{{ $t('profile.discord.infoDisconnected') }}</p>
+                <h3 class="mb-2">{{ $t('profile.discord.titleDisconnected') }}</h3>
+                <p class="mb-6 text-body">{{ $t('profile.discord.infoDisconnected') }}</p>
                 <Btn :color="colors.discord" :loading="loadingDiscord" @click="discordConnect">
                   <span class="text-white">{{ $t('profile.discord.connect') }}</span>
                 </Btn>
@@ -109,6 +109,10 @@ useHead({
 
 onMounted(async () => {
   await settingsStore.getOauthLinks();
+
+  if (isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())) {
+    referralStore.getReferral();
+  }
 });
 
 const discordLink = computed(() => {
@@ -123,7 +127,7 @@ const discordLink = computed(() => {
 });
 
 function enterReferral() {
-  if (!termsAccepted.value) {
+  if (!referralStore.termsAccepted) {
     showModalRefferal.value = true;
   } else {
     router.push('/dashboard/referral');

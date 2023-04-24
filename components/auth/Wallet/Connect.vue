@@ -3,7 +3,7 @@
     <!-- Wallet is connected -->
     <template v-if="!!authStore.user?.wallet">
       <h5 class="mb-0">{{ $t('auth.wallet.connected.title') }}</h5>
-      <p class="mb-6">{{ $t('auth.wallet.connected.info') }}</p>
+      <p class="mb-6 text-body">{{ $t('auth.wallet.connected.info') }}</p>
 
       <!--  Wallet address -->
       <n-form-item
@@ -31,8 +31,8 @@
 
     <!-- Connect your wallet -->
     <template v-else>
-      <n-h5 class="mb-0" prefix="bar">{{ $t('auth.wallet.connect.title') }}</n-h5>
-      <p class="mb-6">{{ $t('auth.wallet.connect.info') }}</p>
+      <n-h5 class="mb-0">{{ $t('auth.wallet.connect.title') }}</n-h5>
+      <p class="mb-6 text-body">{{ $t('auth.wallet.connect.info') }}</p>
       <Btn size="large" type="secondary" @click="modalWalletSelectVisible = true">
         {{ $t('auth.wallet.connect.btn') }}
       </Btn>
