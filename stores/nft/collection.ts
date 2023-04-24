@@ -102,7 +102,7 @@ export const useCollectionStore = defineStore('collection', {
       this.form.behaviour.reserve = 0;
       this.form.behaviour.revocable = null;
       this.form.behaviour.soulbound = null;
-      this.form.behaviour.supplyLimited = false;
+      this.form.behaviour.supplyLimited = 0;
     },
     setCollectionId(id: number) {
       if (this.selected !== id) {
