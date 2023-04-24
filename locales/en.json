@@ -753,6 +753,7 @@
       "csvMissingAttributes": "Are you sure you want to continue with no attirubtes?",
       "csvMissingData": "Missing metadata, num of row must be same as maxSupply",
       "csvRequiredColumns": "Missing metadata columns, required columns:",
+      "fileInvalid": "Invalid file format. Please upload a valid CSV file with columns \"name\", \"description\", and \"image\".",
       "imagesMissing": "Missing images:",
       "imagesInvalid": "Invalid image names. Example: "
     },
