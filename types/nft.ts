@@ -1,7 +1,9 @@
 /** NFT Chains */
 export enum Chains {
-  MOONBEAM = 1,
-  MOONBASE = 2,
+  MOONBEAM = 1284,
+  MOONBASE = 1287,
+  ASTAR_SHIBUYA = 81, // testnet
+  ASTAR = 592,
 }
 
 /** NFT Collection status */
@@ -80,9 +82,11 @@ declare global {
     maxSupply?: number | null;
     mintPrice?: number;
     reserve?: number;
-    revocable?: number | null;
-    soulbound?: number | null;
+    revocable?: boolean | null;
+    soulbound?: boolean | null;
     supplyLimited?: number;
+    royaltiesAddress?: string;
+    royaltiesFees?: number;
   }
   interface FormCollection extends FormCollectionName, FormCollectionBehaviour {
     baseUri: string;

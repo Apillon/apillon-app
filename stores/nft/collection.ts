@@ -30,7 +30,7 @@ export const useCollectionStore = defineStore('collection', {
       base: {
         name: '',
         symbol: '',
-        chain: 1,
+        chain: Chains.MOONBEAM,
       },
       behaviour: {
         baseExtension: '.json',
@@ -39,9 +39,11 @@ export const useCollectionStore = defineStore('collection', {
         maxSupply: 0,
         mintPrice: 0,
         reserve: 0,
-        revocable: null,
-        soulbound: null,
+        revocable: false,
+        soulbound: false,
         supplyLimited: 0,
+        royaltiesAddress: '',
+        royaltiesFees: 0,
       },
     },
   }),
