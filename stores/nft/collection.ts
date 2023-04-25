@@ -30,7 +30,7 @@ export const useCollectionStore = defineStore('collection', {
       base: {
         name: '',
         symbol: '',
-        chain: 1,
+        chain: Chains.MOONBEAM,
       },
       behaviour: {
         baseExtension: '.json',
@@ -39,9 +39,11 @@ export const useCollectionStore = defineStore('collection', {
         maxSupply: 0,
         mintPrice: 0,
         reserve: 0,
-        revocable: null,
-        soulbound: null,
+        revocable: false,
+        soulbound: false,
         supplyLimited: 0,
+        royaltiesAddress: '',
+        royaltiesFees: 0,
       },
     },
   }),
@@ -102,7 +104,7 @@ export const useCollectionStore = defineStore('collection', {
       this.form.behaviour.reserve = 0;
       this.form.behaviour.revocable = null;
       this.form.behaviour.soulbound = null;
-      this.form.behaviour.supplyLimited = false;
+      this.form.behaviour.supplyLimited = 0;
     },
     setCollectionId(id: number) {
       if (this.selected !== id) {

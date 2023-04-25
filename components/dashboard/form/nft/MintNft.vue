@@ -27,6 +27,7 @@
       </div>
       <n-form
         ref="formBehaviourRef"
+        class="max-w-xl"
         :model="collectionStore.form.behaviour"
         :rules="rules"
         @submit.prevent="handleSubmitFormBehaviours"
@@ -109,6 +110,40 @@
         </n-grid>
 
         <n-grid class="items-end" :cols="12" :x-gap="32">
+          <!-- Royalties Address -->
+          <n-form-item-gi
+            path="royaltiesAddress"
+            :span="6"
+            :label="infoLabel('Royalties Address')"
+            :label-props="{ for: 'royaltiesAddress' }"
+          >
+            <n-input
+              v-model:value="collectionStore.form.behaviour.royaltiesAddress"
+              :input-props="{ id: 'royaltiesAddress' }"
+              placeholder="Royalties Address"
+              clearable
+            />
+          </n-form-item-gi>
+
+          <!-- Royalties Fees -->
+          <n-form-item-gi
+            path="royaltiesFees"
+            :span="6"
+            :label="infoLabel('Royalties Fees')"
+            :label-props="{ for: 'royaltiesFees' }"
+          >
+            <n-input-number
+              v-model:value="collectionStore.form.behaviour.royaltiesFees"
+              :min="0"
+              :max="100"
+              :input-props="{ id: 'royaltiesFees' }"
+              placeholder="Royalties Fees"
+              clearable
+            />
+          </n-form-item-gi>
+        </n-grid>
+
+        <n-grid class="items-end" :cols="12" :x-gap="32">
           <!--  Collection Is Drop -->
           <n-form-item-gi path="isDrop" :span="6" :show-label="false">
             <n-checkbox
@@ -134,6 +169,9 @@
           >
             <n-input-number
               v-model:value="collectionStore.form.behaviour.mintPrice"
+              :min="0"
+              :max="1000"
+              :step="0.001"
               :input-props="{ id: 'mintPrice' }"
               :placeholder="$t('form.placeholder.collectionMintPrice')"
               clearable
@@ -174,6 +212,8 @@
             <n-input-number
               v-model:value="collectionStore.form.behaviour.reserve"
               :min="0"
+              :step="1"
+              :max="collectionStore.form.behaviour.maxSupply"
               :input-props="{ id: 'reserve' }"
               :placeholder="$t('form.placeholder.collectionReserve')"
               clearable
@@ -200,6 +240,7 @@
       </div>
       <n-form
         ref="formNameRef"
+        class="max-w-xl"
         :model="collectionStore.form.base"
         :rules="rules"
         @submit.prevent="handleSubmitFormName"
@@ -229,6 +270,8 @@
           >
             <n-input
               v-model:value="collectionStore.form.base.symbol"
+              :minlength="1"
+              :maxlength="8"
               :input-props="{ id: 'symbol' }"
               :placeholder="$t('form.placeholder.collectionSymbol')"
               clearable
@@ -282,15 +325,23 @@ const formBehaviourRef = ref<NFormInst | null>(null);
 const chains = [
   { label: 'Moonbeam', value: Chains.MOONBEAM },
   { label: 'Moonbase', value: Chains.MOONBASE },
+  // { label: 'Astar Shibuya', value: Chains.ASTAR_SHIBUYA },
+  // { label: 'Astar', value: Chains.ASTAR },
 ];
 const supplyTypes = [
   { label: $i18n.t('form.supplyTypes.unlimited'), value: 0 },
   { label: $i18n.t('form.supplyTypes.limited'), value: 1 },
 ];
 const booleanSelect = [
-  { label: $i18n.t('form.booleanSelect.true'), value: 1 },
-  { label: $i18n.t('form.booleanSelect.false'), value: 0 },
+  { label: $i18n.t('form.booleanSelect.true'), value: true },
+  { label: $i18n.t('form.booleanSelect.false'), value: false },
 ];
+
+const maxNft = computed(() => {
+  return collectionStore.form.behaviour.supplyLimited === 1
+    ? collectionStore.csvData?.length
+    : NFT_MAX_SUPPLY;
+});
 
 const rules: NFormRules = {
   symbol: [
@@ -313,9 +364,11 @@ const rules: NFormRules = {
   ],
   maxSupply: [
     {
-      max: NFT_MAX_SUPPLY,
+      max: maxNft.value,
       validator: validateMaxSupply,
-      message: $i18n.t('validation.collectionMaxSupplyReached', { max: NFT_MAX_SUPPLY }),
+      message: $i18n.t('validation.collectionMaxSupplyReached', {
+        max: collectionStore.csvData?.length || NFT_MAX_SUPPLY,
+      }),
     },
   ],
   mintPrice: [
@@ -380,7 +433,7 @@ function validateReserve(_: NFormItemRule, value: number): boolean {
   );
 }
 function validateMaxSupply(_: NFormItemRule, value: number): boolean {
-  return value <= NFT_MAX_SUPPLY;
+  return value <= maxNft.value;
 }
 function validateDropStart(_: NFormItemRule, value: number): boolean {
   return !collectionStore.form.behaviour.isDrop || value > Date.now();
@@ -438,9 +491,11 @@ async function deploy() {
           : 0,
       isDrop: collectionStore.form.behaviour.isDrop,
       dropStart: Math.floor((collectionStore.form.behaviour.dropStart || Date.now()) / 1000),
-      reserve: collectionStore.form.behaviour.reserve,
-      revocable: collectionStore.form.behaviour.revocable,
-      soulbound: collectionStore.form.behaviour.soulbound,
+      reserve: collectionStore.form.behaviour.reserve || 0,
+      isRevokable: collectionStore.form.behaviour.revocable,
+      isSoulbound: collectionStore.form.behaviour.soulbound,
+      royaltiesAddress: collectionStore.form.behaviour.royaltiesAddress,
+      royaltiesFees: collectionStore.form.behaviour.royaltiesFees,
     };
     const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
     collectionStore.active = res.data;

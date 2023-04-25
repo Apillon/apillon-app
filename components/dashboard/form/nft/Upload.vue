@@ -155,20 +155,25 @@
             </div>
           </n-upload-dragger>
         </n-upload>
-        <div v-else class="flex text-left">
-          <div class="card flex-1 px-4 py-2">
-            <span class="icon-file text-xl align-sub mr-3"></span>
-            <span>{{ collectionStore.csvFile.name }}</span>
+        <template v-else>
+          <div class="flex text-left">
+            <div class="card flex-1 px-4 py-2">
+              <span class="icon-file text-xl align-sub mr-3"></span>
+              <span>{{ collectionStore.csvFile.name }}</span>
+            </div>
+            <div class="">
+              <button
+                class="flex justify-center items-center h-12 w-12 ml-4 p-3"
+                @click="collectionStore.resetFile()"
+              >
+                <span class="icon-delete text-xl"></span>
+              </button>
+            </div>
           </div>
-          <div class="">
-            <button
-              class="flex justify-center items-center h-12 w-12 ml-4 p-3"
-              @click="collectionStore.resetFile()"
-            >
-              <span class="icon-delete text-xl"></span>
-            </button>
-          </div>
-        </div>
+          <Notification v-if="!hasRequiredMetadata" type="error" class="mt-4 text-left">
+            {{ $t('nft.validation.fileInvalid') }}
+          </Notification>
+        </template>
 
         <Btn
           class="mt-10"

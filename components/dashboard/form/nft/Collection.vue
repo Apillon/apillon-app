@@ -47,12 +47,30 @@
         >
           <n-input
             v-model:value="formData.symbol"
+            :minlength="1"
+            :maxlength="8"
             :input-props="{ id: 'symbol' }"
             :placeholder="$t('form.placeholder.collectionSymbol')"
             clearable
           />
         </n-form-item-gi>
       </n-grid>
+
+      <!--  Chain -->
+      <n-form-item
+        path="chain"
+        :label="$t('form.label.collectionChain')"
+        :label-props="{ for: 'chain' }"
+      >
+        <select-options
+          v-model:value="formData.chain"
+          :options="chains"
+          :input-props="{ id: 'chain' }"
+          :placeholder="$t('general.pleaseSelect')"
+          filterable
+          clearable
+        />
+      </n-form-item>
 
       <n-grid class="items-end" :cols="12" :x-gap="32">
         <!--  Collection Base URI -->
@@ -87,7 +105,7 @@
           />
         </n-form-item-gi>
         <n-form-item-gi v-if="metadataUri" :span="12" :show-label="false">
-          {{ metadataUri }}
+          <div class="w-full text-sm break-words">{{ metadataUri }}</div>
         </n-form-item-gi>
       </n-grid>
 
@@ -168,6 +186,40 @@
         </n-form-item-gi>
       </n-grid>
 
+      <n-grid class="items-end" :cols="12" :x-gap="32">
+        <!-- Royalties Address -->
+        <n-form-item-gi
+          path="royaltiesAddress"
+          :span="6"
+          :label="infoLabel('Royalties Address')"
+          :label-props="{ for: 'royaltiesAddress' }"
+        >
+          <n-input
+            v-model:value="collectionStore.form.behaviour.royaltiesAddress"
+            :input-props="{ id: 'royaltiesAddress' }"
+            placeholder="Royalties Address"
+            clearable
+          />
+        </n-form-item-gi>
+
+        <!-- Royalties Fees -->
+        <n-form-item-gi
+          path="royaltiesFees"
+          :span="6"
+          :label="infoLabel('Royalties Fees')"
+          :label-props="{ for: 'royaltiesFees' }"
+        >
+          <n-input-number
+            v-model:value="collectionStore.form.behaviour.royaltiesFees"
+            :min="0"
+            :max="100"
+            :input-props="{ id: 'royaltiesFees' }"
+            placeholder="Royalties Fees"
+            clearable
+          />
+        </n-form-item-gi>
+      </n-grid>
+
       <!--  Collection Is Drop -->
       <n-form-item path="isDrop" :span="1" :show-label="false">
         <n-checkbox
@@ -179,9 +231,18 @@
 
       <n-grid v-if="!!formData.isDrop" :cols="12" :x-gap="32">
         <!--  Collection Mint price -->
-        <n-form-item-gi path="mintPrice" :span="6" :label="infoLabel('collectionMintPrice')">
+        <n-form-item-gi
+          path="mintPrice"
+          :span="6"
+          :label="infoLabel('collectionMintPrice')"
+          :label-props="{ for: 'mintPrice' }"
+        >
           <n-input-number
             v-model:value="formData.mintPrice"
+            :min="0"
+            :max="1000"
+            :step="0.001"
+            :input-props="{ id: 'mintPrice' }"
             :placeholder="$t('form.placeholder.collectionMintPrice')"
             clearable
           />
@@ -244,10 +305,18 @@ const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
+const chains = [
+  { label: 'Moonbeam', value: Chains.MOONBEAM },
+  { label: 'Moonbase', value: Chains.MOONBASE },
+  // { label: 'Astar Shibuya', value: Chains.ASTAR_SHIBUYA },
+  // { label: 'Astar', value: Chains.ASTAR },
+];
+
 const formErrors = ref<boolean>(false);
 const formData = ref<FormCollection>({
   name: '',
   symbol: '',
+  chain: Chains.MOONBASE,
   mintPrice: 0,
   supplyLimited: 0,
   maxSupply: 0,
@@ -256,8 +325,10 @@ const formData = ref<FormCollection>({
   isDrop: false,
   dropStart: Date.now() + 3600000,
   reserve: 0,
-  revocable: null,
-  soulbound: null,
+  revocable: false,
+  soulbound: false,
+  royaltiesAddress: '',
+  royaltiesFees: 0,
 });
 
 const supplyTypes = [
@@ -265,8 +336,8 @@ const supplyTypes = [
   { label: $i18n.t('form.supplyTypes.limited'), value: 1 },
 ];
 const booleanSelect = [
-  { label: $i18n.t('form.booleanSelect.true'), value: 1 },
-  { label: $i18n.t('form.booleanSelect.false'), value: 0 },
+  { label: $i18n.t('form.booleanSelect.true'), value: true },
+  { label: $i18n.t('form.booleanSelect.false'), value: false },
 ];
 
 const rules: NFormRules = {
@@ -417,8 +488,10 @@ async function createCollection() {
       isDrop: formData.value.isDrop,
       dropStart: Math.floor((formData.value.dropStart || Date.now()) / 1000),
       reserve: formData.value.reserve,
-      revocable: formData.value.revocable,
-      soulbound: formData.value.soulbound,
+      isRevokable: formData.value.revocable,
+      isSoulbound: formData.value.soulbound,
+      royaltiesAddress: formData.value.royaltiesAddress,
+      royaltiesFees: formData.value.royaltiesFees,
     };
     const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
 
@@ -429,6 +502,8 @@ async function createCollection() {
 
     /** Reset collection qouta limit */
     collectionStore.quotaReached = undefined;
+    collectionStore.resetMetadata();
+    collectionStore.resetForms();
 
     /** Emit events */
     emit('submitSuccess');

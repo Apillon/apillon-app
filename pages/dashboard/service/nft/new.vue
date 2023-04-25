@@ -172,6 +172,10 @@ useHead({
 const mintTabsRef = ref<NTabsInst | null>(null);
 const collectionCreated = ref<boolean>(false);
 
+onBeforeMount(() => {
+  collectionStore.metadataStored = null;
+});
+
 /** Watch active tab, if informations are missing, open previous tab */
 watch(
   () => collectionStore.mintTab,

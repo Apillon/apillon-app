@@ -1,9 +1,10 @@
 export {};
 
 export enum UserError {
-  USER_INVALID_LOGIN = 'USER_INVALID_LOGIN',
-  JWT_TOKEN_EXPIRED = 'jwt expired',
   INVALID_SIGNATURE = 'invalid signature',
+  JWT_TOKEN_EXPIRED = 'jwt expired',
+  USER_INVALID_LOGIN = 'USER_INVALID_LOGIN',
+  USER_DOES_NOT_EXISTS = 'USER_DOES_NOT_EXISTS',
 }
 
 /**
