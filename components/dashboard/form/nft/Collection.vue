@@ -195,7 +195,7 @@
           :label-props="{ for: 'royaltiesAddress' }"
         >
           <n-input
-            v-model:value="collectionStore.form.behaviour.royaltiesAddress"
+            v-model:value="formData.royaltiesAddress"
             :input-props="{ id: 'royaltiesAddress' }"
             placeholder="Royalties Address"
             clearable
@@ -210,7 +210,7 @@
           :label-props="{ for: 'royaltiesFees' }"
         >
           <n-input-number
-            v-model:value="collectionStore.form.behaviour.royaltiesFees"
+            v-model:value="formData.royaltiesFees"
             :min="0"
             :max="100"
             :input-props="{ id: 'royaltiesFees' }"
@@ -316,7 +316,7 @@ const formErrors = ref<boolean>(false);
 const formData = ref<FormCollection>({
   name: '',
   symbol: '',
-  chain: Chains.MOONBASE,
+  chain: Chains.MOONBEAM,
   mintPrice: 0,
   supplyLimited: 0,
   maxSupply: 0,
@@ -481,6 +481,7 @@ async function createCollection() {
       project_uuid: dataStore.projectUuid,
       name: formData.value.name,
       symbol: formData.value.symbol,
+      chain: formData.value.chain,
       mintPrice: formData.value.mintPrice,
       maxSupply: formData.value.supplyLimited === 1 ? formData.value.maxSupply : 0,
       baseUri: formData.value.baseUri,
