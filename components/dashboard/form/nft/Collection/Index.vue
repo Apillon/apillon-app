@@ -7,12 +7,9 @@
     <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
-    <template v-else>
-      <!-- Info text -->
-      <p v-if="$i18n.te('nft.collection.infoNew')" class="text-body mb-8">
-        {{ $t('nft.collection.infoNew') }}
-      </p>
-    </template>
+    <p v-else-if="$i18n.te('nft.collection.infoNew')" class="text-body mb-8">
+      {{ $t('nft.collection.infoNew') }}
+    </p>
 
     <n-form
       ref="formRef"
@@ -27,13 +24,13 @@
         <n-form-item-gi
           :span="8"
           path="name"
-          :label="$t('form.label.collectionName')"
+          :label="infoLabel('collectionName')"
           :label-props="{ for: 'name' }"
         >
           <n-input
             v-model:value="formData.name"
             :input-props="{ id: 'name' }"
-            :placeholder="$t('form.placeholder.collectionName')"
+            :placeholder="$t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -42,7 +39,7 @@
         <n-form-item-gi
           :span="4"
           path="symbol"
-          :label="$t('form.label.collectionSymbol')"
+          :label="infoLabel('collectionSymbol')"
           :label-props="{ for: 'symbol' }"
         >
           <n-input
@@ -50,7 +47,7 @@
             :minlength="1"
             :maxlength="8"
             :input-props="{ id: 'symbol' }"
-            :placeholder="$t('form.placeholder.collectionSymbol')"
+            :placeholder="$t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -84,7 +81,7 @@
           <n-input
             v-model:value="formData.baseUri"
             :input-props="{ id: 'baseUri' }"
-            :placeholder="$t('form.placeholder.collectionBaseUri')"
+            :placeholder="$t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -100,7 +97,7 @@
           <n-input
             v-model:value="formData.baseExtension"
             :input-props="{ id: 'baseExtension' }"
-            :placeholder="$t('form.placeholder.collectionBaseExtension')"
+            :placeholder="$t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -191,13 +188,13 @@
         <n-form-item-gi
           path="royaltiesAddress"
           :span="6"
-          :label="infoLabel('Royalties Address')"
+          :label="infoLabel('collectionRoyaltiesAddress')"
           :label-props="{ for: 'royaltiesAddress' }"
         >
           <n-input
             v-model:value="formData.royaltiesAddress"
             :input-props="{ id: 'royaltiesAddress' }"
-            placeholder="Royalties Address"
+            :placeholder="$t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -206,7 +203,7 @@
         <n-form-item-gi
           path="royaltiesFees"
           :span="6"
-          :label="infoLabel('Royalties Fees')"
+          :label="infoLabel('collectionRoyaltiesFees')"
           :label-props="{ for: 'royaltiesFees' }"
         >
           <n-input-number
@@ -214,7 +211,7 @@
             :min="0"
             :max="100"
             :input-props="{ id: 'royaltiesFees' }"
-            placeholder="Royalties Fees"
+            :placeholder="$t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -225,7 +222,7 @@
         <n-checkbox
           v-model:checked="formData.isDrop"
           size="medium"
-          :label="$t('form.label.collectionIsDrop')"
+          :label="infoLabel('collectionIsDrop')"
         />
       </n-form-item>
 
@@ -243,7 +240,7 @@
             :max="1000"
             :step="0.001"
             :input-props="{ id: 'mintPrice' }"
-            :placeholder="$t('form.placeholder.collectionMintPrice')"
+            :placeholder="$t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -262,11 +259,11 @@
 
       <n-grid v-if="!!formData.isDrop" :cols="12" :x-gap="32">
         <!--  Collection Reserve -->
-        <n-form-item-gi path="reserve" :span="6" :label="$t('form.label.collectionReserve')">
+        <n-form-item-gi path="reserve" :span="6" :label="infoLabel('collectionReserve')">
           <n-input-number
             v-model:value="formData.reserve"
             :min="0"
-            :placeholder="$t('form.placeholder.collectionReserve')"
+            :placeholder="$t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -291,7 +288,6 @@
 
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
-import { h } from 'vue';
 
 const emit = defineEmits(['submitSuccess']);
 
@@ -300,17 +296,17 @@ const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
-const settingsStore = useSettingsStore();
-
-const loading = ref(false);
-const formRef = ref<NFormInst | null>(null);
-
-const chains = [
-  { label: 'Moonbeam', value: Chains.MOONBEAM },
-  { label: 'Moonbase', value: Chains.MOONBASE },
-  // { label: 'Astar Shibuya', value: Chains.ASTAR_SHIBUYA },
-  // { label: 'Astar', value: Chains.ASTAR },
-];
+const {
+  booleanSelect,
+  chains,
+  formRef,
+  loading,
+  supplyTypes,
+  rules,
+  isFormDisabled,
+  isQuotaReached,
+  disablePasteDate,
+} = useCollection();
 
 const formErrors = ref<boolean>(false);
 const formData = ref<FormCollection>({
@@ -320,8 +316,8 @@ const formData = ref<FormCollection>({
   mintPrice: 0,
   supplyLimited: 0,
   maxSupply: 0,
-  baseUri: '',
-  baseExtension: '',
+  baseUri: null,
+  baseExtension: null,
   isDrop: false,
   dropStart: Date.now() + 3600000,
   reserve: 0,
@@ -331,75 +327,6 @@ const formData = ref<FormCollection>({
   royaltiesFees: 0,
 });
 
-const supplyTypes = [
-  { label: $i18n.t('form.supplyTypes.unlimited'), value: 0 },
-  { label: $i18n.t('form.supplyTypes.limited'), value: 1 },
-];
-const booleanSelect = [
-  { label: $i18n.t('form.booleanSelect.true'), value: true },
-  { label: $i18n.t('form.booleanSelect.false'), value: false },
-];
-
-const rules: NFormRules = {
-  symbol: [
-    {
-      required: true,
-      message: $i18n.t('validation.collectionSymbolRequired'),
-    },
-  ],
-  name: [
-    {
-      required: true,
-      message: $i18n.t('validation.collectionNameRequired'),
-    },
-  ],
-  baseUri: [
-    {
-      required: true,
-      message: $i18n.t('validation.collectionBaseUriRequired'),
-    },
-    {
-      type: 'url',
-      message: $i18n.t('validation.collectionBaseUri'),
-    },
-  ],
-  baseExtension: [
-    {
-      required: true,
-      message: $i18n.t('validation.collectionBaseExtensionRequired'),
-    },
-  ],
-  maxSupply: [
-    {
-      max: NFT_MAX_SUPPLY,
-      validator: validateMaxSupply,
-      message: $i18n.t('validation.collectionMaxSupplyReached', { max: NFT_MAX_SUPPLY }),
-    },
-  ],
-  mintPrice: [
-    {
-      required: true,
-      message: $i18n.t('validation.collectionMintPriceRequired'),
-    },
-    {
-      validator: validateMintPrice,
-      message: $i18n.t('validation.collectionMintPrice'),
-    },
-  ],
-  dropStart: [
-    {
-      validator: validateDropStart,
-      message: $i18n.t('validation.collectionDropStart'),
-    },
-  ],
-  reserve: [
-    {
-      validator: validateReserve,
-      message: $i18n.t('validation.collectionReserve'),
-    },
-  ],
-};
-
 const metadataUri = computed<string>(() => {
   return formData.value.baseUri && formData.value.baseExtension
     ? formData.value.baseUri + '1' + formData.value.baseExtension
@@ -408,12 +335,6 @@ const metadataUri = computed<string>(() => {
     : '';
 });
 
-const isQuotaReached = computed<boolean>(() => {
-  return collectionStore.quotaReached === true;
-});
-const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value || settingsStore.isProjectUser();
-});
 function infoLabel(field: string) {
   if (
     $i18n.te(`form.label.${field}`) &&
@@ -430,28 +351,6 @@ function infoLabel(field: string) {
     ];
   }
   return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
-}
-
-/**
- * Validations
- */
-function validateReserve(_: NFormItemRule, value: number): boolean {
-  return formData.value?.maxSupply === 0 || value <= (formData.value?.maxSupply || 0);
-}
-function validateMaxSupply(_: NFormItemRule, value: number): boolean {
-  return value <= NFT_MAX_SUPPLY;
-}
-function validateBaseExtension(_: NFormItemRule, value: number): boolean {
-  return !formData.value.baseUri || !!value;
-}
-function validateDropStart(_: NFormItemRule, value: number): boolean {
-  return !formData.value.isDrop || value > Date.now();
-}
-function validateMintPrice(_: NFormItemRule, value: number): boolean {
-  return !formData.value.isDrop || (value >= 0 && value < 999999);
-}
-function disablePasteDate(ts: number) {
-  return ts < Date.now();
 }
 
 // Submit

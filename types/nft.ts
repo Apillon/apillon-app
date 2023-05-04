@@ -76,7 +76,7 @@ declare global {
   }
 
   interface FormCollectionBehaviour {
-    baseExtension: string;
+    baseExtension: string | null;
     dropStart?: number;
     isDrop: boolean;
     maxSupply?: number | null;
@@ -89,7 +89,7 @@ declare global {
     royaltiesFees?: number;
   }
   interface FormCollection extends FormCollectionName, FormCollectionBehaviour {
-    baseUri: string;
+    baseUri: string | null;
     description?: string;
   }
 
