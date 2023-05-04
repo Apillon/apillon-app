@@ -25,7 +25,7 @@
         icon="nft/illustration"
       >
         <Btn type="primary" @click="router.push({ name: 'dashboard-service-nft-new' })">
-          {{ $t('nft.collection.new') }}
+          {{ $t('nft.collection.createFirst') }}
         </Btn>
       </Empty>
 
