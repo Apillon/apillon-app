@@ -80,7 +80,7 @@ const props = defineProps({
   showOnMobile: { type: Boolean, default: false },
 });
 
-const { isSm, isLg, isXl } = useScreen();
+const { isSm, isLg } = useScreen();
 const dataStore = useDataStore();
 const showModalNewProject = ref(false);
 const emit = defineEmits(['toggleSidebar']);

@@ -1,5 +1,5 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules">
+  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Register password -->
     <n-form-item
       path="password"

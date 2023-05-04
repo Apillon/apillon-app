@@ -1,31 +1,33 @@
-<template
-  v-if="dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
->
-  <n-dropdown
-    v-if="collapsed"
-    :options="dropdownOptions"
-    trigger="click"
-    @select="onDropdownSelect"
+<template>
+  <template
+    v-if="dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
   >
-    <n-button
-      v-bind="$attrs"
-      class="w-full h-10 bg-bg-light"
-      size="tiny"
-      icon-placement="right"
-      :loading="loading"
+    <n-dropdown
+      v-if="collapsed"
+      :options="dropdownOptions"
+      trigger="click"
+      @select="onDropdownSelect"
     >
-      <span class="icon-down text-3xl"></span>
-    </n-button>
-  </n-dropdown>
-  <select-options
-    v-else
-    v-bind="$attrs"
-    :key="componentSelectKey"
-    v-model:value="dataStore.project.selected"
-    :options="dataStore.project.items"
-    class="select-project"
-    :loading="loading"
-  />
+      <n-button
+        v-bind="$attrs"
+        class="w-full h-10 bg-bg-light"
+        size="tiny"
+        icon-placement="right"
+        :loading="loading"
+      >
+        <span class="icon-down text-3xl"></span>
+      </n-button>
+    </n-dropdown>
+    <select-options
+      v-else
+      v-bind="$attrs"
+      :key="componentSelectKey"
+      v-model:value="dataStore.project.selected"
+      :options="dataStore.project.items"
+      class="select-project"
+      :loading="loading"
+    />
+  </template>
 </template>
 
 <script lang="ts" setup>
@@ -34,6 +36,7 @@ defineProps({
 });
 
 const router = useRouter();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
 
