@@ -96,7 +96,9 @@ declare global {
   interface CollectionInterface {
     baseExtension: string;
     baseUri: string;
+    bucketId: number;
     bucket_uuid: string;
+    chain: number;
     collectionStatus: number;
     collection_uuid: string;
     contractAddress: string | null;
@@ -122,6 +124,7 @@ declare global {
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionUpdateResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionsResponse extends GeneralItemsResponse<CollectionInterface> {}
+  interface CollectionQuotaResponse extends GeneralResponse<boolean> {}
   interface CollectionQuotaResponse extends GeneralResponse<boolean> {}
 
   /**

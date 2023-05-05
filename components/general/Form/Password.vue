@@ -122,6 +122,7 @@ function handleSubmit(e: Event | MouseEvent) {
 /** Register (create new user) */
 async function register() {
   loading.value = true;
+  dataStore.resetCurrentProject();
 
   try {
     const res = await $api.post<RegisterResponse>(endpoints.register, {

@@ -623,7 +623,11 @@
   "nft": {
     "chain": {
       "1": "MOONBEAM",
-      "2": "MOONBASE"
+      "2": "MOONBASE",
+      "81": "ASTAR SHIBUYA",
+      "592": "ASTAR",
+      "1284": "MOONBEAM",
+      "1287": "MOONBASE"
     },
     "collection": {
       "addNew": "Add new collection",

@@ -45,6 +45,7 @@
         </p>
         <n-upload
           v-if="!collectionStore.hasImages"
+          v-on-click-outside="stopLoader"
           accept="image/png, image/jpeg"
           :default-file-list="collectionStore.images"
           :show-file-list="false"
@@ -53,6 +54,7 @@
           directory-dnd
           :custom-request="uploadImagesRequest"
           @click="loadingImages = true"
+          @click-outside="loadingImages = false"
         >
           <n-upload-dragger class="h-40">
             <div class="py-2 text-center">
@@ -67,6 +69,7 @@
         </n-upload>
         <div v-else class="flex text-left">
           <n-upload
+            v-on-click-outside="stopLoader"
             accept="image/png, image/jpeg"
             class="flex-1 w-full cursor-pointer"
             :show-file-list="false"
@@ -199,6 +202,8 @@
 </template>
 
 <script lang="ts" setup>
+import { vOnClickOutside } from '@vueuse/components';
+
 const collectionStore = useCollectionStore();
 const {
   allImagesUploaded,
@@ -237,5 +242,9 @@ function createMetadata() {
   collectionStore.metadata = createNftData();
   collectionStore.stepUpload = NftUploadStep.IMAGES;
   modalMetadataAttributesVisible.value = false;
+}
+
+function stopLoader() {
+  loadingImages.value = false;
 }
 </script>

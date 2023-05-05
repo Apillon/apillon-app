@@ -63,6 +63,12 @@ export default function useCollection() {
         message: $i18n.t('validation.collectionBaseExtensionRequired'),
       },
     ],
+    chain: [
+      {
+        required: true,
+        message: $i18n.t('validation.collectionChainRequired'),
+      },
+    ],
     maxSupply: [
       {
         max: maxNft.value,
@@ -73,6 +79,10 @@ export default function useCollection() {
       },
     ],
     mintPrice: [
+      {
+        required: true,
+        message: $i18n.t('validation.collectionMintPrice'),
+      },
       {
         validator: validateMintPrice,
         message: $i18n.t('validation.collectionMintPrice'),
@@ -86,6 +96,10 @@ export default function useCollection() {
     ],
     reserve: [
       {
+        required: true,
+        message: $i18n.t('validation.collectionReserve'),
+      },
+      {
         validator: validateReserve,
         message: $i18n.t('validation.collectionReserve'),
       },
@@ -94,6 +108,12 @@ export default function useCollection() {
       {
         required: true,
         message: $i18n.t('validation.collectionRoyaltiesAddressRequired'),
+      },
+    ],
+    royaltiesFees: [
+      {
+        required: true,
+        message: $i18n.t('validation.collectionRoyaltiesFeesRequired'),
       },
     ],
   };

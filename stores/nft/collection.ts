@@ -224,5 +224,24 @@ export const useCollectionStore = defineStore('collection', {
       this.loading = false;
       return [];
     },
+
+    async fetchCollectionQuota() {
+      if (!dataStore.hasProjects) {
+        await dataStore.fetchProjects();
+      }
+
+      try {
+        const res = await $api.get<CollectionQuotaResponse>(endpoints.collectionQuota, {
+          project_uuid: dataStore.projectUuid,
+        });
+
+        this.quotaReached = res.data;
+      } catch (error: any) {
+        this.quotaReached = undefined;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
   },
 });

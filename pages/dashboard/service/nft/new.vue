@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="false">
+  <Dashboard :loading="pageLoading">
     <template #heading>
       <Heading>
         <slot>
@@ -29,17 +29,27 @@
       <div v-if="collectionCreated">
         <p class="mb-2 text-body">
           <span class="inline-block mx-1">{{ $t('nft.collection.created.view') }}</span>
-          <NuxtLink href="https://moonscan.io/" target="_blank">
+          <a
+            :href="
+              transactionLink(collectionStore.active.transactionHash, collectionStore.active.chain)
+            "
+            target="_blank"
+          >
             <Btn type="builders" size="tiny">
               <span class="text-sm">{{ $t('nft.collection.created.explorer') }}</span>
             </Btn>
-          </NuxtLink>
+          </a>
           <span class="inline-block mx-1">{{ $t('nft.collection.created.or') }}</span>
-          <NuxtLink :to="`/dashboard/service/storage/${collectionStore.bucketId}`" target="_blank">
+          <a
+            :to="`/dashboard/service/storage/${
+              collectionStore.active.bucketId || collectionStore.active.bucket_uuid
+            }`"
+            target="_blank"
+          >
             <Btn type="builders" size="tiny">
               <span class="text-sm">{{ $t('nft.collection.created.bucket') }}</span>
             </Btn>
-          </NuxtLink>
+          </a>
         </p>
         <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
           <div class="w-full max-w-lg text-center">
@@ -52,11 +62,11 @@
             <p class="mb-8 text-body whitespace-pre-line">
               {{ $t('nft.collection.created.info') }}
             </p>
-            <NuxtLink href="https://github.com/Apillon-web3/nft-template">
+            <a href="https://github.com/Apillon-web3/nft-template/fork" target="_blank">
               <Btn>
                 {{ $t('nft.collection.createToDisplay') }}
               </Btn>
-            </NuxtLink>
+            </a>
             <div class="mt-2">
               <NuxtLink :to="`/dashboard/service/nft/${collectionStore.active.id}`">
                 <Btn type="builders" size="tiny">
@@ -158,18 +168,37 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
+const { transactionLink } = useNft();
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),
 });
 
+const pageLoading = ref<boolean>(true);
 const mintTabsRef = ref<NTabsInst | null>(null);
 const collectionCreated = ref<boolean>(false);
 
-onBeforeMount(() => {
+onMounted(() => {
   collectionStore.metadataStored = null;
+
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await collectionStore.getCollections();
+      getCollectionQuota();
+
+      pageLoading.value = false;
+    });
+  }, 100);
 });
+
+/** GET Collection quota, if current value is null  */
+async function getCollectionQuota() {
+  if (collectionStore.quotaReached === undefined) {
+    await collectionStore.fetchCollectionQuota();
+  }
+}
 
 /** Watch active tab, if informations are missing, open previous tab */
 watch(

@@ -328,6 +328,18 @@ export default function useNft() {
     });
   }
 
+  function transactionLink(transactionHash?: string | null, chainId?: number): string {
+    switch (chainId) {
+      case Chains.MOONBEAM:
+        return `https://moonbeam.moonscan.io/tx/${transactionHash}`;
+      case Chains.MOONBASE:
+        return `https://moonbase.moonscan.io/tx/${transactionHash}`;
+      default:
+        console.warn('Missing chainId');
+        return '';
+    }
+  }
+
   return {
     allImagesUploaded,
     hasRequiredMetadata,
@@ -345,6 +357,7 @@ export default function useNft() {
     handleImageRemove,
     isImage,
     parseUploadedFile,
+    transactionLink,
     uploadFileRequest,
     uploadMetadata,
   };
