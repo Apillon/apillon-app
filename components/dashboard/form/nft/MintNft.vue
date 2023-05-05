@@ -4,13 +4,13 @@
       v-if="
         isStepAvailable(NftDeployStep.DEPLOY) && collectionStore.stepDeploy === NftDeployStep.DEPLOY
       "
-      class="w-full"
+      class="w-full pb-8"
     >
-      <NftPreview>
+      <NftPreviewCards>
         <Btn class="max-w-lg w-full" type="primary" :loading="loading" @click="deploy">
           {{ $t('nft.collection.deploy') }}
         </Btn>
-      </NftPreview>
+      </NftPreviewCards>
     </div>
 
     <div

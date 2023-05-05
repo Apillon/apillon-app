@@ -39,8 +39,8 @@ export const useCollectionStore = defineStore('collection', {
         maxSupply: 0,
         mintPrice: 0,
         reserve: 0,
-        revocable: false,
-        soulbound: false,
+        revocable: false as Boolean | null,
+        soulbound: false as Boolean | null,
         supplyLimited: 0,
         royaltiesAddress: '',
         royaltiesFees: 0,
@@ -94,7 +94,7 @@ export const useCollectionStore = defineStore('collection', {
     resetForms() {
       this.form.base.name = '';
       this.form.base.symbol = '';
-      this.form.base.chain = 1;
+      this.form.base.chain = Chains.MOONBEAM;
 
       this.form.behaviour.baseExtension = '.json';
       this.form.behaviour.dropStart = Date.now() + 3600000;

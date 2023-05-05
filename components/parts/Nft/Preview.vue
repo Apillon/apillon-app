@@ -51,7 +51,7 @@
     <n-data-table v-else :columns="collectionStore.csvColumns" :data="collectionStore.csvData" />
   </n-scrollbar>
 
-  <n-space class="w-auto mx-auto mt-8" justify="center">
+  <n-space class="w-auto mx-auto my-4" justify="center">
     <slot />
   </n-space>
 </template>

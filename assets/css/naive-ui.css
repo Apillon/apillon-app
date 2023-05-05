@@ -493,6 +493,15 @@ body > .n-message-container {
   }
 }
 
+/** Pagination */
+.n-pagination {
+  @apply items-center;
+
+  .n-base-selection .n-base-suffix {
+    @apply right-2;
+  }
+}
+
 /** Popover */
 .n-popover {
   max-width: 400px;
