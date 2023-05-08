@@ -52,7 +52,7 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
         return h(
           TableLink,
           {
-            link: transactionLink(row.transactionHash, row.chainId || collectionStore.active.chain),
+            link: transactionLink(row.transactionHash, collectionStore.active.chain || row.chainId),
             text: row.transactionHash,
           },
           ''

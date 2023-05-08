@@ -176,7 +176,6 @@
           v-model:value="collectionStore.form.behaviour.reserve"
           :min="0"
           :step="1"
-          :max="collectionStore.form.behaviour.maxSupply"
           :input-props="{ id: 'reserve' }"
           clearable
         />
