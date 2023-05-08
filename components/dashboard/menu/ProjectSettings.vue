@@ -1,5 +1,5 @@
 <template>
-  <menu :options="menuOptions" mode="horizontal" />
+  <Menu :options="menuOptions" mode="horizontal" />
 </template>
 
 <script lang="ts" setup>
