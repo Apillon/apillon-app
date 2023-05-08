@@ -1,10 +1,14 @@
 <template>
-  <div class="relative flex flex-col min-h-screen h-full pb-28 md:pb-20">
-    <AuthHeader />
-    <div class="container flex items-center md:flex-auto py-0 md:py-10 relative z-1">
+  <div class="relative flex flex-col min-h-screen h-full py-16">
+    <div class="container">
+      <AuthHeader />
+    </div>
+    <div class="container flex items-center md:flex-auto relative z-1">
       <slot />
     </div>
-    <AuthFooter class="absolute left-0 right-0 bottom-0 w-full" />
+    <div class="container">
+      <AuthFooter />
+    </div>
   </div>
 </template>
 

@@ -143,6 +143,9 @@ function checkIfCollectionUnfinished() {
       false
     );
     if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
+      if (collection) {
+        collectionStore.active = collection;
+      }
       clearInterval(collectionInterval);
 
       /** On collection deploy, start transaction polling */
@@ -172,7 +175,7 @@ function checkUnfinishedTransactions() {
     );
     if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
       clearInterval(transactionInterval);
-      await collectionStore.fetchCollection(collectionId.value);
+      collectionStore.active = await collectionStore.fetchCollection(collectionId.value);
     }
   }, 30000);
 }

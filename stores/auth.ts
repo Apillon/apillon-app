@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { DataLsKeys } from './data';
 
 export const AuthLsKeys = {
   AUTH: 'al_auth',
@@ -9,7 +8,6 @@ export const AuthLsKeys = {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    authStep: '',
     crypto: null,
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
     jwt: '',
@@ -117,12 +115,15 @@ export const useAuthStore = defineStore('auth', {
           this.saveUser(res.data);
         }
         this.loadingProfile = false;
+
         return res;
       } catch (error) {
         /** On error - logout */
         this.logout();
 
-        this.loadingProfile = false;
+        setTimeout(() => {
+          this.loadingProfile = false;
+        }, 300);
         return null;
       }
     },

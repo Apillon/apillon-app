@@ -25,6 +25,14 @@
     @apply bg-bg-lighter;
   }
 
+  &--builders-type:not(.n-button--disabled) {
+    @apply text-primary;
+
+    &:hover {
+      @apply text-bg;
+    }
+  }
+
   &.pointer-events-none {
     cursor: not-allowed;
   }
@@ -155,6 +163,15 @@
   }
 }
 
+/** Dropdown */
+.n-dropdown {
+  .n-dropdown-option-body {
+    &.active::before {
+      @apply bg-bg-lighter;
+    }
+  }
+}
+
 /** Form */
 .n-form {
   &:not(.form-errors) {
@@ -191,7 +208,6 @@
   }
   &.n-h5 {
     @apply font-bold;
-    font-size: 1.25rem;
   }
   &.n-h6 {
     @apply font-bold;
@@ -246,6 +262,9 @@
   .n-input__prefix {
     @apply mr-2;
   }
+  .n-input__eye {
+    display: flex;
+  }
 }
 .n-input-number {
   @apply w-full;
@@ -266,6 +285,27 @@
 /** Menu */
 .n-menu {
   &.n-menu--vertical {
+    &.n-menu--collapsed {
+      @apply px-4;
+
+      .n-menu-divider {
+        @apply mx-2 my-4;
+      }
+      .n-menu-item-group-title {
+        @apply hidden;
+      }
+      .n-menu-item-content {
+        @apply !p-0;
+      }
+      .n-menu-item-content::before,
+      .n-menu-item-content-header a::before {
+        @apply left-0 right-0 rounded-full;
+      }
+      .n-menu-item-content__icon {
+        @apply ml-2 !text-[22px];
+      }
+    }
+
     .n-menu-item-group .n-menu-item-group-title {
       @apply h-10 mt-8 mb-2 ml-3;
     }
@@ -287,15 +327,14 @@
       &__icon {
         @apply ml-3;
       }
+    }
+    .n-menu-item-content-header {
+      &__extra {
+        @apply float-right pr-1;
+      }
 
-      .n-menu-item-content-header {
-        &__extra {
-          @apply float-right pr-1;
-        }
-
-        a::before {
-          @apply left-8 right-8;
-        }
+      a::before {
+        @apply left-8 right-8;
       }
     }
   }
@@ -454,6 +493,15 @@ body > .n-message-container {
   }
 }
 
+/** Pagination */
+.n-pagination {
+  @apply items-center;
+
+  .n-base-selection .n-base-suffix {
+    @apply right-2;
+  }
+}
+
 /** Popover */
 .n-popover {
   max-width: 400px;
@@ -554,6 +602,24 @@ body > .n-message-container {
     }
     .n-tabs-tab {
       border: 1px solid theme(colors.bg.light);
+    }
+  }
+  &--bar-type {
+    .n-tabs-wrapper {
+      @apply mobile:flex-col mobile:items-center;
+    }
+    .n-tabs-tab-pad {
+      @apply mobile:hidden;
+    }
+    .n-tabs-tab {
+      @apply mobile:py-1;
+    }
+    .n-tab-pane {
+      @apply mobile:pt-0;
+
+      > div {
+        @apply mobile:py-4 mobile:-my-4;
+      }
     }
   }
 }

@@ -26,13 +26,10 @@
         </n-form-item>
       </n-form>
 
-      <div class="mb-8 flex items-center">
-        <span class="bg-white h-[1px] w-full"></span>
-        <strong class="inline-block px-5 mx-[8%] text-body whitespace-nowrap">
-          {{ $t('storage.ipns.orCreateNew') }}
-        </strong>
-        <span class="bg-white h-[1px] w-full"></span>
-      </div>
+      <!-- Separator -->
+      <SeparatorText class="mt-0 mb-8" :border-left="true">
+        {{ $t('storage.ipns.orCreateNew') }}
+      </SeparatorText>
     </div>
     <div v-else>
       <h4 class="text-center mt-8 mb-4">{{ $t('storage.ipns.createFirst') }}</h4>

@@ -19,6 +19,7 @@ export const useReferralStore = defineStore('referral', {
     tasks: [] as Array<any>,
     termsAccepted: '',
     user_uuid: '',
+    loading: false,
   }),
   actions: {
     initReferral(data: ReferralInterface) {
@@ -37,6 +38,27 @@ export const useReferralStore = defineStore('referral', {
       this.tasks = data.tasks;
       this.termsAccepted = data.termsAccepted;
       this.user_uuid = data.user_uuid;
+    },
+
+    async getReferral() {
+      if (!this.id || isCacheExpired(LsCacheKeys.REFERRAL)) {
+        await this.fetchReferral();
+      }
+    },
+
+    async fetchReferral() {
+      this.loading = true;
+      try {
+        const res = await $api.get<ReferralResponse>(endpoints.referral);
+        // If there is no error -> user already accepted terms & conditions
+        this.initReferral(res.data);
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.REFERRAL, Date.now().toString());
+      } catch (e) {
+        console.warn(e);
+      }
+      this.loading = false;
     },
   },
 });

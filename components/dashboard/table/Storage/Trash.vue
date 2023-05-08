@@ -46,6 +46,10 @@ const fileStore = useFileStore();
 const IconFolderFile = resolveComponent('IconFolderFile');
 const TableEllipsis = resolveComponent('TableEllipsis');
 
+onMounted(() => {
+  fileStore.search = '';
+});
+
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 
 /** Columns */

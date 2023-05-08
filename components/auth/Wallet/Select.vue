@@ -3,7 +3,7 @@
     <template v-for="(wallet, key) in wallets">
       <div v-if="isWalletAvailable(wallet)" :key="key">
         <div
-          class="flex items-center p-4 bg-bg-light border-1 border-bg-lighter"
+        class="card flex items-center p-4"
           :class="{ 'cursor-pointer': wallet.installed }"
           @click="onSelect(wallet)"
         >

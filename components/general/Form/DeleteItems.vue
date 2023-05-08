@@ -1,12 +1,11 @@
 <template v-if="items.length">
   <Btn type="primary" class="w-full mt-2" :loading="loading" @click="deleteItems">
     <slot v-if="$slots.default"></slot>
-    <template v-else>{{ $t('general.confirm') }}</template>
+    <template v-else>{{ $t('form.confirm') }}</template>
   </Btn>
 </template>
 
 <script lang="ts" setup>
-import { bool } from '@polkadot/types-codec';
 import { useMessage } from 'naive-ui';
 type Item =
   | ApiKeyInterface

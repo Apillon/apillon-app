@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-  title: { type: String, required: false },
-  info: { type: String, required: false },
-  icon: { type: String, required: false },
+defineProps({
+  title: { type: String, default: '' },
+  info: { type: String, default: '' },
+  icon: { type: String, default: '' },
 });
 </script>
