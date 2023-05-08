@@ -38,7 +38,6 @@
 
 <script lang="ts" setup>
 import { NModal } from 'naive-ui';
-import colors from '~~/tailwind.colors';
 
 defineProps({
   title: { type: String, default: null },

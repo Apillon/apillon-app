@@ -61,7 +61,6 @@
           :input-props="{ id: 'revocable' }"
           :placeholder="$t('general.pleaseSelect')"
           filterable
-          clearable
         />
       </n-form-item-gi>
 
@@ -78,7 +77,6 @@
           :input-props="{ id: 'soulbound' }"
           :placeholder="$t('general.pleaseSelect')"
           filterable
-          clearable
         />
       </n-form-item-gi>
     </n-grid>
@@ -176,7 +174,6 @@
           v-model:value="collectionStore.form.behaviour.reserve"
           :min="0"
           :step="1"
-          :max="collectionStore.form.behaviour.maxSupply"
           :input-props="{ id: 'reserve' }"
           clearable
         />
