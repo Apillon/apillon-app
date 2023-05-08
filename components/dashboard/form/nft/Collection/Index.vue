@@ -161,7 +161,6 @@
             :input-props="{ id: 'revocable' }"
             :placeholder="$t('general.pleaseSelect')"
             filterable
-            clearable
           />
         </n-form-item-gi>
 
@@ -178,7 +177,6 @@
             :input-props="{ id: 'soulbound' }"
             :placeholder="$t('general.pleaseSelect')"
             filterable
-            clearable
           />
         </n-form-item-gi>
       </n-grid>
@@ -283,6 +281,14 @@
         </Btn>
       </n-form-item>
     </n-form>
+
+    <W3Warn
+      v-model:show="modalW3WarnVisible"
+      :btn-text="$t('nft.collection.upload')"
+      @update:show="onModalW3WarnConfirm"
+    >
+      {{ $t('w3Warn.nft.new') }}
+    </W3Warn>
   </div>
 </template>
 
@@ -290,6 +296,7 @@
 import { useMessage } from 'naive-ui';
 
 const emit = defineEmits(['submitSuccess']);
+const modalW3WarnVisible = ref<boolean>(false);
 
 const $i18n = useI18n();
 const router = useRouter();
@@ -353,6 +360,23 @@ function infoLabel(field: string) {
   return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
 }
 
+/** When user close W3Warn, allow him to create new collection */
+async function onModalW3WarnConfirm(value: boolean) {
+  if (!value) {
+    await createCollection();
+  }
+}
+
+/** Watch modalW3WarnVisible, onShow update timestamp of shown modal in session storage */
+watch(
+  () => modalW3WarnVisible.value,
+  shown => {
+    if (shown) {
+      sessionStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
+    }
+  }
+);
+
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
@@ -362,6 +386,8 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
+    } else if (!sessionStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
+      modalW3WarnVisible.value = true;
     } else {
       await createCollection();
     }

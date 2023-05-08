@@ -61,7 +61,6 @@
           :input-props="{ id: 'revocable' }"
           :placeholder="$t('general.pleaseSelect')"
           filterable
-          clearable
         />
       </n-form-item-gi>
 
@@ -78,7 +77,6 @@
           :input-props="{ id: 'soulbound' }"
           :placeholder="$t('general.pleaseSelect')"
           filterable
-          clearable
         />
       </n-form-item-gi>
     </n-grid>
