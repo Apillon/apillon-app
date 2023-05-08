@@ -68,7 +68,7 @@
               </Btn>
             </a>
             <div class="mt-2">
-              <NuxtLink :to="`/dashboard/service/nft/${collectionStore.active.id}`">
+              <NuxtLink to="/dashboard/service/nft">
                 <Btn type="builders" size="tiny">
                   <span class="text-sm">{{ $t('nft.collection.view') }} </span>
                 </Btn>

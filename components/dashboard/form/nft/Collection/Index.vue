@@ -408,8 +408,8 @@ async function createCollection() {
     /** Emit events */
     emit('submitSuccess');
 
-    /** Redirect to new web page */
-    router.push(`/dashboard/service/nft/${res.data.id}`);
+    /** Redirect to Collections */
+    router.push(`/dashboard/service/nft`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
