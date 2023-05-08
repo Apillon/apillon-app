@@ -197,7 +197,7 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await collectionStore.getCollections();
-      // collectionStore.getCollectionQuota();
+      collectionStore.getCollectionQuota();
 
       pageLoading.value = false;
     });
