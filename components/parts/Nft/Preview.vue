@@ -16,7 +16,11 @@
     </button>
   </div>
 
-  <n-scrollbar class="min-h-[300px] mt-4" style="max-height: calc(100vh - 420px)" y-scrollable>
+  <n-scrollbar
+    class="min-h-[300px] mt-10 lg:mt-4"
+    style="max-height: calc(100vh - 420px)"
+    y-scrollable
+  >
     <template v-if="isGridView">
       <div
         class="grid gap-8 grid-cols-nft"

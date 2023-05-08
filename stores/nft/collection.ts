@@ -123,7 +123,11 @@ export const useCollectionStore = defineStore('collection', {
     },
 
     async getCollection(collectionId: number): Promise<CollectionInterface> {
-      if (this.active?.id === collectionId && !isCacheExpired(LsCacheKeys.COLLECTION)) {
+      if (
+        this.active?.id === collectionId &&
+        this.active?.collectionStatus >= CollectionStatus.DEPLOYED &&
+        !isCacheExpired(LsCacheKeys.COLLECTION)
+      ) {
         return this.active;
       }
       return await this.fetchCollection(collectionId);
@@ -138,6 +142,12 @@ export const useCollectionStore = defineStore('collection', {
         return await this.fetchCollectionTransactions(collectionUuid);
       }
       return this.transaction;
+    },
+
+    async getCollectionQuota() {
+      if (this.quotaReached === undefined) {
+        await this.fetchCollectionQuota();
+      }
     },
 
     /**
@@ -169,6 +179,7 @@ export const useCollectionStore = defineStore('collection', {
 
         return res.data.items;
       } catch (error: any) {
+        console.log(error);
         /** Clear promise */
         dataStore.promises.collections = null;
         this.items = [] as Array<CollectionInterface>;
@@ -192,9 +203,6 @@ export const useCollectionStore = defineStore('collection', {
         return res.data;
       } catch (error: any) {
         this.active = {} as CollectionInterface;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
       }
       return {} as CollectionInterface;
     },

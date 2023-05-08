@@ -37,11 +37,11 @@
           {{ $t('nft.upload.infoImages') }}
         </p>
         <p class="mb-6">
-          <NuxtLink href="https://wiki.apillon.io/build/3-apillon-api.html" target="_blank">
+          <a href="https://wiki.apillon.io/build/2-web3-services.html" target="_blank">
             <Btn type="builders" size="tiny">
               {{ $t('general.learnMore') }}
             </Btn>
-          </NuxtLink>
+          </a>
         </p>
         <n-upload
           v-if="!collectionStore.hasImages"
@@ -98,7 +98,7 @@
           </div>
         </div>
 
-        <n-space class="mt-5" :size="20" justify="space-between" vertical>
+        <n-space class="mt-5 mb-8" :size="20" justify="space-between" vertical>
           <div v-if="collectionStore.hasImages">
             <Notification
               v-if="collectionStore.images?.length < collectionStore.csvData?.length"
@@ -129,17 +129,17 @@
           {{ $t('nft.upload.infoFile') }}
         </p>
         <p class="mb-6 text-body whitespace-pre-line">
-          <NuxtLink href="https://wiki.apillon.io/build/3-apillon-api.html" target="_blank">
+          <a href="https://wiki.apillon.io/build/2-web3-services.html" target="_blank">
             <Btn type="builders" size="tiny">
               {{ $t('general.learnMore') }}
             </Btn>
-          </NuxtLink>
+          </a>
           <span class="inline-block mx-1">{{ $t('general.or') }}</span>
-          <NuxtLink href="/files/example.csv" target="_blank">
+          <a href="/files/example.csv" target="_blank">
             <Btn type="builders" size="tiny">
               {{ $t('nft.upload.downloadCsv') }}
             </Btn>
-          </NuxtLink>
+          </a>
         </p>
         <n-upload
           v-if="!collectionStore.hasCsvFile"
@@ -179,7 +179,7 @@
         </template>
 
         <Btn
-          class="mt-10"
+          class="mt-10 mb-8"
           size="large"
           type="secondary"
           :disabled="!collectionStore.hasCsvFile || !hasRequiredMetadata"

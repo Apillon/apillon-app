@@ -331,9 +331,13 @@ export default function useNft() {
   function transactionLink(transactionHash?: string | null, chainId?: number): string {
     switch (chainId) {
       case Chains.MOONBEAM:
-        return `https://moonbeam.moonscan.io/tx/${transactionHash}`;
+        return transactionHash
+          ? `https://moonbeam.moonscan.io/tx/${transactionHash}`
+          : 'https://moonbeam.moonscan.io';
       case Chains.MOONBASE:
-        return `https://moonbase.moonscan.io/tx/${transactionHash}`;
+        return transactionHash
+          ? `https://moonbase.moonscan.io/tx/${transactionHash}`
+          : 'https://moonbase.moonscan.io';
       default:
         console.warn('Missing chainId');
         return '';

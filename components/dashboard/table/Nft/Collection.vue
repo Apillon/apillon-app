@@ -17,8 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
-
 const props = defineProps({
   collections: { type: Array<CollectionInterface>, default: [] },
 });

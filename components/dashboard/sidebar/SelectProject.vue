@@ -63,7 +63,7 @@ onMounted(() => {
     await dataStore.getProjects();
 
     /** Fetch active project data(get myRole_id_onProject) */
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    Promise.resolve(dataStore.promises.projects).then(async _ => {
       await dataStore.getProject(dataStore.project.selected);
     });
   });

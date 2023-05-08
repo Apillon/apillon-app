@@ -109,22 +109,32 @@
           </template>
           <slot>
             <!-- METADATA: storage type -->
-            <div class="flex justify-center items-center" style="height: calc(100vh - 300px)">
-              <div class="max-w-lg text-center">
+            <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
+              <div class="max-w-lg text-center pb-8">
                 <h2>{{ $t('nft.metadata.title') }}</h2>
-                <p class="text-body whitespace-pre-line">
+
+                <p class="text-body whitespace-pre-line mb-8">
                   {{ $t('nft.metadata.infoNew') }}
                 </p>
-                <div class="flex justify-center gap-4 px-2 mt-8">
-                  <Btn class="w-1/2" type="primary" @click="goToWizzard">
+
+                <!-- Notification - show if qouta has been reached -->
+                <Notification v-if="isQuotaReached" type="warning" class="w-full mb-4">
+                  {{ $t('nft.collection.quotaReached') }}
+                </Notification>
+                <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-4">
+                  {{ $t('dashboard.permissions.insufficient') }}
+                </Notification>
+                <div class="flex justify-center gap-4 px-2">
+                  <Btn class="w-1/2" type="primary" :disabled="isFormDisabled" @click="goToWizzard">
                     {{ $t('nft.metadata.yes') }}
                   </Btn>
                   <Btn
                     class="w-1/2"
                     type="secondary"
+                    :disabled="isFormDisabled"
                     @click="collectionStore.metadataStored = true"
                   >
-                    {{ $t('nft.metadata.no') }}
+                    <span class="inline-block -mx-1">{{ $t('nft.metadata.no') }}</span>
                   </Btn>
                 </div>
               </div>
@@ -171,6 +181,7 @@ const $i18n = useI18n();
 const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 const { transactionLink } = useNft();
+const { isFormDisabled, isQuotaReached } = useCollection();
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),
@@ -186,19 +197,12 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await collectionStore.getCollections();
-      getCollectionQuota();
+      // collectionStore.getCollectionQuota();
 
       pageLoading.value = false;
     });
   }, 100);
 });
-
-/** GET Collection quota, if current value is null  */
-async function getCollectionQuota() {
-  if (collectionStore.quotaReached === undefined) {
-    await collectionStore.fetchCollectionQuota();
-  }
-}
 
 /** Watch active tab, if informations are missing, open previous tab */
 watch(
