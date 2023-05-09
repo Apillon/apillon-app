@@ -17,7 +17,7 @@
 
         <n-space class="py-8" :size="32" vertical>
           <!-- LOGO -->
-          <div class="flex" :class="collapsed ? 'px-4 justify-center' : 'px-8 justify-left'">
+          <div class="flex" :class="collapsed ? 'px-4 justify-center' : 'px-8 pt-1 justify-left'">
             <NuxtIcon v-if="collapsed" name="logo/apillon-icon" class="text-3xl" />
             <Logo v-else />
           </div>

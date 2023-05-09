@@ -3,8 +3,8 @@
     v-if="authStore.loggedIn"
     placement="bottom-end"
     trigger="click"
-    size="large"
     :options="options"
+    style="min-width: 220px"
     @select="handleSelect"
   >
     <div class="flex cursor-pointer">

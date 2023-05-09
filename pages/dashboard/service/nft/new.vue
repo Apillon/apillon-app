@@ -6,17 +6,14 @@
           <div v-if="collectionCreated">
             <h1>{{ $t('nft.collection.display') }}</h1>
           </div>
-          <n-space v-else align="center" :size="32">
-            <NuxtLink
-              v-if="collectionStore.metadataStored === null"
-              :to="{ name: 'dashboard-service-nft' }"
-            >
-              <span class="icon-back text-base"></span>
+          <n-space v-else align="center" size="large">
+            <NuxtLink :to="{ name: 'dashboard-service-nft' }">
+              <span class="icon-back text-2xl align-sub"></span>
             </NuxtLink>
-            <button v-else @click="goToPreviousStep">
-              <span class="icon-back text-base"></span>
-            </button>
-            <h1>{{ $t('nft.collection.new') }}</h1>
+            <!-- <button v-else @click="goToPreviousStep">
+              <span class="icon-back text-2xl align-sub"></span>
+            </button> -->
+            <h2>{{ $t('nft.collection.new') }}</h2>
           </n-space>
         </slot>
         <template #info>
@@ -97,7 +94,7 @@
         animated
       >
         <!-- METADATA -->
-        <n-tab-pane :name="NftMintTab.METADATA">
+        <n-tab-pane :name="NftMintTab.METADATA" :disabled="collectionStore.quotaReached === true">
           <template #tab>
             <IconNumber
               v-if="collectionStore.mintTab === NftMintTab.METADATA"
@@ -141,7 +138,7 @@
             </div>
           </slot>
         </n-tab-pane>
-        <n-tab-pane :name="NftMintTab.UPLOAD">
+        <n-tab-pane :name="NftMintTab.UPLOAD" :disabled="collectionStore.quotaReached === true">
           <template #tab>
             <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
             <IconNumber
@@ -158,6 +155,7 @@
         <n-tab-pane
           :name="NftMintTab.MINT"
           :disabled="
+            collectionStore.quotaReached === true ||
             !collectionStore.hasCsvFile ||
             !collectionStore.hasMetadata ||
             !collectionStore.hasImages
@@ -193,6 +191,8 @@ const collectionCreated = ref<boolean>(false);
 
 onMounted(() => {
   collectionStore.metadataStored = null;
+  collectionStore.resetMetadata();
+  collectionStore.resetForms();
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {

@@ -35,8 +35,8 @@
               href="https://wiki.apillon.io/build/3-apillon-api.html"
               target="_blank"
             >
-              <n-button size="small">
-                <NuxtIcon name="icon/docs" class="text-xl mr-2" />
+              <n-button size="small" :bordered="false">
+                <span class="icon-home text-xl mr-2"></span>
                 {{ $t('dashboard.readDocs') }}
               </n-button>
             </a>

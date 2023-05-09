@@ -1,6 +1,6 @@
 <template>
   <!-- Heading template -->
-  <div class="pb-8">
+  <div>
     <n-space
       class="pb-8 min-h-[40px] box-content"
       justify="space-between"

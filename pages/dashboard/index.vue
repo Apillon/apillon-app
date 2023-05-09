@@ -135,7 +135,7 @@
 
     <template v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" #learn>
       <!-- Referral -->
-      <div class="md:max-w-lg p-8 mb-6 card-border">
+      <div class="md:max-w-lg p-8 mt-8 mb-6 card-border">
         <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
         <p class="text-body mb-6">
           {{ $t('referral.banner.description') }}
