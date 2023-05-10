@@ -205,6 +205,9 @@ export const themeOverrides: GlobalThemeOverrides = {
     padding: '16px 12px',
   },
   Form: {
+    feedbackFontSizeSmall: '12px',
+    feedbackFontSizeMedium: '12px',
+    feedbackFontSizeLarge: '14px',
     feedbackHeightSmall: '24px',
     feedbackHeightMedium: '32px',
     feedbackHeightLarge: '40px',

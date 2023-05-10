@@ -90,7 +90,7 @@
 
 <script lang="ts" setup>
 const props = defineProps({
-  file: { type: Object, required: true },
+  file: { type: Object as VuePropType<BucketItemInterface>, required: true },
 });
 const emit = defineEmits(['onFileDelete']);
 
@@ -112,7 +112,10 @@ onDeactivated(() => {
 });
 
 /** Get File details */
-async function getFileDetails(uuidOrCID: string) {
+async function getFileDetails(uuidOrCID?: string) {
+  if (!uuidOrCID) {
+    return;
+  }
   if (!(uuidOrCID in fileStore.items)) {
     fileStore.items[uuidOrCID] = await fileStore.fetchFileDetails(uuidOrCID);
   }

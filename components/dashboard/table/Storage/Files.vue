@@ -317,7 +317,7 @@ const columns = computed(() => {
           props.type === TableFilesType.HOSTING &&
           row.fileStatus === FileStatus.UPLOADED_TO_S3
         ) {
-          return h(StorageFileStatus, { fileStatus: 5 }, '');
+          return h(StorageFileStatus, { fileStatus: FileStatus.UPLOAD_COMPLETED }, '');
         } else {
           return h(StorageFileStatus, { fileStatus: row.fileStatus }, '');
         }

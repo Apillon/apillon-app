@@ -4,20 +4,20 @@
       <n-data-table :columns="collectionStore.csvColumns" :data="collectionStore.csvData" />
       <n-space justify="space-between">
         <div>
-          <Notification v-if="!isSameNumOfRows" type="warning">
+          <Notification v-if="!nft.isSameNumOfRows" type="warning">
             {{ $t('nft.validation.csvMissingData') }}
             ( {{ collectionStore.active?.maxSupply }} )
           </Notification>
-          <Notification v-else-if="!hasRequiredMetadata" type="error">
+          <Notification v-else-if="!nft.hasRequiredMetadata" type="error">
             {{ $t('nft.validation.csvRequiredColumns') }}
-            {{ metadataRequired.join(',') }}
+            {{ nft.metadataRequired.join(',') }}
           </Notification>
         </div>
         <n-space justify="end">
           <n-upload
             :show-file-list="false"
             accept=".csv, application/vnd.ms-excel"
-            :custom-request="uploadFileRequest"
+            :custom-request="nft.uploadFileRequest"
           >
             <Btn type="secondary">
               {{ $t('nft.upload.differentFile') }}
@@ -25,7 +25,7 @@
           </n-upload>
           <Btn
             type="primary"
-            :disabled="!collectionStore.hasCsvFile || !isCsvValid"
+            :disabled="!collectionStore.hasCsvFile || !nft.isCsvValid"
             @click="modalMetadataAttributesVisible = true"
           >
             {{ $t('nft.upload.csvConfirm') }}
@@ -37,7 +37,7 @@
       v-else
       :show-file-list="false"
       accept=".csv, application/vnd.ms-excel"
-      :custom-request="uploadFileRequest"
+      :custom-request="nft.uploadFileRequest"
     >
       <n-upload-dragger style="height: calc(100vh - 420px)">
         <div class="py-2 text-center">
@@ -64,15 +64,7 @@
 <script lang="ts" setup>
 const loading = ref<boolean>(false);
 const collectionStore = useCollectionStore();
-const {
-  hasRequiredMetadata,
-  isCsvValid,
-  isSameNumOfRows,
-  metadataRequired,
-  createNftData,
-  uploadFileRequest,
-  parseUploadedFile,
-} = useNft();
+const nft = useNft();
 
 /**
  * Attributes
@@ -81,13 +73,13 @@ const modalMetadataAttributesVisible = ref<boolean>(false);
 
 onMounted(() => {
   if (!!collectionStore.csvFile?.file && !collectionStore.csvData) {
-    parseUploadedFile(collectionStore.csvFile.file);
+    nft.parseUploadedFile(collectionStore.csvFile.file);
   }
 });
 
 function createMetadata() {
   loading.value = true;
-  collectionStore.metadata = createNftData();
+  collectionStore.metadata = nft.createNftData();
   loading.value = false;
   collectionStore.mintTab = NftMintTab.IMAGES;
 }

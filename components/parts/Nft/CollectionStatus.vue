@@ -13,10 +13,7 @@
       :wrap="false"
     >
       <span class="mx-1 uppercase">{{ $t(`nft.collection.status.${collectionStatus}`) }}</span>
-      <Spinner
-        v-if="collectionStatus < CollectionStatus.DEPLOYED"
-        class="!relative !w-5 !h-5 !m-0 !left-0"
-      />
+      <AnimationTyping v-if="collectionStatus < CollectionStatus.DEPLOYED" />
     </n-space>
   </n-tag>
 </template>
