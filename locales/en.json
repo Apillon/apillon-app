@@ -682,7 +682,7 @@
         "collectionChain": "Select the network where your NFTs will be deployed",
         "collectionDropStart": "A date when your NFT collection becomes publicly available for visitors to buy NFTs.",
         "collectionIsDrop": "With drop, your collection becomes accessible for visitors to buy NFTs from a certain date onwards.",
-        "collectionMaxSupply": "If total supply is limited, please specify the actual number of the NFTs in total supply",
+        "collectionMaxSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection.",
         "collectionMintPrice": "",
         "collectionName": "The name you choose will be the official name of your NFT collection, “name” NFT collection.",
         "collectionReserve": "A number of NFT you wish to reserve for yourself before the drop.",
@@ -691,8 +691,7 @@
         "collectionRoyaltiesFees": "",
         "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
-        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
-        "collectionTotalSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection."
+        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection."
       },
       "status": {
         "0": "CREATED",

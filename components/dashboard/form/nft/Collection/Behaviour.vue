@@ -11,7 +11,7 @@
       <n-form-item-gi
         path="supplyLimited"
         :span="6"
-        :label="infoLabel('collectionTotalSupply')"
+        :label="infoLabel('collectionSupplyLimited')"
         :label-props="{ for: 'supplyLimited' }"
       >
         <select-options

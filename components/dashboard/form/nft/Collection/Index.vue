@@ -112,7 +112,7 @@
           path="supplyLimited"
           :span="6"
           :label-props="{ for: 'supplyLimited' }"
-          :label="infoLabel('collectionTotalSupply')"
+          :label="infoLabel('collectionSupplyLimited')"
         >
           <select-options
             v-model:value="formData.supplyLimited"
