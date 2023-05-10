@@ -41,11 +41,7 @@
     </n-grid>
 
     <!--  Chain -->
-    <n-form-item
-      path="chain"
-      :label="$t('form.label.collectionChain')"
-      :label-props="{ for: 'chain' }"
-    >
+    <n-form-item path="chain" :label="infoLabel('collectionChain')" :label-props="{ for: 'chain' }">
       <select-options
         v-model:value="collectionStore.form.base.chain"
         :options="chains"

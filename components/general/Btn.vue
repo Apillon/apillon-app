@@ -7,6 +7,7 @@
     :class="btnClass"
     :type="!href && !to ? (type === 'secondary' ? 'primary' : type) : ''"
     :size="size"
+    :disabled="disabled"
     :bordered="type === 'secondary' || type === 'error' ? true : false"
     :ghost="type === 'secondary' || type === 'error' ? true : false"
     :quaternary="quaternary || type === 'builders' ? true : false"

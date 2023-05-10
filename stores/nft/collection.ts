@@ -12,6 +12,7 @@ export const useCollectionStore = defineStore('collection', {
     csvFile: {} as FileListItemType,
     csvSelectedAttributes: [] as Array<string>,
     filesMetadata: [] as FileListItemType[],
+    gridView: true,
     images: [] as FileListItemType[],
     items: [] as CollectionInterface[],
     loading: false,

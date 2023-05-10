@@ -36,7 +36,7 @@
               target="_blank"
             >
               <n-button size="small" :bordered="false">
-                <span class="icon-home text-xl mr-2"></span>
+                <span class="icon-file text-xl mr-2"></span>
                 {{ $t('dashboard.readDocs') }}
               </n-button>
             </a>

@@ -217,7 +217,7 @@ const columns = computed(() => {
       title: $i18n.t('storage.fileName'),
       key: 'name',
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: props.type !== TableFilesType.HOSTING },
+        { onClickOpen: props.type !== TableFilesType.HOSTING },
         { hidden: !selectedColumns.value.includes('name') },
       ],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',

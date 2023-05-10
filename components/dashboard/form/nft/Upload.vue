@@ -2,7 +2,7 @@
   <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
     <div
       class="w-full text-center"
-      :class="{ 'max-w-lg': collectionStore.stepUpload !== NftUploadStep.PREVIEW }"
+      :class="collectionStore.stepUpload === NftUploadStep.PREVIEW ? 'self-start' : 'max-w-lg'"
     >
       <!-- Preview -->
       <template
@@ -20,7 +20,7 @@
             {{ $t('nft.upload.takeMeBack') }}
           </Btn>
           <Btn class="w-60" type="primary" @click="collectionStore.mintTab = NftMintTab.MINT">
-            {{ $t('general.confirm') }}
+            {{ $t('nft.upload.previewConfirm') }}
           </Btn>
         </NftPreview>
       </template>
@@ -32,7 +32,7 @@
           collectionStore.stepUpload === NftUploadStep.IMAGES
         "
       >
-        <h2>{{ $t('nft.upload.images') }}</h2>
+        <h2>{{ $t('nft.upload.titleImage') }}</h2>
         <p class="text-body whitespace-pre-line">
           {{ $t('nft.upload.infoImages') }}
         </p>
@@ -44,22 +44,23 @@
           </a>
         </p>
         <n-upload
-          v-if="!collectionStore.hasImages"
           v-on-click-outside="stopLoader"
           accept="image/png, image/jpeg"
           :default-file-list="collectionStore.images"
           :show-file-list="false"
-          :max="collectionStore.csvData?.length || undefined"
+          :max="collectionStore.images.length > 0 ? collectionStore.csvData?.length : undefined"
           multiple
           directory-dnd
           :custom-request="nft.uploadImagesRequest"
-          @click="nft.loadingImages.value = true"
+          @change="nft.handleImageChange"
+          @remove="nft.handleImageRemove"
+          @click="startLoader"
           @click-outside="nft.loadingImages.value = false"
         >
           <n-upload-dragger class="h-40">
             <div class="py-2 text-center">
               <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-                <span class="icon-upload text-violet text-2xl"></span>
+                <span class="icon-image text-violet text-2xl"></span>
               </div>
 
               <h4 class="mb-1">{{ $t('nft.upload.images') }}</h4>
@@ -67,27 +68,13 @@
             </div>
           </n-upload-dragger>
         </n-upload>
-        <div v-else class="flex text-left">
-          <n-upload
-            v-on-click-outside="stopLoader"
-            accept="image/png, image/jpeg"
-            class="flex-1 w-full cursor-pointer"
-            :show-file-list="false"
-            :max="collectionStore.csvData?.length || undefined"
-            multiple
-            directory-dnd
-            :custom-request="nft.uploadImagesRequest"
-            @change="nft.handleImageChange"
-            @remove="nft.handleImageRemove"
-            @click="nft.loadingImages.value = true"
-          >
-            <div class="card px-4 py-2">
-              <span class="icon-image text-xl align-sub mr-3"></span>
-              <span>{{ collectionStore.images.length }}</span>
-              &nbsp;
-              <span>{{ $t('general.images') }}</span>
-            </div>
-          </n-upload>
+        <div v-if="collectionStore.hasImages" class="flex mt-5 text-left">
+          <div class="card w-full px-4 py-2">
+            <span class="icon-image text-xl align-sub mr-3"></span>
+            <span>{{ collectionStore.images.length }}</span>
+            &nbsp;
+            <span>{{ $t('general.images') }}</span>
+          </div>
           <div class="">
             <button
               class="flex justify-center items-center h-12 w-12 ml-4 p-3"
@@ -104,17 +91,21 @@
               v-if="collectionStore.images?.length < collectionStore.csvData?.length"
               type="warning"
             >
-              {{ $t('nft.validation.imagesMissing') }} {{ nft.missingImages }}
+              {{ $t('nft.validation.imagesMissing') }} {{ nft.missingImages.value }}
             </Notification>
-            <Notification v-else-if="!nft.allImagesUploaded" type="error" class="overflow-hidden">
-              {{ $t('nft.validation.imagesInvalid') }} {{ nft.imagesNames }}
+            <Notification
+              v-else-if="!nft.allImagesUploaded.value"
+              type="error"
+              class="overflow-hidden"
+            >
+              {{ $t('nft.validation.imagesInvalid') }} {{ nft.imagesNames.value }}
             </Notification>
           </div>
           <Btn
-            type="secondary"
+            type="primary"
             size="large"
             :loading="nft.loadingImages.value"
-            :disabled="!collectionStore.hasImages || !nft.allImagesUploaded"
+            :disabled="!collectionStore.hasImages || !nft.allImagesUploaded.value"
             @click="collectionStore.stepUpload = NftUploadStep.PREVIEW"
           >
             {{ $t('nft.upload.previewNfts') }}
@@ -124,7 +115,7 @@
 
       <!-- Upload/Confirm CSV -->
       <template v-else>
-        <h2>{{ $t('nft.upload.csvFile') }}</h2>
+        <h2>{{ $t('nft.upload.titleCsv') }}</h2>
         <p class="text-body whitespace-pre-line">
           {{ $t('nft.upload.infoFile') }}
         </p>
@@ -145,8 +136,13 @@
           v-if="!collectionStore.hasCsvFile"
           :show-file-list="false"
           accept=".csv, application/vnd.ms-excel"
+          class="w-full"
           :custom-request="nft.uploadFileRequest"
         >
+          <Btn class="w-full" type="secondary">
+            {{ $t('nft.upload.csvFile') }}
+          </Btn>
+          <!-- 
           <n-upload-dragger class="h-40">
             <div class="py-2 text-center">
               <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
@@ -157,6 +153,7 @@
               <span class="text-body">{{ $t('nft.upload.dragAndDrop') }}</span>
             </div>
           </n-upload-dragger>
+        -->
         </n-upload>
         <template v-else>
           <div class="flex text-left">
@@ -173,7 +170,7 @@
               </button>
             </div>
           </div>
-          <Notification v-if="!nft.hasRequiredMetadata" type="error" class="mt-4 text-left">
+          <Notification v-if="!nft.hasRequiredMetadata.value" type="error" class="mt-4 text-left">
             {{ $t('nft.validation.fileInvalid') }}
           </Notification>
         </template>
@@ -181,8 +178,8 @@
         <Btn
           class="mt-10 mb-8"
           size="large"
-          type="secondary"
-          :disabled="!collectionStore.hasCsvFile || !nft.hasRequiredMetadata"
+          type="primary"
+          :disabled="!collectionStore.hasCsvFile || !nft.hasRequiredMetadata.value"
           @click="modalMetadataAttributesVisible = true"
         >
           {{ $t('form.proceed') }}
@@ -232,6 +229,12 @@ function createMetadata() {
   collectionStore.metadata = nft.createNftData();
   collectionStore.stepUpload = NftUploadStep.IMAGES;
   modalMetadataAttributesVisible.value = false;
+}
+
+function startLoader() {
+  if ((collectionStore.csvData?.length || 0) < collectionStore.images.length) {
+    nft.loadingImages.value = true;
+  }
 }
 
 function stopLoader() {

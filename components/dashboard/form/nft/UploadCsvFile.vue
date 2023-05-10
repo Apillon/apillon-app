@@ -4,11 +4,11 @@
       <n-data-table :columns="collectionStore.csvColumns" :data="collectionStore.csvData" />
       <n-space justify="space-between">
         <div>
-          <Notification v-if="!nft.isSameNumOfRows" type="warning">
+          <Notification v-if="!nft.isSameNumOfRows.value" type="warning">
             {{ $t('nft.validation.csvMissingData') }}
             ( {{ collectionStore.active?.maxSupply }} )
           </Notification>
-          <Notification v-else-if="!nft.hasRequiredMetadata" type="error">
+          <Notification v-else-if="!nft.hasRequiredMetadata.value" type="error">
             {{ $t('nft.validation.csvRequiredColumns') }}
             {{ nft.metadataRequired.join(',') }}
           </Notification>
@@ -25,7 +25,7 @@
           </n-upload>
           <Btn
             type="primary"
-            :disabled="!collectionStore.hasCsvFile || !nft.isCsvValid"
+            :disabled="!collectionStore.hasCsvFile || !nft.isCsvValid.value"
             @click="modalMetadataAttributesVisible = true"
           >
             {{ $t('nft.upload.csvConfirm') }}

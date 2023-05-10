@@ -86,7 +86,7 @@
       <n-form-item-gi
         path="royaltiesAddress"
         :span="6"
-        :label="infoLabel('Royalties Address')"
+        :label="infoLabel('collectionRoyaltiesAddress')"
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
@@ -101,7 +101,7 @@
       <n-form-item-gi
         path="royaltiesFees"
         :span="6"
-        :label="infoLabel('Royalties Fees')"
+        :label="infoLabel('collectionRoyaltiesFees')"
         :label-props="{ for: 'royaltiesFees' }"
       >
         <n-input-number
@@ -197,6 +197,12 @@ const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
 const { booleanSelect, formRef, supplyTypes, rules, disablePasteDate } = useCollection();
+
+onMounted(() => {
+  if (collectionStore.form.behaviour.maxSupply === 0) {
+    collectionStore.form.behaviour.maxSupply = collectionStore.images.length;
+  }
+});
 
 function infoLabel(field: string) {
   if (

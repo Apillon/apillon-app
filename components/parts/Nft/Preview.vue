@@ -1,39 +1,22 @@
 <template>
-  <div class="absolute right-0 top-0">
-    <button
-      class="p-1 card-border border-l-0 hover:bg-bg-lighter transition-all duration-300"
-      :class="{ 'bg-bg-lighter ': !isGridView }"
-      @click="isGridView = false"
-    >
-      <nuxt-icon name="dashboard/table-view" class="text-xl" />
-    </button>
-    <button
-      class="p-1 card-border border-l-0 hover:bg-bg-lighter transition-all duration-300"
-      :class="{ 'bg-bg-lighter ': isGridView }"
-      @click="isGridView = true"
-    >
-      <nuxt-icon name="dashboard/grid-view" class="text-xl" />
-    </button>
-  </div>
-
   <n-scrollbar
-    class="min-h-[300px] mt-10 lg:mt-4"
+    class="min-h-[300px] mt-10 lg:mt-4 text-left"
     style="max-height: calc(100vh - 420px)"
     y-scrollable
   >
-    <template v-if="isGridView">
+    <template v-if="collectionStore.gridView">
       <div
         class="grid gap-8 grid-cols-nft"
         :class="collectionStore.images.length > 100 ? 'grid-cols-nftSmall' : 'grid-cols-nft'"
       >
-        <div v-for="image in images" :key="image.id">
+        <div v-for="image in images" :key="image.id" class="bg-bg-light rounded-xl overflow-hidden">
           <figure class="flex flex-col h-full">
             <img
               :src="createThumbnailUrl(image)"
               class="w-full h-full object-contain"
               :alt="image.name"
             />
-            <figcaption class="block h-12 px-4 py-3 bg-white text-bg font-bold">
+            <figcaption class="block h-12 px-4 py-3 font-bold">
               {{ image.name }}
             </figcaption>
           </figure>
@@ -63,8 +46,6 @@
 <script lang="ts" setup>
 const { createThumbnailUrl } = useNft();
 const collectionStore = useCollectionStore();
-
-const isGridView = ref<boolean>(true);
 
 const page = ref<number>(1);
 const pageSize = ref<number>(collectionStore.images.length > 100 ? 100 : 10);

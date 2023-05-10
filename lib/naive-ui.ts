@@ -88,6 +88,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     borderRadiusSmall: '0px',
     borderRadiusMedium: '0px',
     borderRadiusLarge: '0px',
+    colorDisabledPrimary: colors.bg.lighter,
     colorInfo: colors.white,
     colorHover: colors.bg.lighter,
     colorHoverInfo: colors.white,

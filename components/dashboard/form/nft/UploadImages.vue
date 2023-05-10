@@ -44,14 +44,14 @@
         >
           {{ $t('nft.validation.imagesMissing') }} {{ nft.missingImages }}
         </Notification>
-        <Notification v-else-if="!nft.allImagesUploaded" type="error">
-          {{ $t('nft.validation.imagesInvalid') }} {{ nft.imagesNames }}
+        <Notification v-else-if="!nft.allImagesUploaded.value" type="error">
+          {{ $t('nft.validation.imagesInvalid') }} {{ nft.imagesNames.value }}
         </Notification>
       </div>
       <Btn
         v-if="collectionStore.hasImages"
         type="primary"
-        :disabled="!nft.allImagesUploaded"
+        :disabled="!nft.allImagesUploaded.value"
         @click="collectionStore.mintTab = NftMintTab.MINT"
       >
         {{ $t('nft.upload.imagesConfirm') }}
