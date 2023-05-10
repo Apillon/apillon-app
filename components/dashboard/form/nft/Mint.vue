@@ -32,7 +32,6 @@
       <n-input-number
         v-model:value="formData.quantity"
         :min="1"
-        :max="collectionStore.active?.reserve"
         :placeholder="$t('form.placeholder.nftMintQuantity')"
         clearable
       />
@@ -93,7 +92,8 @@ const rules: NFormRules = {
 };
 
 function validateQuantity(_: NFormItemRule, value: number): boolean {
-  return value > 0 && value < collectionStore.active?.reserve;
+  console.log(collectionStore.active.isDrop);
+  return !collectionStore.active.isDrop || (value > 0 && value < collectionStore.active?.reserve);
 }
 
 const isReserveMinted = computed<boolean>(() => {
