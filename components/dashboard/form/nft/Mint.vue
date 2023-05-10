@@ -92,7 +92,6 @@ const rules: NFormRules = {
 };
 
 function validateQuantity(_: NFormItemRule, value: number): boolean {
-  console.log(collectionStore.active.isDrop);
   return !collectionStore.active.isDrop || (value > 0 && value < collectionStore.active?.reserve);
 }
 
