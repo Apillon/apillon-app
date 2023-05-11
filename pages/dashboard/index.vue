@@ -7,7 +7,7 @@
     </template>
     <slot>
       <div class="p-8 mb-8 bg-bg-light text-body">
-        <template v-if="authStore.isBetaUser()">
+        <template v-if="authStore.isBetaUser() || true">
           <h3 class="mb-4 text-white">Welcome to the Apillon Closed Beta test</h3>
           <p>
             At this moment, you will be able to test Web3 Storage and Web3 Hosting services, while
