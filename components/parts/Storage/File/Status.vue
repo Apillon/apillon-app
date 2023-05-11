@@ -8,7 +8,7 @@
     >
       <span v-if="isPending" class="mx-1 uppercase">{{ $t('general.pending') }}</span>
       <span v-else class="mx-1 uppercase">{{ $t(`storage.file.status.${fileStatus}`) }}</span>
-      <Spinner v-if="isPending" class="!relative !w-5 !h-5 !m-0 !left-0" />
+      <AnimationTyping v-if="isPending" />
     </n-space>
   </n-tag>
 </template>

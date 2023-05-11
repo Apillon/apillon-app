@@ -32,7 +32,6 @@
       <n-input-number
         v-model:value="formData.quantity"
         :min="1"
-        :max="20"
         :placeholder="$t('form.placeholder.nftMintQuantity')"
         clearable
       />
@@ -85,8 +84,16 @@ const rules: NFormRules = {
       required: true,
       message: $i18n.t('validation.nftMintQuantityRequired'),
     },
+    {
+      validator: validateQuantity,
+      message: $i18n.t('validation.nftMintQuantity'),
+    },
   ],
 };
+
+function validateQuantity(_: NFormItemRule, value: number): boolean {
+  return !collectionStore.active.isDrop || (value > 0 && value < collectionStore.active?.reserve);
+}
 
 const isReserveMinted = computed<boolean>(() => {
   return (
@@ -123,9 +130,12 @@ async function mint() {
       ...formData.value,
       collection_uuid: props.collectionUuid,
     };
-    const res = await $api.post<any>(endpoints.collectionMint(props.collectionUuid), bodyData);
+    await $api.post<any>(endpoints.collectionMint(props.collectionUuid), bodyData);
 
     message.success($i18n.t('form.success.nftMint'));
+
+    /** Invalidate local cache */
+    sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
 
     /** Emit events */
     emit('submitSuccess');

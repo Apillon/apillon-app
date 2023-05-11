@@ -16,7 +16,7 @@
     </n-tab-pane>
     <n-tab-pane
       :name="NftMintTab.IMAGES"
-      :disabled="!collectionStore.hasCsvFile || !collectionStore.csvSession"
+      :disabled="!collectionStore.hasCsvFile || !collectionStore.hasMetadata"
     >
       <template #tab>
         <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
@@ -31,9 +31,9 @@
       :name="NftMintTab.MINT"
       :disabled="
         !collectionStore.hasCsvFile ||
-        !collectionStore.csvSession ||
+        !collectionStore.hasMetadata ||
         !collectionStore.hasImages ||
-        !collectionStore.imagesSession
+        !allImagesUploaded
       "
     >
       <template #tab>
@@ -49,6 +49,7 @@
 
 <script lang="ts" setup>
 const collectionStore = useCollectionStore();
+const { allImagesUploaded } = useNft();
 
 const mintTabsRef = ref<NTabsInst | null>(null);
 

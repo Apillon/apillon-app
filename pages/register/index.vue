@@ -1,37 +1,39 @@
 <template>
   <div>
-    <h2 class="mb-4 text-center sm:text-left">{{ $t('auth.signup.title') }}</h2>
-    <p class="mb-10">{{ $t('auth.signup.description') }}</p>
+    <!-- Heading -->
+    <h1 class="mb-2 text-center sm:text-left">{{ $t('auth.signup.title') }}</h1>
+    <p class="mb-7 text-body">{{ $t('auth.signup.description') }}</p>
 
+    <!-- Apillon Oauth -->
     <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
       <Btn type="secondary" class="w-full">
         <span class="icon-apillon-icon"></span>
         {{ $t('auth.signup.continueWithAT') }}
       </Btn>
     </template>
-    <div class="my-8 flex items-center">
-      <span class="bg-white h-[1px] w-full"></span>
-      <strong class="inline-block px-5 mx-[8%] text-body whitespace-nowrap">
-        <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
-          {{ $t('auth.signup.orUseEmail') }}
-        </template>
-        <template v-else>{{ $t('auth.signup.withEmail') }}</template>
-      </strong>
-      <span class="bg-white h-[1px] w-full"></span>
-    </div>
 
+    <!-- Separator -->
+    <SeparatorText>
+      <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
+        {{ $t('auth.signup.orUseEmail') }}
+      </template>
+      <template v-else>{{ $t('auth.signup.withEmail') }}</template>
+    </SeparatorText>
+
+    <!-- Form -->
     <AuthFormSignup />
 
-    <div class="mt-10 text-center">
-      <span class="text-sm text-body"> {{ $t('auth.signup.alreadyHaveAccount') }} </span>&nbsp;
-      <Btn
-        :to="{ name: 'login' }"
-        type="link"
-        @click.native="tractEvent('registration', 'registration_login', 'Change to login')"
-      >
-        {{ $t('general.login') }}
-      </Btn>
-    </div>
+    <!-- Links -->
+    <n-space vertical>
+      <div>
+        <span class="text-sm text-body">{{ $t('auth.signup.alreadyHaveAccount') }} </span>&nbsp;
+        <NuxtLink :to="{ name: 'login' }">
+          <Btn type="builders" size="tiny" inner-class="text-sm">
+            {{ $t('general.login') }}
+          </Btn>
+        </NuxtLink>
+      </div>
+    </n-space>
   </div>
 </template>
 
@@ -43,10 +45,6 @@ definePageMeta({
 });
 useHead({
   title: 'SignUp',
-});
-
-onBeforeMount(() => {
-  authStore.authStep = AuthStep.SIGN_UP;
 });
 
 onMounted(() => {

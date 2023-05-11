@@ -29,7 +29,9 @@
       <n-layout :has-sider="instructionsAvailable && isMd" sider-placement="right">
         <n-layout-content>
           <n-scrollbar y-scrollable :style="scrollStyle">
-            <slot />
+            <div class="pt-8">
+              <slot />
+            </div>
 
             <slot v-if="instructionsAvailable && !isMd" name="learn" class="mt-8">
               <learn-section />

@@ -1,11 +1,11 @@
 <template>
   <Heading>
     <slot>
-      <n-space align="center" :size="32" :wrap="false">
+      <n-space align="center" size="large" :wrap="false">
         <NuxtLink :to="{ name: 'dashboard-service-storage' }">
-          <span class="icon-back"></span>
+          <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
-        <h4 class="whitespace-nowrap">{{ bucketStore.active.name }}</h4>
+        <h2 class="whitespace-nowrap">{{ bucketStore.active.name }}</h2>
 
         <n-space align="center" size="small" :wrap="false">
           <n-ellipsis class="text-body align-bottom" :line-clamp="1">

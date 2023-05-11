@@ -6,6 +6,7 @@ import { crustTypes } from '@crustio/type-definitions';
 export enum BucketType {
   STORAGE = 1,
   HOSTING = 2,
+  NFT_METADATA = 3,
 }
 
 /**
@@ -24,6 +25,7 @@ export enum FileStatus {
   UPLOADED_TO_S3 = 2,
   UPLOADED_TO_IPFS = 3,
   PINNED_TO_CRUST = 4,
+  UPLOAD_COMPLETED = 5,
 }
 export enum FileUploadRequestFileStatus {
   SIGNED_URL_FOR_UPLOAD_GENERATED = 1,

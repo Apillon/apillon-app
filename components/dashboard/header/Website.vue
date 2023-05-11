@@ -1,11 +1,11 @@
 <template>
   <Heading>
     <slot>
-      <n-space align="center" :size="32">
+      <n-space align="center" size="large">
         <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
-          <span class="icon-back"></span>
+          <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
-        <h4>{{ websiteStore.active.name }}</h4>
+        <h2>{{ websiteStore.active.name }}</h2>
 
         <n-space align="center" size="small" :wrap="false">
           <span>{{ $t('hosting.website.uuid') }}:</span>

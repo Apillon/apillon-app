@@ -25,9 +25,9 @@
 
         <!-- Actions -->
         <n-dropdown
+          :key="collectionStore.active.collectionStatus"
           placement="bottom-end"
           trigger="click"
-          :key="collectionStore.active.collectionStatus"
           :options="options"
         >
           <n-button size="small">
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
+defineProps({
   env: { type: Number, default: 0 },
 });
 const emit = defineEmits(['mint', 'transfer']);
@@ -72,7 +72,7 @@ const options = computed(() => {
     {
       label: $i18n.t('nft.collection.revoke'),
       key: 'revoke',
-      disabled: actionsDisabled.value,
+      disabled: actionsDisabled.value || true,
       props: {
         onClick: () => {},
       },
@@ -93,6 +93,6 @@ const options = computed(() => {
 });
 
 async function refresh() {
-  collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
+  await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
 }
 </script>

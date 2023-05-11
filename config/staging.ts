@@ -9,14 +9,16 @@ const config: ConfigInterface = {
   githubId: '95223986c9689e1c7657',
   publishedFeatures: [
     'DISCORD',
+    'HOSTING',
     'PROJECT',
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
     'REFERRAL',
     'SERVICES',
     'WALLET_LOGIN',
+    'STORAGE',
   ],
-  betaFeatures: ['STORAGE', 'HOSTING'],
+  betaFeatures: ['NFT'],
 };
 
 export default config;

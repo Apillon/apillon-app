@@ -2,7 +2,7 @@
   <n-scrollbar v-if="bucketStore.folder.path.length > 0" x-scrollable style="max-width: 100%">
     <div class="flex flex-nowrap items-center">
       <button class="px-1 mr-2" @click="goToParentFolder()">
-        <span class="icon-back align-sub text-lg"></span>
+        <span class="icon-back text-2xl align-sub"></span>
       </button>
       <span
         v-for="(folderPath, key) in bucketStore.folder.path"

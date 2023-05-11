@@ -66,31 +66,7 @@
       <div class="body-sm mb-6">
         <p class="body-sm mb-1 text-body">{{ $t('storage.status') }}</p>
         <div class="uppercase">
-          <n-tag
-            v-if="fileStatus === FileStatus.PINNED_TO_CRUST"
-            type="success"
-            size="tiny"
-            :bordered="false"
-            round
-          >
-            {{ $t(`storage.file.status.${fileStatus}`) }}
-          </n-tag>
-          <n-tag
-            v-else-if="
-              fileStatus === FileStatus.UPLOADED_TO_IPFS ||
-              fileStatus === FileStatus.UPLOADED_TO_S3 ||
-              fileStatus === FileStatus.REQUEST_FOR_UPLOAD_GENERATED
-            "
-            type="info"
-            size="tiny"
-            :bordered="false"
-            round
-          >
-            <span class="text-bg-dark">{{ $t(`storage.file.status.${fileStatus}`) }}</span>
-          </n-tag>
-          <n-tag v-else type="error" size="tiny" :bordered="false" round>
-            {{ $t(`storage.file.status.${fileStatus}`) }}
-          </n-tag>
+          <StorageFileStatus :file-status="fileStatus" />
         </div>
       </div>
     </div>
@@ -114,7 +90,7 @@
 
 <script lang="ts" setup>
 const props = defineProps({
-  file: { type: Object, required: true },
+  file: { type: Object as VuePropType<BucketItemInterface>, required: true },
 });
 const emit = defineEmits(['onFileDelete']);
 
@@ -136,7 +112,10 @@ onDeactivated(() => {
 });
 
 /** Get File details */
-async function getFileDetails(uuidOrCID: string) {
+async function getFileDetails(uuidOrCID?: string) {
+  if (!uuidOrCID) {
+    return;
+  }
   if (!(uuidOrCID in fileStore.items)) {
     fileStore.items[uuidOrCID] = await fileStore.fetchFileDetails(uuidOrCID);
   }

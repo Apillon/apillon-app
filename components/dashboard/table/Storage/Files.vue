@@ -216,7 +216,10 @@ const columns = computed(() => {
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
-      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
+      className: [
+        { onClickOpen: props.type !== TableFilesType.HOSTING },
+        { hidden: !selectedColumns.value.includes('name') },
+      ],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       minWidth: 200,
       render(row: BucketItemInterface) {
@@ -308,10 +311,16 @@ const columns = computed(() => {
       ],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        if (row.fileStatus) {
+        if (!row.fileStatus) {
+          return '';
+        } else if (
+          props.type === TableFilesType.HOSTING &&
+          row.fileStatus === FileStatus.UPLOADED_TO_S3
+        ) {
+          return h(StorageFileStatus, { fileStatus: FileStatus.UPLOAD_COMPLETED }, '');
+        } else {
           return h(StorageFileStatus, { fileStatus: row.fileStatus }, '');
         }
-        return '';
       },
     },
     {

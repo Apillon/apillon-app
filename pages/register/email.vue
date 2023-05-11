@@ -1,24 +1,26 @@
 <template>
-  <div class="w-full flex flex-col justify-center items-center">
-    <div class="w-full text-center">
-      <div class="mb-7 text-center text-blue">
-        <span class="icon-new text-[34px]"></span>
-      </div>
-      <h2 class="mb-7">{{ $t('auth.signup.checkEmail') }}</h2>
-      <p class="mb-12 whitespace-pre-line">
-        {{ $t('auth.signup.emailSent', { email: authStore.email }) }}
-      </p>
+  <div class="w-full">
+    <!-- Heading -->
+    <h2 class="mb-2">{{ $t('auth.signup.checkEmail') }}</h2>
+    <p class="mb-7 whitespace-pre-line">
+      {{ $t('auth.signup.emailSent', { email: authStore.email }) }}
+    </p>
 
-      <strong class="inline-block mb-4">{{ $t('auth.signup.checkInbox') }}</strong>
-      <AuthFormSignup :send-again="hasEmail" />
+    <!-- Form -->
+    <strong class="inline-block mb-2">{{ $t('auth.signup.checkInbox') }}</strong>
+    <AuthFormSignup :send-again="hasEmail" />
 
-      <div class="mt-10 text-center">
-        <span class="text-sm text-body"> {{ $t('auth.signup.madeMistake') }} </span>&nbsp;
-        <Btn type="link" :to="{ name: 'register' }">
-          {{ $t('general.tryAgain') }}
-        </Btn>
+    <!-- Links -->
+    <n-space vertical>
+      <div>
+        <span class="text-sm text-body">{{ $t('auth.signup.madeMistake') }} </span>&nbsp;
+        <NuxtLink :to="{ name: 'register' }">
+          <Btn type="builders" size="tiny" inner-class="text-sm">
+            {{ $t('general.tryAgain') }}
+          </Btn>
+        </NuxtLink>
       </div>
-    </div>
+    </n-space>
   </div>
 </template>
 
@@ -35,8 +37,6 @@ useHead({
 });
 
 onMounted(() => {
-  authStore.authStep = AuthStep.SIGN_UP_EMAIL;
-
   /** If user hasn't signup, redirect him to signup form */
   if (!hasEmail.value) {
     router.push({ name: 'register' });

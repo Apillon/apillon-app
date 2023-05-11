@@ -16,7 +16,18 @@
   }
 
   /** Border */
-  .border-card {
+  .card-border {
     @apply border-1 border-bg-lighter;
+  }
+
+  /** Card */
+  .card {
+    @apply bg-bg card-border;
+  }
+  .card-dark {
+    @apply bg-bg-dark card-border;
+  }
+  .card-light {
+    @apply bg-bg-light card-border;
   }
 }

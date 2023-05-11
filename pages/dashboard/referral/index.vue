@@ -71,7 +71,9 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const router = useRouter();
+const authStore = useAuthStore();
 const referralStore = useReferralStore();
+
 const loading = ref(false);
 const headingRef = ref<HTMLElement>();
 
@@ -85,17 +87,13 @@ const scrollStyle = computed(() => {
   };
 });
 
-getReferral();
-async function getReferral() {
-  loading.value = true;
-  try {
-    const res = await $api.get<ReferralResponse>(endpoints.referral);
-    // If there is no error -> user already accepted terms & conditions
-    referralStore.initReferral(res.data);
-  } catch (e) {
-    router.replace('/dashboard');
-    console.error(e);
+onMounted(async () => {
+  if (isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())) {
+    await referralStore.getReferral();
+
+    if (!referralStore.termsAccepted) {
+      router.replace('/dashboard');
+    }
   }
-  loading.value = false;
-}
+});
 </script>

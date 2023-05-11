@@ -127,11 +127,15 @@ function onNftTrasnfered() {
 
 /** Collection polling */
 function checkIfCollectionUnfinished() {
+  if (collectionStore.active.collectionStatus === CollectionStatus.CREATED) {
+    return;
+  }
   if (collectionStore.active.collectionStatus >= CollectionStatus.DEPLOYED) {
     clearInterval(collectionInterval);
     return;
   }
 
+  clearInterval(collectionInterval);
   collectionInterval = setInterval(async () => {
     const collection = await collectionStore.fetchCollection(collectionId.value);
     await collectionStore.fetchCollectionTransactions(
@@ -139,6 +143,9 @@ function checkIfCollectionUnfinished() {
       false
     );
     if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
+      if (collection) {
+        collectionStore.active = collection;
+      }
       clearInterval(collectionInterval);
 
       /** On collection deploy, start transaction polling */
@@ -157,6 +164,7 @@ function checkUnfinishedTransactions() {
     return;
   }
 
+  clearInterval(transactionInterval);
   transactionInterval = setInterval(async () => {
     const transactions = await collectionStore.fetchCollectionTransactions(
       collectionStore.active.collection_uuid,
@@ -167,7 +175,7 @@ function checkUnfinishedTransactions() {
     );
     if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
       clearInterval(transactionInterval);
-      await collectionStore.fetchCollection(collectionId.value);
+      collectionStore.active = await collectionStore.fetchCollection(collectionId.value);
     }
   }, 30000);
 }

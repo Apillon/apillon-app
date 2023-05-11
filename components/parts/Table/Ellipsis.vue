@@ -1,5 +1,5 @@
 <template>
-  <div class="flex" v-if="text">
+  <div v-if="text" class="flex">
     <NEllipsis class="text-body align-bottom" :line-clamp="1">{{ text }}</NEllipsis>
     <button class="ml-2" @click="copyToClipboard(text)">
       <span class="icon-copy text-body"></span>

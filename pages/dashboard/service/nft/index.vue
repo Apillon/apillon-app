@@ -24,25 +24,21 @@
         :info="$t('nft.collection.emptyInfo')"
         icon="nft/illustration"
       >
-        <Btn type="primary" @click="createNewCollection">
-          {{ $t('nft.collection.new') }}
+        <Btn type="primary" @click="router.push({ name: 'dashboard-service-nft-new' })">
+          {{ $t('nft.collection.createFirst') }}
         </Btn>
       </Empty>
 
       <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
         {{ $t('w3Warn.nft.new') }}
       </W3Warn>
-
-      <!-- Modal - Create Collection -->
-      <modal v-model:show="modalNewCollectionVisible" :title="$t('nft.collection.addNew')">
-        <FormNftCollection @submit-success="onCollectionCreated" />
-      </modal>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 const pageLoading = ref<boolean>(true);
@@ -58,7 +54,10 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await collectionStore.getCollections();
-      checkUnfinishedCollections();
+
+      setTimeout(() => {
+        checkUnfinishedCollections();
+      }, 3000);
 
       pageLoading.value = false;
     });
@@ -67,19 +66,6 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(collectionInterval);
 });
-
-/**
- * On createNewCollection click
- * If W3Warn has already been shown, show modal create new collection, otherwise show warn first
- * */
-function createNewCollection() {
-  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.nft.new')) {
-    modalNewCollectionVisible.value = true;
-  } else {
-    showModalW3Warn.value = true;
-    modalNewCollectionVisible.value = null;
-  }
-}
 
 /** When user close W3Warn, allow him to create new collection */
 function onModalW3WarnHide(value: boolean) {
@@ -93,27 +79,23 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.HOSTING_NEW, Date.now().toString());
+      sessionStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
     }
   }
 );
 
-function onCollectionCreated() {
-  modalNewCollectionVisible.value = false;
-  setTimeout(() => {
-    checkUnfinishedCollections();
-  }, 3000);
-}
-
 /** Collection polling */
 function checkUnfinishedCollections() {
   const unfinishedCollection = collectionStore.items.find(
-    collection => collection.collectionStatus < CollectionStatus.DEPLOYED
+    collection =>
+      collection.collectionStatus === CollectionStatus.DEPLOY_INITIATED ||
+      collection.collectionStatus === CollectionStatus.DEPLOYING
   );
   if (unfinishedCollection === undefined) {
     return;
   }
 
+  clearInterval(collectionInterval);
   collectionInterval = setInterval(async () => {
     const collections = await collectionStore.fetchCollections(false);
     const collection = collections.find(collection => collection.id === unfinishedCollection.id);

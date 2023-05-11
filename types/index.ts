@@ -4,9 +4,13 @@ import {
   UseI18nOptions,
 } from '@nuxtjs/i18n/dist/runtime/composables';
 
+import { PropType } from 'nuxt/dist/app/compat/capi';
+
 export {};
 
 declare global {
+  type VuePropType<T> = PropType<T>;
+
   /**
    * i18n
    */

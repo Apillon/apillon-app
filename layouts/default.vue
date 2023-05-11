@@ -10,15 +10,17 @@
       <n-layout class="h-full" :has-sider="isLg" sider-placement="left">
         <n-layout-sider
           v-if="isLg"
-          bordered
-          :show-trigger="false"
+          :show-trigger="true"
+          :collapsed="sidebarCollapsed"
+          :collapsed-width="72"
           collapse-mode="width"
-          :collapsed-width="60"
           :width="320"
           :native-scrollbar="false"
+          bordered
           style="max-height: 100vh"
+          @update-collapsed="onCollapse"
         >
-          <Sidebar />
+          <Sidebar :collapsed="sidebarCollapsed" />
         </n-layout-sider>
         <n-layout>
           <Header @toggleSidebar="toggleSidebar" />
@@ -40,10 +42,11 @@
 <script lang="ts" setup>
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
-const { isLg } = useScreen();
+const { isLg, isXl } = useScreen();
 const messageRef = ref<HTMLDivElement>();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
+const sidebarCollapsed = ref<boolean>(false);
 
 /**
  * Enable/disable body scroll
@@ -80,11 +83,30 @@ watch(
   }
 );
 
+watch(
+  () => isXl.value,
+  isXl => {
+    toggleCollapse(!isXl);
+  }
+);
+
 function toggleSidebar(show?: boolean) {
   if (show === undefined) {
     showMobileSidebar.value = !showMobileSidebar.value;
   } else {
     showMobileSidebar.value = show;
   }
+}
+
+function toggleCollapse(show?: boolean) {
+  if (show === undefined) {
+    sidebarCollapsed.value = !sidebarCollapsed.value;
+  } else {
+    sidebarCollapsed.value = show;
+  }
+}
+
+function onCollapse(collapsed: boolean) {
+  sidebarCollapsed.value = collapsed;
 }
 </script>

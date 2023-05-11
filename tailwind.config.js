@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     screens: {
       mobile: { max: '767px' },
+      tablet: { max: '1023px' },
       sm: '640px',
       md: '768px',
       lg: '1024px',
@@ -24,6 +25,7 @@ module.exports = {
       green: '#A9DC76',
       violet: '#AB9DF2',
       blue: '#78DCE8',
+      discord: '#4554E9',
 
       body: '#9D9E91',
       bodyDark: '#6A6B63',
@@ -69,6 +71,18 @@ module.exports = {
       gridTemplateColumns: {
         billing: 'repeat(auto-fill, minmax(310px, 1fr))',
         services: 'repeat(auto-fit, minmax(280px, 1fr))',
+        nft: 'repeat(auto-fit, minmax(220px, 1fr))',
+        nftSmall: 'repeat(auto-fit, minmax(120px, 1fr))',
+      },
+      scale: {
+        10: '0.1',
+        20: '0.2',
+        30: '0.3',
+        40: '0.4',
+        60: '0.6',
+        70: '0.7',
+        80: '0.8',
+        90: '0.9',
       },
       zIndex: {
         1: 1,

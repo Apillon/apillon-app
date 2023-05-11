@@ -20,6 +20,8 @@ const props = defineProps({
 const $i18n = useI18n();
 const router = useRouter();
 const collectionStore = useCollectionStore();
+const { transactionLink } = useNft();
+
 const NftTransactionStatus = resolveComponent('NftTransactionStatus');
 const NftTransactionType = resolveComponent('NftTransactionType');
 const TableLink = resolveComponent('TableLink');
@@ -49,7 +51,10 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       render(row: TransactionInterface) {
         return h(
           TableLink,
-          { link: moonbaseLink(row.transactionHash, row.chainId), text: row.transactionHash },
+          {
+            link: transactionLink(row.transactionHash, collectionStore.active.chain || row.chainId),
+            text: row.transactionHash,
+          },
           ''
         );
       },
@@ -93,10 +98,4 @@ const rowProps = (row: TransactionInterface) => {
     },
   };
 };
-
-function moonbaseLink(transactionHash?: string | null, chainId?: number): string {
-  if (!transactionHash || !chainId) return '';
-  if (chainId === Chains.MOONBEAM) return `https://moonbeam.moonscan.io/tx/${transactionHash}`;
-  return `https://moonbase.moonscan.io/tx/${transactionHash}`;
-}
 </script>

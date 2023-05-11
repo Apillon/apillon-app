@@ -1,6 +1,5 @@
 import { useMessage } from 'naive-ui';
 import { v4 as uuidv4 } from 'uuid';
-import { ref } from 'vue';
 
 export default function useUpload() {
   const $i18n = useI18n();
@@ -87,33 +86,39 @@ export default function useUpload() {
       updateFileStatus(file, FileUploadStatusValue.UPLOADING);
     });
 
-    try {
-      const params = {
-        session_uuid: sessionUuid.value,
-        files: filesUpload,
-      };
+    const filesChunks = sliceIntoChunks(filesUpload, 200);
 
-      /** Upload files request */
-      const fileRequests = await $api.post<FilesUploadRequestResponse>(
-        endpoints.storageFilesUpload(bucketUuid.value),
-        params
-      );
+    for (let i = 0; i < filesChunks.length; i++) {
+      if (filesChunks[i] && filesChunks[i].length > 0) {
+        try {
+          const params = {
+            session_uuid: sessionUuid.value,
+            files: filesChunks[i],
+          };
 
-      if (fileRequests.data) {
-        uploadFilesToS3(fileRequests.data.files);
-      } else {
-        /** Show warning message - zero files uploaded */
-        message.warning($i18n.t('errror.fileUploadStopped'));
+          /** Upload files request */
+          const fileRequests = await $api.post<FilesUploadRequestResponse>(
+            endpoints.storageFilesUpload(bucketUuid.value),
+            params
+          );
+
+          if (fileRequests.data) {
+            uploadFilesToS3(fileRequests.data.files);
+          } else {
+            /** Show warning message - zero files uploaded */
+            message.warning($i18n.t('errror.fileUploadStopped'));
+          }
+        } catch (error) {
+          fileList.value.forEach(file => {
+            file.onError();
+            updateFileStatus(file, FileUploadStatusValue.ERROR);
+          });
+
+          throw error;
+        }
       }
-    } catch (error) {
-      fileList.value.forEach(file => {
-        file.onError();
-        updateFileStatus(file, FileUploadStatusValue.ERROR);
-      });
-
-      /** Show error message */
-      message.error(userFriendlyMsg(error));
     }
+
     return sessionUuid.value;
   }
 

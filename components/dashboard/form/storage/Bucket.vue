@@ -87,7 +87,10 @@
           :disabled="isFormDisabled"
           @click="handleSubmit"
         >
-          <template v-if="bucket">
+          <template v-if="bucketType === BucketType.NFT_METADATA">
+            {{ $t('nft.metadata.createBucket') }}
+          </template>
+          <template v-else-if="bucket">
             {{ $t('storage.bucket.update') }}
           </template>
           <template v-else>
@@ -104,8 +107,9 @@ import { useMessage } from 'naive-ui';
 
 const props = defineProps({
   bucketId: { type: Number, default: 0 },
+  bucketType: { type: Number, default: BucketType.STORAGE },
 });
-const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
+const emit = defineEmits(['submit', 'submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
 const $i18n = useI18n();
@@ -191,10 +195,11 @@ async function createBucket() {
   }
 
   loading.value = true;
+  emit('submit');
 
   const bodyData = {
     project_uuid: dataStore.projectUuid,
-    bucketType: BucketType.STORAGE,
+    bucketType: props.bucketType,
     name: formData.value.bucketName,
     description: formData.value.bucketDescription,
     size: formData.value.bucketSize,
@@ -205,18 +210,20 @@ async function createBucket() {
 
     message.success($i18n.t('form.success.created.bucket'));
 
-    /** On new bucket created redirect to storage list in refresh data */
-    bucketStore.fetchBuckets();
+    /** On new bucket created push data to list */
+    bucketStore.items.push(res.data);
 
     /** Reset bucket qouta limit */
     bucketStore.quotaReached = undefined;
 
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess');
+    emit('createSuccess', res.data);
 
     /** Redirect to new web page */
-    router.push(`/dashboard/service/storage/${res.data.id}`);
+    if (props.bucketType !== BucketType.NFT_METADATA) {
+      router.push(`/dashboard/service/storage/${res.data.id}`);
+    }
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -225,6 +232,7 @@ async function createBucket() {
 
 async function updateBucket() {
   loading.value = true;
+  emit('submit');
 
   const bodyData = {
     name: formData.value.bucketName,

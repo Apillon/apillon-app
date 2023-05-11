@@ -6,18 +6,31 @@
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
-    <!--  Btn submit -->
-    <Btn v-bind="$attrs" :type="btnType" :loading="loading" @click="handleSubmit">
-      <slot v-if="$slots.default"></slot>
-      <span v-else>{{ $t('auth.login.resetPassword') }}</span>
-    </Btn>
-
-    <!--  Email - hidden -->
-    <div class="absolute invisible">
+    <!--  Email - hidden if email provided by props -->
+    <div class="mb-8" :class="{ 'absolute invisible': email }">
       <n-form-item path="email" :show-label="false" :show-feedback="false">
-        <n-input v-model:value="formData.email" :input-props="{ type: 'email' }" readonly />
+        <n-input
+          v-model:value="formData.email"
+          :input-props="{ type: 'email' }"
+          :placeholder="$t('form.placeholder.email', { afna: '@' })"
+          clearable
+        />
       </n-form-item>
     </div>
+
+    <!--  Btn submit -->
+    <n-form-item :show-label="false">
+      <Btn
+        v-bind="$attrs"
+        :class="{ 'w-full': btnType === 'primary' }"
+        :type="btnType"
+        :loading="loading"
+        @click="handleSubmit"
+      >
+        <slot v-if="$slots.default"></slot>
+        <span v-else>{{ $t('auth.login.resetPassword') }}</span>
+      </Btn>
+    </n-form-item>
   </n-form>
 </template>
 
@@ -30,14 +43,14 @@ const props = defineProps({
     validator: (value: string) => ['primary', 'secondary', 'link'].includes(value),
     default: 'secondary',
   },
-  email: { type: String, required: true },
+  email: { type: String, default: '' },
 });
 
 const $i18n = useI18n();
 const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-
 const formData = computed<PasswordResetForm>(() => {
   return { email: props.email };
 });

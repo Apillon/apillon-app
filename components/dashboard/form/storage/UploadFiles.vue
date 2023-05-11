@@ -2,7 +2,7 @@
   <!-- Upload - File list  -->
   <div
     v-if="bucketStore.uploadFileList.length > 0"
-    class="fixed right-0 bottom-0 w-[30rem] px-5 py-3 bg-bg-light border-1 border-bg-lighter z-10"
+    class="card fixed right-0 bottom-0 w-[30rem] px-5 py-3 z-10"
   >
     <!-- Header -->
     <n-space v-if="filesUploading" justify="space-between" align="center">
@@ -154,10 +154,13 @@
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
+
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
+const message = useMessage();
 const bucketStore = useBucketStore();
 const { uploadFiles, fileAlreadyOnFileList, folderName } = useUpload();
 
@@ -227,7 +230,12 @@ function upload() {
   removeFinishedFilesFromList();
   showModalWrapFolder.value = false;
 
-  uploadFiles(props.bucketUuid, bucketStore.uploadFileList, wrapToDirectoryCheckbox.value);
+  try {
+    uploadFiles(props.bucketUuid, bucketStore.uploadFileList, wrapToDirectoryCheckbox.value);
+  } catch (error) {
+    /** Show error message */
+    message.error(userFriendlyMsg(error));
+  }
 }
 
 /** Clear file list */

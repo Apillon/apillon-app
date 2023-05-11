@@ -9,13 +9,9 @@
 
           <h4 class="mb-1">{{ $t('hosting.upload.files') }}</h4>
           <span class="text-body">{{ $t('hosting.upload.dragAndDrop') }}</span>
-          <div class="flex items-center">
-            <span class="bg-white h-[1px] w-full"></span>
-            <strong class="inline-block px-5 mx-[8%] text-body whitespace-nowrap">
-              {{ $t('general.or') }}
-            </strong>
-            <span class="bg-white h-[1px] w-full"></span>
-          </div>
+          <SeparatorText class="mt-1 mb-1" :border-left="true">
+            {{ $t('general.or') }}
+          </SeparatorText>
         </div>
       </n-upload-dragger>
     </n-upload>
@@ -47,10 +43,13 @@
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
+
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
+const message = useMessage();
 const { uploadFiles, fileAlreadyOnFileList } = useUpload();
 
 const fileNum = ref<number>(0);
@@ -120,7 +119,12 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
     uploadInterval.value = setInterval(() => {
       if (fileNum.value === uploadFileList.value.length) {
         /** When all files are on file list, start uploading files */
-        uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+        try {
+          uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+        } catch (error) {
+          /** Show error message */
+          message.error(userFriendlyMsg(error));
+        }
 
         /** Clear interval, upload started */
         clearInterval(uploadInterval.value);

@@ -11,6 +11,7 @@ export {};
 declare global {
   /* eslint-disable no-use-before-define */
   type SubscriptionFn = (accounts: WalletAccount[] | undefined) => void | Promise<void>;
+  type WalletDeviceType = 'desktop' | 'mobile';
 
   interface WalletAccount {
     address: string;
@@ -21,10 +22,12 @@ declare global {
   }
 
   interface WalletInfo {
+    type: WalletDeviceType;
     extensionName: string;
     title: string;
-    installUrl: string;
-    icon: string;
+    installUrl: Record<string, string>;
+    icon?: string;
+    image?: string;
   }
 
   interface WalletMethods {

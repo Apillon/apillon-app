@@ -1,5 +1,5 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules">
+  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Register password -->
     <n-form-item
       path="password"
@@ -35,7 +35,7 @@
     </n-form-item>
 
     <!--  Register submit -->
-    <n-form-item>
+    <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.proceed')" />
       <Btn type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.proceed') }}
@@ -86,11 +86,6 @@ const rules: NFormRules = {
       trigger: ['input', 'blur'],
     },
     {
-      validator: validatePasswordStartWith,
-      message: $i18n.t('validation.passwordReenterSame'),
-      trigger: 'input',
-    },
-    {
       validator: validatePasswordSame,
       message: $i18n.t('validation.passwordReenterSame'),
       trigger: ['blur', 'password-input'],
@@ -98,26 +93,6 @@ const rules: NFormRules = {
   ],
 };
 // Custom validations
-/** Additional validatins
-function passwordContainsUppercase(_: NFormItemRule, value: string): boolean {
-  return /[A-Z]/.test(value);
-}
-function passwordContainsLowercase(_: NFormItemRule, value: string): boolean {
-  return /[a-z]/.test(value);
-}
-function passwordContainsNumber(_: NFormItemRule, value: string): boolean {
-  return /[0-9]/.test(value);
-}
-function passwordContainsSpecial(_: NFormItemRule, value: string): boolean {
-  return /[#?!@$%^&*-]/.test(value);
-} */
-function validatePasswordStartWith(_: NFormItemRule, value: string): boolean {
-  return (
-    !!formData.value.password &&
-    formData.value.password.startsWith(value) &&
-    formData.value.password.length >= value.length
-  );
-}
 function validatePasswordSame(_: NFormItemRule, value: string): boolean {
   return value === formData.value.password;
 }
@@ -147,6 +122,7 @@ function handleSubmit(e: Event | MouseEvent) {
 /** Register (create new user) */
 async function register() {
   loading.value = true;
+  dataStore.resetCurrentProject();
 
   try {
     const res = await $api.post<RegisterResponse>(endpoints.register, {

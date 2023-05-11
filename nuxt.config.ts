@@ -113,7 +113,7 @@ export default defineNuxtConfig({
       script: [
         {
           children:
-            env !== 'local'
+            env === 'production'
               ? `var _mtm = window._mtm = window._mtm || [];
           _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
           var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
@@ -122,7 +122,7 @@ export default defineNuxtConfig({
         },
         {
           children:
-            env !== 'local'
+            env === 'production'
               ? `var _paq = (window._paq = window._paq || []);
             /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
             _paq.push(['trackPageView']);

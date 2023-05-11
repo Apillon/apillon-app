@@ -1,7 +1,9 @@
 /** NFT Chains */
 export enum Chains {
-  MOONBEAM = 1,
-  MOONBASE = 2,
+  MOONBEAM = 1284,
+  MOONBASE = 1287,
+  ASTAR_SHIBUYA = 81, // testnet
+  ASTAR = 592,
 }
 
 /** NFT Collection status */
@@ -31,6 +33,24 @@ export enum TransactionType {
   SET_COLLECTION_BASE_URI = 4,
 }
 
+/** Mint steps */
+export enum NftMintTab {
+  METADATA = 1,
+  UPLOAD = 2,
+  IMAGES = 3,
+  MINT = 4,
+}
+export enum NftUploadStep {
+  FILE = 1,
+  IMAGES = 2,
+  PREVIEW = 3,
+}
+export enum NftDeployStep {
+  NAME = 1,
+  BEHAVIOUR = 2,
+  DEPLOY = 3,
+}
+
 declare global {
   /** Papa parser */
   type CsvFileData = {
@@ -49,23 +69,36 @@ declare global {
   /**
    * Collection
    */
-  interface FormCollection {
+  interface FormCollectionName {
     symbol: string;
     name: string;
-    mintPrice?: number;
-    maxSupply?: number | null;
-    baseUri: string;
-    baseExtension: string;
-    isDrop: boolean;
+    chain?: number;
+  }
+
+  interface FormCollectionBehaviour {
+    baseExtension: string | null;
     dropStart?: number;
+    isDrop: boolean;
+    maxSupply?: number | null;
+    mintPrice?: number;
     reserve?: number;
+    revocable?: boolean | null;
+    soulbound?: boolean | null;
+    supplyLimited?: number;
+    royaltiesAddress?: string;
+    royaltiesFees?: number;
+  }
+  interface FormCollection extends FormCollectionName, FormCollectionBehaviour {
+    baseUri: string | null;
     description?: string;
   }
 
   interface CollectionInterface {
     baseExtension: string;
     baseUri: string;
+    bucketId: number;
     bucket_uuid: string;
+    chain: number;
     collectionStatus: number;
     collection_uuid: string;
     contractAddress: string | null;
@@ -91,6 +124,7 @@ declare global {
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionUpdateResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionsResponse extends GeneralItemsResponse<CollectionInterface> {}
+  interface CollectionQuotaResponse extends GeneralResponse<boolean> {}
   interface CollectionQuotaResponse extends GeneralResponse<boolean> {}
 
   /**

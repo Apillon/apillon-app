@@ -1,7 +1,20 @@
 <template>
-  <n-checkbox-group v-bind="$attrs" v-model:value="collectionStore.csvSelectedAttributes">
+  <n-checkbox-group
+    v-if="collectionStore.csvAttributes.length > 0"
+    v-bind="$attrs"
+    v-model:value="collectionStore.csvSelectedAttributes"
+  >
     <n-space vertical class="p-3" size="small">
-      <strong class="text-body mr-4">{{ $t('nft.upload.selectAttributes') }}:</strong>
+      <n-space align="center" justify="space-between">
+        <strong class="text-body mr-4">{{ $t('nft.upload.selectAttributes') }}:</strong>
+
+        <a href="https://wiki.apillon.io/build/2-web3-services.html" target="_blank">
+          <Btn type="builders" size="tiny">
+            {{ $t('general.learnMore') }}
+          </Btn>
+        </a>
+      </n-space>
+
       <n-space
         v-for="(column, key) in collectionStore.csvAttributes"
         :key="key"
@@ -25,6 +38,7 @@
         />
       </n-space>
     </n-space>
+
     <!-- Select/deselect all -->
     <n-button
       v-if="!!collectionStore.csvSelectedAttributes.length"
@@ -40,6 +54,9 @@
       {{ $t('general.selectAll') }}
     </n-button>
   </n-checkbox-group>
+  <div v-else>
+    <h5>{{ $t('nft.validation.csvMissingAttributes') }}</h5>
+  </div>
 </template>
 
 <script lang="ts" setup>
