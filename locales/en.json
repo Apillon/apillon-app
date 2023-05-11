@@ -338,6 +338,7 @@
     "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
     "NFT_CONTRACT_OWNER_ERROR": "NFT contract has been transferred to another wallet.",
     "NFT_DEPLOY_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
+    "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid ethereum address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
 
     "walletSignature": "'Could not capture your signature, check your wallet connection",
