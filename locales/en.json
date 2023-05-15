@@ -752,6 +752,7 @@
       "csvFile": "Select CSV file",
       "csvFileDesc": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
       "deploy": "Deploy",
+      "deployError": "There is a problem with deploy.",
       "downloadCsv": "Download CSV example",
       "differentFile": "Upload different file",
       "dragAndDrop": "Drag & drop or click to upload.",

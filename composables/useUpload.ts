@@ -15,6 +15,7 @@ export default function useUpload() {
   const endSession = ref<boolean>(true);
   const fileList = ref<Array<FileListItemType>>([]);
   const clearFileList = ref<boolean>(false);
+  const putRequests = ref<Array<any>>([]);
 
   /**
    * Computed
@@ -69,6 +70,7 @@ export default function useUpload() {
     wrapToDirectory.value = wrapFilesToDirectory;
     clearFileList.value = clearFileListOnFinish;
     endSession.value = endSessionOnUploadEnd;
+    putRequests.value = [];
 
     /** Files data for upload params */
     const filesUpload: Array<UploadFileType> = fileList.value.map(file => {
@@ -103,7 +105,7 @@ export default function useUpload() {
           );
 
           if (fileRequests.data) {
-            uploadFilesToS3(fileRequests.data.files);
+            await uploadFilesToS3(fileRequests.data.files);
           } else {
             /** Show warning message - zero files uploaded */
             message.warning($i18n.t('errror.fileUploadStopped'));
@@ -142,13 +144,15 @@ export default function useUpload() {
   ) {
     try {
       /** Upload file to S3 using fetch */
-      const res = await fetch(uploadFilesRequest.url, {
+      const req = fetch(uploadFilesRequest.url, {
         method: 'PUT',
         headers: {
           'Content-Type': 'multipart/form-data',
         },
         body: file.file,
       });
+      putRequests.value.push(req);
+      const res = await req;
 
       if (res.status !== 200) {
         throw new Error('File upload error');
@@ -280,7 +284,8 @@ export default function useUpload() {
   return {
     uploadFiles,
     fileAlreadyOnFileList,
-    folderName,
     onUploadError,
+    folderName,
+    putRequests,
   };
 }

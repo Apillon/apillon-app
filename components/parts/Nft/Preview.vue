@@ -23,7 +23,7 @@
         </div>
       </div>
       <div
-        v-if="collectionStore.images.length > 100"
+        v-if="collectionStore.images.length > PAGINATION_LIMIT"
         class="flex justify-center items-center p-4 mt-4"
       >
         <n-pagination

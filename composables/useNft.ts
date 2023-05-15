@@ -3,7 +3,7 @@ import { useMessage } from 'naive-ui';
 export default function useNft() {
   const $i18n = useI18n();
   const message = useMessage();
-  const { fileAlreadyOnFileList, uploadFiles } = useUpload();
+  const { putRequests, fileAlreadyOnFileList, uploadFiles } = useUpload();
   const collectionStore = useCollectionStore();
 
   const { vueApp } = useNuxtApp();
@@ -257,15 +257,19 @@ export default function useNft() {
       const metadataSession = await uploadMetadata();
       const imagesSession = await uploadImages();
 
-      if (!!metadataSession && !!imagesSession) {
-        const res = await $api.post<CollectionResponse>(
-          endpoints.nftDeploy(collectionStore.active.collection_uuid),
-          { metadataSession, imagesSession }
-        );
-        collectionStore.active = res.data;
+      Promise.all(putRequests.value).then(async _ => {
+        if (!!metadataSession && !!imagesSession) {
+          const res = await $api.post<CollectionResponse>(
+            endpoints.nftDeploy(collectionStore.active.collection_uuid),
+            { metadataSession, imagesSession }
+          );
+          collectionStore.active = res.data;
 
-        message.success($i18n.t('form.success.nftDeployed'));
-      }
+          message.success($i18n.t('form.success.nftDeployed'));
+        } else {
+          message.error($i18n.t('nft.upload.deployError'));
+        }
+      });
     } catch (error) {
       message.error(userFriendlyMsg(error));
       throw error;
