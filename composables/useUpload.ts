@@ -90,12 +90,12 @@ export default function useUpload() {
 
     for (let i = 0; i < filesChunks.length; i++) {
       if (filesChunks[i] && filesChunks[i].length > 0) {
-        try {
-          const params = {
-            session_uuid: sessionUuid.value,
-            files: filesChunks[i],
-          };
+        const params = {
+          session_uuid: sessionUuid.value,
+          files: filesChunks[i],
+        };
 
+        try {
           /** Upload files request */
           const fileRequests = await $api.post<FilesUploadRequestResponse>(
             endpoints.storageFilesUpload(bucketUuid.value),
@@ -108,11 +108,11 @@ export default function useUpload() {
             /** Show warning message - zero files uploaded */
             message.warning($i18n.t('errror.fileUploadStopped'));
           }
-        } catch (error) {
-          fileList.value.forEach(file => {
-            file.onError();
-            updateFileStatus(file, FileUploadStatusValue.ERROR);
-          });
+        } catch (error: any) {
+          onUploadError();
+
+          /** Show error message */
+          message.error(userFriendlyMsg(error));
 
           throw error;
         }
@@ -181,10 +181,7 @@ export default function useUpload() {
           ? bucketStore.getFolderPath + wrapperFolderPath(folderName.value)
           : null,
       };
-      await $api.post<PasswordResetResponse>(
-        endpoints.storageFileUpload(bucketUuid.value, sessionUuid),
-        params
-      );
+      await $api.post(endpoints.storageFileUpload(bucketUuid.value, sessionUuid), params);
 
       /** Unnecessary toast message
       if (resSessionEnd.data) {
@@ -261,6 +258,14 @@ export default function useUpload() {
     }
   }
 
+  /** Upload error - all file status change to error */
+  function onUploadError() {
+    fileList.value.forEach(file => {
+      file.onError();
+      updateFileStatus(file, FileUploadStatusValue.ERROR);
+    });
+  }
+
   /** Calculate file upload progress */
   function createFileProgress(file: FileListItemType) {
     const timeFor1Percent = file.size / 100 / avgUploadSpeed.value;
@@ -276,5 +281,6 @@ export default function useUpload() {
     uploadFiles,
     fileAlreadyOnFileList,
     folderName,
+    onUploadError,
   };
 }

@@ -281,6 +281,7 @@
     "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
     "WEB_PAGE_NOT_FOUND": "Web page not found",
     "PUBLISH_IPNS_CID_NOT_PRESENT": "CID is missing",
+    "MAX_BUCKET_SIZE_REACHED": "Maximum bucket size reached. The current bucket has reached its maximum capacity, and no additional data can be stored.",
 
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
