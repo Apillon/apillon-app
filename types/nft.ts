@@ -51,6 +51,15 @@ export enum NftDeployStep {
   DEPLOY = 3,
 }
 
+/** NFT Collection deploy status */
+export enum NftDeployStatus {
+  IDLE = 0,
+  CREATING = 1,
+  UPLOADING = 2,
+  DEPLOYING = 3,
+  DEPLOYED = 4,
+}
+
 declare global {
   /** Papa parser */
   type CsvFileData = {

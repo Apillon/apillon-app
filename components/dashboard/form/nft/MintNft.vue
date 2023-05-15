@@ -6,8 +6,23 @@
       "
       class="w-full pb-8"
     >
-      <NftPreviewCards>
-        <Btn class="max-w-lg w-full" type="primary" :loading="loading" @click="deploy">
+      <div v-if="deployStatus > 0" class="text-center">
+        <AnimationLoader />
+        <h2>{{ $t('nft.deploy.deploying') }}</h2>
+        <p class="mb-8 text-body whitespace-pre-line">
+          <span v-if="deployStatus === NftDeployStatus.CREATING">
+            {{ $t('nft.deploy.collection') }}
+          </span>
+          <span v-else-if="deployStatus === NftDeployStatus.UPLOADING">
+            {{ $t('nft.deploy.metadata') }}
+          </span>
+          <span v-if="deployStatus === NftDeployStatus.DEPLOYING">
+            {{ $t('nft.deploy.nft') }}
+          </span>
+        </p>
+      </div>
+      <NftPreviewCards v-else>
+        <Btn class="max-w-lg w-full" type="primary" @click="deploy">
           {{ $t('nft.collection.deploy') }}
         </Btn>
       </NftPreviewCards>
@@ -59,7 +74,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 
-const loading = ref<boolean>(false);
+const deployStatus = ref<number>(0);
 const modalW3WarnVisible = ref<boolean>(false);
 const modalW3WarnShown = ref<boolean>(false);
 
@@ -104,7 +119,7 @@ async function deploy() {
     return;
   }
 
-  loading.value = true;
+  deployStatus.value = NftDeployStatus.CREATING;
   if (!dataStore.hasProjects) {
     await dataStore.fetchProjects();
   }
@@ -132,10 +147,16 @@ async function deploy() {
     const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
     collectionStore.active = res.data;
 
+    /** Deployment status */
+    deployStatus.value = NftDeployStatus.UPLOADING;
+
     /** On new collection created add new collection to list */
     collectionStore.items.push(res.data);
 
     await deployCollection();
+
+    /** Deployment status */
+    deployStatus.value = NftDeployStatus.DEPLOYING;
 
     /** Reset collection qouta limit, metadata, forms */
     collectionStore.quotaReached = undefined;
@@ -147,6 +168,7 @@ async function deploy() {
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
-  loading.value = false;
+  /** Deployment status */
+  deployStatus.value = NftDeployStatus.DEPLOYED;
 }
 </script>

@@ -257,7 +257,7 @@ export default function useNft() {
       const metadataSession = await uploadMetadata();
       const imagesSession = await uploadImages();
 
-      Promise.all(putRequests.value).then(async _ => {
+      await Promise.all(putRequests.value).then(async _ => {
         if (!!metadataSession && !!imagesSession) {
           const res = await $api.post<CollectionResponse>(
             endpoints.nftDeploy(collectionStore.active.collection_uuid),

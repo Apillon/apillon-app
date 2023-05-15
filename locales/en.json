@@ -704,6 +704,12 @@
         "5": "FAILED"
       }
     },
+    "deploy": {
+      "collection": "Creating collection",
+      "deploying": "Deploying your NFTs",
+      "metadata": "Uploading metadata",
+      "nft": "Deploying NFTs"
+    },
     "metadata": {
       "createBucket": "Create a bucket",
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
