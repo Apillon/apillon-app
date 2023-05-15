@@ -74,6 +74,7 @@ import {
   UploadFileInfo,
 } from 'naive-ui';
 import {
+  DataTableProps,
   InternalRowData,
   TableBaseColumn,
   TableColumn,
@@ -98,6 +99,7 @@ declare global {
   };
 
   interface NCollapseProps extends CollapseProps {}
+  interface NDataTableProps extends DataTableProps {}
   interface NFileInfo extends SettledFileInfo {}
   interface NFormInst extends FormInst {}
   interface NFormItemInst extends FormItemInst {}

@@ -204,7 +204,7 @@
         >
           <span class="mr-2">{{ $t('general.view') }}:</span>
           <n-button
-            class="w-10 px-1"
+            class="w-10 px-0"
             :class="{ '!bg-bg-lighter ': !collectionStore.gridView }"
             size="small"
             type="tertiary"
@@ -212,10 +212,10 @@
             round
             @click="collectionStore.gridView = false"
           >
-            <span class="icon-list-view text-xl align-sub"></span>
+            <span class="icon-list-view text-2xl align-sub"></span>
           </n-button>
           <n-button
-            class="w-10 px-1"
+            class="w-10 px-0"
             :class="{ '!bg-bg-lighter ': collectionStore.gridView }"
             size="small"
             type="tertiary"
@@ -223,7 +223,7 @@
             round
             @click="collectionStore.gridView = true"
           >
-            <span class="icon-grid-view text-xl align-sub"></span>
+            <span class="icon-grid-view text-2xl align-sub"></span>
           </n-button>
         </div>
       </div>

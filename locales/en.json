@@ -725,6 +725,7 @@
       "yes": "Yes, proceed"
     },
     "transaction": {
+      "chain": "Chain",
       "chainId": "Chain ID",
       "empty": "Your project has currently no transactions",
       "emptyInfo": "If you just deployed your collection, please wait a minute for the collection to deploy.",
