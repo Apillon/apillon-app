@@ -64,16 +64,15 @@
               </Btn>
             </a>
             <span class="inline-block mx-1">{{ $t('nft.collection.created.or') }}</span>
-            <a
-              :to="`/dashboard/service/storage/${
-                collectionStore.active.bucketId || collectionStore.active.bucket_uuid
-              }`"
-              target="_blank"
+
+            <Btn
+              type="builders"
+              size="tiny"
+              :loading="loadingBucket"
+              @click="openBucket(collectionStore.active.bucket_uuid || '')"
             >
-              <Btn type="builders" size="tiny">
-                <span class="text-sm">{{ $t('nft.collection.created.bucket') }}</span>
-              </Btn>
-            </a>
+              <span class="text-sm">{{ $t('nft.collection.created.bucket') }}</span>
+            </Btn>
           </p>
         </div>
       </div>
@@ -237,7 +236,9 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
 const { transactionLink } = useNft();
 const { isFormDisabled, isQuotaReached } = useCollection();
@@ -247,6 +248,7 @@ useHead({
 });
 
 const pageLoading = ref<boolean>(true);
+const loadingBucket = ref<boolean>(false);
 const modalW3WarnVisible = ref<boolean>(false);
 const mintTabsRef = ref<NTabsInst | null>(null);
 const collectionCreated = ref<boolean>(false);
@@ -309,6 +311,20 @@ function goToPreviousStep() {
       return;
     default:
       collectionStore.metadataStored = null;
+  }
+}
+
+async function openBucket(bucketUuid: string) {
+  if (!bucketUuid) {
+    return;
+  }
+  loadingBucket.value = true;
+
+  const bucket = await bucketStore.fetchBucket(bucketUuid);
+  loadingBucket.value = false;
+
+  if (bucket && bucket.id) {
+    router.push(`/dashboard/service/storage/${bucket.id}`);
   }
 }
 </script>

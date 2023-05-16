@@ -163,12 +163,16 @@ async function deploy() {
     collectionStore.resetMetadata();
     collectionStore.resetForms();
 
+    /** Deployment status */
+    deployStatus.value = NftDeployStatus.DEPLOYED;
+
     /** Emit events */
     emit('submitSuccess');
   } catch (error) {
+    /** Deployment status */
+    deployStatus.value = NftDeployStatus.IDLE;
+
     message.error(userFriendlyMsg(error));
   }
-  /** Deployment status */
-  deployStatus.value = NftDeployStatus.DEPLOYED;
 }
 </script>

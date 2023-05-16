@@ -47,9 +47,10 @@ export enum FileUploadStatusValue {
   ERROR = 'error',
 }
 export enum TableFilesType {
-  BUCKET = 0,
-  HOSTING = 1,
-  DEPLOYMENT = 2,
+  BUCKET = 1,
+  HOSTING = 2,
+  NFT_METADATA = 3,
+  DEPLOYMENT = 4,
 }
 
 /** Webhook Auth method */

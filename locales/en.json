@@ -916,9 +916,11 @@
       "management": "Bucket management",
       "name": "Bucket name",
       "new": "New bucket",
+      "nft": "Storage bucket",
       "noActiveService": "You need a storage bucket before you can start storing files. ",
       "nothingHere": "Nothing here",
       "storage": "Storage bucket",
+      "type": "Bucket type",
       "update": "Update bucket",
       "uuid": "Bucket Uuid",
       "quotaReached": "Quota has been reached."
@@ -994,6 +996,11 @@
       "uploading": "Uploading",
       "uploadMore": "Add more files",
       "uploadNow": "Upload now"
+    },
+    "type": {
+      "1": "Storage",
+      "2": "Hosting",
+      "3": "NFT metadata"
     },
     "contentType": "Content type",
     "downloadLink": "Download link",

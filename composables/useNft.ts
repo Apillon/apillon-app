@@ -193,6 +193,7 @@ export default function useNft() {
 
     const image = {
       ...file,
+      fullPath: `/Images${file.fullPath}`,
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),

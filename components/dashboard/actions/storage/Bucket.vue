@@ -50,7 +50,11 @@
       </n-button>
 
       <!-- Create folder -->
-      <n-button size="small" @click="showModalNewFolder = true">
+      <n-button
+        size="small"
+        :disabled="bucketStore.active.bucketType === BucketType.NFT_METADATA"
+        @click="showModalNewFolder = true"
+      >
         <span class="icon-create-folder text-xl mr-2"></span>
         {{ $t('storage.directory.create') }}
       </n-button>
@@ -61,6 +65,7 @@
         size="small"
         type="primary"
         ghost
+        :disabled="bucketStore.active.bucketType === BucketType.NFT_METADATA"
         @click="bucketStore.uploadActive = !bucketStore.uploadActive || !bucketStore.hasBucketItems"
       >
         <span class="icon-upload text-xl mr-2"></span>
