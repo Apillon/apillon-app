@@ -783,6 +783,7 @@
       "imagesMissing": "Missing images:",
       "imagesInvalid": "Invalid image names. Example: "
     },
+    "openBucket": "Go to storage",
     "transactionType": "Transaction Type"
   },
   "profile": {
