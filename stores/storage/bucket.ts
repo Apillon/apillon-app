@@ -203,7 +203,7 @@ export const useBucketStore = defineStore('bucket', {
       return null;
     },
 
-    async fetchBucket(bucketId: number): Promise<BucketInterface> {
+    async fetchBucket(bucketId: number | string): Promise<BucketInterface> {
       try {
         const res = await $api.get<BucketResponse>(endpoints.bucket(bucketId));
 

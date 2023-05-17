@@ -39,6 +39,15 @@ const data = computed<Array<CollectionInterface>>(() => {
 const createColumns = (): NDataTableColumns<CollectionInterface> => {
   return [
     {
+      key: 'chain',
+      title: $i18n.t('nft.transaction.chain'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      minWidth: 120,
+      render(row: CollectionInterface) {
+        return h('span', {}, { default: () => $i18n.t(`nft.chain.${row.chain}`) });
+      },
+    },
+    {
       key: 'symbol',
       title: $i18n.t('nft.collection.symbol'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
@@ -84,7 +93,7 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       title: $i18n.t('nft.collection.minted') + '/' + $i18n.t('nft.collection.maxSupply'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row: CollectionInterface) {
-        return h('span', {}, { default: () => row.minted + '/' + row.maxSupply });
+        return h('span', {}, { default: () => mintedMaxSupply(row.minted, row.maxSupply) });
       },
     },
     {
@@ -126,4 +135,9 @@ const rowProps = (row: CollectionInterface) => {
     },
   };
 };
+
+function mintedMaxSupply(minted: number, maxSupply: number) {
+  const supply = maxSupply > 0 ? maxSupply : $i18n.t('form.supplyTypes.unlimited');
+  return `${minted || 0}/${supply}`;
+}
 </script>

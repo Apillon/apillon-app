@@ -281,6 +281,7 @@
     "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
     "WEB_PAGE_NOT_FOUND": "Web page not found",
     "PUBLISH_IPNS_CID_NOT_PRESENT": "CID is missing",
+    "MAX_BUCKET_SIZE_REACHED": "Maximum bucket size reached. The current bucket has reached its maximum capacity, and no additional data can be stored.",
 
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
@@ -703,6 +704,12 @@
         "5": "FAILED"
       }
     },
+    "deploy": {
+      "collection": "Creating collection",
+      "deploying": "Deploying your NFTs",
+      "metadata": "Uploading metadata",
+      "nft": "Deploying NFTs"
+    },
     "metadata": {
       "createBucket": "Create a bucket",
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
@@ -724,6 +731,7 @@
       "yes": "Yes, proceed"
     },
     "transaction": {
+      "chain": "Chain",
       "chainId": "Chain ID",
       "empty": "Your project has currently no transactions",
       "emptyInfo": "If you just deployed your collection, please wait a minute for the collection to deploy.",
@@ -750,6 +758,7 @@
       "csvFile": "Select CSV file",
       "csvFileDesc": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
       "deploy": "Deploy",
+      "deployError": "There is a problem with deploy.",
       "downloadCsv": "Download CSV example",
       "differentFile": "Upload different file",
       "dragAndDrop": "Drag & drop or click to upload.",
@@ -774,6 +783,7 @@
       "imagesMissing": "Missing images:",
       "imagesInvalid": "Invalid image names. Example: "
     },
+    "openBucket": "Go to storage",
     "transactionType": "Transaction Type"
   },
   "profile": {
@@ -907,9 +917,11 @@
       "management": "Bucket management",
       "name": "Bucket name",
       "new": "New bucket",
+      "nft": "Storage bucket",
       "noActiveService": "You need a storage bucket before you can start storing files. ",
       "nothingHere": "Nothing here",
       "storage": "Storage bucket",
+      "type": "Bucket type",
       "update": "Update bucket",
       "uuid": "Bucket Uuid",
       "quotaReached": "Quota has been reached."
@@ -985,6 +997,11 @@
       "uploading": "Uploading",
       "uploadMore": "Add more files",
       "uploadNow": "Upload now"
+    },
+    "type": {
+      "1": "Storage",
+      "2": "Hosting",
+      "3": "NFT metadata"
     },
     "contentType": "Content type",
     "downloadLink": "Download link",

@@ -87,6 +87,17 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       },
     },
     {
+      key: 'type',
+      title: $i18n.t('storage.bucket.type'),
+      className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row) {
+        if (row.bucketType > 0 && $i18n.te(`storage.type.${row.bucketType}`)) {
+          return h('span', {}, { default: () => $i18n.t(`storage.type.${row.bucketType}`) });
+        }
+        return '';
+      },
+    },
+    {
       key: 'bucket_uuid',
       title: $i18n.t('storage.bucket.uuid'),
       render(row: BucketInterface) {
@@ -94,7 +105,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       },
     },
     {
-      key: 'serviceType',
+      key: 'used',
       title: $i18n.t('storage.used'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {

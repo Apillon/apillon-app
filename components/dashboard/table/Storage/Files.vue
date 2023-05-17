@@ -158,10 +158,13 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
     {
       label: $i18n.t('general.delete'),
       key: 'delete',
+      disabled: props.type === TableFilesType.NFT_METADATA,
       props: {
         class: '!text-pink',
         onClick: () => {
-          showModalDelete.value = true;
+          if (props.type !== TableFilesType.NFT_METADATA) {
+            showModalDelete.value = true;
+          }
         },
       },
     },

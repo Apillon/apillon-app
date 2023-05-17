@@ -39,7 +39,7 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
   return [
     {
       key: 'chainId',
-      title: $i18n.t('nft.transaction.chainId'),
+      title: $i18n.t('nft.transaction.chain'),
       minWidth: 120,
       render(row: TransactionInterface) {
         return h('span', {}, { default: () => $i18n.t(`nft.chain.${row.chainId}`) });
