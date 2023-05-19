@@ -343,6 +343,10 @@ export default function useNft() {
         return transactionHash
           ? `https://moonbase.moonscan.io/tx/${transactionHash}`
           : 'https://moonbase.moonscan.io';
+      case Chains.ASTAR:
+        return transactionHash
+          ? `https://astar.subscan.io/tx/${transactionHash}`
+          : 'https://astar.subscan.io';
       default:
         console.warn('Missing chainId');
         return '';
