@@ -10,10 +10,12 @@ const Endpoints = {
   /** User */
   me: '/users/me',
   login: '/users/login',
+  loginWithKilt: '/users/login-kilt',
   register: '/users/register',
   validateMail: '/users/validate-email',
   passwordReset: '/users/password-reset',
   passwordResetRequest: '/users/password-reset-request',
+  oauthSession: '/users/oauth-session',
 
   /**
    * Dashboard

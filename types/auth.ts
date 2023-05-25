@@ -71,9 +71,15 @@ declare global {
   interface LoginInterface extends UserInterface {
     token: string;
   }
+
   interface LoginResponse extends GeneralResponse<LoginInterface> {}
   interface PasswordResetRequestResponse extends GeneralResponse<boolean> {}
-
+  interface OAuthSessionInterface {
+    data: {
+      session: string;
+    };
+  }
+  interface OauthSessionResponse extends GeneralResponse<OAuthSessionInterface> {}
   /**
    * Wallet
    */

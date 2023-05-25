@@ -33,6 +33,11 @@
     <!-- Form -->
     <AuthFormLogin />
 
+    <!-- Separator -->
+    <SeparatorText>
+      <button id="apillon" @click="openPopup()">KILT LOGIN</button>
+    </SeparatorText>
+
     <!-- Links -->
     <n-space vertical>
       <div>
@@ -61,6 +66,73 @@
 const { t } = useI18n();
 const { isLg } = useScreen();
 const authStore = useAuthStore();
+const dataStore = useDataStore();
+const loading = ref(false);
+const sessionToken = ref<string | undefined>('');
+const oauthAuthToken = ref<string | undefined>('');
+
+onMounted(async () => {
+  sessionToken.value = await getOauthSession();
+});
+
+function openPopup() {
+  const oauthUrl = 'http://127.0.0.1:5173/';
+  const childWindow = window.open(
+    `${oauthUrl}?embedded=1&token=${sessionToken.value}`,
+    'Apillon Auth Form',
+    `height=${900} width=${450} resizable=no`
+  );
+
+  // VERIFICATION EVENT LISTENER
+  window.addEventListener(
+    'message',
+    async event => {
+      console.log('Event: ', event.data);
+      if (event.data.verified) {
+        oauthAuthToken.value = event.data.data.userData;
+        console.log('Loading: ', loading.value);
+        if (!loading.value) {
+          console.log('Logging IN');
+          await loginWithKilt();
+          childWindow?.close();
+        }
+      }
+    },
+    false
+  );
+}
+
+async function loginWithKilt() {
+  loading.value = true;
+  // Logout first - delete LS and store if there is any data
+  authStore.logout();
+  dataStore.resetCurrentProject();
+
+  try {
+    const res = await $api.post<LoginResponse>(endpoints.loginWithKilt, {
+      token: oauthAuthToken.value,
+    });
+    authStore.saveUser(res.data);
+
+    /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
+    dataStore.project.items = await dataStore.fetchProjects(true);
+  } catch (error) {
+    console.error(error);
+  }
+  loading.value = false;
+}
+
+async function getOauthSession() {
+  loading.value = true;
+
+  try {
+    const response = await $api.get<OauthSessionResponse>(endpoints.oauthSession);
+    loading.value = false;
+    return response.data.data.session;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 definePageMeta({
   layout: 'auth',
