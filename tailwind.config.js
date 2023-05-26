@@ -74,6 +74,16 @@ module.exports = {
         nft: 'repeat(auto-fit, minmax(220px, 1fr))',
         nftSmall: 'repeat(auto-fit, minmax(120px, 1fr))',
       },
+      scale: {
+        10: '0.1',
+        20: '0.2',
+        30: '0.3',
+        40: '0.4',
+        60: '0.6',
+        70: '0.7',
+        80: '0.8',
+        90: '0.9',
+      },
       zIndex: {
         1: 1,
         2: 2,

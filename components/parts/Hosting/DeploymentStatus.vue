@@ -13,10 +13,7 @@
       :wrap="false"
     >
       <span class="mx-1">{{ $t(`hosting.deployment.status.${deploymentStatus}`) }}</span>
-      <Spinner
-        v-if="deploymentStatus < DeploymentStatus.SUCCESSFUL"
-        class="!relative !w-5 !h-5 !m-0 !left-0"
-      />
+      <AnimationTyping v-if="deploymentStatus < DeploymentStatus.SUCCESSFUL" />
     </n-space>
   </n-tag>
 </template>

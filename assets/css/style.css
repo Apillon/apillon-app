@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'apillon';
-  src:  url('fonts/apillon.eot?kqb9iq');
-  src:  url('fonts/apillon.eot?kqb9iq#iefix') format('embedded-opentype'),
-    url('fonts/apillon.ttf?kqb9iq') format('truetype'),
-    url('fonts/apillon.woff?kqb9iq') format('woff'),
-    url('fonts/apillon.svg?kqb9iq#apillon') format('svg');
+  src:  url('fonts/apillon.eot?7w3jls');
+  src:  url('fonts/apillon.eot?7w3jls#iefix') format('embedded-opentype'),
+    url('fonts/apillon.ttf?7w3jls') format('truetype'),
+    url('fonts/apillon.woff?7w3jls') format('woff'),
+    url('fonts/apillon.svg?7w3jls#apillon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-grid-view:before {
+  content: "\e94d";
+}
+.icon-list-view:before {
+  content: "\e94e";
+}
+.icon-table-view:before {
+  content: "\e94f";
+}
+.icon-go-to:before {
+  content: "\e948";
+}
+.icon-wide-down:before {
+  content: "\e949";
+}
+.icon-wide-left:before {
+  content: "\e94a";
+}
+.icon-wide-right:before {
+  content: "\e94b";
+}
+.icon-wide-up:before {
+  content: "\e94c";
+}
 .icon-magic-link:before {
   content: "\e946";
 }

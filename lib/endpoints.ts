@@ -53,7 +53,7 @@ const Endpoints = {
   /** Bucket */
   buckets: '/buckets/',
   bucketsQuota: '/buckets/quota-reached',
-  bucket: (buckeId: number) => {
+  bucket: (buckeId: number | string) => {
     return `/buckets/${buckeId}`;
   },
   bucketContent: (buckeId: number) => {

@@ -158,10 +158,13 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
     {
       label: $i18n.t('general.delete'),
       key: 'delete',
+      disabled: props.type === TableFilesType.NFT_METADATA,
       props: {
         class: '!text-pink',
         onClick: () => {
-          showModalDelete.value = true;
+          if (props.type !== TableFilesType.NFT_METADATA) {
+            showModalDelete.value = true;
+          }
         },
       },
     },
@@ -217,7 +220,7 @@ const columns = computed(() => {
       title: $i18n.t('storage.fileName'),
       key: 'name',
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: props.type !== TableFilesType.HOSTING },
+        { onClickOpen: props.type !== TableFilesType.HOSTING },
         { hidden: !selectedColumns.value.includes('name') },
       ],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
@@ -317,7 +320,7 @@ const columns = computed(() => {
           props.type === TableFilesType.HOSTING &&
           row.fileStatus === FileStatus.UPLOADED_TO_S3
         ) {
-          return h(StorageFileStatus, { fileStatus: 5 }, '');
+          return h(StorageFileStatus, { fileStatus: FileStatus.UPLOAD_COMPLETED }, '');
         } else {
           return h(StorageFileStatus, { fileStatus: row.fileStatus }, '');
         }

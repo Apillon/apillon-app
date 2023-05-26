@@ -12,6 +12,7 @@ export const useCollectionStore = defineStore('collection', {
     csvFile: {} as FileListItemType,
     csvSelectedAttributes: [] as Array<string>,
     filesMetadata: [] as FileListItemType[],
+    gridView: true,
     images: [] as FileListItemType[],
     items: [] as CollectionInterface[],
     loading: false,
@@ -102,8 +103,8 @@ export const useCollectionStore = defineStore('collection', {
       this.form.behaviour.maxSupply = 0;
       this.form.behaviour.mintPrice = 0;
       this.form.behaviour.reserve = 0;
-      this.form.behaviour.revocable = null;
-      this.form.behaviour.soulbound = null;
+      this.form.behaviour.revocable = false;
+      this.form.behaviour.soulbound = false;
       this.form.behaviour.supplyLimited = 0;
     },
     setCollectionId(id: number) {
@@ -179,7 +180,6 @@ export const useCollectionStore = defineStore('collection', {
 
         return res.data.items;
       } catch (error: any) {
-        console.log(error);
         /** Clear promise */
         dataStore.promises.collections = null;
         this.items = [] as Array<CollectionInterface>;

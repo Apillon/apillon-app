@@ -4,66 +4,34 @@
       <Heading>
         <slot>
           <div v-if="collectionCreated">
-            <h1>{{ $t('nft.collection.display') }}</h1>
+            <h2>{{ $t('nft.collection.display') }}</h2>
           </div>
-          <n-space v-else align="center" :size="32">
-            <NuxtLink
-              v-if="collectionStore.metadataStored === null"
-              :to="{ name: 'dashboard-service-nft' }"
-            >
-              <span class="icon-back text-base"></span>
-            </NuxtLink>
-            <button v-else @click="goToPreviousStep">
-              <span class="icon-back text-base"></span>
-            </button>
-            <h1>{{ $t('nft.collection.new') }}</h1>
+          <n-space v-else align="center" size="large">
+            <h2>
+              <span class="text-bodyDark">{{ $t('dashboard.nav.nft') }}/</span>
+              {{ $t('general.create') }}
+            </h2>
           </n-space>
         </slot>
         <template #info>
-          <Badge icon="nft/moonbeam" />
+          <Badge icon="nft/moonbeam">
+            <NuxtIcon name="nft/astar_logo" class="icon-auto ml-2" filled />
+          </Badge>
         </template>
       </Heading>
     </template>
 
     <slot>
       <div v-if="collectionCreated">
-        <p class="mb-2 text-body">
-          <span class="inline-block mx-1">{{ $t('nft.collection.created.view') }}</span>
-          <a
-            :href="
-              transactionLink(collectionStore.active.transactionHash, collectionStore.active.chain)
-            "
-            target="_blank"
-          >
-            <Btn type="builders" size="tiny">
-              <span class="text-sm">{{ $t('nft.collection.created.explorer') }}</span>
-            </Btn>
-          </a>
-          <span class="inline-block mx-1">{{ $t('nft.collection.created.or') }}</span>
-          <a
-            :to="`/dashboard/service/storage/${
-              collectionStore.active.bucketId || collectionStore.active.bucket_uuid
-            }`"
-            target="_blank"
-          >
-            <Btn type="builders" size="tiny">
-              <span class="text-sm">{{ $t('nft.collection.created.bucket') }}</span>
-            </Btn>
-          </a>
-        </p>
         <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
           <div class="w-full max-w-lg text-center">
-            <!-- <NuxtIcon
-              name="nft/collectionCreated"
-              class="flex justify-center icon-auto mb-4"
-              filled
-            /> -->
+            <NuxtIcon name="nft/collection" class="flex justify-center icon-auto mb-4" filled />
             <h2>{{ $t('nft.collection.created.title') }}</h2>
             <p class="mb-8 text-body whitespace-pre-line">
               {{ $t('nft.collection.created.info') }}
             </p>
             <a href="https://github.com/Apillon-web3/nft-template/fork" target="_blank">
-              <Btn>
+              <Btn size="large">
                 {{ $t('nft.collection.createToDisplay') }}
               </Btn>
             </a>
@@ -76,6 +44,39 @@
             </div>
           </div>
         </div>
+        <div class="relative border-t-1 border-bg-lighter pt-6 px-5">
+          <IconInfo
+            v-if="$i18n.te('w3Warn.nft.new')"
+            class="absolute top-4 left-0"
+            @click="modalW3WarnVisible = true"
+          />
+          <p class="mb-2 text-center text-body">
+            <span class="inline-block mx-1">{{ $t('nft.collection.created.view') }}</span>
+            <a
+              :href="
+                transactionLink(
+                  collectionStore.active.transactionHash,
+                  collectionStore.active.chain
+                )
+              "
+              target="_blank"
+            >
+              <Btn type="builders" size="tiny">
+                <span class="text-sm">{{ $t('nft.collection.created.explorer') }}</span>
+              </Btn>
+            </a>
+            <span class="inline-block mx-1">{{ $t('nft.collection.created.or') }}</span>
+
+            <Btn
+              type="builders"
+              size="tiny"
+              :loading="loadingBucket"
+              @click="openBucket(collectionStore.active.bucket_uuid || '')"
+            >
+              <span class="text-sm">{{ $t('nft.collection.created.bucket') }}</span>
+            </Btn>
+          </p>
+        </div>
       </div>
       <div v-else-if="collectionStore.metadataStored" class="max-w-lg mx-auto py-4">
         <div class="text-center">
@@ -85,100 +86,161 @@
           </p>
         </div>
         <FormNftCollection />
+        <button class="absolute left-0 top-[42px]" @click="goToPreviousStep">
+          <span class="icon-back text-2xl align-sub"></span>
+        </button>
       </div>
-      <n-tabs
-        v-else
-        ref="mintTabsRef"
-        v-model:value="collectionStore.mintTab"
-        type="bar"
-        :bar-width="0"
-        size="large"
-        justify-content="center"
-        animated
-      >
-        <!-- METADATA -->
-        <n-tab-pane :name="NftMintTab.METADATA">
-          <template #tab>
-            <IconNumber
-              v-if="collectionStore.mintTab === NftMintTab.METADATA"
-              :number="1"
-              :active="true"
-            />
-            <IconSuccessful v-else />
-            <span class="ml-2 text-sm text-white">{{ $t('nft.collection.uploadMetadata') }}</span>
-          </template>
-          <slot>
-            <!-- METADATA: storage type -->
-            <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
-              <div class="max-w-lg text-center pb-8">
-                <h2>{{ $t('nft.metadata.title') }}</h2>
+      <div v-else class="relative">
+        <n-tabs
+          ref="mintTabsRef"
+          v-model:value="collectionStore.mintTab"
+          type="bar"
+          :bar-width="0"
+          size="large"
+          justify-content="center"
+          animated
+        >
+          <!-- METADATA -->
+          <n-tab-pane :name="NftMintTab.METADATA" :disabled="collectionStore.quotaReached === true">
+            <template #tab>
+              <IconNumber
+                v-if="collectionStore.mintTab === NftMintTab.METADATA"
+                :number="1"
+                :active="true"
+              />
+              <IconSuccessful v-else />
+              <span class="ml-2 text-sm text-white">{{ $t('nft.collection.uploadMetadata') }}</span>
+            </template>
+            <slot>
+              <!-- METADATA: storage type -->
+              <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
+                <div class="max-w-lg text-center pb-8">
+                  <h2>{{ $t('nft.metadata.title') }}</h2>
 
-                <p class="text-body whitespace-pre-line mb-8">
-                  {{ $t('nft.metadata.infoNew') }}
-                </p>
+                  <p class="text-body whitespace-pre-line mb-8">
+                    {{ $t('nft.metadata.infoNew') }}
+                  </p>
 
-                <!-- Notification - show if qouta has been reached -->
-                <Notification v-if="isQuotaReached" type="warning" class="w-full mb-4">
-                  {{ $t('nft.collection.quotaReached') }}
-                </Notification>
-                <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-4">
-                  {{ $t('dashboard.permissions.insufficient') }}
-                </Notification>
-                <div class="flex justify-center gap-4 px-2">
-                  <Btn class="w-1/2" type="primary" :disabled="isFormDisabled" @click="goToWizzard">
-                    {{ $t('nft.metadata.yes') }}
-                  </Btn>
-                  <Btn
-                    class="w-1/2"
-                    type="secondary"
-                    :disabled="isFormDisabled"
-                    @click="collectionStore.metadataStored = true"
-                  >
-                    <span class="inline-block -mx-1">{{ $t('nft.metadata.no') }}</span>
-                  </Btn>
+                  <!-- Notification - show if qouta has been reached -->
+                  <Notification v-if="isQuotaReached" type="warning" class="w-full mb-4">
+                    {{ $t('nft.collection.quotaReached') }}
+                  </Notification>
+                  <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-4">
+                    {{ $t('dashboard.permissions.insufficient') }}
+                  </Notification>
+                  <div class="flex flex-col gap-4 px-2">
+                    <Btn
+                      size="large"
+                      type="primary"
+                      :disabled="isFormDisabled"
+                      @click="goToWizzard"
+                    >
+                      {{ $t('nft.metadata.yes') }}
+                    </Btn>
+                    <Btn
+                      size="large"
+                      type="secondary"
+                      :disabled="isFormDisabled"
+                      @click="collectionStore.metadataStored = true"
+                    >
+                      <span class="inline-block -mx-1">{{ $t('nft.metadata.no') }}</span>
+                    </Btn>
+                  </div>
                 </div>
               </div>
-            </div>
-          </slot>
-        </n-tab-pane>
-        <n-tab-pane :name="NftMintTab.UPLOAD">
-          <template #tab>
-            <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
-            <IconNumber
-              v-else
-              :number="2"
-              :active="collectionStore.mintTab === NftMintTab.UPLOAD"
-            />
-            <span class="ml-2 text-sm text-white">{{ $t('nft.collection.uploadData') }}</span>
-          </template>
-          <slot>
-            <FormNftUpload />
-          </slot>
-        </n-tab-pane>
-        <n-tab-pane
-          :name="NftMintTab.MINT"
-          :disabled="
-            !collectionStore.hasCsvFile ||
-            !collectionStore.hasMetadata ||
-            !collectionStore.hasImages
-          "
+            </slot>
+          </n-tab-pane>
+
+          <!-- UPLOAD -->
+          <n-tab-pane :name="NftMintTab.UPLOAD" :disabled="collectionStore.quotaReached === true">
+            <template #tab>
+              <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
+              <IconNumber
+                v-else
+                :number="2"
+                :active="collectionStore.mintTab === NftMintTab.UPLOAD"
+              />
+              <span class="ml-2 text-sm text-white">{{ $t('nft.collection.uploadData') }}</span>
+            </template>
+            <slot>
+              <FormNftUpload />
+            </slot>
+          </n-tab-pane>
+
+          <!-- DEPLOY -->
+          <n-tab-pane
+            :name="NftMintTab.MINT"
+            :disabled="
+              collectionStore.quotaReached === true ||
+              !collectionStore.hasCsvFile ||
+              !collectionStore.hasMetadata ||
+              !collectionStore.hasImages
+            "
+          >
+            <template #tab>
+              <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
+              <span class="ml-2 text-sm text-white">{{ $t('nft.collection.mintNfts') }}</span>
+            </template>
+            <slot>
+              <FormNftMintNft @submit-success="collectionCreated = true" />
+            </slot>
+          </n-tab-pane>
+        </n-tabs>
+        <!-- Button back -->
+        <button
+          v-if="collectionStore.metadataStored !== null"
+          class="absolute left-0 top-[10px]"
+          @click="goToPreviousStep"
         >
-          <template #tab>
-            <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
-            <span class="ml-2 text-sm text-white">{{ $t('nft.collection.mintNfts') }}</span>
-          </template>
-          <slot>
-            <FormNftMintNft @submit-success="collectionCreated = true" />
-          </slot>
-        </n-tab-pane>
-      </n-tabs>
+          <span class="icon-back text-2xl align-sub"></span>
+        </button>
+
+        <!-- Buttons switch preview-->
+        <div
+          v-if="
+            collectionStore.mintTab === NftMintTab.UPLOAD &&
+            collectionStore.stepUpload === NftUploadStep.PREVIEW
+          "
+          class="absolute right-0 top-2 flex items-center"
+        >
+          <span class="mr-2">{{ $t('general.view') }}:</span>
+          <n-button
+            class="w-10 px-0"
+            :class="{ '!bg-bg-lighter ': !collectionStore.gridView }"
+            size="small"
+            type="tertiary"
+            quaternary
+            round
+            @click="collectionStore.gridView = false"
+          >
+            <span class="icon-list-view text-2xl align-sub"></span>
+          </n-button>
+          <n-button
+            class="w-10 px-0"
+            :class="{ '!bg-bg-lighter ': collectionStore.gridView }"
+            size="small"
+            type="tertiary"
+            quaternary
+            round
+            @click="collectionStore.gridView = true"
+          >
+            <span class="icon-grid-view text-2xl align-sub"></span>
+          </n-button>
+        </div>
+      </div>
+
+      <W3Warn v-model:show="modalW3WarnVisible">
+        {{ $t('w3Warn.nft.new') }}
+      </W3Warn>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
 const { transactionLink } = useNft();
 const { isFormDisabled, isQuotaReached } = useCollection();
@@ -188,11 +250,15 @@ useHead({
 });
 
 const pageLoading = ref<boolean>(true);
+const loadingBucket = ref<boolean>(false);
+const modalW3WarnVisible = ref<boolean>(false);
 const mintTabsRef = ref<NTabsInst | null>(null);
 const collectionCreated = ref<boolean>(false);
 
 onMounted(() => {
   collectionStore.metadataStored = null;
+  collectionStore.resetMetadata();
+  collectionStore.resetForms();
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
@@ -229,13 +295,38 @@ function goToWizzard() {
 }
 
 function goToPreviousStep() {
-  if (collectionStore.mintTab === NftMintTab.MINT) {
-    collectionStore.mintTab = NftMintTab.UPLOAD;
-  } else if (collectionStore.mintTab === NftMintTab.UPLOAD) {
-    collectionStore.mintTab = NftMintTab.METADATA;
-    collectionStore.metadataStored = null;
-  } else {
-    collectionStore.metadataStored = null;
+  switch (collectionStore.mintTab) {
+    case NftMintTab.MINT:
+      if (collectionStore.stepDeploy > NftDeployStep.NAME) {
+        collectionStore.stepDeploy -= 1;
+      } else {
+        collectionStore.mintTab = NftMintTab.UPLOAD;
+      }
+      return;
+    case NftMintTab.UPLOAD:
+      if (collectionStore.stepUpload > NftUploadStep.FILE) {
+        collectionStore.stepUpload -= 1;
+      } else {
+        collectionStore.mintTab = NftMintTab.METADATA;
+        collectionStore.metadataStored = null;
+      }
+      return;
+    default:
+      collectionStore.metadataStored = null;
+  }
+}
+
+async function openBucket(bucketUuid: string) {
+  if (!bucketUuid) {
+    return;
+  }
+  loadingBucket.value = true;
+
+  const bucket = await bucketStore.fetchBucket(bucketUuid);
+  loadingBucket.value = false;
+
+  if (bucket && bucket.id) {
+    router.push(`/dashboard/service/storage/${bucket.id}`);
   }
 }
 </script>

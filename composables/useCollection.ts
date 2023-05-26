@@ -7,10 +7,10 @@ export default function useCollection() {
   const formRef = ref<NFormInst | null>(null);
 
   const chains = [
-    { label: 'Moonbeam', value: Chains.MOONBEAM },
-    { label: 'Moonbase', value: Chains.MOONBASE },
-    // { label: 'Astar Shibuya', value: Chains.ASTAR_SHIBUYA },
-    // { label: 'Astar', value: Chains.ASTAR },
+    { label: $i18n.t(`nft.chain.${Chains.MOONBEAM}`), value: Chains.MOONBEAM },
+    { label: $i18n.t(`nft.chain.${Chains.MOONBASE}`), value: Chains.MOONBASE },
+    // { label: $i18n.t(`nft.chain.${Chains.ASTAR_SHIBUYA}`), value: Chains.ASTAR_SHIBUYA },
+    { label: $i18n.t(`nft.chain.${Chains.ASTAR}`), value: Chains.ASTAR },
   ];
   const supplyTypes = [
     { label: $i18n.t('form.supplyTypes.unlimited'), value: 0 },

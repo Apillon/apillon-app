@@ -51,9 +51,7 @@ const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const formData = computed<PasswordResetForm>(() => {
-  return { email: props.email };
-});
+const formData = ref<PasswordResetForm>({ email: props.email });
 const rules: NFormRules = {
   email: [
     {

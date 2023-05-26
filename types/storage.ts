@@ -25,6 +25,7 @@ export enum FileStatus {
   UPLOADED_TO_S3 = 2,
   UPLOADED_TO_IPFS = 3,
   PINNED_TO_CRUST = 4,
+  UPLOAD_COMPLETED = 5,
 }
 export enum FileUploadRequestFileStatus {
   SIGNED_URL_FOR_UPLOAD_GENERATED = 1,
@@ -46,9 +47,10 @@ export enum FileUploadStatusValue {
   ERROR = 'error',
 }
 export enum TableFilesType {
-  BUCKET = 0,
-  HOSTING = 1,
-  DEPLOYMENT = 2,
+  BUCKET = 1,
+  HOSTING = 2,
+  NFT_METADATA = 3,
+  DEPLOYMENT = 4,
 }
 
 /** Webhook Auth method */

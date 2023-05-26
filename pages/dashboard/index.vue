@@ -7,7 +7,7 @@
     </template>
     <slot>
       <div class="p-8 mb-8 bg-bg-light text-body">
-        <template v-if="authStore.isBetaUser()">
+        <template v-if="authStore.isBetaUser() || true">
           <h3 class="mb-4 text-white">Welcome to the Apillon Closed Beta test</h3>
           <p>
             At this moment, you will be able to test Web3 Storage and Web3 Hosting services, while
@@ -135,7 +135,7 @@
 
     <template v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" #learn>
       <!-- Referral -->
-      <div class="md:max-w-lg p-8 mb-6 card-border">
+      <div class="md:max-w-lg p-8 mt-8 mb-6 card-border">
         <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
         <p class="text-body mb-6">
           {{ $t('referral.banner.description') }}

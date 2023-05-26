@@ -42,6 +42,30 @@
   }
 }
 
+.icon-grid-view:before {
+  content: '\e94d';
+}
+.icon-list-view:before {
+  content: '\e94e';
+}
+.icon-table-view:before {
+  content: '\e94f';
+}
+.icon-go-to:before {
+  content: '\e948';
+}
+.icon-wide-down:before {
+  content: '\e949';
+}
+.icon-wide-left:before {
+  content: '\e94a';
+}
+.icon-wide-right:before {
+  content: '\e94b';
+}
+.icon-wide-up:before {
+  content: '\e94c';
+}
 .icon-magic-link:before {
   content: '\e946';
 }

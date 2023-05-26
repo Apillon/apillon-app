@@ -11,9 +11,9 @@
       list-type="image-card"
       multiple
       directory-dnd
-      :custom-request="uploadImagesRequest"
-      @change="handleImageChange"
-      @remove="handleImageRemove"
+      :custom-request="nft.uploadImagesRequest"
+      @change="nft.handleImageChange"
+      @remove="nft.handleImageRemove"
     />
     <n-upload
       v-else
@@ -23,7 +23,7 @@
       :max="collectionStore.csvData?.length || undefined"
       multiple
       directory-dnd
-      :custom-request="uploadImagesRequest"
+      :custom-request="nft.uploadImagesRequest"
     >
       <n-upload-dragger style="height: calc(100vh - 420px)">
         <div class="py-2 text-center">
@@ -42,16 +42,16 @@
           v-if="collectionStore.images?.length < collectionStore.csvData?.length"
           type="warning"
         >
-          {{ $t('nft.validation.imagesMissing') }} {{ missingImages }}
+          {{ $t('nft.validation.imagesMissing') }} {{ nft.missingImages }}
         </Notification>
-        <Notification v-else-if="!allImagesUploaded" type="error">
-          {{ $t('nft.validation.imagesInvalid') }} {{ imagesNames }}
+        <Notification v-else-if="!nft.allImagesUploaded.value" type="error">
+          {{ $t('nft.validation.imagesInvalid') }} {{ nft.imagesNames.value }}
         </Notification>
       </div>
       <Btn
         v-if="collectionStore.hasImages"
         type="primary"
-        :disabled="!allImagesUploaded"
+        :disabled="!nft.allImagesUploaded.value"
         @click="collectionStore.mintTab = NftMintTab.MINT"
       >
         {{ $t('nft.upload.imagesConfirm') }}
@@ -62,12 +62,5 @@
 
 <script lang="ts" setup>
 const collectionStore = useCollectionStore();
-const {
-  allImagesUploaded,
-  imagesNames,
-  missingImages,
-  handleImageChange,
-  handleImageRemove,
-  uploadImagesRequest,
-} = useNft();
+const nft = useNft();
 </script>

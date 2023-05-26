@@ -84,6 +84,7 @@
     "cancel": "No, cancel",
     "confirm": "Confirm",
     "copyrights": "© Apillon",
+    "create": "Create",
     "created": "created",
     "delete": "Delete",
     "deselectAll": "Deselect All",
@@ -280,6 +281,7 @@
     "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
     "WEB_PAGE_NOT_FOUND": "Web page not found",
     "PUBLISH_IPNS_CID_NOT_PRESENT": "CID is missing",
+    "MAX_BUCKET_SIZE_REACHED": "Maximum bucket size reached. The current bucket has reached its maximum capacity, and no additional data can be stored.",
 
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
@@ -337,6 +339,7 @@
     "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
     "NFT_CONTRACT_OWNER_ERROR": "NFT contract has been transferred to another wallet.",
     "NFT_DEPLOY_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
+    "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid EVM address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
 
     "walletSignature": "'Could not capture your signature, check your wallet connection",
@@ -393,7 +396,7 @@
       "collectionRoyaltiesFees": "Royalties fees",
       "collectionSoulbound": "Soulbound",
       "collectionSymbol": "Symbol",
-      "collectionTotalSupply": "Total supply",
+      "collectionSupplyLimited": "Total supply",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "domain": "Domain name",
@@ -623,12 +626,12 @@
   },
   "nft": {
     "chain": {
-      "1": "MOONBEAM",
-      "2": "MOONBASE",
-      "81": "ASTAR SHIBUYA",
-      "592": "ASTAR",
-      "1284": "MOONBEAM",
-      "1287": "MOONBASE"
+      "1": "MOONBEAM (Mainnet)",
+      "2": "MOONBASE (Testnet)",
+      "81": "ASTAR SHIBUYA (Testnet)",
+      "592": "ASTAR (Mainnet)",
+      "1284": "MOONBEAM (Mainnet)",
+      "1287": "MOONBASE (Testnet)"
     },
     "collection": {
       "addNew": "Add new collection",
@@ -638,7 +641,7 @@
       "create": "Create collection",
       "createFirst": "Start creating NFTs",
       "createInfo": "",
-      "createToDisplay": "Create a website to display NFTs",
+      "createToDisplay": "Create website to display NFTs",
       "deploy": "Deploy to blockchain",
       "display": "Display NFT collection",
       "dropStart": "Drop start",
@@ -670,7 +673,7 @@
       "created": {
         "bucket": "newly created bucket",
         "explorer": "blockchain explorer",
-        "info": "To see your NFTs in action and mint them, you need a website. \nUse the Apillon website template and host in decentralized way.",
+        "info": "To display your NFTs and mint them, you need a website. \nUse the Apillon NFT website template and host it on a decentralized network.",
         "or": "or see its contents in your",
         "title": "Display your NFTs on the internet",
         "view": "View the transaction on"
@@ -678,19 +681,19 @@
       "labelInfo": {
         "collectionBaseExtension": "",
         "collectionBaseUri": "Paste the collection metadata base URI here.",
-        "collectionDropStart": "A date for NFT collection release.",
-        "collectionIsDrop": "A date for when an NFT collection is released and will be deposited/dropped into the wallets of buyers.",
-        "collectionMaxSupply": "If total supply is limited, please specify the actual number of the NFTs in total supply",
+        "collectionChain": "Select the network where your NFTs will be deployed",
+        "collectionDropStart": "A date when your NFT collection becomes publicly available for visitors to buy NFTs.",
+        "collectionIsDrop": "With drop, your collection becomes accessible for visitors to buy NFTs from a certain date onwards.",
+        "collectionMaxSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection.",
         "collectionMintPrice": "",
         "collectionName": "The name you choose will be the official name of your NFT collection, “name” NFT collection.",
-        "collectionReserve": "A number of NFTs you wish to reserve for yourself.",
-        "collectionRevocable": "If you set your NFT collection to be revocable, you can delete the NFTs at any point in time.",
+        "collectionReserve": "A number of NFT you wish to reserve for yourself before the drop.",
+        "collectionRevocable": "Collection owner can destroy NFT(s) at any point in time.",
         "collectionRoyaltiesAddress": "",
         "collectionRoyaltiesFees": "",
         "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
-        "collectionSupplyLimited": "It refers to the overall number of NFTs in your NFT collection. If limited, specify how many there will be in total.",
-        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
-        "collectionTotalSupply": "It refers to the overall number of NFTs in your NFT collection. If limited, specify how many there will be in total."
+        "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
+        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection."
       },
       "status": {
         "0": "CREATED",
@@ -701,27 +704,34 @@
         "5": "FAILED"
       }
     },
+    "deploy": {
+      "collection": "Creating collection",
+      "deploying": "Deploying your NFTs",
+      "metadata": "Uploading metadata",
+      "nft": "Deploying NFTs"
+    },
     "metadata": {
       "createBucket": "Create a bucket",
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
       "infoCollectionBehaviour": "Configure the behaviour of your NFT collection. ",
-      "infoCollectionName": "Enter the name and the symbol for your NFT collection.",
-      "infoNew": "To ensure permanent access to your NFT files, you need to store its metadata and images on the web. \n\nWould you like to store your metadata in decentralized way?",
+      "infoCollectionName": "Define the name and symbol for your NFT collection.",
+      "infoNew": "To ensure permanent access to your NFTs, you need to store their metadata and files on the web. \n\nWould you like to store your NFT metadata in decentralized way?",
       "no": "I already have it online",
       "orSelectExisting": "or select existing bucket",
       "proceedUpload": "Proceed to upload",
       "selectBucket": "Continue with selected bucket",
-      "title": "NFT metadata",
+      "title": "Prepare NFT metadata",
       "titleBucket": "Let’s get you a bucket",
       "titleBucketCreation": "Bucket creation in progress",
       "titleBucketCreated": "Bucket successfully created",
       "titleCollectionBehaviour": "Behaviour",
-      "titleCollectionName": "Name and symbol",
+      "titleCollectionName": "Name your collection",
       "yes": "Yes, proceed"
     },
     "transaction": {
+      "chain": "Chain",
       "chainId": "Chain ID",
       "empty": "Your project has currently no transactions",
       "emptyInfo": "If you just deployed your collection, please wait a minute for the collection to deploy.",
@@ -745,21 +755,25 @@
       "attributes": "Metadata attributes",
       "csvConfirm": "Confirm CSV data",
       "csvConfirmAttributes": "Confirm attributes",
-      "csvFile": "Upload CSV file",
+      "csvFile": "Select CSV file",
       "csvFileDesc": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
       "deploy": "Deploy",
+      "deployError": "There is a problem with deploy.",
       "downloadCsv": "Download CSV example",
       "differentFile": "Upload different file",
       "dragAndDrop": "Drag & drop or click to upload.",
-      "images": "Upload NFT images",
+      "images": "Upload files",
       "imagesConfirm": "Confirm & upload images",
       "imagesDesc": "",
-      "infoFile": "Upload CSV file with NFT metadata in order to create your collection.",
-      "infoImages": "Now, upload NFT images that match your CSV file in order to create your NFT collection.",
+      "infoFile": "This is the first step to your NFT collection. The file names in the CSV record should match the names of NFT files you upload in the next step.",
+      "infoImages": "Now, upload NFT files for your NFT collection, images or other media. File names should match those in the CSV metadata record from the previous step.",
       "preview": "Preview upload",
+      "previewConfirm": "Looks good, proceed",
       "previewNfts": "Preview your NFTs",
       "selectAttributes": "Select attributes",
-      "takeMeBack": "Take me back"
+      "takeMeBack": "Take me back",
+      "titleCsv": "Upload metadata in CSV file",
+      "titleImage": "Upload NFT files"
     },
     "validation": {
       "csvMissingAttributes": "Are you sure you want to continue with no attirubtes?",
@@ -769,6 +783,7 @@
       "imagesMissing": "Missing images:",
       "imagesInvalid": "Invalid image names. Example: "
     },
+    "openBucket": "Go to storage",
     "transactionType": "Transaction Type"
   },
   "profile": {
@@ -902,9 +917,11 @@
       "management": "Bucket management",
       "name": "Bucket name",
       "new": "New bucket",
+      "nft": "Storage bucket",
       "noActiveService": "You need a storage bucket before you can start storing files. ",
       "nothingHere": "Nothing here",
       "storage": "Storage bucket",
+      "type": "Bucket type",
       "update": "Update bucket",
       "uuid": "Bucket Uuid",
       "quotaReached": "Quota has been reached."
@@ -980,6 +997,11 @@
       "uploading": "Uploading",
       "uploadMore": "Add more files",
       "uploadNow": "Upload now"
+    },
+    "type": {
+      "1": "Storage",
+      "2": "Hosting",
+      "3": "NFT metadata"
     },
     "contentType": "Content type",
     "downloadLink": "Download link",
@@ -1057,6 +1079,7 @@
     "collectionNameRequired": "Please enter Collection name",
     "collectionReserve": "Number of reserved NFTs can be equal or lower than max supply.",
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
+    "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
     "collectionSymbolRequired": "Please enter Collection symbol",
     "creditCard": "Credit card validation error",
     "creditCardRequired": "Please enter credit card number",
