@@ -29,6 +29,7 @@ const config: ConfigInterface = {
     'MONITORING',
     'TWO_FACTOR_AUTHENTICATION',
     'WALLET_LOGIN',
+    'KILT_LOGIN',
   ],
   betaFeatures: [],
 };

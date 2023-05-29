@@ -6,9 +6,12 @@
 
     <!-- Wallet -->
     <template v-if="isLg && isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())">
-      <AuthWalletLogin class="w-full" />
+      <AuthWalletLogin class="w-full mb-4" />
     </template>
 
+    <template v-if="isLg && isFeatureEnabled(Feature.KILT_LOGIN, authStore.getUserRoles())">
+      <AuthLoginKilt class="w-full mb-4" />
+    </template>
     <!-- Magic link -->
     <template v-if="isFeatureEnabled(Feature.MAGIC_LINK, authStore.getUserRoles())">
       <Btn type="secondary" class="w-full mt-2">

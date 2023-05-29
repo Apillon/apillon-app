@@ -26,6 +26,7 @@ export enum Feature {
   STORAGE = 'STORAGE',
   TWO_FACTOR_AUTHENTICATION = 'TWO_FACTOR_AUTHENTICATION',
   WALLET_LOGIN = 'WALLET_LOGIN',
+  KILT_LOGIN = 'KILT_LOGIN',
 }
 export enum AppEnv {
   PROD = 'production',
