@@ -117,8 +117,6 @@ async function loginWithKilt() {
     });
     authStore.saveUser(res.data);
 
-    console.log(res.data);
-
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     dataStore.project.items = await dataStore.fetchProjects(true);
   } catch (error) {
