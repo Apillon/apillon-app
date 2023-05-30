@@ -36,11 +36,6 @@
     <!-- Form -->
     <AuthFormLogin />
 
-    <!-- Separator -->
-    <SeparatorText>
-      <button id="apillon" @click="openPopup()">KILT LOGIN</button>
-    </SeparatorText>
-
     <!-- Links -->
     <n-space vertical>
       <div>
