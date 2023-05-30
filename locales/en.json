@@ -20,7 +20,8 @@
       "resetPassword": "Reset password",
       "title": "Log in to Apillon",
       "wallet": "Log in with Wallet",
-      "withEmail": "login with email"
+      "withEmail": "login with email",
+      "kilt": "LOGIN WITH KILT"
     },
     "onboarding": {
       "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",

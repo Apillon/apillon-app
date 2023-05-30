@@ -3,13 +3,12 @@
     <div class="flex items-center">
       <NuxtIcon :name="`auth/kilt-logo`" class="text-xl align-sub mr-2" filled />
       <span class="text-xl align-sub mr-2"></span>
-      LOGIN WITH KILT
+      {{ $t('auth.login.kilt') }}
     </div>
   </Btn>
 </template>
 
 <script lang="ts" setup>
-import { getAppConfig } from '../../lib/utils';
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const loading = ref(false);
