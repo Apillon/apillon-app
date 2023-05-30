@@ -9,6 +9,7 @@
 </template>
 
 <script lang="ts" setup>
+const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const loading = ref(false);
@@ -73,7 +74,7 @@ async function getOauthSession() {
 
 function openPopup() {
   childWindow.value = window.open(
-    `${getAppConfig().oauthUrl}?embedded=1&token=${sessionToken.value}`,
+    `${config.public.oauthUrl}?embedded=1&token=${sessionToken.value}`,
     'Apillon Auth Form',
     `height=${900} width=${450} resizable=no`
   ) as Window & typeof globalThis;
