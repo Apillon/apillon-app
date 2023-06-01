@@ -9,9 +9,16 @@
       <AuthWalletLogin class="w-full mb-4" />
     </template>
 
-    <template v-if="isLg && isFeatureEnabled(Feature.KILT_LOGIN, authStore.getUserRoles())">
+    <template
+      v-if="
+        isLg &&
+        isFeatureEnabled(Feature.KILT_LOGIN, authStore.getUserRoles()) &&
+        sessionToken !== ''
+      "
+    >
       <AuthLoginKilt class="w-full mb-4" />
     </template>
+
     <!-- Magic link -->
     <template v-if="isFeatureEnabled(Feature.MAGIC_LINK, authStore.getUserRoles())">
       <Btn type="secondary" class="w-full mt-2">
@@ -95,14 +102,6 @@ onMounted(async () => {
 onUnmounted(() => {
   window.removeEventListener('message', handlerFunction.value, false);
 });
-
-function openPopup() {
-  childWindow.value = window.open(
-    `${getAppConfig().oauthUrl}?embedded=1&token=${sessionToken.value}`,
-    'Apillon Auth Form',
-    `height=${900} width=${450} resizable=no`
-  ) as Window & typeof globalThis;
-}
 
 async function loginWithKilt() {
   try {
