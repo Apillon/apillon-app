@@ -47,7 +47,6 @@ const props = defineProps({
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const $i18n = useI18n();
-const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
@@ -118,9 +117,6 @@ async function createWebsiteDomain() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess');
-
-    /** Redirect to new web page */
-    router.push(`/dashboard/service/hosting/${res.data.id}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
