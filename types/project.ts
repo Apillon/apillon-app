@@ -77,7 +77,7 @@ declare global {
     user_id: number;
     role_id: number;
     name: string;
-    phone: string;
+    phone?: string | null;
     email: string;
     pendingInvitation: number;
     loading?: boolean;

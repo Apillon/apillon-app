@@ -8,7 +8,7 @@ declare global {
     id: number;
     email: string;
     name: string;
-    phone: string;
+    phone?: string | null;
     status: number;
     user_uuid: string;
     userRoles: number[];

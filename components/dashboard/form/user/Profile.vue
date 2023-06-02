@@ -27,17 +27,6 @@
       />
     </n-form-item>
 
-    <!--  Phone -->
-    <n-form-item path="phone" :label="$t('form.label.phone')" :label-props="{ for: 'phone' }">
-      <n-input
-        v-model:value="formData.phone"
-        :input-props="{ id: 'phone' }"
-        :placeholder="$t('form.placeholder.phone')"
-        :loading="loadingForm"
-        @input="handlePhoneNumberInput"
-      />
-    </n-form-item>
-
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.save')" />
@@ -68,7 +57,6 @@ const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormUserProfile>({
   name: authStore.username,
   email: authStore.email,
-  phone: authStore.phone,
 });
 
 onMounted(() => {
@@ -78,7 +66,6 @@ onMounted(() => {
       if (!formData.value.name || !formData.value.email) {
         formData.value.name = authStore.username;
         formData.value.email = authStore.email;
-        formData.value.phone = authStore.phone;
       }
       loadingForm.value = false;
     });
@@ -97,49 +84,7 @@ const rules: NFormRules = {
       message: $i18n.t('validation.emailRequired'),
     },
   ],
-  phone: [
-    {
-      validator: validatePhone,
-      message: $i18n.t('validation.phone'),
-    },
-  ],
 };
-
-// Custom validations
-function validatePhone(_: NFormItemRule, value: string): boolean {
-  const regex = /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
-
-  return !value || regex.test(value);
-}
-
-/** Format phone number */
-function handlePhoneNumberInput(value: string | [string, string]) {
-  const data = textMarshal({
-    input: value,
-    template: 'x',
-    disallowCharacters: [
-      /[a-z]/,
-      /[A-Z]/,
-      /@/,
-      /\\/,
-      /\//,
-      /\|/,
-      /\!/,
-      /\#/,
-      /\$/,
-      /\%/,
-      /\^/,
-      /\&/,
-      /\*/,
-    ],
-    isRepeat: {
-      value: true,
-      removeStart: true,
-      removeEnd: true,
-    },
-  });
-  formData.value.phone = data.marshaltext;
-}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
