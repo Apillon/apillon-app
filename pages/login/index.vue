@@ -68,7 +68,6 @@
 </template>
 
 <script lang="ts" setup>
-import { getAppConfig } from '../../lib/utils';
 const { t } = useI18n();
 const { isLg } = useScreen();
 const authStore = useAuthStore();
