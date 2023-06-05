@@ -583,6 +583,7 @@
     "domain": {
       "add": "Add domain",
       "configure": "Configure domain",
+      "editDisabled": "Website domain can be changed every 15 minutes. ",
       "preview": "Domain preview",
       "setup": "Setup domain",
       "update": "Update domain"

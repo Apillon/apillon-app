@@ -147,9 +147,10 @@ async function updateWebsiteDomain() {
 
 function updateWebsiteDomainValue(domain) {
   /** On website updated refresh website data */
-  websiteStore.items.forEach((item: WebsiteInterface) => {
+  websiteStore.items.forEach((item: WebsiteBaseInterface) => {
     if (item.id === props.websiteId) {
       item.domain = domain;
+      item.updateTime = new Date().toISOString();
     }
   });
   if (websiteStore.active.id === props.websiteId) {

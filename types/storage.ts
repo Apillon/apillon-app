@@ -294,6 +294,7 @@ declare global {
     name: string;
     description: string;
     domain: string;
+    updateTime?: string;
   }
   interface WebsiteInterface {
     id: number;
@@ -323,6 +324,7 @@ declare global {
   }
   interface WebsiteResponse extends GeneralResponse<WebsiteInterface> {}
   interface WebsiteUpdateResponse extends GeneralResponse<WebsiteInterface> {}
+  interface WebsitesBaseResponse extends GeneralItemsResponse<WebsiteBaseInterface> {}
   interface WebsitesResponse extends GeneralItemsResponse<WebsiteInterface> {}
   interface WebsiteQuotaResponse extends GeneralResponse<boolean> {}
   interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
