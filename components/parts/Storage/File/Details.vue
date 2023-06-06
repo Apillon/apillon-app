@@ -43,7 +43,9 @@
             {{
               fileExpiration(
                 parseInt(crustFileStatus.calculated_at),
-                parseInt(crustFileStatus.expired_at)
+                parseInt(crustFileStatus.expired_at),
+                file.updateTime,
+                currentBlockId
               )
             }}
           </strong>
@@ -98,10 +100,12 @@ const fileStore = useFileStore();
 const fileDetails = ref<FileInterface>({} as FileInterface);
 const fileStatus = ref<number>(0);
 const crustFileStatus = ref<FileCrust>({} as FileCrust);
+const currentBlockId = ref<number>(0);
 
 onMounted(async () => {
   await getFileDetails(props.file?.CID || props.file.file_uuid);
   if (props.file.CID) {
+    currentBlockId.value = await fileStore.getCurrentBlockFromCrust();
     await getcrustFileStatus(props.file.CID);
   }
 });
