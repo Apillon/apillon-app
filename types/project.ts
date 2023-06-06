@@ -42,7 +42,6 @@ declare global {
   }
 
   interface ProjectInterface {
-    id: number;
     status: number;
     name: string;
     description: string;
@@ -50,7 +49,7 @@ declare global {
     imageFile_id: number | null;
     myRole_id_onProject?: number;
     project_uuid: string;
-    value?: number;
+    value?: string;
     label?: string;
   }
 

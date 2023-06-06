@@ -72,18 +72,18 @@ onMounted(() => {
 /** Watcher - project change */
 watch(
   () => dataStore.project.selected,
-  async (projectId, oldProjectId) => {
+  async (projectUuid, oldProjectUuid) => {
     /** Clear all stored data */
     clearAll();
 
     /** Save current project ID to LS and redirect to Dashboard */
-    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${projectId}`);
-    if (projectId !== oldProjectId && oldProjectId > 0) {
+    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, projectUuid);
+    if (projectUuid !== oldProjectUuid && oldProjectUuid !== '') {
       router.push({ name: 'dashboard' });
     }
 
-    /** Reload projects if projectId is new project */
-    if (!dataStore.project.items.some(project => project.id === projectId)) {
+    /** Reload projects if projectUuid is new project */
+    if (!dataStore.project.items.some(project => project.project_uuid === projectUuid)) {
       loading.value = true;
       dataStore.project.items = [];
 
