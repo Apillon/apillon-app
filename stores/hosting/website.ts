@@ -44,11 +44,6 @@ export const useWebsiteStore = defineStore('website', {
       }
     },
 
-    getWebsiteUpdateTime(id: number): string | null | undefined {
-      const website = this.items.find(item => item.id === id);
-      return website ? website.updateTime : null;
-    },
-
     /**
      * Fetch wrappers
      */

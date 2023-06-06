@@ -64,11 +64,11 @@ onMounted(() => {
 });
 
 const domain = computed<string>(() => {
-  return websiteStore.active.domain;
+  return websiteStore.active.domain || '';
 });
 
 const editEnabled = computed<boolean>(() => {
-  const time = websiteStore.getWebsiteUpdateTime(websiteId.value);
+  const time = websiteStore.active.domainChangeDate;
   return time && domain.value ? new Date(time).getTime() + 15 * 60 * 1000 < Date.now() : true;
 });
 </script>

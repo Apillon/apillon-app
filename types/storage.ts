@@ -287,15 +287,13 @@ declare global {
   interface WebsiteBaseInterface {
     id: number;
     status: number;
-    project_uuid: string;
     name: string;
     description: string;
-    domain: string;
+    website_uuid: string;
+    domain: string | null;
     domainChangeDate: string | null;
-    updateTime?: string;
   }
   interface WebsiteInterface extends WebsiteBaseInterface {
-    website_uuid: string;
     bucket_uuid: string;
     bucket: BucketInterface;
     stagingBucket: BucketInterface;
