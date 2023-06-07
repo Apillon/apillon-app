@@ -45,6 +45,8 @@ declare global {
   }
   interface PasswordResetForm {
     email: string;
+    captcha?: any;
+    refCode?: string;
   }
   interface RegisterInterface extends UserInterface {
     token: string;

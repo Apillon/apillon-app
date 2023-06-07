@@ -239,7 +239,6 @@
     "404": "Page not found",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
-
     "BAD_REQUEST": "There is a problem with this request. Please come back later when we fixed that problem.",
     "INVALID_PATH": "Invalid path",
     "INVALID_QUERY_PARAMETERS": "Invalid query parameters",
@@ -249,13 +248,11 @@
     "FORBIDDEN": "You don't have permission for this action",
     "USER_IS_NOT_AUTHORIZED": "User is not authorized",
     "Insufficient permissions to modify this record": "You don't have permission for this action",
-
     "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error, please fill the form",
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
     "ERR_CONNECTION_REFUSED": "Connection refused, please check your internet connection.",
     "Failed to fetch": "Connection refused, please check your internet connection.",
     "jwt expired": "Your session has expired, please log in again.",
-
     "API_KEY_NOT_PRESENT": "API key is missing",
     "API_KEY_SECRET_NOT_PRESENT": "API key secret is missing",
     "API_KEY_PROJECT_UUID_NOT_PRESENT": "API_KEY_PROJECT_UUID is missing",
@@ -265,7 +262,6 @@
     "API_KEY_ROLE_PROJECT_UUID_NOT_PRESENT": "API_KEY_ROLE_PROJECT_UUID is missing",
     "API_KEY_ROLE_ROLE_ID_NOT_VALID": "API_KEY_ROLE_ROLE_ID is not valid",
     "CREATE_API_KEY_PROJECT_UUID_NOT_PRESENT": "CREATE_API_KEY_PROJECT_UUID is missing",
-
     "BUCKET_PROJECT_UUID_NOT_PRESENT": "Bucket project ID is missing",
     "BUCKET_STORAGE_PLAN_ID_NOT_PRESENT": "Bucket storage plain ID is missing",
     "BUCKET_NAME_NOT_PRESENT": "Bucekt name is missing",
@@ -283,16 +279,13 @@
     "WEB_PAGE_NOT_FOUND": "Web page not found",
     "PUBLISH_IPNS_CID_NOT_PRESENT": "CID is missing",
     "MAX_BUCKET_SIZE_REACHED": "Maximum bucket size reached. The current bucket has reached its maximum capacity, and no additional data can be stored.",
-
     "FILE_NAME_NOT_PRESENT": "File name is missing",
     "FILE_EXTENSION_NOT_PRESENT": "File extension is missing",
     "FILE_CONTENT_TYPE_NOT_PRESENT": "File content is missing",
     "FILE_VERSION_NOT_PRESENT": "File version is missing",
     "FILE_BODY_NOT_PRESENT": "File body is missing",
     "FILE_NOT_FOUND": "File not found",
-
     "WEBSITE_DOMAIN_CHANGE_NOT_ALLOWED": "Website domain can be changed every 15 minutes. ",
-
     "STATUS_NOT_PRESENT": "Status not present",
     "INVALID_STATUS": "Invalid status",
     "EMAIL_NOT_PRESENT": "Email is missing",
@@ -310,7 +303,6 @@
     "USER_AUTH_TOKEN_EXPIRES_IN_NOT_PRESENT": "AUTH_TOKEN_EXPIRES is missing",
     "USER_AUTH_TOKEN_TYPE_NOT_PRESENT": "AUTH_TOKEN_TYPE is missing",
     "CANNOT_MODIFY_PROJECT_OWNER": "Can't modify project owner",
-
     "PROJECT_NAME_NOT_PRESENT": "Project name is missing",
     "PROJECT_UUID_NOT_PRESENT": "Project UUID is missing",
     "PROJECT_ID_NOT_PRESENT": "Project ID is missing",
@@ -318,7 +310,6 @@
     "SERVICE_TYPE_NOT_PRESENT": "Service type is missing",
     "SERVICE_UUID_NOT_PRESENT": "Service UUID is missing",
     "SERVICE_PROJECT_ID_NOT_PRESENT": "Project ID is missing",
-
     "API": "There has been an error. Please come back later when we fixed that problem.",
     "DEFAULT_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
     "UNHANDLED_SYSTEM_ERROR": "There has been an error. Please come back later when we fixed that problem.",
@@ -328,9 +319,7 @@
     "ERROR_WRITING_TO_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
     "ERROR_READING_FROM_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
     "SERVICE_ERROR": "There has been an error. Please come back later when we fixed that problem.",
-
     "NO_CHANGES_TO_DEPLOY": "There have been no changes to your website. First, make some changes and deploy them to the staging.",
-
     "NFT_BASE_URI_NOT_PRESENT": "NFT base uri not present",
     "NFT_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
     "NFT_DROP_BOOL_NOT_PRESENT": "NFT drop not present",
@@ -344,7 +333,6 @@
     "NFT_DEPLOY_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
     "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid EVM address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
-
     "walletSignature": "'Could not capture your signature, check your wallet connection",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
@@ -487,7 +475,7 @@
       "nftMint": "Minting NFT requested.",
       "nftTransfer": "NFT ownership has been transferred",
       "profile": "Your profile data has been updated",
-      "requestPasswordChange": "We've sent you a password reset request to your email",
+      "requestPasswordChange": "Check your mailbox! If nothing is there, we couldn't find your account.",
       "sendAgainEmail": "Email has been re-sent",
       "websiteDeployed": "Website has been deployed.",
       "websiteDeploying": "Done - deployment initiated",
