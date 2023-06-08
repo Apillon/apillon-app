@@ -25,14 +25,14 @@ const Endpoints = {
   projects: '/projects',
   projectsQuota: '/projects/qouta-reached',
   projectsUserProjects: '/projects/user-projects',
-  project: (projectId: number) => {
-    return `/projects/${projectId}`;
+  project: (projectUuid: string) => {
+    return `/projects/${projectUuid}`;
   },
-  projectUsers: (projectId: number) => {
-    return `/projects/${projectId}/users`;
+  projectUsers: (projectUuid: string) => {
+    return `/projects/${projectUuid}/users`;
   },
-  projectInviteUser: (projectId: number) => {
-    return `/projects/${projectId}/invite-user`;
+  projectInviteUser: (projectUuid: string) => {
+    return `/projects/${projectUuid}/invite-user`;
   },
   projectUserRole: (id: number) => {
     return `/projects/user/${id}`;

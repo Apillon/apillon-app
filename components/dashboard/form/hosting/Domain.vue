@@ -150,7 +150,7 @@ function updateWebsiteDomainValue(domain) {
   websiteStore.items.forEach((item: WebsiteBaseInterface) => {
     if (item.id === props.websiteId) {
       item.domain = domain;
-      item.updateTime = new Date().toISOString();
+      item.domainChangeDate = new Date().toISOString();
     }
   });
   if (websiteStore.active.id === props.websiteId) {

@@ -161,7 +161,7 @@ async function createWebsite() {
     message.success($i18n.t('form.success.created.website'));
 
     /** On new website created add new website to list */
-    websiteStore.items.push(res.data);
+    websiteStore.items.push(res.data as WebsiteBaseInterface);
 
     /** Reset website qouta limit */
     websiteStore.quotaReached = undefined;
@@ -190,7 +190,7 @@ async function updateWebsite() {
     message.success($i18n.t('form.success.updated.website'));
 
     /** On website updated refresh website data */
-    websiteStore.items.forEach((item: WebsiteInterface) => {
+    websiteStore.items.forEach((item: WebsiteBaseInterface) => {
       if (item.id === props.websiteId) {
         item.name = res.data.name;
         item.description = res.data.description;

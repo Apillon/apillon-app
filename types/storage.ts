@@ -287,26 +287,17 @@ declare global {
   interface WebsiteBaseInterface {
     id: number;
     status: number;
-    project_uuid: string;
-    bucket_id: number;
-    stagingBucket_id: number;
-    productionBucket_id: number;
     name: string;
     description: string;
-    domain: string;
-    updateTime?: string;
-  }
-  interface WebsiteInterface {
-    id: number;
-    status: number;
     website_uuid: string;
+    domain: string | null;
+    domainChangeDate: string | null;
+  }
+  interface WebsiteInterface extends WebsiteBaseInterface {
     bucket_uuid: string;
     bucket: BucketInterface;
     stagingBucket: BucketInterface;
     productionBucket: BucketInterface;
-    name: string;
-    description: string;
-    domain: string;
     ipnsStagingLink: string | null;
     ipnsProductionLink: string | null;
   }
