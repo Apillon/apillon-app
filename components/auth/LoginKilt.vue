@@ -1,4 +1,4 @@
-<template v-if="sessionToken !== ''">
+<template>
   <Btn v-bind="$attrs" type="primary" @click="openPopup()">
     <div class="flex items-center">
       <NuxtIcon :name="`auth/kilt-logo`" class="text-xl align-sub mr-2" filled />
@@ -12,14 +12,15 @@
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const sessionToken = ref<string | undefined>('');
 const oauthAuthToken = ref<string | undefined>('');
 const childWindow = ref<(Window & typeof globalThis) | undefined>();
 const handlerFunction = ref();
 
-onMounted(async () => {
-  sessionToken.value = await getOauthSession();
+const props = defineProps({
+  sessionToken: { type: String, default: '' },
+});
 
+onMounted(() => {
   // Handler function for the message event from the oauth module
   handlerFunction.value = async event => {
     if (event.data.verified) {
@@ -54,18 +55,9 @@ async function loginWithKilt() {
   }
 }
 
-async function getOauthSession() {
-  try {
-    const response = await $api.get<OauthSessionResponse>(endpoints.oauthSession);
-    return response.data.data.session;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 function openPopup() {
   childWindow.value = window.open(
-    `${config.public.oauthUrl}?embedded=1&token=${sessionToken.value}`,
+    `${config.public.oauthUrl}?embedded=1&token=${props.sessionToken}`,
     'Apillon Auth Form',
     `height=${900} width=${450} resizable=no`
   ) as Window & typeof globalThis;
