@@ -72,6 +72,7 @@ const { deployCollection } = useNft();
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
 
 const deployStatus = ref<number>(0);
@@ -162,6 +163,7 @@ async function deploy() {
     collectionStore.quotaReached = undefined;
     collectionStore.resetMetadata();
     collectionStore.resetForms();
+    bucketStore.resetData();
 
     /** Deployment status */
     deployStatus.value = NftDeployStatus.DEPLOYED;
