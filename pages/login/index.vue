@@ -6,7 +6,13 @@
 
     <!-- Wallet -->
     <template v-if="isLg && isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())">
-      <AuthWalletLogin class="w-full" />
+      <AuthWalletLogin class="w-full mb-4" />
+    </template>
+
+    <template
+      v-if="isLg && isFeatureEnabled(Feature.KILT_LOGIN, authStore.getUserRoles()) && oauthToken"
+    >
+      <AuthLoginKilt class="w-full mb-4" :session-token="oauthToken" />
     </template>
 
     <!-- Magic link -->
@@ -61,6 +67,7 @@
 const { t } = useI18n();
 const { isLg } = useScreen();
 const authStore = useAuthStore();
+const oauthToken = ref<string | undefined>('');
 
 definePageMeta({
   layout: 'auth',
@@ -68,4 +75,17 @@ definePageMeta({
 useHead({
   title: t('auth.login.title'),
 });
+
+onMounted(async () => {
+  oauthToken.value = await getOauthSession();
+});
+
+async function getOauthSession() {
+  try {
+    const response = await $api.get<OauthSessionResponse>(endpoints.oauthSession);
+    return response.data.data.session;
+  } catch (error) {
+    console.error(error);
+  }
+}
 </script>

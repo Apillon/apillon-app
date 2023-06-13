@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
 
 export const DataLsKeys = {
-  CURRENT_PROJECT_ID: 'al_current_project_id',
+  CURRENT_PROJECT_ID: 'al_current_project_uuid',
 };
 
 export const useDataStore = defineStore('data', {
@@ -12,9 +12,7 @@ export const useDataStore = defineStore('data', {
     project: {
       active: {} as ProjectInterface,
       items: [] as Array<ProjectInterface>,
-      selected: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
-        ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
-        : 0,
+      selected: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID) || '',
       quotaReached: undefined as Boolean | undefined,
     },
     promises: {
@@ -41,14 +39,16 @@ export const useDataStore = defineStore('data', {
       if (!this.hasProjects) {
         return null;
       }
-      /** Return project with currentProjectId, if this ID does not exists, return first project */
-      const project = state.project.items.find(project => project.id === state.project.selected);
+      /** Return project with currentProjectUuid, if this ID does not exists, return first project */
+      const project = state.project.items.find(
+        project => project.project_uuid === state.project.selected
+      );
       if (project) {
         return project;
       }
-      /** Select first project as fallback if currentProjectId is not available */
-      this.project.selected = state.project.items[0].id;
-      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${this.project.selected}`);
+      /** Select first project as fallback if currentProjectUuid is not available */
+      this.project.selected = state.project.items[0].project_uuid;
+      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, this.project.selected);
       return state.project.items[0];
     },
     projectUuid(state): string {
@@ -56,7 +56,7 @@ export const useDataStore = defineStore('data', {
         state.project.active.project_uuid ||
         (
           state.project.items.find(
-            (item: ProjectInterface) => item.id === state.project.selected
+            (item: ProjectInterface) => item.project_uuid === state.project.selected
           ) || ({} as ProjectInterface)
         )?.project_uuid ||
         ''
@@ -78,30 +78,32 @@ export const useDataStore = defineStore('data', {
       this.services.computing = [] as Array<ServiceInterface>;
     },
 
-    setCurrentProject(id: number) {
+    setCurrentProject(uuid: string) {
       /** Reset store data */
       this.resetData();
 
-      this.project.selected = id;
-      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
+      this.project.selected = uuid;
+      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, uuid);
     },
 
     resetCurrentProject() {
       /** Reset store data */
       this.resetData();
 
-      this.project.selected = 0;
+      this.project.selected = '';
       localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
     updateCurrentProject(project: ProjectInterface) {
       /** Find index of specific object using findIndex method. */
-      const projectIndex = this.project.items.findIndex(item => item.id === project.id);
+      const projectIndex = this.project.items.findIndex(
+        item => item.project_uuid === project.project_uuid
+      );
 
       /** Update current project, add value and label, which are used in header dropdown */
       this.project.items[projectIndex] = {
         ...project,
-        value: project.id,
+        value: project.project_uuid,
         label: project.name,
       };
     },
@@ -149,11 +151,14 @@ export const useDataStore = defineStore('data', {
       return this.project.items;
     },
 
-    async getProject(projectId: number): Promise<ProjectInterface> {
-      if (this.project.active?.id === projectId && !isCacheExpired(LsCacheKeys.PROJECT)) {
+    async getProject(projectUuid: string): Promise<ProjectInterface> {
+      if (
+        this.project.active?.project_uuid === projectUuid &&
+        !isCacheExpired(LsCacheKeys.PROJECT)
+      ) {
         return this.project.active;
       }
-      return await this.fetchProject(projectId);
+      return await this.fetchProject(projectUuid);
     },
 
     /** GET Project quota, if current value is undefined  */
@@ -215,7 +220,7 @@ export const useDataStore = defineStore('data', {
         const projects = res.data.items.map((project: ProjectInterface) => {
           return {
             ...project,
-            value: project.id,
+            value: project.project_uuid,
             label: project.name,
           };
         });
@@ -223,8 +228,8 @@ export const useDataStore = defineStore('data', {
         const hasProjects = res.data.total > 0;
 
         /* If current project is not selected, take first one */
-        if (this.project.selected === 0 && hasProjects) {
-          this.setCurrentProject(this.project.items[0].id);
+        if (this.project.selected === '' && hasProjects) {
+          this.setCurrentProject(this.project.items[0].project_uuid);
         }
 
         /** Save timestamp to SS */
@@ -250,13 +255,13 @@ export const useDataStore = defineStore('data', {
       return [];
     },
 
-    async fetchProject(projectId?: number): Promise<ProjectInterface> {
-      const id = projectId || this.project.selected;
-      if (!id || id < 1) {
+    async fetchProject(projectUuid?: string): Promise<ProjectInterface> {
+      const uuid = projectUuid || this.projectUuid;
+      if (!uuid) {
         return {} as ProjectInterface;
       }
       try {
-        const res = await $api.get<ProjectResponse>(endpoints.project(id));
+        const res = await $api.get<ProjectResponse>(endpoints.project(uuid));
         this.project.active = res.data;
 
         /** Save timestamp to SS */
@@ -293,7 +298,8 @@ export const useDataStore = defineStore('data', {
 
       try {
         const params: Record<string, string | number> = {
-          project_id: this.project.selected,
+          uuid: this.projectUuid,
+          project_uuid: this.projectUuid,
           ...PARAMS_ALL_ITEMS,
         };
         if (type) {

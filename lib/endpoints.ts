@@ -10,10 +10,12 @@ const Endpoints = {
   /** User */
   me: '/users/me',
   login: '/users/login',
+  loginWithKilt: '/users/login-kilt',
   register: '/users/register',
   validateMail: '/users/validate-email',
   passwordReset: '/users/password-reset',
   passwordResetRequest: '/users/password-reset-request',
+  oauthSession: '/users/oauth-session',
 
   /**
    * Dashboard
@@ -23,14 +25,14 @@ const Endpoints = {
   projects: '/projects',
   projectsQuota: '/projects/qouta-reached',
   projectsUserProjects: '/projects/user-projects',
-  project: (projectId: number) => {
-    return `/projects/${projectId}`;
+  project: (projectUuid: string) => {
+    return `/projects/${projectUuid}`;
   },
-  projectUsers: (projectId: number) => {
-    return `/projects/${projectId}/users`;
+  projectUsers: (projectUuid: string) => {
+    return `/projects/${projectUuid}/users`;
   },
-  projectInviteUser: (projectId: number) => {
-    return `/projects/${projectId}/invite-user`;
+  projectInviteUser: (projectUuid: string) => {
+    return `/projects/${projectUuid}/invite-user`;
   },
   projectUserRole: (id: number) => {
     return `/projects/user/${id}`;

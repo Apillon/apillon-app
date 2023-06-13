@@ -47,7 +47,6 @@ const props = defineProps({
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const $i18n = useI18n();
-const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
@@ -118,9 +117,6 @@ async function createWebsiteDomain() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess');
-
-    /** Redirect to new web page */
-    router.push(`/dashboard/service/hosting/${res.data.id}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -151,9 +147,10 @@ async function updateWebsiteDomain() {
 
 function updateWebsiteDomainValue(domain) {
   /** On website updated refresh website data */
-  websiteStore.items.forEach((item: WebsiteInterface) => {
+  websiteStore.items.forEach((item: WebsiteBaseInterface) => {
     if (item.id === props.websiteId) {
       item.domain = domain;
+      item.domainChangeDate = new Date().toISOString();
     }
   });
   if (websiteStore.active.id === props.websiteId) {

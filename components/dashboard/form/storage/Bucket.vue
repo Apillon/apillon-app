@@ -220,7 +220,7 @@ async function createBucket() {
     emit('submitSuccess');
     emit('createSuccess', res.data);
 
-    /** Redirect to new web page */
+    /** Redirect to new bucket */
     if (props.bucketType !== BucketType.NFT_METADATA) {
       router.push(`/dashboard/service/storage/${res.data.id}`);
     }

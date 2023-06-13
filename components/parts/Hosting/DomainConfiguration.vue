@@ -16,18 +16,21 @@
       <strong>Hostname: </strong>
       <template v-if="websiteStore.active.domain || domain">
         <span> {{ websiteStore.active.domain || domain }} </span>
-        <button class="ml-2" @click="copyToClipboard(`${websiteStore.active.domain || domain}`)">
+        <span
+          class="inline-block cursor-pointer ml-2"
+          @click="copyToClipboard(`${websiteStore.active.domain || domain}`)"
+        >
           <span class="icon-copy"></span>
-        </button>
+        </span>
       </template>
       <span v-else>&lt;your domain name&gt;</span>
     </p>
     <p class="lg:whitespace-nowrap">
       <strong>Value: </strong>
       <span>52.19.92.40</span>
-      <button class="ml-2" @click="copyToClipboard(`52.19.92.40`)">
+      <span class="inline-block cursor-pointer ml-2" @click="copyToClipboard(`52.19.92.40`)">
         <span class="icon-copy"></span>
-      </button>
+      </span>
     </p>
     <br />
 
@@ -36,21 +39,24 @@
       <strong>Hostname: </strong>
       <template v-if="websiteStore.active.domain || domain">
         <span> _dnslink.{{ websiteStore.active.domain || domain }} </span>
-        <button
-          class="ml-2"
+        <span
+          class="inline-block cursor-pointer ml-2"
           @click="copyToClipboard(`_dnslink.${websiteStore.active.domain || domain}`)"
         >
           <span class="icon-copy"></span>
-        </button>
+        </span>
       </template>
       <span v-else>_dnslink.&lt;your domain name&gt;</span>
     </p>
     <p v-if="bucketStore.active.IPNS" class="lg:whitespace-nowrap">
       <strong>Value: </strong>
       <span>dnslink=/ipns/{{ bucketStore.active.IPNS }}</span>
-      <button class="ml-2" @click="copyToClipboard(`dnslink=/ipns/${bucketStore.active.IPNS}`)">
+      <span
+        class="inline-block cursor-pointer ml-2"
+        @click="copyToClipboard(`dnslink=/ipns/${bucketStore.active.IPNS}`)"
+      >
         <span class="icon-copy"></span>
-      </button>
+      </span>
     </p>
     <p v-else class="lg:whitespace-nowrap">
       <strong>Value: </strong>

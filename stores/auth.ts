@@ -36,9 +36,6 @@ export const useAuthStore = defineStore('auth', {
     username(state) {
       return state.user.name;
     },
-    phone(state) {
-      return state.user.phone;
-    },
     allowedEntry: state => !!state.jwt,
   },
   actions: {
