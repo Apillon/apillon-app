@@ -303,6 +303,7 @@
     "USER_AUTH_TOKEN_EXPIRES_IN_NOT_PRESENT": "AUTH_TOKEN_EXPIRES is missing",
     "USER_AUTH_TOKEN_TYPE_NOT_PRESENT": "AUTH_TOKEN_TYPE is missing",
     "CANNOT_MODIFY_PROJECT_OWNER": "Can't modify project owner",
+    "PROJECT_DOES_NOT_EXISTS": "Project does not exists",
     "PROJECT_NAME_NOT_PRESENT": "Project name is missing",
     "PROJECT_UUID_NOT_PRESENT": "Project UUID is missing",
     "PROJECT_ID_NOT_PRESENT": "Project ID is missing",

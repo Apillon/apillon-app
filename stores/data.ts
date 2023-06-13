@@ -245,7 +245,7 @@ export const useDataStore = defineStore('data', {
         return projects;
       } catch (error) {
         /** Clear promise */
-        this.promises.buckets = null;
+        this.promises.projects = null;
 
         this.project.items = [];
 

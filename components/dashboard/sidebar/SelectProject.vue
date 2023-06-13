@@ -44,14 +44,14 @@ const componentSelectKey = ref(0);
 const loading = ref<boolean>(false);
 
 const dropdownOptions = computed(() => {
-  return dataStore.project.items.map(item => {
+  return dataStore.project.items.map((item: ProjectInterface) => {
     return {
-      key: item.id,
+      key: item.project_uuid,
       label: item.label,
       value: item.value,
-      active: item.id === dataStore.project.selected,
+      active: item.project_uuid === dataStore.project.selected,
       props: {
-        class: item.id === dataStore.project.selected ? 'active' : '',
+        class: item.project_uuid === dataStore.project.selected ? 'active' : '',
         onClick: () => {},
       },
     };
