@@ -48,7 +48,9 @@ export const useBucketStore = defineStore('bucket', {
     hasBuckets(state): boolean {
       if (Array.isArray(state.items) && state.items.length > 0) {
         return state.items.some(
-          (bucket: BucketInterface) => bucket.bucketType === BucketType.STORAGE
+          (bucket: BucketInterface) =>
+            bucket.bucketType === BucketType.STORAGE ||
+            bucket.bucketType === BucketType.NFT_METADATA
         );
       }
       return false;
