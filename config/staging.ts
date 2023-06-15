@@ -18,8 +18,9 @@ const config: ConfigInterface = {
     'SERVICES',
     'WALLET_LOGIN',
     'STORAGE',
+    'NFT',
   ],
-  betaFeatures: ['NFT'],
+  betaFeatures: [],
 };
 
 export default config;
