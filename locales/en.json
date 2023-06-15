@@ -244,6 +244,7 @@
     "INVALID_QUERY_PARAMETERS": "Invalid query parameters",
     "UNAUTHORIZED": "You are unauthorized for this action",
     "INVALID_TOKEN": "Invalid token",
+    "AUTH_TOKEN_EXPIRED": "Your session has expired, please log in again.",
     "USER_IS_NOT_AUTHENTICATED": "User is not authenticated",
     "FORBIDDEN": "You don't have permission for this action",
     "USER_IS_NOT_AUTHORIZED": "User is not authorized",
