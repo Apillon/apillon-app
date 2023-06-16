@@ -245,7 +245,10 @@ const columns = computed(() => {
       title: $i18n.t('storage.fileCid'),
       key: 'CID',
       className: {
-        hidden: !selectedColumns.value.includes('CID') || props.type !== TableFilesType.BUCKET,
+        hidden:
+          !selectedColumns.value.includes('CID') ||
+          props.type === TableFilesType.HOSTING ||
+          props.type === TableFilesType.DEPLOYMENT,
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
@@ -256,7 +259,10 @@ const columns = computed(() => {
       title: $i18n.t('storage.downloadLink'),
       key: 'link',
       className: {
-        hidden: !selectedColumns.value.includes('link') || props.type !== TableFilesType.BUCKET,
+        hidden:
+          !selectedColumns.value.includes('link') ||
+          props.type === TableFilesType.HOSTING ||
+          props.type === TableFilesType.DEPLOYMENT,
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
