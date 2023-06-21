@@ -1,5 +1,5 @@
 <template>
-  <div ref="mainContentRef" class="relative h-screen">
+  <div v-if="!authStore.loadingProfile" ref="mainContentRef" class="relative h-screen">
     <n-message-provider
       :to="messageRef"
       placement="bottom-right"
@@ -42,6 +42,7 @@
 <script lang="ts" setup>
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
+const authStore = useAuthStore();
 const { isLg, isXl } = useScreen();
 const messageRef = ref<HTMLDivElement>();
 const mainContentRef = ref<HTMLDivElement>();

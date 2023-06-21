@@ -90,7 +90,10 @@ export const useCollectionStore = defineStore('collection', {
       this.metadata = [] as Array<Record<string, any>>;
     },
     resetImages() {
-      this.images = [] as FileListItemType[];
+      this.images.forEach(img => img.onError());
+      while (this.images.length > 0) {
+        this.images.pop();
+      }
     },
     resetForms() {
       this.form.base.name = '';

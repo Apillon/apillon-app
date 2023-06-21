@@ -39,12 +39,20 @@ export const useAuthStore = defineStore('auth', {
     allowedEntry: state => !!state.jwt,
   },
   actions: {
+    getUserPermissions() {
+      return this.user?.userPermissions || [];
+    },
+
     getUserRoles() {
       return this.user?.userRoles || [];
     },
 
     isBetaUser() {
       return !!(this.user?.userRoles || []).includes(DefaultUserRole.BETA_USER);
+    },
+
+    isUserAllowed(permission: number) {
+      return !!(this.user?.userPermissions || []).includes(permission);
     },
 
     logout() {
@@ -111,16 +119,21 @@ export const useAuthStore = defineStore('auth', {
         if (res.data) {
           this.saveUser(res.data);
         }
-        this.loadingProfile = false;
+        setTimeout(() => {
+          this.loadingProfile = false;
+        }, 10);
 
         return res;
       } catch (error) {
         /** On error - logout */
         this.logout();
 
+        const router = useRouter();
+        router.push('/login');
+
         setTimeout(() => {
           this.loadingProfile = false;
-        }, 300);
+        }, 700);
         return null;
       }
     },

@@ -1114,6 +1114,7 @@
     "role": "Selected role is invalid",
     "roleRequired": "Please select role",
     "terms": "Please accept the terms",
+    "tooManyImages": "Too many images. You can upload only {num} images.",
     "country": "Please select the country",
     "webhookAuthTypeRequired": "Please select Auth type",
     "webhookPasswordRequired": "Please enter password",

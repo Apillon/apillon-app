@@ -258,6 +258,7 @@ function onBucketDeleted() {
 
   setTimeout(() => {
     bucketStore.fetchBuckets();
+    bucketStore.fetchBuckets(true);
   }, 300);
 }
 
@@ -268,7 +269,8 @@ async function restoreBucket() {
   bucketStore.loading = true;
 
   try {
-    await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.id));
+    const response = await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.id));
+    removeDeletedBucketFromList(response.data.id);
 
     message.success($i18n.t('form.success.restored.bucket'));
   } catch (error) {
@@ -279,5 +281,10 @@ async function restoreBucket() {
   setTimeout(() => {
     router.push({ name: 'dashboard-service-storage' });
   }, 1000);
+}
+
+function removeDeletedBucketFromList(id: number) {
+  bucketStore.fetchBuckets();
+  bucketStore.destroyed = bucketStore.destroyed.filter(item => item.id !== id);
 }
 </script>
