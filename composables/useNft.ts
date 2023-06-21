@@ -188,6 +188,7 @@ export default function useNft() {
   }: NUploadCustomRequestOptions) {
     if (!isImage(file.type)) {
       message.warning($i18n.t('validation.notImage', { name: file.name }));
+      onError();
       return;
     }
 
@@ -203,7 +204,11 @@ export default function useNft() {
 
     if (fileAlreadyOnFileList(collectionStore.images, image)) {
       message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));
-    } else if (collectionStore.images.length < collectionStore.csvData.length) {
+      onError();
+    } else if (collectionStore.images.length >= collectionStore.csvData.length) {
+      message.warning($i18n.t('validation.tooManyImages', { num: collectionStore.csvData.length }));
+      onError();
+    } else {
       onProgress({ percent: 0 });
       collectionStore.images.push(image);
     }

@@ -111,16 +111,21 @@ export const useAuthStore = defineStore('auth', {
         if (res.data) {
           this.saveUser(res.data);
         }
-        this.loadingProfile = false;
+        setTimeout(() => {
+          this.loadingProfile = false;
+        }, 10);
 
         return res;
       } catch (error) {
         /** On error - logout */
         this.logout();
 
+        const router = useRouter();
+        router.push('/login');
+
         setTimeout(() => {
           this.loadingProfile = false;
-        }, 300);
+        }, 700);
         return null;
       }
     },
