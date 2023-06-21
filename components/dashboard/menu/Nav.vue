@@ -43,7 +43,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
       to: 'dashboard-service-storage',
       iconName: 'icon-storage',
       soon: !isFeatureEnabled(Feature.STORAGE, authStore.getUserRoles()),
-      disabled: isMenuItemDisabled(Feature.STORAGE),
+      disabled: isMenuItemDisabled(Feature.STORAGE) || !authStore.isUserAllowed(Permission.STORAGE),
     },
     {
       key: 'dashboard-service-hosting',
@@ -51,7 +51,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
       to: 'dashboard-service-hosting',
       iconName: 'icon-hosting',
       soon: !isFeatureEnabled(Feature.HOSTING, authStore.getUserRoles()),
-      disabled: isMenuItemDisabled(Feature.HOSTING),
+      disabled: isMenuItemDisabled(Feature.HOSTING) || !authStore.isUserAllowed(Permission.HOSTING),
     },
     {
       key: 'dashboard-service-nft',
@@ -59,7 +59,7 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
       to: 'dashboard-service-nft',
       iconName: 'icon-NFTs',
       soon: !isFeatureEnabled(Feature.NFT, authStore.getUserRoles()),
-      disabled: isMenuItemDisabled(Feature.NFT),
+      disabled: isMenuItemDisabled(Feature.NFT) || !authStore.isUserAllowed(Permission.NFTS),
     },
     {
       key: 'dashboard-service-authentication',
@@ -67,14 +67,17 @@ const menuOptions = computed<NMenuMixedOption[]>(() => {
       to: 'dashboard-service-authentication',
       iconName: 'icon-authentication',
       soon: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
-      disabled: isMenuItemDisabled(Feature.AUTHENTICATION),
+      disabled:
+        isMenuItemDisabled(Feature.AUTHENTICATION) ||
+        !authStore.isUserAllowed(Permission.AUTHENTICATION),
     },
     {
       key: 'dashboard-service-computing',
       label: $i18n.t('dashboard.nav.computing'),
       iconName: 'icon-computing',
       soon: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
-      disabled: isMenuItemDisabled(Feature.COMPUTING),
+      disabled:
+        isMenuItemDisabled(Feature.COMPUTING) || authStore.isUserAllowed(Permission.COMPUTING),
     },
   ];
   const monitoringChildren = [

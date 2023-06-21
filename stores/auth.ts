@@ -39,12 +39,20 @@ export const useAuthStore = defineStore('auth', {
     allowedEntry: state => !!state.jwt,
   },
   actions: {
+    getUserPermissions() {
+      return this.user?.userPermissions || [];
+    },
+
     getUserRoles() {
       return this.user?.userRoles || [];
     },
 
     isBetaUser() {
       return !!(this.user?.userRoles || []).includes(DefaultUserRole.BETA_USER);
+    },
+
+    isUserAllowed(permission: number) {
+      return !!(this.user?.userPermissions || []).includes(permission);
     },
 
     logout() {
