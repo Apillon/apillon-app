@@ -38,7 +38,7 @@
           <template #header>
             <h5>{{ $t('dashboard.apiKey.generate') }}</h5>
           </template>
-          <FormApiKeyCreate @close="drawerGenerateApiKeyVisible = false" />
+          <FormApiKey @close="drawerGenerateApiKeyVisible = false" />
         </n-drawer-content>
       </n-drawer>
     </slot>
@@ -66,7 +66,7 @@ const showDrawerGenerateApiKey = () => {
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     /** Fetch all services if there is any service type unloaded */
-    await dataStore.getAllServices();
+    await dataStore.getServices();
 
     /** Fetch all api keys if they are not stored in settings store */
     await settingsStore.getApiKeys();

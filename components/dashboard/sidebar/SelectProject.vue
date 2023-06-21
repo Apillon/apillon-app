@@ -99,8 +99,8 @@ watch(
   }
 );
 
-function onDropdownSelect(key: string | number) {
-  dataStore.project.selected = Number(key);
+function onDropdownSelect(key: string) {
+  dataStore.project.selected = key;
 }
 </script>
 

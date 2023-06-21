@@ -203,7 +203,7 @@ export default function useNft() {
 
     if (fileAlreadyOnFileList(collectionStore.images, image)) {
       message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));
-    } else {
+    } else if (collectionStore.images.length < collectionStore.csvData.length) {
       onProgress({ percent: 0 });
       collectionStore.images.push(image);
     }

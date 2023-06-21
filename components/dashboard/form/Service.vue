@@ -43,6 +43,9 @@
           <template v-if="service">
             {{ $t('form.update') }}
           </template>
+          <template v-else-if="btnText">
+            {{ btnText }}
+          </template>
           <template v-else>
             {{ $t('form.createServiceAndContinue') }}
           </template>
@@ -56,12 +59,13 @@
 import { useMessage } from 'naive-ui';
 
 const props = defineProps({
-  serviceId: { type: Number, default: 0 },
+  serviceUuid: { type: String, default: '' },
   serviceType: {
     type: Number,
     validator: (value: number) => Object.values(ServiceType).includes(value),
     required: true,
   },
+  btnText: { type: String, default: '' },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
@@ -73,11 +77,9 @@ const formRef = ref<NFormInst | null>(null);
 const service = ref<ServiceInterface | undefined>();
 
 onMounted(async () => {
-  if (props.serviceId) {
-    await dataStore.getAuthServices();
-    service.value = dataStore.services[ServiceTypeNames[props.serviceType]].find(
-      item => item.id === props.serviceId
-    );
+  if (props.serviceUuid) {
+    await dataStore.getServices();
+    service.value = dataStore.services.find(item => item.service_uuid === props.serviceUuid);
 
     if (service.value) {
       formData.value.serviceName = service.value.name;
@@ -119,7 +121,7 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => window.$message.error(error.message || 'Error'))
       );
-    } else if (props.serviceId > 0) {
+    } else if (props.serviceUuid) {
       await updateService();
     } else {
       await createService();
@@ -130,7 +132,7 @@ async function createService() {
   loading.value = true;
 
   const bodyData = {
-    project_id: dataStore.project.selected,
+    project_uuid: dataStore.project.selected,
     serviceType_id: props.serviceType,
     name: formData.value.serviceName,
     active: 1,
@@ -146,7 +148,7 @@ async function createService() {
     message.success(msg);
 
     /** On new ipns created add new item to list */
-    dataStore.services[ServiceTypeNames[props.serviceType]].push(res.data);
+    dataStore.services.push(res.data);
 
     /** Emit events */
     emit('submitSuccess');
@@ -161,7 +163,7 @@ async function updateService() {
   loading.value = true;
 
   const bodyData = {
-    project_id: dataStore.project.selected,
+    project_uuid: dataStore.project.selected,
     serviceType_id: props.serviceType,
     name: formData.value.serviceName,
     active: 1,
@@ -169,7 +171,7 @@ async function updateService() {
   };
 
   try {
-    const res = await $api.patch<ServiceResponse>(endpoints.services(props.serviceId), bodyData);
+    const res = await $api.patch<ServiceResponse>(endpoints.services(props.serviceUuid), bodyData);
 
     const msg = $i18n.te(`form.success.updated.${ServiceTypeNames[props.serviceType]}`)
       ? $i18n.t(`form.success.updated.${ServiceTypeNames[props.serviceType]}`)
@@ -177,8 +179,8 @@ async function updateService() {
     message.success(msg);
 
     /** On service updated refresh data */
-    dataStore.services[ServiceTypeNames[props.serviceType]].forEach((item: ServiceInterface) => {
-      if (item.id === props.serviceId) {
+    dataStore.services.forEach((item: ServiceInterface) => {
+      if (item.service_uuid === props.serviceUuid) {
         item.name = res.data.name;
       }
     });

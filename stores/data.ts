@@ -25,11 +25,8 @@ export const useDataStore = defineStore('data', {
       loading: false,
       search: '',
     },
-    services: {
-      authentication: [] as Array<ServiceInterface>,
-      storage: [] as Array<ServiceInterface>,
-      computing: [] as Array<ServiceInterface>,
-    } as Record<ServiceTypeName, Array<ServiceInterface>>,
+    serviceTypes: [] as ServiceTypeInterface[],
+    services: [] as ServiceInterface[],
   }),
   getters: {
     hasProjects(state) {
@@ -73,9 +70,7 @@ export const useDataStore = defineStore('data', {
       this.project.items = [] as Array<ProjectInterface>;
       this.project.quotaReached = undefined as Boolean | undefined;
       /** Services */
-      this.services.authentication = [] as Array<ServiceInterface>;
-      this.services.storage = [] as Array<ServiceInterface>;
-      this.services.computing = [] as Array<ServiceInterface>;
+      this.services = [] as Array<ServiceInterface>;
     },
 
     setCurrentProject(uuid: string) {
@@ -108,16 +103,12 @@ export const useDataStore = defineStore('data', {
       };
     },
 
-    hasServices(type: number) {
-      const key: ServiceTypeName = ServiceTypeNames[type];
-      return Array.isArray(this.services[key]) && this.services[key].length > 0;
+    hasServices() {
+      return Array.isArray(this.services) && this.services.length > 0;
     },
-    hasAllServices(): boolean {
-      return !Object.entries(ServiceTypeNames)
-        .map(([serviceType, typeName]) => {
-          return Array.isArray(this.services[typeName]) && this.services[typeName].length > 0;
-        })
-        .includes(false);
+
+    hasServiceTypes() {
+      return Array.isArray(this.serviceTypes) && this.serviceTypes.length > 0;
     },
 
     hasInstructions(key: string) {
@@ -126,19 +117,6 @@ export const useDataStore = defineStore('data', {
         Array.isArray(this.instructions[key]) &&
         this.instructions[key].length > 0
       );
-    },
-
-    getServiceCacheKey(type?: number): string {
-      switch (type) {
-        case ServiceType.AUTHENTICATION:
-          return LsCacheKeys.SERVICE_AUTH;
-        case ServiceType.COPMUTING:
-          return LsCacheKeys.SERVICE_COMPUTING;
-        case ServiceType.STORAGE:
-          return LsCacheKeys.SERVICE_STORAGE;
-        default:
-          return LsCacheKeys.SERVICES;
-      }
     },
 
     /**
@@ -169,40 +147,23 @@ export const useDataStore = defineStore('data', {
     },
 
     /** Services */
-    async getAllServices() {
-      if (!this.hasAllServices() || isCacheExpired(LsCacheKeys.SERVICES)) {
-        const services = await this.fetchServices();
+    async getServiceTypes() {
+      if (!this.hasServiceTypes() || isCacheExpired(LsCacheKeys.SERVICE_TYPES)) {
+        this.serviceTypes = await this.fetchServiceTypes();
+      }
+      return this.serviceTypes;
+    },
+    async getServices() {
+      this.getServiceTypes();
 
-        Object.entries(ServiceTypeNames).forEach(([serviceType, typeName]) => {
-          this.services[typeName] =
-            services.filter(service => service.serviceType_id === parseInt(serviceType)) ||
-            ([] as Array<ServiceInterface>);
-        });
+      if (!this.hasServices() || isCacheExpired(LsCacheKeys.SERVICES)) {
+        this.services = await this.fetchServices();
       }
+      return this.services;
     },
-    async getAuthServices() {
-      if (
-        !this.hasServices(ServiceType.AUTHENTICATION) ||
-        (isCacheExpired(LsCacheKeys.SERVICE_AUTH) && isCacheExpired(LsCacheKeys.SERVICES))
-      ) {
-        this.services.authentication = await this.fetchServices(ServiceType.AUTHENTICATION);
-      }
-    },
-    async getStorageServices() {
-      if (
-        !this.hasServices(ServiceType.STORAGE) ||
-        (isCacheExpired(LsCacheKeys.SERVICE_STORAGE) && isCacheExpired(LsCacheKeys.SERVICES))
-      ) {
-        this.services.storage = await this.fetchServices(ServiceType.STORAGE);
-      }
-    },
-    async getComputingServices() {
-      if (
-        !this.hasServices(ServiceType.COPMUTING) ||
-        (isCacheExpired(LsCacheKeys.SERVICE_COMPUTING) && isCacheExpired(LsCacheKeys.SERVICES))
-      ) {
-        this.services.computing = await this.fetchServices(ServiceType.COPMUTING);
-      }
+    async getServicesByType(type: number) {
+      const services = await this.getServices();
+      return services.filter(item => item.serviceType_id === type);
     },
 
     /**
@@ -290,7 +251,7 @@ export const useDataStore = defineStore('data', {
     },
 
     /** Services */
-    async fetchServices(type?: number) {
+    async fetchServices() {
       if (!this.hasProjects) {
         await this.fetchProjects();
       }
@@ -302,14 +263,11 @@ export const useDataStore = defineStore('data', {
           project_uuid: this.projectUuid,
           ...PARAMS_ALL_ITEMS,
         };
-        if (type) {
-          params.serviceType_id = type;
-        }
         const res = await $api.get<ServicesResponse>(endpoints.services(), params);
         this.service.loading = false;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(this.getServiceCacheKey(type), Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.SERVICES, Date.now().toString());
 
         return res.data.items
           .filter(item => item.status === 5)
@@ -322,6 +280,21 @@ export const useDataStore = defineStore('data', {
       }
       this.service.loading = false;
       return [] as Array<ServiceInterface>;
+    },
+
+    async fetchServiceTypes() {
+      try {
+        const res = await $api.get<ServiceTypesResponse>(endpoints.serviceTypes);
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.SERVICE_TYPES, Date.now().toString());
+
+        return res.data;
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return [] as Array<ServiceTypeInterface>;
     },
 
     /**

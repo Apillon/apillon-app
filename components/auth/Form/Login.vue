@@ -39,6 +39,7 @@ import { createDiscreteApi } from 'naive-ui';
 const $i18n = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const { clearAll } = useStore();
 const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
 
 const loading = ref(false);
@@ -88,6 +89,9 @@ async function login() {
     // Logout first - delete LS and store if there is any data
     authStore.logout();
     dataStore.resetCurrentProject();
+
+    /** Clear all stored data */
+    clearAll();
 
     const res = await $api.post<LoginResponse>(endpoints.login, formData.value);
 

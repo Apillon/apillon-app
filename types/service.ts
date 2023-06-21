@@ -4,12 +4,14 @@
 export enum ServiceType {
   AUTHENTICATION = 1,
   STORAGE = 2,
-  COPMUTING = 3,
+  NFT = 3,
+  HOSTING = 4,
 }
 export enum ServiceTypeName {
   AUTHENTICATION = 'authentication',
   STORAGE = 'storage',
-  COPMUTING = 'computing',
+  NFT = 'nft',
+  HOSTING = 'hosting',
 }
 
 /**
@@ -18,7 +20,8 @@ export enum ServiceTypeName {
 export const ServiceTypeNames: { [k: number]: ServiceTypeName } = {
   [ServiceType.AUTHENTICATION]: ServiceTypeName.AUTHENTICATION,
   [ServiceType.STORAGE]: ServiceTypeName.STORAGE,
-  [ServiceType.COPMUTING]: ServiceTypeName.COPMUTING,
+  [ServiceType.NFT]: ServiceTypeName.NFT,
+  [ServiceType.HOSTING]: ServiceTypeName.HOSTING,
 };
 
 declare global {
@@ -47,9 +50,18 @@ declare global {
     serviceName: string;
     networkType: boolean;
   }
+  interface ServiceTypeInterface {
+    active: number;
+    name: string;
+    description: string;
+    id: number;
+    status: number;
+  }
+  interface ServiceTypeField extends ServiceTypeInterface {
+    enabled: boolean;
+  }
   interface ServiceInterface {
     active: number;
-    id: number;
     name: string;
     description: string;
     serviceType: string;
@@ -63,4 +75,5 @@ declare global {
   interface CreateServiceResponse extends GeneralResponse<{ id: number; status: number }> {}
   interface ServiceResponse extends GeneralResponse<ServiceInterface> {}
   interface ServicesResponse extends GeneralItemsResponse<ServiceInterface> {}
+  interface ServiceTypesResponse extends GeneralResponse<ServiceTypeInterface[]> {}
 }
