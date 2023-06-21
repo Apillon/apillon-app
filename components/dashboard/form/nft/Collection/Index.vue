@@ -56,7 +56,7 @@
       <!--  Chain -->
       <n-form-item
         path="chain"
-        :label="$t('form.label.collectionChain')"
+        :label="infoLabel('collectionChain')"
         :label-props="{ for: 'chain' }"
       >
         <select-options

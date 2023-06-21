@@ -8,10 +8,10 @@
     },
     "login": {
       "description": "Web3 will not build itself. Go and add your block.",
-      "dontHaveAccount": "I don't have Apillon account yet?",
+      "dontHaveAccount": "Don't have Apillon account yet?",
       "enterNewPassword": "Enter new password",
       "enterYourEmail": "Enter your e-mail",
-      "forgotPassword": "Did you forgot your password?",
+      "forgotPassword": "Did you forget your password?",
       "magicLink": "Send me a Magic Link",
       "orUseEmail": "or log in using email",
       "passwordReplaced": "Your password has been replaced",
