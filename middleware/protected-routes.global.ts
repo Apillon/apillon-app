@@ -1,4 +1,5 @@
 import { useAuthStore } from '~/stores/auth';
+import { Permission } from '~~/types/settings';
 interface ProtectedRouteInterface {
   path?: string;
   regex?: RegExp;

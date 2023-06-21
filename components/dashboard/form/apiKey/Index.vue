@@ -1,6 +1,7 @@
 <template>
   <n-form
     v-if="!loading"
+    v-bind="$attrs"
     ref="formRef"
     :model="formData"
     :rules="rules"
@@ -103,7 +104,9 @@
         </template>
 
         <FormService
+          class="mt-4 pr-4 sm:pr-8"
           :service-type="serviceType.id"
+          :default-service-name="serviceType.name"
           :btn-text="$t('form.createNewService')"
           @create-success="onServiceCreated"
         />
@@ -148,6 +151,7 @@ const props = defineProps({
 
 const $i18n = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
 const emit = defineEmits(['close', 'submitSuccess']);
@@ -198,9 +202,11 @@ const roles = computed(() => {
 
 const unusedServices = computed<ServiceTypeField[]>(() => {
   return dataStore.serviceTypes.reduce((acc, serviceType) => {
-    const isServiceActive = dataStore.services.some(item => item.serviceType_id === serviceType.id);
+    const isServiceInUse = dataStore.services.some(item => item.serviceType_id === serviceType.id);
     const newServiceType = { ...serviceType, enabled: false };
-    return isServiceActive || serviceType.active === 0 ? acc : [...acc, newServiceType];
+    return !isServiceEnabled(serviceType) || isServiceInUse || serviceType.active === 0
+      ? acc
+      : [...acc, newServiceType];
   }, [] as ServiceTypeField[]);
 });
 
@@ -426,5 +432,21 @@ async function onServiceCreated() {
 
   formData.value.roles = roles.value;
   loading.value = false;
+}
+
+/* Check if user can create this service */
+function isServiceEnabled(serviceType: ServiceTypeInterface) {
+  switch (serviceType.id) {
+    case 1:
+      return authStore.isUserAllowed(Permission.AUTHENTICATION);
+    case 2:
+      return authStore.isUserAllowed(Permission.STORAGE);
+    case 3:
+      return authStore.isUserAllowed(Permission.NFTS);
+    case 4:
+      return authStore.isUserAllowed(Permission.HOSTING);
+    default:
+      return false;
+  }
 }
 </script>

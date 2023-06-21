@@ -1,58 +1,58 @@
 <template>
   <Spinner v-if="serviceId > 0 && !service" />
-  <div v-else>
-    <n-form
-      v-bind="$attrs"
-      ref="formRef"
-      :model="formData"
-      :rules="rules"
-      @submit.prevent="handleSubmit"
+  <n-form
+    v-else
+    v-bind="$attrs"
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    @submit.prevent="handleSubmit"
+  >
+    <!--  Service name -->
+    <n-form-item
+      v-if="!defaultServiceName"
+      path="serviceName"
+      :label="$t('form.label.serviceName')"
+      :label-props="{ for: 'serviceName' }"
     >
-      <!--  Service name -->
-      <n-form-item
-        path="serviceName"
-        :label="$t('form.label.serviceName')"
-        :label-props="{ for: 'serviceName' }"
-      >
-        <n-input
-          v-model:value="formData.serviceName"
-          :input-props="{ id: 'serviceName' }"
-          :placeholder="$t('form.placeholder.serviceName')"
-          clearable
-        />
-      </n-form-item>
+      <n-input
+        v-model:value="formData.serviceName"
+        :input-props="{ id: 'serviceName' }"
+        :placeholder="$t('form.placeholder.serviceName')"
+        clearable
+      />
+    </n-form-item>
 
-      <!--  Service type -->
-      <n-form-item class="hidden" path="networkTypes" :label="$t('form.label.networkType')">
-        <n-radio-group v-model:value="formData.networkType" name="radiogroup">
-          <n-space>
-            <n-radio
-              v-for="(type, key) in networkTypes"
-              :key="key"
-              :value="type.value"
-              :label="type.label"
-            />
-          </n-space>
-        </n-radio-group>
-      </n-form-item>
+    <!--  Service type -->
+    <n-form-item class="hidden" path="networkTypes" :label="$t('form.label.networkType')">
+      <n-radio-group v-model:value="formData.networkType" name="radiogroup">
+        <n-space>
+          <n-radio
+            v-for="(type, key) in networkTypes"
+            :key="key"
+            :value="type.value"
+            :label="type.label"
+          />
+        </n-space>
+      </n-radio-group>
+    </n-form-item>
 
-      <!--  Service submit -->
-      <n-form-item :show-label="false">
-        <input type="submit" class="hidden" :value="$t('form.login')" />
-        <Btn type="primary" size="large" :loading="loading" @click="handleSubmit">
-          <template v-if="service">
-            {{ $t('form.update') }}
-          </template>
-          <template v-else-if="btnText">
-            {{ btnText }}
-          </template>
-          <template v-else>
-            {{ $t('form.createServiceAndContinue') }}
-          </template>
-        </Btn>
-      </n-form-item>
-    </n-form>
-  </div>
+    <!--  Service submit -->
+    <n-form-item :show-label="false">
+      <input type="submit" class="hidden" :value="$t('form.login')" />
+      <Btn type="primary" size="large" :loading="loading" @click="handleSubmit">
+        <template v-if="service">
+          {{ $t('form.update') }}
+        </template>
+        <template v-else-if="btnText">
+          {{ btnText }}
+        </template>
+        <template v-else>
+          {{ $t('form.createServiceAndContinue') }}
+        </template>
+      </Btn>
+    </n-form-item>
+  </n-form>
 </template>
 
 <script lang="ts" setup>
@@ -65,6 +65,7 @@ const props = defineProps({
     validator: (value: number) => Object.values(ServiceType).includes(value),
     required: true,
   },
+  defaultServiceName: { type: String, default: '' },
   btnText: { type: String, default: '' },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
@@ -84,6 +85,8 @@ onMounted(async () => {
     if (service.value) {
       formData.value.serviceName = service.value.name;
     }
+  } else if (props.defaultServiceName) {
+    formData.value.serviceName = props.defaultServiceName;
   }
 });
 
