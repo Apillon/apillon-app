@@ -58,7 +58,7 @@ useHead({
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await dataStore.getAuthServices();
+      await dataStore.getServices();
       pageLoading.value = false;
     });
   }, 100);

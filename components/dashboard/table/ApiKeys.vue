@@ -12,7 +12,7 @@
       <template #header>
         <h5>{{ $t('dashboard.apiKey.update') }}</h5>
       </template>
-      <FormApiKeyUpdate :id="currentRow.id" @submit-success="drawerUpdateApiKeyVisible = false" />
+      <FormApiKey :id="currentRow.id" @submit-success="drawerUpdateApiKeyVisible = false" />
     </n-drawer-content>
   </n-drawer>
 

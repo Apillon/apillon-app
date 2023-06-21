@@ -131,7 +131,7 @@
       <n-form-item-gi
         path="mintPrice"
         :span="6"
-        :label="infoLabel('collectionMintPrice')"
+        :label="$t('form.label.collectionMintPrice', { currency: chainCurrency() })"
         :label-props="{ for: 'mintPrice' }"
       >
         <n-input-number
@@ -220,6 +220,15 @@ function infoLabel(field: string) {
     ];
   }
   return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
+}
+
+function chainCurrency() {
+  switch (collectionStore.form.base.chain) {
+    case Chains.ASTAR:
+      return 'ASTR';
+    default:
+      return 'GLMR';
+  }
 }
 
 // Submit

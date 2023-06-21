@@ -12,6 +12,7 @@
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const { clearAll } = useStore();
 const oauthAuthToken = ref<string | undefined>('');
 const childWindow = ref<(Window & typeof globalThis) | undefined>();
 const handlerFunction = ref();
@@ -42,6 +43,9 @@ async function loginWithKilt() {
     // Logout first - delete LS and store if there is any data
     authStore.logout();
     dataStore.resetCurrentProject();
+
+    /** Clear all stored data */
+    clearAll();
 
     const res = await $api.post<LoginResponse>(endpoints.loginWithKilt, {
       token: oauthAuthToken.value,

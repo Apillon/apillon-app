@@ -229,7 +229,7 @@
         <n-form-item-gi
           path="mintPrice"
           :span="6"
-          :label="infoLabel('collectionMintPrice')"
+          :label="$t('form.label.collectionMintPrice', { currency: chainCurrency })"
           :label-props="{ for: 'mintPrice' }"
         >
           <n-input-number
@@ -340,6 +340,15 @@ const metadataUri = computed<string>(() => {
     : formData.value.baseUri
     ? formData.value.baseUri + '1.' + $i18n.t('nft.collection.extension')
     : '';
+});
+
+const chainCurrency = computed<string>(() => {
+  switch (formData.value.chain) {
+    case Chains.ASTAR:
+      return 'ASTR';
+    default:
+      return 'GLMR';
+  }
 });
 
 function infoLabel(field: string) {

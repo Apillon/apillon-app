@@ -78,6 +78,9 @@
 .icon-NFTs:before {
   content: '\e945';
 }
+.icon-nft:before {
+  content: '\e945';
+}
 .icon-docs:before {
   content: '\e943';
 }

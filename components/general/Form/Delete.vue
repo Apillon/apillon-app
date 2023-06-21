@@ -9,7 +9,7 @@
 import { useMessage } from 'naive-ui';
 
 const props = defineProps({
-  id: { type: Number, required: true },
+  id: { type: [Number, String], required: true },
   type: {
     type: String,
     validator: (type: string) =>
@@ -44,7 +44,7 @@ async function deleteItem() {
 }
 
 /** Get URL base on entity type */
-function getUrl(type: string, id: number) {
+function getUrl(type: string, id: number | string) {
   switch (type) {
     case 'apiKey':
       return endpoints.apiKey(id);

@@ -43,9 +43,7 @@ export const LsCacheKeys = {
   PROJECTS: 'al_cache_projects',
   REFERRAL: 'al_cache_referral',
   SERVICES: 'al_cache_services',
-  SERVICE_AUTH: 'al_cache_service_auth',
-  SERVICE_COMPUTING: 'al_cache_service_computing',
-  SERVICE_STORAGE: 'al_cache_service_storage',
+  SERVICE_TYPES: 'al_cache_service_types',
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
 };

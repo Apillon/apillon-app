@@ -34,12 +34,16 @@ const Endpoints = {
   projectInviteUser: (projectUuid: string) => {
     return `/projects/${projectUuid}/invite-user`;
   },
-  projectUserRole: (id: number) => {
+  projectUser: (id: number) => {
     return `/projects/user/${id}`;
+  },
+  projectUserUninvite: (projectUuid: string) => {
+    return `/projects/${projectUuid}/uninvite-user`;
   },
 
   /** Services */
-  services: (id?: number) => {
+  serviceTypes: '/services/types',
+  services: (id?: number | string) => {
     return id ? `/services/${id}` : '/services';
   },
 
@@ -58,7 +62,7 @@ const Endpoints = {
   bucket: (buckeId: number | string) => {
     return `/buckets/${buckeId}`;
   },
-  bucketContent: (buckeId: number) => {
+  bucketContent: (buckeId: number | string) => {
     return `/buckets/${buckeId}/content`;
   },
   bucketRestore: (buckeId: number) => {
@@ -69,13 +73,13 @@ const Endpoints = {
   },
 
   /** Directories */
-  directory: (id?: number) => {
+  directory: (id?: number | string) => {
     return id ? `/directories/${id}` : '/directories';
   },
   directoryContent: '/directories/directory-content',
 
   /** File */
-  file: (key?: number) => {
+  file: (key?: number | string) => {
     return key ? `/files/${key}` : '/files';
   },
 
@@ -108,7 +112,7 @@ const Endpoints = {
     return `/storage/${bucketUuid}/trashed-files`;
   },
   /** IPNS */
-  ipns: (bucketId: number, id?: number) => {
+  ipns: (bucketId: number, id?: number | string) => {
     return id ? `/buckets/${bucketId}/ipns/${id}` : `/buckets/${bucketId}/ipns`;
   },
   ipnsPublish: (bucketId: number, id: number) => {
@@ -168,7 +172,7 @@ const Endpoints = {
    */
 
   /** Api Keys */
-  apiKey: (key?: number) => {
+  apiKey: (key?: number | string) => {
     return key ? `/api-keys/${key}` : '/api-keys';
   },
   apiKeyRole: (key: number) => {
