@@ -11,6 +11,7 @@ declare global {
     phone?: string | null;
     status: number;
     user_uuid: string;
+    userPermissions: number[];
     userRoles: number[];
     token?: any;
     wallet?: string | null;
@@ -45,6 +46,8 @@ declare global {
   }
   interface PasswordResetForm {
     email: string;
+    captcha?: any;
+    refCode?: string;
   }
   interface RegisterInterface extends UserInterface {
     token: string;

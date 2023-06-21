@@ -9,6 +9,7 @@ interface FeatureRouteInterface {
   regex?: RegExp;
   redirect: string;
   feature: string;
+  permission?: number;
 }
 
 const protectedRoutes: Array<ProtectedRouteInterface> = [
@@ -26,11 +27,32 @@ const featureRoutes: Array<FeatureRouteInterface> = [
     regex: /^\/dashboard\/service\/authentication/,
     redirect: '/dashboard',
     feature: Feature.AUTHENTICATION,
+    permission: Permission.AUTHENTICATION,
   },
-  { regex: /^\/dashboard\/service\/storage/, redirect: '/dashboard', feature: Feature.STORAGE },
-  { regex: /^\/dashboard\/service\/hosting/, redirect: '/dashboard', feature: Feature.HOSTING },
-  { regex: /^\/dashboard\/service\/nft/, redirect: '/dashboard', feature: Feature.NFT },
-  { regex: /^\/dashboard\/service\/computing/, redirect: '/dashboard', feature: Feature.COMPUTING },
+  {
+    regex: /^\/dashboard\/service\/storage/,
+    redirect: '/dashboard',
+    feature: Feature.STORAGE,
+    permission: Permission.STORAGE,
+  },
+  {
+    regex: /^\/dashboard\/service\/hosting/,
+    redirect: '/dashboard',
+    feature: Feature.HOSTING,
+    permission: Permission.HOSTING,
+  },
+  {
+    regex: /^\/dashboard\/service\/nft/,
+    redirect: '/dashboard',
+    feature: Feature.NFT,
+    permission: Permission.NFTS,
+  },
+  {
+    regex: /^\/dashboard\/service\/computing/,
+    redirect: '/dashboard',
+    feature: Feature.COMPUTING,
+    permission: Permission.COMPUTING,
+  },
   { regex: /^\/dashboard\/monitoring/, redirect: '/dashboard', feature: Feature.MONITORING },
   {
     regex: /^\/dashboard\/project-settings/,
@@ -70,7 +92,8 @@ export default defineNuxtRouteMiddleware(to => {
     if (
       ((featureRoute.regex && featureRoute.regex.test(decodedUrl)) ||
         decodedUrl === featureRoute.path) &&
-      !isFeatureEnabled(featureRoute.feature, authStore.getUserRoles())
+      (!isFeatureEnabled(featureRoute.feature, authStore.getUserRoles()) ||
+        (featureRoute.permission && !authStore.isUserAllowed(featureRoute.permission)))
     ) {
       return navigateTo(featureRoute.redirect, { redirectCode: 301 });
     }
