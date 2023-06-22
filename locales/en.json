@@ -82,6 +82,7 @@
     "addNew": "Add new",
     "address": "Address",
     "attach": "Attach",
+    "attachService": "Attach {service} service",
     "cancel": "No, cancel",
     "confirm": "Confirm",
     "copyrights": "© Apillon",
