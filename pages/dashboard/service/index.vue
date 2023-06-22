@@ -89,11 +89,5 @@ const services: Array<ServiceTypeItem> = [
     new: true,
     disabled: !isFeatureEnabled(Feature.STORAGE, authStore.getUserRoles()),
   },
-  {
-    id: ServiceType.COPMUTING,
-    name: 'computing',
-    icon: 'icon-computing',
-    disabled: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
-  },
 ];
 </script>

@@ -33,8 +33,8 @@ onMounted(() => {
 });
 
 async function getServicesAuth() {
-  if (!dataStore.hasServices(ServiceType.AUTHENTICATION)) {
-    await dataStore.getAuthServices();
+  if (!dataStore.hasServices()) {
+    await dataStore.getServices();
   }
   pageLoading.value = false;
 }

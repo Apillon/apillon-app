@@ -8,9 +8,10 @@ declare global {
     id: number;
     email: string;
     name: string;
-    phone: string;
+    phone?: string | null;
     status: number;
     user_uuid: string;
+    userPermissions: number[];
     userRoles: number[];
     token?: any;
     wallet?: string | null;
@@ -45,6 +46,8 @@ declare global {
   }
   interface PasswordResetForm {
     email: string;
+    captcha?: any;
+    refCode?: string;
   }
   interface RegisterInterface extends UserInterface {
     token: string;
@@ -71,9 +74,15 @@ declare global {
   interface LoginInterface extends UserInterface {
     token: string;
   }
+
   interface LoginResponse extends GeneralResponse<LoginInterface> {}
   interface PasswordResetRequestResponse extends GeneralResponse<boolean> {}
-
+  interface OAuthSessionInterface {
+    data: {
+      session: string;
+    };
+  }
+  interface OauthSessionResponse extends GeneralResponse<OAuthSessionInterface> {}
   /**
    * Wallet
    */

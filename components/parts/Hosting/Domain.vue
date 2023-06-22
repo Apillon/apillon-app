@@ -5,12 +5,25 @@
     </div>
     <n-space class="w-full" :wrap="!isLg" align="center">
       <HostingPreviewLink v-if="domain" :link="`https://${domain}`" />
-      <Btn type="primary" size="small" @click="showModalDomain = true">
+
+      <Btn v-if="editEnabled" type="primary" size="small" @click="showModalDomain = true">
         <span v-if="domain">
           {{ $t('hosting.domain.setup') }}
         </span>
         <span v-else>{{ $t('hosting.domain.add') }}</span>
       </Btn>
+      <n-tooltip v-else placement="top" trigger="hover">
+        <template #trigger>
+          <Btn type="primary" size="small" class="cursor-default !bg-primary/50 locked">
+            <span v-if="domain">
+              {{ $t('hosting.domain.setup') }}
+            </span>
+            <span v-else>{{ $t('hosting.domain.add') }}</span>
+          </Btn>
+        </template>
+        <span>{{ $t('hosting.domain.editDisabled') }}</span>
+      </n-tooltip>
+
       <Btn type="secondary" size="small" @click="showModalConfiguration = true">
         {{ $t('hosting.domain.configure') }}
       </Btn>
@@ -41,13 +54,21 @@
 
 <script lang="ts" setup>
 const { isLg } = useScreen();
-const { params } = useRoute();
 const websiteStore = useWebsiteStore();
 const showModalDomain = ref<boolean>(false);
 const showModalConfiguration = ref<boolean>(false);
 const { websiteId } = useHosting();
 
+onMounted(() => {
+  websiteStore.getWebsites();
+});
+
 const domain = computed<string>(() => {
-  return websiteStore.active.domain;
+  return websiteStore.active.domain || '';
+});
+
+const editEnabled = computed<boolean>(() => {
+  const time = websiteStore.active.domainChangeDate;
+  return time && domain.value ? new Date(time).getTime() + 15 * 60 * 1000 < Date.now() : true;
 });
 </script>

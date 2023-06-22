@@ -219,17 +219,14 @@ const columns = computed(() => {
     {
       title: $i18n.t('storage.fileName'),
       key: 'name',
-      className: [
-        { onClickOpen: props.type !== TableFilesType.HOSTING },
-        { hidden: !selectedColumns.value.includes('name') },
-      ],
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       minWidth: 200,
       render(row: BucketItemInterface) {
         return [
           h(
             NSpace,
-            { align: 'center', wrap: false },
+            { align: 'center', wrap: false, class: cellClasses(row.type) },
             {
               default: () => [
                 h(IconFolderFile, { isFile: row.type === BucketItemType.FILE }, ''),
@@ -248,7 +245,10 @@ const columns = computed(() => {
       title: $i18n.t('storage.fileCid'),
       key: 'CID',
       className: {
-        hidden: !selectedColumns.value.includes('CID') || props.type !== TableFilesType.BUCKET,
+        hidden:
+          !selectedColumns.value.includes('CID') ||
+          props.type === TableFilesType.HOSTING ||
+          props.type === TableFilesType.DEPLOYMENT,
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
@@ -259,7 +259,10 @@ const columns = computed(() => {
       title: $i18n.t('storage.downloadLink'),
       key: 'link',
       className: {
-        hidden: !selectedColumns.value.includes('link') || props.type !== TableFilesType.BUCKET,
+        hidden:
+          !selectedColumns.value.includes('link') ||
+          props.type === TableFilesType.HOSTING ||
+          props.type === TableFilesType.DEPLOYMENT,
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
@@ -273,7 +276,11 @@ const columns = computed(() => {
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (row.size) {
-          return h('span', {}, { default: () => formatBytes(row.size || 0) });
+          return h(
+            'span',
+            { class: cellClasses(row.type) },
+            { default: () => formatBytes(row.size || 0) }
+          );
         }
         return '';
       },
@@ -287,7 +294,11 @@ const columns = computed(() => {
       ],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
+        return h(
+          'span',
+          { class: cellClasses(row.type) },
+          { default: () => datetimeToDate(row.createTime || '') }
+        );
       },
     },
     {
@@ -300,7 +311,7 @@ const columns = computed(() => {
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (row.contentType) {
-          return h('span', {}, row.contentType);
+          return h('span', { class: cellClasses(row.type) }, row.contentType);
         }
         return '';
       },
@@ -406,7 +417,9 @@ function onItemOpen(row: BucketItemInterface) {
   currentRow.value = row;
   switch (row.type) {
     case BucketItemType.FILE:
-      onFileOpen();
+      if (props.type !== TableFilesType.HOSTING) {
+        onFileOpen();
+      }
       break;
     case BucketItemType.DIRECTORY:
       onFolderOpen(row);
@@ -596,5 +609,12 @@ function checkUnfinishedFiles() {
 }
 function hasUnfinishedFiles(): boolean {
   return bucketStore.folder.items.some(file => file.fileStatus < FileStatus.UPLOADED_TO_IPFS);
+}
+
+/** Additional classes if TableType is Hosting and RowType is File  */
+function cellClasses(rowType: number) {
+  return props.type === TableFilesType.HOSTING && rowType === BucketItemType.FILE
+    ? 'p-3 -m-3 cursor-default'
+    : '';
 }
 </script>

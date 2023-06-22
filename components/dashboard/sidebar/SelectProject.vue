@@ -44,14 +44,14 @@ const componentSelectKey = ref(0);
 const loading = ref<boolean>(false);
 
 const dropdownOptions = computed(() => {
-  return dataStore.project.items.map(item => {
+  return dataStore.project.items.map((item: ProjectInterface) => {
     return {
-      key: item.id,
+      key: item.project_uuid,
       label: item.label,
       value: item.value,
-      active: item.id === dataStore.project.selected,
+      active: item.project_uuid === dataStore.project.selected,
       props: {
-        class: item.id === dataStore.project.selected ? 'active' : '',
+        class: item.project_uuid === dataStore.project.selected ? 'active' : '',
         onClick: () => {},
       },
     };
@@ -72,18 +72,18 @@ onMounted(() => {
 /** Watcher - project change */
 watch(
   () => dataStore.project.selected,
-  async (projectId, oldProjectId) => {
+  async (projectUuid, oldProjectUuid) => {
     /** Clear all stored data */
     clearAll();
 
     /** Save current project ID to LS and redirect to Dashboard */
-    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${projectId}`);
-    if (projectId !== oldProjectId && oldProjectId > 0) {
+    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, projectUuid);
+    if (projectUuid !== oldProjectUuid && oldProjectUuid !== '') {
       router.push({ name: 'dashboard' });
     }
 
-    /** Reload projects if projectId is new project */
-    if (!dataStore.project.items.some(project => project.id === projectId)) {
+    /** Reload projects if projectUuid is new project */
+    if (!dataStore.project.items.some(project => project.project_uuid === projectUuid)) {
       loading.value = true;
       dataStore.project.items = [];
 
@@ -99,8 +99,8 @@ watch(
   }
 );
 
-function onDropdownSelect(key: string | number) {
-  dataStore.project.selected = Number(key);
+function onDropdownSelect(key: string) {
+  dataStore.project.selected = key;
 }
 </script>
 

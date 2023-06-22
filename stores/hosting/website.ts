@@ -7,7 +7,7 @@ const deploymentStore = useDeploymentStore();
 export const useWebsiteStore = defineStore('website', {
   state: () => ({
     active: {} as WebsiteInterface,
-    items: [] as Array<WebsiteInterface>,
+    items: [] as Array<WebsiteBaseInterface>,
     loading: false,
     search: '',
     selected: 0,
@@ -25,7 +25,7 @@ export const useWebsiteStore = defineStore('website', {
   actions: {
     resetData() {
       this.active = {} as WebsiteInterface;
-      this.items = [] as Array<WebsiteInterface>;
+      this.items = [] as Array<WebsiteBaseInterface>;
       this.search = '';
       this.selected = 0;
       this.quotaReached = undefined;
@@ -76,7 +76,7 @@ export const useWebsiteStore = defineStore('website', {
           ...PARAMS_ALL_ITEMS,
         };
 
-        const req = $api.get<WebsitesResponse>(endpoints.websites(), params);
+        const req = $api.get<WebsitesBaseResponse>(endpoints.websites(), params);
         dataStore.promises.websites = req;
         const res = await req;
 
@@ -88,7 +88,7 @@ export const useWebsiteStore = defineStore('website', {
       } catch (error: any) {
         /** Clear promise */
         dataStore.promises.websites = null;
-        this.items = [] as Array<WebsiteInterface>;
+        this.items = [] as Array<WebsiteBaseInterface>;
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));

@@ -7,8 +7,7 @@
         </NuxtLink>
         <h2>{{ collectionStore.active.name }}</h2>
 
-        <!-- 
-        <n-space align="center" size="small" :wrap="false">
+        <n-space class="mt-2" align="center" size="small" :wrap="false">
           <span>{{ $t('nft.collection.uuid') }}:</span>
           <n-ellipsis class="text-body align-bottom" :line-clamp="1">
             {{ collectionStore.active.collection_uuid }}
@@ -19,8 +18,7 @@
           >
             <span class="icon-copy"></span>
           </button>
-        </n-space> 
-        -->
+        </n-space>
       </n-space>
     </slot>
     <template #info>
