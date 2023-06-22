@@ -107,7 +107,7 @@
           class="mt-4 pr-4 sm:pr-8"
           :service-type="serviceType.id"
           :default-service-name="serviceType.name"
-          :btn-text="$t('form.createNewService')"
+          :btn-text="$t('general.attachService', { service: serviceType.name })"
           @create-success="onServiceCreated"
         />
       </n-collapse-item>
