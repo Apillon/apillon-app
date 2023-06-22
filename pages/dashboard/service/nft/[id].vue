@@ -60,8 +60,8 @@ const modalTransferOwnershipVisible = ref<boolean | null>(false);
 let collectionInterval: any = null as any;
 let transactionInterval: any = null as any;
 
-/** Website ID from route */
-const collectionId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
+/** Collection UUID from route */
+const collectionUuid = ref<string>(`${params?.id}` || `${params?.slug}` || '');
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),
@@ -69,10 +69,10 @@ useHead({
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const currentCollection = await collectionStore.getCollection(collectionId.value);
+    const currentCollection = await collectionStore.getCollection(collectionUuid.value);
 
     /** Reset state if user opens different collection */
-    if (collectionId.value !== collectionStore.active?.id) {
+    if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
       collectionStore.resetMetadata();
     }
 

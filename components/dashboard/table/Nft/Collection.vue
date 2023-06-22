@@ -130,7 +130,7 @@ const rowProps = (row: CollectionInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/nft/${row.id}` });
+        router.push({ path: `/dashboard/service/nft/${row.collection_uuid}` });
       }
     },
   };
