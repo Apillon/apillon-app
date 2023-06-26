@@ -90,10 +90,10 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
     },
     {
       key: 'maxSupply',
-      title: $i18n.t('nft.collection.minted') + '/' + $i18n.t('nft.collection.maxSupply'),
+      title: $i18n.t('nft.collection.maxSupply'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row: CollectionInterface) {
-        return h('span', {}, { default: () => mintedMaxSupply(row.minted, row.maxSupply) });
+        return h('span', {}, { default: () => maxSupply(row.maxSupply) });
       },
     },
     {
@@ -136,8 +136,7 @@ const rowProps = (row: CollectionInterface) => {
   };
 };
 
-function mintedMaxSupply(minted: number, maxSupply: number) {
-  const supply = maxSupply > 0 ? maxSupply : $i18n.t('form.supplyTypes.unlimited');
-  return `${minted || 0}/${supply}`;
+function maxSupply(maxSupply: number) {
+  return maxSupply > 0 ? maxSupply : $i18n.t('form.supplyTypes.unlimited');
 }
 </script>
