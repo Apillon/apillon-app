@@ -416,7 +416,7 @@
       "projectDescription": "Project description",
       "role": "Role",
       "serviceName": "Service name",
-      "username": "First & Last name",
+      "username": "First and last name",
       "webhookPassword": "Password",
       "webhookUrl": "Webhook URL",
       "webhookUsername": "User name",
@@ -463,7 +463,7 @@
       "role": "Select role",
       "serviceName": "Enter the name for the new service",
       "typeHere": "Type here",
-      "username": "Enter yout First & Last name",
+      "username": "Enter your full name",
       "webhookPassword": "Enter password",
       "webhookUrl": "Webhook URL",
       "webhookUsername": "Enter user name",
@@ -807,7 +807,7 @@
     },
     "password": {
       "btn": "Send e-mail",
-      "info": "Explanation that we will send an e-mail bla bla Tellus ut sapien tristique lectus faucibus et. Adipiscing nibh nulla in aenean. Senectus egestas venenatis volutpat tortor pulvinar ullamcorper eget viverra.",
+      "info": "In case you need to reset your password, an email will be sent to the email address you saved in the upper section  \"Account Information\".",
       "title": "Password reset"
     },
     "2fa": "Two-factor authentication",

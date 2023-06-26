@@ -5,7 +5,9 @@
     </div>
 
     <div class="w-full lg:w-1/2">
-      <slot />
+      <div class="max-w-lg">
+        <slot />
+      </div>
     </div>
 
     <div class="w-full lg:w-1/4"></div>
