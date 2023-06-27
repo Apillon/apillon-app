@@ -10,6 +10,7 @@
         <!-- Actions -->
         <ActionsNftTransaction
           @mint="modalMintCollectionVisible = true"
+          @revoke="modalBurnTokensVisible = true"
           @transfer="modalTransferOwnershipVisible = true"
         />
 
@@ -34,6 +35,14 @@
         />
       </modal>
 
+      <!-- Modal - Burn Tokens -->
+      <modal v-model:show="modalBurnTokensVisible" :title="$t('nft.collection.burn.title')">
+        <FormNftBurn
+          :collection-uuid="collectionStore.active.collection_uuid"
+          @submit-success="onNftBurned"
+        />
+      </modal>
+
       <!-- Modal - Collection Transfer -->
       <modal v-model:show="modalTransferOwnershipVisible" :title="$t('nft.collection.transfer')">
         <FormNftTransfer
@@ -54,6 +63,7 @@ const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
+const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
 /** Polling */
@@ -111,6 +121,15 @@ function onNftMinted() {
     setTimeout(() => {
       checkUnfinishedTransactions();
     }, 3000);
+  }, 3000);
+}
+
+function onNftBurned() {
+  modalBurnTokensVisible.value = false;
+
+  setTimeout(() => {
+    collectionStore.fetchCollections();
+    router.push({ name: 'dashboard-service-nft' });
   }, 3000);
 }
 

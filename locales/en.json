@@ -669,6 +669,10 @@
       "uploadYourFirst": "Upload your first NFTs and start building your collection.",
       "uuid": "Collection UUID",
       "view": "Or, display them on your existing website",
+      "burn": {
+        "title": "Revoke collection",
+        "info": "Are you sure, you want to burn your collection?"
+      },
       "created": {
         "bucket": "newly created bucket",
         "explorer": "blockchain explorer",
