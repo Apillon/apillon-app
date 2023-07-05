@@ -85,10 +85,10 @@ const options = computed(() => {
     {
       label: $i18n.t('nft.collection.revoke'),
       key: 'revoke',
-      disabled: actionsDisabled.value,
+      disabled: actionsDisabled.value || !collectionStore.active?.isRevokable,
       props: {
         onClick: () => {
-          if (!actionsDisabled.value) {
+          if (!actionsDisabled.value && !!collectionStore.active?.isRevokable) {
             emit('revoke');
           }
         },
