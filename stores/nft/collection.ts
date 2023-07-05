@@ -35,10 +35,10 @@ export const useCollectionStore = defineStore('collection', {
       behaviour: {
         baseExtension: '.json',
         dropStart: Date.now() + 3600000,
-        isDrop: false,
+        drop: false,
         maxSupply: 0,
-        mintPrice: 0,
-        reserve: 0,
+        dropPrice: 0,
+        dropReserve: 0,
         revocable: false as Boolean | null,
         soulbound: false as Boolean | null,
         supplyLimited: 0,
@@ -100,10 +100,10 @@ export const useCollectionStore = defineStore('collection', {
 
       this.form.behaviour.baseExtension = '.json';
       this.form.behaviour.dropStart = Date.now() + 3600000;
-      this.form.behaviour.isDrop = false;
+      this.form.behaviour.drop = false;
       this.form.behaviour.maxSupply = 0;
-      this.form.behaviour.mintPrice = 0;
-      this.form.behaviour.reserve = 0;
+      this.form.behaviour.dropPrice = 0;
+      this.form.behaviour.dropReserve = 0;
       this.form.behaviour.revocable = false;
       this.form.behaviour.soulbound = false;
       this.form.behaviour.supplyLimited = 0;

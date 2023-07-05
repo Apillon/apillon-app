@@ -216,28 +216,28 @@
       </n-grid>
 
       <!--  Collection Is Drop -->
-      <n-form-item path="isDrop" :span="1" :show-label="false">
+      <n-form-item path="drop" :span="1" :show-label="false">
         <n-checkbox
-          v-model:checked="formData.isDrop"
+          v-model:checked="formData.drop"
           size="medium"
-          :label="infoLabel('collectionIsDrop')"
+          :label="infoLabel('collectionDrop')"
         />
       </n-form-item>
 
-      <n-grid v-if="!!formData.isDrop" :cols="12" :x-gap="32">
+      <n-grid v-if="!!formData.drop" :cols="12" :x-gap="32">
         <!--  Collection Mint price -->
         <n-form-item-gi
-          path="mintPrice"
+          path="dropPrice"
           :span="6"
-          :label="$t('form.label.collectionMintPrice', { currency: chainCurrency })"
-          :label-props="{ for: 'mintPrice' }"
+          :label="$t('form.label.collectionDropPrice', { currency: chainCurrency })"
+          :label-props="{ for: 'dropPrice' }"
         >
           <n-input-number
-            v-model:value="formData.mintPrice"
+            v-model:value="formData.dropPrice"
             :min="0"
             :max="1000"
             :step="0.001"
-            :input-props="{ id: 'mintPrice' }"
+            :input-props="{ id: 'dropPrice' }"
             :placeholder="$t('general.typeHere')"
             clearable
           />
@@ -255,11 +255,11 @@
         </n-form-item-gi>
       </n-grid>
 
-      <n-grid v-if="!!formData.isDrop" :cols="12" :x-gap="32">
+      <n-grid v-if="!!formData.drop" :cols="12" :x-gap="32">
         <!--  Collection Reserve -->
-        <n-form-item-gi path="reserve" :span="6" :label="infoLabel('collectionReserve')">
+        <n-form-item-gi path="dropReserve" :span="6" :label="infoLabel('collectionDropReserve')">
           <n-input-number
-            v-model:value="formData.reserve"
+            v-model:value="formData.dropReserve"
             :min="0"
             :placeholder="$t('general.typeHere')"
             clearable
@@ -320,14 +320,14 @@ const formData = ref<FormCollection>({
   name: '',
   symbol: '',
   chain: Chains.MOONBEAM,
-  mintPrice: 0,
+  dropPrice: 0,
   supplyLimited: 0,
   maxSupply: 0,
   baseUri: null,
   baseExtension: null,
-  isDrop: false,
+  drop: false,
   dropStart: Date.now() + 3600000,
-  reserve: 0,
+  dropReserve: 0,
   revocable: false,
   soulbound: false,
   royaltiesAddress: '',
@@ -416,13 +416,13 @@ async function createCollection() {
       name: formData.value.name,
       symbol: formData.value.symbol,
       chain: formData.value.chain,
-      mintPrice: formData.value.mintPrice,
+      dropPrice: formData.value.dropPrice,
       maxSupply: formData.value.supplyLimited === 1 ? formData.value.maxSupply : 0,
       baseUri: formData.value.baseUri,
       baseExtension: formData.value.baseExtension,
-      isDrop: formData.value.isDrop,
+      drop: formData.value.drop,
       dropStart: Math.floor((formData.value.dropStart || Date.now()) / 1000),
-      reserve: formData.value.reserve,
+      dropReserve: formData.value.dropReserve,
       isRevokable: formData.value.revocable,
       isSoulbound: formData.value.soulbound,
       royaltiesAddress: formData.value.royaltiesAddress,
