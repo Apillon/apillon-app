@@ -132,14 +132,14 @@ async function deploy() {
       symbol: collectionStore.form.base.symbol,
       chain: collectionStore.form.base.chain,
       baseExtension: collectionStore.form.behaviour.baseExtension,
-      mintPrice: collectionStore.form.behaviour.mintPrice,
+      dropPrice: collectionStore.form.behaviour.dropPrice,
       maxSupply:
         collectionStore.form.behaviour.supplyLimited === 1
           ? collectionStore.form.behaviour.maxSupply
           : 0,
-      isDrop: collectionStore.form.behaviour.isDrop,
+      drop: collectionStore.form.behaviour.drop,
       dropStart: Math.floor((collectionStore.form.behaviour.dropStart || Date.now()) / 1000),
-      reserve: collectionStore.form.behaviour.reserve || 0,
+      dropReserve: collectionStore.form.behaviour.dropReserve || 0,
       isRevokable: collectionStore.form.behaviour.revocable,
       isSoulbound: collectionStore.form.behaviour.soulbound,
       royaltiesAddress: collectionStore.form.behaviour.royaltiesAddress,

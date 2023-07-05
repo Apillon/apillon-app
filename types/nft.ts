@@ -87,10 +87,10 @@ declare global {
   interface FormCollectionBehaviour {
     baseExtension: string | null;
     dropStart?: number;
-    isDrop: boolean;
+    drop: boolean;
     maxSupply?: number | null;
-    mintPrice?: number;
-    reserve?: number;
+    dropPrice?: number;
+    dropReserve?: number;
     revocable?: boolean | null;
     soulbound?: boolean | null;
     supplyLimited?: number;
@@ -114,13 +114,13 @@ declare global {
     description: string;
     dropStart: number;
     id: number;
-    isDrop: boolean;
+    drop: boolean;
     isRevokable: boolean;
     isSoulbound: boolean;
     maxSupply: number;
-    mintPrice: number;
+    dropPrice: number;
     name: string;
-    reserve: number;
+    dropReserve: number;
     royaltiesAddress: string;
     royaltiesFees: number;
     status: number;

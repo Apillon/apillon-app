@@ -79,13 +79,13 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       },
     },
     {
-      key: 'mintPrice',
-      title: $i18n.t('nft.collection.mintPrice'),
+      key: 'dropPrice',
+      title: $i18n.t('nft.collection.dropPrice'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      key: 'reserve',
-      title: $i18n.t('nft.collection.reserve'),
+      key: 'dropReserve',
+      title: $i18n.t('nft.collection.dropReserve'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {

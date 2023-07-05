@@ -89,7 +89,7 @@ const rules: NFormRules = {
 };
 
 function validateQuantity(_: NFormItemRule, value: number): boolean {
-  return !collectionStore.active.isDrop || (value > 0 && value < collectionStore.active?.reserve);
+  return !collectionStore.active.drop || (value > 0 && value < collectionStore.active?.dropReserve);
 }
 
 const isTransferred = computed<boolean>(() => {
