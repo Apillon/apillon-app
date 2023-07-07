@@ -47,7 +47,7 @@ async function burn() {
   loading.value = true;
 
   try {
-    await $api.get<any>(endpoints.collectionBurn(props.collectionUuid));
+    await $api.post(endpoints.collectionBurn(props.collectionUuid));
 
     message.success($i18n.t('form.success.nftBurned'));
 
