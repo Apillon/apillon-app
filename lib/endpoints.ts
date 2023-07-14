@@ -150,7 +150,7 @@ const Endpoints = {
   },
 
   /** Collection */
-  collections: (id?: number) => {
+  collections: (id?: number | string) => {
     return id ? `/nfts/collections/${id}` : '/nfts/collections';
   },
   collectionTransactions: (collectionUuid: string) => {

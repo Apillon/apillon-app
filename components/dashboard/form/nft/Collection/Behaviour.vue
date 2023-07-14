@@ -117,29 +117,29 @@
 
     <n-grid class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Is Drop -->
-      <n-form-item-gi path="isDrop" :span="6" :show-label="false">
+      <n-form-item-gi path="drop" :span="6" :show-label="false">
         <n-checkbox
-          v-model:checked="collectionStore.form.behaviour.isDrop"
+          v-model:checked="collectionStore.form.behaviour.drop"
           size="medium"
-          :label="infoLabel('collectionIsDrop')"
+          :label="infoLabel('collectionDrop')"
         />
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="!!collectionStore.form.behaviour.isDrop" class="items-end" :cols="12" :x-gap="32">
+    <n-grid v-if="!!collectionStore.form.behaviour.drop" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Mint price -->
       <n-form-item-gi
-        path="mintPrice"
+        path="dropPrice"
         :span="6"
-        :label="$t('form.label.collectionMintPrice', { currency: chainCurrency() })"
-        :label-props="{ for: 'mintPrice' }"
+        :label="$t('form.label.collectionDropPrice', { currency: chainCurrency() })"
+        :label-props="{ for: 'dropPrice' }"
       >
         <n-input-number
-          v-model:value="collectionStore.form.behaviour.mintPrice"
+          v-model:value="collectionStore.form.behaviour.dropPrice"
           :min="0"
           :max="1000"
           :step="0.001"
-          :input-props="{ id: 'mintPrice' }"
+          :input-props="{ id: 'dropPrice' }"
           clearable
         />
       </n-form-item-gi>
@@ -162,19 +162,19 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="!!collectionStore.form.behaviour.isDrop" class="items-end" :cols="12" :x-gap="32">
+    <n-grid v-if="!!collectionStore.form.behaviour.drop" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Reserve -->
       <n-form-item-gi
-        path="reserve"
+        path="dropReserve"
         :span="6"
-        :label="infoLabel('collectionReserve')"
-        :label-props="{ for: 'reserve' }"
+        :label="infoLabel('collectionDropReserve')"
+        :label-props="{ for: 'dropReserve' }"
       >
         <n-input-number
-          v-model:value="collectionStore.form.behaviour.reserve"
+          v-model:value="collectionStore.form.behaviour.dropReserve"
           :min="0"
           :step="1"
-          :input-props="{ id: 'reserve' }"
+          :input-props="{ id: 'dropReserve' }"
           clearable
         />
       </n-form-item-gi>

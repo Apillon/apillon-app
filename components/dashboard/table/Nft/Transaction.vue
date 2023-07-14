@@ -8,7 +8,6 @@
     :loading="collectionStore.loading"
     :pagination="{ pageSize: PAGINATION_LIMIT }"
     :row-key="rowKey"
-    :row-props="rowProps"
   />
 </template>
 
@@ -18,7 +17,6 @@ const props = defineProps({
 });
 
 const $i18n = useI18n();
-const router = useRouter();
 const collectionStore = useCollectionStore();
 const { transactionLink } = useNft();
 
@@ -84,18 +82,4 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
 };
 const columns = createColumns();
 const rowKey = (row: TransactionInterface) => row.id;
-const currentRow = ref<TransactionInterface>(props.transactions[0]);
-
-/** On row click */
-const rowProps = (row: TransactionInterface) => {
-  return {
-    onClick: (e: Event) => {
-      currentRow.value = row;
-
-      if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/nft/${row.id}` });
-      }
-    },
-  };
-};
 </script>

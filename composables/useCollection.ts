@@ -78,14 +78,14 @@ export default function useCollection() {
         }),
       },
     ],
-    mintPrice: [
+    dropPrice: [
       {
         required: true,
-        message: $i18n.t('validation.collectionMintPrice'),
+        message: $i18n.t('validation.collectionDropPrice'),
       },
       {
-        validator: validateMintPrice,
-        message: $i18n.t('validation.collectionMintPrice'),
+        validator: validateDropPrice,
+        message: $i18n.t('validation.collectionDropPrice'),
       },
     ],
     dropStart: [
@@ -94,14 +94,14 @@ export default function useCollection() {
         message: $i18n.t('validation.collectionDropStart'),
       },
     ],
-    reserve: [
+    dropReserve: [
       {
         required: true,
-        message: $i18n.t('validation.collectionReserve'),
+        message: $i18n.t('validation.collectionDropReserve'),
       },
       {
         validator: validateReserve,
-        message: $i18n.t('validation.collectionReserve'),
+        message: $i18n.t('validation.collectionDropReserve'),
       },
     ],
     royaltiesAddress: [
@@ -132,12 +132,10 @@ export default function useCollection() {
     return value <= maxNft.value;
   }
   function validateDropStart(_: NFormItemRule, value: number): boolean {
-    return !collectionStore.form.behaviour.isDrop || value > Date.now();
+    return !collectionStore.form.behaviour.drop || value > Date.now();
   }
-  function validateMintPrice(_: NFormItemRule, value: number): boolean {
-    return (
-      !collectionStore.form.behaviour.isDrop || (value >= 0 && value < Number.MAX_SAFE_INTEGER)
-    );
+  function validateDropPrice(_: NFormItemRule, value: number): boolean {
+    return !collectionStore.form.behaviour.drop || (value >= 0 && value < Number.MAX_SAFE_INTEGER);
   }
 
   function disablePasteDate(ts: number) {
