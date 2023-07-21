@@ -56,7 +56,7 @@ const $i18n = useI18n();
 const authStore = useAuthStore();
 const { isLg } = useScreen();
 const { getMessageSignature } = useProvider();
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const loadingWallet = ref<boolean>(false);
 const modalWalletSelectVisible = ref<boolean>(false);

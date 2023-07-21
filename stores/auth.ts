@@ -95,7 +95,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     /**
-     * API cals
+     * API calls
      */
     async initUser() {
       let lsAuth = localStorage.getItem(AuthLsKeys.AUTH) as any;

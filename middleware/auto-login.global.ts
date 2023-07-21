@@ -11,12 +11,19 @@ const authRoutes: Array<RouteInterface> = [
   { name: 'register', redirect: '/dashboard' },
 ];
 
+const ignoreRoutes: String[] = ['login-admin'];
+
 /**
  * Load user data from localStorage into pinia.
  * If no user data in localStorage, logout.
  * Also logout if provider wallet is set and does not match localStorage wallet
  */
 export default defineNuxtRouteMiddleware(to => {
+  /** Ignored routes */
+  if (ignoreRoutes.includes(to.name as string)) {
+    return;
+  }
+
   const authStore = useAuthStore();
   if (authStore.jwt) {
     // Store already init'ed

@@ -199,7 +199,7 @@ async function deploy(env: number) {
 
   const deployment = await deploymentStore.deploy(websiteStore.active.id, env);
 
-  /** After successfull deploy redirect to next tab */
+  /** After successful deploy redirect to next tab */
   if (deployment && env === DeploymentEnvironment.STAGING) {
     deploymentStore.staging = [] as Array<DeploymentInterface>;
     setTimeout(() => {

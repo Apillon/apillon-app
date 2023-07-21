@@ -64,7 +64,7 @@ const props = defineProps({
 });
 
 const $i18n = useI18n();
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
