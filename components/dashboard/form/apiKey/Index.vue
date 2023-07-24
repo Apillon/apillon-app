@@ -129,13 +129,13 @@
   </n-form>
   <Spinner v-else />
 
-  <!-- Modal - API key detals -->
+  <!-- Modal - API key details -->
   <n-modal
     v-model:show="showModalApiKeyDetails"
     :mask-closable="false"
     preset="dialog"
     :title="$t('dashboard.apiKey.details')"
-    :positive-text="$t('dashboard.apiKey.secredSaved')"
+    :positive-text="$t('dashboard.apiKey.secretSaved')"
     @positive-click="emit('close')"
   >
     <ApiKeyDetails v-bind="createdApiKey" />
