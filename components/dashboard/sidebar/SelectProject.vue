@@ -5,6 +5,7 @@
     <n-dropdown
       v-if="collapsed"
       :options="dropdownOptions"
+      :disabled="authStore.isAdmin()"
       trigger="click"
       @select="onDropdownSelect"
     >
@@ -26,6 +27,7 @@
       :options="dataStore.project.items"
       class="select-project"
       :loading="loading"
+      :disabled="authStore.isAdmin()"
     />
   </template>
 </template>

@@ -43,8 +43,17 @@
           </div>
         </div>
         <!-- User profile -->
-        <HeaderProfile />
+        <HeaderProfile v-if="!authStore.isAdmin()" />
       </div>
+
+      <!-- Admin notification -->
+      <NotificationBar
+        v-if="authStore.isAdmin()"
+        class="absolute top-0 left-1/2 -translate-x-1/2"
+        type="warning"
+      >
+        {{ $t('dashboard.adminMode') }}
+      </NotificationBar>
     </div>
   </transition>
 </template>
