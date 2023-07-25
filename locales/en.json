@@ -142,10 +142,11 @@
     "apiKey": {
       "apiKey": "API key",
       "apiKeySecret": "API key secret",
+      "authorization": "Authorization",
       "delete": "Delete API key",
       "details": "API key details",
       "generate": "Generate new key",
-      "secredSaved": "I've saved API key's secret",
+      "secretSaved": "I've saved API key's secret",
       "title": "API keys",
       "update": "Update API key"
     },
@@ -1099,7 +1100,7 @@
     "nftMintAddressRequired": "Please enter your wallet address for minting",
     "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
-    "nftTransfertAddressRequired": "Please enter wallet address",
+    "nftTransferAddressRequired": "Please enter wallet address",
     "notImage": "{name} is not an image",
     "passwordMinLength": "Password must contain at least 12 characters.",
     "passwordReenterSame": "Password is not same as re-entered password!",
