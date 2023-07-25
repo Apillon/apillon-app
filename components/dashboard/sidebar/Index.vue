@@ -35,6 +35,7 @@
 
               <!-- Create new project -->
               <Btn
+                v-if="!authStore.isAdmin()"
                 type="info"
                 :size="collapsed ? 'small' : 'large'"
                 @click="showModalNewProject = true"
@@ -48,6 +49,7 @@
               </Btn>
             </n-space>
           </div>
+          <div v-else class="h-8"></div>
 
           <!-- SIDEBAR NAVIGATION -->
           <MenuNav :collapsed="collapsed" @toggleSidebar="hideNavOnMobile" />
@@ -94,7 +96,8 @@ onMounted(() => {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
       if (
         !dataStore.hasProjects &&
-        isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles())
+        isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles()) &&
+        !authStore.isAdmin()
       ) {
         showModalNewProject.value = true;
       }
