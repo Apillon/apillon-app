@@ -3,7 +3,6 @@
 </template>
 
 <script lang="ts" setup>
-const { query } = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 
@@ -15,26 +14,27 @@ onMounted(() => {
   window.addEventListener(
     'message',
     event => {
-      onAdminLogin(event.data?.sessionToken);
+      onAdminLogin(event.data?.sessionToken, event.data?.projectUuid);
     },
     false
   );
 });
 
-async function onAdminLogin(sessionToken?: string) {
-  if (!sessionToken) {
+async function onAdminLogin(sessionToken?: string, projectUuid?: string) {
+  if (!sessionToken || !projectUuid) {
+    authStore.logout();
     router.push('/');
     return;
   }
+  localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
+
   authStore.setUserToken(toStr(sessionToken));
   await authStore.initUser();
   if (authStore.jwt) {
     authStore.adminSession = true;
 
     /** Redirect to project */
-    if (query.projectUuid) {
-      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, toStr(query.projectUuid));
-    }
+    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, toStr(projectUuid));
     router.push({ name: 'dashboard' });
 
     /** Message parent on successful login */

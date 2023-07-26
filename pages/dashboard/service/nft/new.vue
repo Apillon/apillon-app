@@ -129,12 +129,7 @@
                     {{ $t('dashboard.permissions.insufficient') }}
                   </Notification>
                   <div class="flex flex-col gap-4 px-2">
-                    <Btn
-                      size="large"
-                      type="primary"
-                      :disabled="isFormDisabled"
-                      @click="goToWizzard"
-                    >
+                    <Btn size="large" type="primary" :disabled="isFormDisabled" @click="goToWizard">
                       {{ $t('nft.metadata.yes') }}
                     </Btn>
                     <Btn
@@ -289,7 +284,7 @@ watch(
   }
 );
 
-function goToWizzard() {
+function goToWizard() {
   collectionStore.metadataStored = false;
   collectionStore.mintTab = NftMintTab.UPLOAD;
 }
