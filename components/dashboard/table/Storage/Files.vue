@@ -66,7 +66,12 @@ const props = defineProps({
   type: {
     type: Number,
     validator: (type: number) =>
-      [TableFilesType.BUCKET, TableFilesType.DEPLOYMENT, TableFilesType.HOSTING].includes(type),
+      [
+        TableFilesType.BUCKET,
+        TableFilesType.HOSTING,
+        TableFilesType.NFT_METADATA,
+        TableFilesType.DEPLOYMENT,
+      ].includes(type),
     default: 0,
   },
 });
@@ -158,13 +163,10 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
     {
       label: $i18n.t('general.delete'),
       key: 'delete',
-      disabled: props.type === TableFilesType.NFT_METADATA,
       props: {
         class: '!text-pink',
         onClick: () => {
-          if (props.type !== TableFilesType.NFT_METADATA) {
-            showModalDelete.value = true;
-          }
+          showModalDelete.value = true;
         },
       },
     },
