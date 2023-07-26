@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_uuid',

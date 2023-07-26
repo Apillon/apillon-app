@@ -60,15 +60,21 @@ const dropdownOptions = computed(() => {
   });
 });
 
-onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await dataStore.getProjects();
+onMounted(async () => {
+  if (authStore.isAdmin()) {
+    const currentProject = await dataStore.getProject(dataStore.project.selected);
+    dataStore.project.items = [currentProject];
+    dataStore.updateCurrentProject(currentProject);
+  } else {
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await dataStore.getProjects();
 
-    /** Fetch active project data(get myRole_id_onProject) */
-    Promise.resolve(dataStore.promises.projects).then(async _ => {
-      await dataStore.getProject(dataStore.project.selected);
+      /** Fetch active project data(get myRole_id_onProject) */
+      Promise.resolve(dataStore.promises.projects).then(async _ => {
+        await dataStore.getProject(dataStore.project.selected);
+      });
     });
-  });
+  }
 });
 
 /** Watcher - project change */
