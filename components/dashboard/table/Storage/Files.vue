@@ -151,7 +151,7 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       label: $i18n.t('storage.ipns.publish'),
       key: 'ipns',
       disabled: !bucketItem.CID,
-      show: props.type === TableFilesType.BUCKET,
+      show: props.type === TableFilesType.BUCKET || props.type === TableFilesType.NFT_METADATA,
       props: {
         onClick: () => {
           if (bucketItem.CID) {
