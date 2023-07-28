@@ -131,6 +131,7 @@
     "termsAccept": "I accept the ",
     "termsAndConditions": "Terms and conditions",
     "test": "Test",
+    "type": "Type",
     "typeHere": "Type here",
     "updateTime": "Update time",
     "upload": "Upload",
@@ -394,6 +395,7 @@
       "collectionSoulbound": "Soulbound",
       "collectionSymbol": "Symbol",
       "collectionSupplyLimited": "Total supply",
+      "collectionType": "Collection type",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "domain": "Domain name",
@@ -694,7 +696,8 @@
         "collectionRoyaltiesFees": "The % value of royalties you want to collect in the future NFT sales.",
         "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
-        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection."
+        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
+        "collectionType": ""
       },
       "status": {
         "0": "CREATED",
@@ -703,6 +706,10 @@
         "3": "DEPLOYED",
         "4": "TRANSFERRED",
         "5": "FAILED"
+      },
+      "type": {
+        "1": "Generic",
+        "2": "Nestable"
       }
     },
     "deploy": {
@@ -716,7 +723,7 @@
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
-      "infoCollectionBehaviour": "Configure the behaviour of your NFT collection. ",
+      "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
       "infoCollectionName": "Define the name and symbol for your NFT collection.",
       "infoNew": "To ensure permanent access to your NFTs, you need to store their metadata and files on the web. \n\nWould you like to store your NFT metadata in decentralized way?",
       "no": "I already have it online",
@@ -727,7 +734,7 @@
       "titleBucket": "Let’s get you a bucket",
       "titleBucketCreation": "Bucket creation in progress",
       "titleBucketCreated": "Bucket successfully created",
-      "titleCollectionBehaviour": "Behaviour",
+      "titleCollectionBehavior": "Behavior",
       "titleCollectionName": "Name your collection",
       "yes": "Yes, proceed"
     },
@@ -1082,6 +1089,7 @@
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
     "collectionSymbolRequired": "Please enter Collection symbol",
+    "collectionTypeRequired": "Please select Collection type",
     "creditCard": "Credit card validation error",
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",

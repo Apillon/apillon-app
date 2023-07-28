@@ -69,6 +69,22 @@
         />
       </n-form-item>
 
+      <!--  Collection type -->
+      <n-form-item
+        path="collectionType"
+        :label="infoLabel('collectionType')"
+        :label-props="{ for: 'collectionType' }"
+      >
+        <select-options
+          v-model:value="formData.collectionType"
+          :options="collectionTypes"
+          :input-props="{ id: 'collectionType' }"
+          :placeholder="$t('general.pleaseSelect')"
+          filterable
+          clearable
+        />
+      </n-form-item>
+
       <n-grid class="items-end" :cols="12" :x-gap="32">
         <!--  Collection Base URI -->
         <n-form-item-gi
@@ -306,6 +322,7 @@ const collectionStore = useCollectionStore();
 const {
   booleanSelect,
   chains,
+  collectionTypes,
   formRef,
   loading,
   supplyTypes,
@@ -320,6 +337,7 @@ const formData = ref<FormCollection>({
   name: '',
   symbol: '',
   chain: Chains.MOONBEAM,
+  collectionType: NFTCollectionType.GENERIC,
   dropPrice: 0,
   supplyLimited: 0,
   maxSupply: 0,
@@ -416,6 +434,7 @@ async function createCollection() {
       name: formData.value.name,
       symbol: formData.value.symbol,
       chain: formData.value.chain,
+      collectionType: formData.value.collectionType,
       dropPrice: formData.value.dropPrice,
       maxSupply: formData.value.supplyLimited === 1 ? formData.value.maxSupply : 0,
       baseUri: formData.value.baseUri,

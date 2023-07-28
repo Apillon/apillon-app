@@ -6,6 +6,12 @@ export enum Chains {
   ASTAR = 592,
 }
 
+/** NFT Collection type */
+export enum NFTCollectionType {
+  GENERIC = 1,
+  NESTABLE = 2,
+}
+
 /** NFT Collection status */
 export enum CollectionStatus {
   CREATED = 0,
@@ -47,7 +53,7 @@ export enum NftUploadStep {
 }
 export enum NftDeployStep {
   NAME = 1,
-  BEHAVIOUR = 2,
+  BEHAVIOR = 2,
   DEPLOY = 3,
 }
 
@@ -82,9 +88,10 @@ declare global {
     symbol: string;
     name: string;
     chain?: number;
+    collectionType?: number;
   }
 
-  interface FormCollectionBehaviour {
+  interface FormCollectionBehavior {
     baseExtension: string | null;
     dropStart?: number;
     drop: boolean;
@@ -97,7 +104,7 @@ declare global {
     royaltiesAddress?: string;
     royaltiesFees?: number;
   }
-  interface FormCollection extends FormCollectionName, FormCollectionBehaviour {
+  interface FormCollection extends FormCollectionName, FormCollectionBehavior {
     baseUri: string | null;
     description?: string;
   }
@@ -108,6 +115,7 @@ declare global {
     bucketId: number;
     bucket_uuid: string;
     chain: number;
+    collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
     contractAddress: string | null;
