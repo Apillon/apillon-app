@@ -5,16 +5,23 @@
 <script lang="ts" setup>
 const router = useRouter();
 const authStore = useAuthStore();
+const config = useRuntimeConfig();
 
 definePageMeta({
   layout: 'auth',
 });
 
 onMounted(() => {
+  // signal the parent that we're loaded.
+  window.parent.postMessage('loaded', '*');
+
+  // listen for messages from the parent.
   window.addEventListener(
     'message',
     event => {
-      onAdminLogin(event.data?.sessionToken, event.data?.projectUuid);
+      if (event.origin === config.public.adminUrl) {
+        onAdminLogin(event.data?.sessionToken, event.data?.projectUuid);
+      }
     },
     false
   );
