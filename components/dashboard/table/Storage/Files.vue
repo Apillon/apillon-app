@@ -143,7 +143,7 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
       props: {
         onClick: () => {
-          downloadFile(currentRow.value.CID);
+          downloadFile(currentRow.value);
         },
       },
     },
