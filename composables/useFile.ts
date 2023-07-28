@@ -1,20 +1,18 @@
 export default function useFile() {
   const bucketStore = useBucketStore();
-  const fileStore = useFileStore();
   const downloading = ref<boolean>(false);
 
   /** Download file - get file details and download content from downloadLink */
-  async function downloadFile(CID?: string | null) {
-    if (!CID) {
-      console.warn('MISSING File CID!');
+  function downloadFile(file?: BucketItemInterface | null) {
+    if (file?.type === BucketItemType.DIRECTORY) {
+      window?.$message?.warning(`Folder ${file?.name} can't be downloaded!`);
+      return;
+    } else if (!file?.link) {
+      window?.$message?.warning(`${file?.name || 'File'} can't be downloaded!`);
       return;
     }
     try {
-      if (!(CID in fileStore.items)) {
-        fileStore.items[CID] = await fileStore.fetchFileDetails(CID);
-      }
-      const fileDetails: FileDetails = fileStore.items[CID].file;
-      return download(fileDetails.link, fileDetails.name);
+      return download(file.link, file.name);
     } catch (error: any) {
       /** Show error message */
       window?.$message?.error(window?.$i18n?.t('error.fileDownload'));
@@ -25,24 +23,17 @@ export default function useFile() {
   /**
    * Download multiple files
    */
-  async function downloadSelectedFiles() {
+  function downloadSelectedFiles() {
     if (bucketStore.folder.selectedItems.length === 0) {
       console.warn('No items selected');
       return;
     }
-
-    const promises: Array<Promise<any>> = [];
     downloading.value = true;
 
-    bucketStore.folder.selectedItems.forEach(async item => {
-      const req = downloadFile(item.CID);
-      promises.push(req);
-      await req;
+    bucketStore.folder.selectedItems.forEach(item => {
+      downloadFile(item);
     });
-
-    await Promise.all(promises).then(_ => {
-      downloading.value = false;
-    });
+    downloading.value = false;
   }
 
   return {
