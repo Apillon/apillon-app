@@ -162,6 +162,9 @@ const Endpoints = {
   collectionTransferOwnership: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/transferOwnership`;
   },
+  collectionBurn: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/burn`;
+  },
   collectionMint: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/mint`;
   },

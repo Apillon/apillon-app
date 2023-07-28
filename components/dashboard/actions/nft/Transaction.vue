@@ -56,7 +56,7 @@
 defineProps({
   env: { type: Number, default: 0 },
 });
-const emit = defineEmits(['mint', 'transfer']);
+const emit = defineEmits(['mint', 'revoke', 'transfer']);
 
 const $i18n = useI18n();
 const router = useRouter();
@@ -85,9 +85,13 @@ const options = computed(() => {
     {
       label: $i18n.t('nft.collection.revoke'),
       key: 'revoke',
-      disabled: actionsDisabled.value || true,
+      disabled: actionsDisabled.value || !collectionStore.active?.isRevokable,
       props: {
-        onClick: () => {},
+        onClick: () => {
+          if (!actionsDisabled.value && !!collectionStore.active?.isRevokable) {
+            emit('revoke');
+          }
+        },
       },
     },
     {
