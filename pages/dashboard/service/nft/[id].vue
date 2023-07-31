@@ -10,6 +10,7 @@
         <!-- Actions -->
         <ActionsNftTransaction
           @mint="modalMintCollectionVisible = true"
+          @nestMint="modalNestMintCollectionVisible = true"
           @revoke="modalBurnTokensVisible = true"
           @transfer="modalTransferOwnershipVisible = true"
         />
@@ -32,6 +33,14 @@
         <FormNftMint
           :collection-uuid="collectionStore.active.collection_uuid"
           @submit-success="onNftMinted"
+        />
+      </modal>
+
+      <!-- Modal - Collection Nest Mint -->
+      <modal v-model:show="modalNestMintCollectionVisible" :title="$t('nft.collection.nestMint')">
+        <FormNftNestMint
+          :collection-uuid="collectionStore.active.collection_uuid"
+          @submit-success="onNftNestMinted"
         />
       </modal>
 
@@ -63,6 +72,7 @@ const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
+const modalNestMintCollectionVisible = ref<boolean | null>(false);
 const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
@@ -78,6 +88,8 @@ useHead({
 });
 
 onMounted(() => {
+  collectionStore.getCollection(collectionUuid.value);
+
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     const currentCollection = await collectionStore.getCollection(collectionUuid.value);
 
@@ -115,6 +127,17 @@ watch(
 
 function onNftMinted() {
   modalMintCollectionVisible.value = false;
+  setTimeout(() => {
+    collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
+
+    setTimeout(() => {
+      checkUnfinishedTransactions();
+    }, 3000);
+  }, 3000);
+}
+
+function onNftNestMinted() {
+  modalNestMintCollectionVisible.value = false;
   setTimeout(() => {
     collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
 

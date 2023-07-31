@@ -56,7 +56,7 @@
 defineProps({
   env: { type: Number, default: 0 },
 });
-const emit = defineEmits(['mint', 'revoke', 'transfer']);
+const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer']);
 
 const $i18n = useI18n();
 const router = useRouter();
@@ -78,6 +78,19 @@ const options = computed(() => {
         onClick: () => {
           if (!actionsDisabled.value) {
             emit('mint');
+          }
+        },
+      },
+    },
+    {
+      label: $i18n.t('nft.collection.nestMint'),
+      key: 'nestMint',
+      show: collectionStore.active?.collectionType === NFTCollectionType.NESTABLE,
+      disabled: actionsDisabled.value,
+      props: {
+        onClick: () => {
+          if (!actionsDisabled.value) {
+            emit('nestMint');
           }
         },
       },
