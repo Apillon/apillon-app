@@ -47,7 +47,7 @@
       <modal v-model:show="modalTransferOwnershipVisible" :title="$t('nft.collection.transfer')">
         <FormNftTransfer
           :collection-uuid="collectionStore.active.collection_uuid"
-          @submit-success="onNftTrasnfered"
+          @submit-success="onNftTransferred"
         />
       </modal>
     </slot>
@@ -128,12 +128,11 @@ function onNftBurned() {
   modalBurnTokensVisible.value = false;
 
   setTimeout(() => {
-    collectionStore.fetchCollections();
-    router.push({ name: 'dashboard-service-nft' });
-  }, 3000);
+    collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
+  }, 300);
 }
 
-function onNftTrasnfered() {
+function onNftTransferred() {
   modalTransferOwnershipVisible.value = false;
   setTimeout(() => {
     collectionStore.fetchCollections();
@@ -156,7 +155,7 @@ function checkIfCollectionUnfinished() {
 
   clearInterval(collectionInterval);
   collectionInterval = setInterval(async () => {
-    const collection = await collectionStore.fetchCollection(collectionId.value);
+    const collection = await collectionStore.fetchCollection(collectionUuid.value);
     await collectionStore.fetchCollectionTransactions(
       collectionStore.active.collection_uuid,
       false
@@ -194,7 +193,7 @@ function checkUnfinishedTransactions() {
     );
     if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
       clearInterval(transactionInterval);
-      collectionStore.active = await collectionStore.fetchCollection(collectionId.value);
+      collectionStore.active = await collectionStore.fetchCollection(collectionUuid.value);
     }
   }, 30000);
 }

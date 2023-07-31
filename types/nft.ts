@@ -150,6 +150,10 @@ declare global {
     receivingAddress: string;
     quantity: number | null;
   }
+  interface FormNftBurn {
+    collectionUuid: string;
+    tokenId: number | null;
+  }
   interface FormNftTransfer {
     address: string;
   }

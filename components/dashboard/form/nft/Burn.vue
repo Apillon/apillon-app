@@ -1,9 +1,20 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
-    <p>{{ $t('nft.collection.burn.info') }}</p>
+    <p class="mb-8">{{ $t('nft.collection.burn.info') }}</p>
+
+    <!--  NFT Mint Quantity -->
+    <n-form-item path="tokenId" :label="$t('form.label.nftBurnTokenId')">
+      <n-input-number
+        v-model:value="formData.tokenId"
+        :min="1"
+        :step="1"
+        :placeholder="$t('form.placeholder.nftBurnTokenId')"
+        clearable
+      />
+    </n-form-item>
 
     <!--  Form submit -->
-    <n-form-item>
+    <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('nft.collection.burn.title')" />
       <Btn type="error" class="w-full mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('nft.collection.revoke') }}
@@ -25,9 +36,19 @@ const message = useMessage();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const formData = ref<{ collectionUuid: string }>({
+const formData = ref<FormNftBurn>({
   collectionUuid: props.collectionUuid,
+  tokenId: null,
 });
+
+const rules: NFormRules = {
+  tokenId: [
+    {
+      required: true,
+      message: $i18n.t('validation.nftBurnTokenIdRequired'),
+    },
+  ],
+};
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
