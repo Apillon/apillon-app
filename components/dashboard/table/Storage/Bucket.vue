@@ -52,6 +52,7 @@ const props = defineProps({
 const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
+const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const settingsStore = useSettingsStore();
 
@@ -179,8 +180,8 @@ const rowProps = (row: BucketInterface) => {
 
 const dropdownOptions = [
   {
-    label: $i18n.t('storage.edit'),
     key: 'storageEdit',
+    label: $i18n.t('storage.edit'),
     disabled: settingsStore.isProjectUser(),
     props: {
       onClick: () => {
@@ -191,6 +192,7 @@ const dropdownOptions = [
   {
     key: 'storageDelete',
     label: $i18n.t('general.delete'),
+    disabled: authStore.isAdmin(),
     props: {
       class: '!text-pink',
       onClick: () => {
@@ -204,6 +206,7 @@ const dropdownDeletedOptions = [
   {
     key: 'storageRestore',
     label: $i18n.t('general.restore'),
+    disabled: authStore.isAdmin(),
     props: {
       class: '!text-pink',
       onClick: () => {
