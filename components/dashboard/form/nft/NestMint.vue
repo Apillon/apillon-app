@@ -5,21 +5,34 @@
   <n-form
     v-bind="$attrs"
     ref="formRef"
+    class="mt-8"
     :model="formData"
     :rules="rules"
     :disabled="isFormDisabled"
     @submit.prevent="handleSubmit"
   >
-    <!--  NFT Mint Address -->
+    <!--  NFT Nest Mint - Collection -->
     <n-form-item
-      path="receivingAddress"
-      :label="$t('form.label.nftMintAddress')"
-      :label-props="{ for: 'receivingAddress' }"
+      path="parentCollectionUuid"
+      :label="$t('form.label.nftMintCollectionUuid')"
+      :label-props="{ for: 'bucket' }"
     >
-      <n-input
-        v-model:value="formData.receivingAddress"
-        :input-props="{ id: 'receivingAddress' }"
-        :placeholder="$t('form.placeholder.nftMintAddress')"
+      <select-options
+        v-model:value="formData.parentCollectionUuid"
+        :options="collections"
+        :loading="loading"
+        :placeholder="$t('general.pleaseSelect')"
+        filterable
+        clearable
+      />
+    </n-form-item>
+
+    <!--  NFT Nest Mint - NFT ID -->
+    <n-form-item path="parentNftId" :label="$t('form.label.nftMintNftId')">
+      <n-input-number
+        v-model:value="formData.parentNftId"
+        :min="1"
+        :placeholder="$t('form.placeholder.nftMintNftId')"
         clearable
       />
     </n-form-item>
@@ -35,7 +48,7 @@
     </n-form-item>
 
     <!--  Form submit -->
-    <n-form-item>
+    <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('nft.collection.mint')" />
       <Btn
         type="primary"
@@ -64,16 +77,23 @@ const collectionStore = useCollectionStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const formData = ref<FormNftMint>({
-  receivingAddress: '',
+const formData = ref<FormNftNestMint>({
+  parentCollectionUuid: null,
+  parentNftId: null,
   quantity: null,
 });
 
 const rules: NFormRules = {
-  receivingAddress: [
+  parentCollectionUuid: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintAddressRequired'),
+      message: $i18n.t('validation.nftMintCollectionUuidRequired'),
+    },
+  ],
+  parentNftId: [
+    {
+      required: true,
+      message: $i18n.t('validation.nftMintNftIdRequired'),
     },
   ],
   quantity: [
@@ -81,18 +101,16 @@ const rules: NFormRules = {
       required: true,
       message: $i18n.t('validation.nftMintQuantityRequired'),
     },
-    {
-      validator: validateQuantity,
-      message: $i18n.t('validation.nftMintQuantity'),
-    },
   ],
 };
 
-function validateQuantity(_: NFormItemRule, value: number): boolean {
-  return (
-    !collectionStore.active.drop || (value > 0 && value <= collectionStore.active?.dropReserve)
-  );
-}
+const collections = computed<Array<NSelectOption>>(() => {
+  return collectionStore.items
+    .filter(item => item.collectionType === NFTCollectionType.NESTABLE)
+    .map(item => {
+      return { label: item.name, value: item.collection_uuid };
+    });
+});
 
 const isTransferred = computed<boolean>(() => {
   return collectionStore.active.collectionStatus === CollectionStatus.TRANSFERRED;
@@ -123,7 +141,7 @@ async function mint() {
       ...formData.value,
       collection_uuid: props.collectionUuid,
     };
-    await $api.post<any>(endpoints.collectionMint(props.collectionUuid), bodyData);
+    await $api.post<any>(endpoints.collectionNestMint(props.collectionUuid), bodyData);
 
     message.success($i18n.t('form.success.nftMint'));
 

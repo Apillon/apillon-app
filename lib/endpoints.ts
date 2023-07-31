@@ -168,6 +168,9 @@ const Endpoints = {
   collectionMint: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/mint`;
   },
+  collectionNestMint: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/nest-mint`;
+  },
   collectionQuota: '/nfts/collections/quota-reached',
 
   /**
