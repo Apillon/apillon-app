@@ -33,7 +33,14 @@
           <!-- Delete files -->
           <n-tooltip placement="bottom" :show="showPopoverDelete">
             <template #trigger>
-              <n-button class="w-10" size="small" type="error" ghost @click="deleteSelectedFiles">
+              <n-button
+                class="w-10"
+                size="small"
+                type="error"
+                :disabled="authStore.isAdmin()"
+                ghost
+                @click="deleteSelectedFiles"
+              >
                 <span class="icon-delete text-xl"></span>
               </n-button>
             </template>
@@ -51,13 +58,25 @@
         </n-button>
 
         <!-- Create folder -->
-        <n-button v-if="isUpload" size="small" @click="showModalNewFolder = true">
+        <n-button
+          v-if="isUpload"
+          size="small"
+          :disabled="authStore.isAdmin()"
+          @click="showModalNewFolder = true"
+        >
           <span class="icon-create-folder text-xl mr-2"></span>
           {{ $t('storage.directory.create') }}
         </n-button>
 
         <!-- Clear all files -->
-        <n-button v-if="isUpload" size="small" type="error" ghost @click="showModalClearAll = true">
+        <n-button
+          v-if="isUpload"
+          size="small"
+          type="error"
+          :disabled="authStore.isAdmin()"
+          ghost
+          @click="showModalClearAll = true"
+        >
           <span class="icon-delete text-xl mr-2"></span>
           {{ $t('hosting.clearAll') }}
         </n-button>
@@ -68,6 +87,7 @@
           size="small"
           type="primary"
           :loading="deploying"
+          :disabled="authStore.isAdmin()"
           @click="deploy(DeploymentEnvironment.STAGING)"
         >
           <span class="icon-deploy text-xl mr-2"></span>
@@ -79,6 +99,7 @@
           size="small"
           type="primary"
           :loading="deploying"
+          :disabled="authStore.isAdmin()"
           @click="deploy(DeploymentEnvironment.PRODUCTION)"
         >
           <span class="icon-deploy text-xl mr-2"></span>
@@ -131,6 +152,7 @@ const { downloading, downloadSelectedFiles } = useFile();
 const { websiteId, refreshWebpage } = useHosting();
 const $i18n = useI18n();
 const router = useRouter();
+const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();

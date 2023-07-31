@@ -50,7 +50,7 @@
       </n-button>
 
       <!-- Create folder -->
-      <n-button size="small" @click="showModalNewFolder = true">
+      <n-button size="small" :disabled="authStore.isAdmin()" @click="showModalNewFolder = true">
         <span class="icon-create-folder text-xl mr-2"></span>
         {{ $t('storage.directory.create') }}
       </n-button>
@@ -60,6 +60,7 @@
         :color="bucketStore.uploadActive ? colors.primary : ''"
         size="small"
         type="primary"
+        :disabled="authStore.isAdmin()"
         ghost
         @click="bucketStore.uploadActive = !bucketStore.uploadActive || !bucketStore.hasBucketItems"
       >
@@ -90,8 +91,9 @@
 <script lang="ts" setup>
 import colors from '~~/tailwind.colors';
 
-const { downloading, downloadSelectedFiles } = useFile();
+const authStore = useAuthStore();
 const bucketStore = useBucketStore();
+const { downloading, downloadSelectedFiles } = useFile();
 
 const showModalNewFolder = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);

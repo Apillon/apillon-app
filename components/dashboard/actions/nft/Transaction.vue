@@ -39,6 +39,7 @@
           placement="bottom-end"
           trigger="click"
           :options="options"
+          :disabled="authStore.isAdmin()"
         >
           <n-button size="small">
             <span class="text-primary">{{ $t('general.actions') }}</span>
@@ -60,6 +61,7 @@ const emit = defineEmits(['mint', 'revoke', 'transfer']);
 
 const $i18n = useI18n();
 const router = useRouter();
+const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
 const loadingBucket = ref<boolean>(false);

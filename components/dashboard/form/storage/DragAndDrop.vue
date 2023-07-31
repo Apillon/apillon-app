@@ -1,5 +1,11 @@
 <template>
-  <n-upload :show-file-list="false" multiple directory-dnd :custom-request="uploadFilesRequest">
+  <n-upload
+    multiple
+    directory-dnd
+    :show-file-list="false"
+    :disabled="authStore.isAdmin()"
+    :custom-request="uploadFilesRequest"
+  >
     <n-upload-dragger :style="uploadHeight">
       <div class="py-2 text-center">
         <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
@@ -14,8 +20,9 @@
 </template>
 
 <script lang="ts" setup>
-const { fileAlreadyOnFileList } = useUpload();
+const authStore = useAuthStore();
 const bucketStore = useBucketStore();
+const { fileAlreadyOnFileList } = useUpload();
 
 /** Upload height */
 const uploadHeight = computed(() => {

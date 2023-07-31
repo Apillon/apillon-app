@@ -1,7 +1,13 @@
 <template>
   <Spinner v-if="websiteId > 0 && !website" />
   <div v-else>
-    <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+    <n-form
+      ref="formRef"
+      :model="formData"
+      :rules="rules"
+      :disabled="authStore.isAdmin()"
+      @submit.prevent="handleSubmit"
+    >
       <!--  Website domain -->
       <n-form-item path="domain" :label="$t('form.label.domain')" :label-props="{ for: 'domain' }">
         <n-input
@@ -22,7 +28,7 @@
           type="primary"
           class="w-full mt-2"
           :loading="loading"
-          :disabled="!domain && formData.domain?.length === 0"
+          :disabled="(!domain && formData.domain?.length === 0) || authStore.isAdmin()"
           @click="handleSubmit"
         >
           <template v-if="domain">
@@ -48,6 +54,7 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
 const loading = ref(false);
