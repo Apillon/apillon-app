@@ -37,6 +37,8 @@ export enum TransactionType {
   TRANSFER_CONTRACT_OWNERSHIP = 2,
   MINT_NFT = 3,
   SET_COLLECTION_BASE_URI = 4,
+  BURN_NFT = 5,
+  NEST_MINT_NFT = 6,
 }
 
 /** Mint steps */

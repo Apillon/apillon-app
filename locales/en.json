@@ -766,7 +766,9 @@
         "1": "DEPLOY CONTRACT",
         "2": "TRANSFER CONTRACT OWNERSHIP",
         "3": "MINT NFT",
-        "4": "SET COLLECTION BASE URI"
+        "4": "SET COLLECTION BASE URI",
+        "5": "BURN NFT",
+        "6": "MINT NEST NFT"
       }
     },
     "upload": {
