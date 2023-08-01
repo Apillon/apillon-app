@@ -21,7 +21,11 @@ defineProps({
 function getTransactionType(status: number): TagType {
   switch (status) {
     case TransactionType.DEPLOY_CONTRACT:
-      return 'info';
+      return 'success';
+    case TransactionType.TRANSFER_CONTRACT_OWNERSHIP:
+      return 'warning';
+    case TransactionType.BURN_NFT:
+      return 'error';
     default:
       return 'info';
   }
