@@ -484,6 +484,7 @@
       "filesUploaded": "Files has been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
+      "nftBurned": "NFT token has been burned.",
       "nftDeployed": "NFT deploy requested.",
       "nftMint": "Minting NFT requested.",
       "nftTransfer": "NFT ownership has been transferred",
