@@ -165,7 +165,11 @@ export default function useNft() {
       const attributes: Array<Record<string, any>> = [];
       collectionStore.csvAttributes.forEach(attribute => {
         if (collectionStore.csvSelectedAttributes.includes(attribute.value)) {
-          attributes.push(attribute);
+          attributes.push({
+            value: item[attribute.value],
+            trait_type: attribute.value,
+            display_type: attribute.display_type,
+          });
         }
       });
       if (attributes.length > 0) {
