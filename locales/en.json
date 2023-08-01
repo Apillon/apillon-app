@@ -669,7 +669,7 @@
       "numOfData": "Number of data",
       "quotaReached": "Quota has been reached.",
       "dropReserve": "Reserved",
-      "revoke": "Revoke",
+      "revoke": "Burn",
       "symbol": "Symbol",
       "title": "Collection title",
       "transfer": "Transfer ownership",
@@ -681,7 +681,7 @@
       "uuid": "Collection UUID",
       "view": "Or, display them on your existing website",
       "burn": {
-        "title": "Revoke collection",
+        "title": "Burn collection",
         "info": "Are you sure, you want to burn your collection?"
       },
       "created": {
