@@ -28,11 +28,11 @@
     </n-form-item>
 
     <!--  NFT Nest Mint - NFT ID -->
-    <n-form-item path="parentNftId" :label="$t('form.label.nftMintNftId')">
+    <n-form-item path="parentNftId" :label="$t('form.label.nftMintParentNftId')">
       <n-input-number
         v-model:value="formData.parentNftId"
         :min="1"
-        :placeholder="$t('form.placeholder.nftMintNftId')"
+        :placeholder="$t('form.placeholder.nftMintParentNftId')"
         clearable
       />
     </n-form-item>
@@ -93,7 +93,7 @@ const rules: NFormRules = {
   parentNftId: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintNftIdRequired'),
+      message: $i18n.t('validation.nftMintParentNftIdRequired'),
     },
   ],
   quantity: [
