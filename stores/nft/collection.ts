@@ -211,8 +211,14 @@ export const useCollectionStore = defineStore('collection', {
     ): Promise<TransactionInterface[]> {
       this.loading = showLoader;
       try {
+        const params: Record<string, string | number> = {
+          orderBy: 'updateTime',
+          desc: 'true',
+          ...PARAMS_ALL_ITEMS,
+        };
         const res = await $api.get<TransactionResponse>(
-          endpoints.collectionTransactions(collectionUuid)
+          endpoints.collectionTransactions(collectionUuid),
+          params
         );
         this.transaction = res.data.items;
         this.loading = false;
