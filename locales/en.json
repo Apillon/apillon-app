@@ -241,8 +241,11 @@
   },
   "error": {
     "404": "Page not found",
+    "50012005": "You can't mint this collection or all tokens has already been minted!",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
+    "50012012": "Make sure parent doesn't have any children nested before burning. If you still experience issues try later or try burning another token.",
+    "50012013": "Collection is not nestable!",
     "BAD_REQUEST": "There is a problem with this request. Please come back later when we fixed that problem.",
     "INVALID_PATH": "Invalid path",
     "INVALID_QUERY_PARAMETERS": "Invalid query parameters",
