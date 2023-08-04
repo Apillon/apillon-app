@@ -159,7 +159,7 @@ async function getUsers() {
 async function updateRole(id: number, roleId: number) {
   updateLoadingStatusOnUsersRole(id, true);
   try {
-    const res = await $api.patch<UpdateUserRoleResponse>(endpoints.projectUserRole(id), {
+    await $api.patch<UpdateUserRoleResponse>(endpoints.projectUser(id), {
       role_id: roleId,
     });
 

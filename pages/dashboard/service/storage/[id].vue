@@ -10,12 +10,7 @@
 
       <!-- Upload files -->
       <transition name="fade" appear>
-        <FormStorageDragAndDrop
-          v-if="
-            (bucketStore.uploadActive || !bucketStore.hasBucketItems) &&
-            bucketStore.active.bucketType !== BucketType.NFT_METADATA
-          "
-        />
+        <FormStorageDragAndDrop v-if="bucketStore.uploadActive || !bucketStore.hasBucketItems" />
       </transition>
 
       <!-- Breadcrumbs -->
@@ -26,9 +21,7 @@
       <!-- DataTable: files and directories -->
       <transition name="fade" appear>
         <TableStorageFiles
-          v-if="
-            bucketStore.hasBucketItems || bucketStore.active.bucketType === BucketType.NFT_METADATA
-          "
+          v-if="bucketStore.hasBucketItems"
           :type="bucketStore.active.bucketType"
         />
       </transition>

@@ -52,6 +52,22 @@
       />
     </n-form-item>
 
+    <!--  Collection type -->
+    <n-form-item
+      path="collectionType"
+      :label="infoLabel('collectionType')"
+      :label-props="{ for: 'collectionType' }"
+    >
+      <select-options
+        v-model:value="collectionStore.form.base.collectionType"
+        :options="collectionTypes"
+        :input-props="{ id: 'collectionType' }"
+        :placeholder="$t('general.pleaseSelect')"
+        filterable
+        clearable
+      />
+    </n-form-item>
+
     <!--  Form submit -->
     <n-form-item>
       <input type="submit" class="hidden" :value="$t('form.proceed')" />
@@ -68,7 +84,7 @@ import { useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { chains, formRef, rules } = useCollection();
+const { chains, collectionTypes, formRef, rules } = useCollection();
 
 function infoLabel(field: string) {
   if (
@@ -97,7 +113,7 @@ function handleSubmitForm(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      collectionStore.stepDeploy = NftDeployStep.BEHAVIOUR;
+      collectionStore.stepDeploy = NftDeployStep.BEHAVIOR;
     }
   });
 }

@@ -31,8 +31,9 @@ export const useCollectionStore = defineStore('collection', {
         name: '',
         symbol: '',
         chain: Chains.MOONBEAM,
+        collectionType: NFTCollectionType.GENERIC,
       },
-      behaviour: {
+      behavior: {
         baseExtension: '.json',
         dropStart: Date.now() + 3600000,
         drop: false,
@@ -97,16 +98,17 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.name = '';
       this.form.base.symbol = '';
       this.form.base.chain = Chains.MOONBEAM;
+      this.form.base.collectionType = NFTCollectionType.GENERIC;
 
-      this.form.behaviour.baseExtension = '.json';
-      this.form.behaviour.dropStart = Date.now() + 3600000;
-      this.form.behaviour.drop = false;
-      this.form.behaviour.maxSupply = 0;
-      this.form.behaviour.dropPrice = 0;
-      this.form.behaviour.dropReserve = 0;
-      this.form.behaviour.revocable = false;
-      this.form.behaviour.soulbound = false;
-      this.form.behaviour.supplyLimited = 0;
+      this.form.behavior.baseExtension = '.json';
+      this.form.behavior.dropStart = Date.now() + 3600000;
+      this.form.behavior.drop = false;
+      this.form.behavior.maxSupply = 0;
+      this.form.behavior.dropPrice = 0;
+      this.form.behavior.dropReserve = 0;
+      this.form.behavior.revocable = false;
+      this.form.behavior.soulbound = false;
+      this.form.behavior.supplyLimited = 0;
     },
 
     /**
@@ -209,8 +211,14 @@ export const useCollectionStore = defineStore('collection', {
     ): Promise<TransactionInterface[]> {
       this.loading = showLoader;
       try {
+        const params: Record<string, string | number> = {
+          orderBy: 'updateTime',
+          desc: 'true',
+          ...PARAMS_ALL_ITEMS,
+        };
         const res = await $api.get<TransactionResponse>(
-          endpoints.collectionTransactions(collectionUuid)
+          endpoints.collectionTransactions(collectionUuid),
+          params
         );
         this.transaction = res.data.items;
         this.loading = false;

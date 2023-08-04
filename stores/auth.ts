@@ -8,6 +8,7 @@ export const AuthLsKeys = {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
+    adminSession: false,
     crypto: null,
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
     jwt: '',
@@ -45,6 +46,10 @@ export const useAuthStore = defineStore('auth', {
 
     getUserRoles() {
       return this.user?.userRoles || [];
+    },
+
+    isAdmin() {
+      return this.adminSession && !!(this.user?.userRoles || []).includes(DefaultUserRole.ADMIN);
     },
 
     isBetaUser() {
@@ -95,7 +100,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     /**
-     * API cals
+     * API calls
      */
     async initUser() {
       let lsAuth = localStorage.getItem(AuthLsKeys.AUTH) as any;

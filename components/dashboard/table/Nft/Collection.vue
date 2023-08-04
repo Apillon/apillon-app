@@ -64,6 +64,19 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       },
     },
     {
+      key: 'type',
+      title: $i18n.t('general.type'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      minWidth: 100,
+      render(row) {
+        if (row.collectionType) {
+          return $i18n.t(`nft.collection.type.${row.collectionType}`);
+        } else {
+          return $i18n.t(`nft.collection.type.${NFTCollectionType.GENERIC}`);
+        }
+      },
+    },
+    {
       key: 'collection_uuid',
       title: $i18n.t('nft.collection.uuid'),
       className: 'hidden',

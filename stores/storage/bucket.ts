@@ -256,7 +256,7 @@ export const useBucketStore = defineStore('bucket', {
       }
 
       try {
-        /** If subfolder is selected, search directory content in this sibfolder */
+        /** If subfolder is selected, search directory content in this subfolder */
         const params: Record<string, string | number> = {
           bucket_uuid: bucket,
         };

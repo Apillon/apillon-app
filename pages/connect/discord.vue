@@ -9,7 +9,6 @@ const { query } = useRoute();
 const router = useRouter();
 const message = useMessage();
 const $i18n = useI18n();
-const settingsStore = useSettingsStore();
 
 onBeforeMount(() => {
   if (query.error) {

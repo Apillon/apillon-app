@@ -25,7 +25,7 @@
     </n-form-item>
 
     <!--  API key type -->
-    <n-form-item
+    <!-- <n-form-item
       path="apiKeyTypes"
       class="mb-4 border-b-1 border-grey/40"
       :label="$t('form.label.apiKeyType')"
@@ -41,7 +41,7 @@
           />
         </n-space>
       </n-radio-group>
-    </n-form-item>
+    </n-form-item> -->
 
     <!-- Permissions per service -->
     <n-collapse
@@ -129,13 +129,13 @@
   </n-form>
   <Spinner v-else />
 
-  <!-- Modal - API key detals -->
+  <!-- Modal - API key details -->
   <n-modal
     v-model:show="showModalApiKeyDetails"
     :mask-closable="false"
     preset="dialog"
     :title="$t('dashboard.apiKey.details')"
-    :positive-text="$t('dashboard.apiKey.secredSaved')"
+    :positive-text="$t('dashboard.apiKey.secretSaved')"
     @positive-click="emit('close')"
   >
     <ApiKeyDetails v-bind="createdApiKey" />
@@ -210,7 +210,7 @@ const unusedServices = computed<ServiceTypeField[]>(() => {
   }, [] as ServiceTypeField[]);
 });
 
-const apiKeyTypes: Array<{ value: boolean; label: string }> = [
+/* const apiKeyTypes: Array<{ value: boolean; label: string }> = [
   {
     value: true,
     label: $i18n.t('form.apiKeyTypes.test'),
@@ -219,7 +219,7 @@ const apiKeyTypes: Array<{ value: boolean; label: string }> = [
     value: false,
     label: $i18n.t('form.apiKeyTypes.live'),
   },
-];
+]; */
 
 const formData = ref<ApiKeyForm>({
   name: '',
@@ -314,7 +314,7 @@ async function createApiKey() {
     const bodyData = {
       project_uuid: projectUuid,
       name: formData.value.name,
-      testNetwork: formData.value.apiKeyType,
+      testNetwork: false,
       roles: formData.value.roles
         .map(role => {
           return role.permissions
@@ -353,7 +353,7 @@ async function updateApiKey() {
     const bodyData = {
       project_uuid: projectUuid,
       name: formData.value.name,
-      testNetwork: formData.value.apiKeyType,
+      testNetwork: false,
     };
     const res = await $api.put<ApiKeyCreatedResponse>(endpoints.apiKey(), bodyData);
 

@@ -66,7 +66,12 @@ const props = defineProps({
   type: {
     type: Number,
     validator: (type: number) =>
-      [TableFilesType.BUCKET, TableFilesType.DEPLOYMENT, TableFilesType.HOSTING].includes(type),
+      [
+        TableFilesType.BUCKET,
+        TableFilesType.HOSTING,
+        TableFilesType.NFT_METADATA,
+        TableFilesType.DEPLOYMENT,
+      ].includes(type),
     default: 0,
   },
 });
@@ -74,6 +79,7 @@ const props = defineProps({
 const { downloadFile } = useFile();
 const $i18n = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const showModalW3Warn = ref<boolean>(false);
@@ -113,8 +119,8 @@ const pagination = computed(() => {
 const dropdownOptions = (bucketItem: BucketItemInterface) => {
   return [
     {
-      label: $i18n.t('general.view'),
       key: 'view',
+      label: $i18n.t('general.view'),
       show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
       props: {
         onClick: () => {
@@ -123,8 +129,8 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       },
     },
     {
-      label: $i18n.t('general.open'),
       key: 'open',
+      label: $i18n.t('general.open'),
       show: bucketItem.type === BucketItemType.DIRECTORY,
       props: {
         onClick: () => {
@@ -133,20 +139,20 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       },
     },
     {
-      label: $i18n.t('general.download'),
       key: 'download',
+      label: $i18n.t('general.download'),
       show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
       props: {
         onClick: () => {
-          downloadFile(currentRow.value.CID);
+          downloadFile(currentRow.value);
         },
       },
     },
     {
-      label: $i18n.t('storage.ipns.publish'),
       key: 'ipns',
-      disabled: !bucketItem.CID,
-      show: props.type === TableFilesType.BUCKET,
+      label: $i18n.t('storage.ipns.publish'),
+      disabled: !bucketItem.CID || authStore.isAdmin(),
+      show: props.type === TableFilesType.BUCKET || props.type === TableFilesType.NFT_METADATA,
       props: {
         onClick: () => {
           if (bucketItem.CID) {
@@ -156,15 +162,13 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       },
     },
     {
-      label: $i18n.t('general.delete'),
       key: 'delete',
-      disabled: props.type === TableFilesType.NFT_METADATA,
+      label: $i18n.t('general.delete'),
+      disabled: authStore.isAdmin(),
       props: {
         class: '!text-pink',
         onClick: () => {
-          if (props.type !== TableFilesType.NFT_METADATA) {
-            showModalDelete.value = true;
-          }
+          showModalDelete.value = true;
         },
       },
     },

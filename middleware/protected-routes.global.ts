@@ -64,10 +64,17 @@ const featureRoutes: Array<FeatureRouteInterface> = [
   { regex: /^\/dashboard\/billing/, redirect: '/dashboard', feature: Feature.BILLING },
 ];
 
+const ignoreRoutes: String[] = ['login-admin'];
+
 /**
  * Redirect user to landing page if not logged in and trying to access protected routes
  */
-export default defineNuxtRouteMiddleware(to => {
+export default defineNuxtRouteMiddleware((to, from) => {
+  /** Ignored routes */
+  if (ignoreRoutes.includes(to.name as string)) {
+    return;
+  }
+
   const decodedUrl = removeLastSlash(decodeURI(to.path));
   const authStore = useAuthStore();
 
@@ -94,7 +101,8 @@ export default defineNuxtRouteMiddleware(to => {
       ((featureRoute.regex && featureRoute.regex.test(decodedUrl)) ||
         decodedUrl === featureRoute.path) &&
       (!isFeatureEnabled(featureRoute.feature, authStore.getUserRoles()) ||
-        (featureRoute.permission && !authStore.isUserAllowed(featureRoute.permission)))
+        (featureRoute.permission && !authStore.isUserAllowed(featureRoute.permission))) &&
+      (!authStore.jwt || !!authStore.userUuid)
     ) {
       return navigateTo(featureRoute.redirect, { redirectCode: 301 });
     }

@@ -17,7 +17,7 @@ import { clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { createDiscreteApi } from 'naive-ui';
 
 /** Global messages */
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 window.$message = message;
 
 /**

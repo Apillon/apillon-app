@@ -52,7 +52,7 @@
       <div class="container relative max-w-lg py-16 sm:px-8 md:px-12 lg:px-16 card">
         <AuthHeader />
         <div>
-          <!-- customise 404 message from template section -->
+          <!-- customize 404 message from template section -->
           <n-h4>{{ $t('error.404') }}</n-h4>
 
           <!-- Redirect to home page -->

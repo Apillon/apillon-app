@@ -30,17 +30,17 @@
 
     <div
       v-else-if="
-        isStepAvailable(NftDeployStep.BEHAVIOUR) &&
-        collectionStore.stepDeploy === NftDeployStep.BEHAVIOUR
+        isStepAvailable(NftDeployStep.BEHAVIOR) &&
+        collectionStore.stepDeploy === NftDeployStep.BEHAVIOR
       "
     >
       <div class="text-center">
-        <h2>{{ $t('nft.metadata.titleCollectionBehaviour') }}</h2>
+        <h2>{{ $t('nft.metadata.titleCollectionBehavior') }}</h2>
         <p class="mb-8 text-body whitespace-pre-line">
-          {{ $t('nft.metadata.infoCollectionBehaviour') }}
+          {{ $t('nft.metadata.infoCollectionBehavior') }}
         </p>
       </div>
-      <FormNftCollectionBehaviour />
+      <FormNftCollectionBehavior />
     </div>
 
     <div v-else class="w-full max-w-lg">
@@ -82,11 +82,11 @@ const modalW3WarnShown = ref<boolean>(false);
 function isStepAvailable(step: number) {
   if (step === NftDeployStep.DEPLOY) {
     return (
-      !!collectionStore.form.behaviour.revocable !== null &&
-      !!collectionStore.form.behaviour.soulbound !== null &&
-      isStepAvailable(NftDeployStep.BEHAVIOUR)
+      !!collectionStore.form.behavior.revocable !== null &&
+      !!collectionStore.form.behavior.soulbound !== null &&
+      isStepAvailable(NftDeployStep.BEHAVIOR)
     );
-  } else if (step === NftDeployStep.BEHAVIOUR) {
+  } else if (step === NftDeployStep.BEHAVIOR) {
     return !!collectionStore.form.base.name && !!collectionStore.form.base.symbol;
   }
   return true;
@@ -131,19 +131,20 @@ async function deploy() {
       name: collectionStore.form.base.name,
       symbol: collectionStore.form.base.symbol,
       chain: collectionStore.form.base.chain,
-      baseExtension: collectionStore.form.behaviour.baseExtension,
-      dropPrice: collectionStore.form.behaviour.dropPrice,
+      collectionType: collectionStore.form.base.collectionType,
+      baseExtension: collectionStore.form.behavior.baseExtension,
+      dropPrice: collectionStore.form.behavior.dropPrice,
       maxSupply:
-        collectionStore.form.behaviour.supplyLimited === 1
-          ? collectionStore.form.behaviour.maxSupply
+        collectionStore.form.behavior.supplyLimited === 1
+          ? collectionStore.form.behavior.maxSupply
           : 0,
-      drop: collectionStore.form.behaviour.drop,
-      dropStart: Math.floor((collectionStore.form.behaviour.dropStart || Date.now()) / 1000),
-      dropReserve: collectionStore.form.behaviour.dropReserve || 0,
-      isRevokable: collectionStore.form.behaviour.revocable,
-      isSoulbound: collectionStore.form.behaviour.soulbound,
-      royaltiesAddress: collectionStore.form.behaviour.royaltiesAddress,
-      royaltiesFees: collectionStore.form.behaviour.royaltiesFees,
+      drop: collectionStore.form.behavior.drop,
+      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
+      dropReserve: collectionStore.form.behavior.dropReserve || 0,
+      isRevokable: collectionStore.form.behavior.revocable,
+      isSoulbound: collectionStore.form.behavior.soulbound,
+      royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
+      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
     };
     const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
     collectionStore.active = res.data;

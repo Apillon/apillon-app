@@ -131,6 +131,7 @@
     "termsAccept": "I accept the ",
     "termsAndConditions": "Terms and conditions",
     "test": "Test",
+    "type": "Type",
     "typeHere": "Type here",
     "updateTime": "Update time",
     "upload": "Upload",
@@ -142,10 +143,11 @@
     "apiKey": {
       "apiKey": "API key",
       "apiKeySecret": "API key secret",
+      "authorization": "Authorization",
       "delete": "Delete API key",
       "details": "API key details",
       "generate": "Generate new key",
-      "secredSaved": "I've saved API key's secret",
+      "secretSaved": "I've saved API key's secret",
       "title": "API keys",
       "update": "Update API key"
     },
@@ -194,7 +196,8 @@
     },
     "addPayment": "Add payment",
     "addPaymentMethod": "Add payment method",
-    "addPaymentMethodText": " Add payment method and prepurchase the needed credits. Once the credits supply is depleated you will be charged again.",
+    "addPaymentMethodText": "Add payment method and purchase the needed credits. Once the credits supply is depleted you will be charged again.",
+    "adminMode": "You are in ADMIN mode!",
     "attached": "Attached",
     "attachService": "Attach service",
     "attachNewService": "Attach new service",
@@ -238,8 +241,11 @@
   },
   "error": {
     "404": "Page not found",
+    "50012005": "You can't mint this collection or all tokens has already been minted!",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
+    "50012012": "Make sure parent doesn't have any children nested before burning. If you still experience issues try later or try burning another token.",
+    "50012013": "Collection is not nestable!",
     "BAD_REQUEST": "There is a problem with this request. Please come back later when we fixed that problem.",
     "INVALID_PATH": "Invalid path",
     "INVALID_QUERY_PARAMETERS": "Invalid query parameters",
@@ -392,6 +398,7 @@
       "collectionSoulbound": "Soulbound",
       "collectionSymbol": "Symbol",
       "collectionSupplyLimited": "Total supply",
+      "collectionType": "Collection type",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "domain": "Domain name",
@@ -406,7 +413,10 @@
       "ipnsName": "IPNS name",
       "expirationDate": "Expiration date",
       "networkType": "Choose the desired network",
+      "nftBurnTokenId": "Token ID",
       "nftMintAddress": "Address",
+      "nftMintCollectionUuid": "Collection",
+      "nftMintParentNftId": "Parent NFT ID",
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
       "password": "Enter a 12-character password",
@@ -451,7 +461,9 @@
       "ipnsDescription": "IPNS description",
       "ipnsName": "IPNS name",
       "expirationDate": "01/2023",
+      "nftBurnTokenId": "Token ID",
       "nftMintAddress": "Address",
+      "nftMintParentNftId": "Parent NFT ID",
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
       "password": "password",
@@ -475,6 +487,7 @@
       "filesUploaded": "Files has been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
+      "nftBurned": "NFT token has been burned.",
       "nftDeployed": "NFT deploy requested.",
       "nftMint": "Minting NFT requested.",
       "nftTransfer": "NFT ownership has been transferred",
@@ -654,11 +667,12 @@
       "mintNfts": "Mint NFTs",
       "dropPrice": "Mint price",
       "name": "Collection name",
+      "nestMint": "Nestable Mint",
       "new": "New NFT collection",
       "numOfData": "Number of data",
       "quotaReached": "Quota has been reached.",
       "dropReserve": "Reserved",
-      "revoke": "Revoke",
+      "revoke": "Burn",
       "symbol": "Symbol",
       "title": "Collection title",
       "transfer": "Transfer ownership",
@@ -669,6 +683,10 @@
       "uploadYourFirst": "Upload your first NFTs and start building your collection.",
       "uuid": "Collection UUID",
       "view": "Or, display them on your existing website",
+      "burn": {
+        "title": "Burn collection",
+        "info": "Are you sure, you want to burn your collection?"
+      },
       "created": {
         "bucket": "newly created bucket",
         "explorer": "blockchain explorer",
@@ -692,7 +710,8 @@
         "collectionRoyaltiesFees": "The % value of royalties you want to collect in the future NFT sales.",
         "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
-        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection."
+        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
+        "collectionType": ""
       },
       "status": {
         "0": "CREATED",
@@ -701,6 +720,10 @@
         "3": "DEPLOYED",
         "4": "TRANSFERRED",
         "5": "FAILED"
+      },
+      "type": {
+        "1": "Generic",
+        "2": "Nestable"
       }
     },
     "deploy": {
@@ -714,7 +737,7 @@
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
-      "infoCollectionBehaviour": "Configure the behaviour of your NFT collection. ",
+      "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
       "infoCollectionName": "Define the name and symbol for your NFT collection.",
       "infoNew": "To ensure permanent access to your NFTs, you need to store their metadata and files on the web. \n\nWould you like to store your NFT metadata in decentralized way?",
       "no": "I already have it online",
@@ -725,7 +748,7 @@
       "titleBucket": "Let’s get you a bucket",
       "titleBucketCreation": "Bucket creation in progress",
       "titleBucketCreated": "Bucket successfully created",
-      "titleCollectionBehaviour": "Behaviour",
+      "titleCollectionBehavior": "Behavior",
       "titleCollectionName": "Name your collection",
       "yes": "Yes, proceed"
     },
@@ -747,7 +770,9 @@
         "1": "DEPLOY CONTRACT",
         "2": "TRANSFER CONTRACT OWNERSHIP",
         "3": "MINT NFT",
-        "4": "SET COLLECTION BASE URI"
+        "4": "SET COLLECTION BASE URI",
+        "5": "BURN NFT",
+        "6": "MINT NEST NFT"
       }
     },
     "upload": {
@@ -1080,6 +1105,7 @@
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
     "collectionSymbolRequired": "Please enter Collection symbol",
+    "collectionTypeRequired": "Please select Collection type",
     "creditCard": "Credit card validation error",
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
@@ -1096,10 +1122,13 @@
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
     "nftBucketRequired": "Please select a bucket",
+    "nftBurnTokenIdRequired": "Please enter token ID",
     "nftMintAddressRequired": "Please enter your wallet address for minting",
+    "nftMintCollectionUuidRequired": "Please select collection",
+    "nftMintParentNftIdRequired": "Please enter Parent NFT ID",
     "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
-    "nftTransfertAddressRequired": "Please enter wallet address",
+    "nftTransferAddressRequired": "Please enter wallet address",
     "notImage": "{name} is not an image",
     "passwordMinLength": "Password must contain at least 12 characters.",
     "passwordReenterSame": "Password is not same as re-entered password!",

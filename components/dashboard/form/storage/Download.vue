@@ -21,17 +21,12 @@ const loading = ref(false);
 
 function downloadFiles() {
   loading.value = true;
-  const promises: Array<Promise<any>> = [];
 
-  props.items.map(async item => {
-    const req = downloadFile(item.CID);
-    promises.push(req);
-    await req;
+  props.items.forEach(item => {
+    downloadFile(item);
   });
 
-  Promise.all(promises).then(_ => {
-    loading.value = false;
-    emit('submitSuccess');
-  });
+  loading.value = false;
+  emit('submitSuccess');
 }
 </script>

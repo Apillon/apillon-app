@@ -162,8 +162,14 @@ const Endpoints = {
   collectionTransferOwnership: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/transferOwnership`;
   },
+  collectionBurn: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/burn`;
+  },
   collectionMint: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/mint`;
+  },
+  collectionNestMint: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/nest-mint`;
   },
   collectionQuota: '/nfts/collections/quota-reached',
 

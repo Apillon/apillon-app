@@ -6,7 +6,7 @@
         class="w-full flex flex-col gap-8"
         style="height: calc(100vh - 88px)"
       >
-        <!-- Loading skeleton - on long page load show skeleten -->
+        <!-- Loading skeleton - on long page load show skeleton -->
         <n-skeleton height="40px" width="100%" />
         <n-skeleton height="40px" width="100%" />
         <div class="flex gap-8 h-full">

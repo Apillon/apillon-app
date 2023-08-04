@@ -12,6 +12,16 @@ export default function useCollection() {
     // { label: $i18n.t(`nft.chain.${Chains.ASTAR_SHIBUYA}`), value: Chains.ASTAR_SHIBUYA },
     { label: $i18n.t(`nft.chain.${Chains.ASTAR}`), value: Chains.ASTAR },
   ];
+  const collectionTypes = [
+    {
+      label: $i18n.t(`nft.collection.type.${NFTCollectionType.GENERIC}`),
+      value: NFTCollectionType.GENERIC,
+    },
+    {
+      label: $i18n.t(`nft.collection.type.${NFTCollectionType.NESTABLE}`),
+      value: NFTCollectionType.NESTABLE,
+    },
+  ];
   const supplyTypes = [
     { label: $i18n.t('form.supplyTypes.unlimited'), value: 0 },
     { label: $i18n.t('form.supplyTypes.limited'), value: 1 },
@@ -29,7 +39,7 @@ export default function useCollection() {
   });
 
   const maxNft = computed(() => {
-    return collectionStore.form.behaviour.supplyLimited === 1
+    return collectionStore.form.behavior.supplyLimited === 1
       ? collectionStore.csvData?.length
       : NFT_MAX_SUPPLY;
   });
@@ -67,6 +77,12 @@ export default function useCollection() {
       {
         required: true,
         message: $i18n.t('validation.collectionChainRequired'),
+      },
+    ],
+    collectionType: [
+      {
+        required: true,
+        message: $i18n.t('validation.collectionTypeRequired'),
       },
     ],
     maxSupply: [
@@ -123,19 +139,19 @@ export default function useCollection() {
    */
   function validateReserve(_: NFormItemRule, value: number): boolean {
     return (
-      collectionStore.form.behaviour.supplyLimited === 0 ||
-      collectionStore.form.behaviour.maxSupply === 0 ||
-      value <= collectionStore.form.behaviour.maxSupply
+      collectionStore.form.behavior.supplyLimited === 0 ||
+      collectionStore.form.behavior.maxSupply === 0 ||
+      value <= collectionStore.form.behavior.maxSupply
     );
   }
   function validateMaxSupply(_: NFormItemRule, value: number): boolean {
     return value <= maxNft.value;
   }
   function validateDropStart(_: NFormItemRule, value: number): boolean {
-    return !collectionStore.form.behaviour.drop || value > Date.now();
+    return !collectionStore.form.behavior.drop || value > Date.now();
   }
   function validateDropPrice(_: NFormItemRule, value: number): boolean {
-    return !collectionStore.form.behaviour.drop || (value >= 0 && value < Number.MAX_SAFE_INTEGER);
+    return !collectionStore.form.behavior.drop || (value >= 0 && value < Number.MAX_SAFE_INTEGER);
   }
 
   function disablePasteDate(ts: number) {
@@ -146,6 +162,7 @@ export default function useCollection() {
     loading,
     formRef,
     chains,
+    collectionTypes,
     supplyTypes,
     booleanSelect,
     rules,

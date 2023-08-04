@@ -57,7 +57,7 @@ const $i18n = useI18n();
 const { query } = useRoute();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
