@@ -161,6 +161,8 @@ export const useCollectionStore = defineStore('collection', {
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
+          orderBy: 'updateTime',
+          desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
 
@@ -212,8 +214,6 @@ export const useCollectionStore = defineStore('collection', {
       this.loading = showLoader;
       try {
         const params: Record<string, string | number> = {
-          orderBy: 'updateTime',
-          desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
         const res = await $api.get<TransactionResponse>(
