@@ -26,7 +26,7 @@
         </Btn>
       </Empty>
 
-      <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+      <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
         {{ $t('w3Warn.hosting.new') }}
       </W3Warn>
 
@@ -82,8 +82,8 @@ function createNewWebsite() {
 }
 
 /** When user close W3Warn, allow him to create new website */
-function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalNewWebsite.value !== false) {
+function onModalW3WarnHide() {
+  if (showModalNewWebsite.value !== false) {
     showModalNewWebsite.value = true;
   }
 }

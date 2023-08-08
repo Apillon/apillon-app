@@ -301,7 +301,7 @@
     <W3Warn
       v-model:show="modalW3WarnVisible"
       :btn-text="$t('nft.collection.upload')"
-      @update:show="onModalW3WarnConfirm"
+      @submit="onModalW3WarnConfirm"
     >
       {{ $t('w3Warn.nft.new') }}
     </W3Warn>
@@ -388,10 +388,8 @@ function infoLabel(field: string) {
 }
 
 /** When user close W3Warn, allow him to create new collection */
-async function onModalW3WarnConfirm(value: boolean) {
-  if (!value) {
-    await createCollection();
-  }
+async function onModalW3WarnConfirm() {
+  await createCollection();
 }
 
 /** Watch modalW3WarnVisible, onShow update timestamp of shown modal in session storage */

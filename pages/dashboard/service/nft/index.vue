@@ -29,7 +29,7 @@
         </Btn>
       </Empty>
 
-      <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+      <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
         {{ $t('w3Warn.nft.new') }}
       </W3Warn>
     </slot>
@@ -68,8 +68,8 @@ onUnmounted(() => {
 });
 
 /** When user close W3Warn, allow him to create new collection */
-function onModalW3WarnHide(value: boolean) {
-  if (!value && modalNewCollectionVisible.value !== false) {
+function onModalW3WarnHide() {
+  if (modalNewCollectionVisible.value !== false) {
     modalNewCollectionVisible.value = true;
   }
 }

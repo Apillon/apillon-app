@@ -4,7 +4,7 @@ export const NFT_MAX_SUPPLY = 10000;
 export const PAGINATION_LIMIT = 20;
 export const PARAMS_ALL_ITEMS = {
   page: 1,
-  limit: 1000,
+  limit: 100,
 };
 
 export const LsTableColumnsKeys = {
