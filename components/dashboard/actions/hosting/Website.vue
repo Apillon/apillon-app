@@ -82,17 +82,24 @@
         </n-button>
 
         <!-- Deploy to staging -->
-        <n-button
-          v-if="isUpload"
-          size="small"
-          type="primary"
-          :loading="deploying"
-          :disabled="authStore.isAdmin()"
-          @click="deploy(DeploymentEnvironment.STAGING)"
-        >
-          <span class="icon-deploy text-xl mr-2"></span>
-          {{ $t('hosting.deployStage') }}
-        </n-button>
+        <div v-if="isUpload" class="flex items-center align-middle bg-primary">
+          <n-button
+            size="small"
+            type="primary"
+            :bordered="false"
+            :loading="deploying"
+            :disabled="authStore.isAdmin()"
+            @click="deploy(DeploymentEnvironment.STAGING)"
+          >
+            <span class="icon-deploy text-xl mr-2"></span>
+            {{ $t('hosting.deployStage') }}
+          </n-button>
+          <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
+            <n-button class="!p-0" size="small" type="primary" :bordered="false">
+              <span class="icon-down text-3xl"></span>
+            </n-button>
+          </n-dropdown>
+        </div>
         <!-- Deploy to production -->
         <n-button
           v-if="env === DeploymentEnvironment.STAGING"
@@ -169,6 +176,20 @@ const isUpload = computed<Boolean>(() => {
   );
 });
 
+const deployOptions = ref([
+  {
+    label: $i18n.t('hosting.deployStage'),
+    key: DeploymentEnvironment.STAGING,
+  },
+  {
+    label: $i18n.t('hosting.deployProd'),
+    key: DeploymentEnvironment.DIRECT_TO_PRODUCTION,
+  },
+]);
+function handleSelectDeploy(key: number) {
+  deploy(key);
+}
+
 function onFolderCreated() {
   showModalNewFolder.value = false;
 
@@ -227,7 +248,7 @@ async function deploy(env: number) {
     setTimeout(() => {
       router.push(`/dashboard/service/hosting/${websiteId.value}/staging`);
     }, 1000);
-  } else if (deployment && env === DeploymentEnvironment.PRODUCTION) {
+  } else if (deployment && env >= DeploymentEnvironment.PRODUCTION) {
     deploymentStore.production = [] as Array<DeploymentInterface>;
     setTimeout(() => {
       router.push(`/dashboard/service/hosting/${websiteId.value}/production`);

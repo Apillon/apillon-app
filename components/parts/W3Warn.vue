@@ -22,7 +22,7 @@
         </template>
         <template v-else>
           <!-- Create new project -->
-          <Btn type="info" size="large" @click="closeModal">
+          <Btn type="info" size="large" @click="confirm">
             <template v-if="btnText">
               {{ btnText }}
             </template>
@@ -44,13 +44,15 @@ defineProps({
   content: { type: String, default: '' },
   btnText: { type: String, default: null },
 });
+const emit = defineEmits(['submit']);
 
 /** Modal W3 Warn - close modal on button click */
 const modalRef = ref<typeof NModal>();
 
-function closeModal() {
+function confirm() {
   if (modalRef.value) {
     modalRef.value.doUpdateShow(false);
+    emit('submit');
   }
 }
 </script>

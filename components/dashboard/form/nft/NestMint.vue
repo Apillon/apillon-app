@@ -101,6 +101,10 @@ const rules: NFormRules = {
       required: true,
       message: $i18n.t('validation.nftMintQuantityRequired'),
     },
+    {
+      validator: validateQuantity,
+      message: $i18n.t('validation.nftMintQuantity'),
+    },
   ],
 };
 
@@ -118,6 +122,12 @@ const isTransferred = computed<boolean>(() => {
 const isFormDisabled = computed<boolean>(() => {
   return isTransferred.value;
 });
+
+function validateQuantity(_: NFormItemRule, value: number): boolean {
+  return (
+    !collectionStore.active.drop || (value > 0 && value <= collectionStore.active?.dropReserve)
+  );
+}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
