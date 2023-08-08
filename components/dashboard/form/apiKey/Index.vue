@@ -210,7 +210,7 @@ const expandedPermissions = computed(() => {
   if (props.id === 0) {
     return null;
   }
-  return roles.value.map(item => item.name);
+  return roles.value.map(item => item.service_uuid);
 });
 
 const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expanded }) => {
