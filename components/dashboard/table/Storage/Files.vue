@@ -52,7 +52,7 @@
     </modal>
 
     <!-- W3Warn: delete bucket -->
-    <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+    <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
       {{ $t('w3Warn.file.delete') }}
     </W3Warn>
   </div>
@@ -501,7 +501,7 @@ function clearSorter() {
   }
 }
 
-/** Watch folder path, onCahnge clear sorter */
+/** Watch folder path, onChange clear sorter */
 watch(
   () => bucketStore.folder.path,
   _ => {
@@ -530,8 +530,8 @@ function deleteBucketItems() {
 }
 
 /** When user close W3Warn, allow him to create new bucket */
-function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalDelete.value !== false) {
+function onModalW3WarnHide() {
+  if (showModalDelete.value !== false) {
     showModalDelete.value = true;
   }
 }

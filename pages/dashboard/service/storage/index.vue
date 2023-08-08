@@ -30,7 +30,7 @@
         </Btn>
       </Empty>
 
-      <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+      <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
         {{ $t('w3Warn.bucket.new') }}
       </W3Warn>
 
@@ -84,8 +84,8 @@ function createNewBucket() {
 }
 
 /** When user close W3Warn, allow him to create new bucket */
-function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalNewBucket.value !== false) {
+function onModalW3WarnHide() {
+  if (showModalNewBucket.value !== false) {
     showModalNewBucket.value = true;
   }
 }

@@ -36,7 +36,7 @@
   </ModalDelete>
 
   <!-- W3Warn: delete bucket -->
-  <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+  <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
     {{ $t('w3Warn.bucket.delete') }}
   </W3Warn>
 </template>
@@ -232,8 +232,8 @@ function deleteBucket(isCurrentRow: boolean = false) {
 }
 
 /** When user close W3Warn, allow him to create new bucket */
-function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalDestroyBucket.value !== false) {
+function onModalW3WarnHide() {
+  if (showModalDestroyBucket.value !== false) {
     showModalDestroyBucket.value = true;
   }
 }
