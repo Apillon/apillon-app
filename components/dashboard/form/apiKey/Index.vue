@@ -52,7 +52,7 @@
       <!-- Active services -->
       <n-collapse-item
         v-for="(service, key) in formData.roles"
-        :key="key"
+        :key="service.service_uuid"
         :title="service.name"
         :name="service.name"
       >
