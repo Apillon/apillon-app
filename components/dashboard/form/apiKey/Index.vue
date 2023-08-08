@@ -24,25 +24,6 @@
       />
     </n-form-item>
 
-    <!--  API key type -->
-    <!-- <n-form-item
-      path="apiKeyTypes"
-      class="mb-4 border-b-1 border-grey/40"
-      :label="$t('form.label.apiKeyType')"
-    >
-      <n-radio-group v-model:value="formData.apiKeyType" name="radiogroup">
-        <n-space>
-          <n-radio
-            v-for="(type, key) in apiKeyTypes"
-            :key="key"
-            :value="type.value"
-            :label="type.label"
-            :disabled="props.id > 0"
-          />
-        </n-space>
-      </n-radio-group>
-    </n-form-item> -->
-
     <!-- Permissions per service -->
     <n-collapse
       class="collapse-permissions"
@@ -54,7 +35,7 @@
         v-for="(service, key) in formData.roles"
         :key="service.service_uuid"
         :title="service.name"
-        :name="service.name"
+        :name="service.service_uuid"
       >
         <template #arrow>
           <span :class="`icon-${service.serviceType.toLocaleLowerCase()}`"></span>
@@ -210,20 +191,9 @@ const unusedServices = computed<ServiceTypeField[]>(() => {
   }, [] as ServiceTypeField[]);
 });
 
-/* const apiKeyTypes: Array<{ value: boolean; label: string }> = [
-  {
-    value: true,
-    label: $i18n.t('form.apiKeyTypes.test'),
-  },
-  {
-    value: false,
-    label: $i18n.t('form.apiKeyTypes.live'),
-  },
-]; */
-
 const formData = ref<ApiKeyForm>({
   name: '',
-  apiKeyType: true,
+  apiKeyType: false,
   roles: roles.value,
 });
 
@@ -245,7 +215,7 @@ const expandedPermissions = computed(() => {
 
 const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expanded }) => {
   /* If service was collapsed, than deactivate all permissions  */
-  const service = formData.value.roles.find(item => item.name === name);
+  const service = formData.value.roles.find(item => item.service_uuid === name);
   const serviceType = unusedServices.value.find(item => item.name === name);
   if (service) {
     service.enabled = !service.enabled;
