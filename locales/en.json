@@ -484,7 +484,7 @@
     },
     "success": {
       "apiKey": "Api key has been created",
-      "filesUploaded": "Files has been successfully uploaded",
+      "filesUploaded": "Files have been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
       "nftBurned": "NFT token has been burned.",
