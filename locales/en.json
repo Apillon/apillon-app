@@ -484,7 +484,7 @@
     },
     "success": {
       "apiKey": "Api key has been created",
-      "filesUploaded": "Files has been successfully uploaded",
+      "filesUploaded": "Files have been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
       "nftBurned": "NFT token has been burned.",
@@ -821,14 +821,14 @@
       "USER": "User"
     },
     "discord": {
-      "connect": "Discord connect",
+      "connect": "Link with Discord",
       "connected": "Discord connected",
       "disconnect": "Discord disconnect",
       "disconnected": "You have successfully disconnected your Discord account",
-      "infoConnected": "Disconnect your Discord account",
-      "infoDisconnected": "Right now we are releasing Discord connect feature which will enable users to connect their Apillon accounts to our Discord server and get access to two channels. Governance debate and governance vote.",
+      "infoConnected": "You have connected your Apillon account to our Discord server and now you can participate in community discussions and product governance.",
+      "infoDisconnected": "Link your Apillon account to our Discord server and participate in community discussions and product governance.",
       "titleConnected": "Discord connected",
-      "titleDisconnected": "Apillon and Discord"
+      "titleDisconnected": "Connect with Discord"
     },
     "password": {
       "btn": "Send e-mail",
@@ -863,9 +863,9 @@
     "banner": {
       "hello": "Hello Apillonian!",
       "title": "Apillon Referral program",
-      "description": "Are you a true Web3 believer and want to build the future together with your friends? Share the news, invite your friends and collect points!",
+      "description": "Creating the future is more rewarding when others know about it, too. Share Apillon news, invite friends, and collect points!",
       "btn": "Start your Referral journey",
-      "goTo": "Go to referral"
+      "goTo": "Join Referral program"
     },
     "enter": {
       "header": "Can we work together?",
