@@ -1,8 +1,7 @@
 <template>
   <Btn v-bind="$attrs" type="primary" @click="openPopup()">
     <div class="flex items-center">
-      <NuxtIcon :name="`auth/kilt-logo`" class="text-xl align-sub mr-2" filled />
-      <span class="text-xl align-sub mr-2"></span>
+      <NuxtIcon name="logo/favicon_kilt_light" class="text-2xl align-sub" filled />
       {{ $t('auth.login.kilt') }}
     </div>
   </Btn>

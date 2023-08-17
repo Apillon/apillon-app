@@ -21,7 +21,7 @@
       "title": "Log in to Apillon",
       "wallet": "Log in with Wallet",
       "withEmail": "login with email",
-      "kilt": "LOGIN WITH KILT"
+      "kilt": "Log in with KILT "
     },
     "onboarding": {
       "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
