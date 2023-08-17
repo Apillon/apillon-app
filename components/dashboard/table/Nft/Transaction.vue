@@ -28,7 +28,7 @@ const TableLink = resolveComponent('TableLink');
 const data = computed<Array<TransactionInterface>>(() => {
   return (
     props.transactions.filter(item =>
-      item.updateTime.toLocaleLowerCase().includes(collectionStore.search.toLocaleLowerCase())
+      JSON.stringify(item).toLocaleLowerCase().includes(collectionStore.search.toLocaleLowerCase())
     ) || []
   );
 });
@@ -69,13 +69,6 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       title: $i18n.t('general.status'),
       render(row: TransactionInterface) {
         return h(NftTransactionStatus, { transactionStatus: row.transactionStatus }, '');
-      },
-    },
-    {
-      key: 'updateTime',
-      title: $i18n.t('general.updateTime'),
-      render(row: TransactionInterface) {
-        return h('span', {}, { default: () => datetimeToDateAndTime(row.updateTime || '') });
       },
     },
   ];

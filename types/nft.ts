@@ -165,13 +165,14 @@ declare global {
     address: string;
   }
   interface TransactionInterface {
-    chainId: number;
     id: number;
     status: number;
-    transactionHash: string | null;
-    transactionStatus: number;
+    chainId: number;
     transactionType: number;
-    updateTime: string;
+    refTable: string;
+    refId: number;
+    transactionStatus: number;
+    transactionHash: string | null;
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}
