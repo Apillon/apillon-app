@@ -1,5 +1,5 @@
 <template>
-  <Btn v-bind="$attrs" type="primary" @click="openPopup()">
+  <Btn v-bind="$attrs" type="primary" :loading="loading" @click="openPopup()">
     <div class="flex items-center">
       <NuxtIcon name="logo/favicon_kilt_light" class="text-2xl align-sub" filled />
       {{ $t('auth.login.kilt') }}
@@ -14,6 +14,8 @@ const dataStore = useDataStore();
 const { clearAll } = useStore();
 const oauthAuthToken = ref<string | undefined>('');
 const childWindow = ref<(Window & typeof globalThis) | undefined>();
+
+const loading = ref<boolean>(false);
 const handlerFunction = ref();
 
 const props = defineProps({
@@ -59,10 +61,19 @@ async function loginWithKilt() {
 }
 
 function openPopup() {
+  loading.value = true;
+
   childWindow.value = window.open(
     `${config.public.oauthUrl}?embedded=1&token=${props.sessionToken}`,
     'Apillon Auth Form',
     `height=${900} width=${450} resizable=no`
   ) as Window & typeof globalThis;
+
+  const windowCloseInterval = setInterval(function () {
+    if (!childWindow.value || childWindow.value.closed) {
+      loading.value = false;
+      clearInterval(windowCloseInterval);
+    }
+  }, 1000);
 }
 </script>
