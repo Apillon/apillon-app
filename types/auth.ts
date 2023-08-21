@@ -40,6 +40,11 @@ declare global {
   /**
    *  Register
    */
+  interface SignupForm {
+    email: string;
+    captcha?: any;
+    refCode?: string;
+  }
   interface FormRegister {
     password: string | null;
     reenteredPassword: string | null;
@@ -70,6 +75,7 @@ declare global {
   interface FormLogin {
     email: string;
     password: string;
+    captcha?: any;
   }
   interface LoginInterface extends UserInterface {
     token: string;
