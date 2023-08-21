@@ -48,7 +48,6 @@ const $route = useRoute();
 const $i18n = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
-const config = useRuntimeConfig();
 const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 const {
   loading,
@@ -88,7 +87,7 @@ function handleSubmit(e: MouseEvent | null) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (!formData.value.captcha && config.public.ENV !== AppEnv.LOCAL) {
+    } else if (!formData.value.captcha) {
       loading.value = true;
       captchaInput.value.execute();
     } else {
