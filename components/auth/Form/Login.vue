@@ -99,11 +99,7 @@ function handleSubmit(e: Event | MouseEvent | null) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (
-      !formData.value.captcha &&
-      config.public.ENV !== AppEnv.LOCAL &&
-      !isCaptchaConfirmed(LsCaptcha.LOGIN)
-    ) {
+    } else if (!formData.value.captcha && !isCaptchaConfirmed(LsCaptcha.LOGIN)) {
       loading.value = true;
       captchaInput.value.execute();
     } else {
@@ -127,9 +123,6 @@ async function login() {
 
     authStore.saveUser(res.data);
 
-    /** Save Captcha login timestamp to LS */
-    localStorage.setItem(LsCaptcha.LOGIN, Date.now().toString());
-
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     dataStore.project.items = await dataStore.fetchProjects(true);
   } catch (error) {
@@ -150,6 +143,9 @@ function isCaptchaConfirmed(key: string): boolean {
 }
 
 function onCaptchaVerify(token: string, eKey: string) {
+  /** Save Captcha login timestamp to LS */
+  localStorage.setItem(LsCaptcha.LOGIN, Date.now().toString());
+
   formData.value.captcha = { token, eKey };
   handleSubmit(null);
   loading.value = false;
