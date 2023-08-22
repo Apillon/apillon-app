@@ -21,7 +21,7 @@ const config: ConfigInterface = {
     'STORAGE',
     'NFT',
   ],
-  betaFeatures: [],
+  betaFeatures: ['NFT_NESTABLE'],
 };
 
 export default config;

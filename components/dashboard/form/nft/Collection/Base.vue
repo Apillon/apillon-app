@@ -54,6 +54,7 @@
 
     <!--  Collection type -->
     <n-form-item
+      v-if="isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles())"
       path="collectionType"
       :label="infoLabel('collectionType')"
       :label-props="{ for: 'collectionType' }"
@@ -83,6 +84,7 @@ import { useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
 const { chains, collectionTypes, formRef, rules } = useCollection();
 
