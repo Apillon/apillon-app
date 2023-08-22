@@ -135,9 +135,9 @@ async function login() {
  * Captcha confirmed is last week
  */
 function isCaptchaConfirmed(key: string): boolean {
-  const timestamp = sessionStorage.getItem(key);
+  const timestamp = localStorage.getItem(key);
   if (timestamp) {
-    return parseInt(timestamp) + WEEK_IN_MS < Date.now();
+    return parseInt(timestamp) + WEEK_IN_MS > Date.now();
   }
   return false;
 }
