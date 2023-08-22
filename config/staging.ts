@@ -22,7 +22,7 @@ const config: ConfigInterface = {
     'NFT',
     'KILT_LOGIN',
   ],
-  betaFeatures: [],
+  betaFeatures: ['NFT_NESTABLE'],
 };
 
 export default config;

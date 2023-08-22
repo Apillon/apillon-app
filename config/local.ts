@@ -19,6 +19,7 @@ const config: ConfigInterface = {
     'INSTRUCTIONS',
     'MARKETING',
     'NFT',
+    'NFT_NESTABLE',
     'ONBOARDING',
     'PROJECT',
     'PROJECT_DELETE',

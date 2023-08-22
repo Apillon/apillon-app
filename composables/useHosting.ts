@@ -53,7 +53,7 @@ export default function useHosting() {
         }
 
         /** Fetch directory content for bucket */
-        bucketStore.fetchDirectoryContent({ bucketUuid: bucketStore.active.bucket_uuid });
+        await bucketStore.fetchDirectoryContent({ bucketUuid: bucketStore.active.bucket_uuid });
 
         if (website.bucket.uploadedSize === 0) {
           bucketStore.uploadActive = true;

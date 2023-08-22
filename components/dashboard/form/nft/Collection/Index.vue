@@ -71,6 +71,7 @@
 
       <!--  Collection type -->
       <n-form-item
+        v-if="isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles())"
         path="collectionType"
         :label="infoLabel('collectionType')"
         :label-props="{ for: 'collectionType' }"
@@ -317,6 +318,8 @@ const modalW3WarnVisible = ref<boolean>(false);
 const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
+
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 const {

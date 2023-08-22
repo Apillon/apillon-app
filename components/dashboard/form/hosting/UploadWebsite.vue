@@ -30,6 +30,7 @@
       <n-button>{{ $t('hosting.upload.directory') }}</n-button>
     </n-upload>
   </div>
+
   <n-space v-if="uploadFileList.length" class="min-h-[32px] my-4" justify="center" align="center">
     <n-space justify="space-between" align="center">
       <IconUploading />
