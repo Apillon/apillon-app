@@ -19,6 +19,7 @@
       <n-space size="large">
         <!-- Open Bucket -->
         <n-button
+          v-if="collectionStore.active.bucket_uuid"
           size="small"
           :loading="loadingBucket"
           @click="openBucket(collectionStore.active.bucket_uuid)"
