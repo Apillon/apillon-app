@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Notification - show if qouta has been reached -->
+    <!-- Notification - show if quota has been reached -->
     <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
       {{ $t('nft.collection.quotaReached') }}
     </Notification>
@@ -14,7 +14,7 @@
     <n-form
       ref="formRef"
       :class="{ 'form-errors': formErrors }"
-      :model="formData"
+      :model="collectionStore.form"
       :rules="rules"
       :disabled="isFormDisabled"
       @submit.prevent="handleSubmit"
@@ -23,12 +23,12 @@
         <!--  Collection name -->
         <n-form-item-gi
           :span="8"
-          path="name"
+          path="base.name"
           :label="infoLabel('collectionName')"
           :label-props="{ for: 'name' }"
         >
           <n-input
-            v-model:value="formData.name"
+            v-model:value="collectionStore.form.base.name"
             :input-props="{ id: 'name' }"
             :placeholder="$t('general.typeHere')"
             clearable
@@ -38,12 +38,12 @@
         <!--  Collection Symbol -->
         <n-form-item-gi
           :span="4"
-          path="symbol"
+          path="base.symbol"
           :label="infoLabel('collectionSymbol')"
           :label-props="{ for: 'symbol' }"
         >
           <n-input
-            v-model:value="formData.symbol"
+            v-model:value="collectionStore.form.base.symbol"
             :minlength="1"
             :maxlength="8"
             :input-props="{ id: 'symbol' }"
@@ -55,12 +55,12 @@
 
       <!--  Chain -->
       <n-form-item
-        path="chain"
+        path="base.chain"
         :label="infoLabel('collectionChain')"
         :label-props="{ for: 'chain' }"
       >
         <select-options
-          v-model:value="formData.chain"
+          v-model:value="collectionStore.form.base.chain"
           :options="chains"
           :input-props="{ id: 'chain' }"
           :placeholder="$t('general.pleaseSelect')"
@@ -72,12 +72,12 @@
       <!--  Collection type -->
       <n-form-item
         v-if="isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles())"
-        path="collectionType"
+        path="base.collectionType"
         :label="infoLabel('collectionType')"
         :label-props="{ for: 'collectionType' }"
       >
         <select-options
-          v-model:value="formData.collectionType"
+          v-model:value="collectionStore.form.base.collectionType"
           :options="collectionTypes"
           :input-props="{ id: 'collectionType' }"
           :placeholder="$t('general.pleaseSelect')"
@@ -91,12 +91,12 @@
         <n-form-item-gi
           :class="{ 'hide-feedback': !!metadataUri }"
           :span="8"
-          path="baseUri"
+          path="behavior.baseUri"
           :label-props="{ for: 'baseUri' }"
           :label="infoLabel('collectionBaseUri')"
         >
           <n-input
-            v-model:value="formData.baseUri"
+            v-model:value="collectionStore.form.behavior.baseUri"
             :input-props="{ id: 'baseUri' }"
             :placeholder="$t('general.typeHere')"
             clearable
@@ -107,12 +107,12 @@
         <n-form-item-gi
           :class="{ 'hide-feedback': !!metadataUri }"
           :span="4"
-          path="baseExtension"
+          path="behavior.baseExtension"
           :label="infoLabel('collectionBaseExtension')"
           :label-props="{ for: 'baseExtension' }"
         >
           <n-input
-            v-model:value="formData.baseExtension"
+            v-model:value="collectionStore.form.behavior.baseExtension"
             :input-props="{ id: 'baseExtension' }"
             :placeholder="$t('general.typeHere')"
             clearable
@@ -126,13 +126,13 @@
       <n-grid class="items-end" :cols="12" :x-gap="32">
         <!-- Collection Total supply -->
         <n-form-item-gi
-          path="supplyLimited"
+          path="behavior.supplyLimited"
           :span="6"
           :label-props="{ for: 'supplyLimited' }"
           :label="infoLabel('collectionSupplyLimited')"
         >
           <select-options
-            v-model:value="formData.supplyLimited"
+            v-model:value="collectionStore.form.behavior.supplyLimited"
             :options="supplyTypes"
             :input-props="{ id: 'supplyLimited' }"
             :placeholder="$t('general.pleaseSelect')"
@@ -143,19 +143,19 @@
 
         <!--  Collection Max supply -->
         <n-form-item-gi
-          path="maxSupply"
+          path="behavior.maxSupply"
           :span="6"
           :label-props="{ for: 'maxSupply' }"
           :label="infoLabel('collectionMaxSupply')"
         >
           <n-input-number
-            v-model:value="formData.maxSupply"
+            v-model:value="collectionStore.form.behavior.maxSupply"
             :min="0"
             :max="NFT_MAX_SUPPLY"
-            :disabled="!formData.supplyLimited"
+            :disabled="!collectionStore.form.behavior.supplyLimited"
             :input-props="{ id: 'maxSupply' }"
             :placeholder="
-              formData.supplyLimited
+              collectionStore.form.behavior.supplyLimited
                 ? $t('form.placeholder.collectionMaxSupply')
                 : $t('form.disabled')
             "
@@ -167,13 +167,13 @@
       <n-grid class="items-end" :cols="12" :x-gap="32">
         <!-- Collection Revocable -->
         <n-form-item-gi
-          path="revocable"
+          path="behavior.revocable"
           :span="6"
           :label-props="{ for: 'revocable' }"
           :label="infoLabel('collectionRevocable')"
         >
           <select-options
-            v-model:value="formData.revocable"
+            v-model:value="collectionStore.form.behavior.revocable"
             :options="booleanSelect"
             :input-props="{ id: 'revocable' }"
             :placeholder="$t('general.pleaseSelect')"
@@ -183,13 +183,13 @@
 
         <!-- Collection Soulbound -->
         <n-form-item-gi
-          path="soulbound"
+          path="behavior.soulbound"
           :span="6"
           :label-props="{ for: 'soulbound' }"
           :label="infoLabel('collectionSoulbound')"
         >
           <select-options
-            v-model:value="formData.soulbound"
+            v-model:value="collectionStore.form.behavior.soulbound"
             :options="booleanSelect"
             :input-props="{ id: 'soulbound' }"
             :placeholder="$t('general.pleaseSelect')"
@@ -201,13 +201,13 @@
       <n-grid class="items-end" :cols="12" :x-gap="32">
         <!-- Royalties Address -->
         <n-form-item-gi
-          path="royaltiesAddress"
+          path="behavior.royaltiesAddress"
           :span="6"
           :label="infoLabel('collectionRoyaltiesAddress')"
           :label-props="{ for: 'royaltiesAddress' }"
         >
           <n-input
-            v-model:value="formData.royaltiesAddress"
+            v-model:value="collectionStore.form.behavior.royaltiesAddress"
             :input-props="{ id: 'royaltiesAddress' }"
             :placeholder="$t('general.typeHere')"
             clearable
@@ -216,13 +216,13 @@
 
         <!-- Royalties Fees -->
         <n-form-item-gi
-          path="royaltiesFees"
+          path="behavior.royaltiesFees"
           :span="6"
           :label="infoLabel('collectionRoyaltiesFees')"
           :label-props="{ for: 'royaltiesFees' }"
         >
           <n-input-number
-            v-model:value="formData.royaltiesFees"
+            v-model:value="collectionStore.form.behavior.royaltiesFees"
             :min="0"
             :max="100"
             :input-props="{ id: 'royaltiesFees' }"
@@ -233,24 +233,24 @@
       </n-grid>
 
       <!--  Collection Is Drop -->
-      <n-form-item path="drop" :span="1" :show-label="false">
+      <n-form-item path="behavior.drop" :span="1" :show-label="false">
         <n-checkbox
-          v-model:checked="formData.drop"
+          v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
           :label="infoLabel('collectionDrop')"
         />
       </n-form-item>
 
-      <n-grid v-if="!!formData.drop" :cols="12" :x-gap="32">
+      <n-grid v-if="!!collectionStore.form.behavior.drop" :cols="12" :x-gap="32">
         <!--  Collection Mint price -->
         <n-form-item-gi
-          path="dropPrice"
+          path="behavior.dropPrice"
           :span="6"
           :label="$t('form.label.collectionDropPrice', { currency: chainCurrency })"
           :label-props="{ for: 'dropPrice' }"
         >
           <n-input-number
-            v-model:value="formData.dropPrice"
+            v-model:value="collectionStore.form.behavior.dropPrice"
             :min="0"
             :max="1000"
             :step="0.001"
@@ -261,22 +261,31 @@
         </n-form-item-gi>
 
         <!--  Collection Drop start -->
-        <n-form-item-gi path="dropStart" :span="6" :label="infoLabel('collectionDropStart')">
+        <n-form-item-gi
+          path="behavior.dropStart"
+          :span="6"
+          :label="infoLabel('collectionDropStart')"
+        >
           <n-date-picker
-            v-model:value="formData.dropStart"
+            v-model:value="collectionStore.form.behavior.dropStart"
             class="w-full"
             type="datetime"
             :is-date-disabled="disablePasteDate"
+            :is-time-disabled="disablePasteTime"
             clearable
           />
         </n-form-item-gi>
       </n-grid>
 
-      <n-grid v-if="!!formData.drop" :cols="12" :x-gap="32">
+      <n-grid v-if="!!collectionStore.form.behavior.drop" :cols="12" :x-gap="32">
         <!--  Collection Reserve -->
-        <n-form-item-gi path="dropReserve" :span="6" :label="infoLabel('collectionDropReserve')">
+        <n-form-item-gi
+          path="behavior.dropReserve"
+          :span="6"
+          :label="infoLabel('collectionDropReserve')"
+        >
           <n-input-number
-            v-model:value="formData.dropReserve"
+            v-model:value="collectionStore.form.behavior.dropReserve"
             :min="0"
             :placeholder="$t('general.typeHere')"
             clearable
@@ -333,38 +342,21 @@ const {
   isFormDisabled,
   isQuotaReached,
   disablePasteDate,
+  disablePasteTime,
 } = useCollection();
 
 const formErrors = ref<boolean>(false);
-const formData = ref<FormCollection>({
-  name: '',
-  symbol: '',
-  chain: Chains.MOONBEAM,
-  collectionType: NFTCollectionType.GENERIC,
-  dropPrice: 0,
-  supplyLimited: 0,
-  maxSupply: 0,
-  baseUri: null,
-  baseExtension: null,
-  drop: false,
-  dropStart: Date.now() + 3600000,
-  dropReserve: 0,
-  revocable: false,
-  soulbound: false,
-  royaltiesAddress: '',
-  royaltiesFees: 0,
-});
 
 const metadataUri = computed<string>(() => {
-  return formData.value.baseUri && formData.value.baseExtension
-    ? formData.value.baseUri + '1' + formData.value.baseExtension
-    : formData.value.baseUri
-    ? formData.value.baseUri + '1.' + $i18n.t('nft.collection.extension')
+  return collectionStore.form.behavior.baseUri && collectionStore.form.behavior.baseExtension
+    ? collectionStore.form.behavior.baseUri + '1' + collectionStore.form.behavior.baseExtension
+    : collectionStore.form.behavior.baseUri
+    ? collectionStore.form.behavior.baseUri + '1.' + $i18n.t('nft.collection.extension')
     : '';
 });
 
 const chainCurrency = computed<string>(() => {
-  switch (formData.value.chain) {
+  switch (collectionStore.form.base.chain) {
     case Chains.ASTAR:
       return 'ASTR';
     default:
@@ -432,21 +424,24 @@ async function createCollection() {
   try {
     const bodyData = {
       project_uuid: dataStore.projectUuid,
-      name: formData.value.name,
-      symbol: formData.value.symbol,
-      chain: formData.value.chain,
-      collectionType: formData.value.collectionType,
-      dropPrice: formData.value.dropPrice,
-      maxSupply: formData.value.supplyLimited === 1 ? formData.value.maxSupply : 0,
-      baseUri: formData.value.baseUri,
-      baseExtension: formData.value.baseExtension,
-      drop: formData.value.drop,
-      dropStart: Math.floor((formData.value.dropStart || Date.now()) / 1000),
-      dropReserve: formData.value.dropReserve,
-      isRevokable: formData.value.revocable,
-      isSoulbound: formData.value.soulbound,
-      royaltiesAddress: formData.value.royaltiesAddress,
-      royaltiesFees: formData.value.royaltiesFees,
+      name: collectionStore.form.base.name,
+      symbol: collectionStore.form.base.symbol,
+      chain: collectionStore.form.base.chain,
+      collectionType: collectionStore.form.base.collectionType,
+      dropPrice: collectionStore.form.behavior.dropPrice,
+      maxSupply:
+        collectionStore.form.behavior.supplyLimited === 1
+          ? collectionStore.form.behavior.maxSupply
+          : 0,
+      baseUri: collectionStore.form.behavior.baseUri,
+      baseExtension: collectionStore.form.behavior.baseExtension,
+      drop: collectionStore.form.behavior.drop,
+      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
+      dropReserve: collectionStore.form.behavior.dropReserve,
+      isRevokable: collectionStore.form.behavior.revocable,
+      isSoulbound: collectionStore.form.behavior.soulbound,
+      royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
+      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
     };
     const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
 
