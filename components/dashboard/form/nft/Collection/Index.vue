@@ -348,10 +348,11 @@ const {
 const formErrors = ref<boolean>(false);
 
 const metadataUri = computed<string>(() => {
+  const baseUri = removeLastSlash(collectionStore.form.behavior.baseUri);
   return collectionStore.form.behavior.baseUri && collectionStore.form.behavior.baseExtension
-    ? collectionStore.form.behavior.baseUri + '1' + collectionStore.form.behavior.baseExtension
-    : collectionStore.form.behavior.baseUri
-    ? collectionStore.form.behavior.baseUri + '1.' + $i18n.t('nft.collection.extension')
+    ? baseUri + '/1' + collectionStore.form.behavior.baseExtension
+    : baseUri
+    ? baseUri + '/1.' + $i18n.t('nft.collection.extension')
     : '';
 });
 
