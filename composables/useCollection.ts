@@ -89,7 +89,6 @@ export default function useCollection() {
     baseExtension: ruleRequired($i18n.t('validation.collectionBaseExtensionRequired')),
     'behavior.baseExtension': ruleRequired($i18n.t('validation.collectionBaseExtensionRequired')),
     maxSupply: ruleMaxSupply,
-    'behavior.maxSupply': ruleMaxSupply,
     dropPrice: ruleDropPrice,
     'behavior.dropPrice': ruleDropPrice,
     dropStart: {
