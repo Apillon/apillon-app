@@ -336,6 +336,7 @@
     "NFT_DROP_TIMESTAMP_NOT_PRESENT": "NFT drop timestamp not present",
     "NFT_RESERVE_NOT_PRESENT": "NFT reserve not present",
     "NFT_MINT_ADDRESS_NOT_VALID": "Mint address not valid",
+    "NFT_DEPLOY_MINT_PRICE_NOT_VALID": "Mint price is not valid",
     "NFT_MINT_QUANTITY_NOT_PRESENT": "Mint Quantity not present",
     "NFT_MINT_QUANTITY_NOT_VALID": "Mint Quantity not valid. Enter a number between 1 and 20.",
     "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
@@ -755,7 +756,7 @@
     "transaction": {
       "chain": "Chain",
       "chainId": "Chain ID",
-      "empty": "Your project has currently no transactions",
+      "empty": "Your collection has currently no transactions",
       "emptyInfo": "If you just deployed your collection, please wait a minute for the collection to deploy.",
       "hash": "Transaction Hash",
       "link": "Transaction Link",
