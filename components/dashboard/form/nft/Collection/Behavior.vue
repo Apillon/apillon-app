@@ -157,6 +157,7 @@
           type="datetime"
           :input-props="{ id: 'dropStart' }"
           :is-date-disabled="disablePasteDate"
+          :is-time-disabled="disablePasteTime"
           clearable
         />
       </n-form-item-gi>
@@ -196,7 +197,8 @@ import { useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { booleanSelect, formRef, supplyTypes, rules, disablePasteDate } = useCollection();
+const { booleanSelect, formRef, supplyTypes, rules, disablePasteDate, disablePasteTime } =
+  useCollection();
 
 onMounted(() => {
   if (collectionStore.form.behavior.maxSupply === 0) {

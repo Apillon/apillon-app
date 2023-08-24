@@ -106,7 +106,7 @@ onMounted(async () => {
   await getFileDetails(props.file?.CID || props.file.file_uuid);
   if (props.file.CID) {
     currentBlockId.value = await fileStore.getCurrentBlockFromCrust();
-    await getcrustFileStatus(props.file.CID);
+    await getCrustFileStatus(props.file.CID);
   }
 });
 onDeactivated(() => {
@@ -128,7 +128,7 @@ async function getFileDetails(uuidOrCID?: string) {
 }
 
 /** Get File details from CRUST */
-async function getcrustFileStatus(cid: string) {
+async function getCrustFileStatus(cid: string) {
   if (!(cid in fileStore.crust)) {
     fileStore.crust[cid] = await fileStore.fetchFileDetailsFromCrust(cid);
   }

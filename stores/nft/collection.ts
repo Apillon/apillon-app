@@ -34,6 +34,7 @@ export const useCollectionStore = defineStore('collection', {
         collectionType: NFTCollectionType.GENERIC,
       },
       behavior: {
+        baseUri: '',
         baseExtension: '.json',
         dropStart: Date.now() + 3600000,
         drop: false,
@@ -100,6 +101,7 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.chain = Chains.MOONBEAM;
       this.form.base.collectionType = NFTCollectionType.GENERIC;
 
+      this.form.behavior.baseUri = '';
       this.form.behavior.baseExtension = '.json';
       this.form.behavior.dropStart = Date.now() + 3600000;
       this.form.behavior.drop = false;

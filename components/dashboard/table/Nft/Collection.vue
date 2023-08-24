@@ -120,7 +120,10 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       key: 'dropStart',
       title: $i18n.t('nft.collection.dropStart'),
       render(row: CollectionInterface) {
-        return h('span', {}, { default: () => timestampToDateAndTime(row.dropStart) });
+        if (row.drop) {
+          return h('span', {}, { default: () => timestampToDateAndTime(row.dropStart) });
+        }
+        return '';
       },
     },
     {
