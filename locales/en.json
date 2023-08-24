@@ -685,8 +685,8 @@
       "uuid": "Collection UUID",
       "view": "Or, display them on your existing website",
       "burn": {
-        "title": "Burn collection",
-        "info": "Are you sure, you want to burn your collection?"
+        "title": "Burn token",
+        "info": "Are you sure, you want to burn your token?"
       },
       "created": {
         "bucket": "newly created bucket",
