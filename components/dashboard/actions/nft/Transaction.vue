@@ -19,6 +19,7 @@
       <n-space size="large">
         <!-- Open Bucket -->
         <n-button
+          v-if="collectionStore.active.bucket_uuid"
           size="small"
           :loading="loadingBucket"
           @click="openBucket(collectionStore.active.bucket_uuid)"
@@ -39,6 +40,7 @@
           placement="bottom-end"
           trigger="click"
           :options="options"
+          :disabled="authStore.isAdmin()"
         >
           <n-button size="small">
             <span class="text-primary">{{ $t('general.actions') }}</span>
@@ -56,10 +58,11 @@
 defineProps({
   env: { type: Number, default: 0 },
 });
-const emit = defineEmits(['mint', 'transfer']);
+const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer']);
 
 const $i18n = useI18n();
 const router = useRouter();
+const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
 const loadingBucket = ref<boolean>(false);
@@ -83,11 +86,28 @@ const options = computed(() => {
       },
     },
     {
+      label: $i18n.t('nft.collection.nestMint'),
+      key: 'nestMint',
+      show: collectionStore.active?.collectionType === NFTCollectionType.NESTABLE,
+      disabled: actionsDisabled.value,
+      props: {
+        onClick: () => {
+          if (!actionsDisabled.value) {
+            emit('nestMint');
+          }
+        },
+      },
+    },
+    {
       label: $i18n.t('nft.collection.revoke'),
       key: 'revoke',
-      disabled: actionsDisabled.value || true,
+      disabled: actionsDisabled.value || !collectionStore.active?.isRevokable,
       props: {
-        onClick: () => {},
+        onClick: () => {
+          if (!actionsDisabled.value && !!collectionStore.active?.isRevokable) {
+            emit('revoke');
+          }
+        },
       },
     },
     {

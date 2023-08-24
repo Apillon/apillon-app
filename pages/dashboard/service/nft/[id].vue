@@ -10,6 +10,8 @@
         <!-- Actions -->
         <ActionsNftTransaction
           @mint="modalMintCollectionVisible = true"
+          @nestMint="modalNestMintCollectionVisible = true"
+          @revoke="modalBurnTokensVisible = true"
           @transfer="modalTransferOwnershipVisible = true"
         />
 
@@ -34,11 +36,27 @@
         />
       </modal>
 
+      <!-- Modal - Collection Nest Mint -->
+      <modal v-model:show="modalNestMintCollectionVisible" :title="$t('nft.collection.nestMint')">
+        <FormNftNestMint
+          :collection-uuid="collectionStore.active.collection_uuid"
+          @submit-success="onNftNestMinted"
+        />
+      </modal>
+
+      <!-- Modal - Burn Tokens -->
+      <modal v-model:show="modalBurnTokensVisible" :title="$t('nft.collection.burn.title')">
+        <FormNftBurn
+          :collection-uuid="collectionStore.active.collection_uuid"
+          @submit-success="onNftBurned"
+        />
+      </modal>
+
       <!-- Modal - Collection Transfer -->
       <modal v-model:show="modalTransferOwnershipVisible" :title="$t('nft.collection.transfer')">
         <FormNftTransfer
           :collection-uuid="collectionStore.active.collection_uuid"
-          @submit-success="onNftTrasnfered"
+          @submit-success="onNftTransferred"
         />
       </modal>
     </slot>
@@ -54,25 +72,29 @@ const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
+const modalNestMintCollectionVisible = ref<boolean | null>(false);
+const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
 /** Polling */
 let collectionInterval: any = null as any;
 let transactionInterval: any = null as any;
 
-/** Website ID from route */
-const collectionId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
+/** Collection UUID from route */
+const collectionUuid = ref<string>(`${params?.id}` || `${params?.slug}` || '');
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),
 });
 
 onMounted(() => {
+  collectionStore.getCollection(collectionUuid.value);
+
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const currentCollection = await collectionStore.getCollection(collectionId.value);
+    const currentCollection = await collectionStore.getCollection(collectionUuid.value);
 
     /** Reset state if user opens different collection */
-    if (collectionId.value !== collectionStore.active?.id) {
+    if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
       collectionStore.resetMetadata();
     }
 
@@ -114,7 +136,26 @@ function onNftMinted() {
   }, 3000);
 }
 
-function onNftTrasnfered() {
+function onNftNestMinted() {
+  modalNestMintCollectionVisible.value = false;
+  setTimeout(() => {
+    collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
+
+    setTimeout(() => {
+      checkUnfinishedTransactions();
+    }, 3000);
+  }, 3000);
+}
+
+function onNftBurned() {
+  modalBurnTokensVisible.value = false;
+
+  setTimeout(() => {
+    collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
+  }, 300);
+}
+
+function onNftTransferred() {
   modalTransferOwnershipVisible.value = false;
   setTimeout(() => {
     collectionStore.fetchCollections();
@@ -137,7 +178,7 @@ function checkIfCollectionUnfinished() {
 
   clearInterval(collectionInterval);
   collectionInterval = setInterval(async () => {
-    const collection = await collectionStore.fetchCollection(collectionId.value);
+    const collection = await collectionStore.fetchCollection(collectionUuid.value);
     await collectionStore.fetchCollectionTransactions(
       collectionStore.active.collection_uuid,
       false
@@ -175,7 +216,7 @@ function checkUnfinishedTransactions() {
     );
     if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
       clearInterval(transactionInterval);
-      collectionStore.active = await collectionStore.fetchCollection(collectionId.value);
+      collectionStore.active = await collectionStore.fetchCollection(collectionUuid.value);
     }
   }, 30000);
 }

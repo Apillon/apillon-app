@@ -8,7 +8,7 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <IconInfo v-if="$i18n.te('w3Warn.hosting.new')" @click="showModalW3Warn = true" />
+            <IconInfo v-if="$i18n.te('w3Warn.hosting.upload')" @click="showModalW3Warn = true" />
           </n-space>
         </template>
       </Heading>
@@ -26,8 +26,8 @@
         </Btn>
       </Empty>
 
-      <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
-        {{ $t('w3Warn.hosting.new') }}
+      <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
+        {{ $t('w3Warn.hosting.upload') }}
       </W3Warn>
 
       <!-- Modal - Create Website -->
@@ -73,7 +73,7 @@ async function getWebsiteQuota() {
  * If W3Warn has already been shown, show modal create new website, otherwise show warn first
  * */
 function createNewWebsite() {
-  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.new')) {
+  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.upload')) {
     showModalNewWebsite.value = true;
   } else {
     showModalW3Warn.value = true;
@@ -82,8 +82,8 @@ function createNewWebsite() {
 }
 
 /** When user close W3Warn, allow him to create new website */
-function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalNewWebsite.value !== false) {
+function onModalW3WarnHide() {
+  if (showModalNewWebsite.value !== false) {
     showModalNewWebsite.value = true;
   }
 }

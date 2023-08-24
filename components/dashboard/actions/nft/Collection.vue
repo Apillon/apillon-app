@@ -30,6 +30,7 @@
       <n-button
         v-if="collectionStore.hasCollections"
         size="small"
+        :disabled="authStore.isAdmin()"
         @click="router.push({ name: 'dashboard-service-nft-new' })"
       >
         <span class="icon-create-folder text-xl text-primary mr-2"></span>
@@ -41,5 +42,6 @@
 
 <script lang="ts" setup>
 const router = useRouter();
+const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
 </script>

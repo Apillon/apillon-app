@@ -12,6 +12,16 @@ export default function useCollection() {
     // { label: $i18n.t(`nft.chain.${Chains.ASTAR_SHIBUYA}`), value: Chains.ASTAR_SHIBUYA },
     { label: $i18n.t(`nft.chain.${Chains.ASTAR}`), value: Chains.ASTAR },
   ];
+  const collectionTypes = [
+    {
+      label: $i18n.t(`nft.collection.type.${NFTCollectionType.GENERIC}`),
+      value: NFTCollectionType.GENERIC,
+    },
+    {
+      label: $i18n.t(`nft.collection.type.${NFTCollectionType.NESTABLE}`),
+      value: NFTCollectionType.NESTABLE,
+    },
+  ];
   const supplyTypes = [
     { label: $i18n.t('form.supplyTypes.unlimited'), value: 0 },
     { label: $i18n.t('form.supplyTypes.limited'), value: 1 },
@@ -29,93 +39,74 @@ export default function useCollection() {
   });
 
   const maxNft = computed(() => {
-    return collectionStore.form.behaviour.supplyLimited === 1
+    return collectionStore.form.behavior.supplyLimited === 1
       ? collectionStore.csvData?.length
       : NFT_MAX_SUPPLY;
   });
 
+  const ruleBaseUri: NFormItemRule[] = [
+    ruleRequired($i18n.t('validation.collectionBaseUriRequired')),
+    {
+      type: 'url',
+      message: $i18n.t('validation.collectionBaseUri'),
+    },
+  ];
+  const ruleMaxSupply: NFormItemRule[] = [
+    {
+      max: maxNft.value,
+      validator: validateMaxSupply,
+      message: $i18n.t('validation.collectionMaxSupplyReached', {
+        max: collectionStore.csvData?.length || NFT_MAX_SUPPLY,
+      }),
+    },
+  ];
+  const ruleDropPrice: NFormItemRule[] = [
+    ruleRequired($i18n.t('validation.collectionDropPrice')),
+    {
+      validator: validateDropPrice,
+      message: $i18n.t('validation.collectionDropPrice'),
+    },
+  ];
+  const ruleDropReserve: NFormItemRule[] = [
+    ruleRequired($i18n.t('validation.collectionDropReserve')),
+    {
+      validator: validateReserve,
+      message: $i18n.t('validation.collectionDropReserve'),
+    },
+  ];
+
   const rules: NFormRules = {
-    symbol: [
-      {
-        required: true,
-        message: $i18n.t('validation.collectionSymbolRequired'),
-      },
-    ],
-    name: [
-      {
-        required: true,
-        message: $i18n.t('validation.collectionNameRequired'),
-      },
-    ],
-    baseUri: [
-      {
-        required: true,
-        message: $i18n.t('validation.collectionBaseUriRequired'),
-      },
-      {
-        type: 'url',
-        message: $i18n.t('validation.collectionBaseUri'),
-      },
-    ],
-    baseExtension: [
-      {
-        required: true,
-        message: $i18n.t('validation.collectionBaseExtensionRequired'),
-      },
-    ],
-    chain: [
-      {
-        required: true,
-        message: $i18n.t('validation.collectionChainRequired'),
-      },
-    ],
-    maxSupply: [
-      {
-        max: maxNft.value,
-        validator: validateMaxSupply,
-        message: $i18n.t('validation.collectionMaxSupplyReached', {
-          max: collectionStore.csvData?.length || NFT_MAX_SUPPLY,
-        }),
-      },
-    ],
-    mintPrice: [
-      {
-        required: true,
-        message: $i18n.t('validation.collectionMintPrice'),
-      },
-      {
-        validator: validateMintPrice,
-        message: $i18n.t('validation.collectionMintPrice'),
-      },
-    ],
-    dropStart: [
-      {
-        validator: validateDropStart,
-        message: $i18n.t('validation.collectionDropStart'),
-      },
-    ],
-    reserve: [
-      {
-        required: true,
-        message: $i18n.t('validation.collectionReserve'),
-      },
-      {
-        validator: validateReserve,
-        message: $i18n.t('validation.collectionReserve'),
-      },
-    ],
-    royaltiesAddress: [
-      {
-        required: true,
-        message: $i18n.t('validation.collectionRoyaltiesAddressRequired'),
-      },
-    ],
-    royaltiesFees: [
-      {
-        required: true,
-        message: $i18n.t('validation.collectionRoyaltiesFeesRequired'),
-      },
-    ],
+    symbol: ruleRequired($i18n.t('validation.collectionSymbolRequired')),
+    'base.symbol': ruleRequired($i18n.t('validation.collectionSymbolRequired')),
+    name: ruleRequired($i18n.t('validation.collectionNameRequired')),
+    'base.name': ruleRequired($i18n.t('validation.collectionNameRequired')),
+    chain: ruleRequired($i18n.t('validation.collectionChainRequired')),
+    'base.chain': ruleRequired($i18n.t('validation.collectionChainRequired')),
+    collectionType: ruleRequired($i18n.t('validation.collectionTypeRequired')),
+    'base.collectionType': ruleRequired($i18n.t('validation.collectionTypeRequired')),
+    baseUri: ruleBaseUri,
+    'behavior.baseUri': ruleBaseUri,
+    baseExtension: ruleRequired($i18n.t('validation.collectionBaseExtensionRequired')),
+    'behavior.baseExtension': ruleRequired($i18n.t('validation.collectionBaseExtensionRequired')),
+    maxSupply: ruleMaxSupply,
+    dropPrice: ruleDropPrice,
+    'behavior.dropPrice': ruleDropPrice,
+    dropStart: {
+      validator: validateDropStart,
+      message: $i18n.t('validation.collectionDropStart'),
+    },
+    'behavior.dropStart': {
+      validator: validateDropStart,
+      message: $i18n.t('validation.collectionDropStart'),
+    },
+    dropReserve: ruleDropReserve,
+    'behavior.dropReserve': ruleDropReserve,
+    royaltiesAddress: ruleRequired($i18n.t('validation.collectionRoyaltiesAddressRequired')),
+    'behavior.royaltiesAddress': ruleRequired(
+      $i18n.t('validation.collectionRoyaltiesAddressRequired')
+    ),
+    royaltiesFees: ruleRequired($i18n.t('validation.collectionRoyaltiesFeesRequired')),
+    'behavior.royaltiesFees': ruleRequired($i18n.t('validation.collectionRoyaltiesFeesRequired')),
   };
 
   /**
@@ -123,24 +114,26 @@ export default function useCollection() {
    */
   function validateReserve(_: NFormItemRule, value: number): boolean {
     return (
-      collectionStore.form.behaviour.supplyLimited === 0 ||
-      collectionStore.form.behaviour.maxSupply === 0 ||
-      value <= collectionStore.form.behaviour.maxSupply
+      collectionStore.form.behavior.supplyLimited === 0 ||
+      collectionStore.form.behavior.maxSupply === 0 ||
+      value <= collectionStore.form.behavior.maxSupply
     );
   }
   function validateMaxSupply(_: NFormItemRule, value: number): boolean {
     return value <= maxNft.value;
   }
   function validateDropStart(_: NFormItemRule, value: number): boolean {
-    return !collectionStore.form.behaviour.isDrop || value > Date.now();
+    return !collectionStore.form.behavior.drop || value > Date.now();
   }
-  function validateMintPrice(_: NFormItemRule, value: number): boolean {
-    return (
-      !collectionStore.form.behaviour.isDrop || (value >= 0 && value < Number.MAX_SAFE_INTEGER)
-    );
+  function validateDropPrice(_: NFormItemRule, value: number): boolean {
+    return !collectionStore.form.behavior.drop || (value > 0 && value < Number.MAX_SAFE_INTEGER);
   }
 
   function disablePasteDate(ts: number) {
+    return ts < new Date().setHours(0, 0, 0, 0);
+  }
+
+  function disablePasteTime(ts: number) {
     return ts < Date.now();
   }
 
@@ -148,11 +141,13 @@ export default function useCollection() {
     loading,
     formRef,
     chains,
+    collectionTypes,
     supplyTypes,
     booleanSelect,
     rules,
     isQuotaReached,
     isFormDisabled,
     disablePasteDate,
+    disablePasteTime,
   };
 }

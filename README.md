@@ -69,6 +69,16 @@ Control size with font-size.
 <NuxtIcon name="larr" class="inline-block text-[18px] mr-3 align-middle" />
 ```
 
+### Icons (Icomoon)
+
+To open and edit icons from font Apillon, open (https://icomoon.io/app/#/select) and import file 'assets\css\fonts\apillon\selection.json'.
+
+Control size with font-size and color.
+
+```html
+<span class="icon-${iconName} text-xl mr-2"></span>
+```
+
 ### Breakpoints
 
 For basic styles, use tailwind breakpoint system. For js usage, use `useScreen` composable.

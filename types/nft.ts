@@ -6,6 +6,12 @@ export enum Chains {
   ASTAR = 592,
 }
 
+/** NFT Collection type */
+export enum NFTCollectionType {
+  GENERIC = 1,
+  NESTABLE = 2,
+}
+
 /** NFT Collection status */
 export enum CollectionStatus {
   CREATED = 0,
@@ -31,6 +37,8 @@ export enum TransactionType {
   TRANSFER_CONTRACT_OWNERSHIP = 2,
   MINT_NFT = 3,
   SET_COLLECTION_BASE_URI = 4,
+  BURN_NFT = 5,
+  NEST_MINT_NFT = 6,
 }
 
 /** Mint steps */
@@ -47,7 +55,7 @@ export enum NftUploadStep {
 }
 export enum NftDeployStep {
   NAME = 1,
-  BEHAVIOUR = 2,
+  BEHAVIOR = 2,
   DEPLOY = 3,
 }
 
@@ -82,22 +90,23 @@ declare global {
     symbol: string;
     name: string;
     chain?: number;
+    collectionType?: number;
   }
 
-  interface FormCollectionBehaviour {
+  interface FormCollectionBehavior {
     baseExtension: string | null;
     dropStart?: number;
-    isDrop: boolean;
+    drop: boolean;
     maxSupply?: number | null;
-    mintPrice?: number;
-    reserve?: number;
+    dropPrice?: number;
+    dropReserve?: number;
     revocable?: boolean | null;
     soulbound?: boolean | null;
     supplyLimited?: number;
     royaltiesAddress?: string;
     royaltiesFees?: number;
   }
-  interface FormCollection extends FormCollectionName, FormCollectionBehaviour {
+  interface FormCollection extends FormCollectionName, FormCollectionBehavior {
     baseUri: string | null;
     description?: string;
   }
@@ -108,20 +117,20 @@ declare global {
     bucketId: number;
     bucket_uuid: string;
     chain: number;
+    collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
     contractAddress: string | null;
     description: string;
     dropStart: number;
     id: number;
-    isDrop: boolean;
+    drop: boolean;
     isRevokable: boolean;
     isSoulbound: boolean;
     maxSupply: number;
-    mintPrice: number;
-    minted: number;
+    dropPrice: number;
     name: string;
-    reserve: number;
+    dropReserve: number;
     royaltiesAddress: string;
     royaltiesFees: number;
     status: number;
@@ -143,17 +152,27 @@ declare global {
     receivingAddress: string;
     quantity: number | null;
   }
+  interface FormNftNestMint {
+    parentCollectionUuid: string | null;
+    parentNftId: number | null;
+    quantity: number | null;
+  }
+  interface FormNftBurn {
+    collectionUuid: string;
+    tokenId: number | null;
+  }
   interface FormNftTransfer {
     address: string;
   }
   interface TransactionInterface {
-    chainId: number;
     id: number;
     status: number;
-    transactionHash: string | null;
-    transactionStatus: number;
+    chainId: number;
     transactionType: number;
-    updateTime: string;
+    refTable: string;
+    refId: number;
+    transactionStatus: number;
+    transactionHash: string | null;
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}

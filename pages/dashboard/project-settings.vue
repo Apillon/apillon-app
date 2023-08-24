@@ -19,7 +19,7 @@
         <!-- Edit project -->
         <FormProjectSettings />
 
-        <!-- Porject owner -->
+        <!-- Project owner -->
         <n-h5 prefix="bar">{{ $t('project.owner') }}</n-h5>
         <TableProjectOwner />
         <div class="text-right">

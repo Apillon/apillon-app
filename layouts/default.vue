@@ -76,7 +76,7 @@ const { lengthX, lengthY } = useSwipe(mainContentRef, {
   },
 });
 
-/** Hide sidebar if user flip devcie in mobile view */
+/** Hide sidebar if user flip device in mobile view */
 watch(
   () => isLg.value,
   isLg => {

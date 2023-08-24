@@ -21,7 +21,14 @@
         <!-- Delete files -->
         <n-tooltip placement="bottom">
           <template #trigger>
-            <n-button class="w-10" size="small" type="error" ghost @click="emit('onBucketDelete')">
+            <n-button
+              class="w-10"
+              size="small"
+              type="error"
+              :disabled="authStore.isAdmin()"
+              ghost
+              @click="emit('onBucketDelete')"
+            >
               <span class="icon-delete text-xl"></span>
             </n-button>
           </template>
@@ -39,7 +46,12 @@
       </n-button>
 
       <!-- Create new bucket -->
-      <n-button v-if="bucketStore.hasBuckets" size="small" @click="showModalNewBucket = true">
+      <n-button
+        v-if="bucketStore.hasBuckets"
+        size="small"
+        :disabled="authStore.isAdmin()"
+        @click="showModalNewBucket = true"
+      >
         <span class="icon-create-folder text-xl text-primary mr-2"></span>
         <span class="text-primary">{{ $t('storage.bucket.new') }}</span>
       </n-button>
@@ -55,6 +67,7 @@
 <script lang="ts" setup>
 const emit = defineEmits(['onBucketDelete']);
 
+const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const showModalNewBucket = ref<boolean | null>(false);
 </script>

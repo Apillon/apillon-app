@@ -14,6 +14,7 @@ export enum Feature {
   MARKETING = 'MARKETING',
   MONITORING = 'MONITORING',
   NFT = 'NFT',
+  NFT_NESTABLE = 'NFT_NESTABLE',
   ONBOARDING = 'ONBOARDING',
   PROJECT = 'PROJECT',
   PROJECT_DELETE = 'PROJECT_DELETE',
@@ -47,6 +48,7 @@ declare global {
     url: string;
     apiUrl: string;
     oauthUrl: string;
+    adminUrl: string;
     CHAIN_ID: string;
     captchaKey: string;
     githubId: string;

@@ -40,7 +40,7 @@ const $i18n = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);

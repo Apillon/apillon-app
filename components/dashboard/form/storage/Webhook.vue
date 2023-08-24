@@ -4,6 +4,7 @@
     ref="formRef"
     :model="formData"
     :rules="rules"
+    :disabled="authStore.isAdmin()"
     @submit.prevent="handleSubmit"
   >
     <!--  Webhook Url -->
@@ -83,7 +84,13 @@
     <n-grid :cols="3" :x-gap="32">
       <n-form-item-gi :span="webhook ? 2 : 3">
         <input type="submit" class="hidden" :value="$t('form.save')" />
-        <Btn type="primary" class="w-full mt-2" :loading="loadingForm" @click="handleSubmit">
+        <Btn
+          type="primary"
+          class="w-full mt-2"
+          :loading="loadingForm"
+          :disabled="authStore.isAdmin()"
+          @click="handleSubmit"
+        >
           <template v-if="webhook">{{ $t('form.update') }}</template>
           <template v-else>{{ $t('form.save') }}</template>
         </Btn>
@@ -91,7 +98,13 @@
 
       <!--  Reset webhook -->
       <n-form-item-gi v-if="webhook" :span="1">
-        <Btn type="secondary" class="w-full mt-2" :loading="loadingReset" @click="resetWebhook">
+        <Btn
+          type="secondary"
+          class="w-full mt-2"
+          :loading="loadingReset"
+          :disabled="authStore.isAdmin()"
+          @click="resetWebhook"
+        >
           {{ $t('form.reset') }}
         </Btn>
       </n-form-item-gi>
@@ -107,8 +120,10 @@ const props = defineProps({
   bucketId: { type: Number, required: true },
 });
 
-const message = useMessage();
 const $i18n = useI18n();
+const message = useMessage();
+const authStore = useAuthStore();
+
 const loadingForm = ref<boolean>(false);
 const loadingPage = ref<boolean>(false);
 const loadingReset = ref<boolean>(false);

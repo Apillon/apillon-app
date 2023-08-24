@@ -47,7 +47,7 @@ const messageOverrides: MessageThemeOverrides = {
 /**
  * Theme configs
  */
-export const MessageProviderOptoins: DiscreteApiOptions = {
+export const MessageProviderOptions: DiscreteApiOptions = {
   messageProviderProps: {
     duration: 3000,
     closable: true,

@@ -24,25 +24,6 @@
       />
     </n-form-item>
 
-    <!--  API key type -->
-    <n-form-item
-      path="apiKeyTypes"
-      class="mb-4 border-b-1 border-grey/40"
-      :label="$t('form.label.apiKeyType')"
-    >
-      <n-radio-group v-model:value="formData.apiKeyType" name="radiogroup">
-        <n-space>
-          <n-radio
-            v-for="(type, key) in apiKeyTypes"
-            :key="key"
-            :value="type.value"
-            :label="type.label"
-            :disabled="props.id > 0"
-          />
-        </n-space>
-      </n-radio-group>
-    </n-form-item>
-
     <!-- Permissions per service -->
     <n-collapse
       class="collapse-permissions"
@@ -52,9 +33,9 @@
       <!-- Active services -->
       <n-collapse-item
         v-for="(service, key) in formData.roles"
-        :key="key"
+        :key="service.service_uuid"
         :title="service.name"
-        :name="service.name"
+        :name="service.service_uuid"
       >
         <template #arrow>
           <span :class="`icon-${service.serviceType.toLocaleLowerCase()}`"></span>
@@ -129,13 +110,13 @@
   </n-form>
   <Spinner v-else />
 
-  <!-- Modal - API key detals -->
+  <!-- Modal - API key details -->
   <n-modal
     v-model:show="showModalApiKeyDetails"
     :mask-closable="false"
     preset="dialog"
     :title="$t('dashboard.apiKey.details')"
-    :positive-text="$t('dashboard.apiKey.secredSaved')"
+    :positive-text="$t('dashboard.apiKey.secretSaved')"
     @positive-click="emit('close')"
   >
     <ApiKeyDetails v-bind="createdApiKey" />
@@ -210,20 +191,9 @@ const unusedServices = computed<ServiceTypeField[]>(() => {
   }, [] as ServiceTypeField[]);
 });
 
-const apiKeyTypes: Array<{ value: boolean; label: string }> = [
-  {
-    value: true,
-    label: $i18n.t('form.apiKeyTypes.test'),
-  },
-  {
-    value: false,
-    label: $i18n.t('form.apiKeyTypes.live'),
-  },
-];
-
 const formData = ref<ApiKeyForm>({
   name: '',
-  apiKeyType: true,
+  apiKeyType: false,
   roles: roles.value,
 });
 
@@ -240,12 +210,12 @@ const expandedPermissions = computed(() => {
   if (props.id === 0) {
     return null;
   }
-  return roles.value.map(item => item.name);
+  return roles.value.map(item => item.service_uuid);
 });
 
 const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expanded }) => {
   /* If service was collapsed, than deactivate all permissions  */
-  const service = formData.value.roles.find(item => item.name === name);
+  const service = formData.value.roles.find(item => item.service_uuid === name);
   const serviceType = unusedServices.value.find(item => item.name === name);
   if (service) {
     service.enabled = !service.enabled;
@@ -314,7 +284,7 @@ async function createApiKey() {
     const bodyData = {
       project_uuid: projectUuid,
       name: formData.value.name,
-      testNetwork: formData.value.apiKeyType,
+      testNetwork: false,
       roles: formData.value.roles
         .map(role => {
           return role.permissions
@@ -353,7 +323,7 @@ async function updateApiKey() {
     const bodyData = {
       project_uuid: projectUuid,
       name: formData.value.name,
-      testNetwork: formData.value.apiKeyType,
+      testNetwork: false,
     };
     const res = await $api.put<ApiKeyCreatedResponse>(endpoints.apiKey(), bodyData);
 

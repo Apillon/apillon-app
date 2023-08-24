@@ -20,7 +20,7 @@ import colors from '~~/tailwind.colors';
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { getMessageSignature } = useProvider();
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const loadingWallet = ref<boolean>(false);
 const modalWalletSelectVisible = ref<boolean>(false);

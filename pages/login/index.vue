@@ -9,10 +9,8 @@
       <AuthWalletLogin class="w-full mb-4" />
     </template>
 
-    <template
-      v-if="isLg && isFeatureEnabled(Feature.KILT_LOGIN, authStore.getUserRoles()) && oauthToken"
-    >
-      <AuthLoginKilt class="w-full mb-4" :session-token="oauthToken" />
+    <template v-if="isLg && isFeatureEnabled(Feature.KILT_LOGIN, authStore.getUserRoles())">
+      <AuthLoginKilt class="w-full mb-4" :disabled="!oauthToken" :session-token="oauthToken" />
     </template>
 
     <!-- Magic link -->

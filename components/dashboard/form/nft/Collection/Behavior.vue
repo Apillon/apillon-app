@@ -2,7 +2,7 @@
   <n-form
     ref="formRef"
     class="max-w-xl"
-    :model="collectionStore.form.behaviour"
+    :model="collectionStore.form.behavior"
     :rules="rules"
     @submit.prevent="handleSubmitForm"
   >
@@ -15,7 +15,7 @@
         :label-props="{ for: 'supplyLimited' }"
       >
         <select-options
-          v-model:value="collectionStore.form.behaviour.supplyLimited"
+          v-model:value="collectionStore.form.behavior.supplyLimited"
           :options="supplyTypes"
           :input-props="{ id: 'supplyLimited' }"
           :placeholder="$t('general.pleaseSelect')"
@@ -32,13 +32,13 @@
         :label-props="{ for: 'maxSupply' }"
       >
         <n-input-number
-          v-model:value="collectionStore.form.behaviour.maxSupply"
+          v-model:value="collectionStore.form.behavior.maxSupply"
           :min="0"
           :max="NFT_MAX_SUPPLY"
-          :disabled="!collectionStore.form.behaviour.supplyLimited"
+          :disabled="!collectionStore.form.behavior.supplyLimited"
           :input-props="{ id: 'maxSupply' }"
           :placeholder="
-            collectionStore.form.behaviour.supplyLimited
+            collectionStore.form.behavior.supplyLimited
               ? $t('form.placeholder.collectionMaxSupply')
               : $t('form.disabled')
           "
@@ -56,7 +56,7 @@
         :label-props="{ for: 'revocable' }"
       >
         <select-options
-          v-model:value="collectionStore.form.behaviour.revocable"
+          v-model:value="collectionStore.form.behavior.revocable"
           :options="booleanSelect"
           :input-props="{ id: 'revocable' }"
           :placeholder="$t('general.pleaseSelect')"
@@ -72,7 +72,7 @@
         :label-props="{ for: 'soulbound' }"
       >
         <select-options
-          v-model:value="collectionStore.form.behaviour.soulbound"
+          v-model:value="collectionStore.form.behavior.soulbound"
           :options="booleanSelect"
           :input-props="{ id: 'soulbound' }"
           :placeholder="$t('general.pleaseSelect')"
@@ -90,7 +90,7 @@
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
-          v-model:value="collectionStore.form.behaviour.royaltiesAddress"
+          v-model:value="collectionStore.form.behavior.royaltiesAddress"
           :input-props="{ id: 'royaltiesAddress' }"
           :placeholder="$t('general.typeHere')"
           clearable
@@ -105,7 +105,7 @@
         :label-props="{ for: 'royaltiesFees' }"
       >
         <n-input-number
-          v-model:value="collectionStore.form.behaviour.royaltiesFees"
+          v-model:value="collectionStore.form.behavior.royaltiesFees"
           :min="0"
           :max="100"
           :input-props="{ id: 'royaltiesFees' }"
@@ -117,29 +117,29 @@
 
     <n-grid class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Is Drop -->
-      <n-form-item-gi path="isDrop" :span="6" :show-label="false">
+      <n-form-item-gi path="drop" :span="6" :show-label="false">
         <n-checkbox
-          v-model:checked="collectionStore.form.behaviour.isDrop"
+          v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
-          :label="infoLabel('collectionIsDrop')"
+          :label="infoLabel('collectionDrop')"
         />
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="!!collectionStore.form.behaviour.isDrop" class="items-end" :cols="12" :x-gap="32">
+    <n-grid v-if="!!collectionStore.form.behavior.drop" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Mint price -->
       <n-form-item-gi
-        path="mintPrice"
+        path="dropPrice"
         :span="6"
-        :label="$t('form.label.collectionMintPrice', { currency: chainCurrency() })"
-        :label-props="{ for: 'mintPrice' }"
+        :label="$t('form.label.collectionDropPrice', { currency: chainCurrency() })"
+        :label-props="{ for: 'dropPrice' }"
       >
         <n-input-number
-          v-model:value="collectionStore.form.behaviour.mintPrice"
+          v-model:value="collectionStore.form.behavior.dropPrice"
           :min="0"
           :max="1000"
           :step="0.001"
-          :input-props="{ id: 'mintPrice' }"
+          :input-props="{ id: 'dropPrice' }"
           clearable
         />
       </n-form-item-gi>
@@ -152,29 +152,30 @@
         :label-props="{ for: 'dropStart' }"
       >
         <n-date-picker
-          v-model:value="collectionStore.form.behaviour.dropStart"
+          v-model:value="collectionStore.form.behavior.dropStart"
           class="w-full"
           type="datetime"
           :input-props="{ id: 'dropStart' }"
           :is-date-disabled="disablePasteDate"
+          :is-time-disabled="disablePasteTime"
           clearable
         />
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="!!collectionStore.form.behaviour.isDrop" class="items-end" :cols="12" :x-gap="32">
+    <n-grid v-if="!!collectionStore.form.behavior.drop" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Reserve -->
       <n-form-item-gi
-        path="reserve"
+        path="dropReserve"
         :span="6"
-        :label="infoLabel('collectionReserve')"
-        :label-props="{ for: 'reserve' }"
+        :label="infoLabel('collectionDropReserve')"
+        :label-props="{ for: 'dropReserve' }"
       >
         <n-input-number
-          v-model:value="collectionStore.form.behaviour.reserve"
+          v-model:value="collectionStore.form.behavior.dropReserve"
           :min="0"
           :step="1"
-          :input-props="{ id: 'reserve' }"
+          :input-props="{ id: 'dropReserve' }"
           clearable
         />
       </n-form-item-gi>
@@ -196,11 +197,12 @@ import { useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { booleanSelect, formRef, supplyTypes, rules, disablePasteDate } = useCollection();
+const { booleanSelect, formRef, supplyTypes, rules, disablePasteDate, disablePasteTime } =
+  useCollection();
 
 onMounted(() => {
-  if (collectionStore.form.behaviour.maxSupply === 0) {
-    collectionStore.form.behaviour.maxSupply = collectionStore.images.length;
+  if (collectionStore.form.behavior.maxSupply === 0) {
+    collectionStore.form.behavior.maxSupply = collectionStore.images.length;
   }
 });
 

@@ -64,6 +64,7 @@ export enum BucketWebhookAuthMethod {
 export enum DeploymentEnvironment {
   STAGING = 1,
   PRODUCTION = 2,
+  DIRECT_TO_PRODUCTION = 3,
 }
 
 /** Hosting deployment status */

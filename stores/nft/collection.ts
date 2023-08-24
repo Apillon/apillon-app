@@ -21,7 +21,6 @@ export const useCollectionStore = defineStore('collection', {
     mintTab: NftMintTab.METADATA,
     quotaReached: undefined as Boolean | undefined,
     search: '',
-    selected: 0,
     stepDeploy: NftDeployStep.NAME,
     stepUpload: NftUploadStep.FILE,
     total: 0,
@@ -32,14 +31,16 @@ export const useCollectionStore = defineStore('collection', {
         name: '',
         symbol: '',
         chain: Chains.MOONBEAM,
+        collectionType: NFTCollectionType.GENERIC,
       },
-      behaviour: {
+      behavior: {
+        baseUri: '',
         baseExtension: '.json',
         dropStart: Date.now() + 3600000,
-        isDrop: false,
+        drop: false,
         maxSupply: 0,
-        mintPrice: 0,
-        reserve: 0,
+        dropPrice: 0,
+        dropReserve: 0,
         revocable: false as Boolean | null,
         soulbound: false as Boolean | null,
         supplyLimited: 0,
@@ -71,7 +72,6 @@ export const useCollectionStore = defineStore('collection', {
       this.items = [] as CollectionInterface[];
       this.quotaReached = undefined;
       this.search = '';
-      this.selected = 0;
       this.transaction = [] as TransactionInterface[];
       this.resetMetadata();
     },
@@ -99,21 +99,18 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.name = '';
       this.form.base.symbol = '';
       this.form.base.chain = Chains.MOONBEAM;
+      this.form.base.collectionType = NFTCollectionType.GENERIC;
 
-      this.form.behaviour.baseExtension = '.json';
-      this.form.behaviour.dropStart = Date.now() + 3600000;
-      this.form.behaviour.isDrop = false;
-      this.form.behaviour.maxSupply = 0;
-      this.form.behaviour.mintPrice = 0;
-      this.form.behaviour.reserve = 0;
-      this.form.behaviour.revocable = false;
-      this.form.behaviour.soulbound = false;
-      this.form.behaviour.supplyLimited = 0;
-    },
-    setCollectionId(id: number) {
-      if (this.selected !== id) {
-        this.selected = id;
-      }
+      this.form.behavior.baseUri = '';
+      this.form.behavior.baseExtension = '.json';
+      this.form.behavior.dropStart = Date.now() + 3600000;
+      this.form.behavior.drop = false;
+      this.form.behavior.maxSupply = 0;
+      this.form.behavior.dropPrice = 0;
+      this.form.behavior.dropReserve = 0;
+      this.form.behavior.revocable = false;
+      this.form.behavior.soulbound = false;
+      this.form.behavior.supplyLimited = 0;
     },
 
     /**
@@ -126,15 +123,15 @@ export const useCollectionStore = defineStore('collection', {
       return this.items;
     },
 
-    async getCollection(collectionId: number): Promise<CollectionInterface> {
+    async getCollection(collectionUuid: string): Promise<CollectionInterface> {
       if (
-        this.active?.id === collectionId &&
+        this.active?.collection_uuid === collectionUuid &&
         this.active?.collectionStatus >= CollectionStatus.DEPLOYED &&
         !isCacheExpired(LsCacheKeys.COLLECTION)
       ) {
         return this.active;
       }
-      return await this.fetchCollection(collectionId);
+      return await this.fetchCollection(collectionUuid);
     },
 
     async getCollectionTransactions(collectionUuid: string): Promise<any> {
@@ -166,6 +163,8 @@ export const useCollectionStore = defineStore('collection', {
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
+          orderBy: 'updateTime',
+          desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
 
@@ -196,9 +195,9 @@ export const useCollectionStore = defineStore('collection', {
       return [];
     },
 
-    async fetchCollection(id: number): Promise<CollectionInterface> {
+    async fetchCollection(uuid: string): Promise<CollectionInterface> {
       try {
-        const res = await $api.get<CollectionResponse>(endpoints.collections(id));
+        const res = await $api.get<CollectionResponse>(endpoints.collections(uuid));
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.COLLECTION, Date.now().toString());
@@ -216,8 +215,12 @@ export const useCollectionStore = defineStore('collection', {
     ): Promise<TransactionInterface[]> {
       this.loading = showLoader;
       try {
+        const params: Record<string, string | number> = {
+          ...PARAMS_ALL_ITEMS,
+        };
         const res = await $api.get<TransactionResponse>(
-          endpoints.collectionTransactions(collectionUuid)
+          endpoints.collectionTransactions(collectionUuid),
+          params
         );
         this.transaction = res.data.items;
         this.loading = false;

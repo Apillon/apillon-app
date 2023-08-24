@@ -28,6 +28,6 @@ onMounted(() => {
 });
 
 /** Global messages */
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 window.$message = message;
 </script>

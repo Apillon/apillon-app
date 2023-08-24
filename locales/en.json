@@ -21,7 +21,7 @@
       "title": "Log in to Apillon",
       "wallet": "Log in with Wallet",
       "withEmail": "login with email",
-      "kilt": "LOGIN WITH KILT"
+      "kilt": "Log in with KILT "
     },
     "onboarding": {
       "buildCustomApp": "Build a custom app with all the necessary blockchain-based services for your use case.",
@@ -131,6 +131,7 @@
     "termsAccept": "I accept the ",
     "termsAndConditions": "Terms and conditions",
     "test": "Test",
+    "type": "Type",
     "typeHere": "Type here",
     "updateTime": "Update time",
     "upload": "Upload",
@@ -142,10 +143,11 @@
     "apiKey": {
       "apiKey": "API key",
       "apiKeySecret": "API key secret",
+      "authorization": "Authorization",
       "delete": "Delete API key",
       "details": "API key details",
       "generate": "Generate new key",
-      "secredSaved": "I've saved API key's secret",
+      "secretSaved": "I've saved API key's secret",
       "title": "API keys",
       "update": "Update API key"
     },
@@ -194,7 +196,8 @@
     },
     "addPayment": "Add payment",
     "addPaymentMethod": "Add payment method",
-    "addPaymentMethodText": " Add payment method and prepurchase the needed credits. Once the credits supply is depleated you will be charged again.",
+    "addPaymentMethodText": "Add payment method and purchase the needed credits. Once the credits supply is depleted you will be charged again.",
+    "adminMode": "You are in ADMIN mode!",
     "attached": "Attached",
     "attachService": "Attach service",
     "attachNewService": "Attach new service",
@@ -238,8 +241,11 @@
   },
   "error": {
     "404": "Page not found",
+    "50012005": "You can't mint this collection or all tokens has already been minted!",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
+    "50012012": "Make sure parent doesn't have any children nested before burning. If you still experience issues try later or try burning another token.",
+    "50012013": "Collection is not nestable!",
     "BAD_REQUEST": "There is a problem with this request. Please come back later when we fixed that problem.",
     "INVALID_PATH": "Invalid path",
     "INVALID_QUERY_PARAMETERS": "Invalid query parameters",
@@ -330,6 +336,7 @@
     "NFT_DROP_TIMESTAMP_NOT_PRESENT": "NFT drop timestamp not present",
     "NFT_RESERVE_NOT_PRESENT": "NFT reserve not present",
     "NFT_MINT_ADDRESS_NOT_VALID": "Mint address not valid",
+    "NFT_DEPLOY_MINT_PRICE_NOT_VALID": "Mint price is not valid",
     "NFT_MINT_QUANTITY_NOT_PRESENT": "Mint Quantity not present",
     "NFT_MINT_QUANTITY_NOT_VALID": "Mint Quantity not valid. Enter a number between 1 and 20.",
     "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
@@ -381,17 +388,18 @@
       "collectionBaseExtension": "Base Extension",
       "collectionChain": "Chain",
       "collectionDropStart": "Drop start",
-      "collectionIsDrop": "Drop",
+      "collectionDrop": "Drop",
       "collectionMaxSupply": "How many?",
-      "collectionMintPrice": "Price in {currency}",
+      "collectionDropPrice": "Price in {currency}",
       "collectionName": "Name",
-      "collectionReserve": "Reserve",
+      "collectionDropReserve": "Reserve",
       "collectionRevocable": "Revocable",
       "collectionRoyaltiesAddress": "Royalties address",
       "collectionRoyaltiesFees": "Royalties fees",
       "collectionSoulbound": "Soulbound",
       "collectionSymbol": "Symbol",
       "collectionSupplyLimited": "Total supply",
+      "collectionType": "Collection type",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "domain": "Domain name",
@@ -406,7 +414,10 @@
       "ipnsName": "IPNS name",
       "expirationDate": "Expiration date",
       "networkType": "Choose the desired network",
+      "nftBurnTokenId": "Token ID",
       "nftMintAddress": "Address",
+      "nftMintCollectionUuid": "Collection",
+      "nftMintParentNftId": "Parent NFT ID",
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
       "password": "Enter a 12-character password",
@@ -416,7 +427,7 @@
       "projectDescription": "Project description",
       "role": "Role",
       "serviceName": "Service name",
-      "username": "First & Last name",
+      "username": "First and last name",
       "webhookPassword": "Password",
       "webhookUrl": "Webhook URL",
       "webhookUsername": "User name",
@@ -451,7 +462,9 @@
       "ipnsDescription": "IPNS description",
       "ipnsName": "IPNS name",
       "expirationDate": "01/2023",
+      "nftBurnTokenId": "Token ID",
       "nftMintAddress": "Address",
+      "nftMintParentNftId": "Parent NFT ID",
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
       "password": "password",
@@ -463,7 +476,7 @@
       "role": "Select role",
       "serviceName": "Enter the name for the new service",
       "typeHere": "Type here",
-      "username": "Enter yout First & Last name",
+      "username": "Enter your full name",
       "webhookPassword": "Enter password",
       "webhookUrl": "Webhook URL",
       "webhookUsername": "Enter user name",
@@ -472,9 +485,10 @@
     },
     "success": {
       "apiKey": "Api key has been created",
-      "filesUploaded": "Files has been successfully uploaded",
+      "filesUploaded": "Files have been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
+      "nftBurned": "NFT token has been burned.",
       "nftDeployed": "NFT deploy requested.",
       "nftMint": "Minting NFT requested.",
       "nftTransfer": "NFT ownership has been transferred",
@@ -652,13 +666,14 @@
       "mint": "Mint",
       "minted": "Minted",
       "mintNfts": "Mint NFTs",
-      "mintPrice": "Mint price",
+      "dropPrice": "Mint price",
       "name": "Collection name",
+      "nestMint": "Nestable Mint",
       "new": "New NFT collection",
       "numOfData": "Number of data",
       "quotaReached": "Quota has been reached.",
-      "reserve": "Reserved",
-      "revoke": "Revoke",
+      "dropReserve": "Reserved",
+      "revoke": "Burn",
       "symbol": "Symbol",
       "title": "Collection title",
       "transfer": "Transfer ownership",
@@ -669,6 +684,10 @@
       "uploadYourFirst": "Upload your first NFTs and start building your collection.",
       "uuid": "Collection UUID",
       "view": "Or, display them on your existing website",
+      "burn": {
+        "title": "Burn token",
+        "info": "Are you sure, you want to burn your token?"
+      },
       "created": {
         "bucket": "newly created bucket",
         "explorer": "blockchain explorer",
@@ -682,17 +701,18 @@
         "collectionBaseUri": "Paste the collection metadata base URI here.",
         "collectionChain": "Select the network where your NFTs will be deployed",
         "collectionDropStart": "A date when your NFT collection becomes publicly available for visitors to buy NFTs.",
-        "collectionIsDrop": "With drop, your collection becomes accessible for visitors to buy NFTs from a certain date onwards.",
+        "collectionDrop": "With drop, your collection becomes accessible for visitors to buy NFTs from a certain date onwards.",
         "collectionMaxSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection.",
-        "collectionMintPrice": "",
+        "collectionDropPrice": "",
         "collectionName": "The name you choose will be the official name of your NFT collection, “name” NFT collection.",
-        "collectionReserve": "A number of NFT you wish to reserve for yourself before the drop.",
+        "collectionDropReserve": "A number of NFT you wish to reserve for yourself before the drop.",
         "collectionRevocable": "Collection owner can destroy NFT(s) at any point in time.",
         "collectionRoyaltiesAddress": "It’s the address to receive optional royalties in case NFT gets sold further.",
         "collectionRoyaltiesFees": "The % value of royalties you want to collect in the future NFT sales.",
         "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
-        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection."
+        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
+        "collectionType": ""
       },
       "status": {
         "0": "CREATED",
@@ -701,6 +721,10 @@
         "3": "DEPLOYED",
         "4": "TRANSFERRED",
         "5": "FAILED"
+      },
+      "type": {
+        "1": "Generic",
+        "2": "Nestable"
       }
     },
     "deploy": {
@@ -714,7 +738,7 @@
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
-      "infoCollectionBehaviour": "Configure the behaviour of your NFT collection. ",
+      "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
       "infoCollectionName": "Define the name and symbol for your NFT collection.",
       "infoNew": "To ensure permanent access to your NFTs, you need to store their metadata and files on the web. \n\nWould you like to store your NFT metadata in decentralized way?",
       "no": "I already have it online",
@@ -725,14 +749,14 @@
       "titleBucket": "Let’s get you a bucket",
       "titleBucketCreation": "Bucket creation in progress",
       "titleBucketCreated": "Bucket successfully created",
-      "titleCollectionBehaviour": "Behaviour",
+      "titleCollectionBehavior": "Behavior",
       "titleCollectionName": "Name your collection",
       "yes": "Yes, proceed"
     },
     "transaction": {
       "chain": "Chain",
       "chainId": "Chain ID",
-      "empty": "Your project has currently no transactions",
+      "empty": "Your collection has currently no transactions",
       "emptyInfo": "If you just deployed your collection, please wait a minute for the collection to deploy.",
       "hash": "Transaction Hash",
       "link": "Transaction Link",
@@ -747,7 +771,9 @@
         "1": "DEPLOY CONTRACT",
         "2": "TRANSFER CONTRACT OWNERSHIP",
         "3": "MINT NFT",
-        "4": "SET COLLECTION BASE URI"
+        "4": "SET COLLECTION BASE URI",
+        "5": "BURN NFT",
+        "6": "MINT NEST NFT"
       }
     },
     "upload": {
@@ -775,7 +801,7 @@
       "titleImage": "Upload NFT files"
     },
     "validation": {
-      "csvMissingAttributes": "Are you sure you want to continue with no attirubtes?",
+      "csvMissingAttributes": "Are you sure you want to continue with no attributes?",
       "csvMissingData": "Missing metadata, num of row must be same as maxSupply",
       "csvRequiredColumns": "Missing metadata columns, required columns:",
       "fileInvalid": "Invalid file format. Please upload a valid CSV file with columns \"name\", \"description\", and \"image\".",
@@ -796,18 +822,18 @@
       "USER": "User"
     },
     "discord": {
-      "connect": "Discord connect",
+      "connect": "Link with Discord",
       "connected": "Discord connected",
       "disconnect": "Discord disconnect",
       "disconnected": "You have successfully disconnected your Discord account",
-      "infoConnected": "Disconnect your Discord account",
-      "infoDisconnected": "Right now we are releasing Discord connect feature which will enable users to connect their Apillon accounts to our Discord server and get access to two channels. Governance debate and governance vote.",
+      "infoConnected": "You have connected your Apillon account to our Discord server and now you can participate in community discussions and product governance.",
+      "infoDisconnected": "Link your Apillon account to our Discord server and participate in community discussions and product governance.",
       "titleConnected": "Discord connected",
-      "titleDisconnected": "Apillon and Discord"
+      "titleDisconnected": "Connect with Discord"
     },
     "password": {
       "btn": "Send e-mail",
-      "info": "Explanation that we will send an e-mail bla bla Tellus ut sapien tristique lectus faucibus et. Adipiscing nibh nulla in aenean. Senectus egestas venenatis volutpat tortor pulvinar ullamcorper eget viverra.",
+      "info": "In case you need to reset your password, an email will be sent to the email address you saved in the upper section  \"Account Information\".",
       "title": "Password reset"
     },
     "2fa": "Two-factor authentication",
@@ -838,9 +864,9 @@
     "banner": {
       "hello": "Hello Apillonian!",
       "title": "Apillon Referral program",
-      "description": "Are you a true Web3 believer and want to build the future together with your friends? Share the news, invite your friends and collect points!",
+      "description": "Creating the future is more rewarding when others know about it, too. Share Apillon news, invite friends, and collect points!",
       "btn": "Start your Referral journey",
-      "goTo": "Go to referral"
+      "goTo": "Join Referral program"
     },
     "enter": {
       "header": "Can we work together?",
@@ -1073,13 +1099,14 @@
     "collectionDropStart": "Drop start is not a valid date or has already passed by",
     "collectionMaxSupplyReached": "Enter lower value, max supply is {max}",
     "collectionMaxSupplyRequired": "Please enter Max supply",
-    "collectionMintPrice": "Please enter a valid Mint price",
-    "collectionMintPriceRequired": "Please enter Mint price",
+    "collectionDropPrice": "Please enter a valid Mint price",
+    "collectionDropPriceRequired": "Please enter Mint price",
     "collectionNameRequired": "Please enter Collection name",
-    "collectionReserve": "Number of reserved NFTs can be equal or lower than max supply.",
+    "collectionDropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
     "collectionSymbolRequired": "Please enter Collection symbol",
+    "collectionTypeRequired": "Please select Collection type",
     "creditCard": "Credit card validation error",
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
@@ -1096,10 +1123,13 @@
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
     "nftBucketRequired": "Please select a bucket",
+    "nftBurnTokenIdRequired": "Please enter token ID",
     "nftMintAddressRequired": "Please enter your wallet address for minting",
+    "nftMintCollectionUuidRequired": "Please select collection",
+    "nftMintParentNftIdRequired": "Please enter Parent NFT ID",
     "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
-    "nftTransfertAddressRequired": "Please enter wallet address",
+    "nftTransferAddressRequired": "Please enter wallet address",
     "notImage": "{name} is not an image",
     "passwordMinLength": "Password must contain at least 12 characters.",
     "passwordReenterSame": "Password is not same as re-entered password!",
@@ -1137,6 +1167,9 @@
     },
     "folder": {
       "delete": "All items stored in this directory will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
+    },
+    "hosting": {
+      "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported."
     },
     "nft": {
       "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world."

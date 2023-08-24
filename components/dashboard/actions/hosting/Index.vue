@@ -23,7 +23,12 @@
       </n-button>
 
       <!-- Create new website -->
-      <n-button v-if="websiteStore.hasWebsites" size="small" @click="showModalEditWebsite = true">
+      <n-button
+        v-if="websiteStore.hasWebsites"
+        size="small"
+        :disabled="authStore.isAdmin()"
+        @click="showModalEditWebsite = true"
+      >
         <span class="icon-create-folder text-xl text-primary mr-2"></span>
         <span class="text-primary">{{ $t('hosting.website.new') }}</span>
       </n-button>
@@ -37,6 +42,7 @@
 </template>
 
 <script lang="ts" setup>
+const authStore = useAuthStore();
 const websiteStore = useWebsiteStore();
 const showModalEditWebsite = ref<boolean>(false);
 </script>

@@ -41,6 +41,7 @@ import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const fileStore = useFileStore();
 const IconFolderFile = resolveComponent('IconFolderFile');
@@ -158,6 +159,7 @@ const dropdownOptions = [
   {
     key: 'restore',
     label: $i18n.t('general.restore'),
+    disabled: authStore.isAdmin(),
     props: {
       class: '!text-pink',
       onClick: () => {

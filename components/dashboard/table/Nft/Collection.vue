@@ -64,6 +64,19 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       },
     },
     {
+      key: 'type',
+      title: $i18n.t('general.type'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      minWidth: 100,
+      render(row) {
+        if (row.collectionType) {
+          return $i18n.t(`nft.collection.type.${row.collectionType}`);
+        } else {
+          return $i18n.t(`nft.collection.type.${NFTCollectionType.GENERIC}`);
+        }
+      },
+    },
+    {
       key: 'collection_uuid',
       title: $i18n.t('nft.collection.uuid'),
       className: 'hidden',
@@ -79,21 +92,21 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       },
     },
     {
-      key: 'mintPrice',
-      title: $i18n.t('nft.collection.mintPrice'),
+      key: 'dropPrice',
+      title: $i18n.t('nft.collection.dropPrice'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      key: 'reserve',
-      title: $i18n.t('nft.collection.reserve'),
+      key: 'dropReserve',
+      title: $i18n.t('nft.collection.dropReserve'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
       key: 'maxSupply',
-      title: $i18n.t('nft.collection.minted') + '/' + $i18n.t('nft.collection.maxSupply'),
+      title: $i18n.t('nft.collection.maxSupply'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row: CollectionInterface) {
-        return h('span', {}, { default: () => mintedMaxSupply(row.minted, row.maxSupply) });
+        return h('span', {}, { default: () => maxSupply(row.maxSupply) });
       },
     },
     {
@@ -107,7 +120,10 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       key: 'dropStart',
       title: $i18n.t('nft.collection.dropStart'),
       render(row: CollectionInterface) {
-        return h('span', {}, { default: () => timestampToDateAndTime(row.dropStart) });
+        if (row.drop) {
+          return h('span', {}, { default: () => timestampToDateAndTime(row.dropStart) });
+        }
+        return '';
       },
     },
     {
@@ -130,14 +146,13 @@ const rowProps = (row: CollectionInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/nft/${row.id}` });
+        router.push({ path: `/dashboard/service/nft/${row.collection_uuid}` });
       }
     },
   };
 };
 
-function mintedMaxSupply(minted: number, maxSupply: number) {
-  const supply = maxSupply > 0 ? maxSupply : $i18n.t('form.supplyTypes.unlimited');
-  return `${minted || 0}/${supply}`;
+function maxSupply(maxSupply: number) {
+  return maxSupply > 0 ? maxSupply : $i18n.t('form.supplyTypes.unlimited');
 }
 </script>

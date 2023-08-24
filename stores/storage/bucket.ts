@@ -7,24 +7,24 @@ export const useBucketStore = defineStore('bucket', {
   state: () => ({
     allowFetch: true,
     active: {} as BucketInterface,
-    destroyed: [] as Array<BucketInterface>,
-    items: [] as Array<BucketInterface>,
+    destroyed: [] as BucketInterface[],
+    items: [] as BucketInterface[],
     loading: false,
     quotaReached: undefined as Boolean | undefined,
     search: '',
     selected: 0,
-    selectedItems: [] as Array<BucketInterface>,
+    selectedItems: [] as BucketInterface[],
     total: 0,
     uploadActive: false,
-    uploadFileList: [] as Array<FileListItemType>,
+    uploadFileList: [] as FileListItemType[],
     folder: {
       allowFetch: true,
-      items: [] as Array<BucketItemInterface>,
+      items: [] as BucketItemInterface[],
       loading: false,
       path: [] as Array<{ id: number; name: string }>,
       search: '',
       selected: 0,
-      selectedItems: [] as Array<BucketItemInterface>,
+      selectedItems: [] as BucketItemInterface[],
       total: 0,
     },
   }),
@@ -256,7 +256,7 @@ export const useBucketStore = defineStore('bucket', {
       }
 
       try {
-        /** If subfolder is selected, search directory content in this sibfolder */
+        /** If subfolder is selected, search directory content in this subfolder */
         const params: Record<string, string | number> = {
           bucket_uuid: bucket,
         };

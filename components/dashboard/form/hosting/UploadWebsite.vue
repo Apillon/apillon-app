@@ -1,6 +1,12 @@
 <template>
   <div class="relative">
-    <n-upload :show-file-list="false" multiple directory-dnd :custom-request="uploadFileRequest">
+    <n-upload
+      multiple
+      directory-dnd
+      :show-file-list="false"
+      :disabled="authStore.isAdmin()"
+      :custom-request="uploadFileRequest"
+    >
       <n-upload-dragger>
         <div class="pb-12 text-center">
           <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
@@ -24,6 +30,7 @@
       <n-button>{{ $t('hosting.upload.directory') }}</n-button>
     </n-upload>
   </div>
+
   <n-space v-if="uploadFileList.length" class="min-h-[32px] my-4" justify="center" align="center">
     <n-space justify="space-between" align="center">
       <IconUploading />
@@ -50,6 +57,7 @@ const props = defineProps({
 });
 
 const message = useMessage();
+const authStore = useAuthStore();
 const { uploadFiles, fileAlreadyOnFileList } = useUpload();
 
 const fileNum = ref<number>(0);
