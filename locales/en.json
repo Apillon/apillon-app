@@ -1103,6 +1103,7 @@
     "collectionDropPriceRequired": "Please enter Mint price",
     "collectionNameRequired": "Please enter Collection name",
     "collectionDropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
+    "collectionRoyaltiesAddress": "Please enter a valid EVM address",
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
     "collectionSymbolRequired": "Please enter Collection symbol",
