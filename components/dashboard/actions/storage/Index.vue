@@ -1,19 +1,31 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="w-[20vw] max-w-xs">
-      <n-input
-        v-model:value="bucketStore.search"
-        type="text"
-        name="search"
+    <n-space size="large">
+      <div class="w-[20vw] max-w-xs">
+        <n-input
+          v-model:value="bucketStore.filter.search"
+          type="text"
+          name="search"
+          size="small"
+          :placeholder="$t('storage.file.search')"
+          clearable
+        >
+          <template #prefix>
+            <span class="icon-search text-2xl"></span>
+          </template>
+        </n-input>
+      </div>
+      <!-- Filter type -->
+      <select-options
+        v-model:value="bucketStore.filter.bucketType"
+        :options="bucketTypes"
+        class="w-[20vw] max-w-xs"
         size="small"
-        :placeholder="$t('storage.file.search')"
+        :placeholder="$t('form.placeholder.bucketType')"
+        filterable
         clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
-    </div>
+      />
+    </n-space>
 
     <n-space size="large">
       <!-- Show only if user select files -->
@@ -67,7 +79,28 @@
 <script lang="ts" setup>
 const emit = defineEmits(['onBucketDelete']);
 
+const $i18n = useI18n();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const showModalNewBucket = ref<boolean | null>(false);
+
+/** Bucket type */
+const bucketTypes = ref<NSelectOption[]>([
+  {
+    value: BucketType.STORAGE,
+    label: $i18n.t(`storage.type.${BucketType.STORAGE}`),
+  },
+  {
+    value: BucketType.NFT_METADATA,
+    label: $i18n.t(`storage.type.${BucketType.NFT_METADATA}`),
+  },
+]);
+// const allBucketTypes = computed<NSelectOption[]>(() => {
+//   return enumValues(BucketType).map(value => {
+//     return {
+//       value,
+//       label: $i18n.t(`storage.type.${value}`),
+//     };
+//   });
+// });
 </script>

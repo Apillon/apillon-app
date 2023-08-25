@@ -67,8 +67,11 @@ const TableEllipsis = resolveComponent('TableEllipsis');
 /** Data: filtered buckets */
 const data = computed<Array<BucketInterface>>(() => {
   return (
-    props.buckets.filter(item =>
-      item.name.toLocaleLowerCase().includes(bucketStore.search.toLocaleLowerCase())
+    props.buckets.filter(
+      item =>
+        (bucketStore.filter.bucketType === null ||
+          item.bucketType === bucketStore.filter.bucketType) &&
+        item.name.toLocaleLowerCase().includes(bucketStore.filter.search.toLocaleLowerCase())
     ) || []
   );
 });

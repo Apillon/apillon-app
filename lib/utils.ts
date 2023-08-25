@@ -32,6 +32,11 @@ export function enumKeys(E: any): string[] {
 export function enumValues(E: any): string[] | number[] {
   return enumKeys(E).map(k => E[k as any]);
 }
+export function enumKeyValues(E: any): KeyValue[] {
+  return enumKeys(E).map(k => {
+    return { key: k, value: E[k as any] };
+  });
+}
 
 /**
  * Numeric manipulations

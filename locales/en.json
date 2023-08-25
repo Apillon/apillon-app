@@ -447,6 +447,7 @@
       "bearerToken": "Enter Bearer token",
       "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
+      "bucketType": "Select Bucket type",
       "cardHolder": "John Doe",
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "complexPassword": "Enter complex password",
