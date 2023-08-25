@@ -650,6 +650,7 @@
       "addNew": "Add new collection",
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
+      "address": "Collection address",
       "contractAddress": "Contract address",
       "create": "Create collection",
       "createFirst": "Start creating NFTs",
