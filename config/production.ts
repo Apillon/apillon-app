@@ -20,6 +20,7 @@ const config: ConfigInterface = {
     'WALLET_LOGIN',
     'STORAGE',
     'NFT',
+    'KILT_LOGIN',
   ],
   betaFeatures: ['NFT_NESTABLE'],
 };
