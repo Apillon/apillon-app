@@ -65,8 +65,16 @@ const props = defineProps({
 
 const $i18n = useI18n();
 const { message } = createDiscreteApi(['message'], MessageProviderOptions);
+const {
+  loading,
+  captchaKey,
+  captchaInput,
+  onCaptchaChallengeExpire,
+  onCaptchaClose,
+  onCaptchaError,
+  onCaptchaExpire,
+} = useCaptcha();
 
-const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<PasswordResetForm>({ email: props.email, captcha: null, refCode: undefined });
 const rules: NFormRules = {
@@ -81,10 +89,6 @@ const rules: NFormRules = {
     },
   ],
 };
-
-const config = useRuntimeConfig();
-const captchaKey = ref<string>(config.public.captchaKey);
-const captchaInput = ref<any>(null);
 
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
@@ -119,27 +123,9 @@ async function passwordChangeRequest() {
   loading.value = false;
 }
 
-function onCaptchaError(err) {
-  console.warn(err);
-  loading.value = false;
-}
-
-function onCaptchaChallengeExpire(err) {
-  console.warn(err);
-  loading.value = false;
-}
-function onCaptchaExpire(err) {
-  console.warn(err);
-  loading.value = false;
-}
-
-function onCaptchaVerify(token, eKey) {
+function onCaptchaVerify(token: string, eKey: string) {
   formData.value.captcha = { token, eKey };
   handleSubmit(null);
-  loading.value = false;
-}
-
-function onCaptchaClose() {
   loading.value = false;
 }
 </script>
