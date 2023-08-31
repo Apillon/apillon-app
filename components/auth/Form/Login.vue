@@ -99,7 +99,11 @@ function handleSubmit(e: Event | MouseEvent | null) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (!formData.value.captcha && !isCaptchaConfirmed(LsCaptcha.LOGIN)) {
+    } else if (
+      !formData.value.captcha &&
+      isFeatureEnabled(Feature.CAPTCHA_LOGIN, authStore.getUserRoles()) &&
+      !isCaptchaConfirmed(LsCaptcha.LOGIN)
+    ) {
       loading.value = true;
       captchaInput.value.execute();
     } else {
@@ -125,8 +129,15 @@ async function login() {
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     dataStore.project.items = await dataStore.fetchProjects(true);
-  } catch (error) {
+  } catch (error: ApiError | ReferenceError | any) {
     message.error(userFriendlyMsg(error));
+
+    if (
+      error.code === LibValidatorErrorCode.CAPTCHA_NOT_PRESENT ||
+      DevConsoleError.USER_INVALID_LOGIN
+    ) {
+      localStorage.removeItem(LsCaptcha.LOGIN);
+    }
   }
   loading.value = false;
 }

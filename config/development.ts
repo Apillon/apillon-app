@@ -30,6 +30,7 @@ const config: ConfigInterface = {
     'TWO_FACTOR_AUTHENTICATION',
     'WALLET_LOGIN',
     'KILT_LOGIN',
+    'CAPTCHA_LOGIN',
   ],
   betaFeatures: ['BILLING'],
 };

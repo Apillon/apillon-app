@@ -18,6 +18,7 @@ const config: ConfigInterface = {
     'REFERRAL',
     'SERVICES',
     'WALLET_LOGIN',
+    'CAPTCHA_LOGIN',
     'STORAGE',
     'NFT',
   ],
