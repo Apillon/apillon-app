@@ -102,7 +102,7 @@ function handleSubmit(e: Event | MouseEvent | null) {
     } else if (
       !formData.value.captcha &&
       isFeatureEnabled(Feature.CAPTCHA_LOGIN, authStore.getUserRoles()) &&
-      !isCaptchaConfirmed(LsCaptcha.LOGIN)
+      !isCaptchaConfirmed()
     ) {
       loading.value = true;
       captchaInput.value.execute();
@@ -132,10 +132,11 @@ async function login() {
   } catch (error: ApiError | ReferenceError | any) {
     message.error(userFriendlyMsg(error));
 
-    if (
-      error.code === LibValidatorErrorCode.CAPTCHA_NOT_PRESENT ||
-      DevConsoleError.USER_INVALID_LOGIN
-    ) {
+    if (error.code === LibValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
+      loading.value = true;
+      captchaInput.value.execute();
+      localStorage.removeItem(LsCaptcha.LOGIN);
+    } else if (DevConsoleError.USER_INVALID_LOGIN) {
       localStorage.removeItem(LsCaptcha.LOGIN);
     }
   }
@@ -145,20 +146,42 @@ async function login() {
 /**
  * Captcha confirmed is last week
  */
-function isCaptchaConfirmed(key: string): boolean {
-  const timestamp = localStorage.getItem(key);
-  if (timestamp) {
-    return parseInt(timestamp) + WEEK_IN_MS > Date.now();
-  }
-  return false;
+function isCaptchaConfirmed(): boolean {
+  const timestamp = getCaptchaTimestamp();
+  return !!timestamp && Date.now() < parseInt(timestamp) + WEEK_IN_MS;
 }
 
 function onCaptchaVerify(token: string, eKey: string) {
   /** Save Captcha login timestamp to LS */
-  localStorage.setItem(LsCaptcha.LOGIN, Date.now().toString());
+  updateCaptchaLS();
 
   formData.value.captcha = { token, eKey };
-  handleSubmit(null);
-  loading.value = false;
+  login();
+}
+
+function getCaptchaLS(): Record<string, string> {
+  try {
+    const data = JSON.parse(localStorage.getItem(LsCaptcha.LOGIN) || '{}');
+    return typeof data === 'object' ? data : {};
+  } catch (error) {
+    console.log(error);
+  }
+  return {};
+}
+
+function getCaptchaTimestamp(): string | null {
+  const data = getCaptchaLS();
+  const emails = Object.keys(data);
+  if (emails.includes(formData.value.email)) {
+    return data[formData.value.email];
+  }
+
+  return null;
+}
+
+function updateCaptchaLS() {
+  const data = getCaptchaLS();
+  data[formData.value.email] = Date.now().toString();
+  localStorage.setItem(LsCaptcha.LOGIN, JSON.stringify(data));
 }
 </script>
