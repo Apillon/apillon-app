@@ -11,9 +11,6 @@ export const PARAMS_ALL_ITEMS = {
 export const LsTableColumnsKeys = {
   FILES: 'al_table_files_columns',
 };
-export const LsCaptcha = {
-  LOGIN: 'al_captcha_login',
-};
 
 export const LsW3WarnKeys = {
   AUTH_NEW: 'al_w3warn_auth_new',
