@@ -42,7 +42,7 @@
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
-const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_NEW);
 
 const pageLoading = ref<boolean>(true);
 const showModalNewWebsite = ref<boolean | null>(false);
