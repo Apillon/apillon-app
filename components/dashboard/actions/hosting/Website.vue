@@ -89,7 +89,7 @@
             :bordered="false"
             :loading="deploying"
             :disabled="authStore.isAdmin()"
-            @click="deploy(DeploymentEnvironment.STAGING)"
+            @click="deployWebsite(DeploymentEnvironment.STAGING)"
           >
             <span class="icon-deploy text-xl mr-2"></span>
             {{ $t('hosting.deployStage') }}
@@ -107,7 +107,7 @@
           type="primary"
           :loading="deploying"
           :disabled="authStore.isAdmin()"
-          @click="deploy(DeploymentEnvironment.PRODUCTION)"
+          @click="deployWebsite(DeploymentEnvironment.PRODUCTION)"
         >
           <span class="icon-deploy text-xl mr-2"></span>
           {{ $t('hosting.deployProd') }}
@@ -147,6 +147,11 @@
         />
       </slot>
     </ModalDelete>
+
+    <!-- W3Warn - Hosting deploy -->
+    <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
+      {{ $t('w3Warn.hosting.deploy') }}
+    </W3Warn>
   </div>
 </template>
 
@@ -157,6 +162,8 @@ const props = defineProps({
 
 const { downloading, downloadSelectedFiles } = useFile();
 const { websiteId, refreshWebpage } = useHosting();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
+
 const $i18n = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
@@ -169,6 +176,7 @@ const showModalDelete = ref<boolean>(false);
 const showModalClearAll = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
 const deploying = ref<boolean>(false);
+const deployEnv = ref<number>(DeploymentEnvironment.STAGING);
 
 const isUpload = computed<Boolean>(() => {
   return (
@@ -187,7 +195,7 @@ const deployOptions = ref([
   },
 ]);
 function handleSelectDeploy(key: number) {
-  deploy(key);
+  deployWebsite(key);
 }
 
 function onFolderCreated() {
@@ -256,5 +264,23 @@ async function deploy(env: number) {
   }
 
   deploying.value = false;
+}
+
+/**
+ * On createNewWebsite click
+ * If W3Warn has already been shown, show modal create new website, otherwise show warn first
+ * */
+function deployWebsite(env: number) {
+  deployEnv.value = env;
+  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) || !$i18n.te('w3Warn.hosting.deploy')) {
+    deploy(env);
+  } else {
+    modalW3WarnVisible.value = true;
+  }
+}
+
+/** When user close W3Warn, allow him to create new website */
+function onModalW3WarnHide() {
+  deploy(deployEnv.value);
 }
 </script>
