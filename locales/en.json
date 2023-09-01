@@ -631,6 +631,7 @@
     "ipns": "IPNS",
     "ipnsAddress": "IPNS Address",
     "ipnsLink": "IPNS link",
+    "ipnsInfo": "It may take up to 5 minutes for the changes to become visible after the deployment has been completed.",
     "management": "Hosting management",
     "productionEmpty": "Deploy files from staging to production",
     "size": "Size",
