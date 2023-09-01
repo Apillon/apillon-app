@@ -18,6 +18,7 @@ export const LsW3WarnKeys = {
   BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
   BUCKET_ITEM_DELETE: 'al_w3warn_bucket_item_delete',
   HOSTING_NEW: 'al_w3warn_hosting_new',
+  HOSTING_DEPLOY: 'al_w3warn_hosting_deploy',
   NFT_NEW: 'al_w3warn_nft_new',
 };
 
