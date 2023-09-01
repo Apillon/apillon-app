@@ -297,10 +297,14 @@ declare global {
   interface WebsiteInterface extends WebsiteBaseInterface {
     bucket_uuid: string;
     bucket: BucketInterface;
-    stagingBucket: BucketInterface;
-    productionBucket: BucketInterface;
-    ipnsStagingLink: string | null;
+    ipnsProduction: string | null;
     ipnsProductionLink: string | null;
+    ipnsStaging: string | null;
+    ipnsStagingLink: string | null;
+    productionBucket: BucketInterface;
+    stagingBucket: BucketInterface;
+    w3ProductionLink: string | null;
+    w3StagingLink: string | null;
   }
   interface DeploymentInterface {
     id: number;
