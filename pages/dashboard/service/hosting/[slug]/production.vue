@@ -23,6 +23,7 @@
               websiteStore.active.w3ProductionLink || websiteStore.active.ipnsProductionLink || ''
             "
             :title="$t('hosting.ipnsLink')"
+            :info="$t('hosting.ipnsInfo')"
           />
 
           <!-- Deployments -->
