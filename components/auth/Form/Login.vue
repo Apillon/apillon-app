@@ -54,7 +54,6 @@ const $i18n = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
-const config = useRuntimeConfig();
 const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 const {
   loading,
@@ -71,6 +70,7 @@ const formData = ref<FormLogin>({
   email: authStore.email,
   password: '',
   captcha: null as any,
+  captchaJwt: '',
 });
 const rules: NFormRules = {
   email: [
@@ -115,6 +115,11 @@ function handleSubmit(e: Event | MouseEvent | null) {
 
 async function login() {
   loading.value = true;
+
+  const captchaData = authStore.getCaptchaData(formData.value.email);
+  if (captchaData) {
+    formData.value.captchaJwt = captchaData.jwt;
+  }
   try {
     // Logout first - delete LS and store if there is any data
     authStore.logout();
@@ -135,9 +140,9 @@ async function login() {
     if (error.code === LibValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
       loading.value = true;
       captchaInput.value.execute();
-      localStorage.removeItem(LsCaptcha.LOGIN);
+      localStorage.removeItem(AuthLsKeys.CAPTCHA);
     } else if (DevConsoleError.USER_INVALID_LOGIN) {
-      localStorage.removeItem(LsCaptcha.LOGIN);
+      localStorage.removeItem(AuthLsKeys.CAPTCHA);
     }
   }
   loading.value = false;
@@ -147,41 +152,12 @@ async function login() {
  * Captcha confirmed is last week
  */
 function isCaptchaConfirmed(): boolean {
-  const timestamp = getCaptchaTimestamp();
-  return !!timestamp && Date.now() < parseInt(timestamp) + WEEK_IN_MS;
+  const captchaData = authStore.getCaptchaData(formData.value.email);
+  return !!captchaData && !!captchaData.ts && Date.now() < parseInt(captchaData.ts) + WEEK_IN_MS;
 }
 
 function onCaptchaVerify(token: string, eKey: string) {
-  /** Save Captcha login timestamp to LS */
-  updateCaptchaLS();
-
   formData.value.captcha = { token, eKey };
   login();
-}
-
-function getCaptchaLS(): Record<string, string> {
-  try {
-    const data = JSON.parse(localStorage.getItem(LsCaptcha.LOGIN) || '{}');
-    return typeof data === 'object' ? data : {};
-  } catch (error) {
-    console.log(error);
-  }
-  return {};
-}
-
-function getCaptchaTimestamp(): string | null {
-  const data = getCaptchaLS();
-  const emails = Object.keys(data);
-  if (emails.includes(formData.value.email)) {
-    return data[formData.value.email];
-  }
-
-  return null;
-}
-
-function updateCaptchaLS() {
-  const data = getCaptchaLS();
-  data[formData.value.email] = Date.now().toString();
-  localStorage.setItem(LsCaptcha.LOGIN, JSON.stringify(data));
 }
 </script>
