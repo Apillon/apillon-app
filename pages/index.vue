@@ -8,10 +8,12 @@ definePageMeta({
   layout: 'auth',
 });
 
-onBeforeMount(() => {
-  if (authStore.loggedIn) {
-    router.push({ name: 'dashboard' });
-  }
-  router.push({ name: 'login' });
+onBeforeMount(async () => {
+  await Promise.resolve(authStore.promises.profile).then(_ => {
+    if (authStore.loggedIn) {
+      router.push({ name: 'dashboard' });
+    }
+    router.push({ name: 'login' });
+  });
 });
 </script>

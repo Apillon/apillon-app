@@ -1,21 +1,17 @@
 import { defineStore } from 'pinia';
-import { ServiceType, ServiceTypeName, ServiceTypeNames } from '~~/types/service';
 
 export const DataLsKeys = {
-  CURRENT_PROJECT_ID: 'al_current_project_id',
+  CURRENT_PROJECT_ID: 'al_current_project_uuid',
 };
 
 export const useDataStore = defineStore('data', {
   state: () => ({
-    currentProjectId: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)
-      ? parseInt(`${localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID)}`)
-      : 0,
     instruction: {} as Record<string, InstructionInterface>,
     instructions: {} as Record<string, Array<InstructionInterface>>,
     project: {
       active: {} as ProjectInterface,
       items: [] as Array<ProjectInterface>,
-      selected: 0,
+      selected: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID) || '',
       quotaReached: undefined as Boolean | undefined,
     },
     promises: {
@@ -28,11 +24,8 @@ export const useDataStore = defineStore('data', {
       loading: false,
       search: '',
     },
-    services: {
-      authentication: [] as Array<ServiceInterface>,
-      storage: [] as Array<ServiceInterface>,
-      computing: [] as Array<ServiceInterface>,
-    } as Record<ServiceTypeName, Array<ServiceInterface>>,
+    serviceTypes: [] as ServiceTypeInterface[],
+    services: [] as ServiceInterface[],
   }),
   getters: {
     hasProjects(state) {
@@ -42,14 +35,16 @@ export const useDataStore = defineStore('data', {
       if (!this.hasProjects) {
         return null;
       }
-      /** Return project with currentProjectId, if this ID does not exists, return first project */
-      const project = state.project.items.find(project => project.id === state.currentProjectId);
+      /** Return project with currentProjectUuid, if this ID does not exists, return first project */
+      const project = state.project.items.find(
+        project => project.project_uuid === state.project.selected
+      );
       if (project) {
         return project;
       }
-      /** Select first project as fallback if currentProjectId is not available */
-      this.currentProjectId = state.project.items[0].id;
-      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${this.currentProjectId}`);
+      /** Select first project as fallback if currentProjectUuid is not available */
+      this.project.selected = state.project.items[0].project_uuid;
+      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, this.project.selected);
       return state.project.items[0];
     },
     projectUuid(state): string {
@@ -57,7 +52,7 @@ export const useDataStore = defineStore('data', {
         state.project.active.project_uuid ||
         (
           state.project.items.find(
-            (item: ProjectInterface) => item.id === state.currentProjectId
+            (item: ProjectInterface) => item.project_uuid === state.project.selected
           ) || ({} as ProjectInterface)
         )?.project_uuid ||
         ''
@@ -72,52 +67,47 @@ export const useDataStore = defineStore('data', {
       /** Project */
       this.project.active = {} as ProjectInterface;
       this.project.items = [] as Array<ProjectInterface>;
-      this.project.selected = 0;
       this.project.quotaReached = undefined as Boolean | undefined;
       /** Services */
-      this.services.authentication = [] as Array<ServiceInterface>;
-      this.services.storage = [] as Array<ServiceInterface>;
-      this.services.computing = [] as Array<ServiceInterface>;
+      this.services = [] as Array<ServiceInterface>;
     },
 
-    setCurrentProject(id: number) {
+    setCurrentProject(uuid: string) {
       /** Reset store data */
       this.resetData();
 
-      this.currentProjectId = id;
-      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, `${id}`);
+      this.project.selected = uuid;
+      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, uuid);
     },
 
     resetCurrentProject() {
       /** Reset store data */
       this.resetData();
 
-      this.currentProjectId = 0;
+      this.project.selected = '';
       localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
     updateCurrentProject(project: ProjectInterface) {
       /** Find index of specific object using findIndex method. */
-      const projectIndex = this.project.items.findIndex(item => item.id === project.id);
+      const projectIndex = this.project.items.findIndex(
+        item => item.project_uuid === project.project_uuid
+      );
 
       /** Update current project, add value and label, which are used in header dropdown */
       this.project.items[projectIndex] = {
         ...project,
-        value: project.id,
+        value: project.project_uuid,
         label: project.name,
       };
     },
 
-    hasServices(type: number) {
-      const key: ServiceTypeName = ServiceTypeNames[type];
-      return Array.isArray(this.services[key]) && this.services[key].length > 0;
+    hasServices() {
+      return Array.isArray(this.services) && this.services.length > 0;
     },
-    hasAllServices(): boolean {
-      return !Object.entries(ServiceTypeNames)
-        .map(([serviceType, typeName]) => {
-          return Array.isArray(this.services[typeName]) && this.services[typeName].length > 0;
-        })
-        .includes(false);
+
+    hasServiceTypes() {
+      return Array.isArray(this.serviceTypes) && this.serviceTypes.length > 0;
     },
 
     hasInstructions(key: string) {
@@ -126,19 +116,6 @@ export const useDataStore = defineStore('data', {
         Array.isArray(this.instructions[key]) &&
         this.instructions[key].length > 0
       );
-    },
-
-    getServiceCacheKey(type?: number): string {
-      switch (type) {
-        case ServiceType.AUTHENTICATION:
-          return LsCacheKeys.SERVICE_AUTH;
-        case ServiceType.COPMUTING:
-          return LsCacheKeys.SERVICE_COMPUTING;
-        case ServiceType.STORAGE:
-          return LsCacheKeys.SERVICE_STORAGE;
-        default:
-          return LsCacheKeys.SERVICES;
-      }
     },
 
     /**
@@ -151,11 +128,14 @@ export const useDataStore = defineStore('data', {
       return this.project.items;
     },
 
-    async getProject(projectId: number): Promise<ProjectInterface> {
-      if (this.project.active?.id === projectId && !isCacheExpired(LsCacheKeys.PROJECT)) {
+    async getProject(projectUuid: string): Promise<ProjectInterface> {
+      if (
+        this.project.active?.project_uuid === projectUuid &&
+        !isCacheExpired(LsCacheKeys.PROJECT)
+      ) {
         return this.project.active;
       }
-      return await this.fetchProject(projectId);
+      return await this.fetchProject(projectUuid);
     },
 
     /** GET Project quota, if current value is undefined  */
@@ -166,40 +146,23 @@ export const useDataStore = defineStore('data', {
     },
 
     /** Services */
-    async getAllServices() {
-      if (!this.hasAllServices() || isCacheExpired(LsCacheKeys.SERVICES)) {
-        const services = await this.fetchServices();
+    async getServiceTypes() {
+      if (!this.hasServiceTypes() || isCacheExpired(LsCacheKeys.SERVICE_TYPES)) {
+        this.serviceTypes = await this.fetchServiceTypes();
+      }
+      return this.serviceTypes;
+    },
+    async getServices() {
+      this.getServiceTypes();
 
-        Object.entries(ServiceTypeNames).forEach(([serviceType, typeName]) => {
-          this.services[typeName] =
-            services.filter(service => service.serviceType_id === parseInt(serviceType)) ||
-            ([] as Array<ServiceInterface>);
-        });
+      if (!this.hasServices() || isCacheExpired(LsCacheKeys.SERVICES)) {
+        this.services = await this.fetchServices();
       }
+      return this.services;
     },
-    async getAuthServices() {
-      if (
-        !this.hasServices(ServiceType.AUTHENTICATION) ||
-        (isCacheExpired(LsCacheKeys.SERVICE_AUTH) && isCacheExpired(LsCacheKeys.SERVICES))
-      ) {
-        this.services.authentication = await this.fetchServices(ServiceType.AUTHENTICATION);
-      }
-    },
-    async getStorageServices() {
-      if (
-        !this.hasServices(ServiceType.STORAGE) ||
-        (isCacheExpired(LsCacheKeys.SERVICE_STORAGE) && isCacheExpired(LsCacheKeys.SERVICES))
-      ) {
-        this.services.storage = await this.fetchServices(ServiceType.STORAGE);
-      }
-    },
-    async getComputingServices() {
-      if (
-        !this.hasServices(ServiceType.COPMUTING) ||
-        (isCacheExpired(LsCacheKeys.SERVICE_COMPUTING) && isCacheExpired(LsCacheKeys.SERVICES))
-      ) {
-        this.services.computing = await this.fetchServices(ServiceType.COPMUTING);
-      }
+    async getServicesByType(type: number) {
+      const services = await this.getServices();
+      return services.filter(item => item.serviceType_id === type);
     },
 
     /**
@@ -207,7 +170,7 @@ export const useDataStore = defineStore('data', {
      */
 
     /** Projects */
-    async fetchProjects(redirectToDashboard: boolean = false) {
+    async fetchProjects(redirectToDashboard: boolean = false): Promise<ProjectInterface[]> {
       const router = useRouter();
       try {
         const req = $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
@@ -217,7 +180,7 @@ export const useDataStore = defineStore('data', {
         const projects = res.data.items.map((project: ProjectInterface) => {
           return {
             ...project,
-            value: project.id,
+            value: project.project_uuid,
             label: project.name,
           };
         });
@@ -225,8 +188,8 @@ export const useDataStore = defineStore('data', {
         const hasProjects = res.data.total > 0;
 
         /* If current project is not selected, take first one */
-        if (this.currentProjectId === 0 && hasProjects) {
-          this.setCurrentProject(this.project.items[0].id);
+        if (this.project.selected === '' && hasProjects) {
+          this.setCurrentProject(this.project.items[0].project_uuid);
         }
 
         /** Save timestamp to SS */
@@ -242,7 +205,7 @@ export const useDataStore = defineStore('data', {
         return projects;
       } catch (error) {
         /** Clear promise */
-        this.promises.buckets = null;
+        this.promises.projects = null;
 
         this.project.items = [];
 
@@ -252,11 +215,13 @@ export const useDataStore = defineStore('data', {
       return [];
     },
 
-    async fetchProject(projectId?: number) {
+    async fetchProject(projectUuid?: string): Promise<ProjectInterface> {
+      const uuid = projectUuid || this.projectUuid;
+      if (!uuid) {
+        return {} as ProjectInterface;
+      }
       try {
-        const res = await $api.get<ProjectResponse>(
-          endpoints.project(projectId || this.currentProjectId)
-        );
+        const res = await $api.get<ProjectResponse>(endpoints.project(uuid));
         this.project.active = res.data;
 
         /** Save timestamp to SS */
@@ -285,7 +250,7 @@ export const useDataStore = defineStore('data', {
     },
 
     /** Services */
-    async fetchServices(type?: number) {
+    async fetchServices() {
       if (!this.hasProjects) {
         await this.fetchProjects();
       }
@@ -293,17 +258,15 @@ export const useDataStore = defineStore('data', {
 
       try {
         const params: Record<string, string | number> = {
-          project_id: this.currentProjectId,
+          uuid: this.projectUuid,
+          project_uuid: this.projectUuid,
           ...PARAMS_ALL_ITEMS,
         };
-        if (type) {
-          params.serviceType_id = type;
-        }
         const res = await $api.get<ServicesResponse>(endpoints.services(), params);
         this.service.loading = false;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(this.getServiceCacheKey(type), Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.SERVICES, Date.now().toString());
 
         return res.data.items
           .filter(item => item.status === 5)
@@ -316,6 +279,21 @@ export const useDataStore = defineStore('data', {
       }
       this.service.loading = false;
       return [] as Array<ServiceInterface>;
+    },
+
+    async fetchServiceTypes() {
+      try {
+        const res = await $api.get<ServiceTypesResponse>(endpoints.serviceTypes);
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.SERVICE_TYPES, Date.now().toString());
+
+        return res.data;
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return [] as Array<ServiceTypeInterface>;
     },
 
     /**

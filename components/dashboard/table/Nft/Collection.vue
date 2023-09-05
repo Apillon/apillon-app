@@ -17,8 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
-
 const props = defineProps({
   collections: { type: Array<CollectionInterface>, default: [] },
 });
@@ -41,6 +39,15 @@ const data = computed<Array<CollectionInterface>>(() => {
 const createColumns = (): NDataTableColumns<CollectionInterface> => {
   return [
     {
+      key: 'chain',
+      title: $i18n.t('nft.transaction.chain'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      minWidth: 120,
+      render(row: CollectionInterface) {
+        return h('span', {}, { default: () => $i18n.t(`nft.chain.${row.chain}`) });
+      },
+    },
+    {
       key: 'symbol',
       title: $i18n.t('nft.collection.symbol'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
@@ -54,6 +61,19 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
+      },
+    },
+    {
+      key: 'type',
+      title: $i18n.t('general.type'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      minWidth: 100,
+      render(row) {
+        if (row.collectionType) {
+          return $i18n.t(`nft.collection.type.${row.collectionType}`);
+        } else {
+          return $i18n.t(`nft.collection.type.${NFTCollectionType.GENERIC}`);
+        }
       },
     },
     {
@@ -72,21 +92,21 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       },
     },
     {
-      key: 'mintPrice',
-      title: $i18n.t('nft.collection.mintPrice'),
+      key: 'dropPrice',
+      title: $i18n.t('nft.collection.dropPrice'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      key: 'reserve',
-      title: $i18n.t('nft.collection.reserve'),
+      key: 'dropReserve',
+      title: $i18n.t('nft.collection.dropReserve'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
       key: 'maxSupply',
-      title: $i18n.t('nft.collection.minted') + '/' + $i18n.t('nft.collection.maxSupply'),
+      title: $i18n.t('nft.collection.maxSupply'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row: CollectionInterface) {
-        return h('span', {}, { default: () => row.minted + '/' + row.maxSupply });
+        return h('span', {}, { default: () => maxSupply(row.maxSupply) });
       },
     },
     {
@@ -100,7 +120,10 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
       key: 'dropStart',
       title: $i18n.t('nft.collection.dropStart'),
       render(row: CollectionInterface) {
-        return h('span', {}, { default: () => timestampToDateAndTime(row.dropStart) });
+        if (row.drop) {
+          return h('span', {}, { default: () => timestampToDateAndTime(row.dropStart) });
+        }
+        return '';
       },
     },
     {
@@ -123,9 +146,13 @@ const rowProps = (row: CollectionInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/nft/${row.id}` });
+        router.push({ path: `/dashboard/service/nft/${row.collection_uuid}` });
       }
     },
   };
 };
+
+function maxSupply(maxSupply: number) {
+  return maxSupply > 0 ? maxSupply : $i18n.t('form.supplyTypes.unlimited');
+}
 </script>

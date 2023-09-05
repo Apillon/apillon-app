@@ -7,24 +7,24 @@ export const useBucketStore = defineStore('bucket', {
   state: () => ({
     allowFetch: true,
     active: {} as BucketInterface,
-    destroyed: [] as Array<BucketInterface>,
-    items: [] as Array<BucketInterface>,
+    destroyed: [] as BucketInterface[],
+    items: [] as BucketInterface[],
     loading: false,
     quotaReached: undefined as Boolean | undefined,
     search: '',
     selected: 0,
-    selectedItems: [] as Array<BucketInterface>,
+    selectedItems: [] as BucketInterface[],
     total: 0,
     uploadActive: false,
-    uploadFileList: [] as Array<FileListItemType>,
+    uploadFileList: [] as FileListItemType[],
     folder: {
       allowFetch: true,
-      items: [] as Array<BucketItemInterface>,
+      items: [] as BucketItemInterface[],
       loading: false,
       path: [] as Array<{ id: number; name: string }>,
       search: '',
       selected: 0,
-      selectedItems: [] as Array<BucketItemInterface>,
+      selectedItems: [] as BucketItemInterface[],
       total: 0,
     },
   }),
@@ -48,7 +48,9 @@ export const useBucketStore = defineStore('bucket', {
     hasBuckets(state): boolean {
       if (Array.isArray(state.items) && state.items.length > 0) {
         return state.items.some(
-          (bucket: BucketInterface) => bucket.bucketType === BucketType.STORAGE
+          (bucket: BucketInterface) =>
+            bucket.bucketType === BucketType.STORAGE ||
+            bucket.bucketType === BucketType.NFT_METADATA
         );
       }
       return false;
@@ -203,7 +205,7 @@ export const useBucketStore = defineStore('bucket', {
       return null;
     },
 
-    async fetchBucket(bucketId: number): Promise<BucketInterface> {
+    async fetchBucket(bucketId: number | string): Promise<BucketInterface> {
       try {
         const res = await $api.get<BucketResponse>(endpoints.bucket(bucketId));
 
@@ -254,7 +256,7 @@ export const useBucketStore = defineStore('bucket', {
       }
 
       try {
-        /** If subfolder is selected, search directory content in this sibfolder */
+        /** If subfolder is selected, search directory content in this subfolder */
         const params: Record<string, string | number> = {
           bucket_uuid: bucket,
         };
@@ -264,7 +266,7 @@ export const useBucketStore = defineStore('bucket', {
           params.directory_id = this.folder.selected;
         }
         if (arg.search) {
-          params.search = params.search;
+          params.search = arg.search;
         }
         if (arg.page) {
           params.page = arg.page;

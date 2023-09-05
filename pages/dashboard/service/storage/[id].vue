@@ -20,7 +20,10 @@
 
       <!-- DataTable: files and directories -->
       <transition name="fade" appear>
-        <TableStorageFiles v-if="bucketStore.hasBucketItems" />
+        <TableStorageFiles
+          v-if="bucketStore.hasBucketItems"
+          :type="bucketStore.active.bucketType"
+        />
       </transition>
     </slot>
   </Dashboard>

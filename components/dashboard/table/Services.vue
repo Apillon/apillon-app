@@ -15,7 +15,7 @@
   <!-- Modal - Edit IPNS -->
   <modal v-model:show="modalEditAuthVisible" :title="$t('service.edit')">
     <FormService
-      :service-id="currentRow?.id || 0"
+      :service-uuid="currentRow?.service_uuid"
       :service-type="ServiceType.AUTHENTICATION"
       @submit-success="modalEditAuthVisible = false"
     />
@@ -23,7 +23,7 @@
 
   <!-- Modal - Delete API key -->
   <ModalDelete v-model:show="modalDeleteAuthVisible" :title="$t('service.delete')">
-    <FormDelete :id="currentRow?.id || 0" type="service" @submit-success="onServiceDeleted" />
+    <FormDelete :id="currentRow?.service_uuid" type="service" @submit-success="onServiceDeleted" />
   </ModalDelete>
 </template>
 
@@ -119,15 +119,13 @@ const createColumns = (): DataTableColumns<ServiceInterface> => {
 const currentRow = ref<ServiceInterface>({} as ServiceInterface);
 const columns = createColumns();
 
-const serviceName = computed(() => {
-  return ServiceTypeNames[props.serviceType];
-});
-
 /** Data: filtered websites */
 const data = computed<Array<ServiceInterface>>(() => {
   return (
-    dataStore.services[serviceName.value].filter(item =>
-      item.name.toLocaleLowerCase().includes(dataStore.service.search.toLocaleLowerCase())
+    dataStore.services.filter(
+      item =>
+        item.serviceType_id === props.serviceType &&
+        item.name.toLocaleLowerCase().includes(dataStore.service.search.toLocaleLowerCase())
     ) || []
   );
 });
@@ -165,10 +163,10 @@ const dropdownOptions = [
 /**
  * Delete Service
  */
-async function onServiceDeleted() {
+function onServiceDeleted() {
   modalDeleteAuthVisible.value = false;
-  dataStore.services[serviceName.value] = dataStore.services[serviceName.value].filter(
-    item => item.id !== currentRow.value.id
+  dataStore.services = dataStore.services.filter(
+    item => item.service_uuid !== currentRow.value.service_uuid
   );
 }
 </script>

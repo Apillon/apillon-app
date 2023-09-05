@@ -8,7 +8,6 @@
     :loading="collectionStore.loading"
     :pagination="{ pageSize: PAGINATION_LIMIT }"
     :row-key="rowKey"
-    :row-props="rowProps"
   />
 </template>
 
@@ -18,8 +17,9 @@ const props = defineProps({
 });
 
 const $i18n = useI18n();
-const router = useRouter();
 const collectionStore = useCollectionStore();
+const { transactionLink } = useNft();
+
 const NftTransactionStatus = resolveComponent('NftTransactionStatus');
 const NftTransactionType = resolveComponent('NftTransactionType');
 const TableLink = resolveComponent('TableLink');
@@ -28,7 +28,7 @@ const TableLink = resolveComponent('TableLink');
 const data = computed<Array<TransactionInterface>>(() => {
   return (
     props.transactions.filter(item =>
-      item.updateTime.toLocaleLowerCase().includes(collectionStore.search.toLocaleLowerCase())
+      JSON.stringify(item).toLocaleLowerCase().includes(collectionStore.search.toLocaleLowerCase())
     ) || []
   );
 });
@@ -37,7 +37,7 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
   return [
     {
       key: 'chainId',
-      title: $i18n.t('nft.transaction.chainId'),
+      title: $i18n.t('nft.transaction.chain'),
       minWidth: 120,
       render(row: TransactionInterface) {
         return h('span', {}, { default: () => $i18n.t(`nft.chain.${row.chainId}`) });
@@ -49,7 +49,10 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       render(row: TransactionInterface) {
         return h(
           TableLink,
-          { link: moonbaseLink(row.transactionHash, row.chainId), text: row.transactionHash },
+          {
+            link: transactionLink(row.transactionHash, collectionStore.active.chain || row.chainId),
+            text: row.transactionHash,
+          },
           ''
         );
       },
@@ -68,35 +71,8 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
         return h(NftTransactionStatus, { transactionStatus: row.transactionStatus }, '');
       },
     },
-    {
-      key: 'updateTime',
-      title: $i18n.t('general.updateTime'),
-      render(row: TransactionInterface) {
-        return h('span', {}, { default: () => datetimeToDateAndTime(row.updateTime || '') });
-      },
-    },
   ];
 };
 const columns = createColumns();
 const rowKey = (row: TransactionInterface) => row.id;
-const currentRow = ref<TransactionInterface>(props.transactions[0]);
-
-/** On row click */
-const rowProps = (row: TransactionInterface) => {
-  return {
-    onClick: (e: Event) => {
-      currentRow.value = row;
-
-      if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/nft/${row.id}` });
-      }
-    },
-  };
-};
-
-function moonbaseLink(transactionHash?: string | null, chainId?: number): string {
-  if (!transactionHash || !chainId) return '';
-  if (chainId === Chains.MOONBEAM) return `https://moonbeam.moonscan.io/tx/${transactionHash}`;
-  return `https://moonbase.moonscan.io/tx/${transactionHash}`;
-}
 </script>

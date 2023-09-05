@@ -5,23 +5,49 @@ const dataStore = useDataStore();
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
+    bucketId: 0,
     csvAttributes: [] as Array<MetadataAttributes>,
     csvColumns: [] as NTableColumns<KeyTitle>,
     csvData: [] as Array<Record<string, string>>,
     csvFile: {} as FileListItemType,
     csvSelectedAttributes: [] as Array<string>,
     filesMetadata: [] as FileListItemType[],
+    gridView: true,
     images: [] as FileListItemType[],
     items: [] as CollectionInterface[],
     loading: false,
     metadata: [] as Array<Record<string, any>>,
+    metadataStored: null as Boolean | null,
     mintTab: NftMintTab.METADATA,
     quotaReached: undefined as Boolean | undefined,
     search: '',
-    selected: 0,
+    stepDeploy: NftDeployStep.NAME,
+    stepUpload: NftUploadStep.FILE,
     total: 0,
     transaction: [] as TransactionInterface[],
     uploadActive: false,
+    form: {
+      base: {
+        name: '',
+        symbol: '',
+        chain: Chains.MOONBEAM,
+        collectionType: NFTCollectionType.GENERIC,
+      },
+      behavior: {
+        baseUri: '',
+        baseExtension: '.json',
+        dropStart: Date.now() + 3600000,
+        drop: false,
+        maxSupply: 0,
+        dropPrice: 0,
+        dropReserve: 0,
+        revocable: false as Boolean | null,
+        soulbound: false as Boolean | null,
+        supplyLimited: 0,
+        royaltiesAddress: '',
+        royaltiesFees: 0,
+      },
+    },
   }),
   getters: {
     hasCollections(state): boolean {
@@ -46,25 +72,45 @@ export const useCollectionStore = defineStore('collection', {
       this.items = [] as CollectionInterface[];
       this.quotaReached = undefined;
       this.search = '';
-      this.selected = 0;
       this.transaction = [] as TransactionInterface[];
       this.resetMetadata();
     },
     resetMetadata() {
+      this.resetFile();
+      this.resetImages();
+      this.mintTab = NftMintTab.METADATA;
+    },
+    resetFile() {
       this.csvAttributes = [] as MetadataAttributes[];
       this.csvColumns = [] as NTableColumns<KeyTitle>;
       this.csvData = [] as Array<Record<string, string>>;
       this.csvFile = {} as FileListItemType;
       this.csvSelectedAttributes = [] as Array<string>;
       this.filesMetadata = [] as FileListItemType[];
-      this.images = [] as FileListItemType[];
-      this.metadata = [];
-      this.mintTab = NftMintTab.METADATA;
+      this.metadata = [] as Array<Record<string, any>>;
     },
-    setCollectionId(id: number) {
-      if (this.selected !== id) {
-        this.selected = id;
+    resetImages() {
+      this.images.forEach(img => img.onError());
+      while (this.images.length > 0) {
+        this.images.pop();
       }
+    },
+    resetForms() {
+      this.form.base.name = '';
+      this.form.base.symbol = '';
+      this.form.base.chain = Chains.MOONBEAM;
+      this.form.base.collectionType = NFTCollectionType.GENERIC;
+
+      this.form.behavior.baseUri = '';
+      this.form.behavior.baseExtension = '.json';
+      this.form.behavior.dropStart = Date.now() + 3600000;
+      this.form.behavior.drop = false;
+      this.form.behavior.maxSupply = 0;
+      this.form.behavior.dropPrice = 0;
+      this.form.behavior.dropReserve = 0;
+      this.form.behavior.revocable = false;
+      this.form.behavior.soulbound = false;
+      this.form.behavior.supplyLimited = 0;
     },
 
     /**
@@ -77,11 +123,15 @@ export const useCollectionStore = defineStore('collection', {
       return this.items;
     },
 
-    async getCollection(collectionId: number): Promise<CollectionInterface> {
-      if (this.active?.id === collectionId && !isCacheExpired(LsCacheKeys.COLLECTION)) {
+    async getCollection(collectionUuid: string): Promise<CollectionInterface> {
+      if (
+        this.active?.collection_uuid === collectionUuid &&
+        this.active?.collectionStatus >= CollectionStatus.DEPLOYED &&
+        !isCacheExpired(LsCacheKeys.COLLECTION)
+      ) {
         return this.active;
       }
-      return await this.fetchCollection(collectionId);
+      return await this.fetchCollection(collectionUuid);
     },
 
     async getCollectionTransactions(collectionUuid: string): Promise<any> {
@@ -93,6 +143,12 @@ export const useCollectionStore = defineStore('collection', {
         return await this.fetchCollectionTransactions(collectionUuid);
       }
       return this.transaction;
+    },
+
+    async getCollectionQuota() {
+      if (this.quotaReached === undefined) {
+        await this.fetchCollectionQuota();
+      }
     },
 
     /**
@@ -107,6 +163,8 @@ export const useCollectionStore = defineStore('collection', {
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
+          orderBy: 'updateTime',
+          desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
 
@@ -137,9 +195,9 @@ export const useCollectionStore = defineStore('collection', {
       return [];
     },
 
-    async fetchCollection(id: number): Promise<CollectionInterface> {
+    async fetchCollection(uuid: string): Promise<CollectionInterface> {
       try {
-        const res = await $api.get<CollectionResponse>(endpoints.collections(id));
+        const res = await $api.get<CollectionResponse>(endpoints.collections(uuid));
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.COLLECTION, Date.now().toString());
@@ -147,9 +205,6 @@ export const useCollectionStore = defineStore('collection', {
         return res.data;
       } catch (error: any) {
         this.active = {} as CollectionInterface;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
       }
       return {} as CollectionInterface;
     },
@@ -160,8 +215,12 @@ export const useCollectionStore = defineStore('collection', {
     ): Promise<TransactionInterface[]> {
       this.loading = showLoader;
       try {
+        const params: Record<string, string | number> = {
+          ...PARAMS_ALL_ITEMS,
+        };
         const res = await $api.get<TransactionResponse>(
-          endpoints.collectionTransactions(collectionUuid)
+          endpoints.collectionTransactions(collectionUuid),
+          params
         );
         this.transaction = res.data.items;
         this.loading = false;
@@ -178,6 +237,25 @@ export const useCollectionStore = defineStore('collection', {
       }
       this.loading = false;
       return [];
+    },
+
+    async fetchCollectionQuota() {
+      if (!dataStore.hasProjects) {
+        await dataStore.fetchProjects();
+      }
+
+      try {
+        const res = await $api.get<CollectionQuotaResponse>(endpoints.collectionQuota, {
+          project_uuid: dataStore.projectUuid,
+        });
+
+        this.quotaReached = res.data;
+      } catch (error: any) {
+        this.quotaReached = undefined;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
     },
   },
 });

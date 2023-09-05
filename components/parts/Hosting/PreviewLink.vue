@@ -2,6 +2,7 @@
   <div v-if="link">
     <div v-if="title" class="body-sm mb-2">
       <strong>{{ title }}</strong>
+      <span v-if="info" class="text-[11px]"> ({{ info }})</span>
     </div>
     <div v-if="copy" class="flex justify-between items-center bg-bg-dark text-body px-4 py-2">
       <n-ellipsis class="align-bottom" :line-clamp="1">
@@ -26,6 +27,7 @@
 defineProps({
   link: { type: String, default: '' },
   title: { type: String, default: '' },
+  info: { type: String, default: '' },
   copy: { type: Boolean, default: false },
 });
 </script>

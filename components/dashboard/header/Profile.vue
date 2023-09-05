@@ -3,8 +3,8 @@
     v-if="authStore.loggedIn"
     placement="bottom-end"
     trigger="click"
-    size="large"
     :options="options"
+    style="min-width: 220px"
     @select="handleSelect"
   >
     <div class="flex cursor-pointer">
@@ -32,12 +32,16 @@ const $i18n = useI18n();
 
 const options = [
   {
-    label: $i18n.t('profile.profile'),
     key: 'profile',
+    label: $i18n.t('profile.profile'),
   },
   {
-    label: $i18n.t('profile.logout'),
+    key: 'dashboard-account-management',
+    label: $i18n.t('profile.account'),
+  },
+  {
     key: 'logout',
+    label: $i18n.t('profile.logout'),
   },
 ];
 
@@ -45,8 +49,8 @@ function handleSelect(key: string | number) {
   if (key === 'logout') {
     authStore.logout();
     router.push({ name: 'login' });
-  } else if (key === 'profile') {
-    router.push({ name: 'profile' });
+  } else if (key) {
+    router.push({ name: `${key}` });
   }
 }
 

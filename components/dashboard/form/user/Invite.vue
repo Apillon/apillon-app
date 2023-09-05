@@ -114,7 +114,7 @@ async function inviteUser() {
 
   try {
     await $api.post<InviteUserResponse>(
-      endpoints.projectInviteUser(dataStore.currentProjectId),
+      endpoints.projectInviteUser(dataStore.project.selected),
       formData.value
     );
 

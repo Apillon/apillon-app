@@ -1,10 +1,10 @@
 export const CACHE_EXPIRATION_IN_MS = 10 * 60 * 1000; // 10 minutes
 export const ON_COLUMN_CLICK_OPEN_CLASS = 'onClickOpen';
-export const NFT_MAX_SUPPLY = 20000;
+export const NFT_MAX_SUPPLY = 10000;
 export const PAGINATION_LIMIT = 20;
 export const PARAMS_ALL_ITEMS = {
   page: 1,
-  limit: 1000,
+  limit: 100,
 };
 
 export const LsTableColumnsKeys = {
@@ -18,6 +18,8 @@ export const LsW3WarnKeys = {
   BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
   BUCKET_ITEM_DELETE: 'al_w3warn_bucket_item_delete',
   HOSTING_NEW: 'al_w3warn_hosting_new',
+  HOSTING_DEPLOY: 'al_w3warn_hosting_deploy',
+  NFT_NEW: 'al_w3warn_nft_new',
 };
 
 export const LsCacheKeys = {
@@ -40,10 +42,9 @@ export const LsCacheKeys = {
   OAUTH_LINKS: 'al_cache_oauth_links',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
+  REFERRAL: 'al_cache_referral',
   SERVICES: 'al_cache_services',
-  SERVICE_AUTH: 'al_cache_service_auth',
-  SERVICE_COMPUTING: 'al_cache_service_computing',
-  SERVICE_STORAGE: 'al_cache_service_storage',
+  SERVICE_TYPES: 'al_cache_service_types',
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
 };
@@ -106,12 +107,3 @@ export const referralCountries = [
   { label: 'Sweden', value: 'Sweden' },
   { label: 'United Kingdom', value: 'United Kingdom' },
 ];
-
-/**
- * NFT
- */
-export const NftMintTab = {
-  METADATA: 'uploadMetadata',
-  IMAGES: 'uploadImages',
-  MINT: 'mintNfts',
-};

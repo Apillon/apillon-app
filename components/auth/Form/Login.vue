@@ -31,12 +31,6 @@
       </Btn>
     </n-form-item>
   </n-form>
-  <div class="min-h-[30px] text-center">
-    <div>
-      <span class="text-sm text-body">{{ $t('auth.login.forgotPassword') }} </span>&nbsp;
-      <FormPasswordResetRequest :email="formData.email" btn-type="link" size="tiny" quaternary />
-    </div>
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -45,7 +39,8 @@ import { createDiscreteApi } from 'naive-ui';
 const $i18n = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { clearAll } = useStore();
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -94,6 +89,9 @@ async function login() {
     // Logout first - delete LS and store if there is any data
     authStore.logout();
     dataStore.resetCurrentProject();
+
+    /** Clear all stored data */
+    clearAll();
 
     const res = await $api.post<LoginResponse>(endpoints.login, formData.value);
 

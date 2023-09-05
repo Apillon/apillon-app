@@ -53,7 +53,7 @@ const bucketStore = useBucketStore();
 /** Form folder */
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const formData = ref<FormFolder>({
   name: '',

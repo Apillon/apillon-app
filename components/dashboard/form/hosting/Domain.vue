@@ -1,7 +1,13 @@
 <template>
   <Spinner v-if="websiteId > 0 && !website" />
   <div v-else>
-    <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+    <n-form
+      ref="formRef"
+      :model="formData"
+      :rules="rules"
+      :disabled="authStore.isAdmin()"
+      @submit.prevent="handleSubmit"
+    >
       <!--  Website domain -->
       <n-form-item path="domain" :label="$t('form.label.domain')" :label-props="{ for: 'domain' }">
         <n-input
@@ -22,7 +28,7 @@
           type="primary"
           class="w-full mt-2"
           :loading="loading"
-          :disabled="!domain && formData.domain?.length === 0"
+          :disabled="(!domain && formData.domain?.length === 0) || authStore.isAdmin()"
           @click="handleSubmit"
         >
           <template v-if="domain">
@@ -47,8 +53,8 @@ const props = defineProps({
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const $i18n = useI18n();
-const router = useRouter();
 const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
 const loading = ref(false);
@@ -118,9 +124,6 @@ async function createWebsiteDomain() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess');
-
-    /** Redirect to new web page */
-    router.push(`/dashboard/service/hosting/${res.data.id}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -151,9 +154,10 @@ async function updateWebsiteDomain() {
 
 function updateWebsiteDomainValue(domain) {
   /** On website updated refresh website data */
-  websiteStore.items.forEach((item: WebsiteInterface) => {
+  websiteStore.items.forEach((item: WebsiteBaseInterface) => {
     if (item.id === props.websiteId) {
       item.domain = domain;
+      item.domainChangeDate = new Date().toISOString();
     }
   });
   if (websiteStore.active.id === props.websiteId) {

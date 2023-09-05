@@ -28,7 +28,7 @@
       <n-button
         size="small"
         :loading="dataStore.service.loading"
-        @click="dataStore.fetchServices(ServiceType.AUTHENTICATION)"
+        @click="dataStore.fetchServices()"
       >
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}

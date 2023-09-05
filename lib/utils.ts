@@ -79,23 +79,6 @@ export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
 }
 
 /**
- * Custom validations
- */
-/** Validate checkbox if it is checked */
-export function validateRequiredCheckbox(_: NFormItemRule, value: boolean | null): boolean {
-  return value === true;
-}
-
-/** Validate dropdown if it is selected */
-export function validateRequiredDropdown(_: NFormItemRule, value: String | null): boolean {
-  if (value) {
-    return value.length !== 0;
-  } else {
-    return false;
-  }
-}
-
-/**
  *  Date and time functions
  */
 /** Time to days and hours */
@@ -172,13 +155,21 @@ export function timestampToDateAndTime(timestamp: number): string {
  * @param expiredAt block number when file will expire
  * @returns
  */
-export function fileExpiration(calculatedAt: number, expiredAt: number): string {
+export function fileExpiration(
+  calculatedAt: number,
+  expiredAt: number,
+  fileUpdateTime: string,
+  currentBlockId?: number
+): string {
   const TIME_TO_CREATE_NEW_BLOCK = 6000;
-  const numOfBlocksBeforeExpiratoin = expiredAt - calculatedAt;
+  const useBlockToCalc = currentBlockId && currentBlockId > 0 ? currentBlockId : calculatedAt;
 
-  const expiredAtDate = new Date(
-    Date.now() + TIME_TO_CREATE_NEW_BLOCK * numOfBlocksBeforeExpiratoin
-  );
+  const numOfRemainingBlocks = expiredAt - useBlockToCalc;
+
+  const expiredAtDate = !currentBlockId
+    ? new Date(new Date(fileUpdateTime).getTime() + TIME_TO_CREATE_NEW_BLOCK * numOfRemainingBlocks)
+    : new Date(Date.now() + TIME_TO_CREATE_NEW_BLOCK * numOfRemainingBlocks);
+
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
@@ -335,6 +326,18 @@ export function isCacheExpired(key: string) {
     return parseInt(timestamp) + CACHE_EXPIRATION_IN_MS < Date.now();
   }
   return true;
+}
+
+/**
+ * Slice array in chunks
+ */
+export function sliceIntoChunks(arr: Array<any>, chunkSize: number) {
+  const res: Array<any> = [];
+  for (let i = 0; i < arr.length; i += chunkSize) {
+    const chunk = arr.slice(i, i + chunkSize);
+    res.push(chunk);
+  }
+  return res;
 }
 
 /**

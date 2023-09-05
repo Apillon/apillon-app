@@ -1,6 +1,12 @@
 <template>
   <div class="relative">
-    <n-upload :show-file-list="false" multiple directory-dnd :custom-request="uploadFileRequest">
+    <n-upload
+      multiple
+      directory-dnd
+      :show-file-list="false"
+      :disabled="authStore.isAdmin()"
+      :custom-request="uploadFileRequest"
+    >
       <n-upload-dragger>
         <div class="pb-12 text-center">
           <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
@@ -9,13 +15,9 @@
 
           <h4 class="mb-1">{{ $t('hosting.upload.files') }}</h4>
           <span class="text-body">{{ $t('hosting.upload.dragAndDrop') }}</span>
-          <div class="flex items-center">
-            <span class="bg-white h-[1px] w-full"></span>
-            <strong class="inline-block px-5 mx-[8%] text-body whitespace-nowrap">
-              {{ $t('general.or') }}
-            </strong>
-            <span class="bg-white h-[1px] w-full"></span>
-          </div>
+          <SeparatorText class="mt-1 mb-1" :border-left="true">
+            {{ $t('general.or') }}
+          </SeparatorText>
         </div>
       </n-upload-dragger>
     </n-upload>
@@ -28,6 +30,7 @@
       <n-button>{{ $t('hosting.upload.directory') }}</n-button>
     </n-upload>
   </div>
+
   <n-space v-if="uploadFileList.length" class="min-h-[32px] my-4" justify="center" align="center">
     <n-space justify="space-between" align="center">
       <IconUploading />
@@ -47,10 +50,14 @@
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
+
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
+const message = useMessage();
+const authStore = useAuthStore();
 const { uploadFiles, fileAlreadyOnFileList } = useUpload();
 
 const fileNum = ref<number>(0);
@@ -120,7 +127,12 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
     uploadInterval.value = setInterval(() => {
       if (fileNum.value === uploadFileList.value.length) {
         /** When all files are on file list, start uploading files */
-        uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+        try {
+          uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+        } catch (error) {
+          /** Show error message */
+          message.error(userFriendlyMsg(error));
+        }
 
         /** Clear interval, upload started */
         clearInterval(uploadInterval.value);

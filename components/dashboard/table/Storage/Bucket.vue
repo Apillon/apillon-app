@@ -36,7 +36,7 @@
   </ModalDelete>
 
   <!-- W3Warn: delete bucket -->
-  <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+  <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
     {{ $t('w3Warn.bucket.delete') }}
   </W3Warn>
 </template>
@@ -52,6 +52,7 @@ const props = defineProps({
 const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
+const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const settingsStore = useSettingsStore();
 
@@ -87,6 +88,17 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       },
     },
     {
+      key: 'type',
+      title: $i18n.t('storage.bucket.type'),
+      className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row) {
+        if (row.bucketType > 0 && $i18n.te(`storage.type.${row.bucketType}`)) {
+          return h('span', {}, { default: () => $i18n.t(`storage.type.${row.bucketType}`) });
+        }
+        return '';
+      },
+    },
+    {
       key: 'bucket_uuid',
       title: $i18n.t('storage.bucket.uuid'),
       render(row: BucketInterface) {
@@ -94,7 +106,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       },
     },
     {
-      key: 'serviceType',
+      key: 'used',
       title: $i18n.t('storage.used'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
@@ -168,8 +180,8 @@ const rowProps = (row: BucketInterface) => {
 
 const dropdownOptions = [
   {
-    label: $i18n.t('storage.edit'),
     key: 'storageEdit',
+    label: $i18n.t('storage.edit'),
     disabled: settingsStore.isProjectUser(),
     props: {
       onClick: () => {
@@ -180,6 +192,7 @@ const dropdownOptions = [
   {
     key: 'storageDelete',
     label: $i18n.t('general.delete'),
+    disabled: authStore.isAdmin(),
     props: {
       class: '!text-pink',
       onClick: () => {
@@ -193,6 +206,7 @@ const dropdownDeletedOptions = [
   {
     key: 'storageRestore',
     label: $i18n.t('general.restore'),
+    disabled: authStore.isAdmin(),
     props: {
       class: '!text-pink',
       onClick: () => {
@@ -218,8 +232,8 @@ function deleteBucket(isCurrentRow: boolean = false) {
 }
 
 /** When user close W3Warn, allow him to create new bucket */
-function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalDestroyBucket.value !== false) {
+function onModalW3WarnHide() {
+  if (showModalDestroyBucket.value !== false) {
     showModalDestroyBucket.value = true;
   }
 }
@@ -247,6 +261,7 @@ function onBucketDeleted() {
 
   setTimeout(() => {
     bucketStore.fetchBuckets();
+    bucketStore.fetchBuckets(true);
   }, 300);
 }
 
@@ -257,7 +272,8 @@ async function restoreBucket() {
   bucketStore.loading = true;
 
   try {
-    await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.id));
+    const response = await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.id));
+    removeDeletedBucketFromList(response.data.id);
 
     message.success($i18n.t('form.success.restored.bucket'));
   } catch (error) {
@@ -268,5 +284,10 @@ async function restoreBucket() {
   setTimeout(() => {
     router.push({ name: 'dashboard-service-storage' });
   }, 1000);
+}
+
+function removeDeletedBucketFromList(id: number) {
+  bucketStore.fetchBuckets();
+  bucketStore.destroyed = bucketStore.destroyed.filter(item => item.id !== id);
 }
 </script>

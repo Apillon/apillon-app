@@ -3,7 +3,7 @@
     <n-space justify="space-between">
       <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
         <n-input
-          v-model:value="search"
+          v-model:value="fileStore.search"
           type="text"
           name="search"
           size="small"
@@ -52,9 +52,7 @@ const showModalDelete = ref<boolean>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
 const IconFolderFile = resolveComponent('IconFolderFile');
 
-const search = ref<string>('');
 const loading = ref<boolean>(false);
-
 const currentRow = ref<FileUploadInterface>({} as FileUploadInterface);
 
 /** File status */
@@ -188,6 +186,8 @@ function onItemOpen(row: FileUploadInterface) {
  * Load data on mounted
  */
 onMounted(() => {
+  fileStore.search = '';
+
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       fileStore.getAllFiles();
@@ -210,7 +210,7 @@ async function onDeleted() {
 
 /** Search files */
 watch(
-  () => search.value,
+  () => fileStore.search,
   _ => {
     debouncedSearchFilter();
   }

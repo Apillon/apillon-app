@@ -13,6 +13,7 @@ import { NButton, NDropdown, NTag, useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
 const message = useMessage();
+const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
 const loading = ref<boolean>(false);
 const SelectRole = resolveComponent('SelectRole');
@@ -122,11 +123,17 @@ const dropdownOptions = (user: ProjectUserInterface) => {
     {
       label: $i18n.t('general.delete'),
       key: 'delete',
-      disabled: !isRoleChangeAllowed(user),
+      disabled: !isRoleDeletionAllowed(user),
       props: {
         class: '!text-pink',
         onClick: () => {
-          deleteRole(currentRow.value.id);
+          if (isRoleDeletionAllowed(user)) {
+            if (user.pendingInvitation === 1) {
+              uninviteUser(currentRow.value);
+            } else {
+              deleteUser(currentRow.value.id);
+            }
+          }
         },
       },
     },
@@ -135,7 +142,10 @@ const dropdownOptions = (user: ProjectUserInterface) => {
 
 /** Check if user role can be changed - user is active and is not project owner */
 function isRoleChangeAllowed(user: ProjectUserInterface) {
-  return !(user.pendingInvitation === 1 || user.role_id === DefaultUserRole.PROJECT_OWNER);
+  return user.pendingInvitation !== 1 && isRoleDeletionAllowed(user);
+}
+function isRoleDeletionAllowed(user: ProjectUserInterface) {
+  return user.role_id !== DefaultUserRole.PROJECT_OWNER && settingsStore.isUserOwner();
 }
 
 /** GET Users on project */
@@ -149,7 +159,7 @@ async function getUsers() {
 async function updateRole(id: number, roleId: number) {
   updateLoadingStatusOnUsersRole(id, true);
   try {
-    const res = await $api.patch<UpdateUserRoleResponse>(endpoints.projectUserRole(id), {
+    await $api.patch<UpdateUserRoleResponse>(endpoints.projectUser(id), {
       role_id: roleId,
     });
 
@@ -162,15 +172,33 @@ async function updateRole(id: number, roleId: number) {
   updateLoadingStatusOnUsersRole(id, false);
 }
 
-/** Delete permission - remove user from project */
-async function deleteRole(id: number) {
+/** Un-invite user from project */
+async function uninviteUser(user: ProjectUserInterface) {
+  updateLoadingStatusOnUsersRole(user.id, true);
+
+  try {
+    await $api.post<DeleteResponse>(endpoints.projectUserUninvite(dataStore.projectUuid), {
+      email: user.email,
+    });
+
+    /** Show success msg and refresh users */
+    message.success($i18n.t('form.success.deleted.userUninvited'));
+    await getUsers();
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  updateLoadingStatusOnUsersRole(user.id, false);
+}
+
+/** Remove user from project */
+async function deleteUser(id: number) {
   updateLoadingStatusOnUsersRole(id, true);
 
   try {
-    await $api.delete<DeleteResponse>(endpoints.projectUserRole(id));
+    await $api.delete<DeleteResponse>(endpoints.projectUser(id));
 
     /** Show success msg and refresh users */
-    message.success($i18n.t('form.success.deleted.userRole'));
+    message.success($i18n.t('form.success.deleted.user'));
     await getUsers();
   } catch (error) {
     message.error(userFriendlyMsg(error));

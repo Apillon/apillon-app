@@ -11,9 +11,9 @@ export enum DefaultUserRole {
   PROJECT_ADMIN = 11, // Admin of current project
   PROJECT_USER = 12, // (read only) User on current project
   // auth user roles
-  INTERNAL_TEST_USER = 90, //user with access to new unpublished features
-  EXTERNAL_TEST_USER = 91, //user with access to features ready for external testers
-  BETA_USER = 92, //user with access to closed beta features
+  INTERNAL_TEST_USER = 90, // user with access to new unpublished features
+  EXTERNAL_TEST_USER = 91, // user with access to features ready for external testers
+  BETA_USER = 92, // user with access to closed beta features
   USER = 99, // user with access to platform (published features)
 }
 export const DefaultUserRoles: { [k: number]: string } = {
@@ -42,7 +42,6 @@ declare global {
   }
 
   interface ProjectInterface {
-    id: number;
     status: number;
     name: string;
     description: string;
@@ -50,7 +49,7 @@ declare global {
     imageFile_id: number | null;
     myRole_id_onProject?: number;
     project_uuid: string;
-    value?: number;
+    value?: string;
     label?: string;
   }
 
@@ -77,7 +76,7 @@ declare global {
     user_id: number;
     role_id: number;
     name: string;
-    phone: string;
+    phone?: string | null;
     email: string;
     pendingInvitation: number;
     loading?: boolean;

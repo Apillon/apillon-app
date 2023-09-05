@@ -99,7 +99,7 @@ const termsLabel = computed(() => {
 /** Form project */
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const formData = ref<FormProject>({
   name: null,
@@ -150,7 +150,7 @@ async function createProject() {
       clearAll();
 
       /** Set new project as current project */
-      dataStore.setCurrentProject(res.data.id);
+      dataStore.setCurrentProject(res.data.project_uuid);
 
       emit('submitSuccess');
       emit('submitActive', false);

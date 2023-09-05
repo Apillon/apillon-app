@@ -35,16 +35,25 @@
               href="https://wiki.apillon.io/build/3-apillon-api.html"
               target="_blank"
             >
-              <n-button size="small">
-                <NuxtIcon name="icon/docs" class="text-xl mr-2" />
+              <n-button size="small" :bordered="false">
+                <span class="icon-file text-xl mr-2"></span>
                 {{ $t('dashboard.readDocs') }}
               </n-button>
             </a>
           </div>
         </div>
         <!-- User profile -->
-        <HeaderProfile />
+        <HeaderProfile v-if="!authStore.isAdmin()" />
       </div>
+
+      <!-- Admin notification -->
+      <NotificationBar
+        v-if="authStore.isAdmin()"
+        class="absolute top-0 left-1/2 -translate-x-1/2"
+        type="warning"
+      >
+        {{ $t('dashboard.adminMode') }}
+      </NotificationBar>
     </div>
   </transition>
 </template>

@@ -14,10 +14,7 @@
       </Heading>
     </template>
     <slot>
-      <TableServices
-        v-if="dataStore.hasServices(ServiceType.AUTHENTICATION)"
-        :service-type="ServiceType.AUTHENTICATION"
-      />
+      <TableServices v-if="dataStore.hasServices()" :service-type="ServiceType.AUTHENTICATION" />
       <Empty
         v-else
         :title="$t('service.authentication.emptyTitle')"
@@ -29,7 +26,7 @@
         </Btn>
       </Empty>
 
-      <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+      <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
         {{ $t('w3Warn.auth.new') }}
       </W3Warn>
 
@@ -58,7 +55,7 @@ useHead({
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await dataStore.getAuthServices();
+      await dataStore.getServices();
       pageLoading.value = false;
     });
   }, 100);
@@ -78,8 +75,8 @@ function createNewService() {
 }
 
 /** When user close W3Warn, allow him to create new service */
-function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalNewService.value !== false) {
+function onModalW3WarnHide() {
+  if (showModalNewService.value !== false) {
     showModalNewService.value = true;
   }
 }

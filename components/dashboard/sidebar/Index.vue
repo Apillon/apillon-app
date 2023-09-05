@@ -17,31 +17,46 @@
 
         <n-space class="py-8" :size="32" vertical>
           <!-- LOGO -->
-          <div class="flex justify-left px-8">
-            <Logo />
+          <div class="flex" :class="collapsed ? 'px-4 justify-center' : 'px-8 pt-1 justify-left'">
+            <NuxtIcon v-if="collapsed" name="logo/apillon-icon" class="text-3xl" />
+            <Logo v-else />
           </div>
 
           <!-- PROJECTS & NEW PROJECT -->
-          <div v-if="isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())" class="px-8">
+          <div
+            v-if="isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
+            :class="collapsed ? 'px-4' : 'px-8'"
+          >
             <n-space :size="20" vertical>
               <!-- Projects dropdown -->
               <div class="min-h-[48px]">
-                <SidebarSelectProject />
+                <SidebarSelectProject :collapsed="collapsed" />
               </div>
 
               <!-- Create new project -->
-              <Btn type="info" size="large" @click="showModalNewProject = true">
-                {{ $t('project.new') }}
+              <Btn
+                v-if="!authStore.isAdmin()"
+                type="info"
+                :size="collapsed ? 'small' : 'large'"
+                @click="showModalNewProject = true"
+              >
+                <template v-if="collapsed">
+                  <span class="inline-block w-5 icon-add text-xl"></span>
+                </template>
+                <template v-else>
+                  {{ $t('project.new') }}
+                </template>
               </Btn>
             </n-space>
           </div>
+          <div v-else class="h-8"></div>
 
           <!-- SIDEBAR NAVIGATION -->
-          <MenuNav @toggleSidebar="hideNavOnMobile" />
+          <MenuNav :collapsed="collapsed" @toggleSidebar="hideNavOnMobile" />
         </n-space>
 
         <!-- SIDEBAR FOOTER -->
-        <div class="flex flex-col p-8">
+        <div v-if="!collapsed" class="flex flex-col p-8">
           <p class="text-sm text-body">
             {{ $t('general.copyrights') }}
             <span>{{ version }}</span>
@@ -63,10 +78,11 @@ import { useDataStore } from '~~/stores/data';
 const authStore = useAuthStore();
 
 const props = defineProps({
+  collapsed: { type: Boolean, default: false },
   showOnMobile: { type: Boolean, default: false },
 });
 
-const { isLg, isSm } = useScreen();
+const { isSm, isLg } = useScreen();
 const dataStore = useDataStore();
 const showModalNewProject = ref(false);
 const emit = defineEmits(['toggleSidebar']);
@@ -80,7 +96,8 @@ onMounted(() => {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
       if (
         !dataStore.hasProjects &&
-        isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles())
+        isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles()) &&
+        !authStore.isAdmin()
       ) {
         showModalNewProject.value = true;
       }

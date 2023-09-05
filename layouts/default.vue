@@ -1,5 +1,5 @@
 <template>
-  <div ref="mainContentRef" class="relative h-screen">
+  <div v-if="!authStore.loadingProfile" ref="mainContentRef" class="relative h-screen">
     <n-message-provider
       :to="messageRef"
       placement="bottom-right"
@@ -10,15 +10,17 @@
       <n-layout class="h-full" :has-sider="isLg" sider-placement="left">
         <n-layout-sider
           v-if="isLg"
-          bordered
-          :show-trigger="false"
+          :show-trigger="true"
+          :collapsed="sidebarCollapsed"
+          :collapsed-width="72"
           collapse-mode="width"
-          :collapsed-width="60"
           :width="320"
           :native-scrollbar="false"
+          bordered
           style="max-height: 100vh"
+          @update-collapsed="onCollapse"
         >
-          <Sidebar />
+          <Sidebar :collapsed="sidebarCollapsed" />
         </n-layout-sider>
         <n-layout>
           <Header @toggleSidebar="toggleSidebar" />
@@ -40,10 +42,12 @@
 <script lang="ts" setup>
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
-const { isLg } = useScreen();
+const authStore = useAuthStore();
+const { isLg, isXl } = useScreen();
 const messageRef = ref<HTMLDivElement>();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
+const sidebarCollapsed = ref<boolean>(false);
 
 /**
  * Enable/disable body scroll
@@ -72,11 +76,18 @@ const { lengthX, lengthY } = useSwipe(mainContentRef, {
   },
 });
 
-/** Hide sidebar if user flip devcie in mobile view */
+/** Hide sidebar if user flip device in mobile view */
 watch(
   () => isLg.value,
   isLg => {
     toggleSidebar(isLg);
+  }
+);
+
+watch(
+  () => isXl.value,
+  isXl => {
+    toggleCollapse(!isXl);
   }
 );
 
@@ -86,5 +97,17 @@ function toggleSidebar(show?: boolean) {
   } else {
     showMobileSidebar.value = show;
   }
+}
+
+function toggleCollapse(show?: boolean) {
+  if (show === undefined) {
+    sidebarCollapsed.value = !sidebarCollapsed.value;
+  } else {
+    sidebarCollapsed.value = show;
+  }
+}
+
+function onCollapse(collapsed: boolean) {
+  sidebarCollapsed.value = collapsed;
 }
 </script>

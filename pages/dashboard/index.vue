@@ -7,7 +7,7 @@
     </template>
     <slot>
       <div class="p-8 mb-8 bg-bg-light text-body">
-        <template v-if="authStore.isBetaUser()">
+        <template v-if="authStore.isBetaUser() || true">
           <h3 class="mb-4 text-white">Welcome to the Apillon Closed Beta test</h3>
           <p>
             At this moment, you will be able to test Web3 Storage and Web3 Hosting services, while
@@ -107,7 +107,7 @@
         <!-- Referral code -->
         <h3 class="mt-8 text-white">Closed Beta code:</h3>
         <n-space
-          class="p-4 bg-bg-light border-card mt-2"
+          class="p-4 bg-bg-light card-border mt-2"
           align="center"
           size="small"
           justify="space-between"
@@ -135,7 +135,7 @@
 
     <template v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" #learn>
       <!-- Referral -->
-      <div class="md:max-w-lg p-8 mb-6 border-card">
+      <div class="md:max-w-lg p-8 mt-8 mb-6 card-border">
         <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
         <p class="text-body mb-6">
           {{ $t('referral.banner.description') }}
@@ -162,46 +162,26 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const authStore = useAuthStore();
 const router = useRouter();
-const config = useRuntimeConfig();
+const authStore = useAuthStore();
 const referralStore = useReferralStore();
+const showModal = ref(false);
 
 useHead({
   title: t('dashboard.dashboard'),
 });
 
 function enterReferral() {
-  if (!termsAccepted.value) {
+  if (!referralStore.termsAccepted) {
     showModal.value = true;
   } else {
     router.push('/dashboard/referral');
   }
 }
 
-const loading = ref(false);
-const termsAccepted = ref(false);
-
 onMounted(() => {
   if (isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())) {
-    getReferral();
+    referralStore.getReferral();
   }
 });
-
-async function getReferral() {
-  loading.value = true;
-  try {
-    const res = await $api.get<ReferralResponse>(endpoints.referral);
-    // If there is no error -> user already accepted terms & conditions
-    referralStore.initReferral(res.data);
-    termsAccepted.value = true;
-  } catch (e) {
-    if (config.public.ENV === AppEnv.LOCAL) {
-      console.error(e);
-    }
-  }
-  loading.value = false;
-}
-
-const showModal = ref(false);
 </script>

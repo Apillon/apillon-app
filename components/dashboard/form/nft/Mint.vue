@@ -1,8 +1,5 @@
 <template>
-  <Notification v-if="isReserveMinted" type="error" class="w-full mb-8">
-    {{ $t('error.50012008') }}
-  </Notification>
-  <Notification v-else-if="isTransferred" type="error" class="w-full mb-8">
+  <Notification v-if="isTransferred" type="error" class="w-full mb-8">
     {{ $t('error.NFT_CONTRACT_OWNER_ERROR') }}
   </Notification>
   <n-form
@@ -32,7 +29,6 @@
       <n-input-number
         v-model:value="formData.quantity"
         :min="1"
-        :max="collectionStore.active?.reserve"
         :placeholder="$t('form.placeholder.nftMintQuantity')"
         clearable
       />
@@ -93,20 +89,16 @@ const rules: NFormRules = {
 };
 
 function validateQuantity(_: NFormItemRule, value: number): boolean {
-  return value > 0 && value < collectionStore.active?.reserve;
+  return (
+    !collectionStore.active.drop || (value > 0 && value <= collectionStore.active?.dropReserve)
+  );
 }
 
-const isReserveMinted = computed<boolean>(() => {
-  return (
-    collectionStore.active?.reserve > 0 &&
-    collectionStore.active?.reserve === collectionStore.active?.minted
-  );
-});
 const isTransferred = computed<boolean>(() => {
   return collectionStore.active.collectionStatus === CollectionStatus.TRANSFERRED;
 });
 const isFormDisabled = computed<boolean>(() => {
-  return isReserveMinted.value || isTransferred.value;
+  return isTransferred.value;
 });
 
 // Submit

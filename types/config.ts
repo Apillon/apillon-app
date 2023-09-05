@@ -11,8 +11,10 @@ export enum Feature {
   HOSTING = 'HOSTING',
   INSTRUCTIONS = 'INSTRUCTIONS',
   MAGIC_LINK = 'MAGIC_LINK',
+  MARKETING = 'MARKETING',
   MONITORING = 'MONITORING',
   NFT = 'NFT',
+  NFT_NESTABLE = 'NFT_NESTABLE',
   ONBOARDING = 'ONBOARDING',
   PROJECT = 'PROJECT',
   PROJECT_DELETE = 'PROJECT_DELETE',
@@ -25,6 +27,7 @@ export enum Feature {
   STORAGE = 'STORAGE',
   TWO_FACTOR_AUTHENTICATION = 'TWO_FACTOR_AUTHENTICATION',
   WALLET_LOGIN = 'WALLET_LOGIN',
+  KILT_LOGIN = 'KILT_LOGIN',
 }
 export enum AppEnv {
   PROD = 'production',
@@ -44,6 +47,8 @@ declare global {
     VERSION: string;
     url: string;
     apiUrl: string;
+    oauthUrl: string;
+    adminUrl: string;
     CHAIN_ID: string;
     captchaKey: string;
     githubId: string;

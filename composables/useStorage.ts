@@ -12,6 +12,10 @@ export default function useStorage() {
     const routeName = name?.toString() || '';
     const paramId = params?.id || params?.slug;
     const bucketId = parseInt(`${paramId}`);
+    if (bucketStore.selected !== bucketId) {
+      fileStore.resetData();
+      ipnsStore.resetData();
+    }
     bucketStore.setBucketId(bucketId);
 
     setTimeout(() => {

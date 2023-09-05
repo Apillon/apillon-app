@@ -1,4 +1,5 @@
 import { useAuthStore } from '~/stores/auth';
+import { Permission } from '~~/types/settings';
 interface ProtectedRouteInterface {
   path?: string;
   regex?: RegExp;
@@ -9,6 +10,7 @@ interface FeatureRouteInterface {
   regex?: RegExp;
   redirect: string;
   feature: string;
+  permission?: number;
 }
 
 const protectedRoutes: Array<ProtectedRouteInterface> = [
@@ -26,11 +28,32 @@ const featureRoutes: Array<FeatureRouteInterface> = [
     regex: /^\/dashboard\/service\/authentication/,
     redirect: '/dashboard',
     feature: Feature.AUTHENTICATION,
+    permission: Permission.AUTHENTICATION,
   },
-  { regex: /^\/dashboard\/service\/storage/, redirect: '/dashboard', feature: Feature.STORAGE },
-  { regex: /^\/dashboard\/service\/hosting/, redirect: '/dashboard', feature: Feature.HOSTING },
-  { regex: /^\/dashboard\/service\/nft/, redirect: '/dashboard', feature: Feature.NFT },
-  { regex: /^\/dashboard\/service\/computing/, redirect: '/dashboard', feature: Feature.COMPUTING },
+  {
+    regex: /^\/dashboard\/service\/storage/,
+    redirect: '/dashboard',
+    feature: Feature.STORAGE,
+    permission: Permission.STORAGE,
+  },
+  {
+    regex: /^\/dashboard\/service\/hosting/,
+    redirect: '/dashboard',
+    feature: Feature.HOSTING,
+    permission: Permission.HOSTING,
+  },
+  {
+    regex: /^\/dashboard\/service\/nft/,
+    redirect: '/dashboard',
+    feature: Feature.NFT,
+    permission: Permission.NFTS,
+  },
+  {
+    regex: /^\/dashboard\/service\/computing/,
+    redirect: '/dashboard',
+    feature: Feature.COMPUTING,
+    permission: Permission.COMPUTING,
+  },
   { regex: /^\/dashboard\/monitoring/, redirect: '/dashboard', feature: Feature.MONITORING },
   {
     regex: /^\/dashboard\/project-settings/,
@@ -41,10 +64,17 @@ const featureRoutes: Array<FeatureRouteInterface> = [
   { regex: /^\/dashboard\/billing/, redirect: '/dashboard', feature: Feature.BILLING },
 ];
 
+const ignoreRoutes: String[] = ['login-admin'];
+
 /**
  * Redirect user to landing page if not logged in and trying to access protected routes
  */
-export default defineNuxtRouteMiddleware(to => {
+export default defineNuxtRouteMiddleware((to, from) => {
+  /** Ignored routes */
+  if (ignoreRoutes.includes(to.name as string)) {
+    return;
+  }
+
   const decodedUrl = removeLastSlash(decodeURI(to.path));
   const authStore = useAuthStore();
 
@@ -70,7 +100,9 @@ export default defineNuxtRouteMiddleware(to => {
     if (
       ((featureRoute.regex && featureRoute.regex.test(decodedUrl)) ||
         decodedUrl === featureRoute.path) &&
-      !isFeatureEnabled(featureRoute.feature, authStore.getUserRoles())
+      (!isFeatureEnabled(featureRoute.feature, authStore.getUserRoles()) ||
+        (featureRoute.permission && !authStore.isUserAllowed(featureRoute.permission))) &&
+      (!authStore.jwt || !!authStore.userUuid)
     ) {
       return navigateTo(featureRoute.redirect, { redirectCode: 301 });
     }

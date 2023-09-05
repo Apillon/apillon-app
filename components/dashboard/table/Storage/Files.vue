@@ -52,7 +52,7 @@
     </modal>
 
     <!-- W3Warn: delete bucket -->
-    <W3Warn v-model:show="showModalW3Warn" @update:show="onModalW3WarnHide">
+    <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
       {{ $t('w3Warn.file.delete') }}
     </W3Warn>
   </div>
@@ -66,7 +66,12 @@ const props = defineProps({
   type: {
     type: Number,
     validator: (type: number) =>
-      [TableFilesType.BUCKET, TableFilesType.DEPLOYMENT, TableFilesType.HOSTING].includes(type),
+      [
+        TableFilesType.BUCKET,
+        TableFilesType.HOSTING,
+        TableFilesType.NFT_METADATA,
+        TableFilesType.DEPLOYMENT,
+      ].includes(type),
     default: 0,
   },
 });
@@ -74,6 +79,7 @@ const props = defineProps({
 const { downloadFile } = useFile();
 const $i18n = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const showModalW3Warn = ref<boolean>(false);
@@ -113,8 +119,8 @@ const pagination = computed(() => {
 const dropdownOptions = (bucketItem: BucketItemInterface) => {
   return [
     {
-      label: $i18n.t('general.view'),
       key: 'view',
+      label: $i18n.t('general.view'),
       show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
       props: {
         onClick: () => {
@@ -123,8 +129,8 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       },
     },
     {
-      label: $i18n.t('general.open'),
       key: 'open',
+      label: $i18n.t('general.open'),
       show: bucketItem.type === BucketItemType.DIRECTORY,
       props: {
         onClick: () => {
@@ -133,20 +139,20 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       },
     },
     {
-      label: $i18n.t('general.download'),
       key: 'download',
+      label: $i18n.t('general.download'),
       show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
       props: {
         onClick: () => {
-          downloadFile(currentRow.value.CID);
+          downloadFile(currentRow.value);
         },
       },
     },
     {
-      label: $i18n.t('storage.ipns.publish'),
       key: 'ipns',
-      disabled: !bucketItem.CID,
-      show: props.type === TableFilesType.BUCKET,
+      label: $i18n.t('storage.ipns.publish'),
+      disabled: !bucketItem.CID || authStore.isAdmin(),
+      show: props.type === TableFilesType.BUCKET || props.type === TableFilesType.NFT_METADATA,
       props: {
         onClick: () => {
           if (bucketItem.CID) {
@@ -156,8 +162,9 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       },
     },
     {
-      label: $i18n.t('general.delete'),
       key: 'delete',
+      label: $i18n.t('general.delete'),
+      disabled: authStore.isAdmin(),
       props: {
         class: '!text-pink',
         onClick: () => {
@@ -223,7 +230,7 @@ const columns = computed(() => {
         return [
           h(
             NSpace,
-            { align: 'center', wrap: false },
+            { align: 'center', wrap: false, class: cellClasses(row.type) },
             {
               default: () => [
                 h(IconFolderFile, { isFile: row.type === BucketItemType.FILE }, ''),
@@ -242,7 +249,10 @@ const columns = computed(() => {
       title: $i18n.t('storage.fileCid'),
       key: 'CID',
       className: {
-        hidden: !selectedColumns.value.includes('CID') || props.type !== TableFilesType.BUCKET,
+        hidden:
+          !selectedColumns.value.includes('CID') ||
+          props.type === TableFilesType.HOSTING ||
+          props.type === TableFilesType.DEPLOYMENT,
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
@@ -253,7 +263,10 @@ const columns = computed(() => {
       title: $i18n.t('storage.downloadLink'),
       key: 'link',
       className: {
-        hidden: !selectedColumns.value.includes('link') || props.type !== TableFilesType.BUCKET,
+        hidden:
+          !selectedColumns.value.includes('link') ||
+          props.type === TableFilesType.HOSTING ||
+          props.type === TableFilesType.DEPLOYMENT,
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
@@ -267,7 +280,11 @@ const columns = computed(() => {
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (row.size) {
-          return h('span', {}, { default: () => formatBytes(row.size || 0) });
+          return h(
+            'span',
+            { class: cellClasses(row.type) },
+            { default: () => formatBytes(row.size || 0) }
+          );
         }
         return '';
       },
@@ -281,7 +298,11 @@ const columns = computed(() => {
       ],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
+        return h(
+          'span',
+          { class: cellClasses(row.type) },
+          { default: () => datetimeToDate(row.createTime || '') }
+        );
       },
     },
     {
@@ -294,7 +315,7 @@ const columns = computed(() => {
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (row.contentType) {
-          return h('span', {}, row.contentType);
+          return h('span', { class: cellClasses(row.type) }, row.contentType);
         }
         return '';
       },
@@ -308,10 +329,16 @@ const columns = computed(() => {
       ],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        if (row.fileStatus) {
+        if (!row.fileStatus) {
+          return '';
+        } else if (
+          props.type === TableFilesType.HOSTING &&
+          row.fileStatus === FileStatus.UPLOADED_TO_S3
+        ) {
+          return h(StorageFileStatus, { fileStatus: FileStatus.UPLOAD_COMPLETED }, '');
+        } else {
           return h(StorageFileStatus, { fileStatus: row.fileStatus }, '');
         }
-        return '';
       },
     },
     {
@@ -394,7 +421,9 @@ function onItemOpen(row: BucketItemInterface) {
   currentRow.value = row;
   switch (row.type) {
     case BucketItemType.FILE:
-      onFileOpen();
+      if (props.type !== TableFilesType.HOSTING) {
+        onFileOpen();
+      }
       break;
     case BucketItemType.DIRECTORY:
       onFolderOpen(row);
@@ -472,7 +501,7 @@ function clearSorter() {
   }
 }
 
-/** Watch folder path, onCahnge clear sorter */
+/** Watch folder path, onChange clear sorter */
 watch(
   () => bucketStore.folder.path,
   _ => {
@@ -501,8 +530,8 @@ function deleteBucketItems() {
 }
 
 /** When user close W3Warn, allow him to create new bucket */
-function onModalW3WarnHide(value: boolean) {
-  if (!value && showModalDelete.value !== false) {
+function onModalW3WarnHide() {
+  if (showModalDelete.value !== false) {
     showModalDelete.value = true;
   }
 }
@@ -584,5 +613,12 @@ function checkUnfinishedFiles() {
 }
 function hasUnfinishedFiles(): boolean {
   return bucketStore.folder.items.some(file => file.fileStatus < FileStatus.UPLOADED_TO_IPFS);
+}
+
+/** Additional classes if TableType is Hosting and RowType is File  */
+function cellClasses(rowType: number) {
+  return props.type === TableFilesType.HOSTING && rowType === BucketItemType.FILE
+    ? 'p-3 -m-3 cursor-default'
+    : '';
 }
 </script>

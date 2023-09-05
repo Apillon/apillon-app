@@ -47,6 +47,7 @@ import {
   NLayoutContent,
   NLayoutHeader,
   NLayoutSider,
+  NPagination,
   NProgress,
   NRadio,
   NRadioButton,
@@ -73,6 +74,7 @@ import {
   UploadFileInfo,
 } from 'naive-ui';
 import {
+  DataTableProps,
   InternalRowData,
   TableBaseColumn,
   TableColumn,
@@ -97,6 +99,7 @@ declare global {
   };
 
   interface NCollapseProps extends CollapseProps {}
+  interface NDataTableProps extends DataTableProps {}
   interface NFileInfo extends SettledFileInfo {}
   interface NFormInst extends FormInst {}
   interface NFormItemInst extends FormItemInst {}
@@ -175,6 +178,7 @@ export default defineNuxtPlugin(nuxtApp => {
         NLayoutContent,
         NLayoutHeader,
         NLayoutSider,
+        NPagination,
         NProgress,
         NRadio,
         NRadioButton,

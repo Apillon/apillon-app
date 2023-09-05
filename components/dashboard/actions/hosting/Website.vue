@@ -33,7 +33,14 @@
           <!-- Delete files -->
           <n-tooltip placement="bottom" :show="showPopoverDelete">
             <template #trigger>
-              <n-button class="w-10" size="small" type="error" ghost @click="deleteSelectedFiles">
+              <n-button
+                class="w-10"
+                size="small"
+                type="error"
+                :disabled="authStore.isAdmin()"
+                ghost
+                @click="deleteSelectedFiles"
+              >
                 <span class="icon-delete text-xl"></span>
               </n-button>
             </template>
@@ -51,35 +58,56 @@
         </n-button>
 
         <!-- Create folder -->
-        <n-button v-if="isUpload" size="small" @click="showModalNewFolder = true">
+        <n-button
+          v-if="isUpload"
+          size="small"
+          :disabled="authStore.isAdmin()"
+          @click="showModalNewFolder = true"
+        >
           <span class="icon-create-folder text-xl mr-2"></span>
           {{ $t('storage.directory.create') }}
         </n-button>
 
         <!-- Clear all files -->
-        <n-button v-if="isUpload" size="small" type="error" ghost @click="showModalClearAll = true">
+        <n-button
+          v-if="isUpload"
+          size="small"
+          type="error"
+          :disabled="authStore.isAdmin()"
+          ghost
+          @click="showModalClearAll = true"
+        >
           <span class="icon-delete text-xl mr-2"></span>
           {{ $t('hosting.clearAll') }}
         </n-button>
 
         <!-- Deploy to staging -->
-        <n-button
-          v-if="isUpload"
-          size="small"
-          type="primary"
-          :loading="deploying"
-          @click="deploy(DeploymentEnvironment.STAGING)"
-        >
-          <span class="icon-deploy text-xl mr-2"></span>
-          {{ $t('hosting.deployStage') }}
-        </n-button>
+        <div v-if="isUpload" class="flex items-center align-middle bg-primary">
+          <n-button
+            size="small"
+            type="primary"
+            :bordered="false"
+            :loading="deploying"
+            :disabled="authStore.isAdmin()"
+            @click="deployWebsite(DeploymentEnvironment.STAGING)"
+          >
+            <span class="icon-deploy text-xl mr-2"></span>
+            {{ $t('hosting.deployStage') }}
+          </n-button>
+          <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
+            <n-button class="!p-0" size="small" type="primary" :bordered="false">
+              <span class="icon-down text-3xl"></span>
+            </n-button>
+          </n-dropdown>
+        </div>
         <!-- Deploy to production -->
         <n-button
           v-if="env === DeploymentEnvironment.STAGING"
           size="small"
           type="primary"
           :loading="deploying"
-          @click="deploy(DeploymentEnvironment.PRODUCTION)"
+          :disabled="authStore.isAdmin()"
+          @click="deployWebsite(DeploymentEnvironment.PRODUCTION)"
         >
           <span class="icon-deploy text-xl mr-2"></span>
           {{ $t('hosting.deployProd') }}
@@ -119,6 +147,11 @@
         />
       </slot>
     </ModalDelete>
+
+    <!-- W3Warn - Hosting deploy -->
+    <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
+      {{ $t('w3Warn.hosting.deploy') }}
+    </W3Warn>
   </div>
 </template>
 
@@ -129,8 +162,11 @@ const props = defineProps({
 
 const { downloading, downloadSelectedFiles } = useFile();
 const { websiteId, refreshWebpage } = useHosting();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
+
 const $i18n = useI18n();
 const router = useRouter();
+const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
@@ -140,12 +176,27 @@ const showModalDelete = ref<boolean>(false);
 const showModalClearAll = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
 const deploying = ref<boolean>(false);
+const deployEnv = ref<number>(DeploymentEnvironment.STAGING);
 
 const isUpload = computed<Boolean>(() => {
   return (
     props.env !== DeploymentEnvironment.STAGING && props.env !== DeploymentEnvironment.PRODUCTION
   );
 });
+
+const deployOptions = ref([
+  {
+    label: $i18n.t('hosting.deployStage'),
+    key: DeploymentEnvironment.STAGING,
+  },
+  {
+    label: $i18n.t('hosting.deployProd'),
+    key: DeploymentEnvironment.DIRECT_TO_PRODUCTION,
+  },
+]);
+function handleSelectDeploy(key: number) {
+  deployWebsite(key);
+}
 
 function onFolderCreated() {
   showModalNewFolder.value = false;
@@ -199,13 +250,13 @@ async function deploy(env: number) {
 
   const deployment = await deploymentStore.deploy(websiteStore.active.id, env);
 
-  /** After successfull deploy redirect to next tab */
+  /** After successful deploy redirect to next tab */
   if (deployment && env === DeploymentEnvironment.STAGING) {
     deploymentStore.staging = [] as Array<DeploymentInterface>;
     setTimeout(() => {
       router.push(`/dashboard/service/hosting/${websiteId.value}/staging`);
     }, 1000);
-  } else if (deployment && env === DeploymentEnvironment.PRODUCTION) {
+  } else if (deployment && env >= DeploymentEnvironment.PRODUCTION) {
     deploymentStore.production = [] as Array<DeploymentInterface>;
     setTimeout(() => {
       router.push(`/dashboard/service/hosting/${websiteId.value}/production`);
@@ -213,5 +264,23 @@ async function deploy(env: number) {
   }
 
   deploying.value = false;
+}
+
+/**
+ * On createNewWebsite click
+ * If W3Warn has already been shown, show modal create new website, otherwise show warn first
+ * */
+function deployWebsite(env: number) {
+  deployEnv.value = env;
+  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) || !$i18n.te('w3Warn.hosting.deploy')) {
+    deploy(env);
+  } else {
+    modalW3WarnVisible.value = true;
+  }
+}
+
+/** When user close W3Warn, allow him to create new website */
+function onModalW3WarnHide() {
+  deploy(deployEnv.value);
 }
 </script>

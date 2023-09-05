@@ -30,21 +30,18 @@
       <n-button
         v-if="collectionStore.hasCollections"
         size="small"
-        @click="modalNewCollectionVisible = true"
+        :disabled="authStore.isAdmin()"
+        @click="router.push({ name: 'dashboard-service-nft-new' })"
       >
         <span class="icon-create-folder text-xl text-primary mr-2"></span>
         <span class="text-primary">{{ $t('nft.collection.new') }}</span>
       </n-button>
     </n-space>
   </n-space>
-
-  <!-- Modal - New collection -->
-  <modal v-model:show="modalNewCollectionVisible" :title="$t('nft.collection.new')">
-    <FormNftCollection @submit-success="modalNewCollectionVisible = false" />
-  </modal>
 </template>
 
 <script lang="ts" setup>
+const router = useRouter();
+const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
-const modalNewCollectionVisible = ref<boolean>(false);
 </script>

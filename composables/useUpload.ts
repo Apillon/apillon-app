@@ -1,6 +1,5 @@
 import { useMessage } from 'naive-ui';
 import { v4 as uuidv4 } from 'uuid';
-import { ref } from 'vue';
 
 export default function useUpload() {
   const $i18n = useI18n();
@@ -16,6 +15,7 @@ export default function useUpload() {
   const endSession = ref<boolean>(true);
   const fileList = ref<Array<FileListItemType>>([]);
   const clearFileList = ref<boolean>(false);
+  const putRequests = ref<Array<any>>([]);
 
   /**
    * Computed
@@ -70,6 +70,7 @@ export default function useUpload() {
     wrapToDirectory.value = wrapFilesToDirectory;
     clearFileList.value = clearFileListOnFinish;
     endSession.value = endSessionOnUploadEnd;
+    putRequests.value = [];
 
     /** Files data for upload params */
     const filesUpload: Array<UploadFileType> = fileList.value.map(file => {
@@ -87,33 +88,39 @@ export default function useUpload() {
       updateFileStatus(file, FileUploadStatusValue.UPLOADING);
     });
 
-    try {
-      const params = {
-        session_uuid: sessionUuid.value,
-        files: filesUpload,
-      };
+    const filesChunks = sliceIntoChunks(filesUpload, 200);
 
-      /** Upload files request */
-      const fileRequests = await $api.post<FilesUploadRequestResponse>(
-        endpoints.storageFilesUpload(bucketUuid.value),
-        params
-      );
+    for (let i = 0; i < filesChunks.length; i++) {
+      if (filesChunks[i] && filesChunks[i].length > 0) {
+        const params = {
+          session_uuid: sessionUuid.value,
+          files: filesChunks[i],
+        };
 
-      if (fileRequests.data) {
-        uploadFilesToS3(fileRequests.data.files);
-      } else {
-        /** Show warning message - zero files uploaded */
-        message.warning($i18n.t('errror.fileUploadStopped'));
+        try {
+          /** Upload files request */
+          const fileRequests = await $api.post<FilesUploadRequestResponse>(
+            endpoints.storageFilesUpload(bucketUuid.value),
+            params
+          );
+
+          if (fileRequests.data) {
+            await uploadFilesToS3(fileRequests.data.files);
+          } else {
+            /** Show warning message - zero files uploaded */
+            message.warning($i18n.t('errror.fileUploadStopped'));
+          }
+        } catch (error: any) {
+          onUploadError();
+
+          /** Show error message */
+          message.error(userFriendlyMsg(error));
+
+          throw error;
+        }
       }
-    } catch (error) {
-      fileList.value.forEach(file => {
-        file.onError();
-        updateFileStatus(file, FileUploadStatusValue.ERROR);
-      });
-
-      /** Show error message */
-      message.error(userFriendlyMsg(error));
     }
+
     return sessionUuid.value;
   }
 
@@ -137,13 +144,15 @@ export default function useUpload() {
   ) {
     try {
       /** Upload file to S3 using fetch */
-      const res = await fetch(uploadFilesRequest.url, {
+      const req = fetch(uploadFilesRequest.url, {
         method: 'PUT',
         headers: {
           'Content-Type': 'multipart/form-data',
         },
         body: file.file,
       });
+      putRequests.value.push(req);
+      const res = await req;
 
       if (res.status !== 200) {
         throw new Error('File upload error');
@@ -176,10 +185,7 @@ export default function useUpload() {
           ? bucketStore.getFolderPath + wrapperFolderPath(folderName.value)
           : null,
       };
-      await $api.post<PasswordResetResponse>(
-        endpoints.storageFileUpload(bucketUuid.value, sessionUuid),
-        params
-      );
+      await $api.post(endpoints.storageFileUpload(bucketUuid.value, sessionUuid), params);
 
       /** Unnecessary toast message
       if (resSessionEnd.data) {
@@ -256,6 +262,14 @@ export default function useUpload() {
     }
   }
 
+  /** Upload error - all file status change to error */
+  function onUploadError() {
+    fileList.value.forEach(file => {
+      file.onError();
+      updateFileStatus(file, FileUploadStatusValue.ERROR);
+    });
+  }
+
   /** Calculate file upload progress */
   function createFileProgress(file: FileListItemType) {
     const timeFor1Percent = file.size / 100 / avgUploadSpeed.value;
@@ -270,6 +284,8 @@ export default function useUpload() {
   return {
     uploadFiles,
     fileAlreadyOnFileList,
+    onUploadError,
     folderName,
+    putRequests,
   };
 }

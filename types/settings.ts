@@ -4,7 +4,15 @@ export enum ApiKeyRole {
   READ = 52,
 }
 
-/* OAuth link type*/
+export enum Permission {
+  STORAGE = 1,
+  HOSTING = 2,
+  NFTS = 3,
+  AUTHENTICATION = 4,
+  COMPUTING = 5,
+}
+
+/* OAuth link type */
 export enum OauthLinkType {
   DISCORD = 1,
   TWEETER = 2,

@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { DataLsKeys } from './data';
 
 export const AuthLsKeys = {
   AUTH: 'al_auth',
@@ -9,7 +8,7 @@ export const AuthLsKeys = {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    authStep: '',
+    adminSession: false,
     crypto: null,
     email: localStorage.getItem(AuthLsKeys.EMAIL) || '',
     jwt: '',
@@ -38,18 +37,27 @@ export const useAuthStore = defineStore('auth', {
     username(state) {
       return state.user.name;
     },
-    phone(state) {
-      return state.user.phone;
-    },
     allowedEntry: state => !!state.jwt,
   },
   actions: {
+    getUserPermissions() {
+      return this.user?.userPermissions || [];
+    },
+
     getUserRoles() {
       return this.user?.userRoles || [];
     },
 
+    isAdmin() {
+      return this.adminSession && !!(this.user?.userRoles || []).includes(DefaultUserRole.ADMIN);
+    },
+
     isBetaUser() {
       return !!(this.user?.userRoles || []).includes(DefaultUserRole.BETA_USER);
+    },
+
+    isUserAllowed(permission: number) {
+      return !!(this.user?.userPermissions || []).includes(permission);
     },
 
     logout() {
@@ -59,7 +67,6 @@ export const useAuthStore = defineStore('auth', {
       this.wallet.name = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.WALLET);
-      localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
     saveEmail(email: string) {
@@ -93,7 +100,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     /**
-     * API cals
+     * API calls
      */
     async initUser() {
       let lsAuth = localStorage.getItem(AuthLsKeys.AUTH) as any;
@@ -117,13 +124,21 @@ export const useAuthStore = defineStore('auth', {
         if (res.data) {
           this.saveUser(res.data);
         }
-        this.loadingProfile = false;
+        setTimeout(() => {
+          this.loadingProfile = false;
+        }, 10);
+
         return res;
       } catch (error) {
         /** On error - logout */
         this.logout();
 
-        this.loadingProfile = false;
+        const router = useRouter();
+        router.push('/login');
+
+        setTimeout(() => {
+          this.loadingProfile = false;
+        }, 700);
         return null;
       }
     },

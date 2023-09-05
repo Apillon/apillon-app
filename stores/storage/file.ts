@@ -9,6 +9,7 @@ export const useFileStore = defineStore('file', {
   state: () => ({
     all: [] as Array<FileUploadInterface>,
     crust: {} as Record<string, AnyJson>,
+    currentBlockId: 0,
     items: {} as Record<string, FileDetailsInterface>,
     loading: false,
     search: '',
@@ -44,6 +45,11 @@ export const useFileStore = defineStore('file', {
       if (!this.hasDeletedFiles || isCacheExpired(LsCacheKeys.FILE_DELETED)) {
         await this.fetchDeletedFiles();
       }
+    },
+    async getCurrentBlockFromCrust() {
+      return this.currentBlockId && this.currentBlockId > 0
+        ? this.currentBlockId
+        : await this.fetchCurrentBlockFromCrust();
     },
 
     /**
@@ -84,6 +90,26 @@ export const useFileStore = defineStore('file', {
       const fileInfo = await api.query.market.filesV2(cid);
       await api.disconnect();
       return fileInfo.toJSON();
+    },
+
+    async fetchCurrentBlockFromCrust() {
+      const api = new ApiPromise({
+        provider: new WsProvider('wss://rpc.crust.network'),
+        typesBundle: typesBundleForPolkadot,
+      });
+
+      try {
+        await api.isReadyOrError;
+        const blockId = await api.query.system.number();
+
+        this.currentBlockId = blockId.toJSON() as number;
+        await api.disconnect();
+        return blockId.toJSON() as number;
+      } catch (error) {
+        await api.disconnect();
+        this.currentBlockId = 0;
+      }
+      return 0;
     },
 
     async fetchAllFiles(fileStatus?: number, page?: number, limit?: number) {

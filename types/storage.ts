@@ -6,6 +6,7 @@ import { crustTypes } from '@crustio/type-definitions';
 export enum BucketType {
   STORAGE = 1,
   HOSTING = 2,
+  NFT_METADATA = 3,
 }
 
 /**
@@ -24,6 +25,7 @@ export enum FileStatus {
   UPLOADED_TO_S3 = 2,
   UPLOADED_TO_IPFS = 3,
   PINNED_TO_CRUST = 4,
+  UPLOAD_COMPLETED = 5,
 }
 export enum FileUploadRequestFileStatus {
   SIGNED_URL_FOR_UPLOAD_GENERATED = 1,
@@ -45,9 +47,10 @@ export enum FileUploadStatusValue {
   ERROR = 'error',
 }
 export enum TableFilesType {
-  BUCKET = 0,
-  HOSTING = 1,
-  DEPLOYMENT = 2,
+  BUCKET = 1,
+  HOSTING = 2,
+  NFT_METADATA = 3,
+  DEPLOYMENT = 4,
 }
 
 /** Webhook Auth method */
@@ -61,6 +64,7 @@ export enum BucketWebhookAuthMethod {
 export enum DeploymentEnvironment {
   STAGING = 1,
   PRODUCTION = 2,
+  DIRECT_TO_PRODUCTION = 3,
 }
 
 /** Hosting deployment status */
@@ -284,27 +288,23 @@ declare global {
   interface WebsiteBaseInterface {
     id: number;
     status: number;
-    project_uuid: string;
-    bucket_id: number;
-    stagingBucket_id: number;
-    productionBucket_id: number;
     name: string;
     description: string;
-    domain: string;
-  }
-  interface WebsiteInterface {
-    id: number;
-    status: number;
     website_uuid: string;
+    domain: string | null;
+    domainChangeDate: string | null;
+  }
+  interface WebsiteInterface extends WebsiteBaseInterface {
     bucket_uuid: string;
     bucket: BucketInterface;
-    stagingBucket: BucketInterface;
-    productionBucket: BucketInterface;
-    name: string;
-    description: string;
-    domain: string;
-    ipnsStagingLink: string | null;
+    ipnsProduction: string | null;
     ipnsProductionLink: string | null;
+    ipnsStaging: string | null;
+    ipnsStagingLink: string | null;
+    productionBucket: BucketInterface;
+    stagingBucket: BucketInterface;
+    w3ProductionLink: string | null;
+    w3StagingLink: string | null;
   }
   interface DeploymentInterface {
     id: number;
@@ -320,6 +320,7 @@ declare global {
   }
   interface WebsiteResponse extends GeneralResponse<WebsiteInterface> {}
   interface WebsiteUpdateResponse extends GeneralResponse<WebsiteInterface> {}
+  interface WebsitesBaseResponse extends GeneralItemsResponse<WebsiteBaseInterface> {}
   interface WebsitesResponse extends GeneralItemsResponse<WebsiteInterface> {}
   interface WebsiteQuotaResponse extends GeneralResponse<boolean> {}
   interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}

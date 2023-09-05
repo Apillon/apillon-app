@@ -1,7 +1,7 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules">
     <!--  Signup email -->
-    <n-form-item v-show="!sendAgain" path="email">
+    <n-form-item v-show="!sendAgain" path="email" :show-label="false">
       <n-input
         v-model:value="formData.email"
         :input-props="{ type: 'email' }"
@@ -29,7 +29,7 @@
     <!--  Signup submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn v-if="sendAgain" class="mx-auto" type="primary" size="medium" @click="handleSubmit">
+      <Btn v-if="sendAgain" type="primary" size="medium" @click="handleSubmit">
         {{ $t('auth.signup.sendAgain') }}
       </Btn>
       <Btn v-else type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
@@ -52,7 +52,7 @@ const $route = useRoute();
 const $i18n = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
-const { message } = createDiscreteApi(['message'], MessageProviderOptoins);
+const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);

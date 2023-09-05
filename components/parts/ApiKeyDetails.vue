@@ -1,5 +1,5 @@
 <template>
-  <div v-if="id">
+  <div v-if="id" class="mb-8">
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('form.label.apiKeyName') }}</p>
       <strong>{{ name }}</strong>
@@ -32,12 +32,22 @@
         <span class="icon-copy"></span>
       </button>
     </div>
+
+    <div class="body-sm mb-4">
+      <p class="body-sm">{{ $t('dashboard.apiKey.authorization') }}</p>
+      <div class="md:whitespace-nowrap">
+        <strong>{{ authorization }}</strong>
+        <button class="ml-2" @click="copyToClipboard(authorization)">
+          <span class="icon-copy"></span>
+        </button>
+      </div>
+    </div>
   </div>
   <Spinner v-else />
 </template>
 
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
   id: { type: String, default: '' },
   status: { type: String, default: '' },
   apiKey: { type: String, default: '' },
@@ -45,5 +55,10 @@ defineProps({
   testNetwork: { type: Boolean, default: null },
   projectUuid: { type: String, default: '' },
   apiKeySecret: { type: String, default: '' },
+});
+
+const authorization = computed<string>(() => {
+  const auth = window.btoa(`${props.apiKey}:${props.apiKeySecret}`);
+  return `Basic ${auth}`;
 });
 </script>
