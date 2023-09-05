@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
       return state.user.id;
     },
     userUuid(state) {
-      return state.user.user_uuid;
+      return state.user.user_uuid || '';
     },
     username(state) {
       return state.user.name;
