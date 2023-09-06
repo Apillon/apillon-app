@@ -143,6 +143,7 @@ async function login() {
       localStorage.removeItem(AuthLsKeys.CAPTCHA);
     } else if (DevConsoleError.USER_INVALID_LOGIN) {
       localStorage.removeItem(AuthLsKeys.CAPTCHA);
+      captchaReset();
     }
   }
   loading.value = false;
@@ -159,5 +160,10 @@ function isCaptchaConfirmed(): boolean {
 function onCaptchaVerify(token: string, eKey: string) {
   formData.value.captcha = { token, eKey };
   login();
+}
+
+function captchaReset() {
+  formData.value.captcha = null;
+  captchaInput.value.reset();
 }
 </script>

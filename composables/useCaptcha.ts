@@ -12,10 +12,12 @@ export default function useCaptcha() {
   function onCaptchaChallengeExpire(err: any) {
     console.warn(err);
     loading.value = false;
+    captchaInput.value.reset();
   }
   function onCaptchaExpire(err: any) {
     console.warn(err);
     loading.value = false;
+    captchaInput.value.reset();
   }
 
   function onCaptchaClose() {
