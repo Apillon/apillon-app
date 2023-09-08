@@ -164,6 +164,8 @@ export const useBucketStore = defineStore('bucket', {
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
+          orderBy: 'createTime',
+          desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
         if (statusDeleted) {

@@ -163,7 +163,7 @@ export const useCollectionStore = defineStore('collection', {
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
-          orderBy: 'updateTime',
+          orderBy: 'createTime',
           desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
