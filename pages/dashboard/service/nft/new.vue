@@ -22,7 +22,7 @@
     </template>
 
     <slot>
-      <div v-if="collectionCreated || true">
+      <div v-if="collectionCreated">
         <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
           <div class="w-full max-w-lg text-center">
             <NuxtIcon name="nft/collection" class="flex justify-center icon-auto mb-4" filled />
