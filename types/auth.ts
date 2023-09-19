@@ -13,8 +13,9 @@ declare global {
     user_uuid: string;
     userPermissions: number[];
     userRoles: number[];
-    token?: any;
     wallet?: string | null;
+    token?: any;
+    captchaJwt?: any;
   }
 
   interface UserResponse extends GeneralResponse<UserInterface> {}
@@ -40,6 +41,11 @@ declare global {
   /**
    *  Register
    */
+  interface SignupForm {
+    email: string;
+    captcha?: any;
+    refCode?: string;
+  }
   interface FormRegister {
     password: string | null;
     reenteredPassword: string | null;
@@ -51,6 +57,7 @@ declare global {
   }
   interface RegisterInterface extends UserInterface {
     token: string;
+    captchaJwt?: string;
   }
   interface ValidateMailInterface {
     data: {
@@ -70,9 +77,12 @@ declare global {
   interface FormLogin {
     email: string;
     password: string;
+    captcha?: any;
+    captchaJwt?: any;
   }
   interface LoginInterface extends UserInterface {
     token: string;
+    captchaJwt?: string;
   }
 
   interface LoginResponse extends GeneralResponse<LoginInterface> {}
@@ -97,4 +107,7 @@ declare global {
   interface WalletLoginResponse extends GeneralResponse<WalletLoginInterface> {}
 
   type AuthInterface = LoginInterface | UserInterface | WalletLoginInterface;
+
+  /** Captcha login */
+  type CaptchaData = { ts: string; jwt: string };
 }

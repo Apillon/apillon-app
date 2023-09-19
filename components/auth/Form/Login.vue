@@ -23,6 +23,19 @@
       />
     </n-form-item>
 
+    <!-- Hcaptcha -->
+    <vue-hcaptcha
+      ref="captchaInput"
+      :sitekey="captchaKey"
+      size="invisible"
+      theme="dark"
+      @error="onCaptchaError"
+      @verify="onCaptchaVerify"
+      @expired="onCaptchaExpire"
+      @challenge-expired="onCaptchaChallengeExpire"
+      @closed="onCaptchaClose"
+    />
+
     <!--  Login submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
@@ -35,19 +48,29 @@
 
 <script lang="ts" setup>
 import { createDiscreteApi } from 'naive-ui';
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
 const $i18n = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
 const { message } = createDiscreteApi(['message'], MessageProviderOptions);
+const {
+  loading,
+  captchaKey,
+  captchaInput,
+  onCaptchaChallengeExpire,
+  onCaptchaClose,
+  onCaptchaError,
+  onCaptchaExpire,
+} = useCaptcha();
 
-const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-
 const formData = ref<FormLogin>({
   email: authStore.email,
   password: '',
+  captcha: null as any,
+  captchaJwt: '',
 });
 const rules: NFormRules = {
   email: [
@@ -68,14 +91,21 @@ const rules: NFormRules = {
   ],
 };
 
-function handleSubmit(e: Event | MouseEvent) {
-  e.preventDefault();
+function handleSubmit(e: Event | MouseEvent | null) {
+  e?.preventDefault();
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
+    } else if (
+      !formData.value.captcha &&
+      isFeatureEnabled(Feature.CAPTCHA_LOGIN, authStore.getUserRoles()) &&
+      !isCaptchaConfirmed()
+    ) {
+      loading.value = true;
+      captchaInput.value.execute();
     } else {
       /** Login with mail and password */
       await login();
@@ -85,6 +115,11 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function login() {
   loading.value = true;
+
+  const captchaData = authStore.getCaptchaData(formData.value.email);
+  if (captchaData) {
+    formData.value.captchaJwt = captchaData.jwt;
+  }
   try {
     // Logout first - delete LS and store if there is any data
     authStore.logout();
@@ -99,9 +134,36 @@ async function login() {
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     dataStore.project.items = await dataStore.fetchProjects(true);
-  } catch (error) {
+  } catch (error: ApiError | ReferenceError | any) {
     message.error(userFriendlyMsg(error));
+
+    if (error.code === LibValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
+      loading.value = true;
+      captchaInput.value.execute();
+      localStorage.removeItem(AuthLsKeys.CAPTCHA);
+    } else if (DevConsoleError.USER_INVALID_LOGIN) {
+      localStorage.removeItem(AuthLsKeys.CAPTCHA);
+      captchaReset();
+    }
   }
   loading.value = false;
+}
+
+/**
+ * Captcha confirmed is last week
+ */
+function isCaptchaConfirmed(): boolean {
+  const captchaData = authStore.getCaptchaData(formData.value.email);
+  return !!captchaData && !!captchaData.ts && Date.now() < parseInt(captchaData.ts) + WEEK_IN_MS;
+}
+
+function onCaptchaVerify(token: string, eKey: string) {
+  formData.value.captcha = { token, eKey };
+  login();
+}
+
+function captchaReset() {
+  formData.value.captcha = null;
+  captchaInput.value.reset();
 }
 </script>

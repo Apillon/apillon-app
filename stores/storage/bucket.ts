@@ -11,12 +11,15 @@ export const useBucketStore = defineStore('bucket', {
     items: [] as BucketInterface[],
     loading: false,
     quotaReached: undefined as Boolean | undefined,
-    search: '',
     selected: 0,
     selectedItems: [] as BucketInterface[],
     total: 0,
     uploadActive: false,
     uploadFileList: [] as FileListItemType[],
+    filter: {
+      bucketType: null,
+      search: '',
+    },
     folder: {
       allowFetch: true,
       items: [] as BucketItemInterface[],
@@ -81,7 +84,8 @@ export const useBucketStore = defineStore('bucket', {
       this.destroyed = [] as Array<BucketInterface>;
       this.items = [] as Array<BucketInterface>;
       this.quotaReached = undefined;
-      this.search = '';
+      this.filter.bucketType = null;
+      this.filter.search = '';
       this.selected = 0;
       this.total = 0;
       this.uploadFileList = [] as Array<FileListItemType>;
@@ -160,6 +164,8 @@ export const useBucketStore = defineStore('bucket', {
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
+          orderBy: 'createTime',
+          desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
         if (statusDeleted) {
@@ -180,7 +186,8 @@ export const useBucketStore = defineStore('bucket', {
         }
         this.total = res.data.total;
         this.loading = false;
-        this.search = '';
+        this.filter.bucketType = null;
+        this.filter.search = '';
 
         /** Save timestamp to SS */
         const cacheKey = statusDeleted ? LsCacheKeys.BUCKET_DESTROYED : LsCacheKeys.BUCKETS;

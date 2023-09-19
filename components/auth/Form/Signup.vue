@@ -10,8 +10,7 @@
       />
     </n-form-item>
 
-    <!-- <div class="flex justify-center align-center mb-3">
-      <n-form-item path="captcha"> -->
+    <!-- Hcaptcha -->
     <vue-hcaptcha
       ref="captchaInput"
       :sitekey="captchaKey"
@@ -23,8 +22,6 @@
       @challenge-expired="onCaptchaChallengeExpire"
       @closed="onCaptchaClose"
     />
-    <!-- </n-form-item>
-    </div> -->
 
     <!--  Signup submit -->
     <n-form-item :show-label="false">
@@ -48,26 +45,28 @@ const props = defineProps({
 });
 
 const $route = useRoute();
-
 const $i18n = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const { message } = createDiscreteApi(['message'], MessageProviderOptions);
+const {
+  loading,
+  captchaKey,
+  captchaInput,
+  onCaptchaChallengeExpire,
+  onCaptchaClose,
+  onCaptchaError,
+  onCaptchaExpire,
+} = useCaptcha();
 
-const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const config = useRuntimeConfig();
-const captchaKey = ref<string>(config.public.captchaKey);
-const captchaInput = ref<any>(null);
-
-const refCode = computed(() => $route.query.REF);
-
-const formData = ref({
+const formData = ref<SignupForm>({
   email: authStore.email,
   captcha: null as any,
-  refCode,
+  refCode: `${$route.query?.REF || ''}`,
 });
+
 const rules: NFormRules = {
   email: [
     {
@@ -88,7 +87,7 @@ function handleSubmit(e: MouseEvent | null) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (!formData.value.captcha && config.public.ENV !== AppEnv.LOCAL) {
+    } else if (!formData.value.captcha) {
       loading.value = true;
       captchaInput.value.execute();
     } else {
@@ -119,27 +118,9 @@ async function signupWithEmail() {
   loading.value = false;
 }
 
-function onCaptchaError(err) {
-  console.warn(err);
-  loading.value = false;
-}
-
-function onCaptchaChallengeExpire(err) {
-  console.warn(err);
-  loading.value = false;
-}
-function onCaptchaExpire(err) {
-  console.warn(err);
-  loading.value = false;
-}
-
-function onCaptchaVerify(token, eKey) {
+function onCaptchaVerify(token: string, eKey: string) {
   formData.value.captcha = { token, eKey };
   handleSubmit(null);
-  loading.value = false;
-}
-
-function onCaptchaClose() {
   loading.value = false;
 }
 </script>

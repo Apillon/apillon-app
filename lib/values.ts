@@ -1,4 +1,5 @@
 export const CACHE_EXPIRATION_IN_MS = 10 * 60 * 1000; // 10 minutes
+export const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000; // 1 week in MS
 export const ON_COLUMN_CLICK_OPEN_CLASS = 'onClickOpen';
 export const NFT_MAX_SUPPLY = 10000;
 export const PAGINATION_LIMIT = 20;

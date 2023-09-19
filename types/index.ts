@@ -11,6 +11,11 @@ export {};
 declare global {
   type VuePropType<T> = PropType<T>;
 
+  type KeyValue = {
+    key: string | number;
+    value: string | number;
+  };
+
   /**
    * i18n
    */

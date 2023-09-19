@@ -126,13 +126,6 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
         return '';
       },
     },
-    {
-      key: 'updateTime',
-      title: $i18n.t('general.updateTime'),
-      render(row: CollectionInterface) {
-        return h('span', {}, { default: () => datetimeToDateAndTime(row.updateTime || '') });
-      },
-    },
   ];
 };
 const columns = createColumns();
