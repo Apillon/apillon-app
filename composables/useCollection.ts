@@ -74,6 +74,13 @@ export default function useCollection() {
       message: $i18n.t('validation.collectionDropReserve'),
     },
   ];
+  const ruleRoyaltiesAddress: NFormItemRule[] = [
+    ruleRequired($i18n.t('validation.collectionRoyaltiesAddressRequired')),
+    {
+      validator: validateEvmAddress,
+      message: $i18n.t('validation.collectionRoyaltiesAddress'),
+    },
+  ];
 
   const rules: NFormRules = {
     symbol: ruleRequired($i18n.t('validation.collectionSymbolRequired')),
@@ -101,10 +108,8 @@ export default function useCollection() {
     },
     dropReserve: ruleDropReserve,
     'behavior.dropReserve': ruleDropReserve,
-    royaltiesAddress: ruleRequired($i18n.t('validation.collectionRoyaltiesAddressRequired')),
-    'behavior.royaltiesAddress': ruleRequired(
-      $i18n.t('validation.collectionRoyaltiesAddressRequired')
-    ),
+    royaltiesAddress: ruleRoyaltiesAddress,
+    'behavior.royaltiesAddress': ruleRoyaltiesAddress,
     royaltiesFees: ruleRequired($i18n.t('validation.collectionRoyaltiesFeesRequired')),
     'behavior.royaltiesFees': ruleRequired($i18n.t('validation.collectionRoyaltiesFeesRequired')),
   };

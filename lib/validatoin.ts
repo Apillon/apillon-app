@@ -21,3 +21,8 @@ export function validateRequiredDropdown(_: NFormItemRule, value: String | null)
     return false;
   }
 }
+
+/** Validate Ethereum address */
+export function validateEvmAddress(_: NFormItemRule, value: string | null): boolean {
+  return !!value && /^0x[a-fA-F0-9]{40}$/i.test(value);
+}

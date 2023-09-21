@@ -16,7 +16,7 @@
         </n-input>
       </div>
       <n-space>
-        <!-- Fitlers -->
+        <!-- Filters -->
         <select-options
           v-model:value="fileStatus"
           :options="fileStatuses"

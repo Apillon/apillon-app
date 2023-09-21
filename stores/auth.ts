@@ -4,6 +4,7 @@ export const AuthLsKeys = {
   AUTH: 'al_auth',
   EMAIL: 'al_email',
   WALLET: 'al_wallet',
+  CAPTCHA: 'al_captcha',
 };
 
 export const useAuthStore = defineStore('auth', {
@@ -32,7 +33,7 @@ export const useAuthStore = defineStore('auth', {
       return state.user.id;
     },
     userUuid(state) {
-      return state.user.user_uuid;
+      return state.user.user_uuid || '';
     },
     username(state) {
       return state.user.name;
@@ -81,6 +82,9 @@ export const useAuthStore = defineStore('auth', {
       if (userData.token) {
         this.setUserToken(userData.token);
       }
+      if (userData.captchaJwt) {
+        this.setCaptchaJwt(userData.captchaJwt, userData.email);
+      }
     },
 
     setUserToken(token: string) {
@@ -97,6 +101,35 @@ export const useAuthStore = defineStore('auth', {
     setWalletKey(wallet: Wallet) {
       this.wallet.name = wallet.extensionName;
       localStorage.setItem(AuthLsKeys.WALLET, wallet.extensionName);
+    },
+
+    getCaptchaLS(): Record<string, any> {
+      try {
+        const data = JSON.parse(localStorage.getItem(AuthLsKeys.CAPTCHA) || '{}');
+        return typeof data === 'object' ? data : {};
+      } catch (error) {
+        console.log(error);
+      }
+      return {};
+    },
+
+    getCaptchaData(email: string): CaptchaData | null {
+      const data = this.getCaptchaLS();
+      const emails = Object.keys(data);
+      if (emails.includes(email) && data[email].ts && data[email].jwt) {
+        return data[email];
+      }
+
+      return null;
+    },
+
+    setCaptchaJwt(captchaJwt: string, email: string) {
+      const data = this.getCaptchaLS();
+      data[email] = {
+        ts: Date.now().toString(),
+        jwt: captchaJwt,
+      };
+      localStorage.setItem(AuthLsKeys.CAPTCHA, JSON.stringify(data));
     },
 
     /**

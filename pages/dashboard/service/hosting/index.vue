@@ -8,7 +8,7 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <IconInfo v-if="$i18n.te('w3Warn.hosting.upload')" @click="showModalW3Warn = true" />
+            <IconInfo v-if="$i18n.te('w3Warn.hosting.upload')" @click="modalW3WarnVisible = true" />
           </n-space>
         </template>
       </Heading>
@@ -26,7 +26,7 @@
         </Btn>
       </Empty>
 
-      <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
+      <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
         {{ $t('w3Warn.hosting.upload') }}
       </W3Warn>
 
@@ -42,8 +42,9 @@
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_NEW);
+
 const pageLoading = ref<boolean>(true);
-const showModalW3Warn = ref<boolean>(false);
 const showModalNewWebsite = ref<boolean | null>(false);
 
 useHead({
@@ -76,7 +77,7 @@ function createNewWebsite() {
   if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.upload')) {
     showModalNewWebsite.value = true;
   } else {
-    showModalW3Warn.value = true;
+    modalW3WarnVisible.value = true;
     showModalNewWebsite.value = null;
   }
 }
@@ -87,14 +88,4 @@ function onModalW3WarnHide() {
     showModalNewWebsite.value = true;
   }
 }
-
-/** Watch showModalNewWebsite, onShow update timestamp of shown modal in session storage */
-watch(
-  () => showModalW3Warn.value,
-  shown => {
-    if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.HOSTING_NEW, Date.now().toString());
-    }
-  }
-);
 </script>

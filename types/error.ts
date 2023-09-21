@@ -56,6 +56,7 @@ export enum LibValidatorErrorCode {
   API_KEY_ROLE_PROJECT_UUID_NOT_PRESENT = 42200016,
   API_KEY_ROLE_SERVICE_UUID_NOT_PRESENT = 42200017,
   API_KEY_ROLE_ROLE_ID_NOT_VALID = 42200018,
+  CAPTCHA_NOT_PRESENT = 42200706,
 }
 
 /**
@@ -86,7 +87,7 @@ export enum LibSystemErrorCode {
 /**
  * Validation error codes - 42204000.
  */
-export enum DevConsoleerror {
+export enum DevConsoleError {
   DEFAULT_VALIDATION_ERROR = 42204000,
   TOKEN_NOT_PRESENT = 42204001,
   USER_UUID_NOT_PRESENT = 42204102,

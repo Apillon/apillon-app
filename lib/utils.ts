@@ -32,6 +32,11 @@ export function enumKeys(E: any): string[] {
 export function enumValues(E: any): string[] | number[] {
   return enumKeys(E).map(k => E[k as any]);
 }
+export function enumKeyValues(E: any): KeyValue[] {
+  return enumKeys(E).map(k => {
+    return { key: k, value: E[k as any] };
+  });
+}
 
 /**
  * Numeric manipulations
@@ -285,9 +290,9 @@ export function copyToClipboard(text: string) {
       if (!window.$message) return;
       /* Rejected - text failed to copy to the clipboard */
       if (window.$i18n?.te('dashboard.clipboard.error')) {
-        window.$message.success(window.$i18n.t('dashboard.clipboard.error'));
+        window.$message.warning(window.$i18n.t('dashboard.clipboard.error'));
       } else {
-        window.$message.success('Failed to copy');
+        window.$message.warning('Failed to copy');
       }
     }
   );
@@ -309,9 +314,9 @@ export function copyToClipboardWithResponseTexts(
     () => {
       /* Rejected - text failed to copy to the clipboard */
       if (errorMsg) {
-        window.$message.success(errorMsg);
+        window.$message.warning(errorMsg);
       } else {
-        window.$message.success('Failed to copy');
+        window.$message.warning('Failed to copy');
       }
     }
   );

@@ -343,6 +343,7 @@
     "NFT_CONTRACT_OWNER_ERROR": "NFT contract has been transferred to another wallet.",
     "NFT_DEPLOY_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
     "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid EVM address",
+    "INVALID_ADDRESS_FOR_TRANSFER_TO": "Wrong address, please enter different address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
     "walletSignature": "'Could not capture your signature, check your wallet connection",
     "fileDownload": "Download failed. Something went wrong during the download.",
@@ -447,6 +448,7 @@
       "bearerToken": "Enter Bearer token",
       "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
+      "bucketType": "Select Bucket type",
       "cardHolder": "John Doe",
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "complexPassword": "Enter complex password",
@@ -630,6 +632,7 @@
     "ipns": "IPNS",
     "ipnsAddress": "IPNS Address",
     "ipnsLink": "IPNS link",
+    "ipnsInfo": "It may take up to 5 minutes for the changes to become visible after the deployment has been completed.",
     "management": "Hosting management",
     "productionEmpty": "Deploy files from staging to production",
     "size": "Size",
@@ -650,6 +653,7 @@
       "addNew": "Add new collection",
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
+      "address": "Collection address",
       "contractAddress": "Contract address",
       "create": "Create collection",
       "createFirst": "Start creating NFTs",
@@ -1103,6 +1107,7 @@
     "collectionDropPriceRequired": "Please enter Mint price",
     "collectionNameRequired": "Please enter Collection name",
     "collectionDropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
+    "collectionRoyaltiesAddress": "Please enter a valid EVM address",
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
     "collectionSymbolRequired": "Please enter Collection symbol",
@@ -1169,7 +1174,8 @@
       "delete": "All items stored in this directory will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
     },
     "hosting": {
-      "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported."
+      "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",
+      "deploy": "Please be advised that the deployment may take up to 5 minutes to complete."
     },
     "nft": {
       "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world."
