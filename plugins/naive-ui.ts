@@ -115,6 +115,12 @@ declare global {
   interface NMessageApiInjection extends MessageApiInjection {}
   interface NTabsInst extends TabsInst {}
 
+  type FileUploadOptions = {
+    file: NUploadFileInfo;
+    fileList: NUploadFileInfo[];
+    event?: Event;
+  };
+
   interface NRadioOption extends SelectOption {
     label: string;
   }
