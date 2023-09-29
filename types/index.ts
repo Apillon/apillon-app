@@ -38,6 +38,14 @@ declare global {
   }
 
   /**
+   * General Interface
+   */
+  interface GeneralInterface {
+    id: string;
+    status: number;
+  }
+
+  /**
    * Base responses
    */
   type GeneralResponse<T> = {

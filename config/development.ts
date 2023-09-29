@@ -32,6 +32,7 @@ const config: ConfigInterface = {
     'WALLET_LOGIN',
     'KILT_LOGIN',
     'CAPTCHA_LOGIN',
+    'BILLING',
   ],
   betaFeatures: ['BILLING'],
 };

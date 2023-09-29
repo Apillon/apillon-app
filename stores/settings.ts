@@ -5,10 +5,10 @@ const dataStore = useDataStore();
 
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
-    apiKeys: [] as Array<ApiKeyInterface>,
+    apiKeys: [] as ApiKeyInterface[],
     discordLink: '' as string,
-    oauthLinks: [] as Array<OauthLinkInterface>,
-    users: [] as Array<ProjectUserInterface>,
+    oauthLinks: [] as OauthLinkInterface[],
+    users: [] as ProjectUserInterface[],
   }),
   getters: {
     hasApiKeys(state) {
@@ -29,8 +29,8 @@ export const useSettingsStore = defineStore('settings', {
   },
   actions: {
     resetData() {
-      this.apiKeys = [] as Array<ApiKeyInterface>;
-      this.users = [] as Array<ProjectUserInterface>;
+      this.apiKeys = [] as ApiKeyInterface[];
+      this.users = [] as ProjectUserInterface[];
     },
 
     getApiKeyById(id: number) {
@@ -85,7 +85,7 @@ export const useSettingsStore = defineStore('settings', {
     /** API keys */
     async fetchApiKeys() {
       if (!dataStore.hasProjects) {
-        this.apiKeys = [] as Array<ApiKeyInterface>;
+        this.apiKeys = [] as ApiKeyInterface[];
       }
 
       try {
@@ -98,7 +98,7 @@ export const useSettingsStore = defineStore('settings', {
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.API_KEYS, Date.now().toString());
       } catch (error: any) {
-        this.apiKeys = [] as Array<ApiKeyInterface>;
+        this.apiKeys = [] as ApiKeyInterface[];
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));

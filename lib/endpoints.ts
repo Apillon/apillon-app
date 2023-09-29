@@ -41,6 +41,26 @@ const Endpoints = {
     return `/projects/${projectUuid}/uninvite-user`;
   },
 
+  /** Payments */
+  credit: (projectUuid: string) => {
+    return `/projects/${projectUuid}/credit`;
+  },
+  creditTransactions: (projectUuid: string) => {
+    return `/projects/${projectUuid}/credit/transactions`;
+  },
+  activeSubscription: (projectUuid: string) => {
+    return `/projects/${projectUuid}/active-subscription`;
+  },
+  subscriptions: (projectUuid: string) => {
+    return `/projects/${projectUuid}/subscriptions`;
+  },
+  invoices: (projectUuid: string) => {
+    return `/projects/${projectUuid}/invoices`;
+  },
+  creditSessionUrl: '/payments/stripe-credit-session-url',
+  subscriptionSessionUrl: '/payments/stripe-subscription-session-url',
+  stripeWebhook: '/payments/stripe-webhook',
+
   /** Services */
   serviceTypes: '/services/types',
   services: (id?: number | string) => {
