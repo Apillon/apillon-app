@@ -26,7 +26,11 @@
     </div>
 
     <div class="flex flex-auto w-full flex-col md:flex-row">
-      <n-layout :has-sider="instructionsAvailable && isMd" sider-placement="right">
+      <n-layout
+        class="has-scrollbar"
+        :has-sider="instructionsAvailable && isMd"
+        sider-placement="right"
+      >
         <n-layout-content>
           <n-scrollbar y-scrollable :style="scrollStyle">
             <div class="pt-8">

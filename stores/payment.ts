@@ -2,22 +2,60 @@ import { defineStore } from 'pinia';
 
 const dataStore = useDataStore();
 
-export const useSettingsStore = defineStore('settings', {
+export const usePaymentsStore = defineStore('payments', {
   state: () => ({
     credit: {} as CreditInterface,
+    creditPackages: [] as CreditPackageInterface[],
     creditTransactions: [] as CreditTransactionInterface[],
     activeSubscription: {} as SubscriptionInterface,
     subscriptions: [] as SubscriptionInterface[],
+    subscriptionPackages: [] as SubscriptionPackageInterface[],
     invoices: [] as InvoiceInterface[],
   }),
-  getters: {},
+  getters: {
+    hasCreditPackages(state) {
+      return Array.isArray(state.creditPackages) && state.creditPackages.length > 0;
+    },
+    hasSubscriptionPackages(state) {
+      return Array.isArray(state.subscriptionPackages) && state.subscriptionPackages.length > 0;
+    },
+    hasInvoices(state) {
+      return Array.isArray(state.invoices) && state.invoices.length > 0;
+    },
+  },
   actions: {
     resetData() {
       this.credit = {} as CreditInterface;
-      this.transactions = [] as CreditTransactionInterface[];
+      this.creditPackages = [] as CreditPackageInterface[];
+      this.creditTransactions = [] as CreditTransactionInterface[];
       this.activeSubscription = {} as SubscriptionInterface;
       this.subscriptions = [] as SubscriptionInterface[];
+      this.subscriptionPackages = [] as SubscriptionPackageInterface[];
       this.invoices = [] as InvoiceInterface[];
+    },
+
+    /**
+     * Fetch wrappers
+     */
+    /** GET Credit Packages */
+    async getCreditPackages() {
+      if (!this.hasCreditPackages || isCacheExpired(LsCacheKeys.CREDIT_PACKAGES)) {
+        await this.fetchCreditPackages();
+      }
+    },
+
+    /** GET Subscription packages */
+    async getSubscriptionPackages() {
+      if (!this.hasSubscriptionPackages || isCacheExpired(LsCacheKeys.SUBSCRIPTION_PACKAGES)) {
+        await this.fetchSubscriptionPackages();
+      }
+    },
+
+    /** GET Invoices */
+    async getInvoices() {
+      if (!this.hasInvoices || isCacheExpired(LsCacheKeys.INVOICES)) {
+        await this.fetchInvoices();
+      }
     },
 
     /**
@@ -37,6 +75,21 @@ export const useSettingsStore = defineStore('settings', {
         this.credit = res.data;
       } catch (error: any) {
         this.credit = {} as CreditInterface;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+    async fetchCreditPackages() {
+      try {
+        const res = await $api.get<CreditPackagesResponse>(endpoints.creditPackages);
+
+        this.creditPackages = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.CREDIT_PACKAGES, Date.now().toString());
+      } catch (error: any) {
+        this.creditPackages = [] as CreditPackageInterface[];
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
@@ -103,8 +156,25 @@ export const useSettingsStore = defineStore('settings', {
       }
     },
 
+    /** API Subscription packages */
+    async fetchSubscriptionPackages() {
+      try {
+        const res = await $api.get<SubscriptionPackagesResponse>(endpoints.subscriptionPackages);
+
+        this.subscriptionPackages = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.SUBSCRIPTION_PACKAGES, Date.now().toString());
+      } catch (error: any) {
+        this.subscriptionPackages = [] as SubscriptionPackageInterface[];
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+
     /** API Invoices */
-    async getInvoices() {
+    async fetchInvoices() {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -113,6 +183,9 @@ export const useSettingsStore = defineStore('settings', {
         const res = await $api.get<InvoiceResponse>(endpoints.invoices(dataStore.projectUuid));
 
         this.invoices = res.data.items;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.INVOICES, Date.now().toString());
       } catch (error: any) {
         this.invoices = [] as InvoiceInterface[];
 
@@ -132,10 +205,12 @@ export const useSettingsStore = defineStore('settings', {
           project_uuid: dataStore.projectUuid,
           package_id: packageId,
         });
+        return res.data;
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      return null;
     },
 
     /** API Stripe subscription session URL */
@@ -149,10 +224,12 @@ export const useSettingsStore = defineStore('settings', {
           project_uuid: dataStore.projectUuid,
           package_id: packageId,
         });
+        return res.data;
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      return null;
     },
 
     /** API Stripe subscribe */

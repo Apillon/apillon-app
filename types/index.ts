@@ -38,11 +38,15 @@ declare global {
   }
 
   /**
-   * General Interface
+   * General Interfaces
    */
   interface GeneralInterface {
-    id: string;
+    id: number;
     status: number;
+  }
+  interface BaseObjectInterface extends GeneralInterface {
+    name: string;
+    description: string | null;
   }
 
   /**

@@ -41,10 +41,8 @@ declare global {
     terms?: boolean;
   }
 
-  interface ProjectInterface {
+  interface ProjectInterface extends BaseObjectInterface {
     status: number;
-    name: string;
-    description: string;
     shortDescription: string | null;
     imageFile_id: number | null;
     myRole_id_onProject?: number;

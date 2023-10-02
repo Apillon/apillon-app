@@ -2,6 +2,25 @@ export {};
 
 declare global {
   /**
+   * Pricing
+   */
+  type PricingService = {
+    identity?: string;
+    storage: string;
+    bandwith: string;
+    hosting?: string;
+    smartContracts?: string;
+    credits: string;
+  };
+  type PricingPlan = {
+    name: string;
+    price: number;
+    description: string;
+    services: PricingService;
+    otherServices: String[];
+  };
+
+  /**
    * Credit
    */
   interface CreditInterface extends GeneralInterface {
@@ -10,17 +29,24 @@ declare global {
   }
   interface CreditResponse extends GeneralResponse<CreditInterface> {}
 
-  interface CreditTransactionInterface extends GeneralInterface {
+  interface CreditTransactionInterface extends BaseObjectInterface {
     amount: number;
     credit_id: number;
     direction: number;
     product_id: number;
-    name: string;
-    description: string;
     referenceId: string | null;
     referenceTable: string | null;
   }
   interface CreditTransactionsResponse extends GeneralItemsResponse<CreditTransactionInterface> {}
+
+  /**
+   * Credit Packages
+   */
+  interface CreditPackageInterface extends BaseObjectInterface {
+    creditAmount: number;
+    bonusCredits: number;
+  }
+  interface CreditPackagesResponse extends GeneralResponse<CreditPackageInterface[]> {}
 
   /**
    * Subscription
@@ -37,16 +63,23 @@ declare global {
   interface SubscriptionsResponse extends GeneralItemsResponse<SubscriptionInterface> {}
 
   /**
+   * Subscription Package
+   */
+  interface SubscriptionPackageInterface extends BaseObjectInterface {}
+  interface SubscriptionPackagesResponse extends GeneralResponse<SubscriptionPackageInterface[]> {}
+
+  /**
    * Invoice
    */
   interface InvoiceInterface extends GeneralInterface {
     project_uuid: string;
-    subtotalAmount: number;
     referenceTable: string;
     referenceId: number;
     clientEmail: string;
     clientName: string;
     currency: string;
+    subtotalAmount: number;
+    totalAmount: number;
   }
   interface InvoiceResponse extends GeneralItemsResponse<InvoiceInterface> {}
 }

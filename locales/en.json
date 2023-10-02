@@ -159,6 +159,23 @@
       "copyLink": "Copy link",
       "error": "Failed to copy"
     },
+    "credit": {
+      "amount": "Amount",
+      "name": "Name",
+      "product_id": "Product ID",
+      "referenceId": "Reference Id",
+      "referenceTable": "Reference Table"
+    },
+    "invoice": {
+      "clientEmail": "Client Email",
+      "clientName": "Client Name",
+      "currency": "Currency",
+      "invoices": "Invoices",
+      "referenceId": "Reference Id",
+      "referenceTable": "Reference Table",
+      "subtotalAmount": "Subtotal Amount",
+      "totalAmount": "Total Amount"
+    },
     "nav": {
       "access": "Access",
       "analytics": "Analytics",
@@ -187,6 +204,10 @@
       "profile": "Profile",
       "projectSettings": "Project settings",
       "usersPermissions": "Users & permissions"
+    },
+    "payment": {
+      "title": "Payment",
+      "expiresOn": "Expires on:"
     },
     "permissions": {
       "read": "Read permissions",
@@ -217,14 +238,9 @@
     "goToApiManagement": "Go to central API management",
     "homepage": "Homepage",
     "inviteTeamMember": "Invite team member",
-    "invoiceDate": "Next invoice issue date",
-    "invoiceTotal": "Invoice total",
-    "invoice": "Invoice",
-    "invoices": "Invoices",
     "learnMoreAboutServices": "Learn more about services",
     "manageRoles": "Manage roles",
     "name": "Name",
-    "payment": "Payment",
     "readDocs": "Read the Docs",
     "role": "Role",
     "searchDocs": "Search the docs",
