@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+
 export const useWebsiteStore = defineStore('website', {
   state: () => ({
     active: {} as WebsiteInterface,
@@ -29,7 +30,7 @@ export const useWebsiteStore = defineStore('website', {
     setWebsiteId(id: number) {
       if (this.selected !== id) {
         this.selected = id;
-
+        
         const deploymentStore = useDeploymentStore();
         deploymentStore.active = {} as DeploymentInterface;
         deploymentStore.staging = [] as Array<DeploymentInterface>;
