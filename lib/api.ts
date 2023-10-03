@@ -1,4 +1,4 @@
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { getAppConfig } from './utils';
 
 export const APISettings = {
@@ -22,7 +22,7 @@ class Api {
   }
 
   async get<T>(path: string, query?: { [k: string]: string | number | Array<string | number> }) {
-    const q = !query ? '' : '?' + stringify(query, { arrayFormat: 'bracket' });
+    const q = !query ? '' : '?' + queryString.stringify(query, { arrayFormat: 'bracket' });
     const response = await fetch(
       APISettings.basePath + path + q,
       this.onRequest({

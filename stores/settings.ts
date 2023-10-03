@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia';
 
-const authStore = useAuthStore();
-const dataStore = useDataStore();
-
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
     apiKeys: [] as ApiKeyInterface[],
@@ -19,6 +16,7 @@ export const useSettingsStore = defineStore('settings', {
     },
     currentUser(state) {
       if (this.hasUsers) {
+        const authStore = useAuthStore();
         return state.users.find(user => user.user_id === authStore.userId);
       }
       return {} as ProjectUserInterface;
@@ -38,15 +36,19 @@ export const useSettingsStore = defineStore('settings', {
     },
 
     isUser(type: number): boolean {
+      const dataStore = useDataStore();
       return dataStore.myRoleOnProject === type;
     },
     isUserOwner(): boolean {
+      const dataStore = useDataStore();
       return dataStore.myRoleOnProject === DefaultUserRole.PROJECT_OWNER;
     },
     isUserAdmin(): boolean {
+      const dataStore = useDataStore();
       return dataStore.myRoleOnProject === DefaultUserRole.PROJECT_ADMIN;
     },
     isProjectUser(): boolean {
+      const dataStore = useDataStore();
       return dataStore.myRoleOnProject === DefaultUserRole.PROJECT_USER;
     },
 
@@ -84,6 +86,7 @@ export const useSettingsStore = defineStore('settings', {
 
     /** API keys */
     async fetchApiKeys() {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         this.apiKeys = [] as ApiKeyInterface[];
       }
@@ -107,6 +110,7 @@ export const useSettingsStore = defineStore('settings', {
 
     /** Users */
     async fetchProjectUsers() {
+      const dataStore = useDataStore();
       try {
         const res = await $api.get<ProjectUsersResponse>(
           endpoints.projectUsers(dataStore.project.selected)

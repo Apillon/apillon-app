@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 
 const config = useRuntimeConfig();
-const dataStore = useDataStore();
 
 export const usePaymentsStore = defineStore('payments', {
   state: () => ({
@@ -66,6 +65,7 @@ export const usePaymentsStore = defineStore('payments', {
 
     /** API Credit */
     async fetchCredit() {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -99,6 +99,7 @@ export const usePaymentsStore = defineStore('payments', {
 
     /** API Credit transactions */
     async fetchCreditTransactions() {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -119,6 +120,7 @@ export const usePaymentsStore = defineStore('payments', {
 
     /** API Active Subscription */
     async fetchActiveSubscription() {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -139,6 +141,7 @@ export const usePaymentsStore = defineStore('payments', {
 
     /** API Subscriptions */
     async fetchSubscriptions() {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -176,6 +179,7 @@ export const usePaymentsStore = defineStore('payments', {
 
     /** API Invoices */
     async fetchInvoices() {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -197,6 +201,7 @@ export const usePaymentsStore = defineStore('payments', {
 
     /** API Stripe credit session URL */
     async fetchCreditSessionUrl(packageId: number) {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -217,6 +222,7 @@ export const usePaymentsStore = defineStore('payments', {
 
     /** API Stripe subscription session URL */
     async fetchSubscriptionSessionUrl(packageId: number) {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -237,6 +243,7 @@ export const usePaymentsStore = defineStore('payments', {
 
     /** API Stripe subscribe */
     async fetchStripeSubscribe() {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
