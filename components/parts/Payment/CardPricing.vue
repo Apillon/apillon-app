@@ -68,7 +68,7 @@ defineProps({
 const paymentStore = usePaymentsStore();
 
 async function getSubscriptionSessionUrl(packageId: number) {
-  const sessionUrl = await paymentStore.getSubscriptionSessionUrl(packageId);
+  const sessionUrl = await paymentStore.fetchSubscriptionSessionUrl(packageId);
   console.log(sessionUrl);
 }
 </script>

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+const config = useRuntimeConfig();
 const dataStore = useDataStore();
 
 export const usePaymentsStore = defineStore('payments', {
@@ -64,7 +65,7 @@ export const usePaymentsStore = defineStore('payments', {
      */
 
     /** API Credit */
-    async getCredit() {
+    async fetchCredit() {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -97,7 +98,7 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Credit transactions */
-    async getCreditTransactions() {
+    async fetchCreditTransactions() {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -117,7 +118,7 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Active Subscription */
-    async getActiveSubscription() {
+    async fetchActiveSubscription() {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -137,7 +138,7 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Subscriptions */
-    async getSubscriptions() {
+    async fetchSubscriptions() {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -195,7 +196,7 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Stripe credit session URL */
-    async getCreditSessionUrl(packageId: number) {
+    async fetchCreditSessionUrl(packageId: number) {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -204,6 +205,7 @@ export const usePaymentsStore = defineStore('payments', {
         const res = await $api.get<GeneralResponse<any>>(endpoints.creditSessionUrl, {
           project_uuid: dataStore.projectUuid,
           package_id: packageId,
+          returnUrl: `${config.public.url}/dashboard/billing`,
         });
         return res.data;
       } catch (error: any) {
@@ -214,7 +216,7 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Stripe subscription session URL */
-    async getSubscriptionSessionUrl(packageId: number) {
+    async fetchSubscriptionSessionUrl(packageId: number) {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -223,6 +225,7 @@ export const usePaymentsStore = defineStore('payments', {
         const res = await $api.get<GeneralResponse<any>>(endpoints.subscriptionSessionUrl, {
           project_uuid: dataStore.projectUuid,
           package_id: packageId,
+          returnUrl: `${config.public.url}/dashboard/billing`,
         });
         return res.data;
       } catch (error: any) {
@@ -233,7 +236,7 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Stripe subscribe */
-    async getStripeSubscribe() {
+    async fetchStripeSubscribe() {
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }

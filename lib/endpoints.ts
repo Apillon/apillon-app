@@ -57,9 +57,9 @@ const Endpoints = {
   invoices: (projectUuid: string) => {
     return `/projects/${projectUuid}/invoices`;
   },
-  creditSessionUrl: '/payments/stripe-credit-session-url',
-  subscriptionSessionUrl: '/payments/stripe-subscription-session-url',
-  stripeWebhook: '/payments/stripe-webhook',
+  creditSessionUrl: '/payments/stripe/credit-session-url',
+  subscriptionSessionUrl: '/payments/stripe/subscription-session-url',
+  stripeWebhook: '/payments/stripe/webhook',
   creditPackages: '/payments/credit-packages',
   subscriptionPackages: '/payments/subscription-packages',
 

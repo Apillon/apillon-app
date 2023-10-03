@@ -91,7 +91,6 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const dataStore = useDataStore();
 const paymentStore = usePaymentsStore();
 
 useHead({
@@ -147,29 +146,11 @@ const pricingPlans: Record<string, PricingPlan> = {
 onMounted(async () => {
   await paymentStore.getCreditPackages();
   await paymentStore.getSubscriptionPackages();
-  paymentStore.getCredit();
-  paymentStore.getCreditTransactions();
-  paymentStore.getSubscriptions();
-  paymentStore.getActiveSubscription();
-  paymentStore.getInvoices();
+  paymentStore.fetchCredit();
+  paymentStore.fetchCreditTransactions();
+  paymentStore.fetchSubscriptions();
+  paymentStore.fetchActiveSubscription();
+  paymentStore.fetchInvoices();
   loading.value = false;
-
-  /** If page was reloaded, populate form data after projects has been loaded 
-  setTimeout(async () => {
-    await Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      console.log(dataStore.projectUuid);
-      await Promise.all([
-        paymentStore.getCreditPackages(),
-        paymentStore.getCredit(),
-        paymentStore.getCreditTransactions(),
-        paymentStore.getSubscriptionPackages(),
-        paymentStore.getSubscriptions(),
-        paymentStore.getActiveSubscription(),
-        paymentStore.getInvoices(),
-      ]);
-      loading.value = false;
-    });
-  }, 300);
-  */
 });
 </script>

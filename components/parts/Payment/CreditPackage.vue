@@ -18,7 +18,7 @@ defineProps({
 const paymentStore = usePaymentsStore();
 
 async function getCreditSessionUrl(packageId: number) {
-  const sessionUrl = await paymentStore.getCreditSessionUrl(packageId);
+  const sessionUrl = await paymentStore.fetchCreditSessionUrl(packageId);
   console.log(sessionUrl);
 }
 </script>
