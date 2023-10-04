@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 
 const props = defineProps({
   resetPassword: { type: Boolean, default: false },
@@ -55,9 +55,9 @@ const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const { query } = useRoute();
+const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);

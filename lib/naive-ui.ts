@@ -47,17 +47,6 @@ const messageOverrides: MessageThemeOverrides = {
 /**
  * Theme configs
  */
-export const MessageProviderOptions: DiscreteApiOptions = {
-  messageProviderProps: {
-    duration: 3000,
-    closable: true,
-    keepAliveOnHover: true,
-    max: 4,
-    placement: 'bottom-right',
-    themeOverrides: messageOverrides,
-  },
-};
-
 export const themeOverrides: GlobalThemeOverrides = {
   common: {
     baseColor: colors.bg.DEFAULT,

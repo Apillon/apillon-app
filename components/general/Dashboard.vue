@@ -98,8 +98,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   loading: { type: Boolean, default: false },
   learnCollapsible: { type: Boolean, default: true },
@@ -109,11 +107,6 @@ const props = defineProps({
 const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
-
-  /** Global messages */
-  setTimeout(() => {
-    window.$message = useMessage();
-  }, 100);
 });
 watch(
   () => props.loading,

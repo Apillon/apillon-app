@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 
 const props = defineProps({
   bucketId: { type: Number, default: null },
@@ -48,12 +48,12 @@ const props = defineProps({
 const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
+const message = useMessage();
 const bucketStore = useBucketStore();
 
 /** Form folder */
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const formData = ref<FormFolder>({
   name: '',
