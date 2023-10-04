@@ -79,8 +79,8 @@
       <n-h5 prefix="bar">{{ $t('dashboard.invoice.invoices') }}</n-h5>
       <TablePaymentInvoices :invoices="paymentStore.invoices" />
 
-      <!-- Invoices -->
-      <n-h5 prefix="bar">{{ $t('dashboard.invoice.invoices') }}</n-h5>
+      <!-- Credit Transactions -->
+      <n-h5 prefix="bar">{{ $t('dashboard.credit.transactions') }}</n-h5>
       <TablePaymentCreditTransactions
         :credit-transactions="paymentStore.creditTransactions"
         class="pb-8"
@@ -90,7 +90,11 @@
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
+
 const { t } = useI18n();
+const { query } = useRoute();
+const message = useMessage();
 const paymentStore = usePaymentsStore();
 
 useHead({
@@ -142,6 +146,14 @@ const pricingPlans: Record<string, PricingPlan> = {
     otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
 };
+
+onBeforeMount(() => {
+  if (query.canceled) {
+    message.warning(t('dashboard.payment.stripe.error'));
+  } else if (query.success) {
+    message.success(t('dashboard.payment.stripe.success'));
+  }
+});
 
 onMounted(async () => {
   await paymentStore.getCreditPackages();

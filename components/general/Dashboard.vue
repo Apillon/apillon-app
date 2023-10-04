@@ -109,6 +109,11 @@ const props = defineProps({
 const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
+
+  /** Global messages */
+  setTimeout(() => {
+    window.$message = useMessage();
+  }, 100);
 });
 watch(
   () => props.loading,
@@ -122,9 +127,6 @@ function setLoadingAnimation(isLoading: boolean) {
     loadingAnimation.value = isLoading;
   }, delay);
 }
-
-/** Global messages */
-window.$message = useMessage();
 
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
@@ -145,10 +147,6 @@ const scrollStyle = computed(() => {
 /** Instructions load */
 const key = computed(() => {
   return name?.toString() || '';
-});
-
-onMounted(async () => {
-  // await getInstructions(key.value);
 });
 
 async function getInstructions(key: string) {

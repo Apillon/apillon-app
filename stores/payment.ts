@@ -106,7 +106,8 @@ export const usePaymentsStore = defineStore('payments', {
 
       try {
         const res = await $api.get<CreditTransactionsResponse>(
-          endpoints.creditTransactions(dataStore.projectUuid)
+          endpoints.creditTransactions(dataStore.projectUuid),
+          PARAMS_ALL_ITEMS
         );
 
         this.creditTransactions = res.data.items;
@@ -185,7 +186,10 @@ export const usePaymentsStore = defineStore('payments', {
       }
 
       try {
-        const res = await $api.get<InvoiceResponse>(endpoints.invoices(dataStore.projectUuid));
+        const res = await $api.get<InvoiceResponse>(
+          endpoints.invoices(dataStore.projectUuid),
+          PARAMS_ALL_ITEMS
+        );
 
         this.invoices = res.data.items;
 
@@ -207,7 +211,7 @@ export const usePaymentsStore = defineStore('payments', {
       }
 
       try {
-        const res = await $api.get<GeneralResponse<any>>(endpoints.creditSessionUrl, {
+        const res = await $api.get<GeneralResponse<string>>(endpoints.creditSessionUrl, {
           project_uuid: dataStore.projectUuid,
           package_id: packageId,
           returnUrl: `${config.public.url}/dashboard/billing`,
@@ -228,7 +232,7 @@ export const usePaymentsStore = defineStore('payments', {
       }
 
       try {
-        const res = await $api.get<GeneralResponse<any>>(endpoints.subscriptionSessionUrl, {
+        const res = await $api.get<GeneralResponse<string>>(endpoints.subscriptionSessionUrl, {
           project_uuid: dataStore.projectUuid,
           package_id: packageId,
           returnUrl: `${config.public.url}/dashboard/billing`,
@@ -242,14 +246,10 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Stripe subscribe */
-    async fetchStripeSubscribe() {
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-
+    async stripeSubscribe() {
       try {
-        const res = await $api.post<GeneralResponse<any>>(endpoints.stripeWebhook);
+        const res = await $api.post<GeneralResponse<string>>(endpoints.stripeWebhook);
+        console.log(res.data);
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));

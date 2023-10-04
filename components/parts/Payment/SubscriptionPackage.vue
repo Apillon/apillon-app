@@ -4,7 +4,13 @@
     <p class="text-body mb-6">
       {{ subscriptionPackage.description }}
     </p>
-    <Btn type="primary" @click="getSubscriptionSessionUrl(subscriptionPackage.id)"> Buy </Btn>
+    <Btn
+      type="primary"
+      :loading="loading"
+      @click="getSubscriptionSessionUrl(subscriptionPackage.id)"
+    >
+      Buy
+    </Btn>
   </div>
 </template>
 
@@ -16,10 +22,16 @@ defineProps({
   },
 });
 
+const loading = ref<boolean>(false);
 const paymentStore = usePaymentsStore();
 
 async function getSubscriptionSessionUrl(packageId: number) {
-  const sessionUrl = await paymentStore.fetchSubscriptionSessionUrl(packageId);
-  console.log(sessionUrl);
+  loading.value = true;
+  const stripeSessionUrl = await paymentStore.fetchSubscriptionSessionUrl(packageId);
+  loading.value = false;
+
+  if (stripeSessionUrl) {
+    window.open(stripeSessionUrl, '_self');
+  }
 }
 </script>

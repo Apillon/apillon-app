@@ -6,7 +6,9 @@
     </p>
     <p class="text-body mb-6">Credit amount: {{ creditPackage.creditAmount }}</p>
     <p class="text-body mb-6">Bonus credits: {{ creditPackage.bonusCredits }}</p>
-    <Btn type="primary" @click="getCreditSessionUrl(creditPackage.id)"> Buy </Btn>
+    <Btn type="primary" :loading="loading" @click="getCreditSessionUrl(creditPackage.id)">
+      Buy
+    </Btn>
   </div>
 </template>
 
@@ -15,10 +17,16 @@ defineProps({
   creditPackage: { type: Object as VuePropType<CreditPackageInterface>, required: true },
 });
 
+const loading = ref<boolean>(false);
 const paymentStore = usePaymentsStore();
 
 async function getCreditSessionUrl(packageId: number) {
-  const sessionUrl = await paymentStore.fetchCreditSessionUrl(packageId);
-  console.log(sessionUrl);
+  loading.value = true;
+  const stripeSessionUrl = await paymentStore.fetchCreditSessionUrl(packageId);
+  loading.value = false;
+
+  if (stripeSessionUrl) {
+    window.open(stripeSessionUrl, '_self');
+  }
 }
 </script>

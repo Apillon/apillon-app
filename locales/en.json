@@ -164,7 +164,8 @@
       "name": "Name",
       "product_id": "Product ID",
       "referenceId": "Reference Id",
-      "referenceTable": "Reference Table"
+      "referenceTable": "Reference Table",
+      "transactions": "Transactions"
     },
     "invoice": {
       "clientEmail": "Client Email",

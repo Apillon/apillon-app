@@ -7,11 +7,11 @@
 
     <!-- Price -->
     <template v-if="plan.price === 0">
-      <h1 :class="textTitleClass">Free</h1>
+      <h1>Free</h1>
       <p class="mb-6 mt-0">forever</p>
     </template>
     <template v-else>
-      <h1 :class="textTitleClass">€{{ plan.price }}</h1>
+      <h1>€{{ plan.price }}</h1>
       <p class="mb-6 mt-0">per month</p>
     </template>
 
@@ -19,7 +19,12 @@
       {{ subscriptionPackage.description || plan.description }}
     </p>
 
-    <Btn type="primary" class="w-full" @click="getSubscriptionSessionUrl(subscriptionPackage.id)">
+    <Btn
+      type="primary"
+      class="w-full"
+      :loading="loading"
+      @click="getSubscriptionSessionUrl(subscriptionPackage.id)"
+    >
       Select package
     </Btn>
     <p class="body-sm mt-1 h-5 italic">
@@ -65,10 +70,16 @@ defineProps({
   type: { type: String as PropType<'dark' | 'light'>, default: 'dark' },
 });
 
+const loading = ref<boolean>(false);
 const paymentStore = usePaymentsStore();
 
 async function getSubscriptionSessionUrl(packageId: number) {
-  const sessionUrl = await paymentStore.fetchSubscriptionSessionUrl(packageId);
-  console.log(sessionUrl);
+  loading.value = true;
+  const stripeSessionUrl = await paymentStore.fetchSubscriptionSessionUrl(packageId);
+  loading.value = false;
+
+  if (stripeSessionUrl) {
+    window.open(stripeSessionUrl, '_self');
+  }
 }
 </script>
