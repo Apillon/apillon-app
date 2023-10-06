@@ -43,7 +43,7 @@
         <template #header-extra>
           <n-switch
             v-model:value="service.enabled"
-            @update:value="service.enabled = !service.enabled"
+            @update:value="removeServicePermissions(service)"
           />
         </template>
 
@@ -389,6 +389,28 @@ async function removePermission(serviceUuid: string, roleId: number) {
       service_uuid: serviceUuid,
       role_id: roleId,
     });
+
+    message.success($i18n.t('form.success.deleted.apiKeyRole'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+}
+
+async function removeServicePermissions(service: ApiKeyRoleForm) {
+  const projectUuid = dataStore.projectUuid || '';
+  service.enabled = !service.enabled;
+  if (!service.enabled) return;
+
+  // If toggle off, remove all active roles for this service type
+  try {
+    await $api.delete<DeleteResponse>(endpoints.apiKeyServiceRoles(props.id), {
+      project_uuid: projectUuid,
+      service_uuid: service.service_uuid,
+      role_id: 50, // Validation placeholder
+    });
+
+    // In case re-enabled, checkbox values need to be refreshed
+    await getApiKeyRoles();
 
     message.success($i18n.t('form.success.deleted.apiKeyRole'));
   } catch (error) {
