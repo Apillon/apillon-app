@@ -20,6 +20,15 @@
     </p>
 
     <Btn
+      v-if="activeSubscription?.package_id === subscriptionPackage.id"
+      :href="config.public.stripePortal"
+      type="primary"
+      size="large"
+    >
+      Change package
+    </Btn>
+    <Btn
+      v-else
       type="primary"
       class="w-full"
       :loading="loading"
@@ -71,7 +80,12 @@ defineProps({
 });
 
 const loading = ref<boolean>(false);
+const config = useRuntimeConfig();
 const paymentStore = usePaymentsStore();
+
+const activeSubscription = computed(() => {
+  return paymentStore.subscriptions.find(item => item.cancelDate === null);
+});
 
 async function getSubscriptionSessionUrl(packageId: number) {
   loading.value = true;

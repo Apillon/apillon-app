@@ -10,6 +10,10 @@
             <span class="icon-star text-xl text-primary mr-3"></span>
             <h4>{{ paymentStore.activeSubscription.stripeId }}</h4>
           </div>
+          Edit plan:
+          <a :href="config.public.stripePortal" class="text-yellow" target="_blank">
+            Stripe portal
+          </a>
         </n-card>
         <n-card :bordered="false" :title="t('dashboard.payment.expiresOn')">
           <h4>{{ datetimeToDate(paymentStore.activeSubscription.expiresOn) }}</h4>
@@ -28,6 +32,7 @@
           :credit-package="creditPackage"
         />
       </div>
+
       <!-- Subscription packages -->
       <n-h5 prefix="bar">Subscription packages</n-h5>
       <n-scrollbar
@@ -46,34 +51,6 @@
           />
         </div>
       </n-scrollbar>
-
-      <!-- Payment methods -->
-      <n-h5 prefix="bar">{{ $t('dashboard.payment.title') }}</n-h5>
-      <TablePaymentMethods class="mb-4" @changePaymentEmit="showDrawerPaymentMethod" />
-
-      <n-card>
-        <div class="flex md:flex-row flex-col md:justify-between">
-          <div>
-            <h5 class="text-lg mb-2">{{ $t('dashboard.addPaymentMethod') }}</h5>
-            <p class="text-sm">{{ $t('dashboard.addPaymentMethodText') }}</p>
-          </div>
-          <div>
-            <Btn type="primary" @click="showDrawerPaymentMethod">
-              {{ $t('dashboard.addPayment') }}
-            </Btn>
-          </div>
-        </div>
-      </n-card>
-
-      <!-- Drawer - Add new payment method -->
-      <n-drawer v-model:show="drawerPaymentMethodActive" :width="495">
-        <n-drawer-content>
-          <template #header>
-            <h5>{{ $t('dashboard.addPayment') }}</h5>
-          </template>
-          <FormPaymentMethod />
-        </n-drawer-content>
-      </n-drawer>
 
       <!-- Invoices -->
       <n-h5 prefix="bar">{{ $t('dashboard.invoice.invoices') }}</n-h5>
@@ -95,6 +72,7 @@ import { useMessage } from 'naive-ui';
 const { t } = useI18n();
 const { query } = useRoute();
 const message = useMessage();
+const config = useRuntimeConfig();
 const paymentStore = usePaymentsStore();
 
 useHead({
@@ -102,14 +80,6 @@ useHead({
 });
 
 const loading = ref<boolean>(true);
-
-/**
- * Drawer - add payment
- */
-const drawerPaymentMethodActive = ref(false);
-const showDrawerPaymentMethod = () => {
-  drawerPaymentMethodActive.value = true;
-};
 
 const pricingPlans: Record<string, PricingPlan> = {
   Freemium: {
@@ -134,14 +104,25 @@ const pricingPlans: Record<string, PricingPlan> = {
     },
     otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
-  Butterfly: {
-    name: 'Butterfly',
+  Cocoon: {
+    name: 'Cocoon',
     price: 79.9,
     description: 'Bring your enterprise to the Web3 level and go big on decentralized tech.',
     services: {
       storage: '300 GB Lifetime',
       bandwith: '750 GB Monthly',
       credits: '2000 Credits Lifetime',
+    },
+    otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
+  },
+  Butterfly: {
+    name: 'Butterfly',
+    price: null,
+    description: 'Bring your enterprise to the Web3 level and go big on decentralized tech.',
+    services: {
+      storage: '∞ GB Lifetime',
+      bandwith: '∞ GB Monthly',
+      credits: '∞ Credits Lifetime',
     },
     otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
@@ -158,10 +139,10 @@ onBeforeMount(() => {
 onMounted(async () => {
   await paymentStore.getCreditPackages();
   await paymentStore.getSubscriptionPackages();
-  paymentStore.fetchCredit();
-  paymentStore.fetchCreditTransactions();
-  paymentStore.fetchSubscriptions();
-  paymentStore.fetchActiveSubscription();
+  await paymentStore.fetchCredit();
+  await paymentStore.fetchCreditTransactions();
+  await paymentStore.fetchSubscriptions();
+  await paymentStore.fetchActiveSubscription();
   paymentStore.fetchInvoices();
   loading.value = false;
 });

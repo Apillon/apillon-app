@@ -14,7 +14,7 @@ declare global {
   };
   type PricingPlan = {
     name: string;
-    price: number;
+    price: number | null;
     description: string;
     services: PricingService;
     otherServices: String[];

@@ -112,7 +112,7 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else if (props.resetPassword) {
-      await resetPassword();
+      await submitResetPassword();
     } else {
       await register();
     }
@@ -145,7 +145,7 @@ async function register() {
 }
 
 /** Reset password (on page reset-password or in dashboard) */
-async function resetPassword() {
+async function submitResetPassword() {
   loading.value = true;
 
   try {

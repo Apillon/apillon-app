@@ -6,7 +6,7 @@ const config: ConfigInterface = {
   apiUrl: 'http://localhost:6001',
   oauthUrl: 'http://localhost:5173',
   adminUrl: 'http://localhost:3001',
-  CHAIN_ID: '0x5',
+  stripePortal: 'https://billing.stripe.com/p/login/test_00gdUBdkG0zh7HGfYY',
   captchaKey: '10000000-ffff-ffff-ffff-000000000001',
   githubId: 'd0482598d8adbd8adffa',
   publishedFeatures: [
