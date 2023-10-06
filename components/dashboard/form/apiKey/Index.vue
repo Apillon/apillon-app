@@ -153,7 +153,7 @@ const createdApiKey = ref<ApiKeyCreatedInterface>({} as ApiKeyCreatedInterface);
 const roles = computed(() => {
   return dataStore.services.map(service => {
     return {
-      enabled: props.id > 0,
+      enabled: props.id > 0 && isAnyPermissionEnabled(service),
       name: service.name,
       serviceType: service.serviceType,
       service_uuid: service.service_uuid,
@@ -210,7 +210,7 @@ const expandedPermissions = computed(() => {
   if (props.id === 0) {
     return null;
   }
-  return roles.value.map(item => item.service_uuid);
+  return roles.value.filter(role => role.enabled).map(item => item.service_uuid);
 });
 
 const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expanded }) => {
@@ -221,7 +221,7 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expan
     service.enabled = !service.enabled;
 
     /** Toggle checkboxes if user is creating new API key */
-    if (props.id === 0) {
+    if (props.id === 0 || !expanded) {
       service.permissions.forEach(permission => {
         permission.value = expanded;
       });
@@ -351,6 +351,9 @@ function isPermissionEnabled(serviceUuid: string, roleId: number) {
       role.service_uuid === serviceUuid &&
       role.role_id === roleId
   );
+}
+function isAnyPermissionEnabled(service: ServiceInterface) {
+  return enumValues(ApiKeyRole).some(roleId => isPermissionEnabled(service.service_uuid, roleId));
 }
 
 /** Permission update */
