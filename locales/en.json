@@ -255,6 +255,7 @@
     "USER_IS_NOT_AUTHENTICATED": "User is not authenticated",
     "FORBIDDEN": "You don't have permission for this action",
     "USER_IS_NOT_AUTHORIZED": "User is not authorized",
+    "CAPTCHA_NOT_PRESENT": "Please solve captcha",
     "Insufficient permissions to modify this record": "You don't have permission for this action",
     "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error, please fill the form",
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
@@ -272,10 +273,10 @@
     "CREATE_API_KEY_PROJECT_UUID_NOT_PRESENT": "CREATE_API_KEY_PROJECT_UUID is missing",
     "BUCKET_PROJECT_UUID_NOT_PRESENT": "Bucket project ID is missing",
     "BUCKET_STORAGE_PLAN_ID_NOT_PRESENT": "Bucket storage plain ID is missing",
-    "BUCKET_NAME_NOT_PRESENT": "Bucekt name is missing",
+    "BUCKET_NAME_NOT_PRESENT": "Bucket name is missing",
     "DIRECTORY_BUCKET_ID_NOT_PRESENT": "Directory bucket ID is missing",
     "DIRECTORY_NAME_NOT_PRESENT": "Directory name is missing",
-    "BUCKET_UUID_NOT_PRESENT": "Bucekt UUID is missing",
+    "BUCKET_UUID_NOT_PRESENT": "Bucket UUID is missing",
     "PATH_NOT_PRESENT": "Path is missing",
     "CONTENT_TYPE_NOT_PRESENT": "Content type is missing",
     "SESSION_UUID_NOT_PRESENT": "Session UUID is missing",
@@ -294,6 +295,7 @@
     "FILE_BODY_NOT_PRESENT": "File body is missing",
     "FILE_NOT_FOUND": "File not found",
     "WEBSITE_DOMAIN_CHANGE_NOT_ALLOWED": "Website domain can be changed every 15 minutes. ",
+    "NO_FILES_TO_DEPLOY": "Please upload some files first.",
     "STATUS_NOT_PRESENT": "Status not present",
     "INVALID_STATUS": "Invalid status",
     "EMAIL_NOT_PRESENT": "Email is missing",
@@ -505,7 +507,7 @@
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
         "collection": "Creating NFT collection requested.",
-        "directory": "Directory key has been created",
+        "directory": "Folder key has been created",
         "domain": "Domain has been added to Website",
         "file": "File has been created",
         "hosting": "Hosting has been created",
@@ -522,7 +524,7 @@
         "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
-        "directory": "Directory key has been deleted",
+        "directory": "Folder key has been deleted",
         "domain": "Domain has been deleted",
         "file": "File has been deleted",
         "hosting": "Hosting has been deleted",
@@ -537,7 +539,7 @@
       },
       "restored": {
         "bucket": "Bucket has been restored",
-        "directory": "Directory key has been restored",
+        "directory": "Folder key has been restored",
         "file": "File has been restored"
       },
       "updated": {
@@ -545,7 +547,7 @@
         "apiKeyRole": "Api key permission has been added",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
-        "directory": "Directory key has been updated",
+        "directory": "Folder key has been updated",
         "domain": "Domain has been updated",
         "file": "File has been updated",
         "hosting": "Hosting has been updated",
@@ -605,7 +607,7 @@
       "production": "3. Production"
     },
     "upload": {
-      "directory": "Upload directory",
+      "directory": "Upload folder",
       "dragAndDrop": "Drag & drop (up to 100 files)",
       "files": "Upload files and folders"
     },
@@ -965,10 +967,10 @@
       "selectedFiles": "Delete selected files and directories"
     },
     "directory": {
-      "create": "Create directory",
-      "createNew": "Create new directory",
-      "delete": "Delete directory",
-      "deleteConfirm": "Are you sure that you want to delete {num} selected directory?"
+      "create": "Create folder",
+      "createNew": "Create new folder",
+      "delete": "Delete folder",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected folders?"
     },
     "download": {
       "bucketItems": "Download selected items?",
@@ -1043,7 +1045,7 @@
     "filesAll": "All Files",
     "fileSize": "File size",
     "fileStatusName": "File status",
-    "goToRootDirectory": "Go to root directory",
+    "goToRootDirectory": "Go to root folder",
     "history": "History",
     "refresh": "Refresh",
     "replicas": "Replicas",
@@ -1146,7 +1148,7 @@
     "houseNumberRequired": "Please enter your house number",
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
-    "captchaRequired": "Captcha challange required!",
+    "captchaRequired": "Captcha challenge required!",
     "role": "Selected role is invalid",
     "roleRequired": "Please select role",
     "terms": "Please accept the terms",
@@ -1171,7 +1173,7 @@
       "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
     },
     "folder": {
-      "delete": "All items stored in this directory will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
+      "delete": "All items stored in this folder will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
     },
     "hosting": {
       "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",

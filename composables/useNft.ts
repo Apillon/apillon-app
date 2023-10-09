@@ -222,11 +222,7 @@ export default function useNft() {
     }, 300);
   }
 
-  function handleImageChange(options: {
-    file: NUploadFileInfo;
-    fileList: NUploadFileInfo[];
-    event?: Event;
-  }) {
+  function handleImageChange(options: FileUploadOptions) {
     const index = options.fileList.indexOf(options.file);
     const indexImage = collectionStore.images.findIndex(
       item => item.name === options.file.name && item.fullPath === options.file.fullPath
@@ -243,7 +239,7 @@ export default function useNft() {
     }
   }
 
-  function handleImageRemove(data: { file: NUploadFileInfo; fileList: NUploadFileInfo[] }) {
+  function handleImageRemove(data: FileUploadOptions) {
     collectionStore.images = collectionStore.images.filter(item => item.id !== data.file.id);
   }
 
