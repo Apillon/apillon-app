@@ -3,8 +3,9 @@
     :is="href ? 'a' : to ? NuxtLink : type === 'link' ? 'button' : NButton"
     v-if="type === 'link' || (!to && !href)"
     v-bind="$attrs"
-    :href="href || undefined"
     :to="to || undefined"
+    :href="href || undefined"
+    :target="href ? '_blank' : undefined"
     :class="btnClass"
     :type="!href && !to ? (type === 'secondary' ? 'primary' : type) : ''"
     :size="size"
@@ -26,8 +27,9 @@
     v-else
     class="inline-block"
     :class="{ 'w-full': size === 'large' }"
-    :href="href || undefined"
     :to="to || undefined"
+    :href="href || undefined"
+    :target="href ? '_blank' : undefined"
   >
     <NButton
       v-bind="$attrs"

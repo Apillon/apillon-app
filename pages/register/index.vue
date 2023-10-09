@@ -27,11 +27,9 @@
     <n-space vertical>
       <div>
         <span class="text-sm text-body">{{ $t('auth.signup.alreadyHaveAccount') }} </span>&nbsp;
-        <NuxtLink :to="{ name: 'login' }">
-          <Btn type="builders" size="tiny" inner-class="text-sm">
-            {{ $t('general.login') }}
-          </Btn>
-        </NuxtLink>
+        <Btn type="builders" size="tiny" inner-class="text-sm" :to="{ name: 'login' }">
+          {{ $t('general.login') }}
+        </Btn>
       </div>
     </n-space>
   </div>
