@@ -412,9 +412,6 @@ async function removeServicePermissions(service: ApiKeyRoleForm) {
       role_id: 50, // Validation placeholder
     });
 
-    // In case re-enabled, checkbox values need to be refreshed
-    await getApiKeyRoles();
-
     message.success($i18n.t('form.success.deleted.apiKeyRole'));
   } catch (error) {
     message.error(userFriendlyMsg(error));
