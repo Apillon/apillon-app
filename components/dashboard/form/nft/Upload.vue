@@ -52,7 +52,7 @@
           multiple
           directory-dnd
           :custom-request="nft.uploadImagesRequest"
-          @change="nft.handleImageChange"
+          @change="onUploadChange"
           @remove="nft.handleImageRemove"
           @click="startLoader"
           @click-outside="nft.loadingImages.value = false"
@@ -232,12 +232,17 @@ function createMetadata() {
 }
 
 function startLoader() {
-  if ((collectionStore.csvData?.length || 0) < collectionStore.images.length) {
+  if ((collectionStore.csvData?.length || 0) > collectionStore.images.length) {
     nft.loadingImages.value = true;
   }
 }
 
 function stopLoader() {
   nft.loadingImages.value = false;
+}
+
+function onUploadChange(options: FileUploadOptions) {
+  nft.handleImageChange(options);
+  startLoader();
 }
 </script>
