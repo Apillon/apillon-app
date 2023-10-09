@@ -660,7 +660,7 @@
       "create": "Create collection",
       "createFirst": "Start creating NFTs",
       "createInfo": "",
-      "createToDisplay": "Create website to display NFTs",
+      "createToDisplay": "Create website to display NFTs with",
       "deploy": "Deploy to blockchain",
       "display": "Display NFT collection",
       "dropStart": "Drop start",
@@ -697,6 +697,7 @@
       "created": {
         "bucket": "newly created bucket",
         "explorer": "blockchain explorer",
+        "goBack": "Go back to NFT Collections",
         "info": "To display your NFTs and mint them, you need a website. \nUse the Apillon NFT website template and host it on a decentralized network.",
         "or": "or see its contents in your",
         "title": "Display your NFTs on the internet",
