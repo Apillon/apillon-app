@@ -57,9 +57,12 @@ const Endpoints = {
   invoices: (projectUuid: string) => {
     return `/projects/${projectUuid}/invoices`;
   },
+  productPrice: (productId?: string | number) => {
+    return productId ? `/payments/product/${productId}` : '/payments/product';
+  },
   creditSessionUrl: '/payments/stripe/credit-session-url',
   subscriptionSessionUrl: '/payments/stripe/subscription-session-url',
-  stripeWebhook: '/payments/stripe/webhook',
+  customerPortalUrl: '/payments/stripe/customer-portal-session-url',
   creditPackages: '/payments/credit-packages',
   subscriptionPackages: '/payments/subscription-packages',
 
@@ -81,17 +84,17 @@ const Endpoints = {
   /** Bucket */
   buckets: '/buckets/',
   bucketsQuota: '/buckets/quota-reached',
-  bucket: (buckeId: number | string) => {
-    return `/buckets/${buckeId}`;
+  bucket: (bucketId: number | string) => {
+    return `/buckets/${bucketId}`;
   },
-  bucketContent: (buckeId: number | string) => {
-    return `/buckets/${buckeId}/content`;
+  bucketContent: (bucketId: number | string) => {
+    return `/buckets/${bucketId}/content`;
   },
-  bucketRestore: (buckeId: number) => {
-    return `/buckets/${buckeId}/cancel-deletion`;
+  bucketRestore: (bucketId: number) => {
+    return `/buckets/${bucketId}/cancel-deletion`;
   },
-  bucketWebhook: (buckeId: number, webhookId?: number) => {
-    return webhookId ? `/buckets/${buckeId}/webhook/${webhookId}` : `/buckets/${buckeId}/webhook`;
+  bucketWebhook: (bucketId: number, webhookId?: number) => {
+    return webhookId ? `/buckets/${bucketId}/webhook/${webhookId}` : `/buckets/${bucketId}/webhook`;
   },
 
   /** Directories */

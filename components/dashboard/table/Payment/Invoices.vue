@@ -1,15 +1,33 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="invoices" />
+  <n-data-table
+    remote
+    :bordered="false"
+    :columns="columns"
+    :data="paymentsStore.invoices.items"
+    :loading="loading"
+    :pagination="pagination"
+    @update:page="handlePageChange"
+  />
 </template>
 
 <script lang="ts" setup>
 import { NTag } from 'naive-ui';
 
-defineProps({
-  invoices: { type: Array<InvoiceInterface>, default: [] },
-});
-
 const { t } = useI18n();
+const paymentsStore = usePaymentsStore();
+
+const loading = ref<boolean>(false);
+
+/** Pagination data */
+const currentPage = ref<number>(1);
+const pagination = computed(() => {
+  return {
+    page: currentPage.value,
+    pageSize: PAGINATION_LIMIT,
+    pageCount: Math.ceil(paymentsStore.invoices.total / PAGINATION_LIMIT),
+    itemCount: paymentsStore.invoices.total,
+  };
+});
 
 const createColumns = (): NDataTableColumns<InvoiceInterface> => {
   return [
@@ -83,4 +101,12 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
 };
 
 const columns = createColumns();
+
+/** On page change, load data */
+async function handlePageChange(page: number) {
+  if (!loading.value) {
+    await paymentsStore.fetchInvoices(page, PAGINATION_LIMIT);
+    currentPage.value = page;
+  }
+}
 </script>

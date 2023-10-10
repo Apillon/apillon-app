@@ -159,8 +159,10 @@
       "copyLink": "Copy link",
       "error": "Failed to copy"
     },
-    "credit": {
+    "credits": {
       "amount": "Amount",
+      "available": "available",
+      "checkPrice": "Check price",
       "name": "Name",
       "product_id": "Product ID",
       "referenceId": "Reference Id",

@@ -1,7 +1,7 @@
 <template>
   <div
     class="rounded-2xl border border-primary-bright p-6 md:p-8 lg:p-12"
-    :class="type === 'dark' ? 'bg-bg-dark' : 'bg-bg-lighter'"
+    :class="type === 'dark' ? 'bg-bg-dark' : 'bg-bg-light'"
   >
     <h4 class="mb-6">{{ subscriptionPackage.name || plan.name }}</h4>
 
@@ -20,9 +20,9 @@
     </p>
 
     <Btn
-      v-if="activeSubscription?.package_id === subscriptionPackage.id"
+      v-if="paymentStore.activeSubscription?.package_id === subscriptionPackage.id"
       :href="config.public.stripePortal"
-      type="primary"
+      type="secondary"
       size="large"
     >
       Change package
@@ -82,10 +82,6 @@ defineProps({
 const loading = ref<boolean>(false);
 const config = useRuntimeConfig();
 const paymentStore = usePaymentsStore();
-
-const activeSubscription = computed(() => {
-  return paymentStore.subscriptions.find(item => item.cancelDate === null);
-});
 
 async function getSubscriptionSessionUrl(packageId: number) {
   loading.value = true;

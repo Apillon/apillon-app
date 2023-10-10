@@ -4,11 +4,11 @@
       <h4>{{ $t('dashboard.billing') }}</h4>
     </template>
     <slot>
-      <div class="grid grid-cols-billing gap-5">
+      <div v-if="paymentStore.activeSubscription?.package_id" class="grid grid-cols-billing gap-5">
         <n-card :bordered="false" :title="t('dashboard.yourPlan')">
           <div class="flex items-center">
             <span class="icon-star text-xl text-primary mr-3"></span>
-            <h4>{{ paymentStore.activeSubscription.stripeId }}</h4>
+            <h4>{{ paymentStore.getActiveSubscriptionPackage?.name }}</h4>
           </div>
           Edit plan:
           <a :href="config.public.stripePortal" class="text-yellow" target="_blank">
@@ -54,14 +54,11 @@
 
       <!-- Invoices -->
       <n-h5 prefix="bar">{{ $t('dashboard.invoice.invoices') }}</n-h5>
-      <TablePaymentInvoices :invoices="paymentStore.invoices" />
+      <TablePaymentInvoices />
 
       <!-- Credit Transactions -->
-      <n-h5 prefix="bar">{{ $t('dashboard.credit.transactions') }}</n-h5>
-      <TablePaymentCreditTransactions
-        :credit-transactions="paymentStore.creditTransactions"
-        class="pb-8"
-      />
+      <n-h5 prefix="bar">{{ $t('dashboard.credits.transactions') }}</n-h5>
+      <TablePaymentCreditTransactions class="pb-8" />
     </slot>
   </Dashboard>
 </template>
@@ -137,13 +134,17 @@ onBeforeMount(() => {
 });
 
 onMounted(async () => {
+  paymentStore.getCredits();
+  paymentStore.fetchActiveSubscription();
+
   await paymentStore.getCreditPackages();
   await paymentStore.getSubscriptionPackages();
-  await paymentStore.fetchCredit();
-  await paymentStore.fetchCreditTransactions();
-  await paymentStore.fetchSubscriptions();
-  await paymentStore.fetchActiveSubscription();
+
+  paymentStore.fetchCreditTransactions();
   paymentStore.fetchInvoices();
   loading.value = false;
+
+  const customerPortalUrl = await paymentStore.getCustomerPortalURL();
+  console.log(customerPortalUrl);
 });
 </script>

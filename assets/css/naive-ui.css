@@ -623,6 +623,17 @@ body > .n-message-container {
   }
 }
 
+/** Table */
+.n-table {
+  &.plain {
+    th {
+      @apply bg-transparent;
+    }
+    td {
+      @apply text-body;
+    }
+  }
+}
 /** Tabs */
 .n-tabs {
   &--line-type {

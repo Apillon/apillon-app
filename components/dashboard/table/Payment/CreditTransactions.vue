@@ -1,39 +1,58 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="creditTransactions" />
+  <n-data-table
+    remote
+    :bordered="false"
+    :columns="columns"
+    :data="paymentsStore.creditTransactions.items"
+    :loading="loading"
+    :pagination="pagination"
+    @update:page="handlePageChange"
+  />
 </template>
 
 <script lang="ts" setup>
 import { NTag } from 'naive-ui';
 
-defineProps({
-  creditTransactions: { type: Array<CreditTransactionInterface>, default: [] },
-});
-
 const { t } = useI18n();
+const paymentsStore = usePaymentsStore();
+
+const loading = ref<boolean>(false);
+
+/** Pagination data */
+const currentPage = ref<number>(1);
+const pagination = computed(() => {
+  return {
+    page: currentPage.value,
+    pageSize: PAGINATION_LIMIT,
+    pageSizes: [PAGINATION_LIMIT, 50, 100],
+    pageCount: Math.ceil(paymentsStore.invoices.total / PAGINATION_LIMIT),
+    itemCount: paymentsStore.invoices.total,
+  };
+});
 
 const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
   return [
     {
-      title: t('dashboard.credit.name'),
+      title: t('dashboard.credits.name'),
       key: 'name',
       render(row) {
         return h('strong', {}, row.name);
       },
     },
     {
-      title: t('dashboard.credit.product_id'),
+      title: t('dashboard.credits.product_id'),
       key: 'product_id',
     },
     {
-      title: t('dashboard.credit.referenceId'),
+      title: t('dashboard.credits.referenceId'),
       key: 'referenceId',
     },
     {
-      title: t('dashboard.credit.referenceTable'),
+      title: t('dashboard.credits.referenceTable'),
       key: 'referenceTable',
     },
     {
-      title: t('dashboard.credit.amount'),
+      title: t('dashboard.credits.amount'),
       key: 'amount',
     },
     {
@@ -73,4 +92,12 @@ const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
 };
 
 const columns = createColumns();
+
+/** On page change, load data */
+async function handlePageChange(page: number) {
+  if (!loading.value) {
+    await paymentsStore.fetchCreditTransactions(page, PAGINATION_LIMIT);
+    currentPage.value = page;
+  }
+}
 </script>

@@ -1,18 +1,30 @@
 import { defineStore } from 'pinia';
 
-const config = useRuntimeConfig();
-
 export const usePaymentsStore = defineStore('payments', {
   state: () => ({
+    customerPortalUrl: '',
     credit: {} as CreditInterface,
     creditPackages: [] as CreditPackageInterface[],
-    creditTransactions: [] as CreditTransactionInterface[],
+    creditTransactions: {
+      items: [] as CreditTransactionInterface[],
+      total: 0,
+    },
     activeSubscription: {} as SubscriptionInterface,
     subscriptions: [] as SubscriptionInterface[],
     subscriptionPackages: [] as SubscriptionPackageInterface[],
-    invoices: [] as InvoiceInterface[],
+    invoices: {
+      items: [] as InvoiceInterface[],
+      total: 0,
+    },
+    priceList: [] as Array<any>,
   }),
   getters: {
+    hasCustomerPortalUrl(state) {
+      return Array.isArray(state.customerPortalUrl) && state.customerPortalUrl.length > 0;
+    },
+    hasCredits(state) {
+      return state.credit && state.credit?.balance;
+    },
     hasCreditPackages(state) {
       return Array.isArray(state.creditPackages) && state.creditPackages.length > 0;
     },
@@ -22,21 +34,40 @@ export const usePaymentsStore = defineStore('payments', {
     hasInvoices(state) {
       return Array.isArray(state.invoices) && state.invoices.length > 0;
     },
+    getActiveSubscriptionPackage(state) {
+      return state.subscriptionPackages.find(
+        item => item.id === state.activeSubscription.package_id
+      );
+    },
   },
   actions: {
     resetData() {
       this.credit = {} as CreditInterface;
       this.creditPackages = [] as CreditPackageInterface[];
-      this.creditTransactions = [] as CreditTransactionInterface[];
+      this.creditTransactions.items = [] as CreditTransactionInterface[];
+      this.creditTransactions.total = 0;
       this.activeSubscription = {} as SubscriptionInterface;
       this.subscriptions = [] as SubscriptionInterface[];
       this.subscriptionPackages = [] as SubscriptionPackageInterface[];
-      this.invoices = [] as InvoiceInterface[];
+      this.invoices.items = [] as InvoiceInterface[];
+      this.invoices.total = 0;
     },
-
     /**
      * Fetch wrappers
      */
+    /** GET Customer portal URL */
+    async getCustomerPortalURL() {
+      if (!this.hasCustomerPortalUrl || isCacheExpired(LsCacheKeys.CUSTOMER_PORTAL_URL)) {
+        await this.fetchCustomerPortalURL();
+      }
+    },
+
+    /** GET Credits */
+    async getCredits() {
+      if (!this.hasCredits || isCacheExpired(LsCacheKeys.CREDITS)) {
+        await this.fetchCredits();
+      }
+    },
     /** GET Credit Packages */
     async getCreditPackages() {
       if (!this.hasCreditPackages || isCacheExpired(LsCacheKeys.CREDIT_PACKAGES)) {
@@ -63,8 +94,25 @@ export const usePaymentsStore = defineStore('payments', {
      * API calls
      */
 
+    /** API Customer portal URL */
+    async fetchCustomerPortalURL() {
+      try {
+        const res = await $api.get<CreditResponse>(endpoints.customerPortalUrl);
+
+        this.credit = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.CREDITS, Date.now().toString());
+      } catch (error: any) {
+        this.credit = {} as CreditInterface;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+
     /** API Credit */
-    async fetchCredit() {
+    async fetchCredits() {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -74,6 +122,9 @@ export const usePaymentsStore = defineStore('payments', {
         const res = await $api.get<CreditResponse>(endpoints.credit(dataStore.projectUuid));
 
         this.credit = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.CREDITS, Date.now().toString());
       } catch (error: any) {
         this.credit = {} as CreditInterface;
 
@@ -98,22 +149,28 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Credit transactions */
-    async fetchCreditTransactions() {
+    async fetchCreditTransactions(page: number = 1, limit: number = PAGINATION_LIMIT) {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
 
       try {
+        const params: Record<string, string | number> = {
+          page,
+          limit,
+        };
+
         const res = await $api.get<CreditTransactionsResponse>(
           endpoints.creditTransactions(dataStore.projectUuid),
-          PARAMS_ALL_ITEMS
+          params
         );
 
-        this.creditTransactions = res.data.items;
+        this.creditTransactions.items = res.data.items;
+        this.creditTransactions.total = res.data.total;
       } catch (error: any) {
-        this.creditTransactions = [] as CreditTransactionInterface[];
-
+        this.creditTransactions.items = [] as CreditTransactionInterface[];
+        this.creditTransactions.total = 0;
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
@@ -179,24 +236,31 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Invoices */
-    async fetchInvoices() {
+    async fetchInvoices(page: number = 1, limit: number = PAGINATION_LIMIT) {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
 
       try {
+        const params: Record<string, string | number> = {
+          page,
+          limit,
+        };
+
         const res = await $api.get<InvoiceResponse>(
           endpoints.invoices(dataStore.projectUuid),
-          PARAMS_ALL_ITEMS
+          params
         );
 
-        this.invoices = res.data.items;
+        this.invoices.items = res.data.items;
+        this.invoices.total = res.data.total;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.INVOICES, Date.now().toString());
       } catch (error: any) {
-        this.invoices = [] as InvoiceInterface[];
+        this.invoices.items = [] as InvoiceInterface[];
+        this.invoices.total = 0;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
@@ -205,6 +269,7 @@ export const usePaymentsStore = defineStore('payments', {
 
     /** API Stripe credit session URL */
     async fetchCreditSessionUrl(packageId: number) {
+      const config = useRuntimeConfig();
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -226,6 +291,7 @@ export const usePaymentsStore = defineStore('payments', {
 
     /** API Stripe subscription session URL */
     async fetchSubscriptionSessionUrl(packageId: number) {
+      const config = useRuntimeConfig();
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -245,15 +311,28 @@ export const usePaymentsStore = defineStore('payments', {
       return null;
     },
 
-    /** API Stripe subscribe */
-    async stripeSubscribe() {
+    /** API Product */
+    async fetchProductPriceList() {
       try {
-        const res = await $api.post<GeneralResponse<string>>(endpoints.stripeWebhook);
-        console.log(res.data);
+        const res = await $api.get<GeneralItemsResponse<any>>(endpoints.productPrice());
+
+        this.priceList = res.data.items;
+      } catch (error: any) {
+        this.priceList = [];
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+    async fetchProductPrice(productId: number): Promise<any> {
+      try {
+        const res = await $api.get<GeneralResponse<any>>(endpoints.productPrice(productId));
+        return res.data;
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      return null;
     },
   },
 });

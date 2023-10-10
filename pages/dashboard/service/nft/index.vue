@@ -8,6 +8,11 @@
 
         <template #info>
           <n-space :size="32" align="center">
+            <n-button class="rounded" size="small" @click="modalCostsVisible = true">
+              <span class="icon-credits text-xl mr-2"></span>
+              {{ $t('dashboard.credits.checkPrice') }}
+            </n-button>
+
             <IconInfo v-if="$i18n.te('w3Warn.nft.new')" @click="showModalW3Warn = true" />
           </n-space>
         </template>
@@ -32,6 +37,18 @@
       <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
         {{ $t('w3Warn.nft.new') }}
       </W3Warn>
+
+      <Modal v-model:show="modalCostsVisible" title="Estimated cost">
+        <PaymentEstimatedCosts
+          description="Description"
+          :prices="[
+            { chain: 'Polygon', credits: 20 },
+            { chain: 'Moonbeam', credits: 30 },
+            { chain: 'Astar', credits: 40 },
+          ]"
+          @confirm="modalCostsVisible = false"
+        />
+      </Modal>
     </slot>
   </Dashboard>
 </template>
@@ -40,10 +57,13 @@
 const $i18n = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
+const paymentsStore = usePaymentsStore();
 const collectionStore = useCollectionStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 const modalNewCollectionVisible = ref<boolean | null>(false);
+const modalCostsVisible = ref<boolean>(false);
+
 let collectionInterval: any = null as any;
 
 useHead({

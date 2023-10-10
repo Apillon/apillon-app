@@ -1,4 +1,4 @@
-import { DiscreteApiOptions, GlobalThemeOverrides, MessageProviderProps } from 'naive-ui';
+import { GlobalThemeOverrides, MessageProviderProps } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 
 type MessageThemeOverrides = NonNullable<MessageProviderProps['themeOverrides']>;
