@@ -156,6 +156,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
+
 const props = defineProps({
   env: { type: Number, default: 0 },
 });
@@ -166,6 +168,7 @@ const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
 
 const $i18n = useI18n();
 const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const websiteStore = useWebsiteStore();
@@ -272,7 +275,12 @@ async function deploy(env: number) {
  * */
 function deployWebsite(env: number) {
   deployEnv.value = env;
-  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) || !$i18n.te('w3Warn.hosting.deploy')) {
+  if (bucketStore.folder.items.length === 0) {
+    message.warning($i18n.t('error.NO_FILES_TO_DEPLOY'));
+  } else if (
+    sessionStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) ||
+    !$i18n.te('w3Warn.hosting.deploy')
+  ) {
     deploy(env);
   } else {
     modalW3WarnVisible.value = true;
