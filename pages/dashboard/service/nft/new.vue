@@ -14,9 +14,20 @@
           </n-space>
         </slot>
         <template #info>
-          <Badge icon="nft/moonbeam">
-            <NuxtIcon name="nft/astar_logo" class="icon-auto ml-2" filled />
-          </Badge>
+          <n-space :size="32" align="center">
+            <PaymentEstimatedCosts
+              description="Description"
+              :prices="[
+                { chain: 'Polygon', credits: 20 },
+                { chain: 'Moonbeam', credits: 30 },
+                { chain: 'Astar', credits: 40 },
+              ]"
+            />
+
+            <Badge icon="nft/moonbeam">
+              <NuxtIcon name="nft/astar_logo" class="icon-auto ml-2" filled />
+            </Badge>
+          </n-space>
         </template>
       </Heading>
     </template>

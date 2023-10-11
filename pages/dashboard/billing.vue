@@ -35,10 +35,10 @@
 
       <!-- Subscription packages -->
       <n-h5 prefix="bar">Subscription packages</n-h5>
-      <n-scrollbar
+      <div
         v-if="paymentStore.hasSubscriptionPackages"
-        class="has-scrollbar-bottom"
-        x-scrollable
+        v-drag-scroll.options="{ direction: 'x' }"
+        class="scrollable overflow-x-auto pb-1"
       >
         <div class="flex gap-5">
           <PaymentCardPricing
@@ -50,7 +50,7 @@
             class="w-1/4 min-w-[18rem]"
           />
         </div>
-      </n-scrollbar>
+      </div>
 
       <!-- Invoices -->
       <n-h5 prefix="bar">{{ $t('dashboard.invoice.invoices') }}</n-h5>
@@ -134,7 +134,6 @@ onBeforeMount(() => {
 });
 
 onMounted(async () => {
-  paymentStore.getCredits();
   paymentStore.fetchActiveSubscription();
 
   await paymentStore.getCreditPackages();

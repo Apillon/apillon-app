@@ -23,7 +23,7 @@ export const usePaymentsStore = defineStore('payments', {
       return Array.isArray(state.customerPortalUrl) && state.customerPortalUrl.length > 0;
     },
     hasCredits(state) {
-      return state.credit && state.credit?.balance;
+      return state.credit?.balance;
     },
     hasCreditPackages(state) {
       return Array.isArray(state.creditPackages) && state.creditPackages.length > 0;
@@ -97,14 +97,14 @@ export const usePaymentsStore = defineStore('payments', {
     /** API Customer portal URL */
     async fetchCustomerPortalURL() {
       try {
-        const res = await $api.get<CreditResponse>(endpoints.customerPortalUrl);
+        const res = await $api.get<GeneralResponse<string>>(endpoints.customerPortalUrl);
 
-        this.credit = res.data;
+        this.customerPortalUrl = res.data;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.CREDITS, Date.now().toString());
       } catch (error: any) {
-        this.credit = {} as CreditInterface;
+        this.customerPortalUrl = '';
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));

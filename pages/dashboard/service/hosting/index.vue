@@ -8,6 +8,10 @@
 
         <template #info>
           <n-space :size="32" align="center">
+            <PaymentEstimatedCosts
+              description="Description"
+              :prices="[{ chain: 'Crust', credits: 50 }]"
+            />
             <IconInfo v-if="$i18n.te('w3Warn.hosting.upload')" @click="modalW3WarnVisible = true" />
           </n-space>
         </template>
