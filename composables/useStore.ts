@@ -1,5 +1,6 @@
 export default function useStore() {
   const dataStore = useDataStore();
+  const storageStore = useStorageStore();
   const bucketStore = useBucketStore();
   const fileStore = useFileStore();
   const ipnsStore = useIpnsStore();
@@ -16,6 +17,7 @@ export default function useStore() {
   }
 
   function clearStorage() {
+    storageStore.resetData();
     bucketStore.resetData();
     fileStore.resetData();
     ipnsStore.resetData();

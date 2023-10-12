@@ -183,16 +183,6 @@ export function fileExpiration(
   return expiredAtDate.toLocaleDateString('en-us', options);
 }
 
-/** Bucket - calculate additional data */
-export function addBucketAdditionalData(bucket: BucketInterface): BucketInterface {
-  return {
-    ...bucket,
-    sizeMb: bytesToMb(bucket.size || 0),
-    maxSizeMb: bytesToMb(bucket.maxSize),
-    percentage: storagePercantage(bucket.size || 0, bucket.maxSize),
-  };
-}
-
 /**
  * Error messages
  */
@@ -265,8 +255,8 @@ export function isFeatureEnabled(feature: Feature | string, userRoles: number[])
 
 /** Check if any of elements contains class ${ON_COLUMN_CLICK_OPEN_CLASS}, which means this column is clickable */
 export function canOpenColumnCell(path: EventTarget[]) {
-  return path.some((item: EventTarget) =>
-    (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
+  return path.some(
+    (item: EventTarget) => (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
   );
 }
 

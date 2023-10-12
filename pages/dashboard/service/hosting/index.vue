@@ -41,6 +41,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_NEW);
 
@@ -54,6 +55,7 @@ useHead({
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await storageStore.getStorageInfo();
       await websiteStore.getWebsites();
       getWebsiteQuota();
 

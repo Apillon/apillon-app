@@ -56,9 +56,10 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
+const $i18n = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
-const { uploadFiles, fileAlreadyOnFileList } = useUpload();
+const { uploadFiles, fileAlreadyOnFileList, fileTooBig } = useUpload();
 
 const fileNum = ref<number>(0);
 const uploadFileList = ref<Array<FileListItemType>>([]);
@@ -84,8 +85,10 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
     onFinish,
     onError,
   };
-
-  if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
+  if (fileTooBig(uploadFileList.value, fileListItem)) {
+    message.warning($i18n.t('validation.fileTooBig', { name: file.name }));
+    onError();
+  } else if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
     onError();
   } else {
     addFileToListAndUpload(fileListItem);
@@ -104,7 +107,10 @@ function uploadDirectoryRequest({ file, onError, onFinish }: NUploadCustomReques
     onError,
   };
 
-  if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
+  if (
+    fileAlreadyOnFileList(uploadFileList.value, fileListItem) ||
+    fileTooBig(uploadFileList.value, fileListItem)
+  ) {
     onError();
   } else {
     addFileToListAndUpload(fileListItem);
@@ -124,14 +130,16 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
   uploadFileList.value.push(fileListItem);
 
   if (uploadFileList.value.length === 1) {
-    uploadInterval.value = setInterval(() => {
+    uploadInterval.value = setInterval(async () => {
       if (fileNum.value === uploadFileList.value.length) {
         /** When all files are on file list, start uploading files */
         try {
-          uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
-        } catch (error) {
+          await uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+        } catch (error: ApiError | ReferenceError | TypeError | any) {
           /** Show error message */
           message.error(userFriendlyMsg(error));
+
+          uploadFileList.value = [];
         }
 
         /** Clear interval, upload started */

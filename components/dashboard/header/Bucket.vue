@@ -20,11 +20,9 @@
 
     <template #info>
       <StorageProgress
-        :key="bucketStore.active.uploadedSize || 0"
-        class="w-1/2"
-        :percentage="bucketStore.active.percentage"
-        :size="bucketStore.active.uploadedSize || 0"
-        :max-size="bucketStore.active.maxSize"
+        :key="storageStore.info.usedStorage"
+        :size="storageStore.info.usedStorage"
+        :max-size="storageStore.info.availableStorage"
       />
     </template>
 
@@ -36,4 +34,9 @@
 
 <script lang="ts" setup>
 const bucketStore = useBucketStore();
+const storageStore = useStorageStore();
+
+onMounted(() => {
+  storageStore.getStorageInfo();
+});
 </script>

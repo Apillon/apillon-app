@@ -54,6 +54,7 @@ const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
+const storageStore = useStorageStore();
 const settingsStore = useSettingsStore();
 
 const showModalW3Warn = ref<boolean>(false);
@@ -113,14 +114,11 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       title: $i18n.t('storage.used'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
-        return h(
-          StorageProgress,
-          {
-            size: row.size,
-            maxSize: row.maxSize,
-            percentage: row.percentage,
-          },
-          ''
+        return (
+          formatBytes(row?.size || 0) +
+          ' (' +
+          storagePercentage(row?.size || 0, storageStore.info.availableStorage) +
+          '%)'
         );
       },
     },

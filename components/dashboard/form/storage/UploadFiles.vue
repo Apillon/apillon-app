@@ -160,9 +160,10 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
+const $i18n = useI18n();
 const message = useMessage();
 const bucketStore = useBucketStore();
-const { uploadFiles, fileAlreadyOnFileList, folderName } = useUpload();
+const { uploadFiles, fileAlreadyOnFileList, fileTooBig, folderName } = useUpload();
 
 const fileListExpanded = ref<boolean>(true);
 
@@ -205,8 +206,10 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
     onFinish,
     onError,
   };
-
-  if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
+  if (fileTooBig(bucketStore.uploadFileList, fileListItem)) {
+    message.warning($i18n.t('validation.fileTooBig', { name: file.name }));
+    onError();
+  } else if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
     onError();
   } else {
     bucketStore.uploadFileList.push(fileListItem);
