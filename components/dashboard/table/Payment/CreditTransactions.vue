@@ -63,22 +63,22 @@ const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
         return datetimeToDateAndTime(row?.createTime || '');
       },
     },
-    {
-      title: t('general.status'),
-      key: 'active',
-      render(row) {
-        return h(
-          NTag,
-          { type: row.status === 5 ? 'success' : 'default', round: true, bordered: false },
-          {
-            default: () =>
-              row.status === 5
-                ? h('strong', { class: 'text-black' }, t('general.active'))
-                : h('strong', { class: 'text-white' }, t('general.notActive')),
-          }
-        );
-      },
-    },
+    // {
+    //   title: t('general.status'),
+    //   key: 'active',
+    //   render(row) {
+    //     return h(
+    //       NTag,
+    //       { type: row.status === 5 ? 'success' : 'default', round: true, bordered: false },
+    //       {
+    //         default: () =>
+    //           row.status === 5
+    //             ? h('strong', { class: 'text-black' }, t('general.active'))
+    //             : h('strong', { class: 'text-white' }, t('general.notActive')),
+    //       }
+    //     );
+    //   },
+    // },
     // {
     //   title: '',
     //   key: 'view',
