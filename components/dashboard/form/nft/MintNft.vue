@@ -103,7 +103,7 @@ watch(
   shown => {
     if (shown) {
       modalW3WarnShown.value = true;
-      sessionStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
     }
   }
 );
@@ -111,7 +111,7 @@ watch(
 async function deploy() {
   if (
     !modalW3WarnShown.value &&
-    !sessionStorage.getItem(LsW3WarnKeys.NFT_NEW) &&
+    !localStorage.getItem(LsW3WarnKeys.NFT_NEW) &&
     $i18n.te('w3Warn.nft.new')
   ) {
     modalW3WarnVisible.value = true;

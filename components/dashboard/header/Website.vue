@@ -21,6 +21,8 @@
 
     <template #info>
       <n-space :size="32" align="center">
+        <PaymentEstimatedCosts :service="ServiceTypeName.HOSTING" />
+
         <IconInfo @click="showModalW3Warn = true" />
       </n-space>
     </template>
@@ -50,12 +52,12 @@ const showModalW3Warn = ref<boolean>(false);
 onMounted(() => {
   if (
     websiteId.value &&
-    !sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) &&
+    !localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) &&
     $i18n.te('w3Warn.hosting.upload') &&
     bucketStore.folder.items.length === 0
   ) {
     showModalW3Warn.value = true;
-    sessionStorage.setItem(LsW3WarnKeys.HOSTING_NEW, Date.now().toString());
+    localStorage.setItem(LsW3WarnKeys.HOSTING_NEW, Date.now().toString());
   }
 });
 </script>

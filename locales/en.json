@@ -162,12 +162,25 @@
     "credits": {
       "amount": "Amount",
       "available": "available",
+      "category": "Category",
       "checkPrice": "Check price",
+      "confirmPrices": "I understand",
+      "cost": "Cost",
+      "createTime": "Created at",
+      "credits": "credits",
+      "description": "Description",
+      "estimatedCosts": "Estimated cost",
       "name": "Name",
       "product_id": "Product ID",
-      "referenceId": "Reference Id",
-      "referenceTable": "Reference Table",
-      "transactions": "Transactions"
+      "service": "Service",
+      "serviceDescription": "Service description",
+      "transactions": "Transactions",
+      "yourFunds": "Your funds",
+      "services": {
+        "NFT": {
+          "description": null
+        }
+      }
     },
     "invoice": {
       "clientEmail": "Client Email",

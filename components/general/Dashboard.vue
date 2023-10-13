@@ -103,10 +103,15 @@ const props = defineProps({
   learnCollapsible: { type: Boolean, default: true },
 });
 
+const paymentsStore = usePaymentsStore();
+
 /** Delay animation */
 const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
+
+  /** Get Price list */
+  paymentsStore.getPriceList();
 });
 watch(
   () => props.loading,

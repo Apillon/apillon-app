@@ -15,14 +15,7 @@
         </slot>
         <template #info>
           <n-space :size="32" align="center">
-            <PaymentEstimatedCosts
-              description="Description"
-              :prices="[
-                { chain: 'Polygon', credits: 20 },
-                { chain: 'Moonbeam', credits: 30 },
-                { chain: 'Astar', credits: 40 },
-              ]"
-            />
+            <PaymentEstimatedCosts />
 
             <Badge icon="nft/moonbeam">
               <NuxtIcon name="nft/astar_logo" class="icon-auto ml-2" filled />

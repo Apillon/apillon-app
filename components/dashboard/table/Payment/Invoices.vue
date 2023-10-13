@@ -43,14 +43,6 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
       key: 'clientEmail',
     },
     {
-      title: t('dashboard.invoice.referenceId'),
-      key: 'referenceId',
-    },
-    {
-      title: t('dashboard.invoice.referenceTable'),
-      key: 'referenceTable',
-    },
-    {
       title: t('dashboard.invoice.subtotalAmount'),
       key: 'subtotalAmount',
       render(row) {

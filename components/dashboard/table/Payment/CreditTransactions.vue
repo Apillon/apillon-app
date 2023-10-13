@@ -39,21 +39,29 @@ const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
         return h('strong', {}, row.name);
       },
     },
+
     {
-      title: t('dashboard.credits.product_id'),
-      key: 'product_id',
+      title: t('dashboard.credits.category'),
+      key: 'category',
     },
     {
-      title: t('dashboard.credits.referenceId'),
-      key: 'referenceId',
+      title: t('dashboard.credits.service'),
+      key: 'service',
     },
     {
-      title: t('dashboard.credits.referenceTable'),
-      key: 'referenceTable',
+      title: t('dashboard.credits.description'),
+      key: 'description',
     },
     {
       title: t('dashboard.credits.amount'),
       key: 'amount',
+    },
+    {
+      title: t('dashboard.credits.createTime'),
+      key: 'createTime',
+      render(row) {
+        return datetimeToDateAndTime(row?.createTime || '');
+      },
     },
     {
       title: t('general.status'),

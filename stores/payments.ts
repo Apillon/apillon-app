@@ -16,7 +16,7 @@ export const usePaymentsStore = defineStore('payments', {
       items: [] as InvoiceInterface[],
       total: 0,
     },
-    priceList: [] as Array<any>,
+    priceList: [] as ProductPriceInterface[],
   }),
   getters: {
     hasCustomerPortalUrl(state) {
@@ -33,6 +33,9 @@ export const usePaymentsStore = defineStore('payments', {
     },
     hasInvoices(state) {
       return Array.isArray(state.invoices) && state.invoices.length > 0;
+    },
+    hasPriceList(state) {
+      return Array.isArray(state.priceList) && state.priceList.length > 0;
     },
     getActiveSubscriptionPackage(state) {
       return state.subscriptionPackages.find(
@@ -51,15 +54,18 @@ export const usePaymentsStore = defineStore('payments', {
       this.subscriptionPackages = [] as SubscriptionPackageInterface[];
       this.invoices.items = [] as InvoiceInterface[];
       this.invoices.total = 0;
+      this.priceList = [] as ProductPriceInterface[];
     },
+
     /**
      * Fetch wrappers
      */
     /** GET Customer portal URL */
-    async getCustomerPortalURL() {
+    async getCustomerPortalURL(): Promise<string> {
       if (!this.hasCustomerPortalUrl || isCacheExpired(LsCacheKeys.CUSTOMER_PORTAL_URL)) {
         await this.fetchCustomerPortalURL();
       }
+      return this.customerPortalUrl;
     },
 
     /** GET Credits */
@@ -87,6 +93,20 @@ export const usePaymentsStore = defineStore('payments', {
       if (!this.hasInvoices || isCacheExpired(LsCacheKeys.INVOICES)) {
         await this.fetchInvoices();
       }
+    },
+
+    /** GET Price list */
+    async getPriceList() {
+      if (!this.hasPriceList || isCacheExpired(LsCacheKeys.PRICE_LIST)) {
+        await this.fetchProductPriceList();
+      }
+    },
+
+    /** GET Prices for service */
+    async getServicePrices(serviceName: string) {
+      await this.getPriceList();
+
+      return this.priceList.filter(item => item.service === serviceName);
     },
 
     /**
@@ -149,7 +169,7 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Credit transactions */
-    async fetchCreditTransactions(page: number = 1, limit: number = PAGINATION_LIMIT) {
+    async fetchCreditTransactions(page = 1, limit: number = PAGINATION_LIMIT) {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -236,7 +256,7 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** API Invoices */
-    async fetchInvoices(page: number = 1, limit: number = PAGINATION_LIMIT) {
+    async fetchInvoices(page = 1, limit: number = PAGINATION_LIMIT) {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -314,9 +334,12 @@ export const usePaymentsStore = defineStore('payments', {
     /** API Product */
     async fetchProductPriceList() {
       try {
-        const res = await $api.get<GeneralItemsResponse<any>>(endpoints.productPrice());
+        const res = await $api.get<PriceListResponse>(endpoints.productPrice());
 
         this.priceList = res.data.items;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.PRICE_LIST, Date.now().toString());
       } catch (error: any) {
         this.priceList = [];
 
@@ -324,9 +347,9 @@ export const usePaymentsStore = defineStore('payments', {
         window.$message.error(userFriendlyMsg(error));
       }
     },
-    async fetchProductPrice(productId: number): Promise<any> {
+    async fetchProductPrice(productId: number): Promise<ProductPriceInterface | null> {
       try {
-        const res = await $api.get<GeneralResponse<any>>(endpoints.productPrice(productId));
+        const res = await $api.get<ProductPriceResponse>(endpoints.productPrice(productId));
         return res.data;
       } catch (error: any) {
         /** Show error message */

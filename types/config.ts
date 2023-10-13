@@ -50,7 +50,6 @@ declare global {
     apiUrl: string;
     oauthUrl: string;
     adminUrl: string;
-    stripePortal: string;
     captchaKey: string;
     githubId: string;
   }

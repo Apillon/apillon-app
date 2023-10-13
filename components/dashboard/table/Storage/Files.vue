@@ -521,7 +521,7 @@ async function handlePageChange(currentPage: number) {
  * If W3Warn has already been shown, show modal delete items, otherwise show warn first
  * */
 function deleteBucketItems() {
-  if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_ITEM_DELETE)) {
+  if (localStorage.getItem(LsW3WarnKeys.BUCKET_ITEM_DELETE)) {
     showModalDelete.value = true;
   } else {
     showModalW3Warn.value = true;
@@ -541,7 +541,7 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.BUCKET_ITEM_DELETE, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.BUCKET_ITEM_DELETE, Date.now().toString());
     }
   }
 );
@@ -578,7 +578,7 @@ const debouncedSearchFilter = debounce(getDirectoryContent, 500);
 async function getDirectoryContent(
   bucketUuid?: string,
   folderId?: number,
-  page: number = 1,
+  page = 1,
   orderBy?: string,
   order?: string
 ) {

@@ -20,10 +20,11 @@
     </p>
 
     <Btn
-      v-if="paymentStore.activeSubscription?.package_id === subscriptionPackage.id"
-      :href="config.public.stripePortal"
+      v-if="paymentsStore.activeSubscription?.package_id === subscriptionPackage.id"
       type="secondary"
       size="large"
+      :loading="loading"
+      @click="goToCustomerPortal()"
     >
       Change package
     </Btn>
@@ -81,15 +82,25 @@ defineProps({
 
 const loading = ref<boolean>(false);
 const config = useRuntimeConfig();
-const paymentStore = usePaymentsStore();
+const paymentsStore = usePaymentsStore();
 
 async function getSubscriptionSessionUrl(packageId: number) {
   loading.value = true;
-  const stripeSessionUrl = await paymentStore.fetchSubscriptionSessionUrl(packageId);
+  const stripeSessionUrl = await paymentsStore.fetchSubscriptionSessionUrl(packageId);
   loading.value = false;
 
   if (stripeSessionUrl) {
     window.open(stripeSessionUrl, '_self');
+  }
+}
+
+async function goToCustomerPortal() {
+  loading.value = true;
+  const customerPortalUrl = await paymentsStore.getCustomerPortalURL();
+  loading.value = false;
+
+  if (customerPortalUrl) {
+    window.open(customerPortalUrl, '_blank');
   }
 }
 </script>

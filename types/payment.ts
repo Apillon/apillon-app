@@ -34,6 +34,7 @@ declare global {
     credit_id: number;
     direction: number;
     product_id: number;
+    createTime: string;
     referenceId: string | null;
     referenceTable: string | null;
   }
@@ -73,8 +74,6 @@ declare global {
    */
   interface InvoiceInterface extends GeneralInterface {
     project_uuid: string;
-    referenceTable: string;
-    referenceId: number;
     clientEmail: string;
     clientName: string;
     currency: string;
@@ -82,4 +81,15 @@ declare global {
     totalAmount: number;
   }
   interface InvoiceResponse extends GeneralItemsResponse<InvoiceInterface> {}
+
+  /**
+   * Product price
+   */
+  interface ProductPriceInterface extends BaseObjectInterface {
+    category: string;
+    service: string;
+    currentPrice: number;
+  }
+  interface ProductPriceResponse extends GeneralResponse<ProductPriceInterface> {}
+  interface PriceListResponse extends GeneralItemsResponse<ProductPriceInterface> {}
 }

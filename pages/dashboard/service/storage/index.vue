@@ -75,7 +75,7 @@ async function geBucketQuota() {
  * If W3Warn has already been shown, show modal create new bucket, otherwise show warn first
  * */
 function createNewBucket() {
-  if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_NEW)) {
+  if (localStorage.getItem(LsW3WarnKeys.BUCKET_NEW)) {
     showModalNewBucket.value = true;
   } else {
     showModalW3Warn.value = true;
@@ -95,7 +95,7 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.BUCKET_NEW, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.BUCKET_NEW, Date.now().toString());
     }
   }
 );

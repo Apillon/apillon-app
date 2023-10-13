@@ -221,9 +221,6 @@ const Endpoints = {
   discordConnect: '/users/discord-connect/',
   discordDisconnect: '/users/discord-disconnect/',
 
-  /** Billing */
-  billing: '/billing/',
-
   /** Referral */
   referral: '/referral',
   referralGithub: '/referral/github/link',

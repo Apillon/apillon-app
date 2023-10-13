@@ -4,30 +4,26 @@
       <h4>{{ $t('dashboard.billing') }}</h4>
     </template>
     <slot>
-      <div v-if="paymentStore.activeSubscription?.package_id" class="grid grid-cols-billing gap-5">
+      <div v-if="paymentsStore.activeSubscription?.package_id" class="grid grid-cols-3 gap-5">
         <n-card :bordered="false" :title="t('dashboard.yourPlan')">
           <div class="flex items-center">
             <span class="icon-star text-xl text-primary mr-3"></span>
-            <h4>{{ paymentStore.getActiveSubscriptionPackage?.name }}</h4>
+            <h4>{{ paymentsStore.getActiveSubscriptionPackage?.name }}</h4>
           </div>
-          Edit plan:
-          <a :href="config.public.stripePortal" class="text-yellow" target="_blank">
-            Stripe portal
-          </a>
         </n-card>
         <n-card :bordered="false" :title="t('dashboard.payment.expiresOn')">
-          <h4>{{ datetimeToDate(paymentStore.activeSubscription.expiresOn) }}</h4>
+          <h4>{{ datetimeToDate(paymentsStore.activeSubscription.expiresOn) }}</h4>
         </n-card>
         <n-card :bordered="false" title="Credits">
-          <h4>{{ paymentStore.credit.balance }}</h4>
+          <h4>{{ paymentsStore.credit.balance }}</h4>
         </n-card>
       </div>
 
       <!-- Credit packages -->
       <n-h5 prefix="bar">Credit packages</n-h5>
-      <div v-if="paymentStore.hasCreditPackages" class="grid grid-cols-billing gap-5">
+      <div v-if="paymentsStore.hasCreditPackages" class="grid grid-cols-3 gap-5">
         <PaymentCreditPackage
-          v-for="(creditPackage, key) in paymentStore.creditPackages"
+          v-for="(creditPackage, key) in paymentsStore.creditPackages"
           :key="key"
           :credit-package="creditPackage"
         />
@@ -36,13 +32,13 @@
       <!-- Subscription packages -->
       <n-h5 prefix="bar">Subscription packages</n-h5>
       <div
-        v-if="paymentStore.hasSubscriptionPackages"
+        v-if="paymentsStore.hasSubscriptionPackages"
         v-drag-scroll.options="{ direction: 'x' }"
         class="scrollable overflow-x-auto pb-1"
       >
         <div class="flex gap-5">
           <PaymentCardPricing
-            v-for="(subscriptionPackage, key) in paymentStore.subscriptionPackages"
+            v-for="(subscriptionPackage, key) in paymentsStore.subscriptionPackages"
             :key="key"
             :subscription-package="subscriptionPackage"
             :plan="pricingPlans[subscriptionPackage.name] || {}"
@@ -69,8 +65,7 @@ import { useMessage } from 'naive-ui';
 const { t } = useI18n();
 const { query } = useRoute();
 const message = useMessage();
-const config = useRuntimeConfig();
-const paymentStore = usePaymentsStore();
+const paymentsStore = usePaymentsStore();
 
 useHead({
   title: t('dashboard.billing'),
@@ -134,16 +129,13 @@ onBeforeMount(() => {
 });
 
 onMounted(async () => {
-  paymentStore.fetchActiveSubscription();
+  paymentsStore.fetchActiveSubscription();
 
-  await paymentStore.getCreditPackages();
-  await paymentStore.getSubscriptionPackages();
+  await paymentsStore.getCreditPackages();
+  await paymentsStore.getSubscriptionPackages();
 
-  paymentStore.fetchCreditTransactions();
-  paymentStore.fetchInvoices();
+  paymentsStore.fetchCreditTransactions();
+  paymentsStore.fetchInvoices();
   loading.value = false;
-
-  const customerPortalUrl = await paymentStore.getCustomerPortalURL();
-  console.log(customerPortalUrl);
 });
 </script>

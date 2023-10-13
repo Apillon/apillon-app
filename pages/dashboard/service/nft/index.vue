@@ -80,7 +80,7 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
     }
   }
 );
