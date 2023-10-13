@@ -1,26 +1,33 @@
 <template>
   <Heading>
     <slot>
-      <n-space align="center" size="large">
+      <n-space align="center" size="large" :wrap="false">
         <NuxtLink :to="{ name: 'dashboard-service-hosting' }">
           <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
-        <h2>{{ websiteStore.active.name }}</h2>
+        <div>
+          <h2>{{ websiteStore.active.name }}</h2>
 
-        <n-space align="center" size="small" :wrap="false">
-          <span>{{ $t('hosting.website.uuid') }}:</span>
-          <n-ellipsis class="text-body align-bottom" :line-clamp="1">
-            {{ websiteStore.active.website_uuid }}
-          </n-ellipsis>
-          <button class="text-body" @click="copyToClipboard(websiteStore.active.website_uuid)">
-            <span class="icon-copy"></span>
-          </button>
-        </n-space>
+          <n-space align="center" size="small" :wrap="false">
+            <span>{{ $t('hosting.website.uuid') }}:</span>
+            <n-ellipsis class="text-body align-bottom" :line-clamp="1">
+              {{ websiteStore.active.website_uuid }}
+            </n-ellipsis>
+            <button class="text-body" @click="copyToClipboard(websiteStore.active.website_uuid)">
+              <span class="icon-copy"></span>
+            </button>
+          </n-space>
+        </div>
       </n-space>
     </slot>
 
     <template #info>
-      <n-space :size="32" align="center">
+      <n-space :size="32" align="center" :wrap="false">
+        <StorageProgress
+          :key="storageStore.info.usedStorage"
+          :size="storageStore.info.usedStorage"
+          :max-size="storageStore.info.availableStorage"
+        />
         <IconInfo @click="showModalW3Warn = true" />
       </n-space>
     </template>
@@ -41,6 +48,7 @@ const $i18n = useI18n();
 const { params } = useRoute();
 
 const bucketStore = useBucketStore();
+const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 
 /** Website ID from route */
@@ -48,6 +56,8 @@ const websiteId = ref<string>(`${params?.id || ''}`);
 const showModalW3Warn = ref<boolean>(false);
 
 onMounted(() => {
+  storageStore.getStorageInfo();
+
   if (
     websiteId.value &&
     !sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) &&

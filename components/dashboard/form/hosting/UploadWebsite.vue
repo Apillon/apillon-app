@@ -59,7 +59,7 @@ const props = defineProps({
 const $i18n = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
-const { uploadFiles, fileAlreadyOnFileList, fileTooBig } = useUpload();
+const { uploadFiles, fileAlreadyOnFileList, isEnoughSpaceInStorage } = useUpload();
 
 const fileNum = ref<number>(0);
 const uploadFileList = ref<Array<FileListItemType>>([]);
@@ -85,8 +85,9 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
     onFinish,
     onError,
   };
-  if (fileTooBig(uploadFileList.value, fileListItem)) {
-    message.warning($i18n.t('validation.fileTooBig', { name: file.name }));
+  console.log(file);
+  if (!isEnoughSpaceInStorage(uploadFileList.value, fileListItem)) {
+    message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
     onError();
   } else if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
     onError();
@@ -107,10 +108,10 @@ function uploadDirectoryRequest({ file, onError, onFinish }: NUploadCustomReques
     onError,
   };
 
-  if (
-    fileAlreadyOnFileList(uploadFileList.value, fileListItem) ||
-    fileTooBig(uploadFileList.value, fileListItem)
-  ) {
+  if (!isEnoughSpaceInStorage(uploadFileList.value, fileListItem)) {
+    message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+    onError();
+  } else if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
     onError();
   } else {
     addFileToListAndUpload(fileListItem);
@@ -132,6 +133,9 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
   if (uploadFileList.value.length === 1) {
     uploadInterval.value = setInterval(async () => {
       if (fileNum.value === uploadFileList.value.length) {
+        /** Clear interval, upload started */
+        clearInterval(uploadInterval.value);
+
         /** When all files are on file list, start uploading files */
         try {
           await uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
@@ -141,9 +145,6 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
 
           uploadFileList.value = [];
         }
-
-        /** Clear interval, upload started */
-        clearInterval(uploadInterval.value);
       }
     }, 10);
   }

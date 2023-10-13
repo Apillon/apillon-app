@@ -3,7 +3,7 @@ import { useMessage } from 'naive-ui';
 export default function useNft() {
   const $i18n = useI18n();
   const message = useMessage();
-  const { putRequests, fileAlreadyOnFileList, fileTooBig, uploadFiles } = useUpload();
+  const { putRequests, fileAlreadyOnFileList, isEnoughSpaceInStorage, uploadFiles } = useUpload();
   const collectionStore = useCollectionStore();
 
   const { vueApp } = useNuxtApp();
@@ -85,8 +85,8 @@ export default function useNft() {
 
   /** Upload file request - add file to list */
   function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-    if (fileTooBig([], file.file)) {
-      message.warning($i18n.t('validation.fileTooBig', { name: file.name }));
+    if (!isEnoughSpaceInStorage([], file.file)) {
+      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
 
       /** Mark file as failed */
       onError();
@@ -211,8 +211,8 @@ export default function useNft() {
       onError,
     };
 
-    if (fileTooBig(collectionStore.images, image)) {
-      message.warning($i18n.t('validation.fileTooBig', { name: file.name }));
+    if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
+      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
       onError();
     } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
       message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));

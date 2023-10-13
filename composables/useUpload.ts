@@ -60,12 +60,12 @@ export default function useUpload() {
   }
 
   /** Check if file is too big (out of space) */
-  function fileTooBig(uploadFileList: Array<FileListItemType>, file: FileListItemType) {
+  function isEnoughSpaceInStorage(uploadFileList: Array<FileListItemType>, file: FileListItemType) {
     const availableSize = storageStore.info.availableStorage - storageStore.info.usedStorage;
     totalFilesSize.value = uploadFileList.reduce((acc, item) => {
       return acc + item.size;
     }, file.size);
-    return totalFilesSize.value > availableSize;
+    return totalFilesSize.value < availableSize;
   }
 
   async function uploadFiles(
@@ -225,7 +225,7 @@ export default function useUpload() {
       bucketStore.fetchDirectoryContent();
 
       /** Refresh Storage info  */
-      storageStore.getStorageInfo();
+      storageStore.fetchStorageInfo();
     }, 500);
   }
 
@@ -301,7 +301,7 @@ export default function useUpload() {
   return {
     uploadFiles,
     fileAlreadyOnFileList,
-    fileTooBig,
+    isEnoughSpaceInStorage,
     onUploadError,
     folderName,
     putRequests,

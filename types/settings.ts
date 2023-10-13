@@ -93,15 +93,6 @@ declare global {
   interface ApiKeysResponse extends GeneralItemsResponse<ApiKeyInterface> {}
 
   /**
-   * Email configuration
-   */
-  interface FormEmailConfiguration {
-    email: boolean;
-    did: boolean;
-  }
-  interface EmailConfigurationResponse extends GeneralResponse<any> {}
-
-  /**
    * Oauth Link
    */
   interface OauthLinkInterface {

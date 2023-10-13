@@ -26,7 +26,7 @@ const $i18n = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
-const { fileAlreadyOnFileList, fileTooBig } = useUpload();
+const { fileAlreadyOnFileList, isEnoughSpaceInStorage } = useUpload();
 
 /** Upload height */
 const uploadHeight = computed(() => {
@@ -46,8 +46,8 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
     onError,
   };
 
-  if (fileTooBig(bucketStore.uploadFileList, fileListItem)) {
-    message.warning($i18n.t('validation.fileTooBig', { name: file.name }));
+  if (!isEnoughSpaceInStorage(bucketStore.uploadFileList, fileListItem)) {
+    message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
     onError();
   } else if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
     onError();
