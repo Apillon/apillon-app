@@ -58,13 +58,13 @@ const Endpoints = {
     return `/projects/${projectUuid}/invoices`;
   },
   productPrice: (productId?: string | number) => {
-    return productId ? `/payments/product/${productId}` : '/payments/product';
+    return productId ? `/payments/products/${productId}/price` : '/payments/products/price-list';
   },
   creditSessionUrl: '/payments/stripe/credit-session-url',
   subscriptionSessionUrl: '/payments/stripe/subscription-session-url',
   customerPortalUrl: '/payments/stripe/customer-portal-session-url',
-  creditPackages: '/payments/credit-packages',
-  subscriptionPackages: '/payments/subscription-packages',
+  creditPackages: '/payments/credit/packages',
+  subscriptionPackages: '/payments/subscription/packages',
 
   /** Services */
   serviceTypes: '/services/types',
