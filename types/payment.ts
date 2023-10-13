@@ -66,7 +66,10 @@ declare global {
   /**
    * Subscription Package
    */
-  interface SubscriptionPackageInterface extends BaseObjectInterface {}
+  interface SubscriptionPackageInterface extends BaseObjectInterface {
+    creditAmount: number;
+    price?: number;
+  }
   interface SubscriptionPackagesResponse extends GeneralResponse<SubscriptionPackageInterface[]> {}
 
   /**

@@ -37,7 +37,7 @@
         class="scrollable overflow-x-auto pb-1"
       >
         <div class="flex gap-5">
-          <PaymentCardPricing
+          <PaymentSubscriptionPackage
             v-for="(subscriptionPackage, key) in paymentsStore.subscriptionPackages"
             :key="key"
             :subscription-package="subscriptionPackage"
