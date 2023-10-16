@@ -105,7 +105,6 @@
 <script lang="ts" setup>
 import cardValidator from 'card-validator';
 import { textMarshal } from 'text-marshal';
-import { useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
 const loading = ref(false);

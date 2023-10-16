@@ -232,7 +232,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 const referralStore = useReferralStore();
 
 const router = useRouter();

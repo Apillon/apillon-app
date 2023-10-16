@@ -64,8 +64,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const emit = defineEmits(['submitSuccess']);
 const { deployCollection } = useNft();
 

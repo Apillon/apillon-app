@@ -60,8 +60,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const { t } = useI18n();
 const { query } = useRoute();
 const message = useMessage();

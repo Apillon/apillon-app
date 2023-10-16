@@ -145,7 +145,7 @@ function isRoleChangeAllowed(user: ProjectUserInterface) {
   return user.pendingInvitation !== 1 && isRoleDeletionAllowed(user);
 }
 function isRoleDeletionAllowed(user: ProjectUserInterface) {
-  return user.role_id !== DefaultUserRole.PROJECT_OWNER && settingsStore.isUserOwner();
+  return user.role_id !== DefaultUserRole.PROJECT_OWNER && dataStore.isUserOwner;
 }
 
 /** GET Users on project */

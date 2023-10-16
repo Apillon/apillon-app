@@ -24,8 +24,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   collectionUuid: { type: String, required: true },
 });

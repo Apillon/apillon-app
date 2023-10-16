@@ -156,8 +156,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   env: { type: Number, default: 0 },
 });

@@ -31,10 +31,10 @@
     :href="href || undefined"
     :target="href ? '_blank' : undefined"
   >
-    <NButton
+    <n-button
       v-bind="$attrs"
       :class="btnClass"
-      :type="type === 'secondary' ? 'primary' : type"
+      :type="type === 'secondary' ? 'primary' : (type as NButtonType)"
       :size="size"
       :disabled="disabled"
       :bordered="type === 'secondary' || type === 'error' ? true : false"
@@ -48,28 +48,23 @@
       <span :class="[innerClass, { 'opacity-0': loading }]">
         <slot />
       </span>
-    </NButton>
+    </n-button>
   </component>
 </template>
 
 <script lang="ts" setup>
+import { NButton } from 'naive-ui';
+import { Type as NButtonType, Size as ButtonSize } from 'naive-ui/es/button/src/interface';
+
+type ButtonType = NButtonType | 'secondary' | 'builders' | 'link';
+
 const props = defineProps({
   href: { type: String, default: null },
   to: { type: [String, Object], default: null },
   disabled: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
-
-  type: {
-    type: String,
-    validator: (value: string) =>
-      ['primary', 'secondary', 'builders', 'error', 'info', 'link'].includes(value),
-    default: 'primary',
-  },
-  size: {
-    type: String,
-    validator: (value: string) => ['tiny', 'small', 'medium', 'large'].includes(value),
-    default: 'medium',
-  },
+  type: { type: String as PropType<ButtonType>, default: 'primary' },
+  size: { type: String as PropType<ButtonSize>, default: 'medium' },
   innerClass: { type: [String, Array, Object], default: '' },
   ridged: { type: Boolean, default: false }, // Add ridge border effect instead of solid color
   borderless: { type: Boolean, default: false },
@@ -79,7 +74,6 @@ const props = defineProps({
 const emit = defineEmits(['click']);
 
 const NuxtLink = resolveComponent('NuxtLink');
-const NButton = resolveComponent('NButton');
 
 /** Disable animation on load */
 const isBtnLocked = ref<boolean>(!props.href && !props.to);

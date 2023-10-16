@@ -51,7 +51,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
 const props = defineProps({

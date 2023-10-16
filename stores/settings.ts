@@ -35,23 +35,6 @@ export const useSettingsStore = defineStore('settings', {
       return this.apiKeys.find(item => item.id === id) || ({} as ApiKeyInterface);
     },
 
-    isUser(type: number): boolean {
-      const dataStore = useDataStore();
-      return dataStore.myRoleOnProject === type;
-    },
-    isUserOwner(): boolean {
-      const dataStore = useDataStore();
-      return dataStore.myRoleOnProject === DefaultUserRole.PROJECT_OWNER;
-    },
-    isUserAdmin(): boolean {
-      const dataStore = useDataStore();
-      return dataStore.myRoleOnProject === DefaultUserRole.PROJECT_ADMIN;
-    },
-    isProjectUser(): boolean {
-      const dataStore = useDataStore();
-      return dataStore.myRoleOnProject === DefaultUserRole.PROJECT_USER;
-    },
-
     /**
      * Fetch wrappers
      */

@@ -26,6 +26,7 @@
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
+const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
 const showModalDeleteApiKey = ref<boolean>(false);
 const drawerUpdateApiKeyVisible = ref<boolean>(false);
@@ -114,7 +115,7 @@ const dropdownOptions = [
   {
     label: t('general.edit'),
     key: 'edit',
-    disabled: settingsStore.isProjectUser(),
+    disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
         drawerUpdateApiKeyVisible.value = true;
@@ -124,7 +125,7 @@ const dropdownOptions = [
   {
     label: t('general.delete'),
     key: 'delete',
-    disabled: settingsStore.isProjectUser(),
+    disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
         showModalDeleteApiKey.value = true;

@@ -73,8 +73,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   websiteId: { type: Number, default: 0 },
 });
@@ -85,7 +83,6 @@ const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
-const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -95,7 +92,7 @@ onMounted(async () => {
   if (props.websiteId) {
     website.value = await websiteStore.getWebsite(props.websiteId);
     formData.value.name = website.value.name;
-    formData.value.description = website.value.description;
+    formData.value.description = website.value.description || '';
   }
 });
 
@@ -125,7 +122,7 @@ const isQuotaReached = computed<boolean>(() => {
   return props.websiteId === 0 && websiteStore.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value || settingsStore.isProjectUser();
+  return isQuotaReached.value || dataStore.isProjectUser;
 });
 
 // Submit

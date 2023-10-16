@@ -31,7 +31,7 @@
         <!-- Delete project -->
         <template
           v-if="
-            settingsStore.isUserOwner() &&
+            dataStore.isUserOwner &&
             isFeatureEnabled(Feature.PROJECT_DELETE, authStore.getUserRoles())
           "
         >
@@ -47,7 +47,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const authStore = useAuthStore();
-const settingsStore = useSettingsStore();
+const dataStore = useDataStore();
 
 useHead({
   title: $i18n.t('dashboard.nav.projectSettings'),

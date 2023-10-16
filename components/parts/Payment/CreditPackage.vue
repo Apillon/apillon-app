@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 defineProps({
-  creditPackage: { type: Object as VuePropType<CreditPackageInterface>, required: true },
+  creditPackage: { type: Object as PropType<CreditPackageInterface>, required: true },
 });
 
 const loading = ref<boolean>(false);

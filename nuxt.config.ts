@@ -1,6 +1,7 @@
-import { DefaultLocaleMessageSchema } from '@nuxtjs/i18n/dist/runtime/composables';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import { getAppConfig } from './lib/utils';
-import en from './locales/en.json';
 
 const env = process.env.ENV || process.env.RUN_ENV || process.env.NODE_ENV;
 const appConfig: ConfigInterface = getAppConfig(env);
@@ -59,6 +60,26 @@ export default defineNuxtConfig({
     ],
     '@nuxtjs/i18n',
   ],
+
+  vite: {
+    plugins: [
+      AutoImport({
+        imports: [
+          {
+            'naive-ui': ['useMessage'],
+          },
+        ],
+      }),
+
+      Components({
+        resolvers: [NaiveUiResolver()],
+      }),
+    ],
+
+    optimizeDeps: {
+      include: process.env.NODE_ENV === 'development' ? ['naive-ui'] : [],
+    },
+  },
 
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',

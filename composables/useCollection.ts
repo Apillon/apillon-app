@@ -1,6 +1,6 @@
 export default function useCollection() {
   const $i18n = useI18n();
-  const settingsStore = useSettingsStore();
+  const dataStore = useDataStore();
   const collectionStore = useCollectionStore();
 
   const loading = ref<boolean>(false);
@@ -35,7 +35,7 @@ export default function useCollection() {
     return collectionStore.quotaReached === true;
   });
   const isFormDisabled = computed<boolean>(() => {
-    return isQuotaReached.value || settingsStore.isProjectUser();
+    return isQuotaReached.value || dataStore.isProjectUser;
   });
 
   const maxNft = computed(() => {

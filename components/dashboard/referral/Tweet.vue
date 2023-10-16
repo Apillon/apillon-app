@@ -48,7 +48,6 @@
 
 <script lang="ts" setup>
 import Tweet from 'vue-tweet';
-import { useMessage } from 'naive-ui';
 
 const emit = defineEmits(['success']);
 

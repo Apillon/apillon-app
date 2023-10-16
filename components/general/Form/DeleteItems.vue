@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 type Item =
   | ApiKeyInterface
   | BucketInterface

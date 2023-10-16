@@ -44,7 +44,7 @@
 import { ServiceTypeName } from '~/types/service';
 
 const props = defineProps({
-  service: { type: String as VuePropType<ServiceTypeName>, default: ServiceTypeName.NFT },
+  service: { type: String as PropType<ServiceTypeName>, default: ServiceTypeName.NFT },
 });
 
 const paymentsStore = usePaymentsStore();
