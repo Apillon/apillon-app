@@ -83,7 +83,7 @@
 
         <!-- Deploy to staging -->
         <div v-if="isUpload" class="flex items-center align-middle bg-primary">
-          <n-button
+          <SpendableEvent
             size="small"
             type="primary"
             :bordered="false"
@@ -93,7 +93,7 @@
           >
             <span class="icon-deploy text-xl mr-2"></span>
             {{ $t('hosting.deployStage') }}
-          </n-button>
+          </SpendableEvent>
           <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
             <n-button class="!p-0" size="small" type="primary" :bordered="false">
               <span class="icon-down text-3xl"></span>
