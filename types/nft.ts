@@ -111,7 +111,7 @@ declare global {
     description?: string;
   }
 
-  interface CollectionInterface {
+  interface CollectionInterface extends BaseObjectInterface {
     baseExtension: string;
     baseUri: string;
     bucketId: number;
@@ -121,19 +121,15 @@ declare global {
     collectionStatus: number;
     collection_uuid: string;
     contractAddress: string | null;
-    description: string;
     dropStart: number;
-    id: number;
     drop: boolean;
     isRevokable: boolean;
     isSoulbound: boolean;
     maxSupply: number;
     dropPrice: number;
-    name: string;
     dropReserve: number;
     royaltiesAddress: string;
     royaltiesFees: number;
-    status: number;
     symbol: string;
     transactionHash: string | null;
     updateTime: string;

@@ -277,6 +277,24 @@
 /** Layout */
 .n-layout {
   background-color: transparent;
+
+  &.has-scrollbar {
+    @apply -mr-3;
+    width: calc(100% + 0.75rem);
+
+    > .n-layout-scroll-container > .n-layout-content > .n-layout-scroll-container > .n-scrollbar {
+      @apply pr-3 -mr-3;
+    }
+  }
+
+  &.has-scrollbar-bottom {
+    @apply -mb-3;
+    height: calc(100% + 0.75rem);
+
+    > n-layout-scroll-container > n-layout-content > .n-layout-scroll-container > .n-scrollbar {
+      @apply pb-3 -mb-3;
+    }
+  }
 }
 .n-layout-sider {
   background-color: transparent;
@@ -543,6 +561,19 @@ body > .n-message-container {
   }
 }
 
+/** scrollbar */
+.n-scrollbar {
+  &.has-scrollbar {
+    @apply pr-3 -mr-3;
+    width: calc(100% + 0.75rem);
+  }
+
+  &.has-scrollbar-bottom {
+    @apply pb-3 -mb-3;
+    height: calc(100% + 0.75rem);
+  }
+}
+
 /** Select */
 .n-select {
   &.select-role {
@@ -592,6 +623,17 @@ body > .n-message-container {
   }
 }
 
+/** Table */
+.n-table {
+  &.plain {
+    th {
+      @apply bg-transparent;
+    }
+    td {
+      @apply text-body;
+    }
+  }
+}
 /** Tabs */
 .n-tabs {
   &--line-type {

@@ -1,5 +1,10 @@
 <template>
-  <NuxtLink :to="link" class="inline-block text-center">
+  <component
+    :is="authStore.loggedIn ? NuxtLink : 'a'"
+    :to="authStore.loggedIn ? link : undefined"
+    :href="!authStore.loggedIn ? 'https://apillon.io/' : undefined"
+    class="inline-block text-center"
+  >
     <img
       v-if="version < 1"
       :src="`/images/logo/apillon-beta@2x.png?ver='${version}`"
@@ -8,7 +13,7 @@
       :alt="alt"
     />
     <img v-else src="/images/logo/apillon.png" :width="width" :height="height" :alt="alt" />
-  </NuxtLink>
+  </component>
 </template>
 
 <script lang="ts" setup>
@@ -19,6 +24,7 @@ defineProps({
 });
 
 const authStore = useAuthStore();
+const NuxtLink = resolveComponent('NuxtLink');
 
 const link = computed(() => {
   return authStore.loggedIn ? { name: 'dashboard' } : { name: 'login' };

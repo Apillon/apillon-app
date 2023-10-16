@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
 
-const dataStore = useDataStore();
-
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
@@ -156,6 +154,8 @@ export const useCollectionStore = defineStore('collection', {
      */
     async fetchCollections(showLoader: boolean = true): Promise<CollectionInterface[]> {
       this.loading = showLoader;
+
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -240,6 +240,7 @@ export const useCollectionStore = defineStore('collection', {
     },
 
     async fetchCollectionQuota() {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }

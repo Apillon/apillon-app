@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
 const props = defineProps({
@@ -47,8 +47,8 @@ const props = defineProps({
 const $route = useRoute();
 const $i18n = useI18n();
 const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 const {
   loading,
   captchaKey,

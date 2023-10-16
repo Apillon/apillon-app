@@ -8,10 +8,10 @@ export enum ServiceType {
   HOSTING = 4,
 }
 export enum ServiceTypeName {
-  AUTHENTICATION = 'authentication',
-  STORAGE = 'storage',
-  NFT = 'nft',
-  HOSTING = 'hosting',
+  AUTHENTICATION = 'IDENTITY',
+  STORAGE = 'STORAGE',
+  NFT = 'NFT',
+  HOSTING = 'HOSTING',
 }
 
 /**
@@ -28,12 +28,8 @@ declare global {
   /**
    * Service Type
    */
-  interface ServiceTypeInterface {
-    id: number;
-    name: string;
-    description: string;
+  interface ServiceTypeInterface extends BaseObjectInterface {
     active: number;
-    status: number;
   }
   interface ServiceTypeItem {
     id: number;
@@ -50,24 +46,17 @@ declare global {
     serviceName: string;
     networkType: boolean;
   }
-  interface ServiceTypeInterface {
+  interface ServiceTypeInterface extends BaseObjectInterface {
     active: number;
-    name: string;
-    description: string;
-    id: number;
-    status: number;
   }
   interface ServiceTypeField extends ServiceTypeInterface {
     enabled: boolean;
   }
-  interface ServiceInterface {
+  interface ServiceInterface extends BaseObjectInterface {
     active: number;
-    name: string;
-    description: string;
     serviceType: string;
     serviceType_id: number;
     service_uuid: string;
-    status: number;
     key?: number;
     uptime?: string;
     updateTime?: string;

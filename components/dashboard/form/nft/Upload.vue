@@ -37,11 +37,13 @@
           {{ $t('nft.upload.infoImages') }}
         </p>
         <p class="mb-6">
-          <a href="https://wiki.apillon.io/build/2-web3-services.html" target="_blank">
-            <Btn type="builders" size="tiny">
-              {{ $t('general.learnMore') }}
-            </Btn>
-          </a>
+          <Btn
+            type="builders"
+            size="tiny"
+            href="https://wiki.apillon.io/build/2-web3-services.html"
+          >
+            {{ $t('general.learnMore') }}
+          </Btn>
         </p>
         <n-upload
           v-on-click-outside="stopLoader"
@@ -120,17 +122,17 @@
           {{ $t('nft.upload.infoFile') }}
         </p>
         <p class="mb-6 text-body whitespace-pre-line">
-          <a href="https://wiki.apillon.io/build/2-web3-services.html" target="_blank">
-            <Btn type="builders" size="tiny">
-              {{ $t('general.learnMore') }}
-            </Btn>
-          </a>
+          <Btn
+            type="builders"
+            size="tiny"
+            href="https://wiki.apillon.io/build/2-web3-services.html"
+          >
+            {{ $t('general.learnMore') }}
+          </Btn>
           <span class="inline-block mx-1">{{ $t('general.or') }}</span>
-          <a href="/files/example.csv" target="_blank">
-            <Btn type="builders" size="tiny">
-              {{ $t('nft.upload.downloadCsv') }}
-            </Btn>
-          </a>
+          <Btn type="builders" size="tiny" href="/files/example.csv">
+            {{ $t('nft.upload.downloadCsv') }}
+          </Btn>
         </p>
         <n-upload
           v-if="!collectionStore.hasCsvFile"

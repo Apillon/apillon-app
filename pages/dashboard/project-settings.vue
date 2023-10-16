@@ -23,11 +23,9 @@
         <n-h5 prefix="bar">{{ $t('project.owner') }}</n-h5>
         <TableProjectOwner />
         <div class="text-right">
-          <NuxtLink :to="{ name: 'dashboard-users-permissions' }">
-            <Btn type="builders">
-              {{ $t('dashboard.manageRoles') }}
-            </Btn>
-          </NuxtLink>
+          <Btn type="builders" :to="{ name: 'dashboard-users-permissions' }">
+            {{ $t('dashboard.manageRoles') }}
+          </Btn>
         </div>
 
         <!-- Delete project -->

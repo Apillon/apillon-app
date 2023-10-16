@@ -8,6 +8,8 @@
 
         <template #info>
           <n-space :size="32" align="center">
+            <PaymentEstimatedCosts :service="ServiceTypeName.HOSTING" />
+
             <IconInfo v-if="$i18n.te('w3Warn.hosting.upload')" @click="modalW3WarnVisible = true" />
           </n-space>
         </template>
@@ -74,7 +76,7 @@ async function getWebsiteQuota() {
  * If W3Warn has already been shown, show modal create new website, otherwise show warn first
  * */
 function createNewWebsite() {
-  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.upload')) {
+  if (localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.upload')) {
     showModalNewWebsite.value = true;
   } else {
     modalW3WarnVisible.value = true;

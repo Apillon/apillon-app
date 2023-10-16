@@ -278,7 +278,7 @@ function deployWebsite(env: number) {
   if (bucketStore.folder.items.length === 0) {
     message.warning($i18n.t('error.NO_FILES_TO_DEPLOY'));
   } else if (
-    sessionStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) ||
+    localStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) ||
     !$i18n.te('w3Warn.hosting.deploy')
   ) {
     deploy(env);

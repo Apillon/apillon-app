@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="hidden md:flex items-center">
-        <n-button class="w-10 px-1" size="small" type="tertiary" quaternary round>
+        <n-button class="w-10 px-1" size="small" type="tertiary" quaternary circle>
           <span class="icon-down text-3xl"></span>
         </n-button>
       </div>

@@ -393,7 +393,7 @@ watch(
   () => modalW3WarnVisible.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
     }
   }
 );
@@ -407,7 +407,7 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (!sessionStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
+    } else if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
       modalW3WarnVisible.value = true;
     } else {
       await createCollection();
