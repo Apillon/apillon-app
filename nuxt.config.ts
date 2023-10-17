@@ -145,14 +145,21 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    // add `vueI18n` option to `@nuxtjs/i18n` module options
-    vueI18n: {
-      legacy: false,
-      globalInjection: true,
-      locale: 'en',
-      messages: {
-        en: en as DefaultLocaleMessageSchema,
+    lazy: true,
+    langDir: 'locales',
+    defaultLocale: 'en',
+    strategy: 'no_prefix',
+    locales: [
+      {
+        code: 'en',
+        name: 'English',
+        file: 'en.json',
       },
+    ],
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_lang',
+      redirectOn: 'root',
     },
   },
 });

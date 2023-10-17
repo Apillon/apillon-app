@@ -221,10 +221,10 @@ const dropdownDeletedOptions = [
  * On deleteBucket click
  * If W3Warn has already been shown, show modal delete bucket, otherwise show warn first
  * */
-function deleteBucket(isCurrentRow: boolean = false) {
+function deleteBucket(isCurrentRow = false) {
   bucketsToDelete.value = isCurrentRow ? [currentRow.value] : bucketStore.selectedItems;
 
-  if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_DELETE)) {
+  if (localStorage.getItem(LsW3WarnKeys.BUCKET_DELETE)) {
     showModalDestroyBucket.value = true;
   } else {
     showModalW3Warn.value = true;
@@ -244,7 +244,7 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.BUCKET_DELETE, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.BUCKET_DELETE, Date.now().toString());
     }
   }
 );

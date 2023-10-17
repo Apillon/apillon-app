@@ -1,54 +1,49 @@
 <template>
   <div v-if="!authStore.loadingProfile" ref="mainContentRef" class="relative h-screen">
-    <n-message-provider
-      :to="messageRef"
-      placement="bottom-right"
-      :keep-alive-on-hover="true"
-      :duration="3000"
-      closable
-    >
-      <n-layout class="h-full" :has-sider="isLg" sider-placement="left">
-        <n-layout-sider
-          v-if="isLg"
-          :show-trigger="true"
-          :collapsed="sidebarCollapsed"
-          :collapsed-width="72"
-          collapse-mode="width"
-          :width="320"
-          :native-scrollbar="false"
-          bordered
-          style="max-height: 100vh"
-          @update-collapsed="onCollapse"
-        >
-          <Sidebar :collapsed="sidebarCollapsed" />
-        </n-layout-sider>
-        <n-layout>
-          <Header @toggleSidebar="toggleSidebar" />
-          <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
-            <div ref="messageRef" class="relative pt-8 px-4 sm:px-8">
-              <slot />
-            </div>
-            <!-- <CookieConsent /> -->
-          </n-scrollbar>
-        </n-layout>
+    <n-layout class="h-full" :has-sider="isLg" sider-placement="left">
+      <n-layout-sider
+        v-if="isLg"
+        :show-trigger="true"
+        :collapsed="sidebarCollapsed"
+        :collapsed-width="72"
+        collapse-mode="width"
+        :width="320"
+        :native-scrollbar="false"
+        bordered
+        style="max-height: 100vh"
+        @update-collapsed="onCollapse"
+      >
+        <Sidebar :collapsed="sidebarCollapsed" />
+      </n-layout-sider>
+      <n-layout>
+        <Header @toggleSidebar="toggleSidebar" />
+        <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
+          <div class="relative pt-8 px-4 sm:px-8">
+            <slot />
+          </div>
+          <!-- <CookieConsent /> -->
+        </n-scrollbar>
       </n-layout>
+    </n-layout>
 
-      <!-- Sidebar on mobile -->
-      <Sidebar v-if="!isLg" :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
-    </n-message-provider>
+    <!-- Sidebar on mobile -->
+    <Sidebar v-if="!isLg" :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useMessage } from 'naive-ui';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+
+/** Global messages */
+const message = useMessage();
+window.$message = message;
 
 const authStore = useAuthStore();
 const { isLg, isXl } = useScreen();
-const messageRef = ref<HTMLDivElement>();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
 const sidebarCollapsed = ref<boolean>(false);
-
 /**
  * Enable/disable body scroll
  */

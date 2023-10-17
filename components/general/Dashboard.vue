@@ -26,7 +26,11 @@
     </div>
 
     <div class="flex flex-auto w-full flex-col md:flex-row">
-      <n-layout :has-sider="instructionsAvailable && isMd" sider-placement="right">
+      <n-layout
+        class="has-scrollbar"
+        :has-sider="instructionsAvailable && isMd"
+        sider-placement="right"
+      >
         <n-layout-content>
           <n-scrollbar y-scrollable :style="scrollStyle">
             <div class="pt-8">
@@ -94,17 +98,20 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   loading: { type: Boolean, default: false },
   learnCollapsible: { type: Boolean, default: true },
 });
 
+const paymentsStore = usePaymentsStore();
+
 /** Delay animation */
 const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
+
+  /** Get Price list */
+  paymentsStore.getPriceList();
 });
 watch(
   () => props.loading,
@@ -118,9 +125,6 @@ function setLoadingAnimation(isLoading: boolean) {
     loadingAnimation.value = isLoading;
   }, delay);
 }
-
-/** Global messages */
-window.$message = useMessage();
 
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
@@ -141,10 +145,6 @@ const scrollStyle = computed(() => {
 /** Instructions load */
 const key = computed(() => {
   return name?.toString() || '';
-});
-
-onMounted(async () => {
-  // await getInstructions(key.value);
 });
 
 async function getInstructions(key: string) {

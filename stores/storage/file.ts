@@ -3,8 +3,6 @@ import { AnyJson } from '@polkadot/types-codec/types';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { typesBundleForPolkadot } from '@crustio/type-definitions';
 
-const bucketStore = useBucketStore();
-
 export const useFileStore = defineStore('file', {
   state: () => ({
     all: [] as Array<FileUploadInterface>,
@@ -68,6 +66,7 @@ export const useFileStore = defineStore('file', {
     },
 
     async fetchFileDetails(fileUuidOrCID: string): Promise<FileDetailsInterface> {
+      const bucketStore = useBucketStore();
       try {
         const url = endpoints.storageFileDetails(bucketStore.bucketUuid, fileUuidOrCID);
         const res = await $api.get<FileDetailsResponse>(url);
@@ -113,6 +112,7 @@ export const useFileStore = defineStore('file', {
     },
 
     async fetchAllFiles(fileStatus?: number, page?: number, limit?: number) {
+      const bucketStore = useBucketStore();
       this.loading = true;
 
       try {
@@ -158,6 +158,7 @@ export const useFileStore = defineStore('file', {
 
     /** Fetch deleted files */
     async fetchDeletedFiles() {
+      const bucketStore = useBucketStore();
       this.loading = true;
 
       try {

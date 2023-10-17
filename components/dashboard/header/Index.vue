@@ -42,8 +42,14 @@
             </a>
           </div>
         </div>
-        <!-- User profile -->
-        <HeaderProfile v-if="!authStore.isAdmin()" />
+
+        <n-space :size="32" align="center">
+          <!-- Credits -->
+          <PaymentCredits v-if="!authStore.isAdmin()" />
+
+          <!-- User profile -->
+          <HeaderProfile v-if="!authStore.isAdmin()" />
+        </n-space>
       </div>
 
       <!-- Admin notification -->
@@ -59,6 +65,8 @@
 </template>
 
 <script lang="ts" setup>
+import { NSpace } from 'naive-ui';
+
 const emit = defineEmits(['toggleSidebar']);
 const authStore = useAuthStore();
 </script>

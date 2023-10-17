@@ -1,16 +1,12 @@
 export {};
 declare global {
-  interface ReferralTask {
-    id: number;
-    name: string;
+  interface ReferralTask extends BaseObjectInterface {
     activeFrom?: string;
     activeTo?: string;
     data?: any;
-    description: string;
     maxCompleted?: any;
     realizations: Array<any>;
     reward: number;
-    status: number;
     type: number;
   }
   interface ReferralInterface {
@@ -32,7 +28,7 @@ declare global {
     termsAccepted: string;
   }
 
-  interface RewardsInterface {
+  interface RewardsInterface extends BaseObjectInterface {
     attributes: {
       name: string;
       id: number;
@@ -40,14 +36,10 @@ declare global {
       description: string;
       inputType: number;
     }[];
-    description: string;
-    id: number;
     imageUrl: string;
     maxOrderCount: number;
     orderCount: number;
-    name: string;
     price: number;
-    status: number;
     stock: number;
   }
 

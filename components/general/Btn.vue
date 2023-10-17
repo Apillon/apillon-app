@@ -1,9 +1,11 @@
 <template>
   <component
     :is="href ? 'a' : to ? NuxtLink : type === 'link' ? 'button' : NButton"
+    v-if="type === 'link' || (!to && !href)"
     v-bind="$attrs"
+    :to="to || undefined"
     :href="href || undefined"
-    :to="to"
+    :target="href ? '_blank' : undefined"
     :class="btnClass"
     :type="!href && !to ? (type === 'secondary' ? 'primary' : type) : ''"
     :size="size"
@@ -19,6 +21,34 @@
     <span :class="[innerClass, { 'opacity-0': loading }]">
       <slot />
     </span>
+  </component>
+  <component
+    :is="to ? NuxtLink : 'a'"
+    v-else
+    class="inline-block"
+    :class="{ 'w-full': size === 'large' }"
+    :to="to || undefined"
+    :href="href || undefined"
+    :target="href ? '_blank' : undefined"
+  >
+    <NButton
+      v-bind="$attrs"
+      :class="btnClass"
+      :type="type === 'secondary' ? 'primary' : type"
+      :size="size"
+      :disabled="disabled"
+      :bordered="type === 'secondary' || type === 'error' ? true : false"
+      :ghost="type === 'secondary' || type === 'error' ? true : false"
+      :quaternary="quaternary || type === 'builders' ? true : false"
+      @click="onClick"
+    >
+      <span v-if="loading" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <Spinner />
+      </span>
+      <span :class="[innerClass, { 'opacity-0': loading }]">
+        <slot />
+      </span>
+    </NButton>
   </component>
 </template>
 
@@ -64,8 +94,7 @@ const btnClass = computed(() => {
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,
       'opacity-60': props.disabled,
-      'hover-bounce':
-        !props.href && !props.to && props.type !== 'link' && props.type !== 'builders',
+      'hover-bounce': props.type !== 'link' && props.type !== 'builders',
       quaternary: props.quaternary || props.type === 'builders',
       locked: isBtnLocked.value,
     },

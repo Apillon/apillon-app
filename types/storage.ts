@@ -92,14 +92,10 @@ declare global {
   /**
    * Bucket
    */
-  interface BucketInterface {
-    id: number;
-    status: number;
+  interface BucketInterface extends BaseObjectInterface {
     bucket_uuid: string;
     project_uuid: string;
     bucketType: number;
-    name: string;
-    description: string;
     size: number | null;
     uploadedSize: number | null;
     CID: string | null;
@@ -154,11 +150,7 @@ declare global {
   /**
    * IPNS
    */
-  interface IpnsInterface {
-    id: number;
-    status: number;
-    name: string;
-    description: string | null;
+  interface IpnsInterface extends BaseObjectInterface {
     ipnsName: string | null;
     ipnsValue: string | null;
     link: string | null;
@@ -293,11 +285,7 @@ declare global {
   interface FormWebsiteDomain {
     domain?: string | null;
   }
-  interface WebsiteBaseInterface {
-    id: number;
-    status: number;
-    name: string;
-    description: string;
+  interface WebsiteBaseInterface extends BaseObjectInterface {
     website_uuid: string;
     domain: string | null;
     domainChangeDate: string | null;

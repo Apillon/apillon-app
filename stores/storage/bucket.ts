@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia';
 
-const dataStore = useDataStore();
-const ipnsStore = useIpnsStore();
-
 export const useBucketStore = defineStore('bucket', {
   state: () => ({
     allowFetch: true,
@@ -105,11 +102,13 @@ export const useBucketStore = defineStore('bucket', {
         this.folder.path = [];
         this.folder.selected = 0;
         this.folderSearch();
+
+        const ipnsStore = useIpnsStore();
         ipnsStore.resetData();
       }
     },
 
-    folderSearch(search: string = '', fetch: boolean = false) {
+    folderSearch(search = '', fetch = false) {
       this.folder.allowFetch = fetch;
       this.folder.search = search;
 
@@ -121,7 +120,7 @@ export const useBucketStore = defineStore('bucket', {
     /**
      * Fetch wrappers
      */
-    async getBuckets(statusDestroyed: boolean = false) {
+    async getBuckets(statusDestroyed = false) {
       if (
         (statusDestroyed &&
           (!this.hasDestroyedBuckets || isCacheExpired(LsCacheKeys.BUCKET_DESTROYED))) ||
@@ -155,7 +154,8 @@ export const useBucketStore = defineStore('bucket', {
     /**
      * API calls
      */
-    async fetchBuckets(statusDeleted: boolean = false) {
+    async fetchBuckets(statusDeleted = false) {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -226,6 +226,7 @@ export const useBucketStore = defineStore('bucket', {
     },
 
     async fetchBucketQuota() {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }

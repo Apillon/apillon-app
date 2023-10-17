@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia';
 
-const dataStore = useDataStore();
-const bucketStore = useBucketStore();
-const deploymentStore = useDeploymentStore();
 
 export const useWebsiteStore = defineStore('website', {
   state: () => ({
@@ -33,9 +30,13 @@ export const useWebsiteStore = defineStore('website', {
     setWebsiteId(id: number) {
       if (this.selected !== id) {
         this.selected = id;
+        
+        const deploymentStore = useDeploymentStore();
         deploymentStore.active = {} as DeploymentInterface;
         deploymentStore.staging = [] as Array<DeploymentInterface>;
         deploymentStore.production = [] as Array<DeploymentInterface>;
+
+        const bucketStore = useBucketStore();
         bucketStore.folder.items = [] as Array<BucketItemInterface>;
         bucketStore.folder.total = 0;
         bucketStore.folder.path = [];
@@ -66,6 +67,8 @@ export const useWebsiteStore = defineStore('website', {
      */
     async fetchWebsites() {
       this.loading = true;
+
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -97,6 +100,7 @@ export const useWebsiteStore = defineStore('website', {
     },
 
     async fetchWebsite(id: number): Promise<WebsiteInterface> {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -119,6 +123,7 @@ export const useWebsiteStore = defineStore('website', {
     },
 
     async fetchWebsiteQuota() {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }

@@ -14,11 +14,9 @@
     <n-space vertical>
       <div>
         <span class="text-sm text-body">{{ $t('auth.signup.madeMistake') }} </span>&nbsp;
-        <NuxtLink :to="{ name: 'register' }">
-          <Btn type="builders" size="tiny" inner-class="text-sm">
-            {{ $t('general.tryAgain') }}
-          </Btn>
-        </NuxtLink>
+        <Btn type="builders" size="tiny" inner-class="text-sm" :to="{ name: 'register' }">
+          {{ $t('general.tryAgain') }}
+        </Btn>
       </div>
     </n-space>
   </div>

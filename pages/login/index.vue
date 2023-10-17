@@ -41,19 +41,20 @@
     <n-space vertical>
       <div>
         <span class="text-sm text-body">{{ $t('auth.login.forgotPassword') }} </span>&nbsp;
-        <NuxtLink :to="{ name: 'login-reset-password' }">
-          <Btn type="builders" size="tiny" inner-class="text-sm">
-            {{ $t('auth.login.resetHere') }}
-          </Btn>
-        </NuxtLink>
+        <Btn
+          type="builders"
+          size="tiny"
+          inner-class="text-sm"
+          :to="{ name: 'login-reset-password' }"
+        >
+          {{ $t('auth.login.resetHere') }}
+        </Btn>
       </div>
       <div>
         <span class="text-sm text-body">{{ $t('auth.login.dontHaveAccount') }} </span>&nbsp;
-        <NuxtLink :to="{ name: 'register' }">
-          <Btn type="builders" size="tiny" inner-class="text-sm">
-            {{ $t('general.signup') }}
-          </Btn>
-        </NuxtLink>
+        <Btn type="builders" size="tiny" inner-class="text-sm" :to="{ name: 'register' }">
+          {{ $t('general.signup') }}
+        </Btn>
       </div>
     </n-space>
 

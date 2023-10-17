@@ -44,6 +44,7 @@ const collectionStore = useCollectionStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 const modalNewCollectionVisible = ref<boolean | null>(false);
+
 let collectionInterval: any = null as any;
 
 useHead({
@@ -79,7 +80,7 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
     }
   }
 );

@@ -41,6 +41,31 @@ const Endpoints = {
     return `/projects/${projectUuid}/uninvite-user`;
   },
 
+  /** Payments */
+  credit: (projectUuid: string) => {
+    return `/projects/${projectUuid}/credit`;
+  },
+  creditTransactions: (projectUuid: string) => {
+    return `/projects/${projectUuid}/credit/transactions`;
+  },
+  activeSubscription: (projectUuid: string) => {
+    return `/projects/${projectUuid}/active-subscription`;
+  },
+  subscriptions: (projectUuid: string) => {
+    return `/projects/${projectUuid}/subscriptions`;
+  },
+  invoices: (projectUuid: string) => {
+    return `/projects/${projectUuid}/invoices`;
+  },
+  productPrice: (productId?: string | number) => {
+    return productId ? `/payments/products/${productId}/price` : '/payments/products/price-list';
+  },
+  creditSessionUrl: '/payments/stripe/credit-session-url',
+  subscriptionSessionUrl: '/payments/stripe/subscription-session-url',
+  customerPortalUrl: '/payments/stripe/customer-portal-session-url',
+  creditPackages: '/payments/credit/packages',
+  subscriptionPackages: '/payments/subscription/packages',
+
   /** Services */
   serviceTypes: '/services/types',
   services: (id?: number | string) => {
@@ -55,17 +80,17 @@ const Endpoints = {
   /** Bucket */
   buckets: '/buckets/',
   bucketsQuota: '/buckets/quota-reached',
-  bucket: (buckeId: number | string) => {
-    return `/buckets/${buckeId}`;
+  bucket: (bucketId: number | string) => {
+    return `/buckets/${bucketId}`;
   },
-  bucketContent: (buckeId: number | string) => {
-    return `/buckets/${buckeId}/content`;
+  bucketContent: (bucketId: number | string) => {
+    return `/buckets/${bucketId}/content`;
   },
-  bucketRestore: (buckeId: number) => {
-    return `/buckets/${buckeId}/cancel-deletion`;
+  bucketRestore: (bucketId: number) => {
+    return `/buckets/${bucketId}/cancel-deletion`;
   },
-  bucketWebhook: (buckeId: number, webhookId?: number) => {
-    return webhookId ? `/buckets/${buckeId}/webhook/${webhookId}` : `/buckets/${buckeId}/webhook`;
+  bucketWebhook: (bucketId: number, webhookId?: number) => {
+    return webhookId ? `/buckets/${bucketId}/webhook/${webhookId}` : `/buckets/${bucketId}/webhook`;
   },
 
   /** Directories */
@@ -192,9 +217,6 @@ const Endpoints = {
   discordLink: '/users/discord-url/',
   discordConnect: '/users/discord-connect/',
   discordDisconnect: '/users/discord-disconnect/',
-
-  /** Billing */
-  billing: '/billing/',
 
   /** Referral */
   referral: '/referral',
