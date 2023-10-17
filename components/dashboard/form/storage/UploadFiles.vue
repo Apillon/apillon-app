@@ -235,6 +235,8 @@ async function upload() {
 
   try {
     await uploadFiles(props.bucketUuid, bucketStore.uploadFileList, wrapToDirectoryCheckbox.value);
+
+    setTimeout(() => bucketStore.fetchDirectoryContent(), 5000);
   } catch (error) {
     /** Show error message */
     message.error(userFriendlyMsg(error));
@@ -273,7 +275,7 @@ function removeFinishedFilesFromList() {
     bucketStore.uploadFileList.filter(file => file.status !== FileUploadStatusValue.FINISHED) || [];
 }
 
-/** Format folder name (remove dissallowed characters) */
+/** Format folder name (remove disallowed characters) */
 function handleFolderNameInput(value: string | [string, string]) {
   folderName.value = stripFolderName(value);
 }

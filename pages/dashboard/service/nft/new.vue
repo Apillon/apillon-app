@@ -339,8 +339,8 @@ async function openBucket(bucketUuid: string) {
   const bucket = await bucketStore.fetchBucket(bucketUuid);
   loadingBucket.value = false;
 
-  if (bucket && bucket.id) {
-    router.push(`/dashboard/service/storage/${bucket.id}`);
+  if (bucket && bucket.bucket_uuid) {
+    router.push(`/dashboard/service/storage/${bucket.bucket_uuid}`);
   }
 }
 </script>

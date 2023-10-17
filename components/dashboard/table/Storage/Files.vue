@@ -388,14 +388,12 @@ const columns = computed(() => {
   ];
 });
 
-const rowKey = (row: BucketItemInterface) => row.id;
-
+const rowKey = (row: BucketItemInterface) => row.uuid;
 const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
   checkedRowKeys.value = rowKeys;
-  const rowKeyIds = rowKeys.map(item => intVal(item));
 
   bucketStore.folder.selectedItems = bucketStore.folder.items.filter(item =>
-    rowKeyIds.includes(item.id)
+    rowKeys.includes(item.uuid)
   );
 };
 
@@ -437,7 +435,7 @@ function onItemOpen(row: BucketItemInterface) {
 function onFileOpen() {
   if (
     currentRow.value.type === BucketItemType.FILE &&
-    currentRow.value.fileStatus > FileStatus.UPLOADED_TO_S3
+    (currentRow.value?.fileStatus || 0) > FileStatus.UPLOADED_TO_S3
   ) {
     drawerFileDetailsVisible.value = true;
   } else {
@@ -449,13 +447,13 @@ function onFileOpen() {
 async function onFolderOpen(folder: BucketItemInterface) {
   /** Add subfolder to folder path */
   bucketStore.folder.path.push({
-    id: folder.id,
+    id: folder.uuid,
     name: folder.name,
   });
 
   /** Fetch data in reset search string */
   bucketStore.folderSearch();
-  await getDirectoryContent(bucketStore.bucketUuid, folder.id);
+  await getDirectoryContent(bucketStore.bucketUuid, folder.uuid);
   clearSorter();
 }
 
@@ -577,7 +575,7 @@ const debouncedSearchFilter = debounce(getDirectoryContent, 500);
 /** Function "Fetch directory content" wrapper  */
 async function getDirectoryContent(
   bucketUuid?: string,
-  folderId?: number,
+  folderUuid?: string,
   page = 1,
   orderBy?: string,
   order?: string
@@ -586,7 +584,7 @@ async function getDirectoryContent(
 
   await bucketStore.fetchDirectoryContent({
     bucketUuid,
-    folderId,
+    folderUuid,
     page,
     limit: PAGINATION_LIMIT,
     search: bucketStore.folder.search,
@@ -612,7 +610,9 @@ function checkUnfinishedFiles() {
   }, 30000);
 }
 function hasUnfinishedFiles(): boolean {
-  return bucketStore.folder.items.some(file => file.fileStatus < FileStatus.UPLOADED_TO_IPFS);
+  return bucketStore.folder.items.some(
+    file => file.fileStatus && file.fileStatus < FileStatus.UPLOADED_TO_IPFS
+  );
 }
 
 /** Additional classes if TableType is Hosting and RowType is File  */

@@ -12,7 +12,7 @@
         <span v-if="key === bucketStore.folder.path.length - 1">
           {{ folderPath.name }}
         </span>
-        <span v-else class="cursor-pointer" @click="goToFolder(folderPath.id)">
+        <span v-else class="cursor-pointer" @click="goToFolder(folderPath.uuid)">
           <span>{{ folderPath.name }}</span>
           <span class="inline-block mx-[1px]">/</span>
         </span>
@@ -28,25 +28,25 @@ const bucketStore = useBucketStore();
 function goToParentFolder() {
   if (bucketStore.folder.path.length > 1) {
     const parentFolder = bucketStore.folder.path.slice(-2)[0];
-    goToFolder(parentFolder.id);
+    goToFolder(parentFolder.uuid);
   } else {
-    goToFolder(0);
+    goToFolder();
   }
 }
 
-function goToFolder(parentFolderId?: number | undefined) {
+function goToFolder(parentFolderUuid?: string) {
   /** Select parent directory or root directory */
-  bucketStore.folder.selected = parentFolderId || 0;
+  bucketStore.folder.selected = parentFolderUuid || '';
 
   /** Refresh folder path */
-  if (parentFolderId === 0 || parentFolderId === undefined) {
+  if (!parentFolderUuid) {
     bucketStore.folder.path = [];
   } else {
-    const pathItemIndex = bucketStore.folder.path.findIndex(item => item.id === parentFolderId);
+    const pathItemIndex = bucketStore.folder.path.findIndex(item => item.uuid === parentFolderUuid);
     bucketStore.folder.path = bucketStore.folder.path.slice(0, pathItemIndex + 1);
   }
 
-  /** Reset search string and refesh folders */
+  /** Reset search string and refresh folders */
   bucketStore.folderSearch();
   bucketStore.fetchDirectoryContent();
 }

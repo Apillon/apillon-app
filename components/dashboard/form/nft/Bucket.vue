@@ -11,7 +11,7 @@
       </template>
 
       <!-- New bucket created -->
-      <template v-else-if="collectionStore.bucketId && loadingBucket === false">
+      <template v-else-if="collectionStore.bucketUuid && loadingBucket === false">
         <IconSuccessful class="text-4xl mb-7" />
         <h2>{{ $t('nft.metadata.titleBucketCreated') }}</h2>
         <p class="mb-9 text-body whitespace-pre-line">{{ $t('nft.metadata.infoBucketCreated') }}</p>
@@ -97,12 +97,12 @@ onMounted(async () => {
 
 const buckets = computed<Array<NSelectOption>>(() => {
   return bucketStore.items.map(item => {
-    return { label: item.name, value: item.id };
+    return { label: item.name, value: item.bucket_uuid };
   });
 });
 
 const formData = ref<{ bucket: any }>({
-  bucket: collectionStore.bucketId || null,
+  bucket: collectionStore.bucketUuid || null,
 });
 
 const rules: NFormRules = {
@@ -123,7 +123,7 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      collectionStore.bucketId = formData.value.bucket;
+      collectionStore.bucketUuId = formData.value.bucket;
       collectionStore.mintTab = NftMintTab.UPLOAD;
     }
   });
@@ -131,7 +131,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
 function onBucketCreated(bucket: BucketInterface) {
   modalNewBucketVisible.value = false;
-  collectionStore.bucketId = bucket.id;
+  collectionStore.bucketUuid = bucket.bucket_uuid;
 
   setTimeout(() => {
     loadingBucket.value = false;

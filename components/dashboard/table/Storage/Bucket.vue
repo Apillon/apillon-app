@@ -19,7 +19,10 @@
 
   <!-- Modal - Edit bucket -->
   <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
-    <FormStorageBucket :bucket-id="currentRow.id" @submit-success="showModalEditBucket = false" />
+    <FormStorageBucket
+      :bucket-uuid="currentRow.bucket_uuid"
+      @submit-success="showModalEditBucket = false"
+    />
   </modal>
 
   <!-- Modal - Destroy bucket -->
@@ -61,8 +64,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean | null>(false);
 const checkedRowKeys = ref<Array<string | number>>([]);
-const bucketsToDelete = ref<Array<BucketInterface>>([]);
-const StorageProgress = resolveComponent('StorageProgress');
+const bucketsToDelete = ref<BucketInterface[]>([]);
 const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered buckets */
@@ -156,14 +158,12 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: BucketItemInterface) => row.id;
+const rowKey = (row: BucketInterface) => row.bucket_uuid;
 const currentRow = ref<BucketInterface>(props.buckets[0]);
 
 const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
   checkedRowKeys.value = rowKeys;
-  const rowKeyIds = rowKeys.map(item => intVal(item));
-
-  bucketStore.selectedItems = bucketStore.items.filter(item => rowKeyIds.includes(item.id));
+  bucketStore.selectedItems = bucketStore.items.filter(item => rowKeys.includes(item.bucket_uuid));
 };
 
 /** On row click */
@@ -173,7 +173,7 @@ const rowProps = (row: BucketInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/storage/${row.id}` });
+        router.push({ path: `/dashboard/service/storage/${row.bucket_uuid}` });
       }
     },
   };
@@ -273,8 +273,10 @@ async function restoreBucket() {
   bucketStore.loading = true;
 
   try {
-    const response = await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.id));
-    removeDeletedBucketFromList(response.data.id);
+    const response = await $api.patch<BucketResponse>(
+      endpoints.bucketRestore(currentRow.value.bucket_uuid)
+    );
+    removeDeletedBucketFromList(response.data.bucket_uuid);
 
     message.success($i18n.t('form.success.restored.bucket'));
   } catch (error) {
@@ -287,8 +289,8 @@ async function restoreBucket() {
   }, 1000);
 }
 
-function removeDeletedBucketFromList(id: number) {
+function removeDeletedBucketFromList(uuid: string) {
   bucketStore.fetchBuckets();
-  bucketStore.destroyed = bucketStore.destroyed.filter(item => item.id !== id);
+  bucketStore.destroyed = bucketStore.destroyed.filter(item => item.bucket_uuid !== uuid);
 }
 </script>

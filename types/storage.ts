@@ -93,18 +93,15 @@ declare global {
    * Bucket
    */
   interface BucketInterface extends BaseObjectInterface {
+    bucketType: number;
     bucket_uuid: string;
     project_uuid: string;
-    bucketType: number;
     size: number | null;
-    uploadedSize: number | null;
-    CID: string | null;
-    IPNS: string | null;
   }
 
   interface FormNewBucket {
     bucketName: string;
-    bucketDescription: string;
+    bucketDescription: string | null;
   }
   interface BucketResponse extends GeneralResponse<BucketInterface> {}
   interface BucketsResponse extends GeneralItemsResponse<BucketInterface> {}
@@ -113,19 +110,15 @@ declare global {
   /**
    * Bucket item
    */
-  interface BucketItemInterface {
+  interface BucketItemInterface extends BaseObjectInterface {
     CID: string | null;
     contentType: string | null;
-    fileStatus: number;
-    file_uuid?: string;
-    id: number;
-    name: string;
+    directoryUuid: string | null;
+    fileStatus: number | null;
     link: string;
     size: number | null;
     type: number;
-    createTime: string;
-    updateTime: string;
-    parentDirectoryId?: number;
+    uuid: string;
   }
   interface FormFolder {
     name: string;
@@ -137,7 +130,7 @@ declare global {
 
   type FetchDirectoryParams = {
     bucketUuid?: string;
-    folderId?: number;
+    folderUuid?: string;
     page?: number;
     limit?: number;
     search?: string;
@@ -151,6 +144,7 @@ declare global {
    * IPNS
    */
   interface IpnsInterface extends BaseObjectInterface {
+    id: number;
     ipnsName: string | null;
     ipnsValue: string | null;
     link: string | null;
@@ -198,9 +192,9 @@ declare global {
 
   interface FileInterface {
     CID: string;
-    bucket_id: number;
+    bucket_uuid: string;
     contentType: string;
-    directory_id: number;
+    directory_uuid: string;
     link: string;
     file_uuid: string;
     id: number;
@@ -267,7 +261,7 @@ declare global {
   interface WebhookInterface {
     id: number;
     status: number;
-    bucket_id: number;
+    bucket_uuid: string;
     url: string;
     authMethod: string;
     param1: string;
@@ -305,8 +299,8 @@ declare global {
   interface DeploymentInterface {
     id: number;
     status: number;
-    website_id: number;
-    bucket_id: number;
+    website_uuid: string;
+    bucket_uuid: string;
     environment: number;
     deploymentStatus: number;
     cid: string | null;

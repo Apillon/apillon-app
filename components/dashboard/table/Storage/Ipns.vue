@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { NButton, NDropdown } from 'naive-ui';
 
 const $i18n = useI18n();
 const ipnsStore = useIpnsStore();

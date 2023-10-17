@@ -28,7 +28,7 @@
             <n-button
               size="small"
               :loading="ipnsStore.loading"
-              @click="ipnsStore.fetchIpns(bucketId)"
+              @click="ipnsStore.fetchIpns(bucketUuid)"
             >
               <span class="icon-refresh text-xl mr-2"></span>
               {{ $t('general.refresh') }}
@@ -70,7 +70,7 @@ const ipnsStore = useIpnsStore();
 const { pageLoading, initBucket } = useStorage();
 
 const { params } = useRoute();
-const bucketId = ref<number>(parseInt(`${params?.slug}`));
+const bucketUuid = ref<string>(`${params?.slug}`);
 const modalCreateIpnsVisible = ref<boolean>(false);
 
 useHead({

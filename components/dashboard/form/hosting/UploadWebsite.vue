@@ -85,7 +85,6 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
     onFinish,
     onError,
   };
-  console.log(file);
   if (!isEnoughSpaceInStorage(uploadFileList.value, fileListItem)) {
     message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
     onError();

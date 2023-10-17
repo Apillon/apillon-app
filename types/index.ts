@@ -41,12 +41,13 @@ declare global {
    * General Interfaces
    */
   interface GeneralInterface {
-    id: number;
     status: number;
   }
   interface BaseObjectInterface extends GeneralInterface {
     name: string;
     description: string | null;
+    createTime: string;
+    updateTime: string;
   }
 
   /**

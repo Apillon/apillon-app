@@ -42,8 +42,8 @@
 import { useMessage } from 'naive-ui';
 
 const props = defineProps({
-  bucketId: { type: Number, default: null },
-  parentFolderId: { type: Number, default: null },
+  bucketUuid: { type: String, default: null },
+  parentFolderUuid: { type: String, default: null },
 });
 const emit = defineEmits(['submitSuccess']);
 
@@ -71,12 +71,12 @@ const rules: NFormRules = {
   description: [],
 };
 
-/** Computed values - bucketId and parentFolderID (use fallback data from dataStore) */
-const bucketId = computed(() => {
-  return props.bucketId || bucketStore.selected;
+/** Computed values - bucketUuid and parentFolderID (use fallback data from dataStore) */
+const bucketUuid = computed(() => {
+  return props.bucketUuid || bucketStore.selected;
 });
-const parentFoldertId = computed(() => {
-  return props.parentFolderId || bucketStore.folder.selected;
+const folderUuid = computed(() => {
+  return props.parentFolderUuid || bucketStore.folder.selected;
 });
 
 /** Format credit card */
@@ -101,18 +101,11 @@ async function createFolder() {
   loading.value = true;
 
   try {
-    const params =
-      parentFoldertId.value > 0
-        ? {
-            ...formData.value,
-            bucket_id: bucketId.value,
-            parentDirectory_id: parentFoldertId.value,
-          }
-        : {
-            ...formData.value,
-            bucket_id: bucketId.value,
-          };
-    const res = await $api.post<CreateFolderResponse>(endpoints.directory(), params);
+    const res = await $api.post<CreateFolderResponse>(endpoints.directory(), {
+      ...formData.value,
+      bucket_uuid: bucketUuid.value,
+      parentDirectory_uuid: folderUuid.value,
+    });
 
     if (res.data) {
       message.success($i18n.t('form.success.created.directory'));

@@ -129,7 +129,7 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: CollectionInterface) => row.id;
+const rowKey = (row: CollectionInterface) => row.collection_uuid;
 const currentRow = ref<CollectionInterface>(props.collections[0]);
 
 /** On row click */

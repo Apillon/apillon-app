@@ -141,7 +141,7 @@
       </template>
       <slot>
         <FormDelete
-          :id="bucketStore.active.id"
+          :id="bucketStore.active.bucket_uuid"
           type="bucketContent"
           @submit-success="onAllFilesDeleted"
         />
@@ -163,7 +163,7 @@ const props = defineProps({
 });
 
 const { downloading, downloadSelectedFiles } = useFile();
-const { websiteId, refreshWebpage } = useHosting();
+const { websiteUuid, refreshWebpage } = useHosting();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
 
 const $i18n = useI18n();
@@ -242,7 +242,7 @@ function onAllFilesDeleted() {
 
   bucketStore.folder.items = [];
   bucketStore.folder.path = [];
-  bucketStore.folder.selected = 0;
+  bucketStore.folder.selected = '';
   bucketStore.folder.total = 0;
   bucketStore.folderSearch();
 }
@@ -251,18 +251,18 @@ function onAllFilesDeleted() {
 async function deploy(env: number) {
   deploying.value = true;
 
-  const deployment = await deploymentStore.deploy(websiteStore.active.id, env);
+  const deployment = await deploymentStore.deploy(websiteStore.active.website_uuid, env);
 
   /** After successful deploy redirect to next tab */
   if (deployment && env === DeploymentEnvironment.STAGING) {
     deploymentStore.staging = [] as Array<DeploymentInterface>;
     setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${websiteId.value}/staging`);
+      router.push(`/dashboard/service/hosting/${websiteUuid.value}/staging`);
     }, 1000);
   } else if (deployment && env >= DeploymentEnvironment.PRODUCTION) {
     deploymentStore.production = [] as Array<DeploymentInterface>;
     setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${websiteId.value}/production`);
+      router.push(`/dashboard/service/hosting/${websiteUuid.value}/production`);
     }, 1000);
   }
 
