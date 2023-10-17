@@ -188,9 +188,10 @@
       "currency": "Currency",
       "invoices": "Invoices",
       "referenceId": "Reference Id",
-      "referenceTable": "Reference Table",
+      "referenceTable": "Reference",
       "subtotalAmount": "Subtotal Amount",
-      "totalAmount": "Total Amount"
+      "totalAmount": "Total Amount",
+      "date": "Date"
     },
     "nav": {
       "access": "Access",
