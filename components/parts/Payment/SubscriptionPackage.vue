@@ -11,13 +11,14 @@
       <p class="mb-6 mt-0">forever</p>
     </template>
     <template v-else>
-      <h1>€{{ plan.price }}</h1>
-      <p class="mb-6 mt-0">per month</p>
+      <h1 v-if="plan.price">{{ plan.price }} €</h1>
+      <h1 v-else>Custom</h1>
+      <p class="mb-6 mt-0">per project/month</p>
     </template>
 
-    <p class="match-description mb-8">
+    <!-- <p class="match-description mb-8">
       {{ subscriptionPackage.description || plan.description }}
-    </p>
+    </p> -->
 
     <Btn
       v-if="paymentsStore.activeSubscription?.package_id === subscriptionPackage.id"
