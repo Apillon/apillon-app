@@ -10,6 +10,11 @@
             <span class="icon-star text-xl text-primary mr-3"></span>
             <h4>{{ paymentsStore.getActiveSubscriptionPackage?.name }}</h4>
           </div>
+          <div class="mt-4">
+            <Btn type="primary" size="large" :loading="loading" @click="goToCustomerPortal()">
+              <span>Edit billing details</span>
+            </Btn>
+          </div>
         </n-card>
         <n-card :bordered="false" :title="t('dashboard.payment.expiresOn')">
           <h4>{{ datetimeToDate(paymentsStore.activeSubscription.expiresOn) }}</h4>
@@ -136,4 +141,12 @@ onMounted(async () => {
   paymentsStore.fetchInvoices();
   loading.value = false;
 });
+
+async function goToCustomerPortal() {
+  const customerPortalUrl = await paymentsStore.getCustomerPortalURL();
+
+  if (customerPortalUrl) {
+    window.open(customerPortalUrl, '_blank');
+  }
+}
 </script>

@@ -82,6 +82,8 @@ declare global {
     currency: string;
     subtotalAmount: number;
     totalAmount: number;
+    referenceTable: string | null;
+    createTime: string | null;
   }
   interface InvoiceResponse extends GeneralItemsResponse<InvoiceInterface> {}
 
