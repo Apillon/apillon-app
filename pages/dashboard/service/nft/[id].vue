@@ -5,8 +5,7 @@
     </template>
 
     <slot>
-      <NftMintTabs v-if="collectionStore.active?.collectionStatus === CollectionStatus.CREATED" />
-      <n-space v-else class="pb-8" :size="32" vertical>
+      <n-space class="pb-8" :size="32" vertical>
         <!-- Actions -->
         <ActionsNftTransaction
           @mint="modalMintCollectionVisible = true"

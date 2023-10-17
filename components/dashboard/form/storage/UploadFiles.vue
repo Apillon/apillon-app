@@ -160,9 +160,10 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
+const $i18n = useI18n();
 const message = useMessage();
 const bucketStore = useBucketStore();
-const { uploadFiles, fileAlreadyOnFileList, folderName } = useUpload();
+const { uploadFiles, fileAlreadyOnFileList, isEnoughSpaceInStorage, folderName } = useUpload();
 
 const fileListExpanded = ref<boolean>(true);
 
@@ -205,8 +206,10 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
     onFinish,
     onError,
   };
-
-  if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
+  if (!isEnoughSpaceInStorage(bucketStore.uploadFileList, fileListItem)) {
+    message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+    onError();
+  } else if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
     onError();
   } else {
     bucketStore.uploadFileList.push(fileListItem);
@@ -225,13 +228,13 @@ function uploadSkipDirectory() {
   wrapToDirectoryCheckbox.value = false;
   upload();
 }
-function upload() {
+async function upload() {
   /** Clear last upload file list */
   removeFinishedFilesFromList();
   showModalWrapFolder.value = false;
 
   try {
-    uploadFiles(props.bucketUuid, bucketStore.uploadFileList, wrapToDirectoryCheckbox.value);
+    await uploadFiles(props.bucketUuid, bucketStore.uploadFileList, wrapToDirectoryCheckbox.value);
   } catch (error) {
     /** Show error message */
     message.error(userFriendlyMsg(error));

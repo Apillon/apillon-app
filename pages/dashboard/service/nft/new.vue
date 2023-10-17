@@ -188,7 +188,7 @@
               <span class="ml-2 text-sm text-white">{{ $t('nft.collection.mintNfts') }}</span>
             </template>
             <slot>
-              <FormNftMintNft @submit-success="collectionCreated = true" />
+              <FormNftDeploy @submit-success="collectionCreated = true" />
             </slot>
           </n-tab-pane>
         </n-tabs>
@@ -247,6 +247,7 @@ const $i18n = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
+const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
 const { transactionLink } = useNft();
 const { isFormDisabled, isQuotaReached } = useCollection();
@@ -268,6 +269,7 @@ onMounted(() => {
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await storageStore.getStorageInfo();
       await collectionStore.getCollections();
       await collectionStore.getCollectionQuota();
 

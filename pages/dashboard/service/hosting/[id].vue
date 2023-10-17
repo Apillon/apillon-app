@@ -30,6 +30,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const bucketStore = useBucketStore();
+const storageStore = useStorageStore();
 const { pageLoading, initWebsite } = useHosting();
 
 useHead({
@@ -38,5 +39,6 @@ useHead({
 
 onMounted(() => {
   initWebsite();
+  storageStore.getStorageInfo();
 });
 </script>

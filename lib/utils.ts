@@ -183,16 +183,6 @@ export function fileExpiration(
   return expiredAtDate.toLocaleDateString('en-us', options);
 }
 
-/** Bucket - calculate additional data */
-export function addBucketAdditionalData(bucket: BucketInterface): BucketInterface {
-  return {
-    ...bucket,
-    sizeMb: bytesToMb(bucket.size || 0),
-    maxSizeMb: bytesToMb(bucket.maxSize),
-    percentage: storagePercantage(bucket.size || 0, bucket.maxSize),
-  };
-}
-
 /**
  * Error messages
  */

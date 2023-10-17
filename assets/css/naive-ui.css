@@ -82,13 +82,6 @@
       @apply pl-4 sm:pl-8;
     }
   }
-  &.collapse-emailConfiguration {
-    .n-collapse-item.n-collapse-item--active
-      .n-collapse-item__header.n-collapse-item__header--active
-      .n-collapse-item-arrow {
-      transform: none;
-    }
-  }
 }
 
 /** Container */

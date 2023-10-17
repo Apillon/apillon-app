@@ -77,10 +77,6 @@ const Endpoints = {
     return key ? `/instructions/${key}` : '/instructions';
   },
 
-  /**
-   * Storage
-   */
-
   /** Bucket */
   buckets: '/buckets/',
   bucketsQuota: '/buckets/quota-reached',
@@ -110,6 +106,7 @@ const Endpoints = {
 
   /** Storage */
   storage: '/storage/',
+  storageInfo: '/storage/info',
   storageFileUpload: (bucketUuid: string, sessionUuid?: string) => {
     return sessionUuid
       ? `/storage/${bucketUuid}/file-upload/${sessionUuid}/end`

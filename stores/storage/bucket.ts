@@ -175,14 +175,10 @@ export const useBucketStore = defineStore('bucket', {
         dataStore.promises.buckets = req;
         const res = await req;
 
-        const items = res.data.items.map((bucket: BucketInterface) => {
-          return addBucketAdditionalData(bucket);
-        });
-
         if (statusDeleted) {
-          this.destroyed = items;
+          this.destroyed = res.data.items;
         } else {
-          this.items = items;
+          this.items = res.data.items;
         }
         this.total = res.data.total;
         this.loading = false;
@@ -215,8 +211,6 @@ export const useBucketStore = defineStore('bucket', {
     async fetchBucket(bucketId: number | string): Promise<BucketInterface> {
       try {
         const res = await $api.get<BucketResponse>(endpoints.bucket(bucketId));
-
-        this.active = addBucketAdditionalData(res.data);
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.BUCKET, Date.now().toString());
