@@ -89,6 +89,7 @@
             :bordered="false"
             :loading="deploying"
             :disabled="authStore.isAdmin()"
+            :service-name="ServicePriceName.HOSTING_DEPLOY_TO_STAGING"
             @click="deployWebsite(DeploymentEnvironment.STAGING)"
           >
             <span class="icon-deploy text-xl mr-2"></span>

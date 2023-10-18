@@ -1,8 +1,8 @@
 <template>
   <n-modal v-bind="$attrs" ref="modalRef" :mask-closable="false">
     <n-card
-      class="w3-warn !max-w-xl"
-      :title="title || 'SPENDING ALERT!'"
+      class="!max-w-xl"
+      :title="title || $t('dashboard.payment.spendingAlert')"
       :bordered="false"
       role="dialog"
       aria-modal="true"
@@ -17,27 +17,28 @@
       </template>
 
       <template #footer>
-        <template v-if="$slots.footer">
-          <slot name="footer" />
-        </template>
-        <template v-else>
-          <Btn type="info" size="large" @click="confirm">
-            <template v-if="btnText">
-              {{ btnText }}
-            </template>
-            <template v-else>
-              {{ $t('dashboard.buy') }}
-            </template>
-          </Btn>
-          <Btn type="info" size="large" @click="$emit('close')">
-            <template v-if="btnText">
-              {{ btnText }}
-            </template>
-            <template v-else>
-              {{ $t('dashboard.close') }}
-            </template>
-          </Btn>
-        </template>
+        <div class="flex gap-6">
+          <div class="w-1/2">
+            <Btn type="info" size="large" @click="$emit('close')">
+              <template v-if="btnCloseText">
+                {{ btnCloseText }}
+              </template>
+              <template v-else>
+                {{ $t('dashboard.payment.decline') }}
+              </template>
+            </Btn>
+          </div>
+          <div class="w-1/2">
+            <Btn type="primary" size="large" @click="confirm">
+              <template v-if="btnConfirmText">
+                {{ btnConfirmText }}
+              </template>
+              <template v-else>
+                {{ $t('dashboard.payment.buy') }}
+              </template>
+            </Btn>
+          </div>
+        </div>
       </template>
     </n-card>
   </n-modal>
@@ -49,7 +50,8 @@ import { NModal } from 'naive-ui';
 defineProps({
   title: { type: String, default: null },
   content: { type: String, default: '' },
-  btnText: { type: String, default: null },
+  btnCloseText: { type: String, default: null },
+  btnConfirmText: { type: String, default: null },
 });
 const emit = defineEmits(['submit', 'close']);
 

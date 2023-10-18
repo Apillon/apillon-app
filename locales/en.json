@@ -228,8 +228,11 @@
       "usersPermissions": "Users & permissions"
     },
     "payment": {
-      "title": "Payment",
-      "expiresOn": "Expires on:"
+      "buy": "Buy",
+      "expiresOn": "Expires on:",
+      "decline": "Decline",
+      "spendingAlert": "Spending ALERT!",
+      "title": "Payment"
     },
     "permissions": {
       "read": "Read permissions",

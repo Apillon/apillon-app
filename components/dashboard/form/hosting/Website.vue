@@ -54,19 +54,27 @@
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('hosting.website.create')" />
         <Btn
+          v-if="website"
           type="primary"
           class="w-full mt-2"
           :loading="loading"
           :disabled="isFormDisabled"
           @click="handleSubmit"
         >
-          <template v-if="website">
-            {{ $t('hosting.website.update') }}
-          </template>
-          <template v-else>
-            {{ $t('hosting.website.create') }}
-          </template>
+          {{ $t('hosting.website.update') }}
         </Btn>
+        <SpendableEvent
+          v-else
+          btn-type="btn"
+          type="primary"
+          class="w-full mt-2"
+          :loading="loading"
+          :disabled="isFormDisabled"
+          :service-name="ServicePriceName.HOSTING_WEBSITE"
+          @click="handleSubmit"
+        >
+          {{ $t('hosting.website.create') }}
+        </SpendableEvent>
       </n-form-item>
     </n-form>
   </div>
