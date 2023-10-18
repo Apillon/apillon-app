@@ -5,7 +5,7 @@
     ref="formRef"
     :model="formData"
     :rules="rules"
-    :disabled="!settingsStore.isUserOwner()"
+    :disabled="!dataStore.isUserOwner"
     @submit.prevent="handleSubmit"
   >
     <!--  Service name -->
@@ -32,7 +32,7 @@
     >
       <!-- Active services -->
       <n-collapse-item
-        v-for="(service, key) in formData.roles"
+        v-for="service in formData.roles"
         :key="service.service_uuid"
         :title="service.name"
         :name="service.service_uuid"
@@ -101,7 +101,7 @@
         type="secondary"
         class="w-full mt-8"
         :loading="loading"
-        :disabled="!settingsStore.isUserOwner()"
+        :disabled="!dataStore.isUserOwner"
         @click="handleSubmit"
       >
         {{ $t('form.generate') }}

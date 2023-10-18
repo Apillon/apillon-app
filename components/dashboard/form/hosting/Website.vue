@@ -54,27 +54,33 @@
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('hosting.website.create')" />
         <Btn
+          v-if="website"
           type="primary"
           class="w-full mt-2"
           :loading="loading"
           :disabled="isFormDisabled"
           @click="handleSubmit"
         >
-          <template v-if="website">
-            {{ $t('hosting.website.update') }}
-          </template>
-          <template v-else>
-            {{ $t('hosting.website.create') }}
-          </template>
+          {{ $t('hosting.website.update') }}
         </Btn>
+        <SpendableEvent
+          v-else
+          btn-type="btn"
+          type="primary"
+          class="w-full mt-2"
+          :loading="loading"
+          :disabled="isFormDisabled"
+          :service-name="ServicePriceName.HOSTING_WEBSITE"
+          @click="handleSubmit"
+        >
+          {{ $t('hosting.website.create') }}
+        </SpendableEvent>
       </n-form-item>
     </n-form>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   websiteId: { type: Number, default: 0 },
 });
@@ -85,7 +91,6 @@ const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
-const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -95,7 +100,7 @@ onMounted(async () => {
   if (props.websiteId) {
     website.value = await websiteStore.getWebsite(props.websiteId);
     formData.value.name = website.value.name;
-    formData.value.description = website.value.description;
+    formData.value.description = website.value.description || '';
   }
 });
 
@@ -125,7 +130,7 @@ const isQuotaReached = computed<boolean>(() => {
   return props.websiteId === 0 && websiteStore.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value || settingsStore.isProjectUser();
+  return isQuotaReached.value || dataStore.isProjectUser;
 });
 
 // Submit

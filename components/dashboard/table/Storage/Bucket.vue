@@ -42,7 +42,8 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
+import type { DataTableRowKey } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
   buckets: { type: Array<BucketInterface>, default: [] },
@@ -53,9 +54,9 @@ const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
+const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
-const settingsStore = useSettingsStore();
 
 const showModalW3Warn = ref<boolean>(false);
 const showModalEditBucket = ref<boolean>(false);
@@ -159,7 +160,7 @@ const columns = createColumns();
 const rowKey = (row: BucketItemInterface) => row.id;
 const currentRow = ref<BucketInterface>(props.buckets[0]);
 
-const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
+const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
   checkedRowKeys.value = rowKeys;
   const rowKeyIds = rowKeys.map(item => intVal(item));
 
@@ -183,7 +184,7 @@ const dropdownOptions = [
   {
     key: 'storageEdit',
     label: $i18n.t('storage.edit'),
-    disabled: settingsStore.isProjectUser(),
+    disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
         showModalEditBucket.value = true;

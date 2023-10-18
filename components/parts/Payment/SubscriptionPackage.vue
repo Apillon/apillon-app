@@ -86,7 +86,7 @@
 <script lang="ts" setup>
 defineProps({
   subscriptionPackage: {
-    type: Object as VuePropType<SubscriptionPackageInterface>,
+    type: Object as PropType<SubscriptionPackageInterface>,
     required: true,
   },
   plan: { type: Object as PropType<PricingPlan>, default: {} as PricingPlan },

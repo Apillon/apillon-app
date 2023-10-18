@@ -103,10 +103,17 @@ export const usePaymentsStore = defineStore('payments', {
     },
 
     /** GET Prices for service */
-    async getServicePrices(serviceName: string) {
+    async getServicePrices(service: string) {
       await this.getPriceList();
 
-      return this.priceList.filter(item => item.service === serviceName);
+      return this.priceList.filter(item => item.service === service);
+    },
+
+    /** GET Price for service */
+    async getServicePrice(serviceName: string) {
+      await this.getPriceList();
+
+      return this.priceList.find(item => item.name === serviceName);
     },
 
     /**

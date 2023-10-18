@@ -44,7 +44,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 import { textMarshal } from 'text-marshal';
 
 const message = useMessage();

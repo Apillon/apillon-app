@@ -60,7 +60,8 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
-import { NButton, NDropdown, NEllipsis, NSpace, NTooltip, useMessage } from 'naive-ui';
+import type { DataTableInst, DataTableRowKey, DataTableSortState } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
 
 const props = defineProps({
   type: {
@@ -86,7 +87,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalDelete = ref<boolean | null>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
 const modalIpnsPublishVisible = ref<boolean>(false);
-const tableRef = ref<NDataTableInst | null>(null);
+const tableRef = ref<DataTableInst | null>(null);
 const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
 const TableEllipsis = resolveComponent('TableEllipsis');
@@ -390,7 +391,7 @@ const columns = computed(() => {
 
 const rowKey = (row: BucketItemInterface) => row.id;
 
-const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
+const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
   checkedRowKeys.value = rowKeys;
   const rowKeyIds = rowKeys.map(item => intVal(item));
 
@@ -480,7 +481,7 @@ onUnmounted(() => {
 });
 
 /** Sort column - fetch directory content with order params  */
-async function handleSorterChange(sorter?: NDataTableSortState) {
+async function handleSorterChange(sorter?: DataTableSortState) {
   if (sorter && sorter.order === false) {
     await getDirectoryContent();
   } else if (sorter) {

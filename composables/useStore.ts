@@ -7,12 +7,14 @@ export default function useStore() {
   const websiteStore = useWebsiteStore();
   const deploymentStore = useDeploymentStore();
   const collectionStore = useCollectionStore();
+  const paymentsStore = usePaymentsStore();
   const settingsStore = useSettingsStore();
 
   function clearAll() {
     dataStore.resetData();
     clearStorage();
     clearCollection();
+    clearPayments();
     clearSettings();
   }
 
@@ -32,6 +34,10 @@ export default function useStore() {
 
   function clearCollection() {
     collectionStore.resetData();
+  }
+
+  function clearPayments() {
+    paymentsStore.resetData();
   }
 
   function clearSettings() {

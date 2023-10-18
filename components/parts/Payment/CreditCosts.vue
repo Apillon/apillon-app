@@ -26,13 +26,6 @@
         </tbody>
       </n-table>
 
-      <div class="bg-bg-lighter flex justify-between p-2 mt-8 rounded">
-        <span>{{ $t('dashboard.credits.yourFunds') }}</span>
-        <strong class="text-blue">
-          {{ paymentsStore.credit.balance }} {{ $t('dashboard.credits.credits') }}
-        </strong>
-      </div>
-
       <Btn class="my-8" type="secondary" size="large" @click="modalCostsVisible = false">
         {{ $t('dashboard.credits.confirmPrices') }}
       </Btn>
@@ -44,7 +37,7 @@
 import { ServiceTypeName } from '~/types/service';
 
 const props = defineProps({
-  service: { type: String as VuePropType<ServiceTypeName>, default: ServiceTypeName.NFT },
+  service: { type: String as PropType<ServiceTypeName>, default: ServiceTypeName.NFT },
 });
 
 const paymentsStore = usePaymentsStore();

@@ -44,8 +44,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   websiteId: { type: Number, default: 0 },
   domain: { type: String, default: '' },

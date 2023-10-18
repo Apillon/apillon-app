@@ -14,7 +14,6 @@
 
 <script lang="ts" setup>
 import { clearAllBodyScrollLocks } from 'body-scroll-lock';
-import { useMessage } from 'naive-ui';
 
 /** Global messages */
 const message = useMessage();

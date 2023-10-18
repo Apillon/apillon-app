@@ -74,8 +74,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   ipnsId: { type: Number, default: 0 },
 });
@@ -126,7 +124,7 @@ const rules: NFormRules = {
 };
 
 const isFormDisabled = computed<boolean>(() => {
-  return settingsStore.isProjectUser();
+  return dataStore.isProjectUser;
 });
 
 // Submit

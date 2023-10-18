@@ -114,8 +114,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   bucketId: { type: Number, required: true },
 });
