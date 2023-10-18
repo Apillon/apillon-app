@@ -119,6 +119,7 @@ declare global {
     size: number | null;
     type: number;
     uuid: string;
+    file_uuid?: string;
   }
   interface FormFolder {
     name: string;

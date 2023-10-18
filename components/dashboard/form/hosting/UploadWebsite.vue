@@ -59,6 +59,7 @@ const props = defineProps({
 const $i18n = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
+const bucketStore = useBucketStore();
 const { uploadFiles, fileAlreadyOnFileList, isEnoughSpaceInStorage } = useUpload();
 
 const fileNum = ref<number>(0);
@@ -138,6 +139,10 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
         /** When all files are on file list, start uploading files */
         try {
           await uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+
+          setTimeout(() => {
+            bucketStore.fetchDirectoryContent();
+          }, 5000);
         } catch (error: ApiError | ReferenceError | TypeError | any) {
           /** Show error message */
           message.error(userFriendlyMsg(error));

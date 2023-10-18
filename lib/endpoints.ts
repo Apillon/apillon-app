@@ -96,13 +96,13 @@ const Endpoints = {
   },
 
   /** Directories */
-  directory: (id?: number | string) => {
+  directory: (id?: string) => {
     return id ? `/directories/${id}` : '/directories';
   },
   directoryContent: '/directories/directory-content',
 
   /** File */
-  file: (key?: number | string) => {
+  file: (key?: string) => {
     return key ? `/files/${key}` : '/files';
   },
 

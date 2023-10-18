@@ -547,7 +547,7 @@
         "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
-        "directory": "Folder key has been deleted",
+        "directory": "Folder has been deleted",
         "domain": "Domain has been deleted",
         "file": "File has been deleted",
         "hosting": "Hosting has been deleted",
@@ -562,7 +562,7 @@
       },
       "restored": {
         "bucket": "Bucket has been restored",
-        "directory": "Folder key has been restored",
+        "directory": "Folder has been restored",
         "file": "File has been restored"
       },
       "updated": {
@@ -570,7 +570,7 @@
         "apiKeyRole": "Api key permission has been added",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
-        "directory": "Folder key has been updated",
+        "directory": "Folder has been updated",
         "domain": "Domain has been updated",
         "file": "File has been updated",
         "hosting": "Hosting has been updated",

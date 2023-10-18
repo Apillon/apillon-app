@@ -36,7 +36,7 @@ async function deleteItems() {
 
   props.items.forEach(async (item: Item) => {
     try {
-      const url = getUrl(getItemType(item), item.id);
+      const url = getUrl(getItemType(item), item);
 
       const req = $api.delete<DeleteResponse>(url);
       const res = await req;
@@ -57,24 +57,27 @@ async function deleteItems() {
       message.success($i18n.t('form.success.deleted.items'));
     }
 
-    loading.value = false;
     emit('submitSuccess');
+    loading.value = false;
   });
 }
 
 /** Get URL base on entity type */
-function getUrl(type: string, id: number) {
+function getUrl(type: string, item: Item) {
   switch (type) {
     case 'apiKey':
-      return endpoints.apiKey(id);
+      return endpoints.apiKey((item as ApiKeyInterface).id);
     case 'bucket':
-      return endpoints.bucket(id);
+      return endpoints.bucket((item as BucketInterface).bucket_uuid);
     case 'directory':
-      return endpoints.directory(id);
+      return endpoints.directory((item as BucketItemInterface).uuid);
     case 'file':
-      return endpoints.storageFileDelete(bucketStore.bucketUuid, id);
+      return endpoints.storageFileDelete(
+        bucketStore.bucketUuid,
+        (item as BucketItemInterface).uuid
+      );
     case 'ipns':
-      return endpoints.ipns(bucketStore.selected, id);
+      return endpoints.ipns(bucketStore.selected, (item as IpnsInterface).id);
     default:
       console.warn('Wrong type');
       return '';

@@ -116,6 +116,7 @@ export const useDeploymentStore = defineStore('deployment', {
         const params: Record<string, string | number | boolean | null> = {
           directDeploy: config.public.ENV === AppEnv.LOCAL,
           environment: env,
+          website_uuid: websiteUuid,
         };
         const deployment = await $api.post<DeploymentResponse>(
           endpoints.websiteDeploy(websiteUuid),

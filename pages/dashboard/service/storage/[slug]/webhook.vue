@@ -7,7 +7,7 @@
     <slot>
       <n-h5 prefix="bar" class="mb-8">{{ $t('storage.webhook') }}</n-h5>
 
-      <FormStorageWebhook class="max-w-xl" :bucket-id="bucketStore.selected" />
+      <FormStorageWebhook class="max-w-xl" :bucket-uuid="bucketStore.selected" />
     </slot>
   </Dashboard>
 </template>

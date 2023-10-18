@@ -447,7 +447,7 @@ function onFileOpen() {
 async function onFolderOpen(folder: BucketItemInterface) {
   /** Add subfolder to folder path */
   bucketStore.folder.path.push({
-    id: folder.uuid,
+    uuid: folder.uuid,
     name: folder.name,
   });
 
@@ -557,6 +557,9 @@ function onBucketItemsDeleted() {
 
   setTimeout(() => {
     getDirectoryContent();
+
+    /** Remove timestamp for deleted items */
+    sessionStorage.removeItem(LsCacheKeys.FILE_DELETED);
   }, 300);
 }
 
