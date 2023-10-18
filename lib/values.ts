@@ -51,6 +51,7 @@ export const LsCacheKeys = {
   REFERRAL: 'al_cache_referral',
   SERVICES: 'al_cache_services',
   SERVICE_TYPES: 'al_cache_service_types',
+  STORAGE_INFO: 'al_cache_storage_info',
   SUBSCRIPTION_PACKAGES: 'al_cache_subscription_packages',
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',

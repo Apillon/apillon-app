@@ -37,6 +37,10 @@ export enum FileUploadRequestFileStatus {
   ERROR_PINING_TO_CRUST = 101,
   ERROR_FILE_NOT_EXISTS_ON_S3 = 102,
   ERROR_BUCKET_FULL = 103,
+  ERROR_FILE_UPLOAD_REQUEST_DOES_NOT_EXISTS = 104,
+  ERROR_CREATING_FILE_OBJECT = 105,
+  ERROR_NOT_ENOUGH_STORAGE = 106,
+  ERROR_MAX_STORAGE_REACHED = 107,
 }
 
 export enum FileUploadStatusValue {
@@ -77,26 +81,30 @@ export enum DeploymentStatus {
 
 declare global {
   /**
+   * Storage
+   */
+  interface StorageInfoInterface {
+    availableStorage: number;
+    usedStorage: number;
+  }
+  interface StorageInfoResponse extends GeneralResponse<StorageInfoInterface> {}
+
+  /**
    * Bucket
    */
   interface BucketInterface extends BaseObjectInterface {
     bucket_uuid: string;
     project_uuid: string;
     bucketType: number;
-    maxSize: number;
     size: number | null;
     uploadedSize: number | null;
     CID: string | null;
     IPNS: string | null;
-    sizeMb?: number;
-    maxSizeMb?: number;
-    percentage?: number;
   }
 
   interface FormNewBucket {
     bucketName: string;
     bucketDescription: string;
-    bucketSize: number;
   }
   interface BucketResponse extends GeneralResponse<BucketInterface> {}
   interface BucketsResponse extends GeneralItemsResponse<BucketInterface> {}

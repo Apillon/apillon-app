@@ -54,29 +54,6 @@
         />
       </n-form-item>
 
-      <!--  Bucket Sizes -->
-      <n-form-item path="bucketSizes" :label="$t('form.label.bucketSize')">
-        <n-radio-group v-model:value="formData.bucketSize" name="bucketSize" class="w-full">
-          <n-grid :cols="2" :x-gap="32" :y-gap="32">
-            <n-gi v-for="(size, key) in bucketSizes" :key="key">
-              <!-- If option is disabled, show tooltip on hover -->
-              <n-tooltip v-if="size?.disabled" trigger="hover" :style="{ maxWidth: '220px' }">
-                <template #trigger>
-                  <n-radio-button
-                    :key="key"
-                    :value="size.value"
-                    :label="size.label"
-                    :disabled="true"
-                  />
-                </template>
-                {{ $t('dashboard.currentlyNotAvailable') }}
-              </n-tooltip>
-              <n-radio-button v-else :key="key" :value="size.value" :label="size.label" />
-            </n-gi>
-          </n-grid>
-        </n-radio-group>
-      </n-form-item>
-
       <!--  Form submit -->
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('form.createBucketAndContinue')" />
@@ -132,7 +109,6 @@ onMounted(async () => {
 const formData = ref<FormNewBucket>({
   bucketName: bucket.value?.name || '',
   bucketDescription: bucket.value?.description || '',
-  bucketSize: 5,
 });
 
 const rules: NFormRules = {
@@ -149,20 +125,7 @@ const rules: NFormRules = {
       trigger: 'input',
     },
   ],
-  bucketSize: [],
 };
-
-const bucketSizes: Array<NRadioOption> = [
-  {
-    value: 5,
-    label: $i18n.t('form.bucketSizes.5gb'),
-  },
-  {
-    value: 100,
-    label: $i18n.t('form.bucketSizes.100gb'),
-    disabled: true,
-  },
-];
 
 const isQuotaReached = computed<boolean>(() => {
   return props.bucketId === 0 && bucketStore.quotaReached === true;
@@ -200,7 +163,6 @@ async function createBucket() {
     bucketType: props.bucketType,
     name: formData.value.bucketName,
     description: formData.value.bucketDescription,
-    size: formData.value.bucketSize,
   };
 
   try {

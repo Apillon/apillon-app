@@ -5,7 +5,8 @@
       class="pb-8 min-h-[40px] box-content"
       justify="space-between"
       align="center"
-      :wrap="false"
+      :size="32"
+      :wrap="!isSm"
     >
       <!-- Title - left side -->
       <slot />
@@ -23,3 +24,7 @@
     <div class="border-b-1 border-bg-lighter"></div>
   </div>
 </template>
+
+<script lang="ts" setup>
+const { isSm } = useScreen();
+</script>

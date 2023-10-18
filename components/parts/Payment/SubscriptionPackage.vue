@@ -97,6 +97,9 @@ const loading = ref<boolean>(false);
 const paymentsStore = usePaymentsStore();
 
 async function getSubscriptionSessionUrl(packageId: number) {
+  if (paymentsStore.activeSubscription?.id) {
+    return await goToCustomerPortal();
+  }
   loading.value = true;
   const stripeSessionUrl = await paymentsStore.fetchSubscriptionSessionUrl(packageId);
   loading.value = false;

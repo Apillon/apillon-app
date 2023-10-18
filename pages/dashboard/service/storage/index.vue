@@ -8,6 +8,11 @@
 
         <template #info>
           <n-space :size="32" align="center">
+            <StorageProgress
+              :key="storageStore.info.usedStorage"
+              :size="storageStore.info.usedStorage"
+              :max-size="storageStore.info.availableStorage"
+            />
             <IconInfo @click="showModalW3Warn = true" />
           </n-space>
         </template>
@@ -46,6 +51,7 @@
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
+const storageStore = useStorageStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 const showModalNewBucket = ref<boolean | null>(false);
@@ -56,6 +62,7 @@ useHead({
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    await storageStore.getStorageInfo();
     await bucketStore.getBuckets();
     await geBucketQuota();
 

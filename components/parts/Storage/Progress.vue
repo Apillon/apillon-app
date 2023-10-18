@@ -10,7 +10,7 @@
       type="line"
       border-radius="3px"
       :height="4"
-      :percentage="percentage"
+      :percentage="storagePercentage(size, maxSize)"
       status="warning"
     >
       <span></span>
@@ -22,6 +22,5 @@
 defineProps({
   size: { type: Number, default: 0 },
   maxSize: { type: Number, default: 0 },
-  percentage: { type: Number, default: 0 },
 });
 </script>

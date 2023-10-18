@@ -57,48 +57,15 @@ const currentRow = ref<FileUploadInterface>({} as FileUploadInterface);
 
 /** File status */
 const fileStatus = ref<number | undefined>();
-const fileStatuses = ref<Array<NSelectOption>>([
-  {
-    value: FileUploadRequestFileStatus.SIGNED_URL_FOR_UPLOAD_GENERATED,
-    label: $i18n.t(
-      `storage.file.status.${FileUploadRequestFileStatus.SIGNED_URL_FOR_UPLOAD_GENERATED}`
-    ),
-  },
-  {
-    value: FileUploadRequestFileStatus.UPLOADED_TO_S3,
-    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.UPLOADED_TO_S3}`),
-  },
-  {
-    value: FileUploadRequestFileStatus.UPLOADED_TO_IPFS,
-    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.UPLOADED_TO_IPFS}`),
-  },
-  {
-    value: FileUploadRequestFileStatus.PINNED_TO_CRUST,
-    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.PINNED_TO_CRUST}`),
-  },
-  {
-    value: FileUploadRequestFileStatus.UPLOAD_COMPLETED,
-    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.UPLOAD_COMPLETED}`),
-  },
-  {
-    value: FileUploadRequestFileStatus.ERROR_UPLOADING_TO_IPFS,
-    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.ERROR_UPLOADING_TO_IPFS}`),
-  },
-  {
-    value: FileUploadRequestFileStatus.ERROR_PINING_TO_CRUST,
-    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.ERROR_PINING_TO_CRUST}`),
-  },
-  {
-    value: FileUploadRequestFileStatus.ERROR_FILE_NOT_EXISTS_ON_S3,
-    label: $i18n.t(
-      `storage.file.status.${FileUploadRequestFileStatus.ERROR_FILE_NOT_EXISTS_ON_S3}`
-    ),
-  },
-  {
-    value: FileUploadRequestFileStatus.ERROR_BUCKET_FULL,
-    label: $i18n.t(`storage.file.status.${FileUploadRequestFileStatus.ERROR_BUCKET_FULL}`),
-  },
-]);
+const fileStatuses = ref<Array<NSelectOption>>(
+  enumValues(FileUploadRequestFileStatus).map(value => {
+    return {
+      value,
+      label: $i18n.t(`storage.file.status.${value}`),
+    };
+  })
+);
+
 async function handleFilesStatusChange() {
   await getFiles();
 }
