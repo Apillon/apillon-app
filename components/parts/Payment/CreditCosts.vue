@@ -3,7 +3,7 @@
     <span class="icon-credits text-xl mr-2"></span>
     {{ $t('dashboard.credits.checkPrice') }}
   </n-button>
-  <Modal v-model:show="modalCostsVisible" :title="$t('dashboard.credits.estimatedCosts')">
+  <Modal v-model:show="modalCostsVisible" :title="$t('dashboard.credits.creditCosts')">
     <div>
       <p v-if="$te(`dashboard.credits.services.${service}.description`)" class="mb-8 text-body">
         {{ $t(`dashboard.credits.services.${service}.description`) }}
@@ -20,7 +20,7 @@
           <tr v-for="(price, key) in servicePrices" :key="key">
             <td>{{ price.description }}</td>
             <td class="text-right">
-              ~{{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
+              {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
             </td>
           </tr>
         </tbody>

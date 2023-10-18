@@ -15,7 +15,7 @@
         </slot>
         <template #info>
           <n-space :size="32" align="center">
-            <PaymentEstimatedCosts />
+            <PaymentCreditCosts />
 
             <Badge icon="nft/moonbeam">
               <NuxtIcon name="nft/astar_logo" class="icon-auto ml-2" filled />
