@@ -26,7 +26,7 @@ onMounted(() => {
   // Handler function for the message event from the oauth module
   handlerFunction.value = async event => {
     if (event.data.verified) {
-      oauthAuthToken.value = event.data.data.userData;
+      oauthAuthToken.value = event.data.authToken;
       // Close before proceeding
       childWindow.value?.close();
       await loginWithKilt();
