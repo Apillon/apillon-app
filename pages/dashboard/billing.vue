@@ -78,7 +78,7 @@ const pricingPlans: Record<string, PricingPlan> = {
     services: {
       storage: '3 GB Lifetime',
       bandwith: '20 GB Monthly',
-      credits: '120 Credits Lifetime',
+      credits: '1200 Credits Lifetime',
     },
     otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
@@ -89,7 +89,7 @@ const pricingPlans: Record<string, PricingPlan> = {
     services: {
       storage: '60 GB Lifetime',
       bandwith: '150 GB Monthly',
-      credits: '500 Credits Lifetime',
+      credits: '5000 Credits Lifetime',
     },
     otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
@@ -100,7 +100,7 @@ const pricingPlans: Record<string, PricingPlan> = {
     services: {
       storage: '300 GB Lifetime',
       bandwith: '750 GB Monthly',
-      credits: '2000 Credits Lifetime',
+      credits: '20000 Credits Lifetime',
     },
     otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },

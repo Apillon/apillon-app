@@ -228,7 +228,7 @@
       "usersPermissions": "Users & permissions"
     },
     "payment": {
-      "buy": "Buy",
+      "buy": "Proceed",
       "expiresOn": "Expires on:",
       "decline": "Decline",
       "spendingAlert": "Spending ALERT!",

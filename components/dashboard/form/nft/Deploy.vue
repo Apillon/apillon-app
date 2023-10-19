@@ -22,7 +22,7 @@
         </p>
       </div>
       <NftPreviewCards v-else>
-        <Btn class="max-w-lg w-full" type="primary" @click="deploy">
+        <Btn class="max-w-lg w-full" type="primary" @click="w3WarnAndDeploy">
           {{ $t('nft.collection.deploy') }}
         </Btn>
       </NftPreviewCards>
@@ -67,12 +67,13 @@
 import { useMessage } from 'naive-ui';
 
 const emit = defineEmits(['submitSuccess']);
-const { deployCollection } = useNft();
+const { deployCollection, getPriceServiceName } = useNft();
 
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
+const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
 const deployStatus = ref<number>(0);
@@ -93,8 +94,8 @@ function isStepAvailable(step: number) {
 }
 
 /** When user close W3Warn, allow him to create new collection */
-async function onModalW3WarnConfirm() {
-  await deploy();
+function onModalW3WarnConfirm() {
+  warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
 }
 
 /** Watch modalW3WarnVisible, onShow update timestamp of shown modal in session storage */
@@ -108,16 +109,19 @@ watch(
   }
 );
 
-async function deploy() {
+function w3WarnAndDeploy() {
   if (
     !modalW3WarnShown.value &&
     !sessionStorage.getItem(LsW3WarnKeys.NFT_NEW) &&
     $i18n.te('w3Warn.nft.new')
   ) {
     modalW3WarnVisible.value = true;
-    return;
+  } else {
+    warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
   }
+}
 
+async function deploy() {
   deployStatus.value = NftDeployStatus.CREATING;
   if (!dataStore.hasProjects) {
     await dataStore.fetchProjects();

@@ -83,18 +83,18 @@
 
         <!-- Deploy to staging -->
         <div v-if="isUpload" class="flex items-center align-middle bg-primary">
-          <SpendableEvent
+          <BtnSpendingWarning
             size="small"
             type="primary"
             :bordered="false"
             :loading="deploying"
             :disabled="authStore.isAdmin()"
-            :service-name="ServicePriceName.HOSTING_DEPLOY_TO_STAGING"
+            :service-name="PriceServiceName.HOSTING_DEPLOY_TO_STAGING"
             @click="deployWebsite(DeploymentEnvironment.STAGING)"
           >
             <span class="icon-deploy text-xl mr-2"></span>
             {{ $t('hosting.deployStage') }}
-          </SpendableEvent>
+          </BtnSpendingWarning>
           <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
             <n-button class="!p-0" size="small" type="primary" :bordered="false">
               <span class="icon-down text-3xl"></span>
@@ -102,17 +102,18 @@
           </n-dropdown>
         </div>
         <!-- Deploy to production -->
-        <n-button
+        <BtnSpendingWarning
           v-if="env === DeploymentEnvironment.STAGING"
           size="small"
           type="primary"
           :loading="deploying"
           :disabled="authStore.isAdmin()"
+          :service-name="PriceServiceName.HOSTING_DEPLOY_TO_PRODUCTION"
           @click="deployWebsite(DeploymentEnvironment.PRODUCTION)"
         >
           <span class="icon-deploy text-xl mr-2"></span>
           {{ $t('hosting.deployProd') }}
-        </n-button>
+        </BtnSpendingWarning>
       </n-space>
     </n-space>
 
@@ -172,6 +173,7 @@ const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
+const warningStore = useWarningStore();
 
 const showModalNewFolder = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
@@ -280,7 +282,7 @@ function deployWebsite(env: number) {
     localStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) ||
     !$i18n.te('w3Warn.hosting.deploy')
   ) {
-    deploy(env);
+    warningStore.showSpendingWarning(getPricingServiceName(env), () => deploy(env));
   } else {
     modalW3WarnVisible.value = true;
   }
@@ -288,6 +290,14 @@ function deployWebsite(env: number) {
 
 /** When user close W3Warn, allow him to create new website */
 function onModalW3WarnHide() {
-  deploy(deployEnv.value);
+  warningStore.showSpendingWarning(getPricingServiceName(deployEnv.value), () =>
+    deploy(deployEnv.value)
+  );
+}
+
+function getPricingServiceName(env: number) {
+  return env === DeploymentEnvironment.STAGING
+    ? PriceServiceName.HOSTING_DEPLOY_TO_STAGING
+    : PriceServiceName.HOSTING_DEPLOY_TO_PRODUCTION;
 }
 </script>

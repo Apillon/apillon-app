@@ -1,7 +1,7 @@
 <template>
   <Spinner v-if="websiteUuid && !website" />
   <div v-else>
-    <!-- Notification - show if quota has been reached -->
+    <!-- Notification - show if qouta has been reached -->
     <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
       {{ $t('hosting.website.quotaReached') }}
     </Notification>
@@ -10,10 +10,10 @@
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="websiteUuid === 0 && $i18n.te('hosting.website.infoNew')" class="text-body mb-8">
+      <p v-if="websiteUuid && $i18n.te('hosting.website.infoNew')" class="text-body mb-8">
         {{ $t('hosting.website.infoNew') }}
       </p>
-      <p v-else-if="websiteUuid > 0 && $i18n.te('hosting.website.infoEdit')" class="text-body mb-8">
+      <p v-else-if="websiteUuid && $i18n.te('hosting.website.infoEdit')" class="text-body mb-8">
         {{ $t('hosting.website.infoEdit') }}
       </p>
     </template>
@@ -54,27 +54,19 @@
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('hosting.website.create')" />
         <Btn
-          v-if="website"
           type="primary"
           class="w-full mt-2"
           :loading="loading"
           :disabled="isFormDisabled"
           @click="handleSubmit"
         >
-          {{ $t('hosting.website.update') }}
+          <template v-if="website">
+            {{ $t('hosting.website.update') }}
+          </template>
+          <template v-else>
+            {{ $t('hosting.website.create') }}
+          </template>
         </Btn>
-        <SpendableEvent
-          v-else
-          btn-type="btn"
-          type="primary"
-          class="w-full mt-2"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          :service-name="ServicePriceName.HOSTING_WEBSITE"
-          @click="handleSubmit"
-        >
-          {{ $t('hosting.website.create') }}
-        </SpendableEvent>
       </n-form-item>
     </n-form>
   </div>
@@ -91,6 +83,7 @@ const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
+const warningStore = useWarningStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
@@ -144,7 +137,7 @@ function handleSubmit(e: Event | MouseEvent) {
     } else if (props.websiteUuid) {
       await updateWebsite();
     } else {
-      await createWebsite();
+      warningStore.showSpendingWarning(PriceServiceName.HOSTING_WEBSITE, () => createWebsite());
     }
   });
 }

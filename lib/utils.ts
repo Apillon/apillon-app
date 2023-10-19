@@ -378,3 +378,7 @@ export function getDeviceName() {
   }
   return '';
 }
+
+export function generatePriceServiceName(service: string, chain: number, action: string) {
+  return service + '_' + Chains[chain] + '_' + action;
+}

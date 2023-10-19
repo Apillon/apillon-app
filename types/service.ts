@@ -17,7 +17,7 @@ export enum ServiceTypeName {
 /**
  * Names of Product price names of all services
  */
-export enum ServicePriceName {
+export enum PriceServiceName {
   HOSTING_WEBSITE = 'HOSTING_WEBSITE',
   HOSTING_DEPLOY_TO_STAGING = 'HOSTING_DEPLOY_TO_STAGING',
   HOSTING_DEPLOY_TO_PRODUCTION = 'HOSTING_DEPLOY_TO_PRODUCTION',
@@ -38,6 +38,13 @@ export enum ServicePriceName {
   NFT_MOONBASE_SET_BASE_URI = 'NFT_MOONBASE_SET_BASE_URI',
   NFT_ASTAR_SET_BASE_URI = 'NFT_ASTAR_SET_BASE_URI',
   KILT_IDENTITY = 'KILT_IDENTITY',
+}
+export enum PriceServiceAction {
+  BURN = 'BURN',
+  COLLECTION = 'COLLECTION',
+  MINT = 'MINT',
+  SET_BASE_URI = 'SET_BASE_URI',
+  TRANSFER_COLLECTION = 'TRANSFER_COLLECTION',
 }
 
 /**
@@ -85,7 +92,6 @@ declare global {
     service_uuid: string;
     key?: number;
     uptime?: string;
-    updateTime?: string;
   }
   interface CreateServiceResponse extends GeneralResponse<{ id: number; status: number }> {}
   interface ServiceResponse extends GeneralResponse<ServiceInterface> {}
