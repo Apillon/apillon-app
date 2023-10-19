@@ -199,11 +199,6 @@ export default function useUpload() {
           : null,
       };
       await $api.post(endpoints.storageFileUpload(bucketUuid.value, sessionUuid), params);
-
-      /** Unnecessary toast message
-      if (resSessionEnd.data) {
-        message.success($i18n.t('form.success.filesUploaded'));
-      } */
     } catch (error) {
       message.error(userFriendlyMsg(error));
     }
@@ -220,8 +215,6 @@ export default function useUpload() {
           fileList.value.pop();
         }
       }
-      /** Refresh directory content  */
-      bucketStore.fetchDirectoryContent();
 
       /** Refresh Storage info  */
       storageStore.fetchStorageInfo();

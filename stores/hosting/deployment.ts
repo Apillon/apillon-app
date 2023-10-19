@@ -26,26 +26,26 @@ export const useDeploymentStore = defineStore('deployment', {
      * Fetch wrappers
      */
     async getDeployments(
-      websiteId: number,
+      websiteUuid: string,
       env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION
     ) {
       if (env === DeploymentEnvironment.PRODUCTION) {
         if (!this.hasProductionDeployments || isCacheExpired(LsCacheKeys.DEPLOYMENTS_PRODUCTION)) {
-          return await this.fetchDeployments(websiteId, env);
+          return await this.fetchDeployments(websiteUuid, env);
         }
         return this.production;
       } else if (!this.hasStagingDeployments || isCacheExpired(LsCacheKeys.DEPLOYMENTS_STAGING)) {
-        return await this.fetchDeployments(websiteId, env);
+        return await this.fetchDeployments(websiteUuid, env);
       }
       return this.staging;
     },
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getDeployment(websiteId: number, id: number): Promise<DeploymentInterface> {
+    async getDeployment(websiteUuid: string, id: number): Promise<DeploymentInterface> {
       if (this.active?.id === id && !isCacheExpired(LsCacheKeys.DEPLOYMENT)) {
         return this.active;
       }
-      return await this.fetchDeployment(websiteId, id);
+      return await this.fetchDeployment(websiteUuid, id);
     },
 
     /**
@@ -53,12 +53,12 @@ export const useDeploymentStore = defineStore('deployment', {
      */
 
     async fetchDeployments(
-      websiteId: number,
+      websiteUuid: string,
       env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION
     ) {
       this.loading = true;
       try {
-        const res = await $api.get<DeploymentsResponse>(endpoints.deployments(websiteId), {
+        const res = await $api.get<DeploymentsResponse>(endpoints.deployments(websiteUuid), {
           environment: env,
           ...PARAMS_ALL_ITEMS,
         });
@@ -88,9 +88,9 @@ export const useDeploymentStore = defineStore('deployment', {
       this.loading = false;
     },
 
-    async fetchDeployment(websiteId: number, id: number): Promise<DeploymentInterface> {
+    async fetchDeployment(websiteUuid: string, id: number): Promise<DeploymentInterface> {
       try {
-        const res = await $api.get<DeploymentResponse>(endpoints.deployment(websiteId, id));
+        const res = await $api.get<DeploymentResponse>(endpoints.deployment(websiteUuid, id));
 
         this.active = res.data;
 
@@ -108,7 +108,7 @@ export const useDeploymentStore = defineStore('deployment', {
     },
 
     async deploy(
-      websiteId: number,
+      websiteUuid: string,
       env: number = DeploymentEnvironment.STAGING
     ): Promise<DeploymentInterface | null> {
       try {
@@ -116,9 +116,10 @@ export const useDeploymentStore = defineStore('deployment', {
         const params: Record<string, string | number | boolean | null> = {
           directDeploy: config.public.ENV === AppEnv.LOCAL,
           environment: env,
+          website_uuid: websiteUuid,
         };
         const deployment = await $api.post<DeploymentResponse>(
-          endpoints.websiteDeploy(websiteId),
+          endpoints.websiteDeploy(websiteUuid),
           params
         );
 

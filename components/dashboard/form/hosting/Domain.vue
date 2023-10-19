@@ -1,5 +1,5 @@
 <template>
-  <Spinner v-if="websiteId > 0 && !website" />
+  <Spinner v-if="websiteUuid && !website" />
   <div v-else>
     <n-form
       ref="formRef"
@@ -45,7 +45,7 @@
 
 <script lang="ts" setup>
 const props = defineProps({
-  websiteId: { type: Number, default: 0 },
+  websiteUuid: { type: String, default: null },
   domain: { type: String, default: '' },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
@@ -61,8 +61,8 @@ const formRef = ref<NFormInst | null>(null);
 const website = ref<WebsiteInterface | null>(null);
 
 onMounted(async () => {
-  if (props.websiteId) {
-    website.value = await websiteStore.getWebsite(props.websiteId);
+  if (props.websiteUuid) {
+    website.value = await websiteStore.getWebsite(props.websiteUuid);
     formData.value.domain = website.value.domain;
   }
 });
@@ -111,7 +111,7 @@ async function createWebsiteDomain() {
 
   try {
     const res = await $api.patch<WebsiteResponse>(
-      endpoints.websites(props.websiteId),
+      endpoints.websites(props.websiteUuid),
       formData.value
     );
 
@@ -133,7 +133,7 @@ async function updateWebsiteDomain() {
 
   try {
     const res = await $api.patch<WebsiteResponse>(
-      endpoints.websites(props.websiteId),
+      endpoints.websites(props.websiteUuid),
       formData.value
     );
 
@@ -153,12 +153,12 @@ async function updateWebsiteDomain() {
 function updateWebsiteDomainValue(domain) {
   /** On website updated refresh website data */
   websiteStore.items.forEach((item: WebsiteBaseInterface) => {
-    if (item.id === props.websiteId) {
+    if (item.website_uuid === props.websiteUuid) {
       item.domain = domain;
       item.domainChangeDate = new Date().toISOString();
     }
   });
-  if (websiteStore.active.id === props.websiteId) {
+  if (websiteStore.active.bucket_uuid === props.websiteUuid) {
     websiteStore.active.domain = domain;
   }
 }

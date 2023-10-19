@@ -48,14 +48,14 @@ const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 
 /** Website ID from route */
-const websiteId = ref<string>(`${params?.id || ''}`);
+const websiteUuid = ref<string>(`${params?.id || ''}`);
 const showModalW3Warn = ref<boolean>(false);
 
 onMounted(() => {
   storageStore.getStorageInfo();
 
   if (
-    websiteId.value &&
+    websiteUuid.value &&
     !localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) &&
     $i18n.te('w3Warn.hosting.upload') &&
     bucketStore.folder.items.length === 0

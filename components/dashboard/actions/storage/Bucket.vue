@@ -136,6 +136,9 @@ function onDeleted() {
 
   setTimeout(() => {
     bucketStore.fetchDirectoryContent();
+
+    /** Remove timestamp for deleted items */
+    sessionStorage.removeItem(LsCacheKeys.FILE_DELETED);
   }, 300);
 }
 </script>

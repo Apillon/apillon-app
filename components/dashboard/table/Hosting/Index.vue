@@ -18,7 +18,7 @@
   <!-- Modal - Edit website -->
   <modal v-model:show="showModalEditWebsite" :title="$t('hosting.website.edit')">
     <FormHostingWebsite
-      :website-id="currentRow.id"
+      :website-uuid="currentRow.website_uuid"
       @submit-success="showModalEditWebsite = false"
     />
   </modal>
@@ -103,7 +103,7 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: BucketItemInterface) => row.id;
+const rowKey = (row: BucketItemInterface) => row.uuid;
 const currentRow = ref<WebsiteBaseInterface>(props.websites[0]);
 
 /** On row click */
@@ -113,7 +113,7 @@ const rowProps = (row: WebsiteBaseInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/hosting/${row.id}` });
+        router.push({ path: `/dashboard/service/hosting/${row.website_uuid}` });
       }
     },
   };

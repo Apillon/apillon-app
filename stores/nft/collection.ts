@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
-    bucketId: 0,
+    bucketUuid: '',
     csvAttributes: [] as Array<MetadataAttributes>,
     csvColumns: [] as NTableColumns<KeyTitle>,
     csvData: [] as Array<Record<string, string>>,

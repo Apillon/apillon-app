@@ -57,6 +57,7 @@ const props = defineProps({
 const $i18n = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
+const bucketStore = useBucketStore();
 const { uploadFiles, fileAlreadyOnFileList, isEnoughSpaceInStorage } = useUpload();
 
 const fileNum = ref<number>(0);
@@ -83,7 +84,6 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
     onFinish,
     onError,
   };
-  console.log(file);
   if (!isEnoughSpaceInStorage(uploadFileList.value, fileListItem)) {
     message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
     onError();
@@ -137,6 +137,10 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
         /** When all files are on file list, start uploading files */
         try {
           await uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
+
+          setTimeout(() => {
+            bucketStore.fetchDirectoryContent();
+          }, 5000);
         } catch (error: ApiError | ReferenceError | TypeError | any) {
           /** Show error message */
           message.error(userFriendlyMsg(error));

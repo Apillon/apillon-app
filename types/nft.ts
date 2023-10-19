@@ -114,7 +114,6 @@ declare global {
   interface CollectionInterface extends BaseObjectInterface {
     baseExtension: string;
     baseUri: string;
-    bucketId: number;
     bucket_uuid: string;
     chain: number;
     collectionType: number;

@@ -9,53 +9,54 @@ export default function useHosting() {
   let deploymentInterval: any = null as any;
 
   /** Website ID from route */
-  const websiteId = ref<number>(parseInt(`${params?.id}`) || parseInt(`${params?.slug}`) || 0);
+  const websiteUuid = ref<string>(params.id ? `${params?.id}` : `${params?.slug}`);
 
   onUnmounted(() => {
     clearInterval(deploymentInterval);
   });
 
   function initWebsite(env: number = 0) {
-    websiteStore.setWebsiteId(websiteId.value);
+    websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
+    websiteStore.setWebsite(websiteUuid.value);
 
     setTimeout(() => {
       Promise.all(Object.values(dataStore.promises)).then(async _ => {
-        const website = await websiteStore.getWebsite(websiteId.value);
+        const website = await websiteStore.getWebsite(websiteUuid.value);
 
         /** Check of website exists */
-        if (!website?.id) {
+        if (!website?.website_uuid) {
           router.push({ name: 'dashboard-service-hosting' });
           return;
         }
         /** Get deployments for this website */
         if (env > 0) {
-          await deploymentStore.getDeployments(websiteId.value, env);
+          await deploymentStore.getDeployments(websiteUuid.value, env);
         }
 
         if (env === DeploymentEnvironment.PRODUCTION) {
           /** Show files from production bucket */
           bucketStore.active = website.productionBucket;
-          bucketStore.setBucketId(website.productionBucket.id);
+          bucketStore.setBucket(website.productionBucket.bucket_uuid);
 
           /** Deployments polling */
           checkUnfinishedDeployments(deploymentStore.production, env);
         } else if (env === DeploymentEnvironment.STAGING) {
           /** Show files from staging bucket */
           bucketStore.active = website.stagingBucket;
-          bucketStore.setBucketId(website.stagingBucket.id);
+          bucketStore.setBucket(website.stagingBucket.bucket_uuid);
 
           /** Deployments polling */
           checkUnfinishedDeployments(deploymentStore.staging, env);
         } else {
           /** Show files from main bucket */
           bucketStore.active = website.bucket;
-          bucketStore.setBucketId(website.bucket.id);
+          bucketStore.setBucket(website.bucket.bucket_uuid);
         }
 
         /** Fetch directory content for bucket */
         await bucketStore.fetchDirectoryContent({ bucketUuid: bucketStore.active.bucket_uuid });
 
-        if (website.bucket.uploadedSize === 0) {
+        if (website.bucket.size === 0) {
           bucketStore.uploadActive = true;
         }
         pageLoading.value = false;
@@ -73,7 +74,7 @@ export default function useHosting() {
 
     deploymentInterval = setInterval(async () => {
       const deployment = await deploymentStore.fetchDeployment(
-        websiteStore.active.id,
+        websiteStore.active.website_uuid,
         unfinishedDeployment.id
       );
       if (unfinishedDeployment.deploymentStatus !== deployment.deploymentStatus) {
@@ -91,19 +92,19 @@ export default function useHosting() {
   async function refreshWebpage(env: number) {
     /** On tab stg/prod refresh also website and deployments */
     if (env === DeploymentEnvironment.STAGING || env === DeploymentEnvironment.PRODUCTION) {
-      /** Refresh deyployments */
-      deploymentStore.fetchDeployments(websiteId.value, env);
+      /** Refresh deployments */
+      deploymentStore.fetchDeployments(websiteUuid.value, env);
 
       /** Refresh active website data */
-      const website = await websiteStore.fetchWebsite(websiteId.value);
+      const website = await websiteStore.fetchWebsite(websiteUuid.value);
 
       /** Show files from staging bucket */
       if (env === DeploymentEnvironment.STAGING) {
         bucketStore.active = website.stagingBucket;
-        bucketStore.setBucketId(website.stagingBucket.id);
+        bucketStore.setBucket(website.stagingBucket.bucket_uuid);
       } else {
         bucketStore.active = website.productionBucket;
-        bucketStore.setBucketId(website.productionBucket.id);
+        bucketStore.setBucket(website.productionBucket.bucket_uuid);
       }
     }
 
@@ -113,7 +114,7 @@ export default function useHosting() {
 
   return {
     pageLoading,
-    websiteId,
+    websiteUuid,
     initWebsite,
     refreshWebpage,
   };

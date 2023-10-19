@@ -80,27 +80,29 @@ const Endpoints = {
   /** Bucket */
   buckets: '/buckets/',
   bucketsQuota: '/buckets/quota-reached',
-  bucket: (bucketId: number | string) => {
-    return `/buckets/${bucketId}`;
+  bucket: (bucketUuid: string) => {
+    return `/buckets/${bucketUuid}`;
   },
-  bucketContent: (bucketId: number | string) => {
-    return `/buckets/${bucketId}/content`;
+  bucketContent: (bucketUuid: string) => {
+    return `/buckets/${bucketUuid}/content`;
   },
-  bucketRestore: (bucketId: number) => {
-    return `/buckets/${bucketId}/cancel-deletion`;
+  bucketRestore: (bucketUuid: string) => {
+    return `/buckets/${bucketUuid}/cancel-deletion`;
   },
-  bucketWebhook: (bucketId: number, webhookId?: number) => {
-    return webhookId ? `/buckets/${bucketId}/webhook/${webhookId}` : `/buckets/${bucketId}/webhook`;
+  bucketWebhook: (bucketUuid: string, webhookId?: number) => {
+    return webhookId
+      ? `/buckets/${bucketUuid}/webhook/${webhookId}`
+      : `/buckets/${bucketUuid}/webhook`;
   },
 
   /** Directories */
-  directory: (id?: number | string) => {
+  directory: (id?: string) => {
     return id ? `/directories/${id}` : '/directories';
   },
   directoryContent: '/directories/directory-content',
 
   /** File */
-  file: (key?: number | string) => {
+  file: (key?: string) => {
     return key ? `/files/${key}` : '/files';
   },
 
@@ -134,11 +136,11 @@ const Endpoints = {
     return `/storage/${bucketUuid}/trashed-files`;
   },
   /** IPNS */
-  ipns: (bucketId: number, id?: number | string) => {
-    return id ? `/buckets/${bucketId}/ipns/${id}` : `/buckets/${bucketId}/ipns`;
+  ipns: (bucketUuid: string, id?: number | string) => {
+    return id ? `/buckets/${bucketUuid}/ipns/${id}` : `/buckets/${bucketUuid}/ipns`;
   },
-  ipnsPublish: (bucketId: number, id: number) => {
-    return `/buckets/${bucketId}/ipns/${id}/publish`;
+  ipnsPublish: (bucketUuid: string, id: number) => {
+    return `/buckets/${bucketUuid}/ipns/${id}/publish`;
   },
 
   /**
@@ -147,20 +149,20 @@ const Endpoints = {
 
   /** Website */
   website: '/storage/hosting/website',
-  websites: (id?: number) => {
-    return id ? `/storage/hosting/websites/${id}` : '/storage/hosting/websites';
+  websites: (uuid?: string) => {
+    return uuid ? `/storage/hosting/websites/${uuid}` : '/storage/hosting/websites';
   },
   websiteQuota: `/storage/hosting/websites/quota-reached`,
-  websiteDeploy: (id?: number) => {
-    return `/storage/hosting/websites/${id}/deploy`;
+  websiteDeploy: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/deploy`;
   },
 
   /** Deployment */
-  deployment: (websiteId: number, id: number) => {
-    return `/storage/hosting/websites/${websiteId}/deployments/${id}`;
+  deployment: (websiteUuid: string, id: number) => {
+    return `/storage/hosting/websites/${websiteUuid}/deployments/${id}`;
   },
-  deployments: (websiteId: number) => {
-    return `/storage/hosting/websites/${websiteId}/deployments`;
+  deployments: (websiteUuid: string) => {
+    return `/storage/hosting/websites/${websiteUuid}/deployments`;
   },
 
   /**

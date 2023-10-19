@@ -99,7 +99,9 @@ function checkUnfinishedCollections() {
   clearInterval(collectionInterval);
   collectionInterval = setInterval(async () => {
     const collections = await collectionStore.fetchCollections(false);
-    const collection = collections.find(collection => collection.id === unfinishedCollection.id);
+    const collection = collections.find(
+      collection => collection.collection_uuid === unfinishedCollection.collection_uuid
+    );
     if (!collection) {
       clearInterval(collectionInterval);
     } else if (collection.collectionStatus >= CollectionStatus.DEPLOYED) {
