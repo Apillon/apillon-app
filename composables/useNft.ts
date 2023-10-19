@@ -340,6 +340,14 @@ export default function useNft() {
     }
   }
 
+  function getPriceServiceName() {
+    return generatePriceServiceName(
+      ServiceTypeName.NFT,
+      collectionStore.form.base.chain,
+      PriceServiceAction.COLLECTION
+    );
+  }
+
   return {
     allImagesUploaded,
     hasRequiredMetadata,
@@ -352,12 +360,13 @@ export default function useNft() {
     createNftData,
     createThumbnailUrl,
     deployCollection,
-    uploadImagesRequest,
+    getPriceServiceName,
     handleImageChange,
     handleImageRemove,
     isImage,
     parseUploadedFile,
     transactionLink,
     uploadFileRequest,
+    uploadImagesRequest,
   };
 }

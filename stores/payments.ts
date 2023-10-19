@@ -141,8 +141,8 @@ export const usePaymentsStore = defineStore('payments', {
     /** API Credit */
     async fetchCredits() {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
+      if (!dataStore.projectUuid) {
+        return;
       }
 
       try {

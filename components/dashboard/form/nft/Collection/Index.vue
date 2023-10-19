@@ -328,6 +328,7 @@ const message = useMessage();
 
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 const {
   booleanSelect,
@@ -341,6 +342,7 @@ const {
   isQuotaReached,
   disablePasteDate,
   disablePasteTime,
+  getPriceServiceName,
 } = useCollection();
 
 const formErrors = ref<boolean>(false);
@@ -382,8 +384,8 @@ function infoLabel(field: string) {
 }
 
 /** When user close W3Warn, allow him to create new collection */
-async function onModalW3WarnConfirm() {
-  await createCollection();
+function onModalW3WarnConfirm() {
+  warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
 }
 
 /** Watch modalW3WarnVisible, onShow update timestamp of shown modal in session storage */
@@ -408,7 +410,7 @@ function handleSubmit(e: Event | MouseEvent) {
     } else if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
       modalW3WarnVisible.value = true;
     } else {
-      await createCollection();
+      warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
     }
   });
 }

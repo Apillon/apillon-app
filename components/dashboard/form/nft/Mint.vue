@@ -53,11 +53,13 @@
 <script lang="ts" setup>
 const props = defineProps({
   collectionUuid: { type: String, required: true },
+  chainId: { type: Number, required: true },
 });
 const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
+const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
 const loading = ref(false);
@@ -108,7 +110,12 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      await mint();
+      const priceServiceName = generatePriceServiceName(
+        ServiceTypeName.NFT,
+        props.chainId,
+        PriceServiceAction.MINT
+      );
+      warningStore.showSpendingWarning(priceServiceName, () => mint());
     }
   });
 }

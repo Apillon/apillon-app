@@ -46,6 +46,12 @@
               v-if="bucketStore.uploadActive && bucketStore.bucketUuid"
               :bucket-uuid="bucketStore.bucketUuid"
             />
+
+            <!-- Global component: Spending warning -->
+            <ModalSpendingWarning
+              v-model:show="warningStore.isSpendingWarningOpen"
+              @close="warningStore.isSpendingWarningOpen = false"
+            />
           </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
@@ -104,6 +110,7 @@ const props = defineProps({
 });
 
 const paymentsStore = usePaymentsStore();
+const warningStore = useWarningStore();
 
 /** Delay animation */
 const loadingAnimation = ref<boolean>(false);
