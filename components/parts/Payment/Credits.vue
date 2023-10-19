@@ -9,9 +9,14 @@
 </template>
 
 <script lang="ts" setup>
+const dataStore = useDataStore();
 const paymentStore = usePaymentsStore();
 
 onMounted(() => {
-  paymentStore.getCredits();
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await paymentStore.getCredits();
+    });
+  }, 500);
 });
 </script>

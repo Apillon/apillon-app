@@ -1,19 +1,15 @@
 <template>
-  <Spinner v-if="bucketUuid > 0 && !bucket" />
+  <Spinner v-if="bucketUuid && !bucket" />
   <div v-else>
-    <!-- Notification - show if qouta has been reached -->
-    <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
-      {{ $t('storage.bucket.quotaReached') }}
-    </Notification>
-    <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="bucketUuid === 0 && $i18n.te('storage.bucket.infoNew')" class="text-body mb-8">
+      <p v-if="!bucketUuid && $i18n.te('storage.bucket.infoNew')" class="text-body mb-8">
         {{ $t('storage.bucket.infoNew') }}
       </p>
-      <p v-else-if="bucketUuid > 0 && $i18n.te('storage.bucket.infoEdit')" class="text-body mb-8">
+      <p v-else-if="!!bucketUuid && $i18n.te('storage.bucket.infoEdit')" class="text-body mb-8">
         {{ $t('storage.bucket.infoEdit') }}
       </p>
     </template>
@@ -127,11 +123,8 @@ const rules: NFormRules = {
   ],
 };
 
-const isQuotaReached = computed<boolean>(() => {
-  return !!props.bucketUuid && bucketStore.quotaReached === true;
-});
 const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value || dataStore.isProjectUser;
+  return dataStore.isProjectUser;
 });
 
 // Submit
@@ -172,9 +165,6 @@ async function createBucket() {
 
     /** On new bucket created push data to list */
     bucketStore.items.push(res.data);
-
-    /** Reset bucket quota limit */
-    bucketStore.quotaReached = undefined;
 
     /** Emit events */
     emit('submitSuccess');

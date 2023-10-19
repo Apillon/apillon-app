@@ -63,19 +63,11 @@ onMounted(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await storageStore.getStorageInfo();
       await websiteStore.getWebsites();
-      getWebsiteQuota();
 
       pageLoading.value = false;
     });
   }, 100);
 });
-
-/** GET Website quota, if current value is null  */
-async function getWebsiteQuota() {
-  if (websiteStore.quotaReached === undefined) {
-    await websiteStore.fetchWebsiteQuota();
-  }
-}
 
 /**
  * On createNewWebsite click

@@ -57,7 +57,7 @@
           {{ $t('general.refresh') }}
         </n-button>
 
-        <!-- Create folder -->
+        <!-- Create folder
         <n-button
           v-if="isUpload"
           size="small"
@@ -66,7 +66,7 @@
         >
           <span class="icon-create-folder text-xl mr-2"></span>
           {{ $t('storage.directory.create') }}
-        </n-button>
+        </n-button> -->
 
         <!-- Clear all files -->
         <n-button

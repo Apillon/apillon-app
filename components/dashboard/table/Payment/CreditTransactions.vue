@@ -64,7 +64,7 @@ const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
       title: t('dashboard.credits.createTime'),
       key: 'createTime',
       render(row) {
-        return datetimeToDateAndTime(row?.createTime || '');
+        return dateTimeToDateAndTime(row?.createTime || '');
       },
     },
     // {

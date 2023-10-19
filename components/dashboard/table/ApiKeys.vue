@@ -59,7 +59,7 @@ const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
       title: t('dashboard.created'),
       key: 'created',
       render(row) {
-        return h('span', {}, { default: () => datetimeToDate(row.updateTime) });
+        return h('span', {}, { default: () => dateTimeToDate(row.updateTime) });
       },
     },
     {

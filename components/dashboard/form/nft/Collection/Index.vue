@@ -1,10 +1,6 @@
 <template>
   <div>
-    <!-- Notification - show if quota has been reached -->
-    <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
-      {{ $t('nft.collection.quotaReached') }}
-    </Notification>
-    <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <p v-else-if="$i18n.te('nft.collection.infoNew')" class="text-body mb-8">
@@ -330,6 +326,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+const { getPriceServiceName } = useNft();
 const {
   booleanSelect,
   chains,
@@ -339,10 +336,8 @@ const {
   supplyTypes,
   rules,
   isFormDisabled,
-  isQuotaReached,
   disablePasteDate,
   disablePasteTime,
-  getPriceServiceName,
 } = useCollection();
 
 const formErrors = ref<boolean>(false);
@@ -451,8 +446,6 @@ async function createCollection() {
     /** On new collection created add new collection to list */
     collectionStore.items.push(res.data);
 
-    /** Reset collection qouta limit */
-    collectionStore.quotaReached = undefined;
     collectionStore.resetMetadata();
     collectionStore.resetForms();
 

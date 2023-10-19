@@ -105,7 +105,6 @@ declare global {
   }
   interface BucketResponse extends GeneralResponse<BucketInterface> {}
   interface BucketsResponse extends GeneralItemsResponse<BucketInterface> {}
-  interface BucketQuotaResponse extends GeneralResponse<boolean> {}
 
   /**
    * Bucket item
@@ -313,7 +312,6 @@ declare global {
   interface WebsiteUpdateResponse extends GeneralResponse<WebsiteInterface> {}
   interface WebsitesBaseResponse extends GeneralItemsResponse<WebsiteBaseInterface> {}
   interface WebsitesResponse extends GeneralItemsResponse<WebsiteInterface> {}
-  interface WebsiteQuotaResponse extends GeneralResponse<boolean> {}
   interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
   interface DeploymentsResponse extends GeneralItemsResponse<DeploymentInterface> {}
 }

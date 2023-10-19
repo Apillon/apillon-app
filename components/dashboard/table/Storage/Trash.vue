@@ -114,7 +114,18 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       title: $i18n.t('dashboard.created'),
       key: 'createTime',
       render(row: BucketItemInterface) {
-        return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
+        return h('span', {}, { default: () => dateTimeToDate(row.createTime || '') });
+      },
+    },
+    {
+      title: $i18n.t('dashboard.deletedAt'),
+      key: 'createTime',
+      render(row: BucketItemInterface) {
+        return h(
+          'span',
+          {},
+          { default: () => dateTimeToDateForDeletedFiles(row.updateTime || '') }
+        );
       },
     },
     {

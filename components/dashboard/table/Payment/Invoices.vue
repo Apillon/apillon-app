@@ -65,7 +65,7 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
       title: t('dashboard.invoice.date'),
       key: 'createTime',
       render(row) {
-        return datetimeToDateAndTime(row?.createTime || '');
+        return dateTimeToDateAndTime(row?.createTime || '');
       },
     },
     // {

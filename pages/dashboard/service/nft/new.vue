@@ -117,7 +117,7 @@
           animated
         >
           <!-- METADATA -->
-          <n-tab-pane :name="NftMintTab.METADATA" :disabled="collectionStore.quotaReached === true">
+          <n-tab-pane :name="NftMintTab.METADATA">
             <template #tab>
               <IconNumber
                 v-if="collectionStore.mintTab === NftMintTab.METADATA"
@@ -137,11 +137,7 @@
                     {{ $t('nft.metadata.infoNew') }}
                   </p>
 
-                  <!-- Notification - show if qouta has been reached -->
-                  <Notification v-if="isQuotaReached" type="warning" class="w-full mb-4">
-                    {{ $t('nft.collection.quotaReached') }}
-                  </Notification>
-                  <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-4">
+                  <Notification v-if="isFormDisabled" type="error" class="w-full mb-4">
                     {{ $t('dashboard.permissions.insufficient') }}
                   </Notification>
                   <div class="flex flex-col gap-4 px-2">
@@ -158,7 +154,7 @@
           </n-tab-pane>
 
           <!-- UPLOAD -->
-          <n-tab-pane :name="NftMintTab.UPLOAD" :disabled="collectionStore.quotaReached === true">
+          <n-tab-pane :name="NftMintTab.UPLOAD">
             <template #tab>
               <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
               <IconNumber
@@ -177,7 +173,6 @@
           <n-tab-pane
             :name="NftMintTab.MINT"
             :disabled="
-              collectionStore.quotaReached === true ||
               !collectionStore.hasCsvFile ||
               !collectionStore.hasMetadata ||
               !collectionStore.hasImages
@@ -252,7 +247,7 @@ const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
 const { transactionLink } = useNft();
-const { isFormDisabled, isQuotaReached } = useCollection();
+const { isFormDisabled } = useCollection();
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),
@@ -273,7 +268,6 @@ onMounted(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await storageStore.getStorageInfo();
       await collectionStore.getCollections();
-      await collectionStore.getCollectionQuota();
 
       pageLoading.value = false;
     });

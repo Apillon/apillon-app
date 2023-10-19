@@ -7,7 +7,6 @@ export const useWebsiteStore = defineStore('website', {
     loading: false,
     search: '',
     selected: '',
-    quotaReached: undefined as Boolean | undefined,
     uploadActive: false,
   }),
   getters: {
@@ -24,7 +23,6 @@ export const useWebsiteStore = defineStore('website', {
       this.items = [] as Array<WebsiteBaseInterface>;
       this.search = '';
       this.selected = '';
-      this.quotaReached = undefined;
     },
     setWebsite(uuid: string) {
       if (this.selected !== uuid) {
@@ -119,26 +117,6 @@ export const useWebsiteStore = defineStore('website', {
         window.$message.error(userFriendlyMsg(error));
       }
       return {} as WebsiteInterface;
-    },
-
-    async fetchWebsiteQuota() {
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-
-      try {
-        const res = await $api.get<WebsiteQuotaResponse>(endpoints.websiteQuota, {
-          project_uuid: dataStore.projectUuid,
-        });
-
-        this.quotaReached = res.data;
-      } catch (error: any) {
-        this.quotaReached = undefined;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
     },
   },
 });

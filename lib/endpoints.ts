@@ -79,7 +79,6 @@ const Endpoints = {
 
   /** Bucket */
   buckets: '/buckets/',
-  bucketsQuota: '/buckets/quota-reached',
   bucket: (bucketUuid: string) => {
     return `/buckets/${bucketUuid}`;
   },
@@ -152,7 +151,6 @@ const Endpoints = {
   websites: (uuid?: string) => {
     return uuid ? `/storage/hosting/websites/${uuid}` : '/storage/hosting/websites';
   },
-  websiteQuota: `/storage/hosting/websites/quota-reached`,
   websiteDeploy: (uuid?: string) => {
     return `/storage/hosting/websites/${uuid}/deploy`;
   },
@@ -195,7 +193,6 @@ const Endpoints = {
   collectionNestMint: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/nest-mint`;
   },
-  collectionQuota: '/nfts/collections/quota-reached',
 
   /**
    * Project settings

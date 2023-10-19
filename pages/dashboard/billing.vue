@@ -25,7 +25,7 @@
           </div>
         </n-card>
         <n-card :bordered="false" :title="t('dashboard.payment.expiresOn')">
-          <h4>{{ datetimeToDate(paymentsStore.activeSubscription.expiresOn) }}</h4>
+          <h4>{{ dateTimeToDate(paymentsStore.activeSubscription.expiresOn) }}</h4>
         </n-card>
         <n-card :bordered="false" title="Credits">
           <h4>{{ paymentsStore.credit.balance }}</h4>

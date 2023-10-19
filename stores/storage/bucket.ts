@@ -7,7 +7,6 @@ export const useBucketStore = defineStore('bucket', {
     destroyed: [] as BucketInterface[],
     items: [] as BucketInterface[],
     loading: false,
-    quotaReached: undefined as Boolean | undefined,
     selected: '',
     selectedItems: [] as BucketInterface[],
     total: 0,
@@ -80,7 +79,6 @@ export const useBucketStore = defineStore('bucket', {
       this.active = {} as BucketInterface;
       this.destroyed = [] as Array<BucketInterface>;
       this.items = [] as Array<BucketInterface>;
-      this.quotaReached = undefined;
       this.filter.bucketType = null;
       this.filter.search = '';
       this.selected = '';
@@ -223,27 +221,6 @@ export const useBucketStore = defineStore('bucket', {
         window.$message.error(userFriendlyMsg(error));
       }
       return {} as BucketInterface;
-    },
-
-    async fetchBucketQuota() {
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-      const params = {
-        project_uuid: dataStore.projectUuid,
-        bucketType: BucketType.STORAGE,
-      };
-      try {
-        const res = await $api.get<BucketQuotaResponse>(endpoints.bucketsQuota, params);
-
-        this.quotaReached = res.data;
-      } catch (error: any) {
-        this.quotaReached = undefined;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
     },
 
     async fetchDirectoryContent(arg: FetchDirectoryParams = {}) {
