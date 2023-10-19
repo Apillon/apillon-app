@@ -65,7 +65,7 @@ const createColumns = (): NDataTableColumns<IpnsInterface> => {
       key: 'createTime',
       title: $i18n.t('general.updateTime'),
       render(row: IpnsInterface) {
-        return h('span', {}, { default: () => datetimeToDateAndTime(row.updateTime || '') });
+        return h('span', {}, { default: () => dateTimeToDateAndTime(row.updateTime || '') });
       },
     },
     {

@@ -110,11 +110,11 @@ export function timeToDays(time: String): string {
   }
 }
 
-/** Datetime to date: "2022-12-13T07:21:50.000Z" -> 13 Dec, 2022  */
-export function datetimeToDate(datetime: string): string {
-  if (!datetime) return '';
+/** DateTime to date: "2022-12-13T07:21:50.000Z" -> 13 Dec, 2022  */
+export function dateTimeToDate(dateTime: string): string {
+  if (!dateTime) return '';
 
-  const date = new Date(datetime);
+  const date = new Date(dateTime);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
@@ -122,10 +122,10 @@ export function datetimeToDate(datetime: string): string {
   };
   return date.toLocaleDateString('en-us', options);
 }
-export function datetimeToDateAndTime(datetime: string): string {
-  if (!datetime) return '';
+export function dateTimeToDateAndTime(dateTime: string): string {
+  if (!dateTime) return '';
 
-  const date = new Date(datetime);
+  const date = new Date(dateTime);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
@@ -150,6 +150,20 @@ export function timestampToDateAndTime(timestamp: number): string {
     minute: '2-digit',
     second: '2-digit',
     hour12: false,
+  };
+  return date.toLocaleDateString('en-us', options);
+}
+/** Deleted files - add 6 months */
+export function dateTimeToDateForDeletedFiles(dateTime: string): string {
+  if (!dateTime) return '';
+
+  const date = new Date(dateTime);
+  date.setMonth(date.getMonth() + 6);
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
   };
   return date.toLocaleDateString('en-us', options);
 }

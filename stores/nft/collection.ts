@@ -17,7 +17,6 @@ export const useCollectionStore = defineStore('collection', {
     metadata: [] as Array<Record<string, any>>,
     metadataStored: null as Boolean | null,
     mintTab: NftMintTab.METADATA,
-    quotaReached: undefined as Boolean | undefined,
     search: '',
     stepDeploy: NftDeployStep.NAME,
     stepUpload: NftUploadStep.FILE,
@@ -68,7 +67,6 @@ export const useCollectionStore = defineStore('collection', {
     resetData() {
       this.active = {} as CollectionInterface;
       this.items = [] as CollectionInterface[];
-      this.quotaReached = undefined;
       this.search = '';
       this.transaction = [] as TransactionInterface[];
       this.resetMetadata();
@@ -141,12 +139,6 @@ export const useCollectionStore = defineStore('collection', {
         return await this.fetchCollectionTransactions(collectionUuid);
       }
       return this.transaction;
-    },
-
-    async getCollectionQuota() {
-      if (this.quotaReached === undefined) {
-        await this.fetchCollectionQuota();
-      }
     },
 
     /**
@@ -237,26 +229,6 @@ export const useCollectionStore = defineStore('collection', {
       }
       this.loading = false;
       return [];
-    },
-
-    async fetchCollectionQuota() {
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-
-      try {
-        const res = await $api.get<CollectionQuotaResponse>(endpoints.collectionQuota, {
-          project_uuid: dataStore.projectUuid,
-        });
-
-        this.quotaReached = res.data;
-      } catch (error: any) {
-        this.quotaReached = undefined;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
     },
   },
 });

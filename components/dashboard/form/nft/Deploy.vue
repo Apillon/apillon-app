@@ -162,8 +162,6 @@ async function deploy() {
     /** Deployment status */
     deployStatus.value = NftDeployStatus.DEPLOYING;
 
-    /** Reset collection qouta limit, metadata, forms */
-    collectionStore.quotaReached = undefined;
     collectionStore.resetMetadata();
     collectionStore.resetForms();
     bucketStore.resetData();

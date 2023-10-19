@@ -64,18 +64,10 @@ onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     await storageStore.getStorageInfo();
     await bucketStore.getBuckets();
-    await geBucketQuota();
 
     pageLoading.value = false;
   });
 });
-
-/** GET Bucket quota, if current value is null  */
-async function geBucketQuota() {
-  if (bucketStore.quotaReached === undefined) {
-    await bucketStore.fetchBucketQuota();
-  }
-}
 
 /**
  * On createNewBucket click

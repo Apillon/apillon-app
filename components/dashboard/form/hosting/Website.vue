@@ -1,11 +1,7 @@
 <template>
   <Spinner v-if="websiteUuid && !website" />
   <div v-else>
-    <!-- Notification - show if qouta has been reached -->
-    <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
-      {{ $t('hosting.website.quotaReached') }}
-    </Notification>
-    <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
@@ -119,11 +115,8 @@ const rules: NFormRules = {
   ],
 };
 
-const isQuotaReached = computed<boolean>(() => {
-  return !!props.websiteUuid && websiteStore.quotaReached === true;
-});
 const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value || dataStore.isProjectUser;
+  return dataStore.isProjectUser;
 });
 
 // Submit
@@ -160,9 +153,6 @@ async function createWebsite() {
 
     /** On new website created add new website to list */
     websiteStore.items.push(res.data as WebsiteBaseInterface);
-
-    /** Reset website quota limit */
-    websiteStore.quotaReached = undefined;
 
     /** Emit events */
     emit('submitSuccess');

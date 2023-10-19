@@ -302,7 +302,7 @@ const columns = computed(() => {
         return h(
           'span',
           { class: cellClasses(row.type) },
-          { default: () => datetimeToDate(row.createTime || '') }
+          { default: () => dateTimeToDate(row.createTime || '') }
         );
       },
     },

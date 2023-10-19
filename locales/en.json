@@ -254,6 +254,7 @@
     "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
     "dashboard": "Dashboard",
     "date": "Date",
+    "deletedAt": "Deleted at",
     "email": "Email",
     "emailMethodConfiguration": "Email method configuration",
     "env": "ENV",
