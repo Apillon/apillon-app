@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { Feature } from '~~/types/config';
 
 const props = defineProps({
@@ -28,7 +29,7 @@ const menuKey = computed<string>(() => {
   return `menu-${dataStore.project.items.length}`;
 });
 
-const menuOptions = computed<NMenuMixedOption[]>(() => {
+const menuOptions = computed<MenuMixedOption[]>(() => {
   const dashboard = {
     key: 'dashboard',
     label: $i18n.t('dashboard.nav.projectOverview'),

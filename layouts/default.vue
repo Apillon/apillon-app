@@ -32,7 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 /** Global messages */

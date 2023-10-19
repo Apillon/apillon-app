@@ -169,11 +169,14 @@
       "createTime": "Created at",
       "credits": "credits",
       "description": "Description",
-      "estimatedCosts": "Estimated cost",
+      "direction": "Direction",
+      "creditCosts": "Credit costs",
       "name": "Name",
+      "packages": "Credit packages",
       "product_id": "Product ID",
       "service": "Service",
       "serviceDescription": "Service description",
+      "title": "Credits",
       "transactions": "Transactions",
       "yourFunds": "Your funds",
       "services": {
@@ -188,9 +191,10 @@
       "currency": "Currency",
       "invoices": "Invoices",
       "referenceId": "Reference Id",
-      "referenceTable": "Reference Table",
+      "referenceTable": "Reference",
       "subtotalAmount": "Subtotal Amount",
-      "totalAmount": "Total Amount"
+      "totalAmount": "Total Amount",
+      "date": "Date"
     },
     "nav": {
       "access": "Access",
@@ -214,16 +218,21 @@
       "apiKeys": "API keys",
       "charts": "Charts",
       "credentials": "Credentials & API keys",
+      "credits": "Credits",
       "destroy": "Destroy",
       "history": "History",
       "methods": "Methods",
       "profile": "Profile",
       "projectSettings": "Project settings",
+      "subscription": "Subscription",
       "usersPermissions": "Users & permissions"
     },
     "payment": {
-      "title": "Payment",
-      "expiresOn": "Expires on:"
+      "buy": "Buy",
+      "expiresOn": "Expires on:",
+      "decline": "Decline",
+      "spendingAlert": "Spending ALERT!",
+      "title": "Payment"
     },
     "permissions": {
       "read": "Read permissions",
@@ -231,15 +240,14 @@
       "execute": "Execute permissions",
       "insufficient": "You don't have permissions to create or edit this item."
     },
-    "addPayment": "Add payment",
-    "addPaymentMethod": "Add payment method",
-    "addPaymentMethodText": "Add payment method and purchase the needed credits. Once the credits supply is depleted you will be charged again.",
+    "subscription": {
+      "packages": "Subscription packages"
+    },
     "adminMode": "You are in ADMIN mode!",
     "attached": "Attached",
     "attachService": "Attach service",
     "attachNewService": "Attach new service",
     "billing": "Billing",
-    "card": "Card",
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
@@ -381,6 +389,7 @@
     "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid EVM address",
     "INVALID_ADDRESS_FOR_TRANSFER_TO": "Wrong address, please enter different address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
+    "CREDIT_BALANCE_TOO_LOW": "Credit balance too low",
     "walletSignature": "'Could not capture your signature, check your wallet connection",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",

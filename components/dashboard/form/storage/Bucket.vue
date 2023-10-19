@@ -80,8 +80,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   bucketUuid: { type: String, default: '' },
   bucketType: { type: Number, default: BucketType.STORAGE },
@@ -133,7 +131,7 @@ const isQuotaReached = computed<boolean>(() => {
   return !!props.bucketUuid && bucketStore.quotaReached === true;
 });
 const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value || settingsStore.isProjectUser();
+  return isQuotaReached.value || dataStore.isProjectUser;
 });
 
 // Submit

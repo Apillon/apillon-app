@@ -4,7 +4,7 @@
     class="max-w-lg"
     :model="formData"
     :rules="rules"
-    :disabled="!settingsStore.isUserOwner()"
+    :disabled="!dataStore.isUserOwner"
     @submit.prevent="handleSubmit"
   >
     <!--  Project name -->
@@ -42,7 +42,7 @@
         type="primary"
         class="mt-2"
         :loading="loading"
-        :disabled="!settingsStore.isUserOwner()"
+        :disabled="!dataStore.isUserOwner"
         @click="handleSubmit"
       >
         {{ $t('form.save') }}
@@ -54,7 +54,6 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const settingsStore = useSettingsStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);

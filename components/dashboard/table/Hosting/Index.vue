@@ -33,8 +33,8 @@ const props = defineProps({
 
 const $i18n = useI18n();
 const router = useRouter();
+const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
-const settingsStore = useSettingsStore();
 const showModalEditWebsite = ref<boolean>(false);
 const TableEllipsis = resolveComponent('TableEllipsis');
 
@@ -123,7 +123,7 @@ const dropdownOptions = [
   {
     label: $i18n.t('storage.edit'),
     key: 'storageEdit',
-    disabled: settingsStore.isProjectUser(),
+    disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
         showModalEditWebsite.value = true;

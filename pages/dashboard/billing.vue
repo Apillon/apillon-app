@@ -1,7 +1,15 @@
 <template>
   <Dashboard :loading="loading">
     <template #heading>
-      <h4>{{ $t('dashboard.billing') }}</h4>
+      <Heading>
+        <slot>
+          <h1>{{ $t('dashboard.billing') }}</h1>
+        </slot>
+
+        <template #submenu>
+          <MenuBilling />
+        </template>
+      </Heading>
     </template>
     <slot>
       <div v-if="paymentsStore.activeSubscription?.package_id" class="grid grid-cols-3 gap-5">
@@ -9,6 +17,11 @@
           <div class="flex items-center">
             <span class="icon-star text-xl text-primary mr-3"></span>
             <h4>{{ paymentsStore.getActiveSubscriptionPackage?.name }}</h4>
+          </div>
+          <div class="mt-4">
+            <Btn type="primary" size="large" :loading="loading" @click="goToCustomerPortal()">
+              <span>Edit billing details</span>
+            </Btn>
           </div>
         </n-card>
         <n-card :bordered="false" :title="t('dashboard.payment.expiresOn')">
@@ -19,18 +32,8 @@
         </n-card>
       </div>
 
-      <!-- Credit packages -->
-      <n-h5 prefix="bar">Credit packages</n-h5>
-      <div v-if="paymentsStore.hasCreditPackages" class="grid grid-cols-3 gap-5">
-        <PaymentCreditPackage
-          v-for="(creditPackage, key) in paymentsStore.creditPackages"
-          :key="key"
-          :credit-package="creditPackage"
-        />
-      </div>
-
       <!-- Subscription packages -->
-      <n-h5 prefix="bar">Subscription packages</n-h5>
+      <n-h5 prefix="bar">{{ $t('dashboard.subscription.packages') }}</n-h5>
       <div
         v-if="paymentsStore.hasSubscriptionPackages"
         v-drag-scroll.options="{ direction: 'x' }"
@@ -51,17 +54,11 @@
       <!-- Invoices -->
       <n-h5 prefix="bar">{{ $t('dashboard.invoice.invoices') }}</n-h5>
       <TablePaymentInvoices />
-
-      <!-- Credit Transactions -->
-      <n-h5 prefix="bar">{{ $t('dashboard.credits.transactions') }}</n-h5>
-      <TablePaymentCreditTransactions class="pb-8" />
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const { t } = useI18n();
 const { query } = useRoute();
 const message = useMessage();
@@ -131,11 +128,17 @@ onBeforeMount(() => {
 onMounted(async () => {
   paymentsStore.fetchActiveSubscription();
 
-  await paymentsStore.getCreditPackages();
   await paymentsStore.getSubscriptionPackages();
 
-  paymentsStore.fetchCreditTransactions();
   paymentsStore.fetchInvoices();
   loading.value = false;
 });
+
+async function goToCustomerPortal() {
+  const customerPortalUrl = await paymentsStore.getCustomerPortalURL();
+
+  if (customerPortalUrl) {
+    window.open(customerPortalUrl, '_blank');
+  }
+}
 </script>

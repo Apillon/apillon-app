@@ -50,8 +50,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });

@@ -92,7 +92,7 @@
 
 <script lang="ts" setup>
 const props = defineProps({
-  file: { type: Object as VuePropType<BucketItemInterface>, required: true },
+  file: { type: Object as PropType<BucketItemInterface>, required: true },
 });
 const emit = defineEmits(['onFileDelete']);
 

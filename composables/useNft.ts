@@ -1,5 +1,3 @@
-import { useMessage } from 'naive-ui';
-
 export default function useNft() {
   const $i18n = useI18n();
   const message = useMessage();

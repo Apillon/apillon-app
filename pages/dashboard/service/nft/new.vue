@@ -15,7 +15,7 @@
         </slot>
         <template #info>
           <n-space :size="32" align="center">
-            <PaymentEstimatedCosts />
+            <PaymentCreditCosts />
 
             <Badge icon="nft/moonbeam">
               <NuxtIcon name="nft/astar_logo" class="icon-auto ml-2" filled />
@@ -243,6 +243,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { TabsInst } from 'naive-ui';
+
 const $i18n = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
@@ -259,7 +261,7 @@ useHead({
 const pageLoading = ref<boolean>(true);
 const loadingBucket = ref<boolean>(false);
 const modalW3WarnVisible = ref<boolean>(false);
-const mintTabsRef = ref<NTabsInst | null>(null);
+const mintTabsRef = ref<TabsInst | null>(null);
 const collectionCreated = ref<boolean>(false);
 
 onMounted(() => {

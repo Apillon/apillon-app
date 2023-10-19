@@ -11,8 +11,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NTag } from 'naive-ui';
-
 const { t } = useI18n();
 const paymentsStore = usePaymentsStore();
 
@@ -32,14 +30,13 @@ const pagination = computed(() => {
 
 const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
   return [
-    {
-      title: t('dashboard.credits.name'),
-      key: 'name',
-      render(row) {
-        return h('strong', {}, row.name);
-      },
-    },
-
+    // {
+    //   title: t('dashboard.credits.name'),
+    //   key: 'name',
+    //   render(row) {
+    //     return h('strong', {}, row.name);
+    //   },
+    // },
     {
       title: t('dashboard.credits.category'),
       key: 'category',
@@ -51,6 +48,13 @@ const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
     {
       title: t('dashboard.credits.description'),
       key: 'description',
+    },
+    {
+      title: t('dashboard.credits.direction'),
+      key: 'direction',
+      render(row) {
+        return row.direction === 1 ? 'RECEIVE' : 'SPEND';
+      },
     },
     {
       title: t('dashboard.credits.amount'),

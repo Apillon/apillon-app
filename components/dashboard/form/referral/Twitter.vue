@@ -32,8 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const message = useMessage();
 
 const referralStore = useReferralStore();

@@ -83,17 +83,18 @@
 
         <!-- Deploy to staging -->
         <div v-if="isUpload" class="flex items-center align-middle bg-primary">
-          <n-button
+          <SpendableEvent
             size="small"
             type="primary"
             :bordered="false"
             :loading="deploying"
             :disabled="authStore.isAdmin()"
+            :service-name="ServicePriceName.HOSTING_DEPLOY_TO_STAGING"
             @click="deployWebsite(DeploymentEnvironment.STAGING)"
           >
             <span class="icon-deploy text-xl mr-2"></span>
             {{ $t('hosting.deployStage') }}
-          </n-button>
+          </SpendableEvent>
           <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
             <n-button class="!p-0" size="small" type="primary" :bordered="false">
               <span class="icon-down text-3xl"></span>
@@ -156,8 +157,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   env: { type: Number, default: 0 },
 });

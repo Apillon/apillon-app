@@ -40,6 +40,7 @@ defineProps({
 const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const paymentStore = usePaymentsStore();
 const { clearAll } = useStore();
 
 const componentSelectKey = ref(0);
@@ -100,6 +101,9 @@ watch(
       setTimeout(() => {
         loading.value = false;
         componentSelectKey.value += 1;
+
+        /** Refresh credits */
+        paymentStore.fetchCredits();
       }, 1000);
     }
     /** Fetch selected project data(get myRole_id_onProject)  */

@@ -11,8 +11,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NTag } from 'naive-ui';
-
 const { t } = useI18n();
 const paymentsStore = usePaymentsStore();
 
@@ -46,14 +44,28 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
       title: t('dashboard.invoice.subtotalAmount'),
       key: 'subtotalAmount',
       render(row) {
-        return h('span', {}, `${row.subtotalAmount} ${row.currency}`);
+        return h('span', {}, `${row.subtotalAmount} ${formatCurrency(row.currency)}`);
       },
     },
     {
       title: t('dashboard.invoice.totalAmount'),
       key: 'totalAmount',
       render(row) {
-        return h('span', {}, `${row.totalAmount} ${row.currency}`);
+        return h('span', {}, `${row.totalAmount} ${formatCurrency(row.currency)}`);
+      },
+    },
+    {
+      title: t('dashboard.invoice.referenceTable'),
+      key: 'referenceTable',
+      render(row) {
+        return h('span', {}, `${row.referenceTable}`);
+      },
+    },
+    {
+      title: t('dashboard.invoice.date'),
+      key: 'createTime',
+      render(row) {
+        return datetimeToDateAndTime(row?.createTime || '');
       },
     },
     // {
@@ -101,4 +113,6 @@ async function handlePageChange(page: number) {
     currentPage.value = page;
   }
 }
+
+const formatCurrency = (currency: string) => (currency === 'eur' ? '€' : '$');
 </script>

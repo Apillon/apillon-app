@@ -6,8 +6,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   uuid: { type: [String, Number], default: null },
   type: {
