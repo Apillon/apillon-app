@@ -6,10 +6,10 @@
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="websiteUuid && $i18n.te('hosting.website.infoNew')" class="text-body mb-8">
+      <p v-if="!!websiteUuid && $i18n.te('hosting.website.infoNew')" class="text-body mb-8">
         {{ $t('hosting.website.infoNew') }}
       </p>
-      <p v-else-if="websiteUuid && $i18n.te('hosting.website.infoEdit')" class="text-body mb-8">
+      <p v-else-if="!!websiteUuid && $i18n.te('hosting.website.infoEdit')" class="text-body mb-8">
         {{ $t('hosting.website.infoEdit') }}
       </p>
     </template>
@@ -47,7 +47,7 @@
       </n-form-item>
 
       <!--  Form submit -->
-      <n-form-item>
+      <n-form-item :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('hosting.website.create')" />
         <Btn
           type="primary"

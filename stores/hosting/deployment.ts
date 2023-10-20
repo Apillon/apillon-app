@@ -41,11 +41,14 @@ export const useDeploymentStore = defineStore('deployment', {
     },
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getDeployment(websiteUuid: string, id: number): Promise<DeploymentInterface> {
-      if (this.active?.id === id && !isCacheExpired(LsCacheKeys.DEPLOYMENT)) {
+    async getDeployment(websiteUuid: string, deploymentUuid: string): Promise<DeploymentInterface> {
+      if (
+        this.active?.deployment_uuid === deploymentUuid &&
+        !isCacheExpired(LsCacheKeys.DEPLOYMENT)
+      ) {
         return this.active;
       }
-      return await this.fetchDeployment(websiteUuid, id);
+      return await this.fetchDeployment(websiteUuid, deploymentUuid);
     },
 
     /**
@@ -88,9 +91,14 @@ export const useDeploymentStore = defineStore('deployment', {
       this.loading = false;
     },
 
-    async fetchDeployment(websiteUuid: string, id: number): Promise<DeploymentInterface> {
+    async fetchDeployment(
+      websiteUuid: string,
+      deploymentUuid: string
+    ): Promise<DeploymentInterface> {
       try {
-        const res = await $api.get<DeploymentResponse>(endpoints.deployment(websiteUuid, id));
+        const res = await $api.get<DeploymentResponse>(
+          endpoints.deployment(websiteUuid, deploymentUuid)
+        );
 
         this.active = res.data;
 

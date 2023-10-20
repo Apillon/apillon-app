@@ -12,6 +12,9 @@ export const useWarningStore = defineStore('warning', {
       this.isSpendingWarningOpen = true;
       this.serviceName = serviceName;
       this.action = action;
+
+      /** Remove timestamp for deleted items */
+      sessionStorage.removeItem(LsCacheKeys.CREDITS);
     },
   },
 });

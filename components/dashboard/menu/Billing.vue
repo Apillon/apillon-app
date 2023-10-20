@@ -16,5 +16,10 @@ const menuOptions: NMenuOption[] = [
     label: t('dashboard.pageMenu.credits'),
     to: 'dashboard-credits',
   },
+  {
+    key: 'dashboard-price-list',
+    label: t('dashboard.pageMenu.priceList'),
+    to: 'dashboard-price-list',
+  },
 ];
 </script>

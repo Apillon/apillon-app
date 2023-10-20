@@ -35,7 +35,7 @@
     </n-form-item>
 
     <!--  Form submit -->
-    <n-form-item>
+    <n-form-item :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('nft.collection.mint')" />
       <Btn
         type="primary"

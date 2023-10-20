@@ -8,8 +8,12 @@
       aria-modal="true"
     >
       <div v-if="servicePrice">
-        <p>{{ servicePrice.description }}</p>
-        <p>{{ servicePrice.currentPrice }} {{ $t('dashboard.credits.credits') }}</p>
+        <p v-if="isEnoughCredits">{{ servicePrice.description }}</p>
+        <p v-else>{{ $t('dashboard.payment.notEnoughCredits') }}</p>
+        <p>
+          <strong>{{ $t('dashboard.credits.cost') }}: </strong>
+          <span>{{ servicePrice.currentPrice }} {{ $t('dashboard.credits.credits') }}</span>
+        </p>
       </div>
 
       <template #footer>
@@ -20,8 +24,17 @@
             </Btn>
           </div>
           <div class="w-1/2">
-            <Btn type="primary" size="large" @click="submit">
-              {{ $t('dashboard.payment.buy') }}
+            <Btn v-if="isEnoughCredits" type="primary" size="large" @click="submit">
+              {{ $t('dashboard.payment.proceed') }}
+            </Btn>
+            <Btn
+              v-else
+              type="secondary"
+              size="large"
+              :to="{ name: 'dashboard-credits' }"
+              @click="$emit('close')"
+            >
+              {{ $t('dashboard.payment.buyCredits') }}
             </Btn>
           </div>
         </div>
@@ -37,6 +50,10 @@ const paymentsStore = usePaymentsStore();
 const warningStore = useWarningStore();
 const servicePrice = ref<ProductPriceInterface | null>();
 
+const isEnoughCredits = computed(() => {
+  return paymentsStore.credit.balance >= (servicePrice.value?.currentPrice || 0);
+});
+
 watch(
   () => warningStore.isSpendingWarningOpen,
   async shown => {
@@ -47,8 +64,9 @@ watch(
   { immediate: true }
 );
 
-function submit() {
+async function submit() {
   emit('close');
-  warningStore.action();
+  await warningStore.action();
+  await paymentsStore.fetchCredits();
 }
 </script>

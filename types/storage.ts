@@ -297,16 +297,15 @@ declare global {
     w3StagingLink: string | null;
   }
   interface DeploymentInterface {
-    id: number;
-    status: number;
-    website_uuid: string;
-    bucket_uuid: string;
-    environment: number;
-    deploymentStatus: number;
     cid: string | null;
-    size: number;
+    cidv1: string | null;
+    deploymentStatus: number;
+    deployment_uuid: string;
+    environment: number;
     number: number | null;
-    updateTime?: string;
+    size: number;
+    createTime: string;
+    updateTime: string;
   }
   interface WebsiteResponse extends GeneralResponse<WebsiteInterface> {}
   interface WebsiteUpdateResponse extends GeneralResponse<WebsiteInterface> {}

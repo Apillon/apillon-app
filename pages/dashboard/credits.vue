@@ -35,7 +35,7 @@ const paymentsStore = usePaymentsStore();
 const loading = ref<boolean>(true);
 
 useHead({
-  title: t('dashboard.billing'),
+  title: t('dashboard.credits.title'),
 });
 
 onMounted(async () => {
