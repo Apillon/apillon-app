@@ -15,7 +15,7 @@
     </n-form-item>
 
     <!--  Form submit -->
-    <n-form-item>
+    <n-form-item :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('nft.collection.transfer')" />
       <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('nft.collection.transfer') }}

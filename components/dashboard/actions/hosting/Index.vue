@@ -36,7 +36,11 @@
   </n-space>
 
   <!-- Modal - New website -->
-  <modal v-model:show="showModalEditWebsite" :title="$t('hosting.website.new')">
+  <modal
+    v-model:show="showModalEditWebsite"
+    :title="$t('hosting.website.new')"
+    :service-name="PriceServiceName.HOSTING_WEBSITE"
+  >
     <FormHostingWebsite />
   </modal>
 </template>

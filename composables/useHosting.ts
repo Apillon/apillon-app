@@ -75,7 +75,7 @@ export default function useHosting() {
     deploymentInterval = setInterval(async () => {
       const deployment = await deploymentStore.fetchDeployment(
         websiteStore.active.website_uuid,
-        unfinishedDeployment.id
+        unfinishedDeployment.deployment_uuid
       );
       if (unfinishedDeployment.deploymentStatus !== deployment.deploymentStatus) {
         unfinishedDeployment.deploymentStatus = deployment.deploymentStatus;

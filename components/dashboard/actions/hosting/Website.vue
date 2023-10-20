@@ -83,18 +83,17 @@
 
         <!-- Deploy to staging -->
         <div v-if="isUpload" class="flex items-center align-middle bg-primary">
-          <BtnSpendingWarning
+          <n-button
             size="small"
             type="primary"
             :bordered="false"
             :loading="deploying"
             :disabled="authStore.isAdmin()"
-            :service-name="PriceServiceName.HOSTING_DEPLOY_TO_STAGING"
             @click="deployWebsite(DeploymentEnvironment.STAGING)"
           >
             <span class="icon-deploy text-xl mr-2"></span>
             {{ $t('hosting.deployStage') }}
-          </BtnSpendingWarning>
+          </n-button>
           <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
             <n-button class="!p-0" size="small" type="primary" :bordered="false">
               <span class="icon-down text-3xl"></span>
@@ -102,18 +101,17 @@
           </n-dropdown>
         </div>
         <!-- Deploy to production -->
-        <BtnSpendingWarning
+        <n-button
           v-if="env === DeploymentEnvironment.STAGING"
           size="small"
           type="primary"
           :loading="deploying"
           :disabled="authStore.isAdmin()"
-          :service-name="PriceServiceName.HOSTING_DEPLOY_TO_PRODUCTION"
           @click="deployWebsite(DeploymentEnvironment.PRODUCTION)"
         >
           <span class="icon-deploy text-xl mr-2"></span>
           {{ $t('hosting.deployProd') }}
-        </BtnSpendingWarning>
+        </n-button>
       </n-space>
     </n-space>
 

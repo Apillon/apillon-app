@@ -140,7 +140,7 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
 
           setTimeout(() => {
             bucketStore.fetchDirectoryContent();
-          }, 5000);
+          }, 4000);
         } catch (error: ApiError | ReferenceError | TypeError | any) {
           /** Show error message */
           message.error(userFriendlyMsg(error));

@@ -129,7 +129,7 @@ export const usePaymentsStore = defineStore('payments', {
         this.customerPortalUrl = res.data;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.CREDITS, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.CUSTOMER_PORTAL_URL, Date.now().toString());
       } catch (error: any) {
         this.customerPortalUrl = '';
 

@@ -156,8 +156,8 @@ const Endpoints = {
   },
 
   /** Deployment */
-  deployment: (websiteUuid: string, id: number) => {
-    return `/storage/hosting/websites/${websiteUuid}/deployments/${id}`;
+  deployment: (websiteUuid: string, deploymentUuid: string) => {
+    return `/storage/hosting/websites/${websiteUuid}/deployments/${deploymentUuid}`;
   },
   deployments: (websiteUuid: string) => {
     return `/storage/hosting/websites/${websiteUuid}/deployments`;

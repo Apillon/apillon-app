@@ -431,24 +431,39 @@ body > .n-message-container {
     @apply max-w-2xl py-12;
 
     .n-card {
-      &__close {
-        @apply absolute right-0 top-0 w-12 h-12 bg-bg border-1 border-solid border-white rounded-full transition-colors duration-300 translate-x-1/2 -translate-y-1/2;
+      &-header {
+        @apply py-4;
 
-        &::before {
-          display: none;
+        &__main {
+          @apply font-bold;
         }
+        &__close {
+          @apply absolute right-0 top-0 w-12 h-12 bg-bg border-1 border-solid border-white rounded-full transition-colors duration-300 translate-x-1/2 -translate-y-1/2;
 
-        &:hover {
-          @apply bg-white text-bg;
+          &::before {
+            display: none;
+          }
+
+          &:hover {
+            @apply bg-white text-bg;
+          }
         }
       }
 
-      &-header__main {
-        @apply font-bold;
+      &__content {
+        @apply py-4;
+
+        &:not(:first-child) {
+          @apply border-t-0;
+        }
       }
 
-      &-footer {
-        @apply mt-3;
+      &__footer {
+        @apply pt-4;
+
+        &:not(:first-child) {
+          @apply border-t-0;
+        }
       }
     }
   }
