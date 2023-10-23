@@ -9,25 +9,13 @@
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
+      <CookieConsent />
     </n-config-provider>
-    <!-- <CookieConsent /> -->
   </div>
 </template>
 
 <script lang="ts" setup>
 import { lightTheme, darkTheme, enUS, dateEnUS } from 'naive-ui';
-
-const authStore = useAuthStore();
-
-/** Matomo analytics */
-const router = useRouter();
-router.afterEach(to => {
-  if (window._paq) {
-    window._paq.push(['setCustomDimension', '1', authStore.userUuid]);
-    window._paq.push(['setDocumentTitle', to.fullPath]);
-    window._paq.push(['trackPageView']);
-  }
-});
 
 const $i18n = useI18n();
 window.$i18n = $i18n;

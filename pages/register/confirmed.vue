@@ -24,6 +24,8 @@ useHead({
 
 onMounted(() => {
   /** Track Registration start */
-  tractEvent('registration', 'registration_email_confirmed', 'Email confirmed');
+  setTimeout(() => {
+    tractEvent('registration_email_confirmed');
+  }, 1000);
 });
 </script>

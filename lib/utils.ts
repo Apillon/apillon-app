@@ -1,4 +1,5 @@
 import { LocationQueryValue } from 'vue-router';
+import { useGtm } from '@gtm-support/vue-gtm';
 import stg from '../config/staging';
 import dev from '../config/development';
 import prod from '../config/production';
@@ -15,11 +16,25 @@ export function getAppConfig(env?: string) {
 }
 
 /**
- * Analytics Matomo
+ * Analytics GTM
  */
-export function tractEvent(eventCategory: string, eventAction: string, eventName: string) {
-  if (window._paq) {
-    window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
+export function tractEvent(eventName: string, eventCategory = 'Dashboard', eventAction = 'click') {
+  const gtm = useGtm();
+  if (gtm && gtm.enabled()) {
+    console.log(gtm);
+    console.log(gtm.trackEvent);
+    console.log(
+      gtm.trackEvent({
+        event: 'test',
+        category: 'test',
+        action: 'test',
+      })
+    );
+    gtm.trackEvent({
+      event: eventName,
+      category: eventCategory,
+      action: eventAction,
+    });
   }
 }
 
