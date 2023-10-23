@@ -21,15 +21,6 @@ export function getAppConfig(env?: string) {
 export function tractEvent(eventName: string, eventCategory = 'Dashboard', eventAction = 'click') {
   const gtm = useGtm();
   if (gtm && gtm.enabled()) {
-    console.log(gtm);
-    console.log(gtm.trackEvent);
-    console.log(
-      gtm.trackEvent({
-        event: 'test',
-        category: 'test',
-        action: 'test',
-      })
-    );
     gtm.trackEvent({
       event: eventName,
       category: eventCategory,
