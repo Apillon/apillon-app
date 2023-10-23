@@ -52,5 +52,6 @@ declare global {
     adminUrl: string;
     captchaKey: string;
     githubId: string;
+    gtmId: string;
   }
 }

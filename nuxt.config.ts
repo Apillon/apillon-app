@@ -131,37 +131,7 @@ export default defineNuxtConfig({
         { rel: 'manifest', href: '/manifest.json' },
       ],
 
-      script: [
-        {
-          children:
-            env === 'production'
-              ? `var _mtm = window._mtm = window._mtm || [];
-          _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
-          var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-          g.async=true; g.src='https://analytics.apillon.io/js/container_UpKxUE2a.js'; s.parentNode.insertBefore(g,s);`
-              : '',
-        },
-        {
-          children:
-            env === 'production'
-              ? `var _paq = (window._paq = window._paq || []);
-            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            (function () {
-              const u = '//analytics.apillon.io/';
-              _paq.push(['setTrackerUrl', u + 'matomo.php']);
-              _paq.push(['setSiteId', '2']);
-              const d = document;
-              const g = d.createElement('script');
-              const s = d.getElementsByTagName('script')[0];
-              g.async = true;
-              g.src = u + 'matomo.js';
-              s.parentNode.insertBefore(g, s);
-            })();`
-              : '',
-        },
-      ],
+      script: [],
     },
   },
 

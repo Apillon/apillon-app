@@ -132,7 +132,7 @@ async function register() {
     authStore.saveUser(res.data);
 
     /** Track Registration created */
-    tractEvent('registration', 'registration_done', 'Password set');
+    trackEvent('registration_done');
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     dataStore.project.items = await dataStore.fetchProjects(true);

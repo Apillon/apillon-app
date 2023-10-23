@@ -76,6 +76,7 @@
     }
   },
   "general": {
+    "accept": "Accept",
     "action": "Action",
     "actions": "Actions",
     "active": "active",
@@ -85,9 +86,11 @@
     "attachService": "Attach {service} service",
     "cancel": "No, cancel",
     "confirm": "Confirm",
+    "cookieNotice": "This website uses cookies to ensure you get the best experience on our website.",
     "copyrights": "© Apillon",
     "create": "Create",
     "created": "created",
+    "decline": "Decline",
     "delete": "Delete",
     "deselectAll": "Deselect All",
     "download": "Download",

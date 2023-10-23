@@ -8,6 +8,7 @@ const config: ConfigInterface = {
   adminUrl: 'http://localhost:3001',
   captchaKey: '10000000-ffff-ffff-ffff-000000000001',
   githubId: 'd0482598d8adbd8adffa',
+  gtmId: '',
   publishedFeatures: [
     'APILLON_REGISTER',
     'AUTHENTICATION',
