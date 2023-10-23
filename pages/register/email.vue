@@ -43,7 +43,9 @@ onMounted(() => {
   }
 
   /** Track Registration start */
-  tractEvent('registration', 'registration_email_sent', 'Email confirmation sent');
+  setTimeout(() => {
+    trackEvent('registration_email_sent');
+  }, 1000);
 });
 
 /** If user has written his email on signup, then allow him to send email again */

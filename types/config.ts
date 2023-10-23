@@ -53,5 +53,6 @@ declare global {
     CHAIN_ID: string;
     captchaKey: string;
     githubId: string;
+    gtmId: string;
   }
 }
