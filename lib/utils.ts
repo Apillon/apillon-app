@@ -18,7 +18,7 @@ export function getAppConfig(env?: string) {
 /**
  * Analytics GTM
  */
-export function tractEvent(eventName: string, eventCategory = 'Dashboard', eventAction = 'click') {
+export function trackEvent(eventName: string, eventCategory = 'Dashboard', eventAction = 'click') {
   const gtm = useGtm();
   if (gtm && gtm.enabled()) {
     gtm.trackEvent({

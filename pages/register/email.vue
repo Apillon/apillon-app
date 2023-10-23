@@ -44,7 +44,7 @@ onMounted(() => {
 
   /** Track Registration start */
   setTimeout(() => {
-    tractEvent('registration_email_sent');
+    trackEvent('registration_email_sent');
   }, 1000);
 });
 

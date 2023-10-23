@@ -50,7 +50,7 @@ useHead({
 onMounted(() => {
   /** Track Registration start */
   setTimeout(() => {
-    tractEvent('registration_start');
+    trackEvent('registration_start');
   }, 1000);
 });
 </script>
