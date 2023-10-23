@@ -1,4 +1,4 @@
-import { LocationQueryValue } from 'vue-router';
+import { type LocationQueryValue } from 'vue-router';
 import { useGtm } from '@gtm-support/vue-gtm';
 import stg from '../config/staging';
 import dev from '../config/development';

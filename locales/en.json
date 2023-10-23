@@ -239,7 +239,11 @@
       "notEnoughCredits": "You don't have enough credits. Please, buy more credits to proceed",
       "proceed": "Proceed",
       "spendingAlert": "Spending ALERT!",
-      "title": "Payment"
+      "title": "Payment",
+      "stripe": {
+        "error": "Failed to subscribe",
+        "success": "Successfully subscribed to a plan"
+      }
     },
     "permissions": {
       "read": "Read permissions",

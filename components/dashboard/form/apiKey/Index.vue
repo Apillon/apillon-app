@@ -124,7 +124,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage, CollapseProps } from 'naive-ui';
+import { useMessage, type CollapseProps } from 'naive-ui';
 
 const props = defineProps({
   id: { type: Number, default: 0 },
