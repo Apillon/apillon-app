@@ -62,6 +62,7 @@
 const { t } = useI18n();
 const { query } = useRoute();
 const message = useMessage();
+const dataStore = useDataStore();
 const paymentsStore = usePaymentsStore();
 
 useHead({
@@ -125,13 +126,28 @@ onBeforeMount(() => {
   }
 });
 
-onMounted(async () => {
-  paymentsStore.fetchActiveSubscription();
+onMounted(() => {
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      const promises: Promise<any>[] = [];
 
-  await paymentsStore.getSubscriptionPackages();
+      promises.push(
+        new Promise<void>(resolve => {
+          paymentsStore.getSubscriptionPackages().then(() => resolve());
+        })
+      );
+      promises.push(
+        new Promise<void>(resolve => {
+          paymentsStore.fetchActiveSubscription().then(() => resolve());
+        })
+      );
 
-  paymentsStore.fetchInvoices();
-  loading.value = false;
+      await Promise.all(promises).then(_ => {
+        paymentsStore.fetchInvoices();
+        loading.value = false;
+      });
+    });
+  }, 100);
 });
 
 async function goToCustomerPortal() {
