@@ -75,10 +75,11 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     {
       key: 'dashboard-service-computing',
       label: $i18n.t('dashboard.nav.computing'),
+      to: 'dashboard-service-computing',
       iconName: 'icon-computing',
       soon: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
       disabled:
-        isMenuItemDisabled(Feature.COMPUTING) || authStore.isUserAllowed(Permission.COMPUTING),
+        isMenuItemDisabled(Feature.COMPUTING) || !authStore.isUserAllowed(Permission.COMPUTING),
     },
   ];
   const monitoringChildren = [
@@ -161,7 +162,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       ];
 });
 
-/** Check if user has projects and if fetaure is enabled */
+/** Check if user has projects and if feature is enabled */
 function isMenuItemDisabled(feature: Feature) {
   return !isFeatureEnabled(feature, authStore.getUserRoles()) || dataStore.hasProjects === false;
 }

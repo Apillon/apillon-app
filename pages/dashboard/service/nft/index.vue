@@ -29,7 +29,7 @@
         </Btn>
       </Empty>
 
-      <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
+      <W3Warn v-model:show="showModalW3Warn">
         {{ $t('w3Warn.nft.new') }}
       </W3Warn>
     </slot>
@@ -43,7 +43,6 @@ const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
-const modalNewCollectionVisible = ref<boolean | null>(false);
 
 let collectionInterval: any = null as any;
 
@@ -68,14 +67,7 @@ onUnmounted(() => {
   clearInterval(collectionInterval);
 });
 
-/** When user close W3Warn, allow him to create new collection */
-function onModalW3WarnHide() {
-  if (modalNewCollectionVisible.value !== false) {
-    modalNewCollectionVisible.value = true;
-  }
-}
-
-/** Watch modalNewCollectionVisible, onShow update timestamp of shown modal in session storage */
+/** Watch showModalW3Warn, onShow update timestamp of shown modal in local storage */
 watch(
   () => showModalW3Warn.value,
   shown => {

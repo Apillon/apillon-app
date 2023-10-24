@@ -94,6 +94,7 @@ export default defineNuxtConfig({
       './stores/hosting',
       './stores/nft',
       './stores/storage',
+      './stores/computing',
     ],
   },
 
