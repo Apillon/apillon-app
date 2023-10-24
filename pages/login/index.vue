@@ -81,8 +81,8 @@ onMounted(async () => {
 
 async function getOauthSession() {
   try {
-    const response = await $api.get<OauthSessionResponse>(endpoints.oauthSession);
-    return response.data.data.session;
+    const { data } = await $api.get<OauthSessionResponse>(endpoints.oauthSession);
+    return data.sessionToken;
   } catch (error) {
     console.error(error);
   }
