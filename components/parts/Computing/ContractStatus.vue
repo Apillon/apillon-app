@@ -1,26 +1,26 @@
 <template>
   <n-tag
     v-bind="$attrs"
-    :type="getTransactionStatus(transactionStatus)"
-    :bordered="transactionStatus < TransactionStatus.FINISHED"
+    :type="getTransactionStatus(contractStatus)"
+    :bordered="contractStatus < TransactionStatus.FINISHED"
     size="tiny"
     round
   >
     <n-space
-      :class="transactionStatus < TransactionStatus.FINISHED ? 'text-body' : 'text-bg-dark'"
+      :class="contractStatus < TransactionStatus.FINISHED ? 'text-body' : 'text-bg-dark'"
       :size="0"
       align="center"
       :wrap="false"
     >
-      <span class="mx-1 uppercase">{{ $t(`nft.transaction.status.${transactionStatus}`) }}</span>
-      <AnimationTyping v-if="transactionStatus < TransactionStatus.FINISHED" />
+      <span class="mx-1 uppercase">{{ $t(`computing.contract.status.${contractStatus}`) }}</span>
+      <AnimationTyping v-if="contractStatus < TransactionStatus.FINISHED" />
     </n-space>
   </n-tag>
 </template>
 
 <script lang="ts" setup>
 defineProps({
-  transactionStatus: {
+  contractStatus: {
     type: Number,
     default: 0,
   },

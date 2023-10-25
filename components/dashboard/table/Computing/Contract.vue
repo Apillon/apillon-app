@@ -13,19 +13,41 @@
       :row-key="rowKey"
       :row-props="rowProps"
     />
+
+    <!-- Modal - Deposit -->
+    <modal v-model:show="modalDepositVisible" :title="$t('computing.contract.deposit')">
+      <FormComputingDeposit
+        :contract-uuid="contractStore.active.contract_uuid"
+        @submit-success="onContractDeposit"
+      />
+    </modal>
+
+    <!-- Modal - Contract Transfer -->
+    <modal v-model:show="modalTransferOwnershipVisible" :title="$t('computing.contract.transfer')">
+      <FormComputingTransfer
+        :contract-uuid="contractStore.active.contract_uuid"
+        @submit-success="onContractTransferred"
+      />
+    </modal>
   </n-space>
 </template>
 
 <script lang="ts" setup>
+import { NButton, NDropdown } from 'naive-ui';
+
 const props = defineProps({
   contracts: { type: Array<ContractInterface>, default: [] },
 });
 
+const { t } = useI18n();
 const $i18n = useI18n();
 const router = useRouter();
 const contractStore = useContractStore();
 const TableEllipsis = resolveComponent('TableEllipsis');
 const ComputingContractStatus = resolveComponent('ComputingContractStatus');
+
+const modalDepositVisible = ref<boolean | null>(false);
+const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
 /** Data: filtered contracts */
 const data = computed<Array<ContractInterface>>(() => {
@@ -62,16 +84,22 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'contract_uuid',
       title: $i18n.t('computing.contract.uuid'),
-      className: 'hidden',
       render(row: ContractInterface) {
         return h(TableEllipsis, { text: row.contract_uuid }, '');
       },
     },
     {
       key: 'contractAddress',
-      title: $i18n.t('computing.contract.contractAddress'),
+      title: $i18n.t('computing.contract.address'),
       render(row: ContractInterface) {
         return h(TableEllipsis, { text: row.contractAddress }, '');
+      },
+    },
+    {
+      key: 'deployerAddress',
+      title: $i18n.t('computing.contract.deployerAddress'),
+      render(row: ContractInterface) {
+        return h(TableEllipsis, { text: row.deployerAddress }, '');
       },
     },
     {
@@ -81,11 +109,65 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
         return h(ComputingContractStatus, { contractStatus: row.contractStatus }, '');
       },
     },
+    {
+      title: '',
+      key: 'actions',
+      align: 'right',
+      className: '!py-0',
+      render() {
+        return h(
+          NDropdown,
+          { options: dropdownOptions, trigger: 'click' },
+          {
+            default: () =>
+              h(
+                NButton,
+                { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
+              ),
+          }
+        );
+      },
+    },
   ];
 };
 const columns = createColumns();
 const rowKey = (row: ContractInterface) => row.contract_uuid;
 const currentRow = ref<ContractInterface>(props.contracts[0]);
+
+const actionsDisabled = computed<boolean>(() => {
+  return contractStore.active?.contractStatus < 0;
+});
+
+/**
+ * Dropdown Actions
+ */
+const dropdownOptions = [
+  {
+    label: t('computing.contract.deposit'),
+    key: 'deposit',
+    disabled: actionsDisabled.value,
+    props: {
+      onClick: () => {
+        if (!actionsDisabled.value) {
+          modalDepositVisible.value = true;
+        }
+      },
+    },
+  },
+  {
+    label: $i18n.t('computing.contract.transfer'),
+    key: 'transfer',
+    disabled: actionsDisabled.value,
+    props: {
+      onClick: () => {
+        if (!actionsDisabled.value) {
+          modalTransferOwnershipVisible.value = true;
+        }
+      },
+    },
+  },
+];
 
 /** On row click */
 const rowProps = (row: ContractInterface) => {
@@ -99,4 +181,25 @@ const rowProps = (row: ContractInterface) => {
     },
   };
 };
+
+function onContractDeposit() {
+  modalDepositVisible.value = false;
+  setTimeout(() => {
+    contractStore.fetchContracts();
+
+    setTimeout(() => {
+      // checkUnfinishedTransactions();
+    }, 10000);
+  }, 3000);
+}
+function onContractTransferred() {
+  modalTransferOwnershipVisible.value = false;
+  setTimeout(() => {
+    contractStore.fetchContracts();
+
+    setTimeout(() => {
+      // checkUnfinishedTransactions();
+    }, 10000);
+  }, 3000);
+}
 </script>

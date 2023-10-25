@@ -152,14 +152,6 @@ const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const contract = ref<ContractInterface | null>(null);
 
-onMounted(async () => {
-  if (props.contractUuid) {
-    contract.value = await contractStore.getContract(props.contractUuid);
-    formData.value.name = contract.value.name;
-    formData.value.description = contract.value.description || '';
-  }
-});
-
 const contractTypes = ref<Array<NSelectOption>>(
   enumValues(ComputingContractType).map(value => {
     return {
@@ -170,8 +162,12 @@ const contractTypes = ref<Array<NSelectOption>>(
 );
 
 const formData = ref<FormContract>({
-  name: contract.value?.name || '',
-  description: contract.value?.description || '',
+  name: '',
+  description: '',
+  contractType: ComputingContractType.SCHRODINGER,
+  nftContractAddress: '',
+  nftChainRpcUrl: '',
+  restrictToOwner: false,
 });
 
 const rules: NFormRules = {
@@ -189,7 +185,22 @@ const rules: NFormRules = {
       trigger: 'input',
     },
   ],
+  nftContractAddress: [
+    {
+      required: true,
+      message: $i18n.t('validation.contract.addressRequired'),
+      trigger: 'input',
+    },
+  ],
 };
+
+onMounted(async () => {
+  if (props.contractUuid) {
+    contract.value = await contractStore.getContract(props.contractUuid);
+    formData.value.name = contract.value.name;
+    formData.value.description = contract.value.description || '';
+  }
+});
 
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;

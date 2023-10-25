@@ -4,17 +4,6 @@
       <div class="w-[20vw] max-w-xs"></div>
 
       <n-space size="large">
-        <!-- Open Bucket -->
-        <n-button
-          v-if="collectionStore.active.bucket_uuid"
-          size="small"
-          :loading="loadingBucket"
-          @click="openBucket(collectionStore.active.bucket_uuid)"
-        >
-          <span class="icon-storage text-xl mr-2"></span>
-          <span>{{ $t('nft.openBucket') }}</span>
-        </n-button>
-
         <!-- Refresh -->
         <n-button size="small" :loading="collectionStore.loading" @click="refresh">
           <span class="icon-refresh text-xl mr-2"></span>
@@ -114,19 +103,5 @@ const options = computed(() => {
 
 async function refresh() {
   await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
-}
-
-async function openBucket(bucketUuid: string) {
-  if (!bucketUuid) {
-    return;
-  }
-  loadingBucket.value = true;
-
-  const bucket = await bucketStore.fetchBucket(bucketUuid);
-  loadingBucket.value = false;
-
-  if (bucket && bucket.id) {
-    router.push(`/dashboard/service/storage/${bucket.id}`);
-  }
 }
 </script>
