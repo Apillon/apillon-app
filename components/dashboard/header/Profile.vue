@@ -1,8 +1,10 @@
 <template>
   <n-dropdown
     v-if="authStore.loggedIn"
+    class="rounded-lg"
     placement="bottom-end"
     trigger="click"
+    size="large"
     :options="options"
     style="min-width: 220px"
     @select="handleSelect"
@@ -30,14 +32,27 @@ const authStore = useAuthStore();
 const router = useRouter();
 const $i18n = useI18n();
 
+const renderIcon = (iconName: string) => {
+  return () => {
+    return h('span', { class: `${iconName} text-xl` }, '');
+  };
+};
+
 const options = [
   {
     key: 'profile',
     label: $i18n.t('profile.profile'),
+    icon: renderIcon('icon-anonymous'),
   },
   {
-    key: 'dashboard-account-management',
-    label: $i18n.t('profile.account'),
+    key: 'dashboard-billing',
+    label: $i18n.t('profile.billing'),
+    icon: renderIcon('icon-billing'),
+  },
+  {
+    key: 'dashboard-project-settings',
+    label: $i18n.t('profile.settings'),
+    icon: renderIcon('icon-project-setting'),
   },
   {
     key: 'logout',

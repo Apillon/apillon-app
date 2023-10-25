@@ -38,8 +38,9 @@ export const usePaymentsStore = defineStore('payments', {
       return Array.isArray(state.priceList) && state.priceList.length > 0;
     },
     getActiveSubscriptionPackage(state) {
-      return state.subscriptionPackages.find(
-        item => item.id === state.activeSubscription.package_id
+      return (
+        state.subscriptionPackages.find(item => item.id === state.activeSubscription.package_id) ||
+        state.subscriptionPackages[0]
       );
     },
   },

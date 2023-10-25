@@ -62,6 +62,22 @@
             <span>{{ version }}</span>
           </p>
         </div>
+
+        <!-- SIDEBAR PRICING -->
+        <div v-if="!collapsed" class="flex border-t border-bg-lighter flex-col p-8">
+          <div class="mb-3">
+            <span class="text-xs text-bodyDark">{{ $t('dashboard.payment.currentPlan') }}</span>
+            <strong class="block">
+              {{ paymentsStore.getActiveSubscriptionPackage?.name }}
+            </strong>
+            <span class="text-sm text-body">{{
+              $t('dashboard.payment.costsPerMonth', { costs: 0 })
+            }}</span>
+          </div>
+          <Btn type="secondary" size="large" @click="router.push({ name: 'dashboard-billing' })">
+            {{ $t('dashboard.payment.upgradePlan') }}
+          </Btn>
+        </div>
       </n-scrollbar>
     </div>
   </transition>
@@ -84,6 +100,8 @@ const props = defineProps({
 
 const { isSm, isLg } = useScreen();
 const dataStore = useDataStore();
+const paymentsStore = usePaymentsStore();
+
 const showModalNewProject = ref(false);
 const emit = defineEmits(['toggleSidebar']);
 
@@ -101,6 +119,8 @@ onMounted(() => {
       ) {
         showModalNewProject.value = true;
       }
+      paymentsStore.getSubscriptionPackages();
+      paymentsStore.fetchActiveSubscription();
     });
   }, 100);
 });

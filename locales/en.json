@@ -234,12 +234,15 @@
     },
     "payment": {
       "buyCredits": "Buy credits",
+      "costsPerMonth": "Costs: {costs} / month",
+      "currentPlan": "Current plan",
       "expiresOn": "Expires on:",
       "decline": "Decline",
       "notEnoughCredits": "You don't have enough credits. Please, buy more credits to proceed",
       "proceed": "Proceed",
       "spendingAlert": "Spending ALERT!",
       "title": "Payment",
+      "upgradePlan": "Upgrade plan",
       "stripe": {
         "error": "Failed to subscribe",
         "success": "Successfully subscribed to a plan"
@@ -258,7 +261,7 @@
     "attached": "Attached",
     "attachService": "Attach service",
     "attachNewService": "Attach new service",
-    "billing": "Billing",
+    "billing": "Billing and usage",
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
@@ -892,6 +895,7 @@
     "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
     "account": "Account",
     "accountInformation": "Account information",
+    "billing": "Billing",
     "logout": "Logout",
     "marketing": "Marketing",
     "marketingCheck": "I want to recieve marketing email from Apillon",
@@ -899,6 +903,7 @@
     "mySettings": "Settings",
     "profile": "Profile",
     "security": "Security",
+    "settings": "Settings",
     "setup2fa": "Set up 2FA"
   },
   "project": {

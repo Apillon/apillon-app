@@ -21,10 +21,6 @@
           :credit-package="creditPackage"
         />
       </div>
-
-      <!-- Credit Transactions -->
-      <n-h5 prefix="bar">{{ $t('dashboard.credits.transactions') }}</n-h5>
-      <TablePaymentCreditTransactions class="pb-8" />
     </slot>
   </Dashboard>
 </template>

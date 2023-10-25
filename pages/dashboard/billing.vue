@@ -54,6 +54,10 @@
       <!-- Invoices -->
       <n-h5 prefix="bar">{{ $t('dashboard.invoice.invoices') }}</n-h5>
       <TablePaymentInvoices />
+
+      <!-- Credit Transactions -->
+      <n-h5 prefix="bar">{{ $t('dashboard.credits.transactions') }}</n-h5>
+      <TablePaymentCreditTransactions class="pb-8" />
     </slot>
   </Dashboard>
 </template>
@@ -138,12 +142,18 @@ onMounted(() => {
       );
       promises.push(
         new Promise<void>(resolve => {
+          paymentsStore.getCreditPackages().then(() => resolve());
+        })
+      );
+      promises.push(
+        new Promise<void>(resolve => {
           paymentsStore.fetchActiveSubscription().then(() => resolve());
         })
       );
 
       await Promise.all(promises).then(_ => {
         paymentsStore.fetchInvoices();
+        paymentsStore.fetchCreditTransactions();
         loading.value = false;
       });
     });
