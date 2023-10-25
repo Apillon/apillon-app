@@ -39,6 +39,12 @@
 <script lang="ts" setup>
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
+type SignupForm = {
+  email: string;
+  captcha?: any;
+  refCode?: string;
+};
+
 const props = defineProps({
   sendAgain: { type: Boolean, default: false },
 });
@@ -106,7 +112,7 @@ async function signupWithEmail() {
       router.push({ name: 'register-email' });
 
       /** Track new registration */
-      tractEvent('registration', 'registration_email_input', 'Email signup');
+      trackEvent('registration_email_input');
     } else {
       message.success($i18n.t('form.success.sendAgainEmail'));
     }

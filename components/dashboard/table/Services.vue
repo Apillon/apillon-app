@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { DataTableColumns, NButton, NDropdown, NTag } from 'naive-ui';
+import { NButton, NDropdown, NTag } from 'naive-ui';
 
 const props = defineProps({
   serviceType: {
@@ -46,7 +46,7 @@ const TableEllipsis = resolveComponent('TableEllipsis');
 const modalEditAuthVisible = ref<boolean>(false);
 const modalDeleteAuthVisible = ref<boolean>(false);
 
-const createColumns = (): DataTableColumns<ServiceInterface> => {
+const createColumns = (): NDataTableColumns<ServiceInterface> => {
   return [
     {
       key: 'name',

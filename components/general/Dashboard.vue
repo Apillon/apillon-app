@@ -104,21 +104,48 @@
 </template>
 
 <script lang="ts" setup>
+import { useGtm } from '@gtm-support/vue-gtm';
 const props = defineProps({
   loading: { type: Boolean, default: false },
   learnCollapsible: { type: Boolean, default: true },
 });
 
-const paymentsStore = usePaymentsStore();
+/** Check if instructions are available (page has content and feature is enabled) */
+const $slots = useSlots();
+const authStore = useAuthStore();
+const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
+const paymentsStore = usePaymentsStore();
+
+const gtm = useGtm();
+const { isMd, isLg, isXl } = useScreen();
+const { name } = useRoute();
+
+/** Heading height */
+const headingRef = ref<HTMLElement>();
+const scrollStyle = computed(() => {
+  return {
+    maxHeight: `calc(100vh - ${120 + (headingRef.value?.clientHeight || 0)}px)`,
+  };
+});
 
 /** Delay animation */
 const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
+  // await getInstructions(key.value);
 
   /** Get Price list */
   paymentsStore.getPriceList();
+
+  if (gtm && gtm.enabled() && !sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
+    gtm.trackEvent({
+      event: 'dashboard_on_load',
+      user_uuid: authStore.userUuid,
+    });
+    sessionStorage.setItem(LsAnalyticsKeys.USER_UUID, Date.now().toString());
+  }
 });
 watch(
   () => props.loading,
@@ -132,22 +159,6 @@ function setLoadingAnimation(isLoading: boolean) {
     loadingAnimation.value = isLoading;
   }, delay);
 }
-
-/** Check if instructions are available (page has content and feature is enabled) */
-const $slots = useSlots();
-const dataStore = useDataStore();
-const bucketStore = useBucketStore();
-const { isMd, isLg, isXl } = useScreen();
-const { name } = useRoute();
-const authStore = useAuthStore();
-
-/** Heading height */
-const headingRef = ref<HTMLElement>();
-const scrollStyle = computed(() => {
-  return {
-    maxHeight: `calc(100vh - ${120 + (headingRef.value?.clientHeight || 0)}px)`,
-  };
-});
 
 /** Instructions load */
 const key = computed(() => {

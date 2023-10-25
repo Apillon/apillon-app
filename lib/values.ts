@@ -8,6 +8,10 @@ export const PARAMS_ALL_ITEMS = {
   limit: 100,
 };
 
+export const LsAnalyticsKeys = {
+  USER_UUID: 'al_analytics_user_uuid',
+};
+
 export const LsTableColumnsKeys = {
   FILES: 'al_table_files_columns',
 };

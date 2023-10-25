@@ -86,31 +86,6 @@ declare global {
   /**
    * Collection
    */
-  interface FormCollectionName {
-    symbol: string;
-    name: string;
-    chain?: number;
-    collectionType?: number;
-  }
-
-  interface FormCollectionBehavior {
-    baseExtension: string | null;
-    dropStart?: number;
-    drop: boolean;
-    maxSupply?: number | null;
-    dropPrice?: number;
-    dropReserve?: number;
-    revocable?: boolean | null;
-    soulbound?: boolean | null;
-    supplyLimited?: number;
-    royaltiesAddress?: string;
-    royaltiesFees?: number;
-  }
-  interface FormCollection extends FormCollectionName, FormCollectionBehavior {
-    baseUri: string | null;
-    description?: string;
-  }
-
   interface CollectionInterface extends BaseObjectInterface {
     baseExtension: string;
     baseUri: string;
@@ -141,22 +116,6 @@ declare global {
   /**
    * NFT
    */
-  interface FormNftMint {
-    receivingAddress: string;
-    quantity: number | null;
-  }
-  interface FormNftNestMint {
-    parentCollectionUuid: string | null;
-    parentNftId: number | null;
-    quantity: number | null;
-  }
-  interface FormNftBurn {
-    collectionUuid: string;
-    tokenId: number | null;
-  }
-  interface FormNftTransfer {
-    address: string;
-  }
   interface TransactionInterface {
     id: number;
     status: number;

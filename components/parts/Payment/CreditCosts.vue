@@ -40,7 +40,7 @@
         </tbody>
       </n-table>
 
-      <Btn class="my-8" type="secondary" size="large" @click="modalCostsVisible = false">
+      <Btn class="mt-8" type="secondary" size="large" @click="modalCostsVisible = false">
         {{ $t('dashboard.credits.confirmPrices') }}
       </Btn>
     </div>

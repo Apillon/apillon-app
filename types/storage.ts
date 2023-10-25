@@ -99,10 +99,6 @@ declare global {
     size: number | null;
   }
 
-  interface FormNewBucket {
-    bucketName: string;
-    bucketDescription: string | null;
-  }
   interface BucketResponse extends GeneralResponse<BucketInterface> {}
   interface BucketsResponse extends GeneralItemsResponse<BucketInterface> {}
 
@@ -120,10 +116,7 @@ declare global {
     uuid: string;
     file_uuid?: string;
   }
-  interface FormFolder {
-    name: string;
-    description?: string | null;
-  }
+
   interface CreateFolderResponse extends GeneralResponse<BucketItemInterface> {}
   interface BucketItemResponse extends GeneralResponse<BucketItemInterface> {}
   interface FolderResponse extends GeneralItemsResponse<BucketItemInterface> {}
@@ -150,13 +143,7 @@ declare global {
     link: string | null;
     updateTime: string;
   }
-  interface FormIpns {
-    name: string;
-    description?: string | null;
-  }
-  interface FormIpnsPublish {
-    ipns?: number;
-  }
+
   interface IpnsCreateResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsUpdateResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsPublishResponse extends GeneralResponse<IpnsInterface> {}
@@ -232,13 +219,6 @@ declare global {
     file: FileInterface;
     fileStatus: number;
   }
-  interface FormFileUploadRequest {
-    fileName: string;
-    contentType: string;
-    directory_uuid?: string;
-    session_uuid?: string;
-    path?: string;
-  }
 
   type FileDetails = FileInterface | FileUploadInterface;
   type FileCrust = typeof crustTypes.market.types.FileInfoV2;
@@ -252,12 +232,6 @@ declare global {
   /**
    * Webhook
    */
-  interface FormWebhook {
-    url: string;
-    authType: string;
-    param1: string;
-    param2?: string;
-  }
   interface WebhookInterface {
     id: number;
     status: number;
@@ -272,13 +246,6 @@ declare global {
   /**
    * Website
    */
-  interface FormWebsite {
-    name: string;
-    description: string;
-  }
-  interface FormWebsiteDomain {
-    domain?: string | null;
-  }
   interface WebsiteBaseInterface extends BaseObjectInterface {
     website_uuid: string;
     domain: string | null;

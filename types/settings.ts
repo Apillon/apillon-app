@@ -21,41 +21,6 @@ export enum OauthLinkType {
 
 declare global {
   /**
-   * Billing
-   */
-  interface FormBilling {
-    cardHolder: string;
-    cardNumber: string;
-    expirationDate: string;
-    cvv: string;
-    postalCode: string;
-    terms: boolean;
-  }
-  interface BillingResponse extends GeneralItemsResponse<any> {}
-
-  /**
-   * API key - Form
-   */
-  interface ApiKeyPermissionForm {
-    key: number;
-    label: string;
-    name: string;
-    value: boolean;
-  }
-  interface ApiKeyRoleForm {
-    enabled: boolean;
-    name: string;
-    serviceType: string;
-    service_uuid: string;
-    permissions: Array<ApiKeyPermissionForm>;
-  }
-  interface ApiKeyForm {
-    name: string;
-    apiKeyType: boolean;
-    roles: Array<ApiKeyRoleForm>;
-  }
-
-  /**
    * API key
    */
   interface ApiKeyInterface {
