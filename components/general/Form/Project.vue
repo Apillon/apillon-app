@@ -71,6 +71,12 @@
 </template>
 
 <script lang="ts" setup>
+type FormProject = {
+  name: string | null;
+  description: string | null;
+  terms?: boolean;
+};
+
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();

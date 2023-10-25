@@ -39,6 +39,12 @@
 <script lang="ts" setup>
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
+type SignupForm = {
+  email: string;
+  captcha?: any;
+  refCode?: string;
+};
+
 const props = defineProps({
   sendAgain: { type: Boolean, default: false },
 });

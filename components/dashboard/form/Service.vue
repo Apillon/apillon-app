@@ -56,6 +56,11 @@
 </template>
 
 <script lang="ts" setup>
+type FormService = {
+  serviceName: string;
+  networkType: boolean;
+};
+
 const props = defineProps({
   serviceUuid: { type: String, default: '' },
   serviceType: {

@@ -75,10 +75,6 @@ declare global {
   /**
    * Service
    */
-  interface FormService {
-    serviceName: string;
-    networkType: boolean;
-  }
   interface ServiceTypeInterface extends BaseObjectInterface {
     active: number;
   }

@@ -25,6 +25,10 @@
 </template>
 
 <script lang="ts" setup>
+type FormNftTransfer = {
+  address: string;
+};
+
 const props = defineProps({
   collectionUuid: { type: String, required: true },
   chainId: { type: Number, required: true },

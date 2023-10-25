@@ -114,6 +114,13 @@
 </template>
 
 <script lang="ts" setup>
+type FormWebhook = {
+  url: string;
+  authType: string;
+  param1: string;
+  param2?: string;
+};
+
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });

@@ -44,6 +44,10 @@
 </template>
 
 <script lang="ts" setup>
+type FormWebsiteDomain = {
+  domain?: string | null;
+};
+
 const props = defineProps({
   websiteUuid: { type: String, default: null },
   domain: { type: String, default: '' },
@@ -55,17 +59,10 @@ const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
+
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-
 const website = ref<WebsiteInterface | null>(null);
-
-onMounted(async () => {
-  if (props.websiteUuid) {
-    website.value = await websiteStore.getWebsite(props.websiteUuid);
-    formData.value.domain = website.value.domain;
-  }
-});
 
 const formData = ref<FormWebsiteDomain>({
   domain: props.domain || null,
@@ -80,6 +77,13 @@ const rules: NFormRules = {
     },
   ],
 };
+
+onMounted(async () => {
+  if (props.websiteUuid) {
+    website.value = await websiteStore.getWebsite(props.websiteUuid);
+    formData.value.domain = website.value.domain;
+  }
+});
 
 // Custom validations
 function validateDomain(_: NFormItemRule, value: string): boolean {

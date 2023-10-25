@@ -76,6 +76,11 @@
 </template>
 
 <script lang="ts" setup>
+type FormNewBucket = {
+  bucketName: string;
+  bucketDescription: string | null;
+};
+
 const props = defineProps({
   bucketUuid: { type: String, default: '' },
   bucketType: { type: Number, default: BucketType.STORAGE },
@@ -87,20 +92,10 @@ const $i18n = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
-const settingsStore = useSettingsStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-
 const bucket = ref<BucketInterface | null>(null);
-
-onMounted(async () => {
-  if (props.bucketUuid) {
-    bucket.value = await bucketStore.getBucket(props.bucketUuid);
-    formData.value.bucketName = bucket.value.name;
-    formData.value.bucketDescription = bucket.value.description;
-  }
-});
 
 const formData = ref<FormNewBucket>({
   bucketName: bucket.value?.name || '',
@@ -122,6 +117,14 @@ const rules: NFormRules = {
     },
   ],
 };
+
+onMounted(async () => {
+  if (props.bucketUuid) {
+    bucket.value = await bucketStore.getBucket(props.bucketUuid);
+    formData.value.bucketName = bucket.value.name;
+    formData.value.bucketDescription = bucket.value.description;
+  }
+});
 
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;

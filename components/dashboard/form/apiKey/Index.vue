@@ -126,6 +126,28 @@
 <script lang="ts" setup>
 import { useMessage, type CollapseProps } from 'naive-ui';
 
+/**
+ * API key - Form
+ */
+type ApiKeyPermissionForm = {
+  key: number;
+  label: string;
+  name: string;
+  value: boolean;
+};
+type ApiKeyRoleForm = {
+  enabled: boolean;
+  name: string;
+  serviceType: string;
+  service_uuid: string;
+  permissions: Array<ApiKeyPermissionForm>;
+};
+type ApiKeyForm = {
+  name: string;
+  apiKeyType: boolean;
+  roles: Array<ApiKeyRoleForm>;
+};
+
 const props = defineProps({
   id: { type: Number, default: 0 },
 });
