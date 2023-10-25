@@ -271,7 +271,11 @@ export default function useNft() {
         if (!!metadataSession && !!imagesSession) {
           const res = await $api.post<CollectionResponse>(
             endpoints.nftDeploy(collectionStore.active.collection_uuid),
-            { metadataSession, imagesSession }
+            {
+              useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
+              metadataSession,
+              imagesSession,
+            }
           );
           collectionStore.active = res.data;
 

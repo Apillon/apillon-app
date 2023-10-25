@@ -32,6 +32,7 @@ export const useCollectionStore = defineStore('collection', {
         symbol: '',
         chain: Chains.MOONBEAM,
         collectionType: NFTCollectionType.GENERIC,
+        useApillonIpfsGateway: false as Boolean | null,
       },
       behavior: {
         baseUri: '',

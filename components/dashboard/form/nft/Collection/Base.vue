@@ -69,8 +69,17 @@
       />
     </n-form-item>
 
+    <!--  Collection Use Gateway -->
+    <n-form-item path="useApillonIpfsGateway" :show-label="false">
+      <n-checkbox
+        v-model:checked="collectionStore.form.base.useApillonIpfsGateway"
+        size="medium"
+        :label="infoLabel('collectionUseGateway')"
+      />
+    </n-form-item>
+
     <!--  Form submit -->
-    <n-form-item>
+    <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.proceed')" />
       <Btn type="primary" class="w-full mt-2" @click="handleSubmitForm">
         {{ $t('form.proceed') }}

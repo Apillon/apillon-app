@@ -401,6 +401,7 @@
       "collectionSymbol": "Symbol",
       "collectionSupplyLimited": "Total supply",
       "collectionType": "Collection type",
+      "collectionUseGateway": "Use apillon gateway for base uri",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "domain": "Domain name",
@@ -716,7 +717,8 @@
         "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
         "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
-        "collectionType": ""
+        "collectionType": "",
+        "collectionUseGateway": ""
       },
       "status": {
         "0": "CREATED",
