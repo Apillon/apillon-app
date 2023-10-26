@@ -44,8 +44,10 @@ declare global {
    * Credit Packages
    */
   interface CreditPackageInterface extends BaseObjectInterface {
-    creditAmount: number;
+    id: number;
     bonusCredits: number;
+    creditAmount: number;
+    price: number;
   }
   interface CreditPackagesResponse extends GeneralResponse<CreditPackageInterface[]> {}
 
@@ -53,6 +55,7 @@ declare global {
    * Subscription
    */
   interface SubscriptionInterface extends GeneralInterface {
+    id: number;
     package_id: number;
     project_uuid: string;
     expiresOn: string;
@@ -67,6 +70,7 @@ declare global {
    * Subscription Package
    */
   interface SubscriptionPackageInterface extends BaseObjectInterface {
+    id: number;
     creditAmount: number;
     price?: number;
   }

@@ -60,3 +60,14 @@
     }
   }
 }
+
+/** Payment package */
+.credits-package,
+.subscription-package {
+  @apply relative;
+
+  &:not(:first-child):before {
+    content: '';
+    @apply absolute -left-6 top-0 bottom-0 block w-0 h-full border-l border-bg-lighter;
+  }
+}

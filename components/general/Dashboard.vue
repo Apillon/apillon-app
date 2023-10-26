@@ -60,7 +60,7 @@
           collapse-mode="width"
           :collapsed-width="48"
           :width="isXl ? 455 : 356"
-          :content-style="isMd ? 'padding-left: 32px;' : ''"
+          :content-style="isMd ? 'padding-left: 20px;' : ''"
           @after-enter="handleOnUpdateCollapse(false)"
           @after-leave="handleOnUpdateCollapse(true)"
         >

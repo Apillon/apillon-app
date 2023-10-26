@@ -31,7 +31,7 @@
               v-else
               type="secondary"
               size="large"
-              :to="{ name: 'dashboard-credits' }"
+              :to="{ name: 'dashboard-billing' }"
               @click="$emit('close')"
             >
               {{ $t('dashboard.payment.buyCredits') }}

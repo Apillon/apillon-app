@@ -96,6 +96,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const referralStore = useReferralStore();
 const showModal = ref(false);
+const loading = ref(false);
 
 useHead({
   title: t('dashboard.dashboard'),
@@ -109,9 +110,11 @@ function enterReferral() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())) {
-    referralStore.getReferral();
+    loading.value = true;
+    await referralStore.getReferral();
+    loading.value = false;
   }
 });
 </script>
