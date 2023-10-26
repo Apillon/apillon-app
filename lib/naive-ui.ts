@@ -1,4 +1,4 @@
-import { GlobalThemeOverrides, MessageProviderProps } from 'naive-ui';
+import type { GlobalThemeOverrides, MessageProviderProps } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 
 type MessageThemeOverrides = NonNullable<MessageProviderProps['themeOverrides']>;
@@ -115,7 +115,7 @@ export const themeOverrides: GlobalThemeOverrides = {
   },
   Card: {
     borderColor: colors.primary,
-    borderRadius: '0px',
+    borderRadius: '8px',
     color: colors.bg.DEFAULT,
     colorEmbedded: colors.bg.DEFAULT,
     colorEmbeddedModal: colors.bg.DEFAULT,
@@ -123,6 +123,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     colorModal: colors.bg.DEFAULT,
     colorPopover: colors.bg.DEFAULT,
     colorTarget: colors.bg.DEFAULT,
+    paddingSmall: '32px',
     paddingMedium: '16px 64px 16px 64px',
   },
   Checkbox: {
@@ -180,7 +181,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     footerPadding: '0px 32px 32px 32px',
   },
   Dropdown: {
-    borderRadius: '0px',
+    borderRadius: '8px',
     color: colors.bg.dark,
     fontSizeSmall: '12px',
     fontSizeMedium: '14px',
@@ -349,7 +350,7 @@ export const themeOverrides: GlobalThemeOverrides = {
         borderActive: `1px solid ${colors.white}`,
         borderFocus: `1px solid ${colors.white}`,
         borderHover: `1px solid ${colors.body}`,
-        borderRadius: '0px',
+        borderRadius: '8px',
         boxShadowActive: 'none',
         boxShadowFocus: 'none',
         boxShadowHover: 'none',

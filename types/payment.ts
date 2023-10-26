@@ -44,8 +44,10 @@ declare global {
    * Credit Packages
    */
   interface CreditPackageInterface extends BaseObjectInterface {
-    creditAmount: number;
+    id: number;
     bonusCredits: number;
+    creditAmount: number;
+    price: number;
   }
   interface CreditPackagesResponse extends GeneralResponse<CreditPackageInterface[]> {}
 

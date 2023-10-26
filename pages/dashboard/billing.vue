@@ -12,52 +12,74 @@
       </Heading>
     </template>
     <slot>
-      <div v-if="paymentsStore.activeSubscription?.package_id" class="grid grid-cols-3 gap-5">
-        <n-card :bordered="false" :title="t('dashboard.yourPlan')">
-          <div class="flex items-center">
-            <span class="icon-star text-xl text-primary mr-3"></span>
-            <h4>{{ paymentsStore.getActiveSubscriptionPackage?.name }}</h4>
+      <div class="grid grid-cols-2 gap-8 mb-12">
+        <n-card
+          class="card-dark"
+          size="small"
+          :bordered="false"
+          :title="$t('dashboard.credits.currentCredits')"
+        >
+          <div class="flex gap-4 items-center mb-6">
+            <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
+            <h3>{{ paymentsStore.credit.balance }} {{ $t('dashboard.credits.credits') }}</h3>
           </div>
-          <div class="mt-4">
-            <Btn type="primary" size="large" :loading="loading" @click="goToCustomerPortal()">
-              <span>Edit billing details</span>
-            </Btn>
+          <Btn type="secondary" size="large" @click="modalCreditPackagesVisible = true">
+            {{ $t('dashboard.credits.getMore') }}
+          </Btn>
+        </n-card>
+        <n-card
+          class="card-dark"
+          size="small"
+          :bordered="false"
+          :title="$t('dashboard.payment.currentPlan')"
+        >
+          <div class="flex gap-4 items-center mb-6">
+            <span class="icon-billing text-xl"></span>
+            <h3>
+              {{
+                $t('dashboard.payment.costsPerMonth', {
+                  costs: paymentsStore.getActiveSubscriptionPackage?.price || 0,
+                })
+              }}
+            </h3>
           </div>
+          <Btn type="primary" size="large" @click="modalSubscriptionPackagesVisible = true">
+            {{ $t('dashboard.payment.upgrade') }}
+          </Btn>
         </n-card>
-        <n-card :bordered="false" :title="t('dashboard.payment.expiresOn')">
-          <h4>{{ dateTimeToDate(paymentsStore.activeSubscription.expiresOn) }}</h4>
-        </n-card>
-        <n-card :bordered="false" title="Credits">
-          <h4>{{ paymentsStore.credit.balance }}</h4>
-        </n-card>
-      </div>
-
-      <!-- Subscription packages -->
-      <n-h5 prefix="bar">{{ $t('dashboard.subscription.packages') }}</n-h5>
-      <div
-        v-if="paymentsStore.hasSubscriptionPackages"
-        v-drag-scroll.options="{ direction: 'x' }"
-        class="scrollable overflow-x-auto pb-1"
-      >
-        <div class="flex gap-5">
-          <PaymentSubscriptionPackage
-            v-for="(subscriptionPackage, key) in paymentsStore.subscriptionPackages"
-            :key="key"
-            :subscription-package="subscriptionPackage"
-            :plan="pricingPlans[subscriptionPackage.name] || {}"
-            :type="key % 2 === 0 ? 'dark' : 'light'"
-            class="w-1/4 min-w-[18rem]"
-          />
-        </div>
       </div>
 
       <!-- Invoices -->
-      <n-h5 prefix="bar">{{ $t('dashboard.invoice.invoices') }}</n-h5>
+      <h4 class="mt-12 mb-6">{{ $t('dashboard.invoice.invoices') }}</h4>
       <TablePaymentInvoices />
 
       <!-- Credit Transactions -->
-      <n-h5 prefix="bar">{{ $t('dashboard.credits.transactions') }}</n-h5>
+      <h4 class="mt-12 mb-6">{{ $t('dashboard.credits.transactions') }}</h4>
       <TablePaymentCreditTransactions class="pb-8" />
+
+      <!-- Modals -->
+      <modal v-model:show="modalCreditPackagesVisible">
+        <div class="grid grid-cols-3 gap-12">
+          <PaymentCreditPackage
+            v-for="(creditPackage, key) in paymentsStore.creditPackages"
+            :key="key"
+            :credit-package="creditPackage"
+          />
+        </div>
+      </modal>
+      <modal v-model:show="modalSubscriptionPackagesVisible" size="large">
+        <div v-drag-scroll.options="{ direction: 'x' }" class="scrollable overflow-x-auto pb-1">
+          <div class="flex gap-12">
+            <PaymentSubscriptionPackage
+              v-for="(subscriptionPackage, key) in paymentsStore.subscriptionPackages"
+              :key="key"
+              :subscription-package="subscriptionPackage"
+              :plan="pricingPlans[subscriptionPackage.name] || {}"
+              class="min-w-[10rem] lg:min-w-[16rem]"
+            />
+          </div>
+        </div>
+      </modal>
     </slot>
   </Dashboard>
 </template>
@@ -74,6 +96,8 @@ useHead({
 });
 
 const loading = ref<boolean>(true);
+const modalCreditPackagesVisible = ref<boolean>(false);
+const modalSubscriptionPackagesVisible = ref<boolean>(false);
 
 const pricingPlans: Record<string, PricingPlan> = {
   Freemium: {
@@ -106,17 +130,6 @@ const pricingPlans: Record<string, PricingPlan> = {
       storage: '300 GB Lifetime',
       bandwith: '750 GB Monthly',
       credits: '20000 Credits Lifetime',
-    },
-    otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
-  },
-  Butterfly: {
-    name: 'Butterfly',
-    price: null,
-    description: 'Bring your enterprise to the Web3 level and go big on decentralized tech.',
-    services: {
-      storage: '∞ GB Lifetime',
-      bandwith: '∞ GB Monthly',
-      credits: '∞ Credits Lifetime',
     },
     otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },

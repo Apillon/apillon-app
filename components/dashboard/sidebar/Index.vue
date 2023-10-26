@@ -70,9 +70,14 @@
             <strong class="block">
               {{ paymentsStore.getActiveSubscriptionPackage?.name }}
             </strong>
-            <span class="text-sm text-body">{{
-              $t('dashboard.payment.costsPerMonth', { costs: 0 })
-            }}</span>
+            <span class="text-sm text-body">
+              {{ $t('dashboard.payment.costs') }}:
+              {{
+                $t('dashboard.payment.costsPerMonth', {
+                  costs: paymentsStore.getActiveSubscriptionPackage?.price || 0,
+                })
+              }}
+            </span>
           </div>
           <Btn type="secondary" size="large" @click="router.push({ name: 'dashboard-billing' })">
             {{ $t('dashboard.payment.upgradePlan') }}
@@ -98,6 +103,7 @@ const props = defineProps({
   showOnMobile: { type: Boolean, default: false },
 });
 
+const router = useRouter();
 const { isSm, isLg } = useScreen();
 const dataStore = useDataStore();
 const paymentsStore = usePaymentsStore();

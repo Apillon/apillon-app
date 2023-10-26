@@ -8,13 +8,8 @@ const { t } = useI18n();
 const menuOptions: NMenuOption[] = [
   {
     key: 'dashboard-billing',
-    label: t('dashboard.pageMenu.subscription'),
+    label: t('dashboard.pageMenu.billing'),
     to: 'dashboard-billing',
-  },
-  {
-    key: 'dashboard-credits',
-    label: t('dashboard.pageMenu.credits'),
-    to: 'dashboard-credits',
   },
   {
     key: 'dashboard-price-list',
