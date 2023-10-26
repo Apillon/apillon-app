@@ -235,6 +235,7 @@
       "priceList": "Price list",
       "profile": "Profile",
       "projectSettings": "Project settings",
+      "usage": "Usage",
       "usersPermissions": "Users & permissions"
     },
     "payment": {
@@ -275,6 +276,15 @@
       "perMonth": "par month",
       "storage": "Storage",
       "web3Services": "Web3 services"
+    },
+    "usage": {
+      "bandwith": "Bandwith",
+      "bytesStored": "Byte stored",
+      "description": "Vel non enim tincidunt cursus. Mauris sit vulputate ac id turpis eget morbi urna ut. Ultrices sagittis aliquam id porta.",
+      "downloads": "Downloads",
+      "hosting": "Cloud hosting",
+      "storage": "Cloud storage",
+      "title": "Project quotas"
     },
     "adminMode": "You are in ADMIN mode!",
     "attached": "Attached",
