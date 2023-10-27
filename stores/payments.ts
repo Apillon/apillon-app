@@ -28,6 +28,9 @@ export const usePaymentsStore = defineStore('payments', {
     hasCreditPackages(state) {
       return Array.isArray(state.creditPackages) && state.creditPackages.length > 0;
     },
+    hasActiveSubscription(state) {
+      return state.activeSubscription?.package_id;
+    },
     hasSubscriptionPackages(state) {
       return Array.isArray(state.subscriptionPackages) && state.subscriptionPackages.length > 0;
     },
@@ -79,6 +82,13 @@ export const usePaymentsStore = defineStore('payments', {
     async getCreditPackages() {
       if (!this.hasCreditPackages || isCacheExpired(LsCacheKeys.CREDIT_PACKAGES)) {
         await this.fetchCreditPackages();
+      }
+    },
+
+    /** GET Active Subscription */
+    async getActiveSubscription() {
+      if (!this.hasActiveSubscription || isCacheExpired(LsCacheKeys.SUBSCRIPTION_ACTIVE)) {
+        await this.fetchActiveSubscription();
       }
     },
 
@@ -217,6 +227,9 @@ export const usePaymentsStore = defineStore('payments', {
         );
 
         this.activeSubscription = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.SUBSCRIPTION_ACTIVE, Date.now().toString());
       } catch (error: any) {
         this.activeSubscription = {} as SubscriptionInterface;
 

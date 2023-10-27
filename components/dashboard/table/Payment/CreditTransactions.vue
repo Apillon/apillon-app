@@ -30,76 +30,48 @@ const pagination = computed(() => {
 
 const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
   return [
-    // {
-    //   title: t('dashboard.credits.name'),
-    //   key: 'name',
-    //   render(row) {
-    //     return h('strong', {}, row.name);
-    //   },
-    // },
-    {
-      title: t('dashboard.credits.category'),
-      key: 'category',
-    },
     {
       title: t('dashboard.credits.service'),
       key: 'service',
+      render(row) {
+        return h('span', { class: 'text-body' }, row.service);
+      },
+    },
+    {
+      title: t('dashboard.credits.category'),
+      key: 'category',
+      render(row) {
+        return h('span', { class: 'text-body' }, row.category);
+      },
     },
     {
       title: t('dashboard.credits.description'),
       key: 'description',
+      render(row) {
+        return h('span', { class: 'text-body' }, row.description);
+      },
     },
     {
       title: t('dashboard.credits.direction'),
       key: 'direction',
       render(row) {
-        return row.direction === 1 ? 'RECEIVE' : 'SPEND';
+        return h('span', { class: 'text-body' }, row.direction === 1 ? 'RECEIVE' : 'SPEND');
       },
     },
     {
       title: t('dashboard.credits.amount'),
       key: 'amount',
-    },
-    {
-      title: t('dashboard.credits.createTime'),
-      key: 'createTime',
       render(row) {
-        return dateTimeToDateAndTime(row?.createTime || '');
+        return h('span', { class: 'text-body' }, `${row.amount}`);
       },
     },
-    // {
-    //   title: t('general.status'),
-    //   key: 'active',
-    //   render(row) {
-    //     return h(
-    //       NTag,
-    //       { type: row.status === 5 ? 'success' : 'default', round: true, bordered: false },
-    //       {
-    //         default: () =>
-    //           row.status === 5
-    //             ? h('strong', { class: 'text-black' }, t('general.active'))
-    //             : h('strong', { class: 'text-white' }, t('general.notActive')),
-    //       }
-    //     );
-    //   },
-    // },
-    // {
-    //   title: '',
-    //   key: 'view',
-    //   align: 'right',
-    //   render(row) {
-    //     return h(
-    //       'strong',
-    //       {
-    //         class: 'text-primary cursor-pointer',
-    //         onClick: () => viewInvoice(row),
-    //       },
-    //       {
-    //         default: () => t('dashboard.viewInvoice'),
-    //       }
-    //     );
-    //   },
-    // },
+    {
+      title: t('dashboard.credits.date'),
+      key: 'createTime',
+      render(row) {
+        return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
+      },
+    },
   ];
 };
 

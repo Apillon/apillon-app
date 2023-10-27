@@ -69,6 +69,9 @@ const loading = ref<boolean>(false);
 const paymentsStore = usePaymentsStore();
 
 async function getSubscriptionSessionUrl(packageId: number) {
+  /** Remove cache mark */
+  sessionStorage.removeItem(LsCacheKeys.SUBSCRIPTION_ACTIVE);
+
   if (paymentsStore.activeSubscription?.id) {
     return await goToCustomerPortal();
   }

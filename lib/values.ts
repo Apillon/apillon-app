@@ -56,6 +56,7 @@ export const LsCacheKeys = {
   SERVICES: 'al_cache_services',
   SERVICE_TYPES: 'al_cache_service_types',
   STORAGE_INFO: 'al_cache_storage_info',
+  SUBSCRIPTION_ACTIVE: 'al_cache_subscription_active',
   SUBSCRIPTION_PACKAGES: 'al_cache_subscription_packages',
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',

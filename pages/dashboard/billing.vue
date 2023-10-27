@@ -150,34 +150,22 @@ onMounted(() => {
 
       promises.push(
         new Promise<void>(resolve => {
-          paymentsStore.getSubscriptionPackages().then(() => resolve());
+          paymentsStore.fetchInvoices().then(() => resolve());
         })
       );
       promises.push(
         new Promise<void>(resolve => {
-          paymentsStore.getCreditPackages().then(() => resolve());
-        })
-      );
-      promises.push(
-        new Promise<void>(resolve => {
-          paymentsStore.fetchActiveSubscription().then(() => resolve());
+          paymentsStore.fetchCreditTransactions().then(() => resolve());
         })
       );
 
       await Promise.all(promises).then(_ => {
-        paymentsStore.fetchInvoices();
-        paymentsStore.fetchCreditTransactions();
+        paymentsStore.getCreditPackages();
+        paymentsStore.getSubscriptionPackages();
+        paymentsStore.getActiveSubscription();
         loading.value = false;
       });
     });
   }, 100);
 });
-
-async function goToCustomerPortal() {
-  const customerPortalUrl = await paymentsStore.getCustomerPortalURL();
-
-  if (customerPortalUrl) {
-    window.open(customerPortalUrl, '_blank');
-  }
-}
 </script>
