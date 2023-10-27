@@ -11,7 +11,7 @@
     <!--  Service name -->
     <n-form-item
       path="name"
-      class="mb-4 border-b-1 border-grey/40"
+      class="mb-4 border-b border-bg-lighter"
       :label="$t('form.label.apiKeyName')"
       :label-props="{ for: 'name' }"
     >
