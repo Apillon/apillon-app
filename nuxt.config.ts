@@ -12,7 +12,7 @@ const meta = {
   description:
     'Apillon is a Web3 development platform empowering developers to build in the Polkadot ecosystem.',
   url: appConfig.url,
-  image: `${appConfig.url}/register-now.jpg`,
+  image: `${appConfig.url}/apillon_og.jpg`,
   twitter: '@apillon_io',
 };
 
