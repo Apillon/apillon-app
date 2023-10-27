@@ -159,7 +159,7 @@
         </n-upload>
         <template v-else>
           <div class="flex text-left">
-            <div class="card flex-1 px-4 py-2">
+            <div class="card flex-1 px-4 py-2 rounded-lg">
               <span class="icon-file text-xl align-sub mr-3"></span>
               <span>{{ collectionStore.csvFile.name }}</span>
             </div>
@@ -190,7 +190,7 @@
     </div>
 
     <modal v-model:show="modalMetadataAttributesVisible" :title="$t('nft.upload.attributes')">
-      <n-space class="pb-8" :size="32" vertical>
+      <n-space :size="32" vertical>
         <NftMetadataAttributes />
         <Btn class="float-right" type="primary" @click="createMetadata">
           {{ $t('nft.upload.csvConfirmAttributes') }}

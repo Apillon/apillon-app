@@ -13,7 +13,7 @@
       </button>
     </div>
     <a v-else :href="link" target="_blank">
-      <div class="flex justify-between items-center bg-bg-dark px-4 py-2">
+      <div class="flex justify-between items-center px-4 py-2 card-dark rounded-lg">
         <n-ellipsis class="align-bottom" :line-clamp="1">
           {{ link }}
         </n-ellipsis>

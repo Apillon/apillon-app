@@ -21,6 +21,7 @@ type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>;
 const SelectRoleOverrides: SelectThemeOverrides = {
   peers: {
     InternalSelection: {
+      color: 'transparent',
       border: '0px',
       borderActive: '0px',
       borderFocus: '0px',
