@@ -52,7 +52,7 @@
           <div v-else class="h-8"></div>
 
           <!-- SIDEBAR NAVIGATION -->
-          <MenuNav :collapsed="collapsed" @toggleSidebar="hideNavOnMobile" />
+          <MenuNav :collapsed="collapsed" @toggle-sidebar="hideNavOnMobile" />
         </n-space>
 
         <!-- SIDEBAR FOOTER -->
@@ -68,13 +68,13 @@
           <div class="mb-3">
             <span class="text-xs text-bodyDark">{{ $t('dashboard.payment.currentPlan') }}</span>
             <strong class="block">
-              {{ paymentsStore.getActiveSubscriptionPackage?.name }}
+              {{ paymentStore.getActiveSubscriptionPackage?.name }}
             </strong>
             <span class="text-sm text-body">
               {{ $t('dashboard.payment.costs') }}:
               {{
                 $t('dashboard.payment.costsPerMonth', {
-                  costs: paymentsStore.getActiveSubscriptionPackage?.price || 0,
+                  costs: paymentStore.getActiveSubscriptionPackage?.price || 0,
                 })
               }}
             </span>
@@ -106,7 +106,7 @@ const props = defineProps({
 const router = useRouter();
 const { isSm, isLg } = useScreen();
 const dataStore = useDataStore();
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 const showModalNewProject = ref(false);
 const emit = defineEmits(['toggleSidebar']);
@@ -125,8 +125,8 @@ onMounted(() => {
       ) {
         showModalNewProject.value = true;
       }
-      paymentsStore.getSubscriptionPackages();
-      paymentsStore.fetchActiveSubscription();
+      paymentStore.getSubscriptionPackages();
+      paymentStore.fetchActiveSubscription();
     });
   }, 100);
 });

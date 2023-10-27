@@ -20,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(price, key) in paymentsStore.priceList" :key="key">
+          <tr v-for="(price, key) in paymentStore.priceList" :key="key">
             <td>{{ price.description }}</td>
             <td class="text-right">
               {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 const loading = ref<boolean>(true);
 
 useHead({
@@ -42,7 +42,7 @@ useHead({
 });
 
 onMounted(async () => {
-  await paymentsStore.getPriceList();
+  await paymentStore.getPriceList();
   loading.value = false;
 });
 </script>

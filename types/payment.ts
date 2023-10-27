@@ -31,12 +31,14 @@ declare global {
 
   interface CreditTransactionInterface extends BaseObjectInterface {
     amount: number;
+    category: string;
     credit_id: number;
     direction: number;
     product_id: number;
     createTime: string;
     referenceId: string | null;
     referenceTable: string | null;
+    service: string;
   }
   interface CreditTransactionsResponse extends GeneralItemsResponse<CreditTransactionInterface> {}
 

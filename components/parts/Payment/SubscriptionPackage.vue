@@ -32,7 +32,7 @@
     </div>
 
     <Btn
-      v-if="paymentsStore.activeSubscription?.package_id === subscriptionPackage.id"
+      v-if="paymentStore.activeSubscription?.package_id === subscriptionPackage.id"
       type="primary"
       size="large"
       round
@@ -66,14 +66,17 @@ defineProps({
 });
 
 const loading = ref<boolean>(false);
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 async function getSubscriptionSessionUrl(packageId: number) {
-  if (paymentsStore.activeSubscription?.id) {
+  /** Remove cache mark */
+  sessionStorage.removeItem(LsCacheKeys.SUBSCRIPTION_ACTIVE);
+
+  if (paymentStore.activeSubscription?.id) {
     return await goToCustomerPortal();
   }
   loading.value = true;
-  const stripeSessionUrl = await paymentsStore.fetchSubscriptionSessionUrl(packageId);
+  const stripeSessionUrl = await paymentStore.fetchSubscriptionSessionUrl(packageId);
   loading.value = false;
 
   if (stripeSessionUrl) {
@@ -83,7 +86,7 @@ async function getSubscriptionSessionUrl(packageId: number) {
 
 async function goToCustomerPortal() {
   loading.value = true;
-  const customerPortalUrl = await paymentsStore.getCustomerPortalURL();
+  const customerPortalUrl = await paymentStore.getCustomerPortalURL();
   loading.value = false;
 
   if (customerPortalUrl) {

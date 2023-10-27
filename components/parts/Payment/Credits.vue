@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 const dataStore = useDataStore();
-const paymentStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 onMounted(() => {
   setTimeout(() => {

@@ -3,7 +3,7 @@
     remote
     :bordered="false"
     :columns="columns"
-    :data="paymentsStore.invoices.items"
+    :data="paymentStore.invoices.items"
     :loading="loading"
     :pagination="pagination"
     @update:page="handlePageChange"
@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 const loading = ref<boolean>(false);
 
@@ -22,85 +22,59 @@ const pagination = computed(() => {
   return {
     page: currentPage.value,
     pageSize: PAGINATION_LIMIT,
-    pageCount: Math.ceil(paymentsStore.invoices.total / PAGINATION_LIMIT),
-    itemCount: paymentsStore.invoices.total,
+    pageCount: Math.ceil(paymentStore.invoices.total / PAGINATION_LIMIT),
+    itemCount: paymentStore.invoices.total,
   };
 });
 
 const createColumns = (): NDataTableColumns<InvoiceInterface> => {
   return [
     {
-      title: t('dashboard.invoice.clientName'),
+      title: t('dashboard.invoice.client'),
       key: 'invoice',
       render(row) {
-        return h('strong', {}, row.clientName);
+        return [
+          h('strong', { class: 'block' }, row.clientName),
+          h('span', { class: 'text-body text-xs' }, row.clientEmail),
+        ];
       },
-    },
-    {
-      title: t('dashboard.invoice.clientEmail'),
-      key: 'clientEmail',
     },
     {
       title: t('dashboard.invoice.subtotalAmount'),
       key: 'subtotalAmount',
       render(row) {
-        return h('span', {}, `${row.subtotalAmount} ${formatCurrency(row.currency)}`);
+        return h(
+          'span',
+          { class: 'text-body' },
+          `${row.subtotalAmount} ${formatCurrency(row.currency)}`
+        );
       },
     },
     {
       title: t('dashboard.invoice.totalAmount'),
       key: 'totalAmount',
       render(row) {
-        return h('span', {}, `${row.totalAmount} ${formatCurrency(row.currency)}`);
+        return h(
+          'span',
+          { class: 'text-body' },
+          `${row.totalAmount} ${formatCurrency(row.currency)}`
+        );
       },
     },
     {
       title: t('dashboard.invoice.referenceTable'),
       key: 'referenceTable',
       render(row) {
-        return h('span', {}, `${row.referenceTable}`);
+        return h('span', { class: 'text-body' }, `${row.referenceTable}`);
       },
     },
     {
       title: t('dashboard.invoice.date'),
       key: 'createTime',
       render(row) {
-        return dateTimeToDateAndTime(row?.createTime || '');
+        return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
       },
     },
-    // {
-    //   title: t('general.status'),
-    //   key: 'active',
-    //   render(row) {
-    //     return h(
-    //       NTag,
-    //       { type: row.status === 5 ? 'success' : 'default', round: true, bordered: false },
-    //       {
-    //         default: () =>
-    //           row.status === 5
-    //             ? h('strong', { class: 'text-black' }, t('general.active'))
-    //             : h('strong', { class: 'text-white' }, t('general.notActive')),
-    //       }
-    //     );
-    //   },
-    // },
-    // {
-    //   title: '',
-    //   key: 'view',
-    //   align: 'right',
-    //   render(row) {
-    //     return h(
-    //       'strong',
-    //       {
-    //         class: 'text-primary cursor-pointer',
-    //         onClick: () => viewInvoice(row),
-    //       },
-    //       {
-    //         default: () => t('dashboard.viewInvoice'),
-    //       }
-    //     );
-    //   },
-    // },
   ];
 };
 
@@ -109,7 +83,7 @@ const columns = createColumns();
 /** On page change, load data */
 async function handlePageChange(page: number) {
   if (!loading.value) {
-    await paymentsStore.fetchInvoices(page, PAGINATION_LIMIT);
+    await paymentStore.fetchInvoices(page, PAGINATION_LIMIT);
     currentPage.value = page;
   }
 }

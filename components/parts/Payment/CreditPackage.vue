@@ -38,7 +38,7 @@ defineProps({
 });
 
 const loading = ref<boolean>(false);
-const paymentStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 async function getCreditSessionUrl(packageId: number) {
   loading.value = true;

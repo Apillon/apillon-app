@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const usePaymentsStore = defineStore('payments', {
+export const usePaymentStore = defineStore('payment', {
   state: () => ({
     customerPortalUrl: '',
     credit: {} as CreditInterface,
@@ -28,6 +28,9 @@ export const usePaymentsStore = defineStore('payments', {
     hasCreditPackages(state) {
       return Array.isArray(state.creditPackages) && state.creditPackages.length > 0;
     },
+    hasActiveSubscription(state) {
+      return state.activeSubscription?.package_id;
+    },
     hasSubscriptionPackages(state) {
       return Array.isArray(state.subscriptionPackages) && state.subscriptionPackages.length > 0;
     },
@@ -47,12 +50,10 @@ export const usePaymentsStore = defineStore('payments', {
   actions: {
     resetData() {
       this.credit = {} as CreditInterface;
-      this.creditPackages = [] as CreditPackageInterface[];
       this.creditTransactions.items = [] as CreditTransactionInterface[];
       this.creditTransactions.total = 0;
       this.activeSubscription = {} as SubscriptionInterface;
       this.subscriptions = [] as SubscriptionInterface[];
-      this.subscriptionPackages = [] as SubscriptionPackageInterface[];
       this.invoices.items = [] as InvoiceInterface[];
       this.invoices.total = 0;
       this.priceList = [] as ProductPriceInterface[];
@@ -79,6 +80,13 @@ export const usePaymentsStore = defineStore('payments', {
     async getCreditPackages() {
       if (!this.hasCreditPackages || isCacheExpired(LsCacheKeys.CREDIT_PACKAGES)) {
         await this.fetchCreditPackages();
+      }
+    },
+
+    /** GET Active Subscription */
+    async getActiveSubscription() {
+      if (!this.hasActiveSubscription || isCacheExpired(LsCacheKeys.SUBSCRIPTION_ACTIVE)) {
+        await this.fetchActiveSubscription();
       }
     },
 
@@ -217,6 +225,9 @@ export const usePaymentsStore = defineStore('payments', {
         );
 
         this.activeSubscription = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.SUBSCRIPTION_ACTIVE, Date.now().toString());
       } catch (error: any) {
         this.activeSubscription = {} as SubscriptionInterface;
 
