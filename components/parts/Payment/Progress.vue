@@ -28,7 +28,7 @@
 <script lang="ts" setup>
 defineProps({
   size: { type: Number, default: 0 },
-  totalSize: { type: Number, default: 5 },
+  totalSize: { type: Number, default: 0 },
   labelTotal: { type: String, default: '' },
 });
 </script>
