@@ -1,9 +1,9 @@
 const meta = {
-  title: 'Apillon - Build Web3 products. Easily.',
+  title: 'Apillon - Make you project unstoppable.',
   description:
-    'Apillon is a Web3 development platform empowering developers to build in the Polkadot ecosystem.',
+    'Host your website or dapp on a decentralized network with just a few clicks and retain the ownership and authority over it.',
   url: 'https://app.apillon.io/',
-  image: 'https://app.apillon.io/register-now.jpg',
+  image: 'https://app.apillon.io/apillon_og.jpg',
 };
 
 export default defineNitroPlugin((nitroApp: any) => {

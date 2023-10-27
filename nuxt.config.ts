@@ -7,9 +7,9 @@ const appConfig: ConfigInterface = getAppConfig(env);
 
 const meta = {
   lang: 'en',
-  title: 'Apillon - Build Web3 products. Easily.',
+  title: 'Apillon - Make you project unstoppable.',
   description:
-    'Apillon is a Web3 development platform empowering developers to build in the Polkadot ecosystem.',
+    'Host your website or dapp on a decentralized network with just a few clicks and retain the ownership and authority over it.',
   url: appConfig.url,
   image: `${appConfig.url}/apillon_og.jpg`,
   twitter: '@apillon_io',
