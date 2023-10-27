@@ -116,7 +116,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 const gtm = useGtm();
 const { isMd, isLg, isXl } = useScreen();
@@ -137,7 +137,7 @@ onMounted(() => {
   // await getInstructions(key.value);
 
   /** Get Price list */
-  paymentsStore.getPriceList();
+  paymentStore.getPriceList();
 
   if (gtm && gtm.enabled() && !sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
     gtm.trackEvent({

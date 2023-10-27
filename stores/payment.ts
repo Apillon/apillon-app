@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const usePaymentsStore = defineStore('payments', {
+export const usePaymentStore = defineStore('payment', {
   state: () => ({
     customerPortalUrl: '',
     credit: {} as CreditInterface,
@@ -50,12 +50,10 @@ export const usePaymentsStore = defineStore('payments', {
   actions: {
     resetData() {
       this.credit = {} as CreditInterface;
-      this.creditPackages = [] as CreditPackageInterface[];
       this.creditTransactions.items = [] as CreditTransactionInterface[];
       this.creditTransactions.total = 0;
       this.activeSubscription = {} as SubscriptionInterface;
       this.subscriptions = [] as SubscriptionInterface[];
-      this.subscriptionPackages = [] as SubscriptionPackageInterface[];
       this.invoices.items = [] as InvoiceInterface[];
       this.invoices.total = 0;
       this.priceList = [] as ProductPriceInterface[];

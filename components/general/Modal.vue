@@ -29,14 +29,14 @@ const props = defineProps({
   serviceName: { type: String as PropType<PriceServiceName>, default: null },
 });
 
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 const servicePrice = ref<ProductPriceInterface | null>();
 
 watch(
   () => attrs.show,
   async shown => {
     if (shown && props.serviceName) {
-      servicePrice.value = await paymentsStore.getServicePrice(props.serviceName);
+      servicePrice.value = await paymentStore.getServicePrice(props.serviceName);
     }
   },
   { immediate: true }

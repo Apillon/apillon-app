@@ -3,7 +3,7 @@
     remote
     :bordered="false"
     :columns="columns"
-    :data="paymentsStore.creditTransactions.items"
+    :data="paymentStore.creditTransactions.items"
     :loading="loading"
     :pagination="pagination"
     @update:page="handlePageChange"
@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 const loading = ref<boolean>(false);
 
@@ -23,8 +23,8 @@ const pagination = computed(() => {
     page: currentPage.value,
     pageSize: PAGINATION_LIMIT,
     pageSizes: [PAGINATION_LIMIT, 50, 100],
-    pageCount: Math.ceil(paymentsStore.invoices.total / PAGINATION_LIMIT),
-    itemCount: paymentsStore.invoices.total,
+    pageCount: Math.ceil(paymentStore.invoices.total / PAGINATION_LIMIT),
+    itemCount: paymentStore.invoices.total,
   };
 });
 
@@ -80,7 +80,7 @@ const columns = createColumns();
 /** On page change, load data */
 async function handlePageChange(page: number) {
   if (!loading.value) {
-    await paymentsStore.fetchCreditTransactions(page, PAGINATION_LIMIT);
+    await paymentStore.fetchCreditTransactions(page, PAGINATION_LIMIT);
     currentPage.value = page;
   }
 }

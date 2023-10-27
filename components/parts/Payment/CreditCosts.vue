@@ -55,7 +55,7 @@ const props = defineProps({
   filterByChain: { type: Boolean, default: false },
 });
 
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
 const { chains } = useCollection();
 
@@ -64,7 +64,7 @@ const selectedChain = ref<number | null>(collectionStore.form.base.chain || Chai
 
 const servicePrices = ref<ProductPriceInterface[]>([]);
 onMounted(async () => {
-  servicePrices.value = await paymentsStore.getServicePrices(props.service);
+  servicePrices.value = await paymentStore.getServicePrices(props.service);
 });
 
 const shownPrices = computed(() => {

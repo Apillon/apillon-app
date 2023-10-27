@@ -71,7 +71,7 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const dataStore = useDataStore();
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 useHead({
   title: t('dashboard.billing'),
@@ -86,12 +86,12 @@ onMounted(() => {
 
       promises.push(
         new Promise<void>(resolve => {
-          paymentsStore.getSubscriptionPackages().then(() => resolve());
+          paymentStore.getSubscriptionPackages().then(() => resolve());
         })
       );
       promises.push(
         new Promise<void>(resolve => {
-          paymentsStore.getCreditPackages().then(() => resolve());
+          paymentStore.getCreditPackages().then(() => resolve());
         })
       );
 

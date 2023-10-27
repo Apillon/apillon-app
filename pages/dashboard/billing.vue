@@ -21,7 +21,7 @@
         >
           <div class="flex gap-4 items-center mb-6">
             <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
-            <h3>{{ paymentsStore.credit.balance }} {{ $t('dashboard.credits.credits') }}</h3>
+            <h3>{{ paymentStore.credit.balance }} {{ $t('dashboard.credits.credits') }}</h3>
           </div>
           <Btn type="secondary" size="large" @click="modalCreditPackagesVisible = true">
             {{ $t('dashboard.credits.getMore') }}
@@ -38,7 +38,7 @@
             <h3>
               {{
                 $t('dashboard.payment.costsPerMonth', {
-                  costs: paymentsStore.getActiveSubscriptionPackage?.price || 0,
+                  costs: paymentStore.getActiveSubscriptionPackage?.price || 0,
                 })
               }}
             </h3>
@@ -61,7 +61,7 @@
       <modal v-model:show="modalCreditPackagesVisible">
         <div class="grid grid-cols-3 gap-12">
           <PaymentCreditPackage
-            v-for="(creditPackage, key) in paymentsStore.creditPackages"
+            v-for="(creditPackage, key) in paymentStore.creditPackages"
             :key="key"
             :credit-package="creditPackage"
           />
@@ -71,7 +71,7 @@
         <div v-drag-scroll.options="{ direction: 'x' }" class="scrollable overflow-x-auto pb-1">
           <div class="flex gap-12">
             <PaymentSubscriptionPackage
-              v-for="(subscriptionPackage, key) in paymentsStore.subscriptionPackages"
+              v-for="(subscriptionPackage, key) in paymentStore.subscriptionPackages"
               :key="key"
               :subscription-package="subscriptionPackage"
               :plan="pricingPlans[subscriptionPackage.name] || {}"
@@ -89,7 +89,7 @@ const { t } = useI18n();
 const { query } = useRoute();
 const message = useMessage();
 const dataStore = useDataStore();
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 useHead({
   title: t('dashboard.billing'),
@@ -150,19 +150,19 @@ onMounted(() => {
 
       promises.push(
         new Promise<void>(resolve => {
-          paymentsStore.fetchInvoices().then(() => resolve());
+          paymentStore.fetchInvoices().then(() => resolve());
         })
       );
       promises.push(
         new Promise<void>(resolve => {
-          paymentsStore.fetchCreditTransactions().then(() => resolve());
+          paymentStore.fetchCreditTransactions().then(() => resolve());
         })
       );
 
       await Promise.all(promises).then(_ => {
-        paymentsStore.getCreditPackages();
-        paymentsStore.getSubscriptionPackages();
-        paymentsStore.getActiveSubscription();
+        paymentStore.getCreditPackages();
+        paymentStore.getSubscriptionPackages();
+        paymentStore.getActiveSubscription();
         loading.value = false;
       });
     });
