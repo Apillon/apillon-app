@@ -28,7 +28,10 @@
             {{ $t('dashboard.usage.bytesStored') }}
           </div>
           <div class="w-full">
-            <PaymentProgress :size="2500000" :total-size="50000000" />
+            <PaymentProgress
+              :size="storageStore.info.usedStorage"
+              :total-size="storageStore.info.availableStorage"
+            />
           </div>
         </div>
         <div class="p-3 border-b border-bg-lighter flex items-center gap-3 text-body">
@@ -36,7 +39,11 @@
             {{ $t('dashboard.usage.bandwith') }}
           </div>
           <div class="w-full">
-            <PaymentProgress :size="2500000" :total-size="5000000" label-total="/day" />
+            <PaymentProgress
+              :size="storageStore.info.usedBandwidth"
+              :total-size="storageStore.info.availableBandwidth"
+              label-total="/day"
+            />
           </div>
         </div>
       </div>
@@ -52,7 +59,11 @@
             {{ $t('dashboard.usage.downloads') }}
           </div>
           <div class="w-full">
-            <PaymentProgress :size="2500000" :total-size="5000000" />
+            <PaymentProgress
+              :size="storageStore.info.usedBandwidth"
+              :total-size="storageStore.info.availableBandwidth"
+              label-total="/day"
+            />
           </div>
         </div>
         <div class="p-3 border-b border-bg-lighter flex items-center gap-3 text-body">
@@ -60,7 +71,10 @@
             {{ $t('service.storage.name') }}
           </div>
           <div class="w-full">
-            <PaymentProgress :size="2500000" :total-size="5000000" />
+            <PaymentProgress
+              :size="storageStore.info.usedStorage"
+              :total-size="storageStore.info.availableStorage"
+            />
           </div>
         </div>
       </div>
@@ -71,8 +85,10 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const dataStore = useDataStore();
+const storageStore = useStorageStore();
 const paymentStore = usePaymentStore();
 
+onMounted(() => {});
 useHead({
   title: t('dashboard.billing'),
 });
@@ -92,6 +108,11 @@ onMounted(() => {
       promises.push(
         new Promise<void>(resolve => {
           paymentStore.getCreditPackages().then(() => resolve());
+        })
+      );
+      promises.push(
+        new Promise<void>(resolve => {
+          storageStore.getStorageInfo().then(() => resolve());
         })
       );
 

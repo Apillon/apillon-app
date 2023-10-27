@@ -84,7 +84,9 @@ declare global {
    * Storage
    */
   interface StorageInfoInterface {
+    availableBandwidth: number;
     availableStorage: number;
+    usedBandwidth: number;
     usedStorage: number;
   }
   interface StorageInfoResponse extends GeneralResponse<StorageInfoInterface> {}
