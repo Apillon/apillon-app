@@ -160,17 +160,21 @@ onMounted(() => {
           paymentStore.fetchCreditTransactions().then(() => resolve());
         })
       );
+      promises.push(
+        new Promise<void>(resolve => {
+          paymentStore.getActiveSubscription().then(() => resolve());
+        })
+      );
 
       await Promise.all(promises).then(_ => {
         paymentStore.getCreditPackages();
         paymentStore.getSubscriptionPackages();
-        paymentStore.getActiveSubscription();
 
         loading.value = false;
         if (query.success && paymentStore.activeSubscription.package_id) {
           message.success(
             t('dashboard.payment.stripe.success', {
-              plan: paymentStore.getActiveSubscriptionPackage.name,
+              plan: paymentStore.getActiveSubscriptionPackage?.name,
             })
           );
         }
