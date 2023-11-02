@@ -57,13 +57,13 @@ declare global {
    * Subscription
    */
   interface SubscriptionInterface extends GeneralInterface {
+    cancelDate: string;
+    cancellationComment: string;
+    cancellationReason: string;
+    expiresOn: string;
     id: number;
     package_id: number;
     project_uuid: string;
-    expiresOn: string;
-    cancelDate: string;
-    subscriberEmail: string;
-    stripeId: string;
   }
   interface ActiveSubscriptionResponse extends GeneralResponse<SubscriptionInterface> {}
   interface SubscriptionsResponse extends GeneralItemsResponse<SubscriptionInterface> {}

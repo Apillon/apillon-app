@@ -264,6 +264,7 @@
     },
     "subscription": {
       "bandwidth": "Bandwith",
+      "canceledOn": "Your plan will be canceled on {date}.",
       "creditsLifetime": "Credits Lifetime",
       "forever": "Forever",
       "free": "Free",
