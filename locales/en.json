@@ -239,7 +239,7 @@
     "payment": {
       "buyCredits": "Buy credits",
       "costs": "Costs",
-      "costsPerMonth": "{costs} / month",
+      "costsPerMonth": "{costs} € / month",
       "changePlan": "Change plan",
       "currentPlan": "Current plan",
       "expiresOn": "Expires on:",
@@ -253,7 +253,7 @@
       "upgradePlan": "Upgrade plan",
       "stripe": {
         "error": "Failed to subscribe",
-        "success": "Successfully subscribed to a plan"
+        "success": "Successfully subscribed to a {plan} plan."
       }
     },
     "permissions": {

@@ -193,6 +193,8 @@ export const usePaymentStore = defineStore('payment', {
 
       try {
         const params: Record<string, string | number> = {
+          orderBy: 'createTime',
+          desc: 'true',
           page,
           limit,
         };
@@ -283,6 +285,8 @@ export const usePaymentStore = defineStore('payment', {
 
       try {
         const params: Record<string, string | number> = {
+          orderBy: 'createTime',
+          desc: 'true',
           page,
           limit,
         };
@@ -318,7 +322,7 @@ export const usePaymentStore = defineStore('payment', {
         const res = await $api.get<GeneralResponse<string>>(endpoints.creditSessionUrl, {
           project_uuid: dataStore.projectUuid,
           package_id: packageId,
-          returnUrl: `${config.public.url}/dashboard/billing`,
+          returnUrl: `${config.public.url}/dashboard/billing?success=true`,
         });
         return res.data;
       } catch (error: any) {
@@ -340,7 +344,7 @@ export const usePaymentStore = defineStore('payment', {
         const res = await $api.get<GeneralResponse<string>>(endpoints.subscriptionSessionUrl, {
           project_uuid: dataStore.projectUuid,
           package_id: packageId,
-          returnUrl: `${config.public.url}/dashboard/billing`,
+          returnUrl: `${config.public.url}/dashboard/billing?success=true`,
         });
         return res.data;
       } catch (error: any) {
