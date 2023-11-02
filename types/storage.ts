@@ -179,22 +179,16 @@ declare global {
     session_uuid: string;
   }
 
-  interface FileInterface {
+  interface FileInterface extends BaseObjectInterface {
     CID: string;
-    bucket_uuid: string;
+    CIDv1: string;
     contentType: string;
     directory_uuid: string;
-    link: string;
+    fileStatus: number;
     file_uuid: string;
-    id: number;
-    name: string;
-    project_uuid: string;
-    s3FileKey: string;
-    size: number;
-    status: number;
-    fileName?: string | null;
-    fileStatus?: number | null;
+    link: string;
     path?: string | null;
+    size: number;
   }
   interface FileUploadInterface {
     id: number;
@@ -217,15 +211,11 @@ declare global {
     reported_replica_count: number;
     spower: number;
   }
-  interface FileDetailsInterface {
-    file: FileInterface;
-    fileStatus: number;
-  }
 
   type FileDetails = FileInterface | FileUploadInterface;
   type FileCrust = typeof crustTypes.market.types.FileInfoV2;
 
-  interface FileDetailsResponse extends GeneralResponse<FileDetailsInterface> {}
+  interface FileDetailsResponse extends GeneralResponse<FileInterface> {}
   interface FileUploadRequestResponse extends GeneralResponse<FileUploadRequestInterface> {}
   interface FilesUploadRequestResponse extends GeneralResponse<S3FilesUploadRequestInterface> {}
   interface FileUploadSessionResponse extends GeneralResponse<boolean> {}

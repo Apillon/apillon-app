@@ -23,7 +23,12 @@
             <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
             <h3>{{ paymentStore.credit.balance }} {{ $t('dashboard.credits.credits') }}</h3>
           </div>
-          <Btn type="secondary" size="large" @click="modalCreditPackagesVisible = true">
+          <Btn
+            type="secondary"
+            size="large"
+            :disabled="dataStore.isProjectUser"
+            @click="modalCreditPackagesVisible = true"
+          >
             {{ $t('dashboard.credits.getMore') }}
           </Btn>
         </n-card>
@@ -43,7 +48,12 @@
               }}
             </h3>
           </div>
-          <Btn type="primary" size="large" @click="modalSubscriptionPackagesVisible = true">
+          <Btn
+            type="primary"
+            size="large"
+            :disabled="dataStore.isProjectUser"
+            @click="modalSubscriptionPackagesVisible = true"
+          >
             {{ $t('dashboard.payment.upgrade') }}
           </Btn>
         </n-card>
