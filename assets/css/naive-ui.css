@@ -464,7 +464,7 @@ body > .n-message-container {
       }
 
       &__content {
-        @apply py-4;
+        @apply py-4 mobile:px-8;
 
         &:not(:first-child) {
           @apply border-t-0;

@@ -23,7 +23,7 @@
           <span class="icon-storage text-xl"></span>
           <h5>{{ $t('dashboard.usage.storage') }}</h5>
         </div>
-        <div class="p-3 border-b border-bg-lighter flex items-center gap-3 text-body">
+        <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
           <div class="min-w-[12rem]">
             {{ $t('dashboard.usage.bytesStored') }}
           </div>
@@ -34,7 +34,7 @@
             />
           </div>
         </div>
-        <div class="p-3 border-b border-bg-lighter flex items-center gap-3 text-body">
+        <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
           <div class="min-w-[12rem]">
             {{ $t('dashboard.usage.bandwith') }}
           </div>
@@ -54,7 +54,7 @@
           <span class="icon-hosting text-xl"></span>
           <h5>{{ $t('dashboard.usage.hosting') }}</h5>
         </div>
-        <div class="p-3 border-b border-bg-lighter flex items-center gap-3 text-body">
+        <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
           <div class="min-w-[12rem]">
             {{ $t('dashboard.usage.downloads') }}
           </div>
@@ -66,7 +66,7 @@
             />
           </div>
         </div>
-        <div class="p-3 border-b border-bg-lighter flex items-center gap-3 text-body">
+        <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
           <div class="min-w-[12rem]">
             {{ $t('service.storage.name') }}
           </div>

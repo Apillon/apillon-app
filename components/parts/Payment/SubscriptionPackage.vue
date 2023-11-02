@@ -8,7 +8,7 @@
       <p class="mb-6 mt-0">{{ $t('dashboard.subscription.forever') }}</p>
     </template>
     <template v-else>
-      <h1 class="text-white">€{{ plan.price }}</h1>
+      <h1 class="text-white">{{ plan.price }} €</h1>
       <p class="mb-6 mt-0">{{ $t('dashboard.subscription.perMonth') }}</p>
     </template>
 

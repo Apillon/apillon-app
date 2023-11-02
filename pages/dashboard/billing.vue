@@ -12,7 +12,7 @@
       </Heading>
     </template>
     <slot>
-      <div class="grid grid-cols-2 gap-8 mb-12">
+      <div class="grid sm:grid-cols-2 gap-8 mb-12">
         <n-card
           class="card-dark"
           size="small"
@@ -85,7 +85,7 @@
               :key="key"
               :subscription-package="subscriptionPackage"
               :plan="pricingPlans[subscriptionPackage.name] || {}"
-              class="min-w-[10rem] lg:min-w-[16rem]"
+              class="min-w-[10rem] md:min-w-[16rem]"
             />
           </div>
         </div>
@@ -145,14 +145,6 @@ const pricingPlans: Record<string, PricingPlan> = {
   },
 };
 
-onBeforeMount(() => {
-  if (query.canceled) {
-    message.warning(t('dashboard.payment.stripe.error'));
-  } else if (query.success) {
-    message.success(t('dashboard.payment.stripe.success'));
-  }
-});
-
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
@@ -173,7 +165,15 @@ onMounted(() => {
         paymentStore.getCreditPackages();
         paymentStore.getSubscriptionPackages();
         paymentStore.getActiveSubscription();
+
         loading.value = false;
+        if (query.success && paymentStore.activeSubscription.package_id) {
+          message.success(
+            t('dashboard.payment.stripe.success', {
+              plan: paymentStore.getActiveSubscriptionPackage.name,
+            })
+          );
+        }
       });
     });
   }, 100);
