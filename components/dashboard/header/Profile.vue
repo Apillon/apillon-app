@@ -37,6 +37,11 @@ const renderIcon = (iconName: string) => {
     return h('span', { class: `${iconName} text-xl` }, '');
   };
 };
+const renderNuxtIcon = (iconName: string) => {
+  return () => {
+    return h(resolveComponent('NuxtIcon'), { name: iconName, class: 'text-xl' }, '');
+  };
+};
 
 const options = [
   {
@@ -57,6 +62,7 @@ const options = [
   {
     key: 'logout',
     label: $i18n.t('profile.logout'),
+    icon: renderNuxtIcon('icon/logout'),
   },
 ];
 

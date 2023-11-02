@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { AnyJson } from '@polkadot/types-codec/types';
+import type { AnyJson } from '@polkadot/types-codec/types';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { typesBundleForPolkadot } from '@crustio/type-definitions';
 
@@ -8,7 +8,7 @@ export const useFileStore = defineStore('file', {
     all: [] as Array<FileUploadInterface>,
     crust: {} as Record<string, AnyJson>,
     currentBlockId: 0,
-    items: {} as Record<string, FileDetailsInterface>,
+    items: {} as Record<string, FileInterface>,
     loading: false,
     search: '',
     total: 0,
@@ -25,7 +25,7 @@ export const useFileStore = defineStore('file', {
   actions: {
     resetData() {
       this.all = [] as Array<FileUploadInterface>;
-      this.items = {} as Record<string, FileDetailsInterface>;
+      this.items = {} as Record<string, FileInterface>;
       this.loading = false;
       this.total = 0;
       this.trash = [] as Array<BucketItemInterface>;
@@ -65,7 +65,7 @@ export const useFileStore = defineStore('file', {
       return null;
     },
 
-    async fetchFileDetails(fileUuidOrCID: string): Promise<FileDetailsInterface> {
+    async fetchFileDetails(fileUuidOrCID: string): Promise<FileInterface> {
       const bucketStore = useBucketStore();
       try {
         const url = endpoints.storageFileDetails(bucketStore.bucketUuid, fileUuidOrCID);
@@ -76,7 +76,7 @@ export const useFileStore = defineStore('file', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
-      return {} as FileDetailsInterface;
+      return {} as FileInterface;
     },
 
     async fetchFileDetailsFromCrust(cid: string) {

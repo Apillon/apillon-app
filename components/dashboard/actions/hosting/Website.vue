@@ -82,7 +82,7 @@
         </n-button>
 
         <!-- Deploy to staging -->
-        <div v-if="isUpload" class="flex items-center align-middle bg-primary">
+        <div v-if="isUpload" class="flex items-center align-middle bg-primary rounded-lg">
           <n-button
             size="small"
             type="primary"

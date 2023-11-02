@@ -32,7 +32,7 @@
     </div>
 
     <Btn
-      v-if="paymentStore.activeSubscription?.package_id === subscriptionPackage.id"
+      v-if="paymentStore.getActiveSubscriptionPackage.id === subscriptionPackage.id"
       type="primary"
       size="large"
       round
