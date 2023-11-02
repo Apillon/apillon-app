@@ -51,6 +51,18 @@
     >
       {{ $t('dashboard.payment.selectPlan') }}
     </Btn>
+    <div
+      v-if="
+        paymentStore.activeSubscription.package_id === subscriptionPackage.id &&
+        paymentStore.activeSubscription.cancelDate
+      "
+    >
+      {{
+        $t('dashboard.subscription.canceledOn', {
+          date: dateTimeToDate(paymentStore.activeSubscription.cancelDate),
+        })
+      }}
+    </div>
   </div>
 </template>
 
