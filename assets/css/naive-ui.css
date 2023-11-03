@@ -450,7 +450,8 @@ body > .n-message-container {
         &__main {
           @apply font-bold;
         }
-        &__close {
+        &__close,
+        .n-card__close {
           @apply absolute right-0 top-0 w-12 h-12 bg-bg border-1 border-solid border-white rounded-full transition-colors duration-300 translate-x-1/2 -translate-y-1/2;
 
           &::before {

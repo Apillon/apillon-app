@@ -1,10 +1,15 @@
 <template>
-  <div v-if="paymentStore.credit.balance">
-    <NuxtLink :to="{ name: 'dashboard-billing' }">
-      <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
-      <strong class="inline-block text-blue ml-2 mr-1">{{ paymentStore.credit.balance }}</strong>
-      <span class="text-bodyDark">{{ $t('dashboard.credits.available') }}</span>
-    </NuxtLink>
+  <div class="relative min-w-[8rem]">
+    <div :class="{ 'opacity-0': paymentStore.loading }">
+      <NuxtLink :to="{ name: 'dashboard-billing' }">
+        <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
+        <strong class="inline-block text-blue ml-2 mr-1">
+          {{ formatNumber(paymentStore.credit.balance) }}
+        </strong>
+        <span class="text-bodyDark">{{ $t('dashboard.credits.available') }}</span>
+      </NuxtLink>
+    </div>
+    <Spinner v-if="paymentStore.loading" :size="28" />
   </div>
 </template>
 

@@ -16,6 +16,7 @@ export const usePaymentStore = defineStore('payment', {
       items: [] as InvoiceInterface[],
       total: 0,
     },
+    loading: false,
     priceList: [] as ProductPriceInterface[],
   }),
   getters: {
@@ -109,6 +110,7 @@ export const usePaymentStore = defineStore('payment', {
       if (!this.hasPriceList || isCacheExpired(LsCacheKeys.PRICE_LIST)) {
         await this.fetchProductPriceList();
       }
+      return this.priceList;
     },
 
     /** GET Prices for service */
@@ -216,6 +218,7 @@ export const usePaymentStore = defineStore('payment', {
 
     /** API Active Subscription */
     async fetchActiveSubscription() {
+      this.loading = true;
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -236,6 +239,7 @@ export const usePaymentStore = defineStore('payment', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      this.loading = false;
     },
 
     /** API Subscriptions */
@@ -322,7 +326,7 @@ export const usePaymentStore = defineStore('payment', {
         const res = await $api.get<GeneralResponse<string>>(endpoints.creditSessionUrl, {
           project_uuid: dataStore.projectUuid,
           package_id: packageId,
-          returnUrl: `${config.public.url}/dashboard/billing?success=true`,
+          returnUrl: `${config.public.url}/dashboard/billing?credits=${packageId}`,
         });
         return res.data;
       } catch (error: any) {
@@ -344,7 +348,7 @@ export const usePaymentStore = defineStore('payment', {
         const res = await $api.get<GeneralResponse<string>>(endpoints.subscriptionSessionUrl, {
           project_uuid: dataStore.projectUuid,
           package_id: packageId,
-          returnUrl: `${config.public.url}/dashboard/billing?success=true`,
+          returnUrl: `${config.public.url}/dashboard/billing?subscription=${packageId}`,
         });
         return res.data;
       } catch (error: any) {

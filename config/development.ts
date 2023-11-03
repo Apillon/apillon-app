@@ -2,7 +2,8 @@ import packageConfig from '../package.json';
 
 const config: ConfigInterface = {
   VERSION: packageConfig.version || '1.0.0',
-  url: 'https://app-dev.apillon.io',
+  url: 'http://localhost:3000',
+  // url: 'https://app-dev.apillon.io',
   apiUrl: 'https://console-api-dev.apillon.io',
   oauthUrl: 'https://oauth-dev.apillon.io',
   adminUrl: 'https://admin-dev.apillon.io',

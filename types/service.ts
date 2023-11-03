@@ -14,6 +14,10 @@ export enum ServiceTypeName {
   HOSTING = 'HOSTING',
 }
 
+export enum IdentityChains {
+  KILT = 'KILT',
+}
+
 /**
  * Names of Product price names of all services
  */
@@ -76,6 +80,7 @@ declare global {
    * Service
    */
   interface ServiceTypeInterface extends BaseObjectInterface {
+    id: number;
     active: number;
   }
   interface ServiceTypeField extends ServiceTypeInterface {

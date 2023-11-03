@@ -12,7 +12,7 @@
       </Heading>
     </template>
     <slot>
-      <div class="mb-6 max-w-lg">
+      <div v-if="$t('dashboard.usage.description')" class="mb-6 max-w-lg">
         <h4 class="mb-6">{{ $t('dashboard.usage.title') }}</h4>
         <p class="text-body">{{ $t('dashboard.usage.description') }}</p>
       </div>
@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <!-- Hosting -->
+      <!-- Hosting 
       <div class="mt-6">
         <div class="p-3 border-b border-bg-lighter flex gap-2">
           <span class="icon-hosting text-xl"></span>
@@ -78,6 +78,7 @@
           </div>
         </div>
       </div>
+      -->
     </slot>
   </Dashboard>
 </template>
@@ -86,7 +87,6 @@
 const { t } = useI18n();
 const dataStore = useDataStore();
 const storageStore = useStorageStore();
-const paymentStore = usePaymentStore();
 
 onMounted(() => {});
 useHead({
@@ -98,27 +98,8 @@ const loading = ref<boolean>(true);
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const promises: Promise<any>[] = [];
-
-      promises.push(
-        new Promise<void>(resolve => {
-          paymentStore.getSubscriptionPackages().then(() => resolve());
-        })
-      );
-      promises.push(
-        new Promise<void>(resolve => {
-          paymentStore.getCreditPackages().then(() => resolve());
-        })
-      );
-      promises.push(
-        new Promise<void>(resolve => {
-          storageStore.getStorageInfo().then(() => resolve());
-        })
-      );
-
-      await Promise.all(promises).then(_ => {
-        loading.value = false;
-      });
+      await storageStore.getStorageInfo();
+      loading.value = false;
     });
   }, 100);
 });

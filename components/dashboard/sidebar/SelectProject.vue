@@ -85,6 +85,9 @@ watch(
     /** Clear all stored data */
     clearAll();
 
+    /** Payment loader */
+    paymentStore.loading = true;
+
     /** Save current project ID to LS and redirect to Dashboard */
     localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, projectUuid);
     if (projectUuid !== oldProjectUuid && oldProjectUuid !== '') {

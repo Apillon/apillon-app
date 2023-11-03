@@ -21,7 +21,9 @@
         >
           <div class="flex gap-4 items-center mb-6">
             <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
-            <h3>{{ paymentStore.credit.balance }} {{ $t('dashboard.credits.credits') }}</h3>
+            <h3>
+              {{ formatNumber(paymentStore.credit.balance) }} {{ $t('dashboard.credits.credits') }}
+            </h3>
           </div>
           <Btn
             type="secondary"
@@ -78,7 +80,10 @@
         </div>
       </modal>
       <modal v-model:show="modalSubscriptionPackagesVisible" size="large">
-        <div v-drag-scroll.options="{ direction: 'x' }" class="scrollable overflow-x-auto pb-1">
+        <div
+          v-drag-scroll.options="{ direction: 'x' }"
+          class="lg:scrollable lg:overflow-x-auto lg:!cursor-default pb-1"
+        >
           <div class="flex gap-12">
             <PaymentSubscriptionPackage
               v-for="(subscriptionPackage, key) in paymentStore.subscriptionPackages"
@@ -166,14 +171,29 @@ onMounted(() => {
         })
       );
 
-      await Promise.all(promises).then(_ => {
-        paymentStore.getCreditPackages();
-        paymentStore.getSubscriptionPackages();
-
+      await Promise.all(promises).then(async _ => {
         loading.value = false;
-        if (query.success && paymentStore.activeSubscription.package_id) {
+
+        await paymentStore.getCreditPackages();
+        if (query.credits && wereCreditsPurchased()) {
+          const creditPackage = paymentStore.creditPackages.find(
+            item => item.id === parseInt(toStr(query.credits))
+          );
+          console.log(creditPackage);
+
+          if (creditPackage) {
+            message.success(
+              t('dashboard.payment.stripe.credits', {
+                credits: formatNumber(creditPackage.creditAmount + creditPackage.bonusCredits),
+              })
+            );
+          }
+        }
+
+        await paymentStore.getSubscriptionPackages();
+        if (query.subscription && paymentStore.activeSubscription.package_id) {
           message.success(
-            t('dashboard.payment.stripe.success', {
+            t('dashboard.payment.stripe.subscription', {
               plan: paymentStore.getActiveSubscriptionPackage?.name,
             })
           );
@@ -182,4 +202,8 @@ onMounted(() => {
     });
   }, 100);
 });
+
+function wereCreditsPurchased() {
+  return true;
+}
 </script>

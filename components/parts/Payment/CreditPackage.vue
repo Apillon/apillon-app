@@ -1,7 +1,7 @@
 <template>
   <div class="credits-package text-center text-body">
     <h4 class="mb-6">{{ creditPackage.name }}</h4>
-    <h1 class="text-white">€{{ creditPackage.price }}</h1>
+    <h1 class="text-white">{{ formatPrice(creditPackage.price, 'eur') }}</h1>
 
     <div class="my-6 border-b border-bg-lighter"></div>
 
@@ -9,11 +9,11 @@
     <div class="match-services mb-12">
       <PaymentPricingService
         :name="$t('dashboard.credits.creditsAmount')"
-        :value="creditPackage.creditAmount"
+        :value="formatNumber(creditPackage.creditAmount)"
       />
       <PaymentPricingService
         :name="$t('dashboard.credits.bonus')"
-        :value="`${creditPackage.bonusCredits}`"
+        :value="`${formatNumber(creditPackage.bonusCredits)}`"
       />
     </div>
 

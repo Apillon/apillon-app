@@ -40,7 +40,7 @@ export function enumValues(E: any): string[] | number[] {
 }
 export function enumKeyValues(E: any): KeyValue[] {
   return enumKeys(E).map(k => {
-    return { key: k, value: E[k as any] };
+    return { key: k, label: k, value: E[k as any] };
   });
 }
 
@@ -87,6 +87,25 @@ export function hideSecret(source: string, partLength: number = 4): string {
 }
 export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
   return s ? s.toString() : '';
+}
+
+/**
+ *  Format numbers
+ */
+/** Add dots and commas */
+export function formatNumber(n: number) {
+  return new Intl.NumberFormat('de-DE').format(n);
+}
+
+export function formatPrice(price: number, currency?: string) {
+  if (currency) {
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency }).format(price);
+  }
+  return new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2 }).format(price);
+}
+
+export function formatCurrency(currency: string) {
+  return currency === 'eur' ? '€' : '$';
 }
 
 /**

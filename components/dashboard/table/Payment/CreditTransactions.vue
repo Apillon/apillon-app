@@ -62,7 +62,7 @@ const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
       title: t('dashboard.credits.amount'),
       key: 'amount',
       render(row) {
-        return h('span', { class: 'text-body' }, `${row.amount}`);
+        return h('span', { class: 'text-body' }, `${formatNumber(row.amount)}`);
       },
     },
     {

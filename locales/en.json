@@ -179,6 +179,7 @@
       "description": "Description",
       "direction": "Direction",
       "filterByChain": "Filter by chain",
+      "filterByService": "Filter by service",
       "getMore": "Get more",
       "name": "Name",
       "packages": "Credit packages",
@@ -252,8 +253,9 @@
       "upgrade": "Upgrade",
       "upgradePlan": "Upgrade plan",
       "stripe": {
+        "credits": "Successfully acquired {credits} credits.",
         "error": "Failed to subscribe",
-        "success": "Successfully subscribed to a {plan} plan."
+        "subscription": "Successfully subscribed to a {plan} plan."
       }
     },
     "permissions": {
@@ -279,10 +281,10 @@
     "usage": {
       "bandwith": "Bandwith",
       "bytesStored": "Byte stored",
-      "description": "Vel non enim tincidunt cursus. Mauris sit vulputate ac id turpis eget morbi urna ut. Ultrices sagittis aliquam id porta.",
+      "description": "",
       "downloads": "Downloads",
-      "hosting": "Cloud hosting",
-      "storage": "Cloud storage",
+      "hosting": "Web3 hosting",
+      "storage": "Web3 storage",
       "title": "Project quotas"
     },
     "adminMode": "You are in ADMIN mode!",

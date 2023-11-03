@@ -64,24 +64,27 @@
         </div>
 
         <!-- SIDEBAR PRICING -->
-        <div v-if="!collapsed" class="flex border-t border-bg-lighter flex-col p-8">
-          <div class="mb-3">
-            <span class="text-xs text-bodyDark">{{ $t('dashboard.payment.currentPlan') }}</span>
-            <strong class="block">
-              {{ paymentStore.getActiveSubscriptionPackage?.name }}
-            </strong>
-            <span class="text-sm text-body">
-              {{ $t('dashboard.payment.costs') }}:
-              {{
-                $t('dashboard.payment.costsPerMonth', {
-                  costs: paymentStore.getActiveSubscriptionPackage?.price || 0,
-                })
-              }}
-            </span>
+        <div v-if="!collapsed" class="relative flex border-t border-bg-lighter flex-col p-8">
+          <div :class="{ 'opacity-0': paymentStore.loading }">
+            <div class="mb-3">
+              <span class="text-xs text-bodyDark">{{ $t('dashboard.payment.currentPlan') }}</span>
+              <strong class="block">
+                {{ paymentStore.getActiveSubscriptionPackage?.name }}
+              </strong>
+              <span class="text-sm text-body">
+                {{ $t('dashboard.payment.costs') }}:
+                {{
+                  $t('dashboard.payment.costsPerMonth', {
+                    costs: paymentStore.getActiveSubscriptionPackage?.price || 0,
+                  })
+                }}
+              </span>
+            </div>
+            <Btn type="secondary" size="large" @click="router.push({ name: 'dashboard-billing' })">
+              {{ $t('dashboard.payment.upgradePlan') }}
+            </Btn>
           </div>
-          <Btn type="secondary" size="large" @click="router.push({ name: 'dashboard-billing' })">
-            {{ $t('dashboard.payment.upgradePlan') }}
-          </Btn>
+          <Spinner v-if="paymentStore.loading" />
         </div>
       </n-scrollbar>
     </div>

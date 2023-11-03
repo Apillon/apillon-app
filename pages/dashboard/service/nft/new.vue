@@ -15,7 +15,7 @@
         </slot>
         <template #info>
           <n-space :size="32" align="center">
-            <PaymentCreditCosts filter-by-chain />
+            <ModalCreditCosts :service="ServiceTypeName.NFT" filter-by-chain />
 
             <Badge icon="nft/moonbeam">
               <NuxtIcon name="nft/astar_logo" class="icon-auto ml-2" filled />

@@ -12,22 +12,7 @@
       </Heading>
     </template>
     <slot>
-      <n-table class="plain pb-8" :bordered="false" :single-line="true">
-        <thead>
-          <tr>
-            <th>{{ $t('dashboard.credits.serviceDescription') }}</th>
-            <th class="!text-right">{{ $t('dashboard.credits.cost') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(price, key) in paymentStore.priceList" :key="key">
-            <td>{{ price.description }}</td>
-            <td class="text-right">
-              {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
-            </td>
-          </tr>
-        </tbody>
-      </n-table>
+      <PaymentCreditCosts class="pb-8" filter-by-chain filter-by-service />
     </slot>
   </Dashboard>
 </template>

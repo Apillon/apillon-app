@@ -46,7 +46,7 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
         return h(
           'span',
           { class: 'text-body' },
-          `${row.subtotalAmount} ${formatCurrency(row.currency)}`
+          `${formatPrice(row.subtotalAmount, row.currency)}`
         );
       },
     },
@@ -54,11 +54,7 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
       title: t('dashboard.invoice.totalAmount'),
       key: 'totalAmount',
       render(row) {
-        return h(
-          'span',
-          { class: 'text-body' },
-          `${row.totalAmount} ${formatCurrency(row.currency)}`
-        );
+        return h('span', { class: 'text-body' }, `${formatPrice(row.totalAmount, row.currency)}`);
       },
     },
     {
@@ -87,6 +83,4 @@ async function handlePageChange(page: number) {
     currentPage.value = page;
   }
 }
-
-const formatCurrency = (currency: string) => (currency === 'eur' ? '€' : '$');
 </script>

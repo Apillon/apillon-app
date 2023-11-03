@@ -8,7 +8,7 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <PaymentCreditCosts :service="ServiceTypeName.AUTHENTICATION" />
+            <ModalCreditCosts :service="ServiceTypeName.AUTHENTICATION" />
 
             <IconInfo v-if="$i18n.te('w3Warn.auth.new')" @click="showModalW3Warn = true" />
           </n-space>
