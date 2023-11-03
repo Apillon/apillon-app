@@ -99,9 +99,17 @@ export const usePaymentStore = defineStore('payment', {
     },
 
     /** GET Invoices */
-    async getInvoices() {
-      if (!this.hasInvoices || isCacheExpired(LsCacheKeys.INVOICES)) {
-        await this.fetchInvoices();
+    async getInvoices(page?: number, limit?: number) {
+      if (page || limit || !this.hasInvoices || isCacheExpired(LsCacheKeys.INVOICES)) {
+        const invoiceData = await this.fetchInvoices(page, limit);
+
+        if (invoiceData?.data) {
+          this.invoices.items = invoiceData.data.items;
+          this.invoices.total = invoiceData.data.total;
+        } else {
+          this.invoices.items = [] as InvoiceInterface[];
+          this.invoices.total = 0;
+        }
       }
     },
 
@@ -281,7 +289,10 @@ export const usePaymentStore = defineStore('payment', {
     },
 
     /** API Invoices */
-    async fetchInvoices(page = 1, limit: number = PAGINATION_LIMIT) {
+    async fetchInvoices(
+      page = 1,
+      limit: number = PAGINATION_LIMIT
+    ): Promise<InvoiceResponse | null> {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -300,18 +311,15 @@ export const usePaymentStore = defineStore('payment', {
           params
         );
 
-        this.invoices.items = res.data.items;
-        this.invoices.total = res.data.total;
-
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.INVOICES, Date.now().toString());
-      } catch (error: any) {
-        this.invoices.items = [] as InvoiceInterface[];
-        this.invoices.total = 0;
 
+        return res;
+      } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      return null;
     },
 
     /** API Stripe credit session URL */

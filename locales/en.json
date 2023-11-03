@@ -106,6 +106,7 @@
     "login": "Log in",
     "logout": "Log out",
     "method": "Method",
+    "month": "month",
     "name": "Name",
     "notActive": "not active",
     "nothingHere": "Nothing here",
@@ -181,6 +182,7 @@
       "filterByChain": "Filter by chain",
       "filterByService": "Filter by service",
       "getMore": "Get more",
+      "included": "Included services:",
       "name": "Name",
       "packages": "Credit packages",
       "product_id": "Product ID",
@@ -189,6 +191,7 @@
       "title": "Credits",
       "transactions": "Credits spent",
       "yourFunds": "Your funds",
+      "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
       "services": {
         "NFT": {
           "description": null
@@ -240,7 +243,6 @@
     "payment": {
       "buyCredits": "Buy credits",
       "costs": "Costs",
-      "costsPerMonth": "{costs} € / month",
       "changePlan": "Change plan",
       "currentPlan": "Current plan",
       "expiresOn": "Expires on:",
@@ -274,7 +276,7 @@
       "monthly": "Monthly",
       "otherServices": "Free credits for other services",
       "packages": "Subscription packages",
-      "perMonth": "par month",
+      "perMonth": "per month",
       "storage": "Storage",
       "web3Services": "Web3 services"
     },

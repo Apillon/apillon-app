@@ -42,7 +42,7 @@
             <PaymentProgress
               :size="storageStore.info.usedBandwidth"
               :total-size="storageStore.info.availableBandwidth"
-              label-total="/day"
+              :label-total="'/' + $t('general.month')"
             />
           </div>
         </div>

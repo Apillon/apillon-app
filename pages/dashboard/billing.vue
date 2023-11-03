@@ -43,10 +43,9 @@
           <div class="flex gap-4 items-center mb-6">
             <span class="icon-billing text-xl"></span>
             <h3>
-              {{
-                $t('dashboard.payment.costsPerMonth', {
-                  costs: paymentStore.getActiveSubscriptionPackage?.price || 0,
-                })
+              {{ paymentStore.getActiveSubscriptionPackage?.name }}
+              {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0, 'eur') }}/{{
+                $t('general.month')
               }}
             </h3>
           </div>
@@ -70,19 +69,25 @@
       <TablePaymentCreditTransactions class="pb-8" />
 
       <!-- Modals -->
-      <modal v-model:show="modalCreditPackagesVisible">
-        <div class="grid grid-cols-3 gap-12">
-          <PaymentCreditPackage
-            v-for="(creditPackage, key) in paymentStore.creditPackages"
-            :key="key"
-            :credit-package="creditPackage"
-          />
+      <modal v-model:show="modalCreditPackagesVisible" size="large">
+        <div
+          v-drag-scroll.options="{ direction: 'x' }"
+          class="tablet:scrollable tablet:overflow-x-auto lg:!cursor-default pb-1"
+        >
+          <div class="flex gap-12">
+            <PaymentCreditPackage
+              v-for="(creditPackage, key) in paymentStore.creditPackages"
+              :key="key"
+              :credit-package="creditPackage"
+              class="min-w-[10rem] md:min-w-[16rem]"
+            />
+          </div>
         </div>
       </modal>
       <modal v-model:show="modalSubscriptionPackagesVisible" size="large">
         <div
           v-drag-scroll.options="{ direction: 'x' }"
-          class="lg:scrollable lg:overflow-x-auto lg:!cursor-default pb-1"
+          class="tablet:scrollable tablet:overflow-x-auto lg:!cursor-default pb-1"
         >
           <div class="flex gap-12">
             <PaymentSubscriptionPackage
@@ -157,7 +162,7 @@ onMounted(() => {
 
       promises.push(
         new Promise<void>(resolve => {
-          paymentStore.fetchInvoices().then(() => resolve());
+          paymentStore.getInvoices().then(() => resolve());
         })
       );
       promises.push(
@@ -170,16 +175,30 @@ onMounted(() => {
           paymentStore.getActiveSubscription().then(() => resolve());
         })
       );
+      promises.push(
+        new Promise<void>(resolve => {
+          paymentStore.getSubscriptionPackages().then(() => resolve());
+        })
+      );
+      promises.push(
+        new Promise<void>(resolve => {
+          paymentStore.getCreditPackages().then(() => resolve());
+        })
+      );
 
       await Promise.all(promises).then(async _ => {
         loading.value = false;
 
-        await paymentStore.getCreditPackages();
-        if (query.credits && wereCreditsPurchased()) {
+        if (query.subscription && paymentStore.activeSubscription.package_id) {
+          message.success(
+            t('dashboard.payment.stripe.subscription', {
+              plan: paymentStore.getActiveSubscriptionPackage?.name,
+            })
+          );
+        } else if (query.credits && (await wereCreditsPurchased())) {
           const creditPackage = paymentStore.creditPackages.find(
             item => item.id === parseInt(toStr(query.credits))
           );
-          console.log(creditPackage);
 
           if (creditPackage) {
             message.success(
@@ -189,21 +208,22 @@ onMounted(() => {
             );
           }
         }
-
-        await paymentStore.getSubscriptionPackages();
-        if (query.subscription && paymentStore.activeSubscription.package_id) {
-          message.success(
-            t('dashboard.payment.stripe.subscription', {
-              plan: paymentStore.getActiveSubscriptionPackage?.name,
-            })
-          );
-        }
       });
     });
   }, 100);
 });
 
-function wereCreditsPurchased() {
-  return true;
+async function wereCreditsPurchased() {
+  const lastInvoice = await paymentStore.fetchInvoices(1, 1);
+  return (
+    lastInvoice?.data?.total &&
+    lastInvoice?.data?.items &&
+    lastInvoice.data.items[0].referenceTable === 'creditPackage' &&
+    isInLastMinute(lastInvoice.data.items[0].createTime)
+  );
+}
+
+function isInLastMinute(createTime: string | null) {
+  return !!createTime && new Date(createTime).getTime() + MINUTE_IN_MS > Date.now();
 }
 </script>

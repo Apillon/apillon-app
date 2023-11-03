@@ -73,10 +73,8 @@
               </strong>
               <span class="text-sm text-body">
                 {{ $t('dashboard.payment.costs') }}:
-                {{
-                  $t('dashboard.payment.costsPerMonth', {
-                    costs: paymentStore.getActiveSubscriptionPackage?.price || 0,
-                  })
+                {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0, 'eur') }}/{{
+                  $t('general.month')
                 }}
               </span>
             </div>

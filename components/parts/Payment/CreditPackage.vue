@@ -1,11 +1,11 @@
 <template>
   <div class="credits-package text-center text-body">
-    <h4 class="mb-6">{{ creditPackage.name }}</h4>
+    <h4 class="mb-6">{{ creditPackage.name }} {{ $t('dashboard.credits.credits') }}</h4>
     <h1 class="text-white">{{ formatPrice(creditPackage.price, 'eur') }}</h1>
 
     <div class="my-6 border-b border-bg-lighter"></div>
 
-    <!-- Service -->
+    <!-- Package -->
     <div class="match-services mb-12">
       <PaymentPricingService
         :name="$t('dashboard.credits.creditsAmount')"
@@ -15,6 +15,18 @@
         :name="$t('dashboard.credits.bonus')"
         :value="`${formatNumber(creditPackage.bonusCredits)}`"
       />
+    </div>
+
+    <div class="my-6 border-b border-bg-lighter"></div>
+
+    <!-- Included Service -->
+    <div class="match-services mb-12">
+      <p class="font-bold text-white">{{ $t('dashboard.credits.included') }}</p>
+      <ul class="inline-flex flex-col list-disc pl-4 mb-4 text-left">
+        <li v-for="(item, key) in $tm('dashboard.credits.includedServices')" :key="key">
+          {{ (item as any)?.loc?.source }}
+        </li>
+      </ul>
     </div>
 
     <Btn

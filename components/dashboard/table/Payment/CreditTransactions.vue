@@ -6,7 +6,6 @@
     :data="paymentStore.creditTransactions.items"
     :loading="loading"
     :pagination="pagination"
-    @update:page="handlePageChange"
   />
 </template>
 
@@ -17,15 +16,21 @@ const paymentStore = usePaymentStore();
 const loading = ref<boolean>(false);
 
 /** Pagination data */
-const currentPage = ref<number>(1);
-const pagination = computed(() => {
-  return {
-    page: currentPage.value,
-    pageSize: PAGINATION_LIMIT,
-    pageSizes: [PAGINATION_LIMIT, 50, 100],
-    pageCount: Math.ceil(paymentStore.invoices.total / PAGINATION_LIMIT),
-    itemCount: paymentStore.invoices.total,
-  };
+const pagination = reactive({
+  page: 1,
+  pageSize: PAGINATION_LIMIT,
+  showSizePicker: true,
+  pageSizes: [10, PAGINATION_LIMIT, 50],
+  itemCount: paymentStore.creditTransactions.total,
+  onChange: (page: number) => {
+    pagination.page = page;
+    handlePageChange(page, pagination.pageSize);
+  },
+  onUpdatePageSize: (pageSize: number) => {
+    pagination.page = 1;
+    pagination.pageSize = pageSize;
+    handlePageChange(pagination.page, pageSize);
+  },
 });
 
 const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
@@ -78,10 +83,9 @@ const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
 const columns = createColumns();
 
 /** On page change, load data */
-async function handlePageChange(page: number) {
+async function handlePageChange(page: number, pageSize: number) {
   if (!loading.value) {
-    await paymentStore.fetchCreditTransactions(page, PAGINATION_LIMIT);
-    currentPage.value = page;
+    await paymentStore.fetchCreditTransactions(page, pageSize);
   }
 }
 </script>
