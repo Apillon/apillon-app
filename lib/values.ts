@@ -9,6 +9,10 @@ export const PARAMS_ALL_ITEMS = {
   limit: 100,
 };
 
+export const SessionKeys = {
+  CREDITS_MSG: 'al_credits_msg',
+};
+
 export const LsAnalyticsKeys = {
   USER_UUID: 'al_analytics_user_uuid',
 };

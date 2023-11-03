@@ -23,8 +23,8 @@
     <div class="match-services mb-12">
       <p class="font-bold text-white">{{ $t('dashboard.credits.included') }}</p>
       <ul class="inline-flex flex-col list-disc pl-4 mb-4 text-left">
-        <li v-for="(item, key) in $tm('dashboard.credits.includedServices')" :key="key">
-          {{ (item as any)?.loc?.source }}
+        <li v-for="(item, key) in translateItems('dashboard.credits.includedServices')" :key="key">
+          {{ item }}
         </li>
       </ul>
     </div>
@@ -45,6 +45,7 @@
 <script lang="ts" setup>
 import colors from '~/tailwind.colors';
 
+const { t, te, tm } = useI18n();
 defineProps({
   creditPackage: { type: Object as PropType<CreditPackageInterface>, required: true },
 });
@@ -58,7 +59,23 @@ async function getCreditSessionUrl(packageId: number) {
   loading.value = false;
 
   if (stripeSessionUrl) {
+    /** Remove key from SS */
+    sessionStorage.removeItem(SessionKeys.CREDITS_MSG);
+
     window.open(stripeSessionUrl, '_self');
   }
+}
+
+onMounted(() => {
+  console.log(tm('dashboard.credits.includedServices'));
+});
+
+function translateItems(key: string): String[] {
+  return Array.from(Array(10).keys()).reduce((accumulator: String[], i) => {
+    if (te(`${key}.${i}`) && t(`${key}.${i}`)) {
+      accumulator.push(t(`${key}.${i}`));
+    }
+    return accumulator;
+  }, [] as String[]);
 }
 </script>

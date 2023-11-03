@@ -195,12 +195,19 @@ onMounted(() => {
               plan: paymentStore.getActiveSubscriptionPackage?.name,
             })
           );
-        } else if (query.credits && (await wereCreditsPurchased())) {
+        } else if (
+          query.credits &&
+          isCacheExpired(SessionKeys.CREDITS_MSG) &&
+          (await wereCreditsPurchased())
+        ) {
           const creditPackage = paymentStore.creditPackages.find(
             item => item.id === parseInt(toStr(query.credits))
           );
 
           if (creditPackage) {
+            /** Save timestamp to SS */
+            sessionStorage.setItem(SessionKeys.CREDITS_MSG, Date.now().toString());
+
             message.success(
               t('dashboard.payment.stripe.credits', {
                 credits: formatNumber(creditPackage.creditAmount + creditPackage.bonusCredits),
