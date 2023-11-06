@@ -78,7 +78,7 @@
                 }}
               </span>
             </div>
-            <Btn type="secondary" size="large" @click="router.push({ name: 'dashboard-billing' })">
+            <Btn type="secondary" size="large" @click="router.push({ name: 'dashboard-payments' })">
               {{ $t('dashboard.payment.upgradePlan') }}
             </Btn>
           </div>

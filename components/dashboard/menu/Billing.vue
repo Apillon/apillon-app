@@ -7,9 +7,9 @@ const { t } = useI18n();
 
 const menuOptions: NMenuOption[] = [
   {
-    key: 'dashboard-billing',
-    label: t('dashboard.pageMenu.billing'),
-    to: 'dashboard-billing',
+    key: 'dashboard-payments',
+    label: t('dashboard.pageMenu.payments'),
+    to: 'dashboard-payments',
   },
   {
     key: 'dashboard-usage',
@@ -17,9 +17,14 @@ const menuOptions: NMenuOption[] = [
     to: 'dashboard-usage',
   },
   {
-    key: 'dashboard-price-list',
-    label: t('dashboard.pageMenu.priceList'),
-    to: 'dashboard-price-list',
+    key: 'dashboard-billing',
+    label: t('dashboard.pageMenu.billing'),
+    to: 'dashboard-billing',
   },
+  // {
+  //   key: 'dashboard-price-list',
+  //   label: t('dashboard.pageMenu.priceList'),
+  //   to: 'dashboard-price-list',
+  // },
 ];
 </script>

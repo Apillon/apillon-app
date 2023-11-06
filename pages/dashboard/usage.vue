@@ -79,6 +79,13 @@
         </div>
       </div>
       -->
+
+      <div v-if="showUpgrade" class="grid sm:grid-cols-2 gap-8 my-12">
+        <div>
+          <h4 class="mb-6">{{ $t('dashboard.usage.upgrade') }}</h4>
+          <PaymentCardCurrentPlan />
+        </div>
+      </div>
     </slot>
   </Dashboard>
 </template>
@@ -86,6 +93,7 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const dataStore = useDataStore();
+const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 
 onMounted(() => {});
@@ -98,9 +106,35 @@ const loading = ref<boolean>(true);
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await storageStore.getStorageInfo();
-      loading.value = false;
+      const promises: Promise<any>[] = [];
+
+      promises.push(
+        new Promise<void>(resolve => {
+          storageStore.getStorageInfo().then(() => resolve());
+        })
+      );
+      promises.push(
+        new Promise<void>(resolve => {
+          paymentStore.getSubscriptionPackages().then(() => resolve());
+        })
+      );
+      promises.push(
+        new Promise<void>(resolve => {
+          paymentStore.getActiveSubscription().then(() => resolve());
+        })
+      );
+
+      await Promise.all(promises).then(_ => {
+        loading.value = false;
+      });
     });
   }, 100);
+});
+
+const showUpgrade = computed(() => {
+  return (
+    storagePercentage(storageStore.info.usedStorage, storageStore.info.availableStorage) > 50 ||
+    storagePercentage(storageStore.info.usedBandwidth, storageStore.info.availableBandwidth) > 50
+  );
 });
 </script>

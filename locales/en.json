@@ -234,6 +234,7 @@
       "destroy": "Destroy",
       "history": "History",
       "methods": "Methods",
+      "payments": "Overview",
       "priceList": "Price list",
       "profile": "Profile",
       "projectSettings": "Project settings",
@@ -274,6 +275,7 @@
       "free": "Free",
       "lifetime": "Lifetime",
       "monthly": "Monthly",
+      "nextBilling": "Next billing cycle on {date}.",
       "otherServices": "Free credits for other services",
       "packages": "Subscription packages",
       "perMonth": "per month",
@@ -287,7 +289,8 @@
       "downloads": "Downloads",
       "hosting": "Web3 hosting",
       "storage": "Web3 storage",
-      "title": "Project quotas"
+      "title": "Project quotas",
+      "upgrade": "Increase quotas"
     },
     "adminMode": "You are in ADMIN mode!",
     "attached": "Attached",
