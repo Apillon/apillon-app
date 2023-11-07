@@ -50,7 +50,7 @@ const options = [
     icon: renderIcon('icon-anonymous'),
   },
   {
-    key: 'dashboard-billing',
+    key: 'dashboard-payments',
     label: $i18n.t('profile.billing'),
     icon: renderIcon('icon-billing'),
   },

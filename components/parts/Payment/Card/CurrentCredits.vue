@@ -9,7 +9,7 @@
       <div class="flex gap-4 items-center mb-6">
         <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
         <h3>
-          {{ formatNumber(paymentStore.credit.balance) }} {{ $t('dashboard.credits.credits') }}
+          {{ formatNumber(paymentStore.credit.balance || 0) }} {{ $t('dashboard.credits.credits') }}
         </h3>
       </div>
       <Btn

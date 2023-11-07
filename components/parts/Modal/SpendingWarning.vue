@@ -51,7 +51,7 @@ const warningStore = useWarningStore();
 const servicePrice = ref<ProductPriceInterface | null>();
 
 const isEnoughCredits = computed(() => {
-  return paymentStore.credit.balance >= (servicePrice.value?.currentPrice || 0);
+  return (paymentStore.credit.balance || 0) >= (servicePrice.value?.currentPrice || 0);
 });
 
 watch(

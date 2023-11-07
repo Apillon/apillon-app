@@ -440,12 +440,8 @@ async function removeServicePermissions(service: ApiKeyRoleForm) {
   }
 }
 
-async function onServiceCreated() {
-  loading.value = true;
-  dataStore.services = await dataStore.fetchServices();
-
+function onServiceCreated() {
   formData.value.roles = roles.value;
-  loading.value = false;
 }
 
 /* Check if user can create this service */
