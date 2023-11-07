@@ -34,7 +34,7 @@ const config: ConfigInterface = {
     'CAPTCHA_LOGIN',
     'BILLING',
   ],
-  betaFeatures: ['BILLING'],
+  betaFeatures: [],
 };
 
 export default config;
