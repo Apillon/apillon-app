@@ -43,7 +43,10 @@
 
             <!-- Global component: File upload list -->
             <FormStorageUploadFiles
-              v-if="bucketStore.uploadActive && bucketStore.bucketUuid"
+              v-if="
+                (bucketStore.uploadActive && bucketStore.bucketUuid) ||
+                bucketStore.uploadFileList.length > 0
+              "
               :bucket-uuid="bucketStore.bucketUuid"
             />
 
