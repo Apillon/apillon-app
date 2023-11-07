@@ -119,6 +119,12 @@ export const useDataStore = defineStore('data', {
       return Array.isArray(this.services) && this.services.length > 0;
     },
 
+    hasServicesByType(type: number) {
+      return (
+        Array.isArray(this.services) && this.services.some(item => item.serviceType_id === type)
+      );
+    },
+
     hasServiceTypes() {
       return Array.isArray(this.serviceTypes) && this.serviceTypes.length > 0;
     },
