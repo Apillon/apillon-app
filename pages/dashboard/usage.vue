@@ -21,7 +21,10 @@
       <div class="mt-6">
         <div class="p-3 border-b border-bg-lighter flex gap-2">
           <span class="icon-storage text-xl"></span>
-          <h5>{{ $t('dashboard.usage.storage') }}</h5>
+          <h5>
+            {{ $t('dashboard.usage.storage') }} -
+            {{ paymentStore.getActiveSubscriptionPackage?.name }}
+          </h5>
         </div>
         <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
           <div class="min-w-[12rem]">
@@ -134,7 +137,8 @@ onMounted(() => {
 const showUpgrade = computed(() => {
   return (
     storagePercentage(storageStore.info.usedStorage, storageStore.info.availableStorage) > 50 ||
-    storagePercentage(storageStore.info.usedBandwidth, storageStore.info.availableBandwidth) > 50
+    storagePercentage(storageStore.info.usedBandwidth, storageStore.info.availableBandwidth) > 50 ||
+    !paymentStore.activeSubscription.package_id
   );
 });
 </script>
