@@ -5,13 +5,13 @@
     ref="formRef"
     :model="formData"
     :rules="rules"
-    :disabled="!settingsStore.isUserOwner()"
+    :disabled="!dataStore.isUserOwner"
     @submit.prevent="handleSubmit"
   >
     <!--  Service name -->
     <n-form-item
       path="name"
-      class="mb-4 border-b-1 border-grey/40"
+      class="mb-4 border-b border-bg-lighter"
       :label="$t('form.label.apiKeyName')"
       :label-props="{ for: 'name' }"
     >
@@ -32,7 +32,7 @@
     >
       <!-- Active services -->
       <n-collapse-item
-        v-for="(service, key) in formData.roles"
+        v-for="service in formData.roles"
         :key="service.service_uuid"
         :title="service.name"
         :name="service.service_uuid"
@@ -43,7 +43,7 @@
         <template #header-extra>
           <n-switch
             v-model:value="service.enabled"
-            @update:value="service.enabled = !service.enabled"
+            @update:value="removeServicePermissions(service)"
           />
         </template>
 
@@ -101,7 +101,7 @@
         type="secondary"
         class="w-full mt-8"
         :loading="loading"
-        :disabled="!settingsStore.isUserOwner()"
+        :disabled="!dataStore.isUserOwner"
         @click="handleSubmit"
       >
         {{ $t('form.generate') }}
@@ -124,7 +124,29 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage, CollapseProps } from 'naive-ui';
+import { useMessage, type CollapseProps } from 'naive-ui';
+
+/**
+ * API key - Form
+ */
+type ApiKeyPermissionForm = {
+  key: number;
+  label: string;
+  name: string;
+  value: boolean;
+};
+type ApiKeyRoleForm = {
+  enabled: boolean;
+  name: string;
+  serviceType: string;
+  service_uuid: string;
+  permissions: Array<ApiKeyPermissionForm>;
+};
+type ApiKeyForm = {
+  name: string;
+  apiKeyType: boolean;
+  roles: Array<ApiKeyRoleForm>;
+};
 
 const props = defineProps({
   id: { type: Number, default: 0 },
@@ -153,7 +175,7 @@ const createdApiKey = ref<ApiKeyCreatedInterface>({} as ApiKeyCreatedInterface);
 const roles = computed(() => {
   return dataStore.services.map(service => {
     return {
-      enabled: props.id > 0,
+      enabled: props.id > 0 && isAnyPermissionEnabled(service),
       name: service.name,
       serviceType: service.serviceType,
       service_uuid: service.service_uuid,
@@ -210,7 +232,7 @@ const expandedPermissions = computed(() => {
   if (props.id === 0) {
     return null;
   }
-  return roles.value.map(item => item.service_uuid);
+  return roles.value.filter(role => role.enabled).map(item => item.service_uuid);
 });
 
 const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expanded }) => {
@@ -221,7 +243,7 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expan
     service.enabled = !service.enabled;
 
     /** Toggle checkboxes if user is creating new API key */
-    if (props.id === 0) {
+    if (props.id === 0 || !expanded) {
       service.permissions.forEach(permission => {
         permission.value = expanded;
       });
@@ -352,6 +374,9 @@ function isPermissionEnabled(serviceUuid: string, roleId: number) {
       role.role_id === roleId
   );
 }
+function isAnyPermissionEnabled(service: ServiceInterface) {
+  return enumValues(ApiKeyRole).some(roleId => isPermissionEnabled(service.service_uuid, roleId));
+}
 
 /** Permission update */
 function updatePermission(serviceUuid: string, roleId: number, value: boolean) {
@@ -388,6 +413,25 @@ async function removePermission(serviceUuid: string, roleId: number) {
       project_uuid: projectUuid,
       service_uuid: serviceUuid,
       role_id: roleId,
+    });
+
+    message.success($i18n.t('form.success.deleted.apiKeyRole'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+}
+
+async function removeServicePermissions(service: ApiKeyRoleForm) {
+  const projectUuid = dataStore.projectUuid || '';
+  service.enabled = !service.enabled;
+  if (!service.enabled) return;
+
+  // If toggle off, remove all active roles for this service type
+  try {
+    await $api.delete<DeleteResponse>(endpoints.apiKeyServiceRoles(props.id), {
+      project_uuid: projectUuid,
+      service_uuid: service.service_uuid,
+      role_id: 50, // Validation placeholder
     });
 
     message.success($i18n.t('form.success.deleted.apiKeyRole'));

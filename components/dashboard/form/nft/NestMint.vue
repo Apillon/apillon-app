@@ -64,15 +64,21 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+type FormNftNestMint = {
+  parentCollectionUuid: string | null;
+  parentNftId: number | null;
+  quantity: number | null;
+};
 
 const props = defineProps({
   collectionUuid: { type: String, required: true },
+  chainId: { type: Number, required: true },
 });
 const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
+const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
 const loading = ref(false);
@@ -132,13 +138,18 @@ function validateQuantity(_: NFormItemRule, value: number): boolean {
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
+  formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      await mint();
+      const priceServiceName = generatePriceServiceName(
+        ServiceTypeName.NFT,
+        props.chainId,
+        PriceServiceAction.MINT
+      );
+      warningStore.showSpendingWarning(priceServiceName, () => mint());
     }
   });
 }

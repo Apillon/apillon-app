@@ -26,7 +26,11 @@
     </div>
 
     <div class="flex flex-auto w-full flex-col md:flex-row">
-      <n-layout :has-sider="instructionsAvailable && isMd" sider-placement="right">
+      <n-layout
+        class="has-scrollbar"
+        :has-sider="instructionsAvailable && isMd"
+        sider-placement="right"
+      >
         <n-layout-content>
           <n-scrollbar y-scrollable :style="scrollStyle">
             <div class="pt-8">
@@ -42,6 +46,12 @@
               v-if="bucketStore.uploadActive && bucketStore.bucketUuid"
               :bucket-uuid="bucketStore.bucketUuid"
             />
+
+            <!-- Global component: Spending warning -->
+            <ModalSpendingWarning
+              v-model:show="warningStore.isSpendingWarningOpen"
+              @close="warningStore.isSpendingWarningOpen = false"
+            />
           </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
@@ -50,7 +60,7 @@
           collapse-mode="width"
           :collapsed-width="48"
           :width="isXl ? 455 : 356"
-          :content-style="isMd ? 'padding-left: 32px;' : ''"
+          :content-style="isMd ? 'padding-left: 20px;' : ''"
           @after-enter="handleOnUpdateCollapse(false)"
           @after-leave="handleOnUpdateCollapse(true)"
         >
@@ -95,21 +105,18 @@
 
 <script lang="ts" setup>
 import { useGtm } from '@gtm-support/vue-gtm';
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
   loading: { type: Boolean, default: false },
   learnCollapsible: { type: Boolean, default: true },
 });
-
-/** Global messages */
-window.$message = useMessage();
 
 /** Check if instructions are available (page has content and feature is enabled) */
 const $slots = useSlots();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
+const warningStore = useWarningStore();
+const paymentStore = usePaymentStore();
 
 const gtm = useGtm();
 const { isMd, isLg, isXl } = useScreen();
@@ -128,6 +135,9 @@ const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
   // await getInstructions(key.value);
+
+  /** Get Price list */
+  paymentStore.getPriceList();
 
   if (gtm && gtm.enabled() && !sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
     gtm.trackEvent({

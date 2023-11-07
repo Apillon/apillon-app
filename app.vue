@@ -6,9 +6,16 @@
       :locale="locale"
       :date-locale="dateLocale"
     >
-      <NuxtLayout>
-        <NuxtPage />
-      </NuxtLayout>
+      <n-message-provider
+        placement="bottom-right"
+        :keep-alive-on-hover="true"
+        :duration="3000"
+        closable
+      >
+        <NuxtLayout>
+          <NuxtPage />
+        </NuxtLayout>
+      </n-message-provider>
       <CookieConsent />
     </n-config-provider>
   </div>

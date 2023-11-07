@@ -26,7 +26,7 @@
         </strong>
       </n-space>
       <TableApiKeys />
-      <div v-if="!settingsStore.isProjectUser()" class="text-right mt-5">
+      <div v-if="!dataStore.isProjectUser" class="text-right mt-5">
         <Btn type="secondary" @click="showDrawerGenerateApiKey">
           {{ $t('dashboard.apiKey.generate') }}
         </Btn>

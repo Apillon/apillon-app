@@ -63,7 +63,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
 // const authStore = useAuthStore();
 const referralStore = useReferralStore();
 const message = useMessage();

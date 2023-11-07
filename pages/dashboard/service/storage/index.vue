@@ -8,6 +8,11 @@
 
         <template #info>
           <n-space :size="32" align="center">
+            <StorageProgress
+              :key="storageStore.info.usedStorage"
+              :size="storageStore.info.usedStorage"
+              :max-size="storageStore.info.availableStorage"
+            />
             <IconInfo @click="showModalW3Warn = true" />
           </n-space>
         </template>
@@ -46,6 +51,7 @@
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
+const storageStore = useStorageStore();
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 const showModalNewBucket = ref<boolean | null>(false);
@@ -56,26 +62,19 @@ useHead({
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    await storageStore.getStorageInfo();
     await bucketStore.getBuckets();
-    await geBucketQuota();
 
     pageLoading.value = false;
   });
 });
-
-/** GET Bucket quota, if current value is null  */
-async function geBucketQuota() {
-  if (bucketStore.quotaReached === undefined) {
-    await bucketStore.fetchBucketQuota();
-  }
-}
 
 /**
  * On createNewBucket click
  * If W3Warn has already been shown, show modal create new bucket, otherwise show warn first
  * */
 function createNewBucket() {
-  if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_NEW)) {
+  if (localStorage.getItem(LsW3WarnKeys.BUCKET_NEW)) {
     showModalNewBucket.value = true;
   } else {
     showModalW3Warn.value = true;
@@ -95,7 +94,7 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.BUCKET_NEW, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.BUCKET_NEW, Date.now().toString());
     }
   }
 );

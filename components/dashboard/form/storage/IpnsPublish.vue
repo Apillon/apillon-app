@@ -46,7 +46,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+type FormIpnsPublish = {
+  ipns?: number;
+};
 
 const props = defineProps({
   cid: { type: String, required: true },

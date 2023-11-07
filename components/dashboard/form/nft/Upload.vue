@@ -37,11 +37,13 @@
           {{ $t('nft.upload.infoImages') }}
         </p>
         <p class="mb-6">
-          <a href="https://wiki.apillon.io/build/2-web3-services.html" target="_blank">
-            <Btn type="builders" size="tiny">
-              {{ $t('general.learnMore') }}
-            </Btn>
-          </a>
+          <Btn
+            type="builders"
+            size="tiny"
+            href="https://wiki.apillon.io/build/2-web3-services.html"
+          >
+            {{ $t('general.learnMore') }}
+          </Btn>
         </p>
         <n-upload
           v-on-click-outside="stopLoader"
@@ -120,17 +122,17 @@
           {{ $t('nft.upload.infoFile') }}
         </p>
         <p class="mb-6 text-body whitespace-pre-line">
-          <a href="https://wiki.apillon.io/build/2-web3-services.html" target="_blank">
-            <Btn type="builders" size="tiny">
-              {{ $t('general.learnMore') }}
-            </Btn>
-          </a>
+          <Btn
+            type="builders"
+            size="tiny"
+            href="https://wiki.apillon.io/build/2-web3-services.html"
+          >
+            {{ $t('general.learnMore') }}
+          </Btn>
           <span class="inline-block mx-1">{{ $t('general.or') }}</span>
-          <a href="/files/example.csv" target="_blank">
-            <Btn type="builders" size="tiny">
-              {{ $t('nft.upload.downloadCsv') }}
-            </Btn>
-          </a>
+          <Btn type="builders" size="tiny" href="/files/example.csv">
+            {{ $t('nft.upload.downloadCsv') }}
+          </Btn>
         </p>
         <n-upload
           v-if="!collectionStore.hasCsvFile"
@@ -157,7 +159,7 @@
         </n-upload>
         <template v-else>
           <div class="flex text-left">
-            <div class="card flex-1 px-4 py-2">
+            <div class="card flex-1 px-4 py-2 rounded-lg">
               <span class="icon-file text-xl align-sub mr-3"></span>
               <span>{{ collectionStore.csvFile.name }}</span>
             </div>
@@ -188,7 +190,7 @@
     </div>
 
     <modal v-model:show="modalMetadataAttributesVisible" :title="$t('nft.upload.attributes')">
-      <n-space class="pb-8" :size="32" vertical>
+      <n-space :size="32" vertical>
         <NftMetadataAttributes />
         <Btn class="float-right" type="primary" @click="createMetadata">
           {{ $t('nft.upload.csvConfirmAttributes') }}

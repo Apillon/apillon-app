@@ -14,9 +14,13 @@
           </n-space>
         </slot>
         <template #info>
-          <Badge icon="nft/moonbeam">
-            <NuxtIcon name="nft/astar_logo" class="icon-auto ml-2" filled />
-          </Badge>
+          <n-space :size="32" align="center">
+            <ModalCreditCosts :service="ServiceTypeName.NFT" filter-by-chain />
+
+            <Badge icon="nft/moonbeam">
+              <NuxtIcon name="nft/astar_logo" class="icon-auto ml-2" filled />
+            </Badge>
+          </n-space>
         </template>
       </Heading>
     </template>
@@ -113,7 +117,7 @@
           animated
         >
           <!-- METADATA -->
-          <n-tab-pane :name="NftMintTab.METADATA" :disabled="collectionStore.quotaReached === true">
+          <n-tab-pane :name="NftMintTab.METADATA">
             <template #tab>
               <IconNumber
                 v-if="collectionStore.mintTab === NftMintTab.METADATA"
@@ -133,11 +137,7 @@
                     {{ $t('nft.metadata.infoNew') }}
                   </p>
 
-                  <!-- Notification - show if qouta has been reached -->
-                  <Notification v-if="isQuotaReached" type="warning" class="w-full mb-4">
-                    {{ $t('nft.collection.quotaReached') }}
-                  </Notification>
-                  <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-4">
+                  <Notification v-if="isFormDisabled" type="error" class="w-full mb-4">
                     {{ $t('dashboard.permissions.insufficient') }}
                   </Notification>
                   <div class="flex flex-col gap-4 px-2">
@@ -154,7 +154,7 @@
           </n-tab-pane>
 
           <!-- UPLOAD -->
-          <n-tab-pane :name="NftMintTab.UPLOAD" :disabled="collectionStore.quotaReached === true">
+          <n-tab-pane :name="NftMintTab.UPLOAD">
             <template #tab>
               <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
               <IconNumber
@@ -173,7 +173,6 @@
           <n-tab-pane
             :name="NftMintTab.MINT"
             :disabled="
-              collectionStore.quotaReached === true ||
               !collectionStore.hasCsvFile ||
               !collectionStore.hasMetadata ||
               !collectionStore.hasImages
@@ -184,7 +183,7 @@
               <span class="ml-2 text-sm text-white">{{ $t('nft.collection.mintNfts') }}</span>
             </template>
             <slot>
-              <FormNftMintNft @submit-success="collectionCreated = true" />
+              <FormNftDeploy @submit-success="collectionCreated = true" />
             </slot>
           </n-tab-pane>
         </n-tabs>
@@ -239,13 +238,16 @@
 </template>
 
 <script lang="ts" setup>
+import type { TabsInst } from 'naive-ui';
+
 const $i18n = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
+const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
 const { transactionLink } = useNft();
-const { isFormDisabled, isQuotaReached } = useCollection();
+const { isFormDisabled } = useCollection();
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),
@@ -254,7 +256,7 @@ useHead({
 const pageLoading = ref<boolean>(true);
 const loadingBucket = ref<boolean>(false);
 const modalW3WarnVisible = ref<boolean>(false);
-const mintTabsRef = ref<NTabsInst | null>(null);
+const mintTabsRef = ref<TabsInst | null>(null);
 const collectionCreated = ref<boolean>(false);
 
 onMounted(() => {
@@ -264,8 +266,8 @@ onMounted(() => {
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await storageStore.getStorageInfo();
       await collectionStore.getCollections();
-      await collectionStore.getCollectionQuota();
 
       pageLoading.value = false;
     });
@@ -333,8 +335,8 @@ async function openBucket(bucketUuid: string) {
   const bucket = await bucketStore.fetchBucket(bucketUuid);
   loadingBucket.value = false;
 
-  if (bucket && bucket.id) {
-    router.push(`/dashboard/service/storage/${bucket.id}`);
+  if (bucket && bucket.bucket_uuid) {
+    router.push(`/dashboard/service/storage/${bucket.bucket_uuid}`);
   }
 }
 </script>

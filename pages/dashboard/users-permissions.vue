@@ -17,7 +17,7 @@
       <TableUsersPermissions />
 
       <!-- Invite team member -->
-      <template v-if="settingsStore.isUserOwner()">
+      <template v-if="dataStore.isUserOwner">
         <n-h5 prefix="bar">{{ $t('dashboard.inviteTeamMember') }}</n-h5>
         <FormUserInvite />
       </template>
@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const settingsStore = useSettingsStore();
+const dataStore = useDataStore();
 
 useHead({
   title: t('project.usersAndPermissions'),

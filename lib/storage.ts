@@ -10,7 +10,7 @@ export function bytesToMb(bytes: number): number {
   return parseFloat((bytes / Math.pow(1024, 2)).toFixed(2));
 }
 
-export function storagePercantage(size: number, maxSize: number): number {
+export function storagePercentage(size: number, maxSize: number): number {
   return parseInt(((size / maxSize) * 100).toFixed(0));
 }
 

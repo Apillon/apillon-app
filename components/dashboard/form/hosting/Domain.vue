@@ -1,5 +1,5 @@
 <template>
-  <Spinner v-if="websiteId > 0 && !website" />
+  <Spinner v-if="websiteUuid && !website" />
   <div v-else>
     <n-form
       ref="formRef"
@@ -44,10 +44,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+type FormWebsiteDomain = {
+  domain?: string | null;
+};
 
 const props = defineProps({
-  websiteId: { type: Number, default: 0 },
+  websiteUuid: { type: String, default: null },
   domain: { type: String, default: '' },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
@@ -57,17 +59,10 @@ const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
+
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-
 const website = ref<WebsiteInterface | null>(null);
-
-onMounted(async () => {
-  if (props.websiteId) {
-    website.value = await websiteStore.getWebsite(props.websiteId);
-    formData.value.domain = website.value.domain;
-  }
-});
 
 const formData = ref<FormWebsiteDomain>({
   domain: props.domain || null,
@@ -82,6 +77,13 @@ const rules: NFormRules = {
     },
   ],
 };
+
+onMounted(async () => {
+  if (props.websiteUuid) {
+    website.value = await websiteStore.getWebsite(props.websiteUuid);
+    formData.value.domain = website.value.domain;
+  }
+});
 
 // Custom validations
 function validateDomain(_: NFormItemRule, value: string): boolean {
@@ -113,7 +115,7 @@ async function createWebsiteDomain() {
 
   try {
     const res = await $api.patch<WebsiteResponse>(
-      endpoints.websites(props.websiteId),
+      endpoints.websites(props.websiteUuid),
       formData.value
     );
 
@@ -135,7 +137,7 @@ async function updateWebsiteDomain() {
 
   try {
     const res = await $api.patch<WebsiteResponse>(
-      endpoints.websites(props.websiteId),
+      endpoints.websites(props.websiteUuid),
       formData.value
     );
 
@@ -155,12 +157,12 @@ async function updateWebsiteDomain() {
 function updateWebsiteDomainValue(domain) {
   /** On website updated refresh website data */
   websiteStore.items.forEach((item: WebsiteBaseInterface) => {
-    if (item.id === props.websiteId) {
+    if (item.website_uuid === props.websiteUuid) {
       item.domain = domain;
       item.domainChangeDate = new Date().toISOString();
     }
   });
-  if (websiteStore.active.id === props.websiteId) {
+  if (websiteStore.active.bucket_uuid === props.websiteUuid) {
     websiteStore.active.domain = domain;
   }
 }

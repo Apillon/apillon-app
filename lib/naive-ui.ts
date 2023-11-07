@@ -1,4 +1,4 @@
-import { DiscreteApiOptions, GlobalThemeOverrides, MessageProviderProps } from 'naive-ui';
+import type { GlobalThemeOverrides, MessageProviderProps } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 
 type MessageThemeOverrides = NonNullable<MessageProviderProps['themeOverrides']>;
@@ -47,17 +47,6 @@ const messageOverrides: MessageThemeOverrides = {
 /**
  * Theme configs
  */
-export const MessageProviderOptions: DiscreteApiOptions = {
-  messageProviderProps: {
-    duration: 3000,
-    closable: true,
-    keepAliveOnHover: true,
-    max: 4,
-    placement: 'bottom-right',
-    themeOverrides: messageOverrides,
-  },
-};
-
 export const themeOverrides: GlobalThemeOverrides = {
   common: {
     baseColor: colors.bg.DEFAULT,
@@ -85,9 +74,9 @@ export const themeOverrides: GlobalThemeOverrides = {
     borderHoverPrimary: `1px solid ${colors.bg.lighter}`,
     borderPressedPrimary: `1px solid ${colors.bg.lighter}`,
     borderRadiusTiny: '0px',
-    borderRadiusSmall: '0px',
-    borderRadiusMedium: '0px',
-    borderRadiusLarge: '0px',
+    borderRadiusSmall: '8px',
+    borderRadiusMedium: '8px',
+    borderRadiusLarge: '8px',
     colorDisabledPrimary: colors.bg.lighter,
     colorInfo: colors.white,
     colorHover: colors.bg.lighter,
@@ -126,7 +115,7 @@ export const themeOverrides: GlobalThemeOverrides = {
   },
   Card: {
     borderColor: colors.primary,
-    borderRadius: '0px',
+    borderRadius: '8px',
     color: colors.bg.DEFAULT,
     colorEmbedded: colors.bg.DEFAULT,
     colorEmbeddedModal: colors.bg.DEFAULT,
@@ -134,13 +123,14 @@ export const themeOverrides: GlobalThemeOverrides = {
     colorModal: colors.bg.DEFAULT,
     colorPopover: colors.bg.DEFAULT,
     colorTarget: colors.bg.DEFAULT,
+    paddingSmall: '32px',
     paddingMedium: '16px 64px 16px 64px',
   },
   Checkbox: {
     border: `2px solid ${colors.bodyDark}`,
     borderChecked: `2px solid ${colors.white}`,
     borderFocus: `2px solid ${colors.bodyDark}`,
-    borderRadius: '0px',
+    borderRadius: '4px',
     sizeSmall: '16px',
     sizeMedium: '18px',
     sizeLarge: '24px',
@@ -191,7 +181,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     footerPadding: '0px 32px 32px 32px',
   },
   Dropdown: {
-    borderRadius: '0px',
+    borderRadius: '8px',
     color: colors.bg.dark,
     fontSizeSmall: '12px',
     fontSizeMedium: '14px',
@@ -229,7 +219,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     borderFocusError: `1px solid ${colors.pink}`,
     borderHoverError: `1px solid ${colors.pink}`,
     borderDisabled: `1px solid ${colors.bg.lighter}`,
-    borderRadius: '0px',
+    borderRadius: '8px',
     boxShadowFocus: 'none',
     boxShadowFocusError: 'none',
     boxShadowFocusWarning: 'none',
@@ -360,7 +350,7 @@ export const themeOverrides: GlobalThemeOverrides = {
         borderActive: `1px solid ${colors.white}`,
         borderFocus: `1px solid ${colors.white}`,
         borderHover: `1px solid ${colors.body}`,
-        borderRadius: '0px',
+        borderRadius: '8px',
         boxShadowActive: 'none',
         boxShadowFocus: 'none',
         boxShadowHover: 'none',
@@ -373,7 +363,7 @@ export const themeOverrides: GlobalThemeOverrides = {
         heightTiny: '32px',
       },
       InternalSelectMenu: {
-        borderRadius: '0px',
+        borderRadius: '8px',
         color: colors.bg.dark,
         optionCheckColor: colors.bg.lighter,
         optionColorActive: colors.bg.lighter,

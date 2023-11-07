@@ -71,9 +71,14 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi } from 'naive-ui';
+type FormProject = {
+  name: string | null;
+  description: string | null;
+  terms?: boolean;
+};
 
 const $i18n = useI18n();
+const message = useMessage();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
 
@@ -99,7 +104,6 @@ const termsLabel = computed(() => {
 /** Form project */
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const formData = ref<FormProject>({
   name: null,

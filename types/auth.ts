@@ -19,42 +19,11 @@ declare global {
   }
 
   interface UserResponse extends GeneralResponse<UserInterface> {}
-
-  /**
-   * User profile
-   */
-  interface FormUserProfile {
-    name?: string | null;
-    email: string;
-    phone?: string | null;
-  }
   interface UserProfileResponse extends GeneralResponse<UserInterface> {}
-
-  /**
-   * User invite
-   */
-  interface FormUserInvite {
-    email: string;
-    role_id: number | null;
-  }
 
   /**
    *  Register
    */
-  interface SignupForm {
-    email: string;
-    captcha?: any;
-    refCode?: string;
-  }
-  interface FormRegister {
-    password: string | null;
-    reenteredPassword: string | null;
-  }
-  interface PasswordResetForm {
-    email: string;
-    captcha?: any;
-    refCode?: string;
-  }
   interface RegisterInterface extends UserInterface {
     token: string;
     captchaJwt?: string;
@@ -74,12 +43,6 @@ declare global {
   /**
    * Login
    */
-  interface FormLogin {
-    email: string;
-    password: string;
-    captcha?: any;
-    captchaJwt?: any;
-  }
   interface LoginInterface extends UserInterface {
     token: string;
     captchaJwt?: string;
@@ -88,11 +51,10 @@ declare global {
   interface LoginResponse extends GeneralResponse<LoginInterface> {}
   interface PasswordResetRequestResponse extends GeneralResponse<boolean> {}
   interface OAuthSessionInterface {
-    data: {
-      session: string;
-    };
+    sessionToken: string;
   }
   interface OauthSessionResponse extends GeneralResponse<OAuthSessionInterface> {}
+
   /**
    * Wallet
    */

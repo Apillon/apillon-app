@@ -18,7 +18,7 @@
 
   <!-- Modal - Delete API key -->
   <ModalDelete v-model:show="showModalDeleteApiKey" :title="$t('dashboard.apiKey.delete')">
-    <FormDelete :id="currentRow?.id || 0" type="apiKey" @submit-success="onApiKeyDeleted" />
+    <FormDelete :id="currentRow?.id" type="apiKey" @submit-success="onApiKeyDeleted" />
   </ModalDelete>
 </template>
 
@@ -26,6 +26,7 @@
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
+const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
 const showModalDeleteApiKey = ref<boolean>(false);
 const drawerUpdateApiKeyVisible = ref<boolean>(false);
@@ -58,7 +59,7 @@ const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
       title: t('dashboard.created'),
       key: 'created',
       render(row) {
-        return h('span', {}, { default: () => datetimeToDate(row.updateTime) });
+        return h('span', {}, { default: () => dateTimeToDate(row.updateTime) });
       },
     },
     {
@@ -114,7 +115,7 @@ const dropdownOptions = [
   {
     label: t('general.edit'),
     key: 'edit',
-    disabled: settingsStore.isProjectUser(),
+    disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
         drawerUpdateApiKeyVisible.value = true;
@@ -124,7 +125,7 @@ const dropdownOptions = [
   {
     label: t('general.delete'),
     key: 'delete',
-    disabled: settingsStore.isProjectUser(),
+    disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
         showModalDeleteApiKey.value = true;

@@ -1,10 +1,6 @@
 <template>
   <div>
-    <!-- Notification - show if quota has been reached -->
-    <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
-      {{ $t('nft.collection.quotaReached') }}
-    </Notification>
-    <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <p v-else-if="$i18n.te('nft.collection.infoNew')" class="text-body mb-8">
@@ -319,8 +315,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const emit = defineEmits(['submitSuccess']);
 const modalW3WarnVisible = ref<boolean>(false);
 
@@ -330,7 +324,9 @@ const message = useMessage();
 
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+const { getPriceServiceName } = useNft();
 const {
   booleanSelect,
   chains,
@@ -340,7 +336,6 @@ const {
   supplyTypes,
   rules,
   isFormDisabled,
-  isQuotaReached,
   disablePasteDate,
   disablePasteTime,
 } = useCollection();
@@ -384,8 +379,8 @@ function infoLabel(field: string) {
 }
 
 /** When user close W3Warn, allow him to create new collection */
-async function onModalW3WarnConfirm() {
-  await createCollection();
+function onModalW3WarnConfirm() {
+  warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
 }
 
 /** Watch modalW3WarnVisible, onShow update timestamp of shown modal in session storage */
@@ -393,7 +388,7 @@ watch(
   () => modalW3WarnVisible.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
     }
   }
 );
@@ -407,10 +402,10 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (!sessionStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
+    } else if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
       modalW3WarnVisible.value = true;
     } else {
-      await createCollection();
+      warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
     }
   });
 }
@@ -451,8 +446,6 @@ async function createCollection() {
     /** On new collection created add new collection to list */
     collectionStore.items.push(res.data);
 
-    /** Reset collection qouta limit */
-    collectionStore.quotaReached = undefined;
     collectionStore.resetMetadata();
     collectionStore.resetForms();
 

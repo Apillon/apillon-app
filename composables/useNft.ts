@@ -1,9 +1,7 @@
-import { useMessage } from 'naive-ui';
-
 export default function useNft() {
   const $i18n = useI18n();
   const message = useMessage();
-  const { putRequests, fileAlreadyOnFileList, uploadFiles } = useUpload();
+  const { putRequests, fileAlreadyOnFileList, isEnoughSpaceInStorage, uploadFiles } = useUpload();
   const collectionStore = useCollectionStore();
 
   const { vueApp } = useNuxtApp();
@@ -85,8 +83,13 @@ export default function useNft() {
 
   /** Upload file request - add file to list */
   function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-    if (file.type !== 'text/csv' && file.type !== 'application/vnd.ms-excel') {
-      console.warn(file.type);
+    if (!isEnoughSpaceInStorage([], file.file)) {
+      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+
+      /** Mark file as failed */
+      onError();
+      return;
+    } else if (file.type !== 'text/csv' && file.type !== 'application/vnd.ms-excel') {
       message.warning($i18n.t('validation.fileTypeNotCsv'));
 
       /** Mark file as failed */
@@ -206,7 +209,10 @@ export default function useNft() {
       onError,
     };
 
-    if (fileAlreadyOnFileList(collectionStore.images, image)) {
+    if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
+      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+      onError();
+    } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
       message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));
       onError();
     } else if (collectionStore.images.length >= collectionStore.csvData.length) {
@@ -259,59 +265,39 @@ export default function useNft() {
    * Deploy NFT with metadata
    */
   async function deployCollection() {
-    try {
-      const metadataSession = await uploadMetadata();
-      const imagesSession = await uploadImages();
-
-      await Promise.all(putRequests.value).then(async _ => {
-        if (!!metadataSession && !!imagesSession) {
-          const res = await $api.post<CollectionResponse>(
-            endpoints.nftDeploy(collectionStore.active.collection_uuid),
-            { metadataSession, imagesSession }
-          );
-          collectionStore.active = res.data;
-
-          message.success($i18n.t('form.success.nftDeployed'));
-        } else {
-          message.error($i18n.t('nft.upload.deployError'));
-        }
-      });
-    } catch (error) {
-      message.error(userFriendlyMsg(error));
-      throw error;
-    }
-  }
-
-  async function uploadImages() {
-    try {
-      return await uploadFiles(
-        collectionStore.active.bucket_uuid,
-        collectionStore.images,
-        false,
-        true,
-        false
-      );
-    } catch (error) {
-      message.error(userFriendlyMsg(error));
-      return null;
-    }
-  }
-
-  async function uploadMetadata() {
     const nftMetadataFiles = createNftFiles(collectionStore.metadata);
+    const metadataSession = await uploadFiles(
+      collectionStore.active.bucket_uuid,
+      nftMetadataFiles,
+      false,
+      true,
+      false
+    );
+    const imagesSession = await uploadFiles(
+      collectionStore.active.bucket_uuid,
+      collectionStore.images,
+      false,
+      true,
+      false
+    );
 
-    try {
-      return await uploadFiles(
-        collectionStore.active.bucket_uuid,
-        nftMetadataFiles,
-        false,
-        true,
-        false
-      );
-    } catch (error) {
-      message.error(userFriendlyMsg(error));
-      return null;
-    }
+    await Promise.all(putRequests.value).then(async _ => {
+      if (!!metadataSession && !!imagesSession) {
+        const res = await $api.post<CollectionResponse>(
+          endpoints.nftDeploy(collectionStore.active.collection_uuid),
+            {
+              useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
+              metadataSession,
+              imagesSession,
+            }
+        );
+        collectionStore.active = res.data;
+
+        message.success($i18n.t('form.success.nftDeployed'));
+      } else {
+        message.error($i18n.t('nft.upload.deployError'));
+      }
+    });
   }
 
   /**
@@ -358,6 +344,14 @@ export default function useNft() {
     }
   }
 
+  function getPriceServiceName() {
+    return generatePriceServiceName(
+      ServiceTypeName.NFT,
+      collectionStore.form.base.chain,
+      PriceServiceAction.COLLECTION
+    );
+  }
+
   return {
     allImagesUploaded,
     hasRequiredMetadata,
@@ -370,13 +364,13 @@ export default function useNft() {
     createNftData,
     createThumbnailUrl,
     deployCollection,
-    uploadImagesRequest,
+    getPriceServiceName,
     handleImageChange,
     handleImageRemove,
     isImage,
     parseUploadedFile,
     transactionLink,
     uploadFileRequest,
-    uploadMetadata,
+    uploadImagesRequest,
   };
 }

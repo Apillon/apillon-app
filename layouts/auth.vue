@@ -5,7 +5,7 @@
 
       <div class="relative">
         <router-view v-slot="{ Component, route }">
-          <transition :name="route.meta?.transition as string || 'fadeBlur'" :duration="500">
+          <transition :name="(route.meta?.transition as string) || 'fadeBlur'" :duration="500">
             <component :is="Component" class="w-full" />
           </transition>
         </router-view>
@@ -18,7 +18,6 @@
 
 <script lang="ts" setup>
 import { clearAllBodyScrollLocks } from 'body-scroll-lock';
-import { createDiscreteApi } from 'naive-ui';
 
 /**
  * Disable body scroll
@@ -28,6 +27,6 @@ onMounted(() => {
 });
 
 /** Global messages */
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
+const message = useMessage();
 window.$message = message;
 </script>

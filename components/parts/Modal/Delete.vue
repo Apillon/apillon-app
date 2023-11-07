@@ -1,6 +1,7 @@
 <template>
   <n-modal v-bind="$attrs" ref="modalRef" :mask-closable="false">
     <n-card
+      class="!max-w-xl"
       :title="title || $t(`dashboard.delete`)"
       :bordered="false"
       role="dialog"
@@ -16,7 +17,7 @@
         <slot name="content"> </slot>
       </div>
 
-      <n-grid :cols="2" :x-gap="32" class="items-center">
+      <n-grid :cols="2" :x-gap="32" class="items-end">
         <n-gi>
           <n-button class="w-full" type="error" ghost @click="closeModal">
             {{ $t('general.cancel') }}

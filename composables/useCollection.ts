@@ -1,6 +1,6 @@
 export default function useCollection() {
   const $i18n = useI18n();
-  const settingsStore = useSettingsStore();
+  const dataStore = useDataStore();
   const collectionStore = useCollectionStore();
 
   const loading = ref<boolean>(false);
@@ -31,11 +31,8 @@ export default function useCollection() {
     { label: $i18n.t('form.booleanSelect.false'), value: false },
   ];
 
-  const isQuotaReached = computed<boolean>(() => {
-    return collectionStore.quotaReached === true;
-  });
   const isFormDisabled = computed<boolean>(() => {
-    return isQuotaReached.value || settingsStore.isProjectUser();
+    return dataStore.isProjectUser;
   });
 
   const maxNft = computed(() => {
@@ -150,7 +147,6 @@ export default function useCollection() {
     supplyTypes,
     booleanSelect,
     rules,
-    isQuotaReached,
     isFormDisabled,
     disablePasteDate,
     disablePasteTime,

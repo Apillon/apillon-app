@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia';
 
-const dataStore = useDataStore();
-const ipnsStore = useIpnsStore();
-
 export const useBucketStore = defineStore('bucket', {
   state: () => ({
     allowFetch: true,
@@ -10,8 +7,7 @@ export const useBucketStore = defineStore('bucket', {
     destroyed: [] as BucketInterface[],
     items: [] as BucketInterface[],
     loading: false,
-    quotaReached: undefined as Boolean | undefined,
-    selected: 0,
+    selected: '',
     selectedItems: [] as BucketInterface[],
     total: 0,
     uploadActive: false,
@@ -24,9 +20,9 @@ export const useBucketStore = defineStore('bucket', {
       allowFetch: true,
       items: [] as BucketItemInterface[],
       loading: false,
-      path: [] as Array<{ id: number; name: string }>,
+      path: [] as Array<{ uuid: string; name: string }>,
       search: '',
-      selected: 0,
+      selected: '',
       selectedItems: [] as BucketItemInterface[],
       total: 0,
     },
@@ -36,7 +32,7 @@ export const useBucketStore = defineStore('bucket', {
       return (
         state.active?.bucket_uuid ||
         (
-          state.items.find((item: BucketInterface) => item.id === state.selected) ||
+          state.items.find((item: BucketInterface) => item.bucket_uuid === state.selected) ||
           ({} as BucketInterface)
         )?.bucket_uuid ||
         ''
@@ -44,7 +40,7 @@ export const useBucketStore = defineStore('bucket', {
     },
     currentBucket(state): BucketInterface {
       return (
-        state.items.find((item: BucketInterface) => item.id === state.selected) ||
+        state.items.find((item: BucketInterface) => item.bucket_uuid === state.selected) ||
         ({} as BucketInterface)
       );
     },
@@ -61,7 +57,7 @@ export const useBucketStore = defineStore('bucket', {
     hasBucketItems(state): boolean {
       return (
         (Array.isArray(state.folder.items) && state.folder.items.length > 0) ||
-        state.folder.selected > 0 ||
+        !!state.folder.selected ||
         state.folder.loading ||
         state.folder.search.length > 0
       );
@@ -70,7 +66,7 @@ export const useBucketStore = defineStore('bucket', {
       return Array.isArray(state.destroyed) && state.destroyed.length > 0;
     },
     hasSelectedBucket(state): boolean {
-      return state.items.some((bucket: BucketInterface) => bucket.id === state.selected);
+      return state.items.some((bucket: BucketInterface) => bucket.bucket_uuid === state.selected);
     },
     getFolderPath(state) {
       const path = state.folder.path.map(p => p.name).join('/');
@@ -83,33 +79,34 @@ export const useBucketStore = defineStore('bucket', {
       this.active = {} as BucketInterface;
       this.destroyed = [] as Array<BucketInterface>;
       this.items = [] as Array<BucketInterface>;
-      this.quotaReached = undefined;
       this.filter.bucketType = null;
       this.filter.search = '';
-      this.selected = 0;
+      this.selected = '';
       this.total = 0;
       this.uploadFileList = [] as Array<FileListItemType>;
 
       /** File/folder */
       this.folder.items = [] as Array<BucketItemInterface>;
       this.folder.path = [];
-      this.folder.selected = 0;
+      this.folder.selected = '';
     },
 
-    setBucketId(id: number) {
-      if (this.selected !== id) {
-        this.selected = id;
+    setBucket(uuid: string) {
+      if (this.selected !== uuid) {
+        this.selected = uuid;
         this.uploadFileList = [] as Array<FileListItemType>;
         this.folder.items = [] as Array<BucketItemInterface>;
         this.folder.total = 0;
         this.folder.path = [];
-        this.folder.selected = 0;
+        this.folder.selected = '';
         this.folderSearch();
+
+        const ipnsStore = useIpnsStore();
         ipnsStore.resetData();
       }
     },
 
-    folderSearch(search: string = '', fetch: boolean = false) {
+    folderSearch(search = '', fetch = false) {
       this.folder.allowFetch = fetch;
       this.folder.search = search;
 
@@ -121,7 +118,7 @@ export const useBucketStore = defineStore('bucket', {
     /**
      * Fetch wrappers
      */
-    async getBuckets(statusDestroyed: boolean = false) {
+    async getBuckets(statusDestroyed = false) {
       if (
         (statusDestroyed &&
           (!this.hasDestroyedBuckets || isCacheExpired(LsCacheKeys.BUCKET_DESTROYED))) ||
@@ -134,11 +131,11 @@ export const useBucketStore = defineStore('bucket', {
     },
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getBucket(bucketId: number): Promise<BucketInterface> {
-      if (this.active?.id !== bucketId || isCacheExpired(LsCacheKeys.BUCKET)) {
-        return await this.fetchBucket(bucketId);
+    async getBucket(bucketUuid: string): Promise<BucketInterface> {
+      if (this.active?.bucket_uuid !== bucketUuid || isCacheExpired(LsCacheKeys.BUCKET)) {
+        return await this.fetchBucket(bucketUuid);
       }
-      const bucket = this.items.find(item => item.id === bucketId);
+      const bucket = this.items.find(item => item.bucket_uuid === bucketUuid);
       if (bucket !== undefined && !isCacheExpired(LsCacheKeys.BUCKETS)) {
         return bucket;
       }
@@ -155,7 +152,8 @@ export const useBucketStore = defineStore('bucket', {
     /**
      * API calls
      */
-    async fetchBuckets(statusDeleted: boolean = false) {
+    async fetchBuckets(statusDeleted = false) {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -175,14 +173,10 @@ export const useBucketStore = defineStore('bucket', {
         dataStore.promises.buckets = req;
         const res = await req;
 
-        const items = res.data.items.map((bucket: BucketInterface) => {
-          return addBucketAdditionalData(bucket);
-        });
-
         if (statusDeleted) {
-          this.destroyed = items;
+          this.destroyed = res.data.items;
         } else {
-          this.items = items;
+          this.items = res.data.items;
         }
         this.total = res.data.total;
         this.loading = false;
@@ -212,11 +206,9 @@ export const useBucketStore = defineStore('bucket', {
       return null;
     },
 
-    async fetchBucket(bucketId: number | string): Promise<BucketInterface> {
+    async fetchBucket(bucketUuid: string): Promise<BucketInterface> {
       try {
-        const res = await $api.get<BucketResponse>(endpoints.bucket(bucketId));
-
-        this.active = addBucketAdditionalData(res.data);
+        const res = await $api.get<BucketResponse>(endpoints.bucket(bucketUuid));
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.BUCKET, Date.now().toString());
@@ -231,35 +223,15 @@ export const useBucketStore = defineStore('bucket', {
       return {} as BucketInterface;
     },
 
-    async fetchBucketQuota() {
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-      const params = {
-        project_uuid: dataStore.projectUuid,
-        bucketType: BucketType.STORAGE,
-      };
-      try {
-        const res = await $api.get<BucketQuotaResponse>(endpoints.bucketsQuota, params);
-
-        this.quotaReached = res.data;
-      } catch (error: any) {
-        this.quotaReached = undefined;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-    },
-
     async fetchDirectoryContent(arg: FetchDirectoryParams = {}) {
       this.folder.loading = arg.loader !== undefined ? arg.loader : true;
 
       /** Fallback for bucketUuid */
       const bucket = arg.bucketUuid || this.bucketUuid;
 
-      /** Update current folderId */
-      if (arg.folderId) {
-        this.folder.selected = arg.folderId;
+      /** Update current folderUuid */
+      if (arg.folderUuid) {
+        this.folder.selected = arg.folderUuid;
       }
 
       try {
@@ -269,8 +241,8 @@ export const useBucketStore = defineStore('bucket', {
         };
 
         /** Add additional parameters */
-        if (this.folder.selected > 0) {
-          params.directory_id = this.folder.selected;
+        if (this.folder.selected) {
+          params.directory_uuid = this.folder.selected;
         }
         if (arg.search) {
           params.search = arg.search;

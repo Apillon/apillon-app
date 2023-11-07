@@ -14,10 +14,9 @@
 
 <script lang="ts" setup>
 import { clearAllBodyScrollLocks } from 'body-scroll-lock';
-import { createDiscreteApi } from 'naive-ui';
 
 /** Global messages */
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
+const message = useMessage();
 window.$message = message;
 
 /**

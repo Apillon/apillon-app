@@ -52,7 +52,7 @@
       </n-form-item>
 
       <!--  Form submit -->
-      <n-form-item>
+      <n-form-item :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('storage.ipns.create')" />
         <Btn
           type="primary"
@@ -74,7 +74,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+type FormIpns = {
+  name: string;
+  description?: string | null;
+};
 
 const props = defineProps({
   ipnsId: { type: Number, default: 0 },
@@ -86,23 +89,10 @@ const $i18n = useI18n();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const ipnsStore = useIpnsStore();
-const settingsStore = useSettingsStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-
 const ipns = ref<IpnsInterface | undefined>();
-
-onMounted(async () => {
-  if (props.ipnsId) {
-    ipns.value = await ipnsStore.getIpnsFromList(bucketStore.selected, props.ipnsId);
-
-    if (ipns.value) {
-      formData.value.name = ipns.value.name;
-      formData.value.description = ipns.value.description;
-    }
-  }
-});
 
 const formData = ref<FormIpns>({
   name: ipns.value?.name || '',
@@ -125,8 +115,19 @@ const rules: NFormRules = {
   ],
 };
 
+onMounted(async () => {
+  if (props.ipnsId) {
+    ipns.value = await ipnsStore.getIpnsFromList(bucketStore.selected, props.ipnsId);
+
+    if (ipns.value) {
+      formData.value.name = ipns.value.name;
+      formData.value.description = ipns.value.description;
+    }
+  }
+});
+
 const isFormDisabled = computed<boolean>(() => {
-  return settingsStore.isProjectUser();
+  return dataStore.isProjectUser;
 });
 
 // Submit

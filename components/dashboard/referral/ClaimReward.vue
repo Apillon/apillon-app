@@ -134,8 +134,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const $i18n = useI18n();
 const formRef = ref<NFormInst | null>(null);
 const message = useMessage();

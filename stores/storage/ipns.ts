@@ -24,21 +24,21 @@ export const useIpnsStore = defineStore('ipns', {
     /**
      * Fetch wrappers
      */
-    async getIPNSs(bucketId: number): Promise<IpnsInterface[]> {
+    async getIPNSs(bucketUuid: string): Promise<IpnsInterface[]> {
       if (!this.hasIpns || isCacheExpired(LsCacheKeys.IPNS)) {
-        return await this.fetchIpns(bucketId);
+        return await this.fetchIpns(bucketUuid);
       }
       return this.items;
     },
 
-    async getIpnsFromList(bucketId: number, ipnsId: number): Promise<IpnsInterface | undefined> {
-      const IPNSs = await this.getIPNSs(bucketId);
+    async getIpnsFromList(bucketUuid: string, ipnsId: number): Promise<IpnsInterface | undefined> {
+      const IPNSs = await this.getIPNSs(bucketUuid);
       return IPNSs.find(item => item.id === ipnsId);
     },
 
-    async getIpnsById(bucketId: number, ipnsId: number): Promise<IpnsInterface> {
+    async getIpnsById(bucketUuid: string, ipnsId: number): Promise<IpnsInterface> {
       if (this.active.id !== ipnsId || isCacheExpired(LsCacheKeys.IPNS_ITEM)) {
-        return await this.fetchIpnsById(bucketId, ipnsId);
+        return await this.fetchIpnsById(bucketUuid, ipnsId);
       }
       return this.active;
     },
@@ -46,11 +46,11 @@ export const useIpnsStore = defineStore('ipns', {
     /**
      * API calls
      */
-    async fetchIpns(bucketId: number): Promise<IpnsInterface[]> {
+    async fetchIpns(bucketUuid: string): Promise<IpnsInterface[]> {
       this.loading = true;
 
       try {
-        const res = await $api.get<IpnsResponse>(endpoints.ipns(bucketId), PARAMS_ALL_ITEMS);
+        const res = await $api.get<IpnsResponse>(endpoints.ipns(bucketUuid), PARAMS_ALL_ITEMS);
 
         this.items = res.data.items;
         this.total = res.data.total;
@@ -73,9 +73,9 @@ export const useIpnsStore = defineStore('ipns', {
       return [];
     },
 
-    async fetchIpnsById(bucketId: number, ipnsId: number): Promise<IpnsInterface> {
+    async fetchIpnsById(bucketUuid: string, ipnsId: number): Promise<IpnsInterface> {
       try {
-        const res = await $api.get<IpnsItemResponse>(endpoints.ipns(bucketId, ipnsId));
+        const res = await $api.get<IpnsItemResponse>(endpoints.ipns(bucketUuid, ipnsId));
 
         this.active = res.data;
 

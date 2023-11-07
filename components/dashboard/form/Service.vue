@@ -1,5 +1,5 @@
 <template>
-  <Spinner v-if="serviceId > 0 && !service" />
+  <Spinner v-if="serviceUuid && !service" />
   <n-form
     v-else
     v-bind="$attrs"
@@ -56,7 +56,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+type FormService = {
+  serviceName: string;
+  networkType: boolean;
+};
 
 const props = defineProps({
   serviceUuid: { type: String, default: '' },

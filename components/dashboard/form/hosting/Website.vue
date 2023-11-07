@@ -1,19 +1,15 @@
 <template>
-  <Spinner v-if="websiteId > 0 && !website" />
+  <Spinner v-if="websiteUuid && !website" />
   <div v-else>
-    <!-- Notification - show if qouta has been reached -->
-    <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
-      {{ $t('hosting.website.quotaReached') }}
-    </Notification>
-    <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="websiteId === 0 && $i18n.te('hosting.website.infoNew')" class="text-body mb-8">
+      <p v-if="!!websiteUuid && $i18n.te('hosting.website.infoNew')" class="text-body mb-8">
         {{ $t('hosting.website.infoNew') }}
       </p>
-      <p v-else-if="websiteId > 0 && $i18n.te('hosting.website.infoEdit')" class="text-body mb-8">
+      <p v-else-if="!!websiteUuid && $i18n.te('hosting.website.infoEdit')" class="text-body mb-8">
         {{ $t('hosting.website.infoEdit') }}
       </p>
     </template>
@@ -51,7 +47,7 @@
       </n-form-item>
 
       <!--  Form submit -->
-      <n-form-item>
+      <n-form-item :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('hosting.website.create')" />
         <Btn
           type="primary"
@@ -73,10 +69,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+type FormWebsite = {
+  name: string;
+  description: string;
+};
 
 const props = defineProps({
-  websiteId: { type: Number, default: 0 },
+  websiteUuid: { type: String, default: null },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
@@ -85,19 +84,11 @@ const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
-const settingsStore = useSettingsStore();
+const warningStore = useWarningStore();
+
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-
 const website = ref<WebsiteInterface | null>(null);
-
-onMounted(async () => {
-  if (props.websiteId) {
-    website.value = await websiteStore.getWebsite(props.websiteId);
-    formData.value.name = website.value.name;
-    formData.value.description = website.value.description;
-  }
-});
 
 const formData = ref<FormWebsite>({
   name: website.value?.name || '',
@@ -121,11 +112,16 @@ const rules: NFormRules = {
   ],
 };
 
-const isQuotaReached = computed<boolean>(() => {
-  return props.websiteId === 0 && websiteStore.quotaReached === true;
+onMounted(async () => {
+  if (props.websiteUuid) {
+    website.value = await websiteStore.getWebsite(props.websiteUuid);
+    formData.value.name = website.value.name;
+    formData.value.description = website.value.description || '';
+  }
 });
+
 const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value || settingsStore.isProjectUser();
+  return dataStore.isProjectUser;
 });
 
 // Submit
@@ -136,10 +132,10 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (props.websiteId > 0) {
+    } else if (props.websiteUuid) {
       await updateWebsite();
     } else {
-      await createWebsite();
+      warningStore.showSpendingWarning(PriceServiceName.HOSTING_WEBSITE, () => createWebsite());
     }
   });
 }
@@ -163,15 +159,12 @@ async function createWebsite() {
     /** On new website created add new website to list */
     websiteStore.items.push(res.data as WebsiteBaseInterface);
 
-    /** Reset website qouta limit */
-    websiteStore.quotaReached = undefined;
-
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess');
 
     /** Redirect to new web page */
-    router.push(`/dashboard/service/hosting/${res.data.id}`);
+    router.push(`/dashboard/service/hosting/${res.data.website_uuid}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -183,7 +176,7 @@ async function updateWebsite() {
 
   try {
     const res = await $api.patch<WebsiteResponse>(
-      endpoints.websites(props.websiteId),
+      endpoints.websites(props.websiteUuid),
       formData.value
     );
 
@@ -191,12 +184,12 @@ async function updateWebsite() {
 
     /** On website updated refresh website data */
     websiteStore.items.forEach((item: WebsiteBaseInterface) => {
-      if (item.id === props.websiteId) {
+      if (item.website_uuid === props.websiteUuid) {
         item.name = res.data.name;
         item.description = res.data.description;
       }
     });
-    if (websiteStore.active.id === props.websiteId) {
+    if (websiteStore.active.website_uuid === props.websiteUuid) {
       websiteStore.active.name = res.data.name;
       websiteStore.active.description = res.data.description;
     }

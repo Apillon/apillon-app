@@ -24,15 +24,20 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+type FormNftBurn = {
+  collectionUuid: string;
+  tokenId: number | null;
+};
 
 const props = defineProps({
   collectionUuid: { type: String, required: true },
+  chainId: { type: Number, required: true },
 });
 const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
+const warningStore = useWarningStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -53,13 +58,18 @@ const rules: NFormRules = {
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
+  formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      await burn();
+      const priceServiceName = generatePriceServiceName(
+        ServiceTypeName.NFT,
+        props.chainId,
+        PriceServiceAction.BURN
+      );
+      warningStore.showSpendingWarning(priceServiceName, () => burn());
     }
   });
 }

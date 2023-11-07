@@ -1,19 +1,15 @@
 <template>
-  <Spinner v-if="bucketId > 0 && !bucket" />
+  <Spinner v-if="bucketUuid && !bucket" />
   <div v-else>
-    <!-- Notification - show if qouta has been reached -->
-    <Notification v-if="isQuotaReached" type="warning" class="w-full mb-8">
-      {{ $t('storage.bucket.quotaReached') }}
-    </Notification>
-    <Notification v-else-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="bucketId === 0 && $i18n.te('storage.bucket.infoNew')" class="text-body mb-8">
+      <p v-if="!bucketUuid && $i18n.te('storage.bucket.infoNew')" class="text-body mb-8">
         {{ $t('storage.bucket.infoNew') }}
       </p>
-      <p v-else-if="bucketId > 0 && $i18n.te('storage.bucket.infoEdit')" class="text-body mb-8">
+      <p v-else-if="!!bucketUuid && $i18n.te('storage.bucket.infoEdit')" class="text-body mb-8">
         {{ $t('storage.bucket.infoEdit') }}
       </p>
     </template>
@@ -54,31 +50,8 @@
         />
       </n-form-item>
 
-      <!--  Bucket Sizes -->
-      <n-form-item path="bucketSizes" :label="$t('form.label.bucketSize')">
-        <n-radio-group v-model:value="formData.bucketSize" name="bucketSize" class="w-full">
-          <n-grid :cols="2" :x-gap="32" :y-gap="32">
-            <n-gi v-for="(size, key) in bucketSizes" :key="key">
-              <!-- If option is disabled, show tooltip on hover -->
-              <n-tooltip v-if="size?.disabled" trigger="hover" :style="{ maxWidth: '220px' }">
-                <template #trigger>
-                  <n-radio-button
-                    :key="key"
-                    :value="size.value"
-                    :label="size.label"
-                    :disabled="true"
-                  />
-                </template>
-                {{ $t('dashboard.currentlyNotAvailable') }}
-              </n-tooltip>
-              <n-radio-button v-else :key="key" :value="size.value" :label="size.label" />
-            </n-gi>
-          </n-grid>
-        </n-radio-group>
-      </n-form-item>
-
       <!--  Form submit -->
-      <n-form-item>
+      <n-form-item :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('form.createBucketAndContinue')" />
         <Btn
           type="primary"
@@ -103,10 +76,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+type FormNewBucket = {
+  bucketName: string;
+  bucketDescription: string | null;
+};
 
 const props = defineProps({
-  bucketId: { type: Number, default: 0 },
+  bucketUuid: { type: String, default: '' },
   bucketType: { type: Number, default: BucketType.STORAGE },
 });
 const emit = defineEmits(['submit', 'submitSuccess', 'createSuccess', 'updateSuccess']);
@@ -116,25 +92,14 @@ const $i18n = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
-const settingsStore = useSettingsStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-
 const bucket = ref<BucketInterface | null>(null);
-
-onMounted(async () => {
-  if (props.bucketId) {
-    bucket.value = await bucketStore.getBucket(props.bucketId);
-    formData.value.bucketName = bucket.value.name;
-    formData.value.bucketDescription = bucket.value.description;
-  }
-});
 
 const formData = ref<FormNewBucket>({
   bucketName: bucket.value?.name || '',
   bucketDescription: bucket.value?.description || '',
-  bucketSize: 5,
 });
 
 const rules: NFormRules = {
@@ -151,26 +116,18 @@ const rules: NFormRules = {
       trigger: 'input',
     },
   ],
-  bucketSize: [],
 };
 
-const bucketSizes: Array<NRadioOption> = [
-  {
-    value: 5,
-    label: $i18n.t('form.bucketSizes.5gb'),
-  },
-  {
-    value: 100,
-    label: $i18n.t('form.bucketSizes.100gb'),
-    disabled: true,
-  },
-];
-
-const isQuotaReached = computed<boolean>(() => {
-  return props.bucketId === 0 && bucketStore.quotaReached === true;
+onMounted(async () => {
+  if (props.bucketUuid) {
+    bucket.value = await bucketStore.getBucket(props.bucketUuid);
+    formData.value.bucketName = bucket.value.name;
+    formData.value.bucketDescription = bucket.value.description;
+  }
 });
+
 const isFormDisabled = computed<boolean>(() => {
-  return isQuotaReached.value || settingsStore.isProjectUser();
+  return dataStore.isProjectUser;
 });
 
 // Submit
@@ -181,7 +138,7 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (props.bucketId > 0) {
+    } else if (props.bucketUuid) {
       await updateBucket();
     } else {
       await createBucket();
@@ -202,7 +159,6 @@ async function createBucket() {
     bucketType: props.bucketType,
     name: formData.value.bucketName,
     description: formData.value.bucketDescription,
-    size: formData.value.bucketSize,
   };
 
   try {
@@ -213,16 +169,13 @@ async function createBucket() {
     /** On new bucket created push data to list */
     bucketStore.items.push(res.data);
 
-    /** Reset bucket qouta limit */
-    bucketStore.quotaReached = undefined;
-
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess', res.data);
 
     /** Redirect to new bucket */
     if (props.bucketType !== BucketType.NFT_METADATA) {
-      router.push(`/dashboard/service/storage/${res.data.id}`);
+      router.push(`/dashboard/service/storage/${res.data.bucket_uuid}`);
     }
   } catch (error) {
     message.error(userFriendlyMsg(error));
@@ -240,18 +193,18 @@ async function updateBucket() {
   };
 
   try {
-    const res = await $api.patch<BucketResponse>(endpoints.bucket(props.bucketId), bodyData);
+    const res = await $api.patch<BucketResponse>(endpoints.bucket(props.bucketUuid), bodyData);
 
     message.success($i18n.t('form.success.updated.bucket'));
 
     /** On bucket updated refresh bucket data */
     bucketStore.items.forEach((item: BucketInterface) => {
-      if (item.id === props.bucketId) {
+      if (item.bucket_uuid === props.bucketUuid) {
         item.name = res.data.name;
         item.description = res.data.description;
       }
     });
-    if (bucketStore.active.id === props.bucketId) {
+    if (bucketStore.active?.bucket_uuid === props.bucketUuid) {
       bucketStore.active.name = res.data.name;
       bucketStore.active.description = res.data.description;
     }

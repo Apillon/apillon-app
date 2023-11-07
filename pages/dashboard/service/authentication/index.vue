@@ -8,6 +8,8 @@
 
         <template #info>
           <n-space :size="32" align="center">
+            <ModalCreditCosts :service="ServiceTypeName.AUTHENTICATION" />
+
             <IconInfo v-if="$i18n.te('w3Warn.auth.new')" @click="showModalW3Warn = true" />
           </n-space>
         </template>
@@ -66,7 +68,7 @@ onMounted(() => {
  * If W3Warn has already been shown, show modal create new service, otherwise show warn first
  * */
 function createNewService() {
-  if (sessionStorage.getItem(LsW3WarnKeys.AUTH_NEW) || !$i18n.te('w3Warn.auth.new')) {
+  if (localStorage.getItem(LsW3WarnKeys.AUTH_NEW) || !$i18n.te('w3Warn.auth.new')) {
     showModalNewService.value = true;
   } else {
     showModalW3Warn.value = true;
@@ -86,7 +88,7 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.AUTH_NEW, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.AUTH_NEW, Date.now().toString());
     }
   }
 );

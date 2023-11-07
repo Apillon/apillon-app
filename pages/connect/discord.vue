@@ -3,8 +3,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const { query } = useRoute();
 const router = useRouter();
 const message = useMessage();

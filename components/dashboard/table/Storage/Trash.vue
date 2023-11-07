@@ -114,7 +114,18 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       title: $i18n.t('dashboard.created'),
       key: 'createTime',
       render(row: BucketItemInterface) {
-        return h('span', {}, { default: () => datetimeToDate(row.createTime || '') });
+        return h('span', {}, { default: () => dateTimeToDate(row.createTime || '') });
+      },
+    },
+    {
+      title: $i18n.t('dashboard.deletedAt'),
+      key: 'createTime',
+      render(row: BucketItemInterface) {
+        return h(
+          'span',
+          {},
+          { default: () => dateTimeToDateForDeletedFiles(row.updateTime || '') }
+        );
       },
     },
     {
@@ -194,10 +205,13 @@ async function restore() {
 
   try {
     const restoredFile = await $api.patch<BucketItemResponse>(
-      endpoints.storageFileRestore(bucketStore.bucketUuid, currentRow.value.id)
+      endpoints.storageFileRestore(
+        bucketStore.bucketUuid,
+        currentRow.value.file_uuid || currentRow.value.uuid
+      )
     );
 
-    removeTrashedFileFromList(restoredFile.data.id);
+    removeTrashedFileFromList(restoredFile.data.file_uuid || restoredFile.data.uuid);
     message.success($i18n.t('form.success.restored.file'));
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));
@@ -205,7 +219,7 @@ async function restore() {
   bucketStore.loading = false;
 }
 
-function removeTrashedFileFromList(id: number) {
-  fileStore.trash = fileStore.trash.filter(item => item.id !== id);
+function removeTrashedFileFromList(uuid: string) {
+  fileStore.trash = fileStore.trash.filter(item => item.file_uuid !== uuid && item.uuid !== uuid);
 }
 </script>

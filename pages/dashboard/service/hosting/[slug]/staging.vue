@@ -4,13 +4,7 @@
       <HeaderWebsite />
     </template>
     <slot>
-      <template
-        v-if="
-          bucketStore.folder.items.length ||
-          bucketStore.active.CID ||
-          deploymentStore.staging.length > 0
-        "
-      >
+      <template v-if="bucketStore.folder.items.length || deploymentStore.staging.length > 0">
         <n-space class="pb-8" :size="32" vertical>
           <ActionsHostingWebsite :env="DeploymentEnvironment.STAGING" />
 
@@ -20,13 +14,6 @@
             :title="$t('hosting.ipnsLink')"
             :info="$t('hosting.ipnsInfo')"
           />
-
-          <!-- IPNS address
-          <HostingPreviewLink
-            :link="bucketStore.active.IPNS || ''"
-            :title="$t('hosting.ipns')"
-            copy
-          /> -->
 
           <!-- Deployments -->
           <TableHostingDeployment :deployments="deploymentStore.staging" />

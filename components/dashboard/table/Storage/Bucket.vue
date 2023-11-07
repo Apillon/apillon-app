@@ -19,7 +19,10 @@
 
   <!-- Modal - Edit bucket -->
   <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
-    <FormStorageBucket :bucket-id="currentRow.id" @submit-success="showModalEditBucket = false" />
+    <FormStorageBucket
+      :bucket-uuid="currentRow.bucket_uuid"
+      @submit-success="showModalEditBucket = false"
+    />
   </modal>
 
   <!-- Modal - Destroy bucket -->
@@ -42,7 +45,8 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
+import type { DataTableRowKey } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
   buckets: { type: Array<BucketInterface>, default: [] },
@@ -53,15 +57,15 @@ const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
+const dataStore = useDataStore();
 const bucketStore = useBucketStore();
-const settingsStore = useSettingsStore();
+const storageStore = useStorageStore();
 
 const showModalW3Warn = ref<boolean>(false);
 const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean | null>(false);
 const checkedRowKeys = ref<Array<string | number>>([]);
-const bucketsToDelete = ref<Array<BucketInterface>>([]);
-const StorageProgress = resolveComponent('StorageProgress');
+const bucketsToDelete = ref<BucketInterface[]>([]);
 const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered buckets */
@@ -113,14 +117,11 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       title: $i18n.t('storage.used'),
       className: props.deleted ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
-        return h(
-          StorageProgress,
-          {
-            size: row.size,
-            maxSize: row.maxSize,
-            percentage: row.percentage,
-          },
-          ''
+        return (
+          formatBytes(row?.size || 0) +
+          ' (' +
+          storagePercentage(row?.size || 0, storageStore.info.availableStorage) +
+          '%)'
         );
       },
     },
@@ -158,14 +159,12 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: BucketItemInterface) => row.id;
+const rowKey = (row: BucketInterface) => row.bucket_uuid;
 const currentRow = ref<BucketInterface>(props.buckets[0]);
 
-const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
+const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
   checkedRowKeys.value = rowKeys;
-  const rowKeyIds = rowKeys.map(item => intVal(item));
-
-  bucketStore.selectedItems = bucketStore.items.filter(item => rowKeyIds.includes(item.id));
+  bucketStore.selectedItems = bucketStore.items.filter(item => rowKeys.includes(item.bucket_uuid));
 };
 
 /** On row click */
@@ -175,7 +174,7 @@ const rowProps = (row: BucketInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/storage/${row.id}` });
+        router.push({ path: `/dashboard/service/storage/${row.bucket_uuid}` });
       }
     },
   };
@@ -185,7 +184,7 @@ const dropdownOptions = [
   {
     key: 'storageEdit',
     label: $i18n.t('storage.edit'),
-    disabled: settingsStore.isProjectUser(),
+    disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
         showModalEditBucket.value = true;
@@ -223,10 +222,10 @@ const dropdownDeletedOptions = [
  * On deleteBucket click
  * If W3Warn has already been shown, show modal delete bucket, otherwise show warn first
  * */
-function deleteBucket(isCurrentRow: boolean = false) {
+function deleteBucket(isCurrentRow = false) {
   bucketsToDelete.value = isCurrentRow ? [currentRow.value] : bucketStore.selectedItems;
 
-  if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_DELETE)) {
+  if (localStorage.getItem(LsW3WarnKeys.BUCKET_DELETE)) {
     showModalDestroyBucket.value = true;
   } else {
     showModalW3Warn.value = true;
@@ -246,7 +245,7 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.BUCKET_DELETE, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.BUCKET_DELETE, Date.now().toString());
     }
   }
 );
@@ -275,8 +274,10 @@ async function restoreBucket() {
   bucketStore.loading = true;
 
   try {
-    const response = await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.id));
-    removeDeletedBucketFromList(response.data.id);
+    const response = await $api.patch<BucketResponse>(
+      endpoints.bucketRestore(currentRow.value.bucket_uuid)
+    );
+    removeDeletedBucketFromList(response.data.bucket_uuid);
 
     message.success($i18n.t('form.success.restored.bucket'));
   } catch (error) {
@@ -289,8 +290,8 @@ async function restoreBucket() {
   }, 1000);
 }
 
-function removeDeletedBucketFromList(id: number) {
+function removeDeletedBucketFromList(uuid: string) {
   bucketStore.fetchBuckets();
-  bucketStore.destroyed = bucketStore.destroyed.filter(item => item.id !== id);
+  bucketStore.destroyed = bucketStore.destroyed.filter(item => item.bucket_uuid !== uuid);
 }
 </script>

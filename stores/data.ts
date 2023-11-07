@@ -61,6 +61,15 @@ export const useDataStore = defineStore('data', {
     myRoleOnProject(state) {
       return state.project.active.myRole_id_onProject || DefaultUserRole.PROJECT_USER;
     },
+    isUserOwner(state): boolean {
+      return state.project.active.myRole_id_onProject === DefaultUserRole.PROJECT_OWNER;
+    },
+    isUserAdmin(state): boolean {
+      return state.project.active.myRole_id_onProject === DefaultUserRole.PROJECT_ADMIN;
+    },
+    isProjectUser(state): boolean {
+      return state.project.active.myRole_id_onProject === DefaultUserRole.PROJECT_USER;
+    },
   },
   actions: {
     resetData() {
@@ -70,6 +79,10 @@ export const useDataStore = defineStore('data', {
       this.project.quotaReached = undefined as Boolean | undefined;
       /** Services */
       this.services = [] as Array<ServiceInterface>;
+    },
+
+    isUser(type: number): boolean {
+      return this.myRoleOnProject === type;
     },
 
     setCurrentProject(uuid: string) {
