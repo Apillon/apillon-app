@@ -19,7 +19,7 @@
         <span v-if="paymentStore.activeSubscription.cancelDate">
           {{
             $t('dashboard.subscription.canceledOn', {
-              date: dateTimeToDate(paymentStore.activeSubscription.cancelDate),
+              date: dateTimeToDate(paymentStore.activeSubscription.expiresOn),
             })
           }}
         </span>
