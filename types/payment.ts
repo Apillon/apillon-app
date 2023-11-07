@@ -25,7 +25,7 @@ declare global {
    */
   interface CreditInterface extends GeneralInterface {
     project_uuid: string;
-    balance: number;
+    balance: number | null;
   }
   interface CreditResponse extends GeneralResponse<CreditInterface> {}
 
