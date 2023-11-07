@@ -135,6 +135,11 @@ export const usePaymentStore = defineStore('payment', {
       return this.priceList.find(item => item.name === serviceName);
     },
 
+    /** Price for service */
+    findServicePrice(serviceName: string) {
+      return this.priceList.find(item => item.name === serviceName);
+    },
+
     /**
      *
      * API calls

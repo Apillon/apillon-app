@@ -1,5 +1,5 @@
 const meta = {
-  title: 'Apillon - Make you project unstoppable.',
+  title: 'Apillon - Make your project unstoppable.',
   description:
     'Host your website or dapp on a decentralized network with just a few clicks and retain the ownership and authority over it.',
   url: 'https://app.apillon.io/',

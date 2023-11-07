@@ -54,11 +54,20 @@ const isEnoughCredits = computed(() => {
   return (paymentStore.credit.balance || 0) >= (servicePrice.value?.currentPrice || 0);
 });
 
+onMounted(() => {
+  paymentStore.getPriceList();
+});
+
 watch(
-  () => warningStore.isSpendingWarningOpen,
-  async shown => {
-    if (shown && warningStore.serviceName) {
-      servicePrice.value = await paymentStore.getServicePrice(warningStore.serviceName);
+  () => warningStore.serviceName,
+  service => {
+    if (service) {
+      servicePrice.value = paymentStore.findServicePrice(warningStore.serviceName);
+
+      /** Auto submit if action is FREE */
+      if (servicePrice.value?.currentPrice === 0) {
+        submit();
+      }
     }
   },
   { immediate: true }

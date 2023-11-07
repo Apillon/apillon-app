@@ -12,7 +12,7 @@
       </Heading>
     </template>
     <slot>
-      <div class="grid sm:grid-cols-2 gap-8 mb-12">
+      <div class="grid sm:grid-cols-2 hd:grid-cols-billing gap-8 mb-12">
         <PaymentCardCurrentCredits />
         <PaymentCardCurrentPlan />
       </div>

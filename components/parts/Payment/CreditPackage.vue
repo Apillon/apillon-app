@@ -45,7 +45,7 @@
 <script lang="ts" setup>
 import colors from '~/tailwind.colors';
 
-const { t, te, tm } = useI18n();
+const { t, te } = useI18n();
 defineProps({
   creditPackage: { type: Object as PropType<CreditPackageInterface>, required: true },
 });
@@ -65,10 +65,6 @@ async function getCreditSessionUrl(packageId: number) {
     window.open(stripeSessionUrl, '_self');
   }
 }
-
-onMounted(() => {
-  console.log(tm('dashboard.credits.includedServices'));
-});
 
 function translateItems(key: string): String[] {
   return Array.from(Array(10).keys()).reduce((accumulator: String[], i) => {
