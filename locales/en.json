@@ -189,7 +189,7 @@
       "service": "Service",
       "serviceDescription": "Service description",
       "title": "Credits",
-      "transactions": "Credits spent",
+      "transactions": "Credit transactions",
       "yourFunds": "Your funds",
       "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
       "services": {
