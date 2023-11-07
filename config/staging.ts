@@ -22,6 +22,7 @@ const config: ConfigInterface = {
     'STORAGE',
     'NFT',
     'KILT_LOGIN',
+    'BILLING',
   ],
   betaFeatures: ['NFT_NESTABLE'],
 };
