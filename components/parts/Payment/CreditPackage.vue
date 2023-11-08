@@ -9,11 +9,11 @@
     <div class="match-services mb-12">
       <PaymentPricingService
         :name="$t('dashboard.credits.creditsAmount')"
-        :value="formatNumber(creditPackage.creditAmount)"
+        :value="formatCredits(creditPackage.creditAmount)"
       />
       <PaymentPricingService
         :name="$t('dashboard.credits.bonus')"
-        :value="`${formatNumber(creditPackage.bonusCredits)}`"
+        :value="`${formatCredits(creditPackage.bonusCredits)}`"
       />
     </div>
 

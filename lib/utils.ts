@@ -98,10 +98,19 @@ export function formatNumber(n: number) {
 }
 
 export function formatPrice(price: number, currency?: string) {
+  const decimals = Math.ceil(price) === price ? 0 : 2;
   if (currency) {
-    return new Intl.NumberFormat('de-DE', { style: 'currency', currency }).format(price);
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: decimals,
+    }).format(price);
   }
-  return new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2 }).format(price);
+  return new Intl.NumberFormat('de-DE', { minimumFractionDigits: decimals }).format(price);
+}
+
+export function formatCredits(credits: number) {
+  return new Intl.NumberFormat().format(credits);
 }
 
 export function formatCurrency(currency: string) {

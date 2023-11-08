@@ -10,10 +10,14 @@
       <div class="flex gap-4 items-center mb-4">
         <span class="icon-billing text-xl"></span>
         <h3>
-          {{ paymentStore.getActiveSubscriptionPackage?.description }}
-          {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0, 'eur') }}/{{
-            $t('general.month')
-          }}
+          <span class="inline-block whitespace-nowrap">
+            {{ paymentStore.getActiveSubscriptionPackage?.description }}&nbsp;
+          </span>
+          <span class="inline-block whitespace-nowrap">
+            {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0, 'eur') }}/{{
+              $t('general.month')
+            }}
+          </span>
         </h3>
       </div>
       <div class="mb-2 text-body">
@@ -38,7 +42,7 @@
         :disabled="dataStore.isProjectUser"
         @click="modalSubscriptionPackagesVisible = true"
       >
-        {{ $t('dashboard.payment.upgrade') }}
+        {{ $t('dashboard.payment.upgradePlan') }}
       </Btn>
     </div>
   </n-card>

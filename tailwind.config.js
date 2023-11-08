@@ -69,7 +69,7 @@ module.exports = {
         light: '0px 0px 4px rgba(240, 242, 218, 0.64)',
       },
       gridTemplateColumns: {
-        billing: 'repeat(auto-fill, minmax(20rem, 47rem))',
+        billing: 'repeat(auto-fill, minmax(23rem, 1fr))',
         services: 'repeat(auto-fit, minmax(280px, 1fr))',
         nft: 'repeat(auto-fill, minmax(220px, 1fr))',
         nftSmall: 'repeat(auto-fill, minmax(120px, 1fr))',

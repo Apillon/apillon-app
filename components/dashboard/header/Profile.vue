@@ -44,9 +44,7 @@ const renderNuxtIcon = (iconName: string) => {
   };
 };
 
-const zeroProjects = computed(() => !dataStore.hasProjects);
-
-const options = [
+const options = computed(() => [
   {
     key: 'profile',
     label: $i18n.t('profile.profile'),
@@ -55,13 +53,13 @@ const options = [
   {
     key: 'dashboard-payments',
     label: $i18n.t('profile.billing'),
-    disabled: zeroProjects.value,
+    disabled: !dataStore.hasProjects,
     icon: renderIcon('icon-billing'),
   },
   {
     key: 'dashboard-project-settings',
     label: $i18n.t('profile.settings'),
-    disabled: zeroProjects.value,
+    disabled: !dataStore.hasProjects,
     icon: renderIcon('icon-project-setting'),
   },
   {
@@ -69,7 +67,7 @@ const options = [
     label: $i18n.t('profile.logout'),
     icon: renderNuxtIcon('icon/logout'),
   },
-];
+]);
 
 function handleSelect(key: string | number) {
   if (key === 'logout') {

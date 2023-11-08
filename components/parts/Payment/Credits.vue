@@ -4,7 +4,7 @@
       <NuxtLink :to="{ name: 'dashboard-payments' }">
         <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
         <strong class="inline-block text-blue ml-2 mr-1">
-          {{ formatNumber(paymentStore.credit.balance || 0) }}
+          {{ formatCredits(paymentStore.credit.balance || 0) }}
         </strong>
         <span class="text-bodyDark">{{ $t('dashboard.credits.available') }}</span>
       </NuxtLink>
