@@ -383,7 +383,6 @@ function updatePermission(serviceUuid: string, roleId: number, value: boolean) {
   if (props.id === 0) {
     return;
   }
-
   if (value) {
     addPermission(serviceUuid, roleId);
   } else {
@@ -424,7 +423,7 @@ async function removePermission(serviceUuid: string, roleId: number) {
 async function removeServicePermissions(service: ApiKeyRoleForm) {
   const projectUuid = dataStore.projectUuid || '';
   service.enabled = !service.enabled;
-  if (!service.enabled) return;
+  if (!service.enabled || props.id === 0) return;
 
   // If toggle off, remove all active roles for this service type
   try {

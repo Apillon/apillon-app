@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-w-[8rem]">
+  <div v-if="dataStore.hasProjects" class="relative min-w-[8rem]">
     <div :class="{ 'opacity-0': paymentStore.loading }">
       <NuxtLink :to="{ name: 'dashboard-payments' }">
         <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>

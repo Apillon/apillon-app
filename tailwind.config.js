@@ -71,8 +71,8 @@ module.exports = {
       gridTemplateColumns: {
         billing: 'repeat(auto-fill, minmax(20rem, 47rem))',
         services: 'repeat(auto-fit, minmax(280px, 1fr))',
-        nft: 'repeat(auto-fit, minmax(220px, 1fr))',
-        nftSmall: 'repeat(auto-fit, minmax(120px, 1fr))',
+        nft: 'repeat(auto-fill, minmax(220px, 1fr))',
+        nftSmall: 'repeat(auto-fill, minmax(120px, 1fr))',
       },
       scale: {
         10: '0.1',

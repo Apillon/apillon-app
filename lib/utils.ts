@@ -225,7 +225,7 @@ export function fileExpiration(
 /**
  * Error messages
  */
-export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | any) {
+export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | DOMException | any) {
   // Check error exists and if translation is included
   if (!window.$i18n || !(window.$i18n instanceof Object) || !error) {
     if (error instanceof ReferenceError || error instanceof TypeError) {

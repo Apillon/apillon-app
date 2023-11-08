@@ -1,5 +1,6 @@
 <template>
   <n-card
+    v-if="showCard"
     class="card-dark"
     size="small"
     :bordered="false"
@@ -32,7 +33,7 @@
         </span>
       </div>
       <Btn
-        type="primary"
+        :type="btnType"
         size="large"
         :disabled="dataStore.isProjectUser"
         @click="modalSubscriptionPackagesVisible = true"
@@ -41,6 +42,15 @@
       </Btn>
     </div>
   </n-card>
+  <Btn
+    v-else
+    :type="btnType"
+    size="large"
+    :disabled="dataStore.isProjectUser"
+    @click="modalSubscriptionPackagesVisible = true"
+  >
+    {{ $t('dashboard.payment.upgradePlan') }}
+  </Btn>
 
   <!-- Modal -->
   <modal v-model:show="modalSubscriptionPackagesVisible" size="large">
@@ -62,6 +72,11 @@
 </template>
 
 <script lang="ts" setup>
+defineProps({
+  showCard: { type: Boolean, default: true },
+  btnType: { type: String as PropType<'primary' | 'secondary'>, default: 'primary' },
+});
+
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const modalSubscriptionPackagesVisible = ref<boolean>(false);

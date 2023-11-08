@@ -40,7 +40,7 @@
           <Btn
             type="builders"
             size="tiny"
-            href="https://wiki.apillon.io/build/2-web3-services.html"
+            href="https://wiki.apillon.io/build/2-web3-services.html#nfts"
           >
             {{ $t('general.learnMore') }}
           </Btn>
@@ -125,7 +125,7 @@
           <Btn
             type="builders"
             size="tiny"
-            href="https://wiki.apillon.io/build/2-web3-services.html"
+            href="https://wiki.apillon.io/build/2-web3-services.html#nfts"
           >
             {{ $t('general.learnMore') }}
           </Btn>

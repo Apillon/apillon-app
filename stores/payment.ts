@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 
+let abortController = null as AbortController | null;
+
 export const usePaymentStore = defineStore('payment', {
   state: () => ({
     customerPortalUrl: '',
@@ -60,6 +62,14 @@ export const usePaymentStore = defineStore('payment', {
       this.priceList = [] as ProductPriceInterface[];
     },
 
+    async getProjectUuid(): Promise<string> {
+      const dataStore = useDataStore();
+      if (!dataStore.hasProjects) {
+        await dataStore.fetchProjects();
+      }
+      return dataStore.projectUuid;
+    },
+
     /**
      * Fetch wrappers
      */
@@ -115,7 +125,7 @@ export const usePaymentStore = defineStore('payment', {
 
     /** GET Price list */
     async getPriceList() {
-      if (!this.hasPriceList || isCacheExpired(LsCacheKeys.PRICE_LIST)) {
+      if (!this.hasPriceList) {
         await this.fetchProductPriceList();
       }
       return this.priceList;
@@ -164,13 +174,11 @@ export const usePaymentStore = defineStore('payment', {
 
     /** API Credit */
     async fetchCredits() {
-      const dataStore = useDataStore();
-      if (!dataStore.projectUuid) {
-        return;
-      }
+      const projectUuid = await this.getProjectUuid();
+      if (!projectUuid) return;
 
       try {
-        const res = await $api.get<CreditResponse>(endpoints.credit(dataStore.projectUuid));
+        const res = await $api.get<CreditResponse>(endpoints.credit(projectUuid));
 
         this.credit = res.data;
 
@@ -201,10 +209,8 @@ export const usePaymentStore = defineStore('payment', {
 
     /** API Credit transactions */
     async fetchCreditTransactions(page = 1, limit: number = PAGINATION_LIMIT) {
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      const projectUuid = await this.getProjectUuid();
+      if (!projectUuid) return;
 
       try {
         const params: Record<string, string | number> = {
@@ -215,7 +221,7 @@ export const usePaymentStore = defineStore('payment', {
         };
 
         const res = await $api.get<CreditTransactionsResponse>(
-          endpoints.creditTransactions(dataStore.projectUuid),
+          endpoints.creditTransactions(projectUuid),
           params
         );
 
@@ -232,14 +238,12 @@ export const usePaymentStore = defineStore('payment', {
     /** API Active Subscription */
     async fetchActiveSubscription() {
       this.loading = true;
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      const projectUuid = await this.getProjectUuid();
+      if (!projectUuid) return;
 
       try {
         const res = await $api.get<ActiveSubscriptionResponse>(
-          endpoints.activeSubscription(dataStore.projectUuid)
+          endpoints.activeSubscription(projectUuid)
         );
 
         this.activeSubscription = res.data;
@@ -257,15 +261,11 @@ export const usePaymentStore = defineStore('payment', {
 
     /** API Subscriptions */
     async fetchSubscriptions() {
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      const projectUuid = await this.getProjectUuid();
+      if (!projectUuid) return;
 
       try {
-        const res = await $api.get<SubscriptionsResponse>(
-          endpoints.subscriptions(dataStore.projectUuid)
-        );
+        const res = await $api.get<SubscriptionsResponse>(endpoints.subscriptions(projectUuid));
 
         this.subscriptions = res.data.items;
       } catch (error: any) {
@@ -298,9 +298,9 @@ export const usePaymentStore = defineStore('payment', {
       page = 1,
       limit: number = PAGINATION_LIMIT
     ): Promise<InvoiceResponse | null> {
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
+      const projectUuid = await this.getProjectUuid();
+      if (!projectUuid) {
+        return null;
       }
 
       try {
@@ -311,10 +311,7 @@ export const usePaymentStore = defineStore('payment', {
           limit,
         };
 
-        const res = await $api.get<InvoiceResponse>(
-          endpoints.invoices(dataStore.projectUuid),
-          params
-        );
+        const res = await $api.get<InvoiceResponse>(endpoints.invoices(projectUuid), params);
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.INVOICES, Date.now().toString());
@@ -330,16 +327,14 @@ export const usePaymentStore = defineStore('payment', {
     /** API Stripe credit session URL */
     async fetchCreditSessionUrl(packageId: number) {
       const config = useRuntimeConfig();
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      const projectUuid = await this.getProjectUuid();
+      if (!projectUuid) return;
 
       try {
         const res = await $api.get<GeneralResponse<string>>(endpoints.creditSessionUrl, {
-          project_uuid: dataStore.projectUuid,
+          project_uuid: projectUuid,
           package_id: packageId,
-          returnUrl: `${config.public.url}/dashboard/billing?credits=${packageId}`,
+          returnUrl: `${config.public.url}/dashboard/payments?credits=${packageId}`,
         });
         return res.data;
       } catch (error: any) {
@@ -352,16 +347,14 @@ export const usePaymentStore = defineStore('payment', {
     /** API Stripe subscription session URL */
     async fetchSubscriptionSessionUrl(packageId: number) {
       const config = useRuntimeConfig();
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      const projectUuid = await this.getProjectUuid();
+      if (!projectUuid) return;
 
       try {
         const res = await $api.get<GeneralResponse<string>>(endpoints.subscriptionSessionUrl, {
-          project_uuid: dataStore.projectUuid,
+          project_uuid: projectUuid,
           package_id: packageId,
-          returnUrl: `${config.public.url}/dashboard/billing?subscription=${packageId}`,
+          returnUrl: `${config.public.url}/dashboard/payments?subscription=${packageId}`,
         });
         return res.data;
       } catch (error: any) {
@@ -373,18 +366,27 @@ export const usePaymentStore = defineStore('payment', {
 
     /** API Product */
     async fetchProductPriceList() {
+      if (abortController) {
+        abortController.abort();
+      }
+      abortController = new AbortController();
+
       try {
-        const res = await $api.get<PriceListResponse>(endpoints.productPrice());
+        const res = await $api.get<PriceListResponse>(endpoints.productPrice(), undefined, {
+          signal: abortController.signal,
+        });
 
         this.priceList = res.data.items;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.PRICE_LIST, Date.now().toString());
       } catch (error: any) {
-        this.priceList = [];
+        if (!(error instanceof DOMException) && error.message !== 'The user aborted a request.') {
+          this.priceList = [];
 
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
+          /** Show error message */
+          window.$message.error(userFriendlyMsg(error));
+        }
       }
     },
     async fetchProductPrice(productId: number): Promise<ProductPriceInterface | null> {
