@@ -12,7 +12,7 @@
       </Heading>
     </template>
     <slot>
-      <div class="grid sm:grid-cols-2 gap-8 mb-12">
+      <div class="grid sm:grid-cols-billing gap-8 mb-12 max-w-6xl">
         <PaymentCardCurrentCredits />
         <PaymentCardCurrentPlan />
       </div>
@@ -78,7 +78,7 @@ onMounted(() => {
 
             message.success(
               t('dashboard.payment.stripe.credits', {
-                credits: formatNumber(creditPackage.creditAmount + creditPackage.bonusCredits),
+                credits: formatCredits(creditPackage.creditAmount + creditPackage.bonusCredits),
               })
             );
           }

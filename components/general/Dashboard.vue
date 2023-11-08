@@ -53,7 +53,7 @@
             <!-- Global component: Spending warning -->
             <ModalSpendingWarning
               v-model:show="warningStore.isSpendingWarningOpen"
-              @close="warningStore.isSpendingWarningOpen = false"
+              @close="onSpendingWaningClose"
             />
           </n-scrollbar>
         </n-layout-content>
@@ -190,6 +190,12 @@ const learnCollapsed = ref<boolean>(
 
 function handleOnUpdateCollapse(value: boolean) {
   localStorage.setItem('learnCollapsed', value ? '1' : '0');
+}
+
+/** Warnings */
+function onSpendingWaningClose() {
+  warningStore.serviceName = '';
+  warningStore.isSpendingWarningOpen = false;
 }
 </script>
 

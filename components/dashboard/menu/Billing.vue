@@ -4,6 +4,8 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
+const router = useRouter();
+const dataStore = useDataStore();
 
 const menuOptions: NMenuOption[] = [
   {
@@ -27,4 +29,14 @@ const menuOptions: NMenuOption[] = [
   //   to: 'dashboard-price-list',
   // },
 ];
+
+onMounted(() => {
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      if (!dataStore.hasProjects) {
+        router.push({ name: 'dashboard' });
+      }
+    });
+  }, 100);
+});
 </script>

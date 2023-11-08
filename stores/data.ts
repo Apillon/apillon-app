@@ -4,6 +4,8 @@ export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_uuid',
 };
 
+let abortController = null as AbortController | null;
+
 export const useDataStore = defineStore('data', {
   state: () => ({
     instruction: {} as Record<string, InstructionInterface>,
@@ -191,8 +193,16 @@ export const useDataStore = defineStore('data', {
     /** Projects */
     async fetchProjects(redirectToDashboard: boolean = false): Promise<ProjectInterface[]> {
       const router = useRouter();
+
+      if (abortController) {
+        abortController.abort();
+      }
+      abortController = new AbortController();
+
       try {
-        const req = $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
+        const req = $api.get<ProjectsResponse>(endpoints.projectsUserProjects, undefined, {
+          signal: abortController.signal,
+        });
         this.promises.projects = req;
         const res = await req;
 
@@ -222,14 +232,16 @@ export const useDataStore = defineStore('data', {
         }
 
         return projects;
-      } catch (error) {
-        /** Clear promise */
-        this.promises.projects = null;
+      } catch (error: any) {
+        if (!(error instanceof DOMException) && error.message !== 'The user aborted a request.') {
+          /** Clear promise */
+          this.promises.projects = null;
 
-        this.project.items = [];
+          this.project.items = [];
 
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
+          /** Show error message */
+          window.$message.error(userFriendlyMsg(error));
+        }
       }
       return [];
     },

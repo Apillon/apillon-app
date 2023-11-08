@@ -28,9 +28,10 @@
 </template>
 
 <script lang="ts" setup>
-const authStore = useAuthStore();
-const router = useRouter();
 const $i18n = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const dataStore = useDataStore();
 
 const renderIcon = (iconName: string) => {
   return () => {
@@ -43,7 +44,7 @@ const renderNuxtIcon = (iconName: string) => {
   };
 };
 
-const options = [
+const options = computed(() => [
   {
     key: 'profile',
     label: $i18n.t('profile.profile'),
@@ -52,11 +53,13 @@ const options = [
   {
     key: 'dashboard-payments',
     label: $i18n.t('profile.billing'),
+    disabled: !dataStore.hasProjects,
     icon: renderIcon('icon-billing'),
   },
   {
     key: 'dashboard-project-settings',
     label: $i18n.t('profile.settings'),
+    disabled: !dataStore.hasProjects,
     icon: renderIcon('icon-project-setting'),
   },
   {
@@ -64,7 +67,7 @@ const options = [
     label: $i18n.t('profile.logout'),
     icon: renderNuxtIcon('icon/logout'),
   },
-];
+]);
 
 function handleSelect(key: string | number) {
   if (key === 'logout') {

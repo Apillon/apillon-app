@@ -6,7 +6,7 @@
   >
     <template v-if="collectionStore.gridView">
       <div
-        class="grid gap-8 grid-cols-nft"
+        class="grid gap-8"
         :class="collectionStore.images.length > 100 ? 'grid-cols-nftSmall' : 'grid-cols-nft'"
       >
         <div v-for="image in images" :key="image.id" class="bg-bg-light rounded-xl overflow-hidden">

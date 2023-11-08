@@ -64,7 +64,10 @@
         </div>
 
         <!-- SIDEBAR PRICING -->
-        <div v-if="!collapsed" class="relative flex border-t border-bg-lighter flex-col p-8">
+        <div
+          v-if="!collapsed && dataStore.hasProjects"
+          class="relative flex border-t border-bg-lighter flex-col p-8"
+        >
           <div :class="{ 'opacity-0': paymentStore.loading }">
             <div class="mb-3">
               <span class="text-xs text-bodyDark">{{ $t('dashboard.payment.currentPlan') }}</span>
@@ -78,7 +81,17 @@
                 }}
               </span>
             </div>
-            <Btn type="secondary" size="large" @click="router.push({ name: 'dashboard-payments' })">
+            <PaymentCardCurrentPlan
+              v-if="route.name === 'dashboard-payments'"
+              :show-card="false"
+              btn-type="secondary"
+            />
+            <Btn
+              v-else
+              type="secondary"
+              size="large"
+              @click="router.push({ name: 'dashboard-payments' })"
+            >
               {{ $t('dashboard.payment.upgradePlan') }}
             </Btn>
           </div>
@@ -104,6 +117,7 @@ const props = defineProps({
   showOnMobile: { type: Boolean, default: false },
 });
 
+const route = useRoute();
 const router = useRouter();
 const { isSm, isLg } = useScreen();
 const dataStore = useDataStore();
