@@ -2,7 +2,7 @@
   <div>
     <n-space :size="32">
       <!-- Filter by service -->
-      <div v-if="filterByService" class="mb-4">
+      <div v-if="filterByService && !service" class="mb-4">
         <strong>{{ $t('dashboard.credits.filterByService') }}:</strong>
         <select-options
           v-model:value="selectedService"
@@ -24,7 +24,7 @@
           size="small"
           :placeholder="$t('form.placeholder.chain')"
           filterable
-          clearable
+          :clearable="!service"
         />
       </div>
     </n-space>
