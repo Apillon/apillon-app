@@ -1,19 +1,19 @@
 <template>
   <n-tag
     v-bind="$attrs"
-    :type="getTransactionStatus(contractStatus)"
-    :bordered="contractStatus < TransactionStatus.FINISHED"
+    :type="getContractStatus(contractStatus)"
+    :bordered="contractStatus < ContractStatus.DEPLOYED"
     size="tiny"
     round
   >
     <n-space
-      :class="contractStatus < TransactionStatus.FINISHED ? 'text-body' : 'text-bg-dark'"
+      :class="contractStatus < ContractStatus.DEPLOYED ? 'text-body' : 'text-bg-dark'"
       :size="0"
       align="center"
       :wrap="false"
     >
       <span class="mx-1 uppercase">{{ $t(`computing.contract.status.${contractStatus}`) }}</span>
-      <AnimationTyping v-if="contractStatus < TransactionStatus.FINISHED" />
+      <AnimationTyping v-if="contractStatus < ContractStatus.DEPLOYED" />
     </n-space>
   </n-tag>
 </template>
@@ -27,15 +27,17 @@ defineProps({
 });
 
 /** Deployment status */
-function getTransactionStatus(status: number): TagType {
+function getContractStatus(status: number): TagType {
   switch (status) {
-    case TransactionStatus.PENDING:
+    case ContractStatus.DEPLOY_INITIATED:
       return 'warning';
-    case TransactionStatus.FINISHED:
+    case ContractStatus.DEPLOYING:
+      return 'warning';
+    case ContractStatus.DEPLOYED:
       return 'success';
-    case TransactionStatus.VERIFIED:
+    case ContractStatus.TRANSFERRED:
       return 'success';
-    case TransactionStatus.FAILED:
+    case ContractStatus.FAILED:
       return 'error';
     default:
       return 'default';

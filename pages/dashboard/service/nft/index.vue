@@ -94,9 +94,7 @@ function checkUnfinishedCollections() {
     const collection = collections.find(
       collection => collection.collection_uuid === unfinishedCollection.collection_uuid
     );
-    if (!collection) {
-      clearInterval(collectionInterval);
-    } else if (collection.collectionStatus >= CollectionStatus.DEPLOYED) {
+    if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
       clearInterval(collectionInterval);
     }
   }, 30000);

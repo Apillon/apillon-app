@@ -142,7 +142,6 @@ const props = defineProps({
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const $i18n = useI18n();
-const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
@@ -227,6 +226,8 @@ async function createContract() {
 
   if (!dataStore.hasProjects) {
     await dataStore.fetchProjects();
+
+    if (!dataStore.projectUuid) return;
   }
 
   try {
@@ -239,14 +240,11 @@ async function createContract() {
     message.success($i18n.t('form.success.created.contract'));
 
     /** On new contract created add new contract to list */
-    contractStore.items.push(res.data as ContractInterface);
+    contractStore.items.unshift(res.data as ContractInterface);
 
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess');
-
-    /** Redirect to new contract */
-    router.push(`/dashboard/service/computing/${res.data.contract_uuid}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

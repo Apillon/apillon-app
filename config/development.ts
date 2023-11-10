@@ -33,8 +33,9 @@ const config: ConfigInterface = {
     'KILT_LOGIN',
     'CAPTCHA_LOGIN',
     'BILLING',
+    'COMPUTING',
   ],
-  betaFeatures: ['BILLING', 'COMPUTING'],
+  betaFeatures: [],
 };
 
 export default config;

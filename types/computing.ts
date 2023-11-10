@@ -10,6 +10,21 @@ export enum ComputingEventType {
   TRANSFER_CONTRACT_OWNERSHIP = 'transfer-contract-ownership',
 }
 
+export enum ContractType {
+  DEPLOY_CONTRACT = 1,
+  TRANSFER_CONTRACT_OWNERSHIP = 2,
+  DEPOSIT_TO_CONTRACT_CLUSTER = 3,
+}
+
+export enum ContractStatus {
+  CREATED = 0,
+  DEPLOY_INITIATED = 1,
+  DEPLOYING = 2,
+  DEPLOYED = 3,
+  TRANSFERRED = 4,
+  FAILED = 5,
+}
+
 declare global {
   /**
    * Contract

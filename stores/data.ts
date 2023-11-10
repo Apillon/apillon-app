@@ -19,6 +19,7 @@ export const useDataStore = defineStore('data', {
       buckets: null as any,
       websites: null as any,
       collections: null as any,
+      contracts: null as any,
     },
     service: {
       loading: false,

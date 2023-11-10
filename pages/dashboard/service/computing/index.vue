@@ -19,7 +19,7 @@
         v-else
         :title="$t('computing.contract.empty')"
         :info="$t('computing.contract.emptyInfo')"
-        icon="computing/illustration"
+        icon="storage/empty"
       >
         <Btn type="primary" @click="showModalCreateContract()">
           {{ $t('computing.contract.createFirst') }}
@@ -32,7 +32,7 @@
 
       <!-- Modal - Create Contract -->
       <modal v-model:show="modalCreateContractVisible" :title="$t('computing.contract.new')">
-        <FormComputingContract />
+        <FormComputingContract @submit-success="modalCreateContractVisible = false" />
       </modal>
     </slot>
   </Dashboard>
