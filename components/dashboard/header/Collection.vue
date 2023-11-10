@@ -9,7 +9,7 @@
 
         <div>
           <n-space class="" align="center" size="small" :wrap="false">
-            <span>{{ $t('nft.collection.address') }}:</span>
+            <span>{{ $t('nft.collection.contractAddress') }}:</span>
             <n-ellipsis class="text-body align-bottom" :line-clamp="1">
               {{ collectionStore.active.contractAddress }}
             </n-ellipsis>
