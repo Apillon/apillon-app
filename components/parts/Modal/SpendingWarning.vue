@@ -31,7 +31,7 @@
               v-else
               type="secondary"
               size="large"
-              :to="{ name: 'dashboard-credits' }"
+              :to="{ name: 'dashboard-billing' }"
               @click="$emit('close')"
             >
               {{ $t('dashboard.payment.buyCredits') }}
@@ -46,19 +46,28 @@
 <script lang="ts" setup>
 const emit = defineEmits(['close']);
 
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 const warningStore = useWarningStore();
 const servicePrice = ref<ProductPriceInterface | null>();
 
 const isEnoughCredits = computed(() => {
-  return paymentsStore.credit.balance >= (servicePrice.value?.currentPrice || 0);
+  return (paymentStore.credit.balance || 0) >= (servicePrice.value?.currentPrice || 0);
+});
+
+onMounted(() => {
+  paymentStore.getPriceList();
 });
 
 watch(
-  () => warningStore.isSpendingWarningOpen,
-  async shown => {
-    if (shown && warningStore.serviceName) {
-      servicePrice.value = await paymentsStore.getServicePrice(warningStore.serviceName);
+  () => warningStore.serviceName,
+  service => {
+    if (service) {
+      servicePrice.value = paymentStore.findServicePrice(warningStore.serviceName);
+
+      /** Auto submit if action is FREE */
+      if (servicePrice.value?.currentPrice === 0) {
+        submit();
+      }
     }
   },
   { immediate: true }
@@ -67,6 +76,6 @@ watch(
 async function submit() {
   emit('close');
   await warningStore.action();
-  await paymentsStore.fetchCredits();
+  await paymentStore.fetchCredits();
 }
 </script>

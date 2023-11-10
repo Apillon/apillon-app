@@ -1,5 +1,5 @@
 <template>
-  <Btn v-if="uuid" type="primary" class="w-full mt-2" :loading="loading" @click="deleteItem">
+  <Btn v-if="id" type="primary" class="w-full mt-2" :loading="loading" @click="deleteItem">
     <slot v-if="$slots.default"></slot>
     <template v-else>{{ $t('form.confirm') }}</template>
   </Btn>
@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 const props = defineProps({
-  uuid: { type: [String, Number], default: null },
+  id: { type: [String, Number], default: null },
   type: {
     type: String,
     validator: (type: string) =>

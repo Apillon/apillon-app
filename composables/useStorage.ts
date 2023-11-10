@@ -31,7 +31,7 @@ export default function useStorage() {
           /** Fetch directory content for bucket */
           bucketStore.getDirectoryContent();
 
-          if (bucketStore.active.uploadedSize === 0) {
+          if (bucketStore.active.size === 0) {
             bucketStore.uploadActive = true;
           }
         } else if (routeName.includes('ipns')) {

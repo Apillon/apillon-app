@@ -84,7 +84,9 @@ declare global {
    * Storage
    */
   interface StorageInfoInterface {
+    availableBandwidth: number;
     availableStorage: number;
+    usedBandwidth: number;
     usedStorage: number;
   }
   interface StorageInfoResponse extends GeneralResponse<StorageInfoInterface> {}
@@ -99,10 +101,6 @@ declare global {
     size: number | null;
   }
 
-  interface FormNewBucket {
-    bucketName: string;
-    bucketDescription: string | null;
-  }
   interface BucketResponse extends GeneralResponse<BucketInterface> {}
   interface BucketsResponse extends GeneralItemsResponse<BucketInterface> {}
 
@@ -120,10 +118,7 @@ declare global {
     uuid: string;
     file_uuid?: string;
   }
-  interface FormFolder {
-    name: string;
-    description?: string | null;
-  }
+
   interface CreateFolderResponse extends GeneralResponse<BucketItemInterface> {}
   interface BucketItemResponse extends GeneralResponse<BucketItemInterface> {}
   interface FolderResponse extends GeneralItemsResponse<BucketItemInterface> {}
@@ -150,13 +145,7 @@ declare global {
     link: string | null;
     updateTime: string;
   }
-  interface FormIpns {
-    name: string;
-    description?: string | null;
-  }
-  interface FormIpnsPublish {
-    ipns?: number;
-  }
+
   interface IpnsCreateResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsUpdateResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsPublishResponse extends GeneralResponse<IpnsInterface> {}
@@ -190,22 +179,16 @@ declare global {
     session_uuid: string;
   }
 
-  interface FileInterface {
+  interface FileInterface extends BaseObjectInterface {
     CID: string;
-    bucket_uuid: string;
+    CIDv1: string;
     contentType: string;
     directory_uuid: string;
-    link: string;
+    fileStatus: number;
     file_uuid: string;
-    id: number;
-    name: string;
-    project_uuid: string;
-    s3FileKey: string;
-    size: number;
-    status: number;
-    fileName?: string | null;
-    fileStatus?: number | null;
+    link: string;
     path?: string | null;
+    size: number;
   }
   interface FileUploadInterface {
     id: number;
@@ -228,22 +211,11 @@ declare global {
     reported_replica_count: number;
     spower: number;
   }
-  interface FileDetailsInterface {
-    file: FileInterface;
-    fileStatus: number;
-  }
-  interface FormFileUploadRequest {
-    fileName: string;
-    contentType: string;
-    directory_uuid?: string;
-    session_uuid?: string;
-    path?: string;
-  }
 
   type FileDetails = FileInterface | FileUploadInterface;
   type FileCrust = typeof crustTypes.market.types.FileInfoV2;
 
-  interface FileDetailsResponse extends GeneralResponse<FileDetailsInterface> {}
+  interface FileDetailsResponse extends GeneralResponse<FileInterface> {}
   interface FileUploadRequestResponse extends GeneralResponse<FileUploadRequestInterface> {}
   interface FilesUploadRequestResponse extends GeneralResponse<S3FilesUploadRequestInterface> {}
   interface FileUploadSessionResponse extends GeneralResponse<boolean> {}
@@ -252,12 +224,6 @@ declare global {
   /**
    * Webhook
    */
-  interface FormWebhook {
-    url: string;
-    authType: string;
-    param1: string;
-    param2?: string;
-  }
   interface WebhookInterface {
     id: number;
     status: number;
@@ -272,13 +238,6 @@ declare global {
   /**
    * Website
    */
-  interface FormWebsite {
-    name: string;
-    description: string;
-  }
-  interface FormWebsiteDomain {
-    domain?: string | null;
-  }
   interface WebsiteBaseInterface extends BaseObjectInterface {
     website_uuid: string;
     domain: string | null;

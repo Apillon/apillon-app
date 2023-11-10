@@ -7,7 +7,7 @@ export default function useStore() {
   const websiteStore = useWebsiteStore();
   const deploymentStore = useDeploymentStore();
   const collectionStore = useCollectionStore();
-  const paymentsStore = usePaymentsStore();
+  const paymentStore = usePaymentStore();
   const settingsStore = useSettingsStore();
 
   function clearAll() {
@@ -37,7 +37,7 @@ export default function useStore() {
   }
 
   function clearPayments() {
-    paymentsStore.resetData();
+    paymentStore.resetData();
   }
 
   function clearSettings() {

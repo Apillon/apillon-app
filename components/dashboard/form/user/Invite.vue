@@ -43,6 +43,11 @@
 </template>
 
 <script lang="ts" setup>
+type FormUserInvite = {
+  email: string;
+  role_id: number | null;
+};
+
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();

@@ -3,113 +3,89 @@
     remote
     :bordered="false"
     :columns="columns"
-    :data="paymentsStore.creditTransactions.items"
+    :data="paymentStore.creditTransactions.items"
     :loading="loading"
     :pagination="pagination"
-    @update:page="handlePageChange"
   />
 </template>
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 const loading = ref<boolean>(false);
 
 /** Pagination data */
-const currentPage = ref<number>(1);
-const pagination = computed(() => {
-  return {
-    page: currentPage.value,
-    pageSize: PAGINATION_LIMIT,
-    pageSizes: [PAGINATION_LIMIT, 50, 100],
-    pageCount: Math.ceil(paymentsStore.invoices.total / PAGINATION_LIMIT),
-    itemCount: paymentsStore.invoices.total,
-  };
+const pagination = reactive({
+  page: 1,
+  pageSize: PAGINATION_LIMIT,
+  showSizePicker: true,
+  pageSizes: [10, PAGINATION_LIMIT, 50],
+  itemCount: paymentStore.creditTransactions.total,
+  onChange: (page: number) => {
+    pagination.page = page;
+    handlePageChange(page, pagination.pageSize);
+  },
+  onUpdatePageSize: (pageSize: number) => {
+    pagination.page = 1;
+    pagination.pageSize = pageSize;
+    handlePageChange(pagination.page, pageSize);
+  },
 });
 
 const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
   return [
-    // {
-    //   title: t('dashboard.credits.name'),
-    //   key: 'name',
-    //   render(row) {
-    //     return h('strong', {}, row.name);
-    //   },
-    // },
-    {
-      title: t('dashboard.credits.category'),
-      key: 'category',
-    },
     {
       title: t('dashboard.credits.service'),
       key: 'service',
+      render(row) {
+        return h('span', { class: 'text-body' }, row.service);
+      },
+    },
+    {
+      title: t('dashboard.credits.category'),
+      key: 'category',
+      render(row) {
+        return h('span', { class: 'text-body' }, row.category);
+      },
     },
     {
       title: t('dashboard.credits.description'),
       key: 'description',
+      render(row) {
+        return h('span', { class: 'text-body' }, row.description);
+      },
     },
     {
       title: t('dashboard.credits.direction'),
       key: 'direction',
       render(row) {
-        return row.direction === 1 ? 'RECEIVE' : 'SPEND';
+        return h('span', { class: 'text-body' }, row.direction === 1 ? 'RECEIVE' : 'SPEND');
       },
     },
     {
       title: t('dashboard.credits.amount'),
       key: 'amount',
-    },
-    {
-      title: t('dashboard.credits.createTime'),
-      key: 'createTime',
       render(row) {
-        return dateTimeToDateAndTime(row?.createTime || '');
+        return h('span', { class: 'text-body' }, `${formatCredits(row.amount)}`);
       },
     },
-    // {
-    //   title: t('general.status'),
-    //   key: 'active',
-    //   render(row) {
-    //     return h(
-    //       NTag,
-    //       { type: row.status === 5 ? 'success' : 'default', round: true, bordered: false },
-    //       {
-    //         default: () =>
-    //           row.status === 5
-    //             ? h('strong', { class: 'text-black' }, t('general.active'))
-    //             : h('strong', { class: 'text-white' }, t('general.notActive')),
-    //       }
-    //     );
-    //   },
-    // },
-    // {
-    //   title: '',
-    //   key: 'view',
-    //   align: 'right',
-    //   render(row) {
-    //     return h(
-    //       'strong',
-    //       {
-    //         class: 'text-primary cursor-pointer',
-    //         onClick: () => viewInvoice(row),
-    //       },
-    //       {
-    //         default: () => t('dashboard.viewInvoice'),
-    //       }
-    //     );
-    //   },
-    // },
+    {
+      title: t('dashboard.credits.date'),
+      key: 'createTime',
+      render(row) {
+        return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
+      },
+    },
   ];
 };
 
 const columns = createColumns();
 
 /** On page change, load data */
-async function handlePageChange(page: number) {
+async function handlePageChange(page: number, pageSize: number) {
   if (!loading.value) {
-    await paymentsStore.fetchCreditTransactions(page, PAGINATION_LIMIT);
-    currentPage.value = page;
+    await paymentStore.fetchCreditTransactions(page, pageSize);
   }
 }
 </script>

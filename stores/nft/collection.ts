@@ -29,6 +29,7 @@ export const useCollectionStore = defineStore('collection', {
         symbol: '',
         chain: Chains.MOONBEAM,
         collectionType: NFTCollectionType.GENERIC,
+        useApillonIpfsGateway: true,
       },
       behavior: {
         baseUri: '',
@@ -96,6 +97,7 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.symbol = '';
       this.form.base.chain = Chains.MOONBEAM;
       this.form.base.collectionType = NFTCollectionType.GENERIC;
+      this.form.base.useApillonIpfsGateway = true;
 
       this.form.behavior.baseUri = '';
       this.form.behavior.baseExtension = '.json';
@@ -144,7 +146,7 @@ export const useCollectionStore = defineStore('collection', {
     /**
      * API calls
      */
-    async fetchCollections(showLoader: boolean = true): Promise<CollectionInterface[]> {
+    async fetchCollections(showLoader = true): Promise<CollectionInterface[]> {
       this.loading = showLoader;
 
       const dataStore = useDataStore();
@@ -203,7 +205,7 @@ export const useCollectionStore = defineStore('collection', {
 
     async fetchCollectionTransactions(
       collectionUuid: string,
-      showLoader: boolean = true
+      showLoader = true
     ): Promise<TransactionInterface[]> {
       this.loading = showLoader;
       try {

@@ -39,11 +39,11 @@
       <div v-if="file?.CID" class="body-sm mb-4">
         <p class="body-sm text-body">{{ $t('storage.expiration') }}</p>
         <div class="relative min-h-[20px]">
-          <strong v-if="crustFileStatus?.expired_at">
+          <strong v-if="crustFileDetails?.expired_at">
             {{
               fileExpiration(
-                parseInt(crustFileStatus.calculated_at),
-                parseInt(crustFileStatus.expired_at),
+                parseInt(crustFileDetails.calculated_at),
+                parseInt(crustFileDetails.expired_at),
                 file.updateTime,
                 currentBlockId
               )
@@ -57,8 +57,8 @@
       <div v-if="file?.CID" class="body-sm mb-4">
         <p class="body-sm text-body">{{ $t('storage.replicas') }}</p>
         <div class="relative min-h-[20px]">
-          <strong v-if="crustFileStatus?.reported_replica_count">
-            {{ crustFileStatus.reported_replica_count }}
+          <strong v-if="crustFileDetails?.reported_replica_count">
+            {{ crustFileDetails.reported_replica_count }}
           </strong>
           <Spinner v-else :size="16" />
         </div>
@@ -68,7 +68,7 @@
       <div class="body-sm mb-6">
         <p class="body-sm mb-1 text-body">{{ $t('storage.status') }}</p>
         <div class="uppercase">
-          <StorageFileStatus :file-status="fileStatus" />
+          <StorageFileStatus :file-status="fileDetails.fileStatus" />
         </div>
       </div>
     </div>
@@ -98,21 +98,19 @@ const emit = defineEmits(['onFileDelete']);
 
 const fileStore = useFileStore();
 const fileDetails = ref<FileInterface>({} as FileInterface);
-const fileStatus = ref<number>(0);
-const crustFileStatus = ref<FileCrust>({} as FileCrust);
+const crustFileDetails = ref<FileCrust>({} as FileCrust);
 const currentBlockId = ref<number>(0);
 
 onMounted(async () => {
-  await getFileDetails(props.file?.CID || props.file.file_uuid);
+  await getFileDetails(props.file?.CID || props.file.uuid);
   if (props.file.CID) {
     currentBlockId.value = await fileStore.getCurrentBlockFromCrust();
-    await getCrustFileStatus(props.file.CID);
+    await getCrustFileDetails(props.file.CID);
   }
 });
 onDeactivated(() => {
   fileDetails.value = {} as FileInterface;
-  fileStatus.value = 0;
-  crustFileStatus.value = {} as FileCrust;
+  crustFileDetails.value = {} as FileCrust;
 });
 
 /** Get File details */
@@ -123,15 +121,14 @@ async function getFileDetails(uuidOrCID?: string) {
   if (!(uuidOrCID in fileStore.items)) {
     fileStore.items[uuidOrCID] = await fileStore.fetchFileDetails(uuidOrCID);
   }
-  fileDetails.value = fileStore.items[uuidOrCID].file;
-  fileStatus.value = fileDetails.value?.fileStatus || fileStore.items[uuidOrCID].fileStatus;
+  fileDetails.value = fileStore.items[uuidOrCID];
 }
 
 /** Get File details from CRUST */
-async function getCrustFileStatus(cid: string) {
+async function getCrustFileDetails(cid: string) {
   if (!(cid in fileStore.crust)) {
     fileStore.crust[cid] = await fileStore.fetchFileDetailsFromCrust(cid);
   }
-  crustFileStatus.value = fileStore.crust[cid] as FileCrust;
+  crustFileDetails.value = fileStore.crust[cid] as FileCrust;
 }
 </script>

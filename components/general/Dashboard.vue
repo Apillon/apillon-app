@@ -43,14 +43,17 @@
 
             <!-- Global component: File upload list -->
             <FormStorageUploadFiles
-              v-if="bucketStore.uploadActive && bucketStore.bucketUuid"
+              v-if="
+                (bucketStore.uploadActive && bucketStore.bucketUuid) ||
+                bucketStore.uploadFileList.length > 0
+              "
               :bucket-uuid="bucketStore.bucketUuid"
             />
 
             <!-- Global component: Spending warning -->
             <ModalSpendingWarning
               v-model:show="warningStore.isSpendingWarningOpen"
-              @close="warningStore.isSpendingWarningOpen = false"
+              @close="onSpendingWaningClose"
             />
           </n-scrollbar>
         </n-layout-content>
@@ -60,7 +63,7 @@
           collapse-mode="width"
           :collapsed-width="48"
           :width="isXl ? 455 : 356"
-          :content-style="isMd ? 'padding-left: 32px;' : ''"
+          :content-style="isMd ? 'padding-left: 20px;' : ''"
           @after-enter="handleOnUpdateCollapse(false)"
           @after-leave="handleOnUpdateCollapse(true)"
         >
@@ -116,7 +119,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 const gtm = useGtm();
 const { isMd, isLg, isXl } = useScreen();
@@ -137,7 +140,7 @@ onMounted(() => {
   // await getInstructions(key.value);
 
   /** Get Price list */
-  paymentsStore.getPriceList();
+  paymentStore.getPriceList();
 
   if (gtm && gtm.enabled() && !sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
     gtm.trackEvent({
@@ -187,6 +190,12 @@ const learnCollapsed = ref<boolean>(
 
 function handleOnUpdateCollapse(value: boolean) {
   localStorage.setItem('learnCollapsed', value ? '1' : '0');
+}
+
+/** Warnings */
+function onSpendingWaningClose() {
+  warningStore.serviceName = '';
+  warningStore.isSpendingWarningOpen = false;
 }
 </script>
 

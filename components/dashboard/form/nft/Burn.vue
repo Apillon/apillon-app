@@ -24,6 +24,11 @@
 </template>
 
 <script lang="ts" setup>
+type FormNftBurn = {
+  collectionUuid: string;
+  tokenId: number | null;
+};
+
 const props = defineProps({
   collectionUuid: { type: String, required: true },
   chainId: { type: Number, required: true },

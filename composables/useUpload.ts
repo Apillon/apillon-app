@@ -36,15 +36,6 @@ export default function useUpload() {
     return sumSpeeds / uploadSpeeds.length;
   });
 
-  /** Check if all files are finished (status FINISHED or ERROR) */
-  const allFilesFinished = computed<boolean>(() => {
-    return !fileList.value.some(
-      file =>
-        file.status === FileUploadStatusValue.PENDING ||
-        file.status === FileUploadStatusValue.UPLOADING
-    );
-  });
-
   /**
    *  Methods
    */
@@ -105,7 +96,7 @@ export default function useUpload() {
       updateFileStatus(file, FileUploadStatusValue.UPLOADING);
     });
 
-    const filesChunks = sliceIntoChunks(filesUpload, 200);
+    const filesChunks = sliceIntoChunks(filesUpload, 50);
 
     for (let i = 0; i < filesChunks.length; i++) {
       if (filesChunks[i] && filesChunks[i].length > 0) {
@@ -187,7 +178,13 @@ export default function useUpload() {
 
   /** Upload Session End  */
   async function uploadSessionEnd(sessionUuid: string) {
-    if (!allFilesFinished.value || !endSession.value) {
+    const allFilesFinished = !fileList.value.some(
+      file =>
+        file.status === FileUploadStatusValue.PENDING ||
+        file.status === FileUploadStatusValue.UPLOADING
+    );
+
+    if (!allFilesFinished || !endSession.value) {
       return;
     }
     try {

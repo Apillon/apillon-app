@@ -195,25 +195,33 @@
     },
     "credits": {
       "amount": "Amount",
+      "bonus": "Bonus credits",
+      "buy": "Buy",
       "available": "available",
       "category": "Category",
       "checkPrice": "Check price",
       "confirmPrices": "I understand",
       "cost": "Cost",
-      "createTime": "Created at",
       "credits": "credits",
+      "creditsAmount": "Credit amount",
       "creditCosts": "Credit costs",
+      "currentCredits": "Current credits",
+      "date": "Date and time",
       "description": "Description",
       "direction": "Direction",
       "filterByChain": "Filter by chain",
+      "filterByService": "Filter by service",
+      "getMore": "Get more",
+      "included": "Can be used for:",
       "name": "Name",
       "packages": "Credit packages",
       "product_id": "Product ID",
       "service": "Service",
       "serviceDescription": "Service description",
       "title": "Credits",
-      "transactions": "Transactions",
+      "transactions": "Credit transactions",
       "yourFunds": "Your funds",
+      "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
       "services": {
         "NFT": {
           "description": null
@@ -221,15 +229,13 @@
       }
     },
     "invoice": {
-      "clientEmail": "Client Email",
-      "clientName": "Client Name",
+      "client": "Client",
       "currency": "Currency",
-      "invoices": "Invoices",
-      "referenceId": "Reference Id",
+      "invoices": "Transactions and Invoices",
       "referenceTable": "Reference",
-      "subtotalAmount": "Subtotal Amount",
-      "totalAmount": "Total Amount",
-      "date": "Date"
+      "subtotalAmount": "Subtotal",
+      "totalAmount": "Total",
+      "date": "Date and time"
     },
     "nav": {
       "access": "Access",
@@ -251,29 +257,38 @@
       "access": "Access",
       "accountManagement": "Account management",
       "apiKeys": "API keys",
+      "billing": "Billing",
       "charts": "Charts",
       "credentials": "Credentials & API keys",
       "credits": "Credits",
       "destroy": "Destroy",
       "history": "History",
       "methods": "Methods",
+      "payments": "Overview",
       "priceList": "Price list",
       "profile": "Profile",
       "projectSettings": "Project settings",
-      "subscription": "Subscription",
+      "usage": "Usage",
       "usersPermissions": "Users & permissions"
     },
     "payment": {
       "buyCredits": "Buy credits",
+      "costs": "Costs",
+      "changePlan": "Change plan",
+      "currentPlan": "Current plan",
       "expiresOn": "Expires on:",
       "decline": "Decline",
       "notEnoughCredits": "You don't have enough credits. Please, buy more credits to proceed",
       "proceed": "Proceed",
+      "selectPlan": "Select plan",
       "spendingAlert": "Spending ALERT!",
       "title": "Payment",
+      "upgrade": "Upgrade",
+      "upgradePlan": "Upgrade plan",
       "stripe": {
+        "credits": "Successfully acquired {credits} credits.",
         "error": "Failed to subscribe",
-        "success": "Successfully subscribed to a plan"
+        "subscription": "Successfully subscribed to a {plan} plan."
       }
     },
     "permissions": {
@@ -283,13 +298,35 @@
       "insufficient": "You don't have permissions to create or edit this item."
     },
     "subscription": {
-      "packages": "Subscription packages"
+      "bandwidth": "Bandwith",
+      "canceledOn": "Your plan will be canceled on {date}.",
+      "creditsLifetime": "Credits Lifetime",
+      "forever": "Forever",
+      "free": "Free",
+      "lifetime": "Lifetime",
+      "monthly": "Monthly",
+      "nextBilling": "Next billing cycle on {date}.",
+      "otherServices": "Free credits for other services",
+      "packages": "Subscription packages",
+      "perMonth": "per month",
+      "storage": "Storage",
+      "web3Services": "Web3 services"
+    },
+    "usage": {
+      "bandwith": "Bandwith",
+      "bytesStored": "Byte stored",
+      "description": "",
+      "downloads": "Downloads",
+      "hosting": "Web3 hosting",
+      "storage": "Web3 storage",
+      "title": "Project quotas",
+      "upgrade": "Increase quotas"
     },
     "adminMode": "You are in ADMIN mode!",
     "attached": "Attached",
     "attachService": "Attach service",
     "attachNewService": "Attach new service",
-    "billing": "Billing",
+    "billing": "Billing and Usage",
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
@@ -317,7 +354,6 @@
     "total": "Total",
     "user": "User",
     "viewInvoice": "View Invoice",
-    "yourPlan": "Your plan: ",
     "value": "Value",
     "visibleColumns": "Visible columns",
     "w3Warn": "W3 warn"
@@ -390,7 +426,7 @@
     "USER_EMAIL_NOT_VALID": "Email is not valid",
     "USER_EMAIL_NOT_EXISTS": "Looks like your email is not in our books yet.",
     "USER_ALREADY_REGISTERED": "User already registered",
-    "USER_EMAIL_ALREADY_TAKEN": "Email is already taken",
+    "USER_EMAIL_ALREADY_TAKEN": "Please check your inbox as mail has already been sent.",
     "USER_UUID_NOT_PRESENT": "user_uuid is missing",
     "USER_UUID_ALREADY_EXISTS": "user_uuid already exists",
     "USER_PASSWORD_NOT_PRESENT": "Password is missing",
@@ -482,6 +518,7 @@
       "collectionSymbol": "Symbol",
       "collectionSupplyLimited": "Total supply",
       "collectionType": "Collection type",
+      "collectionUseGateway": "Use apillon gateway for base uri",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "domain": "Domain name",
@@ -821,7 +858,8 @@
         "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
         "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
-        "collectionType": ""
+        "collectionType": "",
+        "collectionUseGateway": "Collection base uri points to IPFS. If this checkbox is checked, base uri will point to CID on Apillon private gateway, which provide better performance. Otherwise base uri points to: ipfs://[CID], and gateway need to be handled manually."
       },
       "status": {
         "0": "CREATED",
@@ -949,6 +987,7 @@
     "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
     "account": "Account",
     "accountInformation": "Account information",
+    "billing": "Billing",
     "logout": "Logout",
     "marketing": "Marketing",
     "marketingCheck": "I want to recieve marketing email from Apillon",
@@ -956,6 +995,7 @@
     "mySettings": "Settings",
     "profile": "Profile",
     "security": "Security",
+    "settings": "Settings",
     "setup2fa": "Set up 2FA"
   },
   "project": {
@@ -1126,11 +1166,11 @@
       "files": "({files} files)",
       "filesUploading": "({uploading} of {files})",
       "nothingHere": "Nothing here",
-      "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab.",
+      "pinningToCrust": "This file is being pinned to Crust Network. While uploading, the file is only visible in the \"All Files\" tab.",
       "refresh": "Refresh files",
       "retry": "Retry upload",
       "search": "Search files",
-      "stillUploading": "This file is pinning to CRUST. When it will be pinned, you will be able to see file details.",
+      "stillUploading": "This file is being pinned to Crust Network. When it’s done, you will be able to see file’s IPFS details.",
       "upload": "Upload files and folders",
       "uploading": "Uploading",
       "uploadMore": "Add more files",
@@ -1177,7 +1217,7 @@
     "authentication": {
       "name": "Authentication",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum.",
-      "emptyTitle": "Your project has currently no authentication services",
+      "emptyTitle": "Your project does not have an authentication service at the moment",
       "emptyInfo": "First create a authentication service and then create API key."
     },
     "storage": {
@@ -1218,6 +1258,7 @@
     "collectionDropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
     "collectionRoyaltiesAddress": "Please enter a valid EVM address",
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
+    "collectionRoyaltiesFees": "Royalty fee must be greater than 0",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
     "collectionSymbolRequired": "Please enter Collection symbol",
     "collectionTypeRequired": "Please select Collection type",

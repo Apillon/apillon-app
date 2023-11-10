@@ -222,6 +222,9 @@ const Endpoints = {
   apiKeyRoles: (key: number) => {
     return `/api-keys/${key}/roles`;
   },
+  apiKeyServiceRoles: (key: number) => {
+    return `/api-keys/${key}/service-roles`;
+  },
 
   /** Oauth links */
   oauthLinks: '/users/oauth-links/',

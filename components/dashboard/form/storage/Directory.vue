@@ -39,6 +39,11 @@
 </template>
 
 <script lang="ts" setup>
+type FormFolder = {
+  name: string;
+  description?: string | null;
+};
+
 const props = defineProps({
   bucketUuid: { type: String, default: null },
   parentFolderUuid: { type: String, default: null },

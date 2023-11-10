@@ -3,6 +3,7 @@
     v-bind="$attrs"
     :title="title"
     preset="card"
+    :class="size === 'large' ? 'max-w-5xl' : 'max-w-2xl'"
     :bordered="false"
     :show-icon="false"
     :segmented="true"
@@ -23,18 +24,19 @@ import { PriceServiceName } from '#imports';
 
 const attrs = useAttrs();
 const props = defineProps({
+  size: { type: String as PropType<'medium' | 'large'>, default: 'medium' },
   title: { type: String, default: null },
   serviceName: { type: String as PropType<PriceServiceName>, default: null },
 });
 
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 const servicePrice = ref<ProductPriceInterface | null>();
 
 watch(
   () => attrs.show,
   async shown => {
     if (shown && props.serviceName) {
-      servicePrice.value = await paymentsStore.getServicePrice(props.serviceName);
+      servicePrice.value = await paymentStore.getServicePrice(props.serviceName);
     }
   },
   { immediate: true }

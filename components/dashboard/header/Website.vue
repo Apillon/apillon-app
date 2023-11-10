@@ -23,7 +23,7 @@
 
     <template #info>
       <n-space :size="32" align="center" :wrap="false">
-        <PaymentCreditCosts :service="ServiceTypeName.HOSTING" />
+        <ModalCreditCosts :service="ServiceTypeName.HOSTING" />
         <IconInfo @click="showModalW3Warn = true" />
       </n-space>
     </template>

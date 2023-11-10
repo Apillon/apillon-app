@@ -4,22 +4,24 @@
       <strong>{{ title }}</strong>
       <span v-if="info" class="text-[11px]"> ({{ info }})</span>
     </div>
-    <div v-if="copy" class="flex justify-between items-center bg-bg-dark text-body px-4 py-2">
-      <n-ellipsis class="align-bottom" :line-clamp="1">
-        {{ link }}
-      </n-ellipsis>
-      <button class="text-body ml-2" @click="copyToClipboard(link)">
-        <span class="icon-copy"></span>
-      </button>
-    </div>
-    <a v-else :href="link" target="_blank">
-      <div class="flex justify-between items-center bg-bg-dark px-4 py-2">
+    <template v-if="!link.includes('null')">
+      <div v-if="copy" class="flex justify-between items-center bg-bg-dark text-body px-4 py-2">
         <n-ellipsis class="align-bottom" :line-clamp="1">
           {{ link }}
         </n-ellipsis>
-        <span class="icon-preview text-xl align-middle ml-2"></span>
+        <button class="text-body ml-2" @click="copyToClipboard(link)">
+          <span class="icon-copy"></span>
+        </button>
       </div>
-    </a>
+      <a v-else :href="link" target="_blank">
+        <div class="flex justify-between items-center px-4 py-2 card-dark rounded-lg">
+          <n-ellipsis class="align-bottom" :line-clamp="1">
+            {{ link }}
+          </n-ellipsis>
+          <span class="icon-preview text-xl align-middle ml-2"></span>
+        </div>
+      </a>
+    </template>
   </div>
 </template>
 

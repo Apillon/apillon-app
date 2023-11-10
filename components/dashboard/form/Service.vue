@@ -56,6 +56,11 @@
 </template>
 
 <script lang="ts" setup>
+type FormService = {
+  serviceName: string;
+  networkType: boolean;
+};
+
 const props = defineProps({
   serviceUuid: { type: String, default: '' },
   serviceType: {
@@ -141,15 +146,15 @@ async function createService() {
   };
 
   try {
-    const res = await $api.post<ServiceResponse>(endpoints.services(), bodyData);
+    await $api.post<ServiceResponse>(endpoints.services(), bodyData);
 
     const msg = $i18n.te(`form.success.created.${ServiceTypeNames[props.serviceType]}`)
       ? $i18n.t(`form.success.created.${ServiceTypeNames[props.serviceType]}`)
       : $i18n.t('form.success.created.service');
     message.success(msg);
 
-    /** On new ipns created add new item to list */
-    dataStore.services.push(res.data);
+    /** On new service created add new item to list */
+    dataStore.services = await dataStore.fetchServices();
 
     /** Emit events */
     emit('submitSuccess');

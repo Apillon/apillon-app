@@ -1,107 +1,94 @@
 <template>
-  <div
-    class="rounded-2xl border border-primary-bright p-6 md:p-8 lg:p-12"
-    :class="type === 'dark' ? 'bg-bg-dark' : 'bg-bg-light'"
-  >
+  <div v-if="plan.name" class="subscription-package text-center text-body">
     <h4 class="mb-6">{{ subscriptionPackage.name || plan.name }}</h4>
 
     <!-- Price -->
     <template v-if="plan.price === 0">
-      <h1>Free</h1>
-      <p class="mb-6 mt-0">forever</p>
+      <h1 class="text-white">{{ $t('dashboard.subscription.free') }}</h1>
+      <p class="mb-6 mt-0">{{ $t('dashboard.subscription.forever') }}</p>
     </template>
     <template v-else>
-      <h1 v-if="plan.price">{{ plan.price }} €</h1>
-      <h1 v-else>Custom</h1>
-      <p class="mb-6 mt-0">per project/month</p>
+      <h1 class="text-white">{{ formatPrice(plan.price || 0, 'eur') }}</h1>
+      <p class="mb-6 mt-0">{{ $t('dashboard.subscription.perMonth') }}</p>
     </template>
 
-    <!-- <p class="match-description mb-8">
-      {{ subscriptionPackage.description || plan.description }}
-    </p> -->
-
-    <Btn
-      v-if="paymentsStore.activeSubscription?.package_id === subscriptionPackage.id"
-      type="secondary"
-      size="large"
-      :loading="loading"
-      @click="goToCustomerPortal()"
-    >
-      Unsubscribe
-    </Btn>
-    <Btn
-      v-else-if="subscriptionPackage?.price"
-      type="primary"
-      size="large"
-      :loading="loading"
-      @click="getSubscriptionSessionUrl(subscriptionPackage.id)"
-    >
-      <span v-if="paymentsStore.activeSubscription?.id">Change package</span>
-      <span v-else>Select package</span>
-    </Btn>
-    <Btn
-      v-else-if="subscriptionPackage.creditAmount === 0"
-      type="primary"
-      class="w-full"
-      :loading="loading"
-      href="mailto:sales@apillon.io"
-    >
-      Contact us
-    </Btn>
-    <Btn v-else type="primary" class="w-full" :loading="loading"> Included plan </Btn>
-
-    <p class="body-sm mt-1 h-5 italic">
-      <template v-if="plan.price === 0">
-        <span class="text-pink">*</span>
-        No credit card needed.
-      </template>
-    </p>
-    <div class="mb-12 mt-5 border-b border-primary-bright"></div>
+    <div class="my-6 border-b border-bg-lighter"></div>
 
     <!-- Service -->
-    <div v-if="plan.services" class="match-services">
-      <h4>Web3 services</h4>
-      <PaymentPricingService name="Web3 Identity" :value="plan.services.identity" />
-      <PaymentPricingService name="Web3 Storage" :value="plan.services.storage" />
-      <PaymentPricingService name="Bandwith" :value="plan.services.bandwith" />
-      <PaymentPricingService name="Web3 Hosting" :value="plan.services.hosting" />
-      <PaymentPricingService name="Smart Contracts" :value="plan.services.smartContracts" />
+    <div v-if="plan.services" class="match-services mb-12">
+      <h4>{{ $t('dashboard.subscription.web3Services') }}</h4>
       <PaymentPricingService
-        name="Free Credits for other services"
+        :name="$t('dashboard.subscription.storage')"
+        :value="plan.services.storage"
+      />
+      <PaymentPricingService
+        :name="$t('dashboard.subscription.bandwidth')"
+        :value="plan.services.bandwith"
+      />
+      <PaymentPricingService
+        :name="$t('dashboard.subscription.otherServices')"
         :value="plan.services.credits"
       />
     </div>
 
-    <!-- Included -->
-    <div class="my-12 border-b border-primary-bright"></div>
-    <div class="">
-      <h4>What other services?</h4>
-      <ul class="mt-4 list-disc pl-5">
-        <li v-for="(service, key) in plan.otherServices" :key="key">{{ service }}</li>
-      </ul>
+    <Btn
+      v-if="paymentStore.getActiveSubscriptionPackage.id === subscriptionPackage.id"
+      type="primary"
+      size="large"
+      round
+      disabled
+    >
+      {{ $t('dashboard.payment.currentPlan') }}
+    </Btn>
+    <Btn
+      v-else
+      type="primary"
+      size="large"
+      :color="colors.blue"
+      round
+      :loading="loading"
+      @click="getSubscriptionSessionUrl(subscriptionPackage.id)"
+    >
+      {{ $t('dashboard.payment.selectPlan') }}
+    </Btn>
+    <div
+      v-if="
+        paymentStore.activeSubscription.package_id === subscriptionPackage.id &&
+        paymentStore.activeSubscription.cancelDate
+      "
+    >
+      {{
+        $t('dashboard.subscription.canceledOn', {
+          date: dateTimeToDate(paymentStore.activeSubscription.cancelDate),
+        })
+      }}
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import colors from '~/tailwind.colors';
+
 defineProps({
   subscriptionPackage: {
     type: Object as PropType<SubscriptionPackageInterface>,
     required: true,
   },
   plan: { type: Object as PropType<PricingPlan>, default: {} as PricingPlan },
-  type: { type: String as PropType<'dark' | 'light'>, default: 'dark' },
 });
 
 const loading = ref<boolean>(false);
-const paymentsStore = usePaymentsStore();
+const paymentStore = usePaymentStore();
 
 async function getSubscriptionSessionUrl(packageId: number) {
-  if (paymentsStore.activeSubscription?.id) {
+  /** Remove cache mark */
+  sessionStorage.removeItem(LsCacheKeys.SUBSCRIPTION_ACTIVE);
+
+  if (paymentStore.activeSubscription?.id) {
     return await goToCustomerPortal();
   }
   loading.value = true;
-  const stripeSessionUrl = await paymentsStore.fetchSubscriptionSessionUrl(packageId);
+  const stripeSessionUrl = await paymentStore.fetchSubscriptionSessionUrl(packageId);
   loading.value = false;
 
   if (stripeSessionUrl) {
@@ -111,7 +98,7 @@ async function getSubscriptionSessionUrl(packageId: number) {
 
 async function goToCustomerPortal() {
   loading.value = true;
-  const customerPortalUrl = await paymentsStore.getCustomerPortalURL();
+  const customerPortalUrl = await paymentStore.getCustomerPortalURL();
   loading.value = false;
 
   if (customerPortalUrl) {

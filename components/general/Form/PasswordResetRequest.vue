@@ -53,6 +53,12 @@
 <script lang="ts" setup>
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
+type PasswordResetForm = {
+  email: string;
+  captcha?: any;
+  refCode?: string;
+};
+
 const props = defineProps({
   btnType: {
     type: String,
@@ -75,7 +81,12 @@ const {
 } = useCaptcha();
 
 const formRef = ref<NFormInst | null>(null);
-const formData = ref<PasswordResetForm>({ email: props.email, captcha: null, refCode: undefined });
+const formData = ref<PasswordResetForm>({
+  email: props.email,
+  captcha: null,
+  refCode: undefined,
+});
+
 const rules: NFormRules = {
   email: [
     {

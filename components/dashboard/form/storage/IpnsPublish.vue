@@ -46,6 +46,10 @@
 </template>
 
 <script lang="ts" setup>
+type FormIpnsPublish = {
+  ipns?: number;
+};
+
 const props = defineProps({
   cid: { type: String, required: true },
 });

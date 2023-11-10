@@ -25,18 +25,20 @@ declare global {
    */
   interface CreditInterface extends GeneralInterface {
     project_uuid: string;
-    balance: number;
+    balance: number | null;
   }
   interface CreditResponse extends GeneralResponse<CreditInterface> {}
 
   interface CreditTransactionInterface extends BaseObjectInterface {
     amount: number;
+    category: string;
     credit_id: number;
     direction: number;
     product_id: number;
     createTime: string;
     referenceId: string | null;
     referenceTable: string | null;
+    service: string;
   }
   interface CreditTransactionsResponse extends GeneralItemsResponse<CreditTransactionInterface> {}
 
@@ -44,8 +46,10 @@ declare global {
    * Credit Packages
    */
   interface CreditPackageInterface extends BaseObjectInterface {
-    creditAmount: number;
+    id: number;
     bonusCredits: number;
+    creditAmount: number;
+    price: number;
   }
   interface CreditPackagesResponse extends GeneralResponse<CreditPackageInterface[]> {}
 
@@ -53,12 +57,13 @@ declare global {
    * Subscription
    */
   interface SubscriptionInterface extends GeneralInterface {
+    cancelDate: string;
+    cancellationComment: string;
+    cancellationReason: string;
+    expiresOn: string;
+    id: number;
     package_id: number;
     project_uuid: string;
-    expiresOn: string;
-    cancelDate: string;
-    subscriberEmail: string;
-    stripeId: string;
   }
   interface ActiveSubscriptionResponse extends GeneralResponse<SubscriptionInterface> {}
   interface SubscriptionsResponse extends GeneralItemsResponse<SubscriptionInterface> {}
@@ -67,6 +72,7 @@ declare global {
    * Subscription Package
    */
   interface SubscriptionPackageInterface extends BaseObjectInterface {
+    id: number;
     creditAmount: number;
     price?: number;
   }

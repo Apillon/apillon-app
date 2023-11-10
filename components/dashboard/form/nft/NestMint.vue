@@ -64,6 +64,12 @@
 </template>
 
 <script lang="ts" setup>
+type FormNftNestMint = {
+  parentCollectionUuid: string | null;
+  parentNftId: number | null;
+  quantity: number | null;
+};
+
 const props = defineProps({
   collectionUuid: { type: String, required: true },
   chainId: { type: Number, required: true },

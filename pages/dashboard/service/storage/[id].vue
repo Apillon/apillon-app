@@ -14,7 +14,7 @@
       </transition>
 
       <!-- Breadcrumbs -->
-      <div v-if="bucketStore.hasBucketItems" class="relative h-12 py-2 mb-1">
+      <div v-if="bucketStore.hasBucketItems" class="relative h-14 pt-2 mb-1">
         <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
       </div>
 

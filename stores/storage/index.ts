@@ -33,6 +33,8 @@ export const useStorageStore = defineStore('storage', {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
+
+        if (!dataStore.projectUuid) return;
       }
 
       try {

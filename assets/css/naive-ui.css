@@ -63,6 +63,18 @@
   }
 }
 
+/** Card */
+.n-card {
+  &.card-dark {
+    .n-card-header {
+      @apply pb-4;
+      .n-card-header__main {
+        @apply body-md text-body;
+      }
+    }
+  }
+}
+
 /** Checkbox */
 .n-checkbox {
   .n-checkbox__label a {
@@ -278,13 +290,15 @@
     > .n-layout-scroll-container > .n-layout-content > .n-layout-scroll-container > .n-scrollbar {
       @apply pr-3 -mr-3;
     }
+    > .n-layout-scroll-container > .n-layout-sider > .n-layout-sider-scroll-container {
+      @apply pr-3;
+    }
   }
 
   &.has-scrollbar-bottom {
     @apply -mb-3;
     height: calc(100% + 0.75rem);
-
-    > n-layout-scroll-container > n-layout-content > .n-layout-scroll-container > .n-scrollbar {
+    > .n-layout-scroll-container > .n-layout-content > .n-layout-scroll-container > .n-scrollbar {
       @apply pb-3 -mb-3;
     }
   }
@@ -336,9 +350,8 @@
       @apply pr-8;
 
       &::before {
-        @apply left-8 right-8;
+        @apply left-8 right-8 rounded-lg;
       }
-
       &__icon {
         @apply ml-3;
       }
@@ -428,7 +441,7 @@ body > .n-message-container {
 
   /** Card */
   &.n-card {
-    @apply max-w-2xl py-12;
+    @apply card-border py-12;
 
     .n-card {
       &-header {
@@ -437,7 +450,8 @@ body > .n-message-container {
         &__main {
           @apply font-bold;
         }
-        &__close {
+        &__close,
+        .n-card__close {
           @apply absolute right-0 top-0 w-12 h-12 bg-bg border-1 border-solid border-white rounded-full transition-colors duration-300 translate-x-1/2 -translate-y-1/2;
 
           &::before {
@@ -451,7 +465,7 @@ body > .n-message-container {
       }
 
       &__content {
-        @apply py-4;
+        @apply py-4 mobile:px-4;
 
         &:not(:first-child) {
           @apply border-t-0;

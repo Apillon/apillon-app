@@ -51,6 +51,11 @@
 </template>
 
 <script lang="ts" setup>
+type FormNftMint = {
+  receivingAddress: string;
+  quantity: number | null;
+};
+
 const props = defineProps({
   collectionUuid: { type: String, required: true },
   chainId: { type: Number, required: true },

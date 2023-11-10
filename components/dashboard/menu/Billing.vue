@@ -4,22 +4,39 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
+const router = useRouter();
+const dataStore = useDataStore();
 
 const menuOptions: NMenuOption[] = [
   {
+    key: 'dashboard-payments',
+    label: t('dashboard.pageMenu.payments'),
+    to: 'dashboard-payments',
+  },
+  {
+    key: 'dashboard-usage',
+    label: t('dashboard.pageMenu.usage'),
+    to: 'dashboard-usage',
+  },
+  {
     key: 'dashboard-billing',
-    label: t('dashboard.pageMenu.subscription'),
+    label: t('dashboard.pageMenu.billing'),
     to: 'dashboard-billing',
   },
-  {
-    key: 'dashboard-credits',
-    label: t('dashboard.pageMenu.credits'),
-    to: 'dashboard-credits',
-  },
-  {
-    key: 'dashboard-price-list',
-    label: t('dashboard.pageMenu.priceList'),
-    to: 'dashboard-price-list',
-  },
+  // {
+  //   key: 'dashboard-price-list',
+  //   label: t('dashboard.pageMenu.priceList'),
+  //   to: 'dashboard-price-list',
+  // },
 ];
+
+onMounted(() => {
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(_ => {
+      if (!dataStore.hasProjects) {
+        router.push({ name: 'dashboard' });
+      }
+    });
+  }, 100);
+});
 </script>

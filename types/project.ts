@@ -35,12 +35,6 @@ declare global {
   /**
    * Project
    */
-  interface FormProject {
-    name: string | null;
-    description: string | null;
-    terms?: boolean;
-  }
-
   interface ProjectInterface extends BaseObjectInterface {
     status: number;
     shortDescription: string | null;
@@ -59,10 +53,6 @@ declare global {
   /**
    * Project settings
    */
-  interface FormProjectSettings {
-    name?: string | null;
-    description?: string | null;
-  }
   interface ProjectSettingsResponse extends GeneralResponse<ProjectInterface> {}
 
   /**
@@ -84,10 +74,6 @@ declare global {
   /**
    * Invite user
    */
-  interface FormInviteUser {
-    email: string;
-    role_id: number;
-  }
   interface InvitedUserInterface {
     id: number;
     status: number;

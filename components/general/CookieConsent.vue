@@ -3,7 +3,7 @@
     v-if="config.public.gtmId"
     ref="cookieConsent"
     :debug="false"
-    class="card-dark rounded-none"
+    class="card-dark rounded-lg"
     element-id="cookieConsent"
     type="floating"
     position="bottom-right"

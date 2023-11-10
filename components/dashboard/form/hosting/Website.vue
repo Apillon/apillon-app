@@ -69,6 +69,11 @@
 </template>
 
 <script lang="ts" setup>
+type FormWebsite = {
+  name: string;
+  description: string;
+};
+
 const props = defineProps({
   websiteUuid: { type: String, default: null },
 });
@@ -80,18 +85,10 @@ const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
 const warningStore = useWarningStore();
+
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-
 const website = ref<WebsiteInterface | null>(null);
-
-onMounted(async () => {
-  if (props.websiteUuid) {
-    website.value = await websiteStore.getWebsite(props.websiteUuid);
-    formData.value.name = website.value.name;
-    formData.value.description = website.value.description || '';
-  }
-});
 
 const formData = ref<FormWebsite>({
   name: website.value?.name || '',
@@ -114,6 +111,14 @@ const rules: NFormRules = {
     },
   ],
 };
+
+onMounted(async () => {
+  if (props.websiteUuid) {
+    website.value = await websiteStore.getWebsite(props.websiteUuid);
+    formData.value.name = website.value.name;
+    formData.value.description = website.value.description || '';
+  }
+});
 
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;

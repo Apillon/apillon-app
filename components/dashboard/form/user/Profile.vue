@@ -44,11 +44,16 @@
 </template>
 
 <script lang="ts" setup>
-import { textMarshal } from 'text-marshal';
+type FormUserProfile = {
+  name?: string | null;
+  email: string;
+  phone?: string | null;
+};
 
 const message = useMessage();
 const $i18n = useI18n();
 const authStore = useAuthStore();
+
 const loading = ref<boolean>(false);
 const loadingForm = ref<boolean>(true);
 const formRef = ref<NFormInst | null>(null);
@@ -56,19 +61,6 @@ const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormUserProfile>({
   name: authStore.username,
   email: authStore.email,
-});
-
-onMounted(() => {
-  /** If page was reloaded, populate form data after page has been loaded */
-  setTimeout(() => {
-    Promise.all(Object.values(authStore.promises)).then(_ => {
-      if (!formData.value.name || !formData.value.email) {
-        formData.value.name = authStore.username;
-        formData.value.email = authStore.email;
-      }
-      loadingForm.value = false;
-    });
-  }, 500);
 });
 
 const rules: NFormRules = {
@@ -84,6 +76,19 @@ const rules: NFormRules = {
     },
   ],
 };
+
+onMounted(() => {
+  /** If page was reloaded, populate form data after page has been loaded */
+  setTimeout(() => {
+    Promise.all(Object.values(authStore.promises)).then(_ => {
+      if (!formData.value.name || !formData.value.email) {
+        formData.value.name = authStore.username;
+        formData.value.email = authStore.email;
+      }
+      loadingForm.value = false;
+    });
+  }, 500);
+});
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {

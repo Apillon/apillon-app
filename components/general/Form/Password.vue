@@ -45,6 +45,11 @@
 </template>
 
 <script lang="ts" setup>
+type FormRegister = {
+  password: string | null;
+  reenteredPassword: string | null;
+};
+
 const props = defineProps({
   resetPassword: { type: Boolean, default: false },
   token: { type: String, default: '' },

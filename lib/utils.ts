@@ -40,7 +40,7 @@ export function enumValues(E: any): string[] | number[] {
 }
 export function enumKeyValues(E: any): KeyValue[] {
   return enumKeys(E).map(k => {
-    return { key: k, value: E[k as any] };
+    return { key: k, label: k, value: E[k as any] };
   });
 }
 
@@ -87,6 +87,34 @@ export function hideSecret(source: string, partLength: number = 4): string {
 }
 export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
   return s ? s.toString() : '';
+}
+
+/**
+ *  Format numbers
+ */
+/** Add dots and commas */
+export function formatNumber(n: number) {
+  return new Intl.NumberFormat('de-DE').format(n);
+}
+
+export function formatPrice(price: number, currency?: string) {
+  const decimals = Math.ceil(price) === price ? 0 : 2;
+  if (currency) {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: decimals,
+    }).format(price);
+  }
+  return new Intl.NumberFormat('de-DE', { minimumFractionDigits: decimals }).format(price);
+}
+
+export function formatCredits(credits: number) {
+  return new Intl.NumberFormat().format(credits);
+}
+
+export function formatCurrency(currency: string) {
+  return currency === 'eur' ? '€' : '$';
 }
 
 /**
@@ -206,7 +234,7 @@ export function fileExpiration(
 /**
  * Error messages
  */
-export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | any) {
+export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | DOMException | any) {
   // Check error exists and if translation is included
   if (!window.$i18n || !(window.$i18n instanceof Object) || !error) {
     if (error instanceof ReferenceError || error instanceof TypeError) {

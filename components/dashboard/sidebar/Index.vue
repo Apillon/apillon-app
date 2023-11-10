@@ -52,7 +52,7 @@
           <div v-else class="h-8"></div>
 
           <!-- SIDEBAR NAVIGATION -->
-          <MenuNav :collapsed="collapsed" @toggleSidebar="hideNavOnMobile" />
+          <MenuNav :collapsed="collapsed" @toggle-sidebar="hideNavOnMobile" />
         </n-space>
 
         <!-- SIDEBAR FOOTER -->
@@ -61,6 +61,41 @@
             {{ $t('general.copyrights') }}
             <span>{{ version }}</span>
           </p>
+        </div>
+
+        <!-- SIDEBAR PRICING -->
+        <div
+          v-if="!collapsed && dataStore.hasProjects"
+          class="relative flex border-t border-bg-lighter flex-col p-8"
+        >
+          <div :class="{ 'opacity-0': paymentStore.loading }">
+            <div class="mb-3">
+              <span class="text-xs text-bodyDark">{{ $t('dashboard.payment.currentPlan') }}</span>
+              <strong class="block">
+                {{ paymentStore.getActiveSubscriptionPackage?.name }}
+              </strong>
+              <span class="text-sm text-body">
+                {{ $t('dashboard.payment.costs') }}:
+                {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0, 'eur') }}/{{
+                  $t('general.month')
+                }}
+              </span>
+            </div>
+            <PaymentCardCurrentPlan
+              v-if="route.name === 'dashboard-payments'"
+              :show-card="false"
+              btn-type="secondary"
+            />
+            <Btn
+              v-else
+              type="secondary"
+              size="large"
+              @click="router.push({ name: 'dashboard-payments' })"
+            >
+              {{ $t('dashboard.payment.upgradePlan') }}
+            </Btn>
+          </div>
+          <Spinner v-if="paymentStore.loading" />
         </div>
       </n-scrollbar>
     </div>
@@ -82,8 +117,12 @@ const props = defineProps({
   showOnMobile: { type: Boolean, default: false },
 });
 
+const route = useRoute();
+const router = useRouter();
 const { isSm, isLg } = useScreen();
 const dataStore = useDataStore();
+const paymentStore = usePaymentStore();
+
 const showModalNewProject = ref(false);
 const emit = defineEmits(['toggleSidebar']);
 
@@ -101,6 +140,8 @@ onMounted(() => {
       ) {
         showModalNewProject.value = true;
       }
+      paymentStore.getSubscriptionPackages();
+      paymentStore.fetchActiveSubscription();
     });
   }, 100);
 });
