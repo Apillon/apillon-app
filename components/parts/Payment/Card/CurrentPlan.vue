@@ -10,7 +10,7 @@
       <div class="flex gap-4 items-center mb-4">
         <span class="icon-billing text-xl"></span>
         <h3>
-          <span class="inline-block whitespace-nowrap">
+          <span class="block whitespace-nowrap">
             {{ paymentStore.getActiveSubscriptionPackage?.description }}&nbsp;
           </span>
           <span class="inline-block whitespace-nowrap">
