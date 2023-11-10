@@ -33,6 +33,7 @@ const config: ConfigInterface = {
     'STORAGE',
     'TWO_FACTOR_AUTHENTICATION',
     'WALLET_LOGIN',
+    'COMPUTING',
   ],
   betaFeatures: [],
 };

@@ -172,7 +172,7 @@ const Endpoints = {
   },
 
   /** Collection */
-  collections: (id?: number | string) => {
+  collections: (id?: string) => {
     return id ? `/nfts/collections/${id}` : '/nfts/collections';
   },
   collectionTransactions: (collectionUuid: string) => {
@@ -192,6 +192,20 @@ const Endpoints = {
   },
   collectionNestMint: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/nest-mint`;
+  },
+
+  /**
+   * Computing
+   */
+  /** Contracts */
+  contracts: (uuid?: string) => {
+    return uuid ? `/computing/contracts/${uuid}` : '/computing/contracts';
+  },
+  contractDeposit: (uuid: string) => {
+    return `/computing/contracts/${uuid}/deposit-to-cluster`;
+  },
+  contractTransferOwnership: (uuid: string) => {
+    return `/computing/contracts/${uuid}/transfer-ownership`;
   },
 
   /**

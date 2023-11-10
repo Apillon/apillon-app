@@ -14,6 +14,7 @@ const config: ConfigInterface = {
     'AUTHENTICATION',
     'BILLING',
     'CONFIGURATION',
+    'COMPUTING',
     'DISCORD',
     'HOSTING',
     'INSTRUCTIONS',
