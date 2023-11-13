@@ -114,7 +114,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: $i18n.t('dashboard.nav.billing'),
       to: 'dashboard-payments',
       iconName: 'icon-billing',
-      disabled: isMenuItemDisabled(Feature.BILLING),
+      disabled: isMenuItemDisabled(Feature.BILLING) || !dataStore.isUserOwner,
     },
   ];
 
@@ -161,7 +161,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       ];
 });
 
-/** Check if user has projects and if fetaure is enabled */
+/** Check if user has projects and if feature is enabled */
 function isMenuItemDisabled(feature: Feature) {
   return !isFeatureEnabled(feature, authStore.getUserRoles()) || dataStore.hasProjects === false;
 }

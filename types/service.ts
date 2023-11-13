@@ -43,6 +43,13 @@ export enum PriceServiceName {
   NFT_ASTAR_SET_BASE_URI = 'NFT_ASTAR_SET_BASE_URI',
   KILT_IDENTITY = 'KILT_IDENTITY',
 }
+export enum PriceServiceCategory {
+  WEBSITE = 'WEBSITE',
+  MOONBEAM_NFT = 'MOONBEAM_NFT',
+  MOONBASE_NFT = 'MOONBASE_NFT',
+  ASTAR_NFT = 'ASTAR_NFT',
+  KILT_IDENTITY = 'KILT_IDENTITY',
+}
 export enum PriceServiceAction {
   BURN = 'BURN',
   COLLECTION = 'COLLECTION',

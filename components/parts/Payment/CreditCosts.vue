@@ -32,14 +32,26 @@
     <n-table class="plain" :bordered="false" :single-line="true">
       <thead>
         <tr>
-          <th>{{ $t('dashboard.credits.serviceDescription') }}</th>
-          <th class="!text-right">{{ $t('dashboard.credits.cost') }}</th>
+          <th>
+            <template v-if="service">
+              {{ $t(`dashboard.credits.services.${service}.name`) }}
+            </template>
+            <template v-else> {{ $t('dashboard.credits.serviceDescription') }} </template>
+          </th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(price, key) in shownPrices" :key="key">
-          <td>{{ price.description }}</td>
-          <td class="text-right">{{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}</td>
+          <td>
+            <NuxtIcon :name="getIconName(price)" class="float-left text-2xl mr-3" filled />
+            <span>{{ price.description }} </span>
+          </td>
+          <td class="text-right">
+            <strong class="text-white">
+              {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
+            </strong>
+          </td>
         </tr>
       </tbody>
     </n-table>
@@ -129,5 +141,30 @@ function getChainName(chain: string | number, service?: string): string {
     return Chains[chain];
   }
   return `${chain}`;
+}
+
+function getIconName(service: ProductPriceInterface) {
+  switch (service.category) {
+    case PriceServiceCategory.ASTAR_NFT:
+      return 'logo/astar';
+    case PriceServiceCategory.MOONBASE_NFT:
+      return 'logo/moonbase';
+    case PriceServiceCategory.MOONBEAM_NFT:
+      return 'logo/moonbeam';
+  }
+  switch (service.name) {
+    case PriceServiceName.HOSTING_WEBSITE:
+      return 'icon/magic-link';
+    case PriceServiceName.HOSTING_DEPLOY_TO_STAGING:
+      return 'icon/deploy';
+    case PriceServiceName.HOSTING_DEPLOY_TO_PRODUCTION:
+      return 'icon/deploy';
+    case PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN:
+      return 'icon/change';
+    case PriceServiceName.KILT_IDENTITY:
+      return 'logo/kilt';
+  }
+
+  return 'icon/change';
 }
 </script>
