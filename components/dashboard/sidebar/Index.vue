@@ -65,7 +65,7 @@
 
         <!-- SIDEBAR PRICING -->
         <div
-          v-if="!collapsed && dataStore.hasProjects"
+          v-if="!collapsed && dataStore.hasProjects && dataStore.isUserOwner"
           class="relative flex border-t border-bg-lighter flex-col p-8"
         >
           <div :class="{ 'opacity-0': paymentStore.loading }">

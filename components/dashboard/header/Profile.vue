@@ -53,7 +53,7 @@ const options = computed(() => [
   {
     key: 'dashboard-payments',
     label: $i18n.t('profile.billing'),
-    disabled: !dataStore.hasProjects,
+    disabled: !dataStore.hasProjects || !dataStore.isUserOwner,
     icon: renderIcon('icon-billing'),
   },
   {

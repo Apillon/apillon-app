@@ -33,7 +33,7 @@ const menuOptions: NMenuOption[] = [
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
-      if (!dataStore.hasProjects) {
+      if (!dataStore.hasProjects || !dataStore.isUserOwner) {
         router.push({ name: 'dashboard' });
       }
     });

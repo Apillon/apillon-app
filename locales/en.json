@@ -205,7 +205,7 @@
       "cost": "Cost",
       "credits": "credits",
       "creditsAmount": "Credit amount",
-      "creditCosts": "Credit costs",
+      "creditCosts": "Service description cost",
       "currentCredits": "Current credits",
       "date": "Date and time",
       "description": "Description",
@@ -219,12 +219,26 @@
       "product_id": "Product ID",
       "service": "Service",
       "serviceDescription": "Service description",
+      "serviceStorage": "Web3 Storage",
       "title": "Credits",
       "transactions": "Credit transactions",
       "yourFunds": "Your funds",
       "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
       "services": {
+        "HOSTING": {
+          "name": "Web3 Hosting",
+          "description": null
+        },
+        "IDENTITY": {
+          "name": "Web3 Identity",
+          "description": null
+        },
         "NFT": {
+          "name": "NFTs",
+          "description": null
+        },
+        "STORAGE": {
+          "name": "Web3 Storage",
           "description": null
         }
       }

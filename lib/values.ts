@@ -11,6 +11,7 @@ export const PARAMS_ALL_ITEMS = {
 
 export const SessionKeys = {
   CREDITS_MSG: 'al_credits_msg',
+  SUBSCRIPTION_MSG: 'al_subscription_msg',
 };
 
 export const LsAnalyticsKeys = {

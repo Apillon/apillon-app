@@ -57,12 +57,19 @@ onMounted(() => {
       await Promise.all(promises).then(async _ => {
         loading.value = false;
 
-        if (query.subscription && paymentStore.activeSubscription.package_id) {
+        if (
+          query.subscription &&
+          showMsgActiveSubscription(toStr(query.subscription)) &&
+          isCacheExpired(SessionKeys.SUBSCRIPTION_MSG)
+        ) {
           message.success(
             t('dashboard.payment.stripe.subscription', {
               plan: paymentStore.getActiveSubscriptionPackage?.name,
             })
           );
+
+          /** Save timestamp to SS */
+          sessionStorage.setItem(SessionKeys.SUBSCRIPTION_MSG, Date.now().toString());
         } else if (
           query.credits &&
           isCacheExpired(SessionKeys.CREDITS_MSG) &&
@@ -100,5 +107,12 @@ async function wereCreditsPurchased() {
 
 function isInLastMinute(createTime: string | null) {
   return !!createTime && new Date(createTime).getTime() + MINUTE_IN_MS > Date.now();
+}
+
+function showMsgActiveSubscription(packageId: string): boolean {
+  return (
+    paymentStore.activeSubscription.package_id === intVal(packageId) &&
+    !paymentStore.activeSubscription.cancelDate
+  );
 }
 </script>
