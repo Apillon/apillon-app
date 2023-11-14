@@ -8,10 +8,10 @@ export enum ServiceType {
   HOSTING = 4,
 }
 export enum ServiceTypeName {
-  AUTHENTICATION = 'IDENTITY',
   STORAGE = 'STORAGE',
-  NFT = 'NFT',
   HOSTING = 'HOSTING',
+  AUTHENTICATION = 'IDENTITY',
+  NFT = 'NFT',
 }
 
 export enum IdentityChains {

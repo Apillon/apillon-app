@@ -115,7 +115,8 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: $i18n.t('dashboard.nav.billing'),
       to: 'dashboard-payments',
       iconName: 'icon-billing',
-      disabled: isMenuItemDisabled(Feature.BILLING) || !dataStore.isUserOwner,
+      disabled: isMenuItemDisabled(Feature.BILLING),
+      show: !dataStore.isProjectUser,
     },
   ];
 

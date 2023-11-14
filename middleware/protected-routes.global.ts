@@ -20,7 +20,7 @@ const protectedRoutes: Array<ProtectedRouteInterface> = [
   { path: '/profile', redirect: '/login' },
 ];
 
-const ownerRoutes: Array<ProtectedRouteInterface> = [
+const adminRoutes: Array<ProtectedRouteInterface> = [
   { regex: /^\/dashboard\/payments/, redirect: '/dashboard' },
   { regex: /^\/dashboard\/usage/, redirect: '/dashboard' },
   { regex: /^\/dashboard\/billing/, redirect: '/dashboard' },
@@ -117,17 +117,17 @@ export default defineNuxtRouteMiddleware((to, from) => {
   }
 
   const dataStore = useDataStore();
-  /** Redirect owner routes */
-  for (const ownerRoute of ownerRoutes) {
-    if ((!ownerRoute.path && !ownerRoute.regex) || !ownerRoute.redirect) {
+  /** Redirect admin routes if user is not admin or owner */
+  for (const adminRoute of adminRoutes) {
+    if ((!adminRoute.path && !adminRoute.regex) || !adminRoute.redirect) {
       continue;
     }
     if (
-      ((ownerRoute.regex && ownerRoute.regex.test(decodedUrl)) || decodedUrl === ownerRoute.path) &&
+      ((adminRoute.regex && adminRoute.regex.test(decodedUrl)) || decodedUrl === adminRoute.path) &&
       dataStore.hasProjects &&
-      !dataStore.isUserOwner
+      dataStore.isProjectUser
     ) {
-      return navigateTo(ownerRoute.redirect, { redirectCode: 301 });
+      return navigateTo(adminRoute.redirect, { redirectCode: 301 });
     }
   }
 });

@@ -40,6 +40,20 @@
     >
       {{ $t('dashboard.payment.currentPlan') }}
     </Btn>
+    <n-tooltip v-else-if="!dataStore.isUserOwner" trigger="hover">
+      <template #trigger>
+        <Btn
+          class="opacity-60 cursor-default"
+          type="primary"
+          size="large"
+          :color="colors.blue"
+          round
+        >
+          {{ $t('dashboard.payment.selectPlan') }}
+        </Btn>
+      </template>
+      <span>{{ $t('dashboard.permissions.notOwner') }}</span>
+    </n-tooltip>
     <Btn
       v-else
       type="primary"
@@ -78,6 +92,7 @@ defineProps({
 });
 
 const loading = ref<boolean>(false);
+const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 
 async function getSubscriptionSessionUrl(packageId: number) {

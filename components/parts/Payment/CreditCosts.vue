@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!service || (servicePrices && servicePrices.length)">
     <n-space :size="32">
       <!-- Filter by service -->
       <div v-if="filterByService && !service" class="mb-4">
@@ -62,7 +62,7 @@
 import { ServiceTypeName } from '~/types/service';
 
 const props = defineProps({
-  service: { type: String as PropType<ServiceTypeName>, default: null },
+  service: { type: String, default: null },
   filterByChain: { type: Boolean, default: false },
   filterByService: { type: Boolean, default: false },
 });
@@ -85,6 +85,11 @@ onMounted(async () => {
   servicePrices.value = props.service
     ? await paymentStore.getServicePrices(props.service)
     : await paymentStore.getPriceList();
+
+  /** Sort by category (chain name) */
+  servicePrices.value.sort((a, b) =>
+    a.category.toLowerCase() < b.category.toLowerCase() ? -1 : 1
+  );
 });
 
 const chainsByService = computed(() => {

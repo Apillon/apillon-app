@@ -65,7 +65,7 @@
 
         <!-- SIDEBAR PRICING -->
         <div
-          v-if="!collapsed && dataStore.hasProjects && dataStore.isUserOwner"
+          v-if="!collapsed && dataStore.hasProjects"
           class="relative flex border-t border-bg-lighter flex-col p-8"
         >
           <div :class="{ 'opacity-0': paymentStore.loading }">
@@ -81,19 +81,21 @@
                 }}
               </span>
             </div>
-            <PaymentCardCurrentPlan
-              v-if="route.name === 'dashboard-payments'"
-              :show-card="false"
-              btn-type="secondary"
-            />
-            <Btn
-              v-else
-              type="secondary"
-              size="large"
-              @click="router.push({ name: 'dashboard-payments' })"
-            >
-              {{ $t('dashboard.payment.upgradePlan') }}
-            </Btn>
+            <template v-if="!dataStore.isProjectUser">
+              <PaymentCardCurrentPlan
+                v-if="route.name === 'dashboard-payments'"
+                :show-card="false"
+                btn-type="secondary"
+              />
+              <Btn
+                v-else
+                type="secondary"
+                size="large"
+                @click="router.push({ name: 'dashboard-payments' })"
+              >
+                {{ $t('dashboard.payment.upgradePlan') }}
+              </Btn>
+            </template>
           </div>
           <Spinner v-if="paymentStore.loading" />
         </div>
