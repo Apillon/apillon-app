@@ -20,10 +20,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName } from '~/types/service';
-
 defineProps({
-  service: { type: String as PropType<ServiceTypeName>, default: null },
+  service: { type: String, default: null },
 });
 
 const modalCostsVisible = ref<boolean>(false);

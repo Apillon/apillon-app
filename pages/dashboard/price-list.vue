@@ -12,7 +12,13 @@
       </Heading>
     </template>
     <slot>
-      <PaymentCreditCosts class="pb-8" filter-by-chain filter-by-service />
+      <div class="flex flex-col gap-6 pb-8">
+        <PaymentCreditCosts
+          v-for="(service, key) in enumValues(ServiceTypeName)"
+          :key="key"
+          :service="service.toString()"
+        />
+      </div>
     </slot>
   </Dashboard>
 </template>

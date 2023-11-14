@@ -8,10 +8,10 @@ export enum ServiceType {
   HOSTING = 4,
 }
 export enum ServiceTypeName {
-  AUTHENTICATION = 'IDENTITY',
   STORAGE = 'STORAGE',
-  NFT = 'NFT',
   HOSTING = 'HOSTING',
+  AUTHENTICATION = 'IDENTITY',
+  NFT = 'NFT',
 }
 
 export enum IdentityChains {
@@ -41,6 +41,13 @@ export enum PriceServiceName {
   NFT_MOONBEAM_SET_BASE_URI = 'NFT_MOONBEAM_SET_BASE_URI',
   NFT_MOONBASE_SET_BASE_URI = 'NFT_MOONBASE_SET_BASE_URI',
   NFT_ASTAR_SET_BASE_URI = 'NFT_ASTAR_SET_BASE_URI',
+  KILT_IDENTITY = 'KILT_IDENTITY',
+}
+export enum PriceServiceCategory {
+  WEBSITE = 'WEBSITE',
+  MOONBEAM_NFT = 'MOONBEAM_NFT',
+  MOONBASE_NFT = 'MOONBASE_NFT',
+  ASTAR_NFT = 'ASTAR_NFT',
   KILT_IDENTITY = 'KILT_IDENTITY',
 }
 export enum PriceServiceAction {

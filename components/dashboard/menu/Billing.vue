@@ -23,17 +23,17 @@ const menuOptions: NMenuOption[] = [
     label: t('dashboard.pageMenu.billing'),
     to: 'dashboard-billing',
   },
-  // {
-  //   key: 'dashboard-price-list',
-  //   label: t('dashboard.pageMenu.priceList'),
-  //   to: 'dashboard-price-list',
-  // },
+  {
+    key: 'dashboard-price-list',
+    label: t('dashboard.pageMenu.priceList'),
+    to: 'dashboard-price-list',
+  },
 ];
 
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(_ => {
-      if (!dataStore.hasProjects) {
+      if (!dataStore.hasProjects || dataStore.isProjectUser) {
         router.push({ name: 'dashboard' });
       }
     });
