@@ -276,6 +276,7 @@
       }
     },
     "permissions": {
+      "notOwner": "Only project owner can perform this action.",
       "read": "Read permissions",
       "write": "Write permissions",
       "execute": "Execute permissions",
