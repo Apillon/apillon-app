@@ -161,6 +161,7 @@
       "copyApiKey": "Copy Api key to clipboard",
       "copyCid": "Copy CID",
       "copyLink": "Copy link",
+      "copyUuid": "Copy UUID",
       "error": "Failed to copy"
     },
     "credits": {

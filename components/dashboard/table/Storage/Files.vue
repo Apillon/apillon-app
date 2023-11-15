@@ -62,19 +62,10 @@
 import debounce from 'lodash.debounce';
 import type { DataTableInst, DataTableRowKey, DataTableSortState } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
+import { TableFilesType } from '~~/types/storage';
 
 const props = defineProps({
-  type: {
-    type: Number,
-    validator: (type: number) =>
-      [
-        TableFilesType.BUCKET,
-        TableFilesType.HOSTING,
-        TableFilesType.NFT_METADATA,
-        TableFilesType.DEPLOYMENT,
-      ].includes(type),
-    default: 0,
-  },
+  type: { type: Number as PropType<TableFilesType>, default: 0 },
 });
 
 const { downloadFile } = useFile();
@@ -122,7 +113,9 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
     {
       key: 'view',
       label: $i18n.t('general.view'),
-      show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
+      show:
+        bucketItem.type === BucketItemType.FILE &&
+        (props.type === TableFilesType.BUCKET || props.type === TableFilesType.NFT_METADATA),
       props: {
         onClick: () => {
           onFileOpen();
@@ -142,7 +135,9 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
     {
       key: 'download',
       label: $i18n.t('general.download'),
-      show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
+      show:
+        bucketItem.type === BucketItemType.FILE &&
+        (props.type === TableFilesType.BUCKET || props.type === TableFilesType.NFT_METADATA),
       props: {
         onClick: () => {
           downloadFile(currentRow.value);
@@ -202,6 +197,7 @@ const selectedColumns = ref([
 ]);
 const availableColumns = ref([
   { value: 'name', label: $i18n.t('storage.fileName') },
+  { value: 'uuid', label: $i18n.t('general.uuid') },
   { value: 'CID', label: $i18n.t('storage.fileCid'), hidden: props.type !== TableFilesType.BUCKET },
   {
     value: 'link',
@@ -244,6 +240,20 @@ const columns = computed(() => {
             }
           ),
         ];
+      },
+    },
+    {
+      title: $i18n.t('general.uuid'),
+      key: 'uuid',
+      className: {
+        hidden:
+          !selectedColumns.value.includes('uuid') ||
+          props.type === TableFilesType.HOSTING ||
+          props.type === TableFilesType.DEPLOYMENT,
+      },
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
+      render(row: BucketItemInterface) {
+        return h(TableEllipsis, { text: row.uuid }, '');
       },
     },
     {
