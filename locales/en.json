@@ -161,6 +161,7 @@
       "copyApiKey": "Copy Api key to clipboard",
       "copyCid": "Copy CID",
       "copyLink": "Copy link",
+      "copyUuid": "Copy UUID",
       "error": "Failed to copy"
     },
     "credits": {
@@ -374,6 +375,7 @@
     "API_KEY_ROLE_SERVICE_UUID_NOT_PRESENT": "API_KEY_ROLE_SERVICE_UUID is missing",
     "API_KEY_ROLE_PROJECT_UUID_NOT_PRESENT": "API_KEY_ROLE_PROJECT_UUID is missing",
     "API_KEY_ROLE_ROLE_ID_NOT_VALID": "API_KEY_ROLE_ROLE_ID is not valid",
+    "MAX_API_KEY_QUOTA_REACHED": "You have reached the maximum number of API keys for this project.",
     "CREATE_API_KEY_PROJECT_UUID_NOT_PRESENT": "CREATE_API_KEY_PROJECT_UUID is missing",
     "BUCKET_PROJECT_UUID_NOT_PRESENT": "Bucket project ID is missing",
     "BUCKET_STORAGE_PLAN_ID_NOT_PRESENT": "Bucket storage plain ID is missing",
