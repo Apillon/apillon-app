@@ -45,7 +45,17 @@
         class="mb-8"
         :title="$t('profile.marketing.title')"
       >
-        <p class="text-body mb-4">{{ $t('profile.marketing.info') }}</p>
+        <div class="mb-4">
+          <p class="text-body">{{ $t('profile.marketing.info') }}</p>
+          <Btn
+            class="inline-block text-sm"
+            type="link"
+            href="https://apillon.io/privacy-policy/"
+            target="_blank"
+          >
+            {{ $t('profile.marketing.privacy') }}
+          </Btn>
+        </div>
         <FormNewsletter />
       </FormWrapper>
 
