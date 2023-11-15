@@ -43,14 +43,10 @@
       <FormWrapper
         v-if="isFeatureEnabled(Feature.MARKETING, authStore.getUserRoles())"
         class="mb-8"
-        :title="$t('profile.marketing')"
+        :title="$t('profile.marketing.title')"
       >
-        <p class="text-body mb-4">{{ $t('profile.marketingInfo') }}</p>
-        <n-checkbox
-          v-model:checked="marketing"
-          size="medium"
-          :label="$t('profile.marketingCheck')"
-        />
+        <p class="text-body mb-4">{{ $t('profile.marketing.info') }}</p>
+        <FormNewsletter />
       </FormWrapper>
 
       <!-- Modal - Change password -->

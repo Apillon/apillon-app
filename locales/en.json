@@ -656,6 +656,9 @@
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated",
         "website": "Website has been updated"
+      },
+      "newsletter": {
+        "subscribed": "You are successfully subscribed to newsletter"
       }
     },
     "terms": {
@@ -937,6 +940,13 @@
       "titleConnected": "Discord connected",
       "titleDisconnected": "Connect with Discord"
     },
+    "marketing": {
+      "btn": "Receive useful data, tips an tricks via email",
+      "check": "I want to receive useful data, tips an tricks via email.",
+      "info": "Say yes to Apillon emails about product updates, new feature releases, how-to guides and other platform related content. Unsubscribe at anytime.",
+      "subscribed": "Subscribed",
+      "title": "Marketing"
+    },
     "password": {
       "btn": "Send e-mail",
       "info": "In case you need to reset your password, an email will be sent to the email address you saved in the upper section  \"Account Information\".",
@@ -948,9 +958,6 @@
     "accountInformation": "Account information",
     "billing": "Billing",
     "logout": "Logout",
-    "marketing": "Marketing",
-    "marketingCheck": "I want to recieve marketing email from Apillon",
-    "marketingInfo": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
     "mySettings": "Settings",
     "profile": "Profile",
     "security": "Security",
