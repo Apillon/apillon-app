@@ -314,6 +314,8 @@
 /** Menu */
 .n-menu {
   &.n-menu--vertical {
+    overflow: unset;
+
     &.n-menu--collapsed {
       @apply px-4;
 
@@ -332,6 +334,27 @@
       }
       .n-menu-item-content__icon {
         @apply ml-2 !text-[22px];
+      }
+    }
+
+    .n-submenu > .n-menu-item {
+      @apply sticky top-0 mb-2 z-2;
+
+      .n-menu-item-content {
+        @apply mt-8;
+
+        &::before {
+          @apply bg-bg rounded-none;
+        }
+
+        .n-menu-item-content-header {
+          @apply pl-3;
+          color: var(--n-group-text-color);
+          font-size: 0.93em;
+        }
+        .n-menu-item-content__arrow {
+          color: var(--n-group-text-color);
+        }
       }
     }
 
