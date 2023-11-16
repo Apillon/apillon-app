@@ -7,7 +7,7 @@
           <span class="text-body">{{ $t('general.uuid') }}</span>
         </p>
         <div>
-          <strong>{{ file.CID }}</strong>
+          <strong>{{ file.uuid }}</strong>
         </div>
         <button class="text-primary btn-small" @click="copyToClipboard(file.uuid)">
           <strong>{{ $t('dashboard.clipboard.copyUuid') }}</strong>
