@@ -8,6 +8,12 @@
 
         <template #info>
           <n-space :size="32" align="center">
+            <StorageProgress
+              :key="storageStore.info.usedStorage"
+              :size="storageStore.info.usedStorage"
+              :max-size="storageStore.info.availableStorage"
+            />
+
             <IconInfo v-if="$i18n.te('w3Warn.hosting.upload')" @click="modalW3WarnVisible = true" />
           </n-space>
         </template>
@@ -41,6 +47,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const dataStore = useDataStore();
+const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_NEW);
 
@@ -54,27 +61,20 @@ useHead({
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await storageStore.getStorageInfo();
       await websiteStore.getWebsites();
-      getWebsiteQuota();
 
       pageLoading.value = false;
     });
   }, 100);
 });
 
-/** GET Website quota, if current value is null  */
-async function getWebsiteQuota() {
-  if (websiteStore.quotaReached === undefined) {
-    await websiteStore.fetchWebsiteQuota();
-  }
-}
-
 /**
  * On createNewWebsite click
  * If W3Warn has already been shown, show modal create new website, otherwise show warn first
  * */
 function createNewWebsite() {
-  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.upload')) {
+  if (localStorage.getItem(LsW3WarnKeys.HOSTING_NEW) || !$i18n.te('w3Warn.hosting.upload')) {
     showModalNewWebsite.value = true;
   } else {
     modalW3WarnVisible.value = true;

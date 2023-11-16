@@ -6,9 +6,9 @@ const config: ConfigInterface = {
   apiUrl: 'http://localhost:6001',
   oauthUrl: 'http://localhost:5173',
   adminUrl: 'http://localhost:3001',
-  CHAIN_ID: '0x5',
   captchaKey: '10000000-ffff-ffff-ffff-000000000001',
   githubId: 'd0482598d8adbd8adffa',
+  gtmId: '',
   publishedFeatures: [
     'APILLON_REGISTER',
     'AUTHENTICATION',

@@ -63,6 +63,18 @@
   }
 }
 
+/** Card */
+.n-card {
+  &.card-dark {
+    .n-card-header {
+      @apply pb-4;
+      .n-card-header__main {
+        @apply body-md text-body;
+      }
+    }
+  }
+}
+
 /** Checkbox */
 .n-checkbox {
   .n-checkbox__label a {
@@ -80,13 +92,6 @@
     }
     .n-collapse-item__content-inner {
       @apply pl-4 sm:pl-8;
-    }
-  }
-  &.collapse-emailConfiguration {
-    .n-collapse-item.n-collapse-item--active
-      .n-collapse-item__header.n-collapse-item__header--active
-      .n-collapse-item-arrow {
-      transform: none;
     }
   }
 }
@@ -277,6 +282,26 @@
 /** Layout */
 .n-layout {
   background-color: transparent;
+
+  &.has-scrollbar {
+    @apply -mr-3;
+    width: calc(100% + 0.75rem);
+
+    > .n-layout-scroll-container > .n-layout-content > .n-layout-scroll-container > .n-scrollbar {
+      @apply pr-3 -mr-3;
+    }
+    > .n-layout-scroll-container > .n-layout-sider > .n-layout-sider-scroll-container {
+      @apply pr-3;
+    }
+  }
+
+  &.has-scrollbar-bottom {
+    @apply -mb-3;
+    height: calc(100% + 0.75rem);
+    > .n-layout-scroll-container > .n-layout-content > .n-layout-scroll-container > .n-scrollbar {
+      @apply pb-3 -mb-3;
+    }
+  }
 }
 .n-layout-sider {
   background-color: transparent;
@@ -289,6 +314,8 @@
 /** Menu */
 .n-menu {
   &.n-menu--vertical {
+    overflow: unset;
+
     &.n-menu--collapsed {
       @apply px-4;
 
@@ -310,6 +337,27 @@
       }
     }
 
+    .n-submenu > .n-menu-item {
+      @apply sticky top-0 mb-2 z-2;
+
+      .n-menu-item-content {
+        @apply mt-8;
+
+        &::before {
+          @apply bg-bg rounded-none;
+        }
+
+        .n-menu-item-content-header {
+          @apply pl-3;
+          color: var(--n-group-text-color);
+          font-size: 0.93em;
+        }
+        .n-menu-item-content__arrow {
+          color: var(--n-group-text-color);
+        }
+      }
+    }
+
     .n-menu-item-group .n-menu-item-group-title {
       @apply h-10 mt-8 mb-2 ml-3;
     }
@@ -325,9 +373,8 @@
       @apply pr-8;
 
       &::before {
-        @apply left-8 right-8;
+        @apply left-8 right-8 rounded-lg;
       }
-
       &__icon {
         @apply ml-3;
       }
@@ -417,27 +464,43 @@ body > .n-message-container {
 
   /** Card */
   &.n-card {
-    @apply max-w-2xl py-12;
+    @apply card-border py-12;
 
     .n-card {
-      &__close {
-        @apply absolute right-0 top-0 w-12 h-12 bg-bg border-1 border-solid border-white rounded-full transition-colors duration-300 translate-x-1/2 -translate-y-1/2;
+      &-header {
+        @apply py-4;
 
-        &::before {
-          display: none;
+        &__main {
+          @apply font-bold;
         }
+        &__close,
+        .n-card__close {
+          @apply absolute right-0 top-0 w-12 h-12 bg-bg border-1 border-solid border-white rounded-full transition-colors duration-300 translate-x-1/2 -translate-y-1/2;
 
-        &:hover {
-          @apply bg-white text-bg;
+          &::before {
+            display: none;
+          }
+
+          &:hover {
+            @apply bg-white text-bg;
+          }
         }
       }
 
-      &-header__main {
-        @apply font-bold;
+      &__content {
+        @apply py-4 mobile:px-4;
+
+        &:not(:first-child) {
+          @apply border-t-0;
+        }
       }
 
-      &-footer {
-        @apply mt-3;
+      &__footer {
+        @apply pt-4;
+
+        &:not(:first-child) {
+          @apply border-t-0;
+        }
       }
     }
   }
@@ -543,6 +606,19 @@ body > .n-message-container {
   }
 }
 
+/** scrollbar */
+.n-scrollbar {
+  &.has-scrollbar {
+    @apply pr-3 -mr-3;
+    width: calc(100% + 0.75rem);
+  }
+
+  &.has-scrollbar-bottom {
+    @apply pb-3 -mb-3;
+    height: calc(100% + 0.75rem);
+  }
+}
+
 /** Select */
 .n-select {
   &.select-role {
@@ -592,6 +668,17 @@ body > .n-message-container {
   }
 }
 
+/** Table */
+.n-table {
+  &.plain {
+    th {
+      @apply bg-transparent;
+    }
+    td {
+      @apply text-body;
+    }
+  }
+}
 /** Tabs */
 .n-tabs {
   &--line-type {
@@ -644,9 +731,9 @@ body > .n-message-container {
 /** Upload file */
 .n-upload {
   .n-upload-dragger {
-    @apply flex items-center justify-center;
+    @apply flex items-center justify-center bg-no-repeat;
     background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23313442' stroke-width='1' stroke-dasharray='4' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-    background-size: 100% 100%;
+    background-size: 100% 99.7%;
     transition: all 0.3s;
 
     &:focus,

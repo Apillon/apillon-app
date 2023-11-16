@@ -26,7 +26,11 @@
     </div>
 
     <div class="flex flex-auto w-full flex-col md:flex-row">
-      <n-layout :has-sider="instructionsAvailable && isMd" sider-placement="right">
+      <n-layout
+        class="has-scrollbar"
+        :has-sider="instructionsAvailable && isMd"
+        sider-placement="right"
+      >
         <n-layout-content>
           <n-scrollbar y-scrollable :style="scrollStyle">
             <div class="pt-8">
@@ -39,8 +43,17 @@
 
             <!-- Global component: File upload list -->
             <FormStorageUploadFiles
-              v-if="bucketStore.uploadActive && bucketStore.bucketUuid"
+              v-if="
+                (bucketStore.uploadActive && bucketStore.bucketUuid) ||
+                bucketStore.uploadFileList.length > 0
+              "
               :bucket-uuid="bucketStore.bucketUuid"
+            />
+
+            <!-- Global component: Spending warning -->
+            <ModalSpendingWarning
+              v-model:show="warningStore.isSpendingWarningOpen"
+              @close="onSpendingWaningClose"
             />
           </n-scrollbar>
         </n-layout-content>
@@ -50,7 +63,7 @@
           collapse-mode="width"
           :collapsed-width="48"
           :width="isXl ? 455 : 356"
-          :content-style="isMd ? 'padding-left: 32px;' : ''"
+          :content-style="isMd ? 'padding-left: 20px;' : ''"
           @after-enter="handleOnUpdateCollapse(false)"
           @after-leave="handleOnUpdateCollapse(true)"
         >
@@ -94,17 +107,48 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
+import { useGtm } from '@gtm-support/vue-gtm';
 const props = defineProps({
   loading: { type: Boolean, default: false },
   learnCollapsible: { type: Boolean, default: true },
+});
+
+/** Check if instructions are available (page has content and feature is enabled) */
+const $slots = useSlots();
+const authStore = useAuthStore();
+const dataStore = useDataStore();
+const bucketStore = useBucketStore();
+const warningStore = useWarningStore();
+const paymentStore = usePaymentStore();
+
+const gtm = useGtm();
+const { isMd, isLg, isXl } = useScreen();
+const { name } = useRoute();
+
+/** Heading height */
+const headingRef = ref<HTMLElement>();
+const scrollStyle = computed(() => {
+  return {
+    maxHeight: `calc(100vh - ${120 + (headingRef.value?.clientHeight || 0)}px)`,
+  };
 });
 
 /** Delay animation */
 const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
+  // await getInstructions(key.value);
+
+  /** Get Price list */
+  paymentStore.getPriceList();
+
+  if (gtm && gtm.enabled() && !sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
+    gtm.trackEvent({
+      event: 'dashboard_on_load',
+      user_uuid: authStore.userUuid,
+    });
+    sessionStorage.setItem(LsAnalyticsKeys.USER_UUID, Date.now().toString());
+  }
 });
 watch(
   () => props.loading,
@@ -119,32 +163,9 @@ function setLoadingAnimation(isLoading: boolean) {
   }, delay);
 }
 
-/** Global messages */
-window.$message = useMessage();
-
-/** Check if instructions are available (page has content and feature is enabled) */
-const $slots = useSlots();
-const dataStore = useDataStore();
-const bucketStore = useBucketStore();
-const { isMd, isLg, isXl } = useScreen();
-const { name } = useRoute();
-const authStore = useAuthStore();
-
-/** Heading height */
-const headingRef = ref<HTMLElement>();
-const scrollStyle = computed(() => {
-  return {
-    maxHeight: `calc(100vh - ${120 + (headingRef.value?.clientHeight || 0)}px)`,
-  };
-});
-
 /** Instructions load */
 const key = computed(() => {
   return name?.toString() || '';
-});
-
-onMounted(async () => {
-  // await getInstructions(key.value);
 });
 
 async function getInstructions(key: string) {
@@ -169,6 +190,12 @@ const learnCollapsed = ref<boolean>(
 
 function handleOnUpdateCollapse(value: boolean) {
   localStorage.setItem('learnCollapsed', value ? '1' : '0');
+}
+
+/** Warnings */
+function onSpendingWaningClose() {
+  warningStore.serviceName = '';
+  warningStore.isSpendingWarningOpen = false;
 }
 </script>
 

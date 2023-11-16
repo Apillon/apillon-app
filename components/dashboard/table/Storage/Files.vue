@@ -60,20 +60,12 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
-import { NButton, NDropdown, NEllipsis, NSpace, NTooltip, useMessage } from 'naive-ui';
+import type { DataTableInst, DataTableRowKey, DataTableSortState } from 'naive-ui';
+import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
+import { TableFilesType } from '~~/types/storage';
 
 const props = defineProps({
-  type: {
-    type: Number,
-    validator: (type: number) =>
-      [
-        TableFilesType.BUCKET,
-        TableFilesType.HOSTING,
-        TableFilesType.NFT_METADATA,
-        TableFilesType.DEPLOYMENT,
-      ].includes(type),
-    default: 0,
-  },
+  type: { type: Number as PropType<TableFilesType>, default: 0 },
 });
 
 const { downloadFile } = useFile();
@@ -86,7 +78,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalDelete = ref<boolean | null>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
 const modalIpnsPublishVisible = ref<boolean>(false);
-const tableRef = ref<NDataTableInst | null>(null);
+const tableRef = ref<DataTableInst | null>(null);
 const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
 const TableEllipsis = resolveComponent('TableEllipsis');
@@ -121,7 +113,9 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
     {
       key: 'view',
       label: $i18n.t('general.view'),
-      show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
+      show:
+        bucketItem.type === BucketItemType.FILE &&
+        (props.type === TableFilesType.BUCKET || props.type === TableFilesType.NFT_METADATA),
       props: {
         onClick: () => {
           onFileOpen();
@@ -141,7 +135,9 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
     {
       key: 'download',
       label: $i18n.t('general.download'),
-      show: bucketItem.type === BucketItemType.FILE && props.type === TableFilesType.BUCKET,
+      show:
+        bucketItem.type === BucketItemType.FILE &&
+        (props.type === TableFilesType.BUCKET || props.type === TableFilesType.NFT_METADATA),
       props: {
         onClick: () => {
           downloadFile(currentRow.value);
@@ -201,6 +197,7 @@ const selectedColumns = ref([
 ]);
 const availableColumns = ref([
   { value: 'name', label: $i18n.t('storage.fileName') },
+  { value: 'uuid', label: $i18n.t('general.uuid') },
   { value: 'CID', label: $i18n.t('storage.fileCid'), hidden: props.type !== TableFilesType.BUCKET },
   {
     value: 'link',
@@ -243,6 +240,20 @@ const columns = computed(() => {
             }
           ),
         ];
+      },
+    },
+    {
+      title: $i18n.t('general.uuid'),
+      key: 'uuid',
+      className: {
+        hidden:
+          !selectedColumns.value.includes('uuid') ||
+          props.type === TableFilesType.HOSTING ||
+          props.type === TableFilesType.DEPLOYMENT,
+      },
+      sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
+      render(row: BucketItemInterface) {
+        return h(TableEllipsis, { text: row.uuid }, '');
       },
     },
     {
@@ -301,7 +312,7 @@ const columns = computed(() => {
         return h(
           'span',
           { class: cellClasses(row.type) },
-          { default: () => datetimeToDate(row.createTime || '') }
+          { default: () => dateTimeToDate(row.createTime || '') }
         );
       },
     },
@@ -388,14 +399,12 @@ const columns = computed(() => {
   ];
 });
 
-const rowKey = (row: BucketItemInterface) => row.id;
-
-const handleCheck = (rowKeys: Array<NDataTableRowKey>) => {
+const rowKey = (row: BucketItemInterface) => row.uuid;
+const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
   checkedRowKeys.value = rowKeys;
-  const rowKeyIds = rowKeys.map(item => intVal(item));
 
   bucketStore.folder.selectedItems = bucketStore.folder.items.filter(item =>
-    rowKeyIds.includes(item.id)
+    rowKeys.includes(item.uuid)
   );
 };
 
@@ -437,7 +446,7 @@ function onItemOpen(row: BucketItemInterface) {
 function onFileOpen() {
   if (
     currentRow.value.type === BucketItemType.FILE &&
-    currentRow.value.fileStatus > FileStatus.UPLOADED_TO_S3
+    (currentRow.value?.fileStatus || 0) > FileStatus.UPLOADED_TO_S3
   ) {
     drawerFileDetailsVisible.value = true;
   } else {
@@ -449,13 +458,13 @@ function onFileOpen() {
 async function onFolderOpen(folder: BucketItemInterface) {
   /** Add subfolder to folder path */
   bucketStore.folder.path.push({
-    id: folder.id,
+    uuid: folder.uuid,
     name: folder.name,
   });
 
   /** Fetch data in reset search string */
   bucketStore.folderSearch();
-  await getDirectoryContent(bucketStore.bucketUuid, folder.id);
+  await getDirectoryContent(bucketStore.bucketUuid, folder.uuid);
   clearSorter();
 }
 
@@ -480,7 +489,7 @@ onUnmounted(() => {
 });
 
 /** Sort column - fetch directory content with order params  */
-async function handleSorterChange(sorter?: NDataTableSortState) {
+async function handleSorterChange(sorter?: DataTableSortState) {
   if (sorter && sorter.order === false) {
     await getDirectoryContent();
   } else if (sorter) {
@@ -521,7 +530,7 @@ async function handlePageChange(currentPage: number) {
  * If W3Warn has already been shown, show modal delete items, otherwise show warn first
  * */
 function deleteBucketItems() {
-  if (sessionStorage.getItem(LsW3WarnKeys.BUCKET_ITEM_DELETE)) {
+  if (localStorage.getItem(LsW3WarnKeys.BUCKET_ITEM_DELETE)) {
     showModalDelete.value = true;
   } else {
     showModalW3Warn.value = true;
@@ -541,7 +550,7 @@ watch(
   () => showModalW3Warn.value,
   shown => {
     if (shown) {
-      sessionStorage.setItem(LsW3WarnKeys.BUCKET_ITEM_DELETE, Date.now().toString());
+      localStorage.setItem(LsW3WarnKeys.BUCKET_ITEM_DELETE, Date.now().toString());
     }
   }
 );
@@ -559,6 +568,9 @@ function onBucketItemsDeleted() {
 
   setTimeout(() => {
     getDirectoryContent();
+
+    /** Remove timestamp for deleted items */
+    sessionStorage.removeItem(LsCacheKeys.FILE_DELETED);
   }, 300);
 }
 
@@ -577,8 +589,8 @@ const debouncedSearchFilter = debounce(getDirectoryContent, 500);
 /** Function "Fetch directory content" wrapper  */
 async function getDirectoryContent(
   bucketUuid?: string,
-  folderId?: number,
-  page: number = 1,
+  folderUuid?: string,
+  page = 1,
   orderBy?: string,
   order?: string
 ) {
@@ -586,7 +598,7 @@ async function getDirectoryContent(
 
   await bucketStore.fetchDirectoryContent({
     bucketUuid,
-    folderId,
+    folderUuid,
     page,
     limit: PAGINATION_LIMIT,
     search: bucketStore.folder.search,
@@ -612,7 +624,9 @@ function checkUnfinishedFiles() {
   }, 30000);
 }
 function hasUnfinishedFiles(): boolean {
-  return bucketStore.folder.items.some(file => file.fileStatus < FileStatus.UPLOADED_TO_IPFS);
+  return bucketStore.folder.items.some(
+    file => file.fileStatus && file.fileStatus < FileStatus.UPLOADED_TO_IPFS
+  );
 }
 
 /** Additional classes if TableType is Hosting and RowType is File  */

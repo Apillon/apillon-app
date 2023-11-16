@@ -1,6 +1,6 @@
 export default function useCollection() {
   const $i18n = useI18n();
-  const settingsStore = useSettingsStore();
+  const dataStore = useDataStore();
   const collectionStore = useCollectionStore();
 
   const loading = ref<boolean>(false);
@@ -31,11 +31,8 @@ export default function useCollection() {
     { label: $i18n.t('form.booleanSelect.false'), value: false },
   ];
 
-  const isQuotaReached = computed<boolean>(() => {
-    return collectionStore.quotaReached === true;
-  });
   const isFormDisabled = computed<boolean>(() => {
-    return isQuotaReached.value || settingsStore.isProjectUser();
+    return dataStore.isProjectUser;
   });
 
   const maxNft = computed(() => {
@@ -81,6 +78,13 @@ export default function useCollection() {
       message: $i18n.t('validation.collectionRoyaltiesAddress'),
     },
   ];
+  const ruleRoyaltyFee: NFormItemRule[] = [
+    ruleRequired($i18n.t('validation.collectionRoyaltiesFeesRequired')),
+    // {
+    //   validator: validateNumberNotZero,
+    //   message: $i18n.t('validation.collectionRoyaltiesFees'),
+    // },
+  ];
 
   const rules: NFormRules = {
     symbol: ruleRequired($i18n.t('validation.collectionSymbolRequired')),
@@ -110,8 +114,8 @@ export default function useCollection() {
     'behavior.dropReserve': ruleDropReserve,
     royaltiesAddress: ruleRoyaltiesAddress,
     'behavior.royaltiesAddress': ruleRoyaltiesAddress,
-    royaltiesFees: ruleRequired($i18n.t('validation.collectionRoyaltiesFeesRequired')),
-    'behavior.royaltiesFees': ruleRequired($i18n.t('validation.collectionRoyaltiesFeesRequired')),
+    royaltiesFees: ruleRoyaltyFee,
+    'behavior.royaltiesFees': ruleRoyaltyFee,
   };
 
   /**
@@ -150,7 +154,6 @@ export default function useCollection() {
     supplyTypes,
     booleanSelect,
     rules,
-    isQuotaReached,
     isFormDisabled,
     disablePasteDate,
     disablePasteTime,

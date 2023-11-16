@@ -26,8 +26,8 @@
 
 <script lang="ts" setup>
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { EffectCards, Pagination } from 'swiper';
-import { Swiper as SwiperClass } from 'swiper/types';
+import { EffectCards, Pagination } from 'swiper/modules';
+import { type Swiper as SwiperClass } from 'swiper/types';
 
 // Import Swiper styles
 import 'swiper/css';

@@ -6,7 +6,7 @@ export default function useW3Warn(w3WarnKey: string) {
     () => modalW3WarnVisible.value,
     shown => {
       if (shown) {
-        sessionStorage.setItem(w3WarnKey, Date.now().toString());
+        localStorage.setItem(w3WarnKey, Date.now().toString());
       }
     }
   );

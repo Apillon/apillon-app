@@ -14,11 +14,9 @@
     <n-space vertical>
       <div>
         <span class="text-sm text-body">{{ $t('auth.signup.madeMistake') }} </span>&nbsp;
-        <NuxtLink :to="{ name: 'register' }">
-          <Btn type="builders" size="tiny" inner-class="text-sm">
-            {{ $t('general.tryAgain') }}
-          </Btn>
-        </NuxtLink>
+        <Btn type="builders" size="tiny" inner-class="text-sm" :to="{ name: 'register' }">
+          {{ $t('general.tryAgain') }}
+        </Btn>
       </div>
     </n-space>
   </div>
@@ -43,7 +41,9 @@ onMounted(() => {
   }
 
   /** Track Registration start */
-  tractEvent('registration', 'registration_email_sent', 'Email confirmation sent');
+  setTimeout(() => {
+    trackEvent('registration_email_sent');
+  }, 1000);
 });
 
 /** If user has written his email on signup, then allow him to send email again */

@@ -47,14 +47,20 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi } from 'naive-ui';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
+type FormLogin = {
+  email: string;
+  password: string;
+  captcha?: any;
+  captchaJwt?: any;
+};
+
 const $i18n = useI18n();
+const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 const {
   loading,
   captchaKey,
@@ -72,6 +78,7 @@ const formData = ref<FormLogin>({
   captcha: null as any,
   captchaJwt: '',
 });
+
 const rules: NFormRules = {
   email: [
     {

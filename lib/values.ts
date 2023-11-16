@@ -1,3 +1,4 @@
+export const MINUTE_IN_MS = 60 * 1000; // 1 minute
 export const CACHE_EXPIRATION_IN_MS = 10 * 60 * 1000; // 10 minutes
 export const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000; // 1 week in MS
 export const ON_COLUMN_CLICK_OPEN_CLASS = 'onClickOpen';
@@ -6,6 +7,15 @@ export const PAGINATION_LIMIT = 20;
 export const PARAMS_ALL_ITEMS = {
   page: 1,
   limit: 100,
+};
+
+export const SessionKeys = {
+  CREDITS_MSG: 'al_credits_msg',
+  SUBSCRIPTION_MSG: 'al_subscription_msg',
+};
+
+export const LsAnalyticsKeys = {
+  USER_UUID: 'al_analytics_user_uuid',
 };
 
 export const LsTableColumnsKeys = {
@@ -32,20 +42,28 @@ export const LsCacheKeys = {
   COLLECTION: 'al_cache_collection',
   COLLECTIONS: 'al_cache_collections',
   COLLECTION_TRANSACTIONS: 'al_cache_collection_transactions',
+  CREDITS: 'al_cache_credits',
+  CREDIT_PACKAGES: 'al_cache_credit_packages',
+  CUSTOMER_PORTAL_URL: 'al_cache_customer_portal',
   DEPLOYMENT: 'al_cache_deployment',
   DEPLOYMENTS_PRODUCTION: 'al_cache_deployments_production',
   DEPLOYMENTS_STAGING: 'al_cache_deployments_staging',
   DISCORD_LINK: 'al_cache_discord_link',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
+  INVOICES: 'al_cache_invoices',
   IPNS: 'al_cache_ipns',
   IPNS_ITEM: 'al_cache_ipns_item',
   OAUTH_LINKS: 'al_cache_oauth_links',
+  PRICE_LIST: 'al_cache_price_list',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
   REFERRAL: 'al_cache_referral',
   SERVICES: 'al_cache_services',
   SERVICE_TYPES: 'al_cache_service_types',
+  STORAGE_INFO: 'al_cache_storage_info',
+  SUBSCRIPTION_ACTIVE: 'al_cache_subscription_active',
+  SUBSCRIPTION_PACKAGES: 'al_cache_subscription_packages',
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
 };

@@ -1,15 +1,16 @@
-import { useMessage } from 'naive-ui';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function useUpload() {
   const $i18n = useI18n();
   const message = useMessage();
   const bucketStore = useBucketStore();
+  const storageStore = useStorageStore();
   const config = useRuntimeConfig();
 
   const BASE_UPLOAD_SPEED = 1024;
   const bucketUuid = ref<string>('');
   const sessionUuid = ref<string>('');
+  const totalFilesSize = ref<number>(0);
   const folderName = ref<string>('');
   const wrapToDirectory = ref<boolean>(false);
   const endSession = ref<boolean>(true);
@@ -35,15 +36,6 @@ export default function useUpload() {
     return sumSpeeds / uploadSpeeds.length;
   });
 
-  /** Check if all files are finished (status FINISHED or ERROR) */
-  const allFilesFinished = computed<boolean>(() => {
-    return !fileList.value.some(
-      file =>
-        file.status === FileUploadStatusValue.PENDING ||
-        file.status === FileUploadStatusValue.UPLOADING
-    );
-  });
-
   /**
    *  Methods
    */
@@ -55,6 +47,15 @@ export default function useUpload() {
         item.fullPath === file.fullPath &&
         item.file?.lastModified === file.file?.lastModified
     );
+  }
+
+  /** Check if file is too big (out of space) */
+  function isEnoughSpaceInStorage(uploadFileList: Array<FileListItemType>, file: FileListItemType) {
+    const availableSize = storageStore.info.availableStorage - storageStore.info.usedStorage;
+    totalFilesSize.value = uploadFileList.reduce((acc, item) => {
+      return acc + item.size;
+    }, file.size);
+    return totalFilesSize.value < availableSize;
   }
 
   async function uploadFiles(
@@ -83,12 +84,19 @@ export default function useUpload() {
       };
     });
 
+    let availableSize = storageStore.info.availableStorage - storageStore.info.usedStorage;
+
     fileList.value.forEach(file => {
+      availableSize -= file.size;
+      if (availableSize < 0) {
+        throw new ReferenceError('NOT_ENOUGH_STORAGE_SPACE');
+      }
+
       createFileProgress(file);
       updateFileStatus(file, FileUploadStatusValue.UPLOADING);
     });
 
-    const filesChunks = sliceIntoChunks(filesUpload, 200);
+    const filesChunks = sliceIntoChunks(filesUpload, 50);
 
     for (let i = 0; i < filesChunks.length; i++) {
       if (filesChunks[i] && filesChunks[i].length > 0) {
@@ -108,14 +116,10 @@ export default function useUpload() {
             await uploadFilesToS3(fileRequests.data.files);
           } else {
             /** Show warning message - zero files uploaded */
-            message.warning($i18n.t('errror.fileUploadStopped'));
+            message.warning($i18n.t('error.fileUploadStopped'));
           }
         } catch (error: any) {
           onUploadError();
-
-          /** Show error message */
-          message.error(userFriendlyMsg(error));
-
           throw error;
         }
       }
@@ -133,7 +137,7 @@ export default function useUpload() {
         uploadFileToS3(file, uploadFileRequest);
       } else {
         /** Show warning message - file not found by name */
-        message.warning($i18n.t('errror.fileUploadMissing', { name: uploadFileRequest.fileName }));
+        message.warning($i18n.t('error.fileUploadMissing', { name: uploadFileRequest.fileName }));
       }
     });
   }
@@ -174,7 +178,13 @@ export default function useUpload() {
 
   /** Upload Session End  */
   async function uploadSessionEnd(sessionUuid: string) {
-    if (!allFilesFinished.value || !endSession.value) {
+    const allFilesFinished = !fileList.value.some(
+      file =>
+        file.status === FileUploadStatusValue.PENDING ||
+        file.status === FileUploadStatusValue.UPLOADING
+    );
+
+    if (!allFilesFinished || !endSession.value) {
       return;
     }
     try {
@@ -186,11 +196,6 @@ export default function useUpload() {
           : null,
       };
       await $api.post(endpoints.storageFileUpload(bucketUuid.value, sessionUuid), params);
-
-      /** Unnecessary toast message
-      if (resSessionEnd.data) {
-        message.success($i18n.t('form.success.filesUploaded'));
-      } */
     } catch (error) {
       message.error(userFriendlyMsg(error));
     }
@@ -207,8 +212,9 @@ export default function useUpload() {
           fileList.value.pop();
         }
       }
-      /** Refresh diretory content  */
-      bucketStore.fetchDirectoryContent();
+
+      /** Refresh Storage info  */
+      storageStore.fetchStorageInfo();
     }, 500);
   }
 
@@ -284,6 +290,7 @@ export default function useUpload() {
   return {
     uploadFiles,
     fileAlreadyOnFileList,
+    isEnoughSpaceInStorage,
     onUploadError,
     folderName,
     putRequests,

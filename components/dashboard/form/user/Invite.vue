@@ -43,7 +43,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+type FormUserInvite = {
+  email: string;
+  role_id: number | null;
+};
 
 const $i18n = useI18n();
 const message = useMessage();

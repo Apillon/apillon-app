@@ -45,7 +45,10 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi } from 'naive-ui';
+type FormRegister = {
+  password: string | null;
+  reenteredPassword: string | null;
+};
 
 const props = defineProps({
   resetPassword: { type: Boolean, default: false },
@@ -55,9 +58,9 @@ const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const { query } = useRoute();
+const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -112,7 +115,7 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else if (props.resetPassword) {
-      await resetPassword();
+      await submitResetPassword();
     } else {
       await register();
     }
@@ -134,7 +137,7 @@ async function register() {
     authStore.saveUser(res.data);
 
     /** Track Registration created */
-    tractEvent('registration', 'registration_done', 'Password set');
+    trackEvent('registration_done');
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     dataStore.project.items = await dataStore.fetchProjects(true);
@@ -145,7 +148,7 @@ async function register() {
 }
 
 /** Reset password (on page reset-password or in dashboard) */
-async function resetPassword() {
+async function submitResetPassword() {
   loading.value = true;
 
   try {

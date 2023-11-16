@@ -41,6 +41,31 @@ const Endpoints = {
     return `/projects/${projectUuid}/uninvite-user`;
   },
 
+  /** Payments */
+  credit: (projectUuid: string) => {
+    return `/projects/${projectUuid}/credit`;
+  },
+  creditTransactions: (projectUuid: string) => {
+    return `/projects/${projectUuid}/credit/transactions`;
+  },
+  activeSubscription: (projectUuid: string) => {
+    return `/projects/${projectUuid}/active-subscription`;
+  },
+  subscriptions: (projectUuid: string) => {
+    return `/projects/${projectUuid}/subscriptions`;
+  },
+  invoices: (projectUuid: string) => {
+    return `/projects/${projectUuid}/invoices`;
+  },
+  productPrice: (productId?: string | number) => {
+    return productId ? `/payments/products/${productId}/price` : '/payments/products/price-list';
+  },
+  creditSessionUrl: '/payments/stripe/credit-session-url',
+  subscriptionSessionUrl: '/payments/stripe/subscription-session-url',
+  customerPortalUrl: '/payments/stripe/customer-portal-session-url',
+  creditPackages: '/payments/credit/packages',
+  subscriptionPackages: '/payments/subscription/packages',
+
   /** Services */
   serviceTypes: '/services/types',
   services: (id?: number | string) => {
@@ -52,39 +77,37 @@ const Endpoints = {
     return key ? `/instructions/${key}` : '/instructions';
   },
 
-  /**
-   * Storage
-   */
-
   /** Bucket */
   buckets: '/buckets/',
-  bucketsQuota: '/buckets/quota-reached',
-  bucket: (buckeId: number | string) => {
-    return `/buckets/${buckeId}`;
+  bucket: (bucketUuid: string) => {
+    return `/buckets/${bucketUuid}`;
   },
-  bucketContent: (buckeId: number | string) => {
-    return `/buckets/${buckeId}/content`;
+  bucketContent: (bucketUuid: string) => {
+    return `/buckets/${bucketUuid}/content`;
   },
-  bucketRestore: (buckeId: number) => {
-    return `/buckets/${buckeId}/cancel-deletion`;
+  bucketRestore: (bucketUuid: string) => {
+    return `/buckets/${bucketUuid}/cancel-deletion`;
   },
-  bucketWebhook: (buckeId: number, webhookId?: number) => {
-    return webhookId ? `/buckets/${buckeId}/webhook/${webhookId}` : `/buckets/${buckeId}/webhook`;
+  bucketWebhook: (bucketUuid: string, webhookId?: number) => {
+    return webhookId
+      ? `/buckets/${bucketUuid}/webhook/${webhookId}`
+      : `/buckets/${bucketUuid}/webhook`;
   },
 
   /** Directories */
-  directory: (id?: number | string) => {
+  directory: (id?: string) => {
     return id ? `/directories/${id}` : '/directories';
   },
   directoryContent: '/directories/directory-content',
 
   /** File */
-  file: (key?: number | string) => {
+  file: (key?: string) => {
     return key ? `/files/${key}` : '/files';
   },
 
   /** Storage */
   storage: '/storage/',
+  storageInfo: '/storage/info',
   storageFileUpload: (bucketUuid: string, sessionUuid?: string) => {
     return sessionUuid
       ? `/storage/${bucketUuid}/file-upload/${sessionUuid}/end`
@@ -112,11 +135,11 @@ const Endpoints = {
     return `/storage/${bucketUuid}/trashed-files`;
   },
   /** IPNS */
-  ipns: (bucketId: number, id?: number | string) => {
-    return id ? `/buckets/${bucketId}/ipns/${id}` : `/buckets/${bucketId}/ipns`;
+  ipns: (bucketUuid: string, id?: number | string) => {
+    return id ? `/buckets/${bucketUuid}/ipns/${id}` : `/buckets/${bucketUuid}/ipns`;
   },
-  ipnsPublish: (bucketId: number, id: number) => {
-    return `/buckets/${bucketId}/ipns/${id}/publish`;
+  ipnsPublish: (bucketUuid: string, id: number) => {
+    return `/buckets/${bucketUuid}/ipns/${id}/publish`;
   },
 
   /**
@@ -125,20 +148,19 @@ const Endpoints = {
 
   /** Website */
   website: '/storage/hosting/website',
-  websites: (id?: number) => {
-    return id ? `/storage/hosting/websites/${id}` : '/storage/hosting/websites';
+  websites: (uuid?: string) => {
+    return uuid ? `/storage/hosting/websites/${uuid}` : '/storage/hosting/websites';
   },
-  websiteQuota: `/storage/hosting/websites/quota-reached`,
-  websiteDeploy: (id?: number) => {
-    return `/storage/hosting/websites/${id}/deploy`;
+  websiteDeploy: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/deploy`;
   },
 
   /** Deployment */
-  deployment: (websiteId: number, id: number) => {
-    return `/storage/hosting/websites/${websiteId}/deployments/${id}`;
+  deployment: (websiteUuid: string, deploymentUuid: string) => {
+    return `/storage/hosting/websites/${websiteUuid}/deployments/${deploymentUuid}`;
   },
-  deployments: (websiteId: number) => {
-    return `/storage/hosting/websites/${websiteId}/deployments`;
+  deployments: (websiteUuid: string) => {
+    return `/storage/hosting/websites/${websiteUuid}/deployments`;
   },
 
   /**
@@ -171,7 +193,6 @@ const Endpoints = {
   collectionNestMint: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/nest-mint`;
   },
-  collectionQuota: '/nfts/collections/quota-reached',
 
   /**
    * Project settings
@@ -187,6 +208,9 @@ const Endpoints = {
   apiKeyRoles: (key: number) => {
     return `/api-keys/${key}/roles`;
   },
+  apiKeyServiceRoles: (key: number) => {
+    return `/api-keys/${key}/service-roles`;
+  },
 
   /** Oauth links */
   oauthLinks: '/users/oauth-links/',
@@ -195,9 +219,6 @@ const Endpoints = {
   discordLink: '/users/discord-url/',
   discordConnect: '/users/discord-connect/',
   discordDisconnect: '/users/discord-disconnect/',
-
-  /** Billing */
-  billing: '/billing/',
 
   /** Referral */
   referral: '/referral',

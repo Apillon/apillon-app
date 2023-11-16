@@ -6,136 +6,66 @@
       </Heading>
     </template>
     <slot>
-      <div class="p-8 mb-8 bg-bg-light text-body">
-        <template v-if="authStore.isBetaUser() || true">
-          <h3 class="mb-4 text-white">Welcome to the Apillon Closed Beta test</h3>
-          <p>
-            At this moment, you will be able to test Web3 Storage and Web3 Hosting services, while
-            other services are yet to be added and released at a later date.
-          </p>
-          <p>
-            To make your To make your testing journey smooth, please refer to Apillon's Wiki on the
-            following two sections:
-          </p>
-          <p>
-            To learn how things work in the background, refer to the following
-            <Btn
-              class="inline-block"
-              type="link"
-              href="https://wiki.apillon.io/build/#concepts"
-              target="_blank"
-            >
-              article
-            </Btn>
-            <span>.</span>
-          </p>
-          <p>
-            To start building immediately, check out our
-            <Btn
-              class="inline-block"
-              type="link"
-              href="https://wiki.apillon.io/build/3-apillon-api.html"
-              target="_blank"
-            >
-              API docs
-            </Btn>
-            <span>.</span>
-          </p>
-          <br />
+      <div class="p-8 mb-8 bg-bg-light text-body rounded-lg">
+        <h3 class="mb-4 text-white">Welcome to Apillon, your gateway to Web3!</h3>
+        <p>
+          Start your Web3 journey and integrate Decentralized Hosting and Storage services in your
+          project, or create a fully-fledged decentralized NFT collection.
+        </p>
+        <p>
+          Soon, more Web3 services will be added, including Decentralized Authentication and
+          Computing.
+        </p>
+        <p>
+          Find out how things work in the
+          <Btn
+            class="inline-block"
+            type="link"
+            href="https://wiki.apillon.io/build/#concepts"
+            target="_blank"
+          >
+            back end
+          </Btn>
+          <span>.</span>
+        </p>
+        <p>
+          If you know your way around code, check out
+          <Btn
+            class="inline-block"
+            type="link"
+            href="https://wiki.apillon.io/build/3-apillon-api.html"
+            target="_blank"
+          >
+            Apillon API
+          </Btn>
+          <span> details.</span>
+        </p>
+        <br />
 
-          <p>
-            We are proud and happy to open the Closed Beta stage, tho we are fully aware there are
-            still things that still need fixing. We are all about releasing fast, learning fast and
-            improving even faster 😀.
-          </p>
-          <p>
-            To help us detect bugs 🐞 or UI improvements, please file the ticket on our
-            <Btn
-              class="inline-block"
-              type="link"
-              href="https://discord.com/channels/881835505120079912/881848835364778006"
-              target="_blank"
-            >
-              Discord channel
-            </Btn>
-            <span>.</span>
-          </p>
-        </template>
-        <template v-else>
-          <h3 class="mb-4 text-white">Apply for Closed Beta testing</h3>
-          <p>
-            Apillon is currently in the Closed Beta stage. Anyone can register an account on Apillon
-            but only assigned users may get access to test the platform's Beta features.
-          </p>
-          <p>To join the Apillon Closed Beta program, please follow the steps below.</p>
-          <ul class="list-disc pl-5">
-            <li>
-              If you do not yet have an Apillon account, create one on
-              <Btn
-                class="inline-block"
-                type="link"
-                href="http://apillon.io/register"
-                target="_blank"
-              >
-                apillon.io/register
-              </Btn>
-              <span>.</span>
-            </li>
-            <li>Log in to your account.</li>
-            <li>
-              At the bottom of the welcome page, find an Closed Beta code assigned to your account.
-            </li>
-            <li>
-              Copy the Closed Beta code and paste it to our
-              <Btn
-                class="inline-block"
-                type="link"
-                href="https://discord.gg/n6gVzCnz9t"
-                target="_blank"
-              >
-                closed-beta channel
-              </Btn>
-              on Discord.
-            </li>
-            <li>
-              Wait for an email with an invitation to join the Apillon Closed Beta program and
-              access the platform's features.
-            </li>
-          </ul>
-        </template>
-
-        <!-- Referral code -->
-        <h3 class="mt-8 text-white">Closed Beta code:</h3>
-        <n-space
-          class="p-4 bg-bg-light card-border mt-2"
-          align="center"
-          size="small"
-          justify="space-between"
-          :wrap="false"
-        >
-          <n-ellipsis class="align-bottom body-md" :line-clamp="1">
-            {{ authStore.userUuid }}
-          </n-ellipsis>
-          <button @click="copyToClipboard(authStore.userUuid)">
-            <span class="icon-copy text-xl align-sub"></span>
-          </button>
-        </n-space>
-
-        <div class="p-4 bg-bg mt-10">
-          <h4 class="text-white">Note:</h4>
-          <p>
-            Keep in mind that Apillon Closed Beta delivers no guarantees related to functionalities
-            or access and is intended for testing purposes only. Beta features also come with
-            several limitations, which will be removed with each platform update as more and more
-            users deliver feedback on Closed Beta and help improve the platform's services.
-          </p>
-        </div>
+        <p>
+          Or, if you prefer the drag-and-drop way, navigate to the menu on the left and integrate
+          Web3 technologies with a few clicks.
+        </p>
+        <p>
+          Launch projects on Web3 like never before. Oh, and if you detect bugs or would like to
+          suggest UI improvements, please file a ticket in the
+          <Btn
+            class="inline-block"
+            type="link"
+            href="https://discord.com/channels/881835505120079912/881848835364778006"
+            target="_blank"
+          >
+            Apillon Discord channel
+          </Btn>
+          <span>.</span>
+        </p>
+        <p>Happy Web3 building!</p>
       </div>
     </slot>
 
     <template v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" #learn>
       <!-- Referral -->
-      <div class="md:max-w-lg p-8 mt-8 mb-6 card-border">
+      <div class="md:max-w-lg p-8 mt-8 mb-6 card-border rounded-lg">
         <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
         <p class="text-body mb-6">
           {{ $t('referral.banner.description') }}
@@ -166,6 +96,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const referralStore = useReferralStore();
 const showModal = ref(false);
+const loading = ref(false);
 
 useHead({
   title: t('dashboard.dashboard'),
@@ -179,9 +110,11 @@ function enterReferral() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())) {
-    referralStore.getReferral();
+    loading.value = true;
+    await referralStore.getReferral();
+    loading.value = false;
   }
 });
 </script>

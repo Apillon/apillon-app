@@ -1,8 +1,10 @@
 <template>
   <n-dropdown
     v-if="authStore.loggedIn"
+    class="rounded-lg"
     placement="bottom-end"
     trigger="click"
+    size="large"
     :options="options"
     style="min-width: 220px"
     @select="handleSelect"
@@ -17,7 +19,7 @@
         </div>
       </div>
       <div class="hidden md:flex items-center">
-        <n-button class="w-10 px-1" size="small" type="tertiary" quaternary round>
+        <n-button class="w-10 px-1" size="small" type="tertiary" quaternary circle>
           <span class="icon-down text-3xl"></span>
         </n-button>
       </div>
@@ -26,24 +28,47 @@
 </template>
 
 <script lang="ts" setup>
-const authStore = useAuthStore();
-const router = useRouter();
 const $i18n = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const dataStore = useDataStore();
 
-const options = [
+const renderIcon = (iconName: string) => {
+  return () => {
+    return h('span', { class: `${iconName} text-xl` }, '');
+  };
+};
+const renderNuxtIcon = (iconName: string) => {
+  return () => {
+    return h(resolveComponent('NuxtIcon'), { name: iconName, class: 'text-xl' }, '');
+  };
+};
+
+const options = computed(() => [
   {
     key: 'profile',
     label: $i18n.t('profile.profile'),
+    icon: renderIcon('icon-anonymous'),
   },
   {
-    key: 'dashboard-account-management',
-    label: $i18n.t('profile.account'),
+    key: 'dashboard-payments',
+    label: $i18n.t('profile.billing'),
+    disabled: !dataStore.hasProjects,
+    show: !dataStore.isProjectUser,
+    icon: renderIcon('icon-billing'),
+  },
+  {
+    key: 'dashboard-project-settings',
+    label: $i18n.t('profile.settings'),
+    disabled: !dataStore.hasProjects,
+    icon: renderIcon('icon-project-setting'),
   },
   {
     key: 'logout',
     label: $i18n.t('profile.logout'),
+    icon: renderNuxtIcon('icon/logout'),
   },
-];
+]);
 
 function handleSelect(key: string | number) {
   if (key === 'logout') {

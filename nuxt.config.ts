@@ -1,17 +1,18 @@
-import { DefaultLocaleMessageSchema } from '@nuxtjs/i18n/dist/runtime/composables';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import { getAppConfig } from './lib/utils';
-import en from './locales/en.json';
 
 const env = process.env.ENV || process.env.RUN_ENV || process.env.NODE_ENV;
 const appConfig: ConfigInterface = getAppConfig(env);
 
 const meta = {
   lang: 'en',
-  title: 'Apillon - Build Web3 products. Easily.',
+  title: 'Apillon - Make your project unstoppable.',
   description:
-    'Apillon is a Web3 development platform empowering developers to build in the Polkadot ecosystem.',
+    'Host your website or dapp on a decentralized network with just a few clicks and retain the ownership and authority over it.',
   url: appConfig.url,
-  image: `${appConfig.url}/register-now.jpg`,
+  image: `${appConfig.url}/apillon_og.jpg`,
   twitter: '@apillon_io',
 };
 
@@ -59,6 +60,26 @@ export default defineNuxtConfig({
     ],
     '@nuxtjs/i18n',
   ],
+
+  vite: {
+    plugins: [
+      AutoImport({
+        imports: [
+          {
+            'naive-ui': ['useMessage'],
+          },
+        ],
+      }),
+
+      Components({
+        resolvers: [NaiveUiResolver()],
+      }),
+    ],
+
+    optimizeDeps: {
+      include: process.env.NODE_ENV === 'development' ? ['naive-ui'] : [],
+    },
+  },
 
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',
@@ -110,49 +131,26 @@ export default defineNuxtConfig({
         { rel: 'manifest', href: '/manifest.json' },
       ],
 
-      script: [
-        {
-          children:
-            env === 'production'
-              ? `var _mtm = window._mtm = window._mtm || [];
-          _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
-          var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-          g.async=true; g.src='https://analytics.apillon.io/js/container_UpKxUE2a.js'; s.parentNode.insertBefore(g,s);`
-              : '',
-        },
-        {
-          children:
-            env === 'production'
-              ? `var _paq = (window._paq = window._paq || []);
-            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            (function () {
-              const u = '//analytics.apillon.io/';
-              _paq.push(['setTrackerUrl', u + 'matomo.php']);
-              _paq.push(['setSiteId', '2']);
-              const d = document;
-              const g = d.createElement('script');
-              const s = d.getElementsByTagName('script')[0];
-              g.async = true;
-              g.src = u + 'matomo.js';
-              s.parentNode.insertBefore(g, s);
-            })();`
-              : '',
-        },
-      ],
+      script: [],
     },
   },
 
   i18n: {
-    // add `vueI18n` option to `@nuxtjs/i18n` module options
-    vueI18n: {
-      legacy: false,
-      globalInjection: true,
-      locale: 'en',
-      messages: {
-        en: en as DefaultLocaleMessageSchema,
+    lazy: true,
+    langDir: 'locales',
+    defaultLocale: 'en',
+    strategy: 'no_prefix',
+    locales: [
+      {
+        code: 'en',
+        name: 'English',
+        file: 'en.json',
       },
+    ],
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_lang',
+      redirectOn: 'root',
     },
   },
 });

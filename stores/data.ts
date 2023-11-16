@@ -4,6 +4,8 @@ export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_uuid',
 };
 
+let abortController = null as AbortController | null;
+
 export const useDataStore = defineStore('data', {
   state: () => ({
     instruction: {} as Record<string, InstructionInterface>,
@@ -61,6 +63,15 @@ export const useDataStore = defineStore('data', {
     myRoleOnProject(state) {
       return state.project.active.myRole_id_onProject || DefaultUserRole.PROJECT_USER;
     },
+    isUserOwner(state): boolean {
+      return state.project.active.myRole_id_onProject === DefaultUserRole.PROJECT_OWNER;
+    },
+    isUserAdmin(state): boolean {
+      return state.project.active.myRole_id_onProject === DefaultUserRole.PROJECT_ADMIN;
+    },
+    isProjectUser(state): boolean {
+      return state.project.active.myRole_id_onProject === DefaultUserRole.PROJECT_USER;
+    },
   },
   actions: {
     resetData() {
@@ -70,6 +81,10 @@ export const useDataStore = defineStore('data', {
       this.project.quotaReached = undefined as Boolean | undefined;
       /** Services */
       this.services = [] as Array<ServiceInterface>;
+    },
+
+    isUser(type: number): boolean {
+      return this.myRoleOnProject === type;
     },
 
     setCurrentProject(uuid: string) {
@@ -104,6 +119,12 @@ export const useDataStore = defineStore('data', {
 
     hasServices() {
       return Array.isArray(this.services) && this.services.length > 0;
+    },
+
+    hasServicesByType(type: number) {
+      return (
+        Array.isArray(this.services) && this.services.some(item => item.serviceType_id === type)
+      );
     },
 
     hasServiceTypes() {
@@ -172,8 +193,16 @@ export const useDataStore = defineStore('data', {
     /** Projects */
     async fetchProjects(redirectToDashboard: boolean = false): Promise<ProjectInterface[]> {
       const router = useRouter();
+
+      if (abortController) {
+        abortController.abort();
+      }
+      abortController = new AbortController();
+
       try {
-        const req = $api.get<ProjectsResponse>(endpoints.projectsUserProjects);
+        const req = $api.get<ProjectsResponse>(endpoints.projectsUserProjects, undefined, {
+          signal: abortController.signal,
+        });
         this.promises.projects = req;
         const res = await req;
 
@@ -203,14 +232,16 @@ export const useDataStore = defineStore('data', {
         }
 
         return projects;
-      } catch (error) {
-        /** Clear promise */
-        this.promises.projects = null;
+      } catch (error: any) {
+        if (!(error instanceof DOMException) && error.message !== 'The user aborted a request.') {
+          /** Clear promise */
+          this.promises.projects = null;
 
-        this.project.items = [];
+          this.project.items = [];
 
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
+          /** Show error message */
+          window.$message.error(userFriendlyMsg(error));
+        }
       }
       return [];
     },

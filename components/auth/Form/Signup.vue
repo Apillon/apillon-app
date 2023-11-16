@@ -37,8 +37,13 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi } from 'naive-ui';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+
+type SignupForm = {
+  email: string;
+  captcha?: any;
+  refCode?: string;
+};
 
 const props = defineProps({
   sendAgain: { type: Boolean, default: false },
@@ -47,8 +52,8 @@ const props = defineProps({
 const $route = useRoute();
 const $i18n = useI18n();
 const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 const {
   loading,
   captchaKey,
@@ -107,7 +112,7 @@ async function signupWithEmail() {
       router.push({ name: 'register-email' });
 
       /** Track new registration */
-      tractEvent('registration', 'registration_email_input', 'Email signup');
+      trackEvent('registration_email_input');
     } else {
       message.success($i18n.t('form.success.sendAgainEmail'));
     }

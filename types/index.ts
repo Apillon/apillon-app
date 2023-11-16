@@ -3,14 +3,11 @@ import {
   ComposerTranslation,
   UseI18nOptions,
 } from '@nuxtjs/i18n/dist/runtime/composables';
-
-import { PropType } from 'nuxt/dist/app/compat/capi';
+import type { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
 
 export {};
 
 declare global {
-  type VuePropType<T> = PropType<T>;
-
   type KeyValue = {
     key: string | number;
     value: string | number;
@@ -32,9 +29,22 @@ declare global {
    * Window
    */
   interface Window {
-    $message: NMessageApiInjection;
+    $message: MessageApiInjection;
     $i18n: i18nType;
     _paq: Array<String[]>;
+  }
+
+  /**
+   * General Interfaces
+   */
+  interface GeneralInterface {
+    status: number;
+  }
+  interface BaseObjectInterface extends GeneralInterface {
+    name: string;
+    description: string | null;
+    createTime: string;
+    updateTime: string;
   }
 
   /**

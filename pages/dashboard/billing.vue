@@ -1,71 +1,59 @@
 <template>
-  <Dashboard>
+  <Dashboard :loading="loading">
     <template #heading>
-      <h4>{{ $t('dashboard.billing') }}</h4>
+      <Heading>
+        <slot>
+          <h1>{{ $t('dashboard.billing') }}</h1>
+        </slot>
+
+        <template #submenu>
+          <MenuBilling />
+        </template>
+      </Heading>
     </template>
     <slot>
-      <div class="grid grid-cols-billing gap-5">
-        <n-card :bordered="false" :title="t('dashboard.yourPlan')">
-          <div class="flex items-center">
-            <span class="icon-star text-xl text-primary mr-3"></span>
-            <h4>Professional plan</h4>
-          </div>
-        </n-card>
-        <n-card :bordered="false" :title="t('dashboard.invoiceDate')">
-          <h4>20 Jul 2022</h4>
-        </n-card>
-        <n-card :bordered="false" :title="t('dashboard.invoiceTotal')">
-          <h4>$30</h4>
-        </n-card>
-      </div>
-
-      <!-- Payment methods -->
-      <n-h5 prefix="bar">{{ $t('dashboard.payment') }}</n-h5>
-      <TablePaymentMethods class="mb-4" @changePaymentEmit="showDrawerPaymentMethod" />
-
-      <n-card>
-        <div class="flex md:flex-row flex-col md:justify-between">
-          <div>
-            <h5 class="text-lg mb-2">{{ $t('dashboard.addPaymentMethod') }}</h5>
-            <p class="text-sm">{{ $t('dashboard.addPaymentMethodText') }}</p>
-          </div>
-          <div>
-            <Btn type="primary" @click="showDrawerPaymentMethod">
-              {{ $t('dashboard.addPayment') }}
-            </Btn>
-          </div>
-        </div>
-      </n-card>
-
-      <!-- Drawer - Add new payment method -->
-      <n-drawer v-model:show="drawerPaymentMethodActive" :width="495">
-        <n-drawer-content>
-          <template #header>
-            <h5>{{ $t('dashboard.addPayment') }}</h5>
-          </template>
-          <FormPaymentMethod />
-        </n-drawer-content>
-      </n-drawer>
-
       <!-- Invoices -->
-      <n-h5 prefix="bar">{{ $t('dashboard.invoices') }}</n-h5>
-      <TableInvoices />
+      <h4 class="mt-12 mb-6">{{ $t('dashboard.invoice.invoices') }}</h4>
+      <TablePaymentInvoices />
+
+      <!-- Credit Transactions -->
+      <h4 class="mt-12 mb-6">{{ $t('dashboard.credits.transactions') }}</h4>
+      <TablePaymentCreditTransactions class="pb-8" />
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 const { t } = useI18n();
+const dataStore = useDataStore();
+const paymentStore = usePaymentStore();
 
 useHead({
   title: t('dashboard.billing'),
 });
 
-/**
- * Drawer - add payment
- */
-const drawerPaymentMethodActive = ref(false);
-const showDrawerPaymentMethod = () => {
-  drawerPaymentMethodActive.value = true;
-};
+const loading = ref<boolean>(true);
+
+onMounted(() => {
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      const promises: Promise<any>[] = [];
+
+      promises.push(
+        new Promise<void>(resolve => {
+          paymentStore.getInvoices().then(() => resolve());
+        })
+      );
+      promises.push(
+        new Promise<void>(resolve => {
+          paymentStore.fetchCreditTransactions().then(() => resolve());
+        })
+      );
+
+      await Promise.all(promises).then(_ => {
+        loading.value = false;
+      });
+    });
+  }, 100);
+});
 </script>

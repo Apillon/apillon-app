@@ -57,7 +57,7 @@
           {{ $t('general.refresh') }}
         </n-button>
 
-        <!-- Create folder -->
+        <!-- Create folder
         <n-button
           v-if="isUpload"
           size="small"
@@ -66,7 +66,7 @@
         >
           <span class="icon-create-folder text-xl mr-2"></span>
           {{ $t('storage.directory.create') }}
-        </n-button>
+        </n-button> -->
 
         <!-- Clear all files -->
         <n-button
@@ -82,7 +82,7 @@
         </n-button>
 
         <!-- Deploy to staging -->
-        <div v-if="isUpload" class="flex items-center align-middle bg-primary">
+        <div v-if="isUpload" class="flex items-center align-middle bg-primary rounded-lg">
           <n-button
             size="small"
             type="primary"
@@ -141,7 +141,7 @@
       </template>
       <slot>
         <FormDelete
-          :id="bucketStore.active.id"
+          :id="bucketStore.active.bucket_uuid"
           type="bucketContent"
           @submit-success="onAllFilesDeleted"
         />
@@ -161,15 +161,17 @@ const props = defineProps({
 });
 
 const { downloading, downloadSelectedFiles } = useFile();
-const { websiteId, refreshWebpage } = useHosting();
+const { websiteUuid, refreshWebpage } = useHosting();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
 
 const $i18n = useI18n();
 const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
+const warningStore = useWarningStore();
 
 const showModalNewFolder = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
@@ -239,7 +241,7 @@ function onAllFilesDeleted() {
 
   bucketStore.folder.items = [];
   bucketStore.folder.path = [];
-  bucketStore.folder.selected = 0;
+  bucketStore.folder.selected = '';
   bucketStore.folder.total = 0;
   bucketStore.folderSearch();
 }
@@ -248,18 +250,18 @@ function onAllFilesDeleted() {
 async function deploy(env: number) {
   deploying.value = true;
 
-  const deployment = await deploymentStore.deploy(websiteStore.active.id, env);
+  const deployment = await deploymentStore.deploy(websiteStore.active.website_uuid, env);
 
   /** After successful deploy redirect to next tab */
   if (deployment && env === DeploymentEnvironment.STAGING) {
     deploymentStore.staging = [] as Array<DeploymentInterface>;
     setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${websiteId.value}/staging`);
+      router.push(`/dashboard/service/hosting/${websiteUuid.value}/staging`);
     }, 1000);
   } else if (deployment && env >= DeploymentEnvironment.PRODUCTION) {
     deploymentStore.production = [] as Array<DeploymentInterface>;
     setTimeout(() => {
-      router.push(`/dashboard/service/hosting/${websiteId.value}/production`);
+      router.push(`/dashboard/service/hosting/${websiteUuid.value}/production`);
     }, 1000);
   }
 
@@ -272,8 +274,13 @@ async function deploy(env: number) {
  * */
 function deployWebsite(env: number) {
   deployEnv.value = env;
-  if (sessionStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) || !$i18n.te('w3Warn.hosting.deploy')) {
-    deploy(env);
+  if (bucketStore.folder.items.length === 0) {
+    message.warning($i18n.t('error.NO_FILES_TO_DEPLOY'));
+  } else if (
+    localStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) ||
+    !$i18n.te('w3Warn.hosting.deploy')
+  ) {
+    warningStore.showSpendingWarning(getPricingServiceName(env), () => deploy(env));
   } else {
     modalW3WarnVisible.value = true;
   }
@@ -281,6 +288,14 @@ function deployWebsite(env: number) {
 
 /** When user close W3Warn, allow him to create new website */
 function onModalW3WarnHide() {
-  deploy(deployEnv.value);
+  warningStore.showSpendingWarning(getPricingServiceName(deployEnv.value), () =>
+    deploy(deployEnv.value)
+  );
+}
+
+function getPricingServiceName(env: number) {
+  return env === DeploymentEnvironment.STAGING
+    ? PriceServiceName.HOSTING_DEPLOY_TO_STAGING
+    : PriceServiceName.HOSTING_DEPLOY_TO_PRODUCTION;
 }
 </script>

@@ -19,12 +19,12 @@
 
   <!-- Modal - Delete API key -->
   <ModalDelete v-model:show="modalDeleteIpnsVisible" :title="$t('storage.ipns.delete')">
-    <FormDelete :id="currentRow?.id || 0" type="ipns" @submit-success="onIpnsDeleted" />
+    <FormDelete :id="currentRow?.id" type="ipns" @submit-success="onIpnsDeleted" />
   </ModalDelete>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { NButton, NDropdown } from 'naive-ui';
 
 const $i18n = useI18n();
 const ipnsStore = useIpnsStore();
@@ -65,7 +65,7 @@ const createColumns = (): NDataTableColumns<IpnsInterface> => {
       key: 'createTime',
       title: $i18n.t('general.updateTime'),
       render(row: IpnsInterface) {
-        return h('span', {}, { default: () => datetimeToDateAndTime(row.updateTime || '') });
+        return h('span', {}, { default: () => dateTimeToDateAndTime(row.updateTime || '') });
       },
     },
     {

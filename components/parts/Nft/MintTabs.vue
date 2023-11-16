@@ -48,12 +48,14 @@
 </template>
 
 <script lang="ts" setup>
+import type { TabsInst } from 'naive-ui';
+
 const collectionStore = useCollectionStore();
 const { allImagesUploaded } = useNft();
 
-const mintTabsRef = ref<NTabsInst | null>(null);
+const mintTabsRef = ref<TabsInst | null>(null);
 
-/** Watch active tab, if informations are missing, open previous tab */
+/** Watch active tab, if information are missing, open previous tab */
 watch(
   () => collectionStore.mintTab,
   tab => {

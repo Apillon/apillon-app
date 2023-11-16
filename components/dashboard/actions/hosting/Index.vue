@@ -16,6 +16,9 @@
     </div>
 
     <n-space size="large">
+      <!-- Modal Price list for Hosting -->
+      <ModalCreditCosts :service="ServiceTypeName.HOSTING" />
+
       <!-- Refresh websites -->
       <n-button size="small" :loading="websiteStore.loading" @click="websiteStore.fetchWebsites()">
         <span class="icon-refresh text-xl mr-2"></span>
@@ -36,7 +39,11 @@
   </n-space>
 
   <!-- Modal - New website -->
-  <modal v-model:show="showModalEditWebsite" :title="$t('hosting.website.new')">
+  <modal
+    v-model:show="showModalEditWebsite"
+    :title="$t('hosting.website.new')"
+    :service-name="PriceServiceName.HOSTING_WEBSITE"
+  >
     <FormHostingWebsite />
   </modal>
 </template>

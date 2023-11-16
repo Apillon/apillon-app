@@ -50,13 +50,11 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi } from 'naive-ui';
-
 const $i18n = useI18n();
+const message = useMessage();
 const authStore = useAuthStore();
 const { isLg } = useScreen();
 const { getMessageSignature } = useProvider();
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
 
 const loadingWallet = ref<boolean>(false);
 const modalWalletSelectVisible = ref<boolean>(false);

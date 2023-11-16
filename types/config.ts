@@ -50,8 +50,8 @@ declare global {
     apiUrl: string;
     oauthUrl: string;
     adminUrl: string;
-    CHAIN_ID: string;
     captchaKey: string;
     githubId: string;
+    gtmId: string;
   }
 }

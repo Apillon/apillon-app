@@ -1,4 +1,5 @@
-import { LocationQueryValue } from 'vue-router';
+import { type LocationQueryValue } from 'vue-router';
+import { useGtm } from '@gtm-support/vue-gtm';
 import stg from '../config/staging';
 import dev from '../config/development';
 import prod from '../config/production';
@@ -15,11 +16,16 @@ export function getAppConfig(env?: string) {
 }
 
 /**
- * Analytics Matomo
+ * Analytics GTM
  */
-export function tractEvent(eventCategory: string, eventAction: string, eventName: string) {
-  if (window._paq) {
-    window._paq.push(['trackEvent', eventCategory, eventAction, eventName]);
+export function trackEvent(eventName: string, eventCategory = 'Dashboard', eventAction = 'click') {
+  const gtm = useGtm();
+  if (gtm && gtm.enabled()) {
+    gtm.trackEvent({
+      event: eventName,
+      category: eventCategory,
+      action: eventAction,
+    });
   }
 }
 
@@ -34,7 +40,7 @@ export function enumValues(E: any): string[] | number[] {
 }
 export function enumKeyValues(E: any): KeyValue[] {
   return enumKeys(E).map(k => {
-    return { key: k, value: E[k as any] };
+    return { key: k, label: k, value: E[k as any] };
   });
 }
 
@@ -84,6 +90,34 @@ export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
 }
 
 /**
+ *  Format numbers
+ */
+/** Add dots and commas */
+export function formatNumber(n: number) {
+  return new Intl.NumberFormat('de-DE').format(n);
+}
+
+export function formatPrice(price: number, currency?: string) {
+  const decimals = Math.ceil(price) === price ? 0 : 2;
+  if (currency) {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: decimals,
+    }).format(price);
+  }
+  return new Intl.NumberFormat('de-DE', { minimumFractionDigits: decimals }).format(price);
+}
+
+export function formatCredits(credits: number) {
+  return new Intl.NumberFormat().format(credits);
+}
+
+export function formatCurrency(currency: string) {
+  return currency === 'eur' ? '€' : '$';
+}
+
+/**
  *  Date and time functions
  */
 /** Time to days and hours */
@@ -110,11 +144,11 @@ export function timeToDays(time: String): string {
   }
 }
 
-/** Datetime to date: "2022-12-13T07:21:50.000Z" -> 13 Dec, 2022  */
-export function datetimeToDate(datetime: string): string {
-  if (!datetime) return '';
+/** DateTime to date: "2022-12-13T07:21:50.000Z" -> 13 Dec, 2022  */
+export function dateTimeToDate(dateTime: string): string {
+  if (!dateTime) return '';
 
-  const date = new Date(datetime);
+  const date = new Date(dateTime);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
@@ -122,10 +156,10 @@ export function datetimeToDate(datetime: string): string {
   };
   return date.toLocaleDateString('en-us', options);
 }
-export function datetimeToDateAndTime(datetime: string): string {
-  if (!datetime) return '';
+export function dateTimeToDateAndTime(dateTime: string): string {
+  if (!dateTime) return '';
 
-  const date = new Date(datetime);
+  const date = new Date(dateTime);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
@@ -150,6 +184,20 @@ export function timestampToDateAndTime(timestamp: number): string {
     minute: '2-digit',
     second: '2-digit',
     hour12: false,
+  };
+  return date.toLocaleDateString('en-us', options);
+}
+/** Deleted files - add 6 months */
+export function dateTimeToDateForDeletedFiles(dateTime: string): string {
+  if (!dateTime) return '';
+
+  const date = new Date(dateTime);
+  date.setMonth(date.getMonth() + 6);
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
   };
   return date.toLocaleDateString('en-us', options);
 }
@@ -183,20 +231,10 @@ export function fileExpiration(
   return expiredAtDate.toLocaleDateString('en-us', options);
 }
 
-/** Bucket - calculate additional data */
-export function addBucketAdditionalData(bucket: BucketInterface): BucketInterface {
-  return {
-    ...bucket,
-    sizeMb: bytesToMb(bucket.size || 0),
-    maxSizeMb: bytesToMb(bucket.maxSize),
-    percentage: storagePercantage(bucket.size || 0, bucket.maxSize),
-  };
-}
-
 /**
  * Error messages
  */
-export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | any) {
+export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | DOMException | any) {
   // Check error exists and if translation is included
   if (!window.$i18n || !(window.$i18n instanceof Object) || !error) {
     if (error instanceof ReferenceError || error instanceof TypeError) {
@@ -265,8 +303,8 @@ export function isFeatureEnabled(feature: Feature | string, userRoles: number[])
 
 /** Check if any of elements contains class ${ON_COLUMN_CLICK_OPEN_CLASS}, which means this column is clickable */
 export function canOpenColumnCell(path: EventTarget[]) {
-  return path.some((item: EventTarget) =>
-    (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
+  return path.some(
+    (item: EventTarget) => (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
   );
 }
 
@@ -387,4 +425,8 @@ export function getDeviceName() {
     return 'linux';
   }
   return '';
+}
+
+export function generatePriceServiceName(service: string, chain: number, action: string) {
+  return service + '_' + Chains[chain] + '_' + action;
 }

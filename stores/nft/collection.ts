@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia';
 
-const dataStore = useDataStore();
-
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
-    bucketId: 0,
+    bucketUuid: '',
     csvAttributes: [] as Array<MetadataAttributes>,
     csvColumns: [] as NTableColumns<KeyTitle>,
     csvData: [] as Array<Record<string, string>>,
@@ -19,7 +17,6 @@ export const useCollectionStore = defineStore('collection', {
     metadata: [] as Array<Record<string, any>>,
     metadataStored: null as Boolean | null,
     mintTab: NftMintTab.METADATA,
-    quotaReached: undefined as Boolean | undefined,
     search: '',
     stepDeploy: NftDeployStep.NAME,
     stepUpload: NftUploadStep.FILE,
@@ -32,6 +29,7 @@ export const useCollectionStore = defineStore('collection', {
         symbol: '',
         chain: Chains.MOONBEAM,
         collectionType: NFTCollectionType.GENERIC,
+        useApillonIpfsGateway: true,
       },
       behavior: {
         baseUri: '',
@@ -70,7 +68,6 @@ export const useCollectionStore = defineStore('collection', {
     resetData() {
       this.active = {} as CollectionInterface;
       this.items = [] as CollectionInterface[];
-      this.quotaReached = undefined;
       this.search = '';
       this.transaction = [] as TransactionInterface[];
       this.resetMetadata();
@@ -100,6 +97,7 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.symbol = '';
       this.form.base.chain = Chains.MOONBEAM;
       this.form.base.collectionType = NFTCollectionType.GENERIC;
+      this.form.base.useApillonIpfsGateway = true;
 
       this.form.behavior.baseUri = '';
       this.form.behavior.baseExtension = '.json';
@@ -145,17 +143,13 @@ export const useCollectionStore = defineStore('collection', {
       return this.transaction;
     },
 
-    async getCollectionQuota() {
-      if (this.quotaReached === undefined) {
-        await this.fetchCollectionQuota();
-      }
-    },
-
     /**
      * API calls
      */
-    async fetchCollections(showLoader: boolean = true): Promise<CollectionInterface[]> {
+    async fetchCollections(showLoader = true): Promise<CollectionInterface[]> {
       this.loading = showLoader;
+
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -211,7 +205,7 @@ export const useCollectionStore = defineStore('collection', {
 
     async fetchCollectionTransactions(
       collectionUuid: string,
-      showLoader: boolean = true
+      showLoader = true
     ): Promise<TransactionInterface[]> {
       this.loading = showLoader;
       try {
@@ -237,25 +231,6 @@ export const useCollectionStore = defineStore('collection', {
       }
       this.loading = false;
       return [];
-    },
-
-    async fetchCollectionQuota() {
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-
-      try {
-        const res = await $api.get<CollectionQuotaResponse>(endpoints.collectionQuota, {
-          project_uuid: dataStore.projectUuid,
-        });
-
-        this.quotaReached = res.data;
-      } catch (error: any) {
-        this.quotaReached = undefined;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
     },
   },
 });

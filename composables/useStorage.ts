@@ -10,20 +10,19 @@ export default function useStorage() {
   function initBucket(isBucketUpload: boolean = false) {
     /** Website ID from route, then load buckets */
     const routeName = name?.toString() || '';
-    const paramId = params?.id || params?.slug;
-    const bucketId = parseInt(`${paramId}`);
-    if (bucketStore.selected !== bucketId) {
+    const bucketUuid = (params?.id || params?.slug).toString();
+    if (bucketStore.selected !== bucketUuid) {
       fileStore.resetData();
       ipnsStore.resetData();
     }
-    bucketStore.setBucketId(bucketId);
+    bucketStore.setBucket(bucketUuid);
 
     setTimeout(() => {
       Promise.all(Object.values(dataStore.promises)).then(async _ => {
-        bucketStore.active = await bucketStore.getBucket(bucketId);
+        bucketStore.active = await bucketStore.getBucket(bucketUuid);
 
         /** Check of website exists */
-        if (!bucketStore.active?.id) {
+        if (!bucketStore.active?.bucket_uuid) {
           router.push({ name: 'dashboard-service-storage' });
           return;
         }
@@ -32,11 +31,11 @@ export default function useStorage() {
           /** Fetch directory content for bucket */
           bucketStore.getDirectoryContent();
 
-          if (bucketStore.active.uploadedSize === 0) {
+          if (bucketStore.active.size === 0) {
             bucketStore.uploadActive = true;
           }
         } else if (routeName.includes('ipns')) {
-          await ipnsStore.getIPNSs(bucketId);
+          await ipnsStore.getIPNSs(bucketUuid);
         } else if (routeName.includes('trash')) {
           await fileStore.getDeletedFiles();
         }

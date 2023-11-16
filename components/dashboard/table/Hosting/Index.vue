@@ -18,7 +18,7 @@
   <!-- Modal - Edit website -->
   <modal v-model:show="showModalEditWebsite" :title="$t('hosting.website.edit')">
     <FormHostingWebsite
-      :website-id="currentRow.id"
+      :website-uuid="currentRow.website_uuid"
       @submit-success="showModalEditWebsite = false"
     />
   </modal>
@@ -28,18 +28,18 @@
 import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
-  websites: { type: Array<WebsiteInterface>, default: [] },
+  websites: { type: Array<WebsiteBaseInterface>, default: [] },
 });
 
 const $i18n = useI18n();
 const router = useRouter();
+const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
-const settingsStore = useSettingsStore();
 const showModalEditWebsite = ref<boolean>(false);
 const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered websites */
-const data = computed<Array<WebsiteInterface>>(() => {
+const data = computed<Array<WebsiteBaseInterface>>(() => {
   return (
     props.websites.filter(item =>
       item.name.toLocaleLowerCase().includes(websiteStore.search.toLocaleLowerCase())
@@ -47,7 +47,7 @@ const data = computed<Array<WebsiteInterface>>(() => {
   );
 });
 
-const createColumns = (): NDataTableColumns<WebsiteInterface> => {
+const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
   return [
     {
       key: 'name',
@@ -60,7 +60,7 @@ const createColumns = (): NDataTableColumns<WebsiteInterface> => {
     {
       key: 'website_uuid',
       title: $i18n.t('hosting.website.uuid'),
-      render(row: WebsiteInterface) {
+      render(row: WebsiteBaseInterface) {
         return h(TableEllipsis, { text: row.website_uuid }, '');
       },
     },
@@ -103,17 +103,17 @@ const createColumns = (): NDataTableColumns<WebsiteInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: BucketItemInterface) => row.id;
-const currentRow = ref<WebsiteInterface>(props.websites[0]);
+const rowKey = (row: BucketItemInterface) => row.uuid;
+const currentRow = ref<WebsiteBaseInterface>(props.websites[0]);
 
 /** On row click */
-const rowProps = (row: WebsiteInterface) => {
+const rowProps = (row: WebsiteBaseInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/hosting/${row.id}` });
+        router.push({ path: `/dashboard/service/hosting/${row.website_uuid}` });
       }
     },
   };
@@ -123,7 +123,7 @@ const dropdownOptions = [
   {
     label: $i18n.t('storage.edit'),
     key: 'storageEdit',
-    disabled: settingsStore.isProjectUser(),
+    disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
         showModalEditWebsite.value = true;

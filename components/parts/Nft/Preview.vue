@@ -6,7 +6,7 @@
   >
     <template v-if="collectionStore.gridView">
       <div
-        class="grid gap-8 grid-cols-nft"
+        class="grid gap-8"
         :class="collectionStore.images.length > 100 ? 'grid-cols-nftSmall' : 'grid-cols-nft'"
       >
         <div v-for="image in images" :key="image.id" class="bg-bg-light rounded-xl overflow-hidden">
@@ -51,6 +51,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { DataTableColumns, DataTableProps } from 'naive-ui';
 import colors from '~~/tailwind.colors';
 
 const { createThumbnailUrl } = useNft();
@@ -86,7 +87,7 @@ const images = computed(() => {
   return collectionStore.images.slice(first, last);
 });
 
-const createColumns = (): NDataTableColumns<Record<string, string>> => {
+const createColumns = (): DataTableColumns<Record<string, string>> => {
   return [
     {
       key: 'img',
@@ -123,7 +124,7 @@ function imageByName(name: string = '') {
 }
 
 /** Theme override */
-type TableThemeOverrides = NonNullable<NDataTableProps['themeOverrides']>;
+type TableThemeOverrides = NonNullable<DataTableProps['themeOverrides']>;
 const tableOverrides: TableThemeOverrides = {
   tdTextColor: colors.body,
 };

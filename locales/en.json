@@ -76,6 +76,7 @@
     }
   },
   "general": {
+    "accept": "Accept",
     "action": "Action",
     "actions": "Actions",
     "active": "active",
@@ -85,9 +86,11 @@
     "attachService": "Attach {service} service",
     "cancel": "No, cancel",
     "confirm": "Confirm",
+    "cookieNotice": "This website uses cookies to ensure you get the best experience on our website.",
     "copyrights": "© Apillon",
     "create": "Create",
     "created": "created",
+    "decline": "Decline",
     "delete": "Delete",
     "deselectAll": "Deselect All",
     "download": "Download",
@@ -103,6 +106,7 @@
     "login": "Log in",
     "logout": "Log out",
     "method": "Method",
+    "month": "month",
     "name": "Name",
     "notActive": "not active",
     "nothingHere": "Nothing here",
@@ -157,7 +161,66 @@
       "copyApiKey": "Copy Api key to clipboard",
       "copyCid": "Copy CID",
       "copyLink": "Copy link",
+      "copyUuid": "Copy UUID",
       "error": "Failed to copy"
+    },
+    "credits": {
+      "amount": "Amount",
+      "bonus": "Bonus credits",
+      "buy": "Buy",
+      "available": "available",
+      "category": "Category",
+      "checkPrice": "Check price",
+      "confirmPrices": "I understand",
+      "cost": "Cost",
+      "credits": "credits",
+      "creditsAmount": "Credit amount",
+      "creditCosts": "Service description cost",
+      "currentCredits": "Current credits",
+      "date": "Date and time",
+      "description": "Description",
+      "direction": "Direction",
+      "filterByChain": "Filter by chain",
+      "filterByService": "Filter by service",
+      "getMore": "Get more",
+      "included": "Can be used for:",
+      "name": "Name",
+      "packages": "Credit packages",
+      "product_id": "Product ID",
+      "service": "Service",
+      "serviceDescription": "Service description",
+      "serviceStorage": "Web3 Storage",
+      "title": "Credits",
+      "transactions": "Credit transactions",
+      "yourFunds": "Your funds",
+      "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
+      "services": {
+        "HOSTING": {
+          "name": "Web3 Hosting",
+          "description": null
+        },
+        "IDENTITY": {
+          "name": "Web3 Identity",
+          "description": null
+        },
+        "NFT": {
+          "name": "NFTs",
+          "description": null
+        },
+        "STORAGE": {
+          "name": "Web3 Storage",
+          "description": null
+        }
+      }
+    },
+    "invoice": {
+      "client": "Client",
+      "currency": "Currency",
+      "invoices": "Transactions and Invoices",
+      "referenceTable": "Reference",
+      "subtotalAmount": "Subtotal",
+      "totalAmount": "Total",
+      "date": "Date and time"
     },
     "nav": {
       "access": "Access",
@@ -179,36 +242,84 @@
       "access": "Access",
       "accountManagement": "Account management",
       "apiKeys": "API keys",
+      "billing": "Billing",
       "charts": "Charts",
       "credentials": "Credentials & API keys",
+      "credits": "Credits",
       "destroy": "Destroy",
       "history": "History",
       "methods": "Methods",
+      "payments": "Overview",
+      "priceList": "Price list",
       "profile": "Profile",
       "projectSettings": "Project settings",
+      "usage": "Usage",
       "usersPermissions": "Users & permissions"
     },
+    "payment": {
+      "buyCredits": "Buy credits",
+      "costs": "Costs",
+      "changePlan": "Change plan",
+      "currentPlan": "Current plan",
+      "expiresOn": "Expires on:",
+      "decline": "Decline",
+      "notEnoughCredits": "You don't have enough credits. Please, buy more credits to proceed",
+      "proceed": "Proceed",
+      "selectPlan": "Select plan",
+      "spendingAlert": "Spending ALERT!",
+      "title": "Payment",
+      "upgrade": "Upgrade",
+      "upgradePlan": "Upgrade plan",
+      "stripe": {
+        "credits": "Successfully acquired {credits} credits.",
+        "error": "Failed to subscribe",
+        "subscription": "Successfully subscribed to a {plan} plan."
+      }
+    },
     "permissions": {
+      "notOwner": "Only project owner can perform this action.",
       "read": "Read permissions",
       "write": "Write permissions",
       "execute": "Execute permissions",
       "insufficient": "You don't have permissions to create or edit this item."
     },
-    "addPayment": "Add payment",
-    "addPaymentMethod": "Add payment method",
-    "addPaymentMethodText": "Add payment method and purchase the needed credits. Once the credits supply is depleted you will be charged again.",
+    "subscription": {
+      "bandwidth": "Bandwith",
+      "canceledOn": "Your plan will be canceled on {date}.",
+      "creditsLifetime": "Credits Lifetime",
+      "forever": "Forever",
+      "free": "Free",
+      "lifetime": "Lifetime",
+      "monthly": "Monthly",
+      "nextBilling": "Next billing cycle on {date}.",
+      "otherServices": "Free credits for other services",
+      "packages": "Subscription packages",
+      "perMonth": "per month",
+      "storage": "Storage",
+      "web3Services": "Web3 services"
+    },
+    "usage": {
+      "bandwith": "Bandwith",
+      "bytesStored": "Byte stored",
+      "description": "",
+      "downloads": "Downloads",
+      "hosting": "Web3 hosting",
+      "storage": "Web3 storage",
+      "title": "Project quotas",
+      "upgrade": "Increase quotas"
+    },
     "adminMode": "You are in ADMIN mode!",
     "attached": "Attached",
     "attachService": "Attach service",
     "attachNewService": "Attach new service",
-    "billing": "Billing",
-    "card": "Card",
+    "billing": "Billing and Usage",
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
     "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
     "dashboard": "Dashboard",
     "date": "Date",
+    "deletedAt": "Deleted at",
     "email": "Email",
     "emailMethodConfiguration": "Email method configuration",
     "env": "ENV",
@@ -217,14 +328,9 @@
     "goToApiManagement": "Go to central API management",
     "homepage": "Homepage",
     "inviteTeamMember": "Invite team member",
-    "invoiceDate": "Next invoice issue date",
-    "invoiceTotal": "Invoice total",
-    "invoice": "Invoice",
-    "invoices": "Invoices",
     "learnMoreAboutServices": "Learn more about services",
     "manageRoles": "Manage roles",
     "name": "Name",
-    "payment": "Payment",
     "readDocs": "Read the Docs",
     "role": "Role",
     "searchDocs": "Search the docs",
@@ -234,7 +340,6 @@
     "total": "Total",
     "user": "User",
     "viewInvoice": "View Invoice",
-    "yourPlan": "Your plan: ",
     "value": "Value",
     "visibleColumns": "Visible columns",
     "w3Warn": "W3 warn"
@@ -255,6 +360,7 @@
     "USER_IS_NOT_AUTHENTICATED": "User is not authenticated",
     "FORBIDDEN": "You don't have permission for this action",
     "USER_IS_NOT_AUTHORIZED": "User is not authorized",
+    "CAPTCHA_NOT_PRESENT": "Please solve captcha",
     "Insufficient permissions to modify this record": "You don't have permission for this action",
     "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error, please fill the form",
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
@@ -269,13 +375,14 @@
     "API_KEY_ROLE_SERVICE_UUID_NOT_PRESENT": "API_KEY_ROLE_SERVICE_UUID is missing",
     "API_KEY_ROLE_PROJECT_UUID_NOT_PRESENT": "API_KEY_ROLE_PROJECT_UUID is missing",
     "API_KEY_ROLE_ROLE_ID_NOT_VALID": "API_KEY_ROLE_ROLE_ID is not valid",
+    "MAX_API_KEY_QUOTA_REACHED": "You have reached the maximum number of API keys for this project.",
     "CREATE_API_KEY_PROJECT_UUID_NOT_PRESENT": "CREATE_API_KEY_PROJECT_UUID is missing",
     "BUCKET_PROJECT_UUID_NOT_PRESENT": "Bucket project ID is missing",
     "BUCKET_STORAGE_PLAN_ID_NOT_PRESENT": "Bucket storage plain ID is missing",
-    "BUCKET_NAME_NOT_PRESENT": "Bucekt name is missing",
-    "DIRECTORY_BUCKET_ID_NOT_PRESENT": "Directory bucket ID is missing",
+    "BUCKET_NAME_NOT_PRESENT": "Bucket name is missing",
+    "DIRECTORY_BUCKET_ID_NOT_PRESENT": "Directory bucket is missing",
     "DIRECTORY_NAME_NOT_PRESENT": "Directory name is missing",
-    "BUCKET_UUID_NOT_PRESENT": "Bucekt UUID is missing",
+    "BUCKET_UUID_NOT_PRESENT": "Bucket UUID is missing",
     "PATH_NOT_PRESENT": "Path is missing",
     "CONTENT_TYPE_NOT_PRESENT": "Content type is missing",
     "SESSION_UUID_NOT_PRESENT": "Session UUID is missing",
@@ -284,6 +391,8 @@
     "MAX_BUCKETS_REACHED": "Maximum number of buckets is reached",
     "MAX_PROJECTS_REACHED": "Maximum number of projects is reached",
     "BUCKET_ALREADY_MARKED_FOR_DELETION": "Bucket already marked for deletion",
+    "NOT_ENOUGH_STORAGE_SPACE": "Your run out of space. Please upgrade your subscription plan.",
+    "MAX_USED_STORAGE_REACHED": "Your run out of space. Please upgrade your subscription plan.",
     "WEB_PAGE_NOT_FOUND": "Web page not found",
     "PUBLISH_IPNS_CID_NOT_PRESENT": "CID is missing",
     "MAX_BUCKET_SIZE_REACHED": "Maximum bucket size reached. The current bucket has reached its maximum capacity, and no additional data can be stored.",
@@ -294,6 +403,7 @@
     "FILE_BODY_NOT_PRESENT": "File body is missing",
     "FILE_NOT_FOUND": "File not found",
     "WEBSITE_DOMAIN_CHANGE_NOT_ALLOWED": "Website domain can be changed every 15 minutes. ",
+    "NO_FILES_TO_DEPLOY": "Please upload some files first.",
     "STATUS_NOT_PRESENT": "Status not present",
     "INVALID_STATUS": "Invalid status",
     "EMAIL_NOT_PRESENT": "Email is missing",
@@ -303,7 +413,7 @@
     "USER_EMAIL_NOT_VALID": "Email is not valid",
     "USER_EMAIL_NOT_EXISTS": "Looks like your email is not in our books yet.",
     "USER_ALREADY_REGISTERED": "User already registered",
-    "USER_EMAIL_ALREADY_TAKEN": "Email is already taken",
+    "USER_EMAIL_ALREADY_TAKEN": "Please check your inbox as mail has already been sent.",
     "USER_UUID_NOT_PRESENT": "user_uuid is missing",
     "USER_UUID_ALREADY_EXISTS": "user_uuid already exists",
     "USER_PASSWORD_NOT_PRESENT": "Password is missing",
@@ -345,6 +455,7 @@
     "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid EVM address",
     "INVALID_ADDRESS_FOR_TRANSFER_TO": "Wrong address, please enter different address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
+    "CREDIT_BALANCE_TOO_LOW": "Credit balance too low",
     "walletSignature": "'Could not capture your signature, check your wallet connection",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
@@ -365,16 +476,6 @@
       "true": "Yes",
       "false": "No"
     },
-    "bucketSizes": {
-      "5gb": "5GB - Free",
-      "100gb": "100GB - Not available"
-    },
-    "emailConfiguration": {
-      "email": "Email",
-      "emailText": "End users will be able to sign up using email and password. A Digital ID (DID) will be created for them through KILT Protocol.",
-      "did": "DID Vault",
-      "didText": "DIDs generated by the KILT protocol will be saved to Apillon DID Vault and become available for quick login for end-users."
-    },
     "label": {
       "authType": "Auth type",
       "apiKeyName": "API Key name",
@@ -382,7 +483,6 @@
       "bearerToken": "Bearer token",
       "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
-      "bucketSize": "Bucket size",
       "cardHolder": "Card holder",
       "cardNumber": "Card number",
       "collectionBaseUri": "Base URI",
@@ -401,6 +501,7 @@
       "collectionSymbol": "Symbol",
       "collectionSupplyLimited": "Total supply",
       "collectionType": "Collection type",
+      "collectionUseGateway": "Use apillon gateway for base uri",
       "confirmPassword": "Confirm password",
       "cvv": "CVV",
       "domain": "Domain name",
@@ -451,6 +552,7 @@
       "bucketType": "Select Bucket type",
       "cardHolder": "John Doe",
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
+      "chain": "Select Chain",
       "complexPassword": "Enter complex password",
       "cvv": "311",
       "domain": "Type your domain name here",
@@ -505,7 +607,7 @@
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
         "collection": "Creating NFT collection requested.",
-        "directory": "Directory key has been created",
+        "directory": "Folder has been created",
         "domain": "Domain has been added to Website",
         "file": "File has been created",
         "hosting": "Hosting has been created",
@@ -522,7 +624,7 @@
         "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
-        "directory": "Directory key has been deleted",
+        "directory": "Folder has been deleted",
         "domain": "Domain has been deleted",
         "file": "File has been deleted",
         "hosting": "Hosting has been deleted",
@@ -537,7 +639,7 @@
       },
       "restored": {
         "bucket": "Bucket has been restored",
-        "directory": "Directory key has been restored",
+        "directory": "Folder has been restored",
         "file": "File has been restored"
       },
       "updated": {
@@ -545,7 +647,7 @@
         "apiKeyRole": "Api key permission has been added",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
-        "directory": "Directory key has been updated",
+        "directory": "Folder has been updated",
         "domain": "Domain has been updated",
         "file": "File has been updated",
         "hosting": "Hosting has been updated",
@@ -605,7 +707,7 @@
       "production": "3. Production"
     },
     "upload": {
-      "directory": "Upload directory",
+      "directory": "Upload folder",
       "dragAndDrop": "Drag & drop (up to 100 files)",
       "files": "Upload files and folders"
     },
@@ -658,7 +760,7 @@
       "create": "Create collection",
       "createFirst": "Start creating NFTs",
       "createInfo": "",
-      "createToDisplay": "Create website to display NFTs",
+      "createToDisplay": "Create website to display NFTs with",
       "deploy": "Deploy to blockchain",
       "display": "Display NFT collection",
       "dropStart": "Drop start",
@@ -695,6 +797,7 @@
       "created": {
         "bucket": "newly created bucket",
         "explorer": "blockchain explorer",
+        "goBack": "Go back to NFT Collections",
         "info": "To display your NFTs and mint them, you need a website. \nUse the Apillon NFT website template and host it on a decentralized network.",
         "or": "or see its contents in your",
         "title": "Display your NFTs on the internet",
@@ -716,7 +819,8 @@
         "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
         "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
-        "collectionType": ""
+        "collectionType": "",
+        "collectionUseGateway": "Collection base uri points to IPFS. If this checkbox is checked, base uri will point to CID on Apillon private gateway, which provide better performance. Otherwise base uri points to: ipfs://[CID], and gateway need to be handled manually."
       },
       "status": {
         "0": "CREATED",
@@ -844,6 +948,7 @@
     "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
     "account": "Account",
     "accountInformation": "Account information",
+    "billing": "Billing",
     "logout": "Logout",
     "marketing": "Marketing",
     "marketingCheck": "I want to recieve marketing email from Apillon",
@@ -851,6 +956,7 @@
     "mySettings": "Settings",
     "profile": "Profile",
     "security": "Security",
+    "settings": "Settings",
     "setup2fa": "Set up 2FA"
   },
   "project": {
@@ -965,10 +1071,10 @@
       "selectedFiles": "Delete selected files and directories"
     },
     "directory": {
-      "create": "Create directory",
-      "createNew": "Create new directory",
-      "delete": "Delete directory",
-      "deleteConfirm": "Are you sure that you want to delete {num} selected directory?"
+      "create": "Create folder",
+      "createNew": "Create new folder",
+      "delete": "Delete folder",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected folders?"
     },
     "download": {
       "bucketItems": "Download selected items?",
@@ -1005,7 +1111,11 @@
         "100": "Error while uploading to S3",
         "101": "Error while pinning to CRUST",
         "102": "Error: file does not exists on S3",
-        "103": "Error: bucket is full"
+        "103": "Error: bucket is full",
+        "104": "Error: file upload request does not exists",
+        "105": "Error: failed creating file object",
+        "106": "Error: not enough space",
+        "107": "Error: max storage reached"
       },
       "confirmUpload": "Confirm your upload",
       "create": "Create file",
@@ -1017,11 +1127,11 @@
       "files": "({files} files)",
       "filesUploading": "({uploading} of {files})",
       "nothingHere": "Nothing here",
-      "pinningToCrust": "The file is pinning to CRUST. While uploading, the file is only visible in the \"All Files\" tab.",
+      "pinningToCrust": "This file is being pinned to Crust Network. While uploading, the file is only visible in the \"All Files\" tab.",
       "refresh": "Refresh files",
       "retry": "Retry upload",
       "search": "Search files",
-      "stillUploading": "This file is pinning to CRUST. When it will be pinned, you will be able to see file details.",
+      "stillUploading": "This file is being pinned to Crust Network. When it’s done, you will be able to see file’s IPFS details.",
       "upload": "Upload files and folders",
       "uploading": "Uploading",
       "uploadMore": "Add more files",
@@ -1043,7 +1153,7 @@
     "filesAll": "All Files",
     "fileSize": "File size",
     "fileStatusName": "File status",
-    "goToRootDirectory": "Go to root directory",
+    "goToRootDirectory": "Go to root folder",
     "history": "History",
     "refresh": "Refresh",
     "replicas": "Replicas",
@@ -1068,7 +1178,7 @@
     "authentication": {
       "name": "Authentication",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum.",
-      "emptyTitle": "Your project has currently no authentication services",
+      "emptyTitle": "Your project does not have an authentication service at the moment",
       "emptyInfo": "First create a authentication service and then create API key."
     },
     "storage": {
@@ -1109,6 +1219,7 @@
     "collectionDropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
     "collectionRoyaltiesAddress": "Please enter a valid EVM address",
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
+    "collectionRoyaltiesFees": "Royalty fee must be greater than 0",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
     "collectionSymbolRequired": "Please enter Collection symbol",
     "collectionTypeRequired": "Please select Collection type",
@@ -1135,6 +1246,7 @@
     "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
     "nftTransferAddressRequired": "Please enter wallet address",
+    "notEnoughSpaceInStorage": "File \"{name}\" is to big. To proceed, please upgrade your subscription plan.",
     "notImage": "{name} is not an image",
     "passwordMinLength": "Password must contain at least 12 characters.",
     "passwordReenterSame": "Password is not same as re-entered password!",
@@ -1146,7 +1258,7 @@
     "houseNumberRequired": "Please enter your house number",
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
-    "captchaRequired": "Captcha challange required!",
+    "captchaRequired": "Captcha challenge required!",
     "role": "Selected role is invalid",
     "roleRequired": "Please select role",
     "terms": "Please accept the terms",
@@ -1171,7 +1283,7 @@
       "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
     },
     "folder": {
-      "delete": "All items stored in this directory will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
+      "delete": "All items stored in this folder will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
     },
     "hosting": {
       "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",

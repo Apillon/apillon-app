@@ -8,11 +8,13 @@
       <n-space align="center" justify="space-between">
         <strong class="text-body mr-4">{{ $t('nft.upload.selectAttributes') }}:</strong>
 
-        <a href="https://wiki.apillon.io/build/2-web3-services.html" target="_blank">
-          <Btn type="builders" size="tiny">
-            {{ $t('general.learnMore') }}
-          </Btn>
-        </a>
+        <Btn
+          type="builders"
+          size="tiny"
+          href="https://wiki.apillon.io/build/2-web3-services.html#nfts"
+        >
+          {{ $t('general.learnMore') }}
+        </Btn>
       </n-space>
 
       <n-space

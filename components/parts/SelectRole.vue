@@ -11,14 +11,17 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectProps } from 'naive-ui';
+
 const attrs = useAttrs();
 const emit = defineEmits(['roleChange']);
 
 /** Theme override */
-type SelectThemeOverrides = NonNullable<NSelectProps['themeOverrides']>;
+type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>;
 const SelectRoleOverrides: SelectThemeOverrides = {
   peers: {
     InternalSelection: {
+      color: 'transparent',
       border: '0px',
       borderActive: '0px',
       borderFocus: '0px',

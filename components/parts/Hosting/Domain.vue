@@ -36,7 +36,7 @@
     :title="domain ? $t('hosting.domain.update') : $t('hosting.domain.add')"
   >
     <FormHostingDomain
-      :website-id="websiteId"
+      :website-uuid="websiteUuid"
       :domain="domain"
       @submit-success="showModalDomain = false"
     />
@@ -57,7 +57,7 @@ const { isLg } = useScreen();
 const websiteStore = useWebsiteStore();
 const showModalDomain = ref<boolean>(false);
 const showModalConfiguration = ref<boolean>(false);
-const { websiteId } = useHosting();
+const { websiteUuid } = useHosting();
 
 onMounted(() => {
   websiteStore.getWebsites();

@@ -51,8 +51,13 @@
 </template>
 
 <script lang="ts" setup>
-import { createDiscreteApi } from 'naive-ui';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+
+type PasswordResetForm = {
+  email: string;
+  captcha?: any;
+  refCode?: string;
+};
 
 const props = defineProps({
   btnType: {
@@ -64,7 +69,7 @@ const props = defineProps({
 });
 
 const $i18n = useI18n();
-const { message } = createDiscreteApi(['message'], MessageProviderOptions);
+const message = useMessage();
 const {
   loading,
   captchaKey,
@@ -76,7 +81,12 @@ const {
 } = useCaptcha();
 
 const formRef = ref<NFormInst | null>(null);
-const formData = ref<PasswordResetForm>({ email: props.email, captcha: null, refCode: undefined });
+const formData = ref<PasswordResetForm>({
+  email: props.email,
+  captcha: null,
+  refCode: undefined,
+});
+
 const rules: NFormRules = {
   email: [
     {

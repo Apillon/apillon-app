@@ -19,6 +19,12 @@ const protectedRoutes: Array<ProtectedRouteInterface> = [
   { regex: /^\/onboarding/, redirect: '/login' },
   { path: '/profile', redirect: '/login' },
 ];
+
+const adminRoutes: Array<ProtectedRouteInterface> = [
+  { regex: /^\/dashboard\/payments/, redirect: '/dashboard' },
+  { regex: /^\/dashboard\/usage/, redirect: '/dashboard' },
+  { regex: /^\/dashboard\/billing/, redirect: '/dashboard' },
+];
 const featureRoutes: Array<FeatureRouteInterface> = [
   { regex: /^\/onboarding/, redirect: '/dashboard', feature: Feature.ONBOARDING },
   { regex: /^\/connect\/discord/, redirect: '/dashboard', feature: Feature.DISCORD },
@@ -62,6 +68,8 @@ const featureRoutes: Array<FeatureRouteInterface> = [
   },
   { regex: /^\/dashboard\/access/, redirect: '/dashboard', feature: Feature.ACCESS },
   { regex: /^\/dashboard\/billing/, redirect: '/dashboard', feature: Feature.BILLING },
+  { regex: /^\/dashboard\/usage/, redirect: '/dashboard', feature: Feature.BILLING },
+  { regex: /^\/dashboard\/payments/, redirect: '/dashboard', feature: Feature.BILLING },
 ];
 
 const ignoreRoutes: String[] = ['login-admin'];
@@ -105,6 +113,21 @@ export default defineNuxtRouteMiddleware((to, from) => {
       (!authStore.jwt || !!authStore.userUuid)
     ) {
       return navigateTo(featureRoute.redirect, { redirectCode: 301 });
+    }
+  }
+
+  const dataStore = useDataStore();
+  /** Redirect admin routes if user is not admin or owner */
+  for (const adminRoute of adminRoutes) {
+    if ((!adminRoute.path && !adminRoute.regex) || !adminRoute.redirect) {
+      continue;
+    }
+    if (
+      ((adminRoute.regex && adminRoute.regex.test(decodedUrl)) || decodedUrl === adminRoute.path) &&
+      dataStore.hasProjects &&
+      dataStore.isProjectUser
+    ) {
+      return navigateTo(adminRoute.redirect, { redirectCode: 301 });
     }
   }
 });

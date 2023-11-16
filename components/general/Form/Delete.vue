@@ -1,15 +1,13 @@
 <template>
-  <Btn type="primary" class="w-full mt-2" :loading="loading" @click="deleteItem">
+  <Btn v-if="id" type="primary" class="w-full mt-2" :loading="loading" @click="deleteItem">
     <slot v-if="$slots.default"></slot>
     <template v-else>{{ $t('form.confirm') }}</template>
   </Btn>
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
-
 const props = defineProps({
-  id: { type: [Number, String], required: true },
+  id: { type: [String, Number], default: null },
   type: {
     type: String,
     validator: (type: string) =>
@@ -44,24 +42,24 @@ async function deleteItem() {
 }
 
 /** Get URL base on entity type */
-function getUrl(type: string, id: number | string) {
+function getUrl(type: string, id: string | number) {
   switch (type) {
     case 'apiKey':
       return endpoints.apiKey(id);
     case 'bucket':
-      return endpoints.bucket(id);
+      return endpoints.bucket(`${id}`);
     case 'bucketContent':
-      return endpoints.bucketContent(id);
+      return endpoints.bucketContent(`${id}`);
     case 'directory':
-      return endpoints.directory(id);
+      return endpoints.directory(`${id}`);
     case 'file':
       return endpoints.storageFileDelete(bucketStore.bucketUuid, id);
     case 'ipns':
       return endpoints.ipns(bucketStore.selected, id);
     case 'service':
-      return endpoints.services(id);
+      return endpoints.services(`${id}`);
     default:
-      return endpoints.file(id);
+      return endpoints.file(`${id}`);
   }
 }
 </script>

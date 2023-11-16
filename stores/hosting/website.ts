@@ -1,17 +1,12 @@
 import { defineStore } from 'pinia';
 
-const dataStore = useDataStore();
-const bucketStore = useBucketStore();
-const deploymentStore = useDeploymentStore();
-
 export const useWebsiteStore = defineStore('website', {
   state: () => ({
     active: {} as WebsiteInterface,
     items: [] as Array<WebsiteBaseInterface>,
     loading: false,
     search: '',
-    selected: 0,
-    quotaReached: undefined as Boolean | undefined,
+    selected: '',
     uploadActive: false,
   }),
   getters: {
@@ -27,19 +22,22 @@ export const useWebsiteStore = defineStore('website', {
       this.active = {} as WebsiteInterface;
       this.items = [] as Array<WebsiteBaseInterface>;
       this.search = '';
-      this.selected = 0;
-      this.quotaReached = undefined;
+      this.selected = '';
     },
-    setWebsiteId(id: number) {
-      if (this.selected !== id) {
-        this.selected = id;
+    setWebsite(uuid: string) {
+      if (this.selected !== uuid) {
+        this.selected = uuid;
+
+        const deploymentStore = useDeploymentStore();
         deploymentStore.active = {} as DeploymentInterface;
         deploymentStore.staging = [] as Array<DeploymentInterface>;
         deploymentStore.production = [] as Array<DeploymentInterface>;
+
+        const bucketStore = useBucketStore();
         bucketStore.folder.items = [] as Array<BucketItemInterface>;
         bucketStore.folder.total = 0;
         bucketStore.folder.path = [];
-        bucketStore.folder.selected = 0;
+        bucketStore.folder.selected = '';
         bucketStore.folderSearch();
       }
     },
@@ -54,11 +52,11 @@ export const useWebsiteStore = defineStore('website', {
     },
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
-    async getWebsite(websiteId: number): Promise<WebsiteInterface> {
-      if (this.active?.id === websiteId && !isCacheExpired(LsCacheKeys.WEBSITE)) {
+    async getWebsite(websiteUuid: string): Promise<WebsiteInterface> {
+      if (this.active?.website_uuid === websiteUuid && !isCacheExpired(LsCacheKeys.WEBSITE)) {
         return this.active;
       }
-      return await this.fetchWebsite(websiteId);
+      return await this.fetchWebsite(websiteUuid);
     },
 
     /**
@@ -66,6 +64,8 @@ export const useWebsiteStore = defineStore('website', {
      */
     async fetchWebsites() {
       this.loading = true;
+
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
@@ -96,12 +96,13 @@ export const useWebsiteStore = defineStore('website', {
       this.loading = false;
     },
 
-    async fetchWebsite(id: number): Promise<WebsiteInterface> {
+    async fetchWebsite(uuid: string): Promise<WebsiteInterface> {
+      const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
       }
       try {
-        const res = await $api.get<WebsiteResponse>(endpoints.websites(id));
+        const res = await $api.get<WebsiteResponse>(endpoints.websites(uuid));
 
         this.active = res.data;
 
@@ -116,25 +117,6 @@ export const useWebsiteStore = defineStore('website', {
         window.$message.error(userFriendlyMsg(error));
       }
       return {} as WebsiteInterface;
-    },
-
-    async fetchWebsiteQuota() {
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-
-      try {
-        const res = await $api.get<WebsiteQuotaResponse>(endpoints.websiteQuota, {
-          project_uuid: dataStore.projectUuid,
-        });
-
-        this.quotaReached = res.data;
-      } catch (error: any) {
-        this.quotaReached = undefined;
-
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
     },
   },
 });

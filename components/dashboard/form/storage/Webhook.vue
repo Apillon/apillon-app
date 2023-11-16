@@ -114,10 +114,15 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+type FormWebhook = {
+  url: string;
+  authType: string;
+  param1: string;
+  param2?: string;
+};
 
 const props = defineProps({
-  bucketId: { type: Number, required: true },
+  bucketUuid: { type: String, required: true },
 });
 
 const $i18n = useI18n();
@@ -226,7 +231,7 @@ function handleSubmit(e: Event | MouseEvent) {
 async function getWebhook() {
   loadingPage.value = true;
   try {
-    const res = await $api.get<WebhookResponse>(endpoints.bucketWebhook(props.bucketId));
+    const res = await $api.get<WebhookResponse>(endpoints.bucketWebhook(props.bucketUuid));
 
     webhook.value = res.data;
     updateFormData(res.data);
@@ -240,7 +245,7 @@ async function createWebhook() {
 
   try {
     const res = await $api.post<WebhookResponse>(
-      endpoints.bucketWebhook(props.bucketId),
+      endpoints.bucketWebhook(props.bucketUuid),
       formData.value
     );
 
@@ -258,7 +263,7 @@ async function updateWebhook() {
 
   try {
     const res = await $api.patch<WebhookResponse>(
-      endpoints.bucketWebhook(props.bucketId, webhook.value?.id),
+      endpoints.bucketWebhook(props.bucketUuid, webhook.value?.id),
       formData.value
     );
     webhook.value = res.data;
@@ -273,7 +278,7 @@ async function updateWebhook() {
 async function resetWebhook() {
   loadingReset.value = true;
   try {
-    await $api.delete<DeleteResponse>(endpoints.bucketWebhook(props.bucketId, webhook.value?.id));
+    await $api.delete<DeleteResponse>(endpoints.bucketWebhook(props.bucketUuid, webhook.value?.id));
 
     /** Reset form data */
     webhook.value = null;

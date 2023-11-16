@@ -5,12 +5,11 @@
     </template>
 
     <slot>
-      <NftMintTabs v-if="collectionStore.active?.collectionStatus === CollectionStatus.CREATED" />
-      <n-space v-else class="pb-8" :size="32" vertical>
+      <n-space class="pb-8" :size="32" vertical>
         <!-- Actions -->
         <ActionsNftTransaction
           @mint="modalMintCollectionVisible = true"
-          @nestMint="modalNestMintCollectionVisible = true"
+          @nest-mint="modalNestMintCollectionVisible = true"
           @revoke="modalBurnTokensVisible = true"
           @transfer="modalTransferOwnershipVisible = true"
         />
@@ -32,6 +31,7 @@
       <modal v-model:show="modalMintCollectionVisible" :title="$t('nft.collection.mint')">
         <FormNftMint
           :collection-uuid="collectionStore.active.collection_uuid"
+          :chain-id="collectionStore.active.chain"
           @submit-success="onNftMinted"
         />
       </modal>
@@ -40,6 +40,7 @@
       <modal v-model:show="modalNestMintCollectionVisible" :title="$t('nft.collection.nestMint')">
         <FormNftNestMint
           :collection-uuid="collectionStore.active.collection_uuid"
+          :chain-id="collectionStore.active.chain"
           @submit-success="onNftNestMinted"
         />
       </modal>
@@ -48,6 +49,7 @@
       <modal v-model:show="modalBurnTokensVisible" :title="$t('nft.collection.burn.title')">
         <FormNftBurn
           :collection-uuid="collectionStore.active.collection_uuid"
+          :chain-id="collectionStore.active.chain"
           @submit-success="onNftBurned"
         />
       </modal>
@@ -56,6 +58,7 @@
       <modal v-model:show="modalTransferOwnershipVisible" :title="$t('nft.collection.transfer')">
         <FormNftTransfer
           :collection-uuid="collectionStore.active.collection_uuid"
+          :chain-id="collectionStore.active.chain"
           @submit-success="onNftTransferred"
         />
       </modal>

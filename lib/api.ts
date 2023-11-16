@@ -1,4 +1,4 @@
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { getAppConfig } from './utils';
 
 export const APISettings = {
@@ -21,13 +21,17 @@ class Api {
     return this.onResponse<T>(response);
   }
 
-  async get<T>(path: string, query?: { [k: string]: string | number | Array<string | number> }) {
-    const q = !query ? '' : '?' + stringify(query, { arrayFormat: 'bracket' });
+  async get<T>(
+    path: string,
+    query?: { [k: string]: string | number | Array<string | number> },
+    requestOptions?: RequestInit
+  ) {
+    const q = !query ? '' : '?' + queryString.stringify(query, { arrayFormat: 'bracket' });
+    const requestData = { method: 'GET', query: q };
+
     const response = await fetch(
       APISettings.basePath + path + q,
-      this.onRequest({
-        method: 'GET',
-      })
+      this.onRequest(requestData, requestOptions)
     );
     return this.onResponse<T>(response);
   }
@@ -90,8 +94,8 @@ class Api {
     router.push({ name: 'dashboard-error' });
   }
 
-  onRequest(request: Request | any) {
-    const modifiedRequest = { ...request };
+  onRequest(request: Request | any, requestOptions: RequestInit = {}) {
+    const modifiedRequest = { ...request, ...requestOptions };
 
     modifiedRequest.headers = APISettings.headers;
 
