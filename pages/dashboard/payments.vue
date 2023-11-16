@@ -85,7 +85,7 @@ onMounted(() => {
 
             message.success(
               t('dashboard.payment.stripe.credits', {
-                credits: formatCredits(creditPackage.creditAmount + creditPackage.bonusCredits),
+                credits: formatNumber(creditPackage.creditAmount + creditPackage.bonusCredits),
               })
             );
           }

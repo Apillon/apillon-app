@@ -94,23 +94,17 @@ export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
  */
 /** Add dots and commas */
 export function formatNumber(n: number) {
-  return new Intl.NumberFormat('de-DE').format(n);
+  return new Intl.NumberFormat('en-US').format(n);
 }
 
-export function formatPrice(price: number, currency?: string) {
+export function formatPrice(price: number, currency = 'usd') {
   const decimals = Math.ceil(price) === price ? 0 : 2;
-  if (currency) {
-    return new Intl.NumberFormat('us-US', {
-      style: 'currency',
-      currency,
-      minimumFractionDigits: decimals,
-    }).format(price);
-  }
-  return new Intl.NumberFormat('de-DE', { minimumFractionDigits: decimals }).format(price);
-}
 
-export function formatCredits(credits: number) {
-  return new Intl.NumberFormat().format(credits);
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: decimals,
+  }).format(price);
 }
 
 export function formatCurrency(currency: string) {
