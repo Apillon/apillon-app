@@ -950,6 +950,7 @@
     },
     "password": {
       "btn": "Send e-mail",
+      "change": "Change password",
       "info": "In case you need to reset your password, an email will be sent to the email address you saved in the upper section  \"Account Information\".",
       "title": "Password reset"
     },

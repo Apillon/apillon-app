@@ -60,7 +60,7 @@
       </FormWrapper>
 
       <!-- Modal - Change password -->
-      <modal v-model:show="showModalChangePassword" :title="$t('profile.changePassword')">
+      <modal v-model:show="showModalChangePassword" :title="$t('profile.password.change')">
         <FormPassword :token="authStore.jwt" @submit-success="passwordChanged" />
       </modal>
     </slot>
@@ -71,7 +71,6 @@
 const $i18n = useI18n();
 const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
-const marketing = ref<boolean>(false);
 
 useHead({
   title: $i18n.t('profile.mySettings'),

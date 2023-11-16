@@ -1,7 +1,7 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules">
     <!--  Signup email -->
-    <n-form-item v-show="!sendAgain" path="email" :show-label="false">
+    <n-form-item v-show="!sendAgain" path="email" :show-label="false" :show-feedback="formErrors">
       <n-input
         v-model:value="formData.email"
         :input-props="{ type: 'email' }"
@@ -9,6 +9,14 @@
         clearable
       />
     </n-form-item>
+
+    <div v-show="!sendAgain" class="relative" :class="formErrors ? '-top-2 mb-4' : 'mt-2 mb-6'">
+      <n-checkbox
+        v-model:checked="newsletterChecked"
+        size="medium"
+        :label="$t('profile.marketing.check')"
+      />
+    </div>
 
     <!-- Hcaptcha -->
     <vue-hcaptcha
@@ -65,6 +73,8 @@ const {
 } = useCaptcha();
 
 const formRef = ref<NFormInst | null>(null);
+const formErrors = ref<boolean>(false);
+const newsletterChecked = ref<boolean>(false);
 
 const formData = ref<SignupForm>({
   email: authStore.email,
@@ -87,8 +97,10 @@ const rules: NFormRules = {
 
 function handleSubmit(e: MouseEvent | null) {
   e?.preventDefault();
+  formErrors.value = false;
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
+      formErrors.value = true;
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
@@ -109,6 +121,10 @@ async function signupWithEmail() {
     await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
 
     if (!props.sendAgain) {
+      if (newsletterChecked.value) {
+        await subscribeToNewsletter(formData.value.email);
+      }
+
       router.push({ name: 'register-email' });
 
       /** Track new registration */
