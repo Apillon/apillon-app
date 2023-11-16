@@ -14,7 +14,7 @@
             {{ paymentStore.getActiveSubscriptionPackage?.description }}&nbsp;
           </span>
           <span class="inline-block whitespace-nowrap">
-            {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0, 'eur') }}/{{
+            {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0, 'usd') }}/{{
               $t('general.month')
             }}
           </span>

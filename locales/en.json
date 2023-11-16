@@ -178,7 +178,8 @@
     "apiKey": {
       "apiKey": "API key",
       "apiKeySecret": "API key secret",
-      "authorization": "Authorization",
+      "authentication": "Authentication",
+      "authorization": "Authentication",
       "delete": "Delete API key",
       "details": "API key details",
       "generate": "Generate new key",
