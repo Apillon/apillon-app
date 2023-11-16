@@ -1,7 +1,7 @@
 <template>
   <div class="credits-package text-center text-body">
     <h4 class="mb-6">{{ creditPackage.name }} {{ $t('dashboard.credits.credits') }}</h4>
-    <h1 class="text-white">{{ formatPrice(creditPackage.price, 'eur') }}</h1>
+    <h1 class="text-white">{{ formatPrice(creditPackage.price, 'usd') }}</h1>
 
     <div class="my-6 border-b border-bg-lighter"></div>
 

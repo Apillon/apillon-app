@@ -100,7 +100,7 @@ export function formatNumber(n: number) {
 export function formatPrice(price: number, currency?: string) {
   const decimals = Math.ceil(price) === price ? 0 : 2;
   if (currency) {
-    return new Intl.NumberFormat('de-DE', {
+    return new Intl.NumberFormat('us-US', {
       style: 'currency',
       currency,
       minimumFractionDigits: decimals,
