@@ -299,6 +299,8 @@ function goToForm() {
 }
 
 function goToWizard() {
+  bucketStore.resetFolder();
+  bucketStore.resetUpload();
   collectionStore.resetForms();
   collectionStore.metadataStored = false;
   collectionStore.mintTab = NftMintTab.UPLOAD;

@@ -65,7 +65,7 @@
 
         <!-- SIDEBAR PRICING -->
         <div
-          v-if="!collapsed && dataStore.hasProjects"
+          v-if="!collapsed && dataStore.hasProjects && !authStore.isAdmin()"
           class="relative flex border-t border-bg-lighter flex-col p-8"
         >
           <div :class="{ 'opacity-0': paymentStore.loading }">
@@ -141,9 +141,10 @@ onMounted(() => {
         !authStore.isAdmin()
       ) {
         showModalNewProject.value = true;
+      } else if (!authStore.isAdmin()) {
+        paymentStore.getSubscriptionPackages();
+        paymentStore.fetchActiveSubscription();
       }
-      paymentStore.getSubscriptionPackages();
-      paymentStore.fetchActiveSubscription();
     });
   }, 100);
 });
