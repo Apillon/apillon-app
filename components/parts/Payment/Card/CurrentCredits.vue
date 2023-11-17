@@ -16,7 +16,7 @@
       <Btn
         type="secondary"
         size="large"
-        :disabled="dataStore.isProjectUser"
+        :disabled="authStore.isAdmin() || dataStore.isProjectUser"
         @click="modalCreditPackagesVisible = true"
       >
         {{ $t('dashboard.credits.getMore') }}
@@ -43,6 +43,7 @@
 </template>
 
 <script lang="ts" setup>
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const modalCreditPackagesVisible = ref<boolean>(false);
