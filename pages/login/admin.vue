@@ -5,7 +5,9 @@
 <script lang="ts" setup>
 const router = useRouter();
 const authStore = useAuthStore();
+const dataStore = useDataStore();
 const config = useRuntimeConfig();
+const { clearAll } = useStore();
 
 definePageMeta({
   layout: 'auth',
@@ -33,6 +35,7 @@ async function onAdminLogin(sessionToken?: string, projectUuid?: string) {
     router.push('/');
     return;
   }
+  clearAll();
   localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
 
   authStore.setUserToken(toStr(sessionToken));
@@ -40,8 +43,12 @@ async function onAdminLogin(sessionToken?: string, projectUuid?: string) {
   if (authStore.jwt) {
     authStore.adminSession = true;
 
-    /** Redirect to project */
+    /** Load project data */
+    const project = await dataStore.fetchProject(projectUuid);
+    dataStore.project.items = [project];
     localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, toStr(projectUuid));
+
+    /** Redirect to project */
     router.push({ name: 'dashboard' });
 
     /** Message parent on successful login */
