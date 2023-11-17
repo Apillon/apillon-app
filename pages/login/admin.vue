@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts" setup>
+const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
@@ -15,18 +16,21 @@ definePageMeta({
 
 onMounted(() => {
   // signal the parent that we're loaded.
-  window.parent.postMessage('loaded', '*');
+  if (window.opener) {
+    window.opener.postMessage('loaded', '*');
+  } else if (window.parent) {
+    window.parent.postMessage('loaded', '*');
+  }
 
   // listen for messages from the parent.
-  window.addEventListener(
-    'message',
-    event => {
-      if (event.origin === config.public.adminUrl) {
-        onAdminLogin(event.data?.sessionToken, event.data?.projectUuid);
-      }
-    },
-    false
-  );
+  const onWindowLoaded = event => {
+    if (event.origin === config.public.adminUrl && event.data?.projectUuid) {
+      onAdminLogin(event.data?.sessionToken, event.data?.projectUuid);
+
+      window.removeEventListener('message', onWindowLoaded, false);
+    }
+  };
+  window.addEventListener('message', onWindowLoaded, false);
 });
 
 async function onAdminLogin(sessionToken?: string, projectUuid?: string) {
@@ -44,8 +48,7 @@ async function onAdminLogin(sessionToken?: string, projectUuid?: string) {
     authStore.adminSession = true;
 
     /** Load project data */
-    const project = await dataStore.fetchProject(projectUuid);
-    dataStore.project.items = [project];
+    dataStore.project.selected = projectUuid;
     localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, toStr(projectUuid));
 
     /** Redirect to project */
