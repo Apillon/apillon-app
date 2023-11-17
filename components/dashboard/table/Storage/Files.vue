@@ -625,7 +625,10 @@ function checkUnfinishedFiles() {
 }
 function hasUnfinishedFiles(): boolean {
   return bucketStore.folder.items.some(
-    file => file.fileStatus && file.fileStatus < FileStatus.UPLOADED_TO_IPFS
+    file =>
+      file.type === BucketItemType.FILE &&
+      file.fileStatus &&
+      file.fileStatus < FileStatus.UPLOADED_TO_IPFS
   );
 }
 
