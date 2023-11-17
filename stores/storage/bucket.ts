@@ -77,25 +77,39 @@ export const useBucketStore = defineStore('bucket', {
     resetData() {
       /** Bucket */
       this.active = {} as BucketInterface;
-      this.destroyed = [] as Array<BucketInterface>;
-      this.items = [] as Array<BucketInterface>;
+      this.destroyed = [] as BucketInterface[];
+      this.items = [] as BucketInterface[];
       this.filter.bucketType = null;
       this.filter.search = '';
       this.selected = '';
       this.total = 0;
-      this.uploadFileList = [] as Array<FileListItemType>;
 
       /** File/folder */
-      this.folder.items = [] as Array<BucketItemInterface>;
+      this.resetFolder();
+
+      /** Upload files to storage reset */
+      this.resetUpload();
+    },
+    resetFolder() {
+      this.folder.allowFetch = true;
+      this.folder.items = [] as BucketItemInterface[];
+      this.folder.loading = false;
       this.folder.path = [];
+      this.folder.search = '';
       this.folder.selected = '';
+      this.folder.selectedItems = [] as BucketItemInterface[];
+      this.folder.total = 0;
+    },
+    resetUpload() {
+      this.uploadActive = false;
+      this.uploadFileList = [] as FileListItemType[];
     },
 
     setBucket(uuid: string) {
       if (this.selected !== uuid) {
         this.selected = uuid;
-        this.uploadFileList = [] as Array<FileListItemType>;
-        this.folder.items = [] as Array<BucketItemInterface>;
+        this.uploadFileList = [] as FileListItemType[];
+        this.folder.items = [] as BucketItemInterface[];
         this.folder.total = 0;
         this.folder.path = [];
         this.folder.selected = '';
@@ -193,9 +207,9 @@ export const useBucketStore = defineStore('bucket', {
         dataStore.promises.buckets = null;
 
         if (statusDeleted) {
-          this.items = [] as Array<BucketInterface>;
+          this.items = [] as BucketInterface[];
         } else {
-          this.items = [] as Array<BucketInterface>;
+          this.items = [] as BucketInterface[];
         }
         this.total = 0;
         this.loading = false;
