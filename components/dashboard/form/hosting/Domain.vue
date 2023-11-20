@@ -1,6 +1,6 @@
 <template>
   <Spinner v-if="websiteUuid && !website" />
-  <div v-else>
+  <div v-else class="sm:min-w-[22rem]">
     <n-form
       ref="formRef"
       :model="formData"
@@ -19,7 +19,7 @@
       </n-form-item>
 
       <!-- Instructions to configure DNS -->
-      <HostingDomainConfiguration v-if="!domain" :domain="formData.domain || ''" />
+      <HostingDomainConfiguration v-if="!domain" class="mb-8" :domain="formData.domain || ''" />
 
       <!--  Form submit -->
       <n-form-item :show-label="false" :show-feedback="false">
