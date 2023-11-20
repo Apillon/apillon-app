@@ -247,9 +247,7 @@ declare global {
     bucket_uuid: string;
     bucket: BucketInterface;
     ipnsProduction: string | null;
-    ipnsProductionLink: string | null;
     ipnsStaging: string | null;
-    ipnsStagingLink: string | null;
     productionBucket: BucketInterface;
     stagingBucket: BucketInterface;
     w3ProductionLink: string | null;

@@ -10,7 +10,7 @@
 
           <!-- IPNS link -->
           <HostingPreviewLink
-            :link="websiteStore.active.w3StagingLink || websiteStore.active.ipnsStagingLink || ''"
+            :link="websiteStore.active.w3StagingLink || ''"
             :title="$t('hosting.ipnsLink')"
             :info="$t('hosting.ipnsInfo')"
           />
