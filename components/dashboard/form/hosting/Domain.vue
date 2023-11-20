@@ -22,7 +22,7 @@
       <HostingDomainConfiguration v-if="!domain" :domain="formData.domain || ''" />
 
       <!--  Form submit -->
-      <n-form-item :show-label="false">
+      <n-form-item :show-label="false" :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('hosting.domain.add')" />
         <Btn
           type="primary"
