@@ -48,12 +48,12 @@
       </template>
       <span v-else>_dnslink.&lt;your domain name&gt;</span>
     </p>
-    <p v-if="bucketStore.active.IPNS" class="lg:whitespace-nowrap">
+    <p v-if="websiteStore.active.ipnsProduction" class="lg:whitespace-nowrap">
       <strong>Value: </strong>
-      <span>dnslink=/ipns/{{ bucketStore.active.IPNS }}</span>
+      <span>dnslink=/ipns/{{ websiteStore.active.ipnsProduction }}</span>
       <span
         class="inline-block cursor-pointer ml-2"
-        @click="copyToClipboard(`dnslink=/ipns/${bucketStore.active.IPNS}`)"
+        @click="copyToClipboard(`dnslink=/ipns/${websiteStore.active.ipnsProduction}`)"
       >
         <span class="icon-copy"></span>
       </span>
@@ -62,18 +62,6 @@
       <strong>Value: </strong>
       <span>dnslink=/ipns/&lt;production IPNS address&gt;</span>
     </p>
-    <br />
-
-    <!-- <h4>TXT Record Example:</h4>
-    <p>
-      <strong>Hostname: </strong>
-      <span>dnslink.google.com</span>
-    </p>
-    <p class="lg:whitespace-nowrap">
-      <strong>Value: </strong>
-      <span>dnslink=/ipns/k2k4r8jr49vcd16dqpge14mkaghgvm04bscv9zp8nhodzrwx5uw519u0</span>
-    </p>
-    <br /> -->
   </div>
 </template>
 
@@ -82,6 +70,5 @@ defineProps({
   domain: { type: String, default: '' },
 });
 
-const bucketStore = useBucketStore();
 const websiteStore = useWebsiteStore();
 </script>
