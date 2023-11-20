@@ -154,7 +154,7 @@ async function updateWebsiteDomain() {
   loading.value = false;
 }
 
-function updateWebsiteDomainValue(domain) {
+function updateWebsiteDomainValue(domain: string | null) {
   /** On website updated refresh website data */
   websiteStore.items.forEach((item: WebsiteBaseInterface) => {
     if (item.website_uuid === props.websiteUuid) {
@@ -162,8 +162,9 @@ function updateWebsiteDomainValue(domain) {
       item.domainChangeDate = new Date().toISOString();
     }
   });
-  if (websiteStore.active.bucket_uuid === props.websiteUuid) {
+  if (websiteStore.active.website_uuid === props.websiteUuid) {
     websiteStore.active.domain = domain;
+    websiteStore.active.domainChangeDate = new Date().toISOString();
   }
 }
 </script>
