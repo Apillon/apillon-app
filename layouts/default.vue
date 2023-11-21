@@ -16,7 +16,7 @@
         <Sidebar :collapsed="sidebarCollapsed" />
       </n-layout-sider>
       <n-layout>
-        <Header @toggleSidebar="toggleSidebar" />
+        <Header @toggle-sidebar="toggleSidebar" />
         <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
           <div class="relative pt-8 px-4 sm:px-8">
             <slot />
