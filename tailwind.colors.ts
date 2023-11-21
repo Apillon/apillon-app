@@ -5,6 +5,7 @@ export default {
 
   transparent: 'transparent',
   current: 'currentColor',
+  black: '#000000',
   white: '#F0F2DA',
   yellow: '#F9FF73',
   orange: '#F7AF39',
@@ -18,19 +19,10 @@ export default {
   bodyDark: '#6A6B63',
 
   bg: {
+    lightest: '#F4F4EA',
     lighter: '#313442',
     light: '#1E212B',
     DEFAULT: '#141721',
     dark: '#06080F',
-  },
-
-  /** Depricated color names - use body and bg colors instead */
-  dark: '#141721',
-  black: '#06080F',
-  grey: {
-    DEFAULT: '#9D9E91',
-    light: '#F0F2DA',
-    lightBg: '#313442',
-    dark: '#1E212B',
   },
 };

@@ -11,7 +11,11 @@
     <div class="min-h-full bg-bg transition-transform duration-300" :class="sidebarClasses">
       <n-scrollbar style="max-height: 100vh" class="scrollbar--menu">
         <!-- Close - only on mobile -->
-        <button v-if="!isLg" class="absolute top-4 right-4" @click="emit('toggleSidebar', false)">
+        <button
+          v-if="!isLg"
+          class="flex items-center justify-center absolute top-4 right-4 w-8 h-8 z-50"
+          @click="emit('toggleSidebar', false)"
+        >
           <span class="icon-close text-body"></span>
         </button>
 
