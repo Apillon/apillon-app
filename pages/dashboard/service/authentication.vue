@@ -93,14 +93,10 @@
         icon="storage/empty"
       >
         <FormService
-          class="mt-4 pr-4 sm:pr-8"
+          class="mt-4 pr-4 sm:pr-8 min-w-[13rem]"
           :service-type="ServiceType.AUTHENTICATION"
           :default-service-name="ServiceTypeName.AUTHENTICATION"
-          :btn-text="
-            $t('general.attachService', {
-              service: $t('service.authentication.name').toLocaleLowerCase(),
-            })
-          "
+          :btn-text="$t('service.authentication.emptyBtn')"
         />
       </Empty>
     </slot>

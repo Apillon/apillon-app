@@ -43,7 +43,7 @@
           </div>
         </div>
 
-        <n-space :size="32" align="center">
+        <n-space :size="isSm ? 32 : 16" align="center">
           <!-- Credits -->
           <PaymentCredits v-if="!authStore.isAdmin()" />
 
@@ -69,4 +69,5 @@ import { NSpace } from 'naive-ui';
 
 const emit = defineEmits(['toggleSidebar']);
 const authStore = useAuthStore();
+const { isSm } = useScreen();
 </script>
