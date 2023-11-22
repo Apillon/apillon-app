@@ -753,8 +753,11 @@
       "status": {
         "0": "INITIATED",
         "1": "IN PROGRESS",
+        "2": "IN REVIEW",
+        "3": "APPROVED",
         "10": "SUCCESSFUL",
-        "100": "FAILED"
+        "100": "FAILED",
+        "101": "REJECTED"
       }
     },
     "domain": {
