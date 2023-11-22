@@ -36,7 +36,6 @@ const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
-const dataStore = useDataStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -45,12 +44,7 @@ const formData = ref<FormContractTransfer>({
 });
 
 const rules: NFormRules = {
-  accountAddress: [
-    {
-      required: true,
-      message: $i18n.t('validation.contract.addressRequired'),
-    },
-  ],
+  accountAddress: [ruleRequired($i18n.t('validation.contract.addressRequired'))],
 };
 
 // Submit
@@ -71,11 +65,7 @@ async function transfer() {
   loading.value = true;
 
   try {
-    const bodyData = {
-      ...formData.value,
-      project_uuid: dataStore.projectUuid,
-    };
-    await $api.post<any>(endpoints.contractTransferOwnership(props.contractUuid), bodyData);
+    await $api.post<any>(endpoints.contractTransferOwnership(props.contractUuid), formData.value);
 
     message.success($i18n.t('form.success.contractTransfer'));
 

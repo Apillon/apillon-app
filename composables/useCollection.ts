@@ -41,14 +41,17 @@ export default function useCollection() {
       : NFT_MAX_SUPPLY;
   });
 
-  const ruleBaseUri: NFormItemRule[] = [
+  /**
+   * Rules
+   */
+  const rulesBaseUri: NFormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionBaseUriRequired')),
     {
       type: 'url',
       message: $i18n.t('validation.collectionBaseUri'),
     },
   ];
-  const ruleMaxSupply: NFormItemRule[] = [
+  const rulesMaxSupply: NFormItemRule[] = [
     {
       max: maxNft.value,
       validator: validateMaxSupply,
@@ -57,28 +60,28 @@ export default function useCollection() {
       }),
     },
   ];
-  const ruleDropPrice: NFormItemRule[] = [
+  const rulesDropPrice: NFormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionDropPrice')),
     {
       validator: validateDropPrice,
       message: $i18n.t('validation.collectionDropPrice'),
     },
   ];
-  const ruleDropReserve: NFormItemRule[] = [
+  const rulesDropReserve: NFormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionDropReserve')),
     {
       validator: validateReserve,
       message: $i18n.t('validation.collectionDropReserve'),
     },
   ];
-  const ruleRoyaltiesAddress: NFormItemRule[] = [
+  const rulesRoyaltiesAddress: NFormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionRoyaltiesAddressRequired')),
     {
       validator: validateEvmAddress,
       message: $i18n.t('validation.collectionRoyaltiesAddress'),
     },
   ];
-  const ruleRoyaltyFee: NFormItemRule[] = [
+  const rulesRoyaltyFee: NFormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionRoyaltiesFeesRequired')),
     // {
     //   validator: validateNumberNotZero,
@@ -95,13 +98,13 @@ export default function useCollection() {
     'base.chain': ruleRequired($i18n.t('validation.collectionChainRequired')),
     collectionType: ruleRequired($i18n.t('validation.collectionTypeRequired')),
     'base.collectionType': ruleRequired($i18n.t('validation.collectionTypeRequired')),
-    baseUri: ruleBaseUri,
-    'behavior.baseUri': ruleBaseUri,
+    baseUri: rulesBaseUri,
+    'behavior.baseUri': rulesBaseUri,
     baseExtension: ruleRequired($i18n.t('validation.collectionBaseExtensionRequired')),
     'behavior.baseExtension': ruleRequired($i18n.t('validation.collectionBaseExtensionRequired')),
-    maxSupply: ruleMaxSupply,
-    dropPrice: ruleDropPrice,
-    'behavior.dropPrice': ruleDropPrice,
+    maxSupply: rulesMaxSupply,
+    dropPrice: rulesDropPrice,
+    'behavior.dropPrice': rulesDropPrice,
     dropStart: {
       validator: validateDropStart,
       message: $i18n.t('validation.collectionDropStart'),
@@ -110,12 +113,12 @@ export default function useCollection() {
       validator: validateDropStart,
       message: $i18n.t('validation.collectionDropStart'),
     },
-    dropReserve: ruleDropReserve,
-    'behavior.dropReserve': ruleDropReserve,
-    royaltiesAddress: ruleRoyaltiesAddress,
-    'behavior.royaltiesAddress': ruleRoyaltiesAddress,
-    royaltiesFees: ruleRoyaltyFee,
-    'behavior.royaltiesFees': ruleRoyaltyFee,
+    dropReserve: rulesDropReserve,
+    'behavior.dropReserve': rulesDropReserve,
+    royaltiesAddress: rulesRoyaltiesAddress,
+    'behavior.royaltiesAddress': rulesRoyaltiesAddress,
+    royaltiesFees: rulesRoyaltyFee,
+    'behavior.royaltiesFees': rulesRoyaltyFee,
   };
 
   /**

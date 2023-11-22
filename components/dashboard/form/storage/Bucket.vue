@@ -103,19 +103,8 @@ const formData = ref<FormNewBucket>({
 });
 
 const rules: NFormRules = {
-  bucketName: [
-    {
-      required: true,
-      message: $i18n.t('validation.bucketNameRequired'),
-    },
-  ],
-  bucketDescription: [
-    {
-      max: 255,
-      message: $i18n.t('validation.bucketDescriptionTooLong'),
-      trigger: 'input',
-    },
-  ],
+  bucketName: [ruleRequired($i18n.t('validation.bucketNameRequired'))],
+  bucketDescription: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
 };
 
 onMounted(async () => {
