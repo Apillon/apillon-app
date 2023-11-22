@@ -45,7 +45,7 @@
 
         <n-space :size="isSm ? 32 : 16" align="center">
           <!-- Credits -->
-          <PaymentCredits v-if="!authStore.isAdmin()" />
+          <PaymentCredits />
 
           <!-- User profile -->
           <HeaderProfile v-if="!authStore.isAdmin()" />
