@@ -147,9 +147,9 @@ async function login() {
     if (error.code === LibValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
       loading.value = true;
       captchaInput.value.execute();
-      localStorage.removeItem(AuthLsKeys.CAPTCHA);
+      authStore.removeCaptchaJwt(formData.value.email);
     } else if (DevConsoleError.USER_INVALID_LOGIN) {
-      localStorage.removeItem(AuthLsKeys.CAPTCHA);
+      authStore.removeCaptchaJwt(formData.value.email);
       captchaReset();
     }
   }
