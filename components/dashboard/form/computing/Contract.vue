@@ -22,6 +22,7 @@
       :model="formData"
       :rules="rules"
       :disabled="isFormDisabled"
+      autocomplete="off"
       @submit.prevent="handleSubmit"
     >
       <!--  Contract name -->
@@ -72,14 +73,18 @@
       <!--  Contract NFT Contract Address -->
       <n-form-item
         path="nftContractAddress"
-        :label="$t('form.label.contract.nftContractAddress')"
+        :label="labelInfo('nftContractAddress')"
         :label-props="{ for: 'nftContractAddress' }"
       >
-        <n-input
+        <select-options
           v-model:value="formData.nftContractAddress"
+          :options="contractAddresses"
           :input-props="{ id: 'nftContractAddress' }"
           :placeholder="$t('form.placeholder.contract.nftContractAddress')"
+          autocomplete="off"
+          filterable
           clearable
+          tag
         />
       </n-form-item>
 
@@ -89,11 +94,15 @@
         :label="$t('form.label.contract.nftChainRpcUrl')"
         :label-props="{ for: 'nftChainRpcUrl' }"
       >
-        <n-input
+        <select-options
           v-model:value="formData.nftChainRpcUrl"
+          :options="nftChainRpcUrls"
           :input-props="{ id: 'nftChainRpcUrl' }"
           :placeholder="$t('form.placeholder.contract.nftChainRpcUrl')"
+          autocomplete="off"
+          filterable
           clearable
+          tag
         />
       </n-form-item>
 
@@ -136,6 +145,15 @@
 </template>
 
 <script lang="ts" setup>
+type FormContract = {
+  name: string;
+  description?: string;
+  nftContractAddress: string | null;
+  nftChainRpcUrl: string | null;
+  contractType: number | null;
+  restrictToOwner: boolean;
+};
+
 const props = defineProps({
   contractUuid: { type: String, default: null },
 });
@@ -145,13 +163,14 @@ const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
+const collectionStore = useCollectionStore();
 const { booleanSelect } = useCollection();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const contract = ref<ContractInterface | null>(null);
 
-const contractTypes = ref<Array<NSelectOption>>(
+const contractTypes = ref<NSelectOption[]>(
   enumValues(ComputingContractType).map(value => {
     return {
       value,
@@ -160,40 +179,49 @@ const contractTypes = ref<Array<NSelectOption>>(
   })
 );
 
+const contractAddresses = computed(() => {
+  return collectionStore.items.map(item => {
+    return {
+      value: item.contractAddress,
+      label: `${item.contractAddress} (${item.name})`,
+    };
+  });
+});
+
+const nftChainRpcUrls = ref<NSelectOption[]>([
+  {
+    value: 'https://phala-rpc.dwellir.com',
+    label: 'https://phala-rpc.dwellir.com',
+  },
+  {
+    value: 'wss://phala-rpc.dwellir.com',
+    label: 'wss://phala-rpc.dwellir.com',
+  },
+  {
+    value: 'phala-rpc.dwellir.com/79027370-1f5f-4c4f-88c0-f5a68742e247',
+    label: 'phala-rpc.dwellir.com/79027370-1f5f-4c4f-88c0-f5a68742e247',
+  },
+]);
+
 const formData = ref<FormContract>({
   name: '',
   description: '',
   contractType: ComputingContractType.SCHRODINGER,
-  nftContractAddress: '',
-  nftChainRpcUrl: '',
+  nftContractAddress: null,
+  nftChainRpcUrl: null,
   restrictToOwner: false,
 });
 
 const rules: NFormRules = {
-  name: [
-    {
-      required: true,
-      message: $i18n.t('validation.contract.nameRequired'),
-      trigger: 'input',
-    },
-  ],
-  description: [
-    {
-      max: 255,
-      message: $i18n.t('validation.contract.descriptionTooLong'),
-      trigger: 'input',
-    },
-  ],
-  nftContractAddress: [
-    {
-      required: true,
-      message: $i18n.t('validation.contract.addressRequired'),
-      trigger: 'input',
-    },
-  ],
+  name: [ruleRequired($i18n.t('validation.contract.nameRequired'))],
+  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  nftContractAddress: [ruleRequired($i18n.t('validation.contract.addressRequired'))],
 };
 
 onMounted(async () => {
+  /** Get list of NFT collections to show them in dropdown */
+  collectionStore.getCollections();
+
   if (props.contractUuid) {
     contract.value = await contractStore.getContract(props.contractUuid);
     formData.value.name = contract.value.name;
@@ -204,6 +232,24 @@ onMounted(async () => {
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
+
+function labelInfo(field: string) {
+  if (
+    $i18n.te(`form.label.contract.${field}`) &&
+    $i18n.te(`form.label.contract.labelInfo.${field}`) &&
+    $i18n.t(`form.label.contract.labelInfo.${field}`)
+  ) {
+    return [
+      h('span', { class: 'mr-1' }, $i18n.t(`form.label.contract.${field}`)),
+      h(
+        resolveComponent('IconInfo'),
+        { size: 'sm', tooltip: $i18n.t(`form.label.contract.labelInfo.${field}`) },
+        ''
+      ),
+    ];
+  }
+  return $i18n.te(`form.label.contract.${field}`) ? $i18n.t(`form.label.contract.${field}`) : field;
+}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {

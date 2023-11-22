@@ -29,15 +29,6 @@ declare global {
   /**
    * Contract
    */
-  type FormContract = {
-    name: string;
-    description?: string;
-    nftContractAddress?: string;
-    nftChainRpcUrl?: string;
-    contractType?: number;
-    restrictToOwner?: boolean;
-  };
-
   interface ContractInterface extends BaseObjectInterface {
     contract_uuid: string;
     project_uuid: string;

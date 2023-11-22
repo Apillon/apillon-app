@@ -96,20 +96,8 @@ const formData = ref<FormWebsite>({
 });
 
 const rules: NFormRules = {
-  name: [
-    {
-      required: true,
-      message: $i18n.t('validation.websiteNameRequired'),
-      trigger: 'input',
-    },
-  ],
-  description: [
-    {
-      max: 255,
-      message: $i18n.t('validation.websiteDescriptionTooLong'),
-      trigger: 'input',
-    },
-  ],
+  name: [ruleRequired($i18n.t('validation.websiteNameRequired'))],
+  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
 };
 
 onMounted(async () => {

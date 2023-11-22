@@ -14,14 +14,6 @@
       :row-props="rowProps"
     />
 
-    <!-- Modal - Deposit -->
-    <modal v-model:show="modalDepositVisible" :title="$t('computing.contract.deposit')">
-      <FormComputingDeposit
-        :contract-uuid="currentRow.contract_uuid"
-        @submit-success="onContractDeposit"
-      />
-    </modal>
-
     <!-- Modal - Contract Transfer -->
     <modal v-model:show="modalTransferOwnershipVisible" :title="$t('computing.contract.transfer')">
       <FormComputingTransfer
@@ -47,7 +39,6 @@ const TableEllipsis = resolveComponent('TableEllipsis');
 const ComputingContractStatus = resolveComponent('ComputingContractStatus');
 
 let contractInterval: any = null as any;
-const modalDepositVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
 /** Data: filtered contracts */
@@ -156,18 +147,6 @@ const actionsDisabled = computed<boolean>(() => {
 const dropdownOptions = computed(() => {
   return [
     {
-      label: t('computing.contract.deposit'),
-      key: 'deposit',
-      disabled: actionsDisabled.value,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value) {
-            modalDepositVisible.value = true;
-          }
-        },
-      },
-    },
-    {
       label: $i18n.t('computing.contract.transfer'),
       key: 'transfer',
       disabled: actionsDisabled.value,
@@ -195,13 +174,6 @@ const rowProps = (row: ContractInterface) => {
   };
 };
 
-function onContractDeposit() {
-  modalDepositVisible.value = false;
-  setTimeout(async () => {
-    await contractStore.fetchContracts();
-    checkUnfinishedContract();
-  }, 3000);
-}
 function onContractTransferred() {
   modalTransferOwnershipVisible.value = false;
   setTimeout(async () => {
