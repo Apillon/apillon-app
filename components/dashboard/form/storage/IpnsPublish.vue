@@ -47,7 +47,7 @@
 
 <script lang="ts" setup>
 type FormIpnsPublish = {
-  ipns?: number;
+  ipns?: string;
 };
 
 const props = defineProps({
@@ -79,7 +79,7 @@ const rules: NFormRules = {
 
 const ipnsItems = computed<Array<NSelectOption>>(() => {
   return ipnsStore.items.map(item => {
-    return { label: item.name, value: item.id };
+    return { label: item.name, value: item.ipns_uuid };
   });
 });
 
@@ -108,19 +108,18 @@ function handleSubmit(e: Event | MouseEvent) {
   });
 }
 
-async function publishToIpns(ipnsId: number) {
+async function publishToIpns(ipnsUuid: string) {
   loading.value = true;
 
   try {
-    const res = await $api.post<IpnsPublishResponse>(
-      endpoints.ipnsPublish(bucketStore.selected, ipnsId),
-      { cid: props.cid }
-    );
+    await $api.post<IpnsPublishResponse>(endpoints.ipnsPublish(bucketStore.selected, ipnsUuid), {
+      cid: props.cid,
+    });
 
     message.success($i18n.t('form.success.ipnsPublish'));
 
     /** IPNS Publish polling */
-    checkIfIpnsPublished(ipnsId);
+    checkIfIpnsPublished(ipnsUuid);
 
     /** Emit events */
     emit('submitSuccess');
@@ -131,9 +130,9 @@ async function publishToIpns(ipnsId: number) {
   loading.value = false;
 }
 
-function checkIfIpnsPublished(ipnsId: number) {
+function checkIfIpnsPublished(ipnsUuid: string) {
   ipnsPublishInterval = setInterval(async () => {
-    const publishedIpns = await ipnsStore.fetchIpnsById(bucketStore.selected, ipnsId);
+    const publishedIpns = await ipnsStore.fetchIpnsById(bucketStore.selected, ipnsUuid);
 
     if (publishedIpns.ipnsValue) {
       /** On  ipns publish, update data */
@@ -147,7 +146,7 @@ function checkIfIpnsPublished(ipnsId: number) {
 
 function updateIpnsInList(ipns: IpnsInterface) {
   ipnsStore.items.forEach(item => {
-    if (item.id === ipns.id) {
+    if (item.ipns_uuid === ipns.ipns_uuid) {
       item.ipnsName = ipns.ipnsName;
       item.ipnsValue = ipns.ipnsValue;
       item.link = ipns.link;
