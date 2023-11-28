@@ -31,14 +31,17 @@ export const useIpnsStore = defineStore('ipns', {
       return this.items;
     },
 
-    async getIpnsFromList(bucketUuid: string, ipnsId: number): Promise<IpnsInterface | undefined> {
+    async getIpnsFromList(
+      bucketUuid: string,
+      ipnsUuid: string
+    ): Promise<IpnsInterface | undefined> {
       const IPNSs = await this.getIPNSs(bucketUuid);
-      return IPNSs.find(item => item.id === ipnsId);
+      return IPNSs.find(item => item.ipns_uuid === ipnsUuid);
     },
 
-    async getIpnsById(bucketUuid: string, ipnsId: number): Promise<IpnsInterface> {
-      if (this.active.id !== ipnsId || isCacheExpired(LsCacheKeys.IPNS_ITEM)) {
-        return await this.fetchIpnsById(bucketUuid, ipnsId);
+    async getIpnsById(bucketUuid: string, ipnsUuid: string): Promise<IpnsInterface> {
+      if (this.active.ipns_uuid !== ipnsUuid || isCacheExpired(LsCacheKeys.IPNS_ITEM)) {
+        return await this.fetchIpnsById(bucketUuid, ipnsUuid);
       }
       return this.active;
     },
@@ -73,9 +76,9 @@ export const useIpnsStore = defineStore('ipns', {
       return [];
     },
 
-    async fetchIpnsById(bucketUuid: string, ipnsId: number): Promise<IpnsInterface> {
+    async fetchIpnsById(bucketUuid: string, ipnsUuid: string): Promise<IpnsInterface> {
       try {
-        const res = await $api.get<IpnsItemResponse>(endpoints.ipns(bucketUuid, ipnsId));
+        const res = await $api.get<IpnsItemResponse>(endpoints.ipns(bucketUuid, ipnsUuid));
 
         this.active = res.data;
 

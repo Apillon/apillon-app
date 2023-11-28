@@ -12,14 +12,14 @@
   <!-- Modal - Edit IPNS -->
   <modal v-model:show="modalEditIpnsVisible" :title="$t('storage.ipns.edit')">
     <FormStorageIpns
-      :ipns-id="currentRow?.id || 0"
+      :ipns-uuid="currentRow?.ipns_uuid"
       @submit-success="modalEditIpnsVisible = false"
     />
   </modal>
 
   <!-- Modal - Delete API key -->
   <ModalDelete v-model:show="modalDeleteIpnsVisible" :title="$t('storage.ipns.delete')">
-    <FormDelete :id="currentRow?.id" type="ipns" @submit-success="onIpnsDeleted" />
+    <FormDelete :id="currentRow?.ipns_uuid" type="ipns" @submit-success="onIpnsDeleted" />
   </ModalDelete>
 </template>
 
@@ -138,8 +138,8 @@ const data = computed<Array<IpnsInterface>>(() => {
 /**
  * Delete Ipns
  */
-async function onIpnsDeleted() {
+function onIpnsDeleted() {
   modalDeleteIpnsVisible.value = false;
-  ipnsStore.items = ipnsStore.items.filter(item => item.id !== currentRow.value.id);
+  ipnsStore.items = ipnsStore.items.filter(item => item.ipns_uuid !== currentRow.value.ipns_uuid);
 }
 </script>
