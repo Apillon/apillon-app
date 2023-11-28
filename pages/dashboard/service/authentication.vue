@@ -71,20 +71,42 @@
               should be done on the server side.
             </p>
           </li>
+          <li>
+            <p>
+              Follow the
+              <Btn
+                class="inline-block"
+                type="link"
+                href="https://wiki.apillon.io/build/7-apillon-oauth-integration.html"
+                target="_blank"
+              >
+                OAuth integration docs
+              </Btn>
+              on the Apillon wiki. Additionally, you can check out the
+              <Btn
+                class="inline-block"
+                type="link"
+                href="https://github.com/Apillon/oauth-demo"
+                target="_blank"
+              >
+                Apillon OAuth demo on our Github
+              </Btn>
+            </p>
+          </li>
+          <li>
+            <p>
+              If you want to learn more about how OAuth works in the background, refer to the
+              <Btn
+                class="inline-block"
+                type="link"
+                href="https://wiki.apillon.io/web3-services/5-web3-authentication.html"
+                target="_blank"
+              >
+                Web3 Authentication Apillon wiki page
+              </Btn>
+            </p>
+          </li>
         </ol>
-
-        <p>
-          Learn more and follow the example on
-          <Btn
-            class="inline-block"
-            type="link"
-            href="https://wiki.apillon.io/build/2-web3-services.html#web3-authentication"
-            target="_blank"
-          >
-            Apillon Wiki
-          </Btn>
-          <span>.</span>
-        </p>
       </div>
       <Empty
         v-else

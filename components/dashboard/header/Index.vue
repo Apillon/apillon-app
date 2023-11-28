@@ -13,7 +13,7 @@
           >
             <a
               class="flex items-center"
-              href="https://wiki.apillon.io/build/3-apillon-api.html"
+              href="https://wiki.apillon.io/build/1-apillon-api.html"
               target="_blank"
             >
               <n-input
@@ -32,7 +32,7 @@
           <div class="w-[20vw] max-w-xs">
             <a
               class="flex items-center"
-              href="https://wiki.apillon.io/build/3-apillon-api.html"
+              href="https://wiki.apillon.io/build/1-apillon-api.html"
               target="_blank"
             >
               <n-button size="small" :bordered="false">
