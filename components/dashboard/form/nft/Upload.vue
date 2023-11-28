@@ -37,11 +37,7 @@
           {{ $t('nft.upload.infoImages') }}
         </p>
         <p class="mb-6">
-          <Btn
-            type="builders"
-            size="tiny"
-            href="https://wiki.apillon.io/build/2-web3-services.html#nfts"
-          >
+          <Btn type="builders" size="tiny" href="https://wiki.apillon.io/web3-services/4-nfts.html">
             {{ $t('general.learnMore') }}
           </Btn>
         </p>
@@ -122,11 +118,7 @@
           {{ $t('nft.upload.infoFile') }}
         </p>
         <p class="mb-6 text-body whitespace-pre-line">
-          <Btn
-            type="builders"
-            size="tiny"
-            href="https://wiki.apillon.io/build/2-web3-services.html#nfts"
-          >
+          <Btn type="builders" size="tiny" href="https://wiki.apillon.io/web3-services/4-nfts.html">
             {{ $t('general.learnMore') }}
           </Btn>
           <span class="inline-block mx-1">{{ $t('general.or') }}</span>
@@ -144,7 +136,7 @@
           <Btn class="w-full" type="secondary">
             {{ $t('nft.upload.csvFile') }}
           </Btn>
-          <!-- 
+          <!--
           <n-upload-dragger class="h-40">
             <div class="py-2 text-center">
               <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">

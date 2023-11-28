@@ -37,15 +37,15 @@
 
             <div class="mb-2 flex items-center justify-center text-body">
               <p>{{ $t('nft.collection.createToDisplay') }}&nbsp;</p>
-              <a href="https://github.com/Apillon-web3/nft-template-vue/fork" target="_blank">
+              <a href="https://github.com/Apillon/nft-template-vue/fork" target="_blank">
                 <Btn type="builders" size="tiny"> Vue </Btn>
               </a>
               <p>,&nbsp;</p>
-              <a href="https://github.com/Apillon-web3/nft-template-react/fork" target="_blank">
+              <a href="https://github.com/Apillon/nft-template-react/fork" target="_blank">
                 <Btn type="builders" size="tiny"> React </Btn>
               </a>
               <p>&nbsp;{{ $t('general.or') }}&nbsp;</p>
-              <a href="https://github.com/Apillon-web3/nft-template/fork" target="_blank">
+              <a href="https://github.com/Apillon/nft-template/fork" target="_blank">
                 <Btn type="builders" size="tiny"> javascript template </Btn>
               </a>
               <p>.</p>
