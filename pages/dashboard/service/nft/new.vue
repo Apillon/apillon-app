@@ -27,7 +27,7 @@
 
     <slot>
       <div v-if="collectionCreated">
-        <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
+        <div class="flex justify-center items-center" style="min-height: calc(100dvh - 300px)">
           <div class="w-full max-w-lg text-center">
             <NuxtIcon name="nft/collection" class="flex justify-center icon-auto mb-4" filled />
             <h2>{{ $t('nft.collection.created.title') }}</h2>
@@ -129,7 +129,10 @@
             </template>
             <slot>
               <!-- METADATA: storage type -->
-              <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
+              <div
+                class="flex justify-center items-center"
+                style="min-height: calc(100dvh - 300px)"
+              >
                 <div class="max-w-lg text-center pb-8">
                   <h2>{{ $t('nft.metadata.title') }}</h2>
 

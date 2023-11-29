@@ -1,7 +1,7 @@
 <template>
   <div
     class="flex flex-col items-center justify-center px-6 py-4"
-    style="min-height: calc(100vh - 270px)"
+    style="min-height: calc(100dvh - 270px)"
   >
     <div v-if="icon" class="mb-4">
       <NuxtIcon :name="icon" class="icon-auto" filled />
