@@ -9,7 +9,7 @@
   <!-- Sidebar -->
   <transition name="slide-left" :appear="isLg || showOnMobile">
     <div class="min-h-full bg-bg transition-transform duration-300" :class="sidebarClasses">
-      <n-scrollbar style="max-height: 100vh" class="scrollbar--menu">
+      <n-scrollbar style="max-height: 100dvh" class="scrollbar--menu">
         <!-- Close - only on mobile -->
         <button
           v-if="!isLg"

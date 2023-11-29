@@ -1,7 +1,7 @@
 <template>
   <n-scrollbar
     class="min-h-[300px] mt-10 lg:mt-4 text-left"
-    style="max-height: calc(100vh - 420px)"
+    style="max-height: calc(100dvh - 420px)"
     y-scrollable
   >
     <template v-if="collectionStore.gridView">
