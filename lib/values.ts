@@ -9,6 +9,8 @@ export const PARAMS_ALL_ITEMS = {
   limit: 100,
 };
 
+export const LS_KEY_NEWSLETTER = 'al_newsletter_subscribed';
+
 export const SessionKeys = {
   CREDITS_MSG: 'al_credits_msg',
   SUBSCRIPTION_MSG: 'al_subscription_msg',

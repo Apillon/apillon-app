@@ -1,5 +1,6 @@
 import { type LocationQueryValue } from 'vue-router';
 import { useGtm } from '@gtm-support/vue-gtm';
+import queryString from 'query-string';
 import stg from '../config/staging';
 import dev from '../config/development';
 import prod from '../config/production';
@@ -354,6 +355,42 @@ export function copyToClipboardWithResponseTexts(
   );
 }
 
+export async function subscribeToNewsletter(email: string, username?: string): Promise<boolean> {
+  const config = useRuntimeConfig();
+  if (!config.public.mailerLiteSubscribeUrl) {
+    return false;
+  }
+
+  const data = {
+    'fields[email]': email,
+    'fields[firstName]': username,
+    'ml-submit': 1,
+    anticsrf: true,
+    ajax: 1,
+  };
+  const URL =
+    config.public.mailerLiteSubscribeUrl +
+    '?' +
+    queryString.stringify(data, { arrayFormat: 'comma' });
+
+  try {
+    await fetch(URL, {
+      method: 'POST',
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    }).then(response => response.json());
+
+    window.$message.success(window.$i18n.t('form.success.newsletter.subscribed'));
+
+    localStorage.setItem(LS_KEY_NEWSLETTER, email);
+  } catch (error: ApiError | ReferenceError | any) {
+    window.$message.error(userFriendlyMsg(error));
+    return false;
+  }
+  return true;
+}
 /**
  * Cache expiration
  */

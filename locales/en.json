@@ -117,10 +117,15 @@
       "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
       "enterDesiredPassword": "Enter a password to finish creating the account.",
       "madeMistake": "Made a mistake?",
+      "newsletter": "I would like to receive emails about product updates, new feature releases, how-to guides and other platform related content.",
       "orUseEmail": "or sign up using email",
       "sendAgain": "Send again",
       "title": "Build your first Web3 project",
       "withEmail": "sign up with email"
+    },
+    "terms": {
+      "agree": "I have read and agree to ",
+      "tc&pp": "Terms and Conditions and Privacy Policy"
     },
     "wallet": {
       "connect": {
@@ -1010,11 +1015,13 @@
       "btn": "Receive useful data, tips an tricks via email",
       "check": "I want to receive useful data, tips an tricks via email.",
       "info": "Say yes to Apillon emails about product updates, new feature releases, how-to guides and other platform related content. Unsubscribe at anytime.",
+      "privacy": "Privacy Policy",
       "subscribed": "Subscribed",
       "title": "Marketing"
     },
     "password": {
       "btn": "Send e-mail",
+      "change": "Change password",
       "info": "In case you need to reset your password, an email will be sent to the email address you saved in the upper section  \"Account Information\".",
       "title": "Password reset"
     },
