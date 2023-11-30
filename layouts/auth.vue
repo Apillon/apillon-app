@@ -17,15 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import { clearAllBodyScrollLocks } from 'body-scroll-lock';
-
-/**
- * Disable body scroll
- */
-onMounted(() => {
-  clearAllBodyScrollLocks();
-});
-
 /** Global messages */
 const message = useMessage();
 window.$message = message;

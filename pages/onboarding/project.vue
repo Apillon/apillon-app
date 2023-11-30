@@ -59,6 +59,6 @@ function projectCreated() {
 <style lang="postcss" module>
 .loader {
   height: 70vh;
-  max-height: calc(100vh - 350px);
+  max-height: calc(100dvh - 350px);
 }
 </style>

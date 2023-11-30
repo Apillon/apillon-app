@@ -142,7 +142,7 @@ declare global {
    * IPNS
    */
   interface IpnsInterface extends BaseObjectInterface {
-    id: number;
+    ipns_uuid: string;
     ipnsName: string | null;
     ipnsValue: string | null;
     link: string | null;

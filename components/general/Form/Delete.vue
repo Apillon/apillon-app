@@ -53,9 +53,9 @@ function getUrl(type: string, id: string | number) {
     case 'directory':
       return endpoints.directory(`${id}`);
     case 'file':
-      return endpoints.storageFileDelete(bucketStore.bucketUuid, id);
+      return endpoints.storageFileDelete(bucketStore.bucketUuid, `${id}`);
     case 'ipns':
-      return endpoints.ipns(bucketStore.selected, id);
+      return endpoints.ipns(bucketStore.selected, `${id}`);
     case 'service':
       return endpoints.services(`${id}`);
     default:
