@@ -1,7 +1,7 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules">
     <!--  Signup email -->
-    <n-form-item v-show="!sendAgain" path="email" :show-label="false">
+    <n-form-item v-show="!sendAgain" path="email" :show-label="false" :show-feedback="formErrors">
       <n-input
         v-model:value="formData.email"
         :input-props="{ type: 'email' }"
@@ -9,6 +9,20 @@
         clearable
       />
     </n-form-item>
+
+    <div v-show="!sendAgain" class="relative" :class="formErrors ? '-top-2 ' : 'mt-2'">
+      <n-form-item path="terms" :show-label="false" :show-feedback="formErrors && !formData.terms">
+        <n-checkbox v-model:checked="formData.terms" size="medium" :label="termsLabel" />
+      </n-form-item>
+    </div>
+
+    <div v-show="!sendAgain" class="relative" :class="formErrors ? ' mb-4' : 'mb-6'">
+      <n-checkbox
+        v-model:checked="newsletterChecked"
+        size="medium"
+        :label="$t('auth.signup.newsletter')"
+      />
+    </div>
 
     <!-- Hcaptcha -->
     <vue-hcaptcha
@@ -43,6 +57,7 @@ type SignupForm = {
   email: string;
   captcha?: any;
   refCode?: string;
+  terms?: boolean;
 };
 
 const props = defineProps({
@@ -65,11 +80,14 @@ const {
 } = useCaptcha();
 
 const formRef = ref<NFormInst | null>(null);
+const formErrors = ref<boolean>(false);
+const newsletterChecked = ref<boolean>(false);
 
 const formData = ref<SignupForm>({
   email: authStore.email,
   captcha: null as any,
   refCode: `${$route.query?.REF || ''}`,
+  terms: false,
 });
 
 const rules: NFormRules = {
@@ -83,12 +101,35 @@ const rules: NFormRules = {
       message: $i18n.t('validation.emailRequired'),
     },
   ],
+  terms: [
+    {
+      validator(_: NFormItemRule, value: string) {
+        return props.sendAgain || !!value;
+      },
+      message: $i18n.t('validation.terms'),
+      trigger: 'change',
+    },
+  ],
 };
+
+/** Terms label with link  */
+const termsLabel = computed<any>(() => {
+  return h('span', {}, [
+    $i18n.t('auth.terms.agree'),
+    h(
+      'a',
+      { href: 'https://apillon.io/legal-disclaimer', target: '_blank' },
+      { default: () => $i18n.t('auth.terms.tc&pp') }
+    ),
+  ]);
+});
 
 function handleSubmit(e: MouseEvent | null) {
   e?.preventDefault();
+  formErrors.value = false;
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
+      formErrors.value = true;
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
@@ -109,6 +150,10 @@ async function signupWithEmail() {
     await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
 
     if (!props.sendAgain) {
+      if (newsletterChecked.value) {
+        await subscribeToNewsletter(formData.value.email);
+      }
+
       router.push({ name: 'register-email' });
 
       /** Track new registration */

@@ -20,10 +20,8 @@ import type {
   TableExpandColumn,
   TableSelectionColumn,
 } from 'naive-ui/es/data-table/src/interface';
-import { MenuOption } from 'naive-ui/es/menu/src/interface';
-import { SettledFileInfo } from 'naive-ui/es/upload/src/interface';
-
-export {};
+import type { MenuOption } from 'naive-ui/es/menu/src/interface';
+import type { SettledFileInfo } from 'naive-ui/es/upload/src/interface';
 
 declare global {
   type KeyTitle = {

@@ -48,10 +48,15 @@
       "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
       "enterDesiredPassword": "Enter a password to finish creating the account.",
       "madeMistake": "Made a mistake?",
+      "newsletter": "I would like to receive emails about product updates, new feature releases, how-to guides and other platform related content.",
       "orUseEmail": "or sign up using email",
       "sendAgain": "Send again",
       "title": "Build your first Web3 project",
       "withEmail": "sign up with email"
+    },
+    "terms": {
+      "agree": "I have read and agree to ",
+      "tc&pp": "Terms and Conditions and Privacy Policy"
     },
     "wallet": {
       "connect": {
@@ -659,6 +664,9 @@
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated",
         "website": "Website has been updated"
+      },
+      "newsletter": {
+        "subscribed": "You are successfully subscribed to newsletter"
       }
     },
     "terms": {
@@ -709,6 +717,15 @@
       "preview": "1. Upload",
       "staging": "2. Preview",
       "production": "3. Production"
+    },
+    "review": {
+      "confirm": "Proceed with Website Deployment, I'll wait",
+      "content": [
+        "Deployments of websites on the Free Plan undergo security checks to prevent phishing attempts and other malicious activities. While we typically review websites promptly, please note that it may take up to 24 hours. Once approved, your website will be accessible through our IPFS gateway.",
+        "Consider upgrading to one of our paid plans for immediate deployment without the security check delay."
+      ],
+      "title": "Free Plan Website Review by Apillon",
+      "upgrade": "Upgrade Now"
     },
     "upload": {
       "directory": "Upload folder",
@@ -943,8 +960,17 @@
       "titleConnected": "Discord connected",
       "titleDisconnected": "Connect with Discord"
     },
+    "marketing": {
+      "btn": "Receive useful data, tips an tricks via email",
+      "check": "I want to receive useful data, tips an tricks via email.",
+      "info": "Say yes to Apillon emails about product updates, new feature releases, how-to guides and other platform related content. Unsubscribe at anytime.",
+      "privacy": "Privacy Policy",
+      "subscribed": "Subscribed",
+      "title": "Marketing"
+    },
     "password": {
       "btn": "Send e-mail",
+      "change": "Change password",
       "info": "In case you need to reset your password, an email will be sent to the email address you saved in the upper section  \"Account Information\".",
       "title": "Password reset"
     },
@@ -954,9 +980,6 @@
     "accountInformation": "Account information",
     "billing": "Billing",
     "logout": "Logout",
-    "marketing": "Marketing",
-    "marketingCheck": "I want to recieve marketing email from Apillon",
-    "marketingInfo": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
     "mySettings": "Settings",
     "profile": "Profile",
     "security": "Security",

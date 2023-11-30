@@ -43,18 +43,24 @@
       <FormWrapper
         v-if="isFeatureEnabled(Feature.MARKETING, authStore.getUserRoles())"
         class="mb-8"
-        :title="$t('profile.marketing')"
+        :title="$t('profile.marketing.title')"
       >
-        <p class="text-body mb-4">{{ $t('profile.marketingInfo') }}</p>
-        <n-checkbox
-          v-model:checked="marketing"
-          size="medium"
-          :label="$t('profile.marketingCheck')"
-        />
+        <div class="mb-4">
+          <p class="text-body">{{ $t('profile.marketing.info') }}</p>
+          <Btn
+            class="inline-block text-sm"
+            type="link"
+            href="https://apillon.io/privacy-policy/"
+            target="_blank"
+          >
+            {{ $t('profile.marketing.privacy') }}
+          </Btn>
+        </div>
+        <FormNewsletter />
       </FormWrapper>
 
       <!-- Modal - Change password -->
-      <modal v-model:show="showModalChangePassword" :title="$t('profile.changePassword')">
+      <modal v-model:show="showModalChangePassword" :title="$t('profile.password.change')">
         <FormPassword :token="authStore.jwt" @submit-success="passwordChanged" />
       </modal>
     </slot>
@@ -65,7 +71,6 @@
 const $i18n = useI18n();
 const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
-const marketing = ref<boolean>(false);
 
 useHead({
   title: $i18n.t('profile.mySettings'),

@@ -50,6 +50,7 @@ declare global {
     apiUrl: string;
     oauthUrl: string;
     adminUrl: string;
+    mailerLiteSubscribeUrl: string;
     captchaKey: string;
     githubId: string;
     gtmId: string;

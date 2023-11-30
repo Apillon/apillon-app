@@ -346,6 +346,7 @@ export const usePaymentStore = defineStore('payment', {
 
     /** API Stripe subscription session URL */
     async fetchSubscriptionSessionUrl(packageId: number) {
+      const route = useRoute();
       const config = useRuntimeConfig();
       const projectUuid = await this.getProjectUuid();
       if (!projectUuid) return;
@@ -354,7 +355,7 @@ export const usePaymentStore = defineStore('payment', {
         const res = await $api.get<GeneralResponse<string>>(endpoints.subscriptionSessionUrl, {
           project_uuid: projectUuid,
           package_id: packageId,
-          returnUrl: `${config.public.url}/dashboard/payments?subscription=${packageId}`,
+          returnUrl: `${config.public.url}${route.path}?subscription=${packageId}`,
         });
         return res.data;
       } catch (error: any) {

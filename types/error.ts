@@ -26,7 +26,7 @@ export enum LibBadRequestErrorCode {
  */
 export enum LibUnauthorizedErrorCodes {
   UNAUTHORIZED = 40100000,
-  INVALID_TOKEN = 40100000,
+  INVALID_TOKEN = 40100001,
 }
 
 export enum LibForbiddenErrorCodes {
