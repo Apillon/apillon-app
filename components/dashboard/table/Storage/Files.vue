@@ -599,6 +599,9 @@ async function getDirectoryContent(bucketUuid?: string, folderUuid?: string, pag
 }
 
 /** Files polling */
+const finishedFileStatus = computed(() =>
+  props.type === TableFilesType.HOSTING ? FileStatus.UPLOADED_TO_S3 : FileStatus.UPLOADED_TO_IPFS
+);
 function checkUnfinishedFiles() {
   if (!hasUnfinishedFiles()) {
     return;
@@ -616,7 +619,7 @@ function hasUnfinishedFiles(): boolean {
     file =>
       file.type === BucketItemType.FILE &&
       file.fileStatus &&
-      file.fileStatus < FileStatus.UPLOADED_TO_IPFS
+      file.fileStatus < finishedFileStatus.value
   );
 }
 

@@ -718,6 +718,15 @@
       "staging": "2. Preview",
       "production": "3. Production"
     },
+    "review": {
+      "confirm": "Proceed with Website Deployment, I'll wait",
+      "content": [
+        "Deployments of websites on the Free Plan undergo security checks to prevent phishing attempts and other malicious activities. While we typically review websites promptly, please note that it may take up to 24 hours. Once approved, your website will be accessible through our IPFS gateway.",
+        "Consider upgrading to one of our paid plans for immediate deployment without the security check delay."
+      ],
+      "title": "Free Plan Website Review by Apillon",
+      "upgrade": "Upgrade Now"
+    },
     "upload": {
       "directory": "Upload folder",
       "dragAndDrop": "Drag & drop (up to 100 files)",

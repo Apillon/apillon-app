@@ -149,9 +149,24 @@
     </ModalDelete>
 
     <!-- W3Warn - Hosting deploy -->
-    <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
+    <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalConfirm">
       {{ $t('w3Warn.hosting.deploy') }}
     </W3Warn>
+
+    <!-- Modal - Website under review -->
+    <Modal v-model:show="modalWebsiteReviewVisible" :title="$t('hosting.review.title')">
+      <p v-for="(item, key) in translateItems('hosting.review.content')" :key="key">
+        {{ item }}
+      </p>
+      <div class="grid grid-cols-1 gap-8 mt-8 w-full max-w-full">
+        <Btn type="secondary" @click="onModalConfirm">{{ $t('hosting.review.confirm') }}</Btn>
+        <PaymentCardCurrentPlan
+          :show-card="false"
+          btn-type="primary"
+          :btn-text="$t('hosting.review.upgrade')"
+        />
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -163,20 +178,25 @@ const props = defineProps({
 const { downloading, downloadSelectedFiles } = useFile();
 const { websiteUuid, refreshWebpage } = useHosting();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
+const { subscriptionMessage } = usePayment();
 
 const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
+const dataStore = useDataStore();
 const bucketStore = useBucketStore();
+const paymentStore = usePaymentStore();
+const warningStore = useWarningStore();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
-const warningStore = useWarningStore();
 
 const showModalNewFolder = ref<boolean>(false);
 const showModalDelete = ref<boolean>(false);
 const showModalClearAll = ref<boolean>(false);
 const showPopoverDelete = ref<boolean>(false);
+const modalWebsiteReviewVisible = ref<boolean>(false);
+
 const deploying = ref<boolean>(false);
 const deployEnv = ref<number>(DeploymentEnvironment.STAGING);
 
@@ -196,6 +216,16 @@ const deployOptions = ref([
     key: DeploymentEnvironment.DIRECT_TO_PRODUCTION,
   },
 ]);
+
+/** Show payment messages if user create subscription */
+onMounted(() => {
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      subscriptionMessage();
+    });
+  }, 100);
+});
+
 function handleSelectDeploy(key: number) {
   deployWebsite(key);
 }
@@ -277,17 +307,23 @@ function deployWebsite(env: number) {
   if (bucketStore.folder.items.length === 0) {
     message.warning($i18n.t('error.NO_FILES_TO_DEPLOY'));
   } else if (
-    localStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) ||
-    !$i18n.te('w3Warn.hosting.deploy')
+    !paymentStore.hasActiveSubscription &&
+    !sessionStorage.getItem(SessionKeys.WEBSITE_REVIEW)
   ) {
-    warningStore.showSpendingWarning(getPricingServiceName(env), () => deploy(env));
-  } else {
+    modalWebsiteReviewVisible.value = true;
+    sessionStorage.setItem(SessionKeys.WEBSITE_REVIEW, Date.now().toString());
+  } else if (
+    !localStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) &&
+    $i18n.te('w3Warn.hosting.deploy')
+  ) {
     modalW3WarnVisible.value = true;
+  } else {
+    warningStore.showSpendingWarning(getPricingServiceName(env), () => deploy(env));
   }
 }
 
 /** When user close W3Warn, allow him to create new website */
-function onModalW3WarnHide() {
+function onModalConfirm() {
   warningStore.showSpendingWarning(getPricingServiceName(deployEnv.value), () =>
     deploy(deployEnv.value)
   );

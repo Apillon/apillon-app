@@ -22,10 +22,9 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const { query } = useRoute();
-const message = useMessage();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
+const { creditsMessage, subscriptionMessage } = usePayment();
 
 useHead({
   title: t('dashboard.billing'),
@@ -57,62 +56,10 @@ onMounted(() => {
       await Promise.all(promises).then(async _ => {
         loading.value = false;
 
-        if (
-          query.subscription &&
-          showMsgActiveSubscription(toStr(query.subscription)) &&
-          isCacheExpired(SessionKeys.SUBSCRIPTION_MSG)
-        ) {
-          message.success(
-            t('dashboard.payment.stripe.subscription', {
-              plan: paymentStore.getActiveSubscriptionPackage?.name,
-            })
-          );
-
-          /** Save timestamp to SS */
-          sessionStorage.setItem(SessionKeys.SUBSCRIPTION_MSG, Date.now().toString());
-        } else if (
-          query.credits &&
-          isCacheExpired(SessionKeys.CREDITS_MSG) &&
-          (await wereCreditsPurchased())
-        ) {
-          const creditPackage = paymentStore.creditPackages.find(
-            item => item.id === parseInt(toStr(query.credits))
-          );
-
-          if (creditPackage) {
-            /** Save timestamp to SS */
-            sessionStorage.setItem(SessionKeys.CREDITS_MSG, Date.now().toString());
-
-            message.success(
-              t('dashboard.payment.stripe.credits', {
-                credits: formatNumber(creditPackage.creditAmount + creditPackage.bonusCredits),
-              })
-            );
-          }
-        }
+        creditsMessage();
+        subscriptionMessage();
       });
     });
   }, 100);
 });
-
-async function wereCreditsPurchased() {
-  const lastInvoice = await paymentStore.fetchInvoices(1, 1);
-  return (
-    lastInvoice?.data?.total &&
-    lastInvoice?.data?.items &&
-    lastInvoice.data.items[0].referenceTable === 'creditPackage' &&
-    isInLastMinute(lastInvoice.data.items[0].createTime)
-  );
-}
-
-function isInLastMinute(createTime: string | null) {
-  return !!createTime && new Date(createTime).getTime() + MINUTE_IN_MS > Date.now();
-}
-
-function showMsgActiveSubscription(packageId: string): boolean {
-  return (
-    paymentStore.activeSubscription.package_id === intVal(packageId) &&
-    !paymentStore.activeSubscription.cancelDate
-  );
-}
 </script>
