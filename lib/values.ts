@@ -14,6 +14,7 @@ export const LS_KEY_NEWSLETTER = 'al_newsletter_subscribed';
 export const SessionKeys = {
   CREDITS_MSG: 'al_credits_msg',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
+  WEBSITE_REVIEW: 'al_website_review',
 };
 
 export const LsAnalyticsKeys = {

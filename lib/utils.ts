@@ -391,6 +391,17 @@ export async function subscribeToNewsletter(email: string, username?: string): P
   }
   return true;
 }
+
+export function translateItems(key: string): String[] {
+  const { t, te } = useI18n();
+  return Array.from(Array(10).keys()).reduce((accumulator: String[], i) => {
+    if (te(`${key}.${i}`) && t(`${key}.${i}`)) {
+      accumulator.push(t(`${key}.${i}`));
+    }
+    return accumulator;
+  }, [] as String[]);
+}
+
 /**
  * Cache expiration
  */
