@@ -32,52 +32,81 @@
         class="p-8 mb-8 bg-bg-light text-body rounded-lg"
       >
         <h3 class="mb-4 text-white">Apillon OAuth Integration</h3>
-        <p>
-          If you wish to integrate Apillon&#39;s OAuth protocol into your own project or website,
-          you are able to do so. If you don&#39;t have an Apillon account or project already, you
-          can get started on our dashboard. After you have created a project, navigate to your
-          project&#39;s
-          <Btn class="inline-block" type="link" @click="router.push('/dashboard/api-keys')">
-            API keys
-          </Btn>
-          section under the project settings. You must generate an API key for the Authentication
-          service with the <strong>KEY_EXECUTE</strong> permission included. This API key will be
-          used to interact with Apillon&#39;s API, generate an OAuth session and verify a user
-          login. Make sure you store your API key and your API key secret in a secure manner.
+        <p class="mb-2">
+          To integrate Apillon's OAuth protocol into your project or website, follow these steps:
         </p>
-        <p>To integrate Apillon&#39;s OAuth protocol into your website, follow these steps:</p>
-        <ol class="list-decimal text-sm pl-4 mb-4">
+        <ol class="list-decimal text-sm pl-6 mb-4">
           <li>
             <p>
-              <strong>Generate an API Key:</strong> After creating a project, go to your
-              project&#39;s settings and navigate to the
-              <Btn class="inline-block" type="link" @click="router.push('/dashboard/api-keys')">
-                API keys section </Btn
-              >. Generate an API key for the Authentication service with the KEY_EXECUTE permission.
+              Navigate to
+              <Btn
+                class="inline-block"
+                type="link"
+                @click="router.push('/dashboard/project-settings')"
+              >
+                Project settings
+              </Btn>
+              <span>.</span>
             </p>
           </li>
           <li>
             <p>
-              <strong>Securely Store API Key:</strong> It&#39;s crucial to securely store your API
-              key and its secret. These will be used to interact with Apillon&#39;s API, create
-              OAuth sessions, and verify user logins. This should be done on the server-side,
-              explained below.
+              Click the
+              <Btn class="inline-block" type="link" @click="router.push('/dashboard/api-keys')">
+                API keys
+              </Btn>
+              <span> tab.</span>
+            </p>
+          </li>
+          <li>
+            <p>
+              Click <strong>“Generate new key”</strong>, name it, and toggle the Authentication
+              service with the <strong>KEY_EXECUTE</strong> permission.
+            </p>
+          </li>
+          <li>
+            <p>
+              Securely store the API key and its secret. This step is crucial as you will need those
+              to interact with the Apillon API, create OAuth sessions, and verify user log-ins. This
+              should be done on the server side.
+            </p>
+          </li>
+          <li>
+            <p>
+              Follow the
+              <Btn
+                class="inline-block"
+                type="link"
+                href="https://wiki.apillon.io/build/7-apillon-oauth-integration.html"
+                target="_blank"
+              >
+                OAuth integration docs
+              </Btn>
+              on the Apillon wiki. Additionally, you can check out the
+              <Btn
+                class="inline-block"
+                type="link"
+                href="https://github.com/Apillon/oauth-demo"
+                target="_blank"
+              >
+                Apillon OAuth demo on our Github
+              </Btn>
+            </p>
+          </li>
+          <li>
+            <p>
+              If you want to learn more about how OAuth works in the background, refer to the
+              <Btn
+                class="inline-block"
+                type="link"
+                href="https://wiki.apillon.io/web3-services/5-web3-authentication.html"
+                target="_blank"
+              >
+                Web3 Authentication Apillon wiki page
+              </Btn>
             </p>
           </li>
         </ol>
-
-        <p>
-          Check out an example on
-          <Btn
-            class="inline-block"
-            type="link"
-            href="https://wiki.apillon.io/build/2-web3-services.html#web3-authentication"
-            target="_blank"
-          >
-            Wiki
-          </Btn>
-          <span>.</span>
-        </p>
       </div>
       <Empty
         v-else
@@ -86,14 +115,10 @@
         icon="storage/empty"
       >
         <FormService
-          class="mt-4 pr-4 sm:pr-8"
+          class="mt-4 pr-4 sm:pr-8 min-w-[13rem]"
           :service-type="ServiceType.AUTHENTICATION"
           :default-service-name="ServiceTypeName.AUTHENTICATION"
-          :btn-text="
-            $t('general.attachService', {
-              service: $t('service.authentication.name').toLocaleLowerCase(),
-            })
-          "
+          :btn-text="$t('service.authentication.emptyBtn')"
         />
       </Empty>
     </slot>

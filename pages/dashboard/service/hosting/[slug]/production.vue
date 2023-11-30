@@ -4,13 +4,7 @@
       <HeaderWebsite />
     </template>
     <slot>
-      <template
-        v-if="
-          bucketStore.folder.items.length ||
-          bucketStore.active.CID ||
-          deploymentStore.production.length > 0
-        "
-      >
+      <template v-if="bucketStore.folder.items.length || deploymentStore.production.length > 0">
         <n-space class="pb-8" :size="32" vertical>
           <ActionsHostingWebsite :env="DeploymentEnvironment.PRODUCTION" />
 
@@ -19,9 +13,7 @@
 
           <!-- IPNS link -->
           <HostingPreviewLink
-            :link="
-              websiteStore.active.w3ProductionLink || websiteStore.active.ipnsProductionLink || ''
-            "
+            :link="websiteStore.active.w3ProductionLink || ''"
             :title="$t('hosting.ipnsLink')"
             :info="$t('hosting.ipnsInfo')"
           />

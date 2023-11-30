@@ -9,9 +9,13 @@
   <!-- Sidebar -->
   <transition name="slide-left" :appear="isLg || showOnMobile">
     <div class="min-h-full bg-bg transition-transform duration-300" :class="sidebarClasses">
-      <n-scrollbar style="max-height: 100vh" class="scrollbar--menu">
+      <n-scrollbar style="max-height: 100dvh" class="scrollbar--menu">
         <!-- Close - only on mobile -->
-        <button v-if="!isLg" class="absolute top-4 right-4" @click="emit('toggleSidebar', false)">
+        <button
+          v-if="!isLg"
+          class="flex items-center justify-center absolute top-4 right-4 w-8 h-8 z-50"
+          @click="emit('toggleSidebar', false)"
+        >
           <span class="icon-close text-body"></span>
         </button>
 
@@ -65,7 +69,7 @@
 
         <!-- SIDEBAR PRICING -->
         <div
-          v-if="!collapsed && dataStore.hasProjects"
+          v-if="!collapsed && dataStore.hasProjects && !authStore.isAdmin()"
           class="relative flex border-t border-bg-lighter flex-col p-8"
         >
           <div :class="{ 'opacity-0': paymentStore.loading }">
@@ -76,7 +80,7 @@
               </strong>
               <span class="text-sm text-body">
                 {{ $t('dashboard.payment.costs') }}:
-                {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0, 'eur') }}/{{
+                {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0) }}/{{
                   $t('general.month')
                 }}
               </span>
@@ -141,9 +145,10 @@ onMounted(() => {
         !authStore.isAdmin()
       ) {
         showModalNewProject.value = true;
+      } else if (!authStore.isAdmin()) {
+        paymentStore.getSubscriptionPackages();
+        paymentStore.fetchActiveSubscription();
       }
-      paymentStore.getSubscriptionPackages();
-      paymentStore.fetchActiveSubscription();
     });
   }, 100);
 });

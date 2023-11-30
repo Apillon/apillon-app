@@ -27,7 +27,7 @@
 
     <slot>
       <div v-if="collectionCreated">
-        <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
+        <div class="flex justify-center items-center" style="min-height: calc(100dvh - 300px)">
           <div class="w-full max-w-lg text-center">
             <NuxtIcon name="nft/collection" class="flex justify-center icon-auto mb-4" filled />
             <h2>{{ $t('nft.collection.created.title') }}</h2>
@@ -37,15 +37,15 @@
 
             <div class="mb-2 flex items-center justify-center text-body">
               <p>{{ $t('nft.collection.createToDisplay') }}&nbsp;</p>
-              <a href="https://github.com/Apillon-web3/nft-template-vue/fork" target="_blank">
+              <a href="https://github.com/Apillon/nft-template-vue/fork" target="_blank">
                 <Btn type="builders" size="tiny"> Vue </Btn>
               </a>
               <p>,&nbsp;</p>
-              <a href="https://github.com/Apillon-web3/nft-template-react/fork" target="_blank">
+              <a href="https://github.com/Apillon/nft-template-react/fork" target="_blank">
                 <Btn type="builders" size="tiny"> React </Btn>
               </a>
               <p>&nbsp;{{ $t('general.or') }}&nbsp;</p>
-              <a href="https://github.com/Apillon-web3/nft-template/fork" target="_blank">
+              <a href="https://github.com/Apillon/nft-template/fork" target="_blank">
                 <Btn type="builders" size="tiny"> javascript template </Btn>
               </a>
               <p>.</p>
@@ -129,7 +129,10 @@
             </template>
             <slot>
               <!-- METADATA: storage type -->
-              <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
+              <div
+                class="flex justify-center items-center"
+                style="min-height: calc(100dvh - 300px)"
+              >
                 <div class="max-w-lg text-center pb-8">
                   <h2>{{ $t('nft.metadata.title') }}</h2>
 
@@ -299,6 +302,8 @@ function goToForm() {
 }
 
 function goToWizard() {
+  bucketStore.resetFolder();
+  bucketStore.resetUpload();
   collectionStore.resetForms();
   collectionStore.metadataStored = false;
   collectionStore.mintTab = NftMintTab.UPLOAD;

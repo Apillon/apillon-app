@@ -76,7 +76,7 @@ function getUrl(type: string, item: Item) {
         (item as BucketItemInterface).uuid
       );
     case 'ipns':
-      return endpoints.ipns(bucketStore.selected, (item as IpnsInterface).id);
+      return endpoints.ipns(bucketStore.selected, (item as IpnsInterface).ipns_uuid);
     default:
       console.warn('Wrong type');
       return '';

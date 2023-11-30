@@ -14,7 +14,7 @@
             {{ paymentStore.getActiveSubscriptionPackage?.description }}&nbsp;
           </span>
           <span class="inline-block whitespace-nowrap">
-            {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0, 'eur') }}/{{
+            {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0) }}/{{
               $t('general.month')
             }}
           </span>
@@ -39,7 +39,7 @@
       <Btn
         :type="btnType"
         size="large"
-        :disabled="dataStore.isProjectUser"
+        :disabled="authStore.isAdmin() || dataStore.isProjectUser"
         @click="modalSubscriptionPackagesVisible = true"
       >
         {{ $t('dashboard.payment.upgradePlan') }}
@@ -81,6 +81,7 @@ defineProps({
   btnType: { type: String as PropType<'primary' | 'secondary'>, default: 'primary' },
 });
 
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const modalSubscriptionPackagesVisible = ref<boolean>(false);

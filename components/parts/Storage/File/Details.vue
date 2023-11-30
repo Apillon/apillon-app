@@ -1,6 +1,19 @@
 <template>
   <n-space v-if="fileDetails.file_uuid" class="h-full" justify="space-between" vertical>
     <div>
+      <!-- UUID -->
+      <div v-if="file.uuid" class="body-sm mb-4">
+        <p class="body-sm">
+          <span class="text-body">{{ $t('general.uuid') }}</span>
+        </p>
+        <div>
+          <strong>{{ file.uuid }}</strong>
+        </div>
+        <button class="text-primary btn-small" @click="copyToClipboard(file.uuid)">
+          <strong>{{ $t('dashboard.clipboard.copyUuid') }}</strong>
+        </button>
+      </div>
+
       <!-- CID -->
       <div v-if="file?.CID" class="body-sm mb-4">
         <p class="body-sm">

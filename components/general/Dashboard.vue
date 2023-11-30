@@ -4,7 +4,7 @@
       <div
         v-if="loadingAnimation"
         class="w-full flex flex-col gap-8"
-        style="height: calc(100vh - 88px)"
+        style="height: calc(100dvh - 88px)"
       >
         <!-- Loading skeleton - on long page load show skeleton -->
         <n-skeleton height="40px" width="100%" />
@@ -128,8 +128,9 @@ const { name } = useRoute();
 /** Heading height */
 const headingRef = ref<HTMLElement>();
 const scrollStyle = computed(() => {
+  const offset = isLg.value ? 120 : 124;
   return {
-    maxHeight: `calc(100vh - ${120 + (headingRef.value?.clientHeight || 0)}px)`,
+    maxHeight: `calc(100dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
   };
 });
 

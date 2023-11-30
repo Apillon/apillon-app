@@ -147,7 +147,8 @@
     "apiKey": {
       "apiKey": "API key",
       "apiKeySecret": "API key secret",
-      "authorization": "Authorization",
+      "authentication": "Authentication",
+      "authorization": "Authentication",
       "delete": "Delete API key",
       "details": "API key details",
       "generate": "Generate new key",
@@ -161,6 +162,7 @@
       "copyApiKey": "Copy Api key to clipboard",
       "copyCid": "Copy CID",
       "copyLink": "Copy link",
+      "copyUuid": "Copy UUID",
       "error": "Failed to copy"
     },
     "credits": {
@@ -374,6 +376,7 @@
     "API_KEY_ROLE_SERVICE_UUID_NOT_PRESENT": "API_KEY_ROLE_SERVICE_UUID is missing",
     "API_KEY_ROLE_PROJECT_UUID_NOT_PRESENT": "API_KEY_ROLE_PROJECT_UUID is missing",
     "API_KEY_ROLE_ROLE_ID_NOT_VALID": "API_KEY_ROLE_ROLE_ID is not valid",
+    "MAX_API_KEY_QUOTA_REACHED": "You have reached the maximum number of API keys for this project.",
     "CREATE_API_KEY_PROJECT_UUID_NOT_PRESENT": "CREATE_API_KEY_PROJECT_UUID is missing",
     "BUCKET_PROJECT_UUID_NOT_PRESENT": "Bucket project ID is missing",
     "BUCKET_STORAGE_PLAN_ID_NOT_PRESENT": "Bucket storage plain ID is missing",
@@ -690,8 +693,11 @@
       "status": {
         "0": "INITIATED",
         "1": "IN PROGRESS",
+        "2": "IN REVIEW",
+        "3": "APPROVED",
         "10": "SUCCESSFUL",
-        "100": "FAILED"
+        "100": "FAILED",
+        "101": "REJECTED"
       }
     },
     "domain": {
@@ -1185,8 +1191,9 @@
     "authentication": {
       "name": "Authentication",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum.",
-      "emptyTitle": "Your project does not have an authentication service at the moment",
-      "emptyInfo": "First create a authentication service and then create API key."
+      "emptyTitle": "Your project does not have Authentication service yet",
+      "emptyInfo": "Add Web3 Authentication and create an API key.",
+      "emptyBtn": "Attach Web3 Auth"
     },
     "storage": {
       "name": "Storage",

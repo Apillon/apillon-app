@@ -75,8 +75,11 @@ export enum DeploymentEnvironment {
 export enum DeploymentStatus {
   INITIATED = 0,
   IN_PROGRESS = 1,
+  IN_REVIEW = 2,
+  APPROVED = 3,
   SUCCESSFUL = 10,
   FAILED = 100,
+  REJECTED = 101,
 }
 
 declare global {
@@ -139,7 +142,7 @@ declare global {
    * IPNS
    */
   interface IpnsInterface extends BaseObjectInterface {
-    id: number;
+    ipns_uuid: string;
     ipnsName: string | null;
     ipnsValue: string | null;
     link: string | null;
@@ -247,9 +250,7 @@ declare global {
     bucket_uuid: string;
     bucket: BucketInterface;
     ipnsProduction: string | null;
-    ipnsProductionLink: string | null;
     ipnsStaging: string | null;
-    ipnsStagingLink: string | null;
     productionBucket: BucketInterface;
     stagingBucket: BucketInterface;
     w3ProductionLink: string | null;

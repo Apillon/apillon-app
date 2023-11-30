@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center" style="min-height: calc(100vh - 300px)">
+  <div class="flex justify-center items-center" style="min-height: calc(100dvh - 300px)">
     <div
       v-if="
         isStepAvailable(NftDeployStep.DEPLOY) && collectionStore.stepDeploy === NftDeployStep.DEPLOY

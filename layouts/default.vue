@@ -10,14 +10,14 @@
         :width="320"
         :native-scrollbar="false"
         bordered
-        style="max-height: 100vh"
+        style="max-height: 100dvh"
         @update-collapsed="onCollapse"
       >
         <Sidebar :collapsed="sidebarCollapsed" />
       </n-layout-sider>
       <n-layout>
-        <Header @toggleSidebar="toggleSidebar" />
-        <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
+        <Header @toggle-sidebar="toggleSidebar" />
+        <n-scrollbar y-scrollable style="max-height: calc(100dvh - 88px)">
           <div class="relative pt-8 px-4 sm:px-8">
             <slot />
           </div>
@@ -32,8 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
-
 /** Global messages */
 const message = useMessage();
 window.$message = message;
@@ -43,16 +41,6 @@ const { isLg, isXl } = useScreen();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
 const sidebarCollapsed = ref<boolean>(false);
-/**
- * Enable/disable body scroll
- */
-onMounted(() => {
-  disableBodyScroll(document.body as HTMLElement);
-});
-
-onUnmounted(() => {
-  clearAllBodyScrollLocks();
-});
 
 /**
  * Show/hide sidebar on mobile

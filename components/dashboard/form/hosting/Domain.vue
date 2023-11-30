@@ -1,6 +1,6 @@
 <template>
   <Spinner v-if="websiteUuid && !website" />
-  <div v-else>
+  <div v-else class="sm:min-w-[22rem]">
     <n-form
       ref="formRef"
       :model="formData"
@@ -19,10 +19,10 @@
       </n-form-item>
 
       <!-- Instructions to configure DNS -->
-      <HostingDomainConfiguration v-if="!domain" :domain="formData.domain || ''" />
+      <HostingDomainConfiguration v-if="!domain" class="mb-8" :domain="formData.domain || ''" />
 
       <!--  Form submit -->
-      <n-form-item :show-label="false">
+      <n-form-item :show-label="false" :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('hosting.domain.add')" />
         <Btn
           type="primary"
@@ -154,7 +154,7 @@ async function updateWebsiteDomain() {
   loading.value = false;
 }
 
-function updateWebsiteDomainValue(domain) {
+function updateWebsiteDomainValue(domain: string | null) {
   /** On website updated refresh website data */
   websiteStore.items.forEach((item: WebsiteBaseInterface) => {
     if (item.website_uuid === props.websiteUuid) {
@@ -162,8 +162,9 @@ function updateWebsiteDomainValue(domain) {
       item.domainChangeDate = new Date().toISOString();
     }
   });
-  if (websiteStore.active.bucket_uuid === props.websiteUuid) {
+  if (websiteStore.active.website_uuid === props.websiteUuid) {
     websiteStore.active.domain = domain;
+    websiteStore.active.domainChangeDate = new Date().toISOString();
   }
 }
 </script>

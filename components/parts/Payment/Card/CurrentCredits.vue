@@ -9,14 +9,14 @@
       <div class="flex gap-4 items-center mb-6">
         <span class="inline-block icon-credits text-blue text-xl align-text-top"></span>
         <h3>
-          {{ formatCredits(paymentStore.credit.balance || 0) }}
+          {{ formatNumber(paymentStore.credit.balance || 0) }}
           {{ $t('dashboard.credits.credits') }}
         </h3>
       </div>
       <Btn
         type="secondary"
         size="large"
-        :disabled="dataStore.isProjectUser"
+        :disabled="authStore.isAdmin() || dataStore.isProjectUser"
         @click="modalCreditPackagesVisible = true"
       >
         {{ $t('dashboard.credits.getMore') }}
@@ -43,6 +43,7 @@
 </template>
 
 <script lang="ts" setup>
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const modalCreditPackagesVisible = ref<boolean>(false);

@@ -18,6 +18,7 @@ module.exports = {
 
       transparent: 'transparent',
       current: 'currentColor',
+      black: '#000000',
       white: '#F0F2DA',
       yellow: '#F9FF73',
       orange: '#F7AF39',
@@ -31,6 +32,7 @@ module.exports = {
       bodyDark: '#6A6B63',
 
       bg: {
+        lightest: '#F4F4EA',
         lighter: '#313442',
         light: '#1E212B',
         DEFAULT: '#141721',
