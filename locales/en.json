@@ -697,6 +697,11 @@
   },
   "hosting": {
     "deployment": {
+      "env": {
+        "1": "Staging",
+        "2": "Production",
+        "3": "Direct to production"
+      },
       "status": {
         "0": "INITIATED",
         "1": "IN PROGRESS",
