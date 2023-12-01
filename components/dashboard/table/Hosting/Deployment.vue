@@ -31,10 +31,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
           'span',
           {},
           {
-            default: () =>
-              row.environment === DeploymentEnvironment.PRODUCTION
-                ? $i18n.t('general.production')
-                : $i18n.t('general.staging'),
+            default: () => $i18n.t(`hosting.deployment.env.${row.environment}`),
           }
         );
       },
