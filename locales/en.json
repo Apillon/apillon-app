@@ -56,7 +56,9 @@
     },
     "terms": {
       "agree": "I have read and agree to ",
-      "tc&pp": "Terms and Conditions and Privacy Policy"
+      "and": " and ",
+      "pp": "Privacy Policy",
+      "tc": "Terms and Conditions"
     },
     "wallet": {
       "connect": {
