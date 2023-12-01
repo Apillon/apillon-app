@@ -242,6 +242,10 @@ export const useBucketStore = defineStore('bucket', {
 
       /** Fallback for bucketUuid */
       const bucket = arg.bucketUuid || this.bucketUuid;
+      if (!bucket) {
+        this.folder.loading = false;
+        return;
+      }
 
       /** Update current folderUuid */
       if (arg.folderUuid) {
