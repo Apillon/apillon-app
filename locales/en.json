@@ -263,19 +263,30 @@
     },
     "nav": {
       "access": "Access",
+      "apiKeys": "API keys",
       "analytics": "Analytics",
-      "authentication": "Authentication",
       "billing": "Billing",
-      "nft": "NFTs",
-      "computing": "Computing",
       "configuration": "Configuration",
-      "hosting": "Hosting",
-      "monitoring": "Monitoring",
+      "explore": "Explore",
+      "nft": "NFTs",
       "projectOverview": "Project overview",
       "projectSettings": "Project settings",
-      "services": "Services",
-      "serviceMonitor": "Service monitor",
-      "storage": "Storage"
+      "services": "Web3 Services",
+      "smartContracts": "Smart Contracts",
+      "solutions": "Solutions",
+      "storage": "Storage",
+      "solution": {
+        "fileSharing": "Decentralized File Sharing",
+        "nftAirdrop": "NFT Minting and Airdrop",
+        "nftCollection": "Self-hosted NFT Collection",
+        "nftDrop": "NFT Drop",
+        "nftGift": "NFT Gifts in E-commerce",
+        "nftLoyalty": "NFT-based Loyalty Program",
+        "nftMembership": "NFT-based Brand Membership",
+        "poap": "Proof of Attendance NFTs",
+        "tokenGating": "Token Gating",
+        "wallet": "Non-custodial Wallet"
+      }
     },
     "pageMenu": {
       "access": "Access",
@@ -1275,6 +1286,10 @@
       "emptyTitle": "Your project does not have Authentication service yet",
       "emptyInfo": "Add Web3 Authentication and create an API key.",
       "emptyBtn": "Attach Web3 Auth"
+    },
+    "hosting": {
+      "name": "Hosting",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
     },
     "storage": {
       "name": "Storage",

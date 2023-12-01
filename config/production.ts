@@ -11,6 +11,7 @@ const config: ConfigInterface = {
   githubId: '70d0aa8922fe05268341',
   gtmId: 'GTM-P7V3D3P6',
   publishedFeatures: [
+    'ACCESS',
     'DISCORD',
     'HOSTING',
     'PROJECT',

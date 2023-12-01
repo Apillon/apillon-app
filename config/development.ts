@@ -11,6 +11,7 @@ const config: ConfigInterface = {
   githubId: 'd0482598d8adbd8adffa',
   gtmId: 'GTM-P7V3D3P6',
   publishedFeatures: [
+    'ACCESS',
     'APILLON_REGISTER',
     'AUTHENTICATION',
     'BILLING',

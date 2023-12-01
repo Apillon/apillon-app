@@ -24,30 +24,41 @@
       v-bind="$attrs"
       :key="componentSelectKey"
       v-model:value="dataStore.project.selected"
-      :options="dataStore.project.items"
+      :options="dropdownOptions"
       class="select-project"
       :loading="loading"
       :disabled="authStore.isAdmin()"
     />
   </template>
+  <!-- Modal - Create new project -->
+  <modal v-model:show="modalNewProjectVisible" :title="$t('project.new')">
+    <FormProject @submit-success="modalNewProjectVisible = false" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
-defineProps({
+import type { SelectOption } from 'naive-ui';
+import { NButton } from 'naive-ui';
+
+type RenderOptionInfo = { node: VNode; option: SelectOption; selected: boolean };
+
+const props = defineProps({
   collapsed: { type: Boolean, default: false },
 });
-
+const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const { clearAll } = useStore();
 
-const componentSelectKey = ref(0);
+const NEW_PROJECT_KEY = 'new-project';
+const componentSelectKey = ref<number>(0);
 const loading = ref<boolean>(false);
+const modalNewProjectVisible = ref<boolean>(false);
 
 const dropdownOptions = computed(() => {
-  return dataStore.project.items.map((item: ProjectInterface) => {
+  const projects = dataStore.project.items.map((item: ProjectInterface) => {
     return {
       key: item.project_uuid,
       label: item.label,
@@ -55,10 +66,25 @@ const dropdownOptions = computed(() => {
       active: item.project_uuid === dataStore.project.selected,
       props: {
         class: item.project_uuid === dataStore.project.selected ? 'active' : '',
-        onClick: () => {},
       },
     };
   });
+
+  return [
+    ...projects,
+    {
+      key: NEW_PROJECT_KEY,
+      label: t('project.new'),
+      value: NEW_PROJECT_KEY,
+      props: {
+        class: 'dropdown-new-project',
+        onClick: () => {
+          modalNewProjectVisible.value = true;
+        },
+      },
+      render: renderOption,
+    },
+  ];
 });
 
 onMounted(async () => {
@@ -68,6 +94,7 @@ onMounted(async () => {
     dataStore.updateCurrentProject(currentProject);
   } else {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      console.log('projects');
       await dataStore.getProjects();
 
       /** Fetch active project data(get myRole_id_onProject) */
@@ -118,8 +145,29 @@ watch(
 );
 
 function onDropdownSelect(key: string) {
-  dataStore.project.selected = key;
+  if (key !== NEW_PROJECT_KEY) {
+    dataStore.project.selected = key;
+  }
+}
+
+/**
+ * Render functions
+ */
+function renderOption(info: RenderOptionInfo) {
+  if (info.option.key === NEW_PROJECT_KEY) {
+    return h(
+      resolveComponent('Btn'),
+      {
+        class: 'locked mt-2',
+        type: 'info',
+        size: props.collapsed ? 'small' : 'large',
+        onClick: () => {
+          modalNewProjectVisible.value = true;
+        },
+      },
+      () => info.option.label as string
+    );
+  }
+  return info.node;
 }
 </script>
-
-<style lang="postcss"></style>

@@ -9,6 +9,7 @@
     :collapsed="collapsed"
     :collapsed-width="40"
     :collapsed-icon-size="24"
+    :default-expanded-keys="['services']"
     :options="menuOptions"
     @update:value="$emit('toggleSidebar')"
   />
@@ -42,7 +43,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
   const servicesChildren = [
     {
       key: 'dashboard-service-storage',
-      label: $i18n.t('dashboard.nav.storage'),
+      label: $i18n.t('service.storage.name'),
       to: 'dashboard-service-storage',
       iconName: 'icon-storage',
       soon: !isFeatureEnabled(Feature.STORAGE, authStore.getUserRoles()),
@@ -50,23 +51,15 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     },
     {
       key: 'dashboard-service-hosting',
-      label: $i18n.t('dashboard.nav.hosting'),
+      label: $i18n.t('service.hosting.name'),
       to: 'dashboard-service-hosting',
       iconName: 'icon-hosting',
       soon: !isFeatureEnabled(Feature.HOSTING, authStore.getUserRoles()),
       disabled: isMenuItemDisabled(Feature.HOSTING) || !authStore.isUserAllowed(Permission.HOSTING),
     },
     {
-      key: 'dashboard-service-nft',
-      label: $i18n.t('dashboard.nav.nft'),
-      to: 'dashboard-service-nft',
-      iconName: 'icon-NFTs',
-      soon: !isFeatureEnabled(Feature.NFT, authStore.getUserRoles()),
-      disabled: isMenuItemDisabled(Feature.NFT) || !authStore.isUserAllowed(Permission.NFTS),
-    },
-    {
       key: 'dashboard-service-authentication',
-      label: $i18n.t('dashboard.nav.authentication'),
+      label: $i18n.t('service.authentication.name'),
       to: 'dashboard-service-authentication',
       iconName: 'icon-authentication',
       soon: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
@@ -76,26 +69,120 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     },
     {
       key: 'dashboard-service-computing',
-      label: $i18n.t('dashboard.nav.computing'),
+      label: $i18n.t('service.computing.name'),
       to: 'dashboard-service-computing',
       iconName: 'icon-computing',
       soon: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
       disabled:
         isMenuItemDisabled(Feature.COMPUTING) || !authStore.isUserAllowed(Permission.COMPUTING),
     },
-  ];
-  const monitoringChildren = [
     {
-      key: 'dashboard-analytics',
-      label: $i18n.t('dashboard.nav.analytics'),
-      iconName: 'icon-analytics',
-      disabled: isMenuItemDisabled(Feature.MONITORING),
+      key: 'dashboard-service',
+      label: $i18n.t('dashboard.nav.explore'),
+      to: 'dashboard-service',
+      class: 'text-yellow',
+      iconName: 'icon-wide-right',
+    },
+  ];
+  const smartContractsChildren = [
+    {
+      key: 'dashboard-smart-erc-721',
+      label: 'ERC-721',
+      iconName: 'icon-erc-721',
+      disabled: isMenuItemDisabled(Feature.ERC721),
     },
     {
-      key: 'dashboard-service-monitor',
-      label: $i18n.t('dashboard.nav.serviceMonitor'),
-      iconName: 'icon-service-monitor',
-      disabled: isMenuItemDisabled(Feature.MONITORING),
+      key: 'dashboard-smart-erc-20',
+      label: 'ERC-20',
+      iconName: 'icon-erc-20',
+      disabled: isMenuItemDisabled(Feature.ERC20),
+    },
+    {
+      key: 'dashboard-smart-erc-721',
+      label: 'ERC-4337',
+      iconName: 'icon-erc-4437',
+      disabled: isMenuItemDisabled(Feature.ERC4337),
+    },
+    {
+      key: 'dashboard-smart-rmrk',
+      label: 'RMRK',
+      iconName: 'icon-rmrk',
+      disabled: isMenuItemDisabled(Feature.RMRK),
+    },
+    {
+      key: 'dashboard-smart-contracts',
+      label: $i18n.t('dashboard.nav.explore'),
+      class: 'text-yellow',
+      iconName: 'icon-wide-right',
+    },
+  ];
+  const solutionsChildren = [
+    {
+      key: 'dashboard-solution-nft-collection',
+      label: $i18n.t('dashboard.nav.solution.nftCollection'),
+      iconName: 'icon-self-hosted-nft',
+      to: 'dashboard-service-nft',
+      disabled: isMenuItemDisabled(Feature.NFT),
+    },
+    {
+      key: 'dashboard-solution-nft-airdrop',
+      label: $i18n.t('dashboard.nav.solution.nftAirdrop'),
+      iconName: 'icon-nft-mint-airdrop',
+      disabled: isMenuItemDisabled(Feature.NFT_AIRDROP),
+    },
+    {
+      key: 'dashboard-solution-nft-gift',
+      label: $i18n.t('dashboard.nav.solution.nftGift'),
+      iconName: 'icon-gift',
+      disabled: isMenuItemDisabled(Feature.NFT_GIFT),
+    },
+    {
+      key: 'dashboard-solution-poap',
+      label: $i18n.t('dashboard.nav.solution.poap'),
+      iconName: 'icon-poap',
+      disabled: isMenuItemDisabled(Feature.NFT_ATTENDANCE),
+    },
+    {
+      key: 'dashboard-solution-nft-loyalty',
+      label: $i18n.t('dashboard.nav.solution.nftLoyalty'),
+      iconName: 'icon-loyalty-program',
+      disabled: isMenuItemDisabled(Feature.NFT_LOYALTY),
+    },
+    {
+      key: 'dashboard-solution-nft-membership',
+      label: $i18n.t('dashboard.nav.solution.nftMembership'),
+      iconName: 'icon-brand-membership',
+      disabled: isMenuItemDisabled(Feature.NFT_MEMBERSHIP),
+    },
+    {
+      key: 'dashboard-solution-nft-drop',
+      label: $i18n.t('dashboard.nav.solution.nftDrop'),
+      iconName: 'icon-nft-drop',
+      disabled: isMenuItemDisabled(Feature.NFT_DROP),
+    },
+    {
+      key: 'dashboard-solution-wallet',
+      label: $i18n.t('dashboard.nav.solution.wallet'),
+      iconName: 'icon-wallet',
+      disabled: isMenuItemDisabled(Feature.NON_CUSTODIAL_WALLET),
+    },
+    {
+      key: 'dashboard-solution-file-sharing',
+      label: $i18n.t('dashboard.nav.solution.fileSharing'),
+      iconName: 'icon-file-sharing',
+      disabled: isMenuItemDisabled(Feature.FILE_SHARING),
+    },
+    {
+      key: 'dashboard-solution-token-gating',
+      label: $i18n.t('dashboard.nav.solution.tokenGating'),
+      iconName: 'icon-token-gating',
+      disabled: isMenuItemDisabled(Feature.TOKEN_GATING),
+    },
+    {
+      key: 'dashboard-smart-contracts',
+      label: $i18n.t('dashboard.nav.explore'),
+      class: 'text-yellow',
+      iconName: 'icon-wide-right',
     },
   ];
   const configurationChildren = [
@@ -109,6 +196,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     {
       key: 'dashboard-access',
       label: $i18n.t('dashboard.nav.access'),
+      to: 'dashboard-users-permissions',
       iconName: 'icon-acess',
       disabled: isMenuItemDisabled(Feature.ACCESS),
     },
@@ -117,6 +205,14 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: $i18n.t('dashboard.nav.billing'),
       to: 'dashboard-payments',
       iconName: 'icon-billing',
+      disabled: isMenuItemDisabled(Feature.BILLING),
+      show: !dataStore.isProjectUser,
+    },
+    {
+      key: 'dashboard-api-keys',
+      label: $i18n.t('dashboard.nav.apiKeys'),
+      to: 'dashboard-api-keys',
+      iconName: 'icon-api-keys',
       disabled: isMenuItemDisabled(Feature.BILLING),
       show: !dataStore.isProjectUser,
     },
@@ -134,7 +230,12 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
           key: 'divider-2',
           type: 'divider',
         },
-        ...monitoringChildren,
+        ...smartContractsChildren,
+        {
+          key: 'divider-2',
+          type: 'divider',
+        },
+        ...solutionsChildren,
         {
           key: 'divider-3',
           type: 'divider',
@@ -144,20 +245,22 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     : [
         dashboard,
         {
-          type: 'group',
           label: $i18n.t('dashboard.nav.services'),
           key: 'services',
           show: !props.collapsed,
           children: [...servicesChildren],
         },
         {
-          type: 'group',
-          label: $i18n.t('dashboard.nav.monitoring'),
-          key: 'monitoring',
-          children: [...monitoringChildren],
+          label: $i18n.t('dashboard.nav.smartContracts'),
+          key: 'smart-contracts',
+          children: [...smartContractsChildren],
         },
         {
-          type: 'group',
+          label: $i18n.t('dashboard.nav.solutions'),
+          key: 'solutions',
+          children: [...solutionsChildren],
+        },
+        {
           label: $i18n.t('dashboard.nav.configuration'),
           key: 'configuration',
           children: [...configurationChildren],
