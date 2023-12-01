@@ -1,16 +1,15 @@
 <template>
-  <Spinner v-if="ipnsId > 0 && !ipns" />
+  <Spinner v-if="ipnsUuid && !ipns" />
   <div v-else>
-    <!-- Notification - show if qouta has been reached -->
     <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="ipnsId === 0 && $i18n.te('storage.ipns.infoNew')" class="text-body mb-8">
+      <p v-if="ipnsUuid && $i18n.te('storage.ipns.infoNew')" class="text-body mb-8">
         {{ $t('storage.ipns.infoNew') }}
       </p>
-      <p v-else-if="ipnsId > 0 && $i18n.te('storage.ipns.infoEdit')" class="text-body mb-8">
+      <p v-else-if="ipnsUuid && $i18n.te('storage.ipns.infoEdit')" class="text-body mb-8">
         {{ $t('storage.ipns.infoEdit') }}
       </p>
     </template>
@@ -80,7 +79,7 @@ type FormIpns = {
 };
 
 const props = defineProps({
-  ipnsId: { type: Number, default: 0 },
+  ipnsUuid: { type: String, default: null },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
@@ -116,8 +115,8 @@ const rules: NFormRules = {
 };
 
 onMounted(async () => {
-  if (props.ipnsId) {
-    ipns.value = await ipnsStore.getIpnsFromList(bucketStore.selected, props.ipnsId);
+  if (props.ipnsUuid) {
+    ipns.value = await ipnsStore.getIpnsFromList(bucketStore.selected, props.ipnsUuid);
 
     if (ipns.value) {
       formData.value.name = ipns.value.name;
@@ -138,7 +137,7 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (props.ipnsId > 0) {
+    } else if (props.ipnsUuid) {
       await updateIpns();
     } else {
       await createIpns();
@@ -177,7 +176,7 @@ async function updateIpns() {
 
   try {
     const res = await $api.patch<IpnsUpdateResponse>(
-      endpoints.ipns(bucketStore.selected, props.ipnsId),
+      endpoints.ipns(bucketStore.selected, props.ipnsUuid),
       formData.value
     );
 
@@ -185,7 +184,7 @@ async function updateIpns() {
 
     /** On ipns updated refresh ipns data */
     ipnsStore.items.forEach((item: IpnsInterface) => {
-      if (item.id === props.ipnsId) {
+      if (item.ipns_uuid === props.ipnsUuid) {
         item.name = res.data.name;
         item.description = res.data.description;
       }

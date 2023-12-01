@@ -13,22 +13,17 @@
       :wrap="false"
     >
       <span class="mx-1">{{ $t(`hosting.deployment.status.${deploymentStatus}`) }}</span>
-      <AnimationTyping v-if="deploymentStatus < DeploymentStatus.SUCCESSFUL" />
+      <AnimationTyping v-if="deploymentStatus < DeploymentStatus.APPROVED" />
     </n-space>
   </n-tag>
 </template>
 
 <script lang="ts" setup>
+import { DeploymentStatus } from '~~/types/storage';
+
 defineProps({
   deploymentStatus: {
-    type: Number,
-    validator: (deploymentStatus: number) =>
-      [
-        DeploymentStatus.INITIATED,
-        DeploymentStatus.IN_PROGRESS,
-        DeploymentStatus.SUCCESSFUL,
-        DeploymentStatus.FAILED,
-      ].includes(deploymentStatus),
+    type: Number as PropType<DeploymentStatus>,
     default: DeploymentStatus.INITIATED,
   },
 });
@@ -38,9 +33,15 @@ function getDeploymentStatus(status: number): TagType {
   switch (status) {
     case DeploymentStatus.IN_PROGRESS:
       return 'info';
+    case DeploymentStatus.IN_REVIEW:
+      return 'warning';
+    case DeploymentStatus.APPROVED:
+      return 'success';
     case DeploymentStatus.SUCCESSFUL:
       return 'success';
     case DeploymentStatus.FAILED:
+      return 'error';
+    case DeploymentStatus.REJECTED:
       return 'error';
     default:
       return 'default';

@@ -21,7 +21,7 @@
           <Btn
             class="inline-block"
             type="link"
-            href="https://wiki.apillon.io/build/#concepts"
+            href="https://wiki.apillon.io/web3-services/1-good-to-know.html"
             target="_blank"
           >
             back end
@@ -33,7 +33,7 @@
           <Btn
             class="inline-block"
             type="link"
-            href="https://wiki.apillon.io/build/3-apillon-api.html"
+            href="https://wiki.apillon.io/build/1-apillon-api.html"
             target="_blank"
           >
             Apillon API

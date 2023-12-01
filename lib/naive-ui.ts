@@ -410,7 +410,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     colorSegment: colors.bg.DEFAULT,
     panePaddingMedium: '32px 0 0',
     paneTextColor: colors.white,
-    tabBorderColor: colors.grey.lightBg,
+    tabBorderColor: colors.bg.lighter,
     tabBorderRadius: '0',
     tabColor: colors.green,
     tabColorSegment: colors.bg.light,

@@ -31,7 +31,7 @@ const { fileAlreadyOnFileList, isEnoughSpaceInStorage } = useUpload();
 /** Upload height */
 const uploadHeight = computed(() => {
   return {
-    height: bucketStore.hasBucketItems ? 'auto' : 'calc(100vh - 370px)',
+    height: bucketStore.hasBucketItems ? 'auto' : 'calc(100dvh - 370px)',
   };
 });
 

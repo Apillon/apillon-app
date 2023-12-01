@@ -39,10 +39,13 @@
       <Btn
         :type="btnType"
         size="large"
-        :disabled="dataStore.isProjectUser"
+        :disabled="authStore.isAdmin() || dataStore.isProjectUser"
         @click="modalSubscriptionPackagesVisible = true"
       >
-        {{ $t('dashboard.payment.upgradePlan') }}
+        <template v-if="btnText">{{ btnText }}</template>
+        <template v-else>
+          {{ $t('dashboard.payment.upgradePlan') }}
+        </template>
       </Btn>
     </div>
   </n-card>
@@ -53,7 +56,10 @@
     :disabled="dataStore.isProjectUser"
     @click="modalSubscriptionPackagesVisible = true"
   >
-    {{ $t('dashboard.payment.upgradePlan') }}
+    <template v-if="btnText">{{ btnText }}</template>
+    <template v-else>
+      {{ $t('dashboard.payment.upgradePlan') }}
+    </template>
   </Btn>
 
   <!-- Modal -->
@@ -79,8 +85,10 @@
 defineProps({
   showCard: { type: Boolean, default: true },
   btnType: { type: String as PropType<'primary' | 'secondary'>, default: 'primary' },
+  btnText: { type: String, default: null },
 });
 
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const modalSubscriptionPackagesVisible = ref<boolean>(false);

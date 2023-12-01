@@ -66,7 +66,7 @@ export default function useHosting() {
 
   function checkUnfinishedDeployments(deployments: Array<DeploymentInterface>, env: number) {
     const unfinishedDeployment = deployments.find(
-      deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL
+      deployment => deployment.deploymentStatus < DeploymentStatus.IN_REVIEW
     );
     if (unfinishedDeployment === undefined) {
       return;
@@ -80,7 +80,7 @@ export default function useHosting() {
       if (unfinishedDeployment.deploymentStatus !== deployment.deploymentStatus) {
         unfinishedDeployment.deploymentStatus = deployment.deploymentStatus;
       }
-      if (deployment.deploymentStatus >= DeploymentStatus.SUCCESSFUL) {
+      if (deployment.deploymentStatus >= DeploymentStatus.IN_REVIEW) {
         unfinishedDeployment.size = deployment.size;
 
         refreshWebpage(env);

@@ -60,7 +60,6 @@
 <script lang="ts" setup>
 import colors from '~/tailwind.colors';
 
-const { t, te } = useI18n();
 defineProps({
   creditPackage: { type: Object as PropType<CreditPackageInterface>, required: true },
 });
@@ -80,14 +79,5 @@ async function getCreditSessionUrl(packageId: number) {
 
     window.open(stripeSessionUrl, '_self');
   }
-}
-
-function translateItems(key: string): String[] {
-  return Array.from(Array(10).keys()).reduce((accumulator: String[], i) => {
-    if (te(`${key}.${i}`) && t(`${key}.${i}`)) {
-      accumulator.push(t(`${key}.${i}`));
-    }
-    return accumulator;
-  }, [] as String[]);
 }
 </script>

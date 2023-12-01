@@ -34,10 +34,7 @@ export const useWebsiteStore = defineStore('website', {
         deploymentStore.production = [] as Array<DeploymentInterface>;
 
         const bucketStore = useBucketStore();
-        bucketStore.folder.items = [] as Array<BucketItemInterface>;
-        bucketStore.folder.total = 0;
-        bucketStore.folder.path = [];
-        bucketStore.folder.selected = '';
+        bucketStore.resetFolder();
         bucketStore.folderSearch();
       }
     },

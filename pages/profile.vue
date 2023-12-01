@@ -85,7 +85,7 @@
   </Dashboard>
 
   <!-- Modal Referral -->
-  <modal v-model:show="showModalRefferal" :title="$t('referral.enter.header')">
+  <modal v-model:show="showModalReferral" :title="$t('referral.enter.header')">
     <ReferralAcceptTerms />
   </modal>
 </template>
@@ -99,7 +99,7 @@ const message = useMessage();
 const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
 const referralStore = useReferralStore();
-const showModalRefferal = ref(false);
+const showModalReferral = ref(false);
 const loadingDiscord = ref<boolean>(false);
 
 useHead({
@@ -127,7 +127,7 @@ const discordLink = computed(() => {
 
 function enterReferral() {
   if (!referralStore.termsAccepted) {
-    showModalRefferal.value = true;
+    showModalReferral.value = true;
   } else {
     router.push('/dashboard/referral');
   }

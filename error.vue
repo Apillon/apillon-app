@@ -15,17 +15,17 @@
             collapse-mode="width"
             :width="320"
             :native-scrollbar="false"
-            style="max-height: 100vh"
+            style="max-height: 100dvh"
           >
             <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
           </n-layout-sider>
           <n-layout>
             <Header @toggleSidebar="toggleSidebar" />
-            <n-scrollbar y-scrollable style="max-height: calc(100vh - 88px)">
+            <n-scrollbar y-scrollable style="max-height: calc(100dvh - 88px)">
               <div
                 ref="messageRef"
                 class="flex justify-center items-center relative pt-8 px-4"
-                style="height: calc(100vh - 88px)"
+                style="height: calc(100dvh - 88px)"
               >
                 <div>
                   <!-- customise 404 message from template section -->
@@ -67,24 +67,11 @@
 </template>
 
 <script lang="ts" setup>
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
-
 const authStore = useAuthStore();
 const { isLg } = useScreen();
 const messageRef = ref<HTMLDivElement>();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
-
-/**
- * Enable/disable body scroll
- */
-onMounted(() => {
-  disableBodyScroll(document.body as HTMLElement);
-});
-
-onUnmounted(() => {
-  clearAllBodyScrollLocks();
-});
 
 /**
  * Show/hide sidebar on mobile

@@ -99,7 +99,7 @@ async function getSubscriptionSessionUrl(packageId: number) {
   /** Remove cache mark */
   sessionStorage.removeItem(LsCacheKeys.SUBSCRIPTION_ACTIVE);
 
-  if (paymentStore.activeSubscription?.id) {
+  if (paymentStore.hasActiveSubscription) {
     return await goToCustomerPortal();
   }
   loading.value = true;

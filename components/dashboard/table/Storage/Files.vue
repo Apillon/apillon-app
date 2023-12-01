@@ -74,11 +74,7 @@ const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
-const showModalW3Warn = ref<boolean>(false);
-const showModalDelete = ref<boolean | null>(false);
-const drawerFileDetailsVisible = ref<boolean>(false);
-const modalIpnsPublishVisible = ref<boolean>(false);
-const tableRef = ref<DataTableInst | null>(null);
+
 const TableColumns = resolveComponent('TableColumns');
 const IconFolderFile = resolveComponent('IconFolderFile');
 const TableEllipsis = resolveComponent('TableEllipsis');
@@ -88,8 +84,15 @@ const StorageFileStatus = resolveComponent('StorageFileStatus');
 /** Polling */
 let fileInterval: any = null as any;
 
+const showModalW3Warn = ref<boolean>(false);
+const showModalDelete = ref<boolean | null>(false);
+const drawerFileDetailsVisible = ref<boolean>(false);
+const modalIpnsPublishVisible = ref<boolean>(false);
+
+const tableRef = ref<DataTableInst | null>(null);
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
 const checkedRowKeys = ref<Array<string | number>>([]);
+const sort = ref<DataTableSortState | null | undefined>();
 
 /** Current row type */
 const currentRowType = computed<string>(() => {
@@ -490,16 +493,9 @@ onUnmounted(() => {
 
 /** Sort column - fetch directory content with order params  */
 async function handleSorterChange(sorter?: DataTableSortState) {
-  if (sorter && sorter.order === false) {
+  sort.value = sorter && sorter.order !== false ? sorter : null;
+  if (sorter) {
     await getDirectoryContent();
-  } else if (sorter) {
-    await getDirectoryContent(
-      bucketStore.bucketUuid,
-      bucketStore.folder.selected,
-      1,
-      `${sorter.columnKey}`,
-      `${sorter.order}`
-    );
   }
 }
 
@@ -587,13 +583,7 @@ watch(
 const debouncedSearchFilter = debounce(getDirectoryContent, 500);
 
 /** Function "Fetch directory content" wrapper  */
-async function getDirectoryContent(
-  bucketUuid?: string,
-  folderUuid?: string,
-  page = 1,
-  orderBy?: string,
-  order?: string
-) {
+async function getDirectoryContent(bucketUuid?: string, folderUuid?: string, page = 1) {
   clearInterval(fileInterval);
 
   await bucketStore.fetchDirectoryContent({
@@ -602,8 +592,8 @@ async function getDirectoryContent(
     page,
     limit: PAGINATION_LIMIT,
     search: bucketStore.folder.search,
-    orderBy,
-    order,
+    orderBy: sort.value ? `${sort.value.columnKey}` : undefined,
+    order: sort.value ? `${sort.value.order}` : undefined,
   });
 
   checkUnfinishedFiles();
@@ -611,6 +601,9 @@ async function getDirectoryContent(
 }
 
 /** Files polling */
+const finishedFileStatus = computed(() =>
+  props.type === TableFilesType.HOSTING ? FileStatus.UPLOADED_TO_S3 : FileStatus.UPLOADED_TO_IPFS
+);
 function checkUnfinishedFiles() {
   if (!hasUnfinishedFiles()) {
     return;
@@ -625,7 +618,10 @@ function checkUnfinishedFiles() {
 }
 function hasUnfinishedFiles(): boolean {
   return bucketStore.folder.items.some(
-    file => file.fileStatus && file.fileStatus < FileStatus.UPLOADED_TO_IPFS
+    file =>
+      file.type === BucketItemType.FILE &&
+      file.fileStatus &&
+      file.fileStatus < finishedFileStatus.value
   );
 }
 

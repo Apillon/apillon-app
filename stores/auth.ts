@@ -132,6 +132,19 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem(AuthLsKeys.CAPTCHA, JSON.stringify(data));
     },
 
+    removeCaptchaJwt(email?: string) {
+      if (email) {
+        const data = this.getCaptchaLS();
+        const emails = Object.keys(data);
+        if (emails.includes(email)) {
+          delete data[email];
+          localStorage.setItem(AuthLsKeys.CAPTCHA, JSON.stringify(data));
+        }
+      } else {
+        localStorage.removeItem(AuthLsKeys.CAPTCHA);
+      }
+    },
+
     /**
      * API calls
      */

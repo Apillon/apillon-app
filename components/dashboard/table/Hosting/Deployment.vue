@@ -31,10 +31,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
           'span',
           {},
           {
-            default: () =>
-              row.environment === DeploymentEnvironment.PRODUCTION
-                ? $i18n.t('general.production')
-                : $i18n.t('general.staging'),
+            default: () => $i18n.t(`hosting.deployment.env.${row.environment}`),
           }
         );
       },
@@ -57,14 +54,14 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
       },
     },
     {
-      title: $i18n.t('general.updateTime'),
-      key: 'updateTime',
+      title: 'Create time',
+      key: 'createTime',
       render(row: DeploymentInterface) {
-        return h('span', {}, { default: () => dateTimeToDateAndTime(row.updateTime || '') });
+        return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
       },
     },
   ];
 };
 const columns = createColumns();
-const rowKey = (row: DeploymentInterface) => row.id;
+const rowKey = (row: DeploymentInterface) => row.deployment_uuid;
 </script>

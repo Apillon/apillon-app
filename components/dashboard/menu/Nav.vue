@@ -10,6 +10,7 @@
     :collapsed-width="40"
     :collapsed-icon-size="24"
     :options="menuOptions"
+    @update:value="$emit('toggleSidebar')"
   />
 </template>
 
@@ -20,6 +21,7 @@ import { Feature } from '~~/types/config';
 const props = defineProps({
   collapsed: { type: Boolean, default: false },
 });
+defineEmits(['toggleSidebar']);
 
 const $i18n = useI18n();
 const authStore = useAuthStore();
