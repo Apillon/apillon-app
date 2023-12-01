@@ -494,7 +494,9 @@ onUnmounted(() => {
 /** Sort column - fetch directory content with order params  */
 async function handleSorterChange(sorter?: DataTableSortState) {
   sort.value = sorter && sorter.order !== false ? sorter : null;
-  await getDirectoryContent();
+  if (sorter) {
+    await getDirectoryContent();
+  }
 }
 
 /** Reset sort if user search change directory or search directory content */
