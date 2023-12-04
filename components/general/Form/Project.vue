@@ -38,16 +38,6 @@
         />
       </n-form-item>
 
-      <!--  Project terms -->
-      <n-form-item path="terms" :show-label="false">
-        <n-checkbox
-          id="terms"
-          v-model:checked="formData.terms"
-          size="large"
-          :label="$t('form.terms.project')"
-        />
-      </n-form-item>
-
       <!--  Project submit -->
       <n-form-item>
         <input type="submit" class="hidden" :value="$t('form.login')" />
@@ -74,7 +64,6 @@
 type FormProject = {
   name: string | null;
   description: string | null;
-  terms?: boolean;
 };
 
 const $i18n = useI18n();
@@ -89,18 +78,6 @@ onMounted(async () => {
   await dataStore.getProjectQuota();
 });
 
-/** Terms label with link 
-const termsLabel = computed(() => {
-  return h('span', {}, [
-    $i18n.t('general.termsAccept'),
-    h(
-      Tag,
-      { color: 'yellow', onHover: true, onClick: showModalTerms },
-      { default: () => $i18n.t('general.terms') }
-    ),
-  ]);
-}); */
-
 /** Form project */
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -108,7 +85,6 @@ const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormProject>({
   name: null,
   description: null,
-  terms: undefined,
 });
 
 const rules: NFormRules = {
@@ -120,13 +96,6 @@ const rules: NFormRules = {
     },
   ],
   description: [],
-  terms: [
-    {
-      required: true,
-      validator: validateRequiredCheckbox,
-      message: $i18n.t('validation.terms'),
-    },
-  ],
 };
 
 // Submit
