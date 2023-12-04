@@ -55,10 +55,13 @@
       "withEmail": "sign up with email"
     },
     "terms": {
+      "accept": "You must accept the ",
+      "acceptEnd": " before creating an account.",
       "agree": "I have read and agree to ",
       "and": " and ",
       "pp": "Privacy Policy",
-      "tc": "Terms and Conditions"
+      "tc": "Terms and Conditions",
+      "terms": "Terms"
     },
     "wallet": {
       "connect": {
