@@ -4,6 +4,7 @@
     "action": "Action",
     "actions": "Actions",
     "active": "active",
+    "activity": "Activity",
     "addNew": "Add new",
     "address": "Address",
     "attach": "Attach",
@@ -22,6 +23,7 @@
     "edit": "Edit",
     "environment": "Environment",
     "error": "Error",
+    "explore": "Explore",
     "goHome": "Go home",
     "install": "Install",
     "images": "images",
@@ -103,6 +105,7 @@
       "loader": "Put your Web3 hat on, your dashboard is getting ready.",
       "skip": "Skip to the dashboard",
       "startBuilding": "Start building",
+      "viewDemo": "View demo",
       "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
       "web3Gateway": "Your Gateway to Web3",
       "web3ProjectName": "Your  Web3 project needs a name"
@@ -263,17 +266,20 @@
     },
     "nav": {
       "access": "Access",
+      "authentication": "Authentication",
       "apiKeys": "API keys",
       "analytics": "Analytics",
       "billing": "Billing",
       "configuration": "Configuration",
+      "computing": "Computing",
       "explore": "Explore",
+      "hosting": "Hosting",
       "nft": "NFTs",
       "projectOverview": "Project overview",
       "projectSettings": "Project settings",
       "services": "Web3 Services",
       "smartContracts": "Smart Contracts",
-      "solutions": "Solutions",
+      "solutions": "Pre-built Solutions",
       "storage": "Storage",
       "solution": {
         "fileSharing": "Decentralized File Sharing",
@@ -333,6 +339,102 @@
       "execute": "Execute permissions",
       "insufficient": "You don't have permissions to create or edit this item."
     },
+    "service": {
+      "authentication": {
+        "name": "Decentralized Authentication",
+        "description": "Boost users’ privacy and security with decentralized digital identity.",
+        "emptyTitle": "Your project does not have Authentication service yet",
+        "emptyInfo": "Add Web3 Authentication and create an API key.",
+        "emptyBtn": "Attach Web3 Auth",
+        "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
+      },
+      "hosting": {
+        "name": "Decentralized Hosting",
+        "description": "Make your website or app unstoppable and free from third-party impact.",
+        "kraken": "40k Webhosting Project for Kraken",
+        "title": "Web3 Hosting",
+        "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"]
+      },
+      "storage": {
+        "bucket": "Web3 storage bucket",
+        "name": "Decentralized Storage",
+        "description": "Make your content permanently accessible and easily shareable.",
+        "website": "Main Website Storage",
+        "usage": ["storage buckets", "different media", "free ssl support", "drag-n-drop ui"]
+      },
+      "computing": {
+        "name": "Computing",
+        "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
+        "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
+      },
+      "addFirst": "Add first service",
+      "delete": "Delete service",
+      "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",
+      "edit": "Edit service",
+      "info": "Launch a service, receive API keys and start building your next dapp.",
+      "new": "New service"
+    },
+    "smartContracts": {
+      "collection": "NFT collection",
+      "info": "Browse the list of smart contracts you can deploy and integrate and start building immediately via API.",
+      "kraken": "Smart contract for Kraken",
+      "meerkats": "Meerkats"
+    },
+    "solutions": {
+      "fileSharing": {
+        "name": "Decentralized File Sharing",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftAirdrop": {
+        "name": "NFT Minting and Airdrop",
+        "description": "Create a NFT collection, upload target addresses and automatically distribute NFTs to target addresses.",
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
+      },
+      "nftCollection": {
+        "name": "Self-hosted NFT collection",
+        "description": "Get your self sovereign standalone NFT collection with one click. Create NFTs, deploy smart contract and finally host the collection website.",
+        "usage": [
+          "metadata storage",
+          "file storage",
+          "smart contracts",
+          "website template",
+          "hosting"
+        ]
+      },
+      "nftDrop": {
+        "name": "NFT Drop",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftLoyalty": {
+        "name": "NFT-based Loyalty Program",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftMembership": {
+        "name": "NFT-based Brand Membership",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftPoap": {
+        "name": "POAP NFTs",
+        "description": "Create POAP drops simply by clicking. Manage your POAP, allow users to either mint or email reserve the NFTs and boost your next event.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "tokenGating": {
+        "name": "Token Gating",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "wallet": {
+        "name": "Non-custodial Wallet",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "description": "Quickly deploy pre-built templates made and audited by Apillon. Each solution features a combination of Web3 services to demonstrate how they can be combined together, so you can learn, experiment, and launch your Web3 project fast.",
+      "info": "Customize ready-to-deploy templates built and audited by Apillon."
+    },
     "subscription": {
       "bandwidth": "Bandwith",
       "canceledOn": "Your plan will be canceled on {date}.",
@@ -376,7 +478,7 @@
     "expiration": "Expiration",
     "gotIt": "Got it, thanks!",
     "goToApiManagement": "Go to central API management",
-    "homepage": "Homepage",
+    "homepage": "Project overview",
     "inviteTeamMember": "Invite team member",
     "learnMoreAboutServices": "Learn more about services",
     "manageRoles": "Manage roles",
@@ -386,7 +488,6 @@
     "searchDocs": "Search the docs",
     "secret": "Secret",
     "secrets": "Secrets",
-    "selectServices": "Select services",
     "total": "Total",
     "user": "User",
     "viewInvoice": "View Invoice",
@@ -1278,31 +1379,6 @@
     "wrapFiles": "Wrap files",
     "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don't want to do it just skip this process.",
     "wrapToDirectory": "Wrap to directory"
-  },
-  "service": {
-    "authentication": {
-      "name": "Authentication",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum.",
-      "emptyTitle": "Your project does not have Authentication service yet",
-      "emptyInfo": "Add Web3 Authentication and create an API key.",
-      "emptyBtn": "Attach Web3 Auth"
-    },
-    "hosting": {
-      "name": "Hosting",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
-    },
-    "storage": {
-      "name": "Storage",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
-    },
-    "computing": {
-      "name": "Computing",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
-    },
-    "addFirst": "Add first service",
-    "delete": "Delete service",
-    "edit": "Edit service",
-    "new": "New service"
   },
   "validation": {
     "alreadyOnList": "{name} is already on list",

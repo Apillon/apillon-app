@@ -43,7 +43,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
   const servicesChildren = [
     {
       key: 'dashboard-service-storage',
-      label: $i18n.t('service.storage.name'),
+      label: $i18n.t('dashboard.nav.storage'),
       to: 'dashboard-service-storage',
       iconName: 'icon-storage',
       soon: !isFeatureEnabled(Feature.STORAGE, authStore.getUserRoles()),
@@ -51,7 +51,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     },
     {
       key: 'dashboard-service-hosting',
-      label: $i18n.t('service.hosting.name'),
+      label: $i18n.t('dashboard.nav.hosting'),
       to: 'dashboard-service-hosting',
       iconName: 'icon-hosting',
       soon: !isFeatureEnabled(Feature.HOSTING, authStore.getUserRoles()),
@@ -59,7 +59,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     },
     {
       key: 'dashboard-service-authentication',
-      label: $i18n.t('service.authentication.name'),
+      label: $i18n.t('dashboard.nav.authentication'),
       to: 'dashboard-service-authentication',
       iconName: 'icon-authentication',
       soon: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
@@ -69,7 +69,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     },
     {
       key: 'dashboard-service-computing',
-      label: $i18n.t('service.computing.name'),
+      label: $i18n.t('dashboard.nav.computing'),
       to: 'dashboard-service-computing',
       iconName: 'icon-computing',
       soon: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
@@ -82,6 +82,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       to: 'dashboard-service',
       class: 'text-yellow',
       iconName: 'icon-wide-right',
+      show: !props.collapsed,
     },
   ];
   const smartContractsChildren = [
@@ -114,6 +115,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: $i18n.t('dashboard.nav.explore'),
       class: 'text-yellow',
       iconName: 'icon-wide-right',
+      show: !props.collapsed,
     },
   ];
   const solutionsChildren = [
@@ -183,6 +185,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: $i18n.t('dashboard.nav.explore'),
       class: 'text-yellow',
       iconName: 'icon-wide-right',
+      show: !props.collapsed,
     },
   ];
   const configurationChildren = [

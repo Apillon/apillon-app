@@ -202,7 +202,7 @@ watch(
 );
 function setFooterHeight() {
   footerHeight.value =
-    footerRef.value && footerRef.value?.offsetHeight > 100 ? footerRef.value.offsetHeight : 200;
+    footerRef.value && footerRef.value?.offsetHeight > 100 ? footerRef.value.offsetHeight : 0;
 }
 </script>
 

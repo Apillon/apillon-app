@@ -6,12 +6,14 @@ export enum ServiceType {
   STORAGE = 2,
   NFT = 3,
   HOSTING = 4,
+  COMPUTING = 5,
 }
 export enum ServiceTypeName {
   STORAGE = 'STORAGE',
   HOSTING = 'HOSTING',
   AUTHENTICATION = 'IDENTITY',
   NFT = 'NFT',
+  COMPUTING = 'COMPUTING',
 }
 
 export enum IdentityChains {
@@ -66,6 +68,7 @@ export const ServiceTypeNames: { [k: number]: ServiceTypeName } = {
   [ServiceType.STORAGE]: ServiceTypeName.STORAGE,
   [ServiceType.NFT]: ServiceTypeName.NFT,
   [ServiceType.HOSTING]: ServiceTypeName.HOSTING,
+  [ServiceType.COMPUTING]: ServiceTypeName.COMPUTING,
 };
 
 declare global {
@@ -74,13 +77,6 @@ declare global {
    */
   interface ServiceTypeInterface extends BaseObjectInterface {
     active: number;
-  }
-  interface ServiceTypeItem {
-    id: number;
-    name: string;
-    icon: string;
-    new?: boolean | null;
-    disabled?: boolean | null;
   }
 
   /**
