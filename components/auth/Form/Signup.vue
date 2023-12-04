@@ -115,18 +115,13 @@ const rules: NFormRules = {
 /** Terms label with link  */
 const termsLabel = computed<any>(() => {
   return h('span', {}, [
-    $i18n.t('auth.terms.agree'),
+    $i18n.t('auth.terms.accept'),
     h(
       'a',
       { href: 'https://apillon.io/legal-disclaimer', target: '_blank' },
-      { default: () => $i18n.t('auth.terms.tc') }
+      { default: () => $i18n.t('auth.terms.terms') }
     ),
-    $i18n.t('auth.terms.and'),
-    h(
-      'a',
-      { href: 'https://apillon.io/privacy-policy/', target: '_blank' },
-      { default: () => $i18n.t('auth.terms.pp') }
-    ),
+    $i18n.t('auth.terms.acceptEnd'),
   ]);
 });
 

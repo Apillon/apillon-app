@@ -124,10 +124,13 @@
       "withEmail": "sign up with email"
     },
     "terms": {
+      "accept": "You must accept the ",
+      "acceptEnd": " before creating an account.",
       "agree": "I have read and agree to ",
       "and": " and ",
       "pp": "Privacy Policy",
-      "tc": "Terms and Conditions"
+      "tc": "Terms and Conditions",
+      "terms": "Terms"
     },
     "wallet": {
       "connect": {
@@ -1327,6 +1330,7 @@
     "expirationDate": "Date is expired",
     "expirationDateRequired": "Please enter expiration date",
     "fileNoData": "The file is empty or has no data",
+    "fileTypeNotAllow": "File \"{name}\" can't be uploaded here. Please use hosting service.",
     "fileTypeNotCsv": "File must be of type CSV",
     "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",

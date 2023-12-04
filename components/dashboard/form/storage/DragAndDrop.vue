@@ -26,13 +26,18 @@ const $i18n = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
-const { fileAlreadyOnFileList, isEnoughSpaceInStorage } = useUpload();
+const paymentStore = usePaymentStore();
+const { fileAlreadyOnFileList, fileTypeValid, isEnoughSpaceInStorage } = useUpload();
 
 /** Upload height */
 const uploadHeight = computed(() => {
   return {
     height: bucketStore.hasBucketItems ? 'auto' : 'calc(100dvh - 370px)',
   };
+});
+
+onMounted(() => {
+  paymentStore.getActiveSubscription();
 });
 
 /** Upload file request - add file to list */
@@ -50,6 +55,9 @@ function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOpt
     message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
     onError();
   } else if (fileAlreadyOnFileList(bucketStore.uploadFileList, fileListItem)) {
+    onError();
+  } else if (!paymentStore.hasActiveSubscription && !fileTypeValid(fileListItem)) {
+    message.warning($i18n.t('validation.fileTypeNotAllow', { name: file.name }));
     onError();
   } else {
     bucketStore.uploadFileList.push(fileListItem);
