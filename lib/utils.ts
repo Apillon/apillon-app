@@ -413,6 +413,22 @@ export function isCacheExpired(key: string) {
   return true;
 }
 
+/** Parse base method argument to request params */
+export function parseArguments(args: FetchParams): Record<string, string | number> {
+  const params: Record<string, string | number> = {
+    page: args.page || 1,
+    limit: args.limit || PAGINATION_LIMIT,
+    orderBy: args.orderBy || 'createTime',
+    desc: args.order === 'descend' || !args.orderBy ? 'true' : 'false',
+  };
+
+  if (args.search) {
+    params.search = args.search;
+  }
+
+  return params;
+}
+
 /**
  * Slice array in chunks
  */
