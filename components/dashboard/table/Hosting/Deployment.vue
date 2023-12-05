@@ -55,7 +55,7 @@ const createColumns = (): NDataTableColumns<DeploymentInterface> => {
     },
     {
       key: 'createTime',
-      title: $i18n.t('general.createTime'),
+      title: $i18n.t('dashboard.createTime'),
       render(row: DeploymentInterface) {
         return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
       },

@@ -54,7 +54,7 @@ const availableColumns = ref([
   { value: 'description', label: $i18n.t('storage.ipns.description') },
   { value: 'ipnsName', label: $i18n.t('storage.ipns.ipnsName') },
   { value: 'ipnsValue', label: $i18n.t('storage.ipns.link') },
-  { value: 'createTime', label: $i18n.t('general.createTime') },
+  { value: 'createTime', label: $i18n.t('dashboard.createTime') },
   { value: 'updateTime', label: $i18n.t('general.updateTime') },
 ]);
 
@@ -90,7 +90,7 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
     },
     {
       key: 'createTime',
-      title: $i18n.t('general.createTime'),
+      title: $i18n.t('dashboard.createTime'),
       className: { hidden: !selectedColumns.value.includes('createTime') },
       render(row: IpnsInterface) {
         return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
