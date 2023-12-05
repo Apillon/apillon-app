@@ -36,8 +36,8 @@ const pagination = reactive({
 const createColumns = (): NDataTableColumns<InvoiceInterface> => {
   return [
     {
-      title: t('dashboard.invoice.client'),
       key: 'invoice',
+      title: t('dashboard.invoice.client'),
       render(row) {
         return [
           h('strong', { class: 'block' }, row.clientName),
@@ -46,8 +46,8 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
       },
     },
     {
-      title: t('dashboard.invoice.subtotalAmount'),
       key: 'subtotalAmount',
+      title: t('dashboard.invoice.subtotalAmount'),
       render(row) {
         return h(
           'span',
@@ -57,22 +57,22 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
       },
     },
     {
-      title: t('dashboard.invoice.totalAmount'),
       key: 'totalAmount',
+      title: t('dashboard.invoice.totalAmount'),
       render(row) {
         return h('span', { class: 'text-body' }, `${formatPrice(row.totalAmount, row.currency)}`);
       },
     },
     {
-      title: t('dashboard.invoice.referenceTable'),
       key: 'referenceTable',
+      title: t('dashboard.invoice.referenceTable'),
       render(row) {
         return h('span', { class: 'text-body' }, `${row.referenceTable}`);
       },
     },
     {
-      title: t('dashboard.invoice.date'),
       key: 'createTime',
+      title: t('dashboard.invoice.date'),
       render(row) {
         return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
       },

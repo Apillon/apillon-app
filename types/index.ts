@@ -67,4 +67,13 @@ declare global {
     data: boolean;
     status: number;
   }
+
+  type FetchParams = {
+    page?: number;
+    limit?: number;
+    search?: string;
+    orderBy?: string;
+    order?: string;
+    loader?: boolean;
+  };
 }
