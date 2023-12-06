@@ -86,7 +86,7 @@ export function hideSecret(source: string, partLength: number = 4): string {
         source.slice(source.length - partLength, source.length)
     : source;
 }
-export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
+export function toStr(s?: any) {
   return s ? s.toString() : '';
 }
 
