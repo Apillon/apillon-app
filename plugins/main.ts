@@ -1,4 +1,5 @@
 import type { RuntimeConfig } from '@nuxt/schema';
+import type { RouteLocationNormalized } from '#vue-router';
 import VuePapaParse from 'vue-papa-parse';
 import VueCookieAcceptDecline from 'vue-cookie-accept-decline';
 import { createGtm } from '@gtm-support/vue-gtm';
