@@ -1,4 +1,5 @@
 import type { RuntimeConfig } from '@nuxt/schema';
+import type { RouteLocationNormalized } from '#vue-router';
 import VuePapaParse from 'vue-papa-parse';
 import VueCookieAcceptDecline from 'vue-cookie-accept-decline';
 import { createGtm } from '@gtm-support/vue-gtm';
@@ -34,4 +35,18 @@ export default defineNuxtPlugin(nuxtApp => {
   } catch (e) {
     console.log(e);
   }
+
+  /** Preserve query params */
+  const router = useRouter();
+  router.beforeEach((to, from, next) => {
+    if (!hasQueryParams(to) && hasQueryParams(from) && !toStr(to.name).includes('dashboard-')) {
+      next({ name: to.name, query: from.query });
+    } else {
+      next();
+    }
+  });
 });
+
+function hasQueryParams(route: RouteLocationNormalized) {
+  return !!Object.keys(route.query).length;
+}
