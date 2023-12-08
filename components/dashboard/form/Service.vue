@@ -146,7 +146,7 @@ async function createService() {
   };
 
   try {
-    await $api.post<ServiceResponse>(endpoints.services(), bodyData);
+    const res = await $api.post<ServiceResponse>(endpoints.services(), bodyData);
 
     const msg = $i18n.te(`form.success.created.${ServiceTypeNames[props.serviceType]}`)
       ? $i18n.t(`form.success.created.${ServiceTypeNames[props.serviceType]}`)
