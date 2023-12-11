@@ -183,6 +183,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     {
       key: 'dashboard-smart-contracts',
       label: $i18n.t('dashboard.nav.explore'),
+      to: 'dashboard-solution',
       class: 'text-yellow',
       iconName: 'icon-wide-right',
       show: !props.collapsed,

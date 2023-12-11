@@ -14,7 +14,7 @@
         </div>
         <div class="grid gap-4 md:grid-cols-3">
           <div
-            v-for="(service, key) in services"
+            v-for="(service, key) in web3Services"
             :key="key"
             class="card-light flex flex-col justify-between p-8 md:min-h-[24rem]"
           >
@@ -39,7 +39,8 @@
                 :disabled="service.disabled || false"
                 :to="{ name: service.link }"
               >
-                {{ $t('auth.onboarding.getStarted') }}
+                <template v-if="service.disabled"> {{ $t('general.comingSoon') }}</template>
+                <template v-else> {{ $t('auth.onboarding.getStarted') }} </template>
               </Btn>
             </div>
           </div>
@@ -50,53 +51,10 @@
 </template>
 
 <script lang="ts" setup>
-type ServiceTypeItem = {
-  id: number;
-  name: string;
-  icon: string;
-  link: string;
-  disabled?: boolean | null;
-  usage: String[];
-};
 const { t } = useI18n();
 useHead({
   title: t('dashboard.nav.services'),
 });
 
-const authStore = useAuthStore();
-
-const services: Array<ServiceTypeItem> = [
-  {
-    id: ServiceType.STORAGE,
-    name: 'storage',
-    icon: 'icon-storage',
-    link: 'dashboard-service-storage',
-    disabled: !isFeatureEnabled(Feature.STORAGE, authStore.getUserRoles()),
-    usage: translateItems('dashboard.service.storage.usage'),
-  },
-  {
-    id: ServiceType.HOSTING,
-    name: 'hosting',
-    icon: 'icon-hosting',
-    link: 'dashboard-service-hosting',
-    disabled: !isFeatureEnabled(Feature.HOSTING, authStore.getUserRoles()),
-    usage: translateItems('dashboard.service.hosting.usage'),
-  },
-  {
-    id: ServiceType.AUTHENTICATION,
-    name: 'authentication',
-    icon: 'icon-authentication',
-    link: 'dashboard-service-authentication',
-    disabled: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
-    usage: translateItems('dashboard.service.authentication.usage'),
-  },
-  {
-    id: ServiceType.COMPUTING,
-    name: 'computing',
-    icon: 'icon-computing',
-    link: 'dashboard-service-computing',
-    disabled: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
-    usage: translateItems('dashboard.service.computing.usage'),
-  },
-];
+const { web3Services } = useService();
 </script>

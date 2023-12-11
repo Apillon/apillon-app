@@ -129,7 +129,7 @@ const services = [
   {
     title: t('dashboard.nav.solutions'),
     content: t('dashboard.solutions.info'),
-    link: t('dashboard-service'),
+    link: t('dashboard-solution'),
   },
 ];
 

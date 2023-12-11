@@ -39,7 +39,7 @@
                   <Btn
                     size="large"
                     type="secondary"
-                    :disabled="service.disabled"
+                    :disabled="!!service.disabled"
                     :to="{ name: service.link }"
                   >
                     {{ $t('auth.onboarding.viewDemo') }}
@@ -47,7 +47,7 @@
                   <Btn
                     size="large"
                     type="primary"
-                    :disabled="service.disabled"
+                    :disabled="!!service.disabled"
                     :to="{ name: service.link }"
                   >
                     {{ $t('auth.onboarding.getStarted') }}
@@ -66,7 +66,6 @@
 import colors from '~~/tailwind.colors';
 
 type SolutionTypeItem = {
-  id: number;
   name: string;
   icon: string;
   link: string;
@@ -84,7 +83,7 @@ const services: Array<SolutionTypeItem> = [
   {
     name: 'nftCollection',
     icon: 'icon-self-hosted-nft',
-    link: 'dashboard-service-nft',
+    link: 'dashboard-solution-nft-collection',
     disabled: !isFeatureEnabled(Feature.NFT, authStore.getUserRoles()),
     usage: translateItems('dashboard.solutions.nftCollection.usage'),
   },
