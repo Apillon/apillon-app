@@ -8,8 +8,8 @@
 
   <!-- Sidebar -->
   <transition name="slide-left" :appear="isLg || showOnMobile">
-    <div class="min-h-full bg-bg transition-transform duration-300" :class="sidebarClasses">
-      <n-scrollbar style="max-height: 100dvh" class="scrollbar--menu">
+    <div class="h-screen bg-bg transition-transform duration-300" :class="sidebarClasses">
+      <n-scrollbar :style="sidebarStyle" class="scrollbar--menu">
         <!-- Close - only on mobile -->
         <button
           v-if="!isLg"
@@ -31,18 +31,14 @@
             v-if="isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
             :class="collapsed ? 'px-4' : 'px-8'"
           >
-            <n-space :size="20" vertical>
-              <!-- Projects dropdown -->
-              <div class="min-h-[48px]">
-                <SidebarSelectProject :collapsed="collapsed" />
-              </div>
-
-              <!-- Create new project -->
+            <!-- Projects dropdown -->
+            <div class="min-h-[48px]">
+              <SidebarSelectProject v-if="dataStore.hasProjects" :collapsed="collapsed" />
               <Btn
-                v-if="!authStore.isAdmin()"
+                v-else-if="projectsLoaded && !authStore.isAdmin()"
                 type="info"
                 :size="collapsed ? 'small' : 'large'"
-                @click="showModalNewProject = true"
+                @click="modalNewProjectVisible = true"
               >
                 <template v-if="collapsed">
                   <span class="inline-block w-5 icon-add text-xl"></span>
@@ -51,7 +47,7 @@
                   {{ $t('project.new') }}
                 </template>
               </Btn>
-            </n-space>
+            </div>
           </div>
           <div v-else class="h-8"></div>
 
@@ -59,57 +55,58 @@
           <MenuNav :collapsed="collapsed" @toggle-sidebar="hideNavOnMobile" />
         </n-space>
 
-        <!-- SIDEBAR FOOTER -->
-        <div v-if="!collapsed" class="flex flex-col p-8">
+        <!-- APP INFO -->
+        <div v-if="!collapsed" class="flex flex-col px-8 pb-8">
           <p class="text-sm text-body">
             {{ $t('general.copyrights') }}
             <span>{{ version }}</span>
           </p>
         </div>
-
-        <!-- SIDEBAR PRICING -->
-        <div
-          v-if="!collapsed && dataStore.hasProjects && !authStore.isAdmin()"
-          class="relative flex border-t border-bg-lighter flex-col p-8"
-        >
-          <div :class="{ 'opacity-0': paymentStore.loading }">
-            <div class="mb-3">
-              <span class="text-xs text-bodyDark">{{ $t('dashboard.payment.currentPlan') }}</span>
-              <strong class="block">
-                {{ paymentStore.getActiveSubscriptionPackage?.name }}
-              </strong>
-              <span class="text-sm text-body">
-                {{ $t('dashboard.payment.costs') }}:
-                {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0) }}/{{
-                  $t('general.month')
-                }}
-              </span>
-            </div>
-            <template v-if="!dataStore.isProjectUser">
-              <PaymentCardCurrentPlan
-                v-if="route.name === 'dashboard-payments'"
-                :show-card="false"
-                btn-type="secondary"
-              />
-              <Btn
-                v-else
-                type="secondary"
-                size="large"
-                @click="router.push({ name: 'dashboard-payments' })"
-              >
-                {{ $t('dashboard.payment.upgradePlan') }}
-              </Btn>
-            </template>
-          </div>
-          <Spinner v-if="paymentStore.loading" />
-        </div>
       </n-scrollbar>
+
+      <!-- FOOTER: SIDEBAR PRICING -->
+      <div
+        v-if="!collapsed && dataStore.hasProjects && !authStore.isAdmin()"
+        ref="footerRef"
+        class="relative flex border-t border-bg-lighter flex-col p-8"
+      >
+        <div :class="{ 'opacity-0': paymentStore.loading }">
+          <div class="mb-3">
+            <span class="text-xs text-bodyDark">{{ $t('dashboard.payment.currentPlan') }}</span>
+            <strong class="block">
+              {{ paymentStore.getActiveSubscriptionPackage?.name }}
+            </strong>
+            <span class="text-sm text-body">
+              {{ $t('dashboard.payment.costs') }}:
+              {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0) }}/{{
+                $t('general.month')
+              }}
+            </span>
+          </div>
+          <template v-if="!dataStore.isProjectUser">
+            <PaymentCardCurrentPlan
+              v-if="route.name === 'dashboard-payments'"
+              :show-card="false"
+              btn-type="secondary"
+            />
+            <Btn
+              v-else
+              type="secondary"
+              size="large"
+              @click="router.push({ name: 'dashboard-payments' })"
+            >
+              {{ $t('dashboard.payment.upgradePlan') }}
+            </Btn>
+          </template>
+        </div>
+        <Spinner v-if="paymentStore.loading" />
+      </div>
     </div>
   </transition>
 
   <!-- Modal - Create new project -->
-  <modal v-model:show="showModalNewProject" :title="$t('project.new')">
-    <FormProject @submit-success="showModalNewProject = false" />
+  <modal v-model:show="modalNewProjectVisible" :title="$t('project.new')">
+    <FormProject @submit-success="modalNewProjectVisible = false" />
   </modal>
 </template>
 
@@ -125,32 +122,24 @@ const props = defineProps({
 
 const route = useRoute();
 const router = useRouter();
-const { isSm, isLg } = useScreen();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
+const { isSm, isLg } = useScreen();
+const { width } = useWindowSize();
 
-const showModalNewProject = ref(false);
+const projectsLoaded = ref<boolean>(false);
+const modalNewProjectVisible = ref<boolean>(false);
 const emit = defineEmits(['toggleSidebar']);
 
 /** App version */
 const config = useRuntimeConfig();
 const version = ref(config.public.VERSION);
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(_ => {
-      if (
-        !dataStore.hasProjects &&
-        isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles()) &&
-        !authStore.isAdmin()
-      ) {
-        showModalNewProject.value = true;
-      } else if (!authStore.isAdmin()) {
-        paymentStore.getSubscriptionPackages();
-        paymentStore.fetchActiveSubscription();
-      }
-    });
-  }, 100);
+/** Sidebar */
+const footerRef = ref<HTMLElement | null>(null);
+const footerHeight = ref<number>(footerRef.value?.clientHeight || 200);
+const sidebarStyle = computed(() => {
+  return { maxHeight: `calc(100dvh - ${footerHeight.value}px)` };
 });
 
 /** Classes */
@@ -165,11 +154,55 @@ const sidebarClasses = computed(() => {
   ];
 });
 
+onMounted(async () => {
+  await initProject();
+
+  setFooterHeight();
+  projectsLoaded.value = true;
+  if (
+    !dataStore.hasProjects &&
+    isFeatureEnabled(Feature.PROJECT_ON_STARTUP, authStore.getUserRoles()) &&
+    !authStore.isAdmin()
+  ) {
+    modalNewProjectVisible.value = true;
+  } else if (!authStore.isAdmin()) {
+    paymentStore.getSubscriptionPackages();
+    await paymentStore.fetchActiveSubscription();
+    setFooterHeight();
+  }
+});
+
+async function initProject() {
+  projectsLoaded.value = false;
+  if (authStore.isAdmin()) {
+    const currentProject = await dataStore.getProject(dataStore.project.selected);
+    dataStore.project.items = [currentProject];
+    dataStore.updateCurrentProject(currentProject);
+    projectsLoaded.value = true;
+  } else {
+    await dataStore.getProjects().then(async _ => {
+      await dataStore.getProject(dataStore.project.selected);
+      projectsLoaded.value = true;
+    });
+  }
+}
+
 /** Hide sidebar navigation on mobile if user open to different page */
 function hideNavOnMobile() {
   if (!isLg.value) {
     emit('toggleSidebar');
   }
+}
+
+watch(
+  () => width.value,
+  _ => {
+    setFooterHeight();
+  }
+);
+function setFooterHeight() {
+  footerHeight.value =
+    footerRef.value && footerRef.value?.offsetHeight > 100 ? footerRef.value.offsetHeight : 0;
 }
 </script>
 

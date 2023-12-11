@@ -26,9 +26,12 @@
     :is="to ? NuxtLink : 'a'"
     v-else
     class="inline-block"
-    :class="{ 'w-full': size === 'large' }"
-    :to="to || undefined"
-    :href="href || undefined"
+    :class="[
+      { 'w-full': size === 'large' },
+      { 'pointer-events-none pointer-default': props.disabled || props.loading },
+    ]"
+    :to="props.disabled || props.loading || !to ? undefined : to"
+    :href="props.disabled || props.loading || !href ? undefined : href"
     :target="href ? '_blank' : undefined"
   >
     <n-button

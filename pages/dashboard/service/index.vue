@@ -1,65 +1,49 @@
 <template>
   <Dashboard :loading="false">
     <template #heading>
-      <n-space :size="24" align="center" class="h-12">
-        <h4 class="">{{ $t('dashboard.attachNewService') }}</h4>
-        <div class="w-[1px] h-[13px] bg-white"></div>
-        <strong class="body-sm">{{ $t('dashboard.learnMoreAboutServices') }}</strong>
-      </n-space>
-    </template>
-    <template
-      v-if="showServices || !isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())"
-      #learn
-    >
+      <Heading>
+        <slot>
+          <h3>{{ $t('dashboard.nav.services') }}</h3>
+        </slot>
+      </Heading>
     </template>
     <slot>
-      <div v-if="showServices && isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())">
-        <h6 class="mb-6">{{ $t('dashboard.selectServices') }}</h6>
-        <div class="grid gap-4 grid-cols-services">
+      <div class="pb-8">
+        <div class="max-w-lg mb-8">
+          <p class="text-body">{{ $t('dashboard.service.description') }}</p>
+        </div>
+        <div class="grid gap-4 md:grid-cols-3">
           <div
-            v-for="(service, key) in services"
+            v-for="(service, key) in web3Services"
             :key="key"
-            class="py-6 px-[22px] bg-bg-lighter shadow-black"
-            :class="{ 'text-body': service.disabled }"
+            class="card-light flex flex-col justify-between p-8 md:min-h-[24rem]"
           >
-            <div class="text-2xl">
-              <span :class="service.icon"></span>
-              <span
-                v-if="service.new"
-                class="icon-new float-right text-blue text-2xl"
-                :class="`animation-new-${randomInteger(0, 3)}`"
-              ></span>
+            <div class="mb-8">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-2xl" :class="service.icon"></span>
+                <h5>{{ $t(`dashboard.service.${service.name}.name`) }}</h5>
+              </div>
+              <p class="text-body">
+                {{ $t(`dashboard.service.${service.name}.description`) }}
+              </p>
             </div>
-            <h4>{{ $t(`service.${service.name}.name`) }}</h4>
-            <p class="mb-5">
-              {{ $t(`service.${service.name}.description`) }}
-            </p>
-            <Btn
-              class="w-full"
-              :type="attachService === service.id ? 'secondary' : 'primary'"
-              :disabled="service.disabled || false"
-              @click="attachService = service.id"
-            >
-              <span v-if="attachService === service.id">{{ $t('dashboard.attached') }}</span>
-              <span v-else>{{ $t('dashboard.attachService') }}</span>
-            </Btn>
+            <div>
+              <div class="flex flex-wrap gap-2 mb-8">
+                <Pill v-for="(item, key) in service.usage" :key="key" type="info">
+                  {{ item }}
+                </Pill>
+              </div>
+              <Btn
+                size="large"
+                type="primary"
+                :disabled="service.disabled || false"
+                :to="{ name: service.link }"
+              >
+                <template v-if="service.disabled"> {{ $t('general.comingSoon') }}</template>
+                <template v-else> {{ $t('auth.onboarding.getStarted') }} </template>
+              </Btn>
+            </div>
           </div>
-        </div>
-
-        <FormService v-if="attachService" :service-type="attachService" class="max-w-lg mt-5" />
-      </div>
-      <div
-        v-else-if="isFeatureEnabled(Feature.SERVICES, authStore.getUserRoles())"
-        class="flex flex-col md:flex-row items-center justify-between max-w-3xl bg-bg-lighter px-6 py-4"
-      >
-        <div class="mb-4 md:mb-0">
-          <p class="body-lg font-bold">Your project currently has no active service</p>
-          <p class="body-sm">
-            First attach a desired service and configure it, then start building.
-          </p>
-        </div>
-        <div>
-          <Btn type="primary" @click="showServices = !showServices"> Attach a service </Btn>
         </div>
       </div>
     </slot>
@@ -67,27 +51,10 @@
 </template>
 
 <script lang="ts" setup>
+const { t } = useI18n();
 useHead({
-  title: 'Dashboard',
+  title: t('dashboard.nav.services'),
 });
 
-const authStore = useAuthStore();
-const showServices = ref(false);
-const attachService = ref<number>();
-
-const services: Array<ServiceTypeItem> = [
-  {
-    id: ServiceType.AUTHENTICATION,
-    name: 'authentication',
-    icon: 'icon-authentication',
-    disabled: !isFeatureEnabled(Feature.AUTHENTICATION, authStore.getUserRoles()),
-  },
-  {
-    id: ServiceType.STORAGE,
-    name: 'storage',
-    icon: 'icon-storage',
-    new: true,
-    disabled: !isFeatureEnabled(Feature.STORAGE, authStore.getUserRoles()),
-  },
-];
+const { web3Services } = useService();
 </script>

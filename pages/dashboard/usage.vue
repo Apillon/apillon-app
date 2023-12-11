@@ -71,7 +71,7 @@
         </div>
         <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
           <div class="min-w-[12rem]">
-            {{ $t('service.storage.name') }}
+            {{ $t('dashboard.service.storage.name') }}
           </div>
           <div class="w-full">
             <PaymentProgress

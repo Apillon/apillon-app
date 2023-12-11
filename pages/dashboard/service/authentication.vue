@@ -110,15 +110,15 @@
       </div>
       <Empty
         v-else
-        :title="$t('service.authentication.emptyTitle')"
-        :info="$t('service.authentication.emptyInfo')"
+        :title="$t('dashboard.service.authentication.emptyTitle')"
+        :info="$t('dashboard.service.authentication.emptyInfo')"
         icon="storage/empty"
       >
         <FormService
           class="mt-4 pr-4 sm:pr-8 min-w-[13rem]"
           :service-type="ServiceType.AUTHENTICATION"
           :default-service-name="ServiceTypeName.AUTHENTICATION"
-          :btn-text="$t('service.authentication.emptyBtn')"
+          :btn-text="$t('dashboard.service.authentication.emptyBtn')"
         />
       </Empty>
     </slot>
