@@ -149,7 +149,7 @@ async function createIpns() {
     message.success($i18n.t('form.success.created.ipns'));
 
     /** On new ipns created add new item to list */
-    ipnsStore.items.push(res.data);
+    ipnsStore.items.unshift(res.data);
 
     /** Emit events */
     emit('submitSuccess');

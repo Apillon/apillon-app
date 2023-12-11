@@ -3,10 +3,17 @@ import { defineStore } from 'pinia';
 export const useIpnsStore = defineStore('ipns', {
   state: () => ({
     active: {} as IpnsInterface,
+    allowFetch: false,
     items: [] as Array<IpnsInterface>,
     loading: false,
     search: '',
     total: 0,
+    pagination: {
+      page: 1,
+      pageSize: PAGINATION_LIMIT,
+      pageCount: 1,
+      itemCount: 0,
+    },
   }),
   getters: {
     hasIpns(state): boolean {
@@ -19,6 +26,16 @@ export const useIpnsStore = defineStore('ipns', {
       this.items = [] as Array<IpnsInterface>;
       this.search = '';
       this.total = 0;
+
+      this.updatePagination();
+    },
+
+    updatePagination(page?: number) {
+      this.pagination.pageCount = Math.ceil(this.total / PAGINATION_LIMIT);
+      this.pagination.itemCount = this.total;
+      if (page && page > 0) {
+        this.pagination.page = page;
+      }
     },
 
     /**
@@ -49,11 +66,12 @@ export const useIpnsStore = defineStore('ipns', {
     /**
      * API calls
      */
-    async fetchIpns(bucketUuid: string): Promise<IpnsInterface[]> {
-      this.loading = true;
+    async fetchIpns(bucketUuid: string, args: FetchParams = {}): Promise<IpnsInterface[]> {
+      this.loading = args.loader !== undefined ? args.loader : true;
 
       try {
-        const res = await $api.get<IpnsResponse>(endpoints.ipns(bucketUuid), PARAMS_ALL_ITEMS);
+        const params = parseArguments(args);
+        const res = await $api.get<IpnsResponse>(endpoints.ipns(bucketUuid), params);
 
         this.items = res.data.items;
         this.total = res.data.total;
@@ -63,6 +81,7 @@ export const useIpnsStore = defineStore('ipns', {
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.IPNS, Date.now().toString());
 
+        this.updatePagination(parseInt(`${params?.page}`));
         return res.data.items;
       } catch (error: any) {
         this.items = [] as Array<IpnsInterface>;
@@ -73,6 +92,7 @@ export const useIpnsStore = defineStore('ipns', {
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
+      this.updatePagination(args.page);
       return [];
     },
 

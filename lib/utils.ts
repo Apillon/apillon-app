@@ -86,7 +86,7 @@ export function hideSecret(source: string, partLength: number = 4): string {
         source.slice(source.length - partLength, source.length)
     : source;
 }
-export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
+export function toStr(s?: any) {
   return s ? s.toString() : '';
 }
 
@@ -411,6 +411,22 @@ export function isCacheExpired(key: string) {
     return parseInt(timestamp) + CACHE_EXPIRATION_IN_MS < Date.now();
   }
   return true;
+}
+
+/** Parse base method argument to request params */
+export function parseArguments(args: FetchParams): Record<string, string | number> {
+  const params: Record<string, string | number> = {
+    page: args.page || 1,
+    limit: args.limit || PAGINATION_LIMIT,
+    orderBy: args.orderBy || 'createTime',
+    desc: args.order === 'descend' || !args.orderBy ? 'true' : 'false',
+  };
+
+  if (args.search) {
+    params.search = args.search;
+  }
+
+  return params;
 }
 
 /**

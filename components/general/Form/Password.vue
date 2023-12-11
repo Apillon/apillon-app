@@ -132,6 +132,7 @@ async function register() {
       password: formData.value.password,
       token: props.token || query.token || authStore.jwt,
       refCode: query.REF,
+      metadata: JSON.stringify(query),
     });
 
     authStore.saveUser(res.data);
