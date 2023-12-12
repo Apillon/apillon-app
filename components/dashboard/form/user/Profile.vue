@@ -24,6 +24,7 @@
         :placeholder="$t('form.placeholder.email', { afna: '@' })"
         :readonly="true"
         :loading="loadingForm"
+        disabled
       />
     </n-form-item>
 
