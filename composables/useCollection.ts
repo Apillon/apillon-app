@@ -72,18 +72,17 @@ export default function useCollection() {
     },
   ];
   const ruleRoyaltiesAddress: NFormItemRule[] = [
-    ruleRequired($i18n.t('validation.collectionRoyaltiesAddressRequired')),
     {
-      validator: validateEvmAddress,
+      validator: validateRoyaltiesAddress,
       message: $i18n.t('validation.collectionRoyaltiesAddress'),
     },
   ];
   const ruleRoyaltyFee: NFormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionRoyaltiesFeesRequired')),
-    // {
-    //   validator: validateNumberNotZero,
-    //   message: $i18n.t('validation.collectionRoyaltiesFees'),
-    // },
+    {
+      validator: validateNaturalNumber,
+      message: $i18n.t('validation.collectionRoyaltiesFees'),
+    },
   ];
 
   const rules: NFormRules = {
@@ -136,6 +135,9 @@ export default function useCollection() {
   }
   function validateDropPrice(_: NFormItemRule, value: number): boolean {
     return !collectionStore.form.behavior.drop || (value > 0 && value < Number.MAX_SAFE_INTEGER);
+  }
+  function validateRoyaltiesAddress(_: NFormItemRule, value: string): boolean {
+    return collectionStore.form.behavior.royaltiesFees === 0 || validateEvmAddress(_, value);
   }
 
   function disablePasteDate(ts: number) {
