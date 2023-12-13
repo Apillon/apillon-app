@@ -145,7 +145,10 @@ async function deploy() {
       dropReserve: collectionStore.form.behavior.dropReserve || 0,
       isRevokable: collectionStore.form.behavior.revocable,
       isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
+      royaltiesAddress:
+        collectionStore.form.behavior.royaltiesFees === 0
+          ? null
+          : collectionStore.form.behavior.royaltiesAddress,
       royaltiesFees: collectionStore.form.behavior.royaltiesFees,
     };
     const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
