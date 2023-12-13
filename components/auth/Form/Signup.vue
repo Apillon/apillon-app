@@ -88,7 +88,7 @@ const formData = ref<SignupForm>({
   email: authStore.email,
   captcha: null as any,
   refCode: `${query?.REF || ''}`,
-  metadata: JSON.stringify(query),
+  metadata: getMetadata(),
   terms: false,
 });
 
@@ -175,5 +175,11 @@ function onCaptchaVerify(token: string, eKey: string) {
   formData.value.captcha = { token, eKey };
   handleSubmit(null);
   loading.value = false;
+}
+
+function getMetadata() {
+  return query && Object.keys(query).length
+    ? JSON.stringify(query)
+    : readCookie('apillon_mkt_params');
 }
 </script>
