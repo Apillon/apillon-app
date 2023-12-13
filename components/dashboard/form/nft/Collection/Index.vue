@@ -82,6 +82,15 @@
         />
       </n-form-item>
 
+      <!--  Collection Use Gateway -->
+      <n-form-item path="useApillonIpfsGateway" :show-label="false">
+        <n-checkbox
+          v-model:checked="collectionStore.form.base.useApillonIpfsGateway"
+          size="medium"
+          :label="infoLabel('collectionUseGateway')"
+        />
+      </n-form-item>
+
       <n-grid class="items-end" :cols="12" :x-gap="32">
         <!--  Collection Base URI -->
         <n-form-item-gi
