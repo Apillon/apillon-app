@@ -350,6 +350,7 @@
     "viewInvoice": "View Invoice",
     "value": "Value",
     "visibleColumns": "Visible columns",
+    "wiki": "Wiki",
     "w3Warn": "W3 warn"
   },
   "error": {
@@ -1115,6 +1116,20 @@
       "item": "Download selected item",
       "items": "Download selected items"
     },
+    "ipfs": {
+      "generateLink": "Generate link",
+      "hotToGenerateLink": "How to generate link",
+      "ipfsInfo": "Gateway, which can be used to access content via CIDs. Example: https://ipfs-eu1.apillon.io/ipfs/CID",
+      "ipfsLink": "IPFS link",
+      "ipfsLinkInfo": "Link, where requested content can be accessed",
+      "ipns": "IPNS Gateway",
+      "ipnsInfo": "Gateway, which can be used to access content via IPNS name. Example: https://ipfs-eu1.apillon.io/ipns/IPNS",
+      "secretInfo": "Secret for this project, which can be used to generate tokens, to access content of ipfs gateway",
+      "subdomain": "Subdomain Gateway",
+      "subdomainInfo": "If specified, content on ipfs can be access as subdomain. Example: https://bafybeif7ahb2p7ww5jk65jkrxq4l577dxb53u5kh37aainaqhaldjopouq.ipfs.nectarnode.io",
+      "title": "IPFS Gateway",
+      "titleInfo": "IPFS Gateway info"
+    },
     "ipns": {
       "create": "Create new IPNS",
       "createFirst": "Create your first IPNS",
@@ -1270,6 +1285,7 @@
     "fileTypeNotCsv": "File must be of type CSV",
     "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",
+    "ipfsCidRequired": "Please enter CID or IPNS",
     "ipnsDescriptionTooLong": "Text is too long (max 255 characters)",
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
@@ -1323,6 +1339,9 @@
     "hosting": {
       "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",
       "deploy": "Please be advised that the deployment may take up to 5 minutes to complete."
+    },
+    "ipfs": {
+      "gateway": ""
     },
     "nft": {
       "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world."

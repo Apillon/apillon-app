@@ -55,7 +55,7 @@ export const useFileStore = defineStore('file', {
      */
     async fetchFileInfo(fileId: number) {
       try {
-        const res = await $api.get<FolderResponse>(endpoints.file(fileId));
+        const res = await $api.get<FolderResponse>(endpoints.file(`${fileId}`));
 
         return res.data;
       } catch (error: any) {

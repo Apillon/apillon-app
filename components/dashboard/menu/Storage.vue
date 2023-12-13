@@ -16,5 +16,10 @@ const menuOptions: NMenuOption[] = [
     label: t('storage.bucket.destroyed'),
     path: `/dashboard/service/storage/destroyed`,
   },
+  {
+    key: 'dashboard-service-storage-ipfs',
+    label: t('storage.ipfs.title'),
+    path: `/dashboard/service/storage/ipfs`,
+  },
 ];
 </script>

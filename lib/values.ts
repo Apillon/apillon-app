@@ -55,6 +55,7 @@ export const LsCacheKeys = {
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
   INVOICES: 'al_cache_invoices',
+  IPFS: 'al_cache_ipfs',
   IPNS: 'al_cache_ipns',
   IPNS_ITEM: 'al_cache_ipns_item',
   OAUTH_LINKS: 'al_cache_oauth_links',
