@@ -134,6 +134,7 @@ const Endpoints = {
   storageFilesTrashed: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/trashed-files`;
   },
+
   /** IPNS */
   ipns: (bucketUuid: string, uuid?: string) => {
     return uuid ? `/buckets/${bucketUuid}/ipns/${uuid}` : `/buckets/${bucketUuid}/ipns`;
@@ -141,6 +142,10 @@ const Endpoints = {
   ipnsPublish: (bucketUuid: string, uuid: string) => {
     return `/buckets/${bucketUuid}/ipns/${uuid}/publish`;
   },
+
+  /** IPFS */
+  ipfsInfo: '/storage/ipfs-cluster-info',
+  ipfsLink: '/storage/link-on-ipfs/',
 
   /**
    * Hosting
