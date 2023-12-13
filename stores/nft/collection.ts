@@ -42,7 +42,7 @@ export const useCollectionStore = defineStore('collection', {
         revocable: false as Boolean | null,
         soulbound: false as Boolean | null,
         supplyLimited: 0,
-        royaltiesAddress: '',
+        royaltiesAddress: null,
         royaltiesFees: 0,
       },
     },
