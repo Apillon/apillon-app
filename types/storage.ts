@@ -163,11 +163,11 @@ declare global {
     link: string;
   };
   interface IpfsInterface extends BaseObjectInterface {
-    ipfsGateway: string;
-    ipnsGateway: string;
+    ipfsGateway?: string | null;
+    ipnsGateway?: string | null;
     project_uuid: string;
     secret: string;
-    subdomainGateway: string;
+    subdomainGateway?: string | null;
   }
   interface IpfsResponse extends GeneralResponse<IpfsInterface> {}
   interface IpfsLinkResponse extends GeneralResponse<IpfsLink> {}
