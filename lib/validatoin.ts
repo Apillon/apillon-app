@@ -26,6 +26,9 @@ export function validateRequiredDropdown(_: NFormItemRule, value: String | null)
 export function validateEvmAddress(_: NFormItemRule, value: string | null): boolean {
   return !!value && /^0x[a-fA-F0-9]{40}$/i.test(value);
 }
-export function validateNumberNotZero(_: NFormItemRule, value: string | null): boolean {
+export function validateNaturalNumber(_: NFormItemRule, value: number | string | null): boolean {
+  return value !== null && intVal(value) >= 0;
+}
+export function validateNumberNotZero(_: NFormItemRule, value: number | string | null): boolean {
   return !!value && intVal(value) > 0;
 }

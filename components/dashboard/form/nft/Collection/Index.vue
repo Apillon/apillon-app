@@ -82,6 +82,15 @@
         />
       </n-form-item>
 
+      <!--  Collection Use Gateway -->
+      <n-form-item path="useApillonIpfsGateway" :show-label="false">
+        <n-checkbox
+          v-model:checked="collectionStore.form.base.useApillonIpfsGateway"
+          size="medium"
+          :label="infoLabel('collectionUseGateway')"
+        />
+      </n-form-item>
+
       <n-grid class="items-end" :cols="12" :x-gap="32">
         <!--  Collection Base URI -->
         <n-form-item-gi
@@ -436,7 +445,10 @@ async function createCollection() {
       dropReserve: collectionStore.form.behavior.dropReserve,
       isRevokable: collectionStore.form.behavior.revocable,
       isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
+      royaltiesAddress:
+        collectionStore.form.behavior.royaltiesFees === 0
+          ? null
+          : collectionStore.form.behavior.royaltiesAddress,
       royaltiesFees: collectionStore.form.behavior.royaltiesFees,
     };
     const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
