@@ -1121,19 +1121,20 @@
       "items": "Download selected items"
     },
     "ipfs": {
-      "generateLink": "Generate link",
-      "hotToGenerateLink": "How to generate link",
-      "ipfsInfo": "Gateway, which can be used to access content via CIDs.",
+      "generateLink": "Generate IPFS/IPNS link",
+      "hotToGenerateLink": "How to generate link?",
+      "ipfsInfo": "Used to access content via CIDs",
       "ipfsLink": "IPFS link",
       "ipfsLinkInfo": "Link, where requested content can be accessed",
       "ipns": "IPNS Gateway",
-      "ipnsInfo": "Gateway, which can be used to access content via IPNS name.",
+      "ipnsInfo": "Used to access content via IPNS name",
       "project": "Project unique identifier",
-      "secretInfo": "Secret for this project, which can be used to generate tokens, to access content of ipfs gateway",
+      "secretInfo": "Secret for project, used to generate a token to acess the content via the IPFS gateway",
       "subdomain": "Subdomain Gateway",
       "subdomainInfo": "If specified, content on ipfs can be access as subdomain.",
       "title": "IPFS Gateway",
-      "titleInfo": "IPFS Gateway info"
+      "titleInfo": "IPFS Gateway info",
+      "enterCid": "Enter CID or IPNS"
     },
     "ipns": {
       "create": "Create new IPNS",

@@ -5,7 +5,7 @@
       <n-input
         v-model:value="formData.cid"
         :input-props="{ id: 'cid' }"
-        :placeholder="`${$t('form.placeholder.typeHere')} CID ${$t('general.or')} IPNS`"
+        :placeholder="$t('storage.ipfs.enterCid')"
         clearable
       />
     </n-form-item>
