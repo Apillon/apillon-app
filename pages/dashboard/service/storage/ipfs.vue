@@ -8,7 +8,11 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <n-switch class="overflow-hidden px-1" :rail-style="railStyle">
+            <n-switch
+              v-if="config.public.ENV === AppEnv.DEV || config.public.ENV === AppEnv.LOCAL"
+              class="overflow-hidden px-1"
+              :rail-style="railStyle"
+            >
               <template #checked> Basic design </template>
               <template #unchecked>Custom design </template>
             </n-switch>
@@ -151,6 +155,8 @@ import type { CSSProperties } from 'nuxt/dist/app/compat/capi';
 const { t } = useI18n();
 const dataStore = useDataStore();
 const ipfsStore = useIpfsStore();
+const config = useRuntimeConfig();
+
 const pageLoading = ref<boolean>(true);
 const showModalW3Warn = ref<boolean>(false);
 
