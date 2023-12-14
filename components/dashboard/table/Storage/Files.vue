@@ -590,7 +590,7 @@ async function getDirectoryContent(bucketUuid?: string, folderUuid?: string, pag
     bucketUuid,
     folderUuid,
     page,
-    limit: PAGINATION_LIMIT,
+    limit: pagination.pageSize,
     search: bucketStore.folder.search,
     orderBy: sort.value ? `${sort.value.columnKey}` : undefined,
     order: sort.value ? `${sort.value.order}` : undefined,

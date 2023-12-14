@@ -49,6 +49,11 @@ export default function useUpload() {
     );
   }
 
+  /** Check if file type is allowed (disabled: .html) */
+  function fileTypeValid(file: FileListItemType) {
+    return file.type !== 'text/html';
+  }
+
   /** Check if file is too big (out of space) */
   function isEnoughSpaceInStorage(uploadFileList: Array<FileListItemType>, file: FileListItemType) {
     const availableSize = storageStore.info.availableStorage - storageStore.info.usedStorage;
@@ -290,6 +295,7 @@ export default function useUpload() {
   return {
     uploadFiles,
     fileAlreadyOnFileList,
+    fileTypeValid,
     isEnoughSpaceInStorage,
     onUploadError,
     folderName,
