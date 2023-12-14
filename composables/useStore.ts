@@ -3,6 +3,7 @@ export default function useStore() {
   const storageStore = useStorageStore();
   const bucketStore = useBucketStore();
   const fileStore = useFileStore();
+  const ipfsStore = useIpfsStore();
   const ipnsStore = useIpnsStore();
   const websiteStore = useWebsiteStore();
   const deploymentStore = useDeploymentStore();
@@ -22,6 +23,7 @@ export default function useStore() {
     storageStore.resetData();
     bucketStore.resetData();
     fileStore.resetData();
+    ipfsStore.resetData();
     ipnsStore.resetData();
     websiteStore.resetData();
     deploymentStore.resetData();

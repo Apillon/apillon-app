@@ -156,6 +156,22 @@ declare global {
   interface IpnsResponse extends GeneralItemsResponse<IpnsInterface> {}
 
   /**
+   * IPFS
+   */
+  type IpfsLink = {
+    link: string;
+  };
+  interface IpfsInterface extends BaseObjectInterface {
+    ipfsGateway: string;
+    ipnsGateway: string;
+    project_uuid: string;
+    secret: string;
+    subdomainGateway: string;
+  }
+  interface IpfsResponse extends GeneralResponse<IpfsInterface> {}
+  interface IpfsLinkResponse extends GeneralResponse<IpfsLink> {}
+
+  /**
    * File
    */
   /** File status */
