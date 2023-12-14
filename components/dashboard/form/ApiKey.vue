@@ -41,10 +41,7 @@
           <span :class="`icon-${service.serviceType.toLocaleLowerCase()}`"></span>
         </template>
         <template #header-extra>
-          <n-switch
-            v-model:value="service.enabled"
-            @update:value="removeServicePermissions(service)"
-          />
+          <n-switch v-model:value="service.enabled" class="pointer-events-none" />
         </template>
 
         <n-grid :cols="2">
@@ -239,14 +236,20 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expan
   /* If service was collapsed, than deactivate all permissions  */
   const service = formData.value.roles.find(item => item.service_uuid === name);
   const serviceType = unusedServices.value.find(item => item.name === name);
+
   if (service) {
     service.enabled = !service.enabled;
 
     /** Toggle checkboxes if user is creating new API key */
-    if (props.id === 0 || !expanded) {
-      service.permissions.forEach(permission => {
-        permission.value = expanded;
-      });
+    service.permissions.forEach(permission => {
+      permission.value = expanded;
+    });
+    if (props.id > 0 && expanded) {
+      addPermission(name, ApiKeyRole.EXECUTE);
+      addPermission(name, ApiKeyRole.READ);
+      addPermission(name, ApiKeyRole.WRITE);
+    } else if (props.id > 0) {
+      removeServicePermissions(service);
     }
   } else if (serviceType) {
     serviceType.enabled = !serviceType.enabled;
@@ -422,8 +425,7 @@ async function removePermission(serviceUuid: string, roleId: number) {
 
 async function removeServicePermissions(service: ApiKeyRoleForm) {
   const projectUuid = dataStore.projectUuid || '';
-  service.enabled = !service.enabled;
-  if (!service.enabled || props.id === 0) return;
+  if (props.id === 0) return;
 
   // If toggle off, remove all active roles for this service type
   try {

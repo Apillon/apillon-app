@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h4>{{ $t('dashboard.nav.storage') }}</h4>
+          <h1>{{ $t('dashboard.nav.storage') }}</h1>
         </slot>
 
         <template #info>

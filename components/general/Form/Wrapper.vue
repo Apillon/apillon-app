@@ -2,6 +2,7 @@
   <div class="form-wrapper w-full flex gap-8 tablet:flex-wrap">
     <div class="w-full lg:w-1/4">
       <h4>{{ title }}</h4>
+      <slot name="heading" />
     </div>
 
     <div class="w-full lg:w-1/2">

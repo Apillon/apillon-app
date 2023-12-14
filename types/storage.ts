@@ -112,6 +112,7 @@ declare global {
    */
   interface BucketItemInterface extends BaseObjectInterface {
     CID: string | null;
+    CIDv1?: string | null;
     contentType: string | null;
     directoryUuid: string | null;
     fileStatus: number | null;
@@ -154,6 +155,22 @@ declare global {
   interface IpnsPublishResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsItemResponse extends GeneralResponse<IpnsInterface> {}
   interface IpnsResponse extends GeneralItemsResponse<IpnsInterface> {}
+
+  /**
+   * IPFS
+   */
+  type IpfsLink = {
+    link: string;
+  };
+  interface IpfsInterface extends BaseObjectInterface {
+    ipfsGateway?: string | null;
+    ipnsGateway?: string | null;
+    project_uuid: string;
+    secret: string;
+    subdomainGateway?: string | null;
+  }
+  interface IpfsResponse extends GeneralResponse<IpfsInterface> {}
+  interface IpfsLinkResponse extends GeneralResponse<IpfsLink> {}
 
   /**
    * File

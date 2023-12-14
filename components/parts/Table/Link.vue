@@ -2,7 +2,9 @@
   <div v-if="link" class="flex">
     <a :href="link" target="_blank">
       <NEllipsis class="text-body align-bottom" :line-clamp="1">
-        {{ textOrLink }}
+        <span :class="{ 'text-xs': textOrLink.length > 100 }">
+          {{ textOrLink }}
+        </span>
         <template #tooltip>
           {{ link }}
         </template>

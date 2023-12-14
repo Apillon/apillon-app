@@ -25,7 +25,7 @@
           :placeholder="$t('form.placeholder.fileStatus')"
           filterable
           clearable
-          @update:value="handleFilesStatusChange"
+          @update:value="getFiles"
         />
       </n-space>
     </n-space>
@@ -36,6 +36,7 @@
       :data="fileStore.all"
       :loading="loading"
       :pagination="pagination"
+      :row-key="rowKey"
       :row-props="rowProps"
       @update:page="handlePageChange"
     />
@@ -65,10 +66,6 @@ const fileStatuses = ref<Array<NSelectOption>>(
     };
   })
 );
-
-async function handleFilesStatusChange() {
-  await getFiles();
-}
 
 /** Pagination data */
 const currentPage = ref<number>(1);
@@ -134,6 +131,7 @@ const createColumns = (): NDataTableColumns<FileUploadInterface> => {
   ];
 };
 const columns = createColumns();
+const rowKey = (row: FileUploadInterface) => row.file_uuid;
 
 function rowProps(row: FileUploadInterface) {
   return {

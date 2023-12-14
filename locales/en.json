@@ -55,10 +55,13 @@
       "withEmail": "sign up with email"
     },
     "terms": {
+      "accept": "You must accept the ",
+      "acceptEnd": " before creating an account.",
       "agree": "I have read and agree to ",
       "and": " and ",
       "pp": "Privacy Policy",
-      "tc": "Terms and Conditions"
+      "tc": "Terms and Conditions",
+      "terms": "Terms"
     },
     "wallet": {
       "connect": {
@@ -350,6 +353,7 @@
     "viewInvoice": "View Invoice",
     "value": "Value",
     "visibleColumns": "Visible columns",
+    "wiki": "Wiki",
     "w3Warn": "W3 warn"
   },
   "error": {
@@ -460,6 +464,7 @@
     "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
     "NFT_CONTRACT_OWNER_ERROR": "NFT contract has been transferred to another wallet.",
     "NFT_DEPLOY_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
+    "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_PRESENT": "Royalties address is not present, please enter a valid EVM address",
     "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid EVM address",
     "INVALID_ADDRESS_FOR_TRANSFER_TO": "Wrong address, please enter different address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
@@ -1115,6 +1120,21 @@
       "item": "Download selected item",
       "items": "Download selected items"
     },
+    "ipfs": {
+      "generateLink": "Generate link",
+      "hotToGenerateLink": "How to generate link",
+      "ipfsInfo": "Gateway, which can be used to access content via CIDs.",
+      "ipfsLink": "IPFS link",
+      "ipfsLinkInfo": "Link, where requested content can be accessed",
+      "ipns": "IPNS Gateway",
+      "ipnsInfo": "Gateway, which can be used to access content via IPNS name.",
+      "project": "Project unique identifier",
+      "secretInfo": "Secret for this project, which can be used to generate tokens, to access content of ipfs gateway",
+      "subdomain": "Subdomain Gateway",
+      "subdomainInfo": "If specified, content on ipfs can be access as subdomain.",
+      "title": "IPFS Gateway",
+      "titleInfo": "IPFS Gateway info"
+    },
     "ipns": {
       "create": "Create new IPNS",
       "createFirst": "Create your first IPNS",
@@ -1254,7 +1274,7 @@
     "collectionDropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
     "collectionRoyaltiesAddress": "Please enter a valid EVM address",
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
-    "collectionRoyaltiesFees": "Royalty fee must be greater than 0",
+    "collectionRoyaltiesFees": "Royalty fee must be a number between 0 and 100",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
     "collectionSymbolRequired": "Please enter Collection symbol",
     "collectionTypeRequired": "Please select Collection type",
@@ -1267,9 +1287,11 @@
     "expirationDate": "Date is expired",
     "expirationDateRequired": "Please enter expiration date",
     "fileNoData": "The file is empty or has no data",
+    "fileTypeNotAllow": "File \"{name}\" can't be uploaded here. Please use hosting service.",
     "fileTypeNotCsv": "File must be of type CSV",
     "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",
+    "ipfsCidRequired": "Please enter CID or IPNS",
     "ipnsDescriptionTooLong": "Text is too long (max 255 characters)",
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
@@ -1323,6 +1345,9 @@
     "hosting": {
       "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",
       "deploy": "Please be advised that the deployment may take up to 5 minutes to complete."
+    },
+    "ipfs": {
+      "gateway": ""
     },
     "nft": {
       "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world."

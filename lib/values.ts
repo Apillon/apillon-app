@@ -6,7 +6,7 @@ export const NFT_MAX_SUPPLY = 10000;
 export const PAGINATION_LIMIT = 20;
 export const PARAMS_ALL_ITEMS = {
   page: 1,
-  limit: 100,
+  limit: 1000,
 };
 
 export const LS_KEY_NEWSLETTER = 'al_newsletter_subscribed';
@@ -23,6 +23,7 @@ export const LsAnalyticsKeys = {
 
 export const LsTableColumnsKeys = {
   FILES: 'al_table_files_columns',
+  IPNS: 'al_table_ipns_columns',
 };
 
 export const LsW3WarnKeys = {
@@ -55,6 +56,7 @@ export const LsCacheKeys = {
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
   INVOICES: 'al_cache_invoices',
+  IPFS: 'al_cache_ipfs',
   IPNS: 'al_cache_ipns',
   IPNS_ITEM: 'al_cache_ipns_item',
   OAUTH_LINKS: 'al_cache_oauth_links',
