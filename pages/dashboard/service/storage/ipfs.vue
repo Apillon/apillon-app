@@ -39,35 +39,13 @@
             href="https://wiki.apillon.io/build/2-storage-api.html#get-or-generate-link-for-ipfs"
             target="_blank"
           >
-            Wiki
+            {{ $t('dashboard.wiki') }}
           </Btn>
         </div>
-        <HostingPreviewLink
-          :link="ipfsStore.info.ipfsGateway"
-          :title="$t('storage.ipfs.title')"
-          :info="$t('storage.ipfs.ipfsInfo')"
-          copy
-        />
-        <HostingPreviewLink
-          :link="ipfsStore.info.ipnsGateway"
-          :title="$t('storage.ipfs.ipns')"
-          :info="$t('storage.ipfs.ipnsInfo')"
-          copy
-        />
-        <HostingPreviewLink
-          :link="ipfsStore.info.secret"
-          :title="$t('general.secret')"
-          :info="$t('storage.ipfs.secretInfo')"
-          copy
-        />
-        <HostingPreviewLink
-          :link="ipfsStore.info.subdomainGateway || ' '"
-          :title="$t('storage.ipfs.subdomain')"
-          :info="$t('storage.ipfs.subdomainInfo')"
-          copy
-        />
 
-        <div class="flex gap-2 items-end mt-8 mb-4">
+        <StorageIpfsGateway v-if="ipfsStore.info" :gateway="ipfsStore.info" />
+
+        <div class="flex gap-2 items-end mb-4">
           <h4>{{ $t('storage.ipfs.hotToGenerateLink') }}</h4>
           <Btn
             class="inline-block mb-[-2px]"
@@ -75,7 +53,7 @@
             href="https://wiki.apillon.io/build/2-storage-api.html#get-or-generate-link-for-ipfs"
             target="_blank"
           >
-            Wiki
+            {{ $t('dashboard.wiki') }}
           </Btn>
         </div>
 
@@ -92,32 +70,8 @@
             {{ $t('dashboard.wiki') }}
           </Btn>
         </template>
-        <n-space class="pb-8" :size="16" vertical>
-          <HostingPreviewLink
-            :link="ipfsStore.info.ipfsGateway"
-            :title="$t('storage.ipfs.title')"
-            :info="$t('storage.ipfs.ipfsInfo')"
-            copy
-          />
-          <HostingPreviewLink
-            :link="ipfsStore.info.ipnsGateway"
-            :title="$t('storage.ipfs.ipns')"
-            :info="$t('storage.ipfs.ipnsInfo')"
-            copy
-          />
-          <HostingPreviewLink
-            :link="ipfsStore.info.secret"
-            :title="$t('general.secret')"
-            :info="$t('storage.ipfs.secretInfo')"
-            copy
-          />
-          <HostingPreviewLink
-            :link="ipfsStore.info.subdomainGateway || ' '"
-            :title="$t('storage.ipfs.subdomain')"
-            :info="$t('storage.ipfs.subdomainInfo')"
-            copy
-          />
-        </n-space>
+
+        <StorageIpfsGateway v-if="ipfsStore.info" :gateway="ipfsStore.info" />
       </n-card>
 
       <!-- W3Warn: destroyed buckets -->
@@ -140,8 +94,8 @@
             target="_blank"
           >
             {{ $t('dashboard.wiki') }}
-          </Btn></template
-        >
+          </Btn>
+        </template>
 
         <FormStorageIpfs />
       </n-card>

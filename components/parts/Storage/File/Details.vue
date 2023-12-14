@@ -27,6 +27,19 @@
         </button>
       </div>
 
+      <!-- CID -->
+      <div v-if="file?.CIDv1" class="body-sm mb-4">
+        <p class="body-sm">
+          <span class="text-body">CIDv1</span>
+        </p>
+        <div>
+          <strong>{{ file.CIDv1 }}</strong>
+        </div>
+        <button class="text-primary btn-small" @click="copyToClipboard(file.CIDv1)">
+          <strong>{{ $t('dashboard.clipboard.copyCid') }}v1</strong>
+        </button>
+      </div>
+
       <!-- Link -->
       <div v-if="file.link" class="body-sm mb-4">
         <p class="body-sm">

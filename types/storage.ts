@@ -112,6 +112,7 @@ declare global {
    */
   interface BucketItemInterface extends BaseObjectInterface {
     CID: string | null;
+    CIDv1?: string | null;
     contentType: string | null;
     directoryUuid: string | null;
     fileStatus: number | null;
@@ -162,11 +163,11 @@ declare global {
     link: string;
   };
   interface IpfsInterface extends BaseObjectInterface {
-    ipfsGateway: string;
-    ipnsGateway: string;
+    ipfsGateway?: string | null;
+    ipnsGateway?: string | null;
     project_uuid: string;
     secret: string;
-    subdomainGateway: string;
+    subdomainGateway?: string | null;
   }
   interface IpfsResponse extends GeneralResponse<IpfsInterface> {}
   interface IpfsLinkResponse extends GeneralResponse<IpfsLink> {}
