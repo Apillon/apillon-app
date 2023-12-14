@@ -57,6 +57,7 @@ type SignupForm = {
   email: string;
   captcha?: any;
   refCode?: string;
+  metadata?: any;
   terms?: boolean;
 };
 
@@ -64,7 +65,7 @@ const props = defineProps({
   sendAgain: { type: Boolean, default: false },
 });
 
-const $route = useRoute();
+const { query } = useRoute();
 const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
@@ -86,7 +87,8 @@ const newsletterChecked = ref<boolean>(false);
 const formData = ref<SignupForm>({
   email: authStore.email,
   captcha: null as any,
-  refCode: `${$route.query?.REF || ''}`,
+  refCode: `${query?.REF || ''}`,
+  metadata: getMetadata(),
   terms: false,
 });
 
@@ -173,5 +175,11 @@ function onCaptchaVerify(token: string, eKey: string) {
   formData.value.captcha = { token, eKey };
   handleSubmit(null);
   loading.value = false;
+}
+
+function getMetadata() {
+  return query && Object.keys(query).length
+    ? JSON.stringify(query)
+    : readCookie('apillon_mkt_params');
 }
 </script>

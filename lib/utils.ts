@@ -86,7 +86,7 @@ export function hideSecret(source: string, partLength: number = 4): string {
         source.slice(source.length - partLength, source.length)
     : source;
 }
-export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
+export function toStr(s?: any) {
   return s ? s.toString() : '';
 }
 
@@ -487,4 +487,15 @@ export function getDeviceName() {
 
 export function generatePriceServiceName(service: string, chain: number, action: string) {
   return service + '_' + Chains[chain] + '_' + action;
+}
+
+/**
+ * Get the value of a cookie
+ * @param  {String} name  The name of the cookie
+ * @return {String}       The cookie value
+ */
+export function readCookie(name: string) {
+  const value = `; ${document.cookie}`;
+  const parts: String[] = value.split(`; ${name}=`);
+  return parts.length === 2 ? parts.pop()?.split(';')?.shift() || '' : '';
 }

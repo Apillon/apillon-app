@@ -132,6 +132,7 @@ async function register() {
       password: formData.value.password,
       token: props.token || query.token || authStore.jwt,
       refCode: query.REF,
+      metadata: getMetadata(),
     });
 
     authStore.saveUser(res.data);
@@ -165,5 +166,11 @@ async function submitResetPassword() {
     message.error(userFriendlyMsg(error));
   }
   loading.value = false;
+}
+
+function getMetadata() {
+  return query && Object.keys(query).length
+    ? JSON.stringify(query)
+    : readCookie('apillon_mkt_params');
 }
 </script>
