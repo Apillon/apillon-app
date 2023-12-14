@@ -112,6 +112,7 @@ declare global {
    */
   interface BucketItemInterface extends BaseObjectInterface {
     CID: string | null;
+    CIDv1?: string | null;
     contentType: string | null;
     directoryUuid: string | null;
     fileStatus: number | null;
