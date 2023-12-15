@@ -19,6 +19,12 @@
       :info="$t('storage.ipfs.secretInfo')"
       copy
     />
+    <Secret
+      :secret="gateway.secret"
+      :title="$t('general.secret')"
+      :info="$t('storage.ipfs.secretInfo')"
+      copy
+    />
   </n-space>
 </template>
 
