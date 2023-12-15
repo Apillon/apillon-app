@@ -13,12 +13,6 @@
       copy
     />
     <HostingPreviewLink :link="gateway.project_uuid" :title="$t('storage.ipfs.project')" copy />
-    <HostingPreviewLink
-      :link="gateway.secret"
-      :title="$t('general.secret')"
-      :info="$t('storage.ipfs.secretInfo')"
-      copy
-    />
     <Secret
       :secret="gateway.secret"
       :title="$t('general.secret')"
