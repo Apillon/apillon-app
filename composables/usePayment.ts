@@ -4,6 +4,34 @@ export default function usePayment() {
   const message = useMessage();
   const paymentStore = usePaymentStore();
 
+  const loading = ref<boolean>(false);
+
+  async function getSubscriptionSessionUrl(packageId: number) {
+    /** Remove cache mark */
+    sessionStorage.removeItem(LsCacheKeys.SUBSCRIPTION_ACTIVE);
+
+    if (paymentStore.hasActiveSubscription) {
+      return await goToCustomerPortal();
+    }
+    loading.value = true;
+    const stripeSessionUrl = await paymentStore.fetchSubscriptionSessionUrl(packageId);
+    loading.value = false;
+
+    if (stripeSessionUrl) {
+      window.open(stripeSessionUrl, '_self');
+    }
+  }
+
+  async function goToCustomerPortal() {
+    loading.value = true;
+    const customerPortalUrl = await paymentStore.getCustomerPortalURL();
+    loading.value = false;
+
+    if (customerPortalUrl) {
+      window.open(customerPortalUrl, '_blank');
+    }
+  }
+
   async function wereCreditsPurchased() {
     const lastInvoice = await paymentStore.fetchInvoices(1, 1);
     return (
@@ -67,7 +95,10 @@ export default function usePayment() {
   }
 
   return {
+    loading,
     creditsMessage,
+    getSubscriptionSessionUrl,
+    goToCustomerPortal,
     subscriptionMessage,
   };
 }
