@@ -91,33 +91,7 @@ defineProps({
   plan: { type: Object as PropType<PricingPlan>, default: {} as PricingPlan },
 });
 
-const loading = ref<boolean>(false);
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
-
-async function getSubscriptionSessionUrl(packageId: number) {
-  /** Remove cache mark */
-  sessionStorage.removeItem(LsCacheKeys.SUBSCRIPTION_ACTIVE);
-
-  if (paymentStore.hasActiveSubscription) {
-    return await goToCustomerPortal();
-  }
-  loading.value = true;
-  const stripeSessionUrl = await paymentStore.fetchSubscriptionSessionUrl(packageId);
-  loading.value = false;
-
-  if (stripeSessionUrl) {
-    window.open(stripeSessionUrl, '_self');
-  }
-}
-
-async function goToCustomerPortal() {
-  loading.value = true;
-  const customerPortalUrl = await paymentStore.getCustomerPortalURL();
-  loading.value = false;
-
-  if (customerPortalUrl) {
-    window.open(customerPortalUrl, '_blank');
-  }
-}
+const { loading, getSubscriptionSessionUrl } = usePayment();
 </script>

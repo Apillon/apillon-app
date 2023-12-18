@@ -36,17 +36,31 @@
           }}
         </span>
       </div>
-      <Btn
-        :type="btnType"
-        size="large"
-        :disabled="authStore.isAdmin() || dataStore.isProjectUser"
-        @click="modalSubscriptionPackagesVisible = true"
-      >
-        <template v-if="btnText">{{ btnText }}</template>
-        <template v-else>
+      <div class="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-4">
+        <Btn
+          :type="btnType"
+          :disabled="authStore.isAdmin() || dataStore.isProjectUser"
+          @click="modalSubscriptionPackagesVisible = true"
+        >
+          <template v-if="btnText">{{ btnText }}</template>
+          <template v-else-if="paymentStore.hasActiveSubscription">
+            {{ $t('dashboard.payment.comparePlans') }}
+          </template>
+          <template v-else>
+            {{ $t('dashboard.payment.upgradePlan') }}
+          </template>
+        </Btn>
+        <Btn
+          v-if="isCaterpillarActive"
+          type="primary"
+          :color="colors.blue"
+          round
+          :loading="loading"
+          @click="goToCustomerPortal()"
+        >
           {{ $t('dashboard.payment.upgradePlan') }}
-        </template>
-      </Btn>
+        </Btn>
+      </div>
     </div>
   </n-card>
   <Btn
@@ -82,6 +96,8 @@
 </template>
 
 <script lang="ts" setup>
+import colors from '~/tailwind.colors';
+
 defineProps({
   showCard: { type: Boolean, default: true },
   btnType: { type: String as PropType<'primary' | 'secondary'>, default: 'primary' },
@@ -91,7 +107,18 @@ defineProps({
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
+const { loading, goToCustomerPortal } = usePayment();
+
 const modalSubscriptionPackagesVisible = ref<boolean>(false);
+
+const isCaterpillarActive = computed(
+  () =>
+    paymentStore.hasActiveSubscription &&
+    paymentStore.activeSubscription.package_id === caterpillarPackageId()
+);
+
+const caterpillarPackageId = () =>
+  paymentStore.subscriptionPackages.find(item => item.name === 'Caterpillar')?.id || 2;
 
 const pricingPlans: Record<string, PricingPlan> = {
   Freemium: {
@@ -128,4 +155,6 @@ const pricingPlans: Record<string, PricingPlan> = {
     otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
 };
+
+function upgradePlan() {}
 </script>
