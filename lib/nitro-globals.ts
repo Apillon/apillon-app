@@ -1,7 +1,6 @@
 const meta = {
-  title: 'Apillon - Make your project unstoppable.',
-  description:
-    'Host your website or dapp on a decentralized network with just a few clicks and retain the ownership and authority over it.',
+  title: 'Apillon - Web3 development platform',
+  description: 'Robust infrastructure for developers. Few-click solutions for everyone else.',
   url: 'https://app.apillon.io/',
   image: 'https://app.apillon.io/apillon_og.jpg',
 };
