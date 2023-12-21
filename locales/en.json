@@ -329,6 +329,7 @@
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
+    "createTime": "Created at",
     "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
     "dashboard": "Dashboard",
     "date": "Date",
@@ -1156,7 +1157,8 @@
       "publish": "Publish to IPNS",
       "selectIpns": "Select IPNS",
       "title": "IPNS",
-      "update": "Update IPNS"
+      "update": "Update IPNS",
+      "uuid": "IPNS UUID"
     },
     "file": {
       "status": {
