@@ -620,6 +620,7 @@
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
+        "apiKeyRoles": "Api key permissions has been added",
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
         "collection": "Creating NFT collection requested.",
@@ -661,6 +662,7 @@
       "updated": {
         "apiKey": "Api key has been updated",
         "apiKeyRole": "Api key permission has been added",
+        "apiKeyRoles": "Api key permissions has been added",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "directory": "Folder has been updated",
