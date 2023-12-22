@@ -180,9 +180,8 @@ export const useBucketStore = defineStore('bucket', {
           desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
-        if (statusDeleted) {
-          params.status = 8;
-        }
+        params.status = statusDeleted ? 8 : 5;
+
         const req = $api.get<BucketsResponse>(endpoints.buckets, params);
         dataStore.promises.buckets = req;
         const res = await req;

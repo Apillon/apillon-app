@@ -263,8 +263,7 @@ function onBucketDeleted() {
 
   setTimeout(() => {
     bucketStore.fetchBuckets();
-    bucketStore.fetchBuckets(true);
-  }, 300);
+  }, 500);
 }
 
 /**
