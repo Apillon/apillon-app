@@ -759,7 +759,6 @@
       "infoEdit": "",
       "name": "Website name",
       "new": "New website",
-      "quotaReached": "Quota has been reached.",
       "update": "Update website",
       "uuid": "Website Uuid"
     },
@@ -815,7 +814,6 @@
       "nestMint": "Nestable Mint",
       "new": "New NFT collection",
       "numOfData": "Number of data",
-      "quotaReached": "Quota has been reached.",
       "dropReserve": "Reserved",
       "revoke": "Burn",
       "symbol": "Symbol",
@@ -1011,7 +1009,8 @@
     "new": "Add new project",
     "newBucket": "New storage bucket",
     "owner": "Project owner",
-    "quotaReached": "Quota has been reached.",
+    "quotaReached": "Quota has been reached. To create more projects",
+    "upgradePlan": " upgrade your current plan",
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
