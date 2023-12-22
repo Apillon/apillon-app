@@ -106,7 +106,10 @@
 
   <!-- Modal - Create new project -->
   <modal v-model:show="modalNewProjectVisible" :title="$t('project.new')">
-    <FormProject @submit-success="modalNewProjectVisible = false" />
+    <FormProject
+      @submit-success="modalNewProjectVisible = false"
+      @close="modalNewProjectVisible = false"
+    />
   </modal>
 </template>
 

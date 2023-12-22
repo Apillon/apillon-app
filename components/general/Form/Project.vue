@@ -1,7 +1,10 @@
 <template>
   <div>
     <Notification v-if="dataStore.project.quotaReached === true" type="warning" class="mb-4">
-      {{ $t('project.quotaReached') }}
+      {{ $t('project.quotaReached') }},
+      <NuxtLink class="text-yellow" :to="{ name: 'dashboard-payments' }" @click="$emit('close')">
+        {{ $t('project.upgradePlan') }} </NuxtLink
+      >.
     </Notification>
     <n-form
       ref="formRef"
@@ -71,7 +74,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
 
-const emit = defineEmits(['submitActive', 'submitSuccess']);
+const emit = defineEmits(['submitActive', 'submitSuccess', 'close']);
 
 onMounted(async () => {
   /** GET Project quota */
