@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between items-center gap-y-2" :class="{ 'flex-wrap': wrap }">
-    <span class="inline-block lg:min-w-[130px]">
+    <span class="inline-block mr-2">
       <span class="text-body whitespace-nowrap" :class="wrap ? 'text-xs' : 'text-sm'">
         {{ $t('storage.usage', { used: formatBytes(size), max: formatBytes(maxSize) }) }}
       </span>
