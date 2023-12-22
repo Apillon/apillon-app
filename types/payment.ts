@@ -1,5 +1,18 @@
-export {};
-
+export enum TransactionCategory {
+  COLLECTION = 'COLLECTION',
+  DEPLOYMENT = 'DEPLOYMENT',
+  INVOICE = 'INVOICE',
+  PROJECT = 'PROJECT',
+  PROMO_CODE = 'PROMO_CODE',
+  SUBSCRIPTION = 'SUBSCRIPTION',
+  TRANSACTION = 'TRANSACTION',
+  IDENTITY = 'IDENTITY',
+  WEBSITE = 'WEBSITE',
+}
+export enum CreditDirection {
+  RECEIVE = 1,
+  SPEND = 2,
+}
 declare global {
   /**
    * Pricing

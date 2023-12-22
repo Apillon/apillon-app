@@ -1,5 +1,11 @@
 import { defineStore } from 'pinia';
 
+type FetchCreditTransactionsParams = FetchParams & {
+  service: string | null;
+  category: string | null;
+  direction: string | null;
+};
+
 let abortController = null as AbortController | null;
 
 export const usePaymentStore = defineStore('payment', {
@@ -23,7 +29,7 @@ export const usePaymentStore = defineStore('payment', {
   }),
   getters: {
     hasCustomerPortalUrl(state) {
-      return Array.isArray(state.customerPortalUrl) && state.customerPortalUrl.length > 0;
+      return !!state?.customerPortalUrl;
     },
     hasCredits(state) {
       return state.credit?.balance;
@@ -208,17 +214,15 @@ export const usePaymentStore = defineStore('payment', {
     },
 
     /** API Credit transactions */
-    async fetchCreditTransactions(page = 1, limit: number = PAGINATION_LIMIT) {
+    async fetchCreditTransactions(args?: FetchCreditTransactionsParams = {}) {
       const projectUuid = await this.getProjectUuid();
       if (!projectUuid) return;
 
       try {
-        const params: Record<string, string | number> = {
-          orderBy: 'createTime',
-          desc: 'true',
-          page,
-          limit,
-        };
+        const params = parseArguments(args);
+        if (args.category) params.category = args.category;
+        if (args.direction) params.direction = args.direction;
+        if (args.service) params.service = args.service;
 
         const res = await $api.get<CreditTransactionsResponse>(
           endpoints.creditTransactions(projectUuid),
@@ -307,6 +311,7 @@ export const usePaymentStore = defineStore('payment', {
         const params: Record<string, string | number> = {
           orderBy: 'createTime',
           desc: 'true',
+          reference: 'creditPackage',
           page,
           limit,
         };
