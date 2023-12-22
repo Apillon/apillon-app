@@ -129,7 +129,7 @@ const Endpoints = {
     return `/storage/${bucketUuid}/file/${fileUuid}`;
   },
   storageFileRestore: (bucketUuid: string, fileUuid: string | number) => {
-    return `/storage/${bucketUuid}/file/${fileUuid}/cancel-deletion`;
+    return `/storage/${bucketUuid}/file/${fileUuid}/restore`;
   },
   storageFilesTrashed: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/trashed-files`;

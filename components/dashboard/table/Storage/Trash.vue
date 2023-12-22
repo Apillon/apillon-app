@@ -213,6 +213,9 @@ async function restore() {
 
     removeTrashedFileFromList(restoredFile.data.file_uuid || restoredFile.data.uuid);
     message.success($i18n.t('form.success.restored.file'));
+
+    /** Remove timestamp for items */
+    sessionStorage.removeItem(LsCacheKeys.BUCKET_ITEMS);
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));
   }
