@@ -54,11 +54,10 @@
           v-if="isCaterpillarActive"
           type="primary"
           :color="colors.blue"
-          round
           :loading="loading"
           @click="goToCustomerPortal()"
         >
-          {{ $t('dashboard.payment.upgradePlan') }}
+          {{ $t('dashboard.payment.managePlan') }}
         </Btn>
       </div>
     </div>

@@ -16,6 +16,41 @@
         <PaymentCardCurrentCredits />
         <PaymentCardCurrentPlan />
       </div>
+
+      <!-- Usage -->
+      <div class="mt-6 pb-8">
+        <h3 class="mb-6">{{ $t('dashboard.usage.title') }}</h3>
+        <div class="p-3 border-b border-bg-lighter flex gap-2">
+          <span class="icon-storage text-xl"></span>
+          <h5>
+            {{ $t('dashboard.usage.storage') }} -
+            {{ paymentStore.getActiveSubscriptionPackage?.name }}
+          </h5>
+        </div>
+        <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
+          <div class="min-w-[12rem]">
+            {{ $t('dashboard.usage.bytesStored') }}
+          </div>
+          <div class="w-full">
+            <PaymentProgress
+              :size="storageStore.info.usedStorage"
+              :total-size="storageStore.info.availableStorage"
+            />
+          </div>
+        </div>
+        <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
+          <div class="min-w-[12rem]">
+            {{ $t('dashboard.usage.bandwith') }}
+          </div>
+          <div class="w-full">
+            <PaymentProgress
+              :size="storageStore.info.usedBandwidth"
+              :total-size="storageStore.info.availableBandwidth"
+              :label-total="'/' + $t('general.month')"
+            />
+          </div>
+        </div>
+      </div>
     </slot>
   </Dashboard>
 </template>
@@ -24,6 +59,7 @@
 const { t } = useI18n();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
+const storageStore = useStorageStore();
 const { creditsMessage, subscriptionMessage } = usePayment();
 
 useHead({
@@ -50,6 +86,11 @@ onMounted(() => {
       promises.push(
         new Promise<void>(resolve => {
           paymentStore.getCreditPackages().then(() => resolve());
+        })
+      );
+      promises.push(
+        new Promise<void>(resolve => {
+          storageStore.getStorageInfo().then(() => resolve());
         })
       );
 
