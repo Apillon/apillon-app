@@ -121,7 +121,7 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      collectionStore.bucketUuId = formData.value.bucket;
+      collectionStore.bucketUuid = formData.value.bucket;
       collectionStore.mintTab = NftMintTab.UPLOAD;
     }
   });
