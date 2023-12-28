@@ -322,6 +322,10 @@
 .n-layout-sider {
   background-color: transparent;
 
+  &.sider-visible > .n-scrollbar {
+    @apply overflow-visible;
+  }
+
   .n-layout-toggle-button {
     @apply top-12;
   }
@@ -486,7 +490,7 @@ body > .n-message-container {
 
 /** Modal */
 .n-modal {
-  margin: 50px auto;
+  @apply my-12 mx-auto mobile:w-[90vw];
 
   /** Card */
   &.n-card {

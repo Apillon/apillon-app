@@ -115,6 +115,17 @@
   opacity: 1;
 }
 
+/* Slide right */
+.slide-right-enter-active {
+  transition: all 0.5s ease;
+  transform: translateX(0);
+  opacity: 0;
+}
+.slide-right-enter-to {
+  transform: translateX(-100%);
+  opacity: 1;
+}
+
 /* Fade */
 .fade-enter-active,
 .fade-leave-active {
@@ -139,7 +150,9 @@
 /* fadeBlur */
 .fadeBlur-enter-active,
 .fadeBlur-leave-active {
-  transition: opacity 0.5s, filter 0.5s;
+  transition:
+    opacity 0.5s,
+    filter 0.5s;
 }
 .fadeBlur-leave-active {
   position: absolute;

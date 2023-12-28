@@ -201,6 +201,9 @@
       "title": "API keys",
       "update": "Update API key"
     },
+    "chat": {
+      "settings": "Change Chat settings"
+    },
     "clipboard": {
       "copied": "Text has been copied to clipboard",
       "copy": "Copy to clipboard",

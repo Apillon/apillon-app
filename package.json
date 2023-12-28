@@ -39,6 +39,8 @@
     "@pinia/nuxt": "^0.4.11",
     "@polkadot/api": "^9.10.2",
     "@polkadot/extension-inject": "^0.45.2",
+    "@subsocial/grill-widget": "^0.0.13",
+    "@subsocial/resource-discussions": "^0.0.4",
     "card-validator": "^8.1.1",
     "drag-scroll-vue3": "^1.0.7",
     "ethers": "^5.7.2",
@@ -53,6 +55,7 @@
     "v-lazy-image": "^2.1.1",
     "vue-cookie-accept-decline": "^6.1.0",
     "vue-papa-parse": "^3.1.0",
-    "vue-tweet": "^2.0.2"
+    "vue-tweet": "^2.0.2",
+    "vue3-ts-jsoneditor": "^2.9.0"
   }
 }
