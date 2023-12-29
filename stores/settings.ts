@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
+import { grillChatDefaultSettings } from '~/lib/values';
 
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
     apiKeys: [] as ApiKeyInterface[],
     discordLink: '' as string,
+    grillChatSettings: grillChatDefaultSettings,
     oauthLinks: [] as OauthLinkInterface[],
     users: [] as ProjectUserInterface[],
   }),

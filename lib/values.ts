@@ -1,3 +1,5 @@
+import type { GrillConfig } from '@subsocial/grill-widget';
+
 export const MINUTE_IN_MS = 60 * 1000; // 1 minute
 export const CACHE_EXPIRATION_IN_MS = 10 * 60 * 1000; // 10 minutes
 export const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000; // 1 week in MS
@@ -100,6 +102,22 @@ export function CreateUserRoles(): Array<NSelectOption> {
     };
   });
 }
+
+/** Grill chat */
+export const grillChatDefaultSettings: GrillConfig = {
+  theme: 'dark',
+  widgetElementId: 'grill',
+  hub: { id: '1002' },
+  channel: {
+    type: 'channel',
+    id: '754',
+    settings: {
+      enableBackButton: true,
+      enableLoginButton: true,
+      enableInputAutofocus: true,
+    },
+  },
+};
 
 /**
  * Referral
