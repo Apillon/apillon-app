@@ -162,6 +162,7 @@
     "contract": {
       "addNew": "Add new contract",
       "address": "Contract address",
+      "assignCid": "Assign CID to NFT",
       "create": "Create contract",
       "createFirst": "Create first contract",
       "deployerAddress": "Deployer address",
@@ -185,6 +186,10 @@
       "type": {
         "1": "SCHRODINGER"
       }
+    },
+    "upload": {
+      "dragAndDrop": "Drag & drop file",
+      "upload": "Upload file"
     },
     "title": "Computing"
   },
@@ -622,11 +627,13 @@
     "COMPUTING_ACCOUNT_ADDRESS_NOT_VALID": "Account address is not valid",
     "COMPUTING_CONTRACT_TYPE_NOT_VALID": "Contract type is not valid",
     "CONTRACT_DOES_NOT_EXIST": "Contract does not exist",
-    "walletSignature": "'Could not capture your signature, check your wallet connection",
+    "CONTRACT_NOT_DEPLOYED": "Contract is not deployed",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
     "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again.",
-    "Unable to mint new NFTs, out of supply!": "Nfts out of stock!"
+    "request entity too large": "Request entity too large",
+    "Unable to mint new NFTs, out of supply!": "Nfts out of stock!",
+    "walletSignature": "'Could not capture your signature, check your wallet connection"
   },
   "form": {
     "apiKeyTypes": {
@@ -703,6 +710,7 @@
       "websiteName": "Website name",
       "contract": {
         "name": "Contract name",
+        "cid": "CID",
         "description": "Contract description",
         "contractType": "Contract type",
         "nftContractAddress": "Contract Address",
@@ -778,8 +786,6 @@
     },
     "success": {
       "apiKey": "Api key has been created",
-      "contractDeposit": "Contract has been deposit to cluster",
-      "contractTransfer": "Contract has been transferred",
       "filesUploaded": "Files have been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
@@ -792,6 +798,11 @@
       "sendAgainEmail": "Email has been re-sent",
       "websiteDeployed": "Website has been deployed.",
       "websiteDeploying": "Done - deployment initiated",
+      "contract": {
+        "cidAssign": "CID has been assign to NFT",
+        "encrypted": "Contract has been encrypted",
+        "transferred": "Contract has been transferred"
+      },
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
@@ -1492,6 +1503,7 @@
     "websiteDomainUrl": "Domain name is not a valid URL",
     "contract": {
       "addressRequired": "Please enter Phala address",
+      "cidRequired": "Please enter CID",
       "depositAmountRequired": "Please enter amount",
       "depositAmountTooLow": "Please enter a higher amount (min. 0.01)"
     }

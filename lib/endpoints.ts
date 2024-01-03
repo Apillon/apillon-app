@@ -206,6 +206,12 @@ const Endpoints = {
   contracts: (uuid?: string) => {
     return uuid ? `/computing/contracts/${uuid}` : '/computing/contracts';
   },
+  contractAssignCid: (uuid?: string) => {
+    return `/computing/contracts/${uuid}/assign-cid-to-nft`;
+  },
+  contractEncrypt: (uuid?: string) => {
+    return `/computing/contracts/${uuid}/encrypt`;
+  },
   contractTransferOwnership: (uuid: string) => {
     return `/computing/contracts/${uuid}/transfer-ownership`;
   },

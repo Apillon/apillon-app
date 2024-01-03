@@ -7,27 +7,23 @@
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <!-- Actions -->
-        <ActionsComputingContract
-          @mint="modalMintContractVisible = true"
-          @nest-mint="modalNestMintContractVisible = true"
-          @revoke="modalBurnTokensVisible = true"
-          @transfer="modalTransferOwnershipVisible = true"
+        <ActionsComputingContract @transfer="modalTransferOwnershipVisible = true" />
+
+        <FormComputingUpload
+          class="max-w-xl mx-auto my-8"
+          :contract-uuid="contractStore.active.contract_uuid"
+        />
+
+        <FormComputingAssignCID
+          class="max-w-xl mx-auto my-8"
+          :contract-uuid="contractStore.active.contract_uuid"
         />
       </n-space>
 
-      <!-- Modal - Contract Mint
-      <modal v-model:show="modalMintContractVisible" :title="$t('nft.contract.mint')">
-        <FormComputingMint
-          :contract-uuid="contractStore.active.contract_uuid"
-        />
-      </modal> -->
-
-      <!-- Modal - Contract Transfer
+      <!-- Modal - Contract Transfer -->
       <modal v-model:show="modalTransferOwnershipVisible" :title="$t('nft.contract.transfer')">
-        <FormComputingTransfer
-          :contract-uuid="contractStore.active.contract_uuid"
-        />
-      </modal> -->
+        <FormComputingTransfer :contract-uuid="contractStore.active.contract_uuid" />
+      </modal>
     </slot>
   </Dashboard>
 </template>
@@ -40,9 +36,6 @@ const dataStore = useDataStore();
 const contractStore = useContractStore();
 
 const pageLoading = ref<boolean>(true);
-const modalMintContractVisible = ref<boolean | null>(false);
-const modalNestMintContractVisible = ref<boolean | null>(false);
-const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
 /** Contract UUID from route */

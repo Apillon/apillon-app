@@ -180,12 +180,14 @@ const contractTypes = ref<NSelectOption[]>(
 );
 
 const contractAddresses = computed(() => {
-  return collectionStore.items.map(item => {
-    return {
-      value: item.contractAddress,
-      label: `${item.contractAddress} (${item.name})`,
-    };
-  });
+  return collectionStore.items
+    .filter(item => !!item.contractAddress)
+    .map(item => {
+      return {
+        value: item.contractAddress,
+        label: `${item.contractAddress} (${item.name})`,
+      };
+    });
 });
 
 const nftChainRpcUrls = ref<NSelectOption[]>([

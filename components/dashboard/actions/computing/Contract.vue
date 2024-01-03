@@ -4,15 +4,9 @@
       <div class="w-[20vw] max-w-xs"></div>
 
       <n-space size="large">
-        <!-- Refresh -->
-        <n-button size="small" :loading="collectionStore.loading" @click="refresh">
-          <span class="icon-refresh text-xl mr-2"></span>
-          {{ $t('general.refresh') }}
-        </n-button>
-
         <!-- Actions -->
         <n-dropdown
-          :key="collectionStore.active.collectionStatus"
+          :key="contractStore.active.contractStatus"
           placement="bottom-end"
           trigger="click"
           :options="options"
@@ -37,57 +31,17 @@ defineProps({
 const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer']);
 
 const $i18n = useI18n();
-const router = useRouter();
 const authStore = useAuthStore();
-const bucketStore = useBucketStore();
-const collectionStore = useCollectionStore();
-const loadingBucket = ref<boolean>(false);
+const contractStore = useContractStore();
 
-const actionsDisabled = computed<boolean>(() => {
-  return collectionStore.active?.collectionStatus !== CollectionStatus.DEPLOYED;
-});
+const actionsDisabled = computed<boolean>(
+  () => contractStore.active?.contractStatus !== ContractStatus.DEPLOYED
+);
 
 const options = computed(() => {
   return [
     {
-      label: $i18n.t('nft.collection.mint'),
-      key: 'mint',
-      disabled: actionsDisabled.value,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value) {
-            emit('mint');
-          }
-        },
-      },
-    },
-    {
-      label: $i18n.t('nft.collection.nestMint'),
-      key: 'nestMint',
-      show: collectionStore.active?.collectionType === NFTCollectionType.NESTABLE,
-      disabled: actionsDisabled.value,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value) {
-            emit('nestMint');
-          }
-        },
-      },
-    },
-    {
-      label: $i18n.t('nft.collection.revoke'),
-      key: 'revoke',
-      disabled: actionsDisabled.value || !collectionStore.active?.isRevokable,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value && !!collectionStore.active?.isRevokable) {
-            emit('revoke');
-          }
-        },
-      },
-    },
-    {
-      label: $i18n.t('nft.collection.transfer'),
+      label: $i18n.t('computing.contract.transfer'),
       key: 'transfer',
       disabled: actionsDisabled.value,
       props: {
@@ -100,8 +54,4 @@ const options = computed(() => {
     },
   ];
 });
-
-async function refresh() {
-  await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
-}
 </script>

@@ -55,6 +55,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'name',
       title: $i18n.t('computing.contract.name'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
@@ -62,6 +63,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'description',
       title: $i18n.t('general.description'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
@@ -69,6 +71,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'type',
       title: $i18n.t('general.type'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
       minWidth: 130,
       render(row) {
         return $i18n.t(
