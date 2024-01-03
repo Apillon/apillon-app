@@ -5,16 +5,14 @@
 <script lang="ts" setup>
 import grill from '@subsocial/grill-widget';
 
-const settingsStore = useSettingsStore();
-
-const showChat = ref<boolean>(true);
+const chatStore = useChatStore();
 
 onMounted(() => {
-  grill.init(settingsStore.grillChatSettings);
+  grill.init(chatStore.settings);
 });
 
 watch(
-  () => settingsStore.grillChatSettings,
+  () => chatStore.settings,
   (newSettings, oldSettings) => {
     if (oldSettings && newSettings && JSON.stringify(oldSettings) !== JSON.stringify(newSettings)) {
       grill.setConfig(newSettings);

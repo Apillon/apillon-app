@@ -202,7 +202,10 @@
       "update": "Update API key"
     },
     "chat": {
-      "settings": "Change Chat settings"
+      "create": "Create new space in GrillChat",
+      "dragAndDrop": "Drag & drop or click to upload.",
+      "settings": "Change Chat settings",
+      "uploadImage": "Upload image"
     },
     "clipboard": {
       "copied": "Text has been copied to clipboard",
@@ -654,6 +657,10 @@
       "bucketName": "Bucket name",
       "cardHolder": "Card holder",
       "cardNumber": "Card number",
+      "chatAbout": "About",
+      "chatImage": "Space image",
+      "chatName": "Space name",
+      "chatTags": "Tags",
       "collectionBaseUri": "Base URI",
       "collectionBaseExtension": "Base Extension",
       "collectionChain": "Chain",
@@ -735,6 +742,7 @@
       "cardHolder": "John Doe",
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "chain": "Select Chain",
+      "chatTags": "Separate Tags with Commas",
       "complexPassword": "Enter complex password",
       "cvv": "311",
       "domain": "Type your domain name here",
@@ -801,6 +809,7 @@
         "apiKeyRoles": "Api key permissions has been added",
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
+        "chatSpace": "Chat space has been created",
         "collection": "Creating NFT collection requested.",
         "contract": "Contract has been created",
         "directory": "Folder has been created",

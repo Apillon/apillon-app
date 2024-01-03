@@ -51,7 +51,7 @@
           <HeaderProfile v-if="!authStore.isAdmin()" />
 
           <!-- Grill chat btn to show chat on mobile -->
-          <BtnHamburger class="flex lg:hidden" @click="emit('toggleChat')">
+          <BtnHamburger v-if="!isLg" class="flex lg:hidden" @click="emit('toggleChat')">
             <NuxtIcon name="logo/grill-chat-favicon" class="text-4xl" filled />
           </BtnHamburger>
         </n-space>
@@ -74,5 +74,5 @@ import { NSpace } from 'naive-ui';
 
 const emit = defineEmits(['toggleSidebar', 'toggleChat']);
 const authStore = useAuthStore();
-const { isSm } = useScreen();
+const { isSm, isLg } = useScreen();
 </script>

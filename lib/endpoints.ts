@@ -228,6 +228,17 @@ const Endpoints = {
     return `/api-keys/${key}/service-roles`;
   },
 
+  /**
+   * Social
+   */
+  /** Space */
+  space: '/social/space',
+
+  /** Spaces */
+  spaces: (uuid?: number | string) => {
+    return uuid ? `/social/spaces/${uuid}` : '/social/spaces';
+  },
+
   /** Oauth links */
   oauthLinks: '/users/oauth-links/',
 
