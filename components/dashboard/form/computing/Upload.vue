@@ -1,10 +1,11 @@
 <template>
   <n-upload
+    class="pr-1"
     :show-file-list="false"
     :disabled="uploadDisabled && authStore.isAdmin()"
     :custom-request="encryptFile"
   >
-    <n-upload-dragger class="h-60">
+    <n-upload-dragger class="h-40">
       <div class="py-2 text-center">
         <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
           <span class="icon-upload text-violet text-2xl"></span>
@@ -20,6 +21,10 @@
 <script lang="ts" setup>
 import { useMessage } from 'naive-ui';
 
+type EncryptContent = {
+  encryptedContent: string;
+};
+
 const props = defineProps({
   contractUuid: { type: String, required: true },
 });
@@ -31,6 +36,7 @@ const authStore = useAuthStore();
 const contractStore = useContractStore();
 
 const loading = ref<boolean>(true);
+const encryptContent = ref<string>('');
 
 const contract = computed<ContractInterface | undefined>(() => {
   if (contractStore.active.contract_uuid === props.contractUuid) {
@@ -48,12 +54,16 @@ async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOpti
   loading.value = true;
 
   try {
-    const fileContent = await convertBase64(file.file);
+    const fileContent = await convertToBase64(file.file);
 
-    await $api.post<any>(endpoints.contractEncrypt(props.contractUuid), {
-      contract_uuid: props.contractUuid,
-      content: fileContent,
-    });
+    const res = await $api.post<GeneralResponse<EncryptContent>>(
+      endpoints.contractEncrypt(props.contractUuid),
+      {
+        contract_uuid: props.contractUuid,
+        content: fileContent,
+      }
+    );
+    encryptContent.value = res.data.encryptedContent;
 
     message.success($i18n.t('form.success.contract.encrypted'));
     onFinish();
@@ -67,7 +77,7 @@ async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOpti
   loading.value = false;
 }
 
-const convertBase64 = file => {
+const convertToBase64 = file => {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);

@@ -61,12 +61,17 @@ async function assignCid() {
   loading.value = true;
 
   try {
-    await $api.post<any>(endpoints.contractAssignCid(props.contractUuid), formData.value);
+    const res = await $api.post<SuccessResponse>(
+      endpoints.contractAssignCid(props.contractUuid),
+      formData.value
+    );
 
-    message.success($i18n.t('form.success.contract.cidAssignedToNft'));
+    if (res.data.success) {
+      message.success($i18n.t('form.success.contract.cidAssignedToNft'));
 
-    /** Emit events */
-    emit('submitSuccess');
+      /** Emit events */
+      emit('submitSuccess');
+    }
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

@@ -627,11 +627,13 @@
     "COMPUTING_ACCOUNT_ADDRESS_NOT_VALID": "Account address is not valid",
     "COMPUTING_CONTRACT_TYPE_NOT_VALID": "Contract type is not valid",
     "CONTRACT_DOES_NOT_EXIST": "Contract does not exist",
-    "walletSignature": "'Could not capture your signature, check your wallet connection",
+    "CONTRACT_NOT_DEPLOYED": "Contract is not deployed",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
     "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again.",
-    "Unable to mint new NFTs, out of supply!": "Nfts out of stock!"
+    "request entity too large": "Request entity too large",
+    "Unable to mint new NFTs, out of supply!": "Nfts out of stock!",
+    "walletSignature": "'Could not capture your signature, check your wallet connection"
   },
   "form": {
     "apiKeyTypes": {

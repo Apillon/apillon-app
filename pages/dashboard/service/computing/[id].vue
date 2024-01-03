@@ -9,7 +9,10 @@
         <!-- Actions -->
         <ActionsComputingContract @transfer="modalTransferOwnershipVisible = true" />
 
-        <FormComputingUpload :contract-uuid="contractStore.active.contract_uuid" />
+        <FormComputingUpload
+          class="max-w-xl mx-auto my-8"
+          :contract-uuid="contractStore.active.contract_uuid"
+        />
 
         <FormComputingAssignCID
           class="max-w-xl mx-auto my-8"
