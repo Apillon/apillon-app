@@ -86,7 +86,7 @@
               </span>
             </div>
             <template v-if="!dataStore.isProjectUser">
-              <PaymentCardCurrentPlan
+              <PaymentCardPlan
                 v-if="route.name === 'dashboard-payments'"
                 :show-card="false"
                 btn-type="secondary"

@@ -13,8 +13,8 @@
     </template>
     <slot>
       <div class="grid sm:grid-cols-billing gap-8 mb-12 max-w-6xl">
-        <PaymentCardCurrentCredits />
-        <PaymentCardCurrentPlan />
+        <PaymentCardCredits />
+        <PaymentCardPlan />
       </div>
 
       <!-- Usage -->

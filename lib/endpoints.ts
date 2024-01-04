@@ -60,6 +60,9 @@ const Endpoints = {
   productPrice: (productId?: string | number) => {
     return productId ? `/payments/products/${productId}/price` : '/payments/products/price-list';
   },
+  crypto: (id?: string | number) => {
+    return id ? `/payments/crypto/payment/${id}` : '/payments/crypto/payment';
+  },
   creditSessionUrl: '/payments/stripe/credit-session-url',
   subscriptionSessionUrl: '/payments/stripe/subscription-session-url',
   customerPortalUrl: '/payments/stripe/customer-portal-session-url',

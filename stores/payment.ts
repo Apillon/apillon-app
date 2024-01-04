@@ -405,5 +405,42 @@ export const usePaymentStore = defineStore('payment', {
       }
       return null;
     },
+
+    /**
+     * Crypto
+     */
+
+    /** API Crypto credit session URL */
+    async fetchCryptoSessionUrl(packageId: number): Promise<CryptoSessionInterface | null> {
+      const dataStore = useDataStore();
+      const config = useRuntimeConfig();
+
+      if (!dataStore.projectUuid) return null;
+
+      try {
+        const res = await $api.post<CryptoSessionResponse>(endpoints.crypto(), {
+          project_uuid: dataStore.projectUuid,
+          package_id: packageId,
+          returnUrl: `${config.public.url}/dashboard/payments?credits=${packageId}`,
+        });
+        return res.data;
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return null;
+    },
+
+    /** API Crypto payment */
+    async fetchCryptoPayment(paymentId: number) {
+      try {
+        const res = await $api.get<CryptoSessionResponse>(endpoints.crypto(paymentId));
+        return res.data;
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return null;
+    },
   },
 });
