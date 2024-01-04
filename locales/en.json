@@ -227,7 +227,7 @@
     "invoice": {
       "client": "Client",
       "currency": "Currency",
-      "invoices": "Transactions and Invoices",
+      "invoices": "Credit purchases",
       "referenceTable": "Reference",
       "subtotalAmount": "Subtotal",
       "totalAmount": "Total",
@@ -271,9 +271,11 @@
       "buyCredits": "Buy credits",
       "costs": "Costs",
       "changePlan": "Change plan",
+      "comparePlans": "Compare plans",
       "currentPlan": "Current plan",
       "expiresOn": "Expires on:",
       "decline": "Decline",
+      "managePlan": "Manage billing",
       "notEnoughCredits": "You don't have enough credits. Please, buy more credits to proceed",
       "proceed": "Proceed",
       "selectPlan": "Select plan",
@@ -316,7 +318,7 @@
       "downloads": "Downloads",
       "hosting": "Web3 hosting",
       "storage": "Web3 storage",
-      "title": "Project quotas",
+      "title": "Project usage",
       "upgrade": "Increase quotas"
     },
     "adminMode": "You are in ADMIN mode!",
@@ -327,6 +329,7 @@
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
+    "createTime": "Created at",
     "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
     "dashboard": "Dashboard",
     "date": "Date",
@@ -592,6 +595,9 @@
       "reenterPassword": "Re-enter your complex password",
       "role": "Select role",
       "serviceName": "Enter the name for the new service",
+      "selectCategory": "Filter by category",
+      "selectDirection": "Filter by direction",
+      "selectService": "Filter by service",
       "typeHere": "Type here",
       "username": "Enter your full name",
       "webhookPassword": "Enter password",
@@ -617,6 +623,7 @@
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
+        "apiKeyRoles": "Api key permissions has been added",
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
         "collection": "Creating NFT collection requested.",
@@ -658,6 +665,7 @@
       "updated": {
         "apiKey": "Api key has been updated",
         "apiKeyRole": "Api key permission has been added",
+        "apiKeyRoles": "Api key permissions has been added",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "directory": "Folder has been updated",
@@ -754,7 +762,6 @@
       "infoEdit": "",
       "name": "Website name",
       "new": "New website",
-      "quotaReached": "Quota has been reached.",
       "update": "Update website",
       "uuid": "Website Uuid"
     },
@@ -810,7 +817,6 @@
       "nestMint": "Nestable Mint",
       "new": "New NFT collection",
       "numOfData": "Number of data",
-      "quotaReached": "Quota has been reached.",
       "dropReserve": "Reserved",
       "revoke": "Burn",
       "symbol": "Symbol",
@@ -1006,7 +1012,8 @@
     "new": "Add new project",
     "newBucket": "New storage bucket",
     "owner": "Project owner",
-    "quotaReached": "Quota has been reached.",
+    "quotaReached": "Quota has been reached. To create more projects",
+    "upgradePlan": " upgrade your current plan",
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
@@ -1154,7 +1161,8 @@
       "publish": "Publish to IPNS",
       "selectIpns": "Select IPNS",
       "title": "IPNS",
-      "update": "Update IPNS"
+      "update": "Update IPNS",
+      "uuid": "IPNS UUID"
     },
     "file": {
       "status": {
