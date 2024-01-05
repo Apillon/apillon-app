@@ -77,6 +77,13 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         isMenuItemDisabled(Feature.COMPUTING) || !authStore.isUserAllowed(Permission.COMPUTING),
     },
     {
+      key: 'dashboard-service-social',
+      label: $i18n.t('dashboard.nav.social'),
+      to: 'dashboard-service-social',
+      iconName: 'icon-social',
+      disabled: isMenuItemDisabled(Feature.SOCIAL) || !authStore.isUserAllowed(Permission.SOCIAL),
+    },
+    {
       key: 'dashboard-service',
       label: $i18n.t('dashboard.nav.explore'),
       to: 'dashboard-service',

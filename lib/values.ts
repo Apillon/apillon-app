@@ -1,5 +1,3 @@
-import type { GrillConfig } from '@subsocial/grill-widget';
-
 export const MINUTE_IN_MS = 60 * 1000; // 1 minute
 export const CACHE_EXPIRATION_IN_MS = 10 * 60 * 1000; // 10 minutes
 export const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000; // 1 week in MS
@@ -46,11 +44,11 @@ export const LsCacheKeys = {
   BUCKETS: 'al_cache_buckets',
   BUCKET_ITEMS: 'al_cache_bucket_items',
   BUCKET_DESTROYED: 'al_cache_bucket_destroyed',
+  CHAT: 'al_cache_chat',
+  CHATS: 'al_cache_chats',
   COLLECTION: 'al_cache_collection',
   COLLECTIONS: 'al_cache_collections',
   COLLECTION_TRANSACTIONS: 'al_cache_collection_transactions',
-  CHAT: 'al_cache_chat',
-  CHATS: 'al_cache_chats',
   CONTRACT: 'al_cache_contract',
   CONTRACTS: 'al_cache_contracts',
   CREDITS: 'al_cache_credits',
@@ -68,6 +66,8 @@ export const LsCacheKeys = {
   IPNS_ITEM: 'al_cache_ipns_item',
   OAUTH_LINKS: 'al_cache_oauth_links',
   PRICE_LIST: 'al_cache_price_list',
+  POST: 'al_cache_post',
+  POSTS: 'al_cache_posts',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
   REFERRAL: 'al_cache_referral',
@@ -104,22 +104,6 @@ export function CreateUserRoles(): Array<NSelectOption> {
     };
   });
 }
-
-/** Grill chat */
-export const grillChatDefaultSettings: GrillConfig = {
-  theme: 'dark',
-  widgetElementId: 'grill',
-  hub: { id: '1002' },
-  channel: {
-    type: 'channel',
-    id: '754',
-    settings: {
-      enableBackButton: true,
-      enableLoginButton: true,
-      enableInputAutofocus: true,
-    },
-  },
-};
 
 /**
  * Referral

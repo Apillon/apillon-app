@@ -1,5 +1,5 @@
 <template>
-  <div id="grill" class="h-screen"></div>
+  <div id="grill" class="h-full"></div>
 </template>
 
 <script lang="ts" setup>

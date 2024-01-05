@@ -231,12 +231,17 @@ const Endpoints = {
   /**
    * Social
    */
-  /** Space */
   space: '/social/space',
-
-  /** Spaces */
   spaces: (uuid?: number | string) => {
     return uuid ? `/social/spaces/${uuid}` : '/social/spaces';
+  },
+  post: (space_uuid: number | string) => {
+    return `/social/spaces/${space_uuid}/post`;
+  },
+  posts: (space_uuid: number | string, uuid?: number | string) => {
+    return uuid
+      ? `/social/spaces/${space_uuid}/posts/${uuid}`
+      : `/social/spaces/${space_uuid}/posts`;
   },
 
   /** Oauth links */

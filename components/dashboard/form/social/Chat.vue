@@ -18,7 +18,7 @@
 
     <!-- Chat about -->
     <n-form-item
-      path="description"
+      path="about"
       :label="$t('form.label.chatAbout')"
       :label-props="{ for: 'chatAbout' }"
     >
@@ -32,11 +32,7 @@
     </n-form-item>
 
     <!-- Chat tags -->
-    <n-form-item
-      path="description"
-      :label="$t('form.label.chatTags')"
-      :label-props="{ for: 'chatTags' }"
-    >
+    <n-form-item path="tags" :label="$t('form.label.chatTags')" :label-props="{ for: 'chatTags' }">
       <n-input
         v-model:value="formData.tags"
         :input-props="{ id: 'chatTags' }"
@@ -47,7 +43,7 @@
 
     <!-- Chat image -->
     <n-form-item
-      path="description"
+      path="image"
       :label="$t('form.label.chatImage')"
       :label-props="{ for: 'chatImage' }"
     >
@@ -57,14 +53,14 @@
         :disabled="authStore.isAdmin()"
         :custom-request="uploadImageRequest"
       >
-        <n-upload-dragger class="h-60">
+        <n-upload-dragger class="h-40">
           <div class="py-2 text-center">
             <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
               <span class="icon-upload text-violet text-2xl"></span>
             </div>
 
-            <h4 class="mb-1">{{ $t('dashboard.chat.uploadImage') }}</h4>
-            <span class="text-body">{{ $t('dashboard.chat.dragAndDrop') }}</span>
+            <h4 class="mb-1">{{ $t('social.chat.uploadImage') }}</h4>
+            <span class="text-body">{{ $t('social.chat.dragAndDrop') }}</span>
           </div>
         </n-upload-dragger>
       </n-upload>
@@ -72,7 +68,7 @@
 
     <!--  Form submit -->
     <n-form-item :show-feedback="false">
-      <input type="submit" class="hidden" :value="$t('dashboard.chat.create')" />
+      <input type="submit" class="hidden" :value="$t('social.chat.create')" />
       <Btn
         type="primary"
         class="w-full mt-2"
@@ -80,7 +76,7 @@
         :disabled="isFormDisabled"
         @click="handleSubmit"
       >
-        {{ $t('dashboard.chat.create') }}
+        {{ $t('social.chat.create') }}
       </Btn>
     </n-form-item>
   </n-form>
@@ -165,7 +161,11 @@ async function createSpace() {
     message.success($i18n.t('form.success.created.chatSpace'));
 
     /** On new space created add new item to list */
-    chatStore.spaces.unshift(res.data);
+    chatStore.items.unshift(res.data);
+
+    /** Clear timestamp to SS */
+    sessionStorage.removeItem(LsCacheKeys.CHAT);
+    sessionStorage.removeItem(LsCacheKeys.CHATS);
 
     /** Emit events */
     emit('submitSuccess');

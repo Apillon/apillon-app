@@ -201,12 +201,6 @@
       "title": "API keys",
       "update": "Update API key"
     },
-    "chat": {
-      "create": "Create new space in GrillChat",
-      "dragAndDrop": "Drag & drop or click to upload.",
-      "settings": "Change Chat settings",
-      "uploadImage": "Upload image"
-    },
     "clipboard": {
       "copied": "Text has been copied to clipboard",
       "copy": "Copy to clipboard",
@@ -289,6 +283,7 @@
       "projectSettings": "Project settings",
       "services": "Web3 Services",
       "smartContracts": "Smart Contracts",
+      "social": "Social",
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
       "solution": {
@@ -809,6 +804,7 @@
         "apiKeyRoles": "Api key permissions has been added",
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
+        "chatPost": "Chat post has been created",
         "chatSpace": "Chat space has been created",
         "collection": "Creating NFT collection requested.",
         "contract": "Contract has been created",
@@ -1269,6 +1265,36 @@
     "xpPoints": "XP points:",
     "spendingPoints": "Spending points:"
   },
+  "social": {
+    "chat": {
+      "about": "About",
+      "addNew": "Add new space",
+      "create": "Create space",
+      "createFirst": "Create first space",
+      "date": "Create time",
+      "dragAndDrop": "Drag & drop or click to upload.",
+      "empty": "Create your first space",
+      "emptyInfo": "Add it to your Web3 project",
+      "name": "Space name",
+      "new": "New space",
+      "settings": "Change Chat settings",
+      "spaceId": "Space ID",
+      "tags": "Tags",
+      "title": "Space title",
+      "uploadImage": "Upload image",
+      "uuid": "Space UUID"
+    },
+    "post": {
+      "body": "Post content",
+      "create": "Create post",
+      "new": "New post",
+      "postId": "Post ID",
+      "tags": "Tags",
+      "title": "Post title",
+      "uuid": "Post UUID"
+    },
+    "title": "Social"
+  },
   "storage": {
     "bucket": {
       "addNew": "Add new bucket",
@@ -1433,6 +1459,7 @@
     "containsNumber": "Must include a number character",
     "containsSpecial": "Must include a special character",
     "containsUppercase": "Must include an uppercase character",
+    "captchaRequired": "Captcha challenge required!",
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
     "collectionBaseUri": "Base URI is not valid",
@@ -1485,11 +1512,12 @@
     "passwordRequired": "Please enter your password",
     "postalCode": "Wrong postal code",
     "postalCodeRequired": "Please enter postal code",
+    "postBodyRequired": "Please write content",
+    "postTitleRequired": "Please write a title",
     "streetRequired": "Please enter your street",
     "houseNumberRequired": "Please enter your house number",
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
-    "captchaRequired": "Captcha challenge required!",
     "role": "Selected role is invalid",
     "roleRequired": "Please select role",
     "terms": "Please accept the terms",

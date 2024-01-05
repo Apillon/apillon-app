@@ -114,6 +114,10 @@
   .n-data-table-thead {
     @apply body-sm;
   }
+  .n-data-table-tr.selected-row td {
+    @apply bg-bg-dark;
+  }
+
   .n-data-table-th .n-data-table-th__title-wrapper .n-data-table-th__title {
     white-space: nowrap;
   }
