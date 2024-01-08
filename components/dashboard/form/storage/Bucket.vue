@@ -163,7 +163,7 @@ async function createBucket() {
     emit('createSuccess', res.data);
 
     /** Redirect to new bucket */
-    if (props.bucketType !== BucketType.NFT_METADATA) {
+    if (props.bucketType === BucketType.STORAGE) {
       router.push(`/dashboard/service/storage/${res.data.bucket_uuid}`);
     }
   } catch (error) {

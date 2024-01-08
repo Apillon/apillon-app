@@ -30,7 +30,7 @@ defineProps({
 });
 const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const authStore = useAuthStore();
 const contractStore = useContractStore();
 
@@ -41,7 +41,7 @@ const actionsDisabled = computed<boolean>(
 const options = computed(() => {
   return [
     {
-      label: $i18n.t('computing.contract.transfer'),
+      label: t('computing.contract.transfer'),
       key: 'transfer',
       disabled: actionsDisabled.value,
       props: {

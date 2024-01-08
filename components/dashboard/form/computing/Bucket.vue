@@ -4,36 +4,38 @@
       <!-- Creating new bucket -->
       <template v-if="loadingBucket">
         <AnimationLoader />
-        <h2>{{ $t('nft.metadata.titleBucketCreation') }}</h2>
+        <h2>{{ $t('computing.contract.titleBucketCreation') }}</h2>
         <p class="mb-8 text-body whitespace-pre-line">
-          {{ $t('nft.metadata.infoBucketCreation') }}
+          {{ $t('computing.contract.infoBucketCreation') }}
         </p>
       </template>
 
       <!-- New bucket created -->
-      <template v-else-if="collectionStore.bucketUuid && loadingBucket === false">
+      <template v-else-if="contractStore.bucketUuid && loadingBucket === false">
         <IconSuccessful class="text-4xl mb-7" />
-        <h2>{{ $t('nft.metadata.titleBucketCreated') }}</h2>
-        <p class="mb-9 text-body whitespace-pre-line">{{ $t('nft.metadata.infoBucketCreated') }}</p>
+        <h2>{{ $t('computing.contract.titleBucketCreated') }}</h2>
+        <p class="mb-9 text-body whitespace-pre-line">
+          {{ $t('computing.contract.infoBucketCreated') }}
+        </p>
 
-        <Btn size="large" @click="collectionStore.mintTab = NftMintTab.UPLOAD">
-          {{ $t('nft.metadata.proceedUpload') }}
+        <Btn size="large" @click="contractStore.encryptTab = EncryptTab.UPLOAD">
+          {{ $t('computing.contract.proceedUpload') }}
         </Btn>
       </template>
 
       <!-- Select/create bucket  -->
       <div v-else class="w-full max-w-lg text-center">
-        <h2>{{ $t('nft.metadata.titleBucket') }}</h2>
+        <h2>{{ $t('computing.contract.titleBucket') }}</h2>
         <p class="mb-8 text-body whitespace-pre-line">
-          {{ $t('nft.metadata.infoBucket') }}
+          {{ $t('computing.contract.infoBucket') }}
         </p>
         <Btn type="secondary" size="large" @click="modalNewBucketVisible = true">
-          {{ $t('nft.metadata.createBucket') }}
+          {{ $t('computing.contract.createBucket') }}
         </Btn>
 
         <div class="my-6 flex items-center">
           <span class="w-full inline-block text-body whitespace-nowrap">
-            {{ $t('nft.metadata.orSelectExisting') }}
+            {{ $t('computing.contract.orSelectExisting') }}
           </span>
         </div>
 
@@ -56,9 +58,9 @@
           </n-form-item>
           <!--  Form submit -->
           <n-form-item :show-label="false">
-            <input type="submit" class="hidden" :value="$t('nft.metadata.selectBucket')" />
+            <input type="submit" class="hidden" :value="$t('computing.contract.selectBucket')" />
             <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
-              {{ $t('nft.metadata.selectBucket') }}
+              {{ $t('computing.contract.selectBucket') }}
             </Btn>
           </n-form-item>
         </n-form>
@@ -66,21 +68,19 @@
 
       <!-- Modal - Create bucket -->
       <modal v-model:show="modalNewBucketVisible" :title="$t('project.newBucket')">
-        <FormStorageBucket
-          :bucket-type="BucketType.NFT_METADATA"
-          @submit="loadingBucket = true"
-          @createSuccess="onBucketCreated"
-        />
+        <FormStorageBucket @submit="loadingBucket = true" @createSuccess="onBucketCreated" />
       </modal>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+const emit = defineEmits(['submitSuccess']);
+
 const $i18n = useI18n();
 const message = useMessage();
 const bucketStore = useBucketStore();
-const collectionStore = useCollectionStore();
+const contractStore = useContractStore();
 
 const loading = ref<boolean>(false);
 const loadingBucket = ref<boolean | null>(null);
@@ -100,7 +100,7 @@ const buckets = computed<Array<NSelectOption>>(() => {
 });
 
 const formData = ref<{ bucket: any }>({
-  bucket: collectionStore.bucketUuid || null,
+  bucket: contractStore.bucketUuid || null,
 });
 
 const rules: NFormRules = {
@@ -121,15 +121,14 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      collectionStore.bucketUuid = formData.value.bucket;
-      collectionStore.mintTab = NftMintTab.UPLOAD;
+      emit('submit', formData.value.bucket);
     }
   });
 }
 
 function onBucketCreated(bucket: BucketInterface) {
   modalNewBucketVisible.value = false;
-  collectionStore.bucketUuid = bucket.bucket_uuid;
+  emit('submit', bucket.bucket_uuid);
 
   setTimeout(() => {
     loadingBucket.value = false;

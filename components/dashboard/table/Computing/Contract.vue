@@ -32,7 +32,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const $i18n = useI18n();
 const router = useRouter();
 const contractStore = useContractStore();
 const TableEllipsis = resolveComponent('TableEllipsis');
@@ -54,7 +53,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
   return [
     {
       key: 'name',
-      title: $i18n.t('computing.contract.name'),
+      title: t('computing.contract.name'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
@@ -62,7 +61,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     },
     {
       key: 'description',
-      title: $i18n.t('general.description'),
+      title: t('general.description'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
@@ -70,46 +69,46 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     },
     {
       key: 'type',
-      title: $i18n.t('general.type'),
+      title: t('general.type'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       minWidth: 130,
       render(row) {
-        return $i18n.t(
+        return t(
           `computing.contract.type.${row.contractType || ComputingContractType.SCHRODINGER}`
         );
       },
     },
     {
       key: 'contract_uuid',
-      title: $i18n.t('computing.contract.uuid'),
+      title: t('computing.contract.uuid'),
       render(row: ContractInterface) {
         return h(TableEllipsis, { text: row.contract_uuid }, '');
       },
     },
     {
       key: 'contractAddress',
-      title: $i18n.t('computing.contract.address'),
+      title: t('computing.contract.address'),
       render(row: ContractInterface) {
         return h(TableEllipsis, { text: row.contractAddress }, '');
       },
     },
     {
       key: 'deployerAddress',
-      title: $i18n.t('computing.contract.deployerAddress'),
+      title: t('computing.contract.deployerAddress'),
       render(row: ContractInterface) {
         return h(TableEllipsis, { text: row.deployerAddress }, '');
       },
     },
     {
       key: 'createTime',
-      title: $i18n.t('dashboard.created'),
+      title: t('dashboard.created'),
       render(row) {
         return dateTimeToDateAndTime(row?.createTime || '');
       },
     },
     {
       key: 'contractStatus',
-      title: $i18n.t('general.status'),
+      title: t('general.status'),
       render(row) {
         return h(ComputingContractStatus, { contractStatus: row.contractStatus }, '');
       },
@@ -150,7 +149,7 @@ const actionsDisabled = computed<boolean>(() => {
 const dropdownOptions = computed(() => {
   return [
     {
-      label: $i18n.t('computing.contract.transfer'),
+      label: t('computing.contract.transfer'),
       key: 'transfer',
       disabled: actionsDisabled.value,
       props: {

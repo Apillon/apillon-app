@@ -36,7 +36,6 @@ const authStore = useAuthStore();
 const contractStore = useContractStore();
 
 const loading = ref<boolean>(true);
-const encryptContent = ref<string>('');
 
 const contract = computed<ContractInterface | undefined>(() => {
   if (contractStore.active.contract_uuid === props.contractUuid) {
@@ -63,13 +62,11 @@ async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOpti
         content: fileContent,
       }
     );
-    encryptContent.value = res.data.encryptedContent;
-
     message.success($i18n.t('form.success.contract.encrypted'));
     onFinish();
 
     /** Emit events */
-    emit('submitSuccess');
+    emit('submitSuccess', res.data.encryptedContent);
   } catch (error) {
     message.error(userFriendlyMsg(error));
     onError();

@@ -2,27 +2,28 @@ export enum ComputingContractType {
   SCHRODINGER = 1,
 }
 
-export enum ComputingEventType {
-  CREATE_CONTRACT = 'create-contract',
-  LIST_CONTRACTS = 'list-contract',
-  GET_CONTRACT_BY_UUID = 'get-contract-by-uuid',
-  DEPOSIT_TO_CONTRACT_CLUSTER = 'fund-contract-cluster',
-  TRANSFER_CONTRACT_OWNERSHIP = 'transfer-contract-ownership',
-}
-
-export enum ContractType {
+export enum ContractTransactionType {
   DEPLOY_CONTRACT = 1,
   TRANSFER_CONTRACT_OWNERSHIP = 2,
   DEPOSIT_TO_CONTRACT_CLUSTER = 3,
+  ASSIGN_CID_TO_NFT = 4,
 }
 
 export enum ContractStatus {
   CREATED = 0,
   DEPLOY_INITIATED = 1,
-  DEPLOYING = 2,
-  DEPLOYED = 3,
-  TRANSFERRED = 4,
-  FAILED = 5,
+  DEPLOYING = 2, //INSTANTIATING
+  DEPLOYED = 3, //INSTANTIATED
+  TRANSFERRING = 4,
+  TRANSFERRED = 5,
+  FAILED = 6,
+}
+
+/** Encrypt steps */
+export enum EncryptTab {
+  BUCKET = 1,
+  UPLOAD = 2,
+  ENCRYPT = 3,
 }
 
 declare global {
