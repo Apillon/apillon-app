@@ -27,6 +27,7 @@ type FormContractAssignCid = {
 
 const props = defineProps({
   contractUuid: { type: String, required: true },
+  cid: { type: String, required: true },
 });
 const emit = defineEmits(['submitSuccess']);
 
@@ -36,7 +37,7 @@ const message = useMessage();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormContractAssignCid>({
-  cid: '',
+  cid: props.cid,
 });
 
 const rules: NFormRules = {
@@ -67,7 +68,7 @@ async function assignCid() {
     );
 
     if (res.data.success) {
-      message.success($i18n.t('form.success.contract.cidAssignedToNft'));
+      message.success($i18n.t('form.success.contract.cidAssign'));
 
       /** Emit events */
       emit('submitSuccess');

@@ -121,14 +121,14 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      emit('submit', formData.value.bucket);
+      emit('submitSuccess', formData.value.bucket);
     }
   });
 }
 
 function onBucketCreated(bucket: BucketInterface) {
   modalNewBucketVisible.value = false;
-  emit('submit', bucket.bucket_uuid);
+  emit('submitSuccess', bucket.bucket_uuid);
 
   setTimeout(() => {
     loadingBucket.value = false;
