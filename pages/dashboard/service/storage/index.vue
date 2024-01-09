@@ -41,7 +41,10 @@
 
       <!-- Modal - Create bucket -->
       <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
-        <FormStorageBucket @submit-success="showModalNewBucket = false" />
+        <FormStorageBucket
+          @submit-success="showModalNewBucket = false"
+          @create-success="onBucketCreated"
+        />
       </modal>
     </slot>
   </Dashboard>
@@ -49,6 +52,7 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
@@ -98,4 +102,8 @@ watch(
     }
   }
 );
+
+function onBucketCreated(bucket: BucketInterface) {
+  router.push(`/dashboard/service/storage/${bucket.bucket_uuid}`);
+}
 </script>
