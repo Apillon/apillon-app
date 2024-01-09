@@ -1339,7 +1339,7 @@
       "edit": "Edit IPNS",
       "infoNew": "Create new IPNS record",
       "infoEdit": "Update IPNS record",
-      "ipnsName": "IPNS name",
+      "ipnsName": "IPNS uuid",
       "link": "IPNS link",
       "name": "Name",
       "new": "New IPNS",
@@ -1349,7 +1349,7 @@
       "selectIpns": "Select IPNS",
       "title": "IPNS",
       "update": "Update IPNS",
-      "uuid": "IPNS UUID"
+      "uuid": "UUID"
     },
     "file": {
       "status": {
