@@ -9,19 +9,14 @@
         <!-- Actions -->
         <ActionsComputingContract @transfer="modalTransferOwnershipVisible = true" />
 
-        <FormComputingUpload
-          class="max-w-xl mx-auto my-8"
-          :contract-uuid="contractStore.active.contract_uuid"
-        />
-
-        <FormComputingAssignCID
-          class="max-w-xl mx-auto my-8"
-          :contract-uuid="contractStore.active.contract_uuid"
-        />
+        <ComputingContractTabs />
       </n-space>
 
       <!-- Modal - Contract Transfer -->
-      <modal v-model:show="modalTransferOwnershipVisible" :title="$t('nft.contract.transfer')">
+      <modal
+        v-model:show="modalTransferOwnershipVisible"
+        :title="$t('computing.contract.transfer')"
+      >
         <FormComputingTransfer :contract-uuid="contractStore.active.contract_uuid" />
       </modal>
     </slot>

@@ -6,7 +6,8 @@
     :custom-request="encryptFile"
   >
     <n-upload-dragger class="h-40">
-      <div class="py-2 text-center">
+      <spinner v-if="contractStore.uploading" />
+      <div v-else class="py-2 text-center">
         <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
           <span class="icon-upload text-violet text-2xl"></span>
         </div>
@@ -35,9 +36,6 @@ const message = useMessage();
 const authStore = useAuthStore();
 const contractStore = useContractStore();
 
-const loading = ref<boolean>(true);
-const encryptContent = ref<string>('');
-
 const contract = computed<ContractInterface | undefined>(() => {
   if (contractStore.active.contract_uuid === props.contractUuid) {
     return contractStore.active;
@@ -51,8 +49,16 @@ const uploadDisabled = computed<boolean>(
 
 /** Upload file request - add file to list */
 async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-  loading.value = true;
+  contractStore.uploading = true;
 
+  contractStore.file = {
+    ...file,
+    percentage: 0,
+    size: file.file?.size || 0,
+    timestamp: Date.now(),
+    onFinish,
+    onError,
+  };
   try {
     const fileContent = await convertToBase64(file.file);
 
@@ -63,18 +69,17 @@ async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOpti
         content: fileContent,
       }
     );
-    encryptContent.value = res.data.encryptedContent;
-
     message.success($i18n.t('form.success.contract.encrypted'));
     onFinish();
 
     /** Emit events */
-    emit('submitSuccess');
+    emit('submitSuccess', res.data.encryptedContent);
   } catch (error) {
     message.error(userFriendlyMsg(error));
     onError();
+
+    contractStore.uploading = false;
   }
-  loading.value = false;
 }
 
 const convertToBase64 = file => {
