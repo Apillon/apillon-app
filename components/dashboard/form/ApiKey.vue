@@ -5,7 +5,7 @@
     ref="formRef"
     :model="formData"
     :rules="rules"
-    :disabled="!dataStore.isUserOwner"
+    :disabled="dataStore.isProjectUser"
     @submit.prevent="handleSubmit"
   >
     <!--  Service name -->
@@ -94,7 +94,7 @@
         type="secondary"
         class="w-full mt-8"
         :loading="loading"
-        :disabled="!dataStore.isUserOwner"
+        :disabled="dataStore.isProjectUser"
         @click="handleSubmit"
       >
         {{ $t('form.generate') }}
