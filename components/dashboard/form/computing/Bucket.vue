@@ -29,7 +29,12 @@
         <p class="mb-8 text-body whitespace-pre-line">
           {{ $t('computing.contract.infoBucket') }}
         </p>
-        <Btn type="secondary" size="large" @click="modalNewBucketVisible = true">
+        <Btn
+          type="secondary"
+          size="large"
+          :disabled="actionsDisabled"
+          @click="modalNewBucketVisible = true"
+        >
           {{ $t('computing.contract.createBucket') }}
         </Btn>
 
@@ -44,6 +49,7 @@
           class="text-left"
           :model="formData"
           :rules="rules"
+          :disabled="actionsDisabled"
           @submit.prevent="handleSubmit"
         >
           <n-form-item path="bucket" :show-label="false" :label-props="{ for: 'bucket' }">
@@ -59,7 +65,13 @@
           <!--  Form submit -->
           <n-form-item :show-label="false">
             <input type="submit" class="hidden" :value="$t('computing.contract.selectBucket')" />
-            <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+            <Btn
+              type="primary"
+              class="w-full mt-2"
+              :loading="loading"
+              :disabled="actionsDisabled"
+              @click="handleSubmit"
+            >
               {{ $t('computing.contract.selectBucket') }}
             </Btn>
           </n-form-item>
@@ -68,7 +80,11 @@
 
       <!-- Modal - Create bucket -->
       <modal v-model:show="modalNewBucketVisible" :title="$t('project.newBucket')">
-        <FormStorageBucket @submit="loadingBucket = true" @createSuccess="onBucketCreated" />
+        <FormStorageBucket
+          :submit-text="$t('computing.contract.createBucket')"
+          @submit="loadingBucket = true"
+          @createSuccess="onBucketCreated"
+        />
       </modal>
     </div>
   </div>
@@ -91,6 +107,10 @@ onMounted(async () => {
   loading.value = true;
   await bucketStore.getBuckets();
   loading.value = false;
+});
+
+const actionsDisabled = computed<boolean>(() => {
+  return contractStore.active.contractStatus !== ContractStatus.DEPLOYED;
 });
 
 const buckets = computed<Array<NSelectOption>>(() => {

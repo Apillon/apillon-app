@@ -60,8 +60,11 @@
           :disabled="isFormDisabled"
           @click="handleSubmit"
         >
-          <template v-if="bucketType === BucketType.NFT_METADATA">
-            {{ $t('nft.metadata.createBucket') }}
+          <template v-if="submitText">
+            {{ submitText }}
+          </template>
+          <template v-else-if="bucketType === BucketType.NFT_METADATA">
+            {{ $t('storage.bucket.update') }}
           </template>
           <template v-else-if="bucket">
             {{ $t('storage.bucket.update') }}
@@ -82,14 +85,14 @@ type FormNewBucket = {
 };
 
 const props = defineProps({
-  bucketUuid: { type: String, default: '' },
   bucketType: { type: Number, default: BucketType.STORAGE },
+  bucketUuid: { type: String, default: '' },
+  submitText: { type: String, default: null },
 });
 const emit = defineEmits(['submit', 'submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
 const $i18n = useI18n();
-const router = useRouter();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 
@@ -161,11 +164,6 @@ async function createBucket() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess', res.data);
-
-    /** Redirect to new bucket */
-    if (props.bucketType === BucketType.STORAGE) {
-      router.push(`/dashboard/service/storage/${res.data.bucket_uuid}`);
-    }
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
