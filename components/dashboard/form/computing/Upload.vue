@@ -6,7 +6,10 @@
     :custom-request="encryptFile"
   >
     <n-upload-dragger class="h-40">
-      <Spinner v-if="contractStore.uploading" />
+      <div v-if="contractStore.uploading">
+        <Spinner />
+        <h4 class="mt-12 text-center">{{ $t('computing.contract.encrypt.step2Info') }}</h4>
+      </div>
       <div v-else class="py-2 text-center">
         <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
           <span class="icon-upload text-violet text-2xl"></span>
@@ -49,16 +52,23 @@ const uploadDisabled = computed<boolean>(
 
 /** Upload file request - add file to list */
 async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-  contractStore.uploading = true;
+  const size = file.file?.size || 0;
+  if (size > 65536) {
+    message.warning($i18n.t('validation.contract.fileTooBig', { name: file.name }));
+    onError();
+    return;
+  }
 
+  contractStore.uploading = true;
   contractStore.file = {
     ...file,
     percentage: 0,
-    size: file.file?.size || 0,
+    size: size,
     timestamp: Date.now(),
     onFinish,
     onError,
   };
+
   try {
     const fileContent = await convertToBase64(file.file);
 
@@ -72,14 +82,13 @@ async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOpti
     message.success($i18n.t('form.success.contract.encrypted'));
     onFinish();
 
-    /** Emit events */
+    /**Emit events */
     emit('submitSuccess', res.data.encryptedContent);
   } catch (error) {
     message.error(userFriendlyMsg(error));
     onError();
-
-    contractStore.uploading = false;
   }
+  contractStore.uploading = false;
 }
 
 const convertToBase64 = file => {

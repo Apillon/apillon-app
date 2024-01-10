@@ -8,17 +8,17 @@
           :active="true"
         />
         <IconSuccessful v-else />
-        <span class="ml-2">Select bucket</span>
+        <span class="ml-2">{{ $t('computing.contract.encrypt.step1') }}</span>
       </template>
       <slot>
         <FormComputingBucket @submit-success="onBucketSelected" />
       </slot>
     </n-tab-pane>
-    <n-tab-pane :name="EncryptTab.UPLOAD" :disabled="false">
+    <n-tab-pane :name="EncryptTab.UPLOAD" :disabled="!contractStore.bucketUuid">
       <template #tab>
         <IconSuccessful v-if="contractStore.encryptTab === EncryptTab.ENCRYPT" />
         <IconNumber v-else :number="2" :active="contractStore.encryptTab === EncryptTab.UPLOAD" />
-        <span class="ml-2">Upload file</span>
+        <span class="ml-2">{{ $t('computing.contract.encrypt.step2') }}</span>
       </template>
       <slot>
         <FormComputingUpload
@@ -28,10 +28,13 @@
         />
       </slot>
     </n-tab-pane>
-    <n-tab-pane :name="EncryptTab.ENCRYPT" :disabled="false">
+    <n-tab-pane
+      :name="EncryptTab.ENCRYPT"
+      :disabled="!contractStore.bucketUuid || !contractStore.cid"
+    >
       <template #tab>
         <IconNumber :number="3" :active="contractStore.encryptTab === EncryptTab.ENCRYPT" />
-        <span class="ml-2">Encrypt</span>
+        <span class="ml-2">{{ $t('computing.contract.encrypt.step3') }}</span>
       </template>
       <slot>
         <FormComputingAssignCID

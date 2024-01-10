@@ -1,14 +1,15 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderContract />
+      <HeaderContract>
+        <template #info>
+          <ActionsComputingContract @transfer="modalTransferOwnershipVisible = true" />
+        </template>
+      </HeaderContract>
     </template>
 
     <slot>
       <n-space class="pb-8" :size="32" vertical>
-        <!-- Actions -->
-        <ActionsComputingContract @transfer="modalTransferOwnershipVisible = true" />
-
         <ComputingContractTabs />
       </n-space>
 
@@ -17,7 +18,10 @@
         v-model:show="modalTransferOwnershipVisible"
         :title="$t('computing.contract.transfer')"
       >
-        <FormComputingTransfer :contract-uuid="contractStore.active.contract_uuid" />
+        <FormComputingTransfer
+          :contract-uuid="contractStore.active.contract_uuid"
+          @submit-success="modalTransferOwnershipVisible = false"
+        />
       </modal>
     </slot>
   </Dashboard>

@@ -32,7 +32,10 @@
 
       <!-- Modal - Create Contract -->
       <modal v-model:show="modalCreateContractVisible" :title="$t('computing.contract.new')">
-        <FormComputingContract @submit-success="modalCreateContractVisible = false" />
+        <FormComputingContract
+          @submit-success="modalCreateContractVisible = false"
+          @create-success="onContractCreated"
+        />
       </modal>
     </slot>
   </Dashboard>
@@ -42,6 +45,7 @@
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
+const { onContractCreated } = useComputing();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.CONTRACT_NEW);
 
 const pageLoading = ref<boolean>(true);
@@ -55,6 +59,10 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await contractStore.getContracts();
+
+      setTimeout(() => {
+        checkUnfinishedContracts();
+      }, 3000);
 
       pageLoading.value = false;
     });

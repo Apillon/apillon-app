@@ -184,6 +184,12 @@
       "titleBucketCreated": "Bucket successfully created",
       "transfer": "Transfer ownership",
       "uuid": "Contract UUID",
+      "encrypt": {
+        "step1": "Choose bucket",
+        "step2": "Upload & encrypt",
+        "step2Info": "The file is being encrypted and uploaded to IPFS.",
+        "step3": "Assign CID"
+      },
       "status": {
         "0": "CREATED",
         "1": "INITIATED",
@@ -638,6 +644,7 @@
     "COMPUTING_CONTRACT_TYPE_NOT_VALID": "Contract type is not valid",
     "CONTRACT_DOES_NOT_EXIST": "Contract does not exist",
     "CONTRACT_NOT_DEPLOYED": "Contract is not deployed",
+    "TRANSACTION_FOR_TRANSFER_ALREADY_EXISTS": "Contract has already been transferred.",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
     "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again.",
@@ -810,8 +817,9 @@
       "websiteDeploying": "Done - deployment initiated",
       "contract": {
         "cidAssign": "CID has been assign to NFT",
-        "encrypted": "Contract has been encrypted",
-        "transferred": "Contract has been transferred"
+        "deploy": "Contract deploy has been initiated",
+        "encrypted": "Content has been encrypted",
+        "transferred": "Contract transfer has been initiated"
       },
       "created": {
         "apiKey": "Api key has been created",
@@ -820,7 +828,6 @@
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
         "collection": "Creating NFT collection requested.",
-        "contract": "Contract has been created",
         "directory": "Folder has been created",
         "domain": "Domain has been added to Website",
         "file": "File has been created",
@@ -1477,7 +1484,7 @@
     "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
     "nftTransferAddressRequired": "Please enter wallet address",
-    "notEnoughSpaceInStorage": "File \"{name}\" is to big. To proceed, please upgrade your subscription plan.",
+    "notEnoughSpaceInStorage": "File \"{name}\" is too big. To proceed, please upgrade your subscription plan.",
     "notImage": "{name} is not an image",
     "passwordMinLength": "Password must contain at least 12 characters.",
     "passwordReenterSame": "Password is not same as re-entered password!",
@@ -1506,7 +1513,8 @@
       "addressRequired": "Please enter Phala address",
       "cidRequired": "Please enter CID",
       "depositAmountRequired": "Please enter amount",
-      "depositAmountTooLow": "Please enter a higher amount (min. 0.01)"
+      "depositAmountTooLow": "Please enter a higher amount (min. 0.01)",
+      "fileTooBig": "File \"{name}\" is too big, max file size is 64kb."
     }
   },
   "w3Warn": {
