@@ -111,7 +111,7 @@ async function createPost() {
   loading.value = true;
 
   try {
-    const res = await $api.post<PostResponse>(endpoints.post(props.spaceUuid), formData.value);
+    const res = await $api.post<PostResponse>(endpoints.posts(props.spaceUuid), formData.value);
 
     message.success($i18n.t('form.success.created.chatPost'));
 

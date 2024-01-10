@@ -1287,6 +1287,7 @@
     "post": {
       "body": "Post content",
       "create": "Create post",
+      "date": "Created",
       "new": "New post",
       "postId": "Post ID",
       "tags": "Tags",

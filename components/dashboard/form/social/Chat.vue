@@ -156,7 +156,7 @@ async function createSpace() {
       project_uuid: projectUuid,
       ...formData.value,
     };
-    const res = await $api.post<ChatResponse>(endpoints.space, params);
+    const res = await $api.post<ChatResponse>(endpoints.spaces(), params);
 
     message.success($i18n.t('form.success.created.chatSpace'));
 
