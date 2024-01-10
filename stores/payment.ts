@@ -68,14 +68,6 @@ export const usePaymentStore = defineStore('payment', {
       this.priceList = [] as ProductPriceInterface[];
     },
 
-    async getProjectUuid(): Promise<string> {
-      const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-      return dataStore.projectUuid;
-    },
-
     /**
      * Fetch wrappers
      */
@@ -180,7 +172,8 @@ export const usePaymentStore = defineStore('payment', {
 
     /** API Credit */
     async fetchCredits() {
-      const projectUuid = await this.getProjectUuid();
+      const dataStore = useDataStore();
+      const projectUuid = await dataStore.getProjectUuid();
       if (!projectUuid) return;
 
       try {
@@ -214,8 +207,9 @@ export const usePaymentStore = defineStore('payment', {
     },
 
     /** API Credit transactions */
-    async fetchCreditTransactions(args?: FetchCreditTransactionsParams = {}) {
-      const projectUuid = await this.getProjectUuid();
+    async fetchCreditTransactions(args: FetchCreditTransactionsParams = {}) {
+      const dataStore = useDataStore();
+      const projectUuid = await dataStore.getProjectUuid();
       if (!projectUuid) return;
 
       try {
@@ -242,7 +236,8 @@ export const usePaymentStore = defineStore('payment', {
     /** API Active Subscription */
     async fetchActiveSubscription() {
       this.loading = true;
-      const projectUuid = await this.getProjectUuid();
+      const dataStore = useDataStore();
+      const projectUuid = await dataStore.getProjectUuid();
       if (!projectUuid) return;
 
       try {
@@ -265,7 +260,8 @@ export const usePaymentStore = defineStore('payment', {
 
     /** API Subscriptions */
     async fetchSubscriptions() {
-      const projectUuid = await this.getProjectUuid();
+      const dataStore = useDataStore();
+      const projectUuid = await dataStore.getProjectUuid();
       if (!projectUuid) return;
 
       try {
@@ -302,7 +298,8 @@ export const usePaymentStore = defineStore('payment', {
       page = 1,
       limit: number = PAGINATION_LIMIT
     ): Promise<InvoiceResponse | null> {
-      const projectUuid = await this.getProjectUuid();
+      const dataStore = useDataStore();
+      const projectUuid = await dataStore.getProjectUuid();
       if (!projectUuid) {
         return null;
       }
@@ -332,7 +329,8 @@ export const usePaymentStore = defineStore('payment', {
     /** API Stripe credit session URL */
     async fetchCreditSessionUrl(packageId: number) {
       const config = useRuntimeConfig();
-      const projectUuid = await this.getProjectUuid();
+      const dataStore = useDataStore();
+      const projectUuid = await dataStore.getProjectUuid();
       if (!projectUuid) return;
 
       try {
@@ -353,7 +351,8 @@ export const usePaymentStore = defineStore('payment', {
     async fetchSubscriptionSessionUrl(packageId: number) {
       const route = useRoute();
       const config = useRuntimeConfig();
-      const projectUuid = await this.getProjectUuid();
+      const dataStore = useDataStore();
+      const projectUuid = await dataStore.getProjectUuid();
       if (!projectUuid) return;
 
       try {

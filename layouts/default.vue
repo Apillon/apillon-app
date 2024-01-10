@@ -11,12 +11,12 @@
         :native-scrollbar="false"
         bordered
         style="max-height: 100dvh"
-        @update-collapsed="onCollapse"
+        @update-collapsed="collapsed => (sidebarCollapsed = collapsed)"
       >
         <Sidebar :collapsed="sidebarCollapsed" />
       </n-layout-sider>
       <n-layout>
-        <Header @toggle-sidebar="toggleSidebar" />
+        <Header @toggle-sidebar="toggleSidebar"> </Header>
         <n-scrollbar y-scrollable style="max-height: calc(100dvh - 88px)">
           <div class="relative pt-8 px-4 sm:px-8">
             <slot />
@@ -37,7 +37,7 @@ const message = useMessage();
 window.$message = message;
 
 const authStore = useAuthStore();
-const { isLg, isXl } = useScreen();
+const { isLg, isXl, isXxl } = useScreen();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
 const sidebarCollapsed = ref<boolean>(false);
@@ -49,11 +49,11 @@ const { lengthX, lengthY } = useSwipe(mainContentRef, {
   onSwipeEnd() {
     if (
       !isLg.value &&
-      Math.abs(lengthX.value) > 150 &&
+      Math.abs(lengthX.value) > 250 &&
       Math.abs(lengthX.value) > Math.abs(lengthY.value)
     ) {
-      /** Show sidebar if user swipe right otherwise close it   */
-      toggleSidebar(lengthX.value < 0);
+      const isLeftToRight = lengthX.value < 0;
+      toggleSidebar(isLeftToRight);
     }
   },
 });
@@ -69,27 +69,19 @@ watch(
 watch(
   () => isXl.value,
   isXl => {
-    toggleCollapse(!isXl);
+    toggle(sidebarCollapsed, !isXl);
   }
 );
 
+function toggle(item: Ref<boolean>, show?: boolean) {
+  if (show === undefined) {
+    item.value = !item.value;
+  } else {
+    item.value = show;
+  }
+}
+
 function toggleSidebar(show?: boolean) {
-  if (show === undefined) {
-    showMobileSidebar.value = !showMobileSidebar.value;
-  } else {
-    showMobileSidebar.value = show;
-  }
-}
-
-function toggleCollapse(show?: boolean) {
-  if (show === undefined) {
-    sidebarCollapsed.value = !sidebarCollapsed.value;
-  } else {
-    sidebarCollapsed.value = show;
-  }
-}
-
-function onCollapse(collapsed: boolean) {
-  sidebarCollapsed.value = collapsed;
+  toggle(showMobileSidebar, show);
 }
 </script>

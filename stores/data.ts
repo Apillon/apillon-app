@@ -143,6 +143,13 @@ export const useDataStore = defineStore('data', {
     /**
      * Fetch wrappers
      */
+    async getProjectUuid(): Promise<string> {
+      if (!this.hasProjects) {
+        await this.fetchProjects();
+      }
+      return this.projectUuid;
+    },
+
     async getProjects(redirectToDashboard: boolean = false) {
       if (!this.hasProjects || isCacheExpired(LsCacheKeys.PROJECTS)) {
         return await this.fetchProjects(redirectToDashboard);

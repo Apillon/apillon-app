@@ -4,6 +4,7 @@ export default function useScreen() {
     md: 768,
     lg: 1024,
     xl: 1440,
+    xxl: 1680,
     hd: 1920,
   });
 
@@ -29,6 +30,11 @@ export default function useScreen() {
      * Above 1440px
      */
     isXl: breakpoints.greater('xl'),
+
+    /**
+     * Above 1680px
+     */
+    isXxl: breakpoints.greater('xxl'),
 
     /**
      * Above 1920px

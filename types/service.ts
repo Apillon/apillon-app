@@ -7,6 +7,7 @@ export enum ServiceType {
   NFT = 3,
   HOSTING = 4,
   COMPUTING = 5,
+  SOCIAL = 6,
 }
 export enum ServiceTypeName {
   STORAGE = 'STORAGE',
@@ -14,6 +15,7 @@ export enum ServiceTypeName {
   AUTHENTICATION = 'IDENTITY',
   NFT = 'NFT',
   COMPUTING = 'COMPUTING',
+  SOCIAL = 'SOCIAL',
 }
 
 export enum IdentityChains {
@@ -69,6 +71,7 @@ export const ServiceTypeNames: { [k: number]: ServiceTypeName } = {
   [ServiceType.NFT]: ServiceTypeName.NFT,
   [ServiceType.HOSTING]: ServiceTypeName.HOSTING,
   [ServiceType.COMPUTING]: ServiceTypeName.COMPUTING,
+  [ServiceType.SOCIAL]: ServiceTypeName.SOCIAL,
 };
 
 declare global {

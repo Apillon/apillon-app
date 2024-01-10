@@ -31,6 +31,7 @@ const config: ConfigInterface = {
     'PROJECT_SETTINGS',
     'REFERRAL',
     'SERVICES',
+    'SOCIAL',
     'SOCIAL_ICONS',
     'STORAGE',
     'TWO_FACTOR_AUTHENTICATION',
