@@ -1,6 +1,6 @@
 <template>
   <n-space class="pb-8" :size="32" vertical>
-    <ActionsComputing @create-success="checkUnfinishedContract" />
+    <ActionsComputing />
 
     <n-data-table
       ref="tableRef"
@@ -34,10 +34,11 @@ const props = defineProps({
 const { t } = useI18n();
 const router = useRouter();
 const contractStore = useContractStore();
+const { checkUnfinishedContract } = useComputing();
+
 const TableEllipsis = resolveComponent('TableEllipsis');
 const ComputingContractStatus = resolveComponent('ComputingContractStatus');
 
-let contractInterval: any = null as any;
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
 /** Data: filtered contracts */
@@ -182,29 +183,5 @@ function onContractTransferred() {
     await contractStore.fetchContracts();
     checkUnfinishedContract();
   }, 3000);
-}
-
-/** Contract polling */
-function checkUnfinishedContract() {
-  clearInterval(contractInterval);
-
-  const unfinishedCollection = contractStore.items.find(
-    contract =>
-      contract.contractStatus === ContractStatus.DEPLOY_INITIATED ||
-      contract.contractStatus === ContractStatus.DEPLOYING
-  );
-  if (unfinishedCollection === undefined) {
-    return;
-  }
-
-  contractInterval = setInterval(async () => {
-    const contracts = await contractStore.fetchContracts(false);
-    const contract = contracts.find(
-      contract => contract.contract_uuid === unfinishedCollection.contract_uuid
-    );
-    if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
-      clearInterval(contractInterval);
-    }
-  }, 30000);
 }
 </script>

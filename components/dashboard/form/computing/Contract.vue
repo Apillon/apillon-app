@@ -285,14 +285,14 @@ async function createContract() {
     };
     const res = await $api.post<ContractResponse>(endpoints.contracts(), bodyData);
 
-    message.success($i18n.t('form.success.created.contract'));
+    message.success($i18n.t('form.success.contract.deploy'));
 
     /** On new contract created add new contract to list */
     contractStore.items.unshift(res.data as ContractInterface);
 
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess');
+    emit('createSuccess', res.data);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

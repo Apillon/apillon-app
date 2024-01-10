@@ -43,14 +43,15 @@
   <modal v-model:show="modalCreateContractVisible" :title="$t('computing.contract.new')">
     <FormComputingContract
       @submit-success="modalCreateContractVisible = false"
-      @create-success="$emit('createSuccess')"
+      @create-success="onContractCreated"
     />
   </modal>
 </template>
 
 <script lang="ts" setup>
-defineEmits(['createSuccess']);
 const authStore = useAuthStore();
 const contractStore = useContractStore();
+const { onContractCreated } = useComputing();
+
 const modalCreateContractVisible = ref<boolean>(false);
 </script>
