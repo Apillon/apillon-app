@@ -377,7 +377,7 @@ export const usePaymentStore = defineStore('payment', {
       abortController = new AbortController();
 
       try {
-        const res = await $api.get<PriceListResponse>(endpoints.productPrice(), undefined, {
+        const res = await $api.get<PriceListResponse>(endpoints.productPrice(), PARAMS_ALL_ITEMS, {
           signal: abortController.signal,
         });
 
