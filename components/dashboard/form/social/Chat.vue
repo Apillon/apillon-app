@@ -41,7 +41,7 @@
       />
     </n-form-item>
 
-    <!-- Chat image -->
+    <!-- Chat image
     <n-form-item
       path="image"
       :label="$t('form.label.chatImage')"
@@ -65,9 +65,10 @@
         </n-upload-dragger>
       </n-upload>
     </n-form-item>
+   -->
 
     <!--  Form submit -->
-    <n-form-item :show-feedback="false">
+    <n-form-item :show-label="false" :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('social.chat.create')" />
       <Btn
         type="primary"
@@ -93,9 +94,9 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
 const $i18n = useI18n();
-const authStore = useAuthStore();
 const dataStore = useDataStore();
 const chatStore = useChatStore();
+const warningStore = useWarningStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -122,7 +123,7 @@ async function uploadImageRequest({ file, onError, onFinish }: NUploadCustomRequ
     const image = await convertBase64(file.file);
 
     if (image) {
-      formData.value.image = image;
+      formData.value.image = image as string;
       onFinish();
     } else {
       onError();
@@ -141,7 +142,7 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      await createSpace();
+      warningStore.showSpendingWarning(PriceServiceName.SOCIAL_SPACE, () => createSpace());
     }
   });
 }
@@ -169,7 +170,7 @@ async function createSpace() {
 
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess');
+    emit('createSuccess', res.data);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

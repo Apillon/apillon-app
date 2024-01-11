@@ -49,11 +49,6 @@
 
           <!-- User profile -->
           <HeaderProfile v-if="!authStore.isAdmin()" />
-
-          <!-- Grill chat btn to show chat on mobile -->
-          <BtnHamburger v-if="!isLg" class="flex lg:hidden" @click="emit('toggleChat')">
-            <NuxtIcon name="logo/grill-chat-favicon" class="text-4xl" filled />
-          </BtnHamburger>
         </n-space>
       </div>
 

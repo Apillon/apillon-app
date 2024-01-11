@@ -1,4 +1,23 @@
 import { defineStore } from 'pinia';
+import type { GrillConfig } from '@subsocial/grill-widget';
+
+/** Grill chat */
+export const generateGrillSettings = (spaceId: string, postId: string): GrillConfig => {
+  return {
+    theme: 'dark',
+    widgetElementId: 'grill',
+    hub: { id: spaceId },
+    channel: {
+      type: 'channel',
+      id: postId,
+      settings: {
+        enableBackButton: true,
+        enableLoginButton: true,
+        enableInputAutofocus: true,
+      },
+    },
+  };
+};
 
 export const usePostStore = defineStore('post', {
   state: () => ({
@@ -6,6 +25,7 @@ export const usePostStore = defineStore('post', {
     items: [] as PostInterface[],
     loading: false,
     search: '',
+    settings: null as any,
     pagination: {
       page: 1,
       pageSize: PAGINATION_LIMIT,
@@ -38,11 +58,11 @@ export const usePostStore = defineStore('post', {
       return this.items;
     },
 
-    async getPost(spaceUuid: string, chatUuid: string): Promise<PostInterface> {
-      if (this.active?.chat_uuid === chatUuid && !isCacheExpired(LsCacheKeys.POST)) {
+    async getPost(spaceUuid: string, post_uuid: string): Promise<PostInterface> {
+      if (this.active?.post_uuid === post_uuid && !isCacheExpired(LsCacheKeys.POST)) {
         return this.active;
       }
-      return await this.fetchPost(spaceUuid, chatUuid);
+      return await this.fetchPost(spaceUuid, post_uuid);
     },
 
     /**
@@ -86,7 +106,7 @@ export const usePostStore = defineStore('post', {
       return [];
     },
 
-    async fetchPost(spaceUuid: string, chatUuid: string): Promise<PostInterface> {
+    async fetchPost(spaceUuid: string, post_uuid: string): Promise<PostInterface> {
       try {
         const res = await $api.get<PostResponse>(endpoints.posts(spaceUuid, chatUuid));
 

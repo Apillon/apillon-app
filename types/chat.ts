@@ -18,6 +18,16 @@ export enum PostType {
   COMMENT = 3,
 }
 
+export enum SocialStatus {
+  DRAFT = 1,
+  INCOMPLETE = 2,
+  INACTIVE = 3,
+  ACTIVE = 5,
+  BLOCKED = 7,
+  MARKED_FOR_DELETION = 8,
+  DELETED = 9,
+}
+
 declare global {
   /**
    * Chat

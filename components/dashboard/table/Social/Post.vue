@@ -5,23 +5,17 @@
     :columns="columns"
     :data="postStore.items"
     :loading="postStore.loading"
+    :pagination="chatStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
     :row-class-name="rowClassName"
-    :pagination="{
-      ...postStore.pagination,
-      onChange: (page: number) => {
-        postStore.pagination.page = page;
-        handlePageChange(page);
-      },
-    }"
+    @update:page="handlePageChange"
   />
 </template>
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
 import { NButton, NDropdown } from 'naive-ui';
-import { generateGrillSettings } from '~/stores/social/chat';
 
 const props = defineProps({
   spaceUuid: { type: String, required: true },
@@ -30,10 +24,25 @@ const props = defineProps({
 const { t } = useI18n();
 const chatStore = useChatStore();
 const postStore = usePostStore();
-const TableEllipsis = resolveComponent('TableEllipsis');
 
 const createColumns = (): NDataTableColumns<PostInterface> => {
   return [
+    {
+      type: 'expand',
+      renderExpand(row: PostInterface) {
+        if (chatStore.active.spaceId && row.postId) {
+          return h(
+            resolveComponent('GrillChatSettings'),
+            {
+              spaceId: chatStore.active.spaceId,
+              postId: row.postId,
+            },
+            ''
+          );
+        }
+        return null;
+      },
+    },
     {
       key: 'postId',
       title: t('social.post.postId'),
@@ -58,7 +67,7 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
       key: 'post_uuid',
       title: t('social.post.uuid'),
       render(row: PostInterface) {
-        return h(TableEllipsis, { text: row.post_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.post_uuid }, '');
       },
     },
     {
@@ -66,6 +75,13 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
       title: t('social.post.date'),
       render(row) {
         return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
+      },
+    },
+    {
+      key: 'status',
+      title: t('general.status'),
+      render(row) {
+        return h(resolveComponent('GrillChatStatus'), { status: row.status }, '');
       },
     },
     {
@@ -92,10 +108,10 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
 };
 const columns = createColumns();
 const rowKey = (row: PostInterface) => row.post_uuid;
-const currentRow = ref<PostInterface | null>(postStore.items[0] || null);
+const currentRow = ref<PostInterface | null>(null);
 
 const rowClassName = (row: PostInterface) => {
-  return row.post_uuid === currentRow.value?.post_uuid ? 'selected-row' : '';
+  return currentRow.value && currentRow.value?.post_uuid === row.post_uuid ? 'selected-row' : '';
 };
 
 /** On row click */
@@ -117,8 +133,8 @@ const rowProps = (row: PostInterface) => {
 const dropdownOptions = computed(() => {
   return [
     {
-      label: 'Select post',
       key: 'select',
+      label: t('social.post.select'),
       props: {
         onClick: () => {
           console.log('select post', currentRow.value);
@@ -127,10 +143,6 @@ const dropdownOptions = computed(() => {
       },
     },
   ];
-});
-
-onMounted(() => {
-  selectPost();
 });
 
 /** Search posts */
@@ -146,15 +158,15 @@ const debouncedSearchFilter = debounce(handlePageChange, 500);
 /** On page change, load data */
 async function handlePageChange(page: number) {
   await postStore.getPosts(props.spaceUuid, page);
+  postStore.pagination.page = page;
 }
 
 async function selectPost() {
-  const spaces = await chatStore.getChats();
-  const space = spaces.find(item => item.space_uuid === props.spaceUuid);
+  const spaceId = chatStore.active.spaceId;
+  console.log(spaceId);
 
-  if (space && currentRow?.value) {
-    console.log(`${props.spaceUuid}`, `${currentRow.value.postId}`);
-    chatStore.settings = generateGrillSettings(`${props.spaceUuid}`, `${currentRow.value.postId}`);
+  if (spaceId && currentRow?.value) {
+    postStore.settings = generateGrillSettings(`${spaceId}`, `${currentRow.value.postId}`);
   }
 }
 </script>

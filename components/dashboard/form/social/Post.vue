@@ -68,8 +68,10 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
 const $i18n = useI18n();
+const chatStore = useChatStore();
 const dataStore = useDataStore();
 const postStore = usePostStore();
+const warningStore = useWarningStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -90,7 +92,7 @@ const rules: NFormRules = {
 };
 
 const isFormDisabled = computed<boolean>(() => {
-  return dataStore.isProjectUser;
+  return dataStore.isProjectUser || chatStore.active.status < SocialStatus.ACTIVE;
 });
 
 // Submit
@@ -102,7 +104,7 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      await createPost();
+      warningStore.showSpendingWarning(PriceServiceName.SOCIAL_POST, () => createPost());
     }
   });
 }
@@ -124,7 +126,7 @@ async function createPost() {
 
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess');
+    emit('createSuccess', res.data);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

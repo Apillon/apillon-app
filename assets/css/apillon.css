@@ -43,6 +43,9 @@
   }
 }
 
+.icon-subsocial:before {
+  content: '\e961';
+}
 .icon-erc-4437:before {
   content: '\e952';
 }
