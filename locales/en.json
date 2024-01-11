@@ -274,6 +274,10 @@
           "name": "NFTs",
           "description": null
         },
+        "SOCIAL": {
+          "name": "Social",
+          "description": null
+        },
         "STORAGE": {
           "name": "Web3 Storage",
           "description": null
