@@ -141,9 +141,7 @@ const version = ref(config.public.VERSION);
 /** Sidebar */
 const footerRef = ref<HTMLElement | null>(null);
 const footerHeight = ref<number>(footerRef.value?.clientHeight || 200);
-const sidebarStyle = computed(() => {
-  return { maxHeight: `calc(100dvh - ${footerHeight.value}px)` };
-});
+const sidebarStyle = ref<any>({ maxHeight: `100dvh` });
 
 /** Classes */
 const sidebarClasses = computed(() => {
@@ -171,7 +169,8 @@ onMounted(async () => {
   } else if (!authStore.isAdmin()) {
     paymentStore.getSubscriptionPackages();
     await paymentStore.fetchActiveSubscription();
-    setFooterHeight();
+
+    setTimeout(() => setFooterHeight(), 1000);
   }
 });
 
@@ -206,6 +205,20 @@ watch(
 function setFooterHeight() {
   footerHeight.value =
     footerRef.value && footerRef.value?.offsetHeight > 100 ? footerRef.value.offsetHeight : 0;
+  updateSidebarStyle();
+}
+
+watch(
+  () => props.collapsed,
+  _ => {
+    updateSidebarStyle();
+  }
+);
+
+function updateSidebarStyle() {
+  sidebarStyle.value = props.collapsed
+    ? { maxHeight: `100dvh` }
+    : { maxHeight: `calc(100dvh - ${footerHeight.value}px)` };
 }
 </script>
 
