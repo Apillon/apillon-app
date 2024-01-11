@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'apillon';
-  src:  url('fonts/apillon.eot?qqkqu0');
-  src:  url('fonts/apillon.eot?qqkqu0#iefix') format('embedded-opentype'),
-    url('fonts/apillon.ttf?qqkqu0') format('truetype'),
-    url('fonts/apillon.woff?qqkqu0') format('woff'),
-    url('fonts/apillon.svg?qqkqu0#apillon') format('svg');
+  src:  url('fonts/apillon.eot?ea9bae');
+  src:  url('fonts/apillon.eot?ea9bae#iefix') format('embedded-opentype'),
+    url('fonts/apillon.ttf?ea9bae') format('truetype'),
+    url('fonts/apillon.woff?ea9bae') format('woff'),
+    url('fonts/apillon.svg?ea9bae#apillon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-subsocial:before {
+  content: "\e961";
+}
 .icon-erc-4437:before {
   content: "\e952";
 }

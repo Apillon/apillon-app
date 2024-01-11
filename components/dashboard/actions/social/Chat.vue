@@ -16,6 +16,9 @@
     </div>
 
     <n-space size="large">
+      <!-- Modal Price list for Social -->
+      <ModalCreditCosts :service="ServiceTypeName.SOCIAL" />
+
       <!-- Refresh chats -->
       <n-button size="small" :loading="chatStore.loading" @click="chatStore.fetchChats()">
         <span class="icon-refresh text-xl mr-2"></span>
@@ -34,7 +37,7 @@
   <modal v-model:show="modalCreateChatVisible" :title="$t('social.chat.new')">
     <FormSocialChat
       @submit-success="modalCreateChatVisible = false"
-      @create-success="$emit('createSuccess')"
+      @create-success="chat => $emit('createSuccess', chat)"
     />
   </modal>
 </template>

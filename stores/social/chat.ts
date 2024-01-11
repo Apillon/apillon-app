@@ -1,23 +1,4 @@
 import { defineStore } from 'pinia';
-import type { GrillConfig } from '@subsocial/grill-widget';
-
-/** Grill chat */
-export const generateGrillSettings = (id = '1002', channelId = '754'): GrillConfig => {
-  return {
-    theme: 'dark',
-    widgetElementId: 'grill',
-    hub: { id: id },
-    channel: {
-      type: 'channel',
-      id: channelId,
-      settings: {
-        enableBackButton: true,
-        enableLoginButton: true,
-        enableInputAutofocus: true,
-      },
-    },
-  };
-};
 
 export const useChatStore = defineStore('chat', {
   state: () => ({
@@ -25,7 +6,6 @@ export const useChatStore = defineStore('chat', {
     items: [] as ChatInterface[],
     loading: false,
     search: '',
-    settings: generateGrillSettings(),
     pagination: {
       page: 1,
       pageSize: PAGINATION_LIMIT,
@@ -107,6 +87,10 @@ export const useChatStore = defineStore('chat', {
     },
 
     async fetchChat(uuid: string): Promise<ChatInterface> {
+      /** Clear cache for posts */
+      sessionStorage.removeItem(LsCacheKeys.POST);
+      sessionStorage.removeItem(LsCacheKeys.POSTS);
+
       try {
         const res = await $api.get<ChatResponse>(endpoints.spaces(uuid));
 

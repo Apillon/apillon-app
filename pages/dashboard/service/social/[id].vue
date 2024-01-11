@@ -27,23 +27,15 @@
 
     <slot>
       <n-space class="pb-8" :size="32" vertical>
-        <ActionsSocialPost :space-uuid="chatUuid" />
-
+        <ActionsSocialPost :space-uuid="chatUuid" @create-success="checkUnfinishedPost" />
         <TableSocialPost :space-uuid="chatUuid" />
-
-        <div>
-          <h3>Grill settings</h3>
-        </div>
-        <GrillChatSettings />
       </n-space>
     </slot>
-    <template #learn> <GrillChat :style="scrollStyle" /> </template>
+    <template #learn> <GrillChat v-if="postStore.settings" :style="scrollStyle" /> </template>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { generateGrillSettings } from '~/stores/social/chat';
-
 const { params } = useRoute();
 const router = useRouter();
 const $i18n = useI18n();
@@ -51,6 +43,7 @@ const dataStore = useDataStore();
 const chatStore = useChatStore();
 const postStore = usePostStore();
 
+let postInterval: any = null as any;
 const pageLoading = ref<boolean>(true);
 const headingRef = ref<HTMLElement>();
 
@@ -62,7 +55,6 @@ useHead({
 });
 
 const scrollStyle = computed(() => {
-  console.log(headingRef.value?.clientHeight);
   return {
     height: `calc(100vh - ${157 + (headingRef.value?.clientHeight || 0)}px)`,
   };
@@ -79,10 +71,40 @@ onMounted(() => {
         chatStore.active = currentChat;
 
         await postStore.getPosts(chatUuid.value);
+        checkUnfinishedPost();
 
         pageLoading.value = false;
       }
     });
   }, 100);
 });
+
+onUnmounted(() => {
+  clearInterval(postInterval);
+});
+
+/** Post polling */
+function checkUnfinishedPost() {
+  clearInterval(postInterval);
+
+  const unfinishedPost = postStore.items.find(item => item.status < SocialStatus.ACTIVE);
+  if (unfinishedPost === undefined) {
+    return;
+  }
+
+  postInterval = setInterval(async () => {
+    const posts = await postStore.fetchPosts(chatUuid.value, postStore.pagination.page, false);
+    console.log(chatUuid.value);
+    console.log(posts);
+    const post = posts.find(item => item.post_uuid === unfinishedPost.post_uuid);
+    if (!post || post.status >= SocialStatus.ACTIVE) {
+      clearInterval(postInterval);
+
+      const spaceId = chatStore.active.spaceId;
+      if (post && !postStore.settings) {
+        postStore.settings = generateGrillSettings(`${spaceId}`, `${post.postId}`);
+      }
+    }
+  }, 30000);
+}
 </script>

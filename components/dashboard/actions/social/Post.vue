@@ -16,6 +16,9 @@
     </div>
 
     <n-space size="large">
+      <!-- Modal Price list for Social -->
+      <ModalCreditCosts :service="ServiceTypeName.SOCIAL" />
+
       <!-- Refresh posts -->
       <n-button size="small" :loading="postStore.loading" @click="postStore.fetchPosts(spaceUuid)">
         <span class="icon-refresh text-xl mr-2"></span>
@@ -35,7 +38,7 @@
     <FormSocialPost
       :space-uuid="spaceUuid"
       @submit-success="modalCreatePostVisible = false"
-      @create-success="$emit('createSuccess')"
+      @create-success="post => $emit('createSuccess', post)"
     />
   </modal>
 </template>

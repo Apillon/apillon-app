@@ -15,7 +15,7 @@
     </template>
     <slot>
       <n-space v-if="chatStore.hasChats" class="pb-8" :size="32" vertical>
-        <ActionsSocialChat @create-success="" />
+        <ActionsSocialChat @create-success="onChatCreated" />
         <TableSocialChat />
       </n-space>
       <Empty
@@ -35,7 +35,10 @@
 
       <!-- Modal - Create Chat -->
       <modal v-model:show="modalCreateChatVisible" :title="$t('social.chat.new')">
-        <FormSocialChat @submit-success="modalCreateChatVisible = false" />
+        <FormSocialChat
+          @submit-success="modalCreateChatVisible = false"
+          @create-success="onChatCreated"
+        />
       </modal>
     </slot>
   </Dashboard>
@@ -43,10 +46,12 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
 const chatStore = useChatStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.CONTRACT_NEW);
 
+let chatInterval: any = null as any;
 const pageLoading = ref<boolean>(true);
 const modalCreateChatVisible = ref<boolean | null>(false);
 
@@ -59,9 +64,15 @@ onMounted(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await chatStore.getChats();
 
+      checkUnfinishedChat();
+
       pageLoading.value = false;
     });
   }, 100);
+});
+
+onUnmounted(() => {
+  clearInterval(chatInterval);
 });
 
 function showModalCreateChat() {
@@ -78,5 +89,27 @@ function onModalW3WarnHide() {
   if (modalCreateChatVisible.value !== false) {
     modalCreateChatVisible.value = true;
   }
+}
+
+function onChatCreated(chat: ChatInterface) {
+  router.push(`/dashboard/service/social/${chat.space_uuid}`);
+}
+
+/** Chat polling */
+function checkUnfinishedChat() {
+  clearInterval(chatInterval);
+
+  const unfinishedChat = chatStore.items.find(item => item.status < SocialStatus.ACTIVE);
+  if (unfinishedChat === undefined) {
+    return;
+  }
+
+  chatInterval = setInterval(async () => {
+    const chats = await chatStore.fetchChats(chatStore.pagination.page, false);
+    const chat = chats.find(item => item.space_uuid === unfinishedChat.space_uuid);
+    if (!chat || chat.status >= SocialStatus.ACTIVE) {
+      clearInterval(chatInterval);
+    }
+  }, 30000);
 }
 </script>

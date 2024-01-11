@@ -221,7 +221,7 @@
       "cost": "Cost",
       "credits": "credits",
       "creditsAmount": "Credit amount",
-      "creditCosts": "Service description cost",
+      "creditCosts": "Service costs",
       "currentCredits": "Current credits",
       "date": "Date and time",
       "description": "Description",
@@ -1290,6 +1290,8 @@
       "date": "Created",
       "new": "New post",
       "postId": "Post ID",
+      "select": "Select chat",
+      "settings": "Grill Chat settings",
       "tags": "Tags",
       "title": "Post title",
       "uuid": "Post UUID"

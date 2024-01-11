@@ -5,15 +5,10 @@
     :columns="columns"
     :data="chatStore.items"
     :loading="chatStore.loading"
+    :pagination="chatStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
-    :pagination="{
-      ...chatStore.pagination,
-      onChange: (page: number) => {
-        chatStore.pagination.page = page;
-        handlePageChange(page);
-      },
-    }"
+    @update:page="handlePageChange"
   />
 </template>
 
@@ -25,6 +20,7 @@ const { t } = useI18n();
 const router = useRouter();
 const chatStore = useChatStore();
 const TableEllipsis = resolveComponent('TableEllipsis');
+const GrillChatStatus = resolveComponent('GrillChatStatus');
 
 const createColumns = (): NDataTableColumns<ChatInterface> => {
   return [
@@ -60,6 +56,13 @@ const createColumns = (): NDataTableColumns<ChatInterface> => {
       title: t('social.chat.date'),
       render(row) {
         return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
+      },
+    },
+    {
+      key: 'status',
+      title: t('general.status'),
+      render(row) {
+        return h(GrillChatStatus, { status: row.status }, '');
       },
     },
     {
@@ -130,5 +133,6 @@ const debouncedSearchFilter = debounce(handlePageChange, 500);
 /** On page change, load data */
 async function handlePageChange(page: number) {
   await chatStore.getChats(page);
+  chatStore.pagination.page = page;
 }
 </script>
