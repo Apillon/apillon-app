@@ -15,7 +15,7 @@
     </template>
     <slot>
       <n-space v-if="chatStore.hasChats" class="pb-8" :size="32" vertical>
-        <ActionsSocialChat @create-success="onChatCreated" />
+        <ActionsSocialChat @create-success="checkUnfinishedChat" />
         <TableSocialChat />
       </n-space>
       <Empty
@@ -37,7 +37,7 @@
       <modal v-model:show="modalCreateChatVisible" :title="$t('social.chat.new')">
         <FormSocialChat
           @submit-success="modalCreateChatVisible = false"
-          @create-success="onChatCreated"
+          @create-success="checkUnfinishedChat"
         />
       </modal>
     </slot>
@@ -46,7 +46,6 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
-const router = useRouter();
 const dataStore = useDataStore();
 const chatStore = useChatStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.CONTRACT_NEW);
@@ -89,10 +88,6 @@ function onModalW3WarnHide() {
   if (modalCreateChatVisible.value !== false) {
     modalCreateChatVisible.value = true;
   }
-}
-
-function onChatCreated(chat: ChatInterface) {
-  router.push(`/dashboard/service/social/${chat.space_uuid}`);
 }
 
 /** Chat polling */
