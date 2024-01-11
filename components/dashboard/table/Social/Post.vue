@@ -145,6 +145,14 @@ const dropdownOptions = computed(() => {
   ];
 });
 
+onMounted(() => {
+  const spaceId = chatStore.active.spaceId;
+
+  if (spaceId) {
+    postStore.settings = generateSpaceSettings(`${spaceId}`);
+  }
+});
+
 /** Search posts */
 watch(
   () => postStore.search,
@@ -163,7 +171,6 @@ async function handlePageChange(page: number) {
 
 async function selectPost() {
   const spaceId = chatStore.active.spaceId;
-  console.log(spaceId);
 
   if (spaceId && currentRow?.value) {
     postStore.settings = generateGrillSettings(`${spaceId}`, `${currentRow.value.postId}`);
