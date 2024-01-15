@@ -732,6 +732,7 @@
         "contractType": "Contract type",
         "nftContractAddress": "Contract Address",
         "nftChainRpcUrl": "Chain RPC URL",
+        "nftId": "NFT ID",
         "restrictToOwner": "Restrict to owner",
         "accountAddress": "Account Address",
         "amount": "Amount",
@@ -1514,7 +1515,8 @@
       "cidRequired": "Please enter CID",
       "depositAmountRequired": "Please enter amount",
       "depositAmountTooLow": "Please enter a higher amount (min. 0.01)",
-      "fileTooBig": "File \"{name}\" is too big, max file size is 64kb."
+      "fileTooBig": "File \"{name}\" is too big, max file size is 64kb.",
+      "nftIdRequired": "Please enter NFT ID"
     }
   },
   "w3Warn": {
