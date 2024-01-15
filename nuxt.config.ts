@@ -38,9 +38,9 @@ export default defineNuxtConfig({
 
   modules: [
     '@vueuse/nuxt',
-    '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-icons',
+    ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
     [
       '@nuxtjs/google-fonts',
       {
@@ -78,10 +78,6 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: process.env.NODE_ENV === 'development' ? ['naive-ui'] : [],
     },
-  },
-
-  tailwindcss: {
-    cssPath: '~/assets/css/tailwind.css',
   },
 
   imports: {

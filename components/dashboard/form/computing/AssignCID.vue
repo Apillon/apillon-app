@@ -1,11 +1,27 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
-    <!--  Account Address -->
+    <!--  CID -->
     <n-form-item path="cid" :label="$t('form.label.contract.cid')" :label-props="{ for: 'cid' }">
       <n-input
         v-model:value="formData.cid"
         :input-props="{ id: 'cid' }"
         :placeholder="$t('form.placeholder.typeHere')"
+        clearable
+      />
+    </n-form-item>
+
+    <!--  NFT ID -->
+    <n-form-item
+      path="nftId"
+      :label="$t('form.label.contract.nftId')"
+      :label-props="{ for: 'nftId' }"
+    >
+      <n-input-number
+        v-model:value="formData.nftId"
+        :input-props="{ id: 'nftId' }"
+        :placeholder="$t('form.placeholder.typeHere')"
+        min="1"
+        step="1"
         clearable
       />
     </n-form-item>
@@ -23,6 +39,7 @@
 <script lang="ts" setup>
 type FormContractAssignCid = {
   cid: string;
+  nftId: number;
 };
 
 const props = defineProps({
@@ -38,10 +55,12 @@ const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormContractAssignCid>({
   cid: props.cid,
+  nftId: 1,
 });
 
 const rules: NFormRules = {
   cid: [ruleRequired($i18n.t('validation.contract.cidRequired'))],
+  nftId: [ruleRequired($i18n.t('validation.contract.nftIdRequired'))],
 };
 
 // Submit

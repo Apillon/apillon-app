@@ -88,7 +88,6 @@ async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOpti
     message.error(userFriendlyMsg(error));
     onError();
   }
-  contractStore.uploading = false;
 }
 
 const convertToBase64 = file => {

@@ -9,9 +9,7 @@
     </template>
 
     <slot>
-      <n-space class="pb-8" :size="32" vertical>
-        <ComputingContractTabs />
-      </n-space>
+      <ComputingContractTabs class="pb-8" />
 
       <!-- Modal - Contract Transfer -->
       <modal
