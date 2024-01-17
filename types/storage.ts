@@ -163,8 +163,9 @@ declare global {
     link: string;
   };
   interface IpfsInterface extends BaseObjectInterface {
-    ipfsGateway?: string | null;
-    ipnsGateway?: string | null;
+    ipfsGateway: string | null;
+    ipnsGateway: string | null;
+    loadBalancerIp: string | null;
     project_uuid: string;
     secret: string;
     subdomainGateway?: string | null;
