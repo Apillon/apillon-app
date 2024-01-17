@@ -86,7 +86,7 @@ export function hideSecret(source: string, partLength: number = 4): string {
         source.slice(source.length - partLength, source.length)
     : source;
 }
-export function toStr(s: LocationQueryValue | LocationQueryValue[]) {
+export function toStr(s?: any) {
   return s ? s.toString() : '';
 }
 
@@ -413,6 +413,22 @@ export function isCacheExpired(key: string) {
   return true;
 }
 
+/** Parse base method argument to request params */
+export function parseArguments(args: FetchParams): Record<string, string | number> {
+  const params: Record<string, string | number> = {
+    page: args.page || 1,
+    limit: args.limit || PAGINATION_LIMIT,
+    orderBy: args.orderBy || 'createTime',
+    desc: args.order === 'descend' || !args.orderBy ? 'true' : 'false',
+  };
+
+  if (args.search) {
+    params.search = args.search;
+  }
+
+  return params;
+}
+
 /**
  * Slice array in chunks
  */
@@ -471,4 +487,15 @@ export function getDeviceName() {
 
 export function generatePriceServiceName(service: string, chain: number, action: string) {
   return service + '_' + Chains[chain] + '_' + action;
+}
+
+/**
+ * Get the value of a cookie
+ * @param  {String} name  The name of the cookie
+ * @return {String}       The cookie value
+ */
+export function readCookie(name: string) {
+  const value = `; ${document.cookie}`;
+  const parts: String[] = value.split(`; ${name}=`);
+  return parts.length === 2 ? parts.pop()?.split(';')?.shift() || '' : '';
 }

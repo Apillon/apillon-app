@@ -111,27 +111,19 @@ export const useFileStore = defineStore('file', {
       return 0;
     },
 
-    async fetchAllFiles(fileStatus?: number, page?: number, limit?: number) {
+    async fetchAllFiles(fileStatus?: number, args: FetchParams = {}) {
       const bucketStore = useBucketStore();
-      this.loading = true;
+      this.loading = args.loader !== undefined ? args.loader : true;
 
       try {
         const bucketUuid = bucketStore.bucketUuid;
 
-        const params: Record<string, string | number> = {
-          bucket_uuid: bucketUuid,
-        };
+        const params = parseArguments(args);
+        params.bucket_uuid = bucketUuid;
 
         /** Add additional parameters */
-        if (this.search) {
-          params.search = this.search;
-        }
         if (fileStatus) {
           params.fileStatus = fileStatus;
-        }
-        if (page) {
-          params.page = page;
-          params.limit = limit || PAGINATION_LIMIT;
         }
 
         const res = await $api.get<FileUploadsResponse>(

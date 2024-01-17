@@ -55,10 +55,13 @@
       "withEmail": "sign up with email"
     },
     "terms": {
+      "accept": "You must accept the ",
+      "acceptEnd": " before creating an account.",
       "agree": "I have read and agree to ",
       "and": " and ",
       "pp": "Privacy Policy",
-      "tc": "Terms and Conditions"
+      "tc": "Terms and Conditions",
+      "terms": "Terms"
     },
     "wallet": {
       "connect": {
@@ -224,7 +227,7 @@
     "invoice": {
       "client": "Client",
       "currency": "Currency",
-      "invoices": "Transactions and Invoices",
+      "invoices": "Credit purchases",
       "referenceTable": "Reference",
       "subtotalAmount": "Subtotal",
       "totalAmount": "Total",
@@ -268,9 +271,11 @@
       "buyCredits": "Buy credits",
       "costs": "Costs",
       "changePlan": "Change plan",
+      "comparePlans": "Compare plans",
       "currentPlan": "Current plan",
       "expiresOn": "Expires on:",
       "decline": "Decline",
+      "managePlan": "Manage billing",
       "notEnoughCredits": "You don't have enough credits. Please, buy more credits to proceed",
       "proceed": "Proceed",
       "selectPlan": "Select plan",
@@ -313,7 +318,7 @@
       "downloads": "Downloads",
       "hosting": "Web3 hosting",
       "storage": "Web3 storage",
-      "title": "Project quotas",
+      "title": "Project usage",
       "upgrade": "Increase quotas"
     },
     "adminMode": "You are in ADMIN mode!",
@@ -324,6 +329,7 @@
     "changePayment": "Change payment",
     "clientLibraries": "Client Libraries",
     "created": "Created",
+    "createTime": "Created at",
     "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
     "dashboard": "Dashboard",
     "date": "Date",
@@ -462,6 +468,7 @@
     "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
     "NFT_CONTRACT_OWNER_ERROR": "NFT contract has been transferred to another wallet.",
     "NFT_DEPLOY_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
+    "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_PRESENT": "Royalties address is not present, please enter a valid EVM address",
     "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid EVM address",
     "INVALID_ADDRESS_FOR_TRANSFER_TO": "Wrong address, please enter different address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
@@ -589,6 +596,9 @@
       "reenterPassword": "Re-enter your complex password",
       "role": "Select role",
       "serviceName": "Enter the name for the new service",
+      "selectCategory": "Filter by category",
+      "selectDirection": "Filter by direction",
+      "selectService": "Filter by service",
       "typeHere": "Type here",
       "username": "Enter your full name",
       "webhookPassword": "Enter password",
@@ -614,6 +624,7 @@
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
+        "apiKeyRoles": "Api key permissions has been added",
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
         "collection": "Creating NFT collection requested.",
@@ -655,6 +666,7 @@
       "updated": {
         "apiKey": "Api key has been updated",
         "apiKeyRole": "Api key permission has been added",
+        "apiKeyRoles": "Api key permissions has been added",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "directory": "Folder has been updated",
@@ -751,7 +763,6 @@
       "infoEdit": "",
       "name": "Website name",
       "new": "New website",
-      "quotaReached": "Quota has been reached.",
       "update": "Update website",
       "uuid": "Website Uuid"
     },
@@ -807,7 +818,6 @@
       "nestMint": "Nestable Mint",
       "new": "New NFT collection",
       "numOfData": "Number of data",
-      "quotaReached": "Quota has been reached.",
       "dropReserve": "Reserved",
       "revoke": "Burn",
       "symbol": "Symbol",
@@ -1003,7 +1013,8 @@
     "new": "Add new project",
     "newBucket": "New storage bucket",
     "owner": "Project owner",
-    "quotaReached": "Quota has been reached.",
+    "quotaReached": "Quota has been reached. To create more projects",
+    "upgradePlan": " upgrade your current plan",
     "usersAndPermissions": "Project users & permissions"
   },
   "referral": {
@@ -1118,19 +1129,20 @@
       "items": "Download selected items"
     },
     "ipfs": {
-      "generateLink": "Generate link",
-      "hotToGenerateLink": "How to generate link",
-      "ipfsInfo": "Gateway, which can be used to access content via CIDs.",
+      "generateLink": "Generate IPFS/IPNS link",
+      "hotToGenerateLink": "How to generate link?",
+      "ipfsInfo": "Used to access content via CIDs",
       "ipfsLink": "IPFS link",
       "ipfsLinkInfo": "Link, where requested content can be accessed",
       "ipns": "IPNS Gateway",
-      "ipnsInfo": "Gateway, which can be used to access content via IPNS name.",
+      "ipnsInfo": "Used to access content via IPNS name",
       "project": "Project unique identifier",
-      "secretInfo": "Secret for this project, which can be used to generate tokens, to access content of ipfs gateway",
+      "secretInfo": "Secret for project, used to generate a token to acess the content via the IPFS gateway",
       "subdomain": "Subdomain Gateway",
       "subdomainInfo": "If specified, content on ipfs can be access as subdomain.",
       "title": "IPFS Gateway",
-      "titleInfo": "IPFS Gateway info"
+      "titleInfo": "IPFS Gateway info",
+      "enterCid": "Enter CID or IPNS"
     },
     "ipns": {
       "create": "Create new IPNS",
@@ -1150,7 +1162,8 @@
       "publish": "Publish to IPNS",
       "selectIpns": "Select IPNS",
       "title": "IPNS",
-      "update": "Update IPNS"
+      "update": "Update IPNS",
+      "uuid": "IPNS UUID"
     },
     "file": {
       "status": {
@@ -1271,7 +1284,7 @@
     "collectionDropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
     "collectionRoyaltiesAddress": "Please enter a valid EVM address",
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
-    "collectionRoyaltiesFees": "Royalty fee must be greater than 0",
+    "collectionRoyaltiesFees": "Royalty fee must be a number between 0 and 100",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
     "collectionSymbolRequired": "Please enter Collection symbol",
     "collectionTypeRequired": "Please select Collection type",
@@ -1284,6 +1297,7 @@
     "expirationDate": "Date is expired",
     "expirationDateRequired": "Please enter expiration date",
     "fileNoData": "The file is empty or has no data",
+    "fileTypeNotAllow": "File \"{name}\" can't be uploaded here. Please use hosting service.",
     "fileTypeNotCsv": "File must be of type CSV",
     "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",

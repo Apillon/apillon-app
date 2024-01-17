@@ -146,7 +146,7 @@ async function createService() {
   };
 
   try {
-    await $api.post<ServiceResponse>(endpoints.services(), bodyData);
+    const res = await $api.post<ServiceResponse>(endpoints.services(), bodyData);
 
     const msg = $i18n.te(`form.success.created.${ServiceTypeNames[props.serviceType]}`)
       ? $i18n.t(`form.success.created.${ServiceTypeNames[props.serviceType]}`)
@@ -155,10 +155,13 @@ async function createService() {
 
     /** On new service created add new item to list */
     dataStore.services = await dataStore.fetchServices();
+    const createdService = dataStore.services.find(
+      item => item.service_uuid === res.data.service_uuid
+    );
 
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess');
+    emit('createSuccess', createdService);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

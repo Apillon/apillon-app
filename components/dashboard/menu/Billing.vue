@@ -15,13 +15,8 @@ const menuOptions: NMenuOption[] = [
   },
   {
     key: 'dashboard-billing',
-    label: t('dashboard.pageMenu.billing'),
+    label: t('dashboard.pageMenu.credits'),
     to: 'dashboard-billing',
-  },
-  {
-    key: 'dashboard-usage',
-    label: t('dashboard.pageMenu.usage'),
-    to: 'dashboard-usage',
   },
   {
     key: 'dashboard-price-list',

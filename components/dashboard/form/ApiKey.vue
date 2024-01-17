@@ -5,16 +5,11 @@
     ref="formRef"
     :model="formData"
     :rules="rules"
-    :disabled="!dataStore.isUserOwner"
+    :disabled="dataStore.isProjectUser"
     @submit.prevent="handleSubmit"
   >
     <!--  Service name -->
-    <n-form-item
-      path="name"
-      class="mb-4 border-b border-bg-lighter"
-      :label="$t('form.label.apiKeyName')"
-      :label-props="{ for: 'name' }"
-    >
+    <n-form-item path="name" :label="$t('form.label.apiKeyName')" :label-props="{ for: 'name' }">
       <n-input
         v-model:value="formData.name"
         :input-props="{ id: 'name' }"
@@ -26,8 +21,9 @@
 
     <!-- Permissions per service -->
     <n-collapse
+      v-if="formData.roles && formData.roles.length"
       class="collapse-permissions"
-      :default-expanded-names="expandedPermissions"
+      :expanded-names="expandedPermissions"
       @item-header-click="handleItemHeaderClick"
     >
       <!-- Active services -->
@@ -41,10 +37,7 @@
           <span :class="`icon-${service.serviceType.toLocaleLowerCase()}`"></span>
         </template>
         <template #header-extra>
-          <n-switch
-            v-model:value="service.enabled"
-            @update:value="removeServicePermissions(service)"
-          />
+          <n-switch v-model:value="service.enabled" class="pointer-events-none" />
         </template>
 
         <n-grid :cols="2">
@@ -66,8 +59,14 @@
           </n-form-item-gi>
         </n-grid>
       </n-collapse-item>
+    </n-collapse>
 
-      <!-- Unused services  -->
+    <!-- Unused services  -->
+    <n-collapse
+      v-if="unusedServices && unusedServices.length"
+      class="collapse-permissions unused"
+      :expanded-names="expandedUnused"
+    >
       <n-collapse-item
         v-for="serviceType in unusedServices"
         :key="serviceType.id"
@@ -76,12 +75,6 @@
       >
         <template #arrow>
           <span :class="`icon-${serviceType.name.toLocaleLowerCase()}`"></span>
-        </template>
-        <template #header-extra>
-          <n-switch
-            v-model:value="serviceType.enabled"
-            @update:value="serviceType.enabled = !serviceType.enabled"
-          />
         </template>
 
         <FormService
@@ -101,7 +94,7 @@
         type="secondary"
         class="w-full mt-8"
         :loading="loading"
-        :disabled="!dataStore.isUserOwner"
+        :disabled="dataStore.isProjectUser"
         @click="handleSubmit"
       >
         {{ $t('form.generate') }}
@@ -228,30 +221,53 @@ const rules: NFormRules = {
   ],
 };
 
-const expandedPermissions = computed(() => {
+const createExpandedPermissions = () => {
   if (props.id === 0) {
     return null;
   }
   return roles.value.filter(role => role.enabled).map(item => item.service_uuid);
+};
+const expandedPermissions = ref<string | number | Array<string | number> | null>(null);
+
+const expandedUnused = computed(() => {
+  return unusedServices.value.map(item => item.name);
 });
 
-const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expanded }) => {
+const handleItemHeaderClick = ({ name, expanded }) => {
   /* If service was collapsed, than deactivate all permissions  */
   const service = formData.value.roles.find(item => item.service_uuid === name);
   const serviceType = unusedServices.value.find(item => item.name === name);
+
+  updateExpanded(name, expanded);
+
   if (service) {
     service.enabled = !service.enabled;
 
     /** Toggle checkboxes if user is creating new API key */
-    if (props.id === 0 || !expanded) {
-      service.permissions.forEach(permission => {
-        permission.value = expanded;
-      });
+    service.permissions.forEach(permission => {
+      permission.value = expanded;
+    });
+    if (props.id > 0 && expanded) {
+      addAllPermissions(name);
+    } else if (props.id > 0) {
+      removeServicePermissions(service);
     }
   } else if (serviceType) {
     serviceType.enabled = !serviceType.enabled;
   }
 };
+
+function updateExpanded(name: string, expanded: boolean) {
+  if (Array.isArray(expandedPermissions.value) && expanded) {
+    expandedPermissions.value.push(name);
+  } else if (Array.isArray(expandedPermissions.value)) {
+    expandedPermissions.value = expandedPermissions.value.filter(item => item !== name);
+  } else if (expanded) {
+    expandedPermissions.value = [name];
+  } else {
+    expandedPermissions.value = null;
+  }
+}
 
 /** Load roles and show permissions */
 onMounted(async () => {
@@ -262,6 +278,8 @@ onMounted(async () => {
     formData.value.name = apiKey.value.name;
     formData.value.apiKeyType = apiKey.value.testNetwork === 1;
     formData.value.roles = roles.value;
+
+    expandedPermissions.value = createExpandedPermissions();
   }
 
   loading.value = false;
@@ -390,7 +408,17 @@ function updatePermission(serviceUuid: string, roleId: number, value: boolean) {
   }
 }
 
-async function addPermission(serviceUuid: string, roleId: number) {
+async function addAllPermissions(serviceUuid: string) {
+  await Promise.all([
+    addPermission(serviceUuid, ApiKeyRole.EXECUTE, false),
+    addPermission(serviceUuid, ApiKeyRole.READ, false),
+    addPermission(serviceUuid, ApiKeyRole.WRITE, false),
+  ]).then(() => {
+    message.success($i18n.t('form.success.updated.apiKeyRoles'));
+  });
+}
+
+async function addPermission(serviceUuid: string, roleId: number, showMsg = true) {
   const projectUuid = dataStore.projectUuid;
   try {
     await $api.post<ApiKeyRoleUpdateResponse>(endpoints.apiKeyRole(props.id), {
@@ -399,7 +427,9 @@ async function addPermission(serviceUuid: string, roleId: number) {
       role_id: roleId,
     });
 
-    message.success($i18n.t('form.success.updated.apiKeyRole'));
+    if (showMsg) {
+      message.success($i18n.t('form.success.updated.apiKeyRole'));
+    }
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -422,8 +452,7 @@ async function removePermission(serviceUuid: string, roleId: number) {
 
 async function removeServicePermissions(service: ApiKeyRoleForm) {
   const projectUuid = dataStore.projectUuid || '';
-  service.enabled = !service.enabled;
-  if (!service.enabled || props.id === 0) return;
+  if (props.id === 0) return;
 
   // If toggle off, remove all active roles for this service type
   try {
@@ -439,8 +468,12 @@ async function removeServicePermissions(service: ApiKeyRoleForm) {
   }
 }
 
-function onServiceCreated() {
+function onServiceCreated(service: ServiceInterface) {
   formData.value.roles = roles.value;
+
+  if (service && service.active) {
+    handleItemHeaderClick({ name: service.service_uuid, expanded: true });
+  }
 }
 
 /* Check if user can create this service */

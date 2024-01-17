@@ -13,7 +13,7 @@
     </template>
     <slot>
       <!-- Invoices -->
-      <h4 class="mt-12 mb-6">{{ $t('dashboard.invoice.invoices') }}</h4>
+      <h4 class="mb-6">{{ $t('dashboard.invoice.invoices') }}</h4>
       <TablePaymentInvoices />
 
       <!-- Credit Transactions -->

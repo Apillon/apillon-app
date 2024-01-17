@@ -253,26 +253,12 @@ export const useBucketStore = defineStore('bucket', {
 
       try {
         /** If subfolder is selected, search directory content in this subfolder */
-        const params: Record<string, string | number> = {
-          bucket_uuid: bucket,
-        };
+        const params = parseArguments(arg);
+        params.bucket_uuid = bucket;
 
         /** Add additional parameters */
         if (this.folder.selected) {
           params.directory_uuid = this.folder.selected;
-        }
-        if (arg.search) {
-          params.search = arg.search;
-        }
-        if (arg.page) {
-          params.page = arg.page;
-          params.limit = arg.limit || PAGINATION_LIMIT;
-        }
-        if (arg.orderBy) {
-          params.orderBy = arg.orderBy;
-        }
-        if (arg.order) {
-          params.desc = arg.order === 'descend' ? 'true' : 'false';
         }
         if (arg.markedForDeletion) {
           params.markedForDeletion = arg.markedForDeletion ? 1 : 0;
