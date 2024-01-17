@@ -121,14 +121,14 @@
       "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
       "enterDesiredPassword": "Enter a password to finish creating the account.",
       "madeMistake": "Made a mistake?",
-      "newsletter": "I would like to receive emails about product updates, new feature releases, how-to guides and other platform related content.",
+      "newsletter": "I would like to receive product updates, new feature releases, how-to guides and other platform-related content.",
       "orUseEmail": "or sign up using email",
       "sendAgain": "Send again",
       "title": "Build your first Web3 project",
       "withEmail": "sign up with email"
     },
     "terms": {
-      "accept": "You must accept the ",
+      "accept": "I have read and agree to ",
       "acceptEnd": " before creating an account.",
       "agree": "I have read and agree to ",
       "and": " and ",

@@ -121,9 +121,15 @@ const termsLabel = computed<any>(() => {
     h(
       'a',
       { href: 'https://apillon.io/legal-disclaimer', target: '_blank' },
-      { default: () => $i18n.t('auth.terms.terms') }
+      { default: () => $i18n.t('auth.terms.tc') }
     ),
-    $i18n.t('auth.terms.acceptEnd'),
+    $i18n.t('auth.terms.and'),
+    h(
+      'a',
+      { href: 'https://apillon.io/privacy-policy', target: '_blank' },
+      { default: () => $i18n.t('auth.terms.pp') }
+    ),
+    '.',
   ]);
 });
 
