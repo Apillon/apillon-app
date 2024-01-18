@@ -56,6 +56,6 @@
     "vue-cookie-accept-decline": "^6.1.0",
     "vue-papa-parse": "^3.1.0",
     "vue-tweet": "^2.0.2",
-    "vue3-ts-jsoneditor": "^2.9.0"
+    "vue3-code-block": "^2.2.14"
   }
 }

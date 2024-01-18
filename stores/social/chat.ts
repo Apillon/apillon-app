@@ -1,14 +1,4 @@
 import { defineStore } from 'pinia';
-import type { GrillConfig } from '@subsocial/grill-widget';
-
-/** Grill chat */
-export const generateSpaceSettings = (spaceId: string): GrillConfig => {
-  return {
-    theme: 'dark',
-    widgetElementId: 'grill',
-    hub: { id: spaceId },
-  };
-};
 
 export const useChatStore = defineStore('chat', {
   state: () => ({
@@ -16,7 +6,6 @@ export const useChatStore = defineStore('chat', {
     items: [] as ChatInterface[],
     loading: false,
     search: '',
-    settings: null as any,
     pagination: {
       page: 1,
       pageSize: PAGINATION_LIMIT,

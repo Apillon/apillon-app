@@ -5,6 +5,7 @@
     :columns="columns"
     :data="postStore.items"
     :loading="postStore.loading"
+    :expanded-row-keys="expandedRows"
     :pagination="chatStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
@@ -29,6 +30,7 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
   return [
     {
       type: 'expand',
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
       renderExpand(row: PostInterface) {
         if (chatStore.active.spaceId && row.postId) {
           return h(
@@ -106,9 +108,11 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
     },
   ];
 };
+
 const columns = createColumns();
 const rowKey = (row: PostInterface) => row.post_uuid;
 const currentRow = ref<PostInterface | null>(null);
+const expandedRows = ref<Array<string | number>>([]);
 
 const rowClassName = (row: PostInterface) => {
   return currentRow.value && currentRow.value?.post_uuid === row.post_uuid ? 'selected-row' : '';
@@ -137,7 +141,6 @@ const dropdownOptions = computed(() => {
       label: t('social.post.select'),
       props: {
         onClick: () => {
-          console.log('select post', currentRow.value);
           selectPost();
         },
       },
@@ -149,7 +152,7 @@ onMounted(() => {
   const spaceId = chatStore.active.spaceId;
 
   if (spaceId) {
-    postStore.settings = generateSpaceSettings(`${spaceId}`);
+    postStore.updateSettings(`${spaceId}`);
   }
 });
 
@@ -173,7 +176,9 @@ async function selectPost() {
   const spaceId = chatStore.active.spaceId;
 
   if (spaceId && currentRow?.value) {
-    postStore.settings = generateGrillSettings(`${spaceId}`, `${currentRow.value.postId}`);
+    postStore.updateSettings(`${spaceId}`, `${currentRow.value.postId}`);
   }
+  /** Expand selected row */
+  expandedRows.value = [currentRow?.value?.post_uuid || ''];
 }
 </script>

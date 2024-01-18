@@ -73,16 +73,9 @@ function checkUnfinishedPost() {
 
   postInterval = setInterval(async () => {
     const posts = await postStore.fetchPosts(chatUuid.value, postStore.pagination.page, false);
-    console.log(chatUuid.value);
-    console.log(posts);
     const post = posts.find(item => item.post_uuid === unfinishedPost.post_uuid);
     if (!post || post.status >= SocialStatus.ACTIVE) {
       clearInterval(postInterval);
-
-      const spaceId = chatStore.active.spaceId;
-      if (post && !postStore.settings) {
-        postStore.settings = generateGrillSettings(`${spaceId}`, `${post.postId}`);
-      }
     }
   }, 30000);
 }

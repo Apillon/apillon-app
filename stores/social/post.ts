@@ -1,31 +1,13 @@
 import { defineStore } from 'pinia';
 import type { GrillConfig } from '@subsocial/grill-widget';
 
-/** Grill chat */
-export const generateGrillSettings = (spaceId: string, postId: string): GrillConfig => {
-  return {
-    theme: 'dark',
-    widgetElementId: 'grill',
-    hub: { id: spaceId },
-    channel: {
-      type: 'channel',
-      id: postId,
-      settings: {
-        enableBackButton: true,
-        enableLoginButton: true,
-        enableInputAutofocus: true,
-      },
-    },
-  };
-};
-
 export const usePostStore = defineStore('post', {
   state: () => ({
     active: {} as PostInterface,
     items: [] as PostInterface[],
     loading: false,
     search: '',
-    settings: null as any,
+    settings: null as GrillConfig,
     pagination: {
       page: 1,
       pageSize: PAGINATION_LIMIT,
@@ -46,6 +28,29 @@ export const usePostStore = defineStore('post', {
       this.pagination.page = 1;
       this.pagination.itemCount = 0;
       this.search = '';
+    },
+
+    updateSettings(spaceId: string, postId?: string) {
+      this.settings = postId
+        ? {
+            theme: 'dark',
+            widgetElementId: 'grill',
+            hub: { id: spaceId },
+            channel: {
+              type: 'channel',
+              id: postId,
+              settings: {
+                enableBackButton: true,
+                enableLoginButton: true,
+                enableInputAutofocus: true,
+              },
+            },
+          }
+        : {
+            theme: 'dark',
+            widgetElementId: 'grill',
+            hub: { id: spaceId },
+          };
     },
 
     /**

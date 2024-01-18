@@ -1277,11 +1277,12 @@
       "createFirst": "Create first hub",
       "date": "Create time",
       "dragAndDrop": "Drag & drop or click to upload.",
-      "empty": "Create your first hub",
-      "emptyInfo": "Add it to your Web3 project",
+      "empty": "A chat application built on top of the Subsocial blockchain 🔗.",
+      "emptyInfo": "Grill.chat offers a smooth and simple onboarding and user experience while still leveraging the power of blockchain technology.",
       "name": "Hub name",
       "new": "New hub",
-      "settings": "Hub settings",
+      "settings": "Grill.chat hub config",
+      "showSettings": "Show hub settings",
       "spaceId": "Hub ID",
       "tags": "Tags",
       "title": "Hub title",
@@ -1294,11 +1295,17 @@
       "date": "Created",
       "new": "New channel",
       "postId": "Channel ID",
-      "select": "Select chat",
-      "settings": "Grill Chat settings",
+      "select": "Select channel",
+      "settings": "Grill.chat channel config",
       "tags": "Tags",
       "title": "Channel title",
       "uuid": "Channel UUID"
+    },
+    "settings": {
+      "autofocus": "Enable input autofocus",
+      "back": "Enable back button",
+      "login": "Enable login button",
+      "theme": "Dark theme"
     },
     "title": "Social"
   },
@@ -1567,6 +1574,10 @@
     },
     "nft": {
       "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world."
+    },
+    "social": {
+      "info": "Subsocial is a set of Substrate pallets that allows anyone to launch their own decentralized social network or community, or add social features to an existing application. Subsocial is not a decentralized social network, like Twitter or Facebook, but rather Subsocial is a platform for building social networks.",
+      "grillChat": " is a mobile-friendly, anonymous chat application powered by Subsocial, allowing anyone to communicate on-chain, without needing a wallet or tokens!"
     }
   }
 }

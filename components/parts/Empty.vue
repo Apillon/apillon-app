@@ -1,10 +1,10 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center px-6 py-4"
+    class="flex flex-col items-center justify-center px-6 py-4 mx-auto md:max-w-2xl"
     style="min-height: calc(100dvh - 270px)"
   >
-    <div v-if="icon" class="mb-4">
-      <NuxtIcon :name="icon" class="icon-auto" filled />
+    <div v-if="icon" class="mb-8">
+      <NuxtIcon :name="icon" class="icon-auto w-full max-w-xs" filled />
     </div>
     <div class="mb-10 text-center">
       <h3 v-if="title" class="font-bold">{{ title }}</h3>

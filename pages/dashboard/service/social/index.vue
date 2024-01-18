@@ -8,7 +8,10 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <IconInfo v-if="$i18n.te('w3Warn.social.new')" @click="modalW3WarnVisible = true" />
+            <IconInfo
+              v-if="$i18n.te('w3Warn.social.info') || $i18n.te('w3Warn.social.grillChat')"
+              @click="modalW3WarnVisible = true"
+            />
           </n-space>
         </template>
       </Heading>
@@ -22,15 +25,19 @@
         v-else
         :title="$t('social.chat.empty')"
         :info="$t('social.chat.emptyInfo')"
-        icon="storage/empty"
+        icon="logo/grill-chat"
       >
-        <Btn type="primary" @click="showModalCreateChat()">
+        <Btn type="primary" @click="modalCreateChatVisible = true">
           {{ $t('social.chat.createFirst') }}
         </Btn>
       </Empty>
 
-      <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
-        {{ $t('w3Warn.chat.new') }}
+      <W3Warn v-model:show="modalW3WarnVisible">
+        <p>{{ $t('w3Warn.social.info') }}</p>
+        <p>
+          <Btn type="link" href="https://grill.chat/">Grill.chat</Btn>
+          {{ $t('w3Warn.social.grillChat') }}
+        </p>
       </W3Warn>
 
       <!-- Modal - Create Chat -->
@@ -73,22 +80,6 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(chatInterval);
 });
-
-function showModalCreateChat() {
-  if (localStorage.getItem(LsW3WarnKeys.CONTRACT_NEW) || !$i18n.te('w3Warn.chat.new')) {
-    modalCreateChatVisible.value = true;
-  } else {
-    modalW3WarnVisible.value = true;
-    modalCreateChatVisible.value = null;
-  }
-}
-
-/** When user close W3Warn, allow him to create new bucket */
-function onModalW3WarnHide() {
-  if (modalCreateChatVisible.value !== false) {
-    modalCreateChatVisible.value = true;
-  }
-}
 
 /** Chat polling */
 function checkUnfinishedChat() {
