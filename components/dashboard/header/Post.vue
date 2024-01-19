@@ -22,7 +22,9 @@
     </slot>
     <template #info>
       <n-space :size="32" align="center">
-        <IconInfo v-if="chatStore.active.spaceId" @click="modalInfoVisible = true" />
+        <n-button v-if="chatStore.active.spaceId" size="small" @click="modalInfoVisible = true">
+          <span class="text-primary"> {{ $t('social.chat.showSettings') }}</span>
+        </n-button>
       </n-space>
     </template>
   </Heading>
