@@ -70,34 +70,40 @@
         ref="footerRef"
         class="relative flex border-t border-bg-lighter flex-col p-8"
       >
-        <div :class="{ 'opacity-0': paymentStore.loading }">
-          <div class="mb-3">
+        <div class="flex items-end" :class="{ 'opacity-0': paymentStore.loading }">
+          <div class="w-1/2">
             <span class="text-xs text-bodyDark">{{ $t('dashboard.payment.currentPlan') }}</span>
             <strong class="block">
               {{ paymentStore.getActiveSubscriptionPackage?.name }}
             </strong>
-            <span class="text-sm text-body">
+          </div>
+          <div v-if="!dataStore.isProjectUser" class="w-1/2">
+            <span class="text-xs text-bodyDark">
               {{ $t('dashboard.payment.costs') }}:
               {{ formatPrice(paymentStore.getActiveSubscriptionPackage?.price || 0) }}/{{
                 $t('general.month')
               }}
             </span>
-          </div>
-          <template v-if="!dataStore.isProjectUser">
             <PaymentCardCurrentPlan
               v-if="route.name === 'dashboard-payments'"
               :show-card="false"
-              btn-type="secondary"
+              btn-class="font-bold no-underline"
+              btn-type="link"
             />
             <Btn
               v-else
-              type="secondary"
-              size="large"
+              class="font-bold no-underline"
+              type="link"
               @click="router.push({ name: 'dashboard-payments' })"
             >
-              {{ $t('dashboard.payment.upgradePlan') }}
+              <template v-if="paymentStore.hasActiveSubscription">
+                {{ $t('dashboard.payment.managePlan') }}
+              </template>
+              <template v-else>
+                {{ $t('dashboard.payment.upgradePlan') }}
+              </template>
             </Btn>
-          </template>
+          </div>
         </div>
         <Spinner v-if="paymentStore.loading" />
       </div>
