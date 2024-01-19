@@ -117,8 +117,8 @@
         <FormService
           class="mt-4 pr-4 sm:pr-8 min-w-[13rem]"
           :service-type="ServiceType.AUTHENTICATION"
-          :default-service-name="$t('service.authentication.emptyBtn')"
-          :btn-text="$t('service.authentication.serviceName')"
+          :default-service-name="$t('service.authentication.serviceName')"
+          :btn-text="$t('service.authentication.emptyBtn')"
         />
       </Empty>
     </slot>
