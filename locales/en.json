@@ -1244,8 +1244,7 @@
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum.",
       "emptyTitle": "Your project does not have Authentication service yet",
       "emptyInfo": "Add Web3 Authentication and create an API key.",
-      "emptyBtn": "Attach Web3 Auth",
-      "serviceName": "Authentication service"
+      "emptyBtn": "Attach Web3 Auth"
     },
     "storage": {
       "name": "Storage",
