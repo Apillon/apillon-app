@@ -116,7 +116,7 @@ watch(
       }, 1000);
     }
     /** Fetch selected project data(get myRole_id_onProject)  */
-    await dataStore.fetchProject();
+    await dataStore.fetchProject(projectUuid);
 
     /** Refresh credits */
     paymentStore.fetchCredits();
