@@ -117,7 +117,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage, type CollapseProps } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 
 /**
  * API key - Form
@@ -316,6 +316,7 @@ function handleSubmit(e: Event | MouseEvent) {
     }
   });
 }
+
 async function createApiKey() {
   loading.value = true;
 
@@ -381,7 +382,15 @@ async function updateApiKey() {
 function isPermissionEnabled(serviceUuid: string, roleId: number) {
   /** Default value for new API key */
   if (props.id === 0) {
-    return false;
+    if (!roles.value) return false;
+
+    const serviceRoles = roles.value.find(role => role.service_uuid === serviceUuid);
+    if (serviceRoles) {
+      const permission = serviceRoles.permissions.find(role => role.key === roleId);
+      return permission ? permission.value : false;
+    } else {
+      return false;
+    }
   }
 
   const projectUuid = dataStore.projectUuid;

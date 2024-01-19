@@ -8,7 +8,7 @@
 
   <!-- Drawer - Update API Key -->
   <n-drawer v-model:show="drawerUpdateApiKeyVisible" :width="495">
-    <n-drawer-content>
+    <n-drawer-content :native-scrollbar="false">
       <template #header>
         <h5>{{ $t('dashboard.apiKey.update') }}</h5>
       </template>
