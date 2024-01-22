@@ -1,7 +1,9 @@
 <template>
   <Dashboard :loading="pageLoading" :learn-collapsible="false">
     <template #heading>
-      <HeaderPost />
+      <div ref="headingRef">
+        <HeaderPost />
+      </div>
     </template>
 
     <slot>
@@ -35,7 +37,7 @@ useHead({
 
 const scrollStyle = computed(() => {
   return {
-    height: `calc(100vh - ${157 + (headingRef.value?.clientHeight || 0)}px)`,
+    height: `calc(100dvh - ${120 + (headingRef.value?.clientHeight || 73)}px)`,
   };
 });
 
