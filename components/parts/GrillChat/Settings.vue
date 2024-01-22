@@ -69,16 +69,15 @@ yarn add @subsocial/grill-widget
 // 2. Add the div HTML tag with an id of grill to your app.
 <div id="grill"></div>
 
-// 3. Call grill.init(config).
+// 3. Setup config
+const config = ${JSON.stringify(settings.value, null, 2)}
 
+// 4. Call grill.init(config).
   // a. Using as a JS/TS module
 import grill from '@subsocial/grill-widget'    
-
-const config = ${JSON.stringify(settings.value, null, 2)}
 grill.init(config)
 
-  b) Use as a global variable (CDN)
-const config = ${JSON.stringify(settings.value, null, 2)}
+  // b) Use as a global variable (CDN)
 window.GRILL.init(config)`;
 });
 

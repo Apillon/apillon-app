@@ -174,11 +174,12 @@ async function handlePageChange(page: number) {
 
 async function selectPost() {
   const spaceId = chatStore.active.spaceId;
+  const postId = currentRow.value?.post_uuid || '';
 
   if (spaceId && currentRow?.value) {
-    postStore.updateSettings(`${spaceId}`, `${currentRow.value.postId}`);
+    postStore.updateSettings(`${spaceId}`, postId);
   }
   /** Expand selected row */
-  expandedRows.value = [currentRow?.value?.post_uuid || ''];
+  expandedRows.value = expandedRows.value.includes(postId) ? [] : [postId];
 }
 </script>

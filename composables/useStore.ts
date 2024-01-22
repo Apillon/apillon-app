@@ -2,6 +2,8 @@ export default function useStore() {
   const dataStore = useDataStore();
   const storageStore = useStorageStore();
   const bucketStore = useBucketStore();
+  const chatStore = useChatStore();
+  const postStore = usePostStore();
   const fileStore = useFileStore();
   const ipfsStore = useIpfsStore();
   const ipnsStore = useIpnsStore();
@@ -17,6 +19,7 @@ export default function useStore() {
     clearCollection();
     clearPayments();
     clearSettings();
+    clearSocial();
   }
 
   function clearStorage() {
@@ -44,6 +47,11 @@ export default function useStore() {
 
   function clearSettings() {
     settingsStore.resetData();
+  }
+
+  function clearSocial() {
+    chatStore.resetData();
+    postStore.resetData();
   }
 
   return {
