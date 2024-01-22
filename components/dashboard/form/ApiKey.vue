@@ -168,7 +168,7 @@ const createdApiKey = ref<ApiKeyCreatedInterface>({} as ApiKeyCreatedInterface);
 const roles = computed(() => {
   return dataStore.services.map(service => {
     return {
-      enabled: props.id > 0 && isAnyPermissionEnabled(service),
+      enabled: isAnyPermissionEnabled(service),
       name: service.name,
       serviceType: service.serviceType,
       service_uuid: service.service_uuid,
