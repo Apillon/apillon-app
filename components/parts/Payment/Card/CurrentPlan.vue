@@ -51,7 +51,7 @@
           </template>
         </Btn>
         <Btn
-          v-if="isCaterpillarActive"
+          v-if="paymentStore.hasActiveSubscription"
           type="primary"
           :color="colors.blue"
           :loading="loading"
@@ -109,15 +109,6 @@ const paymentStore = usePaymentStore();
 const { loading, goToCustomerPortal } = usePayment();
 
 const modalSubscriptionPackagesVisible = ref<boolean>(false);
-
-const isCaterpillarActive = computed(
-  () =>
-    paymentStore.hasActiveSubscription &&
-    paymentStore.activeSubscription.package_id === caterpillarPackageId()
-);
-
-const caterpillarPackageId = () =>
-  paymentStore.subscriptionPackages.find(item => item.name === 'Caterpillar')?.id || 2;
 
 const pricingPlans: Record<string, PricingPlan> = {
   Freemium: {
