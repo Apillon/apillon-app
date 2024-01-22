@@ -215,6 +215,9 @@ const Endpoints = {
   contractTransferOwnership: (uuid: string) => {
     return `/computing/contracts/${uuid}/transfer-ownership`;
   },
+  contractTransactions: (contractUuid: string) => {
+    return `/computing/contracts/${contractUuid}/transactions`;
+  },
 
   /**
    * Project settings

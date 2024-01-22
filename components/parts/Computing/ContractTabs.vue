@@ -1,5 +1,10 @@
 <template>
-  <n-tabs ref="encryptTabRef" v-model:value="contractStore.encryptTab" type="segment" animated>
+  <n-tabs
+    ref="encryptTabRef"
+    v-model:value="contractStore.encryptTab"
+    class="types-hidden"
+    animated
+  >
     <n-tab-pane :name="EncryptTab.BUCKET">
       <template #tab>
         <IconNumber

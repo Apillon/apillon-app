@@ -54,4 +54,21 @@ declare global {
 
   interface ContractResponse extends GeneralResponse<ContractInterface> {}
   interface ContractsResponse extends GeneralItemsResponse<ContractInterface> {}
+
+  /**
+   * Transaction
+   */
+  interface ComputingTransactionInterface {
+    id: number;
+    status: number;
+    chainId: number;
+    transactionType: number;
+    refTable: string;
+    refId: number;
+    transactionStatus: number;
+    transactionHash: string | null;
+  }
+
+  interface ComputingTransactionResponse
+    extends GeneralItemsResponse<ComputingTransactionInterface> {}
 }

@@ -47,6 +47,7 @@ export const LsCacheKeys = {
   COLLECTION: 'al_cache_collection',
   COLLECTIONS: 'al_cache_collections',
   COLLECTION_TRANSACTIONS: 'al_cache_collection_transactions',
+  COMPUTING_TRANSACTIONS: 'al_cache_computing_transactions',
   CONTRACT: 'al_cache_contract',
   CONTRACTS: 'al_cache_contracts',
   CREDITS: 'al_cache_credits',

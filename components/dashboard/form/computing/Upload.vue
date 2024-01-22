@@ -85,6 +85,7 @@ async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOpti
     /**Emit events */
     emit('submitSuccess', res.data.encryptedContent);
   } catch (error) {
+    contractStore.uploading = true;
     message.error(userFriendlyMsg(error));
     onError();
   }
