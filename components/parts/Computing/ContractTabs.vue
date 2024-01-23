@@ -1,5 +1,10 @@
 <template>
-  <n-tabs ref="encryptTabRef" v-model:value="contractStore.encryptTab" type="segment" animated>
+  <n-tabs
+    ref="encryptTabRef"
+    v-model:value="contractStore.encryptTab"
+    class="types-hidden"
+    animated
+  >
     <n-tab-pane :name="EncryptTab.BUCKET">
       <template #tab>
         <IconNumber
@@ -56,6 +61,13 @@ const message = useMessage();
 const contractStore = useContractStore();
 
 const encryptTabRef = ref<TabsInst | null>(null);
+
+onMounted(() => {
+  if(contractStore.active.bucket_uuid){
+    contractStore.bucketUuid = contractStore.active.bucket_uuid;
+    contractStore.encryptTab = EncryptTab.UPLOAD;
+  }
+})
 
 /** Watch active tab, if information are missing, open previous tab */
 watch(

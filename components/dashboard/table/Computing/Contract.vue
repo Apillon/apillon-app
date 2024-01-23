@@ -1,27 +1,23 @@
 <template>
-  <n-space class="pb-8" :size="32" vertical>
-    <ActionsComputing />
+  <n-data-table
+    ref="tableRef"
+    v-bind="$attrs"
+    :bordered="false"
+    :columns="columns"
+    :data="data"
+    :loading="contractStore.loading"
+    :pagination="{ pageSize: PAGINATION_LIMIT }"
+    :row-key="rowKey"
+    :row-props="rowProps"
+  />
 
-    <n-data-table
-      ref="tableRef"
-      v-bind="$attrs"
-      :bordered="false"
-      :columns="columns"
-      :data="data"
-      :loading="contractStore.loading"
-      :pagination="{ pageSize: PAGINATION_LIMIT }"
-      :row-key="rowKey"
-      :row-props="rowProps"
+  <!-- Modal - Contract Transfer -->
+  <modal v-model:show="modalTransferOwnershipVisible" :title="$t('computing.contract.transfer')">
+    <FormComputingTransfer
+      :contract-uuid="currentRow.contract_uuid"
+      @submit-success="onContractTransferred"
     />
-
-    <!-- Modal - Contract Transfer -->
-    <modal v-model:show="modalTransferOwnershipVisible" :title="$t('computing.contract.transfer')">
-      <FormComputingTransfer
-        :contract-uuid="currentRow.contract_uuid"
-        @submit-success="onContractTransferred"
-      />
-    </modal>
-  </n-space>
+  </modal>
 </template>
 
 <script lang="ts" setup>
@@ -33,6 +29,8 @@ const props = defineProps({
 
 const { t } = useI18n();
 const router = useRouter();
+const authStore = useAuthStore();
+const dataStore = useDataStore();
 const contractStore = useContractStore();
 const { checkUnfinishedContract } = useComputing();
 
@@ -141,7 +139,11 @@ const rowKey = (row: ContractInterface) => row.contract_uuid;
 const currentRow = ref<ContractInterface>(props.contracts[0]);
 
 const actionsDisabled = computed<boolean>(() => {
-  return currentRow.value?.contractStatus !== ContractStatus.DEPLOYED;
+  return currentRow.value?.contractStatus !== ContractStatus.DEPLOYED || authStore.isAdmin();
+});
+
+const viewEnabled = computed<boolean>(() => {
+  return currentRow.value?.contractStatus >= ContractStatus.DEPLOYING;
 });
 
 /**
@@ -152,11 +154,23 @@ const dropdownOptions = computed(() => {
     {
       label: t('computing.contract.transfer'),
       key: 'transfer',
-      disabled: actionsDisabled.value,
+      disabled: dataStore.isProjectUser || actionsDisabled.value,
       props: {
         onClick: () => {
-          if (!actionsDisabled.value) {
+          if (!dataStore.isProjectUser && !actionsDisabled.value) {
             modalTransferOwnershipVisible.value = true;
+          }
+        },
+      },
+    },
+    {
+      label: t('general.view'),
+      key: 'view',
+      disabled: !viewEnabled.value,
+      props: {
+        onClick: () => {
+          if (viewEnabled.value) {
+            router.push({ path: `/dashboard/service/computing/${currentRow.value.contract_uuid}` });
           }
         },
       },
@@ -170,7 +184,7 @@ const rowProps = (row: ContractInterface) => {
     onClick: (e: Event) => {
       currentRow.value = row;
 
-      if (canOpenColumnCell(e.composedPath())) {
+      if (canOpenColumnCell(e.composedPath()) && viewEnabled.value) {
         router.push({ path: `/dashboard/service/computing/${row.contract_uuid}` });
       }
     },

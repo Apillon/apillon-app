@@ -14,7 +14,10 @@
       </Heading>
     </template>
     <slot>
-      <TableComputingContract v-if="contractStore.hasContracts" :contracts="contractStore.items" />
+      <n-space v-if="contractStore.hasContracts" class="pb-8" :size="32" vertical>
+        <ActionsComputingContract />
+        <TableComputingContract :contracts="contractStore.items" />
+      </n-space>
       <Empty
         v-else
         :title="$t('computing.contract.empty')"

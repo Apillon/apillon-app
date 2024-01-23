@@ -755,6 +755,10 @@ body > .n-message-container {
       }
     }
   }
+
+  &.types-hidden .n-tabs-nav {
+    @apply hidden;
+  }
 }
 
 /** Tag */

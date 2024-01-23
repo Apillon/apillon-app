@@ -1,48 +1,57 @@
 <template>
-  <n-space size="large" justify="end">
-    <!-- Actions -->
-    <n-dropdown
-      :key="contractStore.active.contractStatus"
-      placement="bottom-end"
-      trigger="click"
-      :options="options"
-      :disabled="authStore.isAdmin()"
-    >
-      <n-button size="small">
-        <span class="text-primary">{{ $t('general.actions') }}</span>
-        <div class="hidden md:flex items-center relative left-1">
-          <span class="icon-down text-2xl text-primary"></span>
-        </div>
+  <n-space v-bind="$attrs" justify="space-between">
+    <div class="w-[20vw] max-w-xs">
+      <n-input
+        v-model:value="contractStore.search"
+        type="text"
+        name="search"
+        size="small"
+        :placeholder="$t('general.search')"
+        clearable
+      >
+        <template #prefix>
+          <span class="icon-search text-2xl"></span>
+        </template>
+      </n-input>
+    </div>
+
+    <n-space size="large">
+      <!-- Refresh contracts -->
+      <n-button
+        size="small"
+        :loading="contractStore.loading"
+        @click="contractStore.fetchContracts()"
+      >
+        <span class="icon-refresh text-xl mr-2"></span>
+        {{ $t('general.refresh') }}
       </n-button>
-    </n-dropdown>
+
+      <!-- Create new contract -->
+      <n-button
+        v-if="contractStore.hasContracts"
+        size="small"
+        :disabled="authStore.isAdmin()"
+        @click="modalCreateContractVisible = true"
+      >
+        <span class="icon-create-folder text-xl text-primary mr-2"></span>
+        <span class="text-primary">{{ $t('computing.contract.new') }}</span>
+      </n-button>
+    </n-space>
   </n-space>
+
+  <!-- Modal - Create Contract -->
+  <modal v-model:show="modalCreateContractVisible" :title="$t('computing.contract.new')">
+    <FormComputingContract
+      @submit-success="modalCreateContractVisible = false"
+      @create-success="onContractCreated"
+    />
+  </modal>
 </template>
 
 <script lang="ts" setup>
-const emit = defineEmits(['transfer']);
-
-const { t } = useI18n();
 const authStore = useAuthStore();
 const contractStore = useContractStore();
+const { onContractCreated } = useComputing();
 
-const actionsDisabled = computed<boolean>(
-  () => contractStore.active?.contractStatus !== ContractStatus.DEPLOYED
-);
-
-const options = computed(() => {
-  return [
-    {
-      label: t('computing.contract.transfer'),
-      key: 'transfer',
-      disabled: actionsDisabled.value,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value) {
-            emit('transfer');
-          }
-        },
-      },
-    },
-  ];
-});
+const modalCreateContractVisible = ref<boolean>(false);
 </script>

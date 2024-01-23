@@ -114,17 +114,16 @@ declare global {
   interface CollectionsResponse extends GeneralItemsResponse<CollectionInterface> {}
 
   /**
-   * NFT
+   * Transaction
    */
-  interface TransactionInterface {
+  interface TransactionInterface extends GeneralInterface {
+    contract_id: number;
     id: number;
-    status: number;
-    chainId: number;
-    transactionType: number;
-    refTable: string;
-    refId: number;
-    transactionStatus: number;
     transactionHash: string | null;
+    transactionStatus: number;
+    transactionStatusMessage: string | null;
+    transactionType: number;
+    walletAddress: string;
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}

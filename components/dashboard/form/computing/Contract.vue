@@ -70,7 +70,23 @@
         />
       </n-form-item>
 
-      <!--  Contract NFT Contract Address -->
+      <!--  Bucket Uuid -->
+      <n-form-item
+        path="bucketUuid"
+        :label="$t('form.label.bucketName')"
+        :label-props="{ for: 'bucketUuid' }"
+      >
+        <select-options
+          v-model:value="formData.bucketUuid"
+          :options="buckets"
+          :loading="loading"
+          :placeholder="$t('general.pleaseSelect')"
+          filterable
+          clearable
+        />
+      </n-form-item>
+
+      <!--  Contract NFT Collection Address -->
       <n-form-item
         path="nftContractAddress"
         :label="labelInfo('nftContractAddress')"
@@ -85,6 +101,7 @@
           filterable
           clearable
           tag
+          @update:value="onContractChange"
         />
       </n-form-item>
 
@@ -94,12 +111,21 @@
         :label="$t('form.label.contract.nftChainRpcUrl')"
         :label-props="{ for: 'nftChainRpcUrl' }"
       >
+        <n-input
+          v-if="rpcLocked"
+          v-model:value="formData.nftChainRpcUrl"
+          :input-props="{ id: 'nftChainRpcUrl' }"
+          :placeholder="$t('form.placeholder.contract.nftChainRpcUrl')"
+          readonly
+        />
         <select-options
+          v-else
           v-model:value="formData.nftChainRpcUrl"
           :options="nftChainRpcUrls"
           :input-props="{ id: 'nftChainRpcUrl' }"
           :placeholder="$t('form.placeholder.contract.nftChainRpcUrl')"
           autocomplete="off"
+          :readonly="rpcLocked"
           filterable
           clearable
           tag
@@ -148,6 +174,7 @@
 type FormContract = {
   name: string;
   description?: string;
+  bucketUuid: string | null;
   nftContractAddress: string | null;
   nftChainRpcUrl: string | null;
   contractType: number | null;
@@ -162,13 +189,15 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const contractStore = useContractStore();
 const collectionStore = useCollectionStore();
 const { booleanSelect } = useCollection();
 
-const loading = ref(false);
+const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const contract = ref<ContractInterface | null>(null);
+const rpcLocked = ref<boolean>(false);
 
 const contractTypes = ref<NSelectOption[]>(
   enumValues(ComputingContractType).map(value => {
@@ -178,6 +207,12 @@ const contractTypes = ref<NSelectOption[]>(
     };
   })
 );
+
+const buckets = computed<Array<NSelectOption>>(() => {
+  return bucketStore.items.map(item => {
+    return { label: item.name, value: item.bucket_uuid };
+  });
+});
 
 const contractAddresses = computed(() => {
   return collectionStore.items
@@ -190,25 +225,23 @@ const contractAddresses = computed(() => {
     });
 });
 
-const nftChainRpcUrls = ref<NSelectOption[]>([
-  {
-    value: 'https://phala-rpc.dwellir.com',
-    label: 'https://phala-rpc.dwellir.com',
-  },
-  {
-    value: 'wss://phala-rpc.dwellir.com',
-    label: 'wss://phala-rpc.dwellir.com',
-  },
-  {
-    value: 'phala-rpc.dwellir.com/79027370-1f5f-4c4f-88c0-f5a68742e247',
-    label: 'phala-rpc.dwellir.com/79027370-1f5f-4c4f-88c0-f5a68742e247',
-  },
-]);
+const rpc: Record<number, string> = {
+  [Chains.ASTAR]: 'https://evm.astar.network',
+  [Chains.MOONBASE]: 'https://rpc.api.moonbase.moonbeam.network',
+  [Chains.MOONBEAM]: 'https://rpc.api.moonbeam.network',
+};
+
+const nftChainRpcUrls = ref<NSelectOption[]>(
+  Object.values(rpc).map(value => {
+    return { value, label: value };
+  })
+);
 
 const formData = ref<FormContract>({
   name: '',
   description: '',
   contractType: ComputingContractType.SCHRODINGER,
+  bucketUuid: null,
   nftContractAddress: null,
   nftChainRpcUrl: null,
   restrictToOwner: false,
@@ -217,12 +250,14 @@ const formData = ref<FormContract>({
 const rules: NFormRules = {
   name: [ruleRequired($i18n.t('validation.contract.nameRequired'))],
   description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  bucketUuid: [ruleRequired($i18n.t('validation.contract.bucketUuidRequired'))],
   nftContractAddress: [ruleRequired($i18n.t('validation.contract.addressRequired'))],
 };
 
 onMounted(async () => {
-  /** Get list of NFT collections to show them in dropdown */
+  /** Get list of NFT collections and buckets */
   collectionStore.getCollections();
+  bucketStore.getBuckets();
 
   if (props.contractUuid) {
     contract.value = await contractStore.getContract(props.contractUuid);
@@ -327,5 +362,17 @@ async function updateContract() {
     message.error(userFriendlyMsg(error));
   }
   loading.value = false;
+}
+
+function onContractChange(contractAddress: string) {
+  const collection = collectionStore.items.find(item => item.contractAddress === contractAddress);
+
+  if (contractAddress && collection && rpc[collection.chain]) {
+    formData.value.nftChainRpcUrl = rpc[collection.chain];
+    rpcLocked.value = true;
+  } else if (!contractAddress) {
+    formData.value.nftChainRpcUrl = '';
+    rpcLocked.value = false;
+  }
 }
 </script>

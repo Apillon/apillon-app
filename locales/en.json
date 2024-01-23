@@ -171,6 +171,7 @@
       "edit": "Edit",
       "empty": "Create your first contract",
       "emptyInfo": "Add it to your Web3 project",
+      "encryptFile": "Encrypt file",
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
@@ -206,6 +207,26 @@
     "upload": {
       "dragAndDrop": "Drag & drop file",
       "upload": "Upload file"
+    },
+    "transaction": {
+      "contractId": "Chain ID",
+      "hash": "Transaction Hash",
+      "statusMessage": "Status message",
+      "transactionType": "Transaction type",
+      "status": {
+        "1": "PENDING",
+        "2": "CONFIRMED",
+        "3": "FAILED",
+        "4": "ERROR",
+        "5": "ERROR",
+        "6": "ERROR"
+      },
+      "type": {
+        "1": "DEPLOY CONTRACT",
+        "2": "TRANSFER CONTRACT OWNERSHIP",
+        "3": "DEPOSIT TO CONTRACT CLUSTER",
+        "4": "ASSIGN CID TO NFT"
+      }
     },
     "title": "Computing"
   },
@@ -1566,6 +1587,7 @@
     "websiteDomainUrl": "Domain name is not a valid URL",
     "contract": {
       "addressRequired": "Please enter Phala address",
+      "bucketUuidRequired": "Please select Bucket",
       "cidRequired": "Please enter CID",
       "depositAmountRequired": "Please enter amount",
       "depositAmountTooLow": "Please enter a higher amount (min. 0.01)",

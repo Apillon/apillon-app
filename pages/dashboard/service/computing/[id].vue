@@ -1,15 +1,14 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderContract>
-        <template #info>
-          <ActionsComputingContract @transfer="modalTransferOwnershipVisible = true" />
-        </template>
-      </HeaderContract>
+      <HeaderContract />
     </template>
 
     <slot>
-      <ComputingContractTabs class="pb-8" />
+      <n-space class="pb-8" :size="32" vertical>
+        <ActionsComputingTransaction @transfer="modalTransferOwnershipVisible = true" />
+        <TableComputingTransaction :contract-uuid="contractStore.active.contract_uuid" />
+      </n-space>
 
       <!-- Modal - Contract Transfer -->
       <modal
@@ -31,6 +30,7 @@ const { params } = useRoute();
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
+const transactionStore = useComputingTransactionStore();
 
 const pageLoading = ref<boolean>(true);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
@@ -43,17 +43,16 @@ useHead({
 });
 
 onMounted(() => {
-  contractStore.getContract(contractUuid.value);
-
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     const currentContract = await contractStore.getContract(contractUuid.value);
 
     if (!currentContract?.contract_uuid) {
-      router.push({ name: 'dashboard-service-nft' });
+      router.push({ name: 'dashboard-service-computing' });
     } else {
       contractStore.active = currentContract;
-
       pageLoading.value = false;
+
+      transactionStore.fetchTransactions(currentContract.contract_uuid);
     }
   });
 });
