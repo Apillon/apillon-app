@@ -62,6 +62,13 @@ const contractStore = useContractStore();
 
 const encryptTabRef = ref<TabsInst | null>(null);
 
+onMounted(() => {
+  if(contractStore.active.bucket_uuid){
+    contractStore.bucketUuid = contractStore.active.bucket_uuid;
+    contractStore.encryptTab = EncryptTab.UPLOAD;
+  }
+})
+
 /** Watch active tab, if information are missing, open previous tab */
 watch(
   () => contractStore.encryptTab,

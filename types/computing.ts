@@ -42,14 +42,20 @@ declare global {
   interface ContractInterface extends BaseObjectInterface {
     contract_uuid: string;
     project_uuid: string;
+    bucket_uuid: string;
     contractType: number;
     contractStatus: number;
     sourceHash: string;
-    clusterId: number;
     contractAddress: string;
     deployerAddress: string;
     transactionHash: string;
-    data: string;
+    data: {
+      clusterId: string;
+      ipfsGatewayUrl: string;
+      nftChainRpcUrl: string;
+      restrictToOwner: boolean;
+      nftContractAddress: string;
+    };
   }
 
   interface ContractResponse extends GeneralResponse<ContractInterface> {}

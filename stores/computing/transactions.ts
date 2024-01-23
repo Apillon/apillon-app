@@ -52,6 +52,7 @@ export const useComputingTransactionStore = defineStore('computingTransaction', 
       try {
         const params = parseArguments({ page, search: this.search });
         params.project_uuid = dataStore.projectUuid;
+        params.contract_uuid = contractUuid;
 
         const res = await $api.get<ComputingTransactionResponse>(
           endpoints.contractTransactions(contractUuid),
