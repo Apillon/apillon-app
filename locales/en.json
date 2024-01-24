@@ -256,6 +256,7 @@
       "amount": "Amount",
       "bonus": "Bonus credits",
       "buy": "Buy",
+      "buyWithCrypto": "Buy with Crypto",
       "available": "available",
       "category": "Category",
       "checkPrice": "Check price",

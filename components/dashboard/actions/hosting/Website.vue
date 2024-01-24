@@ -160,7 +160,7 @@
       </p>
       <div class="grid grid-cols-1 gap-8 mt-8 w-full max-w-full">
         <Btn type="secondary" @click="onModalConfirm">{{ $t('hosting.review.confirm') }}</Btn>
-        <PaymentCardCurrentPlan
+        <PaymentCardPlan
           :show-card="false"
           btn-type="primary"
           :btn-text="$t('hosting.review.upgrade')"

@@ -84,7 +84,7 @@
                 $t('general.month')
               }}
             </span>
-            <PaymentCardCurrentPlan
+            <PaymentCardPlan
               v-if="route.name === 'dashboard-payments'"
               :show-card="false"
               btn-class="font-bold no-underline"
