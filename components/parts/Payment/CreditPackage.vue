@@ -61,7 +61,7 @@
         :loading="loadingCrypto"
         @click="getCryptoSessionUrl(creditPackage.id)"
       >
-        {{ $t('dashboard.credits.buyWithCrypto') }}
+        {{ $t('dashboard.credits.buyWithDot') }}
       </Btn>
     </n-space>
   </div>
