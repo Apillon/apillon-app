@@ -2,7 +2,7 @@
   <n-upload
     class="pr-1"
     :show-file-list="false"
-    :disabled="uploadDisabled && authStore.isAdmin()"
+    :disabled="uploadDisabled || authStore.isAdmin()"
     :custom-request="encryptFile"
   >
     <n-upload-dragger class="h-40">
@@ -85,7 +85,7 @@ async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOpti
     /**Emit events */
     emit('submitSuccess', res.data.encryptedContent);
   } catch (error) {
-    contractStore.uploading = true;
+    contractStore.uploading = false;
     message.error(userFriendlyMsg(error));
     onError();
   }

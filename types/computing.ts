@@ -32,7 +32,8 @@ export enum ComputingTransactionStatus {
 export enum EncryptTab {
   BUCKET = 1,
   UPLOAD = 2,
-  ENCRYPT = 3,
+  ASSIGN = 3,
+  FINISHED = 4,
 }
 
 declare global {

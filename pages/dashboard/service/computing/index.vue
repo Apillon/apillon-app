@@ -48,7 +48,7 @@
 const $i18n = useI18n();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
-const { onContractCreated } = useComputing();
+const { onContractCreated, checkUnfinishedContracts } = useComputing();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.CONTRACT_NEW);
 
 const pageLoading = ref<boolean>(true);

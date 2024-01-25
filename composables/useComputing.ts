@@ -1,11 +1,18 @@
 export default function useCaptcha() {
   const router = useRouter();
   const contractStore = useContractStore();
+  const transactionStore = useComputingTransactionStore();
 
   let contractInterval: any = null as any;
+  let transactionInterval: any = null as any;
+
+  onUnmounted(() => {
+    clearInterval(contractInterval);
+    clearInterval(transactionInterval);
+  });
 
   /** Contract polling */
-  function checkUnfinishedContract() {
+  function checkUnfinishedContracts() {
     clearInterval(contractInterval);
 
     const unfinishedCollection = contractStore.items.find(
@@ -25,7 +32,36 @@ export default function useCaptcha() {
       if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
         clearInterval(contractInterval);
       }
-    }, 30000);
+    }, 10000);
+  }
+
+  /** Transactions polling */
+  function checkUnfinishedTransactions() {
+    clearInterval(transactionInterval);
+
+    const unfinishedTransaction = transactionStore.items.find(
+      transaction => transaction.transactionStatus < ComputingTransactionStatus.CONFIRMED
+    );
+    if (unfinishedTransaction === undefined) {
+      clearInterval(transactionInterval);
+      return;
+    }
+    const contractUuid = contractStore.active.contract_uuid;
+
+    transactionInterval = setInterval(async () => {
+      const transactions = await transactionStore.fetchTransactions(
+        contractUuid,
+        transactionStore.pagination.page,
+        false
+      );
+      const transaction = transactions.find(
+        transaction => transaction.id === unfinishedTransaction.id
+      );
+      if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
+        clearInterval(transactionInterval);
+        contractStore.active = await contractStore.fetchContract(contractUuid);
+      }
+    }, 10000);
   }
 
   function onContractCreated(contract: ContractInterface) {
@@ -33,7 +69,8 @@ export default function useCaptcha() {
   }
 
   return {
-    checkUnfinishedContract,
+    checkUnfinishedContracts,
+    checkUnfinishedTransactions,
     onContractCreated,
   };
 }

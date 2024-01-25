@@ -6,7 +6,10 @@
 
     <slot>
       <n-space class="pb-8" :size="32" vertical>
-        <ActionsComputingTransaction @transfer="modalTransferOwnershipVisible = true" />
+        <ActionsComputingTransaction
+          :show-upload="showUpload"
+          @transfer="modalTransferOwnershipVisible = true"
+        />
         <TableComputingTransaction :contract-uuid="contractStore.active.contract_uuid" />
       </n-space>
 
@@ -31,8 +34,10 @@ const $i18n = useI18n();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
 const transactionStore = useComputingTransactionStore();
+const { checkUnfinishedTransactions } = useComputing();
 
 const pageLoading = ref<boolean>(true);
+const showUpload = ref<boolean>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
 /** Contract UUID from route */
@@ -50,9 +55,11 @@ onMounted(() => {
       router.push({ name: 'dashboard-service-computing' });
     } else {
       contractStore.active = currentContract;
+      showUpload.value = currentContract.contractStatus === ContractStatus.DEPLOYED;
       pageLoading.value = false;
 
-      transactionStore.fetchTransactions(currentContract.contract_uuid);
+      await transactionStore.fetchTransactions(currentContract.contract_uuid);
+      checkUnfinishedTransactions();
     }
   });
 });

@@ -189,7 +189,10 @@
         "step1": "Choose bucket",
         "step2": "Upload & encrypt",
         "step2Info": "The file is being encrypted and uploaded to IPFS.",
-        "step3": "Assign CID"
+        "step3": "Assign CID",
+        "step4": "Finished",
+        "step4Info": "The file has been encrypted and CID has been assigned to NFT.",
+        "step4Btn": "Encrypt another file"
       },
       "status": {
         "0": "CREATED",

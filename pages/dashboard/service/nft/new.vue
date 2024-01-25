@@ -251,13 +251,13 @@ const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
 const { transactionLink } = useNft();
 const { isFormDisabled } = useCollection();
+const { loadingBucket, openBucket } = useStorage();
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),
 });
 
 const pageLoading = ref<boolean>(true);
-const loadingBucket = ref<boolean>(false);
 const modalW3WarnVisible = ref<boolean>(false);
 const mintTabsRef = ref<TabsInst | null>(null);
 const collectionCreated = ref<boolean>(false);
@@ -328,20 +328,6 @@ function goToPreviousStep() {
       return;
     default:
       collectionStore.metadataStored = null;
-  }
-}
-
-async function openBucket(bucketUuid: string) {
-  if (!bucketUuid) {
-    return;
-  }
-  loadingBucket.value = true;
-
-  const bucket = await bucketStore.fetchBucket(bucketUuid);
-  loadingBucket.value = false;
-
-  if (bucket && bucket.bucket_uuid) {
-    router.push(`/dashboard/service/storage/${bucket.bucket_uuid}`);
   }
 }
 </script>
