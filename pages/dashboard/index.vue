@@ -45,7 +45,12 @@
               <h5 class="mt-4">{{ $t('dashboard.service.storage.website') }}</h5>
             </div>
             <div class="mt-4">
-              <StorageProgress :size="10" :max-size="100" wrap />
+              <StorageProgress
+                :key="storageStore.info.usedStorage"
+                :size="storageStore.info.usedStorage"
+                :max-size="storageStore.info.availableStorage"
+                wrap
+              />
             </div>
           </div>
 
@@ -90,7 +95,12 @@
               <h5 class="mt-4">{{ $t('dashboard.service.hosting.title') }}</h5>
             </div>
             <div class="mt-4">
-              <StorageProgress :size="10" :max-size="100" wrap />
+              <StorageProgress
+                :key="storageStore.info.usedStorage"
+                :size="storageStore.info.usedStorage"
+                :max-size="storageStore.info.availableStorage"
+                wrap
+              />
             </div>
           </div>
         </div>
@@ -110,6 +120,7 @@
 const { t } = useI18n();
 const authStore = useAuthStore();
 const paymentStore = usePaymentStore();
+const storageStore = useStorageStore();
 
 useHead({
   title: t('dashboard.dashboard'),
@@ -135,5 +146,6 @@ const services = [
 
 onMounted(() => {
   paymentStore.getInvoices();
+  storageStore.getStorageInfo();
 });
 </script>
