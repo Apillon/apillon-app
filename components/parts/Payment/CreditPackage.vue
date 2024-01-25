@@ -52,7 +52,7 @@
         :loading="loading"
         @click="getCreditSessionUrl(creditPackage.id)"
       >
-        {{ $t('dashboard.credits.buy') }}
+        {{ $t('dashboard.credits.buyWithCreditCard') }}
       </Btn>
       <Btn
         type="primary"
