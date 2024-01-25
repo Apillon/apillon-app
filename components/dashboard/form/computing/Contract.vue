@@ -250,7 +250,6 @@ const formData = ref<FormContract>({
 const rules: NFormRules = {
   name: [ruleRequired($i18n.t('validation.contract.nameRequired'))],
   description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
-  bucketUuid: [ruleRequired($i18n.t('validation.contract.bucketUuidRequired'))],
   nftContractAddress: [ruleRequired($i18n.t('validation.contract.addressRequired'))],
 };
 

@@ -21,7 +21,7 @@
     </n-tab-pane>
     <n-tab-pane :name="EncryptTab.UPLOAD" :disabled="!contractStore.bucketUuid">
       <template #tab>
-        <IconSuccessful v-if="contractStore.encryptTab === EncryptTab.ENCRYPT" />
+        <IconSuccessful v-if="contractStore.encryptTab === EncryptTab.ASSIGN" />
         <IconNumber v-else :number="2" :active="contractStore.encryptTab === EncryptTab.UPLOAD" />
         <span class="ml-2">{{ $t('computing.contract.encrypt.step2') }}</span>
       </template>
@@ -34,11 +34,11 @@
       </slot>
     </n-tab-pane>
     <n-tab-pane
-      :name="EncryptTab.ENCRYPT"
+      :name="EncryptTab.ASSIGN"
       :disabled="!contractStore.bucketUuid || !contractStore.cid"
     >
       <template #tab>
-        <IconNumber :number="3" :active="contractStore.encryptTab === EncryptTab.ENCRYPT" />
+        <IconNumber :number="3" :active="contractStore.encryptTab === EncryptTab.ASSIGN" />
         <span class="ml-2">{{ $t('computing.contract.encrypt.step3') }}</span>
       </template>
       <slot>
@@ -47,7 +47,26 @@
           class="max-w-xl mx-auto my-8"
           :contract-uuid="contractStore.active.contract_uuid"
           :cid="contractStore.cid"
+          @submit-success="contractStore.encryptTab = EncryptTab.FINISHED"
         />
+      </slot>
+    </n-tab-pane>
+    <n-tab-pane
+      :name="EncryptTab.FINISHED"
+      :disabled="!contractStore.bucketUuid || !contractStore.cid"
+    >
+      <template #tab>
+        <IconNumber :number="4" :active="contractStore.encryptTab === EncryptTab.FINISHED" />
+        <span class="ml-2">{{ $t('computing.contract.encrypt.step4') }}</span>
+      </template>
+      <slot>
+        <div class="max-w-md mx-auto my-8 text-center">
+          <h4 class="mb-2">{{ $t('computing.contract.encrypt.step4') }}</h4>
+          <p class="mb-4">{{ $t('computing.contract.encrypt.step4Info') }}</p>
+          <Btn type="secondary" @click="goToFirstStep()">
+            {{ $t('computing.contract.encrypt.step4Btn') }}
+          </Btn>
+        </div>
       </slot>
     </n-tab-pane>
   </n-tabs>
@@ -57,17 +76,15 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { TabsInst } from 'naive-ui';
 
+const { t } = useI18n();
 const message = useMessage();
 const contractStore = useContractStore();
 
 const encryptTabRef = ref<TabsInst | null>(null);
 
 onMounted(() => {
-  if(contractStore.active.bucket_uuid){
-    contractStore.bucketUuid = contractStore.active.bucket_uuid;
-    contractStore.encryptTab = EncryptTab.UPLOAD;
-  }
-})
+  goToFirstStep();
+});
 
 /** Watch active tab, if information are missing, open previous tab */
 watch(
@@ -76,12 +93,19 @@ watch(
     if (tab === EncryptTab.UPLOAD && !contractStore.bucketUuid) {
       contractStore.encryptTab = EncryptTab.BUCKET;
       nextTick(() => encryptTabRef.value?.syncBarPosition());
-    } else if (tab === EncryptTab.ENCRYPT && !contractStore.cid) {
+    } else if (tab >= EncryptTab.ASSIGN && !contractStore.cid) {
       contractStore.encryptTab = EncryptTab.UPLOAD;
       nextTick(() => encryptTabRef.value?.syncBarPosition());
     }
   }
 );
+
+function goToFirstStep() {
+  if (contractStore.active.bucket_uuid) {
+    contractStore.bucketUuid = contractStore.active.bucket_uuid;
+    contractStore.encryptTab = EncryptTab.UPLOAD;
+  }
+}
 
 function onBucketSelected(bucketUuid: string) {
   contractStore.bucketUuid = bucketUuid;
@@ -98,7 +122,7 @@ async function onFileUploaded(encryptedContent: string) {
 
   if (cid) {
     contractStore.cid = cid;
-    contractStore.encryptTab = EncryptTab.ENCRYPT;
+    contractStore.encryptTab = EncryptTab.ASSIGN;
   }
 }
 
@@ -131,6 +155,10 @@ async function uploadFileToIPFS(
 
     // End session
     await $api.post(endpoints.storageFileUpload(bucketUuid, sessionUuid));
+
+    setTimeout(() => {
+      message.success(t('computing.contract.encrypt.step2Info'), { duration: 5000 });
+    }, 1000);
 
     // Start pooling file
     const uploadedFile = await getFile(bucketUuid, uploadUrl.file_uuid);

@@ -27,6 +27,17 @@
         {{ $t('computing.contract.encryptFile') }}
       </n-button>
 
+      <!-- Open Bucket -->
+      <n-button
+        v-if="contractStore.active.bucket_uuid"
+        size="small"
+        :loading="loadingBucket"
+        @click="openBucket(contractStore.active.bucket_uuid)"
+      >
+        <span class="icon-storage text-xl mr-2"></span>
+        <span>{{ $t('nft.openBucket') }}</span>
+      </n-button>
+
       <!-- Transfer contract -->
       <n-button size="small" :disabled="actionsDisabled" @click="emit('transfer')">
         {{ $t('computing.contract.transfer') }}
@@ -55,14 +66,18 @@
 <script lang="ts" setup>
 import colors from '~/tailwind.colors';
 
+const props = defineProps({
+  showUpload: { type: Boolean, default: false },
+});
 const emit = defineEmits(['transfer']);
 
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
 const transactionStore = useComputingTransactionStore();
+const { loadingBucket, openBucket } = useStorage();
 
-const uploadActive = ref<boolean>(false);
+const uploadActive = ref<boolean>(props.showUpload);
 
 const actionsDisabled = computed<boolean>(
   () =>

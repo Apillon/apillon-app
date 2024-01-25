@@ -6,6 +6,7 @@ export default function useStorage() {
   const fileStore = useFileStore();
   const ipnsStore = useIpnsStore();
   const pageLoading = ref<boolean>(true);
+  const loadingBucket = ref<boolean>(false);
 
   function initBucket(isBucketUpload: boolean = false) {
     /** Website ID from route, then load buckets */
@@ -45,8 +46,25 @@ export default function useStorage() {
     }, 10);
   }
 
+  async function openBucket(bucketUuid: string) {
+    if (!bucketUuid) {
+      return;
+    }
+    loadingBucket.value = true;
+
+    const bucket = await bucketStore.fetchBucket(bucketUuid);
+    loadingBucket.value = false;
+
+    if (bucket && bucket.bucket_uuid) {
+      router.push(`/dashboard/service/storage/${bucket.bucket_uuid}`);
+    }
+  }
+
   return {
     pageLoading,
+    loadingBucket,
+
     initBucket,
+    openBucket,
   };
 }
