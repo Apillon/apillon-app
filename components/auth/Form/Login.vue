@@ -16,7 +16,7 @@
       <n-input
         v-model:value="formData.password"
         type="password"
-        show-password-on="mousedown"
+        show-password-on="click"
         :input-props="{ autocomplete: 'off' }"
         :placeholder="$t('form.placeholder.password')"
         clearable
