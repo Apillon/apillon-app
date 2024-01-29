@@ -10,15 +10,13 @@
         <div>
           <n-space class="" align="center" size="small" :wrap="false">
             <span>{{ $t('nft.collection.contractAddress') }}:</span>
-            <n-ellipsis class="text-body align-bottom" :line-clamp="1">
-              {{ collectionStore.active.contractAddress }}
-            </n-ellipsis>
-            <button
-              class="text-body"
-              @click="copyToClipboard(collectionStore.active.contractAddress || '')"
-            >
-              <span class="icon-copy"></span>
-            </button>
+            <TableLink
+              class="text-body align-bottom"
+              :link="
+                contractLink(collectionStore.active.contractAddress, collectionStore.active.chain)
+              "
+              :text="collectionStore.active.contractAddress || ''"
+            />
           </n-space>
           <n-space class="" align="center" size="small" :wrap="false">
             <span>{{ $t('nft.collection.uuid') }}:</span>
@@ -50,5 +48,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const collectionStore = useCollectionStore();
+const { contractLink } = useNft();
+
 const modalW3WarnVisible = ref<boolean>(false);
 </script>
