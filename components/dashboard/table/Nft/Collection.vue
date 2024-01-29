@@ -21,11 +21,42 @@ const props = defineProps({
   collections: { type: Array<CollectionInterface>, default: [] },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const collectionStore = useCollectionStore();
+const { contractLink } = useNft();
+
 const NftCollectionStatus = resolveComponent('NftCollectionStatus');
 const TableEllipsis = resolveComponent('TableEllipsis');
+const TableLink = resolveComponent('TableLink');
+
+/** Available columns - show/hide column */
+const selectedColumns = ref([
+  'chain',
+  'symbol',
+  'name',
+  'type',
+  'collection_uuid',
+  'contractAddress',
+  'dropPrice',
+  'dropReserve',
+  'maxSupply',
+  'collectionStatus',
+  'dropStart',
+]);
+const availableColumns = ref([
+  { value: 'chain', label: t('nft.transaction.chain') },
+  { value: 'symbol', label: t('nft.collection.symbol') },
+  { value: 'name', label: t('nft.collection.name') },
+  { value: 'type', label: t('general.type') },
+  { value: 'collection_uuid', label: t('nft.collection.uuid') },
+  { value: 'contractAddress', label: t('nft.collection.contractAddress') },
+  { value: 'dropPrice', label: t('nft.collection.dropPrice') },
+  { value: 'dropReserve', label: t('nft.collection.dropReserve') },
+  { value: 'maxSupply', label: t('nft.collection.maxSupply') },
+  { value: 'collectionStatus', label: t('general.status') },
+  { value: 'dropStart', label: t('nft.collection.dropStart') },
+]);
 
 /** Data: filtered collections */
 const data = computed<Array<CollectionInterface>>(() => {
@@ -36,89 +67,108 @@ const data = computed<Array<CollectionInterface>>(() => {
   );
 });
 
-const createColumns = (): NDataTableColumns<CollectionInterface> => {
+const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
   return [
     {
       key: 'chain',
-      title: $i18n.t('nft.transaction.chain'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('nft.transaction.chain'),
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('chain') }],
       minWidth: 120,
       render(row: CollectionInterface) {
-        return h('span', {}, { default: () => $i18n.t(`nft.chain.${row.chain}`) });
+        return h('span', {}, { default: () => t(`nft.chain.${row.chain}`) });
       },
     },
     {
       key: 'symbol',
-      title: $i18n.t('nft.collection.symbol'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('nft.collection.symbol'),
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        { hidden: !selectedColumns.value.includes('symbol') },
+      ],
       render(row) {
         return h('strong', {}, { default: () => row.symbol });
       },
     },
     {
       key: 'name',
-      title: $i18n.t('nft.collection.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('nft.collection.name'),
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
     },
     {
       key: 'type',
-      title: $i18n.t('general.type'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('general.type'),
       minWidth: 100,
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('type') }],
       render(row) {
         if (row.collectionType) {
-          return $i18n.t(`nft.collection.type.${row.collectionType}`);
+          return t(`nft.collection.type.${row.collectionType}`);
         } else {
-          return $i18n.t(`nft.collection.type.${NFTCollectionType.GENERIC}`);
+          return t(`nft.collection.type.${NFTCollectionType.GENERIC}`);
         }
       },
     },
     {
       key: 'collection_uuid',
-      title: $i18n.t('nft.collection.uuid'),
-      className: 'hidden',
+      title: t('nft.collection.uuid'),
+      className: { hidden: !selectedColumns.value.includes('collection_uuid') },
       render(row: CollectionInterface) {
         return h(TableEllipsis, { text: row.collection_uuid }, '');
       },
     },
     {
       key: 'contractAddress',
-      title: $i18n.t('nft.collection.contractAddress'),
+      title: t('nft.collection.contractAddress'),
+      className: { hidden: !selectedColumns.value.includes('contractAddress') },
       render(row: CollectionInterface) {
-        return h(TableEllipsis, { text: row.contractAddress }, '');
+        return h(
+          TableLink,
+          { link: contractLink(row.contractAddress, row.chain), text: row.contractAddress },
+          ''
+        );
       },
     },
     {
       key: 'dropPrice',
-      title: $i18n.t('nft.collection.dropPrice'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('nft.collection.dropPrice'),
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        { hidden: !selectedColumns.value.includes('dropPrice') },
+      ],
     },
     {
       key: 'dropReserve',
-      title: $i18n.t('nft.collection.dropReserve'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('nft.collection.dropReserve'),
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        { hidden: !selectedColumns.value.includes('dropReserve') },
+      ],
     },
     {
       key: 'maxSupply',
-      title: $i18n.t('nft.collection.maxSupply'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('nft.collection.maxSupply'),
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        { hidden: !selectedColumns.value.includes('maxSupply') },
+      ],
       render(row: CollectionInterface) {
         return h('span', {}, { default: () => maxSupply(row.maxSupply) });
       },
     },
     {
       key: 'collectionStatus',
-      title: $i18n.t('general.status'),
+      title: t('general.status'),
+      className: { hidden: !selectedColumns.value.includes('collectionStatus') },
       render(row) {
         return h(NftCollectionStatus, { collectionStatus: row.collectionStatus }, '');
       },
     },
     {
       key: 'dropStart',
-      title: $i18n.t('nft.collection.dropStart'),
+      title: t('nft.collection.dropStart'),
+      className: { hidden: !selectedColumns.value.includes('dropStart') },
       render(row: CollectionInterface) {
         if (row.drop) {
           return h('span', {}, { default: () => timestampToDateAndTime(row.dropStart) });
@@ -126,9 +176,27 @@ const createColumns = (): NDataTableColumns<CollectionInterface> => {
         return '';
       },
     },
+    {
+      key: 'columns',
+      filter: 'default',
+      filterOptionValue: null,
+      renderFilterIcon: () => {
+        return h('span', { class: 'icon-more' }, '');
+      },
+      renderFilterMenu: () => {
+        return h(
+          resolveComponent('TableColumns'),
+          {
+            model: selectedColumns.value,
+            columns: availableColumns.value,
+            onColumnChange: handleColumnChange,
+          },
+          ''
+        );
+      },
+    },
   ];
-};
-const columns = createColumns();
+});
 const rowKey = (row: CollectionInterface) => row.collection_uuid;
 const currentRow = ref<CollectionInterface>(props.collections[0]);
 
@@ -145,7 +213,12 @@ const rowProps = (row: CollectionInterface) => {
   };
 };
 
+function handleColumnChange(selectedValues: Array<string>) {
+  selectedColumns.value = selectedValues;
+  localStorage.setItem(LsTableColumnsKeys.NFT_COLLECTION, JSON.stringify(selectedColumns.value));
+}
+
 function maxSupply(maxSupply: number) {
-  return maxSupply > 0 ? maxSupply : $i18n.t('form.supplyTypes.unlimited');
+  return maxSupply > 0 ? maxSupply : t('form.supplyTypes.unlimited');
 }
 </script>

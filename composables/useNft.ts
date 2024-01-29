@@ -285,11 +285,11 @@ export default function useNft() {
       if (!!metadataSession && !!imagesSession) {
         const res = await $api.post<CollectionResponse>(
           endpoints.nftDeploy(collectionStore.active.collection_uuid),
-            {
-              useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
-              metadataSession,
-              imagesSession,
-            }
+          {
+            useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
+            metadataSession,
+            imagesSession,
+          }
         );
         collectionStore.active = res.data;
 
@@ -322,6 +322,26 @@ export default function useNft() {
         onError: () => {},
       } as FileListItemType;
     });
+  }
+
+  function contractLink(contractAddress?: string | null, chainId?: number): string {
+    switch (chainId) {
+      case Chains.MOONBEAM:
+        return contractAddress
+          ? `https://moonbeam.moonscan.io/address/${contractAddress}`
+          : 'https://moonbeam.moonscan.io';
+      case Chains.MOONBASE:
+        return contractAddress
+          ? `https://moonbase.moonscan.io/address/${contractAddress}`
+          : 'https://moonbase.moonscan.io';
+      case Chains.ASTAR:
+        return contractAddress
+          ? `https://astar.subscan.io/address/${contractAddress}`
+          : 'https://astar.subscan.io';
+      default:
+        console.warn('Missing chainId');
+        return '';
+    }
   }
 
   function transactionLink(transactionHash?: string | null, chainId?: number): string {
@@ -361,6 +381,7 @@ export default function useNft() {
     loadingImages,
     metadataRequired,
     missingImages,
+    contractLink,
     createNftData,
     createThumbnailUrl,
     deployCollection,

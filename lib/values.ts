@@ -24,6 +24,7 @@ export const LsAnalyticsKeys = {
 export const LsTableColumnsKeys = {
   FILES: 'al_table_files_columns',
   IPNS: 'al_table_ipns_columns',
+  NFT_COLLECTION: 'al_table_nft_collection_columns',
 };
 
 export const LsW3WarnKeys = {
