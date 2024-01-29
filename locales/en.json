@@ -218,7 +218,7 @@
       "transactionType": "Transaction type",
       "status": {
         "1": "PENDING",
-        "2": "INSTANTIATED",
+        "2": "IN PROGRESS",
         "3": "FAILED",
         "4": "ERROR",
         "5": "SUCCESS",
