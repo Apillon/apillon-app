@@ -79,11 +79,19 @@
         <select-options
           v-model:value="formData.bucketUuid"
           :options="buckets"
-          :loading="loading"
           :placeholder="$t('general.pleaseSelect')"
           filterable
           clearable
         />
+      </n-form-item>
+
+      <!-- Use Apillon Collection -->
+      <n-form-item
+        class="cursor-default mb-4"
+        :label="labelInfo('useApillonCollection')"
+        :show-feedback="false"
+      >
+        <n-switch v-model:value="useApillonCollection" />
       </n-form-item>
 
       <!--  Contract NFT Collection Address -->
@@ -93,6 +101,7 @@
         :label-props="{ for: 'nftContractAddress' }"
       >
         <select-options
+          v-if="useApillonCollection"
           v-model:value="formData.nftContractAddress"
           :options="contractAddresses"
           :input-props="{ id: 'nftContractAddress' }"
@@ -100,15 +109,22 @@
           autocomplete="off"
           filterable
           clearable
-          tag
           @update:value="onContractChange"
+        />
+        <n-input
+          v-else
+          v-model:value="formData.nftContractAddress"
+          :input-props="{ id: 'nftContractAddress' }"
+          :placeholder="$t('form.placeholder.contract.nftContractAddress')"
+          clearable
         />
       </n-form-item>
 
       <!--  Contract NFT Chain Rpc Url -->
       <n-form-item
+        v-show="!useApillonCollection"
         path="nftChainRpcUrl"
-        :label="$t('form.label.contract.nftChainRpcUrl')"
+        :label="labelInfo('nftChainRpcUrl')"
         :label-props="{ for: 'nftChainRpcUrl' }"
       >
         <n-input
@@ -136,7 +152,7 @@
       <n-form-item
         path="restrictToOwner"
         :span="6"
-        :label="$t('form.label.contract.restrictToOwner')"
+        :label="labelInfo('restrictToOwner')"
         :label-props="{ for: 'restrictToOwner' }"
       >
         <select-options
@@ -198,6 +214,7 @@ const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const contract = ref<ContractInterface | null>(null);
 const rpcLocked = ref<boolean>(false);
+const useApillonCollection = ref<boolean>(true);
 
 const contractTypes = ref<NSelectOption[]>(
   enumValues(ComputingContractType).map(value => {
@@ -232,8 +249,8 @@ const rpc: Record<number, string> = {
 };
 
 const nftChainRpcUrls = ref<NSelectOption[]>(
-  Object.values(rpc).map(value => {
-    return { value, label: value };
+  Object.entries(rpc).map(([key, value]) => {
+    return { value, label: Chains[key] };
   })
 );
 
@@ -257,12 +274,6 @@ onMounted(async () => {
   /** Get list of NFT collections and buckets */
   collectionStore.getCollections();
   bucketStore.getBuckets();
-
-  if (props.contractUuid) {
-    contract.value = await contractStore.getContract(props.contractUuid);
-    formData.value.name = contract.value.name;
-    formData.value.description = contract.value.description || '';
-  }
 });
 
 const isFormDisabled = computed<boolean>(() => {

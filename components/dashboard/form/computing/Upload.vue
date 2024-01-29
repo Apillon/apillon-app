@@ -53,7 +53,12 @@ const uploadDisabled = computed<boolean>(
 /** Upload file request - add file to list */
 async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOptions) {
   const size = file.file?.size || 0;
-  if (size > 65536) {
+
+  if (file.type && file.type.startsWith('application/')) {
+    message.warning($i18n.t('validation.contract.fileIsApp', { name: 'exe' }));
+    onError();
+    return;
+  } else if (size > 65536) {
     message.warning($i18n.t('validation.contract.fileTooBig', { name: file.name }));
     onError();
     return;
