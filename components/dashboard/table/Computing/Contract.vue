@@ -101,6 +101,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'createTime',
       title: t('dashboard.created'),
+      minWidth: 120,
       render(row) {
         return dateTimeToDateAndTime(row?.createTime || '');
       },

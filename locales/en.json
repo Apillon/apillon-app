@@ -218,10 +218,10 @@
       "transactionType": "Transaction type",
       "status": {
         "1": "PENDING",
-        "2": "CONFIRMED",
+        "2": "INSTANTIATED",
         "3": "FAILED",
         "4": "ERROR",
-        "5": "ERROR",
+        "5": "SUCCESS",
         "6": "ERROR"
       },
       "type": {
@@ -750,18 +750,22 @@
       "websiteDescription": "Website description",
       "websiteName": "Website name",
       "contract": {
-        "name": "Contract name",
+        "accountAddress": "Account Address",
+        "amount": "Amount",
         "cid": "CID",
-        "description": "Contract description",
         "contractType": "Contract type",
+        "description": "Contract description",
+        "name": "Contract name",
         "nftContractAddress": "Contract Address",
         "nftChainRpcUrl": "Chain RPC URL",
         "nftId": "NFT ID",
         "restrictToOwner": "Restrict to owner",
-        "accountAddress": "Account Address",
-        "amount": "Amount",
+        "useApillonCollection": "Use Apillon`s Collection",
         "labelInfo": {
-          "nftContractAddress": "Contract Address which will be used to encrypt/decrypt content."
+          "nftContractAddress": "Contract Address which will be used to encrypt/decrypt content.",
+          "nftChainRpcUrl": "Chain RPC URL of used contract",
+          "restrictToOwner": "Own owner will be able to encrypt/decrypt files",
+          "useApillonCollection": "You can use a collection you created on Apillon or any collection you created on other chains."
         }
       }
     },
@@ -1540,7 +1544,8 @@
       "cidRequired": "Please enter CID",
       "depositAmountRequired": "Please enter amount",
       "depositAmountTooLow": "Please enter a higher amount (min. 0.01)",
-      "fileTooBig": "File \"{name}\" is too big, max file size is 64kb.",
+      "fileIsApp": "File \"{name}\" is, max file size is 64kb.",
+      "fileTooBig": "Type of file \"{name}\" is is not supported, please use another file.",
       "nftIdRequired": "Please enter NFT ID"
     }
   },

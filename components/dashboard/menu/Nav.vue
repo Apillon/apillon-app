@@ -99,7 +99,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       disabled: isMenuItemDisabled(Feature.ERC20),
     },
     {
-      key: 'dashboard-smart-erc-721',
+      key: 'dashboard-smart-erc-4437',
       label: 'ERC-4337',
       iconName: 'icon-erc-4437',
       disabled: isMenuItemDisabled(Feature.ERC4337),
@@ -236,12 +236,12 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         },
         ...smartContractsChildren,
         {
-          key: 'divider-2',
+          key: 'divider-3',
           type: 'divider',
         },
         ...solutionsChildren,
         {
-          key: 'divider-3',
+          key: 'divider-4',
           type: 'divider',
         },
         ...configurationChildren,

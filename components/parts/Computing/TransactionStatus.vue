@@ -14,16 +14,16 @@
       align="center"
       :wrap="false"
     >
-      <span class="mx-1 uppercase">{{
-        $t(`computing.transaction.status.${transactionStatus}`)
-      }}</span>
-      <AnimationTyping v-if="transactionStatus < ComputingTransactionStatus.CONFIRMED" />
+      <span class="mx-1 uppercase">
+        {{ $t(`computing.transaction.status.${transactionStatus}`) }}
+      </span>
+      <AnimationTyping v-if="transactionStatus < ComputingTransactionStatus.WORKER_SUCCESS" />
     </n-space>
   </n-tag>
 </template>
 
 <script lang="ts" setup>
-import { ComputingTransactionStatus } from '#imports';
+import { ComputingTransactionStatus } from '~/types/computing';
 
 defineProps({
   transactionStatus: { type: Number as PropType<ComputingTransactionStatus>, default: 1 },
@@ -35,6 +35,8 @@ function getComputingTransactionStatus(status: number): TagType {
     case ComputingTransactionStatus.PENDING:
       return 'warning';
     case ComputingTransactionStatus.CONFIRMED:
+      return 'info';
+    case ComputingTransactionStatus.WORKER_SUCCESS:
       return 'success';
     default:
       return 'error';

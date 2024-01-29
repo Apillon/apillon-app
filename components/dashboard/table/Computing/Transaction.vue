@@ -60,10 +60,6 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
         );
       },
     },
-    {
-      key: 'transactionStatusMessage',
-      title: $i18n.t('computing.transaction.statusMessage'),
-    },
   ];
 };
 const columns = createColumns();
