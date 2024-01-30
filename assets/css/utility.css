@@ -47,6 +47,10 @@
         @apply absolute top-[6px] left-2 right-2 bottom-0 bg-bg-dark card-border rounded-lg -z-1;
         content: '';
       }
+
+      .card-dark {
+        @apply pt-5;
+      }
     }
   }
   .card-light {

@@ -130,6 +130,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       key: 'dashboard-solution-nft-airdrop',
       label: $i18n.t('dashboard.nav.solution.nftAirdrop'),
       iconName: 'icon-nft-mint-airdrop',
+      to: 'dashboard-solution-airdrop',
       disabled: isMenuItemDisabled(Feature.NFT_AIRDROP),
     },
     {

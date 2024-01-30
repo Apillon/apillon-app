@@ -10,26 +10,13 @@
     <slot>
       <div class="pb-8">
         <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
-          <div class="">
-            <h4>How does it work?</h4>
-            <p class="text-body">
-              Launch your end-to-end decentralized NFT collection with one click. Create NFTs,
-              deploy smart contract and host the collection website on Web3.
-            </p>
-            <ul class="my-6">
-              <li v-for="(item, key) in benefits" :key="key" class="my-2">
-                <NuxtIcon
-                  name="icon/success"
-                  class="inline-block float-left mr-2 text-2xl text-green"
-                />
-                <span>{{ item }}</span>
-              </li>
-            </ul>
-            <Btn type="primary" :to="{ name: 'dashboard-service-nft-new' }">
+          <SolutionContent :content="content">
+            <Btn type="primary" :to="{ name: 'dashboard-solution-airdrop-new' }">
               Customize and deploy
             </Btn>
-          </div>
-          <div class="flex justify-center">
+          </SolutionContent>
+
+          <div class="flex justify-center h-fit">
             <div class="relative rounded-lg overflow-hidden">
               <Image :src="NftTemplateJPG" width="514" height="320" alt="nft template" />
               <div class="absolute left-0 right-0 top-0 bottom-0 flex-cc bg-bg-dark/75">
@@ -55,7 +42,7 @@
                 <span class="text-2xl" :class="service.icon"></span>
                 <h5>{{ $t(`dashboard.service.${service.name}.name`) }}</h5>
               </div>
-              <p class="text-body">
+              <p>
                 {{ $t(`dashboard.service.${service.name}.description`) }}
               </p>
             </div>
@@ -78,12 +65,12 @@ import NftTemplateJPG from '~/assets/images/nft/template.jpg';
 
 const { t } = useI18n();
 const { web3Services } = useService();
+const { generateContent } = useSolution();
 
 useHead({
   title: t('dashboard.nav.services'),
 });
 
+const content = generateContent(SolutionKey.NFT_AIRDROP);
 const nftServices = web3Services.filter(item => item.id !== ServiceType.AUTHENTICATION);
-
-const benefits = ['Free metadata storage', '0 gas cost', 'Free web template', 'Free hosting'];
 </script>

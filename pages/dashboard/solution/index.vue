@@ -10,7 +10,7 @@
     <slot>
       <div class="pb-8">
         <div class="max-w-lg mb-8">
-          <p class="text-body">{{ $t('dashboard.solutions.description') }}</p>
+          <p>{{ $t('dashboard.solutions.description') }}</p>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
           <div v-for="(service, key) in services" :key="key" class="card-dark-multiple">
@@ -20,7 +20,7 @@
                   <span class="text-2xl" :class="service.icon"></span>
                   <h5>{{ $t(`dashboard.solutions.${service.name}.name`) }}</h5>
                 </div>
-                <p class="text-body">
+                <p>
                   {{ $t(`dashboard.solutions.${service.name}.description`) }}
                 </p>
               </div>
@@ -81,63 +81,63 @@ const authStore = useAuthStore();
 
 const services: Array<SolutionTypeItem> = [
   {
-    name: 'nftCollection',
+    name: SolutionKey.NFT_COLLECTION,
     icon: 'icon-self-hosted-nft',
     link: 'dashboard-solution-nft-collection',
     disabled: !isFeatureEnabled(Feature.NFT, authStore.getUserRoles()),
     usage: translateItems('dashboard.solutions.nftCollection.usage'),
   },
   {
-    name: 'nftAirdrop',
+    name: SolutionKey.NFT_AIRDROP,
     icon: 'icon-nft-mint-airdrop',
-    link: 'dashboard-service-nft',
+    link: 'dashboard-solution-airdrop',
     disabled: !isFeatureEnabled(Feature.NFT_AIRDROP, authStore.getUserRoles()),
     usage: translateItems('dashboard.solutions.nftAirdrop.usage'),
   },
   {
-    name: 'nftPoap',
+    name: SolutionKey.NFT_POAP,
     icon: 'icon-poap',
     link: 'dashboard-service-nft',
     disabled: !isFeatureEnabled(Feature.NFT_ATTENDANCE, authStore.getUserRoles()),
     usage: translateItems('dashboard.solutions.nftPoap.usage'),
   },
   {
-    name: 'nftLoyalty',
+    name: SolutionKey.NFT_LOYALTY,
     icon: 'icon-loyalty-program',
     link: 'dashboard-service-nft',
     disabled: !isFeatureEnabled(Feature.NFT_LOYALTY, authStore.getUserRoles()),
     usage: translateItems('dashboard.solutions.nftLoyalty.usage'),
   },
   {
-    name: 'nftMembership',
+    name: SolutionKey.NFT_MEMBERSHIP,
     icon: 'icon-brand-membership',
     link: 'dashboard-service-nft',
     disabled: !isFeatureEnabled(Feature.NFT_MEMBERSHIP, authStore.getUserRoles()),
     usage: translateItems('dashboard.solutions.nftMembership.usage'),
   },
   {
-    name: 'nftDrop',
+    name: SolutionKey.NFT_DROP,
     icon: 'icon-nft-drop',
     link: 'dashboard-service-nft',
     disabled: !isFeatureEnabled(Feature.NFT_DROP, authStore.getUserRoles()),
     usage: translateItems('dashboard.solutions.nftDrop.usage'),
   },
   {
-    name: 'wallet',
+    name: SolutionKey.WALLET,
     icon: 'icon-wallet',
     link: 'dashboard-service-nft',
     disabled: !isFeatureEnabled(Feature.NON_CUSTODIAL_WALLET, authStore.getUserRoles()),
     usage: translateItems('dashboard.solutions.wallet.usage'),
   },
   {
-    name: 'fileSharing',
+    name: SolutionKey.FILE_SHARING,
     icon: 'icon-file-sharing',
     link: 'dashboard-service-nft',
     disabled: !isFeatureEnabled(Feature.FILE_SHARING, authStore.getUserRoles()),
     usage: translateItems('dashboard.solutions.fileSharing.usage'),
   },
   {
-    name: 'tokenGating',
+    name: SolutionKey.TOKEN_GATING,
     icon: 'icon-token-gating',
     link: 'dashboard-service-nft',
     disabled: !isFeatureEnabled(Feature.TOKEN_GATING, authStore.getUserRoles()),

@@ -34,7 +34,7 @@
       "
     >
       <template #content>
-        <p class="text-body">
+        <p>
           {{ $t(`storage.${currentRowType}.deleteConfirm`, { num: 1 }) }}
         </p>
       </template>

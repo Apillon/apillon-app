@@ -42,9 +42,6 @@
     .n-button__border {
       border-color: theme('colors.bg.lighter');
     }
-    &:not(.n-button--small-type) {
-      @apply font-mono;
-    }
   }
 
   /** Size small */
@@ -755,7 +752,11 @@ body > .n-message-container {
 
 /** Tag */
 .n-tag {
-  font-weight: bold;
+  @apply font-bold uppercase;
+
+  &.n-tag--round {
+    padding: var(--n-padding);
+  }
 }
 
 /** Upload file */

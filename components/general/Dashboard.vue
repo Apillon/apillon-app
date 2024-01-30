@@ -33,7 +33,7 @@
       >
         <n-layout-content>
           <n-scrollbar y-scrollable :style="scrollStyle">
-            <div class="pt-8">
+            <div class="pt-8" :style="fullHeight ? heightScreen : {}">
               <slot />
             </div>
 
@@ -111,6 +111,7 @@ import { useGtm } from '@gtm-support/vue-gtm';
 const props = defineProps({
   loading: { type: Boolean, default: false },
   learnCollapsible: { type: Boolean, default: true },
+  fullHeight: { type: Boolean, default: false },
 });
 
 /** Check if instructions are available (page has content and feature is enabled) */
@@ -131,6 +132,12 @@ const scrollStyle = computed(() => {
   const offset = isLg.value ? 120 : 124;
   return {
     maxHeight: `calc(100dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
+  };
+});
+const heightScreen = computed(() => {
+  const offset = isLg.value ? 120 : 124;
+  return {
+    height: `calc(100dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
   };
 });
 
