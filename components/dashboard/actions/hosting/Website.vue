@@ -123,7 +123,7 @@
     <!-- Modal - Delete file/folder -->
     <ModalDelete v-model:show="showModalDelete" :title="$t(`storage.delete.bucketItems`)">
       <template #content>
-        <p class="text-body">
+        <p>
           {{ $t(`storage.delete.deleteConfirm`, { num: bucketStore.folder.selectedItems.length }) }}
         </p>
       </template>

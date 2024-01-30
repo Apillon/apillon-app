@@ -7,7 +7,7 @@ type ServiceTypeItem = {
   usage: String[];
 };
 
-export default function useProvider() {
+export default function useService() {
   const authStore = useAuthStore();
 
   /** Web3 Services */

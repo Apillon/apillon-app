@@ -23,6 +23,7 @@ const config: ConfigInterface = {
     'KILT_LOGIN',
     'MARKETING',
     'NFT',
+    'NFT_AIRDROP',
     'NFT_NESTABLE',
     'ONBOARDING',
     'PROJECT',

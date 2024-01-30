@@ -16,6 +16,7 @@
     "copyrights": "© Apillon",
     "create": "Create",
     "created": "created",
+    "customize": "Customize",
     "decline": "Decline",
     "delete": "Delete",
     "description": "Description",
@@ -448,11 +449,47 @@
       "nftAirdrop": {
         "name": "NFT Minting and Airdrop",
         "description": "Create a NFT collection, upload target addresses and automatically distribute NFTs to target addresses.",
+        "content": [
+          {
+            "headline": "How does it work?",
+            "content": "This standalone solution gives you ability to select the NFTs from your collection and distribute them to target addresses."
+          },
+          {
+            "title": "There are three possible ways of distribution:",
+            "content": [
+              "Upload CSV with target addresses",
+              "Upload list of Emails and send emails to users with instructions on how to create a wallet and mint their NFT",
+              "Select the Polkadot OpenGov referendum and the votes and we will automatically parse the addresses"
+            ]
+          },
+          {
+            "headline": "Possible use cases",
+            "title": "Reward your community with NFTs.",
+            "content": "Lorem ipsum dolor sit amet consectetur. Adipiscing habitasse risus enim pharetra. Egestas turpis eget et id nisi."
+          },
+          {
+            "title": "Send gratitude NFTs for your opengov referenda on Polkadot",
+            "content": "Pharetra ultricies interdum scelerisque suspendisse fames sed pharetra placerat purus. Mauris leo mauris aenean dolor congue placerat."
+          },
+          {
+            "title": "Distribute utility NFTs to specific set of wallets",
+            "content": "Lorem ipsum dolor sit amet consectetur. Eget morbi pharetra nec sit non diam consectetur ut vitae. Dictum mauris ipsum semper purus pharetra eget eget."
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
         "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
       },
       "nftCollection": {
         "name": "Self-hosted NFT collection",
         "description": "Get your self sovereign standalone NFT collection with one click. Create NFTs, deploy smart contract and finally host the collection website.",
+        "content": [
+          {
+            "headline": "How does it work?",
+            "content": "Launch your end-to-end decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the collection website on Web3.",
+            "benefits": ["Free metadata storage", "0 gas cost", "Free web template", "Free hosting"]
+          }
+        ],
+        "tabs": ["Create Collection", "Preview Collection", "Mint NFTs"],
         "usage": [
           "metadata storage",
           "file storage",

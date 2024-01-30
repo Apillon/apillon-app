@@ -26,7 +26,7 @@
               </NuxtLink>
             </div>
             <div class="mt-4">
-              <p class="text-body">{{ service.content }}</p>
+              <p>{{ service.content }}</p>
             </div>
           </div>
         </div>
@@ -39,7 +39,7 @@
         <div class="grid lg:grid-cols-4 sm:grid-cols-2 gap-8">
           <div class="card-light p-8 flex flex-col justify-between">
             <div>
-              <n-tag type="info" class="text-bg-dark" :bordered="false" round>
+              <n-tag size="tiny" type="info" class="text-bg-dark" :bordered="false" round>
                 {{ $t('dashboard.service.storage.bucket') }}
               </n-tag>
               <h5 class="mt-4">{{ $t('dashboard.service.storage.website') }}</h5>
@@ -57,7 +57,7 @@
           <div class="card-dark-multiple">
             <div class="card-dark multiple p-8 flex flex-col justify-between">
               <div>
-                <n-tag round>
+                <n-tag size="tiny" round>
                   {{ $t('dashboard.smartContracts.collection') }}
                 </n-tag>
                 <h5 class="mt-4">{{ $t('dashboard.smartContracts.meerkats') }}</h5>
@@ -81,7 +81,7 @@
 
           <div class="card-light p-8">
             <div class="flex justify-between items-center mb-4">
-              <n-tag type="success" :bordered="false" round> ERC-721 </n-tag>
+              <n-tag size="tiny" type="success" :bordered="false" round> ERC-721 </n-tag>
               <NuxtIcon name="logo/astar" class="text-3xl" filled />
             </div>
             <h5>{{ $t('dashboard.smartContracts.kraken') }}</h5>
@@ -89,7 +89,7 @@
 
           <div class="card-light p-8 flex flex-col justify-between">
             <div>
-              <n-tag type="error" class="text-bg-dark" :bordered="false" round>
+              <n-tag size="tiny" type="error" class="text-bg-dark" :bordered="false" round>
                 {{ $t('dashboard.service.storage.bucket') }}
               </n-tag>
               <h5 class="mt-4">{{ $t('dashboard.service.hosting.title') }}</h5>

@@ -14,7 +14,7 @@
     <slot>
       <div v-if="$t('dashboard.usage.description')" class="mb-6 max-w-lg">
         <h4 class="mb-6">{{ $t('dashboard.usage.title') }}</h4>
-        <p class="text-body">{{ $t('dashboard.usage.description') }}</p>
+        <p>{{ $t('dashboard.usage.description') }}</p>
       </div>
 
       <!-- Storage -->
