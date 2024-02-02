@@ -1,18 +1,14 @@
 <template>
-  <Spinner v-if="contractUuid && !contract" />
-  <div v-else>
+  <div>
     <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="!!contractUuid && $i18n.te('computing.contract.infoNew')" class="text-body mb-8">
+      <p v-if="$i18n.te('computing.contract.infoNew')" class="text-body mb-8">
         {{ $t('computing.contract.infoNew') }}
       </p>
-      <p
-        v-else-if="!!contractUuid && $i18n.te('computing.contract.infoEdit')"
-        class="text-body mb-8"
-      >
+      <p v-else-if="$i18n.te('computing.contract.infoEdit')" class="text-body mb-8">
         {{ $t('computing.contract.infoEdit') }}
       </p>
     </template>
@@ -174,12 +170,7 @@
           :disabled="isFormDisabled"
           @click="handleSubmit"
         >
-          <template v-if="contract">
-            {{ $t('computing.contract.update') }}
-          </template>
-          <template v-else>
-            {{ $t('computing.contract.create') }}
-          </template>
+          {{ $t('computing.contract.create') }}
         </Btn>
       </n-form-item>
     </n-form>
@@ -197,10 +188,7 @@ type FormContract = {
   restrictToOwner: boolean;
 };
 
-const props = defineProps({
-  contractUuid: { type: String, default: null },
-});
-const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
+const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -212,7 +200,6 @@ const { booleanSelect } = useCollection();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
-const contract = ref<ContractInterface | null>(null);
 const rpcLocked = ref<boolean>(false);
 const useApillonCollection = ref<boolean>(true);
 
@@ -306,8 +293,6 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (props.contractUuid) {
-      await updateContract();
     } else {
       createContract();
     }
@@ -338,36 +323,6 @@ async function createContract() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess', res.data);
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
-  }
-  loading.value = false;
-}
-
-async function updateContract() {
-  loading.value = true;
-
-  try {
-    const res = await $api.patch<ContractResponse>(
-      endpoints.contracts(props.contractUuid),
-      formData.value
-    );
-
-    message.success($i18n.t('form.success.updated.contract'));
-
-    /** On contract updated refresh contract data */
-    contractStore.items.forEach((item: ContractInterface) => {
-      if (item.contract_uuid === props.contractUuid) {
-        item = res.data;
-      }
-    });
-    if (contractStore.active.contract_uuid === props.contractUuid) {
-      contractStore.active = res.data;
-    }
-
-    /** Emit events */
-    emit('submitSuccess');
-    emit('updateSuccess');
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
