@@ -54,7 +54,7 @@ const uploadDisabled = computed<boolean>(
 async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOptions) {
   const size = file.file?.size || 0;
 
-  if (file.type && file.type.startsWith('application/')) {
+  if (file.type && file.type.startsWith('application/octet-stream')) {
     message.warning($i18n.t('validation.contract.fileIsApp', { name: 'exe' }));
     onError();
     return;
