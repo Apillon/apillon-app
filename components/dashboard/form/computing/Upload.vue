@@ -7,8 +7,18 @@
   >
     <n-upload-dragger class="h-40">
       <div v-if="contractStore.uploading">
-        <Spinner />
-        <h4 class="mt-12 text-center">{{ $t('computing.contract.encrypt.step2Info') }}</h4>
+        <div class="relative mt-2 mb-8">
+          <Spinner />
+        </div>
+        <h4 class="text-center mt-4">{{ $t('computing.contract.encrypt.step2Info') }}</h4>
+      </div>
+      <div v-else-if="contractStore.file?.name" class="py-2 text-center">
+        <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
+          <span class="icon-upload text-violet text-2xl"></span>
+        </div>
+
+        <h4 class="mb-1">{{ $t('computing.upload.uploaded') }}</h4>
+        <span class="text-body">{{ contractStore.file.name }}</span>
       </div>
       <div v-else class="py-2 text-center">
         <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">

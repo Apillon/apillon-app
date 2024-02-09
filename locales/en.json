@@ -164,6 +164,7 @@
       "addNew": "Add new contract",
       "address": "Contract address",
       "assignCid": "Assign CID to NFT",
+      "assignDisabled": "Please upload file first, to assign CID.",
       "create": "Create contract",
       "createBucket": "Create a bucket",
       "createFirst": "Create first contract",
@@ -188,12 +189,11 @@
       "uuid": "Contract UUID",
       "encrypt": {
         "step1": "Choose bucket",
-        "step2": "Upload & encrypt",
-        "step2Info": "The file is being encrypted and uploaded to IPFS.",
-        "step3": "Assign CID",
-        "step4": "Finished",
-        "step4Info": "The file has been encrypted and CID has been assigned to NFT.",
-        "step4Btn": "Encrypt another file"
+        "step2": "Upload, encrypt & assign CID",
+        "step2Info": "The file is being encrypted, uploaded to IPFS.",
+        "step3": "Finished",
+        "step3Info": "The file has been encrypted and CID has been assigned to NFT.",
+        "step3Btn": "Encrypt another file"
       },
       "status": {
         "0": "CREATED",
@@ -210,7 +210,8 @@
     },
     "upload": {
       "dragAndDrop": "Drag & drop file",
-      "upload": "Upload file"
+      "upload": "Upload file",
+      "uploaded": "Uploaded file:"
     },
     "transaction": {
       "contractId": "Chain ID",

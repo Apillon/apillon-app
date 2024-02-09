@@ -19,34 +19,23 @@
         <FormComputingBucket @submit-success="onBucketSelected" />
       </slot>
     </n-tab-pane>
-    <n-tab-pane :name="EncryptTab.UPLOAD" :disabled="!contractStore.bucketUuid">
+    <n-tab-pane :name="EncryptTab.ASSIGN" :disabled="!contractStore.bucketUuid">
       <template #tab>
-        <IconSuccessful v-if="contractStore.encryptTab === EncryptTab.ASSIGN" />
-        <IconNumber v-else :number="2" :active="contractStore.encryptTab === EncryptTab.UPLOAD" />
+        <IconSuccessful v-if="contractStore.encryptTab === EncryptTab.FINISHED" />
+        <IconNumber v-else :number="2" :active="contractStore.encryptTab === EncryptTab.ASSIGN" />
         <span class="ml-2">{{ $t('computing.contract.encrypt.step2') }}</span>
       </template>
       <slot>
         <FormComputingUpload
-          class="max-w-xl mx-auto my-8"
+          class="max-w-xl mx-auto my-8 relative"
           :contract-uuid="contractStore.active.contract_uuid"
           @submit-success="onFileUploaded"
         />
-      </slot>
-    </n-tab-pane>
-    <n-tab-pane
-      :name="EncryptTab.ASSIGN"
-      :disabled="!contractStore.bucketUuid || !contractStore.cid"
-    >
-      <template #tab>
-        <IconNumber :number="3" :active="contractStore.encryptTab === EncryptTab.ASSIGN" />
-        <span class="ml-2">{{ $t('computing.contract.encrypt.step3') }}</span>
-      </template>
-      <slot>
         <FormComputingAssignCID
-          v-if="contractStore.cid"
           class="max-w-xl mx-auto my-8"
           :contract-uuid="contractStore.active.contract_uuid"
           :cid="contractStore.cid"
+          :enabled="!!contractStore.cid"
           @submit-success="contractStore.encryptTab = EncryptTab.FINISHED"
         />
       </slot>
@@ -56,15 +45,15 @@
       :disabled="!contractStore.bucketUuid || !contractStore.cid"
     >
       <template #tab>
-        <IconNumber :number="4" :active="contractStore.encryptTab === EncryptTab.FINISHED" />
-        <span class="ml-2">{{ $t('computing.contract.encrypt.step4') }}</span>
+        <IconNumber :number="3" :active="contractStore.encryptTab === EncryptTab.FINISHED" />
+        <span class="ml-2">{{ $t('computing.contract.encrypt.step3') }}</span>
       </template>
       <slot>
         <div class="max-w-md mx-auto my-8 text-center">
-          <h4 class="mb-2">{{ $t('computing.contract.encrypt.step4') }}</h4>
-          <p class="mb-4">{{ $t('computing.contract.encrypt.step4Info') }}</p>
+          <h4 class="mb-2">{{ $t('computing.contract.encrypt.step3') }}</h4>
+          <p class="mb-4">{{ $t('computing.contract.encrypt.step3Info') }}</p>
           <Btn type="secondary" @click="goToFirstStep()">
-            {{ $t('computing.contract.encrypt.step4Btn') }}
+            {{ $t('computing.contract.encrypt.step3Btn') }}
           </Btn>
         </div>
       </slot>
@@ -90,39 +79,49 @@ onMounted(() => {
 watch(
   () => contractStore.encryptTab,
   tab => {
-    if (tab === EncryptTab.UPLOAD && !contractStore.bucketUuid) {
+    if (tab === EncryptTab.ASSIGN && !contractStore.bucketUuid) {
       contractStore.encryptTab = EncryptTab.BUCKET;
       nextTick(() => encryptTabRef.value?.syncBarPosition());
     } else if (tab >= EncryptTab.ASSIGN && !contractStore.cid) {
-      contractStore.encryptTab = EncryptTab.UPLOAD;
+      contractStore.encryptTab = EncryptTab.ASSIGN;
       nextTick(() => encryptTabRef.value?.syncBarPosition());
     }
   }
 );
 
 function goToFirstStep() {
+  contractStore.cid = '';
+  contractStore.file = {} as FileListItemType;
+
   if (contractStore.active.bucket_uuid) {
     contractStore.bucketUuid = contractStore.active.bucket_uuid;
-    contractStore.encryptTab = EncryptTab.UPLOAD;
+    contractStore.encryptTab = EncryptTab.ASSIGN;
+  } else {
+    contractStore.encryptTab = EncryptTab.BUCKET;
   }
 }
 
 function onBucketSelected(bucketUuid: string) {
   contractStore.bucketUuid = bucketUuid;
-  contractStore.encryptTab = EncryptTab.UPLOAD;
+  contractStore.encryptTab = EncryptTab.ASSIGN;
 }
 
 async function onFileUploaded(encryptedContent: string) {
-  const cid = await uploadFileToIPFS(
+  const fileDetails = await uploadFileToIPFS(
     contractStore.file,
     contractStore.bucketUuid,
     encryptedContent
   );
   contractStore.uploading = false;
 
-  if (cid) {
-    contractStore.cid = cid;
-    contractStore.encryptTab = EncryptTab.ASSIGN;
+  if (fileDetails) {
+    const cid = fileDetails.CIDv1 || fileDetails.CID;
+
+    const fileLink = new URL(fileDetails.link);
+    const token = fileLink.searchParams.get('token');
+
+    contractStore.cid = `${cid}/?token=${token}`;
+    console.log(contractStore.cid);
   }
 }
 
@@ -130,7 +129,7 @@ async function uploadFileToIPFS(
   file: FileListItemType,
   bucketUuid: string,
   encryptedContent: string
-): Promise<string | null> {
+): Promise<FileInterface | null> {
   const sessionUuid = uuidv4();
   const data = {
     session_uuid: sessionUuid,
@@ -161,9 +160,7 @@ async function uploadFileToIPFS(
     }, 1000);
 
     // Start pooling file
-    const uploadedFile = await getFile(bucketUuid, uploadUrl.file_uuid);
-
-    return uploadedFile.CID || uploadedFile.CIDv1;
+    return await getFile(bucketUuid, uploadUrl.file_uuid);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

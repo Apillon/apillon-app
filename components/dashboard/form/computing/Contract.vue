@@ -68,12 +68,12 @@
 
       <!--  Bucket Uuid -->
       <n-form-item
-        path="bucketUuid"
+        path="bucket_uuid"
         :label="$t('form.label.bucketName')"
-        :label-props="{ for: 'bucketUuid' }"
+        :label-props="{ for: 'bucket_uuid' }"
       >
         <select-options
-          v-model:value="formData.bucketUuid"
+          v-model:value="formData.bucket_uuid"
           :options="buckets"
           :placeholder="$t('general.pleaseSelect')"
           filterable
@@ -181,7 +181,7 @@
 type FormContract = {
   name: string;
   description?: string;
-  bucketUuid: string | null;
+  bucket_uuid: string | null;
   nftContractAddress: string | null;
   nftChainRpcUrl: string | null;
   contractType: number | null;
@@ -245,7 +245,7 @@ const formData = ref<FormContract>({
   name: '',
   description: '',
   contractType: ComputingContractType.SCHRODINGER,
-  bucketUuid: null,
+  bucket_uuid: null,
   nftContractAddress: null,
   nftChainRpcUrl: null,
   restrictToOwner: false,
