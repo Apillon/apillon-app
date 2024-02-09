@@ -1,7 +1,21 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    :disabled="!enabled"
+    @submit.prevent="handleSubmit"
+  >
+    <Notification v-if="!enabled" class="-mt-4 mb-4" type="info">
+      {{ $t('computing.contract.assignDisabled') }}
+    </Notification>
     <!--  CID -->
-    <n-form-item path="cid" :label="$t('form.label.contract.cid')" :label-props="{ for: 'cid' }">
+    <n-form-item
+      class="hidden"
+      path="cid"
+      :label="$t('form.label.contract.cid')"
+      :label-props="{ for: 'cid' }"
+    >
       <n-input
         v-model:value="formData.cid"
         :input-props="{ id: 'cid' }"
@@ -27,9 +41,15 @@
     </n-form-item>
 
     <!--  Form submit -->
-    <n-form-item :show-feedback="false">
+    <n-form-item :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="$t('computing.contract.assignCid')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn
+        type="primary"
+        class="w-full mt-2"
+        :loading="loading"
+        :disabled="!enabled"
+        @click="handleSubmit"
+      >
         {{ $t('computing.contract.assignCid') }}
       </Btn>
     </n-form-item>
@@ -45,6 +65,7 @@ type FormContractAssignCid = {
 const props = defineProps({
   contractUuid: { type: String, required: true },
   cid: { type: String, required: true },
+  enabled: { type: Boolean, default: true },
 });
 const emit = defineEmits(['submitSuccess']);
 
@@ -62,6 +83,15 @@ const rules: NFormRules = {
   cid: [ruleRequired($i18n.t('validation.contract.cidRequired'))],
   nftId: [ruleRequired($i18n.t('validation.contract.nftIdRequired'))],
 };
+
+watch(
+  () => props.cid,
+  cid => {
+    if (cid) {
+      formData.value.cid = cid;
+    }
+  }
+);
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {

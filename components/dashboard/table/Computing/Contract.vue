@@ -92,13 +92,6 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
       },
     },
     {
-      key: 'deployerAddress',
-      title: t('computing.contract.deployerAddress'),
-      render(row: ContractInterface) {
-        return h(TableEllipsis, { text: row.deployerAddress }, '');
-      },
-    },
-    {
       key: 'createTime',
       title: t('dashboard.created'),
       minWidth: 120,

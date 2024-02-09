@@ -17,7 +17,7 @@
         {{ $t('computing.contract.infoBucketCreated') }}
       </p>
 
-      <Btn size="large" @click="contractStore.encryptTab = EncryptTab.UPLOAD">
+      <Btn size="large" @click="contractStore.encryptTab = EncryptTab.ASSIGN">
         {{ $t('computing.contract.proceedUpload') }}
       </Btn>
     </template>
