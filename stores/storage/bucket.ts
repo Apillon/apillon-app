@@ -193,8 +193,6 @@ export const useBucketStore = defineStore('bucket', {
         }
         this.total = res.data.total;
         this.loading = false;
-        this.filter.bucketType = null;
-        this.filter.search = '';
 
         /** Save timestamp to SS */
         const cacheKey = statusDeleted ? LsCacheKeys.BUCKET_DESTROYED : LsCacheKeys.BUCKETS;
