@@ -36,7 +36,7 @@
           :contract-uuid="contractStore.active.contract_uuid"
           :cid="contractStore.cid"
           :enabled="!!contractStore.cid"
-          @submit-success="contractStore.encryptTab = EncryptTab.FINISHED"
+          @submit-success="onCidAssigned"
         />
       </slot>
     </n-tab-pane>
@@ -68,6 +68,8 @@ import type { TabsInst } from 'naive-ui';
 const { t } = useI18n();
 const message = useMessage();
 const contractStore = useContractStore();
+const transactionStore = useComputingTransactionStore();
+const { checkUnfinishedTransactions } = useComputing();
 
 const encryptTabRef = ref<TabsInst | null>(null);
 
@@ -121,8 +123,18 @@ async function onFileUploaded(encryptedContent: string) {
     const token = fileLink.searchParams.get('token');
 
     contractStore.cid = `${cid}/?token=${token}`;
-    console.log(contractStore.cid);
   }
+}
+
+async function onCidAssigned() {
+  contractStore.encryptTab = EncryptTab.FINISHED;
+
+  await transactionStore.fetchTransactions(
+    contractStore.active.contract_uuid,
+    transactionStore.pagination.page,
+    false
+  );
+  checkUnfinishedTransactions();
 }
 
 async function uploadFileToIPFS(

@@ -164,7 +164,7 @@
       "addNew": "Add new contract",
       "address": "Contract address",
       "assignCid": "Assign CID to NFT",
-      "assignDisabled": "Please upload file first, to assign CID.",
+      "assignDisabled": "Please upload file first, to encrypt content and assign it to NFT.",
       "create": "Create contract",
       "createBucket": "Create a bucket",
       "createFirst": "Create first contract",
@@ -1639,8 +1639,8 @@
       "cidRequired": "Please enter CID",
       "depositAmountRequired": "Please enter amount",
       "depositAmountTooLow": "Please enter a higher amount (min. 0.01)",
-      "fileIsApp": "File \"{name}\" is, max file size is 64kb.",
-      "fileTooBig": "Type of file \"{name}\" is is not supported, please use another file.",
+      "fileIsApp": "Type of file \"{name}\" is is not supported, please use another file.",
+      "fileTooBig": "File \"{name}\" is, max file size is 64kb.",
       "nftIdRequired": "Please enter NFT ID"
     }
   },
