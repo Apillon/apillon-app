@@ -40,7 +40,7 @@ export default function useCaptcha() {
     clearInterval(transactionInterval);
 
     const unfinishedTransaction = transactionStore.items.find(
-      transaction => transaction.transactionStatus < ComputingTransactionStatus.CONFIRMED
+      transaction => transaction.transactionStatus <= ComputingTransactionStatus.CONFIRMED
     );
     if (unfinishedTransaction === undefined) {
       clearInterval(transactionInterval);
@@ -57,7 +57,7 @@ export default function useCaptcha() {
       const transaction = transactions.find(
         transaction => transaction.id === unfinishedTransaction.id
       );
-      if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
+      if (!transaction || transaction.transactionStatus > ComputingTransactionStatus.CONFIRMED) {
         clearInterval(transactionInterval);
         contractStore.active = await contractStore.fetchContract(contractUuid);
       }
