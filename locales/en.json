@@ -143,7 +143,8 @@
         "info": "Connect with one of Polkadot's wallet",
         "success": "Wallet has been successfully connected",
         "title": "Connect wallet",
-        "different": "Connect different wallet"
+        "different": "Connect different wallet",
+        "wallet": "Connect wallet"
       },
       "connected": {
         "info": "Wallet is connected with your account",
@@ -153,6 +154,12 @@
       "disconnect": {
         "success": "Wallet has been successfully disconnected",
         "wallet": "Disconnect wallet"
+      },
+      "evm": {
+        "connect": "Connect EVM wallet",
+        "disconnect": "Disconnect EVM wallet",
+        "info": "Connect your EVM compatible wallet. This step is crucial for securely receiving and managing the airdropped NFTs.",
+        "title": "Choose wallet"
       },
       "address": "Wallet address",
       "createAccount": "This wallet hasn't got any account. Create an account first.",

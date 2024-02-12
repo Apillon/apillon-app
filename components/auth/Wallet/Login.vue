@@ -5,7 +5,7 @@
   </Btn>
   <!-- Modal - Wallet select -->
   <modal v-model:show="modalWalletSelectVisible" :title="$t('auth.wallet.connect.title')">
-    <AuthWalletSelect
+    <AuthWalletDot
       :action-text="$t('auth.wallet.login')"
       :loading="loadingWallet"
       @sign="walletLogin"

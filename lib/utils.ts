@@ -1,4 +1,3 @@
-import { type LocationQueryValue } from 'vue-router';
 import { useGtm } from '@gtm-support/vue-gtm';
 import queryString from 'query-string';
 import stg from '../config/staging';
@@ -48,9 +47,6 @@ export function enumKeyValues(E: any): KeyValue[] {
 /**
  * Numeric manipulations
  */
-export function randomInteger(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 export function isNumeric(n: any): n is number | string {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
