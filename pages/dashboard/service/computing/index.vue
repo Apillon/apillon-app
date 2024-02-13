@@ -8,7 +8,7 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <IconInfo v-if="$i18n.te('w3Warn.computing.new')" @click="modalW3WarnVisible = true" />
+            <IconInfo v-if="$i18n.te('w3Warn.contract.new')" @click="modalW3WarnVisible = true" />
           </n-space>
         </template>
       </Heading>
