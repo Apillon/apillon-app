@@ -11,6 +11,7 @@ const config: ConfigInterface = {
   githubId: '95223986c9689e1c7657',
   gtmId: 'GTM-P7V3D3P6',
   publishedFeatures: [
+    'ACCESS',
     'DISCORD',
     'HOSTING',
     'PROJECT',
@@ -27,7 +28,7 @@ const config: ConfigInterface = {
     'AUTHENTICATION',
     'MARKETING',
   ],
-  betaFeatures: ['NFT_NESTABLE'],
+  betaFeatures: ['NFT_NESTABLE', 'COMPUTING', 'SOCIAL'],
 };
 
 export default config;

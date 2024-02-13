@@ -123,7 +123,7 @@
     <!-- Modal - Delete file/folder -->
     <ModalDelete v-model:show="showModalDelete" :title="$t(`storage.delete.bucketItems`)">
       <template #content>
-        <p class="text-body">
+        <p>
           {{ $t(`storage.delete.deleteConfirm`, { num: bucketStore.folder.selectedItems.length }) }}
         </p>
       </template>
@@ -160,7 +160,7 @@
       </p>
       <div class="grid grid-cols-1 gap-8 mt-8 w-full max-w-full">
         <Btn type="secondary" @click="onModalConfirm">{{ $t('hosting.review.confirm') }}</Btn>
-        <PaymentCardCurrentPlan
+        <PaymentCardPlan
           :show-card="false"
           btn-type="primary"
           :btn-text="$t('hosting.review.upgrade')"

@@ -11,6 +11,7 @@ const config: ConfigInterface = {
   githubId: 'd0482598d8adbd8adffa',
   gtmId: 'GTM-P7V3D3P6',
   publishedFeatures: [
+    'ACCESS',
     'APILLON_REGISTER',
     'AUTHENTICATION',
     'BILLING',
@@ -22,6 +23,7 @@ const config: ConfigInterface = {
     'KILT_LOGIN',
     'MARKETING',
     'NFT',
+    'NFT_AIRDROP',
     'NFT_NESTABLE',
     'ONBOARDING',
     'PROJECT',
@@ -30,10 +32,12 @@ const config: ConfigInterface = {
     'PROJECT_SETTINGS',
     'REFERRAL',
     'SERVICES',
+    'SOCIAL',
     'SOCIAL_ICONS',
     'STORAGE',
     'TWO_FACTOR_AUTHENTICATION',
     'WALLET_LOGIN',
+    'COMPUTING',
   ],
   betaFeatures: [],
 };

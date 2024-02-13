@@ -8,7 +8,7 @@
       aria-modal="true"
     >
       <template v-if="content">
-        <p class="text-body">{{ content }}</p>
+        <p>{{ content }}</p>
       </template>
       <template v-else>
         <div class="text-body">

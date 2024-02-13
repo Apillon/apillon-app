@@ -2,7 +2,7 @@
   /* Headline 1 */
   h1,
   .h1 {
-    @apply font-sans font-bold;
+    @apply font-bold;
     font-size: 1.75rem;
     line-height: 1.43;
   }
@@ -10,7 +10,7 @@
   /* Headline 2 */
   h2,
   .h2 {
-    @apply font-sans font-bold;
+    @apply font-bold;
     font-size: 1.5rem;
     line-height: 1.5;
 
@@ -22,7 +22,7 @@
   /* Headline 3 */
   h3,
   .h3 {
-    @apply font-sans font-bold;
+    @apply font-bold;
     font-size: 1.25rem;
     line-height: 1.6;
 
@@ -37,7 +37,7 @@
   /* Headline 4 */
   h4,
   .h4 {
-    @apply font-sans font-bold;
+    @apply font-bold;
     font-size: 1.125rem;
     line-height: 1.55;
 
@@ -50,21 +50,20 @@
   /* Headline 5 */
   h5,
   .h5 {
-    @apply font-sans font-bold;
+    @apply font-bold;
     font-size: 1rem;
     line-height: 1.6;
   }
 
   /* Headline 6 */
   h6 {
-    @apply font-sans font-bold uppercase;
+    @apply font-bold;
     font-size: 0.875rem;
     line-height: 1.6;
-    letter-spacing: 0.25em;
   }
 
   p {
-    @apply body-md;
+    @apply body-md text-body;
 
     + h2,
     + .h2,
@@ -94,25 +93,22 @@
   [role='button'],
   [type='reset'],
   [type='submit'] {
-    @apply relative font-mono;
+    @apply relative;
     font-size: 0.875rem;
     line-height: 1.715;
   }
 
   .body-lg {
-    @apply font-sans;
     font-size: 1rem;
     line-height: 1.625;
   }
 
   .body-md {
-    @apply font-sans;
     font-size: 0.875rem;
     line-height: 1.715;
   }
 
   .body-sm {
-    @apply font-sans;
     font-size: 0.75rem;
     line-height: 1.666666;
   }

@@ -28,7 +28,7 @@
   <!-- Modal - Destroy bucket -->
   <ModalDelete v-model:show="showModalDestroyBucket" :title="$t('storage.bucket.delete')">
     <template #content>
-      <p class="text-body">
+      <p>
         {{ $t('storage.bucket.deleteConfirm', { num: bucketsToDelete.length || 1 }) }}
       </p>
     </template>

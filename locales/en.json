@@ -1,4 +1,77 @@
 {
+  "general": {
+    "accept": "Accept",
+    "action": "Action",
+    "actions": "Actions",
+    "active": "active",
+    "activity": "Activity",
+    "addNew": "Add new",
+    "address": "Address",
+    "attach": "Attach",
+    "attachService": "Attach {service} service",
+    "cancel": "No, cancel",
+    "comingSoon": "Coming soon",
+    "confirm": "Confirm",
+    "cookieNotice": "This website uses cookies to ensure you get the best experience on our website.",
+    "copyrights": "© Apillon",
+    "create": "Create",
+    "created": "created",
+    "customize": "Customize",
+    "decline": "Decline",
+    "delete": "Delete",
+    "description": "Description",
+    "deselectAll": "Deselect All",
+    "download": "Download",
+    "edit": "Edit",
+    "environment": "Environment",
+    "error": "Error",
+    "explore": "Explore",
+    "goHome": "Go home",
+    "install": "Install",
+    "images": "images",
+    "learn": "Learn",
+    "learnMore": "Learn more",
+    "live": "Live",
+    "login": "Log in",
+    "logout": "Log out",
+    "method": "Method",
+    "month": "month",
+    "name": "Name",
+    "notActive": "not active",
+    "nothingHere": "Nothing here",
+    "ok": "OK",
+    "open": "Open",
+    "or": "or",
+    "paused": "paused",
+    "pending": "pending",
+    "pleaseSelect": "Please select",
+    "production": "Production",
+    "refresh": "Refresh",
+    "restore": "Restore",
+    "scope": "Scope",
+    "search": "Search",
+    "secret": "Secret",
+    "selectAll": "Select All",
+    "serviceName": "Service name",
+    "serviceType": "Service type",
+    "signup": "Sign up",
+    "skip": "Skip",
+    "smBy": "Smart contracts by",
+    "staging": "Staging",
+    "status": "Status",
+    "tryAgain": "Try again",
+    "terms": "terms and conditions",
+    "termsAccept": "I accept the ",
+    "termsAndConditions": "Terms and conditions",
+    "test": "Test",
+    "type": "Type",
+    "typeHere": "Type here",
+    "updateTime": "Update time",
+    "upload": "Upload",
+    "uptime": "Uptime",
+    "uuid": "UUID",
+    "view": "View"
+  },
   "auth": {
     "footer": {
       "support": "Support",
@@ -34,6 +107,7 @@
       "loader": "Put your Web3 hat on, your dashboard is getting ready.",
       "skip": "Skip to the dashboard",
       "startBuilding": "Start building",
+      "viewDemo": "View demo",
       "walkThroughWeb3": "Walk through a fully Web3-compatible website demo, test a few services and check open-source code.",
       "web3Gateway": "Your Gateway to Web3",
       "web3ProjectName": "Your  Web3 project needs a name"
@@ -85,73 +159,81 @@
       "login": "Login with wallet"
     }
   },
-  "general": {
-    "accept": "Accept",
-    "action": "Action",
-    "actions": "Actions",
-    "active": "active",
-    "addNew": "Add new",
-    "address": "Address",
-    "attach": "Attach",
-    "attachService": "Attach {service} service",
-    "cancel": "No, cancel",
-    "confirm": "Confirm",
-    "cookieNotice": "This website uses cookies to ensure you get the best experience on our website.",
-    "copyrights": "© Apillon",
-    "create": "Create",
-    "created": "created",
-    "decline": "Decline",
-    "delete": "Delete",
-    "deselectAll": "Deselect All",
-    "download": "Download",
-    "edit": "Edit",
-    "environment": "Environment",
-    "error": "Error",
-    "goHome": "Go home",
-    "install": "Install",
-    "images": "images",
-    "learn": "Learn",
-    "learnMore": "Learn more",
-    "live": "Live",
-    "login": "Log in",
-    "logout": "Log out",
-    "method": "Method",
-    "month": "month",
-    "name": "Name",
-    "notActive": "not active",
-    "nothingHere": "Nothing here",
-    "ok": "OK",
-    "open": "Open",
-    "or": "or",
-    "paused": "paused",
-    "pending": "pending",
-    "pleaseSelect": "Please select",
-    "production": "Production",
-    "refresh": "Refresh",
-    "restore": "Restore",
-    "scope": "Scope",
-    "search": "Search",
-    "secret": "Secret",
-    "selectAll": "Select All",
-    "serviceName": "Service name",
-    "serviceType": "Service type",
-    "signup": "Sign up",
-    "skip": "Skip",
-    "smBy": "Smart contracts by",
-    "staging": "Staging",
-    "status": "Status",
-    "tryAgain": "Try again",
-    "terms": "terms and conditions",
-    "termsAccept": "I accept the ",
-    "termsAndConditions": "Terms and conditions",
-    "test": "Test",
-    "type": "Type",
-    "typeHere": "Type here",
-    "updateTime": "Update time",
-    "upload": "Upload",
-    "uptime": "Uptime",
-    "uuid": "UUID",
-    "view": "View"
+  "computing": {
+    "contract": {
+      "addNew": "Add new contract",
+      "address": "Contract address",
+      "assignCid": "Assign CID to NFT",
+      "assignDisabled": "Please upload file first, to encrypt content and assign it to NFT.",
+      "create": "Create contract",
+      "createBucket": "Create a bucket",
+      "createFirst": "Create first contract",
+      "deployerAddress": "Deployer address",
+      "deposit": "Deposit to cluster",
+      "edit": "Edit",
+      "empty": "Create your first contract",
+      "emptyInfo": "Add it to your Web3 project",
+      "encryptFile": "Encrypt file",
+      "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
+      "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
+      "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
+      "name": "Contract name",
+      "new": "New contract",
+      "orSelectExisting": "or select existing bucket",
+      "selectBucket": "Continue with selected bucket",
+      "title": "Contract title",
+      "titleBucket": "Let’s get you a bucket",
+      "titleBucketCreation": "Bucket creation in progress",
+      "titleBucketCreated": "Bucket successfully created",
+      "transfer": "Transfer ownership",
+      "uuid": "Contract UUID",
+      "encrypt": {
+        "step1": "Choose bucket",
+        "step2": "Upload, encrypt & assign CID",
+        "step2Info": "The file is being encrypted, uploaded to IPFS.",
+        "step3": "Finished",
+        "step3Info": "The file has been encrypted and CID has been assigned to NFT.",
+        "step3Btn": "Encrypt another file"
+      },
+      "status": {
+        "0": "CREATED",
+        "1": "INITIATED",
+        "2": "INSTANTIATING",
+        "3": "DEPLOYED",
+        "4": "TRANSFERRING",
+        "5": "TRANSFERRED",
+        "6": "FAILED"
+      },
+      "type": {
+        "1": "SCHRODINGER"
+      }
+    },
+    "upload": {
+      "dragAndDrop": "Drag & drop file",
+      "upload": "Upload file",
+      "uploaded": "Uploaded file:"
+    },
+    "transaction": {
+      "contractId": "Chain ID",
+      "hash": "Transaction Hash",
+      "statusMessage": "Status message",
+      "transactionType": "Transaction type",
+      "status": {
+        "1": "PENDING",
+        "2": "IN PROGRESS",
+        "3": "FAILED",
+        "4": "ERROR",
+        "5": "SUCCESS",
+        "6": "ERROR"
+      },
+      "type": {
+        "1": "DEPLOY CONTRACT",
+        "2": "TRANSFER CONTRACT OWNERSHIP",
+        "3": "DEPOSIT TO CONTRACT CLUSTER",
+        "4": "ASSIGN CID TO NFT"
+      }
+    },
+    "title": "Computing"
   },
   "dashboard": {
     "apiKey": {
@@ -179,6 +261,9 @@
       "amount": "Amount",
       "bonus": "Bonus credits",
       "buy": "Buy",
+      "buyWithCrypto": "Buy with Crypto",
+      "buyWithCreditCard": "Buy with Credit Card",
+      "buyWithDot": "Buy with DOT",
       "available": "available",
       "category": "Category",
       "checkPrice": "Check price",
@@ -186,7 +271,7 @@
       "cost": "Cost",
       "credits": "credits",
       "creditsAmount": "Credit amount",
-      "creditCosts": "Service description cost",
+      "creditCosts": "Service costs",
       "currentCredits": "Current credits",
       "date": "Date and time",
       "description": "Description",
@@ -218,6 +303,10 @@
           "name": "NFTs",
           "description": null
         },
+        "SOCIAL": {
+          "name": "Social",
+          "description": null
+        },
         "STORAGE": {
           "name": "Web3 Storage",
           "description": null
@@ -235,19 +324,34 @@
     },
     "nav": {
       "access": "Access",
-      "analytics": "Analytics",
       "authentication": "Authentication",
+      "apiKeys": "API keys",
+      "analytics": "Analytics",
       "billing": "Billing",
-      "nft": "NFTs",
-      "computing": "Computing",
       "configuration": "Configuration",
+      "computing": "Computing",
+      "explore": "Explore",
       "hosting": "Hosting",
-      "monitoring": "Monitoring",
+      "nft": "NFTs",
       "projectOverview": "Project overview",
       "projectSettings": "Project settings",
-      "services": "Services",
-      "serviceMonitor": "Service monitor",
-      "storage": "Storage"
+      "services": "Web3 Services",
+      "smartContracts": "Smart Contracts",
+      "social": "Social",
+      "solutions": "Pre-built Solutions",
+      "storage": "Storage",
+      "solution": {
+        "fileSharing": "Decentralized File Sharing",
+        "nftAirdrop": "NFT Minting and Airdrop",
+        "nftCollection": "Self-hosted NFT Collection",
+        "nftDrop": "NFT Drop",
+        "nftGift": "NFT Gifts in E-commerce",
+        "nftLoyalty": "NFT-based Loyalty Program",
+        "nftMembership": "NFT-based Brand Membership",
+        "poap": "Proof of Attendance NFTs",
+        "tokenGating": "Token Gating",
+        "wallet": "Non-custodial Wallet"
+      }
     },
     "pageMenu": {
       "access": "Access",
@@ -296,6 +400,139 @@
       "execute": "Execute permissions",
       "insufficient": "You don't have permissions to create or edit this item."
     },
+    "service": {
+      "authentication": {
+        "name": "Decentralized Authentication",
+        "description": "Boost users’ privacy and security with decentralized digital identity.",
+        "emptyTitle": "Your project does not have Authentication service yet",
+        "emptyInfo": "Add Web3 Authentication and create an API key.",
+        "emptyBtn": "Attach Web3 Auth",
+        "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
+      },
+      "hosting": {
+        "name": "Decentralized Hosting",
+        "description": "Make your website or app unstoppable and free from third-party impact.",
+        "kraken": "40k Webhosting Project for Kraken",
+        "title": "Web3 Hosting",
+        "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"]
+      },
+      "storage": {
+        "bucket": "Web3 storage bucket",
+        "name": "Decentralized Storage",
+        "description": "Make your content permanently accessible and easily shareable.",
+        "website": "Main Website Storage",
+        "usage": ["storage buckets", "different media", "free ssl support", "drag-n-drop ui"]
+      },
+      "computing": {
+        "name": "Computing",
+        "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
+        "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
+      },
+      "addFirst": "Add first service",
+      "delete": "Delete service",
+      "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",
+      "edit": "Edit service",
+      "info": "Launch a service, receive API keys and start building your next dapp.",
+      "new": "New service"
+    },
+    "smartContracts": {
+      "collection": "NFT collection",
+      "info": "Browse the list of smart contracts you can deploy and integrate and start building immediately via API.",
+      "kraken": "Smart contract for Kraken",
+      "meerkats": "Meerkats"
+    },
+    "solutions": {
+      "fileSharing": {
+        "name": "Decentralized File Sharing",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftAirdrop": {
+        "name": "NFT Minting and Airdrop",
+        "description": "Create a NFT collection, upload target addresses and automatically distribute NFTs to target addresses.",
+        "content": [
+          {
+            "headline": "How does it work?",
+            "content": "This standalone solution gives you ability to select the NFTs from your collection and distribute them to target addresses."
+          },
+          {
+            "title": "There are three possible ways of distribution:",
+            "content": [
+              "Upload CSV with target addresses",
+              "Upload list of Emails and send emails to users with instructions on how to create a wallet and mint their NFT",
+              "Select the Polkadot OpenGov referendum and the votes and we will automatically parse the addresses"
+            ]
+          },
+          {
+            "headline": "Possible use cases",
+            "title": "Reward your community with NFTs.",
+            "content": "Lorem ipsum dolor sit amet consectetur. Adipiscing habitasse risus enim pharetra. Egestas turpis eget et id nisi."
+          },
+          {
+            "title": "Send gratitude NFTs for your opengov referenda on Polkadot",
+            "content": "Pharetra ultricies interdum scelerisque suspendisse fames sed pharetra placerat purus. Mauris leo mauris aenean dolor congue placerat."
+          },
+          {
+            "title": "Distribute utility NFTs to specific set of wallets",
+            "content": "Lorem ipsum dolor sit amet consectetur. Eget morbi pharetra nec sit non diam consectetur ut vitae. Dictum mauris ipsum semper purus pharetra eget eget."
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
+      },
+      "nftCollection": {
+        "name": "Self-hosted NFT collection",
+        "description": "Get your self sovereign standalone NFT collection with one click. Create NFTs, deploy smart contract and finally host the collection website.",
+        "content": [
+          {
+            "headline": "How does it work?",
+            "content": "Launch your end-to-end decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the collection website on Web3.",
+            "benefits": ["Free metadata storage", "0 gas cost", "Free web template", "Free hosting"]
+          }
+        ],
+        "tabs": ["Create Collection", "Preview Collection", "Mint NFTs"],
+        "usage": [
+          "metadata storage",
+          "file storage",
+          "smart contracts",
+          "website template",
+          "hosting"
+        ]
+      },
+      "nftDrop": {
+        "name": "NFT Drop",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftLoyalty": {
+        "name": "NFT-based Loyalty Program",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftMembership": {
+        "name": "NFT-based Brand Membership",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftPoap": {
+        "name": "POAP NFTs",
+        "description": "Create POAP drops simply by clicking. Manage your POAP, allow users to either mint or email reserve the NFTs and boost your next event.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "tokenGating": {
+        "name": "Token Gating",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "wallet": {
+        "name": "Non-custodial Wallet",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "description": "Quickly deploy pre-built templates made and audited by Apillon. Each solution features a combination of Web3 services to demonstrate how they can be combined together, so you can learn, experiment, and launch your Web3 project fast.",
+      "includedWeb3Services": "Included Web3 Services",
+      "info": "Customize ready-to-deploy templates built and audited by Apillon."
+    },
     "subscription": {
       "bandwidth": "Bandwith",
       "canceledOn": "Your plan will be canceled on {date}.",
@@ -340,7 +577,7 @@
     "expiration": "Expiration",
     "gotIt": "Got it, thanks!",
     "goToApiManagement": "Go to central API management",
-    "homepage": "Homepage",
+    "homepage": "Project overview",
     "inviteTeamMember": "Invite team member",
     "learnMoreAboutServices": "Learn more about services",
     "manageRoles": "Manage roles",
@@ -350,7 +587,6 @@
     "searchDocs": "Search the docs",
     "secret": "Secret",
     "secrets": "Secrets",
-    "selectServices": "Select services",
     "total": "Total",
     "user": "User",
     "viewInvoice": "View Invoice",
@@ -473,11 +709,18 @@
     "INVALID_ADDRESS_FOR_TRANSFER_TO": "Wrong address, please enter different address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
     "CREDIT_BALANCE_TOO_LOW": "Credit balance too low",
-    "walletSignature": "'Could not capture your signature, check your wallet connection",
+    "COMPUTING_ACCOUNT_ADDRESS_NOT_PRESENT": "Account address is missing",
+    "COMPUTING_ACCOUNT_ADDRESS_NOT_VALID": "Account address is not valid",
+    "COMPUTING_CONTRACT_TYPE_NOT_VALID": "Contract type is not valid",
+    "CONTRACT_DOES_NOT_EXIST": "Contract does not exist",
+    "CONTRACT_NOT_DEPLOYED": "Contract is not deployed",
+    "TRANSACTION_FOR_TRANSFER_ALREADY_EXISTS": "Contract has already been transferred.",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
     "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again.",
-    "Unable to mint new NFTs, out of supply!": "Nfts out of stock!"
+    "request entity too large": "Request entity too large",
+    "Unable to mint new NFTs, out of supply!": "Nfts out of stock!",
+    "walletSignature": "'Could not capture your signature, check your wallet connection"
   },
   "form": {
     "apiKeyTypes": {
@@ -502,6 +745,10 @@
       "bucketName": "Bucket name",
       "cardHolder": "Card holder",
       "cardNumber": "Card number",
+      "chatAbout": "About",
+      "chatImage": "Hub image",
+      "chatName": "Hub name",
+      "chatTags": "Tags",
       "collectionBaseUri": "Base URI",
       "collectionBaseExtension": "Base Extension",
       "collectionChain": "Chain",
@@ -551,7 +798,26 @@
       "webhookUrl": "Webhook URL",
       "webhookUsername": "User name",
       "websiteDescription": "Website description",
-      "websiteName": "Website name"
+      "websiteName": "Website name",
+      "contract": {
+        "accountAddress": "Account Address",
+        "amount": "Amount",
+        "cid": "CID",
+        "contractType": "Contract type",
+        "description": "Contract description",
+        "name": "Contract name",
+        "nftContractAddress": "Contract Address",
+        "nftChainRpcUrl": "Chain RPC URL",
+        "nftId": "NFT ID",
+        "restrictToOwner": "Restrict to owner",
+        "useApillonCollection": "Use Apillon`s Collection",
+        "labelInfo": {
+          "nftContractAddress": "Contract Address which will be used to encrypt/decrypt content.",
+          "nftChainRpcUrl": "Chain RPC URL of used contract",
+          "restrictToOwner": "Own owner will be able to encrypt/decrypt files",
+          "useApillonCollection": "You can use a collection you created on Apillon or any collection you created on other chains."
+        }
+      }
     },
     "networkTypes": {
       "test": "Test network",
@@ -570,6 +836,7 @@
       "cardHolder": "John Doe",
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "chain": "Select Chain",
+      "chatTags": "Separate Tags with Commas",
       "complexPassword": "Enter complex password",
       "cvv": "311",
       "domain": "Type your domain name here",
@@ -605,7 +872,14 @@
       "webhookUrl": "Webhook URL",
       "webhookUsername": "Enter user name",
       "websiteDescription": "Website description",
-      "websiteName": "Website name"
+      "websiteName": "Website name",
+      "contract": {
+        "name": "Contract name",
+        "description": "Contract description",
+        "nftContractAddress": "Select or type contract address",
+        "nftChainRpcUrl": "Chain RPC URL",
+        "accountAddress": "Account Address"
+      }
     },
     "success": {
       "apiKey": "Api key has been created",
@@ -621,12 +895,20 @@
       "sendAgainEmail": "Email has been re-sent",
       "websiteDeployed": "Website has been deployed.",
       "websiteDeploying": "Done - deployment initiated",
+      "contract": {
+        "cidAssign": "CID has been assign to NFT",
+        "deploy": "Contract deploy has been initiated",
+        "encrypted": "Content has been encrypted",
+        "transferred": "Contract transfer has been initiated"
+      },
       "created": {
         "apiKey": "Api key has been created",
         "apiKeyRole": "Api key permission has been added",
         "apiKeyRoles": "Api key permissions has been added",
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
+        "chatPost": "Channel has been created",
+        "chatSpace": "Hub has been created",
         "collection": "Creating NFT collection requested.",
         "directory": "Folder has been created",
         "domain": "Domain has been added to Website",
@@ -645,6 +927,7 @@
         "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
+        "contract": "Contract has been deleted",
         "directory": "Folder has been deleted",
         "domain": "Domain has been deleted",
         "file": "File has been deleted",
@@ -669,6 +952,7 @@
         "apiKeyRoles": "Api key permissions has been added",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
+        "contract": "Contract has been updated",
         "directory": "Folder has been updated",
         "domain": "Domain has been updated",
         "file": "File has been updated",
@@ -882,21 +1166,12 @@
       "nft": "Deploying NFTs"
     },
     "metadata": {
-      "createBucket": "Create a bucket",
-      "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
-      "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
-      "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
       "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
       "infoCollectionName": "Define the name and symbol for your NFT collection.",
       "infoNew": "To ensure permanent access to your NFTs, you need to store their metadata and files on the web. \n\nWould you like to store your NFT metadata in decentralized way?",
       "no": "I already have it online",
-      "orSelectExisting": "or select existing bucket",
       "proceedUpload": "Proceed to upload",
-      "selectBucket": "Continue with selected bucket",
       "title": "Prepare NFT metadata",
-      "titleBucket": "Let’s get you a bucket",
-      "titleBucketCreation": "Bucket creation in progress",
-      "titleBucketCreated": "Bucket successfully created",
       "titleCollectionBehavior": "Behavior",
       "titleCollectionName": "Name your collection",
       "yes": "Yes, proceed"
@@ -1083,6 +1358,46 @@
     "xpPoints": "XP points:",
     "spendingPoints": "Spending points:"
   },
+  "social": {
+    "chat": {
+      "about": "About",
+      "addNew": "Add new hub",
+      "create": "Create hub",
+      "createFirst": "Create first hub",
+      "date": "Create time",
+      "dragAndDrop": "Drag & drop or click to upload.",
+      "empty": "A chat application built on top of the Subsocial blockchain 🔗.",
+      "emptyInfo": "Grill.chat offers a smooth and simple onboarding and user experience while still leveraging the power of blockchain technology.",
+      "name": "Hub name",
+      "new": "New hub",
+      "settings": "Grill.chat hub config",
+      "showSettings": "Show hub settings",
+      "spaceId": "Hub ID",
+      "tags": "Tags",
+      "title": "Hub title",
+      "uploadImage": "Upload image",
+      "uuid": "Hub UUID"
+    },
+    "post": {
+      "body": "Channel  content",
+      "create": "Create channel",
+      "date": "Created",
+      "new": "New channel",
+      "postId": "Channel ID",
+      "select": "Select channel",
+      "settings": "Grill.chat channel config",
+      "tags": "Tags",
+      "title": "Channel title",
+      "uuid": "Channel UUID"
+    },
+    "settings": {
+      "autofocus": "Enable input autofocus",
+      "back": "Enable back button",
+      "login": "Enable login button",
+      "theme": "Dark theme"
+    },
+    "title": "Social"
+  },
   "storage": {
     "bucket": {
       "addNew": "Add new bucket",
@@ -1163,7 +1478,7 @@
       "selectIpns": "Select IPNS",
       "title": "IPNS",
       "update": "Update IPNS",
-      "uuid": "IPNS UUID"
+      "uuid": "IPNS uuid"
     },
     "file": {
       "status": {
@@ -1238,37 +1553,16 @@
     "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don't want to do it just skip this process.",
     "wrapToDirectory": "Wrap to directory"
   },
-  "service": {
-    "authentication": {
-      "name": "Authentication",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum.",
-      "emptyTitle": "Your project does not have Authentication service yet",
-      "emptyInfo": "Add Web3 Authentication and create an API key.",
-      "emptyBtn": "Attach Web3 Auth"
-    },
-    "storage": {
-      "name": "Storage",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
-    },
-    "computing": {
-      "name": "Computing",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum."
-    },
-    "addFirst": "Add first service",
-    "delete": "Delete service",
-    "edit": "Edit service",
-    "new": "New service"
-  },
   "validation": {
     "alreadyOnList": "{name} is already on list",
     "apiKeyName": "API key name is required",
     "apiKeyIdRequired": "API key is required",
-    "bucketDescriptionTooLong": "Text is too long (max 255 characters)",
     "bucketNameRequired": "Please enter bucket name",
     "containsLowercase": "Must include a lowercase character",
     "containsNumber": "Must include a number character",
     "containsSpecial": "Must include a special character",
     "containsUppercase": "Must include an uppercase character",
+    "captchaRequired": "Captcha challenge required!",
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
     "collectionBaseUri": "Base URI is not valid",
@@ -1292,6 +1586,7 @@
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
     "cvvRequired": "Please enter CVV",
+    "descriptionTooLong": "Text is too long (max 255 characters)",
     "email": "Email address is not valid",
     "emailRequired": "Typing in your email would definitely hit the spot :)",
     "expirationDate": "Date is expired",
@@ -1302,7 +1597,6 @@
     "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",
     "ipfsCidRequired": "Please enter CID or IPNS",
-    "ipnsDescriptionTooLong": "Text is too long (max 255 characters)",
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
     "nftBucketRequired": "Please select a bucket",
@@ -1313,7 +1607,7 @@
     "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
     "nftTransferAddressRequired": "Please enter wallet address",
-    "notEnoughSpaceInStorage": "File \"{name}\" is to big. To proceed, please upgrade your subscription plan.",
+    "notEnoughSpaceInStorage": "File \"{name}\" is too big. To proceed, please upgrade your subscription plan.",
     "notImage": "{name} is not an image",
     "passwordMinLength": "Password must contain at least 12 characters.",
     "passwordReenterSame": "Password is not same as re-entered password!",
@@ -1321,11 +1615,12 @@
     "passwordRequired": "Please enter your password",
     "postalCode": "Wrong postal code",
     "postalCodeRequired": "Please enter postal code",
+    "postBodyRequired": "Please write content",
+    "postTitleRequired": "Please write a title",
     "streetRequired": "Please enter your street",
     "houseNumberRequired": "Please enter your house number",
     "projectNameRequired": "Please enter project name",
     "phone": "Phone validation error",
-    "captchaRequired": "Captcha challenge required!",
     "role": "Selected role is invalid",
     "roleRequired": "Please select role",
     "terms": "Please accept the terms",
@@ -1337,14 +1632,26 @@
     "webhookUsernameRequired": "Please enter username",
     "webhookTokenRequired": "Please enter token",
     "websiteNameRequired": "Please enter Website name",
-    "websiteDescriptionTooLong": "Description is too long (max 255 characters)",
-    "websiteDomainUrl": "Domain name is not a valid URL"
+    "websiteDomainUrl": "Domain name is not a valid URL",
+    "contract": {
+      "addressRequired": "Please enter Phala address",
+      "bucketUuidRequired": "Please select Bucket",
+      "cidRequired": "Please enter CID",
+      "depositAmountRequired": "Please enter amount",
+      "depositAmountTooLow": "Please enter a higher amount (min. 0.01)",
+      "fileIsApp": "Type of file \"{name}\" is is not supported, please use another file.",
+      "fileTooBig": "File \"{name}\" is, max file size is 64kb.",
+      "nftIdRequired": "Please enter NFT ID"
+    }
   },
   "w3Warn": {
     "bucket": {
       "new": "Each file hosting that passes through Crust's pinning and replication service is paid up front for a minimum period of 6 months. Apillon has no control over amending that period, so keep in mind that all files you deploy to Apillon storage buckets will remain accessible for that period of time.",
       "delete": "All items stored in this bucket will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before.",
       "destroyed": ""
+    },
+    "contract": {
+      "new": "New Phat contract"
     },
     "file": {
       "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."
@@ -1361,6 +1668,10 @@
     },
     "nft": {
       "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world."
+    },
+    "social": {
+      "info": "Subsocial is a set of Substrate pallets that allows anyone to launch their own decentralized social network or community, or add social features to an existing application. Subsocial is not a decentralized social network, like Twitter or Facebook, but rather Subsocial is a platform for building social networks.",
+      "grillChat": " is a mobile-friendly, anonymous chat application powered by Subsocial, allowing anyone to communicate on-chain, without needing a wallet or tokens!"
     }
   }
 }

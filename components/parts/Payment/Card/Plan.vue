@@ -38,6 +38,7 @@
       </div>
       <div class="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-4">
         <Btn
+          :class="btnClass"
           :type="btnType"
           :disabled="authStore.isAdmin() || dataStore.isProjectUser"
           @click="modalSubscriptionPackagesVisible = true"
@@ -64,6 +65,7 @@
   </n-card>
   <Btn
     v-else
+    :class="btnClass"
     :type="btnType"
     size="large"
     :disabled="dataStore.isProjectUser"
@@ -96,10 +98,14 @@
 
 <script lang="ts" setup>
 import colors from '~/tailwind.colors';
+import type { Type as NButtonType } from 'naive-ui/es/button/src/interface';
+
+type ButtonType = NButtonType | 'secondary' | 'builders' | 'link';
 
 defineProps({
   showCard: { type: Boolean, default: true },
-  btnType: { type: String as PropType<'primary' | 'secondary'>, default: 'primary' },
+  btnClass: { type: String, default: '' },
+  btnType: { type: String as PropType<ButtonType>, default: 'primary' },
   btnText: { type: String, default: null },
 });
 

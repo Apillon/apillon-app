@@ -14,7 +14,7 @@ export default function useUpload() {
   const folderName = ref<string>('');
   const wrapToDirectory = ref<boolean>(false);
   const endSession = ref<boolean>(true);
-  const fileList = ref<Array<FileListItemType>>([]);
+  const fileList = ref<FileListItemType[]>([]);
   const clearFileList = ref<boolean>(false);
   const putRequests = ref<Array<any>>([]);
 
@@ -40,7 +40,7 @@ export default function useUpload() {
    *  Methods
    */
   /** Check if file is already on list */
-  function fileAlreadyOnFileList(uploadFileList: Array<FileListItemType>, file: FileListItemType) {
+  function fileAlreadyOnFileList(uploadFileList: FileListItemType[], file: FileListItemType) {
     return uploadFileList.some(
       item =>
         item.name === file.name &&
@@ -55,7 +55,7 @@ export default function useUpload() {
   }
 
   /** Check if file is too big (out of space) */
-  function isEnoughSpaceInStorage(uploadFileList: Array<FileListItemType>, file: FileListItemType) {
+  function isEnoughSpaceInStorage(uploadFileList: FileListItemType[], file: FileListItemType) {
     const availableSize = storageStore.info.availableStorage - storageStore.info.usedStorage;
     totalFilesSize.value = uploadFileList.reduce((acc, item) => {
       return acc + item.size;
@@ -65,7 +65,7 @@ export default function useUpload() {
 
   async function uploadFiles(
     uploadBucketUuid: string,
-    uploadFileList: Array<FileListItemType>,
+    uploadFileList: FileListItemType[],
     wrapFilesToDirectory: boolean = false,
     clearFileListOnFinish: boolean = false,
     endSessionOnUploadEnd: boolean = true

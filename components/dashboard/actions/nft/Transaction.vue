@@ -61,11 +61,9 @@ defineProps({
 const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer']);
 
 const $i18n = useI18n();
-const router = useRouter();
 const authStore = useAuthStore();
-const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
-const loadingBucket = ref<boolean>(false);
+const { loadingBucket, openBucket } = useStorage();
 
 const actionsDisabled = computed<boolean>(() => {
   return collectionStore.active?.collectionStatus !== CollectionStatus.DEPLOYED;
@@ -127,19 +125,5 @@ const options = computed(() => {
 
 async function refresh() {
   await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
-}
-
-async function openBucket(bucketUuid: string) {
-  if (!bucketUuid) {
-    return;
-  }
-  loadingBucket.value = true;
-
-  const bucket = await bucketStore.fetchBucket(bucketUuid);
-  loadingBucket.value = false;
-
-  if (bucket && bucket.bucket_uuid) {
-    router.push(`/dashboard/service/storage/${bucket.bucket_uuid}`);
-  }
 }
 </script>

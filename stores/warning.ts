@@ -14,8 +14,11 @@ export const useWarningStore = defineStore('warning', {
 
       const paymentStore = usePaymentStore();
       const servicePrice = paymentStore.findServicePrice(serviceName);
+
       if (servicePrice && servicePrice?.currentPrice > 0) {
         this.isSpendingWarningOpen = true;
+      } else {
+        action();
       }
 
       /** Remove timestamp for deleted items */

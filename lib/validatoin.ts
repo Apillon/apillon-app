@@ -4,6 +4,13 @@ export function ruleRequired(errMsg: string) {
     message: errMsg,
   };
 }
+export function ruleDescription(errMsg: string) {
+  return {
+    max: 255,
+    message: errMsg,
+    trigger: 'input',
+  };
+}
 
 /**
  * Custom validations

@@ -196,7 +196,7 @@ declare global {
     url: string;
   }
   interface S3FilesUploadRequestInterface {
-    files: Array<S3FileUploadRequestInterface>;
+    files: S3FileUploadRequestInterface[];
     session_uuid: string;
   }
 

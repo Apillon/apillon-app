@@ -10,6 +10,7 @@ export enum Permission {
   NFTS = 3,
   AUTHENTICATION = 4,
   COMPUTING = 5,
+  SOCIAL = 6,
 }
 
 /* OAuth link type */

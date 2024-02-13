@@ -21,7 +21,7 @@
       <FormWrapper :title="$t('profile.security')">
         <!-- Change password -->
         <n-h5>{{ $t('profile.password.title') }}</n-h5>
-        <p class="text-body">{{ $t('profile.password.info') }}</p>
+        <p>{{ $t('profile.password.info') }}</p>
         <FormPasswordResetRequest class="w-full mt-8" :email="authStore.email">
           {{ $t('profile.password.btn') }}
         </FormPasswordResetRequest>
@@ -34,7 +34,7 @@
           v-if="isFeatureEnabled(Feature.TWO_FACTOR_AUTHENTICATION, authStore.getUserRoles())"
         >
           <n-h5>{{ $t('profile.2fa') }}</n-h5>
-          <p class="text-body">{{ $t('profile.2faText') }}</p>
+          <p>{{ $t('profile.2faText') }}</p>
           <Btn class="w-full my-8" type="secondary">{{ $t('profile.setup2fa') }}</Btn>
         </template>
       </FormWrapper>
@@ -46,7 +46,7 @@
         :title="$t('profile.marketing.title')"
       >
         <div class="mb-4">
-          <p class="text-body">{{ $t('profile.marketing.info') }}</p>
+          <p>{{ $t('profile.marketing.info') }}</p>
           <Btn
             class="inline-block text-sm"
             type="link"

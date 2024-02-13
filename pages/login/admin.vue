@@ -3,6 +3,11 @@
 </template>
 
 <script lang="ts" setup>
+type LoginData = {
+  sessionToken: string;
+  projectUuid: string;
+  path?: string;
+};
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
@@ -25,7 +30,7 @@ onMounted(() => {
   // listen for messages from the parent.
   const onWindowLoaded = event => {
     if (event.origin === config.public.adminUrl && event.data?.projectUuid) {
-      onAdminLogin(event.data?.sessionToken, event.data?.projectUuid);
+      onAdminLogin(event.data);
 
       window.removeEventListener('message', onWindowLoaded, false);
     }
@@ -33,8 +38,8 @@ onMounted(() => {
   window.addEventListener('message', onWindowLoaded, false);
 });
 
-async function onAdminLogin(sessionToken?: string, projectUuid?: string) {
-  if (!sessionToken || !projectUuid) {
+async function onAdminLogin(data: LoginData) {
+  if (!data.sessionToken || !data.projectUuid) {
     authStore.logout();
     router.push('/');
     return;
@@ -42,17 +47,20 @@ async function onAdminLogin(sessionToken?: string, projectUuid?: string) {
   clearAll();
   localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
 
-  authStore.setUserToken(toStr(sessionToken));
+  authStore.setUserToken(toStr(data.sessionToken));
   await authStore.initUser();
   if (authStore.jwt) {
     authStore.adminSession = true;
 
     /** Load project data */
-    dataStore.project.selected = projectUuid;
-    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, toStr(projectUuid));
+    dataStore.project.selected = data.projectUuid;
+    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, toStr(data.projectUuid));
 
-    /** Redirect to project */
+    /** Redirect to project or other entity */
     router.push({ name: 'dashboard' });
+    if (data.path) {
+      setTimeout(() => router.push(data.path || ''), 500);
+    }
 
     /** Message parent on successful login */
     window.parent.postMessage({ loggedIn: true }, '*');

@@ -34,7 +34,7 @@
       "
     >
       <template #content>
-        <p class="text-body">
+        <p>
           {{ $t(`storage.${currentRowType}.deleteConfirm`, { num: 1 }) }}
         </p>
       </template>
@@ -590,7 +590,7 @@ async function getDirectoryContent(bucketUuid?: string, folderUuid?: string, pag
     bucketUuid,
     folderUuid,
     page,
-    limit: pagination.pageSize,
+    limit: pagination.value.pageSize,
     search: bucketStore.folder.search,
     orderBy: sort.value ? `${sort.value.columnKey}` : undefined,
     order: sort.value ? `${sort.value.order}` : undefined,

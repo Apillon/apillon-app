@@ -38,9 +38,9 @@ export default defineNuxtConfig({
 
   modules: [
     '@vueuse/nuxt',
-    '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-icons',
+    ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
     [
       '@nuxtjs/google-fonts',
       {
@@ -48,10 +48,7 @@ export default defineNuxtConfig({
         display: 'swap',
         download: false,
         families: {
-          'IBM Plex Mono': {
-            wght: [400, 700],
-          },
-          'IBM Plex Sans': {
+          Inter: {
             wght: [400, 700],
           },
         },
@@ -80,20 +77,8 @@ export default defineNuxtConfig({
     },
   },
 
-  tailwindcss: {
-    cssPath: '~/assets/css/tailwind.css',
-  },
-
   imports: {
-    dirs: [
-      './lib',
-      './lib/wallet',
-      './types',
-      './stores',
-      './stores/hosting',
-      './stores/nft',
-      './stores/storage',
-    ],
+    dirs: ['./lib', './lib/wallet', './types', './stores/**'],
   },
 
   app: {

@@ -12,14 +12,23 @@ export const useFileStore = defineStore('file', {
     loading: false,
     search: '',
     total: 0,
-    trash: [] as Array<BucketItemInterface>,
+    trash: {
+      items: [] as Array<BucketItemInterface>,
+      loading: false,
+      search: '',
+      pagination: {
+        page: 1,
+        pageSize: PAGINATION_LIMIT,
+        itemCount: 0,
+      },
+    },
   }),
   getters: {
     hasAllFiles(state): boolean {
       return Array.isArray(state.all) && state.all.length > 0;
     },
     hasDeletedFiles(state): boolean {
-      return Array.isArray(state.trash) && state.trash.length > 0;
+      return Array.isArray(state.trash.items) && state.trash.items.length > 0;
     },
   },
   actions: {
@@ -28,7 +37,8 @@ export const useFileStore = defineStore('file', {
       this.items = {} as Record<string, FileInterface>;
       this.loading = false;
       this.total = 0;
-      this.trash = [] as Array<BucketItemInterface>;
+      this.trash.items = [] as Array<BucketItemInterface>;
+      this.trash.pagination.itemCount = 0;
     },
 
     /**
@@ -39,8 +49,12 @@ export const useFileStore = defineStore('file', {
         await this.fetchAllFiles();
       }
     },
-    async getDeletedFiles() {
-      if (!this.hasDeletedFiles || isCacheExpired(LsCacheKeys.FILE_DELETED)) {
+    async getDeletedFiles(page = 1) {
+      if (
+        this.trash.pagination.page !== page ||
+        !this.hasDeletedFiles ||
+        isCacheExpired(LsCacheKeys.FILE_DELETED)
+      ) {
         await this.fetchDeletedFiles();
       }
     },
@@ -149,30 +163,32 @@ export const useFileStore = defineStore('file', {
     },
 
     /** Fetch deleted files */
-    async fetchDeletedFiles() {
+    async fetchDeletedFiles(args: FetchParams = {}) {
       const bucketStore = useBucketStore();
-      this.loading = true;
+      this.trash.loading = true;
 
       try {
+        const params = parseArguments(args);
+
         const res = await $api.get<FolderResponse>(
           endpoints.storageFilesTrashed(bucketStore.bucketUuid),
-          PARAMS_ALL_ITEMS
+          params
         );
 
-        this.trash = res.data.items;
+        this.trash.items = res.data.items;
+        this.trash.pagination.itemCount = res.data.total;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.FILE_DELETED, Date.now().toString());
       } catch (error: any) {
         /** Reset data */
-        this.trash = [];
+        this.trash.items = [];
+        this.trash.pagination.itemCount = 0;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
-
-      this.search = '';
-      this.loading = false;
+      this.trash.loading = false;
     },
   },
 });

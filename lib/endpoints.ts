@@ -60,6 +60,9 @@ const Endpoints = {
   productPrice: (productId?: string | number) => {
     return productId ? `/payments/products/${productId}/price` : '/payments/products/price-list';
   },
+  crypto: (id?: string | number) => {
+    return id ? `/payments/crypto/payment/${id}` : '/payments/crypto/payment';
+  },
   creditSessionUrl: '/payments/stripe/credit-session-url',
   subscriptionSessionUrl: '/payments/stripe/subscription-session-url',
   customerPortalUrl: '/payments/stripe/customer-portal-session-url',
@@ -177,7 +180,7 @@ const Endpoints = {
   },
 
   /** Collection */
-  collections: (id?: number | string) => {
+  collections: (id?: string) => {
     return id ? `/nfts/collections/${id}` : '/nfts/collections';
   },
   collectionTransactions: (collectionUuid: string) => {
@@ -200,6 +203,26 @@ const Endpoints = {
   },
 
   /**
+   * Computing
+   */
+  /** Contracts */
+  contracts: (uuid?: string) => {
+    return uuid ? `/computing/contracts/${uuid}` : '/computing/contracts';
+  },
+  contractAssignCid: (uuid?: string) => {
+    return `/computing/contracts/${uuid}/assign-cid-to-nft`;
+  },
+  contractEncrypt: (uuid?: string) => {
+    return `/computing/contracts/${uuid}/encrypt`;
+  },
+  contractTransferOwnership: (uuid: string) => {
+    return `/computing/contracts/${uuid}/transfer-ownership`;
+  },
+  contractTransactions: (contractUuid: string) => {
+    return `/computing/contracts/${contractUuid}/transactions`;
+  },
+
+  /**
    * Project settings
    */
 
@@ -215,6 +238,18 @@ const Endpoints = {
   },
   apiKeyServiceRoles: (key: number) => {
     return `/api-keys/${key}/service-roles`;
+  },
+
+  /**
+   * Social
+   */
+  spaces: (uuid?: number | string) => {
+    return uuid ? `/social/spaces/${uuid}` : '/social/spaces';
+  },
+  posts: (space_uuid: number | string, uuid?: number | string) => {
+    return uuid
+      ? `/social/spaces/${space_uuid}/posts/${uuid}`
+      : `/social/spaces/${space_uuid}/posts`;
   },
 
   /** Oauth links */

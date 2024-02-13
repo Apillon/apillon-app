@@ -47,4 +47,9 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const modalCreditPackagesVisible = ref<boolean>(false);
+
+onMounted(async () => {
+  // const payment = await paymentStore.fetchCryptoPayment(6218618716);
+  // const payment = await paymentStore.fetchCryptoPayment(6298836644);
+});
 </script>
