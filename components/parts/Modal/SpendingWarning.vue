@@ -63,11 +63,6 @@ watch(
   service => {
     if (service) {
       servicePrice.value = paymentStore.findServicePrice(warningStore.serviceName);
-
-      /** Auto submit if action is FREE */
-      if (servicePrice.value?.currentPrice === 0) {
-        submit();
-      }
     }
   },
   { immediate: true }
