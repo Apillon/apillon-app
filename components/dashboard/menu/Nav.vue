@@ -80,7 +80,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       key: 'dashboard-service-social',
       label: $i18n.t('dashboard.nav.social'),
       to: 'dashboard-service-social',
-      iconName: 'icon-subsocial',
+      iconName: 'icon-social',
       soon: !isFeatureEnabled(Feature.SOCIAL, authStore.getUserRoles()),
       disabled: isMenuItemDisabled(Feature.SOCIAL) || !authStore.isUserAllowed(Permission.SOCIAL),
     },
