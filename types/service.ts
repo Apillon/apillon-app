@@ -55,6 +55,7 @@ export enum PriceServiceCategory {
   MOONBASE_NFT = 'MOONBASE_NFT',
   ASTAR_NFT = 'ASTAR_NFT',
   KILT_IDENTITY = 'KILT_IDENTITY',
+  GRILL_CHAT = 'GRILLCHAT',
 }
 export enum PriceServiceAction {
   BURN = 'BURN',
