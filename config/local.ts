@@ -27,7 +27,6 @@ const config: ConfigInterface = {
     'PROJECT_DELETE',
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
-    'REFERRAL',
     'SERVICES',
     'SOCIAL',
     'SOCIAL_ICONS',

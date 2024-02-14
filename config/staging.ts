@@ -17,7 +17,6 @@ const config: ConfigInterface = {
     'PROJECT',
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
-    'REFERRAL',
     'SERVICES',
     'WALLET_LOGIN',
     'CAPTCHA_LOGIN',
