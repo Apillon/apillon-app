@@ -19,17 +19,6 @@
       <n-space size="large">
         <!-- Show only if user select files -->
         <template v-if="isUpload && bucketStore.folder.selectedItems.length > 0">
-          <!-- Download files -->
-          <n-button
-            class="w-10"
-            size="small"
-            :focus="true"
-            :loading="downloading"
-            @click="downloadSelectedFiles"
-          >
-            <span class="icon-download text-xl"></span>
-          </n-button>
-
           <!-- Delete files -->
           <n-tooltip placement="bottom" :show="showPopoverDelete">
             <template #trigger>
@@ -56,17 +45,6 @@
           <span class="icon-refresh text-xl mr-2"></span>
           {{ $t('general.refresh') }}
         </n-button>
-
-        <!-- Create folder
-        <n-button
-          v-if="isUpload"
-          size="small"
-          :disabled="authStore.isAdmin()"
-          @click="showModalNewFolder = true"
-        >
-          <span class="icon-create-folder text-xl mr-2"></span>
-          {{ $t('storage.directory.create') }}
-        </n-button> -->
 
         <!-- Clear all files -->
         <n-button
@@ -175,7 +153,6 @@ const props = defineProps({
   env: { type: Number, default: 0 },
 });
 
-const { downloading, downloadSelectedFiles } = useFile();
 const { websiteUuid, refreshWebpage } = useHosting();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
 const { subscriptionMessage } = usePayment();
