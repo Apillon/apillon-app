@@ -7,7 +7,7 @@ export const usePostStore = defineStore('post', {
     items: [] as PostInterface[],
     loading: false,
     search: '',
-    settings: null as GrillConfig,
+    settings: null as any,
     pagination: {
       page: 1,
       pageSize: PAGINATION_LIMIT,

@@ -246,7 +246,15 @@
       "generate": "Generate new key",
       "secretSaved": "I've saved API key's secret",
       "title": "API keys",
-      "update": "Update API key"
+      "update": "Update API key",
+      "service": {
+        "authentication": "Authentication service",
+        "computing": "Computing service",
+        "hosting": "Hosting service",
+        "nft": "NFT service",
+        "social": "Social service",
+        "storage": "Storage service"
+      }
     },
     "clipboard": {
       "copied": "Text has been copied to clipboard",

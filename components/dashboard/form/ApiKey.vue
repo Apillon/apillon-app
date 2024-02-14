@@ -30,11 +30,15 @@
       <n-collapse-item
         v-for="service in formData.roles"
         :key="service.service_uuid"
-        :title="service.name"
+        :title="$t(`dashboard.apiKey.service.${service.serviceType.toLocaleLowerCase()}`)"
         :name="service.service_uuid"
       >
         <template #arrow>
-          <span :class="`icon-${service.serviceType.toLocaleLowerCase()}`"></span>
+          <span
+            :class="`icon-${service.serviceType.toLocaleLowerCase()}`"
+            class="min-w-[20px] text-center"
+          >
+          </span>
         </template>
         <template #header-extra>
           <n-switch v-model:value="service.enabled" class="pointer-events-none" />
