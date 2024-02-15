@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName } from '~/types/service';
+import { ServiceTypeName } from '~/lib/types/service';
 
 const props = defineProps({
   service: { type: String, default: null },

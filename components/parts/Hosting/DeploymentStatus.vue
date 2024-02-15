@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { DeploymentStatus } from '~~/types/storage';
+import { DeploymentStatus } from '~/lib/types/storage';
 
 defineProps({
   deploymentStatus: {

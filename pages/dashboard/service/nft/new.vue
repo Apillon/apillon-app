@@ -249,7 +249,6 @@ const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
-const { transactionLink } = useNft();
 const { isFormDisabled } = useCollection();
 const { loadingBucket, openBucket } = useStorage();
 

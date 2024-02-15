@@ -62,7 +62,7 @@
 import debounce from 'lodash.debounce';
 import type { DataTableInst, DataTableRowKey, DataTableSortState } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
-import { TableFilesType } from '~~/types/storage';
+import { TableFilesType } from '~/lib/types/storage';
 
 const props = defineProps({
   type: { type: Number as PropType<TableFilesType>, default: 0 },

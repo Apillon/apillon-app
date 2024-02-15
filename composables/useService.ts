@@ -37,6 +37,14 @@ export default function useService() {
       usage: translateItems('dashboard.service.authentication.usage'),
     },
     {
+      id: ServiceType.NFT,
+      name: 'nft',
+      icon: 'icon-nft',
+      link: 'dashboard-service-nft',
+      disabled: !isFeatureEnabled(Feature.NFT, authStore.getUserRoles()),
+      usage: translateItems('dashboard.service.nft.usage'),
+    },
+    {
       id: ServiceType.COMPUTING,
       name: 'computing',
       icon: 'icon-computing',

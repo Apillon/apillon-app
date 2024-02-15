@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ComputingTransactionStatus } from '~/types/computing';
+import { ComputingTransactionStatus } from '~/lib/types/computing';
 
 defineProps({
   transactionStatus: { type: Number as PropType<ComputingTransactionStatus>, default: 1 },
