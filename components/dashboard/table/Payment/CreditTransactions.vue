@@ -45,8 +45,8 @@
 </template>
 
 <script lang="ts" setup>
-import { CreditDirection, TransactionCategory } from '~/types/payment';
-import { ServiceTypeName } from '~/types/service';
+import { CreditDirection, TransactionCategory } from '~/lib/types/payment';
+import { ServiceTypeName } from '~/lib/types/service';
 
 const { t } = useI18n();
 const paymentStore = usePaymentStore();

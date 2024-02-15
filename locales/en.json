@@ -417,6 +417,11 @@
         "emptyBtn": "Attach Web3 Auth",
         "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
       },
+      "computing": {
+        "name": "Computing",
+        "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
+        "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
+      },
       "hosting": {
         "name": "Decentralized Hosting",
         "description": "Make your website or app unstoppable and free from third-party impact.",
@@ -424,17 +429,23 @@
         "title": "Web3 Hosting",
         "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"]
       },
+      "nft": {
+        "name": "NFTs",
+        "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
+        "usage": [
+          "storage buckets",
+          "smart contracts",
+          "drag-n-drop ui",
+          "website template",
+          "hosting"
+        ]
+      },
       "storage": {
         "bucket": "Web3 storage bucket",
         "name": "Decentralized Storage",
         "description": "Make your content permanently accessible and easily shareable.",
         "website": "Main Website Storage",
         "usage": ["storage buckets", "different media", "free ssl support", "drag-n-drop ui"]
-      },
-      "computing": {
-        "name": "Computing",
-        "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
-        "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -1298,7 +1309,8 @@
     "owner": "Project owner",
     "quotaReached": "Quota has been reached. To create more projects",
     "upgradePlan": " upgrade your current plan",
-    "usersAndPermissions": "Project users & permissions"
+    "usersAndPermissions": "Project users & permissions",
+    "uuid": "Project UUID"
   },
   "referral": {
     "banner": {

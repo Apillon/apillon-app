@@ -35,7 +35,14 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       key: 'transactionHash',
       title: $i18n.t('computing.transaction.hash'),
       render(row: TransactionInterface) {
-        return h(resolveComponent('TableEllipsis'), { text: row.transactionHash }, '');
+        return h(
+          resolveComponent('TableLink'),
+          {
+            text: row.transactionHash,
+            link: transactionLink(row.transactionHash, SubstrateChain.PHALA),
+          },
+          ''
+        );
       },
     },
     {

@@ -1,5 +1,5 @@
 import type { GlobalThemeOverrides, MessageProviderProps } from 'naive-ui';
-import colors from '~~/tailwind.colors';
+import colors from '~/tailwind.colors';
 
 type MessageThemeOverrides = NonNullable<MessageProviderProps['themeOverrides']>;
 const messageOverrides: MessageThemeOverrides = {

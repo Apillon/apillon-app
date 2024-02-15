@@ -89,7 +89,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~~/tailwind.colors';
+import colors from '~/tailwind.colors';
 
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
