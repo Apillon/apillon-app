@@ -5,10 +5,13 @@
         <NuxtLink :to="{ name: 'dashboard-service-storage' }">
           <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
-        <n-space align="baseline" :size="[12, 0]" :wrap="true">
-          <h2 class="whitespace-nowrap">{{ bucketStore.active.name }}</h2>
-          <TableEllipsis :prefix="$t('general.uuid')" :text="bucketStore.active.bucket_uuid" />
-        </n-space>
+        <div>
+          <h2>{{ bucketStore.active.name }}</h2>
+          <TableEllipsis
+            :prefix="$t('storage.bucket.uuid')"
+            :text="bucketStore.active.bucket_uuid"
+          />
+        </div>
       </div>
     </slot>
 
