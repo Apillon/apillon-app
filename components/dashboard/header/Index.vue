@@ -67,7 +67,7 @@
 <script lang="ts" setup>
 import { NSpace } from 'naive-ui';
 
-const emit = defineEmits(['toggleSidebar']);
+const emit = defineEmits(['toggleSidebar', 'toggleChat']);
 const authStore = useAuthStore();
-const { isSm } = useScreen();
+const { isSm, isLg } = useScreen();
 </script>

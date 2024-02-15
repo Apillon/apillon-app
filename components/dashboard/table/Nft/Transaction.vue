@@ -18,7 +18,6 @@ const props = defineProps({
 
 const $i18n = useI18n();
 const collectionStore = useCollectionStore();
-const { transactionLink } = useNft();
 
 const NftTransactionStatus = resolveComponent('NftTransactionStatus');
 const NftTransactionType = resolveComponent('NftTransactionType');

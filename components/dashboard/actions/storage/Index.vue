@@ -72,7 +72,10 @@
 
   <!-- Modal - Create bucket -->
   <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
-    <FormStorageBucket @submit-success="showModalNewBucket = false" />
+    <FormStorageBucket
+      @submit-success="showModalNewBucket = false"
+      @create-success="onBucketCreated"
+    />
   </modal>
 </template>
 
@@ -80,6 +83,7 @@
 const emit = defineEmits(['onBucketDelete']);
 
 const $i18n = useI18n();
+const router = useRouter();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const showModalNewBucket = ref<boolean | null>(false);
@@ -103,4 +107,8 @@ const bucketTypes = ref<NSelectOption[]>([
 //     };
 //   });
 // });
+
+function onBucketCreated(bucket: BucketInterface) {
+  router.push(`/dashboard/service/storage/${bucket.bucket_uuid}`);
+}
 </script>

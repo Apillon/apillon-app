@@ -44,7 +44,11 @@
       <tbody>
         <tr v-for="(price, key) in shownPrices" :key="key">
           <td>
-            <NuxtIcon :name="getIconName(price)" class="float-left text-2xl mr-3" filled />
+            <NuxtIcon
+              :name="getIconName(price)"
+              class="float-left text-white text-2xl mr-3"
+              filled
+            />
             <span>{{ price.description }} </span>
           </td>
           <td class="text-right">
@@ -59,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ServiceTypeName } from '~/types/service';
+import { ServiceTypeName } from '~/lib/types/service';
 
 const props = defineProps({
   service: { type: String, default: null },
@@ -156,6 +160,8 @@ function getIconName(service: ProductPriceInterface) {
       return 'logo/moonbase';
     case PriceServiceCategory.MOONBEAM_NFT:
       return 'logo/moonbeam';
+    case PriceServiceCategory.GRILL_CHAT:
+      return 'logo/subsocial';
   }
   switch (service.name) {
     case PriceServiceName.HOSTING_WEBSITE:

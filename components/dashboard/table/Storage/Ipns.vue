@@ -48,9 +48,17 @@ const TableEllipsis = resolveComponent('TableEllipsis');
 const TableLink = resolveComponent('TableLink');
 
 /** Available columns - show/hide column */
-const selectedColumns = ref(['name', 'description', 'ipnsName', 'ipnsValue', 'createTime']);
+const selectedColumns = ref([
+  'name',
+  'ipns_uuid',
+  'description',
+  'ipnsName',
+  'ipnsValue',
+  'createTime',
+]);
 const availableColumns = ref([
   { value: 'name', label: $i18n.t('general.name') },
+  { value: 'ipns_uuid', label: $i18n.t('storage.ipns.uuid') },
   { value: 'description', label: $i18n.t('storage.ipns.description') },
   { value: 'ipnsName', label: $i18n.t('storage.ipns.ipnsName') },
   { value: 'ipnsValue', label: $i18n.t('storage.ipns.link') },
@@ -66,6 +74,13 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
       title: $i18n.t('storage.ipns.name'),
       minWidth: 100,
       className: { hidden: !selectedColumns.value.includes('name') },
+    },
+    {
+      key: 'ipns_uuid',
+      title: $i18n.t('storage.ipns.uuid'),
+      render(row: IpnsInterface) {
+        return h(TableEllipsis, { text: row.ipns_uuid }, '');
+      },
     },
     {
       key: 'description',
@@ -152,7 +167,7 @@ const rowKey = (row: IpnsInterface) => row.ipns_uuid;
 
 function handleColumnChange(selectedValues: Array<string>) {
   selectedColumns.value = selectedValues;
-  localStorage.setItem(LsTableColumnsKeys.FILES, JSON.stringify(selectedColumns.value));
+  localStorage.setItem(LsTableColumnsKeys.IPNS, JSON.stringify(selectedColumns.value));
 }
 
 /** Dropdown options for files */

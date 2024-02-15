@@ -34,7 +34,7 @@
 
       <!-- Drawer - Generate new Key -->
       <n-drawer v-model:show="drawerGenerateApiKeyVisible" :width="495">
-        <n-drawer-content>
+        <n-drawer-content :native-scrollbar="false">
           <template #header>
             <h5>{{ $t('dashboard.apiKey.generate') }}</h5>
           </template>

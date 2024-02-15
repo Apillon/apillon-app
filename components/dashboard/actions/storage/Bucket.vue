@@ -78,7 +78,7 @@
   <!-- Modal - Delete file/folder -->
   <ModalDelete v-model:show="showModalDelete" :title="$t(`storage.delete.bucketItems`)">
     <template #content>
-      <p class="text-body">
+      <p>
         {{ $t(`storage.delete.deleteConfirm`, { num: bucketStore.folder.selectedItems.length }) }}
       </p>
     </template>
@@ -89,7 +89,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~~/tailwind.colors';
+import colors from '~/tailwind.colors';
 
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();

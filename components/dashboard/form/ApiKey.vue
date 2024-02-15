@@ -9,12 +9,7 @@
     @submit.prevent="handleSubmit"
   >
     <!--  Service name -->
-    <n-form-item
-      path="name"
-      class="mb-4 border-b border-bg-lighter"
-      :label="$t('form.label.apiKeyName')"
-      :label-props="{ for: 'name' }"
-    >
+    <n-form-item path="name" :label="$t('form.label.apiKeyName')" :label-props="{ for: 'name' }">
       <n-input
         v-model:value="formData.name"
         :input-props="{ id: 'name' }"
@@ -26,19 +21,24 @@
 
     <!-- Permissions per service -->
     <n-collapse
+      v-if="formData.roles && formData.roles.length"
       class="collapse-permissions"
-      :default-expanded-names="expandedPermissions"
+      :expanded-names="expandedPermissions"
       @item-header-click="handleItemHeaderClick"
     >
       <!-- Active services -->
       <n-collapse-item
         v-for="service in formData.roles"
         :key="service.service_uuid"
-        :title="service.name"
+        :title="$t(`dashboard.apiKey.service.${service.serviceType.toLocaleLowerCase()}`)"
         :name="service.service_uuid"
       >
         <template #arrow>
-          <span :class="`icon-${service.serviceType.toLocaleLowerCase()}`"></span>
+          <span
+            :class="`icon-${service.serviceType.toLocaleLowerCase()}`"
+            class="min-w-[20px] text-center"
+          >
+          </span>
         </template>
         <template #header-extra>
           <n-switch v-model:value="service.enabled" class="pointer-events-none" />
@@ -63,8 +63,14 @@
           </n-form-item-gi>
         </n-grid>
       </n-collapse-item>
+    </n-collapse>
 
-      <!-- Unused services  -->
+    <!-- Unused services  -->
+    <n-collapse
+      v-if="unusedServices && unusedServices.length"
+      class="collapse-permissions unused"
+      :expanded-names="expandedUnused"
+    >
       <n-collapse-item
         v-for="serviceType in unusedServices"
         :key="serviceType.id"
@@ -73,12 +79,6 @@
       >
         <template #arrow>
           <span :class="`icon-${serviceType.name.toLocaleLowerCase()}`"></span>
-        </template>
-        <template #header-extra>
-          <n-switch
-            v-model:value="serviceType.enabled"
-            @update:value="serviceType.enabled = !serviceType.enabled"
-          />
         </template>
 
         <FormService
@@ -121,7 +121,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage, type CollapseProps } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 
 /**
  * API key - Form
@@ -172,7 +172,7 @@ const createdApiKey = ref<ApiKeyCreatedInterface>({} as ApiKeyCreatedInterface);
 const roles = computed(() => {
   return dataStore.services.map(service => {
     return {
-      enabled: props.id > 0 && isAnyPermissionEnabled(service),
+      enabled: isAnyPermissionEnabled(service),
       name: service.name,
       serviceType: service.serviceType,
       service_uuid: service.service_uuid,
@@ -225,17 +225,24 @@ const rules: NFormRules = {
   ],
 };
 
-const expandedPermissions = computed(() => {
+const createExpandedPermissions = () => {
   if (props.id === 0) {
     return null;
   }
   return roles.value.filter(role => role.enabled).map(item => item.service_uuid);
+};
+const expandedPermissions = ref<string | number | Array<string | number> | null>(null);
+
+const expandedUnused = computed(() => {
+  return unusedServices.value.map(item => item.name);
 });
 
-const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expanded }) => {
+const handleItemHeaderClick = ({ name, expanded }) => {
   /* If service was collapsed, than deactivate all permissions  */
   const service = formData.value.roles.find(item => item.service_uuid === name);
   const serviceType = unusedServices.value.find(item => item.name === name);
+
+  updateExpanded(name, expanded);
 
   if (service) {
     service.enabled = !service.enabled;
@@ -245,9 +252,7 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expan
       permission.value = expanded;
     });
     if (props.id > 0 && expanded) {
-      addPermission(name, ApiKeyRole.EXECUTE);
-      addPermission(name, ApiKeyRole.READ);
-      addPermission(name, ApiKeyRole.WRITE);
+      addAllPermissions(name);
     } else if (props.id > 0) {
       removeServicePermissions(service);
     }
@@ -255,6 +260,18 @@ const handleItemHeaderClick: CollapseProps['onItemHeaderClick'] = ({ name, expan
     serviceType.enabled = !serviceType.enabled;
   }
 };
+
+function updateExpanded(name: string, expanded: boolean) {
+  if (Array.isArray(expandedPermissions.value) && expanded) {
+    expandedPermissions.value.push(name);
+  } else if (Array.isArray(expandedPermissions.value)) {
+    expandedPermissions.value = expandedPermissions.value.filter(item => item !== name);
+  } else if (expanded) {
+    expandedPermissions.value = [name];
+  } else {
+    expandedPermissions.value = null;
+  }
+}
 
 /** Load roles and show permissions */
 onMounted(async () => {
@@ -265,6 +282,8 @@ onMounted(async () => {
     formData.value.name = apiKey.value.name;
     formData.value.apiKeyType = apiKey.value.testNetwork === 1;
     formData.value.roles = roles.value;
+
+    expandedPermissions.value = createExpandedPermissions();
   }
 
   loading.value = false;
@@ -301,6 +320,7 @@ function handleSubmit(e: Event | MouseEvent) {
     }
   });
 }
+
 async function createApiKey() {
   loading.value = true;
 
@@ -366,7 +386,15 @@ async function updateApiKey() {
 function isPermissionEnabled(serviceUuid: string, roleId: number) {
   /** Default value for new API key */
   if (props.id === 0) {
-    return false;
+    if (!roles.value) return false;
+
+    const serviceRoles = roles.value.find(role => role.service_uuid === serviceUuid);
+    if (serviceRoles) {
+      const permission = serviceRoles.permissions.find(role => role.key === roleId);
+      return permission ? permission.value : false;
+    } else {
+      return false;
+    }
   }
 
   const projectUuid = dataStore.projectUuid;
@@ -393,7 +421,17 @@ function updatePermission(serviceUuid: string, roleId: number, value: boolean) {
   }
 }
 
-async function addPermission(serviceUuid: string, roleId: number) {
+async function addAllPermissions(serviceUuid: string) {
+  await Promise.all([
+    addPermission(serviceUuid, ApiKeyRole.EXECUTE, false),
+    addPermission(serviceUuid, ApiKeyRole.READ, false),
+    addPermission(serviceUuid, ApiKeyRole.WRITE, false),
+  ]).then(() => {
+    message.success($i18n.t('form.success.updated.apiKeyRoles'));
+  });
+}
+
+async function addPermission(serviceUuid: string, roleId: number, showMsg = true) {
   const projectUuid = dataStore.projectUuid;
   try {
     await $api.post<ApiKeyRoleUpdateResponse>(endpoints.apiKeyRole(props.id), {
@@ -402,7 +440,9 @@ async function addPermission(serviceUuid: string, roleId: number) {
       role_id: roleId,
     });
 
-    message.success($i18n.t('form.success.updated.apiKeyRole'));
+    if (showMsg) {
+      message.success($i18n.t('form.success.updated.apiKeyRole'));
+    }
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -441,8 +481,12 @@ async function removeServicePermissions(service: ApiKeyRoleForm) {
   }
 }
 
-function onServiceCreated() {
+function onServiceCreated(service: ServiceInterface) {
   formData.value.roles = roles.value;
+
+  if (service && service.active) {
+    handleItemHeaderClick({ name: service.service_uuid, expanded: true });
+  }
 }
 
 /* Check if user can create this service */

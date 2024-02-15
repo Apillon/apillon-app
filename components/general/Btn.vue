@@ -26,9 +26,12 @@
     :is="to ? NuxtLink : 'a'"
     v-else
     class="inline-block"
-    :class="{ 'w-full': size === 'large' }"
-    :to="to || undefined"
-    :href="href || undefined"
+    :class="[
+      { 'w-full': size === 'large' },
+      { 'pointer-events-none pointer-default': props.disabled || props.loading },
+    ]"
+    :to="props.disabled || props.loading || !to ? undefined : to"
+    :href="props.disabled || props.loading || !href ? undefined : href"
     :target="href ? '_blank' : undefined"
   >
     <n-button
@@ -84,7 +87,6 @@ setTimeout(() => (isBtnLocked.value = false), 1000);
 
 const btnClass = computed(() => {
   return [
-    props.type === 'link' ? 'font-sans' : 'font-mono',
     {
       'w-full': props.type !== 'link' && props.size === 'large',
       'text-primary underline': props.type === 'link',

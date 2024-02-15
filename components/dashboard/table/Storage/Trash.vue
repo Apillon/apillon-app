@@ -3,7 +3,7 @@
     <n-space justify="space-between">
       <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
         <n-input
-          v-model:value="fileStore.search"
+          v-model:value="fileStore.trash.search"
           type="text"
           name="search"
           size="small"
@@ -18,25 +18,34 @@
 
       <n-space size="large">
         <!-- Refresh files -->
-        <n-button size="small" :loading="fileStore.loading" @click="fileStore.fetchDeletedFiles()">
+        <n-button
+          size="small"
+          :loading="fileStore.trash.loading"
+          @click="fileStore.fetchDeletedFiles()"
+        >
           <span class="icon-refresh text-xl mr-2"></span>
           {{ $t('general.refresh') }}
         </n-button>
       </n-space>
     </n-space>
     <n-data-table
-      remote
+      ref="tableRef"
       :bordered="false"
       :columns="columns"
-      :data="data"
-      :loading="fileStore.loading"
-      :pagination="{ pageSize: PAGINATION_LIMIT }"
+      :data="fileStore.trash.items"
+      :loading="fileStore.trash.loading"
+      :pagination="fileStore.trash.pagination"
       :row-props="rowProps"
+      @update:page="handlePageChange"
+      @update:sorter="handleSorterChange"
+      remote
     />
   </n-space>
 </template>
 
 <script lang="ts" setup>
+import debounce from 'lodash.debounce';
+import type { DataTableSortState, DataTableInst } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
@@ -47,33 +56,33 @@ const fileStore = useFileStore();
 const IconFolderFile = resolveComponent('IconFolderFile');
 const TableEllipsis = resolveComponent('TableEllipsis');
 
-onMounted(() => {
-  fileStore.search = '';
-});
-
+const tableRef = ref<DataTableInst | null>(null);
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
+const sort = ref<DataTableSortState | null | undefined>();
 
 /** Columns */
 const createColumns = (): NDataTableColumns<BucketItemInterface> => {
   return [
     {
       key: 'name',
-      title: $i18n.t('storage.fileName'),
       minWidth: 200,
+      sorter: 'default',
+      title: $i18n.t('storage.fileName'),
       render(row) {
         return [h(IconFolderFile, { isFile: true }, ''), h('span', { class: 'ml-2 ' }, row.name)];
       },
     },
     {
-      title: $i18n.t('storage.fileCid'),
       key: 'CID',
+      sorter: 'default',
+      title: $i18n.t('storage.fileCid'),
       render(row) {
         return h(TableEllipsis, { text: row.CID }, '');
       },
     },
     {
-      title: $i18n.t('storage.downloadLink'),
       key: 'link',
+      title: $i18n.t('storage.downloadLink'),
       render(row: BucketItemInterface) {
         if (row.CID) {
           return [
@@ -101,8 +110,9 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       },
     },
     {
-      title: $i18n.t('storage.fileSize'),
       key: 'size',
+      sorter: 'default',
+      title: $i18n.t('storage.fileSize'),
       render(row: BucketItemInterface) {
         if (row.size) {
           return h('span', {}, { default: () => formatBytes(row.size || 0) });
@@ -111,15 +121,16 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       },
     },
     {
-      title: $i18n.t('dashboard.created'),
       key: 'createTime',
+      sorter: 'default',
+      title: $i18n.t('dashboard.created'),
       render(row: BucketItemInterface) {
         return h('span', {}, { default: () => dateTimeToDate(row.createTime || '') });
       },
     },
     {
-      title: $i18n.t('dashboard.deletedAt'),
       key: 'createTime',
+      title: $i18n.t('dashboard.deletedAt'),
       render(row: BucketItemInterface) {
         return h(
           'span',
@@ -129,8 +140,9 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       },
     },
     {
-      title: $i18n.t('storage.contentType'),
       key: 'contentType',
+      sorter: 'default',
+      title: $i18n.t('storage.contentType'),
       render(row: BucketItemInterface) {
         if (row.contentType) {
           return h('span', {}, row.contentType);
@@ -139,8 +151,8 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       },
     },
     {
-      title: '',
       key: 'actions',
+      title: '',
       align: 'right',
       className: '!py-0',
       render() {
@@ -188,14 +200,48 @@ function rowProps(row: BucketItemInterface) {
   };
 }
 
-/** Data: filtered files */
-const data = computed<Array<BucketItemInterface>>(() => {
-  return (
-    fileStore.trash.filter(item =>
-      item.name.toLocaleLowerCase().includes(fileStore.search.toLocaleLowerCase())
-    ) || []
-  );
-});
+/** Sort column - fetch directory content with order params  */
+async function handleSorterChange(sorter?: DataTableSortState) {
+  sort.value = sorter && sorter.order !== false ? sorter : null;
+  if (sorter) {
+    await getDeletedFiles();
+  }
+}
+
+/** Reset sort if user search change directory or search directory content */
+function clearSorter() {
+  if (tableRef.value) {
+    tableRef.value.sort(0, false);
+  }
+}
+
+/** Search folders and files */
+watch(
+  () => fileStore.trash.search,
+  _ => {
+    debouncedSearchFilter();
+    clearSorter();
+  }
+);
+const debouncedSearchFilter = debounce(getDeletedFiles, 500);
+
+/** On page change, load data */
+async function handlePageChange(currentPage: number) {
+  if (!fileStore.trash.loading) {
+    await getDeletedFiles(currentPage);
+  }
+}
+
+async function getDeletedFiles(page = 1) {
+  fileStore.trash.pagination.page = page;
+
+  await fileStore.fetchDeletedFiles({
+    page,
+    search: fileStore.trash.search,
+    orderBy: sort.value ? `${sort.value.columnKey}` : undefined,
+    order: sort.value ? `${sort.value.order}` : undefined,
+  });
+}
 
 /**
  * Restore file
@@ -213,6 +259,9 @@ async function restore() {
 
     removeTrashedFileFromList(restoredFile.data.file_uuid || restoredFile.data.uuid);
     message.success($i18n.t('form.success.restored.file'));
+
+    /** Remove timestamp for items */
+    sessionStorage.removeItem(LsCacheKeys.BUCKET_ITEMS);
   } catch (error) {
     window.$message.error(userFriendlyMsg(error));
   }
@@ -220,6 +269,8 @@ async function restore() {
 }
 
 function removeTrashedFileFromList(uuid: string) {
-  fileStore.trash = fileStore.trash.filter(item => item.file_uuid !== uuid && item.uuid !== uuid);
+  fileStore.trash.items = fileStore.trash.items.filter(
+    item => item.file_uuid !== uuid && item.uuid !== uuid
+  );
 }
 </script>

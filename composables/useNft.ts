@@ -285,11 +285,11 @@ export default function useNft() {
       if (!!metadataSession && !!imagesSession) {
         const res = await $api.post<CollectionResponse>(
           endpoints.nftDeploy(collectionStore.active.collection_uuid),
-            {
-              useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
-              metadataSession,
-              imagesSession,
-            }
+          {
+            useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
+            metadataSession,
+            imagesSession,
+          }
         );
         collectionStore.active = res.data;
 
@@ -324,26 +324,6 @@ export default function useNft() {
     });
   }
 
-  function transactionLink(transactionHash?: string | null, chainId?: number): string {
-    switch (chainId) {
-      case Chains.MOONBEAM:
-        return transactionHash
-          ? `https://moonbeam.moonscan.io/tx/${transactionHash}`
-          : 'https://moonbeam.moonscan.io';
-      case Chains.MOONBASE:
-        return transactionHash
-          ? `https://moonbase.moonscan.io/tx/${transactionHash}`
-          : 'https://moonbase.moonscan.io';
-      case Chains.ASTAR:
-        return transactionHash
-          ? `https://astar.subscan.io/tx/${transactionHash}`
-          : 'https://astar.subscan.io';
-      default:
-        console.warn('Missing chainId');
-        return '';
-    }
-  }
-
   function getPriceServiceName() {
     return generatePriceServiceName(
       ServiceTypeName.NFT,
@@ -369,7 +349,6 @@ export default function useNft() {
     handleImageRemove,
     isImage,
     parseUploadedFile,
-    transactionLink,
     uploadFileRequest,
     uploadImagesRequest,
   };

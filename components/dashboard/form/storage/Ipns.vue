@@ -99,19 +99,8 @@ const formData = ref<FormIpns>({
 });
 
 const rules: NFormRules = {
-  name: [
-    {
-      required: true,
-      message: $i18n.t('validation.ipnsNameRequired'),
-    },
-  ],
-  description: [
-    {
-      max: 255,
-      message: $i18n.t('validation.ipnsDescriptionTooLong'),
-      trigger: 'input',
-    },
-  ],
+  name: [ruleRequired($i18n.t('validation.ipnsNameRequired'))],
+  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
 };
 
 onMounted(async () => {

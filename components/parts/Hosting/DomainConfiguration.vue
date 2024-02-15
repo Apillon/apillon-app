@@ -3,11 +3,6 @@
     <ol>
       <li>1. Login to your DNS server or domain registrar</li>
       <li>2. Add or edit DNS records described below:</li>
-      <!-- <li>2. Change or add a new A record for the chosen domain with the following IP: 52.19.92.40</li>
-      <li>
-        3. Open Hosting service in Apillon Dashboard, move to the Production tab and enter your domain
-      </li>
-      <li>4. Back in the DNS editor add a new TXT record with the following inputs:</li> -->
     </ol>
     <br />
 
@@ -27,8 +22,8 @@
     </p>
     <p class="lg:whitespace-nowrap">
       <strong>Value: </strong>
-      <span>52.19.92.40</span>
-      <span class="inline-block cursor-pointer ml-2" @click="copyToClipboard(`52.19.92.40`)">
+      <span>{{ ip }}</span>
+      <span class="inline-block cursor-pointer ml-2" @click="copyToClipboard(ip)">
         <span class="icon-copy"></span>
       </span>
     </p>
@@ -70,5 +65,13 @@ defineProps({
   domain: { type: String, default: '' },
 });
 
+const dataStore = useDataStore();
+const ipfsStore = useIpfsStore();
 const websiteStore = useWebsiteStore();
+
+const ip = computed(() => ipfsStore.info.loadBalancerIp || '52.19.92.40');
+
+onMounted(() => {
+  ipfsStore.getIpfsInfo(dataStore.projectUuid);
+});
 </script>

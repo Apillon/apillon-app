@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
 import type { DataTableColumns, DataTableProps } from 'naive-ui';
-import colors from '~~/tailwind.colors';
+import colors from '~/tailwind.colors';
 
 const { createThumbnailUrl } = useNft();
 const collectionStore = useCollectionStore();

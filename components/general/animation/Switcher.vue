@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~~/tailwind.colors';
+import colors from '~/tailwind.colors';
 
 defineProps({
   value: { type: Boolean, default: false },

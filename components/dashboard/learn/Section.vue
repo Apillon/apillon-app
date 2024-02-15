@@ -5,8 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useDataStore } from '~~/stores/data';
-
 const dataStore = useDataStore();
 const { name } = useRoute();
 

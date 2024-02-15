@@ -43,6 +43,54 @@
   }
 }
 
+.icon-social:before {
+  content: '\e961';
+}
+.icon-erc-4437:before {
+  content: '\e952';
+}
+.icon-erc-20:before {
+  content: '\e953';
+}
+.icon-erc-721:before {
+  content: '\e954';
+}
+.icon-rmrk:before {
+  content: '\e955';
+}
+.icon-brand-membership:before {
+  content: '\e956';
+}
+.icon-loyalty-program:before {
+  content: '\e957';
+}
+.icon-api-keys:before {
+  content: '\e958';
+}
+.icon-nft-mint-airdrop:before {
+  content: '\e959';
+}
+.icon-self-hosted-nft:before {
+  content: '\e95a';
+}
+.icon-poap:before {
+  content: '\e95b';
+}
+.icon-nft-drop:before {
+  content: '\e95c';
+}
+.icon-token-gating:before {
+  content: '\e95d';
+}
+.icon-file-sharing:before {
+  content: '\e95e';
+}
+.icon-gift:before {
+  content: '\e95f';
+}
+.icon-change:before {
+  content: '\e960';
+}
 .icon-credits:before {
   content: '\e951';
 }

@@ -43,17 +43,27 @@
       </template>
       <span>{{ $t('dashboard.permissions.notOwner') }}</span>
     </n-tooltip>
-    <Btn
-      v-else
-      type="primary"
-      size="large"
-      :color="colors.blue"
-      round
-      :loading="loading"
-      @click="getCreditSessionUrl(creditPackage.id)"
-    >
-      {{ $t('dashboard.credits.buy') }}
-    </Btn>
+    <n-space v-else size="large" vertical>
+      <Btn
+        type="primary"
+        size="large"
+        :color="colors.blue"
+        round
+        :loading="loading"
+        @click="getCreditSessionUrl(creditPackage.id)"
+      >
+        {{ $t('dashboard.credits.buyWithCreditCard') }}
+      </Btn>
+      <Btn
+        type="primary"
+        size="large"
+        round
+        :loading="loadingCrypto"
+        @click="getCryptoSessionUrl(creditPackage.id)"
+      >
+        {{ $t('dashboard.credits.buyWithDot') }}
+      </Btn>
+    </n-space>
   </div>
 </template>
 
@@ -65,6 +75,7 @@ defineProps({
 });
 
 const loading = ref<boolean>(false);
+const loadingCrypto = ref<boolean>(false);
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 
@@ -78,6 +89,19 @@ async function getCreditSessionUrl(packageId: number) {
     sessionStorage.removeItem(SessionKeys.CREDITS_MSG);
 
     window.open(stripeSessionUrl, '_self');
+  }
+}
+
+async function getCryptoSessionUrl(packageId: number) {
+  loadingCrypto.value = true;
+  const cryptoSessionUrl = await paymentStore.fetchCryptoSessionUrl(packageId);
+  loadingCrypto.value = false;
+
+  if (cryptoSessionUrl?.invoice_url) {
+    /** Remove key from SS */
+    sessionStorage.removeItem(SessionKeys.CREDITS_MSG);
+
+    window.open(cryptoSessionUrl.invoice_url, '_self');
   }
 }
 </script>

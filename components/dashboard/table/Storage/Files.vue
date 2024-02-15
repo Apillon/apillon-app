@@ -34,7 +34,7 @@
       "
     >
       <template #content>
-        <p class="text-body">
+        <p>
           {{ $t(`storage.${currentRowType}.deleteConfirm`, { num: 1 }) }}
         </p>
       </template>
@@ -62,7 +62,7 @@
 import debounce from 'lodash.debounce';
 import type { DataTableInst, DataTableRowKey, DataTableSortState } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
-import { TableFilesType } from '~~/types/storage';
+import { TableFilesType } from '~/lib/types/storage';
 
 const props = defineProps({
   type: { type: Number as PropType<TableFilesType>, default: 0 },
@@ -590,7 +590,7 @@ async function getDirectoryContent(bucketUuid?: string, folderUuid?: string, pag
     bucketUuid,
     folderUuid,
     page,
-    limit: pagination.pageSize,
+    limit: pagination.value.pageSize,
     search: bucketStore.folder.search,
     orderBy: sort.value ? `${sort.value.columnKey}` : undefined,
     order: sort.value ? `${sort.value.order}` : undefined,

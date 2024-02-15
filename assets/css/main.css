@@ -1,5 +1,5 @@
 body {
-  @apply body-md text-white;
+  @apply body-md text-white font-sans;
   font-size: 16px;
 }
 

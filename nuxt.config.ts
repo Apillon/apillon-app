@@ -21,10 +21,6 @@ export default defineNuxtConfig({
 
   typescript: { shim: false },
 
-  nitro: {
-    plugins: ['~/lib/nitro-globals'],
-  },
-
   runtimeConfig: {
     public: appConfig,
   },
@@ -38,26 +34,11 @@ export default defineNuxtConfig({
 
   modules: [
     '@vueuse/nuxt',
-    '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-icons',
-    [
-      '@nuxtjs/google-fonts',
-      {
-        useStylesheet: true,
-        display: 'swap',
-        download: false,
-        families: {
-          'IBM Plex Mono': {
-            wght: [400, 700],
-          },
-          'IBM Plex Sans': {
-            wght: [400, 700],
-          },
-        },
-      },
-    ],
     '@nuxtjs/i18n',
+    '@nuxtjs/google-fonts',
+    ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
   ],
 
   vite: {
@@ -80,20 +61,8 @@ export default defineNuxtConfig({
     },
   },
 
-  tailwindcss: {
-    cssPath: '~/assets/css/tailwind.css',
-  },
-
   imports: {
-    dirs: [
-      './lib',
-      './lib/wallet',
-      './types',
-      './stores',
-      './stores/hosting',
-      './stores/nft',
-      './stores/storage',
-    ],
+    dirs: ['composables/', 'composables/stores/**', 'lib/**', 'stores/**'],
   },
 
   app: {
@@ -150,6 +119,16 @@ export default defineNuxtConfig({
       useCookie: true,
       cookieKey: 'i18n_lang',
       redirectOn: 'root',
+    },
+  },
+  googleFonts: {
+    useStylesheet: true,
+    display: 'swap',
+    download: false,
+    families: {
+      Inter: {
+        wght: [400, 700],
+      },
     },
   },
 });

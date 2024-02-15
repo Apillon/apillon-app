@@ -1,14 +1,15 @@
 <template>
   <div v-if="link" class="flex">
+    <span v-if="prefix" class="mr-1 text-white">{{ prefix }}:</span>
     <a :href="link" target="_blank">
-      <NEllipsis class="text-body align-bottom" :line-clamp="1">
+      <n-ellipsis class="text-body align-bottom" :line-clamp="1">
         <span :class="{ 'text-xs': textOrLink.length > 100 }">
           {{ textOrLink }}
         </span>
         <template #tooltip>
           {{ link }}
         </template>
-      </NEllipsis>
+      </n-ellipsis>
     </a>
     <button class="ml-2" @click="copyToClipboard(textOrLink)">
       <span class="icon-copy text-body"></span>
@@ -18,6 +19,7 @@
 
 <script lang="ts" setup>
 const props = defineProps({
+  prefix: { type: String, default: '' },
   link: { type: String, default: '' },
   text: { type: String, default: '' },
 });

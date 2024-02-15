@@ -74,7 +74,7 @@
         <StorageIpfsGateway v-if="ipfsStore.info" :gateway="ipfsStore.info" />
       </n-card>
 
-      <!-- W3Warn: destroyed buckets -->
+      <!-- W3Warn: ipfs gateway -->
       <W3Warn v-model:show="showModalW3Warn">
         {{ $t('w3Warn.ipfs.gateway') }}
       </W3Warn>
