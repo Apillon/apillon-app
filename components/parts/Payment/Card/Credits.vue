@@ -14,7 +14,7 @@
         </h3>
       </div>
       <Btn
-        type="secondary"
+        type="primary"
         size="large"
         :disabled="authStore.isAdmin() || dataStore.isProjectUser"
         @click="modalCreditPackagesVisible = true"
