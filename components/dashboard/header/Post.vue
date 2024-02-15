@@ -1,13 +1,15 @@
 <template>
   <Heading>
     <slot>
-      <n-space align="baseline" size="large">
+      <div class="flex gap-4 items-center">
         <NuxtLink :to="{ name: 'dashboard-service-social' }">
           <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
-        <h2>{{ chatStore.active.name }}</h2>
-        <TableEllipsis :prefix="$t('social.chat.uuid')" :text="chatStore.active.space_uuid" />
-      </n-space>
+        <div>
+          <h2>{{ chatStore.active.name }}</h2>
+          <TableEllipsis :prefix="$t('social.chat.uuid')" :text="chatStore.active.space_uuid" />
+        </div>
+      </div>
     </slot>
     <template #info>
       <n-space :size="32" align="center">
