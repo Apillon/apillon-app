@@ -415,12 +415,28 @@
         "emptyTitle": "Your project does not have Authentication service yet",
         "emptyInfo": "Add Web3 Authentication and create an API key.",
         "emptyBtn": "Attach Web3 Auth",
-        "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
+        "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
       },
       "computing": {
         "name": "Computing",
         "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
-        "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
+        "usage": [
+          "computing smart contracts",
+          "cross-chain",
+          "secure computing environment",
+          "internet access"
+        ]
+      },
+      "social": {
+        "name": "Social",
+        "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
+        "usage": [
+          "social media",
+          "real-time chat",
+          "user-friendly UI",
+          "HIGH PRIVACY",
+          "configurable interface"
+        ]
       },
       "hosting": {
         "name": "Decentralized Hosting",
@@ -445,7 +461,7 @@
         "name": "Decentralized Storage",
         "description": "Make your content permanently accessible and easily shareable.",
         "website": "Main Website Storage",
-        "usage": ["storage buckets", "different media", "free ssl support", "drag-n-drop ui"]
+        "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
