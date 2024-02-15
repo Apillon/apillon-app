@@ -1083,7 +1083,7 @@
       "name": "Website name",
       "new": "New website",
       "update": "Update website",
-      "uuid": "Website Uuid"
+      "uuid": "Website UUID"
     },
     "clearAll": "Clear all",
     "clearAllFiles": "Do you want to remove all files?",
@@ -1456,7 +1456,7 @@
       "storage": "Storage bucket",
       "type": "Bucket type",
       "update": "Update bucket",
-      "uuid": "Bucket Uuid",
+      "uuid": "Bucket UUID",
       "quotaReached": "Quota has been reached."
     },
     "delete": {
@@ -1514,7 +1514,7 @@
       "selectIpns": "Select IPNS",
       "title": "IPNS",
       "update": "Update IPNS",
-      "uuid": "IPNS uuid"
+      "uuid": "IPNS UUID"
     },
     "file": {
       "status": {
