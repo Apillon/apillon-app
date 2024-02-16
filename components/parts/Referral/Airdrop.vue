@@ -1,6 +1,6 @@
 <template>
   <!-- Referral - Airdrop -->
-  <div class="card-dark p-8">
+  <div class="card-dark p-8 mb-8">
     <div>
       <h3>{{ $t('referral.airdrop.welcome') }}</h3>
       <p class="mb-6">{{ $t('referral.airdrop.content') }}</p>
@@ -15,8 +15,8 @@
           key % 3 === 0
             ? 'border-pink bg-pink/20'
             : key % 3 === 1
-            ? 'border-orange bg-orange/20'
-            : 'border-blue bg-blue/20'
+              ? 'border-orange bg-orange/20'
+              : 'border-blue bg-blue/20'
         "
       >
         {{ tab.title }}
@@ -59,7 +59,6 @@
 
 <script lang="ts" setup>
 import colors from '~/tailwind.colors';
-import type { MessageFunction, VueMessageType } from '@nuxtjs/i18n/dist/runtime/composables';
 
 type VueMsg = VueMessageType | MessageFunction<VueMessageType>;
 type TabsContent = {
@@ -76,6 +75,7 @@ type TabsContentTrans = {
 };
 
 const { te, tm, rt } = useI18n();
+const referralStore = useReferralStore();
 
 const tasks = [
   { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
@@ -84,8 +84,11 @@ const tasks = [
   { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
   { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
 ];
-
 const tabs = generateContent();
+
+onMounted(() => {
+  referralStore.fetchAirdropTasks();
+});
 
 function generateContent() {
   const BASE = 'referral.airdrop.tabs';

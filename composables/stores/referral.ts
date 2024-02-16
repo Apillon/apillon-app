@@ -51,5 +51,19 @@ export const useReferralStore = defineStore('referral', {
       }
       this.loading = false;
     },
+
+    async fetchAirdropTasks() {
+      this.loading = true;
+      try {
+        const res = await $api.get<ReferralResponse>(endpoints.airdropTasks);
+        console.log(res);
+
+        /** Save timestamp to SS */
+        // sessionStorage.setItem(LsCacheKeys.REFERRAL, Date.now().toString());
+      } catch (e) {
+        console.warn(e);
+      }
+      this.loading = false;
+    },
   },
 });

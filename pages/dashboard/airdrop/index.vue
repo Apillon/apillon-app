@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :learn-collapsible="false">
+  <Dashboard>
     <template #heading>
       <Heading>
         <slot>

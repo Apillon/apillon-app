@@ -32,7 +32,7 @@
         sider-placement="right"
       >
         <n-layout-content>
-          <n-scrollbar y-scrollable :style="scrollStyle">
+          <n-scrollbar y-scrollable :style="instructionsAvailable || fullHeight ? {} : scrollStyle">
             <div class="pt-8" :style="fullHeight ? heightScreen : {}">
               <slot />
             </div>
@@ -132,13 +132,13 @@ const scrollStyle = computed(() => {
   const offset = isLg.value ? 120 : 124;
   console.log(offset, headingRef.value?.clientHeight);
   return {
-    maxHeight: `calc(100dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
+    maxHeight: `calc(99dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
   };
 });
 const heightScreen = computed(() => {
   const offset = isLg.value ? 120 : 124;
   return {
-    height: `calc(100dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
+    height: `calc(98dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
   };
 });
 
