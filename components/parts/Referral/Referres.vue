@@ -1,10 +1,10 @@
 <template>
   <!-- Referral - intro -->
-  <div class="bg-bg-light p-8">
+  <div class="card-dark p-8">
     <div class="">
       <div class="flex justify-between">
         <h3 class="mb-6">{{ $t('referral.invite') }}</h3>
-        <n-tag type="info" size="large" round>
+        <n-tag type="info" size="medium" round>
           <strong>{{ '+2 per referral' }}</strong>
         </n-tag>
       </div>

@@ -1,37 +1,14 @@
 <template>
   <!-- Referral - sharing -->
-  <div class="bg-bg-light p-8">
+  <div class="card-dark p-8">
     <div class="flex justify-between">
-      <h3 class="mb-6">{{ $t('referral.shoutout') }}</h3>
-      <n-tag type="info" size="large" round>
+      <h3 class="mb-6">{{ $t('referral.shoutout.title') }}</h3>
+      <n-tag type="info" round>
         <strong>{{ '+1 per share' }}</strong>
       </n-tag>
     </div>
     <div class="text-body mb-6">
-      Spread the word about Apillon and its killer features of the platform. Follow us on Twitter,
-      retweet the posts and earn reward points.
-    </div>
-
-    <div v-if="loading" class="relative">
-      <Spinner />
-    </div>
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-      <div class="row">
-        <ReferralTweet
-          v-for="(tweet, idx) in firstArray"
-          :key="idx"
-          :tweet="tweet"
-          @success="changeTweetFirst(idx)"
-        />
-      </div>
-      <div class="row">
-        <ReferralTweet
-          v-for="(tweet, idx) in secondArray"
-          :key="idx"
-          :tweet="tweet"
-          @success="changeTweetSecond(idx)"
-        />
-      </div>
+      {{ $t('referral.shoutout.content') }}
     </div>
   </div>
 </template>

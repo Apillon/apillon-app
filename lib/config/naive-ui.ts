@@ -398,10 +398,10 @@ export const themeOverrides: GlobalThemeOverrides = {
   Table: {
     borderColor: colors.bg.lighter,
     borderRadius: '0px',
-    tdColor: colors.bg.DEFAULT,
+    tdColor: colors.transparent,
     tdColorModal: colors.bg.DEFAULT,
     tdTextColor: colors.white,
-    thColor: colors.bg.DEFAULT,
+    thColor: colors.transparent,
     thColorModal: colors.bg.light,
     thFontWeight: '700',
     thTextColor: colors.white,

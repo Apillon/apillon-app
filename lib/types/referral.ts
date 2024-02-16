@@ -15,10 +15,6 @@ declare global {
     userEmail: string;
     balance: number;
     balance_all: number;
-    github_id?: string;
-    twitter_id?: string;
-    github_name?: string;
-    twitter_name?: string;
     refCode: string;
     referrals: Array<any>;
     referrer_id?: number;
