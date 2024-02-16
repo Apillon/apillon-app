@@ -40,7 +40,7 @@
     "@pinia/nuxt": "^0.4.11",
     "@polkadot/api": "^9.10.2",
     "@polkadot/extension-inject": "^0.45.2",
-    "@subsocial/grill-widget": "^0.1.0",
+    "@subsocial/grill-widget": "^0.1.1",
     "@subsocial/resource-discussions": "^0.0.4",
     "card-validator": "^8.1.1",
     "drag-scroll-vue3": "^1.0.7",
