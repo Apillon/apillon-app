@@ -5,19 +5,16 @@
     y-scrollable
   >
     <template v-if="collectionStore.gridView">
-      <div
-        class="grid gap-8"
-        :class="collectionStore.images.length > 100 ? 'grid-cols-nftSmall' : 'grid-cols-nft'"
-      >
-        <div v-for="image in images" :key="image.id" class="bg-bg-light rounded-xl overflow-hidden">
+      <div class="grid gap-8" :class="nfts.length > 100 ? 'grid-cols-nftSmall' : 'grid-cols-nft'">
+        <div v-for="nft in nfts" :key="nft.id" class="bg-bg-light rounded-xl overflow-hidden">
           <figure class="flex flex-col h-full">
             <Image
-              :src="createThumbnailUrl(image)"
+              :src="imageByName(nft.image)"
               class="w-full h-full object-contain"
-              :alt="image.name"
+              :alt="nft.name"
             />
             <figcaption class="block h-12 px-4 py-3 font-bold">
-              {{ image.name }}
+              {{ nft.name }}
             </figcaption>
           </figure>
         </div>
@@ -77,14 +74,14 @@ const paginationDataTable = reactive({
   },
 });
 
-const images = computed(() => {
+const nfts = computed(() => {
   const first = (page.value - 1) * pageSize.value;
   let last = first + pageSize.value;
-  if (last > collectionStore.images.length) {
-    last = collectionStore.images.length;
+  if (last > collectionStore.csvData.length) {
+    last = collectionStore.csvData.length;
   }
 
-  return collectionStore.images.slice(first, last);
+  return collectionStore.csvData.slice(first, last);
 });
 
 const createColumns = (): DataTableColumns<Record<string, string>> => {

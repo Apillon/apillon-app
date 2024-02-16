@@ -45,36 +45,28 @@ export default function useNft() {
   });
 
   /** Images */
-  const allImagesUploaded = computed<boolean>(() => {
-    if (collectionStore.images?.length !== collectionStore.csvData?.length) {
-      return false;
-    }
-
-    const dataImages = collectionStore.csvData.map(item => {
-      return item.image;
-    });
-    const imagesNames = collectionStore.images.map(item => {
-      return item.name;
-    });
-    return compareArrays(dataImages, imagesNames);
+  const dataImagesNames = computed<string[]>(() => {
+    const imgNames = collectionStore.csvData.map(item => item.image);
+    return [...new Set(imgNames)];
   });
+  const uploadedImagesNames = computed<string[]>(() => {
+    return collectionStore.images.map(img => img.name);
+  });
+
+  const allImagesUploaded = computed<boolean>(() => {
+    return compareArrays(dataImagesNames.value, uploadedImagesNames.value);
+  });
+
   const missingImages = computed<string>(() => {
-    if (collectionStore.csvData.length - collectionStore.images.length > 5) {
+    if (dataImagesNames.value.length - collectionStore.images.length > 5) {
       return '(' + collectionStore.images.length + '/' + collectionStore.csvData.length + ')';
     }
-    const uploadedImagesNames = collectionStore.images.map(img => img.name);
-    return collectionStore.csvData
-      .filter(item => !uploadedImagesNames.includes(item.image))
-      .map(item => item.image)
-      .join(', ');
-  });
 
-  const imagesNames = computed<string>(() => {
-    return collectionStore.csvData
-      .map(item => {
-        return item.image;
-      })
-      .join(',');
+    const missingImagesName = dataImagesNames.value.filter(
+      item => !uploadedImagesNames.value.includes(item)
+    );
+
+    return [...new Set(missingImagesName)].join(', ');
   });
 
   /**
@@ -335,7 +327,6 @@ export default function useNft() {
   return {
     allImagesUploaded,
     hasRequiredMetadata,
-    imagesNames,
     isCsvValid,
     isSameNumOfRows,
     loadingImages,

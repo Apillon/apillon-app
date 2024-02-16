@@ -84,21 +84,9 @@
         </div>
 
         <n-space class="mt-5 mb-8" :size="20" justify="space-between" vertical>
-          <div v-if="collectionStore.hasImages">
-            <Notification
-              v-if="collectionStore.images?.length < collectionStore.csvData?.length"
-              type="warning"
-            >
-              {{ $t('nft.validation.imagesMissing') }} {{ nft.missingImages.value }}
-            </Notification>
-            <Notification
-              v-else-if="!nft.allImagesUploaded.value"
-              type="error"
-              class="overflow-hidden"
-            >
-              {{ $t('nft.validation.imagesInvalid') }} {{ nft.imagesNames.value }}
-            </Notification>
-          </div>
+          <Notification v-if="!nft.allImagesUploaded.value" type="error" class="overflow-hidden">
+            {{ $t('nft.validation.imagesMissing') }} {{ nft.missingImages }}
+          </Notification>
           <Btn
             type="primary"
             size="large"
