@@ -75,7 +75,15 @@ export default function useNft() {
 
   /** Upload file request - add file to list */
   function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
-    if (!isEnoughSpaceInStorage([], file.file)) {
+    const uploadedFile: FileListItemType = {
+      ...file,
+      percentage: 0,
+      size: file.file?.size || 0,
+      timestamp: Date.now(),
+      onFinish,
+      onError,
+    };
+    if (!isEnoughSpaceInStorage([], uploadedFile)) {
       message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
 
       /** Mark file as failed */
@@ -89,14 +97,7 @@ export default function useNft() {
       return;
     }
     collectionStore.csvAttributes = [];
-    collectionStore.csvFile = {
-      ...file,
-      percentage: 0,
-      size: file.file?.size || 0,
-      timestamp: Date.now(),
-      onFinish,
-      onError,
-    };
+    collectionStore.csvFile = uploadedFile;
     parseUploadedFile(collectionStore.csvFile.file);
   }
 
@@ -326,6 +327,7 @@ export default function useNft() {
 
   return {
     allImagesUploaded,
+    dataImagesNames,
     hasRequiredMetadata,
     isCsvValid,
     isSameNumOfRows,
