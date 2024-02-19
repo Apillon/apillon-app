@@ -77,14 +77,18 @@ type TabsContentTrans = {
 const { te, tm, rt } = useI18n();
 const referralStore = useReferralStore();
 
-const tasks = [
-  { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
-  { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
-  { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
-  { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
-  { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
-];
+// const tasks = [
+//   { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
+//   { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
+//   { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
+//   { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
+//   { task: 'Register to the Apillon platform', type: 'One-time', reward: 10 },
+// ];
 const tabs = generateContent();
+
+const tasks = computed(() => {
+  return [];
+});
 
 onMounted(() => {
   referralStore.fetchAirdropTasks();
