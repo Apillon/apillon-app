@@ -241,9 +241,7 @@ function onUploadChange(options: FileUploadOptions) {
 }
 
 function removeImages() {
-  console.log(uploadRef.value);
-  console.log(collectionStore.images);
-  uploadRef.value?.clear();
   collectionStore.resetImages();
+  uploadRef.value?.clear();
 }
 </script>
