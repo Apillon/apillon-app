@@ -66,6 +66,7 @@
 import { ServiceTypeName } from '~/lib/types/service';
 
 const props = defineProps({
+  chain: { type: Number, default: null },
   service: { type: String, default: null },
   filterByChain: { type: Boolean, default: false },
   filterByService: { type: Boolean, default: false },
@@ -82,8 +83,15 @@ const servicePrices = ref<ProductPriceInterface[]>([]);
 const selectedChain = ref<number | null>(null);
 
 onMounted(async () => {
+  console.log(
+    props.filterByChain,
+    props.service,
+    props.chain,
+    collectionStore.form.base.chain,
+    collectionStore.active.chain
+  );
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
-    selectedChain.value = collectionStore.form.base.chain || Chains.MOONBEAM;
+    selectedChain.value = props.chain || collectionStore.form.base.chain || Chains.MOONBEAM;
   }
 
   servicePrices.value = props.service
