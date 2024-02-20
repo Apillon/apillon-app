@@ -1,7 +1,16 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+    <n-form-item path="type" :label="$t('storage.ipfs.selectType')" :label-props="{ for: 'type' }">
+      <select-options
+        v-model:value="formData.type"
+        :options="types"
+        :placeholder="$t('general.pleaseSelect')"
+        filterable
+        clearable
+      />
+    </n-form-item>
     <!--  Ipfs name -->
-    <n-form-item path="name" label="CID/IPNS" :label-props="{ for: 'cid' }">
+    <n-form-item path="name" :label="cidIpns" :label-props="{ for: 'cid' }">
       <n-input
         v-model:value="formData.cid"
         :input-props="{ id: 'cid' }"
@@ -33,7 +42,12 @@
 <script lang="ts" setup>
 type FormIpfs = {
   cid: string;
+  type: string | null;
 };
+enum IpfsType {
+  CID = 'CID',
+  IPNS = 'IPNS',
+}
 
 const message = useMessage();
 const $i18n = useI18n();
@@ -43,14 +57,19 @@ const ipfsStore = useIpfsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const ipfsLink = ref<string | null>(null);
+const types = enumKeyValues(IpfsType);
 
 const formData = ref<FormIpfs>({
   cid: '',
+  type: null,
 });
 
 const rules: NFormRules = {
   cid: ruleRequired($i18n.t('validation.ipfsCidRequired')),
+  type: ruleRequired($i18n.t('validation.ipfsTypeRequired')),
 };
+
+const cidIpns = computed(() => (formData.value.type ? formData.value.type : 'CID/IPNS'));
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -70,7 +89,11 @@ async function generateIpfsLink() {
   loading.value = true;
   ipfsLink.value = '';
 
-  const res = await ipfsStore.fetchIpfsLink(dataStore.projectUuid, formData.value.cid);
+  const res = await ipfsStore.fetchIpfsLink(
+    dataStore.projectUuid,
+    formData.value.cid,
+    formData.value.type
+  );
   if (res) {
     ipfsLink.value = res.link;
   }
