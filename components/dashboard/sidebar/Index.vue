@@ -120,8 +120,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useDataStore } from '~~/stores/data';
-
 const authStore = useAuthStore();
 
 const props = defineProps({

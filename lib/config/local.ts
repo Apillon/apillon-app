@@ -1,4 +1,4 @@
-import packageConfig from '../package.json';
+import packageConfig from '../../package.json';
 
 const config: ConfigInterface = {
   VERSION: packageConfig.version || '1.0.0',
@@ -27,7 +27,6 @@ const config: ConfigInterface = {
     'PROJECT_DELETE',
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
-    'REFERRAL',
     'SERVICES',
     'SOCIAL',
     'SOCIAL_ICONS',

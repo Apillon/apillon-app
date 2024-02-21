@@ -21,10 +21,6 @@ export default defineNuxtConfig({
 
   typescript: { shim: false },
 
-  nitro: {
-    plugins: ['~/lib/nitro-globals'],
-  },
-
   runtimeConfig: {
     public: appConfig,
   },
@@ -40,21 +36,9 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     'nuxt-icons',
-    ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
-    [
-      '@nuxtjs/google-fonts',
-      {
-        useStylesheet: true,
-        display: 'swap',
-        download: false,
-        families: {
-          Inter: {
-            wght: [400, 700],
-          },
-        },
-      },
-    ],
     '@nuxtjs/i18n',
+    '@nuxtjs/google-fonts',
+    ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
   ],
 
   vite: {
@@ -78,7 +62,7 @@ export default defineNuxtConfig({
   },
 
   imports: {
-    dirs: ['./lib', './lib/wallet', './types', './stores/**'],
+    dirs: ['composables/', 'composables/stores/**', 'lib/**', 'stores/**'],
   },
 
   app: {
@@ -135,6 +119,16 @@ export default defineNuxtConfig({
       useCookie: true,
       cookieKey: 'i18n_lang',
       redirectOn: 'root',
+    },
+  },
+  googleFonts: {
+    useStylesheet: true,
+    display: 'swap',
+    download: false,
+    families: {
+      Inter: {
+        wght: [400, 700],
+      },
     },
   },
 });

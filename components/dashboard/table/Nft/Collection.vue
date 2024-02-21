@@ -24,7 +24,6 @@ const props = defineProps({
 const { t } = useI18n();
 const router = useRouter();
 const collectionStore = useCollectionStore();
-const { contractLink } = useNft();
 
 const NftCollectionStatus = resolveComponent('NftCollectionStatus');
 const TableEllipsis = resolveComponent('TableEllipsis');

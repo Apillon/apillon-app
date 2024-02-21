@@ -1,5 +1,4 @@
 import queryString from 'query-string';
-import { getAppConfig } from './utils';
 
 export const APISettings = {
   headers: new Headers({

@@ -110,12 +110,12 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
 };
 
 const columns = createColumns();
-const rowKey = (row: PostInterface) => row.post_uuid;
+const rowKey = (row: PostInterface) => row.postId;
 const currentRow = ref<PostInterface | null>(null);
 const expandedRows = ref<Array<string | number>>([]);
 
 const rowClassName = (row: PostInterface) => {
-  return currentRow.value && currentRow.value?.post_uuid === row.post_uuid ? 'selected-row' : '';
+  return currentRow.value && currentRow.value?.postId === row.postId ? 'selected-row' : '';
 };
 
 /** On row click */
@@ -174,10 +174,10 @@ async function handlePageChange(page: number) {
 
 async function selectPost() {
   const spaceId = chatStore.active.spaceId;
-  const postId = currentRow.value?.post_uuid || '';
+  const postId = currentRow.value?.postId || '';
 
   if (spaceId && currentRow?.value) {
-    postStore.updateSettings(`${spaceId}`, postId);
+    postStore.updateSettings(`${spaceId}`, `${postId}`);
   }
   /** Expand selected row */
   expandedRows.value = expandedRows.value.includes(postId) ? [] : [postId];

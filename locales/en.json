@@ -253,7 +253,15 @@
       "generate": "Generate new key",
       "secretSaved": "I've saved API key's secret",
       "title": "API keys",
-      "update": "Update API key"
+      "update": "Update API key",
+      "service": {
+        "authentication": "Authentication service",
+        "computing": "Computing service",
+        "hosting": "Hosting service",
+        "nft": "NFT service",
+        "social": "Social service",
+        "storage": "Storage service"
+      }
     },
     "clipboard": {
       "copied": "Text has been copied to clipboard",
@@ -414,7 +422,28 @@
         "emptyTitle": "Your project does not have Authentication service yet",
         "emptyInfo": "Add Web3 Authentication and create an API key.",
         "emptyBtn": "Attach Web3 Auth",
-        "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
+        "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
+      },
+      "computing": {
+        "name": "Computing",
+        "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
+        "usage": [
+          "computing smart contracts",
+          "cross-chain",
+          "secure computing environment",
+          "internet access"
+        ]
+      },
+      "social": {
+        "name": "Social",
+        "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
+        "usage": [
+          "social media",
+          "real-time chat",
+          "user-friendly UI",
+          "HIGH PRIVACY",
+          "configurable interface"
+        ]
       },
       "hosting": {
         "name": "Decentralized Hosting",
@@ -423,17 +452,23 @@
         "title": "Web3 Hosting",
         "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"]
       },
+      "nft": {
+        "name": "NFTs",
+        "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
+        "usage": [
+          "storage buckets",
+          "smart contracts",
+          "drag-n-drop ui",
+          "website template",
+          "hosting"
+        ]
+      },
       "storage": {
         "bucket": "Web3 storage bucket",
         "name": "Decentralized Storage",
         "description": "Make your content permanently accessible and easily shareable.",
         "website": "Main Website Storage",
-        "usage": ["storage buckets", "different media", "free ssl support", "drag-n-drop ui"]
-      },
-      "computing": {
-        "name": "Computing",
-        "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
-        "usage": ["storage buckets", "decentralized id", "HIGH PRIVACY", "SEAMLESS UI"]
+        "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -1055,7 +1090,7 @@
       "name": "Website name",
       "new": "New website",
       "update": "Update website",
-      "uuid": "Website Uuid"
+      "uuid": "Website UUID"
     },
     "clearAll": "Clear all",
     "clearAllFiles": "Do you want to remove all files?",
@@ -1297,7 +1332,8 @@
     "owner": "Project owner",
     "quotaReached": "Quota has been reached. To create more projects",
     "upgradePlan": " upgrade your current plan",
-    "usersAndPermissions": "Project users & permissions"
+    "usersAndPermissions": "Project users & permissions",
+    "uuid": "Project UUID"
   },
   "referral": {
     "banner": {
@@ -1427,7 +1463,7 @@
       "storage": "Storage bucket",
       "type": "Bucket type",
       "update": "Update bucket",
-      "uuid": "Bucket Uuid",
+      "uuid": "Bucket UUID",
       "quotaReached": "Quota has been reached."
     },
     "delete": {
@@ -1485,7 +1521,7 @@
       "selectIpns": "Select IPNS",
       "title": "IPNS",
       "update": "Update IPNS",
-      "uuid": "IPNS uuid"
+      "uuid": "IPNS UUID"
     },
     "file": {
       "status": {

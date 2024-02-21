@@ -1,5 +1,5 @@
-import { useAuthStore } from '~/stores/auth';
-import { Permission } from '~~/types/settings';
+import { useAuthStore } from '~/composables/stores/auth';
+import { Permission } from '~/lib/types/settings';
 interface ProtectedRouteInterface {
   path?: string;
   regex?: RegExp;
@@ -30,6 +30,7 @@ const featureRoutes: Array<FeatureRouteInterface> = [
   { regex: /^\/connect\/discord/, redirect: '/dashboard', feature: Feature.DISCORD },
   { regex: /^\/dashboard\/referral/, redirect: '/dashboard', feature: Feature.REFERRAL },
   { regex: /^\/dashboard\/service/, redirect: '/dashboard', feature: Feature.SERVICES },
+  { regex: /^\/dashboard\/solution/, redirect: '/dashboard', feature: Feature.PREBUILD_SOLUTIONS },
   {
     regex: /^\/dashboard\/service\/authentication/,
     redirect: '/dashboard',

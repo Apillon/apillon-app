@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { EncryptTab } from '~/types/computing';
+import { EncryptTab } from '~/lib/types/computing';
 
 export const useContractStore = defineStore('contract', {
   state: () => ({

@@ -324,46 +324,6 @@ export default function useNft() {
     });
   }
 
-  function contractLink(contractAddress?: string | null, chainId?: number): string {
-    switch (chainId) {
-      case Chains.MOONBEAM:
-        return contractAddress
-          ? `https://moonbeam.moonscan.io/address/${contractAddress}`
-          : 'https://moonbeam.moonscan.io';
-      case Chains.MOONBASE:
-        return contractAddress
-          ? `https://moonbase.moonscan.io/address/${contractAddress}`
-          : 'https://moonbase.moonscan.io';
-      case Chains.ASTAR:
-        return contractAddress
-          ? `https://astar.subscan.io/address/${contractAddress}`
-          : 'https://astar.subscan.io';
-      default:
-        console.warn('Missing chainId');
-        return '';
-    }
-  }
-
-  function transactionLink(transactionHash?: string | null, chainId?: number): string {
-    switch (chainId) {
-      case Chains.MOONBEAM:
-        return transactionHash
-          ? `https://moonbeam.moonscan.io/tx/${transactionHash}`
-          : 'https://moonbeam.moonscan.io';
-      case Chains.MOONBASE:
-        return transactionHash
-          ? `https://moonbase.moonscan.io/tx/${transactionHash}`
-          : 'https://moonbase.moonscan.io';
-      case Chains.ASTAR:
-        return transactionHash
-          ? `https://astar.subscan.io/tx/${transactionHash}`
-          : 'https://astar.subscan.io';
-      default:
-        console.warn('Missing chainId');
-        return '';
-    }
-  }
-
   function getPriceServiceName() {
     return generatePriceServiceName(
       ServiceTypeName.NFT,
@@ -381,7 +341,6 @@ export default function useNft() {
     loadingImages,
     metadataRequired,
     missingImages,
-    contractLink,
     createNftData,
     createThumbnailUrl,
     deployCollection,
@@ -390,7 +349,6 @@ export default function useNft() {
     handleImageRemove,
     isImage,
     parseUploadedFile,
-    transactionLink,
     uploadFileRequest,
     uploadImagesRequest,
   };

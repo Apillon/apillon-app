@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { DeploymentEnvironment } from '~~/types/storage';
+import { DeploymentEnvironment } from '~/lib/types/storage';
 
 export const useDeploymentStore = defineStore('deployment', {
   state: () => ({

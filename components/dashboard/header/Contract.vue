@@ -8,27 +8,14 @@
         <h2>{{ contractStore.active.name }}</h2>
 
         <div>
-          <n-space class="" align="center" size="small" :wrap="false">
-            <span>{{ $t('computing.contract.address') }}:</span>
-            <n-ellipsis class="text-body align-bottom" :line-clamp="1">
-              {{ contractStore.active.contractAddress }}
-            </n-ellipsis>
-            <button
-              class="text-body"
-              @click="copyToClipboard(contractStore.active.contractAddress || '')"
-            >
-              <span class="icon-copy"></span>
-            </button>
-          </n-space>
-          <n-space class="" align="center" size="small" :wrap="false">
-            <span>{{ $t('computing.contract.uuid') }}:</span>
-            <n-ellipsis class="text-body align-bottom" :line-clamp="1">
-              {{ contractStore.active.contract_uuid }}
-            </n-ellipsis>
-            <button class="text-body" @click="copyToClipboard(contractStore.active.contract_uuid)">
-              <span class="icon-copy"></span>
-            </button>
-          </n-space>
+          <TableEllipsis
+            :prefix="$t('computing.contract.address')"
+            :text="contractStore.active.contractAddress"
+          />
+          <TableEllipsis
+            :prefix="$t('computing.contract.uuid')"
+            :text="contractStore.active.contract_uuid"
+          />
         </div>
       </n-space>
     </slot>
