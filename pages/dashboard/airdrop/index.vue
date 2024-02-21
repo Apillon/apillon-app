@@ -1,5 +1,5 @@
 <template>
-  <Dashboard>
+  <Dashboard :loading="loading">
     <template #heading>
       <Heading>
         <slot>
@@ -26,6 +26,7 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
+const referralStore = useReferralStore();
 
 const loading = ref(false);
 
@@ -33,5 +34,8 @@ useHead({
   title: t('referral.title'),
 });
 
-onMounted(async () => {});
+onMounted(async () => {
+  await referralStore.getAirdrop();
+  loading.value = false;
+});
 </script>

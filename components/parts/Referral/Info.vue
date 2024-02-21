@@ -4,7 +4,7 @@
     <div class="card-light p-8">
       <h6>{{ $t('referral.info.collected') }}</h6>
       <h1 class="text-yellow my-2">
-        <span class="mr-2">1000</span>
+        <span class="mr-2">{{ referralStore.airdrop.totalPoints }}</span>
         <NuxtIcon
           name="logo/apillon-icon"
           class="inline-block w-5 h-5 p-1 text-black bg-white rounded-full text-xs"
@@ -22,7 +22,7 @@
         <li
           v-for="i in [...Array(4).keys()]"
           class="my-2"
-          :class="referralStatus < i ? 'text-bodyDark' : 'text-green'"
+          :class="referralStatus <= i ? 'text-bodyDark' : 'text-green'"
         >
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.${i}`) }}</span>
@@ -48,9 +48,22 @@
         {{ $t('referral.info.connectWallet') }}
       </Btn>
     </div>
+
+    <div class="card-light p-8">
+      <h6>{{ $t('referral.info.claim.title') }}</h6>
+      <p class="mt-4 mb-6 text-sm">
+        {{ $t('referral.info.claim.content') }}
+        <a href="https://apillon.io/tge" class="text-white underline" target="_blank">(TGE)</a>
+        {{ $t('referral.info.claim.contentEnd') }}
+      </p>
+      <Btn type="secondary" size="large" disabled>
+        {{ $t('referral.info.claim.btn') }}
+      </Btn>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const referralStatus = ref(1);
+const referralStore = useReferralStore();
+const referralStatus = ref<number>(1);
 </script>

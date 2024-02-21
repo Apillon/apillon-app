@@ -423,7 +423,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     tabTextColorActiveSegment: colors.white,
   },
   Tag: {
-    border: `1px solid ${colors.white}`,
+    border: `1px solid ${colors.body}`,
     borderError: `1px solid ${colors.pink}`,
     borderInfo: `1px solid ${colors.blue}`,
     borderPrimary: `1px solid ${colors.primary}`,
@@ -448,7 +448,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     paddingMedium: '4px 14px',
     paddingLarge: '4px 16px',
     paddingHuge: '4px 18px',
-    textColor: colors.white,
+    textColor: colors.body,
     textColorInfo: colors.blue,
     textColorSuccess: colors.bg.dark,
     textColorWarning: colors.bg.dark,

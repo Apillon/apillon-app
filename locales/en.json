@@ -1314,7 +1314,7 @@
   },
   "referral": {
     "airdrop": {
-      "btn": "Find us on Discord",
+      "btn": "Questions? Discord!",
       "content": "This is your chance to bag some NCTR before the TGE! Have questions? Find us in Discord.",
       "reward": "Reward",
       "task": "Task",
@@ -1351,6 +1351,12 @@
       "receiveTokens": "To receive NCTR tokens, connect your Astar-compatible wallet.",
       "seeHow": "See how",
       "status": "Your status",
+      "claim": {
+        "btn": "Claim NCTR",
+        "content": "You may collect your NCTR rewards once the NCTR token generation event",
+        "contentEnd": "is live.",
+        "title": "Claim your NCTR bonus"
+      },
       "statuses": {
         "0": "Register to Apillon platform",
         "1": "Connect your Astar wallet",
@@ -1363,8 +1369,13 @@
       "referral": "Referral"
     },
     "referres": {
-      "header": "Your referrals",
-      "info": "Keep track of the referral links, active connections and points earned.",
+      "active": "Active",
+      "disclaimer": "Disclaimer: To prevent users from duplicating accounts and referring to themselves, Apillon will measure the activity of referred accounts and reward them accordingly. It will also monitor potential bot activity or users creating multiple accounts. Accounts detected as either bot or self-referral will be excluded from receiving NCTR in the Airdrop.",
+      "header": "Your referees",
+      "info": "See who registered to Apillon using your referral link. \n\nActive users are those who actively use the Apillon platform. Guide your referees through Airdrop Learn and Build tasks to boost their activity.",
+      "invite": "Invite other developers to score",
+      "link": "This is your referral link:",
+      "linkDesc": "Share the link below with your dev peers and have them register to the Apillon platform. Based on their activity, you will be rewarded in NCTR for each active referee.",
       "name": "Service name",
       "github": "GitHub profile",
       "joined": "Joined on"
@@ -1373,8 +1384,6 @@
       "title": "Help us with the shoutout",
       "content": "Spread the word about Apillon and its killer features of the platform. Follow us on Twitter,    retweet the posts and earn reward points."
     },
-    "invite": "Invite your developer friends and score",
-    "link": "This is your referral link:",
     "title": "Referral program"
   },
   "social": {

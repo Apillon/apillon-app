@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :learn-collapsible="false">
+  <Dashboard :loading="loading">
     <template #heading>
       <Heading>
         <slot>
@@ -14,13 +14,9 @@
       </Heading>
     </template>
     <slot>
-      <Spinner v-if="loading" class="mt-40" />
-      <n-space v-else class="pb-8" :size="16" vertical>
+      <n-space class="pb-8" :size="16" vertical>
         <!-- Referral referres -->
         <ReferralReferres />
-
-        <!-- Referral Share -->
-        <ReferralShoutout />
       </n-space>
     </slot>
 
@@ -32,13 +28,17 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
-const router = useRouter();
-const authStore = useAuthStore();
 const referralStore = useReferralStore();
 
-const loading = ref(false);
+const loading = ref(true);
 
 useHead({
   title: $i18n.t('referral.title'),
+});
+
+onMounted(async () => {
+  referralStore.getReferral();
+  await referralStore.getAirdrop();
+  loading.value = false;
 });
 </script>

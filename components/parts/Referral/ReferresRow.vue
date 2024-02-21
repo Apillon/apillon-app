@@ -8,12 +8,12 @@
     </div>
     <div class="text-dark">
       <div class="w-auto">
-        <n-tag v-if="item.has_github" type="success" :bordered="false" round>
-          <strong>ADDED</strong>
-        </n-tag>
-        <n-tag v-else bordered round>
-          <strong>MISSING</strong>
-        </n-tag>
+        <pill v-if="item.joined" type="success">
+          {{ $t('form.booleanSelect.true') }}
+        </pill>
+        <pill v-else>
+          {{ $t('form.booleanSelect.false') }}
+        </pill>
       </div>
     </div>
     <div class="pr-3 text-white" style="line-height: 28px">

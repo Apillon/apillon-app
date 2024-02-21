@@ -3,7 +3,6 @@ import { defineStore } from 'pinia';
 export const useReferralStore = defineStore('referral', {
   state: () => ({
     airdrop: {} as AirdropInterface,
-    airdropTasks: [] as AirdropTask[],
     balance: 0,
     balance_all: 0,
 
@@ -18,6 +17,11 @@ export const useReferralStore = defineStore('referral', {
     user_uuid: '',
     loading: false,
   }),
+  getters: {
+    hasAirdrop(state) {
+      return state.airdrop && state.airdrop.status;
+    },
+  },
   actions: {
     initReferral(data: ReferralInterface) {
       this.balance = data.balance;
@@ -39,6 +43,12 @@ export const useReferralStore = defineStore('referral', {
       }
     },
 
+    async getAirdrop() {
+      if (!this.hasAirdrop || isCacheExpired(LsCacheKeys.REFERRAL_AIRDROP)) {
+        await this.fetchAirdrop();
+      }
+    },
+
     async fetchReferral() {
       this.loading = true;
       try {
@@ -54,20 +64,14 @@ export const useReferralStore = defineStore('referral', {
       this.loading = false;
     },
 
-    async fetchAirdropTasks() {
+    async fetchAirdrop() {
       this.loading = true;
       try {
         const res = await $api.get<AirdropResponse>(endpoints.airdropTasks);
-
         this.airdrop = res.data;
-        this.airdropTasks = Object.entries(res.data)
-          .filter(([task, value]) => typeof value === 'boolean')
-          .map(([task, value]) => {
-            return { name: task, value };
-          });
 
         /** Save timestamp to SS */
-        // sessionStorage.setItem(LsCacheKeys.REFERRAL, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.REFERRAL_AIRDROP, Date.now().toString());
       } catch (e) {
         console.warn(e);
       }
