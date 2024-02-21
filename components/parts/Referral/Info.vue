@@ -41,10 +41,10 @@
 
       <div class="mb-4">
         <label class="text-xs"> {{ $t('referral.info.astarAddress') }}</label>
-        <n-input class="bg-bg-dark" />
+        <n-input class="bg-bg-dark" disabled />
       </div>
 
-      <Btn type="secondary" size="large">
+      <Btn type="secondary" size="large" disabled>
         {{ $t('referral.info.connectWallet') }}
       </Btn>
     </div>

@@ -63,7 +63,7 @@
           <td>
             <div class="flex-cc">
               <NuxtIcon
-                v-if="task.collected"
+                v-if="task.collected.value"
                 name="icon/success"
                 class="inline-block text-green text-2xl"
               />
@@ -122,25 +122,25 @@ function generateContent() {
 
 // prettier-ignore
 const airdropTasks = [
-  { category: 'register', name: 'Register to Apillon platform', type: 'One-time', reward: 10, collected: true },
-  { category: 'learn', name: 'Project created', type: 'One-time', reward: 1, collected: referralStore.airdrop.projectCreated },
-  { category: 'learn', name: 'Bucket created', type: 'One-time', reward: 1, collected: referralStore.airdrop.bucketCreated },
-  { category: 'learn', name: 'Upload files to Apillon Web3 Storage bucket via IPFS', type: 'One-time', reward: 1, collected: referralStore.airdrop.fileUploaded },
-  { category: 'learn', name: 'Website created', type: 'One-time', reward: 1, collected: referralStore.airdrop.websiteCreated },
-  { category: 'learn', name: 'IPNS created', type: 'One-time', reward: 1, collected: referralStore.airdrop.ipnsCreated },
-  { category: 'learn', name: 'Subscription plan', type: 'One-time', reward: 20, collected: referralStore.airdrop.onSubscriptionPlan },
-  { category: 'learn', name: 'Credits purchased', type: 'One-time', reward: 5, collected: referralStore.airdrop.creditsPurchased },
-  { category: 'learn', name: 'Spent 3000 credits', type: 'Repeatable', reward: 1, collected: referralStore.airdrop.creditsSpent },
-  { category: 'learn', name: 'Grill chat created', type: 'One-time', reward: 1, collected: referralStore.airdrop.grillChatCreated },
-  { category: 'learn', name: 'Deployed NFT collections via configurator', type: 'One-time', reward: 10, collected: referralStore.airdrop.nftCollectionCreated },
-  { category: 'build', name: 'Hosting page linked with a domain', type: 'One-time', reward: 10, collected: referralStore.airdrop.domainLinked },
-  { category: 'build', name: 'Website upload via API', type: 'One-time', reward: 5, collected: referralStore.airdrop.websiteUploadedApi },
-  { category: 'build', name: 'File upload via API', type: 'One-time', reward: 5, collected: referralStore.airdrop.fileUploadedApi },
-  { category: 'build', name: 'Schrodindgers NFT deployed ', type: 'One-time', reward: 2, collected: referralStore.airdrop.computingContractCreated },
-  { category: 'build', name: 'Add a collaborator to your project', type: 'One-time', reward: 1, collected: referralStore.airdrop.collaboratorAdded },
-  { category: 'build', name: 'Created KILT identity', type: 'One-time', reward: 10, collected: referralStore.airdrop.kiltIdentityCreated },
-  { category: 'build', name: 'Checking onchain identity via identity SDK', type: 'One-time', reward: 2, collected: referralStore.airdrop.identitySdkUsed },
-  { category: 'build', name: 'NFT minted via API', type: 'One-time', reward: 5, collected: referralStore.airdrop.nftMintedApi },  
-  { category: 'refer', name: 'Refer a friend', type: 'Repeatable', reward: 2, collected: referralStore.airdrop.usersReferred },
+  { category: 'register', name: 'Register to Apillon platform', type: 'One-time', reward: 10, collected: computed(() => (true)) },
+  { category: 'learn', name: 'Project created', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.projectCreated)) },
+  { category: 'learn', name: 'Bucket created', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.bucketCreated)) },
+  { category: 'learn', name: 'Upload files to Apillon Web3 Storage bucket via IPFS', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.fileUploaded)) },
+  { category: 'learn', name: 'Website created', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.websiteCreated)) },
+  { category: 'learn', name: 'IPNS created', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.ipnsCreated)) },
+  { category: 'learn', name: 'Subscription plan', type: 'One-time', reward: 20, collected: computed(() => (referralStore.airdrop.onSubscriptionPlan)) },
+  { category: 'learn', name: 'Credits purchased', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.creditsPurchased)) },
+  { category: 'learn', name: 'Spent 3000 credits', type: 'Repeatable', reward: 1, collected: computed(() => (referralStore.airdrop.creditsSpent > 3000)) },
+  { category: 'learn', name: 'Grill chat created', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.grillChatCreated)) },
+  { category: 'learn', name: 'Deployed NFT collections via configurator', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.nftCollectionCreated)) },
+  { category: 'build', name: 'Hosting page linked with a domain', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.domainLinked)) },
+  { category: 'build', name: 'Website upload via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.websiteUploadedApi)) },
+  { category: 'build', name: 'File upload via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.fileUploadedApi)) },
+  { category: 'build', name: 'Schrodindgers NFT deployed ', type: 'One-time', reward: 2, collected: computed(() => (referralStore.airdrop.computingContractCreated)) },
+  { category: 'build', name: 'Add a collaborator to your project', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.collaboratorAdded)) },
+  { category: 'build', name: 'Created KILT identity', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.kiltIdentityCreated)) },
+  { category: 'build', name: 'Checking onchain identity via identity SDK', type: 'One-time', reward: 2, collected: computed(() => (referralStore.airdrop.identitySdkUsed)) },
+  { category: 'build', name: 'NFT minted via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.nftMintedApi)) },
+  { category: 'refer', name: 'Refer a friend', type: 'Repeatable', reward: 2, collected: computed(() => (referralStore.airdrop.usersReferred)) },
 ];
 </script>
