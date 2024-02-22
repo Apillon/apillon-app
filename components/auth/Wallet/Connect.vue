@@ -1,42 +1,35 @@
 <template>
-  <template v-if="isLg && isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())">
-    <!-- Wallet is connected -->
-    <template v-if="!!authStore.user?.wallet">
-      <h5 class="mb-0">{{ $t('auth.wallet.connected.title') }}</h5>
-      <p class="mb-6 text-body">{{ $t('auth.wallet.connected.info') }}</p>
+  <!-- Wallet is connected -->
+  <template v-if="!!authStore.user?.wallet">
+    <h5 class="mb-0">{{ $t('auth.wallet.connected.title') }}</h5>
+    <p class="mb-6 text-body">{{ $t('auth.wallet.connected.info') }}</p>
 
-      <!--  Wallet address -->
-      <n-form-item
-        class="max-w-lg pointer-events-none cursor-default"
-        :label="$t('auth.wallet.address')"
-      >
-        <n-input
-          v-model:value="authStore.user.wallet"
-          class="pointer-events-none cursor-default"
-          :readonly="true"
-        />
-      </n-form-item>
-      <div class="w-full flex gap-8">
-        <!-- Connect different wallet -->
-        <Btn size="large" type="secondary" @click="modalWalletSelectVisible = true">
-          {{ $t('auth.wallet.connect.different') }}
-        </Btn>
-
-        <!-- Disconnect wallet
-        <Btn type="error" @click="modalWalletSelectVisible = true">
-          {{ $t('auth.wallet.disconnect.wallet') }}
-        </Btn> -->
-      </div>
-    </template>
-
-    <!-- Connect your wallet -->
-    <template v-else>
-      <n-h5 class="mb-0">{{ $t('auth.wallet.connect.title') }}</n-h5>
-      <p class="mb-6 text-body">{{ $t('auth.wallet.connect.info') }}</p>
+    <!--  Wallet address -->
+    <n-form-item
+      class="max-w-lg pointer-events-none cursor-default"
+      :label="$t('auth.wallet.address')"
+    >
+      <n-input
+        v-model:value="authStore.user.wallet"
+        class="pointer-events-none cursor-default"
+        :readonly="true"
+      />
+    </n-form-item>
+    <div class="w-full flex gap-8">
+      <!-- Connect different wallet -->
       <Btn size="large" type="secondary" @click="modalWalletSelectVisible = true">
-        {{ $t('auth.wallet.connect.btn') }}
+        {{ $t('auth.wallet.connect.different') }}
       </Btn>
-    </template>
+    </div>
+  </template>
+
+  <!-- Connect your wallet -->
+  <template v-else>
+    <n-h5 class="mb-0">{{ $t('auth.wallet.connect.title') }}</n-h5>
+    <p class="mb-6 text-body">{{ $t('auth.wallet.connect.info') }}</p>
+    <Btn size="large" type="secondary" @click="modalWalletSelectVisible = true">
+      {{ $t('auth.wallet.connect.btn') }}
+    </Btn>
   </template>
 
   <!-- Modal - Wallet select -->
@@ -80,7 +73,7 @@ async function walletConnect(account: WalletAccount) {
 
         authStore.saveUser(res.data);
 
-        /** Show sussecc message */
+        /** Show success message */
         message.success($i18n.t('auth.wallet.connected.success'));
       } catch (error) {
         /** Show error message */

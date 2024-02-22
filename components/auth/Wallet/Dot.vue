@@ -3,7 +3,7 @@
     <template v-for="(wallet, key) in wallets">
       <div v-if="isWalletAvailable(wallet)" :key="key">
         <div
-          class="card flex items-center p-4"
+          class="card flex items-center px-4 py-3"
           :class="{ 'cursor-pointer': wallet.installed }"
           @click="onSelect(wallet)"
         >
@@ -50,7 +50,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(account, accountKey) in authStore.wallet.accounts" :key="accountKey">
+                <tr
+                  v-for="(account, accountKey) in authStore.wallet.accounts"
+                  :key="accountKey"
+                  :class="{ hidden: account.type === 'ethereum' }"
+                >
                   <td class="whitespace-nowrap">{{ account.name }}</td>
                   <td>
                     <TableEllipsis :text="account.address" />

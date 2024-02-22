@@ -22,7 +22,7 @@ export default defineNuxtPlugin(nuxtApp => {
         new CoinbaseWalletConnector({
           chains,
           options: {
-            appName: 'Whitelist claim',
+            appName: 'Apillon Dashboard',
           },
         })
       ),

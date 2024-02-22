@@ -110,9 +110,12 @@ class Api {
       }
 
       /** Unauthorized or session expired */
+      const loginMsgs: string[] = [
+        UserError.USER_INVALID_LOGIN,
+        UserError.USER_IS_NOT_AUTHENTICATED,
+      ];
       if (
-        (response.status === 401 && error.message !== UserError.USER_INVALID_LOGIN) ||
-        (response.status === 401 && error.message === UserError.AUTH_TOKEN_EXPIRED) ||
+        (response.status === 401 && !loginMsgs.includes(error.message || '')) ||
         (response.status === 500 && error.message === UserError.AUTH_TOKEN_EXPIRED) ||
         (response.status === 500 && error.message === UserError.INVALID_SIGNATURE) ||
         (response.status === 500 && error.message === UserError.JWT_TOKEN_EXPIRED) ||

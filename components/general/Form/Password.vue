@@ -1,5 +1,11 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    v-if="!isWalletRegister"
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    @submit.prevent="handleSubmit"
+  >
     <!--  Register password -->
     <n-form-item
       path="password"
@@ -66,6 +72,8 @@ const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const rPasswordFormItemRef = ref<NFormItemInst | null>(null);
 
+const isWalletRegister = computed(() => query.walletLogin === 'true');
+
 const formData = ref<FormRegister>({
   password: null,
   reenteredPassword: null,
@@ -95,6 +103,13 @@ const rules: NFormRules = {
     },
   ],
 };
+
+onMounted(() => {
+  if (isWalletRegister.value) {
+    register();
+  }
+});
+
 // Custom validations
 function validatePasswordSame(_: NFormItemRule, value: string): boolean {
   return value === formData.value.password;
