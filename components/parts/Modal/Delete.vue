@@ -19,7 +19,7 @@
 
       <n-grid :cols="2" :x-gap="32" class="items-end">
         <n-gi>
-          <n-button class="w-full" type="error" ghost @click="closeModal">
+          <n-button class="w-full" type="primary" @click="closeModal">
             {{ $t('general.cancel') }}
           </n-button>
         </n-gi>

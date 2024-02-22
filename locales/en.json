@@ -259,7 +259,7 @@
     "clipboard": {
       "copied": "Text has been copied to clipboard",
       "copy": "Copy to clipboard",
-      "copyApiKey": "Copy Api key to clipboard",
+      "copyApiKey": "Copy API key to clipboard",
       "copyCid": "Copy CID",
       "copyLink": "Copy link",
       "copyUuid": "Copy UUID",
@@ -917,7 +917,7 @@
       }
     },
     "success": {
-      "apiKey": "Api key has been created",
+      "apiKey": "API key has been created",
       "filesUploaded": "Files have been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
@@ -937,9 +937,9 @@
         "transferred": "Contract transfer has been initiated"
       },
       "created": {
-        "apiKey": "Api key has been created",
-        "apiKeyRole": "Api key permission has been added",
-        "apiKeyRoles": "Api key permissions has been added",
+        "apiKey": "API key has been created",
+        "apiKeyRole": "API key permission has been added",
+        "apiKeyRoles": "API key permissions has been added",
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
         "chatPost": "Channel has been created",
@@ -957,8 +957,8 @@
         "website": "Website has been created"
       },
       "deleted": {
-        "apiKey": "Api key has been deleted",
-        "apiKeyRole": "Api key permission has been removed",
+        "apiKey": "API key has been deleted",
+        "apiKeyRole": "API key permission has been removed",
         "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
@@ -982,9 +982,9 @@
         "file": "File has been restored"
       },
       "updated": {
-        "apiKey": "Api key has been updated",
-        "apiKeyRole": "Api key permission has been added",
-        "apiKeyRoles": "Api key permissions has been added",
+        "apiKey": "API key has been updated",
+        "apiKeyRole": "API key permission has been added",
+        "apiKeyRoles": "API key permissions has been added",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "contract": "Contract has been updated",

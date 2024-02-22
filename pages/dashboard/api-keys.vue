@@ -15,14 +15,14 @@
     </template>
 
     <slot>
-      <h4 class="mb-6">{{ $t('dashboard.apiKey.title') }}</h4>
+      <!-- <h4 class="mb-6">{{ $t('dashboard.apiKey.title') }}</h4> -->
 
       <!-- Secrets -->
-      <n-h5 prefix="bar">{{ $t('dashboard.secrets') }}</n-h5>
-      <n-space class="text-sm" size="large" align="center">
+      <!-- <n-h5 prefix="bar">{{ $t('dashboard.secrets') }}</n-h5> -->
+      <n-space class="text-sm my-4" size="large" align="center">
         <strong>
           {{ $t('general.scope') }}:
-          <span class="text-primary">{{ dataStore.currentProject?.name }}</span>
+          <span class="text-primary"> &nbsp; {{ dataStore.currentProject?.name }}</span>
         </strong>
       </n-space>
       <TableApiKeys />
