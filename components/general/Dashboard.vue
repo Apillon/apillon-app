@@ -130,7 +130,6 @@ const { name } = useRoute();
 const headingRef = ref<HTMLElement>();
 const scrollStyle = computed(() => {
   const offset = isLg.value ? 120 : 124;
-  console.log(offset, headingRef.value?.clientHeight);
   return {
     maxHeight: `calc(99dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
   };

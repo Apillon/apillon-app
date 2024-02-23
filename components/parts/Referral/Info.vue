@@ -4,7 +4,7 @@
     <div class="card-light p-8">
       <h6>{{ $t('referral.info.collected') }}</h6>
       <h1 class="text-yellow my-2">
-        <span class="mr-2">{{ referralStore.airdrop.totalPoints }}</span>
+        <span class="mr-2">{{ referralStore.airdrop.totalPoints || 0 }}</span>
         <NuxtIcon
           name="logo/apillon-icon"
           class="inline-block w-5 h-5 p-1 text-black bg-white rounded-full text-xs"
