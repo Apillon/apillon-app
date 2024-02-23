@@ -26,7 +26,6 @@ useHead({
 });
 
 const isWalletRegister = computed(() => query.walletLogin === 'true');
-console.log(isWalletRegister.value);
 
 onMounted(() => {
   /** Track Registration start */

@@ -37,6 +37,7 @@ const { error, success } = useMessage();
 const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const { connectAndSign } = useWallet();
 const { getMessageSignature } = useProvider();
 
 /** Evm wallet - wagmi */
@@ -86,41 +87,14 @@ async function evmWalletLogin() {
   await sleep(200);
   loadingWallet.value = true;
 
-  if (!walletClient.value) {
-    await refetchWalletClient();
-
-    if (!walletClient.value) {
-      error(t('auth.wallet.login.walletNotConnected'));
-      loadingWallet.value = false;
-      return;
-    }
-  }
-
-  if (!address.value) {
-    error(t('auth.wallet.login.walletAccountNotConnected'));
-    loadingWallet.value = false;
-    return;
-  }
+  const sign = await connectAndSign();
+  if (!sign || !sign.signature || !sign.timestamp) return;
 
   try {
-    const { message, timestamp } = await authStore.getAuthMsg();
-
-    const signature = await walletClient.value.signMessage({ message });
+    const { signature, timestamp } = sign;
 
     authStore.wallet.signature = signature;
     authStore.wallet.timestamp = timestamp;
-
-    await sleep(200);
-
-    if (!connector.value) {
-      error(t('auth.wallet.login.walletNotConnected2'));
-      loadingWallet.value = false;
-      return;
-    } else if (!address.value) {
-      await connectAsync({ connector: connector.value });
-    }
-
-    await sleep(200);
 
     const res = await $api.post<WalletLoginResponse>(endpoints.walletLogin, {
       wallet: address.value,

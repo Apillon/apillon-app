@@ -111,6 +111,7 @@ class Api {
 
       /** Unauthorized or session expired */
       const loginMsgs: string[] = [
+        UserError.INVALID_SIGNATURE,
         UserError.USER_INVALID_LOGIN,
         UserError.USER_IS_NOT_AUTHENTICATED,
       ];

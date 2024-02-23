@@ -141,18 +141,19 @@
     },
     "wallet": {
       "connect": {
-        "btn": "Connect wallet",
+        "btn": "Connect Polkadot wallet",
         "info": "Connect with one of Polkadot's wallet",
         "polkadot": "Connect polkadot wallet",
         "success": "You successfully logged in with your Wallet",
-        "title": "Connect Polkadot wallet",
+        "title": "Connect wallet",
         "different": "Connect different wallet",
         "wallet": "Connect wallet"
       },
       "connected": {
         "info": "Wallet is connected with your account",
         "success": "Wallet has been successfully connected",
-        "title": "Polkadot wallet connected"
+        "title": "Polkadot wallet connected",
+        "wallet": "Connected wallet"
       },
       "disconnect": {
         "success": "Wallet has been successfully disconnected",
@@ -160,6 +161,7 @@
       },
       "evm": {
         "connect": "Connect EVM wallet",
+        "connected": "EVM wallet connected",
         "disconnect": "Disconnect EVM wallet",
         "info": "Connect your EVM compatible wallet. This step is crucial for securely receiving and managing the airdropped NFTs.",
         "title": "Choose EVM wallet"

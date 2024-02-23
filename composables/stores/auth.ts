@@ -24,6 +24,7 @@ export const useAuthStore = defineStore('auth', {
       provider: getWalletBySource(localStorage.getItem(AuthLsKeys.WALLET)),
       name: localStorage.getItem(AuthLsKeys.WALLET) || '',
       signature: '',
+      timestamp: 0,
     },
   }),
   getters: {

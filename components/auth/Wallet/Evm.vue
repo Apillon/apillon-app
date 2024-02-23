@@ -7,7 +7,7 @@ defineProps({
 
 const { fullPath } = useRoute();
 const config = useRuntimeConfig();
-const { address, connector: activeConnector, isConnected } = useAccount();
+const { connector: activeConnector, isConnected } = useAccount();
 const { refetch } = useWalletClient();
 const { connect, connectors, pendingConnector, isLoading } = useConnect();
 
