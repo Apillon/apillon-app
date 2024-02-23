@@ -37,6 +37,7 @@ const selectedColumns = ref([
   'type',
   'collection_uuid',
   'contractAddress',
+  'baseUri',
   'dropPrice',
   'dropReserve',
   'maxSupply',
@@ -50,6 +51,7 @@ const availableColumns = ref([
   { value: 'type', label: t('general.type') },
   { value: 'collection_uuid', label: t('nft.collection.uuid') },
   { value: 'contractAddress', label: t('nft.collection.contractAddress') },
+  { value: 'baseUri', label: t('nft.collection.baseUri') },
   { value: 'dropPrice', label: t('nft.collection.dropPrice') },
   { value: 'dropReserve', label: t('nft.collection.dropReserve') },
   { value: 'maxSupply', label: t('nft.collection.maxSupply') },
@@ -127,6 +129,14 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
           { link: contractLink(row.contractAddress, row.chain), text: row.contractAddress },
           ''
         );
+      },
+    },
+    {
+      key: 'baseUri',
+      title: t('nft.collection.baseUri'),
+      className: { hidden: !selectedColumns.value.includes('baseUri') },
+      render(row: CollectionInterface) {
+        return h(TableEllipsis, { text: row.baseUri }, '');
       },
     },
     {
