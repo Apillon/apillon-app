@@ -42,11 +42,12 @@
           </Btn>
         </p>
         <n-upload
+          ref="uploadRef"
           v-on-click-outside="stopLoader"
           accept="image/png, image/jpeg"
           :default-file-list="collectionStore.images"
           :show-file-list="false"
-          :max="collectionStore.images.length > 0 ? collectionStore.csvData?.length : undefined"
+          :max="nft.dataImagesNames.value.length"
           multiple
           directory-dnd
           :custom-request="nft.uploadImagesRequest"
@@ -76,7 +77,7 @@
           <div class="">
             <button
               class="flex justify-center items-center h-12 w-12 ml-4 p-3"
-              @click="collectionStore.resetImages()"
+              @click="removeImages()"
             >
               <span class="icon-delete text-xl"></span>
             </button>
@@ -84,21 +85,13 @@
         </div>
 
         <n-space class="mt-5 mb-8" :size="20" justify="space-between" vertical>
-          <div v-if="collectionStore.hasImages">
-            <Notification
-              v-if="collectionStore.images?.length < collectionStore.csvData?.length"
-              type="warning"
-            >
-              {{ $t('nft.validation.imagesMissing') }} {{ nft.missingImages.value }}
-            </Notification>
-            <Notification
-              v-else-if="!nft.allImagesUploaded.value"
-              type="error"
-              class="overflow-hidden"
-            >
-              {{ $t('nft.validation.imagesInvalid') }} {{ nft.imagesNames.value }}
-            </Notification>
-          </div>
+          <Notification
+            v-if="collectionStore.hasImages && !nft.allImagesUploaded.value"
+            type="error"
+            class="overflow-hidden"
+          >
+            {{ $t('nft.validation.imagesMissing') }} {{ nft.missingImages }}
+          </Notification>
           <Btn
             type="primary"
             size="large"
@@ -131,7 +124,7 @@
           :show-file-list="false"
           accept=".csv, application/vnd.ms-excel"
           class="w-full"
-          :custom-request="nft.uploadFileRequest"
+          :custom-request="e => onCsvFileUpload(e)"
         >
           <Btn class="w-full" type="secondary">
             {{ $t('nft.upload.csvFile') }}
@@ -194,10 +187,12 @@
 
 <script lang="ts" setup>
 import { vOnClickOutside } from '@vueuse/components';
+import type { UploadInst } from 'naive-ui';
 
 const collectionStore = useCollectionStore();
 const nft = useNft();
 
+const uploadRef = ref<UploadInst | null>(null);
 const modalMetadataAttributesVisible = ref<boolean>(false);
 
 onMounted(() => {
@@ -226,7 +221,7 @@ function createMetadata() {
 }
 
 function startLoader() {
-  if ((collectionStore.csvData?.length || 0) > collectionStore.images.length) {
+  if ((collectionStore.csvData?.length || 0) > nft.dataImagesNames.value.length) {
     nft.loadingImages.value = true;
   }
 }
@@ -235,8 +230,18 @@ function stopLoader() {
   nft.loadingImages.value = false;
 }
 
+function onCsvFileUpload(event: NUploadCustomRequestOptions) {
+  removeImages();
+  nft.uploadFileRequest(event);
+}
+
 function onUploadChange(options: FileUploadOptions) {
   nft.handleImageChange(options);
   startLoader();
+}
+
+function removeImages() {
+  collectionStore.resetImages();
+  uploadRef.value?.clear();
 }
 </script>

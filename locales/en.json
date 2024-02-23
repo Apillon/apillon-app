@@ -1116,6 +1116,7 @@
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
       "address": "Collection address",
+      "baseUri": "Base Uri",
       "contractAddress": "Contract address",
       "create": "Create collection",
       "createFirst": "Start creating NFTs",
