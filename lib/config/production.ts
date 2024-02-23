@@ -20,6 +20,7 @@ const config: ConfigInterface = {
     'SERVICES',
     'WALLET_LOGIN',
     'CAPTCHA_LOGIN',
+    'REFERRAL',
     'STORAGE',
     'NFT',
     'KILT_LOGIN',

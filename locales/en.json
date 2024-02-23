@@ -1330,70 +1330,78 @@
     "uuid": "Project UUID"
   },
   "referral": {
+    "airdrop": {
+      "btn": "Questions? Discord!",
+      "content": "This is your chance to bag some NCTR before the TGE! Have questions? Find us in Discord.",
+      "reward": "Reward",
+      "task": "Task",
+      "title": "NCTR Airdrop",
+      "type": "Type",
+      "welcome": "Welcome to Apillon Airdrop ",
+      "tabs": [
+        {
+          "title": "Refer",
+          "content": "Refer Apillon to a friend and earn NCTR when they register"
+        },
+        {
+          "title": "Learn",
+          "content": "Experiment with the Apillon platform (see tasks below) for a bigger NCTR bonus"
+        },
+        {
+          "title": "Build",
+          "content": "Create a Web3 project with Apillon services (see tasks below) and get the most NCTR"
+        }
+      ]
+    },
     "banner": {
-      "hello": "Hello Apillonian!",
-      "title": "Apillon Referral program",
-      "description": "Creating the future is more rewarding when others know about it, too. Share Apillon news, invite friends, and collect points!",
-      "btn": "Start your Referral journey",
-      "goTo": "Join Referral program"
+      "title": "NCTR Airdrop Zone",
+      "description": "Nam cras mattis placerat sed suspendisse. In sollicitudin tincidunt at pretium. Sed consectetur nunc risus elementum pellentesque. Leo interdum velit sapien sed vitae quis.",
+      "btn": "Apply for Airdrops"
     },
-    "enter": {
-      "header": "Can we work together?",
-      "description": "Currently we are working with a limited list of countries so the reward shipments can be carried out. Please select your country in the list below.",
-      "country": "Select your country",
-      "btn": "Let's see if we can work together",
-      "terms": {
-        "accept": "I accept the",
-        "andConditions": "Terms and conditions",
-        "info": "Text about Terms & conditions",
-        "title": "Terms referral"
+    "info": {
+      "airdrop": "Airdrop",
+      "astarAddress": "Astar wallet address",
+      "collected": "NCTR collected",
+      "connectAstar": "Connect your Astar wallet",
+      "connectWallet": "Connect wallet",
+      "refreshed": "Refreshed hourly",
+      "receiveTokens": "To receive NCTR tokens, connect your Astar-compatible wallet.",
+      "seeHow": "See how",
+      "status": "Your status",
+      "claim": {
+        "btn": "Claim NCTR",
+        "content": "You may collect your NCTR rewards once the NCTR token generation event",
+        "contentEnd": "is live.",
+        "title": "Claim your NCTR bonus"
+      },
+      "statuses": {
+        "0": "Register to Apillon platform",
+        "1": "Connect your Astar wallet",
+        "2": "Wait for TGE",
+        "3": "Receive NCTR tokens"
       }
     },
-    "claim": "Claim now",
-    "claimMerchPack": "Claim merch pack",
-    "connectGithub": "Your GitHub",
-    "connectTwitter": "Your twitter",
-    "content": "Welcome to Apillon referral program. While we are working hard on first MVP and giving you access to beta test, you are free to invite other developers to Apillon, collect points and get your Apillon Merch pack 1.0. ",
-    "included": "What is included?",
-    "learnMore": "Learn more about referral",
-    "points": "points",
-    "subtitle": "Get your Apillon Merch pack 1.0 by helping with referral.",
-    "title": "Referral program",
-    "yourPoints": "Your points",
-    "instructionsHeader": "Instructions:",
-    "instructions": {
-      "first": "1. Collect points by completing tasks",
-      "second": "2. Choose a desired reward and claim it, spending your points",
-      "third": "3. If you collect more points than you can spend, dont worry, the points are transferred to the next reward cycle"
+    "menu": {
+      "airdrop": "Airdrop",
+      "referral": "Referral"
     },
-    "rewards": {
-      "title": "Rewards",
-      "shirt": {
-        "info": "Web3 instant Fashion. Show others you are a dev and Web3 supporter.",
-        "info1": "- Choose size",
-        "info2": "- Free shipping",
-        "info3": "- Instant SWAG"
-      }
-    },
-    "rewardsClaim": "Claim reward",
-    "rewardsSize": "Choose the desired size. In case the size is not available we will send you whatever we have left. ",
-    "connect": "Connect your social accounts",
-    "earnPoints": "Earn Some POINTS",
-    "invite": "Invite your developer friends and score",
-    "link": "This is your referral link:",
-    "linkDesc": "Share the link below before they register to set the referral progress. Once they confirm their GitHub accounts, you will earn 2 points per each active referral.",
     "referres": {
-      "header": "Your referrees",
-      "info": "Keep track of the referral links, active connections and points earned.",
+      "active": "Active",
+      "disclaimer": "Disclaimer: To prevent users from duplicating accounts and referring to themselves, Apillon will measure the activity of referred accounts and reward them accordingly. It will also monitor potential bot activity or users creating multiple accounts. Accounts detected as either bot or self-referral will be excluded from receiving NCTR in the Airdrop.",
+      "header": "Your referees",
+      "info": "See who registered to Apillon using your referral link. \n\nActive users are those who actively use the Apillon platform. Guide your referees through Airdrop Learn and Build tasks to boost their activity.",
+      "invite": "Invite other developers to score",
+      "link": "This is your referral link:",
+      "linkDesc": "Share the link below with your dev peers and have them register to the Apillon platform. Based on their activity, you will be rewarded in NCTR for each active referee.",
       "name": "Service name",
       "github": "GitHub profile",
       "joined": "Joined on"
     },
-    "shoutout": "Help us with the shoutout",
-    "share": "Retweet on Twitter",
-    "confirm": "Claim now",
-    "xpPoints": "XP points:",
-    "spendingPoints": "Spending points:"
+    "shoutout": {
+      "title": "Help us with the shoutout",
+      "content": "Spread the word about Apillon and its killer features of the platform. Follow us on Twitter,    retweet the posts and earn reward points."
+    },
+    "title": "Referral program"
   },
   "social": {
     "chat": {

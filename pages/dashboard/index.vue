@@ -6,6 +6,11 @@
       </Heading>
     </template>
     <slot>
+      <div v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())">
+        <ReferralBanner />
+        <hr class="border-bg-lighter my-8" />
+      </div>
+
       <div
         v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())"
         class="mb-8"
@@ -172,47 +177,17 @@
       </div>
     </slot>
 
-    <template v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" #learn>
-      <!-- Referral -->
-      <div class="md:max-w-lg p-8 mt-8 mb-6 card-border rounded-lg">
-        <h3 class="mb-4">{{ $t('referral.banner.title') }}</h3>
-        <p class="text-body mb-6">
-          {{ $t('referral.banner.description') }}
-        </p>
-        <Image
-          src="/images/dashboard/referral.svg"
-          class="mb-7"
-          :width="359"
-          :height="64"
-          alt="apillon referral"
-        />
-        <Btn :loading="loading" type="primary" size="large" @click="enterReferral()">
-          {{ $t('referral.banner.btn') }}
-        </Btn>
-      </div>
+    <template v-if="false && isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" #learn>
+      <ReferralBanner class="mt-8" />
     </template>
   </Dashboard>
-
-  <!-- Modal Referral -->
-  <modal v-model:show="showModal" :title="$t('referral.enter.header')">
-    <ReferralAcceptTerms />
-  </modal>
 </template>
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const router = useRouter();
 const authStore = useAuthStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
-const referralStore = useReferralStore();
-
-const showModal = ref(false);
-const loading = ref(false);
-
-useHead({
-  title: t('dashboard.dashboard'),
-});
 
 const services = [
   {
@@ -237,21 +212,9 @@ useHead({
 });
 
 onMounted(async () => {
-  paymentStore.getInvoices();
-  storageStore.getStorageInfo();
-
-  if (isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())) {
-    loading.value = true;
-    await referralStore.getReferral();
-    loading.value = false;
+  if (isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())) {
+    paymentStore.getInvoices();
+    storageStore.getStorageInfo();
   }
 });
-
-function enterReferral() {
-  if (!referralStore.termsAccepted) {
-    showModal.value = true;
-  } else {
-    router.push('/dashboard/referral');
-  }
-}
 </script>
