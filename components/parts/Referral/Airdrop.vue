@@ -4,11 +4,9 @@
     <div>
       <h3>{{ $t('referral.airdrop.welcome') }}</h3>
       <p class="mb-6">{{ $t('referral.airdrop.content') }}</p>
-      <Btn
-        :color="colors.blue"
-        href="https://discord.com/channels/881835505120079912/882217141389099089"
-        >{{ $t('referral.airdrop.btn') }}</Btn
-      >
+      <Btn :color="colors.blue" href="https://discord.com/invite/yX3gTw36C4">
+        {{ $t('referral.airdrop.btn') }}
+      </Btn>
     </div>
 
     <div class="flex flex-wrap gap-4 mt-12 mb-4">
