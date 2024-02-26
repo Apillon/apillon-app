@@ -1,11 +1,12 @@
 export {};
 
 export enum UserError {
-  INVALID_SIGNATURE = 'invalid signature',
+  INVALID_SIGNATURE = 'INVALID_SIGNATURE',
   JWT_TOKEN_EXPIRED = 'jwt expired',
   AUTH_TOKEN_EXPIRED = 'AUTH_TOKEN_EXPIRED',
   USER_INVALID_LOGIN = 'USER_INVALID_LOGIN',
   USER_DOES_NOT_EXISTS = 'USER_DOES_NOT_EXISTS',
+  USER_IS_NOT_AUTHENTICATED = 'USER_IS_NOT_AUTHENTICATED',
 }
 
 /**
@@ -14,7 +15,7 @@ export enum UserError {
 /**
  * Bad request error codes - 40000000.
  */
-export enum LibBadRequestErrorCode {
+export enum BadRequestErrorCode {
   BAD_REQUEST = 40000000,
   INVALID_PATH = 40000001,
   INVALID_QUERY_PARAMETERS = 40000002,
@@ -24,19 +25,23 @@ export enum LibBadRequestErrorCode {
 /**
  * Unauthorized error codes - 401000.
  */
-export enum LibUnauthorizedErrorCodes {
+export enum UnauthorizedErrorCodes {
   UNAUTHORIZED = 40100000,
   INVALID_TOKEN = 40100001,
+  INVALID_SIGNATURE = 40100002,
+  WALLET_SIGNATURE_ALREADY_USED = 40002700,
+  INVALID_WALLET_SIGNATURE = 40002701,
+  USER_IS_NOT_AUTHENTICATED = 401021000,
 }
 
-export enum LibForbiddenErrorCodes {
+export enum ForbiddenErrorCodes {
   FORBIDDEN = 40300000,
 }
 
 /**
  * Validation error codes - 42200000.
  */
-export enum LibValidatorErrorCode {
+export enum ValidatorErrorCode {
   DEFAULT_VALIDATOR_ERROR_CODE = 42200000,
   BUCKET_PROJECT_UUID_NOT_PRESENT = 42200001,
   BUCKET_STORAGE_PLAN_ID_NOT_PRESENT = 42200002,
@@ -62,7 +67,7 @@ export enum LibValidatorErrorCode {
 /**
  * System Error codes - 500000.
  */
-export enum LibErrorCode {
+export enum ErrorCode {
   STATUS_NOT_PRESENT = 42200100,
   INVALID_STATUS = 42200101,
   ERROR_WRITING_TO_DATABASE = 50000001,
@@ -73,7 +78,7 @@ export enum LibErrorCode {
 /**
  * System Error codes - 500000.
  */
-export enum LibSystemErrorCode {
+export enum SystemErrorCode {
   DEFAULT_SYSTEM_ERROR = 500000,
   UNHANDLED_SYSTEM_ERROR = 500001,
   SQL_SYSTEM_ERROR = 500002,

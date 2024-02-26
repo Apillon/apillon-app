@@ -1,6 +1,6 @@
 <template>
   <div class="relative flex flex-col justify-center align-middle min-h-screen h-full bg-bg-dark">
-    <div class="container card relative max-w-lg py-16 sm:px-8 md:px-12 lg:px-16">
+    <div class="container card relative max-w-[90vw] sm:max-w-lg py-16 sm:px-8 md:px-12 lg:px-16">
       <AuthHeader />
 
       <div class="relative">

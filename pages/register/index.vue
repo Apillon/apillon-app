@@ -14,7 +14,10 @@
 
     <!-- Separator -->
     <SeparatorText>
-      <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
+      <template v-if="authStore.wallet.signature">
+        {{ $t('auth.signup.withWallet') }}
+      </template>
+      <template v-else-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
         {{ $t('auth.signup.orUseEmail') }}
       </template>
       <template v-else>{{ $t('auth.signup.withEmail') }}</template>

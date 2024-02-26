@@ -52,6 +52,7 @@
 
 <script lang="ts" setup>
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+import { useAccount } from 'use-wagmi';
 
 type SignupForm = {
   email: string;
@@ -59,6 +60,10 @@ type SignupForm = {
   refCode?: string;
   metadata?: any;
   terms?: boolean;
+  isEvmWallet?: string | null;
+  wallet?: string | null;
+  signature?: string | null;
+  timestamp?: number | null;
 };
 
 const props = defineProps({
@@ -79,6 +84,7 @@ const {
   onCaptchaError,
   onCaptchaExpire,
 } = useCaptcha();
+const { address, isConnected } = useAccount();
 
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
@@ -90,6 +96,7 @@ const formData = ref<SignupForm>({
   refCode: `${query?.REF || ''}`,
   metadata: getMetadata(),
   terms: false,
+  wallet: authStore.wallet.signature,
 });
 
 const rules: NFormRules = {
@@ -154,6 +161,19 @@ function handleSubmit(e: MouseEvent | null) {
 }
 async function signupWithEmail() {
   loading.value = true;
+
+  // Wallet register params
+  if (isConnected.value) {
+    formData.value.isEvmWallet = true;
+    formData.value.wallet = address.value;
+    formData.value.signature = authStore.wallet.signature;
+    formData.value.timestamp = authStore.wallet.timestamp;
+  } else if (authStore.wallet.address) {
+    formData.value.isEvmWallet = false;
+    formData.value.wallet = authStore.wallet.address;
+    formData.value.signature = authStore.wallet.signature;
+    formData.value.timestamp = authStore.wallet.timestamp;
+  }
 
   try {
     await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);

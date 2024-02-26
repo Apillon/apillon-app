@@ -29,6 +29,9 @@
         <!-- Wallet Connect -->
         <AuthWalletConnect />
 
+        <!-- EVM Wallet Connect -->
+        <AuthWalletConnectEvm />
+
         <!-- 2FA -->
         <template
           v-if="isFeatureEnabled(Feature.TWO_FACTOR_AUTHENTICATION, authStore.getUserRoles())"
