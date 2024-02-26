@@ -31,17 +31,24 @@
     </div>
 
     <div class="card-light p-8">
-      <h6>{{ $t('referral.info.connectAstar') }}</h6>
+      <h6>
+        {{ $t('referral.info.connectAstar') }}
+        <!-- <span class="icon-soon ml-2 text-lg text-blue"></span> -->
+      </h6>
       <p class="mt-4 mb-6 text-sm">
         {{ $t('referral.info.receiveTokens') }}
-        <a href="" class="text-white underline" target="_blank">
+        <a
+          href="https://docs.astar.network/docs/use/manage-wallets/wallet-providers/"
+          class="text-white underline"
+          target="_blank"
+        >
           {{ $t('referral.info.seeHow') }}
         </a>
       </p>
 
       <div class="mb-4">
         <label class="text-xs"> {{ $t('referral.info.astarAddress') }}</label>
-        <n-input class="bg-bg-dark" disabled />
+        <n-input class="bg-bg-dark" placeholder="Paste here" disabled />
       </div>
 
       <Btn type="secondary" size="large" disabled>
@@ -50,7 +57,10 @@
     </div>
 
     <div class="card-light p-8">
-      <h6>{{ $t('referral.info.claim.title') }}</h6>
+      <h6>
+        {{ $t('referral.info.claim.title') }}
+        <!-- <span class="icon-soon ml-2 text-lg text-blue"></span> -->
+      </h6>
       <p class="mt-4 mb-6 text-sm">
         {{ $t('referral.info.claim.content') }}
         <a href="https://apillon.io/tge" class="text-white underline" target="_blank">(TGE)</a>
