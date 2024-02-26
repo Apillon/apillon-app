@@ -62,13 +62,12 @@
                   <td>
                     <Btn
                       v-if="authStore.user.wallet === account.address"
-                      type="secondary"
+                      type="error"
                       :loading="loading && selectedAddress === account.address"
-                      disabled
-                      @click="connectAccount(account, true)"
+                      @click="emit('remove', account)"
                     >
                       <span class="whitespace-nowrap">
-                        {{ $t('auth.wallet.connected.wallet') }}
+                        {{ $t('auth.wallet.disconnect.wallet') }}
                       </span>
                     </Btn>
                     <Btn
@@ -100,9 +99,8 @@
 defineProps({
   actionText: { type: String, default: '' },
   loading: { type: Boolean, default: false },
-  disconnect: { type: Boolean, default: false },
 });
-const emit = defineEmits(['sign']);
+const emit = defineEmits(['sign', 'remove']);
 
 const { isLg } = useScreen();
 const authStore = useAuthStore();
@@ -118,9 +116,9 @@ function onSelect(wallet: Wallet) {
     authStore.setWallet(wallet);
   }
 }
-function connectAccount(account: WalletAccount, removeWallet: boolean = false) {
+function connectAccount(account: WalletAccount) {
   selectedAddress.value = account.address;
-  emit('sign', account, removeWallet);
+  emit('sign', account);
 }
 
 /** Wallet is available if is large screen and wallet type is desktop or is small screen and wallet type is mobile */

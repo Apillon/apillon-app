@@ -12,9 +12,9 @@
       <Btn class="flex-1" type="secondary" @click="modalWalletSelectVisible = true">
         {{ $t('auth.wallet.connect.different') }}
       </Btn>
-      <!-- <Btn class="flex-1" type="error" borderless @click="disconnectWallet()">
+      <Btn class="flex-1" type="error" borderless @click="removeWallet()">
         {{ $t('auth.wallet.disconnect.wallet') }}
-      </Btn> -->
+      </Btn>
     </div>
     <Btn v-else size="large" type="secondary" @click="modalWalletSelectVisible = true">
       {{ $t('auth.wallet.connect.btn') }}
@@ -26,8 +26,8 @@
     <AuthWalletDot
       :action-text="$t('auth.wallet.connect.btn')"
       :loading="loadingWallet"
-      :disconnect="disconnect"
       @sign="walletConnect"
+      @remove="removeWallet"
     />
   </modal>
 </template>
@@ -38,21 +38,20 @@ const { error, success } = useMessage();
 const authStore = useAuthStore();
 const { getMessageSignature } = useProvider();
 
-const disconnect = ref<boolean>(false);
+const loadingRemove = ref<boolean>(false);
 const loadingWallet = ref<boolean>(false);
 const modalWalletSelectVisible = ref<boolean>(false);
 
 /** Wallet connect */
-async function walletConnect(account: WalletAccount, removeWallet: boolean = false) {
+async function walletConnect(account: WalletAccount) {
   loadingWallet.value = true;
-  disconnect.value = removeWallet;
 
   try {
     const { message, timestamp } = await authStore.getAuthMsg();
     const signature = await getMessageSignature(account.address, message);
 
     const res = await $api.post<WalletLoginResponse>(endpoints.walletConnect, {
-      wallet: removeWallet ? '' : account.address,
+      wallet: account.address,
       signature,
       timestamp,
       isEvmWallet: false,
@@ -61,11 +60,7 @@ async function walletConnect(account: WalletAccount, removeWallet: boolean = fal
     authStore.saveUser(res.data);
 
     /** Show success message */
-    if (removeWallet) {
-      success(t('auth.wallet.disconnect.success'));
-    } else {
-      success(t('auth.wallet.connected.success'));
-    }
+    success(t('auth.wallet.connected.success'));
   } catch (e) {
     /** Show error message */
     error(userFriendlyMsg(e));
@@ -74,20 +69,30 @@ async function walletConnect(account: WalletAccount, removeWallet: boolean = fal
   loadingWallet.value = false;
 }
 
-async function disconnectWallet() {
-  disconnect.value = true;
-
-  if (authStore.wallet.address) {
-    const account = authStore.wallet.accounts.find(
-      item => item.address === authStore.wallet.address
-    );
-    if (account) {
-      walletConnect(account, true);
-    } else {
-      modalWalletSelectVisible.value = true;
-    }
-  } else {
-    modalWalletSelectVisible.value = true;
+async function removeWallet(account?: WalletAccount) {
+  if (!account && authStore.wallet.address) {
+    account = authStore.wallet.accounts.find(item => item.address === authStore.wallet.address);
   }
+  if (!account) {
+    modalWalletSelectVisible.value = true;
+    return;
+  }
+
+  loadingRemove.value = true;
+  try {
+    const res = await $api.post<WalletLoginResponse>(endpoints.walletConnect, {
+      wallet: null,
+      isEvmWallet: false,
+    });
+
+    authStore.saveUser(res.data);
+
+    success(t('auth.wallet.disconnect.success'));
+  } catch (e) {
+    /** Show error message */
+    error(userFriendlyMsg(e));
+  }
+  modalWalletSelectVisible.value = false;
+  loadingWallet.value = false;
 }
 </script>

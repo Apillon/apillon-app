@@ -22,14 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  useAccount,
-  useConnect,
-  useDisconnect,
-  useSwitchNetwork,
-  useNetwork,
-  useWalletClient,
-} from 'use-wagmi';
+import { useAccount, useDisconnect } from 'use-wagmi';
 import colors from '~/tailwind.colors';
 
 const { t } = useI18n();
@@ -41,17 +34,13 @@ const { connectAndSign } = useWallet();
 const { getMessageSignature } = useProvider();
 
 /** Evm wallet - wagmi */
-const { connectAsync } = useConnect();
 const { disconnect } = useDisconnect();
-const { data: walletClient, refetch: refetchWalletClient } = useWalletClient();
-const { address, connector } = useAccount({
-  onConnect: evmWalletLogin,
-});
+const { address } = useAccount({ onConnect: evmWalletLogin });
 
 const loadingWallet = ref<boolean>(false);
 const modalWalletSelectVisible = ref<boolean>(false);
 
-onMounted(() => {
+onBeforeMount(() => {
   disconnect();
 });
 
@@ -85,6 +74,8 @@ async function walletLogin(account: WalletAccount) {
 /** Login with EVM wallet */
 async function evmWalletLogin() {
   await sleep(200);
+  if (!address.value) return;
+
   loadingWallet.value = true;
 
   const sign = await connectAndSign();

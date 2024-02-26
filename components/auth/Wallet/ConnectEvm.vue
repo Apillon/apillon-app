@@ -12,7 +12,7 @@
       <Btn class="flex-1" type="secondary" @click="connectDifferent">
         {{ $t('auth.wallet.connect.different') }}
       </Btn>
-      <Btn class="flex-1" type="error" :loading="loading" borderless @click="connectWallet(true)">
+      <Btn class="flex-1" type="error" :loading="loadingRemove" borderless @click="removeWallet()">
         {{ $t('auth.wallet.evm.disconnect') }}
       </Btn>
     </div>
@@ -50,6 +50,7 @@ const { address, isConnected } = useAccount({ onConnect: onWalletConnected });
 const { disconnect } = useDisconnect();
 
 const loading = ref<boolean>(false);
+const loadingRemove = ref<boolean>(false);
 const modalWalletVisible = ref<boolean>(false);
 
 onMounted(() => {
@@ -66,7 +67,7 @@ function wagmiConnect(connector) {
   }
 }
 
-async function onWalletConnected({ address }) {
+async function onWalletConnected({ address, connector, isReconnected }) {
   await sleep(200);
   if (authStore.user.evmWallet !== address) {
     connectWallet();
@@ -80,7 +81,7 @@ async function connectDifferent() {
   modalWalletVisible.value = true;
 }
 
-async function connectWallet(removeWallet: boolean = false) {
+async function connectWallet() {
   await sleep(200);
   loading.value = true;
 
@@ -100,7 +101,7 @@ async function connectWallet(removeWallet: boolean = false) {
     const { signature, timestamp } = sign;
 
     const res = await $api.post<WalletLoginResponse>(endpoints.walletConnect, {
-      wallet: removeWallet ? '' : address.value,
+      wallet: address.value,
       signature,
       timestamp,
       isEvmWallet: true,
@@ -108,12 +109,7 @@ async function connectWallet(removeWallet: boolean = false) {
 
     authStore.saveUser(res.data);
 
-    if (removeWallet) {
-      disconnect();
-      success(t('auth.wallet.disconnect.success'));
-    } else {
-      success(t('auth.wallet.connected.success'));
-    }
+    success(t('auth.wallet.connected.success'));
 
     modalWalletVisible.value = false;
   } catch (e) {
@@ -121,5 +117,25 @@ async function connectWallet(removeWallet: boolean = false) {
     error(userFriendlyMsg(e));
   }
   loading.value = false;
+}
+
+async function removeWallet() {
+  loadingRemove.value = true;
+
+  try {
+    const res = await $api.post<WalletLoginResponse>(endpoints.walletConnect, {
+      wallet: null,
+      isEvmWallet: true,
+    });
+
+    authStore.saveUser(res.data);
+
+    disconnect();
+    success(t('auth.wallet.disconnect.success'));
+  } catch (e) {
+    /** Show error message */
+    error(userFriendlyMsg(e));
+  }
+  loadingRemove.value = false;
 }
 </script>
