@@ -26,10 +26,10 @@
       </div>
     </div>
 
-    <n-table class="bg-dark" :bordered="false" :single-line="true">
+    <n-table class="bg-dark mobile:text-xs" :bordered="false" :single-line="true">
       <thead>
         <tr>
-          <th></th>
+          <th class="mobile:hidden"></th>
           <th>
             {{ $t('referral.airdrop.task') }}
           </th>
@@ -44,7 +44,7 @@
       </thead>
       <tbody>
         <tr v-for="(task, key) in airdropTasks" :key="key">
-          <td>
+          <td class="mobile:hidden">
             <span
               class="flex-cc icon-status text-xl"
               :class="[
