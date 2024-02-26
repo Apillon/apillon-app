@@ -4,10 +4,7 @@
     <div class="max-w-lg">
       <h3>{{ $t('referral.airdrop.welcome') }}</h3>
       <p class="mb-6 whitespace-break-spaces">{{ $t('referral.airdrop.content') }}</p>
-      <Btn
-        :color="colors.blue"
-        href="https://discord.com/channels/881835505120079912/882217141389099089"
-      >
+      <Btn :color="colors.blue" href="https://discord.com/invite/yX3gTw36C4">
         {{ $t('referral.airdrop.btn') }}
       </Btn>
     </div>
