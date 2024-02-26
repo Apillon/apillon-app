@@ -58,7 +58,7 @@
           </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
-          v-if="instructionsAvailable"
+          v-if="instructionsAvailable && isMd"
           :collapsed="learnCollapsed"
           collapse-mode="width"
           :collapsed-width="48"
