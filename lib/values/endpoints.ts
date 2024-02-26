@@ -267,12 +267,11 @@ const Endpoints = {
   referralTweets: '/referral/twitter/tweets',
   referralRetweet: '/referral/twitter/confirm',
   referralTwitterAuth: '/referral/twitter/authenticate',
-
   referralTwitterDisc: '/referral/twitter/unlink',
   referralGithubDisc: '/referral/github/unlink',
-
   referralRewards: '/referral/products',
   referralClaimReward: '/referral/product',
+  airdropTasks: '/referral/airdrop-tasks',
 };
 
 export default Endpoints;

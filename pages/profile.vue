@@ -14,47 +14,7 @@
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <!-- Referral -->
-        <template v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())">
-          <div class="card-dark p-8 flex gap-8 justify-between mobile:flex-wrap">
-            <div class="md:max-w-lg">
-              <h3 class="mb-2">{{ $t('referral.banner.hello') }}</h3>
-              <p class="text-body mb-6">
-                {{ $t('referral.banner.description') }}
-              </p>
-              <Btn type="primary" @click="enterReferral()">
-                {{ $t('referral.banner.goTo') }}
-              </Btn>
-            </div>
-
-            <!-- User points -->
-            <n-space class="body-md" size="large">
-              <n-space
-                class="card-border pr-3 whitespace-nowrap"
-                size="large"
-                align="center"
-                :wrap="false"
-              >
-                <div class="h-10 p-2 rounded-full transition-all duration-300 hover:bg-bg-lighter">
-                  <NuxtIcon name="referral/spendable-points" class="icon-auto" filled />
-                </div>
-                <span>{{ $t('referral.xpPoints') }}</span>
-                <strong class="text-base text-blue">{{ referralStore.balance_all }}</strong>
-              </n-space>
-              <n-space
-                class="card-border pr-3 whitespace-nowrap"
-                size="large"
-                align="center"
-                :wrap="false"
-              >
-                <div class="h-10 p-2 rounded-full transition-all duration-300 hover:bg-bg-lighter">
-                  <NuxtIcon name="referral/xp-points" class="icon-auto" filled />
-                </div>
-                <span>{{ $t('referral.spendingPoints') }}</span>
-                <strong class="text-base text-pink">{{ referralStore.balance }}</strong>
-              </n-space>
-            </n-space>
-          </div>
-        </template>
+        <ReferralBanner v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" />
 
         <!-- Discord -->
         <template v-if="isFeatureEnabled(Feature.DISCORD, authStore.getUserRoles())">

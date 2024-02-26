@@ -15,10 +15,6 @@ declare global {
     userEmail: string;
     balance: number;
     balance_all: number;
-    github_id?: string;
-    twitter_id?: string;
-    github_name?: string;
-    twitter_name?: string;
     refCode: string;
     referrals: Array<any>;
     referrer_id?: number;
@@ -45,4 +41,36 @@ declare global {
 
   interface ReferralResponse extends GeneralResponse<ReferralInterface> {}
   interface ReferralRewardsResponse extends GeneralItemsResponse<RewardsInterface> {}
+
+  /**
+   * Airdrop
+   */
+  type AirdropTask = {
+    name: string;
+    value: boolean;
+  };
+  interface AirdropInterface extends GeneralInterface {
+    user_uuid: string;
+    projectCreated: boolean;
+    bucketCreated: boolean;
+    fileUploaded: boolean;
+    websiteCreated: boolean;
+    ipnsCreated: boolean;
+    onSubscriptionPlan: boolean;
+    creditsPurchased: boolean;
+    grillChatCreated: boolean;
+    nftCollectionCreated: boolean;
+    domainLinked: boolean;
+    websiteUploadedApi: boolean;
+    fileUploadedApi: boolean;
+    computingContractCreated: boolean;
+    collaboratorAdded: boolean;
+    kiltIdentityCreated: boolean;
+    identitySdkUsed: boolean;
+    nftMintedApi: boolean;
+    usersReferred: number;
+    creditsSpent: number;
+    totalPoints: number;
+  }
+  interface AirdropResponse extends GeneralResponse<AirdropInterface> {}
 }
