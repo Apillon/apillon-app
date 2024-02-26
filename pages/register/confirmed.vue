@@ -2,10 +2,12 @@
   <div class="w-full flex flex-col justify-center items-center">
     <div class="w-full text-center">
       <div class="mb-7 text-center text-blue">
-        <span class="icon-wow text-[34px]"></span>
+        <AnimationLoader v-if="isWalletRegister" />
+        <span v-else class="icon-wow text-[34px]"></span>
       </div>
       <h2 class="mb-2 text-center">{{ $t('auth.signup.emailConfirmed') }}</h2>
-      <p class="mb-7">{{ $t('auth.signup.enterDesiredPassword') }}</p>
+      <p v-if="isWalletRegister" class="mb-7">{{ $t('auth.signup.walletConfirmed') }}</p>
+      <p v-else class="mb-7">{{ $t('auth.signup.enterDesiredPassword') }}</p>
 
       <FormPassword class="mx-auto max-w-lg text-left" />
     </div>
@@ -14,6 +16,7 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const { query } = useRoute();
 
 definePageMeta({
   layout: 'auth',
@@ -21,6 +24,8 @@ definePageMeta({
 useHead({
   title: $i18n.t('auth.signup.emailConfirmed'),
 });
+
+const isWalletRegister = computed(() => query.walletLogin === 'true');
 
 onMounted(() => {
   /** Track Registration start */

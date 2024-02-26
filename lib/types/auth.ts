@@ -7,13 +7,14 @@ declare global {
   interface UserInterface {
     id: number;
     email: string;
+    evmWallet: string | null;
     name: string;
     phone?: string | null;
     status: number;
     user_uuid: string;
     userPermissions: number[];
     userRoles: number[];
-    wallet?: string | null;
+    wallet: string | null;
     token?: any;
     captchaJwt?: any;
   }

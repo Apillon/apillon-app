@@ -126,8 +126,10 @@
       "orUseEmail": "or sign up using email",
       "sendAgain": "Send again",
       "title": "Build your first Web3 project",
-      "titleReferalZiggi": "Welcome, traveler! Register below and start building.",
-      "withEmail": "sign up with email"
+      "walletConfirmed": "Wallet and email confirmed, logging you in...",
+      "withWallet": "email is required for wallet login",
+      "withEmail": "sign up with email",
+      "titleReferalZiggi": "Welcome, traveler! Register below and start building."
     },
     "terms": {
       "accept": "I have read and agree to ",
@@ -140,24 +142,40 @@
     },
     "wallet": {
       "connect": {
-        "btn": "Connect wallet",
+        "btn": "Connect Polkadot wallet",
         "info": "Connect with one of Polkadot's wallet",
-        "success": "Wallet has been successfully connected",
+        "polkadot": "Connect polkadot wallet",
+        "success": "You successfully logged in with your Wallet",
         "title": "Connect wallet",
-        "different": "Connect different wallet"
+        "different": "Connect different wallet",
+        "wallet": "Connect wallet"
       },
       "connected": {
         "info": "Wallet is connected with your account",
         "success": "Wallet has been successfully connected",
-        "title": "Wallet connected"
+        "title": "Polkadot wallet connected",
+        "wallet": "Connected wallet"
       },
       "disconnect": {
         "success": "Wallet has been successfully disconnected",
         "wallet": "Disconnect wallet"
       },
+      "evm": {
+        "connect": "Connect EVM wallet",
+        "connected": "EVM wallet connected",
+        "disconnect": "Disconnect EVM wallet",
+        "info": "Connect your EVM compatible wallet. This step is crucial for securely receiving and managing the airdropped NFTs.",
+        "title": "Choose EVM wallet"
+      },
+      "login": {
+        "success": "Wallet has been successfully connected",
+        "title": "Login with wallet",
+        "walletAccountNotConnected": "A wallet account must be connected",
+        "walletNotConnected": "A wallet must be connected",
+        "walletNotConnected2": "A wallet must be connected, please reconnect. If the issue persist try reloading."
+      },
       "address": "Wallet address",
-      "createAccount": "This wallet hasn't got any account. Create an account first.",
-      "login": "Login with wallet"
+      "createAccount": "This wallet hasn't got any account. Create an account first."
     }
   },
   "computing": {
@@ -1332,13 +1350,13 @@
   },
   "referral": {
     "airdrop": {
-      "btn": "Questions? Discord!",
-      "content": "This is your chance to bag some NCTR before the TGE! Have questions? Find us in Discord.",
+      "btn": "Have questions? Enter Discord!",
+      "content": "As a registered user, you are eligible for a bag of free NCTR. Increase rewards by completing a few tasks below. \nAt the TGE, simply click Claim on the right and collect your NCTR.",
       "reward": "Reward",
       "task": "Task",
       "title": "NCTR Airdrop",
       "type": "Type",
-      "welcome": "Welcome to Apillon Airdrop ",
+      "welcome": "Welcome to NCTR Airdrop!",
       "tabs": [
         {
           "title": "Refer",
@@ -1355,9 +1373,9 @@
       ]
     },
     "banner": {
-      "title": "NCTR Airdrop Zone",
-      "description": "Nam cras mattis placerat sed suspendisse. In sollicitudin tincidunt at pretium. Sed consectetur nunc risus elementum pellentesque. Leo interdum velit sapien sed vitae quis.",
-      "btn": "Apply for Airdrops"
+      "title": "Join NCTR Airdrop!",
+      "description": "As a registered Apillon user, you are eligible to receive free NCTR tokens! Join in, connect wallet, and collect your bag of NCTR at TGE. Get some more by completing a few tasks!",
+      "btn": "Get in line!"
     },
     "info": {
       "airdrop": "Airdrop",
@@ -1379,7 +1397,7 @@
         "0": "Register to Apillon platform",
         "1": "Connect your Astar wallet",
         "2": "Wait for TGE",
-        "3": "Receive NCTR tokens"
+        "3": "Claim NCTR tokens"
       }
     },
     "menu": {
@@ -1392,11 +1410,11 @@
       "header": "Your referees",
       "info": "See who registered to Apillon using your referral link. \n\nActive users are those who actively use the Apillon platform. Guide your referees through Airdrop Learn and Build tasks to boost their activity.",
       "invite": "Invite other developers to score",
-      "link": "This is your referral link:",
+      "link": "Your referral link",
       "linkDesc": "Share the link below with your dev peers and have them register to the Apillon platform. Based on their activity, you will be rewarded in NCTR for each active referee.",
       "name": "Service name",
       "github": "GitHub profile",
-      "joined": "Joined on"
+      "joined": "Joined"
     },
     "shoutout": {
       "title": "Help us with the shoutout",
