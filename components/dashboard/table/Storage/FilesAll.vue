@@ -184,7 +184,7 @@ const debouncedSearchFilter = debounce(getFiles, 500);
 
 /** Function "Fetch directory content" wrapper  */
 async function getFiles(page: number = 1) {
-  await fileStore.fetchAllFiles(fileStatus.value, page, PAGINATION_LIMIT);
+  await fileStore.fetchAllFiles(fileStatus.value, { page });
 
   currentPage.value = page;
 }
