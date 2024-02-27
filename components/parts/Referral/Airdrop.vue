@@ -59,9 +59,10 @@
           <td>{{ task.type }}</td>
           <td>{{ task.reward }}</td>
           <td>
-            <div class="flex-cc">
+            <div class="flex-cc relative min-w-[24px]">
+              <Spinner v-if="referralStore.loadingAirdrop" :size="18" />
               <NuxtIcon
-                v-if="task.collected.value"
+                v-else-if="task.collected.value"
                 name="icon/success"
                 class="inline-block text-green text-2xl"
               />
@@ -133,8 +134,8 @@ const airdropTasks = [
   { category: 'build', name: 'Buy additional credits', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.creditsPurchased)) },
   { category: 'build', name: 'Spend 3,000 credits', type: 'Repeatable', reward: 1, collected: computed(() => (referralStore.airdrop.creditsSpent > 3000)) },
   { category: 'build', name: 'Host website and connect live domain via DNS', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.domainLinked)) },
-  { category: 'build', name: 'Upload website via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.websiteUploadedApi)) },
-  { category: 'build', name: 'Upload files to Web3 storage via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.fileUploadedApi)) },
+  { category: 'build', name: 'Upload website via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.websiteUploadedViaApi)) },
+  { category: 'build', name: 'Upload files to Web3 storage via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.fileUploadedViaApi)) },
   { category: 'build', name: 'Deploy Apillon’s Schrödinger’s NFT solution', type: 'One-time', reward: 2, collected: computed(() => (referralStore.airdrop.computingContractCreated)) },
   { category: 'build', name: 'Add another user to your project', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.collaboratorAdded)) },
   { category: 'build', name: 'Generate KILT-based Web3 identity', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.kiltIdentityCreated)) },

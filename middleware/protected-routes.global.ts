@@ -68,6 +68,7 @@ const featureRoutes: Array<FeatureRouteInterface> = [
     feature: Feature.PROJECT_SETTINGS,
   },
   { regex: /^\/dashboard\/access/, redirect: '/dashboard', feature: Feature.ACCESS },
+  { regex: /^\/dashboard\/api-keys/, redirect: '/dashboard', feature: Feature.API_KEYS },
   { regex: /^\/dashboard\/billing/, redirect: '/dashboard', feature: Feature.BILLING },
   { regex: /^\/dashboard\/usage/, redirect: '/dashboard', feature: Feature.BILLING },
   { regex: /^\/dashboard\/payments/, redirect: '/dashboard', feature: Feature.BILLING },

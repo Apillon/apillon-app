@@ -15,7 +15,9 @@ export const useReferralStore = defineStore('referral', {
     tasks: [] as Array<any>,
     termsAccepted: '',
     user_uuid: '',
+
     loading: false,
+    loadingAirdrop: false,
   }),
   getters: {
     hasAirdrop(state) {
@@ -59,13 +61,14 @@ export const useReferralStore = defineStore('referral', {
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.REFERRAL, Date.now().toString());
       } catch (e) {
-        console.warn(e);
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(e));
       }
       this.loading = false;
     },
 
     async fetchAirdrop() {
-      this.loading = true;
+      this.loadingAirdrop = true;
       try {
         const res = await $api.get<AirdropResponse>(endpoints.airdropTasks);
         this.airdrop = res.data;
@@ -73,9 +76,10 @@ export const useReferralStore = defineStore('referral', {
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.REFERRAL_AIRDROP, Date.now().toString());
       } catch (e) {
-        console.warn(e);
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(e));
       }
-      this.loading = false;
+      this.loadingAirdrop = false;
     },
   },
 });

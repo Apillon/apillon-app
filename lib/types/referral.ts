@@ -50,27 +50,27 @@ declare global {
     value: boolean;
   };
   interface AirdropInterface extends GeneralInterface {
-    user_uuid: string;
-    projectCreated: boolean;
     bucketCreated: boolean;
-    fileUploaded: boolean;
-    websiteCreated: boolean;
-    ipnsCreated: boolean;
-    onSubscriptionPlan: boolean;
-    creditsPurchased: boolean;
-    grillChatCreated: boolean;
-    nftCollectionCreated: boolean;
-    domainLinked: boolean;
-    websiteUploadedApi: boolean;
-    fileUploadedApi: boolean;
-    computingContractCreated: boolean;
     collaboratorAdded: boolean;
-    kiltIdentityCreated: boolean;
-    identitySdkUsed: boolean;
-    nftMintedApi: boolean;
-    usersReferred: number;
+    computingContractCreated: boolean;
+    creditsPurchased: boolean;
     creditsSpent: number;
+    domainLinked: boolean;
+    fileUploaded: boolean;
+    fileUploadedViaApi: boolean;
+    grillChatCreated: boolean;
+    identitySdkUsed: boolean;
+    ipnsCreated: boolean;
+    kiltIdentityCreated: boolean;
+    nftCollectionCreated: boolean;
+    nftMintedApi: boolean;
+    onSubscriptionPlan: boolean;
+    projectCreated: boolean;
     totalPoints: number;
+    user_uuid: string;
+    usersReferred: number;
+    websiteCreated: boolean;
+    websiteUploadedViaApi: boolean;
   }
   interface AirdropResponse extends GeneralResponse<AirdropInterface> {}
 }

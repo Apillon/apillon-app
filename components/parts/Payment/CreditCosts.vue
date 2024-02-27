@@ -1,65 +1,68 @@
 <template>
-  <div v-if="!service || (servicePrices && servicePrices.length)">
-    <n-space :size="32">
-      <!-- Filter by service -->
-      <div v-if="filterByService && !service" class="mb-4">
-        <strong>{{ $t('dashboard.credits.filterByService') }}:</strong>
-        <select-options
-          v-model:value="selectedService"
-          :options="services"
-          class="min-w-[13rem] max-w-xs"
-          size="small"
-          :placeholder="$t('form.placeholder.chain')"
-          filterable
-          clearable
-        />
-      </div>
-      <!-- Filter by chain -->
-      <div v-if="filterByChain" class="mb-4">
-        <strong>{{ $t('dashboard.credits.filterByChain') }}:</strong>
-        <select-options
-          v-model:value="selectedChain"
-          :options="chainsByService"
-          class="min-w-[13rem] max-w-xs"
-          size="small"
-          :placeholder="$t('form.placeholder.chain')"
-          filterable
-          :clearable="!service"
-        />
-      </div>
-    </n-space>
+  <Spinner v-if="loading" />
+  <template v-else>
+    <div v-if="!service || (servicePrices && servicePrices.length)">
+      <n-space :size="32">
+        <!-- Filter by service -->
+        <div v-if="filterByService && !service" class="mb-4">
+          <strong>{{ $t('dashboard.credits.filterByService') }}:</strong>
+          <select-options
+            v-model:value="selectedService"
+            :options="services"
+            class="min-w-[13rem] max-w-xs"
+            size="small"
+            :placeholder="$t('form.placeholder.chain')"
+            filterable
+            clearable
+          />
+        </div>
+        <!-- Filter by chain -->
+        <div v-if="filterByChain" class="mb-4">
+          <strong>{{ $t('dashboard.credits.filterByChain') }}:</strong>
+          <select-options
+            v-model:value="selectedChain"
+            :options="chainsByService"
+            class="min-w-[13rem] max-w-xs"
+            size="small"
+            :placeholder="$t('form.placeholder.chain')"
+            filterable
+            :clearable="!service"
+          />
+        </div>
+      </n-space>
 
-    <n-table class="plain" :bordered="false" :single-line="true">
-      <thead>
-        <tr>
-          <th>
-            <template v-if="service">
-              {{ $t(`dashboard.credits.services.${service}.name`) }}
-            </template>
-            <template v-else> {{ $t('dashboard.credits.serviceDescription') }} </template>
-          </th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(price, key) in shownPrices" :key="key">
-          <td>
-            <NuxtIcon
-              :name="getIconName(price)"
-              class="float-left text-white text-2xl mr-3"
-              filled
-            />
-            <span>{{ price.description }} </span>
-          </td>
-          <td class="text-right">
-            <strong class="text-white">
-              {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
-            </strong>
-          </td>
-        </tr>
-      </tbody>
-    </n-table>
-  </div>
+      <n-table class="plain" :bordered="false" :single-line="true">
+        <thead>
+          <tr>
+            <th>
+              <template v-if="service">
+                {{ $t(`dashboard.credits.services.${service}.name`) }}
+              </template>
+              <template v-else> {{ $t('dashboard.credits.serviceDescription') }} </template>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(price, key) in shownPrices" :key="key">
+            <td>
+              <NuxtIcon
+                :name="getIconName(price)"
+                class="float-left text-white text-2xl mr-3"
+                filled
+              />
+              <span>{{ price.description }} </span>
+            </td>
+            <td class="text-right">
+              <strong class="text-white">
+                {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
+              </strong>
+            </td>
+          </tr>
+        </tbody>
+      </n-table>
+    </div>
+  </template>
 </template>
 
 <script lang="ts" setup>
@@ -81,6 +84,7 @@ const services = enumKeyValues(ServiceTypeName);
 const selectedService = ref<string | null>(props.service);
 const servicePrices = ref<ProductPriceInterface[]>([]);
 const selectedChain = ref<number | null>(null);
+const loading = ref<boolean>(true);
 
 onMounted(async () => {
   console.log(
@@ -102,6 +106,8 @@ onMounted(async () => {
   servicePrices.value.sort((a, b) =>
     a.category.toLowerCase() < b.category.toLowerCase() ? -1 : 1
   );
+
+  loading.value = false;
 });
 
 const chainsByService = computed(() => {
