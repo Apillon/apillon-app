@@ -12,6 +12,7 @@ const config: ConfigInterface = {
   gtmId: 'GTM-P7V3D3P6',
   publishedFeatures: [
     'ACCESS',
+    'API_KEYS',
     'APILLON_REGISTER',
     'AUTHENTICATION',
     'BILLING',
@@ -29,6 +30,7 @@ const config: ConfigInterface = {
     'PROJECT_DELETE',
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
+    'REFERRAL',
     'SERVICES',
     'SOCIAL',
     'SOCIAL_ICONS',

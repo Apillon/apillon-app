@@ -42,7 +42,7 @@
     "@pinia/nuxt": "^0.4.11",
     "@polkadot/api": "^9.10.2",
     "@polkadot/extension-inject": "^0.45.2",
-    "@subsocial/grill-widget": "^0.1.0",
+    "@subsocial/grill-widget": "^0.1.2",
     "@subsocial/resource-discussions": "^0.0.4",
     "buffer": "^6.0.3",
     "card-validator": "^8.1.1",

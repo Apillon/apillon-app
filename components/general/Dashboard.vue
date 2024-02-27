@@ -32,7 +32,7 @@
         sider-placement="right"
       >
         <n-layout-content>
-          <n-scrollbar y-scrollable :style="scrollStyle">
+          <n-scrollbar y-scrollable :style="instructionsAvailable || fullHeight ? {} : scrollStyle">
             <div class="pt-8" :style="fullHeight ? heightScreen : {}">
               <slot />
             </div>
@@ -67,7 +67,7 @@
           @after-enter="handleOnUpdateCollapse(false)"
           @after-leave="handleOnUpdateCollapse(true)"
         >
-          <template v-if="learnCollapsible">
+          <div v-if="learnCollapsible" class="my-8">
             <div class="mb-2">
               <h6 v-if="!learnCollapsed" class="inline-block">
                 {{ $t('general.learn') }}
@@ -91,15 +91,15 @@
               </button>
             </div>
 
-            <slot v-if="!learnCollapsed && isMd" name="learn">
+            <slot v-if="!learnCollapsed" name="learn">
               <learn-section />
             </slot>
-          </template>
-          <template v-else>
-            <slot v-if="!learnCollapsed && isMd" name="learn">
+          </div>
+          <div v-else class="my-8">
+            <slot v-if="!learnCollapsed" name="learn">
               <learn-section />
             </slot>
-          </template>
+          </div>
         </n-layout-sider>
       </n-layout>
     </div>
@@ -110,7 +110,7 @@
 import { useGtm } from '@gtm-support/vue-gtm';
 const props = defineProps({
   loading: { type: Boolean, default: false },
-  learnCollapsible: { type: Boolean, default: true },
+  learnCollapsible: { type: Boolean, default: false },
   fullHeight: { type: Boolean, default: false },
 });
 
@@ -131,13 +131,13 @@ const headingRef = ref<HTMLElement>();
 const scrollStyle = computed(() => {
   const offset = isLg.value ? 120 : 124;
   return {
-    maxHeight: `calc(100dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
+    maxHeight: `calc(99dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
   };
 });
 const heightScreen = computed(() => {
   const offset = isLg.value ? 120 : 124;
   return {
-    height: `calc(100dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
+    height: `calc(98dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
   };
 });
 
@@ -145,10 +145,6 @@ const heightScreen = computed(() => {
 const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
-  // await getInstructions(key.value);
-
-  /** Get Price list */
-  paymentStore.getPriceList();
 
   if (gtm && gtm.enabled() && !sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
     gtm.trackEvent({
@@ -175,12 +171,6 @@ function setLoadingAnimation(isLoading: boolean) {
 const key = computed(() => {
   return name?.toString() || '';
 });
-
-async function getInstructions(key: string) {
-  if (!dataStore.hasInstructions(key)) {
-    await dataStore.fetchInstructions(key);
-  }
-}
 
 const instructionsAvailable = computed<boolean>(() => {
   return (

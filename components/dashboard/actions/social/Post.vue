@@ -20,7 +20,7 @@
       <ModalCreditCosts :service="ServiceTypeName.SOCIAL" />
 
       <!-- Refresh posts -->
-      <n-button size="small" :loading="postStore.loading" @click="postStore.fetchPosts(spaceUuid)">
+      <n-button size="small" :loading="postStore.loading" @click="refresh()">
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
@@ -44,12 +44,25 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
   spaceUuid: { type: String, required: true },
 });
 defineEmits(['createSuccess']);
 
 const authStore = useAuthStore();
+const chatStore = useChatStore();
 const postStore = usePostStore();
 const modalCreatePostVisible = ref<boolean>(false);
+
+const isDisabled = computed<boolean>(() => {
+  return chatStore.active.status < SocialStatus.ACTIVE;
+});
+
+async function refresh() {
+  postStore.fetchPosts(props.spaceUuid);
+
+  if (isDisabled.value) {
+    chatStore.active = await chatStore.fetchChat(props.spaceUuid);
+  }
+}
 </script>
