@@ -53,12 +53,13 @@ export const useIpfsStore = defineStore('ipfs', {
       return {} as IpfsInterface;
     },
 
-    async fetchIpfsLink(project_uuid: string, cid: string): Promise<IpfsLink | null> {
+    async fetchIpfsLink(project_uuid: string, cid: string, type: string): Promise<IpfsLink | null> {
       if (!cid || !project_uuid) return null;
       try {
         const res = await $api.get<IpfsLinkResponse>(endpoints.ipfsLink, {
           project_uuid,
           cid,
+          type,
         });
 
         return res.data;

@@ -20,6 +20,10 @@
             :prefix="$t('nft.collection.uuid')"
             :text="collectionStore.active.collection_uuid"
           />
+          <TableEllipsis
+            :prefix="$t('nft.collection.baseUri')"
+            :text="collectionStore.active.baseUri"
+          />
         </div>
       </n-space>
     </slot>

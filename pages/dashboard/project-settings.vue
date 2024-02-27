@@ -3,13 +3,13 @@
     <template #heading>
       <Heading>
         <slot>
-          <n-space align="baseline">
+          <div>
             <h2 class="whitespace-nowrap">{{ $t('dashboard.nav.projectSettings') }}</h2>
             <TableEllipsis
               :prefix="$t('project.uuid')"
               :text="dataStore.project.active.project_uuid"
             />
-          </n-space>
+          </div>
         </slot>
 
         <template #info> </template>

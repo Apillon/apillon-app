@@ -1,7 +1,11 @@
 <template>
   <div>
     <!-- Heading -->
-    <h1 class="mb-2 text-center sm:text-left">{{ $t('auth.signup.title') }}</h1>
+    <h1 class="mb-2 text-center sm:text-left">
+      {{
+        route.query.REF === 'ZIGGI' ? $t('auth.signup.titleReferalZiggi') : $t('auth.signup.title')
+      }}
+    </h1>
     <p class="mb-7 text-body">{{ $t('auth.signup.description') }}</p>
 
     <!-- Apillon Oauth -->
@@ -14,7 +18,10 @@
 
     <!-- Separator -->
     <SeparatorText>
-      <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
+      <template v-if="authStore.wallet.signature">
+        {{ $t('auth.signup.withWallet') }}
+      </template>
+      <template v-else-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
         {{ $t('auth.signup.orUseEmail') }}
       </template>
       <template v-else>{{ $t('auth.signup.withEmail') }}</template>
@@ -37,6 +44,7 @@
 
 <script lang="ts" setup>
 const authStore = useAuthStore();
+const route = useRoute();
 
 definePageMeta({
   layout: 'auth',

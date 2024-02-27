@@ -52,6 +52,14 @@ export default function useService() {
       disabled: !isFeatureEnabled(Feature.COMPUTING, authStore.getUserRoles()),
       usage: translateItems('dashboard.service.computing.usage'),
     },
+    {
+      id: ServiceType.SOCIAL,
+      name: 'social',
+      icon: 'icon-social',
+      link: 'dashboard-service-social',
+      disabled: !isFeatureEnabled(Feature.SOCIAL, authStore.getUserRoles()),
+      usage: translateItems('dashboard.service.social.usage'),
+    },
   ];
 
   return {

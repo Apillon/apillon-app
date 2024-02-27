@@ -1,6 +1,6 @@
 <template>
   <div v-if="text" class="flex">
-    <span v-if="prefix" class="mr-1 text-white">{{ prefix }}:</span>
+    <span v-if="prefix" class="mr-1 text-white whitespace-nowrap">{{ prefix }}:</span>
     <n-ellipsis
       class="align-bottom break-all"
       :class="textWhite ? 'text-white' : 'text-body'"
