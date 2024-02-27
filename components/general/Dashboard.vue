@@ -146,9 +146,6 @@ const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
 
-  /** Get Price list */
-  paymentStore.getPriceList();
-
   if (gtm && gtm.enabled() && !sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
     gtm.trackEvent({
       event: 'dashboard_on_load',
