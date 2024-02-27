@@ -33,9 +33,9 @@
           >
             <!-- Projects dropdown -->
             <div class="min-h-[48px]">
-              <SidebarSelectProject v-if="dataStore.hasProjects" :collapsed="collapsed" />
+              <SidebarSelectProject :collapsed="collapsed" />
               <Btn
-                v-else-if="projectsLoaded && !authStore.isAdmin()"
+                v-if="!dataStore.hasProjects && projectsLoaded && !authStore.isAdmin()"
                 type="info"
                 :size="collapsed ? 'small' : 'large'"
                 @click="modalNewProjectVisible = true"
