@@ -1,7 +1,11 @@
 <template>
   <div>
     <!-- Heading -->
-    <h1 class="mb-2 text-center sm:text-left">{{ $t('auth.signup.title') }}</h1>
+    <h1 class="mb-2 text-center sm:text-left">
+      {{
+        route.query.REF === 'ZIGGI' ? $t('auth.signup.titleReferalZiggi') : $t('auth.signup.title')
+      }}
+    </h1>
     <p class="mb-7 text-body">{{ $t('auth.signup.description') }}</p>
 
     <!-- Apillon Oauth -->
@@ -40,6 +44,7 @@
 
 <script lang="ts" setup>
 const authStore = useAuthStore();
+const route = useRoute();
 
 definePageMeta({
   layout: 'auth',
