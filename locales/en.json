@@ -126,6 +126,7 @@
       "orUseEmail": "or sign up using email",
       "sendAgain": "Send again",
       "title": "Build your first Web3 project",
+      "titleReferalZiggi": "Welcome, traveler! Register below and start building.",
       "walletConfirmed": "Wallet and email confirmed, logging you in...",
       "withWallet": "email is required for wallet login",
       "withEmail": "sign up with email",
@@ -1383,7 +1384,7 @@
       "collected": "NCTR collected",
       "connectAstar": "Connect your Astar wallet",
       "connectWallet": "Connect wallet",
-      "refreshed": "Refreshed hourly",
+      "refreshed": "Refreshed every 5 minutes",
       "receiveTokens": "To receive NCTR tokens, connect your Astar-compatible wallet.",
       "seeHow": "See how",
       "status": "Your status",
@@ -1620,8 +1621,6 @@
   },
   "validation": {
     "alreadyOnList": "{name} is already on list",
-    "apiKeyName": "API key name is required",
-    "apiKeyIdRequired": "API key is required",
     "bucketNameRequired": "Please enter bucket name",
     "containsLowercase": "Must include a lowercase character",
     "containsNumber": "Must include a number character",
@@ -1699,6 +1698,10 @@
     "webhookTokenRequired": "Please enter token",
     "websiteNameRequired": "Please enter Website name",
     "websiteDomainUrl": "Domain name is not a valid URL",
+    "apiKey": {
+      "nameRequired": "API key name is required",
+      "rolesRequired": "Please select at least one permission"
+    },
     "contract": {
       "addressRequired": "Please enter Phala address",
       "bucketUuidRequired": "Please select Bucket",
