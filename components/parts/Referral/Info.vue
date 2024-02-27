@@ -36,7 +36,7 @@
     <div class="card-light p-8">
       <h6>
         {{ $t('referral.info.connectAstar') }}
-        <!-- <span class="icon-soon ml-2 text-lg text-blue"></span> -->
+        <span class="icon-soon ml-2 text-lg text-blue"></span>
       </h6>
       <p class="mt-4 mb-6 text-sm">
         {{ $t('referral.info.receiveTokens') }}
@@ -62,7 +62,7 @@
     <div class="card-light p-8">
       <h6>
         {{ $t('referral.info.claim.title') }}
-        <!-- <span class="icon-soon ml-2 text-lg text-blue"></span> -->
+        <span class="icon-soon ml-2 text-lg text-blue"></span>
       </h6>
       <p class="mt-4 mb-6 text-sm">
         {{ $t('referral.info.claim.content') }}
