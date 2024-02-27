@@ -59,9 +59,10 @@
           <td>{{ task.type }}</td>
           <td>{{ task.reward }}</td>
           <td>
-            <div class="flex-cc">
+            <div class="flex-cc relative min-w-[24px]">
+              <Spinner v-if="referralStore.loadingAirdrop" :size="18" />
               <NuxtIcon
-                v-if="task.collected.value"
+                v-else-if="task.collected.value"
                 name="icon/success"
                 class="inline-block text-green text-2xl"
               />
