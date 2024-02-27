@@ -164,7 +164,7 @@
         "connect": "Connect EVM wallet",
         "connected": "EVM wallet connected",
         "disconnect": "Disconnect EVM wallet",
-        "info": "Connect your EVM compatible wallet. This step is crucial for securely receiving and managing the airdropped NFTs.",
+        "info": "Connect your EVM compatible wallet.",
         "title": "Choose EVM wallet"
       },
       "login": {
