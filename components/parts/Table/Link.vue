@@ -2,7 +2,7 @@
   <div v-if="link" class="flex">
     <span v-if="prefix" class="mr-1 text-white">{{ prefix }}:</span>
     <a :href="link" target="_blank">
-      <n-ellipsis class="text-body align-bottom" :line-clamp="1">
+      <n-ellipsis class="text-body align-bottom break-all" :line-clamp="1">
         <span :class="{ 'text-xs': textOrLink.length > 100 }">
           {{ textOrLink }}
         </span>

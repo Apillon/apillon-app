@@ -35,12 +35,7 @@
 
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('dashboard.apiKey.authorization') }}</p>
-      <div class="md:whitespace-nowrap">
-        <strong>{{ authorization }}</strong>
-        <button class="ml-2" @click="copyToClipboard(authorization)">
-          <span class="icon-copy"></span>
-        </button>
-      </div>
+      <TableEllipsis :text="authorization" text-white />
     </div>
   </div>
   <Spinner v-else />
