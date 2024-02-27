@@ -111,8 +111,8 @@ function generateContent() {
 
     return translations.map(trans => {
       return {
-        title: trans.title ? rt(trans['title']) : undefined,
-        content: trans.content ? rt(trans['content']) : undefined,
+        title: trans.title ? rt(trans.title) : undefined,
+        content: trans.content ? rt(trans.content) : undefined,
       } as TabsContent;
     });
   }
@@ -126,14 +126,14 @@ const airdropTasks = [
   { category: 'learn', name: 'Create new project ', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.projectCreated)) },
   { category: 'learn', name: 'Create Apillon Web3 Storage bucket', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.bucketCreated)) },
   { category: 'learn', name: 'Upload files to Apillon Web3 Storage bucket', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.fileUploaded)) },
-  { category: 'learn', name: 'Upload website to Apillon Web3 Hosting', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.websiteCreated)) },
+  { category: 'learn', name: 'Create a website on Apillon Web3 Hosting', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.websiteCreated)) },
   { category: 'learn', name: 'Utilize IPNS record', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.ipnsCreated)) },
-  { category: 'learn', name: 'Deploy Grill.chat', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.grillChatCreated)) },
-  { category: 'learn', name: 'Deploy NFT collection', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.nftCollectionCreated)) },
-  { category: 'build', name: 'Sign up for subscription plan', type: 'One-time', reward: 20, collected: computed(() => (referralStore.airdrop.onSubscriptionPlan)) },
+  { category: 'learn', name: 'Deploy a Grill.chat Social Hub', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.grillChatCreated)) },
+  { category: 'learn', name: 'Deploy an NFT collection', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.nftCollectionCreated)) },
+  { category: 'build', name: 'Sign up for a subscription plan', type: 'One-time', reward: 20, collected: computed(() => (referralStore.airdrop.onSubscriptionPlan)) },
   { category: 'build', name: 'Buy additional credits', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.creditsPurchased)) },
   { category: 'build', name: 'Spend 3,000 credits', type: 'Repeatable', reward: 1, collected: computed(() => (referralStore.airdrop.creditsSpent > 3000)) },
-  { category: 'build', name: 'Host website and connect live domain via DNS', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.domainLinked)) },
+  { category: 'build', name: 'Host a website and connect live domain via DNS', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.domainLinked)) },
   { category: 'build', name: 'Upload files to Web3 hosting via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.websiteUploadedViaApi)) },
   { category: 'build', name: 'Upload files to Web3 storage via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.fileUploadedViaApi)) },
   { category: 'build', name: 'Deploy Apillon’s Schrödinger’s NFT solution', type: 'One-time', reward: 2, collected: computed(() => (referralStore.airdrop.computingContractCreated)) },
