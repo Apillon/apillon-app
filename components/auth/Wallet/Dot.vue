@@ -3,7 +3,7 @@
     <template v-for="(wallet, key) in wallets">
       <div v-if="isWalletAvailable(wallet)" :key="key">
         <div
-          class="card flex items-center p-4"
+          class="card flex items-center px-4 py-3"
           :class="{ 'cursor-pointer': wallet.installed }"
           @click="onSelect(wallet)"
         >
@@ -50,13 +50,28 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(account, accountKey) in authStore.wallet.accounts" :key="accountKey">
+                <tr
+                  v-for="(account, accountKey) in authStore.wallet.accounts"
+                  :key="accountKey"
+                  :class="{ hidden: account.type === 'ethereum' }"
+                >
                   <td class="whitespace-nowrap">{{ account.name }}</td>
                   <td>
                     <TableEllipsis :text="account.address" />
                   </td>
                   <td>
                     <Btn
+                      v-if="authStore.user.wallet === account.address"
+                      type="error"
+                      :loading="loading && selectedAddress === account.address"
+                      @click="emit('remove', account)"
+                    >
+                      <span class="whitespace-nowrap">
+                        {{ $t('auth.wallet.disconnect.wallet') }}
+                      </span>
+                    </Btn>
+                    <Btn
+                      v-else
                       type="secondary"
                       :loading="loading && selectedAddress === account.address"
                       @click="connectAccount(account)"
@@ -85,7 +100,7 @@ defineProps({
   actionText: { type: String, default: '' },
   loading: { type: Boolean, default: false },
 });
-const emit = defineEmits(['sign']);
+const emit = defineEmits(['sign', 'remove']);
 
 const { isLg } = useScreen();
 const authStore = useAuthStore();

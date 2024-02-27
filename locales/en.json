@@ -127,7 +127,9 @@
       "sendAgain": "Send again",
       "title": "Build your first Web3 project",
       "titleReferalZiggi": "Welcome, traveler! Register below and start building.",
-      "withEmail": "sign up with email"
+      "walletConfirmed": "Wallet and email confirmed, logging you in...",
+      "withEmail": "sign up with email",
+      "withWallet": "email is required for wallet login"
     },
     "terms": {
       "accept": "I have read and agree to ",
@@ -140,24 +142,40 @@
     },
     "wallet": {
       "connect": {
-        "btn": "Connect wallet",
+        "btn": "Connect Polkadot wallet",
         "info": "Connect with one of Polkadot's wallet",
-        "success": "Wallet has been successfully connected",
+        "polkadot": "Connect polkadot wallet",
+        "success": "You successfully logged in with your Wallet",
         "title": "Connect wallet",
-        "different": "Connect different wallet"
+        "different": "Connect different wallet",
+        "wallet": "Connect wallet"
       },
       "connected": {
         "info": "Wallet is connected with your account",
         "success": "Wallet has been successfully connected",
-        "title": "Wallet connected"
+        "title": "Polkadot wallet connected",
+        "wallet": "Connected wallet"
       },
       "disconnect": {
         "success": "Wallet has been successfully disconnected",
         "wallet": "Disconnect wallet"
       },
+      "evm": {
+        "connect": "Connect EVM wallet",
+        "connected": "EVM wallet connected",
+        "disconnect": "Disconnect EVM wallet",
+        "info": "Connect your EVM compatible wallet.",
+        "title": "Choose EVM wallet"
+      },
+      "login": {
+        "success": "Wallet has been successfully connected",
+        "title": "Login with wallet",
+        "walletAccountNotConnected": "A wallet account must be connected",
+        "walletNotConnected": "A wallet must be connected",
+        "walletNotConnected2": "A wallet must be connected, please reconnect. If the issue persist try reloading."
+      },
       "address": "Wallet address",
-      "createAccount": "This wallet hasn't got any account. Create an account first.",
-      "login": "Login with wallet"
+      "createAccount": "This wallet hasn't got any account. Create an account first."
     }
   },
   "computing": {

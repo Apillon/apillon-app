@@ -144,7 +144,7 @@ async function login() {
   } catch (error: ApiError | ReferenceError | any) {
     message.error(userFriendlyMsg(error));
 
-    if (error.code === LibValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
+    if (error.code === ValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
       loading.value = true;
       captchaInput.value.execute();
       authStore.removeCaptchaJwt(formData.value.email);
