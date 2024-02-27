@@ -125,7 +125,7 @@ const airdropTasks = [
   { category: 'refer', name: 'Refer Apillon to a friend', type: 'Repeatable', reward: 2, collected: computed(() => (referralStore.airdrop.usersReferred)) },
   { category: 'learn', name: 'Create new project ', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.projectCreated)) },
   { category: 'learn', name: 'Create Apillon Web3 Storage bucket', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.bucketCreated)) },
-  { category: 'learn', name: 'Upload files to Apillon Web3 Storage bucket via IPFS', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.fileUploaded)) },
+  { category: 'learn', name: 'Upload files to Apillon Web3 Storage bucket', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.fileUploaded)) },
   { category: 'learn', name: 'Upload website to Apillon Web3 Hosting', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.websiteCreated)) },
   { category: 'learn', name: 'Utilize IPNS record', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.ipnsCreated)) },
   { category: 'learn', name: 'Deploy Grill.chat', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.grillChatCreated)) },
@@ -134,12 +134,12 @@ const airdropTasks = [
   { category: 'build', name: 'Buy additional credits', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.creditsPurchased)) },
   { category: 'build', name: 'Spend 3,000 credits', type: 'Repeatable', reward: 1, collected: computed(() => (referralStore.airdrop.creditsSpent > 3000)) },
   { category: 'build', name: 'Host website and connect live domain via DNS', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.domainLinked)) },
-  { category: 'build', name: 'Upload website via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.websiteUploadedViaApi)) },
+  { category: 'build', name: 'Upload files to Web3 hosting via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.websiteUploadedViaApi)) },
   { category: 'build', name: 'Upload files to Web3 storage via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.fileUploadedViaApi)) },
   { category: 'build', name: 'Deploy Apillon’s Schrödinger’s NFT solution', type: 'One-time', reward: 2, collected: computed(() => (referralStore.airdrop.computingContractCreated)) },
   { category: 'build', name: 'Add another user to your project', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.collaboratorAdded)) },
   { category: 'build', name: 'Generate KILT-based Web3 identity', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.kiltIdentityCreated)) },
-  { category: 'build', name: 'Retrieve KILT-based Web3 identity via Apillon SDK', type: 'One-time', reward: 2, collected: computed(() => (referralStore.airdrop.identitySdkUsed)) },
+  { category: 'build', name: 'Retrieve on-chain Polkadot identity via Apillon SDK', type: 'One-time', reward: 2, collected: computed(() => (referralStore.airdrop.identitySdkUsed)) },
   { category: 'build', name: 'Mint NFTs via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.nftMintedApi)) },
 ];
 </script>
