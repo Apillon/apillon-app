@@ -12,6 +12,7 @@ const config: ConfigInterface = {
   gtmId: 'GTM-P7V3D3P6',
   publishedFeatures: [
     'ACCESS',
+    'API_KEYS',
     'APILLON_REGISTER',
     'AUTHENTICATION',
     'BILLING',
