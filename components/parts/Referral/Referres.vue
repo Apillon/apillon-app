@@ -47,7 +47,6 @@
         </div>
         <div class="flex gap-1 items-center">
           <strong>{{ $t('referral.referres.active') }}</strong>
-          <span class="icon-info text-2xl"></span>
         </div>
         <div>
           <strong>{{ $t('referral.referres.joined') }}</strong>

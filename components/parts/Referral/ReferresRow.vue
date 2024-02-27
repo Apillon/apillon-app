@@ -40,9 +40,11 @@ function getTimeSince(date: string) {
   const secondDate = new Date(date);
 
   const diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / oneDay));
-  if (diffDays < 1) {
-    return ' < 1 day ago';
-  }
-  return diffDays.toString() + ' days ago';
+
+  return diffDays < 1
+    ? ' < 1 day ago'
+    : diffDays === 1
+    ? ' 1 day ago'
+    : diffDays.toString() + ' days ago';
 }
 </script>

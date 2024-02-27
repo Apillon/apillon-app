@@ -97,7 +97,7 @@
     <n-form-item v-if="props.id === 0" :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.generate')" />
       <Btn
-        type="secondary"
+        type="primary"
         class="w-full mt-8"
         :loading="loading"
         :disabled="dataStore.isProjectUser"

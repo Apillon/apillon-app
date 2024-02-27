@@ -70,8 +70,8 @@ async function selectService(serviceName: string) {
 }
 
 async function submit() {
-  emit('close');
   await warningStore.action();
   await paymentStore.fetchCredits();
+  emit('close');
 }
 </script>
