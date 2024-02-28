@@ -92,13 +92,13 @@
 
       <!--  Contract NFT Collection Address -->
       <n-form-item
-        path="nftContractAddress"
+        path="contractData.nftContractAddress"
         :label="labelInfo('nftContractAddress')"
         :label-props="{ for: 'nftContractAddress' }"
       >
         <select-options
           v-if="useApillonCollection"
-          v-model:value="formData.nftContractAddress"
+          v-model:value="formData.contractData.nftContractAddress"
           :options="contractAddresses"
           :input-props="{ id: 'nftContractAddress' }"
           :placeholder="$t('form.placeholder.contract.nftContractAddress')"
@@ -109,7 +109,7 @@
         />
         <n-input
           v-else
-          v-model:value="formData.nftContractAddress"
+          v-model:value="formData.contractData.nftContractAddress"
           :input-props="{ id: 'nftContractAddress' }"
           :placeholder="$t('form.placeholder.contract.nftContractAddress')"
           clearable
@@ -119,20 +119,20 @@
       <!--  Contract NFT Chain Rpc Url -->
       <n-form-item
         v-show="!useApillonCollection"
-        path="nftChainRpcUrl"
+        path="contractData.nftChainRpcUrl"
         :label="labelInfo('nftChainRpcUrl')"
         :label-props="{ for: 'nftChainRpcUrl' }"
       >
         <n-input
           v-if="rpcLocked"
-          v-model:value="formData.nftChainRpcUrl"
+          v-model:value="formData.contractData.nftChainRpcUrl"
           :input-props="{ id: 'nftChainRpcUrl' }"
           :placeholder="$t('form.placeholder.contract.nftChainRpcUrl')"
           readonly
         />
         <select-options
           v-else
-          v-model:value="formData.nftChainRpcUrl"
+          v-model:value="formData.contractData.nftChainRpcUrl"
           :options="nftChainRpcUrls"
           :input-props="{ id: 'nftChainRpcUrl' }"
           :placeholder="$t('form.placeholder.contract.nftChainRpcUrl')"
@@ -146,13 +146,13 @@
 
       <!-- Contract Restrict To Owner -->
       <n-form-item
-        path="restrictToOwner"
+        path="contractData.restrictToOwner"
         :span="6"
         :label="labelInfo('restrictToOwner')"
         :label-props="{ for: 'restrictToOwner' }"
       >
         <select-options
-          v-model:value="formData.restrictToOwner"
+          v-model:value="formData.contractData.restrictToOwner"
           :options="booleanSelect"
           :input-props="{ id: 'restrictToOwner' }"
           :placeholder="$t('general.pleaseSelect')"
@@ -182,10 +182,12 @@ type FormContract = {
   name: string;
   description?: string;
   bucket_uuid: string | null;
-  nftContractAddress: string | null;
-  nftChainRpcUrl: string | null;
   contractType: number | null;
-  restrictToOwner: boolean;
+  contractData: {
+    nftContractAddress: string | null;
+    nftChainRpcUrl: string | null;
+    restrictToOwner: boolean;
+  };
 };
 
 const emit = defineEmits(['submitSuccess', 'createSuccess']);
@@ -246,15 +248,17 @@ const formData = ref<FormContract>({
   description: '',
   contractType: ComputingContractType.SCHRODINGER,
   bucket_uuid: null,
-  nftContractAddress: null,
-  nftChainRpcUrl: null,
-  restrictToOwner: false,
+  contractData: {
+    nftContractAddress: null,
+    nftChainRpcUrl: null,
+    restrictToOwner: false,
+  },
 });
 
 const rules: NFormRules = {
   name: [ruleRequired($i18n.t('validation.contract.nameRequired'))],
   description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
-  nftContractAddress: [ruleRequired($i18n.t('validation.contract.addressRequired'))],
+  'contractData.nftContractAddress': [ruleRequired($i18n.t('validation.contract.addressRequired'))],
 };
 
 onMounted(async () => {
@@ -333,10 +337,10 @@ function onContractChange(contractAddress: string) {
   const collection = collectionStore.items.find(item => item.contractAddress === contractAddress);
 
   if (contractAddress && collection && rpc[collection.chain]) {
-    formData.value.nftChainRpcUrl = rpc[collection.chain];
+    formData.value.contractData.nftChainRpcUrl = rpc[collection.chain];
     rpcLocked.value = true;
   } else if (!contractAddress) {
-    formData.value.nftChainRpcUrl = '';
+    formData.value.contractData.nftChainRpcUrl = '';
     rpcLocked.value = false;
   }
 }
