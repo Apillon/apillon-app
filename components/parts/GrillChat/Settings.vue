@@ -34,12 +34,10 @@ const props = defineProps({
   postId: { type: String, default: '' },
 });
 
-const postStore = usePostStore();
-
-const darkTheme = ref<boolean>(postStore.settings?.theme !== 'light');
-const enableBackButton = ref<boolean>(postStore.settings?.channel?.enableBackButton || false);
-const enableLoginButton = ref<boolean>(postStore.settings?.channel?.enableLoginButton || true);
-const enableInputAutofocus = ref<boolean>(false);
+const darkTheme = ref<boolean>(true);
+const enableBackButton = ref<boolean>(true);
+const enableLoginButton = ref<boolean>(true);
+const enableInputAutofocus = ref<boolean>(true);
 
 const settings = computed(() => {
   return props.postId
@@ -84,17 +82,4 @@ window.GRILL.init(config)`;
 });
 
 const codeSize = ref({ 'min-height': `${22 * code.value.split('\n').length}px` });
-
-watch(
-  () => settings.value,
-  (newSettings, oldSettings) => {
-    if (oldSettings && newSettings && JSON.stringify(oldSettings) !== JSON.stringify(newSettings)) {
-      console.debug(newSettings);
-      postStore.settings = newSettings;
-    }
-  },
-  {
-    deep: true,
-  }
-);
 </script>

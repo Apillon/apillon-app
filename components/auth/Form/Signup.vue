@@ -176,11 +176,13 @@ async function signupWithEmail() {
       if (newsletterChecked.value) {
         await subscribeToNewsletter(formData.value.email);
       }
-
-      router.push({ name: 'register-email' });
+      formData.value.signature = '';
+      formData.value.timestamp = 0;
 
       /** Track new registration */
       trackEvent('registration_email_input');
+
+      router.push({ name: 'register-email' });
     } else {
       message.success($i18n.t('form.success.sendAgainEmail'));
     }
