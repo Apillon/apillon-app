@@ -1376,7 +1376,7 @@
     "banner": {
       "title": "Join NCTR Airdrop!",
       "description": "As a registered Apillon user, you are eligible to receive free NCTR tokens! Join in, connect wallet, and collect your bag of NCTR at TGE. Get some more by completing a few tasks!",
-      "btn": "Get in line!"
+      "btn": "Enter NCTR Airdrop"
     },
     "info": {
       "airdrop": "Airdrop",
@@ -1392,7 +1392,8 @@
         "btn": "Claim NCTR",
         "content": "You may collect your NCTR rewards once the NCTR token generation event",
         "contentEnd": "is live.",
-        "title": "Claim your NCTR bonus"
+        "title": "Claim your NCTR bonus",
+        "tooltip": "You will be able to claim your bonus after TGE."
       },
       "statuses": {
         "0": "Register to Apillon platform",
@@ -1720,7 +1721,7 @@
       "destroyed": ""
     },
     "contract": {
-      "new": "New Phat contract"
+      "_new": "New Phat contract"
     },
     "file": {
       "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."

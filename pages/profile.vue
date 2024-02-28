@@ -43,23 +43,15 @@
       </n-space>
     </slot>
   </Dashboard>
-
-  <!-- Modal Referral -->
-  <modal v-model:show="showModalReferral" :title="$t('referral.enter.header')">
-    <ReferralAcceptTerms />
-  </modal>
 </template>
 
 <script lang="ts" setup>
 import colors from '~/tailwind.colors';
 
 const $i18n = useI18n();
-const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
 const settingsStore = useSettingsStore();
-const referralStore = useReferralStore();
-const showModalReferral = ref(false);
 const loadingDiscord = ref<boolean>(false);
 
 useHead({
@@ -68,10 +60,6 @@ useHead({
 
 onMounted(async () => {
   await settingsStore.getOauthLinks();
-
-  if (isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())) {
-    referralStore.getReferral();
-  }
 });
 
 const discordLink = computed(() => {
@@ -84,14 +72,6 @@ const discordLink = computed(() => {
     null
   );
 });
-
-function enterReferral() {
-  if (!referralStore.termsAccepted) {
-    showModalReferral.value = true;
-  } else {
-    router.push('/dashboard/referral');
-  }
-}
 
 /** Connect Discord account */
 async function discordConnect() {

@@ -31,7 +31,7 @@ const referralStore = useReferralStore();
 const loading = ref(false);
 
 useHead({
-  title: t('referral.title'),
+  title: t('referral.airdrop.title'),
 });
 
 onMounted(async () => {

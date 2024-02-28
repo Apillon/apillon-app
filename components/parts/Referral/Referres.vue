@@ -19,7 +19,7 @@
 
       <div class="max-w-[480px]">
         <div class="h-12 px-5 py-2 bg-bg-light mt-2 border-1 border-grey flex justify-between">
-          <p class="leading-7">
+          <p class="leading-7 whitespace-nowrap overflow-hidden">
             {{ referralCode }}
           </p>
           <div class="mt-1 cursor-pointer" @click="copyWalletNumber()">
