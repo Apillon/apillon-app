@@ -28,8 +28,9 @@ const config: ConfigInterface = {
     'BILLING',
     'AUTHENTICATION',
     'MARKETING',
+    'SOCIAL',
   ],
-  betaFeatures: ['NFT_NESTABLE', 'COMPUTING', 'SOCIAL'],
+  betaFeatures: ['NFT_NESTABLE', 'COMPUTING'],
 };
 
 export default config;

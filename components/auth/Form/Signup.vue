@@ -162,16 +162,11 @@ async function signupWithEmail() {
   loading.value = true;
 
   // Wallet register params
-  if (isConnected.value) {
-    formData.value.isEvmWallet = true;
-    formData.value.wallet = address.value;
+  if (authStore.wallet.signature && authStore.wallet.timestamp) {
+    formData.value.isEvmWallet = isConnected.value;
     formData.value.signature = authStore.wallet.signature;
     formData.value.timestamp = authStore.wallet.timestamp;
-  } else if (authStore.wallet.address) {
-    formData.value.isEvmWallet = false;
-    formData.value.wallet = authStore.wallet.address;
-    formData.value.signature = authStore.wallet.signature;
-    formData.value.timestamp = authStore.wallet.timestamp;
+    formData.value.wallet = isConnected.value ? address.value : authStore.wallet.address;
   }
 
   try {
@@ -181,11 +176,13 @@ async function signupWithEmail() {
       if (newsletterChecked.value) {
         await subscribeToNewsletter(formData.value.email);
       }
-
-      router.push({ name: 'register-email' });
+      formData.value.signature = '';
+      formData.value.timestamp = 0;
 
       /** Track new registration */
       trackEvent('registration_email_input');
+
+      router.push({ name: 'register-email' });
     } else {
       message.success($i18n.t('form.success.sendAgainEmail'));
     }
