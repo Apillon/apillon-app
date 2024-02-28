@@ -45,13 +45,16 @@ onBeforeMount(() => {
   disconnect();
 });
 
-onMounted(() => {
-  clearAll();
-});
-
 /** Wallet login */
 async function walletLogin(account: WalletAccount) {
   loadingWallet.value = true;
+
+  // Logout first - delete LS and store if there is any data
+  authStore.logout();
+  dataStore.resetCurrentProject();
+
+  /** Clear all stored data */
+  clearAll();
 
   try {
     const { message, timestamp } = await authStore.getAuthMsg();
