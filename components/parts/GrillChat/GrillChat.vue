@@ -17,6 +17,9 @@ watch(
     if (oldSettings && newSettings && JSON.stringify(oldSettings) !== JSON.stringify(newSettings)) {
       grill.setConfig(newSettings);
     }
+  },
+  {
+    deep: true,
   }
 );
 </script>

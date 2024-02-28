@@ -91,6 +91,9 @@ watch(
     if (oldSettings && newSettings && JSON.stringify(oldSettings) !== JSON.stringify(newSettings)) {
       postStore.settings = newSettings;
     }
+  },
+  {
+    deep: true,
   }
 );
 </script>
