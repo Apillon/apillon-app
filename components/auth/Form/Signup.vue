@@ -60,7 +60,7 @@ type SignupForm = {
   refCode?: string;
   metadata?: any;
   terms?: boolean;
-  isEvmWallet?: string | null;
+  isEvmWallet?: boolean;
   wallet?: string | null;
   signature?: string | null;
   timestamp?: number | null;
@@ -96,7 +96,6 @@ const formData = ref<SignupForm>({
   refCode: `${query?.REF || ''}`,
   metadata: getMetadata(),
   terms: false,
-  wallet: authStore.wallet.signature,
 });
 
 const rules: NFormRules = {

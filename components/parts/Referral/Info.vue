@@ -22,13 +22,21 @@
       <h6>{{ $t('referral.info.status') }}</h6>
 
       <ul class="mt-4">
-        <li
-          v-for="i in [...Array(4).keys()]"
-          class="my-2"
-          :class="referralStatus <= i ? 'text-bodyDark' : 'text-green'"
-        >
+        <li class="my-2 first-line text-green">
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
-          <span>{{ $t(`referral.info.statuses.${i}`) }}</span>
+          <span>{{ $t(`referral.info.statuses.0`) }}</span>
+        </li>
+        <li class="my-2" :class="authStore.user.evmWallet ? 'text-green' : 'text-bodyDark'">
+          <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
+          <span>{{ $t(`referral.info.statuses.1`) }}</span>
+        </li>
+        <li class="my-2 first-line text-bodyDark">
+          <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
+          <span>{{ $t(`referral.info.statuses.2`) }}</span>
+        </li>
+        <li class="my-2 first-line text-bodyDark">
+          <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
+          <span>{{ $t(`referral.info.statuses.3`) }}</span>
         </li>
       </ul>
     </div>
@@ -36,7 +44,6 @@
     <div class="card-light p-8">
       <h6>
         {{ $t('referral.info.connectAstar') }}
-        <span class="icon-soon ml-2 text-lg text-blue"></span>
       </h6>
       <p class="mt-4 mb-6 text-sm">
         {{ $t('referral.info.receiveTokens') }}
@@ -49,20 +56,13 @@
         </a>
       </p>
 
-      <div class="mb-4">
-        <label class="text-xs"> {{ $t('referral.info.astarAddress') }}</label>
-        <n-input class="bg-bg-dark" placeholder="Paste here" disabled />
-      </div>
-
-      <Btn type="secondary" size="large" disabled>
-        {{ $t('referral.info.connectWallet') }}
-      </Btn>
+      <AuthWalletConnectAstar />
     </div>
 
     <div class="card-light p-8">
       <h6>
         {{ $t('referral.info.claim.title') }}
-        <span class="icon-soon ml-2 text-lg text-blue"></span>
+        <IconInfo size="sm" :tooltip="$t('referral.info.claim.tooltip')" />
       </h6>
       <p class="mt-4 mb-6 text-sm">
         {{ $t('referral.info.claim.content') }}
@@ -77,6 +77,7 @@
 </template>
 
 <script lang="ts" setup>
+const authStore = useAuthStore();
 const referralStore = useReferralStore();
 const referralStatus = ref<number>(1);
 </script>

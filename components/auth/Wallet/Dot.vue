@@ -61,9 +61,9 @@
                   </td>
                   <td>
                     <Btn
-                      v-if="authStore.user.wallet === account.address"
+                      v-if="authStore.jwt && authStore.user.wallet === account.address"
                       type="error"
-                      :loading="loading && selectedAddress === account.address"
+                      :loading="loading && authStore.wallet.address === account.address"
                       @click="emit('remove', account)"
                     >
                       <span class="whitespace-nowrap">
@@ -73,7 +73,7 @@
                     <Btn
                       v-else
                       type="secondary"
-                      :loading="loading && selectedAddress === account.address"
+                      :loading="loading && authStore.wallet.address === account.address"
                       @click="connectAccount(account)"
                     >
                       <span v-if="actionText" class="whitespace-nowrap"> {{ actionText }} </span>
@@ -105,7 +105,6 @@ const emit = defineEmits(['sign', 'remove']);
 const { isLg } = useScreen();
 const authStore = useAuthStore();
 const wallets = ref<Wallet[]>([]);
-const selectedAddress = ref<string>('');
 
 onMounted(() => {
   wallets.value = getWallets();
@@ -117,7 +116,7 @@ function onSelect(wallet: Wallet) {
   }
 }
 function connectAccount(account: WalletAccount) {
-  selectedAddress.value = account.address;
+  authStore.wallet.address = account.address;
   emit('sign', account);
 }
 

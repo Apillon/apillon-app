@@ -32,6 +32,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { connectAndSign } = useWallet();
 const { getMessageSignature } = useProvider();
+const { clearAll } = useStore();
 
 /** Evm wallet - wagmi */
 const { disconnect } = useDisconnect();
@@ -42,6 +43,10 @@ const modalWalletSelectVisible = ref<boolean>(false);
 
 onBeforeMount(() => {
   disconnect();
+});
+
+onMounted(() => {
+  clearAll();
 });
 
 /** Wallet login */

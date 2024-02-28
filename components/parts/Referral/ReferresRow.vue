@@ -8,7 +8,7 @@
     </div>
     <div class="text-dark">
       <div class="w-auto">
-        <pill v-if="item.joined" type="success">
+        <pill v-if="item.active" type="success">
           {{ $t('form.booleanSelect.true') }}
         </pill>
         <pill v-else>

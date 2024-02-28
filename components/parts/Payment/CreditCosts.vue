@@ -87,13 +87,6 @@ const selectedChain = ref<number | null>(null);
 const loading = ref<boolean>(true);
 
 onMounted(async () => {
-  console.log(
-    props.filterByChain,
-    props.service,
-    props.chain,
-    collectionStore.form.base.chain,
-    collectionStore.active.chain
-  );
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
     selectedChain.value = props.chain || collectionStore.form.base.chain || Chains.MOONBEAM;
   }

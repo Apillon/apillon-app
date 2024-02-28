@@ -14,7 +14,7 @@ export default function useStore() {
   const settingsStore = useSettingsStore();
 
   function clearAll() {
-    dataStore.resetData();
+    dataStore.resetCurrentProject();
     clearStorage();
     clearCollection();
     clearPayments();

@@ -1,11 +1,12 @@
 <template>
-  <n-tooltip v-if="tooltip" trigger="hover">
+  <n-tooltip v-if="tooltip" v-bind="$attrs" trigger="hover">
     <template #trigger>
       <n-button
         class="align-sub"
         :class="size === 'sm' ? 'px-1' : 'px-2'"
         :size="size === 'sm' ? 'tiny' : size === 'md' ? 'small' : 'large'"
         type="tertiary"
+        tabindex="-1"
         quaternary
         round
       >
@@ -19,10 +20,12 @@
   </n-tooltip>
   <n-button
     v-else
+    v-bind="$attrs"
     class="align-sub"
     :class="size === 'sm' ? 'px-1' : 'px-2'"
     :size="size === 'sm' ? 'tiny' : size === 'md' ? 'small' : 'large'"
     type="tertiary"
+    tabindex="-1"
     quaternary
     round
   >
