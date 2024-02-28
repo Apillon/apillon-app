@@ -36,10 +36,10 @@ const props = defineProps({
 
 const postStore = usePostStore();
 
-const darkTheme = ref<boolean>(true);
-const enableBackButton = ref<boolean>(true);
-const enableLoginButton = ref<boolean>(true);
-const enableInputAutofocus = ref<boolean>(true);
+const darkTheme = ref<boolean>(postStore.settings?.theme !== 'light');
+const enableBackButton = ref<boolean>(postStore.settings?.channel?.enableBackButton || false);
+const enableLoginButton = ref<boolean>(postStore.settings?.channel?.enableLoginButton || true);
+const enableInputAutofocus = ref<boolean>(false);
 
 const settings = computed(() => {
   return props.postId
