@@ -12,6 +12,7 @@ const config: ConfigInterface = {
   gtmId: 'GTM-P7V3D3P6',
   publishedFeatures: [
     'ACCESS',
+    'API_KEYS',
     'DISCORD',
     'HOSTING',
     'PROJECT',
@@ -20,14 +21,16 @@ const config: ConfigInterface = {
     'SERVICES',
     'WALLET_LOGIN',
     'CAPTCHA_LOGIN',
+    'REFERRAL',
     'STORAGE',
     'NFT',
     'KILT_LOGIN',
     'BILLING',
     'AUTHENTICATION',
     'MARKETING',
+    'SOCIAL',
   ],
-  betaFeatures: ['NFT_NESTABLE', 'COMPUTING', 'SOCIAL'],
+  betaFeatures: ['NFT_NESTABLE', 'COMPUTING'],
 };
 
 export default config;

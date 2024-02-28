@@ -52,6 +52,7 @@
 
 <script lang="ts" setup>
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+import { useAccount } from 'use-wagmi';
 
 type SignupForm = {
   email: string;
@@ -59,6 +60,10 @@ type SignupForm = {
   refCode?: string;
   metadata?: any;
   terms?: boolean;
+  isEvmWallet?: boolean;
+  wallet?: string | null;
+  signature?: string | null;
+  timestamp?: number | null;
 };
 
 const props = defineProps({
@@ -79,6 +84,7 @@ const {
   onCaptchaError,
   onCaptchaExpire,
 } = useCaptcha();
+const { address, isConnected } = useAccount();
 
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
@@ -155,6 +161,14 @@ function handleSubmit(e: MouseEvent | null) {
 async function signupWithEmail() {
   loading.value = true;
 
+  // Wallet register params
+  if (authStore.wallet.signature && authStore.wallet.timestamp) {
+    formData.value.isEvmWallet = isConnected.value;
+    formData.value.signature = authStore.wallet.signature;
+    formData.value.timestamp = authStore.wallet.timestamp;
+    formData.value.wallet = isConnected.value ? address.value : authStore.wallet.address;
+  }
+
   try {
     await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
 
@@ -162,11 +176,13 @@ async function signupWithEmail() {
       if (newsletterChecked.value) {
         await subscribeToNewsletter(formData.value.email);
       }
-
-      router.push({ name: 'register-email' });
+      formData.value.signature = '';
+      formData.value.timestamp = 0;
 
       /** Track new registration */
       trackEvent('registration_email_input');
+
+      router.push({ name: 'register-email' });
     } else {
       message.success($i18n.t('form.success.sendAgainEmail'));
     }

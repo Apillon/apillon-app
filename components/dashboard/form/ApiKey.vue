@@ -20,50 +20,52 @@
     </n-form-item>
 
     <!-- Permissions per service -->
-    <n-collapse
-      v-if="formData.roles && formData.roles.length"
-      class="collapse-permissions"
-      :expanded-names="expandedPermissions"
-      @item-header-click="handleItemHeaderClick"
-    >
-      <!-- Active services -->
-      <n-collapse-item
-        v-for="service in formData.roles"
-        :key="service.service_uuid"
-        :title="$t(`dashboard.apiKey.service.${service.serviceType.toLocaleLowerCase()}`)"
-        :name="service.service_uuid"
+    <n-form-item path="roles" :show-label="false" :show-feedback="false">
+      <n-collapse
+        v-if="formData.roles && formData.roles.length"
+        class="collapse-permissions"
+        :expanded-names="expandedPermissions"
+        @item-header-click="handleItemHeaderClick"
       >
-        <template #arrow>
-          <span
-            :class="`icon-${service.serviceType.toLocaleLowerCase()}`"
-            class="min-w-[20px] text-center"
-          >
-          </span>
-        </template>
-        <template #header-extra>
-          <n-switch v-model:value="service.enabled" class="pointer-events-none" />
-        </template>
+        <!-- Active services -->
+        <n-collapse-item
+          v-for="service in formData.roles"
+          :key="service.service_uuid"
+          :title="$t(`dashboard.apiKey.service.${service.serviceType.toLocaleLowerCase()}`)"
+          :name="service.service_uuid"
+        >
+          <template #arrow>
+            <span
+              :class="`icon-${service.serviceType.toLocaleLowerCase()}`"
+              class="min-w-[20px] text-center"
+            >
+            </span>
+          </template>
+          <template #header-extra>
+            <n-switch v-model:value="service.enabled" class="pointer-events-none" />
+          </template>
 
-        <n-grid :cols="2">
-          <n-form-item-gi
-            v-for="permission in service.permissions"
-            :key="permission.key"
-            :path="`${service.name}.${permission.name}`"
-            :show-label="false"
-            :show-feedback="false"
-          >
-            <n-checkbox
-              v-model:checked="permission.value"
-              size="medium"
-              :label="permission.label"
-              @update:checked="
-                updatePermission(service.service_uuid, permission.key, permission.value)
-              "
-            />
-          </n-form-item-gi>
-        </n-grid>
-      </n-collapse-item>
-    </n-collapse>
+          <n-grid :cols="2">
+            <n-form-item-gi
+              v-for="permission in service.permissions"
+              :key="permission.key"
+              :path="`${service.name}.${permission.name}`"
+              :show-label="false"
+              :show-feedback="false"
+            >
+              <n-checkbox
+                v-model:checked="permission.value"
+                size="medium"
+                :label="permission.label"
+                @update:checked="
+                  updatePermission(service.service_uuid, permission.key, permission.value)
+                "
+              />
+            </n-form-item-gi>
+          </n-grid>
+        </n-collapse-item>
+      </n-collapse>
+    </n-form-item>
 
     <!-- Unused services  -->
     <n-collapse
@@ -95,7 +97,7 @@
     <n-form-item v-if="props.id === 0" :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.generate')" />
       <Btn
-        type="secondary"
+        type="primary"
         class="w-full mt-8"
         :loading="loading"
         :disabled="dataStore.isProjectUser"
@@ -111,6 +113,8 @@
   <n-modal
     v-model:show="showModalApiKeyDetails"
     :mask-closable="false"
+    :close-on-esc="false"
+    :closable="false"
     preset="dialog"
     :title="$t('dashboard.apiKey.details')"
     :positive-text="$t('dashboard.apiKey.secretSaved')"
@@ -149,7 +153,7 @@ const props = defineProps({
   id: { type: Number, default: 0 },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
@@ -181,19 +185,19 @@ const roles = computed(() => {
           key: ApiKeyRole.READ,
           value: isPermissionEnabled(service.service_uuid, ApiKeyRole.READ),
           name: 'read',
-          label: $i18n.t('dashboard.permissions.read'),
+          label: t('dashboard.permissions.read'),
         },
         {
           key: ApiKeyRole.EXECUTE,
           value: isPermissionEnabled(service.service_uuid, ApiKeyRole.EXECUTE),
           name: 'execute',
-          label: $i18n.t('dashboard.permissions.execute'),
+          label: t('dashboard.permissions.execute'),
         },
         {
           key: ApiKeyRole.WRITE,
           value: isPermissionEnabled(service.service_uuid, ApiKeyRole.WRITE),
           name: 'write',
-          label: $i18n.t('dashboard.permissions.write'),
+          label: t('dashboard.permissions.write'),
         },
       ],
     };
@@ -217,10 +221,17 @@ const formData = ref<ApiKeyForm>({
 });
 
 const rules: NFormRules = {
-  name: [
+  name: ruleRequired(t('validation.apiKey.nameRequired')),
+  roles: [
     {
-      required: true,
-      message: $i18n.t('validation.apiKeyName'),
+      validator(_: NFormItemRule, value: any) {
+        return (
+          Array.isArray(value) &&
+          value.length > 0 &&
+          value.some(item => isAnyPermissionEnabled(item))
+        );
+      },
+      message: t('validation.apiKey.rolesRequired'),
     },
   ],
 };
@@ -373,7 +384,7 @@ async function updateApiKey() {
     const res = await $api.put<ApiKeyCreatedResponse>(endpoints.apiKey(), bodyData);
 
     if (res.data) {
-      message.error($i18n.t('form.success.apiKey'));
+      message.error(t('form.success.apiKey'));
       emit('submitSuccess');
     }
   } catch (error) {
@@ -427,7 +438,7 @@ async function addAllPermissions(serviceUuid: string) {
     addPermission(serviceUuid, ApiKeyRole.READ, false),
     addPermission(serviceUuid, ApiKeyRole.WRITE, false),
   ]).then(() => {
-    message.success($i18n.t('form.success.updated.apiKeyRoles'));
+    message.success(t('form.success.updated.apiKeyRoles'));
   });
 }
 
@@ -441,7 +452,7 @@ async function addPermission(serviceUuid: string, roleId: number, showMsg = true
     });
 
     if (showMsg) {
-      message.success($i18n.t('form.success.updated.apiKeyRole'));
+      message.success(t('form.success.updated.apiKeyRole'));
     }
   } catch (error) {
     message.error(userFriendlyMsg(error));
@@ -457,7 +468,7 @@ async function removePermission(serviceUuid: string, roleId: number) {
       role_id: roleId,
     });
 
-    message.success($i18n.t('form.success.deleted.apiKeyRole'));
+    message.success(t('form.success.deleted.apiKeyRole'));
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -475,7 +486,7 @@ async function removeServicePermissions(service: ApiKeyRoleForm) {
       role_id: 50, // Validation placeholder
     });
 
-    message.success($i18n.t('form.success.deleted.apiKeyRole'));
+    message.success(t('form.success.deleted.apiKeyRole'));
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

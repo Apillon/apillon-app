@@ -8,12 +8,12 @@
     </div>
     <div class="text-dark">
       <div class="w-auto">
-        <n-tag v-if="item.has_github" type="success" :bordered="false" round>
-          <strong>ADDED</strong>
-        </n-tag>
-        <n-tag v-else bordered round>
-          <strong>MISSING</strong>
-        </n-tag>
+        <pill v-if="item.active" type="success">
+          {{ $t('form.booleanSelect.true') }}
+        </pill>
+        <pill v-else>
+          {{ $t('form.booleanSelect.false') }}
+        </pill>
       </div>
     </div>
     <div class="pr-3 text-white" style="line-height: 28px">
@@ -40,9 +40,11 @@ function getTimeSince(date: string) {
   const secondDate = new Date(date);
 
   const diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / oneDay));
-  if (diffDays < 1) {
-    return ' < 1 day ago';
-  }
-  return diffDays.toString() + ' days ago';
+
+  return diffDays < 1
+    ? ' < 1 day ago'
+    : diffDays === 1
+    ? ' 1 day ago'
+    : diffDays.toString() + ' days ago';
 }
 </script>

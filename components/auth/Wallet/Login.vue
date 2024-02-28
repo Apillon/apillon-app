@@ -5,54 +5,126 @@
   </Btn>
   <!-- Modal - Wallet select -->
   <modal v-model:show="modalWalletSelectVisible" :title="$t('auth.wallet.connect.title')">
-    <AuthWalletSelect
-      :action-text="$t('auth.wallet.login')"
+    <h6 class="flex-cc mb-6">
+      {{ $t('auth.wallet.connect.polkadot') }}
+    </h6>
+    <AuthWalletDot
+      :action-text="$t('auth.wallet.login.title')"
       :loading="loadingWallet"
       @sign="walletLogin"
     />
+
+    <h6 class="flex-cc mb-6">
+      {{ $t('auth.wallet.evm.connect') }}
+    </h6>
+    <AuthWalletEvm :loading="loadingWallet" />
   </modal>
 </template>
 
 <script lang="ts" setup>
+import { useAccount, useDisconnect } from 'use-wagmi';
 import colors from '~/tailwind.colors';
 
-const message = useMessage();
+const { t } = useI18n();
+const { error, success } = useMessage();
+const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const { connectAndSign } = useWallet();
 const { getMessageSignature } = useProvider();
+const { clearAll } = useStore();
+
+/** Evm wallet - wagmi */
+const { disconnect } = useDisconnect();
+const { address } = useAccount({ onConnect: evmWalletLogin });
 
 const loadingWallet = ref<boolean>(false);
 const modalWalletSelectVisible = ref<boolean>(false);
 
-/** Wallet connect */
+onBeforeMount(() => {
+  disconnect();
+});
+
+/** Wallet login */
 async function walletLogin(account: WalletAccount) {
   loadingWallet.value = true;
 
-  const authMsg = await authStore.getAuthMsg();
+  // Logout first - delete LS and store if there is any data
+  authStore.logout();
+  dataStore.resetCurrentProject();
 
-  if (!!authMsg.message && !!authMsg.timestamp) {
-    // Get user's signature
-    const signature = await getMessageSignature(account.address, authMsg.message);
+  /** Clear all stored data */
+  clearAll();
 
-    if (signature) {
-      /** Get api user for wallet address */
-      try {
-        const res = await $api.post<WalletLoginResponse>(endpoints.walletLogin, {
-          wallet: account.address,
-          signature,
-          timestamp: authMsg.timestamp,
-        });
+  try {
+    const { message, timestamp } = await authStore.getAuthMsg();
 
-        authStore.saveUser(res.data);
+    const signature = await getMessageSignature(account.address, message);
 
-        /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-        await dataStore.fetchProjects(true);
-      } catch (error) {
-        /** Show error message */
-        message.error(userFriendlyMsg(error));
-      }
-    }
+    authStore.wallet.signature = signature;
+    authStore.wallet.timestamp = timestamp;
+
+    const res = await $api.post<WalletLoginResponse>(endpoints.walletLogin, {
+      wallet: account.address,
+      signature,
+      timestamp,
+      isEvmWallet: false,
+    });
+
+    await onLoginSuccess(res.data);
+  } catch (e) {
+    onLoginError(e);
+  }
+
+  loadingWallet.value = false;
+}
+
+/** Login with EVM wallet */
+async function evmWalletLogin() {
+  await sleep(200);
+  if (!address.value) return;
+
+  loadingWallet.value = true;
+
+  const sign = await connectAndSign();
+  if (!sign || !sign.signature || !sign.timestamp) return;
+
+  try {
+    const { signature, timestamp } = sign;
+
+    authStore.wallet.signature = signature;
+    authStore.wallet.timestamp = timestamp;
+
+    const res = await $api.post<WalletLoginResponse>(endpoints.walletLogin, {
+      wallet: address.value,
+      signature,
+      timestamp,
+      isEvmWallet: true,
+    });
+
+    await onLoginSuccess(res.data);
+  } catch (e) {
+    onLoginError(e);
   }
   loadingWallet.value = false;
+}
+
+async function onLoginSuccess(data) {
+  authStore.saveUser(data);
+
+  /** Show success message */
+  success(t('auth.wallet.login.success'));
+
+  /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
+  await dataStore.fetchProjects(true);
+}
+
+async function onLoginError(e) {
+  if (e.code === UnauthorizedErrorCodes.USER_IS_NOT_AUTHENTICATED) {
+    router.push({ name: 'register' });
+  } else {
+    /** Show error message */
+    error(userFriendlyMsg(e));
+  }
 }
 </script>

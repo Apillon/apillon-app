@@ -11,6 +11,8 @@ const config: ConfigInterface = {
   githubId: 'd0482598d8adbd8adffa',
   gtmId: '',
   publishedFeatures: [
+    'ACCESS',
+    'API_KEYS',
     'APILLON_REGISTER',
     'AUTHENTICATION',
     'BILLING',
@@ -27,6 +29,7 @@ const config: ConfigInterface = {
     'PROJECT_DELETE',
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
+    'REFERRAL',
     'SERVICES',
     'SOCIAL',
     'SOCIAL_ICONS',

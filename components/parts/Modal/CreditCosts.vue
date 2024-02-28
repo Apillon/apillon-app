@@ -9,7 +9,13 @@
         {{ $t(`dashboard.credits.services.${service}.description`) }}
       </p>
 
-      <PaymentCreditCosts v-if="modalCostsVisible" v-bind="$attrs" :service="service" />
+      <PaymentCreditCosts
+        v-if="modalCostsVisible"
+        :chain="chain"
+        :filter-by-chain="filterByChain"
+        :filter-by-service="filterByService"
+        :service="service"
+      />
       <Spinner v-else class="min-h-[7rem]" />
 
       <Btn class="mt-8" type="secondary" size="large" @click="modalCostsVisible = false">
@@ -21,7 +27,10 @@
 
 <script lang="ts" setup>
 defineProps({
+  chain: { type: Number, default: null },
   service: { type: String, default: null },
+  filterByChain: { type: Boolean, default: false },
+  filterByService: { type: Boolean, default: false },
 });
 
 const modalCostsVisible = ref<boolean>(false);

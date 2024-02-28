@@ -17,6 +17,13 @@
       </div>
 
       <n-space size="large">
+        <!-- Modal Price list for Hosting -->
+        <ModalCreditCosts
+          :service="ServiceTypeName.NFT"
+          :chain="collectionStore.active.chain"
+          filter-by-chain
+        />
+
         <!-- Open Bucket -->
         <n-button
           v-if="collectionStore.active.bucket_uuid"

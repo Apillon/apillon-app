@@ -127,6 +127,7 @@ const dropdownOptions = [
     key: 'delete',
     disabled: dataStore.isProjectUser,
     props: {
+      class: '!text-pink',
       onClick: () => {
         showModalDeleteApiKey.value = true;
       },

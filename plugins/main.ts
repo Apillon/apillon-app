@@ -3,8 +3,11 @@ import type { RouteLocationNormalized } from '#vue-router';
 import VuePapaParse from 'vue-papa-parse';
 import VueCookieAcceptDecline from 'vue-cookie-accept-decline';
 import { createGtm } from '@gtm-support/vue-gtm';
+import { Buffer } from 'buffer';
 
 export default defineNuxtPlugin(nuxtApp => {
+  window.Buffer = Buffer;
+
   /** Set API base URL */
   const appConfig: RuntimeConfig = useRuntimeConfig();
   $api.setBaseUrl(appConfig.public.apiUrl);

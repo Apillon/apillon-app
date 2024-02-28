@@ -5,7 +5,7 @@
     <p class="mb-7 text-body">{{ $t('auth.login.description') }}</p>
 
     <!-- Wallet -->
-    <template v-if="isLg && isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())">
+    <template v-if="isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())">
       <AuthWalletLogin class="w-full mb-4" />
     </template>
 
