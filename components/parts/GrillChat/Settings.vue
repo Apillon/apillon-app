@@ -34,6 +34,8 @@ const props = defineProps({
   postId: { type: String, default: '' },
 });
 
+const postStore = usePostStore();
+
 const darkTheme = ref<boolean>(true);
 const enableBackButton = ref<boolean>(true);
 const enableLoginButton = ref<boolean>(true);
@@ -82,4 +84,13 @@ window.GRILL.init(config)`;
 });
 
 const codeSize = ref({ 'min-height': `${22 * code.value.split('\n').length}px` });
+
+watch(
+  () => settings.value,
+  (newSettings, oldSettings) => {
+    if (oldSettings && newSettings && JSON.stringify(oldSettings) !== JSON.stringify(newSettings)) {
+      postStore.settings = newSettings;
+    }
+  }
+);
 </script>
