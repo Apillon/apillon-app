@@ -162,16 +162,11 @@ async function signupWithEmail() {
   loading.value = true;
 
   // Wallet register params
-  if (isConnected.value) {
-    formData.value.isEvmWallet = true;
-    formData.value.wallet = address.value;
+  if (authStore.wallet.signature && authStore.wallet.timestamp) {
+    formData.value.isEvmWallet = isConnected.value;
     formData.value.signature = authStore.wallet.signature;
     formData.value.timestamp = authStore.wallet.timestamp;
-  } else if (authStore.wallet.address) {
-    formData.value.isEvmWallet = false;
-    formData.value.wallet = authStore.wallet.address;
-    formData.value.signature = authStore.wallet.signature;
-    formData.value.timestamp = authStore.wallet.timestamp;
+    formData.value.wallet = isConnected.value ? address.value : authStore.wallet.address;
   }
 
   try {
