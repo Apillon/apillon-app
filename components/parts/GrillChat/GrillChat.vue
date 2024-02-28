@@ -15,6 +15,7 @@ watch(
   () => postStore.settings,
   (newSettings, oldSettings) => {
     if (oldSettings && newSettings && JSON.stringify(oldSettings) !== JSON.stringify(newSettings)) {
+      console.debug(newSettings);
       grill.setConfig(newSettings);
     }
   },

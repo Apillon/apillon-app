@@ -89,6 +89,7 @@ watch(
   () => settings.value,
   (newSettings, oldSettings) => {
     if (oldSettings && newSettings && JSON.stringify(oldSettings) !== JSON.stringify(newSettings)) {
+      console.debug(newSettings);
       postStore.settings = newSettings;
     }
   },
