@@ -22,6 +22,12 @@
         "
       >
         <h5 class="mb-2">{{ tab.title }}</h5>
+        <NuxtLink
+          v-if="tab.link && key === 0"
+          class="underline"
+          :to="{ name: 'dashboard-airdrop-referral' }"
+          >{{ tab.link }}</NuxtLink
+        >
         <span class="text-sm">{{ tab.content }}</span>
       </div>
     </div>
@@ -89,12 +95,14 @@ type TabsContent = {
   headline?: string;
   title?: string;
   content?: string | string[];
+  link?: string;
   benefits?: string[];
 };
 type TabsContentTrans = {
   headline?: VueMsg;
   title?: VueMsg;
   content?: VueMsg;
+  link?: VueMsg;
   benefits?: VueMsg;
 };
 
@@ -113,6 +121,7 @@ function generateContent() {
       return {
         title: trans.title ? rt(trans.title) : undefined,
         content: trans.content ? rt(trans.content) : undefined,
+        link: trans.link ? rt(trans.link) : undefined,
       } as TabsContent;
     });
   }
