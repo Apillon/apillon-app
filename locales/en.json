@@ -1360,7 +1360,8 @@
       "tabs": [
         {
           "title": "Refer",
-          "content": "Refer Apillon to a friend and earn NCTR when they register"
+          "content": " and earn NCTR when they register",
+          "link": "Refer Apillon to a friend"
         },
         {
           "title": "Learn",
