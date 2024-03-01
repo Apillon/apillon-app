@@ -651,7 +651,7 @@
   },
   "error": {
     "404": "Page not found",
-    "422060046": "You have to upload \"index.html\" file, to deploy website!",
+    "40006022": "You have to upload \"index.html\" file, to deploy website!",
     "50012005": "You can't mint this collection or all tokens has already been minted!",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
