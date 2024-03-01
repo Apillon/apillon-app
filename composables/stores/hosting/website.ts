@@ -5,6 +5,7 @@ export const useWebsiteStore = defineStore('website', {
     active: {} as WebsiteInterface,
     items: [] as Array<WebsiteBaseInterface>,
     loading: false,
+    missingHtml: false,
     search: '',
     selected: '',
     uploadActive: false,

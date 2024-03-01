@@ -1712,6 +1712,10 @@
       "fileIsApp": "Type of file \"{name}\" is is not supported, please use another file.",
       "fileTooBig": "File \"{name}\" is, max file size is 64kb.",
       "nftIdRequired": "Please enter NFT ID"
+    },
+    "hosting": {
+      "missingHtml": "You have to upload at least one html file, to deploy website!",
+      "missingIndex": "Please upload index.html file"
     }
   },
   "w3Warn": {
