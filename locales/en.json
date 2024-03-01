@@ -651,6 +651,7 @@
   },
   "error": {
     "404": "Page not found",
+    "40006022": "You have to upload \"index.html\" file, to deploy website!",
     "50012005": "You can't mint this collection or all tokens has already been minted!",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
@@ -1712,6 +1713,10 @@
       "fileIsApp": "Type of file \"{name}\" is is not supported, please use another file.",
       "fileTooBig": "File \"{name}\" is, max file size is 64kb.",
       "nftIdRequired": "Please enter NFT ID"
+    },
+    "hosting": {
+      "missingHtml": "You have to upload at least one html file, to deploy website!",
+      "missingIndex": "Please upload index.html file"
     }
   },
   "w3Warn": {
