@@ -113,7 +113,7 @@
     <!-- Modal - Clear all files -->
     <ModalDelete v-model:show="showModalClearAll" :title="$t(`hosting.clearAllFiles`)">
       <template #content>
-        <p v-if="$i18n.te(`hosting.clearAllWarn`)" class="text-body">
+        <p v-if="te(`hosting.clearAllWarn`)" class="text-body">
           {{ $t(`hosting.clearAllWarn`) }}
         </p>
       </template>
@@ -157,7 +157,7 @@ const { websiteUuid, refreshWebpage } = useHosting();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DEPLOY);
 const { subscriptionMessage } = usePayment();
 
-const $i18n = useI18n();
+const { t, te } = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
@@ -185,11 +185,11 @@ const isUpload = computed<Boolean>(() => {
 
 const deployOptions = ref([
   {
-    label: $i18n.t('hosting.deployStage'),
+    label: t('hosting.deployStage'),
     key: DeploymentEnvironment.STAGING,
   },
   {
-    label: $i18n.t('hosting.deployProd'),
+    label: t('hosting.deployProd'),
     key: DeploymentEnvironment.DIRECT_TO_PRODUCTION,
   },
 ]);
@@ -282,17 +282,16 @@ async function deploy(env: number) {
 function deployWebsite(env: number) {
   deployEnv.value = env;
   if (bucketStore.folder.items.length === 0) {
-    message.warning($i18n.t('error.NO_FILES_TO_DEPLOY'));
+    message.warning(t('error.NO_FILES_TO_DEPLOY'));
+  } else if (websiteStore.missingHtml) {
+    message.error(t('validation.hosting.missingHtml'));
   } else if (
     !paymentStore.hasActiveSubscription &&
     !sessionStorage.getItem(SessionKeys.WEBSITE_REVIEW)
   ) {
     modalWebsiteReviewVisible.value = true;
     sessionStorage.setItem(SessionKeys.WEBSITE_REVIEW, Date.now().toString());
-  } else if (
-    !localStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) &&
-    $i18n.te('w3Warn.hosting.deploy')
-  ) {
+  } else if (!localStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) && te('w3Warn.hosting.deploy')) {
     modalW3WarnVisible.value = true;
   } else {
     warningStore.showSpendingWarning(getPricingServiceName(env), () => deploy(env));
