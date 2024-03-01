@@ -25,6 +25,7 @@
       class="absolute inline-block w-auto left-1/2 bottom-4 -translate-x-1/2"
       :show-file-list="false"
       directory
+      :disabled="authStore.isAdmin()"
       :custom-request="uploadDirectoryRequest"
     >
       <n-button>{{ $t('hosting.upload.directory') }}</n-button>
@@ -54,14 +55,15 @@ const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
+const websiteStore = useWebsiteStore();
 const { uploadFiles, fileAlreadyOnFileList, isEnoughSpaceInStorage } = useUpload();
 
 const fileNum = ref<number>(0);
-const uploadFileList = ref<Array<FileListItemType>>([]);
+const uploadFileList = ref<FileListItemType[]>([]);
 const uploadInterval = ref<any>(null);
 
 const numOfFinishedFiles = computed<number>(() => {
@@ -84,14 +86,7 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
     onFinish,
     onError,
   };
-  if (!isEnoughSpaceInStorage(uploadFileList.value, fileListItem)) {
-    message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
-    onError();
-  } else if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
-    onError();
-  } else {
-    addFileToListAndUpload(fileListItem);
-  }
+  validateFileAndUpload(fileListItem);
 }
 
 /** Upload directory */
@@ -105,14 +100,17 @@ function uploadDirectoryRequest({ file, onError, onFinish }: NUploadCustomReques
     onFinish,
     onError,
   };
+  validateFileAndUpload(fileListItem);
+}
 
-  if (!isEnoughSpaceInStorage(uploadFileList.value, fileListItem)) {
-    message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
-    onError();
-  } else if (fileAlreadyOnFileList(uploadFileList.value, fileListItem)) {
-    onError();
+function validateFileAndUpload(file: FileListItemType) {
+  if (!isEnoughSpaceInStorage(uploadFileList.value, file)) {
+    message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
+    file.onError();
+  } else if (fileAlreadyOnFileList(uploadFileList.value, file)) {
+    file.onError();
   } else {
-    addFileToListAndUpload(fileListItem);
+    addFileToListAndUpload(file);
   }
 }
 
@@ -134,6 +132,9 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
         /** Clear interval, upload started */
         clearInterval(uploadInterval.value);
 
+        /** Show warning, if user don't upload HTML files */
+        checkForHtmlFiles(uploadFileList.value);
+
         /** When all files are on file list, start uploading files */
         try {
           await uploadFiles(props.bucketUuid, uploadFileList.value, false, true);
@@ -151,5 +152,21 @@ function addFileToListAndUpload(fileListItem: FileListItemType) {
     }, 10);
   }
   fileNum.value = uploadFileList.value.length;
+}
+
+function checkForHtmlFiles(fileList: FileListItemType[]) {
+  websiteStore.missingHtml = false;
+
+  if (websiteStore.active?.bucket?.size === 0) {
+    const indexFile = fileList.some(item => item.name === 'index.html');
+    const htmlFile = fileList.some(item => item.name.includes('.html'));
+
+    if (!htmlFile) {
+      message.error(t('validation.hosting.missingHtml'));
+      websiteStore.missingHtml = true;
+    } else if (!indexFile) {
+      message.warning(t('validation.hosting.missingIndex'));
+    }
+  }
 }
 </script>
