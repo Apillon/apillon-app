@@ -240,7 +240,7 @@ function handleSubmitForm(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      collectionStore.stepDeploy = NftDeployStep.DEPLOY;
+      collectionStore.mintTab = NftMintTab.PREVIEW;
     }
   });
 }
