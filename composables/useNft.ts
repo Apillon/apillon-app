@@ -221,6 +221,38 @@ export default function useNft() {
     }, 300);
   }
 
+  function uploadImageRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+    if (!isImage(file.type)) {
+      message.warning($i18n.t('validation.notImage', { name: file.name }));
+      onError();
+      return;
+    }
+
+    const image = {
+      ...file,
+      fullPath: `/Images${file.fullPath}`,
+      percentage: 0,
+      size: file.file?.size || 0,
+      timestamp: Date.now(),
+      onFinish,
+      onError,
+    };
+
+    if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
+      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+      onError();
+    } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
+      message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));
+      onError();
+    } else {
+      collectionStore.images.push(image);
+    }
+
+    setTimeout(() => {
+      loadingImages.value = false;
+    }, 300);
+  }
+
   function handleImageChange(options: FileUploadOptions) {
     const index = options.fileList.indexOf(options.file);
     const indexImage = collectionStore.images.findIndex(
@@ -344,5 +376,6 @@ export default function useNft() {
     parseUploadedFile,
     uploadFileRequest,
     uploadImagesRequest,
+    uploadImageRequest,
   };
 }

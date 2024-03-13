@@ -22,6 +22,13 @@ export enum CollectionStatus {
   FAILED = 5,
 }
 
+/** NFT Collection create step */
+export enum CollectionStep {
+  ENVIRONMENT = 0,
+  METADATA = 1,
+  BEHAVIOR = 2,
+}
+
 /** NFT Transaction status */
 export enum TransactionStatus {
   REQUESTED = 0,
@@ -44,10 +51,19 @@ export enum TransactionType {
 /** Mint steps */
 export enum NftMintTab {
   METADATA = 1,
-  UPLOAD = 2,
+  PREVIEW = 2,
   IMAGES = 3,
   MINT = 4,
 }
+/** NFT create steps */
+export enum NftCreateStep {
+  AMOUNT = 1,
+  SINGLE = 2,
+  MULTIPLE = 3,
+  DEPLOY = 4,
+  PREVIEW = 5,
+}
+/** Multiple NFTs upload steps */
 export enum NftUploadStep {
   FILE = 1,
   IMAGES = 2,

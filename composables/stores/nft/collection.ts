@@ -18,13 +18,19 @@ export const useCollectionStore = defineStore('collection', {
     metadataStored: null as Boolean | null,
     mintTab: NftMintTab.METADATA,
     search: '',
+    step: CollectionStep.ENVIRONMENT,
+    nftStep: NftCreateStep.AMOUNT,
+    amount: 0,
     stepDeploy: NftDeployStep.NAME,
+    stepCollectionDeploy: CollectionStatus.CREATED,
     stepUpload: NftUploadStep.FILE,
     total: 0,
     transaction: [] as TransactionInterface[],
     uploadActive: false,
     form: {
       base: {
+        logo: {} as FileListItemType,
+        coverImage: {} as FileListItemType,
         name: '',
         symbol: '',
         chain: Chains.MOONBEAM,
@@ -44,6 +50,13 @@ export const useCollectionStore = defineStore('collection', {
         supplyLimited: 0,
         royaltiesAddress: null,
         royaltiesFees: 0,
+      },
+      single: {
+        collectionUuid: null as String | null,
+        name: '',
+        royalties: '',
+        copies: 0,
+        description: '',
       },
     },
   }),
@@ -76,6 +89,10 @@ export const useCollectionStore = defineStore('collection', {
       this.resetFile();
       this.resetImages();
       this.mintTab = NftMintTab.METADATA;
+      this.step = CollectionStep.ENVIRONMENT;
+      this.nftStep = NftCreateStep.AMOUNT;
+      this.stepDeploy = NftDeployStep.NAME;
+      this.stepCollectionDeploy = CollectionStatus.CREATED;
     },
     resetFile() {
       this.csvAttributes = [] as MetadataAttributes[];
@@ -93,6 +110,8 @@ export const useCollectionStore = defineStore('collection', {
       }
     },
     resetForms() {
+      this.form.base.logo = {} as FileListItemType;
+      this.form.base.coverImage = {} as FileListItemType;
       this.form.base.name = '';
       this.form.base.symbol = '';
       this.form.base.chain = Chains.MOONBEAM;
@@ -109,6 +128,15 @@ export const useCollectionStore = defineStore('collection', {
       this.form.behavior.revocable = false;
       this.form.behavior.soulbound = false;
       this.form.behavior.supplyLimited = 0;
+
+      this.resetSingleFormData();
+    },
+    resetSingleFormData() {
+      this.form.single.collectionUuid = null;
+      this.form.single.name = '';
+      this.form.single.royalties = '';
+      this.form.single.copies = 0;
+      this.form.single.description = '';
     },
 
     /**

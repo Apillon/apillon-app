@@ -1,7 +1,10 @@
 export default function useCollection() {
   const $i18n = useI18n();
+  const message = useMessage();
   const dataStore = useDataStore();
   const collectionStore = useCollectionStore();
+
+  const { isEnoughSpaceInStorage } = useUpload();
 
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
@@ -11,6 +14,18 @@ export default function useCollection() {
     { label: $i18n.t(`nft.chain.${Chains.MOONBASE}`), value: Chains.MOONBASE },
     // { label: $i18n.t(`nft.chain.${Chains.ASTAR_SHIBUYA}`), value: Chains.ASTAR_SHIBUYA },
     { label: $i18n.t(`nft.chain.${Chains.ASTAR}`), value: Chains.ASTAR },
+  ];
+  const NftAmount = [
+    {
+      label: $i18n.t('nft.amount.single'),
+      sublabel: $i18n.t('nft.amount.singleContent'),
+      value: 0,
+    },
+    {
+      label: $i18n.t('nft.amount.multiple'),
+      sublabel: $i18n.t('nft.amount.multipleContent'),
+      value: 1,
+    },
   ];
   const collectionTypes = [
     {
@@ -87,8 +102,26 @@ export default function useCollection() {
       message: $i18n.t('validation.collectionRoyaltiesFees'),
     },
   ];
+  const rulesCollectionLogo: NFormItemRule[] = [
+    ruleRequired($i18n.t('validation.collectionLogoRequired')),
+    {
+      validator: validateCollectionLogo,
+      message: $i18n.t('validation.collectionLogoRequired'),
+    },
+  ];
+  const rulesCollectionCoverImage: NFormItemRule[] = [
+    ruleRequired($i18n.t('validation.collectionCoverImageRequired')),
+    {
+      validator: validateCollectionCoverImage,
+      message: $i18n.t('validation.collectionCoverImageRequired'),
+    },
+  ];
 
   const rules: NFormRules = {
+    logo: rulesCollectionLogo,
+    'base.logo': rulesCollectionLogo,
+    coverImage: rulesCollectionCoverImage,
+    'base.coverImage': rulesCollectionCoverImage,
     symbol: ruleRequired($i18n.t('validation.collectionSymbolRequired')),
     'base.symbol': ruleRequired($i18n.t('validation.collectionSymbolRequired')),
     name: ruleRequired($i18n.t('validation.collectionNameRequired')),
@@ -120,6 +153,19 @@ export default function useCollection() {
     'behavior.royaltiesFees': rulesRoyaltyFee,
   };
 
+  const rulesSingle: NFormRules = {
+    collectionUuid: ruleRequired($i18n.t('validation.nftCollection')),
+    'single.collectionUuid': ruleRequired($i18n.t('validation.nftCollection')),
+    name: ruleRequired($i18n.t('validation.nftName')),
+    'single.name': ruleRequired($i18n.t('validation.nftName')),
+    royalties: ruleRequired($i18n.t('validation.nftRoyalties')),
+    'single.royalties': ruleRequired($i18n.t('validation.nftRoyalties')),
+    copies: ruleRequired($i18n.t('validation.nftCopies')),
+    'single.copies': ruleRequired($i18n.t('validation.nftCopies')),
+    description: ruleRequired($i18n.t('validation.nftDescription')),
+    'single.description': ruleRequired($i18n.t('validation.nftDescription')),
+  };
+
   /**
    * Validations
    */
@@ -142,6 +188,12 @@ export default function useCollection() {
   function validateRoyaltiesAddress(_: NFormItemRule, value: string): boolean {
     return collectionStore.form.behavior.royaltiesFees === 0 || validateEvmAddress(_, value);
   }
+  function validateCollectionLogo(_: NFormItemRule): boolean {
+    return !!collectionStore.form.base.logo?.id;
+  }
+  function validateCollectionCoverImage(_: NFormItemRule): boolean {
+    return !!collectionStore.form.base.coverImage?.id;
+  }
 
   function disablePasteDate(ts: number) {
     return ts < new Date().setHours(0, 0, 0, 0);
@@ -151,16 +203,68 @@ export default function useCollection() {
     return ts < Date.now();
   }
 
+  function uploadFileRequest(
+    { file, onError, onFinish }: NUploadCustomRequestOptions,
+    logo: boolean
+  ) {
+    const uploadedFile: FileListItemType = {
+      ...file,
+      fullPath: `/Images${file.fullPath}`,
+      percentage: 0,
+      size: file.file?.size || 0,
+      timestamp: Date.now(),
+      onFinish,
+      onError,
+    };
+    if (!isEnoughSpaceInStorage([], uploadedFile)) {
+      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+
+      /** Mark file as failed */
+      onError();
+      return;
+    } else if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+      message.warning($i18n.t('validation.notImage'));
+
+      /** Mark file as failed */
+      onError();
+      return;
+    }
+    if (logo) {
+      collectionStore.form.base.logo = uploadedFile;
+    } else {
+      collectionStore.form.base.coverImage = uploadedFile;
+    }
+  }
+
+  function handleCoverImageRemove() {
+    collectionStore.form.base.coverImage = {} as FileListItemType;
+  }
+
+  function handleLogoRemove() {
+    collectionStore.form.base.logo = {} as FileListItemType;
+  }
+
+  function handleCoverImageChange(event: NUploadCustomRequestOptions) {
+    handleCoverImageRemove();
+    uploadFileRequest(event, false);
+  }
+
   return {
     loading,
     formRef,
     chains,
+    NftAmount,
     collectionTypes,
     supplyTypes,
     booleanSelect,
     rules,
+    rulesSingle,
     isFormDisabled,
     disablePasteDate,
     disablePasteTime,
+    uploadFileRequest,
+    handleLogoRemove,
+    handleCoverImageRemove,
+    handleCoverImageChange,
   };
 }
