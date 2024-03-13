@@ -116,7 +116,7 @@
           justify-content="center"
           animated
         >
-          <!-- METADATA -->
+          <!-- COLLECTION METADATA -->
           <n-tab-pane :name="NftMintTab.METADATA">
             <template #tab>
               <IconNumber
@@ -125,74 +125,71 @@
                 :active="true"
               />
               <IconSuccessful v-else />
-              <span class="ml-2 text-sm text-white">{{ $t('nft.collection.uploadMetadata') }}</span>
+              <span class="ml-2 text-sm text-white">{{ $t('nft.collection.create') }}</span>
             </template>
             <slot>
-              <!-- METADATA: storage type -->
-              <div
-                class="flex justify-center items-center"
-                style="min-height: calc(100dvh - 300px)"
-              >
-                <div class="max-w-lg text-center pb-8">
-                  <h2>{{ $t('nft.metadata.title') }}</h2>
-
-                  <p class="text-body whitespace-pre-line mb-8">
-                    {{ $t('nft.metadata.infoNew') }}
-                  </p>
-
-                  <Notification v-if="isFormDisabled" type="error" class="w-full mb-4">
-                    {{ $t('dashboard.permissions.insufficient') }}
-                  </Notification>
-                  <div class="flex flex-col gap-4 px-2">
-                    <Btn size="large" type="primary" :disabled="isFormDisabled" @click="goToWizard">
-                      {{ $t('nft.metadata.yes') }}
-                    </Btn>
-                    <Btn size="large" type="secondary" :disabled="isFormDisabled" @click="goToForm">
-                      <span class="inline-block -mx-1">{{ $t('nft.metadata.no') }}</span>
-                    </Btn>
-                  </div>
-                </div>
-              </div>
+              <FormNftCollectionCreate />
             </slot>
           </n-tab-pane>
 
-          <!-- UPLOAD -->
-          <n-tab-pane :name="NftMintTab.UPLOAD">
+          <!-- COLLECTION PREVIEW -->
+          <n-tab-pane :name="NftMintTab.PREVIEW">
             <template #tab>
               <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
               <IconNumber
                 v-else
                 :number="2"
-                :active="collectionStore.mintTab === NftMintTab.UPLOAD"
+                :active="collectionStore.mintTab === NftMintTab.PREVIEW"
               />
               <span class="ml-2 text-sm text-white">{{ $t('nft.collection.uploadData') }}</span>
             </template>
             <slot>
-              <FormNftUpload />
+              <div
+                class="justify-center items-center flex"
+                style="min-height: calc(100dvh - 300px)"
+              >
+                <div
+                  v-if="collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOY_INITIATED"
+                  class="w-full pb-8"
+                >
+                  <div v-if="collectionStore.stepCollectionDeploy > 0" class="text-center">
+                    <AnimationLoader />
+                    <h2>{{ $t('nft.deploy.deployingCollection') }}</h2>
+                    <p class="mb-8 text-body whitespace-pre-line">
+                      <span>
+                        {{ $t('nft.deploy.collection') }}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div v-else>
+                  <FormNftCollectionPreview />
+                  <Btn type="primary" class="w-full mb-2" @click="modalW3WarnVisible = true">
+                    {{ $t('form.proceed') }}
+                  </Btn>
+                </div>
+              </div>
             </slot>
           </n-tab-pane>
 
-          <!-- DEPLOY -->
-          <n-tab-pane
-            :name="NftMintTab.MINT"
-            :disabled="
-              !collectionStore.hasCsvFile ||
-              !collectionStore.hasMetadata ||
-              !collectionStore.hasImages
-            "
-          >
+          <!-- MINT -->
+          <n-tab-pane :name="NftMintTab.MINT">
             <template #tab>
               <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
               <span class="ml-2 text-sm text-white">{{ $t('nft.collection.mintNfts') }}</span>
             </template>
             <slot>
-              <FormNftDeploy @submit-success="collectionCreated = true" />
+              <FormNftCreate />
             </slot>
           </n-tab-pane>
         </n-tabs>
         <!-- Button back -->
         <button
-          v-if="collectionStore.metadataStored !== null"
+          v-if="
+            collectionStore.metadataStored !== null &&
+            collectionStore.stepCollectionDeploy !== CollectionStatus.DEPLOY_INITIATED &&
+            collectionStore.nftStep !== NftCreateStep.PREVIEW
+          "
           class="absolute left-0 top-[10px]"
           @click="goToPreviousStep"
         >
@@ -201,10 +198,7 @@
 
         <!-- Buttons switch preview-->
         <div
-          v-if="
-            collectionStore.mintTab === NftMintTab.UPLOAD &&
-            collectionStore.stepUpload === NftUploadStep.PREVIEW
-          "
+          v-if="collectionStore.stepUpload === NftUploadStep.PREVIEW"
           class="absolute right-0 top-2 flex items-center"
         >
           <span class="mr-2">{{ $t('general.view') }}:</span>
@@ -233,8 +227,8 @@
         </div>
       </div>
 
-      <W3Warn v-model:show="modalW3WarnVisible">
-        {{ $t('w3Warn.nft.new') }}
+      <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnConfirm">
+        {{ $t('w3Warn.nft.collection') }}
       </W3Warn>
     </slot>
   </Dashboard>
@@ -242,14 +236,14 @@
 
 <script lang="ts" setup>
 import type { TabsInst } from 'naive-ui';
+import { useMessage } from 'naive-ui';
 
 const $i18n = useI18n();
-const router = useRouter();
+const message = useMessage();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
-const { isFormDisabled } = useCollection();
 const { loadingBucket, openBucket } = useStorage();
 
 useHead({
@@ -260,6 +254,8 @@ const pageLoading = ref<boolean>(true);
 const modalW3WarnVisible = ref<boolean>(false);
 const mintTabsRef = ref<TabsInst | null>(null);
 const collectionCreated = ref<boolean>(false);
+
+let collectionInterval: any = null as any;
 
 onMounted(() => {
   collectionStore.metadataStored = null;
@@ -276,53 +272,132 @@ onMounted(() => {
   }, 100);
 });
 
-/** Watch active tab, if informations are missing, open previous tab */
-watch(
-  () => collectionStore.mintTab,
-  tab => {
-    if (tab === NftMintTab.MINT && (!collectionStore.hasCsvFile || !collectionStore.hasImages)) {
-      collectionStore.mintTab = NftMintTab.IMAGES;
-      nextTick(() => mintTabsRef.value?.syncBarPosition());
-    } else if (tab === NftMintTab.IMAGES && !collectionStore.hasCsvFile) {
-      collectionStore.mintTab = NftMintTab.METADATA;
-      nextTick(() => mintTabsRef.value?.syncBarPosition());
-    }
-    if (tab === NftMintTab.METADATA) {
-      collectionStore.stepUpload = NftUploadStep.FILE;
-    } else if (tab === NftMintTab.UPLOAD) {
-      collectionStore.stepDeploy = NftDeployStep.NAME;
-    }
+async function onModalW3WarnConfirm() {
+  if (!dataStore.hasProjects) {
+    await dataStore.fetchProjects();
   }
-);
 
-function goToForm() {
-  collectionStore.resetForms();
-  collectionStore.metadataStored = true;
+  if (collectionStore.mintTab === NftMintTab.PREVIEW) {
+    /* collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
+    await deployCollection(); */
+    collectionStore.mintTab = NftMintTab.MINT;
+
+    modalW3WarnVisible.value = false;
+  } else {
+    modalW3WarnVisible.value = false;
+  }
 }
 
-function goToWizard() {
-  bucketStore.resetFolder();
-  bucketStore.resetUpload();
-  collectionStore.resetForms();
-  collectionStore.metadataStored = false;
-  collectionStore.mintTab = NftMintTab.UPLOAD;
+async function deployCollection() {
+  if (!dataStore.hasProjects) {
+    await dataStore.fetchProjects();
+  }
+
+  try {
+    const bodyData = {
+      project_uuid: dataStore.projectUuid,
+      name: collectionStore.form.base.name,
+      symbol: collectionStore.form.base.symbol,
+      chain: collectionStore.form.base.chain,
+      collectionType: collectionStore.form.base.collectionType,
+      baseExtension: collectionStore.form.behavior.baseExtension,
+      dropPrice: collectionStore.form.behavior.dropPrice,
+      maxSupply:
+        collectionStore.form.behavior.supplyLimited === 1
+          ? collectionStore.form.behavior.maxSupply
+          : 0,
+      drop: collectionStore.form.behavior.drop,
+      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
+      dropReserve: collectionStore.form.behavior.dropReserve || 0,
+      isRevokable: collectionStore.form.behavior.revocable,
+      isSoulbound: collectionStore.form.behavior.soulbound,
+      royaltiesAddress:
+        collectionStore.form.behavior.royaltiesFees === 0
+          ? null
+          : collectionStore.form.behavior.royaltiesAddress,
+      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
+    };
+    const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
+    collectionStore.active = res.data;
+
+    /** On new collection created add new collection to list */
+    collectionStore.items.push(res.data);
+
+    collectionStore.form.single.collectionUuid = res.data.collection_uuid;
+    /** Deployment status */
+    collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYING;
+
+    collectionStore.resetMetadata();
+    collectionStore.resetForms();
+    bucketStore.resetData();
+
+    /** Deployment status */
+    checkUnfinishedCollections();
+    collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
+
+    collectionStore.mintTab = NftMintTab.MINT;
+  } catch (error) {
+    /** Deployment status */
+    collectionStore.stepCollectionDeploy = CollectionStatus.FAILED;
+
+    message.error(userFriendlyMsg(error));
+  }
+}
+function checkUnfinishedCollections() {
+  const unfinishedCollection = collectionStore.items.find(
+    collection =>
+      collection.collectionStatus === CollectionStatus.DEPLOY_INITIATED ||
+      collection.collectionStatus === CollectionStatus.DEPLOYING
+  );
+  if (unfinishedCollection === undefined) {
+    return;
+  }
+
+  clearInterval(collectionInterval);
+  collectionInterval = setInterval(async () => {
+    const collections = await collectionStore.fetchCollections(false);
+    const collection = collections.find(
+      collection => collection.collection_uuid === unfinishedCollection.collection_uuid
+    );
+    if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
+      clearInterval(collectionInterval);
+    }
+  }, 30000);
 }
 
 function goToPreviousStep() {
   switch (collectionStore.mintTab) {
-    case NftMintTab.MINT:
-      if (collectionStore.stepDeploy > NftDeployStep.NAME) {
-        collectionStore.stepDeploy -= 1;
-      } else {
-        collectionStore.mintTab = NftMintTab.UPLOAD;
+    case NftMintTab.METADATA:
+      if (collectionStore.step === CollectionStep.METADATA) {
+        collectionStore.step = CollectionStep.ENVIRONMENT;
+        collectionStore.metadataStored = null;
+      }
+      if (collectionStore.step === CollectionStep.BEHAVIOR) {
+        collectionStore.step = CollectionStep.METADATA;
       }
       return;
-    case NftMintTab.UPLOAD:
-      if (collectionStore.stepUpload > NftUploadStep.FILE) {
-        collectionStore.stepUpload -= 1;
-      } else {
-        collectionStore.mintTab = NftMintTab.METADATA;
-        collectionStore.metadataStored = null;
+    case NftMintTab.PREVIEW:
+      collectionStore.mintTab = NftMintTab.METADATA;
+      collectionStore.step = CollectionStep.BEHAVIOR;
+      return;
+    case NftMintTab.MINT:
+      switch (collectionStore.nftStep) {
+        case NftCreateStep.AMOUNT:
+          return;
+        case NftCreateStep.SINGLE:
+          collectionStore.nftStep = NftCreateStep.AMOUNT;
+          return;
+        case NftCreateStep.MULTIPLE:
+          if (collectionStore.stepUpload === NftUploadStep.FILE) {
+            collectionStore.nftStep = NftCreateStep.AMOUNT;
+          }
+          if (collectionStore.stepUpload === NftUploadStep.IMAGES) {
+            collectionStore.stepUpload = NftUploadStep.FILE;
+          }
+          if (collectionStore.stepUpload === NftUploadStep.PREVIEW) {
+            collectionStore.stepUpload = NftUploadStep.IMAGES;
+          }
+          return;
       }
       return;
     default:
