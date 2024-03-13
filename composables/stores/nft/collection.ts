@@ -109,6 +109,13 @@ export const useCollectionStore = defineStore('collection', {
         this.images.pop();
       }
     },
+    resetSingleFormData() {
+      this.form.single.collectionUuid = null;
+      this.form.single.name = '';
+      this.form.single.royalties = '';
+      this.form.single.copies = 0;
+      this.form.single.description = '';
+    },
     resetForms() {
       this.form.base.logo = {} as FileListItemType;
       this.form.base.coverImage = {} as FileListItemType;
@@ -131,14 +138,6 @@ export const useCollectionStore = defineStore('collection', {
 
       this.resetSingleFormData();
     },
-    resetSingleFormData() {
-      this.form.single.collectionUuid = null;
-      this.form.single.name = '';
-      this.form.single.royalties = '';
-      this.form.single.copies = 0;
-      this.form.single.description = '';
-    },
-
     /**
      * Fetch wrappers
      */
