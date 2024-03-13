@@ -19,7 +19,7 @@
           >
             {{ $t('nft.upload.takeMeBack') }}
           </Btn>
-          <Btn class="w-60" type="primary" @click="collectionStore.mintTab = NftMintTab.MINT">
+          <Btn class="w-60" type="primary" @click="emit('submit')">
             {{ $t('nft.upload.previewConfirm') }}
           </Btn>
         </NftPreview>
@@ -191,6 +191,8 @@ import type { UploadInst } from 'naive-ui';
 
 const collectionStore = useCollectionStore();
 const nft = useNft();
+
+const emit = defineEmits(['submit']);
 
 const uploadRef = ref<UploadInst | null>(null);
 const modalMetadataAttributesVisible = ref<boolean>(false);
