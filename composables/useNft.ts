@@ -10,6 +10,7 @@ export default function useNft() {
   const loadingImages = ref<boolean>(false);
   const metadataRequired = ['name', 'description', 'image'];
   const metadataProperties = [
+    'id',
     'name',
     'description',
     'external_url',
@@ -324,6 +325,46 @@ export default function useNft() {
       }
     });
   }
+  /**
+   * Add NFT with metadata to collection
+   */
+  async function addNft() {
+    const nftMetadataFiles = createNftFiles(collectionStore.metadata);
+    const metadataSession = await uploadFiles(
+      collectionStore.active.bucket_uuid,
+      nftMetadataFiles,
+      false,
+      true,
+      false
+    );
+    const imagesSession = await uploadFiles(
+      collectionStore.active.bucket_uuid,
+      collectionStore.images,
+      false,
+      true,
+      false
+    );
+
+    await Promise.all(putRequests.value).then(async _ => {
+      if (!!metadataSession && !!imagesSession) {
+        const res = await $api.post<CollectionResponse>(
+          endpoints.collectionNftsMetadata(collectionStore.active.collection_uuid),
+          {
+            useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
+            metadataSession,
+            imagesSession,
+          }
+        );
+        collectionStore.active = res.data;
+
+        message.success($i18n.t('form.success.nftDeployed'));
+      } else {
+        message.error($i18n.t('nft.upload.deployError'));
+      }
+    });
+
+    collectionStore.metadata = [];
+  }
 
   /**
    * Prepare NFT files: parse NFT data to JSON files
@@ -336,7 +377,7 @@ export default function useNft() {
 
       return {
         id: `${index + 1}-${nft.name}`,
-        name: `${index + 1}.json`,
+        name: nft.id ? `${nft.id}.json` : `${index + 1}.json`,
         status: 'pending',
         percentage: 0,
         file: nftFile,
@@ -369,6 +410,7 @@ export default function useNft() {
     createNftData,
     createThumbnailUrl,
     deployCollection,
+    addNft,
     getPriceServiceName,
     handleImageChange,
     handleImageRemove,

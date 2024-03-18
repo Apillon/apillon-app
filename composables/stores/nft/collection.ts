@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
+    attribute: {} as AttributeInterface,
     bucketUuid: '',
     csvAttributes: [] as Array<MetadataAttributes>,
     csvColumns: [] as NTableColumns<KeyTitle>,
@@ -52,11 +53,13 @@ export const useCollectionStore = defineStore('collection', {
         royaltiesFees: 0,
       },
       single: {
-        collectionUuid: null as String | null,
+        id: '',
+        collectionUuid: '',
         name: '',
         royalties: '',
-        copies: 0,
+        copies: 1,
         description: '',
+        attributes: [] as AttributesInterface,
       },
     },
   }),
@@ -110,10 +113,11 @@ export const useCollectionStore = defineStore('collection', {
       }
     },
     resetSingleFormData() {
-      this.form.single.collectionUuid = null;
+      this.form.single.id = '';
+      this.form.single.collectionUuid = this.active?.collection_uuid;
       this.form.single.name = '';
       this.form.single.royalties = '';
-      this.form.single.copies = 0;
+      this.form.single.copies = 1;
       this.form.single.description = '';
     },
     resetForms() {

@@ -33,7 +33,6 @@
           :default-file-list="collectionStore.images"
           :show-file-list="false"
           :max="1"
-          multiple
           directory-dnd
           :custom-request="nft.uploadImageRequest"
           @change="onUploadChange"
@@ -69,6 +68,7 @@
           <n-grid class="items-end" :cols="12" :x-gap="32">
             <!-- Collection -->
             <n-form-item-gi
+              v-if="collectionStore.active.collectionStatus !== CollectionStatus.DEPLOYED"
               :span="12"
               path="collection"
               :label="infoLabel('nftCollection')"
@@ -80,6 +80,20 @@
                 :input-props="{ id: 'collection' }"
                 :placeholder="$t('general.pleaseSelect')"
                 filterable
+              />
+            </n-form-item-gi>
+
+            <!-- NFT name -->
+            <n-form-item-gi
+              :span="12"
+              path="id"
+              :label="infoLabel('nftId')"
+              :label-props="{ for: 'nftId' }"
+            >
+              <n-input
+                v-model:value="collectionStore.form.single.id"
+                :input-props="{ id: 'nftId' }"
+                :placeholder="$t('general.typeHere')"
                 clearable
               />
             </n-form-item-gi>
@@ -151,7 +165,7 @@
       <FormNftPropertiesSingle />
     </div>
 
-    <Btn class="my-8" @click="handleSubmitForm">proceed and deploy</Btn>
+    <Btn class="my-8" @click="handleSubmitForm">{{ $t('nft.deploy.single') }}</Btn>
   </div>
 </template>
 
@@ -169,15 +183,13 @@ const emit = defineEmits(['submit']);
 const uploadRef = ref<UploadInst | null>(null);
 const collections = ref<Array<{ label: string; value: string }>>([]);
 
-onBeforeMount(() => {
+onMounted(() => {
   collectionStore.items.forEach(item => {
-    if (item.collectionStatus === CollectionStatus.DEPLOYED) {
-      const collection: { label: string; value: string } = {
-        label: item.name,
-        value: item.collection_uuid,
-      };
-      collections.value.push(collection);
-    }
+    const collection: { label: string; value: string } = {
+      label: `${item.name} | ${item.symbol}`,
+      value: item.collection_uuid,
+    };
+    collections.value.push(collection);
   });
 });
 
@@ -216,11 +228,18 @@ function imageByName(name: string = '') {
 function handleSubmitForm(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors =>
+    if (errors || !collectionStore.hasImages) {
+      if (!collectionStore.hasImages) message.warning($i18n.t('validation.nft') || 'Error');
+      errors?.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else {
+    } else if (collectionStore.form.single.copies > 0) {
+      for (let index = 0; index < collectionStore.form.single.copies; index += 1) {
+        collectionStore.metadata.push(collectionStore.form.single);
+      }
+
+      collectionStore.metadata.forEach(item => (item.image = collectionStore.images[0]?.name));
+
       emit('submit');
     }
   });

@@ -41,6 +41,17 @@
           {{ $t('general.refresh') }}
         </n-button>
 
+        <!-- Add NFT -->
+        <n-button
+          v-if="collectionStore.active.collection_uuid"
+          size="small"
+          :loading="loadingBucket"
+          @click="openAddNft()"
+        >
+          <span class="icon-add text-xl mr-2 text-primary"></span>
+          <span class="text-primary">{{ $t('nft.add') }}</span>
+        </n-button>
+
         <!-- Actions -->
         <n-dropdown
           :key="collectionStore.active.collectionStatus"
@@ -68,6 +79,7 @@ defineProps({
 const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer']);
 
 const $i18n = useI18n();
+const router = useRouter();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
 const { loadingBucket, openBucket } = useStorage();
@@ -132,5 +144,10 @@ const options = computed(() => {
 
 async function refresh() {
   await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
+}
+
+function openAddNft() {
+  collectionStore.form.single.collectionUuid = collectionStore.active?.collection_uuid;
+  router.push('/dashboard/service/nft/add');
 }
 </script>

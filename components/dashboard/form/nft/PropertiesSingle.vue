@@ -6,9 +6,7 @@
         <p>{{ $t('nft.single.propertiesInfo') }}</p>
       </div>
 
-      <button class="ml-auto">
-        <span class="icon-add text-xl border-1 border-bg-bg-light p-1 rounded-md"></span>
-      </button>
+      <FormNftAttributes title="Properties" type="string" />
     </div>
     <div class="mb-4 flex">
       <div>
@@ -16,9 +14,7 @@
         <p>{{ $t('nft.single.levelsInfo') }}</p>
       </div>
 
-      <button class="ml-auto">
-        <span class="icon-add text-xl border-1 border-bg-bg-light p-1 rounded-md"></span>
-      </button>
+      <FormNftAttributes title="Levels" type="number" />
     </div>
     <div class="mb-4 flex">
       <div>
@@ -26,9 +22,7 @@
         <p>{{ $t('nft.single.statsInfo') }}</p>
       </div>
 
-      <button class="ml-auto">
-        <span class="icon-add text-xl border-1 border-bg-bg-light p-1 rounded-md"></span>
-      </button>
+      <FormNftAttributes title="Stats" type="number" />
     </div>
     <div class="mb-4 flex">
       <div>
@@ -36,9 +30,7 @@
         <p>{{ $t('nft.single.boostsInfo') }}</p>
       </div>
 
-      <button class="ml-auto">
-        <span class="icon-add text-xl border-1 border-bg-bg-light p-1 rounded-md"></span>
-      </button>
+      <FormNftAttributes title="Boosts" type="number" />
     </div>
     <div class="mb-4 flex">
       <div>
@@ -46,9 +38,7 @@
         <p>{{ $t('nft.single.dateInfo') }}</p>
       </div>
 
-      <button class="ml-auto">
-        <span class="icon-add text-xl border-1 border-bg-bg-light p-1 rounded-md"></span>
-      </button>
+      <FormNftAttributes title="Date" type="date" />
     </div>
     <div class="mb-4 flex">
       <div>

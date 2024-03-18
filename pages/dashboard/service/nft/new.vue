@@ -3,10 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <div v-if="collectionCreated">
-            <h2>{{ $t('nft.collection.display') }}</h2>
-          </div>
-          <n-space v-else align="center" size="large">
+          <n-space align="center" size="large">
             <h2>
               <span class="text-bodyDark">{{ $t('dashboard.nav.nft') }}/</span>
               {{ $t('general.create') }}
@@ -26,75 +23,7 @@
     </template>
 
     <slot>
-      <div v-if="collectionCreated">
-        <div class="flex justify-center items-center" style="min-height: calc(100dvh - 300px)">
-          <div class="w-full max-w-lg text-center">
-            <NuxtIcon name="nft/collection" class="flex justify-center icon-auto mb-4" filled />
-            <h2>{{ $t('nft.collection.created.title') }}</h2>
-            <p class="mb-2 text-body whitespace-pre-line">
-              {{ $t('nft.collection.created.info') }}
-            </p>
-
-            <div class="mb-2 flex items-center justify-center text-body">
-              <p>{{ $t('nft.collection.createToDisplay') }}&nbsp;</p>
-              <a href="https://github.com/Apillon/nft-template-vue/fork" target="_blank">
-                <Btn type="builders" size="tiny"> Vue </Btn>
-              </a>
-              <p>,&nbsp;</p>
-              <a href="https://github.com/Apillon/nft-template-react/fork" target="_blank">
-                <Btn type="builders" size="tiny"> React </Btn>
-              </a>
-              <p>&nbsp;{{ $t('general.or') }}&nbsp;</p>
-              <a href="https://github.com/Apillon/nft-template/fork" target="_blank">
-                <Btn type="builders" size="tiny"> javascript template </Btn>
-              </a>
-              <p>.</p>
-            </div>
-            <SeparatorText class="my-4" :border-left="true">
-              {{ $t('general.or') }}
-            </SeparatorText>
-            <NuxtLink to="/dashboard/service/nft">
-              <Btn type="primary" size="large">
-                {{ $t('nft.collection.created.goBack') }}
-              </Btn>
-            </NuxtLink>
-          </div>
-        </div>
-        <div class="relative border-t-1 border-bg-lighter pt-6 px-5">
-          <IconInfo
-            v-if="$i18n.te('w3Warn.nft.new')"
-            class="absolute top-4 left-0"
-            @click="modalW3WarnVisible = true"
-          />
-          <p class="mb-2 text-center text-body">
-            <span class="inline-block mx-1">{{ $t('nft.collection.created.view') }}</span>
-            <a
-              :href="
-                transactionLink(
-                  collectionStore.active.transactionHash,
-                  collectionStore.active.chain
-                )
-              "
-              target="_blank"
-            >
-              <Btn type="builders" size="tiny">
-                <span class="text-sm">{{ $t('nft.collection.created.explorer') }}</span>
-              </Btn>
-            </a>
-            <span class="inline-block mx-1">{{ $t('nft.collection.created.or') }}</span>
-
-            <Btn
-              type="builders"
-              size="tiny"
-              :loading="loadingBucket"
-              @click="openBucket(collectionStore.active.bucket_uuid || '')"
-            >
-              <span class="text-sm">{{ $t('nft.collection.created.bucket') }}</span>
-            </Btn>
-          </p>
-        </div>
-      </div>
-      <div v-else-if="collectionStore.metadataStored" class="max-w-lg mx-auto py-4">
+      <div v-if="collectionStore.metadataStored" class="max-w-lg mx-auto py-4">
         <div class="text-center">
           <h2>{{ $t('nft.collection.create') }}</h2>
           <p class="mb-8 text-body whitespace-pre-line">
@@ -117,7 +46,10 @@
           animated
         >
           <!-- COLLECTION METADATA -->
-          <n-tab-pane :name="NftMintTab.METADATA">
+          <n-tab-pane
+            :name="NftMintTab.METADATA"
+            :disabled="collectionStore.mintTab === NftMintTab.MINT"
+          >
             <template #tab>
               <IconNumber
                 v-if="collectionStore.mintTab === NftMintTab.METADATA"
@@ -133,7 +65,7 @@
           </n-tab-pane>
 
           <!-- COLLECTION PREVIEW -->
-          <n-tab-pane :name="NftMintTab.PREVIEW">
+          <n-tab-pane :name="NftMintTab.PREVIEW" disabled>
             <template #tab>
               <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
               <IconNumber
@@ -141,7 +73,7 @@
                 :number="2"
                 :active="collectionStore.mintTab === NftMintTab.PREVIEW"
               />
-              <span class="ml-2 text-sm text-white">{{ $t('nft.collection.uploadData') }}</span>
+              <span class="ml-2 text-sm text-white">{{ $t('nft.collection.previewTab') }}</span>
             </template>
             <slot>
               <div
@@ -176,7 +108,7 @@
           <n-tab-pane :name="NftMintTab.MINT">
             <template #tab>
               <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
-              <span class="ml-2 text-sm text-white">{{ $t('nft.collection.mintNfts') }}</span>
+              <span class="ml-2 text-sm text-white">{{ $t('nft.add') }}</span>
             </template>
             <slot>
               <FormNftCreate />
@@ -188,6 +120,7 @@
           v-if="
             collectionStore.metadataStored !== null &&
             collectionStore.stepCollectionDeploy !== CollectionStatus.DEPLOY_INITIATED &&
+            collectionStore.nftStep !== NftCreateStep.AMOUNT &&
             collectionStore.nftStep !== NftCreateStep.PREVIEW
           "
           class="absolute left-0 top-[10px]"
@@ -241,10 +174,9 @@ import { useMessage } from 'naive-ui';
 const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
-const { loadingBucket, openBucket } = useStorage();
+const { uploadFiles } = useUpload();
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),
@@ -253,23 +185,11 @@ useHead({
 const pageLoading = ref<boolean>(true);
 const modalW3WarnVisible = ref<boolean>(false);
 const mintTabsRef = ref<TabsInst | null>(null);
-const collectionCreated = ref<boolean>(false);
 
-let collectionInterval: any = null as any;
+const images = ref<Array<FileListItemType>>([]);
 
 onMounted(() => {
-  collectionStore.metadataStored = null;
-  collectionStore.resetMetadata();
-  collectionStore.resetForms();
-
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await storageStore.getStorageInfo();
-      await collectionStore.getCollections();
-
-      pageLoading.value = false;
-    });
-  }, 100);
+  resetAndAddNft();
 });
 
 async function onModalW3WarnConfirm() {
@@ -278,8 +198,8 @@ async function onModalW3WarnConfirm() {
   }
 
   if (collectionStore.mintTab === NftMintTab.PREVIEW) {
-    /* collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
-    await deployCollection(); */
+    collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
+    await deploy();
     collectionStore.mintTab = NftMintTab.MINT;
 
     modalW3WarnVisible.value = false;
@@ -288,7 +208,19 @@ async function onModalW3WarnConfirm() {
   }
 }
 
-async function deployCollection() {
+function prepareImagesForUpload() {
+  const cover = collectionStore.form.base.coverImage;
+  const logo = collectionStore.form.base.logo;
+
+  cover.name = 'cover.' + cover.name.split('.')[cover.name.split('.').length - 1];
+
+  logo.name = 'logo.' + logo.name.split('.')[logo.name.split('.').length - 1];
+
+  images.value.push(cover);
+  images.value.push(logo);
+}
+
+async function deploy() {
   if (!dataStore.hasProjects) {
     await dataStore.fetchProjects();
   }
@@ -324,15 +256,15 @@ async function deployCollection() {
     collectionStore.items.push(res.data);
 
     collectionStore.form.single.collectionUuid = res.data.collection_uuid;
+
+    prepareImagesForUpload();
+
+    await uploadFiles(res.data.bucket_uuid, images.value);
+
     /** Deployment status */
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYING;
 
-    collectionStore.resetMetadata();
-    collectionStore.resetForms();
-    bucketStore.resetData();
-
     /** Deployment status */
-    checkUnfinishedCollections();
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
 
     collectionStore.mintTab = NftMintTab.MINT;
@@ -343,26 +275,20 @@ async function deployCollection() {
     message.error(userFriendlyMsg(error));
   }
 }
-function checkUnfinishedCollections() {
-  const unfinishedCollection = collectionStore.items.find(
-    collection =>
-      collection.collectionStatus === CollectionStatus.DEPLOY_INITIATED ||
-      collection.collectionStatus === CollectionStatus.DEPLOYING
-  );
-  if (unfinishedCollection === undefined) {
-    return;
-  }
 
-  clearInterval(collectionInterval);
-  collectionInterval = setInterval(async () => {
-    const collections = await collectionStore.fetchCollections(false);
-    const collection = collections.find(
-      collection => collection.collection_uuid === unfinishedCollection.collection_uuid
-    );
-    if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
-      clearInterval(collectionInterval);
-    }
-  }, 30000);
+function resetAndAddNft() {
+  collectionStore.metadataStored = null;
+  collectionStore.resetMetadata();
+  collectionStore.resetForms();
+
+  setTimeout(() => {
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await storageStore.getStorageInfo();
+      await collectionStore.getCollections();
+
+      pageLoading.value = false;
+    });
+  }, 100);
 }
 
 function goToPreviousStep() {

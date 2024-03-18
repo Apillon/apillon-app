@@ -51,9 +51,7 @@ export default function useCollection() {
   });
 
   const maxNft = computed(() => {
-    return collectionStore.form.behavior.supplyLimited === 1
-      ? collectionStore.csvData?.length
-      : NFT_MAX_SUPPLY;
+    return collectionStore.form.behavior.supplyLimited === 1 ? NFT_MAX_SUPPLY : NFT_MAX_SUPPLY;
   });
 
   /**
@@ -71,7 +69,7 @@ export default function useCollection() {
       max: maxNft.value,
       validator: validateMaxSupply,
       message: $i18n.t('validation.collectionMaxSupplyReached', {
-        max: collectionStore.csvData?.length || NFT_MAX_SUPPLY,
+        max: NFT_MAX_SUPPLY,
       }),
     },
   ];
@@ -154,14 +152,12 @@ export default function useCollection() {
   };
 
   const rulesSingle: NFormRules = {
+    id: ruleRequired($i18n.t('validation.nftId')),
+    'single.id': ruleRequired($i18n.t('validation.nftId')),
     collectionUuid: ruleRequired($i18n.t('validation.nftCollection')),
     'single.collectionUuid': ruleRequired($i18n.t('validation.nftCollection')),
     name: ruleRequired($i18n.t('validation.nftName')),
     'single.name': ruleRequired($i18n.t('validation.nftName')),
-    royalties: ruleRequired($i18n.t('validation.nftRoyalties')),
-    'single.royalties': ruleRequired($i18n.t('validation.nftRoyalties')),
-    copies: ruleRequired($i18n.t('validation.nftCopies')),
-    'single.copies': ruleRequired($i18n.t('validation.nftCopies')),
     description: ruleRequired($i18n.t('validation.nftDescription')),
     'single.description': ruleRequired($i18n.t('validation.nftDescription')),
   };

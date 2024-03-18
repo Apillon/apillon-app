@@ -30,7 +30,10 @@
       class="justify-center items-center flex"
       style="min-height: calc(100dvh - 300px)"
     >
-      <div class="w-full pb-8">
+      <div
+        v-if="collectionStore.stepCollectionDeploy !== CollectionStatus.DEPLOYED"
+        class="w-full pb-8"
+      >
         <div class="text-center">
           <AnimationLoader />
           <h2>{{ $t('nft.deploy.deployingCollection') }}</h2>
@@ -57,15 +60,30 @@
 <script setup lang="ts">
 const collectionStore = useCollectionStore();
 
+const { deployCollection, addNft } = useNft();
+
+const router = useRouter();
+
 const modalW3WarnVisible = ref<boolean>(false);
 
 async function onModalW3WarnConfirm() {
   collectionStore.nftStep = NftCreateStep.DEPLOY;
-  /*  await deploy(); */
-  collectionStore.nftStep = NftCreateStep.PREVIEW;
+  collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
 
   modalW3WarnVisible.value = false;
+
+  await deploy();
+
+  collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
+
+  router.push(`/dashboard/service/nft/${collectionStore.form.single.collectionUuid}`);
 }
 
-function handleDeploy() {}
+async function deploy() {
+  if (collectionStore.active.collectionStatus === CollectionStatus.CREATED) {
+    await deployCollection();
+  } else {
+    await addNft();
+  }
+}
 </script>

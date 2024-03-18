@@ -119,17 +119,18 @@
             {{ $t('nft.upload.downloadCsv') }}
           </Btn>
         </p>
-        <n-upload
-          v-if="!collectionStore.hasCsvFile"
-          :show-file-list="false"
-          accept=".csv, application/vnd.ms-excel"
-          class="w-full"
-          :custom-request="e => onCsvFileUpload(e)"
-        >
-          <Btn class="w-full" type="secondary">
-            {{ $t('nft.upload.csvFile') }}
-          </Btn>
-          <!--
+        <div v-if="!collectionStore.hasCsvFile" class="flex">
+          <n-upload
+            v-if="!collectionStore.hasCsvFile"
+            :show-file-list="false"
+            accept=".csv, application/vnd.ms-excel"
+            class="w-full"
+            :custom-request="e => onCsvFileUpload(e)"
+          >
+            <Btn class="w-full" type="secondary">
+              {{ $t('nft.upload.csvFile') }}
+            </Btn>
+            <!--
           <n-upload-dragger class="h-40">
             <div class="py-2 text-center">
               <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
@@ -141,7 +142,9 @@
             </div>
           </n-upload-dragger>
         -->
-        </n-upload>
+          </n-upload>
+          <IconInfo :tooltip="$t('nft.collection.labelInfo.csvUpload')" size="lg" />
+        </div>
         <template v-else>
           <div class="flex text-left">
             <div class="card flex-1 px-4 py-2 rounded-lg">
@@ -191,6 +194,7 @@ import type { UploadInst } from 'naive-ui';
 
 const collectionStore = useCollectionStore();
 const nft = useNft();
+const $i18n = useI18n();
 
 const emit = defineEmits(['submit']);
 

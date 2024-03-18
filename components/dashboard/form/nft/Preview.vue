@@ -10,7 +10,7 @@
       <Image :src="createThumbnailUrl(collectionStore.form.base.coverImage)" class="h-40" />
     </div>
     <div>
-      <Btn class="primary" @click="handleAddNft">Add NFT</Btn>
+      <Btn class="primary" @click="handleAddNft">{{ $t('nft.add') }}</Btn>
     </div>
   </div>
 </template>
