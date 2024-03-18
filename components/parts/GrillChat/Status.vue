@@ -47,6 +47,8 @@ function getStatus(status: number): TagType {
       return 'error';
     case SocialStatus.DELETED:
       return 'error';
+    case SocialStatus.FAILED:
+      return 'error';
     default:
       return 'default';
   }

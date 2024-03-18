@@ -26,6 +26,7 @@ export enum SocialStatus {
   BLOCKED = 7,
   MARKED_FOR_DELETION = 8,
   DELETED = 9,
+  FAILED = 100,
 }
 
 declare global {
