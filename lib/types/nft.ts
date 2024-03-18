@@ -143,4 +143,16 @@ declare global {
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}
+
+  /**
+   * Attributes
+   */
+
+  interface AttributeInterface {
+    trait_type: string;
+    value: string;
+    display_type: string;
+  }
+
+  interface AttributesInterface extends Array<AttributeInterface> {}
 }
