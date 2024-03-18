@@ -205,7 +205,7 @@ export default function useCollection() {
   ) {
     const uploadedFile: FileListItemType = {
       ...file,
-      fullPath: `/Images${file.fullPath}`,
+      fullPath: file.fullPath,
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
