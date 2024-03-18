@@ -823,11 +823,13 @@
       "nftMintParentNftId": "Parent NFT ID",
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
+      "nftId": "ID",
       "nftCollection": "Collection",
       "nftName": "Name",
       "nftRoyalties": "Royalties",
       "nftCopies": "Copies",
       "nftDescription": "Description",
+      "nftValue": "Value",
       "password": "Enter a 12-character password",
       "phone": "Phone",
       "postalCode": "Postal code",
@@ -1111,6 +1113,8 @@
   },
   "nft": {
     "create": "Create an NFT",
+    "add": "Add NFT",
+    "addAttribute": "Add attribute",
     "chain": {
       "1": "MOONBEAM (Mainnet)",
       "2": "MOONBASE (Testnet)",
@@ -1194,6 +1198,7 @@
       "setBehavior": "Set collection behavior",
       "behavior": "Behavior",
       "preview": "Preview your collection",
+      "previewTab": "Collection preview",
       "previewInfo": "This is the preview of your collection. After a successful deployment, you will be able to start adding NFTs.",
       "deployInfo": "Deploy on Testnet to test the template before launching it in production in Mainnet.",
       "headline": "How does it work?",
@@ -1229,7 +1234,8 @@
         "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
         "collectionType": "",
         "collectionUseGateway": "Collection base uri points to IPFS. If this checkbox is checked, base uri will point to CID on Apillon private gateway, which provide better performance. Otherwise base uri points to: ipfs://[CID], and gateway need to be handled manually.",
-        "collectionLogoSize": "Maximum size: 3MB, Supported formats: JPG, PNG, GIF, SVG. Recommended size: 400 x 400 px."
+        "collectionLogoSize": "Maximum size: 3MB, Supported formats: JPG, PNG, GIF, SVG. Recommended size: 400 x 400 px.",
+        "csvUpload": "Before adding new items to the collection with existing NFTs, please add an id column to the CSV file. This will help maintain data integrity and avoid any conflicts when adding new entries."
       },
       "status": {
         "0": "CREATED",
@@ -1249,7 +1255,8 @@
       "deployingCollection": "Deploying to blockchain...",
       "deploying": "Deploying your NFTs",
       "metadata": "Uploading metadata",
-      "nft": "Deploying NFTs"
+      "nft": "Deploying NFTs",
+      "single": "Deploy NFT"
     },
     "metadata": {
       "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
@@ -1690,6 +1697,7 @@
     "ipfsTypeRequired": "Please select type",
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
+    "nft": "Please select an NFT",
     "nftBucketRequired": "Please select a bucket",
     "nftBurnTokenIdRequired": "Please enter token ID",
     "nftMintAddressRequired": "Please enter your wallet address for minting",
@@ -1698,6 +1706,7 @@
     "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
     "nftTransferAddressRequired": "Please enter wallet address",
+    "nftId": "Please enter ID of NFT",
     "nftName": "Please enter name of NFT",
     "nftCollection": "Please select a Collection",
     "nftRoyalties": "Please enter royalties",
