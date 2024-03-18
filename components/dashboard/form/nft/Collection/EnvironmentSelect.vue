@@ -8,8 +8,9 @@
         :key="chain.value"
         class="border-2 p-4 rounded-md border-bg-lightest hover:cursor-pointer w-40 flex justify-center"
         :class="collectionStore.form.base.chain === chain.value ? 'bg-bg-lighter' : ''"
+        @click="collectionStore.form.base.chain = chain.value"
       >
-        <div @click="collectionStore.form.base.chain = chain.value">
+        <div>
           {{ chain.label }}
         </div>
       </div>

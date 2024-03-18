@@ -8,8 +8,9 @@
         :key="amount.value"
         class="border-2 p-4 rounded-md border-bg-lightest hover:cursor-pointer w-52 flex justify-center"
         :class="collectionStore.amount === amount.value ? 'bg-bg-lighter' : ''"
+        @click="collectionStore.amount = amount.value"
       >
-        <div class="my-auto" @click="collectionStore.amount = amount.value">
+        <div class="my-auto">
           {{ amount.label }}
           <p>{{ amount.sublabel }}</p>
         </div>
