@@ -1251,8 +1251,9 @@
       }
     },
     "deploy": {
-      "collection": "Give it a minute or two. You'll be informed when the deployment is done.",
+      "collection": "Give it a minute or two while we prepare everything for you.",
       "deployingCollection": "Deploying to blockchain...",
+      "creatingCollection": "Creating collection...",
       "deploying": "Deploying your NFTs",
       "metadata": "Uploading metadata",
       "nft": "Deploying NFTs",
@@ -1293,6 +1294,7 @@
       }
     },
     "upload": {
+      "addNft": "Add NFT",
       "attributes": "Metadata attributes",
       "csvConfirm": "Confirm CSV data",
       "csvConfirmAttributes": "Confirm attributes",

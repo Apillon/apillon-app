@@ -86,7 +86,7 @@
                 >
                   <div v-if="collectionStore.stepCollectionDeploy > 0" class="text-center">
                     <AnimationLoader />
-                    <h2>{{ $t('nft.deploy.deployingCollection') }}</h2>
+                    <h2>{{ $t('nft.deploy.creatingCollection') }}</h2>
                     <p class="mb-8 text-body whitespace-pre-line">
                       <span>
                         {{ $t('nft.deploy.collection') }}
