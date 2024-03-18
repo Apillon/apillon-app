@@ -4,9 +4,8 @@ export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
     attribute: {} as AttributeInterface,
-    bucketUuid: '',
+    columns: [] as NTableColumns<KeyTitle>,
     csvAttributes: [] as Array<MetadataAttributes>,
-    csvColumns: [] as NTableColumns<KeyTitle>,
     csvData: [] as Array<Record<string, string>>,
     csvFile: {} as FileListItemType,
     csvSelectedAttributes: [] as Array<string>,
@@ -56,9 +55,8 @@ export const useCollectionStore = defineStore('collection', {
         id: '',
         collectionUuid: '',
         name: '',
-        royalties: '',
-        copies: 1,
         description: '',
+        copies: 1,
         attributes: [] as AttributesInterface,
       },
     },
@@ -99,7 +97,7 @@ export const useCollectionStore = defineStore('collection', {
     },
     resetFile() {
       this.csvAttributes = [] as MetadataAttributes[];
-      this.csvColumns = [] as NTableColumns<KeyTitle>;
+      this.columns = [] as NTableColumns<KeyTitle>;
       this.csvData = [] as Array<Record<string, string>>;
       this.csvFile = {} as FileListItemType;
       this.csvSelectedAttributes = [] as Array<string>;
@@ -116,9 +114,8 @@ export const useCollectionStore = defineStore('collection', {
       this.form.single.id = '';
       this.form.single.collectionUuid = this.active?.collection_uuid;
       this.form.single.name = '';
-      this.form.single.royalties = '';
-      this.form.single.copies = 1;
       this.form.single.description = '';
+      this.form.single.copies = 1;
     },
     resetForms() {
       this.form.base.logo = {} as FileListItemType;
