@@ -13,7 +13,7 @@
       style="min-height: calc(100dvh - 300px)"
     >
       <div>
-        <FormNftUpload @submit="modalW3WarnVisible = true" />
+        <FormNftUpload />
       </div>
     </div>
     <div
@@ -22,7 +22,24 @@
       style="min-height: calc(100dvh - 300px)"
     >
       <div>
-        <FormNftUploadSingle @submit="modalW3WarnVisible = true" />
+        <FormNftUploadSingle />
+      </div>
+    </div>
+    <!-- Preview -->
+    <div
+      v-else-if="collectionStore.nftStep === NftCreateStep.PREVIEW"
+      class="flex justify-center items-center"
+      style="min-height: calc(100dvh - 300px)"
+    >
+      <div>
+        <NftPreview>
+          <Btn class="w-60" type="secondary" @click="handleAddAnother()">
+            {{ $t('nft.upload.addNft') }}
+          </Btn>
+          <Btn class="w-60" type="primary" @click="modalW3WarnVisible = true">
+            {{ $t('nft.deploy.single') }}
+          </Btn>
+        </NftPreview>
       </div>
     </div>
     <div
@@ -45,12 +62,6 @@
         </div>
       </div>
     </div>
-    <div v-else class="justify-center items-center flex" style="min-height: calc(100dvh - 300px)">
-      <div>
-        <FormNftPreview />
-      </div>
-    </div>
-
     <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnConfirm">
       {{ $t('w3Warn.nft.new') }}
     </W3Warn>
@@ -77,6 +88,16 @@ async function onModalW3WarnConfirm() {
   collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
 
   router.push(`/dashboard/service/nft/${collectionStore.form.single.collectionUuid}`);
+}
+
+function handleAddAnother() {
+  if (collectionStore.amount === 1) {
+    collectionStore.resetFile();
+  } else {
+    collectionStore.resetSingleFormData();
+  }
+  collectionStore.nftStep = NftCreateStep.AMOUNT;
+  collectionStore.stepUpload = NftUploadStep.FILE;
 }
 
 async function deploy() {

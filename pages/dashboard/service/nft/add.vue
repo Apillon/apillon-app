@@ -35,7 +35,7 @@
       </div>
       <!-- Buttons switch preview-->
       <div
-        v-if="collectionStore.stepUpload === NftUploadStep.PREVIEW"
+        v-if="collectionStore.nftStep === NftCreateStep.PREVIEW"
         class="absolute right-0 top-2 flex items-center"
       >
         <span class="mr-2">{{ $t('general.view') }}:</span>
@@ -82,14 +82,12 @@ onMounted(() => {
 });
 
 function resetAndAddNft() {
-  collectionStore.metadataStored = null;
   collectionStore.resetMetadata();
   collectionStore.resetForms();
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await storageStore.getStorageInfo();
-      await collectionStore.getCollections();
 
       pageLoading.value = false;
     });
@@ -110,8 +108,14 @@ function goToPreviousStep() {
       if (collectionStore.stepUpload === NftUploadStep.IMAGES) {
         collectionStore.stepUpload = NftUploadStep.FILE;
       }
-      if (collectionStore.stepUpload === NftUploadStep.PREVIEW) {
+      return;
+    case NftCreateStep.PREVIEW:
+      if (collectionStore.amount === 1) {
+        collectionStore.nftStep = NftCreateStep.MULTIPLE;
         collectionStore.stepUpload = NftUploadStep.IMAGES;
+      }
+      if (collectionStore.amount === 0) {
+        collectionStore.nftStep = NftCreateStep.SINGLE;
       }
       return;
     default:

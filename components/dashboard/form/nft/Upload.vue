@@ -4,30 +4,9 @@
       class="w-full text-center"
       :class="collectionStore.stepUpload === NftUploadStep.PREVIEW ? 'self-start' : 'max-w-lg'"
     >
-      <!-- Preview -->
-      <template
-        v-if="
-          isStepAvailable(NftUploadStep.PREVIEW) &&
-          collectionStore.stepUpload === NftUploadStep.PREVIEW
-        "
-      >
-        <NftPreview>
-          <Btn
-            class="w-60"
-            type="secondary"
-            @click="collectionStore.stepUpload = NftUploadStep.IMAGES"
-          >
-            {{ $t('nft.upload.takeMeBack') }}
-          </Btn>
-          <Btn class="w-60" type="primary" @click="emit('submit')">
-            {{ $t('nft.upload.previewConfirm') }}
-          </Btn>
-        </NftPreview>
-      </template>
-
       <!-- Upload Img -->
       <template
-        v-else-if="
+        v-if="
           isStepAvailable(NftUploadStep.IMAGES) &&
           collectionStore.stepUpload === NftUploadStep.IMAGES
         "
@@ -97,7 +76,7 @@
             size="large"
             :loading="nft.loadingImages.value"
             :disabled="!collectionStore.hasImages || !nft.allImagesUploaded.value"
-            @click="collectionStore.stepUpload = NftUploadStep.PREVIEW"
+            @click="collectionStore.nftStep = NftCreateStep.PREVIEW"
           >
             {{ $t('nft.upload.previewNfts') }}
           </Btn>
@@ -194,9 +173,6 @@ import type { UploadInst } from 'naive-ui';
 
 const collectionStore = useCollectionStore();
 const nft = useNft();
-const $i18n = useI18n();
-
-const emit = defineEmits(['submit']);
 
 const uploadRef = ref<UploadInst | null>(null);
 const modalMetadataAttributesVisible = ref<boolean>(false);
@@ -250,4 +226,11 @@ function removeImages() {
   collectionStore.resetImages();
   uploadRef.value?.clear();
 }
+
+/* function handleAddAnother() {
+  collectionStore.resetImages();
+  collectionStore.resetFile();
+  collectionStore.nftStep = NftCreateStep.AMOUNT;
+  collectionStore.stepUpload = NftUploadStep.FILE;
+} */
 </script>

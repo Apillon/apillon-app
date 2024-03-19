@@ -60,8 +60,8 @@ export enum NftCreateStep {
   AMOUNT = 1,
   SINGLE = 2,
   MULTIPLE = 3,
-  DEPLOY = 4,
-  PREVIEW = 5,
+  PREVIEW = 4,
+  DEPLOY = 5,
 }
 /** Multiple NFTs upload steps */
 export enum NftUploadStep {

@@ -34,12 +34,10 @@ export default function useNft() {
     );
   });
   const hasRequiredMetadata = computed<boolean>(() => {
-    const csvColumns: Array<string> = collectionStore.csvColumns.map(
-      (item: NTableColumn<KeyTitle>) => {
-        return (item as KeyTitle).key;
-      }
-    );
-    return metadataRequired.every(item => csvColumns.includes(item));
+    const columns: Array<string> = collectionStore.columns.map((item: NTableColumn<KeyTitle>) => {
+      return (item as KeyTitle).key;
+    });
+    return metadataRequired.every(item => columns.includes(item));
   });
   const isCsvValid = computed<boolean>(() => {
     return isSameNumOfRows.value && hasRequiredMetadata.value;
@@ -116,7 +114,7 @@ export default function useNft() {
       complete: function (results: CsvFileData) {
         if (results.data.length) {
           collectionStore.csvData = results.data;
-          collectionStore.csvColumns = results.meta.fields.map(item => {
+          collectionStore.columns = results.meta.fields.map(item => {
             return {
               title: item,
               key: item,
@@ -246,6 +244,9 @@ export default function useNft() {
       message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));
       onError();
     } else {
+      if (collectionStore.amount === 0) {
+        collectionStore.form.single.image = image.name;
+      }
       collectionStore.images.push(image);
     }
 

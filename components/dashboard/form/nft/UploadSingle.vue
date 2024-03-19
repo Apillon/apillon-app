@@ -6,16 +6,16 @@
       <p class="w-2/3">
         {{ $t('nft.single.uploadDescription') }}
       </p>
-      <div v-if="collectionStore.images.length > 0">
+      <div v-if="collectionStore.form.single.image">
         <div class="bg-bg-light rounded-xl overflow-hidden w-72">
           <figure class="flex flex-col h-full">
             <Image
-              :src="imageByName(collectionStore.images[0]?.name)"
+              :src="imageByName(collectionStore.form.single.image)"
               class="w-full h-full object-contain"
               :alt="collectionStore.images[0]?.name"
             />
             <figcaption class="block h-12 px-4 py-3 font-bold">
-              {{ collectionStore.images[0]?.name }}
+              {{ collectionStore.form.single.image }}
               <button
                 class="flex justify-center items-center p-1 float-right"
                 @click="removeImages()"
@@ -32,7 +32,6 @@
           accept="image/png, image/jpeg"
           :default-file-list="collectionStore.images"
           :show-file-list="false"
-          :max="1"
           directory-dnd
           :custom-request="nft.uploadImageRequest"
           @change="onUploadChange"
@@ -66,23 +65,6 @@
           @submit.prevent="handleSubmitForm"
         >
           <n-grid class="items-end" :cols="12" :x-gap="32">
-            <!-- Collection -->
-            <n-form-item-gi
-              v-if="collectionStore.active.collectionStatus !== CollectionStatus.DEPLOYED"
-              :span="12"
-              path="collection"
-              :label="infoLabel('nftCollection')"
-              :label-props="{ for: 'collection' }"
-            >
-              <select-options
-                v-model:value="collectionStore.form.single.collectionUuid"
-                :options="collections"
-                :input-props="{ id: 'collection' }"
-                :placeholder="$t('general.pleaseSelect')"
-                filterable
-              />
-            </n-form-item-gi>
-
             <!-- NFT name -->
             <n-form-item-gi
               :span="12"
@@ -113,17 +95,18 @@
               />
             </n-form-item-gi>
 
-            <!-- Royalties -->
+            <!-- NFT description -->
             <n-form-item-gi
               :span="12"
-              path="royalties"
-              :label="infoLabel('nftRoyalties')"
-              :label-props="{ for: 'royalties' }"
+              path="description"
+              :label="infoLabel('nftDescription')"
+              :label-props="{ for: 'description' }"
             >
               <n-input
-                v-model:value="collectionStore.form.single.royalties"
-                :input-props="{ id: 'royalties' }"
+                v-model:value="collectionStore.form.single.description"
+                :input-props="{ id: 'description' }"
                 :placeholder="$t('general.typeHere')"
+                type="textarea"
                 clearable
               />
             </n-form-item-gi>
@@ -143,29 +126,13 @@
                 clearable
               />
             </n-form-item-gi>
-
-            <!-- NFT description -->
-            <n-form-item-gi
-              :span="12"
-              path="description"
-              :label="infoLabel('nftDescription')"
-              :label-props="{ for: 'description' }"
-            >
-              <n-input
-                v-model:value="collectionStore.form.single.description"
-                :input-props="{ id: 'description' }"
-                :placeholder="$t('general.typeHere')"
-                type="textarea"
-                clearable
-              />
-            </n-form-item-gi>
           </n-grid>
         </n-form>
       </div>
       <FormNftPropertiesSingle />
     </div>
 
-    <Btn class="my-8" @click="handleSubmitForm">{{ $t('nft.deploy.single') }}</Btn>
+    <Btn class="my-8" @click="handleSubmitForm">{{ $t('form.proceed') }}</Btn>
   </div>
 </template>
 
@@ -178,20 +145,7 @@ const collectionStore = useCollectionStore();
 
 const { formRef, rulesSingle } = useCollection();
 
-const emit = defineEmits(['submit']);
-
 const uploadRef = ref<UploadInst | null>(null);
-const collections = ref<Array<{ label: string; value: string }>>([]);
-
-onMounted(() => {
-  collectionStore.items.forEach(item => {
-    const collection: { label: string; value: string } = {
-      label: `${item.name} | ${item.symbol}`,
-      value: item.collection_uuid,
-    };
-    collections.value.push(collection);
-  });
-});
 
 function infoLabel(field: string) {
   if (
@@ -216,7 +170,8 @@ function onUploadChange(options: FileUploadOptions) {
 }
 
 function removeImages() {
-  collectionStore.resetImages();
+  collectionStore.images.pop();
+  collectionStore.form.single.image = '';
   uploadRef.value?.clear();
 }
 
@@ -233,14 +188,25 @@ function handleSubmitForm(e: Event | MouseEvent) {
       errors?.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (collectionStore.form.single.copies > 0) {
-      for (let index = 0; index < collectionStore.form.single.copies; index += 1) {
-        collectionStore.metadata.push(collectionStore.form.single);
-      }
+    } else {
+      collectionStore.metadata.push({ ...collectionStore.form.single });
 
-      collectionStore.metadata.forEach(item => (item.image = collectionStore.images[0]?.name));
+      collectionStore.columns = [
+        {
+          title: 'image',
+          key: 'image',
+        },
+        {
+          title: 'name',
+          key: 'name',
+        },
+        {
+          title: 'description',
+          key: 'description',
+        },
+      ];
 
-      emit('submit');
+      collectionStore.nftStep = NftCreateStep.PREVIEW;
     }
   });
 }

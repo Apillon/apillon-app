@@ -77,11 +77,11 @@ const paginationDataTable = reactive({
 const nfts = computed(() => {
   const first = (page.value - 1) * pageSize.value;
   let last = first + pageSize.value;
-  if (last > collectionStore.csvData.length) {
-    last = collectionStore.csvData.length;
+  if (last > collectionStore.metadata.length) {
+    last = collectionStore.metadata.length;
   }
 
-  return collectionStore.csvData.slice(first, last);
+  return collectionStore.metadata.slice(first, last);
 });
 
 const createColumns = (): DataTableColumns<Record<string, string>> => {
@@ -100,14 +100,14 @@ const createColumns = (): DataTableColumns<Record<string, string>> => {
       key: 'id',
       title: 'ID',
     },
-    ...collectionStore.csvColumns,
+    ...collectionStore.columns,
   ];
 };
 const columns = createColumns();
 const rowKey = (row: TransactionInterface) => row.id;
 
 const data = computed(() => {
-  return collectionStore.csvData.map((item, key) => {
+  return collectionStore.metadata.map((item, key) => {
     return {
       id: key + 1,
       ...item,
