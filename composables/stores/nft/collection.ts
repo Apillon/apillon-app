@@ -52,6 +52,7 @@ export const useCollectionStore = defineStore('collection', {
         royaltiesFees: 0,
       },
       single: {
+        image: '',
         id: '',
         collectionUuid: '',
         name: '',
@@ -111,6 +112,7 @@ export const useCollectionStore = defineStore('collection', {
       }
     },
     resetSingleFormData() {
+      this.form.single.image = '';
       this.form.single.id = '';
       this.form.single.collectionUuid = this.active?.collection_uuid;
       this.form.single.name = '';
