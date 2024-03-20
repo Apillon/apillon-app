@@ -93,7 +93,7 @@
       "resetPassword": "Reset password",
       "title": "Log in to Apillon",
       "wallet": "Log in with Wallet",
-      "withEmail": "login with email",
+      "withEmail": "Log in with email",
       "kilt": "Log in with KILT "
     },
     "onboarding": {
@@ -117,7 +117,7 @@
       "checkEmail": "Check your e-mail",
       "checkInbox": "Crickets in your inbox?",
       "continueWithAT": "Continue with Apillon",
-      "description": "Build your first Web3 application with Apillon. Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
+      "description": "Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
       "emailConfirmed": "Email confirmed",
       "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
       "enterDesiredPassword": "Enter a password to finish creating the account.",
@@ -131,7 +131,7 @@
       "walletConfirmed": "Wallet and email confirmed, logging you in...",
       "walletEmail": "email is required for wallet login",
       "withWallet": "or sign up with wallet",
-      "withEmail": "sign up with email"
+      "withEmail": "Sign up with email"
     },
     "terms": {
       "accept": "I have read and agree to ",
@@ -146,7 +146,7 @@
       "connect": {
         "btn": "Connect Polkadot wallet",
         "info": "Connect with one of Polkadot's wallet",
-        "polkadot": "Connect polkadot wallet",
+        "polkadot": "Connect Polkadot wallet",
         "success": "You successfully logged in with your Wallet",
         "title": "Connect wallet",
         "different": "Connect different wallet",
@@ -171,7 +171,7 @@
       },
       "login": {
         "success": "Wallet has been successfully connected",
-        "title": "Login with wallet",
+        "title": "Log in with wallet",
         "walletAccountNotConnected": "A wallet account must be connected",
         "walletNotConnected": "A wallet must be connected",
         "walletNotConnected2": "A wallet must be connected, please reconnect. If the issue persist try reloading."
@@ -188,18 +188,18 @@
       "assignDisabled": "Please upload file first, to encrypt content and assign it to NFT.",
       "create": "Create contract",
       "createBucket": "Create a bucket",
-      "createFirst": "Create first contract",
+      "createFirst": " Start creating",
       "deployerAddress": "Deployer address",
       "deposit": "Deposit to cluster",
       "edit": "Edit",
-      "empty": "Create your first contract",
-      "emptyInfo": "Add it to your Web3 project",
+      "empty": "Create Schrödinger’s NFT contract",
+      "emptyInfo": "Schrödinger’s NFT is the first use case of Apillon’s Web3 Computing. More options will follow.",
       "encryptFile": "Encrypt file",
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
       "name": "Contract name",
-      "new": "New contract",
+      "new": "New Schrödinger’s NFT contract",
       "orSelectExisting": "or select existing bucket",
       "selectBucket": "Continue with selected bucket",
       "title": "Contract title",
@@ -226,7 +226,7 @@
         "6": "FAILED"
       },
       "type": {
-        "1": "SCHRODINGER"
+        "1": "Schrödinger’s NFT"
       }
     },
     "upload": {
@@ -863,16 +863,16 @@
         "contractType": "Contract type",
         "description": "Contract description",
         "name": "Contract name",
-        "nftContractAddress": "Contract Address",
+        "nftContractAddress": "NFT collection address",
         "nftChainRpcUrl": "Chain RPC URL",
         "nftId": "NFT ID",
         "restrictToOwner": "Restrict to owner",
-        "useApillonCollection": "Use Apillon`s Collection",
+        "useApillonCollection": "Use Apillon-built NFT collection",
         "labelInfo": {
-          "nftContractAddress": "Contract Address which will be used to encrypt/decrypt content.",
+          "nftContractAddress": "Address of the NFT collection used to encrypt/decrypt files.",
           "nftChainRpcUrl": "Chain RPC URL of used contract",
-          "restrictToOwner": "Own owner will be able to encrypt/decrypt files",
-          "useApillonCollection": "You can use a collection you created on Apillon or any collection you created on other chains."
+          "restrictToOwner": "Only owner will be able to encrypt/decrypt files.",
+          "useApillonCollection": "You can use an NFT collection you created on Apillon or any NFT collection you built on other chains."
         }
       }
     },
@@ -931,8 +931,8 @@
       "websiteDescription": "Website description",
       "websiteName": "Website name",
       "contract": {
-        "name": "Contract name",
-        "description": "Contract description",
+        "name": "Enter contract name",
+        "description": "Enter contract description",
         "nftContractAddress": "Select or type contract address",
         "nftChainRpcUrl": "Chain RPC URL",
         "accountAddress": "Account Address"
