@@ -11,6 +11,12 @@ export function ruleDescription(errMsg: string) {
     trigger: 'input',
   };
 }
+export function ruleNaturalNumber(errMsg: string) {
+  return {
+    validator: validateNaturalNumber,
+    message: errMsg,
+  };
+}
 
 /**
  * Custom validations

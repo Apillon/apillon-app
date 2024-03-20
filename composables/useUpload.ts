@@ -155,9 +155,6 @@ export default function useUpload() {
       /** Upload file to S3 using fetch */
       const req = fetch(uploadFilesRequest.url, {
         method: 'PUT',
-        /* headers: {
-          'Content-Type': 'multipart/form-data',
-        }, */
         body: file.file,
       });
       putRequests.value.push(req);

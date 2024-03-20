@@ -45,6 +45,9 @@ const Endpoints = {
   credit: (projectUuid: string) => {
     return `/projects/${projectUuid}/credit`;
   },
+  creditSettings: (projectUuid: string) => {
+    return `/projects/${projectUuid}/credit-settings`;
+  },
   creditTransactions: (projectUuid: string) => {
     return `/projects/${projectUuid}/credit/transactions`;
   },
