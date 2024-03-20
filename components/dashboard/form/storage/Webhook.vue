@@ -114,6 +114,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 type FormWebhook = {
   url: string;
   authType: string;
@@ -181,7 +183,7 @@ const rules = computed<NFormRules>(() => {
   };
 });
 
-const authTypes = ref<Array<NSelectOption>>([
+const authTypes = ref<Array<SelectOption>>([
   {
     value: BucketWebhookAuthMethod.NONE,
     label: $i18n.t(`form.authTypes.${BucketWebhookAuthMethod.NONE}`),

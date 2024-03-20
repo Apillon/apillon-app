@@ -22,10 +22,7 @@
 
   <!-- Modal - Create Service -->
   <modal v-model:show="modalInfoVisible" :title="$t('social.chat.settings')">
-    <GrillChatSettings
-      v-if="chatStore.active.spaceId"
-      :space-id="chatStore.active.spaceId.toString()"
-    />
+    <GrillChatSettings :space-id="chatStore.active.spaceId?.toString()" />
   </modal>
 </template>
 

@@ -51,7 +51,7 @@ onMounted(() => {
       } else {
         chatStore.active = currentChat;
 
-        await postStore.getPosts(chatUuid.value);
+        await postStore.getPosts();
         checkUnfinishedPost();
 
         pageLoading.value = false;
@@ -74,7 +74,7 @@ function checkUnfinishedPost() {
   }
 
   postInterval = setInterval(async () => {
-    const posts = await postStore.fetchPosts(chatUuid.value, postStore.pagination.page, false);
+    const posts = await postStore.fetchPosts(postStore.pagination.page, false);
     const post = posts.find(item => item.post_uuid === unfinishedPost.post_uuid);
     if (!post || post.status >= SocialStatus.ACTIVE) {
       clearInterval(postInterval);

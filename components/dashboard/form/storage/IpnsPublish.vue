@@ -46,6 +46,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 type FormIpnsPublish = {
   ipns?: string;
 };
@@ -77,7 +79,7 @@ const rules: NFormRules = {
   ],
 };
 
-const ipnsItems = computed<Array<NSelectOption>>(() => {
+const ipnsItems = computed<Array<SelectOption>>(() => {
   return ipnsStore.items.map(item => {
     return { label: item.name, value: item.ipns_uuid };
   });

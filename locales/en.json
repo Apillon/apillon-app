@@ -801,6 +801,7 @@
       "bucketName": "Bucket name",
       "cardHolder": "Card holder",
       "cardNumber": "Card number",
+      "chat": "Hub (optional)",
       "chatAbout": "About",
       "chatImage": "Hub image",
       "chatName": "Hub name",

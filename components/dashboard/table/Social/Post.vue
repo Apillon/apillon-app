@@ -32,7 +32,7 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
       type: 'expand',
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       renderExpand(row: PostInterface) {
-        if (chatStore.active.spaceId && row.postId) {
+        if (row.postId) {
           return h(
             resolveComponent('GrillChatSettings'),
             {
@@ -149,11 +149,12 @@ const dropdownOptions = computed(() => {
 });
 
 onMounted(() => {
-  const spaceId = chatStore.active.spaceId;
+  const spaceId = chatStore.active.spaceId || 'space_uuid';
 
   if (spaceId) {
     postStore.updateSettings(`${spaceId}`);
   }
+  console.log(postStore.settings);
 });
 
 /** Search posts */
@@ -168,12 +169,12 @@ const debouncedSearchFilter = debounce(handlePageChange, 500);
 
 /** On page change, load data */
 async function handlePageChange(page: number) {
-  await postStore.getPosts(props.spaceUuid, page);
+  await postStore.getPosts(page);
   postStore.pagination.page = page;
 }
 
 async function selectPost() {
-  const spaceId = chatStore.active.spaceId;
+  const spaceId = chatStore.active.spaceId || 'space_uuid';
   const postId = currentRow.value?.postId || '';
 
   if (spaceId && currentRow?.value) {

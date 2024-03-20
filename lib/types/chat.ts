@@ -50,6 +50,7 @@ declare global {
    */
   interface PostInterface extends BaseObjectInterface {
     body: string;
+    hubName: string;
     postId: number | null;
     postType: number;
     post_uuid: string;

@@ -89,6 +89,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
@@ -111,7 +113,7 @@ const actionsDisabled = computed<boolean>(() => {
   return contractStore.active.contractStatus !== ContractStatus.DEPLOYED;
 });
 
-const buckets = computed<Array<NSelectOption>>(() => {
+const buckets = computed<Array<SelectOption>>(() => {
   return bucketStore.items.map(item => {
     return { label: item.name, value: item.bucket_uuid };
   });

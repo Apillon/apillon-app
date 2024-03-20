@@ -58,9 +58,11 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 const collectionStore = useCollectionStore();
 
-const displayTypes = ref<Array<NSelectOption>>([
+const displayTypes = ref<Array<SelectOption>>([
   { value: 'string', label: 'String' },
   { value: 'date', label: 'Date' },
   { value: 'number', label: 'Number' },

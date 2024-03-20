@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { SelectProps } from 'naive-ui';
+import type { SelectOption, SelectProps } from 'naive-ui';
 
 const attrs = useAttrs();
 const emit = defineEmits(['roleChange']);
@@ -46,5 +46,5 @@ const selectedRole = computed({
   },
 });
 
-const userRoles: Array<NSelectOption> = CreateUserRoles();
+const userRoles: Array<SelectOption> = CreateUserRoles();
 </script>

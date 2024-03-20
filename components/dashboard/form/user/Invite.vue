@@ -43,6 +43,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 type FormUserInvite = {
   email: string;
   role_id: number | null;
@@ -55,7 +57,7 @@ const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const userRoles: Array<NSelectOption> = CreateUserRoles();
+const userRoles: Array<SelectOption> = CreateUserRoles();
 
 /** Col widths */
 const { width } = useWindowSize();

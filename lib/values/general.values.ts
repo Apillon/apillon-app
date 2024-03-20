@@ -1,3 +1,4 @@
+import type { SelectOption } from 'naive-ui';
 import { DefaultUserRole } from '../types/project';
 
 export const MINUTE_IN_MS = 60 * 1000; // 1 minute
@@ -39,6 +40,7 @@ export const LsW3WarnKeys = {
   HOSTING_NEW: 'al_w3warn_hosting_new',
   HOSTING_DEPLOY: 'al_w3warn_hosting_deploy',
   NFT_NEW: 'al_w3warn_nft_new',
+  SOCIAL_NEW: 'al_w3warn_social_new',
 };
 
 export const LsCacheKeys = {
@@ -100,7 +102,7 @@ export const UserRoleIds = [
 ];
 
 /** User roles */
-export function CreateUserRoles(): Array<NSelectOption> {
+export function CreateUserRoles(): Array<SelectOption> {
   return Object.entries(DefaultUserRoles).map(([roleId, role]) => {
     return {
       label: window.$i18n.t(`profile.userRole.${role}`),

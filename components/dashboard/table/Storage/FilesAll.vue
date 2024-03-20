@@ -45,6 +45,7 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
+import type { SelectOption } from 'naive-ui';
 
 const $i18n = useI18n();
 const dataStore = useDataStore();
@@ -58,7 +59,7 @@ const currentRow = ref<FileUploadInterface>({} as FileUploadInterface);
 
 /** File status */
 const fileStatus = ref<number | undefined>();
-const fileStatuses = ref<Array<NSelectOption>>(
+const fileStatuses = ref<Array<SelectOption>>(
   enumValues(FileUploadRequestFileStatus).map(value => {
     return {
       value,

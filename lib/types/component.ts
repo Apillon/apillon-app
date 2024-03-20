@@ -34,6 +34,7 @@ declare global {
     display_type: string;
     hidden?: boolean;
   };
+  type RenderOptionInfo = { node: VNode; option: SelectOption; selected: boolean };
 
   interface SocialInterface {
     name: string;
@@ -80,7 +81,6 @@ declare global {
   interface NFormRules extends FormRules {}
   interface NFormItemRule extends FormItemRule {}
   interface NFormValidationError extends FormValidationError {}
-  interface NSelectOption extends SelectOption {}
   interface NUploadCustomRequestOptions extends UploadCustomRequestOptions {}
 
   type FileUploadOptions = {
