@@ -13,7 +13,6 @@ const config: ConfigInterface = {
   publishedFeatures: [
     'ACCESS',
     'API_KEYS',
-    'APILLON_REGISTER',
     'AUTHENTICATION',
     'BILLING',
     'CONFIGURATION',
