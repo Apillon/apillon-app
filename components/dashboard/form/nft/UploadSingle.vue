@@ -34,7 +34,6 @@
           :show-file-list="false"
           directory-dnd
           :custom-request="nft.uploadImageRequest"
-          @change="onUploadChange"
           @remove="nft.handleImageRemove"
         >
           <n-upload-dragger class="h-40">
@@ -72,7 +71,7 @@
               :label="infoLabel('nftId')"
               :label-props="{ for: 'nftId' }"
             >
-              <n-input
+              <n-input-number
                 v-model:value="collectionStore.form.single.id"
                 :input-props="{ id: 'nftId' }"
                 :placeholder="$t('general.typeHere')"
@@ -165,10 +164,6 @@ function infoLabel(field: string) {
   return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
 }
 
-function onUploadChange(options: FileUploadOptions) {
-  nft.handleImageChange(options);
-}
-
 function removeImages() {
   collectionStore.images.pop();
   collectionStore.form.single.image = '';
@@ -189,25 +184,41 @@ function handleSubmitForm(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      collectionStore.metadata.push({ ...collectionStore.form.single });
+      for (let index = 0; index < collectionStore.form.single.copies; index += 1) {
+        collectionStore.metadata.push({ ...collectionStore.form.single });
+        collectionStore.form.single.id += 1;
+      }
 
-      collectionStore.columns = [
-        {
-          title: 'image',
-          key: 'image',
-        },
-        {
-          title: 'name',
-          key: 'name',
-        },
-        {
-          title: 'description',
-          key: 'description',
-        },
-      ];
+      collectionStore.columns = createColumns(collectionStore.form.single);
 
       collectionStore.nftStep = NftCreateStep.PREVIEW;
     }
   });
+
+  function createColumns(obj: Record<string, any>): { title: string; key: any }[] {
+    const keysArray: { title: string; key: any }[] = [];
+
+    Object.keys(obj).forEach(key => {
+      if (key !== 'collectionUuid' && key !== 'copies' && key !== 'id') {
+        if (Array.isArray(obj[key])) {
+          // If key is an array, include keys from objects within the array
+          obj[key].forEach((item: Record<string, any>, index: number) => {
+            Object.keys(item).forEach(subKey => {
+              if (subKey === 'trait_type') {
+                keysArray.push({
+                  title: item[subKey],
+                  key: `${key}[${index}].value`,
+                });
+              }
+            });
+          });
+        } else {
+          // Otherwise, include key directly
+          keysArray.push({ title: key, key });
+        }
+      }
+    });
+    return keysArray;
+  }
 }
 </script>

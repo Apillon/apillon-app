@@ -5,12 +5,7 @@
       :class="collectionStore.stepUpload === NftUploadStep.PREVIEW ? 'self-start' : 'max-w-lg'"
     >
       <!-- Upload Img -->
-      <template
-        v-if="
-          isStepAvailable(NftUploadStep.IMAGES) &&
-          collectionStore.stepUpload === NftUploadStep.IMAGES
-        "
-      >
+      <template v-if="collectionStore.stepUpload === NftUploadStep.IMAGES">
         <h2>{{ $t('nft.upload.titleImage') }}</h2>
         <p class="text-body whitespace-pre-line">
           {{ $t('nft.upload.infoImages') }}
@@ -171,8 +166,8 @@
 import { vOnClickOutside } from '@vueuse/components';
 import type { UploadInst } from 'naive-ui';
 
-const collectionStore = useCollectionStore();
 const nft = useNft();
+const collectionStore = useCollectionStore();
 
 const uploadRef = ref<UploadInst | null>(null);
 const modalMetadataAttributesVisible = ref<boolean>(false);
@@ -182,19 +177,6 @@ onMounted(() => {
     nft.parseUploadedFile(collectionStore.csvFile.file);
   }
 });
-
-function isStepAvailable(step: number) {
-  if (step === NftUploadStep.PREVIEW) {
-    return (
-      collectionStore.hasImages &&
-      nft.allImagesUploaded.value &&
-      isStepAvailable(NftUploadStep.IMAGES)
-    );
-  } else if (step === NftUploadStep.IMAGES) {
-    return collectionStore.hasCsvFile && collectionStore.hasMetadata;
-  }
-  return true;
-}
 
 function createMetadata() {
   collectionStore.metadata = nft.createNftData();
@@ -226,11 +208,4 @@ function removeImages() {
   collectionStore.resetImages();
   uploadRef.value?.clear();
 }
-
-/* function handleAddAnother() {
-  collectionStore.resetImages();
-  collectionStore.resetFile();
-  collectionStore.nftStep = NftCreateStep.AMOUNT;
-  collectionStore.stepUpload = NftUploadStep.FILE;
-} */
 </script>

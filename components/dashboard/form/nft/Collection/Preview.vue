@@ -6,8 +6,12 @@
         {{ $t('nft.collection.previewInfo') }}
       </p>
     </div>
-    <div class="mb-4">
-      <Image :src="createThumbnailUrl(collectionStore.form.base.coverImage)" class="h-40" />
+    <div class="mb-4 relative">
+      <Image :src="createThumbnailUrl(collectionStore.form.base.coverImage)" class="h-50" />
+      <Image
+        :src="createThumbnailUrl(collectionStore.form.base.logo)"
+        class="top-2 left-2 absolute h-20 border-2 border-bg-lighter"
+      />
     </div>
     <div>
       <h4 class="mb-2">{{ $t('nft.collection.data') }}</h4>

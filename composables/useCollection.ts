@@ -114,6 +114,13 @@ export default function useCollection() {
       message: $i18n.t('validation.collectionCoverImageRequired'),
     },
   ];
+  const validateSingleIdRequired: NFormItemRule[] = [
+    ruleRequired($i18n.t('validation.nftIdRequired')),
+    {
+      validator: validateSingleNftIdUnique,
+      message: $i18n.t('validation.nftIdDuplicate'),
+    },
+  ];
 
   const rules: NFormRules = {
     logo: rulesCollectionLogo,
@@ -152,8 +159,8 @@ export default function useCollection() {
   };
 
   const rulesSingle: NFormRules = {
-    id: ruleRequired($i18n.t('validation.nftId')),
-    'single.id': ruleRequired($i18n.t('validation.nftId')),
+    id: validateSingleIdRequired,
+    'single.id': validateSingleIdRequired,
     collectionUuid: ruleRequired($i18n.t('validation.nftCollection')),
     'single.collectionUuid': ruleRequired($i18n.t('validation.nftCollection')),
     name: ruleRequired($i18n.t('validation.nftName')),
@@ -189,6 +196,12 @@ export default function useCollection() {
   }
   function validateCollectionCoverImage(_: NFormItemRule): boolean {
     return !!collectionStore.form.base.coverImage?.id;
+  }
+  function validateSingleNftIdUnique(_: NFormItemRule): boolean {
+    if (collectionStore.metadata.length >= 1) {
+      return !collectionStore.metadata.find(item => item.id === collectionStore.form.single.id);
+    }
+    return true;
   }
 
   function disablePasteDate(ts: number) {

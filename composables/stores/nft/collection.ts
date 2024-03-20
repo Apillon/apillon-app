@@ -118,6 +118,7 @@ export const useCollectionStore = defineStore('collection', {
       this.form.single.name = '';
       this.form.single.description = '';
       this.form.single.copies = 1;
+      this.form.single.attributes = [];
     },
     resetForms() {
       this.form.base.logo = {} as FileListItemType;

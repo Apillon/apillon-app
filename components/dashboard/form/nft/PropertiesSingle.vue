@@ -1,66 +1,66 @@
 <template>
   <div class="bg-bg-light p-4 w-full rounded-md">
-    <div class="mb-4 flex">
-      <div>
-        <span class="mr-4">{{ $t('nft.single.properties') }}</span>
-        <p>{{ $t('nft.single.propertiesInfo') }}</p>
-      </div>
-
-      <FormNftAttributes title="Properties" type="string" />
+    <div class="flex">
+      <h4>Attributes</h4>
+      <FormNftAttributes />
     </div>
-    <div class="mb-4 flex">
-      <div>
-        <span class="mr-4">{{ $t('nft.single.levels') }}</span>
-        <p>{{ $t('nft.single.levelsInfo') }}</p>
-      </div>
-
-      <FormNftAttributes title="Levels" type="number" />
-    </div>
-    <div class="mb-4 flex">
-      <div>
-        <span class="mr-4">{{ $t('nft.single.stats') }}</span>
-        <p>{{ $t('nft.single.statsInfo') }}</p>
-      </div>
-
-      <FormNftAttributes title="Stats" type="number" />
-    </div>
-    <div class="mb-4 flex">
-      <div>
-        <span class="mr-4">{{ $t('nft.single.boosts') }}</span>
-        <p>{{ $t('nft.single.boostsInfo') }}</p>
-      </div>
-
-      <FormNftAttributes title="Boosts" type="number" />
-    </div>
-    <div class="mb-4 flex">
-      <div>
-        <span class="mr-4">{{ $t('nft.single.date') }}</span>
-        <p>{{ $t('nft.single.dateInfo') }}</p>
-      </div>
-
-      <FormNftAttributes title="Date" type="date" />
-    </div>
-    <div class="mb-4 flex">
-      <div>
-        <span class="mr-4">{{ $t('nft.single.unlockableContent') }}</span>
-        <p>{{ $t('nft.single.unlockableContentInfo') }}</p>
-      </div>
-      <div class="ml-auto">
-        <n-switch />
-      </div>
-    </div>
-    <div class="w-full border-b-1 bg-bg-lightest mb-4"></div>
-    <div class="mb-4">
-      <span class="mr-4">{{ $t('nft.single.displaySettings') }}</span>
-      <br />
-      <n-radio-group v-model:value="value" name="radiogroup">
-        <n-radio :label="$t('nft.single.showDisplay')" :value="1" /><br />
-        <n-radio :label="$t('nft.single.hideDisplay')" :value="2" />
-      </n-radio-group>
+    <div class="mt-4">
+      <n-data-table
+        :bordered="false"
+        :columns="columns"
+        :data="collectionStore.form.single.attributes"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const value = ref<number>(1);
+const { t } = useI18n();
+const collectionStore = useCollectionStore();
+
+const createColumns = (): NDataTableColumns<AttributeInterface> => {
+  return [
+    {
+      title: t('form.label.nftName'),
+      key: 'trait_type',
+      render(row) {
+        return h('span', { class: 'whitespace-nowrap' }, row.trait_type);
+      },
+    },
+    {
+      title: t('form.label.nftDisplayType'),
+      key: 'display_type',
+      render(row) {
+        return h('span', { class: 'whitespace-nowrap' }, row.display_type);
+      },
+    },
+    {
+      title: t('form.label.nftValue'),
+      key: 'value',
+      render(row) {
+        return h('span', { class: 'whitespace-nowrap' }, row.value);
+      },
+    },
+    {
+      key: 'action_remove',
+      title: '',
+      align: 'right',
+      render(row: AttributeInterface) {
+        return h(
+          'button',
+          { class: 'icon-delete text-xl text-white', onClick: () => removeItem(row) },
+          ''
+        );
+      },
+    },
+  ];
+};
+
+const columns = createColumns();
+
+function removeItem(attribute: AttributeInterface) {
+  collectionStore.form.single.attributes = collectionStore.form.single.attributes.filter(
+    att => att !== attribute
+  );
+}
 </script>

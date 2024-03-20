@@ -131,7 +131,7 @@
 
         <!-- Buttons switch preview-->
         <div
-          v-if="collectionStore.stepUpload === NftUploadStep.PREVIEW"
+          v-if="collectionStore.nftStep === NftCreateStep.PREVIEW"
           class="absolute right-0 top-2 flex items-center"
         >
           <span class="mr-2">{{ $t('general.view') }}:</span>
@@ -170,6 +170,7 @@
 <script lang="ts" setup>
 import type { TabsInst } from 'naive-ui';
 import { useMessage } from 'naive-ui';
+import { NftCreateStep } from '../../../../lib/types/nft';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -257,16 +258,16 @@ async function deploy() {
 
     collectionStore.form.single.collectionUuid = res.data.collection_uuid;
 
+    /** Prepares logo and cover image for upload */
     prepareImagesForUpload();
 
+    /** Uploads logo and cover image */
     await uploadFiles(res.data.bucket_uuid, images.value);
-
-    /** Deployment status */
-    collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYING;
 
     /** Deployment status */
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
 
+    /** Redirects to NFT Create tab */
     collectionStore.mintTab = NftMintTab.MINT;
   } catch (error) {
     /** Deployment status */
@@ -320,8 +321,16 @@ function goToPreviousStep() {
           if (collectionStore.stepUpload === NftUploadStep.IMAGES) {
             collectionStore.stepUpload = NftUploadStep.FILE;
           }
-          if (collectionStore.stepUpload === NftUploadStep.PREVIEW) {
+          return;
+        case NftCreateStep.PREVIEW:
+          if (collectionStore.amount === 1) {
+            collectionStore.nftStep = NftCreateStep.MULTIPLE;
             collectionStore.stepUpload = NftUploadStep.IMAGES;
+          }
+          if (collectionStore.amount === 0) {
+            collectionStore.nftStep = NftCreateStep.SINGLE;
+            collectionStore.metadata.pop();
+            collectionStore.images.pop();
           }
           return;
       }
