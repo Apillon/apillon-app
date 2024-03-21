@@ -38,11 +38,7 @@
     </n-form-item>
 
     <!--  Chat Uuid -->
-    <n-form-item
-      path="chat_uuid"
-      :label="$t('form.label.chat')"
-      :label-props="{ for: 'chat_uuid' }"
-    >
+    <n-form-item path="chat_uuid" :label="hubInfoLabel()" :label-props="{ for: 'chat_uuid' }">
       <select-options
         v-model:value="formData.space_uuid"
         :options="chats"
@@ -53,7 +49,7 @@
     </n-form-item>
 
     <!--  Form submit -->
-    <n-form-item :show-feedback="false">
+    <n-form-item :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="$t('social.post.create')" />
       <Btn
         type="primary"
@@ -147,6 +143,26 @@ onMounted(() => {
   paymentStore.getPriceList();
   chatStore.getChats();
 });
+
+function hubInfoLabel() {
+  const tooltipKey =
+    chatStore.items.length === 0 ? 'form.label.chatInfoEmpty' : 'form.label.chatInfo';
+  return [
+    h('span', { class: 'mr-1' }, t('form.label.chat')),
+    h('span', {}, '('),
+    h(
+      resolveComponent('NuxtLink'),
+      {
+        class: 'text-yellow hover:underline',
+        to: { name: 'dashboard-service-social-hub' },
+        target: '_blank',
+      },
+      t('social.post.manageHubs')
+    ),
+    h('span', {}, ')'),
+    h(resolveComponent('IconInfo'), { size: 'sm', tooltip: t(tooltipKey) }, ''),
+  ];
+}
 
 /**
  * Render functions

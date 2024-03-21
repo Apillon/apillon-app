@@ -10,6 +10,10 @@
     :row-props="rowProps"
     @update:page="handlePageChange"
   />
+  <!-- Modal - Create Service -->
+  <modal v-model:show="modalInfoVisible" :title="$t('social.chat.settings')">
+    <GrillChatSettings :space-id="`${currentRow?.spaceId}`" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
@@ -17,10 +21,10 @@ import debounce from 'lodash.debounce';
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
-const router = useRouter();
 const chatStore = useChatStore();
 const TableEllipsis = resolveComponent('TableEllipsis');
 const GrillChatStatus = resolveComponent('GrillChatStatus');
+const modalInfoVisible = ref<boolean>(false);
 
 const createColumns = (): NDataTableColumns<ChatInterface> => {
   return [
@@ -96,10 +100,6 @@ const rowProps = (row: ChatInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;
-
-      if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/social/${row.space_uuid}` });
-      }
     },
   };
 };
@@ -109,11 +109,11 @@ const rowProps = (row: ChatInterface) => {
 const dropdownOptions = computed(() => {
   return [
     {
-      label: t('general.view'),
-      key: 'view',
+      label: t('social.chat.showSettings'),
+      key: 'settings',
       props: {
         onClick: () => {
-          router.push({ path: `/dashboard/service/social/${currentRow.value?.space_uuid}` });
+          modalInfoVisible.value = true;
         },
       },
     },

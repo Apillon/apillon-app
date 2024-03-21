@@ -3,7 +3,14 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('dashboard.nav.social') }}</h1>
+          <div class="flex gap-4 items-center">
+            <NuxtLink :to="{ name: 'dashboard-service-social' }">
+              <span class="icon-back text-2xl align-sub"></span>
+            </NuxtLink>
+            <div>
+              <h1>{{ $t('social.chat.title') }}</h1>
+            </div>
+          </div>
         </slot>
 
         <template #info>
