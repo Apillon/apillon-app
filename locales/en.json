@@ -1452,6 +1452,7 @@
     "post": {
       "body": "Channel  content",
       "create": "Create channel",
+      "createFirst": "Create first channel",
       "date": "Created",
       "new": "New channel",
       "postId": "Channel ID",

@@ -27,6 +27,7 @@ export const usePostStore = defineStore('post', {
       this.pagination.page = 1;
       this.pagination.itemCount = 0;
       this.search = '';
+      this.settings = null;
     },
 
     updateSettings(spaceId: string, postId?: string) {

@@ -7,12 +7,30 @@
     </template>
 
     <slot>
-      <n-space class="pb-8" :size="32" vertical>
+      <n-space v-if="postStore.hasPosts" class="pb-8" :size="32" vertical>
         <ActionsSocialPost @create-success="checkUnfinishedPost" />
         <TableSocialPost />
       </n-space>
+      <Empty
+        v-else
+        :title="$t('social.chat.empty')"
+        :info="$t('social.chat.emptyInfo')"
+        icon="logo/grill-chat"
+      >
+        <Btn type="primary" @click="modalCreatePostVisible = true">
+          {{ $t('social.post.createFirst') }}
+        </Btn>
+      </Empty>
+
+      <!-- Modal - Create Post -->
+      <modal v-model:show="modalCreatePostVisible" :title="$t('social.chat.new')">
+        <FormSocialPost
+          @submit-success="modalCreatePostVisible = false"
+          @create-success="checkUnfinishedPost"
+        />
+      </modal>
     </slot>
-    <template #learn>
+    <template v-if="postStore.hasPosts" #learn>
       <GrillChat v-if="postStore.settings" :style="scrollStyle" />
     </template>
   </Dashboard>
@@ -26,6 +44,7 @@ const postStore = usePostStore();
 let postInterval: any = null as any;
 const pageLoading = ref<boolean>(true);
 const headingRef = ref<HTMLElement>();
+const modalCreatePostVisible = ref<boolean | null>(false);
 
 useHead({
   title: $i18n.t('dashboard.nav.social'),
