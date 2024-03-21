@@ -1705,7 +1705,7 @@
       "rolesRequired": "Please select at least one permission"
     },
     "contract": {
-      "addressRequired": "Please enter Phala address",
+      "addressRequired": "Please enter NFT collection address",
       "bucketUuidRequired": "Please select Bucket",
       "cidRequired": "Please enter CID",
       "depositAmountRequired": "Please enter amount",
