@@ -195,32 +195,21 @@
 const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { booleanSelect, formRef, supplyTypes, rules, disablePasteDate, disablePasteTime } =
-  useCollection();
+const {
+  booleanSelect,
+  formRef,
+  supplyTypes,
+  rules,
+  disablePasteDate,
+  disablePasteTime,
+  infoLabel,
+} = useCollection();
 
 onMounted(() => {
   if (collectionStore.form.behavior.maxSupply === 0) {
     collectionStore.form.behavior.maxSupply = collectionStore.images.length;
   }
 });
-
-function infoLabel(field: string) {
-  if (
-    $i18n.te(`form.label.${field}`) &&
-    $i18n.te(`nft.collection.labelInfo.${field}`) &&
-    $i18n.t(`nft.collection.labelInfo.${field}`)
-  ) {
-    return [
-      h('span', { class: 'mr-1' }, $i18n.t(`form.label.${field}`)),
-      h(
-        resolveComponent('IconInfo'),
-        { size: 'sm', tooltip: $i18n.t(`nft.collection.labelInfo.${field}`) },
-        ''
-      ),
-    ];
-  }
-  return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
-}
 
 function chainCurrency() {
   switch (collectionStore.form.base.chain) {
