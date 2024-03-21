@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="pageLoading" :learn-collapsible="false">
+  <Dashboard :key="postStore.items.length" :loading="pageLoading" :learn-collapsible="false">
     <template #heading>
       <div ref="headingRef">
         <HeaderSocial />
@@ -52,7 +52,7 @@ useHead({
 
 const scrollStyle = computed(() => {
   return {
-    minHeight: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
+    height: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
   };
 });
 
