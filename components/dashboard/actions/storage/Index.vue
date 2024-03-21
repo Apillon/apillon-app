@@ -80,6 +80,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 const emit = defineEmits(['onBucketDelete']);
 
 const $i18n = useI18n();
@@ -89,7 +91,7 @@ const bucketStore = useBucketStore();
 const showModalNewBucket = ref<boolean | null>(false);
 
 /** Bucket type */
-const bucketTypes = ref<NSelectOption[]>([
+const bucketTypes = ref<SelectOption[]>([
   {
     value: BucketType.STORAGE,
     label: $i18n.t(`storage.type.${BucketType.STORAGE}`),
@@ -99,14 +101,6 @@ const bucketTypes = ref<NSelectOption[]>([
     label: $i18n.t(`storage.type.${BucketType.NFT_METADATA}`),
   },
 ]);
-// const allBucketTypes = computed<NSelectOption[]>(() => {
-//   return enumValues(BucketType).map(value => {
-//     return {
-//       value,
-//       label: $i18n.t(`storage.type.${value}`),
-//     };
-//   });
-// });
 
 function onBucketCreated(bucket: BucketInterface) {
   router.push(`/dashboard/service/storage/${bucket.bucket_uuid}`);

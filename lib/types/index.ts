@@ -77,5 +77,6 @@ declare global {
     orderBy?: string;
     order?: string;
     loader?: boolean;
+    project_uuid?: string;
   };
 }

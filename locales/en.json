@@ -803,6 +803,7 @@
       "bucketName": "Bucket name",
       "cardHolder": "Card holder",
       "cardNumber": "Card number",
+      "chat": "Hub (optional)",
       "chatAbout": "About",
       "chatImage": "Hub image",
       "chatName": "Hub name",
@@ -1453,6 +1454,7 @@
     "post": {
       "body": "Channel  content",
       "create": "Create channel",
+      "createFirst": "Create first channel",
       "date": "Created",
       "new": "New channel",
       "postId": "Channel ID",
@@ -1636,6 +1638,7 @@
     "captchaRequired": "Captcha challenge required!",
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
+    "chatNameRequired": "Please enter Hub name",
     "collectionBaseUri": "Base URI is not valid",
     "collectionBaseUriRequired": "Please enter Base URI",
     "collectionBaseExtensionRequired": "Please enter Base Extension",

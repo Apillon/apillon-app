@@ -178,6 +178,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 type FormContract = {
   name: string;
   description?: string;
@@ -205,7 +207,7 @@ const formRef = ref<NFormInst | null>(null);
 const rpcLocked = ref<boolean>(false);
 const useApillonCollection = ref<boolean>(true);
 
-const contractTypes = ref<NSelectOption[]>(
+const contractTypes = ref<SelectOption[]>(
   enumValues(ComputingContractType).map(value => {
     return {
       value,
@@ -214,7 +216,7 @@ const contractTypes = ref<NSelectOption[]>(
   })
 );
 
-const buckets = computed<Array<NSelectOption>>(() => {
+const buckets = computed<Array<SelectOption>>(() => {
   return bucketStore.items.map(item => {
     return { label: item.name, value: item.bucket_uuid };
   });
@@ -237,7 +239,7 @@ const rpc: Record<number, string> = {
   [Chains.MOONBEAM]: 'https://rpc.api.moonbeam.network',
 };
 
-const nftChainRpcUrls = ref<NSelectOption[]>(
+const nftChainRpcUrls = ref<SelectOption[]>(
   Object.entries(rpc).map(([key, value]) => {
     return { value, label: Chains[key] };
   })
