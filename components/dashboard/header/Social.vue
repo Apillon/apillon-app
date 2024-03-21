@@ -30,12 +30,11 @@
 
   <!-- Modal - Create Service -->
   <modal v-model:show="modalInfoVisible" :title="$t('social.chat.settings')">
-    <GrillChatSettings :space-id="chatStore.active.spaceId?.toString()" />
+    <GrillChatSettings :space-id="postStore.active.hubId?.toString()" />
   </modal>
 </template>
 
 <script lang="ts" setup>
-const chatStore = useChatStore();
 const postStore = usePostStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.SOCIAL_NEW);
 

@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import type { GrillConfig } from '@subsocial/grill-widget';
 
 export const usePostStore = defineStore('post', {
   state: () => ({

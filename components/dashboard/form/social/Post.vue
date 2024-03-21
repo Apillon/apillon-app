@@ -83,9 +83,6 @@ type FormSpace = {
   project_uuid: string;
 };
 
-const props = defineProps({
-  spaceUuid: { type: String, required: true },
-});
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const { t } = useI18n();
@@ -93,6 +90,7 @@ const message = useMessage();
 const chatStore = useChatStore();
 const dataStore = useDataStore();
 const postStore = usePostStore();
+const paymentStore = usePaymentStore();
 const warningStore = useWarningStore();
 
 const NEW_SPACE_KEY = 'new-space';
@@ -146,6 +144,7 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 onMounted(() => {
+  paymentStore.getPriceList();
   chatStore.getChats();
 });
 
@@ -192,7 +191,7 @@ async function createPost() {
   loading.value = true;
 
   try {
-    const res = await $api.post<PostResponse>(endpoints.posts(props.spaceUuid), formData.value);
+    const res = await $api.post<PostResponse>(endpoints.posts(), formData.value);
 
     message.success(t('form.success.created.chatPost'));
 

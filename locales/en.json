@@ -1635,6 +1635,7 @@
     "captchaRequired": "Captcha challenge required!",
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
+    "chatNameRequired": "Please enter Hub name",
     "collectionBaseUri": "Base URI is not valid",
     "collectionBaseUriRequired": "Please enter Base URI",
     "collectionBaseExtensionRequired": "Please enter Base Extension",

@@ -95,7 +95,7 @@
               <learn-section />
             </slot>
           </div>
-          <div v-else class="my-8">
+          <div v-else class="py-8 h-full">
             <slot v-if="!learnCollapsed" name="learn">
               <learn-section />
             </slot>

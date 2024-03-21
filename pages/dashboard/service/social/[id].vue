@@ -8,11 +8,13 @@
 
     <slot>
       <n-space class="pb-8" :size="32" vertical>
-        <ActionsSocialPost :space-uuid="chatUuid" @create-success="checkUnfinishedPost" />
-        <TableSocialPost :space-uuid="chatUuid" />
+        <ActionsSocialPost @create-success="checkUnfinishedPost" />
+        <TableSocialPost />
       </n-space>
     </slot>
-    <template #learn> <GrillChat v-if="postStore.settings" :style="scrollStyle" /> </template>
+    <template #learn>
+      <GrillChat v-if="postStore.settings" :style="scrollStyle" />
+    </template>
   </Dashboard>
 </template>
 
@@ -37,7 +39,7 @@ useHead({
 
 const scrollStyle = computed(() => {
   return {
-    height: `calc(100dvh - ${120 + (headingRef.value?.clientHeight || 73)}px)`,
+    minHeight: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
   };
 });
 

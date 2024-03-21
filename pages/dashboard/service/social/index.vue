@@ -8,8 +8,8 @@
 
     <slot>
       <n-space class="pb-8" :size="32" vertical>
-        <ActionsSocialPost :space-uuid="chatUuid" @create-success="checkUnfinishedPost" />
-        <TableSocialPost :space-uuid="chatUuid" />
+        <ActionsSocialPost @create-success="checkUnfinishedPost" />
+        <TableSocialPost />
       </n-space>
     </slot>
     <template #learn>
@@ -33,7 +33,7 @@ useHead({
 
 const scrollStyle = computed(() => {
   return {
-    height: `calc(100dvh - ${120 + (headingRef.value?.clientHeight || 73)}px)`,
+    minHeight: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
   };
 });
 
@@ -42,6 +42,11 @@ onMounted(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await postStore.getPosts();
       checkUnfinishedPost();
+
+      /** Set first chat as default */
+      if (!postStore.active?.postId && postStore.items.length) {
+        postStore.active = postStore.items[0];
+      }
 
       pageLoading.value = false;
     });

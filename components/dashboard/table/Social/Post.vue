@@ -18,10 +18,6 @@
 import debounce from 'lodash.debounce';
 import { NButton, NDropdown } from 'naive-ui';
 
-const props = defineProps({
-  spaceUuid: { type: String, required: true },
-});
-
 const { t } = useI18n();
 const chatStore = useChatStore();
 const postStore = usePostStore();
@@ -36,7 +32,7 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
           return h(
             resolveComponent('GrillChatSettings'),
             {
-              spaceId: chatStore.active.spaceId,
+              spaceId: row.hubId,
               postId: row.postId,
             },
             ''
@@ -149,10 +145,11 @@ const dropdownOptions = computed(() => {
 });
 
 onMounted(() => {
-  const spaceId = chatStore.active.spaceId || 'space_uuid';
+  const spaceId = postStore.active?.hubId;
+  const postId = postStore.active?.postId || '';
 
   if (spaceId) {
-    postStore.updateSettings(`${spaceId}`);
+    postStore.updateSettings(`${spaceId}`, `${postId}`);
   }
   console.log(postStore.settings);
 });
@@ -174,13 +171,15 @@ async function handlePageChange(page: number) {
 }
 
 async function selectPost() {
-  const spaceId = chatStore.active.spaceId || 'space_uuid';
-  const postId = currentRow.value?.postId || '';
+  if (currentRow.value) {
+    const spaceId = currentRow.value.hubId;
+    const postId = currentRow.value.postId;
 
-  if (spaceId && currentRow?.value) {
+    postStore.active = currentRow.value;
     postStore.updateSettings(`${spaceId}`, `${postId}`);
+
+    /** Expand selected row */
+    expandedRows.value = expandedRows.value.includes(postId) ? [] : [postId];
   }
-  /** Expand selected row */
-  expandedRows.value = expandedRows.value.includes(postId) ? [] : [postId];
 }
 </script>
