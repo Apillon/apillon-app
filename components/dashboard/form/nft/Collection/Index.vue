@@ -338,6 +338,7 @@ const {
   isFormDisabled,
   disablePasteDate,
   disablePasteTime,
+  infoLabel,
 } = useCollection();
 
 const formErrors = ref<boolean>(false);
@@ -359,24 +360,6 @@ const chainCurrency = computed<string>(() => {
       return 'GLMR';
   }
 });
-
-function infoLabel(field: string) {
-  if (
-    $i18n.te(`form.label.${field}`) &&
-    $i18n.te(`nft.collection.labelInfo.${field}`) &&
-    $i18n.t(`nft.collection.labelInfo.${field}`)
-  ) {
-    return [
-      h('span', { class: 'mr-1' }, $i18n.t(`form.label.${field}`)),
-      h(
-        resolveComponent('IconInfo'),
-        { size: 'sm', tooltip: $i18n.t(`nft.collection.labelInfo.${field}`) },
-        ''
-      ),
-    ];
-  }
-  return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
-}
 
 /** When user close W3Warn, allow him to create new collection */
 function onModalW3WarnConfirm() {
