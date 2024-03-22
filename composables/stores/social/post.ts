@@ -30,7 +30,9 @@ export const usePostStore = defineStore('post', {
       this.settings = null;
     },
 
-    updateSettings(spaceId: string, postId?: string) {
+    updateSettings(spaceId: string, postId: string) {
+      if (!spaceId || !postId) return;
+
       this.settings = postId
         ? {
             theme: 'dark',

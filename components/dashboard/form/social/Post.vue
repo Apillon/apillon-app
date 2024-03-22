@@ -82,6 +82,7 @@ type FormSpace = {
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const { t } = useI18n();
+const router = useRouter();
 const message = useMessage();
 const chatStore = useChatStore();
 const dataStore = useDataStore();
@@ -116,6 +117,7 @@ const chats = computed(() => {
     return {
       label: item.name,
       value: item.space_uuid,
+      disabled: item.status !== SocialStatus.ACTIVE,
     };
   });
   return [
@@ -187,6 +189,7 @@ function renderOption(info: RenderOptionInfo) {
 
 function onHubCreated(space: ChatInterface) {
   formData.value.space_uuid = space.space_uuid;
+  router.push({ name: 'dashboard-service-social-hub' });
 }
 
 // Submit

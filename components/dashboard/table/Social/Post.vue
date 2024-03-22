@@ -148,10 +148,9 @@ onMounted(() => {
   const spaceId = postStore.active?.hubId;
   const postId = postStore.active?.postId || '';
 
-  if (spaceId) {
+  if (spaceId && postId) {
     postStore.updateSettings(`${spaceId}`, `${postId}`);
   }
-  console.log(postStore.settings);
 });
 
 /** Search posts */
@@ -176,7 +175,9 @@ async function selectPost() {
     const postId = currentRow.value.postId;
 
     postStore.active = currentRow.value;
-    postStore.updateSettings(`${spaceId}`, `${postId}`);
+    if (spaceId && postId) {
+      postStore.updateSettings(`${spaceId}`, `${postId}`);
+    }
 
     /** Expand selected row */
     expandedRows.value = expandedRows.value.includes(postId) ? [] : [postId];
