@@ -30,8 +30,8 @@ export const usePostStore = defineStore('post', {
       this.settings = null;
     },
 
-    updateSettings(spaceId: string, postId: string) {
-      if (!spaceId || !postId) return;
+    updateSettings(spaceId: string, postId?: string) {
+      if (!spaceId) return;
 
       this.settings = postId
         ? {

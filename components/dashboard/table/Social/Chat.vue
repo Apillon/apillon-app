@@ -4,6 +4,7 @@
     :bordered="false"
     :columns="columns"
     :data="chatStore.items"
+    :expanded-row-keys="expandedRows"
     :loading="chatStore.loading"
     :pagination="chatStore.pagination"
     :row-key="rowKey"
@@ -22,12 +23,30 @@ import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
 const chatStore = useChatStore();
+const postStore = usePostStore();
+
 const TableEllipsis = resolveComponent('TableEllipsis');
 const GrillChatStatus = resolveComponent('GrillChatStatus');
 const modalInfoVisible = ref<boolean>(false);
 
 const createColumns = (): NDataTableColumns<ChatInterface> => {
   return [
+    {
+      type: 'expand',
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      renderExpand(row: ChatInterface) {
+        if (row.spaceId) {
+          return h(
+            resolveComponent('GrillChatSettings'),
+            {
+              spaceId: row.spaceId,
+            },
+            ''
+          );
+        }
+        return null;
+      },
+    },
     {
       key: 'spaceId',
       title: t('social.chat.spaceId'),
@@ -94,12 +113,17 @@ const createColumns = (): NDataTableColumns<ChatInterface> => {
 const columns = createColumns();
 const rowKey = (row: ChatInterface) => row.space_uuid;
 const currentRow = ref<ChatInterface | null>(chatStore.items[0] || null);
+const expandedRows = ref<Array<string | number>>([]);
 
 /** On row click */
 const rowProps = (row: ChatInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;
+
+      if (canOpenColumnCell(e.composedPath())) {
+        selectChat();
+      }
     },
   };
 };
@@ -108,6 +132,15 @@ const rowProps = (row: ChatInterface) => {
  */
 const dropdownOptions = computed(() => {
   return [
+    {
+      key: 'select',
+      label: t('social.chat.select'),
+      props: {
+        onClick: () => {
+          selectChat();
+        },
+      },
+    },
     {
       label: t('social.chat.showSettings'),
       key: 'settings',
@@ -118,6 +151,13 @@ const dropdownOptions = computed(() => {
       },
     },
   ];
+});
+
+onMounted(() => {
+  const spaceId = chatStore.active?.spaceId;
+  if (spaceId) {
+    postStore.updateSettings(`${spaceId}`);
+  }
 });
 
 /** Search chats */
@@ -134,5 +174,19 @@ const debouncedSearchFilter = debounce(handlePageChange, 500);
 async function handlePageChange(page: number) {
   await chatStore.getChats(page);
   chatStore.pagination.page = page;
+}
+
+async function selectChat() {
+  if (currentRow.value) {
+    const spaceId = currentRow.value.spaceId;
+
+    chatStore.active = currentRow.value;
+    if (spaceId) {
+      postStore.updateSettings(`${spaceId}`);
+
+      /** Expand selected row */
+      expandedRows.value = expandedRows.value.includes(spaceId) ? [] : [spaceId];
+    }
+  }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :key="postStore.items.length" :loading="pageLoading" :learn-collapsible="false">
+  <Dashboard :key="postStore.items.length" :loading="pageLoading">
     <template #heading>
       <div ref="headingRef">
         <HeaderSocial />

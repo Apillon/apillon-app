@@ -1445,6 +1445,7 @@
       "emptyInfo": "Grill.chat offers a smooth and simple onboarding and user experience while still leveraging the power of blockchain technology.",
       "name": "Hub name",
       "new": "New hub",
+      "select": "Select Hub",
       "settings": "Grill.chat hub config",
       "showSettings": "Show hub settings",
       "spaceId": "Hub ID",

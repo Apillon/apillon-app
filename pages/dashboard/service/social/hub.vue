@@ -1,27 +1,29 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <Dashboard :key="chatStore.items.length" :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <div class="flex gap-4 items-center">
-            <NuxtLink :to="{ name: 'dashboard-service-social' }">
-              <span class="icon-back text-2xl align-sub"></span>
-            </NuxtLink>
-            <div>
-              <h1>{{ $t('social.chat.title') }}</h1>
+      <div ref="headingRef">
+        <Heading>
+          <slot>
+            <div class="flex gap-4 items-center">
+              <NuxtLink :to="{ name: 'dashboard-service-social' }">
+                <span class="icon-back text-2xl align-sub"></span>
+              </NuxtLink>
+              <div>
+                <h1>{{ $t('social.chat.title') }}</h1>
+              </div>
             </div>
-          </div>
-        </slot>
+          </slot>
 
-        <template #info>
-          <n-space :size="32" align="center">
-            <IconInfo
-              v-if="$i18n.te('w3Warn.social.info') || $i18n.te('w3Warn.social.grillChat')"
-              @click="modalW3WarnVisible = true"
-            />
-          </n-space>
-        </template>
-      </Heading>
+          <template #info>
+            <n-space :size="32" align="center">
+              <IconInfo
+                v-if="$te('w3Warn.social.info') || $te('w3Warn.social.grillChat')"
+                @click="modalW3WarnVisible = true"
+              />
+            </n-space>
+          </template>
+        </Heading>
+      </div>
     </template>
     <slot>
       <n-space v-if="chatStore.hasChats" class="pb-8" :size="32" vertical>
@@ -55,30 +57,45 @@
         />
       </modal>
     </slot>
+
+    <template v-if="chatStore.hasChats" #learn>
+      <GrillChat v-if="postStore.settings" :style="scrollStyle" />
+    </template>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const chatStore = useChatStore();
+const postStore = usePostStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.SOCIAL_NEW);
 
 let chatInterval: any = null as any;
+const headingRef = ref<HTMLElement>();
 const pageLoading = ref<boolean>(true);
 const modalCreateChatVisible = ref<boolean | null>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.social'),
+  title: t('dashboard.nav.social'),
+});
+
+const scrollStyle = computed(() => {
+  return {
+    height: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
+  };
 });
 
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await chatStore.getChats();
-
       checkUnfinishedChat();
 
+      /** Set first Hub as default */
+      if (!chatStore.active?.spaceId && chatStore.items.length) {
+        chatStore.active = chatStore.items[0];
+      }
       pageLoading.value = false;
     });
   }, 100);
