@@ -34,11 +34,8 @@ const drawerUpdateApiKeyVisible = ref<boolean>(false);
 const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
   return [
     {
-      title: t('dashboard.secret'),
-      key: 'secret',
-      render(row) {
-        return h('span', {}, hideSecret(row.apiKey));
-      },
+      title: t('dashboard.apiKey.apiKey'),
+      key: 'apiKey',
     },
     {
       title: t('dashboard.name'),
