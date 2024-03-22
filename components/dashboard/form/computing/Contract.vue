@@ -161,7 +161,7 @@
       </n-form-item>
 
       <!--  Form submit -->
-      <n-form-item :show-feedback="false">
+      <n-form-item :show-feedback="false" :show-label="false">
         <input type="submit" class="hidden" :value="$t('computing.contract.create')" />
         <Btn
           type="primary"
@@ -198,6 +198,8 @@ const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const contractStore = useContractStore();
 const collectionStore = useCollectionStore();
+const paymentStore = usePaymentStore();
+const warningStore = useWarningStore();
 const { booleanSelect } = useCollection();
 
 const loading = ref<boolean>(false);
@@ -265,6 +267,7 @@ onMounted(async () => {
   /** Get list of NFT collections and buckets */
   collectionStore.getCollections();
   bucketStore.getBuckets();
+  paymentStore.getPriceList();
 });
 
 const isFormDisabled = computed<boolean>(() => {
@@ -298,7 +301,9 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      createContract();
+      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_SCHRODINGER_CREATE, () =>
+        createContract()
+      );
     }
   });
 }

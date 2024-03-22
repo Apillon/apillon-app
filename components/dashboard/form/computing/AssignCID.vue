@@ -71,6 +71,8 @@ const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
+const paymentStore = usePaymentStore();
+const warningStore = useWarningStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -83,6 +85,10 @@ const rules: NFormRules = {
   cid: [ruleRequired($i18n.t('validation.contract.cidRequired'))],
   nftId: [ruleRequired($i18n.t('validation.contract.nftIdRequired'))],
 };
+
+onMounted(async () => {
+  paymentStore.getPriceList();
+});
 
 watch(
   () => props.cid,
@@ -102,7 +108,10 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      assignCid();
+      warningStore.showSpendingWarning(
+        PriceServiceName.COMPUTING_SCHRODINGER_ASSIGN_CID_TO_NFT,
+        () => assignCid()
+      );
     }
   });
 }
