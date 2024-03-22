@@ -318,6 +318,10 @@
       "yourFunds": "Your funds",
       "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
       "services": {
+        "COMPUTING": {
+          "name": "Web3 Computing",
+          "description": null
+        },
         "HOSTING": {
           "name": "Web3 Hosting",
           "description": null

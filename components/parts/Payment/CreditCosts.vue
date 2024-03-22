@@ -182,6 +182,10 @@ function getIconName(service: ProductPriceInterface) {
     case PriceServiceName.KILT_IDENTITY:
       return 'logo/kilt';
   }
+  switch (service.service) {
+    case ServiceTypeName.COMPUTING:
+      return 'menu/computing';
+  }
 
   return 'icon/change';
 }

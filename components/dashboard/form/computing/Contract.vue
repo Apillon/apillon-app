@@ -198,7 +198,6 @@ const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const contractStore = useContractStore();
 const collectionStore = useCollectionStore();
-const paymentStore = usePaymentStore();
 const warningStore = useWarningStore();
 const { booleanSelect } = useCollection();
 
@@ -267,7 +266,6 @@ onMounted(async () => {
   /** Get list of NFT collections and buckets */
   collectionStore.getCollections();
   bucketStore.getBuckets();
-  paymentStore.getPriceList();
 });
 
 const isFormDisabled = computed<boolean>(() => {

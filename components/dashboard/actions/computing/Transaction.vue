@@ -43,6 +43,8 @@
         {{ $t('computing.contract.transfer') }}
       </n-button>
 
+      <ModalCreditCosts :service="ServiceTypeName.COMPUTING" />
+
       <!-- Refresh contracts -->
       <n-button
         size="small"
@@ -75,6 +77,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
 const transactionStore = useComputingTransactionStore();
+const paymentStore = usePaymentStore();
 const { loadingBucket, openBucket } = useStorage();
 
 const uploadActive = ref<boolean>(props.showUpload);
@@ -85,4 +88,8 @@ const actionsDisabled = computed<boolean>(
     dataStore.isProjectUser ||
     authStore.isAdmin()
 );
+
+onMounted(() => {
+  paymentStore.getPriceList();
+});
 </script>
