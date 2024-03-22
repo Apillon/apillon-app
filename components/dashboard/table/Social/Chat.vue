@@ -111,7 +111,7 @@ const createColumns = (): NDataTableColumns<ChatInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: ChatInterface) => row.space_uuid;
+const rowKey = (row: ChatInterface) => row.spaceId;
 const currentRow = ref<ChatInterface | null>(chatStore.items[0] || null);
 const expandedRows = ref<Array<string | number>>([]);
 
