@@ -16,7 +16,7 @@
     </div>
 
     <n-space size="large">
-      <!-- API keys -->
+      <!-- API Keys -->
       <NuxtLink :to="{ name: 'dashboard-api-keys' }">
         <n-button size="small">
           <span class="icon-acess text-xl mr-2"></span>
