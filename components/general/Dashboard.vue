@@ -137,7 +137,7 @@ const scrollStyle = computed(() => {
 const heightScreen = computed(() => {
   const offset = isLg.value ? 120 : 124;
   return {
-    height: `calc(98dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
+    height: `calc(100dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
   };
 });
 

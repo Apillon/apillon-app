@@ -8,7 +8,7 @@
       <ul v-if="item.content && Array.isArray(item.content)" class="list-disc pl-4 mb-4 text-body">
         <li v-for="(c, keyC) in item.content" :key="keyC">{{ c }}</li>
       </ul>
-      <p v-else-if="item.content" class="mt-2 mb-6">
+      <p v-else-if="item.content" class="mt-2 mb-6 whitespace-break-spaces">
         {{ item.content }}
       </p>
 

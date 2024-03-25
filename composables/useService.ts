@@ -1,11 +1,13 @@
-type ServiceTypeItem = {
-  id: number;
-  name: string;
-  icon: string;
-  link: string;
-  disabled?: boolean | null;
-  usage: String[];
-};
+declare global {
+  type ServiceTypeItem = {
+    id: number;
+    name: string;
+    icon: string;
+    link?: string;
+    disabled?: boolean | null;
+    usage?: String[];
+  };
+}
 
 export default function useService() {
   const authStore = useAuthStore();

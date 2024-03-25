@@ -37,6 +37,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                   <Btn
+                    v-if="service.link"
                     size="large"
                     type="secondary"
                     :disabled="!!service.disabled"
@@ -45,6 +46,7 @@
                     {{ $t('auth.onboarding.viewDemo') }}
                   </Btn>
                   <Btn
+                    v-if="service.link"
                     size="large"
                     type="primary"
                     :disabled="!!service.disabled"

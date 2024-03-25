@@ -30,6 +30,7 @@ const config: ConfigInterface = {
     'PROJECT_DELETE',
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
+    'PREBUILD_SOLUTIONS',
     'REFERRAL',
     'SERVICES',
     'SOCIAL',

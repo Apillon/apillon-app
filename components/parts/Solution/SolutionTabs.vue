@@ -28,7 +28,8 @@
         v-if="currentIndex > 0"
         type="secondary"
         @click="$emit('change', Object.keys(tabs)[currentIndex - 1])"
-        >Go back</Btn
+      >
+        {{ $t('form.goBack') }}</Btn
       >
       <Btn
         v-if="currentIndex < Object.keys(tabs).length - 1"
@@ -36,7 +37,7 @@
         type="primary"
         @click="$emit('change', Object.keys(tabs)[currentIndex + 1])"
       >
-        Proceed
+        {{ $t('form.proceed') }}
       </Btn>
     </div>
   </div>

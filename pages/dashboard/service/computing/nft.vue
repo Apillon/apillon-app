@@ -3,7 +3,9 @@
     <template #heading>
       <Heading>
         <slot>
-          <h3>{{ $t('dashboard.solutions.nftCollection.name') }}</h3>
+          <h3>
+            {{ $t('dashboard.solutions.nftContentDelivery.name') }}
+          </h3>
         </slot>
       </Heading>
     </template>
@@ -11,7 +13,7 @@
       <div class="pb-8">
         <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
           <SolutionContent :content="content">
-            <Btn type="primary" :to="{ name: 'dashboard-solution-airdrop-new' }">
+            <Btn type="primary" :to="{ name: 'dashboard-service-computing-new' }">
               {{ $t('general.customizeDeploy') }}
             </Btn>
           </SolutionContent>
@@ -21,7 +23,7 @@
               <Image :src="NftTemplateJPG" width="514" height="320" alt="nft template" />
               <div class="absolute left-0 right-0 top-0 bottom-0 flex-cc bg-bg-dark/75">
                 <Btn type="info" size="small">
-                  <strong class="body-sm">{{ $t('general.viewDemo') }}</strong>
+                  <strong class="body-sm"> {{ $t('general.viewDemo') }}</strong>
                 </Btn>
               </div>
             </div>
@@ -50,6 +52,11 @@ useHead({
   title: t('dashboard.nav.services'),
 });
 
-const content = generateContent(SolutionKey.NFT_AIRDROP);
-const nftServices = web3Services.filter(item => item.id !== ServiceType.AUTHENTICATION);
+const content = generateContent(SolutionKey.NFT_CONTENT_DELIVERY);
+const nftServices = web3Services.filter(
+  item =>
+    item.id === ServiceType.COMPUTING ||
+    item.id === ServiceType.NFT ||
+    item.id === ServiceType.HOSTING
+);
 </script>
