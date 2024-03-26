@@ -50,7 +50,7 @@ definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: 'SignUp',
+  title: 'Sign up',
 });
 
 onMounted(() => {
