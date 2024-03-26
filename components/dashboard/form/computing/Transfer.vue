@@ -36,6 +36,7 @@ const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
+const warningStore = useWarningStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -56,7 +57,10 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      transfer();
+      warningStore.showSpendingWarning(
+        PriceServiceName.COMPUTING_SCHRODINGER_TRANSFER_OWNERSHIP,
+        () => transfer()
+      );
     }
   });
 }
