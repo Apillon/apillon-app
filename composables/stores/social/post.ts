@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import type { GrillConfig } from '@subsocial/grill-widget';
 
 export const usePostStore = defineStore('post', {
   state: () => ({
@@ -28,9 +27,12 @@ export const usePostStore = defineStore('post', {
       this.pagination.page = 1;
       this.pagination.itemCount = 0;
       this.search = '';
+      this.settings = null;
     },
 
     updateSettings(spaceId: string, postId?: string) {
+      if (!spaceId) return;
+
       this.settings = postId
         ? {
             theme: 'dark',
@@ -40,7 +42,7 @@ export const usePostStore = defineStore('post', {
               type: 'channel',
               id: postId,
               settings: {
-                enableBackButton: true,
+                enableBackButton: false,
                 enableLoginButton: true,
                 enableInputAutofocus: true,
               },
@@ -56,40 +58,36 @@ export const usePostStore = defineStore('post', {
     /**
      * Fetch wrappers
      */
-    async getPosts(spaceUuid: string, page = 1): Promise<PostInterface[]> {
+    async getPosts(page = 1): Promise<PostInterface[]> {
       if (page !== this.pagination.page || !this.hasPosts || isCacheExpired(LsCacheKeys.POSTS)) {
-        return await this.fetchPosts(spaceUuid);
+        return await this.fetchPosts();
       }
       return this.items;
     },
 
-    async getPost(spaceUuid: string, post_uuid: string): Promise<PostInterface> {
+    async getPost(post_uuid: string): Promise<PostInterface> {
       if (this.active?.post_uuid === post_uuid && !isCacheExpired(LsCacheKeys.POST)) {
         return this.active;
       }
-      return await this.fetchPost(spaceUuid, post_uuid);
+      return await this.fetchPost(post_uuid);
     },
 
     /**
      * API calls
      */
-    async fetchPosts(
-      spaceUuid: string,
-      page?: number,
-      showLoader: boolean = true
-    ): Promise<PostInterface[]> {
+    async fetchPosts(page?: number, showLoader: boolean = true): Promise<PostInterface[]> {
       this.loading = showLoader;
 
       try {
-        const params: Record<string, string | number> = {
-          orderBy: 'createTime',
-          desc: 'true',
+        const dataStore = useDataStore();
+        const params = parseArguments({
           limit: this.pagination.pageSize,
-          page: page || this.pagination.page,
-        };
-        if (this.search) params.search = this.search;
+          page: page,
+          search: this.search,
+          project_uuid: dataStore.projectUuid,
+        });
 
-        const res = await $api.get<PostsResponse>(endpoints.posts(spaceUuid), params);
+        const res = await $api.get<PostsResponse>(endpoints.posts(), params);
 
         this.items = res.data.items;
         this.pagination.itemCount = res.data.total;
@@ -111,9 +109,9 @@ export const usePostStore = defineStore('post', {
       return [];
     },
 
-    async fetchPost(spaceUuid: string, post_uuid: string): Promise<PostInterface> {
+    async fetchPost(post_uuid: string): Promise<PostInterface> {
       try {
-        const res = await $api.get<PostResponse>(endpoints.posts(spaceUuid, chatUuid));
+        const res = await $api.get<PostResponse>(endpoints.posts(post_uuid));
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.POST, Date.now().toString());

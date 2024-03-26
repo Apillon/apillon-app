@@ -169,10 +169,8 @@ export function parseArguments(args: FetchParams): Record<string, string | numbe
     orderBy: args.orderBy || 'createTime',
     desc: args.order === 'descend' || !args.orderBy ? 'true' : 'false',
   };
-
-  if (args.search) {
-    params.search = args.search;
-  }
+  if (args.search) params.search = args.search;
+  if (args.project_uuid) params.project_uuid = args.project_uuid;
 
   return params;
 }

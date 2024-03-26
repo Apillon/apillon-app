@@ -37,10 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { SelectOption } from 'naive-ui';
 import { NButton } from 'naive-ui';
-
-type RenderOptionInfo = { node: VNode; option: SelectOption; selected: boolean };
 
 const props = defineProps({
   collapsed: { type: Boolean, default: false },

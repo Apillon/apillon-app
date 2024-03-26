@@ -30,12 +30,12 @@
 import CodeBlock from 'vue3-code-block';
 
 const props = defineProps({
-  spaceId: { type: String, required: true },
+  spaceId: { type: String, default: 'spaceID' },
   postId: { type: String, default: '' },
 });
 
 const darkTheme = ref<boolean>(true);
-const enableBackButton = ref<boolean>(true);
+const enableBackButton = ref<boolean>(false);
 const enableLoginButton = ref<boolean>(true);
 const enableInputAutofocus = ref<boolean>(true);
 

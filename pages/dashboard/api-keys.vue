@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h4>{{ $t('dashboard.apiKey.title') }}</h4>
+          <h2>{{ $t('dashboard.apiKey.title') }}</h2>
         </slot>
 
         <template #info> </template>

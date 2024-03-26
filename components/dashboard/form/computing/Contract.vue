@@ -161,7 +161,7 @@
       </n-form-item>
 
       <!--  Form submit -->
-      <n-form-item :show-feedback="false">
+      <n-form-item :show-feedback="false" :show-label="false">
         <input type="submit" class="hidden" :value="$t('computing.contract.create')" />
         <Btn
           type="primary"
@@ -178,6 +178,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 type FormContract = {
   name: string;
   description?: string;
@@ -198,6 +200,7 @@ const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const contractStore = useContractStore();
 const collectionStore = useCollectionStore();
+const warningStore = useWarningStore();
 const { booleanSelect } = useCollection();
 
 const loading = ref<boolean>(false);
@@ -205,7 +208,7 @@ const formRef = ref<NFormInst | null>(null);
 const rpcLocked = ref<boolean>(false);
 const useApillonCollection = ref<boolean>(true);
 
-const contractTypes = ref<NSelectOption[]>(
+const contractTypes = ref<SelectOption[]>(
   enumValues(ComputingContractType).map(value => {
     return {
       value,
@@ -214,7 +217,7 @@ const contractTypes = ref<NSelectOption[]>(
   })
 );
 
-const buckets = computed<Array<NSelectOption>>(() => {
+const buckets = computed<Array<SelectOption>>(() => {
   return bucketStore.items.map(item => {
     return { label: item.name, value: item.bucket_uuid };
   });
@@ -237,7 +240,7 @@ const rpc: Record<number, string> = {
   [Chains.MOONBEAM]: 'https://rpc.api.moonbeam.network',
 };
 
-const nftChainRpcUrls = ref<NSelectOption[]>(
+const nftChainRpcUrls = ref<SelectOption[]>(
   Object.entries(rpc).map(([key, value]) => {
     return { value, label: Chains[key] };
   })
@@ -298,7 +301,9 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      createContract();
+      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_SCHRODINGER_CREATE, () =>
+        createContract()
+      );
     }
   });
 }

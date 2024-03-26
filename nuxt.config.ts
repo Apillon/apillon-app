@@ -62,7 +62,11 @@ export default defineNuxtConfig({
   },
 
   imports: {
-    dirs: ['composables/', 'composables/stores/**', 'lib/**', 'stores/**'],
+    dirs: ['composables/', 'composables/stores/**', 'lib/**'],
+  },
+
+  nitro: {
+    compressPublicAssets: true,
   },
 
   app: {
@@ -124,7 +128,7 @@ export default defineNuxtConfig({
   googleFonts: {
     useStylesheet: true,
     display: 'swap',
-    download: false,
+    download: true,
     families: {
       Inter: {
         wght: [400, 700],

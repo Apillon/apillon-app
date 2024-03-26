@@ -28,8 +28,8 @@
     <div class="flex flex-auto w-full flex-col md:flex-row">
       <n-layout
         class="has-scrollbar"
-        :has-sider="instructionsAvailable && isMd"
         sider-placement="right"
+        :has-sider="instructionsAvailable && isMd"
       >
         <n-layout-content>
           <n-scrollbar y-scrollable :style="instructionsAvailable || fullHeight ? {} : scrollStyle">
@@ -95,7 +95,7 @@
               <learn-section />
             </slot>
           </div>
-          <div v-else class="my-8">
+          <div v-else class="py-8 h-full">
             <slot v-if="!learnCollapsed" name="learn">
               <learn-section />
             </slot>
@@ -120,7 +120,6 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
-const paymentStore = usePaymentStore();
 
 const gtm = useGtm();
 const { isMd, isLg, isXl } = useScreen();

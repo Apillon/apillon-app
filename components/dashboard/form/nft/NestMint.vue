@@ -64,6 +64,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 type FormNftNestMint = {
   parentCollectionUuid: string | null;
   parentNftId: number | null;
@@ -114,7 +116,7 @@ const rules: NFormRules = {
   ],
 };
 
-const collections = computed<Array<NSelectOption>>(() => {
+const collections = computed<Array<SelectOption>>(() => {
   return collectionStore.items
     .filter(item => item.collectionType === NFTCollectionType.NESTABLE)
     .map(item => {

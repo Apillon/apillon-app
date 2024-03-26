@@ -19,7 +19,7 @@
     <!-- Separator -->
     <SeparatorText>
       <template v-if="authStore.wallet.signature">
-        {{ $t('auth.signup.withWallet') }}
+        {{ $t('auth.signup.walletEmail') }}
       </template>
       <template v-else-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
         {{ $t('auth.signup.orUseEmail') }}
@@ -31,7 +31,7 @@
     <AuthFormSignup />
 
     <!-- Links -->
-    <n-space vertical>
+    <n-space class="mt-8" vertical>
       <div>
         <span class="text-sm text-body">{{ $t('auth.signup.alreadyHaveAccount') }} </span>&nbsp;
         <Btn type="builders" size="tiny" inner-class="text-sm" :to="{ name: 'login' }">
@@ -50,7 +50,7 @@ definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: 'SignUp',
+  title: 'Sign up',
 });
 
 onMounted(() => {

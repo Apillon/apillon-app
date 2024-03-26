@@ -91,9 +91,9 @@
       "projectName": "Project_name",
       "resetHere": "Reset here",
       "resetPassword": "Reset password",
-      "title": "Log in to Apillon",
+      "title": "Log in",
       "wallet": "Log in with Wallet",
-      "withEmail": "login with email",
+      "withEmail": "Log in with email",
       "kilt": "Log in with KILT "
     },
     "onboarding": {
@@ -117,7 +117,7 @@
       "checkEmail": "Check your e-mail",
       "checkInbox": "Crickets in your inbox?",
       "continueWithAT": "Continue with Apillon",
-      "description": "Build your first Web3 application with Apillon. Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
+      "description": "Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
       "emailConfirmed": "Email confirmed",
       "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
       "enterDesiredPassword": "Enter a password to finish creating the account.",
@@ -127,9 +127,11 @@
       "sendAgain": "Send again",
       "title": "Build your first Web3 project",
       "titleReferalZiggi": "Welcome, traveler! Register below and start building.",
+      "wallet": "Register with wallet",
       "walletConfirmed": "Wallet and email confirmed, logging you in...",
-      "withWallet": "email is required for wallet login",
-      "withEmail": "sign up with email"
+      "walletEmail": "email is required for wallet login",
+      "withWallet": "or sign up with wallet",
+      "withEmail": "Sign up with email"
     },
     "terms": {
       "accept": "I have read and agree to ",
@@ -144,7 +146,7 @@
       "connect": {
         "btn": "Connect Polkadot wallet",
         "info": "Connect with one of Polkadot's wallet",
-        "polkadot": "Connect polkadot wallet",
+        "polkadot": "Connect Polkadot wallet",
         "success": "You successfully logged in with your Wallet",
         "title": "Connect wallet",
         "different": "Connect different wallet",
@@ -169,7 +171,7 @@
       },
       "login": {
         "success": "Wallet has been successfully connected",
-        "title": "Login with wallet",
+        "title": "Log in with wallet",
         "walletAccountNotConnected": "A wallet account must be connected",
         "walletNotConnected": "A wallet must be connected",
         "walletNotConnected2": "A wallet must be connected, please reconnect. If the issue persist try reloading."
@@ -186,18 +188,18 @@
       "assignDisabled": "Please upload file first, to encrypt content and assign it to NFT.",
       "create": "Create contract",
       "createBucket": "Create a bucket",
-      "createFirst": "Create first contract",
+      "createFirst": " Start creating",
       "deployerAddress": "Deployer address",
       "deposit": "Deposit to cluster",
       "edit": "Edit",
-      "empty": "Create your first contract",
-      "emptyInfo": "Add it to your Web3 project",
+      "empty": "Create Schrödinger’s NFT contract",
+      "emptyInfo": "Schrödinger’s NFT is the first use case of Apillon’s Web3 Computing. More options will follow.",
       "encryptFile": "Encrypt file",
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
       "name": "Contract name",
-      "new": "New contract",
+      "new": "New Schrödinger’s NFT contract",
       "orSelectExisting": "or select existing bucket",
       "selectBucket": "Continue with selected bucket",
       "title": "Contract title",
@@ -224,7 +226,7 @@
         "6": "FAILED"
       },
       "type": {
-        "1": "SCHRODINGER"
+        "1": "Schrödinger’s NFT"
       }
     },
     "upload": {
@@ -264,7 +266,7 @@
       "details": "API key details",
       "generate": "Generate new key",
       "secretSaved": "I've saved API key's secret",
-      "title": "API keys",
+      "title": "API Keys",
       "update": "Update API key",
       "service": {
         "authentication": "Authentication service",
@@ -315,9 +317,14 @@
       "serviceStorage": "Web3 Storage",
       "title": "Credits",
       "transactions": "Credit transactions",
+      "threshold": "Credit notification threshold",
       "yourFunds": "Your funds",
       "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
       "services": {
+        "COMPUTING": {
+          "name": "Web3 Computing",
+          "description": null
+        },
         "HOSTING": {
           "name": "Web3 Hosting",
           "description": null
@@ -352,7 +359,7 @@
     "nav": {
       "access": "Access",
       "authentication": "Authentication",
-      "apiKeys": "API keys",
+      "apiKeys": "API Keys",
       "analytics": "Analytics",
       "billing": "Billing",
       "configuration": "Configuration",
@@ -383,10 +390,10 @@
     "pageMenu": {
       "access": "Access",
       "accountManagement": "Account management",
-      "apiKeys": "API keys",
+      "apiKeys": "API Keys",
       "billing": "Billing",
       "charts": "Charts",
-      "credentials": "Credentials & API keys",
+      "credentials": "Credentials & API Keys",
       "credits": "Credits",
       "destroy": "Destroy",
       "history": "History",
@@ -627,7 +634,7 @@
     "deletedAt": "Deleted at",
     "email": "Email",
     "emailMethodConfiguration": "Email method configuration",
-    "env": "ENV",
+    "env": "Environment",
     "expiration": "Expiration",
     "gotIt": "Got it, thanks!",
     "goToApiManagement": "Go to central API management",
@@ -655,6 +662,7 @@
     "50012005": "You can't mint this collection or all tokens has already been minted!",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
+    "50012011": "Content encryption failed",
     "50012012": "Make sure parent doesn't have any children nested before burning. If you still experience issues try later or try burning another token.",
     "50012013": "Collection is not nestable!",
     "BAD_REQUEST": "There is a problem with this request. Please come back later when we fixed that problem.",
@@ -800,6 +808,9 @@
       "bucketName": "Bucket name",
       "cardHolder": "Card holder",
       "cardNumber": "Card number",
+      "chat": "Hub",
+      "chatInfo": "Select one of your Hubs. Otherwise, you can leave this field empty and the default hub will be used.",
+      "chatInfoEmpty": "You must create a Hub first. Otherwise, you can leave this field empty and the default hub will be used.",
       "chatAbout": "About",
       "chatImage": "Hub image",
       "chatName": "Hub name",
@@ -822,6 +833,7 @@
       "collectionType": "Collection type",
       "collectionUseGateway": "Use apillon gateway for base uri",
       "confirmPassword": "Confirm password",
+      "creditThreshold": "Notify me when credits are below the limit",
       "cvv": "CVV",
       "domain": "Domain name",
       "email": "Email address",
@@ -861,16 +873,16 @@
         "contractType": "Contract type",
         "description": "Contract description",
         "name": "Contract name",
-        "nftContractAddress": "Contract Address",
+        "nftContractAddress": "NFT collection address",
         "nftChainRpcUrl": "Chain RPC URL",
         "nftId": "NFT ID",
         "restrictToOwner": "Restrict to owner",
-        "useApillonCollection": "Use Apillon`s Collection",
+        "useApillonCollection": "Use Apillon-built NFT collection",
         "labelInfo": {
-          "nftContractAddress": "Contract Address which will be used to encrypt/decrypt content.",
+          "nftContractAddress": "Address of the NFT collection used to encrypt/decrypt files.",
           "nftChainRpcUrl": "Chain RPC URL of used contract",
-          "restrictToOwner": "Own owner will be able to encrypt/decrypt files",
-          "useApillonCollection": "You can use a collection you created on Apillon or any collection you created on other chains."
+          "restrictToOwner": "Only owner will be able to encrypt/decrypt files.",
+          "useApillonCollection": "You can use an NFT collection you created on Apillon or any NFT collection you built on other chains."
         }
       }
     },
@@ -929,8 +941,8 @@
       "websiteDescription": "Website description",
       "websiteName": "Website name",
       "contract": {
-        "name": "Contract name",
-        "description": "Contract description",
+        "name": "Enter contract name",
+        "description": "Enter contract description",
         "nftContractAddress": "Select or type contract address",
         "nftChainRpcUrl": "Chain RPC URL",
         "accountAddress": "Account Address"
@@ -1008,6 +1020,7 @@
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "contract": "Contract has been updated",
+        "creditThreshold": "Credit threshold has been updated",
         "directory": "Folder has been updated",
         "domain": "Domain has been updated",
         "file": "File has been updated",
@@ -1437,18 +1450,21 @@
       "emptyInfo": "Grill.chat offers a smooth and simple onboarding and user experience while still leveraging the power of blockchain technology.",
       "name": "Hub name",
       "new": "New hub",
+      "select": "Select Hub",
       "settings": "Grill.chat hub config",
       "showSettings": "Show hub settings",
       "spaceId": "Hub ID",
       "tags": "Tags",
-      "title": "Hub title",
+      "title": "Hubs",
       "uploadImage": "Upload image",
       "uuid": "Hub UUID"
     },
     "post": {
       "body": "Channel  content",
       "create": "Create channel",
+      "createFirst": "Create first channel",
       "date": "Created",
+      "manageHubs": "Manage Hubs",
       "new": "New channel",
       "postId": "Channel ID",
       "select": "Select channel",
@@ -1631,6 +1647,7 @@
     "captchaRequired": "Captcha challenge required!",
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
+    "chatNameRequired": "Please enter Hub name",
     "collectionBaseUri": "Base URI is not valid",
     "collectionBaseUriRequired": "Please enter Base URI",
     "collectionBaseExtensionRequired": "Please enter Base Extension",
@@ -1666,6 +1683,7 @@
     "ipfsTypeRequired": "Please select type",
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
+    "naturalNumber": "Please enter a positive number",
     "nftBucketRequired": "Please select a bucket",
     "nftBurnTokenIdRequired": "Please enter token ID",
     "nftMintAddressRequired": "Please enter your wallet address for minting",

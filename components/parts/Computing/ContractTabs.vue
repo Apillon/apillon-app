@@ -154,13 +154,9 @@ async function uploadFileToIPFS(
       data
     );
     const uploadUrl = uploadSession.data.files[0];
-
     // Upload to S3
     await fetch(uploadUrl.url, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
       body: encryptedContent,
     });
 
