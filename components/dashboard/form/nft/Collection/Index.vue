@@ -242,7 +242,7 @@
         <n-form-item-gi
           path="behavior.dropPrice"
           :span="6"
-          :label="$t('form.label.collectionDropPrice', { currency: chainCurrency })"
+          :label="$t('form.label.collectionDropPrice', { currency: chainCurrency() })"
           :label-props="{ for: 'dropPrice' }"
         >
           <n-input-number
@@ -316,7 +316,6 @@
 
 <script lang="ts" setup>
 const emit = defineEmits(['submitSuccess']);
-const modalW3WarnVisible = ref<boolean>(false);
 
 const $i18n = useI18n();
 const router = useRouter();
@@ -326,6 +325,8 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 const { getPriceServiceName } = useNft();
 const {
   booleanSelect,
@@ -336,6 +337,7 @@ const {
   supplyTypes,
   rules,
   isFormDisabled,
+  chainCurrency,
   disablePasteDate,
   disablePasteTime,
 } = useCollection();
@@ -349,15 +351,6 @@ const metadataUri = computed<string>(() => {
     : baseUri
     ? baseUri + '/1.' + $i18n.t('nft.collection.extension')
     : '';
-});
-
-const chainCurrency = computed<string>(() => {
-  switch (collectionStore.form.base.chain) {
-    case Chains.ASTAR:
-      return 'ASTR';
-    default:
-      return 'GLMR';
-  }
 });
 
 function infoLabel(field: string) {
@@ -382,16 +375,6 @@ function infoLabel(field: string) {
 function onModalW3WarnConfirm() {
   warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
 }
-
-/** Watch modalW3WarnVisible, onShow update timestamp of shown modal in session storage */
-watch(
-  () => modalW3WarnVisible.value,
-  shown => {
-    if (shown) {
-      localStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
-    }
-  }
-);
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {

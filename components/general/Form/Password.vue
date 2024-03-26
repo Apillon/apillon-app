@@ -45,6 +45,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormItemInst, FormItemRule } from 'naive-ui';
+
 type FormRegister = {
   password: string | null;
   reenteredPassword: string | null;
@@ -64,7 +66,7 @@ const dataStore = useDataStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const rPasswordFormItemRef = ref<NFormItemInst | null>(null);
+const rPasswordFormItemRef = ref<FormItemInst | null>(null);
 
 const formData = ref<FormRegister>({
   password: null,
@@ -96,7 +98,7 @@ const rules: NFormRules = {
   ],
 };
 // Custom validations
-function validatePasswordSame(_: NFormItemRule, value: string): boolean {
+function validatePasswordSame(_: FormItemRule, value: string): boolean {
   return value === formData.value.password;
 }
 

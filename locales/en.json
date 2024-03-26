@@ -1156,6 +1156,7 @@
       "addNew": "Add new collection",
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
+      "addLogo": "Select logo",
       "address": "Collection address",
       "baseUri": "Base Uri",
       "contractAddress": "Contract address",
@@ -1311,6 +1312,7 @@
       "imagesDesc": "",
       "infoFile": "This is the first step to your NFT collection. The file names in the CSV record should match the names of NFT files you upload in the next step.",
       "infoImages": "Now, upload NFT files for your NFT collection, images or other media. File names should match those in the CSV metadata record from the previous step.",
+      "logo": "Upload logo",
       "preview": "Preview upload",
       "previewConfirm": "Looks good, proceed",
       "previewNfts": "Preview your NFTs",
@@ -1325,7 +1327,8 @@
       "csvRequiredColumns": "Missing metadata columns, required columns:",
       "fileInvalid": "Invalid file format. Please upload a valid CSV file with columns \"name\", \"description\", and \"image\".",
       "imagesMissing": "Missing images:",
-      "imagesInvalid": "Invalid image names. Example: "
+      "imagesInvalid": "Invalid image names. Example: ",
+      "selectAmount": "Please select how many NFTs would you like to create."
     },
     "openBucket": "Go to storage",
     "transactionType": "Transaction Type"

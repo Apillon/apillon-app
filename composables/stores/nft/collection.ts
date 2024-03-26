@@ -1,10 +1,11 @@
+import type { TableColumns } from 'naive-ui/es/data-table/src/interface';
 import { defineStore } from 'pinia';
 
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
     attribute: {} as AttributeInterface,
-    columns: [] as NTableColumns<KeyTitle>,
+    columns: [] as TableColumns<KeyTitle>,
     csvAttributes: [] as Array<MetadataAttributes>,
     csvData: [] as Array<Record<string, string>>,
     csvFile: {} as FileListItemType,
@@ -15,7 +16,7 @@ export const useCollectionStore = defineStore('collection', {
     items: [] as CollectionInterface[],
     loading: false,
     metadata: [] as Array<Record<string, any>>,
-    metadataStored: null as Boolean | null,
+    metadataStored: true as Boolean | null,
     mintTab: NftMintTab.METADATA,
     search: '',
     step: CollectionStep.ENVIRONMENT,
@@ -29,8 +30,8 @@ export const useCollectionStore = defineStore('collection', {
     uploadActive: false,
     form: {
       base: {
-        logo: {} as FileListItemType,
-        coverImage: {} as FileListItemType,
+        logo: null as FileListItemType | null,
+        coverImage: null as FileListItemType | null,
         name: '',
         symbol: '',
         chain: Chains.MOONBEAM,
@@ -121,8 +122,8 @@ export const useCollectionStore = defineStore('collection', {
       this.form.single.attributes = [];
     },
     resetForms() {
-      this.form.base.logo = {} as FileListItemType;
-      this.form.base.coverImage = {} as FileListItemType;
+      this.form.base.logo = null;
+      this.form.base.coverImage = null;
       this.form.base.name = '';
       this.form.base.symbol = '';
       this.form.base.chain = Chains.MOONBEAM;
@@ -152,7 +153,7 @@ export const useCollectionStore = defineStore('collection', {
       return this.items;
     },
 
-    async getCollection(collectionUuid: string): Promise<CollectionInterface> {
+    async getCollection(collectionUuid: string): Promise<CollectionInterface | null> {
       if (
         this.active?.collection_uuid === collectionUuid &&
         this.active?.collectionStatus >= CollectionStatus.DEPLOYED &&
@@ -220,7 +221,8 @@ export const useCollectionStore = defineStore('collection', {
       return [];
     },
 
-    async fetchCollection(uuid: string): Promise<CollectionInterface> {
+    async fetchCollection(uuid: string): Promise<CollectionInterface | null> {
+      if (!uuid) return null;
       try {
         const res = await $api.get<CollectionResponse>(endpoints.collections(uuid));
 
@@ -231,7 +233,7 @@ export const useCollectionStore = defineStore('collection', {
       } catch (error: any) {
         this.active = {} as CollectionInterface;
       }
-      return {} as CollectionInterface;
+      return null;
     },
 
     async fetchCollectionTransactions(

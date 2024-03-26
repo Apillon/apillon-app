@@ -49,6 +49,7 @@
 
 <script lang="ts" setup>
 import type { DataTableColumns, DataTableProps } from 'naive-ui';
+import { NInput } from 'naive-ui';
 import colors from '~/tailwind.colors';
 
 const { createThumbnailUrl } = useNft();
@@ -84,6 +85,33 @@ const nfts = computed(() => {
   return collectionStore.metadata.slice(first, last);
 });
 
+const cols = collectionStore.columns.map(item => {
+  const key = item?.title || item?.key || '';
+  return {
+    key: key,
+    title: key,
+    minWidth: 140,
+    render(row, index) {
+      console.log(index, row);
+      return h(NInput, {
+        value:
+          key in row
+            ? row[key]
+            : row.attributes.find(attrItem => attrItem.trait_type === key)
+            ? row.attributes.find(attrItem => attrItem.trait_type === key).value
+            : null,
+        onUpdateValue(v) {
+          if (key in row) {
+            collectionStore.metadata[index][key] = v;
+          } else if (row.attributes.find(attrItem => attrItem.trait_type === key)) {
+            row.attributes.find(attrItem => attrItem.trait_type === key).value = v;
+          }
+        },
+      });
+    },
+  };
+});
+
 const createColumns = (): DataTableColumns<Record<string, string>> => {
   return [
     {
@@ -100,7 +128,7 @@ const createColumns = (): DataTableColumns<Record<string, string>> => {
       key: 'id',
       title: 'ID',
     },
-    ...collectionStore.columns,
+    ...cols,
   ];
 };
 const columns = createColumns();

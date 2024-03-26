@@ -42,7 +42,7 @@
           </n-upload-dragger>
         </n-upload>
         <div v-if="collectionStore.hasImages" class="flex mt-5 text-left">
-          <div class="card w-full px-4 py-2">
+          <div class="card w-full px-4 py-[10px]">
             <span class="icon-image text-xl align-sub mr-3"></span>
             <span>{{ collectionStore.images.length }}</span>
             &nbsp;
@@ -104,18 +104,6 @@
             <Btn class="w-full" type="secondary">
               {{ $t('nft.upload.csvFile') }}
             </Btn>
-            <!--
-          <n-upload-dragger class="h-40">
-            <div class="py-2 text-center">
-              <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-                <span class="icon-upload text-violet text-2xl"></span>
-              </div>
-
-              <h4 class="mb-1">{{ $t('nft.upload.csvFile') }}</h4>
-              <span class="text-body">{{ $t('nft.upload.dragAndDrop') }}</span>
-            </div>
-          </n-upload-dragger>
-        -->
           </n-upload>
           <IconInfo :tooltip="$t('nft.collection.labelInfo.csvUpload')" size="lg" />
         </div>
@@ -164,7 +152,7 @@
 
 <script lang="ts" setup>
 import { vOnClickOutside } from '@vueuse/components';
-import type { UploadInst } from 'naive-ui';
+import type { UploadCustomRequestOptions, UploadInst } from 'naive-ui';
 
 const nft = useNft();
 const collectionStore = useCollectionStore();
@@ -194,7 +182,7 @@ function stopLoader() {
   nft.loadingImages.value = false;
 }
 
-function onCsvFileUpload(event: NUploadCustomRequestOptions) {
+function onCsvFileUpload(event: UploadCustomRequestOptions) {
   removeImages();
   nft.uploadFileRequest(event);
 }

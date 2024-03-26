@@ -14,25 +14,9 @@
         :label="infoLabel('collectionLogo')"
         :label-props="{ for: 'collectionLogo' }"
       >
-        <div class="flex gap-2">
-          <div
-            v-if="!collectionStore.form.base.logo?.id"
-            class="border-1 w-32 h-32 bg-bg-light justify-items-center items-center flex text-center"
-          >
-            <div class="inline-block w-full h-10 rounded-full">
-              <span class="icon-image text-violet text-2xl"></span>
-            </div>
-          </div>
-          <div v-else class="w-32 h-38">
-            <Image :src="createThumbnailUrl(collectionStore.form.base.logo)" />
-          </div>
-
-          <div>
-            <FormNftCollectionUpload :is-logo="true" />
-            <p>{{ $t('nft.collection.labelInfo.collectionLogoSize') }}</p>
-          </div>
-        </div>
+        <FormNftCollectionUpload :is-logo="true" />
       </n-form-item-gi>
+
       <!--  Collection cover image -->
       <n-form-item-gi
         :span="12"
@@ -42,6 +26,7 @@
       >
         <FormNftCollectionUpload />
       </n-form-item-gi>
+
       <!--  Collection name -->
       <n-form-item-gi
         :span="8"
@@ -148,11 +133,5 @@ function handleSubmitForm(e: Event | MouseEvent) {
       collectionStore.step = CollectionStep.BEHAVIOR;
     }
   });
-}
-function createThumbnailUrl(file: FileListItemType): string {
-  if (file.file) {
-    return window.URL.createObjectURL(file.file);
-  }
-  return '';
 }
 </script>

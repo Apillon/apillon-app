@@ -43,6 +43,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormItemRule } from 'naive-ui';
+
 type FormUserInvite = {
   email: string;
   role_id: number | null;
@@ -91,7 +93,7 @@ const rules: NFormRules = {
       message: $i18n.t('validation.roleRequired'),
     },
     {
-      validator(_: NFormItemRule, value: string) {
+      validator(_: FormItemRule, value: string) {
         return UserRoleIds.includes(parseInt(value));
       },
       message: $i18n.t('validation.role'),

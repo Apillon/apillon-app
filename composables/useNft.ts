@@ -1,3 +1,5 @@
+import type { UploadCustomRequestOptions } from 'naive-ui';
+
 export default function useNft() {
   const $i18n = useI18n();
   const message = useMessage();
@@ -73,7 +75,7 @@ export default function useNft() {
    */
 
   /** Upload file request - add file to list */
-  function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+  function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
     const uploadedFile: FileListItemType = {
       ...file,
       percentage: 0,
@@ -184,7 +186,7 @@ export default function useNft() {
     onProgress,
     onError,
     onFinish,
-  }: NUploadCustomRequestOptions) {
+  }: UploadCustomRequestOptions) {
     if (!isImage(file.type)) {
       message.warning($i18n.t('validation.notImage', { name: file.name }));
       onError();
@@ -220,7 +222,7 @@ export default function useNft() {
     }, 300);
   }
 
-  function uploadImageRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+  function uploadImageRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
     if (!isImage(file.type)) {
       message.warning($i18n.t('validation.notImage', { name: file.name }));
       onError();
@@ -244,7 +246,7 @@ export default function useNft() {
       message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));
       onError();
     } else {
-      if (collectionStore.amount === 0) {
+      if (collectionStore.amount === NftAmount.SINGLE) {
         collectionStore.form.single.image = image.name;
       }
       collectionStore.images.push(image);
@@ -291,7 +293,7 @@ export default function useNft() {
   /**
    * Deploy NFT with metadata
    */
-  async function deployCollection() {
+  async function deployCollection(metadata: boolean = false) {
     const nftMetadataFiles = createNftFiles(collectionStore.metadata);
     const metadataSession = await uploadFiles(
       collectionStore.active.bucket_uuid,
@@ -308,54 +310,17 @@ export default function useNft() {
       false
     );
 
-    await Promise.all(putRequests.value).then(async _ => {
-      if (!!metadataSession && !!imagesSession) {
-        const res = await $api.post<CollectionResponse>(
-          endpoints.nftDeploy(collectionStore.active.collection_uuid),
-          {
-            useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
-            metadataSession,
-            imagesSession,
-          }
-        );
-        collectionStore.active = res.data;
-
-        message.success($i18n.t('form.success.nftDeployed'));
-      } else {
-        message.error($i18n.t('nft.upload.deployError'));
-      }
-    });
-  }
-  /**
-   * Add NFT with metadata to collection
-   */
-  async function addNft() {
-    const nftMetadataFiles = createNftFiles(collectionStore.metadata);
-    const metadataSession = await uploadFiles(
-      collectionStore.active.bucket_uuid,
-      nftMetadataFiles,
-      false,
-      true,
-      false
-    );
-    const imagesSession = await uploadFiles(
-      collectionStore.active.bucket_uuid,
-      collectionStore.images,
-      false,
-      true,
-      false
-    );
+    const endpoint = metadata
+      ? endpoints.collectionNftsMetadata(collectionStore.active.collection_uuid)
+      : endpoints.nftDeploy(collectionStore.active.collection_uuid);
 
     await Promise.all(putRequests.value).then(async _ => {
       if (!!metadataSession && !!imagesSession) {
-        const res = await $api.post<CollectionResponse>(
-          endpoints.collectionNftsMetadata(collectionStore.active.collection_uuid),
-          {
-            useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
-            metadataSession,
-            imagesSession,
-          }
-        );
+        const res = await $api.post<CollectionResponse>(endpoint, {
+          useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
+          metadataSession,
+          imagesSession,
+        });
         collectionStore.active = res.data;
 
         message.success($i18n.t('form.success.nftDeployed'));
@@ -364,7 +329,9 @@ export default function useNft() {
       }
     });
 
-    collectionStore.metadata = [];
+    if (metadata) {
+      collectionStore.metadata = [];
+    }
   }
 
   /**
@@ -411,7 +378,6 @@ export default function useNft() {
     createNftData,
     createThumbnailUrl,
     deployCollection,
-    addNft,
     getPriceServiceName,
     handleImageChange,
     handleImageRemove,

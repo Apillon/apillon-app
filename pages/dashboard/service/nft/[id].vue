@@ -219,7 +219,11 @@ function checkUnfinishedTransactions() {
     );
     if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
       clearInterval(transactionInterval);
-      collectionStore.active = await collectionStore.fetchCollection(collectionUuid.value);
+
+      const newCollection = await collectionStore.fetchCollection(collectionUuid.value);
+      if (newCollection) {
+        collectionStore.active = newCollection;
+      }
     }
   }, 30000);
 }

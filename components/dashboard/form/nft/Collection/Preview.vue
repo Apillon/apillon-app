@@ -1,128 +1,184 @@
 <template>
-  <div class="max-w-xl">
+  <div class="max-w-xl mt-6 mb-8">
     <div class="mb-4">
-      <h2>{{ $t('nft.collection.preview') }}</h2>
+      <h2 class="text-center">{{ $t('nft.collection.preview') }}</h2>
       <p>
         {{ $t('nft.collection.previewInfo') }}
       </p>
     </div>
     <div class="mb-4 relative">
-      <Image :src="createThumbnailUrl(collectionStore.form.base.coverImage)" class="h-50" />
       <Image
+        v-if="collectionStore.form.base.coverImage"
+        :src="createThumbnailUrl(collectionStore.form.base.coverImage)"
+        class="h-50"
+      />
+      <Image
+        v-if="collectionStore.form.base.logo"
         :src="createThumbnailUrl(collectionStore.form.base.logo)"
         class="top-2 left-2 absolute h-20 border-2 border-bg-lighter"
       />
     </div>
-    <div>
-      <h4 class="mb-2">{{ $t('nft.collection.data') }}</h4>
-      <div class="flex bg-bg-light py-2 px-4 rounded-md gap-3 w-max mb-4">
-        <div class="grid gap-y-1">
-          <span>{{ `${$t('form.label.collectionName')}:` }}</span>
-          <span>{{ `${$t('form.label.collectionSymbol')}:` }}</span>
-          <span>{{ `${$t('form.label.collectionChain')}:` }}</span>
-          <span>{{ `${$t('form.label.collectionType')}:` }}</span>
-          <span>{{ `${$t('form.label.collectionUseGateway')}:` }}</span>
-        </div>
-        <div class="grid gap-y-1">
-          <span>{{ collectionStore.form.base.name }}</span>
-          <span>{{ collectionStore.form.base.symbol }}</span>
-          <span>{{ getChainName(collectionStore.form.base.chain) }}</span>
-          <span>{{ getCollectionTypeName(collectionStore.form.base.collectionType) }}</span>
-          <span>{{
-            collectionStore.form.base.useApillonIpfsGateway
-              ? $t('form.booleanSelect.true')
-              : $t('form.booleanSelect.false')
-          }}</span>
-        </div>
-      </div>
-      <div class="mb-4">
-        <h4 class="mb-2">{{ $t('nft.collection.behavior') }}</h4>
-        <div class="flex bg-bg-light py-2 px-4 rounded-md gap-3 w-max">
-          <div class="grid gap-y-1">
-            <span>{{ `${$t('form.label.collectionSupplyLimited')}:` }}</span>
-            <span>{{ `${$t('form.label.collectionMaxSupply')}:` }}</span>
-            <span>{{ `${$t('form.label.collectionRevocable')}:` }}</span>
-            <span>{{ `${$t('form.label.collectionSoulbound')}:` }}</span>
-            <span>{{ `${$t('form.label.collectionRoyaltiesFees')}:` }}</span>
-            <span>{{ `${$t('form.label.collectionRoyaltiesAddress')}:` }}</span>
-            <span>{{ `${$t('form.label.collectionDrop')}:` }}</span>
-            <span v-if="collectionStore.form.behavior.drop">{{
-              `${$t('form.label.dropPrice')}:`
-            }}</span>
-            <span v-if="collectionStore.form.behavior.drop">{{
-              `${$t('form.label.collectionDropStart')}:`
-            }}</span>
-            <span v-if="collectionStore.form.behavior.drop">{{
-              `${$t('form.label.collectionDropReserve')}:`
-            }}</span>
-          </div>
-          <div class="grid gap-y-1">
-            <span>{{
-              collectionStore.form.behavior.supplyLimited
-                ? $t('form.supplyTypes.limited')
-                : $t('form.supplyTypes.unlimited')
-            }}</span>
-            <span>{{
-              collectionStore.form.behavior.maxSupply
-                ? collectionStore.form.behavior.maxSupply
-                : '-'
-            }}</span>
-            <span>{{
-              collectionStore.form.behavior.revocable
-                ? $t('form.booleanSelect.true')
-                : $t('form.booleanSelect.false')
-            }}</span>
-            <span>{{
-              collectionStore.form.behavior.soulbound
-                ? $t('form.booleanSelect.true')
-                : $t('form.booleanSelect.false')
-            }}</span>
-            <span>{{
-              collectionStore.form.behavior.royaltiesFees
-                ? collectionStore.form.behavior.royaltiesFees
-                : '-'
-            }}</span>
-            <span>{{
-              collectionStore.form.behavior.royaltiesAddress
-                ? collectionStore.form.behavior.royaltiesAddress
-                : '-'
-            }}</span>
-            <span>{{
-              collectionStore.form.behavior.drop
-                ? $t('form.booleanSelect.true')
-                : $t('form.booleanSelect.false')
-            }}</span>
-            <span v-if="collectionStore.form.behavior.drop">{{
-              collectionStore.form.behavior.dropPrice
-            }}</span>
-            <span v-if="collectionStore.form.behavior.drop">{{
-              collectionStore.form.behavior.dropStart
-            }}</span>
-            <span v-if="collectionStore.form.behavior.drop">{{
-              collectionStore.form.behavior.dropReserve
-            }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <n-table class="plain table-fixed mb-6" :bordered="false" :single-line="true">
+      <thead>
+        <tr>
+          <th>{{ $t('nft.collection.data') }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ $t('form.label.collectionName') }}:</td>
+          <td>
+            <span class="text-white">{{ collectionStore.form.base.name }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ $t('form.label.collectionSymbol') }}:</td>
+          <td>
+            <span class="text-white">{{ collectionStore.form.base.symbol }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ $t('form.label.collectionChain') }}:</td>
+          <td>
+            <span class="text-white">{{ getChainName(collectionStore.form.base.chain) }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ $t('form.label.collectionType') }}:</td>
+          <td>
+            <span class="text-white">
+              {{ getCollectionTypeName(collectionStore.form.base.collectionType) }}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ $t('form.label.collectionUseGateway') }}:</td>
+          <td>
+            <span class="text-white">
+              {{
+                collectionStore.form.base.useApillonIpfsGateway
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
+              }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </n-table>
+
+    <n-table class="plain table-fixed" :bordered="false" :single-line="true">
+      <thead>
+        <tr>
+          <th>{{ $t('nft.collection.behavior') }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ $t('form.label.collectionSupplyLimited') }}:</td>
+          <td>
+            <span class="text-white">
+              {{
+                collectionStore.form.behavior.supplyLimited
+                  ? collectionStore.form.behavior.maxSupply
+                  : $t('form.supplyTypes.unlimited')
+              }}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ $t('form.label.collectionRevocable') }}:</td>
+          <td>
+            <span class="text-white">
+              {{
+                collectionStore.form.behavior.revocable
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
+              }}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ $t('form.label.collectionSoulbound') }}:</td>
+          <td>
+            <span class="text-white">
+              {{
+                collectionStore.form.behavior.soulbound
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
+              }}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ $t('form.label.collectionRoyaltiesFees') }}:</td>
+          <td>
+            <span class="text-white">
+              {{
+                collectionStore.form.behavior.royaltiesFees
+                  ? collectionStore.form.behavior.royaltiesFees
+                  : '0'
+              }}
+            </span>
+          </td>
+        </tr>
+        <tr v-if="collectionStore.form.behavior.royaltiesAddress">
+          <td>{{ $t('form.label.collectionRoyaltiesAddress') }}:</td>
+          <td>
+            <span class="text-white">
+              {{ collectionStore.form.behavior.royaltiesAddress }}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ $t('form.label.collectionDrop') }}:</td>
+          <td>
+            <span class="text-white">
+              {{
+                collectionStore.form.behavior.drop
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
+              }}
+            </span>
+          </td>
+        </tr>
+        <template v-if="collectionStore.form.behavior.drop">
+          <tr>
+            <td>{{ $t('form.label.collectionDropPrice', { currency: chainCurrency() }) }}:</td>
+            <td>
+              <span class="text-white"> {{ collectionStore.form.behavior.dropPrice }} </span>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ $t('form.label.collectionDropStart') }}:</td>
+            <td>
+              <span class="text-white">
+                {{ timestampToDateAndTime(collectionStore.form.behavior.dropStart / 1000) }}
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ $t('form.label.collectionDropReserve') }}:</td>
+            <td>
+              <span class="text-white"> {{ collectionStore.form.behavior.dropReserve }} </span>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </n-table>
   </div>
 </template>
 
 <script setup lang="ts">
 const collectionStore = useCollectionStore();
-const { collectionTypes, chains } = useCollection();
-
-function createThumbnailUrl(file: FileListItemType): string {
-  if (file.file) {
-    return window.URL.createObjectURL(file.file);
-  }
-  return '';
-}
+const { collectionTypes, chains, chainCurrency } = useCollection();
+const { createThumbnailUrl } = useNft();
 
 function getCollectionTypeName(collectionType: Number) {
-  return collectionTypes.find(type => type.value === collectionType).label;
+  return collectionTypes.find(type => type.value === collectionType)?.label;
 }
 function getChainName(collectionChain: Number) {
-  return chains.find(chain => chain.value === collectionChain).label;
+  return chains.find(chain => chain.value === collectionChain)?.label;
 }
 </script>

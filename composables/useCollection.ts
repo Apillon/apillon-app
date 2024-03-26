@@ -1,3 +1,6 @@
+import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
+import type { FileInfo } from 'naive-ui/es/upload/src/interface';
+
 export default function useCollection() {
   const $i18n = useI18n();
   const message = useMessage();
@@ -12,20 +15,7 @@ export default function useCollection() {
   const chains = [
     { label: $i18n.t(`nft.chain.${Chains.MOONBEAM}`), value: Chains.MOONBEAM },
     { label: $i18n.t(`nft.chain.${Chains.MOONBASE}`), value: Chains.MOONBASE },
-    // { label: $i18n.t(`nft.chain.${Chains.ASTAR_SHIBUYA}`), value: Chains.ASTAR_SHIBUYA },
     { label: $i18n.t(`nft.chain.${Chains.ASTAR}`), value: Chains.ASTAR },
-  ];
-  const NftAmount = [
-    {
-      label: $i18n.t('nft.amount.single'),
-      sublabel: $i18n.t('nft.amount.singleContent'),
-      value: 0,
-    },
-    {
-      label: $i18n.t('nft.amount.multiple'),
-      sublabel: $i18n.t('nft.amount.multipleContent'),
-      value: 1,
-    },
   ];
   const collectionTypes = [
     {
@@ -57,14 +47,14 @@ export default function useCollection() {
   /**
    * Rules
    */
-  const rulesBaseUri: NFormItemRule[] = [
+  const rulesBaseUri: FormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionBaseUriRequired')),
     {
       type: 'url',
       message: $i18n.t('validation.collectionBaseUri'),
     },
   ];
-  const rulesMaxSupply: NFormItemRule[] = [
+  const rulesMaxSupply: FormItemRule[] = [
     {
       max: maxNft.value,
       validator: validateMaxSupply,
@@ -73,48 +63,48 @@ export default function useCollection() {
       }),
     },
   ];
-  const rulesDropPrice: NFormItemRule[] = [
+  const rulesDropPrice: FormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionDropPrice')),
     {
       validator: validateDropPrice,
       message: $i18n.t('validation.collectionDropPrice'),
     },
   ];
-  const rulesDropReserve: NFormItemRule[] = [
+  const rulesDropReserve: FormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionDropReserve')),
     {
       validator: validateReserve,
       message: $i18n.t('validation.collectionDropReserve'),
     },
   ];
-  const rulesRoyaltiesAddress: NFormItemRule[] = [
+  const rulesRoyaltiesAddress: FormItemRule[] = [
     {
       validator: validateRoyaltiesAddress,
       message: $i18n.t('validation.collectionRoyaltiesAddress'),
     },
   ];
-  const rulesRoyaltyFee: NFormItemRule[] = [
+  const rulesRoyaltyFee: FormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionRoyaltiesFeesRequired')),
     {
       validator: validateNaturalNumber,
       message: $i18n.t('validation.collectionRoyaltiesFees'),
     },
   ];
-  const rulesCollectionLogo: NFormItemRule[] = [
+  const rulesCollectionLogo: FormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionLogoRequired')),
     {
       validator: validateCollectionLogo,
       message: $i18n.t('validation.collectionLogoRequired'),
     },
   ];
-  const rulesCollectionCoverImage: NFormItemRule[] = [
+  const rulesCollectionCoverImage: FormItemRule[] = [
     ruleRequired($i18n.t('validation.collectionCoverImageRequired')),
     {
       validator: validateCollectionCoverImage,
       message: $i18n.t('validation.collectionCoverImageRequired'),
     },
   ];
-  const validateSingleIdRequired: NFormItemRule[] = [
+  const validateSingleIdRequired: FormItemRule[] = [
     ruleRequired($i18n.t('validation.nftIdRequired')),
     {
       validator: validateSingleNftIdUnique,
@@ -172,32 +162,32 @@ export default function useCollection() {
   /**
    * Validations
    */
-  function validateReserve(_: NFormItemRule, value: number): boolean {
+  function validateReserve(_: FormItemRule, value: number): boolean {
     return (
       collectionStore.form.behavior.supplyLimited === 0 ||
       collectionStore.form.behavior.maxSupply === 0 ||
       value <= collectionStore.form.behavior.maxSupply
     );
   }
-  function validateMaxSupply(_: NFormItemRule, value: number): boolean {
+  function validateMaxSupply(_: FormItemRule, value: number): boolean {
     return value <= maxNft.value;
   }
-  function validateDropStart(_: NFormItemRule, value: number): boolean {
+  function validateDropStart(_: FormItemRule, value: number): boolean {
     return !collectionStore.form.behavior.drop || value > Date.now();
   }
-  function validateDropPrice(_: NFormItemRule, value: number): boolean {
+  function validateDropPrice(_: FormItemRule, value: number): boolean {
     return !collectionStore.form.behavior.drop || (value > 0 && value < Number.MAX_SAFE_INTEGER);
   }
-  function validateRoyaltiesAddress(_: NFormItemRule, value: string): boolean {
+  function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
     return collectionStore.form.behavior.royaltiesFees === 0 || validateEvmAddress(_, value);
   }
-  function validateCollectionLogo(_: NFormItemRule): boolean {
+  function validateCollectionLogo(_: FormItemRule): boolean {
     return !!collectionStore.form.base.logo?.id;
   }
-  function validateCollectionCoverImage(_: NFormItemRule): boolean {
+  function validateCollectionCoverImage(_: FormItemRule): boolean {
     return !!collectionStore.form.base.coverImage?.id;
   }
-  function validateSingleNftIdUnique(_: NFormItemRule): boolean {
+  function validateSingleNftIdUnique(_: FormItemRule): boolean {
     if (collectionStore.metadata.length >= 1) {
       return !collectionStore.metadata.find(item => item.id === collectionStore.form.single.id);
     }
@@ -212,8 +202,17 @@ export default function useCollection() {
     return ts < Date.now();
   }
 
+  function chainCurrency() {
+    switch (collectionStore.form.base.chain) {
+      case Chains.ASTAR:
+        return 'ASTR';
+      default:
+        return 'GLMR';
+    }
+  }
+
   function uploadFileRequest(
-    { file, onError, onFinish }: NUploadCustomRequestOptions,
+    { file, onError, onFinish }: UploadCustomRequestOptions,
     logo: boolean
   ) {
     const uploadedFile: FileListItemType = {
@@ -253,27 +252,21 @@ export default function useCollection() {
     collectionStore.form.base.logo = {} as FileListItemType;
   }
 
-  function handleCoverImageChange(event: NUploadCustomRequestOptions) {
-    handleCoverImageRemove();
-    uploadFileRequest(event, false);
-  }
-
   return {
     loading,
     formRef,
     chains,
-    NftAmount,
     collectionTypes,
     supplyTypes,
     booleanSelect,
     rules,
     rulesSingle,
     isFormDisabled,
+    chainCurrency,
     disablePasteDate,
     disablePasteTime,
     uploadFileRequest,
     handleLogoRemove,
     handleCoverImageRemove,
-    handleCoverImageChange,
   };
 }

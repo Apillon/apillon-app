@@ -2,7 +2,7 @@
 export enum Chains {
   MOONBEAM = 1284,
   MOONBASE = 1287,
-  ASTAR_SHIBUYA = 81, // testnet
+  // ASTAR_SHIBUYA = 81,
   ASTAR = 592,
 }
 
@@ -48,6 +48,11 @@ export enum TransactionType {
   NEST_MINT_NFT = 6,
 }
 
+/** NFT create steps */
+export enum NftAmount {
+  SINGLE = 1,
+  MULTIPLE = 2,
+}
 /** Mint steps */
 export enum NftMintTab {
   METADATA = 1,

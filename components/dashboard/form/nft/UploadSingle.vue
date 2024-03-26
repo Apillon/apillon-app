@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="w-full max-w-3xl">
     <h2>{{ $t('nft.create') }}</h2>
     <div class="my-8">
       <h4>{{ $t('nft.single.content') }}</h4>
-      <p class="w-2/3">
+      <p class="max-w-lg text-xs">
         {{ $t('nft.single.uploadDescription') }}
       </p>
       <div v-if="collectionStore.form.single.image">
-        <div class="bg-bg-light rounded-xl overflow-hidden w-72">
+        <div class="bg-bg-light rounded-xl overflow-hidden w-72 mx-auto">
           <figure class="flex flex-col h-full">
             <Image
               :src="imageByName(collectionStore.form.single.image)"

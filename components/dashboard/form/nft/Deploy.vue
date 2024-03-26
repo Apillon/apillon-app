@@ -67,7 +67,6 @@
 import { useMessage } from 'naive-ui';
 
 const emit = defineEmits(['submitSuccess']);
-const { deployCollection, getPriceServiceName } = useNft();
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -76,9 +75,10 @@ const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
+const { deployCollection, getPriceServiceName } = useNft();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
+
 const deployStatus = ref<number>(0);
-const modalW3WarnVisible = ref<boolean>(false);
-const modalW3WarnShown = ref<boolean>(false);
 
 function isStepAvailable(step: number) {
   if (step === NftDeployStep.DEPLOY) {
@@ -98,23 +98,8 @@ function onModalW3WarnConfirm() {
   warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
 }
 
-/** Watch modalW3WarnVisible, onShow update timestamp of shown modal in session storage */
-watch(
-  () => modalW3WarnVisible.value,
-  shown => {
-    if (shown) {
-      modalW3WarnShown.value = true;
-      sessionStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
-    }
-  }
-);
-
 function w3WarnAndDeploy() {
-  if (
-    !modalW3WarnShown.value &&
-    !sessionStorage.getItem(LsW3WarnKeys.NFT_NEW) &&
-    $i18n.te('w3Warn.nft.new')
-  ) {
+  if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
     modalW3WarnVisible.value = true;
   } else {
     warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
@@ -123,9 +108,6 @@ function w3WarnAndDeploy() {
 
 async function deploy() {
   deployStatus.value = NftDeployStatus.CREATING;
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
 
   try {
     const bodyData = {

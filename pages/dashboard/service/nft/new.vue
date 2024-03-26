@@ -76,10 +76,7 @@
               <span class="ml-2 text-sm text-white">{{ $t('nft.collection.previewTab') }}</span>
             </template>
             <slot>
-              <div
-                class="justify-center items-center flex"
-                style="min-height: calc(100dvh - 300px)"
-              >
+              <div class="flex-cc" style="min-height: calc(100dvh - 300px)">
                 <div
                   v-if="collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOY_INITIATED"
                   class="w-full pb-8"
@@ -94,9 +91,9 @@
                     </p>
                   </div>
                 </div>
-                <div v-else>
+                <div v-else class="pb-8">
                   <FormNftCollectionPreview />
-                  <Btn type="primary" class="w-full mb-2" @click="modalW3WarnVisible = true">
+                  <Btn type="primary" class="w-full mb-2" @click="w3WarnAndDeploy()">
                     {{ $t('form.proceed') }}
                   </Btn>
                 </div>
@@ -123,7 +120,7 @@
             collectionStore.nftStep !== NftCreateStep.AMOUNT &&
             collectionStore.nftStep !== NftCreateStep.PREVIEW
           "
-          class="absolute left-0 top-[10px]"
+          class="absolute left-0 top-10"
           @click="goToPreviousStep"
         >
           <span class="icon-back text-2xl align-sub"></span>
@@ -170,34 +167,44 @@
 <script lang="ts" setup>
 import type { TabsInst } from 'naive-ui';
 import { useMessage } from 'naive-ui';
-import { NftCreateStep } from '../../../../lib/types/nft';
 
-const $i18n = useI18n();
+const { t, te } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
+const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+
 const { uploadFiles } = useUpload();
+const { getPriceServiceName } = useNft();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 useHead({
-  title: $i18n.t('dashboard.nav.nft'),
+  title: t('dashboard.nav.nft'),
 });
 
 const pageLoading = ref<boolean>(true);
-const modalW3WarnVisible = ref<boolean>(false);
 const mintTabsRef = ref<TabsInst | null>(null);
 
 const images = ref<Array<FileListItemType>>([]);
 
 onMounted(() => {
   resetAndAddNft();
+
+  /** Get Price list */
+  paymentStore.getPriceList();
 });
 
-async function onModalW3WarnConfirm() {
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
+function w3WarnAndDeploy() {
+  if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new')) {
+    modalW3WarnVisible.value = true;
+  } else {
+    warningStore.showSpendingWarning(getPriceServiceName(), () => onModalW3WarnConfirm());
   }
+}
 
+async function onModalW3WarnConfirm() {
   if (collectionStore.mintTab === NftMintTab.PREVIEW) {
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
     await deploy();
@@ -213,12 +220,14 @@ function prepareImagesForUpload() {
   const cover = collectionStore.form.base.coverImage;
   const logo = collectionStore.form.base.logo;
 
-  cover.name = 'cover.' + cover.name.split('.')[cover.name.split('.').length - 1];
-
-  logo.name = 'logo.' + logo.name.split('.')[logo.name.split('.').length - 1];
-
-  images.value.push(cover);
-  images.value.push(logo);
+  if (logo) {
+    logo.name = 'logo.' + logo.name.split('.')[logo.name.split('.').length - 1];
+    images.value.push(logo);
+  }
+  if (cover) {
+    cover.name = 'cover.' + cover.name.split('.')[cover.name.split('.').length - 1];
+    images.value.push(cover);
+  }
 }
 
 async function deploy() {
@@ -323,11 +332,10 @@ function goToPreviousStep() {
           }
           return;
         case NftCreateStep.PREVIEW:
-          if (collectionStore.amount === 1) {
+          if (collectionStore.amount === NftAmount.MULTIPLE) {
             collectionStore.nftStep = NftCreateStep.MULTIPLE;
             collectionStore.stepUpload = NftUploadStep.IMAGES;
-          }
-          if (collectionStore.amount === 0) {
+          } else {
             collectionStore.nftStep = NftCreateStep.SINGLE;
             collectionStore.metadata.pop();
             collectionStore.images.pop();

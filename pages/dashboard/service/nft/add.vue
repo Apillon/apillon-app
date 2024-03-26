@@ -27,7 +27,7 @@
         <FormNftCreate />
         <button
           v-if="collectionStore.nftStep !== NftCreateStep.AMOUNT"
-          class="absolute left-0 top-[10px]"
+          class="absolute left-0 top-10"
           @click="goToPreviousStep"
         >
           <span class="icon-back text-2xl align-sub"></span>
@@ -36,7 +36,7 @@
       <!-- Buttons switch preview-->
       <div
         v-if="collectionStore.nftStep === NftCreateStep.PREVIEW"
-        class="absolute right-0 top-2 flex items-center"
+        class="absolute right-4 top-4 flex items-center"
       >
         <span class="mr-2">{{ $t('general.view') }}:</span>
         <n-button
@@ -71,6 +71,7 @@
 
 <script lang="ts" setup>
 const dataStore = useDataStore();
+const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
 
@@ -79,6 +80,9 @@ const pageLoading = ref<boolean>(true);
 
 onMounted(() => {
   resetAndAddNft();
+
+  /** Get Price list */
+  paymentStore.getPriceList();
 });
 
 function resetAndAddNft() {
@@ -110,11 +114,10 @@ function goToPreviousStep() {
       }
       return;
     case NftCreateStep.PREVIEW:
-      if (collectionStore.amount === 1) {
+      if (collectionStore.amount === NftAmount.MULTIPLE) {
         collectionStore.nftStep = NftCreateStep.MULTIPLE;
         collectionStore.stepUpload = NftUploadStep.IMAGES;
-      }
-      if (collectionStore.amount === 0) {
+      } else {
         collectionStore.nftStep = NftCreateStep.SINGLE;
       }
       return;

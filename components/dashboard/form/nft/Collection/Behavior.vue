@@ -195,8 +195,15 @@
 const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { booleanSelect, formRef, supplyTypes, rules, disablePasteDate, disablePasteTime } =
-  useCollection();
+const {
+  booleanSelect,
+  formRef,
+  supplyTypes,
+  rules,
+  chainCurrency,
+  disablePasteDate,
+  disablePasteTime,
+} = useCollection();
 
 onMounted(() => {
   if (collectionStore.form.behavior.maxSupply === 0) {
@@ -220,15 +227,6 @@ function infoLabel(field: string) {
     ];
   }
   return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
-}
-
-function chainCurrency() {
-  switch (collectionStore.form.base.chain) {
-    case Chains.ASTAR:
-      return 'ASTR';
-    default:
-      return 'GLMR';
-  }
 }
 
 // Submit
