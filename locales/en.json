@@ -755,7 +755,7 @@
     "ERROR_READING_FROM_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
     "SERVICE_ERROR": "There has been an error. Please come back later when we fixed that problem.",
     "NO_CHANGES_TO_DEPLOY": "There have been no changes to your website. First, make some changes and deploy them to the staging.",
-    "NFT_BASE_URI_NOT_PRESENT": "NFT base uri not present",
+    "NFT_BASE_URI_NOT_PRESENT": "NFT base URI not present",
     "NFT_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
     "NFT_DROP_BOOL_NOT_PRESENT": "NFT drop not present",
     "NFT_DROP_TIMESTAMP_NOT_PRESENT": "NFT drop timestamp not present",
@@ -831,7 +831,7 @@
       "collectionSymbol": "Symbol",
       "collectionSupplyLimited": "Total supply",
       "collectionType": "Collection type",
-      "collectionUseGateway": "Use apillon gateway for base uri",
+      "collectionUseGateway": "Use apillon gateway for base URI",
       "confirmPassword": "Confirm password",
       "creditThreshold": "Notify me when credits are below the limit",
       "cvv": "CVV",
@@ -1150,7 +1150,7 @@
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
       "address": "Collection address",
-      "baseUri": "Base Uri",
+      "baseUri": "Base URI",
       "contractAddress": "Contract address",
       "create": "Create collection",
       "createFirst": "Start creating NFTs",
@@ -1214,7 +1214,7 @@
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
         "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
         "collectionType": "",
-        "collectionUseGateway": "Collection base uri points to IPFS. If this checkbox is checked, base uri will point to CID on Apillon private gateway, which provide better performance. Otherwise base uri points to: ipfs://[CID], and gateway need to be handled manually."
+        "collectionUseGateway": "Collection base URI points to IPFS. If this checkbox is checked, base URI will point to CID on Apillon private gateway, which provide better performance. Otherwise base URI points to: ipfs://[CID], and gateway needs to be handled manually."
       },
       "status": {
         "0": "CREATED",
