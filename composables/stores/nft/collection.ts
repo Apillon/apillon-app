@@ -11,13 +11,13 @@ export const useCollectionStore = defineStore('collection', {
     csvFile: {} as FileListItemType,
     csvSelectedAttributes: [] as Array<string>,
     filesMetadata: [] as FileListItemType[],
-    gridView: true,
+    gridView: false,
     images: [] as FileListItemType[],
     items: [] as CollectionInterface[],
     loading: false,
     metadata: [] as Array<Record<string, any>>,
     metadataStored: true as Boolean | null,
-    mintTab: NftMintTab.METADATA,
+    mintTab: NftCreateTab.METADATA,
     search: '',
     step: CollectionStep.ENVIRONMENT,
     nftStep: NftCreateStep.AMOUNT,
@@ -91,7 +91,7 @@ export const useCollectionStore = defineStore('collection', {
     resetMetadata() {
       this.resetFile();
       this.resetImages();
-      this.mintTab = NftMintTab.METADATA;
+      this.mintTab = NftCreateTab.METADATA;
       this.step = CollectionStep.ENVIRONMENT;
       this.nftStep = NftCreateStep.AMOUNT;
       this.stepDeploy = NftDeployStep.NAME;

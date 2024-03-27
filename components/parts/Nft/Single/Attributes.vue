@@ -24,6 +24,7 @@
               clearable
             />
           </n-form-item-gi>
+
           <n-form-item-gi
             :span="12"
             path="display_type"
@@ -33,11 +34,12 @@
             <select-options
               v-model:value="collectionStore.attribute.display_type"
               :options="displayTypes"
-              size="small"
+              :render-option="renderOption"
               filterable
               clearable
             />
           </n-form-item-gi>
+
           <n-form-item-gi
             :span="12"
             path="value"
@@ -62,17 +64,36 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+import { NTooltip, type SelectOption } from 'naive-ui';
+
+const { t, te } = useI18n();
 const collectionStore = useCollectionStore();
 
 const modalShowAttribute = ref<boolean>(false);
-const displayTypes = ref<Array<NSelectOption>>([
-  { value: 'string', label: 'String' },
-  { value: 'date', label: 'Date' },
-  { value: 'number', label: 'Number' },
-  { value: 'boost_number', label: 'Boost number' },
-  { value: 'boost_percentage', label: 'Boost percentage' },
-]);
+const types = ['string', 'date', 'number', 'boost_number', 'boost_percentage'];
+const displayTypes = ref<Array<SelectOption>>(
+  types.map(type => {
+    return {
+      value: type,
+      label: t(`nft.collection.displayTypes.${type}.label`),
+      info: t(`nft.collection.displayTypes.${type}.info`),
+    };
+  })
+);
+
+const renderOption = ({ node, option }: DropdownRenderOption) => {
+  if (option.info) {
+    return h(
+      NTooltip,
+      { keepAliveOnHover: false, style: { width: 'max-content' } },
+      {
+        trigger: () => node,
+        default: () => option.info,
+      }
+    );
+  }
+  return node;
+};
 
 function handleSubmitForm() {
   collectionStore.form.single.attributes.push(collectionStore.attribute);
@@ -88,19 +109,19 @@ function handleSubmitForm() {
 
 function infoLabel(field: string) {
   if (
-    $i18n.te(`form.label.${field}`) &&
-    $i18n.te(`nft.nft.labelInfo.${field}`) &&
-    $i18n.t(`nft.nft.labelInfo.${field}`)
+    te(`form.label.${field}`) &&
+    te(`nft.collection.labelInfo.${field}`) &&
+    t(`nft.collection.labelInfo.${field}`)
   ) {
     return [
-      h('span', { class: 'mr-1' }, $i18n.t(`form.label.${field}`)),
+      h('span', { class: 'mr-1' }, t(`form.label.${field}`)),
       h(
         resolveComponent('IconInfo'),
-        { size: 'sm', tooltip: $i18n.t(`nft.collection.labelInfo.${field}`) },
+        { size: 'sm', tooltip: t(`nft.collection.labelInfo.${field}`) },
         ''
       ),
     ];
   }
-  return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
+  return te(`form.label.${field}`) ? t(`form.label.${field}`) : field;
 }
 </script>

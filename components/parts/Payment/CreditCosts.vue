@@ -83,13 +83,6 @@ const servicePrices = ref<ProductPriceInterface[]>([]);
 const selectedChain = ref<number | null>(null);
 
 onMounted(async () => {
-  console.log(
-    props.filterByChain,
-    props.service,
-    props.chain,
-    collectionStore.form.base.chain,
-    collectionStore.active.chain
-  );
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
     selectedChain.value = props.chain || collectionStore.form.base.chain || Chains.MOONBEAM;
   }

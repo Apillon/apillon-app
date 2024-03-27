@@ -1218,6 +1218,28 @@
         "title": "Display your NFTs on the internet",
         "view": "View the transaction on"
       },
+      "displayTypes": {
+        "string": {
+          "label": "String",
+          "info": "Textual traits that show as text boxes"
+        },
+        "date": {
+          "label": "Date",
+          "info": "Date traits that show as date boxes"
+        },
+        "number": {
+          "label": "Number",
+          "info": "Numerical traits that show as number boxes"
+        },
+        "boost_number": {
+          "label": "Boost number",
+          "info": "Numerical traits that show as progress bars"
+        },
+        "boost_percentage": {
+          "label": "Boost percentage",
+          "info": "Numerical traits that show as circle progress bars"
+        }
+      },
       "labelInfo": {
         "collectionBaseExtension": "",
         "collectionBaseUri": "Paste the collection metadata base URI here.",
@@ -1237,7 +1259,8 @@
         "collectionType": "",
         "collectionUseGateway": "Collection base uri points to IPFS. If this checkbox is checked, base uri will point to CID on Apillon private gateway, which provide better performance. Otherwise base uri points to: ipfs://[CID], and gateway need to be handled manually.",
         "collectionLogoSize": "Maximum size: 3MB, Supported formats: JPG, PNG, GIF, SVG. Recommended size: 400 x 400 px.",
-        "csvUpload": "Before adding new items to the collection with existing NFTs, please add an id column to the CSV file. This will help maintain data integrity and avoid any conflicts when adding new entries."
+        "csvUpload": "Before adding new items to the collection with existing NFTs, please add an id column to the CSV file. This will help maintain data integrity and avoid any conflicts when adding new entries.",
+        "nftDisplayType": "Display type is a field indicating how you would like it to be displayed"
       },
       "status": {
         "0": "CREATED",

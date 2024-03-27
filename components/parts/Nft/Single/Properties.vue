@@ -1,8 +1,8 @@
 <template>
   <div class="bg-bg-light p-4 w-full rounded-md">
     <div class="flex">
-      <h4>Attributes</h4>
-      <FormNftAttributes />
+      <h4>{{ $t('nft.upload.attributes') }}</h4>
+      <NftSingleAttributes />
     </div>
     <div class="mt-4">
       <n-data-table

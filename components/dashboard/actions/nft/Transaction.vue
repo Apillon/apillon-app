@@ -46,6 +46,7 @@
           v-if="collectionStore.active.collection_uuid"
           size="small"
           :loading="loadingBucket"
+          :disabled="actionsDisabled"
           @click="openAddNft()"
         >
           <span class="icon-add text-xl mr-2 text-primary"></span>

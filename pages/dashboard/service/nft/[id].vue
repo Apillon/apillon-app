@@ -15,10 +15,33 @@
         />
 
         <!-- Table -->
-        <TableNftTransaction
-          v-if="collectionStore.hasCollectionTransactions"
-          :transactions="collectionStore.transaction"
-        />
+        <template v-if="collectionStore.hasCollectionTransactions">
+          <TableNftTransaction :transactions="collectionStore.transaction" />
+
+          <div class="w-full max-w-lg text-center mx-auto">
+            <NuxtIcon name="nft/collection" class="flex justify-center icon-auto mb-4" filled />
+            <h2>{{ $t('nft.collection.created.title') }}</h2>
+            <p class="mb-2 text-body whitespace-pre-line">
+              {{ $t('nft.collection.created.info') }}
+            </p>
+
+            <div class="mb-2 flex items-center justify-center text-body">
+              <p>{{ $t('nft.collection.createToDisplay') }}&nbsp;</p>
+              <a href="https://github.com/Apillon/nft-template-vue/fork" target="_blank">
+                <Btn type="builders" size="tiny"> Vue </Btn>
+              </a>
+              <p>,&nbsp;</p>
+              <a href="https://github.com/Apillon/nft-template-react/fork" target="_blank">
+                <Btn type="builders" size="tiny"> React </Btn>
+              </a>
+              <p>&nbsp;{{ $t('general.or') }}&nbsp;</p>
+              <a href="https://github.com/Apillon/nft-template/fork" target="_blank">
+                <Btn type="builders" size="tiny"> javascript template </Btn>
+              </a>
+              <p>.</p>
+            </div>
+          </div>
+        </template>
         <Empty
           v-else
           :title="$t('nft.transaction.empty')"

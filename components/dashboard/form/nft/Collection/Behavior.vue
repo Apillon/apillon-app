@@ -238,7 +238,7 @@ function handleSubmitForm(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      collectionStore.mintTab = NftMintTab.PREVIEW;
+      collectionStore.mintTab = NftCreateTab.PREVIEW;
     }
   });
 }

@@ -128,7 +128,7 @@
           </n-grid>
         </n-form>
       </div>
-      <FormNftPropertiesSingle />
+      <NftSingleProperties />
     </div>
 
     <Btn class="my-8" @click="handleSubmitForm">{{ $t('form.proceed') }}</Btn>

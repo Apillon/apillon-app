@@ -12,7 +12,11 @@
         </slot>
         <template #info>
           <n-space :size="32" align="center">
-            <ModalCreditCosts :service="ServiceTypeName.NFT" filter-by-chain />
+            <ModalCreditCosts
+              :service="ServiceTypeName.NFT"
+              :chain="collectionStore.active.chain"
+              filter-by-chain
+            />
 
             <Badge icon="nft/moonbeam">
               <NuxtIcon name="nft/astar_logo" class="icon-auto ml-2" filled />
@@ -24,7 +28,7 @@
 
     <slot>
       <div>
-        <FormNftCreate />
+        <FormNftCreateMetadata />
         <button
           v-if="collectionStore.nftStep !== NftCreateStep.AMOUNT"
           class="absolute left-0 top-10"

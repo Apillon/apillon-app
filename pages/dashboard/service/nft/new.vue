@@ -31,7 +31,7 @@
           </p>
         </div>
         <FormNftCollection />
-        <button class="absolute left-0 top-[42px]" @click="goToPreviousStep">
+        <button class="absolute left-0 top-[42px]" @click="collectionStore.metadataStored = null">
           <span class="icon-back text-2xl align-sub"></span>
         </button>
       </div>
@@ -47,12 +47,12 @@
         >
           <!-- COLLECTION METADATA -->
           <n-tab-pane
-            :name="NftMintTab.METADATA"
-            :disabled="collectionStore.mintTab === NftMintTab.MINT"
+            :name="NftCreateTab.METADATA"
+            :disabled="collectionStore.mintTab === NftCreateTab.DEPLOY"
           >
             <template #tab>
               <IconNumber
-                v-if="collectionStore.mintTab === NftMintTab.METADATA"
+                v-if="collectionStore.mintTab === NftCreateTab.METADATA"
                 :number="1"
                 :active="true"
               />
@@ -60,18 +60,18 @@
               <span class="ml-2 text-sm text-white">{{ $t('nft.collection.create') }}</span>
             </template>
             <slot>
-              <FormNftCollectionCreate />
+              <NftCollectionForms />
             </slot>
           </n-tab-pane>
 
           <!-- COLLECTION PREVIEW -->
-          <n-tab-pane :name="NftMintTab.PREVIEW" disabled>
+          <n-tab-pane :name="NftCreateTab.PREVIEW" disabled>
             <template #tab>
-              <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
+              <IconSuccessful v-if="collectionStore.mintTab === NftCreateTab.DEPLOY" />
               <IconNumber
                 v-else
                 :number="2"
-                :active="collectionStore.mintTab === NftMintTab.PREVIEW"
+                :active="collectionStore.mintTab === NftCreateTab.PREVIEW"
               />
               <span class="ml-2 text-sm text-white">{{ $t('nft.collection.previewTab') }}</span>
             </template>
@@ -92,7 +92,7 @@
                   </div>
                 </div>
                 <div v-else class="pb-8">
-                  <FormNftCollectionPreview />
+                  <NftPreviewCollection />
                   <Btn type="primary" class="w-full mb-2" @click="w3WarnAndDeploy()">
                     {{ $t('form.proceed') }}
                   </Btn>
@@ -101,14 +101,14 @@
             </slot>
           </n-tab-pane>
 
-          <!-- MINT -->
-          <n-tab-pane :name="NftMintTab.MINT">
+          <!-- DEPLOY -->
+          <n-tab-pane :name="NftCreateTab.DEPLOY">
             <template #tab>
-              <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
+              <IconNumber :number="3" :active="collectionStore.mintTab === NftCreateTab.DEPLOY" />
               <span class="ml-2 text-sm text-white">{{ $t('nft.add') }}</span>
             </template>
             <slot>
-              <FormNftCreate />
+              <FormNftCreateMetadata />
             </slot>
           </n-tab-pane>
         </n-tabs>
@@ -117,10 +117,9 @@
           v-if="
             collectionStore.metadataStored !== null &&
             collectionStore.stepCollectionDeploy !== CollectionStatus.DEPLOY_INITIATED &&
-            collectionStore.nftStep !== NftCreateStep.AMOUNT &&
             collectionStore.nftStep !== NftCreateStep.PREVIEW
           "
-          class="absolute left-0 top-10"
+          class="absolute left-0 top-3"
           @click="goToPreviousStep"
         >
           <span class="icon-back text-2xl align-sub"></span>
@@ -178,6 +177,7 @@ const collectionStore = useCollectionStore();
 
 const { uploadFiles } = useUpload();
 const { getPriceServiceName } = useNft();
+const { prepareFormData } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 useHead({
@@ -200,20 +200,12 @@ function w3WarnAndDeploy() {
   if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new')) {
     modalW3WarnVisible.value = true;
   } else {
-    warningStore.showSpendingWarning(getPriceServiceName(), () => onModalW3WarnConfirm());
+    onModalW3WarnConfirm();
   }
 }
 
 async function onModalW3WarnConfirm() {
-  if (collectionStore.mintTab === NftMintTab.PREVIEW) {
-    collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
-    await deploy();
-    collectionStore.mintTab = NftMintTab.MINT;
-
-    modalW3WarnVisible.value = false;
-  } else {
-    modalW3WarnVisible.value = false;
-  }
+  warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
 }
 
 function prepareImagesForUpload() {
@@ -231,35 +223,11 @@ function prepareImagesForUpload() {
 }
 
 async function deploy() {
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
+  modalW3WarnVisible.value = false;
+  collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
 
   try {
-    const bodyData = {
-      project_uuid: dataStore.projectUuid,
-      name: collectionStore.form.base.name,
-      symbol: collectionStore.form.base.symbol,
-      chain: collectionStore.form.base.chain,
-      collectionType: collectionStore.form.base.collectionType,
-      baseExtension: collectionStore.form.behavior.baseExtension,
-      dropPrice: collectionStore.form.behavior.dropPrice,
-      maxSupply:
-        collectionStore.form.behavior.supplyLimited === 1
-          ? collectionStore.form.behavior.maxSupply
-          : 0,
-      drop: collectionStore.form.behavior.drop,
-      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
-      dropReserve: collectionStore.form.behavior.dropReserve || 0,
-      isRevokable: collectionStore.form.behavior.revocable,
-      isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress:
-        collectionStore.form.behavior.royaltiesFees === 0
-          ? null
-          : collectionStore.form.behavior.royaltiesAddress,
-      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
-    };
-    const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
+    const res = await $api.post<CollectionResponse>(endpoints.collections(), prepareFormData());
     collectionStore.active = res.data;
 
     /** On new collection created add new collection to list */
@@ -277,7 +245,7 @@ async function deploy() {
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
 
     /** Redirects to NFT Create tab */
-    collectionStore.mintTab = NftMintTab.MINT;
+    collectionStore.mintTab = NftCreateTab.DEPLOY;
   } catch (error) {
     /** Deployment status */
     collectionStore.stepCollectionDeploy = CollectionStatus.FAILED;
@@ -303,7 +271,7 @@ function resetAndAddNft() {
 
 function goToPreviousStep() {
   switch (collectionStore.mintTab) {
-    case NftMintTab.METADATA:
+    case NftCreateTab.METADATA:
       if (collectionStore.step === CollectionStep.METADATA) {
         collectionStore.step = CollectionStep.ENVIRONMENT;
         collectionStore.metadataStored = null;
@@ -312,11 +280,11 @@ function goToPreviousStep() {
         collectionStore.step = CollectionStep.METADATA;
       }
       return;
-    case NftMintTab.PREVIEW:
-      collectionStore.mintTab = NftMintTab.METADATA;
+    case NftCreateTab.PREVIEW:
+      collectionStore.mintTab = NftCreateTab.METADATA;
       collectionStore.step = CollectionStep.BEHAVIOR;
       return;
-    case NftMintTab.MINT:
+    case NftCreateTab.DEPLOY:
       switch (collectionStore.nftStep) {
         case NftCreateStep.AMOUNT:
           return;

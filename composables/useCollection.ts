@@ -1,5 +1,4 @@
 import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
-import type { FileInfo } from 'naive-ui/es/upload/src/interface';
 
 export default function useCollection() {
   const $i18n = useI18n();
@@ -159,6 +158,33 @@ export default function useCollection() {
     'single.description': ruleRequired($i18n.t('validation.nftDescription')),
   };
 
+  function prepareFormData(addBaseUri = false) {
+    return {
+      project_uuid: dataStore.projectUuid,
+      name: collectionStore.form.base.name,
+      symbol: collectionStore.form.base.symbol,
+      chain: collectionStore.form.base.chain,
+      collectionType: collectionStore.form.base.collectionType,
+      baseExtension: collectionStore.form.behavior.baseExtension,
+      dropPrice: collectionStore.form.behavior.dropPrice,
+      maxSupply:
+        collectionStore.form.behavior.supplyLimited === 1
+          ? collectionStore.form.behavior.maxSupply
+          : 0,
+      drop: collectionStore.form.behavior.drop,
+      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
+      dropReserve: collectionStore.form.behavior.dropReserve || 0,
+      isRevokable: collectionStore.form.behavior.revocable,
+      isSoulbound: collectionStore.form.behavior.soulbound,
+      royaltiesAddress:
+        collectionStore.form.behavior.royaltiesFees === 0
+          ? null
+          : collectionStore.form.behavior.royaltiesAddress,
+      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
+      baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
+    };
+  }
+
   /**
    * Validations
    */
@@ -265,6 +291,7 @@ export default function useCollection() {
     chainCurrency,
     disablePasteDate,
     disablePasteTime,
+    prepareFormData,
     uploadFileRequest,
     handleLogoRemove,
     handleCoverImageRemove,

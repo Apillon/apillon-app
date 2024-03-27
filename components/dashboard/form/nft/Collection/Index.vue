@@ -340,6 +340,7 @@ const {
   chainCurrency,
   disablePasteDate,
   disablePasteTime,
+  prepareFormData,
 } = useCollection();
 
 const formErrors = ref<boolean>(false);
@@ -396,36 +397,8 @@ function handleSubmit(e: Event | MouseEvent) {
 async function createCollection() {
   loading.value = true;
 
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
-
   try {
-    const bodyData = {
-      project_uuid: dataStore.projectUuid,
-      name: collectionStore.form.base.name,
-      symbol: collectionStore.form.base.symbol,
-      chain: collectionStore.form.base.chain,
-      collectionType: collectionStore.form.base.collectionType,
-      dropPrice: collectionStore.form.behavior.dropPrice,
-      maxSupply:
-        collectionStore.form.behavior.supplyLimited === 1
-          ? collectionStore.form.behavior.maxSupply
-          : 0,
-      baseUri: collectionStore.form.behavior.baseUri,
-      baseExtension: collectionStore.form.behavior.baseExtension,
-      drop: collectionStore.form.behavior.drop,
-      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
-      dropReserve: collectionStore.form.behavior.dropReserve,
-      isRevokable: collectionStore.form.behavior.revocable,
-      isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress:
-        collectionStore.form.behavior.royaltiesFees === 0
-          ? null
-          : collectionStore.form.behavior.royaltiesAddress,
-      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
-    };
-    const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
+    const res = await $api.post<CollectionResponse>(endpoints.collections(), prepareFormData(true));
 
     message.success($i18n.t('form.success.created.collection'));
 

@@ -31,7 +31,9 @@
       </div>
     </div>
 
-    <Btn class="mt-8" size="large" @click="handleSubmit()">{{ $t('form.proceed') }}</Btn>
+    <Btn class="mt-8" size="large" :disabled="!collectionStore.amount" @click="handleSubmit()">
+      {{ $t('form.proceed') }}
+    </Btn>
   </div>
 </template>
 

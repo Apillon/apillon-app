@@ -87,12 +87,14 @@ const nfts = computed(() => {
 
 const cols = collectionStore.columns.map(item => {
   const key = item?.title || item?.key || '';
+
+  if (key === 'image') return { key: key, title: key };
+
   return {
     key: key,
     title: key,
     minWidth: 140,
     render(row, index) {
-      console.log(index, row);
       return h(NInput, {
         value:
           key in row
@@ -116,10 +118,12 @@ const createColumns = (): DataTableColumns<Record<string, string>> => {
   return [
     {
       key: 'img',
+      className: '!py-2',
+      width: 120,
       render(row) {
         return h(
           resolveComponent('Image') as any,
-          { src: imageByName(row.image), class: 'max-w-[60px] max-w-[60px] mx-auto' },
+          { src: imageByName(row.image), class: 'max-w-[90px] max-w-[60px] mx-auto' },
           {}
         );
       },

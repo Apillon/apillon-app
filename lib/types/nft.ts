@@ -24,9 +24,10 @@ export enum CollectionStatus {
 
 /** NFT Collection create step */
 export enum CollectionStep {
-  ENVIRONMENT = 0,
-  METADATA = 1,
-  BEHAVIOR = 2,
+  STORAGE_TYPE = 0,
+  ENVIRONMENT = 1,
+  METADATA = 2,
+  BEHAVIOR = 3,
 }
 
 /** NFT Transaction status */
@@ -54,11 +55,11 @@ export enum NftAmount {
   MULTIPLE = 2,
 }
 /** Mint steps */
-export enum NftMintTab {
+export enum NftCreateTab {
   METADATA = 1,
   PREVIEW = 2,
   IMAGES = 3,
-  MINT = 4,
+  DEPLOY = 4,
 }
 /** NFT create steps */
 export enum NftCreateStep {

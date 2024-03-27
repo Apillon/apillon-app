@@ -54,24 +54,24 @@ function w3WarnAndDeploy() {
   if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new')) {
     modalW3WarnVisible.value = true;
   } else {
-    warningStore.showSpendingWarning(getPriceServiceName(), () => onModalW3WarnConfirm());
+    onModalW3WarnConfirm();
   }
 }
 
 async function onModalW3WarnConfirm() {
+  warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
+}
+
+async function deploy() {
   collectionStore.nftStep = NftCreateStep.DEPLOY;
   collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
 
   modalW3WarnVisible.value = false;
 
-  await deploy();
+  await deployCollection(collectionStore.active.collectionStatus !== CollectionStatus.CREATED);
 
   collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
 
   router.push(`/dashboard/service/nft/${collectionStore.form.single.collectionUuid}`);
-}
-
-async function deploy() {
-  await deployCollection(collectionStore.active.collectionStatus !== CollectionStatus.CREATED);
 }
 </script>
