@@ -305,6 +305,7 @@
       "date": "Date and time",
       "description": "Description",
       "direction": "Direction",
+      "disabled": "Due to limitations set by our payment provider, this payment is disabled",
       "filterByChain": "Filter by chain",
       "filterByService": "Filter by service",
       "getMore": "Get more",
