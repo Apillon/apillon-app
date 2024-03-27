@@ -904,6 +904,7 @@
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "chain": "Select Chain",
       "chatTags": "Separate Tags with Commas",
+      "collectionMaxSupply": "Max supply",
       "complexPassword": "Enter complex password",
       "cvv": "311",
       "domain": "Type your domain name here",
