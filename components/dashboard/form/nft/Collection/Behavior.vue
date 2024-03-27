@@ -192,7 +192,6 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
 const {
@@ -207,7 +206,7 @@ const {
 
 onMounted(() => {
   if (collectionStore.form.behavior.maxSupply === 0) {
-    collectionStore.form.behavior.maxSupply = collectionStore.images.length;
+    collectionStore.form.behavior.maxSupply = collectionStore.csvData.length;
   }
 });
 
