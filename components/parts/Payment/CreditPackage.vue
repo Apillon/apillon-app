@@ -43,6 +43,20 @@
       </template>
       <span>{{ $t('dashboard.permissions.notOwner') }}</span>
     </n-tooltip>
+    <n-tooltip v-else-if="creditPackage.creditAmount === 10000" trigger="hover">
+      <template #trigger>
+        <Btn
+          class="opacity-60 cursor-default"
+          type="primary"
+          size="large"
+          :color="colors.blue"
+          round
+        >
+          {{ $t('dashboard.credits.buy') }}
+        </Btn>
+      </template>
+      <span>{{ $t('dashboard.credits.disabled') }}</span>
+    </n-tooltip>
     <n-space v-else size="large" vertical>
       <Btn
         type="primary"
