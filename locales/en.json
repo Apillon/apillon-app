@@ -881,7 +881,7 @@
         "useApillonCollection": "Use Apillon-built NFT collection",
         "labelInfo": {
           "nftContractAddress": "Address of the NFT collection used to encrypt/decrypt files.",
-          "nftChainRpcUrl": "Chain RPC URL of used contract",
+          "nftChainRpcUrl": "Chain RPC URL of used contract. Select one from the list or manually insert your own.",
           "restrictToOwner": "Only owner will be able to encrypt/decrypt files.",
           "useApillonCollection": "You can use an NFT collection you created on Apillon or any NFT collection you built on other chains."
         }
