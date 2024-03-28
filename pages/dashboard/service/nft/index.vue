@@ -5,6 +5,9 @@
         <slot>
           <h1>{{ $t('dashboard.nav.nft') }}</h1>
         </slot>
+        <template #info>
+          <ModalCreditCosts :service="ServiceTypeName.NFT" filter-by-chain />
+        </template>
       </Heading>
     </template>
     <slot>
@@ -30,6 +33,7 @@
 const $i18n = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
+const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);
@@ -44,6 +48,9 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await collectionStore.getCollections();
+
+      /** Get Price list */
+      paymentStore.getPriceList();
 
       setTimeout(() => {
         checkUnfinishedCollections();

@@ -321,17 +321,17 @@ export default function useNft() {
           metadataSession,
           imagesSession,
         });
-        collectionStore.active = res.data;
+        if (!metadata) {
+          collectionStore.active = res.data;
+        }
+
+        collectionStore.metadata = [];
 
         message.success($i18n.t('form.success.nftDeployed'));
       } else {
         message.error($i18n.t('nft.upload.deployError'));
       }
     });
-
-    if (metadata) {
-      collectionStore.metadata = [];
-    }
   }
 
   /**

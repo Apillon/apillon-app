@@ -79,18 +79,17 @@
               <div class="flex-cc" style="min-height: calc(100dvh - 300px)">
                 <div
                   v-if="collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOY_INITIATED"
-                  class="w-full pb-8"
+                  class="w-full pb-8 text-center"
                 >
-                  <div v-if="collectionStore.stepCollectionDeploy > 0" class="text-center">
-                    <AnimationLoader />
-                    <h2>{{ $t('nft.deploy.creatingCollection') }}</h2>
-                    <p class="mb-8 text-body whitespace-pre-line">
-                      <span>
-                        {{ $t('nft.deploy.collection') }}
-                      </span>
-                    </p>
-                  </div>
+                  <AnimationLoader />
+                  <h2>{{ $t('nft.deploy.creatingCollection') }}</h2>
+                  <p class="mb-8 text-body whitespace-pre-line">
+                    <span>
+                      {{ $t('nft.deploy.collection') }}
+                    </span>
+                  </p>
                 </div>
+
                 <div v-else class="pb-8">
                   <NftPreviewCollection />
                   <Btn type="primary" class="w-full mb-2" @click="w3WarnAndDeploy()">

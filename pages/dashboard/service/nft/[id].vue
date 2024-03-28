@@ -14,33 +14,21 @@
           @transfer="modalTransferOwnershipVisible = true"
         />
 
-        <!-- Table -->
-        <template v-if="collectionStore.hasCollectionTransactions">
-          <TableNftTransaction :transactions="collectionStore.transaction" />
+        <template v-if="collectionStore.hasCollectionTransactions"
+          ><!-- Display Collection -->
+          <NftCollectionInfo class="w-full max-w-4xl mx-auto" />
 
-          <div class="w-full max-w-lg text-center mx-auto">
-            <NuxtIcon name="nft/collection" class="flex justify-center icon-auto mb-4" filled />
-            <h2>{{ $t('nft.collection.created.title') }}</h2>
-            <p class="mb-2 text-body whitespace-pre-line">
-              {{ $t('nft.collection.created.info') }}
-            </p>
-
-            <div class="mb-2 flex items-center justify-center text-body">
-              <p>{{ $t('nft.collection.createToDisplay') }}&nbsp;</p>
-              <a href="https://github.com/Apillon/nft-template-vue/fork" target="_blank">
-                <Btn type="builders" size="tiny"> Vue </Btn>
-              </a>
-              <p>,&nbsp;</p>
-              <a href="https://github.com/Apillon/nft-template-react/fork" target="_blank">
-                <Btn type="builders" size="tiny"> React </Btn>
-              </a>
-              <p>&nbsp;{{ $t('general.or') }}&nbsp;</p>
-              <a href="https://github.com/Apillon/nft-template/fork" target="_blank">
-                <Btn type="builders" size="tiny"> javascript template </Btn>
-              </a>
-              <p>.</p>
-            </div>
+          <!-- Display NFT Services -->
+          <div class="w-full max-w-4xl mx-auto">
+            <h3 class="mb-6">{{ $t('dashboard.service.used') }}</h3>
+            <NftServices />
           </div>
+
+          <!-- Links to NFT templates -->
+          <NftPreviewFinish />
+
+          <!-- Table Transactions -->
+          <TableNftTransaction :transactions="collectionStore.transaction" />
         </template>
         <Empty
           v-else
@@ -93,7 +81,6 @@
 const router = useRouter();
 const { params } = useRoute();
 const $i18n = useI18n();
-const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);
@@ -107,34 +94,32 @@ let collectionInterval: any = null as any;
 let transactionInterval: any = null as any;
 
 /** Collection UUID from route */
-const collectionUuid = ref<string>(`${params?.id}` || `${params?.slug}` || '');
+const collectionUuid = ref<string>(`${params?.id}`);
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),
 });
 
-onMounted(() => {
-  collectionStore.getCollection(collectionUuid.value);
+onMounted(async () => {
+  if (!params?.id) router.push({ name: 'dashboard-service-nft' });
 
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const currentCollection = await collectionStore.getCollection(collectionUuid.value);
+  const currentCollection = await collectionStore.getCollection(collectionUuid.value);
 
-    /** Reset state if user opens different collection */
-    if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
-      collectionStore.resetMetadata();
-    }
+  /** Reset state if user opens different collection */
+  if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
+    collectionStore.resetMetadata();
+  }
 
-    if (!currentCollection?.collection_uuid) {
-      router.push({ name: 'dashboard-service-nft' });
-    } else {
-      await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
-      collectionStore.active = currentCollection;
+  if (!currentCollection?.collection_uuid) {
+    router.push({ name: 'dashboard-service-nft' });
+  } else {
+    await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
+    collectionStore.active = currentCollection;
 
-      checkIfCollectionUnfinished();
-      checkUnfinishedTransactions();
-      pageLoading.value = false;
-    }
-  });
+    checkIfCollectionUnfinished();
+    checkUnfinishedTransactions();
+    pageLoading.value = false;
+  }
 });
 onUnmounted(() => {
   clearInterval(transactionInterval);

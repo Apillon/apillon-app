@@ -64,7 +64,7 @@
           @submit.prevent="handleSubmitForm"
         >
           <n-grid class="items-end" :cols="12" :x-gap="32">
-            <!-- NFT name -->
+            <!-- NFT ID -->
             <n-form-item-gi
               :span="12"
               path="id"

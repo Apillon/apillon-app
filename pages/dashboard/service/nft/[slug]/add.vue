@@ -30,7 +30,10 @@
       <div>
         <FormNftCreateMetadata />
         <button
-          v-if="collectionStore.nftStep !== NftCreateStep.AMOUNT"
+          v-if="
+            collectionStore.nftStep !== NftCreateStep.AMOUNT &&
+            collectionStore.nftStep !== NftCreateStep.DEPLOY
+          "
           class="absolute left-0 top-10"
           @click="goToPreviousStep"
         >
@@ -74,6 +77,8 @@
 </template>
 
 <script lang="ts" setup>
+const router = useRouter();
+const { params } = useRoute();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
@@ -82,11 +87,30 @@ const collectionStore = useCollectionStore();
 const modalW3WarnVisible = ref<boolean>(false);
 const pageLoading = ref<boolean>(true);
 
-onMounted(() => {
-  resetAndAddNft();
+/** Collection UUID from route */
+const collectionUuid = ref<string>(`${params?.slug}`);
+
+onMounted(async () => {
+  if (!params?.slug) router.push({ name: 'dashboard-service-nft' });
 
   /** Get Price list */
   paymentStore.getPriceList();
+
+  const currentCollection = await collectionStore.getCollection(collectionUuid.value);
+
+  if (!currentCollection?.collection_uuid) {
+    router.push({ name: 'dashboard-service-nft' });
+  } else {
+    /** Reset state if user opens different collection */
+    if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
+      collectionStore.resetMetadata();
+    }
+    resetAndAddNft();
+
+    pageLoading.value = false;
+    collectionStore.active = currentCollection;
+    collectionStore.form.single.collectionUuid = currentCollection.collection_uuid;
+  }
 });
 
 function resetAndAddNft() {

@@ -468,7 +468,8 @@
       "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",
       "edit": "Edit service",
       "info": "Launch a service, receive API keys and start building your next dapp.",
-      "new": "New service"
+      "new": "New service",
+      "used": "Web3 services used"
     },
     "smartContracts": {
       "collection": "NFT collection",
@@ -1575,7 +1576,7 @@
       "ipns": "IPNS Gateway",
       "ipnsInfo": "Used to access content via IPNS name",
       "project": "Project unique identifier",
-      "secretInfo": "Secret for project, used to generate a token to acess the content via the IPFS gateway",
+      "secretInfo": "Secret for project, used to generate a token to access the content via the IPFS gateway",
       "selectType": "Select type (CID/IPNS)",
       "subdomain": "Subdomain Gateway",
       "subdomainInfo": "If specified, content on ipfs can be access as subdomain.",
