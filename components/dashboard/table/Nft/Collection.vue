@@ -124,6 +124,8 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('nft.collection.contractAddress'),
       className: { hidden: !selectedColumns.value.includes('contractAddress') },
       render(row: CollectionInterface) {
+        if (!row.contractAddress) return '';
+
         return h(
           TableLink,
           { link: contractLink(row.contractAddress, row.chain), text: row.contractAddress },

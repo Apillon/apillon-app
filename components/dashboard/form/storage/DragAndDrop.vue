@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+import { useMessage, type UploadCustomRequestOptions } from 'naive-ui';
 
 const $i18n = useI18n();
 const message = useMessage();
@@ -41,7 +41,7 @@ onMounted(() => {
 });
 
 /** Upload file request - add file to list */
-function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+function uploadFilesRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
     percentage: 0,

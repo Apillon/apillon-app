@@ -495,7 +495,8 @@
       "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",
       "edit": "Edit service",
       "info": "Launch a service, receive API keys and start building your next dapp.",
-      "new": "New service"
+      "new": "New service",
+      "used": "Web3 services used"
     },
     "smartContracts": {
       "collection": "NFT collection",
@@ -837,6 +838,8 @@
       "collectionSupplyLimited": "Total supply",
       "collectionType": "Collection type",
       "collectionUseGateway": "Use apillon gateway for base URI",
+      "collectionLogo": "Collection logo",
+      "collectionCoverImage": "Collection cover image",
       "confirmPassword": "Confirm password",
       "creditThreshold": "Notify me when credits are below the limit",
       "cvv": "CVV",
@@ -858,6 +861,14 @@
       "nftMintParentNftId": "Parent NFT ID",
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
+      "nftId": "ID",
+      "nftCollection": "Collection",
+      "nftName": "Name",
+      "nftCopies": "Copies",
+      "nftDescription": "Description",
+      "nftValue": "Value",
+      "nftDisplayType": "Type",
+      "nftTraitType": "Trait",
       "password": "Enter a 12-character password",
       "phone": "Phone",
       "postalCode": "Postal code",
@@ -1142,6 +1153,9 @@
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "nft": {
+    "create": "Create an NFT",
+    "add": "Add NFT",
+    "addAttribute": "Add attribute",
     "chain": {
       "1": "MOONBEAM (Mainnet)",
       "2": "MOONBASE (Testnet)",
@@ -1150,10 +1164,39 @@
       "1284": "MOONBEAM (Mainnet)",
       "1287": "MOONBASE (Testnet)"
     },
+    "amount": {
+      "title": "Create NFTs",
+      "content": "Add NFTs one by one or upload them in bulk.",
+      "single": "Build a single NFT",
+      "singleContent": "Enter data manually",
+      "multiple": "Build multiple NFTs at once",
+      "multipleContent": "Use CSV file to upload data in bulk"
+    },
+    "single": {
+      "content": "NFT content",
+      "uploadDescription": "Upload image, video, audio, or a 3D-model. Supported file formats: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB.",
+      "technicalDetails": "NFT technical details",
+      "properties": "Properties",
+      "propertiesInfo": "Textual traits that show as text boxes",
+      "levels": "Levels",
+      "levelsInfo": "Numerical traits that show as progress bar",
+      "stats": "Stats",
+      "statsInfo": "Numerical traits that show as number boxes",
+      "boosts": "Boosts",
+      "boostsInfo": "Numerical traits that show as circle progress bars",
+      "date": "Date",
+      "dateInfo": "Date traits that show as date boxes",
+      "unlockableContent": "Unlockable Content",
+      "unlockableContentInfo": "Content is only visible to the NFT owner",
+      "displaySettings": "Display Settings",
+      "showDisplay": "Show on store website",
+      "hideDisplay": "Hide on Store website"
+    },
     "collection": {
       "addNew": "Add new collection",
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
+      "addLogo": "Select logo",
       "address": "Collection address",
       "baseUri": "Base URI",
       "contractAddress": "Contract address",
@@ -1185,10 +1228,23 @@
       "upload": "Deploy NFT collection",
       "uploadData": "Compose NFT",
       "uploadImages": "Load images",
+      "uploadLogo": "Upload",
       "uploadMetadata": "Store NFT metadata",
       "uploadYourFirst": "Upload your first NFTs and start building your collection.",
       "uuid": "Collection UUID",
       "view": "Or, display them on your existing website",
+      "environment": "Chose environment",
+      "environmentContent": "Deploy on Testnet to test the template before launcing it in production on Mainnet.",
+      "enterData": "Enter collection data",
+      "data": "Collection data",
+      "setBehavior": "Set collection behavior",
+      "behavior": "Behavior",
+      "preview": "Preview your collection",
+      "previewTab": "Collection preview",
+      "previewInfo": "This is the preview of your collection. After a successful deployment, you will be able to start adding NFTs.",
+      "deployInfo": "Deploy on Testnet to test the template before launching it in production in Mainnet.",
+      "headline": "How does it work?",
+      "info": "Launch your end-to-end decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the collection website on Web3.",
       "burn": {
         "title": "Burn token",
         "info": "Are you sure, you want to burn your token?"
@@ -1201,6 +1257,28 @@
         "or": "or see its contents in your",
         "title": "Display your NFTs on the internet",
         "view": "View the transaction on"
+      },
+      "displayTypes": {
+        "string": {
+          "label": "String",
+          "info": "Textual traits that show as text boxes"
+        },
+        "date": {
+          "label": "Date",
+          "info": "Date traits that show as date boxes"
+        },
+        "number": {
+          "label": "Number",
+          "info": "Numerical traits that show as number boxes"
+        },
+        "boost_number": {
+          "label": "Boost number",
+          "info": "Numerical traits that show as progress bars"
+        },
+        "boost_percentage": {
+          "label": "Boost percentage",
+          "info": "Numerical traits that show as circle progress bars"
+        }
       },
       "labelInfo": {
         "collectionBaseExtension": "",
@@ -1219,7 +1297,10 @@
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
         "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
         "collectionType": "",
-        "collectionUseGateway": "Collection base URI points to IPFS. If this checkbox is checked, base URI will point to CID on Apillon private gateway, which provide better performance. Otherwise base URI points to: ipfs://[CID], and gateway needs to be handled manually."
+        "collectionUseGateway": "Collection base URI points to IPFS. If this checkbox is checked, base URI will point to CID on Apillon private gateway, which provide better performance. Otherwise base URI points to: ipfs://[CID], and gateway needs to be handled manually.",
+        "collectionLogoSize": "Maximum size: 3MB, Supported formats: JPG, PNG, GIF, SVG. Recommended size: 400 x 400 px.",
+        "csvUpload": "Before adding new items to the collection with existing NFTs, please add an id column to the CSV file. This will help maintain data integrity and avoid any conflicts when adding new entries.",
+        "nftDisplayType": "Display type is a field indicating how you would like it to be displayed"
       },
       "status": {
         "0": "CREATED",
@@ -1235,10 +1316,13 @@
       }
     },
     "deploy": {
-      "collection": "Creating collection",
+      "collection": "Give it a minute or two while we prepare everything for you.",
+      "deployingCollection": "Deploying to blockchain...",
+      "creatingCollection": "Creating collection...",
       "deploying": "Deploying your NFTs",
       "metadata": "Uploading metadata",
-      "nft": "Deploying NFTs"
+      "nft": "Deploying NFTs",
+      "single": "Deploy NFT"
     },
     "metadata": {
       "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
@@ -1275,6 +1359,7 @@
       }
     },
     "upload": {
+      "addNft": "Add NFT",
       "attributes": "Metadata attributes",
       "csvConfirm": "Confirm CSV data",
       "csvConfirmAttributes": "Confirm attributes",
@@ -1290,6 +1375,7 @@
       "imagesDesc": "",
       "infoFile": "This is the first step to your NFT collection. The file names in the CSV record should match the names of NFT files you upload in the next step.",
       "infoImages": "Now, upload NFT files for your NFT collection, images or other media. File names should match those in the CSV metadata record from the previous step.",
+      "logo": "Upload logo",
       "preview": "Preview upload",
       "previewConfirm": "Looks good, proceed",
       "previewNfts": "Preview your NFTs",
@@ -1304,7 +1390,8 @@
       "csvRequiredColumns": "Missing metadata columns, required columns:",
       "fileInvalid": "Invalid file format. Please upload a valid CSV file with columns \"name\", \"description\", and \"image\".",
       "imagesMissing": "Missing images:",
-      "imagesInvalid": "Invalid image names. Example: "
+      "imagesInvalid": "Invalid image names. Example: ",
+      "selectAmount": "Please select how many NFTs would you like to create."
     },
     "openBucket": "Go to storage",
     "transactionType": "Transaction Type"
@@ -1541,7 +1628,7 @@
       "ipns": "IPNS Gateway",
       "ipnsInfo": "Used to access content via IPNS name",
       "project": "Project unique identifier",
-      "secretInfo": "Secret for project, used to generate a token to acess the content via the IPFS gateway",
+      "secretInfo": "Secret for project, used to generate a token to access the content via the IPFS gateway",
       "selectType": "Select type (CID/IPNS)",
       "subdomain": "Subdomain Gateway",
       "subdomainInfo": "If specified, content on ipfs can be access as subdomain.",
@@ -1669,6 +1756,8 @@
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
     "collectionRoyaltiesFees": "Royalty fee must be a number between 0 and 100",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
+    "collectionLogoRequired": "Please select Collection logo",
+    "collectionCoverImageRequired": "Please select Collection cover image",
     "collectionSymbolRequired": "Please enter Collection symbol",
     "collectionTypeRequired": "Please select Collection type",
     "creditCard": "Credit card validation error",
@@ -1690,6 +1779,7 @@
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
     "naturalNumber": "Please enter a positive number",
+    "nft": "Please select an NFT",
     "nftBucketRequired": "Please select a bucket",
     "nftBurnTokenIdRequired": "Please enter token ID",
     "nftMintAddressRequired": "Please enter your wallet address for minting",
@@ -1698,6 +1788,13 @@
     "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
     "nftTransferAddressRequired": "Please enter wallet address",
+    "nftIdRequired": "Please enter ID of NFT",
+    "nftIdDuplicate": "Please enter different ID",
+    "nftName": "Please enter name of NFT",
+    "nftCollection": "Please select a Collection",
+    "nftRoyalties": "Please enter royalties",
+    "nftCopies": "Please enter number of NFT copies",
+    "nftDescription": "Please enter NFT's description",
     "notEnoughSpaceInStorage": "File \"{name}\" is too big. To proceed, please upgrade your subscription plan.",
     "notImage": "{name} is not an image",
     "passwordMinLength": "Password must contain at least 12 characters.",
@@ -1766,6 +1863,7 @@
       "gateway": ""
     },
     "nft": {
+      "collection": "You are about to deploy a NFT collection to the blockchain. If you confirm this step, your NFT collection will irreversibly be deployed.",
       "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world."
     },
     "social": {

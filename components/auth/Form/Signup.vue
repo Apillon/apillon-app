@@ -71,6 +71,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormItemRule } from 'naive-ui';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 import { useAccount } from 'use-wagmi';
 
@@ -133,7 +134,7 @@ const rules: NFormRules = {
   ],
   terms: [
     {
-      validator(_: NFormItemRule, value: string) {
+      validator(_: FormItemRule, value: string) {
         return props.sendAgain || !!value;
       },
       message: $i18n.t('validation.terms'),
