@@ -4,34 +4,8 @@
       class="w-full text-center"
       :class="collectionStore.stepUpload === NftUploadStep.PREVIEW ? 'self-start' : 'max-w-lg'"
     >
-      <!-- Preview -->
-      <template
-        v-if="
-          isStepAvailable(NftUploadStep.PREVIEW) &&
-          collectionStore.stepUpload === NftUploadStep.PREVIEW
-        "
-      >
-        <NftPreview>
-          <Btn
-            class="w-60"
-            type="secondary"
-            @click="collectionStore.stepUpload = NftUploadStep.IMAGES"
-          >
-            {{ $t('nft.upload.takeMeBack') }}
-          </Btn>
-          <Btn class="w-60" type="primary" @click="collectionStore.mintTab = NftMintTab.MINT">
-            {{ $t('nft.upload.previewConfirm') }}
-          </Btn>
-        </NftPreview>
-      </template>
-
       <!-- Upload Img -->
-      <template
-        v-else-if="
-          isStepAvailable(NftUploadStep.IMAGES) &&
-          collectionStore.stepUpload === NftUploadStep.IMAGES
-        "
-      >
+      <template v-if="collectionStore.stepUpload === NftUploadStep.IMAGES">
         <h2>{{ $t('nft.upload.titleImage') }}</h2>
         <p class="text-body whitespace-pre-line">
           {{ $t('nft.upload.infoImages') }}
@@ -68,7 +42,7 @@
           </n-upload-dragger>
         </n-upload>
         <div v-if="collectionStore.hasImages" class="flex mt-5 text-left">
-          <div class="card w-full px-4 py-2">
+          <div class="card w-full px-4 py-[10px]">
             <span class="icon-image text-xl align-sub mr-3"></span>
             <span>{{ collectionStore.images.length }}</span>
             &nbsp;
@@ -97,7 +71,7 @@
             size="large"
             :loading="nft.loadingImages.value"
             :disabled="!collectionStore.hasImages || !nft.allImagesUploaded.value"
-            @click="collectionStore.stepUpload = NftUploadStep.PREVIEW"
+            @click="collectionStore.nftStep = NftCreateStep.PREVIEW"
           >
             {{ $t('nft.upload.previewNfts') }}
           </Btn>
@@ -119,29 +93,20 @@
             {{ $t('nft.upload.downloadCsv') }}
           </Btn>
         </p>
-        <n-upload
-          v-if="!collectionStore.hasCsvFile"
-          :show-file-list="false"
-          accept=".csv, application/vnd.ms-excel"
-          class="w-full"
-          :custom-request="e => onCsvFileUpload(e)"
-        >
-          <Btn class="w-full" type="secondary">
-            {{ $t('nft.upload.csvFile') }}
-          </Btn>
-          <!--
-          <n-upload-dragger class="h-40">
-            <div class="py-2 text-center">
-              <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-                <span class="icon-upload text-violet text-2xl"></span>
-              </div>
-
-              <h4 class="mb-1">{{ $t('nft.upload.csvFile') }}</h4>
-              <span class="text-body">{{ $t('nft.upload.dragAndDrop') }}</span>
-            </div>
-          </n-upload-dragger>
-        -->
-        </n-upload>
+        <div v-if="!collectionStore.hasCsvFile" class="flex">
+          <n-upload
+            v-if="!collectionStore.hasCsvFile"
+            :show-file-list="false"
+            accept=".csv, application/vnd.ms-excel"
+            class="w-full"
+            :custom-request="e => onCsvFileUpload(e)"
+          >
+            <Btn class="w-full" type="secondary">
+              {{ $t('nft.upload.csvFile') }}
+            </Btn>
+          </n-upload>
+          <IconInfo :tooltip="$t('nft.collection.labelInfo.csvUpload')" size="lg" />
+        </div>
         <template v-else>
           <div class="flex text-left">
             <div class="card flex-1 px-4 py-2 rounded-lg">
@@ -187,10 +152,10 @@
 
 <script lang="ts" setup>
 import { vOnClickOutside } from '@vueuse/components';
-import type { UploadInst } from 'naive-ui';
+import type { UploadCustomRequestOptions, UploadInst } from 'naive-ui';
 
-const collectionStore = useCollectionStore();
 const nft = useNft();
+const collectionStore = useCollectionStore();
 
 const uploadRef = ref<UploadInst | null>(null);
 const modalMetadataAttributesVisible = ref<boolean>(false);
@@ -200,19 +165,6 @@ onMounted(() => {
     nft.parseUploadedFile(collectionStore.csvFile.file);
   }
 });
-
-function isStepAvailable(step: number) {
-  if (step === NftUploadStep.PREVIEW) {
-    return (
-      collectionStore.hasImages &&
-      nft.allImagesUploaded.value &&
-      isStepAvailable(NftUploadStep.IMAGES)
-    );
-  } else if (step === NftUploadStep.IMAGES) {
-    return collectionStore.hasCsvFile && collectionStore.hasMetadata;
-  }
-  return true;
-}
 
 function createMetadata() {
   collectionStore.metadata = nft.createNftData();
@@ -230,7 +182,7 @@ function stopLoader() {
   nft.loadingImages.value = false;
 }
 
-function onCsvFileUpload(event: NUploadCustomRequestOptions) {
+function onCsvFileUpload(event: UploadCustomRequestOptions) {
   removeImages();
   nft.uploadFileRequest(event);
 }

@@ -7,6 +7,26 @@
     @submit.prevent="handleSubmitForm"
   >
     <n-grid class="items-end" :cols="12" :x-gap="32">
+      <!--  Collection logo -->
+      <n-form-item-gi
+        :span="12"
+        path="logo"
+        :label="infoLabel('collectionLogo')"
+        :label-props="{ for: 'collectionLogo' }"
+      >
+        <FormNftCollectionUpload :is-logo="true" />
+      </n-form-item-gi>
+
+      <!--  Collection cover image -->
+      <n-form-item-gi
+        :span="12"
+        path="coverImage"
+        :label="infoLabel('collectionCoverImage')"
+        :label-props="{ for: 'coverImage' }"
+      >
+        <FormNftCollectionUpload />
+      </n-form-item-gi>
+
       <!--  Collection name -->
       <n-form-item-gi
         :span="8"
@@ -39,18 +59,6 @@
         />
       </n-form-item-gi>
     </n-grid>
-
-    <!--  Chain -->
-    <n-form-item path="chain" :label="infoLabel('collectionChain')" :label-props="{ for: 'chain' }">
-      <select-options
-        v-model:value="collectionStore.form.base.chain"
-        :options="chains"
-        :input-props="{ id: 'chain' }"
-        :placeholder="$t('general.pleaseSelect')"
-        filterable
-        clearable
-      />
-    </n-form-item>
 
     <!--  Collection type -->
     <n-form-item
@@ -93,7 +101,7 @@ const $i18n = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
-const { chains, collectionTypes, formRef, rules, infoLabel } = useCollection();
+const { collectionTypes, formRef, rules, infoLabel } = useCollection();
 
 // Submit
 function handleSubmitForm(e: Event | MouseEvent) {
@@ -104,7 +112,7 @@ function handleSubmitForm(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      collectionStore.stepDeploy = NftDeployStep.BEHAVIOR;
+      collectionStore.step = CollectionStep.BEHAVIOR;
     }
   });
 }

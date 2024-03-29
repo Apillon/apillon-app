@@ -3,13 +3,10 @@ import type {
   DropdownGroupOption,
   DropdownOption,
   FormInst,
-  FormItemInst,
-  FormItemRule,
   FormRules,
   FormValidationError,
   SelectOption,
   TagProps,
-  UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
 import type {
@@ -77,11 +74,8 @@ declare global {
 
   /** Naive UI */
   interface NFormInst extends FormInst {}
-  interface NFormItemInst extends FormItemInst {}
   interface NFormRules extends FormRules {}
-  interface NFormItemRule extends FormItemRule {}
   interface NFormValidationError extends FormValidationError {}
-  interface NUploadCustomRequestOptions extends UploadCustomRequestOptions {}
 
   type FileUploadOptions = {
     file: UploadFileInfo;

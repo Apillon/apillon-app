@@ -1,33 +1,40 @@
+import type { TableColumns } from 'naive-ui/es/data-table/src/interface';
 import { defineStore } from 'pinia';
 
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
-    bucketUuid: '',
+    attribute: {} as AttributeInterface,
+    columns: [] as TableColumns<KeyTitle>,
     csvAttributes: [] as Array<MetadataAttributes>,
-    csvColumns: [] as NTableColumns<KeyTitle>,
     csvData: [] as Array<Record<string, string>>,
     csvFile: {} as FileListItemType,
     csvSelectedAttributes: [] as Array<string>,
     filesMetadata: [] as FileListItemType[],
-    gridView: true,
+    gridView: false,
     images: [] as FileListItemType[],
     items: [] as CollectionInterface[],
     loading: false,
     metadata: [] as Array<Record<string, any>>,
-    metadataStored: null as Boolean | null,
-    mintTab: NftMintTab.METADATA,
+    metadataStored: true as Boolean | null,
+    mintTab: NftCreateTab.METADATA,
     search: '',
+    step: CollectionStep.ENVIRONMENT,
+    nftStep: NftCreateStep.AMOUNT,
+    amount: 0,
     stepDeploy: NftDeployStep.NAME,
+    stepCollectionDeploy: CollectionStatus.CREATED,
     stepUpload: NftUploadStep.FILE,
     total: 0,
     transaction: [] as TransactionInterface[],
     uploadActive: false,
     form: {
       base: {
+        logo: null as FileListItemType | null,
+        coverImage: null as FileListItemType | null,
         name: '',
         symbol: '',
-        chain: Chains.MOONBEAM,
+        chain: Chains.MOONBASE,
         collectionType: NFTCollectionType.GENERIC,
         useApillonIpfsGateway: true,
       },
@@ -44,6 +51,15 @@ export const useCollectionStore = defineStore('collection', {
         supplyLimited: 0,
         royaltiesAddress: null,
         royaltiesFees: 0,
+      },
+      single: {
+        image: '',
+        id: '',
+        collectionUuid: '',
+        name: '',
+        description: '',
+        copies: 1,
+        attributes: [] as AttributesInterface,
       },
     },
   }),
@@ -75,11 +91,15 @@ export const useCollectionStore = defineStore('collection', {
     resetMetadata() {
       this.resetFile();
       this.resetImages();
-      this.mintTab = NftMintTab.METADATA;
+      this.mintTab = NftCreateTab.METADATA;
+      this.step = CollectionStep.ENVIRONMENT;
+      this.nftStep = NftCreateStep.AMOUNT;
+      this.stepDeploy = NftDeployStep.NAME;
+      this.stepCollectionDeploy = CollectionStatus.CREATED;
     },
     resetFile() {
       this.csvAttributes = [] as MetadataAttributes[];
-      this.csvColumns = [] as NTableColumns<KeyTitle>;
+      this.columns = [] as NTableColumns<KeyTitle>;
       this.csvData = [] as Array<Record<string, string>>;
       this.csvFile = {} as FileListItemType;
       this.csvSelectedAttributes = [] as Array<string>;
@@ -92,10 +112,21 @@ export const useCollectionStore = defineStore('collection', {
         this.images.pop();
       }
     },
+    resetSingleFormData() {
+      this.form.single.image = '';
+      this.form.single.id = '';
+      this.form.single.collectionUuid = this.active?.collection_uuid;
+      this.form.single.name = '';
+      this.form.single.description = '';
+      this.form.single.copies = 1;
+      this.form.single.attributes = [];
+    },
     resetForms() {
+      this.form.base.logo = null;
+      this.form.base.coverImage = null;
       this.form.base.name = '';
       this.form.base.symbol = '';
-      this.form.base.chain = Chains.MOONBEAM;
+      this.form.base.chain = Chains.MOONBASE;
       this.form.base.collectionType = NFTCollectionType.GENERIC;
       this.form.base.useApillonIpfsGateway = true;
 
@@ -109,8 +140,9 @@ export const useCollectionStore = defineStore('collection', {
       this.form.behavior.revocable = false;
       this.form.behavior.soulbound = false;
       this.form.behavior.supplyLimited = 0;
-    },
 
+      this.resetSingleFormData();
+    },
     /**
      * Fetch wrappers
      */
@@ -121,7 +153,7 @@ export const useCollectionStore = defineStore('collection', {
       return this.items;
     },
 
-    async getCollection(collectionUuid: string): Promise<CollectionInterface> {
+    async getCollection(collectionUuid: string): Promise<CollectionInterface | null> {
       if (
         this.active?.collection_uuid === collectionUuid &&
         this.active?.collectionStatus >= CollectionStatus.DEPLOYED &&
@@ -189,7 +221,8 @@ export const useCollectionStore = defineStore('collection', {
       return [];
     },
 
-    async fetchCollection(uuid: string): Promise<CollectionInterface> {
+    async fetchCollection(uuid: string): Promise<CollectionInterface | null> {
+      if (!uuid) return null;
       try {
         const res = await $api.get<CollectionResponse>(endpoints.collections(uuid));
 
@@ -200,7 +233,7 @@ export const useCollectionStore = defineStore('collection', {
       } catch (error: any) {
         this.active = {} as CollectionInterface;
       }
-      return {} as CollectionInterface;
+      return null;
     },
 
     async fetchCollectionTransactions(

@@ -242,7 +242,7 @@
         <n-form-item-gi
           path="behavior.dropPrice"
           :span="6"
-          :label="$t('form.label.collectionDropPrice', { currency: chainCurrency })"
+          :label="$t('form.label.collectionDropPrice', { currency: chainCurrency() })"
           :label-props="{ for: 'dropPrice' }"
         >
           <n-input-number
@@ -316,7 +316,6 @@
 
 <script lang="ts" setup>
 const emit = defineEmits(['submitSuccess']);
-const modalW3WarnVisible = ref<boolean>(false);
 
 const $i18n = useI18n();
 const router = useRouter();
@@ -326,6 +325,8 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 const { getPriceServiceName } = useNft();
 const {
   booleanSelect,
@@ -336,9 +337,11 @@ const {
   supplyTypes,
   rules,
   isFormDisabled,
+  chainCurrency,
   disablePasteDate,
   disablePasteTime,
   infoLabel,
+  prepareFormData,
 } = useCollection();
 
 const formErrors = ref<boolean>(false);
@@ -352,29 +355,11 @@ const metadataUri = computed<string>(() => {
     : '';
 });
 
-const chainCurrency = computed<string>(() => {
-  switch (collectionStore.form.base.chain) {
-    case Chains.ASTAR:
-      return 'ASTR';
-    default:
-      return 'GLMR';
-  }
-});
 
 /** When user close W3Warn, allow him to create new collection */
 function onModalW3WarnConfirm() {
   warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
 }
-
-/** Watch modalW3WarnVisible, onShow update timestamp of shown modal in session storage */
-watch(
-  () => modalW3WarnVisible.value,
-  shown => {
-    if (shown) {
-      localStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
-    }
-  }
-);
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -396,36 +381,8 @@ function handleSubmit(e: Event | MouseEvent) {
 async function createCollection() {
   loading.value = true;
 
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
-
   try {
-    const bodyData = {
-      project_uuid: dataStore.projectUuid,
-      name: collectionStore.form.base.name,
-      symbol: collectionStore.form.base.symbol,
-      chain: collectionStore.form.base.chain,
-      collectionType: collectionStore.form.base.collectionType,
-      dropPrice: collectionStore.form.behavior.dropPrice,
-      maxSupply:
-        collectionStore.form.behavior.supplyLimited === 1
-          ? collectionStore.form.behavior.maxSupply
-          : 0,
-      baseUri: collectionStore.form.behavior.baseUri,
-      baseExtension: collectionStore.form.behavior.baseExtension,
-      drop: collectionStore.form.behavior.drop,
-      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
-      dropReserve: collectionStore.form.behavior.dropReserve,
-      isRevokable: collectionStore.form.behavior.revocable,
-      isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress:
-        collectionStore.form.behavior.royaltiesFees === 0
-          ? null
-          : collectionStore.form.behavior.royaltiesAddress,
-      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
-    };
-    const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
+    const res = await $api.post<CollectionResponse>(endpoints.collections(), prepareFormData(true));
 
     message.success($i18n.t('form.success.created.collection'));
 

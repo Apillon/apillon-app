@@ -1,9 +1,9 @@
 <template>
   <n-tabs ref="mintTabsRef" v-model:value="collectionStore.mintTab" type="segment" animated>
-    <n-tab-pane :name="NftMintTab.METADATA">
+    <n-tab-pane :name="NftCreateTab.METADATA">
       <template #tab>
         <IconNumber
-          v-if="collectionStore.mintTab === NftMintTab.METADATA"
+          v-if="collectionStore.mintTab === NftCreateTab.METADATA"
           :number="1"
           :active="true"
         />
@@ -15,12 +15,12 @@
       </slot>
     </n-tab-pane>
     <n-tab-pane
-      :name="NftMintTab.IMAGES"
+      :name="NftCreateTab.IMAGES"
       :disabled="!collectionStore.hasCsvFile || !collectionStore.hasMetadata"
     >
       <template #tab>
-        <IconSuccessful v-if="collectionStore.mintTab === NftMintTab.MINT" />
-        <IconNumber v-else :number="2" :active="collectionStore.mintTab === NftMintTab.IMAGES" />
+        <IconSuccessful v-if="collectionStore.mintTab === NftCreateTab.DEPLOY" />
+        <IconNumber v-else :number="2" :active="collectionStore.mintTab === NftCreateTab.IMAGES" />
         <span class="ml-2">{{ $t('nft.collection.uploadImages') }}</span>
       </template>
       <slot>
@@ -28,7 +28,7 @@
       </slot>
     </n-tab-pane>
     <n-tab-pane
-      :name="NftMintTab.MINT"
+      :name="NftCreateTab.DEPLOY"
       :disabled="
         !collectionStore.hasCsvFile ||
         !collectionStore.hasMetadata ||
@@ -37,7 +37,7 @@
       "
     >
       <template #tab>
-        <IconNumber :number="3" :active="collectionStore.mintTab === NftMintTab.MINT" />
+        <IconNumber :number="3" :active="collectionStore.mintTab === NftCreateTab.DEPLOY" />
         <span class="ml-2">{{ $t('nft.collection.upload') }}</span>
       </template>
       <slot>
@@ -59,11 +59,14 @@ const mintTabsRef = ref<TabsInst | null>(null);
 watch(
   () => collectionStore.mintTab,
   tab => {
-    if (tab === NftMintTab.MINT && (!collectionStore.hasCsvFile || !collectionStore.hasImages)) {
-      collectionStore.mintTab = NftMintTab.IMAGES;
+    if (
+      tab === NftCreateTab.DEPLOY &&
+      (!collectionStore.hasCsvFile || !collectionStore.hasImages)
+    ) {
+      collectionStore.mintTab = NftCreateTab.IMAGES;
       nextTick(() => mintTabsRef.value?.syncBarPosition());
-    } else if (tab === NftMintTab.IMAGES && !collectionStore.hasCsvFile) {
-      collectionStore.mintTab = NftMintTab.METADATA;
+    } else if (tab === NftCreateTab.IMAGES && !collectionStore.hasCsvFile) {
+      collectionStore.mintTab = NftCreateTab.METADATA;
       nextTick(() => mintTabsRef.value?.syncBarPosition());
     }
   }
