@@ -22,7 +22,20 @@ const { t } = useI18n();
 const chatStore = useChatStore();
 const postStore = usePostStore();
 
-const createColumns = (): NDataTableColumns<PostInterface> => {
+/** Available columns - show/hide column */
+const selectedColumns = ref(['postId', 'title', 'body', 'hubName', 'tags', 'post_uuid', 'status']);
+const availableColumns = ref([
+  { value: 'postId', label: t('social.post.postId') },
+  { value: 'title', label: t('social.post.title') },
+  { value: 'body', label: t('social.post.body') },
+  { value: 'hubName', label: t('social.chat.name') },
+  { value: 'tags', label: t('social.post.tags') },
+  { value: 'post_uuid', label: t('social.post.uuid') },
+  { value: 'createTime', label: t('social.post.date') },
+  { value: 'status', label: t('general.status') },
+]);
+
+const columns = computed<NDataTableColumns<PostInterface>>(() => {
   return [
     {
       type: 'expand',
@@ -44,26 +57,38 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
     {
       key: 'postId',
       title: t('social.post.postId'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        { hidden: !selectedColumns.value.includes('postId') },
+      ],
     },
     {
       key: 'title',
       title: t('social.post.title'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('title') }],
     },
     {
       key: 'body',
       title: t('social.post.body'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('body') }],
+    },
+    {
+      key: 'hubName',
+      title: t('social.chat.name'),
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        { hidden: !selectedColumns.value.includes('hubName') },
+      ],
     },
     {
       key: 'tags',
       title: t('social.post.tags'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('tags') }],
     },
     {
       key: 'post_uuid',
       title: t('social.post.uuid'),
+      className: [{ hidden: !selectedColumns.value.includes('post_uuid') }],
       render(row: PostInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.post_uuid }, '');
       },
@@ -71,6 +96,10 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
     {
       key: 'createTime',
       title: t('social.post.date'),
+      className: [
+        ON_COLUMN_CLICK_OPEN_CLASS,
+        { hidden: !selectedColumns.value.includes('createTime') },
+      ],
       render(row) {
         return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
       },
@@ -78,6 +107,7 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
     {
       key: 'status',
       title: t('general.status'),
+      className: [{ hidden: !selectedColumns.value.includes('status') }],
       render(row) {
         return h(resolveComponent('GrillChatStatus'), { status: row.status }, '');
       },
@@ -102,10 +132,28 @@ const createColumns = (): NDataTableColumns<PostInterface> => {
         );
       },
     },
+    {
+      key: 'columns',
+      filter: 'default',
+      filterOptionValue: null,
+      renderFilterIcon: () => {
+        return h('span', { class: 'icon-more' }, '');
+      },
+      renderFilterMenu: () => {
+        return h(
+          resolveComponent('TableColumns'),
+          {
+            model: selectedColumns.value,
+            columns: availableColumns.value,
+            onColumnChange: handleColumnChange,
+          },
+          ''
+        );
+      },
+    },
   ];
-};
+});
 
-const columns = createColumns();
 const rowKey = (row: PostInterface) => row.postId;
 const currentRow = ref<PostInterface | null>(null);
 const expandedRows = ref<Array<string | number>>([]);
@@ -182,5 +230,10 @@ async function selectPost() {
     /** Expand selected row */
     expandedRows.value = expandedRows.value.includes(postId) ? [] : [postId];
   }
+}
+
+function handleColumnChange(selectedValues: Array<string>) {
+  selectedColumns.value = selectedValues;
+  localStorage.setItem(LsTableColumnsKeys.SOCIAL_POST, JSON.stringify(selectedColumns.value));
 }
 </script>

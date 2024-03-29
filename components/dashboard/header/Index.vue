@@ -29,18 +29,26 @@
               </n-input>
             </a>
           </div>
-          <div class="w-[20vw] max-w-xs">
+          <div v-if="isLg" class="flex gap-2">
             <a
+              v-for="doc in docs"
+              :key="doc.key"
               class="flex items-center"
-              href="https://wiki.apillon.io/build/1-apillon-api.html"
+              :href="doc.link"
               target="_blank"
             >
               <n-button size="small" :bordered="false">
-                <span class="icon-file text-xl mr-2"></span>
-                {{ $t('dashboard.readDocs') }}
+                <NuxtIcon :name="doc.iconName" class="text-xl mr-2" />
+                {{ doc.label }}
               </n-button>
             </a>
           </div>
+          <n-dropdown v-else :options="docs" @select="handleSelect">
+            <n-button>
+              <NuxtIcon name="icon/file" class="text-xl mr-2" />
+              {{ $t('dashboard.guides') }}
+            </n-button>
+          </n-dropdown>
         </div>
 
         <n-space :size="isSm ? 32 : 16" align="center">
@@ -68,6 +76,53 @@
 import { NSpace } from 'naive-ui';
 
 const emit = defineEmits(['toggleSidebar', 'toggleChat']);
+
+const { t } = useI18n();
 const authStore = useAuthStore();
 const { isSm, isLg } = useScreen();
+
+const renderIcon = (iconName: string) => {
+  return () => {
+    return h(resolveComponent('NuxtIcon'), { name: iconName, class: 'text-xl mx-2' }, '');
+  };
+};
+
+const docs = [
+  {
+    key: 'readDocs',
+    label: t('dashboard.readDocs'),
+    link: 'https://wiki.apillon.io',
+    iconName: 'icon/file',
+    icon: renderIcon('icon/file'),
+  },
+  {
+    key: 'tutorials',
+    label: t('dashboard.tutorials'),
+    link: 'https://blog.apillon.io/tagged/tutorial',
+    iconName: 'icon/guide',
+    icon: renderIcon('icon/guide'),
+  },
+  {
+    key: 'demoVideo',
+    label: t('dashboard.demoVideo'),
+    link: 'https://www.youtube.com/watch?v=qQJnuvUo-xo',
+    iconName: 'social/youtube',
+    icon: renderIcon('social/youtube'),
+  },
+  {
+    key: 'discord',
+    label: t('dashboard.discord'),
+    link: 'https://discord.com/invite/yX3gTw36C4',
+    iconName: 'social/discord',
+    icon: renderIcon('social/discord'),
+  },
+];
+
+function handleSelect(key: string) {
+  const doc = docs.find(item => item.key === key);
+
+  if (doc && doc.link) {
+    window.open(doc.link, '_blank');
+  }
+}
 </script>
