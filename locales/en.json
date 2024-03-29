@@ -1234,7 +1234,7 @@
       "uuid": "Collection UUID",
       "view": "Or, display them on your existing website",
       "environment": "Chose environment",
-      "environmentContent": "Deploy on Testnet to test the template before launcing it in production on Mainnet.",
+      "environmentContent": "Deploy on Testnet to test the template before launching it in production on Mainnet.",
       "enterData": "Enter collection data",
       "data": "Collection data",
       "setBehavior": "Set collection behavior",

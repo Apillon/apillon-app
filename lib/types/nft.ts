@@ -1,7 +1,7 @@
 /** NFT Chains */
 export enum Chains {
-  MOONBEAM = 1284,
   MOONBASE = 1287,
+  MOONBEAM = 1284,
   // ASTAR_SHIBUYA = 81,
   ASTAR = 592,
 }

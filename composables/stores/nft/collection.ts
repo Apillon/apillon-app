@@ -34,7 +34,7 @@ export const useCollectionStore = defineStore('collection', {
         coverImage: null as FileListItemType | null,
         name: '',
         symbol: '',
-        chain: Chains.MOONBEAM,
+        chain: Chains.MOONBASE,
         collectionType: NFTCollectionType.GENERIC,
         useApillonIpfsGateway: true,
       },
@@ -126,7 +126,7 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.coverImage = null;
       this.form.base.name = '';
       this.form.base.symbol = '';
-      this.form.base.chain = Chains.MOONBEAM;
+      this.form.base.chain = Chains.MOONBASE;
       this.form.base.collectionType = NFTCollectionType.GENERIC;
       this.form.base.useApillonIpfsGateway = true;
 
