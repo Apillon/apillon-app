@@ -4,7 +4,7 @@
       <Heading>
         <slot>
           <h3>
-            <span class="text-body">{{ $t('dashboard.solutions.nftCollection.name') }} / </span
+            <span class="text-body">{{ $t('dashboard.solution.nftCollection.name') }} / </span
             >{{ $t('general.customize') }}
           </h3>
         </slot>

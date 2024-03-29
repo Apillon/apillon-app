@@ -1,4 +1,5 @@
 export enum SolutionKey {
+  ENCRYPTION = 'encryption',
   NFT_COLLECTION = 'nftCollection',
   NFT_AIRDROP = 'nftAirdrop',
   NFT_CONTENT_DELIVERY = 'nftContentDelivery',

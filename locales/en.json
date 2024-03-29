@@ -501,7 +501,31 @@
       "kraken": "Smart contract for Kraken",
       "meerkats": "Meerkats"
     },
-    "solutions": {
+    "solution": {
+      "encryption": {
+        "name": "Encryption as a Service",
+        "description": "Provide public service allowing NFT owners to upload and encrypt files using Phala Compute.",
+        "configure": {
+          "customEvm": "Custom EVM",
+          "formName": "Name your Compute instance for personal reference.",
+          "nftCollection": "Choose NFT Collection Chain",
+          "nftCollectionInfo": "To enable the encryption functionality, you need an NFT collection. Select the chain your NFT collection is deployed on."
+        },
+        "deploy": {
+          "finish": "Deployment Success",
+          "finishInfo": "Your prebuilt solution is successfully deployed.",
+          "goBack": "Go back to Computing",
+          "goToContract": "Go to contract",
+          "loading": "Deploying to blockchain....",
+          "loadingInfo": "Give it a minute or two. You’ll be informed when the deployment is done.",
+          "preview": "Deploy preview",
+          "previewData": "Contract data",
+          "previewInfo": "Here is the overview of your deploy:",
+          "previewNftCollection": "NFT Collection"
+        },
+        "tabs": ["Choose Computing Solution", "Configure Deployment", "Deploy"],
+        "usage": []
+      },
       "fileSharing": {
         "name": "Decentralized File Sharing",
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
@@ -607,6 +631,8 @@
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
       },
+      "choose": "Choose Solution",
+      "chooseComputing": "Select a computing template for your project. Deploy it on testnet to test it and fix if needed before launching in production on mainnet.",
       "description": "Quickly deploy pre-built templates made and audited by Apillon. Each solution features a combination of Web3 services to demonstrate how they can be combined together, so you can learn, experiment, and launch your Web3 project fast.",
       "includedWeb3Services": "Included Web3 Services",
       "info": "Customize ready-to-deploy templates built and audited by Apillon."
@@ -886,7 +912,7 @@
         "contractType": "Contract type",
         "description": "Contract description",
         "name": "Contract name",
-        "nftContractAddress": "Contract Address",
+        "nftContractAddress": "NFT Collection Address",
         "nftChainRpcUrl": "Chain RPC URL",
         "nftId": "NFT ID",
         "restrictToOwner": "Restrict to owner",
@@ -956,7 +982,7 @@
       "contract": {
         "name": "Contract name",
         "description": "Contract description",
-        "nftContractAddress": "Select or type contract address",
+        "nftContractAddress": "Select or type NFT collection address",
         "nftChainRpcUrl": "Chain RPC URL",
         "accountAddress": "Account Address"
       }
@@ -1733,11 +1759,13 @@
     "contract": {
       "addressRequired": "Please enter NFT collection address",
       "bucketUuidRequired": "Please select Bucket",
+      "chainRpcUrlRequired": "Please enter RPC URL of your NFT Collection",
       "cidRequired": "Please enter CID",
       "depositAmountRequired": "Please enter amount",
       "depositAmountTooLow": "Please enter a higher amount (min. 0.01)",
       "fileIsApp": "Type of file \"{name}\" is is not supported, please use another file.",
       "fileTooBig": "File \"{name}\" is, max file size is 64kb.",
+      "nameRequired": "Please enter name",
       "nftIdRequired": "Please enter NFT ID"
     },
     "hosting": {

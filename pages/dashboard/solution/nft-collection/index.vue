@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h3>{{ $t('dashboard.solutions.nftCollection.name') }}</h3>
+          <h3>{{ $t('dashboard.solution.nftCollection.name') }}</h3>
         </slot>
       </Heading>
     </template>
@@ -20,7 +20,7 @@
         </div>
 
         <div class="max-w-lg mb-8">
-          <h4>{{ $t('dashboard.solutions.includedWeb3Services') }}</h4>
+          <h4>{{ $t('dashboard.solution.includedWeb3Services') }}</h4>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
           <Card v-for="(service, key) in nftServices" :key="key" :service="service" />

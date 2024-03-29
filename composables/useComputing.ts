@@ -1,4 +1,7 @@
+import IconInfo from '~/components/parts/Icon/Info.vue';
+
 export default function useCaptcha() {
+  const { t, te } = useI18n();
   const router = useRouter();
   const contractStore = useContractStore();
   const transactionStore = useComputingTransactionStore();
@@ -68,9 +71,24 @@ export default function useCaptcha() {
     router.push(`/dashboard/service/computing/${contract.contract_uuid}`);
   }
 
+  function labelInfo(field: string) {
+    if (
+      te(`form.label.contract.${field}`) &&
+      te(`form.label.contract.labelInfo.${field}`) &&
+      t(`form.label.contract.labelInfo.${field}`)
+    ) {
+      return [
+        h('span', { class: 'mr-1' }, t(`form.label.contract.${field}`)),
+        h(IconInfo, { size: 'sm', tooltip: t(`form.label.contract.labelInfo.${field}`) }, ''),
+      ];
+    }
+    return te(`form.label.contract.${field}`) ? t(`form.label.contract.${field}`) : field;
+  }
+
   return {
     checkUnfinishedContracts,
     checkUnfinishedTransactions,
+    labelInfo,
     onContractCreated,
   };
 }

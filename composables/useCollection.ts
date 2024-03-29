@@ -9,7 +9,6 @@ export default function useCollection() {
   const chains = [
     { label: $i18n.t(`nft.chain.${Chains.MOONBEAM}`), value: Chains.MOONBEAM },
     { label: $i18n.t(`nft.chain.${Chains.MOONBASE}`), value: Chains.MOONBASE },
-    // { label: $i18n.t(`nft.chain.${Chains.ASTAR_SHIBUYA}`), value: Chains.ASTAR_SHIBUYA },
     { label: $i18n.t(`nft.chain.${Chains.ASTAR}`), value: Chains.ASTAR },
   ];
   const collectionTypes = [

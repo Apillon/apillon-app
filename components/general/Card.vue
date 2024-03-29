@@ -1,12 +1,12 @@
 <template>
-  <div class="card-light flex flex-col justify-between p-8">
+  <div class="relative card-light flex flex-col justify-between p-8">
     <div class="mb-8">
       <div class="flex items-center gap-2 mb-4">
         <span class="text-2xl" :class="service.icon"></span>
-        <h5>{{ $t(`dashboard.service.${service.name}.name`) }}</h5>
+        <h5>{{ service.name }}</h5>
       </div>
       <p>
-        {{ $t(`dashboard.service.${service.name}.description`) }}
+        {{ service.description }}
       </p>
     </div>
     <div>
@@ -16,6 +16,11 @@
         </Pill>
       </div>
       <slot />
+    </div>
+    <div v-if="service.disabled" class="absolute right-0 bottom-full">
+      <span class="uppercase text-[10px]">
+        {{ $t('general.comingSoon') }}
+      </span>
     </div>
   </div>
 </template>

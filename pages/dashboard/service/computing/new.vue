@@ -21,7 +21,7 @@
     </template>
     <slot>
       <SolutionTabs
-        :solution="SolutionKey.NFT_CONTENT_DELIVERY"
+        :solution="SolutionKey.ENCRYPTION"
         :tab="tab"
         :tabs="tabs"
         @change="t => (tab = t)"

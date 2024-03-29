@@ -19,7 +19,7 @@ export default function useSolution() {
   const { te, tm, rt } = useI18n();
 
   function generateContent(solution: string) {
-    const BASE = 'dashboard.solutions';
+    const BASE = 'dashboard.solution';
 
     if (te(`${BASE}.${solution}.content`)) {
       const translations = tm(`${BASE}.${solution}.content`) as SolutionContentTrans[];
