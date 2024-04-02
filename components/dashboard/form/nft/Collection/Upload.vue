@@ -61,8 +61,30 @@
         </div>
       </div>
     </div>
-    <div v-else>
+    <div v-else class="min-w-[10rem]">
+      <div
+        v-if="collectionStore.form.base.coverImage?.id"
+        class="bg-bg-light rounded-xl overflow-hidden w-72 mx-auto"
+      >
+        <figure class="flex flex-col h-full">
+          <Image
+            :src="createThumbnailUrl(collectionStore.form.base.coverImage)"
+            class="w-full h-full object-contain"
+            :alt="collectionStore.form.base.coverImage.name"
+          />
+          <figcaption class="block h-12 px-4 py-3 font-bold">
+            {{ collectionStore.form.base.coverImage.name }}
+            <button
+              class="flex justify-center items-center p-1 float-right"
+              @click="collection.handleCoverImageRemove()"
+            >
+              <span class="icon-delete text-xl"></span>
+            </button>
+          </figcaption>
+        </figure>
+      </div>
       <n-upload
+        v-else
         ref="uploadRef"
         accept="image/png, image/jpeg"
         :show-file-list="false"
@@ -81,20 +103,6 @@
           </div>
         </n-upload-dragger>
       </n-upload>
-      <div v-if="collectionStore.form.base.coverImage?.id" class="flex mt-5 text-left">
-        <div class="card w-full px-4 py-[10px]">
-          <span class="icon-image text-xl align-sub mr-3"></span>
-          <span>{{ collectionStore.form.base.coverImage.name }}</span>
-        </div>
-        <div>
-          <button
-            class="flex justify-center items-center h-12 w-12 ml-4 p-3"
-            @click="collection.handleCoverImageRemove()"
-          >
-            <span class="icon-delete text-xl"></span>
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 </template>

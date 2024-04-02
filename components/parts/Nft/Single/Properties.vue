@@ -1,8 +1,10 @@
 <template>
   <div class="bg-bg-light p-4 w-full rounded-md">
-    <div class="flex">
+    <div class="flex items-center">
       <h4>{{ $t('nft.upload.attributes') }}</h4>
-      <NftSingleAttributes />
+      <n-button class="ml-auto rounded-lg" size="small" @click="modalAttributeVisible = true">
+        <span class="icon-add text-xl p-1 rounded-md"></span>
+      </n-button>
     </div>
     <div class="mt-4">
       <n-data-table
@@ -11,12 +13,18 @@
         :data="collectionStore.form.single.attributes"
       />
     </div>
+
+    <Modal v-model:show="modalAttributeVisible" title="Attribute">
+      <NftSingleAttributes @close="modalAttributeVisible = false" />
+    </Modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 const { t } = useI18n();
 const collectionStore = useCollectionStore();
+
+const modalAttributeVisible = ref<boolean>(false);
 
 const createColumns = (): NDataTableColumns<AttributeInterface> => {
   return [
