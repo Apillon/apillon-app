@@ -1,75 +1,72 @@
 <template>
-  <button class="ml-auto" @click="modalShowAttribute = true">
-    <span class="icon-add text-xl p-1 rounded-md"></span>
-  </button>
-  <Modal v-model:show="modalShowAttribute" title="Attribute">
-    <div>
-      <n-form
-        ref="formRef"
-        class="max-w-xl"
-        :model="collectionStore.attribute"
-        @submit.prevent="handleSubmitForm"
-      >
-        <n-grid class="items-end" :cols="12" :x-gap="32">
-          <n-form-item-gi
-            :span="12"
-            path="trait_type"
-            :label="infoLabel('nftTraitType')"
-            :label-props="{ for: 'trait_type' }"
-          >
-            <n-input
-              v-model:value="collectionStore.attribute.trait_type"
-              :input-props="{ id: 'trait_type' }"
-              :placeholder="$t('general.typeHere')"
-              clearable
-            />
-          </n-form-item-gi>
+  <div>
+    <n-form
+      ref="formRef"
+      class="max-w-xl"
+      :model="collectionStore.attribute"
+      @submit.prevent="handleSubmitForm"
+    >
+      <n-grid class="items-end" :cols="12" :x-gap="32">
+        <n-form-item-gi
+          :span="12"
+          path="trait_type"
+          :label="infoLabel('nftTraitType')"
+          :label-props="{ for: 'trait_type' }"
+        >
+          <n-input
+            v-model:value="collectionStore.attribute.trait_type"
+            :input-props="{ id: 'trait_type' }"
+            :placeholder="$t('general.typeHere')"
+            clearable
+          />
+        </n-form-item-gi>
 
-          <n-form-item-gi
-            :span="12"
-            path="display_type"
-            :label="infoLabel('nftDisplayType')"
-            :label-props="{ for: 'display_type' }"
-          >
-            <select-options
-              v-model:value="collectionStore.attribute.display_type"
-              :options="displayTypes"
-              :render-option="renderOption"
-              filterable
-              clearable
-            />
-          </n-form-item-gi>
+        <n-form-item-gi
+          :span="12"
+          path="display_type"
+          :label="infoLabel('nftDisplayType')"
+          :label-props="{ for: 'display_type' }"
+        >
+          <select-options
+            v-model:value="collectionStore.attribute.display_type"
+            :options="displayTypes"
+            :render-option="renderOption"
+            filterable
+            clearable
+          />
+        </n-form-item-gi>
 
-          <n-form-item-gi
-            :span="12"
-            path="value"
-            :label="infoLabel('nftValue')"
-            :label-props="{ for: 'value' }"
-          >
-            <n-input
-              v-model:value="collectionStore.attribute.value"
-              :input-props="{ id: 'value' }"
-              :placeholder="$t('general.typeHere')"
-              clearable
-            />
-          </n-form-item-gi>
-        </n-grid>
-      </n-form>
+        <n-form-item-gi
+          :span="12"
+          path="value"
+          :label="infoLabel('nftValue')"
+          :label-props="{ for: 'value' }"
+        >
+          <n-input
+            v-model:value="collectionStore.attribute.value"
+            :input-props="{ id: 'value' }"
+            :placeholder="$t('general.typeHere')"
+            clearable
+          />
+        </n-form-item-gi>
+      </n-grid>
+    </n-form>
 
-      <Btn class="mt-8" type="primary" size="large" @click="handleSubmitForm">
-        {{ $t('nft.addAttribute') }}
-      </Btn>
-    </div>
-  </Modal>
+    <Btn class="mt-8" type="primary" size="large" @click="handleSubmitForm">
+      {{ $t('nft.addAttribute') }}
+    </Btn>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { NTooltip, type SelectOption } from 'naive-ui';
 
-const { t, te } = useI18n();
-const collectionStore = useCollectionStore();
+const emit = defineEmits(['close']);
 
-const modalShowAttribute = ref<boolean>(false);
+const { t } = useI18n();
+const collectionStore = useCollectionStore();
+const { infoLabel } = useCollection();
+
 const types = ['string', 'date', 'number', 'boost_number', 'boost_percentage'];
 const displayTypes = ref<Array<SelectOption>>(
   types.map(type => {
@@ -103,25 +100,6 @@ function handleSubmitForm() {
     value: '',
     trait_type: '',
   };
-
-  modalShowAttribute.value = false;
-}
-
-function infoLabel(field: string) {
-  if (
-    te(`form.label.${field}`) &&
-    te(`nft.collection.labelInfo.${field}`) &&
-    t(`nft.collection.labelInfo.${field}`)
-  ) {
-    return [
-      h('span', { class: 'mr-1' }, t(`form.label.${field}`)),
-      h(
-        resolveComponent('IconInfo'),
-        { size: 'sm', tooltip: t(`nft.collection.labelInfo.${field}`) },
-        ''
-      ),
-    ];
-  }
-  return te(`form.label.${field}`) ? t(`form.label.${field}`) : field;
+  emit('close');
 }
 </script>
