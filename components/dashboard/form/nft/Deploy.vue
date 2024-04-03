@@ -67,18 +67,18 @@
 import { useMessage } from 'naive-ui';
 
 const emit = defineEmits(['submitSuccess']);
-const { deployCollection, getPriceServiceName } = useNft();
 
 const $i18n = useI18n();
 const message = useMessage();
-const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
+const { prepareFormData } = useCollection();
+const { deployCollection, getPriceServiceName } = useNft();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
+
 const deployStatus = ref<number>(0);
-const modalW3WarnVisible = ref<boolean>(false);
-const modalW3WarnShown = ref<boolean>(false);
 
 function isStepAvailable(step: number) {
   if (step === NftDeployStep.DEPLOY) {
@@ -98,60 +98,19 @@ function onModalW3WarnConfirm() {
   warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
 }
 
-/** Watch modalW3WarnVisible, onShow update timestamp of shown modal in session storage */
-watch(
-  () => modalW3WarnVisible.value,
-  shown => {
-    if (shown) {
-      modalW3WarnShown.value = true;
-      sessionStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
-    }
-  }
-);
-
 function w3WarnAndDeploy() {
-  if (
-    !modalW3WarnShown.value &&
-    !sessionStorage.getItem(LsW3WarnKeys.NFT_NEW) &&
-    $i18n.te('w3Warn.nft.new')
-  ) {
+  if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
     modalW3WarnVisible.value = true;
   } else {
-    warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
+    onModalW3WarnConfirm();
   }
 }
 
 async function deploy() {
   deployStatus.value = NftDeployStatus.CREATING;
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
 
   try {
-    const bodyData = {
-      project_uuid: dataStore.projectUuid,
-      name: collectionStore.form.base.name,
-      symbol: collectionStore.form.base.symbol,
-      chain: collectionStore.form.base.chain,
-      collectionType: collectionStore.form.base.collectionType,
-      baseExtension: collectionStore.form.behavior.baseExtension,
-      dropPrice: collectionStore.form.behavior.dropPrice,
-      maxSupply:
-        collectionStore.form.behavior.supplyLimited === 1
-          ? collectionStore.form.behavior.maxSupply
-          : 0,
-      drop: collectionStore.form.behavior.drop,
-      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
-      dropReserve: collectionStore.form.behavior.dropReserve || 0,
-      isRevokable: collectionStore.form.behavior.revocable,
-      isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress:
-        collectionStore.form.behavior.royaltiesFees === 0
-          ? null
-          : collectionStore.form.behavior.royaltiesAddress,
-      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
-    };
-    const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
+    const res = await $api.post<CollectionResponse>(endpoints.collections(), prepareFormData());
     collectionStore.active = res.data;
 
     /** Deployment status */

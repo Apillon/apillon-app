@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+import { useMessage, type UploadCustomRequestOptions } from 'naive-ui';
 
 type EncryptContent = {
   encryptedContent: string;
@@ -61,7 +61,7 @@ const uploadDisabled = computed<boolean>(
 );
 
 /** Upload file request - add file to list */
-async function encryptFile({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+async function encryptFile({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const size = file.file?.size || 0;
 
   if (

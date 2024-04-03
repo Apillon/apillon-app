@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderCollection />
+      <HeaderNftCollection />
     </template>
 
     <slot>
@@ -14,17 +14,37 @@
           @transfer="modalTransferOwnershipVisible = true"
         />
 
-        <!-- Table -->
-        <TableNftTransaction
-          v-if="collectionStore.hasCollectionTransactions"
-          :transactions="collectionStore.transaction"
-        />
+        <template v-if="collectionStore.hasCollectionTransactions"
+          ><!-- Display Collection -->
+          <NftCollectionInfo class="w-full max-w-4xl mx-auto" />
+
+          <!-- Display NFT Services -->
+          <div class="w-full max-w-4xl mx-auto">
+            <h3 class="mb-6">{{ $t('dashboard.service.used') }}</h3>
+            <NftServices />
+          </div>
+
+          <!-- Links to NFT templates -->
+          <NftPreviewFinish />
+
+          <!-- Table Transactions -->
+          <TableNftTransaction :transactions="collectionStore.transaction" />
+        </template>
         <Empty
           v-else
           :title="$t('nft.transaction.empty')"
           :info="$t('nft.transaction.emptyInfo')"
           icon="nft/illustration"
-        />
+        >
+          <!-- Add NFT -->
+          <n-button
+            v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
+            @click="openAddNft(collectionStore.active.collection_uuid)"
+          >
+            <span class="icon-add text-xl mr-2 text-primary"></span>
+            <span class="text-primary">{{ $t('nft.add') }}</span>
+          </n-button>
+        </Empty>
       </n-space>
 
       <!-- Modal - Collection Mint -->
@@ -67,10 +87,10 @@
 </template>
 
 <script lang="ts" setup>
+const $i18n = useI18n();
 const router = useRouter();
 const { params } = useRoute();
-const $i18n = useI18n();
-const dataStore = useDataStore();
+const { openAddNft } = useCollection();
 const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);
@@ -84,34 +104,32 @@ let collectionInterval: any = null as any;
 let transactionInterval: any = null as any;
 
 /** Collection UUID from route */
-const collectionUuid = ref<string>(`${params?.id}` || `${params?.slug}` || '');
+const collectionUuid = ref<string>(`${params?.id}`);
 
 useHead({
   title: $i18n.t('dashboard.nav.nft'),
 });
 
-onMounted(() => {
-  collectionStore.getCollection(collectionUuid.value);
+onMounted(async () => {
+  if (!params?.id) router.push({ name: 'dashboard-service-nft' });
 
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const currentCollection = await collectionStore.getCollection(collectionUuid.value);
+  const currentCollection = await collectionStore.getCollection(collectionUuid.value);
 
-    /** Reset state if user opens different collection */
-    if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
-      collectionStore.resetMetadata();
-    }
+  /** Reset state if user opens different collection */
+  if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
+    collectionStore.resetMetadata();
+  }
 
-    if (!currentCollection?.collection_uuid) {
-      router.push({ name: 'dashboard-service-nft' });
-    } else {
-      await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
-      collectionStore.active = currentCollection;
+  if (!currentCollection?.collection_uuid) {
+    router.push({ name: 'dashboard-service-nft' });
+  } else {
+    await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
+    collectionStore.active = currentCollection;
 
-      checkIfCollectionUnfinished();
-      checkUnfinishedTransactions();
-      pageLoading.value = false;
-    }
-  });
+    checkIfCollectionUnfinished();
+    checkUnfinishedTransactions();
+    pageLoading.value = false;
+  }
 });
 onUnmounted(() => {
   clearInterval(transactionInterval);
@@ -219,7 +237,11 @@ function checkUnfinishedTransactions() {
     );
     if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
       clearInterval(transactionInterval);
-      collectionStore.active = await collectionStore.fetchCollection(collectionUuid.value);
+
+      const newCollection = await collectionStore.fetchCollection(collectionUuid.value);
+      if (newCollection) {
+        collectionStore.active = newCollection;
+      }
     }
   }, 30000);
 }

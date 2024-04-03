@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { SelectOption } from 'naive-ui';
+import type { FormItemRule, SelectOption } from 'naive-ui';
 
 type FormNftNestMint = {
   parentCollectionUuid: string | null;
@@ -131,7 +131,7 @@ const isFormDisabled = computed<boolean>(() => {
   return isTransferred.value;
 });
 
-function validateQuantity(_: NFormItemRule, value: number): boolean {
+function validateQuantity(_: FormItemRule, value: number): boolean {
   return (
     !collectionStore.active.drop || (value > 0 && value <= collectionStore.active?.dropReserve)
   );

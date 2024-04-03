@@ -5,11 +5,8 @@
         <slot>
           <h1>{{ $t('dashboard.nav.nft') }}</h1>
         </slot>
-
         <template #info>
-          <n-space :size="32" align="center">
-            <IconInfo v-if="$i18n.te('w3Warn.nft.new')" @click="showModalW3Warn = true" />
-          </n-space>
+          <ModalCreditCosts :service="ServiceTypeName.NFT" filter-by-chain />
         </template>
       </Heading>
     </template>
@@ -28,10 +25,6 @@
           {{ $t('nft.collection.createFirst') }}
         </Btn>
       </Empty>
-
-      <W3Warn v-model:show="showModalW3Warn">
-        {{ $t('w3Warn.nft.new') }}
-      </W3Warn>
     </slot>
   </Dashboard>
 </template>
@@ -40,9 +33,10 @@
 const $i18n = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
+const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
+
 const pageLoading = ref<boolean>(true);
-const showModalW3Warn = ref<boolean>(false);
 
 let collectionInterval: any = null as any;
 
@@ -55,6 +49,9 @@ onMounted(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await collectionStore.getCollections();
 
+      /** Get Price list */
+      paymentStore.getPriceList();
+
       setTimeout(() => {
         checkUnfinishedCollections();
       }, 3000);
@@ -66,16 +63,6 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(collectionInterval);
 });
-
-/** Watch showModalW3Warn, onShow update timestamp of shown modal in local storage */
-watch(
-  () => showModalW3Warn.value,
-  shown => {
-    if (shown) {
-      localStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
-    }
-  }
-);
 
 /** Collection polling */
 function checkUnfinishedCollections() {

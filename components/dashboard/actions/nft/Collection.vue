@@ -16,9 +16,6 @@
     </div>
 
     <n-space size="large">
-      <!-- Modal Price list for Hosting -->
-      <ModalCreditCosts :service="ServiceTypeName.NFT" />
-
       <!-- Refresh collections -->
       <n-button
         size="small"

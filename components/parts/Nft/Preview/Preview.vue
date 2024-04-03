@@ -1,7 +1,7 @@
 <template>
   <n-scrollbar
     class="min-h-[300px] mt-10 lg:mt-4 text-left"
-    style="max-height: calc(100dvh - 420px)"
+    style="max-height: calc(100dvh - 370px)"
     y-scrollable
   >
     <template v-if="collectionStore.gridView">
@@ -49,6 +49,7 @@
 
 <script lang="ts" setup>
 import type { DataTableColumns, DataTableProps } from 'naive-ui';
+import { NInput } from 'naive-ui';
 import colors from '~/tailwind.colors';
 
 const { createThumbnailUrl } = useNft();
@@ -77,21 +78,52 @@ const paginationDataTable = reactive({
 const nfts = computed(() => {
   const first = (page.value - 1) * pageSize.value;
   let last = first + pageSize.value;
-  if (last > collectionStore.csvData.length) {
-    last = collectionStore.csvData.length;
+  if (last > collectionStore.metadata.length) {
+    last = collectionStore.metadata.length;
   }
 
-  return collectionStore.csvData.slice(first, last);
+  return collectionStore.metadata.slice(first, last);
+});
+
+const cols = collectionStore.columns.map(item => {
+  const key = item?.title || item?.key || '';
+
+  if (key === 'image') return { key: key, title: key };
+
+  return {
+    key: key,
+    title: key,
+    minWidth: 140,
+    render(row, index) {
+      return h(NInput, {
+        value:
+          key in row
+            ? row[key]
+            : row.attributes.find(attrItem => attrItem.trait_type === key)
+            ? row.attributes.find(attrItem => attrItem.trait_type === key).value
+            : null,
+        onUpdateValue(v) {
+          if (key in row) {
+            collectionStore.metadata[index][key] = v;
+          } else if (row.attributes.find(attrItem => attrItem.trait_type === key)) {
+            row.attributes.find(attrItem => attrItem.trait_type === key).value = v;
+          }
+        },
+      });
+    },
+  };
 });
 
 const createColumns = (): DataTableColumns<Record<string, string>> => {
   return [
     {
       key: 'img',
+      className: '!py-2',
+      width: 120,
       render(row) {
         return h(
           resolveComponent('Image') as any,
-          { src: imageByName(row.image), class: 'max-w-[60px] max-w-[60px] mx-auto' },
+          { src: imageByName(row.image), class: 'max-w-[90px] max-w-[60px] mx-auto' },
           {}
         );
       },
@@ -100,14 +132,14 @@ const createColumns = (): DataTableColumns<Record<string, string>> => {
       key: 'id',
       title: 'ID',
     },
-    ...collectionStore.csvColumns,
+    ...cols,
   ];
 };
 const columns = createColumns();
 const rowKey = (row: TransactionInterface) => row.id;
 
 const data = computed(() => {
-  return collectionStore.csvData.map((item, key) => {
+  return collectionStore.metadata.map((item, key) => {
     return {
       id: key + 1,
       ...item,

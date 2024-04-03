@@ -1,3 +1,5 @@
+import type { UploadCustomRequestOptions } from 'naive-ui';
+
 export default function useNft() {
   const $i18n = useI18n();
   const message = useMessage();
@@ -10,6 +12,7 @@ export default function useNft() {
   const loadingImages = ref<boolean>(false);
   const metadataRequired = ['name', 'description', 'image'];
   const metadataProperties = [
+    'id',
     'name',
     'description',
     'external_url',
@@ -33,12 +36,10 @@ export default function useNft() {
     );
   });
   const hasRequiredMetadata = computed<boolean>(() => {
-    const csvColumns: Array<string> = collectionStore.csvColumns.map(
-      (item: NTableColumn<KeyTitle>) => {
-        return (item as KeyTitle).key;
-      }
-    );
-    return metadataRequired.every(item => csvColumns.includes(item));
+    const columns: Array<string> = collectionStore.columns.map((item: NTableColumn<KeyTitle>) => {
+      return (item as KeyTitle).key;
+    });
+    return metadataRequired.every(item => columns.includes(item));
   });
   const isCsvValid = computed<boolean>(() => {
     return isSameNumOfRows.value && hasRequiredMetadata.value;
@@ -74,7 +75,7 @@ export default function useNft() {
    */
 
   /** Upload file request - add file to list */
-  function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+  function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
     const uploadedFile: FileListItemType = {
       ...file,
       percentage: 0,
@@ -115,7 +116,7 @@ export default function useNft() {
       complete: function (results: CsvFileData) {
         if (results.data.length) {
           collectionStore.csvData = results.data;
-          collectionStore.csvColumns = results.meta.fields.map(item => {
+          collectionStore.columns = results.meta.fields.map(item => {
             return {
               title: item,
               key: item,
@@ -185,7 +186,7 @@ export default function useNft() {
     onProgress,
     onError,
     onFinish,
-  }: NUploadCustomRequestOptions) {
+  }: UploadCustomRequestOptions) {
     if (!isImage(file.type)) {
       message.warning($i18n.t('validation.notImage', { name: file.name }));
       onError();
@@ -213,6 +214,41 @@ export default function useNft() {
       onError();
     } else {
       onProgress({ percent: 0 });
+      collectionStore.images.push(image);
+    }
+
+    setTimeout(() => {
+      loadingImages.value = false;
+    }, 300);
+  }
+
+  function uploadImageRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
+    if (!isImage(file.type)) {
+      message.warning($i18n.t('validation.notImage', { name: file.name }));
+      onError();
+      return;
+    }
+
+    const image = {
+      ...file,
+      fullPath: `/Images${file.fullPath}`,
+      percentage: 0,
+      size: file.file?.size || 0,
+      timestamp: Date.now(),
+      onFinish,
+      onError,
+    };
+
+    if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
+      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+      onError();
+    } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
+      message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));
+      onError();
+    } else {
+      if (collectionStore.amount === NftAmount.SINGLE) {
+        collectionStore.form.single.image = image.name;
+      }
       collectionStore.images.push(image);
     }
 
@@ -257,7 +293,7 @@ export default function useNft() {
   /**
    * Deploy NFT with metadata
    */
-  async function deployCollection() {
+  async function deployCollection(deployCollection: boolean = false) {
     const nftMetadataFiles = createNftFiles(collectionStore.metadata);
     const metadataSession = await uploadFiles(
       collectionStore.active.bucket_uuid,
@@ -274,17 +310,22 @@ export default function useNft() {
       false
     );
 
+    const endpoint = deployCollection
+      ? endpoints.nftDeploy(collectionStore.active.collection_uuid)
+      : endpoints.collectionNftsMetadata(collectionStore.active.collection_uuid);
+
     await Promise.all(putRequests.value).then(async _ => {
       if (!!metadataSession && !!imagesSession) {
-        const res = await $api.post<CollectionResponse>(
-          endpoints.nftDeploy(collectionStore.active.collection_uuid),
-          {
-            useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
-            metadataSession,
-            imagesSession,
-          }
-        );
-        collectionStore.active = res.data;
+        const res = await $api.post<CollectionResponse>(endpoint, {
+          useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
+          metadataSession,
+          imagesSession,
+        });
+        if (deployCollection) {
+          collectionStore.active = res.data;
+        }
+
+        collectionStore.metadata = [];
 
         message.success($i18n.t('form.success.nftDeployed'));
       } else {
@@ -304,7 +345,7 @@ export default function useNft() {
 
       return {
         id: `${index + 1}-${nft.name}`,
-        name: `${index + 1}.json`,
+        name: nft.id ? `${nft.id}.json` : `${index + 1}.json`,
         status: 'pending',
         percentage: 0,
         file: nftFile,
@@ -318,11 +359,14 @@ export default function useNft() {
   }
 
   function getPriceServiceName() {
-    return generatePriceServiceName(
-      ServiceTypeName.NFT,
-      collectionStore.form.base.chain,
-      PriceServiceAction.COLLECTION
-    );
+    const chain = collectionStore.active?.chain
+      ? collectionStore.active.chain
+      : collectionStore.form.base.chain;
+    const action =
+      collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED
+        ? PriceServiceAction.SET_BASE_URI
+        : PriceServiceAction.COLLECTION;
+    return generatePriceServiceName(ServiceTypeName.NFT, chain, action);
   }
 
   return {
@@ -344,5 +388,6 @@ export default function useNft() {
     parseUploadedFile,
     uploadFileRequest,
     uploadImagesRequest,
+    uploadImageRequest,
   };
 }
