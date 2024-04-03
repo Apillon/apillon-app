@@ -45,7 +45,7 @@
 const props = defineProps({ deployCollection: { type: Boolean, default: false } });
 const emit = defineEmits(['submitSuccess']);
 
-const { te } = useI18n();
+const { t, te } = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
@@ -62,7 +62,18 @@ function w3WarnAndDeploy() {
 }
 
 async function onModalW3WarnConfirm() {
-  warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
+  if (!metadataValid()) {
+    message.warning(t('validation.nftMetadata'));
+  } else {
+    warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
+  }
+}
+
+function metadataValid(): boolean {
+  return !collectionStore.metadata.some(
+    item =>
+      item.id === null || item.id === undefined || !item.image || !item.name || !item.description
+  );
 }
 
 async function deploy() {

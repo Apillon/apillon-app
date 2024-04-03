@@ -6,7 +6,9 @@
 
     <slot>
       <div>
-        <FormNftCreateMetadata />
+        <FormNftCreateMetadata
+          :deploy-collection="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
+        />
         <button
           v-if="
             collectionStore.nftStep !== NftCreateStep.AMOUNT &&

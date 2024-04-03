@@ -138,7 +138,7 @@
 <script lang="ts" setup>
 import type { UploadInst } from 'naive-ui';
 const nft = useNft();
-const $i18n = useI18n();
+const { t, te } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
 
@@ -148,20 +148,20 @@ const uploadRef = ref<UploadInst | null>(null);
 
 function infoLabel(field: string) {
   if (
-    $i18n.te(`form.label.${field}`) &&
-    $i18n.te(`nft.nft.labelInfo.${field}`) &&
-    $i18n.t(`nft.nft.labelInfo.${field}`)
+    te(`form.label.${field}`) &&
+    te(`nft.nft.labelInfo.${field}`) &&
+    t(`nft.nft.labelInfo.${field}`)
   ) {
     return [
-      h('span', { class: 'mr-1' }, $i18n.t(`form.label.${field}`)),
+      h('span', { class: 'mr-1' }, t(`form.label.${field}`)),
       h(
         resolveComponent('IconInfo'),
-        { size: 'sm', tooltip: $i18n.t(`nft.collection.labelInfo.${field}`) },
+        { size: 'sm', tooltip: t(`nft.collection.labelInfo.${field}`) },
         ''
       ),
     ];
   }
-  return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
+  return te(`form.label.${field}`) ? t(`form.label.${field}`) : field;
 }
 
 function removeImages() {
@@ -177,9 +177,14 @@ function imageByName(name: string = '') {
 
 function handleSubmitForm(e: Event | MouseEvent) {
   e.preventDefault();
+  collectionStore.metadata = [];
+
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors || !collectionStore.hasImages) {
-      if (!collectionStore.hasImages) message.warning($i18n.t('validation.nft') || 'Error');
+      if (!collectionStore.hasImages) {
+        message.warning(t('validation.nft') || 'Error');
+      }
+
       errors?.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
@@ -192,6 +197,7 @@ function handleSubmitForm(e: Event | MouseEvent) {
       collectionStore.columns = createColumns(collectionStore.form.single);
 
       collectionStore.nftStep = NftCreateStep.PREVIEW;
+      collectionStore.form.single.id -= collectionStore.form.single.copies;
     }
   });
 
