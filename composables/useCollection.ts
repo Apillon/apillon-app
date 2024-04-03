@@ -162,6 +162,7 @@ export default function useCollection() {
       name: collectionStore.form.base.name,
       symbol: collectionStore.form.base.symbol,
       chain: collectionStore.form.base.chain,
+      chainType: collectionStore.form.base.chainType,
       collectionType: collectionStore.form.base.collectionType,
       baseExtension: collectionStore.form.behavior.baseExtension,
       dropPrice: collectionStore.form.behavior.dropPrice,

@@ -1,8 +1,13 @@
+export enum ChainType {
+  SUBSTRATE = 1,
+  EVM = 2,
+}
+
 /** NFT Chains */
 export enum Chains {
   MOONBASE = 1287,
   MOONBEAM = 1284,
-  // ASTAR_SHIBUYA = 81,
+  ASTAR_SHIBUYA = 81,
   ASTAR = 592,
 }
 
