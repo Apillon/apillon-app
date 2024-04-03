@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({ deployOnlyMetadata: { type: Boolean, default: true } });
+const props = defineProps({ deployCollection: { type: Boolean, default: false } });
 const emit = defineEmits(['submitSuccess']);
 
 const { te } = useI18n();
@@ -62,15 +62,6 @@ function w3WarnAndDeploy() {
 }
 
 async function onModalW3WarnConfirm() {
-  const chain = props.deployOnlyMetadata
-    ? collectionStore.active.chain
-    : collectionStore.form.base.chain;
-  const action = props.deployOnlyMetadata
-    ? PriceServiceAction.SET_BASE_URI
-    : PriceServiceAction.COLLECTION;
-  console.log(chain);
-  console.log(action);
-  console.log(collectionStore.active);
   warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
 }
 
@@ -80,7 +71,7 @@ async function deploy() {
   collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
 
   try {
-    await deployCollection(props.deployOnlyMetadata);
+    await deployCollection(props.deployCollection);
 
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
 
