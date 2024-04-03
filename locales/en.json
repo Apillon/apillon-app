@@ -1164,6 +1164,10 @@
       "1284": "MOONBEAM (Mainnet)",
       "1287": "MOONBASE (Testnet)"
     },
+    "chainType": {
+      "1": "SUBSTRATE",
+      "2": "EVM"
+    },
     "amount": {
       "title": "Create NFTs",
       "content": "Add NFTs one by one or upload them in bulk.",
@@ -1199,6 +1203,7 @@
       "addLogo": "Select logo",
       "address": "Collection address",
       "baseUri": "Base URI",
+      "chainType": "Chain type",
       "contractAddress": "Contract address",
       "create": "Create collection",
       "createFirst": "Start creating NFTs",
