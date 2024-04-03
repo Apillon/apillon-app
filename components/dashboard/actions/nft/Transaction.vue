@@ -35,10 +35,10 @@
 
       <!-- Add NFT -->
       <n-button
-        v-if="collectionStore.active.collection_uuid && isMetadataStoreOnApillon"
+        v-if="collectionStore.active.collection_uuid"
         size="small"
         :loading="loadingBucket"
-        :disabled="actionsDisabled"
+        :disabled="!allowAddMetadata"
         @click="openAddNft(collectionStore.active.collection_uuid)"
       >
         <span class="icon-add text-xl mr-2 text-primary"></span>
@@ -71,9 +71,9 @@ defineProps({
 const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer']);
 
 const $i18n = useI18n();
-const router = useRouter();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
+const { openAddNft } = useCollection();
 const { loadingBucket, openBucket } = useStorage();
 
 const actionsDisabled = computed<boolean>(() => {
@@ -85,6 +85,13 @@ const isMetadataStoreOnApillon = computed<boolean>(() => {
     !!collectionStore.active.baseUri &&
     collectionStore.active?.baseUri.includes('apillon.io') &&
     collectionStore.active?.baseExtension.includes('?token=')
+  );
+});
+
+const allowAddMetadata = computed<boolean>(() => {
+  return (
+    isMetadataStoreOnApillon.value ||
+    collectionStore.active?.collectionStatus === CollectionStatus.CREATED
   );
 });
 
@@ -144,9 +151,5 @@ const options = computed(() => {
 
 async function refresh() {
   await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
-}
-
-function openAddNft(collectionUuid) {
-  router.push(`/dashboard/service/nft/${collectionUuid}/add`);
 }
 </script>

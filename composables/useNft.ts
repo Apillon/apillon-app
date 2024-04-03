@@ -362,9 +362,10 @@ export default function useNft() {
     const chain = collectionStore.active?.chain
       ? collectionStore.active.chain
       : collectionStore.form.base.chain;
-    const action = collectionStore.active?.chain
-      ? PriceServiceAction.SET_BASE_URI
-      : PriceServiceAction.COLLECTION;
+    const action =
+      collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED
+        ? PriceServiceAction.SET_BASE_URI
+        : PriceServiceAction.COLLECTION;
     return generatePriceServiceName(ServiceTypeName.NFT, chain, action);
   }
 

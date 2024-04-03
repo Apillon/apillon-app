@@ -1782,6 +1782,7 @@
     "nft": "Please select an NFT",
     "nftBucketRequired": "Please select a bucket",
     "nftBurnTokenIdRequired": "Please enter token ID",
+    "nftMetadata": "Please insert missing data, fields ID, image, name and description are required!",
     "nftMintAddressRequired": "Please enter your wallet address for minting",
     "nftMintCollectionUuidRequired": "Please select collection",
     "nftMintParentNftIdRequired": "Please enter Parent NFT ID",

@@ -35,7 +35,16 @@
           :title="$t('nft.transaction.empty')"
           :info="$t('nft.transaction.emptyInfo')"
           icon="nft/illustration"
-        />
+        >
+          <!-- Add NFT -->
+          <n-button
+            v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
+            @click="openAddNft(collectionStore.active.collection_uuid)"
+          >
+            <span class="icon-add text-xl mr-2 text-primary"></span>
+            <span class="text-primary">{{ $t('nft.add') }}</span>
+          </n-button>
+        </Empty>
       </n-space>
 
       <!-- Modal - Collection Mint -->
@@ -78,9 +87,10 @@
 </template>
 
 <script lang="ts" setup>
+const $i18n = useI18n();
 const router = useRouter();
 const { params } = useRoute();
-const $i18n = useI18n();
+const { openAddNft } = useCollection();
 const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);

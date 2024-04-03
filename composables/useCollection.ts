@@ -3,6 +3,7 @@ import IconInfo from '../components/parts/Icon/Info.vue';
 
 export default function useCollection() {
   const { t, te } = useI18n();
+  const router = useRouter();
   const message = useMessage();
   const dataStore = useDataStore();
   const collectionStore = useCollectionStore();
@@ -91,24 +92,24 @@ export default function useCollection() {
     },
   ];
   const rulesCollectionLogo: FormItemRule[] = [
-    ruleRequired($i18n.t('validation.collectionLogoRequired')),
+    ruleRequired(t('validation.collectionLogoRequired')),
     {
       validator: validateCollectionLogo,
-      message: $i18n.t('validation.collectionLogoRequired'),
+      message: t('validation.collectionLogoRequired'),
     },
   ];
   const rulesCollectionCoverImage: FormItemRule[] = [
-    ruleRequired($i18n.t('validation.collectionCoverImageRequired')),
+    ruleRequired(t('validation.collectionCoverImageRequired')),
     {
       validator: validateCollectionCoverImage,
-      message: $i18n.t('validation.collectionCoverImageRequired'),
+      message: t('validation.collectionCoverImageRequired'),
     },
   ];
   const validateSingleIdRequired: FormItemRule[] = [
-    ruleRequired($i18n.t('validation.nftIdRequired')),
+    ruleRequired(t('validation.nftIdRequired')),
     {
       validator: validateSingleNftIdUnique,
-      message: $i18n.t('validation.nftIdDuplicate'),
+      message: t('validation.nftIdDuplicate'),
     },
   ];
 
@@ -150,13 +151,9 @@ export default function useCollection() {
 
   const rulesSingle: NFormRules = {
     id: validateSingleIdRequired,
-    'single.id': validateSingleIdRequired,
-    collectionUuid: ruleRequired($i18n.t('validation.nftCollection')),
-    'single.collectionUuid': ruleRequired($i18n.t('validation.nftCollection')),
-    name: ruleRequired($i18n.t('validation.nftName')),
-    'single.name': ruleRequired($i18n.t('validation.nftName')),
-    description: ruleRequired($i18n.t('validation.nftDescription')),
-    'single.description': ruleRequired($i18n.t('validation.nftDescription')),
+    collectionUuid: ruleRequired(t('validation.nftCollection')),
+    name: ruleRequired(t('validation.nftName')),
+    description: ruleRequired(t('validation.nftDescription')),
   };
 
   function prepareFormData(addBaseUri = false) {
@@ -266,13 +263,13 @@ export default function useCollection() {
       onError,
     };
     if (!isEnoughSpaceInStorage([], uploadedFile)) {
-      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+      message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
 
       /** Mark file as failed */
       onError();
       return;
     } else if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
-      message.warning($i18n.t('validation.notImage'));
+      message.warning(t('validation.notImage'));
 
       /** Mark file as failed */
       onError();
@@ -293,6 +290,10 @@ export default function useCollection() {
     collectionStore.form.base.logo = {} as FileListItemType;
   }
 
+  function openAddNft(collectionUuid: string) {
+    router.push({ name: 'dashboard-service-nft-slug-add', params: { slug: collectionUuid } });
+  }
+
   return {
     loading,
     formRef,
@@ -307,6 +308,7 @@ export default function useCollection() {
     disablePasteDate,
     disablePasteTime,
     infoLabel,
+    openAddNft,
     prepareFormData,
     uploadFileRequest,
     handleLogoRemove,
