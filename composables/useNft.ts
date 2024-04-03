@@ -293,7 +293,7 @@ export default function useNft() {
   /**
    * Deploy NFT with metadata
    */
-  async function deployCollection(metadata: boolean = false) {
+  async function deployCollection(deployCollection: boolean = false) {
     const nftMetadataFiles = createNftFiles(collectionStore.metadata);
     const metadataSession = await uploadFiles(
       collectionStore.active.bucket_uuid,
@@ -310,9 +310,9 @@ export default function useNft() {
       false
     );
 
-    const endpoint = metadata
-      ? endpoints.collectionNftsMetadata(collectionStore.active.collection_uuid)
-      : endpoints.nftDeploy(collectionStore.active.collection_uuid);
+    const endpoint = deployCollection
+      ? endpoints.nftDeploy(collectionStore.active.collection_uuid)
+      : endpoints.collectionNftsMetadata(collectionStore.active.collection_uuid);
 
     await Promise.all(putRequests.value).then(async _ => {
       if (!!metadataSession && !!imagesSession) {
@@ -321,7 +321,7 @@ export default function useNft() {
           metadataSession,
           imagesSession,
         });
-        if (!metadata) {
+        if (deployCollection) {
           collectionStore.active = res.data;
         }
 
