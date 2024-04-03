@@ -24,6 +24,7 @@ const config: ConfigInterface = {
     'NFT',
     'NFT_NESTABLE',
     'ONBOARDING',
+    'PREBUILD_SOLUTIONS',
     'PROJECT',
     'PROJECT_DELETE',
     'PROJECT_ON_STARTUP',

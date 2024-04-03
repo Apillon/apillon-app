@@ -28,6 +28,9 @@ const Endpoints = {
   project: (projectUuid: string) => {
     return `/projects/${projectUuid}`;
   },
+  projectOverview: (projectUuid: string) => {
+    return `/projects/${projectUuid}/overview`;
+  },
   projectUsers: (projectUuid: string) => {
     return `/projects/${projectUuid}/users`;
   },

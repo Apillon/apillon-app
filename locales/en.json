@@ -468,13 +468,16 @@
       "hosting": {
         "name": "Decentralized Hosting",
         "description": "Make your website or app unstoppable and free from third-party impact.",
-        "kraken": "40k Webhosting Project for Kraken",
         "title": "Web3 Hosting",
-        "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"]
+        "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"],
+        "usedBandwidth": "Used bandwidth",
+        "websiteCount": "Number of Websites"
       },
       "nft": {
         "name": "NFTs",
         "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
+        "nftTransactionCount": "Number of transactions",
+        "numOfCollections": "Number of Collections",
         "usage": [
           "storage buckets",
           "smart contracts",
@@ -485,8 +488,10 @@
       },
       "storage": {
         "bucket": "Web3 storage bucket",
-        "name": "Decentralized Storage",
+        "bucketCount": "Number of buckets",
         "description": "Make your content permanently accessible and easily shareable.",
+        "fileCount": "Number of files",
+        "name": "Decentralized Storage",
         "website": "Main Website Storage",
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
@@ -648,6 +653,7 @@
     "learnMoreAboutServices": "Learn more about services",
     "manageRoles": "Manage roles",
     "name": "Name",
+    "projectResources": "Project resources",
     "readDocs": "Read the Docs",
     "role": "Role",
     "searchDocs": "Search the docs",

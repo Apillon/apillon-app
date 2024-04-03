@@ -77,6 +77,7 @@ export const LsCacheKeys = {
   POSTS: 'al_cache_posts',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
+  PROJECT_OVERVIEW: 'al_cache_project_overview',
   REFERRAL: 'al_cache_referral',
   REFERRAL_AIRDROP: 'al_cache_referral_airdrop',
   SERVICES: 'al_cache_services',
