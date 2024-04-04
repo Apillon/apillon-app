@@ -16,10 +16,10 @@ export const useCollectionStore = defineStore('collection', {
     items: [] as CollectionInterface[],
     loading: false,
     metadata: [] as Array<Record<string, any>>,
-    metadataStored: true as Boolean | null,
+    metadataStored: null as Boolean | null,
     mintTab: NftCreateTab.METADATA,
     search: '',
-    step: CollectionStep.ENVIRONMENT,
+    step: CollectionStep.STORAGE_TYPE,
     nftStep: NftCreateStep.AMOUNT,
     amount: 0,
     stepDeploy: NftDeployStep.NAME,
@@ -93,7 +93,7 @@ export const useCollectionStore = defineStore('collection', {
       this.resetFile();
       this.resetImages();
       this.mintTab = NftCreateTab.METADATA;
-      this.step = CollectionStep.ENVIRONMENT;
+      this.step = CollectionStep.STORAGE_TYPE;
       this.nftStep = NftCreateStep.AMOUNT;
       this.stepDeploy = NftDeployStep.NAME;
       this.stepCollectionDeploy = CollectionStatus.CREATED;
