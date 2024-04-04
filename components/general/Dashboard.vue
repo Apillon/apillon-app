@@ -11,10 +11,10 @@
         <n-skeleton height="40px" width="100%" />
         <div class="flex gap-8 h-full">
           <div style="width: 100%">
-            <n-skeleton height="100%" width="100%" />
+            <n-skeleton height="80%" width="100%" />
           </div>
           <div style="width: 320px">
-            <n-skeleton height="400px" width="100%" />
+            <n-skeleton height="80%" width="100%" />
           </div>
         </div>
       </div>
@@ -127,18 +127,16 @@ const { name } = useRoute();
 
 /** Heading height */
 const headingRef = ref<HTMLElement>();
-const scrollStyle = computed(() => {
-  const offset = isLg.value ? 120 : 124;
-  return {
-    maxHeight: `calc(99dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
-  };
-});
-const heightScreen = computed(() => {
-  const offset = isLg.value ? 120 : 124;
-  return {
-    height: `calc(98dvh - ${offset + (headingRef.value?.clientHeight || 0)}px)`,
-  };
-});
+
+const calcHeaderHeight = () => (headingRef.value?.clientHeight || 0) + (isLg.value ? 120 : 124);
+const headingHeight = ref<number>(calcHeaderHeight());
+
+const scrollStyle = computed(() => ({
+  maxHeight: `calc(100dvh - ${headingHeight.value}px)`,
+}));
+const heightScreen = computed(() => ({
+  height: `calc(100dvh - ${headingHeight.value}px)`,
+}));
 
 /** Delay animation */
 const loadingAnimation = ref<boolean>(false);
@@ -163,6 +161,7 @@ function setLoadingAnimation(isLoading: boolean) {
   const delay = isLoading ? 10 : 0;
   setTimeout(() => {
     loadingAnimation.value = isLoading;
+    headingHeight.value = calcHeaderHeight();
   }, delay);
 }
 

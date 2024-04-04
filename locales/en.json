@@ -211,7 +211,7 @@
       "encrypt": {
         "step1": "Choose bucket",
         "step2": "Upload, encrypt & assign CID",
-        "step2Info": "The file is being encrypted, uploaded to IPFS.",
+        "step2Info": "Encrypted file is being uploaded to IPFS.",
         "step3": "Finished",
         "step3Info": "The file has been encrypted and CID has been assigned to NFT.",
         "step3Btn": "Encrypt another file"
@@ -895,6 +895,7 @@
         "cid": "CID",
         "contractType": "Contract type",
         "description": "Contract description",
+        "file": "File",
         "name": "Contract name",
         "nftContractAddress": "NFT collection address",
         "nftChainRpcUrl": "Chain RPC URL",
@@ -1848,6 +1849,7 @@
       "depositAmountTooLow": "Please enter a higher amount (min. 0.01)",
       "fileIsApp": "Type of file \"{name}\" is is not supported, please use another file.",
       "fileTooBig": "File \"{name}\" is, max file size is 64kb.",
+      "fileRequired": "Please upload file",
       "nftIdRequired": "Please enter NFT ID"
     },
     "hosting": {
