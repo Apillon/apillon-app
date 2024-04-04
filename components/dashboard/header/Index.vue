@@ -1,15 +1,15 @@
 <template>
   <transition name="slide-down" appear>
-    <div class="px-8 py-6">
+    <div class="px-4 sm:px-8 py-6">
       <div class="flex justify-between items-center">
-        <div class="flex items-center pr-4">
+        <div class="flex items-center pr-2 sm:pr-4">
           <!-- Hamburger btn to show sidebar on mobile -->
-          <BtnHamburger class="flex lg:hidden mr-4" @click="emit('toggleSidebar')" />
+          <BtnHamburger class="flex lg:hidden mr-2 sm:mr-4" @click="emit('toggleSidebar')" />
 
           <!-- Search docs -->
           <div
             v-if="isFeatureEnabled(Feature.SEARCH, authStore.getUserRoles())"
-            class="w-[20vw] max-w-xs"
+            class="min-w-[11rem] w-[20vw] max-w-xs"
           >
             <a
               class="flex items-center"

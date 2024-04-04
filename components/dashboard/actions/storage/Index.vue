@@ -1,7 +1,7 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
     <n-space size="large">
-      <div class="w-[20vw] max-w-xs">
+      <div class="min-w-[11rem] w-[20vw] max-w-xs">
         <n-input
           v-model:value="bucketStore.filter.search"
           type="text"
@@ -19,7 +19,7 @@
       <select-options
         v-model:value="bucketStore.filter.bucketType"
         :options="bucketTypes"
-        class="w-[20vw] max-w-xs"
+        class="min-w-[11rem] w-[20vw] max-w-xs"
         size="small"
         :placeholder="$t('form.placeholder.bucketType')"
         filterable

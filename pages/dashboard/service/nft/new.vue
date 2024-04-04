@@ -5,15 +5,18 @@
     </template>
 
     <slot>
-      <div v-if="collectionStore.metadataStored" class="max-w-lg mx-auto py-4">
-        <div class="text-center">
+      <div v-if="collectionStore.metadataStored" class="mobile:relative max-w-lg mx-auto py-4">
+        <div class="relative text-center">
           <h2>{{ $t('nft.collection.create') }}</h2>
           <p class="mb-8 text-body whitespace-pre-line">
             {{ $t('nft.collection.createInfo') }}
           </p>
         </div>
         <FormNftCollection />
-        <button class="absolute left-0 top-[42px]" @click="collectionStore.metadataStored = null">
+        <button
+          class="absolute left-0 top-6 md:top-[42px]"
+          @click="collectionStore.metadataStored = null"
+        >
           <span class="icon-back text-2xl align-sub"></span>
         </button>
       </div>
@@ -58,7 +61,7 @@
               <span class="ml-2 text-sm text-white">{{ $t('nft.collection.previewTab') }}</span>
             </template>
             <slot>
-              <div class="flex-cc" style="min-height: calc(100dvh - 300px)">
+              <div class="flex-cc" style="min-height: calc(70dvh - 50px)">
                 <div
                   v-if="collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOY_INITIATED"
                   class="w-full pb-8 text-center"
@@ -100,7 +103,7 @@
             collectionStore.stepCollectionDeploy !== CollectionStatus.DEPLOY_INITIATED &&
             collectionStore.nftStep !== NftCreateStep.PREVIEW
           "
-          class="absolute left-0 top-3"
+          class="absolute left-0 top-2 md:top-3"
           @click="goToPreviousStep"
         >
           <span class="icon-back text-2xl align-sub"></span>
@@ -156,6 +159,7 @@ const storageStore = useStorageStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
+const { isSm } = useScreen();
 const { uploadFiles } = useUpload();
 const { getPriceServiceName } = useNft();
 const { prepareFormData } = useCollection();

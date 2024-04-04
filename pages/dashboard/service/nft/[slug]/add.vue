@@ -5,7 +5,7 @@
     </template>
 
     <slot>
-      <div>
+      <div class="mobile:relative">
         <FormNftCreateMetadata
           :deploy-collection="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
         />
@@ -14,7 +14,7 @@
             collectionStore.nftStep !== NftCreateStep.AMOUNT &&
             collectionStore.nftStep !== NftCreateStep.DEPLOY
           "
-          class="absolute left-0 top-10"
+          class="absolute left-0 top-2 md:top-10"
           @click="goToPreviousStep"
         >
           <span class="icon-back text-2xl align-sub"></span>
