@@ -167,7 +167,7 @@ function onWalletRegister() {
   handleSubmit(null);
 }
 
-function validateForm(): Boolean {
+function validateForm() {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors =>

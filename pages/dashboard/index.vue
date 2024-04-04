@@ -15,6 +15,11 @@
         v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())"
         class="mb-8"
       >
+        <!-- Resources-->
+        <SolutionOverview />
+
+        <hr class="border-bg-lighter my-8" />
+
         <!-- Services-->
         <h4 class="mb-8">{{ $t('general.explore') }}</h4>
 
@@ -27,6 +32,7 @@
             <div class="flex justify-between items-center text-white">
               <strong>{{ service.title }}</strong>
               <NuxtLink
+                v-if="service.link"
                 :to="{ name: service.link }"
                 class="inline-flex-cc w-10 h-10 hover:bg-bg-lighter rounded-full transition-colors duration-300"
               >
@@ -38,18 +44,6 @@
             </div>
           </div>
         </div>
-
-        <hr class="border-bg-lighter my-8" />
-
-        <!-- Resources-->
-        <SolutionOverview />
-
-        <hr class="border-bg-lighter my-8" />
-
-        <!-- Activity-->
-        <h4 class="mb-8">{{ $t('general.activity') }}</h4>
-
-        <TablePaymentInvoices />
       </div>
       <div v-else class="p-8 mb-8 bg-bg-light text-body rounded-lg">
         <h3 class="mb-4 text-white">Welcome to Apillon, your gateway to Web3!</h3>
@@ -117,7 +111,10 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const authStore = useAuthStore();
-const paymentStore = usePaymentStore();
+
+useHead({
+  title: t('dashboard.dashboard'),
+});
 
 const services = [
   {
@@ -128,7 +125,6 @@ const services = [
   {
     title: t('dashboard.nav.smartContracts'),
     content: t('dashboard.smartContracts.info'),
-    link: t('dashboard-service'),
   },
   {
     title: t('dashboard.nav.solutions'),
@@ -136,14 +132,4 @@ const services = [
     link: t('dashboard-solution'),
   },
 ];
-
-useHead({
-  title: t('dashboard.dashboard'),
-});
-
-onMounted(async () => {
-  if (isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())) {
-    paymentStore.getInvoices();
-  }
-});
 </script>

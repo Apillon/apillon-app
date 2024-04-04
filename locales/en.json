@@ -439,30 +439,22 @@
       "authentication": {
         "name": "Decentralized Authentication",
         "description": "Boost users’ privacy and security with decentralized digital identity.",
+        "didCount": "Number of digital identities",
         "emptyTitle": "Your project does not have Authentication service yet",
         "emptyInfo": "Add Web3 Authentication and create an API key.",
         "emptyBtn": "Attach Web3 Auth",
         "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
       },
       "computing": {
-        "name": "Computing",
+        "contractCount": "Number of contracts",
+        "computingTransactionCount": "Number of transactions",
         "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
+        "name": "Computing",
         "usage": [
           "computing smart contracts",
           "cross-chain",
           "secure computing environment",
           "internet access"
-        ]
-      },
-      "social": {
-        "name": "Social",
-        "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
-        "usage": [
-          "social media",
-          "real-time chat",
-          "user-friendly UI",
-          "HIGH PRIVACY",
-          "configurable interface"
         ]
       },
       "hosting": {
@@ -484,6 +476,19 @@
           "drag-n-drop ui",
           "website template",
           "hosting"
+        ]
+      },
+      "social": {
+        "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
+        "name": "Social",
+        "postCount": "Number of channels",
+        "spaceCount": "Number of hubs",
+        "usage": [
+          "social media",
+          "real-time chat",
+          "user-friendly UI",
+          "HIGH PRIVACY",
+          "configurable interface"
         ]
       },
       "storage": {
