@@ -8,7 +8,7 @@
         :key="chain.value"
         class="border-2 p-4 rounded-md border-bg-lightest hover:cursor-pointer w-40 flex justify-center"
         :class="collectionStore.form.base.chain === chain.value ? 'border-yellow' : ''"
-        @click="onChainChange(chain.value)"
+        @click="selectChain(chain.value)"
       >
         <div>
           <NuxtIcon
@@ -23,7 +23,7 @@
 
     <div
       class="transition-all overflow-hidden"
-      :class="isOnlyEvmChain ? 'max-h-0' : 'max-h-[20rem]'"
+      :class="collectionStore.form.base.chain === Chains.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
     >
       <h4 class="relative top-2">{{ $t('nft.collection.chainType') }}</h4>
       <div class="flex gap-4 whitespace-pre-line my-8 justify-center">
@@ -51,29 +51,12 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n();
 const collectionStore = useCollectionStore();
+const { chains, chainTypes, onChainChange } = useCollection();
 
-const chains = enumKeys(Chains).map(k => {
-  return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
-});
-
-const chainTypes = enumKeys(ChainType).map(k => {
-  return { name: k.toLowerCase(), label: t(`nft.chainType.${ChainType[k]}`), value: ChainType[k] };
-});
-
-const isOnlyEvmChain = computed(
-  () =>
-    collectionStore.form.base.chain === Chains.MOONBASE ||
-    collectionStore.form.base.chain === Chains.MOONBEAM
-);
-
-function onChainChange(chain: number) {
+function selectChain(chain: number) {
   collectionStore.form.base.chain = chain;
-
-  if (chain === Chains.MOONBASE || chain === Chains.MOONBEAM) {
-    collectionStore.form.base.chainType = ChainType.EVM;
-  }
+  onChainChange(chain);
 }
 
 function handleSubmit() {

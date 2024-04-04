@@ -13,21 +13,24 @@ export default function useCollection() {
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
 
-  const chains = [
-    { label: t(`nft.chain.${Chains.MOONBEAM}`), value: Chains.MOONBEAM },
-    { label: t(`nft.chain.${Chains.MOONBASE}`), value: Chains.MOONBASE },
-    { label: t(`nft.chain.${Chains.ASTAR}`), value: Chains.ASTAR },
-  ];
-  const collectionTypes = [
-    {
-      label: t(`nft.collection.type.${NFTCollectionType.GENERIC}`),
-      value: NFTCollectionType.GENERIC,
-    },
-    {
-      label: t(`nft.collection.type.${NFTCollectionType.NESTABLE}`),
-      value: NFTCollectionType.NESTABLE,
-    },
-  ];
+  const chains = enumKeys(Chains).map(k => {
+    return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
+  });
+  const chainTypes = enumKeys(ChainType).map(k => {
+    return {
+      name: k.toLowerCase(),
+      label: t(`nft.chainType.${ChainType[k]}`),
+      value: ChainType[k],
+    };
+  });
+  const collectionTypes = enumKeys(NFTCollectionType).map(k => {
+    return {
+      name: k.toLowerCase(),
+      label: t(`nft.collection.type.${NFTCollectionType[k]}`),
+      value: NFTCollectionType[k],
+    };
+  });
+
   const supplyTypes = [
     { label: t('form.supplyTypes.unlimited'), value: 0 },
     { label: t('form.supplyTypes.limited'), value: 1 },
@@ -124,6 +127,7 @@ export default function useCollection() {
     'base.name': ruleRequired(t('validation.collectionNameRequired')),
     chain: ruleRequired(t('validation.collectionChainRequired')),
     'base.chain': ruleRequired(t('validation.collectionChainRequired')),
+    'base.chainType': ruleRequired(t('validation.collectionChainTypeRequired')),
     collectionType: ruleRequired(t('validation.collectionTypeRequired')),
     'base.collectionType': ruleRequired(t('validation.collectionTypeRequired')),
     baseUri: rulesBaseUri,
@@ -295,10 +299,19 @@ export default function useCollection() {
     router.push({ name: 'dashboard-service-nft-slug-add', params: { slug: collectionUuid } });
   }
 
+  function onChainChange(chain: number) {
+    if (chain === Chains.ASTAR_SHIBUYA) {
+      collectionStore.form.base.chainType = ChainType.SUBSTRATE;
+    } else if (chain !== Chains.ASTAR) {
+      collectionStore.form.base.chainType = ChainType.EVM;
+    }
+  }
+
   return {
     loading,
     formRef,
     chains,
+    chainTypes,
     collectionTypes,
     supplyTypes,
     booleanSelect,
@@ -309,6 +322,7 @@ export default function useCollection() {
     disablePasteDate,
     disablePasteTime,
     infoLabel,
+    onChainChange,
     openAddNft,
     prepareFormData,
     uploadFileRequest,

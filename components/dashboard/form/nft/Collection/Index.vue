@@ -65,6 +65,23 @@
         />
       </n-form-item>
 
+      <!--  Chain type -->
+      <n-form-item
+        v-show="collectionStore.form.base.chain === Chains.ASTAR"
+        path="base.chainType"
+        :label="infoLabel('collectionChainType')"
+        :label-props="{ for: 'chainType' }"
+      >
+        <select-options
+          v-model:value="collectionStore.form.base.chainType"
+          :options="chainTypes"
+          :input-props="{ id: 'chainType' }"
+          :placeholder="$t('general.pleaseSelect')"
+          filterable
+          clearable
+        />
+      </n-form-item>
+
       <!--  Collection type -->
       <n-form-item
         v-if="isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles())"
@@ -322,7 +339,6 @@ const router = useRouter();
 const message = useMessage();
 
 const authStore = useAuthStore();
-const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
@@ -331,6 +347,7 @@ const { getPriceServiceName } = useNft();
 const {
   booleanSelect,
   chains,
+  chainTypes,
   collectionTypes,
   formRef,
   loading,
@@ -341,6 +358,7 @@ const {
   disablePasteDate,
   disablePasteTime,
   infoLabel,
+  onChainChange,
   prepareFormData,
 } = useCollection();
 
@@ -355,6 +373,12 @@ const metadataUri = computed<string>(() => {
     : '';
 });
 
+watch(
+  () => collectionStore.form.base.chain,
+  chain => {
+    onChainChange(chain);
+  }
+);
 
 /** When user close W3Warn, allow him to create new collection */
 function onModalW3WarnConfirm() {
