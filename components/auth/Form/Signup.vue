@@ -48,26 +48,6 @@
       </Btn>
     </n-form-item>
   </n-form>
-
-  <template
-    v-if="
-      isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles()) &&
-      (!authStore.wallet.signature || walletRegister)
-    "
-  >
-    <!-- Separator -->
-    <SeparatorText class="my-4" borderLeft>
-      {{ $t('auth.signup.withWallet') }}
-    </SeparatorText>
-    <!-- Wallet -->
-    <AuthWalletLogin
-      class="w-full"
-      :showModal="showModalWallet"
-      register
-      @register="onWalletRegister"
-      @validate="validateForm"
-    />
-  </template>
 </template>
 
 <script lang="ts" setup>
@@ -110,8 +90,6 @@ const { address, isConnected } = useAccount();
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
 const newsletterChecked = ref<boolean>(false);
-const walletRegister = ref<boolean>(false);
-const showModalWallet = ref<boolean>(false);
 
 const formData = ref<SignupForm>({
   email: authStore.email,
@@ -161,24 +139,6 @@ const termsLabel = computed<any>(() => {
     '.',
   ]);
 });
-
-function onWalletRegister() {
-  walletRegister.value = true;
-  handleSubmit(null);
-}
-
-function validateForm() {
-  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
-    } else {
-      showModalWallet.value = true;
-      setTimeout(() => (showModalWallet.value = false), 1000);
-    }
-  });
-}
 
 function handleSubmit(e: MouseEvent | null) {
   e?.preventDefault();
