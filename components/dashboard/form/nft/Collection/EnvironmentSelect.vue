@@ -2,7 +2,7 @@
   <div class="mb-8">
     <h2>{{ $t('nft.collection.environment') }}</h2>
     <p>{{ $t('nft.collection.environmentContent') }}</p>
-    <div class="flex gap-4 whitespace-pre-line my-8 justify-center">
+    <div class="flex flex-wrap gap-4 whitespace-pre-line my-8 justify-center">
       <div
         v-for="chain in chains"
         :key="chain.value"

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center" style="min-height: calc(100dvh - 300px)">
+  <div class="flex justify-center items-center" style="min-height: calc(70dvh - 50px)">
     <div
       class="w-full text-center"
       :class="collectionStore.stepUpload === NftUploadStep.PREVIEW ? 'self-start' : 'max-w-lg'"

@@ -6,50 +6,41 @@
       :model="collectionStore.attribute"
       @submit.prevent="handleSubmitForm"
     >
-      <n-grid class="items-end" :cols="12" :x-gap="32">
-        <n-form-item-gi
-          :span="12"
-          path="trait_type"
-          :label="infoLabel('nftTraitType')"
-          :label-props="{ for: 'trait_type' }"
-        >
-          <n-input
-            v-model:value="collectionStore.attribute.trait_type"
-            :input-props="{ id: 'trait_type' }"
-            :placeholder="$t('general.typeHere')"
-            clearable
-          />
-        </n-form-item-gi>
+      <n-form-item
+        path="trait_type"
+        :label="infoLabel('nftTraitType')"
+        :label-props="{ for: 'trait_type' }"
+      >
+        <n-input
+          v-model:value="collectionStore.attribute.trait_type"
+          :input-props="{ id: 'trait_type' }"
+          :placeholder="$t('general.typeHere')"
+          clearable
+        />
+      </n-form-item>
 
-        <n-form-item-gi
-          :span="12"
-          path="display_type"
-          :label="infoLabel('nftDisplayType')"
-          :label-props="{ for: 'display_type' }"
-        >
-          <select-options
-            v-model:value="collectionStore.attribute.display_type"
-            :options="displayTypes"
-            :render-option="renderOption"
-            filterable
-            clearable
-          />
-        </n-form-item-gi>
+      <n-form-item
+        path="display_type"
+        :label="infoLabel('nftDisplayType')"
+        :label-props="{ for: 'display_type' }"
+      >
+        <select-options
+          v-model:value="collectionStore.attribute.display_type"
+          :options="displayTypes"
+          :render-option="renderOption"
+          filterable
+          clearable
+        />
+      </n-form-item>
 
-        <n-form-item-gi
-          :span="12"
-          path="value"
-          :label="infoLabel('nftValue')"
-          :label-props="{ for: 'value' }"
-        >
-          <n-input
-            v-model:value="collectionStore.attribute.value"
-            :input-props="{ id: 'value' }"
-            :placeholder="$t('general.typeHere')"
-            clearable
-          />
-        </n-form-item-gi>
-      </n-grid>
+      <n-form-item path="value" :label="infoLabel('nftValue')" :label-props="{ for: 'value' }">
+        <n-input
+          v-model:value="collectionStore.attribute.value"
+          :input-props="{ id: 'value' }"
+          :placeholder="$t('general.typeHere')"
+          clearable
+        />
+      </n-form-item>
     </n-form>
 
     <Btn class="mt-8" type="primary" size="large" @click="handleSubmitForm">

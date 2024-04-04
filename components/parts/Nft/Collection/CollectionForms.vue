@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-cc pt-4" style="min-height: calc(100dvh - 300px)">
+  <div class="flex-cc pt-4" style="min-height: calc(70dvh - 50px)">
     <div
       v-if="collectionStore.step === CollectionStep.STORAGE_TYPE"
       class="max-w-lg text-center pb-8"

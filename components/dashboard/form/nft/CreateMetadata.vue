@@ -2,7 +2,7 @@
   <div
     class="relative w-full"
     :class="{ 'flex-cc': collectionStore.nftStep !== NftCreateStep.PREVIEW }"
-    style="min-height: calc(100dvh - 300px)"
+    style="min-height: calc(70dvh - 50px)"
   >
     <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" />
     <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" />
@@ -70,10 +70,7 @@ async function onModalW3WarnConfirm() {
 }
 
 function metadataValid(): boolean {
-  return !collectionStore.metadata.some(
-    item =>
-      item.id === null || item.id === undefined || !item.image || !item.name || !item.description
-  );
+  return !collectionStore.metadata.some(item => !item.image || !item.name || !item.description);
 }
 
 async function deploy() {

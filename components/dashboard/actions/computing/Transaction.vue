@@ -1,6 +1,6 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="w-[20vw] max-w-xs">
+    <div class="min-w-[11rem] w-[20vw] max-w-xs">
       <!-- Search transactions
       <n-input
         v-model:value="transactionStore.search"

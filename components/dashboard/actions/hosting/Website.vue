@@ -1,7 +1,7 @@
 <template>
   <div>
     <n-space v-bind="$attrs" justify="space-between">
-      <div class="w-[20vw] max-w-xs">
+      <div class="min-w-[11rem] w-[20vw] max-w-xs">
         <n-input
           v-model:value="bucketStore.folder.search"
           type="text"

@@ -1,6 +1,6 @@
 <template>
   <div class="w-full max-w-3xl">
-    <h2>{{ $t('nft.create') }}</h2>
+    <h2 class="tablet:text-center">{{ $t('nft.create') }}</h2>
     <div class="my-8">
       <h4>{{ $t('nft.single.content') }}</h4>
       <p class="max-w-lg text-xs">
@@ -54,11 +54,10 @@
       <h4>{{ $t('nft.single.technicalDetails') }}</h4>
     </div>
 
-    <div class="flex gap-4">
-      <div>
+    <div class="flex mobile:flex-wrap gap-4">
+      <div class="w-full md:max-w-xl">
         <n-form
           ref="formRef"
-          class="max-w-xl"
           :model="collectionStore.form.single"
           :rules="rulesSingle"
           @submit.prevent="handleSubmitForm"
