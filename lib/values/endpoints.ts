@@ -194,7 +194,7 @@ const Endpoints = {
     return `/nfts/collections/${collectionUuid}/transactions`;
   },
   collectionSetBaseUri: (collectionUuid: string) => {
-    return `/nfts/collections/${collectionUuid}/setBaseUri`;
+    return `/nfts/collections/${collectionUuid}/set-base-uri`;
   },
   collectionTransferOwnership: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/transferOwnership`;

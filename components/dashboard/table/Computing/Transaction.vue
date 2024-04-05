@@ -23,15 +23,6 @@ const transactionStore = useComputingTransactionStore();
 const createColumns = (): NDataTableColumns<TransactionInterface> => {
   return [
     {
-      key: 'id',
-      title: 'ID',
-      minWidth: 60,
-    },
-    {
-      key: 'contract_id',
-      title: $i18n.t('computing.transaction.contractId'),
-    },
-    {
       key: 'transactionHash',
       title: $i18n.t('computing.transaction.hash'),
       render(row: TransactionInterface) {

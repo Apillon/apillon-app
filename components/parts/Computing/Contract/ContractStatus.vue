@@ -12,7 +12,7 @@
       align="center"
       :wrap="false"
     >
-      <span class="mx-1 uppercase">{{ $t(`computing.contract.status.${contractStatus}`) }}</span>
+      <span class="mx-1 uppercase">{{ ContractStatus[contractStatus] }}</span>
       <AnimationTyping v-if="contractStatus < ContractStatus.DEPLOYED" />
     </n-space>
   </n-tag>

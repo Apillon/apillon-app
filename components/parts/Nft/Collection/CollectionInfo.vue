@@ -24,7 +24,6 @@
           <td>
             <TableLink v-if="item.link && item.value" :link="item.link" :text="item.value" />
             <TableEllipsis v-else-if="item.value" :text="item.value" />
-            <span v-else>{{ item.value }}</span>
           </td>
         </tr>
       </tbody>
@@ -33,8 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-import NftTemplateJPG from 'assets/images/nft/template.jpg';
-
 const { t } = useI18n();
 const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
@@ -76,7 +73,7 @@ const data = computed(() => {
       value: collectionStore.active.baseUri,
     },
     {
-      label: t('form.label.collectionCoverImage'),
+      label: t('form.label.collectionLogo'),
       value: logo.value?.link,
     },
     {

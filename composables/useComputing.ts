@@ -69,7 +69,11 @@ export default function useCaptcha() {
   }
 
   function onContractCreated(contract: ContractInterface) {
-    router.push(`/dashboard/service/computing/${contract.contract_uuid}`);
+    if (contract.contractStatus === ContractStatus.DEPLOYED) {
+      router.push(`/dashboard/service/computing/${contract.contract_uuid}`);
+    } else {
+      router.push({ name: 'dashboard-service-computing' });
+    }
   }
 
   async function uploadFileToIPFS(

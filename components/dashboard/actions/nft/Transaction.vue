@@ -68,9 +68,9 @@
 defineProps({
   env: { type: Number, default: 0 },
 });
-const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer']);
+const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer', 'setBaseUri']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
 const { openAddNft } = useCollection();
@@ -95,7 +95,7 @@ const allowAddMetadata = computed<boolean>(() => {
 const options = computed(() => {
   return [
     {
-      label: $i18n.t('nft.collection.mint'),
+      label: t('nft.collection.mint'),
       key: 'mint',
       disabled: actionsDisabled.value,
       props: {
@@ -107,7 +107,7 @@ const options = computed(() => {
       },
     },
     {
-      label: $i18n.t('nft.collection.nestMint'),
+      label: t('nft.collection.nestMint'),
       key: 'nestMint',
       show: collectionStore.active?.collectionType === NFTCollectionType.NESTABLE,
       disabled: actionsDisabled.value,
@@ -120,7 +120,7 @@ const options = computed(() => {
       },
     },
     {
-      label: $i18n.t('nft.collection.revoke'),
+      label: t('nft.collection.revoke'),
       key: 'revoke',
       disabled: actionsDisabled.value || !collectionStore.active?.isRevokable,
       props: {
@@ -132,13 +132,25 @@ const options = computed(() => {
       },
     },
     {
-      label: $i18n.t('nft.collection.transfer'),
+      label: t('nft.collection.transfer'),
       key: 'transfer',
       disabled: actionsDisabled.value,
       props: {
         onClick: () => {
           if (!actionsDisabled.value) {
             emit('transfer');
+          }
+        },
+      },
+    },
+    {
+      label: t('nft.collection.setBaseUri'),
+      key: 'setBaseUri',
+      disabled: actionsDisabled.value,
+      props: {
+        onClick: () => {
+          if (!actionsDisabled.value) {
+            emit('setBaseUri');
           }
         },
       },

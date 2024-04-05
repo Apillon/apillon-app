@@ -12,6 +12,7 @@
           @nest-mint="modalNestMintCollectionVisible = true"
           @revoke="modalBurnTokensVisible = true"
           @transfer="modalTransferOwnershipVisible = true"
+          @set-base-uri="modalSetBaseUriVisible = true"
         />
 
         <template v-if="collectionStore.hasCollectionTransactions"
@@ -76,12 +77,21 @@
           @submit-success="onNftTransferred"
         />
       </modal>
+
+      <!-- Modal - Collection Set base URI -->
+      <modal v-model:show="modalSetBaseUriVisible" :title="$t('nft.collection.setBaseUri')">
+        <FormNftSetBaseUri
+          :collection-uuid="collectionStore.active.collection_uuid"
+          :chain-id="collectionStore.active.chain"
+          @submit-success="onBaseUriChanged"
+        />
+      </modal>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
 const { openAddNft } = useCollection();
@@ -92,6 +102,7 @@ const modalMintCollectionVisible = ref<boolean | null>(false);
 const modalNestMintCollectionVisible = ref<boolean | null>(false);
 const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
+const modalSetBaseUriVisible = ref<boolean | null>(false);
 
 /** Polling */
 let collectionInterval: any = null as any;
@@ -101,7 +112,7 @@ let transactionInterval: any = null as any;
 const collectionUuid = ref<string>(`${params?.id}`);
 
 useHead({
-  title: $i18n.t('dashboard.nav.nft'),
+  title: t('dashboard.nav.nft'),
 });
 
 onMounted(async () => {
@@ -179,6 +190,11 @@ function onNftTransferred() {
       checkUnfinishedTransactions();
     }, 10000);
   }, 3000);
+}
+
+function onBaseUriChanged(collection: CollectionInterface) {
+  modalSetBaseUriVisible.value = false;
+  collectionStore.active = collection;
 }
 
 /** Collection polling */

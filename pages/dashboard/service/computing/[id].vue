@@ -10,6 +10,10 @@
           :show-upload="showUpload"
           @transfer="modalTransferOwnershipVisible = true"
         />
+
+        <!-- Display Contract data -->
+        <ComputingContractInfo class="mb-8" />
+
         <TableComputingTransaction :contract-uuid="contractStore.active.contract_uuid" />
       </n-space>
 
