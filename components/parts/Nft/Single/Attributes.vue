@@ -88,8 +88,8 @@ function handleSubmitForm() {
 
   collectionStore.attribute = {
     display_type: '',
-    value: '',
     trait_type: '',
+    value: '',
   };
   emit('close');
 }

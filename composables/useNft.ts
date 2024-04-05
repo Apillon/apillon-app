@@ -10,7 +10,7 @@ export default function useNft() {
   const $papa = vueApp.config.globalProperties.$papa;
 
   const loadingImages = ref<boolean>(false);
-  const metadataRequired = ['name', 'description', 'image'];
+  const metadataRequired = ['id', 'name', 'description', 'image'];
   const metadataProperties = [
     'id',
     'name',
@@ -295,6 +295,10 @@ export default function useNft() {
    */
   async function deployCollection(deployCollection: boolean = false) {
     const nftMetadataFiles = createNftFiles(collectionStore.metadata);
+    if (nftMetadataFiles) {
+      console.log(nftMetadataFiles);
+      throw Error('metadata');
+    }
     const metadataSession = await uploadFiles(
       collectionStore.active.bucket_uuid,
       nftMetadataFiles,
@@ -339,13 +343,20 @@ export default function useNft() {
    */
   function createNftFiles(nftData: Array<Record<string, any>>): FileListItemType[] {
     return nftData.map((nft, index) => {
-      const nftFile = new Blob([JSON.stringify(nft, null, 2)], {
+      const id = nft.id || index + 1;
+
+      /** Prepare NFT data */
+      const nftData = JSON.parse(JSON.stringify(nft));
+      delete nftData.id;
+      delete nftData.copies;
+
+      const nftFile = new Blob([JSON.stringify(nftData, null, 2)], {
         type: 'application/json',
       });
 
       return {
-        id: `${index + 1}-${nft.name}`,
-        name: nft.id ? `${nft.id}.json` : `${index + 1}.json`,
+        id: `${id}-${nft.name}`,
+        name: `${id}.json`,
         status: 'pending',
         percentage: 0,
         file: nftFile,
@@ -362,11 +373,7 @@ export default function useNft() {
     const chain = collectionStore.active?.chain
       ? collectionStore.active.chain
       : collectionStore.form.base.chain;
-    const action =
-      collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED
-        ? PriceServiceAction.SET_BASE_URI
-        : PriceServiceAction.COLLECTION;
-    return generatePriceServiceName(ServiceTypeName.NFT, chain, action);
+    return generatePriceServiceName(ServiceTypeName.NFT, chain, PriceServiceAction.COLLECTION);
   }
 
   return {

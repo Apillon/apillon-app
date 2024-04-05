@@ -2,9 +2,13 @@
   <Heading>
     <slot>
       <n-space align="center" size="large">
+        <NuxtLink :to="backLink">
+          <span class="icon-back text-2xl align-sub"></span>
+        </NuxtLink>
         <h2>
-          <span class="text-bodyDark">{{ $t('dashboard.nav.nft') }}/</span>
-          {{ $t('general.create') }}
+          <span class="text-bodyDark">{{ $t('dashboard.solutions.nftCollection.name') }}/</span>
+          <span v-if="collectionStore.active?.collection_uuid">{{ $t('nft.addNfts') }}</span>
+          <span v-else>{{ $t('general.create') }}</span>
         </h2>
       </n-space>
     </slot>
@@ -33,4 +37,13 @@ onMounted(() => {
   /** Get Price list */
   paymentStore.getPriceList();
 });
+
+const backLink = computed(() =>
+  collectionStore.active?.collection_uuid
+    ? {
+        name: 'dashboard-service-nft-id',
+        params: { id: collectionStore.active?.collection_uuid },
+      }
+    : { name: 'dashboard-service-nft' }
+);
 </script>

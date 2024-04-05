@@ -80,11 +80,6 @@ export enum NftUploadStep {
   IMAGES = 2,
   PREVIEW = 3,
 }
-export enum NftDeployStep {
-  NAME = 1,
-  BEHAVIOR = 2,
-  DEPLOY = 3,
-}
 
 /** NFT Collection deploy status */
 export enum NftDeployStatus {
@@ -118,6 +113,7 @@ declare global {
     baseUri: string;
     bucket_uuid: string;
     chain: number;
+    chainType: number;
     collectionType: number;
     collectionStatus: number;
     collection_uuid: string;

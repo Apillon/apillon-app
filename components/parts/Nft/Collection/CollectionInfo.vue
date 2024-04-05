@@ -1,18 +1,13 @@
 <template>
-  <div>
-    <div class="mb-4 relative max-w-lg mx-auto min-h-[10rem]">
+  <div class="max-w-xl mx-auto">
+    <div v-if="loadingImages || logo || coverImage" class="mb-4 relative min-h-[10rem]">
       <Spinner v-if="loadingImages" />
       <template v-else>
         <Image v-if="coverImage" :src="coverImage.link" class="h-50" />
-        <Image v-else :src="NftTemplateJPG" class="h-50" />
         <Image
           v-if="logo"
           :src="logo.link"
           class="top-2 left-2 absolute h-20 border-2 border-bg-lighter"
-        />
-        <Logo
-          v-else
-          class="flex-cc top-2 left-2 absolute p-2 h-20 border-2 border-bg-lighter bg-bg/40"
         />
       </template>
     </div>
@@ -22,57 +17,25 @@
     </div>
     <n-table class="plain" :bordered="false" single-line>
       <tbody>
-        <tr>
+        <tr v-for="(item, key) in data" :key="key">
           <td>
-            <span class="text-white">{{ $t('nft.collection.contractAddress') }}</span>
+            <span class="text-white lg:whitespace-nowrap">{{ item.label }}</span>
           </td>
           <td>
-            <TableLink
-              v-if="collectionStore.active.contractAddress"
-              :link="
-                contractLink(collectionStore.active.contractAddress, collectionStore.active.chain)
-              "
-              :text="collectionStore.active.contractAddress || ''"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <span class="text-white">{{ $t('nft.collection.uuid') }}</span>
-          </td>
-          <td>
-            <TableEllipsis :text="collectionStore.active.collection_uuid" />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <span class="text-white">{{ $t('nft.collection.baseUri') }}</span>
-          </td>
-          <td>
-            <TableEllipsis :text="collectionStore.active.baseUri" />
+            <TableLink v-if="item.link && item.value" :link="item.link" :text="item.value" />
+            <TableEllipsis v-else-if="item.value" :text="item.value" />
+            <span v-else>{{ item.value }}</span>
           </td>
         </tr>
       </tbody>
     </n-table>
-
-    <!-- <TableLink
-      v-if="collectionStore.active.contractAddress"
-      class="text-body align-bottom"
-      :prefix="$t('nft.collection.contractAddress')"
-      :link="contractLink(collectionStore.active.contractAddress, collectionStore.active.chain)"
-      :text="collectionStore.active.contractAddress || ''"
-    />
-    <TableEllipsis
-      :prefix="$t('nft.collection.uuid')"
-      :text="collectionStore.active.collection_uuid"
-    />
-    <TableEllipsis :prefix="$t('nft.collection.baseUri')" :text="collectionStore.active.baseUri" /> -->
   </div>
 </template>
 
 <script lang="ts" setup>
 import NftTemplateJPG from 'assets/images/nft/template.jpg';
 
+const { t } = useI18n();
 const bucketStore = useBucketStore();
 const collectionStore = useCollectionStore();
 
@@ -95,5 +58,31 @@ onMounted(async () => {
 
   await sleep(10);
   loadingImages.value = false;
+});
+
+const data = computed(() => {
+  return [
+    {
+      label: t('nft.collection.contractAddress'),
+      value: collectionStore.active.contractAddress,
+      link: contractLink(collectionStore.active.contractAddress, collectionStore.active.chain),
+    },
+    {
+      label: t('nft.collection.uuid'),
+      value: collectionStore.active.collection_uuid,
+    },
+    {
+      label: t('nft.collection.baseUri'),
+      value: collectionStore.active.baseUri,
+    },
+    {
+      label: t('form.label.collectionCoverImage'),
+      value: logo.value?.link,
+    },
+    {
+      label: t('form.label.collectionCoverImage'),
+      value: coverImage.value?.link,
+    },
+  ];
 });
 </script>

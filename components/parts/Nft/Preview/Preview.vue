@@ -1,7 +1,7 @@
 <template>
   <n-scrollbar
     class="min-h-[300px] mt-10 lg:mt-4 text-left"
-    style="max-height: calc(100dvh - 370px)"
+    style="max-height: calc(70dvh - 100px)"
     y-scrollable
   >
     <template v-if="collectionStore.gridView">
@@ -32,14 +32,24 @@
         />
       </div>
     </template>
-    <n-data-table
-      v-else
-      :columns="columns"
-      :data="data"
-      :theme-overrides="tableOverrides"
-      :pagination="paginationDataTable"
-      :row-key="rowKey"
-    />
+    <div v-else class="relative">
+      <n-data-table
+        :columns="columns"
+        :data="collectionStore.metadata"
+        :theme-overrides="tableOverrides"
+        :pagination="paginationDataTable"
+        :row-key="rowKey"
+      />
+      <Btn
+        v-if="collectionStore.amount === NftAmount.SINGLE"
+        class="lg:absolute bottom-0"
+        type="secondary"
+        size="small"
+        @click="collectionStore.nftStep = NftCreateStep.SINGLE"
+      >
+        {{ $t('nft.add') }}
+      </Btn>
+    </div>
   </n-scrollbar>
 
   <n-space class="w-auto mx-auto my-4" justify="center">
@@ -49,7 +59,7 @@
 
 <script lang="ts" setup>
 import type { DataTableColumns, DataTableProps } from 'naive-ui';
-import { NInput } from 'naive-ui';
+import { NButton, NInput } from 'naive-ui';
 import colors from '~/tailwind.colors';
 
 const { createThumbnailUrl } = useNft();
@@ -88,13 +98,14 @@ const nfts = computed(() => {
 const cols = collectionStore.columns.map(item => {
   const key = item?.title || item?.key || '';
 
-  if (key === 'image') return { key: key, title: key };
+  if (key === 'id') return { key: key, title: key, minWidth: 50 };
+  if (key === 'image') return { key: key, title: key, minWidth: 80 };
 
   return {
     key: key,
     title: key,
     minWidth: 140,
-    render(row, index) {
+    render(row) {
       return h(NInput, {
         value:
           key in row
@@ -104,7 +115,7 @@ const cols = collectionStore.columns.map(item => {
             : null,
         onUpdateValue(v) {
           if (key in row) {
-            collectionStore.metadata[index][key] = v;
+            row[key] = v;
           } else if (row.attributes.find(attrItem => attrItem.trait_type === key)) {
             row.attributes.find(attrItem => attrItem.trait_type === key).value = v;
           }
@@ -128,28 +139,32 @@ const createColumns = (): DataTableColumns<Record<string, string>> => {
         );
       },
     },
-    {
-      key: 'id',
-      title: 'ID',
-    },
     ...cols,
+    {
+      key: 'action_remove',
+      title: '',
+      align: 'right',
+      render(row) {
+        return h(
+          NButton,
+          { size: 'small', type: 'error', ghost: true, onClick: () => removeNft(row?.id || 0) },
+          h('span', { class: 'icon-delete text-lg' }, '')
+        );
+      },
+    },
   ];
 };
+
 const columns = createColumns();
 const rowKey = (row: TransactionInterface) => row.id;
-
-const data = computed(() => {
-  return collectionStore.metadata.map((item, key) => {
-    return {
-      id: key + 1,
-      ...item,
-    };
-  });
-});
 
 function imageByName(name: string = '') {
   const image = collectionStore.images.find(img => img.name === name);
   return image ? createThumbnailUrl(image) : '';
+}
+
+function removeNft(id: number | string) {
+  collectionStore.metadata = collectionStore.metadata.filter(nft => nft.id !== Number(id));
 }
 
 /** Theme override */

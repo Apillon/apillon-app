@@ -78,7 +78,7 @@
                 <div v-else class="pb-8">
                   <NftPreviewCollection />
                   <Btn type="primary" class="w-full mb-2" @click="w3WarnAndDeploy()">
-                    {{ $t('form.proceed') }}
+                    {{ $t('nft.collection.deploy') }}
                   </Btn>
                 </div>
               </div>
@@ -86,7 +86,7 @@
           </n-tab-pane>
 
           <!-- DEPLOY -->
-          <n-tab-pane :name="NftCreateTab.DEPLOY">
+          <n-tab-pane :name="NftCreateTab.DEPLOY" disabled>
             <template #tab>
               <IconNumber :number="3" :active="collectionStore.mintTab === NftCreateTab.DEPLOY" />
               <span class="ml-2 text-sm text-white">{{ $t('nft.add') }}</span>
@@ -101,7 +101,8 @@
           v-if="
             collectionStore.metadataStored !== null &&
             collectionStore.stepCollectionDeploy !== CollectionStatus.DEPLOY_INITIATED &&
-            collectionStore.nftStep !== NftCreateStep.PREVIEW
+            collectionStore.nftStep !== NftCreateStep.AMOUNT &&
+            collectionStore.nftStep !== NftCreateStep.DEPLOY
           "
           class="absolute left-0 top-2 md:top-3"
           @click="goToPreviousStep"
@@ -154,15 +155,15 @@ import { useMessage } from 'naive-ui';
 const { t, te } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
-const { isSm } = useScreen();
 const { uploadFiles } = useUpload();
 const { getPriceServiceName } = useNft();
-const { prepareFormData } = useCollection();
+const { collectionEndpoint, prepareFormData } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 useHead({
@@ -190,7 +191,7 @@ function w3WarnAndDeploy() {
 }
 
 async function onModalW3WarnConfirm() {
-  warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
+  warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
 }
 
 function prepareImagesForUpload() {
@@ -207,12 +208,12 @@ function prepareImagesForUpload() {
   }
 }
 
-async function deploy() {
+async function createCollection() {
   modalW3WarnVisible.value = false;
   collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
 
   try {
-    const res = await $api.post<CollectionResponse>(endpoints.collections(), prepareFormData());
+    const res = await $api.post<CollectionResponse>(collectionEndpoint(), prepareFormData());
     collectionStore.active = res.data;
 
     /** On new collection created add new collection to list */
@@ -240,9 +241,11 @@ async function deploy() {
 }
 
 function resetAndAddNft() {
-  collectionStore.metadataStored = null;
-  collectionStore.resetMetadata();
+  bucketStore.resetFolder();
+  bucketStore.resetUpload();
   collectionStore.resetForms();
+  collectionStore.resetMetadata();
+  collectionStore.metadataStored = null;
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
@@ -257,11 +260,12 @@ function resetAndAddNft() {
 function goToPreviousStep() {
   switch (collectionStore.mintTab) {
     case NftCreateTab.METADATA:
-      if (collectionStore.step === CollectionStep.METADATA) {
-        collectionStore.step = CollectionStep.ENVIRONMENT;
+      if (collectionStore.step === CollectionStep.ENVIRONMENT) {
+        collectionStore.step = CollectionStep.STORAGE_TYPE;
         collectionStore.metadataStored = null;
-      }
-      if (collectionStore.step === CollectionStep.BEHAVIOR) {
+      } else if (collectionStore.step === CollectionStep.METADATA) {
+        collectionStore.step = CollectionStep.ENVIRONMENT;
+      } else if (collectionStore.step === CollectionStep.BEHAVIOR) {
         collectionStore.step = CollectionStep.METADATA;
       }
       return;

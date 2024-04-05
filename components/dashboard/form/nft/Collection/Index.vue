@@ -355,6 +355,7 @@ const {
   rules,
   isFormDisabled,
   chainCurrency,
+  collectionEndpoint,
   disablePasteDate,
   disablePasteTime,
   infoLabel,
@@ -380,11 +381,6 @@ watch(
   }
 );
 
-/** When user close W3Warn, allow him to create new collection */
-function onModalW3WarnConfirm() {
-  warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
-}
-
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
@@ -397,16 +393,21 @@ function handleSubmit(e: Event | MouseEvent) {
     } else if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
       modalW3WarnVisible.value = true;
     } else {
-      warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
+      onModalW3WarnConfirm();
     }
   });
+}
+
+/** When user close W3Warn, allow him to create new collection */
+function onModalW3WarnConfirm() {
+  warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
 }
 
 async function createCollection() {
   loading.value = true;
 
   try {
-    const res = await $api.post<CollectionResponse>(endpoints.collections(), prepareFormData(true));
+    const res = await $api.post<CollectionResponse>(collectionEndpoint(), prepareFormData(true));
 
     message.success($i18n.t('form.success.created.collection'));
 

@@ -7,15 +7,18 @@ export default function useCollection() {
   const message = useMessage();
   const dataStore = useDataStore();
   const collectionStore = useCollectionStore();
+  const config = useRuntimeConfig();
 
   const { isEnoughSpaceInStorage } = useUpload();
 
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
 
-  const chains = enumKeys(Chains).map(k => {
-    return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
-  });
+  const chains = enumKeys(Chains)
+    .filter(key => Chains[key] !== Chains.ASTAR_SHIBUYA)
+    .map(k => {
+      return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
+    });
   const chainTypes = enumKeys(ChainType).map(k => {
     return {
       name: k.toLowerCase(),
@@ -161,12 +164,19 @@ export default function useCollection() {
   };
 
   function prepareFormData(addBaseUri = false) {
+    /** On dev env use ASTAR_SHIBUYA chain if user want to deploy substrate collection on Astar
+    const chain =
+      collectionStore.form.base.chain === Chains.ASTAR &&
+      collectionStore.form.base.chainType === ChainType.SUBSTRATE &&
+      config.public.ENV === AppEnv.DEV
+        ? Chains.ASTAR_SHIBUYA
+        : collectionStore.form.base.chain;
+         */
     return {
+      chain: collectionStore.form.base.chain,
       project_uuid: dataStore.projectUuid,
       name: collectionStore.form.base.name,
       symbol: collectionStore.form.base.symbol,
-      chain: collectionStore.form.base.chain,
-      chainType: collectionStore.form.base.chainType,
       collectionType: collectionStore.form.base.collectionType,
       baseExtension: collectionStore.form.behavior.baseExtension,
       dropPrice: collectionStore.form.behavior.dropPrice,
@@ -186,6 +196,13 @@ export default function useCollection() {
       royaltiesFees: collectionStore.form.behavior.royaltiesFees,
       baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
     };
+  }
+
+  function collectionEndpoint() {
+    return collectionStore.form.base.chain === Chains.ASTAR &&
+      collectionStore.form.base.chainType === ChainType.SUBSTRATE
+      ? endpoints.collectionsSubstrate
+      : endpoints.collections();
   }
 
   /**
@@ -319,6 +336,7 @@ export default function useCollection() {
     rulesSingle,
     isFormDisabled,
     chainCurrency,
+    collectionEndpoint,
     disablePasteDate,
     disablePasteTime,
     infoLabel,

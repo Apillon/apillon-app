@@ -1168,6 +1168,7 @@
   "nft": {
     "create": "Create an NFT",
     "add": "Add NFT",
+    "addNfts": "Add NFTs",
     "addAttribute": "Add attribute",
     "chain": {
       "1": "MOONBEAM (Mainnet)",
@@ -1184,7 +1185,7 @@
     "amount": {
       "title": "Create NFTs",
       "content": "Add NFTs one by one or upload them in bulk.",
-      "single": "Build a single NFT",
+      "single": "Build one by one",
       "singleContent": "Enter data manually",
       "multiple": "Build multiple NFTs at once",
       "multipleContent": "Use CSV file to upload data in bulk"
@@ -1222,7 +1223,7 @@
       "createFirst": "Start creating NFTs",
       "createInfo": "",
       "createToDisplay": "Create website to display NFTs with",
-      "deploy": "Deploy to blockchain",
+      "deploy": "Deploy collection",
       "display": "Display NFT collection",
       "dropStart": "Drop start",
       "edit": "Edit",
@@ -1341,7 +1342,7 @@
       "deploying": "Deploying your NFTs",
       "metadata": "Uploading metadata",
       "nft": "Deploying NFTs",
-      "single": "Deploy NFT"
+      "single": "Create NFT"
     },
     "metadata": {
       "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
@@ -1407,7 +1408,7 @@
       "csvMissingAttributes": "Are you sure you want to continue with no attributes?",
       "csvMissingData": "Missing metadata, num of row must be same as maxSupply",
       "csvRequiredColumns": "Missing metadata columns, required columns:",
-      "fileInvalid": "Invalid file format. Please upload a valid CSV file with columns \"name\", \"description\", and \"image\".",
+      "fileInvalid": "Invalid file format. Please upload a valid CSV file with columns \"id\", \"name\", \"description\", and \"image\".",
       "imagesMissing": "Missing images:",
       "imagesInvalid": "Invalid image names. Example: ",
       "selectAmount": "Please select how many NFTs would you like to create."

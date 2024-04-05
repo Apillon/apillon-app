@@ -45,6 +45,12 @@
           </td>
         </tr>
         <tr>
+          <td>{{ $t('form.label.collectionChainType') }}:</td>
+          <td>
+            <span class="text-white">{{ ChainType[collectionStore.form.base.chainType] }}</span>
+          </td>
+        </tr>
+        <tr>
           <td>{{ $t('form.label.collectionType') }}:</td>
           <td>
             <span class="text-white">

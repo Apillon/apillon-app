@@ -21,6 +21,8 @@
 </template>
 
 <script lang="ts" setup>
+import { NInput } from 'naive-ui';
+
 const { t } = useI18n();
 const collectionStore = useCollectionStore();
 
@@ -46,7 +48,13 @@ const createColumns = (): NDataTableColumns<AttributeInterface> => {
       title: t('form.label.nftValue'),
       key: 'value',
       render(row) {
-        return h('span', { class: 'whitespace-nowrap' }, row.value);
+        return h(NInput, {
+          value: row.value,
+          size: 'small',
+          onUpdateValue(v) {
+            row.value = v;
+          },
+        });
       },
     },
     {

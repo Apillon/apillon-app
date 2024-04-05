@@ -14,7 +14,8 @@
             collectionStore.nftStep !== NftCreateStep.AMOUNT &&
             collectionStore.nftStep !== NftCreateStep.DEPLOY
           "
-          class="absolute left-0 top-2 md:top-10"
+          class="absolute left-0 top-2"
+          :class="collectionStore.nftStep === NftCreateStep.PREVIEW ? 'md:top-6' : 'md:top-10'"
           @click="goToPreviousStep"
         >
           <span class="icon-back text-2xl align-sub"></span>
@@ -60,6 +61,7 @@
 const router = useRouter();
 const { params } = useRoute();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
@@ -94,8 +96,10 @@ onMounted(async () => {
 });
 
 function resetAndAddNft() {
-  collectionStore.resetMetadata();
+  bucketStore.resetFolder();
+  bucketStore.resetUpload();
   collectionStore.resetForms();
+  collectionStore.resetMetadata();
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {

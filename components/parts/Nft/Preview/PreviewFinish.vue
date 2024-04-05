@@ -31,7 +31,7 @@
           <SeparatorText class="my-4" :border-left="true">
             {{ $t('general.or') }}
           </SeparatorText>
-          <NuxtLink to="/dashboard/service/nft">
+          <NuxtLink :to="backLink">
             <Btn type="primary" size="large">
               {{ $t('nft.collection.created.goBack') }}
             </Btn>
@@ -82,4 +82,13 @@ const collectionStore = useCollectionStore();
 const { loadingBucket, openBucket } = useStorage();
 
 const modalW3WarnVisible = ref<boolean>(false);
+
+const backLink = computed(() =>
+  collectionStore.active?.collection_uuid
+    ? {
+        name: 'dashboard-service-nft-id',
+        params: { id: collectionStore.active?.collection_uuid },
+      }
+    : { name: 'dashboard-service-nft' }
+);
 </script>

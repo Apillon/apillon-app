@@ -81,11 +81,8 @@ const actionsDisabled = computed<boolean>(() => {
 });
 
 const isMetadataStoreOnApillon = computed<boolean>(() => {
-  return (
-    !!collectionStore.active.baseUri &&
-    collectionStore.active?.baseUri.includes('apillon.io') &&
-    collectionStore.active?.baseExtension.includes('?token=')
-  );
+  const baseUri = collectionStore.active?.baseUri || '';
+  return baseUri.includes('apillon.io') || baseUri.includes('nectarnode.io');
 });
 
 const allowAddMetadata = computed<boolean>(() => {

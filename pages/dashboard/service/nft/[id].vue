@@ -16,19 +16,13 @@
 
         <template v-if="collectionStore.hasCollectionTransactions"
           ><!-- Display Collection -->
-          <NftCollectionInfo class="w-full max-w-4xl mx-auto" />
-
-          <!-- Display NFT Services -->
-          <div class="w-full max-w-4xl mx-auto">
-            <h3 class="mb-6">{{ $t('dashboard.service.used') }}</h3>
-            <NftServices />
-          </div>
-
-          <!-- Links to NFT templates -->
-          <NftPreviewFinish />
+          <NftCollectionInfo class="mb-8" />
 
           <!-- Table Transactions -->
           <TableNftTransaction :transactions="collectionStore.transaction" />
+
+          <!-- Links to NFT templates -->
+          <NftPreviewFinish />
         </template>
         <Empty
           v-else

@@ -47,10 +47,9 @@ const emit = defineEmits(['submitSuccess']);
 
 const { t, te } = useI18n();
 const message = useMessage();
-const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
-const { deployCollection, getPriceServiceName } = useNft();
+const { deployCollection } = useNft();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 function w3WarnAndDeploy() {
@@ -65,7 +64,7 @@ async function onModalW3WarnConfirm() {
   if (!metadataValid()) {
     message.warning(t('validation.nftMetadata'));
   } else {
-    warningStore.showSpendingWarning(getPriceServiceName(), () => deploy());
+    deploy();
   }
 }
 

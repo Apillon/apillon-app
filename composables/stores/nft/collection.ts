@@ -22,7 +22,6 @@ export const useCollectionStore = defineStore('collection', {
     step: CollectionStep.STORAGE_TYPE,
     nftStep: NftCreateStep.AMOUNT,
     amount: 0,
-    stepDeploy: NftDeployStep.NAME,
     stepCollectionDeploy: CollectionStatus.CREATED,
     stepUpload: NftUploadStep.FILE,
     total: 0,
@@ -95,7 +94,6 @@ export const useCollectionStore = defineStore('collection', {
       this.mintTab = NftCreateTab.METADATA;
       this.step = CollectionStep.STORAGE_TYPE;
       this.nftStep = NftCreateStep.AMOUNT;
-      this.stepDeploy = NftDeployStep.NAME;
       this.stepCollectionDeploy = CollectionStatus.CREATED;
     },
     resetFile() {

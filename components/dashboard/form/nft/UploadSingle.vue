@@ -176,7 +176,6 @@ function imageByName(name: string = '') {
 
 function handleSubmitForm(e: Event | MouseEvent) {
   e.preventDefault();
-  collectionStore.metadata = [];
 
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors || !collectionStore.hasImages) {
@@ -189,14 +188,14 @@ function handleSubmitForm(e: Event | MouseEvent) {
       );
     } else {
       for (let index = 0; index < collectionStore.form.single.copies; index += 1) {
-        collectionStore.metadata.push({ ...collectionStore.form.single });
+        // collectionStore.metadata.push({ ...collectionStore.form.single });
+        collectionStore.metadata.push(JSON.parse(JSON.stringify(collectionStore.form.single)));
         collectionStore.form.single.id += 1;
       }
 
       collectionStore.columns = createColumns(collectionStore.form.single);
 
       collectionStore.nftStep = NftCreateStep.PREVIEW;
-      collectionStore.form.single.id -= collectionStore.form.single.copies;
     }
   });
 
@@ -204,7 +203,7 @@ function handleSubmitForm(e: Event | MouseEvent) {
     const keysArray: { title: string; key: any }[] = [];
 
     Object.keys(obj).forEach(key => {
-      if (key !== 'collectionUuid' && key !== 'copies' && key !== 'id') {
+      if (key !== 'collectionUuid' && key !== 'copies') {
         if (Array.isArray(obj[key])) {
           // If key is an array, include keys from objects within the array
           obj[key].forEach((item: Record<string, any>, index: number) => {
