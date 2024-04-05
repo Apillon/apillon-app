@@ -188,7 +188,6 @@ function handleSubmitForm(e: Event | MouseEvent) {
       );
     } else {
       for (let index = 0; index < collectionStore.form.single.copies; index += 1) {
-        // collectionStore.metadata.push({ ...collectionStore.form.single });
         collectionStore.metadata.push(JSON.parse(JSON.stringify(collectionStore.form.single)));
         collectionStore.form.single.id += 1;
       }

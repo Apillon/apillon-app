@@ -242,9 +242,6 @@ export default function useNft() {
     if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
       message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
       onError();
-    } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
-      message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));
-      onError();
     } else {
       if (collectionStore.amount === NftAmount.SINGLE) {
         collectionStore.form.single.image = image.name;

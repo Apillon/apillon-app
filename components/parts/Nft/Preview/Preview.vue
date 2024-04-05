@@ -45,7 +45,7 @@
         class="lg:absolute bottom-0"
         type="secondary"
         size="small"
-        @click="collectionStore.nftStep = NftCreateStep.SINGLE"
+        @click="addNewNft"
       >
         {{ $t('nft.add') }}
       </Btn>
@@ -161,6 +161,16 @@ const rowKey = (row: TransactionInterface) => row.id;
 function imageByName(name: string = '') {
   const image = collectionStore.images.find(img => img.name === name);
   return image ? createThumbnailUrl(image) : '';
+}
+
+function addNewNft() {
+  collectionStore.nftStep = NftCreateStep.SINGLE;
+
+  /** Reset form */
+  collectionStore.form.single.image = '';
+  collectionStore.form.single.name = '';
+  collectionStore.form.single.description = '';
+  collectionStore.form.single.copies = 1;
 }
 
 function removeNft(id: number | string) {
