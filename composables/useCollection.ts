@@ -205,13 +205,23 @@ export default function useCollection() {
     return !collectionStore.form.behavior.drop || (value > 0 && value < Number.MAX_SAFE_INTEGER);
   }
   function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
-    return collectionStore.form.behavior.royaltiesFees === 0 || validateEvmAddress(_, value);
+    return (
+      collectionStore.form.behavior.royaltiesFees === 0 ||
+      validateAddress(_, value, collectionStore.form.base.chainType)
+    );
   }
   function validateSingleNftIdUnique(_: FormItemRule): boolean {
     if (collectionStore.metadata.length >= 1) {
       return !collectionStore.metadata.find(item => item.id === collectionStore.form.single.id);
     }
     return true;
+  }
+
+  function validateAddress(_: FormItemRule, value: string, chainType: number) {
+    if (chainType === ChainType.EVM) {
+      return validateEvmAddress(_, value);
+    }
+    return !!value;
   }
 
   function disablePasteDate(ts: number) {

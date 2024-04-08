@@ -15,6 +15,8 @@
         <ComputingContractInfo class="mb-8" />
 
         <TableComputingTransaction :contract-uuid="contractStore.active.contract_uuid" />
+
+        <ComputingSchrodingerTemplate />
       </n-space>
 
       <!-- Modal - Contract Transfer -->
@@ -34,7 +36,7 @@
 <script lang="ts" setup>
 const router = useRouter();
 const { params } = useRoute();
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
 const transactionStore = useComputingTransactionStore();
@@ -48,7 +50,7 @@ const modalTransferOwnershipVisible = ref<boolean | null>(false);
 const contractUuid = ref<string>(`${params?.id}` || `${params?.slug}` || '');
 
 useHead({
-  title: $i18n.t('dashboard.nav.nft'),
+  title: t('dashboard.nav.computing'),
 });
 
 onMounted(() => {

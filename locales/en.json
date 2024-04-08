@@ -198,7 +198,6 @@
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
-      "ipfsGatewayUrl": "IPFS Gateway URL",
       "name": "Contract name",
       "new": "New Schrödinger’s NFT contract",
       "orSelectExisting": "or select existing bucket",
@@ -210,6 +209,12 @@
       "titleBucketCreated": "Bucket successfully created",
       "transfer": "Transfer ownership",
       "uuid": "Contract UUID",
+      "created": {
+        "display": "Create website to decrypt files with",
+        "info": "To decrypt your files, you need a website. \nUse the Apillon Schrodinger template and host it on a decentralized network.",
+        "template": "Schrodinger Template",
+        "title": "Decrypt encrypted files"
+      },
       "encrypt": {
         "step1": "Choose bucket",
         "step2": "Upload, encrypt & assign CID",
