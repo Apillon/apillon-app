@@ -22,9 +22,12 @@
           <span class="text-body">
             {{ serviceData.name }}
           </span>
-          <span>
-            {{ serviceData.value }}
-          </span>
+          <div class="relative">
+            <Spinner v-if="loading" :size="14" />
+            <span v-else>
+              {{ serviceData.value }}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -46,6 +49,8 @@ defineProps({
 const { t } = useI18n();
 const dataStore = useDataStore();
 const storageStore = useStorageStore();
+
+const loading = ref<boolean>(true);
 
 const web3Services = computed(() => [
   {
@@ -92,8 +97,8 @@ const web3Services = computed(() => [
     icon: 'icon-nft',
     data: [
       {
-        name: t(`dashboard.service.nft.numOfCollections`),
-        value: dataStore.project.overview.numOfCollections,
+        name: t(`dashboard.service.nft.collectionCount`),
+        value: dataStore.project.overview.collectionCount,
       },
       {
         name: t(`dashboard.service.nft.nftTransactionCount`),
@@ -147,9 +152,11 @@ const web3Services = computed(() => [
 onMounted(async () => {
   await sleep(500);
 
-  Promise.all(Object.values(dataStore.promises)).then(_ => {
+  Promise.all(Object.values(dataStore.promises)).then(async _ => {
     storageStore.getStorageInfo();
-    dataStore.getProjectOverview(dataStore.projectUuid);
+    await dataStore.getProjectOverview(dataStore.projectUuid);
+
+    loading.value = false;
   });
 });
 </script>

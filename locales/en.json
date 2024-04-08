@@ -459,10 +459,10 @@
         "websiteCount": "Number of Websites"
       },
       "nft": {
-        "name": "NFTs",
+        "collectionCount": "Number of Collections",
         "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
+        "name": "NFTs",
         "nftTransactionCount": "Number of transactions",
-        "numOfCollections": "Number of Collections",
         "usage": [
           "storage buckets",
           "smart contracts",
