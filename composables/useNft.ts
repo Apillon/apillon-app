@@ -292,10 +292,6 @@ export default function useNft() {
    */
   async function deployCollection(deployCollection: boolean = false) {
     const nftMetadataFiles = createNftFiles(collectionStore.metadata);
-    if (nftMetadataFiles) {
-      console.log(nftMetadataFiles);
-      throw Error('metadata');
-    }
     const metadataSession = await uploadFiles(
       collectionStore.active.bucket_uuid,
       nftMetadataFiles,
