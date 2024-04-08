@@ -9,7 +9,7 @@
     :collapsed="collapsed"
     :collapsed-width="40"
     :collapsed-icon-size="24"
-    :default-expanded-keys="['services']"
+    :default-expanded-keys="['services', 'configuration']"
     :options="menuOptions"
     @update:value="$emit('toggleSidebar')"
   />
@@ -242,19 +242,19 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       disabled: isMenuItemDisabled(Feature.ACCESS) || zeroProjects.value,
     },
     {
-      key: 'dashboard-payments',
-      label: $i18n.t('dashboard.nav.billing'),
-      to: 'dashboard-payments',
-      iconName: 'icon-billing',
-      disabled: isMenuItemDisabled(Feature.BILLING) || zeroProjects.value,
-      show: !dataStore.isProjectUser,
-    },
-    {
       key: 'dashboard-api-keys',
       label: $i18n.t('dashboard.nav.apiKeys'),
       to: 'dashboard-api-keys',
       iconName: 'icon-api-keys',
       disabled: isMenuItemDisabled(Feature.API_KEYS) || zeroProjects.value,
+      show: !dataStore.isProjectUser,
+    },
+    {
+      key: 'dashboard-payments',
+      label: $i18n.t('dashboard.nav.billing'),
+      to: 'dashboard-payments',
+      iconName: 'icon-billing',
+      disabled: isMenuItemDisabled(Feature.BILLING) || zeroProjects.value,
       show: !dataStore.isProjectUser,
     },
   ];

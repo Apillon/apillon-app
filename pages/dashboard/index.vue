@@ -122,10 +122,10 @@ const services = [
     content: t('dashboard.service.info'),
     link: t('dashboard-service'),
   },
-  {
-    title: t('dashboard.nav.smartContracts'),
-    content: t('dashboard.smartContracts.info'),
-  },
+  // {
+  //   title: t('dashboard.nav.smartContracts'),
+  //   content: t('dashboard.smartContracts.info'),
+  // },
   {
     title: t('dashboard.nav.solutions'),
     content: t('dashboard.solutions.info'),
