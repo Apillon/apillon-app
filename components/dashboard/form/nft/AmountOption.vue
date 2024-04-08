@@ -59,6 +59,7 @@ function handleSubmit() {
     collectionStore.nftStep = NftCreateStep.SINGLE;
   } else if (collectionStore.amount === NftAmount.MULTIPLE) {
     collectionStore.nftStep = NftCreateStep.MULTIPLE;
+    collectionStore.stepUpload = NftUploadStep.FILE;
   } else {
     message.warning(t('nft.validation.selectAmount'));
   }

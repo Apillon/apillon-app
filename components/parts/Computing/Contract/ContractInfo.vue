@@ -39,10 +39,6 @@ const data = computed(() => {
       text: ContractStatus[contractStore.active?.contractStatus],
     },
     {
-      label: t('computing.contract.ipfsGatewayUrl'),
-      value: contractStore.active?.data?.ipfsGatewayUrl,
-    },
-    {
       label: t('form.label.contract.nftContractAddress'),
       value: contractStore.active?.data?.nftContractAddress,
     },

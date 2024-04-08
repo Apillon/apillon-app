@@ -53,7 +53,7 @@ const { deployCollection } = useNft();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 function w3WarnAndDeploy() {
-  if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new')) {
+  if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new') && t('w3Warn.nft.new')) {
     modalW3WarnVisible.value = true;
   } else {
     onModalW3WarnConfirm();

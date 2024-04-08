@@ -7,7 +7,6 @@ export default function useCollection() {
   const message = useMessage();
   const dataStore = useDataStore();
   const collectionStore = useCollectionStore();
-  const config = useRuntimeConfig();
 
   const { isEnoughSpaceInStorage } = useUpload();
 
@@ -86,6 +85,10 @@ export default function useCollection() {
   ];
   const rulesRoyaltiesAddress: FormItemRule[] = [
     {
+      required: isRoyaltyRequired(),
+      message: t('validation.collectionRoyaltiesAddressRequired'),
+    },
+    {
       validator: validateRoyaltiesAddress,
       message: t('validation.collectionRoyaltiesAddress'),
     },
@@ -97,20 +100,6 @@ export default function useCollection() {
       message: t('validation.collectionRoyaltiesFees'),
     },
   ];
-  const rulesCollectionLogo: FormItemRule[] = [
-    ruleRequired(t('validation.collectionLogoRequired')),
-    {
-      validator: validateCollectionLogo,
-      message: t('validation.collectionLogoRequired'),
-    },
-  ];
-  const rulesCollectionCoverImage: FormItemRule[] = [
-    ruleRequired(t('validation.collectionCoverImageRequired')),
-    {
-      validator: validateCollectionCoverImage,
-      message: t('validation.collectionCoverImageRequired'),
-    },
-  ];
   const validateSingleIdRequired: FormItemRule[] = [
     ruleRequired(t('validation.nftIdRequired')),
     {
@@ -120,10 +109,6 @@ export default function useCollection() {
   ];
 
   const rules: NFormRules = {
-    logo: rulesCollectionLogo,
-    'base.logo': rulesCollectionLogo,
-    coverImage: rulesCollectionCoverImage,
-    'base.coverImage': rulesCollectionCoverImage,
     symbol: ruleRequired(t('validation.collectionSymbolRequired')),
     'base.symbol': ruleRequired(t('validation.collectionSymbolRequired')),
     name: ruleRequired(t('validation.collectionNameRequired')),
@@ -164,16 +149,14 @@ export default function useCollection() {
   };
 
   function prepareFormData(addBaseUri = false) {
-    /** On dev env use ASTAR_SHIBUYA chain if user want to deploy substrate collection on Astar
     const chain =
       collectionStore.form.base.chain === Chains.ASTAR &&
-      collectionStore.form.base.chainType === ChainType.SUBSTRATE &&
-      config.public.ENV === AppEnv.DEV
-        ? Chains.ASTAR_SHIBUYA
+      collectionStore.form.base.chainType === ChainType.SUBSTRATE
+        ? SubstrateChain.ASTAR
         : collectionStore.form.base.chain;
-         */
+
     return {
-      chain: collectionStore.form.base.chain,
+      chain,
       project_uuid: dataStore.projectUuid,
       name: collectionStore.form.base.name,
       symbol: collectionStore.form.base.symbol,
@@ -189,10 +172,7 @@ export default function useCollection() {
       dropReserve: collectionStore.form.behavior.dropReserve || 0,
       isRevokable: collectionStore.form.behavior.revocable,
       isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress:
-        collectionStore.form.behavior.royaltiesFees === 0
-          ? null
-          : collectionStore.form.behavior.royaltiesAddress,
+      royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
       royaltiesFees: collectionStore.form.behavior.royaltiesFees,
       baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
     };
@@ -225,19 +205,27 @@ export default function useCollection() {
     return !collectionStore.form.behavior.drop || (value > 0 && value < Number.MAX_SAFE_INTEGER);
   }
   function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
-    return collectionStore.form.behavior.royaltiesFees === 0 || validateEvmAddress(_, value);
-  }
-  function validateCollectionLogo(_: FormItemRule): boolean {
-    return !!collectionStore.form.base.logo?.id;
-  }
-  function validateCollectionCoverImage(_: FormItemRule): boolean {
-    return !!collectionStore.form.base.coverImage?.id;
+    return (
+      !isRoyaltyRequired() ||
+      (collectionStore.form.base.chainType === ChainType.EVM
+        ? validateEvmAddress(_, value)
+        : !!value)
+    );
   }
   function validateSingleNftIdUnique(_: FormItemRule): boolean {
     if (collectionStore.metadata.length >= 1) {
       return !collectionStore.metadata.find(item => item.id === collectionStore.form.single.id);
     }
     return true;
+  }
+
+  function isRoyaltyRequired() {
+    return (
+      (collectionStore.form.base.chainType === ChainType.EVM &&
+        collectionStore.form.behavior.royaltiesFees > 0) ||
+      (collectionStore.form.base.chainType === ChainType.SUBSTRATE &&
+        collectionStore.form.behavior.drop)
+    );
   }
 
   function disablePasteDate(ts: number) {

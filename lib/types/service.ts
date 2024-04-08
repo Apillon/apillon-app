@@ -22,15 +22,6 @@ export enum IdentityChains {
   KILT = 'KILT',
 }
 
-export enum SubstrateChain {
-  CRUST = 1,
-  KILT = 2,
-  PHALA = 4,
-  POLKADOT = 5,
-  SUBSOCIAL = 6,
-  XSOCIAL = 7,
-}
-
 /**
  * Names of Product price names of all services
  */
