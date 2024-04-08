@@ -1338,6 +1338,7 @@
     "chain": {
       "1": "MOONBEAM (Mainnet)",
       "2": "MOONBASE (Testnet)",
+      "8": "ASTAR (Substrate)",
       "81": "ASTAR SHIBUYA (Testnet)",
       "592": "ASTAR (Mainnet)",
       "1284": "MOONBEAM (Mainnet)",
