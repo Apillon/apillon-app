@@ -22,7 +22,7 @@
           <span class="text-body">
             {{ serviceData.name }}
           </span>
-          <div class="relative">
+          <div class="relative text-right min-w-[1rem]">
             <Spinner v-if="loading" :size="14" />
             <span v-else>
               {{ serviceData.value }}
