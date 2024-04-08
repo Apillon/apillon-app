@@ -767,6 +767,7 @@
     "NO_CHANGES_TO_DEPLOY": "There have been no changes to your website. First, make some changes and deploy them to the staging.",
     "NFT_BASE_URI_NOT_PRESENT": "NFT base URI not present",
     "NFT_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
+    "NFT_COLLECTION_BASE_URI_NOT_PRESENT": "NFT base URI not present",
     "NFT_DROP_BOOL_NOT_PRESENT": "NFT drop not present",
     "NFT_DROP_TIMESTAMP_NOT_PRESENT": "NFT drop timestamp not present",
     "NFT_RESERVE_NOT_PRESENT": "NFT reserve not present",

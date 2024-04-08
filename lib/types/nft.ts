@@ -10,6 +10,15 @@ export enum Chains {
   ASTAR_SHIBUYA = 81,
   ASTAR = 592,
 }
+export enum SubstrateChain {
+  CRUST = 1,
+  KILT = 2,
+  PHALA = 4,
+  POLKADOT = 5,
+  SUBSOCIAL = 6,
+  XSOCIAL = 7,
+  ASTAR = 8,
+}
 
 /** NFT Collection type */
 export enum NFTCollectionType {

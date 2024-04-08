@@ -146,16 +146,14 @@ export default function useCollection() {
   };
 
   function prepareFormData(addBaseUri = false) {
-    /** On dev env use ASTAR_SHIBUYA chain if user want to deploy substrate collection on Astar
     const chain =
       collectionStore.form.base.chain === Chains.ASTAR &&
-      collectionStore.form.base.chainType === ChainType.SUBSTRATE &&
-      config.public.ENV === AppEnv.DEV
-        ? Chains.ASTAR_SHIBUYA
+      collectionStore.form.base.chainType === ChainType.SUBSTRATE
+        ? SubstrateChain.ASTAR
         : collectionStore.form.base.chain;
-         */
+
     return {
-      chain: collectionStore.form.base.chain,
+      chain,
       project_uuid: dataStore.projectUuid,
       name: collectionStore.form.base.name,
       symbol: collectionStore.form.base.symbol,
