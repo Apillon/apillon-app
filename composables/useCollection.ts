@@ -224,7 +224,7 @@ export default function useCollection() {
       (collectionStore.form.base.chainType === ChainType.EVM &&
         collectionStore.form.behavior.royaltiesFees > 0) ||
       (collectionStore.form.base.chainType === ChainType.SUBSTRATE &&
-        collectionStore.form.behavior.dropPrice > 0)
+        collectionStore.form.behavior.drop)
     );
   }
 

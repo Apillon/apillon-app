@@ -81,7 +81,12 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid class="items-end" :cols="12" :x-gap="32">
+    <n-grid
+      v-if="collectionStore.form.base.chainType === ChainType.EVM"
+      class="items-end"
+      :cols="12"
+      :x-gap="32"
+    >
       <!-- Royalties Address -->
       <n-form-item-gi
         path="royaltiesAddress"
@@ -177,6 +182,22 @@
           :min="0"
           :step="1"
           :input-props="{ id: 'dropReserve' }"
+          clearable
+        />
+      </n-form-item-gi>
+
+      <!-- Royalties Address -->
+      <n-form-item-gi
+        v-if="collectionStore.form.base.chainType === ChainType.SUBSTRATE"
+        path="royaltiesAddress"
+        :span="6"
+        :label="infoLabel('collectionDropAddress')"
+        :label-props="{ for: 'royaltiesAddress' }"
+      >
+        <n-input
+          v-model:value="collectionStore.form.behavior.royaltiesAddress"
+          :input-props="{ id: 'royaltiesAddress' }"
+          :placeholder="$t('general.typeHere')"
           clearable
         />
       </n-form-item-gi>

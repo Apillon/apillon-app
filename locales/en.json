@@ -835,6 +835,7 @@
       "collectionBaseExtension": "Base Extension",
       "collectionChain": "Chain",
       "collectionChainType": "Chain type",
+      "collectionDropAddress": "Drop Withdrawal  Address",
       "collectionDropStart": "Drop start",
       "collectionDrop": "Drop",
       "collectionMaxSupply": "How many?",

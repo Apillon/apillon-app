@@ -62,7 +62,10 @@
 
     <!--  Collection type -->
     <n-form-item
-      v-if="isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles())"
+      v-if="
+        isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
+        collectionStore.form.base.chainType === ChainType.EVM
+      "
       path="collectionType"
       :label="infoLabel('collectionType')"
       :label-props="{ for: 'collectionType' }"
