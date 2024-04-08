@@ -23,6 +23,7 @@ const config: ConfigInterface = {
     'MARKETING',
     'NFT',
     'NFT_NESTABLE',
+    'NFT_POAP',
     'ONBOARDING',
     'PREBUILD_SOLUTIONS',
     'PROJECT',

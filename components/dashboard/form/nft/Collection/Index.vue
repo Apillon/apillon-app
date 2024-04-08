@@ -84,7 +84,10 @@
 
       <!--  Collection type -->
       <n-form-item
-        v-if="isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles())"
+        v-if="
+          isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
+          collectionStore.form.base.chainType === ChainType.EVM
+        "
         path="base.collectionType"
         :label="infoLabel('collectionType')"
         :label-props="{ for: 'collectionType' }"
@@ -177,7 +180,12 @@
         </n-form-item-gi>
       </n-grid>
 
-      <n-grid class="items-end" :cols="12" :x-gap="32">
+      <n-grid
+        v-if="collectionStore.form.base.chainType === ChainType.EVM"
+        class="items-end"
+        :cols="12"
+        :x-gap="32"
+      >
         <!-- Collection Revocable -->
         <n-form-item-gi
           path="behavior.revocable"
@@ -211,7 +219,12 @@
         </n-form-item-gi>
       </n-grid>
 
-      <n-grid class="items-end" :cols="12" :x-gap="32">
+      <n-grid
+        v-if="collectionStore.form.base.chainType === ChainType.EVM"
+        class="items-end"
+        :cols="12"
+        :x-gap="32"
+      >
         <!-- Royalties Address -->
         <n-form-item-gi
           path="behavior.royaltiesAddress"
@@ -300,6 +313,22 @@
           <n-input-number
             v-model:value="collectionStore.form.behavior.dropReserve"
             :min="0"
+            :placeholder="$t('general.typeHere')"
+            clearable
+          />
+        </n-form-item-gi>
+
+        <!-- Royalties Address -->
+        <n-form-item-gi
+          v-if="collectionStore.form.base.chainType === ChainType.SUBSTRATE"
+          path="royaltiesAddress"
+          :span="6"
+          :label="infoLabel('collectionDropAddress')"
+          :label-props="{ for: 'royaltiesAddress' }"
+        >
+          <n-input
+            v-model:value="collectionStore.form.behavior.royaltiesAddress"
+            :input-props="{ id: 'royaltiesAddress' }"
             :placeholder="$t('general.typeHere')"
             clearable
           />

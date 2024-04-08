@@ -524,28 +524,42 @@
         "content": [
           {
             "headline": "How does it work?",
-            "content": "This standalone solution gives you ability to select the NFTs from your collection and distribute them to target addresses."
+            "content": "This ready-made solution is designed to help you give out digital collectibles (called NFTs) to users, even if you only have their email addresses."
           },
           {
-            "title": "There are three possible ways of distribution:",
+            "title": "Once you set it up, you'll have a special page (called an admin panel) where you can do a few things:",
             "content": [
-              "Upload CSV with target addresses",
-              "Upload list of Emails and send emails to users with instructions on how to create a wallet and mint their NFT",
-              "Select the Polkadot OpenGov referendum and the votes and we will automatically parse the addresses"
+              "Add email addresses one by one.",
+              "Upload a file with lots of email addresses at once.",
+              "See which email addresses got the NFTs successfully and which didn't.",
+              "You can also see which wallets are linked to each email.",
+              "The system will automatically send an email to each address with instructions and a link to a page where they can claim their NFT."
             ]
           },
           {
-            "headline": "Possible use cases",
-            "title": "Reward your community with NFTs.",
-            "content": "Lorem ipsum dolor sit amet consectetur. Adipiscing habitasse risus enim pharetra. Egestas turpis eget et id nisi."
+            "title": "Before you start, you'll need a few things ready:",
+            "content": [
+              "You need to create your digital collectibles using a tool called Apillon.",
+              "You need to know the details of an email server, like where it's located and its address.",
+              "You'll need a special wallet that works with Ethereum (a type of cryptocurrency) to access the admin panel.",
+              "You'll also need an Apillon API key and secret, which are like special codes to connect to Apillon."
+            ]
           },
           {
-            "title": "Send gratitude NFTs for your opengov referenda on Polkadot",
-            "content": "Pharetra ultricies interdum scelerisque suspendisse fames sed pharetra placerat purus. Mauris leo mauris aenean dolor congue placerat."
+            "title": "Here's how the system is set up:",
+            "content": [
+              "The front-end (what users see) is made with Vue.js.",
+              "The back-end (the behind-the-scenes stuff) is made with Node.js, and it stores information in a MySQL database."
+            ]
           },
           {
-            "title": "Distribute utility NFTs to specific set of wallets",
-            "content": "Lorem ipsum dolor sit amet consectetur. Eget morbi pharetra nec sit non diam consectetur ut vitae. Dictum mauris ipsum semper purus pharetra eget eget."
+            "title": "You have a few options for running the system:",
+            "content": [
+              "You can run the front-end on your computer.",
+              "You can host it on any website provider.",
+              "Or, you can use Apillon's hosting service. There's even a special setup for this using GitHub actions.",
+              "For the back-end part, you can run it on your computer or using a tool called Docker. You just need to set up some configuration files with the right information, like the details of your digital collectibles and your email server. All the instructions for this are available on GitHub."
+            ]
           }
         ],
         "tabs": ["First task", "Second task", "Third task"],
@@ -586,9 +600,156 @@
         "usage": ["metadata storage", "file storage"]
       },
       "nftPoap": {
-        "name": "POAP NFTs",
+        "name": "POA - Proof of Attendance",
         "description": "Create POAP drops simply by clicking. Manage your POAP, allow users to either mint or email reserve the NFTs and boost your next event.",
+        "content": [
+          {
+            "headline": "What are POAPs?",
+            "content": "POAP, which stands for \"Proof of Attendance Protocol,\" is a system that lets you create digital keepsakes called \"POAPs\" to commemorate special memories. You can give POAPs to others when they share a memory with you."
+          },
+          {
+            "title": "Possible Use cases:",
+            "content": [
+              "Digital Collectibles: They can be collected as unique digital items, similar to collecting physical memorabilia or trading cards.",
+              "Proof of Participation: They serve as proof that an individual attended or participated in a particular event, conference, or gathering.",
+              "Reward System: Organizations or event organizers can use NFT POAPs as rewards for engagement, participation, or contributions.",
+              "Community Engagement: They can foster a sense of community by giving members something tangible to collect and share, thereby encouraging interaction and participation.",
+              "Monetization: Some people may buy and sell NFT POAPs as a form of investment or to monetize their participation in events.",
+              "Exclusive Access: Holding certain NFT POAPs might grant access to exclusive events, content, or privileges in online communities."
+            ]
+          },
+          {
+            "content": "This ready-made solution is designed to help you give out digital collectibles (called NFTs) to attendances on an event."
+          },
+          {
+            "title": "How does it work?",
+            "content": "Solution has 2 main parts. Admin dashboard and page for NFT(POAPs) claim. \nIn admin dashboard, admin manages it's events, see their status, statistic, ... \nAdmin can create new POAP event, set its title, start and end time and link it with existing NFT collection created in Apillon platform."
+          },
+          {
+            "content": "Second part of solution is website which is meant to be displayed at the event."
+          },
+          {
+            "title": "Flow:",
+            "content": [
+              "User scans qr code from page",
+              "Qr code contains URL to page, where user enter its email",
+              "Email with instructions and link for mint is sent to that address",
+              "User navigates to minting page, connects his wallet and mint NFT to it",
+              "Recieved NFT is a POA"
+            ]
+          },
+          {
+            "title": "Before you start, make sure you have:",
+            "content": [
+              "A NFT collection created in Apillon platform, which will be used to mint NFTs to attendances of an event."
+            ]
+          },
+          {
+            "title": "Here's how the system is set up:",
+            "content": [
+              "The part that users see (the frontend) is made with vue.js.",
+              "The part that does the behind-the-scenes work (the backend) is made with node.js, and it stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "You have a few options for running the system:",
+            "content": [
+              "You can run the front-end on your computer.",
+              "Host it on any website provider.",
+              "Use Apillon's hosting service. There's even a special setup for this using GitHub actions."
+            ]
+          },
+          {
+            "content": "For the part that does the behind-the-scenes work, you can run it on your computer or using a tool called Docker. You just need to set up some configuration files with the right information, like the details of your digital collectibles and your AWS account. All the instructions for this are available on GitHub."
+          }
+        ],
         "usage": ["metadata storage", "file storage"]
+      },
+      "nftWhitelistClaim": {
+        "name": "Whitelist NFT claim",
+        "description": "",
+        "content": [
+          {
+            "content": "Instead of giving out NFTs for free, you can let users claim them themselves. But in this case, users need to pay the transaction fees."
+          },
+          {
+            "title": "One way to do this is through a system called \"whitelist claim.\" Here's how it works:",
+            "content": [
+              "Users can claim their NFTs directly, but only if their addresses are added to a special list in the admin panel.",
+              "The admin panel is where you can manage this list of addresses that are allowed to claim NFTs."
+            ]
+          },
+          {
+            "title": "Before you start, make sure you have:",
+            "content": ["A contract ready for users to claim NFTs."]
+          },
+          {
+            "title": "Here's how the system is set up:",
+            "content": [
+              "The part users see (the frontend) is made with vue.js.",
+              "The behind-the-scenes part (the backend) is made with node.js, and it stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "You have a few options for running the system:",
+            "content": [
+              "You can run the front-end on your computer.",
+              "Host it on any website provider.",
+              "Use Apillon's hosting service. There's even a special setup for this using GitHub actions."
+            ]
+          },
+          {
+            "content": "For the behind-the-scenes part, you can run it on your computer or using a tool called Docker. You just need to set up some configuration files with the right information, like the details of your digital collectibles and your API keys. All the instructions for this are available on GitHub."
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
+      },
+      "openGov": {
+        "name": "OpenGov wasm proposal airdrop",
+        "description": "",
+        "content": [
+          {
+            "content": "This prebuilt solution lets you send special digital collectibles (called NFTs), by using WASM smart contract, to people who voted a certain way on a specific government proposal."
+          },
+          {
+            "title": "Here's how it works:",
+            "content": [
+              "You'll see a simple webpage where you can type in the number of the proposal and the decision made by the voters.",
+              "The system will find all the people who voted that way and show them in a list that you can edit.",
+              "Once you're happy with the list, you can save it, and the NFTs will be sent to all the addresses on the list."
+            ]
+          },
+          {
+            "title": "Before you start, make sure you have:",
+            "content": [
+              "Created your NFT collection",
+              "Have a special wallet that works with Ethereum (a type of cryptocurrency) to access the admin panel.",
+              "Get an Apillon API key and secret, which are like special codes to connect to Apillon.",
+              "Have information about the specific government proposal handy."
+            ]
+          },
+          {
+            "title": "Here's how the system is set up:",
+            "content": [
+              "The part that users see (the frontend) is made with vue.js.",
+              "The part that does the behind-the-scenes work (the backend) is made with node.js, and it stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "You have a few options for running the system:",
+            "content": [
+              "You can run the front-end on your computer.",
+              "Host it on any website provider.",
+              "Use Apillon's hosting service. There's even a special setup for this using GitHub actions."
+            ]
+          },
+          {
+            "content": "For the part that does the behind-the-scenes work, you can run it on your computer or using a tool called Docker. You just need to set up some configuration files with the right information, like the details of your digital collectibles and your AWS account. All the instructions for this are available on GitHub."
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
       },
       "tokenGating": {
         "name": "Token Gating",
@@ -600,9 +761,11 @@
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
       },
+      "deploy": "Customize and deploy",
       "description": "Quickly deploy pre-built templates made and audited by Apillon. Each solution features a combination of Web3 services to demonstrate how they can be combined together, so you can learn, experiment, and launch your Web3 project fast.",
       "includedWeb3Services": "Included Web3 Services",
-      "info": "Customize ready-to-deploy templates built and audited by Apillon."
+      "info": "Customize ready-to-deploy templates built and audited by Apillon.",
+      "viewCode": "Vide code"
     },
     "subscription": {
       "bandwidth": "Bandwith",

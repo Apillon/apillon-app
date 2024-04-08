@@ -97,8 +97,8 @@ const services: Array<SolutionTypeItem> = [
   {
     name: SolutionKey.NFT_POAP,
     icon: 'icon-poap',
-    link: 'dashboard-service-nft',
-    disabled: !isFeatureEnabled(Feature.NFT_ATTENDANCE, authStore.getUserRoles()),
+    link: 'dashboard-solution-proof-of-attendance',
+    disabled: !isFeatureEnabled(Feature.NFT_POAP, authStore.getUserRoles()),
     usage: translateItems('dashboard.solutions.nftPoap.usage'),
   },
   {
