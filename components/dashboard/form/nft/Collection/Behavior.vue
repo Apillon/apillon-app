@@ -99,6 +99,7 @@
 
       <!-- Royalties Fees -->
       <n-form-item-gi
+        v-if="collectionStore.form.base.chainType === ChainType.EVM"
         path="royaltiesFees"
         :span="6"
         :label="infoLabel('collectionRoyaltiesFees')"

@@ -7,7 +7,6 @@ export default function useCollection() {
   const message = useMessage();
   const dataStore = useDataStore();
   const collectionStore = useCollectionStore();
-  const config = useRuntimeConfig();
 
   const { isEnoughSpaceInStorage } = useUpload();
 
@@ -85,6 +84,10 @@ export default function useCollection() {
     },
   ];
   const rulesRoyaltiesAddress: FormItemRule[] = [
+    {
+      required: isRoyaltyRequired(),
+      message: t('validation.collectionRoyaltiesAddressRequired'),
+    },
     {
       validator: validateRoyaltiesAddress,
       message: t('validation.collectionRoyaltiesAddress'),
@@ -169,10 +172,7 @@ export default function useCollection() {
       dropReserve: collectionStore.form.behavior.dropReserve || 0,
       isRevokable: collectionStore.form.behavior.revocable,
       isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress:
-        collectionStore.form.behavior.royaltiesFees === 0
-          ? null
-          : collectionStore.form.behavior.royaltiesAddress,
+      royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
       royaltiesFees: collectionStore.form.behavior.royaltiesFees,
       baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
     };
@@ -206,8 +206,10 @@ export default function useCollection() {
   }
   function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
     return (
-      collectionStore.form.behavior.royaltiesFees === 0 ||
-      validateAddress(_, value, collectionStore.form.base.chainType)
+      !isRoyaltyRequired() ||
+      (collectionStore.form.base.chainType === ChainType.EVM
+        ? validateEvmAddress(_, value)
+        : !!value)
     );
   }
   function validateSingleNftIdUnique(_: FormItemRule): boolean {
@@ -217,11 +219,13 @@ export default function useCollection() {
     return true;
   }
 
-  function validateAddress(_: FormItemRule, value: string, chainType: number) {
-    if (chainType === ChainType.EVM) {
-      return validateEvmAddress(_, value);
-    }
-    return !!value;
+  function isRoyaltyRequired() {
+    return (
+      (collectionStore.form.base.chainType === ChainType.EVM &&
+        collectionStore.form.behavior.royaltiesFees > 0) ||
+      (collectionStore.form.base.chainType === ChainType.SUBSTRATE &&
+        collectionStore.form.behavior.dropPrice > 0)
+    );
   }
 
   function disablePasteDate(ts: number) {
