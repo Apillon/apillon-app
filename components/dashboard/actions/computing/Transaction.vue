@@ -1,6 +1,7 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="w-[20vw] max-w-xs">
+    <div class="min-w-[11rem] w-[20vw] max-w-xs">
+      <!-- Search transactions
       <n-input
         v-model:value="transactionStore.search"
         type="text"
@@ -12,7 +13,7 @@
         <template #prefix>
           <span class="icon-search text-2xl"></span>
         </template>
-      </n-input>
+      </n-input>    -->
     </div>
 
     <n-space size="large">
@@ -62,7 +63,9 @@
     </n-space>
   </n-space>
 
-  <ComputingContractTabs v-show="uploadActive" />
+  <Transition name="scaleY">
+    <ComputingContractTabs v-if="uploadActive" />
+  </Transition>
 </template>
 
 <script lang="ts" setup>

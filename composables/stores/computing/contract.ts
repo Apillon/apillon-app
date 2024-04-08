@@ -5,14 +5,11 @@ export const useContractStore = defineStore('contract', {
   state: () => ({
     active: {} as ContractInterface,
     bucketUuid: '',
-    cid: '',
-    file: {} as FileListItemType,
     encryptTab: EncryptTab.BUCKET,
     items: [] as ContractInterface[],
     loading: false,
     search: '',
     total: 0,
-    uploading: false,
   }),
   getters: {
     hasContracts(state): boolean {

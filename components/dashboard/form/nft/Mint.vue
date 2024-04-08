@@ -51,6 +51,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormItemRule } from 'naive-ui';
+
 type FormNftMint = {
   receivingAddress: string;
   quantity: number | null;
@@ -93,7 +95,7 @@ const rules: NFormRules = {
   ],
 };
 
-function validateQuantity(_: NFormItemRule, value: number): boolean {
+function validateQuantity(_: FormItemRule, value: number): boolean {
   return (
     !collectionStore.active.drop || (value > 0 && value <= collectionStore.active?.dropReserve)
   );

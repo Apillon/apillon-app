@@ -24,6 +24,9 @@ const config: ConfigInterface = {
     'REFERRAL',
     'STORAGE',
     'NFT',
+    'NFT_AIRDROP',
+    'NFT_NESTABLE',
+    'NFT_POAP',
     'KILT_LOGIN',
     'BILLING',
     'AUTHENTICATION',
@@ -31,7 +34,7 @@ const config: ConfigInterface = {
     'COMPUTING',
     'SOCIAL',
   ],
-  betaFeatures: ['NFT_NESTABLE'],
+  betaFeatures: [],
 };
 
 export default config;

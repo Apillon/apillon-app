@@ -1,6 +1,6 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="w-[20vw] max-w-xs">
+    <div class="min-w-[11rem] w-[20vw] max-w-xs">
       <n-input
         v-model:value="collectionStore.search"
         type="text"
@@ -16,9 +16,6 @@
     </div>
 
     <n-space size="large">
-      <!-- Modal Price list for Hosting -->
-      <ModalCreditCosts :service="ServiceTypeName.NFT" />
-
       <!-- Refresh collections -->
       <n-button
         size="small"

@@ -28,6 +28,9 @@ const Endpoints = {
   project: (projectUuid: string) => {
     return `/projects/${projectUuid}`;
   },
+  projectOverview: (projectUuid: string) => {
+    return `/projects/${projectUuid}/overview`;
+  },
   projectUsers: (projectUuid: string) => {
     return `/projects/${projectUuid}/users`;
   },
@@ -183,6 +186,7 @@ const Endpoints = {
   },
 
   /** Collection */
+  collectionsSubstrate: '/nfts/collections/substrate',
   collections: (id?: string) => {
     return id ? `/nfts/collections/${id}` : '/nfts/collections';
   },
@@ -190,7 +194,7 @@ const Endpoints = {
     return `/nfts/collections/${collectionUuid}/transactions`;
   },
   collectionSetBaseUri: (collectionUuid: string) => {
-    return `/nfts/collections/${collectionUuid}/setBaseUri`;
+    return `/nfts/collections/${collectionUuid}/set-base-uri`;
   },
   collectionTransferOwnership: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/transferOwnership`;
@@ -203,6 +207,9 @@ const Endpoints = {
   },
   collectionNestMint: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/nest-mint`;
+  },
+  collectionNftsMetadata: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/nfts-metadata`;
   },
 
   /**

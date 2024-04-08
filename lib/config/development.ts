@@ -25,6 +25,8 @@ const config: ConfigInterface = {
     'NFT',
     'NFT_AIRDROP',
     'NFT_NESTABLE',
+    'NFT_POAP',
+    'PREBUILD_SOLUTIONS',
     'PROJECT',
     'PROJECT_DELETE',
     'PROJECT_ON_STARTUP',

@@ -154,6 +154,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { UploadCustomRequestOptions } from 'naive-ui';
+
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
@@ -195,7 +197,7 @@ const numOfUploadedFiles = computed<number>(() => {
  */
 
 /** Upload file request - add file to list */
-function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+function uploadFilesRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
     percentage: 0,

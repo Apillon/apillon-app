@@ -8,20 +8,20 @@
     </h1>
     <p class="mb-7 text-body">{{ $t('auth.signup.description') }}</p>
 
-    <!-- Apillon Oauth -->
-    <template v-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
-      <Btn type="secondary" class="w-full">
-        <span class="icon-apillon-icon"></span>
-        {{ $t('auth.signup.continueWithAT') }}
-      </Btn>
-    </template>
+    <!-- Wallet -->
+    <AuthWalletLogin
+      v-if="allowWalletRegister && !walletRegister"
+      class="w-full"
+      register
+      @register="onWalletRegister"
+    />
 
     <!-- Separator -->
-    <SeparatorText>
+    <SeparatorText :border-left="allowWalletRegister">
       <template v-if="authStore.wallet.signature">
-        {{ $t('auth.signup.walletEmail') }}
+        <span class="lowercase">{{ $t('auth.signup.walletEmail') }}</span>
       </template>
-      <template v-else-if="isFeatureEnabled(Feature.APILLON_REGISTER, authStore.getUserRoles())">
+      <template v-else-if="allowWalletRegister">
         {{ $t('auth.signup.orUseEmail') }}
       </template>
       <template v-else>{{ $t('auth.signup.withEmail') }}</template>
@@ -43,15 +43,24 @@
 </template>
 
 <script lang="ts" setup>
-const authStore = useAuthStore();
+const { t } = useI18n();
 const route = useRoute();
+const message = useMessage();
+const authStore = useAuthStore();
 
 definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: 'Sign up',
+  title: t('general.signup'),
 });
+
+const walletRegister = ref<boolean>(false);
+const allowWalletRegister = computed<boolean>(
+  () =>
+    isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles()) &&
+    (!authStore.wallet.signature || walletRegister.value)
+);
 
 onMounted(() => {
   /** Track Registration start */
@@ -59,4 +68,10 @@ onMounted(() => {
     trackEvent('registration_start');
   }, 1000);
 });
+
+function onWalletRegister() {
+  walletRegister.value = true;
+
+  message.info(t('auth.signup.walletEmail'));
+}
 </script>

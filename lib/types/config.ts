@@ -3,7 +3,6 @@ import type { PublicRuntimeConfig } from '@nuxt/schema';
 export enum Feature {
   ACCESS = 'ACCESS',
   API_KEYS = 'API_KEYS',
-  APILLON_REGISTER = 'APILLON_REGISTER',
   AUTHENTICATION = 'AUTHENTICATION',
   BILLING = 'BILLING',
   CONFIGURATION = 'CONFIGURATION',
@@ -20,7 +19,7 @@ export enum Feature {
   MONITORING = 'MONITORING',
   NFT = 'NFT',
   NFT_AIRDROP = 'NFT_AIRDROP',
-  NFT_ATTENDANCE = 'NFT_ATTENDANCE',
+  NFT_POAP = 'NFT_POAP',
   NFT_DROP = 'NFT_DROP',
   NFT_GIFT = 'NFT_GIFT',
   NFT_LOYALTY = 'NFT_LOYALTY',

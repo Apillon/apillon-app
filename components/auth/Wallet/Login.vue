@@ -1,5 +1,5 @@
 <template>
-  <Btn v-bind="$attrs" type="info" :color="colors.blue" @click="showModal">
+  <Btn v-bind="$attrs" type="info" :color="colors.blue" @click="modalWalletSelectVisible = true">
     <span class="icon-wallet text-xl align-sub mr-2"></span>
     <span v-if="register">{{ $t('auth.signup.wallet') }}</span>
     <span v-else>{{ $t('auth.login.wallet') }}</span>
@@ -28,9 +28,8 @@ import colors from '~/tailwind.colors';
 
 const props = defineProps({
   register: { type: Boolean, default: false },
-  showModal: { type: Boolean, default: false },
 });
-const emit = defineEmits(['register', 'validate']);
+const emit = defineEmits(['register']);
 
 const { t } = useI18n();
 const { error, success } = useMessage();
@@ -51,23 +50,6 @@ const modalWalletSelectVisible = ref<boolean>(false);
 onBeforeMount(() => {
   disconnect();
 });
-
-watch(
-  () => props.showModal,
-  (show, prevValue) => {
-    if (show && !prevValue) {
-      modalWalletSelectVisible.value = true;
-    }
-  }
-);
-
-function showModal() {
-  if (props.register) {
-    emit('validate');
-  } else {
-    modalWalletSelectVisible.value = true;
-  }
-}
 
 /** Wallet login */
 async function walletLogin(account: WalletAccount) {

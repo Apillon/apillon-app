@@ -1,29 +1,38 @@
+import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
 import IconInfo from '../components/parts/Icon/Info.vue';
 
 export default function useCollection() {
   const { t, te } = useI18n();
+  const router = useRouter();
+  const message = useMessage();
   const dataStore = useDataStore();
   const collectionStore = useCollectionStore();
+
+  const { isEnoughSpaceInStorage } = useUpload();
 
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
 
-  const chains = [
-    { label: t(`nft.chain.${Chains.MOONBEAM}`), value: Chains.MOONBEAM },
-    { label: t(`nft.chain.${Chains.MOONBASE}`), value: Chains.MOONBASE },
-    // { label: t(`nft.chain.${Chains.ASTAR_SHIBUYA}`), value: Chains.ASTAR_SHIBUYA },
-    { label: t(`nft.chain.${Chains.ASTAR}`), value: Chains.ASTAR },
-  ];
-  const collectionTypes = [
-    {
-      label: t(`nft.collection.type.${NFTCollectionType.GENERIC}`),
-      value: NFTCollectionType.GENERIC,
-    },
-    {
-      label: t(`nft.collection.type.${NFTCollectionType.NESTABLE}`),
-      value: NFTCollectionType.NESTABLE,
-    },
-  ];
+  const chains = enumKeys(Chains)
+    .filter(key => Chains[key] !== Chains.ASTAR_SHIBUYA)
+    .map(k => {
+      return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
+    });
+  const chainTypes = enumKeys(ChainType).map(k => {
+    return {
+      name: k.toLowerCase(),
+      label: t(`nft.chainType.${ChainType[k]}`),
+      value: ChainType[k],
+    };
+  });
+  const collectionTypes = enumKeys(NFTCollectionType).map(k => {
+    return {
+      name: k.toLowerCase(),
+      label: t(`nft.collection.type.${NFTCollectionType[k]}`),
+      value: NFTCollectionType[k],
+    };
+  });
+
   const supplyTypes = [
     { label: t('form.supplyTypes.unlimited'), value: 0 },
     { label: t('form.supplyTypes.limited'), value: 1 },
@@ -38,55 +47,64 @@ export default function useCollection() {
   });
 
   const maxNft = computed(() => {
-    return collectionStore.form.behavior.supplyLimited === 1
-      ? collectionStore.csvData?.length
-      : NFT_MAX_SUPPLY;
+    return collectionStore.form.behavior.supplyLimited === 1 ? NFT_MAX_SUPPLY : NFT_MAX_SUPPLY;
   });
 
   /**
    * Rules
    */
-  const rulesBaseUri: NFormItemRule[] = [
+  const rulesBaseUri: FormItemRule[] = [
     ruleRequired(t('validation.collectionBaseUriRequired')),
     {
       type: 'url',
       message: t('validation.collectionBaseUri'),
     },
   ];
-  const rulesMaxSupply: NFormItemRule[] = [
+  const rulesMaxSupply: FormItemRule[] = [
     {
       max: maxNft.value,
       validator: validateMaxSupply,
       message: t('validation.collectionMaxSupplyReached', {
-        max: collectionStore.csvData?.length || NFT_MAX_SUPPLY,
+        max: NFT_MAX_SUPPLY,
       }),
     },
   ];
-  const rulesDropPrice: NFormItemRule[] = [
+  const rulesDropPrice: FormItemRule[] = [
     ruleRequired(t('validation.collectionDropPrice')),
     {
       validator: validateDropPrice,
       message: t('validation.collectionDropPrice'),
     },
   ];
-  const rulesDropReserve: NFormItemRule[] = [
+  const rulesDropReserve: FormItemRule[] = [
     ruleRequired(t('validation.collectionDropReserve')),
     {
       validator: validateReserve,
       message: t('validation.collectionDropReserve'),
     },
   ];
-  const rulesRoyaltiesAddress: NFormItemRule[] = [
+  const rulesRoyaltiesAddress: FormItemRule[] = [
+    {
+      required: isRoyaltyRequired(),
+      message: t('validation.collectionRoyaltiesAddressRequired'),
+    },
     {
       validator: validateRoyaltiesAddress,
       message: t('validation.collectionRoyaltiesAddress'),
     },
   ];
-  const rulesRoyaltyFee: NFormItemRule[] = [
+  const rulesRoyaltyFee: FormItemRule[] = [
     ruleRequired(t('validation.collectionRoyaltiesFeesRequired')),
     {
       validator: validateNaturalNumber,
       message: t('validation.collectionRoyaltiesFees'),
+    },
+  ];
+  const validateSingleIdRequired: FormItemRule[] = [
+    ruleRequired(t('validation.nftIdRequired')),
+    {
+      validator: validateSingleNftIdUnique,
+      message: t('validation.nftIdDuplicate'),
     },
   ];
 
@@ -97,6 +115,7 @@ export default function useCollection() {
     'base.name': ruleRequired(t('validation.collectionNameRequired')),
     chain: ruleRequired(t('validation.collectionChainRequired')),
     'base.chain': ruleRequired(t('validation.collectionChainRequired')),
+    'base.chainType': ruleRequired(t('validation.collectionChainTypeRequired')),
     collectionType: ruleRequired(t('validation.collectionTypeRequired')),
     'base.collectionType': ruleRequired(t('validation.collectionTypeRequired')),
     baseUri: rulesBaseUri,
@@ -122,27 +141,91 @@ export default function useCollection() {
     'behavior.royaltiesFees': rulesRoyaltyFee,
   };
 
+  const rulesSingle: NFormRules = {
+    id: validateSingleIdRequired,
+    collectionUuid: ruleRequired(t('validation.nftCollection')),
+    name: ruleRequired(t('validation.nftName')),
+    description: ruleRequired(t('validation.nftDescription')),
+  };
+
+  function prepareFormData(addBaseUri = false) {
+    const chain =
+      collectionStore.form.base.chain === Chains.ASTAR &&
+      collectionStore.form.base.chainType === ChainType.SUBSTRATE
+        ? SubstrateChain.ASTAR
+        : collectionStore.form.base.chain;
+
+    return {
+      chain,
+      project_uuid: dataStore.projectUuid,
+      name: collectionStore.form.base.name,
+      symbol: collectionStore.form.base.symbol,
+      collectionType: collectionStore.form.base.collectionType,
+      baseExtension: collectionStore.form.behavior.baseExtension,
+      dropPrice: collectionStore.form.behavior.dropPrice,
+      maxSupply:
+        collectionStore.form.behavior.supplyLimited === 1
+          ? collectionStore.form.behavior.maxSupply
+          : 0,
+      drop: collectionStore.form.behavior.drop,
+      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
+      dropReserve: collectionStore.form.behavior.dropReserve || 0,
+      isRevokable: collectionStore.form.behavior.revocable,
+      isSoulbound: collectionStore.form.behavior.soulbound,
+      royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
+      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
+      baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
+    };
+  }
+
+  function collectionEndpoint() {
+    return collectionStore.form.base.chain === Chains.ASTAR &&
+      collectionStore.form.base.chainType === ChainType.SUBSTRATE
+      ? endpoints.collectionsSubstrate
+      : endpoints.collections();
+  }
+
   /**
    * Validations
    */
-  function validateReserve(_: NFormItemRule, value: number): boolean {
+  function validateReserve(_: FormItemRule, value: number): boolean {
     return (
       collectionStore.form.behavior.supplyLimited === 0 ||
       collectionStore.form.behavior.maxSupply === 0 ||
       value <= collectionStore.form.behavior.maxSupply
     );
   }
-  function validateMaxSupply(_: NFormItemRule, value: number): boolean {
+  function validateMaxSupply(_: FormItemRule, value: number): boolean {
     return value <= maxNft.value;
   }
-  function validateDropStart(_: NFormItemRule, value: number): boolean {
+  function validateDropStart(_: FormItemRule, value: number): boolean {
     return !collectionStore.form.behavior.drop || value > Date.now();
   }
-  function validateDropPrice(_: NFormItemRule, value: number): boolean {
+  function validateDropPrice(_: FormItemRule, value: number): boolean {
     return !collectionStore.form.behavior.drop || (value > 0 && value < Number.MAX_SAFE_INTEGER);
   }
-  function validateRoyaltiesAddress(_: NFormItemRule, value: string): boolean {
-    return collectionStore.form.behavior.royaltiesFees === 0 || validateEvmAddress(_, value);
+  function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
+    return (
+      !isRoyaltyRequired() ||
+      (collectionStore.form.base.chainType === ChainType.EVM
+        ? validateEvmAddress(_, value)
+        : !!value)
+    );
+  }
+  function validateSingleNftIdUnique(_: FormItemRule): boolean {
+    if (collectionStore.metadata.length >= 1) {
+      return !collectionStore.metadata.find(item => item.id === collectionStore.form.single.id);
+    }
+    return true;
+  }
+
+  function isRoyaltyRequired() {
+    return (
+      (collectionStore.form.base.chainType === ChainType.EVM &&
+        collectionStore.form.behavior.royaltiesFees > 0) ||
+      (collectionStore.form.base.chainType === ChainType.SUBSTRATE &&
+        collectionStore.form.behavior.drop)
+    );
   }
 
   function disablePasteDate(ts: number) {
@@ -167,17 +250,89 @@ export default function useCollection() {
     return te(`form.label.${field}`) ? t(`form.label.${field}`) : field;
   };
 
+  function chainCurrency() {
+    switch (collectionStore.form.base.chain) {
+      case Chains.ASTAR:
+        return 'ASTR';
+      default:
+        return 'GLMR';
+    }
+  }
+
+  function uploadFileRequest(
+    { file, onError, onFinish }: UploadCustomRequestOptions,
+    logo: boolean
+  ) {
+    const uploadedFile: FileListItemType = {
+      ...file,
+      fullPath: file.fullPath,
+      percentage: 0,
+      size: file.file?.size || 0,
+      timestamp: Date.now(),
+      onFinish,
+      onError,
+    };
+    if (!isEnoughSpaceInStorage([], uploadedFile)) {
+      message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
+
+      /** Mark file as failed */
+      onError();
+      return;
+    } else if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+      message.warning(t('validation.notImage'));
+
+      /** Mark file as failed */
+      onError();
+      return;
+    }
+    if (logo) {
+      collectionStore.form.base.logo = uploadedFile;
+    } else {
+      collectionStore.form.base.coverImage = uploadedFile;
+    }
+  }
+
+  function handleCoverImageRemove() {
+    collectionStore.form.base.coverImage = {} as FileListItemType;
+  }
+
+  function handleLogoRemove() {
+    collectionStore.form.base.logo = {} as FileListItemType;
+  }
+
+  function openAddNft(collectionUuid: string) {
+    router.push({ name: 'dashboard-service-nft-slug-add', params: { slug: collectionUuid } });
+  }
+
+  function onChainChange(chain: number) {
+    if (chain === Chains.ASTAR_SHIBUYA) {
+      collectionStore.form.base.chainType = ChainType.SUBSTRATE;
+    } else if (chain !== Chains.ASTAR) {
+      collectionStore.form.base.chainType = ChainType.EVM;
+    }
+  }
+
   return {
     loading,
     formRef,
     chains,
+    chainTypes,
     collectionTypes,
     supplyTypes,
     booleanSelect,
     rules,
+    rulesSingle,
     isFormDisabled,
+    chainCurrency,
+    collectionEndpoint,
     disablePasteDate,
     disablePasteTime,
     infoLabel,
+    onChainChange,
+    openAddNft,
+    prepareFormData,
+    uploadFileRequest,
+    handleLogoRemove,
+    handleCoverImageRemove,
   };
 }

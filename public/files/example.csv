@@ -1,2 +1,2 @@
-name,description,image,background_color,some_attribute
-Token 0 Name,Token 0 Description,1.jpg,#0098EE,Attribute value
+id,name,description,image,background_color,some_attribute
+1,Token 1 Name,Token 1 Description,1.jpg,#0098EE,Attribute value

@@ -9,7 +9,7 @@
     :collapsed="collapsed"
     :collapsed-width="40"
     :collapsed-icon-size="24"
-    :default-expanded-keys="['services']"
+    :default-expanded-keys="['services', 'configuration']"
     :options="menuOptions"
     @update:value="$emit('toggleSidebar')"
   />
@@ -154,13 +154,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
   const solutionsChildren = isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())
     ? [
         {
-          key: 'dashboard-solution-nft-collection',
-          label: $i18n.t('dashboard.nav.solution.nftCollection'),
-          iconName: 'icon-self-hosted-nft',
-          to: 'dashboard-service-nft',
-          disabled: isMenuItemDisabled(Feature.NFT) || zeroProjects.value,
-        },
-        {
           key: 'dashboard-solution-nft-airdrop',
           label: $i18n.t('dashboard.nav.solution.nftAirdrop'),
           iconName: 'icon-nft-mint-airdrop',
@@ -168,55 +161,64 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
           disabled: isMenuItemDisabled(Feature.NFT_AIRDROP) || zeroProjects.value,
         },
         {
-          key: 'dashboard-solution-nft-gift',
-          label: $i18n.t('dashboard.nav.solution.nftGift'),
-          iconName: 'icon-gift',
-          disabled: isMenuItemDisabled(Feature.NFT_GIFT) || zeroProjects.value,
+          key: 'dashboard-solution-openGov',
+          label: $i18n.t('dashboard.solutions.openGov.name'),
+          iconName: 'icon-brand-membership',
+          to: 'dashboard-solution-openGov',
+          disabled: isMenuItemDisabled(Feature.NFT_AIRDROP) || zeroProjects.value,
         },
         {
           key: 'dashboard-solution-poap',
           label: $i18n.t('dashboard.nav.solution.poap'),
           iconName: 'icon-poap',
-          disabled: isMenuItemDisabled(Feature.NFT_ATTENDANCE) || zeroProjects.value,
+          to: 'dashboard-solution-proof-of-attendance',
+          disabled: isMenuItemDisabled(Feature.NFT_POAP) || zeroProjects.value,
         },
         {
-          key: 'dashboard-solution-nft-loyalty',
-          label: $i18n.t('dashboard.nav.solution.nftLoyalty'),
-          iconName: 'icon-loyalty-program',
-          disabled: isMenuItemDisabled(Feature.NFT_LOYALTY) || zeroProjects.value,
+          key: 'dashboard-solution-whitelist-claim',
+          label: $i18n.t('dashboard.solutions.nftWhitelistClaim.name'),
+          iconName: 'icon-gift',
+          to: 'dashboard-solution-whitelist-claim',
+          disabled: isMenuItemDisabled(Feature.NFT_AIRDROP) || zeroProjects.value,
         },
+        // {
+        //   key: 'dashboard-solution-nft-loyalty',
+        //   label: $i18n.t('dashboard.nav.solution.nftLoyalty'),
+        //   iconName: 'icon-loyalty-program',
+        //   disabled: isMenuItemDisabled(Feature.NFT_LOYALTY) || zeroProjects.value,
+        // },
+        // {
+        //   key: 'dashboard-solution-nft-membership',
+        //   label: $i18n.t('dashboard.nav.solution.nftMembership'),
+        //   iconName: 'icon-brand-membership',
+        //   disabled: isMenuItemDisabled(Feature.NFT_MEMBERSHIP) || zeroProjects.value,
+        // },
+        // {
+        //   key: 'dashboard-solution-nft-drop',
+        //   label: $i18n.t('dashboard.nav.solution.nftDrop'),
+        //   iconName: 'icon-nft-drop',
+        //   disabled: isMenuItemDisabled(Feature.NFT_DROP) || zeroProjects.value,
+        // },
+        // {
+        //   key: 'dashboard-solution-wallet',
+        //   label: $i18n.t('dashboard.nav.solution.wallet'),
+        //   iconName: 'icon-wallet',
+        //   disabled: isMenuItemDisabled(Feature.NON_CUSTODIAL_WALLET) || zeroProjects.value,
+        // },
+        // {
+        //   key: 'dashboard-solution-file-sharing',
+        //   label: $i18n.t('dashboard.nav.solution.fileSharing'),
+        //   iconName: 'icon-file-sharing',
+        //   disabled: isMenuItemDisabled(Feature.FILE_SHARING) || zeroProjects.value,
+        // },
+        // {
+        //   key: 'dashboard-solution-token-gating',
+        //   label: $i18n.t('dashboard.nav.solution.tokenGating'),
+        //   iconName: 'icon-token-gating',
+        //   disabled: isMenuItemDisabled(Feature.TOKEN_GATING) || zeroProjects.value,
+        // },
         {
-          key: 'dashboard-solution-nft-membership',
-          label: $i18n.t('dashboard.nav.solution.nftMembership'),
-          iconName: 'icon-brand-membership',
-          disabled: isMenuItemDisabled(Feature.NFT_MEMBERSHIP) || zeroProjects.value,
-        },
-        {
-          key: 'dashboard-solution-nft-drop',
-          label: $i18n.t('dashboard.nav.solution.nftDrop'),
-          iconName: 'icon-nft-drop',
-          disabled: isMenuItemDisabled(Feature.NFT_DROP) || zeroProjects.value,
-        },
-        {
-          key: 'dashboard-solution-wallet',
-          label: $i18n.t('dashboard.nav.solution.wallet'),
-          iconName: 'icon-wallet',
-          disabled: isMenuItemDisabled(Feature.NON_CUSTODIAL_WALLET) || zeroProjects.value,
-        },
-        {
-          key: 'dashboard-solution-file-sharing',
-          label: $i18n.t('dashboard.nav.solution.fileSharing'),
-          iconName: 'icon-file-sharing',
-          disabled: isMenuItemDisabled(Feature.FILE_SHARING) || zeroProjects.value,
-        },
-        {
-          key: 'dashboard-solution-token-gating',
-          label: $i18n.t('dashboard.nav.solution.tokenGating'),
-          iconName: 'icon-token-gating',
-          disabled: isMenuItemDisabled(Feature.TOKEN_GATING) || zeroProjects.value,
-        },
-        {
-          key: 'dashboard-smart-contracts',
+          key: 'dashboard-solution',
           label: $i18n.t('dashboard.nav.explore'),
           to: 'dashboard-solution',
           class: 'text-yellow',
@@ -242,19 +244,19 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       disabled: isMenuItemDisabled(Feature.ACCESS) || zeroProjects.value,
     },
     {
-      key: 'dashboard-payments',
-      label: $i18n.t('dashboard.nav.billing'),
-      to: 'dashboard-payments',
-      iconName: 'icon-billing',
-      disabled: isMenuItemDisabled(Feature.BILLING) || zeroProjects.value,
-      show: !dataStore.isProjectUser,
-    },
-    {
       key: 'dashboard-api-keys',
       label: $i18n.t('dashboard.nav.apiKeys'),
       to: 'dashboard-api-keys',
       iconName: 'icon-api-keys',
       disabled: isMenuItemDisabled(Feature.API_KEYS) || zeroProjects.value,
+      show: !dataStore.isProjectUser,
+    },
+    {
+      key: 'dashboard-payments',
+      label: $i18n.t('dashboard.nav.billing'),
+      to: 'dashboard-payments',
+      iconName: 'icon-billing',
+      disabled: isMenuItemDisabled(Feature.BILLING) || zeroProjects.value,
       show: !dataStore.isProjectUser,
     },
   ];

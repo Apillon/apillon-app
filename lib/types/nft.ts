@@ -1,9 +1,23 @@
+export enum ChainType {
+  SUBSTRATE = 1,
+  EVM = 2,
+}
+
 /** NFT Chains */
 export enum Chains {
-  MOONBEAM = 1284,
   MOONBASE = 1287,
-  ASTAR_SHIBUYA = 81, // testnet
+  MOONBEAM = 1284,
+  ASTAR_SHIBUYA = 81,
   ASTAR = 592,
+}
+export enum SubstrateChain {
+  CRUST = 1,
+  KILT = 2,
+  PHALA = 4,
+  POLKADOT = 5,
+  SUBSOCIAL = 6,
+  XSOCIAL = 7,
+  ASTAR = 8,
 }
 
 /** NFT Collection type */
@@ -20,6 +34,14 @@ export enum CollectionStatus {
   DEPLOYED = 3,
   TRANSFERRED = 4,
   FAILED = 5,
+}
+
+/** NFT Collection create step */
+export enum CollectionStep {
+  STORAGE_TYPE = 0,
+  ENVIRONMENT = 1,
+  METADATA = 2,
+  BEHAVIOR = 3,
 }
 
 /** NFT Transaction status */
@@ -41,22 +63,31 @@ export enum TransactionType {
   NEST_MINT_NFT = 6,
 }
 
-/** Mint steps */
-export enum NftMintTab {
-  METADATA = 1,
-  UPLOAD = 2,
-  IMAGES = 3,
-  MINT = 4,
+/** NFT create steps */
+export enum NftAmount {
+  SINGLE = 1,
+  MULTIPLE = 2,
 }
+/** Mint steps */
+export enum NftCreateTab {
+  METADATA = 1,
+  PREVIEW = 2,
+  IMAGES = 3,
+  DEPLOY = 4,
+}
+/** NFT create steps */
+export enum NftCreateStep {
+  AMOUNT = 1,
+  SINGLE = 2,
+  MULTIPLE = 3,
+  PREVIEW = 4,
+  DEPLOY = 5,
+}
+/** Multiple NFTs upload steps */
 export enum NftUploadStep {
   FILE = 1,
   IMAGES = 2,
   PREVIEW = 3,
-}
-export enum NftDeployStep {
-  NAME = 1,
-  BEHAVIOR = 2,
-  DEPLOY = 3,
 }
 
 /** NFT Collection deploy status */
@@ -91,6 +122,7 @@ declare global {
     baseUri: string;
     bucket_uuid: string;
     chain: number;
+    chainType: number;
     collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
@@ -127,4 +159,16 @@ declare global {
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}
+
+  /**
+   * Attributes
+   */
+
+  interface AttributeInterface {
+    trait_type: string;
+    value: string;
+    display_type: string;
+  }
+
+  interface AttributesInterface extends Array<AttributeInterface> {}
 }

@@ -3,25 +3,37 @@
     ref="formRef"
     :model="formData"
     :rules="rules"
-    :disabled="!enabled"
+    :disabled="uploadDisabled"
     @submit.prevent="handleSubmit"
   >
-    <Notification v-if="!enabled" class="-mt-4 mb-4" type="info">
-      {{ $t('computing.contract.assignDisabled') }}
-    </Notification>
-    <!--  CID -->
-    <n-form-item
-      class="hidden"
-      path="cid"
-      :label="$t('form.label.contract.cid')"
-      :label-props="{ for: 'cid' }"
-    >
-      <n-input
-        v-model:value="formData.cid"
-        :input-props="{ id: 'cid' }"
-        :placeholder="$t('form.placeholder.typeHere')"
-        clearable
-      />
+    <!--  File -->
+    <n-form-item path="file" :label="$t('form.label.contract.file')" :label-props="{ for: 'file' }">
+      <n-upload
+        v-model:value="formData.file"
+        class="pr-1"
+        :show-file-list="false"
+        :disabled="uploadDisabled || authStore.isAdmin()"
+        :custom-request="onFileChange"
+      >
+        <n-upload-dragger class="h-40">
+          <div v-if="formData.file?.name" class="py-2 text-center">
+            <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
+              <span class="icon-upload text-violet text-2xl"></span>
+            </div>
+
+            <h4 class="mb-1">{{ $t('computing.upload.uploaded') }}</h4>
+            <span class="text-body">{{ formData.file?.name }}</span>
+          </div>
+          <div v-else class="py-2 text-center">
+            <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
+              <span class="icon-upload text-violet text-2xl"></span>
+            </div>
+
+            <h4 class="mb-1">{{ $t('computing.upload.upload') }}</h4>
+            <span class="text-body">{{ $t('computing.upload.dragAndDrop') }}</span>
+          </div>
+        </n-upload-dragger>
+      </n-upload>
     </n-form-item>
 
     <!--  NFT ID -->
@@ -46,8 +58,8 @@
       <Btn
         type="primary"
         class="w-full mt-2"
+        :disabled="uploadDisabled"
         :loading="loading"
-        :disabled="!enabled"
         @click="handleSubmit"
       >
         {{ $t('computing.contract.assignCid') }}
@@ -57,42 +69,51 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormInst, UploadCustomRequestOptions } from 'naive-ui';
+
+type EncryptContent = {
+  encryptedContent: string;
+};
 type FormContractAssignCid = {
   cid: string;
+  file: FileListItemType | undefined;
   nftId: number;
 };
 
 const props = defineProps({
   contractUuid: { type: String, required: true },
-  cid: { type: String, required: true },
-  enabled: { type: Boolean, default: true },
 });
 const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
+const contractStore = useContractStore();
 const warningStore = useWarningStore();
+const { uploadFileToIPFS } = useComputing();
 
 const loading = ref(false);
-const formRef = ref<NFormInst | null>(null);
+const formRef = ref<FormInst | null>(null);
 const formData = ref<FormContractAssignCid>({
-  cid: props.cid,
+  cid: '',
+  file: undefined,
   nftId: 1,
 });
 
+const contract = computed<ContractInterface | undefined>(() => {
+  if (contractStore.active.contract_uuid === props.contractUuid) {
+    return contractStore.active;
+  }
+  return contractStore.items.find(item => item.contract_uuid === props.contractUuid);
+});
+const uploadDisabled = computed<boolean>(
+  () => contract.value?.contractStatus !== ContractStatus.DEPLOYED
+);
+
 const rules: NFormRules = {
-  cid: [ruleRequired($i18n.t('validation.contract.cidRequired'))],
+  file: [ruleRequired($i18n.t('validation.contract.fileRequired'))],
   nftId: [ruleRequired($i18n.t('validation.contract.nftIdRequired'))],
 };
-
-watch(
-  () => props.cid,
-  cid => {
-    if (cid) {
-      formData.value.cid = cid;
-    }
-  }
-);
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -105,20 +126,85 @@ function handleSubmit(e: Event | MouseEvent) {
     } else {
       warningStore.showSpendingWarning(
         PriceServiceName.COMPUTING_SCHRODINGER_ASSIGN_CID_TO_NFT,
-        () => assignCid()
+        () => encryptFile(formData.value.file)
       );
     }
   });
 }
 
-async function assignCid() {
-  loading.value = true;
+async function onFileChange({ file, onError, onFinish }: UploadCustomRequestOptions) {
+  const size = file.file?.size || 0;
 
+  if (
+    file.type?.startsWith('application/octet-stream') ||
+    file.type?.startsWith('application/x-msdownload')
+  ) {
+    message.warning($i18n.t('validation.contract.fileIsApp', { name: file.name }));
+    onError();
+    return;
+  } else if (size > 65536) {
+    message.warning($i18n.t('validation.contract.fileTooBig', { name: file.name }));
+    onError();
+    return;
+  }
+
+  formData.value.file = {
+    ...file,
+    percentage: 0,
+    size: size,
+    timestamp: Date.now(),
+    onFinish,
+    onError,
+  };
+}
+
+async function encryptFile(file?: FileListItemType) {
+  if (!file) return;
+
+  loading.value = true;
   try {
-    const res = await $api.post<SuccessResponse>(
-      endpoints.contractAssignCid(props.contractUuid),
-      formData.value
+    const fileContent = await convertBase64(file.file);
+
+    const res = await $api.post<GeneralResponse<EncryptContent>>(
+      endpoints.contractEncrypt(props.contractUuid),
+      {
+        contract_uuid: props.contractUuid,
+        content: fileContent,
+      }
     );
+    message.success($i18n.t('form.success.contract.encrypted'));
+    file.onFinish();
+
+    await onFileEncrypted(file, res.data.encryptedContent);
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+    file.onError();
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function onFileEncrypted(file: FileListItemType, encryptedContent: string) {
+  const fileDetails = await uploadFileToIPFS(file, contractStore.bucketUuid, encryptedContent);
+
+  if (fileDetails) {
+    const cid = fileDetails.CIDv1 || fileDetails.CID;
+
+    const fileLink = new URL(fileDetails.link);
+    const token = fileLink.searchParams.get('token');
+
+    formData.value.cid = `${cid}/?token=${token}`;
+
+    await assignCid();
+  }
+}
+
+async function assignCid() {
+  try {
+    const res = await $api.post<SuccessResponse>(endpoints.contractAssignCid(props.contractUuid), {
+      cid: formData.value.cid,
+      nftId: formData.value.nftId,
+    });
 
     if (res.data.success) {
       message.success($i18n.t('form.success.contract.cidAssign'));
@@ -129,6 +215,5 @@ async function assignCid() {
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
-  loading.value = false;
 }
 </script>
