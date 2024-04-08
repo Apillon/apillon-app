@@ -158,7 +158,8 @@ const options = computed(() => {
   ];
 });
 
-async function refresh() {
-  await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
+function refresh() {
+  collectionStore.fetchCollection(collectionStore.active.collection_uuid);
+  collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
 }
 </script>
