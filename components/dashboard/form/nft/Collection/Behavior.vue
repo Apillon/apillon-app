@@ -47,7 +47,12 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid class="items-end" :cols="12" :x-gap="32">
+    <n-grid
+      v-if="collectionStore.form.base.chainType === ChainType.EVM"
+      class="items-end"
+      :cols="12"
+      :x-gap="32"
+    >
       <!-- Collection Revocable -->
       <n-form-item-gi
         path="revocable"
