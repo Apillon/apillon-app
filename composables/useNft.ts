@@ -10,7 +10,7 @@ export default function useNft() {
   const $papa = vueApp.config.globalProperties.$papa;
 
   const loadingImages = ref<boolean>(false);
-  const metadataRequired = ['id', 'name', 'description', 'image'];
+  const metadataRequired = ['name', 'description', 'image'];
   const metadataProperties = [
     'id',
     'name',
@@ -116,12 +116,18 @@ export default function useNft() {
       complete: function (results: CsvFileData) {
         if (results.data.length) {
           collectionStore.csvData = results.data;
-          collectionStore.columns = results.meta.fields.map(item => {
+
+          const fields = results.meta.fields;
+          if (!fields.includes('id')) {
+            fields.unshift('id');
+          }
+          collectionStore.columns = fields.map(item => {
             return {
               title: item,
               key: item,
             };
           });
+
           collectionStore.csvAttributes = results.meta.fields
             .filter(item => !metadataProperties.includes(item))
             .map(item => {
@@ -151,7 +157,7 @@ export default function useNft() {
    * Prepare NFT data: array of JSONs with formatted properties and attributes
    */
   function createNftData(): Array<Record<string, any>> {
-    return collectionStore.csvData.map(item => {
+    return collectionStore.csvData.map((item, index) => {
       const nft: Record<string, any> = {};
       Object.entries(item).forEach(([key, value]) => {
         if (!collectionStore.csvSelectedAttributes.includes(key)) {
@@ -171,6 +177,9 @@ export default function useNft() {
       });
       if (attributes.length > 0) {
         nft.attributes = attributes;
+      }
+      if (!item?.id) {
+        nft.id = index + 1;
       }
       return nft;
     });

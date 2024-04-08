@@ -1178,7 +1178,7 @@
       "2": "EVM"
     },
     "amount": {
-      "title": "Create NFTs",
+      "title": "Create NFT",
       "content": "Add NFTs one by one or upload them in bulk.",
       "single": "Build one by one",
       "singleContent": "Enter data manually",
@@ -1267,7 +1267,7 @@
       "created": {
         "bucket": "newly created bucket",
         "explorer": "blockchain explorer",
-        "goBack": "Go back to NFT Collections",
+        "goBack": "Go back to NFT Collection",
         "info": "To display your NFTs and mint them, you need a website. \nUse the Apillon NFT website template and host it on a decentralized network.",
         "or": "or see its contents in your",
         "title": "Display your NFTs on the internet",
@@ -1404,7 +1404,7 @@
       "csvMissingAttributes": "Are you sure you want to continue with no attributes?",
       "csvMissingData": "Missing metadata, num of row must be same as maxSupply",
       "csvRequiredColumns": "Missing metadata columns, required columns:",
-      "fileInvalid": "Invalid file format. Please upload a valid CSV file with columns \"id\", \"name\", \"description\", and \"image\".",
+      "fileInvalid": "Invalid file format. Please upload a valid CSV file with columns \"name\", \"description\", and \"image\".",
       "imagesMissing": "Missing images:",
       "imagesInvalid": "Invalid image names. Example: ",
       "selectAmount": "Please select how many NFTs would you like to create."

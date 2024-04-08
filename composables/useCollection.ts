@@ -97,20 +97,6 @@ export default function useCollection() {
       message: t('validation.collectionRoyaltiesFees'),
     },
   ];
-  const rulesCollectionLogo: FormItemRule[] = [
-    ruleRequired(t('validation.collectionLogoRequired')),
-    {
-      validator: validateCollectionLogo,
-      message: t('validation.collectionLogoRequired'),
-    },
-  ];
-  const rulesCollectionCoverImage: FormItemRule[] = [
-    ruleRequired(t('validation.collectionCoverImageRequired')),
-    {
-      validator: validateCollectionCoverImage,
-      message: t('validation.collectionCoverImageRequired'),
-    },
-  ];
   const validateSingleIdRequired: FormItemRule[] = [
     ruleRequired(t('validation.nftIdRequired')),
     {
@@ -120,10 +106,6 @@ export default function useCollection() {
   ];
 
   const rules: NFormRules = {
-    logo: rulesCollectionLogo,
-    'base.logo': rulesCollectionLogo,
-    coverImage: rulesCollectionCoverImage,
-    'base.coverImage': rulesCollectionCoverImage,
     symbol: ruleRequired(t('validation.collectionSymbolRequired')),
     'base.symbol': ruleRequired(t('validation.collectionSymbolRequired')),
     name: ruleRequired(t('validation.collectionNameRequired')),
@@ -226,12 +208,6 @@ export default function useCollection() {
   }
   function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
     return collectionStore.form.behavior.royaltiesFees === 0 || validateEvmAddress(_, value);
-  }
-  function validateCollectionLogo(_: FormItemRule): boolean {
-    return !!collectionStore.form.base.logo?.id;
-  }
-  function validateCollectionCoverImage(_: FormItemRule): boolean {
-    return !!collectionStore.form.base.coverImage?.id;
   }
   function validateSingleNftIdUnique(_: FormItemRule): boolean {
     if (collectionStore.metadata.length >= 1) {
