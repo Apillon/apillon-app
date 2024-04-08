@@ -16,7 +16,7 @@
             :show-file-list="false"
             :custom-request="e => onLogoUploaded(e, true)"
             @change="onUploadLogoChange"
-            @remove="collection.handleLogoRemove"
+            @remove="handleLogoRemove"
           >
             <n-upload-dragger>
               <div class="w-24 h-20 flex-cc flex-col">
@@ -48,7 +48,7 @@
               <div>
                 <button
                   class="flex justify-center items-center h-12 w-12 ml-4 p-3"
-                  @click="collection.handleLogoRemove()"
+                  @click="handleLogoRemove()"
                 >
                   <span class="icon-delete text-xl"></span>
                 </button>
@@ -76,7 +76,7 @@
             {{ collectionStore.form.base.coverImage.name }}
             <button
               class="flex justify-center items-center p-1 float-right"
-              @click="collection.handleCoverImageRemove()"
+              @click="handleCoverImageRemove()"
             >
               <span class="icon-delete text-xl"></span>
             </button>
@@ -90,7 +90,7 @@
         :show-file-list="false"
         :custom-request="e => onLogoUploaded(e, false)"
         @change="onUploadChange"
-        @remove="collection.handleCoverImageRemove"
+        @remove="handleCoverImageRemove"
       >
         <n-upload-dragger class="h-40">
           <div class="py-2 text-center">
@@ -130,7 +130,7 @@ function onUploadLogoChange(options: FileUploadOptions) {
     onError: collectionStore.form.base.logo?.onError,
   } as UploadCustomRequestOptions;
 
-  collection.handleLogoRemove();
+  handleLogoRemove();
   collection.uploadFileRequest(uploadFile, true);
 }
 
@@ -142,7 +142,15 @@ function onUploadChange(options: FileUploadOptions) {
     onError: collectionStore.form.base.coverImage?.onError,
   } as UploadCustomRequestOptions;
 
-  collection.handleCoverImageRemove();
+  handleCoverImageRemove();
   collection.uploadFileRequest(uploadFile, false);
+}
+
+function handleCoverImageRemove() {
+  collectionStore.form.base.coverImage = null;
+}
+
+function handleLogoRemove() {
+  collectionStore.form.base.logo = null;
 }
 </script>

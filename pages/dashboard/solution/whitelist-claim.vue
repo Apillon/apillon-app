@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import NftTemplateJPG from '~/assets/images/nft/template.jpg';
+import NftTemplateJPG from '~/assets/images/solution/ps-whitelist-claim.png';
 
 const { t } = useI18n();
 const { web3Services } = useService();

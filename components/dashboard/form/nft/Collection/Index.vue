@@ -321,7 +321,7 @@
         <!-- Royalties Address -->
         <n-form-item-gi
           v-if="collectionStore.form.base.chainType === ChainType.SUBSTRATE"
-          path="royaltiesAddress"
+          path="behavior.royaltiesAddress"
           :span="6"
           :label="infoLabel('collectionDropAddress')"
           :label-props="{ for: 'royaltiesAddress' }"
