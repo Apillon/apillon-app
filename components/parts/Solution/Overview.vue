@@ -159,4 +159,14 @@ onMounted(async () => {
     loading.value = false;
   });
 });
+
+watch(
+  () => dataStore.projectUuid,
+  async _ => {
+    loading.value = true;
+
+    await dataStore.getProjectOverview(dataStore.projectUuid);
+    loading.value = false;
+  }
+);
 </script>
