@@ -18,6 +18,15 @@ export default function useCollection() {
     .map(k => {
       return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
     });
+  const substrateChains = enumKeys(SubstrateChain)
+    .filter(key => SubstrateChain[key] === SubstrateChain.ASTAR)
+    .map(k => {
+      return {
+        name: k.toLowerCase(),
+        label: t(`nft.chain.${SubstrateChain[k]}`),
+        value: SubstrateChain[k],
+      };
+    });
   const chainTypes = enumKeys(ChainType).map(k => {
     return {
       name: k.toLowerCase(),
@@ -310,6 +319,7 @@ export default function useCollection() {
     chains,
     chainTypes,
     collectionTypes,
+    substrateChains,
     supplyTypes,
     booleanSelect,
     rules,
