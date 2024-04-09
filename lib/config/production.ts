@@ -27,6 +27,7 @@ const config: ConfigInterface = {
     'NFT_AIRDROP',
     'NFT_NESTABLE',
     'NFT_POAP',
+    'PREBUILD_SOLUTIONS',
     'KILT_LOGIN',
     'BILLING',
     'AUTHENTICATION',
