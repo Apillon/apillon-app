@@ -306,6 +306,7 @@
       <n-grid v-if="!!collectionStore.form.behavior.drop" :cols="12" :x-gap="32">
         <!--  Collection Reserve -->
         <n-form-item-gi
+          v-if="collectionStore.form.base.chainType === ChainType.EVM"
           path="behavior.dropReserve"
           :span="6"
           :label="infoLabel('collectionDropReserve')"
