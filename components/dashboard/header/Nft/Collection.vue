@@ -5,7 +5,7 @@
         <NuxtLink :to="{ name: 'dashboard-service-nft' }">
           <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
-        <h2>{{ $t('dashboard.nav.solution.nftCollection') }}</h2>
+        <h2>{{ $t('dashboard.solutions.nftCollection.name') }}</h2>
       </n-space>
     </slot>
     <template #info>

@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h3>{{ $t('dashboard.solutions.nftAirdrop.name') }}</h3>
+          <h3>{{ $t('dashboard.solutions.nftEmailSignupAirdrop.name') }}</h3>
         </slot>
       </Heading>
     </template>

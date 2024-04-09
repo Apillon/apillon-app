@@ -372,20 +372,7 @@
       "smartContracts": "Smart Contracts",
       "social": "Social",
       "solutions": "Pre-built Solutions",
-      "storage": "Storage",
-      "solution": {
-        "fileSharing": "Decentralized File Sharing",
-        "nftAirdrop": "NFT Minting and Airdrop",
-        "nftCollection": "Self-hosted NFT Collection",
-        "nftDrop": "NFT Drop",
-        "nftEmailSignupAirdrop": "NFT Email airdrop",
-        "nftGift": "NFT Gifts in E-commerce",
-        "nftLoyalty": "NFT-based Loyalty Program",
-        "nftMembership": "NFT-based Brand Membership",
-        "poap": "Proof of Attendance NFTs",
-        "tokenGating": "Token Gating",
-        "wallet": "Non-custodial Wallet"
-      }
+      "storage": "Storage"
     },
     "pageMenu": {
       "access": "Access",
@@ -520,7 +507,7 @@
         "usage": ["metadata storage", "file storage"]
       },
       "nftAirdrop": {
-        "name": "NFT Minting and Airdrop",
+        "name": "NFT Email airdrop",
         "description": "Create a NFT collection, upload target addresses and automatically distribute NFTs to target addresses.",
         "content": [
           {
@@ -591,7 +578,7 @@
         "usage": ["metadata storage", "file storage"]
       },
       "nftEmailSignupAirdrop": {
-        "name": "NFT Email signup Airdrop",
+        "name": "NFT Email signup airdrop",
         "description": "This prebuild solution is targeted for airdropping NFTs to new and unknown users with a limited or unlimited NFT supply.",
         "content": [
           {
