@@ -225,7 +225,7 @@ const buckets = computed<Array<SelectOption>>(() => {
 
 const contractAddresses = computed(() => {
   return collectionStore.items
-    .filter(item => !!item.contractAddress)
+    .filter(item => !!item.contractAddress && item.chainType === ChainType.EVM)
     .map(item => {
       return {
         value: item.contractAddress,
