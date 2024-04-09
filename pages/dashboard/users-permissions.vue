@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h4>{{ $t('project.usersAndPermissions') }}</h4>
+          <h2>{{ $t('project.usersAndPermissions') }}</h2>
         </slot>
 
         <template #info> </template>

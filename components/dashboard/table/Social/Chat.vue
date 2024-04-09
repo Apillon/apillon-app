@@ -4,12 +4,17 @@
     :bordered="false"
     :columns="columns"
     :data="chatStore.items"
+    :expanded-row-keys="expandedRows"
     :loading="chatStore.loading"
     :pagination="chatStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
     @update:page="handlePageChange"
   />
+  <!-- Modal - Create Service -->
+  <modal v-model:show="modalInfoVisible" :title="$t('social.chat.settings')">
+    <GrillChatSettings :space-id="`${currentRow?.spaceId}`" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
@@ -17,13 +22,31 @@ import debounce from 'lodash.debounce';
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
-const router = useRouter();
 const chatStore = useChatStore();
+const postStore = usePostStore();
+
 const TableEllipsis = resolveComponent('TableEllipsis');
 const GrillChatStatus = resolveComponent('GrillChatStatus');
+const modalInfoVisible = ref<boolean>(false);
 
 const createColumns = (): NDataTableColumns<ChatInterface> => {
   return [
+    {
+      type: 'expand',
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      renderExpand(row: ChatInterface) {
+        if (row.spaceId) {
+          return h(
+            resolveComponent('GrillChatSettings'),
+            {
+              spaceId: row.spaceId,
+            },
+            ''
+          );
+        }
+        return null;
+      },
+    },
     {
       key: 'spaceId',
       title: t('social.chat.spaceId'),
@@ -88,8 +111,9 @@ const createColumns = (): NDataTableColumns<ChatInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: ChatInterface) => row.space_uuid;
+const rowKey = (row: ChatInterface) => row.spaceId;
 const currentRow = ref<ChatInterface | null>(chatStore.items[0] || null);
+const expandedRows = ref<Array<string | number>>([]);
 
 /** On row click */
 const rowProps = (row: ChatInterface) => {
@@ -98,7 +122,7 @@ const rowProps = (row: ChatInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/social/${row.space_uuid}` });
+        selectChat();
       }
     },
   };
@@ -109,15 +133,31 @@ const rowProps = (row: ChatInterface) => {
 const dropdownOptions = computed(() => {
   return [
     {
-      label: t('general.view'),
-      key: 'view',
+      key: 'select',
+      label: t('social.chat.select'),
       props: {
         onClick: () => {
-          router.push({ path: `/dashboard/service/social/${currentRow.value?.space_uuid}` });
+          selectChat();
+        },
+      },
+    },
+    {
+      label: t('social.chat.showSettings'),
+      key: 'settings',
+      props: {
+        onClick: () => {
+          modalInfoVisible.value = true;
         },
       },
     },
   ];
+});
+
+onMounted(() => {
+  const spaceId = chatStore.active?.spaceId;
+  if (spaceId) {
+    postStore.updateSettings(`${spaceId}`);
+  }
 });
 
 /** Search chats */
@@ -134,5 +174,19 @@ const debouncedSearchFilter = debounce(handlePageChange, 500);
 async function handlePageChange(page: number) {
   await chatStore.getChats(page);
   chatStore.pagination.page = page;
+}
+
+async function selectChat() {
+  if (currentRow.value) {
+    const spaceId = currentRow.value.spaceId;
+
+    chatStore.active = currentRow.value;
+    if (spaceId) {
+      postStore.updateSettings(`${spaceId}`);
+
+      /** Expand selected row */
+      expandedRows.value = expandedRows.value.includes(spaceId) ? [] : [spaceId];
+    }
+  }
 }
 </script>

@@ -6,7 +6,7 @@
     <slot>
       <template v-if="bucketStore.folder.items.length || deploymentStore.staging.length > 0">
         <n-space class="pb-8" :size="32" vertical>
-          <ActionsHostingWebsite :env="DeploymentEnvironment.STAGING" />
+          <ActionsHostingWebsite :env="DeploymentEnvironment.STAGING" only-deploy />
 
           <!-- IPNS link -->
           <HostingPreviewLink
@@ -19,7 +19,8 @@
           <TableHostingDeployment :deployments="deploymentStore.staging" />
 
           <!-- Breadcrumbs -->
-          <div>
+          <div class="mt-8">
+            <ActionsHostingWebsite :env="DeploymentEnvironment.STAGING" />
             <div class="relative h-14 pt-2 mb-1">
               <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
             </div>

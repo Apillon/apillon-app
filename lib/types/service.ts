@@ -22,15 +22,6 @@ export enum IdentityChains {
   KILT = 'KILT',
 }
 
-export enum SubstrateChain {
-  CRUST = 1,
-  KILT = 2,
-  PHALA = 4,
-  POLKADOT = 5,
-  SUBSOCIAL = 6,
-  XSOCIAL = 7,
-}
-
 /**
  * Names of Product price names of all services
  */
@@ -57,6 +48,9 @@ export enum PriceServiceName {
   KILT_IDENTITY = 'KILT_IDENTITY',
   SOCIAL_SPACE = 'SOCIAL_SPACE',
   SOCIAL_POST = 'SOCIAL_POST',
+  COMPUTING_SCHRODINGER_CREATE = 'COMPUTING_SCHRODINGER_CREATE',
+  COMPUTING_SCHRODINGER_ASSIGN_CID_TO_NFT = 'COMPUTING_SCHRODINGER_ASSIGN_CID_TO_NFT',
+  COMPUTING_SCHRODINGER_TRANSFER_OWNERSHIP = 'COMPUTING_SCHRODINGER_TRANSFER_OWNERSHIP',
 }
 export enum PriceServiceCategory {
   WEBSITE = 'WEBSITE',

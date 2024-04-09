@@ -13,7 +13,6 @@ const config: ConfigInterface = {
   publishedFeatures: [
     'ACCESS',
     'API_KEYS',
-    'APILLON_REGISTER',
     'AUTHENTICATION',
     'BILLING',
     'CAPTCHA_LOGIN',
@@ -24,8 +23,8 @@ const config: ConfigInterface = {
     'KILT_LOGIN',
     'MARKETING',
     'NFT',
-    'NFT_AIRDROP',
     'NFT_NESTABLE',
+    'PREBUILD_SOLUTIONS',
     'PROJECT',
     'PROJECT_DELETE',
     'PROJECT_ON_STARTUP',

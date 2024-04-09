@@ -1,8 +1,9 @@
 <template>
   <div>
     <n-space v-bind="$attrs" justify="space-between">
-      <div class="w-[20vw] max-w-xs">
+      <div class="min-w-[11rem] w-[20vw] max-w-xs">
         <n-input
+          v-if="!onlyDeploy"
           v-model:value="bucketStore.folder.search"
           type="text"
           name="search"
@@ -17,47 +18,49 @@
       </div>
 
       <n-space size="large">
-        <!-- Show only if user select files -->
-        <template v-if="isUpload && bucketStore.folder.selectedItems.length > 0">
-          <!-- Delete files -->
-          <n-tooltip placement="bottom" :show="showPopoverDelete">
-            <template #trigger>
-              <n-button
-                class="w-10"
-                size="small"
-                type="error"
-                :disabled="authStore.isAdmin()"
-                ghost
-                @click="deleteSelectedFiles"
-              >
-                <span class="icon-delete text-xl"></span>
-              </n-button>
-            </template>
-            <span>{{ $t('storage.delete.selectedFiles') }}</span>
-          </n-tooltip>
+        <template v-if="!onlyDeploy">
+          <!-- Show only if user select files -->
+          <template v-if="isUpload && bucketStore.folder.selectedItems.length > 0">
+            <!-- Delete files -->
+            <n-tooltip placement="bottom" :show="showPopoverDelete">
+              <template #trigger>
+                <n-button
+                  class="w-10"
+                  size="small"
+                  type="error"
+                  :disabled="authStore.isAdmin()"
+                  ghost
+                  @click="deleteSelectedFiles"
+                >
+                  <span class="icon-delete text-xl"></span>
+                </n-button>
+              </template>
+              <span>{{ $t('storage.delete.selectedFiles') }}</span>
+            </n-tooltip>
 
-          <!-- Separator -->
-          <n-divider class="h-full mx-4" vertical />
+            <!-- Separator -->
+            <n-divider class="h-full mx-4" vertical />
+          </template>
+
+          <!-- Refresh -->
+          <n-button size="small" :loading="bucketStore.folder.loading" @click="refreshWebpage(env)">
+            <span class="icon-refresh text-xl mr-2"></span>
+            {{ $t('general.refresh') }}
+          </n-button>
+
+          <!-- Clear all files -->
+          <n-button
+            v-if="isUpload"
+            size="small"
+            type="error"
+            :disabled="authStore.isAdmin()"
+            ghost
+            @click="showModalClearAll = true"
+          >
+            <span class="icon-delete text-xl mr-2"></span>
+            {{ $t('hosting.clearAll') }}
+          </n-button>
         </template>
-
-        <!-- Refresh -->
-        <n-button size="small" :loading="bucketStore.folder.loading" @click="refreshWebpage(env)">
-          <span class="icon-refresh text-xl mr-2"></span>
-          {{ $t('general.refresh') }}
-        </n-button>
-
-        <!-- Clear all files -->
-        <n-button
-          v-if="isUpload"
-          size="small"
-          type="error"
-          :disabled="authStore.isAdmin()"
-          ghost
-          @click="showModalClearAll = true"
-        >
-          <span class="icon-delete text-xl mr-2"></span>
-          {{ $t('hosting.clearAll') }}
-        </n-button>
 
         <!-- Deploy to staging -->
         <div v-if="isUpload" class="flex items-center align-middle bg-primary rounded-lg">
@@ -80,7 +83,7 @@
         </div>
         <!-- Deploy to production -->
         <n-button
-          v-if="env === DeploymentEnvironment.STAGING"
+          v-if="env === DeploymentEnvironment.STAGING && onlyDeploy"
           size="small"
           type="primary"
           :loading="deploying"
@@ -151,6 +154,7 @@
 <script lang="ts" setup>
 const props = defineProps({
   env: { type: Number, default: 0 },
+  onlyDeploy: { type: Boolean, default: false },
 });
 
 const { websiteUuid, refreshWebpage } = useHosting();

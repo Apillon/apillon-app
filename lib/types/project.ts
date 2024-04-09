@@ -50,6 +50,25 @@ declare global {
   interface CreateProjectResponse extends GeneralResponse<ProjectInterface> {}
   interface ProjectsQuotaResponse extends GeneralResponse<boolean> {}
 
+  interface ProjectOverviewInterface {
+    availableBandwidth: number;
+    availableStorage: number;
+    bucketCount: number;
+    computingTransactionCount: number;
+    contractCount: number;
+    didCount: number;
+    fileCount: number;
+    nftTransactionCount: number;
+    numOfCollections: number;
+    postCount: number;
+    spaceCount: number;
+    usedBandwidth: number;
+    usedStorage: number;
+    websiteCount: number;
+  }
+
+  interface ProjectOverviewResponse extends GeneralResponse<ProjectOverviewInterface> {}
+
   /**
    * Project settings
    */

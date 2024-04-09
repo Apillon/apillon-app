@@ -24,13 +24,16 @@ const config: ConfigInterface = {
     'REFERRAL',
     'STORAGE',
     'NFT',
+    'NFT_NESTABLE',
+    'PREBUILD_SOLUTIONS',
     'KILT_LOGIN',
     'BILLING',
     'AUTHENTICATION',
     'MARKETING',
+    'COMPUTING',
     'SOCIAL',
   ],
-  betaFeatures: ['NFT_NESTABLE', 'COMPUTING'],
+  betaFeatures: [],
 };
 
 export default config;

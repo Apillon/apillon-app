@@ -2,7 +2,7 @@
   <!-- Upload - File list  -->
   <div
     v-if="bucketStore.uploadFileList.length > 0"
-    class="card fixed right-0 bottom-0 w-[30rem] px-5 py-3 z-10"
+    class="card-dark fixed right-0 bottom-0 w-[30rem] px-5 py-3 !border-yellow !rounded-none z-10 -mr-[1px] -mb-[1px]"
   >
     <!-- Header -->
     <n-space v-if="filesUploading" justify="space-between" align="center">
@@ -154,6 +154,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { UploadCustomRequestOptions } from 'naive-ui';
+
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
@@ -195,7 +197,7 @@ const numOfUploadedFiles = computed<number>(() => {
  */
 
 /** Upload file request - add file to list */
-function uploadFilesRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+function uploadFilesRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
     percentage: 0,

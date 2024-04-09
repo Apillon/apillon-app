@@ -15,6 +15,7 @@ export const useDataStore = defineStore('data', {
       items: [] as Array<ProjectInterface>,
       selected: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID) || '',
       quotaReached: undefined as Boolean | undefined,
+      overview: {} as ProjectOverviewInterface,
     },
     promises: {
       projects: null as any,
@@ -33,6 +34,12 @@ export const useDataStore = defineStore('data', {
   getters: {
     hasProjects(state) {
       return Array.isArray(state.project.items) && state.project.items.length > 0;
+    },
+    hasProjectOverview(state) {
+      return (
+        state.project.overview &&
+        (state.project.overview.availableStorage || state.project.overview.usedStorage)
+      );
     },
     currentProject(state) {
       if (!this.hasProjects) {
@@ -79,6 +86,7 @@ export const useDataStore = defineStore('data', {
       /** Project */
       this.project.active = {} as ProjectInterface;
       this.project.items = [] as Array<ProjectInterface>;
+      this.project.overview = {} as ProjectOverviewInterface;
       this.project.quotaReached = undefined as Boolean | undefined;
       /** Services */
       this.services = [] as Array<ServiceInterface>;
@@ -172,6 +180,17 @@ export const useDataStore = defineStore('data', {
       if (this.project.quotaReached === undefined) {
         await this.fetchProjectsQuota();
       }
+    },
+
+    async getProjectOverview(projectUuid: string): Promise<ProjectOverviewInterface> {
+      if (
+        !this.hasProjectOverview ||
+        this.project.active?.project_uuid !== projectUuid ||
+        isCacheExpired(LsCacheKeys.PROJECT_OVERVIEW)
+      ) {
+        await this.fetchProjectOverview(projectUuid);
+      }
+      return this.project.overview;
     },
 
     /** Services */
@@ -286,6 +305,28 @@ export const useDataStore = defineStore('data', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+    },
+
+    async fetchProjectOverview(projectUuid?: string): Promise<ProjectOverviewInterface> {
+      const uuid = projectUuid || this.projectUuid;
+      if (!uuid) {
+        return {} as ProjectOverviewInterface;
+      }
+      try {
+        const res = await $api.get<ProjectOverviewResponse>(endpoints.projectOverview(uuid));
+        this.project.overview = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.PROJECT_OVERVIEW, Date.now().toString());
+
+        return res.data;
+      } catch (error) {
+        this.project.overview = {} as ProjectOverviewInterface;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return {} as ProjectOverviewInterface;
     },
 
     /** Services */

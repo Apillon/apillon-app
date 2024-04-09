@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('dashboard.billing') }}</h1>
+          <h2>{{ $t('dashboard.billing') }}</h2>
         </slot>
 
         <template #submenu>

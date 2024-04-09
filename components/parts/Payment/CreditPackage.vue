@@ -54,7 +54,17 @@
       >
         {{ $t('dashboard.credits.buyWithCreditCard') }}
       </Btn>
+
+      <n-tooltip v-if="creditPackage.creditAmount === 10000" trigger="hover">
+        <template #trigger>
+          <Btn class="opacity-60 cursor-default" type="primary" size="large" round>
+            {{ $t('dashboard.credits.buyWithDot') }}
+          </Btn>
+        </template>
+        <span>{{ $t('dashboard.credits.disabled') }}</span>
+      </n-tooltip>
       <Btn
+        v-else
         type="primary"
         size="large"
         round

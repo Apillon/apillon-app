@@ -67,7 +67,7 @@ export const useSettingsStore = defineStore('settings', {
      * API calls
      */
 
-    /** API keys */
+    /** API Keys */
     async fetchApiKeys() {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {

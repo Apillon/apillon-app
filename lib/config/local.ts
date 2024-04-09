@@ -13,7 +13,6 @@ const config: ConfigInterface = {
   publishedFeatures: [
     'ACCESS',
     'API_KEYS',
-    'APILLON_REGISTER',
     'AUTHENTICATION',
     'BILLING',
     'CONFIGURATION',
@@ -24,7 +23,9 @@ const config: ConfigInterface = {
     'MARKETING',
     'NFT',
     'NFT_NESTABLE',
+    'NFT_POAP',
     'ONBOARDING',
+    'PREBUILD_SOLUTIONS',
     'PROJECT',
     'PROJECT_DELETE',
     'PROJECT_ON_STARTUP',

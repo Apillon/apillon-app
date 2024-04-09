@@ -3,13 +3,10 @@ import type {
   DropdownGroupOption,
   DropdownOption,
   FormInst,
-  FormItemInst,
-  FormItemRule,
   FormRules,
   FormValidationError,
   SelectOption,
   TagProps,
-  UploadCustomRequestOptions,
   UploadFileInfo,
 } from 'naive-ui';
 import type {
@@ -34,6 +31,7 @@ declare global {
     display_type: string;
     hidden?: boolean;
   };
+  type RenderOptionInfo = { node: VNode; option: SelectOption; selected: boolean };
 
   interface SocialInterface {
     name: string;
@@ -76,12 +74,8 @@ declare global {
 
   /** Naive UI */
   interface NFormInst extends FormInst {}
-  interface NFormItemInst extends FormItemInst {}
   interface NFormRules extends FormRules {}
-  interface NFormItemRule extends FormItemRule {}
   interface NFormValidationError extends FormValidationError {}
-  interface NSelectOption extends SelectOption {}
-  interface NUploadCustomRequestOptions extends UploadCustomRequestOptions {}
 
   type FileUploadOptions = {
     file: UploadFileInfo;

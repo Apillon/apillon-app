@@ -125,6 +125,9 @@ class Api {
         setTimeout(() => {
           this.backToLogin();
         }, 2000);
+      } else if (response.status === 401) {
+        const authStore = useAuthStore();
+        authStore.logout();
       } else if (response.status === 403) {
         this.preventForbiddenAccess();
       }

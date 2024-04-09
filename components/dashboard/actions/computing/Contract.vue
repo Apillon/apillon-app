@@ -1,6 +1,6 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="w-[20vw] max-w-xs">
+    <div class="min-w-[11rem] w-[20vw] max-w-xs">
       <n-input
         v-model:value="contractStore.search"
         type="text"
@@ -16,6 +16,8 @@
     </div>
 
     <n-space size="large">
+      <ModalCreditCosts :service="ServiceTypeName.COMPUTING" />
+
       <!-- Refresh contracts -->
       <n-button
         size="small"
@@ -51,7 +53,12 @@
 <script lang="ts" setup>
 const authStore = useAuthStore();
 const contractStore = useContractStore();
+const paymentStore = usePaymentStore();
 const { onContractCreated } = useComputing();
 
 const modalCreateContractVisible = ref<boolean>(false);
+
+onMounted(() => {
+  paymentStore.getPriceList();
+});
 </script>

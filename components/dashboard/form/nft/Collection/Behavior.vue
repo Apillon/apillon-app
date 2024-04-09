@@ -47,7 +47,12 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid class="items-end" :cols="12" :x-gap="32">
+    <n-grid
+      v-if="collectionStore.form.base.chainType === ChainType.EVM"
+      class="items-end"
+      :cols="12"
+      :x-gap="32"
+    >
       <!-- Collection Revocable -->
       <n-form-item-gi
         path="revocable"
@@ -81,7 +86,12 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid class="items-end" :cols="12" :x-gap="32">
+    <n-grid
+      v-if="collectionStore.form.base.chainType === ChainType.EVM"
+      class="items-end"
+      :cols="12"
+      :x-gap="32"
+    >
       <!-- Royalties Address -->
       <n-form-item-gi
         path="royaltiesAddress"
@@ -166,6 +176,7 @@
     <n-grid v-if="!!collectionStore.form.behavior.drop" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Reserve -->
       <n-form-item-gi
+        v-if="collectionStore.form.base.chainType === ChainType.EVM"
         path="dropReserve"
         :span="6"
         :label="infoLabel('collectionDropReserve')"
@@ -176,6 +187,22 @@
           :min="0"
           :step="1"
           :input-props="{ id: 'dropReserve' }"
+          clearable
+        />
+      </n-form-item-gi>
+
+      <!-- Royalties Address -->
+      <n-form-item-gi
+        v-if="collectionStore.form.base.chainType === ChainType.SUBSTRATE"
+        path="royaltiesAddress"
+        :span="6"
+        :label="infoLabel('collectionDropAddress')"
+        :label-props="{ for: 'royaltiesAddress' }"
+      >
+        <n-input
+          v-model:value="collectionStore.form.behavior.royaltiesAddress"
+          :input-props="{ id: 'royaltiesAddress' }"
+          :placeholder="$t('general.typeHere')"
           clearable
         />
       </n-form-item-gi>
@@ -192,44 +219,24 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { booleanSelect, formRef, supplyTypes, rules, disablePasteDate, disablePasteTime } =
-  useCollection();
+const {
+  booleanSelect,
+  formRef,
+  supplyTypes,
+  rules,
+  chainCurrency,
+  disablePasteDate,
+  disablePasteTime,
+  infoLabel,
+} = useCollection();
 
 onMounted(() => {
   if (collectionStore.form.behavior.maxSupply === 0) {
-    collectionStore.form.behavior.maxSupply = collectionStore.images.length;
+    collectionStore.form.behavior.maxSupply = collectionStore.csvData.length;
   }
 });
-
-function infoLabel(field: string) {
-  if (
-    $i18n.te(`form.label.${field}`) &&
-    $i18n.te(`nft.collection.labelInfo.${field}`) &&
-    $i18n.t(`nft.collection.labelInfo.${field}`)
-  ) {
-    return [
-      h('span', { class: 'mr-1' }, $i18n.t(`form.label.${field}`)),
-      h(
-        resolveComponent('IconInfo'),
-        { size: 'sm', tooltip: $i18n.t(`nft.collection.labelInfo.${field}`) },
-        ''
-      ),
-    ];
-  }
-  return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
-}
-
-function chainCurrency() {
-  switch (collectionStore.form.base.chain) {
-    case Chains.ASTAR:
-      return 'ASTR';
-    default:
-      return 'GLMR';
-  }
-}
 
 // Submit
 function handleSubmitForm(e: Event | MouseEvent) {
@@ -240,7 +247,7 @@ function handleSubmitForm(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      collectionStore.stepDeploy = NftDeployStep.DEPLOY;
+      collectionStore.mintTab = NftCreateTab.PREVIEW;
     }
   });
 }

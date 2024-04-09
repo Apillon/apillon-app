@@ -1,6 +1,6 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="w-[20vw] max-w-xs">
+    <div class="min-w-[11rem] w-[20vw] max-w-xs">
       <n-input
         v-model:value="dataStore.service.search"
         type="text"
@@ -16,7 +16,7 @@
     </div>
 
     <n-space size="large">
-      <!-- API keys -->
+      <!-- API Keys -->
       <NuxtLink :to="{ name: 'dashboard-api-keys' }">
         <n-button size="small">
           <span class="icon-acess text-xl mr-2"></span>

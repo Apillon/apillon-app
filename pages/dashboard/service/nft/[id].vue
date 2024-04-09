@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderCollection />
+      <HeaderNftCollection />
     </template>
 
     <slot>
@@ -12,19 +12,31 @@
           @nest-mint="modalNestMintCollectionVisible = true"
           @revoke="modalBurnTokensVisible = true"
           @transfer="modalTransferOwnershipVisible = true"
+          @set-base-uri="modalSetBaseUriVisible = true"
         />
 
-        <!-- Table -->
-        <TableNftTransaction
-          v-if="collectionStore.hasCollectionTransactions"
-          :transactions="collectionStore.transaction"
-        />
         <Empty
-          v-else
+          v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
           :title="$t('nft.transaction.empty')"
           :info="$t('nft.transaction.emptyInfo')"
           icon="nft/illustration"
-        />
+        >
+          <!-- Add NFT -->
+          <n-button @click="openAddNft(collectionStore.active.collection_uuid)">
+            <span class="icon-add text-xl mr-2 text-primary"></span>
+            <span class="text-primary">{{ $t('nft.add') }}</span>
+          </n-button>
+        </Empty>
+        <template v-else>
+          <!-- Display Collection -->
+          <NftCollectionInfo class="mb-8" />
+
+          <!-- Table Transactions -->
+          <TableNftTransaction :transactions="collectionStore.transaction" />
+
+          <!-- Links to NFT templates -->
+          <NftPreviewFinish />
+        </template>
       </n-space>
 
       <!-- Modal - Collection Mint -->
@@ -62,15 +74,24 @@
           @submit-success="onNftTransferred"
         />
       </modal>
+
+      <!-- Modal - Collection Set base URI -->
+      <modal v-model:show="modalSetBaseUriVisible" :title="$t('nft.collection.setBaseUri')">
+        <FormNftSetBaseUri
+          :collection-uuid="collectionStore.active.collection_uuid"
+          :chain-id="collectionStore.active.chain"
+          @submit-success="onBaseUriChanged"
+        />
+      </modal>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
+const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
-const $i18n = useI18n();
-const dataStore = useDataStore();
+const { openAddNft } = useCollection();
 const collectionStore = useCollectionStore();
 
 const pageLoading = ref<boolean>(true);
@@ -78,40 +99,39 @@ const modalMintCollectionVisible = ref<boolean | null>(false);
 const modalNestMintCollectionVisible = ref<boolean | null>(false);
 const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
+const modalSetBaseUriVisible = ref<boolean | null>(false);
 
 /** Polling */
 let collectionInterval: any = null as any;
 let transactionInterval: any = null as any;
 
 /** Collection UUID from route */
-const collectionUuid = ref<string>(`${params?.id}` || `${params?.slug}` || '');
+const collectionUuid = ref<string>(`${params?.id}`);
 
 useHead({
-  title: $i18n.t('dashboard.nav.nft'),
+  title: t('dashboard.nav.nft'),
 });
 
-onMounted(() => {
-  collectionStore.getCollection(collectionUuid.value);
+onMounted(async () => {
+  if (!params?.id) router.push({ name: 'dashboard-service-nft' });
 
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const currentCollection = await collectionStore.getCollection(collectionUuid.value);
+  const currentCollection = await collectionStore.getCollection(collectionUuid.value);
 
-    /** Reset state if user opens different collection */
-    if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
-      collectionStore.resetMetadata();
-    }
+  /** Reset state if user opens different collection */
+  if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
+    collectionStore.resetMetadata();
+  }
 
-    if (!currentCollection?.collection_uuid) {
-      router.push({ name: 'dashboard-service-nft' });
-    } else {
-      await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
-      collectionStore.active = currentCollection;
+  if (!currentCollection?.collection_uuid) {
+    router.push({ name: 'dashboard-service-nft' });
+  } else {
+    await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
+    collectionStore.active = currentCollection;
 
-      checkIfCollectionUnfinished();
-      checkUnfinishedTransactions();
-      pageLoading.value = false;
-    }
-  });
+    checkIfCollectionUnfinished();
+    checkUnfinishedTransactions();
+    pageLoading.value = false;
+  }
 });
 onUnmounted(() => {
   clearInterval(transactionInterval);
@@ -169,6 +189,11 @@ function onNftTransferred() {
   }, 3000);
 }
 
+function onBaseUriChanged(collection: CollectionInterface) {
+  modalSetBaseUriVisible.value = false;
+  collectionStore.active = collection;
+}
+
 /** Collection polling */
 function checkIfCollectionUnfinished() {
   if (collectionStore.active.collectionStatus === CollectionStatus.CREATED) {
@@ -219,7 +244,11 @@ function checkUnfinishedTransactions() {
     );
     if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
       clearInterval(transactionInterval);
-      collectionStore.active = await collectionStore.fetchCollection(collectionUuid.value);
+
+      const newCollection = await collectionStore.fetchCollection(collectionUuid.value);
+      if (newCollection) {
+        collectionStore.active = newCollection;
+      }
     }
   }, 30000);
 }

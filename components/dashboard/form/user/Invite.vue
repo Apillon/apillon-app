@@ -43,6 +43,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormItemRule, SelectOption } from 'naive-ui';
+
 type FormUserInvite = {
   email: string;
   role_id: number | null;
@@ -55,7 +57,7 @@ const settingsStore = useSettingsStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 
-const userRoles: Array<NSelectOption> = CreateUserRoles();
+const userRoles: Array<SelectOption> = CreateUserRoles();
 
 /** Col widths */
 const { width } = useWindowSize();
@@ -91,7 +93,7 @@ const rules: NFormRules = {
       message: $i18n.t('validation.roleRequired'),
     },
     {
-      validator(_: NFormItemRule, value: string) {
+      validator(_: FormItemRule, value: string) {
         return UserRoleIds.includes(parseInt(value));
       },
       message: $i18n.t('validation.role'),
