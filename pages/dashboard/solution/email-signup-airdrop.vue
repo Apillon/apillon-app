@@ -11,7 +11,7 @@
       <div class="pb-8">
         <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
           <SolutionContent :content="content">
-            <Btn type="primary" href="https://github.com/Apillon/ps-email-airdrop/fork">
+            <Btn type="primary" href="https://github.com/Apillon/ps-email-signup-airdrop/fork">
               {{ $t('dashboard.solutions.deploy') }}
             </Btn>
           </SolutionContent>
@@ -21,7 +21,11 @@
             <div class="relative rounded-lg overflow-hidden">
               <Image :src="NftTemplateJPG" width="514" height="320" alt="nft template" />
               <div class="absolute left-0 right-0 top-0 bottom-0 flex-cc bg-bg-dark/75">
-                <Btn type="info" size="small" href="https://github.com/Apillon/ps-email-airdrop">
+                <Btn
+                  type="info"
+                  size="small"
+                  href="https://github.com/Apillon/ps-email-signup-airdrop"
+                >
                   <span class="icon-github mr-2"></span>
                   <strong class="body-sm"> {{ $t('dashboard.solutions.viewCode') }}</strong>
                 </Btn>
@@ -49,10 +53,10 @@ const { web3Services } = useService();
 const { generateContent } = useSolution();
 
 useHead({
-  title: t('dashboard.solutions.nftAirdrop.name'),
+  title: t('dashboard.solutions.nftEmailSignupAirdrop.name'),
 });
 
-const content = generateContent(SolutionKey.NFT_AIRDROP);
+const content = generateContent(SolutionKey.NFT_EMAIL_SIGNUP_AIRDROP);
 const nftServices = web3Services.filter(
   item =>
     item.id === ServiceType.STORAGE ||

@@ -1,6 +1,6 @@
 <template>
   <div class="relative card-light flex flex-col justify-between p-8">
-    <div class="mb-8">
+    <div>
       <div class="flex items-center gap-2 mb-4">
         <span class="text-2xl" :class="service.icon"></span>
         <h5>{{ service.name }}</h5>
@@ -10,7 +10,7 @@
       </p>
     </div>
     <div>
-      <div v-if="service.usage" class="flex flex-wrap gap-2 mb-8">
+      <div v-if="service.usage && !hideUsage" class="flex flex-wrap gap-2 my-8">
         <Pill v-for="(item, key) in service.usage" :key="key" type="info">
           {{ item }}
         </Pill>

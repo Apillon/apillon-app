@@ -52,7 +52,7 @@ useHead({
   title: t('dashboard.solutions.nftWhitelistClaim.name'),
 });
 
-const content = generateContent(SolutionKey.NFT_AIRDROP);
+const content = generateContent(SolutionKey.NFT_WHITELIST_CLAIM);
 const nftServices = web3Services.filter(
   item =>
     item.id === ServiceType.STORAGE ||

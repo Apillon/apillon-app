@@ -378,6 +378,7 @@
         "nftAirdrop": "NFT Minting and Airdrop",
         "nftCollection": "Self-hosted NFT Collection",
         "nftDrop": "NFT Drop",
+        "nftEmailSignupAirdrop": "NFT Email airdrop",
         "nftGift": "NFT Gifts in E-commerce",
         "nftLoyalty": "NFT-based Loyalty Program",
         "nftMembership": "NFT-based Brand Membership",
@@ -589,6 +590,61 @@
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
       },
+      "nftEmailSignupAirdrop": {
+        "name": "NFT Email signup Airdrop",
+        "description": "This prebuild solution is targeted for airdropping NFTs to new and unknown users with a limited or unlimited NFT supply.",
+        "content": [
+          {
+            "content": "This ready-made solution is designed to help you give out digital collectibles (called NFTs) to new users, even if you don't know their email address. You can choose to give out a limited number of NFTs or as many as you want."
+          },
+          {
+            "headline": "Here's how it works:",
+            "content": [
+              "Users sign up by entering their email address. They'll receive an email with instructions on how to claim their NFT.",
+              "They have a limited time to follow the instructions and connect their digital wallet to receive the NFT.",
+              "If you're only giving out a certain number of NFTs, once that limit is reached, new sign-ups will be put on a waitlist. If someone who signed up earlier doesn't claim their NFT, the next person on the waitlist gets a chance."
+            ]
+          },
+          {
+            "title": "Once you set it up, you'll have a special page (called an admin panel) where you can do a few things:",
+            "content": [
+              "See a list of users who signed up.",
+              "Manage the waitlist.",
+              "See which users successfully claimed their NFTs."
+            ]
+          },
+          {
+            "title": "Before you start, you'll need a few things ready:",
+            "content": [
+              "Created your NFT collection",
+              "Know the details of an email server, like where it's located and its address.",
+              "Have a special wallet that works with Ethereum (a type of cryptocurrency) to access the admin panel.",
+              "Get an Apillon API key and secret, which are like special codes to connect to Apillon.",
+              "Set up a human captcha account and get the necessary secret key."
+            ]
+          },
+          {
+            "title": "Here's how the system is set up:",
+            "content": [
+              "The front-end (what users see) is made with Vue.js.",
+              "The back-end (the behind-the-scenes stuff) is made with Node.js, and it stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "You have a few options for running the system:",
+            "content": [
+              "You can run the front-end on your computer.",
+              "Host it on any website provider.",
+              "Use Apillon's hosting service. There's even a special setup for this using GitHub actions."
+            ]
+          },
+          {
+            "content": "For the behind-the-scenes part, you can run it on your computer or using a tool called Docker. You just need to set up some configuration files with the right information, like the details of your digital collectibles and your API keys. All the instructions for this are available on GitHub."
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
+      },
       "nftLoyalty": {
         "name": "NFT-based Loyalty Program",
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
@@ -667,7 +723,7 @@
       },
       "nftWhitelistClaim": {
         "name": "Whitelist NFT claim",
-        "description": "",
+        "description": "Instead of giving out NFTs for free, you can let users claim them themselves. But in this case, users need to pay the transaction fees. ",
         "content": [
           {
             "content": "Instead of giving out NFTs for free, you can let users claim them themselves. But in this case, users need to pay the transaction fees."
@@ -707,7 +763,7 @@
       },
       "openGov": {
         "name": "OpenGov wasm proposal airdrop",
-        "description": "",
+        "description": "This prebuilt solution lets you send special digital collectibles (called NFTs), by using WASM smart contract, to people who voted a certain way on a specific government proposal.",
         "content": [
           {
             "content": "This prebuilt solution lets you send special digital collectibles (called NFTs), by using WASM smart contract, to people who voted a certain way on a specific government proposal."
