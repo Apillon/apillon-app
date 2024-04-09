@@ -11,7 +11,7 @@
       <div class="pb-8">
         <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
           <SolutionContent :content="content">
-            <Btn type="primary" href="https://github.com/Apillon/ps-wasm-proposal-claim/fork">
+            <Btn type="primary" href="https://github.com/Apillon/ps-wasm-proposal-airdrop/fork">
               {{ $t('dashboard.solutions.deploy') }}
             </Btn>
           </SolutionContent>
@@ -24,7 +24,7 @@
                 <Btn
                   type="info"
                   size="small"
-                  href="https://github.com/Apillon/ps-wasm-proposal-claim"
+                  href="https://github.com/Apillon/ps-wasm-proposal-airdrop"
                 >
                   <span class="icon-github mr-2"></span>
                   <strong class="body-sm"> {{ $t('dashboard.solutions.viewCode') }}</strong>
