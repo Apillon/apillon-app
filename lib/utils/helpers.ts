@@ -150,7 +150,8 @@ export function formatCurrency(currency: string) {
 }
 
 export function generatePriceServiceName(service: string, chain: number, action: string) {
-  return service + '_' + Chains[chain] + '_' + action;
+  const chainName = Chains[chain] || SubstrateChain[chain];
+  return service + '_' + chainName + '_' + action;
 }
 
 /**

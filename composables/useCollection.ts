@@ -18,6 +18,15 @@ export default function useCollection() {
     .map(k => {
       return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
     });
+  const substrateChains = enumKeys(SubstrateChain)
+    .filter(key => SubstrateChain[key] === SubstrateChain.ASTAR)
+    .map(k => {
+      return {
+        name: k.toLowerCase(),
+        label: t(`nft.chain.${SubstrateChain[k]}`),
+        value: SubstrateChain[k],
+      };
+    });
   const chainTypes = enumKeys(ChainType).map(k => {
     return {
       name: k.toLowerCase(),
@@ -209,7 +218,7 @@ export default function useCollection() {
       !isRoyaltyRequired() ||
       (collectionStore.form.base.chainType === ChainType.EVM
         ? validateEvmAddress(_, value)
-        : !!value)
+        : substrateAddressValidate(_, value, SubstrateChainPrefix.ASTAR))
     );
   }
   function validateSingleNftIdUnique(_: FormItemRule): boolean {
@@ -292,14 +301,6 @@ export default function useCollection() {
     }
   }
 
-  function handleCoverImageRemove() {
-    collectionStore.form.base.coverImage = {} as FileListItemType;
-  }
-
-  function handleLogoRemove() {
-    collectionStore.form.base.logo = {} as FileListItemType;
-  }
-
   function openAddNft(collectionUuid: string) {
     router.push({ name: 'dashboard-service-nft-slug-add', params: { slug: collectionUuid } });
   }
@@ -318,6 +319,7 @@ export default function useCollection() {
     chains,
     chainTypes,
     collectionTypes,
+    substrateChains,
     supplyTypes,
     booleanSelect,
     rules,
@@ -332,7 +334,5 @@ export default function useCollection() {
     openAddNft,
     prepareFormData,
     uploadFileRequest,
-    handleLogoRemove,
-    handleCoverImageRemove,
   };
 }
