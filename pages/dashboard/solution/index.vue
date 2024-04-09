@@ -89,7 +89,7 @@ const solutions: Array<SolutionTypeItem> = [
     name: SolutionKey.NFT_EMAIL_SIGNUP_AIRDROP,
     icon: 'icon-nft-drop',
     link: 'dashboard-solution-email-signup-airdrop',
-    github: 'https://github.com/Apillon/ps-email-signup-airdrop',
+    github: 'https://github.com/Apillon/ps-signup-email-airdrop',
     usage: translateItems('dashboard.solutions.nftEmailSignupAirdrop.usage'),
   },
   {
