@@ -1,4 +1,5 @@
 import type { FormItemRule } from 'naive-ui';
+import { checkAddress } from '@polkadot/util-crypto';
 
 export function ruleRequired(errMsg: string) {
   return {
@@ -40,6 +41,19 @@ export function validateRequiredDropdown(_: FormItemRule, value: String | null):
 /** Validate Ethereum address */
 export function validateEvmAddress(_: FormItemRule, value: string | null): boolean {
   return !!value && /^0x[a-fA-F0-9]{40}$/i.test(value);
+}
+export function substrateAddressValidate(
+  _: FormItemRule,
+  value: string | null,
+  chainPrefix?: SubstrateChainPrefix
+): boolean {
+  try {
+    const [isValid] = checkAddress(`${value}`, chainPrefix || SubstrateChainPrefix.ASTAR);
+
+    return isValid;
+  } catch (e: any) {
+    return false;
+  }
 }
 export function validateNaturalNumber(_: FormItemRule, value: number | string | null): boolean {
   return value !== null && intVal(value) >= 0;

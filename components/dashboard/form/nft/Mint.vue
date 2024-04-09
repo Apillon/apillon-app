@@ -97,7 +97,9 @@ const rules: NFormRules = {
 
 function validateQuantity(_: FormItemRule, value: number): boolean {
   return (
-    !collectionStore.active.drop || (value > 0 && value <= collectionStore.active?.dropReserve)
+    !collectionStore.active.drop ||
+    collectionStore.active.chainType === ChainType.SUBSTRATE ||
+    (value > 0 && value <= collectionStore.active?.dropReserve)
   );
 }
 

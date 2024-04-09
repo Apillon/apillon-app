@@ -101,8 +101,10 @@
           v-if="
             collectionStore.metadataStored !== null &&
             collectionStore.stepCollectionDeploy !== CollectionStatus.DEPLOY_INITIATED &&
-            collectionStore.nftStep !== NftCreateStep.AMOUNT &&
-            collectionStore.nftStep !== NftCreateStep.DEPLOY
+            collectionStore.nftStep !== NftCreateStep.PREVIEW &&
+            collectionStore.nftStep !== NftCreateStep.DEPLOY &&
+            (collectionStore.nftStep !== NftCreateStep.AMOUNT ||
+              collectionStore.mintTab !== NftCreateTab.DEPLOY)
           "
           class="absolute left-0 top-2 md:top-3"
           @click="goToPreviousStep"
@@ -191,6 +193,9 @@ function w3WarnAndDeploy() {
 }
 
 async function onModalW3WarnConfirm() {
+  const chain = collectionStore.active?.chain
+    ? collectionStore.active.chain
+    : collectionStore.form.base.chain;
   warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
 }
 

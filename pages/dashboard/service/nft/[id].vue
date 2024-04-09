@@ -15,8 +15,20 @@
           @set-base-uri="modalSetBaseUriVisible = true"
         />
 
-        <template v-if="collectionStore.hasCollectionTransactions"
-          ><!-- Display Collection -->
+        <Empty
+          v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
+          :title="$t('nft.transaction.empty')"
+          :info="$t('nft.transaction.emptyInfo')"
+          icon="nft/illustration"
+        >
+          <!-- Add NFT -->
+          <n-button @click="openAddNft(collectionStore.active.collection_uuid)">
+            <span class="icon-add text-xl mr-2 text-primary"></span>
+            <span class="text-primary">{{ $t('nft.add') }}</span>
+          </n-button>
+        </Empty>
+        <template v-else>
+          <!-- Display Collection -->
           <NftCollectionInfo class="mb-8" />
 
           <!-- Table Transactions -->
@@ -25,21 +37,6 @@
           <!-- Links to NFT templates -->
           <NftPreviewFinish />
         </template>
-        <Empty
-          v-else
-          :title="$t('nft.transaction.empty')"
-          :info="$t('nft.transaction.emptyInfo')"
-          icon="nft/illustration"
-        >
-          <!-- Add NFT -->
-          <n-button
-            v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
-            @click="openAddNft(collectionStore.active.collection_uuid)"
-          >
-            <span class="icon-add text-xl mr-2 text-primary"></span>
-            <span class="text-primary">{{ $t('nft.add') }}</span>
-          </n-button>
-        </Empty>
       </n-space>
 
       <!-- Modal - Collection Mint -->

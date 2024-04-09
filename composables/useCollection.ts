@@ -209,7 +209,7 @@ export default function useCollection() {
       !isRoyaltyRequired() ||
       (collectionStore.form.base.chainType === ChainType.EVM
         ? validateEvmAddress(_, value)
-        : !!value)
+        : substrateAddressValidate(_, value, SubstrateChainPrefix.ASTAR))
     );
   }
   function validateSingleNftIdUnique(_: FormItemRule): boolean {
@@ -292,14 +292,6 @@ export default function useCollection() {
     }
   }
 
-  function handleCoverImageRemove() {
-    collectionStore.form.base.coverImage = {} as FileListItemType;
-  }
-
-  function handleLogoRemove() {
-    collectionStore.form.base.logo = {} as FileListItemType;
-  }
-
   function openAddNft(collectionUuid: string) {
     router.push({ name: 'dashboard-service-nft-slug-add', params: { slug: collectionUuid } });
   }
@@ -332,7 +324,5 @@ export default function useCollection() {
     openAddNft,
     prepareFormData,
     uploadFileRequest,
-    handleLogoRemove,
-    handleCoverImageRemove,
   };
 }

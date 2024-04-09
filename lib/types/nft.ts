@@ -19,6 +19,10 @@ export enum SubstrateChain {
   XSOCIAL = 7,
   ASTAR = 8,
 }
+export enum SubstrateChainPrefix {
+  ASTAR = 5,
+  PHALA = 30,
+}
 
 /** NFT Collection type */
 export enum NFTCollectionType {

@@ -372,9 +372,9 @@ export default function useNft() {
   }
 
   function getPriceServiceName() {
-    const chain = collectionStore.active?.chain
-      ? collectionStore.active.chain
-      : collectionStore.form.base.chain;
+    const chain = collectionStore.form.base?.chain
+      ? collectionStore.form.base.chain
+      : collectionStore.active.chain;
     return generatePriceServiceName(ServiceTypeName.NFT, chain, PriceServiceAction.COLLECTION);
   }
 
