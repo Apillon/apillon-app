@@ -35,7 +35,7 @@
           <TableNftTransaction :transactions="collectionStore.transaction" />
 
           <!-- Links to NFT templates -->
-          <NftPreviewFinish />
+          <NftPreviewFinish v-if="collectionStore.active.chainType === ChainType.EVM" />
         </template>
       </n-space>
 

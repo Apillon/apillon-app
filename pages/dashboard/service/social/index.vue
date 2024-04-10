@@ -23,7 +23,7 @@
       </Empty>
 
       <!-- Modal - Create Post -->
-      <modal v-model:show="modalCreatePostVisible" :title="$t('social.chat.new')">
+      <modal v-model:show="modalCreatePostVisible" :title="$t('social.post.new')">
         <FormSocialPost
           @submit-success="modalCreatePostVisible = false"
           @create-success="checkUnfinishedPost"
