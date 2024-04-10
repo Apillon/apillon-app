@@ -808,7 +808,7 @@
       "description": "Quickly deploy pre-built templates made and audited by Apillon. Each solution features a combination of Web3 services to demonstrate how they can be combined together, so you can learn, experiment, and launch your Web3 project fast.",
       "includedWeb3Services": "Included Web3 Services",
       "info": "Customize ready-to-deploy templates built and audited by Apillon.",
-      "viewCode": "Vide code"
+      "viewCode": "View code"
     },
     "subscription": {
       "bandwidth": "Bandwith",
