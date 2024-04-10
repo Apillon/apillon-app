@@ -12,17 +12,6 @@ This repository contains source code for the Dashboard frontend.
 - TailwindCSS
 - Wagmi & viem
 
-## Authors
-
-| Name            | Role               | Email                      |
-| --------------- | ------------------ | -------------------------- |
-| Tadej Vengust   | Tech Lead          | tadej@kalmia.si            |
-| Tine Mlakar     | Architect & DevOps | tine@kalmia.si             |
-| Vinko Šmid      | Lead Developer     | vinko.smid@kalmia.si       |
-| Urban Kovač     | Frontend Developer | urban.kovac@kalmia.si      |
-| Damjan Dimitrov | Backend developer  | damjan.dimitrov@apillon.io |
-| Tadej Rudel     | Backend developer  | tadej.rudel@apillon.io     |
-
 ## Info
 
 ### API
