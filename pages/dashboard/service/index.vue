@@ -15,6 +15,7 @@
         <div class="grid gap-4 md:grid-cols-3">
           <Card v-for="(service, key) in web3Services" :key="key" :service="service">
             <Btn
+              v-if="service.link"
               size="large"
               type="primary"
               :disabled="service.disabled || false"
