@@ -150,7 +150,8 @@ export function formatCurrency(currency: string) {
 }
 
 export function generatePriceServiceName(service: string, chain: number, action: string) {
-  return service + '_' + Chains[chain] + '_' + action;
+  const chainName = Chains[chain] || SubstrateChain[chain];
+  return service + '_' + chainName + '_' + action;
 }
 
 /**
@@ -158,23 +159,24 @@ export function generatePriceServiceName(service: string, chain: number, action:
  */
 
 export function contractLink(contractAddress?: string | null, chainId?: number): string {
+  const address = contractAddress ? `/address/${contractAddress}` : '';
+
   switch (chainId) {
     case Chains.MOONBEAM:
-      return contractAddress
-        ? `https://moonbeam.moonscan.io/address/${contractAddress}`
-        : 'https://moonbeam.moonscan.io';
+      return `https://moonbeam.moonscan.io${address}`;
     case Chains.MOONBASE:
-      return contractAddress
-        ? `https://moonbase.moonscan.io/address/${contractAddress}`
-        : 'https://moonbase.moonscan.io';
+      return `https://moonbase.moonscan.io${address}`;
     case Chains.ASTAR:
-      return contractAddress
-        ? `https://astar.subscan.io/address/${contractAddress}`
-        : 'https://astar.subscan.io';
+      return `https://astar.subscan.io${address}`;
+    case SubstrateChain.ASTAR:
+      const config = useRuntimeConfig();
+      if (config.public.ENV === AppEnv.DEV) {
+        return `https://shibuya.subscan.io${address}`;
+      } else {
+        return `https://astar.subscan.io${address}`;
+      }
     case SubstrateChain.PHALA:
-      return contractAddress
-        ? `https://phala.subscan.io/address/${contractAddress}`
-        : 'https://phala.subscan.io';
+      return `https://phala.subscan.io${address}`;
     default:
       console.warn('Missing chainId');
       return '';
@@ -182,23 +184,24 @@ export function contractLink(contractAddress?: string | null, chainId?: number):
 }
 
 export function transactionLink(transactionHash?: string | null, chainId?: number): string {
+  const hash = transactionHash ? `/tx/${transactionHash}` : '';
+
   switch (chainId) {
     case Chains.MOONBEAM:
-      return transactionHash
-        ? `https://moonbeam.moonscan.io/tx/${transactionHash}`
-        : 'https://moonbeam.moonscan.io';
+      return `https://moonbeam.moonscan.io${hash}`;
     case Chains.MOONBASE:
-      return transactionHash
-        ? `https://moonbase.moonscan.io/tx/${transactionHash}`
-        : 'https://moonbase.moonscan.io';
+      return `https://moonbase.moonscan.io${hash}`;
     case Chains.ASTAR:
-      return transactionHash
-        ? `https://astar.subscan.io/tx/${transactionHash}`
-        : 'https://astar.subscan.io';
+      return `https://astar.subscan.io${hash}`;
+    case SubstrateChain.ASTAR:
+      const config = useRuntimeConfig();
+      if (config.public.ENV === AppEnv.DEV) {
+        return `https://shibuya.subscan.io${hash}`;
+      } else {
+        return `https://astar.subscan.io${hash}`;
+      }
     case SubstrateChain.PHALA:
-      return transactionHash
-        ? `https://phala.subscan.io/tx/${transactionHash}`
-        : 'https://phala.subscan.io';
+      return `https://phala.subscan.io${hash}`;
     default:
       console.warn('Missing chainId');
       return '';

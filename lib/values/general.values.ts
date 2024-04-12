@@ -1,3 +1,4 @@
+import type { SelectOption } from 'naive-ui';
 import { DefaultUserRole } from '../types/project';
 
 export const MINUTE_IN_MS = 60 * 1000; // 1 minute
@@ -27,6 +28,7 @@ export const LsTableColumnsKeys = {
   FILES: 'al_table_files_columns',
   IPNS: 'al_table_ipns_columns',
   NFT_COLLECTION: 'al_table_nft_collection_columns',
+  SOCIAL_POST: 'al_table_social_channel',
 };
 
 export const LsW3WarnKeys = {
@@ -39,6 +41,7 @@ export const LsW3WarnKeys = {
   HOSTING_NEW: 'al_w3warn_hosting_new',
   HOSTING_DEPLOY: 'al_w3warn_hosting_deploy',
   NFT_NEW: 'al_w3warn_nft_new',
+  SOCIAL_NEW: 'al_w3warn_social_new',
 };
 
 export const LsCacheKeys = {
@@ -74,6 +77,7 @@ export const LsCacheKeys = {
   POSTS: 'al_cache_posts',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
+  PROJECT_OVERVIEW: 'al_cache_project_overview',
   REFERRAL: 'al_cache_referral',
   REFERRAL_AIRDROP: 'al_cache_referral_airdrop',
   SERVICES: 'al_cache_services',
@@ -100,7 +104,7 @@ export const UserRoleIds = [
 ];
 
 /** User roles */
-export function CreateUserRoles(): Array<NSelectOption> {
+export function CreateUserRoles(): Array<SelectOption> {
   return Object.entries(DefaultUserRoles).map(([roleId, role]) => {
     return {
       label: window.$i18n.t(`profile.userRole.${role}`),

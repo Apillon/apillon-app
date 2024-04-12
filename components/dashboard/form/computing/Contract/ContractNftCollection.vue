@@ -110,9 +110,11 @@ const CUSTOM_EVM = 1;
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 
-const dotChains = enumKeys(Chains).map(k => {
-  return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
-});
+const dotChains = enumKeys(Chains)
+  .filter(item => item !== Chains[Chains.ASTAR_SHIBUYA])
+  .map(k => {
+    return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
+  });
 const nftChains = [
   ...dotChains,
   {

@@ -5,30 +5,17 @@
         <NuxtLink :to="{ name: 'dashboard-service-nft' }">
           <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
-        <h2>{{ collectionStore.active.name }}</h2>
-
-        <div>
-          <TableLink
-            class="text-body align-bottom"
-            :prefix="$t('nft.collection.contractAddress')"
-            :link="
-              contractLink(collectionStore.active.contractAddress, collectionStore.active.chain)
-            "
-            :text="collectionStore.active.contractAddress || ''"
-          />
-          <TableEllipsis
-            :prefix="$t('nft.collection.uuid')"
-            :text="collectionStore.active.collection_uuid"
-          />
-          <TableEllipsis
-            :prefix="$t('nft.collection.baseUri')"
-            :text="collectionStore.active.baseUri"
-          />
-        </div>
+        <h2>{{ $t('dashboard.solutions.nftCollection.name') }}</h2>
       </n-space>
     </slot>
     <template #info>
       <n-space :size="32" align="center">
+        <!-- Modal Price list for Hosting -->
+        <ModalCreditCosts
+          :service="ServiceTypeName.NFT"
+          :chain="collectionStore.active.chain"
+          filter-by-chain
+        />
         <IconInfo v-if="$i18n.te('w3Warn.nft.info')" @click="modalW3WarnVisible = true" />
       </n-space>
     </template>
@@ -41,7 +28,13 @@
 
 <script lang="ts" setup>
 const $i18n = useI18n();
+const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
 
 const modalW3WarnVisible = ref<boolean>(false);
+
+onMounted(() => {
+  /** Get Price list */
+  paymentStore.getPriceList();
+});
 </script>

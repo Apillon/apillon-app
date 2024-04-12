@@ -1,7 +1,8 @@
 <template>
   <Btn v-bind="$attrs" type="info" :color="colors.blue" @click="modalWalletSelectVisible = true">
     <span class="icon-wallet text-xl align-sub mr-2"></span>
-    <span>{{ $t('auth.login.wallet') }}</span>
+    <span v-if="register">{{ $t('auth.signup.wallet') }}</span>
+    <span v-else>{{ $t('auth.login.wallet') }}</span>
   </Btn>
   <!-- Modal - Wallet select -->
   <modal v-model:show="modalWalletSelectVisible" :title="$t('auth.wallet.connect.title')">
@@ -24,6 +25,11 @@
 <script lang="ts" setup>
 import { useAccount, useDisconnect } from 'use-wagmi';
 import colors from '~/tailwind.colors';
+
+const props = defineProps({
+  register: { type: Boolean, default: false },
+});
+const emit = defineEmits(['register']);
 
 const { t } = useI18n();
 const { error, success } = useMessage();
@@ -64,6 +70,13 @@ async function walletLogin(account: WalletAccount) {
     authStore.wallet.signature = signature;
     authStore.wallet.timestamp = timestamp;
 
+    if (props.register) {
+      loadingWallet.value = false;
+      modalWalletSelectVisible.value = false;
+      emit('register');
+      return;
+    }
+
     const res = await $api.post<WalletLoginResponse>(endpoints.walletLogin, {
       wallet: account.address,
       signature,
@@ -94,6 +107,13 @@ async function evmWalletLogin() {
 
     authStore.wallet.signature = signature;
     authStore.wallet.timestamp = timestamp;
+
+    if (props.register) {
+      loadingWallet.value = false;
+      modalWalletSelectVisible.value = false;
+      emit('register');
+      return;
+    }
 
     const res = await $api.post<WalletLoginResponse>(endpoints.walletLogin, {
       wallet: address.value,

@@ -37,8 +37,19 @@
       />
     </n-form-item>
 
+    <!--  Chat Uuid -->
+    <n-form-item path="chat_uuid" :label="hubInfoLabel()" :label-props="{ for: 'chat_uuid' }">
+      <select-options
+        v-model:value="formData.space_uuid"
+        :options="chats"
+        :placeholder="$t('general.pleaseSelect')"
+        filterable
+        clearable
+      />
+    </n-form-item>
+
     <!--  Form submit -->
-    <n-form-item :show-feedback="false">
+    <n-form-item :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="$t('social.post.create')" />
       <Btn
         type="primary"
@@ -51,6 +62,11 @@
       </Btn>
     </n-form-item>
   </n-form>
+
+  <!-- Modal - Create new space -->
+  <modal v-model:show="modalNewHubVisible" :title="$t('social.chat.new')">
+    <FormSocialChat @submit-success="modalNewHubVisible = false" @create-success="onHubCreated" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
@@ -59,41 +75,122 @@ type FormSpace = {
   body: string | null;
   image: string | null;
   tags: string | null;
+  space_uuid: string | null;
+  project_uuid: string;
 };
 
-const props = defineProps({
-  spaceUuid: { type: String, required: true },
-});
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
+const { t } = useI18n();
+const router = useRouter();
 const message = useMessage();
-const $i18n = useI18n();
 const chatStore = useChatStore();
 const dataStore = useDataStore();
 const postStore = usePostStore();
+const paymentStore = usePaymentStore();
 const warningStore = useWarningStore();
 
+const NEW_SPACE_KEY = 'new-space';
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
+const modalNewHubVisible = ref<boolean>(false);
 
 const formData = ref<FormSpace>({
   title: '',
   body: '',
   image: '',
   tags: '',
+  space_uuid: null,
+  project_uuid: dataStore.projectUuid,
 });
 
 const rules: NFormRules = {
-  title: [ruleRequired($i18n.t('validation.postTitleRequired'))],
+  title: [ruleRequired(t('validation.postTitleRequired'))],
   body: [
-    ruleRequired($i18n.t('validation.postBodyRequired')),
-    ruleDescription($i18n.t('validation.descriptionTooLong')),
+    ruleRequired(t('validation.postBodyRequired')),
+    ruleDescription(t('validation.descriptionTooLong')),
   ],
 };
+
+const chats = computed(() => {
+  const chats = chatStore.items.map(item => {
+    return {
+      label: item.name,
+      value: item.space_uuid,
+      disabled: item.status !== SocialStatus.ACTIVE,
+    };
+  });
+  return [
+    ...chats,
+    {
+      key: NEW_SPACE_KEY,
+      label: t('social.chat.create'),
+      value: NEW_SPACE_KEY,
+      props: {
+        class: 'dropdown-new-project',
+        onClick: () => {
+          modalNewHubVisible.value = true;
+        },
+      },
+      render: renderOption,
+    },
+  ];
+});
 
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser || chatStore.active.status < SocialStatus.ACTIVE;
 });
+
+onMounted(() => {
+  paymentStore.getPriceList();
+  chatStore.getChats();
+});
+
+function hubInfoLabel() {
+  const tooltipKey =
+    chatStore.items.length === 0 ? 'form.label.chatInfoEmpty' : 'form.label.chatInfo';
+  return [
+    h('span', { class: 'mr-1' }, t('form.label.chat')),
+    h('span', {}, '('),
+    h(
+      resolveComponent('NuxtLink'),
+      {
+        class: 'text-yellow hover:underline',
+        to: { name: 'dashboard-service-social-hub' },
+        target: '_blank',
+      },
+      t('social.post.manageHubs')
+    ),
+    h('span', {}, ')'),
+    h(resolveComponent('IconInfo'), { size: 'sm', tooltip: t(tooltipKey) }, ''),
+  ];
+}
+
+/**
+ * Render functions
+ */
+function renderOption(info: RenderOptionInfo) {
+  if (info.option.key === NEW_SPACE_KEY) {
+    return h(
+      resolveComponent('Btn'),
+      {
+        class: 'locked mt-2',
+        type: 'info',
+        size: 'large',
+        onClick: () => {
+          modalNewHubVisible.value = true;
+        },
+      },
+      () => info.option.label as string
+    );
+  }
+  return info.node;
+}
+
+function onHubCreated(space: ChatInterface) {
+  formData.value.space_uuid = space.space_uuid;
+  router.push({ name: 'dashboard-service-social-hub' });
+}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -113,9 +210,9 @@ async function createPost() {
   loading.value = true;
 
   try {
-    const res = await $api.post<PostResponse>(endpoints.posts(props.spaceUuid), formData.value);
+    const res = await $api.post<PostResponse>(endpoints.posts(), formData.value);
 
-    message.success($i18n.t('form.success.created.chatPost'));
+    message.success(t('form.success.created.chatPost'));
 
     /** On new space created add new item to list */
     postStore.items.unshift(res.data);

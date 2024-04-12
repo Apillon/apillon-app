@@ -84,6 +84,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { UploadCustomRequestOptions } from 'naive-ui';
+
 type FormSpace = {
   name: string;
   about: string | null;
@@ -118,7 +120,7 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 /** Upload image request */
-async function uploadImageRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+async function uploadImageRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   try {
     const image = await convertBase64(file.file);
 

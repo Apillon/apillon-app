@@ -26,6 +26,7 @@ export enum SocialStatus {
   BLOCKED = 7,
   MARKED_FOR_DELETION = 8,
   DELETED = 9,
+  FAILED = 100,
 }
 
 declare global {
@@ -49,7 +50,9 @@ declare global {
    */
   interface PostInterface extends BaseObjectInterface {
     body: string;
-    postId: number | null;
+    hubId: number;
+    hubName: string;
+    postId: number;
     postType: number;
     post_uuid: string;
     project_uuid: string;

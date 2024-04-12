@@ -1,31 +1,41 @@
-# Kalmia Frontend
+# Apillon - A Web3 development platform
+
+This repository contains source code for the Dashboard frontend.
 
 ## Stack
 
-- node 16.16.0
+- node 20.8.1
 - Nuxt 3
 - Vue 3 w/ TypeScript
 - Pinia Store
-- Vuelidate 2
+- NaiveUI
 - TailwindCSS
-- PostCSS
-
-## Team
-
-| Person     | Email                | Role       |
-| ---------- | -------------------- | ---------- |
-| Simon Šenk | simon.senk@kalmia.si | Maintainer |
+- Wagmi & viem
 
 ## Info
 
 ### API
 
-API interaction should be done with [mande](https://github.com/posva/mande) api wrapper. Globally imported as `$api`.
-
-**Error handling TODO**
+API interaction should be done with `fetch` api wrapper. Globally imported as `$api`.
 
 ```js
 await $api.get('/login', formData);
+```
+
+### Blockchain
+
+Blockchain connection is realized with [viem](https://viem.sh/) and [wagmi](https://github.com/wagmi-dev/wagmi). For easier integration, a vue wrapper is used: [use-wagmi](https://github.com/unicape/use-wagmi). Docs for react hooks work with use-wagmi: [https://wagmi.sh/react/hooks/useAccount](https://wagmi.sh/react/hooks/useAccount).
+
+Wagmi config is in `~/plugins/use-wagmi.ts`. Connectors, available chains and RPC urls can be defined here.
+
+### Error handling
+
+Errors are handled with the global function `userFriendlyMsg` and displayed as toast message with Naive UI. Error messages need to be translated, so error messages are written to `~/locales/en.json`
+
+```js
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
 ```
 
 ### Vueuse

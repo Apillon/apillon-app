@@ -31,8 +31,8 @@ export default function useService() {
       key: service,
       name: t(`dashboard.service.${service}.name`),
       description: t(`dashboard.service.${service}.description`),
-      icon: 'icon-storage',
-      link: 'dashboard-service-storage',
+      icon: `icon-${service}`,
+      link: `dashboard-service-${service}`,
       disabled: !isFeatureEnabled(Feature[ServiceType[id]], authStore.getUserRoles()),
       usage: translateItems(`dashboard.service.${service}.usage`),
     };

@@ -1,7 +1,9 @@
+import { v4 as uuidv4 } from 'uuid';
 import IconInfo from '~/components/parts/Icon/Info.vue';
 
 export default function useCaptcha() {
   const { t, te } = useI18n();
+  const message = useMessage();
   const router = useRouter();
   const contractStore = useContractStore();
   const transactionStore = useComputingTransactionStore();
@@ -68,7 +70,69 @@ export default function useCaptcha() {
   }
 
   function onContractCreated(contract: ContractInterface) {
-    router.push(`/dashboard/service/computing/${contract.contract_uuid}`);
+    if (contract.contractStatus === ContractStatus.DEPLOYED) {
+      router.push(`/dashboard/service/computing/${contract.contract_uuid}`);
+    } else {
+      router.push({ name: 'dashboard-service-computing' });
+    }
+  }
+
+  async function uploadFileToIPFS(
+    file: FileListItemType,
+    bucketUuid: string,
+    encryptedContent: string
+  ): Promise<FileInterface | null> {
+    const sessionUuid = uuidv4();
+    const data = {
+      session_uuid: sessionUuid,
+      files: [{ fileName: file.name }],
+    };
+
+    try {
+      const uploadSession = await $api.post<FilesUploadRequestResponse>(
+        endpoints.storageFilesUpload(bucketUuid),
+        data
+      );
+      const uploadUrl = uploadSession.data.files[0];
+      // Upload to S3
+      await fetch(uploadUrl.url, {
+        method: 'PUT',
+        body: encryptedContent,
+      });
+
+      // End session
+      await $api.post(endpoints.storageFileUpload(bucketUuid, sessionUuid));
+
+      setTimeout(() => {
+        message.success(t('computing.contract.encrypt.step2Info'), { duration: 5000 });
+      }, 1000);
+
+      // Start pooling file
+      return await getFile(bucketUuid, uploadUrl.file_uuid);
+    } catch (error) {
+      message.error(userFriendlyMsg(error));
+    }
+    return null;
+  }
+
+  async function getFile(bucketUuid: string, fileUuid: string): Promise<FileInterface> {
+    return new Promise(function (resolve) {
+      const getFileInterval = setInterval(async () => {
+        const fileData = await getFilePoll(bucketUuid, fileUuid);
+
+        if (fileData && (fileData?.CID || fileData?.CIDv1)) {
+          clearInterval(getFileInterval);
+          resolve(fileData);
+        }
+      }, 5000);
+    });
+  }
+
+  async function getFilePoll(bucketUuid: string, fileUuid: string): Promise<FileInterface> {
+    const response = await $api.get<FileDetailsResponse>(
+      endpoints.storageFileDetails(bucketUuid, fileUuid)
+    );
+    return response.data;
   }
 
   function labelInfo(field: string) {
@@ -90,5 +154,6 @@ export default function useCaptcha() {
     checkUnfinishedTransactions,
     labelInfo,
     onContractCreated,
+    uploadFileToIPFS,
   };
 }

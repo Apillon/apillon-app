@@ -13,7 +13,7 @@
           <p>{{ $t('dashboard.solution.description') }}</p>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
-          <div v-for="(service, key) in services" :key="key" class="card-dark-multiple">
+          <div v-for="(service, key) in solutions" :key="key" class="card-dark-multiple">
             <div class="card-dark flex flex-col justify-between p-8 h-full md:min-h-[24rem]">
               <div class="mb-8">
                 <div class="flex items-center gap-2 mb-4">
@@ -40,16 +40,16 @@
                     v-if="service.link"
                     size="large"
                     type="secondary"
-                    :disabled="!!service.disabled"
-                    :to="{ name: service.link }"
+                    :disabled="!service.github"
+                    :href="service.github"
                   >
-                    {{ $t('auth.onboarding.viewDemo') }}
+                    {{ $t('dashboard.solutions.viewCode') }}
                   </Btn>
                   <Btn
                     v-if="service.link"
                     size="large"
                     type="primary"
-                    :disabled="!!service.disabled"
+                    :disabled="!service.link"
                     :to="{ name: service.link }"
                   >
                     {{ $t('auth.onboarding.getStarted') }}
@@ -70,8 +70,8 @@ import colors from '~/tailwind.colors';
 type SolutionTypeItem = {
   name: string;
   icon: string;
-  link: string;
-  disabled?: boolean | null;
+  link?: string;
+  github?: string;
   usage: String[];
 };
 const { t } = useI18n();
@@ -79,71 +79,41 @@ useHead({
   title: t('dashboard.nav.solutions'),
 });
 
-const authStore = useAuthStore();
-
-const services: Array<SolutionTypeItem> = [
-  {
-    name: SolutionKey.NFT_COLLECTION,
-    icon: 'icon-self-hosted-nft',
-    link: 'dashboard-solution-nft-collection',
-    disabled: !isFeatureEnabled(Feature.NFT, authStore.getUserRoles()),
-    usage: translateItems('dashboard.solution.nftCollection.usage'),
-  },
+const solutions: Array<SolutionTypeItem> = [
   {
     name: SolutionKey.NFT_AIRDROP,
     icon: 'icon-nft-mint-airdrop',
     link: 'dashboard-solution-airdrop',
-    disabled: !isFeatureEnabled(Feature.NFT_AIRDROP, authStore.getUserRoles()),
+    github: 'https://github.com/Apillon/ps-email-airdrop',
     usage: translateItems('dashboard.solution.nftAirdrop.usage'),
+  },
+  {
+    name: SolutionKey.NFT_EMAIL_SIGNUP_AIRDROP,
+    icon: 'icon-nft-drop',
+    link: 'dashboard-solution-email-signup-airdrop',
+    github: 'https://github.com/Apillon/ps-signup-email-airdrop',
+    usage: translateItems('dashboard.solutions.nftEmailSignupAirdrop.usage'),
   },
   {
     name: SolutionKey.NFT_POAP,
     icon: 'icon-poap',
-    link: 'dashboard-service-nft',
-    disabled: !isFeatureEnabled(Feature.NFT_ATTENDANCE, authStore.getUserRoles()),
+    link: 'dashboard-solution-proof-of-attendance',
+    github: 'https://github.com/Apillon/ps-proof-of-attendance',
     usage: translateItems('dashboard.solution.nftPoap.usage'),
   },
   {
-    name: SolutionKey.NFT_LOYALTY,
-    icon: 'icon-loyalty-program',
-    link: 'dashboard-service-nft',
-    disabled: !isFeatureEnabled(Feature.NFT_LOYALTY, authStore.getUserRoles()),
-    usage: translateItems('dashboard.solution.nftLoyalty.usage'),
-  },
-  {
-    name: SolutionKey.NFT_MEMBERSHIP,
-    icon: 'icon-brand-membership',
-    link: 'dashboard-service-nft',
-    disabled: !isFeatureEnabled(Feature.NFT_MEMBERSHIP, authStore.getUserRoles()),
+    name: SolutionKey.NFT_WHITELIST_CLAIM,
+    icon: 'icon-gift',
+    link: 'dashboard-solution-whitelist-claim',
+    github: 'https://github.com/Apillon/ps-whitelist-claim',
     usage: translateItems('dashboard.solution.nftMembership.usage'),
   },
   {
-    name: SolutionKey.NFT_DROP,
-    icon: 'icon-nft-drop',
-    link: 'dashboard-service-nft',
-    disabled: !isFeatureEnabled(Feature.NFT_DROP, authStore.getUserRoles()),
-    usage: translateItems('dashboard.solution.nftDrop.usage'),
-  },
-  {
-    name: SolutionKey.WALLET,
-    icon: 'icon-wallet',
-    link: 'dashboard-service-nft',
-    disabled: !isFeatureEnabled(Feature.NON_CUSTODIAL_WALLET, authStore.getUserRoles()),
-    usage: translateItems('dashboard.solution.wallet.usage'),
-  },
-  {
-    name: SolutionKey.FILE_SHARING,
-    icon: 'icon-file-sharing',
-    link: 'dashboard-service-nft',
-    disabled: !isFeatureEnabled(Feature.FILE_SHARING, authStore.getUserRoles()),
-    usage: translateItems('dashboard.solution.fileSharing.usage'),
-  },
-  {
-    name: SolutionKey.TOKEN_GATING,
-    icon: 'icon-token-gating',
-    link: 'dashboard-service-nft',
-    disabled: !isFeatureEnabled(Feature.TOKEN_GATING, authStore.getUserRoles()),
-    usage: translateItems('dashboard.solution.tokenGating.usage'),
+    name: SolutionKey.OPEN_GOV,
+    icon: 'icon-brand-membership',
+    link: 'dashboard-solution-openGov',
+    github: 'https://github.com/Apillon/ps-wasm-proposal-airdrop',
+    usage: translateItems('dashboard.solutions.openGov.usage'),
   },
 ];
 </script>

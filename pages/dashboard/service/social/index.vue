@@ -1,25 +1,15 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <Dashboard :key="postStore.items.length" :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('dashboard.nav.social') }}</h1>
-        </slot>
-
-        <template #info>
-          <n-space :size="32" align="center">
-            <IconInfo
-              v-if="$i18n.te('w3Warn.social.info') || $i18n.te('w3Warn.social.grillChat')"
-              @click="modalW3WarnVisible = true"
-            />
-          </n-space>
-        </template>
-      </Heading>
+      <div ref="headingRef">
+        <HeaderSocial />
+      </div>
     </template>
+
     <slot>
-      <n-space v-if="chatStore.hasChats" class="pb-8" :size="32" vertical>
-        <ActionsSocialChat @create-success="checkUnfinishedChat" />
-        <TableSocialChat />
+      <n-space v-if="postStore.hasPosts" class="pb-8" :size="32" vertical>
+        <ActionsSocialPost @create-success="checkUnfinishedPost" />
+        <TableSocialPost />
       </n-space>
       <Empty
         v-else
@@ -27,50 +17,55 @@
         :info="$t('social.chat.emptyInfo')"
         icon="logo/grill-chat"
       >
-        <Btn type="primary" @click="modalCreateChatVisible = true">
-          {{ $t('social.chat.createFirst') }}
+        <Btn type="primary" @click="modalCreatePostVisible = true">
+          {{ $t('social.post.createFirst') }}
         </Btn>
       </Empty>
 
-      <W3Warn v-model:show="modalW3WarnVisible">
-        <p>{{ $t('w3Warn.social.info') }}</p>
-        <p>
-          <Btn type="link" href="https://grill.chat/">Grill.chat</Btn>
-          {{ $t('w3Warn.social.grillChat') }}
-        </p>
-      </W3Warn>
-
-      <!-- Modal - Create Chat -->
-      <modal v-model:show="modalCreateChatVisible" :title="$t('social.chat.new')">
-        <FormSocialChat
-          @submit-success="modalCreateChatVisible = false"
-          @create-success="checkUnfinishedChat"
+      <!-- Modal - Create Post -->
+      <modal v-model:show="modalCreatePostVisible" :title="$t('social.post.new')">
+        <FormSocialPost
+          @submit-success="modalCreatePostVisible = false"
+          @create-success="checkUnfinishedPost"
         />
       </modal>
     </slot>
+    <template v-if="postStore.hasPosts" #learn>
+      <GrillChat v-if="postStore.settings" :style="scrollStyle" />
+    </template>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const chatStore = useChatStore();
-const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.CONTRACT_NEW);
+const postStore = usePostStore();
 
-let chatInterval: any = null as any;
+let postInterval: any = null as any;
 const pageLoading = ref<boolean>(true);
-const modalCreateChatVisible = ref<boolean | null>(false);
+const headingRef = ref<HTMLElement>();
+const modalCreatePostVisible = ref<boolean | null>(false);
 
 useHead({
   title: $i18n.t('dashboard.nav.social'),
 });
 
+const scrollStyle = computed(() => {
+  return {
+    height: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
+  };
+});
+
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await chatStore.getChats();
+      await postStore.getPosts();
+      checkUnfinishedPost();
 
-      checkUnfinishedChat();
+      /** Set first chat as default */
+      if (!postStore.active?.postId && postStore.items.length) {
+        postStore.active = postStore.items[0];
+      }
 
       pageLoading.value = false;
     });
@@ -78,23 +73,23 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  clearInterval(chatInterval);
+  clearInterval(postInterval);
 });
 
-/** Chat polling */
-function checkUnfinishedChat() {
-  clearInterval(chatInterval);
+/** Post polling */
+function checkUnfinishedPost() {
+  clearInterval(postInterval);
 
-  const unfinishedChat = chatStore.items.find(item => item.status < SocialStatus.ACTIVE);
-  if (unfinishedChat === undefined) {
+  const unfinishedPost = postStore.items.find(item => item.status < SocialStatus.ACTIVE);
+  if (unfinishedPost === undefined) {
     return;
   }
 
-  chatInterval = setInterval(async () => {
-    const chats = await chatStore.fetchChats(chatStore.pagination.page, false);
-    const chat = chats.find(item => item.space_uuid === unfinishedChat.space_uuid);
-    if (!chat || chat.status >= SocialStatus.ACTIVE) {
-      clearInterval(chatInterval);
+  postInterval = setInterval(async () => {
+    const posts = await postStore.fetchPosts(postStore.pagination.page, false);
+    const post = posts.find(item => item.post_uuid === unfinishedPost.post_uuid);
+    if (!post || post.status >= SocialStatus.ACTIVE) {
+      clearInterval(postInterval);
     }
   }, 30000);
 }

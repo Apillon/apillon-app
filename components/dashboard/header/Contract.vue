@@ -6,17 +6,6 @@
           <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
         <h2>{{ contractStore.active.name }}</h2>
-
-        <div>
-          <TableEllipsis
-            :prefix="$t('computing.contract.address')"
-            :text="contractStore.active.contractAddress"
-          />
-          <TableEllipsis
-            :prefix="$t('computing.contract.uuid')"
-            :text="contractStore.active.contract_uuid"
-          />
-        </div>
       </n-space>
     </slot>
     <template #info>

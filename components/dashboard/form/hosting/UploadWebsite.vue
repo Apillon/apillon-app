@@ -51,6 +51,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { UploadCustomRequestOptions } from 'naive-ui';
+
 const props = defineProps({
   bucketUuid: { type: String, required: true },
 });
@@ -77,7 +79,7 @@ const numOfFinishedFiles = computed<number>(() => {
 });
 
 /** Upload files */
-function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
     percentage: 0,
@@ -90,7 +92,7 @@ function uploadFileRequest({ file, onError, onFinish }: NUploadCustomRequestOpti
 }
 
 /** Upload directory */
-function uploadDirectoryRequest({ file, onError, onFinish }: NUploadCustomRequestOptions) {
+function uploadDirectoryRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
     fullPath: removeBaseDirectoryFromFullPath(file.fullPath),

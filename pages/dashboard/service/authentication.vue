@@ -8,7 +8,7 @@
 
         <template #info>
           <n-space :size="32" align="center">
-            <!-- API keys -->
+            <!-- API Keys -->
             <NuxtLink
               v-if="dataStore.hasServicesByType(ServiceType.AUTHENTICATION)"
               :to="{ name: 'dashboard-api-keys' }"
@@ -53,7 +53,7 @@
             <p>
               Click the
               <Btn class="inline-block" type="link" @click="router.push('/dashboard/api-keys')">
-                API keys
+                API Keys
               </Btn>
               <span> tab.</span>
             </p>

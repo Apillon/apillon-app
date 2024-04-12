@@ -93,9 +93,9 @@
       "projectName": "Project_name",
       "resetHere": "Reset here",
       "resetPassword": "Reset password",
-      "title": "Log in to Apillon",
+      "title": "Log in",
       "wallet": "Log in with Wallet",
-      "withEmail": "login with email",
+      "withEmail": "Log in with email",
       "kilt": "Log in with KILT "
     },
     "onboarding": {
@@ -119,7 +119,7 @@
       "checkEmail": "Check your e-mail",
       "checkInbox": "Crickets in your inbox?",
       "continueWithAT": "Continue with Apillon",
-      "description": "Build your first Web3 application with Apillon. Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
+      "description": "Deploy, monitor, and scale with our fully managed blockchain-based back-end service.",
       "emailConfirmed": "Email confirmed",
       "emailSent": "We just sent an email containing a link to {email}. \n Click on it to activate your account.",
       "enterDesiredPassword": "Enter a password to finish creating the account.",
@@ -129,9 +129,11 @@
       "sendAgain": "Send again",
       "title": "Build your first Web3 project",
       "titleReferalZiggi": "Welcome, traveler! Register below and start building.",
+      "wallet": "Register with wallet",
       "walletConfirmed": "Wallet and email confirmed, logging you in...",
-      "withWallet": "email is required for wallet login",
-      "withEmail": "sign up with email"
+      "walletEmail": "Email is required for wallet login",
+      "withWallet": "or sign up with wallet",
+      "withEmail": "Sign up with email"
     },
     "terms": {
       "accept": "I have read and agree to ",
@@ -146,7 +148,7 @@
       "connect": {
         "btn": "Connect Polkadot wallet",
         "info": "Connect with one of Polkadot's wallet",
-        "polkadot": "Connect polkadot wallet",
+        "polkadot": "Connect Polkadot wallet",
         "success": "You successfully logged in with your Wallet",
         "title": "Connect wallet",
         "different": "Connect different wallet",
@@ -171,7 +173,7 @@
       },
       "login": {
         "success": "Wallet has been successfully connected",
-        "title": "Login with wallet",
+        "title": "Log in with wallet",
         "walletAccountNotConnected": "A wallet account must be connected",
         "walletNotConnected": "A wallet must be connected",
         "walletNotConnected2": "A wallet must be connected, please reconnect. If the issue persist try reloading."
@@ -188,45 +190,43 @@
       "assignDisabled": "Please upload file first, to encrypt content and assign it to NFT.",
       "create": "Create contract",
       "createBucket": "Create a bucket",
-      "createFirst": "Create first contract",
+      "createFirst": " Start creating",
       "deployerAddress": "Deployer address",
       "deposit": "Deposit to cluster",
       "edit": "Edit",
-      "empty": "Create your first contract",
-      "emptyInfo": "Add it to your Web3 project",
+      "empty": "Create Schrödinger’s NFT contract",
+      "emptyInfo": "Schrödinger’s NFT is the first use case of Apillon’s Web3 Computing. More options will follow.",
       "encryptFile": "Encrypt file",
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
       "name": "Contract name",
-      "new": "New contract",
+      "new": "New Schrödinger’s NFT contract",
       "orSelectExisting": "or select existing bucket",
       "selectBucket": "Continue with selected bucket",
+      "status": "Contract status",
       "title": "Contract title",
       "titleBucket": "Let’s get you a bucket",
       "titleBucketCreation": "Bucket creation in progress",
       "titleBucketCreated": "Bucket successfully created",
       "transfer": "Transfer ownership",
       "uuid": "Contract UUID",
+      "created": {
+        "display": "Create website to decrypt files with",
+        "info": "To decrypt your files, you need a website. \nUse the Apillon Schrodinger template and host it on a decentralized network.",
+        "template": "Schrodinger Template",
+        "title": "Decrypt encrypted files"
+      },
       "encrypt": {
         "step1": "Choose bucket",
         "step2": "Upload, encrypt & assign CID",
-        "step2Info": "The file is being encrypted, uploaded to IPFS.",
+        "step2Info": "Encrypted file is being uploaded to IPFS.",
         "step3": "Finished",
         "step3Info": "The file has been encrypted and CID has been assigned to NFT.",
         "step3Btn": "Encrypt another file"
       },
-      "status": {
-        "0": "CREATED",
-        "1": "INITIATED",
-        "2": "INSTANTIATING",
-        "3": "DEPLOYED",
-        "4": "TRANSFERRING",
-        "5": "TRANSFERRED",
-        "6": "FAILED"
-      },
       "type": {
-        "1": "SCHRODINGER"
+        "1": "Schrödinger’s NFT"
       }
     },
     "upload": {
@@ -266,7 +266,7 @@
       "details": "API key details",
       "generate": "Generate new key",
       "secretSaved": "I've saved API key's secret",
-      "title": "API keys",
+      "title": "API Keys",
       "update": "Update API key",
       "service": {
         "authentication": "Authentication service",
@@ -305,6 +305,7 @@
       "date": "Date and time",
       "description": "Description",
       "direction": "Direction",
+      "disabled": "Due to limitations set by our payment provider, this payment is disabled",
       "filterByChain": "Filter by chain",
       "filterByService": "Filter by service",
       "getMore": "Get more",
@@ -317,6 +318,7 @@
       "serviceStorage": "Web3 Storage",
       "title": "Credits",
       "transactions": "Credit transactions",
+      "threshold": "Credit notification threshold",
       "yourFunds": "Your funds",
       "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
       "services": {
@@ -358,9 +360,9 @@
     "nav": {
       "access": "Access",
       "authentication": "Authentication",
-      "apiKeys": "API keys",
+      "apiKeys": "API Keys",
       "analytics": "Analytics",
-      "billing": "Billing",
+      "billing": "Billing & usage",
       "configuration": "Configuration",
       "computing": "Computing",
       "explore": "Explore",
@@ -372,27 +374,15 @@
       "smartContracts": "Smart Contracts",
       "social": "Social",
       "solutions": "Pre-built Solutions",
-      "storage": "Storage",
-      "solution": {
-        "fileSharing": "Decentralized File Sharing",
-        "nftAirdrop": "NFT Minting and Airdrop",
-        "nftCollection": "Self-hosted NFT Collection",
-        "nftDrop": "NFT Drop",
-        "nftGift": "NFT Gifts in E-commerce",
-        "nftLoyalty": "NFT-based Loyalty Program",
-        "nftMembership": "NFT-based Brand Membership",
-        "poap": "Proof of Attendance NFTs",
-        "tokenGating": "Token Gating",
-        "wallet": "Non-custodial Wallet"
-      }
+      "storage": "Storage"
     },
     "pageMenu": {
       "access": "Access",
       "accountManagement": "Account management",
-      "apiKeys": "API keys",
+      "apiKeys": "API Keys",
       "billing": "Billing",
       "charts": "Charts",
-      "credentials": "Credentials & API keys",
+      "credentials": "Credentials & API Keys",
       "credits": "Credits",
       "destroy": "Destroy",
       "history": "History",
@@ -437,14 +427,17 @@
       "authentication": {
         "name": "Decentralized Authentication",
         "description": "Boost users’ privacy and security with decentralized digital identity.",
+        "didCount": "Number of digital identities",
         "emptyTitle": "Your project does not have Authentication service yet",
         "emptyInfo": "Add Web3 Authentication and create an API key.",
         "emptyBtn": "Attach Web3 Auth",
         "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
       },
       "computing": {
-        "name": "Computing",
+        "contractCount": "Number of contracts",
+        "computingTransactionCount": "Number of transactions",
         "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
+        "name": "Computing",
         "usage": [
           "computing smart contracts",
           "cross-chain",
@@ -452,27 +445,19 @@
           "internet access"
         ]
       },
-      "social": {
-        "name": "Social",
-        "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
-        "usage": [
-          "social media",
-          "real-time chat",
-          "user-friendly UI",
-          "HIGH PRIVACY",
-          "configurable interface"
-        ]
-      },
       "hosting": {
         "name": "Decentralized Hosting",
         "description": "Make your website or app unstoppable and free from third-party impact.",
-        "kraken": "40k Webhosting Project for Kraken",
         "title": "Web3 Hosting",
-        "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"]
+        "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"],
+        "usedBandwidth": "Used bandwidth",
+        "websiteCount": "Number of Websites"
       },
       "nft": {
         "name": "NFTs",
         "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
+        "nftTransactionCount": "Number of transactions",
+        "numOfCollections": "Number of Collections",
         "usage": [
           "storage buckets",
           "smart contracts",
@@ -481,10 +466,25 @@
           "hosting"
         ]
       },
+      "social": {
+        "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
+        "name": "Social",
+        "postCount": "Number of channels",
+        "spaceCount": "Number of hubs",
+        "usage": [
+          "social media",
+          "real-time chat",
+          "user-friendly UI",
+          "HIGH PRIVACY",
+          "configurable interface"
+        ]
+      },
       "storage": {
         "bucket": "Web3 storage bucket",
-        "name": "Decentralized Storage",
+        "bucketCount": "Number of buckets",
         "description": "Make your content permanently accessible and easily shareable.",
+        "fileCount": "Number of files",
+        "name": "Decentralized Storage",
         "website": "Main Website Storage",
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
@@ -493,7 +493,8 @@
       "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",
       "edit": "Edit service",
       "info": "Launch a service, receive API keys and start building your next dapp.",
-      "new": "New service"
+      "new": "New service",
+      "used": "Web3 services used"
     },
     "smartContracts": {
       "collection": "NFT collection",
@@ -532,33 +533,47 @@
         "usage": ["metadata storage", "file storage"]
       },
       "nftAirdrop": {
-        "name": "NFT Minting and Airdrop",
+        "name": "NFT Email airdrop",
         "description": "Create a NFT collection, upload target addresses and automatically distribute NFTs to target addresses.",
         "content": [
           {
             "headline": "How does it work?",
-            "content": "This standalone solution gives you ability to select the NFTs from your collection and distribute them to target addresses."
+            "content": "This ready-made solution is designed to help you give out digital collectibles (called NFTs) to users, even if you only have their email addresses."
           },
           {
-            "title": "There are three possible ways of distribution:",
+            "title": "Once you set it up, you'll have a special page (called an admin panel) where you can do a few things:",
             "content": [
-              "Upload CSV with target addresses",
-              "Upload list of Emails and send emails to users with instructions on how to create a wallet and mint their NFT",
-              "Select the Polkadot OpenGov referendum and the votes and we will automatically parse the addresses"
+              "Add email addresses one by one.",
+              "Upload a file with lots of email addresses at once.",
+              "See which email addresses got the NFTs successfully and which didn't.",
+              "You can also see which wallets are linked to each email.",
+              "The system will automatically send an email to each address with instructions and a link to a page where they can claim their NFT."
             ]
           },
           {
-            "headline": "Possible use cases",
-            "title": "Reward your community with NFTs.",
-            "content": "Lorem ipsum dolor sit amet consectetur. Adipiscing habitasse risus enim pharetra. Egestas turpis eget et id nisi."
+            "title": "Before you start, you'll need a few things ready:",
+            "content": [
+              "You need to create your digital collectibles using a tool called Apillon.",
+              "You need to know the details of an email server, like where it's located and its address.",
+              "You'll need a special wallet that works with Ethereum (a type of cryptocurrency) to access the admin panel.",
+              "You'll also need an Apillon API key and secret, which are like special codes to connect to Apillon."
+            ]
           },
           {
-            "title": "Send gratitude NFTs for your opengov referenda on Polkadot",
-            "content": "Pharetra ultricies interdum scelerisque suspendisse fames sed pharetra placerat purus. Mauris leo mauris aenean dolor congue placerat."
+            "title": "Here's how the system is set up:",
+            "content": [
+              "The front-end (what users see) is made with Vue.js.",
+              "The back-end (the behind-the-scenes stuff) is made with Node.js, and it stores information in a MySQL database."
+            ]
           },
           {
-            "title": "Distribute utility NFTs to specific set of wallets",
-            "content": "Lorem ipsum dolor sit amet consectetur. Eget morbi pharetra nec sit non diam consectetur ut vitae. Dictum mauris ipsum semper purus pharetra eget eget."
+            "title": "You have a few options for running the system:",
+            "content": [
+              "You can run the front-end on your computer.",
+              "You can host it on any website provider.",
+              "Or, you can use Apillon's hosting service. There's even a special setup for this using GitHub actions.",
+              "For the back-end part, you can run it on your computer or using a tool called Docker. You just need to set up some configuration files with the right information, like the details of your digital collectibles and your email server. All the instructions for this are available on GitHub."
+            ]
           }
         ],
         "tabs": ["First task", "Second task", "Third task"],
@@ -606,6 +621,61 @@
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
       },
+      "nftEmailSignupAirdrop": {
+        "name": "NFT Email signup airdrop",
+        "description": "This prebuild solution is targeted for airdropping NFTs to new and unknown users with a limited or unlimited NFT supply.",
+        "content": [
+          {
+            "content": "This ready-made solution is designed to help you give out digital collectibles (called NFTs) to new users, even if you don't know their email address. You can choose to give out a limited number of NFTs or as many as you want."
+          },
+          {
+            "headline": "Here's how it works:",
+            "content": [
+              "Users sign up by entering their email address. They'll receive an email with instructions on how to claim their NFT.",
+              "They have a limited time to follow the instructions and connect their digital wallet to receive the NFT.",
+              "If you're only giving out a certain number of NFTs, once that limit is reached, new sign-ups will be put on a waitlist. If someone who signed up earlier doesn't claim their NFT, the next person on the waitlist gets a chance."
+            ]
+          },
+          {
+            "title": "Once you set it up, you'll have a special page (called an admin panel) where you can do a few things:",
+            "content": [
+              "See a list of users who signed up.",
+              "Manage the waitlist.",
+              "See which users successfully claimed their NFTs."
+            ]
+          },
+          {
+            "title": "Before you start, you'll need a few things ready:",
+            "content": [
+              "Created your NFT collection",
+              "Know the details of an email server, like where it's located and its address.",
+              "Have a special wallet that works with Ethereum (a type of cryptocurrency) to access the admin panel.",
+              "Get an Apillon API key and secret, which are like special codes to connect to Apillon.",
+              "Set up a human captcha account and get the necessary secret key."
+            ]
+          },
+          {
+            "title": "Here's how the system is set up:",
+            "content": [
+              "The front-end (what users see) is made with Vue.js.",
+              "The back-end (the behind-the-scenes stuff) is made with Node.js, and it stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "You have a few options for running the system:",
+            "content": [
+              "You can run the front-end on your computer.",
+              "Host it on any website provider.",
+              "Use Apillon's hosting service. There's even a special setup for this using GitHub actions."
+            ]
+          },
+          {
+            "content": "For the behind-the-scenes part, you can run it on your computer or using a tool called Docker. You just need to set up some configuration files with the right information, like the details of your digital collectibles and your API keys. All the instructions for this are available on GitHub."
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
+      },
       "nftLoyalty": {
         "name": "NFT-based Loyalty Program",
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
@@ -617,9 +687,156 @@
         "usage": ["metadata storage", "file storage"]
       },
       "nftPoap": {
-        "name": "POAP NFTs",
+        "name": "POA - Proof of Attendance",
         "description": "Create POAP drops simply by clicking. Manage your POAP, allow users to either mint or email reserve the NFTs and boost your next event.",
+        "content": [
+          {
+            "headline": "What are POAPs?",
+            "content": "POAP, which stands for \"Proof of Attendance Protocol,\" is a system that lets you create digital keepsakes called \"POAPs\" to commemorate special memories. You can give POAPs to others when they share a memory with you."
+          },
+          {
+            "title": "Possible Use cases:",
+            "content": [
+              "Digital Collectibles: They can be collected as unique digital items, similar to collecting physical memorabilia or trading cards.",
+              "Proof of Participation: They serve as proof that an individual attended or participated in a particular event, conference, or gathering.",
+              "Reward System: Organizations or event organizers can use NFT POAPs as rewards for engagement, participation, or contributions.",
+              "Community Engagement: They can foster a sense of community by giving members something tangible to collect and share, thereby encouraging interaction and participation.",
+              "Monetization: Some people may buy and sell NFT POAPs as a form of investment or to monetize their participation in events.",
+              "Exclusive Access: Holding certain NFT POAPs might grant access to exclusive events, content, or privileges in online communities."
+            ]
+          },
+          {
+            "content": "This ready-made solution is designed to help you give out digital collectibles (called NFTs) to attendances on an event."
+          },
+          {
+            "title": "How does it work?",
+            "content": "Solution has 2 main parts. Admin dashboard and page for NFT(POAPs) claim. \nIn admin dashboard, admin manages it's events, see their status, statistic, ... \nAdmin can create new POAP event, set its title, start and end time and link it with existing NFT collection created in Apillon platform."
+          },
+          {
+            "content": "Second part of solution is website which is meant to be displayed at the event."
+          },
+          {
+            "title": "Flow:",
+            "content": [
+              "User scans qr code from page",
+              "Qr code contains URL to page, where user enter its email",
+              "Email with instructions and link for mint is sent to that address",
+              "User navigates to minting page, connects his wallet and mint NFT to it",
+              "Recieved NFT is a POA"
+            ]
+          },
+          {
+            "title": "Before you start, make sure you have:",
+            "content": [
+              "A NFT collection created in Apillon platform, which will be used to mint NFTs to attendances of an event."
+            ]
+          },
+          {
+            "title": "Here's how the system is set up:",
+            "content": [
+              "The part that users see (the frontend) is made with vue.js.",
+              "The part that does the behind-the-scenes work (the backend) is made with node.js, and it stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "You have a few options for running the system:",
+            "content": [
+              "You can run the front-end on your computer.",
+              "Host it on any website provider.",
+              "Use Apillon's hosting service. There's even a special setup for this using GitHub actions."
+            ]
+          },
+          {
+            "content": "For the part that does the behind-the-scenes work, you can run it on your computer or using a tool called Docker. You just need to set up some configuration files with the right information, like the details of your digital collectibles and your AWS account. All the instructions for this are available on GitHub."
+          }
+        ],
         "usage": ["metadata storage", "file storage"]
+      },
+      "nftWhitelistClaim": {
+        "name": "Whitelist NFT claim",
+        "description": "Instead of giving out NFTs for free, you can let users claim them themselves. But in this case, users need to pay the transaction fees. ",
+        "content": [
+          {
+            "content": "Instead of giving out NFTs for free, you can let users claim them themselves. But in this case, users need to pay the transaction fees."
+          },
+          {
+            "title": "One way to do this is through a system called \"whitelist claim.\" Here's how it works:",
+            "content": [
+              "Users can claim their NFTs directly, but only if their addresses are added to a special list in the admin panel.",
+              "The admin panel is where you can manage this list of addresses that are allowed to claim NFTs."
+            ]
+          },
+          {
+            "title": "Before you start, make sure you have:",
+            "content": ["A contract ready for users to claim NFTs."]
+          },
+          {
+            "title": "Here's how the system is set up:",
+            "content": [
+              "The part users see (the frontend) is made with vue.js.",
+              "The behind-the-scenes part (the backend) is made with node.js, and it stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "You have a few options for running the system:",
+            "content": [
+              "You can run the front-end on your computer.",
+              "Host it on any website provider.",
+              "Use Apillon's hosting service. There's even a special setup for this using GitHub actions."
+            ]
+          },
+          {
+            "content": "For the behind-the-scenes part, you can run it on your computer or using a tool called Docker. You just need to set up some configuration files with the right information, like the details of your digital collectibles and your API keys. All the instructions for this are available on GitHub."
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
+      },
+      "openGov": {
+        "name": "OpenGov wasm proposal airdrop",
+        "description": "This prebuilt solution lets you send special digital collectibles (called NFTs), by using WASM smart contract, to people who voted a certain way on a specific government proposal.",
+        "content": [
+          {
+            "content": "This prebuilt solution lets you send special digital collectibles (called NFTs), by using WASM smart contract, to people who voted a certain way on a specific government proposal."
+          },
+          {
+            "title": "Here's how it works:",
+            "content": [
+              "You'll see a simple webpage where you can type in the number of the proposal and the decision made by the voters.",
+              "The system will find all the people who voted that way and show them in a list that you can edit.",
+              "Once you're happy with the list, you can save it, and the NFTs will be sent to all the addresses on the list."
+            ]
+          },
+          {
+            "title": "Before you start, make sure you have:",
+            "content": [
+              "Created your NFT collection",
+              "Have a special wallet that works with Ethereum (a type of cryptocurrency) to access the admin panel.",
+              "Get an Apillon API key and secret, which are like special codes to connect to Apillon.",
+              "Have information about the specific government proposal handy."
+            ]
+          },
+          {
+            "title": "Here's how the system is set up:",
+            "content": [
+              "The part that users see (the frontend) is made with vue.js.",
+              "The part that does the behind-the-scenes work (the backend) is made with node.js, and it stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "You have a few options for running the system:",
+            "content": [
+              "You can run the front-end on your computer.",
+              "Host it on any website provider.",
+              "Use Apillon's hosting service. There's even a special setup for this using GitHub actions."
+            ]
+          },
+          {
+            "content": "For the part that does the behind-the-scenes work, you can run it on your computer or using a tool called Docker. You just need to set up some configuration files with the right information, like the details of your digital collectibles and your AWS account. All the instructions for this are available on GitHub."
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
       },
       "tokenGating": {
         "name": "Token Gating",
@@ -632,10 +849,12 @@
         "usage": ["metadata storage", "file storage"]
       },
       "choose": "Choose Solution",
+      "deploy": "Customize and deploy",
       "chooseComputing": "Select a computing template for your project. Deploy it on testnet to test it and fix if needed before launching in production on mainnet.",
       "description": "Quickly deploy pre-built templates made and audited by Apillon. Each solution features a combination of Web3 services to demonstrate how they can be combined together, so you can learn, experiment, and launch your Web3 project fast.",
       "includedWeb3Services": "Included Web3 Services",
-      "info": "Customize ready-to-deploy templates built and audited by Apillon."
+      "info": "Customize ready-to-deploy templates built and audited by Apillon.",
+      "viewCode": "View code"
     },
     "subscription": {
       "bandwidth": "Bandwith",
@@ -674,24 +893,29 @@
     "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
     "dashboard": "Dashboard",
     "date": "Date",
+    "discord": "Discord",
     "deletedAt": "Deleted at",
+    "demoVideo": "Demo video",
     "email": "Email",
     "emailMethodConfiguration": "Email method configuration",
-    "env": "ENV",
+    "env": "Environment",
     "expiration": "Expiration",
     "gotIt": "Got it, thanks!",
     "goToApiManagement": "Go to central API management",
+    "guides": "Guides",
     "homepage": "Project overview",
     "inviteTeamMember": "Invite team member",
     "learnMoreAboutServices": "Learn more about services",
     "manageRoles": "Manage roles",
     "name": "Name",
+    "projectResources": "Project resources",
     "readDocs": "Read the Docs",
     "role": "Role",
     "searchDocs": "Search the docs",
     "secret": "Secret",
     "secrets": "Secrets",
     "total": "Total",
+    "tutorials": "Tutorials",
     "user": "User",
     "viewInvoice": "View Invoice",
     "value": "Value",
@@ -798,8 +1022,9 @@
     "ERROR_READING_FROM_DATABASE": "There has been an error. Please come back later when we fixed that problem.",
     "SERVICE_ERROR": "There has been an error. Please come back later when we fixed that problem.",
     "NO_CHANGES_TO_DEPLOY": "There have been no changes to your website. First, make some changes and deploy them to the staging.",
-    "NFT_BASE_URI_NOT_PRESENT": "NFT base uri not present",
+    "NFT_BASE_URI_NOT_PRESENT": "NFT base URI not present",
     "NFT_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
+    "NFT_COLLECTION_BASE_URI_NOT_PRESENT": "NFT base URI not present",
     "NFT_DROP_BOOL_NOT_PRESENT": "NFT drop not present",
     "NFT_DROP_TIMESTAMP_NOT_PRESENT": "NFT drop timestamp not present",
     "NFT_RESERVE_NOT_PRESENT": "NFT reserve not present",
@@ -810,8 +1035,8 @@
     "NFT_TRANSFER_OWNERSHIP_ADDRESS_NOT_VALID": "Address not valid",
     "NFT_CONTRACT_OWNER_ERROR": "NFT contract has been transferred to another wallet.",
     "NFT_DEPLOY_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
-    "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_PRESENT": "Royalties address is not present, please enter a valid EVM address",
-    "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid EVM address",
+    "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_PRESENT": "Royalties address is not present, please enter a valid Wallet address",
+    "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid Wallet address",
     "INVALID_ADDRESS_FOR_TRANSFER_TO": "Wrong address, please enter different address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
     "CREDIT_BALANCE_TOO_LOW": "Credit balance too low",
@@ -851,6 +1076,9 @@
       "bucketName": "Bucket name",
       "cardHolder": "Card holder",
       "cardNumber": "Card number",
+      "chat": "Hub",
+      "chatInfo": "Select one of your Hubs. Otherwise, you can leave this field empty and the default hub will be used.",
+      "chatInfoEmpty": "You must create a Hub first. Otherwise, you can leave this field empty and the default hub will be used.",
       "chatAbout": "About",
       "chatImage": "Hub image",
       "chatName": "Hub name",
@@ -858,6 +1086,8 @@
       "collectionBaseUri": "Base URI",
       "collectionBaseExtension": "Base Extension",
       "collectionChain": "Chain",
+      "collectionChainType": "Chain type",
+      "collectionDropAddress": "Drop Withdrawal Address",
       "collectionDropStart": "Drop start",
       "collectionDrop": "Drop",
       "collectionMaxSupply": "How many?",
@@ -871,8 +1101,11 @@
       "collectionSymbol": "Symbol",
       "collectionSupplyLimited": "Total supply",
       "collectionType": "Collection type",
-      "collectionUseGateway": "Use apillon gateway for base uri",
+      "collectionUseGateway": "Use apillon gateway for base URI",
+      "collectionLogo": "Collection logo",
+      "collectionCoverImage": "Collection cover image",
       "confirmPassword": "Confirm password",
+      "creditThreshold": "Notify me when credits are below the limit",
       "cvv": "CVV",
       "domain": "Domain name",
       "email": "Email address",
@@ -891,7 +1124,16 @@
       "nftMintCollectionUuid": "Collection",
       "nftMintParentNftId": "Parent NFT ID",
       "nftMintQuantity": "Quantity",
+      "nftSetBaseUri": "Set base URI",
       "nftTransferAddress": "Address",
+      "nftId": "ID",
+      "nftCollection": "Collection",
+      "nftName": "Name",
+      "nftCopies": "Copies",
+      "nftDescription": "Description",
+      "nftValue": "Value",
+      "nftDisplayType": "Type",
+      "nftTraitType": "Trait",
       "password": "Enter a 12-character password",
       "phone": "Phone",
       "postalCode": "Postal code",
@@ -911,17 +1153,18 @@
         "cid": "CID",
         "contractType": "Contract type",
         "description": "Contract description",
+        "file": "File",
         "name": "Contract name",
-        "nftContractAddress": "NFT Collection Address",
+        "nftContractAddress": "NFT collection address",
         "nftChainRpcUrl": "Chain RPC URL",
         "nftId": "NFT ID",
         "restrictToOwner": "Restrict to owner",
-        "useApillonCollection": "Use Apillon`s Collection",
+        "useApillonCollection": "Use Apillon-built NFT collection",
         "labelInfo": {
-          "nftContractAddress": "Contract Address which will be used to encrypt/decrypt content.",
-          "nftChainRpcUrl": "Chain RPC URL of used contract",
-          "restrictToOwner": "Own owner will be able to encrypt/decrypt files",
-          "useApillonCollection": "You can use a collection you created on Apillon or any collection you created on other chains."
+          "nftContractAddress": "Address of the NFT collection used to encrypt/decrypt files.",
+          "nftChainRpcUrl": "Chain RPC URL of used contract. Select one from the list or manually insert your own.",
+          "restrictToOwner": "Only owner will be able to encrypt/decrypt files.",
+          "useApillonCollection": "You can use an NFT collection you created on Apillon or any NFT collection you built on other chains."
         }
       }
     },
@@ -943,6 +1186,7 @@
       "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "chain": "Select Chain",
       "chatTags": "Separate Tags with Commas",
+      "collectionMaxSupply": "Max supply",
       "complexPassword": "Enter complex password",
       "cvv": "311",
       "domain": "Type your domain name here",
@@ -980,8 +1224,8 @@
       "websiteDescription": "Website description",
       "websiteName": "Website name",
       "contract": {
-        "name": "Contract name",
-        "description": "Contract description",
+        "name": "Enter contract name",
+        "description": "Enter contract description",
         "nftContractAddress": "Select or type NFT collection address",
         "nftChainRpcUrl": "Chain RPC URL",
         "accountAddress": "Account Address"
@@ -995,6 +1239,7 @@
       "nftBurned": "NFT token has been burned.",
       "nftDeployed": "NFT deploy requested.",
       "nftMint": "Minting NFT requested.",
+      "nftSetBaseUri": "Base URI has been changed",
       "nftTransfer": "NFT ownership has been transferred",
       "profile": "Your profile data has been updated",
       "requestPasswordChange": "Check your mailbox! If nothing is there, we couldn't find your account.",
@@ -1059,6 +1304,7 @@
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "contract": "Contract has been updated",
+        "creditThreshold": "Credit threshold has been updated",
         "directory": "Folder has been updated",
         "domain": "Domain has been updated",
         "file": "File has been updated",
@@ -1175,26 +1421,66 @@
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "nft": {
+    "create": "Create an NFT",
+    "add": "Add NFT",
+    "addNfts": "Add NFTs",
+    "addAttribute": "Add attribute",
     "chain": {
       "1": "MOONBEAM (Mainnet)",
       "2": "MOONBASE (Testnet)",
+      "8": "ASTAR (Substrate)",
       "81": "ASTAR SHIBUYA (Testnet)",
       "592": "ASTAR (Mainnet)",
       "1284": "MOONBEAM (Mainnet)",
       "1287": "MOONBASE (Testnet)"
     },
+    "chainType": {
+      "1": "SUBSTRATE",
+      "2": "EVM"
+    },
+    "amount": {
+      "title": "Create NFT",
+      "content": "Add NFTs one by one or upload them in bulk.",
+      "single": "Build one by one",
+      "singleContent": "Enter data manually",
+      "multiple": "Build multiple NFTs at once",
+      "multipleContent": "Use CSV file to upload data in bulk"
+    },
+    "single": {
+      "content": "NFT content",
+      "uploadDescription": "Upload image, video, audio, or a 3D-model. Supported file formats: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB.",
+      "technicalDetails": "NFT technical details",
+      "properties": "Properties",
+      "propertiesInfo": "Textual traits that show as text boxes",
+      "levels": "Levels",
+      "levelsInfo": "Numerical traits that show as progress bar",
+      "stats": "Stats",
+      "statsInfo": "Numerical traits that show as number boxes",
+      "boosts": "Boosts",
+      "boostsInfo": "Numerical traits that show as circle progress bars",
+      "date": "Date",
+      "dateInfo": "Date traits that show as date boxes",
+      "unlockableContent": "Unlockable Content",
+      "unlockableContentInfo": "Content is only visible to the NFT owner",
+      "displaySettings": "Display Settings",
+      "showDisplay": "Show on store website",
+      "hideDisplay": "Hide on Store website"
+    },
     "collection": {
       "addNew": "Add new collection",
       "addNewDesc": "Add info",
       "addNewValue": "Add new value",
+      "addLogo": "Select logo",
       "address": "Collection address",
-      "baseUri": "Base Uri",
+      "baseUri": "Base URI",
+      "behavior": "Behavior",
+      "chainType": "Chain type",
       "contractAddress": "Contract address",
       "create": "Create collection",
       "createFirst": "Start creating NFTs",
       "createInfo": "",
       "createToDisplay": "Create website to display NFTs with",
-      "deploy": "Deploy to blockchain",
+      "deploy": "Deploy collection",
       "display": "Display NFT collection",
       "dropStart": "Drop start",
       "edit": "Edit",
@@ -1218,10 +1504,23 @@
       "upload": "Deploy NFT collection",
       "uploadData": "Compose NFT",
       "uploadImages": "Load images",
+      "uploadLogo": "Upload",
       "uploadMetadata": "Store NFT metadata",
       "uploadYourFirst": "Upload your first NFTs and start building your collection.",
       "uuid": "Collection UUID",
       "view": "Or, display them on your existing website",
+      "environment": "Chose environment",
+      "environmentContent": "Deploy on Testnet to test the template before launching it in production on Mainnet.",
+      "enterData": "Enter collection data",
+      "data": "Collection data",
+      "setBaseUri": "Set base URI",
+      "setBehavior": "Set collection behavior",
+      "preview": "Preview your collection",
+      "previewTab": "Collection preview",
+      "previewInfo": "This is the preview of your collection. After a successful deployment, you will be able to start adding NFTs.",
+      "deployInfo": "Deploy on Testnet to test the template before launching it in production in Mainnet.",
+      "headline": "How does it work?",
+      "info": "Launch your end-to-end decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the collection website on Web3.",
       "burn": {
         "title": "Burn token",
         "info": "Are you sure, you want to burn your token?"
@@ -1229,30 +1528,57 @@
       "created": {
         "bucket": "newly created bucket",
         "explorer": "blockchain explorer",
-        "goBack": "Go back to NFT Collections",
+        "goBack": "Go back to NFT Collection",
         "info": "To display your NFTs and mint them, you need a website. \nUse the Apillon NFT website template and host it on a decentralized network.",
         "or": "or see its contents in your",
         "title": "Display your NFTs on the internet",
         "view": "View the transaction on"
       },
+      "displayTypes": {
+        "string": {
+          "label": "String",
+          "info": "Textual traits that show as text boxes"
+        },
+        "date": {
+          "label": "Date",
+          "info": "Date traits that show as date boxes"
+        },
+        "number": {
+          "label": "Number",
+          "info": "Numerical traits that show as number boxes"
+        },
+        "boost_number": {
+          "label": "Boost number",
+          "info": "Numerical traits that show as progress bars"
+        },
+        "boost_percentage": {
+          "label": "Boost percentage",
+          "info": "Numerical traits that show as circle progress bars"
+        }
+      },
       "labelInfo": {
         "collectionBaseExtension": "",
         "collectionBaseUri": "Paste the collection metadata base URI here.",
         "collectionChain": "Select the network where your NFTs will be deployed",
+        "collectionChainType": "",
         "collectionDropStart": "A date when your NFT collection becomes publicly available for visitors to buy NFTs.",
         "collectionDrop": "With drop, your collection becomes accessible for visitors to buy NFTs from a certain date onwards.",
+        "collectionDropAddress": "Drop Withdrawal  Address",
         "collectionMaxSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection.",
         "collectionDropPrice": "",
         "collectionName": "The name you choose will be the official name of your NFT collection, “name” NFT collection.",
         "collectionDropReserve": "A number of NFT you wish to reserve for yourself before the drop.",
         "collectionRevocable": "Collection owner can destroy NFT(s) at any point in time.",
-        "collectionRoyaltiesAddress": "It’s the address to receive optional royalties in case NFT gets sold further.",
+        "collectionRoyaltiesAddress": "It’s Astar address to receive Withdrawal tokens when tokens aer being minted.",
         "collectionRoyaltiesFees": "The % value of royalties you want to collect in the future NFT sales.",
         "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
         "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
         "collectionType": "",
-        "collectionUseGateway": "Collection base uri points to IPFS. If this checkbox is checked, base uri will point to CID on Apillon private gateway, which provide better performance. Otherwise base uri points to: ipfs://[CID], and gateway need to be handled manually."
+        "collectionUseGateway": "Collection base URI points to IPFS. If this checkbox is checked, base URI will point to CID on Apillon private gateway, which provide better performance. Otherwise base URI points to: ipfs://[CID], and gateway needs to be handled manually.",
+        "collectionLogoSize": "Maximum size: 3MB, Supported formats: JPG, PNG, GIF, SVG. Recommended size: 400 x 400 px.",
+        "csvUpload": "Before adding new items to the collection with existing NFTs, please add an id column to the CSV file. This will help maintain data integrity and avoid any conflicts when adding new entries.",
+        "nftDisplayType": "Display type is a field indicating how you would like it to be displayed"
       },
       "status": {
         "0": "CREATED",
@@ -1268,10 +1594,13 @@
       }
     },
     "deploy": {
-      "collection": "Creating collection",
+      "collection": "Give it a minute or two while we prepare everything for you.",
+      "deployingCollection": "Deploying to blockchain...",
+      "creatingCollection": "Creating collection...",
       "deploying": "Deploying your NFTs",
       "metadata": "Uploading metadata",
-      "nft": "Deploying NFTs"
+      "nft": "Deploying NFTs",
+      "single": "Create NFT"
     },
     "metadata": {
       "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
@@ -1308,6 +1637,7 @@
       }
     },
     "upload": {
+      "addNft": "Add NFT",
       "attributes": "Metadata attributes",
       "csvConfirm": "Confirm CSV data",
       "csvConfirmAttributes": "Confirm attributes",
@@ -1323,6 +1653,7 @@
       "imagesDesc": "",
       "infoFile": "This is the first step to your NFT collection. The file names in the CSV record should match the names of NFT files you upload in the next step.",
       "infoImages": "Now, upload NFT files for your NFT collection, images or other media. File names should match those in the CSV metadata record from the previous step.",
+      "logo": "Upload logo",
       "preview": "Preview upload",
       "previewConfirm": "Looks good, proceed",
       "previewNfts": "Preview your NFTs",
@@ -1337,7 +1668,8 @@
       "csvRequiredColumns": "Missing metadata columns, required columns:",
       "fileInvalid": "Invalid file format. Please upload a valid CSV file with columns \"name\", \"description\", and \"image\".",
       "imagesMissing": "Missing images:",
-      "imagesInvalid": "Invalid image names. Example: "
+      "imagesInvalid": "Invalid image names. Example: ",
+      "selectAmount": "Please select how many NFTs would you like to create."
     },
     "openBucket": "Go to storage",
     "transactionType": "Transaction Type"
@@ -1489,18 +1821,21 @@
       "emptyInfo": "Grill.chat offers a smooth and simple onboarding and user experience while still leveraging the power of blockchain technology.",
       "name": "Hub name",
       "new": "New hub",
+      "select": "Select Hub",
       "settings": "Grill.chat hub config",
       "showSettings": "Show hub settings",
       "spaceId": "Hub ID",
       "tags": "Tags",
-      "title": "Hub title",
+      "title": "Hubs",
       "uploadImage": "Upload image",
       "uuid": "Hub UUID"
     },
     "post": {
       "body": "Channel  content",
       "create": "Create channel",
+      "createFirst": "Create first channel",
       "date": "Created",
+      "manageHubs": "Manage Hubs",
       "new": "New channel",
       "postId": "Channel ID",
       "select": "Select channel",
@@ -1571,7 +1906,7 @@
       "ipns": "IPNS Gateway",
       "ipnsInfo": "Used to access content via IPNS name",
       "project": "Project unique identifier",
-      "secretInfo": "Secret for project, used to generate a token to acess the content via the IPFS gateway",
+      "secretInfo": "Secret for project, used to generate a token to access the content via the IPFS gateway",
       "selectType": "Select type (CID/IPNS)",
       "subdomain": "Subdomain Gateway",
       "subdomainInfo": "If specified, content on ipfs can be access as subdomain.",
@@ -1683,10 +2018,12 @@
     "captchaRequired": "Captcha challenge required!",
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
+    "chatNameRequired": "Please enter Hub name",
     "collectionBaseUri": "Base URI is not valid",
     "collectionBaseUriRequired": "Please enter Base URI",
     "collectionBaseExtensionRequired": "Please enter Base Extension",
     "collectionChainRequired": "Please select Chain",
+    "collectionChainTypeRequired": "Please select Chain type",
     "collectionDropStart": "Drop start is not a valid date or has already passed by",
     "collectionMaxSupplyReached": "Enter lower value, max supply is {max}",
     "collectionMaxSupplyRequired": "Please enter Max supply",
@@ -1694,10 +2031,12 @@
     "collectionDropPriceRequired": "Please enter Mint price",
     "collectionNameRequired": "Please enter Collection name",
     "collectionDropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
-    "collectionRoyaltiesAddress": "Please enter a valid EVM address",
+    "collectionRoyaltiesAddress": "Please enter a valid Wallet address",
     "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
     "collectionRoyaltiesFees": "Royalty fee must be a number between 0 and 100",
     "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
+    "collectionLogoRequired": "Please select Collection logo",
+    "collectionCoverImageRequired": "Please select Collection cover image",
     "collectionSymbolRequired": "Please enter Collection symbol",
     "collectionTypeRequired": "Please select Collection type",
     "creditCard": "Credit card validation error",
@@ -1718,14 +2057,25 @@
     "ipfsTypeRequired": "Please select type",
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
+    "naturalNumber": "Please enter a positive number",
+    "nft": "Please select an NFT",
     "nftBucketRequired": "Please select a bucket",
     "nftBurnTokenIdRequired": "Please enter token ID",
+    "nftMetadata": "Please insert missing data, fields ID, image, name and description are required!",
     "nftMintAddressRequired": "Please enter your wallet address for minting",
     "nftMintCollectionUuidRequired": "Please select collection",
     "nftMintParentNftIdRequired": "Please enter Parent NFT ID",
     "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
     "nftMintQuantityRequired": "Please enter mint Quantity",
+    "nftSetBaseUriRequired": "Please enter base URI",
     "nftTransferAddressRequired": "Please enter wallet address",
+    "nftIdRequired": "Please enter ID of NFT",
+    "nftIdDuplicate": "Please enter different ID",
+    "nftName": "Please enter name of NFT",
+    "nftCollection": "Please select a Collection",
+    "nftRoyalties": "Please enter royalties",
+    "nftCopies": "Please enter number of NFT copies",
+    "nftDescription": "Please enter NFT's description",
     "notEnoughSpaceInStorage": "File \"{name}\" is too big. To proceed, please upgrade your subscription plan.",
     "notImage": "{name} is not an image",
     "passwordMinLength": "Password must contain at least 12 characters.",
@@ -1765,6 +2115,7 @@
       "depositAmountTooLow": "Please enter a higher amount (min. 0.01)",
       "fileIsApp": "Type of file \"{name}\" is is not supported, please use another file.",
       "fileTooBig": "File \"{name}\" is, max file size is 64kb.",
+      "fileRequired": "Please upload file",
       "nameRequired": "Please enter name",
       "nftIdRequired": "Please enter NFT ID"
     },
@@ -1796,6 +2147,7 @@
       "gateway": ""
     },
     "nft": {
+      "collection": "You are about to deploy a NFT collection to the blockchain. If you confirm this step, your NFT collection will irreversibly be deployed.",
       "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world."
     },
     "social": {

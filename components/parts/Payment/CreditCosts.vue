@@ -77,7 +77,7 @@ const props = defineProps({
 
 const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
-const { chains } = useCollection();
+const { chains, substrateChains } = useCollection();
 
 const identityChains = enumKeyValues(IdentityChains);
 const services = enumKeyValues(ServiceTypeName);
@@ -110,11 +110,11 @@ const chainsByService = computed(() => {
     case ServiceTypeName.HOSTING:
       return [];
     case ServiceTypeName.NFT:
-      return chains;
+      return [...chains, ...substrateChains];
     case ServiceTypeName.STORAGE:
       return [];
     default:
-      return [...identityChains, ...chains];
+      return [...identityChains, ...chains, ...substrateChains];
   }
 });
 
@@ -133,7 +133,7 @@ const shownPrices = computed(() => {
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
     const chainName = getChainName(selectedChain.value);
-    return servicePrices.value.filter(item => item.category.includes(chainName));
+    return servicePrices.value.filter(item => item.name.includes(chainName));
   } else if (props.filterByService && selectedService.value) {
     /** Filter by service */
     return servicePrices.value.filter(item => item.service === selectedService.value);
@@ -154,7 +154,7 @@ watch(
 
 function getChainName(chain: string | number, service?: string): string {
   if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
-    return Chains[chain];
+    return chain in Chains ? Chains[chain] : SubstrateChain[chain] + '_WASM';
   }
   return `${chain}`;
 }

@@ -65,9 +65,29 @@
         />
       </n-form-item>
 
+      <!--  Chain type -->
+      <n-form-item
+        v-show="collectionStore.form.base.chain === Chains.ASTAR"
+        path="base.chainType"
+        :label="infoLabel('collectionChainType')"
+        :label-props="{ for: 'chainType' }"
+      >
+        <select-options
+          v-model:value="collectionStore.form.base.chainType"
+          :options="chainTypes"
+          :input-props="{ id: 'chainType' }"
+          :placeholder="$t('general.pleaseSelect')"
+          filterable
+          clearable
+        />
+      </n-form-item>
+
       <!--  Collection type -->
       <n-form-item
-        v-if="isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles())"
+        v-if="
+          isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
+          collectionStore.form.base.chainType === ChainType.EVM
+        "
         path="base.collectionType"
         :label="infoLabel('collectionType')"
         :label-props="{ for: 'collectionType' }"
@@ -160,7 +180,12 @@
         </n-form-item-gi>
       </n-grid>
 
-      <n-grid class="items-end" :cols="12" :x-gap="32">
+      <n-grid
+        v-if="collectionStore.form.base.chainType === ChainType.EVM"
+        class="items-end"
+        :cols="12"
+        :x-gap="32"
+      >
         <!-- Collection Revocable -->
         <n-form-item-gi
           path="behavior.revocable"
@@ -194,7 +219,12 @@
         </n-form-item-gi>
       </n-grid>
 
-      <n-grid class="items-end" :cols="12" :x-gap="32">
+      <n-grid
+        v-if="collectionStore.form.base.chainType === ChainType.EVM"
+        class="items-end"
+        :cols="12"
+        :x-gap="32"
+      >
         <!-- Royalties Address -->
         <n-form-item-gi
           path="behavior.royaltiesAddress"
@@ -242,7 +272,7 @@
         <n-form-item-gi
           path="behavior.dropPrice"
           :span="6"
-          :label="$t('form.label.collectionDropPrice', { currency: chainCurrency })"
+          :label="$t('form.label.collectionDropPrice', { currency: chainCurrency() })"
           :label-props="{ for: 'dropPrice' }"
         >
           <n-input-number
@@ -276,6 +306,7 @@
       <n-grid v-if="!!collectionStore.form.behavior.drop" :cols="12" :x-gap="32">
         <!--  Collection Reserve -->
         <n-form-item-gi
+          v-if="collectionStore.form.base.chainType === ChainType.EVM"
           path="behavior.dropReserve"
           :span="6"
           :label="infoLabel('collectionDropReserve')"
@@ -283,6 +314,22 @@
           <n-input-number
             v-model:value="collectionStore.form.behavior.dropReserve"
             :min="0"
+            :placeholder="$t('general.typeHere')"
+            clearable
+          />
+        </n-form-item-gi>
+
+        <!-- Royalties Address -->
+        <n-form-item-gi
+          v-if="collectionStore.form.base.chainType === ChainType.SUBSTRATE"
+          path="behavior.royaltiesAddress"
+          :span="6"
+          :label="infoLabel('collectionDropAddress')"
+          :label-props="{ for: 'royaltiesAddress' }"
+        >
+          <n-input
+            v-model:value="collectionStore.form.behavior.royaltiesAddress"
+            :input-props="{ id: 'royaltiesAddress' }"
             :placeholder="$t('general.typeHere')"
             clearable
           />
@@ -316,28 +363,34 @@
 
 <script lang="ts" setup>
 const emit = defineEmits(['submitSuccess']);
-const modalW3WarnVisible = ref<boolean>(false);
 
 const $i18n = useI18n();
 const router = useRouter();
 const message = useMessage();
 
 const authStore = useAuthStore();
-const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 const { getPriceServiceName } = useNft();
 const {
   booleanSelect,
   chains,
+  chainTypes,
   collectionTypes,
   formRef,
   loading,
   supplyTypes,
   rules,
   isFormDisabled,
+  chainCurrency,
+  collectionEndpoint,
   disablePasteDate,
   disablePasteTime,
+  infoLabel,
+  onChainChange,
+  prepareFormData,
 } = useCollection();
 
 const formErrors = ref<boolean>(false);
@@ -351,45 +404,10 @@ const metadataUri = computed<string>(() => {
     : '';
 });
 
-const chainCurrency = computed<string>(() => {
-  switch (collectionStore.form.base.chain) {
-    case Chains.ASTAR:
-      return 'ASTR';
-    default:
-      return 'GLMR';
-  }
-});
-
-function infoLabel(field: string) {
-  if (
-    $i18n.te(`form.label.${field}`) &&
-    $i18n.te(`nft.collection.labelInfo.${field}`) &&
-    $i18n.t(`nft.collection.labelInfo.${field}`)
-  ) {
-    return [
-      h('span', { class: 'mr-1' }, $i18n.t(`form.label.${field}`)),
-      h(
-        resolveComponent('IconInfo'),
-        { size: 'sm', tooltip: $i18n.t(`nft.collection.labelInfo.${field}`) },
-        ''
-      ),
-    ];
-  }
-  return $i18n.te(`form.label.${field}`) ? $i18n.t(`form.label.${field}`) : field;
-}
-
-/** When user close W3Warn, allow him to create new collection */
-function onModalW3WarnConfirm() {
-  warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
-}
-
-/** Watch modalW3WarnVisible, onShow update timestamp of shown modal in session storage */
 watch(
-  () => modalW3WarnVisible.value,
-  shown => {
-    if (shown) {
-      localStorage.setItem(LsW3WarnKeys.NFT_NEW, Date.now().toString());
-    }
+  () => collectionStore.form.base.chain,
+  chain => {
+    onChainChange(chain);
   }
 );
 
@@ -405,44 +423,21 @@ function handleSubmit(e: Event | MouseEvent) {
     } else if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
       modalW3WarnVisible.value = true;
     } else {
-      warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
+      onModalW3WarnConfirm();
     }
   });
+}
+
+/** When user close W3Warn, allow him to create new collection */
+function onModalW3WarnConfirm() {
+  warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
 }
 
 async function createCollection() {
   loading.value = true;
 
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
-
   try {
-    const bodyData = {
-      project_uuid: dataStore.projectUuid,
-      name: collectionStore.form.base.name,
-      symbol: collectionStore.form.base.symbol,
-      chain: collectionStore.form.base.chain,
-      collectionType: collectionStore.form.base.collectionType,
-      dropPrice: collectionStore.form.behavior.dropPrice,
-      maxSupply:
-        collectionStore.form.behavior.supplyLimited === 1
-          ? collectionStore.form.behavior.maxSupply
-          : 0,
-      baseUri: collectionStore.form.behavior.baseUri,
-      baseExtension: collectionStore.form.behavior.baseExtension,
-      drop: collectionStore.form.behavior.drop,
-      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
-      dropReserve: collectionStore.form.behavior.dropReserve,
-      isRevokable: collectionStore.form.behavior.revocable,
-      isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress:
-        collectionStore.form.behavior.royaltiesFees === 0
-          ? null
-          : collectionStore.form.behavior.royaltiesAddress,
-      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
-    };
-    const res = await $api.post<CollectionResponse>(endpoints.collections(), bodyData);
+    const res = await $api.post<CollectionResponse>(collectionEndpoint(), prepareFormData(true));
 
     message.success($i18n.t('form.success.created.collection'));
 
