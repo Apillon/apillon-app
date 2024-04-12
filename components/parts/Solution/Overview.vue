@@ -97,8 +97,8 @@ const web3Services = computed(() => [
     icon: 'icon-nft',
     data: [
       {
-        name: t(`dashboard.service.nft.numOfCollections`),
-        value: dataStore.project.overview.numOfCollections,
+        name: t(`dashboard.service.nft.collectionCount`),
+        value: dataStore.project.overview.collectionCount,
       },
       {
         name: t(`dashboard.service.nft.nftTransactionCount`),
