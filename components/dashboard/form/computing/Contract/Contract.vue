@@ -15,7 +15,7 @@
 
     <n-form
       ref="formRef"
-      :model="formData"
+      :model="contractStore.form"
       :rules="rules"
       :disabled="isFormDisabled"
       autocomplete="off"
@@ -28,7 +28,7 @@
         :label-props="{ for: 'name' }"
       >
         <n-input
-          v-model:value="formData.name"
+          v-model:value="contractStore.form.name"
           :input-props="{ id: 'name' }"
           :placeholder="$t('form.placeholder.contract.name')"
           clearable
@@ -42,7 +42,7 @@
         :label-props="{ for: 'description' }"
       >
         <n-input
-          v-model:value="formData.description"
+          v-model:value="contractStore.form.description"
           type="textarea"
           :input-props="{ id: 'description' }"
           :placeholder="$t('form.placeholder.contract.description')"
@@ -58,7 +58,7 @@
         :label-props="{ for: 'contractType' }"
       >
         <select-options
-          v-model:value="formData.contractType"
+          v-model:value="contractStore.form.contractType"
           :options="contractTypes"
           :input-props="{ id: 'contractType' }"
           :placeholder="$t('general.pleaseSelect')"
@@ -73,7 +73,7 @@
         :label-props="{ for: 'bucket_uuid' }"
       >
         <select-options
-          v-model:value="formData.bucket_uuid"
+          v-model:value="contractStore.form.bucket_uuid"
           :options="buckets"
           :placeholder="$t('general.pleaseSelect')"
           filterable
@@ -98,7 +98,7 @@
       >
         <select-options
           v-if="useApillonCollection"
-          v-model:value="formData.contractData.nftContractAddress"
+          v-model:value="contractStore.form.contractData.nftContractAddress"
           :options="contractAddresses"
           :input-props="{ id: 'nftContractAddress' }"
           :placeholder="$t('form.placeholder.contract.nftContractAddress')"
@@ -109,7 +109,7 @@
         />
         <n-input
           v-else
-          v-model:value="formData.contractData.nftContractAddress"
+          v-model:value="contractStore.form.contractData.nftContractAddress"
           :input-props="{ id: 'nftContractAddress' }"
           :placeholder="$t('form.placeholder.contract.nftContractAddress')"
           clearable
@@ -125,14 +125,14 @@
       >
         <n-input
           v-if="rpcLocked"
-          v-model:value="formData.contractData.nftChainRpcUrl"
+          v-model:value="contractStore.form.contractData.nftChainRpcUrl"
           :input-props="{ id: 'nftChainRpcUrl' }"
           :placeholder="$t('form.placeholder.contract.nftChainRpcUrl')"
           readonly
         />
         <select-options
           v-else
-          v-model:value="formData.contractData.nftChainRpcUrl"
+          v-model:value="contractStore.form.contractData.nftChainRpcUrl"
           :options="nftChainRpcUrls"
           :input-props="{ id: 'nftChainRpcUrl' }"
           :placeholder="$t('form.placeholder.contract.nftChainRpcUrl')"
@@ -152,7 +152,7 @@
         :label-props="{ for: 'restrictToOwner' }"
       >
         <select-options
-          v-model:value="formData.contractData.restrictToOwner"
+          v-model:value="contractStore.form.contractData.restrictToOwner"
           :options="booleanSelect"
           :input-props="{ id: 'restrictToOwner' }"
           :placeholder="$t('general.pleaseSelect')"
@@ -202,6 +202,7 @@ const contractStore = useContractStore();
 const collectionStore = useCollectionStore();
 const warningStore = useWarningStore();
 const { booleanSelect } = useCollection();
+const { labelInfo } = useComputing();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
@@ -246,18 +247,6 @@ const nftChainRpcUrls = ref<SelectOption[]>(
   })
 );
 
-const formData = ref<FormContract>({
-  name: '',
-  description: '',
-  contractType: ComputingContractType.SCHRODINGER,
-  bucket_uuid: null,
-  contractData: {
-    nftContractAddress: null,
-    nftChainRpcUrl: null,
-    restrictToOwner: false,
-  },
-});
-
 const rules: NFormRules = {
   name: [ruleRequired($i18n.t('validation.contract.nameRequired'))],
   description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
@@ -273,24 +262,6 @@ onMounted(async () => {
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
-
-function labelInfo(field: string) {
-  if (
-    $i18n.te(`form.label.contract.${field}`) &&
-    $i18n.te(`form.label.contract.labelInfo.${field}`) &&
-    $i18n.t(`form.label.contract.labelInfo.${field}`)
-  ) {
-    return [
-      h('span', { class: 'mr-1' }, $i18n.t(`form.label.contract.${field}`)),
-      h(
-        resolveComponent('IconInfo'),
-        { size: 'sm', tooltip: $i18n.t(`form.label.contract.labelInfo.${field}`) },
-        ''
-      ),
-    ];
-  }
-  return $i18n.te(`form.label.contract.${field}`) ? $i18n.t(`form.label.contract.${field}`) : field;
-}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -319,7 +290,7 @@ async function createContract() {
 
   try {
     const bodyData = {
-      ...formData.value,
+      ...contractStore.form,
       project_uuid: dataStore.projectUuid,
     };
     const res = await $api.post<ContractResponse>(endpoints.contracts(), bodyData);
@@ -342,10 +313,10 @@ function onContractChange(contractAddress: string) {
   const collection = collectionStore.items.find(item => item.contractAddress === contractAddress);
 
   if (contractAddress && collection && rpc[collection.chain]) {
-    formData.value.contractData.nftChainRpcUrl = rpc[collection.chain];
+    contractStore.form.contractData.nftChainRpcUrl = rpc[collection.chain];
     rpcLocked.value = true;
   } else if (!contractAddress) {
-    formData.value.contractData.nftChainRpcUrl = '';
+    contractStore.form.contractData.nftChainRpcUrl = '';
     rpcLocked.value = false;
   }
 }

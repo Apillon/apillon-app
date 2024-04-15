@@ -59,7 +59,7 @@ declare global {
     didCount: number;
     fileCount: number;
     nftTransactionCount: number;
-    numOfCollections: number;
+    collectionCount: number;
     postCount: number;
     spaceCount: number;
     usedBandwidth: number;

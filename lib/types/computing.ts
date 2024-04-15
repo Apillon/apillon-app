@@ -35,6 +35,19 @@ export enum EncryptTab {
   FINISHED = 3,
 }
 
+/** Encrypt configure steps */
+export enum EncryptConfigureTab {
+  BASE = 1,
+  NFT_COLLECTION = 2,
+}
+
+/** Encrypt deploy steps */
+export enum EncryptDeployTab {
+  PREVIEW = 1,
+  DEPLOYING = 2,
+  DEPLOYED = 3,
+}
+
 declare global {
   /**
    * Contract
