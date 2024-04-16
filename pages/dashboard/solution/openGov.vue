@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h3>{{ $t('dashboard.solutions.openGov.name') }}</h3>
+          <h3>{{ $t('dashboard.solution.openGov.name') }}</h3>
         </slot>
       </Heading>
     </template>
@@ -12,7 +12,7 @@
         <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
           <SolutionContent :content="content">
             <Btn type="primary" href="https://github.com/Apillon/ps-wasm-proposal-airdrop/fork">
-              {{ $t('dashboard.solutions.deploy') }}
+              {{ $t('dashboard.solution.deploy') }}
             </Btn>
           </SolutionContent>
 
@@ -27,7 +27,7 @@
                   href="https://github.com/Apillon/ps-wasm-proposal-airdrop"
                 >
                   <span class="icon-github mr-2"></span>
-                  <strong class="body-sm"> {{ $t('dashboard.solutions.viewCode') }}</strong>
+                  <strong class="body-sm"> {{ $t('dashboard.solution.viewCode') }}</strong>
                 </Btn>
               </div>
             </div>
@@ -35,7 +35,7 @@
         </div>
 
         <div class="max-w-lg mb-8">
-          <h4>{{ $t('dashboard.solutions.includedWeb3Services') }}</h4>
+          <h4>{{ $t('dashboard.solution.includedWeb3Services') }}</h4>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
           <Card v-for="(service, key) in nftServices" :key="key" :service="service" hide-usage />
@@ -53,7 +53,7 @@ const { web3Services } = useService();
 const { generateContent } = useSolution();
 
 useHead({
-  title: t('dashboard.solutions.openGov.name'),
+  title: t('dashboard.solution.openGov.name'),
 });
 
 const content = generateContent(SolutionKey.OPEN_GOV);

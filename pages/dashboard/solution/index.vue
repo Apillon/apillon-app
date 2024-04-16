@@ -43,7 +43,7 @@
                     :disabled="!service.github"
                     :href="service.github"
                   >
-                    {{ $t('dashboard.solutions.viewCode') }}
+                    {{ $t('dashboard.solution.viewCode') }}
                   </Btn>
                   <Btn
                     v-if="service.link"
@@ -92,7 +92,7 @@ const solutions: Array<SolutionTypeItem> = [
     icon: 'icon-nft-drop',
     link: 'dashboard-solution-email-signup-airdrop',
     github: 'https://github.com/Apillon/ps-signup-email-airdrop',
-    usage: translateItems('dashboard.solutions.nftEmailSignupAirdrop.usage'),
+    usage: translateItems('dashboard.solution.nftEmailSignupAirdrop.usage'),
   },
   {
     name: SolutionKey.NFT_POAP,
@@ -113,7 +113,7 @@ const solutions: Array<SolutionTypeItem> = [
     icon: 'icon-brand-membership',
     link: 'dashboard-solution-openGov',
     github: 'https://github.com/Apillon/ps-wasm-proposal-airdrop',
-    usage: translateItems('dashboard.solutions.openGov.usage'),
+    usage: translateItems('dashboard.solution.openGov.usage'),
   },
 ];
 </script>

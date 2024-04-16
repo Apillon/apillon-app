@@ -533,8 +533,8 @@
         "usage": ["metadata storage", "file storage"]
       },
       "nftAirdrop": {
-        "name": "NFT Email airdrop",
-        "description": "Create a NFT collection, upload target addresses and automatically distribute NFTs to target addresses.",
+        "name": "NFT Email Airdrop",
+        "description": "Create an NFT collection, upload target addresses and automatically distribute NFTs to them.",
         "content": [
           {
             "headline": "How does it work?",
@@ -622,8 +622,8 @@
         "usage": ["metadata storage", "file storage"]
       },
       "nftEmailSignupAirdrop": {
-        "name": "NFT Email signup airdrop",
-        "description": "This prebuild solution is targeted for airdropping NFTs to new and unknown users with a limited or unlimited NFT supply.",
+        "name": "NFT Email Signup Airdrop",
+        "description": "Airdrop NFTs with a limited or unlimited supply to new and random user wallets.",
         "content": [
           {
             "content": "This ready-made solution is designed to help you give out digital collectibles (called NFTs) to new users, even if you don't know their email address. You can choose to give out a limited number of NFTs or as many as you want."
@@ -687,8 +687,8 @@
         "usage": ["metadata storage", "file storage"]
       },
       "nftPoap": {
-        "name": "POA - Proof of Attendance",
-        "description": "Create POAP drops simply by clicking. Manage your POAP, allow users to either mint or email reserve the NFTs and boost your next event.",
+        "name": "PoAP - Proof of Attendance NFTs",
+        "description": "Boost your event by creating PoAP drops in a click and let users mint or email-reserve NFTs.",
         "content": [
           {
             "headline": "What are POAPs?",
@@ -753,8 +753,8 @@
         "usage": ["metadata storage", "file storage"]
       },
       "nftWhitelistClaim": {
-        "name": "Whitelist NFT claim",
-        "description": "Instead of giving out NFTs for free, you can let users claim them themselves. But in this case, users need to pay the transaction fees. ",
+        "name": "Whitelist NFT Claim",
+        "description": "Instead of giving out NFTs for free, let users claim them and pay transaction fees.",
         "content": [
           {
             "content": "Instead of giving out NFTs for free, you can let users claim them themselves. But in this case, users need to pay the transaction fees."
@@ -793,8 +793,8 @@
         "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
       },
       "openGov": {
-        "name": "OpenGov wasm proposal airdrop",
-        "description": "This prebuilt solution lets you send special digital collectibles (called NFTs), by using WASM smart contract, to people who voted a certain way on a specific government proposal.",
+        "name": "OpenGov WASM Proposal Airdrop",
+        "description": "Send NFTs using WASM smart contract to Aye/Nay voters on an OpenGov proposal.",
         "content": [
           {
             "content": "This prebuilt solution lets you send special digital collectibles (called NFTs), by using WASM smart contract, to people who voted a certain way on a specific government proposal."
