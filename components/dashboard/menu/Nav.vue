@@ -42,6 +42,14 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
 
   const servicesChildren = [
     {
+      key: 'dashboard-service',
+      label: $i18n.t('dashboard.nav.explore'),
+      to: 'dashboard-service',
+      class: 'text-yellow',
+      iconName: 'icon-wide-right',
+      show: !props.collapsed,
+    },
+    {
       key: 'dashboard-service-storage',
       label: $i18n.t('dashboard.nav.storage'),
       to: 'dashboard-service-storage',
@@ -107,17 +115,16 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         !authStore.isUserAllowed(Permission.SOCIAL) ||
         zeroProjects.value,
     },
+  ];
+
+  const smartContractsChildren = [
     {
-      key: 'dashboard-service',
+      key: 'dashboard-smart-contracts',
       label: $i18n.t('dashboard.nav.explore'),
-      to: 'dashboard-service',
       class: 'text-yellow',
       iconName: 'icon-wide-right',
       show: !props.collapsed,
     },
-  ];
-
-  const smartContractsChildren = [
     {
       key: 'dashboard-smart-erc-721',
       label: 'ERC-721',
@@ -142,17 +149,18 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-rmrk',
       disabled: isMenuItemDisabled(Feature.RMRK) || zeroProjects.value,
     },
-    {
-      key: 'dashboard-smart-contracts',
-      label: $i18n.t('dashboard.nav.explore'),
-      class: 'text-yellow',
-      iconName: 'icon-wide-right',
-      show: !props.collapsed,
-    },
   ];
 
   const solutionsChildren = isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())
     ? [
+        {
+          key: 'dashboard-solution',
+          label: $i18n.t('dashboard.nav.explore'),
+          to: 'dashboard-solution',
+          class: 'text-yellow',
+          iconName: 'icon-wide-right',
+          show: !props.collapsed,
+        },
         {
           key: 'dashboard-solution-nft-airdrop',
           label: $i18n.t('dashboard.solution.nftAirdrop.name'),
@@ -187,14 +195,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
           iconName: 'icon-brand-membership',
           to: 'dashboard-solution-openGov',
           disabled: zeroProjects.value,
-        },
-        {
-          key: 'dashboard-solution',
-          label: $i18n.t('dashboard.nav.explore'),
-          to: 'dashboard-solution',
-          class: 'text-yellow',
-          iconName: 'icon-wide-right',
-          show: !props.collapsed,
         },
       ]
     : [];
