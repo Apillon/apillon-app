@@ -3,7 +3,7 @@
     <template #heading>
       <Heading>
         <slot>
-          <h3>{{ $t('dashboard.solutions.nftWhitelistClaim.name') }}</h3>
+          <h3>{{ $t('dashboard.solution.nftWhitelistClaim.name') }}</h3>
         </slot>
       </Heading>
     </template>
@@ -12,7 +12,7 @@
         <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
           <SolutionContent :content="content">
             <Btn type="primary" href="https://github.com/Apillon/ps-whitelist-claim/fork">
-              {{ $t('dashboard.solutions.deploy') }}
+              {{ $t('dashboard.solution.deploy') }}
             </Btn>
           </SolutionContent>
 
@@ -23,7 +23,7 @@
               <div class="absolute left-0 right-0 top-0 bottom-0 flex-cc bg-bg-dark/75">
                 <Btn type="info" size="small" href="https://github.com/Apillon/ps-whitelist-claim">
                   <span class="icon-github mr-2"></span>
-                  <strong class="body-sm"> {{ $t('dashboard.solutions.viewCode') }}</strong>
+                  <strong class="body-sm"> {{ $t('dashboard.solution.viewCode') }}</strong>
                 </Btn>
               </div>
             </div>
@@ -31,7 +31,7 @@
         </div>
 
         <div class="max-w-lg mb-8">
-          <h4>{{ $t('dashboard.solutions.includedWeb3Services') }}</h4>
+          <h4>{{ $t('dashboard.solution.includedWeb3Services') }}</h4>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
           <Card v-for="(service, key) in nftServices" :key="key" :service="service" hide-usage />
@@ -49,7 +49,7 @@ const { web3Services } = useService();
 const { generateContent } = useSolution();
 
 useHead({
-  title: t('dashboard.solutions.nftWhitelistClaim.name'),
+  title: t('dashboard.solution.nftWhitelistClaim.name'),
 });
 
 const content = generateContent(SolutionKey.NFT_WHITELIST_CLAIM);
