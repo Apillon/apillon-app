@@ -9,7 +9,7 @@
     :collapsed="collapsed"
     :collapsed-width="40"
     :collapsed-icon-size="24"
-    :default-expanded-keys="['services', 'configuration']"
+    :default-expanded-keys="defaultExpandedKeys"
     :options="menuOptions"
     @update:value="$emit('toggleSidebar')"
   />
@@ -27,9 +27,16 @@ defineEmits(['toggleSidebar']);
 const $i18n = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const { name } = useRoute();
 
 const menuKey = computed<string>(() => `menu-${dataStore.project.items.length}`);
 const zeroProjects = computed(() => dataStore.hasProjects === false);
+
+const defaultExpandedKeys = computed(() =>
+  (name?.toString() || '').includes('solution')
+    ? ['services', 'solutions', 'configuration']
+    : ['services', 'configuration']
+);
 
 const menuOptions = computed<MenuMixedOption[]>(() => {
   const dashboard = {
@@ -41,6 +48,14 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
   };
 
   const servicesChildren = [
+    {
+      key: 'dashboard-service',
+      label: $i18n.t('dashboard.nav.explore'),
+      to: 'dashboard-service',
+      class: 'text-yellow',
+      iconName: 'icon-wide-right',
+      show: !props.collapsed,
+    },
     {
       key: 'dashboard-service-storage',
       label: $i18n.t('dashboard.nav.storage'),
@@ -107,17 +122,16 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         !authStore.isUserAllowed(Permission.SOCIAL) ||
         zeroProjects.value,
     },
+  ];
+
+  const smartContractsChildren = [
     {
-      key: 'dashboard-service',
+      key: 'dashboard-smart-contracts',
       label: $i18n.t('dashboard.nav.explore'),
-      to: 'dashboard-service',
       class: 'text-yellow',
       iconName: 'icon-wide-right',
       show: !props.collapsed,
     },
-  ];
-
-  const smartContractsChildren = [
     {
       key: 'dashboard-smart-erc-721',
       label: 'ERC-721',
@@ -142,33 +156,34 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-rmrk',
       disabled: isMenuItemDisabled(Feature.RMRK) || zeroProjects.value,
     },
-    {
-      key: 'dashboard-smart-contracts',
-      label: $i18n.t('dashboard.nav.explore'),
-      class: 'text-yellow',
-      iconName: 'icon-wide-right',
-      show: !props.collapsed,
-    },
   ];
 
   const solutionsChildren = isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())
     ? [
         {
-          key: 'dashboard-solution-nft-airdrop',
+          key: 'dashboard-solution',
+          label: $i18n.t('dashboard.nav.explore'),
+          to: 'dashboard-solution',
+          class: 'text-yellow',
+          iconName: 'icon-wide-right',
+          show: !props.collapsed,
+        },
+        {
+          key: 'dashboard-solution-airdrop',
           label: $i18n.t('dashboard.solution.nftAirdrop.name'),
           iconName: 'icon-nft-mint-airdrop',
           to: 'dashboard-solution-airdrop',
           disabled: zeroProjects.value,
         },
         {
-          key: 'dashboard-solution-nft-email-signup-airdrop',
+          key: 'dashboard-solution-email-signup-airdrop',
           label: $i18n.t('dashboard.solution.nftEmailSignupAirdrop.name'),
           iconName: 'icon-nft-drop',
           to: 'dashboard-solution-email-signup-airdrop',
           disabled: zeroProjects.value,
         },
         {
-          key: 'dashboard-solution-poap',
+          key: 'dashboard-solution-proof-of-attendance',
           label: $i18n.t('dashboard.solution.nftPoap.name'),
           iconName: 'icon-poap',
           to: 'dashboard-solution-proof-of-attendance',
@@ -187,14 +202,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
           iconName: 'icon-brand-membership',
           to: 'dashboard-solution-openGov',
           disabled: zeroProjects.value,
-        },
-        {
-          key: 'dashboard-solution',
-          label: $i18n.t('dashboard.nav.explore'),
-          to: 'dashboard-solution',
-          class: 'text-yellow',
-          iconName: 'icon-wide-right',
-          show: !props.collapsed,
         },
       ]
     : [];
