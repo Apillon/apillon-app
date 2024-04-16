@@ -1,6 +1,6 @@
 @layer utilities {
-  .link-text {
-    @apply font-bold underline hover:no-underline hover:text-gold;
+  .link {
+    @apply underline text-yellow;
   }
 
   /**

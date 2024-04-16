@@ -9,7 +9,7 @@
     :collapsed="collapsed"
     :collapsed-width="40"
     :collapsed-icon-size="24"
-    :default-expanded-keys="['services', 'configuration']"
+    :default-expanded-keys="defaultExpandedKeys"
     :options="menuOptions"
     @update:value="$emit('toggleSidebar')"
   />
@@ -27,9 +27,16 @@ defineEmits(['toggleSidebar']);
 const $i18n = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
+const { name } = useRoute();
 
 const menuKey = computed<string>(() => `menu-${dataStore.project.items.length}`);
 const zeroProjects = computed(() => dataStore.hasProjects === false);
+
+const defaultExpandedKeys = computed(() =>
+  (name?.toString() || '').includes('solution')
+    ? ['services', 'solutions', 'configuration']
+    : ['services', 'configuration']
+);
 
 const menuOptions = computed<MenuMixedOption[]>(() => {
   const dashboard = {
@@ -162,21 +169,21 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
           show: !props.collapsed,
         },
         {
-          key: 'dashboard-solution-nft-airdrop',
+          key: 'dashboard-solution-airdrop',
           label: $i18n.t('dashboard.solution.nftAirdrop.name'),
           iconName: 'icon-nft-mint-airdrop',
           to: 'dashboard-solution-airdrop',
           disabled: zeroProjects.value,
         },
         {
-          key: 'dashboard-solution-nft-email-signup-airdrop',
+          key: 'dashboard-solution-email-signup-airdrop',
           label: $i18n.t('dashboard.solution.nftEmailSignupAirdrop.name'),
           iconName: 'icon-nft-drop',
           to: 'dashboard-solution-email-signup-airdrop',
           disabled: zeroProjects.value,
         },
         {
-          key: 'dashboard-solution-poap',
+          key: 'dashboard-solution-proof-of-attendance',
           label: $i18n.t('dashboard.solution.nftPoap.name'),
           iconName: 'icon-poap',
           to: 'dashboard-solution-proof-of-attendance',
