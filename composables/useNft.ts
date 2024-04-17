@@ -345,7 +345,7 @@ export default function useNft() {
    */
   function createNftFiles(nftData: Array<Record<string, any>>): FileListItemType[] {
     return nftData.map((nft, index) => {
-      const id = nft.id || index + 1;
+      const id = Number(nft.id || index + 1);
 
       /** Prepare NFT data */
       const nftData = JSON.parse(JSON.stringify(nft));
