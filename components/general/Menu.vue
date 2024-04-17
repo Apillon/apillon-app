@@ -15,14 +15,13 @@
 const props = defineProps({
   sliceName: { type: Boolean, default: false },
 });
-const route = useRoute();
 const { name } = useRoute();
 const selectedMenu = ref<string>(routeNameToKey(name?.toString() || ''));
 const NuxtLink = resolveComponent('NuxtLink');
 
 /** Watch route name and refresh selected menu item */
 const routeName = computed(() => {
-  return route.name?.toString() || '';
+  return name?.toString() || '';
 });
 watch(
   () => routeName.value,

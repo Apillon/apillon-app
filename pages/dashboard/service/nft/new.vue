@@ -1,7 +1,9 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderNftNew />
+      <div ref="headingRef">
+        <HeaderNftNew />
+      </div>
     </template>
 
     <slot>
@@ -92,7 +94,7 @@
               <span class="ml-2 text-sm text-white">{{ $t('nft.add') }}</span>
             </template>
             <slot>
-              <FormNftCreateMetadata deploy-collection />
+              <FormNftCreateMetadata deploy-collection :style="scrollStyle" />
             </slot>
           </n-tab-pane>
         </n-tabs>
@@ -173,9 +175,15 @@ useHead({
 });
 
 const pageLoading = ref<boolean>(true);
-const mintTabsRef = ref<TabsInst | null>(null);
-
 const images = ref<Array<FileListItemType>>([]);
+const mintTabsRef = ref<TabsInst | null>(null);
+const headingRef = ref<HTMLElement>();
+
+const scrollStyle = computed(() => {
+  return {
+    height: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
+  };
+});
 
 onMounted(() => {
   resetAndAddNft();
@@ -193,9 +201,6 @@ function w3WarnAndDeploy() {
 }
 
 async function onModalW3WarnConfirm() {
-  const chain = collectionStore.active?.chain
-    ? collectionStore.active.chain
-    : collectionStore.form.base.chain;
   warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
 }
 
