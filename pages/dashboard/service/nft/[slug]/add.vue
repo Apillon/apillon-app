@@ -1,13 +1,16 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderNftNew />
+      <div ref="headingRef">
+        <HeaderNftNew />
+      </div>
     </template>
 
     <slot>
       <div class="mobile:relative">
         <FormNftCreateMetadata
           :deploy-collection="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
+          :style="scrollStyle"
         />
         <button
           v-if="
@@ -71,6 +74,13 @@ const pageLoading = ref<boolean>(true);
 
 /** Collection UUID from route */
 const collectionUuid = ref<string>(`${params?.slug}`);
+
+const headingRef = ref<HTMLElement>();
+const scrollStyle = computed(() => {
+  return {
+    height: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
+  };
+});
 
 onMounted(async () => {
   if (!params?.slug) router.push({ name: 'dashboard-service-nft' });
