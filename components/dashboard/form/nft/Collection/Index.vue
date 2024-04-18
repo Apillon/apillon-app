@@ -446,6 +446,7 @@ async function createCollection() {
 
     collectionStore.resetMetadata();
     collectionStore.resetForms();
+    collectionStore.resetCache();
 
     /** Emit events */
     emit('submitSuccess');

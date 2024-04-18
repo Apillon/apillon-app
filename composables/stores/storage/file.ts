@@ -5,7 +5,7 @@ import { typesBundleForPolkadot } from '@crustio/type-definitions';
 
 export const useFileStore = defineStore('file', {
   state: () => ({
-    all: [] as Array<FileUploadInterface>,
+    all: [] as Array<FileUploadSessionInterface>,
     crust: {} as Record<string, AnyJson>,
     currentBlockId: 0,
     items: {} as Record<string, FileInterface>,
@@ -33,7 +33,7 @@ export const useFileStore = defineStore('file', {
   },
   actions: {
     resetData() {
-      this.all = [] as Array<FileUploadInterface>;
+      this.all = [] as Array<FileUploadSessionInterface>;
       this.items = {} as Record<string, FileInterface>;
       this.loading = false;
       this.total = 0;
@@ -125,7 +125,7 @@ export const useFileStore = defineStore('file', {
       return 0;
     },
 
-    async fetchAllFiles(fileStatus?: number, args: FetchParams = {}) {
+    async fetchAllFiles(fileStatus?: number | null, args: FetchParams = {}) {
       const bucketStore = useBucketStore();
       this.loading = args.loader !== undefined ? args.loader : true;
 
@@ -138,10 +138,11 @@ export const useFileStore = defineStore('file', {
         /** Add additional parameters */
         if (fileStatus) {
           params.fileStatus = fileStatus;
+          params.sessionStatus = fileStatus;
         }
 
-        const res = await $api.get<FileUploadsResponse>(
-          endpoints.storageFileUploads(bucketUuid),
+        const res = await $api.get<FileUploadSessionsResponse>(
+          endpoints.storageFileUploadSessions(bucketUuid),
           params
         );
         this.loading = false;

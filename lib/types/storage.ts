@@ -82,6 +82,14 @@ export enum DeploymentStatus {
   REJECTED = 101,
 }
 
+export enum FileUploadSessionStatus {
+  CREATED = 1,
+  /* Session was ended - upload is not possible anymore. Sync to IPFS will start... */
+  PROCESSED = 2,
+  /* Files in session has been synced to IPFS */
+  FINISHED = 3,
+}
+
 declare global {
   /**
    * Storage
@@ -211,15 +219,18 @@ declare global {
     path?: string | null;
     size: number;
   }
-  interface FileUploadInterface {
-    id: number;
-    status: number;
+  interface FileUploadInterface extends GeneralInterface {
     file_uuid: string;
-    path: string;
     fileName: string;
     contentType: string;
     fileStatus: number;
     CID: string;
+  }
+  interface FileUploadSessionInterface {
+    numOfFileUploadRequests: number;
+    numOfUploadedFiles: number;
+    sessionStatus: number;
+    session_uuid: string;
   }
   interface CrustInterface {
     amount: number;
@@ -241,6 +252,8 @@ declare global {
   interface FilesUploadRequestResponse extends GeneralResponse<S3FilesUploadRequestInterface> {}
   interface FileUploadSessionResponse extends GeneralResponse<boolean> {}
   interface FileUploadsResponse extends GeneralItemsResponse<FileUploadInterface> {}
+  interface FileUploadSessionsResponse extends GeneralItemsResponse<FileUploadSessionInterface> {}
+  interface SessionDetailsResponse extends GeneralItemsResponse<FileUploadInterface> {}
 
   /**
    * Webhook
