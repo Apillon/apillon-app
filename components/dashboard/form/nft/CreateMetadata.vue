@@ -80,6 +80,7 @@ async function deploy() {
     await deployCollection(props.deployCollection);
 
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
+    collectionStore.resetCache();
 
     /** Emit events */
     emit('submitSuccess');

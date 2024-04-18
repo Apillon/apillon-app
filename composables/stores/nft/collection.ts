@@ -143,6 +143,11 @@ export const useCollectionStore = defineStore('collection', {
 
       this.resetSingleFormData();
     },
+    resetCache() {
+      sessionStorage.removeItem(LsCacheKeys.COLLECTION);
+      sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
+      sessionStorage.removeItem(LsCacheKeys.COLLECTION_TRANSACTIONS);
+    },
     /**
      * Fetch wrappers
      */

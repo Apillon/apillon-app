@@ -1,6 +1,6 @@
 <template>
   <n-space class="pb-8" :size="12" vertical>
-    <n-space justify="space-between">
+    <n-space class="!hidden" justify="space-between">
       <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
         <n-input
           v-model:value="fileStore.search"
@@ -47,23 +47,20 @@
 import debounce from 'lodash.debounce';
 import type { SelectOption } from 'naive-ui';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const fileStore = useFileStore();
-const showModalDelete = ref<boolean>(false);
-const drawerFileDetailsVisible = ref<boolean>(false);
-const IconFolderFile = resolveComponent('IconFolderFile');
 
 const loading = ref<boolean>(false);
-const currentRow = ref<FileUploadInterface>({} as FileUploadInterface);
+const currentRow = ref<FileUploadSessionInterface>({} as FileUploadSessionInterface);
 
 /** File status */
 const fileStatus = ref<number | undefined>();
 const fileStatuses = ref<Array<SelectOption>>(
-  enumValues(FileUploadRequestFileStatus).map(value => {
+  enumValues(FileUploadSessionStatus).map(value => {
     return {
       value,
-      label: $i18n.t(`storage.file.status.${value}`),
+      label: FileUploadSessionStatus[value],
     };
   })
 );
@@ -80,72 +77,48 @@ const pagination = computed(() => {
 });
 
 /** Columns */
-const createColumns = (): NDataTableColumns<FileUploadInterface> => {
+const createColumns = (): NDataTableColumns<FileUploadSessionInterface> => {
   return [
     {
-      title: $i18n.t('storage.fileName'),
+      type: 'expand',
+      renderExpand(row: FileUploadSessionInterface) {
+        return h(resolveComponent('StorageSessionDetails'), { sessionUuid: row.session_uuid }, '');
+      },
+    },
+    {
+      title: t('storage.sessionUuid'),
       key: 'name',
       minWidth: 200,
-      render(row) {
-        return [
-          h(IconFolderFile, { isFile: true }, ''),
-          h('span', { class: 'ml-2 ' }, row.fileName),
-        ];
+      render(row: FileUploadSessionInterface) {
+        return h(resolveComponent('TableEllipsis'), { text: row.session_uuid }, '');
       },
     },
     {
-      title: $i18n.t('storage.fileStatusName'),
-      key: 'fileStatus',
-      render(row) {
-        return h(
-          'span',
-          { class: 'text-body' },
-          {
-            default: () => $i18n.t(`storage.file.status.${row.fileStatus}`),
-          }
-        );
-      },
+      title: t('storage.numOfFileUploadRequests'),
+      key: 'numOfFileUploadRequests',
     },
     {
-      title: $i18n.t('storage.fileCid'),
-      key: 'CID',
-      render(row) {
-        return h(
-          'span',
-          { class: 'text-body' },
-          {
-            default: () => truncateCid(row.CID || ''),
-          }
-        );
-      },
+      title: t('storage.numOfUploadedFiles'),
+      key: 'numOfUploadedFiles',
     },
     {
-      title: $i18n.t('storage.contentType'),
-      key: 'contentType',
-      render(row) {
-        if (row.contentType) {
-          return h('span', {}, row.contentType);
-        }
-        return '';
+      title: t('storage.sessionStatus'),
+      key: 'sessionStatus',
+      render(row: FileUploadSessionInterface) {
+        return h(resolveComponent('StorageSessionStatus'), { status: row.sessionStatus }, '');
       },
     },
   ];
 };
 const columns = createColumns();
-const rowKey = (row: FileUploadInterface) => row.file_uuid;
+const rowKey = (row: FileUploadSessionInterface) => row.session_uuid;
 
-function rowProps(row: FileUploadInterface) {
+function rowProps(row: FileUploadSessionInterface) {
   return {
     onClick: () => {
       currentRow.value = row;
     },
   };
-}
-
-/** Action when user click on File name */
-function onItemOpen(row: FileUploadInterface) {
-  currentRow.value = row;
-  drawerFileDetailsVisible.value = true;
 }
 
 /**
@@ -168,12 +141,6 @@ async function handlePageChange(currentPage: number) {
   }
 }
 
-/** On file deleted, refresh file list */
-async function onDeleted() {
-  await getFiles();
-  showModalDelete.value = false;
-}
-
 /** Search files */
 watch(
   () => fileStore.search,
@@ -185,8 +152,10 @@ const debouncedSearchFilter = debounce(getFiles, 500);
 
 /** Function "Fetch directory content" wrapper  */
 async function getFiles(page: number = 1) {
-  await fileStore.fetchAllFiles(fileStatus.value, { page });
+  loading.value = true;
+  await fileStore.fetchAllFiles(fileStatus.value || null, { page });
 
   currentPage.value = page;
+  loading.value = false;
 }
 </script>
