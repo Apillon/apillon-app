@@ -1,8 +1,8 @@
 <template>
   <n-space class="pb-8" :size="12" vertical>
-    <n-space class="!hidden" justify="space-between">
+    <n-space justify="space-between">
       <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
-        <n-input
+        <!-- <n-input
           v-model:value="fileStore.search"
           type="text"
           name="search"
@@ -13,10 +13,16 @@
           <template #prefix>
             <span class="icon-search text-2xl"></span>
           </template>
-        </n-input>
+        </n-input> -->
       </div>
       <n-space>
-        <!-- Filters -->
+        <!-- Refresh -->
+        <n-button size="small" :loading="loading" @click="getFiles(currentPage)">
+          <span class="icon-refresh text-xl mr-2"></span>
+          {{ $t('general.refresh') }}
+        </n-button>
+
+        <!-- Filters 
         <select-options
           v-model:value="fileStatus"
           :options="fileStatuses"
@@ -26,7 +32,7 @@
           filterable
           clearable
           @update:value="getFiles"
-        />
+        />-->
       </n-space>
     </n-space>
     <n-data-table
@@ -45,7 +51,6 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
-import type { SelectOption } from 'naive-ui';
 
 const { t } = useI18n();
 const dataStore = useDataStore();
@@ -54,7 +59,7 @@ const fileStore = useFileStore();
 const loading = ref<boolean>(false);
 const currentRow = ref<FileUploadSessionInterface>({} as FileUploadSessionInterface);
 
-/** File status */
+/** File status
 const fileStatus = ref<number | undefined>();
 const fileStatuses = ref<Array<SelectOption>>(
   enumValues(FileUploadSessionStatus).map(value => {
@@ -63,7 +68,7 @@ const fileStatuses = ref<Array<SelectOption>>(
       label: FileUploadSessionStatus[value],
     };
   })
-);
+); */
 
 /** Pagination data */
 const currentPage = ref<number>(1);
@@ -100,6 +105,20 @@ const createColumns = (): NDataTableColumns<FileUploadSessionInterface> => {
     {
       title: t('storage.numOfUploadedFiles'),
       key: 'numOfUploadedFiles',
+    },
+    {
+      key: 'createTime',
+      title: t('dashboard.createTime'),
+      render(row: FileUploadSessionInterface) {
+        return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
+      },
+    },
+    {
+      key: 'updateTime',
+      title: t('general.updateTime'),
+      render(row: FileUploadSessionInterface) {
+        return h('span', {}, { default: () => dateTimeToDateAndTime(row.updateTime || '') });
+      },
     },
     {
       title: t('storage.sessionStatus'),
@@ -153,7 +172,7 @@ const debouncedSearchFilter = debounce(getFiles, 500);
 /** Function "Fetch directory content" wrapper  */
 async function getFiles(page: number = 1) {
   loading.value = true;
-  await fileStore.fetchAllFiles(fileStatus.value || null, { page });
+  await fileStore.fetchAllFiles(null, { page });
 
   currentPage.value = page;
   loading.value = false;

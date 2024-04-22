@@ -1939,6 +1939,13 @@
       "uploadMore": "Add more files",
       "uploadNow": "Upload now"
     },
+    "session": {
+      "status": {
+        "1": "CREATED",
+        "2": "IN PROGRESS",
+        "3": "FINISHED"
+      }
+    },
     "type": {
       "1": "Storage",
       "2": "Hosting",
