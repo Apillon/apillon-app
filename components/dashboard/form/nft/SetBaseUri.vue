@@ -78,7 +78,7 @@ async function setBaseUri() {
       bodyData
     );
 
-    message.success(t('form.success.nftTransfer'));
+    message.success(t('form.success.nftSetBaseUri'));
 
     /** Emit events */
     emit('submitSuccess', res.data);
