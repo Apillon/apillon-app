@@ -78,6 +78,9 @@ const pagination = computed(() => {
     pageSize: PAGINATION_LIMIT,
     pageCount: Math.ceil(fileStore.total / PAGINATION_LIMIT),
     itemCount: fileStore.total,
+    prefix({ itemCount }) {
+      return t('general.total', { total: itemCount });
+    },
   };
 });
 

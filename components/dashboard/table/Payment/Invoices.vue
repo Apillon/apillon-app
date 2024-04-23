@@ -22,6 +22,9 @@ const pagination = reactive({
   showSizePicker: true,
   pageSizes: [10, PAGINATION_LIMIT, 50],
   itemCount: paymentStore.invoices.total,
+  prefix({ itemCount }) {
+    return t('general.total', { total: itemCount });
+  },
   onChange: (page: number) => {
     pagination.page = page;
     handlePageChange(page, pagination.pageSize);

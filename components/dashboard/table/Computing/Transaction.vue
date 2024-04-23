@@ -4,7 +4,10 @@
     :columns="columns"
     :data="transactionStore.items"
     :loading="transactionStore.loading"
-    :pagination="transactionStore.pagination"
+    :pagination="{
+      ...transactionStore.pagination,
+      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+    }"
     :row-key="rowKey"
     :row-props="rowProps"
     @update:page="handlePageChange"

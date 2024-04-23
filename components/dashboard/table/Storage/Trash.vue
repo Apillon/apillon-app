@@ -34,7 +34,10 @@
       :columns="columns"
       :data="fileStore.trash.items"
       :loading="fileStore.trash.loading"
-      :pagination="fileStore.trash.pagination"
+      :pagination="{
+        ...fileStore.trash.pagination,
+        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+      }"
       :row-props="rowProps"
       @update:page="handlePageChange"
       @update:sorter="handleSorterChange"

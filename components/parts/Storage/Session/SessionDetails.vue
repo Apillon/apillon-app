@@ -27,6 +27,9 @@ const pagination = reactive({
   page: 1,
   pageSize: PAGINATION_LIMIT,
   itemCount: 0,
+  prefix({ itemCount }) {
+    return t('general.total', { total: itemCount });
+  },
 });
 
 /** Columns */

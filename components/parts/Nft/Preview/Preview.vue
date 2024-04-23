@@ -62,6 +62,7 @@ import type { DataTableColumns, DataTableProps } from 'naive-ui';
 import { NButton, NInput } from 'naive-ui';
 import colors from '~/tailwind.colors';
 
+const { t } = useI18n();
 const { createThumbnailUrl } = useNft();
 const collectionStore = useCollectionStore();
 
@@ -76,6 +77,7 @@ const paginationDataTable = reactive({
   pageSize: PAGINATION_LIMIT,
   showSizePicker: true,
   pageSizes: [PAGINATION_LIMIT, 50, 100],
+  prefix: ({ itemCount }) => t('general.total', { total: itemCount }),
   onChange: (page: number) => {
     paginationDataTable.page = page;
   },
