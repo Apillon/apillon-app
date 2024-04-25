@@ -1,4 +1,4 @@
-import {
+import type {
   Composer,
   ComposerTranslation,
   UseI18nOptions,

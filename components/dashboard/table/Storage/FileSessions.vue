@@ -17,7 +17,13 @@
       </div>
       <n-space>
         <!-- Refresh -->
-        <n-button size="small" :loading="loading" @click="getFiles(currentPage)">
+        <n-button
+          size="small"
+          :loading="loading"
+          @click="
+            getFiles(fileStore.session.pagination.page, fileStore.session.pagination.pageSize)
+          "
+        >
           <span class="icon-refresh text-xl mr-2"></span>
           {{ $t('general.refresh') }}
         </n-button>
@@ -39,12 +45,19 @@
       remote
       :bordered="false"
       :columns="columns"
-      :data="fileStore.all"
+      :data="fileStore.session.items"
       :loading="loading"
-      :pagination="pagination"
+      :pagination="{
+        ...fileStore.session.pagination,
+        onChange: (page: number) => {
+          getFiles(page, fileStore.session.pagination.pageSize);
+        },
+        onUpdatePageSize: (pageSize: number) => {
+          getFiles(1, pageSize);
+        },
+      }"
       :row-key="rowKey"
       :row-props="rowProps"
-      @update:page="handlePageChange"
     />
   </n-space>
 </template>
@@ -69,17 +82,6 @@ const fileStatuses = ref<Array<SelectOption>>(
     };
   })
 ); */
-
-/** Pagination data */
-const currentPage = ref<number>(1);
-const pagination = computed(() => {
-  return {
-    page: currentPage.value,
-    pageSize: PAGINATION_LIMIT,
-    pageCount: Math.ceil(fileStore.total / PAGINATION_LIMIT),
-    itemCount: fileStore.total,
-  };
-});
 
 /** Columns */
 const createColumns = (): NDataTableColumns<FileUploadSessionInterface> => {
@@ -145,20 +147,15 @@ function rowProps(row: FileUploadSessionInterface) {
  */
 onMounted(() => {
   fileStore.search = '';
+  loading.value = true;
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      fileStore.getAllFiles();
+      await fileStore.getFileSessions();
+      loading.value = false;
     });
   }, 100);
 });
-
-/** On page change, load data */
-async function handlePageChange(currentPage: number) {
-  if (!loading.value) {
-    await getFiles(currentPage);
-  }
-}
 
 /** Search files */
 watch(
@@ -170,11 +167,12 @@ watch(
 const debouncedSearchFilter = debounce(getFiles, 500);
 
 /** Function "Fetch directory content" wrapper  */
-async function getFiles(page: number = 1) {
+async function getFiles(page: number = 1, limit: number = PAGINATION_LIMIT) {
   loading.value = true;
-  await fileStore.fetchAllFiles(null, { page });
+  await fileStore.fetchFileSessions(null, { page, limit });
 
-  currentPage.value = page;
   loading.value = false;
+  fileStore.session.pagination.page = page;
+  fileStore.session.pagination.pageSize = limit;
 }
 </script>

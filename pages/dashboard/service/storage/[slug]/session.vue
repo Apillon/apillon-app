@@ -5,7 +5,7 @@
     </template>
 
     <slot>
-      <TableStorageFilesAll />
+      <TableStorageFileSessions />
     </slot>
   </Dashboard>
 </template>

@@ -24,7 +24,7 @@ export const useBucketStore = defineStore('bucket', {
       search: '',
       selected: '',
       selectedItems: [] as BucketItemInterface[],
-      total: 0,
+      pagination: createPagination(),
     },
   }),
   getters: {
@@ -98,7 +98,8 @@ export const useBucketStore = defineStore('bucket', {
       this.folder.search = '';
       this.folder.selected = '';
       this.folder.selectedItems = [] as BucketItemInterface[];
-      this.folder.total = 0;
+      this.folder.pagination.itemCount = 0;
+      this.folder.pagination.page = 1;
     },
     resetUpload() {
       this.uploadActive = false;
@@ -110,7 +111,8 @@ export const useBucketStore = defineStore('bucket', {
         this.selected = uuid;
         this.uploadFileList = [] as FileListItemType[];
         this.folder.items = [] as BucketItemInterface[];
-        this.folder.total = 0;
+        this.folder.pagination.itemCount = 0;
+        this.folder.pagination.page = 1;
         this.folder.path = [];
         this.folder.selected = '';
         this.folderSearch();
@@ -265,14 +267,14 @@ export const useBucketStore = defineStore('bucket', {
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
 
         this.folder.items = res.data.items;
-        this.folder.total = res.data.total;
+        this.folder.pagination.itemCount = res.data.total;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.BUCKET_ITEMS, Date.now().toString());
       } catch (error: any) {
         /** Reset data */
         this.folder.items = [];
-        this.folder.total = 0;
+        this.folder.pagination.itemCount = 0;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));

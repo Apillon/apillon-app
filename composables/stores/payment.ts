@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 
 type FetchCreditTransactionsParams = FetchParams & {
-  service: string | null;
-  category: string | null;
-  direction: string | null;
+  service?: string | null;
+  category?: string | null;
+  direction?: string | null;
 };
 
 let abortController = null as AbortController | null;

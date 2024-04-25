@@ -598,6 +598,10 @@ body > .n-message-container {
   .n-base-selection .n-base-suffix {
     @apply right-2;
   }
+
+  .n-pagination-prefix {
+    @apply text-body;
+  }
 }
 
 /** Popover */
