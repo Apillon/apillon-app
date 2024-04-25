@@ -1556,15 +1556,24 @@
       "single": "Create NFT"
     },
     "metadata": {
+      "currentStep": "Metadata deploy step",
+      "deployTitle": "Metadata deploys",
       "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
       "infoCollectionName": "Define the name and symbol for your NFT collection.",
       "infoNew": "To ensure permanent access to your NFTs, you need to store their metadata and files on the web. \n\nWould you like to store your NFT metadata in decentralized way?",
+      "lastError": "Last error",
       "no": "I already have it online",
       "proceedUpload": "Proceed to upload",
       "title": "Prepare NFT metadata",
       "titleCollectionBehavior": "Behavior",
       "titleCollectionName": "Name your collection",
-      "yes": "Yes, proceed"
+      "yes": "Yes, proceed",
+      "deployStatus": {
+        "1": "UPLOADING IMAGES TO IPFS",
+        "2": "UPDATING JSONs",
+        "3": "METADATA UPLOADED ON IPFS",
+        "10": "METADATA SUCCESSFULLY PREPARED"
+      }
     },
     "transaction": {
       "chain": "Chain",
@@ -1573,6 +1582,7 @@
       "emptyInfo": "If you just deployed your collection, please wait a minute for the collection to deploy.",
       "hash": "Transaction Hash",
       "link": "Transaction Link",
+      "title": "Transactions",
       "status": {
         "0": "REQUESTED",
         "1": "PENDING",

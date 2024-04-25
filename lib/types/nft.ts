@@ -103,6 +103,13 @@ export enum NftDeployStatus {
   DEPLOYED = 4,
 }
 
+export enum PrepareCollectionMetadataStep {
+  UPLOAD_IMAGES_TO_IPFS = 1,
+  UPDATE_JSONS_ON_S3 = 2,
+  UPLOAD_METADATA_TO_IPFS = 3,
+  METADATA_SUCCESSFULLY_PREPARED = 10,
+}
+
 declare global {
   /** Papa parser */
   type CsvFileData = {
@@ -163,6 +170,22 @@ declare global {
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}
+
+  /**
+   * Metadata deploys
+   */
+  interface MetadataDeployInterface {
+    bucket_uuid: string;
+    createTime: string;
+    currentStep: number;
+    imagesSession: string;
+    lastError: string | null;
+    metadataSession: string;
+    updateTime: string;
+    useApillonIpfsGateway: number;
+  }
+
+  interface MetadataDeploysResponse extends GeneralItemsResponse<MetadataDeployInterface> {}
 
   /**
    * Attributes

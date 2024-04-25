@@ -334,6 +334,10 @@ export default function useNft() {
         collectionStore.metadata = [];
 
         message.success($i18n.t('form.success.nftDeployed'));
+
+        /** Reset timestamp to SS */
+        sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
+        sessionStorage.removeItem(LsCacheKeys.COLLECTION_METADATA);
       } else {
         message.error($i18n.t('nft.upload.deployError'));
       }
