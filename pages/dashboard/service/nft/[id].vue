@@ -32,7 +32,19 @@
           <NftCollectionInfo class="mb-8" />
 
           <!-- Table Transactions -->
-          <TableNftTransaction :transactions="collectionStore.transaction" />
+          <div>
+            <h4 class="mb-4">{{ $t('nft.transaction.title') }}</h4>
+            <TableNftTransaction :transactions="collectionStore.transaction" />
+          </div>
+
+          <!-- Table Metadata deploys -->
+          <div>
+            <h4 class="mb-4">{{ $t('nft.metadata.deployTitle') }}</h4>
+            <TableNftMetadataDeploys
+              v-if="collectionStore.active.bucket_uuid"
+              :deploys="collectionStore.metadataDeploys"
+            />
+          </div>
 
           <!-- Links to NFT templates -->
           <NftPreviewFinish v-if="collectionStore.active.chainType === ChainType.EVM" />
@@ -125,12 +137,13 @@ onMounted(async () => {
   if (!currentCollection?.collection_uuid) {
     router.push({ name: 'dashboard-service-nft' });
   } else {
+    await collectionStore.getMetadataDeploys(currentCollection.collection_uuid);
     await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
     collectionStore.active = currentCollection;
+    pageLoading.value = false;
 
     checkIfCollectionUnfinished();
     checkUnfinishedTransactions();
-    pageLoading.value = false;
   }
 });
 onUnmounted(() => {
