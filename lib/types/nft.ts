@@ -153,13 +153,11 @@ declare global {
    * Transaction
    */
   interface TransactionInterface extends GeneralInterface {
-    contract_id: number;
+    chainId: number;
     id: number;
     transactionHash: string | null;
     transactionStatus: number;
-    transactionStatusMessage: string | null;
     transactionType: number;
-    walletAddress: string;
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}

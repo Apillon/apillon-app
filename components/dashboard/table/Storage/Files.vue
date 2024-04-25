@@ -9,7 +9,15 @@
       :columns="columns"
       :data="bucketStore.folder.items"
       :loading="bucketStore.folder.loading"
-      :pagination="pagination"
+      :pagination="{
+        ...bucketStore.folder.pagination,
+        onChange: (page: number) => {
+          handlePageChange(page, bucketStore.folder.pagination.pageSize);
+        },
+        onUpdatePageSize: (pageSize: number) => {
+          handlePageChange(1, pageSize);
+        },
+      }"
       :row-key="rowKey"
       :row-props="rowProps"
       @update:checked-row-keys="handleCheck"
@@ -97,20 +105,6 @@ const sort = ref<DataTableSortState | null | undefined>();
 /** Current row type */
 const currentRowType = computed<string>(() => {
   return currentRow.value.type === BucketItemType.DIRECTORY ? 'directory' : 'file';
-});
-
-/** Pagination data */
-const currentPage = ref<number>(1);
-const pagination = computed(() => {
-  return {
-    page: currentPage.value,
-    pageSize: PAGINATION_LIMIT,
-    pageCount: Math.ceil(bucketStore.folder.total / PAGINATION_LIMIT),
-    itemCount: bucketStore.folder.total,
-    prefix({ itemCount }) {
-      return t('general.total', { total: itemCount });
-    },
-  };
 });
 
 /** Dropdown options for folder and file */
@@ -518,9 +512,14 @@ watch(
 );
 
 /** On page change, load data */
-async function handlePageChange(currentPage: number) {
+async function handlePageChange(currentPage: number, pageSize?: number) {
   if (!bucketStore.folder.loading) {
-    await getDirectoryContent(bucketStore.bucketUuid, bucketStore.folder.selected, currentPage);
+    await getDirectoryContent(
+      bucketStore.bucketUuid,
+      bucketStore.folder.selected,
+      currentPage,
+      pageSize
+    );
   }
 }
 
@@ -586,21 +585,27 @@ watch(
 const debouncedSearchFilter = debounce(getDirectoryContent, 500);
 
 /** Function "Fetch directory content" wrapper  */
-async function getDirectoryContent(bucketUuid?: string, folderUuid?: string, page = 1) {
+async function getDirectoryContent(
+  bucketUuid?: string,
+  folderUuid?: string,
+  page = 1,
+  limit?: number
+) {
   clearInterval(fileInterval);
 
   await bucketStore.fetchDirectoryContent({
     bucketUuid,
     folderUuid,
     page,
-    limit: pagination.value.pageSize,
+    limit: limit || bucketStore.folder.pagination.pageSize,
     search: bucketStore.folder.search,
     orderBy: sort.value ? `${sort.value.columnKey}` : undefined,
     order: sort.value ? `${sort.value.order}` : undefined,
   });
 
   checkUnfinishedFiles();
-  currentPage.value = page;
+  bucketStore.folder.pagination.page = page;
+  bucketStore.folder.pagination.pageSize = limit || bucketStore.folder.pagination.pageSize;
 }
 
 /** Files polling */

@@ -8,7 +8,6 @@
       :loading="loading"
       :pagination="pagination"
       :row-key="rowKey"
-      @update:page="handlePageChange"
     />
   </div>
 </template>
@@ -24,11 +23,19 @@ const bucketStore = useBucketStore();
 const loading = ref<boolean>(true);
 const sessions = ref<FileUploadInterface[]>([]);
 const pagination = reactive({
+  itemCount: 0,
   page: 1,
   pageSize: PAGINATION_LIMIT,
-  itemCount: 0,
+  showSizePicker: true,
+  pageSizes: enumValues(PageSize) as number[],
   prefix({ itemCount }) {
     return t('general.total', { total: itemCount });
+  },
+  onChange: (page: number) => {
+    getSessionDetails(page, pagination.pageSize);
+  },
+  onUpdatePageSize: (pageSize: number) => {
+    getSessionDetails(1, pageSize);
   },
 });
 
@@ -82,24 +89,22 @@ const columns = createColumns();
 const rowKey = (row: FileUploadInterface) => row.file_uuid;
 
 onMounted(async () => {
-  await getSessionDetails(props.sessionUuid);
+  await getSessionDetails();
 });
 
-async function handlePageChange(currentPage: number) {
-  await getSessionDetails(props.sessionUuid, currentPage);
-}
-
-async function getSessionDetails(sessionUuid: string, page = 1) {
+async function getSessionDetails(page: number = 1, limit: number = PAGINATION_LIMIT) {
   loading.value = true;
-  pagination.page = page;
 
-  await fetchSessionDetails(sessionUuid, page);
+  await fetchSessionDetails(props.sessionUuid, { page, limit });
+
   loading.value = false;
+  pagination.page = page;
+  pagination.pageSize = limit;
 }
 
-async function fetchSessionDetails(sessionUuid: string, page: number) {
+async function fetchSessionDetails(sessionUuid: string, args: FetchParams = {}) {
   try {
-    const params = parseArguments({ page });
+    const params = parseArguments(args);
     params.session_uuid = sessionUuid;
 
     const res = await $api.get<SessionDetailsResponse>(

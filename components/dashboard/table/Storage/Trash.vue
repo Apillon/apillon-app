@@ -36,7 +36,12 @@
       :loading="fileStore.trash.loading"
       :pagination="{
         ...fileStore.trash.pagination,
-        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+        onChange: (page: number) => {
+          handlePageChange(page, fileStore.trash.pagination.pageSize);
+        },
+        onUpdatePageSize: (pageSize: number) => {
+          handlePageChange(1, pageSize);
+        },
       }"
       :row-props="rowProps"
       @update:page="handlePageChange"
@@ -229,21 +234,24 @@ watch(
 const debouncedSearchFilter = debounce(getDeletedFiles, 500);
 
 /** On page change, load data */
-async function handlePageChange(currentPage: number) {
+async function handlePageChange(currentPage: number, pageSize?: number) {
   if (!fileStore.trash.loading) {
     await getDeletedFiles(currentPage);
   }
 }
 
-async function getDeletedFiles(page = 1) {
+async function getDeletedFiles(page = 1, limit: number = PAGINATION_LIMIT) {
   fileStore.trash.pagination.page = page;
 
   await fileStore.fetchDeletedFiles({
     page,
+    limit,
     search: fileStore.trash.search,
     orderBy: sort.value ? `${sort.value.columnKey}` : undefined,
     order: sort.value ? `${sort.value.order}` : undefined,
   });
+  fileStore.trash.pagination.page = page;
+  fileStore.trash.pagination.pageSize = limit;
 }
 
 /**

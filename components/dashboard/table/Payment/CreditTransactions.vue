@@ -68,22 +68,19 @@ const services = enumKeyValues(ServiceTypeName).map((item: KeyValue) => {
 
 /** Pagination data */
 const pagination = reactive({
+  itemCount: paymentStore.creditTransactions.total,
   page: 1,
   pageSize: PAGINATION_LIMIT,
-  showSizePicker: true,
-  pageSizes: [10, PAGINATION_LIMIT, 50],
-  itemCount: paymentStore.creditTransactions.total,
+  showSizePicker: paymentStore.creditTransactions.total > 0,
+  pageSizes: enumValues(PageSize) as number[],
   prefix({ itemCount }) {
     return t('general.total', { total: itemCount });
   },
   onChange: (page: number) => {
-    pagination.page = page;
-    handlePageChange();
+    handlePageChange(page, pagination.pageSize);
   },
   onUpdatePageSize: (pageSize: number) => {
-    pagination.page = 1;
-    pagination.pageSize = pageSize;
-    handlePageChange();
+    handlePageChange(1, pageSize);
   },
 });
 
@@ -157,15 +154,21 @@ watch(
 );
 
 /** On page change, load data */
-async function handlePageChange() {
+async function handlePageChange(page = 1, limit = PAGINATION_LIMIT) {
   if (!loading.value) {
+    loading.value = true;
+
     await paymentStore.fetchCreditTransactions({
       category: category.value,
       direction: direction.value,
       service: service.value,
-      page: pagination.page,
-      limit: pagination.pageSize,
+      page,
+      limit,
     });
+
+    loading.value = false;
+    pagination.page = page;
+    pagination.pageSize = limit;
   }
 }
 </script>

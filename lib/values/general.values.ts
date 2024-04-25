@@ -12,6 +12,12 @@ export const PARAMS_ALL_ITEMS = {
   limit: 1000,
 };
 
+export enum PageSize {
+  SM = 10,
+  BASE = PAGINATION_LIMIT,
+  LG = 50,
+}
+
 export const LS_KEY_NEWSLETTER = 'al_newsletter_subscribed';
 
 export const SessionKeys = {

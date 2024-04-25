@@ -6,11 +6,7 @@
     :columns="columns"
     :data="data"
     :loading="collectionStore.loading"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
-    :row-key="rowKey"
+    :pagination="pagination"
   />
 </template>
 
@@ -19,12 +15,29 @@ const props = defineProps({
   transactions: { type: Array<TransactionInterface>, default: [] },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const collectionStore = useCollectionStore();
 
 const NftTransactionStatus = resolveComponent('NftTransactionStatus');
 const NftTransactionType = resolveComponent('NftTransactionType');
 const TableLink = resolveComponent('TableLink');
+
+const pagination = reactive({
+  page: 1,
+  pageSize: PAGINATION_LIMIT,
+  showSizePicker: true,
+  pageSizes: enumValues(PageSize) as number[],
+  prefix({ itemCount }) {
+    return t('general.total', { total: itemCount });
+  },
+  onChange: (page: number) => {
+    pagination.page = page;
+  },
+  onUpdatePageSize: (pageSize: number) => {
+    pagination.page = 1;
+    pagination.pageSize = pageSize;
+  },
+});
 
 /** Data: filtered transactions */
 const data = computed<Array<TransactionInterface>>(() => {
@@ -39,15 +52,15 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
   return [
     {
       key: 'chainId',
-      title: $i18n.t('nft.transaction.chain'),
+      title: t('nft.transaction.chain'),
       minWidth: 120,
       render(row: TransactionInterface) {
-        return h('span', {}, { default: () => $i18n.t(`nft.chain.${row.chainId}`) });
+        return h('span', {}, { default: () => t(`nft.chain.${row.chainId}`) });
       },
     },
     {
       key: 'transactionHash',
-      title: $i18n.t('nft.transaction.hash'),
+      title: t('nft.transaction.hash'),
       render(row: TransactionInterface) {
         return h(
           TableLink,
@@ -61,14 +74,14 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
     },
     {
       key: 'transactionType',
-      title: $i18n.t('nft.transactionType'),
+      title: t('nft.transactionType'),
       render(row: TransactionInterface) {
         return h(NftTransactionType, { transactionType: row.transactionType }, '');
       },
     },
     {
       key: 'transactionStatus',
-      title: $i18n.t('general.status'),
+      title: t('general.status'),
       render(row: TransactionInterface) {
         return h(NftTransactionStatus, { transactionStatus: row.transactionStatus }, '');
       },
@@ -76,5 +89,4 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: TransactionInterface) => row.id;
 </script>
