@@ -188,7 +188,6 @@ export const useCollectionStore = defineStore('collection', {
       return this.transaction;
     },
     async getMetadataDeploys(collectionUuid?: string): Promise<MetadataDeployInterface[]> {
-      console.log(collectionUuid, this.active?.collection_uuid);
       if (
         !this.hasMetadataDeploys ||
         isCacheExpired(LsCacheKeys.COLLECTION_METADATA) ||
