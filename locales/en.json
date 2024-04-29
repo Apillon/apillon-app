@@ -65,6 +65,7 @@
     "termsAccept": "I accept the ",
     "termsAndConditions": "Terms and conditions",
     "test": "Test",
+    "total": "{total} total",
     "type": "Type",
     "typeHere": "Type here",
     "updateTime": "Update time",
@@ -1571,15 +1572,24 @@
       "single": "Create NFT"
     },
     "metadata": {
+      "currentStep": "Metadata deploy step",
+      "deployTitle": "Metadata deploys",
       "infoCollectionBehavior": "Configure the behavior of your NFT collection. ",
       "infoCollectionName": "Define the name and symbol for your NFT collection.",
       "infoNew": "To ensure permanent access to your NFTs, you need to store their metadata and files on the web. \n\nWould you like to store your NFT metadata in decentralized way?",
+      "lastError": "Last error",
       "no": "I already have it online",
       "proceedUpload": "Proceed to upload",
       "title": "Prepare NFT metadata",
       "titleCollectionBehavior": "Behavior",
       "titleCollectionName": "Name your collection",
-      "yes": "Yes, proceed"
+      "yes": "Yes, proceed",
+      "deployStatus": {
+        "1": "UPLOADING IMAGES TO IPFS",
+        "2": "UPDATING JSONs",
+        "3": "METADATA UPLOADED ON IPFS",
+        "10": "METADATA SUCCESSFULLY PREPARED"
+      }
     },
     "transaction": {
       "chain": "Chain",
@@ -1588,6 +1598,7 @@
       "emptyInfo": "If you just deployed your collection, please wait a minute for the collection to deploy.",
       "hash": "Transaction Hash",
       "link": "Transaction Link",
+      "title": "Transactions",
       "status": {
         "0": "REQUESTED",
         "1": "PENDING",
@@ -1939,6 +1950,13 @@
       "uploadMore": "Add more files",
       "uploadNow": "Upload now"
     },
+    "session": {
+      "status": {
+        "1": "CREATED",
+        "2": "IN PROGRESS",
+        "3": "FINISHED"
+      }
+    },
     "type": {
       "1": "Storage",
       "2": "Hosting",
@@ -1952,14 +1970,18 @@
     "fileCid": "File CID",
     "fileName": "File name",
     "files": "Files",
-    "filesAll": "All Files",
+    "filesAll": "Upload sessions",
     "fileSize": "File size",
     "fileStatusName": "File status",
     "goToRootDirectory": "Go to root folder",
     "history": "History",
+    "numOfFileUploadRequests": "Number of file upload requests",
+    "numOfUploadedFiles": "Number of uploaded files",
     "refresh": "Refresh",
     "replicas": "Replicas",
     "selectFiles": "Select files",
+    "sessionStatus": "Session status",
+    "sessionUuid": "Session UUID",
     "snapshots": "Snapshots",
     "stats": "Stats",
     "status": "Status",
@@ -1970,7 +1992,6 @@
     "usage": "{used} of {max} used",
     "visits": "30d visits",
     "yourFiles": "Your files",
-    "yourFilesAll": "All your files",
     "webhook": "Webhook",
     "wrapFiles": "Wrap files",
     "wrapFilesDescription": "If you want to wrap files to a directory please type the name of the directory below. If you don't want to do it just skip this process.",

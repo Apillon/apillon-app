@@ -6,11 +6,7 @@ export const useComputingTransactionStore = defineStore('computingTransaction', 
     loading: false,
     search: '',
     items: [] as ComputingTransactionInterface[],
-    pagination: {
-      page: 1,
-      pageSize: PAGINATION_LIMIT,
-      itemCount: 0,
-    },
+    pagination: createPagination(),
   }),
   getters: {
     hasTransactions(state): boolean {
@@ -27,9 +23,9 @@ export const useComputingTransactionStore = defineStore('computingTransaction', 
     /**
      * Fetch wrappers
      */
-    async getTransactions(contractUuid: string, page = 1): Promise<any> {
+    async getTransactions(contractUuid: string, page = 1, limit = PAGINATION_LIMIT): Promise<any> {
       if ((page !== this.pagination.page, isCacheExpired(LsCacheKeys.COMPUTING_TRANSACTIONS))) {
-        return await this.fetchTransactions(contractUuid, page);
+        return await this.fetchTransactions(contractUuid, { page, limit });
       }
       return this.items;
     },
@@ -39,7 +35,7 @@ export const useComputingTransactionStore = defineStore('computingTransaction', 
      */
     async fetchTransactions(
       contractUuid: string,
-      page = 1,
+      args: FetchParams,
       showLoader = true
     ): Promise<ComputingTransactionInterface[]> {
       const dataStore = useDataStore();
@@ -50,7 +46,7 @@ export const useComputingTransactionStore = defineStore('computingTransaction', 
       this.loading = showLoader;
 
       try {
-        const params = parseArguments({ page, search: this.search });
+        const params = parseArguments({ ...args, search: this.search });
         params.project_uuid = dataStore.projectUuid;
         params.contract_uuid = contractUuid;
 
@@ -59,9 +55,9 @@ export const useComputingTransactionStore = defineStore('computingTransaction', 
           params
         );
         this.items = res.data.items;
-        this.pagination.page = page;
         this.pagination.itemCount = res.data.total;
-        this.loading = false;
+        this.pagination.page = args?.page || this.pagination.page;
+        this.pagination.pageSize = args?.limit || this.pagination.pageSize;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.COMPUTING_TRANSACTIONS, Date.now().toString());
@@ -73,9 +69,9 @@ export const useComputingTransactionStore = defineStore('computingTransaction', 
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.loading = false;
       }
-      this.pagination.page = page;
-      this.loading = false;
       return [];
     },
   },

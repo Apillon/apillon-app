@@ -6,7 +6,10 @@
     :columns="columns"
     :data="data"
     :loading="ipnsStore.loading"
-    :pagination="ipnsStore.pagination"
+    :pagination="{
+      ...ipnsStore.pagination,
+      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+    }"
     :row-key="rowKey"
     :row-props="rowProps"
     @update:page="handlePageChange"

@@ -12,6 +12,12 @@ export const PARAMS_ALL_ITEMS = {
   limit: 1000,
 };
 
+export enum PageSize {
+  SM = 10,
+  BASE = PAGINATION_LIMIT,
+  LG = 50,
+}
+
 export const LS_KEY_NEWSLETTER = 'al_newsletter_subscribed';
 
 export const SessionKeys = {
@@ -54,6 +60,7 @@ export const LsCacheKeys = {
   CHATS: 'al_cache_chats',
   COLLECTION: 'al_cache_collection',
   COLLECTIONS: 'al_cache_collections',
+  COLLECTION_METADATA: 'al_cache_collection_metadata',
   COLLECTION_TRANSACTIONS: 'al_cache_collection_transactions',
   COMPUTING_TRANSACTIONS: 'al_cache_computing_transactions',
   CONTRACT: 'al_cache_contract',

@@ -6,7 +6,10 @@
     :columns="columns"
     :data="data"
     :loading="contractStore.loading"
-    :pagination="{ pageSize: PAGINATION_LIMIT }"
+    :pagination="{
+      pageSize: PAGINATION_LIMIT,
+      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+    }"
     :row-key="rowKey"
     :row-props="rowProps"
   />
