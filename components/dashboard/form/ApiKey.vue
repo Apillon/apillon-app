@@ -511,6 +511,10 @@ function isServiceEnabled(serviceType: ServiceTypeInterface) {
       return authStore.isUserAllowed(Permission.NFTS);
     case 4:
       return authStore.isUserAllowed(Permission.HOSTING);
+    case 5:
+      return authStore.isUserAllowed(Permission.COMPUTING);
+    case 6:
+      return authStore.isUserAllowed(Permission.SOCIAL);
     default:
       return false;
   }
