@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative w-full"
+    class="relative w-full tablet:!h-auto"
     :class="{ 'flex-cc': collectionStore.nftStep !== NftCreateStep.PREVIEW }"
   >
     <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" />
