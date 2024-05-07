@@ -94,7 +94,7 @@
               <span class="ml-2 text-sm text-white">{{ $t('nft.add') }}</span>
             </template>
             <slot>
-              <FormNftCreateMetadata deploy-collection :style="scrollStyle" />
+              <FormNftCreateMetadata deploy-collection />
             </slot>
           </n-tab-pane>
         </n-tabs>
