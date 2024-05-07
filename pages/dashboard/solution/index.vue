@@ -10,7 +10,7 @@
     <slot>
       <div class="pb-8">
         <div class="max-w-lg mb-8">
-          <p>{{ $t('dashboard.solutions.description') }}</p>
+          <p>{{ $t('dashboard.solution.description') }}</p>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
           <div v-for="(service, key) in solutions" :key="key" class="card-dark-multiple">
@@ -18,10 +18,10 @@
               <div class="mb-8">
                 <div class="flex items-center gap-2 mb-4">
                   <span class="text-2xl" :class="service.icon"></span>
-                  <h5>{{ $t(`dashboard.solutions.${service.name}.name`) }}</h5>
+                  <h5>{{ $t(`dashboard.solution.${service.name}.name`) }}</h5>
                 </div>
                 <p>
-                  {{ $t(`dashboard.solutions.${service.name}.description`) }}
+                  {{ $t(`dashboard.solution.${service.name}.description`) }}
                 </p>
               </div>
               <div>
@@ -37,14 +37,16 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                   <Btn
+                    v-if="service.link"
                     size="large"
                     type="secondary"
                     :disabled="!service.github"
                     :href="service.github"
                   >
-                    {{ $t('dashboard.solutions.viewCode') }}
+                    {{ $t('dashboard.solution.viewCode') }}
                   </Btn>
                   <Btn
+                    v-if="service.link"
                     size="large"
                     type="primary"
                     :disabled="!service.link"
@@ -83,35 +85,35 @@ const solutions: Array<SolutionTypeItem> = [
     icon: 'icon-nft-mint-airdrop',
     link: 'dashboard-solution-airdrop',
     github: 'https://github.com/Apillon/ps-email-airdrop',
-    usage: translateItems('dashboard.solutions.nftAirdrop.usage'),
+    usage: translateItems('dashboard.solution.nftAirdrop.usage'),
   },
   {
     name: SolutionKey.NFT_EMAIL_SIGNUP_AIRDROP,
     icon: 'icon-nft-drop',
     link: 'dashboard-solution-email-signup-airdrop',
     github: 'https://github.com/Apillon/ps-signup-email-airdrop',
-    usage: translateItems('dashboard.solutions.nftEmailSignupAirdrop.usage'),
+    usage: translateItems('dashboard.solution.nftEmailSignupAirdrop.usage'),
   },
   {
     name: SolutionKey.NFT_POAP,
     icon: 'icon-poap',
     link: 'dashboard-solution-proof-of-attendance',
     github: 'https://github.com/Apillon/ps-proof-of-attendance',
-    usage: translateItems('dashboard.solutions.nftPoap.usage'),
+    usage: translateItems('dashboard.solution.nftPoap.usage'),
   },
   {
     name: SolutionKey.NFT_WHITELIST_CLAIM,
     icon: 'icon-gift',
     link: 'dashboard-solution-whitelist-claim',
     github: 'https://github.com/Apillon/ps-whitelist-claim',
-    usage: translateItems('dashboard.solutions.nftMembership.usage'),
+    usage: translateItems('dashboard.solution.nftMembership.usage'),
   },
   {
     name: SolutionKey.OPEN_GOV,
     icon: 'icon-brand-membership',
     link: 'dashboard-solution-openGov',
     github: 'https://github.com/Apillon/ps-wasm-proposal-airdrop',
-    usage: translateItems('dashboard.solutions.openGov.usage'),
+    usage: translateItems('dashboard.solution.openGov.usage'),
   },
 ];
 </script>

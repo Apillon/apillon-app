@@ -334,6 +334,10 @@ export default function useNft() {
         collectionStore.metadata = [];
 
         message.success($i18n.t('form.success.nftDeployed'));
+
+        /** Reset timestamp to SS */
+        sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
+        sessionStorage.removeItem(LsCacheKeys.COLLECTION_METADATA);
       } else {
         message.error($i18n.t('nft.upload.deployError'));
       }
@@ -345,7 +349,7 @@ export default function useNft() {
    */
   function createNftFiles(nftData: Array<Record<string, any>>): FileListItemType[] {
     return nftData.map((nft, index) => {
-      const id = nft.id || index + 1;
+      const id = Number(nft.id || index + 1);
 
       /** Prepare NFT data */
       const nftData = JSON.parse(JSON.stringify(nft));

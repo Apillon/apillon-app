@@ -10,6 +10,18 @@ export const useContractStore = defineStore('contract', {
     loading: false,
     search: '',
     total: 0,
+    form: {
+      name: '',
+      description: '',
+      contractType: ComputingContractType.SCHRODINGER,
+      bucket_uuid: null,
+      contractData: {
+        nftContractAddress: '',
+        nftChain: 0,
+        nftChainRpcUrl: '',
+        restrictToOwner: false,
+      },
+    },
   }),
   getters: {
     hasContracts(state): boolean {

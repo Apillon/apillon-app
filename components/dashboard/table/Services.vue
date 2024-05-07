@@ -7,7 +7,10 @@
       :columns="columns"
       :data="data"
       :loading="dataStore.service.loading"
-      :pagination="{ pageSize: PAGINATION_LIMIT }"
+      :pagination="{
+        pageSize: PAGINATION_LIMIT,
+        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+      }"
       :row-props="rowProps"
     />
   </n-space>

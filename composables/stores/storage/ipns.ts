@@ -92,7 +92,7 @@ export const useIpnsStore = defineStore('ipns', {
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
-      this.updatePagination(args.page);
+      this.updatePagination(args?.page || 1);
       return [];
     },
 

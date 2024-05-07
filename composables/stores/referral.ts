@@ -13,7 +13,6 @@ export const useReferralStore = defineStore('referral', {
     shippingInfo: null as any,
     status: 0,
     tasks: [] as Array<any>,
-    termsAccepted: '',
     user_uuid: '',
 
     loading: false,
@@ -35,7 +34,6 @@ export const useReferralStore = defineStore('referral', {
       this.shippingInfo = data.shippingInfo;
       this.status = data.status;
       this.tasks = data.tasks;
-      this.termsAccepted = data.termsAccepted;
       this.user_uuid = data.user_uuid;
     },
 

@@ -21,7 +21,6 @@ declare global {
     shippingInfo?: string;
     status: number;
     tasks: Array<any>;
-    termsAccepted: string;
   }
 
   interface RewardsInterface extends BaseObjectInterface {

@@ -16,6 +16,7 @@ export const useCollectionStore = defineStore('collection', {
     items: [] as CollectionInterface[],
     loading: false,
     metadata: [] as Array<Record<string, any>>,
+    metadataDeploys: [] as MetadataDeployInterface[],
     metadataStored: null as Boolean | null,
     mintTab: NftCreateTab.METADATA,
     search: '',
@@ -64,6 +65,9 @@ export const useCollectionStore = defineStore('collection', {
     },
   }),
   getters: {
+    collectionUuid(state): string {
+      return state.active.collection_uuid;
+    },
     hasCollections(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
     },
@@ -79,11 +83,15 @@ export const useCollectionStore = defineStore('collection', {
     hasMetadata(state): boolean {
       return Array.isArray(state.metadata) && state.metadata.length > 0;
     },
+    hasMetadataDeploys(state): boolean {
+      return Array.isArray(state.metadataDeploys) && state.metadataDeploys.length > 0;
+    },
   },
   actions: {
     resetData() {
       this.active = {} as CollectionInterface;
       this.items = [] as CollectionInterface[];
+      this.metadataDeploys = [] as MetadataDeployInterface[];
       this.search = '';
       this.transaction = [] as TransactionInterface[];
       this.resetMetadata();
@@ -143,6 +151,11 @@ export const useCollectionStore = defineStore('collection', {
 
       this.resetSingleFormData();
     },
+    resetCache() {
+      sessionStorage.removeItem(LsCacheKeys.COLLECTION);
+      sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
+      sessionStorage.removeItem(LsCacheKeys.COLLECTION_TRANSACTIONS);
+    },
     /**
      * Fetch wrappers
      */
@@ -173,6 +186,16 @@ export const useCollectionStore = defineStore('collection', {
         return await this.fetchCollectionTransactions(collectionUuid);
       }
       return this.transaction;
+    },
+    async getMetadataDeploys(collectionUuid?: string): Promise<MetadataDeployInterface[]> {
+      if (
+        !this.hasMetadataDeploys ||
+        isCacheExpired(LsCacheKeys.COLLECTION_METADATA) ||
+        (collectionUuid && this.active?.collection_uuid !== collectionUuid)
+      ) {
+        return await this.fetchMetadataDeploys(collectionUuid);
+      }
+      return this.metadataDeploys;
     },
 
     /**
@@ -263,6 +286,34 @@ export const useCollectionStore = defineStore('collection', {
         window.$message.error(userFriendlyMsg(error));
       }
       this.loading = false;
+      return [];
+    },
+
+    async fetchMetadataDeploys(collectionUuid?: string): Promise<MetadataDeployInterface[]> {
+      try {
+        const params: Record<string, string | number> = {
+          orderBy: 'createTime',
+          desc: 'true',
+          ...PARAMS_ALL_ITEMS,
+        };
+
+        const res = await $api.get<MetadataDeploysResponse>(
+          endpoints.collectionNftsMetadata(collectionUuid || this.collectionUuid),
+          params
+        );
+
+        this.metadataDeploys = res.data.items;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.COLLECTION_METADATA, Date.now().toString());
+
+        return res.data.items;
+      } catch (error: any) {
+        this.metadataDeploys = [] as Array<MetadataDeployInterface>;
+
+        /** Show error message  */
+        window.$message.error(userFriendlyMsg(error));
+      }
       return [];
     },
   },

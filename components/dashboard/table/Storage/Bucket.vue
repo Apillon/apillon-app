@@ -10,7 +10,10 @@
       :columns="columns"
       :data="data"
       :loading="bucketStore.loading"
-      :pagination="{ pageSize: PAGINATION_LIMIT }"
+      :pagination="{
+        pageSize: PAGINATION_LIMIT,
+        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+      }"
       :row-key="rowKey"
       :row-props="rowProps"
       @update:checked-row-keys="handleCheck"

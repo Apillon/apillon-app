@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
+import IconInfo from '~/components/parts/Icon/Info.vue';
 
 export default function useCaptcha() {
-  const { t } = useI18n();
+  const { t, te } = useI18n();
   const message = useMessage();
   const router = useRouter();
   const contractStore = useContractStore();
@@ -134,9 +135,24 @@ export default function useCaptcha() {
     return response.data;
   }
 
+  function labelInfo(field: string) {
+    if (
+      te(`form.label.contract.${field}`) &&
+      te(`form.label.contract.labelInfo.${field}`) &&
+      t(`form.label.contract.labelInfo.${field}`)
+    ) {
+      return [
+        h('span', { class: 'mr-1' }, t(`form.label.contract.${field}`)),
+        h(IconInfo, { size: 'sm', tooltip: t(`form.label.contract.labelInfo.${field}`) }, ''),
+      ];
+    }
+    return te(`form.label.contract.${field}`) ? t(`form.label.contract.${field}`) : field;
+  }
+
   return {
     checkUnfinishedContracts,
     checkUnfinishedTransactions,
+    labelInfo,
     onContractCreated,
     uploadFileToIPFS,
   };

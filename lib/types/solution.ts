@@ -1,7 +1,9 @@
 export enum SolutionKey {
+  ENCRYPTION = 'encryption',
   FILE_SHARING = 'fileSharing',
   NFT_AIRDROP = 'nftAirdrop',
   NFT_COLLECTION = 'nftCollection',
+  NFT_CONTENT_DELIVERY = 'nftContentDelivery',
   NFT_DROP = 'nftDrop',
   NFT_EMAIL_SIGNUP_AIRDROP = 'nftEmailSignupAirdrop',
   NFT_LOYALTY = 'nftLoyalty',

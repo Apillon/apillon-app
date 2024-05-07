@@ -37,7 +37,7 @@
         :columns="columns"
         :data="collectionStore.metadata"
         :theme-overrides="tableOverrides"
-        :pagination="paginationDataTable"
+        :pagination="pagination"
         :row-key="rowKey"
       />
       <Btn
@@ -62,6 +62,7 @@ import type { DataTableColumns, DataTableProps } from 'naive-ui';
 import { NButton, NInput } from 'naive-ui';
 import colors from '~/tailwind.colors';
 
+const { t } = useI18n();
 const { createThumbnailUrl } = useNft();
 const collectionStore = useCollectionStore();
 
@@ -71,17 +72,18 @@ const pageSize = ref<number>(PAGINATION_LIMIT);
 /**
  * Table
  */
-const paginationDataTable = reactive({
+const pagination = reactive({
   page: 1,
   pageSize: PAGINATION_LIMIT,
   showSizePicker: true,
-  pageSizes: [PAGINATION_LIMIT, 50, 100],
+  pageSizes: [...enumValues(PageSize), 100] as number[],
+  prefix: ({ itemCount }) => t('general.total', { total: itemCount }),
   onChange: (page: number) => {
-    paginationDataTable.page = page;
+    pagination.page = page;
   },
   onUpdatePageSize: (pageSize: number) => {
-    paginationDataTable.pageSize = pageSize;
-    paginationDataTable.page = 1;
+    pagination.pageSize = pageSize;
+    pagination.page = 1;
   },
 });
 

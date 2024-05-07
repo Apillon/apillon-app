@@ -6,20 +6,10 @@
 </template>
 
 <script lang="ts" setup>
-type Item =
-  | ApiKeyInterface
-  | BucketInterface
-  | BucketItemInterface
-  | FileUploadInterface
-  | IpnsInterface;
+type Item = ApiKeyInterface | BucketInterface | BucketItemInterface | IpnsInterface;
 
 const props = defineProps({
-  items: {
-    type: Array<
-      ApiKeyInterface | BucketInterface | BucketItemInterface | FileUploadInterface | IpnsInterface
-    >,
-    required: true,
-  },
+  items: { type: Array<Item>, required: true },
 });
 const emit = defineEmits(['submitSuccess']);
 

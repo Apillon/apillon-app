@@ -159,7 +159,8 @@ const options = computed(() => {
 });
 
 function refresh() {
-  collectionStore.fetchCollection(collectionStore.active.collection_uuid);
-  collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid);
+  collectionStore.fetchCollection(collectionStore.collectionUuid);
+  collectionStore.fetchMetadataDeploys(collectionStore.collectionUuid);
+  collectionStore.fetchCollectionTransactions(collectionStore.collectionUuid);
 }
 </script>

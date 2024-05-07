@@ -229,3 +229,17 @@ export function prepareOG(
     ogUrl: url,
   };
 }
+
+export function createPagination() {
+  const { t } = useI18n();
+  return {
+    itemCount: 0,
+    page: 1,
+    pageSize: PAGINATION_LIMIT,
+    showSizePicker: true,
+    pageSizes: enumValues(PageSize) as number[],
+    prefix({ itemCount }) {
+      return t('general.total', { total: itemCount });
+    },
+  };
+}

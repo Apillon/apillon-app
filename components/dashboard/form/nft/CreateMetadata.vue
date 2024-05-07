@@ -2,7 +2,6 @@
   <div
     class="relative w-full"
     :class="{ 'flex-cc': collectionStore.nftStep !== NftCreateStep.PREVIEW }"
-    style="min-height: calc(70dvh - 50px)"
   >
     <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" />
     <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" />
@@ -81,6 +80,7 @@ async function deploy() {
     await deployCollection(props.deployCollection);
 
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
+    collectionStore.resetCache();
 
     /** Emit events */
     emit('submitSuccess');

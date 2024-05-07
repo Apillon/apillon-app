@@ -66,6 +66,7 @@ const createColumns = ({
           {
             type: row.pendingInvitation ? 'default' : 'success',
             round: true,
+            size: 'small',
             bordered: row.pendingInvitation,
           },
           {
