@@ -185,6 +185,8 @@ function getIconName(service: ProductPriceInterface) {
   switch (service.service) {
     case ServiceTypeName.COMPUTING:
       return 'menu/computing';
+    case ServiceTypeName.SOCIAL:
+      return 'logo/subsocial';
   }
 
   return 'icon/change';
