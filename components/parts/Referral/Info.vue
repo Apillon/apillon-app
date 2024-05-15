@@ -1,7 +1,7 @@
 <template>
   <!-- Referral - info -->
   <div class="flex flex-col gap-4">
-    <div class="card-light p-8">
+    <div class="card p-8">
       <h6>{{ $t('referral.info.collected') }}</h6>
       <h1 class="text-yellow my-2">
         <div v-if="!referralStore.airdrop.totalPoints" class="inline-block h-5 w-9 relative">
@@ -18,7 +18,7 @@
       </p>
     </div>
 
-    <div class="card-light p-8">
+    <div v-if="referralStore.airdrop.totalPoints > 0" class="card p-8">
       <h6>{{ $t('referral.info.status') }}</h6>
 
       <ul class="mt-4">
@@ -41,7 +41,7 @@
       </ul>
     </div>
 
-    <div class="card-light p-8">
+    <div v-if="referralStore.airdrop.totalPoints > 0" class="card p-8">
       <h6>
         {{ $t('referral.info.connectAstar') }}
       </h6>
@@ -59,21 +59,15 @@
       <AuthWalletConnectAstar />
     </div>
 
-    <div class="card-light p-8">
+    <div v-if="referralStore.airdrop.totalPoints > 0" class="card-light !border-primary p-8">
       <h6>
         {{ $t('referral.info.claim.title') }}
-        <IconInfo size="sm" :tooltip="$t('referral.info.claim.tooltip')" />
       </h6>
       <p class="mt-4 mb-6 text-sm">
         {{ $t('referral.info.claim.content') }}
-        <!-- TODO: Uncomment when TGE page is live -->
-        <!--<a href="https://apillon.io/tge" class="text-white underline" target="_blank">(TGE)</a>-->
-        (TGE)
-        {{ $t('referral.info.claim.contentEnd') }}
       </p>
-      <Btn type="secondary" size="large" disabled>
-        {{ $t('referral.info.claim.btn') }}
-      </Btn>
+
+      <FormAirdrop />
     </div>
   </div>
 </template>

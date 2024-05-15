@@ -18,7 +18,10 @@ export enum PageSize {
   LG = 50,
 }
 
-export const LS_KEY_NEWSLETTER = 'al_newsletter_subscribed';
+export const LS_KEYS = {
+  AIRDROP_REVIEW: 'al_airdrop_review',
+  NEWSLETTER: 'al_newsletter_subscribed',
+};
 
 export const SessionKeys = {
   CREDITS_MSG: 'al_credits_msg',
