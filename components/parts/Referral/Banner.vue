@@ -3,7 +3,7 @@
   <div class="card-light flex flex-wrap gap-4 p-8">
     <div class="flex-1 min-w-[16rem]">
       <h4>{{ $t('referral.banner.title') }}</h4>
-      <p class="text-body my-4">
+      <p class="text-body mt-4 mb-6 whitespace-break-spaces">
         {{ $t('referral.banner.description') }}
       </p>
       <Btn type="primary" :to="{ name: 'dashboard-airdrop' }">

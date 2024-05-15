@@ -1,36 +1,12 @@
 <template>
   <!-- Referral - Airdrop -->
   <div class="card-dark p-8 mb-8">
-    <div class="max-w-lg">
+    <div class="max-w-lg mb-12">
       <h3>{{ $t('referral.airdrop.welcome') }}</h3>
       <p class="mb-6 whitespace-break-spaces">{{ $t('referral.airdrop.content') }}</p>
       <Btn :color="colors.blue" href="https://discord.com/invite/yX3gTw36C4">
         {{ $t('referral.airdrop.btn') }}
       </Btn>
-    </div>
-
-    <div class="flex flex-wrap gap-4 mt-12 mb-4">
-      <div
-        v-for="(tab, key) in tabs"
-        class="flex-1 p-6 min-w-[160px] rounded-lg border"
-        :class="
-          key % 3 === 0
-            ? 'border-pink bg-pink/20'
-            : key % 3 === 1
-            ? 'border-orange bg-orange/20'
-            : 'border-blue bg-blue/20'
-        "
-      >
-        <h5 class="mb-2">{{ tab.title }}</h5>
-        <NuxtLink
-          v-if="tab.link && key === 0"
-          class="underline"
-          :to="{ name: 'dashboard-airdrop-referral' }"
-        >
-          {{ tab.link }}
-        </NuxtLink>
-        <span class="text-sm">{{ tab.content }}</span>
-      </div>
     </div>
 
     <n-table class="bg-dark mobile:text-xs" :bordered="false" :single-line="true">
@@ -88,46 +64,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { MessageFunction, VueMessageType } from '@nuxtjs/i18n/dist/runtime/composables';
 import colors from '~/tailwind.colors';
 
-type VueMsg = VueMessageType | MessageFunction<VueMessageType>;
-type TabsContent = {
-  headline?: string;
-  title?: string;
-  content?: string | string[];
-  link?: string;
-  benefits?: string[];
-};
-type TabsContentTrans = {
-  headline?: VueMsg;
-  title?: VueMsg;
-  content?: VueMsg;
-  link?: VueMsg;
-  benefits?: VueMsg;
-};
-
-const { te, tm, rt } = useI18n();
 const referralStore = useReferralStore();
-
-const tabs = generateContent();
-
-function generateContent() {
-  const BASE = 'referral.airdrop.tabs';
-
-  if (te(BASE)) {
-    const translations = tm(BASE) as TabsContentTrans[];
-
-    return translations.map(trans => {
-      return {
-        title: trans.title ? rt(trans.title) : undefined,
-        content: trans.content ? rt(trans.content) : undefined,
-        link: trans.link ? rt(trans.link) : undefined,
-      } as TabsContent;
-    });
-  }
-  return [];
-}
 
 // prettier-ignore
 const airdropTasks = [
