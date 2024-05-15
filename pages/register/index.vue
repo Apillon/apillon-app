@@ -3,28 +3,21 @@
     <!-- Heading -->
     <h1 class="mb-2 text-center sm:text-left">
       {{
-        route.query.REF === 'ZIGGI' ? $t('auth.signup.titleReferalZiggi') : $t('auth.signup.title')
+        route.query.REF === 'ZIGGI' ? $t('auth.signup.titleReferalZiggi') : $t('auth.signup.signup')
       }}
     </h1>
-    <p class="mb-7 text-body">{{ $t('auth.signup.description') }}</p>
-
-    <!-- Wallet -->
-    <AuthWalletLogin
-      v-if="allowWalletRegister && !walletRegister"
-      class="w-full"
-      register
-      @register="onWalletRegister"
-    />
 
     <!-- Separator -->
-    <SeparatorText :border-left="allowWalletRegister">
+    <SeparatorText
+      v-if="!authStore.wallet.signature && !allowWalletRegister"
+      :border-left="allowWalletRegister"
+    >
       <template v-if="authStore.wallet.signature">
         <span class="lowercase">{{ $t('auth.signup.walletEmail') }}</span>
       </template>
-      <template v-else-if="allowWalletRegister">
-        {{ $t('auth.signup.orUseEmail') }}
+      <template v-else-if="!allowWalletRegister">
+        {{ $t('auth.signup.withEmail') }}
       </template>
-      <template v-else>{{ $t('auth.signup.withEmail') }}</template>
     </SeparatorText>
 
     <!-- Form -->
@@ -39,6 +32,21 @@
         </Btn>
       </div>
     </n-space>
+
+    <!-- Separator -->
+    <SeparatorText :border-left="allowWalletRegister">
+      <template v-if="allowWalletRegister">
+        {{ $t('auth.signup.withWallet') }}
+      </template>
+    </SeparatorText>
+
+    <!-- Wallet -->
+    <AuthWalletLogin
+      v-if="allowWalletRegister && !walletRegister"
+      class="w-full"
+      register
+      @register="onWalletRegister"
+    />
   </div>
 </template>
 
