@@ -10,7 +10,6 @@
       <div class="mobile:relative">
         <FormNftCreateMetadata
           :deploy-collection="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
-          :style="scrollStyle"
         />
         <button
           v-if="

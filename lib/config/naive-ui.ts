@@ -299,6 +299,19 @@ export const themeOverrides: GlobalThemeOverrides = {
       },
     },
   },
+  Pagination: {
+    peers: {
+      Select: {
+        peers: {
+          InternalSelectMenu: {
+            paddingSmall: '4px 8px',
+            paddingMedium: '4px 10px',
+            paddingLarge: '4px 20px',
+          },
+        },
+      },
+    },
+  },
   Popover: {
     arrowHeight: '16px',
     spaceArrow: '16px',

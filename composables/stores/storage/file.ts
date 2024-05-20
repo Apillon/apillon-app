@@ -5,27 +5,26 @@ import { typesBundleForPolkadot } from '@crustio/type-definitions';
 
 export const useFileStore = defineStore('file', {
   state: () => ({
-    all: [] as Array<FileUploadSessionInterface>,
     crust: {} as Record<string, AnyJson>,
     currentBlockId: 0,
     items: {} as Record<string, FileInterface>,
     loading: false,
     search: '',
-    total: 0,
+    session: {
+      items: [] as Array<FileUploadSessionInterface>,
+      loading: false,
+      pagination: createPagination(),
+    },
     trash: {
       items: [] as Array<BucketItemInterface>,
       loading: false,
       search: '',
-      pagination: {
-        page: 1,
-        pageSize: PAGINATION_LIMIT,
-        itemCount: 0,
-      },
+      pagination: createPagination(),
     },
   }),
   getters: {
-    hasAllFiles(state): boolean {
-      return Array.isArray(state.all) && state.all.length > 0;
+    hasFileSessions(state): boolean {
+      return Array.isArray(state.session.items) && state.session.items.length > 0;
     },
     hasDeletedFiles(state): boolean {
       return Array.isArray(state.trash.items) && state.trash.items.length > 0;
@@ -33,20 +32,24 @@ export const useFileStore = defineStore('file', {
   },
   actions: {
     resetData() {
-      this.all = [] as Array<FileUploadSessionInterface>;
       this.items = {} as Record<string, FileInterface>;
       this.loading = false;
-      this.total = 0;
+
+      this.session.items = [] as Array<FileUploadSessionInterface>;
+      this.session.pagination.itemCount = 0;
+      this.session.pagination.page = 1;
+
       this.trash.items = [] as Array<BucketItemInterface>;
       this.trash.pagination.itemCount = 0;
+      this.trash.pagination.page = 1;
     },
 
     /**
      * Fetch wrappers
      */
-    async getAllFiles() {
-      if (!this.hasAllFiles || isCacheExpired(LsCacheKeys.FILE_ALL)) {
-        await this.fetchAllFiles();
+    async getFileSessions() {
+      if (!this.hasFileSessions || isCacheExpired(LsCacheKeys.FILE_ALL)) {
+        await this.fetchFileSessions();
       }
     },
     async getDeletedFiles(page = 1) {
@@ -125,7 +128,7 @@ export const useFileStore = defineStore('file', {
       return 0;
     },
 
-    async fetchAllFiles(fileStatus?: number | null, args: FetchParams = {}) {
+    async fetchFileSessions(fileStatus?: number | null, args: FetchParams = {}) {
       const bucketStore = useBucketStore();
       this.loading = args.loader !== undefined ? args.loader : true;
 
@@ -147,15 +150,15 @@ export const useFileStore = defineStore('file', {
         );
         this.loading = false;
 
-        this.all = res.data.items;
-        this.total = res.data.total;
+        this.session.items = res.data.items;
+        this.session.pagination.itemCount = res.data.total;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.FILE_ALL, Date.now().toString());
       } catch (error: any) {
         /** Reset data */
-        this.all = [];
-        this.total = 0;
+        this.session.items = [];
+        this.session.pagination.itemCount = 0;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));

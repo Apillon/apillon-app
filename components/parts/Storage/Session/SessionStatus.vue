@@ -12,7 +12,8 @@
       align="center"
       :wrap="false"
     >
-      <span class="uppercase">{{ FileUploadSessionStatus[status] }}</span>
+      <span class="mx-1 uppercase">{{ $t(`storage.session.status.${status}`) }}</span>
+      <AnimationTyping v-if="status < FileUploadSessionStatus.FINISHED" />
     </n-space>
   </n-tag>
 </template>

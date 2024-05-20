@@ -4,10 +4,17 @@
     :columns="columns"
     :data="transactionStore.items"
     :loading="transactionStore.loading"
-    :pagination="transactionStore.pagination"
+    :pagination="{
+      ...transactionStore.pagination,
+      onChange: (page: number) => {
+        handlePageChange(page, transactionStore.pagination.pageSize);
+      },
+      onUpdatePageSize: (pageSize: number) => {
+        handlePageChange(1, pageSize);
+      },
+    }"
     :row-key="rowKey"
     :row-props="rowProps"
-    @update:page="handlePageChange"
     remote
   />
 </template>
@@ -73,9 +80,9 @@ function rowProps(row: TransactionInterface) {
 }
 
 /** On page change, load data */
-async function handlePageChange(currentPage: number) {
+async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIMIT) {
   if (!transactionStore.loading) {
-    await transactionStore.fetchTransactions(props.contractUuid, currentPage);
+    await transactionStore.fetchTransactions(props.contractUuid, { page, limit });
   }
 }
 </script>

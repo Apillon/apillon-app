@@ -17,19 +17,19 @@ const loading = ref<boolean>(false);
 
 /** Pagination data */
 const pagination = reactive({
+  itemCount: paymentStore.invoices.total,
   page: 1,
   pageSize: PAGINATION_LIMIT,
-  showSizePicker: true,
-  pageSizes: [10, PAGINATION_LIMIT, 50],
-  itemCount: paymentStore.invoices.total,
+  showSizePicker: paymentStore.invoices.total > 0,
+  pageSizes: enumValues(PageSize) as number[],
+  prefix({ itemCount }) {
+    return t('general.total', { total: itemCount });
+  },
   onChange: (page: number) => {
-    pagination.page = page;
     handlePageChange(page, pagination.pageSize);
   },
   onUpdatePageSize: (pageSize: number) => {
-    pagination.page = 1;
-    pagination.pageSize = pageSize;
-    handlePageChange(pagination.page, pageSize);
+    handlePageChange(1, pageSize);
   },
 });
 
@@ -83,9 +83,15 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
 const columns = createColumns();
 
 /** On page change, load data */
-async function handlePageChange(page: number, pageSize: number) {
+async function handlePageChange(page: number, limit: number) {
   if (!loading.value) {
-    await paymentStore.getInvoices(page, pageSize);
+    loading.value = true;
+
+    await paymentStore.getInvoices(page, limit);
+
+    loading.value = false;
+    pagination.page = page;
+    pagination.pageSize = limit;
   }
 }
 </script>

@@ -226,7 +226,7 @@ declare global {
     fileStatus: number;
     CID: string;
   }
-  interface FileUploadSessionInterface {
+  interface FileUploadSessionInterface extends BaseObjectInterface {
     numOfFileUploadRequests: number;
     numOfUploadedFiles: number;
     sessionStatus: number;

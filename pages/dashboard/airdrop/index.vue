@@ -6,8 +6,6 @@
           <h2>{{ $t('referral.airdrop.title') }}</h2>
         </slot>
 
-        <template #info> </template>
-
         <template #submenu>
           <MenuReferral />
         </template>
@@ -15,7 +13,8 @@
     </template>
 
     <slot>
-      <ReferralAirdrop />
+      <ReferralAirdrop v-if="referralStore.airdrop.totalPoints > 0" />
+      <ReferralAirdropSubscribe v-else />
     </slot>
 
     <template #learn>
@@ -28,7 +27,7 @@
 const { t } = useI18n();
 const referralStore = useReferralStore();
 
-const loading = ref(false);
+const loading = ref(true);
 
 useHead({
   title: t('referral.airdrop.title'),

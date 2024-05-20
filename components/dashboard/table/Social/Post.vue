@@ -6,7 +6,10 @@
     :data="postStore.items"
     :loading="postStore.loading"
     :expanded-row-keys="expandedRows"
-    :pagination="chatStore.pagination"
+    :pagination="{
+      ...postStore.pagination,
+      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+    }"
     :row-key="rowKey"
     :row-props="rowProps"
     :row-class-name="rowClassName"
@@ -19,7 +22,6 @@ import debounce from 'lodash.debounce';
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
-const chatStore = useChatStore();
 const postStore = usePostStore();
 
 /** Available columns - show/hide column */

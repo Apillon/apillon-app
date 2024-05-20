@@ -125,7 +125,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessage } from 'naive-ui';
+import type { FormItemRule } from 'naive-ui';
 
 /**
  * API key - Form
@@ -173,7 +173,40 @@ const createdApiKey = ref<ApiKeyCreatedInterface>({} as ApiKeyCreatedInterface);
 /**
  * Form data
  */
-const roles = computed(() => {
+
+const formData = ref<ApiKeyForm>({
+  name: '',
+  apiKeyType: false,
+  roles: [],
+});
+
+const rules: NFormRules = {
+  name: ruleRequired(t('validation.apiKey.nameRequired')),
+  roles: [
+    {
+      validator(_: FormItemRule, value: any) {
+        return (
+          Array.isArray(value) &&
+          value.length > 0 &&
+          value.some(item => isAnyPermissionEnabled(item))
+        );
+      },
+      message: t('validation.apiKey.rolesRequired'),
+    },
+  ],
+};
+
+const unusedServices = computed<ServiceTypeField[]>(() => {
+  return dataStore.serviceTypes.reduce((acc, serviceType) => {
+    const isServiceInUse = dataStore.services.some(item => item.serviceType_id === serviceType.id);
+    const newServiceType = { ...serviceType, enabled: false };
+    return !isServiceEnabled(serviceType) || isServiceInUse || serviceType.active === 0
+      ? acc
+      : [...acc, newServiceType];
+  }, [] as ServiceTypeField[]);
+});
+
+const createRoles = () => {
   return dataStore.services.map(service => {
     return {
       enabled: isAnyPermissionEnabled(service),
@@ -202,45 +235,13 @@ const roles = computed(() => {
       ],
     };
   });
-});
-
-const unusedServices = computed<ServiceTypeField[]>(() => {
-  return dataStore.serviceTypes.reduce((acc, serviceType) => {
-    const isServiceInUse = dataStore.services.some(item => item.serviceType_id === serviceType.id);
-    const newServiceType = { ...serviceType, enabled: false };
-    return !isServiceEnabled(serviceType) || isServiceInUse || serviceType.active === 0
-      ? acc
-      : [...acc, newServiceType];
-  }, [] as ServiceTypeField[]);
-});
-
-const formData = ref<ApiKeyForm>({
-  name: '',
-  apiKeyType: false,
-  roles: roles.value,
-});
-
-const rules: NFormRules = {
-  name: ruleRequired(t('validation.apiKey.nameRequired')),
-  roles: [
-    {
-      validator(_: NFormItemRule, value: any) {
-        return (
-          Array.isArray(value) &&
-          value.length > 0 &&
-          value.some(item => isAnyPermissionEnabled(item))
-        );
-      },
-      message: t('validation.apiKey.rolesRequired'),
-    },
-  ],
 };
 
 const createExpandedPermissions = () => {
   if (props.id === 0) {
     return null;
   }
-  return roles.value.filter(role => role.enabled).map(item => item.service_uuid);
+  return formData.value.roles.filter(role => role.enabled).map(item => item.service_uuid);
 };
 const expandedPermissions = ref<string | number | Array<string | number> | null>(null);
 
@@ -292,11 +293,10 @@ onMounted(async () => {
     apiKey.value = settingsStore.getApiKeyById(props.id);
     formData.value.name = apiKey.value.name;
     formData.value.apiKeyType = apiKey.value.testNetwork === 1;
-    formData.value.roles = roles.value;
-
-    expandedPermissions.value = createExpandedPermissions();
   }
 
+  formData.value.roles = createRoles();
+  expandedPermissions.value = createExpandedPermissions();
   loading.value = false;
 });
 
@@ -397,9 +397,9 @@ async function updateApiKey() {
 function isPermissionEnabled(serviceUuid: string, roleId: number) {
   /** Default value for new API key */
   if (props.id === 0) {
-    if (!roles.value) return false;
+    if (!formData.value.roles) return false;
 
-    const serviceRoles = roles.value.find(role => role.service_uuid === serviceUuid);
+    const serviceRoles = formData.value.roles.find(role => role.service_uuid === serviceUuid);
     if (serviceRoles) {
       const permission = serviceRoles.permissions.find(role => role.key === roleId);
       return permission ? permission.value : false;
@@ -493,7 +493,7 @@ async function removeServicePermissions(service: ApiKeyRoleForm) {
 }
 
 function onServiceCreated(service: ServiceInterface) {
-  formData.value.roles = roles.value;
+  formData.value.roles = createRoles();
 
   if (service && service.active) {
     handleItemHeaderClick({ name: service.service_uuid, expanded: true });
@@ -507,12 +507,10 @@ function isServiceEnabled(serviceType: ServiceTypeInterface) {
       return authStore.isUserAllowed(Permission.AUTHENTICATION);
     case 2:
       return authStore.isUserAllowed(Permission.STORAGE);
-    case 3:
-      return authStore.isUserAllowed(Permission.NFTS);
     case 4:
       return authStore.isUserAllowed(Permission.HOSTING);
     default:
-      return false;
+      return authStore.isUserAllowed(serviceType.id);
   }
 }
 </script>

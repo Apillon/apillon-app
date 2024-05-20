@@ -5,11 +5,6 @@ import dev from '../config/development';
 import prod from '../config/production';
 import local from '../config/local';
 import { Feature } from '../types/config';
-import {
-  CACHE_EXPIRATION_IN_MS,
-  ON_COLUMN_CLICK_OPEN_CLASS,
-  PAGINATION_LIMIT,
-} from '../values/general.values';
 
 export function getAppConfig(env?: string) {
   const configFile =
@@ -132,7 +127,7 @@ export async function subscribeToNewsletter(email: string, username?: string): P
 
     window.$message.success(window.$i18n.t('form.success.newsletter.subscribed'));
 
-    localStorage.setItem(LS_KEY_NEWSLETTER, email);
+    localStorage.setItem(LS_KEYS.NEWSLETTER, email);
   } catch (error: ApiError | ReferenceError | any) {
     window.$message.error(userFriendlyMsg(error));
     return false;
@@ -164,10 +159,10 @@ export function isCacheExpired(key: string) {
 /** Parse base method argument to request params */
 export function parseArguments(args: FetchParams): Record<string, string | number> {
   const params: Record<string, string | number> = {
-    page: args.page || 1,
-    limit: args.limit || PAGINATION_LIMIT,
-    orderBy: args.orderBy || 'createTime',
-    desc: args.order === 'descend' || !args.orderBy ? 'true' : 'false',
+    page: args?.page || 1,
+    limit: args?.limit || PAGINATION_LIMIT,
+    orderBy: args?.orderBy || 'createTime',
+    desc: args?.order === 'descend' || !args.orderBy ? 'true' : 'false',
   };
   if (args.search) params.search = args.search;
   if (args.project_uuid) params.project_uuid = args.project_uuid;

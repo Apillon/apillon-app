@@ -1,8 +1,8 @@
 <template>
   <n-space class="pb-8" :size="12" vertical>
-    <n-space class="!hidden" justify="space-between">
+    <n-space justify="space-between">
       <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
-        <n-input
+        <!-- <n-input
           v-model:value="fileStore.search"
           type="text"
           name="search"
@@ -13,10 +13,22 @@
           <template #prefix>
             <span class="icon-search text-2xl"></span>
           </template>
-        </n-input>
+        </n-input> -->
       </div>
       <n-space>
-        <!-- Filters -->
+        <!-- Refresh -->
+        <n-button
+          size="small"
+          :loading="loading"
+          @click="
+            getFiles(fileStore.session.pagination.page, fileStore.session.pagination.pageSize)
+          "
+        >
+          <span class="icon-refresh text-xl mr-2"></span>
+          {{ $t('general.refresh') }}
+        </n-button>
+
+        <!-- Filters 
         <select-options
           v-model:value="fileStatus"
           :options="fileStatuses"
@@ -26,26 +38,32 @@
           filterable
           clearable
           @update:value="getFiles"
-        />
+        />-->
       </n-space>
     </n-space>
     <n-data-table
       remote
       :bordered="false"
       :columns="columns"
-      :data="fileStore.all"
+      :data="fileStore.session.items"
       :loading="loading"
-      :pagination="pagination"
+      :pagination="{
+        ...fileStore.session.pagination,
+        onChange: (page: number) => {
+          getFiles(page, fileStore.session.pagination.pageSize);
+        },
+        onUpdatePageSize: (pageSize: number) => {
+          getFiles(1, pageSize);
+        },
+      }"
       :row-key="rowKey"
       :row-props="rowProps"
-      @update:page="handlePageChange"
     />
   </n-space>
 </template>
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
-import type { SelectOption } from 'naive-ui';
 
 const { t } = useI18n();
 const dataStore = useDataStore();
@@ -54,7 +72,7 @@ const fileStore = useFileStore();
 const loading = ref<boolean>(false);
 const currentRow = ref<FileUploadSessionInterface>({} as FileUploadSessionInterface);
 
-/** File status */
+/** File status
 const fileStatus = ref<number | undefined>();
 const fileStatuses = ref<Array<SelectOption>>(
   enumValues(FileUploadSessionStatus).map(value => {
@@ -63,18 +81,7 @@ const fileStatuses = ref<Array<SelectOption>>(
       label: FileUploadSessionStatus[value],
     };
   })
-);
-
-/** Pagination data */
-const currentPage = ref<number>(1);
-const pagination = computed(() => {
-  return {
-    page: currentPage.value,
-    pageSize: PAGINATION_LIMIT,
-    pageCount: Math.ceil(fileStore.total / PAGINATION_LIMIT),
-    itemCount: fileStore.total,
-  };
-});
+); */
 
 /** Columns */
 const createColumns = (): NDataTableColumns<FileUploadSessionInterface> => {
@@ -102,6 +109,20 @@ const createColumns = (): NDataTableColumns<FileUploadSessionInterface> => {
       key: 'numOfUploadedFiles',
     },
     {
+      key: 'createTime',
+      title: t('dashboard.createTime'),
+      render(row: FileUploadSessionInterface) {
+        return h('span', {}, { default: () => dateTimeToDateAndTime(row.createTime || '') });
+      },
+    },
+    {
+      key: 'updateTime',
+      title: t('general.updateTime'),
+      render(row: FileUploadSessionInterface) {
+        return h('span', {}, { default: () => dateTimeToDateAndTime(row.updateTime || '') });
+      },
+    },
+    {
       title: t('storage.sessionStatus'),
       key: 'sessionStatus',
       render(row: FileUploadSessionInterface) {
@@ -126,20 +147,15 @@ function rowProps(row: FileUploadSessionInterface) {
  */
 onMounted(() => {
   fileStore.search = '';
+  loading.value = true;
 
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      fileStore.getAllFiles();
+      await fileStore.getFileSessions();
+      loading.value = false;
     });
   }, 100);
 });
-
-/** On page change, load data */
-async function handlePageChange(currentPage: number) {
-  if (!loading.value) {
-    await getFiles(currentPage);
-  }
-}
 
 /** Search files */
 watch(
@@ -151,11 +167,12 @@ watch(
 const debouncedSearchFilter = debounce(getFiles, 500);
 
 /** Function "Fetch directory content" wrapper  */
-async function getFiles(page: number = 1) {
+async function getFiles(page: number = 1, limit: number = PAGINATION_LIMIT) {
   loading.value = true;
-  await fileStore.fetchAllFiles(fileStatus.value || null, { page });
+  await fileStore.fetchFileSessions(null, { page, limit });
 
-  currentPage.value = page;
   loading.value = false;
+  fileStore.session.pagination.page = page;
+  fileStore.session.pagination.pageSize = limit;
 }
 </script>

@@ -1,4 +1,4 @@
-import type { MessageFunction, VueMessageType } from '@nuxtjs/i18n/dist/runtime/composables';
+import type { MessageFunction, VueMessageType } from 'vue-i18n';
 
 type VueMsg = VueMessageType | MessageFunction<VueMessageType>;
 
@@ -21,7 +21,7 @@ export default function useSolution() {
   function generateContent(solution: string) {
     const BASE = 'dashboard.solution';
 
-    if (te(`${BASE}.${solution}.content`)) {
+    if (te(`${BASE}.${solution}.content`) || tm(`${BASE}.${solution}.content`)) {
       const translations = tm(`${BASE}.${solution}.content`) as SolutionContentTrans[];
 
       return translations.map(trans => {
