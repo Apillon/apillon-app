@@ -52,7 +52,6 @@
 
 <script lang="ts" setup>
 import type { FormItemInst, FormItemRule } from 'naive-ui';
-import { load as loadFingerprint } from '@fingerprintjs/fingerprintjs';
 
 type FormRegister = {
   password: string | null;
@@ -151,7 +150,6 @@ async function register() {
       token: props.token || query.token || authStore.jwt,
       refCode: query.REF,
       metadata: getMetadata(),
-      fingerprint: await getFingerprint(),
     });
 
     authStore.saveUser(res.data);
@@ -191,14 +189,5 @@ function getMetadata() {
   return query && Object.keys(query).length
     ? JSON.stringify(query)
     : readCookie('apillon_mkt_params');
-}
-
-async function getFingerprint() {
-  try {
-    const { visitorId } = await loadFingerprint().then(fp => fp.get());
-    return visitorId;
-  } catch (err) {
-    return null;
-  }
 }
 </script>

@@ -151,9 +151,6 @@ async function airdropReview() {
 }
 
 async function getFingerprint() {
-  if (authStore.user.fingerprint) {
-    return authStore.user.fingerprint;
-  }
   try {
     const { visitorId } = await loadFingerprint().then(fp => fp.get());
     return visitorId;
