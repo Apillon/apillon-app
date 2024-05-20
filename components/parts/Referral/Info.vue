@@ -7,8 +7,8 @@
         <div v-if="!referralStore.airdrop.totalPoints" class="inline-block h-5 w-9 relative">
           <Spinner :size="20" />
         </div>
-        <span v-else-if="referralStore.tokenClaim.totalClaimed > 0" class="mr-2">
-          {{ referralStore.tokenClaim.totalClaimed }}
+        <span v-else-if="referralStore.tokenClaim.totalNctr > 0" class="mr-2">
+          {{ referralStore.tokenClaim.totalNctr }}
         </span>
         <span v-else class="mr-2">{{ referralStore.airdrop.totalPoints }}</span>
         <NuxtIcon

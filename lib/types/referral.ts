@@ -73,7 +73,7 @@ declare global {
   }
   interface TokenClaimInterface extends GeneralInterface {
     blocked: boolean;
-    totalClaimed: number;
+    totalNctr: number;
     user_uuid: string;
     wallet: string;
   }
