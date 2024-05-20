@@ -7,6 +7,9 @@
         <div v-if="!referralStore.airdrop.totalPoints" class="inline-block h-5 w-9 relative">
           <Spinner :size="20" />
         </div>
+        <span v-else-if="referralStore.tokenClaim.totalClaimed > 0" class="mr-2">
+          {{ referralStore.tokenClaim.totalClaimed }}
+        </span>
         <span v-else class="mr-2">{{ referralStore.airdrop.totalPoints }}</span>
         <NuxtIcon
           name="logo/apillon-icon"
@@ -75,5 +78,4 @@
 <script lang="ts" setup>
 const authStore = useAuthStore();
 const referralStore = useReferralStore();
-const referralStatus = ref<number>(1);
 </script>

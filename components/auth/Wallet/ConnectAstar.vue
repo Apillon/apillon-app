@@ -1,31 +1,46 @@
 <template>
   <div class="my-8">
-    <div class="mb-4">
+    <div v-if="!!referralStore.tokenClaim.wallet" class="mb-4">
       <label class="inline-flex items-baseline text-xs">
         {{ $t('referral.info.astarAddress') }}
         <!-- <IconInfo class="relative top-1" size="sm" :tooltip="$t('referral.info.claim.tooltip')" /> -->
       </label>
       <n-input
-        v-model:value="authStore.user.evmWallet"
+        v-model:value="referralStore.tokenClaim.wallet"
         class="bg-bg-dark"
         :placeholder="$t('referral.info.connectWallet')"
+        :disabled="true"
         readonly
       />
     </div>
+    <template v-else>
+      <div class="mb-4">
+        <label class="inline-flex items-baseline text-xs">
+          {{ $t('referral.info.astarAddress') }}
+          <!-- <IconInfo class="relative top-1" size="sm" :tooltip="$t('referral.info.claim.tooltip')" /> -->
+        </label>
+        <n-input
+          v-model:value="authStore.user.evmWallet"
+          class="bg-bg-dark"
+          :placeholder="$t('referral.info.connectWallet')"
+          readonly
+        />
+      </div>
 
-    <Btn v-if="authStore.user.evmWallet" size="large" type="secondary" @click="connectDifferent">
-      {{ $t('auth.wallet.connect.different') }}
-    </Btn>
-    <Btn
-      v-else
-      size="large"
-      type="secondary"
-      :loading="loading || isLoading"
-      borderless
-      @click="modalWalletVisible = true"
-    >
-      {{ $t('referral.info.connectWallet') }}
-    </Btn>
+      <Btn v-if="authStore.user.evmWallet" size="large" type="secondary" @click="connectDifferent">
+        {{ $t('auth.wallet.connect.different') }}
+      </Btn>
+      <Btn
+        v-else
+        size="large"
+        type="secondary"
+        :loading="loading || isLoading"
+        borderless
+        @click="modalWalletVisible = true"
+      >
+        {{ $t('referral.info.connectWallet') }}
+      </Btn>
+    </template>
   </div>
 
   <modal v-model:show="modalWalletVisible" :title="$t('auth.wallet.evm.title')">
@@ -41,6 +56,7 @@ import { useAccount, useConnect, useDisconnect, useWalletClient } from 'use-wagm
 
 const { t } = useI18n();
 const authStore = useAuthStore();
+const referralStore = useReferralStore();
 const { error, success } = useMessage();
 const { connectAndSign } = useWallet();
 

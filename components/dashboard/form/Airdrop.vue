@@ -1,5 +1,19 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" :disabled="isDisabled">
+    <Notification v-if="referralStore.tokenClaim.blocked" type="error" class="w-full mb-8">
+      {{ $t('referral.info.claim.blocked') }}
+    </Notification>
+    <Notification
+      v-else-if="referralStore.tokenClaim.totalClaimed > 0"
+      type="warning"
+      class="w-full mb-8"
+    >
+      {{ $t('referral.info.claim.alreadyClaimed') }}
+    </Notification>
+    <Notification v-else-if="isDisabled" type="warning" class="w-full mb-8">
+      {{ $t('referral.info.claim.inReview') }}
+    </Notification>
+
     <n-form-item path="terms" :show-label="false" :show-feedback="formErrors && !formData.terms">
       <n-checkbox v-model:checked="formData.terms" size="medium" :label="termsLabel" />
       <IconInfo v-if="isDisabled" size="sm" :tooltip="$t('referral.info.claim.tooltipDisabled')" />
@@ -25,20 +39,27 @@
 
 <script lang="ts" setup>
 import type { FormItemRule } from 'naive-ui';
+import { load as loadFingerprint } from '@fingerprintjs/fingerprintjs';
+import { useAccount, useConnect, useWalletClient, type Address } from 'use-wagmi';
 
 type AirdropForm = {
   terms?: boolean;
 };
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
+const referralStore = useReferralStore();
+const { connectAndSign } = useWallet();
+
+const { connect, connectors } = useConnect();
+const { refetch: refetchWalletClient } = useWalletClient();
+const { address, isConnected } = useAccount();
 
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
-const disabled = ref<boolean>(false);
 const loading = ref<boolean>(false);
-const submitted = ref<string | null>(localStorage.getItem(LS_KEYS.AIRDROP_REVIEW));
+const submitted = ref<string | Address | null>(localStorage.getItem(LS_KEYS.AIRDROP_REVIEW));
 
 const formData = ref<AirdropForm>({
   terms: false,
@@ -48,7 +69,7 @@ const rules: NFormRules = {
   terms: [
     {
       validator: (_: FormItemRule, value: string) => !!value,
-      message: $i18n.t('validation.terms'),
+      message: t('validation.terms'),
       trigger: 'change',
     },
   ],
@@ -56,25 +77,25 @@ const rules: NFormRules = {
 
 const isDisabled = computed(
   () =>
-    disabled.value ||
     submitted.value === authStore.user.evmWallet ||
-    submitted.value === authStore.email
+    referralStore.tokenClaim.blocked ||
+    referralStore.tokenClaim.totalClaimed > 0
 );
 
 /** Terms label with link  */
 const termsLabel = computed<any>(() => {
   return h('span', {}, [
-    $i18n.t('auth.terms.consent'),
+    t('auth.terms.consent'),
     h(
       'a',
       { href: 'https://apillon.io/legal-disclaimer', target: '_blank' },
-      { default: () => $i18n.t('auth.terms.app') }
+      { default: () => t('auth.terms.app') }
     ),
-    $i18n.t('auth.terms.and'),
+    t('auth.terms.and'),
     h(
       'a',
       { href: 'https://apillon.io/privacy-policy', target: '_blank' },
-      { default: () => $i18n.t('auth.terms.pp') }
+      { default: () => t('auth.terms.pp') }
     ),
     '.',
   ]);
@@ -94,19 +115,58 @@ function handleSubmit(e: MouseEvent | null) {
     }
   });
 }
+
 async function airdropReview() {
   loading.value = true;
 
   try {
-    await $api.post<GeneralResponse<boolean>>(endpoints.airdropReviewTasks);
+    if (!isConnected.value) {
+      wagmiConnect(connectors.value[0]);
+      loading.value = false;
+      return;
+    }
 
-    message.success($i18n.t('referral.info.claim.inReview'));
+    const sign = await connectAndSign();
+    if (!sign) {
+      loading.value = false;
+      return;
+    }
 
-    disabled.value = true;
-    localStorage.setItem(LS_KEYS.AIRDROP_REVIEW, authStore.user.evmWallet || authStore.email);
+    await $api.post<GeneralResponse<boolean>>(endpoints.airdropReviewTasks, {
+      fingerprint: await getFingerprint(),
+      wallet: address.value,
+      signature: sign.signature,
+      timestamp: sign.timestamp,
+      isEvmWallet: true,
+    });
+
+    message.success(t('referral.info.claim.inReview'));
+
+    submitted.value = address.value;
+    localStorage.setItem(LS_KEYS.AIRDROP_REVIEW, `${address.value}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
   loading.value = false;
+}
+
+async function getFingerprint() {
+  if (authStore.user.fingerprint) {
+    return authStore.user.fingerprint;
+  }
+  try {
+    const { visitorId } = await loadFingerprint().then(fp => fp.get());
+    return visitorId;
+  } catch (err) {
+    return null;
+  }
+}
+
+function wagmiConnect(connector) {
+  if (isConnected.value) {
+    refetchWalletClient();
+  } else if (connector.ready) {
+    connect({ connector });
+  }
 }
 </script>

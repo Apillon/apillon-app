@@ -48,7 +48,7 @@ declare global {
     name: string;
     value: boolean;
   };
-  interface AirdropInterface extends GeneralInterface {
+  interface AirdropStatsInterface extends GeneralInterface {
     bucketCreated: boolean;
     collaboratorAdded: boolean;
     computingContractCreated: boolean;
@@ -70,6 +70,16 @@ declare global {
     usersReferred: number;
     websiteCreated: boolean;
     websiteUploadedViaApi: boolean;
+  }
+  interface TokenClaimInterface extends GeneralInterface {
+    blocked: boolean;
+    totalClaimed: number;
+    user_uuid: string;
+    wallet: string;
+  }
+  interface AirdropInterface {
+    airdropStats: AirdropStatsInterface;
+    tokenClaim: TokenClaimInterface;
   }
   interface AirdropResponse extends GeneralResponse<AirdropInterface> {}
 }
