@@ -4,7 +4,7 @@
       {{ $t('referral.info.claim.blocked') }}
     </Notification>
     <Notification
-      v-else-if="referralStore.tokenClaim.totalClaimed > 0"
+      v-else-if="referralStore.tokenClaim.totalNctr > 0"
       type="warning"
       class="w-full mb-8"
     >
@@ -79,7 +79,7 @@ const isDisabled = computed(
   () =>
     submitted.value === authStore.user.evmWallet ||
     referralStore.tokenClaim.blocked ||
-    referralStore.tokenClaim.totalClaimed > 0
+    referralStore.tokenClaim.totalNctr > 0
 );
 
 /** Terms label with link  */
