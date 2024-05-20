@@ -8,7 +8,6 @@ declare global {
     id: number;
     email: string;
     evmWallet: string | null;
-    fingerprint?: string | null;
     name: string;
     phone?: string | null;
     status: number;
