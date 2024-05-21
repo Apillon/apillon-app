@@ -1,13 +1,6 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" :disabled="isDisabled">
-    <Notification v-if="referralStore.tokenClaim.blocked" type="error" class="w-full mb-8">
-      {{ $t('referral.info.claim.blocked') }}
-    </Notification>
-    <Notification
-      v-else-if="referralStore.tokenClaim.claimCompleted"
-      type="warning"
-      class="w-full mb-8"
-    >
+    <Notification v-if="referralStore.tokenClaim.claimCompleted" type="warning" class="w-full mb-8">
       {{ $t('referral.info.claim.alreadyClaimed') }}
     </Notification>
     <Notification v-else-if="isDisabled" type="warning" class="w-full mb-8">
@@ -75,10 +68,7 @@ const rules: NFormRules = {
   ],
 };
 
-const isDisabled = computed(
-  () =>
-    !!submitted.value || referralStore.tokenClaim.blocked || referralStore.tokenClaim.claimCompleted
-);
+const isDisabled = computed(() => !!submitted.value || referralStore.tokenClaim.claimCompleted);
 
 /** Terms label with link  */
 const termsLabel = computed<any>(() => {
