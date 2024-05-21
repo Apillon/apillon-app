@@ -70,9 +70,11 @@ declare global {
     usersReferred: number;
     websiteCreated: boolean;
     websiteUploadedViaApi: boolean;
+    galxeTasksCompleted: number;
   }
   interface TokenClaimInterface extends GeneralInterface {
     blocked: boolean;
+    claimCompleted: boolean;
     totalNctr: number;
     user_uuid: string;
     wallet: string;
