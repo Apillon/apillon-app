@@ -48,7 +48,6 @@ type AirdropForm = {
 
 const { t } = useI18n();
 const message = useMessage();
-const authStore = useAuthStore();
 const referralStore = useReferralStore();
 const { connectAndSign } = useWallet();
 
@@ -110,6 +109,7 @@ function handleSubmit(e: MouseEvent | null) {
       );
     } else {
       await airdropReview();
+      await referralStore.fetchAirdrop();
     }
   });
 }
