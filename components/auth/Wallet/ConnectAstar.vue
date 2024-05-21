@@ -1,12 +1,15 @@
 <template>
   <div class="my-8">
-    <div v-if="!!referralStore.tokenClaim.wallet" class="mb-4">
+    <div
+      v-if="!!referralStore.tokenClaim.wallet || airdropReviewWallet === authStore.user.evmWallet"
+      class="mb-4"
+    >
       <label class="inline-flex items-baseline text-xs">
         {{ $t('referral.info.astarAddress') }}
         <!-- <IconInfo class="relative top-1" size="sm" :tooltip="$t('referral.info.claim.tooltip')" /> -->
       </label>
       <n-input
-        v-model:value="referralStore.tokenClaim.wallet"
+        v-model:value="wallet"
         class="bg-bg-dark"
         :placeholder="$t('referral.info.connectWallet')"
         :disabled="true"
@@ -67,6 +70,11 @@ const { disconnect } = useDisconnect();
 
 const loading = ref<boolean>(false);
 const modalWalletVisible = ref<boolean>(false);
+
+const airdropReviewWallet = ref<string | null>(localStorage.getItem(LS_KEYS.AIRDROP_REVIEW));
+const wallet = computed<string | null>(
+  () => referralStore.tokenClaim.wallet || airdropReviewWallet.value
+);
 
 onMounted(() => {
   if (!authStore.user.evmWallet) {

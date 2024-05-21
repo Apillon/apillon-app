@@ -4,7 +4,7 @@
       {{ $t('referral.info.claim.blocked') }}
     </Notification>
     <Notification
-      v-else-if="referralStore.tokenClaim.totalNctr > 0"
+      v-else-if="referralStore.tokenClaim.claimCompleted"
       type="warning"
       class="w-full mb-8"
     >
@@ -40,7 +40,7 @@
 <script lang="ts" setup>
 import type { FormItemRule } from 'naive-ui';
 import { load as loadFingerprint } from '@fingerprintjs/fingerprintjs';
-import { useAccount, useConnect, useWalletClient, type Address } from 'use-wagmi';
+import { useAccount, useConnect, useWalletClient } from 'use-wagmi';
 
 type AirdropForm = {
   terms?: boolean;
@@ -59,7 +59,7 @@ const { address, isConnected } = useAccount();
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
 const loading = ref<boolean>(false);
-const submitted = ref<string | Address | null>(localStorage.getItem(LS_KEYS.AIRDROP_REVIEW));
+const submitted = ref<string | null>(localStorage.getItem(LS_KEYS.AIRDROP_REVIEW));
 
 const formData = ref<AirdropForm>({
   terms: false,
@@ -77,9 +77,7 @@ const rules: NFormRules = {
 
 const isDisabled = computed(
   () =>
-    submitted.value === authStore.user.evmWallet ||
-    referralStore.tokenClaim.blocked ||
-    referralStore.tokenClaim.totalNctr > 0
+    !!submitted.value || referralStore.tokenClaim.blocked || referralStore.tokenClaim.claimCompleted
 );
 
 /** Terms label with link  */
@@ -142,7 +140,7 @@ async function airdropReview() {
 
     message.success(t('referral.info.claim.inReview'));
 
-    submitted.value = address.value;
+    submitted.value = `${address.value}`;
     localStorage.setItem(LS_KEYS.AIRDROP_REVIEW, `${address.value}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));

@@ -1019,6 +1019,7 @@
     "CONTRACT_NOT_DEPLOYED": "Contract is not deployed",
     "TRANSACTION_FOR_TRANSFER_ALREADY_EXISTS": "Contract has already been transferred.",
     "REVIEW_ALREADY_SUBMITTED": "Review has already been submitted.",
+    "USER_NOT_ELIGIBLE": "User is not eligible for airdrop.",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
     "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again.",

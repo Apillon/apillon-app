@@ -35,6 +35,7 @@
                 { 'text-orange': task.category === 'learn' },
                 { 'text-blue': task.category === 'build' },
                 { 'text-pink': task.category === 'refer' },
+                { 'text-yellow': task.category === 'airdrop' },
               ]"
             ></span>
           </td>
@@ -90,5 +91,6 @@ const airdropTasks = [
   { category: 'build', name: 'Generate KILT-based Web3 identity', type: 'One-time', reward: 10, collected: computed(() => (referralStore.airdrop.kiltIdentityCreated)) },
   { category: 'build', name: 'Retrieve on-chain Polkadot identity via Apillon SDK', type: 'One-time', reward: 2, collected: computed(() => (referralStore.airdrop.identitySdkUsed)) },
   { category: 'build', name: 'Mint NFTs via API', type: 'One-time', reward: 5, collected: computed(() => (referralStore.airdrop.nftMintedApi)) },
+  { category: 'airdrop', name: 'Galxe token obtained', type: 'Repeatable', reward: 10, collected: computed(() => (referralStore.airdrop.galxeTasksCompleted)) },
 ];
 </script>
