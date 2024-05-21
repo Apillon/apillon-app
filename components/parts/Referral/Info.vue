@@ -4,7 +4,10 @@
     <div class="card p-8">
       <h6>{{ $t('referral.info.collected') }}</h6>
       <h1 class="text-yellow my-2">
-        <div v-if="!referralStore.airdrop.totalPoints" class="inline-block h-5 w-9 relative">
+        <div
+          v-if="referralStore.airdrop?.totalPoints === undefined"
+          class="inline-block h-5 w-9 relative"
+        >
           <Spinner :size="20" />
         </div>
         <span v-else-if="referralStore.tokenClaim.totalNctr > 0" class="mr-2">
@@ -16,9 +19,6 @@
           class="inline-block w-5 h-5 p-1 text-black bg-white rounded-full text-xs"
         />
       </h1>
-      <p class="text-xs">
-        {{ $t('referral.info.refreshed') }}
-      </p>
     </div>
 
     <div v-if="referralStore.airdrop.totalPoints > 0" class="card p-8">
