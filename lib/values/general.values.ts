@@ -19,7 +19,6 @@ export enum PageSize {
 }
 
 export const LS_KEYS = {
-  AIRDROP_REVIEW: 'al_airdrop_review',
   NEWSLETTER: 'al_newsletter_subscribed',
 };
 
