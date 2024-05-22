@@ -1018,6 +1018,8 @@
     "CONTRACT_DOES_NOT_EXIST": "Contract does not exist",
     "CONTRACT_NOT_DEPLOYED": "Contract is not deployed",
     "TRANSACTION_FOR_TRANSFER_ALREADY_EXISTS": "Contract has already been transferred.",
+    "REVIEW_ALREADY_SUBMITTED": "Review has already been submitted.",
+    "USER_NOT_ELIGIBLE": "User is not eligible for airdrop.",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
     "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again.",
@@ -1718,12 +1720,12 @@
   "referral": {
     "airdrop": {
       "btn": "Have questions? Enter Discord!",
-      "content": "As a registered user, you are eligible for a bag of free NCTR. Increase rewards by completing a few tasks below. \nAt the TGE, simply click Claim on the right and collect your NCTR.",
+      "content": "The NCTR Airdrop task phase is now finished. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
       "reward": "Reward",
       "task": "Task",
       "title": "NCTR Airdrop concluded",
       "type": "Type",
-      "welcome": "Welcome to NCTR Airdrop!",
+      "welcome": "NCTR Airdrop concluded",
       "subscribe": {
         "btn": "Sign up to Apillon news",
         "content": "Sign up for the Apillon newsletter and don’t miss the next chance to earn NCTR tokens.",
@@ -1749,8 +1751,8 @@
       ]
     },
     "banner": {
-      "title": "NCTR Airdrop concluded",
-      "description": "NCTR Airdrop task phase is now concluded. If you have collected any rewards, visit the Airdrop dashboard and proceed to the token-claiming process: \n1. Visit the Airdrop dashboard. \n2. Submit your tasks for review. \n3. Check the review status. \n4. Save your EVM target wallet to receive NCTR. \n5. Wait for NCTR TGE (tokens will be distributed once TGE is concluded).",
+      "title": "NCTR Airdrop task phase is now finished",
+      "description": "If you have collected any rewards, visit the Airdrop dashboard and proceed to the claim your NCTR: \n1. Visit the Airdrop dashboard \n2. Connect your EVM wallet to receive NCTR \n3. Submit your tasks for review \n4. Wait for NCTR TGE (tokens will be distributed once TGE is concluded)",
       "btn": "NCTR Airdrop dashboard"
     },
     "info": {
@@ -1759,11 +1761,12 @@
       "collected": "NCTR Earned",
       "connectAstar": "Connect your EVM wallet",
       "connectWallet": "Connect wallet",
-      "refreshed": "Refreshed every 5 minutes",
       "receiveTokens": "To receive NCTR tokens, connect your EVM compatible wallet.",
       "seeHow": "See how",
       "status": "Your status",
       "claim": {
+        "alreadyClaimed": "You have already claimed your tokens.",
+        "blocked": "You are blocked from claiming tokens due to suspicious behavior.",
         "btn": "Submit",
         "content": "Upon task review and completion of TGE, you will be able to claim your NCTR tokens.",
         "contentEnd": "is live.",
@@ -1775,7 +1778,7 @@
       "statuses": {
         "0": "Register to Apillon platform",
         "1": "Connect your EVM wallet",
-        "2": "Tasks successfully reviewed",
+        "2": "Tasks submitted to a review",
         "3": "Wait for TGE and claim NCTR"
       }
     },
@@ -1787,10 +1790,10 @@
       "active": "Active",
       "disclaimer": "Disclaimer: To prevent users from duplicating accounts and referring to themselves, Apillon will measure the activity of referred accounts and reward them accordingly. It will also monitor potential bot activity or users creating multiple accounts. Accounts detected as either bot or self-referral will be excluded from receiving NCTR in the Airdrop.",
       "header": "Your referees",
-      "info": "See who registered to Apillon using your referral link. \n\nActive users are those who actively use the Apillon platform. Guide your referees through Airdrop Learn and Build tasks to boost their activity.",
+      "info": "See who registered to Apillon using your referral link. \n\nActive users are those who actively use the Apillon platform.",
       "invite": "Invite other developers to score",
       "link": "Your referral link",
-      "linkDesc": "Share the link below with your dev peers and have them register to the Apillon platform. Based on their activity, you will be rewarded in NCTR for each active referee.",
+      "linkDesc": "Share the link below with your dev peers and have them register to the Apillon platform.",
       "name": "Email",
       "github": "GitHub profile",
       "joined": "Joined"

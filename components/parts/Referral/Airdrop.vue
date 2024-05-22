@@ -35,6 +35,7 @@
                 { 'text-orange': task.category === 'learn' },
                 { 'text-blue': task.category === 'build' },
                 { 'text-pink': task.category === 'refer' },
+                { 'text-yellow': task.category === 'airdrop' },
               ]"
             ></span>
           </td>
@@ -70,6 +71,7 @@ const referralStore = useReferralStore();
 
 // prettier-ignore
 const airdropTasks = [
+  { category: 'airdrop', name: 'Galxe token obtained', type: 'Repeatable', reward: 10, collected: computed(() => (referralStore.airdrop.galxeTasksCompleted)) },
   { category: 'register', name: 'Register to Apillon platform', type: 'One-time', reward: 10, collected: computed(() => (true)) },
   { category: 'refer', name: 'Refer Apillon to a friend', type: 'Repeatable', reward: 2, collected: computed(() => (referralStore.airdrop.usersReferred)) },
   { category: 'learn', name: 'Create new project ', type: 'One-time', reward: 1, collected: computed(() => (referralStore.airdrop.projectCreated)) },

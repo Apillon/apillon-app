@@ -4,18 +4,21 @@
     <div class="card p-8">
       <h6>{{ $t('referral.info.collected') }}</h6>
       <h1 class="text-yellow my-2">
-        <div v-if="!referralStore.airdrop.totalPoints" class="inline-block h-5 w-9 relative">
+        <div
+          v-if="referralStore.airdrop?.totalPoints === undefined"
+          class="inline-block h-5 w-9 relative"
+        >
           <Spinner :size="20" />
         </div>
+        <span v-else-if="referralStore.tokenClaim.totalNctr > 0" class="mr-2">
+          {{ referralStore.tokenClaim.totalNctr }}
+        </span>
         <span v-else class="mr-2">{{ referralStore.airdrop.totalPoints }}</span>
         <NuxtIcon
           name="logo/apillon-icon"
           class="inline-block w-5 h-5 p-1 text-black bg-white rounded-full text-xs"
         />
       </h1>
-      <p class="text-xs">
-        {{ $t('referral.info.refreshed') }}
-      </p>
     </div>
 
     <div v-if="referralStore.airdrop.totalPoints > 0" class="card p-8">
@@ -30,11 +33,14 @@
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.1`) }}</span>
         </li>
-        <li class="my-2 first-line text-bodyDark">
+        <li class="my-2" :class="isSubmitted ? 'text-green' : 'text-bodyDark'">
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.2`) }}</span>
         </li>
-        <li class="my-2 first-line text-bodyDark">
+        <li
+          class="my-2"
+          :class="referralStore.tokenClaim.claimCompleted ? 'text-green' : 'text-bodyDark'"
+        >
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.3`) }}</span>
         </li>
@@ -75,5 +81,11 @@
 <script lang="ts" setup>
 const authStore = useAuthStore();
 const referralStore = useReferralStore();
-const referralStatus = ref<number>(1);
+
+const isSubmitted = computed(
+  () =>
+    referralStore.inReview ||
+    !!referralStore.tokenClaim.wallet ||
+    referralStore.tokenClaim.claimCompleted
+);
 </script>
