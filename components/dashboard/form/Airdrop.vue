@@ -1,5 +1,5 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" :disabled="isDisabled">
+  <n-form ref="formTasksReviewRef" :model="formData" :rules="rules" :disabled="isDisabled">
     <Notification v-if="referralStore.tokenClaim.claimCompleted" type="warning" class="w-full mb-8">
       {{ $t('referral.info.claim.alreadyClaimed') }}
     </Notification>
@@ -41,19 +41,16 @@ type AirdropForm = {
 
 const { t } = useI18n();
 const message = useMessage();
-const authStore = useAuthStore();
 const referralStore = useReferralStore();
 const { connectAndSign } = useWallet();
 
 const { connect, connectors } = useConnect();
 const { refetch: refetchWalletClient } = useWalletClient();
-const { address, isConnected } = useAccount();
+const { address, isConnected } = useAccount({ onConnect: onWalletConnected });
 
-const formRef = ref<NFormInst | null>(null);
+const formTasksReviewRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
 const loading = ref<boolean>(false);
-const submitted = ref<boolean>(false);
-const submitter = ref<string | null>(localStorage.getItem(LS_KEYS.AIRDROP_REVIEW));
 
 const formData = ref<AirdropForm>({
   terms: false,
@@ -71,8 +68,7 @@ const rules: NFormRules = {
 
 const isDisabled = computed(
   () =>
-    submitted.value ||
-    submitter.value === authStore.user.evmWallet ||
+    referralStore.inReview ||
     !!referralStore.tokenClaim.wallet ||
     referralStore.tokenClaim.claimCompleted
 );
@@ -99,7 +95,7 @@ const termsLabel = computed<any>(() => {
 function handleSubmit(e: MouseEvent | null) {
   e?.preventDefault();
   formErrors.value = false;
-  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
+  formTasksReviewRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       formErrors.value = true;
       errors.map(fieldErrors =>
@@ -107,7 +103,6 @@ function handleSubmit(e: MouseEvent | null) {
       );
     } else {
       await airdropReview();
-      await referralStore.fetchAirdrop();
     }
   });
 }
@@ -117,8 +112,7 @@ async function airdropReview() {
 
   try {
     if (!isConnected.value) {
-      wagmiConnect(connectors.value[0]);
-      loading.value = false;
+      await wagmiConnect(connectors.value[0]);
       return;
     }
 
@@ -128,19 +122,21 @@ async function airdropReview() {
       return;
     }
 
-    await $api.post<GeneralResponse<boolean>>(endpoints.airdropReviewTasks, {
-      fingerprint: await getFingerprint(),
-      wallet: address.value,
-      signature: sign.signature,
-      timestamp: sign.timestamp,
-      isEvmWallet: true,
-    });
+    const res = await $api.post<GeneralResponse<AirdropStatsInterface>>(
+      endpoints.airdropReviewTasks,
+      {
+        fingerprint: await getFingerprint(),
+        wallet: address.value,
+        signature: sign.signature,
+        timestamp: sign.timestamp,
+        isEvmWallet: true,
+      }
+    );
+    referralStore.inReview = true;
+    referralStore.airdrop = res.data;
 
     message.success(t('referral.info.claim.inReview'));
-
-    submitted.value = true;
-    submitter.value = `${address.value}`;
-    localStorage.setItem(LS_KEYS.AIRDROP_REVIEW, `${address.value}`);
+    localStorage.removeItem(LsCacheKeys.REFERRAL_AIRDROP);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -161,6 +157,13 @@ function wagmiConnect(connector) {
     refetchWalletClient();
   } else if (connector.ready) {
     connect({ connector });
+  }
+}
+
+async function onWalletConnected() {
+  await sleep(200);
+  if (loading.value && !referralStore.inReview) {
+    airdropReview();
   }
 }
 </script>

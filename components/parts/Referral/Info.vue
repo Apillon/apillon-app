@@ -82,10 +82,9 @@
 const authStore = useAuthStore();
 const referralStore = useReferralStore();
 
-const submitter = ref<string | null>(localStorage.getItem(LS_KEYS.AIRDROP_REVIEW));
 const isSubmitted = computed(
   () =>
-    submitter.value === authStore.user.evmWallet ||
+    referralStore.inReview ||
     !!referralStore.tokenClaim.wallet ||
     referralStore.tokenClaim.claimCompleted
 );

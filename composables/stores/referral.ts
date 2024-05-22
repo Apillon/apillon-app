@@ -5,6 +5,7 @@ export const useReferralStore = defineStore('referral', {
     airdrop: {} as AirdropStatsInterface,
     balance: 0,
     balance_all: 0,
+    inReview: false,
     tokenClaim: {} as TokenClaimInterface,
 
     id: 0,
