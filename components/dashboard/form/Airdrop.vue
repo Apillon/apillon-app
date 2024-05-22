@@ -41,6 +41,7 @@ type AirdropForm = {
 
 const { t } = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const referralStore = useReferralStore();
 const { connectAndSign } = useWallet();
 
@@ -51,7 +52,8 @@ const { address, isConnected } = useAccount();
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
 const loading = ref<boolean>(false);
-const submitted = ref<string | null>(localStorage.getItem(LS_KEYS.AIRDROP_REVIEW));
+const submitted = ref<boolean>(false);
+const submitter = ref<string | null>(localStorage.getItem(LS_KEYS.AIRDROP_REVIEW));
 
 const formData = ref<AirdropForm>({
   terms: false,
@@ -67,7 +69,13 @@ const rules: NFormRules = {
   ],
 };
 
-const isDisabled = computed(() => !!submitted.value || referralStore.tokenClaim.claimCompleted);
+const isDisabled = computed(
+  () =>
+    submitted.value ||
+    submitter.value === authStore.user.evmWallet ||
+    !!referralStore.tokenClaim.wallet ||
+    referralStore.tokenClaim.claimCompleted
+);
 
 /** Terms label with link  */
 const termsLabel = computed<any>(() => {
@@ -130,7 +138,8 @@ async function airdropReview() {
 
     message.success(t('referral.info.claim.inReview'));
 
-    submitted.value = `${address.value}`;
+    submitted.value = true;
+    submitter.value = `${address.value}`;
     localStorage.setItem(LS_KEYS.AIRDROP_REVIEW, `${address.value}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
