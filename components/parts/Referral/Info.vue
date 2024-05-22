@@ -33,11 +33,14 @@
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.1`) }}</span>
         </li>
-        <li class="my-2 first-line text-bodyDark">
+        <li class="my-2" :class="isSubmitted ? 'text-green' : 'text-bodyDark'">
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.2`) }}</span>
         </li>
-        <li class="my-2 first-line text-bodyDark">
+        <li
+          class="my-2"
+          :class="referralStore.tokenClaim.claimCompleted ? 'text-green' : 'text-bodyDark'"
+        >
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.3`) }}</span>
         </li>
@@ -78,4 +81,12 @@
 <script lang="ts" setup>
 const authStore = useAuthStore();
 const referralStore = useReferralStore();
+
+const submitter = ref<string | null>(localStorage.getItem(LS_KEYS.AIRDROP_REVIEW));
+const isSubmitted = computed(
+  () =>
+    submitter.value === authStore.user.evmWallet ||
+    !!referralStore.tokenClaim.wallet ||
+    referralStore.tokenClaim.claimCompleted
+);
 </script>
