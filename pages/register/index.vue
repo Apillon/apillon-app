@@ -8,12 +8,8 @@
     </h1>
 
     <!-- Separator -->
-    <SeparatorText v-if="authStore.wallet.signature" :border-left="allowWalletRegister">
+    <SeparatorText v-if="authStore.wallet.signature" :border-left="true">
       <span class="lowercase">{{ $t('auth.signup.walletEmail') }}</span>
-    </SeparatorText>
-    <!-- Separator -->
-    <SeparatorText v-if="!allowWalletRegister" :border-left="allowWalletRegister">
-      <span class="lowercase">{{ $t('auth.signup.withEmail') }}</span>
     </SeparatorText>
 
     <!-- Form -->
