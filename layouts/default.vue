@@ -16,7 +16,7 @@
         <Sidebar :collapsed="sidebarCollapsed" />
       </n-layout-sider>
       <n-layout>
-        <Header @toggle-sidebar="toggleSidebar"> </Header>
+        <Header @toggle-sidebar="toggleSidebar" />
         <n-scrollbar y-scrollable style="max-height: calc(100dvh - 88px)">
           <div class="relative pt-8 px-4 sm:px-8">
             <slot />
@@ -28,6 +28,16 @@
 
     <!-- Sidebar on mobile -->
     <Sidebar v-if="!isLg" :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
+
+    <!-- Refresh Card - Fixed to bottom -->
+    <RefreshCard v-if="showCard" />
+    <!-- TODO: delte this toggle when getting real data -->
+    <button
+      class="fixed top-0 right-0 bg-primary text-black w-[100px] h-[80px] m-3"
+      @click="showCard = !showCard"
+    >
+      Start Progress
+    </button>
   </div>
 </template>
 
@@ -37,11 +47,11 @@ const message = useMessage();
 window.$message = message;
 
 const authStore = useAuthStore();
-const { isLg, isXl, isXxl } = useScreen();
+const { isLg, isXl } = useScreen();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
 const sidebarCollapsed = ref<boolean>(false);
-
+const showCard = ref(false);
 /**
  * Show/hide sidebar on mobile
  */
