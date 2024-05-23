@@ -283,6 +283,7 @@ const Endpoints = {
   referralRewards: '/referral/products',
   referralClaimReward: '/referral/product',
   airdropTasks: '/referral/airdrop-tasks',
+  airdropReviewTasks: '/referral/review-tasks',
 };
 
 export default Endpoints;

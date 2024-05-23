@@ -116,6 +116,7 @@
       "web3ProjectName": "Your  Web3 project needs a name"
     },
     "signup": {
+      "signup": "Sign up",
       "alreadyHaveAccount": "Already have an account?",
       "checkEmail": "Check your e-mail",
       "checkInbox": "Crickets in your inbox?",
@@ -130,10 +131,10 @@
       "sendAgain": "Send again",
       "title": "Build your first Web3 project",
       "titleReferalZiggi": "Welcome, traveler! Register below and start building.",
-      "wallet": "Register with wallet",
+      "wallet": "Register with Wallet",
       "walletConfirmed": "Wallet and email confirmed, logging you in...",
       "walletEmail": "Email is required for wallet login",
-      "withWallet": "or sign up with wallet",
+      "withWallet": "or sign up with Wallet",
       "withEmail": "Sign up with email"
     },
     "terms": {
@@ -141,7 +142,9 @@
       "acceptEnd": " before creating an account.",
       "agree": "I have read and agree to ",
       "and": " and ",
-      "pp": "Privacy Policy",
+      "app": "Airdrop Privacy  Policy",
+      "consent": "I consent to ",
+      "pp": "Privacy  Policy",
       "tc": "Terms and Conditions",
       "terms": "Terms"
     },
@@ -1015,6 +1018,8 @@
     "CONTRACT_DOES_NOT_EXIST": "Contract does not exist",
     "CONTRACT_NOT_DEPLOYED": "Contract is not deployed",
     "TRANSACTION_FOR_TRANSFER_ALREADY_EXISTS": "Contract has already been transferred.",
+    "REVIEW_ALREADY_SUBMITTED": "Review has already been submitted.",
+    "USER_NOT_ELIGIBLE": "User is not eligible for airdrop.",
     "fileDownload": "Download failed. Something went wrong during the download.",
     "fileUploadStopped": "Files will not upload to S3. If you uploaded any file, please upload it again.",
     "fileUploadMissing": "File by name \"{name}\" will not be uploaded. Please upload it again.",
@@ -1538,7 +1543,7 @@
         "collectionName": "The name you choose will be the official name of your NFT collection, “name” NFT collection.",
         "collectionDropReserve": "A number of NFT you wish to reserve for yourself before the drop.",
         "collectionRevocable": "Collection owner can destroy NFT(s) at any point in time.",
-        "collectionRoyaltiesAddress": "It’s Astar address to receive Withdrawal tokens when tokens aer being minted.",
+        "collectionRoyaltiesAddress": "It’s Astar address to receive Withdrawal tokens when tokens are being minted.",
         "collectionRoyaltiesFees": "The % value of royalties you want to collect in the future NFT sales.",
         "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
         "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
@@ -1714,13 +1719,21 @@
   },
   "referral": {
     "airdrop": {
-      "btn": "Have questions? Enter Discord!",
-      "content": "As a registered user, you are eligible for a bag of free NCTR. Increase rewards by completing a few tasks below. \nAt the TGE, simply click Claim on the right and collect your NCTR.",
+      "btn": "Learn more",
+      "content": "The NCTR Airdrop task phase is now finished. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
       "reward": "Reward",
       "task": "Task",
-      "title": "NCTR Airdrop",
+      "title": "NCTR Airdrop concluded",
       "type": "Type",
-      "welcome": "Welcome to NCTR Airdrop!",
+      "welcome": "NCTR Airdrop concluded",
+      "subscribe": {
+        "btn": "Sign up to Apillon news",
+        "content": "Sign up for the Apillon newsletter and don’t miss the next chance to earn NCTR tokens.",
+        "headline": "NCTR Airdrop concluded",
+        "headlineInfo": "The NCTR Airdrop task phase is now finished.",
+        "info": "Receive product and feature updates, how-to guides and other platform-related news. Unsubscribe at any time.",
+        "title": "Missed your chance?"
+      },
       "tabs": [
         {
           "title": "Refer",
@@ -1738,32 +1751,36 @@
       ]
     },
     "banner": {
-      "title": "Join NCTR Airdrop!",
-      "description": "As a registered Apillon user, you are eligible to receive free NCTR tokens! Join in, connect wallet, and collect your bag of NCTR at TGE. Get some more by completing a few tasks!",
-      "btn": "Enter NCTR Airdrop"
+      "title": "NCTR Airdrop task phase is now finished",
+      "description": "If you have collected any rewards, follow these steps: \n1. Visit the Airdrop dashboard \n2. Connect your EVM wallet to receive NCTR \n3. Submit your tasks for review \n4. Wait for NCTR TGE (tokens will be distributed once TGE is concluded)",
+      "btn": "NCTR Airdrop Dashboard",
+      "learnMoreBtn": "Learn more"
     },
     "info": {
       "airdrop": "Airdrop",
-      "astarAddress": "Astar wallet address",
-      "collected": "NCTR collected",
-      "connectAstar": "Connect your Astar wallet",
+      "astarAddress": "EVM wallet address",
+      "collected": "NCTR Earned",
+      "connectAstar": "Connect your EVM wallet",
       "connectWallet": "Connect wallet",
-      "refreshed": "Refreshed every 5 minutes",
-      "receiveTokens": "To receive NCTR tokens, connect your Astar-compatible wallet.",
+      "receiveTokens": "To receive NCTR tokens, connect your EVM compatible wallet.",
       "seeHow": "See how",
       "status": "Your status",
       "claim": {
-        "btn": "Claim NCTR",
-        "content": "You may collect your NCTR rewards once the NCTR token generation event",
+        "alreadyClaimed": "You have already claimed your tokens.",
+        "blocked": "You are blocked from claiming tokens due to suspicious behavior.",
+        "btn": "Submit",
+        "content": "Upon task review and completion of TGE, you will be able to claim your NCTR tokens.",
         "contentEnd": "is live.",
-        "title": "Claim your NCTR bonus",
-        "tooltip": "You will be able to claim your bonus after TGE."
+        "inReview": "Your tasks are in review",
+        "title": "Submit tasks for review",
+        "tooltip": "You will be able to claim your bonus after TGE.",
+        "tooltipDisabled": "Tasks are already in review"
       },
       "statuses": {
         "0": "Register to Apillon platform",
-        "1": "Connect your Astar wallet",
-        "2": "Wait for TGE",
-        "3": "Claim NCTR tokens"
+        "1": "Connect your EVM wallet",
+        "2": "Tasks submitted to a review",
+        "3": "Wait for TGE and claim NCTR"
       }
     },
     "menu": {
@@ -1774,10 +1791,10 @@
       "active": "Active",
       "disclaimer": "Disclaimer: To prevent users from duplicating accounts and referring to themselves, Apillon will measure the activity of referred accounts and reward them accordingly. It will also monitor potential bot activity or users creating multiple accounts. Accounts detected as either bot or self-referral will be excluded from receiving NCTR in the Airdrop.",
       "header": "Your referees",
-      "info": "See who registered to Apillon using your referral link. \n\nActive users are those who actively use the Apillon platform. Guide your referees through Airdrop Learn and Build tasks to boost their activity.",
+      "info": "See who registered to Apillon using your referral link. \n\nActive users are those who actively use the Apillon platform.",
       "invite": "Invite other developers to score",
       "link": "Your referral link",
-      "linkDesc": "Share the link below with your dev peers and have them register to the Apillon platform. Based on their activity, you will be rewarded in NCTR for each active referee.",
+      "linkDesc": "Share the link below with your dev peers and have them register to the Apillon platform.",
       "name": "Email",
       "github": "GitHub profile",
       "joined": "Joined"

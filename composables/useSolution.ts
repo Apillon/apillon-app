@@ -1,4 +1,4 @@
-import type { MessageFunction, VueMessageType } from '@nuxtjs/i18n/dist/runtime/composables';
+import type { MessageFunction, VueMessageType } from 'vue-i18n';
 
 type VueMsg = VueMessageType | MessageFunction<VueMessageType>;
 
