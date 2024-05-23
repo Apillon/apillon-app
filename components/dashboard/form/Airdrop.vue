@@ -79,14 +79,8 @@ const termsLabel = computed<any>(() => {
     t('auth.terms.consent'),
     h(
       'a',
-      { href: 'https://apillon.io/legal-disclaimer', target: '_blank' },
-      { default: () => t('auth.terms.app') }
-    ),
-    t('auth.terms.and'),
-    h(
-      'a',
       { href: 'https://apillon.io/privacy-policy', target: '_blank' },
-      { default: () => t('auth.terms.pp') }
+      { default: () => t('auth.terms.app') }
     ),
     '.',
   ]);

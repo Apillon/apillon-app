@@ -4,7 +4,10 @@
     <div class="max-w-lg mb-12">
       <h3>{{ $t('referral.airdrop.welcome') }}</h3>
       <p class="mb-6 whitespace-break-spaces">{{ $t('referral.airdrop.content') }}</p>
-      <Btn :color="colors.blue" href="https://discord.com/invite/yX3gTw36C4">
+      <Btn
+        :color="colors.blue"
+        href="https://blog.apillon.io/nctr-airdrop-task-period-is-over-here-is-how-to-claim-rewards-fbd721241f11"
+      >
         {{ $t('referral.airdrop.btn') }}
       </Btn>
     </div>
