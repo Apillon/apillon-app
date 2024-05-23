@@ -1719,7 +1719,7 @@
   },
   "referral": {
     "airdrop": {
-      "btn": "Have questions? Enter Discord!",
+      "btn": "Learn more",
       "content": "The NCTR Airdrop task phase is now finished. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
       "reward": "Reward",
       "task": "Task",
@@ -1752,8 +1752,9 @@
     },
     "banner": {
       "title": "NCTR Airdrop task phase is now finished",
-      "description": "If you have collected any rewards, visit the Airdrop dashboard and proceed to the claim your NCTR: \n1. Visit the Airdrop dashboard \n2. Connect your EVM wallet to receive NCTR \n3. Submit your tasks for review \n4. Wait for NCTR TGE (tokens will be distributed once TGE is concluded)",
-      "btn": "NCTR Airdrop dashboard"
+      "description": "If you have collected any rewards, follow these steps: \n1. Visit the Airdrop dashboard \n2. Connect your EVM wallet to receive NCTR \n3. Submit your tasks for review \n4. Wait for NCTR TGE (tokens will be distributed once TGE is concluded)",
+      "btn": "NCTR Airdrop Dashboard",
+      "learnMoreBtn": "Learn more"
     },
     "info": {
       "airdrop": "Airdrop",
