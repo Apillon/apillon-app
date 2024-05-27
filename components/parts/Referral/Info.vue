@@ -75,6 +75,7 @@
 
       <FormAirdrop />
     </div>
+    <ReferralClaim />
   </div>
 </template>
 
