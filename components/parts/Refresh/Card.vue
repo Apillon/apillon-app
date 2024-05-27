@@ -1,7 +1,7 @@
 <template>
   <!-- Card -->
   <n-card
-    class="deploy-actions fixed bottom-0 right-0 w-full max-w-[500px] bg-bg-dark z-50 rounded-none"
+    class="deploy-actions fixed bottom-0 right-0 w-full max-w-[500px] bg-bg-dark z-50 rounded-none -mr-[1px] -mb-[1px]"
   >
     <!-- Accordion -->
     <n-collapse display-directive="show">
@@ -42,8 +42,6 @@
           <div v-for="(service, i) in activeServices" :key="service.id" class="px-2">
             <div class="flex flex-row justify-between">
               <h5>{{ service.title }}</h5>
-              <!-- TODO: should we run a spinner when refresh action is ran -->
-              <!-- <Spinner :size="14" /> -->
               <n-progress
                 type="line"
                 :percentage="progressStep"
@@ -66,75 +64,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watchEffect, onBeforeUnmount } from 'vue';
-
-const { log, options, activeServices, progressStep } = useRefreshStatus();
-
-const refreshInterval = ref(options.value[0]);
-const expanded = ref(false);
-
-let intervalId: ReturnType<typeof setInterval> | null = null;
-
-const updateRefreshInterval = key => {
-  const selectedOption = options.value.find(option => option.key === key);
-  if (selectedOption) {
-    refreshInterval.value = selectedOption;
-  }
-};
-
-const refresh = () => {
-  // Debug
-  //   console.log('Refreshed after', refreshInterval);
-  // TODO: Place the refresh logic here
-  //  TODO: We could display a short spinner when request happens
-  // ????Get current step or smth
-  // TODO: Call this when refresh button is clicked
-  calculateProgress();
-};
-
-// TODO: say we get 5 steps from API - this needs to be dynamic
-const totalSteps = 5;
-let currentStep = 1;
-let progress = 10;
-
-const calculateProgress = () => {
-  // number of steps divided by step
-  progress = (currentStep / totalSteps) * 100;
-  // stop after reaching 100%
-  //  TODO: clunky needs improvement
-  if (progress > 100) {
-    progressStep.value = 100;
-    clearInterval(intervalId);
-    intervalId = null;
-    // TODO: unmount component when done
-  } else {
-    progressStep.value = progress;
-    currentStep++;
-  }
-};
-
-const clearRefreshInterval = () => {
-  if (intervalId) {
-    clearInterval(intervalId);
-    intervalId = null;
-  }
-};
-
-const setRefreshInterval = () => {
-  clearRefreshInterval();
-  intervalId = setInterval(refresh, refreshInterval.value.value * 1000);
-};
-
-onMounted(() => {
-  setRefreshInterval();
-  log();
-});
-
-watchEffect(() => {
-  setRefreshInterval();
-});
-
-onBeforeUnmount(clearRefreshInterval);
+const {
+  log,
+  options,
+  activeServices,
+  progressStep,
+  refreshInterval,
+  expanded,
+  updateRefreshInterval,
+  refresh,
+} = useRefreshStatus();
 </script>
 
 <style lang="postcss">

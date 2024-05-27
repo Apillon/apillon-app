@@ -55,6 +55,16 @@
               v-model:show="warningStore.isSpendingWarningOpen"
               @close="onSpendingWaningClose"
             />
+
+            <!-- Global component: deployment progress -->
+            <RefreshCard v-if="showCard" />
+            <!-- TODO: delte this toggle when getting real data -->
+            <button
+              class="fixed top-0 right-0 bg-primary text-black w-[100px] h-[80px] m-3"
+              @click="showCard = !showCard"
+            >
+              Start Progress
+            </button>
           </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
@@ -137,6 +147,8 @@ const scrollStyle = computed(() => ({
 const heightScreen = computed(() => ({
   height: `calc(100dvh - ${headingHeight.value}px)`,
 }));
+
+const showCard = ref(false);
 
 /** Delay animation */
 const loadingAnimation = ref<boolean>(false);
