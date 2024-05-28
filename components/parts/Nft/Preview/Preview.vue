@@ -1,7 +1,7 @@
 <template>
   <n-scrollbar
     class="min-h-[300px] mt-10 lg:mt-4 text-left"
-    style="max-height: calc(70dvh - 100px)"
+    :style="isXxl ? 'max-height: calc(70dvh - 100px)' : {}"
     y-scrollable
   >
     <template v-if="collectionStore.gridView">
@@ -65,6 +65,7 @@ import colors from '~/tailwind.colors';
 const { t } = useI18n();
 const { createThumbnailUrl } = useNft();
 const collectionStore = useCollectionStore();
+const { isXxl } = useScreen();
 
 const page = ref<number>(1);
 const pageSize = ref<number>(PAGINATION_LIMIT);
@@ -113,8 +114,8 @@ const cols = collectionStore.columns.map(item => {
           key in row
             ? row[key]
             : row.attributes.find(attrItem => attrItem.trait_type === key)
-            ? row.attributes.find(attrItem => attrItem.trait_type === key).value
-            : null,
+              ? row.attributes.find(attrItem => attrItem.trait_type === key).value
+              : null,
         onUpdateValue(v) {
           if (key in row) {
             row[key] = v;
