@@ -74,6 +74,9 @@
                 v-model:value="collectionStore.form.single.id"
                 :input-props="{ id: 'nftId' }"
                 :placeholder="$t('general.typeHere')"
+                :step="1"
+                :min="0"
+                :max="100000"
                 clearable
               />
             </n-form-item-gi>
