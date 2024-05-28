@@ -240,7 +240,7 @@ export default function useNft() {
 
     const image = {
       ...file,
-      fullPath: `/Images${file.fullPath}`,
+      fullPath: `/Images/${file.name}`,
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
@@ -250,6 +250,9 @@ export default function useNft() {
 
     if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
       message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+      onError();
+    } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
+      console.warn($i18n.t('validation.alreadyOnList', { name: file.name }));
       onError();
     } else {
       if (collectionStore.amount === NftAmount.SINGLE) {
