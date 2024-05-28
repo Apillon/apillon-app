@@ -1,5 +1,4 @@
 import {
-  mainnet,
   useAccount,
   useNetwork,
   usePublicClient,
@@ -19,12 +18,16 @@ export default function useContract() {
   const publicClient = usePublicClient();
   const { data: walletClient, refetch } = useWalletClient();
 
-  const contractAddress = '0xddf5F225218fd09Ffa39712aFd9a4Bc34b21b473'; // HARDCODED THIS ONE
+  const contractAddress = '0xddf5F225218fd09Ffa39712aFd9a4Bc34b21b473' as `0x${string}`;
   const usedChain = nuxtConfig.public.ENV === AppEnv.PROD ? moonbeam : moonbaseAlpha;
   const contract = ref();
 
   async function getClaimStatus() {
     return (await contract.value.read.walletClaimed([address.value])) as boolean;
+  }
+
+  async function claimTokens(signature, timestamp, amount) {
+    return await contract.value.read.claim([signature, timestamp, amount]);
   }
 
   /**
@@ -45,12 +48,11 @@ export default function useContract() {
       walletClient: walletClient.value || undefined,
       publicClient: publicClient.value,
     });
-
-    console.log(contract.value.read);
   }
 
   return {
     initContract,
     getClaimStatus,
+    claimTokens,
   };
 }

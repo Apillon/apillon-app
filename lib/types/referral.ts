@@ -84,4 +84,10 @@ declare global {
     tokenClaim: TokenClaimInterface;
   }
   interface AirdropResponse extends GeneralResponse<AirdropInterface> {}
+
+  interface NctrclaimInterface {
+    signature: string;
+    timestamp: string;
+    amount: string;
+  }
 }

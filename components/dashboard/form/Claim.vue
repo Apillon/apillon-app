@@ -2,7 +2,7 @@
   <template v-if="hasClaimed">
     <h1>You've already successfully claimed your $NCTR</h1>
   </template>
-  <template v-else>
+  <template v-else-if="!hasClaimed && referralStore.tokenClaim.wallet">
     <Btn
       type="primary"
       size="large"
@@ -13,6 +13,9 @@
     >
       {{ $t('referral.info.claim.claim') }}
     </Btn>
+  </template>
+  <template v-else-if="!referralStore.tokenClaim.wallet">
+    <h1>You need to connect a wallet</h1>
   </template>
 </template>
 
@@ -25,14 +28,12 @@ const { refetch: refetchWalletClient } = useWalletClient();
 const { isConnected } = useAccount({ onConnect: onWalletConnected });
 const referralStore = useReferralStore();
 
-const { initContract, getClaimStatus } = useContract();
+const { initContract, getClaimStatus, claimTokens } = useContract();
 
 const loading = ref<boolean>(true);
 const hasClaimed = ref(false);
 
-const isDisabled = computed(
-  () => !referralStore.tokenClaim.wallet || referralStore.tokenClaim.claimCompleted
-);
+const isDisabled = computed(() => !referralStore.tokenClaim.wallet || !hasClaimed);
 
 onMounted(async () => {
   await initContract();
@@ -40,25 +41,46 @@ onMounted(async () => {
   loading.value = false;
 });
 
-async function claimNctr() {
+async function claimNctr(e: MouseEvent | null) {
+  e?.preventDefault();
+  loading.value = true;
   try {
     if (!isConnected.value) {
       await wagmiConnect(connectors.value[0]);
     }
 
+    // TODO: DO WE NEED TO SIGN THIS?
+    // DO WE NEED TO MINT?
     const sign = await connectAndSign();
     if (!sign) {
       loading.value = false;
     }
 
-    // 2. TODO: define response
-    const res = await $api.get(endpoints.referralClaimParams);
-    // console.log(res);
-    // 3. TODO get {signature, timestamp, amount} from res
-    // 4.TODO:  call claim on the smart contract with params (signature, timestamp, amount)
-    loading.value = false;
+    // TODO: ADD A DAMJAN WALLET CHECK
+
+    const { signature, timestamp, amount } = await getNctrClaimParams;
+    if (!signature || !timestamp || !amount) {
+      throw new Error('Invalid claim parameters');
+    }
+
+    await claimTokens(signature, timestamp, amount);
   } catch (error) {
     console.error(error);
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function getNctrClaimParams() {
+  try {
+    const res = await $api.get<NctrclaimInterface>(endpoints.referralClaimParams);
+    if (!res.signature || !res.timestamp || !res.amount) {
+      throw new Error('Incomplete response data');
+    }
+    return res;
+  } catch (error) {
+    console.error('Error fetching request params:', error);
+    return {};
   }
 }
 
@@ -73,9 +95,7 @@ function wagmiConnect(connector) {
 async function onWalletConnected() {
   await sleep(200);
   if (loading.value) {
-    // TODO: we can get initial params here
-    // 1. TODO: Call walletClaimed(address) : true | false <- user had claimed tokens
-
+    // TODO: should we get initial params here ?
     console.log('wallet connected');
   }
 }
