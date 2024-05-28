@@ -1,6 +1,6 @@
 <template>
   <template v-if="hasClaimed">
-    <h1>You've already successfully claimed your $NCTR</h1>
+    <h1>You've successfully claimed your $NCTR</h1>
   </template>
   <template v-else-if="!hasClaimed && referralStore.tokenClaim.wallet">
     <Btn
@@ -49,21 +49,20 @@ async function claimNctr(e: MouseEvent | null) {
       await wagmiConnect(connectors.value[0]);
     }
 
-    // TODO: DO WE NEED TO SIGN THIS?
-    // DO WE NEED TO MINT?
     const sign = await connectAndSign();
     if (!sign) {
       loading.value = false;
+      return;
     }
 
     // TODO: ADD A DAMJAN WALLET CHECK
-
     const { signature, timestamp, amount } = await getNctrClaimParams;
     if (!signature || !timestamp || !amount) {
       throw new Error('Invalid claim parameters');
     }
 
-    await claimTokens(signature, timestamp, amount);
+    hasClaimed.value = await claimTokens(signature, timestamp, amount);
+    // console.log(hasClaimed.value);
   } catch (error) {
     console.error(error);
   } finally {

@@ -2,7 +2,7 @@ import { UseWagmiPlugin, createConfig } from 'use-wagmi';
 import { MetaMaskConnector } from 'use-wagmi/connectors/metaMask';
 import { CoinbaseWalletConnector } from 'use-wagmi/connectors/coinbaseWallet';
 import { createPublicClient, http } from 'viem';
-import { mainnet, sepolia, moonbeam, moonbaseAlpha } from 'use-wagmi/chains';
+import { moonbeam, moonbaseAlpha } from 'use-wagmi/chains';
 
 export default defineNuxtPlugin(nuxtApp => {
   const nuxtConfig = useRuntimeConfig();
