@@ -65,7 +65,6 @@
 
 <script setup lang="ts">
 const {
-  log,
   options,
   activeServices,
   progressStep,

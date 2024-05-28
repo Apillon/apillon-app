@@ -1,4 +1,5 @@
-import { ref, onMounted, onBeforeUnmount, watchEffect } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+// const contractStore = useContractStore();
 
 const options = ref([
   { label: '10s', key: 0, value: 10 },
@@ -8,6 +9,8 @@ const options = ref([
 ]);
 
 export default function useRefreshStatus() {
+  // const contractStore = useContractStore();
+
   const activeServices = ref([
     { title: 'Sch1', id: 0 },
     { title: 'Sch2', id: 1 },
@@ -19,19 +22,24 @@ export default function useRefreshStatus() {
   const expanded = ref(false);
 
   let intervalId: ReturnType<typeof setInterval> | null = null;
-  const totalSteps = 5;
+  const totalSteps = 3;
   let currentStep = 1;
 
   const updateRefreshInterval = key => {
     const selectedOption = options.value.find(option => option.key === key);
+    console.log(key);
     if (selectedOption) {
       refreshInterval.value = selectedOption;
       setRefreshInterval(); // Reset interval when the refresh interval changes
     }
   };
 
-  const refresh = () => {
+  const refresh = async () => {
     // Place the refresh logic here
+    // const result = await contractStore.fetchContracts(false);
+    console.log(result);
+    checkUnfinishedContracts();
+
     calculateProgress();
   };
 
@@ -42,7 +50,8 @@ export default function useRefreshStatus() {
       clearInterval(intervalId);
       intervalId = null;
     } else {
-      progressStep.value = progress;
+      // round up
+      progressStep.value = Math.ceil(progress);
       currentStep++;
     }
   };
