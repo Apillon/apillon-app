@@ -15,7 +15,7 @@
     </Btn>
   </template>
   <template v-else-if="!referralStore.tokenClaim.wallet">
-    <h1>You need to connect a wallet</h1>
+    <h1>The NCTR Airdrop is now finished.</h1>
   </template>
 </template>
 
@@ -28,7 +28,7 @@ const { refetch: refetchWalletClient } = useWalletClient();
 const { isConnected } = useAccount({ onConnect: onWalletConnected });
 const referralStore = useReferralStore();
 
-const { initContract, getClaimStatus, claimTokens } = useContract();
+const { initContract, getClaimStatus, claimTokens, ensureCorrectNetwork } = useContract();
 
 const loading = ref<boolean>(true);
 const hasClaimed = ref(false);
@@ -36,33 +36,38 @@ const hasClaimed = ref(false);
 const isDisabled = computed(() => !referralStore.tokenClaim.wallet || !hasClaimed);
 
 onMounted(async () => {
+  if (!isConnected.value) {
+    await wagmiConnect(connectors.value[0]);
+  }
   await initContract();
   hasClaimed.value = await getClaimStatus();
   loading.value = false;
 });
 
+// Claim
 async function claimNctr(e: MouseEvent | null) {
   e?.preventDefault();
   loading.value = true;
   try {
+    // Verify wallet connection
     if (!isConnected.value) {
       await wagmiConnect(connectors.value[0]);
     }
-
+    // Verify network before continuing the transaction
+    await ensureCorrectNetwork();
+    // Sign
     const sign = await connectAndSign();
     if (!sign) {
       loading.value = false;
       return;
     }
-
-    // TODO: ADD A DAMJAN WALLET CHECK
-    const { signature, timestamp, amount } = await getNctrClaimParams;
+    // Call BE for correct params
+    const { signature, timestamp, amount } = await getNctrClaimParams();
     if (!signature || !timestamp || !amount) {
       throw new Error('Invalid claim parameters');
     }
-
+    // Final claim on contract
     hasClaimed.value = await claimTokens(signature, timestamp, amount);
-    // console.log(hasClaimed.value);
   } catch (error) {
     console.error(error);
   } finally {
@@ -73,6 +78,7 @@ async function claimNctr(e: MouseEvent | null) {
 async function getNctrClaimParams() {
   try {
     const res = await $api.get<NctrclaimInterface>(endpoints.referralClaimParams);
+
     if (!res.signature || !res.timestamp || !res.amount) {
       throw new Error('Incomplete response data');
     }
@@ -94,8 +100,7 @@ function wagmiConnect(connector) {
 async function onWalletConnected() {
   await sleep(200);
   if (loading.value) {
-    // TODO: should we get initial params here ?
-    console.log('wallet connected');
+    loading.value = false;
   }
 }
 </script>

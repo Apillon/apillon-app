@@ -22,25 +22,16 @@ export default function useContract() {
   const usedChain = nuxtConfig.public.ENV === AppEnv.PROD ? moonbeam : moonbaseAlpha;
   const contract = ref();
 
-  async function getClaimStatus() {
-    return (await contract.value.read.walletClaimed([address.value])) as boolean;
-  }
-
-  async function claimTokens(signature, timestamp, amount) {
-    return await contract.value.read.claim([signature, timestamp, amount]);
-  }
-
   /**
-   * Helper for init contract
+   * Init contract
    */
   async function initContract() {
     if (!walletClient.value) {
       await refetch();
       await sleep(200);
     }
-    if (!chain || !chain.value || chain?.value.id !== usedChain.id) {
-      switchNetwork(usedChain.id);
-    }
+
+    await ensureCorrectNetwork();
 
     contract.value = getContract({
       address: contractAddress,
@@ -50,9 +41,27 @@ export default function useContract() {
     });
   }
 
+  // Contract Interaction
+  async function getClaimStatus() {
+    return (await contract.value.read.walletClaimed([address.value])) as boolean;
+  }
+
+  async function claimTokens(signature, timestamp, amount) {
+    return await contract.value.read.claim([signature, timestamp, amount]);
+  }
+
+  // Helper
+  async function ensureCorrectNetwork() {
+    if (!chain || !chain.value || chain.value.id !== usedChain.id) {
+      await switchNetwork(usedChain.id);
+      return true;
+    }
+  }
+
   return {
     initContract,
     getClaimStatus,
     claimTokens,
+    ensureCorrectNetwork,
   };
 }
