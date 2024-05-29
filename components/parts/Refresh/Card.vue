@@ -24,7 +24,7 @@
               <n-dropdown
                 trigger="click"
                 placement="bottom-start"
-                :options="options"
+                :options="dropdownOptions"
                 @select="updateRefreshInterval"
               >
                 <n-button size="small">
@@ -39,9 +39,10 @@
           <p class="mb-4">
             {{ $t('dashboard.refreshModal.subtitle') }}
           </p>
-          <div v-for="(service, i) in activeServices" :key="service.id" class="px-2">
+
+          <div v-for="(service, i) in activeServices" :key="service.contract_uuid" class="px-2">
             <div class="flex flex-row justify-between">
-              <h5>{{ service.title }}</h5>
+              <h5>{{ service.name }}</h5>
               <n-progress
                 type="line"
                 :percentage="progressStep"
@@ -64,12 +65,13 @@
 </template>
 
 <script setup lang="ts">
+const expanded = ref(false);
+
 const {
-  options,
+  dropdownOptions,
   activeServices,
   progressStep,
   refreshInterval,
-  expanded,
   updateRefreshInterval,
   refresh,
 } = useRefreshStatus();

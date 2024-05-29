@@ -7,6 +7,7 @@ export default function useCaptcha() {
   const router = useRouter();
   const contractStore = useContractStore();
   const transactionStore = useComputingTransactionStore();
+  const { activeInfoWindow } = useRefreshStatus();
 
   let contractInterval: any = null as any;
   let transactionInterval: any = null as any;
@@ -70,6 +71,7 @@ export default function useCaptcha() {
   }
 
   function onContractCreated(contract: ContractInterface) {
+    activeInfoWindow.value = true;
     if (contract.contractStatus === ContractStatus.DEPLOYED) {
       router.push(`/dashboard/service/computing/${contract.contract_uuid}`);
     } else {
