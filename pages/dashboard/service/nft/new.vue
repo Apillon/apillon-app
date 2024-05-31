@@ -94,7 +94,7 @@
               <span class="ml-2 text-sm text-white">{{ $t('nft.add') }}</span>
             </template>
             <slot>
-              <FormNftCreateMetadata deploy-collection />
+              <FormNftCreateMetadata deploy-collection :style="isLg ? scrollStyle : {}" />
             </slot>
           </n-tab-pane>
         </n-tabs>
@@ -165,6 +165,7 @@ const storageStore = useStorageStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
+const { isLg } = useScreen();
 const { uploadFiles } = useUpload();
 const { getPriceServiceName } = useNft();
 const { collectionEndpoint, prepareFormData } = useCollection();
@@ -181,7 +182,7 @@ const headingRef = ref<HTMLElement>();
 
 const scrollStyle = computed(() => {
   return {
-    height: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
+    minHeight: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
   };
 });
 

@@ -110,6 +110,7 @@ declare global {
     bucket_uuid: string;
     project_uuid: string;
     size: number | null;
+    uploadedSize?: number | null;
   }
 
   interface BucketResponse extends GeneralResponse<BucketInterface> {}

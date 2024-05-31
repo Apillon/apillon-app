@@ -10,6 +10,7 @@
       <div class="mobile:relative">
         <FormNftCreateMetadata
           :deploy-collection="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
+          :style="isLg ? scrollStyle : {}"
         />
         <button
           v-if="
@@ -61,6 +62,7 @@
 
 <script lang="ts" setup>
 const router = useRouter();
+const { isLg } = useScreen();
 const { params } = useRoute();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
@@ -77,7 +79,7 @@ const collectionUuid = ref<string>(`${params?.slug}`);
 const headingRef = ref<HTMLElement>();
 const scrollStyle = computed(() => {
   return {
-    height: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
+    minHeight: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
   };
 });
 
