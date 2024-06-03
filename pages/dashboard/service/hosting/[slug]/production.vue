@@ -6,8 +6,17 @@
     <slot>
       <template v-if="bucketStore.folder.items.length || deploymentStore.production.length > 0">
         <n-space class="pb-8" :size="32" vertical>
-          <!-- Domain preview -->
-          <HostingDomain />
+          <div>
+            <!-- Action: refresh -->
+            <ActionsHostingWebsite
+              class="lg:float-right"
+              :env="DeploymentEnvironment.PRODUCTION"
+              :search="false"
+            />
+
+            <!-- Domain preview -->
+            <HostingDomain />
+          </div>
 
           <!-- IPNS link -->
           <HostingPreviewLink
@@ -21,7 +30,7 @@
 
           <!-- Breadcrumbs -->
           <div class="mt-8">
-            <ActionsHostingWebsite :env="DeploymentEnvironment.PRODUCTION" />
+            <ActionsHostingWebsiteSearchFiles />
 
             <div class="relative h-14 pt-2 mb-1">
               <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
