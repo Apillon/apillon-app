@@ -18,7 +18,7 @@ export default function useContract() {
   const publicClient = usePublicClient();
   const { data: walletClient, refetch } = useWalletClient();
 
-  const contractAddress = '0xddf5F225218fd09Ffa39712aFd9a4Bc34b21b473' as `0x${string}`;
+  const contractAddress = nuxtConfig.public.nctrContract as `0x${string}`;
   const usedChain = nuxtConfig.public.ENV === AppEnv.PROD ? moonbeam : moonbaseAlpha;
   const contract = ref();
 
