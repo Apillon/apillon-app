@@ -17,6 +17,11 @@
   <template v-else-if="!referralStore.tokenClaim.wallet">
     <h1>The NCTR Airdrop is now finished.</h1>
   </template>
+  <template v-if="!hasClaimed && referralStore.tokenClaim.wallet && !userCanClaim">
+    <p class="text-pink">
+      <span>Please get $GLMR tokens to cover the claim $NCTR transaction fees.</span>
+    </p>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -28,12 +33,15 @@ const { refetch: refetchWalletClient } = useWalletClient();
 const { isConnected } = useAccount({ onConnect: onWalletConnected });
 const referralStore = useReferralStore();
 
-const { initContract, getClaimStatus, claimTokens, ensureCorrectNetwork } = useContract();
+const { initContract, getClaimStatus, claimTokens, ensureCorrectNetwork, userBalance } =
+  useContract();
 
 const loading = ref<boolean>(true);
 const hasClaimed = ref(false);
 
 const isDisabled = computed(() => !referralStore.tokenClaim.wallet || !hasClaimed);
+// TODO: this might have to be improved in the future check what gets returned when ,ultiple coins, validate for GLMR???
+const userCanClaim = computed(() => !!userBalance.value?.formatted);
 
 onMounted(async () => {
   if (!isConnected.value) {

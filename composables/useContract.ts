@@ -4,6 +4,7 @@ import {
   usePublicClient,
   useSwitchNetwork,
   useWalletClient,
+  useBalance,
 } from 'use-wagmi';
 import { getContract } from 'viem';
 import { moonbeam, moonbaseAlpha } from 'use-wagmi/chains';
@@ -17,6 +18,7 @@ export default function useContract() {
   const { switchNetwork } = useSwitchNetwork();
   const publicClient = usePublicClient();
   const { data: walletClient, refetch } = useWalletClient();
+  const { data: userBalance } = useBalance({ address: address.value });
 
   const contractAddress = nuxtConfig.public.nctrContract as `0x${string}`;
   const usedChain = nuxtConfig.public.ENV === AppEnv.PROD ? moonbeam : moonbaseAlpha;
@@ -63,5 +65,6 @@ export default function useContract() {
     getClaimStatus,
     claimTokens,
     ensureCorrectNetwork,
+    userBalance,
   };
 }
