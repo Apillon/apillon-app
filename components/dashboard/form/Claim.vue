@@ -39,9 +39,9 @@ const { initContract, getClaimStatus, claimTokens, ensureCorrectNetwork, userBal
 const loading = ref<boolean>(true);
 const hasClaimed = ref(false);
 
-const isDisabled = computed(() => !referralStore.tokenClaim.wallet || !hasClaimed);
+const isDisabled = computed(() => !referralStore.tokenClaim.wallet || !hasClaimed || !userCanClaim);
 // TODO: this might have to be improved in the future check what gets returned when ,ultiple coins, validate for GLMR???
-const userCanClaim = computed(() => !!userBalance.value?.formatted);
+const userCanClaim = () => !!userBalance.value?.formatted;
 
 onMounted(async () => {
   if (!isConnected.value) {
@@ -49,6 +49,7 @@ onMounted(async () => {
   }
   await initContract();
   hasClaimed.value = await getClaimStatus();
+  userCanClaim();
   loading.value = false;
 });
 
