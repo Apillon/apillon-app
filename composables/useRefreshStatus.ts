@@ -34,11 +34,11 @@ export default function useRefreshStatus() {
   let intervalId: ReturnType<typeof setInterval> | null = null;
   // interval steps calculations
   const progressStep = ref(10);
-  const totalSteps = 3;
-  const currentStep = 1;
+  const totalSteps = ref(3);
+  const currentStep = ref(1);
 
   onMounted(() => {
-    console.log('mounted');
+    console.log('init');
     initInfoWindow();
   });
 
@@ -54,17 +54,24 @@ export default function useRefreshStatus() {
         contract.contractStatus === ContractStatus.DEPLOY_INITIATED ||
         contract.contractStatus === ContractStatus.DEPLOYING
     );
+
     // return if no unfinished contracts
-    if (activeServices.value === undefined) return;
+    if (activeServices.value === undefined || activeServices.value.length === 0) return;
     // open info window
     activeInfoWindow.value = true;
-
     const contracts = await contractStore.fetchContracts(false);
-    console.log(contracts[0].contract_uuid);
+    // console.log(contracts[0].contract_uuid);
 
     const contract = contracts.find(
       contract => contract.contract_uuid === activeServices.value.contract_uuid
     );
+
+    activeServices.value = contracts.filter(
+      contract =>
+        contract.contractStatus === ContractStatus.DEPLOY_INITIATED ||
+        contract.contractStatus === ContractStatus.DEPLOYING
+    );
+
     if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
       activeInfoWindow.value = false; // unmounts and clears interval
     }
@@ -85,7 +92,7 @@ export default function useRefreshStatus() {
   };
 
   const calculateProgress = () => {
-    const progress = (currentStep / totalSteps) * 100;
+    const progress = (currentStep.value / totalSteps.value) * 100;
     if (progress >= 100) {
       progressStep.value = 100;
       clearInterval(intervalId);

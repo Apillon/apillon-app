@@ -57,14 +57,7 @@
             />
 
             <!-- Global component: deployment progress -->
-            <RefreshCard v-if="showCard" />
-
-            <button
-              class="fixed top-0 right-0 bg-primary text-black w-[100px] h-[80px] m-3"
-              @click="showCard = !showCard"
-            >
-              Start Progress
-            </button>
+            <RefreshCard v-if="activeServices && activeServices.length > 0" />
           </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
@@ -130,6 +123,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
+const { activeServices } = useRefreshStatus();
 
 const gtm = useGtm();
 const { isMd, isLg, isXl } = useScreen();
@@ -147,8 +141,6 @@ const scrollStyle = computed(() => ({
 const heightScreen = computed(() => ({
   height: `calc(100dvh - ${headingHeight.value}px)`,
 }));
-
-const showCard = ref(false);
 
 /** Delay animation */
 const loadingAnimation = ref<boolean>(false);

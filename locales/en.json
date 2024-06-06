@@ -353,7 +353,7 @@
       }
     },
     "refreshModal": {
-      "title": "Check Deployment Status",
+      "title": "Deployment Status",
       "refresh": "refresh",
       "subtitle": "To check the deployment status, click the refresh button or select the time intervals for the automatic update."
     },

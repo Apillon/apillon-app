@@ -4,9 +4,9 @@
     class="deploy-actions fixed bottom-0 right-0 w-full max-w-[500px] bg-bg-dark z-50 rounded-none -mr-[1px] -mb-[1px]"
   >
     <!-- Accordion -->
-    <n-collapse display-directive="show">
+    <n-collapse display-directive="show" :default-expanded-names="['1']">
       <!-- Primary service -->
-      <n-collapse-item v-model:expanded="expanded">
+      <n-collapse-item v-model:expanded="expanded" name="1">
         <!-- #header -->
         <template #header>
           <div class="flex items-center justify-between w-full">
@@ -65,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-const expanded = ref(false);
+const expanded = ref(true);
 
 const {
   dropdownOptions,
