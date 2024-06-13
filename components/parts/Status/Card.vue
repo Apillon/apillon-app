@@ -1,7 +1,7 @@
 <template>
   <!-- Card -->
   <n-card
-    class="deploy-actions fixed bottom-0 right-0 w-full max-w-[500px] bg-bg-dark z-50 rounded-none -mr-[1px] -mb-[1px]"
+    class="deploy-actions card-dark fixed right-0 bottom-0 max-w-[500px] z-10 !border-yellow !rounded-none -mr-[1px] -mb-[1px]"
   >
     <!-- Accordion -->
     <n-collapse display-directive="show" :default-expanded-names="['1']">
@@ -39,22 +39,23 @@
           <p class="mb-4">
             {{ $t('dashboard.refreshModal.subtitle') }}
           </p>
-
-          <div v-for="(service, i) in activeServices" :key="service.contract_uuid" class="px-2">
-            <div class="flex flex-row justify-between">
-              <h5>{{ service.name }}</h5>
-              <n-progress
-                type="line"
-                :percentage="progressStep"
-                :height="6"
-                :border-radius="4"
-                :fill-border-radius="0"
-                class="max-w-[60%]"
-                color="#F9FF73"
-              />
+          <n-scrollbar v-if="expanded" class="max-h-72 mt-4" y-scrollable>
+            <div v-for="(service, i) in activeServices" :key="service.contract_uuid" class="px-2">
+              <div class="flex flex-row justify-between">
+                <h5>{{ service.name }}</h5>
+                <n-progress
+                  type="line"
+                  :percentage="progressStep"
+                  :height="6"
+                  :border-radius="4"
+                  :fill-border-radius="0"
+                  class="max-w-[60%]"
+                  color="#F9FF73"
+                />
+              </div>
+              <hr v-if="i < activeServices.length - 1" class="border-bg-lighter my-3" />
             </div>
-            <hr v-if="i < activeServices.length - 1" class="border-bg-lighter my-3" />
-          </div>
+          </n-scrollbar>
         </div>
         <!-- End Collapsible content -->
       </n-collapse-item>

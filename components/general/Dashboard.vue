@@ -57,7 +57,7 @@
             />
 
             <!-- Global component: deployment progress -->
-            <RefreshCard v-if="activeServices && activeServices.length > 0" />
+            <StatusCard v-if="activeServices && activeServices.length > 0" />
           </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
