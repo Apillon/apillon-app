@@ -75,6 +75,7 @@
 
       <FormAirdrop />
     </div>
+    <FormClaim />
   </div>
 </template>
 
