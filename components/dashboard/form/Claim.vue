@@ -1,11 +1,12 @@
 <template>
   <template v-if="hasClaimed">
-    <span>
-      You've successfully claimed your $NCTR: You can check out the transaction on
+    <span> You've successfully claimed your $NCTR.</span>
+    <span v-if="referralStore.tokenClaim.transactionHash"
+      >You can check out the transaction on
       <a
         class="underline"
         target="_blank"
-        :href="`https://moonbase.moonscan.io/tx/${referralStore.tokenClaim.wallet}`"
+        :href="`https://moonbase.moonscan.io/tx/${referralStore.tokenClaim.transactionHash}`"
         >Moonbase.</a
       >
     </span>
@@ -31,8 +32,9 @@
   </template>
   <!-- Being claimed -->
   <p v-if="transactionHash && !claimSuccess">
-    <span class="text-green"
-      >You're $NCTR is beng claimed. You can monitor the transaction on
+    <span class="text-green">You're $NCTR is beng claimed.</span>
+    <span v-if="transactionHash" class="text-green"
+      >You can monitor the transaction on
       <a
         class="underline"
         target="_blank"
@@ -43,12 +45,13 @@
   </p>
   <!-- Claim succes -->
   <p v-if="claimSuccess && !claimError">
-    <span class="text-green"
-      >You're $NCTR has been claimed. You can see the transaction on
+    <span class="text-green">You're $NCTR has been claimed.</span>
+    <span v-if="transactionHash" class="text-green"
+      >You can see the transaction on
       <a
         class="underline"
         target="_blank"
-        :href="`https://moonbase.moonscan.io/tx/${referralStore.tokenClaim.wallet}`"
+        :href="`https://moonbase.moonscan.io/tx/${transactionHash}`"
         >Moonbase.</a
       >
     </span>
@@ -77,7 +80,10 @@ const {
 const hasClaimed = ref(false);
 
 const isDisabled = computed(
-  () => !referralStore.tokenClaim.wallet || !hasClaimed || (claimSuccess && !claimError)
+  () =>
+    !referralStore.tokenClaim.wallet ||
+    hasClaimed.value ||
+    (claimSuccess.value && !claimError.value)
 );
 
 onMounted(async () => {
