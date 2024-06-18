@@ -1,19 +1,29 @@
 <template>
-  <template v-if="hasClaimed">
-    <span> You've successfully claimed your $NCTR.</span>
-    <span v-if="referralStore.tokenClaim.transactionHash"
-      >You can check out the transaction on
-      <a
-        class="underline"
-        target="_blank"
-        :href="`https://moonbase.moonscan.io/tx/${referralStore.tokenClaim.transactionHash}`"
-        >Moonbase.</a
-      >
-    </span>
-  </template>
   <!-- button -->
-  <template v-else-if="!hasClaimed && referralStore.tokenClaim.wallet">
+  <template v-if="!hasClaimed && referralStore.tokenClaim.wallet">
     <Btn
+      v-if="!isConnected"
+      type="primary"
+      size="large"
+      class="mt-2"
+      :loading="loading"
+      @click="claimNctr"
+    >
+      {{ $t('referral.info.claim.connectToClaim') }}
+    </Btn>
+    <Btn
+      v-else-if="isConnected && wrongNetwork"
+      type="primary"
+      size="large"
+      class="mt-2"
+      :loading="loading"
+      :disabled="isDisabled"
+      @click="ensureCorrectNetwork"
+    >
+      {{ $t('referral.info.claim.switchToClaim') }}
+    </Btn>
+    <Btn
+      v-else
       type="primary"
       size="large"
       class="mt-2"
@@ -24,12 +34,10 @@
       {{ $t('referral.info.claim.claim') }}
     </Btn>
   </template>
-  <template v-else-if="!referralStore.tokenClaim.wallet">
-    <h1>The NCTR Airdrop is now finished.</h1>
-  </template>
-  <template v-if="claimError">
-    <p class="text-pink">Something went wrong. Please try again or try later.</p>
-  </template>
+
+  <!-- Airdrop finished -->
+  <p v-if="!referralStore.tokenClaim.wallet" class="text-red">The NCTR Airdrop is now finished.</p>
+
   <!-- Being claimed -->
   <p v-if="transactionHash && !claimSuccess">
     <span class="text-green">You're $NCTR is beng claimed.</span>
@@ -43,8 +51,9 @@
       >
     </span>
   </p>
+
   <!-- Claim succes -->
-  <p v-if="claimSuccess && !claimError">
+  <p v-if="(claimSuccess && !claimError) || hasClaimed">
     <span class="text-green">You're $NCTR has been claimed.</span>
     <span v-if="transactionHash" class="text-green"
       >You can see the transaction on
@@ -56,6 +65,16 @@
       >
     </span>
   </p>
+
+  <p v-if="referralStore.tokenClaim.wallet !== address" class="text-pink">
+    Make sure that your connected wallet is the same as submitted EVM wallet address.
+  </p>
+
+  <!-- Error message -->
+  <p v-if="claimError" class="text-pink">
+    Something went wrong. Please try again or try later.<br />Make sure that your connected wallet
+    is the same as submitted EVM wallet address.
+  </p>
 </template>
 
 <script setup lang="ts">
@@ -65,6 +84,7 @@ const { connect, connectors } = useConnect();
 const { refetch: refetchWalletClient } = useWalletClient();
 const { isConnected } = useAccount({ onConnect: onWalletConnected });
 const referralStore = useReferralStore();
+const { address } = useAccount();
 
 const {
   initContract,
@@ -75,25 +95,35 @@ const {
   claimSuccess,
   loading,
   transactionHash,
+  usedChain,
+  chain,
 } = useContract();
 
 const hasClaimed = ref(false);
 
+onMounted(async () => {
+  loading.value = true;
+  await initContract();
+  hasClaimed.value = await getClaimStatus();
+  loading.value = false;
+  console.log(referralStore.tokenClaim.wallet, address.value);
+});
+
+// Disable if:
+// No wallet in state
+// has already claimed
+// has just claimed
+// saved wallet is not same as connected wallet
 const isDisabled = computed(
   () =>
     !referralStore.tokenClaim.wallet ||
     hasClaimed.value ||
-    (claimSuccess.value && !claimError.value)
+    (claimSuccess.value && !claimError.value) ||
+    referralStore.tokenClaim.wallet !== address.value
 );
 
-onMounted(async () => {
-  loading.value = true;
-  if (!isConnected.value) {
-    await wagmiConnect(connectors.value[0]);
-  }
-  await initContract();
-  hasClaimed.value = await getClaimStatus();
-  loading.value = false;
+const wrongNetwork = computed(() => {
+  return !chain || !chain.value || chain.value.id !== usedChain.id;
 });
 
 // Claim
@@ -104,13 +134,12 @@ async function claimNctr(e: MouseEvent | null) {
     // Verify wallet connection
     if (!isConnected.value) {
       await wagmiConnect(connectors.value[0]);
+      return;
     }
-    // Verify network before continuing the transaction
-    await ensureCorrectNetwork();
 
     // Call BE for correct params
     const { signature, timestamp, amount } = await getNctrClaimParams();
-    // console.log(signature, timestamp, amount);
+
     if (!signature || !timestamp || !amount) {
       throw new Error('Invalid claim parameters');
     }
@@ -133,7 +162,7 @@ async function getNctrClaimParams(): Promise<NctrClaimParams> {
     return res.data;
   } catch (error) {
     console.error('Error fetching request params:', error);
-    return {};
+    return error;
   }
 }
 

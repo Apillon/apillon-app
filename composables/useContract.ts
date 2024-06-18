@@ -24,6 +24,8 @@ export default function useContract() {
   const { switchNetwork } = useSwitchNetwork();
   const publicClient = usePublicClient();
   const { data: walletClient, refetch } = useWalletClient();
+  const referralStore = useReferralStore();
+  const savedWallet = ref(referralStore.tokenClaim.wallet);
 
   /**
    * Init contract
@@ -33,8 +35,6 @@ export default function useContract() {
       await refetch();
       await sleep(200);
     }
-
-    await ensureCorrectNetwork();
 
     contract.value = getContract({
       address: contractAddress,
@@ -46,13 +46,14 @@ export default function useContract() {
 
   // Contract Interaction
   async function getClaimStatus() {
-    return (await contract.value.read.walletClaimed([address.value])) as boolean;
+    return (await contract.value.read.walletClaimed([savedWallet.value])) as boolean;
   }
   // amount timestamp signature
   async function claimTokens(amount, timestamp, signature) {
     claimError.value = false;
     claimSuccess.value = false;
     try {
+      console.log(savedWallet.value, address.value);
       const gas = await publicClient.value.estimateContractGas({
         address: contractAddress,
         abi,
@@ -62,7 +63,7 @@ export default function useContract() {
       });
 
       const gasLimit = (gas * 110n) / 100n;
-
+      console.log('gasLimit', gasLimit);
       const tx = await contract.value.write.claim([amount, timestamp, signature], {}, { gasLimit });
       transactionHash.value = tx;
       pollTransactionStatus(tx);
@@ -88,10 +89,8 @@ export default function useContract() {
 
   // Helper
   async function ensureCorrectNetwork() {
-    if (!chain || !chain.value || chain.value.id !== usedChain.id) {
-      await switchNetwork(usedChain.id);
-      return true;
-    }
+    await switchNetwork(usedChain.id);
+    return true;
   }
 
   return {
@@ -103,5 +102,7 @@ export default function useContract() {
     claimSuccess,
     loading,
     transactionHash,
+    usedChain,
+    chain,
   };
 }
