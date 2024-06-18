@@ -1777,7 +1777,9 @@
         "title": "Submit tasks for review",
         "tooltip": "You will be able to claim your bonus after TGE.",
         "tooltipDisabled": "Tasks are already in review",
-        "claim": "Claim your $NCTR"
+        "claim": "Claim your $NCTR",
+        "connectToClaim": "Connect to claim $NCTR",
+        "switchToClaim": "Switch to claim $NCTR"
       },
       "statuses": {
         "0": "Register to Apillon platform",
