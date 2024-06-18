@@ -7,10 +7,10 @@
       {{ $t('referral.info.claim.inReview') }}
     </Notification>
 
-    <n-form-item path="terms" :show-label="false" :show-feedback="formErrors && !formData.terms">
+    <!-- <n-form-item path="terms" :show-label="false" :show-feedback="formErrors && !formData.terms">
       <n-checkbox v-model:checked="formData.terms" size="medium" :label="termsLabel" />
       <IconInfo v-if="isDisabled" size="sm" :tooltip="$t('referral.info.claim.tooltipDisabled')" />
-    </n-form-item>
+    </n-form-item> -->
 
     <!--  Signup submit -->
     <n-form-item :show-label="false" :show-feedback="false">
