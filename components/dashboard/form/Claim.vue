@@ -36,12 +36,14 @@
   </template>
 
   <!-- Airdrop finished -->
-  <p v-if="!referralStore.tokenClaim.wallet" class="text-red">The NCTR Airdrop is now finished.</p>
+  <Notification type="info" v-if="!referralStore.tokenClaim.wallet">
+    The NCTR Airdrop is now finished.</Notification
+  >
 
   <!-- Being claimed -->
-  <p v-if="transactionHash && !claimSuccess">
-    <span class="text-green">You're $NCTR is beng claimed.</span>
-    <span v-if="transactionHash" class="text-green"
+  <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full mb-8"
+    ><span>You're $NCTR is beng claimed.</span>
+    <span v-if="transactionHash"
       >You can monitor the transaction on
       <a
         class="underline"
@@ -49,11 +51,15 @@
         :href="`https://moonbase.moonscan.io/tx/${transactionHash}`"
         >Moonbase.</a
       >
-    </span>
-  </p>
+    </span></Notification
+  >
 
   <!-- Claim succes -->
-  <p v-if="(claimSuccess && !claimError) || hasClaimed">
+  <Notification
+    v-if="(claimSuccess && !claimError) || hasClaimed"
+    type="success"
+    class="w-full mb-8"
+  >
     <span class="text-green">You're $NCTR has been claimed.</span>
     <span v-if="transactionHash" class="text-green"
       >You can see the transaction on
@@ -64,17 +70,21 @@
         >Moonbase.</a
       >
     </span>
-  </p>
+  </Notification>
 
-  <p v-if="referralStore.tokenClaim.wallet !== address" class="text-pink">
+  <!-- Fix connection errro -->
+  <Notification
+    v-if="referralStore.tokenClaim.wallet !== address"
+    type="warning"
+    class="w-full mb-8"
+  >
     Make sure that your connected wallet is the same as submitted EVM wallet address.
-  </p>
-
+  </Notification>
   <!-- Error message -->
-  <p v-if="claimError" class="text-pink">
+  <Notification v-if="claimError" type="error" class="w-full mb-8">
     Something went wrong. Please try again or try later.<br />Make sure that your connected wallet
     is the same as submitted EVM wallet address.
-  </p>
+  </Notification>
 </template>
 
 <script setup lang="ts">

@@ -54,8 +54,6 @@ export default function useContract() {
     claimError.value = false;
     claimSuccess.value = false;
     try {
-      console.log(contract.value);
-      console.log(savedWallet.value, address.value);
       const gas = await publicClient.value.estimateContractGas({
         address: contractAddress,
         abi,
