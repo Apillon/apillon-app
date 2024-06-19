@@ -7,7 +7,7 @@
       size="large"
       class="mt-2"
       :loading="loading"
-      @click="claimNctr"
+      @click="connectWallet"
     >
       {{ $t('referral.info.claim.connectToClaim') }}
     </Btn>
@@ -84,7 +84,6 @@ const { connect, connectors } = useConnect();
 const { refetch: refetchWalletClient } = useWalletClient();
 const { isConnected } = useAccount({ onConnect: onWalletConnected });
 const referralStore = useReferralStore();
-const { address } = useAccount();
 
 const {
   initContract,
@@ -97,6 +96,7 @@ const {
   transactionHash,
   usedChain,
   chain,
+  address,
 } = useContract();
 
 const hasClaimed = ref(false);
@@ -125,6 +125,16 @@ const isDisabled = computed(
 const wrongNetwork = computed(() => {
   return !chain || !chain.value || chain.value.id !== usedChain.id;
 });
+
+async function connectWallet() {
+  // Verify wallet connection
+  if (!isConnected.value) {
+    loading.value = true;
+    await wagmiConnect(connectors.value[0]);
+    loading.value = false;
+    return;
+  }
+}
 
 // Claim
 async function claimNctr(e: MouseEvent | null) {
