@@ -2,7 +2,7 @@
   <!-- button -->
   <template v-if="!hasClaimed && referralStore.tokenClaim.wallet">
     <Btn
-      v-if="!isConnected || (isConnected && !referralStore.tokenClaim.wallet !== address.value)"
+      v-if="!isConnected"
       type="primary"
       size="large"
       class="mt-2"
@@ -138,7 +138,7 @@ const wrongNetwork = computed(() => {
 });
 
 async function connectWallet() {
-  await wagmiConnect(connectors.value[0], true);
+  await wagmiConnect(connectors.value[0]);
 }
 
 // Claim
@@ -181,17 +181,11 @@ async function getNctrClaimParams(): Promise<NctrClaimParams> {
   }
 }
 
-async function wagmiConnect(connector, force = false) {
-  if (force) {
-    disconnect();
-    await sleep(200);
+async function wagmiConnect(connector) {
+  if (isConnected.value) {
+    refetchWalletClient();
+  } else if (connector.ready) {
     connect({ connector });
-  } else {
-    if (isConnected.value) {
-      refetchWalletClient();
-    } else if (connector.ready) {
-      connect({ connector });
-    }
   }
 }
 
