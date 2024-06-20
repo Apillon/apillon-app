@@ -2,7 +2,7 @@
   <!-- button -->
   <template v-if="!hasClaimed && referralStore.tokenClaim.wallet">
     <Btn
-      v-if="!isConnected"
+      v-if="!isConnected || (isConnected && !referralStore.tokenClaim.wallet !== address.value)"
       type="primary"
       size="large"
       class="mt-2"
@@ -88,12 +88,13 @@
 </template>
 
 <script setup lang="ts">
-import { useAccount, useConnect, useWalletClient } from 'use-wagmi';
+import { useAccount, useConnect, useDisconnect, useWalletClient } from 'use-wagmi';
 
 const { connect, connectors } = useConnect();
 const { refetch: refetchWalletClient } = useWalletClient();
 const { isConnected } = useAccount({ onConnect: onWalletConnected });
 const referralStore = useReferralStore();
+const { disconnect } = useDisconnect();
 
 const {
   initContract,
@@ -137,13 +138,7 @@ const wrongNetwork = computed(() => {
 });
 
 async function connectWallet() {
-  // Verify wallet connection
-  if (!isConnected.value) {
-    loading.value = true;
-    await wagmiConnect(connectors.value[0]);
-    loading.value = false;
-    return;
-  }
+  await wagmiConnect(connectors.value[0], true);
 }
 
 // Claim
@@ -186,11 +181,17 @@ async function getNctrClaimParams(): Promise<NctrClaimParams> {
   }
 }
 
-function wagmiConnect(connector) {
-  if (isConnected.value) {
-    refetchWalletClient();
-  } else if (connector.ready) {
+async function wagmiConnect(connector, force = false) {
+  if (force) {
+    disconnect();
+    await sleep(200);
     connect({ connector });
+  } else {
+    if (isConnected.value) {
+      refetchWalletClient();
+    } else if (connector.ready) {
+      connect({ connector });
+    }
   }
 }
 

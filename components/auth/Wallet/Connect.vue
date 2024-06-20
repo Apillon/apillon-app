@@ -44,7 +44,6 @@ const modalWalletSelectVisible = ref<boolean>(false);
 
 /** Wallet connect */
 async function walletConnect(account: WalletAccount) {
-  console.log('XXXXXXX');
   loadingWallet.value = true;
 
   try {
@@ -71,7 +70,6 @@ async function walletConnect(account: WalletAccount) {
 }
 
 async function removeWallet(account?: WalletAccount) {
-  console.log('XXXXXXX2');
   if (!account && authStore.wallet.address) {
     account = authStore.wallet.accounts.find(item => item.address === authStore.wallet.address);
   }

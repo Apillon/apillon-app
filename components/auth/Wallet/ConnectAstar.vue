@@ -117,7 +117,6 @@ async function connectWallet() {
   }
 
   try {
-    console.log('xxxxx6');
     const { signature, timestamp } = sign;
 
     const res = await $api.post<WalletLoginResponse>(endpoints.walletConnect, {
