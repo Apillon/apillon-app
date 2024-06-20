@@ -68,6 +68,7 @@ function wagmiConnect(connector) {
 }
 
 async function onWalletConnected({ address, connector, isReconnected }) {
+  console.log('XXXXXXX3');
   await sleep(200);
   if (authStore.user.evmWallet !== address) {
     connectWallet();
@@ -99,7 +100,7 @@ async function connectWallet() {
 
   try {
     const { signature, timestamp } = sign;
-
+    console.log('XXXXXXX4');
     const res = await $api.post<WalletLoginResponse>(endpoints.walletConnect, {
       wallet: address.value,
       signature,
@@ -121,7 +122,7 @@ async function connectWallet() {
 
 async function removeWallet() {
   loadingRemove.value = true;
-
+  console.log('XXXXXXX5');
   try {
     const res = await $api.post<WalletLoginResponse>(endpoints.walletConnect, {
       wallet: null,
