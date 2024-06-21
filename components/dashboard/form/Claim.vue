@@ -61,12 +61,12 @@
     class="w-full mb-8"
   >
     <span class="text-green">Your $NCTR has been claimed.</span>
-    <span v-if="transactionHash" class="text-green"
+    <span v-if="transactionHash || referralStore.tokenClaim.transactionHash" class="text-green"
       >You can see the transaction on
       <a
         class="underline"
         target="_blank"
-        :href="`https://moonbase.moonscan.io/tx/${transactionHash}`"
+        :href="`https://moonbase.moonscan.io/tx/${transactionHash ? transactionHash : referralStore.tokenClaim.transactionHash}`"
         >Moonbase.</a
       >
     </span>

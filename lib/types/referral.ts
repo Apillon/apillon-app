@@ -78,6 +78,7 @@ declare global {
     totalNctr: number;
     user_uuid: string;
     wallet: string;
+    transactionHash: string;
   }
   interface AirdropInterface {
     airdropStats: AirdropStatsInterface;
