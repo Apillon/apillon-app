@@ -42,7 +42,7 @@
 
   <!-- Being claimed -->
   <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full mb-8"
-    ><span>You're $NCTR is beng claimed.</span>
+    ><span>Your $NCTR is beng claimed.</span>
     <span v-if="transactionHash"
       >You can monitor the transaction on
       <a
@@ -60,7 +60,7 @@
     type="success"
     class="w-full mb-8"
   >
-    <span class="text-green">You're $NCTR has been claimed.</span>
+    <span class="text-green">Your $NCTR has been claimed.</span>
     <span v-if="transactionHash" class="text-green"
       >You can see the transaction on
       <a
