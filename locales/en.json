@@ -1721,7 +1721,7 @@
   },
   "referral": {
     "airdrop": {
-      "btn": "Learn more",
+      "btn": "Have a question? Enter Discord!",
       "content": "The NCTR Airdrop task phase is now finished. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
       "reward": "Reward",
       "task": "Task",
@@ -1753,8 +1753,8 @@
       ]
     },
     "banner": {
-      "title": "NCTR Airdrop task phase is now finished",
-      "description": "If you have collected any rewards, follow these steps: \n1. Visit the Airdrop dashboard \n2. Connect your EVM wallet to receive NCTR \n3. Submit your tasks for review \n4. Wait for NCTR TGE (tokens will be distributed once TGE is concluded)",
+      "title": "NCTR Airdrop concluded",
+      "description": "Submit to review concluded on June 26, 2024. \nYour task review is now in progress.\n\n NCTR Airdrop rewards will be available for claim in August, 2024.",
       "btn": "NCTR Airdrop Dashboard",
       "learnMoreBtn": "Learn more"
     },
@@ -1771,12 +1771,15 @@
         "alreadyClaimed": "You have already claimed your tokens.",
         "blocked": "You are blocked from claiming tokens due to suspicious behavior.",
         "btn": "Submit",
-        "content": "Upon task review and completion of TGE, you will be able to claim your NCTR tokens.",
+        "content": "Your tasks are under review. We will notify you over email, once  ll reviews are completed. ",
         "contentEnd": "is live.",
         "inReview": "Your tasks are in review",
-        "title": "Submit tasks for review",
+        "title": "Tasks review",
         "tooltip": "You will be able to claim your bonus after TGE.",
-        "tooltipDisabled": "Tasks are already in review"
+        "tooltipDisabled": "Tasks are already in review",
+        "claim": "Claim your $NCTR",
+        "connectToClaim": "Connect to claim $NCTR",
+        "switchToClaim": "Switch to claim $NCTR"
       },
       "statuses": {
         "0": "Register to Apillon platform",

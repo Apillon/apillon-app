@@ -2,20 +2,20 @@
   <!-- Referral (Airdrop) -->
   <div class="card-light flex flex-wrap gap-4 p-8">
     <div class="flex-1 min-w-[16rem]">
-      <h4>{{ $t('referral.banner.title') }}</h4>
-      <p class="text-body mt-4 mb-6 whitespace-break-spaces">
+      <h4 class="">{{ $t('referral.banner.title') }}</h4>
+      <p class="mt-4 mb-6 whitespace-break-spaces">
         {{ $t('referral.banner.description') }}
       </p>
       <Btn type="primary" :to="{ name: 'dashboard-airdrop' }" class="mr-2">
         {{ $t('referral.banner.btn') }}
       </Btn>
-      <Btn
+      <!-- <Btn
         type="primary"
         :color="colors.blue"
         href="https://blog.apillon.io/nctr-airdrop-task-period-is-over-here-is-how-to-claim-rewards-fbd721241f11"
       >
         {{ $t('referral.banner.learnMoreBtn') }}
-      </Btn>
+      </Btn> -->
     </div>
     <div class="flex-1 min-w-[16rem]">
       <Image
