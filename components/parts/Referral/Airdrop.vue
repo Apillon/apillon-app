@@ -2,14 +2,49 @@
   <!-- Referral - Airdrop -->
   <div class="card-dark p-8 mb-8">
     <div class="max-w-lg mb-12">
-      <h3>{{ $t('referral.airdrop.welcome') }}</h3>
-      <p class="mb-6 whitespace-break-spaces">{{ $t('referral.airdrop.content') }}</p>
-      <Btn
-        :color="colors.blue"
-        href="https://blog.apillon.io/nctr-airdrop-task-period-is-over-here-is-how-to-claim-rewards-fbd721241f11"
-      >
+      <h4 class="">{{ $t('referral.banner.title') }}</h4>
+      <p class="mt-4 mb-6 whitespace-break-spaces">
+        {{ $t('referral.banner.description') }}
+      </p>
+      <Btn :color="colors.blue" href="https://discord.com/invite/yX3gTw36C4">
         {{ $t('referral.airdrop.btn') }}
       </Btn>
+    </div>
+
+    <div class="flex flex-col lg:flex-row mb-4">
+      <div class="grid gap-4 md:grid-cols-3">
+        <div
+          class="flex flex-col justify-between p-8 border border-solid border-pink rounded-lg bg-pink bg-opacity-15"
+        >
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+              <h5>Refer & Earn</h5>
+            </div>
+            <p class="text-white">Refer Apillon to a friend and earn NCTR when they register</p>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col justify-between p-8 border border-solid border-orange rounded-lg bg-orange bg-opacity-15"
+        >
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+              <h5>Learn & Earn</h5>
+            </div>
+            <p class="text-white">Experiment with the Apillon platform for a bigger NCTR bonus</p>
+          </div>
+        </div>
+        <div
+          class="flex flex-col justify-between p-8 border border-solid rounded-lg border-blue bg-blue bg-opacity-15"
+        >
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+              <h5>Build & Earn</h5>
+            </div>
+            <p class="text-white">Create a Web3 project with Apillon and get even more NCTR</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <n-table class="bg-dark mobile:text-xs" :bordered="false" :single-line="true">
