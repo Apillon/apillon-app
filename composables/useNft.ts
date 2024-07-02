@@ -258,6 +258,11 @@ export default function useNft() {
     } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
       console.warn($i18n.t('validation.alreadyOnList', { name: file.name }));
       onError();
+    } else if (fileAlreadyOnFileList(collectionStore.images, image, true)) {
+      collectionStore.images = collectionStore.images.map(img => {
+        return image.name === img.name ? image : img;
+      });
+      onError();
     } else {
       collectionStore.images.push(image);
     }
