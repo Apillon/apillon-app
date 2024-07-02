@@ -40,12 +40,16 @@ export default function useUpload() {
    *  Methods
    */
   /** Check if file is already on list */
-  function fileAlreadyOnFileList(uploadFileList: FileListItemType[], file: FileListItemType) {
+  function fileAlreadyOnFileList(
+    uploadFileList: FileListItemType[],
+    file: FileListItemType,
+    fileNameCheck = false
+  ) {
     return uploadFileList.some(
       item =>
         item.name === file.name &&
         item.fullPath === file.fullPath &&
-        item.file?.lastModified === file.file?.lastModified
+        (fileNameCheck || item.file?.lastModified === file.file?.lastModified)
     );
   }
 

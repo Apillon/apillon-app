@@ -248,16 +248,22 @@ export default function useNft() {
       onError,
     };
 
+    if (collectionStore.amount === NftAmount.SINGLE) {
+      collectionStore.form.single.image = image.name;
+    }
+
     if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
       message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
       onError();
     } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
       console.warn($i18n.t('validation.alreadyOnList', { name: file.name }));
       onError();
+    } else if (fileAlreadyOnFileList(collectionStore.images, image, true)) {
+      collectionStore.images = collectionStore.images.map(img => {
+        return image.name === img.name ? image : img;
+      });
+      onError();
     } else {
-      if (collectionStore.amount === NftAmount.SINGLE) {
-        collectionStore.form.single.image = image.name;
-      }
       collectionStore.images.push(image);
     }
 
@@ -352,7 +358,7 @@ export default function useNft() {
    */
   function createNftFiles(nftData: Array<Record<string, any>>): FileListItemType[] {
     return nftData.map((nft, index) => {
-      const id = Number(nft.id || index + 1);
+      const id = nft.id === undefined ? index + 1 : Number(nft.id);
 
       /** Prepare NFT data */
       const nftData = JSON.parse(JSON.stringify(nft));
