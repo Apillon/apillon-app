@@ -5,6 +5,7 @@
 
       <p v-if="item.headline && item.title" :class="{ 'mt-6': item.headline }">{{ item.title }}</p>
       <h4 v-else-if="item.title" :class="{ 'mt-6': item.headline }">{{ item.title }}</h4>
+      <p v-if="item.subtitle">{{ item.subtitle }}</p>
 
       <ul v-if="item.content && Array.isArray(item.content)" class="list-disc pl-4 mb-4 text-body">
         <li v-for="(c, keyC) in item.content" :key="keyC" v-html="transformLinks(c)"></li>
@@ -37,7 +38,7 @@ const linkExpr = /\[(.*?)\]\((.*?)\)/gi;
 const transformLinks = (str: string) => {
   return str.replace(linkExpr, (expr, text) => {
     try {
-      var [_, link] = expr.substring(1, expr.length - 1).split('](');
+      const [_, link] = expr.substring(1, expr.length - 1).split('](');
       return text && link ? `<a href="${link}" class="link">${text}</a>` : expr;
     } catch (error) {
       return expr;

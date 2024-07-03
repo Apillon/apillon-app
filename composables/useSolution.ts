@@ -11,6 +11,7 @@ export type SolutionContent = {
 type SolutionContentTrans = {
   headline?: VueMsg;
   title?: VueMsg;
+  subtitle?: VueMsg;
   content?: VueMsg;
   benefits?: VueMsg;
 };
@@ -26,10 +27,11 @@ export default function useSolution() {
 
       return translations.map(trans => {
         return {
-          headline: trans.headline ? translate(trans['headline']) : undefined,
-          title: trans.title ? translate(trans['title']) : undefined,
-          content: trans.content ? translate(trans['content']) : undefined,
-          benefits: trans.benefits ? translate(trans['benefits']) : undefined,
+          headline: trans.headline ? translate(trans.headline) : undefined,
+          title: trans.title ? translate(trans.title) : undefined,
+          subtitle: trans.subtitle ? translate(trans.subtitle) : undefined,
+          content: trans.content ? translate(trans.content) : undefined,
+          benefits: trans.benefits ? translate(trans.benefits) : undefined,
         } as SolutionContent;
       });
     }
