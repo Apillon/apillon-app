@@ -1,5 +1,5 @@
 <template>
-  <Carousel v-bind="settings" :breakpoints="breakpoints">
+  <Carousel v-bind="settings">
     <Slide v-for="slide in 4" :key="slide">
       <div class="carousel__item">{{ slide }}</div>
     </Slide>
