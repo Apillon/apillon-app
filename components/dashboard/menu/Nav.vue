@@ -126,7 +126,8 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       key: 'dashboard-service-embedded-wallet',
       label: $i18n.t('dashboard.nav.embeddedWallet'),
       to: 'dashboard-service-embedded-wallet',
-      iconName: 'icon-social',
+      iconName: 'icon-wallet',
+      // TODO - add feature flag
       soon: isMenuItemDisabled(Feature.SOCIAL),
       disabled:
         isMenuItemDisabled(Feature.SOCIAL) ||

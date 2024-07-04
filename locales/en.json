@@ -278,7 +278,8 @@
         "hosting": "Hosting service",
         "nft": "NFT service",
         "social": "Social service",
-        "storage": "Storage service"
+        "storage": "Storage service",
+        "wallet": "Wallet service"
       }
     },
     "clipboard": {
@@ -538,15 +539,10 @@
         "usage": ["metadata storage", "file storage"]
       },
       "embeddedWallet": {
-        "title": "embedded wallet",
-        "checkPrice": "Check price",
-        "generateApiKey": "Generate API key",
-        "viewDocumentation": "View Documentation",
-        "name": "Embedded Wallet",
         "content": [
           {
-            "title": "Use embedded wallet service to remove friction in the user onboarding.",
-            "subtitle": "Features:",
+            "title": "Features:",
+            "subtitle": "Use embedded wallet service to remove friction in the user onboarding.",
             "content": [
               "Users may onboarding using their email,",
               "EVM wallets are automatically created in the background and encrypted",
@@ -555,10 +551,7 @@
               "No GAS required for users, instead you are charged in credits each time a new user onboards"
             ]
           }
-        ],
-        "generate": {
-          "title": "Generate API key and start using Embedded Wallet service"
-        }
+        ]
       },
       "nftAirdrop": {
         "name": "NFT Email Airdrop",
@@ -917,7 +910,8 @@
     "value": "Value",
     "visibleColumns": "Visible columns",
     "wiki": "Wiki",
-    "w3Warn": "W3 warn"
+    "w3Warn": "W3 warn",
+    "oasisSignatures": "Signatures"
   },
   "error": {
     "404": "Page not found",
@@ -1883,9 +1877,10 @@
     "generateApiKey": "Generate API key",
     "generateNewApiKey": "Generate new key",
     "viewDocumentation": "View Documentation",
-    "codeSnippets": "Code snippet:",
+    "codeSnippets": "Code snippets:",
     "generate": {
-      "title": "Generate API key and start using Embedded Wallet service"
+      "title": "Generate API key and start using Embedded Wallet service",
+      "generate": "Generate new key"
     },
     "table": {
       "secret": "Secret",

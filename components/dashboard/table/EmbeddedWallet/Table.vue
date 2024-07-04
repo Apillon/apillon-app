@@ -3,49 +3,66 @@
     remote
     :bordered="false"
     :columns="columns"
-    :data="ewApiKeyStore.items"
-    :loading="chatStore.loading"
+    :data="settingsStore.ewApiKeys"
+    :row-props="rowProps"
   />
+
+  <!-- Drawer - Update API Key -->
+  <n-drawer v-model:show="drawerUpdateApiKeyVisible" :width="495">
+    <n-drawer-content :native-scrollbar="false">
+      <template #header>
+        <h5>{{ $t('dashboard.apiKey.update') }}</h5>
+      </template>
+      <FormApiKey :id="currentRow.id" @submit-success="drawerUpdateApiKeyVisible = false" />
+    </n-drawer-content>
+  </n-drawer>
+
+  <!-- Modal - Delete API key -->
+  <ModalDelete v-model:show="showModalDeleteApiKey" :title="$t('dashboard.apiKey.delete')">
+    <FormDelete :id="currentRow?.id" type="apiKey" @submit-success="onApiKeyDeleted" />
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
-const chatStore = useChatStore();
-const ewApiKeyStore = useEwApiKeyStore();
+const dataStore = useDataStore();
+const settingsStore = useSettingsStore();
+const showModalDeleteApiKey = ref<boolean>(false);
+const drawerUpdateApiKeyVisible = ref<boolean>(false);
 
-const modalInfoVisible = ref<boolean>(false);
-
-const createColumns = (): NDataTableColumns<EwApiKeyInterface> => {
+const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
   return [
     {
-      key: 'secret',
-      title: t('embeddedWallet.table.secret'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('dashboard.apiKey.apiKey'),
+      key: 'apiKey',
     },
     {
+      title: t('dashboard.name'),
       key: 'name',
-      title: t('embeddedWallet.table.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
+      title: t('dashboard.oasisSignatures'),
+      key: 'oasisSignatures',
+    },
+    {
+      title: t('dashboard.env'),
       key: 'env',
-      title: t('embeddedWallet.table.environment'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
-    },
-
-    {
-      key: 'created',
-      title: t('embeddedWallet.table.created'),
       render(row) {
-        return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
+        return h(
+          'span',
+          {},
+          { default: () => (row.testNetwork === 1 ? t('general.test') : t('general.live')) }
+        );
       },
     },
     {
-      key: 'usage',
-      title: t('embeddedWallet.table.usage'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('dashboard.created'),
+      key: 'created',
+      render(row) {
+        return h('span', {}, { default: () => dateTimeToDate(row.updateTime) });
+      },
     },
     {
       title: '',
@@ -55,7 +72,10 @@ const createColumns = (): NDataTableColumns<EwApiKeyInterface> => {
       render() {
         return h(
           NDropdown,
-          { options: dropdownOptions.value, trigger: 'click' },
+          {
+            options: dropdownOptions,
+            trigger: 'click',
+          },
           {
             default: () =>
               h(
@@ -69,30 +89,56 @@ const createColumns = (): NDataTableColumns<EwApiKeyInterface> => {
     },
   ];
 };
+
+const currentRow = ref<ApiKeyInterface>({} as ApiKeyInterface);
 const columns = createColumns();
+
+function rowProps(row: ApiKeyInterface) {
+  return {
+    onClick: () => {
+      currentRow.value = row;
+    },
+  };
+}
+
 /**
  * Dropdown Actions
  */
-const dropdownOptions = computed(() => {
-  return [
-    {
-      key: 'select',
-      label: t('social.chat.select'),
-      props: {
-        onClick: () => {
-          // selectChat();
-        },
+const dropdownOptions = [
+  {
+    label: t('dashboard.clipboard.copyApiKey'),
+    key: 'copy',
+    props: {
+      onClick: () => {
+        copyToClipboard(currentRow.value.apiKey, t);
       },
     },
-    {
-      label: t('social.chat.showSettings'),
-      key: 'settings',
-      props: {
-        onClick: () => {
-          modalInfoVisible.value = true;
-        },
+  },
+  {
+    label: t('general.edit'),
+    key: 'edit',
+    disabled: dataStore.isProjectUser,
+    props: {
+      onClick: () => {
+        drawerUpdateApiKeyVisible.value = true;
       },
     },
-  ];
-});
+  },
+  {
+    label: t('general.delete'),
+    key: 'delete',
+    disabled: dataStore.isProjectUser,
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        showModalDeleteApiKey.value = true;
+      },
+    },
+  },
+];
+
+function onApiKeyDeleted() {
+  showModalDeleteApiKey.value = false;
+  settingsStore.fetchEmbeddedWalletKeys();
+}
 </script>

@@ -7,6 +7,7 @@ export type SolutionContent = {
   title?: string;
   content?: string | string[];
   benefits?: string[];
+  subtitle?: string;
 };
 type SolutionContentTrans = {
   headline?: VueMsg;

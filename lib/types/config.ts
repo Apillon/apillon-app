@@ -35,6 +35,7 @@ export enum Feature {
   WALLET_LOGIN = 'WALLET_LOGIN',
   KILT_LOGIN = 'KILT_LOGIN',
   CAPTCHA_LOGIN = 'CAPTCHA_LOGIN',
+  EMBEDDED_WALLET = 'EMBEDDED_WALLET',
 }
 export enum AppEnv {
   PROD = 'production',

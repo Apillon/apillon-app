@@ -1,22 +1,27 @@
 <template>
   <div class="flex items-center gap-x-2 mb-8">
     <h5>{{ $t('embeddedWallet.codeSnippets') }}</h5>
-    <n-button size="small" @click="select('react')">
-      <span> React</span>
-    </n-button>
-    <n-button size="small" @click="select('vue')">
-      <span>VueJS</span>
-    </n-button>
+    <div class="bg-bg-lighter rounded-full p-0.4">
+      <n-button
+        size="small"
+        round
+        :class="selectedLanguage === 'react' ? '!bg-bg-dark' : ''"
+        @click="select('react')"
+      >
+        <span class="px-2">React</span>
+      </n-button>
+      <n-button
+        size="small"
+        round
+        :class="selectedLanguage === 'vue' ? '!bg-bg-dark' : ''"
+        @click="select('vue')"
+      >
+        <span class="px-2">VueJS</span>
+      </n-button>
+    </div>
   </div>
 
-  <CodeBlock
-    class="max-w-[767px]"
-    :code="currentCode"
-    lang="js"
-    theme="github-dark"
-    highlightjs
-    :style="codeSize"
-  />
+  <CodeBlock :code="currentCode" lang="js" theme="github-dark" highlightjs :style="codeSize" />
 </template>
 
 <script lang="ts" setup>
@@ -34,7 +39,7 @@ const enableLoginButton = ref<boolean>(true);
 const enableInputAutofocus = ref<boolean>(true);
 
 // State to manage the selected code language
-const selectedLanguage = ref('vue');
+const selectedLanguage = ref('react');
 
 const select = (language: string) => {
   selectedLanguage.value = language;
@@ -102,3 +107,9 @@ const codeSize = computed(() => {
   return { 'min-height': `${22 * currentCode.value.split('\n').length}px` };
 });
 </script>
+
+<style lang="postcss">
+.active {
+  background-color: #f0f0f0;
+}
+</style>
