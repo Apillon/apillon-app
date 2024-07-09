@@ -504,7 +504,9 @@
       "collection": "NFT collection",
       "info": "Browse the list of smart contracts you can deploy and integrate and start building immediately via API.",
       "kraken": "Smart contract for Kraken",
-      "meerkats": "Meerkats"
+      "meerkats": "Meerkats",
+      "description": "Deploy audited and field tested smart contracts with 1 click. Connect to smart contract from your dapp and start using it immediately.",
+      "createNew": "Create new token"
     },
     "solution": {
       "encryption": {
