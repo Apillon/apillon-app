@@ -23,6 +23,7 @@
           <SolutionContent :content="content" :icons="true" />
           <!-- display  -->
           <template v-if="!settingsStore.ewApiKeys.length">
+            <!-- force rebuild -->
             <h4 class="mb-4 mt-8">{{ $t('embeddedWallet.generate.title') }}</h4>
             <div class="flex gap-4 mb-8">
               <!-- Generate API key -->
