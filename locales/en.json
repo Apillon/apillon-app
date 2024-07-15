@@ -278,7 +278,8 @@
         "hosting": "Hosting service",
         "nft": "NFT service",
         "social": "Social service",
-        "storage": "Storage service"
+        "storage": "Storage service",
+        "wallet": "Wallet service"
       }
     },
     "clipboard": {
@@ -378,7 +379,8 @@
       "smartContracts": "Smart Contracts",
       "social": "Social",
       "solutions": "Pre-built Solutions",
-      "storage": "Storage"
+      "storage": "Storage",
+      "embeddedWallet": "Embedded wallet"
     },
     "pageMenu": {
       "access": "Access",
@@ -535,6 +537,21 @@
         "name": "Decentralized File Sharing",
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
+      },
+      "embeddedWallet": {
+        "content": [
+          {
+            "title": "Features:",
+            "subtitle": "Use embedded wallet service to remove friction in the user onboarding.",
+            "content": [
+              "Users may onboarding using their email,",
+              "EVM wallets are automatically created in the background and encrypted",
+              "Non-custodial - users retain complete control over wallets generated,",
+              "Fully trustless - powered by Oasis",
+              "No GAS required for users, instead you are charged in credits each time a new user onboards"
+            ]
+          }
+        ]
       },
       "nftAirdrop": {
         "name": "NFT Email Airdrop",
@@ -893,7 +910,8 @@
     "value": "Value",
     "visibleColumns": "Visible columns",
     "wiki": "Wiki",
-    "w3Warn": "W3 warn"
+    "w3Warn": "W3 warn",
+    "oasisSignatures": "Signatures"
   },
   "error": {
     "404": "Page not found",
@@ -1852,6 +1870,26 @@
       "theme": "Dark theme"
     },
     "title": "Social"
+  },
+  "embeddedWallet": {
+    "title": "embedded wallet",
+    "checkPrice": "Check price",
+    "generateApiKey": "Generate API key",
+    "generateNewApiKey": "Generate new key",
+    "viewDocumentation": "View Documentation",
+    "codeSnippets": "Code snippets:",
+    "generate": {
+      "title": "Generate API key and start using Embedded Wallet service",
+      "generate": "Generate new key"
+    },
+    "table": {
+      "secret": "Secret",
+      "name": "Name",
+      "environment": "ENV",
+      "created": "Created",
+      "usage": "Usage",
+      "actions": "Actions"
+    }
   },
   "storage": {
     "bucket": {
