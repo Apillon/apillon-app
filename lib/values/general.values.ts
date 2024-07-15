@@ -96,6 +96,7 @@ export const LsCacheKeys = {
   SUBSCRIPTION_PACKAGES: 'al_cache_subscription_packages',
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
+  SMART_CONTRACTS: 'al_cache_smart_contracts',
 };
 
 /** User roles */

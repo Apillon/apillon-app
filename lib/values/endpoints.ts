@@ -235,6 +235,15 @@ const Endpoints = {
     return `/computing/contracts/${contractUuid}/transactions`;
   },
 
+  /** Smart contracts */
+
+  smartContractsList: () => {
+    return '/contracts';
+  },
+  smartContractDetails: (uuid: string) => {
+    return `/contracts/${uuid}`;
+  },
+
   /**
    * Project settings
    */

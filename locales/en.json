@@ -506,7 +506,8 @@
       "kraken": "Smart contract for Kraken",
       "meerkats": "Meerkats",
       "description": "Deploy audited and field tested smart contracts with 1 click. Connect to smart contract from your dapp and start using it immediately.",
-      "createNew": "Create new token"
+      "createNew": "Create new token",
+      "customizeAndDeploy": "Customize and deploy"
     },
     "solution": {
       "encryption": {
@@ -537,6 +538,16 @@
         "name": "Decentralized File Sharing",
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
+      },
+      "smartContracts": {
+        "name": "NFT Email Airdrop",
+        "description": "Create an NFT collection, upload target addresses and automatically distribute NFTs to them.",
+        "content": [
+          {
+            "title": "What do you get",
+            "content": ["Free metadata storage", "0 gas cost", "Free web template", "Free hosting"]
+          }
+        ]
       },
       "nftAirdrop": {
         "name": "NFT Email Airdrop",

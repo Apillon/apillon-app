@@ -1,5 +1,5 @@
 <template>
-  <Dashboard>
+  <!-- <Dashboard>
     <template #heading>
       <div ref="headingRef">
         <HeaderSmartContracts />
@@ -8,9 +8,8 @@
     <slot>
       <div class="pb-8">
         <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
-          <SolutionContent :content="content" />
+          <SolutionContent :content="content" :icons="true" />
 
-          <!-- DEMO -->
           <div class="flex justify-center h-fit">
             <div class="relative rounded-lg overflow-hidden">
               <Image :src="NftTemplateJPG" width="514" height="320" alt="nft template" />
@@ -29,19 +28,19 @@
         </div>
       </div>
     </slot>
-  </Dashboard>
+  </Dashboard> -->
 </template>
 
 <script lang="ts" setup>
-import NftTemplateJPG from '~/assets/images/solution/ps-signup-email-airdrop.png';
+// import NftTemplateJPG from '~/assets/images/solution/ps-signup-email-airdrop.png';
 
-const { t } = useI18n();
-const { web3Services } = useService();
-const { generateContent } = useSolution();
+// const { t } = useI18n();
+// const { generateContent } = useSolution();
 
-useHead({
-  title: t('dashboard.solution.nftEmailSignupAirdrop.name'),
-});
+// useHead({
+//   title: t('dashboard.solution.nftEmailSignupAirdrop.name'),
+// });
 
-const content = generateContent(SolutionKey.NFT_EMAIL_SIGNUP_AIRDROP);
+// const content = generateContent(SolutionKey.SMART_CONTRACT);
+//
 </script>
