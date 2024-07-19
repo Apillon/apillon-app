@@ -34,6 +34,8 @@ function getUploadSessionStatus(status: number): TagType {
       return 'default';
     case FileUploadSessionStatus.PROCESSED:
       return 'info';
+    case FileUploadSessionStatus.VALIDATION_FAILED:
+      return 'error';
     default:
       return 'success';
   }
