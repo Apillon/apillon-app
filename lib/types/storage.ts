@@ -49,6 +49,7 @@ export enum FileUploadStatusValue {
   FINISHED = 'finished',
   REMOVED = 'removed',
   ERROR = 'error',
+  VALIDATION_FAILED = 'validation failed',
 }
 export enum TableFilesType {
   BUCKET = 1,
@@ -88,6 +89,8 @@ export enum FileUploadSessionStatus {
   PROCESSED = 2,
   /* Files in session has been synced to IPFS */
   FINISHED = 3,
+  /* Validation has failed for uploaded files */
+  VALIDATION_FAILED = 4,
 }
 
 declare global {
