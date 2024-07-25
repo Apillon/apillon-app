@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { getContract } from 'viem';
 
 export const useSmartContractsStore = defineStore('contracts', {
   state: () => ({
@@ -30,6 +29,7 @@ export const useSmartContractsStore = defineStore('contracts', {
       this.loading = showLoader;
       try {
         const res = await $api.get<ContractsResponse>(endpoints.smartContractsList());
+        // TODO type
         this.smartContracts = res.data.items;
         console.log(res);
 
@@ -48,7 +48,8 @@ export const useSmartContractsStore = defineStore('contracts', {
       try {
         const res = await $api.get(endpoints.smartContractDetails(contractUUID));
         console.log(res);
-
+        // TODO type
+        this.smartContractDetails = res.data;
         /** Save timestamp to SS */
         // sessionStorage.setItem(LsCacheKeys.SMART_CONTRACTS, Date.now().toString());
       } catch (error: any) {
