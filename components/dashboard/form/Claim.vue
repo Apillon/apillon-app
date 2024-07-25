@@ -1,6 +1,6 @@
 <template>
   <!-- button -->
-  <template v-if="!hasClaimed && referralStore.tokenClaim.wallet">
+  <!-- <template v-if="!hasClaimed && referralStore.tokenClaim.wallet">
     <Btn
       v-if="!isConnected"
       type="primary"
@@ -33,16 +33,16 @@
     >
       {{ $t('referral.info.claim.claim') }}
     </Btn>
-  </template>
+  </template> -->
 
   <!-- Airdrop finished -->
-  <Notification type="info" v-if="!referralStore.tokenClaim.wallet">
-    The NCTR Airdrop is now finished.</Notification
-  >
+  <!-- <Notification v-if="!referralStore.tokenClaim.wallet" type="info">
+    The NCTR Airdrop is now finished.
+  </Notification> -->
 
   <!-- Being claimed -->
-  <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full mb-8"
-    ><span>Your $NCTR is beng claimed.</span>
+  <!-- <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full mb-8">
+    <span>Your $NCTR is beng claimed.</span>
     <span v-if="transactionHash"
       >You can monitor the transaction on
       <a
@@ -51,11 +51,11 @@
         :href="`https://moonbase.moonscan.io/tx/${transactionHash}`"
         >Moonbase.</a
       >
-    </span></Notification
-  >
+    </span>
+  </Notification> -->
 
   <!-- Claim succes -->
-  <Notification
+  <!-- <Notification
     v-if="(claimSuccess && !claimError) || hasClaimed"
     type="success"
     class="w-full mb-8"
@@ -70,21 +70,21 @@
         >Moonbase.</a
       >
     </span>
-  </Notification>
+  </Notification> -->
 
   <!-- Fix connection errro -->
-  <Notification
+  <!-- <Notification
     v-if="referralStore.tokenClaim.wallet !== address"
     type="warning"
     class="w-full mb-8"
   >
     Make sure that your connected wallet is the same as submitted EVM wallet address.
-  </Notification>
+  </Notification> -->
   <!-- Error message -->
-  <Notification v-if="claimError" type="error" class="w-full mb-8">
+  <!-- <Notification v-if="claimError" type="error" class="w-full mb-8">
     Something went wrong. Please try again or try later.<br />Make sure that your connected wallet
     is the same as submitted EVM wallet address.
-  </Notification>
+  </Notification> -->
 </template>
 
 <script setup lang="ts">
