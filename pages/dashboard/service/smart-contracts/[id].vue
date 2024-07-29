@@ -9,7 +9,7 @@
         <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
           <div>
             <SolutionContent :content="content" :icons="true" />
-            <Btn type="primary">
+            <Btn type="primary" :to="`/dashboard/service/smart-contracts/${params?.id}/deploy`">
               {{ $t('dashboard.smartContracts.customizeAndDeploy') }}
             </Btn>
           </div>
