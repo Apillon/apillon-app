@@ -31,7 +31,6 @@ export const useSmartContractsStore = defineStore('contracts', {
         const res = await $api.get<ContractsResponse>(endpoints.smartContractsList());
         // TODO type
         this.smartContracts = res.data.items;
-        console.log(res);
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.SMART_CONTRACTS, Date.now().toString());
@@ -50,8 +49,9 @@ export const useSmartContractsStore = defineStore('contracts', {
         console.log(res);
         // TODO type
         this.smartContractDetails = res.data;
+        console.log(res.data);
         /** Save timestamp to SS */
-        // sessionStorage.setItem(LsCacheKeys.SMART_CONTRACTS, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.SMART_CONTRACTS, Date.now().toString());
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));

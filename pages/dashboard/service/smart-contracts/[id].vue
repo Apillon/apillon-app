@@ -56,7 +56,7 @@ onMounted(() => {
     console.log('contractUuid', contractUuid.value);
 
     if (!contractUuid.value) {
-      router.push({ name: 'dashboard-service-computing' });
+      router.push({ name: 'dashboard-service-smart-contracts' });
     } else {
       await smartContractsStore.getContractByUUID(contractUuid.value);
 
