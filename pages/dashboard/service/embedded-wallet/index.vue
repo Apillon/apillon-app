@@ -12,11 +12,11 @@
           <!-- DEMO -->
           <LearnVideo
             title="Embedded Wallet"
-            html-content="https://www.youtube.com/embed/5d6FsGTAk00?si=l2tTiIg47hQ-7MjM"
+            html-content="https://www.youtube.com/embed/AslkbJH4OAM?si=IVlEtikZsgI85iWl"
             class="w-full"
           />
 
-          <Carousel class="w-full" />
+          <Carousel class="w-full max-w-[600px]" />
         </div>
         <div class="gap-8">
           <!-- text -->
@@ -39,7 +39,7 @@
               <Btn
                 type="secondary"
                 inner-class="text-white flex items-center justify-center"
-                href=""
+                href="https://wiki.apillon.io/web3-services/8-embedded-wallets.html"
               >
                 <span class="icon-edit text-xl mr-2"></span>
                 <span>{{ $t('embeddedWallet.viewDocumentation') }}</span>
@@ -54,7 +54,7 @@
                 <Btn
                   type="secondary"
                   inner-class="text-white flex items-center justify-center"
-                  href=""
+                  href="https://wiki.apillon.io/web3-services/8-embedded-wallets.html"
                 >
                   <span class="icon-edit text-xl mr-2"></span>
                   <span>{{ $t('embeddedWallet.viewDocumentation') }}</span>

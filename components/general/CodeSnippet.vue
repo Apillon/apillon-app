@@ -5,18 +5,18 @@
       <n-button
         size="small"
         round
-        :class="selectedLanguage === 'react' ? '!bg-bg-dark' : ''"
-        @click="select('react')"
+        :class="selectedLanguage === 'app' ? '!bg-bg-dark' : ''"
+        @click="select('app')"
       >
-        <span class="px-2">React</span>
+        <span class="px-2">App</span>
       </n-button>
       <n-button
         size="small"
         round
-        :class="selectedLanguage === 'vue' ? '!bg-bg-dark' : ''"
-        @click="select('vue')"
+        :class="selectedLanguage === 'sdk' ? '!bg-bg-dark' : ''"
+        @click="select('sdk')"
       >
-        <span class="px-2">VueJS</span>
+        <span class="px-2">SDK</span>
       </n-button>
     </div>
   </div>
@@ -39,7 +39,7 @@ const enableLoginButton = ref<boolean>(true);
 const enableInputAutofocus = ref<boolean>(true);
 
 // State to manage the selected code language
-const selectedLanguage = ref('react');
+const selectedLanguage = ref('app');
 
 const select = (language: string) => {
   selectedLanguage.value = language;
@@ -71,35 +71,55 @@ const settings = computed(() => {
 
 // VueJS code block
 const codeVue = computed(() => {
-  return `// 1. Installation
-  yarn add @subsocial/grill-widget
-  
-  // 2. Add the div HTML tag with an id of grill to your app.
-  <div id="grill"></div>
-  
-  // 3. Setup config
-  const config = ${JSON.stringify(settings.value, null, 2)}
-  
+  return `
+  import { initializeOnWindow, getEmbeddedWallet } from '@embedded-wallet/sdk';
+
+  initializeOnWindow({
+    production: true,
+    accountManagerAddress: '0x5C3512312312312312312312312312312365D4bC',
+    defaultNetworkId: 1287,
+    networkConfig: {
+      /* Custom network configurations */
+    },
+    onGetSignature: async (gaslessData) => {
+      // Custom signature generation logic
+    },
+    onGetApillonSessionToken: async () => {
+      // Fetch Apillon session token
+    },
+});
 `;
 });
 
-// React code block
 const codeReact = computed(() => {
-  return `// 1. Installation react
-  yarn add @subsocial/grill-widget react
+  return `
+  import { initializeApp } from '@embedded-wallet/ui';
   
-  // 2. Add the div HTML tag with an id of grill to your app.
-  <div id="grill"></div>
-  
-  // 3. Setup config
-  const config = ${JSON.stringify(settings.value, null, 2)}
-  
+  initializeApp('#embedded-wallet', {
+    disableAutoBroadcastAfterSign: false,
+    disableDefaultActivatorStyle: false,
+    accountManagerAddress: '0xF35C3eB93c6D3764A7D5efC6e9DEB614779437b1',
+    networks: [
+      {
+        name: 'Moonbeam Testnet',
+        id: 1287,
+        rpcUrl: 'https://rpc.testnet.moonbeam.network',
+        explorerUrl: 'https://moonbase.moonscan.io',
+      },
+      {
+        name: 'Amoy',
+        id: 80002,
+        rpcUrl: 'https://rpc-amoy.polygon.technology',
+        explorerUrl: 'https://www.oklink.com/amoy',
+      },
+    ],
+  });
 `;
 });
 
 // Computed property to return the current code based on selected language
 const currentCode = computed(() => {
-  return selectedLanguage.value === 'react' ? codeReact.value : codeVue.value;
+  return selectedLanguage.value === 'app' ? codeReact.value : codeVue.value;
 });
 
 // Update code size when language changes

@@ -1,7 +1,22 @@
 <template>
   <Carousel v-bind="settings">
-    <Slide v-for="slide in 4" :key="slide">
-      <div class="carousel__item">{{ slide }}</div>
+    <Slide key="slide1">
+      <img src="/assets/images/embedded-wallet/s1.jpg" alt="nft template" />
+    </Slide>
+    <Slide key="slide2">
+      <img src="/assets/images/embedded-wallet/s4.jpg" alt="nft template" />
+    </Slide>
+    <Slide key="slide3">
+      <img src="/assets/images/embedded-wallet/s5.jpg" alt="nft template" />
+    </Slide>
+    <Slide key="slide4">
+      <img src="/assets/images/embedded-wallet/s6.jpg" alt="nft template" />
+    </Slide>
+    <Slide key="slide5">
+      <img src="/assets/images/embedded-wallet/s7.jpg" alt="nft template" />
+    </Slide>
+    <Slide key="slide6">
+      <img src="/assets/images/embedded-wallet/s8.jpg" alt="nft template" />
     </Slide>
 
     <template #addons>
