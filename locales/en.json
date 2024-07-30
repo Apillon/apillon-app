@@ -541,14 +541,17 @@
       "embeddedWallet": {
         "content": [
           {
-            "title": "Features:",
-            "subtitle": "Use embedded wallet service to remove friction in the user onboarding.",
+            "subtitle": "Embedded Wallet service removes friction in user onboarding."
+          },
+          {
+            "title": "Benefits:",
             "content": [
-              "Users may onboarding using their email,",
-              "EVM wallets are automatically created in the background and encrypted",
-              "Non-custodial - users retain complete control over wallets generated,",
-              "Fully trustless - powered by Oasis",
-              "No GAS required for users, instead you are charged in credits each time a new user onboards"
+              "Email onboard: Simplifies the onboarding process.",
+              "A seamless and secure UX: EVM wallets are auto-created and encrypted.",
+              "Autonomy and security over funds: No third-party services to store user’s private keys.",
+              "Authentication: User can add different methods of verification.",
+              "Gassles wallet creation: charged in Apillon credits per each onboarded user.",
+              "Fully trustless. Powered by Oasis."
             ]
           }
         ]
@@ -1877,6 +1880,7 @@
     "generateApiKey": "Generate API key",
     "generateNewApiKey": "Generate new key",
     "viewDocumentation": "View Documentation",
+    "readBlog": "Read our blog post",
     "codeSnippets": "Code snippets:",
     "generate": {
       "title": "Generate API key and start using Embedded Wallet service",

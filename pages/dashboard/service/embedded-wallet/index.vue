@@ -39,9 +39,16 @@
               <Btn
                 type="secondary"
                 inner-class="text-white flex items-center justify-center"
-                href="https://wiki.apillon.io/web3-services/8-embedded-wallets.html"
+                href="https://blog.apillon.io/embedded-wallets-what-are-they-and-how-apillon-redefines-the-concept-4479a8dd28bd"
               >
                 <span class="icon-edit text-xl mr-2"></span>
+                <span>{{ $t('embeddedWallet.readBlog') }}</span>
+              </Btn>
+              <Btn
+                type="secondary"
+                inner-class="text-white flex items-center justify-center"
+                href="https://wiki.apillon.io/web3-services/8-embedded-wallets.html"
+              >
                 <span>{{ $t('embeddedWallet.viewDocumentation') }}</span>
               </Btn>
             </div>
@@ -51,6 +58,13 @@
               <h4 class="mb-4 mt-8">{{ $t('embeddedWallet.generate.generate') }}</h4>
               <!-- Generate API key -->
               <div class="flex gap-x-4">
+                <Btn
+                  type="secondary"
+                  inner-class="text-white flex items-center justify-center"
+                  href="https://blog.apillon.io/embedded-wallets-what-are-they-and-how-apillon-redefines-the-concept-4479a8dd28bd"
+                >
+                  <span>{{ $t('embeddedWallet.readBlog') }}</span>
+                </Btn>
                 <Btn
                   type="secondary"
                   inner-class="text-white flex items-center justify-center"
