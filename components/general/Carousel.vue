@@ -3,9 +3,6 @@
     <Slide key="slide1">
       <img src="/assets/images/embedded-wallet/s1.jpg" alt="nft template" />
     </Slide>
-    <Slide key="slide2">
-      <img src="/assets/images/embedded-wallet/s4.jpg" alt="nft template" />
-    </Slide>
     <Slide key="slide3">
       <img src="/assets/images/embedded-wallet/s5.jpg" alt="nft template" />
     </Slide>

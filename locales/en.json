@@ -1872,7 +1872,7 @@
     "title": "Social"
   },
   "embeddedWallet": {
-    "title": "embedded wallet",
+    "title": "Embedded Wallet",
     "checkPrice": "Check price",
     "generateApiKey": "Generate API key",
     "generateNewApiKey": "Generate new key",
