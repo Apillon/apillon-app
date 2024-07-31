@@ -2018,7 +2018,8 @@
       "status": {
         "1": "CREATED",
         "2": "IN PROGRESS",
-        "3": "FINISHED"
+        "3": "FINISHED",
+        "4": "VALIDATION FAILED"
       }
     },
     "type": {
