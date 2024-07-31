@@ -162,6 +162,7 @@ const Endpoints = {
   /**
    * Hosting
    */
+  shortUrl: '/storage/hosting/short-url',
 
   /** Website */
   website: '/storage/hosting/website',

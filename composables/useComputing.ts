@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import IconInfo from '~/components/parts/Icon/Info.vue';
 
-export default function useCaptcha() {
+export default function useComputing() {
   const { t, te } = useI18n();
   const message = useMessage();
   const router = useRouter();
@@ -56,7 +56,7 @@ export default function useCaptcha() {
     transactionInterval = setInterval(async () => {
       const transactions = await transactionStore.fetchTransactions(
         contractUuid,
-        transactionStore.pagination.page,
+        { page: transactionStore.pagination.page },
         false
       );
       const transaction = transactions.find(
@@ -135,18 +135,22 @@ export default function useCaptcha() {
     return response.data;
   }
 
-  function labelInfo(field: string) {
+  function labelInfo(field: string, base = 'form.label.contract') {
     if (
-      te(`form.label.contract.${field}`) &&
-      te(`form.label.contract.labelInfo.${field}`) &&
-      t(`form.label.contract.labelInfo.${field}`)
+      te(`${base}.${field}`) &&
+      te(`${base}.labelInfo.${field}`) &&
+      t(`${base}.labelInfo.${field}`)
     ) {
       return [
-        h('span', { class: 'mr-1' }, t(`form.label.contract.${field}`)),
-        h(IconInfo, { size: 'sm', tooltip: t(`form.label.contract.labelInfo.${field}`) }, ''),
+        h('span', { class: 'mr-1' }, t(`${base}.${field}`)),
+        h(
+          IconInfo,
+          { class: 'info-icon', size: 'sm', tooltip: t(`${base}.labelInfo.${field}`) },
+          ''
+        ),
       ];
     }
-    return te(`form.label.contract.${field}`) ? t(`form.label.contract.${field}`) : field;
+    return te(`${base}.${field}`) ? t(`${base}.${field}`) : field;
   }
 
   return {

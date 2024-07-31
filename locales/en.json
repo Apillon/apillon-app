@@ -1366,7 +1366,11 @@
       "editDisabled": "Website domain can be changed every 15 minutes. ",
       "preview": "Domain preview",
       "setup": "Setup domain",
-      "update": "Update domain"
+      "update": "Update domain",
+      "useIpns": "Use IPNS",
+      "labelInfo": {
+        "useIpns": "IPNS is a feature of the IPFS that allows a consistent address to be used even when the content changes. This means you can share the same address, and any updates to the content won't require a new address."
+      }
     },
     "menu": {
       "preview": "1. Upload",
@@ -1940,6 +1944,42 @@
       "item": "Download selected item",
       "items": "Download selected items"
     },
+    "file": {
+      "status": {
+        "1": "Signed URL for upload generated",
+        "2": "Uploaded to S3",
+        "3": "Uploaded to IPFS",
+        "4": "Upload completed - File pinned to CRUST",
+        "5": "Upload completed",
+        "100": "Error while uploading to S3",
+        "101": "Error while pinning to CRUST",
+        "102": "Error: file does not exists on S3",
+        "103": "Error: bucket is full",
+        "104": "Error: file upload request does not exists",
+        "105": "Error: failed creating file object",
+        "106": "Error: not enough space",
+        "107": "Error: max storage reached"
+      },
+      "confirmUpload": "Confirm your upload",
+      "create": "Create file",
+      "delete": "Delete file(s)",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected file(s)?",
+      "deletedFiles": "Deleted buckets",
+      "downloadLink": "Download link",
+      "dragAndDrop": "Drag & drop or click to upload files",
+      "files": "({files} files)",
+      "filesUploading": "({uploading} of {files})",
+      "nothingHere": "Nothing here",
+      "pinningToCrust": "This file is being pinned to Crust Network. While uploading, the file is only visible in the \"All Files\" tab.",
+      "refresh": "Refresh files",
+      "retry": "Retry upload",
+      "search": "Search files",
+      "stillUploading": "This file is being pinned to Crust Network. When it’s done, you will be able to see file’s IPFS details.",
+      "upload": "Upload files and folders",
+      "uploading": "Uploading",
+      "uploadMore": "Add more files",
+      "uploadNow": "Upload now"
+    },
     "ipfs": {
       "generateLink": "Generate IPFS/IPNS link",
       "hotToGenerateLink": "How to generate link?",
@@ -1978,41 +2018,13 @@
       "update": "Update IPNS",
       "uuid": "IPNS UUID"
     },
-    "file": {
-      "status": {
-        "1": "Signed URL for upload generated",
-        "2": "Uploaded to S3",
-        "3": "Uploaded to IPFS",
-        "4": "Upload completed - File pinned to CRUST",
-        "5": "Upload completed",
-        "100": "Error while uploading to S3",
-        "101": "Error while pinning to CRUST",
-        "102": "Error: file does not exists on S3",
-        "103": "Error: bucket is full",
-        "104": "Error: file upload request does not exists",
-        "105": "Error: failed creating file object",
-        "106": "Error: not enough space",
-        "107": "Error: max storage reached"
-      },
-      "confirmUpload": "Confirm your upload",
-      "create": "Create file",
-      "delete": "Delete file(s)",
-      "deleteConfirm": "Are you sure that you want to delete {num} selected file(s)?",
-      "deletedFiles": "Deleted buckets",
-      "downloadLink": "Download link",
-      "dragAndDrop": "Drag & drop or click to upload files",
-      "files": "({files} files)",
-      "filesUploading": "({uploading} of {files})",
-      "nothingHere": "Nothing here",
-      "pinningToCrust": "This file is being pinned to Crust Network. While uploading, the file is only visible in the \"All Files\" tab.",
-      "refresh": "Refresh files",
-      "retry": "Retry upload",
-      "search": "Search files",
-      "stillUploading": "This file is being pinned to Crust Network. When it’s done, you will be able to see file’s IPFS details.",
-      "upload": "Upload files and folders",
-      "uploading": "Uploading",
-      "uploadMore": "Add more files",
-      "uploadNow": "Upload now"
+    "shortUrl": {
+      "btnCopy": "I've copied short URL",
+      "generateLink": "Generate",
+      "generateShortLink": "Generate a Short URL",
+      "shortUrlInfo": "Please save this generated shorthand URL.",
+      "targetUrl": "Target URL",
+      "title": "Short URL"
     },
     "session": {
       "status": {
@@ -2206,6 +2218,9 @@
     "social": {
       "info": "Subsocial is a set of Substrate pallets that allows anyone to launch their own decentralized social network or community, or add social features to an existing application. Subsocial is not a decentralized social network, like Twitter or Facebook, but rather Subsocial is a platform for building social networks.",
       "grillChat": " is a mobile-friendly, anonymous chat application powered by Subsocial, allowing anyone to communicate on-chain, without needing a wallet or tokens!"
+    },
+    "storage": {
+      "shortUrl": ""
     }
   }
 }
