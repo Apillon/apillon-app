@@ -63,6 +63,7 @@
                   inner-class="text-white flex items-center justify-center"
                   href="https://blog.apillon.io/embedded-wallets-what-are-they-and-how-apillon-redefines-the-concept-4479a8dd28bd"
                 >
+                  <span class="icon-file text-xl mr-2"></span>
                   <span>{{ $t('embeddedWallet.readBlog') }}</span>
                 </Btn>
                 <Btn
