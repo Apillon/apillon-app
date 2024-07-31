@@ -99,7 +99,6 @@ async function connectWallet() {
 
   try {
     const { signature, timestamp } = sign;
-
     const res = await $api.post<WalletLoginResponse>(endpoints.walletConnect, {
       wallet: address.value,
       signature,
@@ -121,7 +120,6 @@ async function connectWallet() {
 
 async function removeWallet() {
   loadingRemove.value = true;
-
   try {
     const res = await $api.post<WalletLoginResponse>(endpoints.walletConnect, {
       wallet: null,

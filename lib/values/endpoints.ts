@@ -252,6 +252,9 @@ const Endpoints = {
   apiKeyServiceRoles: (key: number) => {
     return `/api-keys/${key}/service-roles`;
   },
+  embeddedWalletKeys: (projectUuid: string) => {
+    return `/wallet/oasis-signatures-count-by-api-key?project_uuid=${projectUuid}`;
+  },
 
   /**
    * Social
@@ -284,6 +287,7 @@ const Endpoints = {
   referralClaimReward: '/referral/product',
   airdropTasks: '/referral/airdrop-tasks',
   airdropReviewTasks: '/referral/review-tasks',
+  referralClaimParams: '/referral/claim-parameters',
 };
 
 export default Endpoints;
