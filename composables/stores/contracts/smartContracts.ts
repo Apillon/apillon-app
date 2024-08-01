@@ -46,7 +46,7 @@ export const useSmartContractsStore = defineStore('contracts', {
       this.loading = showLoader;
       try {
         const res = await $api.get(endpoints.smartContractDetails(contractUUID));
-        // console.log(res);
+        console.log(res);
         // TODO type
         this.smartContractDetails = res.data;
         /** Save timestamp to SS */
