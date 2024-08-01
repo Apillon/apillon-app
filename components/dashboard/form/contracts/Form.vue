@@ -276,27 +276,27 @@ async function deployContract() {
   //   0x97a6f35fA40BC4eb73247965F43cB99A13fF05D0
 
   try {
-    console.log(form.value.chain);
-    const res = await $api.post(endpoints.newSmartContract(_contractUuid), {
-      project_uuid: _projectUuid,
-      name: form.value.name,
-      description: form.value.description,
-      chain: form.value.chain,
-      contract_uuid: _contractUuid,
-      constructorArguments: [
-        form.value._name,
-        form.value._symbol,
-        form.value._initBaseURI,
-        form.value._baseExtension,
-        [true, true, true, true],
-        0,
-        form.value._pricePerMint,
-        1000,
-        form.value._reserve,
-        form.value._royaltiesAddress,
-        form.value._royaltiesFees,
-      ],
-    });
+    console.log(form.value._dropStart);
+    // const res = await $api.post(endpoints.newSmartContract(_contractUuid), {
+    //   project_uuid: _projectUuid,
+    //   name: form.value.name,
+    //   description: form.value.description,
+    //   chain: form.value.chain,
+    //   contract_uuid: _contractUuid,
+    //   constructorArguments: [
+    //     form.value._name,
+    //     form.value._symbol,
+    //     form.value._initBaseURI,
+    //     form.value._baseExtension,
+    //     [true, true, true, true],
+    //     0,
+    //     form.value._pricePerMint,
+    //     form.value._maxSupply,
+    //     form.value._reserve,
+    //     form.value._royaltiesAddress,
+    //     form.value._royaltiesFees,
+    //   ],
+    // });
   } catch (e) {
     console.log(e);
   }
