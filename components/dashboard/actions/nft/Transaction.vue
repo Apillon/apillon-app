@@ -39,7 +39,7 @@
           collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
           !collectionStore.active.ipns_uuid
         "
-        @positive-click="createIpns()"
+        @positive-click="createDynamicMetadata()"
       >
         <template #icon> <IconInfo /> </template>
         <template #trigger>
@@ -85,10 +85,12 @@ defineProps({
 });
 const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer', 'setBaseUri']);
 
-const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
+const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+
+const { t } = useI18n();
 const { openAddNft } = useCollection();
 const { loadingBucket, openBucket } = useStorage();
 
@@ -185,8 +187,17 @@ function refresh() {
   collectionStore.fetchCollectionTransactions(collectionStore.collectionUuid);
 }
 
-async function createIpns(): Promise<IpnsInterface | null> {
+async function createDynamicMetadata() {
+  const priceServiceName = generatePriceServiceName(
+    ServiceTypeName.NFT,
+    collectionStore.active.chain,
+    PriceServiceAction.SET_BASE_URI
+  );
+  warningStore.showSpendingWarning([PriceServiceName.IPNS, priceServiceName], () => createIpns());
+}
+async function createIpns() {
   const bucketUuid = collectionStore.active.bucket_uuid;
+  const collectionUuid = collectionStore.active.collection_uuid;
   const cid = collectionStore.active.cid;
   try {
     const ipnsRes = await $api.post<IpnsCreateResponse>(endpoints.ipns(bucketUuid), {
@@ -196,17 +207,19 @@ async function createIpns(): Promise<IpnsInterface | null> {
     });
     collectionStore.active.ipns_uuid = ipnsRes.data.ipns_uuid;
 
-    const res = await $api.post<IpnsPublishResponse>(
+    const ipnsPublishRes = await $api.post<IpnsPublishResponse>(
       endpoints.ipnsPublish(bucketUuid, ipnsRes.data.ipns_uuid),
       { cid }
     );
 
-    message.success(t('form.success.created.ipns'));
+    await $api.post(endpoints.collectionSetBaseUri(collectionUuid), {
+      collection_uuid: collectionUuid,
+      uri: ipnsPublishRes.data.link,
+    });
 
-    return res.data;
+    message.success(t('form.success.created.ipns'));
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
-  return null;
 }
 </script>
