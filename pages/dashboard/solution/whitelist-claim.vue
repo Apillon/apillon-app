@@ -9,6 +9,9 @@
     </template>
     <slot>
       <div class="pb-8">
+        <p class="my-6 text-bold">
+          <strong>{{ $t('dashboard.solution.nftWhitelistClaim.description') }}</strong>
+        </p>
         <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
           <SolutionContent :content="content">
             <Btn type="primary" href="https://github.com/Apillon/ps-whitelist-claim/fork">
