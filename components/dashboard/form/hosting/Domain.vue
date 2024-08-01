@@ -1,5 +1,12 @@
 <template>
-  <Spinner v-if="websiteUuid && !website" />
+  <div v-if="websiteUuid && !website" class="h-20 relative min-w-80">
+    <Spinner />
+  </div>
+  <HostingDomainConfiguration
+    v-else-if="!domain && domainCreated"
+    class="mb-8"
+    :domain="formData.domain || ''"
+  />
   <div v-else class="sm:min-w-[22rem]">
     <n-form
       ref="formRef"
@@ -18,8 +25,13 @@
         />
       </n-form-item>
 
-      <!-- Instructions to configure DNS -->
-      <HostingDomainConfiguration v-if="!domain" class="mb-8" :domain="formData.domain || ''" />
+      <!--  IPNS -->
+      <n-form-item path="ipns" :show-label="false">
+        <n-checkbox
+          v-model:checked="formData.ipns"
+          :label="labelInfo('useIpns', 'hosting.domain') as string"
+        />
+      </n-form-item>
 
       <!--  Form submit -->
       <n-form-item :show-label="false" :show-feedback="false">
@@ -48,6 +60,7 @@ import type { FormItemRule } from 'naive-ui';
 
 type FormWebsiteDomain = {
   domain?: string | null;
+  ipns: boolean;
 };
 
 const props = defineProps({
@@ -59,15 +72,19 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 const $i18n = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
-const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
+const warningStore = useWarningStore();
+const deploymentStore = useDeploymentStore();
+const { labelInfo } = useComputing();
 
-const loading = ref(false);
+const loading = ref<boolean>(false);
+const domainCreated = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const website = ref<WebsiteInterface | null>(null);
 
 const formData = ref<FormWebsiteDomain>({
   domain: props.domain || null,
+  ipns: true,
 });
 
 const rules: NFormRules = {
@@ -87,10 +104,15 @@ onMounted(async () => {
   }
 });
 
+const lastDeployment = computed(() => {
+  return deploymentStore.production.reduce((latest, current) => {
+    return new Date(current.createTime) > new Date(latest.createTime) ? current : latest;
+  });
+});
+
 // Custom validations
 function validateDomain(_: FormItemRule, value: string): boolean {
   const regex = /^[a-zA-Z0-9][a-zA-Z0-9-.]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
-
   return !value || regex.test(value);
 }
 
@@ -101,9 +123,15 @@ function handleSubmit(e: Event | MouseEvent) {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (props.domain) {
-      await updateWebsiteDomain();
+      warningStore.showSpendingWarning(PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, () =>
+        updateWebsiteDomain()
+      );
     } else {
-      await createWebsiteDomain();
+      const serviceName = formData.value.ipns
+        ? [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, PriceServiceName.IPNS]
+        : [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN];
+
+      warningStore.showSpendingWarning(serviceName, () => createWebsiteDomain());
     }
   });
 }
@@ -111,8 +139,10 @@ function handleSubmit(e: Event | MouseEvent) {
 async function createWebsiteDomain() {
   loading.value = true;
 
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
+  /** Create IPNS first if user check it */
+  if (formData.value.ipns && !(await createAndPublishToIpns())) {
+    loading.value = false;
+    return;
   }
 
   try {
@@ -132,6 +162,53 @@ async function createWebsiteDomain() {
     message.error(userFriendlyMsg(error));
   }
   loading.value = false;
+}
+
+async function createAndPublishToIpns(): Promise<boolean> {
+  if (!lastDeployment.value) {
+    message.warning('Website must be successfully deployed to production!');
+    return false;
+  }
+  const ipns = await createIpns(websiteStore.active.productionBucket.bucket_uuid);
+  const cid = lastDeployment.value.cidv1 || lastDeployment.value.cid;
+  if (ipns && cid) {
+    const ipnsPublished = await publishToIpns(ipns.ipns_uuid, cid);
+    return !!ipnsPublished;
+  }
+  message.warning('Creating IPNS failed!');
+  return false;
+}
+
+async function createIpns(bucketUuid: string): Promise<IpnsInterface | null> {
+  try {
+    const res = await $api.post<IpnsCreateResponse>(endpoints.ipns(bucketUuid), {
+      name: `Website: ${websiteStore.active.name}`,
+    });
+
+    message.success($i18n.t('form.success.created.ipns'));
+    return res.data;
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  return null;
+}
+async function publishToIpns(ipnsUuid: string, cid: string): Promise<IpnsInterface | null> {
+  loading.value = true;
+
+  try {
+    const res = await $api.post<IpnsPublishResponse>(
+      endpoints.ipnsPublish(websiteStore.active.productionBucket.bucket_uuid, ipnsUuid),
+      { cid }
+    );
+
+    message.success($i18n.t('form.success.ipnsPublished'));
+    domainCreated.value = true;
+
+    return res.data;
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  return null;
 }
 
 async function updateWebsiteDomain() {

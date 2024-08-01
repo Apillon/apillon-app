@@ -1087,8 +1087,8 @@
       "collectionDropAddress": "Drop Withdrawal Address",
       "collectionDropStart": "Drop start",
       "collectionDrop": "Drop",
-      "collectionMaxSupply": "How many?",
       "collectionDropPrice": "Price in {currency}",
+      "collectionMaxSupply": "How many?",
       "collectionName": "Name",
       "collectionDropReserve": "Reserve",
       "collectionRevocable": "Revocable",
@@ -1099,6 +1099,7 @@
       "collectionSupplyLimited": "Total supply",
       "collectionType": "Collection type",
       "collectionUseGateway": "Use apillon gateway for base URI",
+      "collectionUseIpns": "Dynamic metadata",
       "collectionLogo": "Collection logo",
       "collectionCoverImage": "Collection cover image",
       "confirmPassword": "Confirm password",
@@ -1366,7 +1367,11 @@
       "editDisabled": "Website domain can be changed every 15 minutes. ",
       "preview": "Domain preview",
       "setup": "Setup domain",
-      "update": "Update domain"
+      "update": "Update domain",
+      "useIpns": "Use IPNS",
+      "labelInfo": {
+        "useIpns": "IPNS is a feature of the IPFS that allows a consistent address to be used even when the content changes. This means you can share the same address, and any updates to the content won't require a new address."
+      }
     },
     "menu": {
       "preview": "1. Upload",
@@ -1422,6 +1427,8 @@
     "add": "Add NFT",
     "addNfts": "Add NFTs",
     "addAttribute": "Add attribute",
+    "addIpns": "Add IPNS",
+    "addIpnsInfo": "With IPNS, you will be able to modify the metadata and add new NFTs to this collection.",
     "chain": {
       "1": "MOONBEAM (Mainnet)",
       "2": "MOONBASE (Testnet)",
@@ -1561,8 +1568,8 @@
         "collectionDropStart": "A date when your NFT collection becomes publicly available for visitors to buy NFTs.",
         "collectionDrop": "With drop, your collection becomes accessible for visitors to buy NFTs from a certain date onwards.",
         "collectionDropAddress": "Drop Withdrawal  Address",
-        "collectionMaxSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection.",
         "collectionDropPrice": "",
+        "collectionMaxSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection.",
         "collectionName": "The name you choose will be the official name of your NFT collection, “name” NFT collection.",
         "collectionDropReserve": "A number of NFT you wish to reserve for yourself before the drop.",
         "collectionRevocable": "Collection owner can destroy NFT(s) at any point in time.",
@@ -1573,6 +1580,7 @@
         "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
         "collectionType": "",
         "collectionUseGateway": "Collection base URI points to IPFS. If this checkbox is checked, base URI will point to CID on Apillon private gateway, which provide better performance. Otherwise base URI points to: ipfs://[CID], and gateway needs to be handled manually.",
+        "collectionUseIpns": "When this option is selected, the IPNS will be created. This option will allow you to add more NFTs to your collection later.",
         "collectionLogoSize": "Maximum size: 3MB, Supported formats: JPG, PNG, GIF, SVG. Recommended size: 400 x 400 px.",
         "csvUpload": "Before adding new items to the collection with existing NFTs, please add an id column to the CSV file. This will help maintain data integrity and avoid any conflicts when adding new entries.",
         "nftDisplayType": "Display type is a field indicating how you would like it to be displayed"
@@ -1940,6 +1948,42 @@
       "item": "Download selected item",
       "items": "Download selected items"
     },
+    "file": {
+      "status": {
+        "1": "Signed URL for upload generated",
+        "2": "Uploaded to S3",
+        "3": "Uploaded to IPFS",
+        "4": "Upload completed - File pinned to CRUST",
+        "5": "Upload completed",
+        "100": "Error while uploading to S3",
+        "101": "Error while pinning to CRUST",
+        "102": "Error: file does not exists on S3",
+        "103": "Error: bucket is full",
+        "104": "Error: file upload request does not exists",
+        "105": "Error: failed creating file object",
+        "106": "Error: not enough space",
+        "107": "Error: max storage reached"
+      },
+      "confirmUpload": "Confirm your upload",
+      "create": "Create file",
+      "delete": "Delete file(s)",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected file(s)?",
+      "deletedFiles": "Deleted buckets",
+      "downloadLink": "Download link",
+      "dragAndDrop": "Drag & drop or click to upload files",
+      "files": "({files} files)",
+      "filesUploading": "({uploading} of {files})",
+      "nothingHere": "Nothing here",
+      "pinningToCrust": "This file is being pinned to Crust Network. While uploading, the file is only visible in the \"All Files\" tab.",
+      "refresh": "Refresh files",
+      "retry": "Retry upload",
+      "search": "Search files",
+      "stillUploading": "This file is being pinned to Crust Network. When it’s done, you will be able to see file’s IPFS details.",
+      "upload": "Upload files and folders",
+      "uploading": "Uploading",
+      "uploadMore": "Add more files",
+      "uploadNow": "Upload now"
+    },
     "ipfs": {
       "generateLink": "Generate IPFS/IPNS link",
       "hotToGenerateLink": "How to generate link?",
@@ -1978,41 +2022,13 @@
       "update": "Update IPNS",
       "uuid": "IPNS UUID"
     },
-    "file": {
-      "status": {
-        "1": "Signed URL for upload generated",
-        "2": "Uploaded to S3",
-        "3": "Uploaded to IPFS",
-        "4": "Upload completed - File pinned to CRUST",
-        "5": "Upload completed",
-        "100": "Error while uploading to S3",
-        "101": "Error while pinning to CRUST",
-        "102": "Error: file does not exists on S3",
-        "103": "Error: bucket is full",
-        "104": "Error: file upload request does not exists",
-        "105": "Error: failed creating file object",
-        "106": "Error: not enough space",
-        "107": "Error: max storage reached"
-      },
-      "confirmUpload": "Confirm your upload",
-      "create": "Create file",
-      "delete": "Delete file(s)",
-      "deleteConfirm": "Are you sure that you want to delete {num} selected file(s)?",
-      "deletedFiles": "Deleted buckets",
-      "downloadLink": "Download link",
-      "dragAndDrop": "Drag & drop or click to upload files",
-      "files": "({files} files)",
-      "filesUploading": "({uploading} of {files})",
-      "nothingHere": "Nothing here",
-      "pinningToCrust": "This file is being pinned to Crust Network. While uploading, the file is only visible in the \"All Files\" tab.",
-      "refresh": "Refresh files",
-      "retry": "Retry upload",
-      "search": "Search files",
-      "stillUploading": "This file is being pinned to Crust Network. When it’s done, you will be able to see file’s IPFS details.",
-      "upload": "Upload files and folders",
-      "uploading": "Uploading",
-      "uploadMore": "Add more files",
-      "uploadNow": "Upload now"
+    "shortUrl": {
+      "btnCopy": "I've copied short URL",
+      "generateLink": "Generate",
+      "generateShortLink": "Generate a Short URL",
+      "shortUrlInfo": "Please save this generated shorthand URL.",
+      "targetUrl": "Target URL",
+      "title": "Short URL"
     },
     "session": {
       "status": {
@@ -2079,7 +2095,7 @@
     "collectionChainRequired": "Please select Chain",
     "collectionChainTypeRequired": "Please select Chain type",
     "collectionDropStart": "Drop start is not a valid date or has already passed by",
-    "collectionMaxSupplyReached": "Enter lower value, max supply is {max}",
+    "collectionMaxSupplyReached": "Please enter a valid value, max supply is {max}",
     "collectionMaxSupplyRequired": "Please enter Max supply",
     "collectionDropPrice": "Please enter a valid Mint price",
     "collectionDropPriceRequired": "Please enter Mint price",
@@ -2207,6 +2223,9 @@
     "social": {
       "info": "Subsocial is a set of Substrate pallets that allows anyone to launch their own decentralized social network or community, or add social features to an existing application. Subsocial is not a decentralized social network, like Twitter or Facebook, but rather Subsocial is a platform for building social networks.",
       "grillChat": " is a mobile-friendly, anonymous chat application powered by Subsocial, allowing anyone to communicate on-chain, without needing a wallet or tokens!"
+    },
+    "storage": {
+      "shortUrl": ""
     }
   }
 }

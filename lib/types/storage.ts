@@ -308,4 +308,14 @@ declare global {
   interface WebsitesResponse extends GeneralItemsResponse<WebsiteInterface> {}
   interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
   interface DeploymentsResponse extends GeneralItemsResponse<DeploymentInterface> {}
+
+  /**
+   * Short URL
+   */
+  type ShortUrl = {
+    targetUrl: string;
+    url: string;
+  };
+
+  interface ShortUrlResponse extends GeneralResponse<ShortUrl> {}
 }

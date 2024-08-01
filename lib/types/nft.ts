@@ -134,12 +134,14 @@ declare global {
     bucket_uuid: string;
     chain: number;
     chainType: number;
+    cid: string;
     collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
     contractAddress: string | null;
     dropStart: number;
     drop: boolean;
+    ipns_uuid: string;
     isRevokable: boolean;
     isSoulbound: boolean;
     maxSupply: number;
@@ -150,6 +152,7 @@ declare global {
     symbol: string;
     transactionHash: string | null;
     updateTime: string;
+    useApillonIpfsGateway: boolean;
   }
 
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}

@@ -190,7 +190,7 @@ function handleOnUpdateCollapse(value: boolean) {
 
 /** Warnings */
 function onSpendingWaningClose() {
-  warningStore.serviceName = '';
+  warningStore.services = [];
   warningStore.isSpendingWarningOpen = false;
 }
 </script>

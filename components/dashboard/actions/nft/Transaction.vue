@@ -33,6 +33,21 @@
         {{ $t('general.refresh') }}
       </n-button>
 
+      <!-- Add IPNS -->
+      <n-popconfirm
+        v-if="
+          collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
+          !collectionStore.active.ipns_uuid
+        "
+        @positive-click="createIpns()"
+      >
+        <template #icon> <IconInfo /> </template>
+        <template #trigger>
+          <n-button size="small">{{ $t('nft.addIpns') }}</n-button>
+        </template>
+        {{ $t('nft.addIpnsInfo') }}
+      </n-popconfirm>
+
       <!-- Add NFT -->
       <n-button
         v-if="collectionStore.active.collection_uuid"
@@ -71,6 +86,7 @@ defineProps({
 const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer', 'setBaseUri']);
 
 const { t } = useI18n();
+const message = useMessage();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
 const { openAddNft } = useCollection();
@@ -82,13 +98,18 @@ const actionsDisabled = computed<boolean>(() => {
 
 const isMetadataStoreOnApillon = computed<boolean>(() => {
   const baseUri = collectionStore.active?.baseUri || '';
-  return baseUri.includes('apillon.io') || baseUri.includes('nectarnode.io');
+  return (
+    !!collectionStore.active.useApillonIpfsGateway ||
+    !!collectionStore.active.ipns_uuid ||
+    !baseUri.startsWith('ipfs://')
+  );
 });
 
 const allowAddMetadata = computed<boolean>(() => {
   return (
-    isMetadataStoreOnApillon.value ||
-    collectionStore.active?.collectionStatus === CollectionStatus.CREATED
+    collectionStore.active?.collectionStatus === CollectionStatus.CREATED ||
+    (collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
+      isMetadataStoreOnApillon.value)
   );
 });
 
@@ -162,5 +183,30 @@ function refresh() {
   collectionStore.fetchCollection(collectionStore.collectionUuid);
   collectionStore.fetchMetadataDeploys(collectionStore.collectionUuid);
   collectionStore.fetchCollectionTransactions(collectionStore.collectionUuid);
+}
+
+async function createIpns(): Promise<IpnsInterface | null> {
+  const bucketUuid = collectionStore.active.bucket_uuid;
+  const cid = collectionStore.active.cid;
+  try {
+    const ipnsRes = await $api.post<IpnsCreateResponse>(endpoints.ipns(bucketUuid), {
+      bucket_uuid: bucketUuid,
+      cid,
+      name: `${collectionStore.active.name} IPNS Record`,
+    });
+    collectionStore.active.ipns_uuid = ipnsRes.data.ipns_uuid;
+
+    const res = await $api.post<IpnsPublishResponse>(
+      endpoints.ipnsPublish(bucketUuid, ipnsRes.data.ipns_uuid),
+      { cid }
+    );
+
+    message.success(t('form.success.created.ipns'));
+
+    return res.data;
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  return null;
 }
 </script>

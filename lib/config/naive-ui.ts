@@ -312,8 +312,13 @@ export const themeOverrides: GlobalThemeOverrides = {
       },
     },
   },
+  Popconfirm: {},
   Popover: {
     arrowHeight: '16px',
+    border: `1px solid ${colors.bg.lighter}`,
+    borderHover: `2px solid ${colors.bodyDark}`,
+    borderRadius: '8px',
+    color: colors.bg.dark,
     spaceArrow: '16px',
   },
   Progress: {
