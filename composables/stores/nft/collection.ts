@@ -37,7 +37,8 @@ export const useCollectionStore = defineStore('collection', {
         chain: Chains.MOONBASE,
         chainType: ChainType.EVM,
         collectionType: NFTCollectionType.GENERIC,
-        useApillonIpfsGateway: true,
+        useApillonIpfsGateway: false,
+        useIpns: false,
       },
       behavior: {
         baseUri: '',
@@ -136,7 +137,8 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.chain = Chains.MOONBASE;
       this.form.base.chainType = ChainType.EVM;
       this.form.base.collectionType = NFTCollectionType.GENERIC;
-      this.form.base.useApillonIpfsGateway = true;
+      this.form.base.useApillonIpfsGateway = false;
+      this.form.base.useIpns = false;
 
       this.form.behavior.baseUri = '';
       this.form.behavior.baseExtension = '.json';

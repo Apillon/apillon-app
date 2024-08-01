@@ -81,11 +81,20 @@
     </n-form-item>
 
     <!--  Collection Use Gateway -->
-    <n-form-item path="useApillonIpfsGateway" :show-label="false">
+    <n-form-item path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
       <n-checkbox
         v-model:checked="collectionStore.form.base.useApillonIpfsGateway"
         size="medium"
         :label="infoLabel('collectionUseGateway')"
+      />
+    </n-form-item>
+
+    <!--  Collection Dynamic metadata -->
+    <n-form-item path="useIpns" :show-label="false">
+      <n-checkbox
+        v-model:checked="collectionStore.form.base.useIpns"
+        size="medium"
+        :label="infoLabel('collectionUseIpns')"
       />
     </n-form-item>
 

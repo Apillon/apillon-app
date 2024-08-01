@@ -245,7 +245,6 @@ function onAllFilesDeleted() {
   bucketStore.folder.items = [];
   bucketStore.folder.path = [];
   bucketStore.folder.selected = '';
-  bucketStore.folder.total = 0;
   bucketStore.folderSearch();
 }
 

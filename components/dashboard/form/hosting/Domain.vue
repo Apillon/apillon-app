@@ -84,7 +84,7 @@ const website = ref<WebsiteInterface | null>(null);
 
 const formData = ref<FormWebsiteDomain>({
   domain: props.domain || null,
-  ipns: false,
+  ipns: true,
 });
 
 const rules: NFormRules = {
