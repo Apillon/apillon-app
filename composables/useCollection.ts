@@ -13,10 +13,10 @@ export default function useCollection() {
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
 
-  const chains = enumKeys(Chains)
-    .filter(key => Chains[key] !== Chains.ASTAR_SHIBUYA)
+  const chains = enumKeys(EvmChain)
+    .filter(key => EvmChain[key] !== EvmChain.ASTAR_SHIBUYA && EvmChain[key] !== EvmChain.OASIS)
     .map(k => {
-      return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
+      return { name: k.toLowerCase(), label: t(`nft.chain.${EvmChain[k]}`), value: EvmChain[k] };
     });
   const substrateChains = enumKeys(SubstrateChain)
     .filter(key => SubstrateChain[key] === SubstrateChain.ASTAR)
@@ -159,7 +159,7 @@ export default function useCollection() {
 
   function prepareFormData(addBaseUri = false) {
     const chain =
-      collectionStore.form.base.chain === Chains.ASTAR &&
+      collectionStore.form.base.chain === EvmChain.ASTAR &&
       collectionStore.form.base.chainType === ChainType.SUBSTRATE
         ? SubstrateChain.ASTAR
         : collectionStore.form.base.chain;
@@ -190,7 +190,7 @@ export default function useCollection() {
   }
 
   function collectionEndpoint() {
-    return collectionStore.form.base.chain === Chains.ASTAR &&
+    return collectionStore.form.base.chain === EvmChain.ASTAR &&
       collectionStore.form.base.chainType === ChainType.SUBSTRATE
       ? endpoints.collectionsSubstrate
       : endpoints.collections();
@@ -263,7 +263,7 @@ export default function useCollection() {
 
   function chainCurrency() {
     switch (collectionStore.form.base.chain) {
-      case Chains.ASTAR:
+      case EvmChain.ASTAR:
         return 'ASTR';
       default:
         return 'GLMR';
@@ -308,9 +308,9 @@ export default function useCollection() {
   }
 
   function onChainChange(chain: number) {
-    if (chain === Chains.ASTAR_SHIBUYA) {
+    if (chain === EvmChain.ASTAR_SHIBUYA) {
       collectionStore.form.base.chainType = ChainType.SUBSTRATE;
-    } else if (chain !== Chains.ASTAR) {
+    } else if (chain !== EvmChain.ASTAR) {
       collectionStore.form.base.chainType = ChainType.EVM;
     }
   }

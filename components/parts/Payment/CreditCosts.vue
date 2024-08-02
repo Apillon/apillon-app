@@ -88,7 +88,7 @@ const loading = ref<boolean>(true);
 
 onMounted(async () => {
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
-    selectedChain.value = props.chain || collectionStore.form.base.chain || Chains.MOONBEAM;
+    selectedChain.value = props.chain || collectionStore.form.base.chain || EvmChain.MOONBEAM;
   }
 
   servicePrices.value = props.service
@@ -154,7 +154,7 @@ watch(
 
 function getChainName(chain: string | number, service?: string): string {
   if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
-    return chain in Chains ? Chains[chain] : SubstrateChain[chain] + '_WASM';
+    return chain in EvmChain ? EvmChain[chain] : SubstrateChain[chain] + '_WASM';
   }
   return `${chain}`;
 }

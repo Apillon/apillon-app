@@ -1,14 +1,19 @@
+export type Merge<T, K> = Omit<T, keyof K> & K;
+
 export enum ChainType {
   SUBSTRATE = 1,
   EVM = 2,
 }
 
 /** NFT Chains */
-export enum Chains {
-  MOONBASE = 1287,
+export enum EvmChain {
+  ETHEREUM = 1,
+  SEPOLIA = 11155111,
   MOONBEAM = 1284,
-  ASTAR_SHIBUYA = 81,
+  MOONBASE = 1287,
+  ASTAR_SHIBUYA = 81, // testnet
   ASTAR = 592,
+  OASIS = 42262,
 }
 export enum SubstrateChain {
   CRUST = 1,
@@ -19,6 +24,7 @@ export enum SubstrateChain {
   XSOCIAL = 7,
   ASTAR = 8,
 }
+
 export enum SubstrateChainPrefix {
   ASTAR = 5,
   PHALA = 30,

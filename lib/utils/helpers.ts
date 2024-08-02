@@ -150,7 +150,7 @@ export function formatCurrency(currency: string) {
 }
 
 export function generatePriceServiceName(service: string, chain: number, action: string) {
-  const chainName = Chains[chain] || SubstrateChain[chain];
+  const chainName = EvmChain[chain] || SubstrateChain[chain];
   return service + '_' + chainName + '_' + action;
 }
 
@@ -162,11 +162,11 @@ export function contractLink(contractAddress?: string | null, chainId?: number):
   const address = contractAddress ? `/address/${contractAddress}` : '';
 
   switch (chainId) {
-    case Chains.MOONBEAM:
+    case EvmChain.MOONBEAM:
       return `https://moonbeam.moonscan.io${address}`;
-    case Chains.MOONBASE:
+    case EvmChain.MOONBASE:
       return `https://moonbase.moonscan.io${address}`;
-    case Chains.ASTAR:
+    case EvmChain.ASTAR:
       return `https://astar.subscan.io${address}`;
     case SubstrateChain.ASTAR:
       const config = useRuntimeConfig();
@@ -187,11 +187,11 @@ export function transactionLink(transactionHash?: string | null, chainId?: numbe
   const hash = transactionHash ? `/tx/${transactionHash}` : '';
 
   switch (chainId) {
-    case Chains.MOONBEAM:
+    case EvmChain.MOONBEAM:
       return `https://moonbeam.moonscan.io${hash}`;
-    case Chains.MOONBASE:
+    case EvmChain.MOONBASE:
       return `https://moonbase.moonscan.io${hash}`;
-    case Chains.ASTAR:
+    case EvmChain.ASTAR:
       return `https://astar.subscan.io${hash}`;
     case SubstrateChain.ASTAR:
       const config = useRuntimeConfig();

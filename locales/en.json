@@ -1430,13 +1430,14 @@
     "addIpns": "Add IPNS",
     "addIpnsInfo": "With IPNS, you will be able to modify the metadata and add new NFTs to this collection.",
     "chain": {
-      "1": "MOONBEAM (Mainnet)",
-      "2": "MOONBASE (Testnet)",
+      "1": "ETHEREUM (Mainnet)",
       "8": "ASTAR (Substrate)",
       "81": "ASTAR SHIBUYA (Testnet)",
       "592": "ASTAR (Mainnet)",
       "1284": "MOONBEAM (Mainnet)",
-      "1287": "MOONBASE (Testnet)"
+      "1287": "MOONBASE (Testnet)",
+      "42262": "OASIS (Testnet)",
+      "11155111": "SEPOLIA (Testnet)"
     },
     "chainType": {
       "1": "SUBSTRATE",

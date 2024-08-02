@@ -236,14 +236,14 @@ const contractAddresses = computed(() => {
 });
 
 const rpc: Record<number, string> = {
-  [Chains.ASTAR]: 'https://evm.astar.network',
-  [Chains.MOONBASE]: 'https://rpc.api.moonbase.moonbeam.network',
-  [Chains.MOONBEAM]: 'https://rpc.api.moonbeam.network',
+  [EvmChain.ASTAR]: 'https://evm.astar.network',
+  [EvmChain.MOONBASE]: 'https://rpc.api.moonbase.moonbeam.network',
+  [EvmChain.MOONBEAM]: 'https://rpc.api.moonbeam.network',
 };
 
 const nftChainRpcUrls = ref<SelectOption[]>(
   Object.entries(rpc).map(([key, value]) => {
-    return { value, label: Chains[key] };
+    return { value, label: EvmChain[key] };
   })
 );
 

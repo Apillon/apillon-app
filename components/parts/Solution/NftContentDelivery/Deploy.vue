@@ -82,7 +82,7 @@ const collection = computed(() => {
 
 const chainName = computed(() => {
   const chainId = contractStore.form.contractData.nftChain;
-  return (enumValues(Chains) as number[]).includes(chainId) ? Chains[chainId] : '';
+  return (enumValues(EvmChain) as number[]).includes(chainId) ? EvmChain[chainId] : '';
 });
 
 const data = [

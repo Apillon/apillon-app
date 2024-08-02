@@ -67,7 +67,7 @@
 
       <!--  Chain type -->
       <n-form-item
-        v-show="collectionStore.form.base.chain === Chains.ASTAR"
+        v-show="collectionStore.form.base.chain === EvmChain.ASTAR"
         path="base.chainType"
         :label="infoLabel('collectionChainType')"
         :label-props="{ for: 'chainType' }"
@@ -400,8 +400,8 @@ const metadataUri = computed<string>(() => {
   return collectionStore.form.behavior.baseUri && collectionStore.form.behavior.baseExtension
     ? baseUri + '/1' + collectionStore.form.behavior.baseExtension
     : baseUri
-    ? baseUri + '/1.' + $i18n.t('nft.collection.extension')
-    : '';
+      ? baseUri + '/1.' + $i18n.t('nft.collection.extension')
+      : '';
 });
 
 watch(

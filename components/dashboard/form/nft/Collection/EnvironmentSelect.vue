@@ -23,7 +23,7 @@
 
     <div
       class="transition-all overflow-hidden"
-      :class="collectionStore.form.base.chain === Chains.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
+      :class="collectionStore.form.base.chain === EvmChain.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
     >
       <h4 class="relative top-2">{{ $t('nft.collection.chainType') }}</h4>
       <div class="flex gap-4 whitespace-pre-line my-8 justify-center">

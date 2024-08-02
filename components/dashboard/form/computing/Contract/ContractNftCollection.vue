@@ -97,6 +97,8 @@
 </template>
 
 <script lang="ts" setup>
+import { EvmChain } from '~/lib/types/nft';
+
 const emit = defineEmits(['submitSuccess']);
 
 const { t, te } = useI18n();
@@ -110,10 +112,11 @@ const CUSTOM_EVM = 1;
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 
-const dotChains = enumKeys(Chains)
-  .filter(item => item !== Chains[Chains.ASTAR_SHIBUYA])
+const allowedChains = [EvmChain.ASTAR, EvmChain.MOONBASE, EvmChain.MOONBEAM];
+const dotChains = enumKeys(EvmChain)
+  .filter(item => allowedChains.includes(EvmChain[item]))
   .map(k => {
-    return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
+    return { name: k.toLowerCase(), label: t(`nft.chain.${EvmChain[k]}`), value: EvmChain[k] };
   });
 const nftChains = [
   ...dotChains,
@@ -138,9 +141,9 @@ const collectionAddresses = computed(() => {
 });
 
 const rpc: Record<number, string> = {
-  [Chains.ASTAR]: 'https://evm.astar.network',
-  [Chains.MOONBASE]: 'https://rpc.api.moonbase.moonbeam.network',
-  [Chains.MOONBEAM]: 'https://rpc.api.moonbeam.network',
+  [EvmChain.ASTAR]: 'https://evm.astar.network',
+  [EvmChain.MOONBASE]: 'https://rpc.api.moonbase.moonbeam.network',
+  [EvmChain.MOONBEAM]: 'https://rpc.api.moonbeam.network',
 };
 
 const rules: NFormRules = {
