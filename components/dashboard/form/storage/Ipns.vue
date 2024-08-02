@@ -76,11 +76,14 @@
 type FormIpns = {
   name: string;
   description?: string | null;
+  cid?: string | null | undefined;
 };
 
 const props = defineProps({
   ipnsUuid: { type: String, default: null },
+  cid: { type: String, default: null },
 });
+
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
@@ -97,6 +100,7 @@ const ipns = ref<IpnsInterface | undefined>();
 const formData = ref<FormIpns>({
   name: ipns.value?.name || '',
   description: ipns.value?.description || '',
+  cid: props.cid || undefined,
 });
 
 const rules: NFormRules = {
