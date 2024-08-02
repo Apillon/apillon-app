@@ -117,7 +117,6 @@ onMounted(async () => {
   await initContract();
   hasClaimed.value = await getClaimStatus();
   loading.value = false;
-  console.log(referralStore.tokenClaim.wallet, address.value);
 });
 
 // Disable if:

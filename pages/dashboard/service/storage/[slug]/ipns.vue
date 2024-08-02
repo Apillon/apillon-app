@@ -24,6 +24,7 @@
           </div>
 
           <n-space size="large">
+            <ModalCreditCosts :service="ServiceTypeName.STORAGE" />
             <!-- Refresh files -->
             <n-button
               size="small"

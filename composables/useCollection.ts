@@ -184,6 +184,8 @@ export default function useCollection() {
       royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
       royaltiesFees: collectionStore.form.behavior.royaltiesFees,
       baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
+      useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
+      useIpns: collectionStore.form.base.useIpns,
     };
   }
 
@@ -278,8 +280,8 @@ export default function useCollection() {
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
-      onFinish,
-      onError,
+      onFinish: onFinish || (() => {}),
+      onError: onError || (() => {}),
     };
     if (!isEnoughSpaceInStorage([], uploadedFile)) {
       message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
