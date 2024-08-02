@@ -40,7 +40,7 @@
 
     <!-- Modal - New IPNS -->
     <modal v-model:show="modalCreateIpnsVisible" :title="$t('storage.ipns.new')">
-      <FormStorageIpns @submit-success="modalCreateIpnsVisible = false" />
+      <FormStorageIpns :cid="cid" @submit-success="onIpnsCreated" />
     </modal>
   </div>
 </template>
@@ -114,14 +114,17 @@ async function publishToIpns(ipnsUuid: string) {
   loading.value = true;
 
   try {
-    await $api.post<IpnsPublishResponse>(endpoints.ipnsPublish(bucketStore.selected, ipnsUuid), {
-      cid: props.cid,
-    });
+    const res = await $api.post<IpnsPublishResponse>(
+      endpoints.ipnsPublish(bucketStore.selected, ipnsUuid),
+      {
+        cid: props.cid,
+      }
+    );
 
-    message.success($i18n.t('form.success.ipnsPublish'));
+    /** On  ipns publish, update data */
+    updateIpnsInList(res.data);
 
-    /** IPNS Publish polling */
-    checkIfIpnsPublished(ipnsUuid);
+    message.success($i18n.t('form.success.ipnsPublished'));
 
     /** Emit events */
     emit('submitSuccess');
@@ -132,20 +135,6 @@ async function publishToIpns(ipnsUuid: string) {
   loading.value = false;
 }
 
-function checkIfIpnsPublished(ipnsUuid: string) {
-  ipnsPublishInterval = setInterval(async () => {
-    const publishedIpns = await ipnsStore.fetchIpnsById(bucketStore.selected, ipnsUuid);
-
-    if (publishedIpns.ipnsValue) {
-      /** On  ipns publish, update data */
-      updateIpnsInList(publishedIpns);
-
-      message.success($i18n.t('form.success.ipnsPublished'));
-      clearInterval(ipnsPublishInterval);
-    }
-  }, 10000);
-}
-
 function updateIpnsInList(ipns: IpnsInterface) {
   ipnsStore.items.forEach(item => {
     if (item.ipns_uuid === ipns.ipns_uuid) {
@@ -154,5 +143,12 @@ function updateIpnsInList(ipns: IpnsInterface) {
       item.link = ipns.link;
     }
   });
+}
+
+function onIpnsCreated() {
+  modalCreateIpnsVisible.value = false;
+  /** Emit events */
+  emit('submitSuccess');
+  message.success($i18n.t('form.success.ipnsPublished'));
 }
 </script>
