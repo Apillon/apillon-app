@@ -6,7 +6,7 @@
     <n-space class="w-full" :wrap="!isLg" align="center">
       <HostingPreviewLink v-if="domain" :link="`https://${domain}`" />
 
-      <Btn v-if="editEnabled || true" type="primary" size="small" @click="showModalDomain = true">
+      <Btn v-if="editEnabled" type="primary" size="small" @click="showModalDomain = true">
         <span v-if="domain">
           {{ $t('hosting.domain.setup') }}
         </span>
@@ -35,11 +35,7 @@
     class="!w-auto md:min-w-[38rem] max-w-[100vw]"
     :title="domain ? $t('hosting.domain.update') : $t('hosting.domain.add')"
   >
-    <FormHostingDomain
-      :website-uuid="websiteUuid"
-      :domain="domain"
-      @submit-success="showModalDomain = false"
-    />
+    <FormHostingDomain :website-uuid="websiteUuid" :domain="domain" />
   </modal>
 
   <!-- Modal - Website domain configuration -->

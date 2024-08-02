@@ -84,7 +84,7 @@ export default function useUpload() {
 
     /** Files data for upload params */
     const filesUpload: Array<UploadFileType> = fileList.value.map(file => {
-      file.path = fileFolderPath(file.fullPath || '', wrapFilesToDirectory);
+      file.path = fileFolderPath(file?.fullPath || '', wrapFilesToDirectory);
 
       return {
         fileName: file.name,
@@ -168,17 +168,19 @@ export default function useUpload() {
         throw new Error('File upload error');
       }
 
-      file.onFinish();
+      file?.onFinish();
       file.percentage = 100;
       updateFileStatus(file, FileUploadStatusValue.FINISHED);
       uploadSessionEnd(sessionUuid.value);
-    } catch (error) {
-      file.onError();
+    } catch (e) {
+      console.error(e);
+      file?.onError();
+
       updateFileStatus(file, FileUploadStatusValue.ERROR);
       uploadSessionEnd(sessionUuid.value);
 
       /** Show error message */
-      message.error(userFriendlyMsg(error));
+      message.error(userFriendlyMsg(e));
     }
   }
 

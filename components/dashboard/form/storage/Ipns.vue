@@ -86,8 +86,9 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 const message = useMessage();
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const bucketStore = useBucketStore();
 const ipnsStore = useIpnsStore();
+const bucketStore = useBucketStore();
+const warningStore = useWarningStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -129,7 +130,7 @@ function handleSubmit(e: Event | MouseEvent) {
     } else if (props.ipnsUuid) {
       await updateIpns();
     } else {
-      await createIpns();
+      warningStore.showSpendingWarning(PriceServiceName.IPNS, () => createIpns());
     }
   });
 }

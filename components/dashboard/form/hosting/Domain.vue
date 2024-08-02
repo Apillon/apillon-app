@@ -3,9 +3,9 @@
     <Spinner />
   </div>
   <HostingDomainConfiguration
-    v-else-if="!domain && domainCreated"
+    v-else-if="domainCreated"
     class="mb-8"
-    :domain="formData.domain || ''"
+    :domain="formData.domain || domain"
   />
   <div v-else class="sm:min-w-[22rem]">
     <n-form
@@ -84,7 +84,7 @@ const website = ref<WebsiteInterface | null>(null);
 
 const formData = ref<FormWebsiteDomain>({
   domain: props.domain || null,
-  ipns: true,
+  ipns: props.domain ? !!website.value?.ipnsProduction : true,
 });
 
 const rules: NFormRules = {
@@ -101,6 +101,10 @@ onMounted(async () => {
   if (props.websiteUuid) {
     website.value = await websiteStore.getWebsite(props.websiteUuid);
     formData.value.domain = website.value.domain;
+
+    if (props.domain) {
+      formData.value.ipns = !!website.value?.ipnsProduction;
+    }
   }
 });
 
@@ -140,7 +144,7 @@ async function createWebsiteDomain() {
   loading.value = true;
 
   /** Create IPNS first if user check it */
-  if (formData.value.ipns && !(await createAndPublishToIpns())) {
+  if (formData.value.ipns && !(await createIpns())) {
     loading.value = false;
     return;
   }
@@ -150,10 +154,10 @@ async function createWebsiteDomain() {
       endpoints.websites(props.websiteUuid),
       formData.value
     );
-
-    message.success($i18n.t('form.success.created.domain'));
-
     updateWebsiteDomainValue(res.data.domain);
+
+    domainCreated.value = true;
+    message.success($i18n.t('form.success.created.domain'));
 
     /** Emit events */
     emit('submitSuccess');
@@ -164,51 +168,29 @@ async function createWebsiteDomain() {
   loading.value = false;
 }
 
-async function createAndPublishToIpns(): Promise<boolean> {
+async function createIpns(): Promise<boolean> {
   if (!lastDeployment.value) {
     message.warning('Website must be successfully deployed to production!');
     return false;
   }
-  const ipns = await createIpns(websiteStore.active.productionBucket.bucket_uuid);
-  const cid = lastDeployment.value.cidv1 || lastDeployment.value.cid;
-  if (ipns && cid) {
-    const ipnsPublished = await publishToIpns(ipns.ipns_uuid, cid);
-    return !!ipnsPublished;
+
+  try {
+    const res = await $api.post<IpnsCreateResponse>(
+      endpoints.ipns(websiteStore.active.productionBucket.bucket_uuid),
+      {
+        name: `Website: ${websiteStore.active.name}`,
+        cid: lastDeployment.value.cidv1 || lastDeployment.value.cid,
+      }
+    );
+    websiteStore.active.ipnsProduction = res.data.ipnsValue;
+
+    message.success($i18n.t('form.success.created.ipns'));
+    return true;
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
   }
   message.warning('Creating IPNS failed!');
   return false;
-}
-
-async function createIpns(bucketUuid: string): Promise<IpnsInterface | null> {
-  try {
-    const res = await $api.post<IpnsCreateResponse>(endpoints.ipns(bucketUuid), {
-      name: `Website: ${websiteStore.active.name}`,
-    });
-
-    message.success($i18n.t('form.success.created.ipns'));
-    return res.data;
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
-  }
-  return null;
-}
-async function publishToIpns(ipnsUuid: string, cid: string): Promise<IpnsInterface | null> {
-  loading.value = true;
-
-  try {
-    const res = await $api.post<IpnsPublishResponse>(
-      endpoints.ipnsPublish(websiteStore.active.productionBucket.bucket_uuid, ipnsUuid),
-      { cid }
-    );
-
-    message.success($i18n.t('form.success.ipnsPublished'));
-    domainCreated.value = true;
-
-    return res.data;
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
-  }
-  return null;
 }
 
 async function updateWebsiteDomain() {

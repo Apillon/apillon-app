@@ -8,6 +8,7 @@ import type {
   SelectOption,
   TagProps,
   UploadFileInfo,
+  UploadSettledFileInfo,
 } from 'naive-ui';
 import type {
   InternalRowData,
@@ -18,7 +19,6 @@ import type {
   TableSelectionColumn,
 } from 'naive-ui/es/data-table/src/interface';
 import type { MenuOption } from 'naive-ui/es/menu/src/interface';
-import type { SettledFileInfo } from 'naive-ui/es/upload/src/interface';
 
 declare global {
   type KeyTitle = {
@@ -40,12 +40,12 @@ declare global {
     iconName?: string;
   }
 
-  interface FileListItemType extends SettledFileInfo {
+  interface FileListItemType extends UploadSettledFileInfo {
+    path?: string;
     percentage: number;
+    progress?: any;
     size: number;
     timestamp: number;
-    path?: string;
-    progress?: any;
     uploadSpeed?: number;
     onFinish: any;
     onError: any;

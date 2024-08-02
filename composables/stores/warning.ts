@@ -15,10 +15,6 @@ export const useWarningStore = defineStore('warning', {
       const paymentStore = usePaymentStore();
       const servicePrices = await paymentStore.filterServicePrice(this.services);
 
-      console.log(serviceNames);
-      console.log(this.services);
-      console.log(servicePrices);
-      console.log(sumCredits(servicePrices));
       if (servicePrices.length && sumCredits(servicePrices) > 0) {
         this.isSpendingWarningOpen = true;
       } else {

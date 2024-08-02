@@ -284,6 +284,8 @@ declare global {
   interface WebsiteInterface extends WebsiteBaseInterface {
     bucket_uuid: string;
     bucket: BucketInterface;
+    cidProduction: string | null;
+    cidStaging: string | null;
     ipnsProduction: string | null;
     ipnsStaging: string | null;
     productionBucket: BucketInterface;
