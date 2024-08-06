@@ -25,6 +25,24 @@
       @submit-success="showModalEditWebsite = false"
     />
   </modal>
+
+  <!-- Modal - Archive website -->
+  <ModalDelete v-model:show="showModalArchiveWebsite" :title="$t('hosting.website.delete')">
+    <template #content>
+      <p>
+        {{ $t('hosting.website.deleteConfirm', { num: 1 }) }}
+      </p>
+    </template>
+
+    <slot>
+      <FormDeleteItems :items="[currentRow]" @submit-success="onWebsiteDeleted()" />
+    </slot>
+  </ModalDelete>
+
+  <!-- W3Warn: delete website -->
+  <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
+    {{ $t('w3Warn.hosting.delete') }}
+  </W3Warn>
 </template>
 
 <script lang="ts" setup>
@@ -32,13 +50,18 @@ import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
   websites: { type: Array<WebsiteBaseInterface>, default: [] },
+  archive: { type: Boolean, default: false },
 });
 
-const $i18n = useI18n();
+const { t, te } = useI18n();
 const router = useRouter();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DELETE);
+
 const showModalEditWebsite = ref<boolean>(false);
+const showModalArchiveWebsite = ref<boolean | null>(false);
 const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered websites */
@@ -54,28 +77,28 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
   return [
     {
       key: 'name',
-      title: $i18n.t('hosting.website.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('hosting.website.name'),
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
     },
     {
       key: 'website_uuid',
-      title: $i18n.t('hosting.website.uuid'),
+      title: t('hosting.website.uuid'),
       render(row: WebsiteBaseInterface) {
         return h(TableEllipsis, { text: row.website_uuid }, '');
       },
     },
     {
       key: 'domain',
-      title: $i18n.t('hosting.website.domain'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('hosting.website.domain'),
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
       key: 'description',
-      title: $i18n.t('hosting.website.description'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('hosting.website.description'),
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
@@ -89,7 +112,7 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
         return h(
           NDropdown,
           {
-            options: dropdownOptions,
+            options: props.archive ? dropdownOptionsArchive : dropdownOptions,
             trigger: 'click',
           },
           {
@@ -106,7 +129,7 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: BucketItemInterface) => row.uuid;
+const rowKey = (row: WebsiteInterface) => row.website_uuid;
 const currentRow = ref<WebsiteBaseInterface>(props.websites[0]);
 
 /** On row click */
@@ -124,8 +147,8 @@ const rowProps = (row: WebsiteBaseInterface) => {
 
 const dropdownOptions = [
   {
-    label: $i18n.t('storage.edit'),
-    key: 'storageEdit',
+    key: 'hostingEdit',
+    label: t('general.edit'),
     disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
@@ -133,5 +156,95 @@ const dropdownOptions = [
       },
     },
   },
+  {
+    key: 'hostingDelete',
+    label: t('general.delete'),
+    disabled: authStore.isAdmin(),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        deleteWebsite();
+      },
+    },
+  },
 ];
+
+const dropdownOptionsArchive = [
+  {
+    key: 'hostingRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        restoreWebsite();
+      },
+    },
+  },
+];
+
+/**
+ * On deleteWebsite click
+ * If W3Warn has already been shown, show modal delete website, otherwise show warn first
+ * */
+function deleteWebsite() {
+  if (localStorage.getItem(LsW3WarnKeys.HOSTING_DELETE) || !te('w3Warn.hosting.delete')) {
+    showModalArchiveWebsite.value = true;
+  } else {
+    modalW3WarnVisible.value = true;
+    showModalArchiveWebsite.value = null;
+  }
+}
+
+/** When user close W3Warn, allow him to create new website */
+function onModalW3WarnHide() {
+  if (showModalArchiveWebsite.value !== false) {
+    showModalArchiveWebsite.value = true;
+  }
+}
+
+/**
+ * On website deleted
+ * Hide modal and refresh website list
+ * */
+function onWebsiteDeleted() {
+  websiteStore.loading = true;
+  showModalArchiveWebsite.value = false;
+
+  websiteStore.items = websiteStore.items.filter(
+    item => item.website_uuid !== currentRow.value.website_uuid
+  );
+
+  sessionStorage.removeItem(LsCacheKeys.WEBSITE);
+  sessionStorage.removeItem(LsCacheKeys.WEBSITE_ARCHIVE);
+}
+
+/**
+ * Restore website
+ * */
+async function restoreWebsite() {
+  websiteStore.loading = true;
+
+  try {
+    await $api.patch<WebsiteResponse>(endpoints.websites(currentRow.value.website_uuid), {
+      status: 5,
+    });
+    // websiteStore.fetchWebsites();
+    websiteStore.archive = websiteStore.archive.filter(
+      item => item.website_uuid !== currentRow.value.website_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.WEBSITE);
+    sessionStorage.removeItem(LsCacheKeys.WEBSITE_ARCHIVE);
+
+    // message.success(t('form.success.restored.website'));
+  } catch (error) {
+    window.$message.error(userFriendlyMsg(error));
+  }
+  websiteStore.loading = false;
+
+  setTimeout(() => {
+    router.push({ name: 'dashboard-service-hosting' });
+  }, 1000);
+}
 </script>

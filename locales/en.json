@@ -1374,9 +1374,11 @@
       }
     },
     "menu": {
+      "archive": "Website Archive",
       "preview": "1. Upload",
       "staging": "2. Preview",
-      "production": "3. Production"
+      "production": "3. Production",
+      "website": "Websites"
     },
     "review": {
       "confirm": "Proceed with Website Deployment, I'll wait",
@@ -1396,6 +1398,8 @@
       "addFirst": "Add first website",
       "create": "Create website",
       "description": "Website description",
+      "delete": "Delete website",
+      "deleteConfirm": "Are you sure that you want to delete selected website?",
       "domain": "Domain name",
       "edit": "Edit website",
       "infoNew": "",
@@ -1420,6 +1424,8 @@
     "size": "Size",
     "stagingEmpty": "Upload files and deploy them to staging",
     "web3Hosting": "Web3 hosting",
+    "web3HostingArchive": "Web3 hosting Archive",
+    "web3HostingArchiveInfo": "You don't have any website in Archive.",
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "nft": {
@@ -2211,6 +2217,7 @@
     },
     "hosting": {
       "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",
+      "delete": "Deleted sites are no longer accessible, but they are still available in Website Archive. Websites in the archive can be republished.",
       "deploy": "Please be advised that the deployment may take up to 5 minutes to complete."
     },
     "ipfs": {

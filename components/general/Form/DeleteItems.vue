@@ -6,7 +6,12 @@
 </template>
 
 <script lang="ts" setup>
-type Item = ApiKeyInterface | BucketInterface | BucketItemInterface | IpnsInterface;
+type Item =
+  | ApiKeyInterface
+  | BucketInterface
+  | BucketItemInterface
+  | IpnsInterface
+  | WebsiteBaseInterface;
 
 const props = defineProps({
   items: { type: Array<Item>, required: true },
@@ -67,6 +72,8 @@ function getUrl(type: string, item: Item) {
       );
     case 'ipns':
       return endpoints.ipns(bucketStore.selected, (item as IpnsInterface).ipns_uuid);
+    case 'website':
+      return endpoints.websites((item as WebsiteInterface).website_uuid);
     default:
       console.warn('Wrong type');
       return '';
@@ -81,6 +88,8 @@ function getItemType(item: Item) {
     return 'ipns';
   } else if ('bucketType' in item) {
     return 'bucket';
+  } else if ('website_uuid' in item) {
+    return 'website';
   } else if ('type' in item) {
     switch (item.type) {
       case BucketItemType.DIRECTORY:

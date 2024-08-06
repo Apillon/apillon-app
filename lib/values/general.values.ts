@@ -48,6 +48,7 @@ export const LsW3WarnKeys = {
   CONTRACT_NEW: 'al_w3warn_contract_new',
   HOSTING_NEW: 'al_w3warn_hosting_new',
   HOSTING_DEPLOY: 'al_w3warn_hosting_deploy',
+  HOSTING_DELETE: 'al_w3warn_hosting_delete',
   NFT_NEW: 'al_w3warn_nft_new',
   SOCIAL_NEW: 'al_w3warn_social_new',
 };
@@ -96,6 +97,7 @@ export const LsCacheKeys = {
   SUBSCRIPTION_PACKAGES: 'al_cache_subscription_packages',
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
+  WEBSITE_ARCHIVE: 'al_cache_website_archive',
   EW_API_KEYS: 'al_ew_cache_api_keys',
 };
 
