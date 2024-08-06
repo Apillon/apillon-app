@@ -1,6 +1,6 @@
 <template>
   <n-space class="pb-8" :size="32" vertical>
-    <ActionsHosting />
+    <ActionsHosting archive />
 
     <n-data-table
       ref="tableRef"
@@ -30,7 +30,7 @@
   <ModalDelete v-model:show="showModalArchiveWebsite" :title="$t('hosting.website.delete')">
     <template #content>
       <p>
-        {{ $t('hosting.website.deleteConfirm', { num: 1 }) }}
+        {{ $t('hosting.website.deleteConfirm') }}
       </p>
     </template>
 
@@ -208,7 +208,6 @@ function onModalW3WarnHide() {
  * Hide modal and refresh website list
  * */
 function onWebsiteDeleted() {
-  websiteStore.loading = true;
   showModalArchiveWebsite.value = false;
 
   websiteStore.items = websiteStore.items.filter(

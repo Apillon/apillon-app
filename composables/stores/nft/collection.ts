@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
+    archive: [] as CollectionInterface[],
     attribute: {} as AttributeInterface,
     columns: [] as TableColumns<KeyTitle>,
     csvAttributes: [] as Array<MetadataAttributes>,
@@ -72,6 +73,9 @@ export const useCollectionStore = defineStore('collection', {
     hasCollections(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
     },
+    hasCollectionArchive(state): boolean {
+      return Array.isArray(state.archive) && state.archive.length > 0;
+    },
     hasCollectionTransactions(state): boolean {
       return Array.isArray(state.transaction) && state.transaction.length > 0;
     },
@@ -91,6 +95,7 @@ export const useCollectionStore = defineStore('collection', {
   actions: {
     resetData() {
       this.active = {} as CollectionInterface;
+      this.archive = [] as CollectionInterface[];
       this.items = [] as CollectionInterface[];
       this.metadataDeploys = [] as MetadataDeployInterface[];
       this.search = '';
@@ -167,6 +172,12 @@ export const useCollectionStore = defineStore('collection', {
       }
       return this.items;
     },
+    async getCollectionArchive(): Promise<CollectionInterface[]> {
+      if (!this.hasCollectionArchive || isCacheExpired(LsCacheKeys.COLLECTION_ARCHIVE)) {
+        return await this.fetchCollections(true);
+      }
+      return this.archive;
+    },
 
     async getCollection(collectionUuid: string): Promise<CollectionInterface | null> {
       if (
@@ -203,7 +214,7 @@ export const useCollectionStore = defineStore('collection', {
     /**
      * API calls
      */
-    async fetchCollections(showLoader = true): Promise<CollectionInterface[]> {
+    async fetchCollections(archive = false, showLoader = true): Promise<CollectionInterface[]> {
       this.loading = showLoader;
 
       const dataStore = useDataStore();
@@ -218,12 +229,19 @@ export const useCollectionStore = defineStore('collection', {
           desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
+        if (archive) {
+          params.status = 8;
+        }
 
         const req = $api.get<CollectionsResponse>(endpoints.collections(), params);
         dataStore.promises.collections = req;
         const res = await req;
 
-        this.items = res.data.items;
+        if (archive) {
+          this.archive = res.data.items;
+        } else {
+          this.items = res.data.items;
+        }
         this.total = res.data.total;
         this.search = '';
         this.loading = false;

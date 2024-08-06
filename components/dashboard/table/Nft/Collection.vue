@@ -1,6 +1,6 @@
 <template>
   <n-space class="pb-8" :size="32" vertical>
-    <ActionsNftCollection />
+    <ActionsNftCollection archive />
 
     <n-data-table
       ref="tableRef"
@@ -16,18 +16,43 @@
       :row-key="rowKey"
       :row-props="rowProps"
     />
+
+    <!-- Modal - Archive website -->
+    <ModalDelete v-model:show="showModalArchiveCollection" :title="$t('nft.collection.delete')">
+      <template #content>
+        <p>
+          {{ $t('nft.collection.deleteConfirm') }}
+        </p>
+      </template>
+
+      <slot>
+        <FormDeleteItems :items="[currentRow]" @submit-success="onCollectionDeleted()" />
+      </slot>
+    </ModalDelete>
+
+    <!-- W3Warn: delete website -->
+    <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
+      {{ $t('w3Warn.nft.delete') }}
+    </W3Warn>
   </n-space>
 </template>
 
 <script lang="ts" setup>
+import { NButton, NDropdown } from 'naive-ui';
+
 const props = defineProps({
   collections: { type: Array<CollectionInterface>, default: [] },
+  archive: { type: Boolean, default: false },
 });
 
-const { t } = useI18n();
+const { t, te } = useI18n();
 const router = useRouter();
+const authStore = useAuthStore();
+const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.COLLECTION_DELETE);
 
+const showModalArchiveCollection = ref<boolean | null>(false);
 const NftCollectionStatus = resolveComponent('NftCollectionStatus');
 const TableEllipsis = resolveComponent('TableEllipsis');
 const TableLink = resolveComponent('TableLink');
@@ -76,7 +101,10 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     {
       key: 'chain',
       title: t('nft.transaction.chain'),
-      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('chain') }],
+      className: [
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { hidden: !selectedColumns.value.includes('chain') },
+      ],
       minWidth: 120,
       render(row: CollectionInterface) {
         return h('span', {}, { default: () => t(`nft.chain.${row.chain}`) });
@@ -86,7 +114,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'symbol',
       title: t('nft.collection.symbol'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
         { hidden: !selectedColumns.value.includes('symbol') },
       ],
       render(row) {
@@ -96,7 +124,10 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     {
       key: 'name',
       title: t('nft.collection.name'),
-      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
+      className: [
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { hidden: !selectedColumns.value.includes('name') },
+      ],
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
@@ -105,7 +136,10 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'type',
       title: t('general.type'),
       minWidth: 100,
-      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('type') }],
+      className: [
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { hidden: !selectedColumns.value.includes('type') },
+      ],
       render(row) {
         if (row.collectionType) {
           return t(`nft.collection.type.${row.collectionType}`);
@@ -148,7 +182,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'dropPrice',
       title: t('nft.collection.dropPrice'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
         { hidden: !selectedColumns.value.includes('dropPrice') },
       ],
     },
@@ -156,7 +190,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'dropReserve',
       title: t('nft.collection.dropReserve'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
         { hidden: !selectedColumns.value.includes('dropReserve') },
       ],
     },
@@ -164,7 +198,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'maxSupply',
       title: t('nft.collection.maxSupply'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
         { hidden: !selectedColumns.value.includes('maxSupply') },
       ],
       render(row: CollectionInterface) {
@@ -191,9 +225,29 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       },
     },
     {
-      key: 'columns',
+      key: 'actions',
+      title: '',
+      align: 'right',
+      className: '!py-0',
       filter: 'default',
       filterOptionValue: null,
+      render() {
+        return h(
+          NDropdown,
+          {
+            options: props.archive ? dropdownOptionsArchive : dropdownOptions,
+            trigger: 'click',
+          },
+          {
+            default: () =>
+              h(
+                NButton,
+                { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
+              ),
+          }
+        );
+      },
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },
@@ -213,6 +267,34 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
 });
 const rowKey = (row: CollectionInterface) => row.collection_uuid;
 const currentRow = ref<CollectionInterface>(props.collections[0]);
+
+const dropdownOptions = [
+  {
+    key: 'collectionDelete',
+    label: t('general.delete'),
+    disabled: authStore.isAdmin(),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        deleteCollection();
+      },
+    },
+  },
+];
+
+const dropdownOptionsArchive = [
+  {
+    key: 'collectionRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        restoreCollection();
+      },
+    },
+  },
+];
 
 /** On row click */
 const rowProps = (row: CollectionInterface) => {
@@ -234,5 +316,68 @@ function handleColumnChange(selectedValues: Array<string>) {
 
 function maxSupply(maxSupply: number) {
   return maxSupply > 0 ? maxSupply : t('form.supplyTypes.unlimited');
+}
+
+/**
+ * On deleteCollection click
+ * If W3Warn has already been shown, show modal delete collection, otherwise show warn first
+ * */
+function deleteCollection() {
+  if (localStorage.getItem(LsW3WarnKeys.COLLECTION_DELETE) || !te('w3Warn.nft.delete')) {
+    showModalArchiveCollection.value = true;
+  } else {
+    modalW3WarnVisible.value = true;
+    showModalArchiveCollection.value = null;
+  }
+}
+
+/** When user close W3Warn, allow him to create new collection */
+function onModalW3WarnHide() {
+  if (showModalArchiveCollection.value !== false) {
+    showModalArchiveCollection.value = true;
+  }
+}
+
+/**
+ * On collection deleted
+ * Hide modal and refresh collection list
+ * */
+function onCollectionDeleted() {
+  showModalArchiveCollection.value = false;
+
+  collectionStore.items = collectionStore.items.filter(
+    item => item.collection_uuid !== currentRow.value.collection_uuid
+  );
+
+  sessionStorage.removeItem(LsCacheKeys.COLLECTION);
+  sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
+}
+
+/**
+ * Restore collection
+ * */
+async function restoreCollection() {
+  collectionStore.loading = true;
+
+  try {
+    await $api.patch<CollectionResponse>(endpoints.collections(currentRow.value.collection_uuid), {
+      status: 5,
+    });
+    collectionStore.archive = collectionStore.archive.filter(
+      item => item.collection_uuid !== currentRow.value.collection_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.COLLECTION);
+    sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
+
+    // message.success(t('form.success.restored.collection'));
+  } catch (error) {
+    window.$message.error(userFriendlyMsg(error));
+  }
+  collectionStore.loading = false;
+
+  setTimeout(() => {
+    router.push({ name: 'dashboard-service-nft' });
+  }, 1000);
 }
 </script>

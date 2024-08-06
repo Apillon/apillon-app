@@ -10,7 +10,11 @@ type Item =
   | ApiKeyInterface
   | BucketInterface
   | BucketItemInterface
+  | ChatInterface
+  | CollectionInterface
+  | ContractInterface
   | IpnsInterface
+  | PostInterface
   | WebsiteBaseInterface;
 
 const props = defineProps({
@@ -63,6 +67,8 @@ function getUrl(type: string, item: Item) {
       return endpoints.apiKey((item as ApiKeyInterface).id);
     case 'bucket':
       return endpoints.bucket((item as BucketInterface).bucket_uuid);
+    case 'collection':
+      return endpoints.collections((item as CollectionInterface).collection_uuid);
     case 'directory':
       return endpoints.directory((item as BucketItemInterface).uuid);
     case 'file':
@@ -72,6 +78,10 @@ function getUrl(type: string, item: Item) {
       );
     case 'ipns':
       return endpoints.ipns(bucketStore.selected, (item as IpnsInterface).ipns_uuid);
+    case 'post':
+      return endpoints.posts((item as PostInterface).post_uuid);
+    case 'space':
+      return endpoints.spaces((item as ChatInterface).space_uuid);
     case 'website':
       return endpoints.websites((item as WebsiteInterface).website_uuid);
     default:
@@ -88,6 +98,12 @@ function getItemType(item: Item) {
     return 'ipns';
   } else if ('bucketType' in item) {
     return 'bucket';
+  } else if ('collection_uuid' in item) {
+    return 'collection';
+  } else if ('space_uuid' in item) {
+    return 'space';
+  } else if ('post_uuid' in item) {
+    return 'post';
   } else if ('website_uuid' in item) {
     return 'website';
   } else if ('type' in item) {
