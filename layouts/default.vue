@@ -16,7 +16,13 @@
         <Sidebar :collapsed="sidebarCollapsed" />
       </n-layout-sider>
       <n-layout>
-        <Header @toggle-sidebar="toggleSidebar"> </Header>
+        <Header @toggle-sidebar="toggleSidebar">
+          <div
+            class="w-[90vw] sm:w-auto max-w-[100vw] absolute top-0 left-1/2 -translate-x-1/2 z-20"
+          >
+            <ServiceStatus v-for="item in serviceStatus" :service-status="item" />
+          </div>
+        </Header>
         <n-scrollbar y-scrollable style="max-height: calc(100dvh - 88px)">
           <div class="relative pt-8 px-4 sm:px-8">
             <slot />
@@ -37,10 +43,17 @@ const message = useMessage();
 window.$message = message;
 
 const authStore = useAuthStore();
-const { isLg, isXl, isXxl } = useScreen();
+const { isLg, isXl } = useScreen();
 const mainContentRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
 const sidebarCollapsed = ref<boolean>(false);
+
+const serviceStatus = ref<ServiceStatusInterface[]>([]);
+const loadingServiceStatus = ref<boolean>(false);
+
+onMounted(() => {
+  getServiceStatus();
+});
 
 /**
  * Show/hide sidebar on mobile
@@ -83,5 +96,20 @@ function toggle(item: Ref<boolean>, show?: boolean) {
 
 function toggleSidebar(show?: boolean) {
   toggle(showMobileSidebar, show);
+}
+
+async function getServiceStatus() {
+  loadingServiceStatus.value = true;
+
+  try {
+    const res = await $api.get<ServiceStatusesResponse>(endpoints.serviceStatus);
+    serviceStatus.value = res.data.items.filter(item => item.status === SqlModelStatus.ACTIVE);
+  } catch (error) {
+    serviceStatus.value = [];
+    /** Show error message */
+    window?.$message.error(userFriendlyMsg(error));
+  } finally {
+    loadingServiceStatus.value = false;
+  }
 }
 </script>

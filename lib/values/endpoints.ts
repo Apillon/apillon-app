@@ -289,6 +289,9 @@ const Endpoints = {
   airdropTasks: '/referral/airdrop-tasks',
   airdropReviewTasks: '/referral/review-tasks',
   referralClaimParams: '/referral/claim-parameters',
+
+  /** Service status */
+  serviceStatus: '/public/service-status',
 };
 
 export default Endpoints;
