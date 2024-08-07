@@ -226,7 +226,7 @@ async function restoreWebsite() {
 
   try {
     await $api.patch<WebsiteResponse>(endpoints.websites(currentRow.value.website_uuid), {
-      status: 5,
+      status: SqlModelStatus.ACTIVE,
     });
     // websiteStore.fetchWebsites();
     websiteStore.archive = websiteStore.archive.filter(

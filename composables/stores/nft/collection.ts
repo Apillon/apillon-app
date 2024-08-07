@@ -230,7 +230,7 @@ export const useCollectionStore = defineStore('collection', {
           ...PARAMS_ALL_ITEMS,
         };
         if (archive) {
-          params.status = 8;
+          params.status = SqlModelStatus.ARCHIVED;
         }
 
         const req = $api.get<CollectionsResponse>(endpoints.collections(), params);
@@ -247,13 +247,19 @@ export const useCollectionStore = defineStore('collection', {
         this.loading = false;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.COLLECTIONS, Date.now().toString());
+        const key = archive ? LsCacheKeys.COLLECTION_ARCHIVE : LsCacheKeys.COLLECTIONS;
+        sessionStorage.setItem(key, Date.now().toString());
 
         return res.data.items;
       } catch (error: any) {
         /** Clear promise */
         dataStore.promises.collections = null;
-        this.items = [] as Array<CollectionInterface>;
+
+        if (archive) {
+          this.archive = [] as Array<CollectionInterface>;
+        } else {
+          this.items = [] as Array<CollectionInterface>;
+        }
         this.total = 0;
 
         /** Show error message  */

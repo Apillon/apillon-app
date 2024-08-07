@@ -1,21 +1,27 @@
 <template>
   <Heading>
     <slot>
-      <h1>{{ $t('dashboard.nav.social') }}</h1>
+      <div class="flex gap-4 items-center">
+        <NuxtLink :to="{ name: 'dashboard-service-social' }">
+          <span class="icon-back text-2xl align-sub"></span>
+        </NuxtLink>
+        <div>
+          <h1>{{ $t('social.chat.title') }}</h1>
+        </div>
+      </div>
     </slot>
+
     <template #info>
       <n-space :size="32" align="center">
-        <n-button size="small" @click="$router.push({ name: 'dashboard-service-social-hub' })">
-          <span class="text-primary"> {{ $t('social.post.manageHubs') }}</span>
-        </n-button>
         <IconInfo
           v-if="$te('w3Warn.social.info') || $te('w3Warn.social.grillChat')"
           @click="modalW3WarnVisible = true"
         />
       </n-space>
     </template>
+
     <template #submenu>
-      <MenuSocial />
+      <MenuSocialHub />
     </template>
   </Heading>
 

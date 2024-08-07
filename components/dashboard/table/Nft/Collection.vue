@@ -361,7 +361,7 @@ async function restoreCollection() {
 
   try {
     await $api.patch<CollectionResponse>(endpoints.collections(currentRow.value.collection_uuid), {
-      status: 5,
+      status: SqlModelStatus.ACTIVE,
     });
     collectionStore.archive = collectionStore.archive.filter(
       item => item.collection_uuid !== currentRow.value.collection_uuid

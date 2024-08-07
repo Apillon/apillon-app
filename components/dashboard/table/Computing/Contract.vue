@@ -21,6 +21,19 @@
       @submit-success="onContractTransferred"
     />
   </modal>
+
+  <!-- Modal - Archive contract -->
+  <ModalDelete v-model:show="showModalArchiveContract" :title="$t('computing.contract.delete')">
+    <template #content>
+      <p>
+        {{ $t('computing.contract.deleteConfirm') }}
+      </p>
+    </template>
+
+    <slot>
+      <FormDeleteItems :items="[currentRow]" @submit-success="onContractDeleted()" />
+    </slot>
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -28,6 +41,7 @@ import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
   contracts: { type: Array<ContractInterface>, default: [] },
+  archive: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();
@@ -35,12 +49,13 @@ const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
-const { checkUnfinishedContract } = useComputing();
+const { checkUnfinishedContracts } = useComputing();
 
 const TableEllipsis = resolveComponent('TableEllipsis');
 const ComputingContractStatus = resolveComponent('ComputingContractStatus');
 
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
+const showModalArchiveContract = ref<boolean | null>(false);
 
 /** Data: filtered contracts */
 const data = computed<Array<ContractInterface>>(() => {
@@ -56,7 +71,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'name',
       title: t('computing.contract.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
@@ -64,7 +79,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'description',
       title: t('general.description'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
@@ -72,7 +87,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'type',
       title: t('general.type'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       minWidth: 130,
       render(row) {
         return t(
@@ -117,7 +132,10 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
       render() {
         return h(
           NDropdown,
-          { options: dropdownOptions.value, trigger: 'click' },
+          {
+            options: props.archive ? dropdownOptionsArchive : dropdownOptions.value,
+            trigger: 'click',
+          },
           {
             default: () =>
               h(
@@ -172,8 +190,32 @@ const dropdownOptions = computed(() => {
         },
       },
     },
+    {
+      key: 'computingDelete',
+      label: t('general.delete'),
+      disabled: authStore.isAdmin(),
+      props: {
+        class: '!text-pink',
+        onClick: () => {
+          showModalArchiveContract.value = true;
+        },
+      },
+    },
   ];
 });
+const dropdownOptionsArchive = [
+  {
+    key: 'computingRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        restoreContract();
+      },
+    },
+  },
+];
 
 /** On row click */
 const rowProps = (row: ContractInterface) => {
@@ -181,7 +223,7 @@ const rowProps = (row: ContractInterface) => {
     onClick: (e: Event) => {
       currentRow.value = row;
 
-      if (canOpenColumnCell(e.composedPath()) && viewEnabled.value) {
+      if (!props.archive && canOpenColumnCell(e.composedPath()) && viewEnabled.value) {
         router.push({ path: `/dashboard/service/computing/${row.contract_uuid}` });
       }
     },
@@ -192,7 +234,51 @@ function onContractTransferred() {
   modalTransferOwnershipVisible.value = false;
   setTimeout(async () => {
     await contractStore.fetchContracts();
-    checkUnfinishedContract();
+    checkUnfinishedContracts();
   }, 3000);
+}
+
+/**
+ * On contract deleted
+ * Hide modal and refresh contract list
+ * */
+function onContractDeleted() {
+  showModalArchiveContract.value = false;
+
+  contractStore.items = contractStore.items.filter(
+    item => item.contract_uuid !== currentRow.value.contract_uuid
+  );
+
+  sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
+  sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);
+}
+
+/**
+ * Restore contract
+ * */
+async function restoreContract() {
+  contractStore.loading = true;
+
+  try {
+    await $api.patch<ContractResponse>(endpoints.contracts(currentRow.value.contract_uuid), {
+      status: SqlModelStatus.ACTIVE,
+    });
+    contractStore.fetchContracts();
+    contractStore.archive = contractStore.archive.filter(
+      item => item.contract_uuid !== currentRow.value.contract_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
+    sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);
+
+    // message.success(t('form.success.restored.contract'));
+  } catch (error) {
+    window.$message.error(userFriendlyMsg(error));
+  }
+  contractStore.loading = false;
+
+  setTimeout(() => {
+    router.push({ name: 'dashboard-service-computing' });
+  }, 1000);
 }
 </script>

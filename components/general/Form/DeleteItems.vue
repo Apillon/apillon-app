@@ -22,7 +22,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const bucketStore = useBucketStore();
 const loading = ref<boolean>(false);
@@ -44,7 +44,7 @@ async function deleteItems() {
       }
 
       if (props.items.length === 1) {
-        message.success($i18n.t(`form.success.deleted.${getItemType(item)}`));
+        message.success(t(`form.success.deleted.${getItemType(item)}`));
       }
     } catch (error) {
       message.error(userFriendlyMsg(error));
@@ -52,7 +52,7 @@ async function deleteItems() {
   });
   await Promise.all(promises).then(_ => {
     if (props.items.length > 1) {
-      message.success($i18n.t('form.success.deleted.items'));
+      message.success(t('form.success.deleted.items'));
     }
 
     emit('submitSuccess');
@@ -69,6 +69,8 @@ function getUrl(type: string, item: Item) {
       return endpoints.bucket((item as BucketInterface).bucket_uuid);
     case 'collection':
       return endpoints.collections((item as CollectionInterface).collection_uuid);
+    case 'contract':
+      return endpoints.contracts((item as ContractInterface).contract_uuid);
     case 'directory':
       return endpoints.directory((item as BucketItemInterface).uuid);
     case 'file':
@@ -100,10 +102,12 @@ function getItemType(item: Item) {
     return 'bucket';
   } else if ('collection_uuid' in item) {
     return 'collection';
-  } else if ('space_uuid' in item) {
-    return 'space';
+  } else if ('contract_uuid' in item) {
+    return 'contract';
   } else if ('post_uuid' in item) {
     return 'post';
+  } else if ('space_uuid' in item) {
+    return 'space';
   } else if ('website_uuid' in item) {
     return 'website';
   } else if ('type' in item) {

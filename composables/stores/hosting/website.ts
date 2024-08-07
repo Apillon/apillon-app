@@ -85,7 +85,7 @@ export const useWebsiteStore = defineStore('website', {
           ...PARAMS_ALL_ITEMS,
         };
         if (archive) {
-          params.status = 8;
+          params.status = SqlModelStatus.ARCHIVED;
         }
 
         const req = $api.get<WebsitesBaseResponse>(endpoints.websites(), params);

@@ -5,7 +5,15 @@ import type {
 } from '@nuxtjs/i18n/dist/runtime/composables';
 import type { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
 
-export {};
+export enum SqlModelStatus {
+  DRAFT = 1,
+  INCOMPLETE = 2,
+  INACTIVE = 3,
+  ACTIVE = 5,
+  BLOCKED = 7,
+  ARCHIVED = 8,
+  DELETED = 9,
+}
 
 declare global {
   type KeyValue = {
@@ -78,5 +86,6 @@ declare global {
     order?: string;
     loader?: boolean;
     project_uuid?: string;
+    status?: SqlModelStatus;
   };
 }
