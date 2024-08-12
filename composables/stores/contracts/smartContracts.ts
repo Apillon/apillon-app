@@ -2,9 +2,13 @@ import { defineStore } from 'pinia';
 
 export const useSmartContractsStore = defineStore('contracts', {
   state: () => ({
+    active: {} as SmartContractInterface,
     smartContracts: [] as SmartContractInterface[],
     smartContractDetails: {} as SmartContractInterface,
+    smartContractsPerProject: {} as SmartContractInterface,
     loading: false,
+    search: '',
+    deployedSmartContractDetails: {} as SmartContractInterface,
   }),
   getters: {
     getAllContracts(state): SmartContractInterface[] {
@@ -13,6 +17,9 @@ export const useSmartContractsStore = defineStore('contracts', {
     getContractDetails(state): SmartContractInterface {
       return state.smartContractDetails;
     },
+    getContractsPerProject(state): SmartContractInterface {
+      return state.smartContractsPerProject;
+    },
   },
   actions: {
     /**
@@ -20,6 +27,16 @@ export const useSmartContractsStore = defineStore('contracts', {
      */
     async getContracts() {
       await this.getAllContractList();
+    },
+
+    async getDeployedSmartContract(contractUuid: string) {
+      if (
+        this.active?.contract_uuid === contractUuid &&
+        !isCacheExpired(LsCacheKeys.DEPLOYED_SMART_CONTRACT)
+      ) {
+        return this.active;
+      }
+      return await this.fetchDeployedSmartContractDetails(contractUuid);
     },
 
     /**
@@ -57,6 +74,35 @@ export const useSmartContractsStore = defineStore('contracts', {
       } finally {
         this.loading = false;
       }
+    },
+
+    async fetchContractsPerProject(projectUUID: string | undefined, showLoader: boolean = false) {
+      this.loading = showLoader;
+      try {
+        const res = await $api.get(endpoints.smartContractsPerProject(projectUUID));
+        this.smartContractsPerProject = res.data;
+        sessionStorage.setItem(LsCacheKeys.SMART_CONTRACTS_PROJECTS, Date.now().toString());
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async fetchDeployedSmartContractDetails(contractUuid: string | undefined) {
+      try {
+        const res = await $api.get(endpoints.deployedSmartContractDetails(contractUuid));
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.DEPLOYED_SMART_CONTRACT, Date.now().toString());
+
+        return res.data;
+      } catch (error: any) {
+        this.active = {} as SmartContractInterface;
+        /** Show error message */
+      }
+      return {} as SmartContractInterface;
     },
   },
 });

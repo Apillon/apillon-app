@@ -1,6 +1,6 @@
 export default function useSmartContractsStore() {
   const formRef = ref<NFormInst | null>(null);
-  const settings = ref([0]);
+  const settings = ref([false]);
   const form = ref<{ [key: string]: any }>({
     name: '',
     description: '',
@@ -11,8 +11,8 @@ export default function useSmartContractsStore() {
 
   function addSettingsOption(e) {
     e.preventDefault();
-    const lastOption = settings.value[settings.value.length - 1];
-    settings.value.push(lastOption + 1);
+    settings.value.push(false);
+    console.log(settings);
   }
 
   function disablePastDate(ts: number) {

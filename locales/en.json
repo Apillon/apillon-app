@@ -493,6 +493,17 @@
         "website": "Main Website Storage",
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
+      "smartContracts": {
+        "new": "New smart contract",
+        "create": "Create your smart contract",
+        "info": "Add it to your Web3 project",
+        "table": {
+          "chain": "Chain",
+          "name": "Name",
+          "contractAddress": "Address",
+          "contractStatus": "Status"
+        }
+      },
       "addFirst": "Add first service",
       "delete": "Delete service",
       "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",

@@ -55,9 +55,14 @@
         <template v-else-if="input.type === 'bool[]'">
           <div>
             <div>
-              <n-form-item v-for="(s, index) in settings" :span="1" :show-label="false">
+              <n-form-item
+                v-for="(value, index) in settings"
+                :key="index"
+                :span="1"
+                :show-label="false"
+              >
                 <n-checkbox
-                  v-model:value="form[input.name]"
+                  v-model:checked="settings[index]"
                   size="medium"
                   :label="`option ${index + 1}`"
                 />
@@ -114,12 +119,15 @@ const {
 const smartContractDetails = ref<any | null>(null);
 
 const formErrors = ref<boolean>(false);
-const chainOptions = [{ label: '1287', value: 1287 }];
+const chainOptions = [
+  { label: 'Moonbase', value: 1287 },
+  { label: 'Moonbeam', value: 1284 },
+];
 
 const rules = reactive({
-  //   name: [{ required: true, message: 'Name is required' }],
-  //   description: [{ required: true, message: 'Description is required' }],
-  //   chain: [{ required: true, message: 'Chain selection is required' }],
+  name: [{ required: true, message: 'Name is required' }],
+  description: [{ required: true, message: 'Description is required' }],
+  chain: [{ required: true, message: 'Chain selection is required' }],
 });
 
 onMounted(() => {
@@ -158,37 +166,36 @@ function initializeDynamicValidation() {
 // Add dynamic validation rules
 function addDynamicValidation(input: any) {
   // String
-  //   if (input.type === 'string') {
-  //     rules[input.name] = [{ required: true, message: `${input.name} is required` }];
-  //   }
-  //   // Address
-  //   else if (input.type === 'address') {
-  //     rules[input.name] = [
-  //       { required: true, message: `${input.name} is required` },
-  //       { validator: addressValidator, trigger: 'blur' },
-  //     ];
-  //   }
-  //   // uint logic
-  //   else if (input.type.includes('uint')) {
-  //     if (input.name === '_reserve' || input.name === '_maxSupply') {
-  //       rules[input.name] = [
-  //         { required: true, message: `${input.name} is required` },
-  //         { validator: integerValidator },
-  //       ];
-  //     } else if (input.name === '_royaltiesFees') {
-  //       rules[input.name] = [
-  //         { required: true, message: `${input.name} is required` },
-  //         { validator: maxValidator(100), trigger: 'blur' },
-  //       ];
-  //     } else {
-  //       rules[input.name] = [{ required: true, message: `${input.name} is required` }];
-  //     }
-  //   } else if (input.name === '_dropStart') {
-  //     rules[input.name] = [{ required: true, message: 'Start date is required' }];
-  //   }
-  //   else if (input.type === 'bool[]') {
-  //     rules[input.name] = [{ required: true, message: `${input.name} is required` }];
-  //   }
+  if (input.type === 'string') {
+    rules[input.name] = [{ required: true, message: `${input.name} is required` }];
+  }
+  // Address
+  else if (input.type === 'address') {
+    rules[input.name] = [
+      { required: true, message: `${input.name} is required` },
+      { validator: addressValidator, trigger: 'blur' },
+    ];
+  }
+  // uint logic
+  else if (input.type.includes('uint')) {
+    if (input.name === '_reserve' || input.name === '_maxSupply') {
+      rules[input.name] = [
+        { required: true, message: `${input.name} is required` },
+        { validator: integerValidator },
+      ];
+    } else if (input.name === '_royaltiesFees') {
+      rules[input.name] = [
+        { required: true, message: `${input.name} is required` },
+        { validator: maxValidator(100), trigger: 'blur' },
+      ];
+    } else {
+      rules[input.name] = [{ required: true, message: `${input.name} is required` }];
+    }
+  } else if (input.name === '_dropStart') {
+    rules[input.name] = [{ required: true, message: 'Start date is required' }];
+  } else if (input.type === 'bool[]') {
+    rules[input.name] = [{ required: true, message: `${input.name} is required` }];
+  }
 }
 
 // Custom validator to check for integer values
@@ -221,13 +228,13 @@ const addressValidator = (rule, value, callback) => {
 };
 
 // Watch for changes in constructorInputs to update validation rules
-// watch(
-//   constructorInputs,
-//   newInputs => {
-//     newInputs.forEach((input: any) => addDynamicValidation(input));
-//   },
-//   { deep: true, immediate: true }
-// );
+watch(
+  constructorInputs,
+  newInputs => {
+    newInputs.forEach((input: any) => addDynamicValidation(input));
+  },
+  { deep: true, immediate: true }
+);
 
 // submit&deploy
 
@@ -242,89 +249,40 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function deployContract() {
-  //   console.log('deploy');
-  //   console.log(form.value);
-  //   const res = await $api.post(endpoints.newSmartContract, {});
   const _projectUuid = dataStore.currentProject?.project_uuid;
   const _contractUuid = smartContractsStore.getContractDetails.contract_uuid;
+  console.log(form.value);
   console.log(form.value._settings);
-  console.log(form.value._dropStart);
-  console.log(form.value._maxSupply);
-  console.log(form.value._reserve);
-  console.log(form.value._royaltiesFees);
-  console.log(form.value._pricePerMint);
-  //   const body = JSON.stringify({
-  //     project_uuid: _projectUuid,
-  //     name: form.value.name,
-  //     description: form.value.description,
-  //     chain: form.value.chain,
-  //     contract_uuid: _contractUuid,
-  //     constructorArguments: [
-  //       form.value._name,
-  //       form.value._symbol,
-  //       form.value._initBaseURI,
-  //       form.value._baseExtension,
-  //       [true, true],
-  //       form.value._dropStart,
-  //       form.value._pricePerMint,
-  //       form.value._maxSupply,
-  //       form.value._reserve,
-  //       form.value._royaltiesAddress,
-  //       form.value._royaltiesFees,
-  //     ],
-  //   });
-  //   0x97a6f35fA40BC4eb73247965F43cB99A13fF05D0
+  console.log([...settings.value]);
 
   try {
-    console.log(form.value._dropStart);
-    // const res = await $api.post(endpoints.newSmartContract(_contractUuid), {
-    //   project_uuid: _projectUuid,
-    //   name: form.value.name,
-    //   description: form.value.description,
-    //   chain: form.value.chain,
-    //   contract_uuid: _contractUuid,
-    //   constructorArguments: [
-    //     form.value._name,
-    //     form.value._symbol,
-    //     form.value._initBaseURI,
-    //     form.value._baseExtension,
-    //     [true, true, true, true],
-    //     0,
-    //     form.value._pricePerMint,
-    //     form.value._maxSupply,
-    //     form.value._reserve,
-    //     form.value._royaltiesAddress,
-    //     form.value._royaltiesFees,
-    //   ],
-    // });
+    const res = await $api.post(endpoints.newSmartContract(_contractUuid), {
+      project_uuid: _projectUuid,
+      name: form.value.name,
+      description: form.value.description,
+      chain: form.value.chain,
+      contract_uuid: _contractUuid,
+      constructorArguments: [
+        form.value._name,
+        form.value._symbol,
+        form.value._initBaseURI,
+        form.value._baseExtension,
+        ...settings.value,
+        form.value._dropStart,
+        form.value._pricePerMint,
+        form.value._maxSupply,
+        form.value._reserve,
+        form.value._royaltiesAddress,
+        form.value._royaltiesFees,
+      ],
+    });
+    if (res.ok) {
+      form.value.reset();
+      //   TODO add succes meassage ' redirect to details page'
+    }
   } catch (e) {
+    // TODO handle this error and validation errors
     console.log(e);
   }
 }
 </script>
-
-<!-- const raw = JSON.stringify({
-    "project_uuid": "c094c483-857f-4b12-bdd4-e3a316719882",
-    "name": "Tadej Contract 1234",
-    "description": "descriptipon",
-    "chain": 1287,
-    "contract_uuid": "ac30d481-7e6f-43c2-ad2b-72b6832ae5a6",
-    "constructorArguments": [
-      "Name",
-      "NME",
-      "baseUri",
-      "baseExtension",
-      [
-        true,
-        true,
-        true,
-        true
-      ],
-      0,
-      0,
-      1000,
-      10,
-      "0x4C2A866EB59511a6aD78db5cd4970464666b745a",
-      10
-    ]
-  }); -->

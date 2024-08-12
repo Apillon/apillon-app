@@ -6,7 +6,7 @@
 
     <slot>
       <div>
-        <h4 class="mb-6">Smart Contract Details</h4>
+        <h4 class="mb-6">Create a new smart contract</h4>
 
         <FormContractsForm />
       </div>

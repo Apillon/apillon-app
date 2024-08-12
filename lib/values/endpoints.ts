@@ -246,6 +246,12 @@ const Endpoints = {
   newSmartContract: (contractUuid: string) => {
     return `/contracts/${contractUuid}/deploy`;
   },
+  smartContractsPerProject: (projectUuid: string) => {
+    return `/contracts/deployed?project_uuid=${projectUuid}`;
+  },
+  deployedSmartContractDetails: (contractUuid: string) => {
+    return `/contracts/deployed/${contractUuid}`;
+  },
 
   /**
    * Project settings

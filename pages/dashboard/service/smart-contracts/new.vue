@@ -1,46 +1,61 @@
 <template>
-  <!-- <Dashboard>
+  <Dashboard :loading="pageLoading">
     <template #heading>
-      <div ref="headingRef">
-        <HeaderSmartContracts />
-      </div>
+      <HeaderSmartContractsSecondary />
     </template>
+
     <slot>
       <div class="pb-8">
-        <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
-          <SolutionContent :content="content" :icons="true" />
-
-          <div class="flex justify-center h-fit">
-            <div class="relative rounded-lg overflow-hidden">
-              <Image :src="NftTemplateJPG" width="514" height="320" alt="nft template" />
-              <div class="absolute left-0 right-0 top-0 bottom-0 flex-cc bg-bg-dark/75">
-                <Btn
-                  type="info"
-                  size="small"
-                  href="https://github.com/Apillon/ps-signup-email-airdrop"
-                >
-                  <span class="icon-github mr-2"></span>
-                  <strong class="body-sm"> {{ $t('dashboard.solution.viewCode') }}</strong>
-                </Btn>
-              </div>
+        <div class="max-w-lg mb-8">
+          <p>{{ $t('dashboard.smartContracts.description') }}</p>
+        </div>
+        <div class="grid gap-4 md:grid-cols-3">
+          <SmartContractsCard v-for="(contract, key) in smartContracts" :key="key">
+            <div class="flex items-center gap-2 mb-4 text-green">
+              <span class="icon-security"></span> Audited
             </div>
-          </div>
+            <div class="flex items-center gap-2 mb-4">
+              <span class="text-2xl icon-file"></span>
+              <h5>{{ contract.name }}</h5>
+            </div>
+            <p>{{ contract.description }}</p>
+            <Btn
+              type="secondary"
+              class="mt-8"
+              :to="`/dashboard/service/smart-contracts/${contract.contract_uuid}`"
+            >
+              {{ $t('dashboard.smartContracts.createNew') }}
+            </Btn>
+          </SmartContractsCard>
         </div>
       </div>
     </slot>
-  </Dashboard> -->
+  </Dashboard>
 </template>
 
 <script lang="ts" setup>
-// import NftTemplateJPG from '~/assets/images/solution/ps-signup-email-airdrop.png';
+const dataStore = useDataStore();
+const smartContractsStore = useSmartContractsStore();
+const $i18n = useI18n();
 
-// const { t } = useI18n();
-// const { generateContent } = useSolution();
+const headingRef = ref<HTMLElement>();
 
-// useHead({
-//   title: t('dashboard.solution.nftEmailSignupAirdrop.name'),
-// });
+const smartContracts = ref<SmartContractInterface[]>([]);
 
-// const content = generateContent(SolutionKey.SMART_CONTRACT);
-//
+useHead({
+  title: $i18n.t('dashboard.nav.smartContracts'),
+});
+const pageLoading = ref<boolean>(true);
+
+onMounted(async () => {
+  await sleep(500);
+  Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    /** Fetch all services if there is any service type unloaded */
+    await smartContractsStore.getContracts();
+
+    smartContracts.value = smartContractsStore.getAllContracts;
+
+    pageLoading.value = false;
+  });
+});
 </script>
