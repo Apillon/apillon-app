@@ -252,6 +252,9 @@ const Endpoints = {
   deployedSmartContractDetails: (contractUuid: string) => {
     return `/contracts/deployed/${contractUuid}`;
   },
+  querySmartContract: (contractUuid: string) => {
+    return `/contracts/deployed/${contractUuid}/call`;
+  },
 
   /**
    * Project settings

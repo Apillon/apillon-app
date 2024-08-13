@@ -97,6 +97,10 @@
       />
     </n-form-item>
     <n-button type="primary" native-type="submit" @click="handleSubmit">Submit</n-button>
+
+    <Notification v-if="submitError" type="error" class="mt-6">
+      Something went wrong, please try again or try later.
+    </Notification>
   </n-form>
 </template>
 
@@ -119,6 +123,8 @@ const {
 const smartContractDetails = ref<any | null>(null);
 
 const formErrors = ref<boolean>(false);
+const submitError = ref<boolean>(false);
+
 const chainOptions = [
   { label: 'Moonbase', value: 1287 },
   { label: 'Moonbeam', value: 1284 },
@@ -239,6 +245,7 @@ watch(
 // submit&deploy
 
 function handleSubmit(e: Event | MouseEvent) {
+  submitError.value = false;
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<any> | undefined) => {
     formErrors.value = !!errors;
@@ -283,6 +290,7 @@ async function deployContract() {
   } catch (e) {
     // TODO handle this error and validation errors
     console.log(e);
+    submitError.value = true;
   }
 }
 </script>
