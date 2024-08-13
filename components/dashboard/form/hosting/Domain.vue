@@ -26,7 +26,7 @@
       </n-form-item>
 
       <!--  IPNS -->
-      <n-form-item path="ipns" :show-label="false">
+      <n-form-item v-if="!website?.ipnsProduction" path="ipns" :show-label="false">
         <n-checkbox
           v-model:checked="formData.ipns"
           :label="labelInfo('useIpns', 'hosting.domain') as string"
