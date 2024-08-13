@@ -258,9 +258,9 @@ function handleSubmit(e: Event | MouseEvent) {
 async function deployContract() {
   const _projectUuid = dataStore.currentProject?.project_uuid;
   const _contractUuid = smartContractsStore.getContractDetails.contract_uuid;
-  console.log(form.value);
-  console.log(form.value._settings);
-  console.log([...settings.value]);
+  // console.log(form.value);
+  // console.log(form.value._settings);
+  // console.log([...settings.value]);
 
   try {
     const res = await $api.post(endpoints.newSmartContract(_contractUuid), {
