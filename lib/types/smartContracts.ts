@@ -1,5 +1,15 @@
 export {};
 
+export enum ContractStatus {
+  CREATED = 0,
+  DEPLOY_INITIATED = 1,
+  DEPLOYING = 2,
+  DEPLOYED = 3,
+  FAILED = 4,
+  TRANSFERRING = 5,
+  TRANSFERRED = 6,
+}
+
 declare global {
   // Your code here
   interface SmartContractInterface {

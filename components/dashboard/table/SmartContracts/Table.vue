@@ -36,6 +36,8 @@ const data = computed<Array<SmartContractInterface>>(() => {
   );
 });
 
+const DeployStatus = resolveComponent('SmartContractsStatus');
+
 const selectedColumns = ref<string[]>(['chain', 'name', 'contractAddress', 'contractStatus']);
 const rowKey = (row: SmartContractInterface) => row.contract_uuid;
 const currentRow = ref<SmartContractInterface>(props.contracts[0]);
@@ -55,7 +57,11 @@ const columns = computed(() => [
     className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
     minWidth: 120,
     render(row) {
-      return h('span', {}, { default: () => row.chain });
+      return h(
+        'span',
+        {},
+        { default: () => t(`dashboard.service.smartContracts.chain.${row.chain}`) }
+      );
     },
   },
   {
@@ -79,7 +85,7 @@ const columns = computed(() => [
       { hidden: !selectedColumns.value.includes('contractStatus') },
     ],
     render(row) {
-      return h('span', {}, { default: () => row.contractStatus });
+      return h(DeployStatus, { contractStatus: row.contractStatus }, '');
     },
   },
 ]);

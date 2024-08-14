@@ -128,6 +128,8 @@ const submitError = ref<boolean>(false);
 const chainOptions = [
   { label: 'Moonbase', value: 1287 },
   { label: 'Moonbeam', value: 1284 },
+  { label: 'Astar_Shibuya', value: 81 },
+  { label: 'Astar', value: 592 },
 ];
 
 const rules = reactive({
