@@ -9,7 +9,13 @@
     <slot>
       <template v-for="fn in functionObjects" :key="fn">
         <!-- If function has any availablbe inouts create a form -->
-        <template v-if="fn.inputs.length">
+        <template
+          v-if="
+            fn.inputs.length &&
+            (fn.stateMutability === 'payable' || fn.stateMutability === 'nonpayable')
+          "
+        >
+          {{ fn.stateMutability }}
           <n-card size="small" class="my-1 max-w-lg">
             <n-collapse accordion>
               <n-collapse-item :title="fn.name">
@@ -20,7 +26,8 @@
                   class="max-w-lg"
                   @submit.prevent="handleSubmit"
                 >
-                  <h3>{{ fn.stateMutability }}</h3>
+                  <!-- <h3>{{ fn.stateMutability }}</h3> -->
+                  {{ fn }}
                   <!-- Create inouts -->
                   <template v-for="i in fn.inputs" :key="i.name">
                     <n-form-item :label="i.name">

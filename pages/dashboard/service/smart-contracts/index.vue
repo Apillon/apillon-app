@@ -33,6 +33,7 @@
 const dataStore = useDataStore();
 const smartContractsStore = useSmartContractsStore();
 const $i18n = useI18n();
+const router = useRouter();
 
 useHead({
   title: $i18n.t('dashboard.nav.smartContracts'),
@@ -47,6 +48,9 @@ onMounted(() => {
     await smartContractsStore.fetchContractsPerProject(projectUuid);
 
     deployedSmartContracts.value = smartContractsStore.getContractsPerProject;
+    if (!deployedSmartContracts.value) {
+      router.push({ name: 'dashboard-service-smart-contracts-new' });
+    }
     pageLoading.value = false;
   });
 });

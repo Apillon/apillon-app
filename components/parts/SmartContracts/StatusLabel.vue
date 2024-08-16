@@ -1,13 +1,14 @@
 <template>
+  <!-- <span>pan</span> -->
   <n-tag
     v-bind="$attrs"
     :type="getCollectionStatus(contractStatus)"
-    :bordered="contractStatus < ContractStatus.DEPLOYED"
+    :bordered="contractStatus < SmartContractStatus.DEPLOYED"
     size="tiny"
     round
   >
     <n-space
-      :class="contractStatus < ContractStatus.DEPLOYED ? 'text-body' : 'text-bg-dark'"
+      :class="contractStatus < SmartContractStatus.DEPLOYED ? 'text-body' : 'text-bg-dark'"
       :size="0"
       align="center"
       :wrap="false"
@@ -15,7 +16,8 @@
       <span class="mx-1 uppercase">{{ $t(`nft.collection.status.${contractStatus}`) }}</span>
       <AnimationTyping
         v-if="
-          contractStatus < ContractStatus.DEPLOYED || contractStatus === ContractStatus.TRANSFERRING
+          contractStatus < SmartContractStatus.DEPLOYED ||
+          contractStatus === SmartContractStatus.TRANSFERRING
         "
       />
     </n-space>
@@ -26,7 +28,8 @@
 defineProps({
   contractStatus: {
     type: Number,
-    validator: (contractStatus: number) => Object.values(ContractStatus).includes(contractStatus),
+    validator: (contractStatus: number) =>
+      Object.values(SmartContractStatus).includes(contractStatus),
     default: 0,
   },
 });
@@ -34,11 +37,11 @@ defineProps({
 /** Deployment status */
 function getCollectionStatus(status: number): TagType {
   switch (status) {
-    case ContractStatus.DEPLOYED:
+    case SmartContractStatus.DEPLOYED:
       return 'success';
-    case ContractStatus.TRANSFERRED:
+    case SmartContractStatus.TRANSFERRED:
       return 'success';
-    case ContractStatus.FAILED:
+    case SmartContractStatus.FAILED:
       return 'error';
     default:
       return 'default';

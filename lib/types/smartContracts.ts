@@ -1,6 +1,6 @@
 export {};
 
-export enum ContractStatus {
+export enum SmartContractStatus {
   CREATED = 0,
   DEPLOY_INITIATED = 1,
   DEPLOYING = 2,
