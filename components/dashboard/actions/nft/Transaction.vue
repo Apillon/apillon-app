@@ -198,11 +198,17 @@ async function createDynamicMetadata() {
 }
 async function createIpns() {
   try {
-    const ipnsRes = await $api.post<IpnsCreateResponse>(
+    const res = await $api.post<CollectionResponse>(
       endpoints.collectionIpns(collectionStore.active.collection_uuid)
     );
 
-    collectionStore.active.ipns_uuid = ipnsRes.data.ipns_uuid;
+    /** Update collection data in store */
+    collectionStore.active = res.data;
+    collectionStore.items.forEach(item => {
+      if (item.collection_uuid === res.data.collection_uuid) {
+        item.baseUri = res.data.baseUri;
+      }
+    });
 
     message.success(t('form.success.created.ipns'));
   } catch (error) {
