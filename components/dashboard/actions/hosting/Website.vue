@@ -47,6 +47,13 @@
           {{ $t('hosting.clearAll') }}
         </n-button>
 
+        <!-- Generate short URL -->
+        <FormStorageShortUrl
+          v-if="env === DeploymentEnvironment.PRODUCTION && websiteStore.active.w3ProductionLink"
+          :target-url="websiteStore.active.w3ProductionLink"
+          size="small"
+        />
+
         <!-- Deploy to staging -->
         <div v-if="isUpload" class="flex items-center align-middle bg-primary rounded-lg">
           <n-button
@@ -238,7 +245,6 @@ function onAllFilesDeleted() {
   bucketStore.folder.items = [];
   bucketStore.folder.path = [];
   bucketStore.folder.selected = '';
-  bucketStore.folder.total = 0;
   bucketStore.folderSearch();
 }
 

@@ -162,6 +162,7 @@ const Endpoints = {
   /**
    * Hosting
    */
+  shortUrl: '/storage/hosting/short-url',
 
   /** Website */
   website: '/storage/hosting/website',
@@ -213,6 +214,9 @@ const Endpoints = {
   },
   collectionNftsMetadata: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/nfts-metadata`;
+  },
+  collectionIpns: (id: string) => {
+    return `/nfts/collections/${id}/ipns`;
   },
 
   /**

@@ -333,6 +333,7 @@ export default function useNft() {
       if (!!metadataSession && !!imagesSession) {
         const res = await $api.post<CollectionResponse>(endpoint, {
           useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
+          useIpns: collectionStore.form.base.useIpns,
           metadataSession,
           imagesSession,
         });
