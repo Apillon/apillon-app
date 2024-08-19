@@ -20,6 +20,7 @@ export enum PageSize {
 
 export const LS_KEYS = {
   NEWSLETTER: 'al_newsletter_subscribed',
+  SERVICE_STATUS: 'al_service_status',
 };
 
 export const SessionKeys = {
