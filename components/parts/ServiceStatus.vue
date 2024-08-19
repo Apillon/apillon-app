@@ -1,5 +1,5 @@
 <template>
-  <Notification
+  <Notice
     v-if="showNotification"
     class="relative inline-flex items-center pr-12"
     :type="notificationType"
@@ -8,14 +8,14 @@
       {{ serviceStatus.message }}
     </span>
     <span v-if="serviceStatus.url" class="inline-block mr-2">
-      <a :href="serviceStatus.url" class="text-body underline" target="_blank">
+      <a :href="serviceStatus.url" class="text-bg-dark underline" target="_blank">
         {{ $t('general.readMore') }}
       </a>
     </span>
-    <button class="absolute right-4 mb-1" @click="close">
+    <button class="absolute top-1/2 -translate-y-1/2 right-4" @click="close">
       <span class="icon-close align-middle text-xl text-bodyDark"></span>
     </button>
-  </Notification>
+  </Notice>
 </template>
 
 <script lang="ts" setup>
