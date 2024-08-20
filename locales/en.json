@@ -1256,6 +1256,7 @@
       "sendAgainEmail": "Email has been re-sent",
       "websiteDeployed": "Website has been deployed.",
       "websiteDeploying": "Done - deployment initiated",
+      "smartContract": "Done - deployment initiated",
       "contract": {
         "cidAssign": "CID has been assign to NFT",
         "deploy": "Contract deploy has been initiated",
