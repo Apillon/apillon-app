@@ -9,6 +9,7 @@ export const useSmartContractsStore = defineStore('contracts', {
     loading: false,
     search: '',
     deployedSmartContractDetails: {} as SmartContractInterface,
+    pagination: createPagination(),
   }),
   getters: {
     getAllContracts(state): SmartContractInterface[] {

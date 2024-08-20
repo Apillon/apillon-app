@@ -9,8 +9,12 @@
       :columns="columns"
       :data="data"
       :pagination="{
-        pageSize: PAGINATION_LIMIT,
-        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+        onChange: (page: number) => {
+          handlePageChange(page, smartContractsStore.pagination.pageSize);
+        },
+        onUpdatePageSize: (pageSize: number) => {
+          handlePageChange(1, pageSize);
+        },
       }"
       :row-key="rowKey"
       :row-props="rowProps"
@@ -83,9 +87,6 @@ const columns = computed(() => [
     render(row) {
       return h(DeployStatus, { contractStatus: row.contractStatus }, '');
     },
-    // render(row) {
-    //   return h('span', {}, { default: () => row.contractStatus });
-    // },
   },
 ]);
 /** On row click */
@@ -99,4 +100,7 @@ const rowProps = (row: SmartContractInterface) => {
     },
   };
 };
+
+//
+async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIMIT) {}
 </script>
