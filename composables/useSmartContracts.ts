@@ -7,6 +7,26 @@ export default function useSmartContractsStore() {
     chain: null,
   });
 
+  // Define the Astar Shibuya chain configuration
+  const astarShibuya = ref({
+    id: 81, // Chain ID for Astar Shibuya testnet
+    name: 'Astar Shibuya',
+    network: 'shibuya',
+    nativeCurrency: {
+      decimals: 18,
+      name: 'SBY',
+      symbol: 'SBY',
+    },
+    rpcUrls: {
+      default: { http: ['https://rpc.shibuya.astar.network'] },
+      public: { http: ['https://rpc.shibuya.astar.network'] },
+    },
+    blockExplorers: {
+      default: { name: 'Subscan', url: 'https://shibuya.subscan.io/' },
+    },
+    testnet: true,
+  });
+
   const isSpecialField = (input: any) => input.name === '_dropStart';
 
   function addSettingsOption(e) {
@@ -31,5 +51,6 @@ export default function useSmartContractsStore() {
     disablePastDate,
     disablePastTime,
     isSpecialField,
+    astarShibuya,
   };
 }

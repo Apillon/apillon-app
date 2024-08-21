@@ -43,7 +43,11 @@
                         </n-form-item>
                       </template>
                       <!-- Submit -->
-                      <n-button type="primary" native-type="submit" @click="handleSubmit(fn.name)">
+                      <n-button
+                        type="primary"
+                        native-type="submit"
+                        @click="handleSubmit(fn.name, 'write', fn.onlyOwner)"
+                      >
                         Query
                       </n-button>
                       <!-- Error container for each form -->
@@ -96,12 +100,19 @@
                         </n-form-item>
                       </template>
                       <!-- Submit -->
-                      <n-button type="primary" native-type="submit" @click="handleSubmit(fn.name)">
+                      <n-button
+                        type="primary"
+                        native-type="submit"
+                        @click="handleSubmit(fn.name, 'read', false)"
+                      >
                         Query
                       </n-button>
                       <!-- Error container for each form -->
                       <Notification v-if="errors[fn.name]" type="error" class="mt-6">
                         Something went wrong, please try again or try later.
+                      </Notification>
+                      <Notification v-if="msgs[fn.name]" type="success" class="mt-6">
+                        {{ msgs[fn.name] }}
                       </Notification>
                     </n-form>
                   </n-collapse-item>
@@ -126,6 +137,9 @@
 </template>
 
 <script lang="ts" setup>
+import { createPublicClient, http, formatUnits } from 'viem';
+import { moonbaseAlpha, moonbeam, astar } from 'viem/chains';
+
 const router = useRouter();
 const { params } = useRoute();
 const { t } = useI18n();
@@ -136,6 +150,7 @@ useHead({
 
 const dataStore = useDataStore();
 const smartContractsStore = useSmartContractsStore();
+const { astarShibuya } = useSmartContracts();
 
 const pageLoading = ref<boolean>(true);
 const contractUuid = ref<string>(`${params?.id}` || '');
@@ -149,6 +164,9 @@ const form = reactive({});
 const formRefs = ref({});
 const errors = ref({});
 const formErrors = ref({});
+const msgs = ref({});
+
+const chains = {};
 
 function validate(obj) {
   for (const key in obj) {
@@ -162,16 +180,59 @@ function validate(obj) {
 }
 
 // Submit
-async function handleSubmit(methodName) {
+function handleSubmit(methodName, method, onlyOwner) {
   errors.value = {};
+  msgs.value = {};
   formErrors.value = {};
-  console.log(form[methodName]);
 
   if (!validate(form[methodName])) {
     formErrors.value[methodName] = true;
     return false;
   }
+  if (method === 'write') {
+    if (onlyOwner) {
+      execOwnerWrite(methodName);
+    } else {
+      execWrite(methodName);
+    }
+  } else {
+    execRead(methodName);
+  }
+}
 
+async function execOwnerWrite(methodName) {}
+
+// read functions handler
+async function execRead(methodName) {
+  const contractAddress = smartContractsStore.active.contractAddress;
+  const chainId = smartContractsStore.active.chain;
+  const abi = smartContractsStore.active.contractVersion.abi;
+  let response;
+
+  const chainConfig = getChainConfig(chainId);
+
+  const client = createPublicClient({
+    chain: chainConfig,
+    transport: http(),
+  });
+
+  try {
+    response = await client.readContract({
+      address: contractAddress,
+      abi,
+      functionName: methodName,
+      args: Object.values(form[methodName]),
+    });
+
+    msgs.value[methodName] = response;
+  } catch (error) {
+    console.log(e);
+    errors.value[methodName] = 'Something went wrong. Please try again.';
+  }
+}
+
+// write functions handler
+async function execWrite(methodName) {
   try {
     const res = await $api.post(endpoints.querySmartContract(contractUuid.value), {
       methodName,
@@ -182,7 +243,6 @@ async function handleSubmit(methodName) {
       errors.value[methodName] = '';
       formRefs.value[methodName].reset();
     }
-    console.log('pass');
   } catch (e) {
     console.log(e);
     errors.value[methodName] = 'Something went wrong. Please try again.';
@@ -231,6 +291,19 @@ onMounted(() => {
     }
   });
 });
+
+function getChainConfig(chainId) {
+  switch (chainId) {
+    case moonbaseAlpha.id:
+      return moonbaseAlpha;
+    case moonbeam.id:
+      return moonbeam;
+    case astar.id:
+      return astar;
+    case astarShibuya.id:
+      return astarShibuya;
+  }
+}
 </script>
 
 <style lang="postcss" scoped>
