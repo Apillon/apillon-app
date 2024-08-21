@@ -65,7 +65,7 @@
       <AuthWalletConnectAstar />
     </div>
 
-    <div v-if="referralStore.airdrop.totalPoints > 0" class="card-light !border-primary p-8">
+    <!-- <div v-if="referralStore.airdrop.totalPoints > 0" class="card-light !border-primary p-8">
       <h6>
         {{ $t('referral.info.claim.title') }}
       </h6>
@@ -74,7 +74,7 @@
       </p>
 
       <FormAirdrop />
-    </div>
+    </div> -->
     <FormClaim />
   </div>
 </template>
