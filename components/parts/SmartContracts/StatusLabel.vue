@@ -13,7 +13,9 @@
       align="center"
       :wrap="false"
     >
-      <span class="mx-1 uppercase">{{ $t(`nft.collection.status.${contractStatus}`) }}</span>
+      <span class="mx-1 uppercase">{{
+        $t(`dashboard.service.smartContracts.status.${contractStatus}`)
+      }}</span>
       <AnimationTyping
         v-if="
           contractStatus < SmartContractStatus.DEPLOYED ||

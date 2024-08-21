@@ -7,6 +7,18 @@
     </template>
 
     <slot>
+      <div class="wallet-props">
+        <span v-if="address" class="mr-4">{{ shortHash(address) }}</span>
+        <Btn
+          v-if="isConnected"
+          type="primary"
+          class="min-w-[12rem]"
+          :loading="btnLoading"
+          @click="disconnectWallet()"
+        >
+          Disconnect
+        </Btn>
+      </div>
       <div class="flex">
         <!-- wrtie functions -->
         <div class="p-2 w-full max-w-lg">
@@ -17,7 +29,7 @@
                 <n-collapse accordion>
                   <n-collapse-item :title="fn.name">
                     <!-- Assign a fromref according to function ref - we have multiple form on same site -->
-                    <template #header-extra>
+                    <template v-if="contractStatus !== 6" #header-extra>
                       <n-tag size="small" type="warning" round>
                         <span class="text-orange"> {{ fn.onlyOwner }}</span>
                       </n-tag>
@@ -44,8 +56,19 @@
                       </template>
                       <!-- Submit -->
                       <n-button
+                        v-if="needsWalletConnection(fn.onlyOwner)"
                         type="primary"
                         native-type="submit"
+                        :loading="btnLoading"
+                        @click="connectWallet"
+                      >
+                        Connect your wallet
+                      </n-button>
+                      <n-button
+                        v-else
+                        type="primary"
+                        native-type="submit"
+                        :loading="btnLoading"
                         @click="handleSubmit(fn.name, 'write', fn.onlyOwner)"
                       >
                         Query
@@ -103,6 +126,7 @@
                       <n-button
                         type="primary"
                         native-type="submit"
+                        :loading="btnLoading"
                         @click="handleSubmit(fn.name, 'read', false)"
                       >
                         Query
@@ -137,8 +161,15 @@
 </template>
 
 <script lang="ts" setup>
-import { createPublicClient, http, formatUnits } from 'viem';
+import { createPublicClient, createWalletClient, custom, http } from 'viem';
 import { moonbaseAlpha, moonbeam, astar } from 'viem/chains';
+
+import { useAccount, useConnect, useWalletClient, useDisconnect } from 'use-wagmi';
+const { connect, connectors } = useConnect();
+const { disconnect } = useDisconnect();
+const { refetch: refetchWalletClient } = useWalletClient();
+const { isConnected } = useAccount({ onConnect: onWalletConnected });
+const { address } = useAccount();
 
 const router = useRouter();
 const { params } = useRoute();
@@ -154,6 +185,7 @@ const { astarShibuya } = useSmartContracts();
 
 const pageLoading = ref<boolean>(true);
 const contractUuid = ref<string>(`${params?.id}` || '');
+const contractStatus = computed(() => smartContractsStore.active.contractStatus);
 
 // Data
 const functionObjects = ref([]);
@@ -165,8 +197,45 @@ const formRefs = ref({});
 const errors = ref({});
 const formErrors = ref({});
 const msgs = ref({});
+const btnLoading = ref(false);
 
-const chains = {};
+function needsWalletConnection(onlyOwner) {
+  if ((!onlyOwner && !isConnected.value) || (!isConnected.value && contractStatus.value === 6))
+    return true;
+  return false;
+}
+
+async function onWalletConnected() {
+  await sleep(200);
+  if (btnLoading.value) {
+    btnLoading.value = false;
+  }
+}
+
+async function connectWallet() {
+  if (!isConnected.value) {
+    await wagmiConnect(connectors.value[0]);
+  }
+}
+
+function disconnectWallet() {
+  disconnect();
+}
+
+function wagmiConnect(connector) {
+  if (isConnected.value) {
+    refetchWalletClient();
+  } else if (connector.ready) {
+    connect({ connector });
+  }
+}
+
+function shortHash(val: string) {
+  if (!val || val.length <= 10) {
+    return val;
+  }
+  return `${val.slice(0, 6)}...${val.slice(-4)}`;
+}
 
 function validate(obj) {
   for (const key in obj) {
@@ -181,6 +250,7 @@ function validate(obj) {
 
 // Submit
 function handleSubmit(methodName, method, onlyOwner) {
+  btnLoading.value = true;
   errors.value = {};
   msgs.value = {};
   formErrors.value = {};
@@ -190,23 +260,53 @@ function handleSubmit(methodName, method, onlyOwner) {
     return false;
   }
   if (method === 'write') {
-    if (onlyOwner) {
-      execOwnerWrite(methodName);
+    if (!onlyOwner || contractStatus.value === 6) {
+      execWalletWrite(methodName);
     } else {
-      execWrite(methodName);
+      execOwnerWrite(methodName);
     }
   } else {
     execRead(methodName);
   }
 }
 
-async function execOwnerWrite(methodName) {}
+async function execWalletWrite(methodName) {
+  const contractAddress = smartContractsStore.active.contractAddress;
+  const abi = smartContractsStore.active.contractVersion.abi;
+  const chainId = smartContractsStore.active.chain;
+  let response;
+
+  const chainConfig = getChainConfig(chainId);
+
+  const client = createWalletClient({
+    chain: chainConfig,
+    transport: custom(window.ethereum), // Connect to the wallet via MetaMask or similar
+  });
+
+  try {
+    response = await client.writeContract({
+      address: contractAddress,
+      abi,
+      functionName: methodName,
+      args: Object.values(form[methodName]),
+      account: address.value,
+    });
+    msgs.value[methodName] = response;
+  } catch (e) {
+    console.log(e);
+    errors.value[methodName] = 'Something went wrong. Please try again.';
+  } finally {
+    btnLoading.value = false;
+  }
+
+  btnLoading.value = false;
+}
 
 // read functions handler
 async function execRead(methodName) {
   const contractAddress = smartContractsStore.active.contractAddress;
-  const chainId = smartContractsStore.active.chain;
   const abi = smartContractsStore.active.contractVersion.abi;
+  const chainId = smartContractsStore.active.chain;
   let response;
 
   const chainConfig = getChainConfig(chainId);
@@ -228,11 +328,13 @@ async function execRead(methodName) {
   } catch (error) {
     console.log(e);
     errors.value[methodName] = 'Something went wrong. Please try again.';
+  } finally {
+    btnLoading.value = false;
   }
 }
 
 // write functions handler
-async function execWrite(methodName) {
+async function execOwnerWrite(methodName) {
   try {
     const res = await $api.post(endpoints.querySmartContract(contractUuid.value), {
       methodName,
@@ -243,9 +345,12 @@ async function execWrite(methodName) {
       errors.value[methodName] = '';
       formRefs.value[methodName].reset();
     }
+    msgs.value[methodName] = response;
   } catch (e) {
     console.log(e);
     errors.value[methodName] = 'Something went wrong. Please try again.';
+  } finally {
+    btnLoading.value = false;
   }
 }
 
