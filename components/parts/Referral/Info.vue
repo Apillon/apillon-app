@@ -37,10 +37,7 @@
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.2`) }}</span>
         </li>
-        <li
-          class="my-2"
-          :class="referralStore.tokenClaim.claimCompleted ? 'text-green' : 'text-bodyDark'"
-        >
+        <li class="my-2 text-green">
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.3`) }}</span>
         </li>
