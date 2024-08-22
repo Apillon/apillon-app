@@ -175,6 +175,38 @@
         </div>
       </div>
     </slot>
+
+    <div
+      v-if="activeTransactions"
+      class="card-dark fixed right-0 bottom-0 w-[34rem] px-5 py-3 !border-yellow !rounded-none z-10 -mr-[1px] -mb-[1px]"
+    >
+      <n-space justify="space-between" align="center">
+        <n-space justify="space-between" align="center">
+          <button class="p-2" @click="transactionListExpanded = !transactionListExpanded">
+            <span
+              class="icon-down align-middle text-2xl"
+              :class="[transactionListExpanded ? 'icon-down' : 'icon-up']"
+            ></span>
+
+            <strong>Transactions in progress</strong>
+          </button>
+        </n-space>
+        <n-space align="center">
+          <IconClose @click="" />
+        </n-space>
+      </n-space>
+      <n-scrollbar v-if="transactionListExpanded" class="max-h-72 mt-4" y-scrollable>
+        <div v-for="(response, methodName) in msgs" :key="methodName" class="method-container">
+          <span>Method: {{ methodName }}</span>
+          <div class="flex flex-row">
+            <Notification type="success" class="mb-2">
+              {{ msgs[methodName] }}
+            </Notification>
+            <IconClose @click="" />
+          </div>
+        </div>
+      </n-scrollbar>
+    </div>
   </Dashboard>
 </template>
 
@@ -201,6 +233,8 @@ const dataStore = useDataStore();
 const smartContractsStore = useSmartContractsStore();
 const { astarShibuya } = useSmartContracts();
 
+const activeTransactions = ref<boolean>(true);
+const transactionListExpanded = ref<boolean>(true);
 const pageLoading = ref<boolean>(true);
 const contractUuid = ref<string>(`${params?.id}` || '');
 const contractStatus = computed(() => smartContractsStore.active.contractStatus);
@@ -270,7 +304,7 @@ function validate(obj) {
 function handleSubmit(methodName, method, onlyOwner) {
   btnLoading.value = true;
   errors.value = {};
-  msgs.value = {};
+  msgs.value[methodName] = null;
   formErrors.value = {};
 
   if (!validate(form[methodName])) {
