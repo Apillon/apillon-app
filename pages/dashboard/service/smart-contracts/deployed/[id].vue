@@ -148,7 +148,25 @@
               <n-card size="small" class="my-1 max-w-lg">
                 <n-collapse accordion>
                   <n-collapse-item :title="fn.name">
-                    {{ fn.outputs[0]?.internalType }}
+                    <div class="mb-4">{{ fn.outputs[0]?.internalType }}</div>
+                    <n-button
+                      type="primary"
+                      native-type="submit"
+                      :loading="btnLoading"
+                      @click="handleSubmit(fn.name, 'read', false)"
+                    >
+                      Query
+                    </n-button>
+                    <!-- Error container for each form -->
+                    <Notification v-if="errors[fn.name]" type="error" class="mt-6">
+                      Something went wrong, please try again or try later.
+                    </Notification>
+                    <Notification
+                      v-if="msgs[fn.name]"
+                      type="success"
+                      class="mt-6"
+                      v-html="msgs[fn.name]"
+                    />
                   </n-collapse-item>
                 </n-collapse>
               </n-card>
