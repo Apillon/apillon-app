@@ -91,7 +91,7 @@
 
   <div class="border-b-1 border-bg-lighter"></div>
 
-  <NctrAddTokenBtn />
+  <!-- <NctrAddTokenBtn /> -->
 </template>
 
 <script setup lang="ts">
