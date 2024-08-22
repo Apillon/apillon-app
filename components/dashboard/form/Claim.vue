@@ -1,6 +1,8 @@
 <template>
   <!-- button -->
-  <template v-if="!hasClaimed && referralStore.tokenClaim.wallet">
+  <template
+    v-if="!hasClaimed && referralStore.tokenClaim.wallet && referralStore.tokenClaim.status === 5"
+  >
     <Btn
       v-if="!isConnected"
       type="primary"
@@ -72,9 +74,14 @@
     </span>
   </Notification>
 
+  <!--  -->
+  <Notification v-if="referralStore.tokenClaim.status !== 5" type="warning" class="w-full mb-8">
+    Breach of terms and Conditions
+  </Notification>
+
   <!-- Fix connection errro -->
   <Notification
-    v-if="referralStore.tokenClaim.wallet !== address"
+    v-if="referralStore.tokenClaim.wallet !== address && referralStore.tokenClaim.status === 5"
     type="warning"
     class="w-full mb-8"
   >
@@ -129,7 +136,8 @@ const isDisabled = computed(
     !referralStore.tokenClaim.wallet ||
     hasClaimed.value ||
     (claimSuccess.value && !claimError.value) ||
-    referralStore.tokenClaim.wallet !== address.value
+    referralStore.tokenClaim.wallet !== address.value ||
+    referralStore.tokenClaim.status !== 5
 );
 
 const wrongNetwork = computed(() => {
