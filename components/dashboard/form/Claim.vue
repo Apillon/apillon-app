@@ -55,7 +55,7 @@
       >
     </span>
   </Notification>
-
+  <!-- redeploy -->
   <!-- Claim succes -->
   <Notification v-if="(claimSuccess && !claimError) || hasClaimed" type="success" class="w-full">
     <span class="text-green">Your $NCTR has been claimed.</span>
