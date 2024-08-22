@@ -43,39 +43,35 @@
   </Notification>
 
   <!-- Being claimed -->
-  <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full mb-8">
-    <span>Your $NCTR is beng claimed.</span>
+  <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full">
+    <span>Your $NCTR is being claimed.</span>
     <span v-if="transactionHash"
       >You can monitor the transaction on
       <a
         class="underline"
         target="_blank"
-        :href="`https://moonbase.moonscan.io/tx/${transactionHash}`"
-        >Moonbase.</a
+        :href="`https://moonbeam.moonscan.io/x/${transactionHash}`"
+        >Moonbeam.</a
       >
     </span>
   </Notification>
 
   <!-- Claim succes -->
-  <Notification
-    v-if="(claimSuccess && !claimError) || hasClaimed"
-    type="success"
-    class="w-full mb-8"
-  >
+  <Notification v-if="(claimSuccess && !claimError) || hasClaimed" type="success" class="w-full">
     <span class="text-green">Your $NCTR has been claimed.</span>
     <span v-if="transactionHash || referralStore.tokenClaim.transactionHash" class="text-green"
       >You can see the transaction on
       <a
         class="underline"
         target="_blank"
-        :href="`https://moonbase.moonscan.io/tx/${transactionHash ? transactionHash : referralStore.tokenClaim.transactionHash}`"
-        >Moonbase.</a
+        :href="`https://moonbeam.moonscan.io/tx/${transactionHash ? transactionHash : referralStore.tokenClaim.transactionHash}`"
+        >Moonbeam.</a
       >
     </span>
   </Notification>
 
   <!--  -->
-  <Notification v-if="referralStore.tokenClaim.status !== 5" type="warning" class="w-full mb-8">
+  <Notification v-if="referralStore.tokenClaim.status !== 5" type="warning" class="w-full">
     Breach of terms and Conditions
   </Notification>
 
@@ -83,15 +79,19 @@
   <Notification
     v-if="referralStore.tokenClaim.wallet !== address && referralStore.tokenClaim.status === 5"
     type="warning"
-    class="w-full mb-8"
+    class="w-full"
   >
     Make sure that your connected wallet is the same as submitted EVM wallet address.
   </Notification>
   <!-- Error message -->
-  <Notification v-if="claimError" type="error" class="w-full mb-8">
+  <Notification v-if="claimError" type="error" class="w-full">
     Something went wrong. Please try again or try later.<br />Make sure that your connected wallet
     is the same as submitted EVM wallet address.
   </Notification>
+
+  <div class="border-b-1 border-bg-lighter"></div>
+
+  <NctrAddTokenBtn />
 </template>
 
 <script setup lang="ts">
