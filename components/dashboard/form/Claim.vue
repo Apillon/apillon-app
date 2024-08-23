@@ -1,6 +1,7 @@
 <template>
+  <div>Claim</div>
   <!-- button -->
-  <template
+  <!-- <template
     v-if="!hasClaimed && referralStore.tokenClaim.wallet && referralStore.tokenClaim.status === 5"
   >
     <Btn
@@ -35,15 +36,15 @@
     >
       {{ $t('referral.info.claim.claim') }}
     </Btn>
-  </template>
+  </template> -->
 
   <!-- Airdrop finished -->
-  <Notification v-if="!referralStore.tokenClaim.wallet" type="info">
+  <!-- <Notification v-if="!referralStore.tokenClaim.wallet" type="info">
     The NCTR Airdrop is now finished.
-  </Notification>
+  </Notification> -->
 
   <!-- Being claimed -->
-  <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full">
+  <!-- <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full">
     <span>Your $NCTR is being claimed.</span>
     <span v-if="transactionHash"
       >You can monitor the transaction on
@@ -55,8 +56,7 @@
       >
     </span>
   </Notification>
-  <!-- redeploy -->
-  <!-- Claim succes -->
+
   <Notification v-if="(claimSuccess && !claimError) || hasClaimed" type="success" class="w-full">
     <span class="text-green">Your $NCTR has been claimed.</span>
     <span v-if="transactionHash || referralStore.tokenClaim.transactionHash" class="text-green"
@@ -70,26 +70,25 @@
     </span>
   </Notification>
 
-  <!--  -->
   <Notification v-if="referralStore.tokenClaim.status !== 5" type="warning" class="w-full">
     Breach of terms and Conditions
-  </Notification>
+  </Notification> -->
 
   <!-- Fix connection errro -->
-  <Notification
+  <!-- <Notification
     v-if="referralStore.tokenClaim.wallet !== address && referralStore.tokenClaim.status === 5"
     type="warning"
     class="w-full"
   >
     Make sure that your connected wallet is the same as submitted EVM wallet address.
-  </Notification>
+  </Notification> -->
   <!-- Error message -->
-  <Notification v-if="claimError" type="error" class="w-full">
+  <!-- <Notification v-if="claimError" type="error" class="w-full">
     Something went wrong. Please try again or try later.<br />Make sure that your connected wallet
     is the same as submitted EVM wallet address.
-  </Notification>
+  </Notification> -->
 
-  <div class="border-b-1 border-bg-lighter"></div>
+  <!-- <div class="border-b-1 border-bg-lighter"></div> -->
 
   <!-- <NctrAddTokenBtn /> -->
 </template>
