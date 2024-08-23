@@ -177,7 +177,7 @@
     </slot>
 
     <div
-      v-if="activeTransactions"
+      v-if="activeTransactionsWindow"
       class="card-dark fixed right-0 bottom-0 w-[34rem] px-5 py-3 !border-yellow !rounded-none z-10 -mr-[1px] -mb-[1px]"
     >
       <n-space justify="space-between" align="center">
@@ -192,7 +192,10 @@
           </button>
         </n-space>
         <n-space align="center">
-          <IconClose @click="" />
+          <IconClose
+            class="cursor-pointer"
+            @click="activeTransactionsWindow = !activeTransactionsWindow"
+          />
         </n-space>
       </n-space>
       <n-scrollbar v-if="transactionListExpanded" class="max-h-72 mt-4" y-scrollable>
@@ -200,7 +203,7 @@
           <span>Method: {{ methodName }}</span>
           <div class="flex flex-row">
             <Notification type="success" class="mb-2">
-              {{ msgs[methodName] }}
+              <span v-html="msgs[methodName]"></span>
             </Notification>
             <IconClose @click="" />
           </div>
@@ -233,7 +236,8 @@ const dataStore = useDataStore();
 const smartContractsStore = useSmartContractsStore();
 const { astarShibuya } = useSmartContracts();
 
-const activeTransactions = ref<boolean>(true);
+const activeTransactions = ref({});
+const activeTransactionsWindow = ref<boolean>(true);
 const transactionListExpanded = ref<boolean>(true);
 const pageLoading = ref<boolean>(true);
 const contractUuid = ref<string>(`${params?.id}` || '');
@@ -306,9 +310,11 @@ function handleSubmit(methodName, method, onlyOwner) {
   errors.value = {};
   msgs.value[methodName] = null;
   formErrors.value = {};
+  activeTransactionsWindow.value = true;
 
   if (!validate(form[methodName])) {
     formErrors.value[methodName] = true;
+    btnLoading.value = false;
     return false;
   }
   if (method === 'write') {
