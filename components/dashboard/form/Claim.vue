@@ -70,7 +70,8 @@
   </Notification>
 
   <Notification v-if="referralStore.tokenClaim.status !== 5" type="warning" class="w-full">
-    Breach of terms and Conditions
+    Unfortunately, you are unable to claim rewards due to a breach of the
+    <a target="_blank" href="https://apillon.io/privacy-policy/">Privacy Policy</a>.
   </Notification>
 
   <!-- Fix connection errro -->
@@ -89,7 +90,7 @@
 
   <div class="border-b-1 border-bg-lighter"></div>
 
-  <NctrAddTokenBtn />
+  <NctrAddTokenBtn v-if="referralStore.tokenClaim.status === 5" />
 </template>
 
 <script setup lang="ts">
