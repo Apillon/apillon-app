@@ -70,8 +70,12 @@
   </Notification>
 
   <Notification v-if="referralStore.tokenClaim.status !== 5" type="warning" class="w-full">
-    Unfortunately, you are unable to claim rewards due to a breach of the
-    <a target="_blank" href="https://apillon.io/privacy-policy/">Privacy Policy</a>.
+    <strong>Account disqualified from rewards due breach of Terms and Conditions.</strong
+    ><br /><br />
+    We detected unauthorized, fraudulent and/or illicit activities aimed at directly or indirectly
+    manipulating, distorting or otherwise illicitly influencing the reward outcomes from the
+    Programs.
+    <!-- <a target="_blank" href="https://apillon.io/privacy-policy/">Privacy Policy</a>. -->
   </Notification>
 
   <!-- Fix connection errro -->
