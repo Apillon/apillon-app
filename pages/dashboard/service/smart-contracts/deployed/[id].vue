@@ -205,7 +205,7 @@
             <Notification type="success" class="mb-2">
               <span v-html="msgs[methodName]"></span>
             </Notification>
-            <IconClose @click="" />
+            <IconClose @click="removeMsg(methodName)" />
           </div>
         </div>
       </n-scrollbar>
@@ -254,6 +254,10 @@ const errors = ref({});
 const formErrors = ref({});
 const msgs = ref({});
 const btnLoading = ref(false);
+
+function removeMsg(methodName) {
+  delete msgs.value[methodName];
+}
 
 function needsWalletConnection(onlyOwner) {
   if ((!onlyOwner && !isConnected.value) || (!isConnected.value && contractStatus.value === 6))
@@ -308,15 +312,15 @@ function validate(obj) {
 function handleSubmit(methodName, method, onlyOwner) {
   btnLoading.value = true;
   errors.value = {};
-  msgs.value[methodName] = null;
   formErrors.value = {};
-  activeTransactionsWindow.value = true;
 
   if (!validate(form[methodName])) {
     formErrors.value[methodName] = true;
     btnLoading.value = false;
     return false;
   }
+  activeTransactionsWindow.value = true;
+  msgs.value[methodName] = null;
   if (method === 'write') {
     if (!onlyOwner || contractStatus.value === 6) {
       execWalletWrite(methodName);
