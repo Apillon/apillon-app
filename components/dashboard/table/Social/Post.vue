@@ -42,7 +42,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
 const postStore = usePostStore();
 
@@ -325,13 +325,13 @@ function onPostDeleted() {
  * Restore post
  * */
 async function restorePost() {
+  if (!currentRow.value?.post_uuid) return;
+
   postStore.loading = true;
 
   try {
-    await $api.patch<PostResponse>(endpoints.posts(currentRow.value?.post_uuid), {
-      status: SqlModelStatus.ACTIVE,
-    });
-    postStore.fetchPosts();
+    await $api.patch<PostResponse>(endpoints.postActivate(currentRow.value?.post_uuid));
+
     postStore.archive.items = postStore.archive.items.filter(
       item => item.post_uuid !== currentRow.value?.post_uuid
     );
@@ -339,14 +339,10 @@ async function restorePost() {
     sessionStorage.removeItem(LsCacheKeys.POSTS);
     sessionStorage.removeItem(LsCacheKeys.POST_ARCHIVE);
 
-    // message.success(t('form.success.restored.post'));
+    message.success(t('form.success.restored.post'));
   } catch (error) {
-    window.$message.error(userFriendlyMsg(error));
+    message.error(userFriendlyMsg(error));
   }
   postStore.loading = false;
-
-  setTimeout(() => {
-    router.push({ name: 'dashboard-service-social' });
-  }, 1000);
 }
 </script>

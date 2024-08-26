@@ -44,7 +44,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
 const chatStore = useChatStore();
 const postStore = usePostStore();
@@ -270,13 +270,13 @@ function onChatDeleted() {
  * Restore chat
  * */
 async function restoreChat() {
+  if (!currentRow.value?.space_uuid) return;
+
   chatStore.loading = true;
 
   try {
-    await $api.patch<ChatResponse>(endpoints.spaces(currentRow.value?.space_uuid), {
-      status: SqlModelStatus.ACTIVE,
-    });
-    chatStore.fetchChats();
+    await $api.patch<ChatResponse>(endpoints.spaceActivate(currentRow.value?.space_uuid));
+
     chatStore.archive.items = chatStore.archive.items.filter(
       item => item.space_uuid !== currentRow.value?.space_uuid
     );
@@ -284,14 +284,10 @@ async function restoreChat() {
     sessionStorage.removeItem(LsCacheKeys.CHATS);
     sessionStorage.removeItem(LsCacheKeys.CHAT_ARCHIVE);
 
-    // message.success(t('form.success.restored.chat'));
+    message.success(t('form.success.restored.chat'));
   } catch (error) {
-    window.$message.error(userFriendlyMsg(error));
+    message.error(userFriendlyMsg(error));
   }
   chatStore.loading = false;
-
-  setTimeout(() => {
-    router.push({ name: 'dashboard-service-social-hub' });
-  }, 1000);
 }
 </script>

@@ -172,6 +172,9 @@ const Endpoints = {
   websiteDeploy: (uuid?: string) => {
     return `/storage/hosting/websites/${uuid}/deploy`;
   },
+  websiteActivate: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/activate`;
+  },
 
   /** Deployment */
   deployment: (websiteUuid: string, deploymentUuid: string) => {
@@ -215,6 +218,9 @@ const Endpoints = {
   collectionNftsMetadata: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/nfts-metadata`;
   },
+  collectionActivate: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/activate`;
+  },
 
   /**
    * Computing
@@ -234,6 +240,9 @@ const Endpoints = {
   },
   contractTransactions: (contractUuid: string) => {
     return `/computing/contracts/${contractUuid}/transactions`;
+  },
+  contractActivate: (contractUuid: string) => {
+    return `/computing/contracts/${contractUuid}/activate`;
   },
 
   /**
@@ -263,8 +272,14 @@ const Endpoints = {
   spaces: (uuid?: number | string) => {
     return uuid ? `/social/spaces/${uuid}` : '/social/spaces';
   },
+  spaceActivate: (uuid: number | string) => {
+    return `/social/spaces/${uuid}/activate`;
+  },
   posts: (uuid?: number | string) => {
     return uuid ? `/social/posts/${uuid}` : `/social/posts`;
+  },
+  postActivate: (uuid: number | string) => {
+    return `/social/posts/${uuid}/activate`;
   },
 
   /** Oauth links */

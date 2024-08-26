@@ -55,6 +55,7 @@ const props = defineProps({
 
 const { t, te } = useI18n();
 const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
@@ -225,10 +226,8 @@ async function restoreWebsite() {
   websiteStore.loading = true;
 
   try {
-    await $api.patch<WebsiteResponse>(endpoints.websites(currentRow.value.website_uuid), {
-      status: SqlModelStatus.ACTIVE,
-    });
-    // websiteStore.fetchWebsites();
+    await $api.patch<WebsiteResponse>(endpoints.websiteActivate(currentRow.value.website_uuid));
+
     websiteStore.archive = websiteStore.archive.filter(
       item => item.website_uuid !== currentRow.value.website_uuid
     );
@@ -236,14 +235,10 @@ async function restoreWebsite() {
     sessionStorage.removeItem(LsCacheKeys.WEBSITE);
     sessionStorage.removeItem(LsCacheKeys.WEBSITE_ARCHIVE);
 
-    // message.success(t('form.success.restored.website'));
+    message.success(t('form.success.restored.website'));
   } catch (error) {
-    window.$message.error(userFriendlyMsg(error));
+    message.error(userFriendlyMsg(error));
   }
   websiteStore.loading = false;
-
-  setTimeout(() => {
-    router.push({ name: 'dashboard-service-hosting' });
-  }, 1000);
 }
 </script>

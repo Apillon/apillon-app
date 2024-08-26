@@ -47,8 +47,8 @@ const props = defineProps({
 
 const { t, te } = useI18n();
 const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
-const dataStore = useDataStore();
 const collectionStore = useCollectionStore();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.COLLECTION_DELETE);
 
@@ -360,9 +360,10 @@ async function restoreCollection() {
   collectionStore.loading = true;
 
   try {
-    await $api.patch<CollectionResponse>(endpoints.collections(currentRow.value.collection_uuid), {
-      status: SqlModelStatus.ACTIVE,
-    });
+    await $api.patch<CollectionResponse>(
+      endpoints.collectionActivate(currentRow.value.collection_uuid)
+    );
+
     collectionStore.archive = collectionStore.archive.filter(
       item => item.collection_uuid !== currentRow.value.collection_uuid
     );
@@ -370,14 +371,10 @@ async function restoreCollection() {
     sessionStorage.removeItem(LsCacheKeys.COLLECTION);
     sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
 
-    // message.success(t('form.success.restored.collection'));
+    message.success(t('form.success.restored.collection'));
   } catch (error) {
-    window.$message.error(userFriendlyMsg(error));
+    message.error(userFriendlyMsg(error));
   }
   collectionStore.loading = false;
-
-  setTimeout(() => {
-    router.push({ name: 'dashboard-service-nft' });
-  }, 1000);
 }
 </script>

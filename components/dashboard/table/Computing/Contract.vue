@@ -46,6 +46,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
@@ -260,10 +261,7 @@ async function restoreContract() {
   contractStore.loading = true;
 
   try {
-    await $api.patch<ContractResponse>(endpoints.contracts(currentRow.value.contract_uuid), {
-      status: SqlModelStatus.ACTIVE,
-    });
-    contractStore.fetchContracts();
+    await $api.patch<ContractResponse>(endpoints.contractActivate(currentRow.value.contract_uuid));
     contractStore.archive = contractStore.archive.filter(
       item => item.contract_uuid !== currentRow.value.contract_uuid
     );
@@ -271,14 +269,10 @@ async function restoreContract() {
     sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
     sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);
 
-    // message.success(t('form.success.restored.contract'));
+    message.success(t('form.success.restored.contract'));
   } catch (error) {
-    window.$message.error(userFriendlyMsg(error));
+    message.error(userFriendlyMsg(error));
   }
   contractStore.loading = false;
-
-  setTimeout(() => {
-    router.push({ name: 'dashboard-service-computing' });
-  }, 1000);
 }
 </script>
