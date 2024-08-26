@@ -70,7 +70,9 @@
   </Notification>
 
   <Notification v-if="referralStore.tokenClaim.status !== 5" type="warning" class="w-full">
-    <strong>Account disqualified from rewards due breach of Terms and Conditions.</strong
+    <strong
+      >Account disqualified from rewards due breach of
+      <a target="_blank" href="https://apillon.io/privacy-policy/">Privacy Policy.</a></strong
     ><br /><br />
     We detected unauthorized, fraudulent and/or illicit activities aimed at directly or indirectly
     manipulating, distorting or otherwise illicitly influencing the reward outcomes from the
