@@ -28,6 +28,9 @@
         {{ $t('hosting.domain.configure') }}
       </Btn>
     </n-space>
+    <div v-if="domainStatus">
+      <span>{{ WebsiteDomainStatus[domainStatus.domainStatus] }}</span>
+    </div>
   </div>
   <!-- Modal - Website domain -->
   <modal
@@ -51,12 +54,18 @@
 <script lang="ts" setup>
 const { isLg } = useScreen();
 const websiteStore = useWebsiteStore();
-const showModalDomain = ref<boolean>(false);
-const showModalConfiguration = ref<boolean>(false);
 const { websiteUuid } = useHosting();
 
-onMounted(() => {
-  websiteStore.getWebsites();
+const showModalDomain = ref<boolean>(false);
+const showModalConfiguration = ref<boolean>(false);
+const domainStatus = ref<DomainInterface | null>(null);
+
+onMounted(async () => {
+  await websiteStore.getWebsites();
+
+  if (domain.value) {
+    domainStatus.value = await websiteStore.fetchDomainStatus(websiteUuid.value);
+  }
 });
 
 const domain = computed<string>(() => {

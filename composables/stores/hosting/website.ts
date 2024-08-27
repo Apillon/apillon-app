@@ -116,5 +116,16 @@ export const useWebsiteStore = defineStore('website', {
       }
       return {} as WebsiteInterface;
     },
+
+    async fetchDomainStatus(uuid: string): Promise<DomainInterface | null> {
+      try {
+        const res = await $api.get<DomainResponse>(endpoints.websiteDomainStatus(uuid));
+        return res.data;
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return null;
+    },
   },
 });
