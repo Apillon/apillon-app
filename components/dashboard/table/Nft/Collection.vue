@@ -192,6 +192,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     },
     {
       key: 'columns',
+      className: '!sticky right-0',
       filter: 'default',
       filterOptionValue: null,
       renderFilterIcon: () => {
