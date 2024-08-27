@@ -71,7 +71,6 @@ watch(
 );
 
 async function selectServices(serviceNames: string[]) {
-  await paymentStore.getPriceList();
   servicePrices.value = await paymentStore.filterServicePrice(serviceNames);
 }
 

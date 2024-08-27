@@ -37,6 +37,7 @@
       <n-popconfirm
         v-if="
           collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
+          collectionStore.active.cid &&
           !collectionStore.active.ipns_uuid
         "
         @positive-click="createDynamicMetadata()"
@@ -196,25 +197,17 @@ async function createDynamicMetadata() {
   warningStore.showSpendingWarning([PriceServiceName.IPNS, priceServiceName], () => createIpns());
 }
 async function createIpns() {
-  const bucketUuid = collectionStore.active.bucket_uuid;
-  const collectionUuid = collectionStore.active.collection_uuid;
-  const cid = collectionStore.active.cid;
   try {
-    const ipnsRes = await $api.post<IpnsCreateResponse>(endpoints.ipns(bucketUuid), {
-      bucket_uuid: bucketUuid,
-      cid,
-      name: `${collectionStore.active.name} IPNS Record`,
-    });
-    collectionStore.active.ipns_uuid = ipnsRes.data.ipns_uuid;
-
-    const ipnsPublishRes = await $api.post<IpnsPublishResponse>(
-      endpoints.ipnsPublish(bucketUuid, ipnsRes.data.ipns_uuid),
-      { cid }
+    const res = await $api.post<CollectionResponse>(
+      endpoints.collectionIpns(collectionStore.active.collection_uuid)
     );
 
-    await $api.post(endpoints.collectionSetBaseUri(collectionUuid), {
-      collection_uuid: collectionUuid,
-      uri: ipnsPublishRes.data.link,
+    /** Update collection data in store */
+    collectionStore.active = res.data;
+    collectionStore.items.forEach(item => {
+      if (item.collection_uuid === res.data.collection_uuid) {
+        item.baseUri = res.data.baseUri;
+      }
     });
 
     message.success(t('form.success.created.ipns'));

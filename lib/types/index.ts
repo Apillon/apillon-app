@@ -15,6 +15,15 @@ export enum SqlModelStatus {
   DELETED = 9,
 }
 
+/**
+ * Service Status Type Enum { Info, Error, Warning }
+ */
+export enum ServiceStatusType {
+  INFO = 1,
+  ERROR = 2,
+  WARNING = 3,
+}
+
 declare global {
   type KeyValue = {
     key: string | number;
@@ -88,4 +97,15 @@ declare global {
     project_uuid?: string;
     status?: SqlModelStatus;
   };
+
+  interface ServiceStatusInterface {
+    id: number;
+    message: string;
+    status: number;
+    type: number;
+    url: string | null;
+  }
+
+  interface ServiceStatusResponse extends GeneralResponse<ServiceStatusInterface> {}
+  interface ServiceStatusesResponse extends GeneralItemsResponse<ServiceStatusInterface> {}
 }

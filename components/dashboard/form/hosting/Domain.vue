@@ -26,7 +26,7 @@
       </n-form-item>
 
       <!--  IPNS -->
-      <n-form-item path="ipns" :show-label="false">
+      <n-form-item v-if="!website?.ipnsProduction" path="ipns" :show-label="false">
         <n-checkbox
           v-model:checked="formData.ipns"
           :label="labelInfo('useIpns', 'hosting.domain') as string"
@@ -127,9 +127,12 @@ function handleSubmit(e: Event | MouseEvent) {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
     } else if (props.domain) {
-      warningStore.showSpendingWarning(PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, () =>
-        updateWebsiteDomain()
-      );
+      const serviceName =
+        formData.value.ipns && !website.value?.ipnsProduction
+          ? [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, PriceServiceName.IPNS]
+          : [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN];
+
+      warningStore.showSpendingWarning(serviceName, () => updateWebsiteDomain());
     } else {
       const serviceName = formData.value.ipns
         ? [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, PriceServiceName.IPNS]

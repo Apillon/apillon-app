@@ -218,6 +218,9 @@ const Endpoints = {
   collectionNftsMetadata: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/nfts-metadata`;
   },
+  collectionIpns: (id: string) => {
+    return `/nfts/collections/${id}/ipns`;
+  },
   collectionActivate: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/activate`;
   },
@@ -304,6 +307,9 @@ const Endpoints = {
   airdropTasks: '/referral/airdrop-tasks',
   airdropReviewTasks: '/referral/review-tasks',
   referralClaimParams: '/referral/claim-parameters',
+
+  /** Service status */
+  serviceStatus: '/public/service-status',
 };
 
 export default Endpoints;
