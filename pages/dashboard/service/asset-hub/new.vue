@@ -8,14 +8,16 @@
               <span class="icon-back text-2xl align-sub"></span>
             </NuxtLink>
             <div>
-              <h2>{{ $t('dashboard.nav.assetHub') }}</h2>
+              <h2>{{ $t('dashboard.service.assetHub.form.create') }}</h2>
             </div>
           </div>
         </slot>
       </Heading>
     </template>
 
-    <FormAssetHubNew />
+    <div>
+      <FormAssetHubNew />
+    </div>
   </Dashboard>
 </template>
 
