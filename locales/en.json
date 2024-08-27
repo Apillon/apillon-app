@@ -378,7 +378,8 @@
       "smartContracts": "Smart Contracts",
       "social": "Social",
       "solutions": "Pre-built Solutions",
-      "storage": "Storage"
+      "storage": "Storage",
+      "assetHub": "Asset hub"
     },
     "pageMenu": {
       "access": "Access",
@@ -491,6 +492,36 @@
         "name": "Decentralized Storage",
         "website": "Main Website Storage",
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
+      },
+      "assetHub": {
+        "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
+        "connectWallet": "Connect wallet",
+        "noProject": "Your project has no assets yet",
+        "form": {
+          "create": "Create asset",
+          "subtitle": "Characteristics",
+          "label": {
+            "network": "Network",
+            "name": "Asset name",
+            "symbol": "Asset symbol",
+            "assetId": "Asset ID",
+            "decimals": "Decimals",
+            "initialSupply": "Initial supply",
+            "minBalance": "Minimum balance",
+            "issuerAddress": "Issuer Address",
+            "freezerAddress": "Freezer Address"
+          },
+          "placeholder": {
+            "name": "Type name",
+            "symbol": "Type asset symbol",
+            "assetId": "Asset ID",
+            "decimals": "Decimals",
+            "inititalSupply": "initial Supply",
+            "minbalance": "Minimum Balance",
+            "issuerAddress": "Issuer Address",
+            "freezerAddress": "Freezer Address"
+          }
+        }
       },
       "addFirst": "Add first service",
       "delete": "Delete service",

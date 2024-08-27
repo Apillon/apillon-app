@@ -122,6 +122,17 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         !authStore.isUserAllowed(Permission.SOCIAL) ||
         zeroProjects.value,
     },
+    {
+      key: 'dashboard-service-asset-hub',
+      label: $i18n.t('dashboard.nav.assetHub'),
+      to: 'dashboard-service-asset-hub',
+      iconName: 'icon-social',
+      soon: isMenuItemDisabled(Feature.SOCIAL),
+      disabled:
+        isMenuItemDisabled(Feature.SOCIAL) ||
+        !authStore.isUserAllowed(Permission.SOCIAL) ||
+        zeroProjects.value,
+    },
   ];
 
   const smartContractsChildren = [
