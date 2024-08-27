@@ -10,7 +10,7 @@ import { moonbeam, moonbaseAlpha } from 'use-wagmi/chains';
 const nuxtConfig = useRuntimeConfig();
 
 const contractAddress = nuxtConfig.public.nctrContract as `0x${string}`;
-const usedChain = nuxtConfig.public.ENV === AppEnv.PROD ? moonbeam : moonbaseAlpha;
+const usedChain = moonbeam;
 
 const contract = ref();
 const claimError = ref(false);
