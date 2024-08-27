@@ -1,6 +1,8 @@
 <template>
   <!-- button -->
-  <!-- <template v-if="!hasClaimed && referralStore.tokenClaim.wallet">
+  <template
+    v-if="!hasClaimed && referralStore.tokenClaim.wallet && referralStore.tokenClaim.status === 5"
+  >
     <Btn
       v-if="!isConnected"
       type="primary"
@@ -33,58 +35,68 @@
     >
       {{ $t('referral.info.claim.claim') }}
     </Btn>
-  </template> -->
+  </template>
 
   <!-- Airdrop finished -->
-  <!-- <Notification v-if="!referralStore.tokenClaim.wallet" type="info">
+  <Notification v-if="!referralStore.tokenClaim.wallet" type="info">
     The NCTR Airdrop is now finished.
-  </Notification> -->
+  </Notification>
 
   <!-- Being claimed -->
-  <!-- <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full mb-8">
-    <span>Your $NCTR is beng claimed.</span>
+  <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full">
+    <span>Your $NCTR is being claimed.</span>
     <span v-if="transactionHash"
       >You can monitor the transaction on
       <a
         class="underline"
         target="_blank"
-        :href="`https://moonbase.moonscan.io/tx/${transactionHash}`"
-        >Moonbase.</a
+        :href="`https://moonbeam.moonscan.io/x/${transactionHash}`"
+        >Moonbeam.</a
       >
     </span>
-  </Notification> -->
+  </Notification>
 
-  <!-- Claim succes -->
-  <!-- <Notification
-    v-if="(claimSuccess && !claimError) || hasClaimed"
-    type="success"
-    class="w-full mb-8"
-  >
+  <Notification v-if="(claimSuccess && !claimError) || hasClaimed" type="success" class="w-full">
     <span class="text-green">Your $NCTR has been claimed.</span>
     <span v-if="transactionHash || referralStore.tokenClaim.transactionHash" class="text-green"
       >You can see the transaction on
       <a
         class="underline"
         target="_blank"
-        :href="`https://moonbase.moonscan.io/tx/${transactionHash ? transactionHash : referralStore.tokenClaim.transactionHash}`"
-        >Moonbase.</a
+        :href="`https://moonbeam.moonscan.io/tx/${transactionHash ? transactionHash : referralStore.tokenClaim.transactionHash}`"
+        >Moonbeam.</a
       >
     </span>
-  </Notification> -->
+  </Notification>
+
+  <Notification v-if="referralStore.tokenClaim.status !== 5" type="warning" class="w-full">
+    <strong
+      >Account disqualified from rewards due breach of
+      <a target="_blank" href="https://apillon.io/privacy-policy/">Privacy Policy.</a></strong
+    ><br /><br />
+    We detected unauthorized, fraudulent and/or illicit activities aimed at directly or indirectly
+    manipulating, distorting or otherwise illicitly influencing the reward outcomes from the
+    Programs.
+    <!-- <a target="_blank" href="https://apillon.io/privacy-policy/">Privacy Policy</a>. -->
+  </Notification>
 
   <!-- Fix connection errro -->
-  <!-- <Notification
-    v-if="referralStore.tokenClaim.wallet !== address"
+  <Notification
+    v-if="referralStore.tokenClaim.wallet !== address && referralStore.tokenClaim.status === 5"
     type="warning"
-    class="w-full mb-8"
+    class="w-full"
   >
     Make sure that your connected wallet is the same as submitted EVM wallet address.
-  </Notification> -->
+  </Notification>
   <!-- Error message -->
-  <!-- <Notification v-if="claimError" type="error" class="w-full mb-8">
+  <Notification v-if="claimError" type="error" class="w-full">
     Something went wrong. Please try again or try later.<br />Make sure that your connected wallet
     is the same as submitted EVM wallet address.
-  </Notification> -->
+  </Notification>
+
+  <div class="border-b-1 border-bg-lighter"></div>
+
+  <NctrAddTokenBtn v-if="referralStore.tokenClaim.status === 5" />
 </template>
 
 <script setup lang="ts">
@@ -129,7 +141,8 @@ const isDisabled = computed(
     !referralStore.tokenClaim.wallet ||
     hasClaimed.value ||
     (claimSuccess.value && !claimError.value) ||
-    referralStore.tokenClaim.wallet !== address.value
+    referralStore.tokenClaim.wallet !== address.value ||
+    referralStore.tokenClaim.status !== 5
 );
 
 const wrongNetwork = computed(() => {

@@ -1954,7 +1954,7 @@
         "1": "Signed URL for upload generated",
         "2": "Uploaded to S3",
         "3": "Uploaded to IPFS",
-        "4": "Upload completed - File pinned to CRUST",
+        "4": "Upload completed",
         "5": "Upload completed",
         "100": "Error while uploading to S3",
         "101": "Error while pinning to CRUST",
