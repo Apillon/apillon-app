@@ -10,7 +10,7 @@ import { moonbeam, moonbaseAlpha } from 'use-wagmi/chains';
 const nuxtConfig = useRuntimeConfig();
 
 const contractAddress = nuxtConfig.public.nctrContract as `0x${string}`;
-const usedChain = nuxtConfig.public.ENV === AppEnv.PROD ? moonbeam : moonbaseAlpha;
+const usedChain = moonbeam;
 
 const contract = ref();
 const claimError = ref(false);
@@ -26,6 +26,7 @@ export default function useContract() {
   const { data: walletClient, refetch } = useWalletClient();
   const referralStore = useReferralStore();
   const savedWallet = ref(referralStore.tokenClaim.wallet);
+  const { isConnected } = useAccount({ onConnect: onWalletConnected });
 
   /**
    * Init contract
@@ -35,7 +36,7 @@ export default function useContract() {
       await refetch();
       await sleep(200);
     }
-
+    contract.value = null;
     contract.value = getContract({
       address: contractAddress,
       abi,
@@ -53,7 +54,6 @@ export default function useContract() {
     claimError.value = false;
     claimSuccess.value = false;
     try {
-      console.log(savedWallet.value, address.value);
       const gas = await publicClient.value.estimateContractGas({
         address: contractAddress,
         abi,
@@ -63,7 +63,6 @@ export default function useContract() {
       });
 
       const gasLimit = (gas * 110n) / 100n;
-      console.log('gasLimit', gasLimit);
       const tx = await contract.value.write.claim([amount, timestamp, signature], {}, { gasLimit });
       transactionHash.value = tx;
       pollTransactionStatus(tx);
@@ -93,6 +92,10 @@ export default function useContract() {
     return true;
   }
 
+  async function onWalletConnected() {
+    await initContract();
+  }
+
   return {
     initContract,
     getClaimStatus,
@@ -104,5 +107,6 @@ export default function useContract() {
     transactionHash,
     usedChain,
     chain,
+    address,
   };
 }
