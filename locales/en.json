@@ -497,6 +497,7 @@
         "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
         "connectWallet": "Connect wallet",
         "noProject": "Your project has no assets yet",
+        "asset": "asset",
         "form": {
           "create": "Create an asset",
           "subtitle": "Characteristics",
@@ -522,11 +523,6 @@
             "issuerAddress": "Issuer Address",
             "freezerAddress": "Freezer Address"
           }
-        },
-        "info": {
-          "p1": "We recommend creating your asset on the testnet first, to preview and test it thoroughly. Once you’re satisfied with the outcome, you can confidently deploy it on the mainnet. Keep in mind, once deployed, asset’s name, symbol, ID, and other characteristics will be permanently reserved on the blockchain.",
-          "p2": "These are the key characteristics of your soon-to-be created asset. We’ll automatically validate the asset’s name, symbol, and ID, and notify you if any of these are already in use by an existing asset.Feel free to learn more about asset parameters in the documentation here.",
-          "p3": "Issuer: An account with unique ability to mint a specific class of assets. Freezer: An account with exclusive rights to restrict another account from transferring a certain class of assets."
         }
       },
       "addFirst": "Add first service",

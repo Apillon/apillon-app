@@ -3,7 +3,7 @@
     ref="formRef"
     :model="formData"
     :class="{ 'form-errors': formErrors }"
-    class="max-w-lg"
+    class="w-full max-w-lg mb-8"
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
