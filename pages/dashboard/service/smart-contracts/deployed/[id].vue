@@ -7,6 +7,18 @@
     </template>
 
     <slot>
+      <div>
+        <div class="flex flex-col md:flex-row">
+          <div>
+            <h3></h3>
+            <p></p>
+            <div class=""></div>
+          </div>
+          <div>
+            <img src="" alt="" />
+          </div>
+        </div>
+      </div>
       <div class="wallet-props">
         <span v-if="address" class="mr-4">{{ shortHash(address) }}</span>
         <Btn
