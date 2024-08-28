@@ -50,28 +50,11 @@
       </h6>
       <p class="mt-4 mb-6 text-sm">
         {{ $t('referral.info.receiveTokens') }}
-        <!-- <a
-          href="https://docs.astar.network/docs/use/manage-wallets/wallet-providers/"
-          class="text-white underline"
-          target="_blank"
-        >
-          {{ $t('referral.info.seeHow') }}
-        </a> -->
       </p>
 
       <AuthWalletConnectAstar />
     </div>
 
-    <!-- <div v-if="referralStore.airdrop.totalPoints > 0" class="card-light !border-primary p-8">
-      <h6>
-        {{ $t('referral.info.claim.title') }}
-      </h6>
-      <p class="mt-4 mb-6 text-sm">
-        {{ $t('referral.info.claim.content') }}
-      </p>
-
-      <FormAirdrop />
-    </div> -->
     <FormClaim />
   </div>
 </template>
