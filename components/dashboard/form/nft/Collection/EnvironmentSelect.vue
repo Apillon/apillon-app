@@ -10,7 +10,25 @@
         :class="collectionStore.form.base.chain === chain.value ? 'border-yellow' : ''"
         @click="selectChain(chain.value)"
       >
-        <div>
+        <n-tooltip v-if="disabledChain(chain.value)" placement="bottom" trigger="hover">
+          <template #trigger>
+            <div class="!cursor-default opacity-60">
+              <NuxtIcon
+                :name="`logo/${chain.name}`"
+                class="flex justify-center mx-auto text-7xl"
+                filled
+              />
+              <p>{{ chain.label }}</p>
+            </div>
+          </template>
+          <span v-if="collectionStore.quotaReached">
+            {{ $t('error.ETHEREUM_COLLECTION_QUOTA_REACHED') }}
+          </span>
+          <span v-else-if="!paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY)">
+            {{ $t('error.REQUIRES_BUTTERFLY_PLAN') }}
+          </span>
+        </n-tooltip>
+        <div v-else>
           <NuxtIcon
             :name="`logo/${chain.name}`"
             class="flex justify-center mx-auto text-7xl"
@@ -52,9 +70,16 @@
 
 <script setup lang="ts">
 const collectionStore = useCollectionStore();
+const paymentStore = usePaymentStore();
 const { chains, chainTypes, onChainChange } = useCollection();
 
+const disabledChain = (chainId: number) =>
+  (!paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) || collectionStore.quotaReached) &&
+  (chainId === EvmChain.ETHEREUM || chainId === EvmChain.SEPOLIA);
+
 function selectChain(chain: number) {
+  if (disabledChain(chain)) return;
+
   collectionStore.form.base.chain = chain;
   onChainChange(chain);
 }

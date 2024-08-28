@@ -191,6 +191,7 @@ const Endpoints = {
 
   /** Collection */
   collectionsSubstrate: '/nfts/collections/substrate',
+  collectionsQuota: '/nfts/collections/quota-reached',
   collections: (id?: string) => {
     return id ? `/nfts/collections/${id}` : '/nfts/collections';
   },

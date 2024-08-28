@@ -6,6 +6,13 @@ type FetchCreditTransactionsParams = FetchParams & {
   direction?: string | null;
 };
 
+export const PLAN_NAMES = {
+  FREEMIUM: 'Egg',
+  CATERPILLAR: 'Caterpillar',
+  COCOON: 'Cocoon',
+  BUTTERFLY: 'Butterfly',
+};
+
 let abortController = null as AbortController | null;
 
 export const usePaymentStore = defineStore('payment', {
@@ -66,6 +73,13 @@ export const usePaymentStore = defineStore('payment', {
       this.invoices.items = [] as InvoiceInterface[];
       this.invoices.total = 0;
       this.priceList = [] as ProductPriceInterface[];
+    },
+
+    hasPlan(planName: string) {
+      const activePackage =
+        this.subscriptionPackages.find(item => item.id === this.activeSubscription.package_id) ||
+        this.subscriptionPackages[0];
+      return activePackage.name === planName;
     },
 
     /**

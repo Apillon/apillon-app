@@ -19,6 +19,7 @@ export const useCollectionStore = defineStore('collection', {
     metadataDeploys: [] as MetadataDeployInterface[],
     metadataStored: null as Boolean | null,
     mintTab: NftCreateTab.METADATA,
+    quotaReached: undefined as Boolean | undefined,
     search: '',
     step: CollectionStep.STORAGE_TYPE,
     nftStep: NftCreateStep.AMOUNT,
@@ -95,6 +96,7 @@ export const useCollectionStore = defineStore('collection', {
       this.metadataDeploys = [] as MetadataDeployInterface[];
       this.search = '';
       this.transaction = [] as TransactionInterface[];
+      this.quotaReached = undefined as Boolean | undefined;
       this.resetMetadata();
     },
     resetMetadata() {
@@ -157,6 +159,7 @@ export const useCollectionStore = defineStore('collection', {
       sessionStorage.removeItem(LsCacheKeys.COLLECTION);
       sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
       sessionStorage.removeItem(LsCacheKeys.COLLECTION_TRANSACTIONS);
+      sessionStorage.removeItem(LsCacheKeys.COLLECTION_QUOTA);
     },
     /**
      * Fetch wrappers
@@ -198,6 +201,14 @@ export const useCollectionStore = defineStore('collection', {
         return await this.fetchMetadataDeploys(collectionUuid);
       }
       return this.metadataDeploys;
+    },
+
+    /** GET Collection quota, if current value is undefined  */
+    async getQuota() {
+      if (this.quotaReached === undefined || isCacheExpired(LsCacheKeys.COLLECTION_QUOTA)) {
+        await this.fetchQuota();
+      }
+      return this.quotaReached;
     },
 
     /**
@@ -317,6 +328,24 @@ export const useCollectionStore = defineStore('collection', {
         window.$message.error(userFriendlyMsg(error));
       }
       return [];
+    },
+
+    async fetchQuota() {
+      const dataStore = useDataStore();
+      if (!dataStore.hasProjects) {
+        await dataStore.fetchProjects();
+      }
+      try {
+        const res = await $api.get<GeneralResponse<boolean>>(endpoints.collectionsQuota, {
+          project_uuid: dataStore.projectUuid,
+        });
+        this.quotaReached = res.data;
+      } catch (error: any) {
+        this.quotaReached = undefined;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
     },
   },
 });

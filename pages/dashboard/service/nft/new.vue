@@ -189,6 +189,9 @@ const scrollStyle = computed(() => {
 onMounted(() => {
   resetAndAddNft();
 
+  /** Check if user can create Ethereum collection */
+  collectionStore.getQuota();
+
   /** Get Price list */
   paymentStore.getPriceList();
 });
