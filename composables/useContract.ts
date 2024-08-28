@@ -47,7 +47,11 @@ export default function useContract() {
 
   // Contract Interaction
   async function getClaimStatus() {
-    return (await contract.value.read.walletClaimed([savedWallet.value])) as boolean;
+    try {
+      return (await contract.value.read.walletClaimed([savedWallet.value])) as boolean;
+    } catch (e) {
+      return e;
+    }
   }
   // amount timestamp signature
   async function claimTokens(amount, timestamp, signature) {
