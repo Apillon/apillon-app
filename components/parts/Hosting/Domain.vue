@@ -28,9 +28,19 @@
         {{ $t('hosting.domain.configure') }}
       </Btn>
     </n-space>
-    <div v-if="domainStatus">
-      <span>{{ WebsiteDomainStatus[domainStatus.domainStatus] }}</span>
-    </div>
+    <n-space v-if="domainStatus" class="w-full mt-4" :wrap="!isLg" align="center">
+      <Pill :type="domainStatusType">
+        {{ $t(`hosting.domain.status.${domainStatus.domainStatus}`) }}
+      </Pill>
+      <Btn
+        size="small"
+        :disabled="btnDomainDisabled"
+        :loading="loadingDomain"
+        click="refreshDomainStatus"
+      >
+        {{ $t('hosting.domain.refreshStatus') }}
+      </Btn>
+    </n-space>
   </div>
   <!-- Modal - Website domain -->
   <modal
@@ -59,21 +69,41 @@ const { websiteUuid } = useHosting();
 const showModalDomain = ref<boolean>(false);
 const showModalConfiguration = ref<boolean>(false);
 const domainStatus = ref<DomainInterface | null>(null);
+const loadingDomain = ref<boolean>(false);
+const btnDomainDisabled = ref<boolean>(false);
 
 onMounted(async () => {
   await websiteStore.getWebsites();
-
-  if (domain.value) {
-    domainStatus.value = await websiteStore.fetchDomainStatus(websiteUuid.value);
-  }
+  refreshDomainStatus();
 });
 
 const domain = computed<string>(() => {
   return websiteStore.active.domain || '';
 });
 
+const domainStatusType = computed<TagType>(() => {
+  switch (domainStatus.value?.domainStatus) {
+    case WebsiteDomainStatus.PENDING:
+      return 'info';
+    case WebsiteDomainStatus.INVALID:
+      return 'warning';
+    default:
+      return 'success';
+  }
+});
+
 const editEnabled = computed<boolean>(() => {
   const time = websiteStore.active.domainChangeDate;
   return time && domain.value ? new Date(time).getTime() + 15 * 60 * 1000 < Date.now() : true;
 });
+
+async function refreshDomainStatus() {
+  if (domain.value) {
+    loadingDomain.value = true;
+    btnDomainDisabled.value = true;
+    domainStatus.value = await websiteStore.fetchDomainStatus(websiteUuid.value);
+    loadingDomain.value = false;
+    setTimeout(() => (btnDomainDisabled.value = false), 5000);
+  }
+}
 </script>
