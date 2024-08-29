@@ -146,7 +146,7 @@ const isDisabled = computed(
     !referralStore.tokenClaim.wallet ||
     hasClaimed.value ||
     (claimSuccess.value && !claimError.value) ||
-    referralStore.tokenClaim.wallet !== address.value ||
+    referralStore.tokenClaim.wallet.toLowerCase() !== address.value?.toLowerCase() ||
     referralStore.tokenClaim.status !== 5
 );
 
