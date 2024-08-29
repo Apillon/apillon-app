@@ -7,18 +7,6 @@
     </template>
 
     <slot>
-      <div>
-        <div class="flex flex-col md:flex-row">
-          <div>
-            <h3></h3>
-            <p></p>
-            <div class=""></div>
-          </div>
-          <div>
-            <img src="" alt="" />
-          </div>
-        </div>
-      </div>
       <div class="wallet-props">
         <span v-if="address" class="mr-4">{{ shortHash(address) }}</span>
         <Btn
@@ -31,110 +19,239 @@
           Disconnect
         </Btn>
       </div>
-      <div class="flex">
-        <!-- wrtie functions -->
-        <div class="p-2 w-full max-w-lg">
-          <template v-for="fn in writeFunctions" :key="fn">
-            <!-- If function has any availablbe inouts create a form -->
-            <template v-if="fn.inputs.length">
-              <n-card size="small" class="my-1 max-w-lg">
-                <n-collapse accordion>
-                  <n-collapse-item :title="fn.name">
-                    <!-- Assign a fromref according to function ref - we have multiple form on same site -->
-                    <template v-if="contractStatus !== 6" #header-extra>
-                      <n-tag size="small" type="warning" round>
-                        <span class="text-orange"> {{ fn.onlyOwner }}</span>
-                      </n-tag>
-                    </template>
+      <div class="my-8">
+        <div class="flex flex-col md:flex-row gap-x-8">
+          <div class="flex-1 max-w-[550px]">
+            <h4>
+              {{ $t('dashboard.service.smartContracts.infoSection.title') }}
+            </h4>
+            <p class="">{{ $t('dashboard.service.smartContracts.infoSection.p') }}</p>
+            <div class="flex border border-bg-lighter p-4 mt-4">
+              <span class="icon-info mr-2"></span>
+              <p>{{ $t('dashboard.service.smartContracts.infoSection.infoBox') }}</p>
+            </div>
+          </div>
+          <div class="flex-1">
+            <img src="~/assets/images/solution/smart-contracts.png" alt="" />
+          </div>
+        </div>
+        <Btn type="primary" class="min-w-[12rem] mt-8" @click="disconnectWallet()">
+          Take smart contract ownership
+        </Btn>
+      </div>
 
-                    <n-form
-                      :ref="el => (formRefs[fn.name] = el)"
-                      :model="form[fn.name]"
-                      class="max-w-lg"
-                      @submit.prevent="handleSubmit"
-                    >
-                      <!-- Create inouts -->
-                      <template v-for="i in fn.inputs" :key="i.name">
-                        <n-form-item :label="i.name">
-                          <n-input
-                            v-model:value="form[fn.name][i.name]"
-                            :maxlength="256"
-                            required
-                            :class="{
-                              'error-input': formErrors[fn.name],
-                            }"
-                          />
-                        </n-form-item>
-                      </template>
-                      <!-- Submit -->
-                      <n-button
-                        v-if="needsWalletConnection(fn.onlyOwner)"
-                        type="primary"
-                        native-type="submit"
-                        :loading="btnLoading"
-                        @click="connectWallet"
-                      >
-                        Connect your wallet
-                      </n-button>
-                      <n-button
-                        v-else
-                        type="primary"
-                        native-type="submit"
-                        :loading="btnLoading"
-                        @click="handleSubmit(fn.name, 'write', fn.onlyOwner)"
-                      >
-                        Query
-                      </n-button>
-                      <!-- Error container for each form -->
-                      <Notification v-if="errors[fn.name]" type="error" class="mt-6">
-                        Something went wrong, please try again or try later.
-                      </Notification>
-                    </n-form>
-                  </n-collapse-item>
-                </n-collapse>
-              </n-card>
-            </template>
-            <template v-else>
-              <!-- If function doesnt have inputs avialble, just output function data -->
-              <n-card size="small" class="my-1 max-w-lg">
-                <n-collapse accordion>
-                  <n-collapse-item :title="fn.name">
-                    {{ fn.outputs[0]?.internalType }}
-                  </n-collapse-item>
-                </n-collapse>
-              </n-card>
-            </template>
-          </template>
+      <h4 class="mb-6">
+        {{ $t('dashboard.service.smartContracts.functions.write') }}
+      </h4>
+      <div class="flex gap-x-4 max-w-[1200px]">
+        <!-- wrtie functions -->
+        <div class="bg-black p-2 w-2/3 rounded-lg">
+          <div class="flex px-2 gap-3">
+            <div class="flex-1">
+              <h4 class="my-3">
+                {{ $t('dashboard.service.smartContracts.functions.writeFromDapp') }}
+              </h4>
+              <template v-for="fn in writeFunctions" :key="fn">
+                <!-- If function has any availablbe inouts create a form -->
+                <template v-if="fn.inputs.length && !fn.onlyOwner">
+                  <n-card size="small" class="my-1 max-w-lg mb-3">
+                    <n-collapse accordion arrow-placement="right">
+                      <n-collapse-item :title="fn.name">
+                        <!-- Assign a fromref according to function ref - we have multiple form on same site -->
+                        <n-form
+                          :ref="el => (formRefs[fn.name] = el)"
+                          :model="form[fn.name]"
+                          class="max-w-lg"
+                          @submit.prevent="handleSubmit"
+                        >
+                          <!-- Create inouts -->
+                          <template v-for="i in fn.inputs" :key="i.name">
+                            <n-form-item :label="i.name">
+                              <n-input
+                                v-model:value="form[fn.name][i.name]"
+                                :maxlength="256"
+                                required
+                                :class="{
+                                  'error-input': formErrors[fn.name],
+                                }"
+                              />
+                            </n-form-item>
+                          </template>
+                          <!-- Submit -->
+                          <n-button
+                            v-if="needsWalletConnection(fn.onlyOwner)"
+                            class="w-full text-yellow border border-yellow"
+                            type="secondary"
+                            native-type="submit"
+                            :loading="btnLoading"
+                            @click="connectWallet"
+                          >
+                            Connect your wallet
+                          </n-button>
+                          <n-button
+                            v-else
+                            class="w-full"
+                            type="primary"
+                            native-type="submit"
+                            :loading="btnLoading"
+                            @click="handleSubmit(fn.name, 'write', fn.onlyOwner)"
+                          >
+                            Query
+                          </n-button>
+                          <!-- Error container for each form -->
+                          <Notification v-if="errors[fn.name]" type="error" class="mt-6">
+                            Something went wrong, please try again or try later.
+                          </Notification>
+                        </n-form>
+                      </n-collapse-item>
+                    </n-collapse>
+                  </n-card>
+                </template>
+                <template v-else-if="!fn.onlyOwner">
+                  <!-- If function doesnt have inputs avialble, just output function data -->
+                  <n-card size="small" class="my-1 max-w-lg mb-3">
+                    <n-collapse accordion arrow-placement="right">
+                      <n-collapse-item :title="fn.name">
+                        {{ fn.outputs[0]?.internalType }}
+                      </n-collapse-item>
+                    </n-collapse>
+                  </n-card>
+                </template>
+              </template>
+            </div>
+            <div class="flex-1">
+              <h4 class="my-3">
+                {{ $t('dashboard.service.smartContracts.functions.writeOverApillon') }}
+              </h4>
+              <template v-for="fn in writeFunctions" :key="fn">
+                <!-- If function has any availablbe inouts create a form -->
+                <template v-if="fn.inputs.length && fn.onlyOwner">
+                  <n-card size="small" class="my-1 max-w-lg mb-3">
+                    <n-collapse accordion arrow-placement="right">
+                      <n-collapse-item :title="fn.name">
+                        <!-- Assign a fromref according to function ref - we have multiple form on same site -->
+                        <n-form
+                          :ref="el => (formRefs[fn.name] = el)"
+                          :model="form[fn.name]"
+                          class="max-w-lg"
+                          @submit.prevent="handleSubmit"
+                        >
+                          <!-- Create inouts -->
+                          <template v-for="i in fn.inputs" :key="i.name">
+                            <n-form-item :label="i.name">
+                              <n-input
+                                v-model:value="form[fn.name][i.name]"
+                                :maxlength="256"
+                                required
+                                :class="{
+                                  'error-input': formErrors[fn.name],
+                                }"
+                              />
+                            </n-form-item>
+                          </template>
+                          <!-- Submit -->
+                          <n-button
+                            v-if="needsWalletConnection(fn.onlyOwner)"
+                            type="primary"
+                            class="w-full"
+                            native-type="submit"
+                            :loading="btnLoading"
+                            @click="connectWallet"
+                          >
+                            Connect your wallet
+                          </n-button>
+                          <n-button
+                            v-else
+                            type="primary"
+                            class="w-full"
+                            native-type="submit"
+                            :loading="btnLoading"
+                            @click="handleSubmit(fn.name, 'write', fn.onlyOwner)"
+                          >
+                            Query
+                          </n-button>
+                          <!-- Error container for each form -->
+                          <Notification v-if="errors[fn.name]" type="error" class="mt-6">
+                            Something went wrong, please try again or try later.
+                          </Notification>
+                        </n-form>
+                      </n-collapse-item>
+                    </n-collapse>
+                  </n-card>
+                </template>
+                <template v-else-if="fn.onlyOwner">
+                  <!-- If function doesnt have inputs avialble, just output function data -->
+                  <n-card size="small" class="my-1 max-w-lg mb-3">
+                    <n-collapse accordion arrow-placement="right">
+                      <n-collapse-item :title="fn.name">
+                        {{ fn.outputs[0]?.internalType }}
+                      </n-collapse-item>
+                    </n-collapse>
+                  </n-card>
+                </template>
+              </template>
+            </div>
+          </div>
         </div>
         <!-- read functions -->
-        <div class="bg-black p-2 w-full max-w-lg rounded-lg">
-          <template v-for="fn in readFunctions" :key="fn">
-            <!-- If function has any availablbe inouts create a form -->
-            <template v-if="fn.inputs.length">
-              <n-card size="small" class="my-1 max-w-lg">
-                <n-collapse accordion>
-                  <n-collapse-item :title="fn.name">
-                    <!-- Assign a fromref according to function ref - we have multiple form on same site -->
-                    <n-form
-                      :ref="el => (formRefs[fn.name] = el)"
-                      :model="form[fn.name]"
-                      class="max-w-lg"
-                      @submit.prevent="handleSubmit"
-                    >
-                      <!-- Create inouts -->
-                      <template v-for="i in fn.inputs" :key="i.name">
-                        <n-form-item :label="i.name">
-                          <n-input
-                            v-model:value="form[fn.name][i.name]"
-                            :maxlength="256"
-                            required
-                            :class="{
-                              'error-input': formErrors[fn.name],
-                            }"
-                          />
-                        </n-form-item>
-                      </template>
-                      <!-- Submit -->
+        <div class="w-1/3">
+          <div class="px-3 py-2 rounded-lg bg-bg-lighter">
+            <h4 class="my-3">
+              {{ $t('dashboard.service.smartContracts.functions.readFromDapp') }}
+            </h4>
+            <template v-for="fn in readFunctions" :key="fn">
+              <!-- If function has any availablbe inouts create a form -->
+              <template v-if="fn.inputs.length">
+                <n-card size="small" class="my-1 max-w-lg mb-3">
+                  <n-collapse accordion arrow-placement="right">
+                    <n-collapse-item :title="fn.name">
+                      <!-- Assign a fromref according to function ref - we have multiple form on same site -->
+                      <n-form
+                        :ref="el => (formRefs[fn.name] = el)"
+                        :model="form[fn.name]"
+                        class="max-w-lg"
+                        @submit.prevent="handleSubmit"
+                      >
+                        <!-- Create inouts -->
+                        <template v-for="i in fn.inputs" :key="i.name">
+                          <n-form-item :label="i.name">
+                            <n-input
+                              v-model:value="form[fn.name][i.name]"
+                              :maxlength="256"
+                              required
+                              :class="{
+                                'error-input': formErrors[fn.name],
+                              }"
+                            />
+                          </n-form-item>
+                        </template>
+                        <!-- Submit -->
+                        <n-button
+                          type="primary"
+                          native-type="submit"
+                          :loading="btnLoading"
+                          @click="handleSubmit(fn.name, 'read', false)"
+                        >
+                          Query
+                        </n-button>
+                        <!-- Error container for each form -->
+                        <Notification v-if="errors[fn.name]" type="error" class="mt-6">
+                          Something went wrong, please try again or try later.
+                        </Notification>
+                        <Notification v-if="msgs[fn.name]" type="success" class="mt-6">
+                          {{ msgs[fn.name] }}
+                        </Notification>
+                      </n-form>
+                    </n-collapse-item>
+                  </n-collapse>
+                </n-card>
+              </template>
+              <template v-else>
+                <!-- If function doesnt have inputs avialble, just output function data -->
+                <n-card size="small" class="my-1 max-w-lg mb-3">
+                  <n-collapse accordion arrow-placement="right">
+                    <n-collapse-item :title="fn.name">
+                      <div class="mb-4">{{ fn.outputs[0]?.internalType }}</div>
                       <n-button
                         type="primary"
                         native-type="submit"
@@ -147,43 +264,18 @@
                       <Notification v-if="errors[fn.name]" type="error" class="mt-6">
                         Something went wrong, please try again or try later.
                       </Notification>
-                      <Notification v-if="msgs[fn.name]" type="success" class="mt-6">
-                        {{ msgs[fn.name] }}
-                      </Notification>
-                    </n-form>
-                  </n-collapse-item>
-                </n-collapse>
-              </n-card>
+                      <Notification
+                        v-if="msgs[fn.name]"
+                        type="success"
+                        class="mt-6"
+                        v-html="msgs[fn.name]"
+                      />
+                    </n-collapse-item>
+                  </n-collapse>
+                </n-card>
+              </template>
             </template>
-            <template v-else>
-              <!-- If function doesnt have inputs avialble, just output function data -->
-              <n-card size="small" class="my-1 max-w-lg">
-                <n-collapse accordion>
-                  <n-collapse-item :title="fn.name">
-                    <div class="mb-4">{{ fn.outputs[0]?.internalType }}</div>
-                    <n-button
-                      type="primary"
-                      native-type="submit"
-                      :loading="btnLoading"
-                      @click="handleSubmit(fn.name, 'read', false)"
-                    >
-                      Query
-                    </n-button>
-                    <!-- Error container for each form -->
-                    <Notification v-if="errors[fn.name]" type="error" class="mt-6">
-                      Something went wrong, please try again or try later.
-                    </Notification>
-                    <Notification
-                      v-if="msgs[fn.name]"
-                      type="success"
-                      class="mt-6"
-                      v-html="msgs[fn.name]"
-                    />
-                  </n-collapse-item>
-                </n-collapse>
-              </n-card>
-            </template>
-          </template>
+          </div>
         </div>
       </div>
     </slot>
@@ -486,6 +578,16 @@ function getChainConfig(chainId) {
 </script>
 
 <style lang="postcss" scoped>
+:deep(.n-collapse .n-collapse-item .n-collapse-item__header .n-collapse-item__header-main) {
+  justify-content: space-between;
+}
+:deep(.n-card > .n-card__content, .n-card > .n-card__footer) {
+  padding: 0;
+  padding: 16px 16px 16px 24px;
+}
+:deep(.n-card.n-card--bordered) {
+  border: 0px solid transparent !important;
+}
 .n-card.n-card--bordered {
   border: 1px solid #313442;
 }
