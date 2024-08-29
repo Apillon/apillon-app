@@ -37,14 +37,17 @@
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.2`) }}</span>
         </li>
-        <li class="my-2 text-green">
+        <li v-if="referralStore.tokenClaim?.wallet" class="my-2 text-green">
           <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
           <span>{{ $t(`referral.info.statuses.3`) }}</span>
         </li>
       </ul>
     </div>
 
-    <div v-if="referralStore.airdrop.totalPoints > 0" class="card p-8">
+    <div
+      v-if="referralStore.airdrop.totalPoints > 0 && referralStore.tokenClaim?.wallet"
+      class="card p-8"
+    >
       <h6>
         {{ $t('referral.info.connectAstar') }}
       </h6>

@@ -38,7 +38,7 @@
   </template>
 
   <!-- Airdrop finished -->
-  <Notification v-if="!referralStore.tokenClaim.wallet" type="info">
+  <Notification v-if="!referralStore.tokenClaim?.wallet" type="info">
     The NCTR Airdrop is now finished.
   </Notification>
 
@@ -56,7 +56,7 @@
     </span>
   </Notification>
 
-  <template v-if="referralStore.tokenClaim.wallet">
+  <template v-if="referralStore.tokenClaim?.wallet">
     <Notification v-if="(claimSuccess && !claimError) || hasClaimed" type="success" class="w-full">
       <span class="text-green">Your $NCTR has been claimed.</span>
       <span v-if="transactionHash || referralStore.tokenClaim.transactionHash" class="text-green"
@@ -83,20 +83,23 @@
   </Notification>
 
   <!-- Fix connection errro -->
-  <Notification
-    v-if="referralStore.tokenClaim.wallet !== address && referralStore.tokenClaim.status === 5"
-    type="warning"
-    class="w-full"
-  >
-    Make sure that your connected wallet is the same as submitted EVM wallet address.
-  </Notification>
+  <template v-if="referralStore.tokenClaim?.wallet">
+    <Notification
+      v-if="referralStore.tokenClaim.wallet !== address && referralStore.tokenClaim.status === 5"
+      type="warning"
+      class="w-full"
+    >
+      Make sure that your connected wallet is the same as submitted EVM wallet address.
+    </Notification>
+  </template>
+
   <!-- Error message -->
   <Notification v-if="claimError" type="error" class="w-full">
     Something went wrong. Please try again or try later.<br />Make sure that your connected wallet
     is the same as submitted EVM wallet address.
   </Notification>
 
-  <template v-if="referralStore.tokenClaim.status === 5 && referralStore.tokenClaim.wallet">
+  <template v-if="referralStore.tokenClaim.status === 5 && referralStore.tokenClaim?.wallet">
     <div class="border-b-1 border-bg-lighter"></div>
 
     <NctrAddTokenBtn />
