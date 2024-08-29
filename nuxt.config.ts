@@ -18,7 +18,6 @@ const meta = {
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   ssr: false,
-
   typescript: { shim: false },
 
   runtimeConfig: {
@@ -125,6 +124,7 @@ export default defineNuxtConfig({
       redirectOn: 'root',
     },
   },
+
   googleFonts: {
     useStylesheet: true,
     display: 'swap',
@@ -135,4 +135,6 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  compatibilityDate: '2024-08-28',
 });
