@@ -56,18 +56,20 @@
     </span>
   </Notification>
 
-  <Notification v-if="(claimSuccess && !claimError) || hasClaimed" type="success" class="w-full">
-    <span class="text-green">Your $NCTR has been claimed.</span>
-    <span v-if="transactionHash || referralStore.tokenClaim.transactionHash" class="text-green"
-      >You can see the transaction on
-      <a
-        class="underline"
-        target="_blank"
-        :href="`https://moonbeam.moonscan.io/tx/${transactionHash ? transactionHash : referralStore.tokenClaim.transactionHash}`"
-        >Moonbeam.</a
-      >
-    </span>
-  </Notification>
+  <template v-if="referralStore.tokenClaim.wallet">
+    <Notification v-if="(claimSuccess && !claimError) || hasClaimed" type="success" class="w-full">
+      <span class="text-green">Your $NCTR has been claimed.</span>
+      <span v-if="transactionHash || referralStore.tokenClaim.transactionHash" class="text-green"
+        >You can see the transaction on
+        <a
+          class="underline"
+          target="_blank"
+          :href="`https://moonbeam.moonscan.io/tx/${transactionHash ? transactionHash : referralStore.tokenClaim.transactionHash}`"
+          >Moonbeam.</a
+        >
+      </span>
+    </Notification>
+  </template>
 
   <Notification v-if="referralStore.tokenClaim.status !== 5" type="warning" class="w-full">
     <strong
@@ -94,9 +96,11 @@
     is the same as submitted EVM wallet address.
   </Notification>
 
-  <div class="border-b-1 border-bg-lighter"></div>
+  <template v-if="referralStore.tokenClaim.status === 5 && referralStore.tokenClaim.wallet">
+    <div class="border-b-1 border-bg-lighter"></div>
 
-  <NctrAddTokenBtn v-if="referralStore.tokenClaim.status === 5" />
+    <NctrAddTokenBtn />
+  </template>
 </template>
 
 <script setup lang="ts">
