@@ -80,7 +80,7 @@
                           <!-- Submit -->
                           <n-button
                             v-if="needsWalletConnection(fn.onlyOwner)"
-                            class="w-full text-yellow border border-yellow"
+                            class="w-full text-yellow btn-connect bg-transparent"
                             type="secondary"
                             native-type="submit"
                             :loading="btnLoading"
@@ -229,6 +229,7 @@
                         <n-button
                           type="primary"
                           native-type="submit"
+                          class="w-full"
                           :loading="btnLoading"
                           @click="handleSubmit(fn.name, 'read', false)"
                         >
@@ -255,6 +256,7 @@
                       <n-button
                         type="primary"
                         native-type="submit"
+                        class="w-full"
                         :loading="btnLoading"
                         @click="handleSubmit(fn.name, 'read', false)"
                       >
@@ -593,5 +595,8 @@ function getChainConfig(chainId) {
 }
 .error-input {
   border: 1px solid #ff6188;
+}
+.btn-connect {
+  border: 1px solid #1e212b;
 }
 </style>
