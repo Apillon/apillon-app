@@ -2,7 +2,11 @@
   <n-tag
     v-bind="$attrs"
     class="rounded-xl uppercase text-[10px]"
-    :class="[{ 'bg-green': type === 'success' }, { 'bg-orange': type === 'warning' }]"
+    :class="[
+      { 'bg-green': type === 'success' },
+      { 'bg-orange': type === 'warning' },
+      { 'bg-pink': type === 'error' },
+    ]"
     :size="size"
     :type="type"
     round

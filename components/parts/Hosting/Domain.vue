@@ -28,19 +28,26 @@
         {{ $t('hosting.domain.configure') }}
       </Btn>
     </n-space>
-    <n-space v-if="domainStatus" class="w-full mt-4" :wrap="!isLg" align="center">
-      <Pill :type="domainStatusType">
-        {{ $t(`hosting.domain.status.${domainStatus.domainStatus}`) }}
-      </Pill>
-      <Btn
-        size="small"
-        :disabled="btnDomainDisabled"
-        :loading="loadingDomain"
-        click="refreshDomainStatus"
-      >
-        {{ $t('hosting.domain.refreshStatus') }}
-      </Btn>
-    </n-space>
+
+    <template v-if="domainStatus">
+      <div class="body-sm mt-4">
+        <strong>{{ $t('hosting.domain.domainStatus') }}</strong>
+      </div>
+      <n-space class="w-full mt-2" :wrap="!isLg" align="center">
+        <Pill :type="domainStatusType">
+          {{ $t(`hosting.domain.status.${domainStatus.domainStatus}`) }}
+        </Pill>
+        <Btn
+          size="small"
+          type="secondary"
+          :disabled="btnDomainDisabled"
+          :loading="loadingDomain"
+          @click="refreshDomainStatus"
+        >
+          {{ $t('hosting.domain.refreshStatus') }}
+        </Btn>
+      </n-space>
+    </template>
   </div>
   <!-- Modal - Website domain -->
   <modal
@@ -86,7 +93,7 @@ const domainStatusType = computed<TagType>(() => {
     case WebsiteDomainStatus.PENDING:
       return 'info';
     case WebsiteDomainStatus.INVALID:
-      return 'warning';
+      return 'error';
     default:
       return 'success';
   }
