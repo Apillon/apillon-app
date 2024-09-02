@@ -239,6 +239,17 @@ const Endpoints = {
     return `/computing/contracts/${contractUuid}/transactions`;
   },
 
+  /** Cloud functions - Acurast */
+  acurast: (uuid?: string) => {
+    return uuid ? `/acurast/jobs/${uuid}` : '/acurast/jobs';
+  },
+  acurastEnvironment: (uuid: string) => {
+    return `/acurast/jobs/${uuid}/environment`;
+  },
+  acurastMessage: (uuid: string) => {
+    return `/acurast/jobs/${uuid}/message`;
+  },
+
   /**
    * Project settings
    */

@@ -48,6 +48,13 @@ export enum EncryptDeployTab {
   DEPLOYED = 3,
 }
 
+export enum AcurastJobStatus {
+  DEPLOYING = 1,
+  DEPLOYED = 2,
+  MATCHED = 3,
+  DELETED = 9,
+}
+
 declare global {
   /**
    * Contract
@@ -90,4 +97,20 @@ declare global {
 
   interface ComputingTransactionResponse
     extends GeneralItemsResponse<ComputingTransactionInterface> {}
+
+  /**
+   * Cloud Functions
+   */
+  interface CloudFunctionInterface extends BaseObjectInterface {
+    job_uuid: string; // UUID format string
+    project_uuid: string; // UUID format string
+    scriptCid: string; // URL or CID (Content Identifier)
+    startTime: string; // ISO 8601 date string
+    endTime: string; // ISO 8601 date string
+    slots: number;
+    jobStatus: number;
+  }
+
+  interface CloudFunctionResponse extends GeneralResponse<CloudFunctionInterface> {}
+  interface CloudFunctionsResponse extends GeneralItemsResponse<CloudFunctionInterface> {}
 }

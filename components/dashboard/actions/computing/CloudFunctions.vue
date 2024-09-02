@@ -2,7 +2,7 @@
   <n-space v-bind="$attrs" justify="space-between">
     <div class="min-w-[11rem] w-[20vw] max-w-xs">
       <n-input
-        v-model:value="contractStore.search"
+        v-model:value="cloudFunctionStore.search"
         type="text"
         name="search"
         size="small"
@@ -16,47 +16,43 @@
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" />
+      <ModalCreditCosts :service="ServiceTypeName.COMPUTING" />
 
-      <!-- Refresh contracts -->
+      <!-- Refresh cloudFunctions -->
       <n-button
         size="small"
-        :loading="contractStore.loading"
-        @click="contractStore.fetchContracts()"
+        :loading="cloudFunctionStore.loading"
+        @click="cloudFunctionStore.fetchCloudFunctions()"
       >
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
-      <!-- Create new contract -->
+      <!-- Create new cloudFunction -->
       <n-button
-        v-if="contractStore.hasContracts"
+        v-if="cloudFunctionStore.hasCloudFunctions"
         size="small"
         :disabled="authStore.isAdmin()"
-        @click="modalCreateContractVisible = true"
+        @click="modalCreateCloudFunctionVisible = true"
       >
         <span class="icon-create-folder text-xl text-primary mr-2"></span>
-        <span class="text-primary">{{ $t('computing.contract.new') }}</span>
+        <span class="text-primary">{{ $t('computing.cloudFunctions.new') }}</span>
       </n-button>
     </n-space>
   </n-space>
 
-  <!-- Modal - Create Contract -->
-  <modal v-model:show="modalCreateContractVisible" :title="$t('computing.contract.new')">
-    <FormComputingContract
-      @submit-success="modalCreateContractVisible = false"
-      @create-success="onContractCreated"
-    />
+  <!-- Modal - Create CloudFunction -->
+  <modal v-model:show="modalCreateCloudFunctionVisible" :title="$t('computing.cloudFunctions.new')">
+    <FormComputingCloudFunctions @submit-success="modalCreateCloudFunctionVisible = false" />
   </modal>
 </template>
 
 <script lang="ts" setup>
 const authStore = useAuthStore();
-const contractStore = useContractStore();
+const cloudFunctionStore = useCloudFunctionStore();
 const paymentStore = usePaymentStore();
-const { onContractCreated } = useComputing();
 
-const modalCreateContractVisible = ref<boolean>(false);
+const modalCreateCloudFunctionVisible = ref<boolean>(false);
 
 onMounted(() => {
   paymentStore.getPriceList();

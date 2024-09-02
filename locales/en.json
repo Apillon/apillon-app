@@ -22,6 +22,7 @@
     "delete": "Delete",
     "description": "Description",
     "deselectAll": "Deselect All",
+    "documentation": "documentation",
     "download": "Download",
     "edit": "Edit",
     "environment": "Environment",
@@ -188,6 +189,35 @@
     }
   },
   "computing": {
+    "cloudFunctions": {
+      "addNew": "Add new Cloud function",
+      "checkVideo": "Check out the video",
+      "deployments": "Deployments",
+      "documentation": "View Documentation",
+      "endpoint": "Cloud function API endpoint",
+      "monitoring": "Monitoring",
+      "new": "New Cloud function",
+      "startNew": "Start by creating a new cloud function",
+      "variables": "Environment variables",
+      "content": [
+        {
+          "headline": "Features:",
+          "subtitle": "Use cloud functions to build your own unstoppable Web3 backend. Just like \nAWS lambda but without compromise. ",
+          "benefits": [
+            "Write code in NodeJS, bundle and deploy",
+            "Compute is executed on high performance CPUs with random providers and redundancy.",
+            "Bypass centralized backends and build a truly decentralized dapp",
+            "Set and forget mentality"
+          ]
+        }
+      ],
+      "variable": {
+        "btnAdd": "Add environment variable manually",
+        "btnUpload": "Upload .ENV file for automatic detection",
+        "content": "Create a new environment variable which you want to pass into the cloud function. To learn more about how environment variables are handled, refer to the {url}.",
+        "title": "You currently have no environment variables for this cloud functions"
+      }
+    },
     "contract": {
       "addNew": "Add new contract",
       "address": "Contract address",
@@ -351,6 +381,10 @@
         "STORAGE": {
           "name": "Web3 Storage",
           "description": null
+        },
+        "WALLET": {
+          "name": "Embedded Wallet",
+          "description": null
         }
       }
     },
@@ -371,6 +405,7 @@
       "billing": "Billing & usage",
       "configuration": "Configuration",
       "computing": "Computing",
+      "cloudFunctions": "Cloud Functions",
       "explore": "Explore",
       "hosting": "Hosting",
       "nft": "NFTs",
@@ -1165,6 +1200,12 @@
           "restrictToOwner": "Only owner will be able to encrypt/decrypt files.",
           "useApillonCollection": "You can use an NFT collection you created on Apillon or any NFT collection you built on other chains."
         }
+      },
+      "cloudFunctions": {
+        "description": "Description",
+        "name": "Title",
+        "startTime": "Start time",
+        "endTime": "End time"
       }
     },
     "networkTypes": {
@@ -1228,6 +1269,10 @@
         "nftContractAddress": "Select or type NFT collection address",
         "nftChainRpcUrl": "Chain RPC URL",
         "accountAddress": "Account Address"
+      },
+      "cloudFunctions": {
+        "description": "Enter cloud function description for personal reference",
+        "name": "Enter cloud function title for personal reference"
       }
     },
     "success": {
@@ -1259,6 +1304,7 @@
         "bucket": "Bucket has been created",
         "chatPost": "Channel has been created",
         "chatSpace": "Hub has been created",
+        "cloudFunction": "Cloud function has been created",
         "collection": "Creating NFT collection requested.",
         "directory": "Folder has been created",
         "domain": "Domain has been added to Website",
@@ -1277,6 +1323,7 @@
         "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
+        "cloudFunction": "Cloud function has been deleted",
         "contract": "Contract has been deleted",
         "directory": "Folder has been deleted",
         "domain": "Domain has been deleted",
@@ -1302,6 +1349,7 @@
         "apiKeyRoles": "API key permissions has been added",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
+        "cloudFunction": "Cloud function has been updated",
         "contract": "Contract has been updated",
         "creditThreshold": "Credit threshold has been updated",
         "directory": "Folder has been updated",
@@ -2036,7 +2084,8 @@
         "1": "CREATED",
         "2": "IN PROGRESS",
         "3": "FINISHED",
-        "4": "VALIDATION FAILED"
+        "4": "VALIDATION FAILED",
+        "5": "VALIDATION PASSED"
       }
     },
     "type": {
@@ -2189,6 +2238,13 @@
       "fileRequired": "Please upload file",
       "nameRequired": "Please enter name",
       "nftIdRequired": "Please enter NFT ID"
+    },
+    "cloudFunctions": {
+      "endTimeRequired": "Please select end date",
+      "fileRequired": "Please upload file",
+      "fileType": "Wrong file type, please upload javascript file",
+      "nameRequired": "Please enter name",
+      "startTimeRequired": "Please select start date"
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
