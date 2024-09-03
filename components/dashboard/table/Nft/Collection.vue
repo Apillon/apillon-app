@@ -270,7 +270,7 @@ const currentRow = ref<CollectionInterface>(props.collections[0]);
 const dropdownOptions = [
   {
     key: 'collectionDelete',
-    label: t('general.delete'),
+    label: t('general.archive'),
     disabled: authStore.isAdmin(),
     props: {
       class: '!text-pink',
