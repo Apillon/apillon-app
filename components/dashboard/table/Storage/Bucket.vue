@@ -140,7 +140,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       key: 'actions',
       title: '',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
       render() {
         return h(
           NDropdown,
