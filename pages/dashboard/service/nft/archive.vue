@@ -15,8 +15,8 @@
         :info="$t('nft.collection.emptyArchiveInfo')"
         icon="nft/illustration"
       >
-        <Btn type="primary" @click="router.push({ name: 'dashboard-service-nft-new' })">
-          {{ $t('nft.collection.create') }}
+        <Btn type="primary" @click="router.push({ name: 'dashboard-service-nft-index' })">
+          {{ $t('dashboard.nav.nft') }}
         </Btn>
       </Empty>
     </slot>
