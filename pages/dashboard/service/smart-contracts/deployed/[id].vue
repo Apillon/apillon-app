@@ -35,26 +35,30 @@
             <img src="~/assets/images/solution/smart-contracts.png" alt="" />
           </div>
         </div>
-        <Btn type="primary" class="min-w-[12rem] mt-8" @click="disconnectWallet()">
-          Take smart contract ownership
-        </Btn>
+
+        <a v-if="contractStatus !== 6" class="anchor-link" href="#transferOwnership"
+          >Take smart contract ownership</a
+        >
       </div>
 
       <h4 class="mb-6">
         {{ $t('dashboard.service.smartContracts.functions.write') }}
       </h4>
-      <div class="flex gap-x-4 max-w-[1200px]">
+      <div class="flex gap-x-4 mb-6">
         <!-- wrtie functions -->
-        <div class="bg-black p-2 w-2/3 rounded-lg">
+        <div
+          class="bg-black p-2 rounded-lg h-full"
+          :class="hasDappMethods ? 'w-2/3 max-w-[840px]' : 'w-1/3 max-w-[420px]'"
+        >
           <div class="flex px-2 gap-3">
-            <div class="flex-1">
+            <div v-if="hasDappMethods" class="flex-1">
               <h4 class="my-3">
                 {{ $t('dashboard.service.smartContracts.functions.writeFromDapp') }}
               </h4>
               <template v-for="fn in writeFunctions" :key="fn">
                 <!-- If function has any availablbe inouts create a form -->
                 <template v-if="fn.inputs.length && !fn.onlyOwner">
-                  <n-card size="small" class="my-1 max-w-lg mb-3">
+                  <n-card :id="fn.name" size="small" class="my-1 max-w-lg mb-3">
                     <n-collapse accordion arrow-placement="right">
                       <n-collapse-item :title="fn.name">
                         <!-- Assign a fromref according to function ref - we have multiple form on same site -->
@@ -109,7 +113,7 @@
                 </template>
                 <template v-else-if="!fn.onlyOwner">
                   <!-- If function doesnt have inputs avialble, just output function data -->
-                  <n-card size="small" class="my-1 max-w-lg mb-3">
+                  <n-card :id="fn.name" size="small" class="my-1 max-w-lg mb-3">
                     <n-collapse accordion arrow-placement="right">
                       <n-collapse-item :title="fn.name">
                         {{ fn.outputs[0]?.internalType }}
@@ -126,7 +130,7 @@
               <template v-for="fn in writeFunctions" :key="fn">
                 <!-- If function has any availablbe inouts create a form -->
                 <template v-if="fn.inputs.length && fn.onlyOwner">
-                  <n-card size="small" class="my-1 max-w-lg mb-3">
+                  <n-card :id="fn.name" size="small" class="my-1 max-w-lg mb-3">
                     <n-collapse accordion arrow-placement="right">
                       <n-collapse-item :title="fn.name">
                         <!-- Assign a fromref according to function ref - we have multiple form on same site -->
@@ -152,8 +156,8 @@
                           <!-- Submit -->
                           <n-button
                             v-if="needsWalletConnection(fn.onlyOwner)"
-                            type="primary"
-                            class="w-full"
+                            class="w-full text-yellow btn-connect bg-transparent"
+                            type="secondary"
                             native-type="submit"
                             :loading="btnLoading"
                             @click="connectWallet"
@@ -194,7 +198,7 @@
           </div>
         </div>
         <!-- read functions -->
-        <div class="w-1/3">
+        <div class="w-1/3 max-w-[420px]">
           <div class="px-3 py-2 rounded-lg bg-bg-lighter">
             <h4 class="my-3">
               {{ $t('dashboard.service.smartContracts.functions.readFromDapp') }}
@@ -334,6 +338,8 @@ const router = useRouter();
 const { params } = useRoute();
 const { t } = useI18n();
 
+const { shortHash, validate } = useSmartContractWallet();
+
 useHead({
   title: t('dashboard.nav.smartContracts'),
 });
@@ -343,7 +349,7 @@ const smartContractsStore = useSmartContractsStore();
 const { astarShibuya } = useSmartContracts();
 
 const activeTransactions = ref({});
-const activeTransactionsWindow = ref<boolean>(true);
+const activeTransactionsWindow = ref<boolean>(false);
 const transactionListExpanded = ref<boolean>(true);
 const pageLoading = ref<boolean>(true);
 const contractUuid = ref<string>(`${params?.id}` || '');
@@ -353,12 +359,14 @@ const contractStatus = computed(() => smartContractsStore.active.contractStatus)
 const functionObjects = ref([]);
 const writeFunctions = ref([]);
 const readFunctions = ref([]);
+const hasDappMethods = ref(false); // serves as UI signal to hide or display dapp methods
 
 const form = reactive({});
 const formRefs = ref({});
 const errors = ref({});
 const formErrors = ref({});
 const msgs = ref({});
+const responses = ref({});
 const btnLoading = ref(false);
 
 function removeMsg(methodName) {
@@ -396,24 +404,6 @@ function wagmiConnect(connector) {
   }
 }
 
-function shortHash(val: string) {
-  if (!val || val.length <= 10) {
-    return val;
-  }
-  return `${val.slice(0, 6)}...${val.slice(-4)}`;
-}
-
-function validate(obj) {
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      if (obj[key] === null || obj[key] === '') {
-        return false; // Fail validation
-      }
-    }
-  }
-  return true;
-}
-
 // Submit
 function handleSubmit(methodName, method, onlyOwner) {
   btnLoading.value = true;
@@ -425,10 +415,10 @@ function handleSubmit(methodName, method, onlyOwner) {
     btnLoading.value = false;
     return false;
   }
-  activeTransactionsWindow.value = true;
   msgs.value[methodName] = null;
   if (method === 'write') {
     if (!onlyOwner || contractStatus.value === 6) {
+      console.log('wallet write');
       execWalletWrite(methodName);
     } else {
       execOwnerWrite(methodName);
@@ -439,6 +429,9 @@ function handleSubmit(methodName, method, onlyOwner) {
 }
 
 async function execWalletWrite(methodName) {
+  console.log('wallet write');
+  activeTransactionsWindow.value = true;
+
   const contractAddress = smartContractsStore.active.contractAddress;
   const abi = smartContractsStore.active.contractVersion.abi;
   const chainId = smartContractsStore.active.chain;
@@ -459,14 +452,16 @@ async function execWalletWrite(methodName) {
       args: Object.values(form[methodName]),
       account: address.value,
     });
-    msgs.value[methodName] = response;
-  } catch (e) {
-    console.log(e);
+    if (response) {
+      console.log(response);
+      msgs.value[methodName] = response;
+    }
+  } catch (error) {
+    console.log(error);
     errors.value[methodName] = 'Something went wrong. Please try again.';
   } finally {
     btnLoading.value = false;
   }
-
   btnLoading.value = false;
 }
 
@@ -491,10 +486,10 @@ async function execRead(methodName) {
       functionName: methodName,
       args: Object.values(form[methodName]),
     });
-
+    console.log(response);
     msgs.value[methodName] = response;
   } catch (error) {
-    console.log(e);
+    console.log(error);
     errors.value[methodName] = 'Something went wrong. Please try again.';
   } finally {
     btnLoading.value = false;
@@ -503,6 +498,10 @@ async function execRead(methodName) {
 
 // write functions handler
 async function execOwnerWrite(methodName) {
+  activeTransactionsWindow.value = true;
+
+  console.log('write write');
+
   try {
     const res = await $api.post(endpoints.querySmartContract(contractUuid.value), {
       methodName,
@@ -513,9 +512,9 @@ async function execOwnerWrite(methodName) {
       errors.value[methodName] = '';
       formRefs.value[methodName].reset();
     }
-    msgs.value[methodName] = response;
-  } catch (e) {
-    console.log(e);
+    msgs.value[methodName] = res;
+  } catch (error) {
+    console.log(error);
     errors.value[methodName] = 'Something went wrong. Please try again.';
   } finally {
     btnLoading.value = false;
@@ -551,6 +550,9 @@ onMounted(() => {
             method => method.name === fn.name
           );
           // Add the method to writeFunctions and tag it with onlyOwner if applicable
+
+          if (!method.onlyOwner) hasDappMethods.value = true;
+
           writeFunctions.value.push({
             ...fn, // Spread the function properties
             onlyOwner: method ? method.onlyOwner : false, // Add onlyOwner property
@@ -598,5 +600,15 @@ function getChainConfig(chainId) {
 }
 .btn-connect {
   border: 1px solid #1e212b;
+}
+.anchor-link {
+  color: black;
+  font-weight: bold;
+  font-size: 14px;
+  background-color: #f9ff73;
+  padding: 16px 32px;
+  border-radius: 8px;
+  margin-top: 40px;
+  display: inline-block;
 }
 </style>
