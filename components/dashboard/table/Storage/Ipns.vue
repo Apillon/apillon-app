@@ -126,7 +126,9 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
       key: 'actions',
       title: '',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
+      filter: 'default',
+      filterOptionValue: null,
       render() {
         return h(
           NDropdown,
@@ -144,11 +146,6 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
           }
         );
       },
-    },
-    {
-      key: 'columns',
-      filter: 'default',
-      filterOptionValue: null,
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },

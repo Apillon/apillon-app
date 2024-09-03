@@ -1379,13 +1379,21 @@
     "domain": {
       "add": "Add domain",
       "configure": "Configure domain",
+      "domainStatus": "Domain status",
       "editDisabled": "Website domain can be changed every 15 minutes. ",
       "preview": "Domain preview",
+      "refreshStatus": "Refresh domain status",
       "setup": "Setup domain",
       "update": "Update domain",
       "useIpns": "Use IPNS",
       "labelInfo": {
         "useIpns": "IPNS is a feature of the IPFS that allows a consistent address to be used even when the content changes. This means you can share the same address, and any updates to the content won't require a new address."
+      },
+      "status": {
+        "0": "Pending",
+        "1": "OK",
+        "2": "Domain has CDN",
+        "10": "Invalid, domain is not pointing to Apillon IP"
       }
     },
     "menu": {
@@ -1990,7 +1998,7 @@
         "1": "Signed URL for upload generated",
         "2": "Uploaded to S3",
         "3": "Uploaded to IPFS",
-        "4": "Upload completed - File pinned to CRUST",
+        "4": "Upload completed",
         "5": "Upload completed",
         "100": "Error while uploading to S3",
         "101": "Error while pinning to CRUST",

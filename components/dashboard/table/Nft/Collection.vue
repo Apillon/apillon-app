@@ -226,9 +226,8 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     },
     {
       key: 'actions',
-      title: '',
       align: 'right',
-      className: '!py-0',
+      className: '!sticky right-0',
       filter: 'default',
       filterOptionValue: null,
       render() {
