@@ -6,14 +6,23 @@
 </template>
 
 <script lang="ts" setup>
-type Item = ApiKeyInterface | BucketInterface | BucketItemInterface | IpnsInterface;
+type Item =
+  | ApiKeyInterface
+  | BucketInterface
+  | BucketItemInterface
+  | ChatInterface
+  | CollectionInterface
+  | ContractInterface
+  | IpnsInterface
+  | PostInterface
+  | WebsiteBaseInterface;
 
 const props = defineProps({
   items: { type: Array<Item>, required: true },
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const bucketStore = useBucketStore();
 const loading = ref<boolean>(false);
@@ -35,7 +44,7 @@ async function deleteItems() {
       }
 
       if (props.items.length === 1) {
-        message.success($i18n.t(`form.success.deleted.${getItemType(item)}`));
+        message.success(t(`form.success.deleted.${getItemType(item)}`));
       }
     } catch (error) {
       message.error(userFriendlyMsg(error));
@@ -43,7 +52,7 @@ async function deleteItems() {
   });
   await Promise.all(promises).then(_ => {
     if (props.items.length > 1) {
-      message.success($i18n.t('form.success.deleted.items'));
+      message.success(t('form.success.deleted.items'));
     }
 
     emit('submitSuccess');
@@ -58,6 +67,10 @@ function getUrl(type: string, item: Item) {
       return endpoints.apiKey((item as ApiKeyInterface).id);
     case 'bucket':
       return endpoints.bucket((item as BucketInterface).bucket_uuid);
+    case 'collection':
+      return endpoints.collections((item as CollectionInterface).collection_uuid);
+    case 'contract':
+      return endpoints.contracts((item as ContractInterface).contract_uuid);
     case 'directory':
       return endpoints.directory((item as BucketItemInterface).uuid);
     case 'file':
@@ -67,6 +80,12 @@ function getUrl(type: string, item: Item) {
       );
     case 'ipns':
       return endpoints.ipns(bucketStore.selected, (item as IpnsInterface).ipns_uuid);
+    case 'post':
+      return endpoints.posts((item as PostInterface).post_uuid);
+    case 'space':
+      return endpoints.spaces((item as ChatInterface).space_uuid);
+    case 'website':
+      return endpoints.websites((item as WebsiteInterface).website_uuid);
     default:
       console.warn('Wrong type');
       return '';
@@ -81,6 +100,16 @@ function getItemType(item: Item) {
     return 'ipns';
   } else if ('bucketType' in item) {
     return 'bucket';
+  } else if ('collection_uuid' in item) {
+    return 'collection';
+  } else if ('contract_uuid' in item) {
+    return 'contract';
+  } else if ('post_uuid' in item) {
+    return 'post';
+  } else if ('space_uuid' in item) {
+    return 'space';
+  } else if ('website_uuid' in item) {
+    return 'website';
   } else if ('type' in item) {
     switch (item.type) {
       case BucketItemType.DIRECTORY:

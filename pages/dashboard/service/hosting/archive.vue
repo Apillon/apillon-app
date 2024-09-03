@@ -4,15 +4,19 @@
       <HeaderHosting />
     </template>
     <slot>
-      <TableHosting v-if="websiteStore.hasWebsites" :websites="websiteStore.items" />
+      <TableHosting
+        v-if="websiteStore.hasWebsiteArchive"
+        :websites="websiteStore.archive"
+        archive
+      />
       <Empty
         v-else
-        :title="$t('hosting.web3Hosting')"
-        :info="$t('hosting.web3HostingEnable')"
+        :title="$t('hosting.web3HostingArchive')"
+        :info="$t('hosting.web3HostingArchiveInfo')"
         icon="storage/empty"
       >
         <Btn type="primary" @click="createNewWebsite">
-          {{ $t('hosting.website.addFirst') }}
+          {{ $t('hosting.website.create') }}
         </Btn>
       </Empty>
 
@@ -46,7 +50,7 @@ onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await storageStore.getStorageInfo();
-      await websiteStore.getWebsites();
+      await websiteStore.getWebsiteArchive();
 
       pageLoading.value = false;
     });

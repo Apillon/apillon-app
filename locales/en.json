@@ -9,6 +9,7 @@
     "address": "Address",
     "attach": "Attach",
     "attachService": "Attach {service} service",
+    "archive": "Archive",
     "cancel": "No, cancel",
     "comingSoon": "Coming soon",
     "confirm": "Confirm",
@@ -196,15 +197,20 @@
       "create": "Create contract",
       "createBucket": "Create a bucket",
       "createFirst": " Start creating",
+      "delete": "Delete contract",
+      "deleteConfirm": "Are you sure that you want to delete selected contract?",
       "deployerAddress": "Deployer address",
       "deposit": "Deposit to cluster",
       "edit": "Edit",
       "empty": "Create Schrödinger’s NFT contract",
       "emptyInfo": "Schrödinger’s NFT is the first use case of Apillon’s Web3 Computing. More options will follow.",
+      "emptyArchive": "Contracts Archive",
+      "emptyArchiveInfo": "You don't have any contract in Archive.",
       "encryptFile": "Encrypt file",
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
+      "list": "Contracts",
       "name": "Contract name",
       "new": "New Schrödinger’s NFT contract",
       "orSelectExisting": "or select existing bucket",
@@ -1277,6 +1283,7 @@
         "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
+        "collection": "NFT collection has been deleted",
         "contract": "Contract has been deleted",
         "directory": "Folder has been deleted",
         "domain": "Domain has been deleted",
@@ -1285,6 +1292,8 @@
         "ipns": "IPNS has been deleted",
         "item": "Item has been deleted",
         "items": "Items has been deleted",
+        "post": "Channel has been deleted",
+        "space": "Hub has been deleted",
         "service": "Service has been deleted",
         "user": "User has been removed from project",
         "userUninvited": "User has been uninvited from project",
@@ -1293,8 +1302,13 @@
       },
       "restored": {
         "bucket": "Bucket has been restored",
+        "chat": "Hub has been restored",
+        "collection": "NFT collection has been restored",
+        "contract": "Contract has been restored",
         "directory": "Folder has been restored",
-        "file": "File has been restored"
+        "file": "File has been restored",
+        "post": "Channel has been restored",
+        "website": "Website has been restored"
       },
       "updated": {
         "apiKey": "API key has been updated",
@@ -1375,9 +1389,11 @@
       }
     },
     "menu": {
+      "archive": "Website Archive",
       "preview": "1. Upload",
       "staging": "2. Preview",
-      "production": "3. Production"
+      "production": "3. Production",
+      "website": "Websites"
     },
     "review": {
       "confirm": "Proceed with Website Deployment, I'll wait",
@@ -1397,6 +1413,8 @@
       "addFirst": "Add first website",
       "create": "Create website",
       "description": "Website description",
+      "delete": "Delete website",
+      "deleteConfirm": "Are you sure that you want to delete selected website?",
       "domain": "Domain name",
       "edit": "Edit website",
       "infoNew": "",
@@ -1421,6 +1439,8 @@
     "size": "Size",
     "stagingEmpty": "Upload files and deploy them to staging",
     "web3Hosting": "Web3 hosting",
+    "web3HostingArchive": "Web3 hosting Archive",
+    "web3HostingArchiveInfo": "You don't have any website in Archive.",
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "nft": {
@@ -1485,6 +1505,8 @@
       "createFirst": "Start creating NFTs",
       "createInfo": "",
       "createToDisplay": "Create website to display NFTs with",
+      "delete": "Delete collection",
+      "deleteConfirm": "Are you sure that you want to delete selected collection?",
       "deploy": "Deploy collection",
       "display": "Display NFT collection",
       "dropStart": "Drop start",
@@ -1492,6 +1514,8 @@
       "extension": "[extension]",
       "empty": "Create your first NFT collection",
       "emptyInfo": "Add it to your Web3 project",
+      "emptyArchive": "NFT collection Archive",
+      "emptyArchiveInfo": "You don't have any collection in Archive.",
       "maxSupply": "Max supply",
       "mint": "Mint",
       "minted": "Minted",
@@ -1847,9 +1871,14 @@
       "create": "Create hub",
       "createFirst": "Create first hub",
       "date": "Create time",
+      "delete": "Delete hub",
+      "deleteConfirm": "Are you sure that you want to delete selected hub?",
       "dragAndDrop": "Drag & drop or click to upload.",
       "empty": "A chat application built on top of the Subsocial blockchain 🔗.",
       "emptyInfo": "Grill.chat offers a smooth and simple onboarding and user experience while still leveraging the power of blockchain technology.",
+      "emptyArchive": "Hub Archive",
+      "emptyArchiveInfo": "You don't have any hub in Archive.",
+      "list": "Hub list",
       "name": "Hub name",
       "new": "New hub",
       "select": "Select Hub",
@@ -1866,6 +1895,13 @@
       "create": "Create channel",
       "createFirst": "Create first channel",
       "date": "Created",
+      "delete": "Delete channel",
+      "deleteConfirm": "Are you sure that you want to delete selected channel?",
+      "empty": "A chat application built on top of the Subsocial blockchain 🔗.",
+      "emptyInfo": "Grill.chat offers a smooth and simple onboarding and user experience while still leveraging the power of blockchain technology.",
+      "emptyArchive": "Social channel Archive",
+      "emptyArchiveInfo": "You don't have any channel in Archive.",
+      "list": "Channel list",
       "manageHubs": "Manage Hubs",
       "new": "New channel",
       "postId": "Channel ID",
@@ -2212,6 +2248,7 @@
     },
     "hosting": {
       "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",
+      "delete": "Deleted sites are no longer accessible, but they are still available in Website Archive. Websites in the archive can be republished.",
       "deploy": "Please be advised that the deployment may take up to 5 minutes to complete."
     },
     "ipfs": {
@@ -2219,7 +2256,8 @@
     },
     "nft": {
       "collection": "You are about to deploy a NFT collection to the blockchain. If you confirm this step, your NFT collection will irreversibly be deployed.",
-      "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world."
+      "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world.",
+      "delete": "Deleting NFT collection will erased collection's metadata, but collection will still exists on chain."
     },
     "social": {
       "info": "Subsocial is a set of Substrate pallets that allows anyone to launch their own decentralized social network or community, or add social features to an existing application. Subsocial is not a decentralized social network, like Twitter or Facebook, but rather Subsocial is a platform for building social networks.",

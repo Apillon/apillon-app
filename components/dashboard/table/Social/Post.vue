@@ -3,11 +3,13 @@
     remote
     :bordered="false"
     :columns="columns"
-    :data="postStore.items"
-    :loading="postStore.loading"
+    :data="archive ? postStore.archive.items : postStore.items"
+    :loading="archive ? postStore.archive.loading : postStore.loading"
     :expanded-row-keys="expandedRows"
     :pagination="{
-      ...postStore.pagination,
+      page: archive ? postStore.archive.pagination.page : postStore.pagination.page,
+      pageSize: archive ? postStore.archive.pagination.pageSize : postStore.pagination.pageSize,
+      itemCount: archive ? postStore.archive.pagination.itemCount : postStore.pagination.itemCount,
       prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
     }"
     :row-key="rowKey"
@@ -15,14 +17,36 @@
     :row-class-name="rowClassName"
     @update:page="handlePageChange"
   />
+
+  <!-- Modal - Archive post -->
+  <ModalDelete v-model:show="showModalArchivePost" :title="$t('social.post.delete')">
+    <template #content>
+      <p>
+        {{ $t('social.post.deleteConfirm') }}
+      </p>
+    </template>
+
+    <slot>
+      <FormDeleteItems v-if="currentRow" :items="[currentRow]" @submit-success="onPostDeleted()" />
+    </slot>
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
 import { NButton, NDropdown } from 'naive-ui';
+import { SqlModelStatus } from '~/lib/types';
+
+const props = defineProps({
+  archive: { type: Boolean, default: false },
+});
 
 const { t } = useI18n();
+const message = useMessage();
+const authStore = useAuthStore();
 const postStore = usePostStore();
+
+const showModalArchivePost = ref<boolean | null>(false);
 
 /** Available columns - show/hide column */
 const selectedColumns = ref(['postId', 'title', 'body', 'hubName', 'tags', 'post_uuid', 'status']);
@@ -41,7 +65,7 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
   return [
     {
       type: 'expand',
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? 'hidden' : ON_COLUMN_CLICK_OPEN_CLASS,
       renderExpand(row: PostInterface) {
         if (row.postId) {
           return h(
@@ -60,32 +84,41 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
       key: 'postId',
       title: t('social.post.postId'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
         { hidden: !selectedColumns.value.includes('postId') },
       ],
     },
     {
       key: 'title',
       title: t('social.post.title'),
-      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('title') }],
+      className: [
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { hidden: !selectedColumns.value.includes('title') },
+      ],
     },
     {
       key: 'body',
       title: t('social.post.body'),
-      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('body') }],
+      className: [
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { hidden: !selectedColumns.value.includes('body') },
+      ],
     },
     {
       key: 'hubName',
       title: t('social.chat.name'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
         { hidden: !selectedColumns.value.includes('hubName') },
       ],
     },
     {
       key: 'tags',
       title: t('social.post.tags'),
-      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('tags') }],
+      className: [
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { hidden: !selectedColumns.value.includes('tags') },
+      ],
     },
     {
       key: 'post_uuid',
@@ -99,7 +132,7 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
       key: 'createTime',
       title: t('social.post.date'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
         { hidden: !selectedColumns.value.includes('createTime') },
       ],
       render(row) {
@@ -121,20 +154,6 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
       className: '!py-0 !sticky right-0',
       filter: 'default',
       filterOptionValue: null,
-      render() {
-        return h(
-          NDropdown,
-          { options: dropdownOptions.value, trigger: 'click' },
-          {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
-          }
-        );
-      },
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },
@@ -147,6 +166,23 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
             onColumnChange: handleColumnChange,
           },
           ''
+        );
+      },
+      render() {
+        return h(
+          NDropdown,
+          {
+            options: props.archive ? dropdownOptionsArchive : dropdownOptions,
+            trigger: 'click',
+          },
+          {
+            default: () =>
+              h(
+                NButton,
+                { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
+              ),
+          }
         );
       },
     },
@@ -167,7 +203,7 @@ const rowProps = (row: PostInterface) => {
     onClick: (e: Event) => {
       currentRow.value = row;
 
-      if (canOpenColumnCell(e.composedPath())) {
+      if (!props.archive && canOpenColumnCell(e.composedPath())) {
         selectPost();
       }
     },
@@ -177,25 +213,48 @@ const rowProps = (row: PostInterface) => {
 /**
  * Dropdown Actions
  */
-const dropdownOptions = computed(() => {
-  return [
-    {
-      key: 'select',
-      label: t('social.post.select'),
-      props: {
-        onClick: () => {
-          selectPost();
-        },
+const dropdownOptions = [
+  {
+    key: 'select',
+    label: t('social.post.select'),
+    props: {
+      onClick: () => {
+        selectPost();
       },
     },
-  ];
-});
+  },
+  {
+    key: 'socialDelete',
+    label: t('general.delete'),
+    disabled: authStore.isAdmin(),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        showModalArchivePost.value = true;
+      },
+    },
+  },
+];
+
+const dropdownOptionsArchive = [
+  {
+    key: 'postRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        restorePost();
+      },
+    },
+  },
+];
 
 onMounted(() => {
   const spaceId = postStore.active?.hubId;
   const postId = postStore.active?.postId || '';
 
-  if (spaceId && postId) {
+  if (spaceId && postId && !props.archive) {
     postStore.updateSettings(`${spaceId}`, `${postId}`);
   }
 });
@@ -210,10 +269,23 @@ watch(
 );
 const debouncedSearchFilter = debounce(handlePageChange, 500);
 
+watch(
+  () => postStore.archive.search,
+  _ => {
+    postStore.archive.loading = true;
+    debouncedSearchArchiveFilter();
+  }
+);
+const debouncedSearchArchiveFilter = debounce(handlePageArchiveChange, 500);
+
 /** On page change, load data */
 async function handlePageChange(page: number) {
   await postStore.getPosts(page);
   postStore.pagination.page = page;
+}
+async function handlePageArchiveChange(page: number) {
+  await postStore.getPostArchive(page);
+  postStore.archive.pagination.page = page;
 }
 
 async function selectPost() {
@@ -234,5 +306,43 @@ async function selectPost() {
 function handleColumnChange(selectedValues: Array<string>) {
   selectedColumns.value = selectedValues;
   localStorage.setItem(LsTableColumnsKeys.SOCIAL_POST, JSON.stringify(selectedColumns.value));
+}
+
+/**
+ * On post deleted
+ * Hide modal and refresh post list
+ * */
+function onPostDeleted() {
+  showModalArchivePost.value = false;
+
+  postStore.items = postStore.items.filter(item => item.post_uuid !== currentRow.value?.post_uuid);
+
+  sessionStorage.removeItem(LsCacheKeys.POSTS);
+  sessionStorage.removeItem(LsCacheKeys.POST_ARCHIVE);
+}
+
+/**
+ * Restore post
+ * */
+async function restorePost() {
+  if (!currentRow.value?.post_uuid) return;
+
+  postStore.loading = true;
+
+  try {
+    await $api.patch<PostResponse>(endpoints.postActivate(currentRow.value?.post_uuid));
+
+    postStore.archive.items = postStore.archive.items.filter(
+      item => item.post_uuid !== currentRow.value?.post_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.POSTS);
+    sessionStorage.removeItem(LsCacheKeys.POST_ARCHIVE);
+
+    message.success(t('form.success.restored.post'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  postStore.loading = false;
 }
 </script>

@@ -218,6 +218,9 @@ const Endpoints = {
   collectionIpns: (id: string) => {
     return `/nfts/collections/${id}/ipns`;
   },
+  collectionActivate: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/activate`;
+  },
 
   /**
    * Computing
@@ -237,6 +240,9 @@ const Endpoints = {
   },
   contractTransactions: (contractUuid: string) => {
     return `/computing/contracts/${contractUuid}/transactions`;
+  },
+  contractActivate: (contractUuid: string) => {
+    return `/computing/contracts/${contractUuid}/activate`;
   },
 
   /**
@@ -266,8 +272,14 @@ const Endpoints = {
   spaces: (uuid?: number | string) => {
     return uuid ? `/social/spaces/${uuid}` : '/social/spaces';
   },
+  spaceActivate: (uuid: number | string) => {
+    return `/social/spaces/${uuid}/activate`;
+  },
   posts: (uuid?: number | string) => {
     return uuid ? `/social/posts/${uuid}` : `/social/posts`;
+  },
+  postActivate: (uuid: number | string) => {
+    return `/social/posts/${uuid}/activate`;
   },
 
   /** Oauth links */

@@ -95,6 +95,7 @@ declare global {
     order?: string;
     loader?: boolean;
     project_uuid?: string;
+    status?: SqlModelStatus;
   };
 
   interface ServiceStatusInterface {
