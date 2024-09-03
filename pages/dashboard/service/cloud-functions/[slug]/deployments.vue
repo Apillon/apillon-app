@@ -5,7 +5,10 @@
     </template>
 
     <slot>
-      <n-space class="pb-8" :size="32" vertical> </n-space>
+      <n-space class="pb-8" :size="32" vertical>
+        <ActionsComputingCloudFunctionJobs />
+        <TableComputingCloudFunctionJobs />
+      </n-space>
     </slot>
   </Dashboard>
 </template>

@@ -1,14 +1,12 @@
 import { defineStore } from 'pinia';
 
-export const useCloudFunctionStore = defineStore('cloudFunction', {
+export const useJobStore = defineStore('job', {
   state: () => ({
     active: {} as CloudFunctionInterface,
-    bucketUuid: '',
     items: [] as CloudFunctionInterface[],
     loading: false,
     search: '',
     total: 0,
-    variables: [],
     pagination: {
       page: 1,
       pageSize: PAGINATION_LIMIT,
@@ -16,11 +14,8 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     },
   }),
   getters: {
-    hasCloudFunctions(state): boolean {
+    hasJobs(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
-    },
-    hasVariables(state): boolean {
-      return Array.isArray(state.variables) && state.variables.length > 0;
     },
   },
   actions: {
@@ -35,28 +30,27 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     /**
      * Fetch wrappers
      */
-    async getCloudFunctions(page = 1): Promise<CloudFunctionInterface[]> {
-      if (
-        page !== this.pagination.page ||
-        !this.hasCloudFunctions ||
-        isCacheExpired(LsCacheKeys.CLOUD_FUNCTIONS)
-      ) {
-        return await this.fetchCloudFunctions();
+    async getJobs(page = 1): Promise<CloudFunctionInterface[]> {
+      if (page !== this.pagination.page || !this.hasJobs || isCacheExpired(LsCacheKeys.JOBS)) {
+        return await this.fetchJobs();
       }
       return this.items;
     },
 
-    async getCloudFunction(jobUuid: string): Promise<CloudFunctionInterface> {
+    async getJob(jobUuid: string): Promise<CloudFunctionInterface> {
       if (this.active?.job_uuid === jobUuid && !isCacheExpired(LsCacheKeys.CLOUD_FUNCTION)) {
         return this.active;
       }
-      return await this.fetchCloudFunction(jobUuid);
+      return await this.fetchJob(jobUuid);
     },
 
     /**
      * API calls
      */
-    async fetchCloudFunctions(showLoader: boolean = true): Promise<CloudFunctionInterface[]> {
+    async fetchJobs(
+      cloudFunctionUuid: string,
+      showLoader: boolean = true
+    ): Promise<CloudFunctionInterface[]> {
       this.loading = showLoader;
 
       const dataStore = useDataStore();
@@ -72,7 +66,10 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
           ...PARAMS_ALL_ITEMS,
         };
 
-        const res = await $api.get<CloudFunctionsResponse>(endpoints.cloudFunctions(), params);
+        const res = await $api.get<CloudFunctionsResponse>(
+          endpoints.acurastJobs(cloudFunctionUuid),
+          params
+        );
 
         this.items = res.data.items;
         this.total = res.data.total;
@@ -80,7 +77,7 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
         this.loading = false;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.CLOUD_FUNCTIONS, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.JOBS, Date.now().toString());
 
         return res.data.items;
       } catch (error: any) {
@@ -95,12 +92,12 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
       return [];
     },
 
-    async fetchCloudFunction(uuid: string): Promise<CloudFunctionInterface> {
+    async fetchJob(uuid: string): Promise<CloudFunctionInterface> {
       try {
         const res = await $api.get<CloudFunctionResponse>(endpoints.cloudFunctions(uuid));
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.CLOUD_FUNCTION, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.JOB, Date.now().toString());
 
         return res.data;
       } catch (error: any) {

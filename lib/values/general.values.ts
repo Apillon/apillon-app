@@ -84,6 +84,8 @@ export const LsCacheKeys = {
   IPFS: 'al_cache_ipfs',
   IPNS: 'al_cache_ipns',
   IPNS_ITEM: 'al_cache_ipns_item',
+  JOB: 'al_cache_job',
+  JOBS: 'al_cache_jobs',
   OAUTH_LINKS: 'al_cache_oauth_links',
   PRICE_LIST: 'al_cache_price_list',
   POST: 'al_cache_post',

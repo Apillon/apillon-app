@@ -240,14 +240,23 @@ const Endpoints = {
   },
 
   /** Cloud functions - Acurast */
-  acurast: (uuid?: string) => {
-    return uuid ? `/acurast/jobs/${uuid}` : '/acurast/jobs';
+  cloudFunctions: (uuid?: string) => {
+    return uuid ? `/acurast/cloud-functions/${uuid}` : '/acurast/cloud-functions';
+  },
+  cloudFunctionExecute: (uuid?: string) => {
+    return `/acurast/cloud-functions/${uuid}/execute`;
+  },
+  cloudFunctionJobs: (uuid?: string) => {
+    return `/acurast/cloud-functions/${uuid}/jobs`;
+  },
+  cloudFunctionUsage: (uuid?: string) => {
+    return `/acurast/cloud-functions/${uuid}/usage`;
+  },
+  acurastJobs: (uuid: string) => {
+    return `/acurast/jobs/${uuid}`;
   },
   acurastEnvironment: (uuid: string) => {
     return `/acurast/jobs/${uuid}/environment`;
-  },
-  acurastMessage: (uuid: string) => {
-    return `/acurast/jobs/${uuid}/message`;
   },
 
   /**

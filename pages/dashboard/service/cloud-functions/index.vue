@@ -12,7 +12,7 @@
       </Heading>
     </template>
     <slot>
-      <n-space v-if="!cloudFunctionStore.hasCloudFunctions" class="pb-8" :size="32" vertical>
+      <n-space v-if="cloudFunctionStore.hasCloudFunctions" class="pb-8" :size="32" vertical>
         <ActionsComputingCloudFunctions />
         <TableComputingCloudFunctions />
       </n-space>

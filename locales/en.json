@@ -212,9 +212,11 @@
         }
       ],
       "variable": {
+        "addRow": "Add row",
         "btnAdd": "Add environment variable manually",
         "btnUpload": "Upload .ENV file for automatic detection",
-        "content": "Create a new environment variable which you want to pass into the cloud function. To learn more about how environment variables are handled, refer to the {url}.",
+        "content": "Create a new environment variable which you want to pass into the cloud function. \nTo learn more about how environment variables are handled, refer to the {url}.",
+        "new": "New Environment variable",
         "title": "You currently have no environment variables for this cloud functions"
       }
     },
@@ -360,6 +362,10 @@
       "services": {
         "COMPUTING": {
           "name": "Web3 Computing",
+          "description": null
+        },
+        "CONTRACTS": {
+          "name": "Contracts",
           "description": null
         },
         "HOSTING": {
@@ -1205,7 +1211,9 @@
         "description": "Description",
         "name": "Title",
         "startTime": "Start time",
-        "endTime": "End time"
+        "endTime": "End time",
+        "varKey": "Key",
+        "varValue": "Value"
       }
     },
     "networkTypes": {
@@ -1305,6 +1313,7 @@
         "chatPost": "Channel has been created",
         "chatSpace": "Hub has been created",
         "cloudFunction": "Cloud function has been created",
+        "cloudFunctionVariable": "Cloud function variables have been created",
         "collection": "Creating NFT collection requested.",
         "directory": "Folder has been created",
         "domain": "Domain has been added to Website",
@@ -2243,6 +2252,8 @@
       "endTimeRequired": "Please select end date",
       "fileRequired": "Please upload file",
       "fileType": "Wrong file type, please upload javascript file",
+      "keyRequired": "Please enter variable key",
+      "keyNotUnique": "Please enter unique variable key",
       "nameRequired": "Please enter name",
       "startTimeRequired": "Please select start date"
     },

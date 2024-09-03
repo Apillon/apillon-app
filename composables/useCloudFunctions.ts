@@ -16,11 +16,11 @@ export default function useCloudFunctions() {
       const currentCloudFunction = await cloudFunctionStore.getCloudFunction(jobUuid.value);
 
       if (!currentCloudFunction?.job_uuid) {
-        router.push({ name: 'dashboard-service-cloud-functions' });
+        // router.push({ name: 'dashboard-service-cloud-functions' });
       } else {
         cloudFunctionStore.active = currentCloudFunction;
-        pageLoading.value = false;
       }
+      pageLoading.value = false;
     });
   }
 
