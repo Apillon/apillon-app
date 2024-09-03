@@ -42,7 +42,7 @@
   </ModalDelete>
 
   <!-- W3Warn: delete bucket -->
-  <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
+  <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
     {{ $t('w3Warn.bucket.delete') }}
   </W3Warn>
 </template>
@@ -63,8 +63,8 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.BUCKET_DELETE);
 
-const showModalW3Warn = ref<boolean>(false);
 const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean | null>(false);
 const checkedRowKeys = ref<Array<string | number>>([]);
@@ -231,7 +231,7 @@ function deleteBucket(isCurrentRow = false) {
   if (localStorage.getItem(LsW3WarnKeys.BUCKET_DELETE)) {
     showModalDestroyBucket.value = true;
   } else {
-    showModalW3Warn.value = true;
+    modalW3WarnVisible.value = true;
     showModalDestroyBucket.value = null;
   }
 }
@@ -242,16 +242,6 @@ function onModalW3WarnHide() {
     showModalDestroyBucket.value = true;
   }
 }
-
-/** Watch showModalW3Warn, onShow update timestamp of shown modal in session storage */
-watch(
-  () => showModalW3Warn.value,
-  shown => {
-    if (shown) {
-      localStorage.setItem(LsW3WarnKeys.BUCKET_DELETE, Date.now().toString());
-    }
-  }
-);
 
 /**
  * On bucket deleted

@@ -23,7 +23,7 @@
     </template>
 
     <template #submenu>
-      <MenuHosting />
+      <MenuWebsite />
     </template>
   </Heading>
 

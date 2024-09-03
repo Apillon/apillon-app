@@ -3,11 +3,13 @@
     remote
     :bordered="false"
     :columns="columns"
-    :data="chatStore.items"
+    :data="archive ? chatStore.archive.items : chatStore.items"
     :expanded-row-keys="expandedRows"
-    :loading="chatStore.loading"
+    :loading="archive ? chatStore.archive.loading : chatStore.loading"
     :pagination="{
-      ...chatStore.pagination,
+      page: archive ? chatStore.archive.pagination.page : chatStore.pagination.page,
+      pageSize: archive ? chatStore.archive.pagination.pageSize : chatStore.pagination.pageSize,
+      itemCount: archive ? chatStore.archive.pagination.itemCount : chatStore.pagination.itemCount,
       prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
     }"
     :row-key="rowKey"
@@ -18,25 +20,45 @@
   <modal v-model:show="modalInfoVisible" :title="$t('social.chat.settings')">
     <GrillChatSettings :space-id="`${currentRow?.spaceId}`" />
   </modal>
+
+  <!-- Modal - Archive chat -->
+  <ModalDelete v-model:show="showModalArchiveChat" :title="$t('social.chat.delete')">
+    <template #content>
+      <p>
+        {{ $t('social.chat.deleteConfirm') }}
+      </p>
+    </template>
+
+    <slot>
+      <FormDeleteItems v-if="currentRow" :items="[currentRow]" @submit-success="onChatDeleted()" />
+    </slot>
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
 import { NButton, NDropdown } from 'naive-ui';
 
+const props = defineProps({
+  archive: { type: Boolean, default: false },
+});
+
 const { t } = useI18n();
+const message = useMessage();
+const authStore = useAuthStore();
 const chatStore = useChatStore();
 const postStore = usePostStore();
 
 const TableEllipsis = resolveComponent('TableEllipsis');
 const GrillChatStatus = resolveComponent('GrillChatStatus');
 const modalInfoVisible = ref<boolean>(false);
+const showModalArchiveChat = ref<boolean | null>(false);
 
 const createColumns = (): NDataTableColumns<ChatInterface> => {
   return [
     {
       type: 'expand',
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? 'hidden' : ON_COLUMN_CLICK_OPEN_CLASS,
       renderExpand(row: ChatInterface) {
         if (row.spaceId) {
           return h(
@@ -53,22 +75,23 @@ const createColumns = (): NDataTableColumns<ChatInterface> => {
     {
       key: 'spaceId',
       title: t('social.chat.spaceId'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      minWidth: 80,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
       key: 'name',
       title: t('social.chat.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
       key: 'about',
       title: t('social.chat.about'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
       key: 'tags',
       title: t('social.chat.tags'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
       key: 'contract_uuid',
@@ -99,7 +122,7 @@ const createColumns = (): NDataTableColumns<ChatInterface> => {
       render() {
         return h(
           NDropdown,
-          { options: dropdownOptions.value, trigger: 'click' },
+          { options: props.archive ? dropdownOptionsArchive : dropdownOptions, trigger: 'click' },
           {
             default: () =>
               h(
@@ -124,7 +147,7 @@ const rowProps = (row: ChatInterface) => {
     onClick: (e: Event) => {
       currentRow.value = row;
 
-      if (canOpenColumnCell(e.composedPath())) {
+      if (!props.archive && canOpenColumnCell(e.composedPath())) {
         selectChat();
       }
     },
@@ -133,32 +156,55 @@ const rowProps = (row: ChatInterface) => {
 /**
  * Dropdown Actions
  */
-const dropdownOptions = computed(() => {
-  return [
-    {
-      key: 'select',
-      label: t('social.chat.select'),
-      props: {
-        onClick: () => {
-          selectChat();
-        },
+const dropdownOptions = [
+  {
+    key: 'select',
+    label: t('social.chat.select'),
+    props: {
+      onClick: () => {
+        selectChat();
       },
     },
-    {
-      label: t('social.chat.showSettings'),
-      key: 'settings',
-      props: {
-        onClick: () => {
-          modalInfoVisible.value = true;
-        },
+  },
+  {
+    label: t('social.chat.showSettings'),
+    key: 'settings',
+    props: {
+      onClick: () => {
+        modalInfoVisible.value = true;
       },
     },
-  ];
-});
+  },
+  {
+    key: 'socialDelete',
+    label: t('general.delete'),
+    disabled: authStore.isAdmin(),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        showModalArchiveChat.value = true;
+      },
+    },
+  },
+];
+
+const dropdownOptionsArchive = [
+  {
+    key: 'chatRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      class: '!text-pink',
+      onClick: () => {
+        restoreChat();
+      },
+    },
+  },
+];
 
 onMounted(() => {
   const spaceId = chatStore.active?.spaceId;
-  if (spaceId) {
+  if (spaceId && props.archive) {
     postStore.updateSettings(`${spaceId}`);
   }
 });
@@ -172,11 +218,23 @@ watch(
   }
 );
 const debouncedSearchFilter = debounce(handlePageChange, 500);
+watch(
+  () => chatStore.archive.search,
+  _ => {
+    chatStore.archive.loading = true;
+    debouncedSearchArchiveFilter();
+  }
+);
+const debouncedSearchArchiveFilter = debounce(handlePageArchiveChange, 500);
 
 /** On page change, load data */
 async function handlePageChange(page: number) {
   await chatStore.getChats(page);
   chatStore.pagination.page = page;
+}
+async function handlePageArchiveChange(page: number) {
+  await chatStore.getChatArchive(page);
+  chatStore.archive.pagination.page = page;
 }
 
 async function selectChat() {
@@ -191,5 +249,45 @@ async function selectChat() {
       expandedRows.value = expandedRows.value.includes(spaceId) ? [] : [spaceId];
     }
   }
+}
+
+/**
+ * On chat deleted
+ * Hide modal and refresh chat list
+ * */
+function onChatDeleted() {
+  showModalArchiveChat.value = false;
+
+  chatStore.items = chatStore.items.filter(
+    item => item.space_uuid !== currentRow.value?.space_uuid
+  );
+
+  sessionStorage.removeItem(LsCacheKeys.CHATS);
+  sessionStorage.removeItem(LsCacheKeys.CHAT_ARCHIVE);
+}
+
+/**
+ * Restore chat
+ * */
+async function restoreChat() {
+  if (!currentRow.value?.space_uuid) return;
+
+  chatStore.loading = true;
+
+  try {
+    await $api.patch<ChatResponse>(endpoints.spaceActivate(currentRow.value?.space_uuid));
+
+    chatStore.archive.items = chatStore.archive.items.filter(
+      item => item.space_uuid !== currentRow.value?.space_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.CHATS);
+    sessionStorage.removeItem(LsCacheKeys.CHAT_ARCHIVE);
+
+    message.success(t('form.success.restored.chat'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  chatStore.loading = false;
 }
 </script>

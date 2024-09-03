@@ -15,7 +15,7 @@
       <span v-if="$te(`social.chat.status.${status}`)" class="mx-1 uppercase">
         {{ $t(`social.chat.status.${status}`) }}
       </span>
-      <span v-else class="mx-1 uppercase">{{ SocialStatus[status] }}</span>
+      <span v-else class="mx-1 uppercase">{{ SocialStatus[status].replaceAll('_', ' ') }}</span>
 
       <AnimationTyping v-if="status < SocialStatus.INACTIVE" />
     </n-space>
