@@ -38,8 +38,6 @@ const dataStore = useDataStore();
 const smartContractsStore = useSmartContractsStore();
 const $i18n = useI18n();
 
-const headingRef = ref<HTMLElement>();
-
 const smartContracts = ref<SmartContractInterface[]>([]);
 
 useHead({

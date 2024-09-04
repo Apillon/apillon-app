@@ -523,7 +523,7 @@
         },
         "infoSection": {
           "title": "Execute read & write functions",
-          "p": "Your Smart Contract was deployed via Apillon. This means, certain Write functions are available only over Apillon Backend, until you decide to take ownership of the contract.",
+          "p": "Your smart contract was deployed via Apillon. This means certain write functions are available only through the Apillon Backend, until you decide to take ownership of the contract. ",
           "infoBox": "Take ownership of the Smart Contract. Once you take ownership of the Smart Contract, you will be able to execute all the functions directly from your dapp. This is not a mandatory step, but it makes sense to take the ownership of the contract before going to production.",
           "takeOwnershipBtn": "Take smart contract ownership"
         },
@@ -548,7 +548,7 @@
       "info": "Browse the list of smart contracts you can deploy and integrate and start building immediately via API.",
       "kraken": "Smart contract for Kraken",
       "meerkats": "Meerkats",
-      "description": "Deploy audited and field tested smart contracts with 1 click. Connect to smart contract from your dapp and start using it immediately.",
+      "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
       "createNew": "Create new token",
       "customizeAndDeploy": "Customize and deploy"
     },
@@ -587,8 +587,8 @@
         "description": "Create an NFT collection, upload target addresses and automatically distribute NFTs to them.",
         "content": [
           {
-            "title": "What do you get",
-            "content": ["Free metadata storage", "0 gas cost", "Free web template", "Free hosting"]
+            "title": "What do you get?",
+            "content": ["Free metadata storage", "No gas cost", "Free web template", "Free hosting"]
           }
         ]
       },

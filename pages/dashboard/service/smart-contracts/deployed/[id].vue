@@ -19,7 +19,7 @@
           Disconnect
         </Btn>
       </div>
-      <div class="my-8">
+      <div v-if="contractStatus !== 6" class="my-8">
         <div class="flex flex-col md:flex-row gap-x-8">
           <div class="flex-1 max-w-[550px]">
             <h4>
@@ -36,9 +36,7 @@
           </div>
         </div>
 
-        <a v-if="contractStatus !== 6" class="anchor-link" href="#transferOwnership"
-          >Take smart contract ownership</a
-        >
+        <a class="anchor-link" href="#transferOwnership">Take smart contract ownership</a>
       </div>
 
       <h4 class="mb-6">
@@ -83,7 +81,7 @@
                           </template>
                           <!-- Submit -->
                           <n-button
-                            v-if="needsWalletConnection(fn.onlyOwner)"
+                            v-if="needsWalletConnection(fn.onlyOwner) && !isConnected"
                             class="w-full text-yellow btn-connect bg-transparent"
                             type="secondary"
                             native-type="submit"
@@ -91,6 +89,16 @@
                             @click="connectWallet"
                           >
                             Connect your wallet
+                          </n-button>
+                          <n-button
+                            v-else-if="isConnected && wrongNetwork"
+                            class="w-full"
+                            type="primary"
+                            native-type="submit"
+                            :loading="btnLoading"
+                            @click="ensureCorrectNetwork"
+                          >
+                            Switch Network
                           </n-button>
                           <n-button
                             v-else
@@ -124,8 +132,11 @@
               </template>
             </div>
             <div class="flex-1">
-              <h4 class="my-3">
+              <h4 v-if="contractStatus !== 6" class="my-3">
                 {{ $t('dashboard.service.smartContracts.functions.writeOverApillon') }}
+              </h4>
+              <h4 v-else class="my-3">
+                <br />
               </h4>
               <template v-for="fn in writeFunctions" :key="fn">
                 <!-- If function has any availablbe inouts create a form -->
@@ -155,7 +166,7 @@
                           </template>
                           <!-- Submit -->
                           <n-button
-                            v-if="needsWalletConnection(fn.onlyOwner)"
+                            v-if="needsWalletConnection(fn.onlyOwner) && !isConnected"
                             class="w-full text-yellow btn-connect bg-transparent"
                             type="secondary"
                             native-type="submit"
@@ -164,6 +175,17 @@
                           >
                             Connect your wallet
                           </n-button>
+                          <n-button
+                            v-else-if="isConnected && wrongNetwork"
+                            class="w-full"
+                            type="primary"
+                            native-type="submit"
+                            :loading="btnLoading"
+                            @click="ensureCorrectNetwork"
+                          >
+                            Switch Network
+                          </n-button>
+
                           <n-button
                             v-else
                             type="primary"
@@ -286,7 +308,7 @@
       </div>
     </slot>
 
-    <div
+    <!-- <div
       v-if="activeTransactionsWindow"
       class="card-dark fixed right-0 bottom-0 w-[34rem] px-5 py-3 !border-yellow !rounded-none z-10 -mr-[1px] -mb-[1px]"
     >
@@ -319,7 +341,7 @@
           </div>
         </div>
       </n-scrollbar>
-    </div>
+    </div> -->
   </Dashboard>
 </template>
 
@@ -327,7 +349,17 @@
 import { createPublicClient, createWalletClient, custom, http } from 'viem';
 import { moonbaseAlpha, moonbeam, astar } from 'viem/chains';
 
-import { useAccount, useConnect, useWalletClient, useDisconnect } from 'use-wagmi';
+import {
+  useAccount,
+  useConnect,
+  useWalletClient,
+  useDisconnect,
+  useNetwork,
+  useSwitchNetwork,
+} from 'use-wagmi';
+const { chain } = useNetwork();
+const { switchNetwork } = useSwitchNetwork();
+
 const { connect, connectors } = useConnect();
 const { disconnect } = useDisconnect();
 const { refetch: refetchWalletClient } = useWalletClient();
@@ -348,9 +380,8 @@ const dataStore = useDataStore();
 const smartContractsStore = useSmartContractsStore();
 const { astarShibuya } = useSmartContracts();
 
-const activeTransactions = ref({});
-const activeTransactionsWindow = ref<boolean>(false);
-const transactionListExpanded = ref<boolean>(true);
+// const activeTransactionsWindow = ref<boolean>(false);
+// const transactionListExpanded = ref<boolean>(true);
 const pageLoading = ref<boolean>(true);
 const contractUuid = ref<string>(`${params?.id}` || '');
 const contractStatus = computed(() => smartContractsStore.active.contractStatus);
@@ -366,7 +397,6 @@ const formRefs = ref({});
 const errors = ref({});
 const formErrors = ref({});
 const msgs = ref({});
-const responses = ref({});
 const btnLoading = ref(false);
 
 function removeMsg(methodName) {
@@ -404,8 +434,20 @@ function wagmiConnect(connector) {
   }
 }
 
+const wrongNetwork = computed(() => {
+  // compare contract chain id to current wallet chain id
+  return !chain || !chain.value || chain.value.id !== smartContractsStore.active.chain;
+});
+
+async function ensureCorrectNetwork() {
+  await switchNetwork(smartContractsStore.active.chain);
+  btnLoading.value = false;
+  return true;
+}
+
 // Submit
 function handleSubmit(methodName, method, onlyOwner) {
+  console.log('submit');
   btnLoading.value = true;
   errors.value = {};
   formErrors.value = {};
@@ -418,7 +460,6 @@ function handleSubmit(methodName, method, onlyOwner) {
   msgs.value[methodName] = null;
   if (method === 'write') {
     if (!onlyOwner || contractStatus.value === 6) {
-      console.log('wallet write');
       execWalletWrite(methodName);
     } else {
       execOwnerWrite(methodName);
@@ -429,8 +470,7 @@ function handleSubmit(methodName, method, onlyOwner) {
 }
 
 async function execWalletWrite(methodName) {
-  console.log('wallet write');
-  activeTransactionsWindow.value = true;
+  // activeTransactionsWindow.value = true;
 
   const contractAddress = smartContractsStore.active.contractAddress;
   const abi = smartContractsStore.active.contractVersion.abi;
@@ -498,7 +538,7 @@ async function execRead(methodName) {
 
 // write functions handler
 async function execOwnerWrite(methodName) {
-  activeTransactionsWindow.value = true;
+  // activeTransactionsWindow.value = true;
 
   console.log('write write');
 

@@ -311,7 +311,7 @@ async function deployContract() {
 
   for (const key in form.value) {
     if (form.value.hasOwnProperty(key)) {
-      if (key !== 'name' && key !== 'description' && key !== 'chain') {
+      if (key !== 'Name' && key !== 'description' && key !== 'chain') {
         if (key === '_settings') {
           constructorArguments.push(settings.value);
         } else if (accumulatedKeys.includes(key)) {
