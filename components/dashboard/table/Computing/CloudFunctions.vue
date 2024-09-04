@@ -13,14 +13,6 @@
     :row-key="rowKey"
     :row-props="rowProps"
   />
-
-  <!-- Modal - CloudFunction Transfer 
-  <modal v-model:show="modalTransferOwnershipVisible" :title="$t('computing.cloudFunctions.transfer')">
-    <FormComputingTransfer
-      :cloudFunction-uuid="currentRow.job_uuid"
-      @submit-success="onCloudFunctionTransferred"
-    />
-  </modal>-->
 </template>
 
 <script lang="ts" setup>
@@ -49,26 +41,10 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
       },
     },
     {
-      key: 'job_uuid',
+      key: 'function_uuid',
       title: t('general.uuid'),
       render(row: CloudFunctionInterface) {
-        return h(resolveComponent('TableEllipsis'), { text: row.job_uuid }, '');
-      },
-    },
-    {
-      key: 'startTime',
-      title: t('form.label.cloudFunctions.startTime'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.startTime || '');
-      },
-    },
-    {
-      key: 'endTime',
-      title: t('form.label.cloudFunctions.endTime'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.endTime || '');
+        return h(resolveComponent('TableEllipsis'), { text: row.function_uuid }, '');
       },
     },
     {
@@ -80,15 +56,8 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
       },
     },
     {
-      key: 'jobStatus',
-      title: t('general.status'),
-      render(row: CloudFunctionInterface) {
-        return h(
-          resolveComponent('Pill'),
-          { type: jobStatusType(row.jobStatus) },
-          AcurastJobStatus[row.jobStatus]
-        );
-      },
+      key: 'activeJob_id',
+      title: t('computing.cloudFunctions.activeJob'),
     },
     {
       title: '',
@@ -113,12 +82,8 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: CloudFunctionInterface) => row.job_uuid;
+const rowKey = (row: CloudFunctionInterface) => row.function_uuid;
 const currentRow = ref<CloudFunctionInterface>();
-
-const viewEnabled = computed<boolean>(() => {
-  return (currentRow.value?.status || 0) >= AcurastJobStatus.DEPLOYING;
-});
 
 /**
  * Dropdown Actions
@@ -128,12 +93,11 @@ const dropdownOptions = computed(() => {
     {
       label: t('general.view'),
       key: 'view',
-      disabled: !viewEnabled.value,
       props: {
         onClick: () => {
-          if (viewEnabled.value && currentRow.value) {
+          if (currentRow.value) {
             router.push({
-              path: `/dashboard/service/cloud-functions/${currentRow.value.job_uuid}`,
+              path: `/dashboard/service/cloud-functions/${currentRow.value.function_uuid}`,
             });
           }
         },
@@ -148,8 +112,8 @@ const rowProps = (row: CloudFunctionInterface) => {
     onClick: (e: Event) => {
       currentRow.value = row;
 
-      if (canOpenColumnCell(e.composedPath()) && viewEnabled.value) {
-        router.push({ path: `/dashboard/service/cloud-functions/${row.job_uuid}` });
+      if (canOpenColumnCell(e.composedPath())) {
+        router.push({ path: `/dashboard/service/cloud-functions/${row.function_uuid}` });
       }
     },
   };

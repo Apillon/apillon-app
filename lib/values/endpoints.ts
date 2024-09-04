@@ -243,20 +243,20 @@ const Endpoints = {
   cloudFunctions: (uuid?: string) => {
     return uuid ? `/acurast/cloud-functions/${uuid}` : '/acurast/cloud-functions';
   },
-  cloudFunctionExecute: (uuid?: string) => {
+  cloudFunctionEnvironment: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/environment`;
+  },
+  cloudFunctionExecute: (uuid: string) => {
     return `/acurast/cloud-functions/${uuid}/execute`;
   },
-  cloudFunctionJobs: (uuid?: string) => {
+  cloudFunctionJobs: (uuid: string) => {
     return `/acurast/cloud-functions/${uuid}/jobs`;
   },
-  cloudFunctionUsage: (uuid?: string) => {
+  cloudFunctionUsage: (uuid: string) => {
     return `/acurast/cloud-functions/${uuid}/usage`;
   },
   acurastJobs: (uuid: string) => {
     return `/acurast/jobs/${uuid}`;
-  },
-  acurastEnvironment: (uuid: string) => {
-    return `/acurast/jobs/${uuid}/environment`;
   },
 
   /**

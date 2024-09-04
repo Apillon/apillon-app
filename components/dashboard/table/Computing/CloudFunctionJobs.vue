@@ -4,7 +4,7 @@
     v-bind="$attrs"
     :bordered="false"
     :columns="columns"
-    :data="cloudFunctionStore.items"
+    :data="cloudFunctionStore.jobs"
     :loading="cloudFunctionStore.loading"
     :pagination="{
       ...cloudFunctionStore.pagination,
@@ -16,65 +16,41 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
 const router = useRouter();
 const cloudFunctionStore = useCloudFunctionStore();
 
-const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
+const createColumns = (): NDataTableColumns<JobInterface> => {
   return [
     {
-      key: 'name',
-      title: t('general.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
-      render(row) {
-        return h('strong', {}, { default: () => row.name });
-      },
+      key: 'filename',
+      title: t('computing.cloudFunctions.job.filename'),
     },
     {
-      key: 'description',
-      title: t('general.description'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
-      render(row) {
-        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
-      },
+      key: 'size',
+      title: t('computing.cloudFunctions.job.size'),
     },
     {
-      key: 'job_uuid',
-      title: t('general.uuid'),
-      render(row: CloudFunctionInterface) {
-        return h(resolveComponent('TableEllipsis'), { text: row.job_uuid }, '');
+      key: 'cid',
+      title: t('computing.cloudFunctions.job.cid'),
+      render(row: JobInterface) {
+        return h(resolveComponent('TableEllipsis'), { text: row.cid }, '');
       },
     },
     {
       key: 'startTime',
-      title: t('form.label.cloudFunctions.startTime'),
+      title: t('computing.cloudFunctions.job.dateStarted'),
       minWidth: 120,
       render(row) {
         return dateTimeToDateAndTime(row?.startTime || '');
       },
     },
     {
-      key: 'endTime',
-      title: t('form.label.cloudFunctions.endTime'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.endTime || '');
-      },
-    },
-    {
-      key: 'createTime',
-      title: t('dashboard.created'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.createTime || '');
-      },
-    },
-    {
       key: 'jobStatus',
       title: t('general.status'),
-      render(row: CloudFunctionInterface) {
+      render(row: JobInterface) {
         return h(
           resolveComponent('Pill'),
           { type: jobStatusType(row.jobStatus) },
@@ -105,8 +81,8 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: CloudFunctionInterface) => row.job_uuid;
-const currentRow = ref<CloudFunctionInterface>();
+const rowKey = (row: JobInterface) => row.job_uuid;
+const currentRow = ref<JobInterface>();
 
 const viewEnabled = computed<boolean>(() => {
   return (currentRow.value?.status || 0) >= AcurastJobStatus.DEPLOYING;
@@ -135,7 +111,7 @@ const dropdownOptions = computed(() => {
 });
 
 /** On row click */
-const rowProps = (row: CloudFunctionInterface) => {
+const rowProps = (row: JobInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;

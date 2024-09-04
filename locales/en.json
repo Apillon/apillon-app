@@ -202,7 +202,7 @@
       "content": [
         {
           "headline": "Features:",
-          "subtitle": "Use cloud functions to build your own unstoppable Web3 backend. Just like \nAWS lambda but without compromise. ",
+          "subtitle": "Use cloud functions to build your own unstoppable Web3 backend. \nJust like AWS lambda but without compromise. ",
           "benefits": [
             "Write code in NodeJS, bundle and deploy",
             "Compute is executed on high performance CPUs with random providers and redundancy.",
@@ -211,6 +211,16 @@
           ]
         }
       ],
+      "job": {
+        "btnUpload": "Upload new Script",
+        "cid": "CID",
+        "content": "Start by uploading your script by drag & drop files",
+        "dateStarted": "Date started",
+        "filename": "Filename",
+        "new": "Deploy new script",
+        "size": "Size",
+        "title": "You currently have no deployments for this Cloud function"
+      },
       "variable": {
         "addRow": "Add row",
         "btnAdd": "Add environment variable manually",
@@ -308,6 +318,7 @@
       "service": {
         "authentication": "Authentication service",
         "computing": "Computing service",
+        "contracts": "Contracts service",
         "hosting": "Hosting service",
         "nft": "NFT service",
         "social": "Social service",
@@ -1210,6 +1221,8 @@
       "cloudFunctions": {
         "description": "Description",
         "name": "Title",
+        "jobName": "Job name",
+        "slots": "Slots",
         "startTime": "Start time",
         "endTime": "End time",
         "varKey": "Key",
@@ -1253,6 +1266,7 @@
       "nftMintParentNftId": "Parent NFT ID",
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
+      "number": "Enter number",
       "password": "password",
       "phone": "+000 12345678",
       "postalCode": "4223",
@@ -1280,7 +1294,8 @@
       },
       "cloudFunctions": {
         "description": "Enter cloud function description for personal reference",
-        "name": "Enter cloud function title for personal reference"
+        "name": "Enter cloud function title for personal reference",
+        "jobName": "Enter cloud function job name for personal reference"
       }
     },
     "success": {
@@ -2255,7 +2270,8 @@
       "keyRequired": "Please enter variable key",
       "keyNotUnique": "Please enter unique variable key",
       "nameRequired": "Please enter name",
-      "startTimeRequired": "Please select start date"
+      "startTimeRequired": "Please select start date",
+      "slotsRequired": "Please enter number of slots"
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",

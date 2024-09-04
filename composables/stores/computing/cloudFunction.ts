@@ -8,7 +8,7 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     loading: false,
     search: '',
     total: 0,
-    variables: [],
+    variables: [] as EnvVariable[],
     pagination: {
       page: 1,
       pageSize: PAGINATION_LIMIT,
@@ -16,8 +16,17 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     },
   }),
   getters: {
+    functionUuid(state): string {
+      return state.active.function_uuid;
+    },
+    jobs(state): JobInterface[] {
+      return state.active.jobs;
+    },
     hasCloudFunctions(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
+    },
+    hasJobs(state): boolean {
+      return Array.isArray(state.active.jobs) && state.active.jobs.length > 0;
     },
     hasVariables(state): boolean {
       return Array.isArray(state.variables) && state.variables.length > 0;
@@ -46,11 +55,14 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
       return this.items;
     },
 
-    async getCloudFunction(jobUuid: string): Promise<CloudFunctionInterface> {
-      if (this.active?.job_uuid === jobUuid && !isCacheExpired(LsCacheKeys.CLOUD_FUNCTION)) {
+    async getCloudFunction(functionUuid: string): Promise<CloudFunctionInterface> {
+      if (
+        this.active?.function_uuid === functionUuid &&
+        !isCacheExpired(LsCacheKeys.CLOUD_FUNCTION)
+      ) {
         return this.active;
       }
-      return await this.fetchCloudFunction(jobUuid);
+      return await this.fetchCloudFunction(functionUuid);
     },
 
     /**

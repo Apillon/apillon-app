@@ -78,6 +78,7 @@ const $i18n = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
+const cloudFunctionStore = useCloudFunctionStore();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
@@ -126,6 +127,8 @@ async function createCloudFunctions() {
       description: formData.value.description,
     };
     const res = await $api.post<CloudFunctionResponse>(endpoints.cloudFunctions(), bodyData);
+
+    cloudFunctionStore.items.push(res.data);
 
     message.success($i18n.t('form.success.created.cloudFunction'));
 

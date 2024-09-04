@@ -4,10 +4,10 @@
     v-bind="$attrs"
     :bordered="false"
     :columns="columns"
-    :data="cloudFunctionStore.items"
+    :data="cloudFunctionStore.variables"
     :loading="cloudFunctionStore.loading"
     :pagination="{
-      ...cloudFunctionStore.pagination,
+      pageSize: PAGINATION_LIMIT,
       prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
     }"
     :row-key="rowKey"
@@ -16,13 +16,13 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown } from 'naive-ui';
+import { NButton, NDropdown, NInput } from 'naive-ui';
 
 const { t } = useI18n();
 const router = useRouter();
 const cloudFunctionStore = useCloudFunctionStore();
 
-const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
+const createColumns = (): NDataTableColumns<EnvVariable> => {
   return [
     {
       key: 'key',
@@ -31,14 +31,17 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
     {
       key: 'value',
       title: t('form.label.cloudFunctions.varValue'),
-    },
-
-    {
-      key: 'createTime',
-      title: t('dashboard.created'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.createTime || '');
+      render(row: EnvVariable) {
+        return h(NInput, {
+          value: row.value,
+          showPasswordOn: 'click',
+          size: 'small',
+          type: 'password',
+          readonly: true,
+          onUpdateValue(v) {
+            // row.value = v;
+          },
+        });
       },
     },
     {
@@ -64,12 +67,8 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: CloudFunctionInterface) => row.job_uuid;
-const currentRow = ref<CloudFunctionInterface>();
-
-const viewEnabled = computed<boolean>(() => {
-  return (currentRow.value?.status || 0) >= AcurastJobStatus.DEPLOYING;
-});
+const currentRow = ref<EnvVariable>();
+const rowKey = (row: EnvVariable) => row.key;
 
 /**
  * Dropdown Actions
@@ -77,18 +76,21 @@ const viewEnabled = computed<boolean>(() => {
 const dropdownOptions = computed(() => {
   return [
     {
-      label: t('general.view'),
-      key: 'view',
-      disabled: !viewEnabled.value,
+      label: t('general.delete'),
+      key: 'delete',
       props: {
-        onClick: () => {},
+        onClick: () => {
+          cloudFunctionStore.variables = cloudFunctionStore.variables.filter(
+            item => item.key !== currentRow.value?.key
+          );
+        },
       },
     },
   ];
 });
 
 /** On row click */
-const rowProps = (row: CloudFunctionInterface) => {
+const rowProps = (row: EnvVariable) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;

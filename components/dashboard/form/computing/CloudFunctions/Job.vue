@@ -5,10 +5,10 @@
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="$i18n.te('computing.cloudFunctions.infoNew')" class="text-body mb-8">
+      <p v-if="$te('computing.cloudFunctions.infoNew')" class="text-body mb-8">
         {{ $t('computing.cloudFunctions.infoNew') }}
       </p>
-      <p v-else-if="$i18n.te('computing.cloudFunctions.infoEdit')" class="text-body mb-8">
+      <p v-else-if="$te('computing.cloudFunctions.infoEdit')" class="text-body mb-8">
         {{ $t('computing.cloudFunctions.infoEdit') }}
       </p>
     </template>
@@ -24,28 +24,28 @@
       <!--  CloudFunctions name -->
       <n-form-item
         path="name"
-        :label="$t('form.label.cloudFunctions.name')"
+        :label="$t('form.label.cloudFunctions.jobName')"
         :label-props="{ for: 'name' }"
       >
         <n-input
           v-model:value="formData.name"
           :input-props="{ id: 'name' }"
-          :placeholder="$t('form.placeholder.cloudFunctions.name')"
+          :placeholder="$t('form.placeholder.cloudFunctions.jobName')"
           clearable
         />
       </n-form-item>
-
-      <!--  CloudFunctions description -->
+      <!--  CloudFunctions slots -->
       <n-form-item
-        path="description"
-        :label="$t('form.label.cloudFunctions.description')"
-        :label-props="{ for: 'description' }"
+        path="slots"
+        :label="$t('form.label.cloudFunctions.slots')"
+        :label-props="{ for: 'slots' }"
       >
-        <n-input
-          v-model:value="formData.description"
-          type="textarea"
-          :input-props="{ id: 'description' }"
-          :placeholder="$t('form.placeholder.cloudFunctions.description')"
+        <n-input-number
+          v-model:value="formData.slots"
+          :min="1"
+          :step="1"
+          :input-props="{ id: 'slots' }"
+          :placeholder="$t('form.placeholder.number')"
           clearable
         />
       </n-form-item>
@@ -118,7 +118,7 @@ import type { UploadCustomRequestOptions } from 'naive-ui';
 
 type FormCloudFunctions = {
   name: string | null;
-  description?: string | null;
+  slots?: string | null;
   startTime?: string | null;
   endTime?: string | null;
   scriptCid: string | null;
@@ -126,12 +126,13 @@ type FormCloudFunctions = {
 };
 
 const props = defineProps({
-  cloudFunctionUuid: { type: String, default: '' },
+  functionUuid: { type: String, default: '' },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
+const jobStore = useJobStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
@@ -142,7 +143,7 @@ const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormCloudFunctions>({
   name: null,
-  description: null,
+  slots: null,
   startTime: null,
   endTime: null,
   scriptCid: null,
@@ -150,11 +151,10 @@ const formData = ref<FormCloudFunctions>({
 });
 
 const rules: NFormRules = {
-  name: ruleRequired($i18n.t('validation.cloudFunctions.nameRequired')),
-  description: ruleDescription($i18n.t('validation.descriptionTooLong')),
-  startTime: ruleRequired($i18n.t('validation.cloudFunctions.startTimeRequired')),
-  endTime: ruleRequired($i18n.t('validation.cloudFunctions.endTimeRequired')),
-  file: ruleRequired($i18n.t('validation.cloudFunctions.fileRequired')),
+  slots: ruleRequired(t('validation.cloudFunctions.slotsRequired')),
+  startTime: ruleRequired(t('validation.cloudFunctions.startTimeRequired')),
+  endTime: ruleRequired(t('validation.cloudFunctions.endTimeRequired')),
+  file: ruleRequired(t('validation.cloudFunctions.fileRequired')),
 };
 
 const isFormDisabled = computed<boolean>(() => {
@@ -162,10 +162,10 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 onMounted(async () => {
-  if (props.cloudFunctionUuid) {
-    // bucket.value = await bucketStore.getBucket(props.bucketUuid);
+  if (props.functionUuid) {
+    // bucket.value = await bucketStore.getBucket(props.functionUuid);
     // formData.value.bucketName = bucket.value.name;
-    // formData.value.bucketDescription = bucket.value.description;
+    // formData.value.bucketslots = bucket.value.slots;
   }
 });
 
@@ -173,7 +173,7 @@ async function onFileChange({ file, onError, onFinish }: UploadCustomRequestOpti
   const size = file.file?.size || 0;
 
   // if (!file.type?.startsWith('text/javascript')) {
-  //   message.warning($i18n.t('validation.cloudFunctions.fileType'));
+  //   message.warning(t('validation.cloudFunctions.fileType'));
   //   onError();
   //   return;
   // }
@@ -217,15 +217,20 @@ async function createCloudFunctions() {
 
     const bodyData = {
       project_uuid: dataStore.projectUuid,
+      function_uuid: props.functionUuid,
       name: formData.value.name,
-      description: formData.value.description,
+      slots: formData.value.slots,
       endTime: formData.value.endTime,
       startTime: formData.value.startTime,
       scriptCid: formData.value.scriptCid,
     };
-    const res = await $api.post<CloudFunctionResponse>(endpoints.cloudFunctions(), bodyData);
+    const res = await $api.post<JobResponse>(
+      endpoints.cloudFunctionJobs(props.functionUuid),
+      bodyData
+    );
+    jobStore.items.push(res.data);
 
-    message.success($i18n.t('form.success.created.cloudFunction'));
+    message.success(t('form.success.created.cloudFunction'));
 
     /** Emit events */
     emit('submitSuccess');

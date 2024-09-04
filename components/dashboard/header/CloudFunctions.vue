@@ -2,7 +2,7 @@
   <Heading>
     <slot>
       <n-space align="center" size="large">
-        <NuxtLink :to="{ name: 'dashboard-service-computing' }">
+        <NuxtLink :to="{ name: 'dashboard-service-cloud-functions' }">
           <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
         <h2>{{ cloudFunctionStore.active.name }}</h2>
@@ -20,7 +20,7 @@
         <TableLink
           class="bg-white px-4 py-[10px] rounded-lg !text-black lg:min-w-[30rem]"
           color="text-black"
-          :link="cloudFunctionStore.active.job_uuid"
+          :link="cloudFunctionStore.functionUuid"
         />
       </div>
       <MenuCloudFunctions />

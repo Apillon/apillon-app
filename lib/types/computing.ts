@@ -102,15 +102,32 @@ declare global {
    * Cloud Functions
    */
   interface CloudFunctionInterface extends BaseObjectInterface {
-    job_uuid: string; // UUID format string
-    project_uuid: string; // UUID format string
-    scriptCid: string; // URL or CID (Content Identifier)
-    startTime: string; // ISO 8601 date string
-    endTime: string; // ISO 8601 date string
-    slots: number;
-    jobStatus: number;
+    activeJob_id: string;
+    encrypted_variables: string;
+    function_uuid: string;
+    jobs: JobInterface[];
+    project_uuid: string;
   }
 
   interface CloudFunctionResponse extends GeneralResponse<CloudFunctionInterface> {}
   interface CloudFunctionsResponse extends GeneralItemsResponse<CloudFunctionInterface> {}
+
+  interface JobInterface extends BaseObjectInterface {
+    endTime: string;
+    function_uuid: string;
+    jobStatus: number;
+    job_uuid: string;
+    project_uuid: string;
+    scriptCid: string;
+    slots: number;
+    startTime: string;
+  }
+
+  interface JobResponse extends GeneralResponse<JobInterface> {}
+  interface JobsResponse extends GeneralItemsResponse<JobInterface> {}
+
+  type EnvVariable = {
+    key: string;
+    value: string;
+  };
 }

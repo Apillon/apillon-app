@@ -5,9 +5,8 @@
     </template>
 
     <slot>
-      <n-space v-if="cloudFunctionStore.hasCloudFunctions" class="pb-8" :size="32" vertical>
-        <ActionsComputingCloudFunctions />
-        <TableComputingCloudFunctions />
+      <n-space v-if="cloudFunctionStore.hasVariables" class="pb-8" :size="32" vertical>
+        <TableComputingCloudFunctionVariables />
       </n-space>
       <div v-else class="flex justify-center items-center h-full">
         <div class="flex flex-col gap-4 mb-8 my-20 max-w-xl text-center">
@@ -43,6 +42,7 @@
         :title="$t('computing.cloudFunctions.variable.new')"
       >
         <FormComputingCloudFunctionsVariable
+          :function-uuid="cloudFunctionStore.functionUuid"
           @submit-success="modalCreateVariableVisible = false"
           @create-success=""
         />
@@ -57,7 +57,7 @@ import type { UploadCustomRequestOptions } from 'naive-ui';
 const { t } = useI18n();
 const message = useMessage();
 const cloudFunctionStore = useCloudFunctionStore();
-const { pageLoading, init } = useCloudFunctions();
+const { pageLoading, init, parseEnvFile } = useCloudFunctions();
 
 const modalCreateVariableVisible = ref<boolean>(false);
 
@@ -70,6 +70,13 @@ onMounted(() => {
 });
 
 async function uploadFile({ file, onError, onFinish }: UploadCustomRequestOptions) {
-  console.log(file);
+  try {
+    const envData = await parseEnvFile(file);
+    cloudFunctionStore.variables = Object.entries(envData).map(([k, v]) => ({ key: k, value: v }));
+    onFinish();
+  } catch (error) {
+    console.warn(error);
+    onError();
+  }
 }
 </script>

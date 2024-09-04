@@ -16,8 +16,6 @@
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts :service="ServiceTypeName.COMPUTING" />
-
       <!-- Refresh cloudFunctions -->
       <n-button
         size="small"
@@ -29,21 +27,16 @@
       </n-button>
 
       <!-- Create new cloudFunction -->
-      <n-button
-        v-if="cloudFunctionStore.hasCloudFunctions"
-        size="small"
-        :disabled="authStore.isAdmin()"
-        @click="modalCreateCloudFunctionVisible = true"
-      >
+      <n-button size="small" :disabled="authStore.isAdmin()" @click="modalCreateJobVisible = true">
         <span class="icon-create-folder text-xl text-primary mr-2"></span>
-        <span class="text-primary">{{ $t('computing.cloudFunctions.new') }}</span>
+        <span class="text-primary">{{ $t('computing.cloudFunctions.job.new') }}</span>
       </n-button>
     </n-space>
   </n-space>
 
-  <!-- Modal - Create CloudFunction -->
-  <modal v-model:show="modalCreateCloudFunctionVisible" :title="$t('computing.cloudFunctions.new')">
-    <FormComputingCloudFunctions @submit-success="modalCreateCloudFunctionVisible = false" />
+  <!-- Modal - Create CloudFunction Job -->
+  <modal v-model:show="modalCreateJobVisible" :title="$t('computing.cloudFunctions.job.new')">
+    <FormComputingCloudFunctionsJob @submit-success="modalCreateJobVisible = false" />
   </modal>
 </template>
 
@@ -52,7 +45,7 @@ const authStore = useAuthStore();
 const cloudFunctionStore = useCloudFunctionStore();
 const paymentStore = usePaymentStore();
 
-const modalCreateCloudFunctionVisible = ref<boolean>(false);
+const modalCreateJobVisible = ref<boolean>(false);
 
 onMounted(() => {
   paymentStore.getPriceList();

@@ -10,7 +10,7 @@
       <!--  Variable key -->
       <n-form-item-gi
         class="mb-4"
-        :class="{ 'hide-feedback': !item.key && !formErrors }"
+        :class="{ 'hide-feedback': item.key || !formErrors }"
         :path="`${key}.key`"
         :label="$t('form.label.cloudFunctions.varKey')"
         :show-label="key === 0"
@@ -21,7 +21,7 @@
       <!--  Variable value -->
       <n-form-item-gi
         class="mb-4"
-        :class="{ 'hide-feedback': !item.key && !formErrors }"
+        :class="{ 'hide-feedback': item.key || !formErrors }"
         :path="`${key}.value`"
         :label="$t('form.label.cloudFunctions.varValue')"
         :show-label="key === 0"
@@ -51,7 +51,7 @@
 import type { FormItemRule } from 'naive-ui';
 
 const props = defineProps({
-  jobUuid: { type: String, default: '' },
+  functionUuid: { type: String, default: '' },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
@@ -105,7 +105,7 @@ async function createVariables() {
 
   try {
     const res = await $api.post<CloudFunctionResponse>(
-      endpoints.acurastEnvironment(props.jobUuid),
+      endpoints.cloudFunctionEnvironment(props.functionUuid),
       { variables: parseVariables() }
     );
 

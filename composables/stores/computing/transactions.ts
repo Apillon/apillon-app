@@ -24,7 +24,7 @@ export const useComputingTransactionStore = defineStore('computingTransaction', 
      * Fetch wrappers
      */
     async getTransactions(contractUuid: string, page = 1, limit = PAGINATION_LIMIT): Promise<any> {
-      if ((page !== this.pagination.page, isCacheExpired(LsCacheKeys.COMPUTING_TRANSACTIONS))) {
+      if (page !== this.pagination.page || isCacheExpired(LsCacheKeys.COMPUTING_TRANSACTIONS)) {
         return await this.fetchTransactions(contractUuid, { page, limit });
       }
       return this.items;

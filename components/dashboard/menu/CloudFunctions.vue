@@ -10,17 +10,17 @@ const menuOptions: NMenuOption[] = [
   {
     key: 'dashboard-service-cloud-functions-id',
     label: t('computing.cloudFunctions.monitoring'),
-    path: `/dashboard/service/cloud-functions/${cloudFunctionStore.active.job_uuid}`,
+    path: `/dashboard/service/cloud-functions/${cloudFunctionStore.functionUuid}`,
   },
   {
     key: 'dashboard-service-cloud-functions-slug-deployments',
     label: t('computing.cloudFunctions.deployments'),
-    path: `/dashboard/service/cloud-functions/${cloudFunctionStore.active.job_uuid}/deployments`,
+    path: `/dashboard/service/cloud-functions/${cloudFunctionStore.functionUuid}/deployments`,
   },
   {
     key: 'dashboard-service-cloud-functions-slug-variables',
     label: t('computing.cloudFunctions.variables'),
-    path: `/dashboard/service/cloud-functions/${cloudFunctionStore.active.job_uuid}/variables`,
+    path: `/dashboard/service/cloud-functions/${cloudFunctionStore.functionUuid}/variables`,
   },
 ];
 </script>
