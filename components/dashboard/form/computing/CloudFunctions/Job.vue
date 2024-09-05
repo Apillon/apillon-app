@@ -88,6 +88,7 @@
 
       <!--  File -->
       <n-form-item
+        v-if="!props.jobUuid"
         accept="text/javascript, text/plain"
         path="file"
         :label="$t('form.label.contract.file')"
@@ -118,29 +119,33 @@ import type { UploadCustomRequestOptions } from 'naive-ui';
 
 type FormCloudFunctions = {
   name: string | null;
-  slots?: string | null;
-  startTime?: string | null;
-  endTime?: string | null;
+  slots?: number | null;
+  startTime?: Date | string | null;
+  endTime?: Date | string | null;
   scriptCid: string | null;
   file: FileListItemType | undefined | null;
 };
 
+const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 const props = defineProps({
-  functionUuid: { type: String, default: '' },
+  functionUuid: { type: String, required: true },
+  jobUuid: { type: String, default: '' },
 });
-const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
 const { t } = useI18n();
 const message = useMessage();
-const jobStore = useJobStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
+const cloudFunctionStore = useCloudFunctionStore();
 const { uploadFileToIPFS } = useComputing();
 const { disablePasteDate, disablePasteTime } = useCollection();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
+const cloudFunction = ref<CloudFunctionInterface | undefined>();
+const job = ref<JobInterface | undefined>();
+
 const formData = ref<FormCloudFunctions>({
   name: null,
   slots: null,
@@ -162,10 +167,17 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 onMounted(async () => {
-  if (props.functionUuid) {
-    // bucket.value = await bucketStore.getBucket(props.functionUuid);
-    // formData.value.bucketName = bucket.value.name;
-    // formData.value.bucketslots = bucket.value.slots;
+  if (props.jobUuid) {
+    cloudFunction.value = await cloudFunctionStore.getCloudFunction(props.functionUuid);
+    job.value = cloudFunctionStore.jobs.find(item => item.job_uuid === props.jobUuid);
+
+    if (job.value) {
+      formData.value.name = job.value.name;
+      formData.value.slots = Number(job.value.slots || 0);
+      formData.value.startTime = new Date(job.value.startTime);
+      formData.value.endTime = new Date(job.value.endTime);
+      formData.value.scriptCid = job.value.scriptCid;
+    }
   }
 });
 
@@ -196,15 +208,17 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
+    } else if (props.jobUuid) {
+      updateCloudFunction();
     } else {
       warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_CREATE, () =>
-        createCloudFunctions()
+        createCloudFunction()
       );
     }
   });
 }
 
-async function createCloudFunctions() {
+async function createCloudFunction() {
   loading.value = true;
 
   if (!dataStore.hasProjects) {
@@ -228,13 +242,31 @@ async function createCloudFunctions() {
       endpoints.cloudFunctionJobs(props.functionUuid),
       bodyData
     );
-    jobStore.items.push(res.data);
+    cloudFunctionStore.addJob(res.data);
 
     message.success(t('form.success.created.cloudFunction'));
 
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess', res.data);
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  loading.value = false;
+}
+
+async function updateCloudFunction() {
+  loading.value = true;
+
+  try {
+    const res = await $api.patch<JobResponse>(endpoints.acurastJobs(props.jobUuid), formData.value);
+    cloudFunctionStore.updateJob(res.data);
+
+    message.success(t('form.success.updated.cloudFunctionJob'));
+
+    /** Emit events */
+    emit('submitSuccess');
+    emit('updateSuccess', res.data);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

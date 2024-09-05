@@ -18,11 +18,14 @@ const dataStore = useDataStore();
 const cloudFunctionStore = useCloudFunctionStore();
 const { pageLoading, init } = useCloudFunctions();
 
+const usage = ref();
+
 useHead({
   title: t('dashboard.nav.cloudFunctions'),
 });
 
-onMounted(() => {
-  init();
+onMounted(async () => {
+  await init();
+  usage.value = await cloudFunctionStore.fetchUsage(cloudFunctionStore.functionUuid);
 });
 </script>

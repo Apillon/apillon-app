@@ -41,6 +41,20 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
       this.pagination.page = 1;
     },
 
+    addJob(job: JobInterface) {
+      this.active.jobs.push(job);
+    },
+    updateJob(job: JobInterface) {
+      this.active.jobs.forEach(item => {
+        if (item.job_uuid === job.job_uuid) {
+          Object.assign(item, job);
+        }
+      });
+    },
+    removeJob(jobUuid: string) {
+      this.active.jobs = this.active.jobs.filter(item => item.job_uuid !== jobUuid);
+    },
+
     /**
      * Fetch wrappers
      */
@@ -117,6 +131,20 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
         return res.data;
       } catch (error: any) {
         this.active = {} as CloudFunctionInterface;
+      }
+      return {} as CloudFunctionInterface;
+    },
+
+    async fetchUsage(uuid: string): Promise<CloudFunctionInterface> {
+      try {
+        const res = await $api.get<CloudFunctionResponse>(endpoints.cloudFunctionUsage(uuid));
+
+        /** Save timestamp to SS
+        sessionStorage.setItem(LsCacheKeys.CLOUD_FUNCTION, Date.now().toString()); */
+
+        return res.data;
+      } catch (error: any) {
+        // this.active = {} as CloudFunctionInterface;
       }
       return {} as CloudFunctionInterface;
     },

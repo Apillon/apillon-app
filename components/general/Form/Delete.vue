@@ -11,7 +11,9 @@ const props = defineProps({
   type: {
     type: String,
     validator: (type: string) =>
-      ['apiKey', 'bucket', 'bucketContent', 'directory', 'file', 'ipns', 'service'].includes(type),
+      ['apiKey', 'bucket', 'bucketContent', 'directory', 'file', 'ipns', 'service', 'job'].includes(
+        type
+      ),
     required: true,
   },
 });
@@ -34,7 +36,7 @@ async function deleteItem() {
       : $i18n.t('form.success.deleted.item');
     message.success(successMsg);
 
-    emit('submitSuccess');
+    emit('submitSuccess', props.id);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -56,6 +58,8 @@ function getUrl(type: string, id: string | number) {
       return endpoints.storageFileDelete(bucketStore.bucketUuid, `${id}`);
     case 'ipns':
       return endpoints.ipns(bucketStore.selected, `${id}`);
+    case 'job':
+      return endpoints.acurastJobs(`${id}`);
     case 'service':
       return endpoints.services(`${id}`);
     default:

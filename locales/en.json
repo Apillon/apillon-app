@@ -190,6 +190,7 @@
   },
   "computing": {
     "cloudFunctions": {
+      "activeJob": "Active Job",
       "addNew": "Add new Cloud function",
       "checkVideo": "Check out the video",
       "deployments": "Deployments",
@@ -216,7 +217,10 @@
         "cid": "CID",
         "content": "Start by uploading your script by drag & drop files",
         "dateStarted": "Date started",
+        "delete": "Delete job",
+        "edit": "Edit job",
         "filename": "Filename",
+        "name": "Job name",
         "new": "Deploy new script",
         "size": "Size",
         "title": "You currently have no deployments for this Cloud function"
@@ -1374,6 +1378,7 @@
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "cloudFunction": "Cloud function has been updated",
+        "cloudFunctionJob": "Job has been updated",
         "contract": "Contract has been updated",
         "creditThreshold": "Credit threshold has been updated",
         "directory": "Folder has been updated",

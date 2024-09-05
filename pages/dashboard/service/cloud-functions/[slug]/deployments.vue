@@ -34,11 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-const router = useRouter();
-const { params } = useRoute();
 const { t } = useI18n();
-const dataStore = useDataStore();
-const jobStore = useJobStore();
 const cloudFunctionStore = useCloudFunctionStore();
 const { pageLoading, init } = useCloudFunctions();
 
@@ -50,7 +46,5 @@ useHead({
 
 onMounted(async () => {
   await init();
-
-  jobStore.getJob(cloudFunctionStore.active.jobs[0].job_uuid);
 });
 </script>

@@ -23,6 +23,7 @@ export default function useCloudFunctions() {
       } else {
         cloudFunctionStore.active = currentCloudFunction;
       }
+
       pageLoading.value = false;
     });
   }

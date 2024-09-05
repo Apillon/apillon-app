@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const { generateContent } = useSolution();
 const cloudFunctionStore = useCloudFunctionStore();
@@ -72,7 +72,7 @@ const modalCreateCloudFunctionsVisible = ref<boolean | null>(false);
 const content = generateContent('cloudFunctions', 'computing');
 
 useHead({
-  title: $i18n.t('dashboard.nav.computing'),
+  title: t('dashboard.nav.computing'),
 });
 
 onMounted(() => {
