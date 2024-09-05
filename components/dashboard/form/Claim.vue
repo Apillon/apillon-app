@@ -127,8 +127,13 @@ const hasClaimed = ref(false);
 onMounted(async () => {
   loading.value = true;
   await initContract();
-  hasClaimed.value = await getClaimStatus();
-  loading.value = false;
+  try {
+    hasClaimed.value = await getClaimStatus();
+  } catch {
+    console.log('error');
+  } finally {
+    loading.value = false;
+  }
 });
 
 // Disable if:
