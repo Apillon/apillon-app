@@ -5,36 +5,37 @@
     </template>
 
     <slot>
-      <n-space v-if="cloudFunctionStore.hasVariables" class="pb-8" :size="32" vertical>
-        <TableComputingCloudFunctionVariables />
-      </n-space>
-      <div v-else class="flex justify-center items-center h-full">
-        <div class="flex flex-col gap-4 mb-8 my-20 max-w-xl text-center">
-          <h4 class="mb-2">{{ $t('computing.cloudFunctions.variable.title') }}</h4>
-          <i18n-t keypath="computing.cloudFunctions.variable.content" tag="p">
-            <template v-slot:url>
-              <a
-                href="https://wiki.apillon.io/web3-services/7-web3-compute.html"
-                class="underline text-blue"
-                target="_blank"
-              >
-                {{ $t('general.documentation') }}
-              </a>
-            </template>
-          </i18n-t>
+      <n-space class="pb-8" :size="32" vertical>
+        <!-- <TableComputingCloudFunctionVariables /> -->
+        <pre v-if="encryptedVariables">Encrypted vars: {{ encryptedVariables }}</pre>
+        <div class="flex justify-center items-center h-full">
+          <div class="flex flex-col gap-4 mb-8 my-20 max-w-xl text-center">
+            <h4 class="mb-2">{{ $t('computing.cloudFunctions.variable.title') }}</h4>
+            <i18n-t keypath="computing.cloudFunctions.variable.content" tag="p">
+              <template v-slot:url>
+                <a
+                  href="https://wiki.apillon.io/web3-services/7-web3-compute.html"
+                  class="underline text-blue"
+                  target="_blank"
+                >
+                  {{ $t('general.documentation') }}
+                </a>
+              </template>
+            </i18n-t>
 
-          <div class="mt-4 max-w-xs mx-auto">
-            <Btn class="mb-2" size="large" @click="modalCreateVariableVisible = true">
-              {{ $t('computing.cloudFunctions.variable.btnAdd') }}
-            </Btn>
-            <n-upload :show-file-list="false" accept=".env" :custom-request="e => uploadFile(e)">
-              <Btn type="secondary" size="large">
-                {{ $t('computing.cloudFunctions.variable.btnUpload') }}
+            <div class="mt-4 max-w-xs mx-auto">
+              <Btn class="mb-2" size="large" @click="modalCreateVariableVisible = true">
+                {{ $t('computing.cloudFunctions.variable.btnAdd') }}
               </Btn>
-            </n-upload>
+              <n-upload :show-file-list="false" accept=".env" :custom-request="e => uploadFile(e)">
+                <Btn type="secondary" size="large">
+                  {{ $t('computing.cloudFunctions.variable.btnUpload') }}
+                </Btn>
+              </n-upload>
+            </div>
           </div>
         </div>
-      </div>
+      </n-space>
 
       <!-- Modal - Create Cloud Functions -->
       <modal
@@ -68,6 +69,13 @@ useHead({
 onMounted(() => {
   init();
 });
+
+const encryptedVariables = computed(
+  () =>
+    cloudFunctionStore.active.encrypted_variables ||
+    cloudFunctionStore.items.find(item => item.function_uuid === cloudFunctionStore.functionUuid)
+      ?.encrypted_variables
+);
 
 async function uploadFile({ file, onError, onFinish }: UploadCustomRequestOptions) {
   try {

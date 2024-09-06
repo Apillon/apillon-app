@@ -228,6 +228,7 @@
       "variable": {
         "addRow": "Add row",
         "btnAdd": "Add environment variable manually",
+        "btnCreate": "Create variables",
         "btnUpload": "Upload .ENV file for automatic detection",
         "content": "Create a new environment variable which you want to pass into the cloud function. \nTo learn more about how environment variables are handled, refer to the {url}.",
         "new": "New Environment variable",
@@ -976,6 +977,7 @@
   "error": {
     "404": "Page not found",
     "40006022": "You have to upload \"index.html\" file, to deploy website!",
+    "FIELD_INVALID": "Invalid filed, please upload valid .env file.",
     "50012005": "You can't mint this collection or all tokens has already been minted!",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
@@ -2273,6 +2275,8 @@
       "fileRequired": "Please upload file",
       "fileType": "Wrong file type, please upload javascript file",
       "keyRequired": "Please enter variable key",
+      "valueRequired": "Please enter variable value",
+      "valuesRequired": "Some variables does not have value, please fill in these fields.",
       "keyNotUnique": "Please enter unique variable key",
       "nameRequired": "Please enter name",
       "startTimeRequired": "Please select start date",

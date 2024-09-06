@@ -40,7 +40,7 @@
     <!--  Form submit -->
     <n-form-item :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.continue')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" class="w-full mt-2" :loading="envLoading" @click="handleSubmit">
         {{ $t('form.continue') }}
       </Btn>
     </n-form-item>
@@ -57,13 +57,12 @@ const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
 const { t } = useI18n();
 const message = useMessage();
-const dataStore = useDataStore();
 const warningStore = useWarningStore();
+const { envLoading, createEnvVariables } = useCloudFunctions();
 
 const formErrors = ref<boolean>(false);
-const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
-const formData = ref<KeyValue[]>([{ key: '', value: '' }]);
+const formData = ref<EnvVariable[]>([{ key: '', value: '' }]);
 
 const rules = computed<NFormRules>(() =>
   formData.value.reduce((acc, field, key) => {
@@ -74,12 +73,12 @@ const rules = computed<NFormRules>(() =>
         message: t('validation.cloudFunctions.keyNotUnique'),
       },
     ];
+    acc[`${key}.value`] = ruleRequired(t('validation.cloudFunctions.valueRequired'));
     return acc;
   }, {})
 );
 
 function validateVariableKey(rule: FormItemRule, value): boolean {
-  console.log(rule, value);
   return formData.value.filter(item => item.key === value).length === 1;
 }
 
@@ -101,26 +100,11 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createVariables() {
-  loading.value = true;
-
-  try {
-    const res = await $api.post<CloudFunctionResponse>(
-      endpoints.cloudFunctionEnvironment(props.functionUuid),
-      { variables: parseVariables() }
-    );
-
-    message.success(t('form.success.created.cloudFunctionVariable'));
-
+  const cloudFunction = await createEnvVariables(formData.value, props.functionUuid);
+  if (cloudFunction) {
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess', res.data);
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
+    emit('createSuccess', cloudFunction);
   }
-  loading.value = false;
 }
-
-const parseVariables = () => {
-  return formData.value.map(item => [item.key, item.value]);
-};
 </script>

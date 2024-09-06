@@ -9,7 +9,7 @@ export default function useCloudFunctions() {
   const cloudFunctionStore = useCloudFunctionStore();
 
   const pageLoading = ref<boolean>(true);
-  const envLoading = ref<boolean>(true);
+  const envLoading = ref<boolean>(false);
 
   async function init() {
     /** CloudFunction UUID from route */
@@ -57,35 +57,36 @@ export default function useCloudFunctions() {
     return env;
   }
 
-  async function updateEnvVariables(data: EnvVariable[], uuid?: string) {
+  async function createEnvVariables(
+    data: EnvVariable[],
+    uuid?: string
+  ): Promise<CloudFunctionInterface | null> {
     envLoading.value = true;
 
     const functionUuid = uuid || cloudFunctionStore.functionUuid;
 
     try {
-      const bodyData = {
-        function_uuid: functionUuid,
-        variables: envVariablesToArray(data),
-      };
       const res = await $api.post<CloudFunctionResponse>(
         endpoints.cloudFunctionEnvironment(functionUuid),
-        bodyData
+        { variables: data }
       );
+      message.success(t('form.success.created.cloudFunctionVariable'));
+      envLoading.value = false;
 
-      message.success(t('form.success.created.cloudFunction'));
+      return res.data;
     } catch (error) {
       message.error(userFriendlyMsg(error));
+      envLoading.value = false;
+
+      return null;
     }
-    envLoading.value = false;
   }
 
-  const envVariablesToArray = (data: EnvVariable[]) =>
-    data.reduce((acc, item) => Object.assign(acc, { [item.key]: item.value }), {});
-
   return {
+    envLoading,
     pageLoading,
     init,
     parseEnvFile,
-    envVariablesToArray,
+    createEnvVariables,
   };
 }
