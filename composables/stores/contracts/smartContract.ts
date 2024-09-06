@@ -12,9 +12,6 @@ export const useSmartContractStore = defineStore('smartContract', {
     hasSmartContracts(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
     },
-    getSmartContractsPerProject(state): SmartContractInterface {
-      return state.smartContractsPerProject;
-    },
   },
   actions: {
     /**

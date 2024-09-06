@@ -29,8 +29,8 @@ onMounted(async () => {
   if (!contractUuid.value) {
     router.push({ name: 'dashboard-service-smart-contracts' });
   } else {
-    await smartContractStore.getContractByUUID(contractUuid.value as string);
-    smartContractDetails.value = smartContractStore.getContractDetails;
+    await smartContractStore.getSmartContract(contractUuid.value as string);
+    smartContractDetails.value = smartContractStore.active;
     pageLoading.value = false;
   }
 });

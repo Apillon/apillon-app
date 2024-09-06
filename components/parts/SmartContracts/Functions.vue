@@ -112,7 +112,7 @@ const columns = createColumns();
 const tableData = ref([]);
 
 const updateTableData = () => {
-  const contractDetails = smartContractStore.getContractDetails.contractVersion.abi;
+  const contractDetails = smartContractStore.active.contractVersion.abi;
   const functionDetails = contractDetails.find(
     item => item.type === 'function' && item.name === selectedFunction.value
   );
@@ -143,12 +143,12 @@ const selectFunction = (name: string) => {
   updateTableData();
 };
 
-const readFunctions = smartContractStore.getContractDetails.contractVersion.abi.filter(
+const readFunctions = smartContractStore.active.contractVersion.abi.filter(
   item =>
     item.type === 'function' && (item.stateMutability === 'view' || item.stateMutability === 'pure')
 );
 
-const writeFunctions = smartContractStore.getContractDetails.contractVersion.abi.filter(
+const writeFunctions = smartContractStore.active.contractVersion.abi.filter(
   item =>
     item.type === 'function' &&
     (item.stateMutability === 'nonpayable' || item.stateMutability === 'payable')

@@ -145,7 +145,6 @@ const {
   disablePastTime,
   isSpecialField,
 } = useSmartContracts();
-const smartContractDetails = ref<any | null>(null);
 
 const formErrors = ref<boolean>(false);
 const submitError = ref<boolean>(false);
@@ -171,9 +170,8 @@ onMounted(() => {
 
 function initForm() {
   // Initialize form fields from abi constructor
-  smartContractDetails.value = smartContractStore.getContractDetails;
-  if (smartContractDetails.value) {
-    const constructorInputs = getConstructorInputs(smartContractDetails.value);
+  if (smartContractStore.active) {
+    const constructorInputs = getConstructorInputs(smartContractStore.active);
     constructorInputs.forEach((input: any) => {
       if (input.type === 'tuple') {
         input.components.forEach((i: any) => {
@@ -194,8 +192,8 @@ const getConstructorInputs = (contractDetails: any) => {
 };
 
 const constructorInputs = computed(() => {
-  if (!smartContractDetails.value) return [];
-  return getConstructorInputs(smartContractDetails.value);
+  if (!smartContractStore.active) return [];
+  return getConstructorInputs(smartContractStore.active);
 });
 
 // Dynamic validation
@@ -301,7 +299,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function deployContract() {
   const _projectUuid = dataStore.currentProject?.project_uuid;
-  const _contractUuid = smartContractStore.getContractDetails.contract_uuid;
+  const _contractUuid = smartContractStore.active.contract_uuid;
 
   const constructorArguments = [];
 

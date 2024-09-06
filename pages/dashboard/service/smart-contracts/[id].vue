@@ -45,7 +45,6 @@ const dataStore = useDataStore();
 
 const content = generateContent(SolutionKey.SMART_CONTRACT);
 const contractUuid = ref<string>(`${params?.id}` || `${params?.slug}` || '');
-const smartContractDetails = ref<SmartContractInterface | null>(null);
 
 useHead({
   title: t('dashboard.solution.nftEmailSignupAirdrop.name'),
@@ -58,9 +57,8 @@ onMounted(() => {
     if (!contractUuid.value) {
       router.push({ name: 'dashboard-service-smart-contracts' });
     } else {
-      await smartContractStore.getContractByUUID(contractUuid.value);
+      await smartContractStore.getSmartContract(contractUuid.value);
 
-      smartContractDetails.value = smartContractStore.getContractDetails;
       pageLoading.value = false;
     }
   });
