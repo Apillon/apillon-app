@@ -1,4 +1,4 @@
-export default function useSmartContractsStore() {
+export default function useSmartContractStore() {
   const formRef = ref<NFormInst | null>(null);
   const settings = ref([false, false, false, false]);
   const form = ref<{ [key: string]: any }>({

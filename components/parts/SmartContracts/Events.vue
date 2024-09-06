@@ -28,7 +28,7 @@
 import { ref } from 'vue';
 const selectedEvent = ref('');
 
-const smartContractsStore = useSmartContractsStore();
+const smartContractStore = useSmartContractStore();
 
 // table
 const { t } = useI18n();
@@ -50,7 +50,7 @@ const columns = createColumns();
 const tableData = ref([]);
 
 const updateTableData = () => {
-  const contractDetails = smartContractsStore.getContractDetails.contractVersion.abi;
+  const contractDetails = smartContractStore.getContractDetails.contractVersion.abi;
   const eventDetails = contractDetails.find(
     item => item.type === 'event' && item.name === selectedEvent.value
   );
@@ -73,7 +73,7 @@ const selectEvent = (name: string) => {
   updateTableData();
 };
 
-const readEvents = smartContractsStore.getContractDetails.contractVersion.abi.filter(
+const readEvents = smartContractStore.getContractDetails.contractVersion.abi.filter(
   item => item.type === 'event'
 );
 

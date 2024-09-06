@@ -377,14 +377,14 @@ useHead({
 });
 
 const dataStore = useDataStore();
-const smartContractsStore = useSmartContractsStore();
+const smartContractStore = useSmartContractStore();
 const { astarShibuya } = useSmartContracts();
 
 // const activeTransactionsWindow = ref<boolean>(false);
 // const transactionListExpanded = ref<boolean>(true);
 const pageLoading = ref<boolean>(true);
 const contractUuid = ref<string>(`${params?.id}` || '');
-const contractStatus = computed(() => smartContractsStore.active.contractStatus);
+const contractStatus = computed(() => smartContractStore.active.contractStatus);
 
 // Data
 const functionObjects = ref([]);
@@ -436,11 +436,11 @@ function wagmiConnect(connector) {
 
 const wrongNetwork = computed(() => {
   // compare contract chain id to current wallet chain id
-  return !chain || !chain.value || chain.value.id !== smartContractsStore.active.chain;
+  return !chain || !chain.value || chain.value.id !== smartContractStore.active.chain;
 });
 
 async function ensureCorrectNetwork() {
-  await switchNetwork(smartContractsStore.active.chain);
+  await switchNetwork(smartContractStore.active.chain);
   btnLoading.value = false;
   return true;
 }
@@ -472,9 +472,9 @@ function handleSubmit(methodName, method, onlyOwner) {
 async function execWalletWrite(methodName) {
   // activeTransactionsWindow.value = true;
 
-  const contractAddress = smartContractsStore.active.contractAddress;
-  const abi = smartContractsStore.active.contractVersion.abi;
-  const chainId = smartContractsStore.active.chain;
+  const contractAddress = smartContractStore.active.contractAddress;
+  const abi = smartContractStore.active.contractVersion.abi;
+  const chainId = smartContractStore.active.chain;
   let response;
 
   const chainConfig = getChainConfig(chainId);
@@ -507,9 +507,9 @@ async function execWalletWrite(methodName) {
 
 // read functions handler
 async function execRead(methodName) {
-  const contractAddress = smartContractsStore.active.contractAddress;
-  const abi = smartContractsStore.active.contractVersion.abi;
-  const chainId = smartContractsStore.active.chain;
+  const contractAddress = smartContractStore.active.contractAddress;
+  const abi = smartContractStore.active.contractVersion.abi;
+  const chainId = smartContractStore.active.chain;
   let response;
 
   const chainConfig = getChainConfig(chainId);
@@ -543,7 +543,7 @@ async function execOwnerWrite(methodName) {
   console.log('write write');
 
   try {
-    const res = await $api.post(endpoints.querySmartContract(contractUuid.value), {
+    const res = await $api.post(endpoints.smartContractsQuery(contractUuid.value), {
       methodName,
       methodArguments: Object.values(form[methodName]),
     });
@@ -563,16 +563,16 @@ async function execOwnerWrite(methodName) {
 
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const currentSmartContract = await smartContractsStore.getDeployedSmartContract(
+    const currentSmartContract = await smartContractStore.getDeployedSmartContract(
       contractUuid.value
     );
 
     if (!currentSmartContract?.contract_uuid) {
       router.push({ name: 'dashboard-service-smart-contracts' });
     } else {
-      smartContractsStore.active = currentSmartContract;
+      smartContractStore.active = currentSmartContract;
 
-      functionObjects.value = smartContractsStore.active.contractVersion.abi.filter(
+      functionObjects.value = smartContractStore.active?.contractVersion?.abi.filter(
         item => item.type === 'function'
       );
 
@@ -586,7 +586,7 @@ onMounted(() => {
 
         if (fn.stateMutability === 'nonpayable' || fn.stateMutability === 'payable') {
           // Find the corresponding method in state.contractVersion.methods
-          const method = smartContractsStore.active.contractVersion.methods.find(
+          const method = smartContractStore.active.contractVersion.methods.find(
             method => method.name === fn.name
           );
           // Add the method to writeFunctions and tag it with onlyOwner if applicable

@@ -130,7 +130,7 @@
 import { ref, computed, reactive, onMounted } from 'vue';
 import { NForm, NFormItem, NInput, NButton, NDatePicker } from 'naive-ui';
 
-const smartContractsStore = useSmartContractsStore();
+const smartContractStore = useSmartContractStore();
 const dataStore = useDataStore();
 const message = useMessage();
 const router = useRouter();
@@ -171,7 +171,7 @@ onMounted(() => {
 
 function initForm() {
   // Initialize form fields from abi constructor
-  smartContractDetails.value = smartContractsStore.getContractDetails;
+  smartContractDetails.value = smartContractStore.getContractDetails;
   if (smartContractDetails.value) {
     const constructorInputs = getConstructorInputs(smartContractDetails.value);
     constructorInputs.forEach((input: any) => {
@@ -301,7 +301,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function deployContract() {
   const _projectUuid = dataStore.currentProject?.project_uuid;
-  const _contractUuid = smartContractsStore.getContractDetails.contract_uuid;
+  const _contractUuid = smartContractStore.getContractDetails.contract_uuid;
 
   const constructorArguments = [];
 
@@ -329,7 +329,7 @@ async function deployContract() {
   }
 
   try {
-    const res = await $api.post(endpoints.newSmartContract(_contractUuid), {
+    const res = await $api.post(endpoints.smartContractsNew(_contractUuid), {
       project_uuid: _projectUuid,
       name: form.value.name,
       description: form.value.description,

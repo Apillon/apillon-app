@@ -90,7 +90,7 @@ const selectedType = ref('write');
 const selectedLang = ref('js');
 const selectedFunction = ref('');
 
-const smartContractsStore = useSmartContractsStore();
+const smartContractStore = useSmartContractStore();
 
 // table
 const { t } = useI18n();
@@ -112,7 +112,7 @@ const columns = createColumns();
 const tableData = ref([]);
 
 const updateTableData = () => {
-  const contractDetails = smartContractsStore.getContractDetails.contractVersion.abi;
+  const contractDetails = smartContractStore.getContractDetails.contractVersion.abi;
   const functionDetails = contractDetails.find(
     item => item.type === 'function' && item.name === selectedFunction.value
   );
@@ -143,12 +143,12 @@ const selectFunction = (name: string) => {
   updateTableData();
 };
 
-const readFunctions = smartContractsStore.getContractDetails.contractVersion.abi.filter(
+const readFunctions = smartContractStore.getContractDetails.contractVersion.abi.filter(
   item =>
     item.type === 'function' && (item.stateMutability === 'view' || item.stateMutability === 'pure')
 );
 
-const writeFunctions = smartContractsStore.getContractDetails.contractVersion.abi.filter(
+const writeFunctions = smartContractStore.getContractDetails.contractVersion.abi.filter(
   item =>
     item.type === 'function' &&
     (item.stateMutability === 'nonpayable' || item.stateMutability === 'payable')

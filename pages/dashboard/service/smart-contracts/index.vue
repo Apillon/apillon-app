@@ -8,8 +8,8 @@
     <slot>
       <div class="pb-8">
         <TableSmartContractsTable
-          v-if="deployedSmartContracts"
-          :contracts="deployedSmartContracts.items"
+          v-if="deployedContractStore.hasDeployedContracts"
+          :contracts="deployedContractStore.items"
         />
         <Empty
           v-else
@@ -30,27 +30,19 @@
 </template>
 
 <script lang="ts" setup>
+const { t } = useI18n();
 const dataStore = useDataStore();
-const smartContractsStore = useSmartContractsStore();
-const $i18n = useI18n();
-const router = useRouter();
+const deployedContractStore = useDeployedContractStore();
 
 useHead({
-  title: $i18n.t('dashboard.nav.smartContracts'),
+  title: t('dashboard.nav.smartContracts'),
 });
 const pageLoading = ref<boolean>(true);
 
-const deployedSmartContracts = ref<SmartContractInterface[]>([]);
-
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const projectUuid = dataStore.currentProject?.project_uuid;
-    await smartContractsStore.fetchContractsPerProject(projectUuid);
+    await deployedContractStore.getDeployedContracts();
 
-    deployedSmartContracts.value = smartContractsStore.getContractsPerProject;
-    if (!deployedSmartContracts.value) {
-      router.push({ name: 'dashboard-service-smart-contracts-new' });
-    }
     pageLoading.value = false;
   });
 });

@@ -59,6 +59,8 @@ declare global {
     data: {
       items: Array<T>;
       total: number;
+      page: number;
+      limit: number;
     };
     id: string;
     status: number;

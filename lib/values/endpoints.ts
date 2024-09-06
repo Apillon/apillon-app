@@ -236,23 +236,16 @@ const Endpoints = {
   },
 
   /** Smart contracts */
-
-  smartContractsList: () => {
-    return '/contracts';
+  smartContracts: (uuid?: string) => {
+    return uuid ? `/contracts/${uuid}` : '/contracts';
   },
-  smartContractDetails: (uuid: string) => {
-    return `/contracts/${uuid}`;
-  },
-  newSmartContract: (contractUuid: string) => {
+  smartContractsNew: (contractUuid: string) => {
     return `/contracts/${contractUuid}/deploy`;
   },
-  smartContractsPerProject: (projectUuid: string) => {
-    return `/contracts/deployed?project_uuid=${projectUuid}`;
+  smartContractsDeployed: (uuid?: string) => {
+    return uuid ? `/contracts/deployed/${uuid}` : `/contracts/deployed`;
   },
-  deployedSmartContractDetails: (contractUuid: string) => {
-    return `/contracts/deployed/${contractUuid}`;
-  },
-  querySmartContract: (contractUuid: string) => {
+  smartContractsQuery: (contractUuid: string) => {
     return `/contracts/deployed/${contractUuid}/call`;
   },
 

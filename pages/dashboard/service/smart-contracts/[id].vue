@@ -38,7 +38,7 @@ const router = useRouter();
 const { params } = useRoute();
 const { t } = useI18n();
 const { generateContent } = useSolution();
-const smartContractsStore = useSmartContractsStore();
+const smartContractStore = useSmartContractStore();
 
 const pageLoading = ref<boolean>(true);
 const dataStore = useDataStore();
@@ -58,9 +58,9 @@ onMounted(() => {
     if (!contractUuid.value) {
       router.push({ name: 'dashboard-service-smart-contracts' });
     } else {
-      await smartContractsStore.getContractByUUID(contractUuid.value);
+      await smartContractStore.getContractByUUID(contractUuid.value);
 
-      smartContractDetails.value = smartContractsStore.getContractDetails;
+      smartContractDetails.value = smartContractStore.getContractDetails;
       pageLoading.value = false;
     }
   });

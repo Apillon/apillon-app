@@ -10,7 +10,7 @@
       :data="data"
       :pagination="{
         onChange: (page: number) => {
-          handlePageChange(page, smartContractsStore.pagination.pageSize);
+          handlePageChange(page, smartContractStore.pagination.pageSize);
         },
         onUpdatePageSize: (pageSize: number) => {
           handlePageChange(1, pageSize);
@@ -26,16 +26,16 @@
 const router = useRouter();
 
 const { t } = useI18n();
-const smartContractsStore = useSmartContractsStore();
+const smartContractStore = useSmartContractStore();
 
 const props = defineProps({
-  contracts: { type: Array<CollectionInterface>, default: [] },
+  contracts: { type: Array<DeployedContractInterface>, default: [] },
 });
 
-const data = computed<Array<SmartContractInterface>>(() => {
+const data = computed<Array<DeployedContractInterface>>(() => {
   return (
     props.contracts.filter(item =>
-      item.name.toLocaleLowerCase().includes(smartContractsStore.search.toLocaleLowerCase())
+      item.name.toLocaleLowerCase().includes(smartContractStore.search.toLocaleLowerCase())
     ) || []
   );
 });
@@ -44,8 +44,8 @@ const DeployStatus = resolveComponent('SmartContractsStatusLabel');
 
 const selectedColumns = ref<string[]>(['chain', 'name', 'contractAddress', 'contractStatus']);
 
-const rowKey = (row: SmartContractInterface) => row.contract_uuid;
-const currentRow = ref<SmartContractInterface>(props.contracts[0]);
+const rowKey = (row: DeployedContractInterface) => row.contract_uuid;
+const currentRow = ref<DeployedContractInterface>(props.contracts[0]);
 
 const columns = computed(() => [
   {
@@ -90,7 +90,7 @@ const columns = computed(() => [
   },
 ]);
 /** On row click */
-const rowProps = (row: SmartContractInterface) => {
+const rowProps = (row: DeployedContractInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;

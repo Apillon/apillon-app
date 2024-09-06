@@ -10,7 +10,7 @@
           <p>{{ $t('dashboard.smartContracts.description') }}</p>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
-          <SmartContractsCard v-for="(contract, key) in smartContracts" :key="key">
+          <SmartContractsCard v-for="(contract, key) in smartContractStore.items" :key="key">
             <div class="flex items-center gap-2 mb-4 text-green">
               <span class="icon-security"></span> Audited
             </div>
@@ -35,10 +35,8 @@
 
 <script lang="ts" setup>
 const dataStore = useDataStore();
-const smartContractsStore = useSmartContractsStore();
+const smartContractStore = useSmartContractStore();
 const $i18n = useI18n();
-
-const smartContracts = ref<SmartContractInterface[]>([]);
 
 useHead({
   title: $i18n.t('dashboard.nav.smartContracts'),
@@ -49,9 +47,7 @@ onMounted(async () => {
   await sleep(500);
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     /** Fetch all services if there is any service type unloaded */
-    await smartContractsStore.getContracts();
-
-    smartContracts.value = smartContractsStore.getAllContracts;
+    await smartContractStore.getSmartContracts();
 
     pageLoading.value = false;
   });

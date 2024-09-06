@@ -17,7 +17,7 @@
 <script lang="ts" setup>
 import { useRouter, useRoute } from 'vue-router';
 
-const smartContractsStore = useSmartContractsStore();
+const smartContractStore = useSmartContractStore();
 
 const router = useRouter();
 const { params } = useRoute();
@@ -29,8 +29,8 @@ onMounted(async () => {
   if (!contractUuid.value) {
     router.push({ name: 'dashboard-service-smart-contracts' });
   } else {
-    await smartContractsStore.getContractByUUID(contractUuid.value as string);
-    smartContractDetails.value = smartContractsStore.getContractDetails;
+    await smartContractStore.getContractByUUID(contractUuid.value as string);
+    smartContractDetails.value = smartContractStore.getContractDetails;
     pageLoading.value = false;
   }
 });
