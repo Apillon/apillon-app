@@ -2190,6 +2190,9 @@
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
       "missingIndex": "Please upload index.html file"
+    },
+    "smartContracts": {
+      "fieldRequired": "Please fill all fields"
     }
   },
   "w3Warn": {

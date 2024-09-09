@@ -25,16 +25,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-const selectedEvent = ref('');
-
-const smartContractStore = useSmartContractStore();
+type Function = {
+  name: string;
+  type: string;
+};
+const { t } = useI18n();
 const deployedContractStore = useDeployedContractStore();
 
-// table
-const { t } = useI18n();
+const tableData = ref<Array<Function[]>>([]);
+const selectedEvent = ref('');
 
-const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
+const readEvents = deployedContractStore.active.contractVersion.abi.filter(
+  item => item.type === 'event'
+);
+
+const createColumns = (): NDataTableColumns<Function> => {
   return [
     {
       title: 'type',
@@ -48,8 +53,6 @@ const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
 };
 const columns = createColumns();
 
-const tableData = ref([]);
-
 const updateTableData = () => {
   const contractDetails = deployedContractStore.active.contractVersion.abi;
   const eventDetails = contractDetails.find(
@@ -57,26 +60,20 @@ const updateTableData = () => {
   );
 
   if (eventDetails) {
-    tableData.value = eventDetails.inputs.map(input => ({
-      name: input.name,
-      type: input.type,
-    }));
+    tableData.value =
+      eventDetails.inputs.map(input => ({
+        name: input.name,
+        type: input.type,
+      })) || [];
   } else {
     tableData.value = [];
   }
-
-  console.log(tableData.value);
 };
-// end table
 
 const selectEvent = (name: string) => {
   selectedEvent.value = name;
   updateTableData();
 };
-
-const readEvents = deployedContractStore.active.contractVersion.abi.filter(
-  item => item.type === 'event'
-);
 
 onMounted(() => {
   selectedEvent.value = readEvents.length ? readEvents[0].name : '';

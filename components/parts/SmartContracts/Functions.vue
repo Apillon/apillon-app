@@ -83,19 +83,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+type Function = {
+  name: string;
+  type: string;
+};
 import CodeBlock from 'vue3-code-block';
 
 const selectedType = ref('write');
 const selectedLang = ref('js');
 const selectedFunction = ref('');
 
-const smartContractStore = useSmartContractStore();
+const deployedContractStore = useDeployedContractStore();
 
 // table
 const { t } = useI18n();
 
-const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
+const createColumns = (): NDataTableColumns<Function> => {
   return [
     {
       title: 'type',
@@ -109,10 +112,10 @@ const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
 };
 const columns = createColumns();
 
-const tableData = ref([]);
+const tableData = ref<Function[]>([]);
 
 const updateTableData = () => {
-  const contractDetails = smartContractStore.active.contractVersion.abi;
+  const contractDetails = deployedContractStore.active?.contractVersion?.abi;
   const functionDetails = contractDetails.find(
     item => item.type === 'function' && item.name === selectedFunction.value
   );
@@ -143,12 +146,12 @@ const selectFunction = (name: string) => {
   updateTableData();
 };
 
-const readFunctions = smartContractStore.active.contractVersion.abi.filter(
+const readFunctions = deployedContractStore.active.contractVersion.abi.filter(
   item =>
     item.type === 'function' && (item.stateMutability === 'view' || item.stateMutability === 'pure')
 );
 
-const writeFunctions = smartContractStore.active.contractVersion.abi.filter(
+const writeFunctions = deployedContractStore.active.contractVersion.abi.filter(
   item =>
     item.type === 'function' &&
     (item.stateMutability === 'nonpayable' || item.stateMutability === 'payable')

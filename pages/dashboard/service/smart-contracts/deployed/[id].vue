@@ -1,14 +1,12 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <div ref="headingRef">
-        <HeaderSmartContractsSecondary />
-      </div>
+      <HeaderSmartContractsSecondary />
     </template>
 
     <slot>
       <div class="wallet-props">
-        <span v-if="address" class="mr-4">{{ shortHash(address) }}</span>
+        <span v-if="address" class="mr-4">Connected wallet: {{ shortHash(address) }}</span>
         <Btn
           v-if="isConnected"
           type="primary"
@@ -20,7 +18,7 @@
         </Btn>
       </div>
       <div v-if="contractStatus !== 6" class="my-8">
-        <div class="flex flex-col md:flex-row gap-x-8">
+        <div class="flex flex-col md:flex-row gap-x-8 mb-8">
           <div class="flex-1 max-w-[550px]">
             <h4>
               {{ $t('dashboard.service.smartContracts.infoSection.title') }}
@@ -36,14 +34,14 @@
           </div>
         </div>
 
-        <a class="anchor-link" href="#transferOwnership">Take smart contract ownership</a>
+        <Btn href="#transferOwnership">Take smart contract ownership</Btn>
       </div>
 
       <h4 class="mb-6">
         {{ $t('dashboard.service.smartContracts.functions.write') }}
       </h4>
       <div class="flex gap-x-4 mb-6">
-        <!-- wrtie functions -->
+        <!-- write functions -->
         <div
           class="bg-black p-2 rounded-lg h-full"
           :class="hasDappMethods ? 'w-2/3 max-w-[840px]' : 'w-1/3 max-w-[420px]'"
@@ -53,83 +51,20 @@
               <h4 class="my-3">
                 {{ $t('dashboard.service.smartContracts.functions.writeFromDapp') }}
               </h4>
-              <template v-for="fn in writeFunctions" :key="fn">
-                <!-- If function has any available inputs create a form -->
-                <template v-if="fn.inputs.length && !fn.onlyOwner">
-                  <n-card :id="fn.name" size="small" class="my-1 max-w-lg mb-3">
-                    <n-collapse accordion arrow-placement="right">
-                      <n-collapse-item :title="fn.name">
-                        <!-- Assign a form ref according to function ref - we have multiple form on same site -->
-                        <n-form
-                          :ref="el => (formRefs[fn.name] = el)"
-                          :model="form[fn.name]"
-                          class="max-w-lg"
-                          @submit.prevent="handleSubmit"
-                        >
-                          <!-- Create inputs -->
-                          <template v-for="i in fn.inputs" :key="i.name">
-                            <n-form-item :label="i.name">
-                              <n-input
-                                v-model:value="form[fn.name][i.name]"
-                                :maxlength="256"
-                                required
-                                :class="{
-                                  'error-input': formErrors[fn.name],
-                                }"
-                              />
-                            </n-form-item>
-                          </template>
-                          <!-- Submit -->
-                          <n-button
-                            v-if="needsWalletConnection(fn.onlyOwner) && !isConnected"
-                            class="w-full text-yellow btn-connect bg-transparent"
-                            type="secondary"
-                            native-type="submit"
-                            :loading="btnLoading"
-                            @click="connectWallet"
-                          >
-                            Connect your wallet
-                          </n-button>
-                          <n-button
-                            v-else-if="isConnected && wrongNetwork"
-                            class="w-full"
-                            type="primary"
-                            native-type="submit"
-                            :loading="btnLoading"
-                            @click="ensureCorrectNetwork"
-                          >
-                            Switch Network
-                          </n-button>
-                          <n-button
-                            v-else
-                            class="w-full"
-                            type="primary"
-                            native-type="submit"
-                            :loading="btnLoading"
-                            @click="handleSubmit(fn.name, 'write', fn.onlyOwner)"
-                          >
-                            Query
-                          </n-button>
-                          <!-- Error container for each form -->
-                          <Notification v-if="errors[fn.name]" type="error" class="mt-6">
-                            Something went wrong, please try again or try later.
-                          </Notification>
-                        </n-form>
-                      </n-collapse-item>
-                    </n-collapse>
-                  </n-card>
-                </template>
-                <template v-else-if="!fn.onlyOwner">
-                  <!-- If function doesn't have inputs available, just output function data -->
-                  <n-card :id="fn.name" size="small" class="my-1 max-w-lg mb-3">
-                    <n-collapse accordion arrow-placement="right">
-                      <n-collapse-item :title="fn.name">
-                        {{ JSON.stringify(fn) }}
-                      </n-collapse-item>
-                    </n-collapse>
-                  </n-card>
-                </template>
-              </template>
+              <n-card
+                v-for="fn in writeFunctions"
+                :key="fn"
+                :id="fn.name"
+                size="small"
+                class="my-1 max-w-lg mb-3"
+              >
+                <n-collapse accordion arrow-placement="right">
+                  <n-collapse-item :title="fn.name">
+                    <!-- Assign a form ref according to function ref - we have multiple form on same site -->
+                    <FormSmartContractAction :fn="fn" />
+                  </n-collapse-item>
+                </n-collapse>
+              </n-card>
             </div>
             <div class="flex-1">
               <h4 v-if="contractStatus !== 6" class="my-3">
@@ -138,64 +73,20 @@
               <h4 v-else class="my-3">
                 <br />
               </h4>
-              <template v-for="fn in writeFunctions" :key="fn">
-                <!-- If function has any available inputs create a form -->
-                <template v-if="fn.inputs.length && fn.onlyOwner">
-                  <n-card :id="fn.name" size="small" class="my-1 max-w-lg mb-3">
-                    <n-collapse accordion arrow-placement="right">
-                      <n-collapse-item :title="fn.name">
-                        <!-- Assign a form ref according to function ref - we have multiple form on same site -->
-                        <n-form
-                          :ref="el => (formRefs[fn.name] = el)"
-                          :model="form[fn.name]"
-                          class="max-w-lg"
-                          @submit.prevent="handleSubmit"
-                        >
-                          <!-- Create inputs -->
-                          <template v-for="i in fn.inputs" :key="i.name">
-                            <n-form-item :label="i.name">
-                              <n-input
-                                v-model:value="form[fn.name][i.name]"
-                                :maxlength="256"
-                                required
-                                :class="{
-                                  'error-input': formErrors[fn.name],
-                                }"
-                              />
-                            </n-form-item>
-                          </template>
-                          <!-- Submit -->
-                          <SmartContractsBtnSubmit />
-                          <!-- Error container for each form -->
-                          <Notification v-if="errors[fn.name]" type="error" class="mt-6">
-                            Something went wrong, please try again or try later.
-                          </Notification>
-                        </n-form>
-                      </n-collapse-item>
-                    </n-collapse>
-                  </n-card>
-                </template>
-                <template v-else-if="fn.onlyOwner">
-                  <!-- If function doesn't have inputs available, just output function data -->
-                  <n-card size="small" class="my-1 max-w-lg mb-3">
-                    <n-collapse accordion arrow-placement="right">
-                      <n-collapse-item :title="fn.name">
-                        {{ JSON.stringify(fn) }}
-
-                        <Btn
-                          type="primary"
-                          class="w-full"
-                          native-type="submit"
-                          :loading="btnLoading"
-                          @click="handleSubmit(fn.name, 'write', fn.onlyOwner)"
-                        >
-                          Query
-                        </Btn>
-                      </n-collapse-item>
-                    </n-collapse>
-                  </n-card>
-                </template>
-              </template>
+              <n-card
+                v-for="fn in ownerFunctions"
+                :key="fn"
+                :id="fn.name"
+                size="small"
+                class="my-1 max-w-lg mb-3"
+              >
+                <n-collapse accordion arrow-placement="right">
+                  <n-collapse-item :title="fn.name">
+                    <!-- Assign a form ref according to function ref - we have multiple form on same site -->
+                    <FormSmartContractAction :fn="fn" owner />
+                  </n-collapse-item>
+                </n-collapse>
+              </n-card>
             </div>
           </div>
         </div>
@@ -205,144 +96,25 @@
             <h4 class="my-3">
               {{ $t('dashboard.service.smartContracts.functions.readFromDapp') }}
             </h4>
-            <template v-for="fn in readFunctions" :key="fn">
-              <!-- If function has any available inputs create a form -->
-              <template v-if="fn.inputs.length">
-                <n-card size="small" class="my-1 max-w-lg mb-3">
-                  <n-collapse accordion arrow-placement="right">
-                    <n-collapse-item :title="fn.name">
-                      <!-- Assign a form ref according to function ref - we have multiple form on same site -->
-                      <n-form
-                        :ref="el => (formRefs[fn.name] = el)"
-                        :model="form[fn.name]"
-                        class="max-w-lg"
-                        @submit.prevent="handleSubmit"
-                      >
-                        <!-- Create inputs -->
-                        <template v-for="i in fn.inputs" :key="i.name">
-                          <n-form-item :label="i.name">
-                            <n-input
-                              v-model:value="form[fn.name][i.name]"
-                              :maxlength="256"
-                              required
-                              :class="{
-                                'error-input': formErrors[fn.name],
-                              }"
-                            />
-                          </n-form-item>
-                        </template>
-                        <!-- Submit -->
-                        <n-button
-                          type="primary"
-                          native-type="submit"
-                          class="w-full"
-                          :loading="btnLoading"
-                          @click="handleSubmit(fn.name, 'read', false)"
-                        >
-                          Query
-                        </n-button>
-                        <!-- Error container for each form -->
-                        <Notification v-if="errors[fn.name]" type="error" class="mt-6">
-                          Something went wrong, please try again or try later.
-                        </Notification>
-                        <Notification v-if="msgs[fn.name]" type="success" class="mt-6">
-                          {{ msgs[fn.name] }}
-                        </Notification>
-                      </n-form>
-                    </n-collapse-item>
-                  </n-collapse>
-                </n-card>
-              </template>
-              <template v-else>
-                <!-- If function doesnt have inputs avialble, just output function data -->
-                <n-card size="small" class="my-1 max-w-lg mb-3">
-                  <n-collapse accordion arrow-placement="right">
-                    <n-collapse-item :title="fn.name">
-                      <div class="mb-4">{{ fn.outputs[0]?.internalType }}</div>
-                      <n-button
-                        type="primary"
-                        native-type="submit"
-                        class="w-full"
-                        :loading="btnLoading"
-                        @click="handleSubmit(fn.name, 'read', false)"
-                      >
-                        Query
-                      </n-button>
-                      <!-- Error container for each form -->
-                      <Notification v-if="errors[fn.name]" type="error" class="mt-6">
-                        Something went wrong, please try again or try later.
-                      </Notification>
-                      <Notification
-                        v-if="msgs[fn.name]"
-                        type="success"
-                        class="mt-6"
-                        v-html="msgs[fn.name]"
-                      />
-                    </n-collapse-item>
-                  </n-collapse>
-                </n-card>
-              </template>
-            </template>
+            <n-card v-for="fn in readFunctions" :key="fn" size="small" class="my-1 max-w-lg mb-3">
+              <n-collapse accordion arrow-placement="right">
+                <n-collapse-item :title="fn.name">
+                  <!-- Assign a form ref according to function ref - we have multiple form on same site -->
+                  <FormSmartContractAction :fn="fn" read />
+                </n-collapse-item>
+              </n-collapse>
+            </n-card>
           </div>
         </div>
       </div>
     </slot>
-
-    <!-- activeTransactionsWindow -->
-    <div
-      v-if="activeTransactionsWindow"
-      class="card-dark fixed right-0 bottom-0 w-[34rem] px-5 py-3 !border-yellow !rounded-none z-10 -mr-[1px] -mb-[1px]"
-    >
-      <n-space justify="space-between" align="center">
-        <n-space justify="space-between" align="center">
-          <button class="p-2" @click="transactionListExpanded = !transactionListExpanded">
-            <span
-              class="icon-down align-middle text-2xl"
-              :class="[transactionListExpanded ? 'icon-down' : 'icon-up']"
-            ></span>
-
-            <strong>Transactions in progress</strong>
-          </button>
-        </n-space>
-        <n-space align="center">
-          <IconClose
-            class="cursor-pointer"
-            @click="activeTransactionsWindow = !activeTransactionsWindow"
-          />
-        </n-space>
-      </n-space>
-      <n-scrollbar v-if="transactionListExpanded" class="max-h-72 mt-4" y-scrollable>
-        <div v-for="(response, methodName) in msgs" :key="methodName" class="method-container">
-          <span>Method: {{ methodName }}</span>
-          <div class="flex flex-row">
-            <Notification type="success" class="mb-2">
-              <span v-html="msgs[methodName]"></span>
-            </Notification>
-            <IconClose @click="removeMsg(methodName)" />
-          </div>
-        </div>
-      </n-scrollbar>
-    </div>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { createPublicClient, createWalletClient, custom, http } from 'viem';
+import { useAccount, useDisconnect } from 'use-wagmi';
 
-import {
-  useAccount,
-  useConnect,
-  useWalletClient,
-  useDisconnect,
-  useNetwork,
-  useSwitchNetwork,
-} from 'use-wagmi';
-const { chain } = useNetwork();
-const { switchNetwork } = useSwitchNetwork();
-
-const { connect, connectors } = useConnect();
 const { disconnect } = useDisconnect();
-const { refetch: refetchWalletClient } = useWalletClient();
 const { isConnected } = useAccount({ onConnect: onWalletConnected });
 const { address } = useAccount();
 
@@ -351,34 +123,21 @@ const router = useRouter();
 const { params } = useRoute();
 const dataStore = useDataStore();
 const deployedContractStore = useDeployedContractStore();
-const { getChainConfig } = useSmartContracts();
 
 useHead({
   title: t('dashboard.nav.smartContracts'),
 });
 
-const activeTransactionsWindow = ref<boolean>(false);
-const transactionListExpanded = ref<boolean>(true);
 const pageLoading = ref<boolean>(true);
+const btnLoading = ref<boolean>(false);
 const contractUuid = ref<string>(`${params?.id}` || '');
 const contractStatus = computed(() => deployedContractStore.active.contractStatus);
 
 // Data
-const functionObjects = ref<SmartContractABI[]>([]);
-const writeFunctions = ref<Array<SmartContractABI & { onlyOwner: boolean }>>([]);
+const ownerFunctions = ref<SmartContractABI[]>([]);
 const readFunctions = ref<SmartContractABI[]>([]);
+const writeFunctions = ref<SmartContractABI[]>([]);
 const hasDappMethods = ref(false); // serves as UI signal to hide or display dapp methods
-
-const form = reactive({});
-const formRefs = ref({});
-const errors = ref({});
-const formErrors = ref({});
-const msgs = ref({});
-const btnLoading = ref(false);
-
-function removeMsg(methodName) {
-  delete msgs.value[methodName];
-}
 
 async function onWalletConnected() {
   await sleep(200);
@@ -387,154 +146,8 @@ async function onWalletConnected() {
   }
 }
 
-async function connectWallet() {
-  if (!isConnected.value) {
-    await wagmiConnect(connectors.value[0]);
-  }
-}
-
 function disconnectWallet() {
   disconnect();
-}
-
-function wagmiConnect(connector) {
-  if (isConnected.value) {
-    refetchWalletClient();
-  } else if (connector.ready) {
-    connect({ connector });
-  }
-}
-
-const wrongNetwork = computed(() => {
-  // compare contract chain id to current wallet chain id
-  return !chain || !chain.value || chain.value.id !== deployedContractStore.active.chain;
-});
-
-async function ensureCorrectNetwork() {
-  await switchNetwork(deployedContractStore.active.chain);
-  btnLoading.value = false;
-  return true;
-}
-
-// Submit
-function handleSubmit(methodName, method, onlyOwner) {
-  console.log('submit');
-  btnLoading.value = true;
-  errors.value = {};
-  formErrors.value = {};
-
-  // if (!validate(form[methodName])) {
-  //   formErrors.value[methodName] = true;
-  //   btnLoading.value = false;
-  //   return false;
-  // }
-  msgs.value[methodName] = null;
-  if (method === 'write') {
-    if (!onlyOwner || contractStatus.value === 6) {
-      execWalletWrite(methodName);
-    } else {
-      execOwnerWrite(methodName);
-    }
-  } else {
-    execRead(methodName);
-  }
-}
-
-async function execWalletWrite(methodName) {
-  // activeTransactionsWindow.value = true;
-
-  const contractAddress = deployedContractStore.active.contractAddress as `0x${string}`;
-  const abi = deployedContractStore.active.contractVersion.abi;
-  const chainId = deployedContractStore.active.chain;
-  let response;
-
-  const chainConfig = getChainConfig(chainId);
-
-  const client = createWalletClient({
-    chain: chainConfig,
-    transport: custom(window.ethereum), // Connect to the wallet via MetaMask or similar
-  });
-
-  try {
-    response = await client.writeContract({
-      address: contractAddress,
-      abi,
-      functionName: methodName,
-      args: Object.values(form[methodName]),
-      account: address.value,
-    });
-    if (response) {
-      console.log(response);
-      msgs.value[methodName] = response;
-    }
-  } catch (error) {
-    console.log(error);
-    errors.value[methodName] = 'Something went wrong. Please try again.';
-  } finally {
-    btnLoading.value = false;
-  }
-  btnLoading.value = false;
-}
-
-// read functions handler
-async function execRead(methodName) {
-  const contractAddress = deployedContractStore.active.contractAddress as `0x${string}`;
-  const abi = deployedContractStore.active.contractVersion.abi;
-  const chainId = deployedContractStore.active.chain;
-  let response;
-
-  const chainConfig = getChainConfig(chainId);
-
-  const client = createPublicClient({
-    chain: chainConfig,
-    transport: http(),
-  });
-
-  try {
-    response = await client.readContract({
-      address: contractAddress,
-      abi,
-      functionName: methodName,
-      args: Object.values(form[methodName]),
-    });
-    console.log(response);
-    msgs.value[methodName] = response;
-  } catch (error) {
-    console.log(error);
-    errors.value[methodName] = 'Something went wrong. Please try again.';
-  } finally {
-    btnLoading.value = false;
-  }
-}
-
-// write functions handler
-async function execOwnerWrite(methodName) {
-  // activeTransactionsWindow.value = true;
-
-  console.log('write write');
-
-  try {
-    const res = await $api.post<SmartContractCallResponse>(
-      endpoints.smartContractsCall(contractUuid.value),
-      {
-        methodName,
-        methodArguments: Object.keys(form[methodName]).length
-          ? Object.values(form[methodName])
-          : ['true'],
-      }
-    );
-
-    if (res.ok) {
-      errors.value[methodName] = '';
-      formRefs.value[methodName].reset();
-    }
-    msgs.value[methodName] = res;
-  } catch (error) {
-    console.log(error);
-    errors.value[methodName] = 'Something went wrong. Please try again.';
-  } finally {
-    btnLoading.value = false;
-  }
 }
 
 onMounted(() => {
@@ -548,32 +161,24 @@ onMounted(() => {
     } else {
       deployedContractStore.active = currentSmartContract;
 
-      functionObjects.value = deployedContractStore.active?.contractVersion?.abi.filter(
+      const functionObjects = deployedContractStore.active?.contractVersion?.abi.filter(
         item => item.type === 'function'
       );
-      console.log(functionObjects.value);
 
       // Initialize form models dynamically based on functionObjects
-      functionObjects.value.forEach(fn => {
-        form[fn.name] = {};
-
-        fn.inputs.forEach(input => {
-          form[fn.name][input.name] = null; // Initialize each input field
-        });
-
+      functionObjects.forEach(fn => {
         if (fn.stateMutability === 'nonpayable' || fn.stateMutability === 'payable') {
           // Find the corresponding method in state.contractVersion.methods
           const method = deployedContractStore.active.contractVersion.methods.find(
             method => method.name === fn.name
           );
-          // Add the method to writeFunctions and tag it with onlyOwner if applicable
 
-          if (!method?.onlyOwner) hasDappMethods.value = true;
-
-          writeFunctions.value.push({
-            ...fn, // Spread the function properties
-            onlyOwner: method ? method.onlyOwner : false, // Add onlyOwner property
-          });
+          if (method?.onlyOwner) {
+            ownerFunctions.value.push(fn);
+          } else {
+            writeFunctions.value.push(fn);
+            hasDappMethods.value = true;
+          }
         } else {
           readFunctions.value.push(fn);
         }
@@ -598,21 +203,5 @@ onMounted(() => {
 }
 .n-card.n-card--bordered {
   border: 1px solid #313442;
-}
-.error-input {
-  border: 1px solid #ff6188;
-}
-.btn-connect {
-  border: 1px solid #1e212b;
-}
-.anchor-link {
-  color: black;
-  font-weight: bold;
-  font-size: 14px;
-  background-color: #f9ff73;
-  padding: 16px 32px;
-  border-radius: 8px;
-  margin-top: 40px;
-  display: inline-block;
 }
 </style>

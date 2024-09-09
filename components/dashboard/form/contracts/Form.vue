@@ -92,9 +92,9 @@
                 </n-form-item>
               </div>
               <div>
-                <n-button v-if="settings.length < 4" type="secondary" @click="addSettingsOption">
+                <Btn v-if="settings.length < 4" type="secondary" @click="addSettingsOption">
                   Add a settings option
-                </n-button>
+                </Btn>
               </div>
             </div>
           </template>
@@ -342,7 +342,7 @@ async function deployContract() {
     }
   } catch (e) {
     console.log(e);
-    message.error(userFriendlyMsg(error));
+    message.error(userFriendlyMsg(e));
     submitError.value = true;
   }
 }
