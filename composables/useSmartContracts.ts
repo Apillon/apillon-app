@@ -1,30 +1,32 @@
-export default function useSmartContractStore() {
+import { moonbaseAlpha, moonbeam, astar } from 'viem/chains';
+
+// Define the Astar Shibuya chain configuration
+const astarShibuya = {
+  id: 81, // Chain ID for Astar Shibuya testnet
+  name: 'Astar Shibuya',
+  network: 'shibuya',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'SBY',
+    symbol: 'SBY',
+  },
+  rpcUrls: {
+    default: { http: ['https://rpc.shibuya.astar.network'] },
+    public: { http: ['https://rpc.shibuya.astar.network'] },
+  },
+  blockExplorers: {
+    default: { name: 'Subscan', url: 'https://shibuya.subscan.io/' },
+  },
+  testnet: true,
+};
+
+export default function useSmartContracts() {
   const formRef = ref<NFormInst | null>(null);
   const settings = ref([false, false, false, false]);
   const form = ref<{ [key: string]: any }>({
     name: '',
     description: '',
     chain: null,
-  });
-
-  // Define the Astar Shibuya chain configuration
-  const astarShibuya = ref({
-    id: 81, // Chain ID for Astar Shibuya testnet
-    name: 'Astar Shibuya',
-    network: 'shibuya',
-    nativeCurrency: {
-      decimals: 18,
-      name: 'SBY',
-      symbol: 'SBY',
-    },
-    rpcUrls: {
-      default: { http: ['https://rpc.shibuya.astar.network'] },
-      public: { http: ['https://rpc.shibuya.astar.network'] },
-    },
-    blockExplorers: {
-      default: { name: 'Subscan', url: 'https://shibuya.subscan.io/' },
-    },
-    testnet: true,
   });
 
   const isSpecialField = (input: any) => input.name === '_dropStart';
@@ -43,14 +45,28 @@ export default function useSmartContractStore() {
     return ts < Date.now();
   }
 
+  function getChainConfig(chainId: number) {
+    switch (chainId) {
+      case moonbaseAlpha.id:
+        return moonbaseAlpha;
+      case moonbeam.id:
+        return moonbeam;
+      case astar.id:
+        return astar;
+      case astarShibuya.id:
+        return astarShibuya;
+    }
+  }
+
   return {
+    astarShibuya,
     formRef,
     form,
     settings,
     addSettingsOption,
     disablePastDate,
     disablePastTime,
+    getChainConfig,
     isSpecialField,
-    astarShibuya,
   };
 }

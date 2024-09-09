@@ -54,19 +54,19 @@
                 {{ $t('dashboard.service.smartContracts.functions.writeFromDapp') }}
               </h4>
               <template v-for="fn in writeFunctions" :key="fn">
-                <!-- If function has any availablbe inouts create a form -->
+                <!-- If function has any available inputs create a form -->
                 <template v-if="fn.inputs.length && !fn.onlyOwner">
                   <n-card :id="fn.name" size="small" class="my-1 max-w-lg mb-3">
                     <n-collapse accordion arrow-placement="right">
                       <n-collapse-item :title="fn.name">
-                        <!-- Assign a fromref according to function ref - we have multiple form on same site -->
+                        <!-- Assign a form ref according to function ref - we have multiple form on same site -->
                         <n-form
                           :ref="el => (formRefs[fn.name] = el)"
                           :model="form[fn.name]"
                           class="max-w-lg"
                           @submit.prevent="handleSubmit"
                         >
-                          <!-- Create inouts -->
+                          <!-- Create inputs -->
                           <template v-for="i in fn.inputs" :key="i.name">
                             <n-form-item :label="i.name">
                               <n-input
@@ -120,11 +120,11 @@
                   </n-card>
                 </template>
                 <template v-else-if="!fn.onlyOwner">
-                  <!-- If function doesnt have inputs avialble, just output function data -->
+                  <!-- If function doesn't have inputs available, just output function data -->
                   <n-card :id="fn.name" size="small" class="my-1 max-w-lg mb-3">
                     <n-collapse accordion arrow-placement="right">
                       <n-collapse-item :title="fn.name">
-                        {{ fn.outputs[0]?.internalType }}
+                        {{ JSON.stringify(fn) }}
                       </n-collapse-item>
                     </n-collapse>
                   </n-card>
@@ -139,19 +139,19 @@
                 <br />
               </h4>
               <template v-for="fn in writeFunctions" :key="fn">
-                <!-- If function has any availablbe inouts create a form -->
+                <!-- If function has any available inputs create a form -->
                 <template v-if="fn.inputs.length && fn.onlyOwner">
                   <n-card :id="fn.name" size="small" class="my-1 max-w-lg mb-3">
                     <n-collapse accordion arrow-placement="right">
                       <n-collapse-item :title="fn.name">
-                        <!-- Assign a fromref according to function ref - we have multiple form on same site -->
+                        <!-- Assign a form ref according to function ref - we have multiple form on same site -->
                         <n-form
                           :ref="el => (formRefs[fn.name] = el)"
                           :model="form[fn.name]"
                           class="max-w-lg"
                           @submit.prevent="handleSubmit"
                         >
-                          <!-- Create inouts -->
+                          <!-- Create inputs -->
                           <template v-for="i in fn.inputs" :key="i.name">
                             <n-form-item :label="i.name">
                               <n-input
@@ -165,37 +165,7 @@
                             </n-form-item>
                           </template>
                           <!-- Submit -->
-                          <n-button
-                            v-if="needsWalletConnection(fn.onlyOwner) && !isConnected"
-                            class="w-full text-yellow btn-connect bg-transparent"
-                            type="secondary"
-                            native-type="submit"
-                            :loading="btnLoading"
-                            @click="connectWallet"
-                          >
-                            Connect your wallet
-                          </n-button>
-                          <n-button
-                            v-else-if="isConnected && wrongNetwork"
-                            class="w-full"
-                            type="primary"
-                            native-type="submit"
-                            :loading="btnLoading"
-                            @click="ensureCorrectNetwork"
-                          >
-                            Switch Network
-                          </n-button>
-
-                          <n-button
-                            v-else
-                            type="primary"
-                            class="w-full"
-                            native-type="submit"
-                            :loading="btnLoading"
-                            @click="handleSubmit(fn.name, 'write', fn.onlyOwner)"
-                          >
-                            Query
-                          </n-button>
+                          <SmartContractsBtnSubmit />
                           <!-- Error container for each form -->
                           <Notification v-if="errors[fn.name]" type="error" class="mt-6">
                             Something went wrong, please try again or try later.
@@ -206,11 +176,21 @@
                   </n-card>
                 </template>
                 <template v-else-if="fn.onlyOwner">
-                  <!-- If function doesnt have inputs avialble, just output function data -->
+                  <!-- If function doesn't have inputs available, just output function data -->
                   <n-card size="small" class="my-1 max-w-lg mb-3">
                     <n-collapse accordion arrow-placement="right">
                       <n-collapse-item :title="fn.name">
-                        {{ fn.outputs[0]?.internalType }}
+                        {{ JSON.stringify(fn) }}
+
+                        <Btn
+                          type="primary"
+                          class="w-full"
+                          native-type="submit"
+                          :loading="btnLoading"
+                          @click="handleSubmit(fn.name, 'write', fn.onlyOwner)"
+                        >
+                          Query
+                        </Btn>
                       </n-collapse-item>
                     </n-collapse>
                   </n-card>
@@ -226,19 +206,19 @@
               {{ $t('dashboard.service.smartContracts.functions.readFromDapp') }}
             </h4>
             <template v-for="fn in readFunctions" :key="fn">
-              <!-- If function has any availablbe inouts create a form -->
+              <!-- If function has any available inputs create a form -->
               <template v-if="fn.inputs.length">
                 <n-card size="small" class="my-1 max-w-lg mb-3">
                   <n-collapse accordion arrow-placement="right">
                     <n-collapse-item :title="fn.name">
-                      <!-- Assign a fromref according to function ref - we have multiple form on same site -->
+                      <!-- Assign a form ref according to function ref - we have multiple form on same site -->
                       <n-form
                         :ref="el => (formRefs[fn.name] = el)"
                         :model="form[fn.name]"
                         class="max-w-lg"
                         @submit.prevent="handleSubmit"
                       >
-                        <!-- Create inouts -->
+                        <!-- Create inputs -->
                         <template v-for="i in fn.inputs" :key="i.name">
                           <n-form-item :label="i.name">
                             <n-input
@@ -308,7 +288,8 @@
       </div>
     </slot>
 
-    <!-- <div
+    <!-- activeTransactionsWindow -->
+    <div
       v-if="activeTransactionsWindow"
       class="card-dark fixed right-0 bottom-0 w-[34rem] px-5 py-3 !border-yellow !rounded-none z-10 -mr-[1px] -mb-[1px]"
     >
@@ -341,13 +322,12 @@
           </div>
         </div>
       </n-scrollbar>
-    </div> -->
+    </div>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
 import { createPublicClient, createWalletClient, custom, http } from 'viem';
-import { moonbaseAlpha, moonbeam, astar } from 'viem/chains';
 
 import {
   useAccount,
@@ -366,30 +346,27 @@ const { refetch: refetchWalletClient } = useWalletClient();
 const { isConnected } = useAccount({ onConnect: onWalletConnected });
 const { address } = useAccount();
 
+const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
-const { t } = useI18n();
-
-const { shortHash, validate } = useSmartContractWallet();
+const dataStore = useDataStore();
+const deployedContractStore = useDeployedContractStore();
+const { getChainConfig } = useSmartContracts();
 
 useHead({
   title: t('dashboard.nav.smartContracts'),
 });
 
-const dataStore = useDataStore();
-const deployedContractStore = useDeployedContractStore();
-const { astarShibuya } = useSmartContracts();
-
-// const activeTransactionsWindow = ref<boolean>(false);
-// const transactionListExpanded = ref<boolean>(true);
+const activeTransactionsWindow = ref<boolean>(false);
+const transactionListExpanded = ref<boolean>(true);
 const pageLoading = ref<boolean>(true);
 const contractUuid = ref<string>(`${params?.id}` || '');
 const contractStatus = computed(() => deployedContractStore.active.contractStatus);
 
 // Data
-const functionObjects = ref([]);
-const writeFunctions = ref([]);
-const readFunctions = ref([]);
+const functionObjects = ref<SmartContractABI[]>([]);
+const writeFunctions = ref<Array<SmartContractABI & { onlyOwner: boolean }>>([]);
+const readFunctions = ref<SmartContractABI[]>([]);
 const hasDappMethods = ref(false); // serves as UI signal to hide or display dapp methods
 
 const form = reactive({});
@@ -401,12 +378,6 @@ const btnLoading = ref(false);
 
 function removeMsg(methodName) {
   delete msgs.value[methodName];
-}
-
-function needsWalletConnection(onlyOwner) {
-  if ((!onlyOwner && !isConnected.value) || (!isConnected.value && contractStatus.value === 6))
-    return true;
-  return false;
 }
 
 async function onWalletConnected() {
@@ -452,11 +423,11 @@ function handleSubmit(methodName, method, onlyOwner) {
   errors.value = {};
   formErrors.value = {};
 
-  if (!validate(form[methodName])) {
-    formErrors.value[methodName] = true;
-    btnLoading.value = false;
-    return false;
-  }
+  // if (!validate(form[methodName])) {
+  //   formErrors.value[methodName] = true;
+  //   btnLoading.value = false;
+  //   return false;
+  // }
   msgs.value[methodName] = null;
   if (method === 'write') {
     if (!onlyOwner || contractStatus.value === 6) {
@@ -472,7 +443,7 @@ function handleSubmit(methodName, method, onlyOwner) {
 async function execWalletWrite(methodName) {
   // activeTransactionsWindow.value = true;
 
-  const contractAddress = deployedContractStore.active.contractAddress;
+  const contractAddress = deployedContractStore.active.contractAddress as `0x${string}`;
   const abi = deployedContractStore.active.contractVersion.abi;
   const chainId = deployedContractStore.active.chain;
   let response;
@@ -507,7 +478,7 @@ async function execWalletWrite(methodName) {
 
 // read functions handler
 async function execRead(methodName) {
-  const contractAddress = deployedContractStore.active.contractAddress;
+  const contractAddress = deployedContractStore.active.contractAddress as `0x${string}`;
   const abi = deployedContractStore.active.contractVersion.abi;
   const chainId = deployedContractStore.active.chain;
   let response;
@@ -543,10 +514,15 @@ async function execOwnerWrite(methodName) {
   console.log('write write');
 
   try {
-    const res = await $api.post(endpoints.smartContractsQuery(contractUuid.value), {
-      methodName,
-      methodArguments: Object.values(form[methodName]),
-    });
+    const res = await $api.post<SmartContractCallResponse>(
+      endpoints.smartContractsCall(contractUuid.value),
+      {
+        methodName,
+        methodArguments: Object.keys(form[methodName]).length
+          ? Object.values(form[methodName])
+          : ['true'],
+      }
+    );
 
     if (res.ok) {
       errors.value[methodName] = '';
@@ -575,6 +551,7 @@ onMounted(() => {
       functionObjects.value = deployedContractStore.active?.contractVersion?.abi.filter(
         item => item.type === 'function'
       );
+      console.log(functionObjects.value);
 
       // Initialize form models dynamically based on functionObjects
       functionObjects.value.forEach(fn => {
@@ -591,7 +568,7 @@ onMounted(() => {
           );
           // Add the method to writeFunctions and tag it with onlyOwner if applicable
 
-          if (!method.onlyOwner) hasDappMethods.value = true;
+          if (!method?.onlyOwner) hasDappMethods.value = true;
 
           writeFunctions.value.push({
             ...fn, // Spread the function properties
@@ -606,19 +583,6 @@ onMounted(() => {
     }
   });
 });
-
-function getChainConfig(chainId) {
-  switch (chainId) {
-    case moonbaseAlpha.id:
-      return moonbaseAlpha;
-    case moonbeam.id:
-      return moonbeam;
-    case astar.id:
-      return astar;
-    case astarShibuya.id:
-      return astarShibuya;
-  }
-}
 </script>
 
 <style lang="postcss" scoped>

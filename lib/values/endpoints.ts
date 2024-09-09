@@ -245,7 +245,7 @@ const Endpoints = {
   smartContractsDeployed: (uuid?: string) => {
     return uuid ? `/contracts/deployed/${uuid}` : `/contracts/deployed`;
   },
-  smartContractsQuery: (contractUuid: string) => {
+  smartContractsCall: (contractUuid: string) => {
     return `/contracts/deployed/${contractUuid}/call`;
   },
 

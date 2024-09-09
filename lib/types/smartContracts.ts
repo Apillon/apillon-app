@@ -25,12 +25,12 @@ declare global {
   interface SmartContractABI {
     stateMutability?: string;
     type: string;
-    inputs?: Array<{
+    inputs: Array<{
       name: string;
       internalType: string;
       type: string;
     }>;
-    name?: string;
+    name: string;
     outputs?: Array<{
       name: string;
       internalType: string;
@@ -76,4 +76,20 @@ declare global {
 
   interface DeployedContractResponse extends GeneralResponse<DeployedContractInterface> {}
   interface DeployedContractsResponse extends GeneralItemsResponse<DeployedContractInterface> {}
+
+  interface SmartContractCallInterface {
+    id: number;
+    status: number;
+    address: string;
+    to: string;
+    chain: number;
+    transactionStatus: number;
+    chainType: number;
+    transactionHash: string;
+    referenceTable: string;
+    referenceId: string;
+    data: any | null; // 'data' can be of any type, or null.
+    project_uuid: string;
+  }
+  interface SmartContractCallResponse extends GeneralResponse<SmartContractCallInterface> {}
 }
