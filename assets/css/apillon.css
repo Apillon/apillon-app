@@ -43,6 +43,18 @@
   }
 }
 
+.icon-contracts:before {
+  content: '\e965';
+}
+.icon-play:before {
+  content: '\e962';
+}
+.icon-cloud-functions:before {
+  content: '\e963';
+}
+.icon-add-link:before {
+  content: '\e964';
+}
 .icon-social:before {
   content: '\e961';
 }

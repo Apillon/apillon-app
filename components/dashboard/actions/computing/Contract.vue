@@ -16,7 +16,7 @@
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts :service="ServiceTypeName.COMPUTING" />
+      <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" />
 
       <!-- Refresh contracts -->
       <n-button

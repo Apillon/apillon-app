@@ -112,6 +112,17 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
+      key: 'dashboard-service-cloud-functions',
+      label: $i18n.t('dashboard.nav.cloudFunctions'),
+      to: 'dashboard-service-cloud-functions',
+      iconName: 'icon-computing',
+      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
+      disabled:
+        isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
+        !authStore.isUserAllowed(Permission.COMPUTING) ||
+        zeroProjects.value,
+    },
+    {
       key: 'dashboard-service-social',
       label: $i18n.t('dashboard.nav.social'),
       to: 'dashboard-service-social',

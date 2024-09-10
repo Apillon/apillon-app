@@ -11,7 +11,7 @@
     <template #info>
       <n-space :size="32" align="center" justify="end">
         <slot name="info"> </slot>
-        <IconInfo v-if="$i18n.te('w3Warn.computing.info')" @click="modalW3WarnVisible = true" />
+        <IconInfo v-if="$te('w3Warn.computing.info')" @click="modalW3WarnVisible = true" />
       </n-space>
     </template>
   </Heading>
@@ -22,7 +22,6 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
 const contractStore = useContractStore();
 const modalW3WarnVisible = ref<boolean>(false);
 </script>

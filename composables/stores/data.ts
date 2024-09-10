@@ -227,11 +227,14 @@ export const useDataStore = defineStore('data', {
       abortController = new AbortController();
 
       try {
-        const req = $api.get<ProjectsResponse>(endpoints.projectsUserProjects, undefined, {
-          signal: abortController.signal,
-        });
-        this.promises.projects = req;
-        const res = await req;
+        this.promises.projects = $api.get<ProjectsResponse>(
+          endpoints.projectsUserProjects,
+          undefined,
+          {
+            signal: abortController.signal,
+          }
+        );
+        const res = await this.promises.projects;
 
         const projects = res.data.items.map((project: ProjectInterface) => {
           return {

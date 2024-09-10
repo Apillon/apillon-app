@@ -48,6 +48,14 @@ export enum EncryptDeployTab {
   DEPLOYED = 3,
 }
 
+export enum AcurastJobStatus {
+  DEPLOYING = 1,
+  DEPLOYED = 2,
+  MATCHED = 3,
+  INACTIVE = 4,
+  DELETED = 9,
+}
+
 declare global {
   /**
    * Contract
@@ -90,4 +98,47 @@ declare global {
 
   interface ComputingTransactionResponse
     extends GeneralItemsResponse<ComputingTransactionInterface> {}
+
+  /**
+   * Cloud Functions
+   */
+  interface CloudFunctionInterface extends BaseObjectInterface {
+    activeJob_id: string;
+    bucket_uuid: string;
+    encrypted_variables: string;
+    function_uuid: string;
+    jobs: JobInterface[];
+    project_uuid: string;
+  }
+
+  interface CloudFunctionResponse extends GeneralResponse<CloudFunctionInterface> {}
+  interface CloudFunctionsResponse extends GeneralItemsResponse<CloudFunctionInterface> {}
+
+  interface JobInterface extends BaseObjectInterface {
+    endTime?: string;
+    function_uuid: string;
+    jobStatus: number;
+    job_uuid: string;
+    project_uuid: string;
+    scriptCid: string;
+    slots: number;
+    startTime?: string;
+  }
+
+  interface JobResponse extends GeneralResponse<JobInterface> {}
+  interface JobsResponse extends GeneralItemsResponse<JobInterface> {}
+
+  type EnvVariable = {
+    key: string;
+    value: string;
+  };
+  interface EnvironmentResponse extends GeneralResponse<EnvVariable[]> {}
+
+  interface CloudFunctionUsageInterface {
+    error: boolean | null;
+    function_uuid: string;
+    success: boolean | null;
+    timestamp: string;
+  }
+  interface CloudFunctionUsageResponse extends GeneralResponse<CloudFunctionUsageInterface[]> {}
 }
