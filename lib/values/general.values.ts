@@ -71,6 +71,8 @@ export const LsCacheKeys = {
   CONTRACTS: 'al_cache_contracts',
   CLOUD_FUNCTION: 'al_cache_cloud_function',
   CLOUD_FUNCTIONS: 'al_cache_cloud_functions',
+  CLOUD_FUNCTION_USAGE: 'al_cache_cloud_function_usage',
+  CLOUD_FUNCTION_VARIABLES: 'al_cache_cloud_function_variables',
   CREDITS: 'al_cache_credits',
   CREDIT_PACKAGES: 'al_cache_credit_packages',
   CUSTOMER_PORTAL_URL: 'al_cache_customer_portal',

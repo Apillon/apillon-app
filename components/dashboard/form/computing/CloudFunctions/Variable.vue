@@ -50,15 +50,12 @@
 <script lang="ts" setup>
 import type { FormItemRule } from 'naive-ui';
 
-const props = defineProps({
-  functionUuid: { type: String, default: '' },
-});
 const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
 const { t } = useI18n();
 const message = useMessage();
-const warningStore = useWarningStore();
-const { envLoading, createEnvVariables } = useCloudFunctions();
+const cloudFunctionStore = useCloudFunctionStore();
+const { envLoading } = useCloudFunctions();
 
 const formErrors = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
@@ -79,7 +76,10 @@ const rules = computed<NFormRules>(() =>
 );
 
 function validateVariableKey(rule: FormItemRule, value): boolean {
-  return formData.value.filter(item => item.key === value).length === 1;
+  return (
+    formData.value.filter(item => isLowercaseEqual(item.key, value)).length === 1 &&
+    !cloudFunctionStore.variables.some(item => isLowercaseEqual(item.key, value))
+  );
 }
 
 // Submit
@@ -92,19 +92,9 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_SET_ENVIRONMENT, () =>
-        createVariables()
-      );
+      cloudFunctionStore.variablesNew = formData.value;
+      emit('submitSuccess');
     }
   });
-}
-
-async function createVariables() {
-  const cloudFunction = await createEnvVariables(formData.value, props.functionUuid);
-  if (cloudFunction) {
-    /** Emit events */
-    emit('submitSuccess');
-    emit('createSuccess', cloudFunction);
-  }
 }
 </script>

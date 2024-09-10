@@ -190,7 +190,7 @@
   },
   "computing": {
     "cloudFunctions": {
-      "activeJob": "Active Job",
+      "activeJob": "Active Job ID",
       "addNew": "Add new Cloud function",
       "checkVideo": "Check out the video",
       "deployments": "Deployments",
@@ -222,14 +222,28 @@
         "filename": "Filename",
         "name": "Job name",
         "new": "Deploy new script",
+        "redeploy": "Deploy again",
         "size": "Size",
-        "title": "You currently have no deployments for this Cloud function"
+        "title": "You currently have no deployments for this Cloud function",
+        "status": {
+          "1": "DEPLOYING",
+          "2": "DEPLOYED",
+          "3": "ACTIVE",
+          "4": "PAUSED",
+          "9": "DELETED"
+        }
+      },
+      "usage": {
+        "title": "Cloud functions monitor"
       },
       "variable": {
         "addRow": "Add row",
         "btnAdd": "Add environment variable manually",
+        "btnAddVariable": "Add variable",
         "btnCreate": "Create variables",
+        "btnUpdate": "Update variables",
         "btnUpload": "Upload .ENV file for automatic detection",
+        "btnUploadEnv": "Upload .ENV",
         "content": "Create a new environment variable which you want to pass into the cloud function. \nTo learn more about how environment variables are handled, refer to the {url}.",
         "new": "New Environment variable",
         "title": "You currently have no environment variables for this cloud functions"
@@ -1334,6 +1348,7 @@
         "chatPost": "Channel has been created",
         "chatSpace": "Hub has been created",
         "cloudFunction": "Cloud function has been created",
+        "cloudFunctionJob": "Cloud function Job has been created",
         "cloudFunctionVariable": "Cloud function variables have been created",
         "collection": "Creating NFT collection requested.",
         "directory": "Folder has been created",
@@ -1381,6 +1396,7 @@
         "bucket": "Bucket has been updated",
         "cloudFunction": "Cloud function has been updated",
         "cloudFunctionJob": "Job has been updated",
+        "cloudFunctionVariable": "Cloud function variables have been updated",
         "contract": "Contract has been updated",
         "creditThreshold": "Credit threshold has been updated",
         "directory": "Folder has been updated",

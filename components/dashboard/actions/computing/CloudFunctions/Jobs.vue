@@ -2,7 +2,7 @@
   <n-space v-bind="$attrs" justify="space-between">
     <div class="min-w-[11rem] w-[20vw] max-w-xs">
       <n-input
-        v-model:value="cloudFunctionStore.search"
+        v-model:value="cloudFunctionStore.searchJobs"
         type="text"
         name="search"
         size="small"
@@ -20,7 +20,7 @@
       <n-button
         size="small"
         :loading="cloudFunctionStore.loading"
-        @click="cloudFunctionStore.fetchCloudFunctions()"
+        @click="cloudFunctionStore.fetchCloudFunction(cloudFunctionStore.functionUuid)"
       >
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}

@@ -4,7 +4,7 @@
     v-bind="$attrs"
     :bordered="false"
     :columns="columns"
-    :data="cloudFunctionStore.jobs"
+    :data="data"
     :loading="cloudFunctionStore.loading"
     :pagination="{
       ...cloudFunctionStore.pagination,
@@ -41,9 +41,13 @@
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
-const router = useRouter();
+const message = useMessage();
+const dataStore = useDataStore();
+const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
+const { checkUnfinishedJobs } = useCloudFunctions();
 
+const loadingRedeploy = ref<boolean>(false);
 const modalEditJobsVisible = ref<boolean>(false);
 const modalDeleteJobsVisible = ref<boolean>(false);
 
@@ -67,31 +71,29 @@ const createColumns = (): NDataTableColumns<JobInterface> => {
         return h(resolveComponent('TableEllipsis'), { text: row.scriptCid }, '');
       },
     },
-    {
-      key: 'startTime',
-      title: t('form.label.cloudFunctions.startTime'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.startTime || '');
-      },
-    },
-    {
-      key: 'endTime',
-      title: t('form.label.cloudFunctions.endTime'),
-      minWidth: 120,
-      render(row) {
-        return dateTimeToDateAndTime(row?.endTime || '');
-      },
-    },
+    // {
+    //   key: 'startTime',
+    //   title: t('form.label.cloudFunctions.startTime'),
+    //   minWidth: 120,
+    //   render(row) {
+    //     return dateTimeToDateAndTime(row?.startTime || '');
+    //   },
+    // },
+    // {
+    //   key: 'endTime',
+    //   title: t('form.label.cloudFunctions.endTime'),
+    //   minWidth: 120,
+    //   render(row) {
+    //     return dateTimeToDateAndTime(row?.endTime || '');
+    //   },
+    // },
     {
       key: 'jobStatus',
       title: t('general.status'),
       render(row: JobInterface) {
-        return h(
-          resolveComponent('Pill'),
-          { type: jobStatusType(row.jobStatus) },
-          AcurastJobStatus[row.jobStatus]
-        );
+        return h(resolveComponent('ComputingCloudFunctionsJobStatus'), {
+          jobStatus: row.jobStatus,
+        });
       },
     },
     {
@@ -124,6 +126,13 @@ const actionsEnabled = computed<boolean>(() => {
   return (currentRow.value?.jobStatus || 0) >= AcurastJobStatus.DEPLOYED;
 });
 
+const data = computed(
+  () =>
+    cloudFunctionStore.jobs.filter(item =>
+      item.name.toLocaleLowerCase().includes(cloudFunctionStore.searchJobs.toLocaleLowerCase())
+    ) || []
+);
+
 /**
  * Dropdown Actions
  */
@@ -137,6 +146,20 @@ const dropdownOptions = computed(() => {
         onClick: () => {
           if (actionsEnabled.value && currentRow.value) {
             modalEditJobsVisible.value = true;
+          }
+        },
+      },
+    },
+    {
+      label: t('computing.cloudFunctions.job.redeploy'),
+      key: 'redeploy',
+      disabled: !actionsEnabled.value,
+      props: {
+        onClick: () => {
+          if (actionsEnabled.value && currentRow.value) {
+            warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_CREATE, () =>
+              redeploy(currentRow.value)
+            );
           }
         },
       },
@@ -162,24 +185,42 @@ const rowProps = (row: JobInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;
-
-      if (canOpenColumnCell(e.composedPath()) && actionsEnabled.value) {
-        router.push({ path: `/dashboard/service/cloud-functions/${row.job_uuid}` });
-      }
     },
   };
 };
 
-const jobStatusType = (status: number) => {
-  switch (status) {
-    case AcurastJobStatus.DELETED:
-      return 'error';
-    case AcurastJobStatus.DEPLOYING:
-      return 'info';
-    default:
-      return 'success';
+async function redeploy(job?: JobInterface) {
+  if (!job) return;
+
+  loadingRedeploy.value = true;
+
+  if (!dataStore.hasProjects) {
+    await dataStore.fetchProjects();
+    if (!dataStore.projectUuid) return;
   }
-};
+
+  try {
+    const bodyData = {
+      project_uuid: dataStore.projectUuid,
+      function_uuid: job.function_uuid,
+      name: job.name,
+      slots: job.slots,
+      scriptCid: job.scriptCid,
+    };
+    const res = await $api.post<JobResponse>(
+      endpoints.cloudFunctionJobs(job.function_uuid),
+      bodyData
+    );
+    cloudFunctionStore.addJob(res.data);
+
+    message.success(t('form.success.created.cloudFunctionJob'));
+
+    setTimeout(() => checkUnfinishedJobs(), 20000);
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  loadingRedeploy.value = false;
+}
 
 /**
  * Delete Job

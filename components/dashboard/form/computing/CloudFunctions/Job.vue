@@ -50,42 +50,6 @@
         />
       </n-form-item>
 
-      <n-grid class="items-end" :cols="2" :x-gap="32">
-        <!--  CloudFunctions Start time -->
-        <n-form-item-gi
-          path="startTime"
-          :label="$t('form.label.cloudFunctions.startTime')"
-          :label-props="{ for: 'startTime' }"
-        >
-          <n-date-picker
-            v-model:value="formData.startTime"
-            class="w-full"
-            type="datetime"
-            :input-props="{ id: 'startTime' }"
-            clearable
-            :is-date-disabled="disablePasteDate"
-            :is-time-disabled="disablePasteTime"
-          />
-        </n-form-item-gi>
-
-        <!--  CloudFunctions End time -->
-        <n-form-item-gi
-          path="endTime"
-          :label="$t('form.label.cloudFunctions.endTime')"
-          :label-props="{ for: 'endTime' }"
-        >
-          <n-date-picker
-            v-model:value="formData.endTime"
-            class="w-full"
-            type="datetime"
-            :input-props="{ id: 'endTime' }"
-            clearable
-            :is-date-disabled="disablePasteDate"
-            :is-time-disabled="disablePasteTime"
-          />
-        </n-form-item-gi>
-      </n-grid>
-
       <!--  File -->
       <n-form-item
         v-if="!props.jobUuid"
@@ -120,8 +84,6 @@ import type { UploadCustomRequestOptions } from 'naive-ui';
 type FormCloudFunctions = {
   name: string | null;
   slots?: number | null;
-  startTime?: Date | string | null;
-  endTime?: Date | string | null;
   scriptCid: string | null;
   file: FileListItemType | undefined | null;
 };
@@ -135,11 +97,10 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
+const { checkUnfinishedJobs } = useCloudFunctions();
 const { uploadFileToIPFS } = useComputing();
-const { disablePasteDate, disablePasteTime } = useCollection();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
@@ -149,16 +110,12 @@ const job = ref<JobInterface | undefined>();
 const formData = ref<FormCloudFunctions>({
   name: null,
   slots: null,
-  startTime: null,
-  endTime: null,
   scriptCid: null,
   file: null,
 });
 
 const rules: NFormRules = {
   slots: ruleRequired(t('validation.cloudFunctions.slotsRequired')),
-  startTime: ruleRequired(t('validation.cloudFunctions.startTimeRequired')),
-  endTime: ruleRequired(t('validation.cloudFunctions.endTimeRequired')),
   file: ruleRequired(t('validation.cloudFunctions.fileRequired')),
 };
 
@@ -174,8 +131,6 @@ onMounted(async () => {
     if (job.value) {
       formData.value.name = job.value.name;
       formData.value.slots = Number(job.value.slots || 0);
-      formData.value.startTime = new Date(job.value.startTime);
-      formData.value.endTime = new Date(job.value.endTime);
       formData.value.scriptCid = job.value.scriptCid;
     }
   }
@@ -234,8 +189,6 @@ async function createCloudFunction() {
       function_uuid: props.functionUuid,
       name: formData.value.name,
       slots: formData.value.slots,
-      endTime: formData.value.endTime,
-      startTime: formData.value.startTime,
       scriptCid: formData.value.scriptCid,
     };
     const res = await $api.post<JobResponse>(
@@ -244,11 +197,13 @@ async function createCloudFunction() {
     );
     cloudFunctionStore.addJob(res.data);
 
-    message.success(t('form.success.created.cloudFunction'));
+    message.success(t('form.success.created.cloudFunctionJob'));
 
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess', res.data);
+
+    setTimeout(() => checkUnfinishedJobs(), 20000);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

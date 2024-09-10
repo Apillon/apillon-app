@@ -10,19 +10,18 @@
     </slot>
 
     <template #info>
-      <ComputingCloudFunctionsProgress :size="250000" :max-size="5000000" />
-    </template>
-
-    <template #submenu>
-      <div class="flex items-center gap-4 border-t border-bg-lighter py-8">
+      <div class="flex items-center gap-4">
         <h4>{{ $t('computing.cloudFunctions.endpoint') }}</h4>
 
         <TableLink
-          class="bg-white px-4 py-[10px] rounded-lg !text-black lg:min-w-[30rem]"
+          class="bg-white px-4 py-[10px] rounded-lg !text-black max-w-sm lg:max-w-md xl:max-w-lg xxl:max-w-none"
           color="text-black"
-          :link="cloudFunctionStore.functionUuid"
+          :link="`https://${cloudFunctionStore.functionUuid}.${subdomain}.web3approved.com`"
         />
       </div>
+    </template>
+
+    <template #submenu>
       <MenuCloudFunctions />
     </template>
   </Heading>
@@ -33,6 +32,15 @@
 </template>
 
 <script lang="ts" setup>
+const config = useRuntimeConfig();
 const cloudFunctionStore = useCloudFunctionStore();
 const modalW3WarnVisible = ref<boolean>(false);
+
+const subdomain = computed(() =>
+  config.public.ENV === AppEnv.DEV
+    ? 'gw-dev'
+    : config.public.ENV === AppEnv.STAGING
+      ? 'gw-stg'
+      : 'gw'
+);
 </script>

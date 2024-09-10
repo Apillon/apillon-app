@@ -1,21 +1,11 @@
 <template>
-  <div class="flex justify-end">
-    <Btn
-      type="primary"
-      :loading="envLoading"
-      :disabled="!cloudFunctionStore.variables.length"
-      @click="createVariables"
-    >
-      {{ $t('computing.cloudFunctions.variable.btnCreate') }}
-    </Btn>
-  </div>
   <n-data-table
     ref="tableRef"
     v-bind="$attrs"
     :bordered="false"
     :columns="columns"
-    :data="cloudFunctionStore.variables"
-    :loading="cloudFunctionStore.loading"
+    :data="data"
+    :loading="cloudFunctionStore.loadingVariables"
     :pagination="{
       pageSize: PAGINATION_LIMIT,
       prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
@@ -30,10 +20,16 @@
 import { NButton, NDropdown, NInput } from 'naive-ui';
 
 const { t } = useI18n();
-const message = useMessage();
-const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
-const { envLoading, createEnvVariables } = useCloudFunctions();
+
+const data = computed(
+  () =>
+    [...cloudFunctionStore.variables, ...cloudFunctionStore.variablesNew].filter(item =>
+      `${item.key} ${item.value}`
+        .toLocaleLowerCase()
+        .includes(cloudFunctionStore.searchVariables.toLocaleLowerCase())
+    ) || []
+);
 
 const createColumns = (): NDataTableColumns<EnvVariable> => {
   return [
@@ -108,8 +104,7 @@ const page = ref(1);
 const editingRow = ref(-1);
 const columns = createColumns();
 const currentRow = ref<EnvVariable>();
-const rowKey = (row: EnvVariable) =>
-  cloudFunctionStore.variables.findIndex(item => item.key === row?.key);
+const rowKey = (row: EnvVariable) => data.value.findIndex(item => item.key === row?.key);
 
 const isEditingRow = (i: number) => editingRow.value === (page.value - 1) * PAGINATION_LIMIT + i;
 
@@ -123,9 +118,7 @@ const dropdownOptions = computed(() => {
       key: 'edit',
       props: {
         onClick: () => {
-          editingRow.value = cloudFunctionStore.variables.findIndex(
-            item => item.key === currentRow.value?.key
-          );
+          editingRow.value = data.value.findIndex(item => item.key === currentRow.value?.key);
         },
       },
     },
@@ -135,9 +128,15 @@ const dropdownOptions = computed(() => {
       props: {
         class: '!text-pink',
         onClick: () => {
-          cloudFunctionStore.variables = cloudFunctionStore.variables.filter(
-            item => item.key !== currentRow.value?.key
-          );
+          if (cloudFunctionStore.variables.find(item => item.key === currentRow.value?.key)) {
+            cloudFunctionStore.variables = cloudFunctionStore.variables.filter(
+              item => item.key !== currentRow.value?.key
+            );
+          } else {
+            cloudFunctionStore.variablesNew = cloudFunctionStore.variablesNew.filter(
+              item => item.key !== currentRow.value?.key
+            );
+          }
         },
       },
     },
@@ -152,14 +151,4 @@ const rowProps = (row: EnvVariable) => {
     },
   };
 };
-
-async function createVariables() {
-  if (!cloudFunctionStore.variables.every(v => !!v.key && !!v.value)) {
-    message.warning(t('validation.cloudFunctions.valuesRequired'));
-  } else {
-    warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_SET_ENVIRONMENT, () =>
-      createEnvVariables(cloudFunctionStore.variables)
-    );
-  }
-}
 </script>

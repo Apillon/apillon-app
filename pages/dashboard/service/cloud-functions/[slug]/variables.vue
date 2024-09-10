@@ -5,9 +5,11 @@
     </template>
 
     <slot>
-      <n-space class="pb-8" :size="32" vertical>
-        <!-- <TableComputingCloudFunctionVariables /> -->
-        <pre v-if="encryptedVariables">Encrypted vars: {{ encryptedVariables }}</pre>
+      <n-space v-if="cloudFunctionStore.hasJobs" class="pb-8" :size="32" vertical>
+        <ActionsComputingCloudFunctionsEnvironment />
+        <TableComputingCloudFunctionVariables v-if="cloudFunctionStore.hasVariables" />
+      </n-space>
+      <n-space v-else class="pb-8" :size="32" vertical>
         <div class="flex justify-center items-center h-full">
           <div class="flex flex-col gap-4 mb-8 my-20 max-w-xl text-center">
             <h4 class="mb-2">{{ $t('computing.cloudFunctions.variable.title') }}</h4>
@@ -37,7 +39,7 @@
         </div>
       </n-space>
 
-      <!-- Modal - Create Cloud Functions -->
+      <!-- Modal - Create Cloud Function variables -->
       <modal
         v-model:show="modalCreateVariableVisible"
         :title="$t('computing.cloudFunctions.variable.new')"
@@ -53,12 +55,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { UploadCustomRequestOptions } from 'naive-ui';
-
 const { t } = useI18n();
-const message = useMessage();
 const cloudFunctionStore = useCloudFunctionStore();
-const { pageLoading, init, parseEnvFile } = useCloudFunctions();
+const { pageLoading, init, uploadFile } = useCloudFunctions();
 
 const modalCreateVariableVisible = ref<boolean>(false);
 
@@ -66,25 +65,11 @@ useHead({
   title: t('dashboard.nav.cloudFunctions'),
 });
 
-onMounted(() => {
-  init();
+onMounted(async () => {
+  await init();
+
+  pageLoading.value = true;
+  await cloudFunctionStore.getVariables(cloudFunctionStore.active.function_uuid);
+  pageLoading.value = false;
 });
-
-const encryptedVariables = computed(
-  () =>
-    cloudFunctionStore.active.encrypted_variables ||
-    cloudFunctionStore.items.find(item => item.function_uuid === cloudFunctionStore.functionUuid)
-      ?.encrypted_variables
-);
-
-async function uploadFile({ file, onError, onFinish }: UploadCustomRequestOptions) {
-  try {
-    const envData = await parseEnvFile(file);
-    cloudFunctionStore.variables = Object.entries(envData).map(([k, v]) => ({ key: k, value: v }));
-    onFinish();
-  } catch (error) {
-    console.warn(error);
-    onError();
-  }
-}
 </script>

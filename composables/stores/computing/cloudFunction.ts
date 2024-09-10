@@ -3,12 +3,16 @@ import { defineStore } from 'pinia';
 export const useCloudFunctionStore = defineStore('cloudFunction', {
   state: () => ({
     active: {} as CloudFunctionInterface,
-    bucketUuid: '',
     items: [] as CloudFunctionInterface[],
     loading: false,
+    loadingVariables: false,
     search: '',
+    searchJobs: '',
+    searchVariables: '',
     total: 0,
+    usage: [] as CloudFunctionUsageInterface[],
     variables: [] as EnvVariable[],
+    variablesNew: [] as EnvVariable[],
     pagination: {
       page: 1,
       pageSize: PAGINATION_LIMIT,
@@ -28,8 +32,20 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     hasJobs(state): boolean {
       return Array.isArray(state.active.jobs) && state.active.jobs.length > 0;
     },
+    hasUsage(state): boolean {
+      return Array.isArray(state.usage) && state.usage.length > 0;
+    },
     hasVariables(state): boolean {
+      return (
+        (Array.isArray(state.variables) && state.variables.length > 0) ||
+        (Array.isArray(state.variablesNew) && state.variablesNew.length > 0)
+      );
+    },
+    hasVariablesExisting(state): boolean {
       return Array.isArray(state.variables) && state.variables.length > 0;
+    },
+    hasVariablesNew(state): boolean {
+      return Array.isArray(state.variablesNew) && state.variablesNew.length > 0;
     },
   },
   actions: {
@@ -77,6 +93,28 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
         return this.active;
       }
       return await this.fetchCloudFunction(functionUuid);
+    },
+
+    async getUsage(functionUuid: string): Promise<EnvVariable[]> {
+      if (
+        !this.hasVariables ||
+        this.active?.function_uuid !== functionUuid ||
+        isCacheExpired(LsCacheKeys.CLOUD_FUNCTION_USAGE)
+      ) {
+        await this.fetchUsage(functionUuid);
+      }
+      return this.variables;
+    },
+
+    async getVariables(functionUuid: string): Promise<EnvVariable[]> {
+      if (
+        !this.hasVariables ||
+        this.active?.function_uuid !== functionUuid ||
+        isCacheExpired(LsCacheKeys.CLOUD_FUNCTION_VARIABLES)
+      ) {
+        await this.fetchVariables(functionUuid);
+      }
+      return this.variables;
     },
 
     /**
@@ -131,22 +169,50 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
         return res.data;
       } catch (error: any) {
         this.active = {} as CloudFunctionInterface;
+
+        /** Show error message  */
+        window.$message.error(userFriendlyMsg(error));
       }
       return {} as CloudFunctionInterface;
     },
 
-    async fetchUsage(uuid: string): Promise<CloudFunctionInterface> {
+    async fetchUsage(uuid: string): Promise<CloudFunctionUsageInterface[]> {
       try {
-        const res = await $api.get<CloudFunctionResponse>(endpoints.cloudFunctionUsage(uuid));
+        const res = await $api.get<CloudFunctionUsageResponse>(endpoints.cloudFunctionUsage(uuid));
+        this.usage = res.data;
 
-        /** Save timestamp to SS
-        sessionStorage.setItem(LsCacheKeys.CLOUD_FUNCTION, Date.now().toString()); */
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.CLOUD_FUNCTION_USAGE, Date.now().toString());
 
         return res.data;
       } catch (error: any) {
-        // this.active = {} as CloudFunctionInterface;
+        this.usage = [];
+
+        /** Show error message  */
+        window.$message.error(userFriendlyMsg(error));
       }
-      return {} as CloudFunctionInterface;
+      return [];
+    },
+
+    async fetchVariables(uuid: string): Promise<EnvVariable[]> {
+      this.loadingVariables = true;
+      try {
+        const res = await $api.get<EnvironmentResponse>(endpoints.cloudFunctionEnvironment(uuid));
+        this.variables = res.data;
+        this.loadingVariables = false;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.CLOUD_FUNCTION_VARIABLES, Date.now().toString());
+
+        return res.data;
+      } catch (error: any) {
+        this.variables = [];
+        this.loadingVariables = false;
+
+        /** Show error message  */
+        window.$message.error(userFriendlyMsg(error));
+      }
+      return [];
     },
   },
 });

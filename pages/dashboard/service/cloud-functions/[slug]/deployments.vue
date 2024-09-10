@@ -6,7 +6,7 @@
 
     <slot>
       <n-space v-if="cloudFunctionStore.hasJobs" class="pb-8" :size="32" vertical>
-        <ActionsComputingCloudFunctionJobs />
+        <ActionsComputingCloudFunctionsJobs />
         <TableComputingCloudFunctionJobs />
       </n-space>
       <div v-else class="flex justify-center items-center h-full">
@@ -35,8 +35,8 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const cloudFunctionStore = useCloudFunctionStore();
 const { pageLoading, init } = useCloudFunctions();
+const cloudFunctionStore = useCloudFunctionStore();
 
 const modalCreateJobVisible = ref<boolean>(false);
 

@@ -1,4 +1,7 @@
-import type { UploadFileInfo } from 'naive-ui';
+import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui';
+
+let functionInterval: any = null as any;
+let jobInterval: any = null as any;
 
 export default function useCloudFunctions() {
   const { t } = useI18n();
@@ -11,6 +14,10 @@ export default function useCloudFunctions() {
   const pageLoading = ref<boolean>(true);
   const envLoading = ref<boolean>(false);
 
+  onUnmounted(() => {
+    clearInterval(jobInterval);
+  });
+
   async function init() {
     /** CloudFunction UUID from route */
     const functionUuid = params?.id ? `${params?.id}` : params?.slug ? `${params?.slug}` : '';
@@ -22,10 +29,36 @@ export default function useCloudFunctions() {
         router.push({ name: 'dashboard-service-cloud-functions' });
       } else {
         cloudFunctionStore.active = currentCloudFunction;
+
+        checkUnfinishedJobs();
       }
 
       pageLoading.value = false;
     });
+  }
+
+  /** Cloud function polling */
+  function checkUnfinishedJobs() {
+    clearInterval(jobInterval);
+
+    const unfinishedJob = cloudFunctionStore.jobs.find(
+      job => job.jobStatus === AcurastJobStatus.DEPLOYING
+    );
+    if (unfinishedJob === undefined) {
+      return;
+    }
+
+    jobInterval = setInterval(async () => {
+      const cloudFunction = await cloudFunctionStore.fetchCloudFunction(
+        cloudFunctionStore.functionUuid
+      );
+      const job = cloudFunction.jobs.find(job => job.job_uuid === unfinishedJob.job_uuid);
+
+      if (!job || job.jobStatus >= AcurastJobStatus.DEPLOYED) {
+        clearInterval(jobInterval);
+        cloudFunctionStore.active = cloudFunction;
+      }
+    }, 10000);
   }
 
   async function parseEnvFile(file: UploadFileInfo): Promise<Record<string, string>> {
@@ -70,7 +103,11 @@ export default function useCloudFunctions() {
         endpoints.cloudFunctionEnvironment(functionUuid),
         { variables: data }
       );
-      message.success(t('form.success.created.cloudFunctionVariable'));
+      if (cloudFunctionStore.hasVariablesExisting) {
+        message.success(t('form.success.updated.cloudFunctionVariable'));
+      } else {
+        message.success(t('form.success.created.cloudFunctionVariable'));
+      }
       envLoading.value = false;
 
       return res.data;
@@ -82,11 +119,30 @@ export default function useCloudFunctions() {
     }
   }
 
+  async function uploadFile({ file, onError, onFinish }: UploadCustomRequestOptions) {
+    try {
+      const envData = await parseEnvFile(file);
+      cloudFunctionStore.variablesNew = Object.entries(envData).map(([k, v]) => ({
+        key: k,
+        value: v,
+      }));
+      cloudFunctionStore.variables = cloudFunctionStore.variables.filter(
+        i => !cloudFunctionStore.variablesNew.some(j => j.key === i.key)
+      );
+      onFinish();
+    } catch (error) {
+      console.warn(error);
+      onError();
+    }
+  }
+
   return {
     envLoading,
     pageLoading,
+    checkUnfinishedJobs,
+    createEnvVariables,
     init,
     parseEnvFile,
-    createEnvVariables,
+    uploadFile,
   };
 }

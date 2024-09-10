@@ -52,6 +52,7 @@ export enum AcurastJobStatus {
   DEPLOYING = 1,
   DEPLOYED = 2,
   MATCHED = 3,
+  INACTIVE = 4,
   DELETED = 9,
 }
 
@@ -113,14 +114,14 @@ declare global {
   interface CloudFunctionsResponse extends GeneralItemsResponse<CloudFunctionInterface> {}
 
   interface JobInterface extends BaseObjectInterface {
-    endTime: string;
+    endTime?: string;
     function_uuid: string;
     jobStatus: number;
     job_uuid: string;
     project_uuid: string;
     scriptCid: string;
     slots: number;
-    startTime: string;
+    startTime?: string;
   }
 
   interface JobResponse extends GeneralResponse<JobInterface> {}
@@ -130,4 +131,13 @@ declare global {
     key: string;
     value: string;
   };
+  interface EnvironmentResponse extends GeneralResponse<EnvVariable[]> {}
+
+  interface CloudFunctionUsageInterface {
+    error: boolean | null;
+    function_uuid: string;
+    success: boolean | null;
+    timestamp: string;
+  }
+  interface CloudFunctionUsageResponse extends GeneralResponse<CloudFunctionUsageInterface[]> {}
 }
