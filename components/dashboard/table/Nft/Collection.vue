@@ -102,7 +102,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'chain',
       title: t('nft.transaction.chain'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('chain') },
       ],
       minWidth: 120,
@@ -114,7 +114,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'symbol',
       title: t('nft.collection.symbol'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('symbol') },
       ],
       render(row) {
@@ -125,7 +125,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'name',
       title: t('nft.collection.name'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('name') },
       ],
       render(row) {
@@ -137,7 +137,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('general.type'),
       minWidth: 100,
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('type') },
       ],
       render(row) {
@@ -182,7 +182,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'dropPrice',
       title: t('nft.collection.dropPrice'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('dropPrice') },
       ],
     },
@@ -190,7 +190,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'dropReserve',
       title: t('nft.collection.dropReserve'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('dropReserve') },
       ],
     },
@@ -198,7 +198,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'maxSupply',
       title: t('nft.collection.maxSupply'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('maxSupply') },
       ],
       render(row: CollectionInterface) {
@@ -268,6 +268,16 @@ const rowKey = (row: CollectionInterface) => row.collection_uuid;
 const currentRow = ref<CollectionInterface>(props.collections[0]);
 
 const dropdownOptions = [
+  {
+    key: 'collectionView',
+    label: t('general.view'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        router.push(`/dashboard/service/nft/${currentRow.value.collection_uuid}`);
+      },
+    },
+  },
   {
     key: 'collectionDelete',
     label: t('general.delete'),
