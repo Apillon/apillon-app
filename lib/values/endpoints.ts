@@ -265,9 +265,7 @@ const Endpoints = {
   apiKeyServiceRoles: (key: number) => {
     return `/api-keys/${key}/service-roles`;
   },
-  embeddedWalletKeys: (projectUuid: string) => {
-    return `/wallet/oasis-signatures-count-by-api-key?project_uuid=${projectUuid}`;
-  },
+  embeddedWallet: '/wallet/oasis-signatures-count-by-api-key',
 
   /**
    * Social

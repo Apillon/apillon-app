@@ -80,6 +80,7 @@ export const LsCacheKeys = {
   DEPLOYMENTS_PRODUCTION: 'al_cache_deployments_production',
   DEPLOYMENTS_STAGING: 'al_cache_deployments_staging',
   DISCORD_LINK: 'al_cache_discord_link',
+  EMBEDDED_WALLET: 'al_cache_embedded_wallet',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
   INVOICES: 'al_cache_invoices',
@@ -104,7 +105,6 @@ export const LsCacheKeys = {
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
   WEBSITE_ARCHIVE: 'al_cache_website_archive',
-  EW_API_KEYS: 'al_ew_cache_api_keys',
 };
 
 /** User roles */

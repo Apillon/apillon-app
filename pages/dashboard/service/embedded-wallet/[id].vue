@@ -6,26 +6,27 @@
 
     <slot>
       <div class="pb-8">
-        <n-collapse
-          v-if="settingsStore.hasEmbeddedWallets"
-          class="border-b-1 border-bg-lighter -mt-4 pb-4"
-          accordion
-          @update:expanded-names="onUpdateAccordion"
-        >
-          <n-collapse-item
-            :title="
-              instructionsVisible
-                ? $t('embeddedWallet.showInstructions')
-                : $t('embeddedWallet.hideInstructions')
-            "
-          >
-            <EmbeddedWalletInstructions />
-          </n-collapse-item>
-        </n-collapse>
-        <EmbeddedWalletInstructions v-else />
+        <h2 class="mb-4">Start building</h2>
 
-        <ActionsEmbeddedWallet v-if="settingsStore.hasEmbeddedWallets" class="my-8" />
-        <TableEmbeddedWallet v-if="settingsStore.hasEmbeddedWallets" />
+        <div class="absolute right-4 flex gap-4 mb-4">
+          <!-- View documentation -->
+          <n-button
+            size="small"
+            href="https://wiki.apillon.io/web3-services/8-embedded-wallets.html"
+          >
+            <span class="icon-file text-xl mr-2"></span>
+            {{ $t('embeddedWallet.viewDocumentation') }}
+          </n-button>
+
+          <NuxtLink :to="{ name: 'dashboard-api-keys' }">
+            <n-button size="small">
+              <span class="icon-magic-link text-xl text-primary mr-2"></span>
+              <span class="text-primary">{{ $t('dashboard.pageMenu.apiKeys') }}</span>
+            </n-button>
+          </NuxtLink>
+        </div>
+
+        <CodeSnippet />
       </div>
     </slot>
   </Dashboard>
@@ -57,6 +58,7 @@ onMounted(async () => {
 });
 
 function onUpdateAccordion(expandedNames: Array<string | number>) {
+  console.log(expandedNames);
   instructionsVisible.value = expandedNames.length > 0;
 }
 </script>

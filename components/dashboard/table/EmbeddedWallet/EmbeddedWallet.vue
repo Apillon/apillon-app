@@ -3,30 +3,16 @@
     remote
     :bordered="false"
     :columns="columns"
-    :data="settingsStore.ewApiKeys"
+    :data="settingsStore.embeddedWallets"
     :row-props="rowProps"
   />
-
-  <!-- Drawer - Update API Key -->
-  <n-drawer v-model:show="drawerUpdateApiKeyVisible" :width="495">
-    <n-drawer-content :native-scrollbar="false">
-      <template #header>
-        <h5>{{ $t('dashboard.apiKey.update') }}</h5>
-      </template>
-      <FormApiKey :id="currentRow.id" @submit-success="drawerUpdateApiKeyVisible = false" />
-    </n-drawer-content>
-  </n-drawer>
-
-  <!-- Modal - Delete API key -->
-  <ModalDelete v-model:show="showModalDeleteApiKey" :title="$t('dashboard.apiKey.delete')">
-    <FormDelete :id="currentRow?.id" type="apiKey" @submit-success="onApiKeyDeleted" />
-  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
 const showModalDeleteApiKey = ref<boolean>(false);
@@ -106,21 +92,12 @@ function rowProps(row: ApiKeyInterface) {
  */
 const dropdownOptions = [
   {
-    label: t('dashboard.clipboard.copyApiKey'),
-    key: 'copy',
-    props: {
-      onClick: () => {
-        copyToClipboard(currentRow.value.apiKey, t);
-      },
-    },
-  },
-  {
     label: t('general.edit'),
     key: 'edit',
     disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
-        drawerUpdateApiKeyVisible.value = true;
+        router.push(`/dashboard/service/embedded-wallet/${currentRow.value.apiKey}`);
       },
     },
   },
@@ -136,9 +113,4 @@ const dropdownOptions = [
     },
   },
 ];
-
-function onApiKeyDeleted() {
-  showModalDeleteApiKey.value = false;
-  settingsStore.fetchEmbeddedWalletKeys();
-}
 </script>

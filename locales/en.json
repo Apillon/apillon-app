@@ -552,12 +552,12 @@
           },
           {
             "title": "Benefits:",
-            "content": [
+            "benefits": [
               "Email onboard: Simplifies the onboarding process.",
               "A seamless and secure UX: EVM wallets are auto-created and encrypted.",
               "Autonomy and security over funds: No third-party services to store user’s private keys.",
               "Authentication: User can add different methods of verification.",
-              "Gassles wallet creation: charged in Apillon credits per each onboarded user.",
+              "Gasless wallet creation: charged in Apillon credits per each onboarded user.",
               "Fully trustless. Powered by Oasis."
             ]
           }
@@ -1171,6 +1171,10 @@
           "restrictToOwner": "Only owner will be able to encrypt/decrypt files.",
           "useApillonCollection": "You can use an NFT collection you created on Apillon or any NFT collection you built on other chains."
         }
+      },
+      "embeddedWallet": {
+        "name": "Embedded wallet’s title",
+        "description": "Embedded wallet’s description"
       }
     },
     "networkTypes": {
@@ -1234,6 +1238,10 @@
         "nftContractAddress": "Select or type NFT collection address",
         "nftChainRpcUrl": "Chain RPC URL",
         "accountAddress": "Account Address"
+      },
+      "embeddedWallet": {
+        "name": "Enter the title for your personal reference",
+        "description": "Enter the description for your personal reference"
       }
     },
     "success": {
@@ -1930,11 +1938,15 @@
   "embeddedWallet": {
     "title": "Embedded Wallet",
     "checkPrice": "Check price",
+    "codeSnippets": "Code snippets:",
+    "createNew": "New Embedded wallet integration",
     "generateApiKey": "Generate API key",
     "generateNewApiKey": "Generate new key",
-    "viewDocumentation": "View Documentation",
+    "hideInstructions": "Hide instructions",
+    "howItWorks": "See how it works",
     "readBlog": "Read our blog post",
-    "codeSnippets": "Code snippets:",
+    "showInstructions": "Show instructions",
+    "viewDocumentation": "View Documentation",
     "generate": {
       "title": "Generate API key and start using Embedded Wallet service",
       "generate": "Generate new key"

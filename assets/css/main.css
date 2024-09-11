@@ -37,3 +37,21 @@ select:autofill:focus {
   -webkit-text-fill-color: theme('colors.white');
   -webkit-box-shadow: 0 0 0px 1000px #1e212b inset;
 }
+
+.swiper {
+  .swiper-button-prev,
+  .swiper-button-next {
+    @apply bg-no-repeat bg-center bg-contain;
+
+    &:after {
+      @apply hidden;
+    }
+  }
+  .swiper-button-prev {
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='25' viewBox='0 0 24 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 11.0001V13.0001H8.00003L13.5 18.5001L12.08 19.9201L4.16003 12.0001L12.08 4.08008L13.5 5.50008L8.00003 11.0001H20Z' fill='%23F0F2DA'/%3E%3C/svg%3E%0A");
+  }
+
+  .swiper-button-next {
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='25' viewBox='0 0 24 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 10.92V12.92H16L10.5 18.42L11.92 19.84L19.84 11.92L11.92 4L10.5 5.42L16 10.92H4Z' fill='%23F0F2DA'/%3E%3C/svg%3E%0A");
+  }
+}
