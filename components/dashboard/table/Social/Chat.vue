@@ -20,19 +20,6 @@
   <modal v-model:show="modalInfoVisible" :title="$t('social.chat.settings')">
     <GrillChatSettings :space-id="`${currentRow?.spaceId}`" />
   </modal>
-
-  <!-- Modal - Archive chat -->
-  <ModalDelete v-model:show="showModalArchiveChat" :title="$t('social.chat.delete')">
-    <template #content>
-      <p>
-        {{ $t('social.chat.deleteConfirm') }}
-      </p>
-    </template>
-
-    <slot>
-      <FormDeleteItems v-if="currentRow" :items="[currentRow]" @submit-success="onChatDeleted()" />
-    </slot>
-  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -48,11 +35,8 @@ const message = useMessage();
 const authStore = useAuthStore();
 const chatStore = useChatStore();
 const postStore = usePostStore();
-
-const TableEllipsis = resolveComponent('TableEllipsis');
-const GrillChatStatus = resolveComponent('GrillChatStatus');
+const { deleteItem } = useDelete();
 const modalInfoVisible = ref<boolean>(false);
-const showModalArchiveChat = ref<boolean | null>(false);
 
 const createColumns = (): NDataTableColumns<ChatInterface> => {
   return [
@@ -97,7 +81,7 @@ const createColumns = (): NDataTableColumns<ChatInterface> => {
       key: 'contract_uuid',
       title: t('social.chat.uuid'),
       render(row: ChatInterface) {
-        return h(TableEllipsis, { text: row.space_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.space_uuid }, '');
       },
     },
     {
@@ -111,7 +95,7 @@ const createColumns = (): NDataTableColumns<ChatInterface> => {
       key: 'status',
       title: t('general.status'),
       render(row) {
-        return h(GrillChatStatus, { status: row.status }, '');
+        return h(resolveComponent('GrillChatStatus'), { status: row.status }, '');
       },
     },
     {
@@ -177,12 +161,11 @@ const dropdownOptions = [
   },
   {
     key: 'socialDelete',
-    label: t('general.delete'),
+    label: t('general.archive'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
-        showModalArchiveChat.value = true;
+        deleteChat();
       },
     },
   },
@@ -194,7 +177,6 @@ const dropdownOptionsArchive = [
     label: t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restoreChat();
       },
@@ -251,19 +233,15 @@ async function selectChat() {
   }
 }
 
-/**
- * On chat deleted
- * Hide modal and refresh chat list
- * */
-function onChatDeleted() {
-  showModalArchiveChat.value = false;
+async function deleteChat() {
+  if (currentRow.value && (await deleteItem(ItemDeleteKey.SPACE, currentRow.value.space_uuid))) {
+    chatStore.items = chatStore.items.filter(
+      item => item.space_uuid !== currentRow.value?.space_uuid
+    );
 
-  chatStore.items = chatStore.items.filter(
-    item => item.space_uuid !== currentRow.value?.space_uuid
-  );
-
-  sessionStorage.removeItem(LsCacheKeys.CHATS);
-  sessionStorage.removeItem(LsCacheKeys.CHAT_ARCHIVE);
+    sessionStorage.removeItem(LsCacheKeys.CHATS);
+    sessionStorage.removeItem(LsCacheKeys.CHAT_ARCHIVE);
+  }
 }
 
 /**

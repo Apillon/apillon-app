@@ -172,6 +172,9 @@ const Endpoints = {
   websiteDeploy: (uuid?: string) => {
     return `/storage/hosting/websites/${uuid}/deploy`;
   },
+  websiteActivate: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/activate`;
+  },
   websiteDomainStatus: (uuid?: string) => {
     return `/storage/hosting/websites/${uuid}/check-domain`;
   },

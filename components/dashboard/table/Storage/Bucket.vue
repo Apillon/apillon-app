@@ -199,7 +199,6 @@ const dropdownOptions = [
     label: $i18n.t('general.delete'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         deleteBucket(true);
       },
@@ -213,7 +212,6 @@ const dropdownDeletedOptions = [
     label: $i18n.t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restoreBucket();
       },
