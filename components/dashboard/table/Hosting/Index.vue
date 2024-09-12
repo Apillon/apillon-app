@@ -25,24 +25,6 @@
       @submit-success="showModalEditWebsite = false"
     />
   </modal>
-
-  <!-- Modal - Archive website -->
-  <ModalDelete v-model:show="showModalArchiveWebsite" :title="$t('hosting.website.delete')">
-    <template #content>
-      <p>
-        {{ $t('hosting.website.deleteConfirm') }}
-      </p>
-    </template>
-
-    <slot>
-      <FormDeleteItems :items="[currentRow]" @submit-success="onWebsiteDeleted()" />
-    </slot>
-  </ModalDelete>
-
-  <!-- W3Warn: delete website -->
-  <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
-    {{ $t('w3Warn.hosting.delete') }}
-  </W3Warn>
 </template>
 
 <script lang="ts" setup>
@@ -59,11 +41,8 @@ const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
-const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.HOSTING_DELETE);
-
+const { deleteItem } = useDelete();
 const showModalEditWebsite = ref<boolean>(false);
-const showModalArchiveWebsite = ref<boolean | null>(false);
-const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered websites */
 const data = computed<Array<WebsiteBaseInterface>>(() => {
@@ -88,7 +67,7 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
       key: 'website_uuid',
       title: t('hosting.website.uuid'),
       render(row: WebsiteBaseInterface) {
-        return h(TableEllipsis, { text: row.website_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.website_uuid }, '');
       },
     },
     {
@@ -162,7 +141,6 @@ const dropdownOptions = [
     label: t('general.archive'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         deleteWebsite();
       },
@@ -176,7 +154,6 @@ const dropdownOptionsArchive = [
     label: t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restoreWebsite();
       },
@@ -186,37 +163,19 @@ const dropdownOptionsArchive = [
 
 /**
  * On deleteWebsite click
- * If W3Warn has already been shown, show modal delete website, otherwise show warn first
  * */
-function deleteWebsite() {
-  if (localStorage.getItem(LsW3WarnKeys.HOSTING_DELETE) || !te('w3Warn.hosting.delete')) {
-    showModalArchiveWebsite.value = true;
-  } else {
-    modalW3WarnVisible.value = true;
-    showModalArchiveWebsite.value = null;
+async function deleteWebsite() {
+  if (
+    currentRow.value &&
+    (await deleteItem(ItemDeleteKey.WEBSITE, currentRow.value.website_uuid))
+  ) {
+    websiteStore.items = websiteStore.items.filter(
+      item => item.website_uuid !== currentRow.value.website_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.WEBSITE);
+    sessionStorage.removeItem(LsCacheKeys.WEBSITE_ARCHIVE);
   }
-}
-
-/** When user close W3Warn, allow him to create new website */
-function onModalW3WarnHide() {
-  if (showModalArchiveWebsite.value !== false) {
-    showModalArchiveWebsite.value = true;
-  }
-}
-
-/**
- * On website deleted
- * Hide modal and refresh website list
- * */
-function onWebsiteDeleted() {
-  showModalArchiveWebsite.value = false;
-
-  websiteStore.items = websiteStore.items.filter(
-    item => item.website_uuid !== currentRow.value.website_uuid
-  );
-
-  sessionStorage.removeItem(LsCacheKeys.WEBSITE);
-  sessionStorage.removeItem(LsCacheKeys.WEBSITE_ARCHIVE);
 }
 
 /**
