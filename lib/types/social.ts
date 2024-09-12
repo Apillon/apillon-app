@@ -24,7 +24,7 @@ export enum SocialStatus {
   INACTIVE = 3,
   ACTIVE = 5,
   BLOCKED = 7,
-  MARKED_FOR_DELETION = 8,
+  ARCHIVE = 8,
   DELETED = 9,
   FAILED = 100,
 }

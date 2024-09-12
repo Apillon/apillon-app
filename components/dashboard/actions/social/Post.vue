@@ -20,7 +20,11 @@
       <ModalCreditCosts :service="ServiceTypeName.SOCIAL" />
 
       <!-- Refresh posts -->
-      <n-button size="small" :loading="postStore.loading" @click="postStore.fetchPosts()">
+      <n-button
+        size="small"
+        :loading="postStore.loading"
+        @click="archive ? postStore.fetchPostsArchive() : postStore.fetchPosts()"
+      >
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
@@ -44,6 +48,9 @@
 
 <script lang="ts" setup>
 defineEmits(['createSuccess']);
+defineProps({
+  archive: { type: Boolean, default: false },
+});
 
 const authStore = useAuthStore();
 const postStore = usePostStore();
