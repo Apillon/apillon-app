@@ -84,7 +84,7 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
       key: 'postId',
       title: t('social.post.postId'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('postId') },
       ],
     },
@@ -92,7 +92,7 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
       key: 'title',
       title: t('social.post.title'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('title') },
       ],
     },
@@ -100,7 +100,7 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
       key: 'body',
       title: t('social.post.body'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('body') },
       ],
     },
@@ -108,7 +108,7 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
       key: 'hubName',
       title: t('social.chat.name'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('hubName') },
       ],
     },
@@ -116,7 +116,7 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
       key: 'tags',
       title: t('social.post.tags'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('tags') },
       ],
     },
@@ -132,7 +132,7 @@ const columns = computed<NDataTableColumns<PostInterface>>(() => {
       key: 'createTime',
       title: t('social.post.date'),
       className: [
-        { ON_COLUMN_CLICK_OPEN_CLASS: !props.archive },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('createTime') },
       ],
       render(row) {
