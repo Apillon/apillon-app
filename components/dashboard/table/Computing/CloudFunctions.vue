@@ -13,6 +13,18 @@
     :row-key="rowKey"
     :row-props="rowProps"
   />
+
+  <!-- Modal - Edit CloudFunction -->
+  <modal
+    v-if="currentRow?.function_uuid"
+    v-model:show="modalEditCloudFunctionVisible"
+    :title="$t('computing.cloudFunctions.new')"
+  >
+    <FormComputingCloudFunctions
+      :function-uuid="currentRow?.function_uuid"
+      @submit-success="modalEditCloudFunctionVisible = false"
+    />
+  </modal>
 </template>
 
 <script lang="ts" setup>
@@ -21,6 +33,8 @@ import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 const { t } = useI18n();
 const router = useRouter();
 const cloudFunctionStore = useCloudFunctionStore();
+
+const modalEditCloudFunctionVisible = ref<boolean>(false);
 
 const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
   return [
@@ -57,7 +71,14 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
     },
     {
       key: 'activeJob_id',
-      title: t('computing.cloudFunctions.activeJob'),
+      title: t('general.status'),
+      render(row) {
+        return h(
+          resolveComponent('Pill'),
+          { type: !!row.activeJob_id ? 'success' : 'warning', class: 'min-w-16 justify-center' },
+          { default: () => (!!row.activeJob_id ? t('general.active') : t('general.inactive')) }
+        );
+      },
     },
     {
       title: '',
@@ -91,14 +112,25 @@ const currentRow = ref<CloudFunctionInterface>();
 const dropdownOptions = computed(() => {
   return [
     {
-      label: t('general.view'),
       key: 'view',
+      label: t('general.view'),
       props: {
         onClick: () => {
           if (currentRow.value) {
             router.push({
               path: `/dashboard/service/cloud-functions/${currentRow.value.function_uuid}`,
             });
+          }
+        },
+      },
+    },
+    {
+      key: 'edit',
+      label: t('general.edit'),
+      props: {
+        onClick: () => {
+          if (currentRow.value) {
+            modalEditCloudFunctionVisible.value = true;
           }
         },
       },
@@ -117,16 +149,5 @@ const rowProps = (row: CloudFunctionInterface) => {
       }
     },
   };
-};
-
-const jobStatusType = (status: number) => {
-  switch (status) {
-    case AcurastJobStatus.DELETED:
-      return 'error';
-    case AcurastJobStatus.DEPLOYING:
-      return 'info';
-    default:
-      return 'success';
-  }
 };
 </script>

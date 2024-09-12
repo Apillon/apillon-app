@@ -10,13 +10,13 @@
     </slot>
 
     <template #info>
-      <div class="flex items-center gap-4">
+      <div v-if="cloudFunctionStore.active.activeJob_id" class="flex items-center gap-4">
         <h4>{{ $t('computing.cloudFunctions.endpoint') }}</h4>
 
-        <TableLink
+        <TableEllipsis
           class="bg-white px-4 py-[10px] rounded-lg !text-black max-w-sm lg:max-w-md xl:max-w-lg xxl:max-w-none"
           color="text-black"
-          :link="`https://${cloudFunctionStore.functionUuid}.${subdomain}.web3approved.com`"
+          :text="`https://${cloudFunctionStore.functionUuid}.${subdomain}.web3approved.com`"
         />
       </div>
     </template>

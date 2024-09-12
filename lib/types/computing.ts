@@ -104,6 +104,7 @@ declare global {
    */
   interface CloudFunctionInterface extends BaseObjectInterface {
     activeJob_id: string;
+    bucket_uuid: string;
     encrypted_variables: string;
     function_uuid: string;
     jobs: JobInterface[];

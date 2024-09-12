@@ -122,10 +122,16 @@ export default function useCloudFunctions() {
   async function uploadFile({ file, onError, onFinish }: UploadCustomRequestOptions) {
     try {
       const envData = await parseEnvFile(file);
-      cloudFunctionStore.variablesNew = Object.entries(envData).map(([k, v]) => ({
+      const newVars = Object.entries(envData).map(([k, v]) => ({
         key: k,
         value: v,
       }));
+
+      cloudFunctionStore.variablesNew = cloudFunctionStore.variablesNew.filter(
+        i => !newVars.some(j => j.key === i.key)
+      );
+      cloudFunctionStore.variablesNew = [...cloudFunctionStore.variablesNew, ...newVars];
+
       cloudFunctionStore.variables = cloudFunctionStore.variables.filter(
         i => !cloudFunctionStore.variablesNew.some(j => j.key === i.key)
       );

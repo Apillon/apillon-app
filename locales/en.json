@@ -29,6 +29,7 @@
     "error": "Error",
     "explore": "Explore",
     "goHome": "Go home",
+    "inactive": "inactive",
     "install": "Install",
     "images": "images",
     "learn": "Learn",
@@ -190,7 +191,6 @@
   },
   "computing": {
     "cloudFunctions": {
-      "activeJob": "Active Job ID",
       "addNew": "Add new Cloud function",
       "checkVideo": "Check out the video",
       "deployments": "Deployments",
@@ -1242,11 +1242,14 @@
         "description": "Description",
         "name": "Title",
         "jobName": "Job name",
-        "slots": "Slots",
+        "slots": "Number of processors",
         "startTime": "Start time",
         "endTime": "End time",
         "varKey": "Key",
-        "varValue": "Value"
+        "varValue": "Value",
+        "labelInfo": {
+          "slots": "Multi-processor jobs will be supported soon"
+        }
       }
     },
     "networkTypes": {

@@ -78,7 +78,8 @@ const rules = computed<NFormRules>(() =>
 function validateVariableKey(rule: FormItemRule, value): boolean {
   return (
     formData.value.filter(item => isLowercaseEqual(item.key, value)).length === 1 &&
-    !cloudFunctionStore.variables.some(item => isLowercaseEqual(item.key, value))
+    !cloudFunctionStore.variables.some(item => isLowercaseEqual(item.key, value)) &&
+    !cloudFunctionStore.variablesNew.some(item => isLowercaseEqual(item.key, value))
   );
 }
 
@@ -92,7 +93,7 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      cloudFunctionStore.variablesNew = formData.value;
+      cloudFunctionStore.variablesNew = [...cloudFunctionStore.variablesNew, ...formData.value];
       emit('submitSuccess');
     }
   });

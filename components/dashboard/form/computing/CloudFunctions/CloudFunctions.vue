@@ -5,10 +5,10 @@
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="$i18n.te('computing.cloudFunctions.infoNew')" class="text-body mb-8">
+      <p v-if="$te('computing.cloudFunctions.infoNew')" class="text-body mb-8">
         {{ $t('computing.cloudFunctions.infoNew') }}
       </p>
-      <p v-else-if="$i18n.te('computing.cloudFunctions.infoEdit')" class="text-body mb-8">
+      <p v-else-if="$te('computing.cloudFunctions.infoEdit')" class="text-body mb-8">
         {{ $t('computing.cloudFunctions.infoEdit') }}
       </p>
     </template>
@@ -72,15 +72,18 @@ type FormCloudFunctions = {
   name: string | null;
   description?: string | null;
 };
-const emit = defineEmits(['submitSuccess', 'createSuccess']);
+const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
+const props = defineProps({
+  functionUuid: { type: String, default: null },
+});
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
-const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
 
-const loading = ref<boolean>(false);
+const loading = ref<boolean>(true);
+const cloudFunction = ref<CloudFunctionInterface | undefined>();
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormCloudFunctions>({
   name: null,
@@ -88,12 +91,24 @@ const formData = ref<FormCloudFunctions>({
 });
 
 const rules: NFormRules = {
-  name: ruleRequired($i18n.t('validation.cloudFunctions.nameRequired')),
-  description: ruleDescription($i18n.t('validation.descriptionTooLong')),
+  name: ruleRequired(t('validation.cloudFunctions.nameRequired')),
+  description: ruleDescription(t('validation.descriptionTooLong')),
 };
 
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
+});
+
+onMounted(async () => {
+  if (props.functionUuid) {
+    cloudFunction.value = await cloudFunctionStore.getCloudFunction(props.functionUuid);
+
+    if (cloudFunction.value) {
+      formData.value.name = cloudFunction.value.name;
+      formData.value.description = cloudFunction.value.description;
+    }
+  }
+  loading.value = false;
 });
 
 // Submit
@@ -104,15 +119,15 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
+    } else if (props.functionUuid) {
+      updateCloudFunction();
     } else {
-      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_CREATE, () =>
-        createCloudFunctions()
-      );
+      createCloudFunction();
     }
   });
 }
 
-async function createCloudFunctions() {
+async function createCloudFunction() {
   loading.value = true;
 
   if (!dataStore.hasProjects) {
@@ -130,11 +145,36 @@ async function createCloudFunctions() {
 
     cloudFunctionStore.items.push(res.data);
 
-    message.success($i18n.t('form.success.created.cloudFunction'));
+    message.success(t('form.success.created.cloudFunction'));
 
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess', res.data);
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  loading.value = false;
+}
+
+async function updateCloudFunction() {
+  loading.value = true;
+
+  try {
+    const res = await $api.patch<JobResponse>(
+      endpoints.cloudFunctions(props.functionUuid),
+      formData.value
+    );
+    cloudFunctionStore.items.forEach(item => {
+      if (item.function_uuid === res.data.function_uuid) {
+        Object.assign(item, res.data);
+      }
+    });
+
+    message.success(t('form.success.updated.cloudFunction'));
+
+    /** Emit events */
+    emit('submitSuccess');
+    emit('updateSuccess', res.data);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

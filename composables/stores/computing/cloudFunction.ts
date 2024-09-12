@@ -13,6 +13,7 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     usage: [] as CloudFunctionUsageInterface[],
     variables: [] as EnvVariable[],
     variablesNew: [] as EnvVariable[],
+    variablesUpdate: false,
     pagination: {
       page: 1,
       pageSize: PAGINATION_LIMIT,
@@ -160,11 +161,13 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     },
 
     async fetchCloudFunction(uuid: string): Promise<CloudFunctionInterface> {
+      this.loading = true;
       try {
         const res = await $api.get<CloudFunctionResponse>(endpoints.cloudFunctions(uuid));
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.CLOUD_FUNCTION, Date.now().toString());
+        this.loading = false;
 
         return res.data;
       } catch (error: any) {
@@ -173,6 +176,7 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
+      this.loading = false;
       return {} as CloudFunctionInterface;
     },
 

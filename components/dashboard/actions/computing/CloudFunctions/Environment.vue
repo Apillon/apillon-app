@@ -19,13 +19,13 @@
       <!-- Refresh variables -->
       <n-button size="small" :loading="cloudFunctionStore.loading" @click="refresh">
         <span class="icon-refresh text-xl mr-2"></span>
-        {{ $t('general.refresh') }}
+        {{ $t('form.reset') }}
       </n-button>
 
       <!-- Add new variables -->
       <n-button
         size="small"
-        :disabled="authStore.isAdmin() || cloudFunctionStore.variablesNew.length"
+        :disabled="authStore.isAdmin()"
         @click="modalCreateVariableVisible = true"
       >
         <span class="icon-create-folder text-xl text-primary mr-2"></span>
@@ -34,11 +34,8 @@
         }}</span>
       </n-button>
 
-      <n-upload :show-file-list="false" accept=".env" :custom-request="e => uploadFile(e)">
-        <n-button
-          size="small"
-          :disabled="authStore.isAdmin() || cloudFunctionStore.variablesNew.length"
-        >
+      <n-upload :show-file-list="false" :custom-request="e => uploadFile(e)">
+        <n-button size="small" :disabled="authStore.isAdmin()">
           <span class="icon-create-folder text-xl text-primary mr-2"></span>
           <span class="text-primary">{{
             $t('computing.cloudFunctions.variable.btnUploadEnv')
@@ -49,14 +46,11 @@
       <n-button
         size="small"
         type="primary"
-        :disabled="authStore.isAdmin() || cloudFunctionStore.variablesNew.length === 0"
+        :disabled="isDisabled"
         :loading="envLoading"
         @click="updateVariables"
       >
-        <span
-          v-if="authStore.isAdmin() || cloudFunctionStore.variablesNew.length === 0"
-          class="text-primary"
-        >
+        <span v-if="isDisabled" class="text-primary">
           {{ textCreateOrUpdate }}
         </span>
         <strong v-else>{{ textCreateOrUpdate }}</strong>
@@ -91,6 +85,12 @@ const textCreateOrUpdate = computed(() =>
     : t('computing.cloudFunctions.variable.btnCreate')
 );
 
+const isDisabled = computed(
+  () =>
+    authStore.isAdmin() ||
+    (cloudFunctionStore.variablesNew.length === 0 && !cloudFunctionStore.variablesUpdate)
+);
+
 function refresh() {
   cloudFunctionStore.variablesNew = [];
   cloudFunctionStore.searchVariables = '';
@@ -109,6 +109,7 @@ async function updateVariables() {
       cloudFunctionStore.variablesNew = [];
       cloudFunctionStore.searchVariables = '';
     }
+    cloudFunctionStore.variablesUpdate = false;
   }
 }
 </script>
