@@ -196,7 +196,6 @@ const dropdownOptions = computed(() => {
       label: t('general.archive'),
       disabled: authStore.isAdmin(),
       props: {
-        class: '!text-pink',
         onClick: () => {
           showModalArchiveContract.value = true;
         },
@@ -210,7 +209,6 @@ const dropdownOptionsArchive = [
     label: t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restoreContract();
       },

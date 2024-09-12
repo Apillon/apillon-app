@@ -16,24 +16,6 @@
       :row-key="rowKey"
       :row-props="rowProps"
     />
-
-    <!-- Modal - Archive website -->
-    <ModalDelete v-model:show="showModalArchiveCollection" :title="$t('nft.collection.delete')">
-      <template #content>
-        <p>
-          {{ $t('nft.collection.deleteConfirm') }}
-        </p>
-      </template>
-
-      <slot>
-        <FormDeleteItems :items="[currentRow]" @submit-success="onCollectionDeleted()" />
-      </slot>
-    </ModalDelete>
-
-    <!-- W3Warn: delete website -->
-    <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
-      {{ $t('w3Warn.nft.delete') }}
-    </W3Warn>
   </n-space>
 </template>
 
@@ -50,12 +32,7 @@ const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
-const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.COLLECTION_DELETE);
-
-const showModalArchiveCollection = ref<boolean | null>(false);
-const NftCollectionStatus = resolveComponent('NftCollectionStatus');
-const TableEllipsis = resolveComponent('TableEllipsis');
-const TableLink = resolveComponent('TableLink');
+const { deleteItem } = useDelete();
 
 /** Available columns - show/hide column */
 const selectedColumns = ref([
@@ -153,7 +130,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('nft.collection.uuid'),
       className: { hidden: !selectedColumns.value.includes('collection_uuid') },
       render(row: CollectionInterface) {
-        return h(TableEllipsis, { text: row.collection_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.collection_uuid }, '');
       },
     },
     {
@@ -164,7 +141,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
         if (!row.contractAddress) return '';
 
         return h(
-          TableLink,
+          resolveComponent('TableLink'),
           { link: contractLink(row.contractAddress, row.chain), text: row.contractAddress },
           ''
         );
@@ -175,7 +152,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('nft.collection.baseUri'),
       className: { hidden: !selectedColumns.value.includes('baseUri') },
       render(row: CollectionInterface) {
-        return h(TableEllipsis, { text: row.baseUri }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.baseUri }, '');
       },
     },
     {
@@ -210,7 +187,11 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('general.status'),
       className: { hidden: !selectedColumns.value.includes('collectionStatus') },
       render(row) {
-        return h(NftCollectionStatus, { collectionStatus: row.collectionStatus }, '');
+        return h(
+          resolveComponent('NftCollectionStatus'),
+          { collectionStatus: row.collectionStatus },
+          ''
+        );
       },
     },
     {
@@ -283,7 +264,6 @@ const dropdownOptions = [
     label: t('general.archive'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         deleteCollection();
       },
@@ -297,7 +277,6 @@ const dropdownOptionsArchive = [
     label: t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restoreCollection();
       },
@@ -327,39 +306,15 @@ function maxSupply(maxSupply: number) {
   return maxSupply > 0 ? maxSupply : t('form.supplyTypes.unlimited');
 }
 
-/**
- * On deleteCollection click
- * If W3Warn has already been shown, show modal delete collection, otherwise show warn first
- * */
-function deleteCollection() {
-  if (localStorage.getItem(LsW3WarnKeys.COLLECTION_DELETE) || !te('w3Warn.nft.delete')) {
-    showModalArchiveCollection.value = true;
-  } else {
-    modalW3WarnVisible.value = true;
-    showModalArchiveCollection.value = null;
+async function deleteCollection() {
+  if (await deleteItem(ItemDeleteKey.COLLECTION, currentRow.value.collection_uuid)) {
+    collectionStore.items = collectionStore.items.filter(
+      item => item.collection_uuid !== currentRow.value.collection_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.COLLECTION);
+    sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
   }
-}
-
-/** When user close W3Warn, allow him to create new collection */
-function onModalW3WarnHide() {
-  if (showModalArchiveCollection.value !== false) {
-    showModalArchiveCollection.value = true;
-  }
-}
-
-/**
- * On collection deleted
- * Hide modal and refresh collection list
- * */
-function onCollectionDeleted() {
-  showModalArchiveCollection.value = false;
-
-  collectionStore.items = collectionStore.items.filter(
-    item => item.collection_uuid !== currentRow.value.collection_uuid
-  );
-
-  sessionStorage.removeItem(LsCacheKeys.COLLECTION);
-  sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
 }
 
 /**

@@ -17,25 +17,11 @@
     :row-class-name="rowClassName"
     @update:page="handlePageChange"
   />
-
-  <!-- Modal - Archive post -->
-  <ModalDelete v-model:show="showModalArchivePost" :title="$t('social.post.delete')">
-    <template #content>
-      <p>
-        {{ $t('social.post.deleteConfirm') }}
-      </p>
-    </template>
-
-    <slot>
-      <FormDeleteItems v-if="currentRow" :items="[currentRow]" @submit-success="onPostDeleted()" />
-    </slot>
-  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
 import { NButton, NDropdown } from 'naive-ui';
-import { SqlModelStatus } from '~/lib/types';
 
 const props = defineProps({
   archive: { type: Boolean, default: false },
@@ -45,8 +31,7 @@ const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const postStore = usePostStore();
-
-const showModalArchivePost = ref<boolean | null>(false);
+const { deleteItem } = useDelete();
 
 /** Available columns - show/hide column */
 const selectedColumns = ref(['postId', 'title', 'body', 'hubName', 'tags', 'post_uuid', 'status']);
@@ -228,9 +213,8 @@ const dropdownOptions = [
     label: t('general.archive'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
-        showModalArchivePost.value = true;
+        deletePost();
       },
     },
   },
@@ -242,7 +226,6 @@ const dropdownOptionsArchive = [
     label: t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restorePost();
       },
@@ -308,17 +291,15 @@ function handleColumnChange(selectedValues: Array<string>) {
   localStorage.setItem(LsTableColumnsKeys.SOCIAL_POST, JSON.stringify(selectedColumns.value));
 }
 
-/**
- * On post deleted
- * Hide modal and refresh post list
- * */
-function onPostDeleted() {
-  showModalArchivePost.value = false;
+async function deletePost() {
+  if (currentRow.value && (await deleteItem(ItemDeleteKey.POST, currentRow.value.post_uuid))) {
+    postStore.items = postStore.items.filter(
+      item => item.post_uuid !== currentRow.value?.post_uuid
+    );
 
-  postStore.items = postStore.items.filter(item => item.post_uuid !== currentRow.value?.post_uuid);
-
-  sessionStorage.removeItem(LsCacheKeys.POSTS);
-  sessionStorage.removeItem(LsCacheKeys.POST_ARCHIVE);
+    sessionStorage.removeItem(LsCacheKeys.POSTS);
+    sessionStorage.removeItem(LsCacheKeys.POST_ARCHIVE);
+  }
 }
 
 /**
