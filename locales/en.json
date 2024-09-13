@@ -625,12 +625,12 @@
           },
           {
             "title": "Benefits:",
-            "content": [
+            "benefits": [
               "Email onboard: Simplifies the onboarding process.",
               "A seamless and secure UX: EVM wallets are auto-created and encrypted.",
               "Autonomy and security over funds: No third-party services to store user’s private keys.",
               "Authentication: User can add different methods of verification.",
-              "Gassles wallet creation: charged in Apillon credits per each onboarded user.",
+              "Gasless wallet creation: charged in Apillon credits per each onboarded user.",
               "Fully trustless. Powered by Oasis."
             ]
           }
@@ -1258,6 +1258,10 @@
         "labelInfo": {
           "slots": "Multi-processor jobs will be supported soon"
         }
+      },
+      "embeddedWallet": {
+        "name": "Embedded wallet’s title",
+        "description": "Embedded wallet’s description"
       }
     },
     "networkTypes": {
@@ -1327,6 +1331,10 @@
         "description": "Enter cloud function description for personal reference",
         "name": "Enter cloud function title for personal reference",
         "jobName": "Enter cloud function job name for personal reference"
+      },
+      "embeddedWallet": {
+        "name": "Enter the title for your personal reference",
+        "description": "Enter the description for your personal reference"
       }
     },
     "success": {
@@ -1364,6 +1372,7 @@
         "collection": "Creating NFT collection requested.",
         "directory": "Folder has been created",
         "domain": "Domain has been added to Website",
+        "embeddedWallet": "Embedded Wallet has been created",
         "file": "File has been created",
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
@@ -2030,11 +2039,16 @@
   "embeddedWallet": {
     "title": "Embedded Wallet",
     "checkPrice": "Check price",
+    "codeSnippets": "Code snippets:",
+    "createNew": "New Embedded wallet integration",
     "generateApiKey": "Generate API key",
     "generateNewApiKey": "Generate new key",
-    "viewDocumentation": "View Documentation",
+    "goToApiKey": "Go to API key management",
+    "hideInstructions": "Hide instructions",
+    "howItWorks": "See how it works",
     "readBlog": "Read our blog post",
-    "codeSnippets": "Code snippets:",
+    "showInstructions": "Show instructions",
+    "viewDocumentation": "View Documentation",
     "generate": {
       "title": "Generate API key and start using Embedded Wallet service",
       "generate": "Generate new key"

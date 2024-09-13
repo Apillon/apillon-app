@@ -34,7 +34,7 @@ declare global {
     updateTime: string;
   }
 
-  interface EwApiKeyInterface {
+  interface EmbeddedWalletInterface {
     id: number;
     status: string;
     apiKey: string;
@@ -68,7 +68,9 @@ declare global {
   interface ApiKeyRolesResponse extends GeneralResponse<Array<ApiKeyRoleInterface>> {}
   interface ApiKeyRoleUpdateResponse extends GeneralResponse<ApiKeyRoleInterface> {}
   interface ApiKeysResponse extends GeneralItemsResponse<ApiKeyInterface> {}
-  interface EwApiKeysResponse extends GeneralItemsResponse<EwApiKeyInterface> {}
+
+  interface EmbeddedWalletResponse extends GeneralResponse<EmbeddedWalletInterface> {}
+  interface EmbeddedWalletsResponse extends GeneralResponse<EmbeddedWalletInterface[]> {}
 
   /**
    * Oauth Link

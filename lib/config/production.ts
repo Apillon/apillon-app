@@ -15,6 +15,7 @@ const config: ConfigInterface = {
     'ACCESS',
     'API_KEYS',
     'DISCORD',
+    'EMBEDDED_WALLET',
     'HOSTING',
     'PROJECT',
     'PROJECT_ON_STARTUP',

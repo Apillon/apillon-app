@@ -3,27 +3,33 @@ import { defineStore } from 'pinia';
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
     apiKeys: [] as ApiKeyInterface[],
-    ewApiKeys: [] as EwApiKeyInterface[],
     discordLink: '' as string,
+    embeddedWallets: [] as EmbeddedWalletInterface[],
+    loadingWallet: false,
     oauthLinks: [] as OauthLinkInterface[],
+    searchWallet: '',
+    selectedWallet: '',
     users: [] as ProjectUserInterface[],
   }),
   getters: {
-    hasApiKeys(state) {
-      return Array.isArray(state.apiKeys) && state.apiKeys.length > 0;
-    },
-    hasEwApiKeys(state) {
-      return Array.isArray(state.ewApiKeys) && state.ewApiKeys.length > 0;
-    },
-    hasUsers(state) {
-      return Array.isArray(state.users) && state.users.length > 0;
+    activeWallet(state) {
+      return this.embeddedWallets.find(item => item.apiKey === state.selectedWallet);
     },
     currentUser(state) {
-      if (this.hasUsers) {
+      if (Array.isArray(state.users) && state.users.length > 0) {
         const authStore = useAuthStore();
         return state.users.find(user => user.user_id === authStore.userId);
       }
       return {} as ProjectUserInterface;
+    },
+    hasApiKeys(state) {
+      return Array.isArray(state.apiKeys) && state.apiKeys.length > 0;
+    },
+    hasEmbeddedWallets(state) {
+      return Array.isArray(state.embeddedWallets) && state.embeddedWallets.length > 0;
+    },
+    hasUsers(state) {
+      return Array.isArray(state.users) && state.users.length > 0;
     },
     hasOauthLinks(state) {
       return Array.isArray(state.oauthLinks) && state.oauthLinks.length > 0;
@@ -33,7 +39,7 @@ export const useSettingsStore = defineStore('settings', {
     resetData() {
       this.apiKeys = [] as ApiKeyInterface[];
       this.users = [] as ProjectUserInterface[];
-      this.ewApiKeys = [] as EwApiKeyInterface[];
+      this.embeddedWallets = [] as EmbeddedWalletInterface[];
     },
 
     getApiKeyById(id: number) {
@@ -50,10 +56,11 @@ export const useSettingsStore = defineStore('settings', {
         await this.fetchApiKeys();
       }
     },
+
     /** Oasis embedded wallet keys */
-    async getEwApiKeys() {
-      if (!this.hasEwApiKeys || isCacheExpired(LsCacheKeys.EW_API_KEYS)) {
-        await this.fetchEmbeddedWalletKeys();
+    async getEmbeddedWallets() {
+      if (!this.hasEmbeddedWallets || isCacheExpired(LsCacheKeys.EMBEDDED_WALLET)) {
+        await this.fetchEmbeddedWallets();
       }
     },
 
@@ -102,23 +109,27 @@ export const useSettingsStore = defineStore('settings', {
     },
 
     /** embedded wallet API Keys */
-    async fetchEmbeddedWalletKeys() {
+    async fetchEmbeddedWallets() {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        this.ewApiKeys = [] as EwApiKeyInterface[];
-      }
+      const project_uuid = await dataStore.getProjectUuid();
+      if (!project_uuid) return;
 
+      this.loadingWallet = true;
       try {
-        const project = dataStore.project.active.project_uuid;
-        const res = await $api.get<EwApiKeysResponse>(endpoints.embeddedWalletKeys(project));
-        this.ewApiKeys = res.data;
+        const res = await $api.get<EmbeddedWalletsResponse>(endpoints.embeddedWallet, {
+          project_uuid,
+        });
+        this.embeddedWallets = res.data;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.EW_API_KEYS, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.EMBEDDED_WALLET, Date.now().toString());
       } catch (error) {
-        this.ewApiKeys = [] as EwApiKeyInterface[];
+        this.embeddedWallets = [] as EmbeddedWalletInterface[];
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.loadingWallet = false;
+        this.searchWallet = '';
       }
     },
 
