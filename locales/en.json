@@ -197,6 +197,8 @@
       "deployments": "Deployments",
       "documentation": "View Documentation",
       "endpoint": "Cloud function API endpoint",
+      "emptyArchive": "Cloud functions Archive",
+      "emptyArchiveInfo": "There are currently no Cloud functions in the Archive.",
       "monitoring": "Monitoring",
       "new": "New Cloud function",
       "startNew": "Start by creating a new cloud function",

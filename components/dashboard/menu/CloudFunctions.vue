@@ -4,23 +4,17 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const cloudFunctionStore = useCloudFunctionStore();
 
 const menuOptions: NMenuOption[] = [
   {
-    key: 'dashboard-service-cloud-functions-id',
-    label: t('computing.cloudFunctions.deployments'),
-    path: `/dashboard/service/cloud-functions/${cloudFunctionStore.functionUuid}`,
+    key: 'dashboard-service-cloud-functions',
+    label: t('dashboard.nav.cloudFunctions'),
+    path: `/dashboard/service/cloud-functions`,
   },
   {
-    key: 'dashboard-service-cloud-functions-slug-monitoring',
-    label: t('computing.cloudFunctions.monitoring'),
-    path: `/dashboard/service/cloud-functions/${cloudFunctionStore.functionUuid}/monitoring`,
-  },
-  {
-    key: 'dashboard-service-cloud-functions-slug-variables',
-    label: t('computing.cloudFunctions.variables'),
-    path: `/dashboard/service/cloud-functions/${cloudFunctionStore.functionUuid}/variables`,
+    key: 'dashboard-service-cloud-functions-archive',
+    label: t('general.archive'),
+    path: '/dashboard/service/cloud-functions/archive',
   },
 ];
 </script>

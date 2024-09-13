@@ -50,7 +50,8 @@ export default function useCloudFunctions() {
 
     jobInterval = setInterval(async () => {
       const cloudFunction = await cloudFunctionStore.fetchCloudFunction(
-        cloudFunctionStore.functionUuid
+        cloudFunctionStore.functionUuid,
+        false
       );
       const job = cloudFunction.jobs.find(job => job.job_uuid === unfinishedJob.job_uuid);
 

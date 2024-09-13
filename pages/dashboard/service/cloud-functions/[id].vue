@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderCloudFunctions />
+      <HeaderCloudFunction />
     </template>
 
     <slot>

@@ -255,6 +255,9 @@ const Endpoints = {
   cloudFunctions: (uuid?: string) => {
     return uuid ? `/acurast/cloud-functions/${uuid}` : '/acurast/cloud-functions';
   },
+  cloudFunctionActivate: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/activate`;
+  },
   cloudFunctionEnvironment: (uuid: string) => {
     return `/acurast/cloud-functions/${uuid}/environment`;
   },

@@ -4,7 +4,7 @@
     v-bind="$attrs"
     :bordered="false"
     :columns="columns"
-    :data="cloudFunctionStore.items"
+    :data="data"
     :loading="cloudFunctionStore.loading"
     :pagination="{
       ...cloudFunctionStore.pagination,
@@ -30,9 +30,17 @@
 <script lang="ts" setup>
 import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
+const props = defineProps({
+  functions: { type: Array<CloudFunctionInterface>, default: [] },
+  archive: { type: Boolean, default: false },
+});
+
 const { t } = useI18n();
 const router = useRouter();
+const message = useMessage();
+const authStore = useAuthStore();
 const cloudFunctionStore = useCloudFunctionStore();
+const { deleteItem } = useDelete();
 
 const modalEditCloudFunctionVisible = ref<boolean>(false);
 
@@ -41,7 +49,7 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
     {
       key: 'name',
       title: t('general.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
@@ -49,7 +57,7 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
     {
       key: 'description',
       title: t('general.description'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
@@ -88,7 +96,10 @@ const createColumns = (): NDataTableColumns<CloudFunctionInterface> => {
       render() {
         return h(
           NDropdown,
-          { options: dropdownOptions.value, trigger: 'click' },
+          {
+            trigger: 'click',
+            options: props.archive ? dropdownOptionsArchive : dropdownOptions.value,
+          },
           {
             default: () =>
               h(
@@ -106,6 +117,15 @@ const columns = createColumns();
 const rowKey = (row: CloudFunctionInterface) => row.function_uuid;
 const currentRow = ref<CloudFunctionInterface>();
 
+/** Data: filtered cloudFunctions */
+const data = computed<CloudFunctionInterface[]>(() => {
+  return (
+    props.functions.filter(item =>
+      item.name.toLocaleLowerCase().includes(cloudFunctionStore.search.toLocaleLowerCase())
+    ) || []
+  );
+});
+
 /**
  * Dropdown Actions
  */
@@ -116,7 +136,7 @@ const dropdownOptions = computed(() => {
       label: t('general.view'),
       props: {
         onClick: () => {
-          if (currentRow.value) {
+          if (!props.archive && currentRow.value) {
             router.push({
               path: `/dashboard/service/cloud-functions/${currentRow.value.function_uuid}`,
             });
@@ -127,6 +147,7 @@ const dropdownOptions = computed(() => {
     {
       key: 'edit',
       label: t('general.edit'),
+      disabled: authStore.isAdmin(),
       props: {
         onClick: () => {
           if (currentRow.value) {
@@ -135,8 +156,30 @@ const dropdownOptions = computed(() => {
         },
       },
     },
+    {
+      key: 'computingDelete',
+      label: t('general.archive'),
+      disabled: authStore.isAdmin(),
+      props: {
+        onClick: () => {
+          deleteCloudFunction();
+        },
+      },
+    },
   ];
 });
+const dropdownOptionsArchive = [
+  {
+    key: 'computingRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        restoreCloudFunction();
+      },
+    },
+  },
+];
 
 /** On row click */
 const rowProps = (row: CloudFunctionInterface) => {
@@ -150,4 +193,47 @@ const rowProps = (row: CloudFunctionInterface) => {
     },
   };
 };
+
+/**
+ * cloudFunction delete
+ * */
+async function deleteCloudFunction() {
+  if (
+    currentRow.value &&
+    (await deleteItem(ItemDeleteKey.CLOUD_FUNCTION, currentRow.value.function_uuid))
+  ) {
+    cloudFunctionStore.items = cloudFunctionStore.items.filter(
+      item => item.function_uuid !== currentRow.value?.function_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
+    sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);
+  }
+}
+
+/**
+ * Restore cloudFunction
+ * */
+async function restoreCloudFunction() {
+  if (!currentRow.value?.function_uuid) return;
+
+  cloudFunctionStore.loading = true;
+
+  try {
+    await $api.patch<CloudFunctionResponse>(
+      endpoints.cloudFunctionActivate(currentRow.value.function_uuid)
+    );
+    cloudFunctionStore.archive = cloudFunctionStore.archive.filter(
+      item => item.function_uuid !== currentRow.value?.function_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.CLOUD_FUNCTIONS);
+    sessionStorage.removeItem(LsCacheKeys.CLOUD_FUNCTIONS_ARCHIVE);
+
+    message.success(t('form.success.restored.cloudFunction'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  cloudFunctionStore.loading = false;
+}
 </script>

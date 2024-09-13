@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderCloudFunctions />
+      <HeaderCloudFunction />
     </template>
 
     <slot>
@@ -50,14 +50,8 @@ const prepareData = () => {
   });
 
   const labels = Object.keys(data);
-
-  const dataSuccess = Object.values(data)
-    .map(value => value.success)
-    .reverse();
-
-  const dataError = Object.values(data)
-    .map(value => value.error)
-    .reverse();
+  const dataSuccess = Object.values(data).map(value => value.success);
+  const dataError = Object.values(data).map(value => value.error);
 
   return {
     labels,

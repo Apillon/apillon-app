@@ -1,20 +1,12 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('dashboard.nav.cloudFunctions') }}</h1>
-        </slot>
-
-        <template #info>
-          <n-space :size="32" align="center"> </n-space>
-        </template>
-      </Heading>
+      <HeaderCloudFunctions />
     </template>
     <slot>
       <n-space v-if="cloudFunctionStore.hasCloudFunctions" class="pb-8" :size="32" vertical>
         <ActionsComputingCloudFunctions />
-        <TableComputingCloudFunctions />
+        <TableComputingCloudFunctions :functions="cloudFunctionStore.items" />
       </n-space>
       <div v-else class="flex gap-y-8 flex-wrap pb-8 mb-8">
         <div class="lg:w-1/2 lg:pr-6">

@@ -3,21 +3,26 @@ export type ItemDelete =
   | BucketInterface
   | BucketItemInterface
   | ChatInterface
+  | CloudFunctionInterface
   | CollectionInterface
   | ContractInterface
   | IpnsInterface
+  | JobInterface
   | PostInterface
+  | ServiceInterface
   | WebsiteBaseInterface;
 
 export enum ItemDeleteKey {
   API_KEY = 'apiKey',
   BUCKET = 'bucket',
   BUCKET_CONTENT = 'bucketContent',
+  CLOUD_FUNCTION = 'cloudFunction',
   COLLECTION = 'collection',
   CONTRACT = 'contract',
   DIRECTORY = 'directory',
   FILE = 'file',
   IPNS = 'ipns',
+  JOB = 'job',
   POST = 'post',
   SERVICE = 'service',
   SPACE = 'space',
@@ -61,6 +66,8 @@ export default function useDelete() {
         return endpoints.bucket(`${id}`);
       case ItemDeleteKey.BUCKET_CONTENT:
         return endpoints.bucketContent(`${id}`);
+      case ItemDeleteKey.CLOUD_FUNCTION:
+        return endpoints.cloudFunctions(`${id}`);
       case ItemDeleteKey.COLLECTION:
         return endpoints.collections(`${id}`);
       case ItemDeleteKey.CONTRACT:
@@ -71,6 +78,8 @@ export default function useDelete() {
         return endpoints.storageFileDelete(bucketStore.bucketUuid, `${id}`);
       case ItemDeleteKey.IPNS:
         return endpoints.ipns(bucketStore.selected, `${id}`);
+      case ItemDeleteKey.JOB:
+        return endpoints.acurastJobs(`${id}`);
       case ItemDeleteKey.POST:
         return endpoints.posts(`${id}`);
       case ItemDeleteKey.SERVICE:
@@ -124,28 +133,34 @@ export default function useDelete() {
   /** Get URL base on entity type */
   function getUrl(type: string, item: ItemDelete) {
     switch (type) {
-      case 'apiKey':
+      case ItemDeleteKey.API_KEY:
         return endpoints.apiKey((item as ApiKeyInterface).id);
-      case 'bucket':
+      case ItemDeleteKey.BUCKET:
         return endpoints.bucket((item as BucketInterface).bucket_uuid);
-      case 'collection':
+      case ItemDeleteKey.CLOUD_FUNCTION:
+        return endpoints.cloudFunctions((item as CloudFunctionInterface).function_uuid);
+      case ItemDeleteKey.COLLECTION:
         return endpoints.collections((item as CollectionInterface).collection_uuid);
-      case 'contract':
+      case ItemDeleteKey.CONTRACT:
         return endpoints.contracts((item as ContractInterface).contract_uuid);
-      case 'directory':
+      case ItemDeleteKey.DIRECTORY:
         return endpoints.directory((item as BucketItemInterface).uuid);
-      case 'file':
+      case ItemDeleteKey.FILE:
         return endpoints.storageFileDelete(
           bucketStore.bucketUuid,
           (item as BucketItemInterface).uuid
         );
-      case 'ipns':
+      case ItemDeleteKey.IPNS:
         return endpoints.ipns(bucketStore.selected, (item as IpnsInterface).ipns_uuid);
-      case 'post':
+      case ItemDeleteKey.JOB:
+        return endpoints.acurastJobs((item as JobInterface).job_uuid);
+      case ItemDeleteKey.POST:
         return endpoints.posts((item as PostInterface).post_uuid);
-      case 'space':
+      case ItemDeleteKey.SERVICE:
+        return endpoints.services((item as ServiceInterface).service_uuid);
+      case ItemDeleteKey.SPACE:
         return endpoints.spaces((item as ChatInterface).space_uuid);
-      case 'website':
+      case ItemDeleteKey.WEBSITE:
         return endpoints.websites((item as WebsiteInterface).website_uuid);
       default:
         console.warn('Wrong type');
@@ -156,32 +171,34 @@ export default function useDelete() {
   /** Get type base on entity type */
   function getItemType(item: ItemDelete) {
     if ('apiKey' in item) {
-      return 'apiKey';
+      return ItemDeleteKey.API_KEY;
     } else if ('ipnsName' in item) {
-      return 'ipns';
+      return ItemDeleteKey.IPNS;
     } else if ('bucketType' in item) {
-      return 'bucket';
+      return ItemDeleteKey.BUCKET;
     } else if ('collection_uuid' in item) {
-      return 'collection';
+      return ItemDeleteKey.COLLECTION;
     } else if ('contract_uuid' in item) {
-      return 'contract';
+      return ItemDeleteKey.CONTRACT;
+    } else if ('function_uuid' in item) {
+      return ItemDeleteKey.CLOUD_FUNCTION;
+    } else if ('job_uuid' in item) {
+      return ItemDeleteKey.JOB;
     } else if ('post_uuid' in item) {
-      return 'post';
+      return ItemDeleteKey.POST;
     } else if ('space_uuid' in item) {
-      return 'space';
+      return ItemDeleteKey.SPACE;
     } else if ('website_uuid' in item) {
-      return 'website';
+      return ItemDeleteKey.WEBSITE;
     } else if ('type' in item) {
       switch (item.type) {
         case BucketItemType.DIRECTORY:
-          return 'directory';
-        case BucketItemType.FILE:
-          return 'file';
+          return ItemDeleteKey.DIRECTORY;
         default:
-          return 'file';
+          return ItemDeleteKey.FILE;
       }
     }
-    return 'file';
+    return ItemDeleteKey.FILE;
   }
 
   return { loading, deleteItem, deleteItems };
