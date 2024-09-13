@@ -55,6 +55,20 @@
         </Btn>
       </n-form-item>
     </n-form>
+
+    <!-- Modal - API key details -->
+    <n-modal
+      v-model:show="showModalWalletDetails"
+      :mask-closable="false"
+      :close-on-esc="false"
+      :closable="false"
+      preset="dialog"
+      :title="$t('dashboard.apiKey.details')"
+      :positive-text="$t('dashboard.apiKey.secretSaved')"
+      @positive-click="showModalWalletDetails = false"
+    >
+      <ApiKeyDetails v-bind="createdWallet" />
+    </n-modal>
   </div>
 </template>
 
@@ -65,13 +79,16 @@ type FormEmbeddedWallet = {
 };
 const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const settingsStore = useSettingsStore();
 
 const loading = ref<boolean>(false);
+const showModalWalletDetails = ref<boolean>(false);
+const createdWallet = ref<ApiKeyCreatedInterface>();
+
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormEmbeddedWallet>({
   name: null,
@@ -79,13 +96,37 @@ const formData = ref<FormEmbeddedWallet>({
 });
 
 const rules: NFormRules = {
-  name: ruleRequired($i18n.t('validation.embeddedWallet.nameRequired')),
-  description: ruleDescription($i18n.t('validation.descriptionTooLong')),
+  name: ruleRequired(t('validation.embeddedWallet.nameRequired')),
+  description: ruleDescription(t('validation.descriptionTooLong')),
 };
 
 const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
+
+onMounted(async () => {
+  await dataStore.getServicesByType(ServiceType.WALLET);
+  if (!dataStore.hasServicesByType(ServiceType.WALLET)) {
+    await createServiceWallet();
+  }
+});
+
+async function createServiceWallet() {
+  const bodyData = {
+    project_uuid: dataStore.project.selected,
+    serviceType_id: ServiceType.WALLET,
+    name: 'Service Embedded Wallet',
+    active: 1,
+  };
+
+  try {
+    await $api.post<ServiceResponse>(endpoints.services(), bodyData);
+
+    dataStore.services = await dataStore.fetchServices();
+  } catch (error) {
+    console.warn(error);
+  }
+}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -96,31 +137,44 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      //   warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_CREATE, () =>      );
-      createEmbeddedWallet();
+      warningStore.showSpendingWarning(PriceServiceName.OASIS_SIGNATURE, () =>
+        createEmbeddedWallet()
+      );
     }
   });
 }
 
 async function createEmbeddedWallet() {
-  loading.value = true;
-
   if (!dataStore.hasProjects) {
     await dataStore.fetchProjects();
     if (!dataStore.projectUuid) return;
   }
 
+  const serviceWallet = await dataStore.getServiceByType(ServiceType.WALLET);
+  if (!serviceWallet) return;
+
+  loading.value = true;
   try {
+    const project_uuid = dataStore.projectUuid;
+    const service_uuid = serviceWallet?.service_uuid;
+
     const bodyData = {
       project_uuid: dataStore.projectUuid,
       name: formData.value.name,
-      description: formData.value.description,
+      testNetwork: false,
+      roles: [
+        { project_uuid, service_uuid, role_id: ApiKeyRole.READ },
+        { project_uuid, service_uuid, role_id: ApiKeyRole.WRITE },
+        { project_uuid, service_uuid, role_id: ApiKeyRole.EXECUTE },
+      ],
     };
-    const res = await $api.post<EmbeddedWalletResponse>(endpoints.embeddedWallet, bodyData);
+    const res = await $api.post<ApiKeyCreatedResponse>(endpoints.apiKey(), bodyData);
+    createdWallet.value = res.data;
+    showModalWalletDetails.value = true;
 
-    settingsStore.embeddedWallets.push(res.data);
+    settingsStore.fetchEmbeddedWallets();
 
-    message.success($i18n.t('form.success.created.embeddedWallet'));
+    message.success(t('form.success.created.embeddedWallet'));
 
     /** Emit events */
     emit('submitSuccess');

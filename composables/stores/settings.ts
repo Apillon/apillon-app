@@ -8,9 +8,20 @@ export const useSettingsStore = defineStore('settings', {
     loadingWallet: false,
     oauthLinks: [] as OauthLinkInterface[],
     searchWallet: '',
+    selectedWallet: '',
     users: [] as ProjectUserInterface[],
   }),
   getters: {
+    activeWallet(state) {
+      return this.embeddedWallets.find(item => item.apiKey === state.selectedWallet);
+    },
+    currentUser(state) {
+      if (Array.isArray(state.users) && state.users.length > 0) {
+        const authStore = useAuthStore();
+        return state.users.find(user => user.user_id === authStore.userId);
+      }
+      return {} as ProjectUserInterface;
+    },
     hasApiKeys(state) {
       return Array.isArray(state.apiKeys) && state.apiKeys.length > 0;
     },
@@ -19,13 +30,6 @@ export const useSettingsStore = defineStore('settings', {
     },
     hasUsers(state) {
       return Array.isArray(state.users) && state.users.length > 0;
-    },
-    currentUser(state) {
-      if (this.hasUsers) {
-        const authStore = useAuthStore();
-        return state.users.find(user => user.user_id === authStore.userId);
-      }
-      return {} as ProjectUserInterface;
     },
     hasOauthLinks(state) {
       return Array.isArray(state.oauthLinks) && state.oauthLinks.length > 0;
@@ -52,6 +56,7 @@ export const useSettingsStore = defineStore('settings', {
         await this.fetchApiKeys();
       }
     },
+
     /** Oasis embedded wallet keys */
     async getEmbeddedWallets() {
       if (!this.hasEmbeddedWallets || isCacheExpired(LsCacheKeys.EMBEDDED_WALLET)) {
@@ -124,7 +129,7 @@ export const useSettingsStore = defineStore('settings', {
         window.$message.error(userFriendlyMsg(error));
       } finally {
         this.loadingWallet = false;
-        this.searchWallet = ';';
+        this.searchWallet = '';
       }
     },
 

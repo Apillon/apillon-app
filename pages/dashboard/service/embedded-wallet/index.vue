@@ -1,7 +1,11 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderEmbeddedWallet />
+      <Heading>
+        <slot>
+          <h1>{{ $t('dashboard.nav.embeddedWallet') }}</h1>
+        </slot>
+      </Heading>
     </template>
 
     <slot>
@@ -15,8 +19,8 @@
           <n-collapse-item
             :title="
               instructionsVisible
-                ? $t('embeddedWallet.showInstructions')
-                : $t('embeddedWallet.hideInstructions')
+                ? $t('embeddedWallet.hideInstructions')
+                : $t('embeddedWallet.showInstructions')
             "
           >
             <EmbeddedWalletInstructions />
@@ -44,11 +48,8 @@ useHead({
 });
 
 onMounted(async () => {
-  await sleep(500);
+  await sleep(10);
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    /** Fetch all services if there is any service type unloaded */
-    await dataStore.getServices();
-
     /** Fetch all api keys if they are not stored in settings store */
     await settingsStore.getEmbeddedWallets();
 

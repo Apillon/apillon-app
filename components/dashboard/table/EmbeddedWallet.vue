@@ -1,9 +1,9 @@
 <template>
   <n-data-table
-    remote
     :bordered="false"
     :columns="columns"
-    :data="settingsStore.embeddedWallets"
+    :data="data"
+    :loading="settingsStore.loadingWallet"
     :row-props="rowProps"
   />
 </template>
@@ -15,22 +15,32 @@ const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const settingsStore = useSettingsStore();
-const showModalDeleteApiKey = ref<boolean>(false);
-const drawerUpdateApiKeyVisible = ref<boolean>(false);
 
-const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
+/** Data: filtered contracts */
+const data = computed<Array<EmbeddedWalletInterface>>(() => {
+  return (
+    settingsStore.embeddedWallets.filter(item =>
+      item.name.toLocaleLowerCase().includes(settingsStore.searchWallet.toLocaleLowerCase())
+    ) || []
+  );
+});
+
+const createColumns = (): NDataTableColumns<EmbeddedWalletInterface> => {
   return [
     {
-      title: t('dashboard.apiKey.apiKey'),
       key: 'apiKey',
+      title: t('dashboard.apiKey.apiKey'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      title: t('dashboard.name'),
       key: 'name',
+      title: t('dashboard.name'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      title: t('dashboard.oasisSignatures'),
       key: 'oasisSignatures',
+      title: t('dashboard.oasisSignatures'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
       title: t('dashboard.env'),
@@ -76,13 +86,17 @@ const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
   ];
 };
 
-const currentRow = ref<ApiKeyInterface>({} as ApiKeyInterface);
+const currentRow = ref<EmbeddedWalletInterface>({} as EmbeddedWalletInterface);
 const columns = createColumns();
 
-function rowProps(row: ApiKeyInterface) {
+function rowProps(row: EmbeddedWalletInterface) {
   return {
-    onClick: () => {
+    onClick: (e: Event) => {
       currentRow.value = row;
+
+      if (canOpenColumnCell(e.composedPath())) {
+        router.push({ path: `/dashboard/service/embedded-wallet/${row.apiKey}` });
+      }
     },
   };
 }
@@ -92,8 +106,8 @@ function rowProps(row: ApiKeyInterface) {
  */
 const dropdownOptions = [
   {
-    label: t('general.edit'),
-    key: 'edit',
+    key: 'view',
+    label: t('general.view'),
     disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
@@ -101,16 +115,15 @@ const dropdownOptions = [
       },
     },
   },
-  {
-    label: t('general.delete'),
-    key: 'delete',
-    disabled: dataStore.isProjectUser,
-    props: {
-      class: '!text-pink',
-      onClick: () => {
-        showModalDeleteApiKey.value = true;
-      },
-    },
-  },
+  // {
+  //   label: t('general.delete'),
+  //   key: 'delete',
+  //   disabled: dataStore.isProjectUser,
+  //   props: {
+  //     class: '!text-pink',
+  //     onClick: () => {
+  //     },
+  //   },
+  // },
 ];
 </script>

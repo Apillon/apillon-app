@@ -357,6 +357,10 @@
         "STORAGE": {
           "name": "Web3 Storage",
           "description": null
+        },
+        "WALLET": {
+          "name": "Embedded Wallet",
+          "description": null
         }
       }
     },
@@ -1276,6 +1280,7 @@
         "collection": "Creating NFT collection requested.",
         "directory": "Folder has been created",
         "domain": "Domain has been added to Website",
+        "embeddedWallet": "Embedded Wallet has been created",
         "file": "File has been created",
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
@@ -1942,6 +1947,7 @@
     "createNew": "New Embedded wallet integration",
     "generateApiKey": "Generate API key",
     "generateNewApiKey": "Generate new key",
+    "goToApiKey": "Go to API key management",
     "hideInstructions": "Hide instructions",
     "howItWorks": "See how it works",
     "readBlog": "Read our blog post",

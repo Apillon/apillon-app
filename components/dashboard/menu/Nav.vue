@@ -116,7 +116,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: $i18n.t('dashboard.nav.social'),
       to: 'dashboard-service-social',
       iconName: 'icon-social',
-      soon: isMenuItemDisabled(Feature.SOCIAL),
       disabled:
         isMenuItemDisabled(Feature.SOCIAL) ||
         !authStore.isUserAllowed(Permission.SOCIAL) ||
@@ -127,11 +126,9 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: $i18n.t('dashboard.nav.embeddedWallet'),
       to: 'dashboard-service-embedded-wallet',
       iconName: 'icon-wallet',
-      // TODO - add feature flag
-      soon: isMenuItemDisabled(Feature.SOCIAL),
       disabled:
-        isMenuItemDisabled(Feature.SOCIAL) ||
-        !authStore.isUserAllowed(Permission.SOCIAL) ||
+        isMenuItemDisabled(Feature.EMBEDDED_WALLET) ||
+        !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
         zeroProjects.value,
     },
   ];
