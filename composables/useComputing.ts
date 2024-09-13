@@ -30,7 +30,7 @@ export default function useComputing() {
     }
 
     contractInterval = setInterval(async () => {
-      const contracts = await contractStore.fetchContracts(false);
+      const contracts = await contractStore.fetchContracts(false, false);
       const contract = contracts.find(
         contract => contract.contract_uuid === unfinishedCollection.contract_uuid
       );

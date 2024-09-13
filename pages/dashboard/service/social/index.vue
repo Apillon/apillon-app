@@ -13,8 +13,8 @@
       </n-space>
       <Empty
         v-else
-        :title="$t('social.chat.empty')"
-        :info="$t('social.chat.emptyInfo')"
+        :title="$t('social.post.empty')"
+        :info="$t('social.post.emptyInfo')"
         icon="logo/grill-chat"
       >
         <Btn type="primary" @click="modalCreatePostVisible = true">

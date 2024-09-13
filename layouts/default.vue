@@ -20,7 +20,7 @@
       </n-layout-sider>
       <n-layout>
         <Header @toggle-sidebar="toggleSidebar"> </Header>
-        <n-scrollbar y-scrollable style="max-height: calc(100dvh - 88px)">
+        <n-scrollbar class="bg-bg" y-scrollable style="max-height: calc(100dvh - 88px)">
           <div class="relative pt-8 px-4 sm:px-8 bg-bg">
             <slot />
           </div>

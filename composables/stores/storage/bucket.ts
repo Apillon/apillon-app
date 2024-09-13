@@ -182,7 +182,7 @@ export const useBucketStore = defineStore('bucket', {
           desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
-        params.status = statusDeleted ? 8 : 5;
+        params.status = statusDeleted ? SqlModelStatus.ARCHIVED : SqlModelStatus.ACTIVE;
 
         const req = $api.get<BucketsResponse>(endpoints.buckets, params);
         dataStore.promises.buckets = req;

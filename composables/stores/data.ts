@@ -352,7 +352,7 @@ export const useDataStore = defineStore('data', {
         sessionStorage.setItem(LsCacheKeys.SERVICES, Date.now().toString());
 
         return res.data.items
-          .filter(item => item.status === 5)
+          .filter(item => item.status === SqlModelStatus.ACTIVE)
           .map((service: ServiceInterface, key: number) => {
             return { key, ...service };
           });

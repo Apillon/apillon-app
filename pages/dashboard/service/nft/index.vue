@@ -1,14 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('dashboard.nav.nft') }}</h1>
-        </slot>
-        <template #info>
-          <ModalCreditCosts :service="ServiceTypeName.NFT" filter-by-chain />
-        </template>
-      </Heading>
+      <HeaderNft />
     </template>
     <slot>
       <TableNftCollection
@@ -77,7 +70,7 @@ function checkUnfinishedCollections() {
 
   clearInterval(collectionInterval);
   collectionInterval = setInterval(async () => {
-    const collections = await collectionStore.fetchCollections(false);
+    const collections = await collectionStore.fetchCollections(false, false);
     const collection = collections.find(
       collection => collection.collection_uuid === unfinishedCollection.collection_uuid
     );

@@ -4,6 +4,8 @@ import { EncryptTab } from '~/lib/types/computing';
 export const useContractStore = defineStore('contract', {
   state: () => ({
     active: {} as ContractInterface,
+    archive: [] as ContractInterface[],
+    archiveTotal: 0,
     bucketUuid: '',
     encryptTab: EncryptTab.BUCKET,
     items: [] as ContractInterface[],
@@ -27,12 +29,18 @@ export const useContractStore = defineStore('contract', {
     hasContracts(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
     },
+    hasContractArchive(state): boolean {
+      return Array.isArray(state.archive) && state.archive.length > 0;
+    },
   },
   actions: {
     resetData() {
       this.active = {} as ContractInterface;
+      this.archive = [] as ContractInterface[];
+      this.archiveTotal = 0;
       this.items = [] as ContractInterface[];
       this.search = '';
+      this.total = 0;
     },
 
     /**
@@ -41,6 +49,13 @@ export const useContractStore = defineStore('contract', {
     async getContracts(): Promise<ContractInterface[]> {
       if (!this.hasContracts || isCacheExpired(LsCacheKeys.CONTRACTS)) {
         return await this.fetchContracts();
+      }
+      return this.items;
+    },
+
+    async getContractArchive(): Promise<ContractInterface[]> {
+      if (!this.hasContractArchive || isCacheExpired(LsCacheKeys.CONTRACT_ARCHIVE)) {
+        return await this.fetchContracts(true);
       }
       return this.items;
     },
@@ -55,7 +70,10 @@ export const useContractStore = defineStore('contract', {
     /**
      * API calls
      */
-    async fetchContracts(showLoader: boolean = true): Promise<ContractInterface[]> {
+    async fetchContracts(
+      archive: boolean = false,
+      showLoader: boolean = true
+    ): Promise<ContractInterface[]> {
       this.loading = showLoader;
 
       const dataStore = useDataStore();
@@ -70,25 +88,40 @@ export const useContractStore = defineStore('contract', {
           desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
+        if (archive) {
+          params.status = SqlModelStatus.ARCHIVED;
+        }
 
         const req = $api.get<ContractsResponse>(endpoints.contracts(), params);
         dataStore.promises.contracts = req;
         const res = await req;
 
-        this.items = res.data.items;
-        this.total = res.data.total;
+        if (archive) {
+          this.archive = res.data.items;
+          this.archiveTotal = res.data.total;
+        } else {
+          this.items = res.data.items;
+          this.total = res.data.total;
+        }
         this.search = '';
         this.loading = false;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.CONTRACTS, Date.now().toString());
+        const key = archive ? LsCacheKeys.CONTRACT_ARCHIVE : LsCacheKeys.CONTRACT;
+        sessionStorage.setItem(key, Date.now().toString());
 
         return res.data.items;
       } catch (error: any) {
         /** Clear promise */
         dataStore.promises.contracts = null;
-        this.items = [] as Array<ContractInterface>;
-        this.total = 0;
+
+        if (archive) {
+          this.archive = [] as Array<ContractInterface>;
+          this.archiveTotal = 0;
+        } else {
+          this.items = [] as Array<ContractInterface>;
+          this.total = 0;
+        }
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));

@@ -2,27 +2,7 @@
   <Dashboard :key="chatStore.items.length" :loading="pageLoading">
     <template #heading>
       <div ref="headingRef">
-        <Heading>
-          <slot>
-            <div class="flex gap-4 items-center">
-              <NuxtLink :to="{ name: 'dashboard-service-social' }">
-                <span class="icon-back text-2xl align-sub"></span>
-              </NuxtLink>
-              <div>
-                <h1>{{ $t('social.chat.title') }}</h1>
-              </div>
-            </div>
-          </slot>
-
-          <template #info>
-            <n-space :size="32" align="center">
-              <IconInfo
-                v-if="$te('w3Warn.social.info') || $te('w3Warn.social.grillChat')"
-                @click="modalW3WarnVisible = true"
-              />
-            </n-space>
-          </template>
-        </Heading>
+        <HeaderSocialHub />
       </div>
     </template>
     <slot>

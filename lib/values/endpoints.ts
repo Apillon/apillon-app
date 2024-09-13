@@ -172,6 +172,12 @@ const Endpoints = {
   websiteDeploy: (uuid?: string) => {
     return `/storage/hosting/websites/${uuid}/deploy`;
   },
+  websiteActivate: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/activate`;
+  },
+  websiteDomainStatus: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/check-domain`;
+  },
 
   /** Deployment */
   deployment: (websiteUuid: string, deploymentUuid: string) => {
@@ -218,6 +224,9 @@ const Endpoints = {
   collectionIpns: (id: string) => {
     return `/nfts/collections/${id}/ipns`;
   },
+  collectionActivate: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/activate`;
+  },
 
   /**
    * Computing
@@ -237,6 +246,9 @@ const Endpoints = {
   },
   contractTransactions: (contractUuid: string) => {
     return `/computing/contracts/${contractUuid}/transactions`;
+  },
+  contractActivate: (contractUuid: string) => {
+    return `/computing/contracts/${contractUuid}/activate`;
   },
 
   /** Cloud functions - Acurast */
@@ -286,8 +298,14 @@ const Endpoints = {
   spaces: (uuid?: number | string) => {
     return uuid ? `/social/spaces/${uuid}` : '/social/spaces';
   },
+  spaceActivate: (uuid: number | string) => {
+    return `/social/spaces/${uuid}/activate`;
+  },
   posts: (uuid?: number | string) => {
     return uuid ? `/social/posts/${uuid}` : `/social/posts`;
+  },
+  postActivate: (uuid: number | string) => {
+    return `/social/posts/${uuid}/activate`;
   },
 
   /** Oauth links */
