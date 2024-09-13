@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useCloudFunctionStore = defineStore('cloudFunction', {
   state: () => ({
     active: {} as CloudFunctionInterface,
+    archive: [] as CloudFunctionInterface[],
     items: [] as CloudFunctionInterface[],
     loading: false,
     loadingVariables: false,
@@ -10,9 +11,11 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     searchJobs: '',
     searchVariables: '',
     total: 0,
+    totalArchive: 0,
     usage: [] as CloudFunctionUsageInterface[],
     variables: [] as EnvVariable[],
     variablesNew: [] as EnvVariable[],
+    variablesUpdate: false,
     pagination: {
       page: 1,
       pageSize: PAGINATION_LIMIT,
@@ -28,6 +31,9 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     },
     hasCloudFunctions(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
+    },
+    hasCloudFunctionsArchive(state): boolean {
+      return Array.isArray(state.archive) && state.archive.length > 0;
     },
     hasJobs(state): boolean {
       return Array.isArray(state.active.jobs) && state.active.jobs.length > 0;
@@ -74,13 +80,15 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     /**
      * Fetch wrappers
      */
-    async getCloudFunctions(page = 1): Promise<CloudFunctionInterface[]> {
-      if (
-        page !== this.pagination.page ||
-        !this.hasCloudFunctions ||
-        isCacheExpired(LsCacheKeys.CLOUD_FUNCTIONS)
-      ) {
+    async getCloudFunctions(): Promise<CloudFunctionInterface[]> {
+      if (!this.hasCloudFunctions || isCacheExpired(LsCacheKeys.CLOUD_FUNCTIONS)) {
         return await this.fetchCloudFunctions();
+      }
+      return this.items;
+    },
+    async getCloudFunctionsArchive(): Promise<CloudFunctionInterface[]> {
+      if (!this.hasCloudFunctionsArchive || isCacheExpired(LsCacheKeys.CLOUD_FUNCTIONS_ARCHIVE)) {
+        return await this.fetchCloudFunctions(true);
       }
       return this.items;
     },
@@ -120,7 +128,10 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     /**
      * API calls
      */
-    async fetchCloudFunctions(showLoader: boolean = true): Promise<CloudFunctionInterface[]> {
+    async fetchCloudFunctions(
+      archive = false,
+      showLoader: boolean = true
+    ): Promise<CloudFunctionInterface[]> {
       this.loading = showLoader;
 
       const dataStore = useDataStore();
@@ -135,21 +146,35 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
           desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
+        if (archive) {
+          params.status = SqlModelStatus.ARCHIVED;
+        }
 
         const res = await $api.get<CloudFunctionsResponse>(endpoints.cloudFunctions(), params);
 
-        this.items = res.data.items;
-        this.total = res.data.total;
+        if (archive) {
+          this.archive = res.data.items;
+          this.totalArchive = res.data.total;
+        } else {
+          this.items = res.data.items;
+          this.total = res.data.total;
+        }
         this.search = '';
         this.loading = false;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.CLOUD_FUNCTIONS, Date.now().toString());
+        const key = archive ? LsCacheKeys.CLOUD_FUNCTIONS_ARCHIVE : LsCacheKeys.CLOUD_FUNCTIONS;
+        sessionStorage.setItem(key, Date.now().toString());
 
         return res.data.items;
       } catch (error: any) {
-        this.items = [] as Array<CloudFunctionInterface>;
-        this.total = 0;
+        if (archive) {
+          this.archive = [];
+          this.totalArchive = 0;
+        } else {
+          this.items = [] as Array<CloudFunctionInterface>;
+          this.total = 0;
+        }
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
@@ -159,12 +184,14 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
       return [];
     },
 
-    async fetchCloudFunction(uuid: string): Promise<CloudFunctionInterface> {
+    async fetchCloudFunction(uuid: string, loading = true): Promise<CloudFunctionInterface> {
+      this.loading = loading;
       try {
         const res = await $api.get<CloudFunctionResponse>(endpoints.cloudFunctions(uuid));
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.CLOUD_FUNCTION, Date.now().toString());
+        this.loading = false;
 
         return res.data;
       } catch (error: any) {
@@ -173,6 +200,7 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
+      this.loading = false;
       return {} as CloudFunctionInterface;
     },
 

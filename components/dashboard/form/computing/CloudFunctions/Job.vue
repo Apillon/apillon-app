@@ -37,7 +37,7 @@
       <!--  CloudFunctions slots -->
       <n-form-item
         path="slots"
-        :label="$t('form.label.cloudFunctions.slots')"
+        :label="labelInfo('slots', 'form.label.cloudFunctions')"
         :label-props="{ for: 'slots' }"
       >
         <n-input-number
@@ -46,6 +46,7 @@
           :step="1"
           :input-props="{ id: 'slots' }"
           :placeholder="$t('form.placeholder.number')"
+          disabled
           clearable
         />
       </n-form-item>
@@ -53,7 +54,7 @@
       <!--  File -->
       <n-form-item
         v-if="!props.jobUuid"
-        accept="text/javascript, text/plain"
+        accept="text/javascript"
         path="file"
         :label="$t('form.label.contract.file')"
         :label-props="{ for: 'file' }"
@@ -83,7 +84,7 @@ import type { UploadCustomRequestOptions } from 'naive-ui';
 
 type FormCloudFunctions = {
   name: string | null;
-  slots?: number | null;
+  slots: number | null;
   scriptCid: string | null;
   file: FileListItemType | undefined | null;
 };
@@ -100,7 +101,7 @@ const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
 const { checkUnfinishedJobs } = useCloudFunctions();
-const { uploadFileToIPFS } = useComputing();
+const { labelInfo, uploadFileToIPFS } = useComputing();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
@@ -109,13 +110,13 @@ const job = ref<JobInterface | undefined>();
 
 const formData = ref<FormCloudFunctions>({
   name: null,
-  slots: null,
+  slots: 1,
   scriptCid: null,
   file: null,
 });
 
 const rules: NFormRules = {
-  slots: ruleRequired(t('validation.cloudFunctions.slotsRequired')),
+  // slots: ruleRequired(t('validation.cloudFunctions.slotsRequired')),
   file: ruleRequired(t('validation.cloudFunctions.fileRequired')),
 };
 
@@ -139,11 +140,11 @@ onMounted(async () => {
 async function onFileChange({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const size = file.file?.size || 0;
 
-  // if (!file.type?.startsWith('text/javascript')) {
-  //   message.warning(t('validation.cloudFunctions.fileType'));
-  //   onError();
-  //   return;
-  // }
+  if (!file.type?.startsWith('text/javascript')) {
+    message.warning(t('validation.cloudFunctions.fileType'));
+    onError();
+    return;
+  }
 
   formData.value.file = {
     ...file,
@@ -164,16 +165,14 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else if (props.jobUuid) {
-      updateCloudFunction();
+      updateJob();
     } else {
-      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_CREATE, () =>
-        createCloudFunction()
-      );
+      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_CREATE, () => createJob());
     }
   });
 }
 
-async function createCloudFunction() {
+async function createJob() {
   loading.value = true;
 
   if (!dataStore.hasProjects) {
@@ -210,7 +209,7 @@ async function createCloudFunction() {
   loading.value = false;
 }
 
-async function updateCloudFunction() {
+async function updateJob() {
   loading.value = true;
 
   try {
@@ -234,11 +233,7 @@ async function uploadFile(file?: FileListItemType | null) {
   const fileDetails = await uploadFileToIPFS(file, cloudFunctionStore.active.bucket_uuid);
 
   if (fileDetails) {
-    const cid = fileDetails.CIDv1 || fileDetails.CID;
-
-    const fileLink = new URL(fileDetails.link);
-    const token = fileLink.searchParams.get('token');
-    formData.value.scriptCid = `${cid}/?token=${token}`;
+    formData.value.scriptCid = fileDetails.CIDv1 || fileDetails.CID;
   }
 }
 </script>

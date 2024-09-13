@@ -30,6 +30,7 @@
     "error": "Error",
     "explore": "Explore",
     "goHome": "Go home",
+    "inactive": "inactive",
     "install": "Install",
     "images": "images",
     "learn": "Learn",
@@ -191,12 +192,13 @@
   },
   "computing": {
     "cloudFunctions": {
-      "activeJob": "Active Job ID",
       "addNew": "Add new Cloud function",
       "checkVideo": "Check out the video",
       "deployments": "Deployments",
       "documentation": "View Documentation",
       "endpoint": "Cloud function API endpoint",
+      "emptyArchive": "Cloud functions Archive",
+      "emptyArchiveInfo": "There are currently no Cloud functions in the Archive.",
       "monitoring": "Monitoring",
       "new": "New Cloud function",
       "startNew": "Start by creating a new cloud function",
@@ -1248,11 +1250,14 @@
         "description": "Description",
         "name": "Title",
         "jobName": "Job name",
-        "slots": "Slots",
+        "slots": "Number of processors",
         "startTime": "Start time",
         "endTime": "End time",
         "varKey": "Key",
-        "varValue": "Value"
+        "varValue": "Value",
+        "labelInfo": {
+          "slots": "Multi-processor jobs will be supported soon"
+        }
       }
     },
     "networkTypes": {
@@ -1375,7 +1380,7 @@
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
         "collection": "NFT collection has been archived",
-        "cloudFunction": "Cloud function has been deleted",
+        "cloudFunction": "Cloud function has been archived",
         "contract": "Contract has been deleted",
         "directory": "Folder has been deleted",
         "domain": "Domain has been deleted",

@@ -16,13 +16,13 @@
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts :service="ServiceTypeName.COMPUTING" />
+      <ModalCreditCosts v-if="!archive" :service="ServiceTypeName.COMPUTING" />
 
       <!-- Refresh cloudFunctions -->
       <n-button
         size="small"
         :loading="cloudFunctionStore.loading"
-        @click="cloudFunctionStore.fetchCloudFunctions()"
+        @click="cloudFunctionStore.fetchCloudFunctions(archive)"
       >
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
@@ -30,7 +30,7 @@
 
       <!-- Create new cloudFunction -->
       <n-button
-        v-if="cloudFunctionStore.hasCloudFunctions"
+        v-if="cloudFunctionStore.hasCloudFunctions && !archive"
         size="small"
         :disabled="authStore.isAdmin()"
         @click="modalCreateCloudFunctionVisible = true"
@@ -48,6 +48,10 @@
 </template>
 
 <script lang="ts" setup>
+defineProps({
+  archive: { type: Boolean, default: false },
+});
+
 const authStore = useAuthStore();
 const cloudFunctionStore = useCloudFunctionStore();
 const paymentStore = usePaymentStore();
@@ -55,6 +59,7 @@ const paymentStore = usePaymentStore();
 const modalCreateCloudFunctionVisible = ref<boolean>(false);
 
 onMounted(() => {
+  cloudFunctionStore.search = '';
   paymentStore.getPriceList();
 });
 </script>

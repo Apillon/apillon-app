@@ -1,11 +1,11 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderCloudFunctions />
+      <HeaderCloudFunction />
     </template>
 
     <slot>
-      <n-space v-if="cloudFunctionStore.hasJobs" class="pb-8" :size="32" vertical>
+      <n-space v-if="cloudFunctionStore.hasVariables" class="pb-8" :size="32" vertical>
         <ActionsComputingCloudFunctionsEnvironment />
         <TableComputingCloudFunctionVariables v-if="cloudFunctionStore.hasVariables" />
       </n-space>
@@ -29,7 +29,7 @@
               <Btn class="mb-2" size="large" @click="modalCreateVariableVisible = true">
                 {{ $t('computing.cloudFunctions.variable.btnAdd') }}
               </Btn>
-              <n-upload :show-file-list="false" accept=".env" :custom-request="e => uploadFile(e)">
+              <n-upload :show-file-list="false" :custom-request="e => uploadFile(e)">
                 <Btn type="secondary" size="large">
                   {{ $t('computing.cloudFunctions.variable.btnUpload') }}
                 </Btn>

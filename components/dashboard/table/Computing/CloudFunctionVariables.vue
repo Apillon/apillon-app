@@ -45,6 +45,7 @@ const createColumns = (): NDataTableColumns<EnvVariable> => {
               readonly: !isEditingRow(index),
               onUpdateValue(v) {
                 row.key = v;
+                cloudFunctionStore.variablesUpdate = true;
               },
               onKeyup(e) {
                 if (e.key === 'Enter') {
@@ -68,6 +69,7 @@ const createColumns = (): NDataTableColumns<EnvVariable> => {
           onUpdateValue(v) {
             if (isEditingRow(index)) {
               row.value = v;
+              cloudFunctionStore.variablesUpdate = true;
             }
           },
           onKeyup(e) {
@@ -137,6 +139,7 @@ const dropdownOptions = computed(() => {
               item => item.key !== currentRow.value?.key
             );
           }
+          cloudFunctionStore.variablesUpdate = true;
         },
       },
     },
