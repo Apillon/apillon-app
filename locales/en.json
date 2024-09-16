@@ -330,6 +330,10 @@
           "name": "Web3 Computing",
           "description": null
         },
+        "CONTRACTS": {
+          "name": "Smart contracts",
+          "description": null
+        },
         "HOSTING": {
           "name": "Web3 Hosting",
           "description": null
@@ -494,23 +498,19 @@
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
       "smartContracts": {
+        "audited": "Audited",
         "new": "New smart contract",
+        "customizeAndDeploy": "Customize and deploy",
         "create": "Create your smart contract",
+        "createNew": "Create a new smart contract",
+        "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
+        "details": "Smart Contract Details",
         "info": "Add it to your Web3 project",
         "table": {
           "chain": "Chain",
           "name": "Name",
           "contractAddress": "Address",
           "contractStatus": "Status"
-        },
-        "chain": {
-          "1": "MOONBEAM (Mainnet)",
-          "2": "MOONBASE (Testnet)",
-          "8": "ASTAR (Substrate)",
-          "81": "ASTAR SHIBUYA (Testnet)",
-          "592": "ASTAR (Mainnet)",
-          "1284": "MOONBEAM (Mainnet)",
-          "1287": "MOONBASE (Testnet)"
         },
         "status": {
           "0": "CREATED",
@@ -547,10 +547,7 @@
       "collection": "NFT collection",
       "info": "Browse the list of smart contracts you can deploy and integrate and start building immediately via API.",
       "kraken": "Smart contract for Kraken",
-      "meerkats": "Meerkats",
-      "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
-      "createNew": "Create new token",
-      "customizeAndDeploy": "Customize and deploy"
+      "meerkats": "Meerkats"
     },
     "solution": {
       "encryption": {
@@ -1367,6 +1364,7 @@
     "createServiceAndContinue": "Create service & continue to management",
     "continue": "Continue",
     "disabled": "Disabled",
+    "deploy": "Deploy",
     "generate": "Generate",
     "goBack": "Go back",
     "login": "Log in",

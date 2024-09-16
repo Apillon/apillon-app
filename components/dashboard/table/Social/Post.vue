@@ -6,19 +6,17 @@
     :data="postStore.items"
     :loading="postStore.loading"
     :expanded-row-keys="expandedRows"
-    :pagination="{
-      ...postStore.pagination,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="postStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
     :row-class-name="rowClassName"
-    @update:page="handlePageChange"
+    @update:page="(page: number) => handlePageChange(page, postStore.pagination.pageSize)"
+    @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
   />
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
@@ -211,12 +209,13 @@ watch(
     debouncedSearchFilter();
   }
 );
-const debouncedSearchFilter = debounce(handlePageChange, 500);
+const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
 
 /** On page change, load data */
-async function handlePageChange(page: number) {
-  await postStore.getPosts(page);
+async function handlePageChange(page = 1, limit = PAGINATION_LIMIT) {
+  await postStore.fetchPosts(page, limit);
   postStore.pagination.page = page;
+  postStore.pagination.pageSize = limit;
 }
 
 async function selectPost() {

@@ -8,12 +8,17 @@
       mode="horizontal"
     />
   </div>
-  <component :is="currentComponent" name="name" />
+  <component :is="currentComponent" name="name" :abi="abi" />
 </template>
 
 <script lang="ts" setup>
 import Functions from './Functions.vue';
 import Events from './Events.vue';
+
+defineProps({
+  abi: { type: Array<SmartContractABI>, default: [] },
+});
+
 // Define menu options
 const menuOptions = [
   { label: 'Functions', key: 'functions' },

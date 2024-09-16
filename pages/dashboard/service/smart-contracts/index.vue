@@ -7,22 +7,27 @@
     </template>
     <slot>
       <div class="pb-8">
-        <TableSmartContractsTable
-          v-if="deployedContractStore.hasDeployedContracts"
-          :contracts="deployedContractStore.items"
-        />
+        <n-space
+          v-if="
+            deployedContractStore.hasDeployedContracts ||
+            deployedContractStore.search ||
+            deployedContractStore.loading
+          "
+          :size="32"
+          vertical
+        >
+          <ActionsSmartContractsActions />
+          <TableSmartContracts :contracts="deployedContractStore.items" />
+        </n-space>
         <Empty
           v-else
           :title="$t('dashboard.service.smartContracts.create')"
           :info="$t('dashboard.service.smartContracts.info')"
           icon="storage/empty"
         >
-          <NuxtLink
-            class="flex items-center gap-x-2"
-            :to="{ name: 'dashboard-service-smart-contracts' }"
-          >
-            <h4>{{ $t('dashboard.service.smartContracts.new') }}</h4>
-          </NuxtLink>
+          <Btn :to="{ name: 'dashboard-service-smart-contracts' }">
+            {{ $t('dashboard.service.smartContracts.new') }}
+          </Btn>
         </Empty>
       </div>
     </slot>

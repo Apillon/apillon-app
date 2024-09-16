@@ -5,8 +5,6 @@ export const useSmartContractStore = defineStore('smartContract', {
     active: {} as SmartContractInterface,
     items: [] as SmartContractInterface[],
     loading: false,
-    pagination: createPagination(),
-    search: '',
   }),
   getters: {
     hasSmartContracts(state): boolean {
@@ -40,8 +38,10 @@ export const useSmartContractStore = defineStore('smartContract', {
     async fetchSmartContracts(showLoader: boolean = true) {
       this.loading = showLoader;
       try {
-        const res = await $api.get<SmartContractsResponse>(endpoints.smartContracts());
-        // TODO type
+        const res = await $api.get<SmartContractsResponse>(
+          endpoints.smartContracts(),
+          PARAMS_ALL_ITEMS
+        );
         this.items = res.data.items;
 
         /** Save timestamp to SS */
@@ -58,16 +58,19 @@ export const useSmartContractStore = defineStore('smartContract', {
       this.loading = showLoader;
       try {
         const res = await $api.get<SmartContractResponse>(endpoints.smartContracts(contractUUID));
-        // TODO type
-        this.active = res.data;
+        this.loading = false;
+
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.SMART_CONTRACTS, Date.now().toString());
+
+        return res.data;
       } catch (error: any) {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       } finally {
         this.loading = false;
       }
+      return null;
     },
   },
 });

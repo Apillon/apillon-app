@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
@@ -171,11 +171,11 @@ watch(
     debouncedSearchFilter();
   }
 );
-const debouncedSearchFilter = debounce(handlePageChange, 500);
+const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
 
 /** On page change, load data */
-async function handlePageChange(page: number) {
-  await chatStore.getChats(page);
+async function handlePageChange(page = 1) {
+  await chatStore.fetchChats(page);
   chatStore.pagination.page = page;
 }
 

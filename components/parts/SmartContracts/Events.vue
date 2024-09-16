@@ -29,15 +29,16 @@ type Function = {
   name: string;
   type: string;
 };
+
+const props = defineProps({
+  abi: { type: Array<SmartContractABI>, default: [] },
+});
 const { t } = useI18n();
-const deployedContractStore = useDeployedContractStore();
 
 const tableData = ref<Array<Function[]>>([]);
 const selectedEvent = ref('');
 
-const readEvents = deployedContractStore.active.contractVersion.abi.filter(
-  item => item.type === 'event'
-);
+const readEvents = props.abi.filter(item => item.type === 'event');
 
 const createColumns = (): NDataTableColumns<Function> => {
   return [
@@ -54,7 +55,7 @@ const createColumns = (): NDataTableColumns<Function> => {
 const columns = createColumns();
 
 const updateTableData = () => {
-  const contractDetails = deployedContractStore.active.contractVersion.abi;
+  const contractDetails = props.abi;
   const eventDetails = contractDetails.find(
     item => item.type === 'event' && item.name === selectedEvent.value
   );

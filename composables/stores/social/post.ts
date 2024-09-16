@@ -7,11 +7,7 @@ export const usePostStore = defineStore('post', {
     loading: false,
     search: '',
     settings: null as any,
-    pagination: {
-      page: 1,
-      pageSize: PAGINATION_LIMIT,
-      itemCount: 0,
-    },
+    pagination: createPagination(),
   }),
   getters: {
     hasPosts(state): boolean {
@@ -58,9 +54,9 @@ export const usePostStore = defineStore('post', {
     /**
      * Fetch wrappers
      */
-    async getPosts(page = 1): Promise<PostInterface[]> {
+    async getPosts(page = 1, limit = PAGINATION_LIMIT): Promise<PostInterface[]> {
       if (page !== this.pagination.page || !this.hasPosts || isCacheExpired(LsCacheKeys.POSTS)) {
-        return await this.fetchPosts();
+        return await this.fetchPosts(page, limit);
       }
       return this.items;
     },
@@ -75,14 +71,18 @@ export const usePostStore = defineStore('post', {
     /**
      * API calls
      */
-    async fetchPosts(page?: number, showLoader: boolean = true): Promise<PostInterface[]> {
+    async fetchPosts(
+      page: number = 1,
+      limit: number = PAGINATION_LIMIT,
+      showLoader: boolean = true
+    ): Promise<PostInterface[]> {
       this.loading = showLoader;
 
       try {
         const dataStore = useDataStore();
         const params = parseArguments({
-          limit: this.pagination.pageSize,
-          page: page,
+          limit,
+          page,
           search: this.search,
           project_uuid: dataStore.projectUuid,
         });

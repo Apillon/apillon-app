@@ -2,7 +2,7 @@
   <n-space v-bind="$attrs" justify="space-between">
     <div class="min-w-[11rem] w-[20vw] max-w-xs">
       <n-input
-        v-model:value="smartContractStore.search"
+        v-model:value="deployedContractStore.search"
         type="text"
         name="search"
         size="small"
@@ -32,5 +32,5 @@
 <script lang="ts" setup>
 const router = useRouter();
 const authStore = useAuthStore();
-const smartContractStore = useSmartContractStore();
+const deployedContractStore = useDeployedContractStore();
 </script>

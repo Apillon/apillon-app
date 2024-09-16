@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderSmartContractsSecondary />
+      <HeaderSmartContract to="/dashboard/service/smart-contracts/new" />
     </template>
 
     <slot>
@@ -10,7 +10,7 @@
           <div>
             <SolutionContent :content="content" :icons="true" />
             <Btn type="primary" :to="`/dashboard/service/smart-contracts/${params?.id}/deploy`">
-              {{ $t('dashboard.smartContracts.customizeAndDeploy') }}
+              {{ $t('dashboard.service.smartContracts.customizeAndDeploy') }}
             </Btn>
           </div>
 
@@ -23,9 +23,9 @@
         </div>
       </div>
 
-      <div>
-        <h4>Smart Contract Details</h4>
-        <SmartContractsSubMenu />
+      <div v-if="smartContractStore.active?.contractVersion" class="pb-8">
+        <h4>{{ $t('dashboard.service.smartContracts.details') }}</h4>
+        <SmartContractsSubMenu :abi="smartContractStore.active?.contractVersion?.abi" />
       </div>
     </slot>
   </Dashboard>
@@ -34,33 +34,19 @@
 <script lang="ts" setup>
 import NftTemplateJPG from '~/assets/images/solution/ps-signup-email-airdrop.png';
 
-const router = useRouter();
-const { params } = useRoute();
 const { t } = useI18n();
-const { generateContent } = useSolution();
+const { params } = useRoute();
 const smartContractStore = useSmartContractStore();
+const { pageLoading, init } = useSmartContracts();
 
-const pageLoading = ref<boolean>(true);
-const dataStore = useDataStore();
-
+const { generateContent } = useSolution();
 const content = generateContent(SolutionKey.SMART_CONTRACT);
-const contractUuid = ref<string>(`${params?.id}` || `${params?.slug}` || '');
 
 useHead({
   title: t('dashboard.solution.nftEmailSignupAirdrop.name'),
 });
 
 onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    console.log('contractUuid', contractUuid.value);
-
-    if (!contractUuid.value) {
-      router.push({ name: 'dashboard-service-smart-contracts' });
-    } else {
-      await smartContractStore.getSmartContract(contractUuid.value);
-
-      pageLoading.value = false;
-    }
-  });
+  init();
 });
 </script>

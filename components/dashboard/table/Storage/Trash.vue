@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import type { DataTableSortState, DataTableInst } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
 
@@ -231,7 +231,7 @@ watch(
     clearSorter();
   }
 );
-const debouncedSearchFilter = debounce(getDeletedFiles, 500);
+const debouncedSearchFilter = useDebounceFn(getDeletedFiles, 500);
 
 /** On page change, load data */
 async function handlePageChange(currentPage: number, pageSize?: number) {

@@ -21,6 +21,12 @@ const astarShibuya = {
 };
 
 export default function useSmartContracts() {
+  const router = useRouter();
+  const { params } = useRoute();
+  const dataStore = useDataStore();
+  const smartContractStore = useSmartContractStore();
+
+  const pageLoading = ref<boolean>(true);
   const formRef = ref<NFormInst | null>(null);
   const settings = ref([false, false, false, false]);
   const form = ref<{ [key: string]: any }>({
@@ -37,14 +43,6 @@ export default function useSmartContracts() {
     console.log(settings);
   }
 
-  function disablePastDate(ts: number) {
-    return ts < new Date().setHours(0, 0, 0, 0);
-  }
-
-  function disablePastTime(ts: number) {
-    return ts < Date.now();
-  }
-
   function getChainConfig(chainId: number) {
     switch (chainId) {
       case moonbaseAlpha.id:
@@ -58,15 +56,33 @@ export default function useSmartContracts() {
     }
   }
 
+  async function init() {
+    const contractUuid = params?.id ? params?.id : params?.slug;
+    if (!contractUuid) {
+      router.push({ name: 'dashboard-service-smart-contracts' });
+    }
+
+    await Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      const smartContract = await smartContractStore.getSmartContract(`${contractUuid}`);
+
+      if (!smartContract) {
+        router.push({ name: 'dashboard-service-smart-contracts' });
+      } else {
+        smartContractStore.active = smartContract;
+        pageLoading.value = false;
+      }
+    });
+  }
+
   return {
     astarShibuya,
     formRef,
     form,
+    pageLoading,
     settings,
     addSettingsOption,
-    disablePastDate,
-    disablePastTime,
     getChainConfig,
+    init,
     isSpecialField,
   };
 }

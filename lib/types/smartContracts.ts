@@ -9,19 +9,6 @@ export enum SmartContractStatus {
 }
 
 declare global {
-  interface SmartContractInterface {
-    chainType: number;
-    contractType: number;
-    contract_uuid: string;
-    description: string;
-    id: number;
-    name: string;
-    status: number;
-  }
-
-  interface SmartContractResponse extends GeneralResponse<SmartContractInterface> {}
-  interface SmartContractsResponse extends GeneralItemsResponse<SmartContractInterface> {}
-
   interface SmartContractABI {
     stateMutability?: string;
     type: string;
@@ -54,6 +41,16 @@ declare global {
     abi: SmartContractABI[];
     methods: ContractMethod[];
   }
+
+  interface SmartContractInterface extends BaseObjectInterface {
+    chainType: number;
+    contractType: number;
+    contractVersion?: ContractVersion;
+    contract_uuid: string;
+  }
+
+  interface SmartContractResponse extends GeneralResponse<SmartContractInterface> {}
+  interface SmartContractsResponse extends GeneralItemsResponse<SmartContractInterface> {}
 
   interface DeployedContractInterface {
     status: number;

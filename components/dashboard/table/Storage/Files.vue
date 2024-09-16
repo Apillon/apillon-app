@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import type { DataTableInst, DataTableRowKey, DataTableSortState } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
 import { TableFilesType } from '~/lib/types/storage';
@@ -582,7 +582,7 @@ watch(
     }
   }
 );
-const debouncedSearchFilter = debounce(getDirectoryContent, 500);
+const debouncedSearchFilter = useDebounceFn(getDirectoryContent, 500);
 
 /** Function "Fetch directory content" wrapper  */
 async function getDirectoryContent(

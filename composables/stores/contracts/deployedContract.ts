@@ -17,11 +17,15 @@ export const useDeployedContractStore = defineStore('deployedContract', {
     /**
      * Fetch wrappers
      */
-    async getDeployedContracts() {
-      if (this.hasDeployedContracts && !isCacheExpired(LsCacheKeys.SMART_CONTRACTS_DEPLOYED)) {
+    async getDeployedContracts(page = 1, limit = PAGINATION_LIMIT) {
+      if (
+        page === this.pagination.page &&
+        this.hasDeployedContracts &&
+        !isCacheExpired(LsCacheKeys.SMART_CONTRACTS_DEPLOYED)
+      ) {
         return this.items;
       }
-      return await this.fetchDeployedContracts();
+      return await this.fetchDeployedContracts(page, limit);
     },
 
     async getDeployedContract(contractUuid: string) {
@@ -38,7 +42,7 @@ export const useDeployedContractStore = defineStore('deployedContract', {
      * API calls
      */
 
-    async fetchDeployedContracts(showLoader: boolean = false) {
+    async fetchDeployedContracts(page = 1, limit = PAGINATION_LIMIT, showLoader: boolean = true) {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -46,9 +50,16 @@ export const useDeployedContractStore = defineStore('deployedContract', {
 
       this.loading = showLoader;
       try {
-        const res = await $api.get<DeployedContractsResponse>(endpoints.smartContractsDeployed(), {
+        const params = parseArguments({
+          limit,
+          page,
+          search: this.search,
           project_uuid: dataStore.projectUuid,
         });
+        const res = await $api.get<DeployedContractsResponse>(
+          endpoints.smartContractsDeployed(),
+          params
+        );
         this.items = res.data.items;
         this.pagination.itemCount = res.data.total;
 

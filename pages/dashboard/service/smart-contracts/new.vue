@@ -1,18 +1,19 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderSmartContractsSecondary />
+      <HeaderSmartContract />
     </template>
 
     <slot>
       <div class="pb-8">
         <div class="max-w-lg mb-8">
-          <p>{{ $t('dashboard.smartContracts.description') }}</p>
+          <p>{{ $t('dashboard.service.smartContracts.description') }}</p>
         </div>
-        <div class="grid gap-4 md:grid-cols-3">
+        <div class="grid gap-4 md:grid-cols-services">
           <SmartContractsCard v-for="(contract, key) in smartContractStore.items" :key="key">
             <div class="flex items-center gap-2 mb-4 text-green">
-              <span class="icon-security"></span> Audited
+              <span class="icon-security"></span>
+              {{ $t('dashboard.service.smartContracts.audited') }}
             </div>
             <div class="flex items-center gap-2 mb-4">
               <span class="text-2xl icon-file"></span>
@@ -22,9 +23,10 @@
             <Btn
               type="secondary"
               class="mt-8"
+              size="large"
               :to="`/dashboard/service/smart-contracts/${contract.contract_uuid}`"
             >
-              {{ $t('dashboard.smartContracts.createNew') }}
+              {{ $t('dashboard.service.smartContracts.new') }}
             </Btn>
           </SmartContractsCard>
         </div>
