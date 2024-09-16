@@ -16,7 +16,7 @@
         <TableEllipsis
           class="bg-white px-4 py-[10px] rounded-lg !text-black max-w-sm lg:max-w-md xl:max-w-lg xxl:max-w-none"
           color="text-black"
-          :text="`https://${cloudFunctionStore.functionUuid}.${subdomain}.web3approved.com`"
+          :text="`${cloudFunctionStore.gatewayUrl}`"
         />
       </div>
     </template>
@@ -32,6 +32,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useCloudFunctionStore } from '~/composables/stores/computing/cloudFunction';
+
 const config = useRuntimeConfig();
 const cloudFunctionStore = useCloudFunctionStore();
 const modalW3WarnVisible = ref<boolean>(false);

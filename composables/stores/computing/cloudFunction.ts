@@ -26,6 +26,9 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     functionUuid(state): string {
       return state.active.function_uuid;
     },
+    gatewayUrl(state): string {
+      return state.active.gatewayUrl;
+    },
     jobs(state): JobInterface[] {
       return state.active.jobs;
     },
