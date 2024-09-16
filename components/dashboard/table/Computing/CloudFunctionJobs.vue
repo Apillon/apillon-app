@@ -71,14 +71,21 @@ const createColumns = (): NDataTableColumns<JobInterface> => {
         return h(resolveComponent('TableEllipsis'), { text: row.scriptCid }, '');
       },
     },
-    // {
-    //   key: 'startTime',
-    //   title: t('form.label.cloudFunctions.startTime'),
-    //   minWidth: 120,
-    //   render(row) {
-    //     return dateTimeToDateAndTime(row?.startTime || '');
-    //   },
-    // },
+    {
+      key: 'createTime',
+      title: t('dashboard.created'),
+      minWidth: 120,
+      render(row) {
+        return dateTimeToDateAndTime(row?.createTime || '');
+      },
+    },
+    {
+      key: 'updateTime',
+      title: t('general.updateTime'),
+      render(row) {
+        return dateTimeToDateAndTime(row?.updateTime || '');
+      },
+    },
     // {
     //   key: 'endTime',
     //   title: t('form.label.cloudFunctions.endTime'),

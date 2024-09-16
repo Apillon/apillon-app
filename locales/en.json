@@ -230,7 +230,7 @@
         "title": "You currently have no deployments for this Cloud function",
         "status": {
           "1": "DEPLOYING",
-          "2": "DEPLOYED",
+          "2": "ASSIGNING PROCESSORS",
           "3": "ACTIVE",
           "4": "PAUSED",
           "9": "DELETED"
