@@ -15,7 +15,10 @@
   />
   <!-- Modal - Create Service -->
   <modal v-model:show="modalEditEmbeddedWalletVisible" :title="$t('embeddedWallet.edit')">
-    <FormEmbeddedWallet @submit-success="modalEditEmbeddedWalletVisible = false" />
+    <FormEmbeddedWallet
+      :integration-uuid="currentRow.integration_uuid"
+      @submit-success="modalEditEmbeddedWalletVisible = false"
+    />
   </modal>
 </template>
 
@@ -72,7 +75,7 @@ const createColumns = (): NDataTableColumns<EmbeddedWalletInterface> => {
   return [
     {
       key: 'title',
-      title: t('embeddedWallet.apiKey.title'),
+      title: t('embeddedWallet.table.title'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
@@ -83,7 +86,6 @@ const createColumns = (): NDataTableColumns<EmbeddedWalletInterface> => {
     {
       key: 'integration_uuid',
       title: t('embeddedWallet.table.integration_uuid'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row: EmbeddedWalletInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.integration_uuid }, '');
       },
@@ -94,7 +96,7 @@ const createColumns = (): NDataTableColumns<EmbeddedWalletInterface> => {
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      title: t('embeddedWallet.created'),
+      title: t('embeddedWallet.table.created'),
       key: 'created',
       render(row: EmbeddedWalletInterface) {
         return h('span', {}, { default: () => dateTimeToDate(row.createTime) });

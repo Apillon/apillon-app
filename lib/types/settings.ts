@@ -113,6 +113,6 @@ declare global {
 
   interface EmbeddedWalletResponse extends GeneralResponse<EmbeddedWalletInterface> {}
   interface EmbeddedWalletsResponse extends GeneralItemsResponse<EmbeddedWalletInterface> {}
-  interface EmbeddedWalletInfoResponse extends GeneralResponse<EmbeddedWalletInterface> {}
+  interface EmbeddedWalletInfoResponse extends GeneralResponse<EmbeddedWalletInfoInterface> {}
   interface SignaturesResponse extends GeneralItemsResponse<SignatureInterface> {}
 }
