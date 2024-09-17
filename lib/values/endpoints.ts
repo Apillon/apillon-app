@@ -248,6 +248,16 @@ const Endpoints = {
     return `/computing/contracts/${contractUuid}/activate`;
   },
 
+  /** Embedded wallet */
+  embeddedWallets: (uuid?: number | string) => {
+    return uuid ? `/embedded-wallet/integrations/${uuid}` : '/embedded-wallet/integrations';
+  },
+  embeddedWalletInfo: '/embedded-wallet/info',
+  embeddedWalletIntegration: '/embedded-wallet/integration',
+  embeddedWalletSignatures: (uuid: number | string) => {
+    return `/embedded-wallet/integrations/${uuid}/signatures`;
+  },
+
   /**
    * Project settings
    */
@@ -265,7 +275,6 @@ const Endpoints = {
   apiKeyServiceRoles: (key: number) => {
     return `/api-keys/${key}/service-roles`;
   },
-  embeddedWallet: '/wallet/oasis-signatures-count-by-api-key',
 
   /**
    * Social

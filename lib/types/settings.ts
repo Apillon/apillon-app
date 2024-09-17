@@ -34,16 +34,6 @@ declare global {
     updateTime: string;
   }
 
-  interface EmbeddedWalletInterface {
-    id: number;
-    status: string;
-    apiKey: string;
-    name: string;
-    testNetwork: number;
-    updateTime: string;
-    oasisSignatures: number;
-  }
-
   interface ApiKeyCreatedInterface {
     id: string;
     status: string;
@@ -68,9 +58,6 @@ declare global {
   interface ApiKeyRolesResponse extends GeneralResponse<Array<ApiKeyRoleInterface>> {}
   interface ApiKeyRoleUpdateResponse extends GeneralResponse<ApiKeyRoleInterface> {}
   interface ApiKeysResponse extends GeneralItemsResponse<ApiKeyInterface> {}
-
-  interface EmbeddedWalletResponse extends GeneralResponse<EmbeddedWalletInterface> {}
-  interface EmbeddedWalletsResponse extends GeneralResponse<EmbeddedWalletInterface[]> {}
 
   /**
    * Oauth Link
@@ -101,4 +88,31 @@ declare global {
     url: string;
   }
   interface DiscordLinkResponse extends GeneralResponse<DiscordLinkInterface> {}
+
+  /**
+   * Embedded Wallet
+   */
+  interface EmbeddedWalletInterface extends BaseObjectInterface {
+    integration_uuid: string;
+    title: string;
+    numberOfSignatures: number;
+  }
+  interface EmbeddedWalletInfoInterface {
+    maxNumOfEWIntegrations: number;
+    numOfEWIntegrations: number;
+    maxNumOfEWSignatures: number;
+    numOfEWSignaturesForCurrentMonth: number;
+  }
+  interface SignatureInterface {
+    apiKey: string;
+    dataHash: string;
+    hashedUsername: string | null;
+    publicAddress: string | null;
+    status: number;
+  }
+
+  interface EmbeddedWalletResponse extends GeneralResponse<EmbeddedWalletInterface> {}
+  interface EmbeddedWalletsResponse extends GeneralItemsResponse<EmbeddedWalletInterface> {}
+  interface EmbeddedWalletInfoResponse extends GeneralResponse<EmbeddedWalletInterface> {}
+  interface SignaturesResponse extends GeneralItemsResponse<SignatureInterface> {}
 }

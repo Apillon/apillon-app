@@ -2,7 +2,7 @@
   <n-space v-bind="$attrs" justify="space-between">
     <div class="min-w-[11rem] w-[20vw] max-w-xs">
       <n-input
-        v-model:value="settingsStore.searchWallet"
+        v-model:value="embeddedWalletStore.search"
         type="text"
         name="search"
         size="small"
@@ -21,14 +21,18 @@
       <!-- Refresh -->
       <n-button
         size="small"
-        :loading="settingsStore.loadingWallet"
-        @click="settingsStore.fetchEmbeddedWallets()"
+        :loading="embeddedWalletStore.loading"
+        @click="
+          embeddedWalletStore.fetchEmbeddedWallets(
+            embeddedWalletStore.pagination.page,
+            embeddedWalletStore.pagination.pageSize
+          )
+        "
       >
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
-      <!-- Create new website -->
       <n-button size="small" @click="showModalNewEmbeddedWallet = true">
         <span class="icon-create-folder text-xl text-primary mr-2"></span>
         <span class="text-primary">{{ $t('embeddedWallet.createNew') }}</span>
@@ -36,13 +40,13 @@
     </n-space>
   </n-space>
 
-  <!-- Modal - Create Service -->
+  <!-- Modal - Create wallet -->
   <modal v-model:show="showModalNewEmbeddedWallet" :title="$t('embeddedWallet.createNew')">
     <FormEmbeddedWallet @submit-success="showModalNewEmbeddedWallet = false" />
   </modal>
 </template>
 
 <script lang="ts" setup>
-const settingsStore = useSettingsStore();
+const embeddedWalletStore = useEmbeddedWalletStore();
 const showModalNewEmbeddedWallet = ref<boolean | null>(false);
 </script>

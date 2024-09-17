@@ -11,7 +11,7 @@
     <slot>
       <div class="pb-8">
         <n-collapse
-          v-if="settingsStore.hasEmbeddedWallets"
+          v-if="embeddedWalletStore.hasEmbeddedWallets"
           class="border-b-1 border-bg-lighter -mt-4 pb-4"
           accordion
           @update:expanded-names="onUpdateAccordion"
@@ -28,8 +28,11 @@
         </n-collapse>
         <EmbeddedWalletInstructions v-else />
 
-        <ActionsEmbeddedWallet v-if="settingsStore.hasEmbeddedWallets" class="my-8" />
-        <TableEmbeddedWallet v-if="settingsStore.hasEmbeddedWallets" />
+        <ActionsEmbeddedWallet v-if="embeddedWalletStore.hasEmbeddedWallets" class="my-8" />
+        <TableEmbeddedWallet
+          v-if="embeddedWalletStore.hasEmbeddedWallets"
+          :embedded-wallets="embeddedWalletStore.items"
+        />
       </div>
     </slot>
   </Dashboard>
@@ -38,7 +41,7 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const dataStore = useDataStore();
-const settingsStore = useSettingsStore();
+const embeddedWalletStore = useEmbeddedWalletStore();
 
 const pageLoading = ref<boolean>(true);
 const instructionsVisible = ref<boolean>(false);
@@ -50,8 +53,7 @@ useHead({
 onMounted(async () => {
   await sleep(10);
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    /** Fetch all api keys if they are not stored in settings store */
-    await settingsStore.getEmbeddedWallets();
+    await embeddedWalletStore.getEmbeddedWallets();
 
     pageLoading.value = false;
   });

@@ -1177,7 +1177,7 @@
         }
       },
       "embeddedWallet": {
-        "name": "Embedded wallet’s title",
+        "title": "Embedded wallet’s title",
         "description": "Embedded wallet’s description"
       }
     },
@@ -1244,7 +1244,7 @@
         "accountAddress": "Account Address"
       },
       "embeddedWallet": {
-        "name": "Enter the title for your personal reference",
+        "title": "Enter the title for your personal reference",
         "description": "Enter the description for your personal reference"
       }
     },
@@ -1333,6 +1333,7 @@
         "creditThreshold": "Credit threshold has been updated",
         "directory": "Folder has been updated",
         "domain": "Domain has been updated",
+        "embeddedWallet": "Embedded Wallet has been updated",
         "file": "File has been updated",
         "hosting": "Hosting has been updated",
         "ipns": "IPNS has been updated",
@@ -1945,6 +1946,7 @@
     "checkPrice": "Check price",
     "codeSnippets": "Code snippets:",
     "createNew": "New Embedded wallet integration",
+    "edit": "Edit Embedded wallet integration",
     "generateApiKey": "Generate API key",
     "generateNewApiKey": "Generate new key",
     "goToApiKey": "Go to API key management",
@@ -1958,12 +1960,14 @@
       "generate": "Generate new key"
     },
     "table": {
-      "secret": "Secret",
-      "name": "Name",
-      "environment": "ENV",
       "created": "Created",
-      "usage": "Usage",
-      "actions": "Actions"
+      "dataHash": "Data Hash",
+      "hashedUsername": "Hashed Username",
+      "integration_uuid": "Integration UUID",
+      "numberOfSignatures": "Number of signatures",
+      "publicAddress": "Public Address",
+      "title": "Embedded Wallet title",
+      "usage": "Usage"
     }
   },
   "storage": {
@@ -2251,6 +2255,9 @@
       "fileRequired": "Please upload file",
       "nameRequired": "Please enter name",
       "nftIdRequired": "Please enter NFT ID"
+    },
+    "embeddedWallet": {
+      "titleRequired": "Embedded Wallet title is required"
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
