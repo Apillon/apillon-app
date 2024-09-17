@@ -4,17 +4,10 @@ export const useSettingsStore = defineStore('settings', {
   state: () => ({
     apiKeys: [] as ApiKeyInterface[],
     discordLink: '' as string,
-    embeddedWallets: [] as EmbeddedWalletInterface[],
-    loadingWallet: false,
     oauthLinks: [] as OauthLinkInterface[],
-    searchWallet: '',
-    selectedWallet: '',
     users: [] as ProjectUserInterface[],
   }),
   getters: {
-    activeWallet(state) {
-      return this.embeddedWallets.find(item => item.apiKey === state.selectedWallet);
-    },
     currentUser(state) {
       if (Array.isArray(state.users) && state.users.length > 0) {
         const authStore = useAuthStore();
@@ -24,9 +17,6 @@ export const useSettingsStore = defineStore('settings', {
     },
     hasApiKeys(state) {
       return Array.isArray(state.apiKeys) && state.apiKeys.length > 0;
-    },
-    hasEmbeddedWallets(state) {
-      return Array.isArray(state.embeddedWallets) && state.embeddedWallets.length > 0;
     },
     hasUsers(state) {
       return Array.isArray(state.users) && state.users.length > 0;
@@ -39,7 +29,6 @@ export const useSettingsStore = defineStore('settings', {
     resetData() {
       this.apiKeys = [] as ApiKeyInterface[];
       this.users = [] as ProjectUserInterface[];
-      this.embeddedWallets = [] as EmbeddedWalletInterface[];
     },
 
     getApiKeyById(id: number) {
@@ -54,13 +43,6 @@ export const useSettingsStore = defineStore('settings', {
     async getApiKeys() {
       if (!this.hasApiKeys || isCacheExpired(LsCacheKeys.API_KEYS)) {
         await this.fetchApiKeys();
-      }
-    },
-
-    /** Oasis embedded wallet keys */
-    async getEmbeddedWallets() {
-      if (!this.hasEmbeddedWallets || isCacheExpired(LsCacheKeys.EMBEDDED_WALLET)) {
-        await this.fetchEmbeddedWallets();
       }
     },
 
@@ -105,31 +87,6 @@ export const useSettingsStore = defineStore('settings', {
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
-      }
-    },
-
-    /** embedded wallet API Keys */
-    async fetchEmbeddedWallets() {
-      const dataStore = useDataStore();
-      const project_uuid = await dataStore.getProjectUuid();
-      if (!project_uuid) return;
-
-      this.loadingWallet = true;
-      try {
-        const res = await $api.get<EmbeddedWalletsResponse>(endpoints.embeddedWallet, {
-          project_uuid,
-        });
-        this.embeddedWallets = res.data;
-
-        /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.EMBEDDED_WALLET, Date.now().toString());
-      } catch (error) {
-        this.embeddedWallets = [] as EmbeddedWalletInterface[];
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      } finally {
-        this.loadingWallet = false;
-        this.searchWallet = '';
       }
     },
 

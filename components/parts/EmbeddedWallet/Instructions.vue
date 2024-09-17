@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div>
+    <div class="mx-auto">
       <h4 class="text-center mb-4">{{ $t('embeddedWallet.howItWorks') }}</h4>
       <Carousel class="w-full max-w-[440px]" :slides="[img1, img2, img3, img4, img5, img6]" />
     </div>

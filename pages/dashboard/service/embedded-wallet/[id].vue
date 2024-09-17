@@ -26,6 +26,8 @@
           </NuxtLink>
         </div>
 
+        <TableEmbeddedWalletSignatures />
+
         <CodeSnippet />
       </div>
     </slot>
@@ -37,10 +39,9 @@ const { t } = useI18n();
 const { params } = useRoute();
 const router = useRouter();
 const dataStore = useDataStore();
-const settingsStore = useSettingsStore();
+const embeddedWalletStore = useEmbeddedWalletStore();
 
 const pageLoading = ref<boolean>(true);
-const walletApiKey = ref<string>(`${params?.id}` || '');
 
 useHead({
   title: t('embeddedWallet.title'),
@@ -48,13 +49,16 @@ useHead({
 
 onMounted(async () => {
   await sleep(10);
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await settingsStore.getEmbeddedWallets();
-    settingsStore.selectedWallet = walletApiKey.value;
 
-    if (!settingsStore.activeWallet) {
-      router.push({ name: 'dashboard-service-computing' });
+  Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    const walletUuid = `${params?.id}` || '';
+    const embeddedWallet = await embeddedWalletStore.getEmbeddedWallet(walletUuid);
+
+    if (!embeddedWallet) {
+      router.push({ name: 'dashboard-service-embedded-wallet' });
+      return;
     }
+    embeddedWalletStore.active = embeddedWallet;
   });
   pageLoading.value = false;
 });

@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <Spinner v-if="integrationUuid && !embeddedWallet" />
+  <div v-else>
     <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
@@ -12,16 +13,16 @@
       autocomplete="off"
       @submit.prevent="handleSubmit"
     >
-      <!--  EmbeddedWallet name -->
+      <!--  EmbeddedWallet title -->
       <n-form-item
-        path="name"
-        :label="$t('form.label.embeddedWallet.name')"
-        :label-props="{ for: 'name' }"
+        path="title"
+        :label="$t('form.label.embeddedWallet.title')"
+        :label-props="{ for: 'title' }"
       >
         <n-input
-          v-model:value="formData.name"
-          :input-props="{ id: 'name' }"
-          :placeholder="$t('form.placeholder.embeddedWallet.name')"
+          v-model:value="formData.title"
+          :input-props="{ id: 'title' }"
+          :placeholder="$t('form.placeholder.embeddedWallet.title')"
           clearable
         />
       </n-form-item>
@@ -55,48 +56,35 @@
         </Btn>
       </n-form-item>
     </n-form>
-
-    <!-- Modal - API key details -->
-    <n-modal
-      v-model:show="showModalWalletDetails"
-      :mask-closable="false"
-      :close-on-esc="false"
-      :closable="false"
-      preset="dialog"
-      :title="$t('dashboard.apiKey.details')"
-      :positive-text="$t('dashboard.apiKey.secretSaved')"
-      @positive-click="showModalWalletDetails = false"
-    >
-      <ApiKeyDetails v-bind="createdWallet" />
-    </n-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 type FormEmbeddedWallet = {
-  name: string | null;
+  title: string | null;
   description?: string | null;
 };
-const emit = defineEmits(['submitSuccess', 'createSuccess']);
+const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
+const props = defineProps({
+  integrationUuid: { type: String, default: '' },
+});
 
 const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
-const settingsStore = useSettingsStore();
+const embeddedWalletStore = useEmbeddedWalletStore();
 
 const loading = ref<boolean>(false);
-const showModalWalletDetails = ref<boolean>(false);
-const createdWallet = ref<ApiKeyCreatedInterface>();
-
+const embeddedWallet = ref<EmbeddedWalletInterface | null>(null);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormEmbeddedWallet>({
-  name: null,
+  title: null,
   description: null,
 });
 
 const rules: NFormRules = {
-  name: ruleRequired(t('validation.embeddedWallet.nameRequired')),
+  title: ruleRequired(t('validation.embeddedWallet.titleRequired')),
   description: ruleDescription(t('validation.descriptionTooLong')),
 };
 
@@ -105,28 +93,12 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 onMounted(async () => {
-  await dataStore.getServicesByType(ServiceType.WALLET);
-  if (!dataStore.hasServicesByType(ServiceType.WALLET)) {
-    await createServiceWallet();
+  if (props.integrationUuid) {
+    embeddedWallet.value = await embeddedWalletStore.getEmbeddedWallet(props.integrationUuid);
+    formData.value.title = embeddedWallet.value.title;
+    formData.value.description = embeddedWallet.value.description;
   }
 });
-
-async function createServiceWallet() {
-  const bodyData = {
-    project_uuid: dataStore.project.selected,
-    serviceType_id: ServiceType.WALLET,
-    name: 'Service Embedded Wallet',
-    active: 1,
-  };
-
-  try {
-    await $api.post<ServiceResponse>(endpoints.services(), bodyData);
-
-    dataStore.services = await dataStore.fetchServices();
-  } catch (error) {
-    console.warn(error);
-  }
-}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -136,6 +108,8 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
+    } else if (props.integrationUuid) {
+      updateEmbeddedWallet();
     } else {
       warningStore.showSpendingWarning(PriceServiceName.OASIS_SIGNATURE, () =>
         createEmbeddedWallet()
@@ -145,40 +119,57 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createEmbeddedWallet() {
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-    if (!dataStore.projectUuid) return;
-  }
-
-  const serviceWallet = await dataStore.getServiceByType(ServiceType.WALLET);
-  if (!serviceWallet) return;
+  const project_uuid = await dataStore.getProjectUuid();
+  if (!project_uuid) return;
 
   loading.value = true;
   try {
-    const project_uuid = dataStore.projectUuid;
-    const service_uuid = serviceWallet?.service_uuid;
-
     const bodyData = {
-      project_uuid: dataStore.projectUuid,
-      name: formData.value.name,
-      testNetwork: false,
-      roles: [
-        { project_uuid, service_uuid, role_id: ApiKeyRole.READ },
-        { project_uuid, service_uuid, role_id: ApiKeyRole.WRITE },
-        { project_uuid, service_uuid, role_id: ApiKeyRole.EXECUTE },
-      ],
+      ...formData.value,
+      project_uuid,
     };
-    const res = await $api.post<ApiKeyCreatedResponse>(endpoints.apiKey(), bodyData);
-    createdWallet.value = res.data;
-    showModalWalletDetails.value = true;
-
-    settingsStore.fetchEmbeddedWallets();
+    const res = await $api.post<EmbeddedWalletResponse>(
+      endpoints.embeddedWalletIntegration,
+      bodyData
+    );
+    embeddedWalletStore.items.push(res.data);
 
     message.success(t('form.success.created.embeddedWallet'));
+
+    sessionStorage.removeItem(LsCacheKeys.EMBEDDED_WALLET);
+    sessionStorage.removeItem(LsCacheKeys.EMBEDDED_WALLETS);
 
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess', res.data);
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  loading.value = false;
+}
+
+async function updateEmbeddedWallet() {
+  loading.value = true;
+
+  try {
+    const res = await $api.patch<EmbeddedWalletResponse>(
+      endpoints.embeddedWallets(props.integrationUuid),
+      formData.value
+    );
+    embeddedWalletStore.items.forEach(item => {
+      if (item.integration_uuid === res.data.integration_uuid) {
+        Object.assign(item.integration_uuid, res.data);
+      }
+    });
+
+    message.success(t('form.success.updated.embeddedWallet'));
+
+    sessionStorage.removeItem(LsCacheKeys.EMBEDDED_WALLET);
+    sessionStorage.removeItem(LsCacheKeys.EMBEDDED_WALLETS);
+
+    /** Emit events */
+    emit('submitSuccess');
+    emit('updateSuccess', res.data);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
