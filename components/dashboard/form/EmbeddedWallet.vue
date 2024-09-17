@@ -52,7 +52,8 @@
           :disabled="isFormDisabled"
           @click="handleSubmit"
         >
-          {{ $t('form.continue') }}
+          <span v-if="integrationUuid"> {{ $t('general.edit') }} </span>
+          <span v-else>{{ $t('form.continue') }}</span>
         </Btn>
       </n-form-item>
     </n-form>
@@ -95,8 +96,11 @@ const isFormDisabled = computed<boolean>(() => {
 onMounted(async () => {
   if (props.integrationUuid) {
     embeddedWallet.value = await embeddedWalletStore.getEmbeddedWallet(props.integrationUuid);
-    formData.value.title = embeddedWallet.value.title;
-    formData.value.description = embeddedWallet.value.description;
+
+    if (embeddedWallet.value) {
+      formData.value.title = embeddedWallet.value.title;
+      formData.value.description = embeddedWallet.value.description;
+    }
   }
 });
 
@@ -158,7 +162,7 @@ async function updateEmbeddedWallet() {
     );
     embeddedWalletStore.items.forEach(item => {
       if (item.integration_uuid === res.data.integration_uuid) {
-        Object.assign(item.integration_uuid, res.data);
+        Object.assign(item, res.data);
       }
     });
 

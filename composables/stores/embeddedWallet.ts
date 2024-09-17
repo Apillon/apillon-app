@@ -17,7 +17,7 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
   }),
   getters: {
     hasEmbeddedWalletInfo(state) {
-      return !!state.info;
+      return Object.keys(state.info).length > 0;
     },
     hasEmbeddedWallets(state) {
       return Array.isArray(state.items) && state.items.length > 0;
@@ -67,7 +67,7 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
       if (!this.hasEmbeddedWalletInfo || isCacheExpired(LsCacheKeys.EMBEDDED_WALLET_INFO)) {
         await this.fetchInfo();
       }
-      return this.active;
+      return this.info;
     },
     async getSignatures(integrationUuid: string, page = 1, limit = PAGINATION_LIMIT) {
       if (
@@ -143,10 +143,10 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
 
       this.loading = true;
       try {
-        const res = await $api.get<EmbeddedWalletResponse>(endpoints.embeddedWalletInfo, {
+        const res = await $api.get<EmbeddedWalletInfoResponse>(endpoints.embeddedWalletInfo, {
           project_uuid,
         });
-        this.loading = false;
+        this.info = res.data;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.EMBEDDED_WALLET_INFO, Date.now().toString());

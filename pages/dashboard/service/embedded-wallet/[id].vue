@@ -8,6 +8,30 @@
       <div class="relative pb-8">
         <h2 class="mb-4">Start building</h2>
 
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <n-card class="card-dark" size="small" :bordered="false" title="Number of integrations">
+            <h4 class="text-primary">
+              {{ embeddedWalletStore.info.numOfEWIntegrations }}
+            </h4>
+          </n-card>
+          <n-card
+            class="card-dark"
+            size="small"
+            :bordered="false"
+            title="Max number of integrations"
+          >
+            <h4 class="text-primary">{{ embeddedWalletStore.info.maxNumOfEWIntegrations }}</h4>
+          </n-card>
+          <n-card class="card-dark" size="small" :bordered="false" title="Number of signatures">
+            <h4 class="text-primary">
+              {{ embeddedWalletStore.info.numOfEWSignaturesForCurrentMonth }}
+            </h4>
+          </n-card>
+          <n-card class="card-dark" size="small" :bordered="false" title="Max number of signatures">
+            <h4 class="text-primary">{{ embeddedWalletStore.info.maxNumOfEWSignatures }}</h4>
+          </n-card>
+        </div>
+
         <div class="absolute right-4 flex gap-4 mb-4">
           <!-- View documentation -->
           <n-button
@@ -59,6 +83,9 @@ onMounted(async () => {
       return;
     }
     embeddedWalletStore.active = embeddedWallet;
+
+    await embeddedWalletStore.getInfo();
+    await embeddedWalletStore.getSignatures(walletUuid);
   });
   pageLoading.value = false;
 });
