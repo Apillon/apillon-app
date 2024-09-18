@@ -16,8 +16,6 @@
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts :service="ServiceTypeName.WALLET" />
-
       <!-- Refresh -->
       <n-button
         size="small"

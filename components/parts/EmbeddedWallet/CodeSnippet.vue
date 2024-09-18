@@ -25,18 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
 import CodeBlock from 'vue3-code-block';
-
-const props = defineProps({
-  spaceId: { type: String, default: 'spaceID' },
-  postId: { type: String, default: '' },
-});
-
-const darkTheme = ref<boolean>(true);
-const enableBackButton = ref<boolean>(false);
-const enableLoginButton = ref<boolean>(true);
-const enableInputAutofocus = ref<boolean>(true);
 
 // State to manage the selected code language
 const selectedLanguage = ref('app');
@@ -45,33 +34,8 @@ const select = (language: string) => {
   selectedLanguage.value = language;
 };
 
-// Settings computed property
-const settings = computed(() => {
-  return props.postId
-    ? {
-        theme: darkTheme.value ? 'dark' : 'light',
-        widgetElementId: 'grill',
-        hub: { id: props.spaceId },
-        channel: {
-          type: 'channel',
-          id: props.postId,
-          settings: {
-            enableBackButton: enableBackButton.value,
-            enableLoginButton: enableLoginButton.value,
-            enableInputAutofocus: enableInputAutofocus.value,
-          },
-        },
-      }
-    : {
-        theme: darkTheme.value ? 'dark' : 'light',
-        widgetElementId: 'grill',
-        hub: { id: props.spaceId },
-      };
-});
-
 // VueJS code block
-const codeVue = computed(() => {
-  return `
+const codeVue = `
   import { initializeOnWindow, getEmbeddedWallet } from '@embedded-wallet/sdk';
 
   initializeOnWindow({
@@ -89,10 +53,8 @@ const codeVue = computed(() => {
     },
 });
 `;
-});
 
-const codeReact = computed(() => {
-  return `
+const codeReact = `
   import { initializeApp } from '@embedded-wallet/ui';
   
   initializeApp('#embedded-wallet', {
@@ -115,11 +77,10 @@ const codeReact = computed(() => {
     ],
   });
 `;
-});
 
 // Computed property to return the current code based on selected language
 const currentCode = computed(() => {
-  return selectedLanguage.value === 'app' ? codeReact.value : codeVue.value;
+  return selectedLanguage.value === 'app' ? codeReact : codeVue;
 });
 
 // Update code size when language changes
@@ -127,9 +88,3 @@ const codeSize = computed(() => {
   return { 'min-height': `${22 * currentCode.value.split('\n').length}px` };
 });
 </script>
-
-<style lang="postcss">
-.active {
-  background-color: #f0f0f0;
-}
-</style>

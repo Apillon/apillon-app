@@ -52,7 +52,7 @@
 
         <TableEmbeddedWalletSignatures />
 
-        <CodeSnippet />
+        <EmbeddedWalletCodeSnippet />
       </div>
     </slot>
   </Dashboard>
