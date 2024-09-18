@@ -95,7 +95,7 @@ declare global {
   interface EmbeddedWalletInterface extends BaseObjectInterface {
     integration_uuid: string;
     title: string;
-    numberOfSignatures: number;
+    numOfSignatures: number;
   }
   interface EmbeddedWalletInfoInterface {
     maxNumOfEWIntegrations: number;

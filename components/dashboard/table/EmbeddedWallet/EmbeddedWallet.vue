@@ -91,7 +91,7 @@ const createColumns = (): NDataTableColumns<EmbeddedWalletInterface> => {
       },
     },
     {
-      key: 'numberOfSignatures',
+      key: 'numOfSignatures',
       title: t('embeddedWallet.table.numberOfSignatures'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
