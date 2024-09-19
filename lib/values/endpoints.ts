@@ -284,6 +284,20 @@ const Endpoints = {
     return `/embedded-wallet/integrations/${uuid}/signatures`;
   },
 
+  /** Smart contracts */
+  smartContracts: (uuid?: string) => {
+    return uuid ? `/contracts/${uuid}` : '/contracts';
+  },
+  smartContractsNew: (contractUuid: string) => {
+    return `/contracts/${contractUuid}/deploy`;
+  },
+  smartContractsDeployed: (uuid?: string) => {
+    return uuid ? `/contracts/deployed/${uuid}` : `/contracts/deployed`;
+  },
+  smartContractsCall: (contractUuid: string) => {
+    return `/contracts/deployed/${contractUuid}/call`;
+  },
+
   /**
    * Project settings
    */

@@ -296,8 +296,8 @@
             v-model:value="collectionStore.form.behavior.dropStart"
             class="w-full"
             type="datetime"
-            :is-date-disabled="disablePasteDate"
-            :is-time-disabled="disablePasteTime"
+            :is-date-disabled="disablePastDate"
+            :is-time-disabled="disablePastTime"
             clearable
           />
         </n-form-item-gi>
@@ -386,8 +386,8 @@ const {
   isFormDisabled,
   chainCurrency,
   collectionEndpoint,
-  disablePasteDate,
-  disablePasteTime,
+  disablePastDate,
+  disablePastTime,
   infoLabel,
   onChainChange,
   prepareFormData,
@@ -400,8 +400,8 @@ const metadataUri = computed<string>(() => {
   return collectionStore.form.behavior.baseUri && collectionStore.form.behavior.baseExtension
     ? baseUri + '/1' + collectionStore.form.behavior.baseExtension
     : baseUri
-    ? baseUri + '/1.' + $i18n.t('nft.collection.extension')
-    : '';
+      ? baseUri + '/1.' + $i18n.t('nft.collection.extension')
+      : '';
 });
 
 watch(

@@ -166,8 +166,8 @@
           class="w-full"
           type="datetime"
           :input-props="{ id: 'dropStart' }"
-          :is-date-disabled="disablePasteDate"
-          :is-time-disabled="disablePasteTime"
+          :is-date-disabled="disablePastDate"
+          :is-time-disabled="disablePastTime"
           clearable
         />
       </n-form-item-gi>
@@ -227,8 +227,8 @@ const {
   supplyTypes,
   rules,
   chainCurrency,
-  disablePasteDate,
-  disablePasteTime,
+  disablePastDate,
+  disablePastTime,
   infoLabel,
 } = useCollection();
 

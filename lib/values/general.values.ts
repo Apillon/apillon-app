@@ -116,6 +116,10 @@ export const LsCacheKeys = {
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
   WEBSITE_ARCHIVE: 'al_cache_website_archive',
+  SMART_CONTRACT: 'al_cache_smart_contract',
+  SMART_CONTRACTS: 'al_cache_smart_contracts',
+  SMART_CONTRACT_DEPLOYED: 'al_smart_contract_deployed',
+  SMART_CONTRACTS_DEPLOYED: 'al_smart_contracts_deployed',
 };
 
 /** User roles */

@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import { NButton, NDropdown } from 'naive-ui';
 
 const props = defineProps({
@@ -199,7 +199,7 @@ watch(
     debouncedSearchFilter();
   }
 );
-const debouncedSearchFilter = debounce(handlePageChange, 500);
+const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
 watch(
   () => chatStore.archive.search,
   _ => {
@@ -210,8 +210,8 @@ watch(
 const debouncedSearchArchiveFilter = debounce(handlePageArchiveChange, 500);
 
 /** On page change, load data */
-async function handlePageChange(page: number) {
-  await chatStore.getChats(page);
+async function handlePageChange(page = 1) {
+  await chatStore.fetchChats(page);
   chatStore.pagination.page = page;
 }
 async function handlePageArchiveChange(page: number) {

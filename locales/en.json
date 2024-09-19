@@ -403,7 +403,7 @@
           "description": null
         },
         "CONTRACTS": {
-          "name": "Contracts",
+          "name": "Smart contracts",
           "description": null
         },
         "HOSTING": {
@@ -457,6 +457,7 @@
       "projectSettings": "Project settings",
       "services": "Web3 Services",
       "smartContracts": "Smart Contracts",
+      "smartContractDetails": "Smart Contract Details",
       "social": "Social",
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
@@ -574,6 +575,44 @@
         "website": "Main Website Storage",
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
+      "smartContracts": {
+        "audited": "Audited",
+        "new": "New smart contract",
+        "customizeAndDeploy": "Customize and deploy",
+        "create": "Create your smart contract",
+        "createNew": "Create a new smart contract",
+        "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
+        "details": "Smart Contract Details",
+        "info": "Add it to your Web3 project",
+        "table": {
+          "chain": "Chain",
+          "name": "Name",
+          "contractAddress": "Address",
+          "contractStatus": "Status"
+        },
+        "status": {
+          "0": "CREATED",
+          "1": "INITIATED",
+          "2": "DEPLOYING",
+          "3": "DEPLOYED",
+          "4": "TRANSFERRED",
+          "5": "FAILED",
+          "6": "TRANSFERRED"
+        },
+        "infoSection": {
+          "title": "Execute read & write functions",
+          "p": "Your smart contract was deployed via Apillon. This means certain write functions are available only through the Apillon Backend, until you decide to take ownership of the contract. ",
+          "infoBox": "Take ownership of the Smart Contract. Once you take ownership of the Smart Contract, you will be able to execute all the functions directly from your dapp. This is not a mandatory step, but it makes sense to take the ownership of the contract before going to production.",
+          "takeOwnershipBtn": "Take smart contract ownership"
+        },
+        "functions": {
+          "write": "Write functions",
+          "read": "Read functions",
+          "writeFromDapp": "Write from your dapp",
+          "writeOverApillon": "Write over Appilon",
+          "readFromDapp": "Read from your dapp"
+        }
+      },
       "addFirst": "Add first service",
       "delete": "Delete service",
       "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",
@@ -617,6 +656,16 @@
         "name": "Decentralized File Sharing",
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
+      },
+      "smartContracts": {
+        "name": "NFT Email Airdrop",
+        "description": "Create an NFT collection, upload target addresses and automatically distribute NFTs to them.",
+        "content": [
+          {
+            "title": "What do you get?",
+            "content": ["Free metadata storage", "No gas cost", "Free web template", "Free hosting"]
+          }
+        ]
       },
       "embeddedWallet": {
         "content": [
@@ -1352,6 +1401,7 @@
       "sendAgainEmail": "Email has been re-sent",
       "websiteDeployed": "Website has been deployed.",
       "websiteDeploying": "Done - deployment initiated",
+      "smartContract": "Done - deployment initiated",
       "contract": {
         "cidAssign": "CID has been assign to NFT",
         "deploy": "Contract deploy has been initiated",
@@ -1457,6 +1507,7 @@
     "createServiceAndContinue": "Create service & continue to management",
     "continue": "Continue",
     "disabled": "Disabled",
+    "deploy": "Deploy",
     "generate": "Generate",
     "goBack": "Go back",
     "login": "Log in",
@@ -2369,6 +2420,9 @@
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
       "missingIndex": "Please upload index.html file"
+    },
+    "smartContracts": {
+      "fieldRequired": "Please fill all fields"
     }
   },
   "w3Warn": {

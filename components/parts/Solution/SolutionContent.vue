@@ -9,7 +9,7 @@
 
       <template v-if="icons">
         <ul v-if="item.content && Array.isArray(item.content)" class="mb-4 text-green">
-          <li v-for="(c, keyC) in item.content" :key="keyC">
+          <li v-for="(c, keyC) in item.content" :key="keyC" class="mb-2">
             <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
             <span class="text-body" v-html="transformLinks(c)"></span>
           </li>
