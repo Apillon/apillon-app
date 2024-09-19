@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderSmartContract to="/dashboard/service/smart-contracts/new" />
+      <HeaderSmartContract link="/dashboard/service/smart-contracts/new" />
     </template>
 
     <slot>

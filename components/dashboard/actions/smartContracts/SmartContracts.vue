@@ -16,6 +16,21 @@
     </div>
 
     <n-space size="large">
+      <!-- Refresh -->
+      <n-button
+        size="small"
+        :loading="deployedContractStore.loading"
+        @click="
+          deployedContractStore.fetchDeployedContracts(
+            deployedContractStore.pagination.page,
+            deployedContractStore.pagination.pageSize
+          )
+        "
+      >
+        <span class="icon-refresh text-xl mr-2"></span>
+        {{ $t('general.refresh') }}
+      </n-button>
+
       <!-- Create new collection -->
       <n-button
         size="small"

@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderSmartContract />
+      <HeaderSmartContract :link="`/dashboard/service/smart-contracts/${contractUuid}`" />
     </template>
 
     <slot>
@@ -14,7 +14,10 @@
 </template>
 
 <script lang="ts" setup>
+const { params } = useRoute();
 const { pageLoading, init } = useSmartContracts();
+
+const contractUuid = params?.id ? params?.id : params?.slug;
 
 onMounted(() => {
   init();

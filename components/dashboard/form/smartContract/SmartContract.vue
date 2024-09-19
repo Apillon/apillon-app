@@ -81,6 +81,9 @@
               <Btn size="small" type="primary" @click="addSettingsOption">
                 Add a settings option
               </Btn>
+              <Btn size="small" type="error" @click="removeSettingsOption">
+                Remvoe settings option
+              </Btn>
             </div>
           </template>
 
@@ -122,10 +125,12 @@ const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
+const warningStore = useWarningStore();
 const smartContractStore = useSmartContractStore();
 
 const { disablePastDate, disablePastTime } = useCollection();
-const { formRef, form, settings, addSettingsOption, isSpecialField } = useSmartContracts();
+const { formRef, form, settings, addSettingsOption, removeSettingsOption, isSpecialField } =
+  useSmartContracts();
 
 const loading = ref<boolean>(false);
 const tupleInputs = ref([]);
@@ -207,7 +212,8 @@ function createValidation(input: any): FormItemRule[] {
       return [ruleRequired(`${input.name} is required`)];
     }
   } else if (input.type === 'bool[]') {
-    return [{ validator: validateBoolean, message: `${input.name} is required` }];
+    // return [{ validator: validateBoolean, message: `${input.name} is required` }];
+    return [];
   } else {
     return [ruleRequired(`${input.name} is required`)];
   }
@@ -215,10 +221,15 @@ function createValidation(input: any): FormItemRule[] {
 
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
-  formRef.value?.validate(async (errors: Array<any> | undefined) => {
-    if (errors) return;
 
-    await deployContract();
+  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
+    if (errors) {
+      errors.map(fieldErrors =>
+        fieldErrors.map(error => message.warning(error.message || 'Error'))
+      );
+    } else {
+      warningStore.showSpendingWarning(PriceServiceName.HOSTING_WEBSITE, () => deployContract());
+    }
   });
 }
 
@@ -270,7 +281,7 @@ async function deployContract() {
     console.log(e);
     message.error(userFriendlyMsg(e));
   } finally {
-    loading.value = true;
+    loading.value = false;
   }
 }
 </script>

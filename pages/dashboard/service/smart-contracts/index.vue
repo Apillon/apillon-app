@@ -16,7 +16,7 @@
           :size="32"
           vertical
         >
-          <ActionsSmartContractsActions />
+          <ActionsSmartContracts />
           <TableSmartContracts :contracts="deployedContractStore.items" />
         </n-space>
         <Empty

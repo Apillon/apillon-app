@@ -28,7 +28,7 @@ export default function useSmartContracts() {
 
   const pageLoading = ref<boolean>(true);
   const formRef = ref<NFormInst | null>(null);
-  const settings = ref([false, false, false, false]);
+  const settings = ref([false, false]);
   const form = ref<{ [key: string]: any }>({
     name: '',
     description: '',
@@ -40,7 +40,11 @@ export default function useSmartContracts() {
   function addSettingsOption(e) {
     e.preventDefault();
     settings.value.push(false);
-    console.log(settings);
+  }
+
+  function removeSettingsOption(e) {
+    e.preventDefault();
+    settings.value.pop();
   }
 
   function getChainConfig(chainId: number) {
@@ -81,6 +85,7 @@ export default function useSmartContracts() {
     pageLoading,
     settings,
     addSettingsOption,
+    removeSettingsOption,
     getChainConfig,
     init,
     isSpecialField,
