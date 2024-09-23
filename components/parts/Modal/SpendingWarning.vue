@@ -7,12 +7,14 @@
       role="dialog"
       aria-modal="true"
     >
-      <div v-if="servicePrice">
-        <p v-if="isEnoughCredits">{{ servicePrice.description }}</p>
+      <div v-if="servicePrices">
+        <div v-if="isEnoughCredits" class="flex flex-col gap-1 text-body mb-4">
+          <span v-for="servicePrice in servicePrices">{{ servicePrice.description }}</span>
+        </div>
         <p v-else>{{ $t('dashboard.payment.notEnoughCredits') }}</p>
         <p>
           <strong>{{ $t('dashboard.credits.cost') }}: </strong>
-          <span>{{ servicePrice.currentPrice }} {{ $t('dashboard.credits.credits') }}</span>
+          <span>{{ totalCredits }} {{ $t('dashboard.credits.credits') }}</span>
         </p>
       </div>
 
@@ -48,25 +50,28 @@ const emit = defineEmits(['close']);
 
 const paymentStore = usePaymentStore();
 const warningStore = useWarningStore();
-const servicePrice = ref<ProductPriceInterface | null>();
+const servicePrices = ref<ProductPriceInterface[]>([]);
+
+const totalCredits = computed(() => {
+  return sumCredits(servicePrices.value);
+});
 
 const isEnoughCredits = computed(() => {
-  return (paymentStore.credit.balance || 0) >= (servicePrice.value?.currentPrice || 0);
+  return (paymentStore.credit.balance || 0) >= totalCredits.value;
 });
 
 watch(
-  () => warningStore.serviceName,
-  service => {
-    if (service) {
-      selectService(service);
+  () => warningStore.services,
+  services => {
+    if (services.length) {
+      selectServices(services);
     }
   },
   { immediate: true }
 );
 
-async function selectService(serviceName: string) {
-  await paymentStore.getPriceList();
-  servicePrice.value = paymentStore.findServicePrice(serviceName);
+async function selectServices(serviceNames: string[]) {
+  servicePrices.value = await paymentStore.filterServicePrice(serviceNames);
 }
 
 async function submit() {

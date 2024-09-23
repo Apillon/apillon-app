@@ -88,9 +88,9 @@ function wagmiConnect(connector) {
 
 async function onWalletConnected({ address, connector, isReconnected }) {
   await sleep(200);
-  if (authStore.user.evmWallet !== address) {
-    connectWallet();
-  }
+  // if (authStore.user.evmWallet !== address) {
+  //   connectWallet();
+  // }
 }
 
 async function connectDifferent() {

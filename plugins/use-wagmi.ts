@@ -6,7 +6,8 @@ import { moonbeam, moonbaseAlpha } from 'use-wagmi/chains';
 
 export default defineNuxtPlugin(nuxtApp => {
   const nuxtConfig = useRuntimeConfig();
-  const chain = nuxtConfig.public.ENV === AppEnv.PROD ? moonbeam : moonbaseAlpha;
+  // const chain = nuxtConfig.public.ENV === AppEnv.PROD ? moonbeam : moonbaseAlpha;
+  const chain = moonbeam;
   const chains = [chain];
 
   const config = createConfig({

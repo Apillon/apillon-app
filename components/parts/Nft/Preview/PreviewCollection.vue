@@ -70,6 +70,18 @@
             </span>
           </td>
         </tr>
+        <tr>
+          <td>{{ $t('form.label.collectionUseIpns') }}:</td>
+          <td>
+            <span class="text-white">
+              {{
+                collectionStore.form.base.useIpns
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
+              }}
+            </span>
+          </td>
+        </tr>
       </tbody>
     </n-table>
 

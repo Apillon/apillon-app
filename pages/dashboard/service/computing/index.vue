@@ -1,17 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('dashboard.nav.computing') }}</h1>
-        </slot>
-
-        <template #info>
-          <n-space :size="32" align="center">
-            <IconInfo v-if="$i18n.te('w3Warn.contract.new')" @click="modalW3WarnVisible = true" />
-          </n-space>
-        </template>
-      </Heading>
+      <HeaderComputing />
     </template>
     <slot>
       <n-space v-if="contractStore.hasContracts" class="pb-8" :size="32" vertical>

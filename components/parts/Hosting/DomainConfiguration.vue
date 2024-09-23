@@ -43,19 +43,19 @@
       </template>
       <span v-else>_dnslink.&lt;your domain name&gt;</span>
     </p>
-    <p v-if="websiteStore.active.ipnsProduction" class="lg:whitespace-nowrap">
+    <p v-if="link.length > 10" class="lg:whitespace-nowrap">
       <strong>Value: </strong>
-      <span>dnslink=/ipns/{{ websiteStore.active.ipnsProduction }}</span>
-      <span
-        class="inline-block cursor-pointer ml-2"
-        @click="copyToClipboard(`dnslink=/ipns/${websiteStore.active.ipnsProduction}`)"
-      >
+      <span>dnslink=/{{ link }}</span>
+      <span class="inline-block cursor-pointer ml-2" @click="copyToClipboard(`dnslink=/${link}`)">
         <span class="icon-copy"></span>
       </span>
     </p>
     <p v-else class="lg:whitespace-nowrap">
       <strong>Value: </strong>
-      <span>dnslink=/ipns/&lt;production IPNS address&gt;</span>
+      <span v-if="websiteStore.active.domain && websiteStore.active.w3ProductionLink">
+        dnslink={{ parseIpfsFromLink(websiteStore.active.w3ProductionLink) }}
+      </span>
+      <span v-else>dnslink=/ipns/&lt;production IPNS address&gt;</span>
     </p>
   </div>
 </template>
@@ -71,7 +71,18 @@ const websiteStore = useWebsiteStore();
 
 const ip = computed(() => ipfsStore.info.loadBalancerIp || '52.19.92.40');
 
+const link = computed(() =>
+  websiteStore.active.ipnsProduction
+    ? `ipns/${websiteStore.active.ipnsProduction}`
+    : `ipfs/${websiteStore.active.cidProduction}`
+);
+
 onMounted(() => {
   ipfsStore.getIpfsInfo(dataStore.projectUuid);
 });
+
+const parseIpfsFromLink = (link: string) => {
+  const match = link.match(/\/ipfs\/[^\/?]+/);
+  return match && match.length ? match[0] : '';
+};
 </script>

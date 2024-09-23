@@ -166,6 +166,7 @@ export function parseArguments(args: FetchParams): Record<string, string | numbe
   };
   if (args.search) params.search = args.search;
   if (args.project_uuid) params.project_uuid = args.project_uuid;
+  if (args.status) params.status = args.status;
 
   return params;
 }

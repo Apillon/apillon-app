@@ -12,6 +12,16 @@ export const usePostStore = defineStore('post', {
       pageSize: PAGINATION_LIMIT,
       itemCount: 0,
     },
+    archive: {
+      items: [] as PostInterface[],
+      loading: false,
+      search: '',
+      pagination: {
+        page: 1,
+        pageSize: PAGINATION_LIMIT,
+        itemCount: 0,
+      },
+    },
   }),
   getters: {
     hasPosts(state): boolean {
@@ -19,10 +29,21 @@ export const usePostStore = defineStore('post', {
         !!state.search || state.loading || (Array.isArray(state.items) && state.items.length > 0)
       );
     },
+    hasPostArchive(state): boolean {
+      return (
+        !!state.archive.search ||
+        state.archive.loading ||
+        (Array.isArray(state.archive.items) && state.archive.items.length > 0)
+      );
+    },
   },
   actions: {
     resetData() {
       this.active = {} as PostInterface;
+      this.archive.items = [] as PostInterface[];
+      this.archive.pagination.page = 1;
+      this.archive.pagination.itemCount = 0;
+      this.archive.search = '';
       this.items = [] as PostInterface[];
       this.pagination.page = 1;
       this.pagination.itemCount = 0;
@@ -60,7 +81,17 @@ export const usePostStore = defineStore('post', {
      */
     async getPosts(page = 1): Promise<PostInterface[]> {
       if (page !== this.pagination.page || !this.hasPosts || isCacheExpired(LsCacheKeys.POSTS)) {
-        return await this.fetchPosts();
+        return await this.fetchPosts(page);
+      }
+      return this.items;
+    },
+    async getPostArchive(page = 1): Promise<PostInterface[]> {
+      if (
+        page !== this.archive.pagination.page ||
+        !this.hasPostArchive ||
+        isCacheExpired(LsCacheKeys.POST_ARCHIVE)
+      ) {
+        return await this.fetchPostsArchive(page);
       }
       return this.items;
     },
@@ -106,6 +137,41 @@ export const usePostStore = defineStore('post', {
       }
 
       this.loading = false;
+      return [];
+    },
+
+    async fetchPostsArchive(page?: number, showLoader: boolean = true): Promise<PostInterface[]> {
+      this.archive.loading = showLoader;
+
+      try {
+        const dataStore = useDataStore();
+        const params = parseArguments({
+          limit: this.archive.pagination.pageSize,
+          page: page,
+          search: this.archive.search,
+          project_uuid: dataStore.projectUuid,
+          status: SqlModelStatus.ARCHIVED,
+        });
+
+        const res = await $api.get<PostsResponse>(endpoints.posts(), params);
+
+        this.archive.items = res.data.items;
+        this.archive.pagination.itemCount = res.data.total;
+        this.archive.loading = false;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.POST_ARCHIVE, Date.now().toString());
+
+        return res.data.items;
+      } catch (error: any) {
+        this.archive.items = [] as Array<PostInterface>;
+        this.archive.pagination.itemCount = 0;
+
+        /** Show error message  */
+        window.$message.error(userFriendlyMsg(error));
+      }
+
+      this.archive.loading = false;
       return [];
     },
 

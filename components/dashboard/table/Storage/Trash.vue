@@ -162,7 +162,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       key: 'actions',
       title: '',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
       render() {
         return h(
           NDropdown,
@@ -192,7 +192,6 @@ const dropdownOptions = [
     label: $i18n.t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restore();
       },

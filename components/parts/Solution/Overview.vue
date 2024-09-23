@@ -98,7 +98,8 @@ const web3Services = computed(() => [
     data: [
       {
         name: t(`dashboard.service.nft.collectionCount`),
-        value: dataStore.project.overview.collectionCount,
+        value:
+          dataStore.project.overview.numOfCollections || dataStore.project.overview.collectionCount,
       },
       {
         name: t(`dashboard.service.nft.nftTransactionCount`),

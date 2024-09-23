@@ -130,22 +130,27 @@ export const usePaymentStore = defineStore('payment', {
     },
 
     /** GET Prices for service */
-    async getServicePrices(service: string) {
+    async getServicePrices(service: string): Promise<ProductPriceInterface[]> {
       await this.getPriceList();
-
       return this.priceList.filter(item => item.service === service);
+    },
+    async getServicePricesByName(serviceName: string): Promise<ProductPriceInterface[]> {
+      return this.priceList.filter(item => item.name === serviceName);
     },
 
     /** GET Price for service */
-    async getServicePrice(serviceName: string) {
+    async getServicePrice(serviceName: string): Promise<ProductPriceInterface | undefined> {
       await this.getPriceList();
-
       return this.priceList.find(item => item.name === serviceName);
     },
 
     /** Price for service */
-    findServicePrice(serviceName: string) {
+    async findServicePrice(serviceName: string): Promise<ProductPriceInterface | undefined> {
       return this.priceList.find(item => item.name === serviceName);
+    },
+    async filterServicePrice(serviceNames: string[]): Promise<ProductPriceInterface[]> {
+      await this.getPriceList();
+      return await this.priceList.filter(item => serviceNames.includes(item.name));
     },
 
     /**

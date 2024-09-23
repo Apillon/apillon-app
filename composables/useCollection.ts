@@ -55,8 +55,8 @@ export default function useCollection() {
     return dataStore.isProjectUser;
   });
 
-  const maxNft = computed(() => {
-    return collectionStore.form.behavior.supplyLimited === 1 ? NFT_MAX_SUPPLY : NFT_MAX_SUPPLY;
+  const isSupplyLimited = computed(() => {
+    return collectionStore.form.behavior.supplyLimited === 1;
   });
 
   /**
@@ -71,7 +71,7 @@ export default function useCollection() {
   ];
   const rulesMaxSupply: FormItemRule[] = [
     {
-      max: maxNft.value,
+      max: NFT_MAX_SUPPLY,
       validator: validateMaxSupply,
       message: t('validation.collectionMaxSupplyReached', {
         max: NFT_MAX_SUPPLY,
@@ -184,6 +184,8 @@ export default function useCollection() {
       royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
       royaltiesFees: collectionStore.form.behavior.royaltiesFees,
       baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
+      useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
+      useIpns: collectionStore.form.base.useIpns,
     };
   }
 
@@ -205,7 +207,7 @@ export default function useCollection() {
     );
   }
   function validateMaxSupply(_: FormItemRule, value: number): boolean {
-    return value <= maxNft.value;
+    return value <= NFT_MAX_SUPPLY && (isSupplyLimited.value ? value > 0 : true);
   }
   function validateDropStart(_: FormItemRule, value: number): boolean {
     return !collectionStore.form.behavior.drop || value > Date.now();
@@ -278,8 +280,8 @@ export default function useCollection() {
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
-      onFinish,
-      onError,
+      onFinish: onFinish || (() => {}),
+      onError: onError || (() => {}),
     };
     if (!isEnoughSpaceInStorage([], uploadedFile)) {
       message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));

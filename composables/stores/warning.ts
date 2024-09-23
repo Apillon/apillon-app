@@ -4,18 +4,22 @@ export const useWarningStore = defineStore('warning', {
   state: () => ({
     action: (() => {}) as Function,
     isSpendingWarningOpen: false,
-    serviceName: '',
+    services: [] as string[],
   }),
 
   actions: {
-    showSpendingWarning(serviceName: string, action: Function) {
-      this.serviceName = serviceName;
+    async showSpendingWarning(serviceNames: string | string[], action: Function) {
+      this.services = Array.isArray(serviceNames) ? serviceNames : [serviceNames];
       this.action = action;
 
       const paymentStore = usePaymentStore();
-      const servicePrice = paymentStore.findServicePrice(serviceName);
+      let servicePrices = await paymentStore.filterServicePrice(this.services);
 
-      if (servicePrice && servicePrice?.currentPrice > 0) {
+      if (!servicePrices.length) {
+        await sleep(500);
+        servicePrices = await paymentStore.filterServicePrice(this.services);
+      }
+      if (servicePrices.length && sumCredits(servicePrices) > 0) {
         this.isSpendingWarningOpen = true;
       } else {
         action();
@@ -26,3 +30,7 @@ export const useWarningStore = defineStore('warning', {
     },
   },
 });
+
+export const sumCredits = (servicePrices: ProductPriceInterface[]) => {
+  return servicePrices.reduce((acc, servicePrice) => acc + (servicePrice?.currentPrice || 0), 0);
+};

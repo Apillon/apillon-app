@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia';
-import { DeploymentEnvironment } from '~/lib/types/storage';
 
 export const useDeploymentStore = defineStore('deployment', {
   state: () => ({
     active: {} as DeploymentInterface,
     loading: false,
-    production: [] as Array<DeploymentInterface>,
-    staging: [] as Array<DeploymentInterface>,
+    production: [] as DeploymentInterface[],
+    staging: [] as DeploymentInterface[],
   }),
   getters: {
     hasProductionDeployments(state): boolean {
@@ -19,8 +18,8 @@ export const useDeploymentStore = defineStore('deployment', {
   actions: {
     resetData() {
       this.active = {} as DeploymentInterface;
-      this.staging = [] as Array<DeploymentInterface>;
-      this.production = [] as Array<DeploymentInterface>;
+      this.staging = [] as DeploymentInterface[];
+      this.production = [] as DeploymentInterface[];
     },
     /**
      * Fetch wrappers
@@ -63,6 +62,8 @@ export const useDeploymentStore = defineStore('deployment', {
       try {
         const res = await $api.get<DeploymentsResponse>(endpoints.deployments(websiteUuid), {
           environment: env,
+          orderBy: 'createTime',
+          desc: 'true',
           ...PARAMS_ALL_ITEMS,
         });
 
@@ -80,9 +81,9 @@ export const useDeploymentStore = defineStore('deployment', {
         sessionStorage.setItem(cacheKey, Date.now().toString());
       } catch (error: any) {
         if (env === DeploymentEnvironment.PRODUCTION) {
-          this.production = [] as Array<DeploymentInterface>;
+          this.production = [] as DeploymentInterface[];
         } else {
-          this.staging = [] as Array<DeploymentInterface>;
+          this.staging = [] as DeploymentInterface[];
         }
 
         /** Show error message  */
