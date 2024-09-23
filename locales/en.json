@@ -2165,7 +2165,6 @@
     "expirationDateRequired": "Please enter expiration date",
     "fileNoData": "The file is empty or has no data",
     "fileTypeNotAllow": "File \"{name}\" can't be uploaded here. Please use hosting service.",
-    "fileTypeNotSameAsContent": "The file type doesn't match the content. Please upload a valid file.",
     "fileTypeNotCsv": "File must be of type CSV",
     "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",

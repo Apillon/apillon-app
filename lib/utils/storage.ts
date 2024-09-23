@@ -64,15 +64,6 @@ export function stripFolderName(value: string | [string, string]) {
   }).marshaltext;
 }
 
-/** Convert file to text */
-export const fileTypeBasedOnBase64 = fileContent => {
-  try {
-    return fileContent.split(';')[0].split(':')[1];
-  } catch (error) {
-    return '';
-  }
-};
-
 /** Convert file to base64 */
 export const convertBase64 = file => {
   return new Promise((resolve, reject) => {
@@ -81,38 +72,6 @@ export const convertBase64 = file => {
 
     fileReader.onload = () => {
       resolve(fileReader.result);
-    };
-
-    fileReader.onerror = error => {
-      reject(error);
-    };
-  });
-};
-
-/** Convert file to text */
-export const convertFileToText = file => {
-  return new Promise<string>((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsText(file);
-
-    fileReader.onload = () => {
-      resolve(fileReader.result as string);
-    };
-
-    fileReader.onerror = error => {
-      reject(error);
-    };
-  });
-};
-
-/** Convert file to ArrayBuffer */
-export const convertFileContentToArray = (file: File) => {
-  return new Promise<Uint8Array>((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsArrayBuffer(file);
-
-    fileReader.onload = () => {
-      resolve(new Uint8Array(fileReader.result as ArrayBufferLike));
     };
 
     fileReader.onerror = error => {

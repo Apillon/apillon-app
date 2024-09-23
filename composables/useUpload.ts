@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { filetypemime } from 'magic-bytes.js';
 
 export default function useUpload() {
   const $i18n = useI18n();
@@ -54,29 +53,9 @@ export default function useUpload() {
     );
   }
 
-  /** Check if file type is same as file content (prevent phishing) */
-  async function fileTypeSameAsContent(file: FileListItemType) {
-    if (!file.file) return false;
-
-    const fileType = file.type || '';
-    const fileExt = file.name.split('.').pop() || '';
-    const mimeTypes = filetypemime(await convertFileContentToArray(file.file));
-    const base64Types = fileTypeBasedOnBase64(await convertBase64(file.file));
-
-    return (
-      fileType.includes('text') ||
-      mimeTypes.includes(fileType) ||
-      mimeTypes.join().includes('video') ||
-      mimeTypes.join().includes('/zip') ||
-      base64Types.includes(fileExt) ||
-      mimeTypes.join().includes(fileExt)
-    );
-  }
-
   /** Check if file type is allowed (disabled: .html) */
-  async function fileTypeValid(file: FileListItemType) {
-    const fileContent: string = await convertFileToText(file.file);
-    return file.type !== 'text/html' && !fileContent.toLowerCase().includes('<script');
+  function fileTypeValid(file: FileListItemType) {
+    return file.type !== 'text/html';
   }
 
   /** Check if file is too big (out of space) */
@@ -319,7 +298,6 @@ export default function useUpload() {
   return {
     uploadFiles,
     fileAlreadyOnFileList,
-    fileTypeSameAsContent,
     fileTypeValid,
     isEnoughSpaceInStorage,
     onUploadError,
