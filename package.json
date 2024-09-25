@@ -52,7 +52,6 @@
     "chart.js": "^4.4.4",
     "drag-scroll-vue3": "^1.0.7",
     "lodash.debounce": "^4.0.8",
-    "magic-bytes.js": "^1.10.0",
     "nuxt-icons": "^3.0.0",
     "passive-events-support": "^1.1.0",
     "pinia": "^2.1.6",
