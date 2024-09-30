@@ -21,19 +21,6 @@
       @submit-success="onContractTransferred"
     />
   </modal>
-
-  <!-- Modal - Archive contract -->
-  <ModalDelete v-model:show="showModalArchiveContract" :title="$t('computing.contract.delete')">
-    <template #content>
-      <p>
-        {{ $t('computing.contract.deleteConfirm') }}
-      </p>
-    </template>
-
-    <slot>
-      <FormDeleteItems :items="[currentRow]" @submit-success="onContractDeleted()" />
-    </slot>
-  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
@@ -51,12 +38,9 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
 const { checkUnfinishedContracts } = useComputing();
-
-const TableEllipsis = resolveComponent('TableEllipsis');
-const ComputingContractStatus = resolveComponent('ComputingContractStatus');
+const { deleteItem } = useDelete();
 
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
-const showModalArchiveContract = ref<boolean | null>(false);
 
 /** Data: filtered contracts */
 const data = computed<Array<ContractInterface>>(() => {
@@ -100,14 +84,14 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
       key: 'contract_uuid',
       title: t('computing.contract.uuid'),
       render(row: ContractInterface) {
-        return h(TableEllipsis, { text: row.contract_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.contract_uuid }, '');
       },
     },
     {
       key: 'contractAddress',
       title: t('computing.contract.address'),
       render(row: ContractInterface) {
-        return h(TableEllipsis, { text: row.contractAddress }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.contractAddress }, '');
       },
     },
     {
@@ -122,7 +106,11 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
       key: 'contractStatus',
       title: t('general.status'),
       render(row) {
-        return h(ComputingContractStatus, { contractStatus: row.contractStatus }, '');
+        return h(
+          resolveComponent('ComputingContractStatus'),
+          { contractStatus: row.contractStatus },
+          ''
+        );
       },
     },
     {
@@ -193,12 +181,11 @@ const dropdownOptions = computed(() => {
     },
     {
       key: 'computingDelete',
-      label: t('general.delete'),
+      label: t('general.archive'),
       disabled: authStore.isAdmin(),
       props: {
-        class: '!text-pink',
         onClick: () => {
-          showModalArchiveContract.value = true;
+          deleteContract();
         },
       },
     },
@@ -210,7 +197,6 @@ const dropdownOptionsArchive = [
     label: t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restoreContract();
       },
@@ -240,18 +226,20 @@ function onContractTransferred() {
 }
 
 /**
- * On contract deleted
- * Hide modal and refresh contract list
+ * contract delete
  * */
-function onContractDeleted() {
-  showModalArchiveContract.value = false;
+async function deleteContract() {
+  if (
+    currentRow.value &&
+    (await deleteItem(ItemDeleteKey.CONTRACT, currentRow.value.contract_uuid))
+  ) {
+    contractStore.items = contractStore.items.filter(
+      item => item.contract_uuid !== currentRow.value.contract_uuid
+    );
 
-  contractStore.items = contractStore.items.filter(
-    item => item.contract_uuid !== currentRow.value.contract_uuid
-  );
-
-  sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
-  sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);
+    sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
+    sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);
+  }
 }
 
 /**

@@ -15,8 +15,8 @@
         :info="$t('hosting.web3HostingArchiveInfo')"
         icon="storage/empty"
       >
-        <Btn type="primary" @click="createNewWebsite">
-          {{ $t('hosting.website.create') }}
+        <Btn type="primary" :to="{ name: 'dashboard-service-hosting' }">
+          {{ $t('hosting.menu.website') }}
         </Btn>
       </Empty>
 

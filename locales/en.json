@@ -40,7 +40,7 @@
     "month": "month",
     "name": "Name",
     "notActive": "not active",
-    "nothingHere": "Nothing here",
+    "nothingHere": "Nothing here yet",
     "ok": "OK",
     "open": "Open",
     "or": "or",
@@ -1296,22 +1296,22 @@
         "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
-        "collection": "NFT collection has been deleted",
+        "collection": "NFT collection has been archived",
         "contract": "Contract has been deleted",
         "directory": "Folder has been deleted",
         "domain": "Domain has been deleted",
         "file": "File has been deleted",
-        "hosting": "Hosting has been deleted",
+        "hosting": "Hosting has been archived",
         "ipns": "IPNS has been deleted",
         "item": "Item has been deleted",
         "items": "Items has been deleted",
-        "post": "Channel has been deleted",
-        "space": "Hub has been deleted",
+        "post": "Channel has been archived",
+        "space": "Hub has been archived",
         "service": "Service has been deleted",
         "user": "User has been removed from project",
         "userUninvited": "User has been uninvited from project",
         "webhook": "Webhook has been deleted",
-        "website": "Website has been deleted"
+        "website": "Website has been archived"
       },
       "restored": {
         "bucket": "Bucket has been restored",
@@ -1798,17 +1798,17 @@
   "referral": {
     "airdrop": {
       "btn": "Have a question? Enter Discord!",
-      "content": "The NCTR Airdrop task phase is now finished. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
+      "content": "You can now claim your $NCTR rewards. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
       "reward": "Reward",
       "task": "Task",
-      "title": "NCTR Airdrop concluded",
+      "title": "$NCTR Airdrop Claim is open",
       "type": "Type",
-      "welcome": "NCTR Airdrop concluded",
+      "welcome": "$NCTR Airdrop Claim is open",
       "subscribe": {
         "btn": "Sign up to Apillon news",
         "content": "Sign up for the Apillon newsletter and don’t miss the next chance to earn NCTR tokens.",
-        "headline": "NCTR Airdrop concluded",
-        "headlineInfo": "The NCTR Airdrop task phase is now finished.",
+        "headline": "$NCTR Airdrop Claim is open",
+        "headlineInfo": "You can now claim your $NCTR rewards.",
         "info": "Receive product and feature updates, how-to guides and other platform-related news. Unsubscribe at any time.",
         "title": "Missed your chance?"
       },
@@ -1829,9 +1829,9 @@
       ]
     },
     "banner": {
-      "title": "NCTR Airdrop concluded",
-      "description": "Submit to review concluded on June 26, 2024. \nYour task review is now in progress.\n\n NCTR Airdrop rewards will be available for claim in August, 2024.",
-      "btn": "NCTR Airdrop Dashboard",
+      "title": "$NCTR Airdrop Claim is open",
+      "description": "You can now claim your $NCTR rewards.",
+      "btn": "NCTR Airdrop",
       "learnMoreBtn": "Learn more"
     },
     "info": {

@@ -1,11 +1,31 @@
 <template>
   <div v-bind="$attrs">
-    <div class="body-sm mb-2">
+    <div class="body-sm mb-1">
       <strong>{{ $t('hosting.domain.preview') }}</strong>
     </div>
-    <n-space class="w-full" :wrap="!isLg" align="center">
-      <HostingPreviewLink v-if="domain" :link="`https://${domain}`" />
 
+    <div class="flex flex-wrap mb-4 gap-4 gap-y-6 items-center">
+      <HostingPreviewLink v-if="domain" :link="`https://${domain}`" />
+      <div v-if="domainStatus" class="flex gap-3 items-center flex-wrap sm:flex-nowrap mb-2">
+        <div class="body-sm">
+          <strong class="whitespace-nowrap">{{ $t('hosting.domain.domainStatus') }}:</strong>
+        </div>
+        <Pill :type="domainStatusType">
+          {{ $t(`hosting.domain.status.${domainStatus.domainStatus}`) }}
+        </Pill>
+        <n-button
+          size="small"
+          :disabled="btnDomainDisabled"
+          :loading="loadingDomain"
+          @click="refreshDomainStatus"
+        >
+          <span class="icon-refresh text-xl mr-2"></span>
+          {{ $t('hosting.domain.refreshStatus') }}
+        </n-button>
+      </div>
+    </div>
+
+    <n-space class="w-full" :wrap="!isLg" align="center">
       <Btn v-if="editEnabled || true" type="primary" size="small" @click="showModalDomain = true">
         <span v-if="domain">
           {{ $t('hosting.domain.setup') }}
@@ -28,26 +48,6 @@
         {{ $t('hosting.domain.configure') }}
       </Btn>
     </n-space>
-
-    <template v-if="domainStatus">
-      <div class="body-sm mt-4">
-        <strong>{{ $t('hosting.domain.domainStatus') }}</strong>
-      </div>
-      <n-space class="w-full mt-2" :wrap="!isLg" align="center">
-        <Pill :type="domainStatusType">
-          {{ $t(`hosting.domain.status.${domainStatus.domainStatus}`) }}
-        </Pill>
-        <Btn
-          size="small"
-          type="secondary"
-          :disabled="btnDomainDisabled"
-          :loading="loadingDomain"
-          @click="refreshDomainStatus"
-        >
-          {{ $t('hosting.domain.refreshStatus') }}
-        </Btn>
-      </n-space>
-    </template>
   </div>
   <!-- Modal - Website domain -->
   <modal
