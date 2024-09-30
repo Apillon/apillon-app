@@ -19,14 +19,14 @@
       />
     </n-form-item>
 
-    <!-- name -->
-    <n-form-item label="Name" path="name">
-      <n-input v-model:value="form.name" :maxlength="256" required />
+    <!-- Name -->
+    <n-form-item label="Name" path="Name">
+      <n-input v-model:value="form.Name" :maxlength="256" required />
     </n-form-item>
 
-    <!-- description -->
-    <n-form-item label="Description" path="description">
-      <n-input v-model:value="form.description" :maxlength="256" required />
+    <!-- Description -->
+    <n-form-item label="Description" path="Description">
+      <n-input v-model:value="form.Description" :maxlength="256" required />
     </n-form-item>
 
     <!-- dynamic fields -->
@@ -78,12 +78,6 @@
                   />
                 </n-form-item-gi>
               </n-grid>
-              <Btn size="small" type="primary" @click="addSettingsOption">
-                Add a settings option
-              </Btn>
-              <Btn size="small" type="error" @click="removeSettingsOption">
-                Remvoe settings option
-              </Btn>
             </div>
           </template>
 
@@ -121,6 +115,12 @@
 <script lang="ts" setup>
 import type { FormRules, FormItemRule } from 'naive-ui';
 
+type SmartContractForm = {
+  Name: string | null;
+  Description: string | null;
+  chain: number | null;
+};
+
 const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
@@ -129,19 +129,24 @@ const warningStore = useWarningStore();
 const smartContractStore = useSmartContractStore();
 
 const { disablePastDate, disablePastTime } = useCollection();
-const { formRef, form, settings, addSettingsOption, removeSettingsOption, isSpecialField } =
-  useSmartContracts();
+const { isSpecialField } = useSmartContracts();
 
 const loading = ref<boolean>(false);
-const tupleInputs = ref([]);
+const formRef = ref<NFormInst | null>(null);
+const settings = ref([false, false, false, false]);
+const form = ref<SmartContractForm>({
+  Name: '',
+  Description: '',
+  chain: null,
+});
 
 const chains = enumKeys(Chains).map(k => {
   return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
 });
 
 const initialRules: FormRules = {
-  name: ruleRequired('Name is required'),
-  description: ruleRequired('Description is required'),
+  Name: ruleRequired('Name is required'),
+  Description: ruleRequired('Description is required'),
   chain: ruleRequired('Chain selection is required'),
 };
 
@@ -235,15 +240,15 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function deployContract() {
   loading.value = true;
-  const constructorArguments = [];
+  const constructorArguments: Array<any> = [];
 
   // THIS IS HARDCODED TO HANDLE NESTABLE ERC-721 TUPLE
   const accumulatedKeys = ['royaltyRecipient', 'royaltyPercentageBps', 'maxSupply', 'pricePerMint'];
-  const accumulatedArray = [];
+  const accumulatedArray: Array<any> = [];
 
   for (const key in form.value) {
     if (form.value.hasOwnProperty(key)) {
-      if (key !== 'Name' && key !== 'description' && key !== 'chain') {
+      if (key !== 'Name' && key !== 'Description' && key !== 'chain') {
         if (key === '_settings') {
           constructorArguments.push(settings.value);
         } else if (accumulatedKeys.includes(key)) {
@@ -266,8 +271,8 @@ async function deployContract() {
       {
         project_uuid: dataStore.projectUuid,
         contract_uuid: smartContractStore.active.contract_uuid,
-        name: form.value.name,
-        description: form.value.description,
+        name: form.value.Name,
+        description: form.value.Description,
         chain: form.value.chain,
         constructorArguments,
       }
@@ -278,7 +283,6 @@ async function deployContract() {
       router.push(`/dashboard/service/smart-contracts`);
     }
   } catch (e) {
-    console.log(e);
     message.error(userFriendlyMsg(e));
   } finally {
     loading.value = false;
