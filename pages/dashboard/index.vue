@@ -6,11 +6,6 @@
       </Heading>
     </template>
     <slot>
-      <div v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())">
-        <ReferralBanner />
-        <hr class="border-bg-lighter my-8" />
-      </div>
-
       <div
         v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())"
         class="mb-8"
