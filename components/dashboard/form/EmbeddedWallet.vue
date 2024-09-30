@@ -1,8 +1,14 @@
 <template>
   <Spinner v-if="integrationUuid && !embeddedWallet" />
   <div v-else>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="dataStore.isProjectUser" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
+    </Notification>
+    <Notification v-else-if="isFormDisabled" type="warning" class="mb-4">
+      {{ $t('project.quotaReached') }},
+      <NuxtLink class="text-yellow" :to="{ name: 'dashboard-payments' }" @click="$emit('close')">
+        {{ $t('project.upgradePlan') }} </NuxtLink
+      >.
     </Notification>
 
     <n-form
@@ -90,7 +96,7 @@ const rules: NFormRules = {
 };
 
 const isFormDisabled = computed<boolean>(() => {
-  return dataStore.isProjectUser;
+  return dataStore.isProjectUser || embeddedWalletStore.quotaReached === true;
 });
 
 onMounted(async () => {
@@ -146,8 +152,12 @@ async function createEmbeddedWallet() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess', res.data);
-  } catch (error) {
+  } catch (error: ApiError | any) {
     message.error(userFriendlyMsg(error));
+
+    if (error?.message === 'MAX_NUMBER_OF_EMBEDDED_WALLET_INTEGRATIONS_REACHED') {
+      embeddedWalletStore.quotaReached = true;
+    }
   }
   loading.value = false;
 }
