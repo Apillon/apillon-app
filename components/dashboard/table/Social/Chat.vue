@@ -207,7 +207,7 @@ watch(
     debouncedSearchArchiveFilter();
   }
 );
-const debouncedSearchArchiveFilter = debounce(handlePageArchiveChange, 500);
+const debouncedSearchArchiveFilter = useDebounceFn(handlePageArchiveChange, 500);
 
 /** On page change, load data */
 async function handlePageChange(page = 1) {

@@ -255,7 +255,7 @@ watch(
     debouncedSearchArchiveFilter();
   }
 );
-const debouncedSearchArchiveFilter = debounce(handlePageArchiveChange, 500);
+const debouncedSearchArchiveFilter = useDebounceFn(handlePageArchiveChange, 500);
 
 /** On page change, load data */
 async function handlePageChange(page = 1, limit = PAGINATION_LIMIT) {
@@ -263,9 +263,10 @@ async function handlePageChange(page = 1, limit = PAGINATION_LIMIT) {
   postStore.pagination.page = page;
   postStore.pagination.pageSize = limit;
 }
-async function handlePageArchiveChange(page: number) {
-  await postStore.getPostArchive(page);
+async function handlePageArchiveChange(page = 1, limit = PAGINATION_LIMIT) {
+  await postStore.getPostArchive(page, limit);
   postStore.archive.pagination.page = page;
+  postStore.archive.pagination.pageSize = limit;
 }
 
 async function selectPost() {
