@@ -42,7 +42,11 @@ export const useDeployedContractStore = defineStore('deployedContract', {
      * API calls
      */
 
-    async fetchDeployedContracts(page = 1, limit = PAGINATION_LIMIT, showLoader: boolean = true) {
+    async fetchDeployedContracts(
+      page = 1,
+      limit = PAGINATION_LIMIT,
+      showLoader: boolean = true
+    ): Promise<DeployedContractInterface[]> {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -73,6 +77,7 @@ export const useDeployedContractStore = defineStore('deployedContract', {
       } finally {
         this.loading = false;
       }
+      return this.items;
     },
 
     async fetchDeployedContract(contractUuid: string | undefined) {

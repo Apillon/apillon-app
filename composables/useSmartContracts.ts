@@ -25,27 +25,12 @@ export default function useSmartContracts() {
   const { params } = useRoute();
   const dataStore = useDataStore();
   const smartContractStore = useSmartContractStore();
+  const deployedContractStore = useDeployedContractStore();
 
   const pageLoading = ref<boolean>(true);
-  const formRef = ref<NFormInst | null>(null);
-  const settings = ref([false, false]);
-  const form = ref<{ [key: string]: any }>({
-    name: '',
-    description: '',
-    chain: null,
-  });
+  let smartContractInterval: any = null as any;
 
   const isSpecialField = (input: any) => input.name === '_dropStart';
-
-  function addSettingsOption(e) {
-    e.preventDefault();
-    settings.value.push(false);
-  }
-
-  function removeSettingsOption(e) {
-    e.preventDefault();
-    settings.value.pop();
-  }
 
   function getChainConfig(chainId: number) {
     switch (chainId) {
@@ -78,14 +63,37 @@ export default function useSmartContracts() {
     });
   }
 
+  /** Contract polling */
+  function checkUnfinishedSmartContracts() {
+    clearInterval(smartContractInterval);
+
+    const unfinishedContract = deployedContractStore.items.find(
+      contract =>
+        contract.contractStatus === SmartContractStatus.DEPLOY_INITIATED ||
+        contract.contractStatus === SmartContractStatus.DEPLOYING
+    );
+    console.log(unfinishedContract);
+    if (unfinishedContract === undefined) return;
+
+    smartContractInterval = setInterval(async () => {
+      const smartContracts = await deployedContractStore.fetchDeployedContracts(
+        deployedContractStore.pagination.page,
+        deployedContractStore.pagination.pageSize,
+        false
+      );
+      const smartContract = smartContracts.find(
+        contract => contract.contract_uuid === unfinishedContract.contract_uuid
+      );
+      if (!smartContract || smartContract.contractStatus >= SmartContractStatus.DEPLOYED) {
+        clearInterval(smartContractInterval);
+      }
+    }, 10000);
+  }
+
   return {
     astarShibuya,
-    formRef,
-    form,
     pageLoading,
-    settings,
-    addSettingsOption,
-    removeSettingsOption,
+    checkUnfinishedSmartContracts,
     getChainConfig,
     init,
     isSpecialField,

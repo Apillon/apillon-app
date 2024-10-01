@@ -38,6 +38,7 @@
 const { t } = useI18n();
 const dataStore = useDataStore();
 const deployedContractStore = useDeployedContractStore();
+const { checkUnfinishedSmartContracts } = useSmartContracts();
 
 useHead({
   title: t('dashboard.nav.smartContracts'),
@@ -47,8 +48,9 @@ const pageLoading = ref<boolean>(true);
 onMounted(() => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     await deployedContractStore.getDeployedContracts();
-
     pageLoading.value = false;
+
+    checkUnfinishedSmartContracts();
   });
 });
 </script>
