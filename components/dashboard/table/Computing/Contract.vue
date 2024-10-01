@@ -35,7 +35,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
-const { checkUnfinishedContract } = useComputing();
+const { checkUnfinishedContracts } = useComputing();
 
 const TableEllipsis = resolveComponent('TableEllipsis');
 const ComputingContractStatus = resolveComponent('ComputingContractStatus');
@@ -192,7 +192,7 @@ function onContractTransferred() {
   modalTransferOwnershipVisible.value = false;
   setTimeout(async () => {
     await contractStore.fetchContracts();
-    checkUnfinishedContract();
+    checkUnfinishedContracts();
   }, 3000);
 }
 </script>

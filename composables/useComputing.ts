@@ -20,21 +20,21 @@ export default function useCaptcha() {
   function checkUnfinishedContracts() {
     clearInterval(contractInterval);
 
-    const unfinishedCollection = contractStore.items.find(
+    const unfinishedContract = contractStore.items.find(
       contract =>
         contract.contractStatus === ContractStatus.DEPLOY_INITIATED ||
         contract.contractStatus === ContractStatus.DEPLOYING
     );
-    if (unfinishedCollection === undefined) {
+    if (unfinishedContract === undefined) {
       return;
     }
 
     contractInterval = setInterval(async () => {
       const contracts = await contractStore.fetchContracts(false);
       const contract = contracts.find(
-        contract => contract.contract_uuid === unfinishedCollection.contract_uuid
+        contract => contract.contract_uuid === unfinishedContract.contract_uuid
       );
-      if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
+      if (!contract || contract.contractStatus >= ContractStatus.DEPLOYED) {
         clearInterval(contractInterval);
       }
     }, 10000);

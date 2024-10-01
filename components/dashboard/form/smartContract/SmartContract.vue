@@ -20,12 +20,12 @@
     </n-form-item>
 
     <!-- Name -->
-    <n-form-item label="Name" path="Name">
+    <n-form-item label="Smart Contract Name" path="Name">
       <n-input v-model:value="form.Name" :maxlength="256" required />
     </n-form-item>
 
     <!-- Description -->
-    <n-form-item label="Description" path="Description">
+    <n-form-item label="Smart Contract Description" path="Description">
       <n-input v-model:value="form.Description" :maxlength="256" required />
     </n-form-item>
 
@@ -127,6 +127,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const smartContractStore = useSmartContractStore();
+const deployedContractStore = useDeployedContractStore();
 
 const { disablePastDate, disablePastTime } = useCollection();
 const { isSpecialField } = useSmartContracts();
@@ -266,7 +267,7 @@ async function deployContract() {
   }
 
   try {
-    const res = await $api.post<SmartContractResponse>(
+    const res = await $api.post<DeployedContractResponse>(
       endpoints.smartContractsNew(smartContractStore.active.contract_uuid),
       {
         project_uuid: dataStore.projectUuid,
@@ -281,6 +282,8 @@ async function deployContract() {
     if (res.data) {
       message.success(t('form.success.smartContract'));
       router.push(`/dashboard/service/smart-contracts`);
+
+      setTimeout(() => deployedContractStore.items.unshift(res.data), 500);
     }
   } catch (e) {
     message.error(userFriendlyMsg(e));

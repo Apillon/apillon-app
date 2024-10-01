@@ -25,8 +25,10 @@ export default function useSmartContracts() {
   const { params } = useRoute();
   const dataStore = useDataStore();
   const smartContractStore = useSmartContractStore();
+  const deployedContractStore = useDeployedContractStore();
 
   const pageLoading = ref<boolean>(true);
+  let smartContractInterval: any = null as any;
 
   const isSpecialField = (input: any) => input.name === '_dropStart';
 
@@ -61,9 +63,37 @@ export default function useSmartContracts() {
     });
   }
 
+  /** Contract polling */
+  function checkUnfinishedSmartContracts() {
+    clearInterval(smartContractInterval);
+
+    const unfinishedContract = deployedContractStore.items.find(
+      contract =>
+        contract.contractStatus === SmartContractStatus.DEPLOY_INITIATED ||
+        contract.contractStatus === SmartContractStatus.DEPLOYING
+    );
+    console.log(unfinishedContract);
+    if (unfinishedContract === undefined) return;
+
+    smartContractInterval = setInterval(async () => {
+      const smartContracts = await deployedContractStore.fetchDeployedContracts(
+        deployedContractStore.pagination.page,
+        deployedContractStore.pagination.pageSize,
+        false
+      );
+      const smartContract = smartContracts.find(
+        contract => contract.contract_uuid === unfinishedContract.contract_uuid
+      );
+      if (!smartContract || smartContract.contractStatus >= SmartContractStatus.DEPLOYED) {
+        clearInterval(smartContractInterval);
+      }
+    }, 10000);
+  }
+
   return {
     astarShibuya,
     pageLoading,
+    checkUnfinishedSmartContracts,
     getChainConfig,
     init,
     isSpecialField,
