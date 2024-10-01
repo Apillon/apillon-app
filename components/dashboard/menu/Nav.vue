@@ -132,20 +132,20 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         !authStore.isUserAllowed(Permission.SOCIAL) ||
         zeroProjects.value,
     },
-    // {
-    //   key: 'dashboard-service-embedded-wallet',
-    //   label: t('dashboard.nav.embeddedWallet'),
-    //   to: 'dashboard-service-embedded-wallet',
-    //   iconName: 'icon-wallet',
-    //   soon: isMenuItemDisabled(Feature.EMBEDDED_WALLET),
-    //   disabled:
-    //     isMenuItemDisabled(Feature.EMBEDDED_WALLET) ||
-    //     !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
-    //     zeroProjects.value,
-    // },
+    {
+      key: 'dashboard-service-embedded-wallet',
+      label: t('dashboard.nav.embeddedWallet'),
+      to: 'dashboard-service-embedded-wallet',
+      iconName: 'icon-wallet',
+      soon: isMenuItemDisabled(Feature.EMBEDDED_WALLET),
+      disabled:
+        isMenuItemDisabled(Feature.EMBEDDED_WALLET) ||
+        !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
+        zeroProjects.value,
+    },
     {
       key: 'dashboard-service-smart-contracts',
-      label: $i18n.t('dashboard.nav.smartContracts'),
+      label: t('dashboard.nav.smartContracts'),
       to: 'dashboard-service-smart-contracts',
       iconName: 'icon-file',
       soon: isMenuItemDisabled(Feature.SOCIAL),
