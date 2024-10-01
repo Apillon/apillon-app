@@ -1379,11 +1379,12 @@
     },
     "domain": {
       "add": "Add domain",
-      "configure": "Configure domain",
+      "configure": "DNS Records",
       "domainStatus": "Domain status",
       "editDisabled": "Website domain can be changed every 15 minutes. ",
       "preview": "Domain preview",
       "refreshStatus": "Refresh domain status",
+      "remove": "Remove domain",
       "setup": "Setup domain",
       "update": "Update domain",
       "useIpns": "Use IPNS",
@@ -1391,7 +1392,7 @@
         "useIpns": "IPNS is a feature of the IPFS that allows a consistent address to be used even when the content changes. This means you can share the same address, and any updates to the content won't require a new address."
       },
       "status": {
-        "0": "Pending",
+        "0": "Not Connected",
         "1": "OK",
         "2": "Domain has CDN",
         "10": "Invalid, domain is not pointing to Apillon IP"

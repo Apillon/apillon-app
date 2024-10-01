@@ -6,7 +6,7 @@
     <slot>
       <template v-if="bucketStore.folder.items.length || deploymentStore.production.length > 0">
         <n-space class="pb-8" :size="32" vertical>
-          <div class="relative mb-4">
+          <div class="relative">
             <!-- Action: refresh -->
             <ActionsHostingWebsite
               class="absolute top-0 right-0"
