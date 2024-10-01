@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
     apiKeys: [] as ApiKeyInterface[],
+    ewApiKeys: [] as EwApiKeyInterface[],
     discordLink: '' as string,
     oauthLinks: [] as OauthLinkInterface[],
     users: [] as ProjectUserInterface[],
@@ -10,6 +11,9 @@ export const useSettingsStore = defineStore('settings', {
   getters: {
     hasApiKeys(state) {
       return Array.isArray(state.apiKeys) && state.apiKeys.length > 0;
+    },
+    hasEwApiKeys(state) {
+      return Array.isArray(state.ewApiKeys) && state.ewApiKeys.length > 0;
     },
     hasUsers(state) {
       return Array.isArray(state.users) && state.users.length > 0;
@@ -29,6 +33,7 @@ export const useSettingsStore = defineStore('settings', {
     resetData() {
       this.apiKeys = [] as ApiKeyInterface[];
       this.users = [] as ProjectUserInterface[];
+      this.ewApiKeys = [] as EwApiKeyInterface[];
     },
 
     getApiKeyById(id: number) {
@@ -43,6 +48,12 @@ export const useSettingsStore = defineStore('settings', {
     async getApiKeys() {
       if (!this.hasApiKeys || isCacheExpired(LsCacheKeys.API_KEYS)) {
         await this.fetchApiKeys();
+      }
+    },
+    /** Oasis embedded wallet keys */
+    async getEwApiKeys() {
+      if (!this.hasEwApiKeys || isCacheExpired(LsCacheKeys.EW_API_KEYS)) {
+        await this.fetchEmbeddedWalletKeys();
       }
     },
 
@@ -78,7 +89,6 @@ export const useSettingsStore = defineStore('settings', {
         const res = await $api.get<ApiKeysResponse>(endpoints.apiKey(), {
           project_uuid: dataStore.projectUuid,
         });
-
         this.apiKeys = res.data.items;
 
         /** Save timestamp to SS */
@@ -86,6 +96,27 @@ export const useSettingsStore = defineStore('settings', {
       } catch (error: any) {
         this.apiKeys = [] as ApiKeyInterface[];
 
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+
+    /** embedded wallet API Keys */
+    async fetchEmbeddedWalletKeys() {
+      const dataStore = useDataStore();
+      if (!dataStore.hasProjects) {
+        this.ewApiKeys = [] as EwApiKeyInterface[];
+      }
+
+      try {
+        const project = dataStore.project.active.project_uuid;
+        const res = await $api.get<EwApiKeysResponse>(endpoints.embeddedWalletKeys(project));
+        this.ewApiKeys = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.EW_API_KEYS, Date.now().toString());
+      } catch (error) {
+        this.ewApiKeys = [] as EwApiKeyInterface[];
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }

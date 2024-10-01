@@ -162,6 +162,7 @@ const Endpoints = {
   /**
    * Hosting
    */
+  shortUrl: '/storage/hosting/short-url',
 
   /** Website */
   website: '/storage/hosting/website',
@@ -170,6 +171,12 @@ const Endpoints = {
   },
   websiteDeploy: (uuid?: string) => {
     return `/storage/hosting/websites/${uuid}/deploy`;
+  },
+  websiteActivate: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/activate`;
+  },
+  websiteDomainStatus: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/check-domain`;
   },
 
   /** Deployment */
@@ -214,6 +221,12 @@ const Endpoints = {
   collectionNftsMetadata: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/nfts-metadata`;
   },
+  collectionIpns: (id: string) => {
+    return `/nfts/collections/${id}/ipns`;
+  },
+  collectionActivate: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/activate`;
+  },
 
   /**
    * Computing
@@ -234,6 +247,9 @@ const Endpoints = {
   contractTransactions: (contractUuid: string) => {
     return `/computing/contracts/${contractUuid}/transactions`;
   },
+  contractActivate: (contractUuid: string) => {
+    return `/computing/contracts/${contractUuid}/activate`;
+  },
 
   /**
    * Project settings
@@ -252,6 +268,9 @@ const Endpoints = {
   apiKeyServiceRoles: (key: number) => {
     return `/api-keys/${key}/service-roles`;
   },
+  embeddedWalletKeys: (projectUuid: string) => {
+    return `/wallet/oasis-signatures-count-by-api-key?project_uuid=${projectUuid}`;
+  },
 
   /**
    * Social
@@ -259,8 +278,14 @@ const Endpoints = {
   spaces: (uuid?: number | string) => {
     return uuid ? `/social/spaces/${uuid}` : '/social/spaces';
   },
+  spaceActivate: (uuid: number | string) => {
+    return `/social/spaces/${uuid}/activate`;
+  },
   posts: (uuid?: number | string) => {
     return uuid ? `/social/posts/${uuid}` : `/social/posts`;
+  },
+  postActivate: (uuid: number | string) => {
+    return `/social/posts/${uuid}/activate`;
   },
 
   /** Oauth links */
@@ -284,6 +309,10 @@ const Endpoints = {
   referralClaimReward: '/referral/product',
   airdropTasks: '/referral/airdrop-tasks',
   airdropReviewTasks: '/referral/review-tasks',
+  referralClaimParams: '/referral/claim-parameters',
+
+  /** Service status */
+  serviceStatus: '/public/service-status',
 };
 
 export default Endpoints;

@@ -33,6 +33,22 @@
         {{ $t('general.refresh') }}
       </n-button>
 
+      <!-- Add IPNS -->
+      <n-popconfirm
+        v-if="
+          collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
+          collectionStore.active.cid &&
+          !collectionStore.active.ipns_uuid
+        "
+        @positive-click="createDynamicMetadata()"
+      >
+        <template #icon> <IconInfo /> </template>
+        <template #trigger>
+          <n-button size="small">{{ $t('nft.addIpns') }}</n-button>
+        </template>
+        {{ $t('nft.addIpnsInfo') }}
+      </n-popconfirm>
+
       <!-- Add NFT -->
       <n-button
         v-if="collectionStore.active.collection_uuid"
@@ -70,9 +86,12 @@ defineProps({
 });
 const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer', 'setBaseUri']);
 
-const { t } = useI18n();
+const message = useMessage();
 const authStore = useAuthStore();
+const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+
+const { t } = useI18n();
 const { openAddNft } = useCollection();
 const { loadingBucket, openBucket } = useStorage();
 
@@ -82,13 +101,18 @@ const actionsDisabled = computed<boolean>(() => {
 
 const isMetadataStoreOnApillon = computed<boolean>(() => {
   const baseUri = collectionStore.active?.baseUri || '';
-  return baseUri.includes('apillon.io') || baseUri.includes('nectarnode.io');
+  return (
+    !!collectionStore.active.useApillonIpfsGateway ||
+    !!collectionStore.active.ipns_uuid ||
+    !baseUri.startsWith('ipfs://')
+  );
 });
 
 const allowAddMetadata = computed<boolean>(() => {
   return (
-    isMetadataStoreOnApillon.value ||
-    collectionStore.active?.collectionStatus === CollectionStatus.CREATED
+    collectionStore.active?.collectionStatus === CollectionStatus.CREATED ||
+    (collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
+      isMetadataStoreOnApillon.value)
   );
 });
 
@@ -162,5 +186,33 @@ function refresh() {
   collectionStore.fetchCollection(collectionStore.collectionUuid);
   collectionStore.fetchMetadataDeploys(collectionStore.collectionUuid);
   collectionStore.fetchCollectionTransactions(collectionStore.collectionUuid);
+}
+
+async function createDynamicMetadata() {
+  const priceServiceName = generatePriceServiceName(
+    ServiceTypeName.NFT,
+    collectionStore.active.chain,
+    PriceServiceAction.SET_BASE_URI
+  );
+  warningStore.showSpendingWarning([PriceServiceName.IPNS, priceServiceName], () => createIpns());
+}
+async function createIpns() {
+  try {
+    const res = await $api.post<CollectionResponse>(
+      endpoints.collectionIpns(collectionStore.active.collection_uuid)
+    );
+
+    /** Update collection data in store */
+    collectionStore.active = res.data;
+    collectionStore.items.forEach(item => {
+      if (item.collection_uuid === res.data.collection_uuid) {
+        item.baseUri = res.data.baseUri;
+      }
+    });
+
+    message.success(t('form.success.created.ipns'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
 }
 </script>

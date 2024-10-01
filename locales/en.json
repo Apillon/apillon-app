@@ -9,6 +9,7 @@
     "address": "Address",
     "attach": "Attach",
     "attachService": "Attach {service} service",
+    "archive": "Archive",
     "cancel": "No, cancel",
     "comingSoon": "Coming soon",
     "confirm": "Confirm",
@@ -39,7 +40,7 @@
     "month": "month",
     "name": "Name",
     "notActive": "not active",
-    "nothingHere": "Nothing here",
+    "nothingHere": "Nothing here yet",
     "ok": "OK",
     "open": "Open",
     "or": "or",
@@ -47,6 +48,7 @@
     "pending": "pending",
     "pleaseSelect": "Please select",
     "production": "Production",
+    "readMore": "Read more",
     "refresh": "Refresh",
     "restore": "Restore",
     "scope": "Scope",
@@ -195,15 +197,20 @@
       "create": "Create contract",
       "createBucket": "Create a bucket",
       "createFirst": " Start creating",
+      "delete": "Delete contract",
+      "deleteConfirm": "Are you sure that you want to delete selected contract?",
       "deployerAddress": "Deployer address",
       "deposit": "Deposit to cluster",
       "edit": "Edit",
       "empty": "Create Schrödinger’s NFT contract",
       "emptyInfo": "Schrödinger’s NFT is the first use case of Apillon’s Web3 Computing. More options will follow.",
+      "emptyArchive": "Contracts Archive",
+      "emptyArchiveInfo": "There are currently no Contracts in the Archive.",
       "encryptFile": "Encrypt file",
       "infoBucket": "Apillon will now create a new Web3 storage bucket where you will be able to upload all your NFT files.",
       "infoBucketCreation": "Apillon is creating a new Web3 storage bucket where the NFT files will go.",
       "infoBucketCreated": "You will now be able to upload your NFT metadata and NFT images to it.",
+      "list": "Contracts",
       "name": "Contract name",
       "new": "New Schrödinger’s NFT contract",
       "orSelectExisting": "or select existing bucket",
@@ -278,7 +285,8 @@
         "hosting": "Hosting service",
         "nft": "NFT service",
         "social": "Social service",
-        "storage": "Storage service"
+        "storage": "Storage service",
+        "wallet": "Wallet service"
       }
     },
     "clipboard": {
@@ -366,6 +374,7 @@
       "authentication": "Authentication",
       "apiKeys": "API Keys",
       "analytics": "Analytics",
+      "assetHub": "Asset hub",
       "billing": "Billing & usage",
       "configuration": "Configuration",
       "computing": "Computing",
@@ -379,7 +388,7 @@
       "social": "Social",
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
-      "assetHub": "Asset hub"
+      "embeddedWallet": "Embedded Wallet"
     },
     "pageMenu": {
       "access": "Access",
@@ -568,6 +577,24 @@
         "name": "Decentralized File Sharing",
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
+      },
+      "embeddedWallet": {
+        "content": [
+          {
+            "subtitle": "Embedded Wallet service removes friction in user onboarding."
+          },
+          {
+            "title": "Benefits:",
+            "content": [
+              "Email onboard: Simplifies the onboarding process.",
+              "A seamless and secure UX: EVM wallets are auto-created and encrypted.",
+              "Autonomy and security over funds: No third-party services to store user’s private keys.",
+              "Authentication: User can add different methods of verification.",
+              "Gassles wallet creation: charged in Apillon credits per each onboarded user.",
+              "Fully trustless. Powered by Oasis."
+            ]
+          }
+        ]
       },
       "nftAirdrop": {
         "name": "NFT Email Airdrop",
@@ -926,7 +953,8 @@
     "value": "Value",
     "visibleColumns": "Visible columns",
     "wiki": "Wiki",
-    "w3Warn": "W3 warn"
+    "w3Warn": "W3 warn",
+    "oasisSignatures": "Signatures"
   },
   "error": {
     "404": "Page not found",
@@ -1099,8 +1127,8 @@
       "collectionDropAddress": "Drop Withdrawal Address",
       "collectionDropStart": "Drop start",
       "collectionDrop": "Drop",
-      "collectionMaxSupply": "How many?",
       "collectionDropPrice": "Price in {currency}",
+      "collectionMaxSupply": "How many?",
       "collectionName": "Name",
       "collectionDropReserve": "Reserve",
       "collectionRevocable": "Revocable",
@@ -1111,6 +1139,7 @@
       "collectionSupplyLimited": "Total supply",
       "collectionType": "Collection type",
       "collectionUseGateway": "Use apillon gateway for base URI",
+      "collectionUseIpns": "Dynamic metadata",
       "collectionLogo": "Collection logo",
       "collectionCoverImage": "Collection cover image",
       "confirmPassword": "Confirm password",
@@ -1287,24 +1316,32 @@
         "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
+        "collection": "NFT collection has been archived",
         "contract": "Contract has been deleted",
         "directory": "Folder has been deleted",
         "domain": "Domain has been deleted",
         "file": "File has been deleted",
-        "hosting": "Hosting has been deleted",
+        "hosting": "Hosting has been archived",
         "ipns": "IPNS has been deleted",
         "item": "Item has been deleted",
         "items": "Items has been deleted",
+        "post": "Channel has been archived",
+        "space": "Hub has been archived",
         "service": "Service has been deleted",
         "user": "User has been removed from project",
         "userUninvited": "User has been uninvited from project",
         "webhook": "Webhook has been deleted",
-        "website": "Website has been deleted"
+        "website": "Website has been archived"
       },
       "restored": {
         "bucket": "Bucket has been restored",
+        "chat": "Hub has been restored",
+        "collection": "NFT collection has been restored",
+        "contract": "Contract has been restored",
         "directory": "Folder has been restored",
-        "file": "File has been restored"
+        "file": "File has been restored",
+        "post": "Channel has been restored",
+        "website": "Website has been restored"
       },
       "updated": {
         "apiKey": "API key has been updated",
@@ -1375,15 +1412,29 @@
     "domain": {
       "add": "Add domain",
       "configure": "Configure domain",
+      "domainStatus": "Domain status",
       "editDisabled": "Website domain can be changed every 15 minutes. ",
       "preview": "Domain preview",
+      "refreshStatus": "Refresh domain status",
       "setup": "Setup domain",
-      "update": "Update domain"
+      "update": "Update domain",
+      "useIpns": "Use IPNS",
+      "labelInfo": {
+        "useIpns": "IPNS is a feature of the IPFS that allows a consistent address to be used even when the content changes. This means you can share the same address, and any updates to the content won't require a new address."
+      },
+      "status": {
+        "0": "Pending",
+        "1": "OK",
+        "2": "Domain has CDN",
+        "10": "Invalid, domain is not pointing to Apillon IP"
+      }
     },
     "menu": {
+      "archive": "Website Archive",
       "preview": "1. Upload",
       "staging": "2. Preview",
-      "production": "3. Production"
+      "production": "3. Production",
+      "website": "Websites"
     },
     "review": {
       "confirm": "Proceed with Website Deployment, I'll wait",
@@ -1403,6 +1454,8 @@
       "addFirst": "Add first website",
       "create": "Create website",
       "description": "Website description",
+      "delete": "Delete website",
+      "deleteConfirm": "Are you sure that you want to delete selected website?",
       "domain": "Domain name",
       "edit": "Edit website",
       "infoNew": "",
@@ -1427,6 +1480,8 @@
     "size": "Size",
     "stagingEmpty": "Upload files and deploy them to staging",
     "web3Hosting": "Web3 hosting",
+    "web3HostingArchive": "Web3 hosting Archive",
+    "web3HostingArchiveInfo": "You don't have any website in Archive.",
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "nft": {
@@ -1434,6 +1489,8 @@
     "add": "Add NFT",
     "addNfts": "Add NFTs",
     "addAttribute": "Add attribute",
+    "addIpns": "Add IPNS",
+    "addIpnsInfo": "With IPNS, you will be able to modify the metadata and add new NFTs to this collection.",
     "chain": {
       "1": "MOONBEAM (Mainnet)",
       "2": "MOONBASE (Testnet)",
@@ -1489,6 +1546,8 @@
       "createFirst": "Start creating NFTs",
       "createInfo": "",
       "createToDisplay": "Create website to display NFTs with",
+      "delete": "Delete collection",
+      "deleteConfirm": "Are you sure that you want to delete selected collection?",
       "deploy": "Deploy collection",
       "display": "Display NFT collection",
       "dropStart": "Drop start",
@@ -1496,6 +1555,8 @@
       "extension": "[extension]",
       "empty": "Create your first NFT collection",
       "emptyInfo": "Add it to your Web3 project",
+      "emptyArchive": "NFT collections Archive",
+      "emptyArchiveInfo": "There are currently no NFT collections in the Archive.",
       "maxSupply": "Max supply",
       "mint": "Mint",
       "minted": "Minted",
@@ -1573,8 +1634,8 @@
         "collectionDropStart": "A date when your NFT collection becomes publicly available for visitors to buy NFTs.",
         "collectionDrop": "With drop, your collection becomes accessible for visitors to buy NFTs from a certain date onwards.",
         "collectionDropAddress": "Drop Withdrawal  Address",
-        "collectionMaxSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection.",
         "collectionDropPrice": "",
+        "collectionMaxSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection.",
         "collectionName": "The name you choose will be the official name of your NFT collection, “name” NFT collection.",
         "collectionDropReserve": "A number of NFT you wish to reserve for yourself before the drop.",
         "collectionRevocable": "Collection owner can destroy NFT(s) at any point in time.",
@@ -1585,6 +1646,7 @@
         "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
         "collectionType": "",
         "collectionUseGateway": "Collection base URI points to IPFS. If this checkbox is checked, base URI will point to CID on Apillon private gateway, which provide better performance. Otherwise base URI points to: ipfs://[CID], and gateway needs to be handled manually.",
+        "collectionUseIpns": "When this option is selected, the IPNS will be created. This option will allow you to add more NFTs to your collection later.",
         "collectionLogoSize": "Maximum size: 3MB, Supported formats: JPG, PNG, GIF, SVG. Recommended size: 400 x 400 px.",
         "csvUpload": "Before adding new items to the collection with existing NFTs, please add an id column to the CSV file. This will help maintain data integrity and avoid any conflicts when adding new entries.",
         "nftDisplayType": "Display type is a field indicating how you would like it to be displayed"
@@ -1755,17 +1817,17 @@
   "referral": {
     "airdrop": {
       "btn": "Have a question? Enter Discord!",
-      "content": "The NCTR Airdrop task phase is now finished. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
+      "content": "You can now claim your $NCTR rewards. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
       "reward": "Reward",
       "task": "Task",
-      "title": "NCTR Airdrop concluded",
+      "title": "$NCTR Airdrop Claim is open",
       "type": "Type",
-      "welcome": "NCTR Airdrop concluded",
+      "welcome": "$NCTR Airdrop Claim is open",
       "subscribe": {
         "btn": "Sign up to Apillon news",
         "content": "Sign up for the Apillon newsletter and don’t miss the next chance to earn NCTR tokens.",
-        "headline": "NCTR Airdrop concluded",
-        "headlineInfo": "The NCTR Airdrop task phase is now finished.",
+        "headline": "$NCTR Airdrop Claim is open",
+        "headlineInfo": "You can now claim your $NCTR rewards.",
         "info": "Receive product and feature updates, how-to guides and other platform-related news. Unsubscribe at any time.",
         "title": "Missed your chance?"
       },
@@ -1786,9 +1848,9 @@
       ]
     },
     "banner": {
-      "title": "NCTR Airdrop concluded",
-      "description": "Submit to review concluded on June 26, 2024. \nYour task review is now in progress.\n\n NCTR Airdrop rewards will be available for claim in August, 2024.",
-      "btn": "NCTR Airdrop Dashboard",
+      "title": "$NCTR Airdrop Claim is open",
+      "description": "You can now claim your $NCTR rewards.",
+      "btn": "NCTR Airdrop",
       "learnMoreBtn": "Learn more"
     },
     "info": {
@@ -1850,9 +1912,14 @@
       "create": "Create hub",
       "createFirst": "Create first hub",
       "date": "Create time",
+      "delete": "Delete hub",
+      "deleteConfirm": "Are you sure that you want to delete selected hub?",
       "dragAndDrop": "Drag & drop or click to upload.",
       "empty": "A chat application built on top of the Subsocial blockchain 🔗.",
       "emptyInfo": "Grill.chat offers a smooth and simple onboarding and user experience while still leveraging the power of blockchain technology.",
+      "emptyArchive": "Hub Archive",
+      "emptyArchiveInfo": "There are currently no Hubs in the Archive.",
+      "list": "Hub list",
       "name": "Hub name",
       "new": "New hub",
       "select": "Select Hub",
@@ -1869,6 +1936,13 @@
       "create": "Create channel",
       "createFirst": "Create first channel",
       "date": "Created",
+      "delete": "Delete channel",
+      "deleteConfirm": "Are you sure that you want to delete selected channel?",
+      "empty": "A chat application built on top of the Subsocial blockchain 🔗.",
+      "emptyInfo": "Grill.chat offers a smooth and simple onboarding and user experience while still leveraging the power of blockchain technology.",
+      "emptyArchive": "Social channel Archive",
+      "emptyArchiveInfo": "There are currently no Channels in the Archive.",
+      "list": "Channel list",
       "manageHubs": "Manage Hubs",
       "new": "New channel",
       "postId": "Channel ID",
@@ -1885,6 +1959,27 @@
       "theme": "Dark theme"
     },
     "title": "Social"
+  },
+  "embeddedWallet": {
+    "title": "Embedded Wallet",
+    "checkPrice": "Check price",
+    "generateApiKey": "Generate API key",
+    "generateNewApiKey": "Generate new key",
+    "viewDocumentation": "View Documentation",
+    "readBlog": "Read our blog post",
+    "codeSnippets": "Code snippets:",
+    "generate": {
+      "title": "Generate API key and start using Embedded Wallet service",
+      "generate": "Generate new key"
+    },
+    "table": {
+      "secret": "Secret",
+      "name": "Name",
+      "environment": "ENV",
+      "created": "Created",
+      "usage": "Usage",
+      "actions": "Actions"
+    }
   },
   "storage": {
     "bucket": {
@@ -1904,7 +1999,7 @@
       "new": "New bucket",
       "nft": "Storage bucket",
       "noActiveService": "You need a storage bucket before you can start storing files. ",
-      "nothingHere": "Nothing here",
+      "nothingHere": "Nothing here yet",
       "storage": "Storage bucket",
       "type": "Bucket type",
       "update": "Update bucket",
@@ -1930,6 +2025,42 @@
       "bucketItems": "Download selected items?",
       "item": "Download selected item",
       "items": "Download selected items"
+    },
+    "file": {
+      "status": {
+        "1": "Signed URL for upload generated",
+        "2": "Uploaded to S3",
+        "3": "Uploaded to IPFS",
+        "4": "Upload completed",
+        "5": "Upload completed",
+        "100": "Error while uploading to S3",
+        "101": "Error while pinning to CRUST",
+        "102": "Error: file does not exists on S3",
+        "103": "Error: bucket is full",
+        "104": "Error: file upload request does not exists",
+        "105": "Error: failed creating file object",
+        "106": "Error: not enough space",
+        "107": "Error: max storage reached"
+      },
+      "confirmUpload": "Confirm your upload",
+      "create": "Create file",
+      "delete": "Delete file(s)",
+      "deleteConfirm": "Are you sure that you want to delete {num} selected file(s)?",
+      "deletedFiles": "Deleted files from your bucket will appear in this list.",
+      "downloadLink": "Download link",
+      "dragAndDrop": "Drag & drop or click to upload files",
+      "files": "({files} files)",
+      "filesUploading": "({uploading} of {files})",
+      "nothingHere": "Nothing here yet",
+      "pinningToCrust": "This file is being pinned to Crust Network. While uploading, the file is only visible in the \"All Files\" tab.",
+      "refresh": "Refresh files",
+      "retry": "Retry upload",
+      "search": "Search files",
+      "stillUploading": "This file is being pinned to Crust Network. When it’s done, you will be able to see file’s IPFS details.",
+      "upload": "Upload files and folders",
+      "uploading": "Uploading",
+      "uploadMore": "Add more files",
+      "uploadNow": "Upload now"
     },
     "ipfs": {
       "generateLink": "Generate IPFS/IPNS link",
@@ -1969,41 +2100,13 @@
       "update": "Update IPNS",
       "uuid": "IPNS UUID"
     },
-    "file": {
-      "status": {
-        "1": "Signed URL for upload generated",
-        "2": "Uploaded to S3",
-        "3": "Uploaded to IPFS",
-        "4": "Upload completed - File pinned to CRUST",
-        "5": "Upload completed",
-        "100": "Error while uploading to S3",
-        "101": "Error while pinning to CRUST",
-        "102": "Error: file does not exists on S3",
-        "103": "Error: bucket is full",
-        "104": "Error: file upload request does not exists",
-        "105": "Error: failed creating file object",
-        "106": "Error: not enough space",
-        "107": "Error: max storage reached"
-      },
-      "confirmUpload": "Confirm your upload",
-      "create": "Create file",
-      "delete": "Delete file(s)",
-      "deleteConfirm": "Are you sure that you want to delete {num} selected file(s)?",
-      "deletedFiles": "Deleted buckets",
-      "downloadLink": "Download link",
-      "dragAndDrop": "Drag & drop or click to upload files",
-      "files": "({files} files)",
-      "filesUploading": "({uploading} of {files})",
-      "nothingHere": "Nothing here",
-      "pinningToCrust": "This file is being pinned to Crust Network. While uploading, the file is only visible in the \"All Files\" tab.",
-      "refresh": "Refresh files",
-      "retry": "Retry upload",
-      "search": "Search files",
-      "stillUploading": "This file is being pinned to Crust Network. When it’s done, you will be able to see file’s IPFS details.",
-      "upload": "Upload files and folders",
-      "uploading": "Uploading",
-      "uploadMore": "Add more files",
-      "uploadNow": "Upload now"
+    "shortUrl": {
+      "btnCopy": "I've copied short URL",
+      "generateLink": "Generate",
+      "generateShortLink": "Generate a Short URL",
+      "shortUrlInfo": "Please save this generated shorthand URL.",
+      "targetUrl": "Target URL",
+      "title": "Short URL"
     },
     "session": {
       "status": {
@@ -2070,7 +2173,7 @@
     "collectionChainRequired": "Please select Chain",
     "collectionChainTypeRequired": "Please select Chain type",
     "collectionDropStart": "Drop start is not a valid date or has already passed by",
-    "collectionMaxSupplyReached": "Enter lower value, max supply is {max}",
+    "collectionMaxSupplyReached": "Please enter a valid value, max supply is {max}",
     "collectionMaxSupplyRequired": "Please enter Max supply",
     "collectionDropPrice": "Please enter a valid Mint price",
     "collectionDropPriceRequired": "Please enter Mint price",
@@ -2186,6 +2289,7 @@
     },
     "hosting": {
       "upload": "With web3 hosting you can only hosting static, client site rendered pages. Server side rendering is not supported.",
+      "delete": "Deleted sites are no longer accessible, but they are still available in Website Archive. Websites in the archive can be republished.",
       "deploy": "Please be advised that the deployment may take up to 5 minutes to complete."
     },
     "ipfs": {
@@ -2193,11 +2297,15 @@
     },
     "nft": {
       "collection": "You are about to deploy a NFT collection to the blockchain. If you confirm this step, your NFT collection will irreversibly be deployed.",
-      "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world."
+      "new": "Your NFT collection is now configured. If you proceed with this step, the deployment of NFT collection on blockchain will start. Once deployed, the NFTs will be live on the blockchain and ready to mingle with the world.",
+      "delete": "Deleting NFT collection will erased collection's metadata, but collection will still exists on chain."
     },
     "social": {
       "info": "Subsocial is a set of Substrate pallets that allows anyone to launch their own decentralized social network or community, or add social features to an existing application. Subsocial is not a decentralized social network, like Twitter or Facebook, but rather Subsocial is a platform for building social networks.",
       "grillChat": " is a mobile-friendly, anonymous chat application powered by Subsocial, allowing anyone to communicate on-chain, without needing a wallet or tokens!"
+    },
+    "storage": {
+      "shortUrl": ""
     }
   }
 }

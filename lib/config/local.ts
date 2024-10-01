@@ -10,6 +10,7 @@ const config: ConfigInterface = {
   captchaKey: '10000000-ffff-ffff-ffff-000000000001',
   githubId: 'd0482598d8adbd8adffa',
   gtmId: '',
+  nctrContract: '0xddf5F225218fd09Ffa39712aFd9a4Bc34b21b473',
   publishedFeatures: [
     'ACCESS',
     'API_KEYS',

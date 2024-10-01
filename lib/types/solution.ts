@@ -13,4 +13,5 @@ export enum SolutionKey {
   OPEN_GOV = 'openGov',
   TOKEN_GATING = 'tokenGating',
   WALLET = 'wallet',
+  EMBEDDED_WALLET = 'embeddedWallet',
 }

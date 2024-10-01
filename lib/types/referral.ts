@@ -78,10 +78,23 @@ declare global {
     totalNctr: number;
     user_uuid: string;
     wallet: string;
+    transactionHash: string;
   }
   interface AirdropInterface {
     airdropStats: AirdropStatsInterface;
     tokenClaim: TokenClaimInterface;
   }
   interface AirdropResponse extends GeneralResponse<AirdropInterface> {}
+
+  interface NctrClaimParams {
+    amount: string;
+    timestamp: number;
+    signature: string;
+  }
+
+  interface NctrClaimResponse {
+    id: string;
+    status: number;
+    data: NctrClaimParams;
+  }
 }

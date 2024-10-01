@@ -10,7 +10,9 @@
         class="flex justify-between items-center card-dark rounded-lg text-body px-4 py-2"
       >
         <n-ellipsis class="align-bottom" :line-clamp="1">
-          {{ link }}
+          <a :href="link" target="_blank">
+            {{ link }}
+          </a>
         </n-ellipsis>
         <button class="text-body ml-2" @click="copyToClipboard(link)">
           <span class="icon-copy"></span>

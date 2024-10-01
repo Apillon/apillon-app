@@ -353,10 +353,11 @@ const columns = computed(() => {
       },
     },
     {
-      title: '',
       key: 'actions',
       align: 'right',
-      className: ['!py-0', { hidden: props.type === TableFilesType.DEPLOYMENT }],
+      filter: 'default',
+      filterOptionValue: null,
+      className: ['!py-0 !sticky right-0', { hidden: props.type === TableFilesType.DEPLOYMENT }],
       render(row: BucketItemInterface) {
         return h(
           NDropdown,
@@ -375,12 +376,6 @@ const columns = computed(() => {
           }
         );
       },
-    },
-    {
-      key: 'columns',
-      filter: 'default',
-      filterOptionValue: null,
-      className: { hidden: props.type === TableFilesType.DEPLOYMENT },
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },

@@ -1,7 +1,7 @@
 /** Button */
 .n-button {
   .n-button__content {
-    white-space: normal;
+    @apply whitespace-normal;
   }
   &.n-button--loading {
     .n-button__icon {
@@ -16,6 +16,10 @@
     .n-button__content {
       color: transparent;
     }
+  }
+
+  &--small-type .n-button__content {
+    @apply leading-[1.44];
   }
 
   &--tertiary-type:not(.n-button--disabled):focus {
@@ -204,7 +208,10 @@
 
   .n-checkbox {
     &--disabled .n-checkbox__label strong {
-      opacity: 0.4;
+      @apply opacity-40;
+    }
+    .n-checkbox__label button {
+      @apply relative -top-[2px];
     }
   }
   .n-grid {

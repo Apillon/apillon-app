@@ -112,9 +112,9 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
-      key: 'dashboard-service-social',
-      label: $i18n.t('dashboard.nav.social'),
-      to: 'dashboard-service-social',
+      key: 'dashboard-service-asset-hub',
+      label: $i18n.t('dashboard.nav.assetHub'),
+      to: 'dashboard-service-asset-hub',
       iconName: 'icon-social',
       soon: isMenuItemDisabled(Feature.SOCIAL),
       disabled:
@@ -123,9 +123,9 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
-      key: 'dashboard-service-asset-hub',
-      label: $i18n.t('dashboard.nav.assetHub'),
-      to: 'dashboard-service-asset-hub',
+      key: 'dashboard-service-social',
+      label: $i18n.t('dashboard.nav.social'),
+      to: 'dashboard-service-social',
       iconName: 'icon-social',
       soon: isMenuItemDisabled(Feature.SOCIAL),
       disabled:
