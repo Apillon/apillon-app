@@ -4,8 +4,8 @@
       <strong>{{ $t('hosting.domain.preview') }}</strong>
     </div>
 
-    <div class="flex flex-wrap mb-4 gap-4 gap-y-6 items-center">
-      <HostingPreviewLink v-if="domain" :link="`https://${domain}`" />
+    <div v-if="domain" class="flex flex-wrap mb-4 gap-4 gap-y-6 items-center">
+      <HostingPreviewLink :link="`https://${domain}`" />
       <div v-if="domainStatus" class="flex gap-3 items-center flex-wrap sm:flex-nowrap mb-2">
         <div class="body-sm">
           <strong class="whitespace-nowrap">{{ $t('hosting.domain.domainStatus') }}:</strong>

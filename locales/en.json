@@ -1438,6 +1438,7 @@
     "deployProd": "Deploy to production",
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
+    "ipfsLink": "IPFS link",
     "ipns": "IPNS",
     "ipnsAddress": "IPNS Address",
     "ipnsLink": "IPNS link",

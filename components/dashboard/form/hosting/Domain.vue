@@ -123,21 +123,18 @@ function validateDomain(_: FormItemRule, value: string): boolean {
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
+
+  const serviceName =
+    formData.value.ipns && !website.value?.ipnsProduction
+      ? [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, PriceServiceName.IPNS]
+      : [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN];
+
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
-    } else if (props.domain) {
-      const serviceName =
-        formData.value.ipns && !website.value?.ipnsProduction
-          ? [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, PriceServiceName.IPNS]
-          : [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN];
-
+    } else if (props.domain || website.value?.ipnsProduction) {
       warningStore.showSpendingWarning(serviceName, () => updateWebsiteDomain());
     } else {
-      const serviceName = formData.value.ipns
-        ? [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, PriceServiceName.IPNS]
-        : [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN];
-
       warningStore.showSpendingWarning(serviceName, () => createWebsiteDomain());
     }
   });
