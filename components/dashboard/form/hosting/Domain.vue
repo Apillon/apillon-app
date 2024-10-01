@@ -76,6 +76,7 @@ const websiteStore = useWebsiteStore();
 const warningStore = useWarningStore();
 const deploymentStore = useDeploymentStore();
 const { labelInfo } = useComputing();
+const { checkUnfinishedWebsite } = useHosting();
 
 const loading = ref<boolean>(false);
 const domainCreated = ref<boolean>(false);
@@ -182,7 +183,7 @@ async function createIpns(): Promise<boolean> {
         cid: lastDeployment.value.cidv1 || lastDeployment.value.cid,
       }
     );
-    websiteStore.active.ipnsProduction = res.data.ipnsValue;
+    websiteStore.active.ipnsProduction = res.data.ipnsName;
 
     message.success($i18n.t('form.success.created.ipns'));
     return true;
@@ -226,6 +227,10 @@ function updateWebsiteDomainValue(domain: string | null) {
   if (websiteStore.active.website_uuid === props.websiteUuid) {
     websiteStore.active.domain = domain;
     websiteStore.active.domainChangeDate = new Date().toISOString();
+  }
+
+  if (website.value && formData.value.ipns && !website.value?.ipnsProduction) {
+    checkUnfinishedWebsite(website.value);
   }
 }
 </script>

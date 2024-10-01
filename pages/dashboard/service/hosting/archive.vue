@@ -4,11 +4,10 @@
       <HeaderHosting />
     </template>
     <slot>
-      <TableHosting
-        v-if="websiteStore.hasWebsiteArchive"
-        :websites="websiteStore.archive"
-        archive
-      />
+      <n-space v-if="websiteStore.hasWebsiteArchive" class="pb-8" :size="32" vertical>
+        <ActionsHosting archive />
+        <TableHosting :websites="websiteStore.archive" archive />
+      </n-space>
       <Empty
         v-else
         :title="$t('hosting.web3HostingArchive')"

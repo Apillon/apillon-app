@@ -943,6 +943,7 @@
     "USER_IS_NOT_AUTHORIZED": "User is not authorized",
     "CAPTCHA_NOT_PRESENT": "Please solve captcha",
     "Insufficient permissions to modify this record": "You don't have permission for this action",
+    "Insufficient permissions to access this record": "You don't have permission for this action",
     "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error, please fill the form",
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
     "ERR_CONNECTION_REFUSED": "Connection refused, please check your internet connection.",

@@ -4,11 +4,10 @@
       <HeaderNft />
     </template>
     <slot>
-      <TableNftCollection
-        v-if="collectionStore.hasCollectionArchive"
-        :collections="collectionStore.archive"
-        archive
-      />
+      <n-space v-if="collectionStore.hasCollectionArchive" class="pb-8" :size="32" vertical>
+        <ActionsNftCollection archive/>
+        <TableNftCollection :collections="collectionStore.archive" archive/>
+      </n-space>
       <Empty
         v-else
         :title="$t('nft.collection.emptyArchive')"

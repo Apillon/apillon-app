@@ -26,7 +26,7 @@
     </div>
 
     <n-space class="w-full" :wrap="!isLg" align="center">
-      <Btn v-if="editEnabled || true" type="primary" size="small" @click="showModalDomain = true">
+      <Btn v-if="editEnabled" type="primary" size="small" @click="showModalDomain = true">
         <span v-if="domain">
           {{ $t('hosting.domain.setup') }}
         </span>
