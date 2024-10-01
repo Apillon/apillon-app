@@ -71,11 +71,11 @@ const websiteStore = useWebsiteStore();
 
 const ip = computed(() => ipfsStore.info.loadBalancerIp || '52.19.92.40');
 
-const link = computed(() =>
-  websiteStore.active.ipnsProduction
+const link = computed(() => {
+  return websiteStore.active.ipnsProduction
     ? `ipns/${websiteStore.active.ipnsProduction}`
-    : `ipfs/${websiteStore.active.cidProduction}`
-);
+    : `ipfs/${websiteStore.active.cidProduction}`;
+});
 
 onMounted(() => {
   ipfsStore.getIpfsInfo(dataStore.projectUuid);

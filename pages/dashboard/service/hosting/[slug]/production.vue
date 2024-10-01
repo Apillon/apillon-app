@@ -21,7 +21,7 @@
                 <!-- IPNS link -->
                 <HostingPreviewLink
                   :link="websiteStore.active.w3ProductionLink || ''"
-                  :title="$t('hosting.ipnsLink')"
+                  :title="$t('hosting.ipfsLink')"
                   :info="$t('hosting.ipnsInfo')"
                 />
               </div>

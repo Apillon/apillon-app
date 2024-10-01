@@ -9,7 +9,9 @@
     >
       <div v-if="servicePrices">
         <div v-if="isEnoughCredits" class="flex flex-col gap-1 text-body mb-4">
-          <span v-for="servicePrice in servicePrices">{{ servicePrice.description }}</span>
+          <span v-for="servicePrice in servicePrices">
+            {{ servicePrice.description || servicePrice.name }}
+          </span>
         </div>
         <p v-else>{{ $t('dashboard.payment.notEnoughCredits') }}</p>
         <p>
