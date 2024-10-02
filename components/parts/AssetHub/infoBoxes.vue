@@ -1,14 +1,16 @@
 <template>
-  <div class="flex flex-col max-w-lg justify-between pb-[200px]">
+  <div class="flex flex-col max-w-lg justify-between pb-[260px]">
     <div>
-      <div class="flex p-2 border border-bg-lighter">
-        <span class="icon-info mt-1"></span>
-        <p class="ml-2">
-          We recommend creating your asset on the testnet first, to preview and test it thoroughly.
-          Once you’re satisfied with the outcome, you can confidently deploy it on the mainnet. Keep
-          in mind, once deployed, asset’s name, symbol, ID, and other characteristics will be
-          permanently reserved on the blockchain.
-        </p>
+      <div class="min-h-[192px]">
+        <div class="flex p-2 border border-bg-lighter">
+          <span class="icon-info mt-1"></span>
+          <p class="ml-2">
+            We recommend creating your asset on the testnet first, to preview and test it
+            thoroughly. Once you’re satisfied with the outcome, you can confidently deploy it on the
+            mainnet. Keep in mind, once deployed, asset’s name, symbol, ID, and other
+            characteristics will be permanently reserved on the blockchain.
+          </p>
+        </div>
       </div>
       <div class="flex p-2 border border-bg-lighter mt-2">
         <span class="icon-info mt-1"></span>
@@ -17,7 +19,13 @@
           validate the asset’s name, symbol, and ID, and notify you if any of these are already in
           use by an existing asset. <br /><br />Feel free to learn more about asset parameters in
           the
-          <a class="underline text-yellow" target="_blank" href="\">documentation here.</a>
+          <a
+            class="underline text-yellow"
+            target="_blank"
+            href="https://crates.parity.io/pallet_assets/index.html"
+          >
+            documentation here.
+          </a>
         </p>
       </div>
     </div>

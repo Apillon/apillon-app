@@ -1,37 +1,64 @@
-const btnLoading = ref(false);
-const isWalletConnected = ref(false);
+import { useAccount, useConnect, useDisconnect, useWalletClient } from 'use-wagmi';
 
 export default function assetHub() {
-  async function connectWallet() {
-    isWalletConnected.value = true;
-    // if (!isConnected.value) {
-    //   await wagmiConnect(connectors.value[0]);
-    // }
+  const { t } = useI18n();
+  const authStore = useAuthStore();
+  const referralStore = useReferralStore();
+  const { error, success } = useMessage();
+  const { connectAndSign } = useWallet();
+
+  const { connect, connectors, isLoading } = useConnect();
+  const { refetch: refetchWalletClient } = useWalletClient();
+  const { address, isConnected } = useAccount({ onConnect: onWalletConnected });
+  const { disconnect } = useDisconnect();
+
+  const loading = ref(false);
+
+  onMounted(() => {
+    if (!authStore.user.evmWallet) {
+      disconnect();
+    }
+  });
+
+  async function onWalletConnected({ address, connector, isReconnected }) {
+    await sleep(200);
+    loading.value = false;
+    console.log(address, isReconnected, connector);
   }
 
-  //   async function onWalletConnected() {
-  //     await sleep(200);
-  //     if (btnLoading.value) {
-  //       btnLoading.value = false;
-  //     }
-  //   }
+  function wagmiConnect(connector) {
+    if (isConnected.value) {
+      refetchWalletClient();
+    } else if (connector.ready) {
+      connect({ connector });
+    }
+  }
+  async function connectWallet() {
+    await sleep(200);
+    loading.value = true;
 
-  //   function wagmiConnect(connector) {
-  //     if (isConnected.value) {
-  //       refetchWalletClient();
-  //     } else if (connector.ready) {
-  //       connect({ connector });
-  //     }
-  //   }
+    if (!isConnected.value) {
+      wagmiConnect(connectors.value[0]);
+      loading.value = false;
+      return;
+    }
 
-  //   function disconnectWallet() {
-  //     disconnect();
-  //   }
+    const sign = await connectAndSign();
+    if (!sign) {
+      loading.value = false;
+      return;
+    }
+
+    loading.value = false;
+  }
+
+  function disconnectWallet() {
+    disconnect();
+  }
 
   return {
-    isWalletConnected,
+    loading,
     connectWallet,
-    // disconnectWallet,
-    // btnLoading,
+    disconnectWallet,
   };
 }

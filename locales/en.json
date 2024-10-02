@@ -23,6 +23,7 @@
     "delete": "Delete",
     "description": "Description",
     "deselectAll": "Deselect All",
+    "disconnect": "Disconnect",
     "download": "Download",
     "edit": "Edit",
     "environment": "Environment",
@@ -438,6 +439,21 @@
       "insufficient": "You don't have permissions to create or edit this item."
     },
     "service": {
+      "assetHub": {
+        "asset": "asset",
+        "changeIssuer": "Change issuer",
+        "changeFreezer": "Change freezer",
+        "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
+        "connectWallet": "Connect wallet",
+        "create": "Create asset",
+        "createAsset": "Create an asset",
+        "characteristics": "Characteristics",
+        "edit": "Edit asset",
+        "noProject": "Your project has no assets yet",
+        "new": "Create new asset",
+        "sendTokens": "Send Tokens",
+        "transfer": "Transfer ownership"
+      },
       "authentication": {
         "name": "Decentralized Authentication",
         "description": "Boost users’ privacy and security with decentralized digital identity.",
@@ -501,38 +517,6 @@
         "name": "Decentralized Storage",
         "website": "Main Website Storage",
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
-      },
-      "assetHub": {
-        "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
-        "connectWallet": "Connect wallet",
-        "noProject": "Your project has no assets yet",
-        "asset": "asset",
-        "form": {
-          "create": "Create an asset",
-          "subtitle": "Characteristics",
-          "label": {
-            "network": "Network",
-            "name": "Asset name",
-            "symbol": "Asset symbol",
-            "assetId": "Asset ID",
-            "decimals": "Decimals",
-            "initialSupply": "Initial supply",
-            "minBalance": "Minimum balance",
-            "issuerAddress": "Issuer Address",
-            "freezerAddress": "Freezer Address"
-          },
-          "placeholder": {
-            "network": "Network",
-            "name": "Type name",
-            "symbol": "Type asset symbol",
-            "assetId": "Asset ID",
-            "decimals": "Decimals",
-            "initialSupply": "initial Supply",
-            "minbalance": "Minimum Balance",
-            "issuerAddress": "Issuer Address",
-            "freezerAddress": "Freezer Address"
-          }
-        }
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -1185,6 +1169,17 @@
       "webhookUsername": "User name",
       "websiteDescription": "Website description",
       "websiteName": "Website name",
+      "assetHub": {
+        "network": "Network",
+        "name": "Asset name",
+        "symbol": "Asset symbol",
+        "assetId": "Asset ID",
+        "decimals": "Decimals",
+        "initialSupply": "Initial supply",
+        "minBalance": "Minimum balance",
+        "issuerAddress": "Issuer Address",
+        "freezerAddress": "Freezer Address"
+      },
       "contract": {
         "accountAddress": "Account Address",
         "amount": "Amount",
@@ -1261,6 +1256,17 @@
       "webhookUsername": "Enter user name",
       "websiteDescription": "Website description",
       "websiteName": "Website name",
+      "assetHub": {
+        "network": "Network",
+        "name": "Type name",
+        "symbol": "Type asset symbol",
+        "assetId": "Asset ID",
+        "decimals": "Decimals",
+        "initialSupply": "initial Supply",
+        "minbalance": "Minimum Balance",
+        "issuerAddress": "Issuer Address",
+        "freezerAddress": "Freezer Address"
+      },
       "contract": {
         "name": "Enter contract name",
         "description": "Enter contract description",

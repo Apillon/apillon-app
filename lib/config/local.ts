@@ -14,6 +14,7 @@ const config: ConfigInterface = {
   publishedFeatures: [
     'ACCESS',
     'API_KEYS',
+    'ASSET_HUB',
     'AUTHENTICATION',
     'BILLING',
     'CONFIGURATION',

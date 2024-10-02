@@ -116,10 +116,9 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: $i18n.t('dashboard.nav.assetHub'),
       to: 'dashboard-service-asset-hub',
       iconName: 'icon-social',
-      soon: isMenuItemDisabled(Feature.SOCIAL),
       disabled:
-        isMenuItemDisabled(Feature.SOCIAL) ||
-        !authStore.isUserAllowed(Permission.SOCIAL) ||
+        isMenuItemDisabled(Feature.ASSET_HUB) ||
+        !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
         zeroProjects.value,
     },
     {

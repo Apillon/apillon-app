@@ -57,6 +57,8 @@ export const LsW3WarnKeys = {
 
 export const LsCacheKeys = {
   API_KEYS: 'al_cache_api_keys',
+  ASSET: 'al_cache_asset',
+  ASSETS: 'al_cache_assets',
   BUCKET: 'al_cache_bucket',
   BUCKETS: 'al_cache_buckets',
   BUCKET_ITEMS: 'al_cache_bucket_items',

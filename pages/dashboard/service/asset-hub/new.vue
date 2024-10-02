@@ -1,27 +1,25 @@
 <template>
   <Dashboard>
     <template #heading>
-      <Heading>
-        <slot>
-          <div class="flex gap-4 items-center">
-            <NuxtLink :to="{ name: 'dashboard-service-asset-hub' }">
-              <span class="icon-back text-2xl align-sub"></span>
-            </NuxtLink>
-            <div>
-              <h2>{{ $t('dashboard.service.assetHub.form.create') }}</h2>
-            </div>
-          </div>
-        </slot>
-      </Heading>
+      <HeaderAssetHub
+        back-link="/dashboard/service/asset-hub/"
+        :title="$t('dashboard.service.assetHub.createAsset')"
+      />
     </template>
 
-    <div class="flex w-full max-w-[1200px] gap-8 justify-between">
-      <FormAssetHubNew />
-      <AssetHubInfoBoxes />
+    <div class="pb-8">
+      <FormAssetHub class="mx-auto" />
     </div>
+    <template #learn>
+      <AssetHubInfoBoxes class="h-full" />
+    </template>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
+
+useHead({
+  title: t('dashboard.nav.assetHub'),
+});
 </script>
