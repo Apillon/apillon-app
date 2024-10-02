@@ -14,7 +14,7 @@
             <HostingPreviewLink
               class="xl:max-w-3xl xxl:max-w-4xl"
               :link="websiteStore.active.w3StagingLink || ''"
-              :title="$t('hosting.ipnsLink')"
+              :title="$t('hosting.ipfsLink')"
               :info="$t('hosting.ipnsInfo')"
             />
           </div>

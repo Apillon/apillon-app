@@ -153,6 +153,7 @@ declare global {
     transactionHash: string | null;
     updateTime: string;
     useApillonIpfsGateway: boolean;
+    useIpns: boolean;
   }
 
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}

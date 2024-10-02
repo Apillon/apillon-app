@@ -51,7 +51,7 @@
 
       <!-- Add NFT -->
       <n-button
-        v-if="collectionStore.active.collection_uuid"
+        v-if="collectionStore.active.collection_uuid && collectionStore.active.useIpns !== false"
         size="small"
         :loading="loadingBucket"
         :disabled="!allowAddMetadata"
@@ -211,6 +211,8 @@ async function createIpns() {
     });
 
     message.success(t('form.success.created.ipns'));
+
+    collectionStore.fetchCollectionTransactions(collectionStore.collectionUuid);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

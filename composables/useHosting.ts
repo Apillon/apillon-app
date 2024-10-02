@@ -6,13 +6,16 @@ export default function useHosting() {
   const websiteStore = useWebsiteStore();
   const deploymentStore = useDeploymentStore();
   const pageLoading = ref<boolean>(true);
+
   let deploymentInterval: any = null as any;
+  let websiteInterval: any = null as any;
 
   /** Website ID from route */
   const websiteUuid = ref<string>(params.id ? `${params?.id}` : `${params?.slug}`);
 
   onUnmounted(() => {
     clearInterval(deploymentInterval);
+    clearInterval(websiteInterval);
   });
 
   function initWebsite(env: number = 0) {
@@ -62,6 +65,18 @@ export default function useHosting() {
         pageLoading.value = false;
       });
     }, 100);
+  }
+
+  function checkUnfinishedWebsite(unfinishedWebsite: WebsiteInterface) {
+    if (!!unfinishedWebsite?.ipnsProduction) return;
+
+    websiteInterval = setInterval(async () => {
+      const website = await websiteStore.fetchWebsite(websiteStore.active.website_uuid);
+
+      if (!!website?.ipnsProduction) {
+        clearInterval(websiteInterval);
+      }
+    }, 10000);
   }
 
   function checkUnfinishedDeployments(deployments: Array<DeploymentInterface>, env: number) {
@@ -115,6 +130,7 @@ export default function useHosting() {
   return {
     pageLoading,
     websiteUuid,
+    checkUnfinishedWebsite,
     initWebsite,
     refreshWebpage,
   };

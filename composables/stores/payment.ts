@@ -26,6 +26,9 @@ export const usePaymentStore = defineStore('payment', {
     },
     loading: false,
     priceList: [] as ProductPriceInterface[],
+    promises: {
+      priceList: null as any,
+    },
   }),
   getters: {
     hasCustomerPortalUrl(state) {
@@ -123,7 +126,9 @@ export const usePaymentStore = defineStore('payment', {
 
     /** GET Price list */
     async getPriceList() {
-      if (!this.hasPriceList) {
+      if (!this.hasPriceList && this.promises.priceList) {
+        await this.promises.priceList;
+      } else if (!this.hasPriceList) {
         await this.fetchProductPriceList();
       }
       return this.priceList;
@@ -382,9 +387,14 @@ export const usePaymentStore = defineStore('payment', {
       abortController = new AbortController();
 
       try {
-        const res = await $api.get<PriceListResponse>(endpoints.productPrice(), PARAMS_ALL_ITEMS, {
-          signal: abortController.signal,
-        });
+        this.promises.priceList = $api.get<PriceListResponse>(
+          endpoints.productPrice(),
+          PARAMS_ALL_ITEMS,
+          {
+            signal: abortController.signal,
+          }
+        );
+        const res = await this.promises.priceList;
 
         this.priceList = res.data.items;
 
@@ -398,6 +408,7 @@ export const usePaymentStore = defineStore('payment', {
           window.$message.error(userFriendlyMsg(error));
         }
       }
+      this.promises.priceList = null;
     },
     async fetchProductPrice(productId: number): Promise<ProductPriceInterface | null> {
       try {
