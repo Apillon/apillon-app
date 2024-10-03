@@ -41,7 +41,7 @@
     <p class="relative -top-4 text-center px-4">
       {{ $t('dashboard.service.assetHub.mintTokensInfo') }}
     </p>
-    <FormAssetHubSendTokens class="text-left" @close="modalMintTokensVisible = false" />
+    <FormAssetHubMintTokens class="text-left" @close="modalMintTokensVisible = false" />
   </Modal>
 
   <Modal

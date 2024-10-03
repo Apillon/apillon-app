@@ -21,7 +21,6 @@ export default function assetHub() {
   async function onWalletConnected({ address, connector, isReconnected }) {
     await sleep(200);
     loading.value = false;
-    console.log(address, isReconnected, connector);
   }
 
   function wagmiConnect(connector) {
