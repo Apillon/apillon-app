@@ -76,6 +76,7 @@ const websiteStore = useWebsiteStore();
 const warningStore = useWarningStore();
 const deploymentStore = useDeploymentStore();
 const { labelInfo } = useComputing();
+const { checkUnfinishedWebsite } = useHosting();
 
 const loading = ref<boolean>(false);
 const domainCreated = ref<boolean>(false);
@@ -123,21 +124,18 @@ function validateDomain(_: FormItemRule, value: string): boolean {
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
+
+  const serviceName =
+    formData.value.ipns && !website.value?.ipnsProduction
+      ? [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, PriceServiceName.IPNS]
+      : [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN];
+
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.error(error.message || 'Error')));
-    } else if (props.domain) {
-      const serviceName =
-        formData.value.ipns && !website.value?.ipnsProduction
-          ? [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, PriceServiceName.IPNS]
-          : [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN];
-
+    } else if (props.domain || website.value?.ipnsProduction) {
       warningStore.showSpendingWarning(serviceName, () => updateWebsiteDomain());
     } else {
-      const serviceName = formData.value.ipns
-        ? [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN, PriceServiceName.IPNS]
-        : [PriceServiceName.HOSTING_CHANGE_WEBSITE_DOMAIN];
-
       warningStore.showSpendingWarning(serviceName, () => createWebsiteDomain());
     }
   });
@@ -185,7 +183,7 @@ async function createIpns(): Promise<boolean> {
         cid: lastDeployment.value.cidv1 || lastDeployment.value.cid,
       }
     );
-    websiteStore.active.ipnsProduction = res.data.ipnsValue;
+    websiteStore.active.ipnsProduction = res.data.ipnsName;
 
     message.success($i18n.t('form.success.created.ipns'));
     return true;
@@ -229,6 +227,10 @@ function updateWebsiteDomainValue(domain: string | null) {
   if (websiteStore.active.website_uuid === props.websiteUuid) {
     websiteStore.active.domain = domain;
     websiteStore.active.domainChangeDate = new Date().toISOString();
+  }
+
+  if (website.value && formData.value.ipns && !website.value?.ipnsProduction) {
+    checkUnfinishedWebsite(website.value);
   }
 }
 </script>

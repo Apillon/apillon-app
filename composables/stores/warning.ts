@@ -13,12 +13,8 @@ export const useWarningStore = defineStore('warning', {
       this.action = action;
 
       const paymentStore = usePaymentStore();
-      let servicePrices = await paymentStore.filterServicePrice(this.services);
+      const servicePrices = await paymentStore.filterServicePrice(this.services);
 
-      if (!servicePrices.length) {
-        await sleep(500);
-        servicePrices = await paymentStore.filterServicePrice(this.services);
-      }
       if (servicePrices.length && sumCredits(servicePrices) > 0) {
         this.isSpendingWarningOpen = true;
       } else {

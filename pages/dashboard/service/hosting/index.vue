@@ -4,7 +4,10 @@
       <HeaderHosting />
     </template>
     <slot>
-      <TableHosting v-if="websiteStore.hasWebsites" :websites="websiteStore.items" />
+      <n-space v-if="websiteStore.hasWebsites" class="pb-8" :size="32" vertical>
+        <ActionsHosting />
+        <TableHosting :websites="websiteStore.items" />
+      </n-space>
       <Empty
         v-else
         :title="$t('hosting.web3Hosting')"
