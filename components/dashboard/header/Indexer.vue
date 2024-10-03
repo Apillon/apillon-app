@@ -1,0 +1,23 @@
+<template>
+  <Heading>
+    <slot>
+      <NuxtLink class="flex items-center gap-x-2" :to="link">
+        <span class="icon-back text-2xl align-sub"></span>
+        <h1 v-if="title">{{ title }}</h1>
+        <h1 v-else>{{ $t('dashboard.nav.indexer') }}</h1>
+      </NuxtLink>
+    </slot>
+    <template #info> </template>
+
+    <template #submenu>
+      <MenuIndexer />
+    </template>
+  </Heading>
+</template>
+
+<script lang="ts" setup>
+defineProps({
+  link: { type: String, default: '/dashboard/service/indexer' },
+  title: { type: String, default: '' },
+});
+</script>

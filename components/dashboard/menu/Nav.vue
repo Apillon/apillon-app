@@ -154,6 +154,17 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         !authStore.isUserAllowed(Permission.SOCIAL) ||
         zeroProjects.value,
     },
+    {
+      key: 'dashboard-service-indexer',
+      label: t('dashboard.nav.indexer'),
+      to: 'dashboard-service-indexer',
+      iconName: 'icon-file',
+      soon: isMenuItemDisabled(Feature.INDEXER),
+      disabled:
+        isMenuItemDisabled(Feature.INDEXER) ||
+        !authStore.isUserAllowed(Permission.INDEXER) ||
+        zeroProjects.value,
+    },
   ];
 
   const smartContractsChildren = [

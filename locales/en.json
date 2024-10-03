@@ -461,7 +461,8 @@
       "social": "Social",
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
-      "embeddedWallet": "Embedded Wallet"
+      "embeddedWallet": "Embedded Wallet",
+      "indexer": "Indexer"
     },
     "pageMenu": {
       "access": "Access",
@@ -612,6 +613,25 @@
           "writeOverApillon": "Write over Appilon",
           "readFromDapp": "Read from your dapp"
         }
+      },
+      "indexer": {
+        "create": "Create new indexer",
+        "info": "Add it to your Web3 project",
+        "new": "New indexer",
+        "table": {
+          "name": "Name",
+          "description": "Description",
+          "status": "Status"
+        },
+        "tableLog": {
+          "level": "Level",
+          "ts": "Timestamp",
+          "container": "Continer",
+          "msg": "Message"
+        },
+        "general": "General",
+        "logs": "Logs",
+        "deploys": "Deploys"
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -1243,6 +1263,8 @@
       "hostingDescription": "Hosting description",
       "hostingName": "Hosting name",
       "hostingSize": "Hosting size",
+      "indexerName": "Indexer name",
+      "indexerDescription": "Indexer description",
       "inviteByEmail": "Invite by email",
       "ipnsDescription": "IPNS description",
       "ipnsName": "IPNS name",
@@ -1342,6 +1364,8 @@
       "folderDescription": "",
       "hostingDescription": "Hosting description",
       "hostingName": "Hosting name",
+      "indexerName": "Indexer name",
+      "indexerDescription": "Indexer description",
       "inviteByEmail": "Type e-mail",
       "ipnsDescription": "IPNS description",
       "ipnsName": "IPNS name",
@@ -1431,7 +1455,8 @@
         "service": "Service has been created",
         "userInvite": "User has been invited.",
         "webhook": "Webhook has been created",
-        "website": "Website has been created"
+        "website": "Website has been created",
+        "indexer": "Indexer has been created"
       },
       "deleted": {
         "apiKey": "API key has been deleted",
@@ -1614,6 +1639,14 @@
     "web3HostingArchive": "Web3 hosting Archive",
     "web3HostingArchiveInfo": "You don't have any website in Archive.",
     "web3HostingEnable": "Enable Web3 hosting to host your website."
+  },
+  "indexer": {
+    "create": "Create new indexer",
+    "update": "Update indexer",
+    "upload": {
+      "sourceCode": "Upload indexer source code",
+      "directory": "Indexer directory"
+    }
   },
   "nft": {
     "create": "Create an NFT",
@@ -2338,6 +2371,7 @@
     "fileTypeNotCsv": "File must be of type CSV",
     "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",
+    "indexerNameRequired": "Indexer name is required",
     "ipfsCidRequired": "Please enter CID or IPNS",
     "ipfsTypeRequired": "Please select type",
     "ipnsNameRequired": "Please enter IPNS name",
