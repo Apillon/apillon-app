@@ -17,11 +17,7 @@
 
     <n-space size="large">
       <!-- Refresh cloudFunctions -->
-      <n-button
-        size="small"
-        :loading="cloudFunctionStore.loading"
-        @click="cloudFunctionStore.fetchCloudFunction(cloudFunctionStore.functionUuid)"
-      >
+      <n-button size="small" :loading="cloudFunctionStore.loading" @click="refresh">
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
@@ -53,4 +49,10 @@ const modalCreateJobVisible = ref<boolean>(false);
 onMounted(() => {
   paymentStore.getPriceList();
 });
+
+async function refresh() {
+  cloudFunctionStore.active = await cloudFunctionStore.fetchCloudFunction(
+    cloudFunctionStore.functionUuid
+  );
+}
 </script>
