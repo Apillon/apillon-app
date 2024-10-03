@@ -18,7 +18,15 @@
                 </span>
               </td>
               <td>
-                {{ data.value }}
+                <Btn v-if="data.link" :href="data.link" type="link">
+                  {{ data.value }}
+                </Btn>
+                <TableEllipsis
+                  v-else-if="data.copy"
+                  class="w-full justify-between"
+                  :text="data.value"
+                />
+                <span v-else>{{ data.value }}</span>
               </td>
             </tr>
           </tbody>
@@ -26,7 +34,7 @@
       </div>
 
       <div class="card-light px-6 py-4">
-        <h4>Connected wakket stats</h4>
+        <h4>Connected wallet stats</h4>
         <n-table class="plain my-4" :bordered="false" :single-line="true">
           <tbody>
             <tr>
@@ -42,35 +50,12 @@
     </div>
 
     <template #learn>
-      <div class="card-border p-4 flex flex-col gap-2 rounded-lg">
-        <h4>{{ $t('general.actions') }}</h4>
-        <Btn size="small">
-          <strong>{{ $t('dashboard.service.assetHub.sendTokens') }}</strong>
-        </Btn>
-        <Btn size="small" :color="colors.blue">
-          <strong>{{ $t('dashboard.service.assetHub.sendTokens') }}</strong>
-        </Btn>
-        <n-button size="small">
-          {{ $t('dashboard.service.assetHub.transfer') }}
-        </n-button>
-        <n-button size="small">
-          {{ $t('dashboard.service.assetHub.changeIssuer') }}
-        </n-button>
-        <n-button size="small">
-          {{ $t('dashboard.service.assetHub.changeFreezer') }}
-        </n-button>
-        <n-button size="small">
-          <span class="icon-edit text-xl mr-2"></span>
-          {{ $t('dashboard.service.assetHub.edit') }}
-        </n-button>
-      </div>
+      <AssetHubActions />
     </template>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
-
 const { t } = useI18n();
 const dataStore = useDataStore();
 const assetHubStore = useAssetHubStore();
@@ -91,12 +76,12 @@ const assetData = [
   {
     label: t('form.label.assetHub.issuerAddress'),
     value: '0xe4302A01F70fa56c5f40bEf998a21757b6...',
-    copy: '0xe4302A01F70fa56c5f40bEf998a21757b6...',
+    copy: true,
   },
   {
     label: t('form.label.assetHub.freezerAddress'),
     value: '0xe4302A01F70fa56c5f40bEf998a21757b6...',
-    copy: '0xe4302A01F70fa56c5f40bEf998a21757b6...',
+    copy: true,
   },
   {
     label: 'On-chain metadata',

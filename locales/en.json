@@ -30,6 +30,7 @@
     "error": "Error",
     "explore": "Explore",
     "goHome": "Go home",
+    "here": "here",
     "install": "Install",
     "images": "images",
     "learn": "Learn",
@@ -441,18 +442,35 @@
     "service": {
       "assetHub": {
         "asset": "asset",
+        "assetCreating": "We are creating your asset",
+        "assetCreatingInfo": "While you wait, feel free to review the article about asset metadata publishing {0}.",
+        "assetCreatingWait": "Please stay put, we will let you know once the asset is created. ",
         "changeIssuer": "Change issuer",
+        "changeIssuerInfo": "Changing the issuer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
         "changeFreezer": "Change freezer",
+        "changeFreezerInfo": "Changing the freezer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
         "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
         "connectWallet": "Connect wallet",
         "create": "Create asset",
         "createAsset": "Create an asset",
         "characteristics": "Characteristics",
         "edit": "Edit asset",
+        "loadingTransaction": "The transaction is being processed, please wait.",
+        "mintTokens": "Mint Tokens",
+        "mintTokensInfo": "Mint Tokens",
         "noProject": "Your project has no assets yet",
         "new": "Create new asset",
         "sendTokens": "Send Tokens",
-        "transfer": "Transfer ownership"
+        "sendTokensInfo": "You may only send tokens available in your connected wallet. If you do not see any tokens available, please review your wallet connection.",
+        "transactionDetails": "You may view the transaction details {0}.",
+        "transactionProcessed": "The transaction was successfully processed.",
+        "transfer": "Transfer ownership",
+        "transferInfo": "Transferring the ownership means handing all rights over to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "leave": {
+          "anyway": "Leave anyway",
+          "info": "If you leave, your changes won’t be saved.",
+          "title": "Are you sure you want to leave?"
+        }
       },
       "authentication": {
         "name": "Decentralized Authentication",
@@ -1170,6 +1188,8 @@
       "websiteDescription": "Website description",
       "websiteName": "Website name",
       "assetHub": {
+        "address": "Address",
+        "amount": "Amount",
         "network": "Network",
         "name": "Asset name",
         "symbol": "Asset symbol",
@@ -1257,6 +1277,8 @@
       "websiteDescription": "Website description",
       "websiteName": "Website name",
       "assetHub": {
+        "address": "Enter target address",
+        "amount": "Enter amount",
         "network": "Network",
         "name": "Type name",
         "symbol": "Type asset symbol",
@@ -1277,6 +1299,7 @@
     },
     "success": {
       "apiKey": "API key has been created",
+      "assetTransferred": "Asset has been transferred",
       "filesUploaded": "Files have been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
@@ -1377,6 +1400,7 @@
       "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform's services.",
       "payment": "I understand the billing process and some other legal stuff."
     },
+    "cancel": "Cancel",
     "confirm": "Yes, confirm",
     "connect": "Connect",
     "createBucketAndContinue": "Create bucket & continue to management",
@@ -1395,6 +1419,7 @@
     "saveCard": "Save card",
     "saveExit": "Save & exit",
     "sendInvite": "Send invite",
+    "sign": "Sign and continue",
     "startFirstProject": "Start your first project",
     "update": "Update"
   },
@@ -2259,6 +2284,10 @@
     "apiKey": {
       "nameRequired": "API key name is required",
       "rolesRequired": "Please select at least one permission"
+    },
+    "assetHub": {
+      "addressRequired": "Please enter target address",
+      "amountRequired": "Please enter amount"
     },
     "contract": {
       "addressRequired": "Please enter NFT collection address",

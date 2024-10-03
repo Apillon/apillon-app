@@ -3,8 +3,6 @@ import { useAccount, useConnect, useDisconnect, useWalletClient } from 'use-wagm
 export default function assetHub() {
   const { t } = useI18n();
   const authStore = useAuthStore();
-  const referralStore = useReferralStore();
-  const { error, success } = useMessage();
   const { connectAndSign } = useWallet();
 
   const { connect, connectors, isLoading } = useConnect();

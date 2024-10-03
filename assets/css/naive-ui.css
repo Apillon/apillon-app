@@ -504,6 +504,10 @@ body > .n-message-container {
   &.n-card {
     @apply card-border py-12;
 
+    &.hide-header .n-card-header {
+      @apply hidden;
+    }
+
     .n-card {
       &-header {
         @apply py-4;
