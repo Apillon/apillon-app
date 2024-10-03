@@ -1017,6 +1017,7 @@
     "USER_IS_NOT_AUTHORIZED": "User is not authorized",
     "CAPTCHA_NOT_PRESENT": "Please solve captcha",
     "Insufficient permissions to modify this record": "You don't have permission for this action",
+    "Insufficient permissions to access this record": "You don't have permission for this action",
     "DEFAULT_VALIDATOR_ERROR_CODE": "Validation error, please fill the form",
     "FORBIDDEN_RESOURCE": "You don't have permissions for this action",
     "ERR_CONNECTION_REFUSED": "Connection refused, please check your internet connection.",
@@ -1478,11 +1479,12 @@
     },
     "domain": {
       "add": "Add domain",
-      "configure": "Configure domain",
+      "configure": "DNS Records",
       "domainStatus": "Domain status",
       "editDisabled": "Website domain can be changed every 15 minutes. ",
       "preview": "Domain preview",
       "refreshStatus": "Refresh domain status",
+      "remove": "Remove domain",
       "setup": "Setup domain",
       "update": "Update domain",
       "useIpns": "Use IPNS",
@@ -1490,7 +1492,7 @@
         "useIpns": "IPNS is a feature of the IPFS that allows a consistent address to be used even when the content changes. This means you can share the same address, and any updates to the content won't require a new address."
       },
       "status": {
-        "0": "Pending",
+        "0": "Not Connected",
         "1": "OK",
         "2": "Domain has CDN",
         "10": "Invalid, domain is not pointing to Apillon IP"
@@ -1538,6 +1540,7 @@
     "deployProd": "Deploy to production",
     "deployStage": "Deploy to staging",
     "deploymentStatus": "Deployment status",
+    "ipfsLink": "IPFS link",
     "ipns": "IPNS",
     "ipnsAddress": "IPNS Address",
     "ipnsLink": "IPNS link",
@@ -1884,17 +1887,17 @@
   "referral": {
     "airdrop": {
       "btn": "Have a question? Enter Discord!",
-      "content": "The NCTR Airdrop task phase is now finished. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
+      "content": "You can now claim your $NCTR rewards. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
       "reward": "Reward",
       "task": "Task",
-      "title": "NCTR Airdrop concluded",
+      "title": "$NCTR Airdrop Claim is open",
       "type": "Type",
-      "welcome": "NCTR Airdrop concluded",
+      "welcome": "$NCTR Airdrop Claim is open",
       "subscribe": {
         "btn": "Sign up to Apillon news",
         "content": "Sign up for the Apillon newsletter and don’t miss the next chance to earn NCTR tokens.",
-        "headline": "NCTR Airdrop concluded",
-        "headlineInfo": "The NCTR Airdrop task phase is now finished.",
+        "headline": "$NCTR Airdrop Claim is open",
+        "headlineInfo": "You can now claim your $NCTR rewards.",
         "info": "Receive product and feature updates, how-to guides and other platform-related news. Unsubscribe at any time.",
         "title": "Missed your chance?"
       },
@@ -1915,9 +1918,9 @@
       ]
     },
     "banner": {
-      "title": "NCTR Airdrop concluded",
-      "description": "Submit to review concluded on June 26, 2024. \nYour task review is now in progress.\n\n NCTR Airdrop rewards will be available for claim in August, 2024.",
-      "btn": "NCTR Airdrop Dashboard",
+      "title": "$NCTR Airdrop Claim is open",
+      "description": "You can now claim your $NCTR rewards.",
+      "btn": "NCTR Airdrop",
       "learnMoreBtn": "Learn more"
     },
     "info": {

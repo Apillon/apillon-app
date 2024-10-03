@@ -6,6 +6,7 @@ export type ItemDelete =
   | CloudFunctionInterface
   | CollectionInterface
   | ContractInterface
+  | DomainInterface
   | IpnsInterface
   | JobInterface
   | PostInterface
@@ -20,6 +21,7 @@ export enum ItemDeleteKey {
   COLLECTION = 'collection',
   CONTRACT = 'contract',
   DIRECTORY = 'directory',
+  DOMAIN = 'domain',
   FILE = 'file',
   IPNS = 'ipns',
   JOB = 'job',
@@ -74,6 +76,8 @@ export default function useDelete() {
         return endpoints.contracts(`${id}`);
       case ItemDeleteKey.DIRECTORY:
         return endpoints.directory(`${id}`);
+      case ItemDeleteKey.DOMAIN:
+        return endpoints.websiteDomain(`${id}`);
       case ItemDeleteKey.FILE:
         return endpoints.storageFileDelete(bucketStore.bucketUuid, `${id}`);
       case ItemDeleteKey.IPNS:

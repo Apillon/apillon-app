@@ -27,20 +27,39 @@
     >
       <h4 class="relative top-2">{{ $t('nft.collection.chainType') }}</h4>
       <div class="flex gap-4 whitespace-pre-line my-8 justify-center">
-        <div
-          v-for="chainType in chainTypes"
-          :key="chainType.value"
-          class="border-2 p-4 rounded-md border-bg-lightest hover:cursor-pointer w-40 flex justify-center"
-          :class="collectionStore.form.base.chainType === chainType.value ? 'border-yellow' : ''"
-          @click="collectionStore.form.base.chainType = chainType.value"
-        >
-          <div>
-            <NuxtIcon
-              :name="`logo/${chainType.name}`"
-              class="flex justify-center mx-auto text-7xl"
-              filled
-            />
-            <p>{{ chainType.label }}</p>
+        <div v-for="chainType in chainTypes">
+          <div
+            v-if="chainType.label === 'SUBSTRATE'"
+            :key="chainType.value"
+            class="border-2 p-4 rounded-md border-bg-lightest w-40 flex justify-center cursor-not-allowed"
+            title="Temporarily unavailable"
+          >
+            <div>
+              <NuxtIcon
+                :name="`logo/${chainType.name}`"
+                class="flex justify-center mx-auto text-7xl"
+                filled
+              />
+              <p>{{ chainType.label }}</p>
+            </div>
+          </div>
+
+          <!-- Div for all other cases (with click handler) -->
+          <div
+            v-else
+            :key="chainType.value"
+            class="border-2 p-4 rounded-md border-bg-lightest hover:cursor-pointer w-40 flex justify-center"
+            :class="collectionStore.form.base.chainType === chainType.value ? 'border-yellow' : ''"
+            @click="collectionStore.form.base.chainType = chainType.value"
+          >
+            <div>
+              <NuxtIcon
+                :name="`logo/${chainType.name}`"
+                class="flex justify-center mx-auto text-7xl"
+                filled
+              />
+              <p>{{ chainType.label }}</p>
+            </div>
           </div>
         </div>
       </div>
