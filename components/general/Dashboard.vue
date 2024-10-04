@@ -57,7 +57,7 @@
             />
 
             <!-- Global component: deployment progress -->
-            <StatusCard v-if="activeServices && activeServices.length > 0" />
+            <StatusCard v-if="activeInfoWindow" />
           </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
@@ -123,7 +123,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
-const { activeServices } = useRefreshStatus();
+const { activeInfoWindow } = useRefreshStatus();
 
 const gtm = useGtm();
 const { isMd, isLg, isXl } = useScreen();

@@ -1,130 +1,211 @@
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-
-interface Contract {
-  createTime: string;
-  updateTime: string;
-  contract_uuid: string;
-  project_uuid: string;
-  bucket_uuid: string;
-  name: string;
-  description: string;
-  contractType: number;
-  contractStatus: number;
-  contractAbi_id: number;
-  contractAddress: string | null;
-  deployerAddress: string;
+enum IntervalType {
+  FILE = 'file',
+  JOB = 'job',
+  CONTRACT = 'contract',
 }
+type Interval = ReturnType<typeof setInterval> | null;
+type Deployment = {
+  interval: Interval;
+  progress: number;
+  service: FileListItemType | JobInterface | ContractInterface | null;
+};
+type Deployments = Record<IntervalType, Deployment>;
 
-const dropdownOptions = ref([
-  { label: '10s', key: 0, value: 10 },
-  { label: '20s', key: 1, value: 20 },
-  { label: '30s', key: 2, value: 30 },
-  { label: '40s', key: 3, value: 40 },
+const refreshStatusOptions = ref([
+  { label: '10s', key: 1, value: 10000 },
+  { label: '20s', key: 2, value: 20000 },
+  { label: '30s', key: 3, value: 30000 },
+  { label: '40s', key: 4, value: 40000 },
 ]);
 
+const initDeployment = () => ({
+  interval: null,
+  progress: 0,
+  service: null,
+});
+
+const refreshInterval = ref(refreshStatusOptions.value[2]);
+const deployments = ref<Deployments>({
+  file: initDeployment(),
+  job: initDeployment(),
+  contract: initDeployment(),
+});
+
 export default function useRefreshStatus() {
-  // stores
   const contractStore = useContractStore();
-  // UI
-  const activeInfoWindow = ref(false);
+  const cloudFunctionStore = useCloudFunctionStore();
 
-  const activeServices = ref<Contract[]>([]);
+  const activeInfoWindow = computed(() =>
+    Object.values(deployments.value).some(item => item?.interval)
+  );
+  const activeDeployments = computed(
+    () =>
+      Object.values(deployments.value).filter(item => !!item && item?.interval && item?.service) ||
+      []
+  );
 
-  const refreshInterval = ref(dropdownOptions.value[0]);
-  let intervalId: ReturnType<typeof setInterval> | null = null;
-  // interval steps calculations
-  const progressStep = ref(10);
-  const totalSteps = ref(3);
-  const currentStep = ref(1);
-
-  onMounted(() => {
-    console.log('init');
-    initInfoWindow();
-  });
-
-  const initInfoWindow = async () => {
-    await getFilteredServices();
-    setRefreshInterval();
-  };
-
-  const getFilteredServices = async () => {
-    // get collection of unfinished
-    activeServices.value = contractStore.items.filter(
-      contract =>
-        contract.contractStatus === ContractStatus.DEPLOY_INITIATED ||
-        contract.contractStatus === ContractStatus.DEPLOYING
+  const setInitialRefreshInterval = () => {
+    const refreshKey = localStorage.getItem(LS_KEYS.DEPLOYMENT_REFRESH_INTERVAL);
+    const selectedOption = refreshStatusOptions.value.find(
+      option => option.key === Number(refreshKey)
     );
-
-    // return if no unfinished contracts
-    if (activeServices.value === undefined || activeServices.value.length === 0) return;
-    // open info window
-    activeInfoWindow.value = true;
-    const contracts = await contractStore.fetchContracts(false);
-    // console.log(contracts[0].contract_uuid);
-
-    const contract = contracts.find(
-      contract => contract.contract_uuid === activeServices.value.contract_uuid
-    );
-
-    activeServices.value = contracts.filter(
-      contract =>
-        contract.contractStatus === ContractStatus.DEPLOY_INITIATED ||
-        contract.contractStatus === ContractStatus.DEPLOYING
-    );
-
-    if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
-      activeInfoWindow.value = false; // unmounts and clears interval
+    if (refreshKey && selectedOption) {
+      refreshInterval.value = selectedOption;
     }
   };
 
-  const updateRefreshInterval = key => {
-    const selectedOption = dropdownOptions.value.find(option => option.key === key);
+  const updateRefreshInterval = (key: number) => {
+    const selectedOption = refreshStatusOptions.value.find(option => option.key === key);
     if (selectedOption) {
       refreshInterval.value = selectedOption;
-      setRefreshInterval(); // Reset interval when the refresh interval changes
+      refresh();
+      localStorage.setItem(LS_KEYS.DEPLOYMENT_REFRESH_INTERVAL, `${key}`);
     }
   };
 
-  const refresh = async () => {
-    // Place the refresh logic here
-    await getFilteredServices();
-    calculateProgress();
+  const refresh = () => {
+    if (deployments.value.job?.interval) checkUnfinishedJobs();
   };
 
-  const calculateProgress = () => {
-    const progress = (currentStep.value / totalSteps.value) * 100;
-    if (progress >= 100) {
-      progressStep.value = 100;
-      clearInterval(intervalId);
-      intervalId = null;
-    } else {
-      // round up
-      progressStep.value = Math.ceil(progress);
+  const clearIntervals = () => {
+    clearIntervalContract();
+    clearIntervalJob();
+    clearIntervalFile();
+  };
+  const clearIntervalContract = () => {
+    if (deployments.value.contract.interval) {
+      clearInterval(deployments.value.contract.interval);
+
+      if (deployments.value.contract.progress >= 100) {
+        deployments.value.contract.interval = null;
+        deployments.value.contract.progress = 0;
+        deployments.value.contract.service = null;
+      }
+    }
+  };
+  const clearIntervalJob = () => {
+    if (deployments.value.job.interval) {
+      clearInterval(deployments.value.job?.interval);
+
+      if (deployments.value.job.progress >= 100) {
+        deployments.value.job.interval = null;
+        deployments.value.job.progress = 0;
+        deployments.value.job.service = null;
+      }
+    }
+  };
+  const clearIntervalFile = () => {
+    if (deployments.value.file.interval) {
+      clearInterval(deployments.value.file.interval);
+
+      if (deployments.value.file.progress >= 100) {
+        deployments.value.file.interval = null;
+        deployments.value.file.progress = 0;
+        deployments.value.file.service = null;
+      }
     }
   };
 
-  const setRefreshInterval = () => {
-    clearRefreshInterval();
-    intervalId = setInterval(refresh, refreshInterval.value.value * 1000);
+  const calcProgress = (currentProgress: number, interval?: number) => {
+    const intervalInSeconds = interval ? interval * 0.1 : refreshInterval.value.key;
+    if (currentProgress < 30) return currentProgress + intervalInSeconds * 5;
+    if (currentProgress < 50) return currentProgress + intervalInSeconds * 4;
+    if (currentProgress < 70) return currentProgress + intervalInSeconds * 3;
+    if (currentProgress < 80) return currentProgress + intervalInSeconds * 2;
+    if (currentProgress < 88) return currentProgress + intervalInSeconds;
+    if (currentProgress < 92) return currentProgress + intervalInSeconds * 0.5;
+    if (currentProgress < 95) return currentProgress + intervalInSeconds * 0.4;
+    if (currentProgress < 97) return currentProgress + intervalInSeconds * 0.6;
+    if (currentProgress < 98) return currentProgress + intervalInSeconds * 0.8;
+    if (currentProgress < 99) return currentProgress + intervalInSeconds * 0.1;
+    if (currentProgress < 100) return currentProgress + intervalInSeconds * 0.2;
+    return currentProgress;
   };
 
-  const clearRefreshInterval = () => {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = null;
-    }
-  };
+  onMounted(() => {
+    setInitialRefreshInterval();
+  });
+  onBeforeUnmount(clearIntervals);
 
-  onBeforeUnmount(clearRefreshInterval);
+  /** Contract polling */
+  function checkUnfinishedContracts() {
+    clearIntervalContract();
+
+    const unfinishedCollection = contractStore.items.find(
+      contract => contract.contractStatus < ContractStatus.DEPLOYED
+    );
+    if (unfinishedCollection === undefined) return;
+
+    deployments.value.contract.service = unfinishedCollection;
+    deployments.value.contract.progress = deployments.value.contract?.progress || 1;
+
+    const progressInterval = setInterval(() => {
+      deployments.value.contract.progress = calcProgress(deployments.value.contract.progress, 0.1);
+    }, 100);
+
+    deployments.value.contract.interval = setInterval(async () => {
+      const contracts = await contractStore.fetchContracts(false, false);
+      const contract = contracts.find(
+        contract => contract.contract_uuid === unfinishedCollection.contract_uuid
+      );
+      if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
+        deployments.value.contract.progress = 100;
+
+        clearInterval(progressInterval);
+        clearIntervalContract();
+      }
+    }, refreshInterval.value.value);
+  }
+
+  /** Cloud function polling */
+  function checkUnfinishedJobs() {
+    clearIntervalJob();
+
+    const unfinishedJob = cloudFunctionStore.jobs.find(
+      job => !job?.jobStatus || job.jobStatus < AcurastJobStatus.DEPLOYED
+    );
+    if (unfinishedJob === undefined) return;
+
+    deployments.value.job.service = unfinishedJob;
+    deployments.value.job.progress = deployments.value.job?.progress || 1;
+
+    const progressInterval = setInterval(() => {
+      deployments.value.job.progress = calcProgress(deployments.value.job.progress, 0.1);
+    }, 100);
+
+    deployments.value.job.interval = setInterval(async () => {
+      if (deployments.value.job?.progress) {
+        deployments.value.job.progress = calcProgress(deployments.value.job.progress);
+      }
+      const cloudFunction = await cloudFunctionStore.fetchCloudFunction(
+        cloudFunctionStore.functionUuid,
+        false
+      );
+      const job = cloudFunction.jobs.find(job => job.job_uuid === unfinishedJob.job_uuid);
+
+      if (!job || job.jobStatus >= AcurastJobStatus.DEPLOYED) {
+        deployments.value.job.progress = 100;
+        cloudFunctionStore.active = cloudFunction;
+
+        clearInterval(progressInterval);
+        clearIntervalJob();
+      }
+    }, refreshInterval.value.value);
+  }
 
   return {
-    dropdownOptions,
-    activeServices,
-    progressStep,
-    refreshInterval,
-    updateRefreshInterval,
-    refresh,
     activeInfoWindow,
-    initInfoWindow,
+    activeDeployments,
+    deployments,
+    refreshStatusOptions,
+    refreshInterval,
+    calcProgress,
+    checkUnfinishedJobs,
+    clearIntervals,
+    clearIntervalFile,
+    clearIntervalJob,
+    refresh,
+    checkUnfinishedContracts,
+    updateRefreshInterval,
   };
 }

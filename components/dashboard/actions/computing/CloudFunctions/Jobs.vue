@@ -34,6 +34,7 @@
   <modal v-model:show="modalCreateJobVisible" :title="$t('computing.cloudFunctions.job.new')">
     <FormComputingCloudFunctionsJob
       :function-uuid="cloudFunctionStore.functionUuid"
+      @create-success="checkUnfinishedJobs()"
       @submit-success="modalCreateJobVisible = false"
     />
   </modal>
@@ -41,8 +42,9 @@
 
 <script lang="ts" setup>
 const authStore = useAuthStore();
-const cloudFunctionStore = useCloudFunctionStore();
 const paymentStore = usePaymentStore();
+const cloudFunctionStore = useCloudFunctionStore();
+const { checkUnfinishedJobs } = useRefreshStatus();
 
 const modalCreateJobVisible = ref<boolean>(false);
 

@@ -1,19 +1,14 @@
 <template>
-  <!-- Card -->
   <n-card
     class="deploy-actions card-dark fixed right-0 bottom-0 max-w-[500px] z-10 !border-yellow !rounded-none -mr-[1px] -mb-[1px]"
   >
-    <!-- Accordion -->
     <n-collapse display-directive="show" :default-expanded-names="['1']">
-      <!-- Primary service -->
       <n-collapse-item v-model:expanded="expanded" name="1">
-        <!-- #header -->
         <template #header>
           <div class="flex items-center justify-between w-full">
             <span class="ml-4" @click="expanded = !expanded">
               {{ $t('dashboard.refreshModal.title') }}</span
             >
-            <!-- Buttons -->
             <n-button-group @click.stop>
               <!-- Refresh -->
               <n-button size="small" @click="refresh">
@@ -24,7 +19,7 @@
               <n-dropdown
                 trigger="click"
                 placement="bottom-start"
-                :options="dropdownOptions"
+                :options="refreshStatusOptions"
                 @select="updateRefreshInterval"
               >
                 <n-button size="small">
@@ -40,42 +35,35 @@
             {{ $t('dashboard.refreshModal.subtitle') }}
           </p>
           <n-scrollbar v-if="expanded" class="max-h-72 mt-4" y-scrollable>
-            <div v-for="(service, i) in activeServices" :key="service.contract_uuid" class="px-2">
-              <div class="flex flex-row justify-between">
-                <h5>{{ service.name }}</h5>
+            <div v-for="(deployment, key) in activeDeployments" :key="key" class="px-2">
+              <div v-if="deployment?.service" class="flex flex-row justify-between">
+                <h5>{{ deployment.service.name }}</h5>
                 <n-progress
                   type="line"
-                  :percentage="progressStep"
+                  class="max-w-[60%]"
+                  :color="colors.primary"
+                  :percentage="Math.round(deployment.progress)"
                   :height="6"
                   :border-radius="4"
                   :fill-border-radius="0"
-                  class="max-w-[60%]"
-                  color="#F9FF73"
                 />
               </div>
-              <hr v-if="i < activeServices.length - 1" class="border-bg-lighter my-3" />
+              <hr v-if="key < activeDeployments.length - 1" class="border-bg-lighter my-3" />
             </div>
           </n-scrollbar>
         </div>
-        <!-- End Collapsible content -->
       </n-collapse-item>
     </n-collapse>
-    <!-- End Accordion -->
   </n-card>
-  <!-- End Card -->
 </template>
 
 <script setup lang="ts">
+import colors from '~/tailwind.colors';
+
 const expanded = ref(true);
 
-const {
-  dropdownOptions,
-  activeServices,
-  progressStep,
-  refreshInterval,
-  updateRefreshInterval,
-  refresh,
-} = useRefreshStatus();
+const { activeDeployments, refreshInterval, refreshStatusOptions, updateRefreshInterval, refresh } =
+  useRefreshStatus();
 </script>
 
 <style lang="postcss">
