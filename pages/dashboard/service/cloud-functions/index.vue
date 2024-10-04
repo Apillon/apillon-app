@@ -64,7 +64,7 @@ const modalCreateCloudFunctionsVisible = ref<boolean | null>(false);
 const content = generateContent('cloudFunctions', 'computing');
 
 useHead({
-  title: t('dashboard.nav.computing'),
+  title: t('dashboard.nav.cloudFunctions'),
 });
 
 onMounted(() => {

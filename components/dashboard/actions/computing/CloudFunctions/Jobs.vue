@@ -17,11 +17,7 @@
 
     <n-space size="large">
       <!-- Refresh cloudFunctions -->
-      <n-button
-        size="small"
-        :loading="cloudFunctionStore.loading"
-        @click="cloudFunctionStore.fetchCloudFunction(cloudFunctionStore.functionUuid)"
-      >
+      <n-button size="small" :loading="cloudFunctionStore.loading" @click="refresh">
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
@@ -38,6 +34,7 @@
   <modal v-model:show="modalCreateJobVisible" :title="$t('computing.cloudFunctions.job.new')">
     <FormComputingCloudFunctionsJob
       :function-uuid="cloudFunctionStore.functionUuid"
+      @create-success="checkUnfinishedJobs()"
       @submit-success="modalCreateJobVisible = false"
     />
   </modal>
@@ -45,12 +42,19 @@
 
 <script lang="ts" setup>
 const authStore = useAuthStore();
-const cloudFunctionStore = useCloudFunctionStore();
 const paymentStore = usePaymentStore();
+const cloudFunctionStore = useCloudFunctionStore();
+const { checkUnfinishedJobs } = useRefreshStatus();
 
 const modalCreateJobVisible = ref<boolean>(false);
 
 onMounted(() => {
   paymentStore.getPriceList();
 });
+
+async function refresh() {
+  cloudFunctionStore.active = await cloudFunctionStore.fetchCloudFunction(
+    cloudFunctionStore.functionUuid
+  );
+}
 </script>

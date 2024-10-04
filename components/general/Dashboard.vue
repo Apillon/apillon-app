@@ -55,6 +55,9 @@
               v-model:show="warningStore.isSpendingWarningOpen"
               @close="onSpendingWaningClose"
             />
+
+            <!-- Global component: deployment progress -->
+            <StatusCard v-if="activeInfoWindow" />
           </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
@@ -120,6 +123,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
+const { activeInfoWindow } = useRefreshStatus();
 
 const gtm = useGtm();
 const { isMd, isLg, isXl } = useScreen();

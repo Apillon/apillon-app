@@ -432,6 +432,11 @@
         }
       }
     },
+    "refreshModal": {
+      "title": "Deployment Status",
+      "refresh": "refresh",
+      "subtitle": "To check the deployment status, click the refresh button or select the time intervals for the automatic update."
+    },
     "invoice": {
       "client": "Client",
       "currency": "Currency",
@@ -2328,6 +2333,7 @@
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
     "cvvRequired": "Please enter CVV",
+    "descriptionRequired": "Please enter description",
     "descriptionTooLong": "Text is too long (max 255 characters)",
     "email": "Email address is not valid",
     "emailRequired": "Typing in your email would definitely hit the spot :)",

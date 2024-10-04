@@ -16,9 +16,11 @@
 
           <p class="my-5">{{ $t('general.or') }}</p>
 
-          <Btn class="mb-2" size="large" @click="modalCreateJobVisible = true">
-            {{ $t('computing.cloudFunctions.job.btnUpload') }}
-          </Btn>
+          <div class="my-auto mb-2">
+            <Btn @click="modalCreateJobVisible = true">
+              {{ $t('computing.cloudFunctions.job.btnUpload') }}
+            </Btn>
+          </div>
         </div>
       </div>
 
@@ -26,6 +28,7 @@
       <modal v-model:show="modalCreateJobVisible" :title="$t('computing.cloudFunctions.job.new')">
         <FormComputingCloudFunctionsJob
           :function-uuid="cloudFunctionStore.functionUuid"
+          @create-success="checkUnfinishedJobs()"
           @submit-success="modalCreateJobVisible = false"
         />
       </modal>
@@ -37,6 +40,7 @@
 const { t } = useI18n();
 const { pageLoading, init } = useCloudFunctions();
 const cloudFunctionStore = useCloudFunctionStore();
+const { checkUnfinishedJobs } = useRefreshStatus();
 
 const modalCreateJobVisible = ref<boolean>(false);
 

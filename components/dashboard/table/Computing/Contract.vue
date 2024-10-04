@@ -37,7 +37,7 @@ const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
-const { checkUnfinishedContracts } = useComputing();
+const { checkUnfinishedContracts } = useRefreshStatus();
 const { deleteItem } = useDelete();
 
 const modalTransferOwnershipVisible = ref<boolean | null>(false);

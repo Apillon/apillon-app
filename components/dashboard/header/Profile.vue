@@ -40,7 +40,7 @@ const renderIcon = (iconName: string) => {
 };
 const renderNuxtIcon = (iconName: string) => {
   return () => {
-    return h(resolveComponent('NuxtIcon'), { name: iconName, class: 'text-xl' }, '');
+    return h(resolveComponent('NuxtIcon'), { name: iconName, class: 'text' }, '');
   };
 };
 

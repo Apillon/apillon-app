@@ -206,8 +206,8 @@ async function deleteCloudFunction() {
       item => item.function_uuid !== currentRow.value?.function_uuid
     );
 
-    sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
-    sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);
+    sessionStorage.removeItem(LsCacheKeys.CLOUD_FUNCTIONS);
+    sessionStorage.removeItem(LsCacheKeys.CLOUD_FUNCTIONS_ARCHIVE);
   }
 }
 

@@ -115,8 +115,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       key: 'dashboard-service-cloud-functions',
       label: t('dashboard.nav.cloudFunctions'),
       to: 'dashboard-service-cloud-functions',
-      iconName: 'icon-computing',
-      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
+      iconName: 'icon-cloud-functions',
       disabled:
         isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
         !authStore.isUserAllowed(Permission.COMPUTING) ||

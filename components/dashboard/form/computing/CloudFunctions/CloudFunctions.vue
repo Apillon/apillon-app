@@ -143,7 +143,7 @@ async function createCloudFunction() {
     };
     const res = await $api.post<CloudFunctionResponse>(endpoints.cloudFunctions(), bodyData);
 
-    cloudFunctionStore.items.push(res.data);
+    cloudFunctionStore.items.unshift(res.data);
 
     message.success(t('form.success.created.cloudFunction'));
 

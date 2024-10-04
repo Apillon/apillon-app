@@ -100,7 +100,6 @@ const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
-const { checkUnfinishedJobs } = useCloudFunctions();
 const { labelInfo, uploadFileToIPFS } = useComputing();
 
 const loading = ref<boolean>(false);
@@ -173,16 +172,18 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createJob() {
-  loading.value = true;
-
   if (!dataStore.hasProjects) {
     await dataStore.fetchProjects();
     if (!dataStore.projectUuid) return;
   }
 
+  loading.value = true;
   try {
-    await uploadFile(formData.value.file);
-
+    const fileUploaded = await uploadFile(formData.value.file);
+    if (!fileUploaded) {
+      loading.value = false;
+      return;
+    }
     const bodyData = {
       project_uuid: dataStore.projectUuid,
       function_uuid: props.functionUuid,
@@ -201,8 +202,6 @@ async function createJob() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess', res.data);
-
-    setTimeout(() => checkUnfinishedJobs(), 20000);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
@@ -228,12 +227,16 @@ async function updateJob() {
 }
 
 async function uploadFile(file?: FileListItemType | null) {
-  if (!file?.file) return;
+  if (!file?.file) return false;
+  if (!cloudFunctionStore.active.bucket_uuid) {
+    message.error(t('error.DIRECTORY_BUCKET_ID_NOT_PRESENT'));
+    return false;
+  }
 
   const fileDetails = await uploadFileToIPFS(file, cloudFunctionStore.active.bucket_uuid);
-
   if (fileDetails) {
     formData.value.scriptCid = fileDetails.CIDv1 || fileDetails.CID;
   }
+  return true;
 }
 </script>

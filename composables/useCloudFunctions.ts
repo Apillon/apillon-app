@@ -1,8 +1,5 @@
 import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui';
 
-let functionInterval: any = null as any;
-let jobInterval: any = null as any;
-
 export default function useCloudFunctions() {
   const { t } = useI18n();
   const { params } = useRoute();
@@ -10,13 +7,10 @@ export default function useCloudFunctions() {
   const message = useMessage();
   const dataStore = useDataStore();
   const cloudFunctionStore = useCloudFunctionStore();
+  const { checkUnfinishedJobs } = useRefreshStatus();
 
   const pageLoading = ref<boolean>(true);
   const envLoading = ref<boolean>(false);
-
-  onUnmounted(() => {
-    clearInterval(jobInterval);
-  });
 
   async function init() {
     /** CloudFunction UUID from route */
@@ -32,34 +26,8 @@ export default function useCloudFunctions() {
 
         checkUnfinishedJobs();
       }
-
       pageLoading.value = false;
     });
-  }
-
-  /** Cloud function polling */
-  function checkUnfinishedJobs() {
-    clearInterval(jobInterval);
-
-    const unfinishedJob = cloudFunctionStore.jobs.find(
-      job => job.jobStatus === AcurastJobStatus.DEPLOYING
-    );
-    if (unfinishedJob === undefined) {
-      return;
-    }
-
-    jobInterval = setInterval(async () => {
-      const cloudFunction = await cloudFunctionStore.fetchCloudFunction(
-        cloudFunctionStore.functionUuid,
-        false
-      );
-      const job = cloudFunction.jobs.find(job => job.job_uuid === unfinishedJob.job_uuid);
-
-      if (!job || job.jobStatus >= AcurastJobStatus.DEPLOYED) {
-        clearInterval(jobInterval);
-        cloudFunctionStore.active = cloudFunction;
-      }
-    }, 10000);
   }
 
   async function parseEnvFile(file: UploadFileInfo): Promise<Record<string, string>> {
@@ -146,7 +114,6 @@ export default function useCloudFunctions() {
   return {
     envLoading,
     pageLoading,
-    checkUnfinishedJobs,
     createEnvVariables,
     init,
     parseEnvFile,
