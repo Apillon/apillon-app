@@ -1,11 +1,21 @@
 <template>
   <Heading>
-    <slot>
+    <slot v-if="!indexerUuid">
       <NuxtLink class="flex items-center gap-x-2" :to="link">
         <span class="icon-back text-2xl align-sub"></span>
-        <h1 v-if="title">{{ title }}</h1>
-        <h1 v-else>{{ $t('dashboard.nav.indexer') }}</h1>
+        <h1>{{ $t('dashboard.nav.indexer') }}</h1>
       </NuxtLink>
+    </slot>
+    <slot v-else>
+      <n-space align="center" size="large" :wrap="false">
+        <NuxtLink :to="{ name: 'dashboard-service-indexer' }">
+          <span class="icon-back text-2xl align-sub"></span>
+        </NuxtLink>
+        <div>
+          <h2>{{ indexerStore.active.name }}</h2>
+          <TableEllipsis :prefix="$t('indexer.uuid')" :text="indexerStore.active.indexer_uuid" />
+        </div>
+      </n-space>
     </slot>
     <template #info> </template>
 
@@ -16,8 +26,10 @@
 </template>
 
 <script lang="ts" setup>
+const indexerStore = useIndexerStore();
+
 defineProps({
   link: { type: String, default: '/dashboard/service/indexer' },
-  title: { type: String, default: '' },
+  indexerUuid: { type: String, default: '' },
 });
 </script>

@@ -3,6 +3,8 @@ export default function useIndexer() {
   const { params } = useRoute();
   const dataStore = useDataStore();
   const indexerStore = useIndexerStore();
+  const indexerLogsStore = useIndexerLogStore();
+  const indexerDeploymentsStore = useIndexerDeploymentsStore();
   const pageLoading = ref<boolean>(true);
 
   async function initIndexer() {
@@ -16,14 +18,21 @@ export default function useIndexer() {
 
       if (!indexer) {
         router.push({ name: 'dashboard-service-indexer' });
-      } else {
-        indexerStore.active = indexer;
-        pageLoading.value = false;
+        return;
       }
+
+      indexerStore.active = indexer;
+      pageLoading.value = false;
+
+      // Get logs
+      await indexerLogsStore.getLogs(indexer.indexer_uuid);
+      // Get deployments
+      await indexerDeploymentsStore.getDeployments(indexer.indexer_uuid);
     });
   }
 
   return {
+    pageLoading,
     initIndexer,
   };
 }

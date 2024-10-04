@@ -306,6 +306,14 @@ const Endpoints = {
     return uuid ? `/indexer/${uuid}` : '/indexer';
   },
 
+  indexerLogs: (uuid: string) => {
+    return `/indexer/${uuid}/logs`;
+  },
+
+  indexerDeployments: (uuid: string) => {
+    return `/indexer/${uuid}/deployments`;
+  },
+
   /**
    * Project settings
    */

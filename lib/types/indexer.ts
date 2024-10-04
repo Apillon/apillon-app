@@ -16,6 +16,9 @@ declare global {
       slot: string;
       reference: string;
     };
+    totalElapsedTimeMs: number;
+    updatedAt: string;
+    createdAt: string;
   }
 
   interface IndexerLogInterface {
@@ -38,4 +41,6 @@ declare global {
   interface IndexerResponse extends GeneralResponse<IndexerInterface> {}
   interface IndexerLogsResponse
     extends GeneralResponse<{ logs: IndexerLogInterface[]; nextPage: string }> {}
+
+  interface IndexerDeploymentsResponse extends GeneralResponse<IndexerDeploymentInferface[]> {}
 }

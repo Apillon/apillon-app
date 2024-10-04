@@ -18,9 +18,9 @@ const menuOptions: NMenuOption[] = [
     path: `/dashboard/service/indexer/${indexerStore.active.indexer_uuid}/logs`,
   },
   {
-    key: 'dashboard-service-indexer-slug-deploys',
-    label: t('dashboard.service.indexer.deploys'),
-    path: `/dashboard/service/indexer/${indexerStore.active.indexer_uuid}/deploys`,
+    key: 'dashboard-service-indexer-slug-deployments',
+    label: t('dashboard.service.indexer.deployments'),
+    path: `/dashboard/service/indexer/${indexerStore.active.indexer_uuid}/deployments`,
   },
 ];
 </script>

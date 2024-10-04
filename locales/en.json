@@ -629,9 +629,16 @@
           "container": "Continer",
           "msg": "Message"
         },
+        "tableDeployments": {
+          "type": "Type",
+          "failed": "Failed",
+          "status": "Status",
+          "updatedAt": "Updated",
+          "createdAt": "Created"
+        },
         "general": "General",
         "logs": "Logs",
-        "deploys": "Deploys"
+        "deployments": "Deployments"
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -1646,7 +1653,8 @@
     "upload": {
       "sourceCode": "Upload indexer source code",
       "directory": "Indexer directory"
-    }
+    },
+    "uuid": "Indexer UUID"
   },
   "nft": {
     "create": "Create an NFT",

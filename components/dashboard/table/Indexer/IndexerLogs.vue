@@ -18,6 +18,7 @@
 import { useDebounceFn } from '@vueuse/core';
 
 const { t } = useI18n();
+const indexerStore = useIndexerStore();
 const indexerLogStore = useIndexerLogStore();
 
 const rowKey = (row: IndexerLogInterface) => row.id;
@@ -64,8 +65,10 @@ watch(
 const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
 
 async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIMIT) {
-  await indexerLogStore.fetchLogs(page, limit);
-  indexerLogStore.pagination.page = page;
-  indexerLogStore.pagination.pageSize = limit;
+  if (indexerStore.active) {
+    await indexerLogStore.fetchLogs(indexerStore.active.indexer_uuid, page, limit);
+    indexerLogStore.pagination.page = page;
+    indexerLogStore.pagination.pageSize = limit;
+  }
 }
 </script>
