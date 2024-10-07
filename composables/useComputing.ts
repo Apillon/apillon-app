@@ -7,15 +7,32 @@ export default function useComputing() {
   const router = useRouter();
   const contractStore = useContractStore();
   const transactionStore = useComputingTransactionStore();
-  const { updateFileStatus } = useUpload();
-  const { deployments, calcProgress, clearIntervalFile, checkUnfinishedContracts } =
-    useRefreshStatus();
 
   let transactionInterval: any = null as any;
 
   onUnmounted(() => {
     clearInterval(transactionInterval);
   });
+
+  /** Contract polling */
+  function checkUnfinishedContracts() {
+    clearInterval(contractInterval);
+
+    const unfinishedCollection = contractStore.items.find(
+      contract => contract.contractStatus < ContractStatus.DEPLOYED
+    );
+    if (unfinishedCollection === undefined) return;
+
+    contractInterval = setInterval(async () => {
+      const contracts = await contractStore.fetchContracts(false, false);
+      const contract = contracts.find(
+        contract => contract.contract_uuid === unfinishedCollection.contract_uuid
+      );
+      if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
+        clearInterval(contractInterval);
+      }
+    }, 10000);
+  }
 
   /** Transactions polling */
   function checkUnfinishedTransactions() {
@@ -47,7 +64,7 @@ export default function useComputing() {
   }
 
   function onContractCreated(contract: ContractInterface) {
-    checkUnfinishedContracts();
+    initInfoWindow();
     if (contract.contractStatus === ContractStatus.DEPLOYED) {
       router.push(`/dashboard/service/computing/${contract.contract_uuid}`);
     } else {
@@ -65,15 +82,6 @@ export default function useComputing() {
       session_uuid: sessionUuid,
       files: [{ fileName: file.name }],
     };
-    updateFileStatus(file, FileUploadStatusValue.UPLOADING);
-
-    deployments.value.file.interval = setInterval(() => {}, 100000);
-    deployments.value.file.progress = 0;
-    deployments.value.file.service = file;
-
-    const progressInterval = setInterval(() => {
-      deployments.value.file.progress = calcProgress(deployments.value.file.progress, 0.1);
-    }, 100);
 
     try {
       const uploadSession = await $api.post<FilesUploadRequestResponse>(
@@ -97,35 +105,20 @@ export default function useComputing() {
       }
 
       // Start pooling file
-      const filePoll = await getFile(bucketUuid, uploadUrl.file_uuid);
-
-      file?.onFinish();
-      deployments.value.file.progress = 100;
-      updateFileStatus(file, FileUploadStatusValue.FINISHED);
-      clearInterval(progressInterval);
-
-      await sleep(500);
-      clearIntervalFile();
-
-      return filePoll;
+      return await getFile(bucketUuid, uploadUrl.file_uuid);
     } catch (error) {
-      file.onError();
-      updateFileStatus(file, FileUploadStatusValue.ERROR);
       message.error(userFriendlyMsg(error));
     }
     return null;
   }
 
   async function getFile(bucketUuid: string, fileUuid: string): Promise<FileInterface> {
-    if (deployments.value.file.interval) {
-      clearInterval(deployments.value.file.interval);
-    }
     return new Promise(function (resolve) {
-      deployments.value.file.interval = setInterval(async () => {
+      const getFileInterval = setInterval(async () => {
         const fileData = await getFilePoll(bucketUuid, fileUuid);
 
-        if (fileData && deployments.value.file.interval && (fileData?.CID || fileData?.CIDv1)) {
-          clearInterval(deployments.value.file.interval);
+        if (fileData && (fileData?.CID || fileData?.CIDv1)) {
+          clearInterval(getFileInterval);
           resolve(fileData);
         }
       }, 5000);
@@ -158,6 +151,7 @@ export default function useComputing() {
   }
 
   return {
+    checkUnfinishedContracts,
     checkUnfinishedTransactions,
     labelInfo,
     onContractCreated,

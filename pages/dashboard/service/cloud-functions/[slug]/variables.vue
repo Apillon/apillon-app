@@ -29,7 +29,7 @@
               <Btn class="mb-2" size="large" @click="modalCreateVariableVisible = true">
                 {{ $t('computing.cloudFunctions.variable.btnAdd') }}
               </Btn>
-              <n-upload :show-file-list="false" :custom-request="e => uploadFile(e)">
+              <n-upload :show-file-list="false" :custom-request="e => uploadEnvFile(e)">
                 <Btn type="secondary" size="large">
                   {{ $t('computing.cloudFunctions.variable.btnUpload') }}
                 </Btn>
@@ -57,7 +57,7 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const cloudFunctionStore = useCloudFunctionStore();
-const { pageLoading, init, uploadFile } = useCloudFunctions();
+const { pageLoading, init, uploadEnvFile } = useCloudFunctions();
 
 const modalCreateVariableVisible = ref<boolean>(false);
 
