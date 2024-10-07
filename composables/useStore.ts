@@ -3,6 +3,7 @@ export default function useStore() {
   const storageStore = useStorageStore();
   const bucketStore = useBucketStore();
   const chatStore = useChatStore();
+  const embeddedWalletStore = useEmbeddedWalletStore();
   const postStore = usePostStore();
   const contractStore = useContractStore();
   const fileStore = useFileStore();
@@ -16,6 +17,7 @@ export default function useStore() {
 
   function clearAll() {
     dataStore.resetData();
+    embeddedWalletStore.resetData();
     clearStorage();
     clearCollection();
     clearComputing();

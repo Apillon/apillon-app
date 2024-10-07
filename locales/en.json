@@ -1179,7 +1179,8 @@
       },
       "embeddedWallet": {
         "title": "Embedded wallet’s title",
-        "description": "Embedded wallet’s description"
+        "description": "Embedded wallet’s description",
+        "whitelistedDomains": "Whitelisted Domains"
       }
     },
     "networkTypes": {
@@ -1246,7 +1247,8 @@
       },
       "embeddedWallet": {
         "title": "Enter the title for your personal reference",
-        "description": "Enter the description for your personal reference"
+        "description": "Enter the description for your personal reference",
+        "whitelistedDomains": "valid-domain.com\n*.valid-domain2.com\nsubdomain.*.valid-domain3.com"
       }
     },
     "success": {
@@ -2255,7 +2257,8 @@
       "nftIdRequired": "Please enter NFT ID"
     },
     "embeddedWallet": {
-      "titleRequired": "Embedded Wallet title is required"
+      "titleRequired": "Embedded Wallet title is required",
+      "whitelistedDomains": "Domains not valid"
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",

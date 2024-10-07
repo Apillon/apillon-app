@@ -92,10 +92,13 @@ declare global {
   /**
    * Embedded Wallet
    */
+  type EmbeddedWalletUsage = { date: string; countOfSignatures: number };
   interface EmbeddedWalletInterface extends BaseObjectInterface {
     integration_uuid: string;
     title: string;
     numOfSignatures: number;
+    usage: EmbeddedWalletUsage[];
+    whitelistedDomains: string | null;
   }
   interface EmbeddedWalletInfoInterface {
     maxNumOfEWIntegrations: number;
