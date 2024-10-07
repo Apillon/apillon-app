@@ -1,4 +1,7 @@
 import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui';
+import type { FormCloudFunctions } from '~/components/dashboard/form/computing/CloudFunctions/Job.vue';
+
+let jobInterval: any = null as any;
 
 export default function useCloudFunctions() {
   const { t } = useI18n();
@@ -7,10 +10,16 @@ export default function useCloudFunctions() {
   const message = useMessage();
   const dataStore = useDataStore();
   const cloudFunctionStore = useCloudFunctionStore();
-  const { checkUnfinishedJobs } = useRefreshStatus();
+  const { uploadFileToIPFS } = useComputing();
+  const { checkUnfinishedJobs, setJobStatus, updateJobStatus } = useRefreshStatus();
 
   const pageLoading = ref<boolean>(true);
   const envLoading = ref<boolean>(false);
+  const modalCreateJobVisible = ref<boolean>(false);
+
+  onUnmounted(() => {
+    clearInterval(jobInterval);
+  });
 
   async function init() {
     /** CloudFunction UUID from route */
@@ -26,6 +35,7 @@ export default function useCloudFunctions() {
 
         checkUnfinishedJobs();
       }
+
       pageLoading.value = false;
     });
   }
@@ -88,7 +98,7 @@ export default function useCloudFunctions() {
     }
   }
 
-  async function uploadFile({ file, onError, onFinish }: UploadCustomRequestOptions) {
+  async function uploadEnvFile({ file, onError, onFinish }: UploadCustomRequestOptions) {
     try {
       const envData = await parseEnvFile(file);
       const newVars = Object.entries(envData).map(([k, v]) => ({
@@ -111,12 +121,71 @@ export default function useCloudFunctions() {
     }
   }
 
+  async function createNewJob(
+    data: FormCloudFunctions,
+    functionUuid: string
+  ): Promise<JobInterface | null> {
+    if (!dataStore.hasProjects) {
+      await dataStore.fetchProjects();
+      if (!dataStore.projectUuid) return null;
+    }
+    try {
+      setJobStatus(data?.file?.name);
+
+      const fileCid = await uploadFile(data.file);
+      if (!fileCid) return null;
+
+      const bodyData = {
+        project_uuid: dataStore.projectUuid,
+        function_uuid: functionUuid,
+        name: data.name,
+        slots: data.slots,
+        scriptCid: fileCid,
+      };
+      updateJobStatus(data?.name);
+
+      const res = await $api.post<JobResponse>(endpoints.cloudFunctionJobs(functionUuid), bodyData);
+      cloudFunctionStore.addJob(res.data);
+      message.success(t('form.success.created.cloudFunctionJob'));
+
+      return res.data;
+    } catch (error) {
+      message.error(userFriendlyMsg(error));
+    }
+    return null;
+  }
+
+  async function uploadFile(file?: FileListItemType | null) {
+    if (!file?.file) return false;
+    if (!cloudFunctionStore.active.bucket_uuid) {
+      message.error(t('error.DIRECTORY_BUCKET_ID_NOT_PRESENT'));
+      return false;
+    }
+
+    const fileDetails = await uploadFileToIPFS(file, cloudFunctionStore.active.bucket_uuid);
+    if (fileDetails) {
+      return fileDetails.CIDv1 || fileDetails.CID;
+    }
+    return false;
+  }
+
+  async function onJobCreated(cloudFunction: CloudFunctionInterface) {
+    modalCreateJobVisible.value = false;
+    await sleep(1000);
+    await cloudFunctionStore.fetchCloudFunction(cloudFunction.function_uuid, false);
+    await sleep(5000);
+    checkUnfinishedJobs();
+  }
+
   return {
     envLoading,
+    modalCreateJobVisible,
     pageLoading,
     createEnvVariables,
+    createNewJob,
     init,
+    onJobCreated,
     parseEnvFile,
-    uploadFile,
+    uploadEnvFile,
   };
 }

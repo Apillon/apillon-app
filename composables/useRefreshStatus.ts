@@ -8,6 +8,7 @@ type Deployment = {
   interval: Interval;
   progress: number;
   service: FileListItemType | JobInterface | ContractInterface | null;
+  title: String | null;
 };
 type Deployments = Record<IntervalType, Deployment>;
 
@@ -22,26 +23,21 @@ const initDeployment = () => ({
   interval: null,
   progress: 0,
   service: null,
+  title: null,
 });
 
 const refreshInterval = ref(refreshStatusOptions.value[2]);
-const deployments = ref<Deployments>({
+const deployments = reactive<Deployments>({
   file: initDeployment(),
   job: initDeployment(),
   contract: initDeployment(),
 });
 
 export default function useRefreshStatus() {
-  const contractStore = useContractStore();
   const cloudFunctionStore = useCloudFunctionStore();
 
-  const activeInfoWindow = computed(() =>
-    Object.values(deployments.value).some(item => item?.interval)
-  );
   const activeDeployments = computed(
-    () =>
-      Object.values(deployments.value).filter(item => !!item && item?.interval && item?.service) ||
-      []
+    () => Object.values(deployments).filter(item => !!item && (item?.service || item?.title)) || []
   );
 
   const setInitialRefreshInterval = () => {
@@ -63,120 +59,95 @@ export default function useRefreshStatus() {
     }
   };
 
-  const refresh = () => {
-    if (deployments.value.job?.interval) checkUnfinishedJobs();
-  };
+  const refresh = () => {};
 
   const clearIntervals = () => {
-    clearIntervalContract();
-    clearIntervalJob();
-    clearIntervalFile();
+    // clearIntervalContract();
+    clearIntervalJob(false);
   };
-  const clearIntervalContract = () => {
-    if (deployments.value.contract.interval) {
-      clearInterval(deployments.value.contract.interval);
+  const clearIntervalContract = async (finished: boolean = true) => {
+    if (deployments.contract.interval) {
+      clearInterval(deployments.contract.interval);
+    }
 
-      if (deployments.value.contract.progress >= 100) {
-        deployments.value.contract.interval = null;
-        deployments.value.contract.progress = 0;
-        deployments.value.contract.service = null;
-      }
+    if (deployments.contract.progress >= 100 || finished) {
+      await sleep(500);
+      deployments.contract.interval = null;
+      deployments.contract.progress = 0;
+      deployments.contract.service = null;
+      deployments.contract.title = null;
     }
   };
-  const clearIntervalJob = () => {
-    if (deployments.value.job.interval) {
-      clearInterval(deployments.value.job?.interval);
-
-      if (deployments.value.job.progress >= 100) {
-        deployments.value.job.interval = null;
-        deployments.value.job.progress = 0;
-        deployments.value.job.service = null;
-      }
+  const clearIntervalJob = async (finished: boolean = true) => {
+    if (deployments.job.interval) {
+      clearInterval(deployments.job?.interval);
     }
-  };
-  const clearIntervalFile = () => {
-    if (deployments.value.file.interval) {
-      clearInterval(deployments.value.file.interval);
 
-      if (deployments.value.file.progress >= 100) {
-        deployments.value.file.interval = null;
-        deployments.value.file.progress = 0;
-        deployments.value.file.service = null;
-      }
+    if (deployments.job.progress >= 100 || finished) {
+      await sleep(500);
+      deployments.job.interval = null;
+      deployments.job.progress = 0;
+      deployments.job.service = null;
+      deployments.job.title = null;
     }
   };
 
   const calcProgress = (currentProgress: number, interval?: number) => {
     const intervalInSeconds = interval ? interval * 0.1 : refreshInterval.value.key;
-    if (currentProgress < 30) return currentProgress + intervalInSeconds * 5;
-    if (currentProgress < 50) return currentProgress + intervalInSeconds * 4;
-    if (currentProgress < 70) return currentProgress + intervalInSeconds * 3;
-    if (currentProgress < 80) return currentProgress + intervalInSeconds * 2;
+    if (currentProgress < 30) return currentProgress + intervalInSeconds * 10;
+    if (currentProgress < 50) return currentProgress + intervalInSeconds * 8;
+    if (currentProgress < 70) return currentProgress + intervalInSeconds * 6;
+    if (currentProgress < 80) return currentProgress + intervalInSeconds * 3;
     if (currentProgress < 88) return currentProgress + intervalInSeconds;
     if (currentProgress < 92) return currentProgress + intervalInSeconds * 0.5;
     if (currentProgress < 95) return currentProgress + intervalInSeconds * 0.4;
     if (currentProgress < 97) return currentProgress + intervalInSeconds * 0.6;
     if (currentProgress < 98) return currentProgress + intervalInSeconds * 0.8;
     if (currentProgress < 99) return currentProgress + intervalInSeconds * 0.1;
-    if (currentProgress < 100) return currentProgress + intervalInSeconds * 0.2;
+    if (currentProgress < 100) return currentProgress + intervalInSeconds * 0.02;
     return currentProgress;
   };
 
   onMounted(() => {
     setInitialRefreshInterval();
   });
-  onBeforeUnmount(clearIntervals);
 
-  /** Contract polling */
-  function checkUnfinishedContracts() {
-    clearIntervalContract();
-
-    const unfinishedCollection = contractStore.items.find(
-      contract => contract.contractStatus < ContractStatus.DEPLOYED
-    );
-    if (unfinishedCollection === undefined) return;
-
-    deployments.value.contract.service = unfinishedCollection;
-    deployments.value.contract.progress = deployments.value.contract?.progress || 1;
-
-    const progressInterval = setInterval(() => {
-      deployments.value.contract.progress = calcProgress(deployments.value.contract.progress, 0.1);
+  function setDeploymentStatus(type: IntervalType, title: string) {
+    deployments[type].title = title;
+    setInterval(() => {
+      deployments[type].progress = calcProgress(deployments[type].progress, 0.1);
     }, 100);
+  }
+  function updateDeploymentStatus(type: IntervalType, title: string) {
+    deployments[type].title = title;
+  }
 
-    deployments.value.contract.interval = setInterval(async () => {
-      const contracts = await contractStore.fetchContracts(false, false);
-      const contract = contracts.find(
-        contract => contract.contract_uuid === unfinishedCollection.contract_uuid
-      );
-      if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
-        deployments.value.contract.progress = 100;
-
-        clearInterval(progressInterval);
-        clearIntervalContract();
-      }
-    }, refreshInterval.value.value);
+  function setJobStatus(title?: string | null) {
+    setDeploymentStatus(IntervalType.JOB, title || '');
+  }
+  function updateJobStatus(title?: string | null) {
+    updateDeploymentStatus(IntervalType.JOB, title || '');
+    checkUnfinishedJobs();
   }
 
   /** Cloud function polling */
   function checkUnfinishedJobs() {
-    clearIntervalJob();
+    clearIntervalJob(false);
 
     const unfinishedJob = cloudFunctionStore.jobs.find(
       job => !job?.jobStatus || job.jobStatus < AcurastJobStatus.DEPLOYED
     );
     if (unfinishedJob === undefined) return;
 
-    deployments.value.job.service = unfinishedJob;
-    deployments.value.job.progress = deployments.value.job?.progress || 1;
+    deployments.job.service = unfinishedJob;
 
-    const progressInterval = setInterval(() => {
-      deployments.value.job.progress = calcProgress(deployments.value.job.progress, 0.1);
-    }, 100);
+    if (!deployments.job.progress) {
+      setInterval(() => {
+        deployments.job.progress = calcProgress(deployments.job.progress, 0.1);
+      }, 100);
+    }
 
-    deployments.value.job.interval = setInterval(async () => {
-      if (deployments.value.job?.progress) {
-        deployments.value.job.progress = calcProgress(deployments.value.job.progress);
-      }
+    deployments.job.interval = setInterval(async () => {
       const cloudFunction = await cloudFunctionStore.fetchCloudFunction(
         cloudFunctionStore.functionUuid,
         false
@@ -184,17 +155,15 @@ export default function useRefreshStatus() {
       const job = cloudFunction.jobs.find(job => job.job_uuid === unfinishedJob.job_uuid);
 
       if (!job || job.jobStatus >= AcurastJobStatus.DEPLOYED) {
-        deployments.value.job.progress = 100;
+        deployments.job.progress = 100;
         cloudFunctionStore.active = cloudFunction;
 
-        clearInterval(progressInterval);
         clearIntervalJob();
       }
     }, refreshInterval.value.value);
   }
 
   return {
-    activeInfoWindow,
     activeDeployments,
     deployments,
     refreshStatusOptions,
@@ -202,10 +171,10 @@ export default function useRefreshStatus() {
     calcProgress,
     checkUnfinishedJobs,
     clearIntervals,
-    clearIntervalFile,
     clearIntervalJob,
     refresh,
-    checkUnfinishedContracts,
+    setJobStatus,
+    updateJobStatus,
     updateRefreshInterval,
   };
 }

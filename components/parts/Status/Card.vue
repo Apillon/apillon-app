@@ -36,8 +36,11 @@
           </p>
           <n-scrollbar v-if="expanded" class="max-h-72 mt-4" y-scrollable>
             <div v-for="(deployment, key) in activeDeployments" :key="key" class="px-2">
-              <div v-if="deployment?.service" class="flex flex-row justify-between">
-                <h5>{{ deployment.service.name }}</h5>
+              <div
+                v-if="deployment?.service || deployment?.title"
+                class="flex flex-row justify-between"
+              >
+                <h5>{{ deployment.service?.name || deployment.title }}</h5>
                 <n-progress
                   type="line"
                   class="max-w-[60%]"

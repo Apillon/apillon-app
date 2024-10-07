@@ -28,8 +28,7 @@
       <modal v-model:show="modalCreateJobVisible" :title="$t('computing.cloudFunctions.job.new')">
         <FormComputingCloudFunctionsJob
           :function-uuid="cloudFunctionStore.functionUuid"
-          @create-success="checkUnfinishedJobs()"
-          @submit-success="modalCreateJobVisible = false"
+          @create-success="onJobCreated"
         />
       </modal>
     </slot>
@@ -40,9 +39,7 @@
 const { t } = useI18n();
 const { pageLoading, init } = useCloudFunctions();
 const cloudFunctionStore = useCloudFunctionStore();
-const { checkUnfinishedJobs } = useRefreshStatus();
-
-const modalCreateJobVisible = ref<boolean>(false);
+const { modalCreateJobVisible, onJobCreated } = useCloudFunctions();
 
 useHead({
   title: t('dashboard.nav.cloudFunctions'),
