@@ -11,7 +11,7 @@ export default function useCloudFunctions() {
   const dataStore = useDataStore();
   const cloudFunctionStore = useCloudFunctionStore();
   const { uploadFileToIPFS } = useComputing();
-  const { checkUnfinishedJobs, setJobStatus, updateJobStatus } = useRefreshStatus();
+  const { refreshInterval, clearIntervalJob, setJobStatus, updateJobStatus } = useRefreshStatus();
 
   const pageLoading = ref<boolean>(true);
   const envLoading = ref<boolean>(false);
@@ -146,7 +146,9 @@ export default function useCloudFunctions() {
 
       const res = await $api.post<JobResponse>(endpoints.cloudFunctionJobs(functionUuid), bodyData);
       cloudFunctionStore.addJob(res.data);
+
       message.success(t('form.success.created.cloudFunctionJob'));
+      clearIntervalJob();
 
       return res.data;
     } catch (error) {
@@ -175,6 +177,29 @@ export default function useCloudFunctions() {
     await cloudFunctionStore.fetchCloudFunction(cloudFunction.function_uuid, false);
     await sleep(5000);
     checkUnfinishedJobs();
+  }
+
+  /** Cloud function polling */
+  function checkUnfinishedJobs() {
+    clearInterval(jobInterval);
+
+    const unfinishedJob = cloudFunctionStore.jobs.find(
+      job => !job?.jobStatus || job.jobStatus < AcurastJobStatus.DEPLOYED
+    );
+    if (unfinishedJob === undefined) return;
+
+    jobInterval = setInterval(async () => {
+      const cloudFunction = await cloudFunctionStore.fetchCloudFunction(
+        cloudFunctionStore.functionUuid,
+        false
+      );
+      const job = cloudFunction.jobs.find(job => job.job_uuid === unfinishedJob.job_uuid);
+
+      if (!job || job.jobStatus >= AcurastJobStatus.DEPLOYED) {
+        cloudFunctionStore.active = cloudFunction;
+        clearInterval(jobInterval);
+      }
+    }, refreshInterval.value.value);
   }
 
   return {

@@ -6,16 +6,14 @@
       <n-collapse-item v-model:expanded="expanded" name="1">
         <template #header>
           <div class="flex items-center justify-between w-full">
-            <span class="ml-4" @click="expanded = !expanded">
+            <span class="ml-4 my-1" @click="expanded = !expanded">
               {{ $t('dashboard.refreshModal.title') }}</span
             >
-            <n-button-group @click.stop>
-              <!-- Refresh -->
+            <!-- <n-button-group @click.stop>
               <n-button size="small" @click="refresh">
                 <span class="icon-refresh text-xl mr-2"></span>
                 {{ $t('dashboard.refreshModal.refresh') }}
               </n-button>
-              <!-- Dropdown -->
               <n-dropdown
                 trigger="click"
                 placement="bottom-start"
@@ -26,7 +24,7 @@
                   <span>{{ refreshInterval.label }}</span> <span class="icon-down text-3xl"></span>
                 </n-button>
               </n-dropdown>
-            </n-button-group>
+            </n-button-group> -->
           </div>
         </template>
         <!-- Collapsible content -->
