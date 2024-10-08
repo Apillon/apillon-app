@@ -34,8 +34,6 @@ const deployments = reactive<Deployments>({
 });
 
 export default function useRefreshStatus() {
-  const cloudFunctionStore = useCloudFunctionStore();
-
   const activeDeployments = computed(
     () => Object.values(deployments).filter(item => !!item && (item?.service || item?.title)) || []
   );
@@ -62,21 +60,7 @@ export default function useRefreshStatus() {
   const refresh = () => {};
 
   const clearIntervals = () => {
-    // clearIntervalContract();
     clearIntervalJob(false);
-  };
-  const clearIntervalContract = async (finished: boolean = true) => {
-    if (deployments.contract.interval) {
-      clearInterval(deployments.contract.interval);
-    }
-
-    if (deployments.contract.progress >= 100 || finished) {
-      await sleep(500);
-      deployments.contract.interval = null;
-      deployments.contract.progress = 0;
-      deployments.contract.service = null;
-      deployments.contract.title = null;
-    }
   };
   const clearIntervalJob = async (finished: boolean = true) => {
     if (deployments.job.interval) {
@@ -84,7 +68,7 @@ export default function useRefreshStatus() {
     }
 
     if (deployments.job.progress >= 100 || finished) {
-      await sleep(500);
+      await sleep(1000);
       deployments.job.interval = null;
       deployments.job.progress = 0;
       deployments.job.service = null;
@@ -94,17 +78,17 @@ export default function useRefreshStatus() {
 
   const calcProgress = (currentProgress: number, interval?: number) => {
     const intervalInSeconds = interval ? interval * 0.1 : refreshInterval.value.key;
-    if (currentProgress < 30) return currentProgress + intervalInSeconds * 10;
-    if (currentProgress < 50) return currentProgress + intervalInSeconds * 8;
-    if (currentProgress < 70) return currentProgress + intervalInSeconds * 6;
-    if (currentProgress < 80) return currentProgress + intervalInSeconds * 3;
-    if (currentProgress < 88) return currentProgress + intervalInSeconds;
-    if (currentProgress < 92) return currentProgress + intervalInSeconds * 0.5;
-    if (currentProgress < 95) return currentProgress + intervalInSeconds * 0.4;
+    if (currentProgress < 30) return currentProgress + intervalInSeconds * 17;
+    if (currentProgress < 50) return currentProgress + intervalInSeconds * 14;
+    if (currentProgress < 70) return currentProgress + intervalInSeconds * 12;
+    if (currentProgress < 80) return currentProgress + intervalInSeconds * 10;
+    if (currentProgress < 88) return currentProgress + intervalInSeconds * 6;
+    if (currentProgress < 92) return currentProgress + intervalInSeconds * 2;
+    if (currentProgress < 95) return currentProgress + intervalInSeconds * 1;
     if (currentProgress < 97) return currentProgress + intervalInSeconds * 0.6;
-    if (currentProgress < 98) return currentProgress + intervalInSeconds * 0.8;
+    if (currentProgress < 98) return currentProgress + intervalInSeconds * 0.3;
     if (currentProgress < 99) return currentProgress + intervalInSeconds * 0.1;
-    if (currentProgress < 100) return currentProgress + intervalInSeconds * 0.02;
+    if (currentProgress < 100) return currentProgress + intervalInSeconds * 0.05;
     return currentProgress;
   };
 
@@ -127,40 +111,6 @@ export default function useRefreshStatus() {
   }
   function updateJobStatus(title?: string | null) {
     updateDeploymentStatus(IntervalType.JOB, title || '');
-    checkUnfinishedJobs();
-  }
-
-  /** Cloud function polling */
-  function checkUnfinishedJobs() {
-    clearIntervalJob(false);
-
-    const unfinishedJob = cloudFunctionStore.jobs.find(
-      job => !job?.jobStatus || job.jobStatus < AcurastJobStatus.DEPLOYED
-    );
-    if (unfinishedJob === undefined) return;
-
-    deployments.job.service = unfinishedJob;
-
-    if (!deployments.job.progress) {
-      setInterval(() => {
-        deployments.job.progress = calcProgress(deployments.job.progress, 0.1);
-      }, 100);
-    }
-
-    deployments.job.interval = setInterval(async () => {
-      const cloudFunction = await cloudFunctionStore.fetchCloudFunction(
-        cloudFunctionStore.functionUuid,
-        false
-      );
-      const job = cloudFunction.jobs.find(job => job.job_uuid === unfinishedJob.job_uuid);
-
-      if (!job || job.jobStatus >= AcurastJobStatus.DEPLOYED) {
-        deployments.job.progress = 100;
-        cloudFunctionStore.active = cloudFunction;
-
-        clearIntervalJob();
-      }
-    }, refreshInterval.value.value);
   }
 
   return {
@@ -169,7 +119,6 @@ export default function useRefreshStatus() {
     refreshStatusOptions,
     refreshInterval,
     calcProgress,
-    checkUnfinishedJobs,
     clearIntervals,
     clearIntervalJob,
     refresh,
