@@ -18,6 +18,7 @@ const config: ConfigInterface = {
     'BILLING',
     'CONFIGURATION',
     'COMPUTING',
+    'CLOUD_FUNCTIONS',
     'DISCORD',
     'HOSTING',
     'INSTRUCTIONS',

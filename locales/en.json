@@ -23,12 +23,14 @@
     "delete": "Delete",
     "description": "Description",
     "deselectAll": "Deselect All",
+    "documentation": "documentation",
     "download": "Download",
     "edit": "Edit",
     "environment": "Environment",
     "error": "Error",
     "explore": "Explore",
     "goHome": "Go home",
+    "inactive": "inactive",
     "install": "Install",
     "images": "images",
     "learn": "Learn",
@@ -189,6 +191,67 @@
     }
   },
   "computing": {
+    "cloudFunctions": {
+      "addNew": "Add new Cloud function",
+      "checkVideo": "Check out the video",
+      "deployments": "Deployments",
+      "documentation": "View Documentation",
+      "endpoint": "Cloud function API endpoint",
+      "emptyArchive": "Cloud functions Archive",
+      "emptyArchiveInfo": "There are currently no Cloud functions in the Archive.",
+      "monitoring": "Monitoring",
+      "new": "New Cloud function",
+      "startNew": "Start by creating a new cloud function",
+      "variables": "Environment variables",
+      "content": [
+        {
+          "headline": "Features:",
+          "subtitle": "Use cloud functions to build your own unstoppable Web3 backend. \nJust like AWS lambda but without compromise. ",
+          "benefits": [
+            "Write code in NodeJS, bundle and deploy",
+            "Compute is executed on high performance CPUs with random providers and redundancy.",
+            "Bypass centralized backends and build a truly decentralized dapp",
+            "Set and forget mentality"
+          ]
+        }
+      ],
+      "job": {
+        "btnUpload": "Upload new Script",
+        "cid": "CID",
+        "content": "Start by uploading your script by drag & drop files",
+        "dateStarted": "Date started",
+        "delete": "Delete job",
+        "edit": "Edit job",
+        "filename": "Filename",
+        "name": "Job name",
+        "new": "Deploy new script",
+        "redeploy": "Deploy again",
+        "size": "Size",
+        "title": "You currently have no deployments for this Cloud function",
+        "status": {
+          "1": "DEPLOYING",
+          "2": "DEPLOYED",
+          "3": "ACTIVE",
+          "4": "PAUSED",
+          "9": "DELETED"
+        }
+      },
+      "usage": {
+        "title": "Cloud functions monitor"
+      },
+      "variable": {
+        "addRow": "Add row",
+        "btnAdd": "Add environment variable manually",
+        "btnAddVariable": "Add variable",
+        "btnCreate": "Create variables",
+        "btnUpdate": "Update variables",
+        "btnUpload": "Upload .ENV file for automatic detection",
+        "btnUploadEnv": "Upload .ENV",
+        "content": "Create a new environment variable which you want to pass into the cloud function. \nTo learn more about how environment variables are handled, refer to the {url}.",
+        "new": "New Environment variable",
+        "title": "You currently have no environment variables for this cloud functions"
+      }
+    },
     "contract": {
       "addNew": "Add new contract",
       "address": "Contract address",
@@ -282,6 +345,7 @@
       "service": {
         "authentication": "Authentication service",
         "computing": "Computing service",
+        "contracts": "Contracts service",
         "hosting": "Hosting service",
         "nft": "NFT service",
         "social": "Social service",
@@ -338,6 +402,10 @@
           "name": "Web3 Computing",
           "description": null
         },
+        "CONTRACTS": {
+          "name": "Contracts",
+          "description": null
+        },
         "HOSTING": {
           "name": "Web3 Hosting",
           "description": null
@@ -357,8 +425,17 @@
         "STORAGE": {
           "name": "Web3 Storage",
           "description": null
+        },
+        "WALLET": {
+          "name": "Embedded Wallet",
+          "description": null
         }
       }
+    },
+    "refreshModal": {
+      "title": "Deployment Status",
+      "refresh": "refresh",
+      "subtitle": "To check the deployment status, click the refresh button or select the time intervals for the automatic update."
     },
     "invoice": {
       "client": "Client",
@@ -377,6 +454,7 @@
       "billing": "Billing & usage",
       "configuration": "Configuration",
       "computing": "Computing",
+      "cloudFunctions": "Cloud Functions",
       "explore": "Explore",
       "hosting": "Hosting",
       "nft": "NFTs",
@@ -926,6 +1004,7 @@
   "error": {
     "404": "Page not found",
     "40006022": "You have to upload \"index.html\" file, to deploy website!",
+    "FIELD_INVALID": "Invalid filed, please upload valid .env file.",
     "50012005": "You can't mint this collection or all tokens has already been minted!",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
@@ -1172,6 +1251,19 @@
           "restrictToOwner": "Only owner will be able to encrypt/decrypt files.",
           "useApillonCollection": "You can use an NFT collection you created on Apillon or any NFT collection you built on other chains."
         }
+      },
+      "cloudFunctions": {
+        "description": "Description",
+        "name": "Title",
+        "jobName": "Job name",
+        "slots": "Number of processors",
+        "startTime": "Start time",
+        "endTime": "End time",
+        "varKey": "Key",
+        "varValue": "Value",
+        "labelInfo": {
+          "slots": "Multi-processor jobs will be supported soon"
+        }
       }
     },
     "networkTypes": {
@@ -1211,6 +1303,7 @@
       "nftMintParentNftId": "Parent NFT ID",
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
+      "number": "Enter number",
       "password": "password",
       "phone": "+000 12345678",
       "postalCode": "4223",
@@ -1235,6 +1328,11 @@
         "nftContractAddress": "Select or type NFT collection address",
         "nftChainRpcUrl": "Chain RPC URL",
         "accountAddress": "Account Address"
+      },
+      "cloudFunctions": {
+        "description": "Enter cloud function description for personal reference",
+        "name": "Enter cloud function title for personal reference",
+        "jobName": "Enter cloud function job name for personal reference"
       }
     },
     "success": {
@@ -1266,6 +1364,9 @@
         "bucket": "Bucket has been created",
         "chatPost": "Channel has been created",
         "chatSpace": "Hub has been created",
+        "cloudFunction": "Cloud function has been created",
+        "cloudFunctionJob": "Job deployment has been initiated",
+        "cloudFunctionVariable": "Cloud function variables have been created",
         "collection": "Creating NFT collection requested.",
         "directory": "Folder has been created",
         "domain": "Domain has been added to Website",
@@ -1284,6 +1385,7 @@
         "authentication": "Authentication service has been deleted",
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
+        "cloudFunction": "Cloud function has been deleted",
         "collection": "NFT collection has been archived",
         "contract": "Contract has been deleted",
         "directory": "Folder has been deleted",
@@ -1317,6 +1419,9 @@
         "apiKeyRoles": "API key permissions has been added",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
+        "cloudFunction": "Cloud function has been updated",
+        "cloudFunctionJob": "Job has been updated",
+        "cloudFunctionVariable": "Cloud function variables have been updated",
         "contract": "Contract has been updated",
         "creditThreshold": "Credit threshold has been updated",
         "directory": "Folder has been updated",
@@ -2083,7 +2188,8 @@
         "1": "CREATED",
         "2": "IN PROGRESS",
         "3": "FINISHED",
-        "4": "VALIDATION FAILED"
+        "4": "VALIDATION FAILED",
+        "5": "VALIDATION PASSED"
       }
     },
     "type": {
@@ -2161,6 +2267,7 @@
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
     "cvvRequired": "Please enter CVV",
+    "descriptionRequired": "Please enter description",
     "descriptionTooLong": "Text is too long (max 255 characters)",
     "email": "Email address is not valid",
     "emailRequired": "Typing in your email would definitely hit the spot :)",
@@ -2236,6 +2343,18 @@
       "fileRequired": "Please upload file",
       "nameRequired": "Please enter name",
       "nftIdRequired": "Please enter NFT ID"
+    },
+    "cloudFunctions": {
+      "endTimeRequired": "Please select end date",
+      "fileRequired": "Please upload file",
+      "fileType": "Wrong file type, please upload javascript file",
+      "keyRequired": "Please enter variable key",
+      "valueRequired": "Please enter variable value",
+      "valuesRequired": "Some variables does not have value, please fill in these fields.",
+      "keyNotUnique": "Please enter unique variable key",
+      "nameRequired": "Please enter name",
+      "startTimeRequired": "Please select start date",
+      "slotsRequired": "Please enter number of slots"
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",

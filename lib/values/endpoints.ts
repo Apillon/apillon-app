@@ -254,6 +254,29 @@ const Endpoints = {
     return `/computing/contracts/${contractUuid}/activate`;
   },
 
+  /** Cloud functions - Acurast */
+  cloudFunctions: (uuid?: string) => {
+    return uuid ? `/acurast/cloud-functions/${uuid}` : '/acurast/cloud-functions';
+  },
+  cloudFunctionActivate: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/activate`;
+  },
+  cloudFunctionEnvironment: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/environment`;
+  },
+  cloudFunctionExecute: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/execute`;
+  },
+  cloudFunctionJobs: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/jobs`;
+  },
+  cloudFunctionUsage: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/usage`;
+  },
+  acurastJobs: (uuid: string) => {
+    return `/acurast/jobs/${uuid}`;
+  },
+
   /**
    * Project settings
    */

@@ -136,7 +136,7 @@ export const useContractStore = defineStore('contract', {
         const res = await $api.get<ContractResponse>(endpoints.contracts(uuid));
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.COLLECTION, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.CONTRACT, Date.now().toString());
 
         return res.data;
       } catch (error: any) {

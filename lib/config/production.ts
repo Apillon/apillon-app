@@ -32,6 +32,7 @@ const config: ConfigInterface = {
     'AUTHENTICATION',
     'MARKETING',
     'COMPUTING',
+    'CLOUD_FUNCTIONS',
     'SOCIAL',
   ],
   betaFeatures: [],

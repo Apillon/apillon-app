@@ -39,6 +39,7 @@ const config: ConfigInterface = {
     'TWO_FACTOR_AUTHENTICATION',
     'WALLET_LOGIN',
     'COMPUTING',
+    'CLOUD_FUNCTIONS',
   ],
   betaFeatures: [],
 };

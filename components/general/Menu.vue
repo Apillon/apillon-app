@@ -15,14 +15,15 @@
 const props = defineProps({
   sliceName: { type: Boolean, default: false },
 });
-const { name } = useRoute();
-const selectedMenu = ref<string>(routeNameToKey(name?.toString() || ''));
+const route = useRoute();
+const selectedMenu = ref<string>(routeNameToKey(route.name?.toString() || ''));
 const NuxtLink = resolveComponent('NuxtLink');
 
 /** Watch route name and refresh selected menu item */
 const routeName = computed(() => {
-  return name?.toString() || '';
+  return route.name?.toString() || '';
 });
+
 watch(
   () => routeName.value,
   routeName => {
@@ -31,7 +32,11 @@ watch(
 );
 
 function routeNameToKey(name: string) {
-  return props.sliceName ? name.split('-').slice(0, 3).join('-') : name;
+  return props.sliceName ? removeIdOrSlug(name) : name;
+}
+
+function removeIdOrSlug(text) {
+  return text.replace(/(-id|-slug|-archive).*/g, '');
 }
 
 /**

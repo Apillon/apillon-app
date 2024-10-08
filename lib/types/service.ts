@@ -9,6 +9,7 @@ export enum ServiceType {
   COMPUTING = 5,
   SOCIAL = 6,
   WALLET = 7,
+  CONTRACTS = 8,
 }
 export enum ServiceTypeName {
   STORAGE = 'STORAGE',
@@ -17,6 +18,7 @@ export enum ServiceTypeName {
   NFT = 'NFT',
   COMPUTING = 'COMPUTING',
   SOCIAL = 'SOCIAL',
+  CONTRACTS = 'CONTRACTS',
   WALLET = 'WALLET',
 }
 
