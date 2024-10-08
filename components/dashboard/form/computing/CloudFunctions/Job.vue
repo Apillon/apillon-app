@@ -174,11 +174,11 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function createJob() {
   loading.value = true;
-  const newJob = await createNewJob(formData.value, props.functionUuid);
+  emit('submitSuccess');
 
+  const newJob = await createNewJob(formData.value, props.functionUuid);
   if (newJob) {
     /** Emit events */
-    emit('submitSuccess');
     emit('createSuccess', newJob);
   }
   loading.value = false;
