@@ -108,6 +108,7 @@ declare global {
     encrypted_variables: string;
     endpointUrl?: string;
     function_uuid: string;
+    gatewayUrl?: string | null;
     jobs: JobInterface[];
     project_uuid: string;
   }
