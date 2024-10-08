@@ -452,6 +452,7 @@
         "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
         "connectWallet": "Connect wallet",
         "create": "Create asset",
+        "createNew": "Create new asset",
         "createAsset": "Create an asset",
         "characteristics": "Characteristics",
         "edit": "Edit asset",
@@ -1284,8 +1285,8 @@
         "symbol": "Type asset symbol",
         "assetId": "Asset ID",
         "decimals": "Decimals",
-        "initialSupply": "initial Supply",
-        "minbalance": "Minimum Balance",
+        "initialSupply": "Initial supply",
+        "minBalance": "Minimum Balance",
         "issuerAddress": "Issuer Address",
         "freezerAddress": "Freezer Address"
       },

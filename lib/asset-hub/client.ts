@@ -1,6 +1,5 @@
-import { ApiPromise, Keyring, SubmittableResult, WsProvider } from '@polkadot/api';
-import type { KeyringPair } from '@polkadot/keyring/types';
-import { sleep, timeout } from '~/lib/asset-hub/helpers';
+import { ApiPromise, SubmittableResult, WsProvider } from '@polkadot/api';
+import { timeout } from '~/lib/asset-hub/helpers';
 import '@polkadot/api-augment';
 import '@polkadot/types-augment';
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
@@ -10,22 +9,20 @@ export class AssetHubClient {
   private static instance: AssetHubClient | null;
 
   private api: ApiPromise;
-  private readonly account: KeyringPair;
+  private readonly account: WalletAccount;
 
-  private constructor(api: ApiPromise, account: KeyringPair) {
+  private constructor(api: ApiPromise, account: WalletAccount) {
     this.api = api;
     this.account = account;
   }
 
-  static async getInstance(rpcEndpoint: string, mnemonic: string) {
+  static async getInstance(rpcEndpoint: string, account: WalletAccount) {
     if (!AssetHubClient.instance) {
       const api = await ApiPromise.create({
         provider: new WsProvider(rpcEndpoint),
         throwOnConnect: true,
         noInitWarn: true,
       });
-      const keyring = new Keyring({ type: 'sr25519' });
-      const account = keyring.addFromMnemonic(mnemonic);
 
       AssetHubClient.instance = new AssetHubClient(api, account);
     }
@@ -44,7 +41,9 @@ export class AssetHubClient {
   }
 
   private async signAndSend(tx: SubmittableExtrinsic<'promise'>) {
-    const signedTx = await tx.signAsync(this.account, {
+    console.log(this.account);
+    const signedTx = await tx.signAsync(this.account.address, {
+      signer: this.account.signer,
       nonce: -1,
     });
 
@@ -163,11 +162,18 @@ export class AssetHubClient {
     name: string,
     symbol: string,
     decimals: number,
-    minBalance: number
+    minBalance: number,
+    team?: { issuer: string; admin: string; freezer: string }
   ) {
     const createTx = this.api.tx.assets.create(id, admin, minBalance);
     const metadataTx = this.api.tx.assets.setMetadata(id, name, symbol, decimals);
-    const result = await this.signAndSend(this.api.tx.utility.batchAll([createTx, metadataTx]));
+    const txs = [createTx, metadataTx];
+
+    if (team) {
+      const teamTx = this.api.tx.assets.setTeam(id, team.issuer, team.admin, team.freezer);
+      txs.push(teamTx);
+    }
+    const result = await this.signAndSend(this.api.tx.utility.batchAll(txs));
 
     return result.txHash.toHex();
   }

@@ -16,7 +16,7 @@
       >
         <select-options
           v-model:value="formData.network"
-          :options="chains"
+          :options="networks"
           :input-props="{ id: 'chainId' }"
           :placeholder="$t('form.placeholder.assetHub.network')"
           required
@@ -98,7 +98,7 @@
       >
         <n-input-number
           v-model:value="formData.minBalance"
-          :placeholder="$t('form.label.assetHub.minBalance')"
+          :placeholder="$t('form.placeholder.assetHub.minBalance')"
           clearable
           class="bg-bg-light rounded-lg"
           :min="0"
@@ -157,23 +157,22 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
-const warningStore = useWarningStore();
-const { chains } = useCollection();
+const { connectedAccount } = useAssetHub();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
 
 const rules: NFormRules = {
-  network: [{ required: true, message: 'Network is required' }],
-  name: [{ required: true, message: 'Name is required' }],
-  symbol: [{ required: true, message: 'Symbol is required' }],
-  assetId: [{ required: true, message: 'Asset Id is required' }],
-  decimals: [{ required: true, message: 'Decimals is required' }],
-  initialSupply: [{ required: true, message: 'Initial Supply is required' }],
-  minBalance: [{ required: true, message: 'Min balance is required' }],
-  issuerAddress: [{ required: true, message: 'Issuer Address is required' }],
-  freezerAddress: [{ required: true, message: 'Freezer Address is required' }],
+  network: ruleRequired('Network is required'),
+  name: ruleRequired('Name is required'),
+  symbol: ruleRequired('Symbol is required'),
+  assetId: ruleRequired('Asset Id is required'),
+  decimals: ruleRequired('Decimals is required'),
+  initialSupply: ruleRequired('Initial Supply is required'),
+  minBalance: ruleRequired('Min balance is required'),
+  issuerAddress: ruleRequired('Issuer Address is required'),
+  freezerAddress: ruleRequired('Freezer Address is required'),
 };
 
 const formData = ref<FormAsset>({
@@ -188,6 +187,16 @@ const formData = ref<FormAsset>({
   freezerAddress: null,
 });
 
+const networks = computed(() =>
+  Object.values(assetHubNetworks).map(network => ({ label: network.name, value: network.rpc }))
+);
+
+onMounted(() => {
+  if (!connectedAccount.value) {
+    router.push({ name: 'dashboard-service-asset-hub' });
+  }
+});
+
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
@@ -197,24 +206,64 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      warningStore.showSpendingWarning(PriceServiceName.SOCIAL_POST, () => createAsset());
+      createAsset();
     }
   });
 }
 
 async function createAsset() {
+  if (!connectedAccount.value) {
+    message.warning(t('dashboard.service.assetHub.connect'));
+    return;
+  }
+  if (
+    !formData.value.network ||
+    !formData.value.assetId ||
+    !formData.value.name ||
+    !formData.value.symbol ||
+    !formData.value.decimals ||
+    !formData.value.minBalance ||
+    !formData.value.issuerAddress ||
+    !formData.value.freezerAddress
+  ) {
+    message.warning('Missing data');
+    return;
+  }
   loading.value = true;
 
+  const assetHubClient = await AssetHubClient.getInstance(
+    formData.value.network,
+    connectedAccount.value
+  );
   try {
-    const res = await $api.post<any>(endpoints.posts(), formData.value);
+    const team = {
+      issuer: formData.value.issuerAddress,
+      admin: connectedAccount.value.address,
+      freezer: formData.value.freezerAddress,
+    };
+    const hash = await assetHubClient.createAsset(
+      connectedAccount.value.address,
+      formData.value.assetId,
+      formData.value.name,
+      formData.value.symbol,
+      formData.value.decimals,
+      formData.value.minBalance,
+      team
+    );
 
     message.success(t('form.success.created.asset'));
 
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess', res.data);
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
+    emit('createSuccess', hash);
+  } catch (error: any) {
+    if (error?.message) {
+      message.error(error?.message);
+    } else {
+      message.error(userFriendlyMsg(error));
+    }
+  } finally {
+    assetHubClient.destroyInstance();
   }
   loading.value = false;
 }

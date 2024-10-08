@@ -35,9 +35,13 @@ type FormAssetTransfer = {
 
 // const props = defineProps({});
 const emit = defineEmits(['submitSuccess', 'close']);
+const props = defineProps({
+  assetId: { type: Number, required: true },
+});
 
 const { t } = useI18n();
 const message = useMessage();
+const { connectedAccount } = useAssetHub();
 
 const loading = ref(true);
 const transactionSubmitted = ref(false);
@@ -65,17 +69,36 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function transfer() {
+  if (!connectedAccount.value) {
+    message.warning(t('dashboard.service.assetHub.connect'));
+    return;
+  }
+  if (!formData.value.address) {
+    message.warning('Missing data');
+    return;
+  }
   loading.value = true;
 
+  const assetHubClient = await AssetHubClient.getInstance(
+    assetHubNetworks.westend.rpc,
+    connectedAccount.value
+  );
   try {
-    const res = await $api.post<any>('', formData.value);
+    const hash = await assetHubClient.transferOwnership(props.assetId, formData.value.address);
+    console.log(hash);
 
-    message.success(t('form.success.assetTransferred'));
+    message.success(t('form.success.created.asset'));
 
     /** Emit events */
     emit('submitSuccess');
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
+  } catch (error: any) {
+    if (error?.message) {
+      message.error(error?.message);
+    } else {
+      message.error(userFriendlyMsg(error));
+    }
+  } finally {
+    assetHubClient.destroyInstance();
   }
   loading.value = false;
 }

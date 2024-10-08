@@ -1,26 +1,43 @@
 <template>
   <div class="card-border p-4 flex flex-col gap-2 rounded-lg">
     <h4>{{ $t('general.actions') }}</h4>
-    <Btn size="small" @click="modalSendTokensVisible = true">
-      <strong>{{ $t('dashboard.service.assetHub.sendTokens') }}</strong>
-    </Btn>
-    <Btn size="small" :color="colors.blue" @click="modalMintTokensVisible = true">
-      <strong>{{ $t('dashboard.service.assetHub.mintTokens') }}</strong>
-    </Btn>
-    <n-button size="small" @click="modalTransferVisible = true">
-      {{ $t('dashboard.service.assetHub.transfer') }}
-    </n-button>
-    <n-button size="small" @click="modalChangeIssuerVisible = true">
-      {{ $t('dashboard.service.assetHub.changeIssuer') }}
-    </n-button>
-    <n-button size="small" @click="modalChangeFreezerVisible = true">
-      {{ $t('dashboard.service.assetHub.changeFreezer') }}
-    </n-button>
-    <n-button size="small" @click="modalEditAssetVisible = true">
-      <span class="icon-edit text-xl mr-2"></span>
-      {{ $t('dashboard.service.assetHub.edit') }}
-    </n-button>
+
+    <div v-if="!connectedAccount">
+      <Btn type="primary" :loading="loadingWallet" @click="modalWalletSelectVisible = true">
+        {{ $t('dashboard.service.assetHub.connectWallet') }}
+      </Btn>
+    </div>
+    <template v-else>
+      <Btn size="small" @click="modalSendTokensVisible = true">
+        <strong>{{ $t('dashboard.service.assetHub.sendTokens') }}</strong>
+      </Btn>
+      <Btn size="small" :color="colors.blue" @click="modalMintTokensVisible = true">
+        <strong>{{ $t('dashboard.service.assetHub.mintTokens') }}</strong>
+      </Btn>
+      <n-button size="small" @click="modalTransferVisible = true">
+        {{ $t('dashboard.service.assetHub.transfer') }}
+      </n-button>
+      <n-button size="small" @click="modalChangeIssuerVisible = true">
+        {{ $t('dashboard.service.assetHub.changeIssuer') }}
+      </n-button>
+      <n-button size="small" @click="modalChangeFreezerVisible = true">
+        {{ $t('dashboard.service.assetHub.changeFreezer') }}
+      </n-button>
+      <n-button size="small" @click="modalEditAssetVisible = true">
+        <span class="icon-edit text-xl mr-2"></span>
+        {{ $t('dashboard.service.assetHub.edit') }}
+      </n-button></template
+    >
   </div>
+
+  <!-- Modal - Wallet select -->
+  <modal v-model:show="modalWalletSelectVisible" :title="$t('auth.wallet.connect.title')">
+    <AuthWalletDot
+      :action-text="$t('auth.wallet.connect.btn')"
+      :loading="loadingWallet"
+      @sign="walletConnect"
+    />
+  </modal>
 
   <Modal
     v-model:show="modalSendTokensVisible"
@@ -88,6 +105,7 @@
 
 <script lang="ts" setup>
 import colors from '~/tailwind.colors';
+const { connectedAccount, loadingWallet, modalWalletSelectVisible, walletConnect } = useAssetHub();
 
 const modalSendTokensVisible = ref<boolean>(false);
 const modalMintTokensVisible = ref<boolean>(false);

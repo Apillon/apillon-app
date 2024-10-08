@@ -1,23 +1,10 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <n-form-item
-      path="address"
-      :label="$t('form.label.assetHub.address')"
-      :label-props="{ for: 'address' }"
-    >
-      <n-input
-        v-model:value="formData.address"
-        :input-props="{ id: 'address' }"
-        :placeholder="$t('form.placeholder.assetHub.address')"
-        clearable
-      />
-    </n-form-item>
-
-    <n-form-item
       class="relative"
       path="amount"
       :label="$t('form.label.assetHub.amount')"
-      :label-props="{ for: 'address' }"
+      :label-props="{ for: 'amount' }"
     >
       <n-input
         v-model:value="formData.amount"
@@ -44,11 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { ApiPromise, WsProvider } from '@polkadot/api';
-
 type FormAssetTransfer = {
-  address: string | null;
   amount: number | null;
 };
 
@@ -57,16 +40,15 @@ const emit = defineEmits(['submitSuccess', 'close']);
 
 const { t } = useI18n();
 const message = useMessage();
+const { connectedAccount } = useAssetHub();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormAssetTransfer>({
-  address: null,
   amount: null,
 });
 
 const rules: NFormRules = {
-  address: ruleRequired(t('validation.assetHub.addressRequired')),
   amount: ruleRequired(t('validation.assetHub.amountRequired')),
 };
 
@@ -79,7 +61,7 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      mintTokens();
+      mintToWallet();
     }
   });
 }
@@ -88,7 +70,7 @@ async function mintTokens() {
   loading.value = true;
 
   try {
-    const res = await $api.post<any>('', formData.value);
+    const res = await $api.post<any>('/mint', formData.value);
 
     message.success(t('form.success.assetTransferred'));
 
@@ -100,27 +82,13 @@ async function mintTokens() {
   loading.value = false;
 }
 
-async function enableExtension() {
-  await web3Enable('My Polkadot App');
-  return await web3Accounts();
-}
-
 const mintToWallet = async () => {
-  await cryptoWaitReady();
-  const accounts = await enableExtension();
-  console.log('Accounts:', accounts);
-
-  const account = accounts[0];
-  const injector = await web3FromAddress(account.address);
-  const api = await ApiPromise.create({
-    provider: new WsProvider('wss://asset-hub-westend-rpc.dwellir.com'),
-    throwOnConnect: true,
-    noInitWarn: true,
-  });
-  console.log('Minting to:', account.address);
-  const hash = await api.tx.assets
-    .mint(791, account.address, 100)
-    .signAndSend(account.address, { signer: injector.signer, nonce: -1 });
-  console.log('Transaction sent with hash', hash.toHex());
+  // const hash = await api.tx.assets
+  //   .mint(791, connectedAccount.value.address, 100)
+  //   .signAndSend(connectedAccount.value.address, {
+  //     signer: connectedAccount.value.signer,
+  //     nonce: -1,
+  //   });
+  // console.log('Transaction sent with hash', hash.toHex());
 };
 </script>

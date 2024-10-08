@@ -33,6 +33,7 @@
       <span class="icon-info mt-1"></span>
       <p class="ml-2">
         <strong>Issuer:</strong> An account with unique ability to mint a specific class of assets.
+        <br />
         <strong>Freezer:</strong> An account with exclusive rights to restrict another account from
         transferring a certain class of assets.
       </p>

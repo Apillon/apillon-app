@@ -5,7 +5,7 @@
     </template>
     <slot>
       <div
-        v-if="!isConnected"
+        v-if="!connectedAccount"
         class="flex gap-4 items-center py-2 px-5 border-1 border-primary max-w-3xl lg:gap-10 xl:gap-20"
       >
         <div class="flex items-center mb-2">
@@ -13,12 +13,12 @@
           <p class="ml-2">{{ $t('dashboard.service.assetHub.connect') }}</p>
         </div>
 
-        <Btn type="primary" :loading="loading" @click="connectWallet">
+        <Btn type="primary" :loading="loadingWallet" @click="modalWalletSelectVisible = true">
           {{ $t('dashboard.service.assetHub.connectWallet') }}
         </Btn>
       </div>
 
-      <n-space v-else-if="!assetHubStore.hasAssets" class="pb-8" :size="32" vertical>
+      <n-space v-else-if="assetHubStore.hasAssets" class="pb-8" :size="32" vertical>
         <ActionsAssetHub />
         <TableAssetHub />
       </n-space>
@@ -32,15 +32,21 @@
       </template>
     </slot>
   </Dashboard>
+
+  <!-- Modal - Wallet select -->
+  <modal v-model:show="modalWalletSelectVisible" :title="$t('auth.wallet.connect.title')">
+    <AuthWalletDot
+      :action-text="$t('auth.wallet.connect.btn')"
+      :loading="loadingWallet"
+      @sign="walletConnect"
+    />
+  </modal>
 </template>
 <script lang="ts" setup>
-import { useAccount } from 'use-wagmi';
-
 const { t } = useI18n();
 const dataStore = useDataStore();
 const assetHubStore = useAssetHubStore();
-const { loading, connectWallet } = useAssetHub();
-const { isConnected } = useAccount();
+const { connectedAccount, loadingWallet, modalWalletSelectVisible, walletConnect } = useAssetHub();
 
 const pageLoading = ref<boolean>(true);
 

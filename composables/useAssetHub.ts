@@ -1,61 +1,83 @@
-import { useAccount, useConnect, useDisconnect, useWalletClient } from 'use-wagmi';
+import { cryptoWaitReady } from '@polkadot/util-crypto';
+
+export const assetHubNetworks = {
+  polkadot: {
+    name: 'Polkadot',
+    rpc: 'wss://asset-hub-polkadot-rpc.dwellir.com',
+  },
+  westend: {
+    name: 'Westend Testnet',
+    rpc: 'wss://asset-hub-westend-rpc.dwellir.com',
+  },
+};
+
+const connectedAccount = ref<WalletAccount | undefined>();
 
 export default function assetHub() {
   const { t } = useI18n();
+  const { error, success, warning } = useMessage();
   const authStore = useAuthStore();
-  const { connectAndSign } = useWallet();
-
-  const { connect, connectors, isLoading } = useConnect();
-  const { refetch: refetchWalletClient } = useWalletClient();
-  const { address, isConnected } = useAccount({ onConnect: onWalletConnected });
-  const { disconnect } = useDisconnect();
+  const { getMessageSignature } = useProvider();
 
   const loading = ref(false);
+  const loadingWallet = ref<boolean>(false);
+  const modalWalletSelectVisible = ref<boolean>(false);
 
-  onMounted(() => {
-    if (!authStore.user.evmWallet) {
-      disconnect();
+  async function walletConnect(account: WalletAccount) {
+    loadingWallet.value = true;
+
+    try {
+      const { message, timestamp } = await authStore.getAuthMsg();
+      await getMessageSignature(account.address, message);
+      connectedAccount.value = account;
+
+      success(t('auth.wallet.connected.success'));
+    } catch (e) {
+      /** Show error message */
+      error(userFriendlyMsg(e));
     }
-  });
-
-  async function onWalletConnected({ address, connector, isReconnected }) {
-    await sleep(200);
-    loading.value = false;
+    modalWalletSelectVisible.value = false;
+    loadingWallet.value = false;
   }
 
-  function wagmiConnect(connector) {
-    if (isConnected.value) {
-      refetchWalletClient();
-    } else if (connector.ready) {
-      connect({ connector });
-    }
-  }
-  async function connectWallet() {
-    await sleep(200);
-    loading.value = true;
-
-    if (!isConnected.value) {
-      wagmiConnect(connectors.value[0]);
-      loading.value = false;
+  async function initClient(rpc = assetHubNetworks.westend.rpc) {
+    if (!connectedAccount.value) {
+      warning(t('dashboard.service.assetHub.connect'));
       return;
     }
+    await cryptoWaitReady();
 
-    const sign = await connectAndSign();
-    if (!sign) {
-      loading.value = false;
-      return;
-    }
-
-    loading.value = false;
+    return await AssetHubClient.getInstance(rpc, connectedAccount.value);
   }
 
-  function disconnectWallet() {
-    disconnect();
+  async function getAssetDetails(assetId: number) {
+    const assetHubClient = await initClient();
+    if (!assetHubClient || !connectedAccount.value) return;
+
+    const metadata = await assetHubClient.getAssetMetadata(assetId);
+    const details = await assetHubClient.getAssetDetails(assetId);
+
+    return {
+      name: metadata.name.toHuman(),
+      symbol: metadata.symbol.toHuman(),
+      decimals: metadata.decimals.toHuman(),
+      owner: details?.owner?.toString(),
+      issuer: details?.issuer?.toString(),
+      admin: details?.admin?.toString(),
+      freezer: details?.freezer?.toString(),
+      supply: details?.supply?.toString(),
+      deposit: details?.deposit?.toString(),
+      minBalance: details?.minBalance?.toString(),
+      status: details?.status?.toString(),
+    };
   }
 
   return {
+    connectedAccount,
     loading,
-    connectWallet,
-    disconnectWallet,
+    loadingWallet,
+    modalWalletSelectVisible,
+    getAssetDetails,
+    walletConnect,
   };
 }
