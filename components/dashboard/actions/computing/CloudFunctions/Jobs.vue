@@ -34,6 +34,7 @@
   <modal v-model:show="modalCreateJobVisible" :title="$t('computing.cloudFunctions.job.new')">
     <FormComputingCloudFunctionsJob
       :function-uuid="cloudFunctionStore.functionUuid"
+      @submit-success="modalCreateJobVisible = false"
       @create-success="onJobCreated"
     />
   </modal>
