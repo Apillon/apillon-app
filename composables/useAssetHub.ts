@@ -58,9 +58,9 @@ export default function assetHub() {
     const details = await assetHubClient.getAssetDetails(assetId);
 
     return {
-      name: metadata.name.toHuman(),
-      symbol: metadata.symbol.toHuman(),
-      decimals: metadata.decimals.toHuman(),
+      name: metadata.name.toString(),
+      symbol: metadata.symbol.toString(),
+      decimals: metadata.decimals.toString(),
       owner: details?.owner?.toString(),
       issuer: details?.issuer?.toString(),
       admin: details?.admin?.toString(),
