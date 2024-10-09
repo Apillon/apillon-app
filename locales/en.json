@@ -77,7 +77,11 @@
     "uptime": "Uptime",
     "uuid": "UUID",
     "view": "View",
-    "viewDemo": "View demo"
+    "viewDemo": "View demo",
+    "instructions": {
+      "hide": "Hide instructions",
+      "show": "Show instructions"
+    }
   },
   "auth": {
     "footer": {
