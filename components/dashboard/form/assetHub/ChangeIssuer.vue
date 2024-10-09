@@ -37,7 +37,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 const message = useMessage();
-const { connectedAccount } = useAssetHub();
+const assetHubStore = useAssetHubStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -64,7 +64,7 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function changeIssuer() {
-  if (!connectedAccount.value) {
+  if (!assetHubStore.accountConnected) {
     message.warning(t('dashboard.service.assetHub.connect'));
     return;
   }
@@ -76,13 +76,13 @@ async function changeIssuer() {
 
   const assetHubClient = await AssetHubClient.getInstance(
     assetHubNetworks.westend.rpc,
-    connectedAccount.value
+    assetHubStore.account
   );
   try {
     const hash = await assetHubClient.updateTeam(
       props.assetId,
       formData.value.address,
-      connectedAccount.value.address,
+      assetHubStore.account.address,
       formData.value.address
     );
     console.log(hash);

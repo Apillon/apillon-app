@@ -24,6 +24,7 @@ export const LS_KEYS = {
 };
 
 export const SessionKeys = {
+  ASSET_HUB: 'al_asset_hub',
   CREDITS_MSG: 'al_credits_msg',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',

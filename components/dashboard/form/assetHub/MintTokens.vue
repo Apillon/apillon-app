@@ -40,7 +40,7 @@ const emit = defineEmits(['submitSuccess', 'close']);
 
 const { t } = useI18n();
 const message = useMessage();
-const { connectedAccount } = useAssetHub();
+const assetHubStore = useAssetHubStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -84,9 +84,9 @@ async function mintTokens() {
 
 const mintToWallet = async () => {
   // const hash = await api.tx.assets
-  //   .mint(791, connectedAccount.value.address, 100)
-  //   .signAndSend(connectedAccount.value.address, {
-  //     signer: connectedAccount.value.signer,
+  //   .mint(791, assetHubStore.account.address, 100)
+  //   .signAndSend(assetHubStore.account.address, {
+  //     signer: assetHubStore.account.signer,
   //     nonce: -1,
   //   });
   // console.log('Transaction sent with hash', hash.toHex());

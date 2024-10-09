@@ -5,7 +5,7 @@
     </template>
     <slot>
       <div
-        v-if="!connectedAccount"
+        v-if="!assetHubStore.accountConnected"
         class="flex gap-4 items-center py-2 px-5 border-1 border-primary max-w-3xl lg:gap-10 xl:gap-20"
       >
         <div class="flex items-center mb-2">
@@ -46,7 +46,7 @@
 const { t } = useI18n();
 const dataStore = useDataStore();
 const assetHubStore = useAssetHubStore();
-const { connectedAccount, loadingWallet, modalWalletSelectVisible, walletConnect } = useAssetHub();
+const { loadingWallet, modalWalletSelectVisible, walletConnect } = useAssetHub();
 
 const pageLoading = ref<boolean>(true);
 

@@ -22,7 +22,7 @@
         >
           <p class="text-bodyDark">{{ truncateWallet(`${address}`) }}</p>
           <hr class="bg-bg h-full w-[1px] border-bg" />
-          <p class="cursor-pointer text-white" @click="disconnectWallet">
+          <p class="cursor-pointer text-white" @click="">
             {{ $t('general.disconnect') }}
           </p>
         </div>
@@ -40,5 +40,5 @@ defineProps({
 });
 
 const { address, isConnected } = useAccount();
-const { disconnectWallet } = useAssetHub();
+// const { disconnectWallet } = useAssetHub();
 </script>

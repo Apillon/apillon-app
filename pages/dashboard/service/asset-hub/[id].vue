@@ -63,7 +63,7 @@ type AssetData = SelectOption & {
 const { t } = useI18n();
 const { params } = useRoute();
 const dataStore = useDataStore();
-const { connectedAccount, getAssetDetails } = useAssetHub();
+const assetHubStore = useAssetHubStore();
 
 useHead({
   title: t('dashboard.nav.assetHub'),
@@ -83,31 +83,31 @@ onMounted(() => {
 });
 
 watch(
-  () => connectedAccount.value,
+  () => assetHubStore.accountConnected,
   () => {
     initAssetData(assetId.value);
   }
 );
 
 async function initAssetData(assetId: number) {
-  const data = await getAssetDetails(assetId);
+  const data = await assetHubStore.getAsset(assetId);
   console.log(data);
-  
+
   assetData.value = [
     { label: t('form.label.assetHub.network'), value: '' },
-    { label: t('form.label.assetHub.name'), value: data?.name },
-    { label: t('form.label.assetHub.symbol'), value: data?.symbol },
+    { label: t('form.label.assetHub.name'), value: data?.name?.toString() },
+    { label: t('form.label.assetHub.symbol'), value: data?.symbol?.toString() },
     { label: t('form.label.assetHub.assetId'), assetId },
-    { label: t('form.label.assetHub.decimals'), value: data?.decimals },
-    { label: t('form.label.assetHub.initialSupply'), value: data?.supply },
+    { label: t('form.label.assetHub.decimals'), value: data?.decimals?.toString() },
+    { label: t('form.label.assetHub.initialSupply'), value: data?.supply?.toString() },
     {
       label: t('form.label.assetHub.issuerAddress'),
-      value: data?.issuer,
+      value: data?.issuer?.toString(),
       copy: true,
     },
     {
       label: t('form.label.assetHub.freezerAddress'),
-      value: data?.freezer,
+      value: data?.freezer?.toString(),
       copy: true,
     },
     {

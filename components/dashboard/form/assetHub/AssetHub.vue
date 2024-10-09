@@ -157,7 +157,7 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
-const { connectedAccount } = useAssetHub();
+const assetHubStore = useAssetHubStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -192,7 +192,7 @@ const networks = computed(() =>
 );
 
 onMounted(() => {
-  if (!connectedAccount.value) {
+  if (!assetHubStore.accountConnected) {
     router.push({ name: 'dashboard-service-asset-hub' });
   }
 });
@@ -212,7 +212,7 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createAsset() {
-  if (!connectedAccount.value) {
+  if (!assetHubStore.accountConnected) {
     message.warning(t('dashboard.service.assetHub.connect'));
     return;
   }
@@ -233,16 +233,16 @@ async function createAsset() {
 
   const assetHubClient = await AssetHubClient.getInstance(
     formData.value.network,
-    connectedAccount.value
+    assetHubStore.account
   );
   try {
     const team = {
       issuer: formData.value.issuerAddress,
-      admin: connectedAccount.value.address,
+      admin: assetHubStore.account.address,
       freezer: formData.value.freezerAddress,
     };
     const hash = await assetHubClient.createAsset(
-      connectedAccount.value.address,
+      assetHubStore.account.address,
       formData.value.assetId,
       formData.value.name,
       formData.value.symbol,

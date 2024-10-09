@@ -2,7 +2,7 @@
   <div class="card-border p-4 flex flex-col gap-2 rounded-lg">
     <h4>{{ $t('general.actions') }}</h4>
 
-    <div v-if="!connectedAccount">
+    <div v-if="!assetHubStore.accountConnected">
       <Btn type="primary" :loading="loadingWallet" @click="modalWalletSelectVisible = true">
         {{ $t('dashboard.service.assetHub.connectWallet') }}
       </Btn>
@@ -47,7 +47,11 @@
     <p class="relative -top-4 text-center px-4">
       {{ $t('dashboard.service.assetHub.sendTokensInfo') }}
     </p>
-    <FormAssetHubSendTokens class="text-left" @close="modalSendTokensVisible = false" />
+    <FormAssetHubSendTokens
+      class="text-left"
+      :assetId="assetId"
+      @close="modalSendTokensVisible = false"
+    />
   </Modal>
 
   <Modal
@@ -58,7 +62,11 @@
     <p class="relative -top-4 text-center px-4">
       {{ $t('dashboard.service.assetHub.mintTokensInfo') }}
     </p>
-    <FormAssetHubMintTokens class="text-left" @close="modalMintTokensVisible = false" />
+    <FormAssetHubMintTokens
+      class="text-left"
+      :assetId="assetId"
+      @close="modalMintTokensVisible = false"
+    />
   </Modal>
 
   <Modal
@@ -69,7 +77,11 @@
     <p class="relative -top-4 text-center px-4">
       {{ $t('dashboard.service.assetHub.transferInfo') }}
     </p>
-    <FormAssetHubTransfer class="text-left" @close="modalTransferVisible = false" />
+    <FormAssetHubTransfer
+      class="text-left"
+      :assetId="assetId"
+      @close="modalTransferVisible = false"
+    />
   </Modal>
 
   <Modal
@@ -80,7 +92,11 @@
     <p class="relative -top-4 text-center px-4">
       {{ $t('dashboard.service.assetHub.changeIssuerInfo') }}
     </p>
-    <FormAssetHubChangeIssuer class="text-left" @close="modalChangeIssuerVisible = false" />
+    <FormAssetHubChangeIssuer
+      class="text-left"
+      :assetId="assetId"
+      @close="modalChangeIssuerVisible = false"
+    />
   </Modal>
 
   <Modal
@@ -91,7 +107,11 @@
     <p class="relative -top-4 text-center px-4">
       {{ $t('dashboard.service.assetHub.changeFreezerInfo') }}
     </p>
-    <FormAssetHubChangeFreezer class="text-left" @close="modalChangeFreezerVisible = false" />
+    <FormAssetHubChangeFreezer
+      class="text-left"
+      :assetId="assetId"
+      @close="modalChangeFreezerVisible = false"
+    />
   </Modal>
 
   <Modal
@@ -105,7 +125,12 @@
 
 <script lang="ts" setup>
 import colors from '~/tailwind.colors';
-const { connectedAccount, loadingWallet, modalWalletSelectVisible, walletConnect } = useAssetHub();
+
+const { params } = useRoute();
+const assetHubStore = useAssetHubStore();
+const { loadingWallet, modalWalletSelectVisible, walletConnect } = useAssetHub();
+
+const assetId = ref<number>(Number(params?.id));
 
 const modalSendTokensVisible = ref<boolean>(false);
 const modalMintTokensVisible = ref<boolean>(false);

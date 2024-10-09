@@ -41,7 +41,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 const message = useMessage();
-const { connectedAccount } = useAssetHub();
+const assetHubStore = useAssetHubStore();
 
 const loading = ref(true);
 const transactionSubmitted = ref(false);
@@ -69,7 +69,7 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function transfer() {
-  if (!connectedAccount.value) {
+  if (!assetHubStore.accountConnected) {
     message.warning(t('dashboard.service.assetHub.connect'));
     return;
   }
@@ -81,7 +81,7 @@ async function transfer() {
 
   const assetHubClient = await AssetHubClient.getInstance(
     assetHubNetworks.westend.rpc,
-    connectedAccount.value
+    assetHubStore.account
   );
   try {
     const hash = await assetHubClient.transferOwnership(props.assetId, formData.value.address);

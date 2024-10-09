@@ -143,6 +143,12 @@ export class AssetHubClient {
 
     return result.isEmpty ? null : result.unwrap();
   }
+  async getBalances() {
+    return await this.api.query.balances.account(this.account.address);
+  }
+  async getAssets() {
+    return await this.api.query.assets.asset.entries();
+  }
 
   async getAssetMetadata(id: number) {
     return await this.api.query.assets.metadata(id);
