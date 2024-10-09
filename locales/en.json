@@ -461,6 +461,7 @@
         "mintTokensInfo": "Mint Tokens",
         "noProject": "Your project has no assets yet",
         "new": "Create new asset",
+        "select": "Select asset",
         "sendTokens": "Send Tokens",
         "sendTokensInfo": "You may only send tokens available in your connected wallet. If you do not see any tokens available, please review your wallet connection.",
         "transactionDetails": "You may view the transaction details {0}.",
@@ -1190,16 +1191,19 @@
       "websiteName": "Website name",
       "assetHub": {
         "address": "Address",
+        "admin": "Admin address",
         "amount": "Amount",
-        "network": "Network",
-        "name": "Asset name",
-        "symbol": "Asset symbol",
         "assetId": "Asset ID",
         "decimals": "Decimals",
+        "deposit": "Deposit",
+        "freezerAddress": "Freezer Address",
         "initialSupply": "Initial supply",
-        "minBalance": "Minimum balance",
         "issuerAddress": "Issuer Address",
-        "freezerAddress": "Freezer Address"
+        "minBalance": "Minimum balance",
+        "name": "Asset name",
+        "network": "Network",
+        "owner": "Owner Address",
+        "symbol": "Asset symbol"
       },
       "contract": {
         "accountAddress": "Account Address",

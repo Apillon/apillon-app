@@ -5,7 +5,7 @@
     </template>
     <slot>
       <div
-        v-if="!assetHubStore.accountConnected"
+        v-if="!assetHubStore.account"
         class="flex gap-4 items-center py-2 px-5 border-1 border-primary max-w-3xl lg:gap-10 xl:gap-20"
       >
         <div class="flex items-center mb-2">
@@ -57,10 +57,20 @@ useHead({
 onMounted(() => {
   setTimeout(() => {
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await assetHubStore.getAssets();
       pageLoading.value = false;
     });
-  }, 100);
+  }, 10);
 });
+
+watch(
+  () => assetHubStore.account,
+  () => {
+    if (assetHubStore.account) {
+      // assetHubStore.getAssets();
+    }
+  }
+);
 </script>
 
 <style lang="postcss" module>

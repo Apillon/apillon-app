@@ -1,9 +1,8 @@
 <template>
   <n-data-table
-    remote
     :bordered="false"
     :columns="columns"
-    :data="assetHubStore.items"
+    :data="data"
     :loading="assetHubStore.loading"
     :expanded-row-keys="expandedRows"
     :pagination="{
@@ -12,69 +11,89 @@
     }"
     :row-key="rowKey"
     :row-props="rowProps"
-    :row-class-name="rowClassName"
-    @update:page="handlePageChange"
   />
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
 const router = useRouter();
-const message = useMessage();
-const authStore = useAuthStore();
 const assetHubStore = useAssetHubStore();
+
+const currentRow = ref<AssetInterface | null>(null);
+const expandedRows = ref<Array<string | number>>([]);
+const rowKey = (row: AssetInterface) => row.id;
 
 const columns = computed<NDataTableColumns<AssetInterface>>(() => {
   return [
     {
-      key: 'postId',
-      title: t('social.post.postId'),
+      key: 'name',
+      title: t('form.label.assetHub.name'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      key: 'title',
-      title: t('social.post.title'),
+      key: 'symbol',
+      title: t('form.label.assetHub.symbol'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      key: 'body',
-      title: t('social.post.body'),
+      key: 'decimals',
+      title: t('form.label.assetHub.decimals'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      key: 'hubName',
-      title: t('social.chat.name'),
+      key: 'supply',
+      title: t('form.label.assetHub.initialSupply'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      key: 'tags',
-      title: t('social.post.tags'),
+      key: 'minBalance',
+      title: t('form.label.assetHub.minBalance'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
-      key: 'post_uuid',
-      title: t('social.post.uuid'),
+      key: 'deposit',
+      title: t('form.label.assetHub.deposit'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+    },
+    {
+      key: 'owner',
+      title: t('form.label.assetHub.owner'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
       render(row: AssetInterface) {
-        return h(resolveComponent('TableEllipsis'), { text: row.post_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.owner }, '');
       },
     },
     {
-      key: 'createTime',
-      title: t('social.post.date'),
+      key: 'admin',
+      title: t('form.label.assetHub.admin'),
       className: ON_COLUMN_CLICK_OPEN_CLASS,
-      render(row) {
-        return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
+      render(row: AssetInterface) {
+        return h(resolveComponent('TableEllipsis'), { text: row.admin }, '');
+      },
+    },
+    {
+      key: 'issuer',
+      title: t('form.label.assetHub.issuerAddress'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row: AssetInterface) {
+        return h(resolveComponent('TableEllipsis'), { text: row.issuer }, '');
+      },
+    },
+    {
+      key: 'freezer',
+      title: t('form.label.assetHub.freezerAddress'),
+      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row: AssetInterface) {
+        return h(resolveComponent('TableEllipsis'), { text: row.freezer }, '');
       },
     },
     {
       key: 'status',
       title: t('general.status'),
       render(row) {
-        return h(resolveComponent('GrillChatStatus'), { status: row.status }, '');
+        return row.status;
       },
     },
     {
@@ -103,13 +122,14 @@ const columns = computed<NDataTableColumns<AssetInterface>>(() => {
   ];
 });
 
-const rowKey = (row: AssetInterface) => row.postId;
-const currentRow = ref<AssetInterface | null>(null);
-const expandedRows = ref<Array<string | number>>([]);
-
-const rowClassName = (row: AssetInterface) => {
-  return currentRow.value && currentRow.value?.postId === row.postId ? 'selected-row' : '';
-};
+/** Data: filtered files */
+const data = computed<AssetInterface[]>(() => {
+  return (
+    assetHubStore.items.filter(item =>
+      item.name.toLocaleLowerCase().includes(assetHubStore.search.toLocaleLowerCase())
+    ) || []
+  );
+});
 
 /** On row click */
 const rowProps = (row: AssetInterface) => {
@@ -118,7 +138,7 @@ const rowProps = (row: AssetInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push(`/dashboard/service/asset-hub/${row.uuid}`);
+        router.push(`/dashboard/service/asset-hub/${row.id}`);
       }
     },
   };
@@ -130,30 +150,14 @@ const rowProps = (row: AssetInterface) => {
 const dropdownOptions = [
   {
     key: 'view',
-    label: t('social.post.select'),
+    label: t('dashboard.service.assetHub.select'),
     props: {
       onClick: () => {
-        router.push(`/dashboard/service/asset-hub/${currentRow.value?.uuid}`);
+        router.push(`/dashboard/service/asset-hub/${currentRow.value?.id}`);
       },
     },
   },
 ];
 
 onMounted(() => {});
-
-/** Search posts */
-watch(
-  () => assetHubStore.search,
-  _ => {
-    assetHubStore.loading = true;
-    debouncedSearchFilter();
-  }
-);
-const debouncedSearchFilter = debounce(handlePageChange, 500);
-
-/** On page change, load data */
-async function handlePageChange(page: number) {
-  await assetHubStore.getAssets(page);
-  assetHubStore.pagination.page = page;
-}
 </script>

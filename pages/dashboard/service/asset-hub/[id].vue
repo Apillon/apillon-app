@@ -1,7 +1,10 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderAssetHub to="/dashboard/service/asset-hub/" :title="`Asset `" />
+      <HeaderAssetHub
+        back-link="/dashboard/service/asset-hub/"
+        :title="`Asset ${assetHubStore.active.name}`"
+      />
     </template>
 
     <div class="pb-8">
@@ -21,7 +24,7 @@
                 <TableEllipsis
                   v-else-if="data.copy"
                   class="w-full justify-between"
-                  :text="data.value"
+                  :text="`${data.value}`"
                 />
                 <span v-else>{{ data.value }}</span>
               </td>
@@ -83,7 +86,7 @@ onMounted(() => {
 });
 
 watch(
-  () => assetHubStore.accountConnected,
+  () => assetHubStore.account,
   () => {
     initAssetData(assetId.value);
   }
@@ -91,7 +94,6 @@ watch(
 
 async function initAssetData(assetId: number) {
   const data = await assetHubStore.getAsset(assetId);
-  console.log(data);
 
   assetData.value = [
     { label: t('form.label.assetHub.network'), value: '' },

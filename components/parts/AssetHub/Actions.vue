@@ -2,7 +2,7 @@
   <div class="card-border p-4 flex flex-col gap-2 rounded-lg">
     <h4>{{ $t('general.actions') }}</h4>
 
-    <div v-if="!assetHubStore.accountConnected">
+    <div v-if="!assetHubStore.account">
       <Btn type="primary" :loading="loadingWallet" @click="modalWalletSelectVisible = true">
         {{ $t('dashboard.service.assetHub.connectWallet') }}
       </Btn>

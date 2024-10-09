@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { defineStore } from 'pinia';
+import Id from '~/pages/dashboard/service/asset-hub/[id].vue';
 
 export type AssetInterface = {
   id: number;
@@ -23,7 +24,7 @@ export type AssetInterface = {
 
 export const useAssetHubStore = defineStore('assetHub', {
   state: () => ({
-    account: {} as WalletAccount,
+    account: null as WalletAccount | null | undefined,
     active: {} as AssetInterface,
     items: [] as AssetInterface[],
     loading: false,
@@ -32,12 +33,10 @@ export const useAssetHubStore = defineStore('assetHub', {
   }),
   getters: {
     accountConnected(state): boolean {
-      return state.account && !!state.account?.address;
+      return !!state.account && !!state.account?.address;
     },
     hasAssets(state): boolean {
-      return (
-        !!state.search || state.loading || (Array.isArray(state.items) && state.items.length > 0)
-      );
+      return Array.isArray(state.items) && state.items.length > 0;
     },
   },
   actions: {
@@ -50,9 +49,7 @@ export const useAssetHubStore = defineStore('assetHub', {
 
     async initClient(rpc = assetHubNetworks.westend.rpc) {
       if (!this.account) {
-        const { t } = useI18n();
-        const { warning } = useMessage();
-        warning(t('dashboard.service.assetHub.connect'));
+        window.$message.warning(window.$i18n.t('dashboard.service.assetHub.connect'));
         return;
       }
       await cryptoWaitReady();
@@ -65,7 +62,7 @@ export const useAssetHubStore = defineStore('assetHub', {
      */
     async getAssets(): Promise<AssetInterface[]> {
       if (!this.hasAssets || isCacheExpired(LsCacheKeys.ASSETS)) {
-        return await this.fetchAssets();
+        this.items = await this.fetchAssets();
       }
       return this.items;
     },
@@ -88,21 +85,34 @@ export const useAssetHubStore = defineStore('assetHub', {
 
       const loadedAssets = await assetHubClient.getAssets();
       const assets: AssetInterface[] = [];
+      const promises: Array<Promise<any>> = [];
 
-      loadedAssets.forEach(async asset => {
+      const prepareAssetData = async asset => {
         const id = Number(asset[0].toHuman()?.toLocaleString().replaceAll(',', ''));
         const metadata = await assetHubClient.getAssetMetadata(id);
 
         assets.push(
           Object.assign({ id }, asset[1].toHuman(), metadata.toHuman()) as AssetInterface
         );
+      };
+
+      loadedAssets.forEach(asset => {
+        promises.push(prepareAssetData(asset));
+      });
+      await Promise.all(promises).then(_ => {
+        this.loading = false;
       });
 
-      this.loading = false;
+      /** Save timestamp to SS */
+      sessionStorage.setItem(LsCacheKeys.ASSETS, Date.now().toString());
+
       return assets;
     },
 
     async fetchAsset(assetId: number): Promise<AssetInterface> {
+      const asset = this.items.find(i => i.id === assetId);
+      if (asset) return asset;
+
       const assetHubClient = await this.initClient();
       if (!assetHubClient || !this.accountConnected) return {} as AssetInterface;
 
@@ -117,6 +127,6 @@ export const useAssetHubStore = defineStore('assetHub', {
     key: SessionKeys.ASSET_HUB,
     storage: persistedState.sessionStorage,
     paths: ['account', 'items'],
-    debug: true,
-  },
+    // debug: true,
+  } as any,
 });

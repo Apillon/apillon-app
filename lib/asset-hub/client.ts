@@ -41,7 +41,6 @@ export class AssetHubClient {
   }
 
   private async signAndSend(tx: SubmittableExtrinsic<'promise'>) {
-    console.log(this.account);
     const signedTx = await tx.signAsync(this.account.address, {
       signer: this.account.signer,
       nonce: -1,
@@ -60,7 +59,6 @@ export class AssetHubClient {
         timeout(async () => {
           await transaction
             .send((result, extra) => {
-              // console.log('result', result.status.toString());
               if (result.status.isInBlock) {
                 const error = decodeError(result);
                 if (error) {

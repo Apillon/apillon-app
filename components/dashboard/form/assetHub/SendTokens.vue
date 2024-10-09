@@ -85,7 +85,7 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function sendTokens() {
-  if (!assetHubStore.accountConnected) {
+  if (!assetHubStore.account) {
     message.warning(t('dashboard.service.assetHub.connect'));
     return;
   }

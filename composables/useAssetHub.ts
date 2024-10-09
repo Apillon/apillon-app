@@ -9,6 +9,8 @@ export const assetHubNetworks = {
   },
 };
 
+const connectedAccount = ref<WalletInfo | undefined>();
+
 export default function assetHub() {
   const { t } = useI18n();
   const { error, success } = useMessage();
@@ -19,6 +21,27 @@ export default function assetHub() {
   const loadingWallet = ref<boolean>(false);
   const modalWalletSelectVisible = ref<boolean>(false);
 
+  onMounted(() => {
+    reconnectWallet();
+  });
+
+  async function reconnectWallet() {
+    if (assetHubStore?.account?.address && assetHubStore?.account?.wallet) {
+      const wallet = getWallets().find(w => w.title === assetHubStore.account?.wallet?.title);
+
+      if (wallet && wallet.installed) {
+        authStore.setWallet(wallet);
+
+        assetHubStore.account = authStore.wallet.accounts.find(
+          acc => acc.address === assetHubStore.account?.address
+        );
+      } else {
+        assetHubStore.account = assetHubStore.account;
+      }
+    } else {
+      assetHubStore.account = null;
+    }
+  }
   async function walletConnect(account: WalletAccount) {
     loadingWallet.value = true;
 

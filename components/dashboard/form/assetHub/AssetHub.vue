@@ -192,7 +192,7 @@ const networks = computed(() =>
 );
 
 onMounted(() => {
-  if (!assetHubStore.accountConnected) {
+  if (!assetHubStore.account) {
     router.push({ name: 'dashboard-service-asset-hub' });
   }
 });
@@ -212,7 +212,7 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createAsset() {
-  if (!assetHubStore.accountConnected) {
+  if (!assetHubStore.account) {
     message.warning(t('dashboard.service.assetHub.connect'));
     return;
   }
