@@ -68,6 +68,7 @@ export default function useRefreshStatus() {
     }
 
     if (deployments.job.progress >= 100 || finished) {
+      deployments.job.progress = 100;
       await sleep(1000);
       deployments.job.interval = null;
       deployments.job.progress = 0;
@@ -98,8 +99,12 @@ export default function useRefreshStatus() {
 
   function setDeploymentStatus(type: IntervalType, title: string) {
     deployments[type].title = title;
-    setInterval(() => {
-      deployments[type].progress = calcProgress(deployments[type].progress, 0.1);
+    const progressInterval = setInterval(() => {
+      if (deployments[type].progress >= 100) {
+        clearInterval(progressInterval);
+      } else {
+        deployments[type].progress = calcProgress(deployments[type].progress, 0.1);
+      }
     }, 100);
   }
   function updateDeploymentStatus(type: IntervalType, title: string) {
