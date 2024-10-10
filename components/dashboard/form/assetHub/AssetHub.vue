@@ -1,5 +1,6 @@
 <template>
   <n-form
+    v-bind="$attrs"
     ref="formRef"
     :model="formData"
     :class="{ 'form-errors': formErrors }"
@@ -19,6 +20,7 @@
           :options="networks"
           :input-props="{ id: 'chainId' }"
           :placeholder="$t('form.placeholder.assetHub.network')"
+          :disabled="!!assetId"
           required
           clearable
         />
@@ -59,6 +61,7 @@
           clearable
           class="bg-bg-light rounded-lg"
           :min="0"
+          :disabled="!!assetId"
           @keydown.enter.prevent
         />
       </n-form-item>
@@ -73,6 +76,8 @@
           clearable
           class="bg-bg-light rounded-lg"
           :min="0"
+          :max="16"
+          :step="1"
           @keydown.enter.prevent
         />
       </n-form-item>
@@ -88,6 +93,8 @@
           clearable
           class="bg-bg-light rounded-lg"
           :min="0"
+          :step="1"
+          :disabled="!!assetId"
           @keydown.enter.prevent
         />
       </n-form-item>
@@ -102,6 +109,8 @@
           clearable
           class="bg-bg-light rounded-lg"
           :min="0"
+          :step="1"
+          :disabled="!!assetId"
           @keydown.enter.prevent
         />
       </n-form-item>
@@ -134,10 +143,18 @@
       <input type="submit" class="hidden" :value="$t('dashboard.service.assetHub.create')" />
 
       <Btn type="primary" size="large" :loading="loading" @click="handleSubmit">
-        {{ $t('dashboard.service.assetHub.create') }}
+        <span v-if="assetId">{{ $t('dashboard.service.assetHub.edit') }}</span>
+        <span v-else>{{ $t('dashboard.service.assetHub.create') }}</span>
       </Btn>
     </n-form-item>
   </n-form>
+
+  <AssetHubTransaction
+    v-if="transactionHash"
+    :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
+    @close="$emit('close')"
+  />
+  <AssetHubLoader v-if="loading" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
@@ -153,15 +170,20 @@ type FormAsset = {
   freezerAddress: string | null;
 };
 
-const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
+const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'close']);
+const props = defineProps({
+  assetId: { type: Number, default: null },
+});
+
 const { t } = useI18n();
-const router = useRouter();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
 
 const loading = ref(false);
+const asset = ref<AssetInterface | undefined>();
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
+const transactionHash = ref<string | undefined>();
 
 const rules: NFormRules = {
   network: ruleRequired('Network is required'),
@@ -191,9 +213,21 @@ const networks = computed(() =>
   Object.values(assetHubNetworks).map(network => ({ label: network.name, value: network.rpc }))
 );
 
-onMounted(() => {
-  if (!assetHubStore.account) {
-    router.push({ name: 'dashboard-service-asset-hub' });
+onMounted(async () => {
+  if (props.assetId) {
+    asset.value = await assetHubStore.getAsset(props.assetId);
+
+    if (asset.value) {
+      formData.value.assetId = props.assetId;
+      formData.value.decimals = Number(asset.value.decimals);
+      formData.value.freezerAddress = asset.value.freezer;
+      formData.value.initialSupply = Number(asset.value.supply);
+      formData.value.issuerAddress = asset.value.issuer;
+      formData.value.minBalance = Number(asset.value.minBalance);
+      formData.value.name = asset.value.name;
+      formData.value.network = assetHubNetworks.westend.rpc;
+      formData.value.symbol = asset.value.symbol;
+    }
   }
 });
 
@@ -205,6 +239,18 @@ function handleSubmit(e: Event | MouseEvent) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
+    } else if (props.assetId && asset.value) {
+      if (
+        formData.value.name === asset.value.name &&
+        formData.value.symbol === asset.value.symbol &&
+        formData.value.decimals === Number(asset.value.decimals) &&
+        formData.value.freezerAddress === asset.value.freezer &&
+        formData.value.issuerAddress === asset.value.issuer
+      ) {
+        message.warning('No changes');
+      } else {
+        updateAsset();
+      }
     } else {
       createAsset();
     }
@@ -241,7 +287,7 @@ async function createAsset() {
       admin: assetHubStore.account.address,
       freezer: formData.value.freezerAddress,
     };
-    const hash = await assetHubClient.createAsset(
+    transactionHash.value = await assetHubClient.createAsset(
       assetHubStore.account.address,
       formData.value.assetId,
       formData.value.name,
@@ -255,7 +301,73 @@ async function createAsset() {
 
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess', hash);
+    emit('createSuccess', transactionHash.value);
+  } catch (error: any) {
+    if (error?.message) {
+      message.error(error?.message);
+    } else {
+      message.error(userFriendlyMsg(error));
+    }
+  } finally {
+    assetHubClient.destroyInstance();
+  }
+  loading.value = false;
+}
+
+async function updateAsset() {
+  if (!assetHubStore.account) {
+    message.warning(t('dashboard.service.assetHub.connect'));
+    return;
+  }
+  if (
+    !asset.value ||
+    !formData.value.network ||
+    !formData.value.assetId ||
+    !formData.value.name ||
+    !formData.value.symbol ||
+    !formData.value.decimals ||
+    !formData.value.issuerAddress ||
+    !formData.value.freezerAddress
+  ) {
+    message.warning('Missing data');
+    return;
+  }
+  loading.value = true;
+
+  const assetHubClient = await AssetHubClient.getInstance(
+    formData.value.network,
+    assetHubStore.account
+  );
+  try {
+    if (
+      formData.value.name !== asset.value.name ||
+      formData.value.symbol !== asset.value.symbol ||
+      formData.value.decimals !== Number(asset.value.decimals)
+    ) {
+      transactionHash.value = await assetHubClient.updateMetadata(
+        props.assetId,
+        formData.value.name,
+        formData.value.symbol,
+        formData.value.decimals
+      );
+    }
+    if (
+      formData.value.freezerAddress !== asset.value.freezer ||
+      formData.value.issuerAddress !== asset.value.issuer
+    ) {
+      transactionHash.value = await assetHubClient.updateTeam(
+        props.assetId,
+        formData.value.issuerAddress,
+        assetHubStore.account.address,
+        formData.value.freezerAddress
+      );
+    }
+
+    message.success(t('form.success.updated.asset'));
+
+    /** Emit events */
+    emit('submitSuccess');
+    emit('createSuccess', transactionHash.value);
   } catch (error: any) {
     if (error?.message) {
       message.error(error?.message);

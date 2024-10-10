@@ -1,3 +1,5 @@
+import { cryptoWaitReady } from '@polkadot/util-crypto';
+
 export const assetHubNetworks = {
   polkadot: {
     name: 'Polkadot',
@@ -15,33 +17,47 @@ export default function assetHub() {
   const { t } = useI18n();
   const { error, success } = useMessage();
   const authStore = useAuthStore();
+  const dataStore = useDataStore();
   const assetHubStore = useAssetHubStore();
   const { getMessageSignature } = useProvider();
 
+  const pageLoading = ref<boolean>(true);
   const loadingWallet = ref<boolean>(false);
   const modalWalletSelectVisible = ref<boolean>(false);
 
-  onMounted(() => {
-    reconnectWallet();
-  });
+  async function initAssetHub() {
+    await sleep(10);
+    Promise.all(Object.values(dataStore.promises)).then(async _ => {
+      await assetHubStore.getAssets();
+      pageLoading.value = false;
+    });
+  }
 
   async function reconnectWallet() {
+    await sleep(200);
     if (assetHubStore?.account?.address && assetHubStore?.account?.wallet) {
-      const wallet = getWallets().find(w => w.title === assetHubStore.account?.wallet?.title);
+      await cryptoWaitReady();
 
+      const wallet = getWallets().find(w => w.title === assetHubStore.account?.wallet?.title);
       if (wallet && wallet.installed) {
+        await sleep(200);
         authStore.setWallet(wallet);
 
         assetHubStore.account = authStore.wallet.accounts.find(
           acc => acc.address === assetHubStore.account?.address
         );
       } else {
-        assetHubStore.account = assetHubStore.account;
+        assetHubStore.account = null;
       }
+    } else if (authStore.wallet.address && authStore.wallet.accounts.length > 0) {
+      assetHubStore.account = authStore.wallet.accounts.find(
+        acc => acc.address === authStore.wallet.address
+      );
     } else {
       assetHubStore.account = null;
     }
   }
+
   async function walletConnect(account: WalletAccount) {
     loadingWallet.value = true;
 
@@ -62,6 +78,9 @@ export default function assetHub() {
   return {
     loadingWallet,
     modalWalletSelectVisible,
+    pageLoading,
+    initAssetHub,
+    reconnectWallet,
     walletConnect,
   };
 }

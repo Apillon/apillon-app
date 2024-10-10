@@ -26,7 +26,7 @@
       <n-button
         size="small"
         :disabled="authStore.isAdmin()"
-        :to="{ name: 'dashboard-service-asset-hub-new' }"
+        @click="$router.push({ name: 'dashboard-service-asset-hub-new' })"
       >
         <span class="icon-create-folder text-xl text-primary mr-2"></span>
         <span class="text-primary">{{ $t('dashboard.service.assetHub.new') }}</span>

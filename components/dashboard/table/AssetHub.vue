@@ -12,15 +12,28 @@
     :row-key="rowKey"
     :row-props="rowProps"
   />
+
+  <!-- Modal - Edit asst -->
+  <modal v-model:show="modalEditVisible" :title="$t('dashboard.service.assetHub.edit')">
+    <FormAssetHub
+      v-if="currentRow?.id"
+      :asset-id="currentRow?.id"
+      @close="modalEditVisible = false"
+    />
+  </modal>
 </template>
 
 <script lang="ts" setup>
 import { NButton, NDropdown } from 'naive-ui';
 
+const props = defineProps({
+  owned: { type: Boolean, default: false },
+});
 const { t } = useI18n();
 const router = useRouter();
 const assetHubStore = useAssetHubStore();
 
+const modalEditVisible = ref<boolean>(false);
 const currentRow = ref<AssetInterface | null>(null);
 const expandedRows = ref<Array<string | number>>([]);
 const rowKey = (row: AssetInterface) => row.id;
@@ -100,23 +113,25 @@ const columns = computed<NDataTableColumns<AssetInterface>>(() => {
       key: 'actions',
       title: '',
       align: 'right',
-      className: '!py-0 !sticky right-0',
+      className: ['!py-0 !sticky right-0', { hidden: !props.owned }],
       render() {
-        return h(
-          NDropdown,
-          {
-            options: dropdownOptions,
-            trigger: 'click',
-          },
-          {
-            default: () =>
-              h(
-                NButton,
-                { type: 'tertiary', size: 'small', quaternary: true, round: true },
-                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
-              ),
-          }
-        );
+        if (props.owned) {
+          return h(
+            NDropdown,
+            {
+              options: dropdownOptions,
+              trigger: 'click',
+            },
+            {
+              default: () =>
+                h(
+                  NButton,
+                  { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                  { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
+                ),
+            }
+          );
+        }
       },
     },
   ];
@@ -124,10 +139,13 @@ const columns = computed<NDataTableColumns<AssetInterface>>(() => {
 
 /** Data: filtered files */
 const data = computed<AssetInterface[]>(() => {
-  return (
-    assetHubStore.items.filter(item =>
+  if (props.owned) {
+    return assetHubStore.items.filter(item => item.admin === assetHubStore.account?.address);
+  }
+  return assetHubStore.items.filter(
+    item =>
+      item.admin !== assetHubStore.account?.address &&
       item.name.toLocaleLowerCase().includes(assetHubStore.search.toLocaleLowerCase())
-    ) || []
   );
 });
 
@@ -153,7 +171,20 @@ const dropdownOptions = [
     label: t('dashboard.service.assetHub.select'),
     props: {
       onClick: () => {
-        router.push(`/dashboard/service/asset-hub/${currentRow.value?.id}`);
+        if (props.owned) {
+          router.push(`/dashboard/service/asset-hub/${currentRow.value?.id}`);
+        }
+      },
+    },
+  },
+  {
+    key: 'edit',
+    label: t('dashboard.service.assetHub.edit'),
+    props: {
+      onClick: () => {
+        if (props.owned) {
+          modalEditVisible.value = true;
+        }
       },
     },
   },

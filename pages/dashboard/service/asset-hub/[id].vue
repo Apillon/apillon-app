@@ -64,25 +64,25 @@ type AssetData = SelectOption & {
 };
 
 const { t } = useI18n();
+const router = useRouter();
 const { params } = useRoute();
-const dataStore = useDataStore();
 const assetHubStore = useAssetHubStore();
+const { pageLoading, initAssetHub, reconnectWallet } = useAssetHub();
 
 useHead({
   title: t('dashboard.nav.assetHub'),
 });
 
-const pageLoading = ref<boolean>(true);
 const assetId = ref<number>(Number(params?.id));
 const assetData = ref<AssetData[]>([]);
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await initAssetData(assetId.value);
-      pageLoading.value = false;
-    });
-  }, 100);
+onMounted(async () => {
+  await initAssetHub();
+  await reconnectWallet();
+
+  if (!assetHubStore.account) {
+    router.push({ name: 'dashboard-service-asset-hub' });
+  }
 });
 
 watch(

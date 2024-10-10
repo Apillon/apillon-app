@@ -20,6 +20,8 @@
 
       <n-space v-else-if="assetHubStore.hasAssets" class="pb-8" :size="32" vertical>
         <ActionsAssetHub />
+        <TableAssetHub owned />
+        <h4 class="mt-8 mb-4">{{ $t('dashboard.service.assetHub.otherAssets') }}</h4>
         <TableAssetHub />
       </n-space>
 
@@ -44,30 +46,30 @@
 </template>
 <script lang="ts" setup>
 const { t } = useI18n();
-const dataStore = useDataStore();
 const assetHubStore = useAssetHubStore();
-const { loadingWallet, modalWalletSelectVisible, walletConnect } = useAssetHub();
-
-const pageLoading = ref<boolean>(true);
+const {
+  loadingWallet,
+  modalWalletSelectVisible,
+  pageLoading,
+  initAssetHub,
+  reconnectWallet,
+  walletConnect,
+} = useAssetHub();
 
 useHead({
   title: t('dashboard.nav.assetHub'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await assetHubStore.getAssets();
-      pageLoading.value = false;
-    });
-  }, 10);
+onMounted(async () => {
+  await initAssetHub();
+  await reconnectWallet();
 });
 
 watch(
   () => assetHubStore.account,
   () => {
     if (assetHubStore.account) {
-      // assetHubStore.getAssets();
+      assetHubStore.getAssets();
     }
   }
 );
