@@ -35,8 +35,8 @@
         <thead>
           <tr>
             <th>
-              <template v-if="service">
-                {{ $t(`dashboard.credits.services.${service}.name`) }}
+              <template v-if="service || category">
+                {{ $t(`dashboard.credits.services.${service || category}.name`) }}
               </template>
               <template v-else> {{ $t('dashboard.credits.serviceDescription') }} </template>
             </th>
@@ -70,6 +70,7 @@ import { ServiceTypeName } from '~/lib/types/service';
 
 const props = defineProps({
   chain: { type: Number, default: null },
+  category: { type: String, default: null },
   service: { type: String, default: null },
   filterByChain: { type: Boolean, default: false },
   filterByService: { type: Boolean, default: false },
@@ -91,9 +92,11 @@ onMounted(async () => {
     selectedChain.value = props.chain || collectionStore.form.base.chain || Chains.MOONBEAM;
   }
 
-  servicePrices.value = props.service
-    ? await paymentStore.getServicePrices(props.service)
-    : await paymentStore.getPriceList();
+  servicePrices.value = props.category
+    ? await paymentStore.getServicePricesByCategory(props.category)
+    : props.service
+      ? await paymentStore.getServicePrices(props.service)
+      : await paymentStore.getPriceList();
 
   /** Sort by category (chain name) */
   servicePrices.value.sort((a, b) =>
@@ -161,6 +164,8 @@ function getChainName(chain: string | number, service?: string): string {
 
 function getIconName(service: ProductPriceInterface) {
   switch (service.category) {
+    case PriceServiceCategory.ACURAST:
+      return 'icon/cloud-functions';
     case PriceServiceCategory.ASTAR_NFT:
       return 'logo/astar';
     case PriceServiceCategory.MOONBASE_NFT:
