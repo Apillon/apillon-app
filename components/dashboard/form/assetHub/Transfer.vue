@@ -35,7 +35,7 @@
     :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
     @close="$emit('close')"
   />
-  <AssetHubLoader v-if="loading" class="z-3000" />
+  <AssetHubLoader v-if="loading && assetHubClient.txApproved" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
@@ -51,6 +51,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
+const { assetHubClient, initClient } = useAssetHub();
 
 const loading = ref(false);
 const transactionHash = ref<string | undefined>();
@@ -62,6 +63,10 @@ const formData = ref<FormAssetTransfer>({
 const rules: NFormRules = {
   address: ruleRequired(t('validation.assetHub.addressRequired')),
 };
+
+onMounted(() => {
+  initClient();
+});
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -84,12 +89,8 @@ async function transfer() {
   }
   loading.value = true;
 
-  const assetHubClient = await AssetHubClient.getInstance(
-    assetHubNetworks.westend.rpc,
-    assetHubStore.account
-  );
   try {
-    transactionHash.value = await assetHubClient.transferOwnership(
+    transactionHash.value = await assetHubClient.value.transferOwnership(
       props.assetId,
       formData.value.address
     );
@@ -107,7 +108,7 @@ async function transfer() {
       message.error(userFriendlyMsg(error));
     }
   } finally {
-    assetHubClient.destroyInstance();
+    assetHubClient.value.destroyInstance();
   }
   loading.value = false;
 }

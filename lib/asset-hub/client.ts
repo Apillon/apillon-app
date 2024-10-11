@@ -10,10 +10,12 @@ export class AssetHubClient {
 
   private api: ApiPromise;
   private readonly account: WalletAccount;
+  public txApproved: Boolean;
 
   private constructor(api: ApiPromise, account: WalletAccount) {
     this.api = api;
     this.account = account;
+    this.txApproved = false;
   }
 
   static async getInstance(rpcEndpoint: string, account: WalletAccount) {
@@ -45,6 +47,7 @@ export class AssetHubClient {
       signer: this.account.signer,
       nonce: -1,
     });
+    this.txApproved = true;
 
     return await this.sendAsync(signedTx);
   }
@@ -156,6 +159,10 @@ export class AssetHubClient {
     const result = await this.api.query.assets.asset(id);
 
     return result.isEmpty ? null : result.unwrap();
+  }
+
+  async getNextId() {
+    return await this.api.query.assetConversion.nextPoolAssetId();
   }
 
   // TRANSACTIONS

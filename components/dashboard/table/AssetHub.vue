@@ -35,6 +35,7 @@ const currentRow = ref<AssetInterface | null>(null);
 const rowKey = (row: AssetInterface) => row.id;
 
 const availableColumns = ref([
+  { value: 'id', label: t('form.label.assetHub.assetId') },
   { value: 'name', label: t('form.label.assetHub.name') },
   { value: 'symbol', label: t('form.label.assetHub.symbol') },
   { value: 'decimals', label: t('form.label.assetHub.decimals') },
@@ -50,6 +51,14 @@ const availableColumns = ref([
 
 const columns = computed<NDataTableColumns<AssetInterface>>(() => {
   return [
+    {
+      key: 'id',
+      title: t('form.label.assetHub.assetId'),
+      className: [
+        { hidden: !selectedColumns.value.includes('id') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
+    },
     {
       key: 'name',
       title: t('form.label.assetHub.name'),
