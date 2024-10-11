@@ -101,6 +101,16 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
+      key: 'dashboard-service-asset-hub',
+      label: t('dashboard.nav.assetHub'),
+      to: 'dashboard-service-asset-hub',
+      iconName: 'icon-social',
+      disabled:
+        isMenuItemDisabled(Feature.ASSET_HUB) ||
+        !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
+        zeroProjects.value,
+    },
+    {
       key: 'dashboard-service-computing',
       label: t('dashboard.nav.computing'),
       to: 'dashboard-service-computing',

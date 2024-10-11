@@ -25,6 +25,7 @@ export const LS_KEYS = {
 };
 
 export const SessionKeys = {
+  ASSET_HUB: 'al_asset_hub',
   CREDITS_MSG: 'al_credits_msg',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',
@@ -59,6 +60,8 @@ export const LsW3WarnKeys = {
 
 export const LsCacheKeys = {
   API_KEYS: 'al_cache_api_keys',
+  ASSET: 'al_cache_asset',
+  ASSETS: 'al_cache_assets',
   BUCKET: 'al_cache_bucket',
   BUCKETS: 'al_cache_buckets',
   BUCKET_ITEMS: 'al_cache_bucket_items',
