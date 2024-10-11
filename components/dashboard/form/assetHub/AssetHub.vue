@@ -244,13 +244,17 @@ onMounted(async () => {
 
 // Custom validations
 function validateAssetId(_: FormItemRule, value: string): boolean {
-  return assetHubStore.items.some(i => i.id === Number(value)) === undefined;
+  return !!props.assetId || assetHubStore.items.some(i => i.id === Number(value)) === undefined;
 }
 function validateName(_: FormItemRule, value: string): boolean {
-  return assetHubStore.items.some(i => i.name.toLowerCase() === value.toLowerCase()) === undefined;
+  return (
+    !!props.assetId ||
+    assetHubStore.items.some(i => i.name.toLowerCase() === value.toLowerCase()) === undefined
+  );
 }
 function validateSymbol(_: FormItemRule, value: string): boolean {
   return (
+    !!props.assetId ||
     assetHubStore.items.some(i => i.symbol.toLowerCase() === value.toLowerCase()) === undefined
   );
 }
@@ -365,6 +369,9 @@ async function updateAsset() {
       formData.value.symbol,
       formData.value.decimals
     );
+    assetHubStore.active.name = formData.value.name;
+    assetHubStore.active.symbol = formData.value.symbol;
+    assetHubStore.active.decimals = `${formData.value.decimals}`;
 
     message.success(t('form.success.updated.asset'));
 
