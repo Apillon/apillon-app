@@ -11,6 +11,21 @@ export const assetHubNetworks = {
   },
 };
 
+/** Available columns - show/hide column */
+const selectedColumns = ref([
+  'name',
+  'symbol',
+  'decimals',
+  'supply',
+  'minBalance',
+  'deposit',
+  'owner',
+  'admin',
+  'issuer',
+  'freezer',
+  'status',
+]);
+
 export const toNum = (text: string) => Number(text.replaceAll(',', ''));
 
 export default function assetHub() {
@@ -79,6 +94,7 @@ export default function assetHub() {
     loadingWallet,
     modalWalletSelectVisible,
     pageLoading,
+    selectedColumns,
     initAssetHub,
     reconnectWallet,
     walletConnect,

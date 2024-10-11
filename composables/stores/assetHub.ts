@@ -29,7 +29,6 @@ export const useAssetHubStore = defineStore('assetHub', {
     items: [] as AssetInterface[],
     loading: false,
     search: '',
-    pagination: createPagination(),
   }),
   getters: {
     accountConnected(state): boolean {
@@ -49,8 +48,6 @@ export const useAssetHubStore = defineStore('assetHub', {
   actions: {
     resetData() {
       this.items = [] as AssetInterface[];
-      this.pagination.page = 1;
-      this.pagination.itemCount = 0;
       this.search = '';
     },
 

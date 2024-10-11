@@ -240,6 +240,11 @@ onMounted(() => {
   if (spaceId && postId && !props.archive) {
     postStore.updateSettings(`${spaceId}`, `${postId}`);
   }
+
+  /** Check if selected columns are stored in LS */
+  if (localStorage.getItem(LsTableColumnsKeys.SOCIAL_POST)) {
+    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.SOCIAL_POST) || '');
+  }
 });
 
 /** Search posts */
