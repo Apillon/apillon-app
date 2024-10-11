@@ -16,7 +16,7 @@
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts v-if="!archive" :service="ServiceTypeName.COMPUTING" />
+      <ModalCreditCosts v-if="!archive" :category="PriceServiceCategory.ACURAST" />
 
       <!-- Refresh cloudFunctions -->
       <n-button
