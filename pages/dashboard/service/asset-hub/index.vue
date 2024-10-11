@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderAssetHub />
+      <HeaderAssetHub :title="$t('dashboard.nav.assetHub')" />
     </template>
     <slot>
       <div

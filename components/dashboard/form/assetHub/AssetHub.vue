@@ -7,7 +7,7 @@
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
-    <div class="bg-bg-lighter rounded-lg p-8 pb-2 mb-4">
+    <div class="bg-bg-lighter rounded-lg p-8 pb-2 mb-4" :class="{ hidden: !!assetId }">
       <n-form-item
         :span="6"
         :label-props="{ for: 'chainId' }"
@@ -26,7 +26,9 @@
       </n-form-item>
     </div>
 
-    <p class="text-white font-bold mb-4">{{ $t('dashboard.service.assetHub.characteristics') }}</p>
+    <p class="text-white font-bold mb-4" :class="{ hidden: !!assetId }">
+      {{ $t('dashboard.service.assetHub.characteristics') }}
+    </p>
     <div class="bg-bg-lighter rounded-lg p-8">
       <n-form-item :label="$t('form.label.assetHub.name')" path="name">
         <n-input
@@ -51,6 +53,7 @@
 
       <n-form-item
         class="bg-bg-lighter rounded-lg"
+        :class="{ hidden: !!assetId }"
         :label="$t('form.label.assetHub.assetId')"
         path="assetId"
       >
@@ -83,6 +86,7 @@
 
       <n-form-item
         class="bg-bg-lighter rounded-lg"
+        :class="{ hidden: !!assetId }"
         :label="$t('form.label.assetHub.initialSupply')"
         path="initialSupply"
       >
@@ -99,6 +103,7 @@
       </n-form-item>
       <n-form-item
         class="bg-bg-lighter rounded-lg"
+        :class="{ hidden: !!assetId }"
         :label="$t('form.label.assetHub.minBalance')"
         path="minBalance"
       >
@@ -115,7 +120,7 @@
       </n-form-item>
     </div>
 
-    <div class="bg-bg-lighter rounded-lg p-8 mt-4">
+    <div class="bg-bg-lighter rounded-lg p-8 mt-4" :class="{ hidden: !!assetId }">
       <n-form-item :label="$t('form.label.assetHub.issuerAddress')" path="issuerAddress">
         <n-input
           v-model:value="formData.issuerAddress"
@@ -140,7 +145,7 @@
       </n-form-item>
     </div>
 
-    <n-form-item>
+    <n-form-item :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('dashboard.service.assetHub.create')" />
 
       <Btn type="primary" size="large" :loading="loading" @click="handleSubmit">
@@ -155,7 +160,7 @@
     :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
     @close="$emit('close')"
   />
-  <AssetHubLoader v-if="loading" class="z-3000" />
+  <AssetHubLoader v-if="loading && assetHubClient.txApproved" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
@@ -163,14 +168,14 @@ import type { FormItemRule } from 'naive-ui';
 
 type FormAsset = {
   network: string | null;
-  name: string | null;
-  symbol: string | null;
+  name: string;
+  symbol: string;
   assetId: number | null;
   decimals: number | null;
   initialSupply: number | null;
   minBalance: number | null;
-  issuerAddress: string | null;
-  freezerAddress: string | null;
+  issuerAddress: string;
+  freezerAddress: string;
 };
 
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'close']);
@@ -181,6 +186,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
+const { assetHubClient, initClient } = useAssetHub();
 
 const loading = ref(false);
 const asset = ref<AssetInterface | undefined>();
@@ -189,14 +195,14 @@ const transactionHash = ref<string | undefined>();
 
 const formData = ref<FormAsset>({
   network: null,
-  name: null,
-  symbol: null,
+  name: '',
+  symbol: '',
   assetId: null,
   decimals: null,
   initialSupply: null,
   minBalance: null,
-  issuerAddress: null,
-  freezerAddress: null,
+  issuerAddress: assetHubStore.account?.address || '',
+  freezerAddress: assetHubStore.account?.address || '',
 });
 
 const rules: NFormRules = {
@@ -225,6 +231,7 @@ const networks = computed(() =>
 );
 
 onMounted(async () => {
+  initClient();
   if (props.assetId) {
     asset.value = await assetHubStore.getAsset(props.assetId);
     if (asset.value) {
@@ -239,23 +246,37 @@ onMounted(async () => {
       formData.value.symbol = asset.value.symbol;
     }
   }
+
   assetHubStore.getAssets();
 });
 
+watch(
+  () => formData.value.network,
+  async rpc => {
+    if (assetHubClient.value) {
+      assetHubClient.value.destroyInstance();
+    }
+    if (rpc && assetHubStore.account && !formData.value.assetId) {
+      assetHubClient.value = await AssetHubClient.getInstance(rpc, assetHubStore.account);
+      const nextId = await assetHubClient.value.getNextId();
+      formData.value.assetId = toNum(nextId.toHuman()?.toLocaleString() || '') + 1;
+    }
+  }
+);
+
 // Custom validations
 function validateAssetId(_: FormItemRule, value: string): boolean {
-  return !!props.assetId || assetHubStore.items.some(i => i.id === Number(value)) === undefined;
+  return !!props.assetId || !assetHubStore.items.some(i => i.id === Number(value));
 }
 function validateName(_: FormItemRule, value: string): boolean {
   return (
-    !!props.assetId ||
-    assetHubStore.items.some(i => i.name.toLowerCase() === value.toLowerCase()) === undefined
+    !!props.assetId || !assetHubStore.items.some(i => i.name.toLowerCase() === value.toLowerCase())
   );
 }
 function validateSymbol(_: FormItemRule, value: string): boolean {
   return (
     !!props.assetId ||
-    assetHubStore.items.some(i => i.symbol.toLowerCase() === value.toLowerCase()) === undefined
+    !assetHubStore.items.some(i => i.symbol.toLowerCase() === value.toLowerCase())
   );
 }
 
@@ -291,29 +312,20 @@ async function createAsset() {
   if (
     !formData.value.network ||
     !formData.value.assetId ||
-    !formData.value.name ||
-    !formData.value.symbol ||
     !formData.value.decimals ||
-    !formData.value.minBalance ||
-    !formData.value.issuerAddress ||
-    !formData.value.freezerAddress
+    !formData.value.minBalance
   ) {
     message.warning('Missing data');
     return;
   }
   loading.value = true;
-
-  const assetHubClient = await AssetHubClient.getInstance(
-    formData.value.network,
-    assetHubStore.account
-  );
   try {
     const team = {
       issuer: formData.value.issuerAddress,
       admin: assetHubStore.account.address,
       freezer: formData.value.freezerAddress,
     };
-    transactionHash.value = await assetHubClient.createAsset(
+    transactionHash.value = await assetHubClient.value.createAsset(
       assetHubStore.account.address,
       formData.value.assetId,
       formData.value.name,
@@ -335,7 +347,7 @@ async function createAsset() {
       message.error(userFriendlyMsg(error));
     }
   } finally {
-    assetHubClient.destroyInstance();
+    assetHubClient.value.destroyInstance();
   }
   loading.value = false;
 }
@@ -349,8 +361,6 @@ async function updateAsset() {
     !asset.value ||
     !formData.value.network ||
     !formData.value.assetId ||
-    !formData.value.name ||
-    !formData.value.symbol ||
     !formData.value.decimals
   ) {
     message.warning('Missing data');
@@ -358,12 +368,8 @@ async function updateAsset() {
   }
   loading.value = true;
 
-  const assetHubClient = await AssetHubClient.getInstance(
-    formData.value.network,
-    assetHubStore.account
-  );
   try {
-    transactionHash.value = await assetHubClient.updateMetadata(
+    transactionHash.value = await assetHubClient.value.updateMetadata(
       props.assetId,
       formData.value.name,
       formData.value.symbol,
@@ -385,7 +391,7 @@ async function updateAsset() {
       message.error(userFriendlyMsg(error));
     }
   } finally {
-    assetHubClient.destroyInstance();
+    assetHubClient.value.destroyInstance();
   }
   loading.value = false;
 }

@@ -14,31 +14,48 @@
 
     <template #info>
       <n-space :size="32" align="center" :wrap="false">
-        <ModalCreditCosts :service="ServiceTypeName.WALLET" />
+        <!-- <ModalCreditCosts :service="ServiceTypeName.WALLET" /> -->
 
         <div
-          v-if="isConnected"
+          v-if="assetHubStore.accountConnected"
           class="bg-bg-lighter rounded-xl text-sm px-3 flex gap-2 items-center h-10"
         >
-          <p class="text-bodyDark">{{ truncateWallet(`${address}`) }}</p>
+          <p class="text-bodyDark">{{ truncateWallet(`${assetHubStore.account?.address}`) }}</p>
           <hr class="bg-bg h-full w-[1px] border-bg" />
-          <p class="cursor-pointer text-white" @click="">
+          <p class="cursor-pointer text-white" @click="assetHubStore.account = null">
             {{ $t('general.disconnect') }}
           </p>
+        </div>
+        <div v-else>
+          <Btn
+            type="primary"
+            size="small"
+            :loading="loadingWallet"
+            @click="modalWalletSelectVisible = true"
+          >
+            {{ $t('dashboard.service.assetHub.connectWallet') }}
+          </Btn>
         </div>
       </n-space>
     </template>
   </Heading>
+
+  <!-- Modal - Wallet select -->
+  <modal v-model:show="modalWalletSelectVisible" :title="$t('auth.wallet.connect.title')">
+    <AuthWalletDot
+      :action-text="$t('auth.wallet.connect.btn')"
+      :loading="loadingWallet"
+      @sign="walletConnect"
+    />
+  </modal>
 </template>
 
 <script lang="ts" setup>
-import { useAccount } from 'use-wagmi';
-
 defineProps({
   backLink: { type: String, default: null },
   title: { type: String, default: null },
 });
 
-const { address, isConnected } = useAccount();
-// const { disconnectWallet } = useAssetHub();
+const assetHubStore = useAssetHubStore();
+const { loadingWallet, modalWalletSelectVisible, walletConnect } = useAssetHub();
 </script>

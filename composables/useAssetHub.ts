@@ -1,18 +1,20 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
+import type { AssetHubClient as AssetHubClientType } from '#imports';
 
 export const assetHubNetworks = {
-  polkadot: {
-    name: 'Polkadot',
-    rpc: 'wss://asset-hub-polkadot-rpc.dwellir.com',
-  },
   westend: {
-    name: 'Westend Testnet',
+    name: 'Westend Asset Hub (testnet)',
     rpc: 'wss://asset-hub-westend-rpc.dwellir.com',
+  },
+  polkadot: {
+    name: 'Polkadot Asset Hub (mainnet)',
+    rpc: 'wss://asset-hub-polkadot-rpc.dwellir.com',
   },
 };
 
 /** Available columns - show/hide column */
 const selectedColumns = ref([
+  'id',
   'name',
   'symbol',
   'decimals',
@@ -25,6 +27,7 @@ const selectedColumns = ref([
   'freezer',
   'status',
 ]);
+const assetHubClient = ref({} as AssetHubClientType);
 
 export const toNum = (text: string) => Number(text.replaceAll(',', ''));
 
@@ -40,12 +43,22 @@ export default function assetHub() {
   const loadingWallet = ref<boolean>(false);
   const modalWalletSelectVisible = ref<boolean>(false);
 
+  onUnmounted(() => {
+    assetHubClient.value?.destroyInstance();
+  });
+
   async function initAssetHub() {
     await sleep(10);
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
       await assetHubStore.getAssets();
       pageLoading.value = false;
     });
+  }
+
+  async function initClient(rpc = assetHubNetworks.westend.rpc) {
+    if (assetHubStore.account) {
+      assetHubClient.value = await AssetHubClient.getInstance(rpc, assetHubStore.account);
+    }
   }
 
   async function reconnectWallet() {
@@ -91,11 +104,13 @@ export default function assetHub() {
   }
 
   return {
+    assetHubClient,
     loadingWallet,
     modalWalletSelectVisible,
     pageLoading,
     selectedColumns,
     initAssetHub,
+    initClient,
     reconnectWallet,
     walletConnect,
   };

@@ -19,7 +19,7 @@
         }
       "
     >
-      {{ $t('form.cancel') }}
+      {{ $t('general.close') }}
     </Btn>
   </Modal>
 </template>

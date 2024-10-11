@@ -55,7 +55,7 @@
     :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
     @close="$emit('close')"
   />
-  <AssetHubLoader v-if="loading" class="z-3000" />
+  <AssetHubLoader v-if="loading && assetHubClient.txApproved" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
@@ -72,6 +72,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
+const { assetHubClient, initClient } = useAssetHub();
 
 const loading = ref(false);
 const transactionHash = ref<string | undefined>();
@@ -85,6 +86,10 @@ const rules: NFormRules = {
   address: ruleRequired(t('validation.assetHub.addressRequired')),
   amount: ruleRequired(t('validation.assetHub.amountRequired')),
 };
+
+onMounted(() => {
+  initClient();
+});
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -111,12 +116,8 @@ async function sendTokens() {
   }
   loading.value = true;
 
-  const assetHubClient = await AssetHubClient.getInstance(
-    assetHubNetworks.westend.rpc,
-    assetHubStore.account
-  );
   try {
-    transactionHash.value = await assetHubClient.transfer(
+    transactionHash.value = await assetHubClient.value.transfer(
       props.assetId,
       formData.value.address,
       formData.value.amount
@@ -133,7 +134,7 @@ async function sendTokens() {
       message.error(userFriendlyMsg(error));
     }
   } finally {
-    assetHubClient.destroyInstance();
+    assetHubClient.value.destroyInstance();
   }
   loading.value = false;
 }
