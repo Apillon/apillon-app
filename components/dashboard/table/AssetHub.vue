@@ -4,11 +4,7 @@
     :columns="columns"
     :data="data"
     :loading="assetHubStore.loading"
-    :expanded-row-keys="expandedRows"
-    :pagination="{
-      ...assetHubStore.pagination,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="createPagination(false)"
     :row-key="rowKey"
     :row-props="rowProps"
   />
@@ -32,48 +28,83 @@ const props = defineProps({
 const { t } = useI18n();
 const router = useRouter();
 const assetHubStore = useAssetHubStore();
+const { selectedColumns } = useAssetHub();
 
 const modalEditVisible = ref<boolean>(false);
 const currentRow = ref<AssetInterface | null>(null);
-const expandedRows = ref<Array<string | number>>([]);
 const rowKey = (row: AssetInterface) => row.id;
+
+const availableColumns = ref([
+  { value: 'name', label: t('form.label.assetHub.name') },
+  { value: 'symbol', label: t('form.label.assetHub.symbol') },
+  { value: 'decimals', label: t('form.label.assetHub.decimals') },
+  { value: 'supply', label: t('form.label.assetHub.initialSupply') },
+  { value: 'minBalance', label: t('form.label.assetHub.minBalance') },
+  { value: 'deposit', label: t('form.label.assetHub.deposit') },
+  { value: 'owner', label: t('form.label.assetHub.owner') },
+  { value: 'admin', label: t('form.label.assetHub.admin') },
+  { value: 'issuer', label: t('form.label.assetHub.issuerAddress') },
+  { value: 'freezer', label: t('form.label.assetHub.freezerAddress') },
+  { value: 'status', label: t('general.status') },
+]);
 
 const columns = computed<NDataTableColumns<AssetInterface>>(() => {
   return [
     {
       key: 'name',
       title: t('form.label.assetHub.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { hidden: !selectedColumns.value.includes('name') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
     },
     {
       key: 'symbol',
       title: t('form.label.assetHub.symbol'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { hidden: !selectedColumns.value.includes('symbol') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
     },
     {
       key: 'decimals',
       title: t('form.label.assetHub.decimals'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { hidden: !selectedColumns.value.includes('decimals') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
     },
     {
       key: 'supply',
       title: t('form.label.assetHub.initialSupply'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { hidden: !selectedColumns.value.includes('supply') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
     },
     {
       key: 'minBalance',
       title: t('form.label.assetHub.minBalance'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { hidden: !selectedColumns.value.includes('minBalance') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
     },
     {
       key: 'deposit',
       title: t('form.label.assetHub.deposit'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { hidden: !selectedColumns.value.includes('deposit') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
     },
     {
       key: 'owner',
       title: t('form.label.assetHub.owner'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { hidden: !selectedColumns.value.includes('owner') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
       render(row: AssetInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.owner }, '');
       },
@@ -81,7 +112,10 @@ const columns = computed<NDataTableColumns<AssetInterface>>(() => {
     {
       key: 'admin',
       title: t('form.label.assetHub.admin'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { hidden: !selectedColumns.value.includes('admin') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
       render(row: AssetInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.admin }, '');
       },
@@ -89,7 +123,10 @@ const columns = computed<NDataTableColumns<AssetInterface>>(() => {
     {
       key: 'issuer',
       title: t('form.label.assetHub.issuerAddress'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { hidden: !selectedColumns.value.includes('issuerAddress') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
       render(row: AssetInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.issuer }, '');
       },
@@ -97,7 +134,10 @@ const columns = computed<NDataTableColumns<AssetInterface>>(() => {
     {
       key: 'freezer',
       title: t('form.label.assetHub.freezerAddress'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: [
+        { hidden: !selectedColumns.value.includes('freezerAddress') },
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: props.owned },
+      ],
       render(row: AssetInterface) {
         return h(resolveComponent('TableEllipsis'), { text: row.freezer }, '');
       },
@@ -114,6 +154,22 @@ const columns = computed<NDataTableColumns<AssetInterface>>(() => {
       title: '',
       align: 'right',
       className: ['!py-0 !sticky right-0', { hidden: !props.owned }],
+      filter: 'default',
+      filterOptionValue: null,
+      renderFilterIcon: () => {
+        return h('span', { class: 'icon-more' }, '');
+      },
+      renderFilterMenu: () => {
+        return h(
+          resolveComponent('TableColumns'),
+          {
+            model: selectedColumns.value,
+            columns: availableColumns.value,
+            onColumnChange: handleColumnChange,
+          },
+          ''
+        );
+      },
       render() {
         if (props.owned) {
           return h(
@@ -155,7 +211,7 @@ const rowProps = (row: AssetInterface) => {
     onClick: (e: Event) => {
       currentRow.value = row;
 
-      if (canOpenColumnCell(e.composedPath())) {
+      if (canOpenColumnCell(e.composedPath()) && props.owned) {
         router.push(`/dashboard/service/asset-hub/${row.id}`);
       }
     },
@@ -190,5 +246,15 @@ const dropdownOptions = [
   },
 ];
 
-onMounted(() => {});
+onMounted(() => {
+  /** Check if selected columns are stored in LS */
+  if (localStorage.getItem(LsTableColumnsKeys.ASSET_HUB)) {
+    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.ASSET_HUB) || '');
+  }
+});
+
+function handleColumnChange(selectedValues: Array<string>) {
+  selectedColumns.value = selectedValues;
+  localStorage.setItem(LsTableColumnsKeys.ASSET_HUB, JSON.stringify(selectedColumns.value));
+}
 </script>

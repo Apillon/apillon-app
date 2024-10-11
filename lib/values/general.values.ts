@@ -36,6 +36,7 @@ export const LsAnalyticsKeys = {
 };
 
 export const LsTableColumnsKeys = {
+  ASSET_HUB: 'al_table_asset_hub',
   FILES: 'al_table_files_columns',
   IPNS: 'al_table_ipns_columns',
   NFT_COLLECTION: 'al_table_nft_collection_columns',
