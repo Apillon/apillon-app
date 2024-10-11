@@ -119,7 +119,7 @@
     class="text-center"
     :title="$t('dashboard.service.assetHub.asset')"
   >
-    <FormAssetHub class="text-left" @close="modalEditAssetVisible = false" />
+    <FormAssetHub class="text-left" :asset-id="assetId" @close="modalEditAssetVisible = false" />
   </Modal>
 </template>
 

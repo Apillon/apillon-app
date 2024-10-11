@@ -1,5 +1,24 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    v-bind="$attrs"
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    @submit.prevent="handleSubmit"
+  >
+    <n-form-item
+      path="address"
+      :label="$t('form.label.assetHub.address')"
+      :label-props="{ for: 'address' }"
+    >
+      <n-input
+        v-model:value="formData.address"
+        :input-props="{ id: 'address' }"
+        :placeholder="$t('form.placeholder.assetHub.address')"
+        clearable
+      />
+    </n-form-item>
+
     <n-form-item
       class="relative"
       path="amount"
@@ -13,8 +32,10 @@
         clearable
       />
       <div class="absolute right-0 top-full mt-1 text-sm">
-        Available:
-        <span class="text-body">10020 NCTR</span>
+        {{ $t('general.available') }}:
+        <span class="text-body"
+          >{{ assetHubStore.active.supply }} {{ assetHubStore.active.symbol }}</span
+        >
       </div>
     </n-form-item>
 
@@ -28,23 +49,35 @@
       {{ $t('form.cancel') }}
     </Btn>
   </n-form>
+
+  <AssetHubTransaction
+    v-if="transactionHash"
+    :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
+    @close="$emit('close')"
+  />
+  <AssetHubLoader v-if="loading" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
 type FormAssetTransfer = {
+  address: string | null;
   amount: number | null;
 };
 
-// const props = defineProps({});
 const emit = defineEmits(['submitSuccess', 'close']);
+const props = defineProps({
+  assetId: { type: Number, required: true },
+});
 
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
 
 const loading = ref(false);
+const transactionHash = ref<string | undefined>();
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormAssetTransfer>({
+  address: null,
   amount: null,
 });
 
@@ -61,34 +94,46 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      mintToWallet();
+      mintTokens();
     }
   });
 }
 
 async function mintTokens() {
+  if (!assetHubStore.account) {
+    message.warning(t('dashboard.service.assetHub.connect'));
+    return;
+  }
+  if (!formData.value.address || !formData.value.amount) {
+    message.warning('Missing data');
+    return;
+  }
   loading.value = true;
 
+  const assetHubClient = await AssetHubClient.getInstance(
+    assetHubNetworks.westend.rpc,
+    assetHubStore.account
+  );
   try {
-    const res = await $api.post<any>('/mint', formData.value);
+    transactionHash.value = await assetHubClient.mint(
+      props.assetId,
+      formData.value.address,
+      formData.value.amount
+    );
 
-    message.success(t('form.success.assetTransferred'));
+    message.success(t('form.success.assetMinted'));
 
     /** Emit events */
     emit('submitSuccess');
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
+  } catch (error: any) {
+    if (error?.message) {
+      message.error(error?.message);
+    } else {
+      message.error(userFriendlyMsg(error));
+    }
+  } finally {
+    assetHubClient.destroyInstance();
   }
   loading.value = false;
 }
-
-const mintToWallet = async () => {
-  // const hash = await api.tx.assets
-  //   .mint(791, assetHubStore.account.address, 100)
-  //   .signAndSend(assetHubStore.account.address, {
-  //     signer: assetHubStore.account.signer,
-  //     nonce: -1,
-  //   });
-  // console.log('Transaction sent with hash', hash.toHex());
-};
 </script>

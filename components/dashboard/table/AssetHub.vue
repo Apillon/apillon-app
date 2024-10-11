@@ -140,11 +140,11 @@ const columns = computed<NDataTableColumns<AssetInterface>>(() => {
 /** Data: filtered files */
 const data = computed<AssetInterface[]>(() => {
   if (props.owned) {
-    return assetHubStore.items.filter(item => item.admin === assetHubStore.account?.address);
+    return assetHubStore.items.filter(item => item.owner === assetHubStore.account?.address);
   }
   return assetHubStore.items.filter(
     item =>
-      item.admin !== assetHubStore.account?.address &&
+      item.owner !== assetHubStore.account?.address &&
       item.name.toLocaleLowerCase().includes(assetHubStore.search.toLocaleLowerCase())
   );
 });

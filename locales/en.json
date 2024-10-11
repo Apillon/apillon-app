@@ -7,9 +7,10 @@
     "activity": "Activity",
     "addNew": "Add new",
     "address": "Address",
+    "archive": "Archive",
     "attach": "Attach",
     "attachService": "Attach {service} service",
-    "archive": "Archive",
+    "available": "Available",
     "cancel": "No, cancel",
     "comingSoon": "Coming soon",
     "confirm": "Confirm",
@@ -466,9 +467,11 @@
         "sendTokens": "Send Tokens",
         "sendTokensInfo": "You may only send tokens available in your connected wallet. If you do not see any tokens available, please review your wallet connection.",
         "transactionDetails": "You may view the transaction details {0}.",
+        "transactionHistory": "View transaction history",
         "transactionProcessed": "The transaction was successfully processed.",
         "transfer": "Transfer ownership",
         "transferInfo": "Transferring the ownership means handing all rights over to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "walletStats": "Connected wallet stats",
         "leave": {
           "anyway": "Leave anyway",
           "info": "If you leave, your changes won’t be saved.",
@@ -1305,7 +1308,9 @@
     },
     "success": {
       "apiKey": "API key has been created",
-      "assetTransferred": "Asset has been transferred",
+      "assetMinted": "Asset tokens has been minted",
+      "assetSend": "Asset tokens has been send",
+      "assetTransferred": "Asset ownership has been transferred",
       "filesUploaded": "Files have been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
@@ -1384,6 +1389,8 @@
         "apiKeyRole": "API key permission has been added",
         "apiKeyRoles": "API key permissions has been added",
         "asset": "Asset metadata has been updated",
+        "assetFreezer": "Asset freezer has been updated",
+        "assetIssuer": "Asset issuer has been updated",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "contract": "Contract has been updated",
@@ -2295,7 +2302,10 @@
     },
     "assetHub": {
       "addressRequired": "Please enter target address",
-      "amountRequired": "Please enter amount"
+      "amountRequired": "Please enter amount",
+      "idNotUnique": "Asset with this ID already exists, please use a different ID",
+      "nameNotUnique": "Asset with this name already exists, please use a different name",
+      "symbolNotUnique": "Asset with this symbol already exists, please use a different symbol"
     },
     "contract": {
       "addressRequired": "Please enter NFT collection address",

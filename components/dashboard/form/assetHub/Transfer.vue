@@ -1,5 +1,11 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    v-bind="$attrs"
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    @submit.prevent="handleSubmit"
+  >
     <n-form-item
       path="address"
       :label="$t('form.label.assetHub.address')"
@@ -24,7 +30,11 @@
     </Btn>
   </n-form>
 
-  <AssetHubTransaction v-if="transactionSubmitted" link="transactionLink" @close="$emit('close')" />
+  <AssetHubTransaction
+    v-if="transactionHash"
+    :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
+    @close="$emit('close')"
+  />
   <AssetHubLoader v-if="loading" class="z-3000" />
 </template>
 
@@ -33,7 +43,6 @@ type FormAssetTransfer = {
   address: string;
 };
 
-// const props = defineProps({});
 const emit = defineEmits(['submitSuccess', 'close']);
 const props = defineProps({
   assetId: { type: Number, required: true },
@@ -43,8 +52,8 @@ const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
 
-const loading = ref(true);
-const transactionSubmitted = ref(false);
+const loading = ref(false);
+const transactionHash = ref<string | undefined>();
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormAssetTransfer>({
   address: '',
@@ -73,10 +82,6 @@ async function transfer() {
     message.warning(t('dashboard.service.assetHub.connect'));
     return;
   }
-  if (!formData.value.address) {
-    message.warning('Missing data');
-    return;
-  }
   loading.value = true;
 
   const assetHubClient = await AssetHubClient.getInstance(
@@ -84,10 +89,14 @@ async function transfer() {
     assetHubStore.account
   );
   try {
-    const hash = await assetHubClient.transferOwnership(props.assetId, formData.value.address);
-    console.log(hash);
+    transactionHash.value = await assetHubClient.transferOwnership(
+      props.assetId,
+      formData.value.address
+    );
 
-    message.success(t('form.success.created.asset'));
+    message.success(t('form.success.assetTransferred'));
+
+    sessionStorage.removeItem(LsCacheKeys.ASSETS);
 
     /** Emit events */
     emit('submitSuccess');

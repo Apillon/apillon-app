@@ -1,5 +1,11 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    v-bind="$attrs"
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    @submit.prevent="handleSubmit"
+  >
     <n-form-item
       path="address"
       :label="$t('form.label.assetHub.address')"
@@ -23,6 +29,13 @@
       {{ $t('form.cancel') }}
     </Btn>
   </n-form>
+
+  <AssetHubTransaction
+    v-if="transactionHash"
+    :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
+    @close="$emit('close')"
+  />
+  <AssetHubLoader v-if="loading" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
@@ -40,6 +53,7 @@ const message = useMessage();
 const assetHubStore = useAssetHubStore();
 
 const loading = ref(false);
+const transactionHash = ref<string | undefined>();
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormAssetTransfer>({
   address: '',
@@ -68,10 +82,6 @@ async function changeIssuer() {
     message.warning(t('dashboard.service.assetHub.connect'));
     return;
   }
-  if (!formData.value.address) {
-    message.warning('Missing data');
-    return;
-  }
   loading.value = true;
 
   const assetHubClient = await AssetHubClient.getInstance(
@@ -79,15 +89,15 @@ async function changeIssuer() {
     assetHubStore.account
   );
   try {
-    const hash = await assetHubClient.updateTeam(
+    transactionHash.value = await assetHubClient.updateTeam(
       props.assetId,
-      formData.value.address,
+      assetHubStore.active.issuer,
       assetHubStore.account.address,
       formData.value.address
     );
-    console.log(hash);
+    assetHubStore.active.freezer = formData.value.address;
 
-    message.success(t('form.success.created.asset'));
+    message.success(t('form.success.updated.assetFreezer'));
 
     /** Emit events */
     emit('submitSuccess');

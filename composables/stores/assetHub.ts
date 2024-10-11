@@ -35,8 +35,15 @@ export const useAssetHubStore = defineStore('assetHub', {
     accountConnected(state): boolean {
       return !!state.account && !!state.account?.address;
     },
-    hasAssets(state): boolean {
+    assetsLoaded(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
+    },
+    hasAssets(state): boolean {
+      return (
+        Array.isArray(state.items) &&
+        state.items.length > 0 &&
+        state.items.some(i => i.owner === state.account?.address)
+      );
     },
   },
   actions: {
@@ -68,7 +75,7 @@ export const useAssetHubStore = defineStore('assetHub', {
     },
 
     async getAsset(id: number): Promise<AssetInterface> {
-      if (this.active?.id !== id || isCacheExpired(LsCacheKeys.ASSET)) {
+      if (this.active?.id !== id) {
         this.active = await this.fetchAsset(id);
       }
       return this.active;
@@ -88,7 +95,7 @@ export const useAssetHubStore = defineStore('assetHub', {
       const promises: Array<Promise<any>> = [];
 
       const prepareAssetData = async asset => {
-        const id = Number(asset[0].toHuman()?.toLocaleString().replaceAll(',', ''));
+        const id = toNum(asset[0].toHuman()?.toLocaleString());
         const metadata = await assetHubClient.getAssetMetadata(id);
 
         assets.push(

@@ -25,6 +25,13 @@
         <TableAssetHub />
       </n-space>
 
+      <div
+        v-else-if="assetHubStore.loading && !assetHubStore.assetsLoaded"
+        class="relative h-full min-h-[50dvh]"
+      >
+        <Spinner class="absolute top-1/2" />
+      </div>
+
       <template v-else>
         <Empty :title="$t('dashboard.service.assetHub.noProject')" icon="storage/empty">
           <Btn type="primary" :to="{ name: 'dashboard-service-asset-hub-new' }">

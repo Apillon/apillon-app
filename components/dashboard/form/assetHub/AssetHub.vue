@@ -3,7 +3,6 @@
     v-bind="$attrs"
     ref="formRef"
     :model="formData"
-    :class="{ 'form-errors': formErrors }"
     class="w-full max-w-xl"
     :rules="rules"
     @submit.prevent="handleSubmit"
@@ -122,6 +121,7 @@
           v-model:value="formData.issuerAddress"
           :input-props="{ type: 'text' }"
           :placeholder="$t('form.placeholder.assetHub.issuerAddress')"
+          :disabled="!!assetId"
           clearable
           class="bg-bg-light"
           @keydown.enter.prevent
@@ -132,6 +132,7 @@
           v-model:value="formData.freezerAddress"
           :input-props="{ type: 'text' }"
           :placeholder="$t('form.label.assetHub.freezerAddress')"
+          :disabled="!!assetId"
           clearable
           class="bg-bg-light"
           @keydown.enter.prevent
@@ -158,6 +159,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormItemRule } from 'naive-ui';
+
 type FormAsset = {
   network: string | null;
   name: string | null;
@@ -182,20 +185,7 @@ const assetHubStore = useAssetHubStore();
 const loading = ref(false);
 const asset = ref<AssetInterface | undefined>();
 const formRef = ref<NFormInst | null>(null);
-const formErrors = ref<boolean>(false);
 const transactionHash = ref<string | undefined>();
-
-const rules: NFormRules = {
-  network: ruleRequired('Network is required'),
-  name: ruleRequired('Name is required'),
-  symbol: ruleRequired('Symbol is required'),
-  assetId: ruleRequired('Asset Id is required'),
-  decimals: ruleRequired('Decimals is required'),
-  initialSupply: ruleRequired('Initial Supply is required'),
-  minBalance: ruleRequired('Min balance is required'),
-  issuerAddress: ruleRequired('Issuer Address is required'),
-  freezerAddress: ruleRequired('Freezer Address is required'),
-};
 
 const formData = ref<FormAsset>({
   network: null,
@@ -209,6 +199,27 @@ const formData = ref<FormAsset>({
   freezerAddress: null,
 });
 
+const rules: NFormRules = {
+  network: ruleRequired('Network is required'),
+  name: [
+    ruleRequired('Name is required'),
+    { validator: validateName, message: t('validation.assetHub.nameNotUnique') },
+  ],
+  symbol: [
+    ruleRequired('Symbol is required'),
+    { validator: validateSymbol, message: t('validation.assetHub.symbolNotUnique') },
+  ],
+  assetId: [
+    ruleRequired('Asset Id is required'),
+    { validator: validateAssetId, message: t('validation.assetHub.idNotUnique') },
+  ],
+  decimals: ruleRequired('Decimals is required'),
+  initialSupply: ruleRequired('Initial Supply is required'),
+  minBalance: ruleRequired('Min balance is required'),
+  issuerAddress: ruleRequired('Issuer Address is required'),
+  freezerAddress: ruleRequired('Freezer Address is required'),
+};
+
 const networks = computed(() =>
   Object.values(assetHubNetworks).map(network => ({ label: network.name, value: network.rpc }))
 );
@@ -216,20 +227,33 @@ const networks = computed(() =>
 onMounted(async () => {
   if (props.assetId) {
     asset.value = await assetHubStore.getAsset(props.assetId);
-
     if (asset.value) {
       formData.value.assetId = props.assetId;
-      formData.value.decimals = Number(asset.value.decimals);
+      formData.value.decimals = toNum(asset.value.decimals);
       formData.value.freezerAddress = asset.value.freezer;
-      formData.value.initialSupply = Number(asset.value.supply);
+      formData.value.initialSupply = toNum(asset.value.supply);
       formData.value.issuerAddress = asset.value.issuer;
-      formData.value.minBalance = Number(asset.value.minBalance);
+      formData.value.minBalance = toNum(asset.value.minBalance);
       formData.value.name = asset.value.name;
       formData.value.network = assetHubNetworks.westend.rpc;
       formData.value.symbol = asset.value.symbol;
     }
   }
+  assetHubStore.getAssets();
 });
+
+// Custom validations
+function validateAssetId(_: FormItemRule, value: string): boolean {
+  return assetHubStore.items.some(i => i.id === Number(value)) === undefined;
+}
+function validateName(_: FormItemRule, value: string): boolean {
+  return assetHubStore.items.some(i => i.name.toLowerCase() === value.toLowerCase()) === undefined;
+}
+function validateSymbol(_: FormItemRule, value: string): boolean {
+  return (
+    assetHubStore.items.some(i => i.symbol.toLowerCase() === value.toLowerCase()) === undefined
+  );
+}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -243,9 +267,7 @@ function handleSubmit(e: Event | MouseEvent) {
       if (
         formData.value.name === asset.value.name &&
         formData.value.symbol === asset.value.symbol &&
-        formData.value.decimals === Number(asset.value.decimals) &&
-        formData.value.freezerAddress === asset.value.freezer &&
-        formData.value.issuerAddress === asset.value.issuer
+        formData.value.decimals === toNum(asset.value.decimals)
       ) {
         message.warning('No changes');
       } else {
@@ -325,9 +347,7 @@ async function updateAsset() {
     !formData.value.assetId ||
     !formData.value.name ||
     !formData.value.symbol ||
-    !formData.value.decimals ||
-    !formData.value.issuerAddress ||
-    !formData.value.freezerAddress
+    !formData.value.decimals
   ) {
     message.warning('Missing data');
     return;
@@ -339,29 +359,12 @@ async function updateAsset() {
     assetHubStore.account
   );
   try {
-    if (
-      formData.value.name !== asset.value.name ||
-      formData.value.symbol !== asset.value.symbol ||
-      formData.value.decimals !== Number(asset.value.decimals)
-    ) {
-      transactionHash.value = await assetHubClient.updateMetadata(
-        props.assetId,
-        formData.value.name,
-        formData.value.symbol,
-        formData.value.decimals
-      );
-    }
-    if (
-      formData.value.freezerAddress !== asset.value.freezer ||
-      formData.value.issuerAddress !== asset.value.issuer
-    ) {
-      transactionHash.value = await assetHubClient.updateTeam(
-        props.assetId,
-        formData.value.issuerAddress,
-        assetHubStore.account.address,
-        formData.value.freezerAddress
-      );
-    }
+    transactionHash.value = await assetHubClient.updateMetadata(
+      props.assetId,
+      formData.value.name,
+      formData.value.symbol,
+      formData.value.decimals
+    );
 
     message.success(t('form.success.updated.asset'));
 

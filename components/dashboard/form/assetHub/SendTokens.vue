@@ -1,5 +1,11 @@
 <template>
-  <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+  <n-form
+    v-bind="$attrs"
+    ref="formRef"
+    :model="formData"
+    :rules="rules"
+    @submit.prevent="handleSubmit"
+  >
     <n-form-item
       path="address"
       :label="$t('form.label.assetHub.address')"
@@ -26,8 +32,10 @@
         clearable
       />
       <div class="absolute right-0 top-full mt-1 text-sm">
-        Available:
-        <span class="text-body">10020 NCTR</span>
+        {{ $t('general.available') }}:
+        <span class="text-body"
+          >{{ assetHubStore.active.supply }} {{ assetHubStore.active.symbol }}</span
+        >
       </div>
     </n-form-item>
 
@@ -41,6 +49,13 @@
       {{ $t('form.cancel') }}
     </Btn>
   </n-form>
+
+  <AssetHubTransaction
+    v-if="transactionHash"
+    :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
+    @close="$emit('close')"
+  />
+  <AssetHubLoader v-if="loading" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
@@ -59,6 +74,7 @@ const message = useMessage();
 const assetHubStore = useAssetHubStore();
 
 const loading = ref(false);
+const transactionHash = ref<string | undefined>();
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormAssetTransfer>({
   address: null,
@@ -100,14 +116,13 @@ async function sendTokens() {
     assetHubStore.account
   );
   try {
-    const hash = await assetHubClient.transfer(
+    transactionHash.value = await assetHubClient.transfer(
       props.assetId,
       formData.value.address,
       formData.value.amount
     );
-    console.log(hash);
 
-    message.success(t('form.success.created.asset'));
+    message.success(t('form.success.assetSend'));
 
     /** Emit events */
     emit('submitSuccess');

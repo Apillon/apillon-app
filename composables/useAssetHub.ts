@@ -11,7 +11,7 @@ export const assetHubNetworks = {
   },
 };
 
-const connectedAccount = ref<WalletInfo | undefined>();
+export const toNum = (text: string) => Number(text.replaceAll(',', ''));
 
 export default function assetHub() {
   const { t } = useI18n();

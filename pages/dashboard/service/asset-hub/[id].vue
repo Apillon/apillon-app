@@ -11,13 +11,13 @@
       <div class="card-light px-6 py-4 mb-6">
         <n-table class="plain" :bordered="false" :single-line="true">
           <tbody>
-            <tr v-for="data in assetData">
-              <td>
+            <tr v-for="(data, key) in assetData">
+              <td :class="{ '!border-bg-light': key + 1 === assetData.length }">
                 <span class="text-white">
                   {{ data.label }}
                 </span>
               </td>
-              <td>
+              <td :class="{ '!border-bg-light': key + 1 === assetData.length }">
                 <Btn v-if="data.link" :href="data.link" type="link">
                   {{ data.value }}
                 </Btn>
@@ -34,18 +34,25 @@
       </div>
 
       <div class="card-light px-6 py-4">
-        <h4>Connected wallet stats</h4>
+        <h4>
+          {{ $t('dashboard.service.assetHub.walletStats') }}
+        </h4>
         <n-table class="plain my-4" :bordered="false" :single-line="true">
           <tbody>
             <tr>
               <td>
-                <span class="text-white">Available</span>
+                <span class="text-white">{{ $t('general.available') }}</span>
               </td>
-              <td>10020 NCTR</td>
+              <td>{{ assetHubStore.active.supply }} {{ assetHubStore.active.symbol }}</td>
             </tr>
           </tbody>
         </n-table>
-        <a href="" class="text-blue font-bold text-sm">View transaction history</a>
+        <a
+          :href="`https://assethub-westend.subscan.io/account/${assetHubStore.active.owner}`"
+          class="text-blue font-bold text-sm"
+        >
+          {{ $t('dashboard.service.assetHub.transactionHistory') }}
+        </a>
       </div>
     </div>
 
@@ -83,6 +90,7 @@ onMounted(async () => {
   if (!assetHubStore.account) {
     router.push({ name: 'dashboard-service-asset-hub' });
   }
+  initAssetData(assetId.value);
 });
 
 watch(
@@ -96,10 +104,10 @@ async function initAssetData(assetId: number) {
   const data = await assetHubStore.getAsset(assetId);
 
   assetData.value = [
-    { label: t('form.label.assetHub.network'), value: '' },
+    { label: t('form.label.assetHub.network'), value: assetHubNetworks.westend.name },
     { label: t('form.label.assetHub.name'), value: data?.name?.toString() },
     { label: t('form.label.assetHub.symbol'), value: data?.symbol?.toString() },
-    { label: t('form.label.assetHub.assetId'), assetId },
+    { label: t('form.label.assetHub.assetId'), value: assetId },
     { label: t('form.label.assetHub.decimals'), value: data?.decimals?.toString() },
     { label: t('form.label.assetHub.initialSupply'), value: data?.supply?.toString() },
     {
