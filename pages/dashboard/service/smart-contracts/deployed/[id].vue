@@ -5,19 +5,7 @@
     </template>
 
     <slot>
-      <div class="wallet-props">
-        <span v-if="address" class="mr-4">Connected wallet: {{ shortHash(address) }}</span>
-        <Btn
-          v-if="isConnected"
-          type="primary"
-          class="min-w-[12rem]"
-          :loading="btnLoading"
-          @click="disconnectWallet()"
-        >
-          Disconnect
-        </Btn>
-      </div>
-      <div v-if="contractStatus !== 6" class="my-8">
+      <div v-if="contractStatus !== SmartContractStatus.TRANSFERRED" class="mb-8">
         <div class="flex flex-col md:flex-row gap-x-8 mb-8">
           <div class="flex-1 max-w-[550px]">
             <h4>
@@ -33,8 +21,22 @@
             <img src="~/assets/images/solution/smart-contracts.png" alt="" />
           </div>
         </div>
+        <!-- <Btn @click="">Take smart contract ownership</Btn> -->
+      </div>
 
-        <Btn href="#transferOwnership">Take smart contract ownership</Btn>
+      <div class="wallet-props my-8">
+        <span v-if="address" class="mr-4">
+          {{ $t('auth.wallet.connected.wallet') }}: {{ shortHash(address) }}
+        </span>
+        <Btn
+          v-if="isConnected"
+          type="primary"
+          class="min-w-[12rem]"
+          :loading="btnLoading"
+          @click="disconnectWallet()"
+        >
+          {{ $t('auth.wallet.disconnect.wallet') }}
+        </Btn>
       </div>
 
       <h4 class="mb-6">

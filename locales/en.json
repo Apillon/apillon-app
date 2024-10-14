@@ -517,8 +517,8 @@
           "1": "INITIATED",
           "2": "DEPLOYING",
           "3": "DEPLOYED",
-          "4": "TRANSFERRED",
-          "5": "FAILED",
+          "4": "FAILED",
+          "5": "TRANSFERRING",
           "6": "TRANSFERRED"
         },
         "infoSection": {

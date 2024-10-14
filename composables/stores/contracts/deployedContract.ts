@@ -12,6 +12,11 @@ export const useDeployedContractStore = defineStore('deployedContract', {
     hasDeployedContracts(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
     },
+    showDeployedContracts(state): boolean {
+      return (
+        state.loading || !!state.search || (Array.isArray(state.items) && state.items.length > 0)
+      );
+    },
   },
   actions: {
     /**

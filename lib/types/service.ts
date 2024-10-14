@@ -16,6 +16,7 @@ export enum ServiceTypeName {
   NFT = 'NFT',
   COMPUTING = 'COMPUTING',
   SOCIAL = 'SOCIAL',
+  CONTRACTS = 'CONTRACTS',
 }
 
 export enum IdentityChains {
