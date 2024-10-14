@@ -1,6 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { defineStore } from 'pinia';
-import Id from '~/pages/dashboard/service/asset-hub/[id].vue';
 
 export type AssetInterface = {
   id: number;
@@ -26,8 +25,10 @@ export const useAssetHubStore = defineStore('assetHub', {
   state: () => ({
     account: null as WalletAccount | null | undefined,
     active: {} as AssetInterface,
-    items: [] as AssetInterface[],
+    itemsMainnet: [] as AssetInterface[],
+    itemsTestnet: [] as AssetInterface[],
     loading: false,
+    mainnet: false,
     search: '',
   }),
   getters: {
@@ -35,40 +36,72 @@ export const useAssetHubStore = defineStore('assetHub', {
       return !!state.account && !!state.account?.address;
     },
     assetsLoaded(state): boolean {
-      return Array.isArray(state.items) && state.items.length > 0;
+      return state.mainnet
+        ? Array.isArray(state.itemsMainnet) && state.itemsMainnet.length > 0
+        : Array.isArray(state.itemsTestnet) && state.itemsTestnet.length > 0;
     },
     hasAssets(state): boolean {
+      return state.mainnet
+        ? Array.isArray(state.itemsMainnet) &&
+            state.itemsMainnet.length > 0 &&
+            state.itemsMainnet.some(i => i.owner === state.account?.address)
+        : Array.isArray(state.itemsTestnet) &&
+            state.itemsTestnet.length > 0 &&
+            state.itemsTestnet.some(i => i.owner === state.account?.address);
+    },
+    hasAssetsMainnet(state): boolean {
       return (
-        Array.isArray(state.items) &&
-        state.items.length > 0 &&
-        state.items.some(i => i.owner === state.account?.address)
+        Array.isArray(state.itemsMainnet) &&
+        state.itemsMainnet.length > 0 &&
+        state.itemsMainnet.some(i => i.owner === state.account?.address)
       );
+    },
+    hasAssetsTestnet(state): boolean {
+      return (
+        Array.isArray(state.itemsTestnet) &&
+        state.itemsTestnet.length > 0 &&
+        state.itemsTestnet.some(i => i.owner === state.account?.address)
+      );
+    },
+    items(state): AssetInterface[] {
+      return state.mainnet ? state.itemsMainnet : state.itemsTestnet;
     },
   },
   actions: {
     resetData() {
-      this.items = [] as AssetInterface[];
+      this.itemsMainnet = [] as AssetInterface[];
+      this.itemsTestnet = [] as AssetInterface[];
       this.search = '';
     },
 
-    async initClient(rpc = assetHubNetworks.westend.rpc) {
+    async initClient(mainnet?: boolean) {
       if (!this.account) {
         window.$message.warning(window.$i18n.t('dashboard.service.assetHub.connect'));
-        return;
+        return null;
       }
       await cryptoWaitReady();
 
-      return await AssetHubClient.getInstance(rpc, this.account);
+      const env = mainnet === undefined ? this.mainnet : mainnet;
+      return await AssetHubClient.getInstance(getAssetHubRpc(env), this.account);
     },
 
     /**
      * Fetch wrappers
      */
     async getAssets(): Promise<AssetInterface[]> {
-      if (!this.hasAssets || isCacheExpired(LsCacheKeys.ASSETS)) {
-        this.items = await this.fetchAssets();
+      return this.mainnet ? await this.getAssetsMainnet() : await this.getAssetsTestnet();
+    },
+    async getAssetsMainnet(): Promise<AssetInterface[]> {
+      if (!this.hasAssetsMainnet || isCacheExpired(LsCacheKeys.ASSETS)) {
+        this.itemsMainnet = await this.fetchAssets(true);
       }
-      return this.items;
+      return this.itemsMainnet;
+    },
+    async getAssetsTestnet(): Promise<AssetInterface[]> {
+      if (!this.hasAssetsTestnet || isCacheExpired(LsCacheKeys.ASSETS_TESTNET)) {
+        this.itemsTestnet = await this.fetchAssets(false);
+      }
+      return this.itemsTestnet;
     },
 
     async getAsset(id: number): Promise<AssetInterface> {
@@ -81,10 +114,10 @@ export const useAssetHubStore = defineStore('assetHub', {
     /**
      * API calls
      */
-    async fetchAssets(showLoader: boolean = true): Promise<AssetInterface[]> {
-      this.loading = showLoader;
+    async fetchAssets(mainnet?: boolean): Promise<AssetInterface[]> {
+      this.loading = true;
 
-      const assetHubClient = await this.initClient();
+      const assetHubClient = await this.initClient(mainnet);
       if (!assetHubClient || !this.account) return [];
 
       const loadedAssets = await assetHubClient.getAssets();
@@ -106,15 +139,21 @@ export const useAssetHubStore = defineStore('assetHub', {
       await Promise.all(promises).then(_ => {
         this.loading = false;
       });
+      assetHubClient.destroyInstance();
 
       /** Save timestamp to SS */
-      sessionStorage.setItem(LsCacheKeys.ASSETS, Date.now().toString());
+
+      const env = mainnet === undefined ? this.mainnet : mainnet;
+      const key = env ? LsCacheKeys.ASSETS : LsCacheKeys.ASSETS_TESTNET;
+      sessionStorage.setItem(key, Date.now().toString());
 
       return assets;
     },
 
     async fetchAsset(assetId: number): Promise<AssetInterface> {
-      const asset = this.items.find(i => i.id === assetId);
+      const asset = this.mainnet
+        ? this.itemsMainnet.find(i => i.id === assetId)
+        : this.itemsTestnet.find(i => i.id === assetId);
       if (asset) return asset;
 
       const assetHubClient = await this.initClient();
@@ -122,6 +161,7 @@ export const useAssetHubStore = defineStore('assetHub', {
 
       const metadata = await assetHubClient.getAssetMetadata(assetId);
       const details = await assetHubClient.getAssetDetails(assetId);
+      assetHubClient.destroyInstance();
 
       return { id: assetId, ...metadata.toHuman(), ...details?.toHuman() } as AssetInterface;
     },
@@ -130,7 +170,7 @@ export const useAssetHubStore = defineStore('assetHub', {
   persist: {
     key: SessionKeys.ASSET_HUB,
     storage: persistedState.sessionStorage,
-    paths: ['account', 'items'],
+    paths: ['account', 'itemsMainnet', 'itemsTestnet'],
     // debug: true,
   } as any,
 });

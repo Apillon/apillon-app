@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderAssetHub :title="$t('dashboard.nav.assetHub')" />
+      <HeaderAssetHub :title="$t('dashboard.nav.assetHub')" switcher />
     </template>
     <slot>
       <div
@@ -78,6 +78,12 @@ watch(
     if (assetHubStore.account) {
       assetHubStore.getAssets();
     }
+  }
+);
+watch(
+  () => assetHubStore.mainnet,
+  () => {
+    assetHubStore.getAssets();
   }
 );
 </script>

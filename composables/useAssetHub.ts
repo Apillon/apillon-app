@@ -12,6 +12,9 @@ export const assetHubNetworks = {
   },
 };
 
+export const getAssetHubRpc = (mainnet = false) =>
+  mainnet ? assetHubNetworks.polkadot.rpc : assetHubNetworks.westend.rpc;
+
 /** Available columns - show/hide column */
 const selectedColumns = ref([
   'id',
@@ -42,12 +45,6 @@ export default function assetHub() {
   const pageLoading = ref<boolean>(true);
   const loadingWallet = ref<boolean>(false);
   const modalWalletSelectVisible = ref<boolean>(false);
-
-  onUnmounted(() => {
-    if (assetHubClient.value) {
-      // assetHubClient.value?.destroyInstance();
-    }
-  });
 
   async function initAssetHub() {
     await sleep(10);
