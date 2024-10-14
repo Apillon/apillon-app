@@ -242,7 +242,8 @@
           "3": "ACTIVE",
           "4": "PAUSED",
           "9": "DELETED"
-        }
+        },
+        "viewTemplate": "View code template"
       },
       "usage": {
         "title": "Cloud functions monitor"

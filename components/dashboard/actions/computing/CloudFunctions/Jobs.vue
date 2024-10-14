@@ -16,6 +16,16 @@
     </div>
 
     <n-space size="large">
+      <!-- View template -->
+      <n-button
+        size="small"
+        tag="a"
+        href="https://github.com/Apillon/cloud-function-template"
+        target="_blank"
+      >
+        <span class="icon-cloud-functions text-xl mr-2"></span>
+        {{ $t('computing.cloudFunctions.job.viewTemplate') }}
+      </n-button>
       <!-- Refresh cloudFunctions -->
       <n-button size="small" :loading="cloudFunctionStore.loading" @click="refresh">
         <span class="icon-refresh text-xl mr-2"></span>
