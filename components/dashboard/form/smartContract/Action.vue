@@ -15,7 +15,7 @@
     <SmartContractsBtnSubmit :fn="fn" :owner="owner" :loading="loading" @submit="handleSubmit" />
 
     <!-- Result -->
-    <Notification v-if="result !== undefined" type="success" class="mt-6">
+    <Notification v-if="result !== undefined" type="success" class="mt-6" hide-icon>
       {{ result }}
     </Notification>
   </n-form>

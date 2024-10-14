@@ -7,12 +7,15 @@
         <h1 v-else>{{ $t('dashboard.nav.smartContracts') }}</h1>
       </NuxtLink>
     </slot>
-    <template #info> </template>
+    <template #info>
+      <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" filter-by-chain />
+    </template>
   </Heading>
 </template>
 
 <script lang="ts" setup>
 defineProps({
+  billing: { type: Boolean, default: false },
   link: { type: String, default: '/dashboard/service/smart-contracts' },
   title: { type: String, default: '' },
 });

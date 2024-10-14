@@ -72,7 +72,6 @@ export default function useSmartContracts() {
         contract.contractStatus === SmartContractStatus.DEPLOY_INITIATED ||
         contract.contractStatus === SmartContractStatus.DEPLOYING
     );
-    console.log(unfinishedContract);
     if (unfinishedContract === undefined) return;
 
     smartContractInterval = setInterval(async () => {

@@ -7,25 +7,17 @@
     </template>
     <slot>
       <div class="pb-8">
-        <n-space
-          v-if="
-            deployedContractStore.hasDeployedContracts ||
-            deployedContractStore.search ||
-            deployedContractStore.loading
-          "
-          :size="32"
-          vertical
-        >
+        <n-space v-show="deployedContractStore.showDeployedContracts" :size="32" vertical>
           <ActionsSmartContracts />
           <TableSmartContracts :contracts="deployedContractStore.items" />
         </n-space>
         <Empty
-          v-else
+          v-show="!deployedContractStore.showDeployedContracts"
           :title="$t('dashboard.service.smartContracts.create')"
           :info="$t('dashboard.service.smartContracts.info')"
           icon="storage/empty"
         >
-          <Btn :to="{ name: 'dashboard-service-smart-contracts' }">
+          <Btn :to="{ name: 'dashboard-service-smart-contracts-new' }">
             {{ $t('dashboard.service.smartContracts.new') }}
           </Btn>
         </Empty>
