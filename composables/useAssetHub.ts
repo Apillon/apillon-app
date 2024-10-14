@@ -7,7 +7,7 @@ export const assetHubNetworks = {
     rpc: 'wss://asset-hub-westend-rpc.dwellir.com',
   },
   polkadot: {
-    name: 'Polkadot Asset Hub (mainnet)',
+    name: 'Asset Hub (mainnet)',
     rpc: 'wss://asset-hub-polkadot-rpc.dwellir.com',
   },
 };
