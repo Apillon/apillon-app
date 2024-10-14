@@ -63,6 +63,7 @@
           clearable
           class="bg-bg-light rounded-lg"
           :min="0"
+          :step="1"
           :disabled="!!assetId"
           @keydown.enter.prevent
         />
@@ -160,7 +161,7 @@
     :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
     @close="$emit('close')"
   />
-  <AssetHubLoader v-if="loading && assetHubClient.txApproved" class="z-3000" />
+  <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
@@ -230,6 +231,8 @@ const networks = computed(() =>
   Object.values(assetHubNetworks).map(network => ({ label: network.name, value: network.rpc }))
 );
 
+const assetIDs = computed(() => new Set(assetHubStore.items.map(i => i.id)));
+
 onMounted(async () => {
   initClient();
   if (props.assetId) {
@@ -254,12 +257,26 @@ watch(
   () => formData.value.network,
   async rpc => {
     if (assetHubClient.value) {
-      assetHubClient.value.destroyInstance();
+      await assetHubClient.value.destroyInstance();
+      await sleep(200);
     }
     if (rpc && assetHubStore.account && !formData.value.assetId) {
       assetHubClient.value = await AssetHubClient.getInstance(rpc, assetHubStore.account);
       const nextId = await assetHubClient.value.getNextId();
       formData.value.assetId = toNum(nextId.toHuman()?.toLocaleString() || '') + 1;
+    }
+  }
+);
+
+watch(
+  () => formData.value.assetId,
+  (newId, oldId) => {
+    if (oldId && newId) {
+      const delta = newId - oldId;
+
+      if (Math.abs(delta) === 1 && assetIDs.value.has(newId)) {
+        formData.value.assetId = newId + delta;
+      }
     }
   }
 );
@@ -319,6 +336,13 @@ async function createAsset() {
     return;
   }
   loading.value = true;
+
+  if (!assetHubClient.value) {
+    assetHubClient.value = await AssetHubClient.getInstance(
+      formData.value.network,
+      assetHubStore.account
+    );
+  }
   try {
     const team = {
       issuer: formData.value.issuerAddress,
@@ -368,6 +392,12 @@ async function updateAsset() {
   }
   loading.value = true;
 
+  if (!assetHubClient.value) {
+    assetHubClient.value = await AssetHubClient.getInstance(
+      formData.value.network,
+      assetHubStore.account
+    );
+  }
   try {
     transactionHash.value = await assetHubClient.value.updateMetadata(
       props.assetId,

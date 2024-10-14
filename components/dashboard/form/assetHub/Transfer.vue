@@ -35,7 +35,7 @@
     :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
     @close="$emit('close')"
   />
-  <AssetHubLoader v-if="loading && assetHubClient.txApproved" class="z-3000" />
+  <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
@@ -89,6 +89,12 @@ async function transfer() {
   }
   loading.value = true;
 
+  if (!assetHubClient.value) {
+    assetHubClient.value = await AssetHubClient.getInstance(
+      assetHubNetworks.westend.rpc,
+      assetHubStore.account
+    );
+  }
   try {
     transactionHash.value = await assetHubClient.value.transferOwnership(
       props.assetId,
