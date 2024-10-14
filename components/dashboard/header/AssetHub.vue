@@ -14,7 +14,10 @@
 
     <template #info>
       <n-space :size="32" align="center" :wrap="false">
-        <!-- <ModalCreditCosts :service="ServiceTypeName.WALLET" /> -->
+        <div v-if="switcher">
+          <strong>Mainnet</strong>
+          <n-switch v-model:value="isMainnet" :disabled="switchDisabled" @click="onSwitch" />
+        </div>
 
         <div
           v-if="assetHubStore.accountConnected"
@@ -53,9 +56,20 @@
 <script lang="ts" setup>
 defineProps({
   backLink: { type: String, default: null },
+  switcher: { type: Boolean, default: false },
   title: { type: String, default: null },
 });
 
 const assetHubStore = useAssetHubStore();
 const { loadingWallet, modalWalletSelectVisible, walletConnect } = useAssetHub();
+
+const isMainnet = ref<boolean>(assetHubStore.mainnet);
+const switchDisabled = ref<boolean>(false);
+
+const onSwitch = () => {
+  switchDisabled.value = true;
+
+  setTimeout(() => (assetHubStore.mainnet = isMainnet.value), 200);
+  setTimeout(() => (switchDisabled.value = false), 2000);
+};
 </script>

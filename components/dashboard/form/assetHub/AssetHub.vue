@@ -14,6 +14,14 @@
         :label="$t('form.label.assetHub.network')"
         path="network"
       >
+        <div
+          v-if="!assetId && formData.network === assetHubNetworks.westend.rpc"
+          class="absolute bottom-full right-0 mb-2"
+        >
+          <Btn size="small" type="link" to="https://faucet.polkadot.io/westend?parachain=1000">
+            <span class="text-xs">Faucet</span>
+          </Btn>
+        </div>
         <select-options
           v-model:value="formData.network"
           :options="networks"
@@ -234,7 +242,6 @@ const networks = computed(() =>
 const assetIDs = computed(() => new Set(assetHubStore.items.map(i => i.id)));
 
 onMounted(async () => {
-  initClient();
   if (props.assetId) {
     asset.value = await assetHubStore.getAsset(props.assetId);
     if (asset.value) {
@@ -337,12 +344,9 @@ async function createAsset() {
   }
   loading.value = true;
 
-  if (!assetHubClient.value) {
-    assetHubClient.value = await AssetHubClient.getInstance(
-      formData.value.network,
-      assetHubStore.account
-    );
-  }
+  assetHubClient.value = await assetHubStore.initClient();
+  if (!assetHubClient.value) return;
+
   try {
     const team = {
       issuer: formData.value.issuerAddress,
@@ -392,12 +396,9 @@ async function updateAsset() {
   }
   loading.value = true;
 
-  if (!assetHubClient.value) {
-    assetHubClient.value = await AssetHubClient.getInstance(
-      formData.value.network,
-      assetHubStore.account
-    );
-  }
+  assetHubClient.value = await assetHubStore.initClient();
+  if (!assetHubClient.value) return;
+
   try {
     transactionHash.value = await assetHubClient.value.updateMetadata(
       props.assetId,

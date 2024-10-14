@@ -86,10 +86,6 @@ const rules: NFormRules = {
   amount: ruleRequired(t('validation.assetHub.amountRequired')),
 };
 
-onMounted(() => {
-  initClient();
-});
-
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
@@ -115,12 +111,9 @@ async function mintTokens() {
   }
   loading.value = true;
 
-  if (!assetHubClient.value) {
-    assetHubClient.value = await AssetHubClient.getInstance(
-      assetHubNetworks.westend.rpc,
-      assetHubStore.account
-    );
-  }
+  assetHubClient.value = await assetHubStore.initClient();
+  if (!assetHubClient.value) return;
+
   try {
     transactionHash.value = await assetHubClient.value.mint(
       props.assetId,

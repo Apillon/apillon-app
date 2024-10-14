@@ -85,7 +85,7 @@ const assetData = computed<AssetData[]>(() => [
   { label: t('form.label.assetHub.network'), value: `${assetHubNetworks.westend.name}` },
   { label: t('form.label.assetHub.name'), value: `${assetHubStore.active?.name}` },
   { label: t('form.label.assetHub.symbol'), value: `${assetHubStore.active?.symbol}` },
-  { label: t('form.label.assetHub.assetId'), value: `${assetId}` },
+  { label: t('form.label.assetHub.assetId'), value: `${assetId.value}` },
   { label: t('form.label.assetHub.decimals'), value: `${assetHubStore.active?.decimals}` },
   {
     label: t('form.label.assetHub.initialSupply'),

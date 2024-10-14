@@ -51,7 +51,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
-const { assetHubClient, initClient } = useAssetHub();
+const { assetHubClient } = useAssetHub();
 
 const loading = ref(false);
 const transactionHash = ref<string | undefined>();
@@ -63,10 +63,6 @@ const formData = ref<FormAssetTransfer>({
 const rules: NFormRules = {
   address: ruleRequired(t('validation.assetHub.addressRequired')),
 };
-
-onMounted(() => {
-  initClient();
-});
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -89,12 +85,9 @@ async function transfer() {
   }
   loading.value = true;
 
-  if (!assetHubClient.value) {
-    assetHubClient.value = await AssetHubClient.getInstance(
-      assetHubNetworks.westend.rpc,
-      assetHubStore.account
-    );
-  }
+  assetHubClient.value = await assetHubStore.initClient();
+  if (!assetHubClient.value) return;
+
   try {
     transactionHash.value = await assetHubClient.value.transferOwnership(
       props.assetId,
