@@ -7,7 +7,7 @@ export const assetHubNetworks = {
     rpc: 'wss://asset-hub-westend-rpc.dwellir.com',
   },
   polkadot: {
-    name: 'Polkadot Asset Hub (mainnet)',
+    name: 'Asset Hub (mainnet)',
     rpc: 'wss://asset-hub-polkadot-rpc.dwellir.com',
   },
 };
@@ -27,7 +27,7 @@ const selectedColumns = ref([
   'freezer',
   'status',
 ]);
-const assetHubClient = ref({} as AssetHubClientType);
+const assetHubClient = ref<AssetHubClientType | null | undefined>();
 
 export const toNum = (text: string) => Number(text.replaceAll(',', ''));
 
@@ -44,7 +44,9 @@ export default function assetHub() {
   const modalWalletSelectVisible = ref<boolean>(false);
 
   onUnmounted(() => {
-    assetHubClient.value?.destroyInstance();
+    if (assetHubClient.value) {
+      // assetHubClient.value?.destroyInstance();
+    }
   });
 
   async function initAssetHub() {

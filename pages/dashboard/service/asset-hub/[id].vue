@@ -3,7 +3,7 @@
     <template #heading>
       <HeaderAssetHub
         back-link="/dashboard/service/asset-hub/"
-        :title="`Asset ${assetHubStore.active.name}`"
+        :title="`Asset: ${assetHubStore.active.name}`"
       />
     </template>
 
@@ -81,7 +81,32 @@ useHead({
 });
 
 const assetId = ref<number>(Number(params?.id));
-const assetData = ref<AssetData[]>([]);
+const assetData = computed<AssetData[]>(() => [
+  { label: t('form.label.assetHub.network'), value: `${assetHubNetworks.westend.name}` },
+  { label: t('form.label.assetHub.name'), value: `${assetHubStore.active?.name}` },
+  { label: t('form.label.assetHub.symbol'), value: `${assetHubStore.active?.symbol}` },
+  { label: t('form.label.assetHub.assetId'), value: `${assetId}` },
+  { label: t('form.label.assetHub.decimals'), value: `${assetHubStore.active?.decimals}` },
+  {
+    label: t('form.label.assetHub.initialSupply'),
+    value: `${assetHubStore.active?.supply}`,
+  },
+  {
+    label: t('form.label.assetHub.issuerAddress'),
+    value: `${assetHubStore.active?.issuer}`,
+    copy: true,
+  },
+  {
+    label: t('form.label.assetHub.freezerAddress'),
+    value: `${assetHubStore.active?.freezer}`,
+    copy: true,
+  },
+  {
+    label: 'On-chain metadata',
+    value: 'Get here',
+    link: 'https://github.com/subscan-explorer/assets-info',
+  },
+]);
 
 onMounted(async () => {
   await initAssetHub();
@@ -90,41 +115,6 @@ onMounted(async () => {
   if (!assetHubStore.account) {
     router.push({ name: 'dashboard-service-asset-hub' });
   }
-  initAssetData(assetId.value);
+  await assetHubStore.getAsset(assetId.value);
 });
-
-watch(
-  () => assetHubStore.account,
-  () => {
-    initAssetData(assetId.value);
-  }
-);
-
-async function initAssetData(assetId: number) {
-  const data = await assetHubStore.getAsset(assetId);
-
-  assetData.value = [
-    { label: t('form.label.assetHub.network'), value: assetHubNetworks.westend.name },
-    { label: t('form.label.assetHub.name'), value: data?.name?.toString() },
-    { label: t('form.label.assetHub.symbol'), value: data?.symbol?.toString() },
-    { label: t('form.label.assetHub.assetId'), value: assetId },
-    { label: t('form.label.assetHub.decimals'), value: data?.decimals?.toString() },
-    { label: t('form.label.assetHub.initialSupply'), value: data?.supply?.toString() },
-    {
-      label: t('form.label.assetHub.issuerAddress'),
-      value: data?.issuer?.toString(),
-      copy: true,
-    },
-    {
-      label: t('form.label.assetHub.freezerAddress'),
-      value: data?.freezer?.toString(),
-      copy: true,
-    },
-    {
-      label: 'On-chain metadata',
-      value: 'Get here',
-      link: 'https://github.com/subscan-explorer/assets-info',
-    },
-  ];
-}
 </script>
