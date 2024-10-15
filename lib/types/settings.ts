@@ -112,6 +112,7 @@ declare global {
     hashedUsername: string | null;
     publicAddress: string | null;
     status: number;
+    createTime: string;
   }
 
   interface EmbeddedWalletResponse extends GeneralResponse<EmbeddedWalletInterface> {}
