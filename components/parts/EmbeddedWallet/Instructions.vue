@@ -23,7 +23,7 @@
         <Btn
           type="secondary"
           inner-class="text-white flex items-center justify-center"
-          href="https://wiki.apillon.io/web3-services/8-embedded-wallets.html"
+          href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
         >
           <span>{{ $t('embeddedWallet.viewDocumentation') }}</span>
         </Btn>

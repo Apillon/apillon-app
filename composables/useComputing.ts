@@ -145,7 +145,11 @@ export default function useComputing() {
         h('span', { class: 'mr-1' }, t(`${base}.${field}`)),
         h(
           IconInfo,
-          { class: 'info-icon', size: 'sm', tooltip: t(`${base}.labelInfo.${field}`) },
+          {
+            class: 'info-icon',
+            size: 'sm',
+            tooltip: decodeHTMLEntities(t(`${base}.labelInfo.${field}`)),
+          },
           ''
         ),
       ];
