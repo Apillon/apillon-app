@@ -24,7 +24,7 @@
             class="card-dark"
             size="small"
             :bordered="false"
-            title="Number of wallets this month"
+            title="Generated wallets this month"
           >
             <h4 class="text-primary">
               {{ embeddedWalletStore.info.numOfEWSignaturesForCurrentMonth }}
@@ -99,10 +99,12 @@ const prepareData = (usage: EmbeddedWalletUsage[]) => {
     },
     datasets: [
       {
-        label: 'Number of wallets per day',
+        label: 'Wallets per day',
         backgroundColor: colors.green,
+        borderColor: colors.white,
         data: graphData,
         fill: true,
+        borderWidth: 1,
       },
     ],
   };

@@ -27,10 +27,20 @@ const embeddedWalletStore = useEmbeddedWalletStore();
 const createColumns = (): NDataTableColumns<SignatureInterface> => {
   return [
     {
+      key: 'publicAddress',
+      title: t('embeddedWallet.table.publicAddress'),
+      render(row: SignatureInterface) {
+        return h(resolveComponent('TableEllipsis'), {
+          text: row.publicAddress,
+          color: 'text-white',
+        });
+      },
+    },
+    {
       key: 'dataHash',
       title: t('embeddedWallet.table.dataHash'),
       render(row) {
-        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.dataHash });
+        return h(resolveComponent('TableEllipsis'), { text: row.dataHash });
       },
     },
     // {
@@ -40,13 +50,6 @@ const createColumns = (): NDataTableColumns<SignatureInterface> => {
     //     return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.hashedUsername });
     //   },
     // },
-    {
-      key: 'publicAddress',
-      title: t('embeddedWallet.table.publicAddress'),
-      render(row: SignatureInterface) {
-        return h(resolveComponent('TableEllipsis'), { text: row.publicAddress }, '');
-      },
-    },
     {
       key: 'createTime',
       title: t('dashboard.created'),

@@ -2212,8 +2212,8 @@
       "dataHash": "Data Hash",
       "hashedUsername": "Hashed Username",
       "integration_uuid": "Integration UUID",
-      "numberOfSignatures": "Number of wallets this month",
-      "publicAddress": "Public Address",
+      "numberOfSignatures": "Generated wallets this month",
+      "publicAddress": "Generated Wallet Address",
       "title": "Embedded Wallet title",
       "usage": "Usage"
     }
