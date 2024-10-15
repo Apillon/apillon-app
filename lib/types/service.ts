@@ -19,7 +19,6 @@ export enum ServiceTypeName {
   COMPUTING = 'COMPUTING',
   CONTRACTS = 'CONTRACTS',
   SOCIAL = 'SOCIAL',
-  CONTRACTS = 'CONTRACTS',
   WALLET = 'WALLET',
 }
 
