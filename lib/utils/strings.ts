@@ -9,6 +9,12 @@ export function toHtmlNewlines(text: string, breaks = '<br/>') {
     .replace(/(\r?\n)|↵/g, breaks);
 }
 
+export function decodeHTMLEntities(text) {
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  return textarea.value;
+}
+
 export function shortHash(val: string) {
   if (!val || val.length <= 10) {
     return val;

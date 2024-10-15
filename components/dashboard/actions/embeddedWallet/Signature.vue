@@ -1,23 +1,16 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs">
-      <n-input
-        v-model:value="embeddedWalletStore.signature.search"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('general.search')"
-        clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
+    <div class="">
+      <!-- Modal - Create wallet -->
+      <modal v-model:show="showModalEditEmbeddedWallet" :title="$t('embeddedWallet.edit')">
+        <FormEmbeddedWallet
+          :integration-uuid="embeddedWalletStore.active.integration_uuid"
+          @submit-success="showModalEditEmbeddedWallet = false"
+        />
+      </modal>
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts :service="ServiceTypeName.WALLET" />
-
       <!-- Refresh -->
       <n-button
         size="small"
@@ -33,10 +26,25 @@
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
+
+      <!-- View documentation -->
+      <n-button
+        size="small"
+        href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
+      >
+        <span class="icon-file text-xl mr-2"></span>
+        {{ $t('embeddedWallet.viewDocumentation') }}
+      </n-button>
+
+      <n-button size="small" @click="showModalEditEmbeddedWallet = true">
+        <span class="icon-wallet text-xl text-primary mr-2"></span>
+        <span class="text-primary">{{ $t('embeddedWallet.editIntegration') }}</span>
+      </n-button>
     </n-space>
   </n-space>
 </template>
 
 <script lang="ts" setup>
 const embeddedWalletStore = useEmbeddedWalletStore();
+const showModalEditEmbeddedWallet = ref<boolean | null>(false);
 </script>

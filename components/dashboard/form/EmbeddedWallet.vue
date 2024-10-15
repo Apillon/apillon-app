@@ -1,5 +1,7 @@
 <template>
-  <Spinner v-if="integrationUuid && !embeddedWallet" />
+  <div v-if="integrationUuid && !embeddedWallet" class="mt-20">
+    <Spinner />
+  </div>
   <div v-else>
     <Notification v-if="dataStore.isProjectUser" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
@@ -51,8 +53,8 @@
       <!--  EmbeddedWallet whitelist domains -->
       <n-form-item
         path="whitelistedDomains"
-        :label="$t('form.label.embeddedWallet.whitelistedDomains')"
         :label-props="{ for: 'whitelistedDomains' }"
+        :label="labelInfo('whitelistedDomains', 'form.label.embeddedWallet') as string"
       >
         <n-input
           v-model:value="formData.whitelistedDomains"
@@ -99,6 +101,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
+const { labelInfo } = useComputing();
 
 const loading = ref<boolean>(false);
 const embeddedWallet = ref<EmbeddedWalletInterface | null>(null);
@@ -120,7 +123,14 @@ const rules: NFormRules = {
 };
 function validateDomains(_: FormItemRule, value: string): boolean {
   const regex = /^[a-zA-Z0-9*][a-zA-Z0-9-.*]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
-  return !value || value.split('\n').every(item => regex.test(item));
+  const regexLocalhost = /localhost:[0-9]{4}$/;
+  return (
+    !value ||
+    value
+      .trim()
+      .split(/[\n,]+/)
+      .every(item => regex.test(item) || regexLocalhost.test(item))
+  );
 }
 
 const isFormDisabled = computed<boolean>(() => {
@@ -168,7 +178,7 @@ async function createEmbeddedWallet() {
     const bodyData = {
       title: formData.value.title,
       description: formData.value.description,
-      whitelistedDomains: formData.value.whitelistedDomains?.replaceAll('\n', ','),
+      whitelistedDomains: formData.value.whitelistedDomains?.trim().replaceAll('\n', ','),
       project_uuid,
     };
     const res = await $api.post<EmbeddedWalletResponse>(

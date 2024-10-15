@@ -628,7 +628,7 @@ body > .n-message-container {
   max-width: 400px;
 
   &__content {
-    @apply body-sm;
+    @apply body-sm whitespace-break-spaces;
   }
   &.n-popover-shared.n-popover-shared--show-arrow {
     @apply max-w-xs;
