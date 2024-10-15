@@ -2212,7 +2212,7 @@
       "dataHash": "Data Hash",
       "hashedUsername": "Hashed Username",
       "integration_uuid": "Integration UUID",
-      "numberOfSignatures": "Number of signatures",
+      "numberOfSignatures": "Number of wallets this month",
       "publicAddress": "Public Address",
       "title": "Embedded Wallet title",
       "usage": "Usage"

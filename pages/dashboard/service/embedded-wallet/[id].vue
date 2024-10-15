@@ -20,12 +20,17 @@
           >
             <h4 class="text-primary">{{ embeddedWalletStore.info.maxNumOfEWIntegrations }}</h4>
           </n-card>
-          <n-card class="card-dark" size="small" :bordered="false" title="Number of signatures">
+          <n-card
+            class="card-dark"
+            size="small"
+            :bordered="false"
+            title="Number of wallets this month"
+          >
             <h4 class="text-primary">
               {{ embeddedWalletStore.info.numOfEWSignaturesForCurrentMonth }}
             </h4>
           </n-card>
-          <n-card class="card-dark" size="small" :bordered="false" title="Max number of signatures">
+          <n-card class="card-dark" size="small" :bordered="false" title="Max wallets per month">
             <h4 class="text-primary">{{ embeddedWalletStore.info.maxNumOfEWSignatures }}</h4>
           </n-card>
         </div>
@@ -94,7 +99,7 @@ const prepareData = (usage: EmbeddedWalletUsage[]) => {
     },
     datasets: [
       {
-        label: 'Number of signatures per day',
+        label: 'Number of wallets per day',
         backgroundColor: colors.green,
         data: graphData,
         fill: true,

@@ -75,7 +75,7 @@
           :disabled="isFormDisabled"
           @click="handleSubmit"
         >
-          <span v-if="integrationUuid"> {{ $t('general.edit') }} </span>
+          <span v-if="integrationUuid"> {{ $t('form.save') }} </span>
           <span v-else>{{ $t('form.continue') }}</span>
         </Btn>
       </n-form-item>
