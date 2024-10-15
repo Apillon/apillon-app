@@ -5,18 +5,18 @@
       <n-button
         size="small"
         round
-        :class="selectedLanguage === 'app' ? '!bg-bg-dark' : ''"
-        @click="select('app')"
+        :class="selectedLanguage === CodeFramework.VUE ? '!bg-bg-dark' : ''"
+        @click="select(CodeFramework.VUE)"
       >
-        <span class="px-2">App</span>
+        <span class="px-2">Vue</span>
       </n-button>
       <n-button
         size="small"
         round
-        :class="selectedLanguage === 'sdk' ? '!bg-bg-dark' : ''"
-        @click="select('sdk')"
+        :class="selectedLanguage === CodeFramework.REACT ? '!bg-bg-dark' : ''"
+        @click="select(CodeFramework.REACT)"
       >
-        <span class="px-2">SDK</span>
+        <span class="px-2">React</span>
       </n-button>
     </div>
   </div>
@@ -25,10 +25,17 @@
 </template>
 
 <script lang="ts" setup>
+enum CodeFramework {
+  VUE = 'vue',
+  REACT = 'react',
+}
+
 import CodeBlock from 'vue3-code-block';
 
+const embeddedWalletStore = useEmbeddedWalletStore();
+
 // State to manage the selected code language
-const selectedLanguage = ref('app');
+const selectedLanguage = ref('vue');
 
 const select = (language: string) => {
   selectedLanguage.value = language;
@@ -36,51 +43,66 @@ const select = (language: string) => {
 
 // VueJS code block
 const codeVue = `
-  import { initializeOnWindow, getEmbeddedWallet } from '@embedded-wallet/sdk';
+import { WalletWidget } from '@apillon/wallet-vue';
 
-  initializeOnWindow({
-    production: true,
-    accountManagerAddress: '0x5C3512312312312312312312312312312365D4bC',
-    defaultNetworkId: 1287,
-    networkConfig: {
-      /* Custom network configurations */
+<WalletWidget
+  :clientId="${embeddedWalletStore.active.integration_uuid}"
+  :defaultNetworkId="1287"
+  :networks="[
+    {
+      name: 'Moonbeam Testnet',
+      id: 1287,
+      rpcUrl: 'https://rpc.testnet.moonbeam.network',
+      explorerUrl: 'https://moonbase.moonscan.io',
     },
-    onGetSignature: async (gaslessData) => {
-      // Custom signature generation logic
+    {
+      name: 'Celo Alfajores Testnet',
+      id: 44787,
+      rpcUrl: 'https://alfajores-forno.celo-testnet.org',
+      explorerUrl: 'https://explorer.celo.org/alfajores',
     },
-    onGetApillonSessionToken: async () => {
-      // Fetch Apillon session token
+    {
+      name: 'Amoy',
+      id: 80002,
+      rpcUrl: 'https://rpc-amoy.polygon.technology',
+      explorerUrl: 'https://www.oklink.com/amoy',
     },
-});
+  ]"
+/>
 `;
 
 const codeReact = `
-  import { initializeApp } from '@embedded-wallet/ui';
+import { WalletWidget } from '@apillon/wallet-react';
   
-  initializeApp('#embedded-wallet', {
-    disableAutoBroadcastAfterSign: false,
-    disableDefaultActivatorStyle: false,
-    accountManagerAddress: '0xF35C3eB93c6D3764A7D5efC6e9DEB614779437b1',
-    networks: [
-      {
-        name: 'Moonbeam Testnet',
-        id: 1287,
-        rpcUrl: 'https://rpc.testnet.moonbeam.network',
-        explorerUrl: 'https://moonbase.moonscan.io',
-      },
-      {
-        name: 'Amoy',
-        id: 80002,
-        rpcUrl: 'https://rpc-amoy.polygon.technology',
-        explorerUrl: 'https://www.oklink.com/amoy',
-      },
-    ],
-  });
+<WalletWidget
+  clientId={${embeddedWalletStore.active.integration_uuid}}
+  defaultNetworkId={1287}
+  networks={[
+    {
+      name: 'Moonbeam Testnet',
+      id: 1287,
+      rpcUrl: 'https://rpc.testnet.moonbeam.network',
+      explorerUrl: 'https://moonbase.moonscan.io',
+    },
+    {
+      name: 'Celo Alfajores Testnet',
+      id: 44787,
+      rpcUrl: 'https://alfajores-forno.celo-testnet.org',
+      explorerUrl: 'https://explorer.celo.org/alfajores',
+    },
+    {
+      name: 'Amoy',
+      id: 80002,
+      rpcUrl: 'https://rpc-amoy.polygon.technology',
+      explorerUrl: 'https://www.oklink.com/amoy',
+    },
+  ]}
+/>
 `;
 
 // Computed property to return the current code based on selected language
 const currentCode = computed(() => {
-  return selectedLanguage.value === 'app' ? codeReact : codeVue;
+  return selectedLanguage.value === CodeFramework.REACT ? codeReact : codeVue;
 });
 
 // Update code size when language changes

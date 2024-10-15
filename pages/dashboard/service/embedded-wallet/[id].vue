@@ -111,7 +111,7 @@ const prepareData = (usage: EmbeddedWalletUsage[]) => {
     },
     datasets: [
       {
-        label: 'Count if signatures',
+        label: 'Number of signatures per day',
         backgroundColor: colors.green,
         data: graphData,
         fill: true,

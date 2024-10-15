@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap justify-between xl:flex-nowrap border-b border-bg-lighter pb-8 mb-8">
+  <div class="flex flex-wrap justify-between xl:flex-nowrap mb-8">
     <div class="flex flex-col">
       <!-- DEMO -->
       <LearnVideo

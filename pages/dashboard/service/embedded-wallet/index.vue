@@ -29,7 +29,7 @@
             <EmbeddedWalletInstructions />
           </n-collapse-item>
         </n-collapse>
-        <EmbeddedWalletInstructions v-else />
+        <EmbeddedWalletInstructions v-else class="border-b-1 border-bg-lighter pb-8" />
 
         <ActionsEmbeddedWallet v-if="embeddedWalletStore.hasEmbeddedWallets" class="my-8" />
         <TableEmbeddedWallet
