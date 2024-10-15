@@ -1221,6 +1221,7 @@
     "INVALID_EVM_ADDRESS": "Invalid EVM address, please enter a valid EVM address",
     "INVALID_SUBSTRATE_ADDRESS": "Invalid Substrate address, please enter a valid Substrate address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
+    "MAX_NUMBER_OF_EMBEDDED_WALLET_INTEGRATIONS_REACHED": "Max number of Embedded Wallet integrations reached",
     "CREDIT_BALANCE_TOO_LOW": "Credit balance too low",
     "COMPUTING_ACCOUNT_ADDRESS_NOT_PRESENT": "Account address is missing",
     "COMPUTING_ACCOUNT_ADDRESS_NOT_VALID": "Account address is not valid",
@@ -1383,7 +1384,8 @@
       },
       "embeddedWallet": {
         "title": "Embedded wallet’s title",
-        "description": "Embedded wallet’s description"
+        "description": "Embedded wallet’s description",
+        "whitelistedDomains": "Whitelisted Domains"
       }
     },
     "networkTypes": {
@@ -1469,7 +1471,8 @@
       },
       "embeddedWallet": {
         "title": "Enter the title for your personal reference",
-        "description": "Enter the description for your personal reference"
+        "description": "Enter the description for your personal reference",
+        "whitelistedDomains": "valid-domain.com\n*.valid-domain2.com\nsubdomain.*.valid-domain3.com"
       }
     },
     "success": {
@@ -2507,7 +2510,8 @@
       "nftIdRequired": "Please enter NFT ID"
     },
     "embeddedWallet": {
-      "titleRequired": "Embedded Wallet title is required"
+      "titleRequired": "Embedded Wallet title is required",
+      "whitelistedDomains": "Domains not valid"
     },
     "cloudFunctions": {
       "endTimeRequired": "Please select end date",

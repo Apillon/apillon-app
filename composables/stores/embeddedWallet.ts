@@ -8,6 +8,7 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
     loading: false,
     search: '',
     pagination: createPagination(),
+    quotaReached: undefined as Boolean | undefined,
     signature: {
       items: [] as SignatureInterface[],
       loading: false,

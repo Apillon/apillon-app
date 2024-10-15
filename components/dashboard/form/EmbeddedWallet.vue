@@ -1,8 +1,14 @@
 <template>
   <Spinner v-if="integrationUuid && !embeddedWallet" />
   <div v-else>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="dataStore.isProjectUser" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
+    </Notification>
+    <Notification v-else-if="isFormDisabled" type="warning" class="mb-4">
+      {{ $t('project.quotaReached') }},
+      <NuxtLink class="text-yellow" :to="{ name: 'dashboard-payments' }" @click="$emit('close')">
+        {{ $t('project.upgradePlan') }} </NuxtLink
+      >.
     </Notification>
 
     <n-form
@@ -42,6 +48,21 @@
         />
       </n-form-item>
 
+      <!--  EmbeddedWallet whitelist domains -->
+      <n-form-item
+        path="whitelistedDomains"
+        :label="$t('form.label.embeddedWallet.whitelistedDomains')"
+        :label-props="{ for: 'whitelistedDomains' }"
+      >
+        <n-input
+          v-model:value="formData.whitelistedDomains"
+          type="textarea"
+          :input-props="{ id: 'whitelistedDomains' }"
+          :placeholder="$t('form.placeholder.embeddedWallet.whitelistedDomains')"
+          clearable
+        />
+      </n-form-item>
+
       <!--  Form submit -->
       <n-form-item :show-feedback="false" :show-label="false">
         <input type="submit" class="hidden" :value="$t('form.continue')" />
@@ -61,11 +82,14 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormItemRule } from 'naive-ui';
+
 type FormEmbeddedWallet = {
   title: string | null;
   description?: string | null;
+  whitelistedDomains?: string | null;
 };
-const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
+const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'close']);
 const props = defineProps({
   integrationUuid: { type: String, default: '' },
 });
@@ -82,15 +106,27 @@ const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormEmbeddedWallet>({
   title: null,
   description: null,
+  whitelistedDomains: null,
 });
 
 const rules: NFormRules = {
   title: ruleRequired(t('validation.embeddedWallet.titleRequired')),
   description: ruleDescription(t('validation.descriptionTooLong')),
+  whitelistedDomains: {
+    type: 'url',
+    validator: validateDomains,
+    message: t('validation.embeddedWallet.whitelistedDomains'),
+  },
 };
+function validateDomains(_: FormItemRule, value: string): boolean {
+  const regex = /^[a-zA-Z0-9*][a-zA-Z0-9-.*]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
+  return !value || value.split('\n').every(item => regex.test(item));
+}
 
 const isFormDisabled = computed<boolean>(() => {
-  return dataStore.isProjectUser;
+  return (
+    dataStore.isProjectUser || (embeddedWalletStore.quotaReached === true && !props.integrationUuid)
+  );
 });
 
 onMounted(async () => {
@@ -100,6 +136,7 @@ onMounted(async () => {
     if (embeddedWallet.value) {
       formData.value.title = embeddedWallet.value.title;
       formData.value.description = embeddedWallet.value.description;
+      formData.value.whitelistedDomains = embeddedWallet.value.whitelistedDomains;
     }
   }
 });
@@ -129,14 +166,16 @@ async function createEmbeddedWallet() {
   loading.value = true;
   try {
     const bodyData = {
-      ...formData.value,
+      title: formData.value.title,
+      description: formData.value.description,
+      whitelistedDomains: formData.value.whitelistedDomains?.replaceAll('\n', ','),
       project_uuid,
     };
     const res = await $api.post<EmbeddedWalletResponse>(
       endpoints.embeddedWalletIntegration,
       bodyData
     );
-    embeddedWalletStore.items.push(res.data);
+    embeddedWalletStore.items.unshift(res.data);
 
     message.success(t('form.success.created.embeddedWallet'));
 
@@ -146,8 +185,12 @@ async function createEmbeddedWallet() {
     /** Emit events */
     emit('submitSuccess');
     emit('createSuccess', res.data);
-  } catch (error) {
+  } catch (error: ApiError | any) {
     message.error(userFriendlyMsg(error));
+
+    if (error?.message === 'MAX_NUMBER_OF_EMBEDDED_WALLET_INTEGRATIONS_REACHED') {
+      embeddedWalletStore.quotaReached = true;
+    }
   }
   loading.value = false;
 }
@@ -156,9 +199,14 @@ async function updateEmbeddedWallet() {
   loading.value = true;
 
   try {
+    const bodyData = {
+      title: formData.value.title,
+      description: formData.value.description,
+      whitelistedDomains: formData.value.whitelistedDomains?.replaceAll('\n', ','),
+    };
     const res = await $api.patch<EmbeddedWalletResponse>(
       endpoints.embeddedWallets(props.integrationUuid),
-      formData.value
+      bodyData
     );
     embeddedWalletStore.items.forEach(item => {
       if (item.integration_uuid === res.data.integration_uuid) {
