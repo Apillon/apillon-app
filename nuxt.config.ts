@@ -111,6 +111,7 @@ export default defineNuxtConfig({
     langDir: 'locales',
     defaultLocale: 'en',
     strategy: 'no_prefix',
+    compilation: { strictMessage: false, escapeHtml: false },
     locales: [
       {
         code: 'en',

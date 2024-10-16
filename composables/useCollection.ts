@@ -1,5 +1,6 @@
 import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
 import IconInfo from '../components/parts/Icon/Info.vue';
+import { EvmChain } from '~/lib/types/nft';
 
 export default function useCollection() {
   const { t, te } = useI18n();
@@ -18,6 +19,14 @@ export default function useCollection() {
     .map(k => {
       return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
     });
+  const nftChains = [
+    ...chains,
+    {
+      name: SubstrateChain.UNIQUE,
+      label: t(`nft.chain.${SubstrateChain.UNIQUE}`),
+      value: SubstrateChain.UNIQUE,
+    },
+  ];
   const substrateChains = enumKeys(SubstrateChain)
     .filter(key => SubstrateChain[key] === SubstrateChain.ASTAR)
     .map(k => {
@@ -321,6 +330,7 @@ export default function useCollection() {
     chains,
     chainTypes,
     collectionTypes,
+    nftChains,
     substrateChains,
     supplyTypes,
     booleanSelect,

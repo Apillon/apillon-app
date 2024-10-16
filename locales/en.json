@@ -1569,25 +1569,6 @@
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "nft": {
-    "create": "Create an NFT",
-    "add": "Add NFT",
-    "addNfts": "Add NFTs",
-    "addAttribute": "Add attribute",
-    "addIpns": "Add IPNS",
-    "addIpnsInfo": "With IPNS, you will be able to modify the metadata and add new NFTs to this collection.",
-    "chain": {
-      "1": "MOONBEAM (Mainnet)",
-      "2": "MOONBASE (Testnet)",
-      "8": "ASTAR (Substrate)",
-      "81": "ASTAR SHIBUYA (Testnet)",
-      "592": "ASTAR (Mainnet)",
-      "1284": "MOONBEAM (Mainnet)",
-      "1287": "MOONBASE (Testnet)"
-    },
-    "chainType": {
-      "1": "SUBSTRATE",
-      "2": "EVM"
-    },
     "amount": {
       "title": "Create NFT",
       "content": "Add NFTs one by one or upload them in bulk.",
@@ -1596,25 +1577,19 @@
       "multiple": "Build multiple NFTs at once",
       "multipleContent": "Use CSV file to upload data in bulk"
     },
-    "single": {
-      "content": "NFT content",
-      "uploadDescription": "Upload image, video, audio, or a 3D-model. Supported file formats: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB.",
-      "technicalDetails": "NFT technical details",
-      "properties": "Properties",
-      "propertiesInfo": "Textual traits that show as text boxes",
-      "levels": "Levels",
-      "levelsInfo": "Numerical traits that show as progress bar",
-      "stats": "Stats",
-      "statsInfo": "Numerical traits that show as number boxes",
-      "boosts": "Boosts",
-      "boostsInfo": "Numerical traits that show as circle progress bars",
-      "date": "Date",
-      "dateInfo": "Date traits that show as date boxes",
-      "unlockableContent": "Unlockable Content",
-      "unlockableContentInfo": "Content is only visible to the NFT owner",
-      "displaySettings": "Display Settings",
-      "showDisplay": "Show on store website",
-      "hideDisplay": "Hide on Store website"
+    "chain": {
+      "1": "MOONBEAM (Mainnet)",
+      "2": "MOONBASE (Testnet)",
+      "8": "ASTAR (Substrate)",
+      "11": "Unique network",
+      "81": "ASTAR SHIBUYA (Testnet)",
+      "592": "ASTAR (Mainnet)",
+      "1284": "MOONBEAM (Mainnet)",
+      "1287": "MOONBASE (Testnet)"
+    },
+    "chainType": {
+      "1": "SUBSTRATE",
+      "2": "EVM"
     },
     "collection": {
       "addNew": "Add new collection",
@@ -1777,6 +1752,101 @@
         "10": "METADATA SUCCESSFULLY PREPARED"
       }
     },
+    "network": {
+      "11": {
+        "content": [
+          {
+            "purpose": "Purpose: Unique Network is a Polkadot parachain optimized specifically for NFTs and gaming applications.",
+            "title": "Unique network",
+            "benefits": [
+              "<b>Specialized NFT Infrastructure:</b> Unique is designed solely for NFTs, offering specific tools and features that are fine-tuned for NFT minting and management.",
+              "<b>Low-Cost and Eco-Friendly:</b> The network operates with lower transaction fees and a more energy-efficient consensus mechanism compared to Ethereum.",
+              "<b>NFT Customization:</b> Developers have more granular control over NFT metadata, including complex logic such as dynamic NFTs that can evolve based on certain conditions.",
+              "<b>Native Support for On-Chain Features:</b> Includes native support for fractional ownership, nested NFTs (NFTs containing other NFTs), and NFT marketplaces.",
+              "<b>Cross-Chain Capabilities:</b> As a Polkadot parachain, Unique offers cross-chain functionality for NFTs, enabling them to be traded or utilized across different networks within the Polkadot ecosystem.",
+              "<b>Developer-Friendly:</b> Unique provides a comprehensive set of SDKs, APIs, and ready-made NFT tools, reducing the complexity of developing NFT-based applications."
+            ]
+          },
+          {
+            "content": "Use case: Best suited for NFT-focused projects, particularly those that require advanced features like dynamic NFTs, fractional ownership, and low-cost minting."
+          }
+        ]
+      },
+      "592": {
+        "content": [
+          {
+            "title": "Astar Network",
+            "purpose": "Purpose: Astar is a multi-chain dApp hub on Polkadot that supports Ethereum, WebAssembly, and Layer 2 solutions.",
+            "benefits": [
+              "<b>Multi-VM Support:</b> Astar supports both Ethereum Virtual Machine (EVM) and WebAssembly (WASM), providing flexibility for developers who prefer different environments for NFT minting.",
+              "<b>Layer 2 Support:</b> Allows for scaling solutions through Layer 2 technology, reducing costs and increasing efficiency for NFT minting.",
+              "<b>Cross-Chain Interoperability:</b> Like Moonbeam, Astar benefits from Polkadot's cross-chain capabilities, meaning NFTs minted on Astar can be transferred or interact with other Polkadot parachains.",
+              "<b>Dapp Staking Mechanism:</b> Developers can stake Astar tokens to earn rewards, providing additional incentives for NFT projects deployed on Astar.",
+              "<b>Growing Ecosystem:</b> Astar is becoming a dApp hub, meaning NFT projects can integrate with various decentralized applications."
+            ]
+          },
+          {
+            "content": " Suitable for projects looking to leverage multi-chain capabilities with the flexibility of EVM and WASM for more sophisticated NFT minting solutions."
+          }
+        ]
+      },
+      "1284": {
+        "content": [
+          {
+            "title": "Moonbeam (Mainnet)",
+            "content": "Purpose: Moonbeam is a fully Ethereum-compatible smart contract platform on Polkadot, designed for cross-chain applications.",
+            "benefits": [
+              "<b>Ethereum Compatibility:</b> Full support for Ethereum smart contracts and tools (like OpenZeppelin, MetaMask), enabling developers to mint NFTs without learning new languages.",
+              "<b>Cross-Chain Interoperability:</b> Through Polkadot’s relay chain, NFTs minted on Moonbeam can interact with other chains in the Polkadot ecosystem.",
+              "<b>Low Gas Fees:</b> Gas fees on Moonbeam are significantly lower compared to Ethereum, making minting NFTs more cost-efficient.",
+              "<b>Active DeFi and NFT Ecosystem:</b> Moonbeam's rapidly growing DeFi ecosystem also creates opportunities for NFTs to be used in decentralized finance.",
+              "<b>Multi-chain Vision:</b> Moonbeam allows NFTs to be minted with the potential to interact with multiple blockchains through Polkadot’s cross-chain capabilities."
+            ]
+          },
+          {
+            "content": "Use case: Ideal for projects requiring full production deployment of Ethereum-based NFTs with cross-chain interactions."
+          }
+        ]
+      },
+      "1287": {
+        "content": [
+          {
+            "title": "MOONBASE (Moonbeam Testnet)",
+            "content": "Purpose: Moonbase is the testnet for Moonbeam, designed for testing and experimentation.",
+            "benefits": [
+              "<b>Low Costs:</b> As a testnet, transaction fees are negligible, allowing for cost-effective testing of NFT minting processes.",
+              "<b>Ethereum Compatibility:</b> Developers can test Ethereum-based smart contracts and NFTs in an environment that mirrors Ethereum’s functionality.",
+              "<b>Web3 Compatible:</b> You can use Ethereum development tools like MetaMask, Remix, and Truffle.",
+              "<b>Access to Full Moonbeam Ecosystem:</b> Provides the opportunity to test features before deploying them on Moonbeam, ensuring seamless migration of NFT minting solutions to the mainnet.",
+              "<b>Free Tokens for Testing:</b> You can request tokens from a faucet, making testing free and accessible."
+            ]
+          },
+          {
+            "content": "Use case: Best suited for developers who want to test minting processes and smart contract deployment before moving to production."
+          }
+        ]
+      }
+    },
+    "single": {
+      "content": "NFT content",
+      "uploadDescription": "Upload image, video, audio, or a 3D-model. Supported file formats: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB.",
+      "technicalDetails": "NFT technical details",
+      "properties": "Properties",
+      "propertiesInfo": "Textual traits that show as text boxes",
+      "levels": "Levels",
+      "levelsInfo": "Numerical traits that show as progress bar",
+      "stats": "Stats",
+      "statsInfo": "Numerical traits that show as number boxes",
+      "boosts": "Boosts",
+      "boostsInfo": "Numerical traits that show as circle progress bars",
+      "date": "Date",
+      "dateInfo": "Date traits that show as date boxes",
+      "unlockableContent": "Unlockable Content",
+      "unlockableContentInfo": "Content is only visible to the NFT owner",
+      "displaySettings": "Display Settings",
+      "showDisplay": "Show on store website",
+      "hideDisplay": "Hide on Store website"
+    },
     "transaction": {
       "chain": "Chain",
       "chainId": "Chain ID",
@@ -1836,6 +1906,12 @@
       "imagesInvalid": "Invalid image names. Example: ",
       "selectAmount": "Please select how many NFTs would you like to create."
     },
+    "add": "Add NFT",
+    "addNfts": "Add NFTs",
+    "addAttribute": "Add attribute",
+    "addIpns": "Add IPNS",
+    "addIpnsInfo": "With IPNS, you will be able to modify the metadata and add new NFTs to this collection.",
+    "create": "Create an NFT",
     "openBucket": "Go to storage",
     "transactionType": "Transaction Type"
   },
