@@ -3,12 +3,12 @@
     <slot v-if="!indexerUuid">
       <NuxtLink class="flex items-center gap-x-2" :to="link">
         <span class="icon-back text-2xl align-sub"></span>
-        <h1>{{ $t('dashboard.nav.indexer') }}</h1>
+        <h1>{{ $t('dashboard.nav.indexing') }}</h1>
       </NuxtLink>
     </slot>
     <slot v-else>
       <n-space align="center" size="large" :wrap="false">
-        <NuxtLink :to="{ name: 'dashboard-service-indexer' }">
+        <NuxtLink :to="{ name: 'dashboard-service-indexing' }">
           <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
         <div>
@@ -29,7 +29,7 @@
 const indexerStore = useIndexerStore();
 
 defineProps({
-  link: { type: String, default: '/dashboard/service/indexer' },
+  link: { type: String, default: '/dashboard/service/indexing' },
   indexerUuid: { type: String, default: '' },
 });
 </script>

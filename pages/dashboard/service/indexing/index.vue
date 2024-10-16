@@ -1,7 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <h1>{{ $t('dashboard.nav.indexer') }}</h1>
+      <h1>{{ $t('dashboard.nav.indexing') }}</h1>
     </template>
     <slot>
       <div class="pb-8">

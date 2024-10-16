@@ -303,15 +303,19 @@ const Endpoints = {
 
   /** Indexers */
   indexers: (uuid?: string) => {
-    return uuid ? `/indexer/${uuid}` : '/indexer';
+    return uuid ? `/indexing/indexers/${uuid}` : '/indexing/indexers';
+  },
+
+  indexer: () => {
+    return '/indexing/indexer';
   },
 
   indexerLogs: (uuid: string) => {
-    return `/indexer/${uuid}/logs`;
+    return `/indexing/indexers/${uuid}/logs`;
   },
 
   indexerDeployments: (uuid: string) => {
-    return `/indexer/${uuid}/deployments`;
+    return `/indexing/indexers/${uuid}/deployments`;
   },
 
   /**

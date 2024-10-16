@@ -6,41 +6,30 @@ export const useIndexerLogStore = defineStore('indexerLog', {
     items: [] as IndexerLogInterface[],
     nextPage: undefined,
     loading: false,
-    pagination: createPagination(),
     search: '',
   }),
   actions: {
     /**
      * Fetch wrappers
      */
-    async getLogs(indexerUuid: string, page = 1, limit = PAGINATION_LIMIT) {
-      if (
-        this.indexerUuid === indexerUuid &&
-        page === this.pagination.page &&
-        !isCacheExpired(LsCacheKeys.INDEXER_LOGS)
-      ) {
+    async getLogs(indexerUuid: string) {
+      if (this.indexerUuid === indexerUuid && !isCacheExpired(LsCacheKeys.INDEXER_LOGS)) {
         return this.items;
       }
-      return await this.fetchLogs(indexerUuid, page, limit);
+      return await this.fetchLogs(indexerUuid);
     },
 
     /**
      * API calls
      */
-    async fetchLogs(
-      indexerUuid: string,
-      page = 1,
-      limit = PAGINATION_LIMIT,
-      showLoader: boolean = true
-    ) {
+    async fetchLogs(indexerUuid: string, showLoader: boolean = true) {
       this.loading = showLoader;
       this.indexerUuid = indexerUuid;
       try {
-        const params = parseArguments({
-          limit,
-          page,
+        const params = {
+          limit: 200,
           search: this.search,
-        });
+        };
 
         const res = await $api.get<IndexerLogsResponse>(
           endpoints.indexerLogs(this.indexerUuid),
@@ -52,7 +41,6 @@ export const useIndexerLogStore = defineStore('indexerLog', {
         sessionStorage.setItem(LsCacheKeys.INDEXER_LOGS, Date.now().toString());
       } catch (error: any) {
         this.items = [];
-        this.pagination.itemCount = 0;
 
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));

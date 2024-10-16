@@ -6,11 +6,8 @@
     :columns="columns"
     :data="indexerLogStore.items"
     :loading="indexerLogStore.loading"
-    :pagination="indexerLogStore.pagination"
     :row-key="rowKey"
     remote
-    @update:page="(page: number) => handlePageChange(page, indexerLogStore.pagination.pageSize)"
-    @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
   />
 </template>
 
@@ -27,14 +24,14 @@ const columns = computed(() => [
   {
     key: 'level',
     title: t('dashboard.service.indexer.tableLog.level'),
-    render(row) {
-      return h('strong', {}, { default: () => row.level });
+    render(row: IndexerLogInterface) {
+      return h(resolveComponent('IndexerLogLevel'), { logLevel: row.level }, '');
     },
   },
   {
     key: 'container',
     title: t('dashboard.service.indexer.tableLog.container'),
-    render(row) {
+    render(row: IndexerLogInterface) {
       return h('strong', {}, { default: () => row.container });
     },
   },
@@ -62,13 +59,11 @@ watch(
     debouncedSearchFilter();
   }
 );
-const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
+const debouncedSearchFilter = useDebounceFn(fetchLogs, 500);
 
-async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIMIT) {
+async function fetchLogs() {
   if (indexerStore.active) {
-    await indexerLogStore.fetchLogs(indexerStore.active.indexer_uuid, page, limit);
-    indexerLogStore.pagination.page = page;
-    indexerLogStore.pagination.pageSize = limit;
+    await indexerLogStore.fetchLogs(indexerStore.active.indexer_uuid);
   }
 }
 </script>

@@ -8,19 +8,19 @@ const indexerStore = useIndexerStore();
 
 const menuOptions: NMenuOption[] = [
   {
-    key: 'dashboard-service-indexer-id',
+    key: 'dashboard-service-indexing-id',
     label: t('dashboard.service.indexer.general'),
-    path: `/dashboard/service/indexer/${indexerStore.active.indexer_uuid}`,
+    path: `/dashboard/service/indexing/${indexerStore.active.indexer_uuid}`,
   },
   {
-    key: 'dashboard-service-indexer-slug-logs',
+    key: 'dashboard-service-indexing-slug-logs',
     label: t('dashboard.service.indexer.logs'),
-    path: `/dashboard/service/indexer/${indexerStore.active.indexer_uuid}/logs`,
+    path: `/dashboard/service/indexing/${indexerStore.active.indexer_uuid}/logs`,
   },
   {
-    key: 'dashboard-service-indexer-slug-deployments',
+    key: 'dashboard-service-indexing-slug-deployments',
     label: t('dashboard.service.indexer.deployments'),
-    path: `/dashboard/service/indexer/${indexerStore.active.indexer_uuid}/deployments`,
+    path: `/dashboard/service/indexing/${indexerStore.active.indexer_uuid}/deployments`,
   },
 ];
 </script>

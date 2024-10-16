@@ -155,14 +155,14 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
-      key: 'dashboard-service-indexer',
-      label: t('dashboard.nav.indexer'),
-      to: 'dashboard-service-indexer',
+      key: 'dashboard-service-indexing',
+      label: t('dashboard.nav.indexing'),
+      to: 'dashboard-service-indexing',
       iconName: 'icon-file',
-      soon: isMenuItemDisabled(Feature.INDEXER),
+      soon: isMenuItemDisabled(Feature.INDEXING),
       disabled:
-        isMenuItemDisabled(Feature.INDEXER) ||
-        !authStore.isUserAllowed(Permission.INDEXER) ||
+        isMenuItemDisabled(Feature.INDEXING) ||
+        !authStore.isUserAllowed(Permission.INDEXING) ||
         zeroProjects.value,
     },
   ];

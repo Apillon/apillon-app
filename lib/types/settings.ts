@@ -12,7 +12,7 @@ export enum Permission {
   COMPUTING = 5,
   SOCIAL = 6,
   EMBEDDED_WALLET = 7,
-  INDEXER = 10,
+  INDEXING = 10,
 }
 
 /* OAuth link type */

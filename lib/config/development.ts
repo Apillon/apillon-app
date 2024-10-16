@@ -22,6 +22,7 @@ const config: ConfigInterface = {
     'DISCORD',
     'EMBEDDED_WALLET',
     'HOSTING',
+    'INDEXING',
     'INSTRUCTIONS',
     'KILT_LOGIN',
     'MARKETING',

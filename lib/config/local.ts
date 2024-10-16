@@ -21,7 +21,7 @@ const config: ConfigInterface = {
     'CLOUD_FUNCTIONS',
     'DISCORD',
     'HOSTING',
-    'INDEXER',
+    'INDEXING',
     'INSTRUCTIONS',
     'MARKETING',
     'NFT',

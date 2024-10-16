@@ -350,7 +350,8 @@
         "nft": "NFT service",
         "social": "Social service",
         "storage": "Storage service",
-        "wallet": "Wallet service"
+        "wallet": "Wallet service",
+        "indexing": "Indexing service"
       }
     },
     "clipboard": {
@@ -462,7 +463,7 @@
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
       "embeddedWallet": "Embedded Wallet",
-      "indexer": "Indexer"
+      "indexing": "Indexing"
     },
     "pageMenu": {
       "access": "Access",
@@ -1654,7 +1655,22 @@
       "sourceCode": "Upload indexer source code",
       "directory": "Indexer directory"
     },
-    "uuid": "Indexer UUID"
+    "uuid": "Indexer UUID",
+    "instructions": {
+      "deployYourIndexer": "Deploy your indexer",
+      "instruction1": "Indexer deployments are handeled over Apillon CLI.",
+      "instruction2": ""
+    },
+    "indexerApiEndpoint": "Indexer API endpoint",
+    "indexerGeneralData": "Indexer - general data",
+    "name": "Name",
+    "description": "Description",
+    "status": "Status",
+    "created": "Created",
+    "lastDeployed": "Last deployed",
+    "apiStatus": "Api status",
+    "processorStatus": "Processor status",
+    "processedBlocks": "Processed blocks"
   },
   "nft": {
     "create": "Create an NFT",

@@ -67,7 +67,7 @@ const rowProps = (row: IndexerBaseInterface) => {
     onClick: (e: Event) => {
       currentRow.value = row;
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/indexer/${row.indexer_uuid}` });
+        router.push({ path: `/dashboard/service/indexing/${row.indexer_uuid}` });
       }
     },
   };

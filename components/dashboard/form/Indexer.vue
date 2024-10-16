@@ -142,7 +142,7 @@ async function createIndexer() {
       ...formData.value,
       project_uuid: dataStore.projectUuid,
     };
-    const res = await $api.post<IndexerBaseResponse>(endpoints.indexers(), bodyData);
+    const res = await $api.post<IndexerBaseResponse>(endpoints.indexer(), bodyData);
 
     message.success($i18n.t('form.success.created.indexer'));
 
@@ -154,7 +154,7 @@ async function createIndexer() {
     emit('createSuccess');
 
     /** Redirect to new web page */
-    router.push(`/dashboard/service/indexer/${res.data.indexer_uuid}`);
+    router.push(`/dashboard/service/indexing/${res.data.indexer_uuid}`);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

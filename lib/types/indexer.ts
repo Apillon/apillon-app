@@ -2,6 +2,8 @@ declare global {
   interface IndexerBaseInterface extends BaseObjectInterface {
     indexer_uuid: string;
     lastDeploymentId: number;
+    squidId?: number;
+    squidReference?: string;
   }
 
   interface IndexerDeploymentInferface {
@@ -33,6 +35,23 @@ declare global {
   }
 
   interface IndexerInterface extends IndexerBaseInterface {
+    squid: {
+      id: number;
+      api: {
+        status: string;
+        urls: [{ type: string; url: string }];
+      };
+      processors: {
+        name: string;
+        status: string;
+        syncState: {
+          totalBlocks: number;
+          currentBlock: number;
+        };
+      };
+      deployedAt: string;
+      hibernatedAt: string;
+    };
     lastDeployment: IndexerDeploymentInferface;
   }
 
