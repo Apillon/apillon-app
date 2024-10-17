@@ -162,9 +162,7 @@ function handleSubmit(e: Event | MouseEvent) {
     } else if (props.integrationUuid) {
       updateEmbeddedWallet();
     } else {
-      warningStore.showSpendingWarning(PriceServiceName.OASIS_SIGNATURE, () =>
-        createEmbeddedWallet()
-      );
+      createEmbeddedWallet();      
     }
   });
 }
