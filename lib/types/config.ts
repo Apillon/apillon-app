@@ -3,6 +3,7 @@ import type { PublicRuntimeConfig } from '@nuxt/schema';
 export enum Feature {
   ACCESS = 'ACCESS',
   API_KEYS = 'API_KEYS',
+  ASSET_HUB = 'ASSET_HUB',
   AUTHENTICATION = 'AUTHENTICATION',
   BILLING = 'BILLING',
   CONFIGURATION = 'CONFIGURATION',
@@ -29,6 +30,7 @@ export enum Feature {
   RMRK = 'RMRK',
   SEARCH = 'SEARCH',
   SERVICES = 'SERVICES',
+  SMART_CONTRACTS = 'SMART_CONTRACTS',
   SOCIAL = 'SOCIAL',
   SOCIAL_ICONS = 'SOCIAL_ICONS',
   STORAGE = 'STORAGE',

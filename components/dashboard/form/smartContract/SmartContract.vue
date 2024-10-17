@@ -129,7 +129,7 @@ const warningStore = useWarningStore();
 const smartContractStore = useSmartContractStore();
 const deployedContractStore = useDeployedContractStore();
 
-const { disablePastDate, disablePastTime } = useCollection();
+const { chains, disablePastDate, disablePastTime } = useCollection();
 const { isSpecialField } = useSmartContracts();
 
 const loading = ref<boolean>(false);
@@ -139,10 +139,6 @@ const form = ref<SmartContractForm>({
   Name: '',
   Description: '',
   chain: null,
-});
-
-const chains = enumKeys(Chains).map(k => {
-  return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
 });
 
 const initialRules: FormRules = {

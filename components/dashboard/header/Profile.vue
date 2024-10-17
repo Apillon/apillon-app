@@ -40,7 +40,7 @@ const renderIcon = (iconName: string) => {
 };
 const renderNuxtIcon = (iconName: string) => {
   return () => {
-    return h(resolveComponent('NuxtIcon'), { name: iconName, class: 'text-xl' }, '');
+    return h(resolveComponent('NuxtIcon'), { name: iconName, class: 'text' }, '');
   };
 };
 
@@ -56,12 +56,6 @@ const options = computed(() => [
     disabled: !dataStore.hasProjects,
     show: !dataStore.isProjectUser,
     icon: renderIcon('icon-billing'),
-  },
-  {
-    key: 'dashboard-airdrop',
-    label: $i18n.t('referral.banner.btn'),
-    show: !dataStore.isProjectUser,
-    icon: renderNuxtIcon('logo/apillon-icon'),
   },
   {
     key: 'dashboard-project-settings',

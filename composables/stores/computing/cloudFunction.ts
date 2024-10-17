@@ -1,3 +1,4 @@
+import { load } from '@fingerprintjs/fingerprintjs';
 import { defineStore } from 'pinia';
 
 export const useCloudFunctionStore = defineStore('cloudFunction', {
@@ -98,12 +99,12 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
 
     async getCloudFunction(functionUuid: string): Promise<CloudFunctionInterface> {
       if (
-        this.active?.function_uuid === functionUuid &&
-        !isCacheExpired(LsCacheKeys.CLOUD_FUNCTION)
+        this.active?.function_uuid !== functionUuid ||
+        isCacheExpired(LsCacheKeys.CLOUD_FUNCTION)
       ) {
-        return this.active;
+        this.active = await this.fetchCloudFunction(functionUuid);
       }
-      return await this.fetchCloudFunction(functionUuid);
+      return this.active;
     },
 
     async getUsage(functionUuid: string): Promise<EnvVariable[]> {

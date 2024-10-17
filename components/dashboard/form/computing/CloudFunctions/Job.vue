@@ -82,7 +82,7 @@
 <script lang="ts" setup>
 import type { UploadCustomRequestOptions } from 'naive-ui';
 
-type FormCloudFunctions = {
+export type FormCloudFunctions = {
   name: string | null;
   slots: number | null;
   scriptCid: string | null;
@@ -100,8 +100,8 @@ const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
-const { checkUnfinishedJobs } = useCloudFunctions();
-const { labelInfo, uploadFileToIPFS } = useComputing();
+const { createNewJob } = useCloudFunctions();
+const { labelInfo } = useComputing();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
@@ -174,37 +174,12 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function createJob() {
   loading.value = true;
+  emit('submitSuccess');
 
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-    if (!dataStore.projectUuid) return;
-  }
-
-  try {
-    await uploadFile(formData.value.file);
-
-    const bodyData = {
-      project_uuid: dataStore.projectUuid,
-      function_uuid: props.functionUuid,
-      name: formData.value.name,
-      slots: formData.value.slots,
-      scriptCid: formData.value.scriptCid,
-    };
-    const res = await $api.post<JobResponse>(
-      endpoints.cloudFunctionJobs(props.functionUuid),
-      bodyData
-    );
-    cloudFunctionStore.addJob(res.data);
-
-    message.success(t('form.success.created.cloudFunctionJob'));
-
+  const newJob = await createNewJob(formData.value, props.functionUuid);
+  if (newJob) {
     /** Emit events */
-    emit('submitSuccess');
-    emit('createSuccess', res.data);
-
-    setTimeout(() => checkUnfinishedJobs(), 20000);
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
+    emit('createSuccess', newJob);
   }
   loading.value = false;
 }
@@ -225,15 +200,5 @@ async function updateJob() {
     message.error(userFriendlyMsg(error));
   }
   loading.value = false;
-}
-
-async function uploadFile(file?: FileListItemType | null) {
-  if (!file?.file) return;
-
-  const fileDetails = await uploadFileToIPFS(file, cloudFunctionStore.active.bucket_uuid);
-
-  if (fileDetails) {
-    formData.value.scriptCid = fileDetails.CIDv1 || fileDetails.CID;
-  }
 }
 </script>

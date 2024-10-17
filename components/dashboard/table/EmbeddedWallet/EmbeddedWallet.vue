@@ -13,7 +13,7 @@
     "
     remote
   />
-  <!-- Modal - Create Service -->
+  <!-- Modal - Edit embedded wallet -->
   <modal v-model:show="modalEditEmbeddedWalletVisible" :title="$t('embeddedWallet.edit')">
     <FormEmbeddedWallet
       :integration-uuid="currentRow.integration_uuid"

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap justify-between xl:flex-nowrap border-b border-bg-lighter pb-8 mb-8">
+  <div class="flex flex-wrap justify-between xl:flex-nowrap mb-8">
     <div class="flex flex-col">
       <!-- DEMO -->
       <LearnVideo
@@ -23,7 +23,7 @@
         <Btn
           type="secondary"
           inner-class="text-white flex items-center justify-center"
-          href="https://wiki.apillon.io/web3-services/8-embedded-wallets.html"
+          href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
         >
           <span>{{ $t('embeddedWallet.viewDocumentation') }}</span>
         </Btn>

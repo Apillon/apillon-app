@@ -115,7 +115,7 @@ const services = [
   {
     title: t('dashboard.nav.services'),
     content: t('dashboard.service.info'),
-    link: t('dashboard-service'),
+    link: 'dashboard-service',
   },
   // {
   //   title: t('dashboard.nav.smartContracts'),
@@ -124,7 +124,7 @@ const services = [
   {
     title: t('dashboard.nav.solutions'),
     content: t('dashboard.solution.info'),
-    link: t('dashboard-solution'),
+    link: 'dashboard-solution',
   },
 ];
 </script>

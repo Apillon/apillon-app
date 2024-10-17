@@ -16,9 +16,11 @@
 
           <p class="my-5">{{ $t('general.or') }}</p>
 
-          <Btn class="mb-2" size="large" @click="modalCreateJobVisible = true">
-            {{ $t('computing.cloudFunctions.job.btnUpload') }}
-          </Btn>
+          <div class="my-auto mb-2">
+            <Btn @click="modalCreateJobVisible = true">
+              {{ $t('computing.cloudFunctions.job.btnUpload') }}
+            </Btn>
+          </div>
         </div>
       </div>
 
@@ -27,6 +29,7 @@
         <FormComputingCloudFunctionsJob
           :function-uuid="cloudFunctionStore.functionUuid"
           @submit-success="modalCreateJobVisible = false"
+          @create-success="onJobCreated"
         />
       </modal>
     </slot>
@@ -37,8 +40,7 @@
 const { t } = useI18n();
 const { pageLoading, init } = useCloudFunctions();
 const cloudFunctionStore = useCloudFunctionStore();
-
-const modalCreateJobVisible = ref<boolean>(false);
+const { modalCreateJobVisible, onJobCreated } = useCloudFunctions();
 
 useHead({
   title: t('dashboard.nav.cloudFunctions'),

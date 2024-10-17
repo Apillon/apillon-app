@@ -4,6 +4,7 @@
       <HeaderSmartContract
         :link="`/dashboard/service/smart-contracts/${contractUuid}`"
         :title="smartContractStore.active.name"
+        billing
       />
     </template>
 

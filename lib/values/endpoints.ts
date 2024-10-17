@@ -86,6 +86,11 @@ const Endpoints = {
     return key ? `/instructions/${key}` : '/instructions';
   },
 
+  /** Asset Hub */
+  assets: (uuid?: string) => {
+    return uuid ? `/asset-hub/${uuid}` : '/asset-hub';
+  },
+
   /** Bucket */
   buckets: '/buckets/',
   bucket: (bucketUuid: string) => {

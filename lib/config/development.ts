@@ -14,6 +14,7 @@ const config: ConfigInterface = {
   publishedFeatures: [
     'ACCESS',
     'API_KEYS',
+    'ASSET_HUB',
     'AUTHENTICATION',
     'BILLING',
     'CAPTCHA_LOGIN',
@@ -36,6 +37,7 @@ const config: ConfigInterface = {
     'PREBUILD_SOLUTIONS',
     'REFERRAL',
     'SERVICES',
+    'SMART_CONTRACTS',
     'SOCIAL',
     'SOCIAL_ICONS',
     'STORAGE',

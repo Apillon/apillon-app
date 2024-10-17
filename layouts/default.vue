@@ -19,7 +19,7 @@
         <Sidebar :collapsed="sidebarCollapsed" />
       </n-layout-sider>
       <n-layout>
-        <Header @toggle-sidebar="toggleSidebar"> </Header>
+        <Header @toggle-sidebar="toggleSidebar" />
         <n-scrollbar class="bg-bg" y-scrollable style="max-height: calc(100dvh - 88px)">
           <div class="relative pt-8 px-4 sm:px-8 bg-bg">
             <slot />
@@ -45,7 +45,6 @@ const mainContentRef = ref<HTMLDivElement>();
 const serviceStatusRef = ref<HTMLDivElement>();
 const showMobileSidebar = ref<boolean>(false);
 const sidebarCollapsed = ref<boolean>(false);
-
 const serviceStatus = ref<ServiceStatusInterface[]>([]);
 const loadingServiceStatus = ref<boolean>(false);
 

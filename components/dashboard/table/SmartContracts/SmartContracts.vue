@@ -4,7 +4,7 @@
     v-bind="$attrs"
     :bordered="false"
     :columns="columns"
-    :data="props.contracts"
+    :data="contracts"
     :loading="deployedContractStore.loading"
     :pagination="deployedContractStore.pagination"
     :row-key="rowKey"
@@ -36,7 +36,7 @@ const columns = computed(() => [
     key: 'name',
     title: t('dashboard.service.smartContracts.table.name'),
     className: ON_COLUMN_CLICK_OPEN_CLASS,
-    render(row) {
+    render(row: DeployedContractInterface) {
       return h('strong', {}, { default: () => row.name });
     },
   },
@@ -45,7 +45,7 @@ const columns = computed(() => [
     title: t('dashboard.service.smartContracts.table.chain'),
     className: ON_COLUMN_CLICK_OPEN_CLASS,
     minWidth: 120,
-    render(row) {
+    render(row: DeployedContractInterface) {
       return h('span', {}, { default: () => t(`nft.chain.${row.chain}`) });
     },
   },
@@ -54,14 +54,14 @@ const columns = computed(() => [
     title: t('dashboard.service.smartContracts.table.contractAddress'),
     minWidth: 100,
     className: ON_COLUMN_CLICK_OPEN_CLASS,
-    render(row) {
+    render(row: DeployedContractInterface) {
       return h('span', {}, { default: () => row.contractAddress });
     },
   },
   {
     key: 'contractStatus',
     title: t('dashboard.service.smartContracts.table.contractStatus'),
-    render(row) {
+    render(row: DeployedContractInterface) {
       return h(
         resolveComponent('SmartContractsStatusLabel'),
         { contractStatus: row.contractStatus },

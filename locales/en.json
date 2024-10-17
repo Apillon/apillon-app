@@ -7,10 +7,12 @@
     "activity": "Activity",
     "addNew": "Add new",
     "address": "Address",
+    "archive": "Archive",
     "attach": "Attach",
     "attachService": "Attach {service} service",
-    "archive": "Archive",
+    "available": "Available",
     "cancel": "No, cancel",
+    "close": "Close",
     "comingSoon": "Coming soon",
     "confirm": "Confirm",
     "cookieNotice": "This website uses cookies to ensure you get the best experience on our website.",
@@ -23,6 +25,7 @@
     "delete": "Delete",
     "description": "Description",
     "deselectAll": "Deselect All",
+    "disconnect": "Disconnect",
     "documentation": "documentation",
     "download": "Download",
     "edit": "Edit",
@@ -30,6 +33,7 @@
     "error": "Error",
     "explore": "Explore",
     "goHome": "Go home",
+    "here": "here",
     "inactive": "inactive",
     "install": "Install",
     "images": "images",
@@ -77,7 +81,11 @@
     "uptime": "Uptime",
     "uuid": "UUID",
     "view": "View",
-    "viewDemo": "View demo"
+    "viewDemo": "View demo",
+    "instructions": {
+      "hide": "Hide instructions",
+      "show": "Show instructions"
+    }
   },
   "auth": {
     "footer": {
@@ -234,7 +242,8 @@
           "3": "ACTIVE",
           "4": "PAUSED",
           "9": "DELETED"
-        }
+        },
+        "viewTemplate": "View code template"
       },
       "usage": {
         "title": "Cloud functions monitor"
@@ -399,6 +408,10 @@
       "yourFunds": "Your funds",
       "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
       "services": {
+        "ACURAST": {
+          "name": "Cloud functions",
+          "description": null
+        },
         "COMPUTING": {
           "name": "Web3 Computing",
           "description": null
@@ -433,6 +446,11 @@
         }
       }
     },
+    "refreshModal": {
+      "title": "Deployment Status",
+      "refresh": "refresh",
+      "subtitle": "To check the deployment status, click the refresh button or select the time intervals for the automatic update."
+    },
     "invoice": {
       "client": "Client",
       "currency": "Currency",
@@ -447,6 +465,7 @@
       "authentication": "Authentication",
       "apiKeys": "API Keys",
       "analytics": "Analytics",
+      "assetHub": "Asset hub",
       "billing": "Billing & usage",
       "configuration": "Configuration",
       "computing": "Computing",
@@ -513,6 +532,43 @@
       "insufficient": "You don't have permissions to create or edit this item."
     },
     "service": {
+      "assetHub": {
+        "asset": "asset",
+        "assetCreating": "We are creating your asset",
+        "assetCreatingInfo": "While you wait, feel free to review the article about asset metadata publishing {0}.",
+        "assetCreatingWait": "Please stay put, we will let you know once the asset is created. ",
+        "changeIssuer": "Change issuer",
+        "changeIssuerInfo": "Changing the issuer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "changeFreezer": "Change freezer",
+        "changeFreezerInfo": "Changing the freezer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
+        "connectWallet": "Connect wallet",
+        "create": "Create asset",
+        "createNew": "Create new asset",
+        "createAsset": "Create an asset",
+        "characteristics": "Characteristics",
+        "edit": "Edit asset",
+        "loadingTransaction": "The transaction is being processed, please wait.",
+        "mintTokens": "Mint Tokens",
+        "mintTokensInfo": "Mint Tokens",
+        "noProject": "Your project has no assets yet",
+        "new": "Create new asset",
+        "otherAssets": "Other assets on Asset Hub",
+        "select": "Select asset",
+        "sendTokens": "Send Tokens",
+        "sendTokensInfo": "You may only send tokens available in your connected wallet. If you do not see any tokens available, please review your wallet connection.",
+        "transactionDetails": "You may view the transaction details {0}.",
+        "transactionHistory": "View transaction history",
+        "transactionProcessed": "The transaction was successfully processed.",
+        "transfer": "Transfer ownership",
+        "transferInfo": "Transferring the ownership means handing all rights over to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "walletStats": "Connected wallet stats",
+        "leave": {
+          "anyway": "Leave anyway",
+          "info": "If you leave, your changes won’t be saved.",
+          "title": "Are you sure you want to leave?"
+        }
+      },
       "authentication": {
         "name": "Decentralized Authentication",
         "description": "Boost users’ privacy and security with decentralized digital identity.",
@@ -597,8 +653,8 @@
           "1": "INITIATED",
           "2": "DEPLOYING",
           "3": "DEPLOYED",
-          "4": "TRANSFERRED",
-          "5": "FAILED",
+          "4": "FAILED",
+          "5": "TRANSFERRING",
           "6": "TRANSFERRED"
         },
         "infoSection": {
@@ -1208,6 +1264,7 @@
     "INVALID_EVM_ADDRESS": "Invalid EVM address, please enter a valid EVM address",
     "INVALID_SUBSTRATE_ADDRESS": "Invalid Substrate address, please enter a valid Substrate address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
+    "MAX_NUMBER_OF_EMBEDDED_WALLET_INTEGRATIONS_REACHED": "Max number of Embedded Wallet integrations reached",
     "CREDIT_BALANCE_TOO_LOW": "Credit balance too low",
     "COMPUTING_ACCOUNT_ADDRESS_NOT_PRESENT": "Account address is missing",
     "COMPUTING_ACCOUNT_ADDRESS_NOT_VALID": "Account address is not valid",
@@ -1321,6 +1378,22 @@
       "webhookUsername": "User name",
       "websiteDescription": "Website description",
       "websiteName": "Website name",
+      "assetHub": {
+        "address": "Address",
+        "admin": "Admin address",
+        "amount": "Amount",
+        "assetId": "Asset ID",
+        "decimals": "Decimals",
+        "deposit": "Deposit",
+        "freezerAddress": "Freezer Address",
+        "initialSupply": "Initial supply",
+        "issuerAddress": "Issuer Address",
+        "minBalance": "Minimum balance",
+        "name": "Asset name",
+        "network": "Network",
+        "owner": "Owner Address",
+        "symbol": "Asset symbol"
+      },
       "contract": {
         "accountAddress": "Account Address",
         "amount": "Amount",
@@ -1356,7 +1429,11 @@
       },
       "embeddedWallet": {
         "title": "Embedded wallet’s title",
-        "description": "Embedded wallet’s description"
+        "description": "Embedded wallet’s description",
+        "whitelistedDomains": "Whitelisted Domains",
+        "labelInfo": {
+          "whitelistedDomains": "Prevent third-parties from using your integration by restricting access to allowed domains \n- Authorize all domains with * \n  Example: *.apillon.io accepts all .apillon.io sites \n- Authorize local URLs with localhost:&lt;port&gt; \n- Separate domains by commas"
+        }
       }
     },
     "networkTypes": {
@@ -1417,6 +1494,19 @@
       "webhookUsername": "Enter user name",
       "websiteDescription": "Website description",
       "websiteName": "Website name",
+      "assetHub": {
+        "address": "Enter target address",
+        "amount": "Enter amount",
+        "network": "Network",
+        "name": "Type name",
+        "symbol": "Type asset symbol",
+        "assetId": "Asset ID",
+        "decimals": "Decimals",
+        "initialSupply": "Initial supply",
+        "minBalance": "Minimum Balance",
+        "issuerAddress": "Issuer Address",
+        "freezerAddress": "Freezer Address"
+      },
       "contract": {
         "name": "Enter contract name",
         "description": "Enter contract description",
@@ -1431,7 +1521,8 @@
       },
       "embeddedWallet": {
         "title": "Enter the title for your personal reference",
-        "description": "Enter the description for your personal reference"
+        "description": "Enter the description for your personal reference",
+        "whitelistedDomains": "valid-domain.com\n*.valid-domain2.com\nsubdomain.*.valid-domain3.com"
       },
       "indexer": {
         "logLevels": "Log levels",
@@ -1440,6 +1531,9 @@
     },
     "success": {
       "apiKey": "API key has been created",
+      "assetMinted": "Asset tokens has been minted",
+      "assetSend": "Asset tokens has been send",
+      "assetTransferred": "Asset ownership has been transferred",
       "filesUploaded": "Files have been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
@@ -1464,12 +1558,13 @@
         "apiKey": "API key has been created",
         "apiKeyRole": "API key permission has been added",
         "apiKeyRoles": "API key permissions has been added",
+        "asset": "Asset has been created",
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
         "chatPost": "Channel has been created",
         "chatSpace": "Hub has been created",
         "cloudFunction": "Cloud function has been created",
-        "cloudFunctionJob": "Cloud function Job has been created",
+        "cloudFunctionJob": "Job deployment has been initiated",
         "cloudFunctionVariable": "Cloud function variables have been created",
         "collection": "Creating NFT collection requested.",
         "directory": "Folder has been created",
@@ -1523,6 +1618,9 @@
         "apiKey": "API key has been updated",
         "apiKeyRole": "API key permission has been added",
         "apiKeyRoles": "API key permissions has been added",
+        "asset": "Asset metadata has been updated",
+        "assetFreezer": "Asset freezer has been updated",
+        "assetIssuer": "Asset issuer has been updated",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
         "cloudFunction": "Cloud function has been updated",
@@ -1551,6 +1649,7 @@
       "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform's services.",
       "payment": "I understand the billing process and some other legal stuff."
     },
+    "cancel": "Cancel",
     "confirm": "Yes, confirm",
     "connect": "Connect",
     "createBucketAndContinue": "Create bucket & continue to management",
@@ -1570,6 +1669,7 @@
     "saveCard": "Save card",
     "saveExit": "Save & exit",
     "sendInvite": "Send invite",
+    "sign": "Sign and continue",
     "startFirstProject": "Start your first project",
     "update": "Update"
   },
@@ -2037,78 +2137,6 @@
     "uuid": "Project UUID"
   },
   "referral": {
-    "airdrop": {
-      "btn": "Have a question? Enter Discord!",
-      "content": "You can now claim your $NCTR rewards. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
-      "reward": "Reward",
-      "task": "Task",
-      "title": "$NCTR Airdrop Claim is open",
-      "type": "Type",
-      "welcome": "$NCTR Airdrop Claim is open",
-      "subscribe": {
-        "btn": "Sign up to Apillon news",
-        "content": "Sign up for the Apillon newsletter and don’t miss the next chance to earn NCTR tokens.",
-        "headline": "$NCTR Airdrop Claim is open",
-        "headlineInfo": "You can now claim your $NCTR rewards.",
-        "info": "Receive product and feature updates, how-to guides and other platform-related news. Unsubscribe at any time.",
-        "title": "Missed your chance?"
-      },
-      "tabs": [
-        {
-          "title": "Refer",
-          "content": " and earn NCTR when they register",
-          "link": "Refer Apillon to a friend"
-        },
-        {
-          "title": "Learn",
-          "content": "Experiment with the Apillon platform (see tasks below) for a bigger NCTR bonus"
-        },
-        {
-          "title": "Build",
-          "content": "Create a Web3 project with Apillon services (see tasks below) and get the most NCTR"
-        }
-      ]
-    },
-    "banner": {
-      "title": "$NCTR Airdrop Claim is open",
-      "description": "You can now claim your $NCTR rewards.",
-      "btn": "NCTR Airdrop",
-      "learnMoreBtn": "Learn more"
-    },
-    "info": {
-      "airdrop": "Airdrop",
-      "astarAddress": "EVM wallet address",
-      "collected": "NCTR Earned",
-      "connectAstar": "Connect your EVM wallet",
-      "connectWallet": "Connect wallet",
-      "receiveTokens": "To receive NCTR tokens, connect your EVM compatible wallet.",
-      "seeHow": "See how",
-      "status": "Your status",
-      "claim": {
-        "alreadyClaimed": "You have already claimed your tokens.",
-        "blocked": "You are blocked from claiming tokens due to suspicious behavior.",
-        "btn": "Submit",
-        "content": "Your tasks are under review. We will notify you over email, once all reviews are completed. ",
-        "contentEnd": "is live.",
-        "inReview": "Your tasks are in review",
-        "title": "Tasks review",
-        "tooltip": "You will be able to claim your bonus after TGE.",
-        "tooltipDisabled": "Tasks are already in review",
-        "claim": "Claim your $NCTR",
-        "connectToClaim": "Connect to claim $NCTR",
-        "switchToClaim": "Switch to claim $NCTR"
-      },
-      "statuses": {
-        "0": "Register to Apillon platform",
-        "1": "Connect your EVM wallet",
-        "2": "Tasks submitted to a review",
-        "3": "Wait for TGE and claim NCTR"
-      }
-    },
-    "menu": {
-      "airdrop": "Airdrop",
-      "referral": "Referral"
-    },
     "referres": {
       "active": "Active",
       "disclaimer": "Disclaimer: To prevent users from duplicating accounts and referring to themselves, Apillon will measure the activity of referred accounts and reward them accordingly. It will also monitor potential bot activity or users creating multiple accounts. Accounts detected as either bot or self-referral will be excluded from receiving NCTR in the Airdrop.",
@@ -2188,6 +2216,7 @@
     "codeSnippets": "Code snippets:",
     "createNew": "New Embedded wallet integration",
     "edit": "Edit Embedded wallet integration",
+    "editIntegration": "Edit integration",
     "hideInstructions": "Hide instructions",
     "howItWorks": "See how it works",
     "readBlog": "Read our blog post",
@@ -2202,8 +2231,8 @@
       "dataHash": "Data Hash",
       "hashedUsername": "Hashed Username",
       "integration_uuid": "Integration UUID",
-      "numberOfSignatures": "Number of signatures",
-      "publicAddress": "Public Address",
+      "numberOfSignatures": "Generated wallets this month",
+      "publicAddress": "Generated Wallet Address",
       "title": "Embedded Wallet title",
       "usage": "Usage"
     }
@@ -2419,6 +2448,7 @@
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
     "cvvRequired": "Please enter CVV",
+    "descriptionRequired": "Please enter description",
     "descriptionTooLong": "Text is too long (max 255 characters)",
     "email": "Email address is not valid",
     "emailRequired": "Typing in your email would definitely hit the spot :)",
@@ -2483,6 +2513,13 @@
       "nameRequired": "API key name is required",
       "rolesRequired": "Please select at least one permission"
     },
+    "assetHub": {
+      "addressRequired": "Please enter target address",
+      "amountRequired": "Please enter amount",
+      "idNotUnique": "Asset with this ID already exists, please use a different ID",
+      "nameNotUnique": "Asset with this name already exists, please use a different name",
+      "symbolNotUnique": "Asset with this symbol already exists, please use a different symbol"
+    },
     "contract": {
       "addressRequired": "Please enter NFT collection address",
       "bucketUuidRequired": "Please select Bucket",
@@ -2497,7 +2534,8 @@
       "nftIdRequired": "Please enter NFT ID"
     },
     "embeddedWallet": {
-      "titleRequired": "Embedded Wallet title is required"
+      "titleRequired": "Embedded Wallet title is required",
+      "whitelistedDomains": "Domains not valid"
     },
     "cloudFunctions": {
       "endTimeRequired": "Please select end date",

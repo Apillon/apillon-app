@@ -30,7 +30,7 @@ const cloudFunctionStore = useCloudFunctionStore();
 const pageLoading = ref<boolean>(true);
 
 useHead({
-  title: t('dashboard.nav.computing'),
+  title: t('dashboard.nav.cloudFunctions'),
 });
 
 onMounted(() => {

@@ -19,11 +19,13 @@ export enum PageSize {
 }
 
 export const LS_KEYS = {
+  DEPLOYMENT_REFRESH_INTERVAL: 'al_deployment_refresh_interval',
   NEWSLETTER: 'al_newsletter_subscribed',
   SERVICE_STATUS: 'al_service_status',
 };
 
 export const SessionKeys = {
+  ASSET_HUB: 'al_asset_hub',
   CREDITS_MSG: 'al_credits_msg',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',
@@ -34,6 +36,7 @@ export const LsAnalyticsKeys = {
 };
 
 export const LsTableColumnsKeys = {
+  ASSET_HUB: 'al_table_asset_hub',
   FILES: 'al_table_files_columns',
   IPNS: 'al_table_ipns_columns',
   NFT_COLLECTION: 'al_table_nft_collection_columns',
@@ -58,6 +61,9 @@ export const LsW3WarnKeys = {
 
 export const LsCacheKeys = {
   API_KEYS: 'al_cache_api_keys',
+  ASSET: 'al_cache_asset',
+  ASSETS: 'al_cache_assets',
+  ASSETS_TESTNET: 'al_cache_assets_testnet',
   BUCKET: 'al_cache_bucket',
   BUCKETS: 'al_cache_buckets',
   BUCKET_ITEMS: 'al_cache_bucket_items',

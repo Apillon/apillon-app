@@ -16,7 +16,7 @@
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts v-if="!archive" :service="ServiceTypeName.COMPUTING" />
+      <ModalCreditCosts v-if="!archive" :category="PriceServiceCategory.ACURAST" />
 
       <!-- Refresh cloudFunctions -->
       <n-button
@@ -43,7 +43,12 @@
 
   <!-- Modal - Create CloudFunction -->
   <modal v-model:show="modalCreateCloudFunctionVisible" :title="$t('computing.cloudFunctions.new')">
-    <FormComputingCloudFunctions @submit-success="modalCreateCloudFunctionVisible = false" />
+    <FormComputingCloudFunctions
+      @submit-success="modalCreateCloudFunctionVisible = false"
+      @create-success="
+        data => $router.push(`/dashboard/service/cloud-functions/${data.function_uuid}`)
+      "
+    />
   </modal>
 </template>
 

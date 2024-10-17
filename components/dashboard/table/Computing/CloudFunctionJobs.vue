@@ -45,7 +45,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
-const { checkUnfinishedJobs } = useCloudFunctions();
+const { checkUnfinishedJobs } = useRefreshStatus();
 
 const loadingRedeploy = ref<boolean>(false);
 const modalEditJobsVisible = ref<boolean>(false);
@@ -219,10 +219,9 @@ async function redeploy(job?: JobInterface) {
       bodyData
     );
     cloudFunctionStore.addJob(res.data);
+    setTimeout(() => checkUnfinishedJobs(), 500);
 
     message.success(t('form.success.created.cloudFunctionJob'));
-
-    setTimeout(() => checkUnfinishedJobs(), 20000);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

@@ -16,12 +16,18 @@
     </div>
 
     <n-space size="large">
-      <!-- Refresh cloudFunctions -->
+      <!-- View template -->
       <n-button
         size="small"
-        :loading="cloudFunctionStore.loading"
-        @click="cloudFunctionStore.fetchCloudFunction(cloudFunctionStore.functionUuid)"
+        tag="a"
+        href="https://github.com/Apillon/cloud-function-template"
+        target="_blank"
       >
+        <span class="icon-cloud-functions text-xl mr-2"></span>
+        {{ $t('computing.cloudFunctions.job.viewTemplate') }}
+      </n-button>
+      <!-- Refresh cloudFunctions -->
+      <n-button size="small" :loading="cloudFunctionStore.loading" @click="refresh">
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
@@ -39,18 +45,24 @@
     <FormComputingCloudFunctionsJob
       :function-uuid="cloudFunctionStore.functionUuid"
       @submit-success="modalCreateJobVisible = false"
+      @create-success="onJobCreated"
     />
   </modal>
 </template>
 
 <script lang="ts" setup>
 const authStore = useAuthStore();
-const cloudFunctionStore = useCloudFunctionStore();
 const paymentStore = usePaymentStore();
-
-const modalCreateJobVisible = ref<boolean>(false);
+const cloudFunctionStore = useCloudFunctionStore();
+const { modalCreateJobVisible, onJobCreated } = useCloudFunctions();
 
 onMounted(() => {
   paymentStore.getPriceList();
 });
+
+async function refresh() {
+  cloudFunctionStore.active = await cloudFunctionStore.fetchCloudFunction(
+    cloudFunctionStore.functionUuid
+  );
+}
 </script>

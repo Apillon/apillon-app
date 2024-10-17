@@ -40,9 +40,11 @@ defineProps({
 function getCollectionStatus(status: number): TagType {
   switch (status) {
     case SmartContractStatus.DEPLOYED:
-      return 'success';
     case SmartContractStatus.TRANSFERRED:
       return 'success';
+    case SmartContractStatus.DEPLOYING:
+    case SmartContractStatus.TRANSFERRING:
+      return 'info';
     case SmartContractStatus.FAILED:
       return 'error';
     default:

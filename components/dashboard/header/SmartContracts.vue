@@ -5,7 +5,7 @@
     </slot>
     <template #info>
       <n-space :size="32" align="center">
-        <ModalCreditCosts service="CONTRACTS" />
+        <ModalCreditCosts :service="ServiceTypeName.CONTRACT" />
       </n-space>
     </template>
   </Heading>

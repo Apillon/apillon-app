@@ -7,6 +7,7 @@
     :pagination="embeddedWalletStore.signature.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
+    remote
     @update:page="
       (page: number) => handlePageChange(page, embeddedWalletStore.signature.pagination.pageSize)
     "
@@ -14,7 +15,6 @@
       (pageSize: number) =>
         handlePageChange(embeddedWalletStore.signature.pagination.page, pageSize)
     "
-    remote
   />
 </template>
 
@@ -27,24 +27,35 @@ const embeddedWalletStore = useEmbeddedWalletStore();
 const createColumns = (): NDataTableColumns<SignatureInterface> => {
   return [
     {
-      key: 'hashedUsername',
-      title: t('embeddedWallet.table.hashedUsername'),
-      render(row) {
-        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.hashedUsername });
+      key: 'publicAddress',
+      title: t('embeddedWallet.table.publicAddress'),
+      render(row: SignatureInterface) {
+        return h(resolveComponent('TableEllipsis'), {
+          text: row.publicAddress,
+          color: 'text-white',
+        });
       },
     },
     {
       key: 'dataHash',
       title: t('embeddedWallet.table.dataHash'),
       render(row) {
-        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.dataHash });
+        return h(resolveComponent('TableEllipsis'), { text: row.dataHash });
       },
     },
+    // {
+    //   key: 'hashedUsername',
+    //   title: t('embeddedWallet.table.hashedUsername'),
+    //   render(row) {
+    //     return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.hashedUsername });
+    //   },
+    // },
     {
-      key: 'publicAddress',
-      title: t('embeddedWallet.table.publicAddress'),
-      render(row: SignatureInterface) {
-        return h(resolveComponent('TableEllipsis'), { text: row.publicAddress }, '');
+      key: 'createTime',
+      title: t('dashboard.created'),
+      minWidth: 120,
+      render(row) {
+        return dateTimeToDate(row?.createTime || '');
       },
     },
     {

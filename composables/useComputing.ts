@@ -8,11 +8,9 @@ export default function useComputing() {
   const contractStore = useContractStore();
   const transactionStore = useComputingTransactionStore();
 
-  let contractInterval: any = null as any;
   let transactionInterval: any = null as any;
 
   onUnmounted(() => {
-    clearInterval(contractInterval);
     clearInterval(transactionInterval);
   });
 
@@ -20,21 +18,17 @@ export default function useComputing() {
   function checkUnfinishedContracts() {
     clearInterval(contractInterval);
 
-    const unfinishedContract = contractStore.items.find(
-      contract =>
-        contract.contractStatus === ContractStatus.DEPLOY_INITIATED ||
-        contract.contractStatus === ContractStatus.DEPLOYING
+    const unfinishedCollection = contractStore.items.find(
+      contract => contract.contractStatus < ContractStatus.DEPLOYED
     );
-    if (unfinishedContract === undefined) {
-      return;
-    }
+    if (unfinishedCollection === undefined) return;
 
     contractInterval = setInterval(async () => {
       const contracts = await contractStore.fetchContracts(false, false);
       const contract = contracts.find(
-        contract => contract.contract_uuid === unfinishedContract.contract_uuid
+        contract => contract.contract_uuid === unfinishedCollection.contract_uuid
       );
-      if (!contract || contract.contractStatus >= ContractStatus.DEPLOYED) {
+      if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
         clearInterval(contractInterval);
       }
     }, 10000);
@@ -70,6 +64,7 @@ export default function useComputing() {
   }
 
   function onContractCreated(contract: ContractInterface) {
+    initInfoWindow();
     if (contract.contractStatus === ContractStatus.DEPLOYED) {
       router.push(`/dashboard/service/computing/${contract.contract_uuid}`);
     } else {
@@ -147,7 +142,11 @@ export default function useComputing() {
         h('span', { class: 'mr-1' }, t(`${base}.${field}`)),
         h(
           IconInfo,
-          { class: 'info-icon', size: 'sm', tooltip: t(`${base}.labelInfo.${field}`) },
+          {
+            class: 'info-icon',
+            size: 'sm',
+            tooltip: decodeHTMLEntities(t(`${base}.labelInfo.${field}`)),
+          },
           ''
         ),
       ];

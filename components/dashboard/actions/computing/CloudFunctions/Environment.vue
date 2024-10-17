@@ -34,7 +34,7 @@
         }}</span>
       </n-button>
 
-      <n-upload :show-file-list="false" :custom-request="e => uploadFile(e)">
+      <n-upload :show-file-list="false" :custom-request="e => uploadEnvFile(e)">
         <n-button size="small" :disabled="authStore.isAdmin()">
           <span class="icon-create-folder text-xl text-primary mr-2"></span>
           <span class="text-primary">{{
@@ -75,7 +75,7 @@ const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const cloudFunctionStore = useCloudFunctionStore();
-const { envLoading, createEnvVariables, uploadFile } = useCloudFunctions();
+const { envLoading, createEnvVariables, uploadEnvFile } = useCloudFunctions();
 
 const modalCreateVariableVisible = ref<boolean>(false);
 
