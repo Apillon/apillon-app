@@ -1778,8 +1778,15 @@
     "uuid": "Indexer UUID",
     "instructions": {
       "deployYourIndexer": "Deploy your indexer",
-      "instruction1": "Indexer deployments are handeled over Apillon CLI.",
-      "instruction2": ""
+      "instruction1": "Indexer deployments are handeled over Apillon CLI.\n Please follow the step by step instructions below and deploy your indexer with the help of our CLI.",
+      "instruction2": "Note, that you need at lease 20,000 credits to perform this action.",
+      "step1": "Step 1 - Setup the Apillon CLI",
+      "step2": "Step 2 - Set up you squid locally",
+      "chooseTemplate": "Chose template for you indexer from Subsquid Github repository and clone it. \nBelow templates are available:",
+      "substrateTemplate": "Teplate for indexing substrate based chain",
+      "evmTemplates": "Templates for EVM based chains",
+      "step3": "Step 3 - Customize your squid",
+      "step4": "Step 4 - Deploy the indexer"
     },
     "indexerApiEndpoint": "Indexer API endpoint",
     "indexerGeneralData": "Indexer - general data",

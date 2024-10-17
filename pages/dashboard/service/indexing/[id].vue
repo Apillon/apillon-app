@@ -102,23 +102,21 @@
         </n-table>
       </n-space>
       <div v-else class="d-flex flex-column">
-        <h4>Deploy your indexer</h4>
+        <h4>{{ $t('indexer.instructions.deployYourIndexer') }}</h4>
         <p>
-          Indexer deployments are handled over Apillon CLI. <br />
-          Please follow the step by step instructions below and deploy your indexer with the help of
-          our CLI. <br />
-          Note, that you need at lease 20,000 credits to perform this action.
+          {{ $t('indexer.instructions.instruction1') }}
         </p>
+        <p>{{ $t('indexer.instructions.instruction2') }}</p>
+
         <n-space class="mt-8 pb-8 mx-auto" :size="16" vertical>
-          <h4>Step 1 - Setup the Apillon CLI</h4>
+          <h4>{{ $t('indexer.instructions.step1') }}</h4>
           <CliCommand command="npm install -g @apillon/cli" title="Install the CLI globally" />
         </n-space>
 
         <n-space class="mt-8 pb-8 mx-auto" :size="16" vertical>
-          <h4>Step 2 - Set up you squid locally</h4>
+          <h4>{{ $t('indexer.instructions.step2') }}</h4>
           <p>
-            Chose template for you indexer from Subsquid Github repository and clone it.<br />
-            Below templates are available:
+            {{ $t('indexer.instructions.chooseTemplate') }}
           </p>
           <ul>
             <li>
@@ -126,22 +124,24 @@
                 class="link"
                 href="https://github.com/subsquid-labs/squid-substrate-template"
                 target="_blank"
-                >Teplate for indexing substrate based chain</a
               >
+                {{ $t('indexer.instructions.substrateTemplate') }}
+              </a>
             </li>
             <li>
               <a
                 class="link"
                 href="https://github.com/subsquid-labs/squid-evm-templates"
                 target="_blank"
-                >Templates for EVM based chains</a
               >
+                {{ $t('indexer.instructions.evmTemplates') }}
+              </a>
             </li>
           </ul>
         </n-space>
 
         <n-space class="mt-8 pb-8 mx-auto" :size="16" vertical>
-          <h4>Step 3 - Customize your squid</h4>
+          <h4>{{ $t('indexer.instructions.step3') }}</h4>
           <p>
             Explore <a class="link" href="https://docs.sqd.dev/" target="_blank">the docs</a> to
             learn how to customize your squid
@@ -149,7 +149,7 @@
         </n-space>
 
         <n-space class="mt-8 pb-8 mx-auto" :size="16" vertical>
-          <h4>Step 4 - Deploy the indexer</h4>
+          <h4>{{ $t('indexer.instructions.step4') }}</h4>
           <CliCommand
             command="apillon indexing deploy-indexer <Path to indexer> -i <indexer-uuid>"
             title="Run indexer deployment inside your squid project locally"
