@@ -239,11 +239,11 @@ export default function useCollection() {
     );
   }
 
-  function disablePasteDate(ts: number) {
+  function disablePastDate(ts: number) {
     return ts < new Date().setHours(0, 0, 0, 0);
   }
 
-  function disablePasteTime(ts: number) {
+  function disablePastTime(ts: number) {
     return ts < Date.now();
   }
 
@@ -329,8 +329,8 @@ export default function useCollection() {
     isFormDisabled,
     chainCurrency,
     collectionEndpoint,
-    disablePasteDate,
-    disablePasteTime,
+    disablePastDate,
+    disablePastTime,
     infoLabel,
     onChainChange,
     openAddNft,

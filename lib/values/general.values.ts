@@ -25,6 +25,7 @@ export const LS_KEYS = {
 };
 
 export const SessionKeys = {
+  ASSET_HUB: 'al_asset_hub',
   CREDITS_MSG: 'al_credits_msg',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',
@@ -35,6 +36,7 @@ export const LsAnalyticsKeys = {
 };
 
 export const LsTableColumnsKeys = {
+  ASSET_HUB: 'al_table_asset_hub',
   FILES: 'al_table_files_columns',
   IPNS: 'al_table_ipns_columns',
   NFT_COLLECTION: 'al_table_nft_collection_columns',
@@ -59,6 +61,9 @@ export const LsW3WarnKeys = {
 
 export const LsCacheKeys = {
   API_KEYS: 'al_cache_api_keys',
+  ASSET: 'al_cache_asset',
+  ASSETS: 'al_cache_assets',
+  ASSETS_TESTNET: 'al_cache_assets_testnet',
   BUCKET: 'al_cache_bucket',
   BUCKETS: 'al_cache_buckets',
   BUCKET_ITEMS: 'al_cache_bucket_items',
@@ -87,6 +92,10 @@ export const LsCacheKeys = {
   DEPLOYMENTS_PRODUCTION: 'al_cache_deployments_production',
   DEPLOYMENTS_STAGING: 'al_cache_deployments_staging',
   DISCORD_LINK: 'al_cache_discord_link',
+  EMBEDDED_WALLET: 'al_cache_embedded_wallet',
+  EMBEDDED_WALLETS: 'al_cache_embedded_wallets',
+  EMBEDDED_WALLET_INFO: 'al_cache_embedded_wallet_info',
+  EMBEDDED_WALLET_SIGNATURES: 'al_cache_embedded_wallet_signatures',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
   INVOICES: 'al_cache_invoices',
@@ -113,7 +122,10 @@ export const LsCacheKeys = {
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
   WEBSITE_ARCHIVE: 'al_cache_website_archive',
-  EW_API_KEYS: 'al_ew_cache_api_keys',
+  SMART_CONTRACT: 'al_cache_smart_contract',
+  SMART_CONTRACTS: 'al_cache_smart_contracts',
+  SMART_CONTRACT_DEPLOYED: 'al_smart_contract_deployed',
+  SMART_CONTRACTS_DEPLOYED: 'al_smart_contracts_deployed',
 };
 
 /** User roles */

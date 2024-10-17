@@ -14,4 +14,5 @@ export enum SolutionKey {
   TOKEN_GATING = 'tokenGating',
   WALLET = 'wallet',
   EMBEDDED_WALLET = 'embeddedWallet',
+  SMART_CONTRACT = 'smartContracts',
 }

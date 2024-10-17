@@ -230,11 +230,11 @@ export function prepareOG(
   };
 }
 
-export function createPagination() {
+export function createPagination(remote = true) {
   const { t } = useI18n();
   return {
-    itemCount: 0,
-    page: 1,
+    itemCount: remote ? 0 : undefined,
+    page: remote ? 1 : undefined,
     pageSize: PAGINATION_LIMIT,
     showSizePicker: true,
     pageSizes: enumValues(PageSize) as number[],

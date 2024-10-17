@@ -79,23 +79,3 @@ export const convertBase64 = file => {
     };
   });
 };
-
-/** Read file content */
-export const readFileContent = file => {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsText(file);
-
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    };
-
-    fileReader.onerror = error => {
-      reject(error);
-    };
-  });
-};
-
-export function removeSurroundingQuotes(str: string): string {
-  return str.replace(/^'+|'+$/g, '');
-}

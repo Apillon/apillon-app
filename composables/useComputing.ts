@@ -8,11 +8,9 @@ export default function useComputing() {
   const contractStore = useContractStore();
   const transactionStore = useComputingTransactionStore();
 
-  let contractInterval: any = null as any;
   let transactionInterval: any = null as any;
 
   onUnmounted(() => {
-    clearInterval(contractInterval);
     clearInterval(transactionInterval);
   });
 
@@ -144,7 +142,11 @@ export default function useComputing() {
         h('span', { class: 'mr-1' }, t(`${base}.${field}`)),
         h(
           IconInfo,
-          { class: 'info-icon', size: 'sm', tooltip: t(`${base}.labelInfo.${field}`) },
+          {
+            class: 'info-icon',
+            size: 'sm',
+            tooltip: decodeHTMLEntities(t(`${base}.labelInfo.${field}`)),
+          },
           ''
         ),
       ];
