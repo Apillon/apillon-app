@@ -192,6 +192,8 @@ function getIconName(service: ProductPriceInterface) {
       return 'menu/computing';
     case ServiceTypeName.SOCIAL:
       return 'logo/subsocial';
+    case ServiceTypeName.WALLET:
+      return 'icon/wallet';
   }
 
   return 'icon/change';
