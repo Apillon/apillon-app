@@ -8,6 +8,8 @@ export default function useIndexer() {
   const pageLoading = ref<boolean>(true);
 
   async function initIndexer() {
+    indexerStore.active = {} as IndexerInterface;
+
     const indexerUuid = params?.id ? params?.id : params?.slug;
     if (!indexerUuid) {
       router.push({ name: 'dashboard-service-indexer' });
@@ -24,10 +26,12 @@ export default function useIndexer() {
       indexerStore.active = indexer;
       pageLoading.value = false;
 
-      // Get logs
-      await indexerLogsStore.getLogs(indexer.indexer_uuid);
-      // Get deployments
-      await indexerDeploymentsStore.getDeployments(indexer.indexer_uuid);
+      if (indexer.squidId) {
+        // Get logs
+        await indexerLogsStore.getLogs(indexer.indexer_uuid);
+        // Get deployments
+        await indexerDeploymentsStore.getDeployments(indexer.indexer_uuid);
+      }
     });
   }
 

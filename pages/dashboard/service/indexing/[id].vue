@@ -1,7 +1,10 @@
 <template>
   <Dashboard>
     <template #heading>
-      <HeaderIndexer :indexer-uuid="indexerStore.active.indexer_uuid" />
+      <HeaderIndexer
+        v-if="indexerStore.active.indexer_uuid"
+        :indexer-uuid="indexerStore.active.indexer_uuid"
+      />
     </template>
 
     <slot v-if="indexerStore.active.indexer_uuid">
@@ -104,7 +107,7 @@
           Indexer deployments are handled over Apillon CLI. <br />
           Please follow the step by step instructions below and deploy your indexer with the help of
           our CLI. <br />
-          Note, that you need at lease 50,000 credit to perform this action.
+          Note, that you need at lease 20,000 credits to perform this action.
         </p>
         <n-space class="mt-8 pb-8 mx-auto" :size="16" vertical>
           <h4>Step 1 - Setup the Apillon CLI</h4>

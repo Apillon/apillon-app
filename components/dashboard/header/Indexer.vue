@@ -20,7 +20,7 @@
     <template #info> </template>
 
     <template #submenu>
-      <MenuIndexer />
+      <MenuIndexer v-if="indexerStore.active" />
     </template>
   </Heading>
 </template>
