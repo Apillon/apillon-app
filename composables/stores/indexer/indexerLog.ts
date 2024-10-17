@@ -7,6 +7,11 @@ export const useIndexerLogStore = defineStore('indexerLog', {
     nextPage: undefined,
     loading: false,
     search: '',
+    filter: {
+      logLevels: [],
+      containers: [],
+      dateFrom: undefined as Date | undefined,
+    },
   }),
   actions: {
     /**
@@ -26,10 +31,24 @@ export const useIndexerLogStore = defineStore('indexerLog', {
       this.loading = showLoader;
       this.indexerUuid = indexerUuid;
       try {
+        /* const fromDate = new Date();
+        fromDate.setDate(fromDate.getDate() - 2); */
         const params = {
           limit: 200,
           search: this.search,
+          // from: fromDate.toISOString(), // Last 2 days
+          level: [],
+          container: [],
         };
+        /* if (this.filter.dateFrom) {
+          params.from = new Date(this.filter.dateFrom).toISOString();
+        } */
+        if (this.filter.logLevels.length > 0) {
+          params.level = this.filter.logLevels;
+        }
+        if (this.filter.containers.length > 0) {
+          params.container = this.filter.containers;
+        }
 
         const res = await $api.get<IndexerLogsResponse>(
           endpoints.indexerLogs(this.indexerUuid),
