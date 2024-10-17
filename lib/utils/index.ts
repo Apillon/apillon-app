@@ -85,6 +85,12 @@ export function isFeatureEnabled(feature: Feature | string, userRoles: number[])
   return enabledFeatures.includes(feature) || false;
 }
 
+/** Feature flags - check if feature is only for beta users */
+export function isBetaFeature(feature: Feature | string): boolean {
+  const config = useRuntimeConfig();
+  return config.public.betaFeatures.includes(feature) || false;
+}
+
 /** Check if any of elements contains class ${ON_COLUMN_CLICK_OPEN_CLASS}, which means this column is clickable */
 export function canOpenColumnCell(path: EventTarget[]) {
   return path.some(

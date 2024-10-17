@@ -36,6 +36,7 @@ const config: ConfigInterface = {
     'PREBUILD_SOLUTIONS',
     'REFERRAL',
     'SERVICES',
+    'SMART_CONTRACTS',
     'SOCIAL',
     'SOCIAL_ICONS',
     'STORAGE',

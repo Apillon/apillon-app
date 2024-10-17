@@ -18,6 +18,7 @@
 <script lang="ts" setup>
 import type { MenuMixedOption } from 'naive-ui/es/menu/src/interface';
 import { Feature } from '~/lib/types/config';
+import { isBetaFeature } from '~/lib/utils';
 
 const props = defineProps({
   collapsed: { type: Boolean, default: false },
@@ -105,10 +106,8 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.nav.assetHub'),
       to: 'dashboard-service-asset-hub',
       iconName: 'icon-social',
-      disabled:
-        isMenuItemDisabled(Feature.ASSET_HUB) ||
-        !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
-        zeroProjects.value,
+      show: !isMenuItemDisabled(Feature.ASSET_HUB),
+      disabled: isMenuItemDisabled(Feature.ASSET_HUB) || zeroProjects.value,
     },
     {
       key: 'dashboard-service-computing',
@@ -126,6 +125,8 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.nav.cloudFunctions'),
       to: 'dashboard-service-cloud-functions',
       iconName: 'icon-cloud-functions',
+      show: !isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
+      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
       disabled:
         isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
         !authStore.isUserAllowed(Permission.COMPUTING) ||
@@ -146,7 +147,9 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.nav.embeddedWallet'),
       to: 'dashboard-service-embedded-wallet',
       iconName: 'icon-wallet',
+      show: !isMenuItemDisabled(Feature.EMBEDDED_WALLET),
       soon: isMenuItemDisabled(Feature.EMBEDDED_WALLET),
+      beta: isBetaFeature(Feature.EMBEDDED_WALLET),
       disabled:
         isMenuItemDisabled(Feature.EMBEDDED_WALLET) ||
         !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
@@ -157,11 +160,9 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.nav.smartContracts'),
       to: 'dashboard-service-smart-contracts',
       iconName: 'icon-file',
-      soon: isMenuItemDisabled(Feature.SOCIAL),
-      disabled:
-        isMenuItemDisabled(Feature.SOCIAL) ||
-        !authStore.isUserAllowed(Permission.SOCIAL) ||
-        zeroProjects.value,
+      show: !isMenuItemDisabled(Feature.SMART_CONTRACTS),
+      soon: isMenuItemDisabled(Feature.SMART_CONTRACTS),
+      disabled: isMenuItemDisabled(Feature.SMART_CONTRACTS) || zeroProjects.value,
     },
   ];
 
