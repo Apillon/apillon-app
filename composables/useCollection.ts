@@ -168,8 +168,7 @@ export default function useCollection() {
 
   function prepareFormData(addBaseUri = false) {
     const chain =
-      collectionStore.form.base.chain === Chains.ASTAR &&
-      collectionStore.form.base.chainType === ChainType.SUBSTRATE
+      collectionStore.form.base.chain === Chains.ASTAR && collectionStore.form.base.chainType === ChainType.SUBSTRATE
         ? SubstrateChain.ASTAR
         : collectionStore.form.base.chain;
 
@@ -181,10 +180,7 @@ export default function useCollection() {
       collectionType: collectionStore.form.base.collectionType,
       baseExtension: collectionStore.form.behavior.baseExtension,
       dropPrice: collectionStore.form.behavior.dropPrice,
-      maxSupply:
-        collectionStore.form.behavior.supplyLimited === 1
-          ? collectionStore.form.behavior.maxSupply
-          : 0,
+      maxSupply: collectionStore.form.behavior.supplyLimited === 1 ? collectionStore.form.behavior.maxSupply : 0,
       drop: collectionStore.form.behavior.drop,
       dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
       dropReserve: collectionStore.form.behavior.dropReserve || 0,
@@ -196,6 +192,22 @@ export default function useCollection() {
       useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
       useIpns: collectionStore.form.base.useIpns,
     };
+  }
+
+  function prepareLogoAndCover() {
+    const images: FileListItemType[] = [];
+    const cover = collectionStore.form.base.coverImage;
+    const logo = collectionStore.form.base.logo;
+
+    if (logo) {
+      logo.name = 'logo.' + logo.name.split('.')[logo.name.split('.').length - 1];
+      images.push(logo);
+    }
+    if (cover) {
+      cover.name = 'cover.' + cover.name.split('.')[cover.name.split('.').length - 1];
+      images.push(cover);
+    }
+    return images;
   }
 
   function collectionEndpoint() {
@@ -241,10 +253,8 @@ export default function useCollection() {
 
   function isRoyaltyRequired() {
     return (
-      (collectionStore.form.base.chainType === ChainType.EVM &&
-        collectionStore.form.behavior.royaltiesFees > 0) ||
-      (collectionStore.form.base.chainType === ChainType.SUBSTRATE &&
-        collectionStore.form.behavior.drop)
+      (collectionStore.form.base.chainType === ChainType.EVM && collectionStore.form.behavior.royaltiesFees > 0) ||
+      (collectionStore.form.base.chainType === ChainType.SUBSTRATE && collectionStore.form.behavior.drop)
     );
   }
 
@@ -279,10 +289,7 @@ export default function useCollection() {
     }
   }
 
-  function uploadFileRequest(
-    { file, onError, onFinish }: UploadCustomRequestOptions,
-    logo: boolean
-  ) {
+  function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptions, logo: boolean) {
     const uploadedFile: FileListItemType = {
       ...file,
       fullPath: file.fullPath,
@@ -345,6 +352,7 @@ export default function useCollection() {
     onChainChange,
     openAddNft,
     prepareFormData,
+    prepareLogoAndCover,
     uploadFileRequest,
   };
 }

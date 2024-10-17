@@ -538,12 +538,7 @@
         "computingTransactionCount": "Number of transactions",
         "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
         "name": "Computing",
-        "usage": [
-          "computing smart contracts",
-          "cross-chain",
-          "secure computing environment",
-          "internet access"
-        ]
+        "usage": ["computing smart contracts", "cross-chain", "secure computing environment", "internet access"]
       },
       "hosting": {
         "name": "Decentralized Hosting",
@@ -558,26 +553,14 @@
         "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
         "name": "NFTs",
         "nftTransactionCount": "Number of transactions",
-        "usage": [
-          "storage buckets",
-          "smart contracts",
-          "drag-n-drop ui",
-          "website template",
-          "hosting"
-        ]
+        "usage": ["storage buckets", "smart contracts", "drag-n-drop ui", "website template", "hosting"]
       },
       "social": {
         "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
         "name": "Social",
         "postCount": "Number of channels",
         "spaceCount": "Number of hubs",
-        "usage": [
-          "social media",
-          "real-time chat",
-          "user-friendly UI",
-          "HIGH PRIVACY",
-          "configurable interface"
-        ]
+        "usage": ["social media", "real-time chat", "user-friendly UI", "HIGH PRIVACY", "configurable interface"]
       },
       "storage": {
         "bucket": "Web3 storage bucket",
@@ -704,13 +687,7 @@
           }
         ],
         "tabs": ["Create Collection", "Preview Collection", "Mint NFTs"],
-        "usage": [
-          "metadata storage",
-          "file storage",
-          "smart contracts",
-          "website template",
-          "hosting"
-        ]
+        "usage": ["metadata storage", "file storage", "smart contracts", "website template", "hosting"]
       },
       "nftContentDelivery": {
         "name": "NFT-Based Content Delivery",
@@ -1605,12 +1582,16 @@
       "createFirst": "Start creating NFTs",
       "createInfo": "",
       "createToDisplay": "Create website to display NFTs with",
+      "data": "Collection data",
       "delete": "Delete collection",
       "deleteConfirm": "Are you sure that you want to delete selected collection?",
       "deploy": "Deploy collection",
       "display": "Display NFT collection",
       "dropStart": "Drop start",
       "edit": "Edit",
+      "environment": "Chose environment",
+      "environmentContent": "Deploy on Testnet to test the template before launching it in production on Mainnet.",
+      "enterData": "Enter collection data",
       "extension": "[extension]",
       "empty": "Create your first NFT collection",
       "emptyInfo": "Add it to your Web3 project",
@@ -1638,10 +1619,6 @@
       "uploadYourFirst": "Upload your first NFTs and start building your collection.",
       "uuid": "Collection UUID",
       "view": "Or, display them on your existing website",
-      "environment": "Chose environment",
-      "environmentContent": "Deploy on Testnet to test the template before launching it in production on Mainnet.",
-      "enterData": "Enter collection data",
-      "data": "Collection data",
       "setBaseUri": "Set base URI",
       "setBehavior": "Set collection behavior",
       "preview": "Preview your collection",
@@ -1684,6 +1661,10 @@
           "label": "Boost percentage",
           "info": "Numerical traits that show as circle progress bars"
         }
+      },
+      "instruction": {
+        "data": "All collection data can be changed later in settings.",
+        "smartContract": "The smart contract data cannot be changed later or depends on the settings you have chosen. So make sure that you enter the correct data."
       },
       "labelInfo": {
         "collectionBaseExtension": "",

@@ -7,97 +7,62 @@
     </template>
 
     <slot>
-      <div v-if="collectionStore.metadataStored" class="mobile:relative max-w-lg mx-auto py-4">
+      <div v-if="collectionStore.metadataStored" class="mx-auto max-w-lg py-4 mobile:relative">
         <div class="relative text-center">
-          <h2>{{ $t('nft.collection.create') }}</h2>
-          <p class="mb-8 text-body whitespace-pre-line">
-            {{ $t('nft.collection.createInfo') }}
+          <h2>{{ t('nft.collection.create') }}</h2>
+          <p class="mb-8 whitespace-pre-line text-body">
+            {{ t('nft.collection.createInfo') }}
           </p>
         </div>
         <FormNftCollection />
-        <button
-          class="absolute left-0 top-6 md:top-[42px]"
-          @click="collectionStore.metadataStored = null"
-        >
-          <span class="icon-back text-2xl align-sub"></span>
+        <button class="absolute left-0 top-6 md:top-[42px]" @click="collectionStore.metadataStored = null">
+          <span class="icon-back align-sub text-2xl"></span>
         </button>
       </div>
       <div v-else class="relative">
-        <n-tabs
-          ref="mintTabsRef"
-          v-model:value="collectionStore.mintTab"
-          type="bar"
-          :bar-width="0"
-          size="large"
-          justify-content="center"
-          animated
+        <FormInstructions :title="t('nft.collection.data')" :instructions="[t('nft.collection.instruction.data')]">
+          <FormNftCollectionBase ref="formBaseRef" hide-submit />
+        </FormInstructions>
+
+        <FormInstructions
+          :title="t('nft.collection.data')"
+          :instructions="[t('nft.collection.instruction.smartContract')]"
         >
-          <!-- COLLECTION METADATA -->
-          <n-tab-pane
-            :name="NftCreateTab.METADATA"
-            :disabled="collectionStore.mintTab === NftCreateTab.DEPLOY"
+          <FormNftCollectionBehavior ref="formBehaviorRef" hide-submit />
+        </FormInstructions>
+
+        <FormInstructions class="!p-0">
+          <Btn type="primary" size="large" :loading="false" :disabled="false" @click="w3WarnAndDeploy">
+            {{ t('nft.collection.create') }}
+          </Btn>
+        </FormInstructions>
+
+        <!--
+        <div class="flex-cc" style="min-height: calc(70dvh - 50px)">
+          <div
+            v-if="collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOY_INITIATED"
+            class="w-full pb-8 text-center"
           >
-            <template #tab>
-              <IconNumber
-                v-if="collectionStore.mintTab === NftCreateTab.METADATA"
-                :number="1"
-                :active="true"
-              />
-              <IconSuccessful v-else />
-              <span class="ml-2 text-sm text-white">{{ $t('nft.collection.create') }}</span>
-            </template>
-            <slot>
-              <NftCollectionForms />
-            </slot>
-          </n-tab-pane>
+            <AnimationLoader />
+            <h2>{{ t('nft.deploy.creatingCollection') }}</h2>
+            <p class="mb-8 whitespace-pre-line text-body">
+              <span>
+                {{ t('nft.deploy.collection') }}
+              </span>
+            </p>
+          </div>
 
-          <!-- COLLECTION PREVIEW -->
-          <n-tab-pane :name="NftCreateTab.PREVIEW" disabled>
-            <template #tab>
-              <IconSuccessful v-if="collectionStore.mintTab === NftCreateTab.DEPLOY" />
-              <IconNumber
-                v-else
-                :number="2"
-                :active="collectionStore.mintTab === NftCreateTab.PREVIEW"
-              />
-              <span class="ml-2 text-sm text-white">{{ $t('nft.collection.previewTab') }}</span>
-            </template>
-            <slot>
-              <div class="flex-cc" style="min-height: calc(70dvh - 50px)">
-                <div
-                  v-if="collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOY_INITIATED"
-                  class="w-full pb-8 text-center"
-                >
-                  <AnimationLoader />
-                  <h2>{{ $t('nft.deploy.creatingCollection') }}</h2>
-                  <p class="mb-8 text-body whitespace-pre-line">
-                    <span>
-                      {{ $t('nft.deploy.collection') }}
-                    </span>
-                  </p>
-                </div>
+          <div v-else class="pb-8">
+            <NftPreviewCollection />
+            <Btn type="primary" class="mb-2 w-full" @click="w3WarnAndDeploy()">
+              {{ t('nft.collection.deploy') }}
+            </Btn>
+          </div>
+        </div>
 
-                <div v-else class="pb-8">
-                  <NftPreviewCollection />
-                  <Btn type="primary" class="w-full mb-2" @click="w3WarnAndDeploy()">
-                    {{ $t('nft.collection.deploy') }}
-                  </Btn>
-                </div>
-              </div>
-            </slot>
-          </n-tab-pane>
+        <FormNftCreateMetadata deploy-collection :style="isLg ? scrollStyle : {}" />
+        -->
 
-          <!-- DEPLOY -->
-          <n-tab-pane :name="NftCreateTab.DEPLOY" disabled>
-            <template #tab>
-              <IconNumber :number="3" :active="collectionStore.mintTab === NftCreateTab.DEPLOY" />
-              <span class="ml-2 text-sm text-white">{{ $t('nft.add') }}</span>
-            </template>
-            <slot>
-              <FormNftCreateMetadata deploy-collection :style="isLg ? scrollStyle : {}" />
-            </slot>
-          </n-tab-pane>
-        </n-tabs>
         <!-- Button back -->
         <button
           v-if="
@@ -105,55 +70,51 @@
             collectionStore.stepCollectionDeploy !== CollectionStatus.DEPLOY_INITIATED &&
             collectionStore.nftStep !== NftCreateStep.PREVIEW &&
             collectionStore.nftStep !== NftCreateStep.DEPLOY &&
-            (collectionStore.nftStep !== NftCreateStep.AMOUNT ||
-              collectionStore.mintTab !== NftCreateTab.DEPLOY)
+            (collectionStore.nftStep !== NftCreateStep.AMOUNT || collectionStore.mintTab !== NftCreateTab.DEPLOY)
           "
           class="absolute left-0 top-2 md:top-3"
           @click="goToPreviousStep"
         >
-          <span class="icon-back text-2xl align-sub"></span>
+          <span class="icon-back align-sub text-2xl"></span>
         </button>
 
-        <!-- Buttons switch preview-->
-        <div
-          v-if="collectionStore.nftStep === NftCreateStep.PREVIEW"
-          class="absolute right-0 top-2 flex items-center"
-        >
-          <span class="mr-2">{{ $t('general.view') }}:</span>
+        <!-- Buttons switch preview
+        <div v-if="collectionStore.nftStep === NftCreateStep.PREVIEW" class="absolute right-0 top-2 flex items-center">
+          <span class="mr-2">{{ t('general.view') }}:</span>
           <n-button
             class="w-10 px-0"
-            :class="{ '!bg-bg-lighter ': !collectionStore.gridView }"
+            :class="{ '!bg-bg-lighter': !collectionStore.gridView }"
             size="small"
             type="tertiary"
             quaternary
             round
             @click="collectionStore.gridView = false"
           >
-            <span class="icon-list-view text-2xl align-sub"></span>
+            <span class="icon-list-view align-sub text-2xl"></span>
           </n-button>
           <n-button
             class="w-10 px-0"
-            :class="{ '!bg-bg-lighter ': collectionStore.gridView }"
+            :class="{ '!bg-bg-lighter': collectionStore.gridView }"
             size="small"
             type="tertiary"
             quaternary
             round
             @click="collectionStore.gridView = true"
           >
-            <span class="icon-grid-view text-2xl align-sub"></span>
+            <span class="icon-grid-view align-sub text-2xl"></span>
           </n-button>
-        </div>
+        </div>-->
       </div>
 
       <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnConfirm">
-        {{ $t('w3Warn.nft.collection') }}
+        {{ t('w3Warn.nft.collection') }}
       </W3Warn>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import type { TabsInst } from 'naive-ui';
+import { useTemplateRef } from 'vue';
 import { useMessage } from 'naive-ui';
 
 const { t, te } = useI18n();
@@ -168,55 +129,41 @@ const collectionStore = useCollectionStore();
 const { isLg } = useScreen();
 const { uploadFiles } = useUpload();
 const { getPriceServiceName } = useNft();
-const { collectionEndpoint, prepareFormData } = useCollection();
+const { collectionEndpoint, prepareFormData, prepareLogoAndCover } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 useHead({
   title: t('dashboard.nav.nft'),
 });
 
-const pageLoading = ref<boolean>(true);
-const images = ref<Array<FileListItemType>>([]);
-const mintTabsRef = ref<TabsInst | null>(null);
 const headingRef = ref<HTMLElement>();
+const formBaseRef = useTemplateRef('formBaseRef');
+const formBehaviorRef = useTemplateRef('formBehaviorRef');
 
-const scrollStyle = computed(() => {
-  return {
-    minHeight: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
-  };
-});
+const pageLoading = ref<boolean>(true);
 
-onMounted(() => {
-  resetAndAddNft();
+onMounted(async () => {
+  await resetAndAddNft();
 
   /** Get Price list */
-  paymentStore.getPriceList();
+  await paymentStore.getPriceList();
 });
 
+const submitFormBase = () => (formBaseRef.value ? formBaseRef.value.handleSubmitForm() : false);
+const submitFormBehavior = () => (formBehaviorRef.value ? formBehaviorRef.value.handleSubmitForm() : false);
+
 function w3WarnAndDeploy() {
-  if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new')) {
-    modalW3WarnVisible.value = true;
-  } else {
-    onModalW3WarnConfirm();
+  if (submitFormBase() && submitFormBehavior()) {
+    if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new')) {
+      modalW3WarnVisible.value = true;
+    } else {
+      onModalW3WarnConfirm();
+    }
   }
 }
 
 async function onModalW3WarnConfirm() {
   warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
-}
-
-function prepareImagesForUpload() {
-  const cover = collectionStore.form.base.coverImage;
-  const logo = collectionStore.form.base.logo;
-
-  if (logo) {
-    logo.name = 'logo.' + logo.name.split('.')[logo.name.split('.').length - 1];
-    images.value.push(logo);
-  }
-  if (cover) {
-    cover.name = 'cover.' + cover.name.split('.')[cover.name.split('.').length - 1];
-    images.value.push(cover);
-  }
 }
 
 async function createCollection() {
@@ -233,10 +180,10 @@ async function createCollection() {
     collectionStore.form.single.collectionUuid = res.data.collection_uuid;
 
     /** Prepares logo and cover image for upload */
-    prepareImagesForUpload();
+    const images = prepareLogoAndCover();
 
     /** Uploads logo and cover image */
-    await uploadFiles(res.data.bucket_uuid, images.value);
+    await uploadFiles(res.data.bucket_uuid, images);
 
     /** Deployment status */
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
@@ -251,21 +198,20 @@ async function createCollection() {
   }
 }
 
-function resetAndAddNft() {
+async function resetAndAddNft() {
   bucketStore.resetFolder();
   bucketStore.resetUpload();
   collectionStore.resetForms();
   collectionStore.resetMetadata();
   collectionStore.metadataStored = null;
 
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await storageStore.getStorageInfo();
-      await collectionStore.getCollections();
+  await sleep(200);
+  await Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    storageStore.getStorageInfo();
+    await collectionStore.getCollections();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+    pageLoading.value = false;
+  });
 }
 
 function goToPreviousStep() {

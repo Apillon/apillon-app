@@ -1,10 +1,10 @@
 <template>
   <div>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
-      {{ $t('dashboard.permissions.insufficient') }}
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
+      {{ t('dashboard.permissions.insufficient') }}
     </Notification>
-    <p v-else-if="$i18n.te('nft.collection.infoNew')" class="text-body mb-8">
-      {{ $t('nft.collection.infoNew') }}
+    <p v-else-if="te('nft.collection.infoNew')" class="mb-8 text-body">
+      {{ t('nft.collection.infoNew') }}
     </p>
 
     <n-form
@@ -17,16 +17,11 @@
     >
       <n-grid class="items-end" :cols="12" :x-gap="32">
         <!--  Collection name -->
-        <n-form-item-gi
-          :span="8"
-          path="base.name"
-          :label="infoLabel('collectionName')"
-          :label-props="{ for: 'name' }"
-        >
+        <n-form-item-gi :span="8" path="base.name" :label="infoLabel('collectionName')" :label-props="{ for: 'name' }">
           <n-input
             v-model:value="collectionStore.form.base.name"
             :input-props="{ id: 'name' }"
-            :placeholder="$t('general.typeHere')"
+            :placeholder="t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -43,23 +38,19 @@
             :minlength="1"
             :maxlength="8"
             :input-props="{ id: 'symbol' }"
-            :placeholder="$t('general.typeHere')"
+            :placeholder="t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
       </n-grid>
 
       <!--  Chain -->
-      <n-form-item
-        path="base.chain"
-        :label="infoLabel('collectionChain')"
-        :label-props="{ for: 'chain' }"
-      >
+      <n-form-item path="base.chain" :label="infoLabel('collectionChain')" :label-props="{ for: 'chain' }">
         <select-options
           v-model:value="collectionStore.form.base.chain"
           :options="chains"
           :input-props="{ id: 'chain' }"
-          :placeholder="$t('general.pleaseSelect')"
+          :placeholder="t('general.pleaseSelect')"
           filterable
           clearable
         />
@@ -76,7 +67,7 @@
           v-model:value="collectionStore.form.base.chainType"
           :options="chainTypes"
           :input-props="{ id: 'chainType' }"
-          :placeholder="$t('general.pleaseSelect')"
+          :placeholder="t('general.pleaseSelect')"
           filterable
           clearable
         />
@@ -96,7 +87,7 @@
           v-model:value="collectionStore.form.base.collectionType"
           :options="collectionTypes"
           :input-props="{ id: 'collectionType' }"
-          :placeholder="$t('general.pleaseSelect')"
+          :placeholder="t('general.pleaseSelect')"
           filterable
           clearable
         />
@@ -114,7 +105,7 @@
           <n-input
             v-model:value="collectionStore.form.behavior.baseUri"
             :input-props="{ id: 'baseUri' }"
-            :placeholder="$t('general.typeHere')"
+            :placeholder="t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -130,12 +121,12 @@
           <n-input
             v-model:value="collectionStore.form.behavior.baseExtension"
             :input-props="{ id: 'baseExtension' }"
-            :placeholder="$t('general.typeHere')"
+            :placeholder="t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
         <n-form-item-gi v-if="metadataUri" :span="12" :show-label="false">
-          <div class="w-full text-sm break-words">{{ metadataUri }}</div>
+          <div class="w-full break-words text-sm">{{ metadataUri }}</div>
         </n-form-item-gi>
       </n-grid>
 
@@ -151,7 +142,7 @@
             v-model:value="collectionStore.form.behavior.supplyLimited"
             :options="supplyTypes"
             :input-props="{ id: 'supplyLimited' }"
-            :placeholder="$t('general.pleaseSelect')"
+            :placeholder="t('general.pleaseSelect')"
             filterable
             clearable
           />
@@ -172,20 +163,15 @@
             :input-props="{ id: 'maxSupply' }"
             :placeholder="
               collectionStore.form.behavior.supplyLimited
-                ? $t('form.placeholder.collectionMaxSupply')
-                : $t('form.disabled')
+                ? t('form.placeholder.collectionMaxSupply')
+                : t('form.disabled')
             "
             clearable
           />
         </n-form-item-gi>
       </n-grid>
 
-      <n-grid
-        v-if="collectionStore.form.base.chainType === ChainType.EVM"
-        class="items-end"
-        :cols="12"
-        :x-gap="32"
-      >
+      <n-grid v-if="collectionStore.form.base.chainType === ChainType.EVM" class="items-end" :cols="12" :x-gap="32">
         <!-- Collection Revocable -->
         <n-form-item-gi
           path="behavior.revocable"
@@ -197,7 +183,7 @@
             v-model:value="collectionStore.form.behavior.revocable"
             :options="booleanSelect"
             :input-props="{ id: 'revocable' }"
-            :placeholder="$t('general.pleaseSelect')"
+            :placeholder="t('general.pleaseSelect')"
             filterable
           />
         </n-form-item-gi>
@@ -213,18 +199,13 @@
             v-model:value="collectionStore.form.behavior.soulbound"
             :options="booleanSelect"
             :input-props="{ id: 'soulbound' }"
-            :placeholder="$t('general.pleaseSelect')"
+            :placeholder="t('general.pleaseSelect')"
             filterable
           />
         </n-form-item-gi>
       </n-grid>
 
-      <n-grid
-        v-if="collectionStore.form.base.chainType === ChainType.EVM"
-        class="items-end"
-        :cols="12"
-        :x-gap="32"
-      >
+      <n-grid v-if="collectionStore.form.base.chainType === ChainType.EVM" class="items-end" :cols="12" :x-gap="32">
         <!-- Royalties Address -->
         <n-form-item-gi
           path="behavior.royaltiesAddress"
@@ -235,7 +216,7 @@
           <n-input
             v-model:value="collectionStore.form.behavior.royaltiesAddress"
             :input-props="{ id: 'royaltiesAddress' }"
-            :placeholder="$t('general.typeHere')"
+            :placeholder="t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -252,7 +233,7 @@
             :min="0"
             :max="100"
             :input-props="{ id: 'royaltiesFees' }"
-            :placeholder="$t('general.typeHere')"
+            :placeholder="t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -272,7 +253,7 @@
         <n-form-item-gi
           path="behavior.dropPrice"
           :span="6"
-          :label="$t('form.label.collectionDropPrice', { currency: chainCurrency() })"
+          :label="t('form.label.collectionDropPrice', { currency: chainCurrency() })"
           :label-props="{ for: 'dropPrice' }"
         >
           <n-input-number
@@ -281,17 +262,13 @@
             :max="1000"
             :step="0.001"
             :input-props="{ id: 'dropPrice' }"
-            :placeholder="$t('general.typeHere')"
+            :placeholder="t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
 
         <!--  Collection Drop start -->
-        <n-form-item-gi
-          path="behavior.dropStart"
-          :span="6"
-          :label="infoLabel('collectionDropStart')"
-        >
+        <n-form-item-gi path="behavior.dropStart" :span="6" :label="infoLabel('collectionDropStart')">
           <n-date-picker
             v-model:value="collectionStore.form.behavior.dropStart"
             class="w-full"
@@ -314,7 +291,7 @@
           <n-input-number
             v-model:value="collectionStore.form.behavior.dropReserve"
             :min="0"
-            :placeholder="$t('general.typeHere')"
+            :placeholder="t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -330,7 +307,7 @@
           <n-input
             v-model:value="collectionStore.form.behavior.royaltiesAddress"
             :input-props="{ id: 'royaltiesAddress' }"
-            :placeholder="$t('general.typeHere')"
+            :placeholder="t('general.typeHere')"
             clearable
           />
         </n-form-item-gi>
@@ -338,25 +315,15 @@
 
       <!--  Form submit -->
       <n-form-item :show-label="false">
-        <input type="submit" class="hidden" :value="$t('nft.collection.create')" />
-        <Btn
-          type="primary"
-          size="large"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          @click="handleSubmit"
-        >
-          {{ $t('nft.collection.create') }}
+        <input type="submit" class="hidden" :value="t('nft.collection.create')" />
+        <Btn type="primary" size="large" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
+          {{ t('nft.collection.create') }}
         </Btn>
       </n-form-item>
     </n-form>
 
-    <W3Warn
-      v-model:show="modalW3WarnVisible"
-      :btn-text="$t('nft.collection.upload')"
-      @submit="onModalW3WarnConfirm"
-    >
-      {{ $t('w3Warn.nft.new') }}
+    <W3Warn v-model:show="modalW3WarnVisible" :btn-text="t('nft.collection.upload')" @submit="onModalW3WarnConfirm">
+      {{ t('w3Warn.nft.new') }}
     </W3Warn>
   </div>
 </template>
@@ -364,7 +331,7 @@
 <script lang="ts" setup>
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t, te } = useI18n();
 const router = useRouter();
 const message = useMessage();
 
@@ -400,8 +367,8 @@ const metadataUri = computed<string>(() => {
   return collectionStore.form.behavior.baseUri && collectionStore.form.behavior.baseExtension
     ? baseUri + '/1' + collectionStore.form.behavior.baseExtension
     : baseUri
-    ? baseUri + '/1.' + $i18n.t('nft.collection.extension')
-    : '';
+      ? baseUri + '/1.' + t('nft.collection.extension')
+      : '';
 });
 
 watch(
@@ -417,10 +384,8 @@ function handleSubmit(e: Event | MouseEvent) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     formErrors.value = !!errors;
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
-    } else if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && $i18n.te('w3Warn.nft.new')) {
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+    } else if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new')) {
       modalW3WarnVisible.value = true;
     } else {
       onModalW3WarnConfirm();
@@ -439,7 +404,7 @@ async function createCollection() {
   try {
     const res = await $api.post<CollectionResponse>(collectionEndpoint(), prepareFormData(true));
 
-    message.success($i18n.t('form.success.created.collection'));
+    message.success(t('form.success.created.collection'));
 
     /** On new collection created add new collection to list */
     collectionStore.items.push(res.data);
