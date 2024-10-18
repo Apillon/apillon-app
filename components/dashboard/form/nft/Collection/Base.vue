@@ -1,4 +1,7 @@
 <template>
+  <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
+    {{ t('dashboard.permissions.insufficient') }}
+  </Notification>
   <n-form
     ref="formRef"
     class="max-w-xl"
@@ -6,7 +9,7 @@
     :rules="rules"
     @submit.prevent="handleSubmitForm"
   >
-    <n-grid class="items-end" :cols="12" :x-gap="32">
+    <n-grid :cols="12" :x-gap="32">
       <!--  Collection name -->
       <n-form-item-gi
         :span="8"
@@ -41,22 +44,24 @@
 
       <!--  Collection logo -->
       <n-form-item-gi
-        :span="12"
+        :span="6"
         path="logo"
-        :label="infoLabel('collectionLogo')"
+        :label="infoLabel('collectionLogo') as string"
         :label-props="{ for: 'collectionLogo' }"
+        :show-feedback="false"
       >
-        <FormNftCollectionUpload :is-logo="true" />
+        <FormNftCollectionUpload :image="collectionStore.form.base.logo || ({} as FileListItemType)" is-logo />
       </n-form-item-gi>
 
       <!--  Collection cover image -->
       <n-form-item-gi
-        :span="12"
+        :span="6"
         path="coverImage"
-        :label="infoLabel('collectionCoverImage')"
+        :label="infoLabel('collectionCoverImage') as string"
         :label-props="{ for: 'coverImage' }"
+        :show-feedback="false"
       >
-        <FormNftCollectionUpload />
+        <FormNftCollectionUpload :image="collectionStore.form.base.coverImage || ({} as FileListItemType)" />
       </n-form-item-gi>
     </n-grid>
 
@@ -77,20 +82,18 @@ defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { formRef, rules, infoLabel } = useCollection();
+const { formRef, isFormDisabled, rules, infoLabel } = useCollection();
 defineExpose({ formRef, handleSubmitForm });
 
 // Submit
-function handleSubmitForm(e?: Event | MouseEvent): boolean {
+async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
-  formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
-      collectionStore.step = CollectionStep.BEHAVIOR;
-      return true;
-    }
-  });
-  return false;
+  return !(
+    await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
+      if (errors) {
+        errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+      }
+    })
+  )?.warnings;
 }
 </script>

@@ -8,50 +8,53 @@
         <ActionsNftCollection />
         <TableNftCollection :collections="collectionStore.items" />
       </n-space>
-      <Empty
-        v-else
-        :title="$t('nft.collection.empty')"
-        :info="$t('nft.collection.emptyInfo')"
-        icon="nft/illustration"
-      >
-        <Btn type="primary" @click="router.push({ name: 'dashboard-service-nft-new' })">
-          {{ $t('nft.collection.createFirst') }}
+      <Empty v-else :title="t('nft.collection.empty')" :info="t('nft.collection.emptyInfo')" icon="nft/illustration">
+        <Btn type="primary" @click="modalCreateCollectionVisible = true">
+          {{ t('nft.collection.createFirst') }}
         </Btn>
       </Empty>
+
+      <!-- Modal - Collection Transfer -->
+      <modal v-model:show="modalCreateCollectionVisible" class="max-w-4xl text-center">
+        <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === null" />
+        <FormNftCollectionNetworkSelect v-else @submit="router.push({ name: 'dashboard-service-nft-new' })" />
+      </modal>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
+const { resetAll } = useCollection();
 
 const pageLoading = ref<boolean>(true);
+const modalCreateCollectionVisible = ref<boolean>(false);
 
 let collectionInterval: any = null as any;
 
 useHead({
-  title: $i18n.t('dashboard.nav.nft'),
+  title: t('dashboard.nav.nft'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await collectionStore.getCollections();
+onMounted(async () => {
+  resetAll();
+  await sleep(100);
+  Promise.all(Object.values(dataStore.promises)).then(async _ => {
+    await collectionStore.getCollections();
 
-      /** Get Price list */
-      paymentStore.getPriceList();
+    /** Get Price list */
+    paymentStore.getPriceList();
 
-      setTimeout(() => {
-        checkUnfinishedCollections();
-      }, 3000);
+    setTimeout(() => {
+      checkUnfinishedCollections();
+    }, 3000);
 
-      pageLoading.value = false;
-    });
-  }, 100);
+    pageLoading.value = false;
+  });
 });
 onUnmounted(() => {
   clearInterval(collectionInterval);

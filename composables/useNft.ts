@@ -1,7 +1,7 @@
 import type { UploadCustomRequestOptions } from 'naive-ui';
 
 export default function useNft() {
-  const $i18n = useI18n();
+  const { t } = useI18n();
   const message = useMessage();
   const { putRequests, fileAlreadyOnFileList, isEnoughSpaceInStorage, uploadFiles } = useUpload();
   const collectionStore = useCollectionStore();
@@ -31,8 +31,7 @@ export default function useNft() {
   /** CSV */
   const isSameNumOfRows = computed<boolean>(() => {
     return (
-      collectionStore.active?.maxSupply === 0 ||
-      collectionStore.active?.maxSupply === collectionStore.csvData?.length
+      collectionStore.active?.maxSupply === 0 || collectionStore.active?.maxSupply === collectionStore.csvData?.length
     );
   });
   const hasRequiredMetadata = computed<boolean>(() => {
@@ -63,9 +62,7 @@ export default function useNft() {
       return '(' + collectionStore.images.length + '/' + collectionStore.csvData.length + ')';
     }
 
-    const missingImagesName = dataImagesNames.value.filter(
-      item => !uploadedImagesNames.value.includes(item)
-    );
+    const missingImagesName = dataImagesNames.value.filter(item => !uploadedImagesNames.value.includes(item));
 
     return [...new Set(missingImagesName)].join(', ');
   });
@@ -85,13 +82,13 @@ export default function useNft() {
       onError,
     };
     if (!isEnoughSpaceInStorage([], uploadedFile)) {
-      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+      message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
 
       /** Mark file as failed */
       onError();
       return;
     } else if (file.type !== 'text/csv' && file.type !== 'application/vnd.ms-excel') {
-      message.warning($i18n.t('validation.fileTypeNotCsv'));
+      message.warning(t('validation.fileTypeNotCsv'));
 
       /** Mark file as failed */
       onError();
@@ -138,7 +135,7 @@ export default function useNft() {
               };
             });
         } else {
-          message.warning($i18n.t('validation.fileNoData'));
+          message.warning(t('validation.fileNoData'));
 
           collectionStore.csvFile.onError();
           collectionStore.csvFile = {} as FileListItemType;
@@ -190,14 +187,9 @@ export default function useNft() {
    */
 
   /** Upload image request - add file to list */
-  function uploadImagesRequest({
-    file,
-    onProgress,
-    onError,
-    onFinish,
-  }: UploadCustomRequestOptions) {
+  function uploadImagesRequest({ file, onProgress, onError, onFinish }: UploadCustomRequestOptions) {
     if (!isImage(file.type)) {
-      message.warning($i18n.t('validation.notImage', { name: file.name }));
+      message.warning(t('validation.notImage', { name: file.name }));
       onError();
       return;
     }
@@ -213,13 +205,13 @@ export default function useNft() {
     };
 
     if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
-      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+      message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
       onError();
     } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
-      message.warning($i18n.t('validation.alreadyOnList', { name: file.name }));
+      message.warning(t('validation.alreadyOnList', { name: file.name }));
       onError();
     } else if (collectionStore.images.length >= collectionStore.csvData.length) {
-      message.warning($i18n.t('validation.tooManyImages', { num: collectionStore.csvData.length }));
+      message.warning(t('validation.tooManyImages', { num: collectionStore.csvData.length }));
       onError();
     } else {
       onProgress({ percent: 0 });
@@ -233,7 +225,7 @@ export default function useNft() {
 
   function uploadImageRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
     if (!isImage(file.type)) {
-      message.warning($i18n.t('validation.notImage', { name: file.name }));
+      message.warning(t('validation.notImage', { name: file.name }));
       onError();
       return;
     }
@@ -253,10 +245,10 @@ export default function useNft() {
     }
 
     if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
-      message.warning($i18n.t('validation.notEnoughSpaceInStorage', { name: file.name }));
+      message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
       onError();
     } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
-      console.warn($i18n.t('validation.alreadyOnList', { name: file.name }));
+      console.warn(t('validation.alreadyOnList', { name: file.name }));
       onError();
     } else if (fileAlreadyOnFileList(collectionStore.images, image, true)) {
       collectionStore.images = collectionStore.images.map(img => {
@@ -280,11 +272,11 @@ export default function useNft() {
 
     if (!isImage(options.file.type)) {
       options.fileList.splice(index, 1);
-      message.warning($i18n.t('validation.notImage', { name: options.file.name }));
+      message.warning(t('validation.notImage', { name: options.file.name }));
     } else if (indexImage !== -1) {
       options.fileList.splice(index, 1);
       if (!allImagesUploaded.value) {
-        message.warning($i18n.t('validation.alreadyOnList', { name: options.file.name }));
+        message.warning(t('validation.alreadyOnList', { name: options.file.name }));
       }
     }
   }
@@ -308,15 +300,9 @@ export default function useNft() {
   /**
    * Deploy NFT with metadata
    */
-  async function deployCollection(deployCollection: boolean = false) {
+  async function deployCollection(deploy: boolean = false) {
     const nftMetadataFiles = createNftFiles(collectionStore.metadata);
-    const metadataSession = await uploadFiles(
-      collectionStore.active.bucket_uuid,
-      nftMetadataFiles,
-      false,
-      true,
-      false
-    );
+    const metadataSession = await uploadFiles(collectionStore.active.bucket_uuid, nftMetadataFiles, false, true, false);
     const imagesSession = await uploadFiles(
       collectionStore.active.bucket_uuid,
       collectionStore.images,
@@ -325,31 +311,31 @@ export default function useNft() {
       false
     );
 
-    const endpoint = deployCollection
+    const endpoint = deploy
       ? endpoints.nftDeploy(collectionStore.active.collection_uuid)
       : endpoints.collectionNftsMetadata(collectionStore.active.collection_uuid);
 
     await Promise.all(putRequests.value).then(async _ => {
       if (!!metadataSession && !!imagesSession) {
         const res = await $api.post<CollectionResponse>(endpoint, {
-          useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
-          useIpns: collectionStore.form.base.useIpns,
+          useApillonIpfsGateway: collectionStore.form.behavior.useApillonIpfsGateway,
+          useIpns: collectionStore.form.behavior.useIpns,
           metadataSession,
           imagesSession,
         });
-        if (deployCollection) {
+        if (deploy) {
           collectionStore.active = res.data;
         }
 
         collectionStore.metadata = [];
 
-        message.success($i18n.t('form.success.nftDeployed'));
+        message.success(t('form.success.nftDeployed'));
 
         /** Reset timestamp to SS */
         sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
         sessionStorage.removeItem(LsCacheKeys.COLLECTION_METADATA);
       } else {
-        message.error($i18n.t('nft.upload.deployError'));
+        message.error(t('nft.upload.deployError'));
       }
     });
   }
@@ -386,9 +372,7 @@ export default function useNft() {
   }
 
   function getPriceServiceName() {
-    const chain = collectionStore.form.base?.chain
-      ? collectionStore.form.base.chain
-      : collectionStore.active.chain;
+    const chain = collectionStore.form.base?.chain ? collectionStore.form.behavior.chain : collectionStore.active.chain;
     return generatePriceServiceName(ServiceTypeName.NFT, chain, PriceServiceAction.COLLECTION);
   }
 

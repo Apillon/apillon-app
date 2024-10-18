@@ -10,16 +10,33 @@
     <n-form-item
       v-if="
         isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
-        collectionStore.form.base.chainType === ChainType.EVM
+        collectionStore.form.behavior.chainType === ChainType.EVM
       "
       path="collectionType"
       :label="infoLabel('collectionType') as string"
       :label-props="{ for: 'collectionType' }"
     >
       <select-options
-        v-model:value="collectionStore.form.base.collectionType"
+        v-model:value="collectionStore.form.behavior.collectionType"
         :options="collectionTypes"
         :input-props="{ id: 'collectionType' }"
+        :placeholder="t('general.pleaseSelect')"
+        filterable
+        clearable
+      />
+    </n-form-item>
+
+    <!--  Chain -->
+    <n-form-item
+      v-if="showNetwork"
+      path="chain"
+      :label="infoLabel('collectionChain') as string"
+      :label-props="{ for: 'chain' }"
+    >
+      <select-options
+        v-model:value="collectionStore.form.behavior.chain"
+        :options="nftChains"
+        :input-props="{ id: 'chain' }"
         :placeholder="t('general.pleaseSelect')"
         filterable
         clearable
@@ -29,7 +46,7 @@
     <!--  Collection Use Gateway -->
     <n-form-item path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
       <n-checkbox
-        v-model:checked="collectionStore.form.base.useApillonIpfsGateway"
+        v-model:checked="collectionStore.form.behavior.useApillonIpfsGateway"
         size="medium"
         :label="infoLabel('collectionUseGateway') as string"
       />
@@ -38,7 +55,7 @@
     <!--  Collection Dynamic metadata -->
     <n-form-item path="useIpns" :show-label="false">
       <n-checkbox
-        v-model:checked="collectionStore.form.base.useIpns"
+        v-model:checked="collectionStore.form.behavior.useIpns"
         size="medium"
         :label="infoLabel('collectionUseIpns') as string"
       />
@@ -83,7 +100,7 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="collectionStore.form.base.chainType === ChainType.EVM" class="items-end" :cols="12" :x-gap="32">
+    <n-grid v-if="collectionStore.form.behavior.chainType === ChainType.EVM" class="items-end" :cols="12" :x-gap="32">
       <!-- Collection Revocable -->
       <n-form-item-gi
         path="revocable"
@@ -117,7 +134,7 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="collectionStore.form.base.chainType === ChainType.EVM" class="items-end" :cols="12" :x-gap="32">
+    <n-grid v-if="collectionStore.form.behavior.chainType === ChainType.EVM" class="items-end" :cols="12" :x-gap="32">
       <!-- Royalties Address -->
       <n-form-item-gi
         path="royaltiesAddress"
@@ -153,7 +170,7 @@
 
     <n-grid class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Is Drop -->
-      <n-form-item-gi path="drop" :span="6" :show-label="false">
+      <n-form-item-gi path="drop" :span="6" :show-label="false" :show-feedback="false">
         <n-checkbox
           v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
@@ -202,7 +219,7 @@
     <n-grid v-if="!!collectionStore.form.behavior.drop" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Reserve -->
       <n-form-item-gi
-        v-if="collectionStore.form.base.chainType === ChainType.EVM"
+        v-if="collectionStore.form.behavior.chainType === ChainType.EVM"
         path="dropReserve"
         :span="6"
         :label="infoLabel('collectionDropReserve') as string"
@@ -219,7 +236,7 @@
 
       <!-- Royalties Address -->
       <n-form-item-gi
-        v-if="collectionStore.form.base.chainType === ChainType.SUBSTRATE"
+        v-if="collectionStore.form.behavior.chainType === ChainType.SUBSTRATE"
         path="royaltiesAddress"
         :span="6"
         :label="infoLabel('collectionDropAddress') as string"
@@ -246,10 +263,13 @@
 
 <script lang="ts" setup>
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
+import { Feature } from '~/lib/types/config';
 import { ChainType } from '~/lib/types/nft';
+import { isFeatureEnabled } from '~/lib/utils';
 
 defineProps({
   hideSubmit: { type: Boolean, default: false },
+  showNetwork: { type: Boolean, default: true },
 });
 const { t } = useI18n();
 const message = useMessage();
@@ -259,6 +279,7 @@ const {
   booleanSelect,
   collectionTypes,
   formRef,
+  nftChains,
   supplyTypes,
   rules,
   chainCurrency,
@@ -275,16 +296,16 @@ onMounted(() => {
 });
 
 // Submit
-function handleSubmitForm(e?: Event | MouseEvent): boolean {
+async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
-  formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
-      collectionStore.mintTab = NftCreateTab.PREVIEW;
-      return true;
-    }
-  });
-  return false;
+  return !(
+    await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
+      console.log(errors);
+      if (errors) {
+        errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+      } else {
+      }
+    })
+  )?.warnings;
 }
 </script>

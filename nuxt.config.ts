@@ -24,12 +24,7 @@ export default defineNuxtConfig({
     public: appConfig,
   },
 
-  components: [
-    '~/components',
-    '~/components/general/',
-    '~/components/parts/',
-    '~/components/dashboard/',
-  ],
+  components: ['~/components', '~/components/general/', '~/components/parts/', '~/components/dashboard/'],
 
   modules: [
     '@vueuse/nuxt',

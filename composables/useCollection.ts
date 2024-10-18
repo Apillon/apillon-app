@@ -1,12 +1,12 @@
 import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
 import IconInfo from '../components/parts/Icon/Info.vue';
-import { EvmChain } from '~/lib/types/nft';
 
 export default function useCollection() {
-  const { t, te } = useI18n();
   const router = useRouter();
+  const { t, te } = useI18n();
   const message = useMessage();
   const dataStore = useDataStore();
+  const bucketStore = useBucketStore();
   const collectionStore = useCollectionStore();
 
   const { isEnoughSpaceInStorage } = useUpload();
@@ -168,16 +168,17 @@ export default function useCollection() {
 
   function prepareFormData(addBaseUri = false) {
     const chain =
-      collectionStore.form.base.chain === Chains.ASTAR && collectionStore.form.base.chainType === ChainType.SUBSTRATE
+      collectionStore.form.behavior.chain === Chains.ASTAR &&
+      collectionStore.form.behavior.chainType === ChainType.SUBSTRATE
         ? SubstrateChain.ASTAR
-        : collectionStore.form.base.chain;
+        : collectionStore.form.behavior.chain;
 
     return {
       chain,
       project_uuid: dataStore.projectUuid,
       name: collectionStore.form.base.name,
       symbol: collectionStore.form.base.symbol,
-      collectionType: collectionStore.form.base.collectionType,
+      collectionType: collectionStore.form.behavior.collectionType,
       baseExtension: collectionStore.form.behavior.baseExtension,
       dropPrice: collectionStore.form.behavior.dropPrice,
       maxSupply: collectionStore.form.behavior.supplyLimited === 1 ? collectionStore.form.behavior.maxSupply : 0,
@@ -189,8 +190,8 @@ export default function useCollection() {
       royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
       royaltiesFees: collectionStore.form.behavior.royaltiesFees,
       baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
-      useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
-      useIpns: collectionStore.form.base.useIpns,
+      useApillonIpfsGateway: collectionStore.form.behavior.useApillonIpfsGateway,
+      useIpns: collectionStore.form.behavior.useIpns,
     };
   }
 
@@ -211,8 +212,8 @@ export default function useCollection() {
   }
 
   function collectionEndpoint() {
-    return collectionStore.form.base.chain === Chains.ASTAR &&
-      collectionStore.form.base.chainType === ChainType.SUBSTRATE
+    return collectionStore.form.behavior.chain === Chains.ASTAR &&
+      collectionStore.form.behavior.chainType === ChainType.SUBSTRATE
       ? endpoints.collectionsSubstrate
       : endpoints.collections();
   }
@@ -239,7 +240,7 @@ export default function useCollection() {
   function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
     return (
       !isRoyaltyRequired() ||
-      (collectionStore.form.base.chainType === ChainType.EVM
+      (collectionStore.form.behavior.chainType === ChainType.EVM
         ? validateEvmAddress(_, value)
         : substrateAddressValidate(_, value, SubstrateChainPrefix.ASTAR))
     );
@@ -253,8 +254,8 @@ export default function useCollection() {
 
   function isRoyaltyRequired() {
     return (
-      (collectionStore.form.base.chainType === ChainType.EVM && collectionStore.form.behavior.royaltiesFees > 0) ||
-      (collectionStore.form.base.chainType === ChainType.SUBSTRATE && collectionStore.form.behavior.drop)
+      (collectionStore.form.behavior.chainType === ChainType.EVM && collectionStore.form.behavior.royaltiesFees > 0) ||
+      (collectionStore.form.behavior.chainType === ChainType.SUBSTRATE && collectionStore.form.behavior.drop)
     );
   }
 
@@ -281,7 +282,7 @@ export default function useCollection() {
   };
 
   function chainCurrency() {
-    switch (collectionStore.form.base.chain) {
+    switch (collectionStore.form.behavior.chain) {
       case Chains.ASTAR:
         return 'ASTR';
       default:
@@ -325,10 +326,19 @@ export default function useCollection() {
 
   function onChainChange(chain: number) {
     if (chain === Chains.ASTAR_SHIBUYA) {
-      collectionStore.form.base.chainType = ChainType.SUBSTRATE;
+      collectionStore.form.behavior.chainType = ChainType.SUBSTRATE;
     } else if (chain !== Chains.ASTAR) {
-      collectionStore.form.base.chainType = ChainType.EVM;
+      collectionStore.form.behavior.chainType = ChainType.EVM;
     }
+  }
+
+  function resetAll() {
+    bucketStore.resetFolder();
+    bucketStore.resetUpload();
+    collectionStore.resetCache();
+    collectionStore.resetForms();
+    collectionStore.resetMetadata();
+    collectionStore.metadataStored = null;
   }
 
   return {
@@ -353,6 +363,7 @@ export default function useCollection() {
     openAddNft,
     prepareFormData,
     prepareLogoAndCover,
+    resetAll,
     uploadFileRequest,
   };
 }

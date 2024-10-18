@@ -160,7 +160,7 @@
 /** Divider */
 .n-divider {
   &.n-divider--vertical {
-    @apply h-full mx-4;
+    @apply mx-4 h-full;
   }
 }
 
@@ -189,7 +189,7 @@
     }
 
     &.dropdown-new-project {
-      @apply !text-bg mt-2;
+      @apply mt-2 !text-bg;
 
       &::before {
         @apply !bg-white;
@@ -246,7 +246,7 @@
     padding-left: 1.5rem;
 
     &::before {
-      @apply w-3 h-[2px] rounded-none top-1/2 -translate-y-1/2 bg-white;
+      @apply top-1/2 h-[2px] w-3 -translate-y-1/2 rounded-none bg-white;
     }
   }
 }
@@ -312,7 +312,7 @@
     width: calc(100% + 0.75rem);
 
     > .n-layout-scroll-container > .n-layout-content > .n-layout-scroll-container > .n-scrollbar {
-      @apply pr-3 -mr-3;
+      @apply -mr-3 pr-3;
     }
     > .n-layout-scroll-container > .n-layout-sider > .n-layout-sider-scroll-container {
       @apply pr-3;
@@ -323,7 +323,7 @@
     @apply -mb-3;
     height: calc(100% + 0.75rem);
     > .n-layout-scroll-container > .n-layout-content > .n-layout-scroll-container > .n-scrollbar {
-      @apply pb-3 -mb-3;
+      @apply -mb-3 pb-3;
     }
   }
 }
@@ -366,13 +366,13 @@
     }
 
     .n-submenu > .n-menu-item {
-      @apply sticky top-0 mb-2 z-2;
+      @apply sticky top-0 z-2 mb-2;
 
       .n-menu-item-content {
         @apply mt-2;
 
         &::before {
-          @apply bg-bg rounded-none;
+          @apply rounded-none bg-bg;
         }
 
         .n-menu-item-content-header {
@@ -387,7 +387,7 @@
     }
 
     .n-menu-item-group .n-menu-item-group-title {
-      @apply h-10 my-2 ml-3;
+      @apply my-2 ml-3 h-10;
     }
 
     .n-menu-item {
@@ -430,7 +430,7 @@
 
   &.n-menu--horizontal {
     .n-menu-item-content {
-      @apply px-1 mr-8;
+      @apply mr-8 px-1;
     }
   }
 }
@@ -454,7 +454,7 @@
   }
 
   .n-message__icon {
-    @apply relative flex items-center w-full mb-2;
+    @apply relative mb-2 flex w-full items-center;
 
     .n-base-icon {
       @apply relative mr-3;
@@ -498,11 +498,11 @@ body > .n-message-container {
 
 /** Modal */
 .n-modal {
-  @apply my-12 mx-auto mobile:w-[90vw];
+  @apply mx-auto my-12 mobile:w-[90vw];
 
   /** Card */
   &.n-card {
-    @apply card-border py-12;
+    @apply card-border py-4 lg:py-12;
 
     .n-card {
       &-header {
@@ -513,7 +513,7 @@ body > .n-message-container {
         }
         &__close,
         .n-card__close {
-          @apply absolute right-0 top-0 w-12 h-12 bg-bg border-1 border-solid border-white rounded-full transition-colors duration-300 translate-x-1/2 -translate-y-1/2;
+          @apply absolute right-0 top-0 h-12 w-12 -translate-y-1/2 translate-x-1/2 rounded-full border-1 border-solid border-white bg-bg transition-colors duration-300;
 
           &::before {
             display: none;
@@ -545,12 +545,12 @@ body > .n-message-container {
 
   /** Dialog */
   &.n-dialog {
-    @apply min-w-[90vw] md:min-w-[660px] mobile:px-[6%];
+    @apply min-w-[90vw] mobile:px-[6%] md:min-w-[660px];
     border: var(--n-border);
 
     .n-dialog {
       &__close {
-        @apply w-12 h-12 bg-bg border-1 border-solid border-white rounded-full;
+        @apply h-12 w-12 rounded-full border-1 border-solid border-white bg-bg;
 
         &:hover {
           @apply bg-white;
@@ -636,7 +636,7 @@ body > .n-message-container {
 /** Radio */
 .n-radio-group {
   .n-radio-button {
-    @apply h-10 w-full flex items-center justify-center;
+    @apply flex h-10 w-full items-center justify-center;
   }
   .n-radio__label {
     font-weight: normal;
@@ -651,12 +651,12 @@ body > .n-message-container {
 /** scrollbar */
 .n-scrollbar {
   &.has-scrollbar {
-    @apply pr-3 -mr-3;
+    @apply -mr-3 pr-3;
     width: calc(100% + 0.75rem);
   }
 
   &.has-scrollbar-bottom {
-    @apply pb-3 -mb-3;
+    @apply -mb-3 pb-3;
     height: calc(100% + 0.75rem);
   }
 }
@@ -749,7 +749,7 @@ body > .n-message-container {
 
       &::before {
         content: '';
-        @apply absolute left-1/2 top-1/2 h-3 border-r-1 border-bg-lighter -translate-x-1/2 -translate-y-1/2;
+        @apply absolute left-1/2 top-1/2 h-3 -translate-x-1/2 -translate-y-1/2 border-r-1 border-bg-lighter;
       }
     }
     .n-tabs-tab {
@@ -759,7 +759,7 @@ body > .n-message-container {
       @apply mobile:pt-0;
 
       > div {
-        @apply mobile:py-4 mobile:-my-4;
+        @apply mobile:-my-4 mobile:py-4;
       }
     }
   }
@@ -794,7 +794,7 @@ body > .n-message-container {
   .n-upload-file-info {
     &__action {
       .n-button {
-        @apply w-8 h-8 p-2 hover:bg-bg-lighter;
+        @apply h-8 w-8 p-2 hover:bg-bg-lighter;
       }
       .n-button__icon {
         width: var(--n-icon-size);
@@ -812,7 +812,7 @@ body > .n-message-container {
 }
 
 .n-upload-file-list .n-upload-file {
-  @apply bg-bg hover:bg-bg mb-2 px-6 pb-1;
+  @apply mb-2 bg-bg px-6 pb-1 hover:bg-bg;
 
   .n-upload-file-info__thumbnail {
     display: none;

@@ -7,70 +7,87 @@
     </template>
 
     <slot>
-      <div class="mobile:relative">
-        <FormNftCreateMetadata
-          :deploy-collection="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
-          :style="isLg ? scrollStyle : {}"
-        />
-        <button
-          v-if="
-            collectionStore.nftStep !== NftCreateStep.AMOUNT &&
-            collectionStore.nftStep !== NftCreateStep.DEPLOY
-          "
-          class="absolute left-0 top-2"
-          :class="collectionStore.nftStep === NftCreateStep.PREVIEW ? 'md:top-6' : 'md:top-10'"
-          @click="goToPreviousStep"
-        >
-          <span class="icon-back text-2xl align-sub"></span>
-        </button>
-      </div>
-      <!-- Buttons switch preview-->
       <div
-        v-if="collectionStore.nftStep === NftCreateStep.PREVIEW"
-        class="absolute right-4 top-4 flex items-center"
+        class="relative w-full"
+        :class="{ 'flex-cc': collectionStore.nftStep !== NftCreateStep.PREVIEW }"
+        :style="isLg ? scrollStyle : {}"
       >
-        <span class="mr-2">{{ $t('general.view') }}:</span>
+        <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" />
+        <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" />
+        <FormNftUploadSingle v-else-if="collectionStore.nftStep === NftCreateStep.SINGLE" />
+
+        <!-- Preview -->
+        <div v-else-if="collectionStore.nftStep === NftCreateStep.PREVIEW" class="pt-8">
+          <NftPreview>
+            <Btn class="w-60" type="primary" @click="w3WarnAndDeploy()">
+              {{ t('nft.deploy.single') }}
+            </Btn>
+          </NftPreview>
+        </div>
+        <NftPreviewFinish
+          v-else-if="
+            collectionStore.nftStep === NftCreateStep.DEPLOY &&
+            collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOYED
+          "
+          show-footer
+        />
+        <div v-else-if="collectionStore.nftStep === NftCreateStep.DEPLOY" class="w-full pb-8">
+          <AnimationDeploy />
+        </div>
+
+        <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnConfirm">
+          {{ t('w3Warn.nft.new') }}
+        </W3Warn>
+      </div>
+
+      <!-- Buttons switch preview-->
+      <div v-if="collectionStore.nftStep === NftCreateStep.PREVIEW" class="absolute right-4 top-4 flex items-center">
+        <span class="mr-2">{{ t('general.view') }}:</span>
         <n-button
           class="w-10 px-0"
-          :class="{ '!bg-bg-lighter ': !collectionStore.gridView }"
+          :class="{ '!bg-bg-lighter': !collectionStore.gridView }"
           size="small"
           type="tertiary"
           quaternary
           round
           @click="collectionStore.gridView = false"
         >
-          <span class="icon-list-view text-2xl align-sub"></span>
+          <span class="icon-list-view align-sub text-2xl"></span>
         </n-button>
         <n-button
           class="w-10 px-0"
-          :class="{ '!bg-bg-lighter ': collectionStore.gridView }"
+          :class="{ '!bg-bg-lighter': collectionStore.gridView }"
           size="small"
           type="tertiary"
           quaternary
           round
           @click="collectionStore.gridView = true"
         >
-          <span class="icon-grid-view text-2xl align-sub"></span>
+          <span class="icon-grid-view align-sub text-2xl"></span>
         </n-button>
       </div>
       <W3Warn v-model:show="modalW3WarnVisible" @submit="modalW3WarnVisible = false">
-        {{ $t('w3Warn.nft.collection') }}
+        {{ t('w3Warn.nft.collection') }}
       </W3Warn>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
+import { CollectionStatus, NftCreateStep } from '~/lib/types/nft';
+
 const router = useRouter();
-const { isLg } = useScreen();
-const { params } = useRoute();
-const dataStore = useDataStore();
-const bucketStore = useBucketStore();
+const message = useMessage();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
 
-const modalW3WarnVisible = ref<boolean>(false);
+const { t, te } = useI18n();
+const { isLg } = useScreen();
+const { params } = useRoute();
+const { deployCollection } = useNft();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
+
 const pageLoading = ref<boolean>(true);
 
 /** Collection UUID from route */
@@ -94,11 +111,11 @@ onMounted(async () => {
   if (!currentCollection?.collection_uuid) {
     router.push({ name: 'dashboard-service-nft' });
   } else {
-    /** Reset state if user opens different collection */
-    if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
-      collectionStore.resetMetadata();
-    }
-    resetAndAddNft();
+    collectionStore.resetFile();
+    collectionStore.resetImages();
+    collectionStore.stepCollectionDeploy = CollectionStatus.CREATED;
+
+    await storageStore.getStorageInfo();
 
     pageLoading.value = false;
     collectionStore.active = currentCollection;
@@ -106,46 +123,40 @@ onMounted(async () => {
   }
 });
 
-function resetAndAddNft() {
-  bucketStore.resetFolder();
-  bucketStore.resetUpload();
-  collectionStore.resetForms();
-  collectionStore.resetMetadata();
+const metadataValid = () => !collectionStore.metadata.some(item => !item.image || !item.name || !item.description);
 
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await storageStore.getStorageInfo();
-
-      pageLoading.value = false;
-    });
-  }, 100);
+function w3WarnAndDeploy() {
+  if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new') && t('w3Warn.nft.new')) {
+    modalW3WarnVisible.value = true;
+  } else {
+    onModalW3WarnConfirm();
+  }
 }
 
-function goToPreviousStep() {
-  switch (collectionStore.nftStep) {
-    case NftCreateStep.AMOUNT:
-      return;
-    case NftCreateStep.SINGLE:
-      collectionStore.nftStep = NftCreateStep.AMOUNT;
-      return;
-    case NftCreateStep.MULTIPLE:
-      if (collectionStore.stepUpload === NftUploadStep.FILE) {
-        collectionStore.nftStep = NftCreateStep.AMOUNT;
-      }
-      if (collectionStore.stepUpload === NftUploadStep.IMAGES) {
-        collectionStore.stepUpload = NftUploadStep.FILE;
-      }
-      return;
-    case NftCreateStep.PREVIEW:
-      if (collectionStore.amount === NftAmount.MULTIPLE) {
-        collectionStore.nftStep = NftCreateStep.MULTIPLE;
-        collectionStore.stepUpload = NftUploadStep.IMAGES;
-      } else {
-        collectionStore.nftStep = NftCreateStep.SINGLE;
-      }
-      return;
-    default:
-      collectionStore.nftStep = NftCreateStep.AMOUNT;
+async function onModalW3WarnConfirm() {
+  if (!metadataValid()) {
+    message.warning(t('validation.nftMetadata'));
+  } else {
+    deploy();
+  }
+}
+
+async function deploy() {
+  modalW3WarnVisible.value = false;
+  collectionStore.nftStep = NftCreateStep.DEPLOY;
+  collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
+
+  try {
+    await deployCollection(collectionStore.active.collectionStatus === CollectionStatus.CREATED);
+
+    collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
+    collectionStore.resetCache();
+  } catch (error) {
+    /** Deployment status */
+    collectionStore.nftStep = NftCreateStep.PREVIEW;
+    collectionStore.stepCollectionDeploy = CollectionStatus.FAILED;
+
+    message.error(userFriendlyMsg(error));
   }
 }
 </script>

@@ -1547,7 +1547,7 @@
   },
   "nft": {
     "amount": {
-      "title": "Create NFT",
+      "title": "Add NFTs",
       "content": "Add NFTs one by one or upload them in bulk.",
       "single": "Build one by one",
       "singleContent": "Enter data manually",
@@ -1608,6 +1608,7 @@
       "numOfData": "Number of data",
       "dropReserve": "Reserved",
       "revoke": "Burn",
+      "smartContract": "Smart contract",
       "symbol": "Symbol",
       "title": "Collection title",
       "transfer": "Transfer ownership",
@@ -1707,7 +1708,7 @@
     "deploy": {
       "collection": "Give it a minute or two while we prepare everything for you.",
       "deployingCollection": "Deploying to blockchain...",
-      "creatingCollection": "Creating collection...",
+      "creatingCollection": "Deploying NFT collection",
       "deploying": "Deploying your NFTs",
       "metadata": "Uploading metadata",
       "nft": "Deploying NFTs",
@@ -1809,24 +1810,24 @@
       }
     },
     "single": {
-      "content": "NFT content",
-      "uploadDescription": "Upload image, video, audio, or a 3D-model. Supported file formats: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB.",
-      "technicalDetails": "NFT technical details",
-      "properties": "Properties",
-      "propertiesInfo": "Textual traits that show as text boxes",
-      "levels": "Levels",
-      "levelsInfo": "Numerical traits that show as progress bar",
-      "stats": "Stats",
-      "statsInfo": "Numerical traits that show as number boxes",
       "boosts": "Boosts",
       "boostsInfo": "Numerical traits that show as circle progress bars",
+      "content": "NFT content",
+      "data": "NFT data",
       "date": "Date",
       "dateInfo": "Date traits that show as date boxes",
-      "unlockableContent": "Unlockable Content",
-      "unlockableContentInfo": "Content is only visible to the NFT owner",
       "displaySettings": "Display Settings",
+      "hideDisplay": "Hide on Store website",
+      "levels": "Levels",
+      "levelsInfo": "Numerical traits that show as progress bar",
+      "properties": "Properties",
+      "propertiesInfo": "Textual traits that show as text boxes",
       "showDisplay": "Show on store website",
-      "hideDisplay": "Hide on Store website"
+      "stats": "Stats",
+      "statsInfo": "Numerical traits that show as number boxes",
+      "uploadDescription": "Upload image, video, audio, or a 3D-model. Supported file formats: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB.",
+      "unlockableContent": "Unlockable Content",
+      "unlockableContentInfo": "Content is only visible to the NFT owner"
     },
     "transaction": {
       "chain": "Chain",
@@ -1855,6 +1856,8 @@
     "upload": {
       "addNft": "Add NFT",
       "attributes": "Metadata attributes",
+      "avatar": "Upload avatar",
+      "cover": "Upload cover",
       "csvConfirm": "Confirm CSV data",
       "csvConfirmAttributes": "Confirm attributes",
       "csvFile": "Select CSV file",
@@ -1892,7 +1895,6 @@
     "addAttribute": "Add attribute",
     "addIpns": "Add IPNS",
     "addIpnsInfo": "With IPNS, you will be able to modify the metadata and add new NFTs to this collection.",
-    "create": "Create an NFT",
     "openBucket": "Go to storage",
     "transactionType": "Transaction Type"
   },

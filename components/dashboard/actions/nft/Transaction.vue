@@ -1,12 +1,12 @@
 <template>
   <n-space justify="space-between">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs">
+    <div class="w-[20vw] min-w-[11rem] max-w-xs">
       <!-- <n-input
           v-model:value="collectionStore.search"
           type="text"
           name="search"
           size="small"
-          :placeholder="$t('general.search')"
+          :placeholder="t('general.search')"
           clearable
         >
           <template #prefix>
@@ -23,14 +23,14 @@
         :loading="loadingBucket"
         @click="openBucket(collectionStore.active.bucket_uuid)"
       >
-        <span class="icon-storage text-xl mr-2"></span>
-        <span>{{ $t('nft.openBucket') }}</span>
+        <span class="icon-storage mr-2 text-xl"></span>
+        <span>{{ t('nft.openBucket') }}</span>
       </n-button>
 
       <!-- Refresh -->
       <n-button size="small" :loading="collectionStore.loading" @click="refresh">
-        <span class="icon-refresh text-xl mr-2"></span>
-        {{ $t('general.refresh') }}
+        <span class="icon-refresh mr-2 text-xl"></span>
+        {{ t('general.refresh') }}
       </n-button>
 
       <!-- Add IPNS -->
@@ -44,9 +44,9 @@
       >
         <template #icon> <IconInfo /> </template>
         <template #trigger>
-          <n-button size="small">{{ $t('nft.addIpns') }}</n-button>
+          <n-button size="small">{{ t('nft.addIpns') }}</n-button>
         </template>
-        {{ $t('nft.addIpnsInfo') }}
+        {{ t('nft.addIpnsInfo') }}
       </n-popconfirm>
 
       <!-- Add NFT -->
@@ -57,8 +57,8 @@
         :disabled="!allowAddMetadata"
         @click="openAddNft(collectionStore.active.collection_uuid)"
       >
-        <span class="icon-add text-xl mr-2 text-primary"></span>
-        <span class="text-primary">{{ $t('nft.add') }}</span>
+        <span class="icon-add mr-2 text-xl text-primary"></span>
+        <span class="text-primary">{{ t('nft.add') }}</span>
       </n-button>
 
       <!-- Actions -->
@@ -70,8 +70,8 @@
         :disabled="authStore.isAdmin()"
       >
         <n-button size="small">
-          <span class="text-primary">{{ $t('general.actions') }}</span>
-          <div class="hidden md:flex items-center relative left-1">
+          <span class="text-primary">{{ t('general.actions') }}</span>
+          <div class="relative left-1 hidden items-center md:flex">
             <span class="icon-down text-2xl text-primary"></span>
           </div>
         </n-button>
@@ -81,6 +81,8 @@
 </template>
 
 <script lang="ts" setup>
+import { CollectionStatus } from '~/lib/types/nft';
+
 defineProps({
   env: { type: Number, default: 0 },
 });
@@ -111,8 +113,7 @@ const isMetadataStoreOnApillon = computed<boolean>(() => {
 const allowAddMetadata = computed<boolean>(() => {
   return (
     collectionStore.active?.collectionStatus === CollectionStatus.CREATED ||
-    (collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
-      isMetadataStoreOnApillon.value)
+    (collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED && isMetadataStoreOnApillon.value)
   );
 });
 
@@ -198,9 +199,7 @@ async function createDynamicMetadata() {
 }
 async function createIpns() {
   try {
-    const res = await $api.post<CollectionResponse>(
-      endpoints.collectionIpns(collectionStore.active.collection_uuid)
-    );
+    const res = await $api.post<CollectionResponse>(endpoints.collectionIpns(collectionStore.active.collection_uuid));
 
     /** Update collection data in store */
     collectionStore.active = res.data;
