@@ -5,18 +5,18 @@
       <n-button
         size="small"
         round
-        :class="selectedLanguage === CodeFramework.VUE ? '!bg-bg-dark' : ''"
-        @click="select(CodeFramework.VUE)"
-      >
-        <span class="px-2">Vue</span>
-      </n-button>
-      <n-button
-        size="small"
-        round
         :class="selectedLanguage === CodeFramework.REACT ? '!bg-bg-dark' : ''"
         @click="select(CodeFramework.REACT)"
       >
         <span class="px-2">React</span>
+      </n-button>
+      <n-button
+        size="small"
+        round
+        :class="selectedLanguage === CodeFramework.VUE ? '!bg-bg-dark' : ''"
+        @click="select(CodeFramework.VUE)"
+      >
+        <span class="px-2">Vue</span>
       </n-button>
       <n-button
         size="small"
@@ -45,15 +45,15 @@
 import CodeBlock from 'vue3-code-block';
 
 enum CodeFramework {
-  VUE = 'vue',
   REACT = 'react',
+  VUE = 'vue',
   TYPESCRIPT = 'typescript',
 }
 
 const embeddedWalletStore = useEmbeddedWalletStore();
 
 // State to manage the selected code language
-const selectedLanguage = ref<string>(CodeFramework.VUE as string);
+const selectedLanguage = ref<string>(CodeFramework.REACT as string);
 
 const select = (language: string) => {
   selectedLanguage.value = language;
@@ -67,6 +67,7 @@ const codeNetworks = `[
       rpcUrl: 'https://rpc.testnet.moonbeam.network',
       explorerUrl: 'https://moonbase.moonscan.io',
     },
+    /* ... */
   ]`;
 
 // Computed property to return the current code based on selected language
@@ -81,12 +82,12 @@ const currentCode = computed(() => {
 />
 `;
   } else if (selectedLanguage.value === CodeFramework.TYPESCRIPT) {
-    return `import { EmbeddedWalletUI } from '@apillon/wallet-vue';
+    return `import { EmbeddedWalletUI } from '@apillon/wallet-ui';
 
 EmbeddedWalletUI("#wallet", {
   clientId: "${embeddedWalletStore.active.integration_uuid}",
   defaultNetworkId: 1287,
-  networks: ${codeNetworks},
+  networks: ${codeNetworks}
 });
 `;
   } else {
