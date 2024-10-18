@@ -18,19 +18,37 @@
       >
         <span class="px-2">React</span>
       </n-button>
+      <n-button
+        size="small"
+        round
+        :class="selectedLanguage === CodeFramework.TYPESCRIPT ? '!bg-bg-dark' : ''"
+        @click="select(CodeFramework.TYPESCRIPT)"
+      >
+        <span class="px-2">TypeScript</span>
+      </n-button>
     </div>
+    <Btn
+      type="secondary"
+      size="small"
+      inner-class="text-white flex items-center justify-center"
+      href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
+    >
+      <span class="icon-file text-xl mr-2"></span>
+      {{ $t('embeddedWallet.viewDocumentation') }}
+    </Btn>
   </div>
 
   <CodeBlock :code="currentCode" lang="js" theme="github-dark" highlightjs :style="codeSize" />
 </template>
 
 <script lang="ts" setup>
+import CodeBlock from 'vue3-code-block';
+
 enum CodeFramework {
   VUE = 'vue',
   REACT = 'react',
+  TYPESCRIPT = 'typescript',
 }
-
-import CodeBlock from 'vue3-code-block';
 
 const embeddedWalletStore = useEmbeddedWalletStore();
 
@@ -44,44 +62,43 @@ const select = (language: string) => {
 // VueJS code block
 const codeNetworks = `[
     {
-      name: 'Moonbeam Testnet',
+      name: 'Moonbase Testnet',
       id: 1287,
       rpcUrl: 'https://rpc.testnet.moonbeam.network',
       explorerUrl: 'https://moonbase.moonscan.io',
-    },
-    {
-      name: 'Celo Alfajores Testnet',
-      id: 44787,
-      rpcUrl: 'https://alfajores-forno.celo-testnet.org',
-      explorerUrl: 'https://explorer.celo.org/alfajores',
-    },
-    {
-      name: 'Amoy',
-      id: 80002,
-      rpcUrl: 'https://rpc-amoy.polygon.technology',
-      explorerUrl: 'https://www.oklink.com/amoy',
     },
   ]`;
 
 // Computed property to return the current code based on selected language
 const currentCode = computed(() => {
-  return selectedLanguage.value === CodeFramework.REACT
-    ? `import { WalletWidget } from '@apillon/wallet-react';
-  
+  if (selectedLanguage.value === CodeFramework.REACT) {
+    return `import { WalletWidget } from '@apillon/wallet-react';
+
 <WalletWidget
-  clientId={${embeddedWalletStore.active.integration_uuid}}
+  clientId="${embeddedWalletStore.active.integration_uuid}"
   defaultNetworkId={1287}
   networks={${codeNetworks}}
 />
-`
-    : `import { WalletWidget } from '@apillon/wallet-vue';
+`;
+  } else if (selectedLanguage.value === CodeFramework.TYPESCRIPT) {
+    return `import { EmbeddedWalletUI } from '@apillon/wallet-vue';
+
+EmbeddedWalletUI("#wallet", {
+  clientId: "${embeddedWalletStore.active.integration_uuid}",
+  defaultNetworkId: 1287,
+  networks: ${codeNetworks},
+});
+`;
+  } else {
+    return `import { WalletWidget } from '@apillon/wallet-vue';
 
 <WalletWidget
-  :clientId="${embeddedWalletStore.active.integration_uuid}"
+  clientId="${embeddedWalletStore.active.integration_uuid}"
   :defaultNetworkId="1287"
   :networks="${codeNetworks}"
 />
 `;
+  }
 });
 
 // Update code size when language changes
