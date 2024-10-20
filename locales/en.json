@@ -7,10 +7,12 @@
     "activity": "Activity",
     "addNew": "Add new",
     "address": "Address",
+    "archive": "Archive",
     "attach": "Attach",
     "attachService": "Attach {service} service",
-    "archive": "Archive",
+    "available": "Available",
     "cancel": "No, cancel",
+    "close": "Close",
     "comingSoon": "Coming soon",
     "confirm": "Confirm",
     "cookieNotice": "This website uses cookies to ensure you get the best experience on our website.",
@@ -23,12 +25,16 @@
     "delete": "Delete",
     "description": "Description",
     "deselectAll": "Deselect All",
+    "disconnect": "Disconnect",
+    "documentation": "documentation",
     "download": "Download",
     "edit": "Edit",
     "environment": "Environment",
     "error": "Error",
     "explore": "Explore",
     "goHome": "Go home",
+    "here": "here",
+    "inactive": "inactive",
     "install": "Install",
     "images": "images",
     "learn": "Learn",
@@ -75,7 +81,11 @@
     "uptime": "Uptime",
     "uuid": "UUID",
     "view": "View",
-    "viewDemo": "View demo"
+    "viewDemo": "View demo",
+    "instructions": {
+      "hide": "Hide instructions",
+      "show": "Show instructions"
+    }
   },
   "auth": {
     "footer": {
@@ -189,6 +199,68 @@
     }
   },
   "computing": {
+    "cloudFunctions": {
+      "addNew": "Add new Cloud function",
+      "checkVideo": "Check out the video",
+      "deployments": "Deployments",
+      "documentation": "View Documentation",
+      "endpoint": "Cloud function API endpoint",
+      "emptyArchive": "Cloud functions Archive",
+      "emptyArchiveInfo": "There are currently no Cloud functions in the Archive.",
+      "monitoring": "Monitoring",
+      "new": "New Cloud function",
+      "startNew": "Start by creating a new cloud function",
+      "variables": "Environment variables",
+      "content": [
+        {
+          "headline": "Features:",
+          "subtitle": "Use cloud functions to build your own unstoppable Web3 backend. \nJust like AWS lambda but without compromise. ",
+          "benefits": [
+            "Write code in NodeJS, bundle and deploy",
+            "Compute is executed on high performance CPUs with random providers and redundancy.",
+            "Bypass centralized backends and build a truly decentralized dapp",
+            "Set and forget mentality"
+          ]
+        }
+      ],
+      "job": {
+        "btnUpload": "Upload new Script",
+        "cid": "CID",
+        "content": "Start by uploading your script by drag & drop files",
+        "dateStarted": "Date started",
+        "delete": "Delete job",
+        "edit": "Edit job",
+        "filename": "Filename",
+        "name": "Job name",
+        "new": "Deploy new script",
+        "redeploy": "Deploy again",
+        "size": "Size",
+        "title": "You currently have no deployments for this Cloud function",
+        "status": {
+          "1": "DEPLOYING",
+          "2": "ASSIGNING PROCESSORS",
+          "3": "ACTIVE",
+          "4": "PAUSED",
+          "9": "DELETED"
+        },
+        "viewTemplate": "View code template"
+      },
+      "usage": {
+        "title": "Cloud functions monitor"
+      },
+      "variable": {
+        "addRow": "Add row",
+        "btnAdd": "Add environment variable manually",
+        "btnAddVariable": "Add variable",
+        "btnCreate": "Create variables",
+        "btnUpdate": "Update variables",
+        "btnUpload": "Upload .ENV file for automatic detection",
+        "btnUploadEnv": "Upload .ENV",
+        "content": "Create a new environment variable which you want to pass into the cloud function. \nTo learn more about how environment variables are handled, refer to the {url}.",
+        "new": "New Environment variable",
+        "title": "You currently have no environment variables for this cloud functions"
+      }
+    },
     "contract": {
       "addNew": "Add new contract",
       "address": "Contract address",
@@ -282,6 +354,7 @@
       "service": {
         "authentication": "Authentication service",
         "computing": "Computing service",
+        "contracts": "Contracts service",
         "hosting": "Hosting service",
         "nft": "NFT service",
         "social": "Social service",
@@ -334,8 +407,16 @@
       "yourFunds": "Your funds",
       "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
       "services": {
+        "ACURAST": {
+          "name": "Cloud functions",
+          "description": null
+        },
         "COMPUTING": {
           "name": "Web3 Computing",
+          "description": null
+        },
+        "CONTRACTS": {
+          "name": "Smart contracts",
           "description": null
         },
         "HOSTING": {
@@ -357,8 +438,17 @@
         "STORAGE": {
           "name": "Web3 Storage",
           "description": null
+        },
+        "WALLET": {
+          "name": "Embedded Wallet",
+          "description": null
         }
       }
+    },
+    "refreshModal": {
+      "title": "Deployment Status",
+      "refresh": "refresh",
+      "subtitle": "To check the deployment status, click the refresh button or select the time intervals for the automatic update."
     },
     "invoice": {
       "client": "Client",
@@ -374,9 +464,11 @@
       "authentication": "Authentication",
       "apiKeys": "API Keys",
       "analytics": "Analytics",
+      "assetHub": "Asset hub",
       "billing": "Billing & usage",
       "configuration": "Configuration",
       "computing": "Computing",
+      "cloudFunctions": "Cloud Functions",
       "explore": "Explore",
       "hosting": "Hosting",
       "nft": "NFTs",
@@ -384,6 +476,7 @@
       "projectSettings": "Project settings",
       "services": "Web3 Services",
       "smartContracts": "Smart Contracts",
+      "smartContractDetails": "Smart Contract Details",
       "social": "Social",
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
@@ -437,6 +530,43 @@
       "insufficient": "You don't have permissions to create or edit this item."
     },
     "service": {
+      "assetHub": {
+        "asset": "asset",
+        "assetCreating": "We are creating your asset",
+        "assetCreatingInfo": "While you wait, feel free to review the article about asset metadata publishing {0}.",
+        "assetCreatingWait": "Please stay put, we will let you know once the asset is created. ",
+        "changeIssuer": "Change issuer",
+        "changeIssuerInfo": "Changing the issuer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "changeFreezer": "Change freezer",
+        "changeFreezerInfo": "Changing the freezer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
+        "connectWallet": "Connect wallet",
+        "create": "Create asset",
+        "createNew": "Create new asset",
+        "createAsset": "Create an asset",
+        "characteristics": "Characteristics",
+        "edit": "Edit asset",
+        "loadingTransaction": "The transaction is being processed, please wait.",
+        "mintTokens": "Mint Tokens",
+        "mintTokensInfo": "Mint Tokens",
+        "noProject": "Your project has no assets yet",
+        "new": "Create new asset",
+        "otherAssets": "Other assets on Asset Hub",
+        "select": "Select asset",
+        "sendTokens": "Send Tokens",
+        "sendTokensInfo": "You may only send tokens available in your connected wallet. If you do not see any tokens available, please review your wallet connection.",
+        "transactionDetails": "You may view the transaction details {0}.",
+        "transactionHistory": "View transaction history",
+        "transactionProcessed": "The transaction was successfully processed.",
+        "transfer": "Transfer ownership",
+        "transferInfo": "Transferring the ownership means handing all rights over to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "walletStats": "Connected wallet stats",
+        "leave": {
+          "anyway": "Leave anyway",
+          "info": "If you leave, your changes won’t be saved.",
+          "title": "Are you sure you want to leave?"
+        }
+      },
       "authentication": {
         "name": "Decentralized Authentication",
         "description": "Boost users’ privacy and security with decentralized digital identity.",
@@ -501,6 +631,44 @@
         "website": "Main Website Storage",
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
+      "smartContracts": {
+        "audited": "Audited",
+        "new": "New smart contract",
+        "customizeAndDeploy": "Customize and deploy",
+        "create": "Create your smart contract",
+        "createNew": "Create a new smart contract",
+        "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
+        "details": "Smart Contract Details",
+        "info": "Add it to your Web3 project",
+        "table": {
+          "chain": "Chain",
+          "name": "Name",
+          "contractAddress": "Address",
+          "contractStatus": "Status"
+        },
+        "status": {
+          "0": "CREATED",
+          "1": "INITIATED",
+          "2": "DEPLOYING",
+          "3": "DEPLOYED",
+          "4": "FAILED",
+          "5": "TRANSFERRING",
+          "6": "TRANSFERRED"
+        },
+        "infoSection": {
+          "title": "Execute read & write functions",
+          "p": "Your smart contract was deployed via Apillon. This means certain write functions are available only through the Apillon Backend, until you decide to take ownership of the contract. ",
+          "infoBox": "Take ownership of the Smart Contract. Once you take ownership of the Smart Contract, you will be able to execute all the functions directly from your dapp. This is not a mandatory step, but it makes sense to take the ownership of the contract before going to production.",
+          "takeOwnershipBtn": "Take smart contract ownership"
+        },
+        "functions": {
+          "write": "Write functions",
+          "read": "Read functions",
+          "writeFromDapp": "Write from your dapp",
+          "writeOverApillon": "Write over Appilon",
+          "readFromDapp": "Read from your dapp"
+        }
+      },
       "addFirst": "Add first service",
       "delete": "Delete service",
       "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",
@@ -545,6 +713,16 @@
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
       },
+      "smartContracts": {
+        "name": "NFT Email Airdrop",
+        "description": "Create an NFT collection, upload target addresses and automatically distribute NFTs to them.",
+        "content": [
+          {
+            "title": "What do you get?",
+            "content": ["Free metadata storage", "No gas cost", "Free web template", "Free hosting"]
+          }
+        ]
+      },
       "embeddedWallet": {
         "content": [
           {
@@ -552,12 +730,12 @@
           },
           {
             "title": "Benefits:",
-            "content": [
+            "benefits": [
               "Email onboard: Simplifies the onboarding process.",
               "A seamless and secure UX: EVM wallets are auto-created and encrypted.",
               "Autonomy and security over funds: No third-party services to store user’s private keys.",
               "Authentication: User can add different methods of verification.",
-              "Gassles wallet creation: charged in Apillon credits per each onboarded user.",
+              "Gasless wallet creation: charged in Apillon credits per each onboarded user.",
               "Fully trustless. Powered by Oasis."
             ]
           }
@@ -926,6 +1104,7 @@
   "error": {
     "404": "Page not found",
     "40006022": "You have to upload \"index.html\" file, to deploy website!",
+    "FIELD_INVALID": "Invalid filed, please upload valid .env file.",
     "50012005": "You can't mint this collection or all tokens has already been minted!",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
@@ -1042,6 +1221,7 @@
     "INVALID_EVM_ADDRESS": "Invalid EVM address, please enter a valid EVM address",
     "INVALID_SUBSTRATE_ADDRESS": "Invalid Substrate address, please enter a valid Substrate address",
     "MAX_COLLECTIONS_REACHED": "Max collections reached",
+    "MAX_NUMBER_OF_EMBEDDED_WALLET_INTEGRATIONS_REACHED": "Max number of Embedded Wallet integrations reached",
     "CREDIT_BALANCE_TOO_LOW": "Credit balance too low",
     "COMPUTING_ACCOUNT_ADDRESS_NOT_PRESENT": "Account address is missing",
     "COMPUTING_ACCOUNT_ADDRESS_NOT_VALID": "Account address is not valid",
@@ -1153,6 +1333,22 @@
       "webhookUsername": "User name",
       "websiteDescription": "Website description",
       "websiteName": "Website name",
+      "assetHub": {
+        "address": "Address",
+        "admin": "Admin address",
+        "amount": "Amount",
+        "assetId": "Asset ID",
+        "decimals": "Decimals",
+        "deposit": "Deposit",
+        "freezerAddress": "Freezer Address",
+        "initialSupply": "Initial supply",
+        "issuerAddress": "Issuer Address",
+        "minBalance": "Minimum balance",
+        "name": "Asset name",
+        "network": "Network",
+        "owner": "Owner Address",
+        "symbol": "Asset symbol"
+      },
       "contract": {
         "accountAddress": "Account Address",
         "amount": "Amount",
@@ -1171,6 +1367,27 @@
           "nftChainRpcUrl": "Chain RPC URL of used contract. Select one from the list or manually insert your own.",
           "restrictToOwner": "Only owner will be able to encrypt/decrypt files.",
           "useApillonCollection": "You can use an NFT collection you created on Apillon or any NFT collection you built on other chains."
+        }
+      },
+      "cloudFunctions": {
+        "description": "Description",
+        "name": "Title",
+        "jobName": "Job name",
+        "slots": "Number of processors",
+        "startTime": "Start time",
+        "endTime": "End time",
+        "varKey": "Key",
+        "varValue": "Value",
+        "labelInfo": {
+          "slots": "Multi-processor jobs will be supported soon"
+        }
+      },
+      "embeddedWallet": {
+        "title": "Embedded wallet’s title",
+        "description": "Embedded wallet’s description",
+        "whitelistedDomains": "Whitelisted Domains",
+        "labelInfo": {
+          "whitelistedDomains": "Prevent third-parties from using your integration by restricting access to allowed domains \n- Authorize all domains with * \n  Example: *.apillon.io accepts all .apillon.io sites \n- Authorize local URLs with localhost:&lt;port&gt; \n- Separate domains by commas"
         }
       }
     },
@@ -1211,6 +1428,7 @@
       "nftMintParentNftId": "Parent NFT ID",
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
+      "number": "Enter number",
       "password": "password",
       "phone": "+000 12345678",
       "postalCode": "4223",
@@ -1229,16 +1447,42 @@
       "webhookUsername": "Enter user name",
       "websiteDescription": "Website description",
       "websiteName": "Website name",
+      "assetHub": {
+        "address": "Enter target address",
+        "amount": "Enter amount",
+        "network": "Network",
+        "name": "Type name",
+        "symbol": "Type asset symbol",
+        "assetId": "Asset ID",
+        "decimals": "Decimals",
+        "initialSupply": "Initial supply",
+        "minBalance": "Minimum Balance",
+        "issuerAddress": "Issuer Address",
+        "freezerAddress": "Freezer Address"
+      },
       "contract": {
         "name": "Enter contract name",
         "description": "Enter contract description",
         "nftContractAddress": "Select or type NFT collection address",
         "nftChainRpcUrl": "Chain RPC URL",
         "accountAddress": "Account Address"
+      },
+      "cloudFunctions": {
+        "description": "Enter cloud function description for personal reference",
+        "name": "Enter cloud function title for personal reference",
+        "jobName": "Enter cloud function job name for personal reference"
+      },
+      "embeddedWallet": {
+        "title": "Enter the title for your personal reference",
+        "description": "Enter the description for your personal reference",
+        "whitelistedDomains": "valid-domain.com\n*.valid-domain2.com\nsubdomain.*.valid-domain3.com"
       }
     },
     "success": {
       "apiKey": "API key has been created",
+      "assetMinted": "Asset tokens has been minted",
+      "assetSend": "Asset tokens has been send",
+      "assetTransferred": "Asset ownership has been transferred",
       "filesUploaded": "Files have been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
       "ipnsPublished": "IPNS has been published",
@@ -1252,6 +1496,7 @@
       "sendAgainEmail": "Email has been re-sent",
       "websiteDeployed": "Website has been deployed.",
       "websiteDeploying": "Done - deployment initiated",
+      "smartContract": "Done - deployment initiated",
       "contract": {
         "cidAssign": "CID has been assign to NFT",
         "deploy": "Contract deploy has been initiated",
@@ -1262,13 +1507,18 @@
         "apiKey": "API key has been created",
         "apiKeyRole": "API key permission has been added",
         "apiKeyRoles": "API key permissions has been added",
+        "asset": "Asset has been created",
         "authentication": "Authentication service has been created",
         "bucket": "Bucket has been created",
         "chatPost": "Channel has been created",
         "chatSpace": "Hub has been created",
+        "cloudFunction": "Cloud function has been created",
+        "cloudFunctionJob": "Job deployment has been initiated",
+        "cloudFunctionVariable": "Cloud function variables have been created",
         "collection": "Creating NFT collection requested.",
         "directory": "Folder has been created",
         "domain": "Domain has been added to Website",
+        "embeddedWallet": "Embedded Wallet has been created",
         "file": "File has been created",
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
@@ -1285,6 +1535,7 @@
         "bucket": "Bucket has been deleted",
         "bucketContent": "Bucket items has been deleted",
         "collection": "NFT collection has been archived",
+        "cloudFunction": "Cloud function has been archived",
         "contract": "Contract has been deleted",
         "directory": "Folder has been deleted",
         "domain": "Domain has been deleted",
@@ -1315,12 +1566,19 @@
         "apiKey": "API key has been updated",
         "apiKeyRole": "API key permission has been added",
         "apiKeyRoles": "API key permissions has been added",
+        "asset": "Asset metadata has been updated",
+        "assetFreezer": "Asset freezer has been updated",
+        "assetIssuer": "Asset issuer has been updated",
         "authentication": "Authentication service has been updated",
         "bucket": "Bucket has been updated",
+        "cloudFunction": "Cloud function has been updated",
+        "cloudFunctionJob": "Job has been updated",
+        "cloudFunctionVariable": "Cloud function variables have been updated",
         "contract": "Contract has been updated",
         "creditThreshold": "Credit threshold has been updated",
         "directory": "Folder has been updated",
         "domain": "Domain has been updated",
+        "embeddedWallet": "Embedded Wallet has been updated",
         "file": "File has been updated",
         "hosting": "Hosting has been updated",
         "ipns": "IPNS has been updated",
@@ -1339,6 +1597,7 @@
       "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform's services.",
       "payment": "I understand the billing process and some other legal stuff."
     },
+    "cancel": "Cancel",
     "confirm": "Yes, confirm",
     "connect": "Connect",
     "createBucketAndContinue": "Create bucket & continue to management",
@@ -1348,6 +1607,7 @@
     "createServiceAndContinue": "Create service & continue to management",
     "continue": "Continue",
     "disabled": "Disabled",
+    "deploy": "Deploy",
     "generate": "Generate",
     "goBack": "Go back",
     "login": "Log in",
@@ -1357,6 +1617,7 @@
     "saveCard": "Save card",
     "saveExit": "Save & exit",
     "sendInvite": "Send invite",
+    "sign": "Sign and continue",
     "startFirstProject": "Start your first project",
     "update": "Update"
   },
@@ -1785,78 +2046,6 @@
     "uuid": "Project UUID"
   },
   "referral": {
-    "airdrop": {
-      "btn": "Have a question? Enter Discord!",
-      "content": "You can now claim your $NCTR rewards. Check your completion status on the right side and make sure you have connected your wallet and submitted the tasks for review.",
-      "reward": "Reward",
-      "task": "Task",
-      "title": "$NCTR Airdrop Claim is open",
-      "type": "Type",
-      "welcome": "$NCTR Airdrop Claim is open",
-      "subscribe": {
-        "btn": "Sign up to Apillon news",
-        "content": "Sign up for the Apillon newsletter and don’t miss the next chance to earn NCTR tokens.",
-        "headline": "$NCTR Airdrop Claim is open",
-        "headlineInfo": "You can now claim your $NCTR rewards.",
-        "info": "Receive product and feature updates, how-to guides and other platform-related news. Unsubscribe at any time.",
-        "title": "Missed your chance?"
-      },
-      "tabs": [
-        {
-          "title": "Refer",
-          "content": " and earn NCTR when they register",
-          "link": "Refer Apillon to a friend"
-        },
-        {
-          "title": "Learn",
-          "content": "Experiment with the Apillon platform (see tasks below) for a bigger NCTR bonus"
-        },
-        {
-          "title": "Build",
-          "content": "Create a Web3 project with Apillon services (see tasks below) and get the most NCTR"
-        }
-      ]
-    },
-    "banner": {
-      "title": "$NCTR Airdrop Claim is open",
-      "description": "You can now claim your $NCTR rewards.",
-      "btn": "NCTR Airdrop",
-      "learnMoreBtn": "Learn more"
-    },
-    "info": {
-      "airdrop": "Airdrop",
-      "astarAddress": "EVM wallet address",
-      "collected": "NCTR Earned",
-      "connectAstar": "Connect your EVM wallet",
-      "connectWallet": "Connect wallet",
-      "receiveTokens": "To receive NCTR tokens, connect your EVM compatible wallet.",
-      "seeHow": "See how",
-      "status": "Your status",
-      "claim": {
-        "alreadyClaimed": "You have already claimed your tokens.",
-        "blocked": "You are blocked from claiming tokens due to suspicious behavior.",
-        "btn": "Submit",
-        "content": "Your tasks are under review. We will notify you over email, once all reviews are completed. ",
-        "contentEnd": "is live.",
-        "inReview": "Your tasks are in review",
-        "title": "Tasks review",
-        "tooltip": "You will be able to claim your bonus after TGE.",
-        "tooltipDisabled": "Tasks are already in review",
-        "claim": "Claim your $NCTR",
-        "connectToClaim": "Connect to claim $NCTR",
-        "switchToClaim": "Switch to claim $NCTR"
-      },
-      "statuses": {
-        "0": "Register to Apillon platform",
-        "1": "Connect your EVM wallet",
-        "2": "Tasks submitted to a review",
-        "3": "Wait for TGE and claim NCTR"
-      }
-    },
-    "menu": {
-      "airdrop": "Airdrop",
-      "referral": "Referral"
-    },
     "referres": {
       "active": "Active",
       "disclaimer": "Disclaimer: To prevent users from duplicating accounts and referring to themselves, Apillon will measure the activity of referred accounts and reward them accordingly. It will also monitor potential bot activity or users creating multiple accounts. Accounts detected as either bot or self-referral will be excluded from receiving NCTR in the Airdrop.",
@@ -1933,22 +2122,28 @@
   "embeddedWallet": {
     "title": "Embedded Wallet",
     "checkPrice": "Check price",
-    "generateApiKey": "Generate API key",
-    "generateNewApiKey": "Generate new key",
-    "viewDocumentation": "View Documentation",
-    "readBlog": "Read our blog post",
     "codeSnippets": "Code snippets:",
+    "createNew": "New Embedded wallet integration",
+    "edit": "Edit Embedded wallet integration",
+    "editIntegration": "Edit integration",
+    "hideInstructions": "Hide instructions",
+    "howItWorks": "See how it works",
+    "readBlog": "Read our blog post",
+    "showInstructions": "Show instructions",
+    "viewDocumentation": "View Documentation",
     "generate": {
       "title": "Generate API key and start using Embedded Wallet service",
       "generate": "Generate new key"
     },
     "table": {
-      "secret": "Secret",
-      "name": "Name",
-      "environment": "ENV",
       "created": "Created",
-      "usage": "Usage",
-      "actions": "Actions"
+      "dataHash": "Data Hash",
+      "hashedUsername": "Hashed Username",
+      "integration_uuid": "Integration UUID",
+      "numberOfSignatures": "Generated wallets this month",
+      "publicAddress": "Generated Wallet Address",
+      "title": "Embedded Wallet title",
+      "usage": "Usage"
     }
   },
   "storage": {
@@ -2083,7 +2278,8 @@
         "1": "CREATED",
         "2": "IN PROGRESS",
         "3": "FINISHED",
-        "4": "VALIDATION FAILED"
+        "4": "VALIDATION FAILED",
+        "5": "VALIDATION PASSED"
       }
     },
     "type": {
@@ -2161,6 +2357,7 @@
     "creditCardRequired": "Please enter credit card number",
     "cvv": "Wrong CVV",
     "cvvRequired": "Please enter CVV",
+    "descriptionRequired": "Please enter description",
     "descriptionTooLong": "Text is too long (max 255 characters)",
     "email": "Email address is not valid",
     "emailRequired": "Typing in your email would definitely hit the spot :)",
@@ -2224,6 +2421,13 @@
       "nameRequired": "API key name is required",
       "rolesRequired": "Please select at least one permission"
     },
+    "assetHub": {
+      "addressRequired": "Please enter target address",
+      "amountRequired": "Please enter amount",
+      "idNotUnique": "Asset with this ID already exists, please use a different ID",
+      "nameNotUnique": "Asset with this name already exists, please use a different name",
+      "symbolNotUnique": "Asset with this symbol already exists, please use a different symbol"
+    },
     "contract": {
       "addressRequired": "Please enter NFT collection address",
       "bucketUuidRequired": "Please select Bucket",
@@ -2237,9 +2441,28 @@
       "nameRequired": "Please enter name",
       "nftIdRequired": "Please enter NFT ID"
     },
+    "embeddedWallet": {
+      "titleRequired": "Embedded Wallet title is required",
+      "whitelistedDomains": "Domains not valid"
+    },
+    "cloudFunctions": {
+      "endTimeRequired": "Please select end date",
+      "fileRequired": "Please upload file",
+      "fileType": "Wrong file type, please upload javascript file",
+      "keyRequired": "Please enter variable key",
+      "valueRequired": "Please enter variable value",
+      "valuesRequired": "Some variables does not have value, please fill in these fields.",
+      "keyNotUnique": "Please enter unique variable key",
+      "nameRequired": "Please enter name",
+      "startTimeRequired": "Please select start date",
+      "slotsRequired": "Please enter number of slots"
+    },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
       "missingIndex": "Please upload index.html file"
+    },
+    "smartContracts": {
+      "fieldRequired": "Please fill all fields"
     }
   },
   "w3Warn": {

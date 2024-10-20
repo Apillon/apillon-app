@@ -296,11 +296,12 @@ export default function useUpload() {
   }
 
   return {
-    uploadFiles,
     fileAlreadyOnFileList,
     fileTypeValid,
     isEnoughSpaceInStorage,
     onUploadError,
+    updateFileStatus,
+    uploadFiles,
     folderName,
     putRequests,
   };

@@ -5,8 +5,11 @@
   </n-button>
   <Modal v-model:show="modalCostsVisible" :title="$t('dashboard.credits.creditCosts')">
     <div>
-      <p v-if="$te(`dashboard.credits.services.${service}.description`)" class="mb-8 text-body">
-        {{ $t(`dashboard.credits.services.${service}.description`) }}
+      <p
+        v-if="$te(`dashboard.credits.services.${service || category}.description`)"
+        class="mb-8 text-body"
+      >
+        {{ $t(`dashboard.credits.services.${service || category}.description`) }}
       </p>
 
       <PaymentCreditCosts
@@ -15,6 +18,7 @@
         :filter-by-chain="filterByChain"
         :filter-by-service="filterByService"
         :service="service"
+        :category="category"
       />
       <Spinner v-else class="min-h-[7rem]" />
 
@@ -28,6 +32,7 @@
 <script lang="ts" setup>
 defineProps({
   chain: { type: Number, default: null },
+  category: { type: String, default: null },
   service: { type: String, default: null },
   filterByChain: { type: Boolean, default: false },
   filterByService: { type: Boolean, default: false },

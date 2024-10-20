@@ -8,11 +8,9 @@ export default function useComputing() {
   const contractStore = useContractStore();
   const transactionStore = useComputingTransactionStore();
 
-  let contractInterval: any = null as any;
   let transactionInterval: any = null as any;
 
   onUnmounted(() => {
-    clearInterval(contractInterval);
     clearInterval(transactionInterval);
   });
 
@@ -21,13 +19,9 @@ export default function useComputing() {
     clearInterval(contractInterval);
 
     const unfinishedCollection = contractStore.items.find(
-      contract =>
-        contract.contractStatus === ContractStatus.DEPLOY_INITIATED ||
-        contract.contractStatus === ContractStatus.DEPLOYING
+      contract => contract.contractStatus < ContractStatus.DEPLOYED
     );
-    if (unfinishedCollection === undefined) {
-      return;
-    }
+    if (unfinishedCollection === undefined) return;
 
     contractInterval = setInterval(async () => {
       const contracts = await contractStore.fetchContracts(false, false);
@@ -70,6 +64,7 @@ export default function useComputing() {
   }
 
   function onContractCreated(contract: ContractInterface) {
+    initInfoWindow();
     if (contract.contractStatus === ContractStatus.DEPLOYED) {
       router.push(`/dashboard/service/computing/${contract.contract_uuid}`);
     } else {
@@ -80,7 +75,7 @@ export default function useComputing() {
   async function uploadFileToIPFS(
     file: FileListItemType,
     bucketUuid: string,
-    encryptedContent: string
+    encryptedContent?: string
   ): Promise<FileInterface | null> {
     const sessionUuid = uuidv4();
     const data = {
@@ -97,15 +92,17 @@ export default function useComputing() {
       // Upload to S3
       await fetch(uploadUrl.url, {
         method: 'PUT',
-        body: encryptedContent,
+        body: encryptedContent || file.file,
       });
 
       // End session
       await $api.post(endpoints.storageFileUpload(bucketUuid, sessionUuid));
 
-      setTimeout(() => {
-        message.success(t('computing.contract.encrypt.step2Info'), { duration: 5000 });
-      }, 1000);
+      if (encryptedContent) {
+        setTimeout(() => {
+          message.success(t('computing.contract.encrypt.step2Info'), { duration: 5000 });
+        }, 1000);
+      }
 
       // Start pooling file
       return await getFile(bucketUuid, uploadUrl.file_uuid);
@@ -145,7 +142,11 @@ export default function useComputing() {
         h('span', { class: 'mr-1' }, t(`${base}.${field}`)),
         h(
           IconInfo,
-          { class: 'info-icon', size: 'sm', tooltip: t(`${base}.labelInfo.${field}`) },
+          {
+            class: 'info-icon',
+            size: 'sm',
+            tooltip: decodeHTMLEntities(t(`${base}.labelInfo.${field}`)),
+          },
           ''
         ),
       ];

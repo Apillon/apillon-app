@@ -280,6 +280,15 @@ const dropdownOptionsArchive = [
   },
 ];
 
+onMounted(() => {
+  /** Check if selected columns are stored in LS */
+  if (localStorage.getItem(LsTableColumnsKeys.NFT_COLLECTION)) {
+    selectedColumns.value = JSON.parse(
+      localStorage.getItem(LsTableColumnsKeys.NFT_COLLECTION) || ''
+    );
+  }
+});
+
 /** On row click */
 const rowProps = (row: CollectionInterface) => {
   return {

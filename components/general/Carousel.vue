@@ -1,56 +1,91 @@
 <template>
-  <Carousel v-bind="settings">
-    <Slide key="slide1">
-      <img src="/assets/images/embedded-wallet/s1.jpg" alt="nft template" />
-    </Slide>
-    <Slide key="slide3">
-      <img src="/assets/images/embedded-wallet/s5.jpg" alt="nft template" />
-    </Slide>
-    <Slide key="slide4">
-      <img src="/assets/images/embedded-wallet/s6.jpg" alt="nft template" />
-    </Slide>
-    <Slide key="slide5">
-      <img src="/assets/images/embedded-wallet/s7.jpg" alt="nft template" />
-    </Slide>
-    <Slide key="slide6">
-      <img src="/assets/images/embedded-wallet/s8.jpg" alt="nft template" />
-    </Slide>
+  <swiper
+    class="max-w-sm xl:max-w-md mx-auto"
+    :grab-cursor="true"
+    :effect="'fade'"
+    :navigation="true"
+    :modules="[Navigation, EffectFade]"
+    @swiper="onSwiper"
+  >
+    <swiper-slide v-for="(slide, key) in slides" :key="key" class="px-8">
+      <img :src="slide" class="mx-auto" :alt="`slide ${key}`" />
+    </swiper-slide>
 
-    <template #addons>
-      <Pagination />
-      <Navigation />
-    </template>
-  </Carousel>
+    <div
+      v-if="swiperRef"
+      class="pointer-events-none absolute left-1/2 bottom-0 z-1 flex w-full -translate-x-1/2 flex-wrap justify-center"
+    >
+      <div>
+        <Button
+          title="Previous"
+          class="pointer-events-auto mr-2 block !h-16 !w-16 text-black"
+          isType="custom"
+          :disabled="swiperRef.isBeginning"
+          :icon="{
+            name: 'arrow-left',
+            color: swiperRef.isBeginning ? '#C9C9CA' : 'gradient-200',
+            size: '2xl',
+          }"
+          @click="swiperRef.slidePrev()"
+        />
+      </div>
+      <div>
+        <Button
+          title="Next"
+          class="pointer-events-auto ml-2 block !h-16 !w-16 text-black"
+          isType="custom"
+          :disabled="swiperRef.isEnd"
+          :icon="{
+            name: 'arrow-right',
+            color: swiperRef.isEnd ? '#C9C9CA' : 'gradient-200',
+            size: '2xl',
+          }"
+          @click="swiperRef.slideNext()"
+        />
+      </div>
+    </div>
+  </swiper>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { Carousel, Navigation, Slide, Pagination } from 'vue3-carousel';
-import 'vue3-carousel/dist/carousel.css';
+<script lang="ts" setup>
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation, EffectFade } from 'swiper/modules';
+import { type Swiper as SwiperClass } from 'swiper/types';
 
-// Carousel settings
-const settings = ref({
-  itemsToShow: 1,
-  snapAlign: 'center',
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/effect-fade';
+
+defineProps({
+  slides: { type: Array<string>, default: [] },
 });
+const swiperRef = ref<SwiperClass>();
+
+onUnmounted(() => {
+  if (swiperRef.value) {
+    window.removeEventListener('keydown', onKeyPressed);
+  }
+});
+
+const onSwiper = swiper => {
+  swiperRef.value = swiper;
+  useTimeoutFn(() => {
+    window.addEventListener('keydown', onKeyPressed);
+  }, 500);
+};
+
+function onKeyPressed(e: KeyboardEvent) {
+  if (swiperRef.value) {
+    switch (e.keyCode) {
+      case 37:
+        swiperRef.value.slidePrev();
+        break;
+      case 39:
+        swiperRef.value.slideNext();
+    }
+  }
+}
 </script>
 
-<style lang="postcss">
-.carousel__item {
-  min-height: 200px;
-  width: 100%;
-  font-size: 20px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: aquamarine;
-}
-.carousel__prev,
-.carousel__next {
-  color: #f9ff73;
-}
-.carousel__pagination-button--active::after {
-  background-color: #f9ff73;
-}
-</style>
+<style lang="postcss"></style>

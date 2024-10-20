@@ -58,12 +58,6 @@ const options = computed(() => [
     icon: renderIcon('icon-billing'),
   },
   {
-    key: 'dashboard-airdrop',
-    label: $i18n.t('referral.banner.btn'),
-    show: !dataStore.isProjectUser,
-    icon: renderNuxtIcon('logo/apillon-icon'),
-  },
-  {
     key: 'dashboard-project-settings',
     label: $i18n.t('profile.settings'),
     disabled: !dataStore.hasProjects,

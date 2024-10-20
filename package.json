@@ -42,6 +42,7 @@
     "@gtm-support/vue-gtm": "^2.2.0",
     "@hcaptcha/vue3-hcaptcha": "^1.3.0",
     "@metamask/detect-provider": "^2.0.0",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
     "@pinia/nuxt": "^0.5.1",
     "@polkadot/api": "^11.0.2",
     "@polkadot/extension-inject": "^0.47.2",
@@ -49,6 +50,7 @@
     "@subsocial/grill-widget": "^0.1.3",
     "@subsocial/resource-discussions": "^0.0.4",
     "buffer": "^6.0.3",
+    "chart.js": "^4.4.4",
     "drag-scroll-vue3": "^1.0.7",
     "lodash.debounce": "^4.0.8",
     "nuxt-icons": "^3.0.0",
@@ -59,10 +61,10 @@
     "text-marshal": "^0.0.2",
     "uuid": "^9.0.0",
     "v-lazy-image": "^2.1.1",
+    "vue-chartjs": "^5.3.1",
     "vue-cookie-accept-decline": "^6.1.0",
     "vue-papa-parse": "^3.1.0",
     "vue-tweet": "^2.0.2",
-    "vue3-carousel": "^0.3.3",
     "vue3-code-block": "^2.2.14"
   }
 }

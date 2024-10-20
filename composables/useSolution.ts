@@ -20,21 +20,21 @@ type SolutionContentTrans = {
 export default function useSolution() {
   const { te, tm, rt } = useI18n();
 
-  function generateContent(solution: string) {
-    const BASE = 'dashboard.solution';
-
+  function generateContent(solution: string, BASE = 'dashboard.solution') {
     if (te(`${BASE}.${solution}.content`) || tm(`${BASE}.${solution}.content`)) {
-      const translations = tm(`${BASE}.${solution}.content`) as SolutionContentTrans[];
+      const translations = (tm(`${BASE}.${solution}.content`) as SolutionContentTrans[]) || [];
 
-      return translations.map(trans => {
-        return {
-          headline: trans.headline ? translate(trans.headline) : undefined,
-          title: trans.title ? translate(trans.title) : undefined,
-          subtitle: trans.subtitle ? translate(trans.subtitle) : undefined,
-          content: trans.content ? translate(trans.content) : undefined,
-          benefits: trans.benefits ? translate(trans.benefits) : undefined,
-        } as SolutionContent;
-      });
+      return (
+        translations?.map(trans => {
+          return {
+            headline: trans.headline ? translate(trans.headline) : undefined,
+            title: trans.title ? translate(trans.title) : undefined,
+            subtitle: trans.subtitle ? translate(trans.subtitle) : undefined,
+            content: trans.content ? translate(trans.content) : undefined,
+            benefits: trans.benefits ? translate(trans.benefits) : undefined,
+          } as SolutionContent;
+        }) || []
+      );
     }
     return [];
   }

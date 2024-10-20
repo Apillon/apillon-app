@@ -19,11 +19,13 @@ export enum PageSize {
 }
 
 export const LS_KEYS = {
+  DEPLOYMENT_REFRESH_INTERVAL: 'al_deployment_refresh_interval',
   NEWSLETTER: 'al_newsletter_subscribed',
   SERVICE_STATUS: 'al_service_status',
 };
 
 export const SessionKeys = {
+  ASSET_HUB: 'al_asset_hub',
   CREDITS_MSG: 'al_credits_msg',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',
@@ -34,6 +36,7 @@ export const LsAnalyticsKeys = {
 };
 
 export const LsTableColumnsKeys = {
+  ASSET_HUB: 'al_table_asset_hub',
   FILES: 'al_table_files_columns',
   IPNS: 'al_table_ipns_columns',
   NFT_COLLECTION: 'al_table_nft_collection_columns',
@@ -47,6 +50,7 @@ export const LsW3WarnKeys = {
   BUCKET_DESTROYED: 'al_w3warn_bucket_destroyed',
   BUCKET_ITEM_DELETE: 'al_w3warn_bucket_item_delete',
   CONTRACT_NEW: 'al_w3warn_contract_new',
+  CLOUD_FUNCTION_NEW: 'al_w3warn_cloud_function_new',
   COLLECTION_DELETE: 'al_w3warn_collection_delete',
   HOSTING_NEW: 'al_w3warn_hosting_new',
   HOSTING_DEPLOY: 'al_w3warn_hosting_deploy',
@@ -57,6 +61,9 @@ export const LsW3WarnKeys = {
 
 export const LsCacheKeys = {
   API_KEYS: 'al_cache_api_keys',
+  ASSET: 'al_cache_asset',
+  ASSETS: 'al_cache_assets',
+  ASSETS_TESTNET: 'al_cache_assets_testnet',
   BUCKET: 'al_cache_bucket',
   BUCKETS: 'al_cache_buckets',
   BUCKET_ITEMS: 'al_cache_bucket_items',
@@ -73,6 +80,11 @@ export const LsCacheKeys = {
   CONTRACT: 'al_cache_contract',
   CONTRACTS: 'al_cache_contracts',
   CONTRACT_ARCHIVE: 'al_cache_contract_archive',
+  CLOUD_FUNCTION: 'al_cache_cloud_function',
+  CLOUD_FUNCTIONS: 'al_cache_cloud_functions',
+  CLOUD_FUNCTIONS_ARCHIVE: 'al_cache_cloud_functions_archive',
+  CLOUD_FUNCTION_USAGE: 'al_cache_cloud_function_usage',
+  CLOUD_FUNCTION_VARIABLES: 'al_cache_cloud_function_variables',
   CREDITS: 'al_cache_credits',
   CREDIT_PACKAGES: 'al_cache_credit_packages',
   CUSTOMER_PORTAL_URL: 'al_cache_customer_portal',
@@ -80,12 +92,18 @@ export const LsCacheKeys = {
   DEPLOYMENTS_PRODUCTION: 'al_cache_deployments_production',
   DEPLOYMENTS_STAGING: 'al_cache_deployments_staging',
   DISCORD_LINK: 'al_cache_discord_link',
+  EMBEDDED_WALLET: 'al_cache_embedded_wallet',
+  EMBEDDED_WALLETS: 'al_cache_embedded_wallets',
+  EMBEDDED_WALLET_INFO: 'al_cache_embedded_wallet_info',
+  EMBEDDED_WALLET_SIGNATURES: 'al_cache_embedded_wallet_signatures',
   FILE_ALL: 'al_cache_file_all',
   FILE_DELETED: 'al_cache_file_deleted',
   INVOICES: 'al_cache_invoices',
   IPFS: 'al_cache_ipfs',
   IPNS: 'al_cache_ipns',
   IPNS_ITEM: 'al_cache_ipns_item',
+  JOB: 'al_cache_job',
+  JOBS: 'al_cache_jobs',
   OAUTH_LINKS: 'al_cache_oauth_links',
   PRICE_LIST: 'al_cache_price_list',
   POST: 'al_cache_post',
@@ -104,7 +122,10 @@ export const LsCacheKeys = {
   WEBSITE: 'al_cache_website',
   WEBSITES: 'al_cache_websites',
   WEBSITE_ARCHIVE: 'al_cache_website_archive',
-  EW_API_KEYS: 'al_ew_cache_api_keys',
+  SMART_CONTRACT: 'al_cache_smart_contract',
+  SMART_CONTRACTS: 'al_cache_smart_contracts',
+  SMART_CONTRACT_DEPLOYED: 'al_smart_contract_deployed',
+  SMART_CONTRACTS_DEPLOYED: 'al_smart_contracts_deployed',
 };
 
 /** User roles */
