@@ -17,6 +17,7 @@ const config: ConfigInterface = {
     'AUTHENTICATION',
     'BILLING',
     'CAPTCHA_LOGIN',
+    'CLOUD_FUNCTIONS',
     'COMPUTING',
     'DISCORD',
     'EMBEDDED_WALLET',
