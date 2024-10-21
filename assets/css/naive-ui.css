@@ -754,6 +754,10 @@ body > .n-message-container {
     }
     .n-tabs-tab {
       @apply mobile:py-1;
+
+      &.n-tabs-tab--disabled {
+        @apply pointer-events-none !border-b-0 grayscale-0;
+      }
     }
     .n-tab-pane {
       @apply mobile:pt-0;

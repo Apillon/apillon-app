@@ -2,7 +2,7 @@
   <Heading>
     <slot>
       <n-space align="center" size="large">
-        <NuxtLink :to="`/dashboard/service/nft/${collectionStore.active.collection_uuid}`">
+        <NuxtLink :to="{ name: 'dashboard-service-nft' }">
           <span class="icon-back align-sub text-2xl"></span>
         </NuxtLink>
         <h2>{{ t('dashboard.solution.nftCollection.name') }}</h2>

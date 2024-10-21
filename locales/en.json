@@ -1832,7 +1832,7 @@
     "transaction": {
       "chain": "Chain",
       "chainId": "Chain ID",
-      "empty": "Your collection has currently no transactions",
+      "empty": "Your collection has currently no NFTs.",
       "emptyInfo": "If you just deployed your collection, please wait a minute for the collection to deploy.",
       "hash": "Transaction Hash",
       "link": "Transaction Link",
