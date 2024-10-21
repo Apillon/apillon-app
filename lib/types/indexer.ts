@@ -1,0 +1,65 @@
+declare global {
+  interface IndexerBaseInterface extends BaseObjectInterface {
+    indexer_uuid: string;
+    lastDeploymentId: number;
+    squidId?: number;
+    squidReference?: string;
+  }
+
+  interface IndexerDeploymentInferface {
+    id: number;
+    type: string;
+    failed: string;
+    status: string;
+    logs: [{ message: string; severity: string }];
+    squid?: {
+      id: number;
+      name: string;
+      slot: string;
+      reference: string;
+    };
+    totalElapsedTimeMs: number;
+    updatedAt: string;
+    createdAt: string;
+  }
+
+  interface IndexerLogInterface {
+    id: string;
+    level: string;
+    timestamp: string;
+    container: string;
+    payload: {
+      msg: string;
+      ns: string;
+    };
+  }
+
+  interface IndexerInterface extends IndexerBaseInterface {
+    squid: {
+      id: number;
+      api: {
+        status: string;
+        urls: [{ type: string; url: string }];
+      };
+      processors: {
+        name: string;
+        status: string;
+        syncState: {
+          totalBlocks: number;
+          currentBlock: number;
+        };
+      };
+      deployedAt: string;
+      hibernatedAt: string;
+    };
+    lastDeployment: IndexerDeploymentInferface;
+  }
+
+  interface IndexersResponse extends GeneralItemsResponse<IndexerInterface> {}
+  interface IndexerBaseResponse extends GeneralResponse<IndexerBaseInterface> {}
+  interface IndexerResponse extends GeneralResponse<IndexerInterface> {}
+  interface IndexerLogsResponse
+    extends GeneralResponse<{ logs: IndexerLogInterface[]; nextPage: string }> {}
+
+  interface IndexerDeploymentsResponse extends GeneralResponse<IndexerDeploymentInferface[]> {}
+}

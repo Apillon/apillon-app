@@ -359,7 +359,8 @@
         "nft": "NFT service",
         "social": "Social service",
         "storage": "Storage service",
-        "wallet": "Wallet service"
+        "wallet": "Wallet service",
+        "indexing": "Indexing service"
       }
     },
     "clipboard": {
@@ -480,7 +481,8 @@
       "social": "Social",
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
-      "embeddedWallet": "Embedded Wallet"
+      "embeddedWallet": "Embedded Wallet",
+      "indexing": "Indexing"
     },
     "pageMenu": {
       "access": "Access",
@@ -668,6 +670,32 @@
           "writeOverApillon": "Write over Appilon",
           "readFromDapp": "Read from your dapp"
         }
+      },
+      "indexer": {
+        "create": "Create new indexer",
+        "info": "Add it to your Web3 project",
+        "new": "New indexer",
+        "table": {
+          "name": "Name",
+          "description": "Description",
+          "status": "Status"
+        },
+        "tableLog": {
+          "level": "Level",
+          "ts": "Timestamp",
+          "container": "Continer",
+          "msg": "Message"
+        },
+        "tableDeployments": {
+          "type": "Type",
+          "failed": "Failed",
+          "status": "Status",
+          "updatedAt": "Updated",
+          "createdAt": "Created"
+        },
+        "general": "General",
+        "logs": "Logs",
+        "deployments": "Deployments"
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -1025,6 +1053,21 @@
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
       },
+      "indexing": {
+        "content": [
+          {
+            "headline": "Features:",
+            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints.",
+            "benefits": [
+              "Real-time Data Processing: Continuously indexes new blockchain data for immediate access.",
+              "Historical Data Access: Easily retrieve past blockchain data for analysis or verification.",
+              "Customizable APIs: Flexible API endpoints enable tailored querying for specific blockchain data needs.",
+              "Multi-Blockchain Support: Seamlessly index data across various blockchain networks.",
+              "Scalability: Efficiently handles large amounts of data, suitable for high-traffic applications."
+            ]
+          }
+        ]
+      },
       "choose": "Choose Solution",
       "deploy": "Deploy solution",
       "chooseComputing": "Select a computing template for your project. Deploy it on testnet to test it and fix if needed before launching in production on mainnet.",
@@ -1300,6 +1343,8 @@
       "hostingDescription": "Hosting description",
       "hostingName": "Hosting name",
       "hostingSize": "Hosting size",
+      "indexerName": "Indexer name",
+      "indexerDescription": "Indexer description",
       "inviteByEmail": "Invite by email",
       "ipnsDescription": "IPNS description",
       "ipnsName": "IPNS name",
@@ -1419,6 +1464,8 @@
       "folderDescription": "",
       "hostingDescription": "Hosting description",
       "hostingName": "Hosting name",
+      "indexerName": "Indexer name",
+      "indexerDescription": "Indexer description",
       "inviteByEmail": "Type e-mail",
       "ipnsDescription": "IPNS description",
       "ipnsName": "IPNS name",
@@ -1476,6 +1523,10 @@
         "title": "Enter the title for your personal reference",
         "description": "Enter the description for your personal reference",
         "whitelistedDomains": "valid-domain.com\n*.valid-domain2.com\nsubdomain.*.valid-domain3.com"
+      },
+      "indexer": {
+        "logLevels": "Log levels",
+        "containers": "Containers"
       }
     },
     "success": {
@@ -1526,7 +1577,8 @@
         "service": "Service has been created",
         "userInvite": "User has been invited.",
         "webhook": "Webhook has been created",
-        "website": "Website has been created"
+        "website": "Website has been created",
+        "indexer": "Indexer has been created"
       },
       "deleted": {
         "apiKey": "API key has been deleted",
@@ -1714,6 +1766,52 @@
     "web3HostingArchive": "Web3 hosting Archive",
     "web3HostingArchiveInfo": "You don't have any website in Archive.",
     "web3HostingEnable": "Enable Web3 hosting to host your website."
+  },
+  "indexer": {
+    "startNew": "Star by creating a new indexer",
+    "create": "Create new indexer",
+    "update": "Update indexer",
+    "upload": {
+      "sourceCode": "Upload indexer source code",
+      "directory": "Indexer directory"
+    },
+    "uuid": "Indexer UUID",
+    "instructions": {
+      "deployYourIndexer": "Deploy your indexer",
+      "instruction1": "Indexer deployments are handeled over Apillon CLI.\n Please follow the step by step instructions below and deploy your indexer with the help of our CLI.",
+      "instruction2": "Note, that you need at lease 20,000 credits to perform this action.",
+      "step1": "Step 1 - Setup the Apillon CLI",
+      "step2": "Step 2 - Set up you squid locally",
+      "chooseTemplate": "Chose template for you indexer from Subsquid Github repository and clone it. \nBelow templates are available:",
+      "substrateTemplate": "Teplate for indexing substrate based chain",
+      "evmTemplates": "Templates for EVM based chains",
+      "step3": "Step 3 - Customize your squid",
+      "step4": "Step 4 - Deploy the indexer"
+    },
+    "indexerApiEndpoint": "Indexer API endpoint",
+    "indexerGeneralData": "Indexer - general data",
+    "name": "Name",
+    "description": "Description",
+    "status": "Status",
+    "created": "Created",
+    "lastDeployed": "Last deployed",
+    "apiStatus": "Api status",
+    "processorStatus": "Processor status",
+    "processedBlocks": "Processed blocks",
+    "logLevels": {
+      "error": "Error",
+      "debug": "Debug",
+      "info": "Info",
+      "notice": "Notice",
+      "warning": "Warning",
+      "critical": "Critical"
+    },
+    "containers": {
+      "db": "DB",
+      "init": "Init",
+      "api": "API",
+      "processor": "Processor"
+    }
   },
   "nft": {
     "create": "Create an NFT",
@@ -2368,6 +2466,7 @@
     "fileTypeNotCsv": "File must be of type CSV",
     "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",
+    "indexerNameRequired": "Indexer name is required",
     "ipfsCidRequired": "Please enter CID or IPNS",
     "ipfsTypeRequired": "Please select type",
     "ipnsNameRequired": "Please enter IPNS name",

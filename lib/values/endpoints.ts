@@ -306,6 +306,23 @@ const Endpoints = {
     return `/contracts/deployed/${contractUuid}/call`;
   },
 
+  /** Indexers */
+  indexers: (uuid?: string) => {
+    return uuid ? `/indexing/indexers/${uuid}` : '/indexing/indexers';
+  },
+
+  indexer: () => {
+    return '/indexing/indexer';
+  },
+
+  indexerLogs: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/logs`;
+  },
+
+  indexerDeployments: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/deployments`;
+  },
+
   /**
    * Project settings
    */

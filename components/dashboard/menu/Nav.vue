@@ -164,6 +164,17 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       soon: isMenuItemDisabled(Feature.SMART_CONTRACTS),
       disabled: isMenuItemDisabled(Feature.SMART_CONTRACTS) || zeroProjects.value,
     },
+    {
+      key: 'dashboard-service-indexing',
+      label: t('dashboard.nav.indexing'),
+      to: 'dashboard-service-indexing',
+      iconName: 'icon-file',
+      soon: isMenuItemDisabled(Feature.INDEXING),
+      disabled:
+        isMenuItemDisabled(Feature.INDEXING) ||
+        !authStore.isUserAllowed(Permission.INDEXING) ||
+        zeroProjects.value,
+    },
   ];
 
   const smartContractsChildren = [
