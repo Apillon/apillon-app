@@ -1,6 +1,6 @@
 import type { MessageFunction, VueMessageType } from 'vue-i18n';
 
-type VueMsg = VueMessageType | MessageFunction<VueMessageType>;
+export type VueMsg = VueMessageType | MessageFunction<VueMessageType>;
 
 export type SolutionContent = {
   headline?: string;
@@ -25,15 +25,17 @@ export default function useSolution() {
       const translations = (tm(`${BASE}.${solution}.content`) as SolutionContentTrans[]) || [];
 
       return (
-        translations?.map(trans => {
-          return {
-            headline: trans.headline ? translate(trans.headline) : undefined,
-            title: trans.title ? translate(trans.title) : undefined,
-            subtitle: trans.subtitle ? translate(trans.subtitle) : undefined,
-            content: trans.content ? translate(trans.content) : undefined,
-            benefits: trans.benefits ? translate(trans.benefits) : undefined,
-          } as SolutionContent;
-        }) || []
+        (Array.isArray(translations) &&
+          translations?.map(trans => {
+            return {
+              headline: trans.headline ? translate(trans.headline) : undefined,
+              title: trans.title ? translate(trans.title) : undefined,
+              subtitle: trans.subtitle ? translate(trans.subtitle) : undefined,
+              content: trans.content ? translate(trans.content) : undefined,
+              benefits: trans.benefits ? translate(trans.benefits) : undefined,
+            } as SolutionContent;
+          })) ||
+        []
       );
     }
     return [];
@@ -48,5 +50,6 @@ export default function useSolution() {
 
   return {
     generateContent,
+    translate,
   };
 }

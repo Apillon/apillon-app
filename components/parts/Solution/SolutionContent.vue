@@ -34,7 +34,7 @@
               name="icon/success"
               class="inline-block float-left mr-2 text-2xl text-green"
             />
-            <span>{{ benefit }}</span>
+            <span v-html="benefit"></span>
           </li>
         </ul>
       </template>
