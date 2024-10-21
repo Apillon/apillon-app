@@ -34,6 +34,22 @@
             <h4 class="text-primary">{{ embeddedWalletStore.info.maxNumOfEWSignatures }}</h4>
           </n-card>
         </div>
+        <div class="flex justify-end mr-4">
+          <n-button
+            size="small"
+            :loading="embeddedWalletStore.loading"
+            @click="
+              embeddedWalletStore.fetchSignatures(
+                embeddedWalletStore.integrationUuid,
+                embeddedWalletStore.signature.pagination.page || 1,
+                embeddedWalletStore.signature.pagination.pageSize
+              )
+            "
+          >
+            <span class="icon-refresh text-xl mr-2"></span>
+            {{ $t('general.refresh') }}
+          </n-button>
+        </div>
 
         <TableEmbeddedWalletSignatures />
 
