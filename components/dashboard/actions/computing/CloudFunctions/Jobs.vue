@@ -26,6 +26,15 @@
         <span class="icon-cloud-functions text-xl mr-2"></span>
         {{ $t('computing.cloudFunctions.job.viewTemplate') }}
       </n-button>
+      <n-button
+        size="small"
+        tag="a"
+        href="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html"
+        target="_blank"
+      >
+        <span class="icon-file text-xl mr-2"></span>
+        {{ $t('computing.cloudFunctions.documentation') }}
+      </n-button>
       <!-- Refresh cloudFunctions -->
       <n-button size="small" :loading="cloudFunctionStore.loading" @click="refresh">
         <span class="icon-refresh text-xl mr-2"></span>

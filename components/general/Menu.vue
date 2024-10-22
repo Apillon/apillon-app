@@ -75,16 +75,11 @@ function renderMenuExtra(option: NMenuOption) {
   } else if ('beta' in option && option.beta) {
     return h(
       'span',
-      { class: ' align-middle' },
-      h(
-        resolveComponent('NuxtIcon'),
-        {
-          name: 'icon/beta',
-          class: 'flex items-center justify-end w-16 h-6 text-[52px]',
-          filled: true,
-        },
-        ''
-      )
+      h('img', {
+        src: '/icons/beta.svg',
+        class: 'w-14 h-5 inline-block',
+        alt: 'Beta',
+      })
     );
   } else if ('soon' in option && option.soon) {
     return h('span', { class: 'icon-soon align-middle text-violet text-2xl mr-2' }, '');

@@ -11,20 +11,9 @@
     </div>
 
     <n-space size="large">
-      <!-- Refresh -->
-      <n-button
-        size="small"
-        :loading="embeddedWalletStore.loading"
-        @click="
-          embeddedWalletStore.fetchSignatures(
-            embeddedWalletStore.integrationUuid,
-            embeddedWalletStore.signature.pagination.page,
-            embeddedWalletStore.signature.pagination.pageSize
-          )
-        "
-      >
-        <span class="icon-refresh text-xl mr-2"></span>
-        {{ $t('general.refresh') }}
+      <n-button size="small" @click="showModalEditEmbeddedWallet = true">
+        <span class="icon-edit text-xl text-primary mr-2"></span>
+        <span class="text-primary">{{ $t('embeddedWallet.editIntegration') }}</span>
       </n-button>
 
       <!-- View documentation -->
@@ -38,10 +27,7 @@
         {{ $t('embeddedWallet.viewDocumentation') }}
       </Btn>
 
-      <n-button size="small" @click="showModalEditEmbeddedWallet = true">
-        <span class="icon-edit text-xl text-primary mr-2"></span>
-        <span class="text-primary">{{ $t('embeddedWallet.editIntegration') }}</span>
-      </n-button>
+      <ModalCreditCosts :service="ServiceTypeName.WALLET" />
     </n-space>
   </n-space>
 </template>
