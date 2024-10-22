@@ -210,6 +210,7 @@
       "monitoring": "Monitoring",
       "new": "New Cloud function",
       "startNew": "Start by creating a new cloud function",
+      "uuid": "Cloud Function UUID",
       "variables": "Environment variables",
       "content": [
         {
@@ -2455,7 +2456,8 @@
       "keyNotUnique": "Please enter unique variable key",
       "nameRequired": "Please enter name",
       "startTimeRequired": "Please select start date",
-      "slotsRequired": "Please enter number of slots"
+      "slotsRequired": "Please enter number of slots",
+      "uuid": "Cloud Function UUID"
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
