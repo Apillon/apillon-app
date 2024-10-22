@@ -3,7 +3,10 @@
     <template #heading>
       <Heading>
         <slot>
-          <h1>{{ $t('dashboard.nav.embeddedWallet') }}</h1>
+          <h1 class="inline-block">
+            {{ $t('dashboard.nav.embeddedWallet') }}
+            <img src="/icons/beta.svg" alt="Beta" class="w-14 h-5 inline-block ml-2" />
+          </h1>
         </slot>
         <template #info>
           <ModalCreditCosts :service="ServiceTypeName.WALLET" />
@@ -26,6 +29,14 @@
                 : $t('embeddedWallet.showInstructions')
             "
           >
+            <template #header>
+              <span class="icon-info text-xl mr-2"></span>
+              {{
+                instructionsVisible
+                  ? $t('embeddedWallet.hideInstructions')
+                  : $t('embeddedWallet.showInstructions')
+              }}
+            </template>
             <EmbeddedWalletInstructions />
           </n-collapse-item>
         </n-collapse>

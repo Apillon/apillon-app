@@ -4,7 +4,7 @@
       <!-- DEMO -->
       <LearnVideo
         title="Embedded Wallet"
-        html-content="https://www.youtube.com/embed/AslkbJH4OAM?si=IVlEtikZsgI85iWl"
+        html-content="https://www.youtube.com/embed/yt6ZnNScDkM"
         class="w-full max-w-lg"
       />
       <SolutionContent :content="content" />

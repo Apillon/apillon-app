@@ -19,8 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NButton, NDropdown, NEllipsis } from 'naive-ui';
-
 const { t } = useI18n();
 const embeddedWalletStore = useEmbeddedWalletStore();
 
