@@ -7,12 +7,22 @@
     @submit.prevent="handleSubmit"
   >
     <!-- Create inputs -->
-    <n-form-item v-for="(field, key) in formData" :key="key" :path="key" :label="key">
-      <n-input v-model:value="formData[key]" :maxlength="256" required />
-    </n-form-item>
+    <template v-if="!args">
+      <n-form-item
+        v-for="(input, key) in fn.inputs"
+        :key="key"
+        :path="input.name"
+        :label="labelInfoText(input.name, input?.description)"
+      >
+        <n-input v-model:value="formData[input.name]" :maxlength="256" required />
+      </n-form-item>
+    </template>
 
     <!-- Submit -->
-    <SmartContractsBtnSubmit :fn="fn" :owner="owner" :loading="loading" @submit="handleSubmit" />
+    <Btn v-if="owner" type="primary" class="w-full" :loading="loading" @click="handleSubmit">
+      {{ btnText || 'Query' }}
+    </Btn>
+    <SmartContractsBtnSubmit v-else :owner="owner" :loading="loading" @submit="handleSubmit" />
 
     <!-- Result -->
     <Notification v-if="result !== undefined" type="success" class="mt-6" hide-icon>
@@ -27,16 +37,19 @@ import { createPublicClient, createWalletClient, custom, http } from 'viem';
 
 const emit = defineEmits(['submitSuccess']);
 const props = defineProps({
+  args: { type: Array<string | null>, default: null },
+  btnText: { type: String, default: null },
   fn: { type: Object as PropType<SmartContractABI>, required: true },
   owner: { type: Boolean, default: false },
   read: { type: Boolean, default: false },
 });
 
-const message = useMessage();
 const { t } = useI18n();
+const message = useMessage();
 const { address } = useAccount();
-const deployedContractStore = useDeployedContractStore();
+const { labelInfoText } = useComputing();
 const { getChainConfig } = useSmartContracts();
+const deployedContractStore = useDeployedContractStore();
 
 const loading = ref<boolean>(false);
 const result = ref<string>();
@@ -46,10 +59,22 @@ const formData = reactive<Record<string, string | null>>(
   props.fn.inputs.reduce((acc, item) => Object.assign(acc, { [item.name]: null }), {})
 );
 
-const rules: NFormRules = props.fn.inputs.reduce(
-  (acc, item) =>
-    Object.assign(acc, { [item.name]: ruleRequired(t('validation.smartContracts.fieldRequired')) }),
-  {}
+const rules: NFormRules = props.args
+  ? {}
+  : props.fn.inputs.reduce(
+      (acc, item) =>
+        Object.assign(acc, {
+          [item.name]: ruleRequired(t('validation.smartContracts.fieldRequired')),
+        }),
+      {}
+    );
+
+const data = computed(() =>
+  props.args && props.args.length
+    ? props.args
+    : Object.keys(formData).length
+      ? Object.values(formData)
+      : ['true']
 );
 
 // Submit
@@ -77,7 +102,6 @@ async function execRead(methodName: string) {
   const contractAddress = deployedContractStore.active.contractAddress as `0x${string}`;
   const abi = deployedContractStore.active.contractVersion.abi;
   const chainId = deployedContractStore.active.chain;
-  let response;
 
   const chainConfig = getChainConfig(chainId);
 
@@ -87,14 +111,15 @@ async function execRead(methodName: string) {
   });
 
   try {
-    response = await client.readContract({
+    const res = await client.readContract({
       address: contractAddress,
-      abi,
+      abi: abi.filter(a => a.inputs.length === props.fn.inputs.length),
       functionName: methodName,
-      args: Object.values(formData),
+      args: data.value,
     });
-    result.value = `${response}`;
+    result.value = `${res}`;
   } catch (e) {
+    console.error(e);
     message.error(userFriendlyMsg(e));
   } finally {
     loading.value = false;
@@ -121,7 +146,7 @@ async function execWalletWrite(methodName: string) {
       address: contractAddress,
       abi,
       functionName: methodName,
-      args: Object.values(formData),
+      args: data.value,
       account: address.value,
     });
     result.value = `${res}`;
@@ -140,7 +165,7 @@ async function execOwnerWrite(methodName: string) {
       endpoints.smartContractsCall(deployedContractStore.active.contract_uuid),
       {
         methodName,
-        methodArguments: Object.keys(formData).length ? Object.values(formData) : ['true'],
+        methodArguments: data.value,
       }
     );
   } catch (e) {

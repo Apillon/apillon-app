@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <Dashboard :loading="pageLoading" :mainnet="assetHubStore.mainnet">
     <template #heading>
       <HeaderAssetHub
         back-link="/dashboard/service/asset-hub/"
@@ -82,7 +82,10 @@ useHead({
 
 const assetId = ref<number>(Number(params?.id));
 const assetData = computed<AssetData[]>(() => [
-  { label: t('form.label.assetHub.network'), value: `${assetHubNetworks.westend.name}` },
+  {
+    label: t('form.label.assetHub.network'),
+    value: `${assetHubNetworks.westend.name} (${assetHubNetworks.westend.env})`,
+  },
   { label: t('form.label.assetHub.name'), value: `${assetHubStore.active?.name}` },
   { label: t('form.label.assetHub.symbol'), value: `${assetHubStore.active?.symbol}` },
   { label: t('form.label.assetHub.assetId'), value: `${assetId.value}` },

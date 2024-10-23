@@ -13,33 +13,38 @@
     </slot>
 
     <template #info>
-      <n-space :size="32" align="center" :wrap="false">
-        <div v-if="switcher">
-          <strong>Mainnet</strong>
+      <div v-if="switcher">
+        <div class="text-center mb-1">
+          <h5>{{ $t('general.environment') }} (testnet/mainnet)</h5>
+        </div>
+        <div class="flex gap-1 items-center">
+          <span class="text-pink text-sm">{{ assetHubNetworks.westend.name }}</span>
           <n-switch v-model:value="isMainnet" :disabled="switchDisabled" @click="onSwitch" />
+          <span class="text-violet text-sm">{{ assetHubNetworks.assetHub.name }}</span>
         </div>
+      </div>
 
-        <div
-          v-if="assetHubStore.accountConnected"
-          class="bg-bg-lighter rounded-xl text-sm px-3 flex gap-2 items-center h-10"
+      <div
+        v-if="assetHubStore.accountConnected"
+        class="bg-bg-lighter rounded-xl text-sm px-3 flex gap-2 items-center h-10"
+      >
+        <p class="text-bodyDark">{{ truncateWallet(`${assetHubStore.account?.address}`) }}</p>
+        <hr class="bg-bg h-full w-[1px] border-bg" />
+        <p class="cursor-pointer text-white" @click="assetHubStore.account = null">
+          {{ $t('general.disconnect') }}
+        </p>
+      </div>
+      <div v-else-if="!switcher">
+        <Btn
+          type="primary"
+          size="small"
+          :loading="loadingWallet"
+          @click="modalWalletSelectVisible = true"
         >
-          <p class="text-bodyDark">{{ truncateWallet(`${assetHubStore.account?.address}`) }}</p>
-          <hr class="bg-bg h-full w-[1px] border-bg" />
-          <p class="cursor-pointer text-white" @click="assetHubStore.account = null">
-            {{ $t('general.disconnect') }}
-          </p>
-        </div>
-        <div v-else>
-          <Btn
-            type="primary"
-            size="small"
-            :loading="loadingWallet"
-            @click="modalWalletSelectVisible = true"
-          >
-            {{ $t('dashboard.service.assetHub.connectWallet') }}
-          </Btn>
-        </div>
-      </n-space>
+          {{ $t('dashboard.service.assetHub.connectWallet') }}
+        </Btn>
+      </div>
+      <div v-else></div>
     </template>
   </Heading>
 

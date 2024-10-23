@@ -18,7 +18,7 @@
           v-if="!assetId && formData.network === assetHubNetworks.westend.rpc"
           class="absolute bottom-full right-0 mb-2"
         >
-          <Btn size="small" type="link" to="https://faucet.polkadot.io/westend?parachain=1000">
+          <Btn size="small" type="link" href="https://faucet.polkadot.io/westend?parachain=1000">
             <span class="text-xs">Faucet</span>
           </Btn>
         </div>
@@ -239,7 +239,13 @@ const networks = computed(() =>
   Object.values(assetHubNetworks).map(network => ({ label: network.name, value: network.rpc }))
 );
 
-const assetIDs = computed(() => new Set(assetHubStore.items.map(i => i.id)));
+const assetIDsMainnet = computed(() => new Set(assetHubStore.itemsMainnet.map(i => i.id)));
+const assetIDsTestnet = computed(() => new Set(assetHubStore.itemsTestnet.map(i => i.id)));
+const assetIDs = computed(() =>
+  formData.value.network === assetHubNetworks.westend.rpc
+    ? assetIDsTestnet.value
+    : assetIDsMainnet.value
+);
 
 onMounted(async () => {
   if (props.assetId) {
@@ -257,7 +263,8 @@ onMounted(async () => {
     }
   }
 
-  assetHubStore.getAssets();
+  assetHubStore.getAssetsMainnet();
+  assetHubStore.getAssetsTestnet();
 });
 
 watch(
@@ -267,13 +274,18 @@ watch(
       await assetHubClient.value.destroyInstance();
       await sleep(200);
     }
-    if (rpc && assetHubStore.account && !formData.value.assetId) {
-      assetHubClient.value = await AssetHubClient.getInstance(rpc, assetHubStore.account);
-      const nextId = await assetHubClient.value.getNextId();
-      formData.value.assetId = toNum(nextId.toHuman()?.toLocaleString() || '') + 1;
+    if (rpc && assetHubStore.account) {
+      formData.value.assetId = findFirstAvailableNumber(assetIDs.value);
     }
   }
 );
+function findFirstAvailableNumber(set) {
+  let i = 1;
+  while (set.has(i)) {
+    i++;
+  }
+  return i;
+}
 
 watch(
   () => formData.value.assetId,

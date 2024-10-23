@@ -1,14 +1,17 @@
 <template>
   <Heading>
-    <slot>
-      <NuxtLink class="flex items-center gap-x-2" :to="link">
+    <div class="flex gap-4 items-center">
+      <NuxtLink v-if="link" class="flex items-center gap-x-2" :to="link">
         <span class="icon-back text-2xl align-sub"></span>
-        <h1 v-if="title">{{ title }}</h1>
-        <h1 v-else>{{ $t('dashboard.nav.smartContracts') }}</h1>
       </NuxtLink>
-    </slot>
+      <h1 v-if="title">{{ title }}</h1>
+      <h1 v-else>{{ $t('dashboard.nav.smartContracts') }}</h1>
+    </div>
     <template #info>
-      <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" filter-by-chain />
+      <n-space :size="32" align="center">
+        <slot> </slot>
+        <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" filter-by-chain />
+      </n-space>
     </template>
   </Heading>
 </template>

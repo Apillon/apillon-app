@@ -1,11 +1,23 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderSmartContract />
+      <HeaderSmartContract :title="deployedContractStore.active.name">
+        <div
+          v-if="isConnected"
+          class="bg-bg-lighter rounded-xl text-sm px-3 flex gap-2 items-center h-10"
+        >
+          <p class="text-bodyDark">{{ truncateWallet(`${address}`) }}</p>
+          <hr class="bg-bg h-full w-[1px] border-bg" />
+          <p class="cursor-pointer text-white" @click="disconnectWallet()">
+            {{ $t('auth.wallet.disconnect.wallet') }}
+          </p>
+        </div>
+        <SmartContractsBtnSubmit v-else size="small" />
+      </HeaderSmartContract>
     </template>
 
     <slot>
-      <div v-if="contractStatus !== SmartContractStatus.TRANSFERRED" class="mb-8">
+      <div class="mb-8">
         <div class="flex flex-col md:flex-row gap-x-8 mb-8">
           <div class="flex-1 max-w-[550px]">
             <h4>
@@ -14,34 +26,44 @@
             <p class="">{{ $t('dashboard.service.smartContracts.infoSection.p') }}</p>
             <div class="flex border border-bg-lighter p-4 mt-4">
               <span class="icon-info mr-2"></span>
-              <p>{{ $t('dashboard.service.smartContracts.infoSection.infoBox') }}</p>
+              <p v-if="isContractTransferred">
+                {{ $t('dashboard.service.smartContracts.infoSection.infoTransferred') }}
+              </p>
+              <p v-else>
+                {{ $t('dashboard.service.smartContracts.infoSection.info') }}
+              </p>
             </div>
           </div>
           <div class="flex-1">
             <img src="~/assets/images/solution/smart-contracts.png" alt="" />
           </div>
         </div>
-        <!-- <Btn @click="">Take smart contract ownership</Btn> -->
+        <FormSmartContractAction
+          v-if="isConnected && !isContractTransferred && fnTransferOwnership"
+          class="max-w-sm"
+          :fn="fnTransferOwnership"
+          :args="[address as string]"
+          :btn-text="$t('dashboard.service.smartContracts.infoSection.takeOwnershipBtn')"
+          owner
+        />
       </div>
 
-      <div class="wallet-props my-8">
-        <span v-if="address" class="mr-4">
-          {{ $t('auth.wallet.connected.wallet') }}: {{ shortHash(address) }}
-        </span>
-        <Btn
-          v-if="isConnected"
-          type="primary"
-          class="min-w-[12rem]"
-          :loading="btnLoading"
-          @click="disconnectWallet()"
+      <div class="flex gap-x-4 border-t border-bg-lighter mt-8 pt-8 mb-4">
+        <div
+          class="p-2 rounded-lg h-full"
+          :class="hasDappMethods ? 'w-2/3 max-w-[840px]' : 'w-1/3 max-w-[420px]'"
         >
-          {{ $t('auth.wallet.disconnect.wallet') }}
-        </Btn>
+          <h2>
+            {{ $t('dashboard.service.smartContracts.functions.write') }}
+          </h2>
+        </div>
+        <div class="w-1/3 max-w-[420px]">
+          <h2>
+            {{ $t('dashboard.service.smartContracts.functions.read') }}
+          </h2>
+        </div>
       </div>
 
-      <h4 class="mb-6">
-        {{ $t('dashboard.service.smartContracts.functions.write') }}
-      </h4>
       <div class="flex gap-x-4 mb-6">
         <!-- write functions -->
         <div
@@ -55,13 +77,13 @@
               </h4>
               <n-card
                 v-for="fn in writeFunctions"
-                :key="fn"
+                :key="fn.name"
                 :id="fn.name"
                 size="small"
                 class="my-1 max-w-lg mb-3"
               >
                 <n-collapse accordion arrow-placement="right">
-                  <n-collapse-item :title="fn.name">
+                  <n-collapse-item :title="labelInfoText(fn.name, fn?.description)">
                     <!-- Assign a form ref according to function ref - we have multiple form on same site -->
                     <FormSmartContractAction :fn="fn" />
                   </n-collapse-item>
@@ -69,21 +91,18 @@
               </n-card>
             </div>
             <div class="flex-1">
-              <h4 v-if="contractStatus !== 6" class="my-3">
+              <h4 class="my-3">
                 {{ $t('dashboard.service.smartContracts.functions.writeOverApillon') }}
               </h4>
-              <h4 v-else class="my-3">
-                <br />
-              </h4>
               <n-card
-                v-for="fn in ownerFunctions"
-                :key="fn"
+                v-for="(fn, key) in ownerFunctions"
+                :key="key"
                 :id="fn.name"
                 size="small"
                 class="my-1 max-w-lg mb-3"
               >
                 <n-collapse accordion arrow-placement="right">
-                  <n-collapse-item :title="fn.name">
+                  <n-collapse-item :title="labelInfoText(fn.name, fn?.description)">
                     <!-- Assign a form ref according to function ref - we have multiple form on same site -->
                     <FormSmartContractAction :fn="fn" owner />
                   </n-collapse-item>
@@ -100,7 +119,7 @@
             </h4>
             <n-card v-for="fn in readFunctions" :key="fn" size="small" class="my-1 max-w-lg mb-3">
               <n-collapse accordion arrow-placement="right">
-                <n-collapse-item :title="fn.name">
+                <n-collapse-item :title="labelInfoText(fn.name, fn?.description)">
                   <!-- Assign a form ref according to function ref - we have multiple form on same site -->
                   <FormSmartContractAction :fn="fn" read />
                 </n-collapse-item>
@@ -116,15 +135,16 @@
 <script lang="ts" setup>
 import { useAccount, useDisconnect } from 'use-wagmi';
 
-const { disconnect } = useDisconnect();
-const { isConnected } = useAccount({ onConnect: onWalletConnected });
-const { address } = useAccount();
-
 const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
 const dataStore = useDataStore();
 const deployedContractStore = useDeployedContractStore();
+
+const { address } = useAccount();
+const { disconnect } = useDisconnect();
+const { isConnected } = useAccount({ onConnect: onWalletConnected });
+const { labelInfoText } = useComputing();
 
 useHead({
   title: t('dashboard.nav.smartContracts'),
@@ -134,12 +154,19 @@ const pageLoading = ref<boolean>(true);
 const btnLoading = ref<boolean>(false);
 const contractUuid = ref<string>(`${params?.id}` || '');
 const contractStatus = computed(() => deployedContractStore.active.contractStatus);
+const isContractTransferred = computed(
+  () => contractStatus.value === SmartContractStatus.TRANSFERRED
+);
 
 // Data
 const ownerFunctions = ref<SmartContractABI[]>([]);
 const readFunctions = ref<SmartContractABI[]>([]);
 const writeFunctions = ref<SmartContractABI[]>([]);
 const hasDappMethods = ref(false); // serves as UI signal to hide or display dapp methods
+
+const fnTransferOwnership = computed(() =>
+  ownerFunctions.value.find(method => method.name === 'transferOwnership')
+);
 
 async function onWalletConnected() {
   await sleep(200);
@@ -175,7 +202,7 @@ onMounted(() => {
             method => method.name === fn.name
           );
 
-          if (method?.onlyOwner) {
+          if (method?.onlyOwner && !isContractTransferred.value) {
             ownerFunctions.value.push(fn);
           } else {
             writeFunctions.value.push(fn);

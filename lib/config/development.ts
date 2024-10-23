@@ -18,6 +18,7 @@ const config: ConfigInterface = {
     'AUTHENTICATION',
     'BILLING',
     'CAPTCHA_LOGIN',
+    'CLOUD_FUNCTIONS',
     'COMPUTING',
     'CONFIGURATION',
     'DISCORD',
@@ -43,7 +44,6 @@ const config: ConfigInterface = {
     'STORAGE',
     'TWO_FACTOR_AUTHENTICATION',
     'WALLET_LOGIN',
-    'CLOUD_FUNCTIONS',
   ],
   betaFeatures: [],
 };

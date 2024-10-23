@@ -35,7 +35,7 @@ const config: ConfigInterface = {
     'STORAGE',
     'WALLET_LOGIN',
   ],
-  betaFeatures: ['EMBEDDED_WALLET'],
+  betaFeatures: ['ASSET_HUB', 'EMBEDDED_WALLET', 'SMART_CONTRACTS'],
 };
 
 export default config;

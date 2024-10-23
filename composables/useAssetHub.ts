@@ -2,18 +2,20 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import type { AssetHubClient as AssetHubClientType } from '#imports';
 
 export const assetHubNetworks = {
-  westend: {
-    name: 'Westend Asset Hub (testnet)',
-    rpc: 'wss://asset-hub-westend-rpc.dwellir.com',
-  },
-  polkadot: {
-    name: 'Asset Hub (mainnet)',
+  assetHub: {
+    name: 'Asset Hub',
+    env: 'mainnet',
     rpc: 'wss://asset-hub-polkadot-rpc.dwellir.com',
+  },
+  westend: {
+    name: 'Westend Asset Hub',
+    env: 'testnet',
+    rpc: 'wss://asset-hub-westend-rpc.dwellir.com',
   },
 };
 
 export const getAssetHubRpc = (mainnet = false) =>
-  mainnet ? assetHubNetworks.polkadot.rpc : assetHubNetworks.westend.rpc;
+  mainnet ? assetHubNetworks.assetHub.rpc : assetHubNetworks.westend.rpc;
 
 /** Available columns - show/hide column */
 const selectedColumns = ref([

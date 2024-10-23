@@ -9,8 +9,10 @@ export default function useComputing() {
   const transactionStore = useComputingTransactionStore();
 
   let transactionInterval: any = null as any;
+  let contractInterval: any = null as any;
 
   onUnmounted(() => {
+    clearInterval(contractInterval);
     clearInterval(transactionInterval);
   });
 
@@ -64,7 +66,6 @@ export default function useComputing() {
   }
 
   function onContractCreated(contract: ContractInterface) {
-    initInfoWindow();
     if (contract.contractStatus === ContractStatus.DEPLOYED) {
       router.push(`/dashboard/service/computing/${contract.contract_uuid}`);
     } else {
@@ -138,26 +139,29 @@ export default function useComputing() {
       te(`${base}.labelInfo.${field}`) &&
       t(`${base}.labelInfo.${field}`)
     ) {
-      return [
-        h('span', { class: 'mr-1' }, t(`${base}.${field}`)),
-        h(
-          IconInfo,
-          {
-            class: 'info-icon',
-            size: 'sm',
-            tooltip: decodeHTMLEntities(t(`${base}.labelInfo.${field}`)),
-          },
-          ''
-        ),
-      ];
+      return labelInfoText(
+        t(`${base}.${field}`),
+        decodeHTMLEntities(t(`${base}.labelInfo.${field}`))
+      );
     }
     return te(`${base}.${field}`) ? t(`${base}.${field}`) : field;
+  }
+
+  function labelInfoText(label: string, info?: string) {
+    if (info && info.length > 0) {
+      return h('span', { class: 'inline-flex items-center' }, [
+        h('span', { class: 'mr-1' }, label),
+        h(IconInfo, { class: 'info-icon', size: 'sm', tooltip: info }, ''),
+      ]);
+    }
+    return label;
   }
 
   return {
     checkUnfinishedContracts,
     checkUnfinishedTransactions,
     labelInfo,
+    labelInfoText,
     onContractCreated,
     uploadFileToIPFS,
   };

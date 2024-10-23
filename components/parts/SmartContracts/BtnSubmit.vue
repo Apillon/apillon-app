@@ -1,15 +1,9 @@
 <template>
-  <Btn
-    v-if="(owner && !isConnected) || (!isConnected && contractStatus === 6)"
-    size="large"
-    type="secondary"
-    :loading="loading"
-    @click="connectWallet"
-  >
+  <Btn v-if="!isConnected" size="large" type="secondary" :loading="loading" @click="connectWallet">
     Connect your wallet
   </Btn>
   <Btn
-    v-else-if="isConnected && wrongNetwork"
+    v-else-if="wrongNetwork"
     size="large"
     type="primary"
     :loading="loading"
@@ -19,7 +13,7 @@
   </Btn>
 
   <Btn v-else type="primary" class="w-full" native-type="submit" @click="e => $emit('submit', e)">
-    Query
+    {{ btnText || 'Query' }}
   </Btn>
 </template>
 
@@ -28,8 +22,7 @@ import { useAccount, useConnect, useWalletClient, useNetwork, useSwitchNetwork }
 
 defineEmits(['submit']);
 defineProps({
-  fn: { type: Object as PropType<SmartContractABI>, required: true },
-  owner: { type: Boolean, default: false },
+  btnText: { type: String, default: null },
 });
 
 const { chain } = useNetwork();
@@ -42,7 +35,6 @@ const { isConnected } = useAccount({ onConnect: onWalletConnected });
 const deployedContractStore = useDeployedContractStore();
 
 const loading = ref(false);
-const contractStatus = computed(() => deployedContractStore.active.contractStatus);
 
 async function onWalletConnected() {
   await sleep(200);

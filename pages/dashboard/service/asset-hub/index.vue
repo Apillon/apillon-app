@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <Dashboard :loading="pageLoading" :mainnet="assetHubStore.mainnet">
     <template #heading>
       <HeaderAssetHub :title="$t('dashboard.nav.assetHub')" switcher />
     </template>

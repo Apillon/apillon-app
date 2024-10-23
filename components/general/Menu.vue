@@ -36,7 +36,7 @@ function routeNameToKey(name: string) {
 }
 
 function removeIdOrSlug(text) {
-  return text.replace(/(-id|-slug|-archive).*/g, '');
+  return text.replace(/(-id|-slug|-archive|-deployed).*/g, '');
 }
 
 /**
