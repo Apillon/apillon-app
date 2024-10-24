@@ -259,7 +259,12 @@
       </n-grid>
 
       <!--  Collection Is Drop -->
-      <n-form-item path="behavior.drop" :span="1" :show-label="false">
+      <n-form-item
+        v-if="collectionStore.form.base.chain !== SubstrateChain.UNIQUE"
+        path="behavior.drop"
+        :span="1"
+        :show-label="false"
+      >
         <n-checkbox
           v-model:checked="collectionStore.form.behavior.drop"
           size="medium"

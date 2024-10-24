@@ -1,6 +1,6 @@
 import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
 import IconInfo from '../components/parts/Icon/Info.vue';
-import { EvmChain } from '~/lib/types/nft';
+import { EvmChain, SubstrateChain } from '~/lib/types/nft';
 
 export default function useCollection() {
   const { t, te } = useI18n();
@@ -199,10 +199,12 @@ export default function useCollection() {
   }
 
   function collectionEndpoint() {
-    return collectionStore.form.base.chain === Chains.ASTAR &&
-      collectionStore.form.base.chainType === ChainType.SUBSTRATE
-      ? endpoints.collectionsSubstrate
-      : endpoints.collections();
+    return collectionStore.form.base.chain === SubstrateChain.UNIQUE
+      ? endpoints.collectionsUnique
+      : collectionStore.form.base.chain === Chains.ASTAR &&
+          collectionStore.form.base.chainType === ChainType.SUBSTRATE
+        ? endpoints.collectionsSubstrate
+        : endpoints.collections();
   }
 
   /**
@@ -227,9 +229,11 @@ export default function useCollection() {
   function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
     return (
       !isRoyaltyRequired() ||
-      (collectionStore.form.base.chainType === ChainType.EVM
-        ? validateEvmAddress(_, value)
-        : substrateAddressValidate(_, value, SubstrateChainPrefix.ASTAR))
+      (collectionStore.form.base.chain === SubstrateChain.UNIQUE
+        ? substrateAddressValidate(_, value, SubstrateChainPrefix.UNIQUE)
+        : collectionStore.form.base.chainType === ChainType.SUBSTRATE
+          ? substrateAddressValidate(_, value, SubstrateChainPrefix.ASTAR)
+          : validateEvmAddress(_, value))
     );
   }
   function validateSingleNftIdUnique(_: FormItemRule): boolean {

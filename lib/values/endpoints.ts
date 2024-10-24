@@ -205,6 +205,7 @@ const Endpoints = {
 
   /** Collection */
   collectionsSubstrate: '/nfts/collections/substrate',
+  collectionsUnique: '/nfts/collections/unique',
   collections: (id?: string) => {
     return id ? `/nfts/collections/${id}` : '/nfts/collections';
   },

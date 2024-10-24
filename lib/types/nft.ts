@@ -38,6 +38,8 @@ export enum SubstrateChain {
 export enum SubstrateChainPrefix {
   ASTAR = 5,
   PHALA = 30,
+  HYDRATION = 63,
+  UNIQUE = 7391,
 }
 
 /** NFT Collection type */

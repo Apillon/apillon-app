@@ -35,7 +35,7 @@ export const useCollectionStore = defineStore('collection', {
         coverImage: null as FileListItemType | null,
         name: '',
         symbol: '',
-        chain: Chains.MOONBASE,
+        chain: Chains.MOONBASE as number,
         chainType: ChainType.EVM,
         collectionType: NFTCollectionType.GENERIC,
         useApillonIpfsGateway: false,

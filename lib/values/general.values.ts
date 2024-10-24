@@ -19,6 +19,7 @@ export enum PageSize {
 }
 
 export const LS_KEYS = {
+  APP_VERSION: 'al_app_version',
   DEPLOYMENT_REFRESH_INTERVAL: 'al_deployment_refresh_interval',
   NEWSLETTER: 'al_newsletter_subscribed',
   SERVICE_STATUS: 'al_service_status',
