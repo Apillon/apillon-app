@@ -4,7 +4,7 @@
     v-bind="$attrs"
     :bordered="false"
     :columns="columns"
-    :data="data"
+    :data="tableData"
     :loading="rpcApiKeyStore.loading"
     :pagination="{
       pageSize: PAGINATION_LIMIT,
@@ -28,14 +28,13 @@
 import { NButton, NDropdown, NEllipsis, type DropdownOption } from 'naive-ui';
 
 const props = defineProps({
-  rpcApiKeys: { type: Array<RpcApiKeyInterface>, default: [] },
   isOwner: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();
 const rpcApiKeyStore = useRpcApiKeyStore();
 
-const data = props.rpcApiKeys;
+const tableData = computed(() => rpcApiKeyStore.items);
 
 const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {
   const columns: NDataTableColumns<RpcApiKeyInterface> = [
@@ -127,7 +126,7 @@ const dropdownOptions = computed(() => {
     },
   ] as DropdownOption[];
 
-  if (props.rpcApiKeys.length > 1) {
+  if (tableData.value.length > 1) {
     options.push({
       key: 'delete',
       label: t('general.delete'),
@@ -145,7 +144,7 @@ const dropdownOptions = computed(() => {
 
 function onRpcApiKeyDeleted() {
   modalDeleteRpcKey.value = false;
-  rpcApiKeyStore.items = rpcApiKeyStore.items.filter(item => item.id !== currentRow.value?.id);
+  currentRow.value && rpcApiKeyStore.deleteItem(currentRow.value.id);
 }
 
 watch(modalEditRpcKeyVisible, newValue => {

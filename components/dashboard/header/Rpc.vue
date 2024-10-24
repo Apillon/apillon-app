@@ -7,11 +7,14 @@
       <div>
         <div v-if="rpcApiKeyStore.selectedId && rpcApiKeyStore?.usage">
           <RpcProgress
-            :current-calls="rpcApiKeyStore?.usage?.requests ?? 0"
+            :current-calls="rpcApiKeyStore?.usage?.totalRequests ?? 0"
             :max-calls="hasRpcPlan ? 25000000 : 5000000"
           />
         </div>
-        <div v-if="dataStore.isUserOwner" class="flex flex-row gap-4 items-center justify-end">
+        <div
+          v-if="dataStore.isUserOwner && paymentStore.isRpcPlanLoaded"
+          class="flex flex-row gap-4 items-center justify-end"
+        >
           <div>
             <p class="text-white font-bold">
               {{ $t('dashboard.payment.currentPlan') }}: {{ hasRpcPlan ? 'Developer' : 'Free' }}

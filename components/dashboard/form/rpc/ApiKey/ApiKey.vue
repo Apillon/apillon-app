@@ -132,9 +132,11 @@ async function createApiKey() {
     };
     const res = await $api.post<RpcApiKeyResponse>(endpoints.rpcApiKeys(), bodyData);
 
-    message.success($i18n.t('form.success.created.endpoint'));
+    message.success($i18n.t('form.success.created.rpcApiKey'));
 
     rpcApiKeyStore.items.unshift(res.data as RpcApiKeyInterface);
+
+    rpcApiKeyStore.handleSelectedIdChange();
 
     emit('submitSuccess');
     emit('createSuccess', res.data);

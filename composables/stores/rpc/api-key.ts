@@ -1,10 +1,9 @@
 export const useRpcApiKeyStore = defineStore('rpc-api-key', {
   state: () => ({
-    active: null as RpcApiKeyInterface | null,
     search: '',
     loading: false,
     total: 0,
-    usage: undefined as any | undefined,
+    usage: undefined as RpcApiKeyUsageInterface | undefined,
     selectedId: undefined as number | undefined,
     items: [] as RpcApiKeyInterface[],
     form: {
@@ -22,6 +21,14 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
   },
 
   actions: {
+    deleteItem(id: number): void {
+      this.items = this.items.filter(item => item.id !== id);
+      if (this.selectedId === id) {
+        this.selectedId = undefined;
+        this.handleSelectedIdChange();
+      }
+    },
+
     handleSelectedIdChange(): void {
       this.usage = undefined;
       const rpcEndpointStore = useRpcEndpointStore();

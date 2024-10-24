@@ -3,7 +3,6 @@ export default function useRpc() {
 
   function onKeyCreated(apiKey: RpcApiKeyInterface) {
     rpcApiKeyStore.selectedId = apiKey.id;
-    rpcApiKeyStore.active = apiKey;
   }
 
   return {

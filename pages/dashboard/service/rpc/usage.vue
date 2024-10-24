@@ -56,7 +56,9 @@ onMounted(() => {
 
     await rpcApiKeyStore.getRpcApiKeyUsage();
 
-    chartData.value = prepareData(rpcApiKeyStore.usage);
+    if (rpcApiKeyStore.usage) {
+      chartData.value = prepareData(rpcApiKeyStore.usage);
+    }
 
     pageLoading.value = false;
     initialLoadComplete.value = true;

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { RpcPlanType } from '~/lib/types/rpc';
 
 type FetchCreditTransactionsParams = FetchParams & {
   service?: string | null;
@@ -7,12 +8,6 @@ type FetchCreditTransactionsParams = FetchParams & {
 };
 
 let abortController = null as AbortController | null;
-
-enum RpcPlanType {
-  DISABLED = 1,
-  FREE = 2,
-  PAID = 3,
-}
 
 export const usePaymentStore = defineStore('payment', {
   state: () => ({
@@ -40,6 +35,9 @@ export const usePaymentStore = defineStore('payment', {
   getters: {
     hasRpcPlan(state) {
       return state.rpcPlan !== RpcPlanType.DISABLED;
+    },
+    isRpcPlanLoaded(state) {
+      return state.rpcPlan !== undefined;
     },
     hasPaidRpcPlan(state) {
       return state.rpcPlan === RpcPlanType.PAID;

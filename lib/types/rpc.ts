@@ -34,6 +34,9 @@ declare global {
     per_day: Record<string, { requests: number; responses: number }>;
     requests: number;
     responses: number;
+    // Represent the total requests and responses for the current day regardless of the api key
+    totalRequests: number;
+    totalResponses: number;
   }
 
   interface RpcFavoriteEndpointsResponse
@@ -46,10 +49,10 @@ declare global {
   interface RpcApiKeysQuotaResponse extends GeneralResponse<boolean> {}
 
   interface RpcApiKeyUsageResponse extends GeneralResponse<RpcApiKeyUsageInterface> {}
+}
 
-  enum RpcPlanType {
-    DISABLED = 1,
-    FREE = 2,
-    PAID = 3,
-  }
+export enum RpcPlanType {
+  DISABLED = 1,
+  FREE = 2,
+  PAID = 3,
 }

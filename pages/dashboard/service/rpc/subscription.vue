@@ -64,6 +64,8 @@
 </template>
 
 <script lang="ts" setup>
+import { RpcPlanType } from '~/lib/types/rpc';
+
 const { t, tm } = useI18n();
 const subscriptionPackages = computed(() => [
   {
@@ -121,11 +123,6 @@ const selectedPackage = ref<number>(0);
 const initialPackage = ref<number>(0);
 const allowSwitch = ref<boolean>(true);
 const dataStore = useDataStore();
-enum RpcPlanType {
-  DISABLED = 1,
-  FREE = 2,
-  PAID = 3,
-}
 
 onMounted(async () => {
   const rpcPlan = await paymentStore.getRpcPlan();

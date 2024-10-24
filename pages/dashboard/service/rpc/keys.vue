@@ -9,7 +9,7 @@
           <MenuRpc />
           <ActionsRpcApiKey v-if="dataStore.isUserOwner" />
         </div>
-        <TableRpcApiKey :rpc-api-keys="rpcApiKeyStore.items" :is-owner="dataStore.isUserOwner" />
+        <TableRpcApiKey :is-owner="dataStore.isUserOwner" />
       </n-space>
       <RpcNoApiKeys v-else />
     </slot>
