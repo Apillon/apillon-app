@@ -21,7 +21,7 @@
       <n-space v-else-if="assetHubStore.hasAssets" class="pb-8" :size="32" vertical>
         <ActionsAssetHub />
         <TableAssetHub owned />
-        <h4 class="mt-8 mb-4">{{ $t('dashboard.service.assetHub.otherAssets') }}</h4>
+        <h4 class="my-4">{{ $t('dashboard.service.assetHub.otherAssets') }}</h4>
         <TableAssetHub />
       </n-space>
 

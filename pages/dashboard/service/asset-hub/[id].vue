@@ -47,10 +47,7 @@
             </tr>
           </tbody>
         </n-table>
-        <a
-          :href="`https://assethub-westend.subscan.io/account/${assetHubStore.active.owner}`"
-          class="text-blue font-bold text-sm"
-        >
+        <a :href="transactionsList" class="text-blue font-bold text-sm">
           {{ $t('dashboard.service.assetHub.transactionHistory') }}
         </a>
       </div>
@@ -88,19 +85,19 @@ const assetData = computed<AssetData[]>(() => [
   },
   { label: t('form.label.assetHub.name'), value: `${assetHubStore.active?.name}` },
   { label: t('form.label.assetHub.symbol'), value: `${assetHubStore.active?.symbol}` },
-  { label: t('form.label.assetHub.assetId'), value: `${assetId.value}` },
+  { label: t('form.label.assetHub.id'), value: `${assetId.value}` },
   { label: t('form.label.assetHub.decimals'), value: `${assetHubStore.active?.decimals}` },
   {
-    label: t('form.label.assetHub.initialSupply'),
+    label: t('form.label.assetHub.supply'),
     value: `${assetHubStore.active?.supply}`,
   },
   {
-    label: t('form.label.assetHub.issuerAddress'),
+    label: t('form.label.assetHub.issuer'),
     value: `${assetHubStore.active?.issuer}`,
     copy: true,
   },
   {
-    label: t('form.label.assetHub.freezerAddress'),
+    label: t('form.label.assetHub.freezer'),
     value: `${assetHubStore.active?.freezer}`,
     copy: true,
   },
@@ -110,6 +107,12 @@ const assetData = computed<AssetData[]>(() => [
     link: 'https://github.com/subscan-explorer/assets-info',
   },
 ]);
+
+const transactionsList = computed(() =>
+  assetHubStore.mainnet
+    ? `https://assethub-polkadot.subscan.io/account/${assetHubStore.active.owner}`
+    : `https://assethub-westend.subscan.io/account/${assetHubStore.active.owner}`
+);
 
 onMounted(async () => {
   await initAssetHub();

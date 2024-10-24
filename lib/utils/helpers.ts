@@ -202,6 +202,12 @@ export function transactionLink(transactionHash?: string | null, chainId?: numbe
       }
     case SubstrateChain.PHALA:
       return `https://phala.subscan.io${hash}`;
+    case SubstrateChain.PHALA:
+      return `https://phala.subscan.io${hash}`;
+    case SubstrateChain.ASSET_HUB:
+      return `https://assethub-polkadot.subscan.io/extrinsic/${transactionHash}`;
+    case SubstrateChain.WESTEND_ASSET_HUB:
+      return `https://assethub-westend.subscan.io/extrinsic/${transactionHash}`;
     default:
       console.warn('Missing chainId');
       return '';

@@ -6,7 +6,9 @@
       {{ $t('dashboard.service.assetHub.transactionProcessed') }}
     </h2>
     <i18n-t keypath="dashboard.service.assetHub.transactionDetails" tag="p">
-      <a :href="link" class="link" target="_blank">{{ $t('general.here') }}</a>
+      <a :href="transactionLink(transactionHash, chainId)" class="link" target="_blank">
+        {{ $t('general.here') }}
+      </a>
     </i18n-t>
 
     <Btn
@@ -27,9 +29,13 @@
 <script lang="ts" setup>
 defineEmits(['close']);
 defineProps({
-  link: { type: String, required: true },
+  transactionHash: { type: String, required: true },
 });
 
-const i18n = useI18n();
+const assetHubStore = useAssetHubStore();
 const modalTransactionVisible = ref<boolean>(true);
+
+const chainId = computed(() =>
+  assetHubStore.mainnet ? SubstrateChain.ASSET_HUB : SubstrateChain.WESTEND_ASSET_HUB
+);
 </script>
