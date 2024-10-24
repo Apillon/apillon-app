@@ -89,5 +89,37 @@ export const useIndexerStore = defineStore('indexer', {
       }
       return null;
     },
+
+    async hibernateIndexer(indexerUUID: string, showLoader: boolean = true) {
+      this.loading = showLoader;
+      try {
+        await $api.post(endpoints.indexerHibernate(indexerUUID));
+        this.loading = false;
+
+        return true;
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async deleteIndexer(indexerUUID: string, showLoader: boolean = true) {
+      this.loading = showLoader;
+      try {
+        await $api.delete(endpoints.indexers(indexerUUID));
+        this.loading = false;
+
+        this.items = this.items.filter(item => item.indexer_uuid !== indexerUUID);
+
+        return true;
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 });

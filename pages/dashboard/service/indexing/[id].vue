@@ -12,7 +12,7 @@
         <h4>{{ $t('indexer.indexerApiEndpoint') }}</h4>
         <HostingPreviewLink
           class="xl:max-w-3xl xxl:max-w-4xl"
-          :link="indexerStore.active.squid.api.urls[0].url || ''"
+          :link="indexerStore.active.squid?.api?.urls[0].url || ''"
         />
         <n-table class="plain" :bordered="false" single-line>
           <tbody>
@@ -39,7 +39,26 @@
                 }}</span>
               </td>
               <td>
-                {{ dateTimeToDateAndTime(indexerStore.active.squid.deployedAt || '') }}
+                {{ dateTimeToDateAndTime(indexerStore.active.squid?.deployedAt || '') }}
+              </td>
+            </tr>
+            <!--Squid Status-->
+            <tr>
+              <td>
+                <span class="text-white lg:whitespace-nowrap">{{ $t('indexer.squidStatus') }}</span>
+              </td>
+              <td>
+                <n-tag
+                  v-bind="$attrs"
+                  :type="indexerStore.active.squid?.status == 'DEPLOYED' ? 'success' : 'error'"
+                  :bordered="false"
+                  size="tiny"
+                  round
+                >
+                  <n-space :class="'text-bg-dark'" :size="0" align="center" :wrap="false">
+                    <span class="mx-1 uppercase">{{ indexerStore.active.squid?.status }}</span>
+                  </n-space>
+                </n-tag>
               </td>
             </tr>
             <!--API Status-->
@@ -50,13 +69,15 @@
               <td>
                 <n-tag
                   v-bind="$attrs"
-                  :type="indexerStore.active.squid.api.status == 'AVAILABLE' ? 'success' : 'error'"
+                  :type="
+                    indexerStore.active.squid?.api?.status == 'AVAILABLE' ? 'success' : 'error'
+                  "
                   :bordered="false"
                   size="tiny"
                   round
                 >
                   <n-space :class="'text-bg-dark'" :size="0" align="center" :wrap="false">
-                    <span class="mx-1 uppercase">{{ indexerStore.active.squid.api.status }}</span>
+                    <span class="mx-1 uppercase">{{ indexerStore.active.squid?.api?.status }}</span>
                   </n-space>
                 </n-tag>
               </td>
@@ -72,7 +93,9 @@
                 <n-tag
                   v-bind="$attrs"
                   :type="
-                    indexerStore.active.squid.processors[0].status == 'SYNCED' ? 'success' : 'error'
+                    indexerStore.active.squid?.processors[0].status == 'SYNCED'
+                      ? 'success'
+                      : 'error'
                   "
                   :bordered="false"
                   size="tiny"
@@ -80,7 +103,7 @@
                 >
                   <n-space :class="'text-bg-dark'" :size="0" align="center" :wrap="false">
                     <span class="mx-1 uppercase">{{
-                      indexerStore.active.squid.processors[0].status
+                      indexerStore.active.squid?.processors[0].status
                     }}</span>
                   </n-space>
                 </n-tag>
@@ -94,7 +117,7 @@
               </td>
               <td>
                 {{
-                  `${indexerStore.active.squid.processors[0].syncState.currentBlock}/${indexerStore.active.squid.processors[0].syncState.totalBlocks} `
+                  `${indexerStore.active.squid?.processors[0].syncState.currentBlock}/${indexerStore.active.squid?.processors[0].syncState.totalBlocks} `
                 }}
               </td>
             </tr>

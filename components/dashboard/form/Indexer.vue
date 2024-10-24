@@ -1,17 +1,9 @@
 <template>
-  <Spinner v-if="websiteUuid && !website" />
+  <Spinner v-if="indexerUuid && !indexer" />
   <div v-else>
     <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
-    <!-- <template v-else>
-      <p v-if="!!websiteUuid && $i18n.te('hosting.website.infoNew')" class="text-body mb-8">
-        {{ $t('hosting.website.infoNew') }}
-      </p>
-      <p v-else-if="!!websiteUuid && $i18n.te('hosting.website.infoEdit')" class="text-body mb-8">
-        {{ $t('hosting.website.infoEdit') }}
-      </p>
-    </template> -->
 
     <n-form
       ref="formRef"
@@ -83,7 +75,6 @@ const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const indexerStore = useIndexerStore();
-const warningStore = useWarningStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -165,25 +156,25 @@ async function updateIndexer() {
   loading.value = true;
 
   try {
-    // const res = await $api.patch<WebsiteResponse>(
-    //   endpoints.websites(props.websiteUuid),
-    //   formData.value
-    // );
-    // message.success($i18n.t('form.success.updated.website'));
-    // /** On website updated refresh website data */
-    // websiteStore.items.forEach((item: WebsiteBaseInterface) => {
-    //   if (item.website_uuid === props.websiteUuid) {
-    //     item.name = res.data.name;
-    //     item.description = res.data.description;
-    //   }
-    // });
-    // if (websiteStore.active.website_uuid === props.websiteUuid) {
-    //   websiteStore.active.name = res.data.name;
-    //   websiteStore.active.description = res.data.description;
-    // }
-    // /** Emit events */
-    // emit('submitSuccess');
-    // emit('updateSuccess');
+    const res = await $api.patch<IndexerBaseResponse>(
+      endpoints.indexers(props.indexerUuid),
+      formData.value
+    );
+    message.success($i18n.t('form.success.updated.indexer'));
+    /** On indexer updated refresh indexer data */
+    indexerStore.items.forEach((item: IndexerBaseInterface) => {
+      if (item.indexer_uuid === props.indexerUuid) {
+        item.name = res.data.name;
+        item.description = res.data.description;
+      }
+    });
+    if (indexerStore.active.indexer_uuid === props.indexerUuid) {
+      indexerStore.active.name = res.data.name;
+      indexerStore.active.description = res.data.description;
+    }
+    /** Emit events */
+    emit('submitSuccess');
+    emit('updateSuccess');
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

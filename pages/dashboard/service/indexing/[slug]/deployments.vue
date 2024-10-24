@@ -7,6 +7,7 @@
       />
     </template>
     <slot>
+      <ActionsIndexerDeployments />
       <TableIndexerDeployments />
     </slot>
   </Dashboard>
