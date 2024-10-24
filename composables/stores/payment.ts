@@ -8,6 +8,12 @@ type FetchCreditTransactionsParams = FetchParams & {
 
 let abortController = null as AbortController | null;
 
+enum RpcPlanType {
+  DISABLED = 1,
+  FREE = 2,
+  PAID = 3,
+}
+
 export const usePaymentStore = defineStore('payment', {
   state: () => ({
     customerPortalUrl: '',
@@ -29,8 +35,15 @@ export const usePaymentStore = defineStore('payment', {
     promises: {
       priceList: null as any,
     },
+    rpcPlan: undefined as RpcPlanType | undefined,
   }),
   getters: {
+    hasRpcPlan(state) {
+      return state.rpcPlan !== RpcPlanType.DISABLED;
+    },
+    hasPaidRpcPlan(state) {
+      return state.rpcPlan === RpcPlanType.PAID;
+    },
     hasCustomerPortalUrl(state) {
       return !!state?.customerPortalUrl;
     },
@@ -100,6 +113,14 @@ export const usePaymentStore = defineStore('payment', {
       if (!this.hasActiveSubscription || isCacheExpired(LsCacheKeys.SUBSCRIPTION_ACTIVE)) {
         await this.fetchActiveSubscription();
       }
+    },
+
+    /** GET RPC Plan */
+    async getRpcPlan() {
+      if (this.rpcPlan === undefined || isCacheExpired(LsCacheKeys.RPC_PLAN)) {
+        await this.fetchRpcPlan();
+      }
+      return this.rpcPlan;
     },
 
     /** GET Subscription packages */
@@ -358,6 +379,27 @@ export const usePaymentStore = defineStore('payment', {
         window.$message.error(userFriendlyMsg(error));
       }
       return null;
+    },
+
+    async fetchRpcPlan() {
+      const dataStore = useDataStore();
+      const projectUuid = await dataStore.getProjectUuid();
+
+      if (!projectUuid) return;
+
+      try {
+        const res = await $api.get<GeneralResponse<RpcPlanType>>(endpoints.getRpcPlan(projectUuid));
+
+        this.rpcPlan = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.RPC_PLAN, Date.now().toString());
+      } catch (error: any) {
+        this.rpcPlan = RpcPlanType.DISABLED;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
     },
 
     /** API Stripe subscription session URL */

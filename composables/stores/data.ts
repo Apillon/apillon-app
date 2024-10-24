@@ -23,6 +23,9 @@ export const useDataStore = defineStore('data', {
       websites: null as any,
       collections: null as any,
       contracts: null as any,
+      rpcApiKeys: null as Promise<RpcApiKeysResponse> | null,
+      rpcEndpoints: null as Promise<[RpcEndpointsResponse, RpcFavoriteEndpointsResponse]> | null,
+      publicRpcEndpoints: null as Promise<RpcEndpointsResponse> | null,
     },
     service: {
       loading: false,
