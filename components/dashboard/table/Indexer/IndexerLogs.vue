@@ -31,6 +31,7 @@ const columns = computed(() => [
   {
     key: 'container',
     title: t('dashboard.service.indexer.tableLog.container'),
+    minWidth: 150,
     render(row: IndexerLogInterface) {
       return h('strong', {}, { default: () => row.container });
     },
@@ -38,6 +39,7 @@ const columns = computed(() => [
   {
     key: 'timestamp',
     title: t('dashboard.service.indexer.tableLog.ts'),
+    minWidth: 200,
     render(row: IndexerLogInterface) {
       return h('span', {}, { default: () => dateTimeToDateAndTime(row.timestamp || '') });
     },

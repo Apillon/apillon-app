@@ -324,6 +324,10 @@ const Endpoints = {
     return `/indexing/indexers/${uuid}/deployments`;
   },
 
+  indexerHibernate: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/hibernate`;
+  },
+
   /**
    * Project settings
    */

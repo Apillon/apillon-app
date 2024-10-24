@@ -680,7 +680,8 @@
         "table": {
           "name": "Name",
           "description": "Description",
-          "status": "Status"
+          "status": "Status",
+          "uuid": "Indexer UUID"
         },
         "tableLog": {
           "level": "Level",
@@ -1605,7 +1606,8 @@
         "user": "User has been removed from project",
         "userUninvited": "User has been uninvited from project",
         "webhook": "Webhook has been deleted",
-        "website": "Website has been archived"
+        "website": "Website has been archived",
+        "indexer": "Indexer has been deleted"
       },
       "restored": {
         "bucket": "Bucket has been restored",
@@ -1636,6 +1638,7 @@
         "embeddedWallet": "Embedded Wallet has been updated",
         "file": "File has been updated",
         "hosting": "Hosting has been updated",
+        "indexer": "Indexer has been updated",
         "ipns": "IPNS has been updated",
         "item": "Item has been updated",
         "project": "Project has been updated",
@@ -1774,9 +1777,10 @@
     "startNew": "Star by creating a new indexer",
     "create": "Create new indexer",
     "update": "Update indexer",
-    "upload": {
-      "sourceCode": "Upload indexer source code",
-      "directory": "Indexer directory"
+    "statuses": {
+      "1": "Created",
+      "3": "Hibernated",
+      "5": "Active"
     },
     "uuid": "Indexer UUID",
     "instructions": {
@@ -1784,7 +1788,7 @@
       "instruction1": "Indexer deployments are handeled over Apillon CLI.\n Please follow the step by step instructions below and deploy your indexer with the help of our CLI.",
       "instruction2": "Note, that you need at lease 20,000 credits to perform this action.",
       "step1": "Step 1 - Setup the Apillon CLI",
-      "step2": "Step 2 - Set up you squid locally",
+      "step2": "Step 2 - Set up your squid locally",
       "chooseTemplate": "Chose template for you indexer from Subsquid Github repository and clone it. \nBelow templates are available:",
       "substrateTemplate": "Teplate for indexing substrate based chain",
       "evmTemplates": "Templates for EVM based chains",
@@ -1801,6 +1805,7 @@
     "apiStatus": "Api status",
     "processorStatus": "Processor status",
     "processedBlocks": "Processed blocks",
+    "squidStatus": "Squid status",
     "logLevels": {
       "error": "Error",
       "debug": "Debug",
@@ -1814,7 +1819,11 @@
       "init": "Init",
       "api": "API",
       "processor": "Processor"
-    }
+    },
+    "hibernate": "Hibernate",
+    "hibernateIndexer": "Hibernate indexer",
+    "hibernateIndexerInfo": "Hibernation of indexer lets you pause virtual machines, lowering costs while keeping data safe. Wheen needed, redeploy the indexer with all data intact.",
+    "successfullyHibernated": "Indexer successfully hibernated"
   },
   "nft": {
     "amount": {
