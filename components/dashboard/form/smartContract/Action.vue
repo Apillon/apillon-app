@@ -74,7 +74,9 @@ const data = computed(() =>
     ? props.args
     : Object.keys(formData).length
       ? Object.values(formData)
-      : ['true']
+      : props.owner
+        ? ['true']
+        : []
 );
 
 // Submit
@@ -118,6 +120,7 @@ async function execRead(methodName: string) {
       args: data.value,
     });
     result.value = `${res}`;
+    message.success(t('dashboard.service.smartContracts.functions.executed'));
   } catch (e) {
     console.error(e);
     message.error(userFriendlyMsg(e));
@@ -150,6 +153,7 @@ async function execWalletWrite(methodName: string) {
       account: address.value,
     });
     result.value = `${res}`;
+    message.success(t('dashboard.service.smartContracts.functions.executed'));
   } catch (e) {
     message.error(userFriendlyMsg(e));
   } finally {
@@ -168,6 +172,7 @@ async function execOwnerWrite(methodName: string) {
         methodArguments: data.value,
       }
     );
+    message.success(t('dashboard.service.smartContracts.functions.executed'));
   } catch (e) {
     message.error(userFriendlyMsg(e));
   } finally {

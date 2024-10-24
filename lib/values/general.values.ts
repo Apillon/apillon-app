@@ -41,6 +41,7 @@ export const LsTableColumnsKeys = {
   FILES: 'al_table_files_columns',
   IPNS: 'al_table_ipns_columns',
   NFT_COLLECTION: 'al_table_nft_collection_columns',
+  SMART_CONTRACTS: 'al_table_smart_contracts',
   SOCIAL_POST: 'al_table_social_channel',
 };
 

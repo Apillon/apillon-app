@@ -646,7 +646,7 @@
         "table": {
           "chain": "Chain",
           "name": "Name",
-          "contractAddress": "Address",
+          "contractAddress": "Contract Address",
           "contractStatus": "Status"
         },
         "status": {
@@ -666,6 +666,7 @@
           "takeOwnershipBtn": "Take smart contract ownership"
         },
         "functions": {
+          "executed": "Function has been executed",
           "write": "Write functions",
           "read": "Read functions",
           "writeFromDapp": "Write from your dapp",

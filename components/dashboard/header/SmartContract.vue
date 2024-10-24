@@ -4,8 +4,12 @@
       <NuxtLink v-if="link" class="flex items-center gap-x-2" :to="link">
         <span class="icon-back text-2xl align-sub"></span>
       </NuxtLink>
-      <h1 v-if="title">{{ title }}</h1>
-      <h1 v-else>{{ $t('dashboard.nav.smartContracts') }}</h1>
+      <div>
+        <slot name="title">
+          <h1 v-if="title">{{ title }}</h1>
+          <h1 v-else>{{ $t('dashboard.nav.smartContracts') }}</h1>
+        </slot>
+      </div>
     </div>
     <template #info>
       <n-space :size="32" align="center">
