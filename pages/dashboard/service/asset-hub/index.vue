@@ -18,13 +18,6 @@
         </Btn>
       </div>
 
-      <n-space v-else-if="assetHubStore.hasAssets" class="pb-8" :size="32" vertical>
-        <ActionsAssetHub />
-        <TableAssetHub owned />
-        <h4 class="my-4">{{ $t('dashboard.service.assetHub.otherAssets') }}</h4>
-        <TableAssetHub />
-      </n-space>
-
       <div
         v-else-if="assetHubStore.loading && !assetHubStore.assetsLoaded"
         class="relative h-full min-h-[50dvh]"
@@ -32,13 +25,24 @@
         <Spinner class="absolute top-1/2" />
       </div>
 
-      <template v-else>
-        <Empty :title="$t('dashboard.service.assetHub.noProject')" icon="storage/empty">
+      <n-space v-else class="pb-8" :size="32" vertical>
+        <ActionsAssetHub />
+
+        <TableAssetHub v-if="assetHubStore.hasAssets" owned />
+        <Empty
+          v-else
+          :title="$t('dashboard.service.assetHub.noProject')"
+          icon="storage/empty"
+          small
+        >
           <Btn type="primary" :to="{ name: 'dashboard-service-asset-hub-new' }">
             {{ $t('dashboard.service.assetHub.createNew') }}
           </Btn>
         </Empty>
-      </template>
+
+        <h4 class="my-4">{{ $t('dashboard.service.assetHub.otherAssets') }}</h4>
+        <TableAssetHub />
+      </n-space>
     </slot>
   </Dashboard>
 

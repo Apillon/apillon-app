@@ -188,11 +188,15 @@ onMounted(() => {
   if (localStorage.getItem(LsTableColumnsKeys.ASSET_HUB)) {
     selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.ASSET_HUB) || '');
   }
-  assetHubStore.search = '';
-  otherAssets.value = getOtherAssets();
-  data.value = props.owned ? getOwnedAssets() : otherAssets.value;
+  initAsset();
 });
 
+watch(
+  () => assetHubStore.mainnet,
+  () => {
+    initAsset();
+  }
+);
 watch(
   () => assetHubStore.search,
   search => {
@@ -208,6 +212,12 @@ watch(
   }
 );
 const debouncedSearchFilter = useDebounceFn(searchAssets, 500);
+
+function initAsset() {
+  assetHubStore.search = '';
+  otherAssets.value = getOtherAssets();
+  data.value = props.owned ? getOwnedAssets() : otherAssets.value;
+}
 
 function handleColumnChange(selectedValues: Array<string>) {
   selectedColumns.value = selectedValues;
