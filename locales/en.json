@@ -198,6 +198,7 @@
       "createAccount": "This wallet hasn't got any account. Create an account first."
     }
   },
+
   "computing": {
     "cloudFunctions": {
       "addNew": "Add new Cloud function",
@@ -484,6 +485,7 @@
       "smartContracts": "Smart Contracts",
       "smartContractDetails": "Smart Contract Details",
       "social": "Social",
+      "rpc": "RPC service",
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
       "embeddedWallet": "Embedded Wallet",
@@ -773,6 +775,17 @@
               "Authentication: User can add different methods of verification.",
               "Gasless wallet creation: charged in Apillon credits per each onboarded user.",
               "Fully trustless. Powered by Oasis."
+            ]
+          }
+        ]
+      },
+      "rpcService": {
+        "content": [
+          {
+            "benefits": [
+              "Free Tier to start",
+              "Receive API keys for different chains (over 100 chains supported)",
+              "over 99% uptime"
             ]
           }
         ]
@@ -1084,6 +1097,7 @@
       "info": "Customize ready-to-deploy templates built and audited by Apillon.",
       "viewCode": "View code"
     },
+
     "subscription": {
       "bandwidth": "Bandwith",
       "canceledOn": "Your plan will be canceled on {date}.",
@@ -1097,7 +1111,8 @@
       "packages": "Subscription packages",
       "perMonth": "per month",
       "storage": "Storage",
-      "web3Services": "Web3 services"
+      "web3Services": "Web3 services",
+      "plusTaxes": "+taxes"
     },
     "usage": {
       "bandwith": "Bandwith",
@@ -1378,6 +1393,10 @@
       "postalCode": "Postal code",
       "projectName": "Project name",
       "projectDescription": "Project description",
+      "rpcApiKey": {
+        "name": "Name",
+        "description": "Description"
+      },
       "role": "Role",
       "serviceName": "Service name",
       "username": "First and last name",
@@ -1491,6 +1510,10 @@
       "projectName": "Enter project name",
       "projectDescription": "Enter project description",
       "reenterPassword": "Re-enter your complex password",
+      "rpcApiKey": {
+        "name": "Enter key name",
+        "description": "Enter key description"
+      },
       "role": "Select role",
       "serviceName": "Enter the name for the new service",
       "selectCategory": "Filter by category",
@@ -1583,6 +1606,8 @@
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
         "item": "Item has been created",
+        "rpcApiKey": "RPC API key has been created",
+        "rpcEndpoint": "RPC endpoint has been added",
         "service": "Service has been created",
         "userInvite": "User has been invited.",
         "webhook": "Webhook has been created",
@@ -1606,6 +1631,7 @@
         "item": "Item has been deleted",
         "items": "Items has been deleted",
         "post": "Channel has been archived",
+        "rpcEndpoint": "RPC endpoint has been removed from favorites",
         "space": "Hub has been archived",
         "service": "Service has been deleted",
         "user": "User has been removed from project",
@@ -1647,6 +1673,7 @@
         "ipns": "IPNS has been updated",
         "item": "Item has been updated",
         "project": "Project has been updated",
+        "rpcApiKey": "RPC API key has been updated",
         "service": "Service has been updated",
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated",
@@ -2257,6 +2284,92 @@
     },
     "title": "Referral program"
   },
+  "rpc": {
+    "apiKey": {
+      "new": "New key",
+      "save": "Save",
+      "keys": "Your API keys",
+      "turnOnService": "Turn on RPC service",
+      "mustBeOwner": "You must be the project owner to turn on the RPC service.",
+      "powered": "Powered by",
+      "headline": "Access over 100 blockchains",
+      "description": "Apillon’s RPC service, powered by Dwellir, provides developers with reliable, low-latency access to over 100 blockchain networks. This scalable solution ensures seamless communication between decentralized applications and blockchains, backed by 99% uptime and top-tier performance. With easy API key management, you can quickly integrate multiple chains, eliminating the complexity of running your own nodes. The intuitive dashboard allows you to browse and favorite endpoints, simplifying Web3 project management from start to scale.",
+      "uuid": "UUID",
+      "usage": "RPC Usage monitoring",
+      "yourEndpoints": "Your endpoints",
+      "curious": "Curious about what we offer before enabling the service?",
+      "explore": "Explore the supported chains and pick the one that fits your needs.",
+      "start": "Start by browsing the list of available endpoints, and don't forget to mark the chains you're using as favorites for quick access and efficient management.",
+      "continue": "Continue",
+      "quotaReached": "Quota has been reached. To create more API keys",
+      "empty": "You currently have no API keys for the selected project.",
+      "emptyInfo": "Create your first API key to start using the RPC service.",
+      "createFirst": "Create first API key",
+      "monthlyUsage": "{used} of {max} monthly calls used"
+    },
+    "endpoint": {
+      "chainName": "Chain name",
+      "network": "Network",
+      "httpsEndpoint": "HTTPS endpoint",
+      "wssEndpoint": "WSS endpoint",
+      "viewAll": "View all endpoints",
+      "allEndpoints": "All endpoints",
+      "add": "Add",
+      "added": "Added",
+      "delete": "Are you sure you want to remove this endpoint from favorites?",
+      "noFavoriteEndpointTitle": "You currently have no favorite endpoints.",
+      "noFavoriteEndpointDescription": "Browse our available endpoints and click \"Add\" for quick access. Once you add a chain you plan to use, it will appear in your \"Endpoints\" table.",
+      "browse": "Browse endpoints"
+    },
+    "usage": {
+      "requestsNumber": "Number of requests"
+    },
+    "initial": {
+      "benefits": [
+        {
+          "text": "Free Tier to start"
+        },
+        {
+          "bolded": "Multi-Chain Access:",
+          "text": "Connect to over 100 blockchain networks for versatile Web3 integration."
+        },
+        {
+          "bolded": "99% Uptime:",
+          "text": "Ensure high reliability and fast response times for smooth project execution."
+        },
+        {
+          "bolded": "Scalable Infrastructure:",
+          "text": "Access robust RPC nodes to scale with your project's demands"
+        },
+        {
+          "bolded": "API Key Management:",
+          "text": "Generate and manage API keys for multiple chains with ease."
+        },
+        {
+          "bolded": "User-Friendly Dashboard:",
+          "text": "Browse, manage and favorite your blockchain endpoints effortlessly."
+        }
+      ],
+      "planSelection": "Before proceeding, select a plan.\nIf you choose the free plan, we'll notify you when you're approaching the limits.\nAt that point, you'll need to upgrade to keep the RPC service active.",
+      "subscriptionBenefits": [
+        {
+          "text": "Only one free plan is available per registered user, regardless of how many projects you have."
+        },
+        {
+          "bolded": "If you have an active subscription, the paid plan covers all the projects you own."
+        },
+        {
+          "bolded": "Any additional team members you add to a project can use the RPC API under your existing subscription."
+        }
+      ],
+      "subscriptionLimits": "Limits"
+    },
+    "subscription": {
+      "unavailable": "Unavailable",
+      "unavailableDescription": "You've already used the Freemium plan on this or other projects you own.",
+      "mustBeOwner": "You must be the project owner to change the plan."
+    }
+  },
   "social": {
     "chat": {
       "about": "About",
@@ -2668,6 +2781,9 @@
     },
     "contract": {
       "_new": "New Phat contract"
+    },
+    "rpc": {
+      "new": "INSERT SOME TEXT"
     },
     "file": {
       "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."

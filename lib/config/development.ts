@@ -37,6 +37,7 @@ const config: ConfigInterface = {
     'PROJECT_SETTINGS',
     'PREBUILD_SOLUTIONS',
     'REFERRAL',
+    'RPC',
     'SERVICES',
     'SMART_CONTRACTS',
     'SOCIAL',
