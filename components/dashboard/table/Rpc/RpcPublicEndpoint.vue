@@ -57,5 +57,5 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
 };
 
 const columns = createColumns();
-const rowKey = (row: RpcEndpointInterface) => row.id;
+const rowKey = (row: RpcEndpointInterface) => row.networkId;
 </script>

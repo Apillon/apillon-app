@@ -22,6 +22,8 @@ declare global {
     image_url: string;
     type: string;
     networkName: string;
+    networkId: number;
+    chainName: string;
     nodes: {
       https: string;
       wss: string;

@@ -11,17 +11,14 @@
             :max-calls="hasRpcPlan ? 25000000 : 5000000"
           />
         </div>
-        <div
-          v-if="dataStore.isUserOwner && paymentStore.isRpcPlanLoaded"
-          class="flex flex-row gap-4 items-center justify-end"
-        >
+        <div class="flex flex-row gap-4 items-center justify-end">
           <div>
             <p class="text-white font-bold">
               {{ $t('dashboard.payment.currentPlan') }}: {{ hasRpcPlan ? 'Developer' : 'Free' }}
             </p>
           </div>
           <Btn
-            v-if="!hasRpcPlan"
+            v-if="dataStore.isUserOwner && paymentStore.isRpcPlanLoaded && !hasRpcPlan"
             class="font-bold no-underline"
             type="link"
             to="/dashboard/service/rpc/subscription"
