@@ -47,7 +47,7 @@
             </tr>
           </tbody>
         </n-table>
-        <a :href="transactionsList" class="text-blue font-bold text-sm">
+        <a :href="transactionsList" class="text-blue font-bold text-sm" target="_blank">
           {{ $t('dashboard.service.assetHub.transactionHistory') }}
         </a>
       </div>
@@ -110,8 +110,8 @@ const assetData = computed<AssetData[]>(() => [
 
 const transactionsList = computed(() =>
   assetHubStore.mainnet
-    ? `https://assethub-polkadot.subscan.io/account/${assetHubStore.active.owner}`
-    : `https://assethub-westend.subscan.io/account/${assetHubStore.active.owner}`
+    ? `https://assethub-polkadot.subscan.io/assets/${assetHubStore.active.id}?tab=activity`
+    : `https://assethub-westend.subscan.io/assets/${assetHubStore.active.id}?tab=activity`
 );
 
 onMounted(async () => {

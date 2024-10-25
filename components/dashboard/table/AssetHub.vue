@@ -14,7 +14,8 @@
   <modal v-model:show="modalEditVisible" :title="$t('dashboard.service.assetHub.edit')">
     <FormAssetHub
       v-if="currentRow?.id"
-      :asset-id="currentRow?.id"
+      :asset-id="currentRow.id"
+      @submit-success="refreshAsset(currentRow.id)"
       @close="modalEditVisible = false"
     />
   </modal>
@@ -30,7 +31,7 @@ const props = defineProps({
 const { t } = useI18n();
 const router = useRouter();
 const assetHubStore = useAssetHubStore();
-const { selectedColumns } = useAssetHub();
+const { selectedColumns, refreshAsset } = useAssetHub();
 
 const modalEditVisible = ref<boolean>(false);
 const currentRow = ref<AssetInterface | null>(null);
@@ -193,7 +194,7 @@ onMounted(() => {
 
 watch(
   () => assetHubStore.mainnet,
-  () => {
+  async () => {
     initAsset();
   }
 );

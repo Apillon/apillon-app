@@ -62,6 +62,18 @@ export default function assetHub() {
     }
   }
 
+  const refreshAsset = async (assetId: number) => {
+    await sleep(2000);
+    const updatedAsset = await assetHubStore.fetchAsset(assetId);
+
+    Object.assign(assetHubStore.active, updatedAsset);
+    assetHubStore.items.forEach(item => {
+      if (item.id === assetId) {
+        Object.assign(item, updatedAsset);
+      }
+    });
+  };
+
   async function reconnectWallet() {
     await sleep(200);
     if (assetHubStore?.account?.address && assetHubStore?.account?.wallet) {
@@ -113,6 +125,7 @@ export default function assetHub() {
     initAssetHub,
     initClient,
     reconnectWallet,
+    refreshAsset,
     walletConnect,
   };
 }

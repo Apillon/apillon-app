@@ -13,7 +13,7 @@
   </Btn>
 
   <Btn v-else type="primary" class="w-full" native-type="submit" @click="e => $emit('submit', e)">
-    {{ btnText || 'Query' }}
+    {{ btnText }}
   </Btn>
 </template>
 

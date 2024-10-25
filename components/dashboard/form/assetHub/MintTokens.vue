@@ -14,6 +14,7 @@
       <n-input
         v-model:value="formData.address"
         :input-props="{ id: 'address' }"
+        :precision="assetHubStore.active.decimals"
         :placeholder="$t('form.placeholder.assetHub.address')"
         clearable
       />
@@ -68,7 +69,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
-const { assetHubClient, initClient } = useAssetHub();
+const { assetHubClient } = useAssetHub();
 
 const loading = ref(false);
 const txHash = ref<string | undefined>();
@@ -114,7 +115,9 @@ async function mintTokens() {
     txHash.value = await assetHubClient.value.mint(
       props.assetId,
       formData.value.address,
-      formData.value.amount
+      Math.round(
+        Number(formData.value.amount) * Math.pow(10, Number(assetHubStore.active.decimals))
+      )
     );
 
     message.success(t('form.success.assetMinted'));

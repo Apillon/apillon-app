@@ -107,6 +107,8 @@
           :min="0"
           :step="1"
           :disabled="!!assetId"
+          :parse="parse"
+          :format="format"
           @keydown.enter.prevent
         />
       </n-form-item>
@@ -121,8 +123,8 @@
           :placeholder="$t('form.placeholder.assetHub.minBalance')"
           clearable
           class="bg-bg-light rounded-lg"
-          :min="1"
-          :step="1"
+          :min="0"
+          :precision="formData?.decimals || 3"
           :disabled="!!assetId"
           @keydown.enter.prevent
         />
@@ -205,7 +207,7 @@ const formData = ref<FormAsset>({
   assetId: null,
   decimals: 18,
   initialSupply: null,
-  minBalance: 1,
+  minBalance: 0.001,
   issuerAddress: assetHubStore.account?.address || '',
   freezerAddress: assetHubStore.account?.address || '',
 });
@@ -263,6 +265,19 @@ onMounted(async () => {
 });
 
 watch(
+  () => formData.value.assetId,
+  (newId, oldId) => {
+    if (oldId && newId) {
+      const delta = newId - oldId;
+
+      if (Math.abs(delta) === 1 && assetIDs.value.has(newId)) {
+        formData.value.assetId = newId + delta;
+      }
+    }
+  }
+);
+
+watch(
   () => formData.value.network,
   async rpc => {
     if (assetHubClient.value) {
@@ -282,19 +297,6 @@ function findFirstAvailableNumber(set) {
   return i;
 }
 
-watch(
-  () => formData.value.assetId,
-  (newId, oldId) => {
-    if (oldId && newId) {
-      const delta = newId - oldId;
-
-      if (Math.abs(delta) === 1 && assetIDs.value.has(newId)) {
-        formData.value.assetId = newId + delta;
-      }
-    }
-  }
-);
-
 // Custom validations
 function validateAssetId(_: FormItemRule, value: string): boolean {
   return !!props.assetId || !assetHubStore.items.some(i => i.id === Number(value));
@@ -310,6 +312,16 @@ function validateSymbol(_: FormItemRule, value: string): boolean {
     !assetHubStore.items.some(i => i.symbol.toLowerCase() === value.toLowerCase())
   );
 }
+
+const parse = (input: string) => {
+  const nums = input.replace(/\./g, '').trim();
+  if (/^\d+(\.(\d+)?)?$/.test(nums)) return Number(nums);
+  return nums === '' ? null : Number.NaN;
+};
+const format = (value: number | null) => {
+  if (value === null) return '';
+  return new Intl.NumberFormat('de-DE').format(value);
+};
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -366,7 +378,7 @@ async function createAsset() {
       formData.value.name,
       formData.value.symbol,
       formData.value.decimals,
-      formData.value.minBalance,
+      Number(formData.value.minBalance) * Math.pow(10, Number(formData.value.decimals)),
       team
     );
 

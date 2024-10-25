@@ -20,9 +20,15 @@
 
     <!-- Submit -->
     <Btn v-if="owner" type="primary" class="w-full" :loading="loading" @click="handleSubmit">
-      {{ btnText || 'Query' }}
+      {{ btnText ? btnText : read ? 'Query' : 'Execute' }}
     </Btn>
-    <SmartContractsBtnSubmit v-else :owner="owner" :loading="loading" @submit="handleSubmit" />
+    <SmartContractsBtnSubmit
+      v-else
+      :owner="owner"
+      :loading="loading"
+      :btn-text="btnText ? btnText : read ? 'Query' : 'Execute'"
+      @submit="handleSubmit"
+    />
 
     <!-- Result -->
     <Notification v-if="result !== undefined" type="success" class="mt-6" hide-icon>

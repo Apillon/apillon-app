@@ -159,24 +159,24 @@ export function generatePriceServiceName(service: string, chain: number, action:
  */
 
 export function contractLink(contractAddress?: string | null, chainId?: number): string {
-  const address = contractAddress ? `/address/${contractAddress}` : '';
+  const address = contractAddress ? `address/${contractAddress}` : '';
 
   switch (chainId) {
     case Chains.MOONBEAM:
-      return `https://moonbeam.moonscan.io${address}`;
+      return `https://moonbeam.moonscan.io/${address}`;
     case Chains.MOONBASE:
-      return `https://moonbase.moonscan.io${address}`;
+      return `https://moonbase.moonscan.io/${address}`;
     case Chains.ASTAR:
-      return `https://astar.subscan.io${address}`;
+      return `https://astar.subscan.io/${address}`;
     case SubstrateChain.ASTAR:
       const config = useRuntimeConfig();
       if (config.public.ENV === AppEnv.DEV) {
-        return `https://shibuya.subscan.io${address}`;
+        return `https://shibuya.subscan.io/${address}`;
       } else {
-        return `https://astar.subscan.io${address}`;
+        return `https://astar.subscan.io/${address}`;
       }
     case SubstrateChain.PHALA:
-      return `https://phala.subscan.io${address}`;
+      return `https://phala.subscan.io/${address}`;
     default:
       console.warn('Missing chainId');
       return '';
@@ -184,26 +184,24 @@ export function contractLink(contractAddress?: string | null, chainId?: number):
 }
 
 export function transactionLink(transactionHash?: string | null, chainId?: number): string {
-  const hash = transactionHash ? `/tx/${transactionHash}` : '';
+  const hash = transactionHash ? `tx/${transactionHash}` : '';
 
   switch (chainId) {
     case Chains.MOONBEAM:
-      return `https://moonbeam.moonscan.io${hash}`;
+      return `https://moonbeam.moonscan.io/${hash}`;
     case Chains.MOONBASE:
-      return `https://moonbase.moonscan.io${hash}`;
+      return `https://moonbase.moonscan.io/${hash}`;
     case Chains.ASTAR:
-      return `https://astar.subscan.io${hash}`;
+      return `https://astar.subscan.io/${hash}`;
     case SubstrateChain.ASTAR:
       const config = useRuntimeConfig();
       if (config.public.ENV === AppEnv.DEV) {
-        return `https://shibuya.subscan.io${hash}`;
+        return `https://shibuya.subscan.io/${hash}`;
       } else {
-        return `https://astar.subscan.io${hash}`;
+        return `https://astar.subscan.io/${hash}`;
       }
     case SubstrateChain.PHALA:
-      return `https://phala.subscan.io${hash}`;
-    case SubstrateChain.PHALA:
-      return `https://phala.subscan.io${hash}`;
+      return `https://phala.subscan.io/${hash}`;
     case SubstrateChain.ASSET_HUB:
       return `https://assethub-polkadot.subscan.io/extrinsic/${transactionHash}`;
     case SubstrateChain.WESTEND_ASSET_HUB:
