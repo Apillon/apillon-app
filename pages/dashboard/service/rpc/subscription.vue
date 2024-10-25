@@ -36,7 +36,12 @@
               <RpcSubscriptionPackage
                 v-for="(rpcPackage, key) in subscriptionPackages"
                 :key="key"
-                :on-press="() => handlePackagePress(rpcPackage.id)"
+                :on-press="
+                  () => {
+                    handlePackagePress(rpcPackage.id);
+                    handleContinuePress();
+                  }
+                "
                 :package="rpcPackage"
                 :is-selected="selectedPackage === rpcPackage.id"
                 :loading="loading && selectedPackage === rpcPackage.id"
@@ -44,18 +49,6 @@
                 :is-owner="dataStore.isUserOwner"
               />
             </div>
-            <Btn
-              v-if="dataStore.isUserOwner"
-              class="w-full max-w-sm"
-              type="primary"
-              size="large"
-              @click="handleContinuePress"
-            >
-              {{ t('rpc.apiKey.continue') }}
-            </Btn>
-            <p v-else>
-              {{ t('rpc.subscription.mustBeOwner') }}
-            </p>
           </div>
         </div>
       </div>

@@ -36,19 +36,15 @@
         <p>{{ benefit }}</p>
       </li>
     </ul>
-
-    <Btn v-if="isSelected && isOwner" type="primary" size="large" :loading="loading" round disabled>
-      {{ $t('dashboard.payment.currentPlan') }}
-    </Btn>
     <Btn
-      v-else-if="allowSwitch && isOwner"
-      type="primary"
+      v-if="isOwner && allowSwitch"
+      :type="isSelected ? 'secondary' : 'primary'"
       size="large"
-      round
       :loading="loading"
+      round
       @click="onPress"
     >
-      {{ $t('dashboard.payment.selectPlan') }}
+      {{ isSelected ? $t('rpc.apiKey.continue') : $t('dashboard.payment.selectPlan') }}
     </Btn>
   </div>
 </template>

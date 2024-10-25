@@ -168,7 +168,7 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
 
 const currentRow = ref<RpcEndpointInterface>({} as RpcEndpointInterface);
 const columns = createColumns();
-const rowKey = (row: RpcEndpointInterface) => row.id;
+const rowKey = (row: RpcEndpointInterface) => row.networkId;
 const message = useMessage();
 
 const loading = ref<boolean>(false);
