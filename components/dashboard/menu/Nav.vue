@@ -175,6 +175,17 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         !authStore.isUserAllowed(Permission.INDEXING) ||
         zeroProjects.value,
     },
+    {
+      key: 'dashboard-service-rpc',
+      label: t('dashboard.nav.rpc'),
+      to: 'dashboard-service-rpc',
+      iconName: 'icon-web',
+      soon: isMenuItemDisabled(Feature.RPC),
+      disabled:
+        isMenuItemDisabled(Feature.RPC) ||
+        !authStore.isUserAllowed(Permission.RPC) ||
+        zeroProjects.value,
+    },
   ];
 
   const smartContractsChildren = [

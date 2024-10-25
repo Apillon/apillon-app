@@ -10,6 +10,7 @@ export enum ServiceType {
   SOCIAL = 6,
   WALLET = 7,
   CONTRACTS = 8,
+  RPC = 9,
 }
 export enum ServiceTypeName {
   STORAGE = 'STORAGE',
@@ -20,6 +21,7 @@ export enum ServiceTypeName {
   CONTRACTS = 'CONTRACTS',
   SOCIAL = 'SOCIAL',
   WALLET = 'WALLET',
+  INDEXING = 'INDEXING',
 }
 
 export enum IdentityChains {

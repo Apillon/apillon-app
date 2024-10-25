@@ -57,6 +57,9 @@ const Endpoints = {
   activeSubscription: (projectUuid: string) => {
     return `/projects/${projectUuid}/active-subscription`;
   },
+  getRpcPlan: (projectUuid: string) => {
+    return `/projects/${projectUuid}/rpc-plan`;
+  },
   subscriptions: (projectUuid: string) => {
     return `/projects/${projectUuid}/subscriptions`;
   },
@@ -326,6 +329,37 @@ const Endpoints = {
 
   indexerHibernate: (uuid: string) => {
     return `/indexing/indexers/${uuid}/hibernate`;
+  },
+
+  /**
+   * RPC
+   */
+  rpcApiKeys: (id?: number) => {
+    return `/rpc/api-key${id ? `/${id}` : ''}`;
+  },
+
+  rpcFavoriteEndpoints: (apiKeyId: number) => {
+    return `/rpc/api-key/${apiKeyId}/urls`;
+  },
+
+  rpcEndpoints: () => {
+    return '/rpc/endpoints';
+  },
+
+  rpcApiKeysQuotaReached: () => {
+    return '/rpc/api-key/quota-reached';
+  },
+
+  rpcUrl: (id?: number) => {
+    return `/rpc/url${id ? `/${id}` : ''}`;
+  },
+
+  rpcDwellirId: () => {
+    return '/rpc/dwellir-id';
+  },
+
+  rpcApiKeyUsage: (projectUuid: string, apiKeyId: number) => {
+    return `/rpc/${projectUuid}/api-key/${apiKeyId}/usage`;
   },
 
   /**
