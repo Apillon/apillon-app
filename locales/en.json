@@ -444,6 +444,10 @@
         "WALLET": {
           "name": "Embedded Wallet",
           "description": null
+        },
+        "INDEXING": {
+          "name": "Indexing",
+          "description": null
         }
       }
     },
@@ -1778,6 +1782,8 @@
     "startNew": "Star by creating a new indexer",
     "create": "Create new indexer",
     "update": "Update indexer",
+    "showInstructions": "Show instructions",
+    "hideInstructions": "Hide instructions",
     "statuses": {
       "1": "Created",
       "3": "Hibernated",
