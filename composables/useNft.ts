@@ -392,6 +392,24 @@ export default function useNft() {
     return generatePriceServiceName(ServiceTypeName.NFT, chain, PriceServiceAction.COLLECTION);
   }
 
+  async function uploadLogoAndCover(bucketUuid: string) {
+    const images: FileListItemType[] = [];
+    const cover = collectionStore.form.base.coverImage;
+    const logo = collectionStore.form.base.logo;
+
+    if (logo) {
+      logo.name = 'logo.' + logo.name.split('.')[logo.name.split('.').length - 1];
+      images.push(logo);
+    }
+    if (cover) {
+      cover.name = 'cover.' + cover.name.split('.')[cover.name.split('.').length - 1];
+      images.push(cover);
+    }
+    if (images.length) {
+      await uploadFiles(bucketUuid, images);
+    }
+  }
+
   return {
     allImagesUploaded,
     dataImagesNames,
@@ -412,5 +430,6 @@ export default function useNft() {
     uploadFileRequest,
     uploadImagesRequest,
     uploadImageRequest,
+    uploadLogoAndCover,
   };
 }

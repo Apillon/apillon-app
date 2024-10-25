@@ -46,9 +46,11 @@ const emit = defineEmits(['submitSuccess']);
 
 const { t, te } = useI18n();
 const message = useMessage();
+const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
-const { deployCollection } = useNft();
+const { prepareFormData } = useCollection();
+const { deployCollection, getPriceServiceName, uploadLogoAndCover } = useNft();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 function w3WarnAndDeploy() {
@@ -62,6 +64,8 @@ function w3WarnAndDeploy() {
 async function onModalW3WarnConfirm() {
   if (!metadataValid()) {
     message.warning(t('validation.nftMetadata'));
+  } else if (collectionStore.form.base.chain === SubstrateChain.UNIQUE) {
+    warningStore.showSpendingWarning(getPriceServiceName(), () => deployUnique());
   } else {
     deploy();
   }
@@ -91,5 +95,55 @@ async function deploy() {
 
     message.error(userFriendlyMsg(error));
   }
+}
+
+async function deployUnique() {
+  modalW3WarnVisible.value = false;
+  collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
+  collectionStore.nftStep = NftCreateStep.DEPLOY;
+
+  try {
+    const res = await $api.post<CollectionResponse>(
+      endpoints.collectionsUnique,
+      prepareUniqueData()
+    );
+    collectionStore.active = res.data;
+
+    /** On new collection created add new collection to list */
+    collectionStore.items.push(res.data);
+    collectionStore.form.single.collectionUuid = res.data.collection_uuid;
+
+    /** Uploads logo and cover image */
+    await uploadLogoAndCover(res.data.bucket_uuid);
+
+    /** Deployment status */
+    collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
+
+    collectionStore.resetCache();
+
+    /** Emit events */
+    emit('submitSuccess');
+  } catch (error) {
+    /** Deployment status */
+    collectionStore.nftStep = NftCreateStep.PREVIEW;
+    collectionStore.stepCollectionDeploy = CollectionStatus.FAILED;
+
+    message.error(userFriendlyMsg(error));
+  }
+}
+
+function prepareUniqueData() {
+  const baseData = prepareFormData();
+  const metadata = Object.values(collectionStore.metadata).reduce((acc, meta, key) => {
+    const id = Number(meta.id) || key + 1;
+    const m = Object.assign({}, meta);
+    delete m.id;
+    m.image =
+      'https://eu1.web3approved.com/ipfs/bafkreiboegsznwqzr4rgtbghblaqxkvici4jgl4q27pmv2yohdlbfoqksa/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaWQiOiJiYWZrcmVpYm9lZ3N6bndxenI0cmd0YmdoYmxhcXhrdmljaTRqZ2w0cTI3cG12MnlvaGRsYmZvcWtzYSIsInByb2plY3RfdXVpZCI6ImY2N2RkOTlhLTY5ZDEtNGY2Zi05Y2QzLWYwYWMyZDdmYWRjNCIsImlhdCI6MTcyOTg1MTg3NSwic3ViIjoiSVBGUy10b2tlbiJ9.wY9VRfd9zERuAqc1rcGZHu4D02_4z4U6Qv2yxn9USMg';
+    acc[id] = m;
+    return acc;
+  }, {});
+
+  return { ...baseData, metadata };
 }
 </script>
