@@ -80,7 +80,7 @@
                 <div v-else class="pb-8">
                   <NftPreviewCollection />
                   <Btn type="primary" class="w-full mb-2" @click="w3WarnAndDeploy()">
-                    <span v-if="collectionStore.form.base.chain === SubstrateChain.UNIQUE">
+                    <span v-if="isUnique">
                       {{ $t('form.proceed') }}
                     </span>
                     <span v-else>
@@ -172,7 +172,7 @@ const collectionStore = useCollectionStore();
 
 const { isLg } = useScreen();
 const { getPriceServiceName, uploadLogoAndCover } = useNft();
-const { collectionEndpoint, prepareFormData } = useCollection();
+const { isUnique, collectionEndpoint, prepareFormData } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 useHead({
@@ -205,7 +205,7 @@ function w3WarnAndDeploy() {
 }
 
 async function onModalW3WarnConfirm() {
-  if (collectionStore.form.base.chain === SubstrateChain.UNIQUE) {
+  if (isUnique.value) {
     /** Redirects to NFT Create tab */
     collectionStore.mintTab = NftCreateTab.DEPLOY;
   } else {

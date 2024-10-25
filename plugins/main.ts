@@ -39,7 +39,7 @@ export default defineNuxtPlugin(nuxtApp => {
         })
       );
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     /** Preserve query params */

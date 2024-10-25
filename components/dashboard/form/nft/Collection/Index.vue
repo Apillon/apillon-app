@@ -259,12 +259,7 @@
       </n-grid>
 
       <!--  Collection Is Drop -->
-      <n-form-item
-        v-if="collectionStore.form.base.chain !== SubstrateChain.UNIQUE"
-        path="behavior.drop"
-        :span="1"
-        :show-label="false"
-      >
+      <n-form-item v-if="!isUnique" path="behavior.drop" :span="1" :show-label="false">
         <n-checkbox
           v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
@@ -389,6 +384,7 @@ const {
   supplyTypes,
   rules,
   isFormDisabled,
+  isUnique,
   chainCurrency,
   collectionEndpoint,
   disablePastDate,

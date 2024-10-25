@@ -34,7 +34,7 @@
         :default-file-list="collectionStore.images"
         :show-file-list="false"
         directory-dnd
-        :custom-request="nft.uploadImageRequest"
+        :custom-request="upload => nft.uploadImageRequest(upload, isUnique)"
         @remove="nft.handleImageRemove"
       >
         <n-upload-dragger class="h-40">
@@ -143,8 +143,7 @@ const nft = useNft();
 const { t, te } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-
-const { formRef, rulesSingle } = useCollection();
+const { formRef, isUnique, rulesSingle } = useCollection();
 
 const uploadRef = ref<UploadInst | null>(null);
 

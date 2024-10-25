@@ -46,11 +46,14 @@ const emit = defineEmits(['submitSuccess']);
 
 const { t, te } = useI18n();
 const message = useMessage();
+const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
-const { prepareFormData } = useCollection();
+const { getFile } = useComputing();
+const { isUnique, prepareFormData } = useCollection();
 const { deployCollection, getPriceServiceName, uploadLogoAndCover } = useNft();
+const { uploadFiles } = useUpload();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 function w3WarnAndDeploy() {
@@ -64,7 +67,7 @@ function w3WarnAndDeploy() {
 async function onModalW3WarnConfirm() {
   if (!metadataValid()) {
     message.warning(t('validation.nftMetadata'));
-  } else if (collectionStore.form.base.chain === SubstrateChain.UNIQUE) {
+  } else if (isUnique.value) {
     warningStore.showSpendingWarning(getPriceServiceName(), () => deployUnique());
   } else {
     deploy();
@@ -103,10 +106,12 @@ async function deployUnique() {
   collectionStore.nftStep = NftCreateStep.DEPLOY;
 
   try {
-    const res = await $api.post<CollectionResponse>(
-      endpoints.collectionsUnique,
-      prepareUniqueData()
-    );
+    const bucketUuid = await createBucket(collectionStore.form.base.name);
+    if (!bucketUuid) return;
+
+    const metadata = await prepareUniqueData(bucketUuid);
+
+    const res = await $api.post<CollectionResponse>(endpoints.collectionsUnique, metadata);
     collectionStore.active = res.data;
 
     /** On new collection created add new collection to list */
@@ -132,18 +137,46 @@ async function deployUnique() {
   }
 }
 
-function prepareUniqueData() {
+async function prepareUniqueData(bucketUuid: string) {
+  await uploadFiles(bucketUuid, collectionStore.images, false);
+
+  /** Get images links */
+  const imageLinks: Record<string, string> = {};
+  for (let i = 0; i < collectionStore.images.length; i += 1) {
+    const img = collectionStore.images[i];
+    if (img?.file_uuid) {
+      const file = await getFile(bucketUuid, img.file_uuid);
+      imageLinks[file.name] = file.link;
+    }
+  }
+
+  /** Prepare metadata */
   const baseData = prepareFormData();
   const metadata = Object.values(collectionStore.metadata).reduce((acc, meta, key) => {
     const id = Number(meta.id) || key + 1;
     const m = Object.assign({}, meta);
     delete m.id;
-    m.image =
-      'https://eu1.web3approved.com/ipfs/bafkreiboegsznwqzr4rgtbghblaqxkvici4jgl4q27pmv2yohdlbfoqksa/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaWQiOiJiYWZrcmVpYm9lZ3N6bndxenI0cmd0YmdoYmxhcXhrdmljaTRqZ2w0cTI3cG12MnlvaGRsYmZvcWtzYSIsInByb2plY3RfdXVpZCI6ImY2N2RkOTlhLTY5ZDEtNGY2Zi05Y2QzLWYwYWMyZDdmYWRjNCIsImlhdCI6MTcyOTg1MTg3NSwic3ViIjoiSVBGUy10b2tlbiJ9.wY9VRfd9zERuAqc1rcGZHu4D02_4z4U6Qv2yxn9USMg';
+    m.image = imageLinks[meta.image];
     acc[id] = m;
     return acc;
   }, {});
 
   return { ...baseData, metadata };
+}
+
+async function createBucket(name: string) {
+  const bodyData = {
+    project_uuid: dataStore.projectUuid,
+    bucketType: BucketType.NFT_METADATA,
+    name: `NFT Collection: ${name}`,
+  };
+
+  try {
+    const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
+    return res.data.bucket_uuid;
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  return null;
 }
 </script>

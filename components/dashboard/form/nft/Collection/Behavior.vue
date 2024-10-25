@@ -48,10 +48,7 @@
     </n-grid>
 
     <n-grid
-      v-if="
-        collectionStore.form.base.chainType === ChainType.EVM ||
-        collectionStore.form.base.chain === SubstrateChain.UNIQUE
-      "
+      v-if="collectionStore.form.base.chainType === ChainType.EVM || isUnique"
       class="items-end"
       :cols="12"
       :x-gap="32"
@@ -90,10 +87,7 @@
     </n-grid>
 
     <n-grid
-      v-if="
-        collectionStore.form.base.chainType === ChainType.EVM ||
-        collectionStore.form.base.chain === SubstrateChain.UNIQUE
-      "
+      v-if="collectionStore.form.base.chainType === ChainType.EVM || isUnique"
       class="items-end"
       :cols="12"
       :x-gap="32"
@@ -131,12 +125,7 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid
-      v-if="collectionStore.form.base.chain !== SubstrateChain.UNIQUE"
-      class="items-end"
-      :cols="12"
-      :x-gap="32"
-    >
+    <n-grid v-if="!isUnique" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Is Drop -->
       <n-form-item-gi path="drop" :span="6" :show-label="false">
         <n-checkbox
@@ -235,6 +224,7 @@ const collectionStore = useCollectionStore();
 const {
   booleanSelect,
   formRef,
+  isUnique,
   supplyTypes,
   rules,
   chainCurrency,

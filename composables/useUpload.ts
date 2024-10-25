@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export default function useUpload() {
-  const $i18n = useI18n();
+  const { t } = useI18n();
   const message = useMessage();
   const bucketStore = useBucketStore();
   const storageStore = useStorageStore();
@@ -125,7 +125,7 @@ export default function useUpload() {
             await uploadFilesToS3(fileRequests.data.files);
           } else {
             /** Show warning message - zero files uploaded */
-            message.warning($i18n.t('error.fileUploadStopped'));
+            message.warning(t('error.fileUploadStopped'));
           }
         } catch (error: any) {
           onUploadError();
@@ -143,10 +143,11 @@ export default function useUpload() {
         file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path
       );
       if (file) {
+        file['file_uuid'] = uploadFileRequest.file_uuid;
         uploadFileToS3(file, uploadFileRequest);
       } else {
         /** Show warning message - file not found by name */
-        message.warning($i18n.t('error.fileUploadMissing', { name: uploadFileRequest.fileName }));
+        message.warning(t('error.fileUploadMissing', { name: uploadFileRequest.fileName }));
       }
     });
   }

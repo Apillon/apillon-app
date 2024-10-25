@@ -61,42 +61,44 @@
     </n-grid>
 
     <!--  Collection type -->
-    <n-form-item
-      v-if="
-        isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
-        collectionStore.form.base.chainType === ChainType.EVM
-      "
-      path="collectionType"
-      :label="infoLabel('collectionType')"
-      :label-props="{ for: 'collectionType' }"
-    >
-      <select-options
-        v-model:value="collectionStore.form.base.collectionType"
-        :options="collectionTypes"
-        :input-props="{ id: 'collectionType' }"
-        :placeholder="$t('general.pleaseSelect')"
-        filterable
-        clearable
-      />
-    </n-form-item>
+    <template v-if="!isUnique">
+      <n-form-item
+        v-if="
+          isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
+          collectionStore.form.base.chainType === ChainType.EVM
+        "
+        path="collectionType"
+        :label="infoLabel('collectionType')"
+        :label-props="{ for: 'collectionType' }"
+      >
+        <select-options
+          v-model:value="collectionStore.form.base.collectionType"
+          :options="collectionTypes"
+          :input-props="{ id: 'collectionType' }"
+          :placeholder="$t('general.pleaseSelect')"
+          filterable
+          clearable
+        />
+      </n-form-item>
 
-    <!--  Collection Use Gateway -->
-    <n-form-item path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
-      <n-checkbox
-        v-model:checked="collectionStore.form.base.useApillonIpfsGateway"
-        size="medium"
-        :label="infoLabel('collectionUseGateway')"
-      />
-    </n-form-item>
+      <!--  Collection Use Gateway -->
+      <n-form-item path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
+        <n-checkbox
+          v-model:checked="collectionStore.form.base.useApillonIpfsGateway"
+          size="medium"
+          :label="infoLabel('collectionUseGateway')"
+        />
+      </n-form-item>
 
-    <!--  Collection Dynamic metadata -->
-    <n-form-item path="useIpns" :show-label="false">
-      <n-checkbox
-        v-model:checked="collectionStore.form.base.useIpns"
-        size="medium"
-        :label="infoLabel('collectionUseIpns')"
-      />
-    </n-form-item>
+      <!--  Collection Dynamic metadata -->
+      <n-form-item path="useIpns" :show-label="false">
+        <n-checkbox
+          v-model:checked="collectionStore.form.base.useIpns"
+          size="medium"
+          :label="infoLabel('collectionUseIpns')"
+        />
+      </n-form-item>
+    </template>
 
     <!--  Form submit -->
     <n-form-item :show-label="false">
@@ -109,11 +111,10 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
-const { collectionTypes, formRef, rules, infoLabel } = useCollection();
+const { collectionTypes, formRef, isUnique, rules, infoLabel } = useCollection();
 
 // Submit
 function handleSubmitForm(e: Event | MouseEvent) {

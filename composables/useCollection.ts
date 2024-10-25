@@ -68,6 +68,10 @@ export default function useCollection() {
     return collectionStore.form.behavior.supplyLimited === 1;
   });
 
+  const isUnique = computed(() => {
+    return collectionStore.form.base.chain === SubstrateChain.UNIQUE;
+  });
+
   /**
    * Rules
    */
@@ -199,7 +203,7 @@ export default function useCollection() {
   }
 
   function collectionEndpoint() {
-    return collectionStore.form.base.chain === SubstrateChain.UNIQUE
+    return isUnique.value
       ? endpoints.collectionsUnique
       : collectionStore.form.base.chain === Chains.ASTAR &&
           collectionStore.form.base.chainType === ChainType.SUBSTRATE
@@ -229,7 +233,7 @@ export default function useCollection() {
   function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
     return (
       !isRoyaltyRequired() ||
-      (collectionStore.form.base.chain === SubstrateChain.UNIQUE
+      (isUnique.value
         ? substrateAddressValidate(_, value, SubstrateChainPrefix.UNIQUE)
         : collectionStore.form.base.chainType === ChainType.SUBSTRATE
           ? substrateAddressValidate(_, value, SubstrateChainPrefix.ASTAR)
@@ -334,6 +338,7 @@ export default function useCollection() {
     chains,
     chainTypes,
     collectionTypes,
+    isUnique,
     nftChains,
     substrateChains,
     supplyTypes,

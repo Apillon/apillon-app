@@ -190,13 +190,13 @@
 
 <script setup lang="ts">
 const collectionStore = useCollectionStore();
-const { collectionTypes, chains, chainCurrency } = useCollection();
+const { collectionTypes, nftChains, chainCurrency } = useCollection();
 const { createThumbnailUrl } = useNft();
 
 function getCollectionTypeName(collectionType: Number) {
   return collectionTypes.find(type => type.value === collectionType)?.label;
 }
 function getChainName(collectionChain: Number) {
-  return chains.find(chain => chain.value === collectionChain)?.label;
+  return nftChains.find(chain => chain.value === collectionChain)?.label;
 }
 </script>

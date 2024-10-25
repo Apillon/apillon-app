@@ -160,6 +160,7 @@ export default function useComputing() {
   return {
     checkUnfinishedContracts,
     checkUnfinishedTransactions,
+    getFile,
     labelInfo,
     labelInfoText,
     onContractCreated,

@@ -49,6 +49,7 @@ declare global {
     uploadSpeed?: number;
     onFinish: any;
     onError: any;
+    file_uuid?: string;
   }
 
   interface UploadFileType {

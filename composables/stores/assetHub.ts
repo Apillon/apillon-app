@@ -164,7 +164,6 @@ export const useAssetHubStore = defineStore('assetHub', {
       const details = await assetHubClient.getAssetDetails(assetId);
       assetHubClient.destroyInstance();
 
-      console.log({ id: assetId, ...metadata.toHuman(), ...details?.toHuman() });
       return { id: assetId, ...metadata.toHuman(), ...details?.toHuman() } as AssetInterface;
     },
   },
