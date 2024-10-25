@@ -1,3 +1,9 @@
+export enum IndexerStatuses {
+  CREATED = 1,
+  HIBERNATED = 3,
+  ACTIVE = 5,
+}
+
 declare global {
   interface IndexerBaseInterface extends BaseObjectInterface {
     indexer_uuid: string;
@@ -49,6 +55,7 @@ declare global {
           currentBlock: number;
         };
       };
+      status: string;
       deployedAt: string;
       hibernatedAt: string;
     };
