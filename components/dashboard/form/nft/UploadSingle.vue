@@ -143,26 +143,13 @@ const nft = useNft();
 const { t, te } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
+const { labelInfo } = useComputing();
 const { formRef, isUnique, rulesSingle } = useCollection();
 
 const uploadRef = ref<UploadInst | null>(null);
 
 function infoLabel(field: string) {
-  if (
-    te(`form.label.${field}`) &&
-    te(`nft.nft.labelInfo.${field}`) &&
-    t(`nft.nft.labelInfo.${field}`)
-  ) {
-    return [
-      h('span', { class: 'mr-1' }, t(`form.label.${field}`)),
-      h(
-        resolveComponent('IconInfo'),
-        { size: 'sm', tooltip: t(`nft.collection.labelInfo.${field}`) },
-        ''
-      ),
-    ];
-  }
-  return te(`form.label.${field}`) ? t(`form.label.${field}`) : field;
+  return labelInfo(field, 'form.label.collection');
 }
 
 function removeImages() {

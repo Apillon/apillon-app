@@ -24,6 +24,5 @@ defineProps({
   read: { type: Boolean, default: false },
   title: { type: String, default: '' },
 });
-const { t } = useI18n();
 const { labelInfoText } = useComputing();
 </script>

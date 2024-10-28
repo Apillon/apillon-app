@@ -11,7 +11,7 @@
       <n-form-item-gi
         :span="12"
         path="logo"
-        :label="infoLabel('collectionLogo')"
+        :label="infoLabel('logo')"
         :label-props="{ for: 'collectionLogo' }"
       >
         <FormNftCollectionUpload :is-logo="true" />
@@ -21,7 +21,7 @@
       <n-form-item-gi
         :span="12"
         path="coverImage"
-        :label="infoLabel('collectionCoverImage')"
+        :label="infoLabel('coverImage')"
         :label-props="{ for: 'coverImage' }"
       >
         <FormNftCollectionUpload />
@@ -31,7 +31,7 @@
       <n-form-item-gi
         :span="8"
         path="name"
-        :label="infoLabel('collectionName')"
+        :label="infoLabel('name')"
         :label-props="{ for: 'name' }"
       >
         <n-input
@@ -46,7 +46,7 @@
       <n-form-item-gi
         :span="4"
         path="symbol"
-        :label="infoLabel('collectionSymbol')"
+        :label="infoLabel('symbol')"
         :label-props="{ for: 'symbol' }"
       >
         <n-input
@@ -68,7 +68,7 @@
           collectionStore.form.base.chainType === ChainType.EVM
         "
         path="collectionType"
-        :label="infoLabel('collectionType')"
+        :label="infoLabel('type')"
         :label-props="{ for: 'collectionType' }"
       >
         <select-options
@@ -86,7 +86,7 @@
         <n-checkbox
           v-model:checked="collectionStore.form.base.useApillonIpfsGateway"
           size="medium"
-          :label="infoLabel('collectionUseGateway')"
+          :label="infoLabel('useGateway')"
         />
       </n-form-item>
 
@@ -95,7 +95,7 @@
         <n-checkbox
           v-model:checked="collectionStore.form.base.useIpns"
           size="medium"
-          :label="infoLabel('collectionUseIpns')"
+          :label="infoLabel('useIpns')"
         />
       </n-form-item>
     </template>
@@ -114,7 +114,12 @@
 const message = useMessage();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
-const { collectionTypes, formRef, isUnique, rules, infoLabel } = useCollection();
+const { labelInfo } = useComputing();
+const { collectionTypes, formRef, isUnique, rules } = useCollection();
+
+function infoLabel(field: string) {
+  return labelInfo(field, 'form.label.collection');
+}
 
 // Submit
 function handleSubmitForm(e: Event | MouseEvent) {

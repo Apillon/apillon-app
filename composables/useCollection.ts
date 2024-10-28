@@ -264,20 +264,6 @@ export default function useCollection() {
     return ts < Date.now();
   }
 
-  const infoLabel = (field: string) => {
-    if (
-      te(`form.label.${field}`) &&
-      te(`nft.collection.labelInfo.${field}`) &&
-      t(`nft.collection.labelInfo.${field}`)
-    ) {
-      return [
-        h('span', { class: 'mr-1' }, t(`form.label.${field}`)),
-        h(IconInfo, { size: 'sm', tooltip: t(`nft.collection.labelInfo.${field}`) }, ''),
-      ];
-    }
-    return te(`form.label.${field}`) ? t(`form.label.${field}`) : field;
-  };
-
   function chainCurrency() {
     switch (collectionStore.form.base.chain) {
       case Chains.ASTAR:
@@ -350,7 +336,6 @@ export default function useCollection() {
     collectionEndpoint,
     disablePastDate,
     disablePastTime,
-    infoLabel,
     onChainChange,
     openAddNft,
     prepareFormData,

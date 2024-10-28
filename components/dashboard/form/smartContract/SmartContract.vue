@@ -34,7 +34,7 @@
       <template v-if="input.type === 'tuple'">
         <div v-for="i in input.components" :key="i">
           <!-- string -->
-          <n-form-item :label="labelInfoText(i.name, i.description)" :path="i.name">
+          <n-form-item :label="labelInfo(input.name, 'form.label.collection')" :path="i.name">
             <n-input
               v-if="i.type === 'string' || i.type === 'address'"
               v-model:value="form[i.name]"
@@ -51,7 +51,11 @@
           </n-form-item>
         </div>
       </template>
-      <n-form-item v-else :label="labelInfoText(input.name, input?.description)" :path="input.name">
+      <n-form-item
+        v-else
+        :label="labelInfo(input.name, 'form.label.collection')"
+        :path="input.name"
+      >
         <template v-if="!isSpecialField(input)">
           <!-- string -->
           <n-input
@@ -129,7 +133,7 @@ const warningStore = useWarningStore();
 const smartContractStore = useSmartContractStore();
 const deployedContractStore = useDeployedContractStore();
 
-const { labelInfoText } = useComputing();
+const { labelInfo } = useComputing();
 const { isSpecialField } = useSmartContracts();
 const { chains, disablePastDate, disablePastTime } = useCollection();
 

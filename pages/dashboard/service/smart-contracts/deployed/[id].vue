@@ -61,8 +61,14 @@
             <img src="~/assets/images/solution/smart-contracts.png" alt="" />
           </div>
         </div>
+        <Btn v-if="isContractTransferring" class="max-w-xs w-full" :disabled="true">
+          <span class="flex gap-2 items-center">
+            <AnimationTyping />
+            {{ SmartContractStatus[contractStatus] }}
+          </span>
+        </Btn>
         <FormSmartContractAction
-          v-if="isConnected && !isContractTransferred && fnTransferOwnership"
+          v-else-if="isConnected && !isContractTransferred && fnTransferOwnership"
           class="max-w-sm"
           :fn="fnTransferOwnership"
           :args="[address as string]"
@@ -122,11 +128,11 @@ const router = useRouter();
 const { params } = useRoute();
 const dataStore = useDataStore();
 const deployedContractStore = useDeployedContractStore();
+const { checkUnfinishedSmartContracts } = useSmartContracts();
 
 const { address } = useAccount();
 const { disconnect } = useDisconnect();
 const { isConnected } = useAccount({ onConnect: onWalletConnected });
-const { labelInfoText } = useComputing();
 
 useHead({
   title: t('dashboard.nav.smartContracts'),
@@ -136,6 +142,9 @@ const pageLoading = ref<boolean>(true);
 const btnLoading = ref<boolean>(false);
 const contractUuid = ref<string>(`${params?.id}` || '');
 const contractStatus = computed(() => deployedContractStore.active.contractStatus);
+const isContractTransferring = computed(
+  () => contractStatus.value === SmartContractStatus.TRANSFERRING
+);
 const isContractTransferred = computed(
   () => contractStatus.value === SmartContractStatus.TRANSFERRED
 );
@@ -144,7 +153,6 @@ const isContractTransferred = computed(
 const ownerFunctions = ref<SmartContractABI[]>([]);
 const readFunctions = ref<SmartContractABI[]>([]);
 const writeFunctions = ref<SmartContractABI[]>([]);
-const hasDappMethods = ref(false); // serves as UI signal to hide or display dapp methods
 
 const fnTransferOwnership = computed(() =>
   ownerFunctions.value.find(method => method.name === 'transferOwnership')
@@ -171,33 +179,55 @@ onMounted(() => {
       router.push({ name: 'dashboard-service-smart-contracts' });
     } else {
       deployedContractStore.active = currentSmartContract;
-
-      const functionObjects = deployedContractStore.active?.contractVersion?.abi.filter(
-        item => item.type === 'function'
-      );
-
-      // Initialize form models dynamically based on functionObjects
-      functionObjects.forEach(fn => {
-        if (fn.stateMutability === 'nonpayable' || fn.stateMutability === 'payable') {
-          // Find the corresponding method in state.contractVersion.methods
-          const method = deployedContractStore.active.contractVersion.methods.find(
-            method => method.name === fn.name
-          );
-
-          if (method?.onlyOwner && !isContractTransferred.value) {
-            ownerFunctions.value.push(fn);
-          } else {
-            writeFunctions.value.push(fn);
-          }
-        } else {
-          readFunctions.value.push(fn);
-        }
-      });
-
+      initFunctions();
       pageLoading.value = false;
+      setTimeout(
+        () => (deployedContractStore.active.contractStatus = SmartContractStatus.TRANSFERRING),
+        1000
+      );
     }
   });
 });
+
+watch(
+  () => contractStatus.value,
+  () => {
+    if (isContractTransferring.value) {
+      checkUnfinishedSmartContracts();
+    } else if (isContractTransferred.value) {
+      refreshPage();
+    }
+  }
+);
+
+async function refreshPage() {
+  await deployedContractStore.fetchDeployedContract(deployedContractStore.active.contract_uuid);
+  initFunctions();
+}
+
+function initFunctions() {
+  const functionObjects = deployedContractStore.active?.contractVersion?.abi.filter(
+    item => item.type === 'function'
+  );
+
+  // Initialize form models dynamically based on functionObjects
+  functionObjects.forEach(fn => {
+    if (fn.stateMutability === 'nonpayable' || fn.stateMutability === 'payable') {
+      // Find the corresponding method in state.contractVersion.methods
+      const method = deployedContractStore.active.contractVersion.methods.find(
+        method => method.name === fn.name
+      );
+
+      if (method?.onlyOwner && !isContractTransferred.value) {
+        ownerFunctions.value.push(fn);
+      } else {
+        writeFunctions.value.push(fn);
+      }
+    } else {
+      readFunctions.value.push(fn);
+    }
+  });
+}
 </script>
 
 <style lang="postcss" scoped>

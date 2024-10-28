@@ -11,7 +11,7 @@
       <n-form-item-gi
         path="supplyLimited"
         :span="6"
-        :label="infoLabel('collectionSupplyLimited')"
+        :label="infoLabel('supplyLimited')"
         :label-props="{ for: 'supplyLimited' }"
       >
         <select-options
@@ -28,7 +28,7 @@
       <n-form-item-gi
         path="maxSupply"
         :span="6"
-        :label="infoLabel('collectionMaxSupply')"
+        :label="infoLabel('maxSupply')"
         :label-props="{ for: 'maxSupply' }"
       >
         <n-input-number
@@ -57,7 +57,7 @@
       <n-form-item-gi
         path="revocable"
         :span="6"
-        :label="infoLabel('collectionRevocable')"
+        :label="infoLabel('revocable')"
         :label-props="{ for: 'revocable' }"
       >
         <select-options
@@ -73,7 +73,7 @@
       <n-form-item-gi
         path="soulbound"
         :span="6"
-        :label="infoLabel('collectionSoulbound')"
+        :label="infoLabel('soulbound')"
         :label-props="{ for: 'soulbound' }"
       >
         <select-options
@@ -96,7 +96,7 @@
       <n-form-item-gi
         path="royaltiesAddress"
         :span="6"
-        :label="infoLabel('collectionRoyaltiesAddress')"
+        :label="infoLabel('royaltiesAddress')"
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
@@ -111,7 +111,7 @@
       <n-form-item-gi
         path="royaltiesFees"
         :span="6"
-        :label="infoLabel('collectionRoyaltiesFees')"
+        :label="infoLabel('royaltiesFees')"
         :label-props="{ for: 'royaltiesFees' }"
       >
         <n-input-number
@@ -131,7 +131,7 @@
         <n-checkbox
           v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
-          :label="infoLabel('collectionDrop')"
+          :label="infoLabel('drop')"
         />
       </n-form-item-gi>
     </n-grid>
@@ -141,7 +141,7 @@
       <n-form-item-gi
         path="dropPrice"
         :span="6"
-        :label="$t('form.label.collectionDropPrice', { currency: chainCurrency() })"
+        :label="$t('form.label.collection.dropPrice', { currency: chainCurrency() })"
         :label-props="{ for: 'dropPrice' }"
       >
         <n-input-number
@@ -158,7 +158,7 @@
       <n-form-item-gi
         path="dropStart"
         :span="6"
-        :label="infoLabel('collectionDropStart')"
+        :label="infoLabel('dropStart')"
         :label-props="{ for: 'dropStart' }"
       >
         <n-date-picker
@@ -179,7 +179,7 @@
         v-if="collectionStore.form.base.chainType === ChainType.EVM"
         path="dropReserve"
         :span="6"
-        :label="infoLabel('collectionDropReserve')"
+        :label="infoLabel('dropReserve')"
         :label-props="{ for: 'dropReserve' }"
       >
         <n-input-number
@@ -196,7 +196,7 @@
         v-if="collectionStore.form.base.chainType === ChainType.SUBSTRATE"
         path="royaltiesAddress"
         :span="6"
-        :label="infoLabel('collectionDropAddress')"
+        :label="infoLabel('dropAddress')"
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
@@ -220,6 +220,7 @@
 
 <script lang="ts" setup>
 const message = useMessage();
+const { labelInfo } = useComputing();
 const collectionStore = useCollectionStore();
 const {
   booleanSelect,
@@ -230,7 +231,6 @@ const {
   chainCurrency,
   disablePastDate,
   disablePastTime,
-  infoLabel,
 } = useCollection();
 
 onMounted(() => {
@@ -238,6 +238,10 @@ onMounted(() => {
     collectionStore.form.behavior.maxSupply = collectionStore.csvData.length;
   }
 });
+
+function infoLabel(field: string) {
+  return labelInfo(field, 'form.label.collection');
+}
 
 // Submit
 function handleSubmitForm(e: Event | MouseEvent) {

@@ -20,7 +20,7 @@
         <n-form-item-gi
           :span="8"
           path="base.name"
-          :label="infoLabel('collectionName')"
+          :label="infoLabel('name')"
           :label-props="{ for: 'name' }"
         >
           <n-input
@@ -35,7 +35,7 @@
         <n-form-item-gi
           :span="4"
           path="base.symbol"
-          :label="infoLabel('collectionSymbol')"
+          :label="infoLabel('symbol')"
           :label-props="{ for: 'symbol' }"
         >
           <n-input
@@ -50,11 +50,7 @@
       </n-grid>
 
       <!--  Chain -->
-      <n-form-item
-        path="base.chain"
-        :label="infoLabel('collectionChain')"
-        :label-props="{ for: 'chain' }"
-      >
+      <n-form-item path="base.chain" :label="infoLabel('chain')" :label-props="{ for: 'chain' }">
         <select-options
           v-model:value="collectionStore.form.base.chain"
           :options="chains"
@@ -69,7 +65,7 @@
       <n-form-item
         v-show="collectionStore.form.base.chain === Chains.ASTAR"
         path="base.chainType"
-        :label="infoLabel('collectionChainType')"
+        :label="infoLabel('chainType')"
         :label-props="{ for: 'chainType' }"
       >
         <select-options
@@ -89,7 +85,7 @@
           collectionStore.form.base.chainType === ChainType.EVM
         "
         path="base.collectionType"
-        :label="infoLabel('collectionType')"
+        :label="infoLabel('type')"
         :label-props="{ for: 'collectionType' }"
       >
         <select-options
@@ -109,7 +105,7 @@
           :span="8"
           path="behavior.baseUri"
           :label-props="{ for: 'baseUri' }"
-          :label="infoLabel('collectionBaseUri')"
+          :label="infoLabel('baseUri')"
         >
           <n-input
             v-model:value="collectionStore.form.behavior.baseUri"
@@ -124,7 +120,7 @@
           :class="{ 'hide-feedback': !!metadataUri }"
           :span="4"
           path="behavior.baseExtension"
-          :label="infoLabel('collectionBaseExtension')"
+          :label="infoLabel('baseExtension')"
           :label-props="{ for: 'baseExtension' }"
         >
           <n-input
@@ -145,7 +141,7 @@
           path="behavior.supplyLimited"
           :span="6"
           :label-props="{ for: 'supplyLimited' }"
-          :label="infoLabel('collectionSupplyLimited')"
+          :label="infoLabel('supplyLimited')"
         >
           <select-options
             v-model:value="collectionStore.form.behavior.supplyLimited"
@@ -162,7 +158,7 @@
           path="behavior.maxSupply"
           :span="6"
           :label-props="{ for: 'maxSupply' }"
-          :label="infoLabel('collectionMaxSupply')"
+          :label="infoLabel('maxSupply')"
         >
           <n-input-number
             v-model:value="collectionStore.form.behavior.maxSupply"
@@ -191,7 +187,7 @@
           path="behavior.revocable"
           :span="6"
           :label-props="{ for: 'revocable' }"
-          :label="infoLabel('collectionRevocable')"
+          :label="infoLabel('revocable')"
         >
           <select-options
             v-model:value="collectionStore.form.behavior.revocable"
@@ -207,7 +203,7 @@
           path="behavior.soulbound"
           :span="6"
           :label-props="{ for: 'soulbound' }"
-          :label="infoLabel('collectionSoulbound')"
+          :label="infoLabel('soulbound')"
         >
           <select-options
             v-model:value="collectionStore.form.behavior.soulbound"
@@ -229,7 +225,7 @@
         <n-form-item-gi
           path="behavior.royaltiesAddress"
           :span="6"
-          :label="infoLabel('collectionRoyaltiesAddress')"
+          :label="infoLabel('royaltiesAddress')"
           :label-props="{ for: 'royaltiesAddress' }"
         >
           <n-input
@@ -244,7 +240,7 @@
         <n-form-item-gi
           path="behavior.royaltiesFees"
           :span="6"
-          :label="infoLabel('collectionRoyaltiesFees')"
+          :label="infoLabel('royaltiesFees')"
           :label-props="{ for: 'royaltiesFees' }"
         >
           <n-input-number
@@ -263,7 +259,7 @@
         <n-checkbox
           v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
-          :label="infoLabel('collectionDrop')"
+          :label="infoLabel('drop')"
         />
       </n-form-item>
 
@@ -272,7 +268,7 @@
         <n-form-item-gi
           path="behavior.dropPrice"
           :span="6"
-          :label="$t('form.label.collectionDropPrice', { currency: chainCurrency() })"
+          :label="$t('form.label.collection.dropPrice', { currency: chainCurrency() })"
           :label-props="{ for: 'dropPrice' }"
         >
           <n-input-number
@@ -287,11 +283,7 @@
         </n-form-item-gi>
 
         <!--  Collection Drop start -->
-        <n-form-item-gi
-          path="behavior.dropStart"
-          :span="6"
-          :label="infoLabel('collectionDropStart')"
-        >
+        <n-form-item-gi path="behavior.dropStart" :span="6" :label="infoLabel('dropStart')">
           <n-date-picker
             v-model:value="collectionStore.form.behavior.dropStart"
             class="w-full"
@@ -309,7 +301,7 @@
           v-if="collectionStore.form.base.chainType === ChainType.EVM"
           path="behavior.dropReserve"
           :span="6"
-          :label="infoLabel('collectionDropReserve')"
+          :label="infoLabel('dropReserve')"
         >
           <n-input-number
             v-model:value="collectionStore.form.behavior.dropReserve"
@@ -324,7 +316,7 @@
           v-if="collectionStore.form.base.chainType === ChainType.SUBSTRATE"
           path="behavior.royaltiesAddress"
           :span="6"
-          :label="infoLabel('collectionDropAddress')"
+          :label="infoLabel('dropAddress')"
           :label-props="{ for: 'royaltiesAddress' }"
         >
           <n-input
@@ -373,6 +365,7 @@ const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
+const { labelInfo } = useComputing();
 const { getPriceServiceName } = useNft();
 const {
   booleanSelect,
@@ -389,7 +382,6 @@ const {
   collectionEndpoint,
   disablePastDate,
   disablePastTime,
-  infoLabel,
   onChainChange,
   prepareFormData,
 } = useCollection();
@@ -411,6 +403,10 @@ watch(
     onChainChange(chain);
   }
 );
+
+function infoLabel(field: string) {
+  return labelInfo(field, 'form.label.collection');
+}
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {

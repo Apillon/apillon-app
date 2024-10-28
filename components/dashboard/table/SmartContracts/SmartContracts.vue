@@ -36,10 +36,18 @@ const availableColumns = ref([
   { value: 'name', label: t('dashboard.service.smartContracts.table.name') },
   { value: 'chain', label: t('dashboard.service.smartContracts.table.chain') },
   { value: 'contractAddress', label: t('dashboard.service.smartContracts.table.contractAddress') },
+  { value: 'version', label: t('dashboard.service.smartContracts.table.version') },
   { value: 'description', label: t('general.description') },
   { value: 'contractStatus', label: t('dashboard.service.smartContracts.table.contractStatus') },
 ]);
-const selectedColumns = ref(['name', 'chain', 'contractAddress', 'description', 'contractStatus']);
+const selectedColumns = ref([
+  'name',
+  'chain',
+  'contractAddress',
+  'version',
+  'description',
+  'contractStatus',
+]);
 
 const columns = computed(() => [
   {
@@ -71,6 +79,11 @@ const columns = computed(() => [
         ''
       );
     },
+  },
+  {
+    key: 'version',
+    title: t('dashboard.service.smartContracts.table.version'),
+    className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('version') }],
   },
   {
     key: 'description',

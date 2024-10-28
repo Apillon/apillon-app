@@ -27,31 +27,31 @@
       </thead>
       <tbody>
         <tr>
-          <td>{{ $t('form.label.collectionName') }}:</td>
+          <td>{{ $t('form.label.collection.name') }}:</td>
           <td>
             <span class="text-white">{{ collectionStore.form.base.name }}</span>
           </td>
         </tr>
         <tr>
-          <td>{{ $t('form.label.collectionSymbol') }}:</td>
+          <td>{{ $t('form.label.collection.symbol') }}:</td>
           <td>
             <span class="text-white">{{ collectionStore.form.base.symbol }}</span>
           </td>
         </tr>
         <tr>
-          <td>{{ $t('form.label.collectionChain') }}:</td>
+          <td>{{ $t('form.label.collection.chain') }}:</td>
           <td>
             <span class="text-white">{{ getChainName(collectionStore.form.base.chain) }}</span>
           </td>
         </tr>
         <tr>
-          <td>{{ $t('form.label.collectionChainType') }}:</td>
+          <td>{{ $t('form.label.collection.chainType') }}:</td>
           <td>
             <span class="text-white">{{ ChainType[collectionStore.form.base.chainType] }}</span>
           </td>
         </tr>
         <tr>
-          <td>{{ $t('form.label.collectionType') }}:</td>
+          <td>{{ $t('form.label.collection.type') }}:</td>
           <td>
             <span class="text-white">
               {{ getCollectionTypeName(collectionStore.form.base.collectionType) }}
@@ -59,7 +59,7 @@
           </td>
         </tr>
         <tr>
-          <td>{{ $t('form.label.collectionUseGateway') }}:</td>
+          <td>{{ $t('form.label.collection.useGateway') }}:</td>
           <td>
             <span class="text-white">
               {{
@@ -71,7 +71,7 @@
           </td>
         </tr>
         <tr>
-          <td>{{ $t('form.label.collectionUseIpns') }}:</td>
+          <td>{{ $t('form.label.collection.useIpns') }}:</td>
           <td>
             <span class="text-white">
               {{
@@ -94,7 +94,7 @@
       </thead>
       <tbody>
         <tr>
-          <td>{{ $t('form.label.collectionSupplyLimited') }}:</td>
+          <td>{{ $t('form.label.collection.supplyLimited') }}:</td>
           <td>
             <span class="text-white">
               {{
@@ -106,7 +106,7 @@
           </td>
         </tr>
         <tr>
-          <td>{{ $t('form.label.collectionRevocable') }}:</td>
+          <td>{{ $t('form.label.collection.revocable') }}:</td>
           <td>
             <span class="text-white">
               {{
@@ -118,7 +118,7 @@
           </td>
         </tr>
         <tr>
-          <td>{{ $t('form.label.collectionSoulbound') }}:</td>
+          <td>{{ $t('form.label.collection.soulbound') }}:</td>
           <td>
             <span class="text-white">
               {{
@@ -130,7 +130,7 @@
           </td>
         </tr>
         <tr>
-          <td>{{ $t('form.label.collectionRoyaltiesFees') }}:</td>
+          <td>{{ $t('form.label.collection.royaltiesFees') }}:</td>
           <td>
             <span class="text-white">
               {{
@@ -142,7 +142,7 @@
           </td>
         </tr>
         <tr v-if="collectionStore.form.behavior.royaltiesAddress">
-          <td>{{ $t('form.label.collectionRoyaltiesAddress') }}:</td>
+          <td>{{ $t('form.label.collection.royaltiesAddress') }}:</td>
           <td>
             <span class="text-white">
               {{ collectionStore.form.behavior.royaltiesAddress }}
@@ -150,7 +150,7 @@
           </td>
         </tr>
         <tr>
-          <td>{{ $t('form.label.collectionDrop') }}:</td>
+          <td>{{ $t('form.label.collection.drop') }}:</td>
           <td>
             <span class="text-white">
               {{
@@ -163,13 +163,13 @@
         </tr>
         <template v-if="collectionStore.form.behavior.drop">
           <tr>
-            <td>{{ $t('form.label.collectionDropPrice', { currency: chainCurrency() }) }}:</td>
+            <td>{{ $t('form.label.collection.dropPrice', { currency: chainCurrency() }) }}:</td>
             <td>
               <span class="text-white"> {{ collectionStore.form.behavior.dropPrice }} </span>
             </td>
           </tr>
           <tr>
-            <td>{{ $t('form.label.collectionDropStart') }}:</td>
+            <td>{{ $t('form.label.collection.dropStart') }}:</td>
             <td>
               <span class="text-white">
                 {{ timestampToDateAndTime(collectionStore.form.behavior.dropStart / 1000) }}
@@ -177,7 +177,7 @@
             </td>
           </tr>
           <tr>
-            <td>{{ $t('form.label.collectionDropReserve') }}:</td>
+            <td>{{ $t('form.label.collection.dropReserve') }}:</td>
             <td>
               <span class="text-white"> {{ collectionStore.form.behavior.dropReserve }} </span>
             </td>

@@ -41,7 +41,7 @@
 import { useAccount } from 'use-wagmi';
 import { createPublicClient, createWalletClient, custom, http } from 'viem';
 
-const emit = defineEmits(['submitSuccess']);
+const emit = defineEmits(['submitSuccess', 'transferred']);
 const props = defineProps({
   args: { type: Array<string | null>, default: null },
   btnText: { type: String, default: null },
@@ -69,9 +69,11 @@ const rules: NFormRules = props.args
   ? {}
   : props.fn.inputs.reduce(
       (acc, item) =>
-        Object.assign(acc, {
-          [item.name]: ruleRequired(t('validation.smartContracts.fieldRequired')),
-        }),
+        item.name !== 'data'
+          ? Object.assign(acc, {
+              [item.name]: ruleRequired(t('validation.smartContracts.fieldRequired')),
+            })
+          : acc,
       {}
     );
 
@@ -179,6 +181,15 @@ async function execOwnerWrite(methodName: string) {
       }
     );
     message.success(t('dashboard.service.smartContracts.functions.executed'));
+
+    if (methodName === 'transferOwnership') {
+      deployedContractStore.active.contractStatus = SmartContractStatus.TRANSFERRING;
+      deployedContractStore.items.forEach(item => {
+        if (item.contract_uuid === deployedContractStore.active.contract_uuid) {
+          item.contractStatus = SmartContractStatus.TRANSFERRING;
+        }
+      });
+    }
   } catch (e) {
     message.error(userFriendlyMsg(e));
   } finally {

@@ -20,7 +20,7 @@
           <!-- DEMO -->
           <Demo
             :image="NftTemplateJPG"
-            link="https://github.com/Apillon/ps-signup-email-airdrop"
+            link="https://github.com/Apillon/apillon-evm-contracts"
             :title="$t('dashboard.solution.viewCode')"
           />
         </div>
