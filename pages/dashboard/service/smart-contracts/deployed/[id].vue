@@ -181,10 +181,6 @@ onMounted(() => {
       deployedContractStore.active = currentSmartContract;
       initFunctions();
       pageLoading.value = false;
-      setTimeout(
-        () => (deployedContractStore.active.contractStatus = SmartContractStatus.TRANSFERRING),
-        1000
-      );
     }
   });
 });
