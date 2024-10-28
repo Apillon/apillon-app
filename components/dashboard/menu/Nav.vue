@@ -125,7 +125,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.nav.cloudFunctions'),
       to: 'dashboard-service-cloud-functions',
       iconName: 'icon-cloud-functions',
-      show: !isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
       soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
       disabled:
         isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
@@ -147,7 +146,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.nav.embeddedWallet'),
       to: 'dashboard-service-embedded-wallet',
       iconName: 'icon-wallet',
-      show: !isMenuItemDisabled(Feature.EMBEDDED_WALLET),
       soon: isMenuItemDisabled(Feature.EMBEDDED_WALLET),
       beta: isBetaFeature(Feature.EMBEDDED_WALLET),
       disabled:
@@ -160,16 +158,17 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.nav.smartContracts'),
       to: 'dashboard-service-smart-contracts',
       iconName: 'icon-file',
-      show: !isMenuItemDisabled(Feature.SMART_CONTRACTS),
       soon: isMenuItemDisabled(Feature.SMART_CONTRACTS),
+      beta: isBetaFeature(Feature.SMART_CONTRACTS),
       disabled: isMenuItemDisabled(Feature.SMART_CONTRACTS) || zeroProjects.value,
     },
     {
       key: 'dashboard-service-indexing',
       label: t('dashboard.nav.indexing'),
       to: 'dashboard-service-indexing',
-      iconName: 'icon-cloud-functions',
+      iconName: 'icon-indexer',
       soon: isMenuItemDisabled(Feature.INDEXING),
+      beta: isBetaFeature(Feature.INDEXING),
       disabled:
         isMenuItemDisabled(Feature.INDEXING) ||
         !authStore.isUserAllowed(Permission.INDEXING) ||
@@ -179,46 +178,13 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       key: 'dashboard-service-rpc',
       label: t('dashboard.nav.rpc'),
       to: 'dashboard-service-rpc',
-      icon: 'menu/rpc',
+      iconName: 'icon-rpc',
       soon: isMenuItemDisabled(Feature.RPC),
+      beta: isBetaFeature(Feature.RPC),
       disabled:
         isMenuItemDisabled(Feature.RPC) ||
         !authStore.isUserAllowed(Permission.RPC) ||
         zeroProjects.value,
-    },
-  ];
-
-  const smartContractsChildren = [
-    {
-      key: 'dashboard-smart-contracts',
-      label: t('dashboard.nav.explore'),
-      class: 'text-yellow',
-      iconName: 'icon-wide-right',
-      show: !props.collapsed,
-    },
-    {
-      key: 'dashboard-smart-erc-721',
-      label: 'ERC-721',
-      iconName: 'icon-erc-721',
-      disabled: isMenuItemDisabled(Feature.ERC721) || zeroProjects.value,
-    },
-    {
-      key: 'dashboard-smart-erc-20',
-      label: 'ERC-20',
-      iconName: 'icon-erc-20',
-      disabled: isMenuItemDisabled(Feature.ERC20) || zeroProjects.value,
-    },
-    {
-      key: 'dashboard-smart-erc-4437',
-      label: 'ERC-4337',
-      iconName: 'icon-erc-4437',
-      disabled: isMenuItemDisabled(Feature.ERC4337) || zeroProjects.value,
-    },
-    {
-      key: 'dashboard-smart-rmrk',
-      label: 'RMRK',
-      iconName: 'icon-rmrk',
-      disabled: isMenuItemDisabled(Feature.RMRK) || zeroProjects.value,
     },
   ];
 
@@ -334,11 +300,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
           key: 'divider-2',
           type: 'divider',
         },
-        // ...smartContractsChildren,
-        // {
-        //   key: 'divider-3',
-        //   type: 'divider',
-        // },
         ...solutionsMenuMobile,
         ...configurationChildren,
       ]
@@ -350,11 +311,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
           show: !props.collapsed,
           children: [...servicesChildren],
         },
-        // {
-        //   label: t('dashboard.nav.smartContracts'),
-        //   key: 'smart-contracts',
-        //   children: [...smartContractsChildren],
-        // },
         ...solutionsMenu,
         {
           label: t('dashboard.nav.configuration'),

@@ -6,7 +6,7 @@
     :columns="columns"
     :data="data"
     :loading="rpcEndpointStore.loading"
-    :max-height="200"
+    :max-height="250"
     :row-key="rowKey"
   />
 </template>

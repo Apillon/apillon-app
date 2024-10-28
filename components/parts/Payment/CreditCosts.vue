@@ -78,7 +78,7 @@ const props = defineProps({
 
 const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
-const { chains, substrateChains } = useCollection();
+const { chains, evmChains, substrateChains } = useCollection();
 
 const identityChains = enumKeyValues(IdentityChains);
 const services = enumKeyValues(ServiceTypeName);
@@ -116,6 +116,8 @@ const chainsByService = computed(() => {
       return [...chains, ...substrateChains];
     case ServiceTypeName.STORAGE:
       return [];
+    case ServiceTypeName.CONTRACTS:
+      return [...evmChains, ...chains];
     default:
       return [...identityChains, ...chains, ...substrateChains];
   }
@@ -135,7 +137,7 @@ const shownPrices = computed(() => {
     );
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
-    const chainName = getChainName(selectedChain.value);
+    const chainName = getChainName(selectedChain.value, props.service);
     return servicePrices.value.filter(item => item.name.includes(chainName));
   } else if (props.filterByService && selectedService.value) {
     /** Filter by service */
@@ -156,22 +158,32 @@ watch(
 );
 
 function getChainName(chain: string | number, service?: string): string {
-  if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
+  if (service === ServiceTypeName.CONTRACTS && Number.isInteger(chain)) {
+    return chain in EvmChain ? EvmChain[chain] : Chains[chain];
+  } else if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
     return chain in Chains ? Chains[chain] : SubstrateChain[chain] + '_WASM';
   }
   return `${chain}`;
 }
 
 function getIconName(service: ProductPriceInterface) {
-  switch (service.category) {
+  switch (service.category.trim()) {
     case PriceServiceCategory.ACURAST:
       return 'icon/cloud-functions';
+    case PriceServiceCategory.ASTAR_CONTRACT:
     case PriceServiceCategory.ASTAR_NFT:
       return 'logo/astar';
+    case PriceServiceCategory.MOONBASE_CONTRACT:
     case PriceServiceCategory.MOONBASE_NFT:
       return 'logo/moonbase';
+    case PriceServiceCategory.MOONBEAM_CONTRACT:
     case PriceServiceCategory.MOONBEAM_NFT:
       return 'logo/moonbeam';
+    case PriceServiceCategory.ETHEREUM_CONTRACT:
+    case PriceServiceCategory.ETHEREUM_NFT:
+    case PriceServiceCategory.SEPOLIA_CONTRACT:
+    case PriceServiceCategory.SEPOLIA_NFT:
+      return 'logo/evm';
     case PriceServiceCategory.GRILL_CHAT:
       return 'logo/subsocial';
   }

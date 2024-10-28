@@ -23,6 +23,7 @@ const config: ConfigInterface = {
     'DISCORD',
     'EMBEDDED_WALLET',
     'HOSTING',
+    'INDEXING',
     'KILT_LOGIN',
     'MARKETING',
     'NFT',
@@ -39,7 +40,7 @@ const config: ConfigInterface = {
     'STORAGE',
     'WALLET_LOGIN',
   ],
-  betaFeatures: ['ASSET_HUB', 'EMBEDDED_WALLET', 'SMART_CONTRACTS'],
+  betaFeatures: ['ASSET_HUB', 'EMBEDDED_WALLET', 'INDEXING', 'RPC', 'SMART_CONTRACTS'],
 };
 
 export default config;

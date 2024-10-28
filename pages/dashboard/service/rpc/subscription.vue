@@ -9,7 +9,7 @@
     </template>
 
     <slot>
-      <div class="mb-6">
+      <div class="pb-8 mb-6">
         <div class="flex flex-col gap-16">
           <div class="flex flex-col">
             <h4>

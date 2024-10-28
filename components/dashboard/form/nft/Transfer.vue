@@ -3,7 +3,7 @@
     <!--  NFT Mint Address -->
     <n-form-item
       path="address"
-      :label="$t('form.label.nftTransferAddress')"
+      :label="$t('form.label.nft.transferAddress')"
       :label-props="{ for: 'address' }"
     >
       <n-input

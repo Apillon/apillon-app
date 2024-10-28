@@ -36,6 +36,12 @@ export default function useCollection() {
         value: SubstrateChain[k],
       };
     });
+  const evmChains = enumKeys(EvmChain)
+    .filter(key => [EvmChain.ETHEREUM, EvmChain.SEPOLIA].includes(EvmChain[key]))
+    .map(k => {
+      return { name: k.toLowerCase(), label: t(`nft.evmChain.${EvmChain[k]}`), value: EvmChain[k] };
+    });
+
   const chainTypes = enumKeys(ChainType).map(k => {
     return {
       name: k.toLowerCase(),
@@ -331,6 +337,7 @@ export default function useCollection() {
     chains,
     chainTypes,
     collectionTypes,
+    evmChains,
     isUnique,
     nftChains,
     substrateChains,

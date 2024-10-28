@@ -24,7 +24,7 @@
           <span class="text-primary">{{ $t('indexer.update') }}</span>
         </n-button>
 
-        <!-- View documentation -->
+        <!-- View documentation
         <Btn
           type="secondary"
           size="small"
@@ -33,7 +33,7 @@
         >
           <span class="icon-file text-xl mr-2"></span>
           {{ $t('embeddedWallet.viewDocumentation') }}
-        </Btn>
+        </Btn> -->
 
         <!-- Actions -->
         <n-dropdown

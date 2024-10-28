@@ -34,9 +34,9 @@
             </tr>
             <tr>
               <td>
-                <span class="text-white lg:whitespace-nowrap">{{
-                  $t('indexer.lastDeployed')
-                }}</span>
+                <span class="text-white lg:whitespace-nowrap">
+                  {{ $t('indexer.lastDeployed') }}
+                </span>
               </td>
               <td>
                 {{ dateTimeToDateAndTime(indexerStore.active.squid?.deployedAt || '') }}
@@ -124,7 +124,7 @@
           </tbody>
         </n-table>
       </n-space>
-      <div v-else class="d-flex flex-column">
+      <div v-else class="d-flex flex-column pb-8">
         <h4>{{ $t('indexer.instructions.deployYourIndexer') }}</h4>
         <p>
           {{ $t('indexer.instructions.instruction1') }}

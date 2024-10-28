@@ -67,7 +67,7 @@
             <n-form-item-gi
               :span="12"
               path="id"
-              :label="infoLabel('nftId')"
+              :label="infoLabel('id')"
               :label-props="{ for: 'nftId' }"
             >
               <n-input-number
@@ -85,7 +85,7 @@
             <n-form-item-gi
               :span="12"
               path="name"
-              :label="infoLabel('nftName')"
+              :label="infoLabel('name')"
               :label-props="{ for: 'name' }"
             >
               <n-input
@@ -100,7 +100,7 @@
             <n-form-item-gi
               :span="12"
               path="description"
-              :label="infoLabel('nftDescription')"
+              :label="infoLabel('description')"
               :label-props="{ for: 'description' }"
             >
               <n-input
@@ -116,7 +116,7 @@
             <n-form-item-gi
               :span="12"
               path="copies"
-              :label="infoLabel('nftCopies')"
+              :label="infoLabel('copies')"
               :label-props="{ for: 'copies' }"
             >
               <n-input-number
@@ -140,7 +140,7 @@
 <script lang="ts" setup>
 import type { UploadInst } from 'naive-ui';
 const nft = useNft();
-const { t, te } = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
 const { labelInfo } = useComputing();
@@ -149,7 +149,7 @@ const { formRef, isUnique, rulesSingle } = useCollection();
 const uploadRef = ref<UploadInst | null>(null);
 
 function infoLabel(field: string) {
-  return labelInfo(field, 'form.label.collection');
+  return labelInfo(field, 'form.label.nft');
 }
 
 function removeImages() {

@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'apillon';
-  src: url('./fonts/apillon/apillon.eot?49hmrm');
+  src: url('./fonts/apillon/apillon.eot?30d64w');
   src:
-    url('./fonts/apillon/apillon.eot?49hmrm#iefix') format('embedded-opentype'),
-    url('./fonts/apillon/apillon.ttf?49hmrm') format('truetype'),
-    url('./fonts/apillon/apillon.woff?49hmrm') format('woff'),
-    url('./fonts/apillon/apillon.svg?49hmrm#apillon') format('svg');
+    url('./fonts/apillon/apillon.eot?30d64w#iefix') format('embedded-opentype'),
+    url('./fonts/apillon/apillon.ttf?30d64w') format('truetype'),
+    url('./fonts/apillon/apillon.woff?30d64w') format('woff'),
+    url('./fonts/apillon/apillon.svg?30d64w#apillon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -43,6 +43,15 @@
   }
 }
 
+.icon-indexing:before {
+  content: '\e968';
+}
+.icon-indexer:before {
+  content: '\e966';
+}
+.icon-rpc:before {
+  content: '\e967';
+}
 .icon-contracts:before {
   content: '\e965';
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="border-none">
     <n-menu
       v-bind="$attrs"
       v-model:value="selectedMenu"

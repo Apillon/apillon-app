@@ -8,7 +8,7 @@
     >
       <n-form-item
         path="trait_type"
-        :label="infoLabel('nftTraitType')"
+        :label="infoLabel('traitType')"
         :label-props="{ for: 'trait_type' }"
       >
         <n-input
@@ -21,7 +21,7 @@
 
       <n-form-item
         path="display_type"
-        :label="infoLabel('nftDisplayType')"
+        :label="infoLabel('displayType')"
         :label-props="{ for: 'display_type' }"
       >
         <select-options
@@ -33,7 +33,7 @@
         />
       </n-form-item>
 
-      <n-form-item path="value" :label="infoLabel('nftValue')" :label-props="{ for: 'value' }">
+      <n-form-item path="value" :label="infoLabel('value')" :label-props="{ for: 'value' }">
         <n-input
           v-model:value="collectionStore.attribute.value"
           :input-props="{ id: 'value' }"
@@ -84,7 +84,7 @@ const renderOption = ({ node, option }: DropdownRenderOption) => {
 };
 
 function infoLabel(field: string) {
-  return labelInfo(field, 'form.label.collection');
+  return labelInfo(field, 'form.label.nft');
 }
 
 function handleSubmitForm() {

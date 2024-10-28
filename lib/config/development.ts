@@ -46,7 +46,7 @@ const config: ConfigInterface = {
     'TWO_FACTOR_AUTHENTICATION',
     'WALLET_LOGIN',
   ],
-  betaFeatures: [],
+  betaFeatures: ['ASSET_HUB', 'EMBEDDED_WALLET', 'INDEXING', 'RPC', 'SMART_CONTRACTS'],
 };
 
 export default config;

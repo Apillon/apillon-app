@@ -4,21 +4,17 @@
       <HeaderRpc v-if="isRpcActivated" />
     </template>
 
-    <template v-if="isRpcActivated">
-      <n-space class="my-8">
-        <select-options
-          v-if="rpcApiKeyStore.hasRpcApiKeys"
-          v-model:value="rpcApiKeyStore.selectedId"
-          :options="options"
-          class="min-w-[11rem] w-[20vw] max-w-xs"
-          size="small"
-          filterable
-        />
-      </n-space>
-      <div class="flex flex-between">
-        <MenuRpc />
-      </div>
-      <slot>
+    <n-space v-if="isRpcActivated" class="pb-8" :size="32" vertical>
+      <select-options
+        v-if="rpcApiKeyStore.hasRpcApiKeys"
+        v-model:value="rpcApiKeyStore.selectedId"
+        :options="options"
+        class="min-w-[11rem] w-[20vw] max-w-xs"
+        size="small"
+        filterable
+      />
+      <MenuRpc class="border-b border-bg-lighter" />
+      <div>
         <div class="flex justify-end">
           <Btn
             class="font-bold no-underline"
@@ -28,30 +24,25 @@
             {{ $t('rpc.endpoint.viewAll') }}
           </Btn>
         </div>
-      </slot>
-      <slot v-if="endpoints.length > 0">
         <TableRpcEndpoint
+          v-if="endpoints.length > 0"
           :rpc-endpoints="rpcEndpointStore.items.filter(item => item.isFavorite)"
           :is-owner="dataStore.isUserOwner"
         />
-      </slot>
-      <Empty
-        v-else
-        :title="$t('rpc.endpoint.noFavoriteEndpointTitle')"
-        :info="$t('rpc.endpoint.noFavoriteEndpointDescription')"
-        icon="storage/empty"
-      >
-        <Btn type="primary" @click="router.push(`/dashboard/service/rpc/endpoints`)">
-          {{ $t('rpc.endpoint.browse') }}
-        </Btn>
-      </Empty>
-    </template>
-    <template v-else-if="!rpcApiKeyStore.selectedId">
-      <RpcNoApiKeys />
-    </template>
-    <template v-else>
-      <RpcDisabled />
-    </template>
+        <Empty
+          v-else
+          :title="$t('rpc.endpoint.noFavoriteEndpointTitle')"
+          :info="$t('rpc.endpoint.noFavoriteEndpointDescription')"
+          icon="storage/empty"
+        >
+          <Btn type="primary" @click="router.push(`/dashboard/service/rpc/endpoints`)">
+            {{ $t('rpc.endpoint.browse') }}
+          </Btn>
+        </Empty>
+      </div>
+    </n-space>
+    <RpcNoApiKeys v-else-if="!rpcApiKeyStore.selectedId" />
+    <RpcDisabled v-else />
   </Dashboard>
 </template>
 

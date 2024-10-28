@@ -9,7 +9,7 @@
     </template>
 
     <slot>
-      <div class="flex flex-col h-full">
+      <div class="flex flex-col h-full pb-8">
         <div class="flex flex-col flex-grow">
           <div class="flex flex-col gap-2">
             <h4>
@@ -63,15 +63,12 @@
             <h4 class="font-bold">{{ $t('rpc.apiKey.curious') }}</h4>
             <h4 class="font-normal">{{ $t('rpc.apiKey.explore') }}</h4>
           </div>
-
-          <slot>
-            <ActionsRpcPublicEndpoint />
-          </slot>
-          <slot>
-            <div v-if="rpcEndpointStore.hasPublicEndpoints" class="mb-4">
-              <TableRpcPublicEndpoint :rpc-endpoints="rpcEndpointStore.publicEndpoints" />
-            </div>
-          </slot>
+          <ActionsRpcPublicEndpoint />
+          <TableRpcPublicEndpoint
+            v-if="rpcEndpointStore.hasPublicEndpoints"
+            class="mb-4"
+            :rpc-endpoints="rpcEndpointStore.publicEndpoints"
+          />
         </div>
       </div>
     </slot>

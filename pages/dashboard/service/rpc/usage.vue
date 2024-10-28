@@ -4,7 +4,7 @@
       <HeaderRpc />
     </template>
     <slot>
-      <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="my-8">
+      <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="pb-8" :size="32" vertical>
         <select-options
           v-model:value="rpcApiKeyStore.selectedId"
           :options="options"
@@ -12,12 +12,7 @@
           size="small"
           filterable
         />
-      </n-space>
-
-      <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="pb-8" :size="32" vertical>
-        <slot>
-          <MenuRpc />
-        </slot>
+        <MenuRpc class="border-b border-bg-lighter" />
       </n-space>
       <RpcNoApiKeys v-else />
     </slot>

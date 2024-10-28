@@ -13,7 +13,7 @@
     <!--  NFT Mint Address -->
     <n-form-item
       path="receivingAddress"
-      :label="$t('form.label.nftMintAddress')"
+      :label="$t('form.label.nft.mintAddress')"
       :label-props="{ for: 'receivingAddress' }"
     >
       <n-input
@@ -25,7 +25,7 @@
     </n-form-item>
 
     <!--  NFT Mint Quantity -->
-    <n-form-item path="quantity" :label="$t('form.label.nftMintQuantity')">
+    <n-form-item path="quantity" :label="$t('form.label.nft.mintQuantity')">
       <n-input-number
         v-model:value="formData.quantity"
         :min="1"
