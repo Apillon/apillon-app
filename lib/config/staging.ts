@@ -40,7 +40,14 @@ const config: ConfigInterface = {
     'STORAGE',
     'WALLET_LOGIN',
   ],
-  betaFeatures: ['ASSET_HUB', 'EMBEDDED_WALLET', 'INDEXING', 'RPC', 'SMART_CONTRACTS'],
+  betaFeatures: [
+    'ASSET_HUB',
+    'EMBEDDED_WALLET',
+    'INDEXING',
+    'RPC',
+    'SMART_CONTRACTS',
+    'CLOUD_FUNCTIONS',
+  ],
 };
 
 export default config;

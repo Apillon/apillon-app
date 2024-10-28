@@ -91,15 +91,61 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
-      key: 'dashboard-service-authentication',
-      label: t('dashboard.nav.authentication'),
-      to: 'dashboard-service-authentication',
-      iconName: 'icon-authentication',
-      soon: isMenuItemDisabled(Feature.AUTHENTICATION),
+      key: 'dashboard-service-embedded-wallet',
+      label: t('dashboard.nav.embeddedWallet'),
+      to: 'dashboard-service-embedded-wallet',
+      iconName: 'icon-wallet',
+      soon: isMenuItemDisabled(Feature.EMBEDDED_WALLET),
+      beta: isBetaFeature(Feature.EMBEDDED_WALLET),
       disabled:
-        isMenuItemDisabled(Feature.AUTHENTICATION) ||
-        !authStore.isUserAllowed(Permission.AUTHENTICATION) ||
+        isMenuItemDisabled(Feature.EMBEDDED_WALLET) ||
+        !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
         zeroProjects.value,
+    },
+    {
+      key: 'dashboard-service-rpc',
+      label: t('dashboard.nav.rpc'),
+      to: 'dashboard-service-rpc',
+      iconName: 'icon-rpc',
+      soon: isMenuItemDisabled(Feature.RPC),
+      beta: isBetaFeature(Feature.RPC),
+      disabled:
+        isMenuItemDisabled(Feature.RPC) ||
+        !authStore.isUserAllowed(Permission.RPC) ||
+        zeroProjects.value,
+    },
+    {
+      key: 'dashboard-service-cloud-functions',
+      label: t('dashboard.nav.cloudFunctions'),
+      to: 'dashboard-service-cloud-functions',
+      iconName: 'icon-cloud-functions',
+      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
+      beta: isBetaFeature(Feature.CLOUD_FUNCTIONS),
+      disabled:
+        isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
+        !authStore.isUserAllowed(Permission.COMPUTING) ||
+        zeroProjects.value,
+    },
+    {
+      key: 'dashboard-service-indexing',
+      label: t('dashboard.nav.indexing'),
+      to: 'dashboard-service-indexing',
+      iconName: 'icon-indexer',
+      soon: isMenuItemDisabled(Feature.INDEXING),
+      beta: isBetaFeature(Feature.INDEXING),
+      disabled:
+        isMenuItemDisabled(Feature.INDEXING) ||
+        !authStore.isUserAllowed(Permission.INDEXING) ||
+        zeroProjects.value,
+    },
+    {
+      key: 'dashboard-service-smart-contracts',
+      label: t('dashboard.nav.smartContracts'),
+      to: 'dashboard-service-smart-contracts',
+      iconName: 'icon-file',
+      soon: isMenuItemDisabled(Feature.SMART_CONTRACTS),
+      beta: isBetaFeature(Feature.SMART_CONTRACTS),
+      disabled: isMenuItemDisabled(Feature.SMART_CONTRACTS) || zeroProjects.value,
     },
     {
       key: 'dashboard-service-asset-hub',
@@ -121,14 +167,14 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
-      key: 'dashboard-service-cloud-functions',
-      label: t('dashboard.nav.cloudFunctions'),
-      to: 'dashboard-service-cloud-functions',
-      iconName: 'icon-cloud-functions',
-      soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
+      key: 'dashboard-service-authentication',
+      label: t('dashboard.nav.authentication'),
+      to: 'dashboard-service-authentication',
+      iconName: 'icon-authentication',
+      soon: isMenuItemDisabled(Feature.AUTHENTICATION),
       disabled:
-        isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
-        !authStore.isUserAllowed(Permission.COMPUTING) ||
+        isMenuItemDisabled(Feature.AUTHENTICATION) ||
+        !authStore.isUserAllowed(Permission.AUTHENTICATION) ||
         zeroProjects.value,
     },
     {
@@ -139,51 +185,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       disabled:
         isMenuItemDisabled(Feature.SOCIAL) ||
         !authStore.isUserAllowed(Permission.SOCIAL) ||
-        zeroProjects.value,
-    },
-    {
-      key: 'dashboard-service-embedded-wallet',
-      label: t('dashboard.nav.embeddedWallet'),
-      to: 'dashboard-service-embedded-wallet',
-      iconName: 'icon-wallet',
-      soon: isMenuItemDisabled(Feature.EMBEDDED_WALLET),
-      beta: isBetaFeature(Feature.EMBEDDED_WALLET),
-      disabled:
-        isMenuItemDisabled(Feature.EMBEDDED_WALLET) ||
-        !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
-        zeroProjects.value,
-    },
-    {
-      key: 'dashboard-service-smart-contracts',
-      label: t('dashboard.nav.smartContracts'),
-      to: 'dashboard-service-smart-contracts',
-      iconName: 'icon-file',
-      soon: isMenuItemDisabled(Feature.SMART_CONTRACTS),
-      beta: isBetaFeature(Feature.SMART_CONTRACTS),
-      disabled: isMenuItemDisabled(Feature.SMART_CONTRACTS) || zeroProjects.value,
-    },
-    {
-      key: 'dashboard-service-indexing',
-      label: t('dashboard.nav.indexing'),
-      to: 'dashboard-service-indexing',
-      iconName: 'icon-indexer',
-      soon: isMenuItemDisabled(Feature.INDEXING),
-      beta: isBetaFeature(Feature.INDEXING),
-      disabled:
-        isMenuItemDisabled(Feature.INDEXING) ||
-        !authStore.isUserAllowed(Permission.INDEXING) ||
-        zeroProjects.value,
-    },
-    {
-      key: 'dashboard-service-rpc',
-      label: t('dashboard.nav.rpc'),
-      to: 'dashboard-service-rpc',
-      iconName: 'icon-rpc',
-      soon: isMenuItemDisabled(Feature.RPC),
-      beta: isBetaFeature(Feature.RPC),
-      disabled:
-        isMenuItemDisabled(Feature.RPC) ||
-        !authStore.isUserAllowed(Permission.RPC) ||
         zeroProjects.value,
     },
   ];
