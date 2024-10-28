@@ -56,7 +56,7 @@
             </div>
           </template>
           <p class="text-xs text-left mt-2">
-            {{ $t('nft.collection.labelInfo.collectionLogoSize') }}
+            {{ $t('form.label.collection.labelInfo.logoSize') }}
           </p>
         </div>
       </div>

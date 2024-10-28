@@ -88,7 +88,9 @@ function renderMenuExtra(option: NMenuOption) {
 }
 
 function renderMenuIcon(option: NMenuOption) {
-  if ('iconName' in option) {
+  if ('icon' in option) {
+    return h(resolveComponent('NuxtIcon'), { name: option.icon, class: 'text-xl mx-2' }, '');
+  } else if ('iconName' in option) {
     return h('span', { class: iconClass(option.iconName) }, '');
   }
   return null;

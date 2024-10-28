@@ -35,7 +35,7 @@
             </template>
             <div class="flex gap-y-8 flex-wrap pb-8 mb-8">
               <div class="lg:pr-6">
-                <SolutionContent :content="content" />
+                <SolutionContent class="lg:flex gap-4" inner-class="lg:w-1/2" :content="content" />
 
                 <h4 class="my-4">{{ $t('indexer.startNew') }}</h4>
 

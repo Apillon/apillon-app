@@ -183,22 +183,29 @@ export default function useCollection() {
       name: collectionStore.form.base.name,
       symbol: collectionStore.form.base.symbol,
       collectionType: collectionStore.form.base.collectionType,
-      baseExtension: collectionStore.form.behavior.baseExtension,
-      dropPrice: collectionStore.form.behavior.dropPrice,
       maxSupply:
         collectionStore.form.behavior.supplyLimited === 1
           ? collectionStore.form.behavior.maxSupply
           : 0,
-      drop: collectionStore.form.behavior.drop,
-      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
-      dropReserve: collectionStore.form.behavior.dropReserve || 0,
       isRevokable: collectionStore.form.behavior.revocable,
       isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
+      royaltiesAddress:
+        collectionStore.form.behavior.royaltiesFees === 0
+          ? undefined
+          : collectionStore.form.behavior.royaltiesAddress,
       royaltiesFees: collectionStore.form.behavior.royaltiesFees,
       baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
-      useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
-      useIpns: collectionStore.form.base.useIpns,
+      baseExtension: isUnique.value ? undefined : collectionStore.form.behavior.baseExtension,
+      drop: isUnique.value ? undefined : collectionStore.form.behavior.drop,
+      dropPrice: isUnique.value ? undefined : collectionStore.form.behavior.dropPrice,
+      dropStart: isUnique.value
+        ? undefined
+        : Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
+      dropReserve: isUnique.value ? undefined : collectionStore.form.behavior.dropReserve || 0,
+      useApillonIpfsGateway: isUnique.value
+        ? undefined
+        : collectionStore.form.base.useApillonIpfsGateway,
+      useIpns: isUnique.value ? undefined : collectionStore.form.base.useIpns,
     };
   }
 

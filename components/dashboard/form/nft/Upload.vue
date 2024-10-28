@@ -105,7 +105,7 @@
               {{ $t('nft.upload.csvFile') }}
             </Btn>
           </n-upload>
-          <IconInfo :tooltip="$t('nft.collection.labelInfo.csvUpload')" size="lg" />
+          <IconInfo :tooltip="$t('form.label.collection.labelInfo.csvUpload')" size="lg" />
         </div>
         <template v-else>
           <div class="flex text-left">

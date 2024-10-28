@@ -1078,7 +1078,9 @@
         "content": [
           {
             "headline": "Features:",
-            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints.",
+            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints."
+          },
+          {
             "benefits": [
               "Real-time Data Processing: Continuously indexes new blockchain data for immediate access.",
               "Historical Data Access: Easily retrieve past blockchain data for analysis or verification.",

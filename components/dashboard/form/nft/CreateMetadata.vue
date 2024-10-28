@@ -47,6 +47,7 @@ const emit = defineEmits(['submitSuccess']);
 const { t, te } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
@@ -142,12 +143,22 @@ async function prepareUniqueData(bucketUuid: string) {
 
   /** Get images links */
   const imageLinks: Record<string, string> = {};
-  for (let i = 0; i < collectionStore.images.length; i += 1) {
-    const img = collectionStore.images[i];
-    if (img?.file_uuid) {
-      const file = await getFile(bucketUuid, img.file_uuid);
-      imageLinks[file.name] = file.link;
-    }
+
+  if (collectionStore.images[0] && collectionStore.images[0]?.file_uuid) {
+    const file = await getFile(bucketUuid, collectionStore.images[0].file_uuid);
+    imageLinks[file.name] = file.link;
+  }
+  const filesChunks = sliceIntoChunks([...collectionStore.images], 100);
+
+  for (let i = 1; i <= filesChunks.length; i++) {
+    const uploadedImages = await bucketStore.fetchDirectoryContent({
+      bucketUuid: bucketUuid,
+      page: i,
+      limit: 100,
+    });
+    uploadedImages.forEach(img => {
+      imageLinks[img.name] = img.link;
+    });
   }
 
   /** Prepare metadata */
@@ -156,7 +167,7 @@ async function prepareUniqueData(bucketUuid: string) {
     const id = Number(meta.id) || key + 1;
     const m = Object.assign({}, meta);
     delete m.id;
-    m.image = imageLinks[meta.image];
+    m.image = meta.image in imageLinks ? imageLinks[meta.image] : meta.image;
     acc[id] = m;
     return acc;
   }, {});

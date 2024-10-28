@@ -105,7 +105,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       key: 'dashboard-service-asset-hub',
       label: t('dashboard.nav.assetHub'),
       to: 'dashboard-service-asset-hub',
-      iconName: 'icon-social',
+      icon: 'icon/asset-hub',
       show: !isMenuItemDisabled(Feature.ASSET_HUB),
       disabled: isMenuItemDisabled(Feature.ASSET_HUB) || zeroProjects.value,
     },
@@ -168,7 +168,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       key: 'dashboard-service-indexing',
       label: t('dashboard.nav.indexing'),
       to: 'dashboard-service-indexing',
-      iconName: 'icon-file',
+      iconName: 'icon-cloud-functions',
       soon: isMenuItemDisabled(Feature.INDEXING),
       disabled:
         isMenuItemDisabled(Feature.INDEXING) ||
@@ -179,7 +179,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       key: 'dashboard-service-rpc',
       label: t('dashboard.nav.rpc'),
       to: 'dashboard-service-rpc',
-      iconName: 'icon-web',
+      icon: 'menu/rpc',
       soon: isMenuItemDisabled(Feature.RPC),
       disabled:
         isMenuItemDisabled(Feature.RPC) ||
