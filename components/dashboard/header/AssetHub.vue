@@ -5,9 +5,10 @@
         <NuxtLink v-if="backLink" :to="backLink">
           <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
-        <div>
+        <div class="flex items-center">
           <h2 v-if="title">{{ title }}</h2>
           <h2 v-else>{{ $t('dashboard.service.assetHub.createAsset') }}</h2>
+          <img src="/icons/beta.svg" alt="Beta" class="w-14 h-5 inline-block ml-2" />
         </div>
       </n-space>
     </slot>
