@@ -76,50 +76,50 @@ export default function useCollection() {
    * Rules
    */
   const rulesBaseUri: FormItemRule[] = [
-    ruleRequired(t('validation.collectionBaseUriRequired')),
+    ruleRequired(t('validation.collection.baseUriRequired')),
     {
       type: 'url',
-      message: t('validation.collectionBaseUri'),
+      message: t('validation.collection.baseUri'),
     },
   ];
   const rulesMaxSupply: FormItemRule[] = [
     {
       max: NFT_MAX_SUPPLY,
       validator: validateMaxSupply,
-      message: t('validation.collectionMaxSupplyReached', {
+      message: t('validation.collection.maxSupplyReached', {
         max: NFT_MAX_SUPPLY,
       }),
     },
   ];
   const rulesDropPrice: FormItemRule[] = [
-    ruleRequired(t('validation.collectionDropPrice')),
+    ruleRequired(t('validation.collection.dropPrice')),
     {
       validator: validateDropPrice,
-      message: t('validation.collectionDropPrice'),
+      message: t('validation.collection.dropPrice'),
     },
   ];
   const rulesDropReserve: FormItemRule[] = [
-    ruleRequired(t('validation.collectionDropReserve')),
+    ruleRequired(t('validation.collection.dropReserve')),
     {
       validator: validateReserve,
-      message: t('validation.collectionDropReserve'),
+      message: t('validation.collection.dropReserve'),
     },
   ];
   const rulesRoyaltiesAddress: FormItemRule[] = [
     {
       required: isRoyaltyRequired(),
-      message: t('validation.collectionRoyaltiesAddressRequired'),
+      message: t('validation.collection.royaltiesAddressRequired'),
     },
     {
       validator: validateRoyaltiesAddress,
-      message: t('validation.collectionRoyaltiesAddress'),
+      message: t('validation.collection.royaltiesAddress'),
     },
   ];
   const rulesRoyaltyFee: FormItemRule[] = [
-    ruleRequired(t('validation.collectionRoyaltiesFeesRequired')),
+    ruleRequired(t('validation.collection.royaltiesFeesRequired')),
     {
       validator: validateNaturalNumber,
-      message: t('validation.collectionRoyaltiesFees'),
+      message: t('validation.collection.royaltiesFees'),
     },
   ];
   const validateSingleIdRequired: FormItemRule[] = [
@@ -131,29 +131,29 @@ export default function useCollection() {
   ];
 
   const rules: NFormRules = {
-    symbol: ruleRequired(t('validation.collectionSymbolRequired')),
-    'base.symbol': ruleRequired(t('validation.collectionSymbolRequired')),
-    name: ruleRequired(t('validation.collectionNameRequired')),
-    'base.name': ruleRequired(t('validation.collectionNameRequired')),
-    chain: ruleRequired(t('validation.collectionChainRequired')),
-    'base.chain': ruleRequired(t('validation.collectionChainRequired')),
-    'base.chainType': ruleRequired(t('validation.collectionChainTypeRequired')),
-    collectionType: ruleRequired(t('validation.collectionTypeRequired')),
-    'base.collectionType': ruleRequired(t('validation.collectionTypeRequired')),
+    symbol: ruleRequired(t('validation.collection.symbolRequired')),
+    'base.symbol': ruleRequired(t('validation.collection.symbolRequired')),
+    name: ruleRequired(t('validation.collection.nameRequired')),
+    'base.name': ruleRequired(t('validation.collection.nameRequired')),
+    chain: ruleRequired(t('validation.collection.chainRequired')),
+    'base.chain': ruleRequired(t('validation.collection.chainRequired')),
+    'base.chainType': ruleRequired(t('validation.collection.chainTypeRequired')),
+    collectionType: ruleRequired(t('validation.collection.typeRequired')),
+    'base.collectionType': ruleRequired(t('validation.collection.typeRequired')),
     baseUri: rulesBaseUri,
     'behavior.baseUri': rulesBaseUri,
-    baseExtension: ruleRequired(t('validation.collectionBaseExtensionRequired')),
-    'behavior.baseExtension': ruleRequired(t('validation.collectionBaseExtensionRequired')),
+    baseExtension: ruleRequired(t('validation.collection.baseExtensionRequired')),
+    'behavior.baseExtension': ruleRequired(t('validation.collection.baseExtensionRequired')),
     maxSupply: rulesMaxSupply,
     dropPrice: rulesDropPrice,
     'behavior.dropPrice': rulesDropPrice,
     dropStart: {
       validator: validateDropStart,
-      message: t('validation.collectionDropStart'),
+      message: t('validation.collection.dropStart'),
     },
     'behavior.dropStart': {
       validator: validateDropStart,
-      message: t('validation.collectionDropStart'),
+      message: t('validation.collection.dropStart'),
     },
     dropReserve: rulesDropReserve,
     'behavior.dropReserve': rulesDropReserve,
