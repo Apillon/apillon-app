@@ -31,7 +31,6 @@ declare global {
     price: number | null;
     description: string;
     services: PricingService;
-    otherServices: String[];
   };
 
   /**
