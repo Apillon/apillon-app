@@ -5,8 +5,7 @@
     </template>
     <slot>
       <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" :size="32" vertical>
-        <div class="flex justify-between flex-row border-b border-bg-lighter">
-          <MenuRpc />
+        <div class="flex justify-end flex-row">
           <ActionsRpcApiKey v-if="dataStore.isUserOwner" />
         </div>
         <TableRpcApiKey :is-owner="dataStore.isUserOwner" />

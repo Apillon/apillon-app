@@ -5,41 +5,39 @@
     </template>
 
     <n-space v-if="isRpcActivated" class="pb-8" :size="32" vertical>
-      <select-options
-        v-if="rpcApiKeyStore.hasRpcApiKeys"
-        v-model:value="rpcApiKeyStore.selectedId"
-        :options="options"
-        class="min-w-[11rem] w-[20vw] max-w-xs"
-        size="small"
-        filterable
-      />
-      <MenuRpc class="border-b border-bg-lighter" />
-      <div>
-        <div class="flex justify-end">
-          <Btn
-            class="font-bold no-underline"
-            type="link"
-            @click="router.push(`/dashboard/service/rpc/endpoints`)"
-          >
-            {{ $t('rpc.endpoint.viewAll') }}
-          </Btn>
-        </div>
-        <TableRpcEndpoint
-          v-if="endpoints.length > 0"
-          :rpc-endpoints="rpcEndpointStore.items.filter(item => item.isFavorite)"
-          :is-owner="dataStore.isUserOwner"
+      <div class="flex justify-between">
+        <select-options
+          v-if="rpcApiKeyStore.hasRpcApiKeys"
+          v-model:value="rpcApiKeyStore.selectedId"
+          :options="options"
+          class="min-w-[11rem] w-[20vw] max-w-xs"
+          size="small"
+          filterable
         />
-        <Empty
-          v-else
-          :title="$t('rpc.endpoint.noFavoriteEndpointTitle')"
-          :info="$t('rpc.endpoint.noFavoriteEndpointDescription')"
-          icon="storage/empty"
+        <div v-else></div>
+        <Btn
+          class="font-bold no-underline"
+          type="link"
+          @click="router.push(`/dashboard/service/rpc/endpoints`)"
         >
-          <Btn type="primary" @click="router.push(`/dashboard/service/rpc/endpoints`)">
-            {{ $t('rpc.endpoint.browse') }}
-          </Btn>
-        </Empty>
+          {{ $t('rpc.endpoint.viewAll') }}
+        </Btn>
       </div>
+      <TableRpcEndpoint
+        v-if="endpoints.length > 0"
+        :rpc-endpoints="rpcEndpointStore.items.filter(item => item.isFavorite)"
+        :is-owner="dataStore.isUserOwner"
+      />
+      <Empty
+        v-else
+        :title="$t('rpc.endpoint.noFavoriteEndpointTitle')"
+        :info="$t('rpc.endpoint.noFavoriteEndpointDescription')"
+        icon="storage/empty"
+      >
+        <Btn type="primary" @click="router.push(`/dashboard/service/rpc/endpoints`)">
+          {{ $t('rpc.endpoint.browse') }}
+        </Btn>
+      </Empty>
     </n-space>
     <RpcNoApiKeys v-else-if="!rpcApiKeyStore.selectedId" />
     <RpcDisabled v-else />
@@ -66,15 +64,13 @@ useHead({
 });
 
 onMounted(async () => {
+  await sleep(100);
   await Promise.all(Object.values(dataStore.promises));
-
   await dataStore.getServices();
 
-  const isRpcServiceActivated = dataStore.hasServicesByType(ServiceType.RPC);
+  isRpcActivated.value = dataStore.hasServicesByType(ServiceType.RPC);
 
-  isRpcActivated.value = isRpcServiceActivated;
-
-  if (isRpcServiceActivated) {
+  if (isRpcActivated.value) {
     await rpcApiKeyStore.getApiKeys();
     if (!rpcApiKeyStore.selectedId && rpcApiKeyStore.items.length > 0) {
       rpcApiKeyStore.selectedId = rpcApiKeyStore.items[0].id;
@@ -87,7 +83,7 @@ onMounted(async () => {
   initialLoadComplete.value = true;
 });
 
-/** Bucket type */
+/** RPC Api keys */
 const options = computed<SelectOption[]>(() =>
   rpcApiKeyStore.items.map(item => ({
     value: item.id,

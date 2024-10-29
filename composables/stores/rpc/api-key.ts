@@ -69,6 +69,8 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
             endpoints.rpcApiKeyUsage(dataStore.projectUuid, this.selectedId)
           );
           this.usage = res.data;
+
+          sessionStorage.setItem(LsCacheKeys.RPC_API_KEY_USAGE, Date.now().toString());
         } catch (error) {}
       }
       this.loading = false;
@@ -108,8 +110,7 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
         this.search = '';
         this.loading = false;
 
-        const key = LsCacheKeys.RPC_API_KEYS;
-        sessionStorage.setItem(key, Date.now().toString());
+        sessionStorage.setItem(LsCacheKeys.RPC_API_KEYS, Date.now().toString());
 
         return res.data.items;
       } catch (error) {

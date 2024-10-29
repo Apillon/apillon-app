@@ -28,6 +28,9 @@
         </div>
       </div>
     </template>
+    <template #submenu>
+      <MenuRpc />
+    </template>
   </Heading>
 </template>
 <script lang="ts" setup>

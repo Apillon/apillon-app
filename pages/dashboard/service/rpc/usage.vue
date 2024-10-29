@@ -3,23 +3,18 @@
     <template #heading>
       <HeaderRpc />
     </template>
-    <slot>
-      <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="pb-8" :size="32" vertical>
-        <select-options
-          v-model:value="rpcApiKeyStore.selectedId"
-          :options="options"
-          class="min-w-[11rem] w-[20vw] max-w-xs"
-          size="small"
-          filterable
-        />
-        <MenuRpc class="border-b border-bg-lighter" />
-      </n-space>
-      <RpcNoApiKeys v-else />
-    </slot>
 
-    <slot>
+    <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="pb-8" :size="32" vertical>
+      <select-options
+        v-model:value="rpcApiKeyStore.selectedId"
+        :options="options"
+        class="min-w-[11rem] w-[20vw] max-w-xs"
+        size="small"
+        filterable
+      />
       <ChartLine v-if="chartData" :data="chartData" />
-    </slot>
+    </n-space>
+    <RpcNoApiKeys v-else />
   </Dashboard>
 </template>
 
