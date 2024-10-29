@@ -1,5 +1,5 @@
 <template>
-  <Dashboard>
+  <Dashboard :loading="pageLoading">
     <template #heading>
       <HeaderIndexer
         v-if="indexerStore.active.indexer_uuid"
@@ -186,11 +186,6 @@
         </n-space>
       </div>
     </slot>
-    <n-spin
-      v-if="pageLoading"
-      size="large"
-      class="fixed inset-0 bg-opacity-50 bg-gray-500 flex items-center justify-center"
-    />
   </Dashboard>
 </template>
 
