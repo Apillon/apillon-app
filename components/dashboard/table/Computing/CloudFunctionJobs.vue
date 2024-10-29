@@ -136,7 +136,7 @@ const actionsEnabled = computed<boolean>(() => {
 const data = computed(
   () =>
     cloudFunctionStore.jobs.filter(item =>
-      item.name.toLocaleLowerCase().includes(cloudFunctionStore.searchJobs.toLocaleLowerCase())
+      item.name.toLowerCase().includes(cloudFunctionStore.searchJobs.toLowerCase())
     ) || []
 );
 

@@ -51,7 +51,7 @@ const data = computed<Array<RpcEndpointInterface>>(() => {
   }
   return (
     props.rpcEndpoints.filter(endpoint =>
-      endpoint.name.toLocaleLowerCase().includes(rpcEndpointStore.search.toLocaleLowerCase())
+      endpoint.name.toLowerCase().includes(rpcEndpointStore.search.toLowerCase())
     ) || []
   );
 });

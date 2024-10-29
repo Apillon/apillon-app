@@ -78,7 +78,7 @@ const data = computed<Array<BucketInterface>>(() => {
       item =>
         (bucketStore.filter.bucketType === null ||
           item.bucketType === bucketStore.filter.bucketType) &&
-        item.name.toLocaleLowerCase().includes(bucketStore.filter.search.toLocaleLowerCase())
+        item.name.toLowerCase().includes(bucketStore.filter.search.toLowerCase())
     ) || []
   );
 });

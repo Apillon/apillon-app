@@ -35,7 +35,7 @@ const selectedColumns = ref([
 ]);
 const assetHubClient = ref<AssetHubClientType | null | undefined>();
 
-export const toNum = (text: string) => Number(text.replaceAll(',', ''));
+export const toNum = (text: string) => Number(text?.replaceAll(',', ''));
 
 export default function assetHub() {
   const { t } = useI18n();
@@ -54,7 +54,7 @@ export default function assetHub() {
     //   toNum(assetHubStore.active.supply) / Math.pow(10, Number(assetHubStore.active.decimals))
     // )
     const factor = new BN(10).pow(new BN(assetHubStore.active.decimals));
-    const supplyBN = new BN(assetHubStore.active.supply.replaceAll(',', ''));
+    const supplyBN = new BN(assetHubStore.active?.supply?.replaceAll(',', ''));
     return supplyBN.div(factor).toString();
   });
 

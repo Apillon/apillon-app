@@ -178,8 +178,8 @@ const getOtherAssets = () =>
 const searchAssets = () => {
   data.value = otherAssets.value.filter(item =>
     (item.id + '' + item.name + '' + item.symbol)
-      .toLocaleLowerCase()
-      .includes(assetHubStore.search.toLocaleLowerCase())
+      .toLowerCase()
+      .includes(assetHubStore.search.toLowerCase())
   );
   assetHubStore.loading = false;
 };

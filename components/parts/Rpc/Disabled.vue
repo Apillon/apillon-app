@@ -101,7 +101,7 @@ const benefits = computed(() => {
 });
 
 const onServiceCreated = () => {
-  router.replace('/dashboard/service/rpc/subscription');
+  router.push('/dashboard/service/rpc/subscription');
 };
 
 onMounted(async () => {

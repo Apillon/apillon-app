@@ -23,9 +23,7 @@ const rpcEndpointStore = useRpcEndpointStore();
 const data = computed<Array<RpcEndpointInterface | RpcFavoriteEndpointInterface>>(() => {
   return (
     props.rpcEndpoints.filter(endpoint =>
-      endpoint.name
-        .toLocaleLowerCase()
-        .includes(rpcEndpointStore.publicEndpointsSearch.toLocaleLowerCase())
+      endpoint.name.toLowerCase().includes(rpcEndpointStore.publicEndpointsSearch.toLowerCase())
     ) || []
   );
 });

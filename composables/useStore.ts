@@ -15,6 +15,8 @@ export default function useStore() {
   const collectionStore = useCollectionStore();
   const paymentStore = usePaymentStore();
   const settingsStore = useSettingsStore();
+  const rpcApiKeyStore = useRpcApiKeyStore();
+  const rpcEndpointStore = useRpcEndpointStore();
 
   function clearAll() {
     dataStore.resetData();
@@ -25,6 +27,7 @@ export default function useStore() {
     clearPayments();
     clearSettings();
     clearSocial();
+    clearRpc();
   }
 
   function clearStorage() {
@@ -62,6 +65,11 @@ export default function useStore() {
   function clearSocial() {
     chatStore.resetData();
     postStore.resetData();
+  }
+
+  function clearRpc() {
+    rpcApiKeyStore.reset();
+    rpcEndpointStore.reset();
   }
 
   return {

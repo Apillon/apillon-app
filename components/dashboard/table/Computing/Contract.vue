@@ -46,7 +46,7 @@ const modalTransferOwnershipVisible = ref<boolean | null>(false);
 const data = computed<Array<ContractInterface>>(() => {
   return (
     props.contracts.filter(item =>
-      item.name.toLocaleLowerCase().includes(contractStore.search.toLocaleLowerCase())
+      item.name.toLowerCase().includes(contractStore.search.toLowerCase())
     ) || []
   );
 });

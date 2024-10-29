@@ -20,6 +20,7 @@ export const useRpcEndpointStore = defineStore('endpoint', {
   actions: {
     reset(): void {
       this.items = [];
+      this.search = '';
       this.total = 0;
     },
 

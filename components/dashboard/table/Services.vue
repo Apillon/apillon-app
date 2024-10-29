@@ -128,7 +128,7 @@ const data = computed<Array<ServiceInterface>>(() => {
     dataStore.services.filter(
       item =>
         item.serviceType_id === props.serviceType &&
-        item.name.toLocaleLowerCase().includes(dataStore.service.search.toLocaleLowerCase())
+        item.name.toLowerCase().includes(dataStore.service.search.toLowerCase())
     ) || []
   );
 });
