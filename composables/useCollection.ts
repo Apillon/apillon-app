@@ -195,11 +195,11 @@ export default function useCollection() {
           : 0,
       isRevokable: collectionStore.form.behavior.revocable,
       isSoulbound: collectionStore.form.behavior.soulbound,
+      royaltiesFees: isUnique.value ? undefined : collectionStore.form.behavior.royaltiesFees,
       royaltiesAddress:
         collectionStore.form.behavior.royaltiesFees === 0
           ? undefined
           : collectionStore.form.behavior.royaltiesAddress,
-      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
       baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
       baseExtension: isUnique.value ? undefined : collectionStore.form.behavior.baseExtension,
       drop: isUnique.value ? undefined : collectionStore.form.behavior.drop,
