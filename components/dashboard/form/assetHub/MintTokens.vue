@@ -115,9 +115,7 @@ async function mintTokens() {
     txHash.value = await assetHubClient.value.mint(
       props.assetId,
       formData.value.address,
-      Math.round(
-        Number(formData.value.amount) * Math.pow(10, Number(assetHubStore.active.decimals))
-      )
+      formData.value.amount
     );
 
     message.success(t('form.success.assetMinted'));
