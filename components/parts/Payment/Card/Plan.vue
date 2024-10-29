@@ -127,7 +127,6 @@ const pricingPlans: Record<string, PricingPlan> = {
       wallets: '100 Wallets Monthly',
       credits: '1200 Credits Lifetime',
     },
-    otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
   Caterpillar: {
     name: 'Caterpillar',
@@ -139,7 +138,6 @@ const pricingPlans: Record<string, PricingPlan> = {
       wallets: '500 Wallets Monthly',
       credits: '5000 Credits Lifetime',
     },
-    otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
   Cocoon: {
     name: 'Cocoon',
@@ -151,7 +149,6 @@ const pricingPlans: Record<string, PricingPlan> = {
       wallets: '1000 Wallets Monthly',
       credits: '20000 Credits Lifetime',
     },
-    otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
 };
 </script>
