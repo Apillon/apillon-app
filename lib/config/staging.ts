@@ -14,6 +14,7 @@ const config: ConfigInterface = {
   publishedFeatures: [
     'ACCESS',
     'API_KEYS',
+    'ASSET_HUB',
     'AUTHENTICATION',
     'BILLING',
     'CAPTCHA_LOGIN',
@@ -22,6 +23,7 @@ const config: ConfigInterface = {
     'DISCORD',
     'EMBEDDED_WALLET',
     'HOSTING',
+    'INDEXING',
     'KILT_LOGIN',
     'MARKETING',
     'NFT',
@@ -31,12 +33,21 @@ const config: ConfigInterface = {
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
     'REFERRAL',
+    'RPC',
     'SERVICES',
+    'SMART_CONTRACTS',
     'SOCIAL',
     'STORAGE',
     'WALLET_LOGIN',
   ],
-  betaFeatures: ['EMBEDDED_WALLET'],
+  betaFeatures: [
+    'ASSET_HUB',
+    'EMBEDDED_WALLET',
+    'INDEXING',
+    'RPC',
+    'SMART_CONTRACTS',
+    'CLOUD_FUNCTIONS',
+  ],
 };
 
 export default config;

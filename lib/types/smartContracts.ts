@@ -14,10 +14,12 @@ declare global {
     type: string;
     inputs: Array<{
       name: string;
+      description?: string;
       internalType: string;
       type: string;
     }>;
     name: string;
+    description?: string;
     outputs?: Array<{
       name: string;
       internalType: string;

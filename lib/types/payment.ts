@@ -21,6 +21,7 @@ declare global {
     identity?: string;
     storage: string;
     bandwith: string;
+    wallets: string;
     hosting?: string;
     smartContracts?: string;
     credits: string;

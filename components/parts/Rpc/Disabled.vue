@@ -1,0 +1,114 @@
+<template>
+  <Dashboard :loading="pageLoading">
+    <template #heading>
+      <Heading>
+        <slot>
+          <h1>{{ t('dashboard.nav.rpc') }}</h1>
+        </slot>
+      </Heading>
+    </template>
+
+    <slot>
+      <div class="flex flex-col h-full pb-8">
+        <div class="flex flex-col flex-grow">
+          <div class="flex flex-col gap-2">
+            <h4>
+              {{ $t('rpc.apiKey.headline') }}
+            </h4>
+            <p>
+              {{ $t('rpc.apiKey.description') }}
+            </p>
+            <div class="text-body flex flex-row gap-4">
+              {{ $t('rpc.apiKey.powered') }}
+              <img
+                src="/assets/images/rpc/Dwellir.png"
+                class="h-6 w-auto object-contain"
+                alt="Dwellir"
+              />
+            </div>
+          </div>
+
+          <ul class="mt-6 flex-grow overflow-y-auto">
+            <li v-for="(benefit, keyB) in benefits" :key="keyB" class="my-2">
+              <NuxtIcon
+                name="icon/success"
+                class="inline-block float-left mr-2 text-2xl text-green"
+              />
+              <span>
+                <strong v-if="benefit.bolded">{{ benefit.bolded }}</strong>
+                {{ benefit.text }}
+              </span>
+            </li>
+          </ul>
+          <div class="flex flex-col gap-8 border-b border-bg-lighter pb-8 my-8">
+            <p class="text-sm font-bold text-white">{{ $t('rpc.apiKey.start') }}</p>
+
+            <div>
+              <FormService
+                class="mt-4 pr-4 inline-block"
+                :service-type="ServiceType.RPC"
+                default-service-name="RPC service"
+                :btn-text="$t('rpc.apiKey.turnOnService')"
+                :disabled="!dataStore.isUserOwner"
+                @create-success="onServiceCreated"
+              />
+              <p v-if="!dataStore.isUserOwner" class="mt-4">
+                {{ $t('rpc.apiKey.mustBeOwner') }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <div class="mb-2">
+            <h4 class="font-bold">{{ $t('rpc.apiKey.curious') }}</h4>
+            <h4 class="font-normal">{{ $t('rpc.apiKey.explore') }}</h4>
+          </div>
+          <ActionsRpcPublicEndpoint />
+          <TableRpcPublicEndpoint
+            v-if="rpcEndpointStore.hasPublicEndpoints"
+            class="mb-4"
+            :rpc-endpoints="rpcEndpointStore.publicEndpoints"
+          />
+        </div>
+      </div>
+    </slot>
+  </Dashboard>
+</template>
+<script lang="ts" setup>
+const { t, tm } = useI18n();
+const router = useRouter();
+const rpcEndpointStore = useRpcEndpointStore();
+const dataStore = useDataStore();
+const pageLoading = ref<boolean>(true);
+
+const benefits = computed(() => {
+  const rawBenefits = tm('rpc.initial.benefits') as Array<{
+    text?: {
+      body: {
+        static: string;
+      };
+    };
+    bolded?: {
+      body: {
+        static: string;
+      };
+    };
+  }>;
+  return rawBenefits.map(benefit => ({
+    text: benefit.text?.body.static || '',
+    bolded: benefit.bolded?.body.static || '',
+  }));
+});
+
+const onServiceCreated = () => {
+  router.replace('/dashboard/service/rpc/subscription');
+};
+
+onMounted(async () => {
+  await Promise.all(Object.values(dataStore.promises));
+
+  await rpcEndpointStore.getPublicEndpoints();
+
+  pageLoading.value = false;
+});
+</script>

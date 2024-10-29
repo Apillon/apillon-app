@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <Dashboard :loading="pageLoading" :mainnet="assetHubStore.mainnet">
     <template #heading>
       <HeaderAssetHub
         back-link="/dashboard/service/asset-hub/"

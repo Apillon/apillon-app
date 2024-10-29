@@ -26,6 +26,10 @@
         :value="plan.services.bandwith"
       />
       <PaymentPricingService
+        :name="$t('dashboard.subscription.wallets')"
+        :value="plan.services.wallets"
+      />
+      <PaymentPricingService
         :name="$t('dashboard.subscription.otherServices')"
         :value="plan.services.credits"
       />

@@ -46,9 +46,15 @@ const emit = defineEmits(['submitSuccess']);
 
 const { t, te } = useI18n();
 const message = useMessage();
+const dataStore = useDataStore();
+const bucketStore = useBucketStore();
+const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
-const { deployCollection } = useNft();
+const { getFile } = useComputing();
+const { isUnique, prepareFormData } = useCollection();
+const { deployCollection, getPriceServiceName, uploadLogoAndCover } = useNft();
+const { uploadFiles } = useUpload();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 function w3WarnAndDeploy() {
@@ -62,6 +68,8 @@ function w3WarnAndDeploy() {
 async function onModalW3WarnConfirm() {
   if (!metadataValid()) {
     message.warning(t('validation.nftMetadata'));
+  } else if (isUnique.value) {
+    warningStore.showSpendingWarning(getPriceServiceName(), () => deployUnique());
   } else {
     deploy();
   }
@@ -91,5 +99,95 @@ async function deploy() {
 
     message.error(userFriendlyMsg(error));
   }
+}
+
+async function deployUnique() {
+  modalW3WarnVisible.value = false;
+  collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
+  collectionStore.nftStep = NftCreateStep.DEPLOY;
+
+  try {
+    const bucketUuid = await createBucket(collectionStore.form.base.name);
+    if (!bucketUuid) return;
+
+    const metadata = await prepareUniqueData(bucketUuid);
+
+    const res = await $api.post<CollectionResponse>(endpoints.collectionsUnique, metadata);
+    collectionStore.active = res.data;
+
+    /** On new collection created add new collection to list */
+    collectionStore.items.push(res.data);
+    collectionStore.form.single.collectionUuid = res.data.collection_uuid;
+
+    /** Uploads logo and cover image */
+    await uploadLogoAndCover(bucketUuid);
+
+    /** Deployment status */
+    collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
+
+    collectionStore.resetCache();
+
+    /** Emit events */
+    emit('submitSuccess');
+  } catch (error) {
+    /** Deployment status */
+    collectionStore.nftStep = NftCreateStep.PREVIEW;
+    collectionStore.stepCollectionDeploy = CollectionStatus.FAILED;
+
+    message.error(userFriendlyMsg(error));
+  }
+}
+
+async function prepareUniqueData(bucketUuid: string) {
+  await uploadFiles(bucketUuid, collectionStore.images, false);
+
+  /** Get images links */
+  const imageLinks: Record<string, string> = {};
+
+  if (collectionStore.images[0] && collectionStore.images[0]?.file_uuid) {
+    const file = await getFile(bucketUuid, collectionStore.images[0].file_uuid);
+    imageLinks[file.name] = file.link;
+  }
+  const filesChunks = sliceIntoChunks([...collectionStore.images], 100);
+
+  for (let i = 1; i <= filesChunks.length; i++) {
+    const uploadedImages = await bucketStore.fetchDirectoryContent({
+      bucketUuid: bucketUuid,
+      page: i,
+      limit: 100,
+    });
+    uploadedImages.forEach(img => {
+      imageLinks[img.name] = img.link;
+    });
+  }
+
+  /** Prepare metadata */
+  const baseData = prepareFormData();
+  const metadata = Object.values(collectionStore.metadata).reduce((acc, meta, key) => {
+    const id = Number(meta.id) || key + 1;
+    const m = Object.assign({}, meta);
+    delete m.id;
+    m.image = meta.image in imageLinks ? imageLinks[meta.image] : meta.image;
+    acc[id] = m;
+    return acc;
+  }, {});
+
+  return { ...baseData, metadata, bucket_uuid: bucketUuid };
+}
+
+async function createBucket(name: string) {
+  const bodyData = {
+    project_uuid: dataStore.projectUuid,
+    bucketType: BucketType.NFT_METADATA,
+    name: `NFT Collection: ${name}`,
+  };
+
+  try {
+    const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
+    return res.data.bucket_uuid;
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  return null;
 }
 </script>

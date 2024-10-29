@@ -243,7 +243,7 @@ export const useBucketStore = defineStore('bucket', {
       const bucket = arg.bucketUuid || this.bucketUuid;
       if (!bucket) {
         this.folder.loading = false;
-        return;
+        return [];
       }
 
       /** Update current folderUuid */
@@ -268,9 +268,12 @@ export const useBucketStore = defineStore('bucket', {
 
         this.folder.items = res.data.items;
         this.folder.pagination.itemCount = res.data.total;
+        this.folder.loading = false;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.BUCKET_ITEMS, Date.now().toString());
+
+        return res.data.items;
       } catch (error: any) {
         /** Reset data */
         this.folder.items = [];
@@ -281,6 +284,7 @@ export const useBucketStore = defineStore('bucket', {
       }
 
       this.folder.loading = false;
+      return [];
     },
   },
 });

@@ -10,6 +10,17 @@ export enum Chains {
   ASTAR_SHIBUYA = 81,
   ASTAR = 592,
 }
+export enum EvmChain {
+  ETHEREUM = 1,
+  SEPOLIA = 11155111,
+  MOONBEAM = 1284,
+  MOONBASE = 1287,
+  ASTAR_SHIBUYA = 81, // testnet
+  ASTAR = 592,
+  OASIS = 42262,
+  ALFAJORES = 44787, // Celo testnet
+  CELO = 42220,
+}
 export enum SubstrateChain {
   CRUST = 1,
   KILT = 2,
@@ -18,10 +29,17 @@ export enum SubstrateChain {
   SUBSOCIAL = 6,
   XSOCIAL = 7,
   ASTAR = 8,
+  ACURAST = 9,
+  UNIQUE = 11,
+  ASSET_HUB = 1000,
+  WESTEND_ASSET_HUB = 1001,
 }
+
 export enum SubstrateChainPrefix {
   ASTAR = 5,
   PHALA = 30,
+  HYDRATION = 63,
+  UNIQUE = 7391,
 }
 
 /** NFT Collection type */

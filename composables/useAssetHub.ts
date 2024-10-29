@@ -1,19 +1,22 @@
+import { nToBigInt, BN } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import type { AssetHubClient as AssetHubClientType } from '#imports';
 
 export const assetHubNetworks = {
-  westend: {
-    name: 'Westend Asset Hub (testnet)',
-    rpc: 'wss://asset-hub-westend-rpc.dwellir.com',
-  },
-  polkadot: {
-    name: 'Asset Hub (mainnet)',
+  assetHub: {
+    name: 'Asset Hub',
+    env: 'mainnet',
     rpc: 'wss://asset-hub-polkadot-rpc.dwellir.com',
+  },
+  westend: {
+    name: 'Westend Asset Hub',
+    env: 'testnet',
+    rpc: 'wss://asset-hub-westend-rpc.dwellir.com',
   },
 };
 
 export const getAssetHubRpc = (mainnet = false) =>
-  mainnet ? assetHubNetworks.polkadot.rpc : assetHubNetworks.westend.rpc;
+  mainnet ? assetHubNetworks.assetHub.rpc : assetHubNetworks.westend.rpc;
 
 /** Available columns - show/hide column */
 const selectedColumns = ref([
@@ -46,6 +49,15 @@ export default function assetHub() {
   const loadingWallet = ref<boolean>(false);
   const modalWalletSelectVisible = ref<boolean>(false);
 
+  const supply = computed(() => {
+    // new Intl.NumberFormat('de-DE').format(
+    //   toNum(assetHubStore.active.supply) / Math.pow(10, Number(assetHubStore.active.decimals))
+    // )
+    const factor = new BN(10).pow(new BN(assetHubStore.active.decimals));
+    const supplyBN = new BN(assetHubStore.active.supply.replaceAll(',', ''));
+    return supplyBN.div(factor).toString();
+  });
+
   async function initAssetHub() {
     await sleep(10);
     Promise.all(Object.values(dataStore.promises)).then(async _ => {
@@ -59,6 +71,18 @@ export default function assetHub() {
       assetHubClient.value = await AssetHubClient.getInstance(rpc, assetHubStore.account);
     }
   }
+
+  const refreshAsset = async (assetId: number) => {
+    await sleep(2000);
+    const updatedAsset = await assetHubStore.fetchAsset(assetId);
+
+    Object.assign(assetHubStore.active, updatedAsset);
+    assetHubStore.items.forEach(item => {
+      if (item.id === assetId) {
+        Object.assign(item, updatedAsset);
+      }
+    });
+  };
 
   async function reconnectWallet() {
     await sleep(200);
@@ -108,9 +132,11 @@ export default function assetHub() {
     modalWalletSelectVisible,
     pageLoading,
     selectedColumns,
+    supply,
     initAssetHub,
     initClient,
     reconnectWallet,
+    refreshAsset,
     walletConnect,
   };
 }

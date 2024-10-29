@@ -86,6 +86,12 @@ const featureRoutes: Array<FeatureRouteInterface> = [
     feature: Feature.SMART_CONTRACTS,
     permission: Permission.COMPUTING,
   },
+  {
+    regex: /^\/dashboard\/service\/rpc/,
+    redirect: '/dashboard',
+    feature: Feature.RPC,
+    permission: Permission.RPC,
+  },
   { regex: /^\/dashboard\/monitoring/, redirect: '/dashboard', feature: Feature.MONITORING },
   {
     regex: /^\/dashboard\/project-settings/,

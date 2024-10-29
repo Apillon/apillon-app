@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col max-w-lg justify-between pb-[260px]">
+  <div class="flex flex-col max-w-lg justify-between pb-[185px]">
     <div>
       <div class="min-h-[192px]">
         <div class="flex p-2 border border-bg-lighter">

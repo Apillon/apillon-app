@@ -18,7 +18,7 @@
           v-if="!assetId && formData.network === assetHubNetworks.westend.rpc"
           class="absolute bottom-full right-0 mb-2"
         >
-          <Btn size="small" type="link" to="https://faucet.polkadot.io/westend?parachain=1000">
+          <Btn size="small" type="link" href="https://faucet.polkadot.io/westend?parachain=1000">
             <span class="text-xs">Faucet</span>
           </Btn>
         </div>
@@ -37,7 +37,7 @@
     <p class="text-white font-bold mb-4" :class="{ hidden: !!assetId }">
       {{ $t('dashboard.service.assetHub.characteristics') }}
     </p>
-    <div class="bg-bg-lighter rounded-lg p-8">
+    <div class="bg-bg-lighter rounded-lg p-8 pb-2">
       <n-form-item :label="$t('form.label.assetHub.name')" path="name">
         <n-input
           v-model:value="formData.name"
@@ -52,7 +52,7 @@
         <n-input
           v-model:value="formData.symbol"
           :input-props="{ type: 'text' }"
-          :placeholder="$t('form.label.assetHub.symbol')"
+          :placeholder="$t('form.placeholder.assetHub.symbol')"
           clearable
           class="bg-bg-light"
           @keydown.enter.prevent
@@ -62,7 +62,7 @@
       <n-form-item
         class="bg-bg-lighter rounded-lg"
         :class="{ hidden: !!assetId }"
-        :label="$t('form.label.assetHub.assetId')"
+        :label="$t('form.label.assetHub.id')"
         path="assetId"
       >
         <n-input-number
@@ -83,11 +83,11 @@
       >
         <n-input-number
           v-model:value="formData.decimals"
-          :placeholder="$t('form.label.assetHub.decimals')"
+          :placeholder="$t('form.placeholder.assetHub.decimals')"
           clearable
           class="bg-bg-light rounded-lg"
           :min="0"
-          :max="16"
+          :max="18"
           :step="1"
           @keydown.enter.prevent
         />
@@ -96,17 +96,19 @@
       <n-form-item
         class="bg-bg-lighter rounded-lg"
         :class="{ hidden: !!assetId }"
-        :label="$t('form.label.assetHub.initialSupply')"
+        :label="$t('form.label.assetHub.supply')"
         path="initialSupply"
       >
         <n-input-number
           v-model:value="formData.initialSupply"
-          :placeholder="$t('form.placeholder.assetHub.initialSupply')"
+          :placeholder="$t('form.placeholder.assetHub.supply')"
           clearable
           class="bg-bg-light rounded-lg"
           :min="0"
           :step="1"
           :disabled="!!assetId"
+          :parse="parse"
+          :format="format"
           @keydown.enter.prevent
         />
       </n-form-item>
@@ -122,15 +124,15 @@
           clearable
           class="bg-bg-light rounded-lg"
           :min="0"
-          :step="1"
+          :precision="formData?.decimals || 3"
           :disabled="!!assetId"
           @keydown.enter.prevent
         />
       </n-form-item>
     </div>
 
-    <div class="bg-bg-lighter rounded-lg p-8 mt-4" :class="{ hidden: !!assetId }">
-      <n-form-item :label="$t('form.label.assetHub.issuerAddress')" path="issuerAddress">
+    <div class="bg-bg-lighter rounded-lg p-8 pb-2 mt-4" :class="{ hidden: !!assetId }">
+      <n-form-item :label="$t('form.label.assetHub.issuer')" path="issuerAddress">
         <n-input
           v-model:value="formData.issuerAddress"
           :input-props="{ type: 'text' }"
@@ -141,11 +143,11 @@
           @keydown.enter.prevent
         />
       </n-form-item>
-      <n-form-item :label="$t('form.label.assetHub.freezerAddress')" path="freezerAddress">
+      <n-form-item :label="$t('form.label.assetHub.freezer')" path="freezerAddress">
         <n-input
           v-model:value="formData.freezerAddress"
           :input-props="{ type: 'text' }"
-          :placeholder="$t('form.label.assetHub.freezerAddress')"
+          :placeholder="$t('form.placeholder.assetHub.freezerAddress')"
           :disabled="!!assetId"
           clearable
           class="bg-bg-light"
@@ -164,11 +166,7 @@
     </n-form-item>
   </n-form>
 
-  <AssetHubTransaction
-    v-if="transactionHash"
-    :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
-    @close="$emit('close')"
-  />
+  <AssetHubTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
   <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
@@ -195,21 +193,21 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
-const { assetHubClient, initClient } = useAssetHub();
+const { assetHubClient } = useAssetHub();
 
 const loading = ref(false);
 const asset = ref<AssetInterface | undefined>();
 const formRef = ref<NFormInst | null>(null);
-const transactionHash = ref<string | undefined>();
+const txHash = ref<string | undefined>();
 
 const formData = ref<FormAsset>({
   network: null,
   name: '',
   symbol: '',
   assetId: null,
-  decimals: null,
+  decimals: 18,
   initialSupply: null,
-  minBalance: null,
+  minBalance: 0.001,
   issuerAddress: assetHubStore.account?.address || '',
   freezerAddress: assetHubStore.account?.address || '',
 });
@@ -239,7 +237,12 @@ const networks = computed(() =>
   Object.values(assetHubNetworks).map(network => ({ label: network.name, value: network.rpc }))
 );
 
-const assetIDs = computed(() => new Set(assetHubStore.items.map(i => i.id)));
+const isMainnetSelected = computed(() => formData.value.network === assetHubNetworks.assetHub.rpc);
+const assetIDsMainnet = computed(() => new Set(assetHubStore.itemsMainnet.map(i => i.id)));
+const assetIDsTestnet = computed(() => new Set(assetHubStore.itemsTestnet.map(i => i.id)));
+const assetIDs = computed(() =>
+  isMainnetSelected.value ? assetIDsMainnet.value : assetIDsTestnet.value
+);
 
 onMounted(async () => {
   if (props.assetId) {
@@ -257,23 +260,9 @@ onMounted(async () => {
     }
   }
 
-  assetHubStore.getAssets();
+  assetHubStore.getAssetsMainnet();
+  assetHubStore.getAssetsTestnet();
 });
-
-watch(
-  () => formData.value.network,
-  async rpc => {
-    if (assetHubClient.value) {
-      await assetHubClient.value.destroyInstance();
-      await sleep(200);
-    }
-    if (rpc && assetHubStore.account && !formData.value.assetId) {
-      assetHubClient.value = await AssetHubClient.getInstance(rpc, assetHubStore.account);
-      const nextId = await assetHubClient.value.getNextId();
-      formData.value.assetId = toNum(nextId.toHuman()?.toLocaleString() || '') + 1;
-    }
-  }
-);
 
 watch(
   () => formData.value.assetId,
@@ -287,6 +276,26 @@ watch(
     }
   }
 );
+
+watch(
+  () => formData.value.network,
+  async rpc => {
+    if (assetHubClient.value) {
+      await assetHubClient.value.destroyInstance();
+      await sleep(200);
+    }
+    if (rpc && assetHubStore.account) {
+      formData.value.assetId = findFirstAvailableNumber(assetIDs.value);
+    }
+  }
+);
+function findFirstAvailableNumber(set) {
+  let i = 1;
+  while (set.has(i)) {
+    i++;
+  }
+  return i;
+}
 
 // Custom validations
 function validateAssetId(_: FormItemRule, value: string): boolean {
@@ -303,6 +312,16 @@ function validateSymbol(_: FormItemRule, value: string): boolean {
     !assetHubStore.items.some(i => i.symbol.toLowerCase() === value.toLowerCase())
   );
 }
+
+const parse = (input: string) => {
+  const nums = input.replace(/\./g, '').trim();
+  if (/^\d+(\.(\d+)?)?$/.test(nums)) return Number(nums);
+  return nums === '' ? null : Number.NaN;
+};
+const format = (value: number | null) => {
+  if (value === null) return '';
+  return new Intl.NumberFormat('de-DE').format(value);
+};
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -344,7 +363,7 @@ async function createAsset() {
   }
   loading.value = true;
 
-  assetHubClient.value = await assetHubStore.initClient();
+  assetHubClient.value = await assetHubStore.initClient(isMainnetSelected.value);
   if (!assetHubClient.value) return;
 
   try {
@@ -353,13 +372,13 @@ async function createAsset() {
       admin: assetHubStore.account.address,
       freezer: formData.value.freezerAddress,
     };
-    transactionHash.value = await assetHubClient.value.createAsset(
+    txHash.value = await assetHubClient.value.createAsset(
       assetHubStore.account.address,
       formData.value.assetId,
       formData.value.name,
       formData.value.symbol,
       formData.value.decimals,
-      formData.value.minBalance,
+      Number(formData.value.minBalance) * Math.pow(10, Number(formData.value.decimals)),
       team
     );
 
@@ -367,7 +386,7 @@ async function createAsset() {
 
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess', transactionHash.value);
+    emit('createSuccess', txHash.value);
   } catch (error: any) {
     if (error?.message) {
       message.error(error?.message);
@@ -400,7 +419,7 @@ async function updateAsset() {
   if (!assetHubClient.value) return;
 
   try {
-    transactionHash.value = await assetHubClient.value.updateMetadata(
+    txHash.value = await assetHubClient.value.updateMetadata(
       props.assetId,
       formData.value.name,
       formData.value.symbol,
@@ -414,7 +433,7 @@ async function updateAsset() {
 
     /** Emit events */
     emit('submitSuccess');
-    emit('createSuccess', transactionHash.value);
+    emit('createSuccess', txHash.value);
   } catch (error: any) {
     if (error?.message) {
       message.error(error?.message);

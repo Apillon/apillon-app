@@ -35,7 +35,7 @@ export const useCollectionStore = defineStore('collection', {
         coverImage: null as FileListItemType | null,
         name: '',
         symbol: '',
-        chain: Chains.MOONBASE,
+        chain: Chains.MOONBASE as number,
         chainType: ChainType.EVM,
         collectionType: NFTCollectionType.GENERIC,
         useApillonIpfsGateway: false,
@@ -90,6 +90,9 @@ export const useCollectionStore = defineStore('collection', {
     },
     hasMetadataDeploys(state): boolean {
       return Array.isArray(state.metadataDeploys) && state.metadataDeploys.length > 0;
+    },
+    isUnique(state): boolean {
+      return state.active.chain === SubstrateChain.UNIQUE;
     },
   },
   actions: {

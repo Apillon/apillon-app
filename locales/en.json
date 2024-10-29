@@ -358,9 +358,11 @@
         "contracts": "Contracts service",
         "hosting": "Hosting service",
         "nft": "NFT service",
+        "rpc": "RPC Service",
         "social": "Social service",
         "storage": "Storage service",
-        "wallet": "Wallet service"
+        "wallet": "Wallet service",
+        "indexing": "Indexing service"
       }
     },
     "clipboard": {
@@ -443,6 +445,10 @@
         "WALLET": {
           "name": "Embedded Wallet",
           "description": null
+        },
+        "INDEXING": {
+          "name": "Indexing",
+          "description": null
         }
       }
     },
@@ -479,9 +485,11 @@
       "smartContracts": "Smart Contracts",
       "smartContractDetails": "Smart Contract Details",
       "social": "Social",
+      "rpc": "RPC Service",
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
-      "embeddedWallet": "Embedded Wallet"
+      "embeddedWallet": "Embedded Wallet",
+      "indexing": "Indexing"
     },
     "pageMenu": {
       "access": "Access",
@@ -566,7 +574,8 @@
           "anyway": "Leave anyway",
           "info": "If you leave, your changes won’t be saved.",
           "title": "Are you sure you want to leave?"
-        }
+        },
+        "viewDocumentation": "View Documentation"
       },
       "authentication": {
         "name": "Decentralized Authentication",
@@ -643,9 +652,10 @@
         "info": "Add it to your Web3 project",
         "table": {
           "chain": "Chain",
+          "contractAddress": "Contract Address",
+          "contractStatus": "Status",
           "name": "Name",
-          "contractAddress": "Address",
-          "contractStatus": "Status"
+          "version": "Version"
         },
         "status": {
           "0": "CREATED",
@@ -659,16 +669,46 @@
         "infoSection": {
           "title": "Execute read & write functions",
           "p": "Your smart contract was deployed via Apillon. This means certain write functions are available only through the Apillon Backend, until you decide to take ownership of the contract. ",
-          "infoBox": "Take ownership of the Smart Contract. Once you take ownership of the Smart Contract, you will be able to execute all the functions directly from your dapp. This is not a mandatory step, but it makes sense to take the ownership of the contract before going to production.",
+          "info": "Take ownership of the Smart Contract. Once you take ownership of the Smart Contract, you will be able to execute all the functions directly from your dapp. This is not a mandatory step, but it makes sense to take the ownership of the contract before going to production.",
+          "infoTransferred": "You are owner of this contract, now you execute all the functions directly from your dapp.",
           "takeOwnershipBtn": "Take smart contract ownership"
         },
         "functions": {
+          "executed": "Function has been executed",
           "write": "Write functions",
           "read": "Read functions",
           "writeFromDapp": "Write from your dapp",
-          "writeOverApillon": "Write over Appilon",
+          "writeOverApillon": "Write over Apillon",
           "readFromDapp": "Read from your dapp"
         }
+      },
+      "indexer": {
+        "create": "Create new indexer",
+        "info": "Add it to your Web3 project",
+        "new": "New indexer",
+        "table": {
+          "name": "Name",
+          "description": "Description",
+          "status": "Status",
+          "uuid": "Indexer UUID"
+        },
+        "tableLog": {
+          "level": "Level",
+          "ts": "Timestamp",
+          "container": "Continer",
+          "msg": "Message"
+        },
+        "tableDeployments": {
+          "type": "Type",
+          "failed": "Failed",
+          "status": "Status",
+          "updatedAt": "Updated",
+          "createdAt": "Created"
+        },
+        "general": "General",
+        "logs": "Logs",
+        "deployments": "Deployments",
+        "viewDocumentation": "View Documentation"
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -738,6 +778,17 @@
               "Authentication: User can add different methods of verification.",
               "Gasless wallet creation: charged in Apillon credits per each onboarded user.",
               "Fully trustless. Powered by Oasis."
+            ]
+          }
+        ]
+      },
+      "rpcService": {
+        "content": [
+          {
+            "benefits": [
+              "Free Tier to start",
+              "Receive API keys for different chains (over 100 chains supported)",
+              "over 99% uptime"
             ]
           }
         ]
@@ -1026,6 +1077,23 @@
         "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
         "usage": ["metadata storage", "file storage"]
       },
+      "indexing": {
+        "content": [
+          {
+            "headline": "Features:",
+            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints."
+          },
+          {
+            "benefits": [
+              "Real-time Data Processing: Continuously indexes new blockchain data for immediate access.",
+              "Historical Data Access: Easily retrieve past blockchain data for analysis or verification.",
+              "Customizable APIs: Flexible API endpoints enable tailored querying for specific blockchain data needs.",
+              "Multi-Blockchain Support: Seamlessly index data across various blockchain networks.",
+              "Scalability: Efficiently handles large amounts of data, suitable for high-traffic applications."
+            ]
+          }
+        ]
+      },
       "choose": "Choose Solution",
       "deploy": "Deploy solution",
       "chooseComputing": "Select a computing template for your project. Deploy it on testnet to test it and fix if needed before launching in production on mainnet.",
@@ -1034,6 +1102,7 @@
       "info": "Customize ready-to-deploy templates built and audited by Apillon.",
       "viewCode": "View code"
     },
+
     "subscription": {
       "bandwidth": "Bandwith",
       "canceledOn": "Your plan will be canceled on {date}.",
@@ -1047,7 +1116,9 @@
       "packages": "Subscription packages",
       "perMonth": "per month",
       "storage": "Storage",
-      "web3Services": "Web3 services"
+      "web3Services": "Web3 services",
+      "plusTaxes": "+taxes",
+      "wallets": "Embedded Wallets"
     },
     "usage": {
       "bandwith": "Bandwith",
@@ -1106,7 +1177,7 @@
     "404": "Page not found",
     "40006022": "You have to upload \"index.html\" file, to deploy website!",
     "FIELD_INVALID": "Invalid filed, please upload valid .env file.",
-    "50012005": "You can't mint this collection or all tokens has already been minted!",
+    "50012005": "You can't mint this collection or all tokens have already been minted!",
     "50012007": "Nfts out of stock!",
     "50012008": "Mint reserve supply out of stock!",
     "50012011": "Content encryption failed",
@@ -1269,28 +1340,6 @@
       "chatImage": "Hub image",
       "chatName": "Hub name",
       "chatTags": "Tags",
-      "collectionBaseUri": "Base URI",
-      "collectionBaseExtension": "Base Extension",
-      "collectionChain": "Chain",
-      "collectionChainType": "Chain type",
-      "collectionDropAddress": "Drop Withdrawal Address",
-      "collectionDropStart": "Drop start",
-      "collectionDrop": "Drop",
-      "collectionDropPrice": "Price in {currency}",
-      "collectionMaxSupply": "How many?",
-      "collectionName": "Name",
-      "collectionDropReserve": "Reserve",
-      "collectionRevocable": "Revocable",
-      "collectionRoyaltiesAddress": "Royalties address",
-      "collectionRoyaltiesFees": "Royalties fees",
-      "collectionSoulbound": "Soulbound",
-      "collectionSymbol": "Symbol",
-      "collectionSupplyLimited": "Total supply",
-      "collectionType": "Collection type",
-      "collectionUseGateway": "Use apillon gateway for base URI",
-      "collectionUseIpns": "Dynamic metadata",
-      "collectionLogo": "Collection logo",
-      "collectionCoverImage": "Collection cover image",
       "confirmPassword": "Confirm password",
       "creditThreshold": "Notify me when credits are below the limit",
       "cvv": "CVV",
@@ -1301,26 +1350,13 @@
       "hostingDescription": "Hosting description",
       "hostingName": "Hosting name",
       "hostingSize": "Hosting size",
+      "indexerName": "Indexer name",
+      "indexerDescription": "Indexer description",
       "inviteByEmail": "Invite by email",
       "ipnsDescription": "IPNS description",
       "ipnsName": "IPNS name",
       "expirationDate": "Expiration date",
       "networkType": "Choose the desired network",
-      "nftBurnTokenId": "Token ID",
-      "nftMintAddress": "Address",
-      "nftMintCollectionUuid": "Collection",
-      "nftMintParentNftId": "Parent NFT ID",
-      "nftMintQuantity": "Quantity",
-      "nftSetBaseUri": "Set base URI",
-      "nftTransferAddress": "Address",
-      "nftId": "ID",
-      "nftCollection": "Collection",
-      "nftName": "Name",
-      "nftCopies": "Copies",
-      "nftDescription": "Description",
-      "nftValue": "Value",
-      "nftDisplayType": "Type",
-      "nftTraitType": "Trait",
       "password": "Enter a 12-character password",
       "phone": "Phone",
       "postalCode": "Postal code",
@@ -1338,17 +1374,71 @@
         "address": "Address",
         "admin": "Admin address",
         "amount": "Amount",
-        "assetId": "Asset ID",
         "decimals": "Decimals",
         "deposit": "Deposit",
-        "freezerAddress": "Freezer Address",
-        "initialSupply": "Initial supply",
-        "issuerAddress": "Issuer Address",
+        "freezer": "Freezer Address",
+        "id": "Asset ID",
+        "supply": "Initial supply",
+        "issuer": "Issuer Address",
         "minBalance": "Minimum balance",
         "name": "Asset name",
         "network": "Network",
         "owner": "Owner Address",
+        "status": "Status",
         "symbol": "Asset symbol"
+      },
+      "collection": {
+        "baseUri": "Base URI",
+        "baseExtension": "Base Extension",
+        "chain": "Chain",
+        "chainType": "Chain type",
+        "coverImage": "Collection cover image",
+        "dropAddress": "Drop Withdrawal Address",
+        "dropStart": "Drop start",
+        "drop": "Drop",
+        "dropPrice": "Price in {currency}",
+        "dropReserve": "Reserve",
+        "initialOwner": "Initial owner",
+        "logo": "Collection logo",
+        "maxSupply": "How many?",
+        "name": "Name",
+        "revocable": "Revocable",
+        "royaltiesAddress": "Royalties address",
+        "royaltiesFees": "Royalties fees",
+        "soulbound": "Soulbound",
+        "symbol": "Symbol",
+        "supplyLimited": "Total supply",
+        "type": "Collection type",
+        "uri": "Base URI",
+        "useGateway": "Use apillon gateway for base URI",
+        "useIpns": "Dynamic metadata",
+        "labelInfo": {
+          "baseExtension": "",
+          "baseUri": "Paste the collection metadata base URI here.",
+          "chain": "Select the network where your NFTs will be deployed",
+          "chainType": "",
+          "csvUpload": "Before adding new items to the collection with existing NFTs, please add an id column to the CSV file. This will help maintain data integrity and avoid any conflicts when adding new entries.",
+          "dropStart": "A date when your NFT collection becomes publicly available for visitors to buy NFTs.",
+          "drop": "With drop, your collection becomes accessible for visitors to buy NFTs from a certain date onwards.",
+          "dropAddress": "Drop Withdrawal  Address",
+          "dropPrice": "",
+          "dropReserve": "A number of NFT you wish to reserve for yourself before the drop.",
+          "initialOwner": "Initial owner of an NFT collection get access to exclusive rewards, increased resale potential, community influence, and potential royalties.",
+          "logoSize": "Maximum size: 3MB, Supported formats: JPG, PNG, GIF, SVG. Recommended size: 400 x 400 px.",
+          "maxSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection.",
+          "name": "The name you choose will be the official name of your NFT collection, “name” NFT collection.",
+          "nftDisplayType": "Display type is a field indicating how you would like it to be displayed",
+          "revocable": "Collection owner can destroy NFT(s) at any point in time.",
+          "royaltiesAddress": "It’s Astar address to receive Withdrawal tokens when tokens are being minted.",
+          "royaltiesFees": "The % value of royalties you want to collect in the future NFT sales.",
+          "soulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
+          "supplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
+          "symbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
+          "type": "",
+          "uri": "Paste the collection metadata base URI here.",
+          "useGateway": "Collection base URI points to IPFS. If this checkbox is checked, base URI will point to CID on Apillon private gateway, which provide better performance. Otherwise base URI points to: ipfs://[CID], and gateway needs to be handled manually.",
+          "useIpns": "When this option is selected, the IPNS will be created. This option will allow you to add more NFTs to your collection later."
+        }
       },
       "contract": {
         "accountAddress": "Account Address",
@@ -1390,6 +1480,27 @@
         "labelInfo": {
           "whitelistedDomains": "Prevent third-parties from using your integration by restricting access to allowed domains \n- Authorize all domains with * \n  Example: *.apillon.io accepts all .apillon.io sites \n- Authorize local URLs with localhost:&lt;port&gt; \n- Separate domains by commas"
         }
+      },
+      "nft": {
+        "burnTokenId": "Token ID",
+        "collection": "Collection",
+        "copies": "Copies",
+        "description": "Description",
+        "displayType": "Type",
+        "id": "ID",
+        "mintAddress": "Address",
+        "mintCollectionUuid": "Collection",
+        "mintParentNftId": "Parent NFT ID",
+        "mintQuantity": "Quantity",
+        "name": "Name",
+        "setBaseUri": "Set base URI",
+        "transferAddress": "Address",
+        "traitType": "Trait",
+        "value": "Value"
+      },
+      "rpcApiKey": {
+        "name": "Name",
+        "description": "Description"
       }
     },
     "networkTypes": {
@@ -1406,8 +1517,6 @@
       "bucketDescription": "Bucket description",
       "bucketName": "Bucket name",
       "bucketType": "Select Bucket type",
-      "cardHolder": "John Doe",
-      "cardNumber": "XXXX - XXXX - XXXX - XXXX",
       "chain": "Select Chain",
       "chatTags": "Separate Tags with Commas",
       "collectionMaxSupply": "Max supply",
@@ -1420,6 +1529,8 @@
       "folderDescription": "",
       "hostingDescription": "Hosting description",
       "hostingName": "Hosting name",
+      "indexerName": "Indexer name",
+      "indexerDescription": "Indexer description",
       "inviteByEmail": "Type e-mail",
       "ipnsDescription": "IPNS description",
       "ipnsName": "IPNS name",
@@ -1436,6 +1547,10 @@
       "projectName": "Enter project name",
       "projectDescription": "Enter project description",
       "reenterPassword": "Re-enter your complex password",
+      "rpcApiKey": {
+        "name": "Enter key name",
+        "description": "Enter key description"
+      },
       "role": "Select role",
       "serviceName": "Enter the name for the new service",
       "selectCategory": "Filter by category",
@@ -1456,7 +1571,7 @@
         "symbol": "Type asset symbol",
         "assetId": "Asset ID",
         "decimals": "Decimals",
-        "initialSupply": "Initial supply",
+        "supply": "Initial supply",
         "minBalance": "Minimum Balance",
         "issuerAddress": "Issuer Address",
         "freezerAddress": "Freezer Address"
@@ -1477,12 +1592,16 @@
         "title": "Enter the title for your personal reference",
         "description": "Enter the description for your personal reference",
         "whitelistedDomains": "valid-domain.com\n*.valid-domain2.com\nsubdomain.*.valid-domain3.com"
+      },
+      "indexer": {
+        "logLevels": "Log levels",
+        "containers": "Containers"
       }
     },
     "success": {
       "apiKey": "API key has been created",
-      "assetMinted": "Asset tokens has been minted",
-      "assetSend": "Asset tokens has been send",
+      "assetMinted": "Asset tokens have been minted",
+      "assetSend": "Asset tokens have been send",
       "assetTransferred": "Asset ownership has been transferred",
       "filesUploaded": "Files have been successfully uploaded",
       "ipnsPublish": "IPNS is published in the background. You will be notified when it is done.",
@@ -1524,10 +1643,13 @@
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
         "item": "Item has been created",
+        "rpcApiKey": "RPC API key has been created",
+        "rpcEndpoint": "RPC endpoint has been added",
         "service": "Service has been created",
         "userInvite": "User has been invited.",
         "webhook": "Webhook has been created",
-        "website": "Website has been created"
+        "website": "Website has been created",
+        "indexer": "Indexer has been created"
       },
       "deleted": {
         "apiKey": "API key has been deleted",
@@ -1546,12 +1668,14 @@
         "item": "Item has been deleted",
         "items": "Items has been deleted",
         "post": "Channel has been archived",
+        "rpcEndpoint": "RPC endpoint has been removed from favorites",
         "space": "Hub has been archived",
         "service": "Service has been deleted",
         "user": "User has been removed from project",
         "userUninvited": "User has been uninvited from project",
         "webhook": "Webhook has been deleted",
-        "website": "Website has been archived"
+        "website": "Website has been archived",
+        "indexer": "Indexer has been deleted"
       },
       "restored": {
         "bucket": "Bucket has been restored",
@@ -1582,9 +1706,11 @@
         "embeddedWallet": "Embedded Wallet has been updated",
         "file": "File has been updated",
         "hosting": "Hosting has been updated",
+        "indexer": "Indexer has been updated",
         "ipns": "IPNS has been updated",
         "item": "Item has been updated",
         "project": "Project has been updated",
+        "rpcApiKey": "RPC API key has been updated",
         "service": "Service has been updated",
         "userRole": "User role has been updated",
         "webhook": "Webhook has been updated",
@@ -1716,26 +1842,59 @@
     "web3HostingArchiveInfo": "You don't have any website in Archive.",
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
+  "indexer": {
+    "startNew": "Star by creating a new indexer",
+    "create": "Create new indexer",
+    "update": "Update Indexer",
+    "statuses": {
+      "1": "Created",
+      "3": "Hibernated",
+      "5": "Active"
+    },
+    "uuid": "Indexer UUID",
+    "instructions": {
+      "deployYourIndexer": "Deploy your indexer",
+      "instruction1": "Indexer deployments are handled over the Apillon CLI.\n Please follow the step by step instructions below and deploy your indexer with the help of our CLI.",
+      "instruction2": "Note, that you need at least 20,000 credits to perform this action.",
+      "step1": "Step 1 - Setup the Apillon CLI",
+      "step2": "Step 2 - Set up your indexer locally",
+      "chooseTemplate": "Choose a template for you indexer from the Subsquid Github repository and clone it. \nThe templates below are available:",
+      "substrateTemplate": "Template for Substrate chains",
+      "evmTemplates": "Templates for EVM chains",
+      "step3": "Step 3 - Customize your indexer",
+      "step4": "Step 4 - Deploy the indexer"
+    },
+    "indexerApiEndpoint": "Indexer API endpoint",
+    "indexerGeneralData": "Indexer - general data",
+    "name": "Name",
+    "description": "Description",
+    "status": "Status",
+    "created": "Created",
+    "lastDeployed": "Last deployed",
+    "apiStatus": "Api status",
+    "processorStatus": "Processor status",
+    "processedBlocks": "Processed blocks",
+    "squidStatus": "Squid status",
+    "logLevels": {
+      "error": "Error",
+      "debug": "Debug",
+      "info": "Info",
+      "notice": "Notice",
+      "warning": "Warning",
+      "critical": "Critical"
+    },
+    "containers": {
+      "db": "DB",
+      "init": "Init",
+      "api": "API",
+      "processor": "Processor"
+    },
+    "hibernate": "Hibernate",
+    "hibernateIndexer": "Hibernate indexer",
+    "hibernateIndexerInfo": "Hibernation of indexer lets you pause virtual machines, lowering costs while keeping data safe. Wheen needed, redeploy the indexer with all data intact.",
+    "successfullyHibernated": "Indexer successfully hibernated"
+  },
   "nft": {
-    "create": "Create an NFT",
-    "add": "Add NFT",
-    "addNfts": "Add NFTs",
-    "addAttribute": "Add attribute",
-    "addIpns": "Add IPNS",
-    "addIpnsInfo": "With IPNS, you will be able to modify the metadata and add new NFTs to this collection.",
-    "chain": {
-      "1": "MOONBEAM (Mainnet)",
-      "2": "MOONBASE (Testnet)",
-      "8": "ASTAR (Substrate)",
-      "81": "ASTAR SHIBUYA (Testnet)",
-      "592": "ASTAR (Mainnet)",
-      "1284": "MOONBEAM (Mainnet)",
-      "1287": "MOONBASE (Testnet)"
-    },
-    "chainType": {
-      "1": "SUBSTRATE",
-      "2": "EVM"
-    },
     "amount": {
       "title": "Create NFT",
       "content": "Add NFTs one by one or upload them in bulk.",
@@ -1744,25 +1903,23 @@
       "multiple": "Build multiple NFTs at once",
       "multipleContent": "Use CSV file to upload data in bulk"
     },
-    "single": {
-      "content": "NFT content",
-      "uploadDescription": "Upload image, video, audio, or a 3D-model. Supported file formats: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB.",
-      "technicalDetails": "NFT technical details",
-      "properties": "Properties",
-      "propertiesInfo": "Textual traits that show as text boxes",
-      "levels": "Levels",
-      "levelsInfo": "Numerical traits that show as progress bar",
-      "stats": "Stats",
-      "statsInfo": "Numerical traits that show as number boxes",
-      "boosts": "Boosts",
-      "boostsInfo": "Numerical traits that show as circle progress bars",
-      "date": "Date",
-      "dateInfo": "Date traits that show as date boxes",
-      "unlockableContent": "Unlockable Content",
-      "unlockableContentInfo": "Content is only visible to the NFT owner",
-      "displaySettings": "Display Settings",
-      "showDisplay": "Show on store website",
-      "hideDisplay": "Hide on Store website"
+    "chain": {
+      "1": "MOONBEAM (Mainnet)",
+      "2": "MOONBASE (Testnet)",
+      "8": "ASTAR (Substrate)",
+      "11": "Unique network",
+      "81": "ASTAR SHIBUYA (Testnet)",
+      "592": "ASTAR (Mainnet)",
+      "1284": "MOONBEAM (Mainnet)",
+      "1287": "MOONBASE (Testnet)"
+    },
+    "evmChain": {
+      "1": "Ethereum (Mainnet)",
+      "11155111": "Sepolia (Testnet)"
+    },
+    "chainType": {
+      "1": "SUBSTRATE",
+      "2": "EVM"
     },
     "collection": {
       "addNew": "Add new collection",
@@ -1858,31 +2015,6 @@
           "info": "Numerical traits that show as circle progress bars"
         }
       },
-      "labelInfo": {
-        "collectionBaseExtension": "",
-        "collectionBaseUri": "Paste the collection metadata base URI here.",
-        "collectionChain": "Select the network where your NFTs will be deployed",
-        "collectionChainType": "",
-        "collectionDropStart": "A date when your NFT collection becomes publicly available for visitors to buy NFTs.",
-        "collectionDrop": "With drop, your collection becomes accessible for visitors to buy NFTs from a certain date onwards.",
-        "collectionDropAddress": "Drop Withdrawal  Address",
-        "collectionDropPrice": "",
-        "collectionMaxSupply": "The specified number serves as a max supply. Once set, you won't be able to add more files than specified to the collection.",
-        "collectionName": "The name you choose will be the official name of your NFT collection, “name” NFT collection.",
-        "collectionDropReserve": "A number of NFT you wish to reserve for yourself before the drop.",
-        "collectionRevocable": "Collection owner can destroy NFT(s) at any point in time.",
-        "collectionRoyaltiesAddress": "It’s Astar address to receive Withdrawal tokens when tokens are being minted.",
-        "collectionRoyaltiesFees": "The % value of royalties you want to collect in the future NFT sales.",
-        "collectionSoulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
-        "collectionSupplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
-        "collectionSymbol": "A symbol acts as a token name on the blockchain for this NFT collection. It consists of 3 or 4 letters, in connection to the name of the NFT collection.",
-        "collectionType": "",
-        "collectionUseGateway": "Collection base URI points to IPFS. If this checkbox is checked, base URI will point to CID on Apillon private gateway, which provide better performance. Otherwise base URI points to: ipfs://[CID], and gateway needs to be handled manually.",
-        "collectionUseIpns": "When this option is selected, the IPNS will be created. This option will allow you to add more NFTs to your collection later.",
-        "collectionLogoSize": "Maximum size: 3MB, Supported formats: JPG, PNG, GIF, SVG. Recommended size: 400 x 400 px.",
-        "csvUpload": "Before adding new items to the collection with existing NFTs, please add an id column to the CSV file. This will help maintain data integrity and avoid any conflicts when adding new entries.",
-        "nftDisplayType": "Display type is a field indicating how you would like it to be displayed"
-      },
       "status": {
         "0": "CREATED",
         "1": "INITIATED",
@@ -1924,6 +2056,101 @@
         "3": "METADATA UPLOADED ON IPFS",
         "10": "METADATA SUCCESSFULLY PREPARED"
       }
+    },
+    "network": {
+      "11": {
+        "content": [
+          {
+            "purpose": "Purpose: Unique Network is a Polkadot parachain optimized specifically for NFTs and gaming applications.",
+            "title": "Unique network",
+            "benefits": [
+              "<b>Specialized NFT Infrastructure:</b> Unique is designed solely for NFTs, offering specific tools and features that are fine-tuned for NFT minting and management.",
+              "<b>Low-Cost and Eco-Friendly:</b> The network operates with lower transaction fees and a more energy-efficient consensus mechanism compared to Ethereum.",
+              "<b>NFT Customization:</b> Developers have more granular control over NFT metadata, including complex logic such as dynamic NFTs that can evolve based on certain conditions.",
+              "<b>Native Support for On-Chain Features:</b> Includes native support for fractional ownership, nested NFTs (NFTs containing other NFTs), and NFT marketplaces.",
+              "<b>Cross-Chain Capabilities:</b> As a Polkadot parachain, Unique offers cross-chain functionality for NFTs, enabling them to be traded or utilized across different networks within the Polkadot ecosystem.",
+              "<b>Developer-Friendly:</b> Unique provides a comprehensive set of SDKs, APIs, and ready-made NFT tools, reducing the complexity of developing NFT-based applications."
+            ]
+          },
+          {
+            "content": "Use case: Best suited for NFT-focused projects, particularly those that require advanced features like dynamic NFTs, fractional ownership, and low-cost minting."
+          }
+        ]
+      },
+      "592": {
+        "content": [
+          {
+            "title": "Astar Network",
+            "purpose": "Purpose: Astar is a multi-chain dApp hub on Polkadot that supports Ethereum, WebAssembly, and Layer 2 solutions.",
+            "benefits": [
+              "<b>Multi-VM Support:</b> Astar supports both Ethereum Virtual Machine (EVM) and WebAssembly (WASM), providing flexibility for developers who prefer different environments for NFT minting.",
+              "<b>Layer 2 Support:</b> Allows for scaling solutions through Layer 2 technology, reducing costs and increasing efficiency for NFT minting.",
+              "<b>Cross-Chain Interoperability:</b> Like Moonbeam, Astar benefits from Polkadot's cross-chain capabilities, meaning NFTs minted on Astar can be transferred or interact with other Polkadot parachains.",
+              "<b>Dapp Staking Mechanism:</b> Developers can stake Astar tokens to earn rewards, providing additional incentives for NFT projects deployed on Astar.",
+              "<b>Growing Ecosystem:</b> Astar is becoming a dApp hub, meaning NFT projects can integrate with various decentralized applications."
+            ]
+          },
+          {
+            "content": " Suitable for projects looking to leverage multi-chain capabilities with the flexibility of EVM and WASM for more sophisticated NFT minting solutions."
+          }
+        ]
+      },
+      "1284": {
+        "content": [
+          {
+            "title": "Moonbeam (Mainnet)",
+            "content": "Purpose: Moonbeam is a fully Ethereum-compatible smart contract platform on Polkadot, designed for cross-chain applications.",
+            "benefits": [
+              "<b>Ethereum Compatibility:</b> Full support for Ethereum smart contracts and tools (like OpenZeppelin, MetaMask), enabling developers to mint NFTs without learning new languages.",
+              "<b>Cross-Chain Interoperability:</b> Through Polkadot’s relay chain, NFTs minted on Moonbeam can interact with other chains in the Polkadot ecosystem.",
+              "<b>Low Gas Fees:</b> Gas fees on Moonbeam are significantly lower compared to Ethereum, making minting NFTs more cost-efficient.",
+              "<b>Active DeFi and NFT Ecosystem:</b> Moonbeam's rapidly growing DeFi ecosystem also creates opportunities for NFTs to be used in decentralized finance.",
+              "<b>Multi-chain Vision:</b> Moonbeam allows NFTs to be minted with the potential to interact with multiple blockchains through Polkadot’s cross-chain capabilities."
+            ]
+          },
+          {
+            "content": "Use case: Ideal for projects requiring full production deployment of Ethereum-based NFTs with cross-chain interactions."
+          }
+        ]
+      },
+      "1287": {
+        "content": [
+          {
+            "title": "MOONBASE (Moonbeam Testnet)",
+            "content": "Purpose: Moonbase is the testnet for Moonbeam, designed for testing and experimentation.",
+            "benefits": [
+              "<b>Low Costs:</b> As a testnet, transaction fees are negligible, allowing for cost-effective testing of NFT minting processes.",
+              "<b>Ethereum Compatibility:</b> Developers can test Ethereum-based smart contracts and NFTs in an environment that mirrors Ethereum’s functionality.",
+              "<b>Web3 Compatible:</b> You can use Ethereum development tools like MetaMask, Remix, and Truffle.",
+              "<b>Access to Full Moonbeam Ecosystem:</b> Provides the opportunity to test features before deploying them on Moonbeam, ensuring seamless migration of NFT minting solutions to the mainnet.",
+              "<b>Free Tokens for Testing:</b> You can request tokens from a faucet, making testing free and accessible."
+            ]
+          },
+          {
+            "content": "Use case: Best suited for developers who want to test minting processes and smart contract deployment before moving to production."
+          }
+        ]
+      }
+    },
+    "single": {
+      "content": "NFT content",
+      "uploadDescription": "Upload image, video, audio, or a 3D-model. Supported file formats: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB.",
+      "technicalDetails": "NFT technical details",
+      "properties": "Properties",
+      "propertiesInfo": "Textual traits that show as text boxes",
+      "levels": "Levels",
+      "levelsInfo": "Numerical traits that show as progress bar",
+      "stats": "Stats",
+      "statsInfo": "Numerical traits that show as number boxes",
+      "boosts": "Boosts",
+      "boostsInfo": "Numerical traits that show as circle progress bars",
+      "date": "Date",
+      "dateInfo": "Date traits that show as date boxes",
+      "unlockableContent": "Unlockable Content",
+      "unlockableContentInfo": "Content is only visible to the NFT owner",
+      "displaySettings": "Display Settings",
+      "showDisplay": "Show on store website",
+      "hideDisplay": "Hide on Store website"
     },
     "transaction": {
       "chain": "Chain",
@@ -1984,6 +2211,12 @@
       "imagesInvalid": "Invalid image names. Example: ",
       "selectAmount": "Please select how many NFTs would you like to create."
     },
+    "add": "Add NFT",
+    "addNfts": "Add NFTs",
+    "addAttribute": "Add attribute",
+    "addIpns": "Add IPNS",
+    "addIpnsInfo": "With IPNS, you will be able to modify the metadata and add new NFTs to this collection.",
+    "create": "Create an NFT",
     "openBucket": "Go to storage",
     "transactionType": "Transaction Type"
   },
@@ -2065,6 +2298,93 @@
     },
     "title": "Referral program"
   },
+  "rpc": {
+    "apiKey": {
+      "new": "New key",
+      "save": "Save",
+      "keys": "Your API keys",
+      "turnOnService": "Turn on RPC service",
+      "mustBeOwner": "You must be the project owner to turn on the RPC service.",
+      "powered": "Powered by",
+      "headline": "Access over 100 blockchains",
+      "description": "Apillon’s RPC service, powered by Dwellir, provides developers with reliable, low-latency access to over 100 blockchain networks. This scalable solution ensures seamless communication between decentralized applications and blockchains, backed by 99% uptime and top-tier performance. With easy API key management, you can quickly integrate multiple chains, eliminating the complexity of running your own nodes. The intuitive dashboard allows you to browse and favorite endpoints, simplifying Web3 project management from start to scale.",
+      "uuid": "UUID",
+      "usage": "RPC Usage monitoring",
+      "yourEndpoints": "Your endpoints",
+      "curious": "Curious about what we offer before enabling the service?",
+      "explore": "Explore the supported chains and pick the one that fits your needs.",
+      "start": "Start by browsing the list of available endpoints, and don't forget to mark the chains you're using as favorites for quick access and efficient management.",
+      "continue": "Continue",
+      "quotaReached": "Quota has been reached. To create more API keys",
+      "empty": "You currently have no API keys for the selected project.",
+      "emptyInfo": "Create your first API key to start using the RPC service.",
+      "createFirst": "Create first API key",
+      "monthlyUsage": "{used} of {max} monthly calls used"
+    },
+    "endpoint": {
+      "chainName": "Chain name",
+      "network": "Network",
+      "httpsEndpoint": "HTTPS endpoint",
+      "wssEndpoint": "WSS endpoint",
+      "viewAll": "View all endpoints",
+      "viewDocumentation": "View Documentation",
+      "allEndpoints": "All endpoints",
+      "add": "Add",
+      "added": "Added",
+      "delete": "Are you sure you want to remove this endpoint from favorites?",
+      "noFavoriteEndpointTitle": "You currently have no favorite endpoints.",
+      "noFavoriteEndpointDescription": "Browse our available endpoints and click \"Add\" for quick access. Once you add a chain you plan to use, it will appear in your \"Endpoints\" table.",
+      "browse": "Browse endpoints"
+    },
+    "usage": {
+      "requestsNumber": "Number of requests"
+    },
+    "initial": {
+      "benefits": [
+        {
+          "text": "Free Tier to start"
+        },
+        {
+          "bolded": "Multi-Chain Access:",
+          "text": "Connect to over 100 blockchain networks for versatile Web3 integration."
+        },
+        {
+          "bolded": "99% Uptime:",
+          "text": "Ensure high reliability and fast response times for smooth project execution."
+        },
+        {
+          "bolded": "Scalable Infrastructure:",
+          "text": "Access robust RPC nodes to scale with your project's demands"
+        },
+        {
+          "bolded": "API Key Management:",
+          "text": "Generate and manage API keys for multiple chains with ease."
+        },
+        {
+          "bolded": "User-Friendly Dashboard:",
+          "text": "Browse, manage and favorite your blockchain endpoints effortlessly."
+        }
+      ],
+      "planSelection": "Before proceeding, select a plan.\nIf you choose the free plan, we'll notify you when you're approaching the limits.\nAt that point, you'll need to upgrade to keep the RPC service active.",
+      "subscriptionBenefits": [
+        {
+          "text": "Only one free plan is available per registered user, regardless of how many projects you have."
+        },
+        {
+          "bolded": "If you have an active subscription, the paid plan covers all the projects you own."
+        },
+        {
+          "bolded": "Any additional team members you add to a project can use the RPC API under your existing subscription."
+        }
+      ],
+      "subscriptionLimits": "Limits"
+    },
+    "subscription": {
+      "unavailable": "Unavailable",
+      "unavailableDescription": "You've already used the Freemium plan on this or other projects you own.",
+      "mustBeOwner": "You must be the project owner to change the plan."
+    }
+  },
   "social": {
     "chat": {
       "about": "About",
@@ -2127,10 +2447,8 @@
     "createNew": "New Embedded wallet integration",
     "edit": "Edit Embedded wallet integration",
     "editIntegration": "Edit integration",
-    "hideInstructions": "Hide instructions",
     "howItWorks": "See how it works",
     "readBlog": "Read our blog post",
-    "showInstructions": "Show instructions",
     "viewDocumentation": "View Documentation",
     "generate": {
       "title": "Generate API key and start using Embedded Wallet service",
@@ -2334,30 +2652,6 @@
     "cardHolder": "Please enter valid name",
     "cardHolderRequired": "Please enter your name",
     "chatNameRequired": "Please enter Hub name",
-    "collectionBaseUri": "Base URI is not valid",
-    "collectionBaseUriRequired": "Please enter Base URI",
-    "collectionBaseExtensionRequired": "Please enter Base Extension",
-    "collectionChainRequired": "Please select Chain",
-    "collectionChainTypeRequired": "Please select Chain type",
-    "collectionDropStart": "Drop start is not a valid date or has already passed by",
-    "collectionMaxSupplyReached": "Please enter a valid value, max supply is {max}",
-    "collectionMaxSupplyRequired": "Please enter Max supply",
-    "collectionDropPrice": "Please enter a valid Mint price",
-    "collectionDropPriceRequired": "Please enter Mint price",
-    "collectionNameRequired": "Please enter Collection name",
-    "collectionDropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
-    "collectionRoyaltiesAddress": "Please enter a valid Wallet address",
-    "collectionRoyaltiesAddressRequired": "Please enter Royalties address",
-    "collectionRoyaltiesFees": "Royalty fee must be a number between 0 and 100",
-    "collectionRoyaltiesFeesRequired": "Please enter Royalties fees",
-    "collectionLogoRequired": "Please select Collection logo",
-    "collectionCoverImageRequired": "Please select Collection cover image",
-    "collectionSymbolRequired": "Please enter Collection symbol",
-    "collectionTypeRequired": "Please select Collection type",
-    "creditCard": "Credit card validation error",
-    "creditCardRequired": "Please enter credit card number",
-    "cvv": "Wrong CVV",
-    "cvvRequired": "Please enter CVV",
     "descriptionRequired": "Please enter description",
     "descriptionTooLong": "Text is too long (max 255 characters)",
     "email": "Email address is not valid",
@@ -2369,6 +2663,7 @@
     "fileTypeNotCsv": "File must be of type CSV",
     "folderNameRequired": "Please enter folder name",
     "idRequired": "ID is required",
+    "indexerNameRequired": "Indexer name is required",
     "ipfsCidRequired": "Please enter CID or IPNS",
     "ipfsTypeRequired": "Please select type",
     "ipnsNameRequired": "Please enter IPNS name",
@@ -2429,6 +2724,28 @@
       "nameNotUnique": "Asset with this name already exists, please use a different name",
       "symbolNotUnique": "Asset with this symbol already exists, please use a different symbol"
     },
+    "collection": {
+      "baseUri": "Base URI is not valid",
+      "baseUriRequired": "Please enter Base URI",
+      "baseExtensionRequired": "Please enter Base Extension",
+      "chainRequired": "Please select Chain",
+      "chainTypeRequired": "Please select Chain type",
+      "coverImageRequired": "Please select Collection cover image",
+      "dropPrice": "Please enter a valid Mint price",
+      "dropPriceRequired": "Please enter Mint price",
+      "dropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
+      "dropStart": "Drop start is not a valid date or has already passed by",
+      "logoRequired": "Please select Collection logo",
+      "maxSupplyReached": "Please enter a valid value, max supply is {max}",
+      "maxSupplyRequired": "Please enter Max supply",
+      "nameRequired": "Please enter Collection name",
+      "royaltiesAddress": "Please enter a valid Wallet address",
+      "royaltiesAddressRequired": "Please enter Royalties address",
+      "royaltiesFees": "Royalty fee must be a number between 0 and 100",
+      "royaltiesFeesRequired": "Please enter Royalties fees",
+      "symbolRequired": "Please enter Collection symbol",
+      "typeRequired": "Please select Collection type"
+    },
     "contract": {
       "addressRequired": "Please enter NFT collection address",
       "bucketUuidRequired": "Please select Bucket",
@@ -2475,6 +2792,9 @@
     },
     "contract": {
       "_new": "New Phat contract"
+    },
+    "rpc": {
+      "new": "INSERT SOME TEXT"
     },
     "file": {
       "delete": "This item will be permanently deleted after 3 months. Until then you can find them in the deleted items tab and you can restore them anytime before."

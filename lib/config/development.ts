@@ -18,11 +18,13 @@ const config: ConfigInterface = {
     'AUTHENTICATION',
     'BILLING',
     'CAPTCHA_LOGIN',
+    'CLOUD_FUNCTIONS',
     'COMPUTING',
     'CONFIGURATION',
     'DISCORD',
     'EMBEDDED_WALLET',
     'HOSTING',
+    'INDEXING',
     'INSTRUCTIONS',
     'KILT_LOGIN',
     'MARKETING',
@@ -35,6 +37,7 @@ const config: ConfigInterface = {
     'PROJECT_SETTINGS',
     'PREBUILD_SOLUTIONS',
     'REFERRAL',
+    'RPC',
     'SERVICES',
     'SMART_CONTRACTS',
     'SOCIAL',
@@ -42,9 +45,15 @@ const config: ConfigInterface = {
     'STORAGE',
     'TWO_FACTOR_AUTHENTICATION',
     'WALLET_LOGIN',
+  ],
+  betaFeatures: [
+    'ASSET_HUB',
+    'EMBEDDED_WALLET',
+    'INDEXING',
+    'RPC',
+    'SMART_CONTRACTS',
     'CLOUD_FUNCTIONS',
   ],
-  betaFeatures: [],
 };
 
 export default config;

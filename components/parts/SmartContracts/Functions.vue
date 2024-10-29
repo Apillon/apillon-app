@@ -37,11 +37,11 @@
       </div>
     </div>
     <div class="w-3/4 p-4">
-      <h3>{{ selectedFunction }}</h3>
+      <h3 class="mb-2">{{ selectedFunction }}</h3>
 
       <n-data-table :bordered="false" :columns="columns" :data="tableData" />
 
-      <div class="mt-6">
+      <!-- <div class="mt-6">
         <h3>Use this function in your app</h3>
 
         <div class="bg-bg-lighter rounded-full p-0.4 inline-block mt-6 mb-6">
@@ -77,7 +77,7 @@
           theme="github-dark"
           highlightjs
         />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

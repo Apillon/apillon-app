@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="border-none">
     <n-menu
       v-bind="$attrs"
       v-model:value="selectedMenu"
@@ -36,7 +36,7 @@ function routeNameToKey(name: string) {
 }
 
 function removeIdOrSlug(text) {
-  return text.replace(/(-id|-slug|-archive).*/g, '');
+  return text.replace(/(-id|-slug|-archive|-deployed|-new).*/g, '');
 }
 
 /**
@@ -88,7 +88,9 @@ function renderMenuExtra(option: NMenuOption) {
 }
 
 function renderMenuIcon(option: NMenuOption) {
-  if ('iconName' in option) {
+  if ('svgIcon' in option) {
+    return h(resolveComponent('NuxtIcon'), { name: option.svgIcon, class: 'text-xl mx-2' }, '');
+  } else if ('iconName' in option) {
     return h('span', { class: iconClass(option.iconName) }, '');
   }
   return null;

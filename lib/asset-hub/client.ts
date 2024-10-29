@@ -189,19 +189,19 @@ export class AssetHubClient {
     return result.txHash.toHex();
   }
 
-  async mint(id: number, beneficiary: string, amount: number) {
+  async mint(id: number, beneficiary: string, amount: bigint) {
     const result = await this.signAndSend(this.api.tx.assets.mint(id, beneficiary, amount));
 
     return result.txHash.toHex();
   }
 
-  async burn(id: number, who: string, amount: number) {
+  async burn(id: number, who: string, amount: bigint) {
     const result = await this.signAndSend(this.api.tx.assets.burn(id, who, amount));
 
     return result.txHash.toHex();
   }
 
-  async transfer(id: number, target: string, amount: number) {
+  async transfer(id: number, target: string, amount: bigint) {
     const result = await this.signAndSend(this.api.tx.assets.transfer(id, target, amount));
 
     return result.txHash.toHex();

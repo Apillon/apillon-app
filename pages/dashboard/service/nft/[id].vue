@@ -193,6 +193,8 @@ function onNftBurned() {
 
 function onNftTransferred() {
   modalTransferOwnershipVisible.value = false;
+  collectionStore.active.collectionStatus = CollectionStatus.TRANSFERRED;
+
   setTimeout(() => {
     collectionStore.fetchCollections();
 

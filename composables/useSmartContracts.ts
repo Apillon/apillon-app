@@ -70,7 +70,8 @@ export default function useSmartContracts() {
     const unfinishedContract = deployedContractStore.items.find(
       contract =>
         contract.contractStatus === SmartContractStatus.DEPLOY_INITIATED ||
-        contract.contractStatus === SmartContractStatus.DEPLOYING
+        contract.contractStatus === SmartContractStatus.DEPLOYING ||
+        contract.contractStatus === SmartContractStatus.TRANSFERRING
     );
     if (unfinishedContract === undefined) return;
 
@@ -83,7 +84,17 @@ export default function useSmartContracts() {
       const smartContract = smartContracts.find(
         contract => contract.contract_uuid === unfinishedContract.contract_uuid
       );
-      if (!smartContract || smartContract.contractStatus >= SmartContractStatus.DEPLOYED) {
+      if (
+        smartContract &&
+        deployedContractStore.active.contract_uuid === smartContract.contract_uuid
+      ) {
+        Object.assign(deployedContractStore.active, smartContract);
+      }
+      if (
+        !smartContract ||
+        smartContract.contractStatus === SmartContractStatus.DEPLOYED ||
+        smartContract.contractStatus === SmartContractStatus.TRANSFERRED
+      ) {
         clearInterval(smartContractInterval);
       }
     }, 10000);
