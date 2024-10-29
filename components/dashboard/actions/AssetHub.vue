@@ -16,13 +16,13 @@
     </div>
 
     <n-space size="large">
-      <!-- Refresh posts -->
+      <!-- Refresh assets -->
       <n-button size="small" :loading="assetHubStore.loading" @click="assetHubStore.fetchAssets()">
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
-      <!-- Create new post -->
+      <!-- Create new asset -->
       <n-button
         size="small"
         :disabled="authStore.isAdmin()"
@@ -31,6 +31,17 @@
         <span class="icon-create-folder text-xl text-primary mr-2"></span>
         <span class="text-primary">{{ $t('dashboard.service.assetHub.new') }}</span>
       </n-button>
+
+      <!-- View Documentation -->
+      <Btn
+        size="small"
+        type="secondary"
+        inner-class="text-white flex items-center justify-center"
+        href="https://wiki.polkadot.network/docs/learn-assets"
+      >
+        <span class="icon-file text-xl mr-2"></span>
+        <span>{{ $t('dashboard.service.assetHub.viewDocumentation') }}</span>
+      </Btn>
     </n-space>
   </n-space>
 </template>

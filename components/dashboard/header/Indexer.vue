@@ -19,6 +19,15 @@
     </slot>
     <template #info>
       <n-space v-if="indexerUuid && indexerStore.active" size="large">
+        <Btn
+          size="small"
+          type="secondary"
+          inner-class="text-white flex items-center justify-center"
+          href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
+        >
+          <span class="icon-file text-xl mr-2"></span>
+          <span>{{ $t('dashboard.service.indexer.viewDocumentation') }}</span>
+        </Btn>
         <n-button size="small" @click="showModalEditIndexer = true">
           <span class="icon-edit text-xl text-primary mr-2"></span>
           <span class="text-primary">{{ $t('indexer.update') }}</span>

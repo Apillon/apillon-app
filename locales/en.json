@@ -574,7 +574,8 @@
           "anyway": "Leave anyway",
           "info": "If you leave, your changes won’t be saved.",
           "title": "Are you sure you want to leave?"
-        }
+        },
+        "viewDocumentation": "View Documentation"
       },
       "authentication": {
         "name": "Decentralized Authentication",
@@ -706,7 +707,8 @@
         },
         "general": "General",
         "logs": "Logs",
-        "deployments": "Deployments"
+        "deployments": "Deployments",
+        "viewDocumentation": "View Documentation"
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -1115,7 +1117,8 @@
       "perMonth": "per month",
       "storage": "Storage",
       "web3Services": "Web3 services",
-      "plusTaxes": "+taxes"
+      "plusTaxes": "+taxes",
+      "wallets": "Embedded Wallets"
     },
     "usage": {
       "bandwith": "Bandwith",
@@ -1842,9 +1845,7 @@
   "indexer": {
     "startNew": "Star by creating a new indexer",
     "create": "Create new indexer",
-    "update": "Update indexer",
-    "showInstructions": "Show instructions",
-    "hideInstructions": "Hide instructions",
+    "update": "Update Indexer",
     "statuses": {
       "1": "Created",
       "3": "Hibernated",
@@ -2326,6 +2327,7 @@
       "httpsEndpoint": "HTTPS endpoint",
       "wssEndpoint": "WSS endpoint",
       "viewAll": "View all endpoints",
+      "viewDocumentation": "View Documentation",
       "allEndpoints": "All endpoints",
       "add": "Add",
       "added": "Added",
@@ -2445,10 +2447,8 @@
     "createNew": "New Embedded wallet integration",
     "edit": "Edit Embedded wallet integration",
     "editIntegration": "Edit integration",
-    "hideInstructions": "Hide instructions",
     "howItWorks": "See how it works",
     "readBlog": "Read our blog post",
-    "showInstructions": "Show instructions",
     "viewDocumentation": "View Documentation",
     "generate": {
       "title": "Generate API key and start using Embedded Wallet service",

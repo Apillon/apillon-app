@@ -33,6 +33,16 @@
         <span class="icon-file text-xl text-primary mr-2"></span>
         <span class="text-primary">{{ $t('dashboard.service.indexer.new') }}</span>
       </n-button>
+      <!-- Show Docs -->
+      <Btn
+        size="small"
+        type="secondary"
+        inner-class="text-white flex items-center justify-center"
+        href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
+      >
+        <span class="icon-file text-xl mr-2"></span>
+        <span>{{ $t('dashboard.service.indexer.viewDocumentation') }}</span>
+      </Btn>
     </n-space>
   </n-space>
   <!-- Modal - Create Indexer -->

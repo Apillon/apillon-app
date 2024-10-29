@@ -22,19 +22,13 @@
           accordion
           @update:expanded-names="onUpdateAccordion"
         >
-          <n-collapse-item
-            :title="
-              instructionsVisible
-                ? $t('embeddedWallet.hideInstructions')
-                : $t('embeddedWallet.showInstructions')
-            "
-          >
+          <n-collapse-item>
             <template #header>
               <span class="icon-info text-xl mr-2"></span>
               {{
                 instructionsVisible
-                  ? $t('embeddedWallet.hideInstructions')
-                  : $t('embeddedWallet.showInstructions')
+                  ? $t('general.instructions.hide')
+                  : $t('general.instructions.show')
               }}
             </template>
             <EmbeddedWalletInstructions />
