@@ -1,5 +1,5 @@
 <template>
-  <Dashboard>
+  <Dashboard :loading="pageLoading">
     <template #heading>
       <HeaderIndexer
         v-if="indexerStore.active.indexer_uuid"
@@ -9,7 +9,13 @@
 
     <slot v-if="indexerStore.active.indexer_uuid">
       <n-space v-if="indexerStore.active?.squidId" class="pb-8" :size="32" vertical>
-        <h4>{{ $t('indexer.indexerApiEndpoint') }}</h4>
+        <div class="flex justify-between items-center">
+          <h4>{{ $t('indexer.indexerApiEndpoint') }}</h4>
+          <n-button size="small" :loading="pageLoading" class="mr-4" @click="refreshIndexerData">
+            <span class="icon-refresh text-xl mr-2"></span>
+            {{ $t('general.refresh') }}
+          </n-button>
+        </div>
         <HostingPreviewLink
           class="xl:max-w-3xl xxl:max-w-4xl"
           :link="indexerStore.active.squid?.api?.urls[0].url || ''"
@@ -187,6 +193,7 @@
 const { t } = useI18n();
 const indexerStore = useIndexerStore();
 const { initIndexer } = useIndexer();
+const pageLoading = ref<boolean>(false);
 
 useHead({
   title: t('dashboard.nav.indexing'),
@@ -195,4 +202,10 @@ useHead({
 onMounted(() => {
   initIndexer();
 });
+
+const refreshIndexerData = async () => {
+  pageLoading.value = true;
+  await initIndexer();
+  pageLoading.value = false;
+};
 </script>
