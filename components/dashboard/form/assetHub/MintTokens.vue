@@ -56,6 +56,8 @@
 </template>
 
 <script lang="ts" setup>
+import { nToBigInt } from '@polkadot/util';
+
 type FormAssetTransfer = {
   address: string | null;
   amount: number | null;
@@ -115,7 +117,7 @@ async function mintTokens() {
     txHash.value = await assetHubClient.value.mint(
       props.assetId,
       formData.value.address,
-      formData.value.amount
+      nToBigInt(Number(formData.value.amount) * Math.pow(10, Number(assetHubStore.active.decimals)))
     );
 
     message.success(t('form.success.assetMinted'));
