@@ -43,7 +43,7 @@
               <td>
                 <span class="text-white">{{ $t('general.available') }}</span>
               </td>
-              <td>{{ assetHubStore.active.supply }} {{ assetHubStore.active.symbol }}</td>
+              <td>{{ supply }} {{ assetHubStore.active.symbol }}</td>
             </tr>
           </tbody>
         </n-table>
@@ -71,7 +71,7 @@ const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
 const assetHubStore = useAssetHubStore();
-const { pageLoading, initAssetHub, reconnectWallet } = useAssetHub();
+const { pageLoading, supply, initAssetHub, reconnectWallet } = useAssetHub();
 
 useHead({
   title: t('dashboard.nav.assetHub'),
@@ -89,7 +89,7 @@ const assetData = computed<AssetData[]>(() => [
   { label: t('form.label.assetHub.decimals'), value: `${assetHubStore.active?.decimals}` },
   {
     label: t('form.label.assetHub.supply'),
-    value: `${assetHubStore.active?.supply}`,
+    value: `${supply.value}`,
   },
   {
     label: t('form.label.assetHub.issuer'),

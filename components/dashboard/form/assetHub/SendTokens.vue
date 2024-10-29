@@ -33,9 +33,7 @@
       />
       <div class="absolute right-0 top-full mt-1 text-sm">
         {{ $t('general.available') }}:
-        <span class="text-body"
-          >{{ assetHubStore.active.supply }} {{ assetHubStore.active.symbol }}</span
-        >
+        <span class="text-body"> {{ supply }} {{ assetHubStore.active.symbol }}</span>
       </div>
     </n-form-item>
 
@@ -70,7 +68,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
-const { assetHubClient, initClient } = useAssetHub();
+const { assetHubClient, supply } = useAssetHub();
 
 const loading = ref(false);
 const txHash = ref<string | undefined>();

@@ -32,12 +32,6 @@
         :placeholder="$t('form.placeholder.assetHub.amount')"
         clearable
       />
-      <div class="absolute right-0 top-full mt-1 text-sm">
-        {{ $t('general.available') }}:
-        <span class="text-body"
-          >{{ assetHubStore.active.supply }} {{ assetHubStore.active.symbol }}</span
-        >
-      </div>
     </n-form-item>
 
     <n-form-item :show-feedback="false">
