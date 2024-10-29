@@ -172,7 +172,7 @@ async function prepareUniqueData(bucketUuid: string) {
     return acc;
   }, {});
 
-  return { ...baseData, metadata };
+  return { ...baseData, metadata, bucket_uuid: bucketUuid };
 }
 
 async function createBucket(name: string) {

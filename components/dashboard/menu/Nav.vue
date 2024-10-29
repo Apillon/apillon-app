@@ -151,7 +151,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       key: 'dashboard-service-asset-hub',
       label: t('dashboard.nav.assetHub'),
       to: 'dashboard-service-asset-hub',
-      icon: 'icon/asset-hub',
+      svgIcon: 'icon/asset-hub',
       show: !isMenuItemDisabled(Feature.ASSET_HUB),
       beta: isBetaFeature(Feature.ASSET_HUB),
       disabled: isMenuItemDisabled(Feature.ASSET_HUB) || zeroProjects.value,

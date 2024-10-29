@@ -268,6 +268,7 @@ export const useBucketStore = defineStore('bucket', {
 
         this.folder.items = res.data.items;
         this.folder.pagination.itemCount = res.data.total;
+        this.folder.loading = false;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.BUCKET_ITEMS, Date.now().toString());
