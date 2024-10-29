@@ -35,7 +35,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
 
@@ -49,7 +49,7 @@ const rules: NFormRules = {
   address: [
     {
       required: true,
-      message: $i18n.t('validation.nftTransferAddressRequired'),
+      message: t('validation.nftTransferAddressRequired'),
     },
   ],
 };
@@ -81,12 +81,9 @@ async function transfer() {
       ...formData.value,
       collection_uuid: props.collectionUuid,
     };
-    const res = await $api.post<any>(
-      endpoints.collectionTransferOwnership(props.collectionUuid),
-      bodyData
-    );
+    await $api.post<any>(endpoints.collectionTransferOwnership(props.collectionUuid), bodyData);
 
-    message.success($i18n.t('form.success.nftTransfer'));
+    message.success(t('form.success.nftTransfer'));
 
     /** Emit events */
     emit('submitSuccess');

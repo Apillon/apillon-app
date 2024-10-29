@@ -87,7 +87,7 @@
     </n-grid>
 
     <n-grid
-      v-if="collectionStore.form.base.chainType === ChainType.EVM || isUnique"
+      v-if="collectionStore.form.base.chainType === ChainType.EVM && !isUnique"
       class="items-end"
       :cols="12"
       :x-gap="32"

@@ -171,6 +171,7 @@ const options = computed(() => {
     {
       label: t('nft.collection.setBaseUri'),
       key: 'setBaseUri',
+      show: !collectionStore.isUnique,
       disabled: actionsDisabled.value,
       props: {
         onClick: () => {
