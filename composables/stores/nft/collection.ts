@@ -91,6 +91,9 @@ export const useCollectionStore = defineStore('collection', {
     hasMetadataDeploys(state): boolean {
       return Array.isArray(state.metadataDeploys) && state.metadataDeploys.length > 0;
     },
+    isUnique(state): boolean {
+      return state.active.chain === SubstrateChain.UNIQUE;
+    },
   },
   actions: {
     resetData() {

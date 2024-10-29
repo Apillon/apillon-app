@@ -38,7 +38,8 @@
         v-if="
           collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
           collectionStore.active.cid &&
-          !collectionStore.active.ipns_uuid
+          !collectionStore.active.ipns_uuid &&
+          !collectionStore.isUnique
         "
         @positive-click="createDynamicMetadata()"
       >

@@ -184,12 +184,12 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const indexerStore = useIndexerStore();
 const { initIndexer } = useIndexer();
 
 useHead({
-  title: $i18n.t('dashboard.nav.hosting'),
+  title: t('dashboard.nav.indexing'),
 });
 
 onMounted(() => {

@@ -11,7 +11,7 @@
         @click="selectChain(chain.value)"
       >
         <div>
-          <div class="h-20">
+          <div class="h-20 flex items-center justify-center">
             <Image
               v-if="chain.value === SubstrateChain.UNIQUE"
               :src="uniquePNG"

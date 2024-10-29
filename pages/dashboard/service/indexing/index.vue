@@ -34,6 +34,7 @@
                   : $t('indexer.showInstructions')
               }}
             </template>
+            <IndexerInstructions />
           </n-collapse-item>
         </n-collapse>
         <IndexerInstructions v-else class="border-b-1 border-bg-lighter pb-8" />

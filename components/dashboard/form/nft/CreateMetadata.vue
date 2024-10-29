@@ -120,7 +120,7 @@ async function deployUnique() {
     collectionStore.form.single.collectionUuid = res.data.collection_uuid;
 
     /** Uploads logo and cover image */
-    await uploadLogoAndCover(res.data.bucket_uuid);
+    await uploadLogoAndCover(bucketUuid);
 
     /** Deployment status */
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;

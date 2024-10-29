@@ -78,7 +78,7 @@ const props = defineProps({
 
 const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
-const { chains, evmChains, substrateChains } = useCollection();
+const { chains, nftChains, evmChains, substrateChains } = useCollection();
 
 const identityChains = enumKeyValues(IdentityChains);
 const services = enumKeyValues(ServiceTypeName);
@@ -113,7 +113,7 @@ const chainsByService = computed(() => {
     case ServiceTypeName.HOSTING:
       return [];
     case ServiceTypeName.NFT:
-      return [...chains, ...substrateChains];
+      return nftChains;
     case ServiceTypeName.STORAGE:
       return [];
     case ServiceTypeName.CONTRACTS:
@@ -138,6 +138,7 @@ const shownPrices = computed(() => {
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
     const chainName = getChainName(selectedChain.value, props.service);
+    console.log(chainName);
     return servicePrices.value.filter(item => item.name.includes(chainName));
   } else if (props.filterByService && selectedService.value) {
     /** Filter by service */
@@ -161,7 +162,11 @@ function getChainName(chain: string | number, service?: string): string {
   if (service === ServiceTypeName.CONTRACTS && Number.isInteger(chain)) {
     return chain in EvmChain ? EvmChain[chain] : Chains[chain];
   } else if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
-    return chain in Chains ? Chains[chain] : SubstrateChain[chain] + '_WASM';
+    return chain in Chains
+      ? Chains[chain]
+      : SubstrateChain[chain] === SubstrateChain.ASTAR
+        ? SubstrateChain[chain] + '_WASM'
+        : SubstrateChain[chain];
   }
   return `${chain}`;
 }
@@ -184,8 +189,12 @@ function getIconName(service: ProductPriceInterface) {
     case PriceServiceCategory.SEPOLIA_CONTRACT:
     case PriceServiceCategory.SEPOLIA_NFT:
       return 'logo/evm';
+    case PriceServiceCategory.UNIQUE_NFT:
+      return 'logo/unique';
     case PriceServiceCategory.GRILL_CHAT:
       return 'logo/subsocial';
+    case PriceServiceName.INDEXER:
+      return 'menu/indexer';
   }
   switch (service.name) {
     case PriceServiceName.HOSTING_WEBSITE:
