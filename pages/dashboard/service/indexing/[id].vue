@@ -174,7 +174,7 @@
         <n-space class="mt-8 pb-8 mx-auto" :size="16" vertical>
           <h4>{{ $t('indexer.instructions.step4') }}</h4>
           <CliCommand
-            command="apillon indexing deploy-indexer <path to indexer> -i <indexer-uuid>"
+            command="apillon indexing deploy <path to indexer> -i <indexer-uuid>"
             title="Run indexer deployment inside your local project"
           />
         </n-space>
