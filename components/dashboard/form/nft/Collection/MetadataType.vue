@@ -13,7 +13,7 @@
       <Btn size="large" type="primary" :disabled="isFormDisabled" @click="collectionStore.metadataStored = false">
         {{ t('nft.metadata.yes') }}
       </Btn>
-      <Btn size="large" type="secondary" :disabled="isFormDisabled" @click="collectionStore.metadataStored = true">
+      <Btn size="large" type="secondary" :disabled="isFormDisabled" @click="onMetadataStored">
         <span class="-mx-1 inline-block">{{ t('nft.metadata.no') }}</span>
       </Btn>
     </div>
@@ -22,10 +22,16 @@
 
 <script setup lang="ts">
 const { t } = useI18n();
+const router = useRouter();
 const collectionStore = useCollectionStore();
 const { isFormDisabled, resetAll } = useCollection();
 
 onMounted(() => {
   resetAll();
 });
+
+function onMetadataStored() {
+  router.push({ name: 'dashboard-service-nft-new' });
+  setTimeout(() => collectionStore.metadataStored = true, 10);  
+}
 </script>

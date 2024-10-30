@@ -138,7 +138,7 @@
       "orUseEmail": "or sign up using email",
       "sendAgain": "Send again",
       "title": "Build your first Web3 project",
-      "titleReferalZiggi": "Welcome, traveler! Register below and start building.",
+      "titleReferralZiggi": "Welcome, traveler! Register below and start building.",
       "wallet": "Register with Wallet",
       "walletConfirmed": "Wallet and email confirmed, logging you in...",
       "walletEmail": "Email is required for wallet login",
@@ -612,7 +612,7 @@
       },
       "fileSharing": {
         "name": "Decentralized File Sharing",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "embeddedWallet": {
@@ -627,7 +627,7 @@
               "A seamless and secure UX: EVM wallets are auto-created and encrypted.",
               "Autonomy and security over funds: No third-party services to store user’s private keys.",
               "Authentication: User can add different methods of verification.",
-              "Gassles wallet creation: charged in Apillon credits per each onboarded user.",
+              "Gasless wallet creation: charged in Apillon credits per each onboarded user.",
               "Fully trustless. Powered by Oasis."
             ]
           }
@@ -709,7 +709,7 @@
       },
       "nftDrop": {
         "name": "NFT Drop",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": ".",
         "usage": ["metadata storage", "file storage"]
       },
       "nftEmailSignupAirdrop": {
@@ -757,12 +757,12 @@
       },
       "nftLoyalty": {
         "name": "NFT-based Loyalty Program",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "nftMembership": {
         "name": "NFT-based Brand Membership",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "nftPoap": {
@@ -903,12 +903,12 @@
       },
       "tokenGating": {
         "name": "Token Gating",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "wallet": {
         "name": "Non-custodial Wallet",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "choose": "Choose Solution",
@@ -1861,7 +1861,7 @@
       "csvConfirm": "Confirm CSV data",
       "csvConfirmAttributes": "Confirm attributes",
       "csvFile": "Select CSV file",
-      "csvFileDesc": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
+      "csvFileDesc": "",
       "deploy": "Deploy",
       "deployError": "There is a problem with deploy.",
       "downloadCsv": "Download CSV example",
@@ -2135,8 +2135,8 @@
       "destroyed": "Deleted buckets",
       "destroyedBuckets": "Destroyed buckets",
       "edit": "Edit bucket",
-      "infoEdit": "Edit name and description for the bucket so you can easily recognise it.",
-      "infoNew": "Enter the desired name and description for the bucket so you can easily recognise it.",
+      "infoEdit": "Edit name and description for the bucket so you can easily recognize it.",
+      "infoNew": "Enter the desired name and description for the bucket so you can easily recognize it.",
       "management": "Bucket management",
       "name": "Bucket name",
       "new": "New bucket",
