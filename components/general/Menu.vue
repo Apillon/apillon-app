@@ -77,7 +77,7 @@ function renderMenuExtra(option: NMenuOption) {
       'span',
       h('img', {
         src: '/icons/beta.svg',
-        class: 'w-14 h-5 inline-block',
+        class: 'w-14 h-4 inline-block',
         alt: 'Beta',
       })
     );

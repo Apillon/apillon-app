@@ -28,16 +28,15 @@ defineEmits(['toggleSidebar']);
 const { t } = useI18n();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
-const { name } = useRoute();
 
 const menuKey = computed<string>(() => `menu-${dataStore.project.items.length}`);
 const zeroProjects = computed(() => dataStore.hasProjects === false);
 
-const defaultExpandedKeys = computed(() =>
-  (name?.toString() || '').includes('solution')
-    ? ['services', 'solutions', 'configuration']
-    : ['services', 'configuration']
-);
+const defaultExpandedKeys = computed(() => [
+  'coreWeb3Infrastructure',
+  'assetManagement',
+  'utility',
+]);
 
 const menuOptions = computed<MenuMixedOption[]>(() => {
   const dashboard = {
@@ -48,15 +47,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     disabled: isMenuItemDisabled(Feature.PROJECT),
   };
 
-  const servicesChildren = [
-    {
-      key: 'dashboard-service',
-      label: t('dashboard.nav.explore'),
-      to: 'dashboard-service',
-      class: 'text-yellow',
-      iconName: 'icon-wide-right',
-      show: !props.collapsed,
-    },
+  const coreWeb3Infrastructure = [
     {
       key: 'dashboard-service-storage',
       label: t('dashboard.nav.storage'),
@@ -80,17 +71,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
-      key: 'dashboard-service-nft',
-      label: t('dashboard.nav.nft'),
-      to: 'dashboard-service-nft',
-      iconName: 'icon-NFTs',
-      soon: isMenuItemDisabled(Feature.NFT),
-      disabled:
-        isMenuItemDisabled(Feature.NFT) ||
-        !authStore.isUserAllowed(Permission.NFTS) ||
-        zeroProjects.value,
-    },
-    {
       key: 'dashboard-service-embedded-wallet',
       label: t('dashboard.nav.embeddedWallet'),
       to: 'dashboard-service-embedded-wallet',
@@ -100,18 +80,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       disabled:
         isMenuItemDisabled(Feature.EMBEDDED_WALLET) ||
         !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
-        zeroProjects.value,
-    },
-    {
-      key: 'dashboard-service-rpc',
-      label: t('dashboard.nav.rpc'),
-      to: 'dashboard-service-rpc',
-      iconName: 'icon-rpc',
-      soon: isMenuItemDisabled(Feature.RPC),
-      beta: isBetaFeature(Feature.RPC),
-      disabled:
-        isMenuItemDisabled(Feature.RPC) ||
-        !authStore.isUserAllowed(Permission.RPC) ||
         zeroProjects.value,
     },
     {
@@ -127,6 +95,18 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
         zeroProjects.value,
     },
     {
+      key: 'dashboard-service-rpc',
+      label: t('dashboard.nav.rpc'),
+      to: 'dashboard-service-rpc',
+      iconName: 'icon-rpc',
+      soon: isMenuItemDisabled(Feature.RPC),
+      beta: isBetaFeature(Feature.RPC),
+      disabled:
+        isMenuItemDisabled(Feature.RPC) ||
+        !authStore.isUserAllowed(Permission.RPC) ||
+        zeroProjects.value,
+    },
+    {
       key: 'dashboard-service-indexing',
       label: t('dashboard.nav.indexing'),
       to: 'dashboard-service-indexing',
@@ -136,6 +116,20 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       disabled:
         isMenuItemDisabled(Feature.INDEXING) ||
         !authStore.isUserAllowed(Permission.INDEXING) ||
+        zeroProjects.value,
+    },
+  ];
+
+  const assetManagementDevelopment = [
+    {
+      key: 'dashboard-service-nft',
+      label: t('dashboard.nav.nft'),
+      to: 'dashboard-service-nft',
+      iconName: 'icon-NFTs',
+      soon: isMenuItemDisabled(Feature.NFT),
+      disabled:
+        isMenuItemDisabled(Feature.NFT) ||
+        !authStore.isUserAllowed(Permission.NFTS) ||
         zeroProjects.value,
     },
     {
@@ -156,6 +150,9 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       beta: isBetaFeature(Feature.ASSET_HUB),
       disabled: isMenuItemDisabled(Feature.ASSET_HUB) || zeroProjects.value,
     },
+  ];
+
+  const utility = [
     {
       key: 'dashboard-service-computing',
       label: t('dashboard.nav.computing'),
@@ -190,53 +187,43 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     },
   ];
 
-  const solutionsChildren = isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())
-    ? [
-        {
-          key: 'dashboard-solution',
-          label: t('dashboard.nav.explore'),
-          to: 'dashboard-solution',
-          class: 'text-yellow',
-          iconName: 'icon-wide-right',
-          show: !props.collapsed,
-        },
-        {
-          key: 'dashboard-solution-airdrop',
-          label: t('dashboard.solution.nftAirdrop.name'),
-          iconName: 'icon-nft-mint-airdrop',
-          to: 'dashboard-solution-airdrop',
-          disabled: zeroProjects.value,
-        },
-        {
-          key: 'dashboard-solution-email-signup-airdrop',
-          label: t('dashboard.solution.nftEmailSignupAirdrop.name'),
-          iconName: 'icon-nft-drop',
-          to: 'dashboard-solution-email-signup-airdrop',
-          disabled: zeroProjects.value,
-        },
-        {
-          key: 'dashboard-solution-proof-of-attendance',
-          label: t('dashboard.solution.nftPoap.name'),
-          iconName: 'icon-poap',
-          to: 'dashboard-solution-proof-of-attendance',
-          disabled: zeroProjects.value,
-        },
-        {
-          key: 'dashboard-solution-whitelist-claim',
-          label: t('dashboard.solution.nftWhitelistClaim.name'),
-          iconName: 'icon-gift',
-          to: 'dashboard-solution-whitelist-claim',
-          disabled: zeroProjects.value,
-        },
-        {
-          key: 'dashboard-solution-openGov',
-          label: t('dashboard.solution.openGov.name'),
-          iconName: 'icon-brand-membership',
-          to: 'dashboard-solution-openGov',
-          disabled: zeroProjects.value,
-        },
-      ]
-    : [];
+  const simplets = [
+    {
+      key: 'dashboard-solution-proof-of-attendance',
+      label: t('dashboard.solution.nftPoap.name'),
+      iconName: 'icon-poap',
+      to: 'dashboard-solution-proof-of-attendance',
+      disabled: zeroProjects.value,
+    },
+    {
+      key: 'dashboard-solution-airdrop',
+      label: t('dashboard.solution.nftAirdrop.name'),
+      iconName: 'icon-nft-mint-airdrop',
+      to: 'dashboard-solution-airdrop',
+      disabled: zeroProjects.value,
+    },
+    {
+      key: 'dashboard-solution-email-signup-airdrop',
+      label: t('dashboard.solution.nftEmailSignupAirdrop.name'),
+      iconName: 'icon-nft-drop',
+      to: 'dashboard-solution-email-signup-airdrop',
+      disabled: zeroProjects.value,
+    },
+    {
+      key: 'dashboard-solution-whitelist-claim',
+      label: t('dashboard.solution.nftWhitelistClaim.name'),
+      iconName: 'icon-gift',
+      to: 'dashboard-solution-whitelist-claim',
+      disabled: zeroProjects.value,
+    },
+    {
+      key: 'dashboard-solution-openGov',
+      label: t('dashboard.solution.openGov.name'),
+      iconName: 'icon-brand-membership',
+      to: 'dashboard-solution-openGov',
+      disabled: zeroProjects.value,
+    },
+  ];
 
   const configurationChildren = [
     {
@@ -271,25 +258,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     },
   ];
 
-  const solutionsMenu = isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())
-    ? [
-        {
-          label: t('dashboard.nav.solutions'),
-          key: 'solutions',
-          children: [...solutionsChildren],
-        },
-      ]
-    : [];
-  const solutionsMenuMobile = isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())
-    ? [
-        ...solutionsChildren,
-        {
-          key: 'divider-4',
-          type: 'divider',
-        },
-      ]
-    : [];
-
   return props.collapsed
     ? [
         dashboard,
@@ -297,23 +265,46 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
           key: 'divider-1',
           type: 'divider',
         },
-        ...servicesChildren,
+        ...coreWeb3Infrastructure,
         {
           key: 'divider-2',
           type: 'divider',
         },
-        ...solutionsMenuMobile,
+        ...assetManagementDevelopment,
+        {
+          key: 'divider-3',
+          type: 'divider',
+        },
+        ...utility,
+        {
+          key: 'divider-4',
+          type: 'divider',
+        },
+        ...simplets,
         ...configurationChildren,
       ]
     : [
         dashboard,
         {
-          label: t('dashboard.nav.services'),
-          key: 'services',
-          show: !props.collapsed,
-          children: [...servicesChildren],
+          label: t('dashboard.nav.coreWeb3Infrastructure'),
+          key: 'coreWeb3Infrastructure',
+          children: [...coreWeb3Infrastructure],
         },
-        ...solutionsMenu,
+        {
+          label: t('dashboard.nav.assetManagement'),
+          key: 'assetManagement',
+          children: [...assetManagementDevelopment],
+        },
+        {
+          label: t('dashboard.nav.utility'),
+          key: 'utility',
+          children: [...utility],
+        },
+        {
+          label: t('dashboard.nav.simplets'),
+          key: 'simplets',
+          children: [...simplets],
+        },
         {
           label: t('dashboard.nav.configuration'),
           key: 'configuration',
