@@ -34,7 +34,7 @@
         :default-file-list="collectionStore.images"
         :show-file-list="false"
         directory-dnd
-        :custom-request="upload => nft.uploadImageRequest(upload, isUnique)"
+        :custom-request="upload => nft.uploadImageRequest(upload, !isUnique)"
         @remove="nft.handleImageRemove"
       >
         <n-upload-dragger class="h-40">

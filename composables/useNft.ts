@@ -202,7 +202,7 @@ export default function useNft() {
 
     const image = {
       ...file,
-      fullPath: wrapToFolder ? `/Images${file.name}` : file.name,
+      fullPath: wrapToFolder ? `/Images/${file.name}` : file.name,
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
