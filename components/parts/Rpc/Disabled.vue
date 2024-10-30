@@ -75,33 +75,27 @@
   </Dashboard>
 </template>
 <script lang="ts" setup>
-const { t, tm } = useI18n();
+const { t, tm, rt } = useI18n();
 const router = useRouter();
 const rpcEndpointStore = useRpcEndpointStore();
 const dataStore = useDataStore();
 const pageLoading = ref<boolean>(true);
 
 const benefits = computed(() => {
-  const rawBenefits = tm('rpc.initial.benefits') as Array<{
-    text?: {
-      body: {
-        static: string;
-      };
-    };
-    bolded?: {
-      body: {
-        static: string;
-      };
-    };
-  }>;
+  const rawBenefits =
+    (tm('rpc.initial.benefits') as {
+      text?: string;
+      bolded?: string;
+    }[]) || [];
+
   return rawBenefits.map(benefit => ({
-    text: benefit.text?.body.static || '',
-    bolded: benefit.bolded?.body.static || '',
+    text: benefit.text ? rt(benefit.text) : undefined,
+    bolded: benefit.bolded ? rt(benefit.bolded) : undefined,
   }));
 });
 
 const onServiceCreated = () => {
-  router.replace('/dashboard/service/rpc/subscription');
+  router.push('/dashboard/service/rpc/subscription');
 };
 
 onMounted(async () => {

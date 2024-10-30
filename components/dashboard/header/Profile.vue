@@ -46,8 +46,8 @@ const renderNuxtIcon = (iconName: string) => {
 
 const options = computed(() => [
   {
-    key: 'profile',
-    label: $i18n.t('profile.profile'),
+    key: 'dashboard-account-management',
+    label: $i18n.t('profile.account'),
     icon: renderIcon('icon-anonymous'),
   },
   {

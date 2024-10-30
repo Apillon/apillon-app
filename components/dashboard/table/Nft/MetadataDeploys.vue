@@ -22,7 +22,7 @@ const collectionStore = useCollectionStore();
 const data = computed<Array<MetadataDeployInterface>>(() => {
   return (
     props.deploys.filter(item =>
-      JSON.stringify(item).toLocaleLowerCase().includes(collectionStore.search.toLocaleLowerCase())
+      JSON.stringify(item).toLowerCase().includes(collectionStore.search.toLowerCase())
     ) || []
   );
 });

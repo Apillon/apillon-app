@@ -121,7 +121,7 @@ const currentRow = ref<CloudFunctionInterface>();
 const data = computed<CloudFunctionInterface[]>(() => {
   return (
     props.functions.filter(item =>
-      item.name.toLocaleLowerCase().includes(cloudFunctionStore.search.toLocaleLowerCase())
+      item.name.toLowerCase().includes(cloudFunctionStore.search.toLowerCase())
     ) || []
   );
 });

@@ -43,7 +43,7 @@ const pagination = reactive({
 const data = computed<Array<TransactionInterface>>(() => {
   return (
     props.transactions.filter(item =>
-      JSON.stringify(item).toLocaleLowerCase().includes(collectionStore.search.toLocaleLowerCase())
+      JSON.stringify(item).toLowerCase().includes(collectionStore.search.toLowerCase())
     ) || []
   );
 });

@@ -59,7 +59,7 @@
 <script lang="ts" setup>
 import { RpcPlanType } from '~/lib/types/rpc';
 
-const { t, tm } = useI18n();
+const { t, tm, rt } = useI18n();
 const subscriptionPackages = computed(() => [
   {
     id: 0,
@@ -92,21 +92,14 @@ const subscriptionPackages = computed(() => [
 ]);
 
 const benefits = computed(() => {
-  const rawBenefits = tm('rpc.initial.subscriptionBenefits') as Array<{
-    text?: {
-      body: {
-        static: string;
-      };
-    };
-    bolded?: {
-      body: {
-        static: string;
-      };
-    };
-  }>;
+  const rawBenefits =
+    (tm('rpc.initial.subscriptionBenefits') as {
+      text?: string;
+      bolded?: string;
+    }[]) || [];
   return rawBenefits.map(benefit => ({
-    text: benefit.text?.body.static || '',
-    bolded: benefit.bolded?.body.static || '',
+    text: benefit.text ? rt(benefit.text) : undefined,
+    bolded: benefit.bolded ? rt(benefit.bolded) : undefined,
   }));
 });
 

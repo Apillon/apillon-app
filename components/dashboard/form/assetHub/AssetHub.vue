@@ -302,15 +302,10 @@ function validateAssetId(_: FormItemRule, value: string): boolean {
   return !!props.assetId || !assetHubStore.items.some(i => i.id === Number(value));
 }
 function validateName(_: FormItemRule, value: string): boolean {
-  return (
-    !!props.assetId || !assetHubStore.items.some(i => i.name.toLowerCase() === value.toLowerCase())
-  );
+  return !!props.assetId || !assetHubStore.items.some(i => equalsIgnoreCase(i.name, value));
 }
 function validateSymbol(_: FormItemRule, value: string): boolean {
-  return (
-    !!props.assetId ||
-    !assetHubStore.items.some(i => i.symbol.toLowerCase() === value.toLowerCase())
-  );
+  return !!props.assetId || !assetHubStore.items.some(i => equalsIgnoreCase(i.symbol, value));
 }
 
 const parse = (input: string) => {

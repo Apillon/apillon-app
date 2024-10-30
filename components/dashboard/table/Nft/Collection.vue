@@ -64,7 +64,7 @@ const availableColumns = ref([
 const data = computed<Array<CollectionInterface>>(() => {
   return (
     props.collections.filter(item =>
-      item.name.toLocaleLowerCase().includes(collectionStore.search.toLocaleLowerCase())
+      item.name.toLowerCase().includes(collectionStore.search.toLowerCase())
     ) || []
   );
 });

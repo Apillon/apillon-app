@@ -4,7 +4,8 @@
       <HeaderRpc v-if="isRpcActivated" />
     </template>
 
-    <n-space v-if="isRpcActivated" class="pb-8" :size="32" vertical>
+    <RpcDisabled v-if="!isRpcActivated" />
+    <n-space v-else class="pb-8" :size="32" vertical>
       <div class="flex justify-between">
         <select-options
           v-if="rpcApiKeyStore.hasRpcApiKeys"
@@ -34,8 +35,9 @@
           </Btn>
         </div>
       </div>
+      <RpcNoApiKeys v-if="!rpcApiKeyStore.hasRpcApiKeys" />
       <TableRpcEndpoint
-        v-if="endpoints.length > 0"
+        v-else-if="endpoints.length > 0"
         :rpc-endpoints="rpcEndpointStore.items.filter(item => item.isFavorite)"
         :is-owner="dataStore.isUserOwner"
       />
@@ -50,8 +52,6 @@
         </Btn>
       </Empty>
     </n-space>
-    <RpcNoApiKeys v-else-if="!rpcApiKeyStore.selectedId" />
-    <RpcDisabled v-else />
   </Dashboard>
 </template>
 

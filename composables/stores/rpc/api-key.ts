@@ -21,6 +21,15 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
   },
 
   actions: {
+    reset(): void {
+      this.dwellirId = null;
+      this.items = [];
+      this.quotaReached = undefined;
+      this.selectedId = undefined;
+      this.search = '';
+      this.total = 0;
+    },
+
     deleteItem(id: number): void {
       this.items = this.items.filter(item => item.id !== id);
       if (this.selectedId === id) {

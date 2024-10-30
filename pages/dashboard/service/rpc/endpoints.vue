@@ -43,7 +43,9 @@ useHead({
 onMounted(async () => {
   if (!rpcApiKeyStore.selectedId) {
     await rpcApiKeyStore.getApiKeys();
-    rpcApiKeyStore.selectedId = rpcApiKeyStore.items[0].id;
+    if (rpcApiKeyStore.hasRpcApiKeys) {
+      rpcApiKeyStore.selectedId = rpcApiKeyStore.items[0].id;
+    }
   }
 
   await rpcEndpointStore.getEndpoints();

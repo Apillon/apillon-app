@@ -34,16 +34,14 @@ export function zeroPad(num: string | number, size = 2) {
   return nums;
 }
 
-export function isLowercaseEqual(str1: string, str2: string) {
-  if (!str1 || typeof str1 !== 'string') {
-    str1 = '';
-  }
-
-  if (!str2 || typeof str2 !== 'string') {
-    str2 = '';
-  }
-
-  return str1.toLowerCase() === str2.toLowerCase();
+export function equalsIgnoreCase(str1?: string, str2?: string) {
+  return (
+    str1 &&
+    str2 &&
+    str1.localeCompare(str2, undefined, {
+      sensitivity: 'base',
+    })
+  );
 }
 
 /**

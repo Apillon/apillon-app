@@ -31,7 +31,7 @@
   </n-form>
 
   <AssetHubTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
-  <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
+  <AssetHubLoader v-else-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
 <script lang="ts" setup>

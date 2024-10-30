@@ -82,7 +82,7 @@
     <FormAssetHubTransfer
       class="text-left"
       :assetId="assetId"
-      @submit-success="refreshAsset(assetId)"
+      @submit-success="onTransferred"
       @close="modalTransferVisible = false"
     />
   </Modal>
@@ -135,6 +135,7 @@
 import colors from '~/tailwind.colors';
 
 const { params } = useRoute();
+const router = useRouter();
 const assetHubStore = useAssetHubStore();
 const { loadingWallet, modalWalletSelectVisible, refreshAsset, walletConnect } = useAssetHub();
 
@@ -146,4 +147,10 @@ const modalTransferVisible = ref<boolean>(false);
 const modalChangeIssuerVisible = ref<boolean>(false);
 const modalChangeFreezerVisible = ref<boolean>(false);
 const modalEditAssetVisible = ref<boolean>(false);
+
+async function onTransferred() {
+  await refreshAsset(assetId.value);
+
+  router.push({ name: 'dashboard-service-asset-hub' });
+}
 </script>
