@@ -23,6 +23,9 @@ export const useDataStore = defineStore('data', {
       websites: null as any,
       collections: null as any,
       contracts: null as any,
+      rpcApiKeys: null as Promise<RpcApiKeysResponse> | null,
+      rpcEndpoints: null as Promise<[RpcEndpointsResponse, RpcFavoriteEndpointsResponse]> | null,
+      publicRpcEndpoints: null as Promise<RpcEndpointsResponse> | null,
     },
     service: {
       loading: false,
@@ -207,6 +210,10 @@ export const useDataStore = defineStore('data', {
         this.services = await this.fetchServices();
       }
       return this.services;
+    },
+    async getServiceByType(type: number) {
+      const services = await this.getServices();
+      return services.find(item => item.serviceType_id === type);
     },
     async getServicesByType(type: number) {
       const services = await this.getServices();

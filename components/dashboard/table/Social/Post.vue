@@ -6,21 +6,17 @@
     :data="archive ? postStore.archive.items : postStore.items"
     :loading="archive ? postStore.archive.loading : postStore.loading"
     :expanded-row-keys="expandedRows"
-    :pagination="{
-      page: archive ? postStore.archive.pagination.page : postStore.pagination.page,
-      pageSize: archive ? postStore.archive.pagination.pageSize : postStore.pagination.pageSize,
-      itemCount: archive ? postStore.archive.pagination.itemCount : postStore.pagination.itemCount,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="postStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
     :row-class-name="rowClassName"
-    @update:page="handlePageChange"
+    @update:page="(page: number) => handlePageChange(page, postStore.pagination.pageSize)"
+    @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
   />
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import { NButton, NDropdown } from 'naive-ui';
 
 const props = defineProps({
@@ -240,6 +236,11 @@ onMounted(() => {
   if (spaceId && postId && !props.archive) {
     postStore.updateSettings(`${spaceId}`, `${postId}`);
   }
+
+  /** Check if selected columns are stored in LS */
+  if (localStorage.getItem(LsTableColumnsKeys.SOCIAL_POST)) {
+    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.SOCIAL_POST) || '');
+  }
 });
 
 /** Search posts */
@@ -250,7 +251,7 @@ watch(
     debouncedSearchFilter();
   }
 );
-const debouncedSearchFilter = debounce(handlePageChange, 500);
+const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
 
 watch(
   () => postStore.archive.search,
@@ -259,16 +260,18 @@ watch(
     debouncedSearchArchiveFilter();
   }
 );
-const debouncedSearchArchiveFilter = debounce(handlePageArchiveChange, 500);
+const debouncedSearchArchiveFilter = useDebounceFn(handlePageArchiveChange, 500);
 
 /** On page change, load data */
-async function handlePageChange(page: number) {
-  await postStore.getPosts(page);
+async function handlePageChange(page = 1, limit = PAGINATION_LIMIT) {
+  await postStore.fetchPosts(page, limit);
   postStore.pagination.page = page;
+  postStore.pagination.pageSize = limit;
 }
-async function handlePageArchiveChange(page: number) {
-  await postStore.getPostArchive(page);
+async function handlePageArchiveChange(page = 1, limit = PAGINATION_LIMIT) {
+  await postStore.getPostArchive(page, limit);
   postStore.archive.pagination.page = page;
+  postStore.archive.pagination.pageSize = limit;
 }
 
 async function selectPost() {

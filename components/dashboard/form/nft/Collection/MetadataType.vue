@@ -32,6 +32,6 @@ onMounted(() => {
 
 function onMetadataStored() {
   router.push({ name: 'dashboard-service-nft-new' });
-  setTimeout(() => collectionStore.metadataStored = true, 10);  
+  setTimeout(() => collectionStore.metadataStored = true, 100);  
 }
 </script>

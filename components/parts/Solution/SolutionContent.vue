@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(item, key) in content" :key="key">
+    <div v-for="(item, key) in content" :key="key" :class="innerClass">
       <h3 v-if="item.headline">{{ item.headline }}</h3>
 
       <p v-if="item.headline && item.title" :class="{ 'mt-6': item.headline }">{{ item.title }}</p>
@@ -48,6 +48,7 @@
 defineProps({
   content: { type: Array<SolutionContent>, default: [] },
   icons: { type: Boolean, default: false },
+  innerClass: { type: String, default: '' },
 });
 
 const linkExpr = /\[(.*?)\]\((.*?)\)/gi;

@@ -32,13 +32,13 @@ export const useAuthStore = defineStore('auth', {
       return !!state.email && !!state.jwt;
     },
     userId(state) {
-      return state.user.id;
+      return state.user?.id || 0;
     },
     userUuid(state) {
       return state.user.user_uuid || '';
     },
     username(state) {
-      return state.user.name;
+      return state.user?.name || '';
     },
     allowedEntry: state => !!state.jwt,
   },

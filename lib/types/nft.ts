@@ -31,11 +31,15 @@ export enum SubstrateChain {
   ASTAR = 8,
   ACURAST = 9,
   UNIQUE = 11,
+  ASSET_HUB = 1000,
+  WESTEND_ASSET_HUB = 1001,
 }
 
 export enum SubstrateChainPrefix {
   ASTAR = 5,
   PHALA = 30,
+  HYDRATION = 63,
+  UNIQUE = 7391,
 }
 
 /** NFT Collection type */

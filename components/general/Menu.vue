@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="border-none">
     <n-menu
       v-bind="$attrs"
       v-model:value="selectedMenu"
@@ -36,7 +36,7 @@ function routeNameToKey(name: string) {
 }
 
 function removeIdOrSlug(text) {
-  return text.replace(/(-id|-slug|-archive).*/g, '');
+  return text.replace(/(-id|-slug|-archive|-deployed|-new).*/g, '');
 }
 
 /**
@@ -72,6 +72,15 @@ function renderMenuLabel(option: NMenuOption) {
 function renderMenuExtra(option: NMenuOption) {
   if ('new' in option && option.new) {
     return h('span', { class: 'icon-new align-middle text-blue text-2xl' }, '');
+  } else if ('beta' in option && option.beta) {
+    return h(
+      'span',
+      h('img', {
+        src: '/icons/beta.svg',
+        class: 'w-14 h-5 inline-block',
+        alt: 'Beta',
+      })
+    );
   } else if ('soon' in option && option.soon) {
     return h('span', { class: 'icon-soon align-middle text-violet text-2xl mr-2' }, '');
   }
@@ -79,7 +88,9 @@ function renderMenuExtra(option: NMenuOption) {
 }
 
 function renderMenuIcon(option: NMenuOption) {
-  if ('iconName' in option) {
+  if ('svgIcon' in option) {
+    return h(resolveComponent('NuxtIcon'), { name: option.svgIcon, class: 'text-xl mx-2' }, '');
+  } else if ('iconName' in option) {
     return h('span', { class: iconClass(option.iconName) }, '');
   }
   return null;

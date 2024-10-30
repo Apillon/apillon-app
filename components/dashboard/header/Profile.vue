@@ -46,8 +46,8 @@ const renderNuxtIcon = (iconName: string) => {
 
 const options = computed(() => [
   {
-    key: 'profile',
-    label: $i18n.t('profile.profile'),
+    key: 'dashboard-account-management',
+    label: $i18n.t('profile.account'),
     icon: renderIcon('icon-anonymous'),
   },
   {
@@ -56,12 +56,6 @@ const options = computed(() => [
     disabled: !dataStore.hasProjects,
     show: !dataStore.isProjectUser,
     icon: renderIcon('icon-billing'),
-  },
-  {
-    key: 'dashboard-airdrop',
-    label: $i18n.t('referral.banner.btn'),
-    show: !dataStore.isProjectUser,
-    icon: renderNuxtIcon('logo/apillon-icon'),
   },
   {
     key: 'dashboard-project-settings',

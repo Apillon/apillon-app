@@ -11,6 +11,8 @@ export type ItemDelete =
   | JobInterface
   | PostInterface
   | ServiceInterface
+  | RpcApiKeyInterface
+  | RpcEndpointInterface
   | WebsiteBaseInterface;
 
 export enum ItemDeleteKey {
@@ -26,6 +28,8 @@ export enum ItemDeleteKey {
   IPNS = 'ipns',
   JOB = 'job',
   POST = 'post',
+  RPC_API_KEY = 'rpcApiKey',
+  RPC_ENDPOINT = 'rpcEndpoint',
   SERVICE = 'service',
   SPACE = 'space',
   WEBSITE = 'website',
@@ -92,6 +96,10 @@ export default function useDelete() {
         return endpoints.spaces(`${id}`);
       case ItemDeleteKey.WEBSITE:
         return endpoints.websites(`${id}`);
+      case ItemDeleteKey.RPC_API_KEY:
+        return endpoints.rpcApiKeys(id as number);
+      case ItemDeleteKey.RPC_ENDPOINT:
+        return endpoints.rpcUrl(id as number);
       default:
         return endpoints.file(`${id}`);
     }
@@ -166,6 +174,10 @@ export default function useDelete() {
         return endpoints.spaces((item as ChatInterface).space_uuid);
       case ItemDeleteKey.WEBSITE:
         return endpoints.websites((item as WebsiteInterface).website_uuid);
+      case 'rpcApiKey':
+        return endpoints.rpcApiKeys((item as RpcApiKeyInterface).id);
+      case 'rpcEndpoint':
+        return endpoints.rpcUrl((item as RpcEndpointInterface).favoriteData?.id);
       default:
         console.warn('Wrong type');
         return '';

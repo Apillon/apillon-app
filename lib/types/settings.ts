@@ -12,6 +12,8 @@ export enum Permission {
   COMPUTING = 5,
   SOCIAL = 6,
   EMBEDDED_WALLET = 7,
+  RPC = 9,
+  INDEXING = 10,
 }
 
 /* OAuth link type */
@@ -32,16 +34,6 @@ declare global {
     name: string;
     testNetwork: number;
     updateTime: string;
-  }
-
-  interface EwApiKeyInterface {
-    id: number;
-    status: string;
-    apiKey: string;
-    name: string;
-    testNetwork: number;
-    updateTime: string;
-    oasisSignatures: number;
   }
 
   interface ApiKeyCreatedInterface {
@@ -68,7 +60,6 @@ declare global {
   interface ApiKeyRolesResponse extends GeneralResponse<Array<ApiKeyRoleInterface>> {}
   interface ApiKeyRoleUpdateResponse extends GeneralResponse<ApiKeyRoleInterface> {}
   interface ApiKeysResponse extends GeneralItemsResponse<ApiKeyInterface> {}
-  interface EwApiKeysResponse extends GeneralItemsResponse<EwApiKeyInterface> {}
 
   /**
    * Oauth Link
@@ -99,4 +90,35 @@ declare global {
     url: string;
   }
   interface DiscordLinkResponse extends GeneralResponse<DiscordLinkInterface> {}
+
+  /**
+   * Embedded Wallet
+   */
+  type EmbeddedWalletUsage = { date: string; countOfSignatures: number };
+  interface EmbeddedWalletInterface extends BaseObjectInterface {
+    integration_uuid: string;
+    title: string;
+    numOfSignatures: number;
+    usage: EmbeddedWalletUsage[];
+    whitelistedDomains: string | null;
+  }
+  interface EmbeddedWalletInfoInterface {
+    maxNumOfEWIntegrations: number;
+    numOfEWIntegrations: number;
+    maxNumOfEWSignatures: number;
+    numOfEWSignaturesForCurrentMonth: number;
+  }
+  interface SignatureInterface {
+    apiKey: string;
+    dataHash: string;
+    hashedUsername: string | null;
+    publicAddress: string | null;
+    status: number;
+    createTime: string;
+  }
+
+  interface EmbeddedWalletResponse extends GeneralResponse<EmbeddedWalletInterface> {}
+  interface EmbeddedWalletsResponse extends GeneralItemsResponse<EmbeddedWalletInterface> {}
+  interface EmbeddedWalletInfoResponse extends GeneralResponse<EmbeddedWalletInfoInterface> {}
+  interface SignaturesResponse extends GeneralItemsResponse<SignatureInterface> {}
 }

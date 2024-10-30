@@ -1,131 +1,73 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <div ref="headingRef">
-        <HeaderEmbeddedWallet />
-      </div>
+      <Heading>
+        <slot>
+          <h1 class="inline-block">
+            {{ $t('dashboard.nav.embeddedWallet') }}
+            <img src="/icons/beta.svg" alt="Beta" class="w-14 h-5 inline-block ml-2" />
+          </h1>
+        </slot>
+        <template #info>
+          <ModalCreditCosts :service="ServiceTypeName.WALLET" />
+        </template>
+      </Heading>
     </template>
 
     <slot>
       <div class="pb-8">
-        <div class="grid md:grid-cols-2 gap-8 border-b border-bg-lighter pb-8 mb-8">
-          <!-- DEMO -->
-          <LearnVideo
-            title="Embedded Wallet"
-            html-content="https://www.youtube.com/embed/AslkbJH4OAM?si=IVlEtikZsgI85iWl"
-            class="w-full"
-          />
+        <n-collapse
+          v-if="embeddedWalletStore.hasEmbeddedWallets"
+          class="border-b-1 border-bg-lighter -mt-4 pb-4"
+          accordion
+          @update:expanded-names="onUpdateAccordion"
+        >
+          <n-collapse-item>
+            <template #header>
+              <span class="icon-info text-xl mr-2"></span>
+              {{
+                instructionsVisible
+                  ? $t('general.instructions.hide')
+                  : $t('general.instructions.show')
+              }}
+            </template>
+            <EmbeddedWalletInstructions />
+          </n-collapse-item>
+        </n-collapse>
+        <EmbeddedWalletInstructions v-else class="border-b-1 border-bg-lighter pb-8" />
 
-          <Carousel class="w-full max-w-[600px]" />
-        </div>
-        <div class="gap-8">
-          <!-- text -->
-          <SolutionContent :content="content" :icons="true" />
-          <!-- display  -->
-          <template v-if="!settingsStore.ewApiKeys.length">
-            <!-- force rebuild -->
-            <h4 class="mb-4 mt-8">{{ $t('embeddedWallet.generate.title') }}</h4>
-            <div class="flex gap-4 mb-8">
-              <!-- Generate API key -->
-              <Btn
-                :to="{ name: 'dashboard-api-keys' }"
-                inner-class="flex items-center justify-center "
-                type="primary"
-              >
-                <span>{{ $t('embeddedWallet.generateApiKey') }}</span>
-              </Btn>
-
-              <!-- View documentation -->
-              <Btn
-                type="secondary"
-                inner-class="text-white flex items-center justify-center"
-                href="https://blog.apillon.io/embedded-wallets-what-are-they-and-how-apillon-redefines-the-concept-4479a8dd28bd"
-              >
-                <span class="icon-edit text-xl mr-2"></span>
-                <span>{{ $t('embeddedWallet.readBlog') }}</span>
-              </Btn>
-              <Btn
-                type="secondary"
-                inner-class="text-white flex items-center justify-center"
-                href="https://wiki.apillon.io/web3-services/8-embedded-wallets.html"
-              >
-                <span>{{ $t('embeddedWallet.viewDocumentation') }}</span>
-              </Btn>
-            </div>
-          </template>
-          <template v-else>
-            <div class="flex items-center justify-between">
-              <h4 class="mb-4 mt-8">{{ $t('embeddedWallet.generate.generate') }}</h4>
-              <!-- Generate API key -->
-              <div class="flex gap-x-4">
-                <Btn
-                  type="secondary"
-                  inner-class="text-white flex items-center justify-center"
-                  href="https://blog.apillon.io/embedded-wallets-what-are-they-and-how-apillon-redefines-the-concept-4479a8dd28bd"
-                >
-                  <span class="icon-file text-xl mr-2"></span>
-                  <span>{{ $t('embeddedWallet.readBlog') }}</span>
-                </Btn>
-                <Btn
-                  type="secondary"
-                  inner-class="text-white flex items-center justify-center"
-                  href="https://wiki.apillon.io/web3-services/8-embedded-wallets.html"
-                >
-                  <span class="icon-edit text-xl mr-2"></span>
-                  <span>{{ $t('embeddedWallet.viewDocumentation') }}</span>
-                </Btn>
-                <Btn
-                  :to="{ name: 'dashboard-api-keys' }"
-                  inner-class="flex items-center justify-center px-4"
-                  type="primary"
-                >
-                  <span class="icon-add text-xl mr-2"></span>
-                  <span>{{ $t('embeddedWallet.generateApiKey') }}</span>
-                </Btn>
-              </div>
-            </div>
-            <div class="mb-8">
-              <!-- table -->
-              <TableEmbeddedWalletTable />
-            </div>
-          </template>
-        </div>
-        <div class="gap-8">
-          <CodeSnippet />
-        </div>
+        <ActionsEmbeddedWallet v-if="embeddedWalletStore.hasEmbeddedWallets" class="my-8" />
+        <TableEmbeddedWallet
+          v-if="embeddedWalletStore.hasEmbeddedWallets"
+          :embedded-wallets="embeddedWalletStore.items"
+        />
       </div>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-const { generateContent } = useSolution();
+const { t } = useI18n();
 const dataStore = useDataStore();
-const settingsStore = useSettingsStore();
-
-const content = generateContent(SolutionKey.EMBEDDED_WALLET);
-
-const $i18n = useI18n();
+const embeddedWalletStore = useEmbeddedWalletStore();
 
 const pageLoading = ref<boolean>(true);
-
-const headingRef = ref<HTMLElement>();
+const instructionsVisible = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('embeddedWallet.title'),
+  title: t('embeddedWallet.title'),
 });
 
 onMounted(async () => {
-  await sleep(500);
+  await sleep(10);
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    /** Fetch all services if there is any service type unloaded */
-    await dataStore.getServices();
-
-    /** Fetch all api keys if they are not stored in settings store */
-    await settingsStore.fetchEmbeddedWalletKeys();
+    await embeddedWalletStore.getEmbeddedWallets();
 
     pageLoading.value = false;
   });
 });
-onUnmounted(() => {});
+
+function onUpdateAccordion(expandedNames: Array<string | number>) {
+  instructionsVisible.value = expandedNames.length > 0;
+}
 </script>

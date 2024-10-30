@@ -13,7 +13,7 @@
         collectionStore.form.behavior.chainType === ChainType.EVM
       "
       path="collectionType"
-      :label="infoLabel('collectionType') as string"
+      :label="infoLabel('type') as string"
       :label-props="{ for: 'collectionType' }"
     >
       <select-options
@@ -30,7 +30,7 @@
     <n-form-item
       v-if="showNetwork"
       path="chain"
-      :label="infoLabel('collectionChain') as string"
+      :label="infoLabel('chain') as string"
       :label-props="{ for: 'chain' }"
     >
       <select-options
@@ -48,7 +48,7 @@
       <n-checkbox
         v-model:checked="collectionStore.form.behavior.useApillonIpfsGateway"
         size="medium"
-        :label="infoLabel('collectionUseGateway') as string"
+        :label="infoLabel('useGateway') as string"
       />
     </n-form-item>
 
@@ -57,7 +57,7 @@
       <n-checkbox
         v-model:checked="collectionStore.form.behavior.useIpns"
         size="medium"
-        :label="infoLabel('collectionUseIpns') as string"
+        :label="infoLabel('useIpns') as string"
       />
     </n-form-item>
 
@@ -66,14 +66,14 @@
       <n-form-item-gi
         path="supplyLimited"
         :span="6"
-        :label="infoLabel('collectionSupplyLimited') as string"
+        :label="infoLabel('supplyLimited') as string"
         :label-props="{ for: 'supplyLimited' }"
       >
         <select-options
           v-model:value="collectionStore.form.behavior.supplyLimited"
           :options="supplyTypes"
           :input-props="{ id: 'supplyLimited' }"
-          :placeholder="t('general.pleaseSelect')"
+          :placeholder="$t('general.pleaseSelect')"
           filterable
           clearable
         />
@@ -83,7 +83,7 @@
       <n-form-item-gi
         path="maxSupply"
         :span="6"
-        :label="infoLabel('collectionMaxSupply') as string"
+        :label="infoLabel('maxSupply') as string"
         :label-props="{ for: 'maxSupply' }"
       >
         <n-input-number
@@ -100,12 +100,17 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="collectionStore.form.behavior.chainType === ChainType.EVM" class="items-end" :cols="12" :x-gap="32">
+    <n-grid 
+      v-if="collectionStore.form.behavior.chainType === ChainType.EVM || isUnique"
+      class="items-end"
+      :cols="12"
+      :x-gap="32"
+    >
       <!-- Collection Revocable -->
       <n-form-item-gi
         path="revocable"
         :span="6"
-        :label="infoLabel('collectionRevocable') as string"
+        :label="infoLabel('revocable') as string"
         :label-props="{ for: 'revocable' }"
       >
         <select-options
@@ -121,7 +126,7 @@
       <n-form-item-gi
         path="soulbound"
         :span="6"
-        :label="infoLabel('collectionSoulbound') as string"
+        :label="infoLabel('soulbound') as string"
         :label-props="{ for: 'soulbound' }"
       >
         <select-options
@@ -134,12 +139,12 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="collectionStore.form.behavior.chainType === ChainType.EVM" class="items-end" :cols="12" :x-gap="32">
+    <n-grid v-if="collectionStore.form.behavior.chainType === ChainType.EVM && !isUnique" class="items-end" :cols="12" :x-gap="32">
       <!-- Royalties Address -->
       <n-form-item-gi
         path="royaltiesAddress"
         :span="6"
-        :label="infoLabel('collectionRoyaltiesAddress') as string"
+        :label="infoLabel('royaltiesAddress') as string"
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
@@ -154,7 +159,7 @@
       <n-form-item-gi
         path="royaltiesFees"
         :span="6"
-        :label="infoLabel('collectionRoyaltiesFees') as string"
+        :label="infoLabel('royaltiesFees') as string"
         :label-props="{ for: 'royaltiesFees' }"
       >
         <n-input-number
@@ -168,13 +173,13 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid class="items-end" :cols="12" :x-gap="32">
+    <n-grid v-if="!isUnique" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Is Drop -->
       <n-form-item-gi path="drop" :span="6" :show-label="false" :show-feedback="false">
         <n-checkbox
           v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
-          :label="infoLabel('collectionDrop') as string"
+          :label="infoLabel('drop') as string"
         />
       </n-form-item-gi>
     </n-grid>
@@ -184,7 +189,7 @@
       <n-form-item-gi
         path="dropPrice"
         :span="6"
-        :label="t('form.label.collectionDropPrice', { currency: chainCurrency() })"
+        :label="$t('form.label.collection.dropPrice', { currency: chainCurrency() })"
         :label-props="{ for: 'dropPrice' }"
       >
         <n-input-number
@@ -201,7 +206,7 @@
       <n-form-item-gi
         path="dropStart"
         :span="6"
-        :label="infoLabel('collectionDropStart') as string"
+        :label="infoLabel('dropStart') as string"
         :label-props="{ for: 'dropStart' }"
       >
         <n-date-picker
@@ -209,8 +214,8 @@
           class="w-full"
           type="datetime"
           :input-props="{ id: 'dropStart' }"
-          :is-date-disabled="disablePasteDate"
-          :is-time-disabled="disablePasteTime"
+          :is-date-disabled="disablePastDate"
+          :is-time-disabled="disablePastTime"
           clearable
         />
       </n-form-item-gi>
@@ -222,7 +227,7 @@
         v-if="collectionStore.form.behavior.chainType === ChainType.EVM"
         path="dropReserve"
         :span="6"
-        :label="infoLabel('collectionDropReserve') as string"
+        :label="infoLabel('dropReserve') as string"
         :label-props="{ for: 'dropReserve' }"
       >
         <n-input-number
@@ -239,7 +244,7 @@
         v-if="collectionStore.form.behavior.chainType === ChainType.SUBSTRATE"
         path="royaltiesAddress"
         :span="6"
-        :label="infoLabel('collectionDropAddress') as string"
+        :label="infoLabel('dropAddress') as string"
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
@@ -274,18 +279,19 @@ defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
+const { labelInfo } = useComputing();
 const collectionStore = useCollectionStore();
 const {
   booleanSelect,
   collectionTypes,
   formRef,
+  isUnique,
   nftChains,
   supplyTypes,
   rules,
   chainCurrency,
-  disablePasteDate,
-  disablePasteTime,
-  infoLabel,
+  disablePastDate,
+  disablePastTime,
 } = useCollection();
 defineExpose({ formRef, handleSubmitForm });
 
@@ -294,6 +300,10 @@ onMounted(() => {
     collectionStore.form.behavior.maxSupply = collectionStore.csvData.length;
   }
 });
+
+function infoLabel(field: string) {
+  return labelInfo(field, 'form.label.collection');
+}
 
 // Submit
 async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {

@@ -1,23 +1,32 @@
 <template>
   <Heading>
     <slot>
-      <n-space align="center" size="large">
+      <div class="flex gap-4 items-center">
         <NuxtLink :to="{ name: 'dashboard-service-cloud-functions' }">
           <span class="icon-back text-2xl align-sub"></span>
         </NuxtLink>
-        <h2>{{ cloudFunctionStore.active.name }}</h2>
-      </n-space>
+        <div>
+          <h2>{{ cloudFunctionStore.active.name }}</h2>
+          <TableEllipsis
+            :prefix="$t('computing.cloudFunctions.uuid')"
+            :text="cloudFunctionStore.active.function_uuid"
+          />
+        </div>
+      </div>
     </slot>
 
     <template #info>
-      <div v-if="cloudFunctionStore.active.activeJob_id" class="flex items-center gap-4">
-        <h4>{{ $t('computing.cloudFunctions.endpoint') }}</h4>
-
-        <TableEllipsis
-          class="bg-white px-4 py-[10px] rounded-lg !text-black max-w-sm lg:max-w-md xl:max-w-lg xxl:max-w-none"
-          color="text-black"
-          :text="gatewayUrl"
-        />
+      <div v-if="cloudFunctionStore.active.activeJob_id">
+        <h4>
+          {{ $t('computing.cloudFunctions.endpoint') }}
+        </h4>
+        <div class="flex items-center gap-4 mt-2">
+          <TableEllipsis
+            class="bg-white px-4 py-[10px] rounded-lg !text-black max-w-sm lg:max-w-md xl:max-w-lg xxl:max-w-none"
+            color="text-black"
+            :text="gatewayUrl"
+          />
+        </div>
       </div>
     </template>
 

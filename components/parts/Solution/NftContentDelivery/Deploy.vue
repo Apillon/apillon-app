@@ -104,7 +104,7 @@ const data = [
     value: contractStore.form.contractData.nftContractAddress,
   },
   {
-    label: t('form.label.collectionChain'),
+    label: t('form.label.collection.chain'),
     value: chainName.value,
   },
   {

@@ -9,7 +9,7 @@
       >
         <n-grid :cols="12" :x-gap="32">
           <!-- NFT name -->
-          <n-form-item-gi :span="8" path="name" :label="infoLabel('nftName')" :label-props="{ for: 'name' }">
+          <n-form-item-gi :span="8" path="name" :label="infoLabel('name')" :label-props="{ for: 'name' }">
             <n-input
               v-model:value="collectionStore.form.single.name"
               :input-props="{ id: 'name' }"
@@ -19,7 +19,7 @@
           </n-form-item-gi>
 
           <!-- NFT ID -->
-          <n-form-item-gi :span="4" path="id" :label="infoLabel('nftId')" :label-props="{ for: 'nftId' }">
+          <n-form-item-gi :span="4" path="id" :label="infoLabel('id')" :label-props="{ for: 'nftId' }">
             <n-input-number
               v-model:value="collectionStore.form.single.id"
               :input-props="{ id: 'nftId' }"
@@ -35,7 +35,7 @@
           <n-form-item-gi
             :span="12"
             path="description"
-            :label="infoLabel('nftDescription')"
+            :label="infoLabel('description')"
             :label-props="{ for: 'description' }"
           >
             <n-input
@@ -51,7 +51,7 @@
           <n-form-item-gi
             :span="6"
             path="coverImage"
-            :label="infoLabel('collectionCoverImage') as string"
+            :label="infoLabel('coverImage') as string"
             :label-props="{ for: 'coverImage' }"
             :show-feedback="false"
           >
@@ -123,9 +123,13 @@ const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
 const { createThumbnailUrl, handleImageRemove, uploadImageRequest } = useNft();
-const { formRef, rulesSingle, infoLabel } = useCollection();
+const { formRef, isUnique, rulesSingle } = useCollection();
 
 const uploadRef = ref<UploadInst | null>(null);
+
+function infoLabel(field: string) {
+  return labelInfo(field, 'form.label.nft');
+}
 
 function removeImages() {
   collectionStore.images.pop();

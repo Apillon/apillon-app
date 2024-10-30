@@ -3,6 +3,7 @@
     {{ t('dashboard.permissions.insufficient') }}
   </Notification>
   <n-form
+    v-bind="$attrs"
     ref="formRef"
     class="max-w-xl"
     :model="collectionStore.form.base"
@@ -14,7 +15,7 @@
       <n-form-item-gi
         :span="8"
         path="name"
-        :label="infoLabel('collectionName') as string"
+        :label="infoLabel('name') as string"
         :label-props="{ for: 'name' }"
       >
         <n-input
@@ -29,7 +30,7 @@
       <n-form-item-gi
         :span="4"
         path="symbol"
-        :label="infoLabel('collectionSymbol') as string"
+        :label="infoLabel('symbol') as string"
         :label-props="{ for: 'symbol' }"
       >
         <n-input
@@ -46,7 +47,7 @@
       <n-form-item-gi
         :span="6"
         path="logo"
-        :label="infoLabel('collectionLogo') as string"
+        :label="infoLabel('logo') as string"
         :label-props="{ for: 'collectionLogo' }"
         :show-feedback="false"
       >
@@ -57,7 +58,7 @@
       <n-form-item-gi
         :span="6"
         path="coverImage"
-        :label="infoLabel('collectionCoverImage') as string"
+        :label="infoLabel('coverImage') as string"
         :label-props="{ for: 'coverImage' }"
         :show-feedback="false"
       >
@@ -82,8 +83,14 @@ defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { formRef, isFormDisabled, rules, infoLabel } = useCollection();
+
+const { labelInfo } = useComputing();
+const { formRef, isFormDisabled, rules } = useCollection();
 defineExpose({ formRef, handleSubmitForm });
+
+function infoLabel(field: string) {
+  return labelInfo(field, 'form.label.collection');
+}
 
 // Submit
 async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {

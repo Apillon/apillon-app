@@ -106,6 +106,7 @@ declare global {
     activeJob_id: string;
     bucket_uuid: string;
     encrypted_variables: string;
+    gatewayUrl: string;
     endpointUrl?: string;
     function_uuid: string;
     gatewayUrl?: string | null;

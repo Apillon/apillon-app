@@ -187,7 +187,10 @@ export default function useNft() {
    */
 
   /** Upload image request - add file to list */
-  function uploadImagesRequest({ file, onProgress, onError, onFinish }: UploadCustomRequestOptions) {
+  function uploadImagesRequest(
+    { file, onProgress, onError, onFinish }: UploadCustomRequestOptions,
+    wrapToFolder = true
+  ) {
     if (!isImage(file.type)) {
       message.warning(t('validation.notImage', { name: file.name }));
       onError();
@@ -196,7 +199,7 @@ export default function useNft() {
 
     const image = {
       ...file,
-      fullPath: `/Images${file.fullPath}`,
+      fullPath: wrapToFolder ? `/Images/${file.name}` : file.name,
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
@@ -223,7 +226,10 @@ export default function useNft() {
     }, 300);
   }
 
-  function uploadImageRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
+  function uploadImageRequest(
+    { file, onError, onFinish }: UploadCustomRequestOptions,
+    wrapToFolder = true
+  ) {
     if (!isImage(file.type)) {
       message.warning(t('validation.notImage', { name: file.name }));
       onError();
@@ -232,7 +238,7 @@ export default function useNft() {
 
     const image = {
       ...file,
-      fullPath: `/Images/${file.name}`,
+      fullPath: wrapToFolder ? `/Images/${file.name}` : file.name,
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
@@ -376,6 +382,24 @@ export default function useNft() {
     return generatePriceServiceName(ServiceTypeName.NFT, chain, PriceServiceAction.COLLECTION);
   }
 
+  async function uploadLogoAndCover(bucketUuid: string) {
+    const images: FileListItemType[] = [];
+    const cover = collectionStore.form.base.coverImage;
+    const logo = collectionStore.form.base.logo;
+
+    if (logo) {
+      logo.name = 'logo.' + logo.name.split('.')[logo.name.split('.').length - 1];
+      images.push(logo);
+    }
+    if (cover) {
+      cover.name = 'cover.' + cover.name.split('.')[cover.name.split('.').length - 1];
+      images.push(cover);
+    }
+    if (images.length) {
+      await uploadFiles(bucketUuid, images);
+    }
+  }
+
   return {
     allImagesUploaded,
     dataImagesNames,
@@ -396,5 +420,6 @@ export default function useNft() {
     uploadFileRequest,
     uploadImagesRequest,
     uploadImageRequest,
+    uploadLogoAndCover,
   };
 }

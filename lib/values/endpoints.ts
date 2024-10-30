@@ -57,6 +57,9 @@ const Endpoints = {
   activeSubscription: (projectUuid: string) => {
     return `/projects/${projectUuid}/active-subscription`;
   },
+  getRpcPlan: (projectUuid: string) => {
+    return `/projects/${projectUuid}/rpc-plan`;
+  },
   subscriptions: (projectUuid: string) => {
     return `/projects/${projectUuid}/subscriptions`;
   },
@@ -84,6 +87,11 @@ const Endpoints = {
   /** Instructions */
   instructions: (key?: string) => {
     return key ? `/instructions/${key}` : '/instructions';
+  },
+
+  /** Asset Hub */
+  assets: (uuid?: string) => {
+    return uuid ? `/asset-hub/${uuid}` : '/asset-hub';
   },
 
   /** Bucket */
@@ -200,6 +208,7 @@ const Endpoints = {
 
   /** Collection */
   collectionsSubstrate: '/nfts/collections/substrate',
+  collectionsUnique: '/nfts/collections/unique',
   collections: (id?: string) => {
     return id ? `/nfts/collections/${id}` : '/nfts/collections';
   },
@@ -277,6 +286,82 @@ const Endpoints = {
     return `/acurast/jobs/${uuid}`;
   },
 
+  /** Embedded wallet */
+  embeddedWallets: (uuid?: number | string) => {
+    return uuid ? `/embedded-wallet/integrations/${uuid}` : '/embedded-wallet/integrations';
+  },
+  embeddedWalletInfo: '/embedded-wallet/info',
+  embeddedWalletIntegration: '/embedded-wallet/integration',
+  embeddedWalletSignatures: (uuid: number | string) => {
+    return `/embedded-wallet/integrations/${uuid}/signatures`;
+  },
+
+  /** Smart contracts */
+  smartContracts: (uuid?: string) => {
+    return uuid ? `/contracts/${uuid}` : '/contracts';
+  },
+  smartContractsNew: (contractUuid: string) => {
+    return `/contracts/${contractUuid}/deploy`;
+  },
+  smartContractsDeployed: (uuid?: string) => {
+    return uuid ? `/contracts/deployed/${uuid}` : `/contracts/deployed`;
+  },
+  smartContractsCall: (contractUuid: string) => {
+    return `/contracts/deployed/${contractUuid}/call`;
+  },
+
+  /** Indexers */
+  indexers: (uuid?: string) => {
+    return uuid ? `/indexing/indexers/${uuid}` : '/indexing/indexers';
+  },
+
+  indexer: () => {
+    return '/indexing/indexer';
+  },
+
+  indexerLogs: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/logs`;
+  },
+
+  indexerDeployments: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/deployments`;
+  },
+
+  indexerHibernate: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/hibernate`;
+  },
+
+  /**
+   * RPC
+   */
+  rpcApiKeys: (id?: number) => {
+    return `/rpc/api-key${id ? `/${id}` : ''}`;
+  },
+
+  rpcFavoriteEndpoints: (apiKeyId: number) => {
+    return `/rpc/api-key/${apiKeyId}/urls`;
+  },
+
+  rpcEndpoints: () => {
+    return '/rpc/endpoints';
+  },
+
+  rpcApiKeysQuotaReached: () => {
+    return '/rpc/api-key/quota-reached';
+  },
+
+  rpcUrl: (id?: number) => {
+    return `/rpc/url${id ? `/${id}` : ''}`;
+  },
+
+  rpcDwellirId: () => {
+    return '/rpc/dwellir-id';
+  },
+
+  rpcApiKeyUsage: (projectUuid: string, apiKeyId: number) => {
+    return `/rpc/${projectUuid}/api-key/${apiKeyId}/usage`;
+  },
+
   /**
    * Project settings
    */
@@ -293,9 +378,6 @@ const Endpoints = {
   },
   apiKeyServiceRoles: (key: number) => {
     return `/api-keys/${key}/service-roles`;
-  },
-  embeddedWalletKeys: (projectUuid: string) => {
-    return `/wallet/oasis-signatures-count-by-api-key?project_uuid=${projectUuid}`;
   },
 
   /**

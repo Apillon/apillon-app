@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 
 const { t } = useI18n();
 const dataStore = useDataStore();
@@ -164,7 +164,7 @@ watch(
     debouncedSearchFilter();
   }
 );
-const debouncedSearchFilter = debounce(getFiles, 500);
+const debouncedSearchFilter = useDebounceFn(getFiles, 500);
 
 /** Function "Fetch directory content" wrapper  */
 async function getFiles(page: number = 1, limit: number = PAGINATION_LIMIT) {

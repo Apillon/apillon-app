@@ -1,7 +1,7 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  NFT Set base URI -->
-    <n-form-item path="uri" :label="$t('form.label.nftSetBaseUri')" :label-props="{ for: 'uri' }">
+    <n-form-item path="uri" :label="$t('form.label.nft.setBaseUri')" :label-props="{ for: 'uri' }">
       <n-input
         v-model:value="formData.uri"
         :input-props="{ id: 'uri' }"

@@ -4,7 +4,7 @@
       <span class="mx-1 uppercase">{{
         $t(`computing.cloudFunctions.job.status.${jobStatus}`)
       }}</span>
-      <AnimationTyping v-if="jobStatus < AcurastJobStatus.DEPLOYED" />
+      <AnimationTyping v-if="jobStatus < AcurastJobStatus.MATCHED" />
     </n-space>
   </pill>
 </template>
@@ -21,6 +21,7 @@ const jobStatusType = (status: number) => {
     case AcurastJobStatus.INACTIVE:
       return 'warning';
     case AcurastJobStatus.DEPLOYING:
+    case AcurastJobStatus.DEPLOYED:
       return 'info';
     default:
       return 'success';

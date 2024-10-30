@@ -44,7 +44,7 @@ const showModalEditWebsite = ref<boolean>(false);
 const data = computed<Array<WebsiteBaseInterface>>(() => {
   return (
     props.websites.filter(item =>
-      item.name.toLocaleLowerCase().includes(websiteStore.search.toLocaleLowerCase())
+      item.name.toLowerCase().includes(websiteStore.search.toLowerCase())
     ) || []
   );
 });

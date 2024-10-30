@@ -14,6 +14,7 @@ const config: ConfigInterface = {
   publishedFeatures: [
     'ACCESS',
     'API_KEYS',
+    'ASSET_HUB',
     'AUTHENTICATION',
     'BILLING',
     'CONFIGURATION',
@@ -21,6 +22,7 @@ const config: ConfigInterface = {
     'CLOUD_FUNCTIONS',
     'DISCORD',
     'HOSTING',
+    'INDEXING',
     'INSTRUCTIONS',
     'MARKETING',
     'NFT',
@@ -33,6 +35,7 @@ const config: ConfigInterface = {
     'PROJECT_ON_STARTUP',
     'PROJECT_SETTINGS',
     'REFERRAL',
+    'RPC',
     'SERVICES',
     'SOCIAL',
     'SOCIAL_ICONS',

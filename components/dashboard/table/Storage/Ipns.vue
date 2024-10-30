@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import type { DataTableInst, DataTableSortState } from 'naive-ui';
 import { NButton, NDropdown } from 'naive-ui';
 
@@ -205,7 +205,7 @@ function rowProps(row: IpnsInterface) {
 const data = computed<Array<IpnsInterface>>(() => {
   return (
     ipnsStore.items.filter(item =>
-      item.name.toLocaleLowerCase().includes(ipnsStore.search.toLocaleLowerCase())
+      item.name.toLowerCase().includes(ipnsStore.search.toLowerCase())
     ) || []
   );
 });
@@ -249,7 +249,7 @@ watch(
     }
   }
 );
-const debouncedSearchFilter = debounce(getIpns, 500);
+const debouncedSearchFilter = useDebounceFn(getIpns, 500);
 
 /** Function "Fetch directory content" wrapper  */
 async function getIpns(page = 1) {

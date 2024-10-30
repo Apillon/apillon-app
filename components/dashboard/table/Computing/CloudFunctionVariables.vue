@@ -26,8 +26,8 @@ const data = computed(
   () =>
     [...cloudFunctionStore.variables, ...cloudFunctionStore.variablesNew].filter(item =>
       `${item.key} ${item.value}`
-        .toLocaleLowerCase()
-        .includes(cloudFunctionStore.searchVariables.toLocaleLowerCase())
+        .toLowerCase()
+        .includes(cloudFunctionStore.searchVariables.toLowerCase())
     ) || []
 );
 

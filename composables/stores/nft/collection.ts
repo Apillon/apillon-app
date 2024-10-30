@@ -35,7 +35,7 @@ export const useCollectionStore = defineStore('collection', {
         symbol: '',
       },
       behavior: {
-        chain: Chains.MOONBASE,
+        chain: Chains.MOONBASE as number,
         chainType: ChainType.EVM,
         collectionType: NFTCollectionType.GENERIC,
         useApillonIpfsGateway: false,
@@ -47,8 +47,8 @@ export const useCollectionStore = defineStore('collection', {
         maxSupply: 0,
         dropPrice: 0,
         dropReserve: 0,
-        revocable: false as Boolean | null,
-        soulbound: false as Boolean | null,
+        revocable: false as boolean | null,
+        soulbound: false as boolean | null,
         supplyLimited: 0,
         royaltiesAddress: null,
         royaltiesFees: 0,
@@ -88,6 +88,9 @@ export const useCollectionStore = defineStore('collection', {
     },
     hasMetadataDeploys(state): boolean {
       return Array.isArray(state.metadataDeploys) && state.metadataDeploys.length > 0;
+    },
+    isUnique(state): boolean {
+      return state.active.chain === SubstrateChain.UNIQUE;
     },
   },
   actions: {

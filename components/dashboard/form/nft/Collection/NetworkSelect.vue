@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import uniquePNG from 'assets/images/logo/unique.png';
-import { SubstrateChain } from '~/lib/types/nft';
+import { Chains, SubstrateChain } from '~/lib/types/nft';
 
 defineEmits(['submit']);
 const { t } = useI18n();

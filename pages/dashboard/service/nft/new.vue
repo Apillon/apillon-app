@@ -2,17 +2,24 @@
   <Dashboard :loading="pageLoading">
     <template #heading>
       <div ref="headingRef">
-        <HeaderNftNew />
+        <HeaderNftCollection />
       </div>
     </template>
 
     <slot>
-      <div v-if="!isNetworkSelected" class="flex-cc pt-4" style="min-height: calc(70dvh - 50px)">
+      <div
+        v-if="!isNetworkSelected && !collectionStore.metadataStored"
+        class="flex-cc pt-4"
+        style="min-height: calc(70dvh - 50px)"
+      >
         <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === null" />
         <FormNftCollectionNetworkSelect v-else class="mb-8" @submit="isNetworkSelected = true" />
       </div>
       <div v-else-if="collectionStore.metadataStored">
         <FormNftCollection />
+      </div>
+      <div v-else-if="createUniqueMetadata">
+        <NftCreateMetadata :style="isLg ? scrollStyle : {}" />
       </div>
       <div v-else class="relative">
         <FormInstructions :title="t('nft.collection.data')" :instructions="[t('nft.collection.instruction.data')]">
@@ -43,6 +50,8 @@
         </Modal>
       </div>
 
+      <ModalLeaving />
+
       <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnConfirm">
         {{ t('w3Warn.nft.collection') }}
       </W3Warn>
@@ -56,6 +65,7 @@ import { useMessage } from 'naive-ui';
 import { CollectionStatus } from '~/lib/types/nft';
 
 const { t, te } = useI18n();
+const { isLg } = useScreen();
 const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
@@ -64,16 +74,22 @@ const storageStore = useStorageStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
-const { uploadFiles } = useUpload();
-const { getPriceServiceName } = useNft();
-const { isFormDisabled, collectionEndpoint, prepareFormData, prepareLogoAndCover } = useCollection();
+const { getPriceServiceName, uploadLogoAndCover } = useNft();
+const { isFormDisabled, isUnique, collectionEndpoint, prepareFormData } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 const headingRef = ref<HTMLElement>();
 const formBaseRef = useTemplateRef('formBaseRef');
 const formBehaviorRef = useTemplateRef('formBehaviorRef');
 const pageLoading = ref<boolean>(true);
+const createUniqueMetadata = ref<boolean>(false);
 const isNetworkSelected = ref<boolean>(collectionStore.metadataStored !== null);
+
+const scrollStyle = computed(() => {
+  return {
+    minHeight: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
+  };
+});
 
 useHead({
   title: t('dashboard.nav.nft'),
@@ -110,9 +126,12 @@ async function w3WarnAndDeploy() {
 }
 
 async function onModalW3WarnConfirm() {
-  warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
+  if (isUnique.value) {
+    createUniqueMetadata.value = true;
+  } else {
+    warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
+  }
 }
-
 async function createCollection() {
   modalW3WarnVisible.value = false;
   collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
@@ -126,18 +145,16 @@ async function createCollection() {
 
     collectionStore.form.single.collectionUuid = res.data.collection_uuid;
 
-    /** Prepares logo and cover image for upload */
-    const images = prepareLogoAndCover();
-
     /** Uploads logo and cover image */
-    if (images.length > 0) {
-      await uploadFiles(res.data.bucket_uuid, images);
-    }
+    await uploadLogoAndCover(res.data.bucket_uuid);
 
     /** Deployment status */
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
 
     router.push(`/dashboard/service/nft/${res.data.collection_uuid}/add`);
+
+    /** Redirects to NFT Create tab
+    // collectionStore.mintTab = NftCreateTab.DEPLOY; */
   } catch (error) {
     /** Deployment status */
     collectionStore.stepCollectionDeploy = CollectionStatus.FAILED;

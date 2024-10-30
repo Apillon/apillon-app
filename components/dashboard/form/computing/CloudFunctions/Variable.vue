@@ -77,9 +77,9 @@ const rules = computed<NFormRules>(() =>
 
 function validateVariableKey(rule: FormItemRule, value): boolean {
   return (
-    formData.value.filter(item => isLowercaseEqual(item.key, value)).length === 1 &&
-    !cloudFunctionStore.variables.some(item => isLowercaseEqual(item.key, value)) &&
-    !cloudFunctionStore.variablesNew.some(item => isLowercaseEqual(item.key, value))
+    formData.value.filter(item => equalsIgnoreCase(item.key, value)).length === 1 &&
+    !cloudFunctionStore.variables.some(item => equalsIgnoreCase(item.key, value)) &&
+    !cloudFunctionStore.variablesNew.some(item => equalsIgnoreCase(item.key, value))
   );
 }
 
