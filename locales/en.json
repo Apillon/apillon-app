@@ -85,6 +85,10 @@
     "instructions": {
       "hide": "Hide instructions",
       "show": "Show instructions"
+    },
+    "information": {
+      "hide": "Hide information",
+      "show": "Show information"
     }
   },
   "auth": {
