@@ -205,7 +205,7 @@ function rowProps(row: IpnsInterface) {
 const data = computed<Array<IpnsInterface>>(() => {
   return (
     ipnsStore.items.filter(item =>
-      item.name.toLocaleLowerCase().includes(ipnsStore.search.toLocaleLowerCase())
+      item.name.toLowerCase().includes(ipnsStore.search.toLowerCase())
     ) || []
   );
 });

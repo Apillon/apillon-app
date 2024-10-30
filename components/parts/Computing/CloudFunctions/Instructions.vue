@@ -12,7 +12,7 @@
         <Btn
           type="secondary"
           inner-class="text-white flex items-center justify-center"
-          href="https://wiki.apillon.io/web3-services/7-web3-compute.html"
+          href="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html"
         >
           <span class="icon-file text-xl mr-2"></span>
           <span>{{ $t('computing.cloudFunctions.documentation') }}</span>

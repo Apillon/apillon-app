@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(item, key) in content" :key="key">
+    <div v-for="(item, key) in content" :key="key" :class="innerClass">
       <h3 v-if="item.headline">{{ item.headline }}</h3>
 
       <p v-if="item.headline && item.title" :class="{ 'mt-6': item.headline }">{{ item.title }}</p>
@@ -9,7 +9,7 @@
 
       <template v-if="icons">
         <ul v-if="item.content && Array.isArray(item.content)" class="mb-4 text-green">
-          <li v-for="(c, keyC) in item.content" :key="keyC" class="mb-2">
+          <li v-for="(c, keyC) in item.content" :key="keyC">
             <NuxtIcon name="icon/success" class="inline-block float-left mr-2 text-2xl" />
             <span class="text-body" v-html="transformLinks(c)"></span>
           </li>
@@ -34,7 +34,7 @@
               name="icon/success"
               class="inline-block float-left mr-2 text-2xl text-green"
             />
-            <span>{{ benefit }}</span>
+            <span v-html="benefit"></span>
           </li>
         </ul>
       </template>
@@ -48,6 +48,7 @@
 defineProps({
   content: { type: Array<SolutionContent>, default: [] },
   icons: { type: Boolean, default: false },
+  innerClass: { type: String, default: '' },
 });
 
 const linkExpr = /\[(.*?)\]\((.*?)\)/gi;

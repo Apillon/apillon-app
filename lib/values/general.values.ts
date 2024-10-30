@@ -19,6 +19,7 @@ export enum PageSize {
 }
 
 export const LS_KEYS = {
+  APP_VERSION: 'al_app_version',
   DEPLOYMENT_REFRESH_INTERVAL: 'al_deployment_refresh_interval',
   NEWSLETTER: 'al_newsletter_subscribed',
   SERVICE_STATUS: 'al_service_status',
@@ -40,6 +41,7 @@ export const LsTableColumnsKeys = {
   FILES: 'al_table_files_columns',
   IPNS: 'al_table_ipns_columns',
   NFT_COLLECTION: 'al_table_nft_collection_columns',
+  SMART_CONTRACTS: 'al_table_smart_contracts',
   SOCIAL_POST: 'al_table_social_channel',
 };
 
@@ -114,6 +116,15 @@ export const LsCacheKeys = {
   PROJECT_OVERVIEW: 'al_cache_project_overview',
   REFERRAL: 'al_cache_referral',
   REFERRAL_AIRDROP: 'al_cache_referral_airdrop',
+  RPC_ACTIVATED: 'al_cache_rpc_activated',
+  RPC_API_KEYS: 'al_cache_rpc_api_keys',
+  RPC_API_KEY: 'al_cache_rpc_api_key',
+  RPC_API_KEY_USAGE: 'al_cache_rpc_api_key_usage',
+  RPC_ENDPOINTS: 'al_cache_rpc_endpoints',
+  RPC_FAVORITE_ENDPOINTS: 'al_cache_rpc_favorite_endpoints',
+  RPC_DWELLIR_ID: 'al_cache_rpc_dwellir_id',
+  RPC_PLAN: 'al_cache_rpc_plan',
+  RPC_PUBLIC_ENDPOINTS: 'al_cache_rpc_public_endpoints',
   SERVICES: 'al_cache_services',
   SERVICE_TYPES: 'al_cache_service_types',
   STORAGE_INFO: 'al_cache_storage_info',
@@ -126,6 +137,10 @@ export const LsCacheKeys = {
   SMART_CONTRACTS: 'al_cache_smart_contracts',
   SMART_CONTRACT_DEPLOYED: 'al_smart_contract_deployed',
   SMART_CONTRACTS_DEPLOYED: 'al_smart_contracts_deployed',
+  INDEXERS: 'al_cache_indexers',
+  INDEXER: 'al_cache_indexer',
+  INDEXER_LOGS: 'al_cache_indexer_logs',
+  INDEXER_DEPLOYMENTS: 'al_cache_indexer_deployments',
 };
 
 /** User roles */

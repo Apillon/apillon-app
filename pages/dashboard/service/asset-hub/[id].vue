@@ -1,5 +1,5 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <Dashboard :loading="pageLoading" :mainnet="assetHubStore.mainnet">
     <template #heading>
       <HeaderAssetHub
         back-link="/dashboard/service/asset-hub/"
@@ -43,14 +43,11 @@
               <td>
                 <span class="text-white">{{ $t('general.available') }}</span>
               </td>
-              <td>{{ assetHubStore.active.supply }} {{ assetHubStore.active.symbol }}</td>
+              <td>{{ supply }} {{ assetHubStore.active.symbol }}</td>
             </tr>
           </tbody>
         </n-table>
-        <a
-          :href="`https://assethub-westend.subscan.io/account/${assetHubStore.active.owner}`"
-          class="text-blue font-bold text-sm"
-        >
+        <a :href="transactionsList" class="text-blue font-bold text-sm" target="_blank">
           {{ $t('dashboard.service.assetHub.transactionHistory') }}
         </a>
       </div>
@@ -74,7 +71,7 @@ const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
 const assetHubStore = useAssetHubStore();
-const { pageLoading, initAssetHub, reconnectWallet } = useAssetHub();
+const { pageLoading, supply, initAssetHub, reconnectWallet } = useAssetHub();
 
 useHead({
   title: t('dashboard.nav.assetHub'),
@@ -82,22 +79,25 @@ useHead({
 
 const assetId = ref<number>(Number(params?.id));
 const assetData = computed<AssetData[]>(() => [
-  { label: t('form.label.assetHub.network'), value: `${assetHubNetworks.westend.name}` },
+  {
+    label: t('form.label.assetHub.network'),
+    value: `${assetHubNetworks.westend.name} (${assetHubNetworks.westend.env})`,
+  },
   { label: t('form.label.assetHub.name'), value: `${assetHubStore.active?.name}` },
   { label: t('form.label.assetHub.symbol'), value: `${assetHubStore.active?.symbol}` },
-  { label: t('form.label.assetHub.assetId'), value: `${assetId.value}` },
+  { label: t('form.label.assetHub.id'), value: `${assetId.value}` },
   { label: t('form.label.assetHub.decimals'), value: `${assetHubStore.active?.decimals}` },
   {
-    label: t('form.label.assetHub.initialSupply'),
-    value: `${assetHubStore.active?.supply}`,
+    label: t('form.label.assetHub.supply'),
+    value: `${supply.value}`,
   },
   {
-    label: t('form.label.assetHub.issuerAddress'),
+    label: t('form.label.assetHub.issuer'),
     value: `${assetHubStore.active?.issuer}`,
     copy: true,
   },
   {
-    label: t('form.label.assetHub.freezerAddress'),
+    label: t('form.label.assetHub.freezer'),
     value: `${assetHubStore.active?.freezer}`,
     copy: true,
   },
@@ -107,6 +107,12 @@ const assetData = computed<AssetData[]>(() => [
     link: 'https://github.com/subscan-explorer/assets-info',
   },
 ]);
+
+const transactionsList = computed(() =>
+  assetHubStore.mainnet
+    ? `https://assethub-polkadot.subscan.io/assets/${assetHubStore.active.id}?tab=activity`
+    : `https://assethub-westend.subscan.io/assets/${assetHubStore.active.id}?tab=activity`
+);
 
 onMounted(async () => {
   await initAssetHub();

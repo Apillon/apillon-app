@@ -63,14 +63,18 @@ const prepareData = () => {
       {
         label: 'Success',
         backgroundColor: colors.green,
+        borderColor: colors.white,
         data: dataSuccess,
         fill: true,
+        borderWidth: 1,
       },
       {
         label: 'Error',
         backgroundColor: colors.pink,
+        borderColor: colors.white,
         data: dataError,
         fill: true,
+        borderWidth: 1,
       },
     ],
   };

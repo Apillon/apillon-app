@@ -29,7 +29,7 @@ const props = defineProps({
 const notificationClosed = ref<boolean>(false);
 
 const notificationType = computed(() => {
-  return ServiceStatusType[props.serviceStatus.type]?.toLocaleLowerCase();
+  return ServiceStatusType[props.serviceStatus.type]?.toLowerCase();
 });
 
 const showNotification = computed(() => {

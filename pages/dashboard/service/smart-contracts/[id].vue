@@ -1,7 +1,10 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderSmartContract link="/dashboard/service/smart-contracts/new" />
+      <HeaderSmartContract
+        link="/dashboard/service/smart-contracts/new"
+        :title="smartContractStore.active.name"
+      />
     </template>
 
     <slot>
@@ -17,7 +20,7 @@
           <!-- DEMO -->
           <Demo
             :image="NftTemplateJPG"
-            link="https://github.com/Apillon/ps-signup-email-airdrop"
+            link="https://github.com/Apillon/apillon-evm-contracts"
             :title="$t('dashboard.solution.viewCode')"
           />
         </div>

@@ -50,6 +50,7 @@
     <FormAssetHubSendTokens
       class="text-left"
       :assetId="assetId"
+      @submit-success="refreshAsset(assetId)"
       @close="modalSendTokensVisible = false"
     />
   </Modal>
@@ -59,12 +60,13 @@
     class="text-center"
     :title="$t('dashboard.service.assetHub.mintTokens')"
   >
-    <p class="relative -top-4 text-center px-4">
+    <!-- <p class="relative -top-4 text-center px-4">
       {{ $t('dashboard.service.assetHub.mintTokensInfo') }}
-    </p>
+    </p> -->
     <FormAssetHubMintTokens
       class="text-left"
       :assetId="assetId"
+      @submit-success="refreshAsset(assetId)"
       @close="modalMintTokensVisible = false"
     />
   </Modal>
@@ -80,6 +82,7 @@
     <FormAssetHubTransfer
       class="text-left"
       :assetId="assetId"
+      @submit-success="onTransferred"
       @close="modalTransferVisible = false"
     />
   </Modal>
@@ -117,9 +120,14 @@
   <Modal
     v-model:show="modalEditAssetVisible"
     class="text-center"
-    :title="$t('dashboard.service.assetHub.asset')"
+    :title="$t('dashboard.service.assetHub.edit')"
   >
-    <FormAssetHub class="text-left" :asset-id="assetId" @close="modalEditAssetVisible = false" />
+    <FormAssetHub
+      class="text-left"
+      :asset-id="assetId"
+      @submit-success="refreshAsset(assetId)"
+      @close="modalEditAssetVisible = false"
+    />
   </Modal>
 </template>
 
@@ -127,8 +135,9 @@
 import colors from '~/tailwind.colors';
 
 const { params } = useRoute();
+const router = useRouter();
 const assetHubStore = useAssetHubStore();
-const { loadingWallet, modalWalletSelectVisible, walletConnect } = useAssetHub();
+const { loadingWallet, modalWalletSelectVisible, refreshAsset, walletConnect } = useAssetHub();
 
 const assetId = ref<number>(Number(params?.id));
 
@@ -138,4 +147,10 @@ const modalTransferVisible = ref<boolean>(false);
 const modalChangeIssuerVisible = ref<boolean>(false);
 const modalChangeFreezerVisible = ref<boolean>(false);
 const modalEditAssetVisible = ref<boolean>(false);
+
+async function onTransferred() {
+  await refreshAsset(assetId.value);
+
+  router.push({ name: 'dashboard-service-asset-hub' });
+}
 </script>

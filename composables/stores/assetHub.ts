@@ -105,7 +105,14 @@ export const useAssetHubStore = defineStore('assetHub', {
     },
 
     async getAsset(id: number): Promise<AssetInterface> {
-      if (this.active?.id !== id) {
+      if (this.active?.id === id) return this.active;
+
+      const asset = this.mainnet
+        ? this.itemsMainnet.find(i => i.id === id)
+        : this.itemsTestnet.find(i => i.id === id);
+      if (asset) {
+        this.active = asset;
+      } else {
         this.active = await this.fetchAsset(id);
       }
       return this.active;
@@ -137,12 +144,11 @@ export const useAssetHubStore = defineStore('assetHub', {
         promises.push(prepareAssetData(asset));
       });
       await Promise.all(promises).then(_ => {
-        this.loading = false;
+        setTimeout(() => (this.loading = false), 10);
       });
       assetHubClient.destroyInstance();
 
       /** Save timestamp to SS */
-
       const env = mainnet === undefined ? this.mainnet : mainnet;
       const key = env ? LsCacheKeys.ASSETS : LsCacheKeys.ASSETS_TESTNET;
       sessionStorage.setItem(key, Date.now().toString());
@@ -151,11 +157,6 @@ export const useAssetHubStore = defineStore('assetHub', {
     },
 
     async fetchAsset(assetId: number): Promise<AssetInterface> {
-      const asset = this.mainnet
-        ? this.itemsMainnet.find(i => i.id === assetId)
-        : this.itemsTestnet.find(i => i.id === assetId);
-      if (asset) return asset;
-
       const assetHubClient = await this.initClient();
       if (!assetHubClient || !this.accountConnected) return {} as AssetInterface;
 

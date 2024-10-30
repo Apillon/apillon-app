@@ -31,21 +31,21 @@ const modalAttributeVisible = ref<boolean>(false);
 const createColumns = (): NDataTableColumns<AttributeInterface> => {
   return [
     {
-      title: t('form.label.nftName'),
+      title: t('form.label.nft.name'),
       key: 'trait_type',
       render(row) {
         return h('span', { class: 'whitespace-nowrap' }, row.trait_type);
       },
     },
     {
-      title: t('form.label.nftDisplayType'),
+      title: t('form.label.nft.displayType'),
       key: 'display_type',
       render(row) {
         return h('span', { class: 'whitespace-nowrap' }, row.display_type);
       },
     },
     {
-      title: t('form.label.nftValue'),
+      title: t('form.label.nft.value'),
       key: 'value',
       render(row) {
         return h(NInput, {

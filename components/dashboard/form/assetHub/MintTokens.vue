@@ -14,6 +14,7 @@
       <n-input
         v-model:value="formData.address"
         :input-props="{ id: 'address' }"
+        :precision="assetHubStore.active.decimals"
         :placeholder="$t('form.placeholder.assetHub.address')"
         clearable
       />
@@ -31,12 +32,6 @@
         :placeholder="$t('form.placeholder.assetHub.amount')"
         clearable
       />
-      <div class="absolute right-0 top-full mt-1 text-sm">
-        {{ $t('general.available') }}:
-        <span class="text-body"
-          >{{ assetHubStore.active.supply }} {{ assetHubStore.active.symbol }}</span
-        >
-      </div>
     </n-form-item>
 
     <n-form-item :show-feedback="false">
@@ -50,15 +45,13 @@
     </Btn>
   </n-form>
 
-  <AssetHubTransaction
-    v-if="transactionHash"
-    :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
-    @close="$emit('close')"
-  />
+  <AssetHubTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
   <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
+import { nToBigInt } from '@polkadot/util';
+
 type FormAssetTransfer = {
   address: string | null;
   amount: number | null;
@@ -72,10 +65,10 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
-const { assetHubClient, initClient } = useAssetHub();
+const { assetHubClient } = useAssetHub();
 
 const loading = ref(false);
-const transactionHash = ref<string | undefined>();
+const txHash = ref<string | undefined>();
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormAssetTransfer>({
   address: null,
@@ -115,10 +108,10 @@ async function mintTokens() {
   if (!assetHubClient.value) return;
 
   try {
-    transactionHash.value = await assetHubClient.value.mint(
+    txHash.value = await assetHubClient.value.mint(
       props.assetId,
       formData.value.address,
-      formData.value.amount
+      nToBigInt(Number(formData.value.amount) * Math.pow(10, Number(assetHubStore.active.decimals)))
     );
 
     message.success(t('form.success.assetMinted'));

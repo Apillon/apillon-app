@@ -33,9 +33,7 @@
       />
       <div class="absolute right-0 top-full mt-1 text-sm">
         {{ $t('general.available') }}:
-        <span class="text-body"
-          >{{ assetHubStore.active.supply }} {{ assetHubStore.active.symbol }}</span
-        >
+        <span class="text-body"> {{ supply }} {{ assetHubStore.active.symbol }}</span>
       </div>
     </n-form-item>
 
@@ -50,15 +48,13 @@
     </Btn>
   </n-form>
 
-  <AssetHubTransaction
-    v-if="transactionHash"
-    :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
-    @close="$emit('close')"
-  />
+  <AssetHubTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
   <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
+import { nToBigInt } from '@polkadot/util';
+
 type FormAssetTransfer = {
   address: string | null;
   amount: number | null;
@@ -72,10 +68,10 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
-const { assetHubClient, initClient } = useAssetHub();
+const { assetHubClient, supply } = useAssetHub();
 
 const loading = ref(false);
-const transactionHash = ref<string | undefined>();
+const txHash = ref<string | undefined>();
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormAssetTransfer>({
   address: null,
@@ -116,10 +112,10 @@ async function sendTokens() {
   if (!assetHubClient.value) return;
 
   try {
-    transactionHash.value = await assetHubClient.value.transfer(
+    txHash.value = await assetHubClient.value.transfer(
       props.assetId,
       formData.value.address,
-      formData.value.amount
+      nToBigInt(Number(formData.value.amount) * Math.pow(10, Number(assetHubStore.active.decimals)))
     );
 
     message.success(t('form.success.assetSend'));

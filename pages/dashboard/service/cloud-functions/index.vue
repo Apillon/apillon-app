@@ -10,13 +10,15 @@
           accordion
           @update:expanded-names="onUpdateAccordion"
         >
-          <n-collapse-item
-            :title="
-              instructionsVisible
-                ? $t('general.instructions.hide')
-                : $t('general.instructions.show')
-            "
-          >
+          <n-collapse-item>
+            <template #header>
+              <span class="icon-info text-xl mr-2"></span>
+              {{
+                instructionsVisible
+                  ? $t('general.instructions.hide')
+                  : $t('general.instructions.show')
+              }}
+            </template>
             <ComputingCloudFunctionsInstructions />
           </n-collapse-item>
         </n-collapse>

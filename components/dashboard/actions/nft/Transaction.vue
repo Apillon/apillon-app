@@ -38,7 +38,8 @@
         v-if="
           collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
           collectionStore.active.cid &&
-          !collectionStore.active.ipns_uuid
+          !collectionStore.active.ipns_uuid &&
+          !collectionStore.isUnique
         "
         @positive-click="createDynamicMetadata()"
       >
@@ -170,6 +171,7 @@ const options = computed(() => {
     {
       label: t('nft.collection.setBaseUri'),
       key: 'setBaseUri',
+      show: !collectionStore.isUnique,
       disabled: actionsDisabled.value,
       props: {
         onClick: () => {

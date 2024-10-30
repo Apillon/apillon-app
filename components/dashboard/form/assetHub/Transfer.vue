@@ -30,12 +30,8 @@
     </Btn>
   </n-form>
 
-  <AssetHubTransaction
-    v-if="transactionHash"
-    :link="`https://assethub-westend.subscan.io/extrinsic/${transactionHash}`"
-    @close="$emit('close')"
-  />
-  <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
+  <AssetHubTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
+  <AssetHubLoader v-else-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 
 <script lang="ts" setup>
@@ -54,7 +50,7 @@ const assetHubStore = useAssetHubStore();
 const { assetHubClient } = useAssetHub();
 
 const loading = ref(false);
-const transactionHash = ref<string | undefined>();
+const txHash = ref<string | undefined>();
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormAssetTransfer>({
   address: '',
@@ -89,7 +85,7 @@ async function transfer() {
   if (!assetHubClient.value) return;
 
   try {
-    transactionHash.value = await assetHubClient.value.transferOwnership(
+    txHash.value = await assetHubClient.value.transferOwnership(
       props.assetId,
       formData.value.address
     );
