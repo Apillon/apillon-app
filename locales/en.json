@@ -473,6 +473,7 @@
     "nav": {
       "access": "Access",
       "authentication": "Authentication",
+      "assetManagement": "Asset Management & Development",
       "apiKeys": "API Keys",
       "analytics": "Analytics",
       "assetHub": "Asset hub",
@@ -480,6 +481,7 @@
       "configuration": "Configuration",
       "computing": "Computing",
       "cloudFunctions": "Cloud Functions",
+      "coreWeb3Infrastructure": "Core Web3 Infrastructure",
       "explore": "Explore",
       "hosting": "Hosting",
       "nft": "NFTs",
@@ -490,8 +492,10 @@
       "smartContractDetails": "Smart Contract Details",
       "social": "Social",
       "rpc": "RPC Service",
+      "utility": "Utility",
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
+      "simplets": "Simplets",
       "embeddedWallet": "Embedded Wallet",
       "indexing": "Indexing"
     },
