@@ -33,7 +33,7 @@
       </li>
     </ul>
     <Btn
-      v-if="isOwner && allowSwitch"
+      v-if="isOwner"
       :type="isSelected ? 'secondary' : 'primary'"
       size="large"
       :loading="loading"
