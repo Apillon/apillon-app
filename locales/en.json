@@ -2063,6 +2063,16 @@
         "2": "UPDATING JSONs",
         "3": "METADATA UPLOADED ON IPFS",
         "10": "METADATA SUCCESSFULLY PREPARED"
+      },
+      "dynamic": {
+        "btn": "Create Dynamic NFT collection",
+        "content": "If you plan to update or reveal metadata over time, after you’ve deployed the NFT Collection, this is your way to go. This solution uses IPNS records with data stored on IPFS.",
+        "title": "Dynamic NFT collection"
+      },
+      "static": {
+        "btn": "Create Static NFT collection",
+        "content": "If you plan to create an NFT Collection and not make any post-deployment changes, a static collection is your jam. The data will be stored on IPFS.",
+        "title": "Static NFT collection"
       }
     },
     "network": {
