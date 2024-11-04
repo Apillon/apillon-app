@@ -243,6 +243,9 @@ const assetIDsTestnet = computed(() => new Set(assetHubStore.itemsTestnet.map(i 
 const assetIDs = computed(() =>
   isMainnetSelected.value ? assetIDsMainnet.value : assetIDsTestnet.value
 );
+const assets = computed(() =>
+  isMainnetSelected.value ? assetHubStore.itemsMainnet : assetHubStore.itemsTestnet
+);
 
 onMounted(async () => {
   if (props.assetId) {
@@ -299,13 +302,13 @@ function findFirstAvailableNumber(set) {
 
 // Custom validations
 function validateAssetId(_: FormItemRule, value: string): boolean {
-  return !!props.assetId || !assetHubStore.items.some(i => i.id === Number(value));
+  return !!props.assetId || !assets.value.some(i => i.id === Number(value));
 }
 function validateName(_: FormItemRule, value: string): boolean {
-  return !!props.assetId || !assetHubStore.items.some(i => equalsIgnoreCase(i.name, value));
+  return !!props.assetId || !assets.value.some(i => equalsIgnoreCase(i.name, value));
 }
 function validateSymbol(_: FormItemRule, value: string): boolean {
-  return !!props.assetId || !assetHubStore.items.some(i => equalsIgnoreCase(i.symbol, value));
+  return !!props.assetId || !assets.value.some(i => equalsIgnoreCase(i.symbol, value));
 }
 
 const parse = (input: string) => {
