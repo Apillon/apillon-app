@@ -172,6 +172,7 @@
 
 <script lang="ts" setup>
 import type { FormItemRule } from 'naive-ui';
+import { assetHubNetworks } from '~/composables/useAssetHub';
 
 type FormAsset = {
   network: string | null;

@@ -334,7 +334,6 @@ export default function useCollection() {
   function resetAll() {
     bucketStore.resetFolder();
     bucketStore.resetUpload();
-    collectionStore.resetCache();
     collectionStore.resetForms();
     collectionStore.resetMetadata();
     collectionStore.metadataStored = null;

@@ -96,16 +96,13 @@ useHead({
 });
 
 onMounted(async () => {
-  await sleep(200);
-  await Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    storageStore.getStorageInfo();
-    await collectionStore.getCollections();
+  await Promise.all(Object.values(dataStore.promises));
 
-    pageLoading.value = false;
-  });
+  storageStore.getStorageInfo();
+  paymentStore.getPriceList();
+  await collectionStore.getCollections();
 
-  /** Get Price list */
-  await paymentStore.getPriceList();
+  pageLoading.value = false;
 });
 
 const submitFormBase = async () => (formBaseRef.value ? await formBaseRef.value.handleSubmitForm() : false);

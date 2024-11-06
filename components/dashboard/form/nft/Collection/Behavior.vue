@@ -44,16 +44,16 @@
     </n-form-item>
 
     <!--  Collection Use Gateway -->
-    <n-form-item path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
+    <n-form-item v-if="!isUnique" path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
       <n-checkbox
         v-model:checked="collectionStore.form.behavior.useApillonIpfsGateway"
         size="medium"
         :label="infoLabel('useGateway') as string"
-      />
+      /> 
     </n-form-item>
 
     <!--  Collection Dynamic metadata -->
-    <n-form-item path="useIpns" :show-label="false">
+    <n-form-item v-if="!isUnique" path="useIpns" :show-label="false">
       <n-checkbox
         v-model:checked="collectionStore.form.behavior.useIpns"
         size="medium"
