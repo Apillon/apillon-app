@@ -40,7 +40,7 @@ export function equalsIgnoreCase(str1?: string, str2?: string) {
     str2 &&
     str1.localeCompare(str2, undefined, {
       sensitivity: 'base',
-    })
+    }) === 0
   );
 }
 

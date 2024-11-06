@@ -29,6 +29,22 @@
       </div>
     </template>
     <template #submenu>
+      <n-collapse
+        class="border-b-1 border-bg-lighter -mt-4 pb-4"
+        accordion
+        @update:expanded-names="onUpdateAccordion"
+      >
+        <n-collapse-item>
+          <template #header>
+            <span class="icon-info text-xl mr-2"></span>
+            {{
+              instructionsVisible ? $t('general.information.hide') : $t('general.information.show')
+            }}
+          </template>
+          <RpcFeatures />
+        </n-collapse-item>
+      </n-collapse>
+
       <MenuRpc />
     </template>
   </Heading>
@@ -37,6 +53,11 @@
 const paymentStore = usePaymentStore();
 const dataStore = useDataStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
+const instructionsVisible = ref<boolean>(false);
+
+function onUpdateAccordion(expandedNames: Array<string | number>) {
+  instructionsVisible.value = expandedNames.length > 0;
+}
 
 onMounted(async () => {
   await paymentStore.getRpcPlan();

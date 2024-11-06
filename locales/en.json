@@ -85,6 +85,10 @@
     "instructions": {
       "hide": "Hide instructions",
       "show": "Show instructions"
+    },
+    "information": {
+      "hide": "Hide information",
+      "show": "Show information"
     }
   },
   "auth": {
@@ -469,6 +473,7 @@
     "nav": {
       "access": "Access",
       "authentication": "Authentication",
+      "assetManagement": "Asset Management & Development",
       "apiKeys": "API Keys",
       "analytics": "Analytics",
       "assetHub": "Asset hub",
@@ -476,6 +481,7 @@
       "configuration": "Configuration",
       "computing": "Computing",
       "cloudFunctions": "Cloud Functions",
+      "coreWeb3Infrastructure": "Core Web3 Infrastructure",
       "explore": "Explore",
       "hosting": "Hosting",
       "nft": "NFTs",
@@ -486,8 +492,10 @@
       "smartContractDetails": "Smart Contract Details",
       "social": "Social",
       "rpc": "RPC Service",
+      "utility": "Utility",
       "solutions": "Pre-built Solutions",
       "storage": "Storage",
+      "simplets": "Simplets",
       "embeddedWallet": "Embedded Wallet",
       "indexing": "Indexing"
     },
@@ -2037,6 +2045,16 @@
         "2": "UPDATING JSONs",
         "3": "METADATA UPLOADED ON IPFS",
         "10": "METADATA SUCCESSFULLY PREPARED"
+      },
+      "dynamic": {
+        "btn": "Create Dynamic NFT collection",
+        "content": "If you plan to update or reveal metadata over time, after you’ve deployed the NFT Collection, this is your way to go. This solution uses IPNS records with data stored on IPFS.",
+        "title": "Dynamic NFT collection"
+      },
+      "static": {
+        "btn": "Create Static NFT collection",
+        "content": "If you plan to create an NFT Collection and not make any post-deployment changes, a static collection is your jam. The data will be stored on IPFS.",
+        "title": "Static NFT collection"
       }
     },
     "network": {
@@ -2761,7 +2779,8 @@
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
-      "missingIndex": "Please upload index.html file"
+      "missingIndex": "Please upload index.html file",
+      "waitActiveDeployment": "Staging deployment is still in progress. Please wait until it completes before proceeding with the production deployment."
     },
     "smartContracts": {
       "fieldRequired": "Please fill all fields"

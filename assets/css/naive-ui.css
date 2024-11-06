@@ -377,15 +377,14 @@
       @apply sticky top-0 z-2 mb-2;
 
       .n-menu-item-content {
-        @apply mt-2;
-
-        &::before {
+                &::before {
           @apply rounded-none bg-bg;
         }
 
         .n-menu-item-content-header {
           @apply pl-3;
           color: var(--n-group-text-color);
+          font-weight: bold;
           font-size: 0.93em;
         }
         .n-menu-item-content__arrow {
@@ -399,7 +398,7 @@
     }
 
     .n-menu-item {
-      @apply mt-2;
+      @apply mt-1;
 
       &:first-child {
         @apply mt-0;
@@ -409,11 +408,11 @@
     > .n-menu-item-group {
       + .n-submenu,
       + .n-menu-item-group {
-        @apply mt-10;
+        @apply mt-4;
       }
     }
     .n-submenu-children {
-      @apply mb-8;
+      @apply mb-2;
     }
     .n-menu-item-content {
       @apply pr-8;
