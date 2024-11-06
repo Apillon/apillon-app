@@ -3,7 +3,7 @@
     class="inline-block py-2 px-5 border-l-4 w-full bg-bg-dark text-sm"
     :class="notificationClass"
   >
-    <span :class="iconClass"></span>
+    <span v-if="!hideIcon" :class="iconClass"></span>
     <slot />
   </div>
 </template>
@@ -15,6 +15,7 @@ const props = defineProps({
     validator: (value: string) => ['info', 'error', 'warning', 'success'].includes(value),
     default: 'success',
   },
+  hideIcon: { type: Boolean, default: false },
 });
 
 const $style = useCssModule();

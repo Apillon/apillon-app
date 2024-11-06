@@ -1,10 +1,10 @@
-import {
+import type {
   InjectedExtension,
   InjectedMetadata,
   InjectedProvider,
   Unsubcall,
 } from '@polkadot/extension-inject/types';
-import { Signer } from '@polkadot/types/types';
+import type { Signer } from '@polkadot/types/types';
 
 export {};
 
@@ -17,8 +17,8 @@ declare global {
     address: string;
     source: string;
     name?: string;
-    wallet?: Wallet;
-    signer?: unknown;
+    wallet: Wallet;
+    signer: Signer;
   }
 
   interface WalletInfo {

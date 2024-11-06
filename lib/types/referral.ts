@@ -21,7 +21,6 @@ declare global {
     shippingInfo?: string;
     status: number;
     tasks: Array<any>;
-    termsAccepted: string;
   }
 
   interface RewardsInterface extends BaseObjectInterface {
@@ -49,7 +48,7 @@ declare global {
     name: string;
     value: boolean;
   };
-  interface AirdropInterface extends GeneralInterface {
+  interface AirdropStatsInterface extends GeneralInterface {
     bucketCreated: boolean;
     collaboratorAdded: boolean;
     computingContractCreated: boolean;
@@ -71,6 +70,31 @@ declare global {
     usersReferred: number;
     websiteCreated: boolean;
     websiteUploadedViaApi: boolean;
+    galxeTasksCompleted: number;
+  }
+  interface TokenClaimInterface extends GeneralInterface {
+    blocked: boolean;
+    claimCompleted: boolean;
+    totalNctr: number;
+    user_uuid: string;
+    wallet: string;
+    transactionHash: string;
+  }
+  interface AirdropInterface {
+    airdropStats: AirdropStatsInterface;
+    tokenClaim: TokenClaimInterface;
   }
   interface AirdropResponse extends GeneralResponse<AirdropInterface> {}
+
+  interface NctrClaimParams {
+    amount: string;
+    timestamp: number;
+    signature: string;
+  }
+
+  interface NctrClaimResponse {
+    id: string;
+    status: number;
+    data: NctrClaimParams;
+  }
 }

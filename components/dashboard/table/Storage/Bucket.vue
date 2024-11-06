@@ -10,7 +10,10 @@
       :columns="columns"
       :data="data"
       :loading="bucketStore.loading"
-      :pagination="{ pageSize: PAGINATION_LIMIT }"
+      :pagination="{
+        pageSize: PAGINATION_LIMIT,
+        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+      }"
       :row-key="rowKey"
       :row-props="rowProps"
       @update:checked-row-keys="handleCheck"
@@ -39,7 +42,7 @@
   </ModalDelete>
 
   <!-- W3Warn: delete bucket -->
-  <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
+  <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnHide">
     {{ $t('w3Warn.bucket.delete') }}
   </W3Warn>
 </template>
@@ -60,8 +63,8 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
+const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.BUCKET_DELETE);
 
-const showModalW3Warn = ref<boolean>(false);
 const showModalEditBucket = ref<boolean>(false);
 const showModalDestroyBucket = ref<boolean | null>(false);
 const checkedRowKeys = ref<Array<string | number>>([]);
@@ -75,7 +78,7 @@ const data = computed<Array<BucketInterface>>(() => {
       item =>
         (bucketStore.filter.bucketType === null ||
           item.bucketType === bucketStore.filter.bucketType) &&
-        item.name.toLocaleLowerCase().includes(bucketStore.filter.search.toLocaleLowerCase())
+        item.name.toLowerCase().includes(bucketStore.filter.search.toLowerCase())
     ) || []
   );
 });
@@ -137,7 +140,7 @@ const createColumns = (): NDataTableColumns<BucketInterface> => {
       key: 'actions',
       title: '',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
       render() {
         return h(
           NDropdown,
@@ -196,7 +199,6 @@ const dropdownOptions = [
     label: $i18n.t('general.delete'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         deleteBucket(true);
       },
@@ -210,7 +212,6 @@ const dropdownDeletedOptions = [
     label: $i18n.t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restoreBucket();
       },
@@ -228,7 +229,7 @@ function deleteBucket(isCurrentRow = false) {
   if (localStorage.getItem(LsW3WarnKeys.BUCKET_DELETE)) {
     showModalDestroyBucket.value = true;
   } else {
-    showModalW3Warn.value = true;
+    modalW3WarnVisible.value = true;
     showModalDestroyBucket.value = null;
   }
 }
@@ -239,16 +240,6 @@ function onModalW3WarnHide() {
     showModalDestroyBucket.value = true;
   }
 }
-
-/** Watch showModalW3Warn, onShow update timestamp of shown modal in session storage */
-watch(
-  () => showModalW3Warn.value,
-  shown => {
-    if (shown) {
-      localStorage.setItem(LsW3WarnKeys.BUCKET_DELETE, Date.now().toString());
-    }
-  }
-);
 
 /**
  * On bucket deleted

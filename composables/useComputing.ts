@@ -1,14 +1,15 @@
 import { v4 as uuidv4 } from 'uuid';
+import IconInfo from '~/components/parts/Icon/Info.vue';
 
-export default function useCaptcha() {
-  const { t } = useI18n();
+export default function useComputing() {
+  const { t, te } = useI18n();
   const message = useMessage();
   const router = useRouter();
   const contractStore = useContractStore();
   const transactionStore = useComputingTransactionStore();
 
-  let contractInterval: any = null as any;
   let transactionInterval: any = null as any;
+  let contractInterval: any = null as any;
 
   onUnmounted(() => {
     clearInterval(contractInterval);
@@ -20,16 +21,12 @@ export default function useCaptcha() {
     clearInterval(contractInterval);
 
     const unfinishedCollection = contractStore.items.find(
-      contract =>
-        contract.contractStatus === ContractStatus.DEPLOY_INITIATED ||
-        contract.contractStatus === ContractStatus.DEPLOYING
+      contract => contract.contractStatus < ContractStatus.DEPLOYED
     );
-    if (unfinishedCollection === undefined) {
-      return;
-    }
+    if (unfinishedCollection === undefined) return;
 
     contractInterval = setInterval(async () => {
-      const contracts = await contractStore.fetchContracts(false);
+      const contracts = await contractStore.fetchContracts(false, false);
       const contract = contracts.find(
         contract => contract.contract_uuid === unfinishedCollection.contract_uuid
       );
@@ -55,7 +52,7 @@ export default function useCaptcha() {
     transactionInterval = setInterval(async () => {
       const transactions = await transactionStore.fetchTransactions(
         contractUuid,
-        transactionStore.pagination.page,
+        { page: transactionStore.pagination.page },
         false
       );
       const transaction = transactions.find(
@@ -79,7 +76,7 @@ export default function useCaptcha() {
   async function uploadFileToIPFS(
     file: FileListItemType,
     bucketUuid: string,
-    encryptedContent: string
+    encryptedContent?: string
   ): Promise<FileInterface | null> {
     const sessionUuid = uuidv4();
     const data = {
@@ -96,15 +93,17 @@ export default function useCaptcha() {
       // Upload to S3
       await fetch(uploadUrl.url, {
         method: 'PUT',
-        body: encryptedContent,
+        body: encryptedContent || file.file,
       });
 
       // End session
       await $api.post(endpoints.storageFileUpload(bucketUuid, sessionUuid));
 
-      setTimeout(() => {
-        message.success(t('computing.contract.encrypt.step2Info'), { duration: 5000 });
-      }, 1000);
+      if (encryptedContent) {
+        setTimeout(() => {
+          message.success(t('computing.contract.encrypt.step2Info'), { duration: 5000 });
+        }, 1000);
+      }
 
       // Start pooling file
       return await getFile(bucketUuid, uploadUrl.file_uuid);
@@ -134,9 +133,36 @@ export default function useCaptcha() {
     return response.data;
   }
 
+  function labelInfo(field: string, base = 'form.label.contract') {
+    if (
+      te(`${base}.${field}`) &&
+      te(`${base}.labelInfo.${field}`) &&
+      t(`${base}.labelInfo.${field}`)
+    ) {
+      return labelInfoText(
+        t(`${base}.${field}`),
+        decodeHTMLEntities(t(`${base}.labelInfo.${field}`))
+      );
+    }
+    return te(`${base}.${field}`) ? t(`${base}.${field}`) : field;
+  }
+
+  function labelInfoText(label: string, info?: string) {
+    if (info && info.length > 0) {
+      return h('span', { class: 'inline-flex items-center' }, [
+        h('span', { class: 'mr-1' }, label),
+        h(IconInfo, { class: 'info-icon', size: 'sm', tooltip: info }, ''),
+      ]);
+    }
+    return label;
+  }
+
   return {
     checkUnfinishedContracts,
     checkUnfinishedTransactions,
+    getFile,
+    labelInfo,
+    labelInfoText,
     onContractCreated,
     uploadFileToIPFS,
   };

@@ -13,14 +13,12 @@
       :wrap="false"
     >
       <span class="mx-1">{{ $t(`hosting.deployment.status.${deploymentStatus}`) }}</span>
-      <AnimationTyping v-if="deploymentStatus < DeploymentStatus.APPROVED" />
+      <AnimationTyping v-if="deploymentStatus < DeploymentStatus.IN_REVIEW" />
     </n-space>
   </n-tag>
 </template>
 
 <script lang="ts" setup>
-import { DeploymentStatus } from '~/lib/types/storage';
-
 defineProps({
   deploymentStatus: {
     type: Number as PropType<DeploymentStatus>,

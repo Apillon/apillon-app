@@ -16,13 +16,13 @@
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts :service="ServiceTypeName.COMPUTING" />
+      <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" />
 
       <!-- Refresh contracts -->
       <n-button
         size="small"
         :loading="contractStore.loading"
-        @click="contractStore.fetchContracts()"
+        @click="contractStore.fetchContracts(archive)"
       >
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
@@ -51,6 +51,9 @@
 </template>
 
 <script lang="ts" setup>
+defineProps({
+  archive: { type: Boolean, default: false },
+});
 const authStore = useAuthStore();
 const contractStore = useContractStore();
 const paymentStore = usePaymentStore();

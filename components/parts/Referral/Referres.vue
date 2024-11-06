@@ -4,9 +4,11 @@
     <div class="">
       <div class="flex justify-between">
         <h3 class="mb-6">{{ $t('referral.referres.invite') }}</h3>
+
+        <!-- TAG
         <n-tag type="info" size="medium" round>
           <strong class="lowercase text-base">+2 per referral</strong>
-        </n-tag>
+        </n-tag> -->
       </div>
 
       <p class="font-button text-sm text-body mt-3 mb-5">

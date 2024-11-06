@@ -76,18 +76,22 @@
 type FormIpns = {
   name: string;
   description?: string | null;
+  cid?: string | null | undefined;
 };
 
 const props = defineProps({
   ipnsUuid: { type: String, default: null },
+  cid: { type: String, default: null },
 });
+
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const message = useMessage();
 const $i18n = useI18n();
 const dataStore = useDataStore();
-const bucketStore = useBucketStore();
 const ipnsStore = useIpnsStore();
+const bucketStore = useBucketStore();
+const warningStore = useWarningStore();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -96,6 +100,7 @@ const ipns = ref<IpnsInterface | undefined>();
 const formData = ref<FormIpns>({
   name: ipns.value?.name || '',
   description: ipns.value?.description || '',
+  cid: props.cid || undefined,
 });
 
 const rules: NFormRules = {
@@ -129,7 +134,7 @@ function handleSubmit(e: Event | MouseEvent) {
     } else if (props.ipnsUuid) {
       await updateIpns();
     } else {
-      await createIpns();
+      warningStore.showSpendingWarning(PriceServiceName.IPNS, () => createIpns());
     }
   });
 }

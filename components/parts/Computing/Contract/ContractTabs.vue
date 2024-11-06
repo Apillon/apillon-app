@@ -97,7 +97,7 @@ async function onCidAssigned() {
 
   await transactionStore.fetchTransactions(
     contractStore.active.contract_uuid,
-    transactionStore.pagination.page,
+    { page: transactionStore.pagination.page },
     false
   );
   checkUnfinishedTransactions();

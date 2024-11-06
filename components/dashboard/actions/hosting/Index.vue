@@ -20,7 +20,11 @@
       <ModalCreditCosts :service="ServiceTypeName.HOSTING" />
 
       <!-- Refresh websites -->
-      <n-button size="small" :loading="websiteStore.loading" @click="websiteStore.fetchWebsites()">
+      <n-button
+        size="small"
+        :loading="websiteStore.loading"
+        @click="websiteStore.fetchWebsites(archive)"
+      >
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
@@ -49,6 +53,10 @@
 </template>
 
 <script lang="ts" setup>
+defineProps({
+  archive: { type: Boolean, default: false },
+});
+
 const authStore = useAuthStore();
 const websiteStore = useWebsiteStore();
 const showModalEditWebsite = ref<boolean>(false);

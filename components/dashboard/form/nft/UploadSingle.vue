@@ -34,7 +34,7 @@
         :default-file-list="collectionStore.images"
         :show-file-list="false"
         directory-dnd
-        :custom-request="nft.uploadImageRequest"
+        :custom-request="upload => nft.uploadImageRequest(upload, !isUnique)"
         @remove="nft.handleImageRemove"
       >
         <n-upload-dragger class="h-40">
@@ -67,13 +67,16 @@
             <n-form-item-gi
               :span="12"
               path="id"
-              :label="infoLabel('nftId')"
+              :label="infoLabel('id')"
               :label-props="{ for: 'nftId' }"
             >
               <n-input-number
                 v-model:value="collectionStore.form.single.id"
                 :input-props="{ id: 'nftId' }"
                 :placeholder="$t('general.typeHere')"
+                :step="1"
+                :min="0"
+                :max="100000"
                 clearable
               />
             </n-form-item-gi>
@@ -82,7 +85,7 @@
             <n-form-item-gi
               :span="12"
               path="name"
-              :label="infoLabel('nftName')"
+              :label="infoLabel('name')"
               :label-props="{ for: 'name' }"
             >
               <n-input
@@ -97,7 +100,7 @@
             <n-form-item-gi
               :span="12"
               path="description"
-              :label="infoLabel('nftDescription')"
+              :label="infoLabel('description')"
               :label-props="{ for: 'description' }"
             >
               <n-input
@@ -113,7 +116,7 @@
             <n-form-item-gi
               :span="12"
               path="copies"
-              :label="infoLabel('nftCopies')"
+              :label="infoLabel('copies')"
               :label-props="{ for: 'copies' }"
             >
               <n-input-number
@@ -137,30 +140,16 @@
 <script lang="ts" setup>
 import type { UploadInst } from 'naive-ui';
 const nft = useNft();
-const { t, te } = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-
-const { formRef, rulesSingle } = useCollection();
+const { labelInfo } = useComputing();
+const { formRef, isUnique, rulesSingle } = useCollection();
 
 const uploadRef = ref<UploadInst | null>(null);
 
 function infoLabel(field: string) {
-  if (
-    te(`form.label.${field}`) &&
-    te(`nft.nft.labelInfo.${field}`) &&
-    t(`nft.nft.labelInfo.${field}`)
-  ) {
-    return [
-      h('span', { class: 'mr-1' }, t(`form.label.${field}`)),
-      h(
-        resolveComponent('IconInfo'),
-        { size: 'sm', tooltip: t(`nft.collection.labelInfo.${field}`) },
-        ''
-      ),
-    ];
-  }
-  return te(`form.label.${field}`) ? t(`form.label.${field}`) : field;
+  return labelInfo(field, 'form.label.nft');
 }
 
 function removeImages() {

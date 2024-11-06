@@ -64,7 +64,9 @@ onMounted(() => {
       showUpload.value = currentContract.contractStatus === ContractStatus.DEPLOYED;
       pageLoading.value = false;
 
-      await transactionStore.fetchTransactions(currentContract.contract_uuid);
+      await transactionStore.fetchTransactions(currentContract.contract_uuid, {
+        page: transactionStore.pagination.page,
+      });
       checkUnfinishedTransactions();
     }
   });

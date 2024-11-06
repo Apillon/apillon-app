@@ -57,6 +57,9 @@ const Endpoints = {
   activeSubscription: (projectUuid: string) => {
     return `/projects/${projectUuid}/active-subscription`;
   },
+  getRpcPlan: (projectUuid: string) => {
+    return `/projects/${projectUuid}/rpc-plan`;
+  },
   subscriptions: (projectUuid: string) => {
     return `/projects/${projectUuid}/subscriptions`;
   },
@@ -84,6 +87,11 @@ const Endpoints = {
   /** Instructions */
   instructions: (key?: string) => {
     return key ? `/instructions/${key}` : '/instructions';
+  },
+
+  /** Asset Hub */
+  assets: (uuid?: string) => {
+    return uuid ? `/asset-hub/${uuid}` : '/asset-hub';
   },
 
   /** Bucket */
@@ -128,6 +136,9 @@ const Endpoints = {
   storageFileUploads: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/file-uploads`;
   },
+  storageFileUploadSessions: (bucketUuid: string) => {
+    return `/storage/${bucketUuid}/file-upload-sessions`;
+  },
   storageFileDetails: (bucketUuid: string, fileUuid: string) => {
     return `/storage/${bucketUuid}/file/${fileUuid}/detail`;
   },
@@ -159,6 +170,7 @@ const Endpoints = {
   /**
    * Hosting
    */
+  shortUrl: '/storage/hosting/short-url',
 
   /** Website */
   website: '/storage/hosting/website',
@@ -167,6 +179,15 @@ const Endpoints = {
   },
   websiteDeploy: (uuid?: string) => {
     return `/storage/hosting/websites/${uuid}/deploy`;
+  },
+  websiteActivate: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/activate`;
+  },
+  websiteDomain: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/domain`;
+  },
+  websiteDomainStatus: (uuid?: string) => {
+    return `/storage/hosting/websites/${uuid}/check-domain`;
   },
 
   /** Deployment */
@@ -187,6 +208,7 @@ const Endpoints = {
 
   /** Collection */
   collectionsSubstrate: '/nfts/collections/substrate',
+  collectionsUnique: '/nfts/collections/unique',
   collections: (id?: string) => {
     return id ? `/nfts/collections/${id}` : '/nfts/collections';
   },
@@ -211,6 +233,12 @@ const Endpoints = {
   collectionNftsMetadata: (collectionUuid: string) => {
     return `/nfts/collections/${collectionUuid}/nfts-metadata`;
   },
+  collectionIpns: (id: string) => {
+    return `/nfts/collections/${id}/ipns`;
+  },
+  collectionActivate: (collectionUuid: string) => {
+    return `/nfts/collections/${collectionUuid}/activate`;
+  },
 
   /**
    * Computing
@@ -230,6 +258,108 @@ const Endpoints = {
   },
   contractTransactions: (contractUuid: string) => {
     return `/computing/contracts/${contractUuid}/transactions`;
+  },
+  contractActivate: (contractUuid: string) => {
+    return `/computing/contracts/${contractUuid}/activate`;
+  },
+
+  /** Cloud functions - Acurast */
+  cloudFunctions: (uuid?: string) => {
+    return uuid ? `/acurast/cloud-functions/${uuid}` : '/acurast/cloud-functions';
+  },
+  cloudFunctionActivate: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/activate`;
+  },
+  cloudFunctionEnvironment: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/environment`;
+  },
+  cloudFunctionExecute: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/execute`;
+  },
+  cloudFunctionJobs: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/jobs`;
+  },
+  cloudFunctionUsage: (uuid: string) => {
+    return `/acurast/cloud-functions/${uuid}/usage`;
+  },
+  acurastJobs: (uuid: string) => {
+    return `/acurast/jobs/${uuid}`;
+  },
+
+  /** Embedded wallet */
+  embeddedWallets: (uuid?: number | string) => {
+    return uuid ? `/embedded-wallet/integrations/${uuid}` : '/embedded-wallet/integrations';
+  },
+  embeddedWalletInfo: '/embedded-wallet/info',
+  embeddedWalletIntegration: '/embedded-wallet/integration',
+  embeddedWalletSignatures: (uuid: number | string) => {
+    return `/embedded-wallet/integrations/${uuid}/signatures`;
+  },
+
+  /** Smart contracts */
+  smartContracts: (uuid?: string) => {
+    return uuid ? `/contracts/${uuid}` : '/contracts';
+  },
+  smartContractsNew: (contractUuid: string) => {
+    return `/contracts/${contractUuid}/deploy`;
+  },
+  smartContractsDeployed: (uuid?: string) => {
+    return uuid ? `/contracts/deployed/${uuid}` : `/contracts/deployed`;
+  },
+  smartContractsCall: (contractUuid: string) => {
+    return `/contracts/deployed/${contractUuid}/call`;
+  },
+
+  /** Indexers */
+  indexers: (uuid?: string) => {
+    return uuid ? `/indexing/indexers/${uuid}` : '/indexing/indexers';
+  },
+
+  indexer: () => {
+    return '/indexing/indexer';
+  },
+
+  indexerLogs: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/logs`;
+  },
+
+  indexerDeployments: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/deployments`;
+  },
+
+  indexerHibernate: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/hibernate`;
+  },
+
+  /**
+   * RPC
+   */
+  rpcApiKeys: (id?: number) => {
+    return `/rpc/api-key${id ? `/${id}` : ''}`;
+  },
+
+  rpcFavoriteEndpoints: (apiKeyId: number) => {
+    return `/rpc/api-key/${apiKeyId}/urls`;
+  },
+
+  rpcEndpoints: () => {
+    return '/rpc/endpoints';
+  },
+
+  rpcApiKeysQuotaReached: () => {
+    return '/rpc/api-key/quota-reached';
+  },
+
+  rpcUrl: (id?: number) => {
+    return `/rpc/url${id ? `/${id}` : ''}`;
+  },
+
+  rpcDwellirId: () => {
+    return '/rpc/dwellir-id';
+  },
+
+  rpcApiKeyUsage: (projectUuid: string, apiKeyId: number) => {
+    return `/rpc/${projectUuid}/api-key/${apiKeyId}/usage`;
   },
 
   /**
@@ -256,8 +386,14 @@ const Endpoints = {
   spaces: (uuid?: number | string) => {
     return uuid ? `/social/spaces/${uuid}` : '/social/spaces';
   },
+  spaceActivate: (uuid: number | string) => {
+    return `/social/spaces/${uuid}/activate`;
+  },
   posts: (uuid?: number | string) => {
     return uuid ? `/social/posts/${uuid}` : `/social/posts`;
+  },
+  postActivate: (uuid: number | string) => {
+    return `/social/posts/${uuid}/activate`;
   },
 
   /** Oauth links */
@@ -280,6 +416,11 @@ const Endpoints = {
   referralRewards: '/referral/products',
   referralClaimReward: '/referral/product',
   airdropTasks: '/referral/airdrop-tasks',
+  airdropReviewTasks: '/referral/review-tasks',
+  referralClaimParams: '/referral/claim-parameters',
+
+  /** Service status */
+  serviceStatus: '/public/service-status',
 };
 
 export default Endpoints;

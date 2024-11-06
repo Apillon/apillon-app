@@ -24,7 +24,7 @@
           :max="nft.dataImagesNames.value.length"
           multiple
           directory-dnd
-          :custom-request="nft.uploadImagesRequest"
+          :custom-request="upload => nft.uploadImagesRequest(upload, !isUnique)"
           @change="onUploadChange"
           @remove="nft.handleImageRemove"
           @click="startLoader"
@@ -105,7 +105,7 @@
               {{ $t('nft.upload.csvFile') }}
             </Btn>
           </n-upload>
-          <IconInfo :tooltip="$t('nft.collection.labelInfo.csvUpload')" size="lg" />
+          <IconInfo :tooltip="$t('form.label.collection.labelInfo.csvUpload')" size="lg" />
         </div>
         <template v-else>
           <div class="flex text-left">
@@ -156,6 +156,7 @@ import type { UploadCustomRequestOptions, UploadInst } from 'naive-ui';
 
 const nft = useNft();
 const collectionStore = useCollectionStore();
+const { isUnique } = useCollection();
 
 const uploadRef = ref<UploadInst | null>(null);
 const modalMetadataAttributesVisible = ref<boolean>(false);

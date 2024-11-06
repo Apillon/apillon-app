@@ -66,6 +66,7 @@ const createColumns = ({
           {
             type: row.pendingInvitation ? 'default' : 'success',
             round: true,
+            size: 'small',
             bordered: row.pendingInvitation,
           },
           {
@@ -79,7 +80,7 @@ const createColumns = ({
       title: '',
       key: 'actions',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
       render(row) {
         return h(
           NDropdown,

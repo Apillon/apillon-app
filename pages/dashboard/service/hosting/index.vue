@@ -1,26 +1,13 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <Heading>
-        <slot>
-          <h1>{{ $t('dashboard.nav.hosting') }}</h1>
-        </slot>
-
-        <template #info>
-          <n-space :size="32" align="center">
-            <StorageProgress
-              :key="storageStore.info.usedStorage"
-              :size="storageStore.info.usedStorage"
-              :max-size="storageStore.info.availableStorage"
-            />
-
-            <IconInfo v-if="$i18n.te('w3Warn.hosting.upload')" @click="modalW3WarnVisible = true" />
-          </n-space>
-        </template>
-      </Heading>
+      <HeaderHosting />
     </template>
     <slot>
-      <TableHosting v-if="websiteStore.hasWebsites" :websites="websiteStore.items" />
+      <n-space v-if="websiteStore.hasWebsites" class="pb-8" :size="32" vertical>
+        <ActionsHosting />
+        <TableHosting :websites="websiteStore.items" />
+      </n-space>
       <Empty
         v-else
         :title="$t('hosting.web3Hosting')"

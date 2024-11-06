@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export default function useUpload() {
-  const $i18n = useI18n();
+  const { t } = useI18n();
   const message = useMessage();
   const bucketStore = useBucketStore();
   const storageStore = useStorageStore();
@@ -40,12 +40,16 @@ export default function useUpload() {
    *  Methods
    */
   /** Check if file is already on list */
-  function fileAlreadyOnFileList(uploadFileList: FileListItemType[], file: FileListItemType) {
+  function fileAlreadyOnFileList(
+    uploadFileList: FileListItemType[],
+    file: FileListItemType,
+    fileNameCheck = false
+  ) {
     return uploadFileList.some(
       item =>
         item.name === file.name &&
         item.fullPath === file.fullPath &&
-        item.file?.lastModified === file.file?.lastModified
+        (fileNameCheck || item.file?.lastModified === file.file?.lastModified)
     );
   }
 
@@ -80,7 +84,7 @@ export default function useUpload() {
 
     /** Files data for upload params */
     const filesUpload: Array<UploadFileType> = fileList.value.map(file => {
-      file.path = fileFolderPath(file.fullPath || '', wrapFilesToDirectory);
+      file.path = fileFolderPath(file?.fullPath || '', wrapFilesToDirectory);
 
       return {
         fileName: file.name,
@@ -121,7 +125,7 @@ export default function useUpload() {
             await uploadFilesToS3(fileRequests.data.files);
           } else {
             /** Show warning message - zero files uploaded */
-            message.warning($i18n.t('error.fileUploadStopped'));
+            message.warning(t('error.fileUploadStopped'));
           }
         } catch (error: any) {
           onUploadError();
@@ -139,10 +143,11 @@ export default function useUpload() {
         file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path
       );
       if (file) {
+        file['file_uuid'] = uploadFileRequest.file_uuid;
         uploadFileToS3(file, uploadFileRequest);
       } else {
         /** Show warning message - file not found by name */
-        message.warning($i18n.t('error.fileUploadMissing', { name: uploadFileRequest.fileName }));
+        message.warning(t('error.fileUploadMissing', { name: uploadFileRequest.fileName }));
       }
     });
   }
@@ -164,17 +169,19 @@ export default function useUpload() {
         throw new Error('File upload error');
       }
 
-      file.onFinish();
+      file?.onFinish();
       file.percentage = 100;
       updateFileStatus(file, FileUploadStatusValue.FINISHED);
       uploadSessionEnd(sessionUuid.value);
-    } catch (error) {
-      file.onError();
+    } catch (e) {
+      console.error(e);
+      file?.onError();
+
       updateFileStatus(file, FileUploadStatusValue.ERROR);
       uploadSessionEnd(sessionUuid.value);
 
       /** Show error message */
-      message.error(userFriendlyMsg(error));
+      message.error(userFriendlyMsg(e));
     }
   }
 
@@ -290,11 +297,12 @@ export default function useUpload() {
   }
 
   return {
-    uploadFiles,
     fileAlreadyOnFileList,
     fileTypeValid,
     isEnoughSpaceInStorage,
     onUploadError,
+    updateFileStatus,
+    uploadFiles,
     folderName,
     putRequests,
   };

@@ -3,7 +3,7 @@
     <p class="mb-8">{{ $t('nft.collection.burn.info') }}</p>
 
     <!--  NFT Mint Quantity -->
-    <n-form-item path="tokenId" :label="$t('form.label.nftBurnTokenId')">
+    <n-form-item path="tokenId" :label="$t('form.label.nft.burnTokenId')">
       <n-input-number
         v-model:value="formData.tokenId"
         :min="1"

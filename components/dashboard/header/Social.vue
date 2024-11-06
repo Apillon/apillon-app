@@ -14,6 +14,9 @@
         />
       </n-space>
     </template>
+    <template #submenu>
+      <MenuSocial />
+    </template>
   </Heading>
 
   <W3Warn v-model:show="modalW3WarnVisible">

@@ -35,7 +35,7 @@
 
     <div class="body-sm mb-4">
       <p class="body-sm">{{ $t('dashboard.apiKey.authorization') }}</p>
-      <TableEllipsis :text="authorization" text-white />
+      <TableEllipsis :text="authorization" color="text-white" />
     </div>
   </div>
   <Spinner v-else />

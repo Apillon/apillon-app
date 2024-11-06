@@ -18,7 +18,6 @@ const meta = {
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   ssr: false,
-
   typescript: { shim: false },
 
   runtimeConfig: {
@@ -35,6 +34,7 @@ export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
     '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
     'nuxt-icons',
     '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
@@ -112,6 +112,7 @@ export default defineNuxtConfig({
     langDir: 'locales',
     defaultLocale: 'en',
     strategy: 'no_prefix',
+    compilation: { strictMessage: false, escapeHtml: false },
     locales: [
       {
         code: 'en',
@@ -125,6 +126,7 @@ export default defineNuxtConfig({
       redirectOn: 'root',
     },
   },
+
   googleFonts: {
     useStylesheet: true,
     display: 'swap',
@@ -135,4 +137,6 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  compatibilityDate: '2024-08-29',
 });

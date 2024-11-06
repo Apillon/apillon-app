@@ -19,19 +19,10 @@
 </template>
 
 <script lang="ts" setup>
+import { TransactionStatus } from '~/lib/types/nft';
+
 defineProps({
-  transactionStatus: {
-    type: Number,
-    validator: (transactionStatus: number) =>
-      [
-        TransactionStatus.REQUESTED,
-        TransactionStatus.PENDING,
-        TransactionStatus.FINISHED,
-        TransactionStatus.VERIFIED,
-        TransactionStatus.FAILED,
-      ].includes(transactionStatus),
-    default: 0,
-  },
+  transactionStatus: { type: Number as PropType<TransactionStatus>, default: 0 },
 });
 
 /** Deployment status */

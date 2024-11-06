@@ -2,7 +2,11 @@
   <n-tag
     v-bind="$attrs"
     class="rounded-xl uppercase text-[10px]"
-    :class="{ 'bg-green': type === 'success' }"
+    :class="[
+      { 'bg-green': type === 'success' },
+      { 'bg-orange': type === 'warning' },
+      { 'bg-pink': type === 'error' },
+    ]"
     :size="size"
     :type="type"
     round
@@ -12,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-type TagType = 'default' | 'error' | 'primary' | 'info' | 'success' | 'warning';
+export type TagType = 'default' | 'error' | 'primary' | 'info' | 'success' | 'warning';
 type TagSize = 'small' | 'medium' | 'large' | 'tiny';
 
 defineProps({

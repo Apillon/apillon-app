@@ -1,11 +1,11 @@
-import {
+import type {
   InjectedAccount,
   InjectedExtension,
   InjectedMetadata,
   InjectedProvider,
   InjectedWindow,
 } from '@polkadot/extension-inject/types';
-import { Signer } from '@polkadot/types/types';
+import type { Signer } from '@polkadot/types/types';
 
 const DAPP_NAME = 'Apillon SubWallet Connect';
 

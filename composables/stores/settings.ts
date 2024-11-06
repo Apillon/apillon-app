@@ -8,18 +8,18 @@ export const useSettingsStore = defineStore('settings', {
     users: [] as ProjectUserInterface[],
   }),
   getters: {
+    currentUser(state) {
+      if (Array.isArray(state.users) && state.users.length > 0) {
+        const authStore = useAuthStore();
+        return state.users.find(user => user.user_id === authStore.userId);
+      }
+      return {} as ProjectUserInterface;
+    },
     hasApiKeys(state) {
       return Array.isArray(state.apiKeys) && state.apiKeys.length > 0;
     },
     hasUsers(state) {
       return Array.isArray(state.users) && state.users.length > 0;
-    },
-    currentUser(state) {
-      if (this.hasUsers) {
-        const authStore = useAuthStore();
-        return state.users.find(user => user.user_id === authStore.userId);
-      }
-      return {} as ProjectUserInterface;
     },
     hasOauthLinks(state) {
       return Array.isArray(state.oauthLinks) && state.oauthLinks.length > 0;
@@ -78,7 +78,6 @@ export const useSettingsStore = defineStore('settings', {
         const res = await $api.get<ApiKeysResponse>(endpoints.apiKey(), {
           project_uuid: dataStore.projectUuid,
         });
-
         this.apiKeys = res.data.items;
 
         /** Save timestamp to SS */

@@ -7,7 +7,10 @@
       :columns="columns"
       :data="data"
       :loading="dataStore.service.loading"
-      :pagination="{ pageSize: PAGINATION_LIMIT }"
+      :pagination="{
+        pageSize: PAGINATION_LIMIT,
+        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+      }"
       :row-props="rowProps"
     />
   </n-space>
@@ -95,7 +98,7 @@ const createColumns = (): NDataTableColumns<ServiceInterface> => {
       key: 'actions',
       title: '',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
       render() {
         return h(
           NDropdown,
@@ -125,7 +128,7 @@ const data = computed<Array<ServiceInterface>>(() => {
     dataStore.services.filter(
       item =>
         item.serviceType_id === props.serviceType &&
-        item.name.toLocaleLowerCase().includes(dataStore.service.search.toLocaleLowerCase())
+        item.name.toLowerCase().includes(dataStore.service.search.toLowerCase())
     ) || []
   );
 });

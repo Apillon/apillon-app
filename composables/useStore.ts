@@ -3,7 +3,10 @@ export default function useStore() {
   const storageStore = useStorageStore();
   const bucketStore = useBucketStore();
   const chatStore = useChatStore();
+  const embeddedWalletStore = useEmbeddedWalletStore();
   const postStore = usePostStore();
+  const cloudFunctionStore = useCloudFunctionStore();
+  const contractStore = useContractStore();
   const fileStore = useFileStore();
   const ipfsStore = useIpfsStore();
   const ipnsStore = useIpnsStore();
@@ -12,14 +15,19 @@ export default function useStore() {
   const collectionStore = useCollectionStore();
   const paymentStore = usePaymentStore();
   const settingsStore = useSettingsStore();
+  const rpcApiKeyStore = useRpcApiKeyStore();
+  const rpcEndpointStore = useRpcEndpointStore();
 
   function clearAll() {
     dataStore.resetData();
+    embeddedWalletStore.resetData();
     clearStorage();
     clearCollection();
+    clearComputing();
     clearPayments();
     clearSettings();
     clearSocial();
+    clearRpc();
   }
 
   function clearStorage() {
@@ -41,6 +49,11 @@ export default function useStore() {
     collectionStore.resetData();
   }
 
+  function clearComputing() {
+    contractStore.resetData();
+    cloudFunctionStore.resetData();
+  }
+
   function clearPayments() {
     paymentStore.resetData();
   }
@@ -52,6 +65,11 @@ export default function useStore() {
   function clearSocial() {
     chatStore.resetData();
     postStore.resetData();
+  }
+
+  function clearRpc() {
+    rpcApiKeyStore.reset();
+    rpcEndpointStore.reset();
   }
 
   return {

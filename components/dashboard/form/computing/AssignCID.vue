@@ -8,32 +8,11 @@
   >
     <!--  File -->
     <n-form-item path="file" :label="$t('form.label.contract.file')" :label-props="{ for: 'file' }">
-      <n-upload
-        v-model:value="formData.file"
-        class="pr-1"
-        :show-file-list="false"
-        :disabled="uploadDisabled || authStore.isAdmin()"
-        :custom-request="onFileChange"
-      >
-        <n-upload-dragger class="h-40">
-          <div v-if="formData.file?.name" class="py-2 text-center">
-            <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-              <span class="icon-upload text-violet text-2xl"></span>
-            </div>
-
-            <h4 class="mb-1">{{ $t('computing.upload.uploaded') }}</h4>
-            <span class="text-body">{{ formData.file?.name }}</span>
-          </div>
-          <div v-else class="py-2 text-center">
-            <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-              <span class="icon-upload text-violet text-2xl"></span>
-            </div>
-
-            <h4 class="mb-1">{{ $t('computing.upload.upload') }}</h4>
-            <span class="text-body">{{ $t('computing.upload.dragAndDrop') }}</span>
-          </div>
-        </n-upload-dragger>
-      </n-upload>
+      <FormFieldUploadFile
+        :file="formData.file"
+        :disabled="uploadDisabled"
+        @upload="onFileChange"
+      />
     </n-form-item>
 
     <!--  NFT ID -->
@@ -87,7 +66,6 @@ const emit = defineEmits(['submitSuccess']);
 
 const $i18n = useI18n();
 const message = useMessage();
-const authStore = useAuthStore();
 const contractStore = useContractStore();
 const warningStore = useWarningStore();
 const { uploadFileToIPFS } = useComputing();

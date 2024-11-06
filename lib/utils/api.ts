@@ -89,8 +89,8 @@ class Api {
   }
 
   preventForbiddenAccess() {
-    const router = useRouter();
-    router.push({ name: 'dashboard-error' });
+    // const router = useRouter();
+    // router.push({ name: 'dashboard-error' });
   }
 
   onRequest(request: Request | any, requestOptions: RequestInit = {}) {

@@ -27,7 +27,7 @@
       </n-space>
       <TableApiKeys />
       <div v-if="!dataStore.isProjectUser" class="text-right mt-5">
-        <Btn type="secondary" @click="showDrawerGenerateApiKey">
+        <Btn type="secondary" @click="drawerGenerateApiKeyVisible = true">
           {{ $t('dashboard.apiKey.generate') }}
         </Btn>
       </div>
@@ -59,11 +59,9 @@ useHead({
  * Drawer - add payment
  */
 const drawerGenerateApiKeyVisible = ref(false);
-const showDrawerGenerateApiKey = () => {
-  drawerGenerateApiKeyVisible.value = true;
-};
 
-onMounted(() => {
+onMounted(async () => {
+  await sleep(500);
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     /** Fetch all services if there is any service type unloaded */
     await dataStore.getServices();

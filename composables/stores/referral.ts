@@ -2,9 +2,11 @@ import { defineStore } from 'pinia';
 
 export const useReferralStore = defineStore('referral', {
   state: () => ({
-    airdrop: {} as AirdropInterface,
+    airdrop: {} as AirdropStatsInterface,
     balance: 0,
     balance_all: 0,
+    inReview: false,
+    tokenClaim: {} as TokenClaimInterface,
 
     id: 0,
     refCode: '',
@@ -13,7 +15,6 @@ export const useReferralStore = defineStore('referral', {
     shippingInfo: null as any,
     status: 0,
     tasks: [] as Array<any>,
-    termsAccepted: '',
     user_uuid: '',
 
     loading: false,
@@ -35,7 +36,6 @@ export const useReferralStore = defineStore('referral', {
       this.shippingInfo = data.shippingInfo;
       this.status = data.status;
       this.tasks = data.tasks;
-      this.termsAccepted = data.termsAccepted;
       this.user_uuid = data.user_uuid;
     },
 
@@ -71,7 +71,8 @@ export const useReferralStore = defineStore('referral', {
       this.loadingAirdrop = true;
       try {
         const res = await $api.get<AirdropResponse>(endpoints.airdropTasks);
-        this.airdrop = res.data;
+        this.airdrop = res.data.airdropStats;
+        this.tokenClaim = res.data.tokenClaim;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.REFERRAL_AIRDROP, Date.now().toString());

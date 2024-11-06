@@ -34,7 +34,15 @@
       :columns="columns"
       :data="fileStore.trash.items"
       :loading="fileStore.trash.loading"
-      :pagination="fileStore.trash.pagination"
+      :pagination="{
+        ...fileStore.trash.pagination,
+        onChange: (page: number) => {
+          handlePageChange(page, fileStore.trash.pagination.pageSize);
+        },
+        onUpdatePageSize: (pageSize: number) => {
+          handlePageChange(1, pageSize);
+        },
+      }"
       :row-props="rowProps"
       @update:page="handlePageChange"
       @update:sorter="handleSorterChange"
@@ -44,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import type { DataTableSortState, DataTableInst } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
 
@@ -154,7 +162,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       key: 'actions',
       title: '',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
       render() {
         return h(
           NDropdown,
@@ -184,7 +192,6 @@ const dropdownOptions = [
     label: $i18n.t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restore();
       },
@@ -223,24 +230,27 @@ watch(
     clearSorter();
   }
 );
-const debouncedSearchFilter = debounce(getDeletedFiles, 500);
+const debouncedSearchFilter = useDebounceFn(getDeletedFiles, 500);
 
 /** On page change, load data */
-async function handlePageChange(currentPage: number) {
+async function handlePageChange(currentPage: number, pageSize?: number) {
   if (!fileStore.trash.loading) {
     await getDeletedFiles(currentPage);
   }
 }
 
-async function getDeletedFiles(page = 1) {
+async function getDeletedFiles(page = 1, limit: number = PAGINATION_LIMIT) {
   fileStore.trash.pagination.page = page;
 
   await fileStore.fetchDeletedFiles({
     page,
+    limit,
     search: fileStore.trash.search,
     orderBy: sort.value ? `${sort.value.columnKey}` : undefined,
     order: sort.value ? `${sort.value.order}` : undefined,
   });
+  fileStore.trash.pagination.page = page;
+  fileStore.trash.pagination.pageSize = limit;
 }
 
 /**

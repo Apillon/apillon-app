@@ -16,5 +16,10 @@ const menuOptions: NMenuOption[] = [
     label: t('storage.ipfs.title'),
     path: `/dashboard/service/storage/ipfs`,
   },
+  {
+    key: 'dashboard-service-storage-short-url',
+    label: t('storage.shortUrl.title'),
+    path: `/dashboard/service/storage/short-url`,
+  },
 ];
 </script>

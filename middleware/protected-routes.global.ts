@@ -38,6 +38,12 @@ const featureRoutes: Array<FeatureRouteInterface> = [
     permission: Permission.AUTHENTICATION,
   },
   {
+    regex: /^\/dashboard\/service\/asset-hub/,
+    redirect: '/dashboard',
+    feature: Feature.ASSET_HUB,
+    permission: Permission.EMBEDDED_WALLET,
+  },
+  {
     regex: /^\/dashboard\/service\/storage/,
     redirect: '/dashboard',
     feature: Feature.STORAGE,
@@ -55,11 +61,36 @@ const featureRoutes: Array<FeatureRouteInterface> = [
     feature: Feature.NFT,
     permission: Permission.NFTS,
   },
+
   {
     regex: /^\/dashboard\/service\/computing/,
     redirect: '/dashboard',
     feature: Feature.COMPUTING,
     permission: Permission.COMPUTING,
+  },
+  {
+    regex: /^\/dashboard\/service\/cloud-functions/,
+    redirect: '/dashboard',
+    feature: Feature.CLOUD_FUNCTIONS,
+    permission: Permission.COMPUTING,
+  },
+  {
+    regex: /^\/dashboard\/service\/embedded-wallet/,
+    redirect: '/dashboard',
+    feature: Feature.EMBEDDED_WALLET,
+    permission: Permission.EMBEDDED_WALLET,
+  },
+  {
+    regex: /^\/dashboard\/service\/smart-contracts/,
+    redirect: '/dashboard',
+    feature: Feature.SMART_CONTRACTS,
+    permission: Permission.COMPUTING,
+  },
+  {
+    regex: /^\/dashboard\/service\/rpc/,
+    redirect: '/dashboard',
+    feature: Feature.RPC,
+    permission: Permission.RPC,
   },
   { regex: /^\/dashboard\/monitoring/, redirect: '/dashboard', feature: Feature.MONITORING },
   {

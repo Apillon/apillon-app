@@ -49,6 +49,7 @@ export enum FileUploadStatusValue {
   FINISHED = 'finished',
   REMOVED = 'removed',
   ERROR = 'error',
+  VALIDATION_FAILED = 'validation failed',
 }
 export enum TableFilesType {
   BUCKET = 1,
@@ -57,29 +58,14 @@ export enum TableFilesType {
   DEPLOYMENT = 4,
 }
 
-/** Webhook Auth method */
-export enum BucketWebhookAuthMethod {
-  NONE = 'none',
-  BASIC = 'basic',
-  TOKEN = 'bearer-token',
-}
-
-/** Hosting deploy env */
-export enum DeploymentEnvironment {
-  STAGING = 1,
-  PRODUCTION = 2,
-  DIRECT_TO_PRODUCTION = 3,
-}
-
-/** Hosting deployment status */
-export enum DeploymentStatus {
-  INITIATED = 0,
-  IN_PROGRESS = 1,
-  IN_REVIEW = 2,
-  APPROVED = 3,
-  SUCCESSFUL = 10,
-  FAILED = 100,
-  REJECTED = 101,
+export enum FileUploadSessionStatus {
+  CREATED = 1,
+  /* Session was ended - upload is not possible anymore. Sync to IPFS will start... */
+  PROCESSED = 2,
+  /* Files in session has been synced to IPFS */
+  FINISHED = 3,
+  /* Validation has failed for uploaded files */
+  VALIDATION_FAILED = 4,
 }
 
 declare global {
@@ -102,6 +88,7 @@ declare global {
     bucket_uuid: string;
     project_uuid: string;
     size: number | null;
+    uploadedSize?: number | null;
   }
 
   interface BucketResponse extends GeneralResponse<BucketInterface> {}
@@ -211,15 +198,18 @@ declare global {
     path?: string | null;
     size: number;
   }
-  interface FileUploadInterface {
-    id: number;
-    status: number;
+  interface FileUploadInterface extends GeneralInterface {
     file_uuid: string;
-    path: string;
     fileName: string;
     contentType: string;
     fileStatus: number;
     CID: string;
+  }
+  interface FileUploadSessionInterface extends BaseObjectInterface {
+    numOfFileUploadRequests: number;
+    numOfUploadedFiles: number;
+    sessionStatus: number;
+    session_uuid: string;
   }
   interface CrustInterface {
     amount: number;
@@ -241,54 +231,6 @@ declare global {
   interface FilesUploadRequestResponse extends GeneralResponse<S3FilesUploadRequestInterface> {}
   interface FileUploadSessionResponse extends GeneralResponse<boolean> {}
   interface FileUploadsResponse extends GeneralItemsResponse<FileUploadInterface> {}
-
-  /**
-   * Webhook
-   */
-  interface WebhookInterface {
-    id: number;
-    status: number;
-    bucket_uuid: string;
-    url: string;
-    authMethod: string;
-    param1: string;
-    param2?: string;
-  }
-  interface WebhookResponse extends GeneralResponse<WebhookInterface> {}
-
-  /**
-   * Website
-   */
-  interface WebsiteBaseInterface extends BaseObjectInterface {
-    website_uuid: string;
-    domain: string | null;
-    domainChangeDate: string | null;
-  }
-  interface WebsiteInterface extends WebsiteBaseInterface {
-    bucket_uuid: string;
-    bucket: BucketInterface;
-    ipnsProduction: string | null;
-    ipnsStaging: string | null;
-    productionBucket: BucketInterface;
-    stagingBucket: BucketInterface;
-    w3ProductionLink: string | null;
-    w3StagingLink: string | null;
-  }
-  interface DeploymentInterface {
-    cid: string | null;
-    cidv1: string | null;
-    deploymentStatus: number;
-    deployment_uuid: string;
-    environment: number;
-    number: number | null;
-    size: number;
-    createTime: string;
-    updateTime: string;
-  }
-  interface WebsiteResponse extends GeneralResponse<WebsiteInterface> {}
-  interface WebsiteUpdateResponse extends GeneralResponse<WebsiteInterface> {}
-  interface WebsitesBaseResponse extends GeneralItemsResponse<WebsiteBaseInterface> {}
-  interface WebsitesResponse extends GeneralItemsResponse<WebsiteInterface> {}
-  interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
-  interface DeploymentsResponse extends GeneralItemsResponse<DeploymentInterface> {}
+  interface FileUploadSessionsResponse extends GeneralItemsResponse<FileUploadSessionInterface> {}
+  interface SessionDetailsResponse extends GeneralItemsResponse<FileUploadInterface> {}
 }

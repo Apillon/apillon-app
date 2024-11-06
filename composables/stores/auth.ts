@@ -32,13 +32,13 @@ export const useAuthStore = defineStore('auth', {
       return !!state.email && !!state.jwt;
     },
     userId(state) {
-      return state.user.id;
+      return state.user?.id || 0;
     },
     userUuid(state) {
       return state.user.user_uuid || '';
     },
     username(state) {
-      return state.user.name;
+      return state.user?.name || '';
     },
     allowedEntry: state => !!state.jwt,
   },
@@ -70,6 +70,7 @@ export const useAuthStore = defineStore('auth', {
       this.wallet.name = '';
       localStorage.removeItem(AuthLsKeys.AUTH);
       localStorage.removeItem(AuthLsKeys.WALLET);
+      localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
     saveEmail(email: string) {

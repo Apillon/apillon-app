@@ -51,6 +51,8 @@
           </n-dropdown>
         </div>
 
+        <slot />
+
         <n-space :size="isSm ? 32 : 16" align="center">
           <!-- Credits -->
           <PaymentCredits />

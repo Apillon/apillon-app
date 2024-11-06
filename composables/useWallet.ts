@@ -50,7 +50,6 @@ export default function useWallet() {
     } catch (e) {
       console.log(e);
     }
-    return;
   }
 
   return {

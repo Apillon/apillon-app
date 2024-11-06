@@ -1,7 +1,9 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderNftNew />
+      <div ref="headingRef">
+        <HeaderNftNew />
+      </div>
     </template>
 
     <slot>
@@ -78,7 +80,12 @@
                 <div v-else class="pb-8">
                   <NftPreviewCollection />
                   <Btn type="primary" class="w-full mb-2" @click="w3WarnAndDeploy()">
-                    {{ $t('nft.collection.deploy') }}
+                    <span v-if="isUnique">
+                      {{ $t('form.proceed') }}
+                    </span>
+                    <span v-else>
+                      {{ $t('nft.collection.deploy') }}
+                    </span>
                   </Btn>
                 </div>
               </div>
@@ -92,7 +99,7 @@
               <span class="ml-2 text-sm text-white">{{ $t('nft.add') }}</span>
             </template>
             <slot>
-              <FormNftCreateMetadata deploy-collection />
+              <FormNftCreateMetadata deploy-collection :style="isLg ? scrollStyle : {}" />
             </slot>
           </n-tab-pane>
         </n-tabs>
@@ -163,9 +170,9 @@ const storageStore = useStorageStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
-const { uploadFiles } = useUpload();
-const { getPriceServiceName } = useNft();
-const { collectionEndpoint, prepareFormData } = useCollection();
+const { isLg } = useScreen();
+const { getPriceServiceName, uploadLogoAndCover } = useNft();
+const { isUnique, collectionEndpoint, prepareFormData } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 useHead({
@@ -174,8 +181,13 @@ useHead({
 
 const pageLoading = ref<boolean>(true);
 const mintTabsRef = ref<TabsInst | null>(null);
+const headingRef = ref<HTMLElement>();
 
-const images = ref<Array<FileListItemType>>([]);
+const scrollStyle = computed(() => {
+  return {
+    minHeight: `calc(100dvh - ${184 + (headingRef.value?.clientHeight || 73)}px)`,
+  };
+});
 
 onMounted(() => {
   resetAndAddNft();
@@ -193,23 +205,11 @@ function w3WarnAndDeploy() {
 }
 
 async function onModalW3WarnConfirm() {
-  const chain = collectionStore.active?.chain
-    ? collectionStore.active.chain
-    : collectionStore.form.base.chain;
-  warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
-}
-
-function prepareImagesForUpload() {
-  const cover = collectionStore.form.base.coverImage;
-  const logo = collectionStore.form.base.logo;
-
-  if (logo) {
-    logo.name = 'logo.' + logo.name.split('.')[logo.name.split('.').length - 1];
-    images.value.push(logo);
-  }
-  if (cover) {
-    cover.name = 'cover.' + cover.name.split('.')[cover.name.split('.').length - 1];
-    images.value.push(cover);
+  if (isUnique.value) {
+    /** Redirects to NFT Create tab */
+    collectionStore.mintTab = NftCreateTab.DEPLOY;
+  } else {
+    warningStore.showSpendingWarning(getPriceServiceName(), () => createCollection());
   }
 }
 
@@ -226,11 +226,8 @@ async function createCollection() {
 
     collectionStore.form.single.collectionUuid = res.data.collection_uuid;
 
-    /** Prepares logo and cover image for upload */
-    prepareImagesForUpload();
-
     /** Uploads logo and cover image */
-    await uploadFiles(res.data.bucket_uuid, images.value);
+    await uploadLogoAndCover(res.data.bucket_uuid);
 
     /** Deployment status */
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;

@@ -1,11 +1,28 @@
-import {
+import type {
   Composer,
   ComposerTranslation,
   UseI18nOptions,
 } from '@nuxtjs/i18n/dist/runtime/composables';
 import type { MessageApiInjection } from 'naive-ui/es/message/src/MessageProvider';
 
-export {};
+export enum SqlModelStatus {
+  DRAFT = 1,
+  INCOMPLETE = 2,
+  INACTIVE = 3,
+  ACTIVE = 5,
+  BLOCKED = 7,
+  ARCHIVED = 8,
+  DELETED = 9,
+}
+
+/**
+ * Service Status Type Enum { Info, Error, Warning }
+ */
+export enum ServiceStatusType {
+  INFO = 1,
+  ERROR = 2,
+  WARNING = 3,
+}
 
 declare global {
   type KeyValue = {
@@ -59,6 +76,8 @@ declare global {
     data: {
       items: Array<T>;
       total: number;
+      page: number;
+      limit: number;
     };
     id: string;
     status: number;
@@ -78,5 +97,17 @@ declare global {
     order?: string;
     loader?: boolean;
     project_uuid?: string;
+    status?: SqlModelStatus;
   };
+
+  interface ServiceStatusInterface {
+    id: number;
+    message: string;
+    status: number;
+    type: number;
+    url: string | null;
+  }
+
+  interface ServiceStatusResponse extends GeneralResponse<ServiceStatusInterface> {}
+  interface ServiceStatusesResponse extends GeneralItemsResponse<ServiceStatusInterface> {}
 }

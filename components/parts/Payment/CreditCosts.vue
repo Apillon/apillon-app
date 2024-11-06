@@ -35,8 +35,8 @@
         <thead>
           <tr>
             <th>
-              <template v-if="service">
-                {{ $t(`dashboard.credits.services.${service}.name`) }}
+              <template v-if="service || category">
+                {{ $t(`dashboard.credits.services.${service || category}.name`) }}
               </template>
               <template v-else> {{ $t('dashboard.credits.serviceDescription') }} </template>
             </th>
@@ -70,6 +70,7 @@ import { ServiceTypeName } from '~/lib/types/service';
 
 const props = defineProps({
   chain: { type: Number, default: null },
+  category: { type: String, default: null },
   service: { type: String, default: null },
   filterByChain: { type: Boolean, default: false },
   filterByService: { type: Boolean, default: false },
@@ -77,7 +78,7 @@ const props = defineProps({
 
 const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
-const { chains, substrateChains } = useCollection();
+const { chains, nftChains, evmChains, substrateChains } = useCollection();
 
 const identityChains = enumKeyValues(IdentityChains);
 const services = enumKeyValues(ServiceTypeName);
@@ -91,9 +92,11 @@ onMounted(async () => {
     selectedChain.value = props.chain || collectionStore.form.base.chain || Chains.MOONBEAM;
   }
 
-  servicePrices.value = props.service
-    ? await paymentStore.getServicePrices(props.service)
-    : await paymentStore.getPriceList();
+  servicePrices.value = props.category
+    ? await paymentStore.getServicePricesByCategory(props.category)
+    : props.service
+      ? await paymentStore.getServicePrices(props.service)
+      : await paymentStore.getPriceList();
 
   /** Sort by category (chain name) */
   servicePrices.value.sort((a, b) =>
@@ -110,9 +113,11 @@ const chainsByService = computed(() => {
     case ServiceTypeName.HOSTING:
       return [];
     case ServiceTypeName.NFT:
-      return [...chains, ...substrateChains];
+      return nftChains;
     case ServiceTypeName.STORAGE:
       return [];
+    case ServiceTypeName.CONTRACTS:
+      return [...evmChains, ...chains];
     default:
       return [...identityChains, ...chains, ...substrateChains];
   }
@@ -132,7 +137,8 @@ const shownPrices = computed(() => {
     );
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
-    const chainName = getChainName(selectedChain.value);
+    const chainName = getChainName(selectedChain.value, props.service);
+    console.log(chainName);
     return servicePrices.value.filter(item => item.name.includes(chainName));
   } else if (props.filterByService && selectedService.value) {
     /** Filter by service */
@@ -153,22 +159,42 @@ watch(
 );
 
 function getChainName(chain: string | number, service?: string): string {
-  if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
-    return chain in Chains ? Chains[chain] : SubstrateChain[chain] + '_WASM';
+  if (service === ServiceTypeName.CONTRACTS && Number.isInteger(chain)) {
+    return chain in EvmChain ? EvmChain[chain] : Chains[chain];
+  } else if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
+    return chain in Chains
+      ? Chains[chain]
+      : SubstrateChain[chain] === SubstrateChain.ASTAR
+        ? SubstrateChain[chain] + '_WASM'
+        : SubstrateChain[chain];
   }
   return `${chain}`;
 }
 
 function getIconName(service: ProductPriceInterface) {
-  switch (service.category) {
+  switch (service.category.trim()) {
+    case PriceServiceCategory.ACURAST:
+      return 'icon/cloud-functions';
+    case PriceServiceCategory.ASTAR_CONTRACT:
     case PriceServiceCategory.ASTAR_NFT:
       return 'logo/astar';
+    case PriceServiceCategory.MOONBASE_CONTRACT:
     case PriceServiceCategory.MOONBASE_NFT:
       return 'logo/moonbase';
+    case PriceServiceCategory.MOONBEAM_CONTRACT:
     case PriceServiceCategory.MOONBEAM_NFT:
       return 'logo/moonbeam';
+    case PriceServiceCategory.ETHEREUM_CONTRACT:
+    case PriceServiceCategory.ETHEREUM_NFT:
+    case PriceServiceCategory.SEPOLIA_CONTRACT:
+    case PriceServiceCategory.SEPOLIA_NFT:
+      return 'logo/evm';
+    case PriceServiceCategory.UNIQUE_NFT:
+      return 'logo/unique';
     case PriceServiceCategory.GRILL_CHAT:
       return 'logo/subsocial';
+    case PriceServiceName.INDEXER:
+      return 'menu/indexer';
   }
   switch (service.name) {
     case PriceServiceName.HOSTING_WEBSITE:
@@ -185,6 +211,10 @@ function getIconName(service: ProductPriceInterface) {
   switch (service.service) {
     case ServiceTypeName.COMPUTING:
       return 'menu/computing';
+    case ServiceTypeName.SOCIAL:
+      return 'logo/subsocial';
+    case ServiceTypeName.WALLET:
+      return 'icon/wallet';
   }
 
   return 'icon/change';

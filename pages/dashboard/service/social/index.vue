@@ -13,8 +13,8 @@
       </n-space>
       <Empty
         v-else
-        :title="$t('social.chat.empty')"
-        :info="$t('social.chat.emptyInfo')"
+        :title="$t('social.post.empty')"
+        :info="$t('social.post.emptyInfo')"
         icon="logo/grill-chat"
       >
         <Btn type="primary" @click="modalCreatePostVisible = true">
@@ -86,7 +86,11 @@ function checkUnfinishedPost() {
   }
 
   postInterval = setInterval(async () => {
-    const posts = await postStore.fetchPosts(postStore.pagination.page, false);
+    const posts = await postStore.fetchPosts(
+      postStore.pagination.page,
+      postStore.pagination.pageSize,
+      false
+    );
     const post = posts.find(item => item.post_uuid === unfinishedPost.post_uuid);
     if (!post || post.status >= SocialStatus.ACTIVE) {
       clearInterval(postInterval);

@@ -54,6 +54,7 @@ declare global {
     availableBandwidth: number;
     availableStorage: number;
     bucketCount: number;
+    collectionCount: number;
     computingTransactionCount: number;
     contractCount: number;
     didCount: number;

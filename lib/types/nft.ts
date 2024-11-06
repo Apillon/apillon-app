@@ -10,6 +10,17 @@ export enum Chains {
   ASTAR_SHIBUYA = 81,
   ASTAR = 592,
 }
+export enum EvmChain {
+  ETHEREUM = 1,
+  SEPOLIA = 11155111,
+  MOONBEAM = 1284,
+  MOONBASE = 1287,
+  ASTAR_SHIBUYA = 81, // testnet
+  ASTAR = 592,
+  OASIS = 42262,
+  ALFAJORES = 44787, // Celo testnet
+  CELO = 42220,
+}
 export enum SubstrateChain {
   CRUST = 1,
   KILT = 2,
@@ -18,10 +29,17 @@ export enum SubstrateChain {
   SUBSOCIAL = 6,
   XSOCIAL = 7,
   ASTAR = 8,
+  ACURAST = 9,
+  UNIQUE = 11,
+  ASSET_HUB = 1000,
+  WESTEND_ASSET_HUB = 1001,
 }
+
 export enum SubstrateChainPrefix {
   ASTAR = 5,
   PHALA = 30,
+  HYDRATION = 63,
+  UNIQUE = 7391,
 }
 
 /** NFT Collection type */
@@ -103,6 +121,13 @@ export enum NftDeployStatus {
   DEPLOYED = 4,
 }
 
+export enum PrepareCollectionMetadataStep {
+  UPLOAD_IMAGES_TO_IPFS = 1,
+  UPDATE_JSONS_ON_S3 = 2,
+  UPLOAD_METADATA_TO_IPFS = 3,
+  METADATA_SUCCESSFULLY_PREPARED = 10,
+}
+
 declare global {
   /** Papa parser */
   type CsvFileData = {
@@ -127,12 +152,14 @@ declare global {
     bucket_uuid: string;
     chain: number;
     chainType: number;
+    cid: string;
     collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
     contractAddress: string | null;
     dropStart: number;
     drop: boolean;
+    ipns_uuid: string;
     isRevokable: boolean;
     isSoulbound: boolean;
     maxSupply: number;
@@ -143,6 +170,8 @@ declare global {
     symbol: string;
     transactionHash: string | null;
     updateTime: string;
+    useApillonIpfsGateway: boolean;
+    useIpns: boolean;
   }
 
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}
@@ -153,16 +182,30 @@ declare global {
    * Transaction
    */
   interface TransactionInterface extends GeneralInterface {
-    contract_id: number;
+    chainId: number;
     id: number;
     transactionHash: string | null;
     transactionStatus: number;
-    transactionStatusMessage: string | null;
     transactionType: number;
-    walletAddress: string;
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}
+
+  /**
+   * Metadata deploys
+   */
+  interface MetadataDeployInterface {
+    bucket_uuid: string;
+    createTime: string;
+    currentStep: number;
+    imagesSession: string;
+    lastError: string | null;
+    metadataSession: string;
+    updateTime: string;
+    useApillonIpfsGateway: number;
+  }
+
+  interface MetadataDeploysResponse extends GeneralItemsResponse<MetadataDeployInterface> {}
 
   /**
    * Attributes

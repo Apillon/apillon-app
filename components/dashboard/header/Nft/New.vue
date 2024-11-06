@@ -3,7 +3,7 @@
     <slot>
       <n-space align="center" size="large">
         <h2>
-          <span class="text-bodyDark">{{ $t('dashboard.solutions.nftCollection.name') }}/</span>
+          <span class="text-bodyDark">{{ $t('dashboard.solution.nftCollection.name') }}/</span>
           <span v-if="collectionStore.active?.collection_uuid">{{ $t('nft.addNfts') }}</span>
           <span v-else>{{ $t('general.create') }}</span>
         </h2>

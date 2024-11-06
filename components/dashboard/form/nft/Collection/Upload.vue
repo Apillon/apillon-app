@@ -56,7 +56,7 @@
             </div>
           </template>
           <p class="text-xs text-left mt-2">
-            {{ $t('nft.collection.labelInfo.collectionLogoSize') }}
+            {{ $t('form.label.collection.labelInfo.logoSize') }}
           </p>
         </div>
       </div>
@@ -126,8 +126,8 @@ function onUploadLogoChange(options: FileUploadOptions) {
   const uploadFile = {
     file: options.file,
     onProgress: () => {},
-    onFinish: collectionStore.form.base.logo?.onFinish,
-    onError: collectionStore.form.base.logo?.onError,
+    onFinish: collectionStore.form.base.logo?.onFinish || (() => {}),
+    onError: collectionStore.form.base.logo?.onError || (() => {}),
   } as UploadCustomRequestOptions;
 
   handleLogoRemove();
@@ -138,8 +138,8 @@ function onUploadChange(options: FileUploadOptions) {
   const uploadFile = {
     file: options.file,
     onProgress: () => {},
-    onFinish: collectionStore.form.base.coverImage?.onFinish,
-    onError: collectionStore.form.base.coverImage?.onError,
+    onFinish: collectionStore.form.base.coverImage?.onFinish || (() => {}),
+    onError: collectionStore.form.base.coverImage?.onError || (() => {}),
   } as UploadCustomRequestOptions;
 
   handleCoverImageRemove();

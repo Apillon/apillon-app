@@ -1,16 +1,18 @@
-import type { MessageFunction, VueMessageType } from '@nuxtjs/i18n/dist/runtime/composables';
+import type { MessageFunction, VueMessageType } from 'vue-i18n';
 
-type VueMsg = VueMessageType | MessageFunction<VueMessageType>;
+export type VueMsg = VueMessageType | MessageFunction<VueMessageType>;
 
 export type SolutionContent = {
   headline?: string;
   title?: string;
   content?: string | string[];
   benefits?: string[];
+  subtitle?: string;
 };
 type SolutionContentTrans = {
   headline?: VueMsg;
   title?: VueMsg;
+  subtitle?: VueMsg;
   content?: VueMsg;
   benefits?: VueMsg;
 };
@@ -18,20 +20,23 @@ type SolutionContentTrans = {
 export default function useSolution() {
   const { te, tm, rt } = useI18n();
 
-  function generateContent(solution: string) {
-    const BASE = 'dashboard.solutions';
+  function generateContent(solution: string, BASE = 'dashboard.solution') {
+    if (te(`${BASE}.${solution}.content`) || tm(`${BASE}.${solution}.content`)) {
+      const translations = (tm(`${BASE}.${solution}.content`) as SolutionContentTrans[]) || [];
 
-    if (te(`${BASE}.${solution}.content`)) {
-      const translations = tm(`${BASE}.${solution}.content`) as SolutionContentTrans[];
-
-      return translations.map(trans => {
-        return {
-          headline: trans.headline ? translate(trans['headline']) : undefined,
-          title: trans.title ? translate(trans['title']) : undefined,
-          content: trans.content ? translate(trans['content']) : undefined,
-          benefits: trans.benefits ? translate(trans['benefits']) : undefined,
-        } as SolutionContent;
-      });
+      return (
+        (Array.isArray(translations) &&
+          translations?.map(trans => {
+            return {
+              headline: trans.headline ? translate(trans.headline) : undefined,
+              title: trans.title ? translate(trans.title) : undefined,
+              subtitle: trans.subtitle ? translate(trans.subtitle) : undefined,
+              content: trans.content ? translate(trans.content) : undefined,
+              benefits: trans.benefits ? translate(trans.benefits) : undefined,
+            } as SolutionContent;
+          })) ||
+        []
+      );
     }
     return [];
   }
@@ -45,5 +50,6 @@ export default function useSolution() {
 
   return {
     generateContent,
+    translate,
   };
 }

@@ -15,7 +15,7 @@
       <span v-if="$te(`social.chat.status.${status}`)" class="mx-1 uppercase">
         {{ $t(`social.chat.status.${status}`) }}
       </span>
-      <span v-else class="mx-1 uppercase">{{ SocialStatus[status] }}</span>
+      <span v-else class="mx-1 uppercase">{{ SocialStatus[status].replaceAll('_', ' ') }}</span>
 
       <AnimationTyping v-if="status < SocialStatus.INACTIVE" />
     </n-space>
@@ -41,7 +41,7 @@ function getStatus(status: number): TagType {
       return 'info';
     case SocialStatus.ACTIVE:
       return 'success';
-    case SocialStatus.MARKED_FOR_DELETION:
+    case SocialStatus.ARCHIVE:
       return 'info';
     case SocialStatus.BLOCKED:
       return 'error';

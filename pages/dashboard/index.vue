@@ -6,11 +6,6 @@
       </Heading>
     </template>
     <slot>
-      <div v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())">
-        <ReferralBanner />
-        <hr class="border-bg-lighter my-8" />
-      </div>
-
       <div
         v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())"
         class="mb-8"
@@ -120,7 +115,7 @@ const services = [
   {
     title: t('dashboard.nav.services'),
     content: t('dashboard.service.info'),
-    link: t('dashboard-service'),
+    link: 'dashboard-service',
   },
   // {
   //   title: t('dashboard.nav.smartContracts'),
@@ -128,8 +123,8 @@ const services = [
   // },
   {
     title: t('dashboard.nav.solutions'),
-    content: t('dashboard.solutions.info'),
-    link: t('dashboard-solution'),
+    content: t('dashboard.solution.info'),
+    link: 'dashboard-solution',
   },
 ];
 </script>

@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
+import { RpcPlanType } from '~/lib/types/rpc';
 
 type FetchCreditTransactionsParams = FetchParams & {
-  service: string | null;
-  category: string | null;
-  direction: string | null;
+  service?: string | null;
+  category?: string | null;
+  direction?: string | null;
 };
 
 let abortController = null as AbortController | null;
@@ -26,8 +27,21 @@ export const usePaymentStore = defineStore('payment', {
     },
     loading: false,
     priceList: [] as ProductPriceInterface[],
+    promises: {
+      priceList: null as any,
+    },
+    rpcPlan: undefined as RpcPlanType | undefined,
   }),
   getters: {
+    hasRpcPlan(state) {
+      return state.rpcPlan !== RpcPlanType.DISABLED;
+    },
+    isRpcPlanLoaded(state) {
+      return state.rpcPlan !== undefined;
+    },
+    hasPaidRpcPlan(state) {
+      return state.rpcPlan === RpcPlanType.PAID;
+    },
     hasCustomerPortalUrl(state) {
       return !!state?.customerPortalUrl;
     },
@@ -99,6 +113,14 @@ export const usePaymentStore = defineStore('payment', {
       }
     },
 
+    /** GET RPC Plan */
+    async getRpcPlan() {
+      if (this.rpcPlan === undefined || isCacheExpired(LsCacheKeys.RPC_PLAN)) {
+        await this.fetchRpcPlan();
+      }
+      return this.rpcPlan;
+    },
+
     /** GET Subscription packages */
     async getSubscriptionPackages() {
       if (!this.hasSubscriptionPackages || isCacheExpired(LsCacheKeys.SUBSCRIPTION_PACKAGES)) {
@@ -123,29 +145,39 @@ export const usePaymentStore = defineStore('payment', {
 
     /** GET Price list */
     async getPriceList() {
-      if (!this.hasPriceList) {
+      if (!this.hasPriceList && this.promises.priceList) {
+        await this.promises.priceList;
+      } else if (!this.hasPriceList) {
         await this.fetchProductPriceList();
       }
       return this.priceList;
     },
 
     /** GET Prices for service */
-    async getServicePrices(service: string) {
+    async getServicePrices(service: string): Promise<ProductPriceInterface[]> {
       await this.getPriceList();
-
       return this.priceList.filter(item => item.service === service);
+    },
+    async getServicePricesByName(serviceName: string): Promise<ProductPriceInterface[]> {
+      return this.priceList.filter(item => item.name === serviceName);
+    },
+    async getServicePricesByCategory(category: string): Promise<ProductPriceInterface[]> {
+      return this.priceList.filter(item => item.category === category);
     },
 
     /** GET Price for service */
-    async getServicePrice(serviceName: string) {
+    async getServicePrice(serviceName: string): Promise<ProductPriceInterface | undefined> {
       await this.getPriceList();
-
       return this.priceList.find(item => item.name === serviceName);
     },
 
     /** Price for service */
-    findServicePrice(serviceName: string) {
+    async findServicePrice(serviceName: string): Promise<ProductPriceInterface | undefined> {
       return this.priceList.find(item => item.name === serviceName);
+    },
+    async filterServicePrice(serviceNames: string[]): Promise<ProductPriceInterface[]> {
+      await this.getPriceList();
+      return await this.priceList.filter(item => serviceNames.includes(item.name));
     },
 
     /**
@@ -347,6 +379,27 @@ export const usePaymentStore = defineStore('payment', {
       return null;
     },
 
+    async fetchRpcPlan() {
+      const dataStore = useDataStore();
+      const projectUuid = await dataStore.getProjectUuid();
+
+      if (!projectUuid) return;
+
+      try {
+        const res = await $api.get<GeneralResponse<RpcPlanType>>(endpoints.getRpcPlan(projectUuid));
+
+        this.rpcPlan = res.data;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.RPC_PLAN, Date.now().toString());
+      } catch (error: any) {
+        this.rpcPlan = RpcPlanType.DISABLED;
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      }
+    },
+
     /** API Stripe subscription session URL */
     async fetchSubscriptionSessionUrl(packageId: number) {
       const route = useRoute();
@@ -377,9 +430,14 @@ export const usePaymentStore = defineStore('payment', {
       abortController = new AbortController();
 
       try {
-        const res = await $api.get<PriceListResponse>(endpoints.productPrice(), PARAMS_ALL_ITEMS, {
-          signal: abortController.signal,
-        });
+        this.promises.priceList = $api.get<PriceListResponse>(
+          endpoints.productPrice(),
+          PARAMS_ALL_ITEMS,
+          {
+            signal: abortController.signal,
+          }
+        );
+        const res = await this.promises.priceList;
 
         this.priceList = res.data.items;
 
@@ -393,6 +451,7 @@ export const usePaymentStore = defineStore('payment', {
           window.$message.error(userFriendlyMsg(error));
         }
       }
+      this.promises.priceList = null;
     },
     async fetchProductPrice(productId: number): Promise<ProductPriceInterface | null> {
       try {

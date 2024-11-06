@@ -13,9 +13,9 @@ const menuOptions: NMenuOption[] = [
     path: `/dashboard/service/storage/${bucketStore.selected}`,
   },
   {
-    key: 'dashboard-service-storage-slug-all',
+    key: 'dashboard-service-storage-slug-session',
     label: t('storage.filesAll'),
-    path: `/dashboard/service/storage/${bucketStore.selected}/all`,
+    path: `/dashboard/service/storage/${bucketStore.selected}/session`,
   },
   {
     key: 'dashboard-service-storage-slug-webhook',

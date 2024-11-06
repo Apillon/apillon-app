@@ -51,10 +51,9 @@
         size="small"
         :loading="transactionStore.loading"
         @click="
-          transactionStore.fetchTransactions(
-            contractStore.active.contract_uuid,
-            transactionStore.pagination.page
-          )
+          transactionStore.fetchTransactions(contractStore.active.contract_uuid, {
+            page: transactionStore.pagination.page,
+          })
         "
       >
         <span class="icon-refresh text-xl mr-2"></span>

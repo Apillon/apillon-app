@@ -20,7 +20,7 @@
       <n-button
         size="small"
         :loading="collectionStore.loading"
-        @click="collectionStore.fetchCollections()"
+        @click="collectionStore.fetchCollections(archive)"
       >
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
@@ -41,6 +41,10 @@
 </template>
 
 <script lang="ts" setup>
+defineProps({
+  archive: { type: Boolean, default: false },
+});
+
 const router = useRouter();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();

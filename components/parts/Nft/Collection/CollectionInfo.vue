@@ -73,11 +73,11 @@ const data = computed(() => {
       value: collectionStore.active.baseUri,
     },
     {
-      label: t('form.label.collectionLogo'),
+      label: t('form.label.collection.logo'),
       value: logo.value?.link,
     },
     {
-      label: t('form.label.collectionCoverImage'),
+      label: t('form.label.collection.coverImage'),
       value: coverImage.value?.link,
     },
   ];

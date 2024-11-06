@@ -14,7 +14,7 @@
     <!--  NFT Nest Mint - Collection -->
     <n-form-item
       path="parentCollectionUuid"
-      :label="$t('form.label.nftMintCollectionUuid')"
+      :label="$t('form.label.nft.mintCollectionUuid')"
       :label-props="{ for: 'bucket' }"
     >
       <select-options
@@ -28,7 +28,7 @@
     </n-form-item>
 
     <!--  NFT Nest Mint - NFT ID -->
-    <n-form-item path="parentNftId" :label="$t('form.label.nftMintParentNftId')">
+    <n-form-item path="parentNftId" :label="$t('form.label.nft.mintParentNftId')">
       <n-input-number
         v-model:value="formData.parentNftId"
         :min="1"
@@ -38,7 +38,7 @@
     </n-form-item>
 
     <!--  NFT Mint Quantity -->
-    <n-form-item path="quantity" :label="$t('form.label.nftMintQuantity')">
+    <n-form-item path="quantity" :label="$t('form.label.nft.mintQuantity')">
       <n-input-number
         v-model:value="formData.quantity"
         :min="1"

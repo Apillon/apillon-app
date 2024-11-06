@@ -23,6 +23,9 @@ export const useDataStore = defineStore('data', {
       websites: null as any,
       collections: null as any,
       contracts: null as any,
+      rpcApiKeys: null as Promise<RpcApiKeysResponse> | null,
+      rpcEndpoints: null as Promise<[RpcEndpointsResponse, RpcFavoriteEndpointsResponse]> | null,
+      publicRpcEndpoints: null as Promise<RpcEndpointsResponse> | null,
     },
     service: {
       loading: false,
@@ -208,6 +211,10 @@ export const useDataStore = defineStore('data', {
       }
       return this.services;
     },
+    async getServiceByType(type: number) {
+      const services = await this.getServices();
+      return services.find(item => item.serviceType_id === type);
+    },
     async getServicesByType(type: number) {
       const services = await this.getServices();
       return services.filter(item => item.serviceType_id === type);
@@ -227,11 +234,14 @@ export const useDataStore = defineStore('data', {
       abortController = new AbortController();
 
       try {
-        const req = $api.get<ProjectsResponse>(endpoints.projectsUserProjects, undefined, {
-          signal: abortController.signal,
-        });
-        this.promises.projects = req;
-        const res = await req;
+        this.promises.projects = $api.get<ProjectsResponse>(
+          endpoints.projectsUserProjects,
+          undefined,
+          {
+            signal: abortController.signal,
+          }
+        );
+        const res = await this.promises.projects;
 
         const projects = res.data.items.map((project: ProjectInterface) => {
           return {
@@ -349,7 +359,7 @@ export const useDataStore = defineStore('data', {
         sessionStorage.setItem(LsCacheKeys.SERVICES, Date.now().toString());
 
         return res.data.items
-          .filter(item => item.status === 5)
+          .filter(item => item.status === SqlModelStatus.ACTIVE)
           .map((service: ServiceInterface, key: number) => {
             return { key, ...service };
           });

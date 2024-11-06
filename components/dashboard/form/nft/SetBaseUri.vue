@@ -1,7 +1,7 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  NFT Set base URI -->
-    <n-form-item path="uri" :label="$t('form.label.nftSetBaseUri')" :label-props="{ for: 'uri' }">
+    <n-form-item path="uri" :label="$t('form.label.nft.setBaseUri')" :label-props="{ for: 'uri' }">
       <n-input
         v-model:value="formData.uri"
         :input-props="{ id: 'uri' }"
@@ -78,7 +78,7 @@ async function setBaseUri() {
       bodyData
     );
 
-    message.success(t('form.success.nftTransfer'));
+    message.success(t('form.success.nftSetBaseUri'));
 
     /** Emit events */
     emit('submitSuccess', res.data);

@@ -7,7 +7,7 @@
       <TableStorageTrash v-if="fileStore.hasDeletedFiles" />
       <Empty
         v-else
-        :title="$t('general.nothingHere')"
+        :title="$t('storage.file.nothingHere')"
         :info="$t('storage.file.deletedFiles')"
         icon="storage/empty"
       />
