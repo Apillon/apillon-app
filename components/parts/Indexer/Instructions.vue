@@ -28,9 +28,9 @@
     </div>
   </div>
   <!-- Modal - Create Indexer -->
-  <modal v-model:show="showModalNewIndexer" :title="$t('indexer.new')">
+  <IndexerSpendingWarning v-model:show="showModalNewIndexer">
     <FormIndexer />
-  </modal>
+  </IndexerSpendingWarning>
 </template>
 
 <script lang="ts" setup>

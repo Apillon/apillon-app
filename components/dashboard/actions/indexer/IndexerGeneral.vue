@@ -41,9 +41,9 @@
     </n-space>
   </n-space>
   <!-- Modal - Create Indexer -->
-  <modal v-model:show="showModalNewIndexer" :title="$t('indexer.new')">
+  <IndexerSpendingWarning v-model:show="showModalNewIndexer">
     <FormIndexer />
-  </modal>
+  </IndexerSpendingWarning>
   <!-- Modal - Update Indexer -->
   <modal v-model:show="showModalEditIndexer" :title="$t('indexer.update')">
     <FormIndexer

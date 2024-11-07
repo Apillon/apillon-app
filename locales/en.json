@@ -403,7 +403,9 @@
       "getMore": "Get more",
       "included": "Can be used for:",
       "name": "Name",
+      "notEnoughCredits": "Not enough credits",
       "packages": "Credit packages",
+      "pricingNotification": "Pricing notification",
       "product_id": "Product ID",
       "service": "Service",
       "serviceDescription": "Service description",
@@ -1848,6 +1850,14 @@
       "notice": "Notice",
       "warning": "Warning",
       "critical": "Critical"
+    },
+    "spendingWarning": {
+      "btnProceed": "Got it, Proceed",
+      "btnBuyCredits": "I want to buy credits right now",
+      "content": "When you deploy an indexer, <b>50,000 credits will be deducted from your account.</b> This is the minimum required to start running the indexer. The rate of credit usage depends on the amount of data being indexed. You can explore typical pricing scenarios here:",
+      "info": "Don't worry, we'll notify you via email when your credits are running low.",
+      "notEnough1": "To deploy an indexer, you need at least 50,000 credits in your account. This ensures the indexer is set up and starts indexing.",
+      "notEnough2": "However, the actual usage depends on the indexing you're performing."
     },
     "statuses": {
       "1": "Created",
