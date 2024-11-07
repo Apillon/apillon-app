@@ -1549,6 +1549,7 @@
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
       "number": "Enter number",
+      "onlyJsFiles": "Only .js files are allowed",
       "password": "password",
       "phone": "+000 12345678",
       "postalCode": "4223",
