@@ -61,6 +61,9 @@
   .card-light {
     @apply bg-bg-light card-border rounded-lg;
   }
+  .card-lighter {
+    @apply bg-bg-lighter card-border rounded-lg;
+  }
 
   /** scrollbar */
   .scrollable {

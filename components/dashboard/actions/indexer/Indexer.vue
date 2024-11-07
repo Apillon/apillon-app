@@ -31,7 +31,7 @@
       <!-- Create new indexer -->
       <n-button size="small" :disabled="authStore.isAdmin()" @click="showModalNewIndexer = true">
         <span class="icon-file text-xl text-primary mr-2"></span>
-        <span class="text-primary">{{ $t('dashboard.service.indexer.new') }}</span>
+        <span class="text-primary">{{ $t('indexer.new') }}</span>
       </n-button>
       <!-- Show Docs -->
       <Btn
@@ -41,12 +41,12 @@
         href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
       >
         <span class="icon-file text-xl mr-2"></span>
-        <span>{{ $t('dashboard.service.indexer.viewDocumentation') }}</span>
+        <span>{{ $t('indexer.viewDocumentation') }}</span>
       </Btn>
     </n-space>
   </n-space>
   <!-- Modal - Create Indexer -->
-  <modal v-model:show="showModalNewIndexer" :title="$t('dashboard.service.indexer.new')">
+  <modal v-model:show="showModalNewIndexer" :title="$t('indexer.new')">
     <FormIndexer />
   </modal>
 </template>

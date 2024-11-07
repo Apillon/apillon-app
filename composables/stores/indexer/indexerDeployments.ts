@@ -2,9 +2,9 @@ import { defineStore } from 'pinia';
 
 export const useIndexerDeploymentsStore = defineStore('indexerDeployments', {
   state: () => ({
-    active: {} as IndexerDeploymentInferface,
+    active: {} as IndexerDeploymentInterface,
     indexerUuid: '',
-    items: [] as IndexerDeploymentInferface[],
+    items: [] as IndexerDeploymentInterface[],
     loading: false,
   }),
   actions: {
