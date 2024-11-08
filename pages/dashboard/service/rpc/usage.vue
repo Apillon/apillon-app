@@ -5,14 +5,11 @@
     </template>
 
     <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="pb-8" :size="32" vertical>
-      <select-options
-        v-model:value="rpcApiKeyStore.selectedId"
-        :options="options"
-        class="min-w-[11rem] w-[20vw] max-w-xs"
-        size="small"
-        filterable
-      />
+      <ActionsRpc />
       <ChartLine v-if="chartData" :data="chartData" />
+      <div v-else class="flex-cc min-h-40">
+        <h2>No RPC usage has been detected yet.</h2>
+      </div>
     </n-space>
     <RpcNoApiKeys v-else />
   </Dashboard>
@@ -22,7 +19,7 @@
 import type { SelectOption } from 'naive-ui';
 import colors from '~/tailwind.colors';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const dataStore = useDataStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
 
@@ -31,28 +28,27 @@ const chartData = ref();
 const initialLoadComplete = ref<boolean>(false);
 
 useHead({
-  title: $i18n.t('dashboard.nav.rpc'),
+  title: t('dashboard.nav.rpc'),
 });
 
-onMounted(() => {
-  setTimeout(async () => {
-    await Promise.all(Object.values(dataStore.promises));
+onMounted(async () => {
+  await sleep(100);
+  await Promise.all(Object.values(dataStore.promises));
 
-    await rpcApiKeyStore.getApiKeys();
+  await rpcApiKeyStore.getApiKeys();
 
-    if (!rpcApiKeyStore.selectedId && rpcApiKeyStore.items.length > 0) {
-      rpcApiKeyStore.selectedId = rpcApiKeyStore.items[0].id;
-    }
+  if (!rpcApiKeyStore.selectedId && rpcApiKeyStore.items.length > 0) {
+    rpcApiKeyStore.selectedId = rpcApiKeyStore.items[0].id;
+  }
 
-    await rpcApiKeyStore.getRpcApiKeyUsage();
+  await rpcApiKeyStore.getRpcApiKeyUsage();
 
-    if (rpcApiKeyStore.usage) {
-      chartData.value = prepareData(rpcApiKeyStore.usage);
-    }
+  if (rpcApiKeyStore.usage) {
+    chartData.value = prepareData(rpcApiKeyStore.usage);
+  }
 
-    pageLoading.value = false;
-    initialLoadComplete.value = true;
-  }, 100);
+  pageLoading.value = false;
+  initialLoadComplete.value = true;
 });
 
 function formatDate(timestamp: string): string {
@@ -78,7 +74,7 @@ const prepareData = (usage: RpcApiKeyUsageInterface) => {
     },
     datasets: [
       {
-        label: $i18n.t('rpc.usage.requestsNumber'),
+        label: t('rpc.usage.requestsNumber'),
         backgroundColor: colors.green,
         borderColor: colors.green,
         data: requests,

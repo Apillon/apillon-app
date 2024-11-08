@@ -186,6 +186,7 @@ async function initProject() {
     dataStore.updateCurrentProject(currentProject);
     projectsLoaded.value = true;
   } else {
+    await Promise.all(Object.values(dataStore.promises));
     await dataStore.getProjects().then(async _ => {
       await dataStore.getProject(dataStore.project.selected);
       projectsLoaded.value = true;

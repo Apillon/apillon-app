@@ -8,7 +8,7 @@
     </n-space>
   </n-space>
 
-  <!-- Modal - Create Contract -->
+  <!-- Modal - Create Key -->
   <modal v-model:show="modalCreateKeyVisible" :title="$t('rpc.apiKey.new')">
     <FormRpcApiKey @submit-success="modalCreateKeyVisible = false" @create-success="onKeyCreated" />
   </modal>

@@ -1,5 +1,5 @@
 <template>
-  <Heading>
+  <Heading v-bind="$attrs">
     <slot>
       <h1>{{ $t('dashboard.nav.rpc') }}</h1>
     </slot>
@@ -21,7 +21,7 @@
             v-if="dataStore.isUserOwner && paymentStore.isRpcPlanLoaded && !hasRpcPlan"
             class="font-bold no-underline"
             type="link"
-            to="/dashboard/service/rpc/subscription"
+            @click="modalSubscriptionVisible = true"
           >
             <span class="text-blue text-sm">{{ $t('dashboard.payment.upgrade') }}</span>
           </Btn>
@@ -29,31 +29,47 @@
       </div>
     </template>
     <template #submenu>
-      <n-collapse
-        class="border-b-1 border-bg-lighter -mt-4 pb-4"
-        accordion
-        @update:expanded-names="onUpdateAccordion"
-      >
-        <n-collapse-item>
-          <template #header>
-            <span class="icon-info text-xl mr-2"></span>
-            {{
-              instructionsVisible ? $t('general.information.hide') : $t('general.information.show')
-            }}
-          </template>
-          <RpcFeatures />
-        </n-collapse-item>
-      </n-collapse>
-
-      <MenuRpc />
+      <div class="relative">
+        <MenuRpc class="lg:absolute top-0 left-0 w-2/3 z-1" />
+        <n-collapse
+          v-if="isLg"
+          class="justify-end"
+          accordion
+          @update:expanded-names="onUpdateAccordion"
+        >
+          <n-collapse-item>
+            <template #header>
+              {{
+                instructionsVisible
+                  ? $t('general.information.hide')
+                  : $t('general.information.show')
+              }}
+              <span class="icon-info text-xl ml-2"></span>
+            </template>
+            <RpcFeatures />
+          </n-collapse-item>
+        </n-collapse>
+      </div>
     </template>
   </Heading>
+
+  <!-- Modal - Subscription -->
+  <modal
+    v-model:show="modalSubscriptionVisible"
+    class="max-w-3xl"
+    :title="$t('rpc.apiKey.headline')"
+  >
+    <RpcSubscriptions @close="modalSubscriptionVisible = false" />
+  </modal>
 </template>
 <script lang="ts" setup>
-const paymentStore = usePaymentStore();
+const { isLg } = useScreen();
 const dataStore = useDataStore();
+const paymentStore = usePaymentStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
+
 const instructionsVisible = ref<boolean>(false);
+const modalSubscriptionVisible = ref<boolean>(false);
 
 function onUpdateAccordion(expandedNames: Array<string | number>) {
   instructionsVisible.value = expandedNames.length > 0;
@@ -69,3 +85,18 @@ onMounted(async () => {
 
 const hasRpcPlan = computed(() => paymentStore.hasPaidRpcPlan);
 </script>
+
+<style lang="postcss" scoped>
+:deep(.n-collapse-item__header) {
+  @apply h-10;
+}
+:deep(.n-collapse-item__header--active) {
+  @apply border-b-1 border-bg-lighter;
+}
+:deep(.n-collapse-item__header-main) {
+  @apply justify-end;
+}
+:deep(.n-collapse-item__content-inner) {
+  @apply my-4;
+}
+</style>
