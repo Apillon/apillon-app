@@ -2315,6 +2315,7 @@
       "mustBeOwner": "You must be the project owner to turn on the RPC service.",
       "powered": "Powered by",
       "headline": "Before proceeding, select a plan.",
+      "management": "Key management",
       "description": "Apillon’s RPC service, powered by Dwellir, provides developers with reliable, low-latency access to over 100 blockchain networks. This scalable solution ensures seamless communication between decentralized applications and blockchains, backed by 99% uptime and top-tier performance. With easy API key management, you can quickly integrate multiple chains, eliminating the complexity of running your own nodes. The intuitive dashboard allows you to browse and favorite endpoints, simplifying Web3 project management from start to scale.",
       "uuid": "UUID",
       "usage": "RPC Usage monitoring",

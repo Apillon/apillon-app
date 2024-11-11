@@ -1,14 +1,24 @@
 <template>
   <div class="flex justify-between">
     <div>
-      <select-options
-        v-if="rpcApiKeyStore.hasRpcApiKeys"
-        v-model:value="rpcApiKeyStore.selectedId"
-        :options="options"
-        class="min-w-[11rem] w-[20vw] max-w-xs"
-        size="small"
-        filterable
-      />
+      <div v-if="rpcApiKeyStore.hasRpcApiKeys" class="flex items-center gap-4">
+        <select-options
+          v-model:value="rpcApiKeyStore.selectedId"
+          :options="options"
+          class="min-w-[11rem] w-[20vw] max-w-xs"
+          size="small"
+          filterable
+        />
+        <Btn
+          class="font-bold no-underline"
+          type="link"
+          :to="{ name: 'dashboard-service-rpc-keys' }"
+          :inner-class="'flex gap-2 items-center text-white'"
+        >
+          <span class="text-sm">{{ $t('rpc.apiKey.management') }}</span>
+          <span class="icon-project-setting"></span>
+        </Btn>
+      </div>
     </div>
 
     <div class="flex space-x-2">

@@ -16,10 +16,5 @@ const menuOptions: NMenuOption[] = [
     label: t('rpc.apiKey.usage'),
     path: `/dashboard/service/rpc/usage`,
   },
-  {
-    key: 'dashboard-service-rpc-keys',
-    label: t('rpc.apiKey.keys'),
-    path: '/dashboard/service/rpc/keys',
-  },
 ];
 </script>
