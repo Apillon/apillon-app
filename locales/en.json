@@ -2327,11 +2327,12 @@
     "apiKey": {
       "new": "New key",
       "save": "Save",
-      "keys": "Your API keys",
+      "keys": "API key management",
       "turnOnService": "Turn on RPC service",
       "mustBeOwner": "You must be the project owner to turn on the RPC service.",
       "powered": "Powered by",
-      "headline": "Access over 100 blockchains",
+      "headline": "Before proceeding, select a plan.",
+      "management": "Key management",
       "description": "Apillon’s RPC service, powered by Dwellir, provides developers with reliable, low-latency access to over 100 blockchain networks. This scalable solution ensures seamless communication between decentralized applications and blockchains, backed by 99% uptime and top-tier performance. With easy API key management, you can quickly integrate multiple chains, eliminating the complexity of running your own nodes. The intuitive dashboard allows you to browse and favorite endpoints, simplifying Web3 project management from start to scale.",
       "uuid": "UUID",
       "usage": "RPC Usage monitoring",
@@ -2361,9 +2362,6 @@
       "noFavoriteEndpointDescription": "Browse our available endpoints and click \"Add\" for quick access. Once you add a chain you plan to use, it will appear in your \"Endpoints\" table.",
       "browse": "Browse endpoints"
     },
-    "usage": {
-      "requestsNumber": "Number of requests"
-    },
     "initial": {
       "benefits": [
         {
@@ -2390,7 +2388,7 @@
           "text": "Browse, manage and favorite your blockchain endpoints effortlessly."
         }
       ],
-      "planSelection": "Before proceeding, select a plan.\nIf you choose the free plan, we'll notify you when you're approaching the limits.\nAt that point, you'll need to upgrade to keep the RPC service active.",
+      "planSelection": "If you choose the free plan, we’ll notify you when you're approaching the limits. At that point, you'll need to upgrade to keep the RPC service active.",
       "subscriptionBenefits": [
         {
           "text": "Only one free plan is available per registered user, regardless of how many projects you have."
@@ -2408,6 +2406,9 @@
       "unavailable": "Unavailable",
       "unavailableDescription": "You've already used the Freemium plan on this or other projects you own.",
       "mustBeOwner": "You must be the project owner to change the plan."
+    },
+    "usage": {
+      "requestsNumber": "Number of requests"
     }
   },
   "social": {

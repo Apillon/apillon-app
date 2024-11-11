@@ -1,40 +1,12 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <RpcDisabled v-if="!isRpcActivated && !pageLoading" @service-created="onServiceCreated" />
+  <Dashboard v-else :loading="pageLoading">
     <template #heading>
       <HeaderRpc v-if="isRpcActivated" />
     </template>
 
-    <RpcDisabled v-if="!isRpcActivated" />
-    <n-space v-else class="pb-8" :size="32" vertical>
-      <div class="flex justify-between">
-        <select-options
-          v-if="rpcApiKeyStore.hasRpcApiKeys"
-          v-model:value="rpcApiKeyStore.selectedId"
-          :options="options"
-          class="min-w-[11rem] w-[20vw] max-w-xs"
-          size="small"
-          filterable
-        />
-        <div v-else></div>
-        <div class="flex space-x-2">
-          <Btn
-            class="font-bold no-underline"
-            type="secondary"
-            ghost
-            @click="router.push(`/dashboard/service/rpc/endpoints`)"
-          >
-            {{ $t('rpc.endpoint.viewAll') }}
-          </Btn>
-          <Btn
-            type="secondary"
-            inner-class="text-white flex items-center justify-center"
-            href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html"
-          >
-            <span class="icon-file text-xl mr-2"></span>
-            <span>{{ $t('rpc.endpoint.viewDocumentation') }}</span>
-          </Btn>
-        </div>
-      </div>
+    <n-space class="pb-8" :size="32" vertical>
+      <ActionsRpc />
       <RpcNoApiKeys v-if="!rpcApiKeyStore.hasRpcApiKeys" />
       <TableRpcEndpoint
         v-else-if="endpoints.length > 0"
@@ -53,22 +25,27 @@
       </Empty>
     </n-space>
   </Dashboard>
+  <!-- Modal - Subscription -->
+  <modal
+    v-model:show="modalSubscriptionVisible"
+    class="max-w-3xl"
+    :title="$t('rpc.apiKey.headline')"
+  >
+    <RpcSubscriptions @close="modalSubscriptionVisible = false" />
+  </modal>
 </template>
 
 <script lang="ts" setup>
-import type { SelectOption } from 'naive-ui';
-
 const { t } = useI18n();
-
+const router = useRouter();
+const dataStore = useDataStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
 const rpcEndpointStore = useRpcEndpointStore();
-
-const dataStore = useDataStore();
-const router = useRouter();
 
 const pageLoading = ref<boolean>(true);
 const isRpcActivated = ref<boolean>(false);
 const initialLoadComplete = ref<boolean>(false);
+const modalSubscriptionVisible = ref<boolean>(false);
 
 useHead({
   title: t('dashboard.nav.rpc'),
@@ -79,28 +56,11 @@ onMounted(async () => {
   await Promise.all(Object.values(dataStore.promises));
   await dataStore.getServices();
 
-  isRpcActivated.value = dataStore.hasServicesByType(ServiceType.RPC);
-
-  if (isRpcActivated.value) {
-    await rpcApiKeyStore.getApiKeys();
-    if (!rpcApiKeyStore.selectedId && rpcApiKeyStore.items.length > 0) {
-      rpcApiKeyStore.selectedId = rpcApiKeyStore.items[0].id;
-    }
-
-    await rpcEndpointStore.getEndpoints();
-  }
+  await initRpc();
 
   pageLoading.value = false;
   initialLoadComplete.value = true;
 });
-
-/** RPC Api keys */
-const options = computed<SelectOption[]>(() =>
-  rpcApiKeyStore.items.map(item => ({
-    value: item.id,
-    label: item.name,
-  }))
-);
 
 const endpoints = computed(() => rpcEndpointStore.items.filter(item => item.isFavorite));
 
@@ -117,4 +77,22 @@ watch(
     }
   }
 );
+
+function onServiceCreated() {
+  modalSubscriptionVisible.value = true;
+  initRpc();
+}
+
+async function initRpc() {
+  isRpcActivated.value = dataStore.hasServicesByType(ServiceType.RPC);
+
+  if (isRpcActivated.value) {
+    await rpcApiKeyStore.getApiKeys();
+    if (!rpcApiKeyStore.selectedId && rpcApiKeyStore.items.length > 0) {
+      rpcApiKeyStore.selectedId = rpcApiKeyStore.items[0].id;
+    }
+
+    await rpcEndpointStore.getEndpoints();
+  }
+}
 </script>

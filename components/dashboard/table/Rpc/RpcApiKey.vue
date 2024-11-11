@@ -34,7 +34,11 @@ const props = defineProps({
 const { t } = useI18n();
 const rpcApiKeyStore = useRpcApiKeyStore();
 
-const tableData = computed(() => rpcApiKeyStore.items);
+const tableData = computed(() => {
+  return rpcApiKeyStore.items.filter(item =>
+    item.name.toLowerCase().includes(rpcApiKeyStore.search.toLowerCase())
+  );
+});
 
 const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {
   const columns: NDataTableColumns<RpcApiKeyInterface> = [

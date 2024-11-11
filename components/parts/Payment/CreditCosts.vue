@@ -138,7 +138,6 @@ const shownPrices = computed(() => {
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
     const chainName = getChainName(selectedChain.value, props.service);
-    console.log(chainName);
     return servicePrices.value.filter(item => item.name.includes(chainName));
   } else if (props.filterByService && selectedService.value) {
     /** Filter by service */

@@ -15,14 +15,11 @@
         </slot>
       </Heading>
     </template>
-    <template v-if="rpcApiKeyStore.selectedId">
-      <slot>
-        <ActionsRpcEndpoint />
-      </slot>
-      <slot>
-        <TableRpcEndpoint :rpcEndpoints="rpcEndpointStore.items" :allowFavoriteCheck="true" />
-      </slot>
-    </template>
+
+    <n-space v-if="rpcApiKeyStore.selectedId" class="pb-8" :size="32" vertical>
+      <ActionsRpcEndpoint />
+      <TableRpcEndpoint :rpcEndpoints="rpcEndpointStore.items" :allowFavoriteCheck="true" />
+    </n-space>
     <template v-else>
       <RpcNoApiKeys />
     </template>
