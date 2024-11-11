@@ -403,7 +403,9 @@
       "getMore": "Get more",
       "included": "Can be used for:",
       "name": "Name",
+      "notEnoughCredits": "Not enough credits",
       "packages": "Credit packages",
+      "pricingNotification": "Pricing notification",
       "product_id": "Product ID",
       "service": "Service",
       "serviceDescription": "Service description",
@@ -689,34 +691,6 @@
           "writeOverApillon": "Write over Apillon",
           "readFromDapp": "Read from your dapp"
         }
-      },
-      "indexer": {
-        "create": "Create new indexer",
-        "info": "Add it to your Web3 project",
-        "new": "New indexer",
-        "table": {
-          "name": "Name",
-          "description": "Description",
-          "status": "Status",
-          "uuid": "Indexer UUID"
-        },
-        "tableLog": {
-          "level": "Level",
-          "ts": "Timestamp",
-          "container": "Continer",
-          "msg": "Message"
-        },
-        "tableDeployments": {
-          "type": "Type",
-          "failed": "Failed",
-          "status": "Status",
-          "updatedAt": "Updated",
-          "createdAt": "Created"
-        },
-        "general": "General",
-        "logs": "Logs",
-        "deployments": "Deployments",
-        "viewDocumentation": "View Documentation"
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -1088,10 +1062,8 @@
       "indexing": {
         "content": [
           {
-            "headline": "Features:",
-            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints."
-          },
-          {
+            "title": "Features:",
+            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints.",
             "benefits": [
               "Real-time Data Processing: Continuously indexes new blockchain data for immediate access.",
               "Historical Data Access: Easily retrieve past blockchain data for analysis or verification.",
@@ -1852,38 +1824,26 @@
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "indexer": {
-    "startNew": "Star by creating a new indexer",
-    "create": "Create new indexer",
-    "update": "Update Indexer",
-    "statuses": {
-      "1": "Created",
-      "3": "Hibernated",
-      "5": "Active"
+    "containers": {
+      "db": "DB",
+      "init": "Init",
+      "api": "API",
+      "processor": "Processor"
     },
-    "uuid": "Indexer UUID",
     "instructions": {
-      "deployYourIndexer": "Deploy your indexer",
-      "instruction1": "Indexer deployments are handled over the Apillon CLI.\n Please follow the step by step instructions below and deploy your indexer with the help of our CLI.",
-      "instruction2": "Note, that you need at least 20,000 credits to perform this action.",
-      "step1": "Step 1 - Setup the Apillon CLI",
-      "step2": "Step 2 - Set up your indexer locally",
+      "btnFinish": "I have finished the deployment - Show me the indexers",
       "chooseTemplate": "Choose a template for you indexer from the Subsquid Github repository and clone it. \nThe templates below are available:",
-      "substrateTemplate": "Template for Substrate chains",
+      "deployNotFinished": "Indexer is not yet deployed, please follow the instructions.",
+      "deployYourIndexer": "Instructions to deploy your first Indexer",
       "evmTemplates": "Templates for EVM chains",
-      "step3": "Step 3 - Customize your indexer",
-      "step4": "Step 4 - Deploy the indexer"
+      "instruction1": "Indexer deployments are handled over the <b>Apillon CLI</b>.",
+      "instruction2": "Before you can see your indexer in the dashboard, please follow the step by step instructions below and deploy your indexer with the help of our CLI. ",
+      "step1": "Setup the Apillon CLI",
+      "step2": "Set up your indexer",
+      "step3": "Customize your indexer",
+      "step4": "Deploy the indexer",
+      "substrateTemplate": "Template for Substrate chains"
     },
-    "indexerApiEndpoint": "Indexer API endpoint",
-    "indexerGeneralData": "Indexer - general data",
-    "name": "Name",
-    "description": "Description",
-    "status": "Status",
-    "created": "Created",
-    "lastDeployed": "Last deployed",
-    "apiStatus": "Api status",
-    "processorStatus": "Processor status",
-    "processedBlocks": "Processed blocks",
-    "squidStatus": "Squid status",
     "logLevels": {
       "error": "Error",
       "debug": "Debug",
@@ -1892,16 +1852,62 @@
       "warning": "Warning",
       "critical": "Critical"
     },
-    "containers": {
-      "db": "DB",
-      "init": "Init",
-      "api": "API",
-      "processor": "Processor"
+    "spendingWarning": {
+      "btnProceed": "Got it, Proceed",
+      "btnBuyCredits": "I want to buy credits right now",
+      "content": "When you deploy an indexer, <b>50,000 credits will be deducted from your account.</b> This is the minimum required to start running the indexer. The rate of credit usage depends on the amount of data being indexed. You can explore typical pricing scenarios here:",
+      "info": "Don't worry, we'll notify you via email when your credits are running low.",
+      "notEnough1": "To deploy an indexer, you need at least 50,000 credits in your account. This ensures the indexer is set up and starts indexing.",
+      "notEnough2": "However, the actual usage depends on the indexing you're performing."
     },
+    "statuses": {
+      "1": "Created",
+      "3": "Hibernated",
+      "5": "Active"
+    },
+    "table": {
+      "name": "Name",
+      "description": "Description",
+      "status": "Status",
+      "uuid": "Indexer UUID"
+    },
+    "tableLog": {
+      "level": "Level",
+      "ts": "Timestamp",
+      "container": "Container",
+      "msg": "Message"
+    },
+    "tableDeployments": {
+      "type": "Type",
+      "failed": "Failed",
+      "updatedAt": "Updated",
+      "createdAt": "Created"
+    },
+    "apiStatus": "Api status",
+    "create": "Create new indexer",
+    "created": "Created",
+    "deployments": "Deployments",
+    "description": "Description",
+    "general": "General",
     "hibernate": "Hibernate",
     "hibernateIndexer": "Hibernate indexer",
     "hibernateIndexerInfo": "Hibernation of indexer lets you pause virtual machines, lowering costs while keeping data safe. Wheen needed, redeploy the indexer with all data intact.",
-    "successfullyHibernated": "Indexer successfully hibernated"
+    "indexerApiEndpoint": "Indexer API endpoint",
+    "indexerGeneralData": "Indexer - general data",
+    "info": "Add it to your Web3 project",
+    "lastDeployed": "Last deployed",
+    "logs": "Logs",
+    "name": "Name",
+    "new": "New indexer",
+    "processors": "Processors",
+    "processorStatus": "Processor status",
+    "processedBlocks": "Processed blocks",
+    "squidStatus": "Squid status",
+    "startNew": "Star by creating a new indexer",
+    "successfullyHibernated": "Indexer successfully hibernated",
+    "update": "Update Indexer",
+    "uuid": "Indexer UUID",
+    "viewDocumentation": "View Documentation"
   },
   "nft": {
     "amount": {
