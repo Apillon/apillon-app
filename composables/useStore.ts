@@ -17,6 +17,9 @@ export default function useStore() {
   const settingsStore = useSettingsStore();
   const rpcApiKeyStore = useRpcApiKeyStore();
   const rpcEndpointStore = useRpcEndpointStore();
+  const indexerStore = useIndexerStore();
+  const indexerLogStore = useIndexerLogStore();
+  const indexerDeploymentsStore = useIndexerDeploymentsStore();
 
   function clearAll() {
     dataStore.resetData();
@@ -28,6 +31,7 @@ export default function useStore() {
     clearSettings();
     clearSocial();
     clearRpc();
+    clearIndexer();
   }
 
   function clearStorage() {
@@ -70,6 +74,12 @@ export default function useStore() {
   function clearRpc() {
     rpcApiKeyStore.reset();
     rpcEndpointStore.reset();
+  }
+
+  function clearIndexer() {
+    indexerStore.resetData();
+    indexerLogStore.resetData();
+    indexerDeploymentsStore.resetData();
   }
 
   return {
