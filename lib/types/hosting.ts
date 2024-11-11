@@ -62,6 +62,10 @@ declare global {
     bucket: BucketInterface;
     cidProduction: string | null;
     cidStaging: string | null;
+    domain: string | null;
+    domainChangeDate: string | null;
+    domainLastCheckDate: string | null;
+    domainStatus: number;
     ipnsProduction: string | null;
     ipnsStaging: string | null;
     productionBucket: BucketInterface;
@@ -96,10 +100,4 @@ declare global {
   };
 
   interface ShortUrlResponse extends GeneralResponse<ShortUrl> {}
-
-  interface DomainInterface extends WebsiteInterface {
-    domainStatus: number;
-    domainLastCheckDate: string | null;
-  }
-  interface DomainResponse extends GeneralResponse<DomainInterface> {}
 }
