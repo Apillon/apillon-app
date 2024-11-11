@@ -14,6 +14,15 @@ export const useIndexerLogStore = defineStore('indexerLog', {
     },
   }),
   actions: {
+    resetData() {
+      this.indexerUuid = '';
+      this.items = [] as Array<IndexerLogInterface>;
+      this.search = '';
+      this.filter.logLevels = [];
+      this.filter.containers = [];
+      this.filter.dateFrom = undefined as Date | undefined;
+    },
+
     /**
      * Fetch wrappers
      */

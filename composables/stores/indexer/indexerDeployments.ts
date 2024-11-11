@@ -8,6 +8,12 @@ export const useIndexerDeploymentsStore = defineStore('indexerDeployments', {
     loading: false,
   }),
   actions: {
+    resetData() {
+      this.active = {} as IndexerDeploymentInterface;
+      this.indexerUuid = '';
+      this.items = [] as Array<IndexerDeploymentInterface>;
+    },
+
     /**
      * Fetch wrappers
      */
