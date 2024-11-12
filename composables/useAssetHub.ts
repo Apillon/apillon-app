@@ -103,6 +103,8 @@ export default function assetHub() {
 
   async function reconnectWallet() {
     await sleep(200);
+    const userWallet = authStore.wallet.address || authStore.user.wallet;
+
     if (assetHubStore?.account?.address && assetHubStore?.account?.wallet) {
       await cryptoWaitReady();
 
@@ -117,10 +119,8 @@ export default function assetHub() {
       } else {
         assetHubStore.account = null;
       }
-    } else if (authStore.wallet.address && authStore.wallet.accounts.length > 0) {
-      assetHubStore.account = authStore.wallet.accounts.find(
-        acc => acc.address === authStore.wallet.address
-      );
+    } else if (userWallet && authStore.wallet.accounts.length > 0) {
+      assetHubStore.account = authStore.wallet.accounts.find(acc => acc.address === userWallet);
     } else {
       assetHubStore.account = null;
     }

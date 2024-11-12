@@ -19,19 +19,24 @@
     </template>
 
     <!-- Submit -->
-    <Btn v-if="owner" type="primary" class="w-full" :loading="loading" @click="handleSubmit">
-      {{ btnText ? btnText : read ? 'Query' : 'Execute' }}
-    </Btn>
-    <SmartContractsBtnSubmit
-      v-else
-      :owner="owner"
-      :loading="loading"
-      :btn-text="btnText ? btnText : read ? 'Query' : 'Execute'"
-      @submit="handleSubmit"
-    />
+    <div v-if="!read || fn.inputs.length > 0" class="mb-6">
+      <Btn v-if="owner" type="primary" class="w-full" :loading="loading" @click="handleSubmit">
+        {{ btnText ? btnText : read ? 'Query' : 'Execute' }}
+      </Btn>
+      <SmartContractsBtnSubmit
+        v-else
+        :owner="owner"
+        :loading="loading"
+        :btn-text="btnText ? btnText : read ? 'Query' : 'Execute'"
+        @submit="handleSubmit"
+      />
+    </div>
+    <div v-else-if="loading" class="relative h-4">
+      <Spinner :size="24" />
+    </div>
 
     <!-- Result -->
-    <Notification v-if="result !== undefined" type="success" class="mt-6" hide-icon>
+    <Notification v-if="result !== undefined" type="success" hide-icon>
       {{ result }}
     </Notification>
   </n-form>
@@ -86,6 +91,12 @@ const data = computed(() =>
         ? ['true']
         : []
 );
+
+onMounted(() => {
+  if (props.read && props.fn.inputs.length === 0) {
+    execRead(props.fn.name);
+  }
+});
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {

@@ -301,7 +301,7 @@ async function deployContract() {
       message.success(t('form.success.smartContract'));
       router.push(`/dashboard/service/smart-contracts`);
 
-      setTimeout(() => deployedContractStore.items.unshift(res.data), 500);
+      setTimeout(() => addSmToList(res.data), 500);
     }
   } catch (e) {
     message.error(userFriendlyMsg(e));
@@ -309,4 +309,10 @@ async function deployContract() {
     loading.value = false;
   }
 }
+
+const addSmToList = (sm: DeployedContractInterface) => {
+  if (!deployedContractStore.items.some(i => i.contract_uuid === sm.contract_uuid)) {
+    deployedContractStore.items.unshift(sm);
+  }
+};
 </script>

@@ -8,7 +8,7 @@
     </slot>
     <template #info>
       <n-space :size="32" align="center">
-        <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" />
+        <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" filter-by-chain />
       </n-space>
     </template>
   </Heading>
