@@ -68,7 +68,7 @@
       <div
         v-if="!collapsed && dataStore.hasProjects && !authStore.isAdmin()"
         ref="footerRef"
-        class="relative flex border-t border-bg-lighter flex-col p-8"
+        class="relative flex border-t border-bg-lighter flex-col p-8 z-2"
       >
         <div class="flex items-end" :class="{ 'opacity-0': paymentStore.loading }">
           <div class="w-1/2">

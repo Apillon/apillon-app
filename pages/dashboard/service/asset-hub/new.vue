@@ -7,15 +7,14 @@
       />
     </template>
 
-    <div class="pb-8">
+    <div class="grid grid-cols-assetHub justify-center gap-4 lg:gap-8 pb-8 mx-auto">
       <FormAssetHub
-        class="mx-auto"
+        class="flex-auto w-full min-w-40 max-w-xl"
+        @create-success="(id, network) => refreshAssets(id, network)"
         @close="$router.push({ name: 'dashboard-service-asset-hub' })"
       />
+      <AssetHubInfoBoxes />
     </div>
-    <template #learn>
-      <AssetHubInfoBoxes class="h-full" />
-    </template>
   </Dashboard>
 </template>
 
@@ -23,7 +22,7 @@
 const { t } = useI18n();
 const router = useRouter();
 const assetHubStore = useAssetHubStore();
-const { pageLoading, initAssetHub, reconnectWallet } = useAssetHub();
+const { pageLoading, initAssetHub, reconnectWallet, refreshAssets } = useAssetHub();
 
 onMounted(async () => {
   await initAssetHub();

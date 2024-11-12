@@ -1154,6 +1154,7 @@
     "oasisSignatures": "Signatures"
   },
   "error": {
+    "general": "Something went wrong, please try again later.",
     "404": "Page not found",
     "40006022": "You have to upload \"index.html\" file, to deploy website!",
     "FIELD_INVALID": "Invalid filed, please upload valid .env file.",

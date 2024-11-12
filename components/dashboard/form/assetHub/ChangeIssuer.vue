@@ -91,12 +91,17 @@ async function changeIssuer() {
       assetHubStore.account.address,
       assetHubStore.active.freezer
     );
-    assetHubStore.active.issuer = formData.value.address;
+    if (txHash.value) {
+      assetHubStore.active.issuer = formData.value.address;
 
-    message.success(t('form.success.updated.assetIssuer'));
+      message.success(t('form.success.updated.assetIssuer'));
 
-    /** Emit events */
-    emit('submitSuccess');
+      /** Emit events */
+      emit('submitSuccess');
+    } else {
+      message.warning(t('error.general'));
+      emit('close');
+    }
   } catch (error: any) {
     if (error?.message) {
       message.error(error?.message);
