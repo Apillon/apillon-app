@@ -7,8 +7,8 @@
         <template #header>
           <div class="flex items-center justify-between w-full">
             <span class="ml-4 my-1" @click="expanded = !expanded">
-              {{ $t('dashboard.refreshModal.title') }}</span
-            >
+              {{ $t('dashboard.refreshModal.title') }}
+            </span>
             <!-- <n-button-group @click.stop>
               <n-button size="small" @click="refresh">
                 <span class="icon-refresh text-xl mr-2"></span>

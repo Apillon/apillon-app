@@ -24,26 +24,30 @@ export default function useCloudFunctions() {
   async function init() {
     /** CloudFunction UUID from route */
     const functionUuid = params?.id ? `${params?.id}` : params?.slug ? `${params?.slug}` : '';
+    if (functionUuid !== cloudFunctionStore.functionUuid) {
+      cloudFunctionStore.resetVariables();
+    }
 
-    await Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const currentCloudFunction = await cloudFunctionStore.getCloudFunction(functionUuid);
+    await Promise.all(Object.values(dataStore.promises));
 
-      if (!currentCloudFunction?.function_uuid) {
-        router.push({ name: 'dashboard-service-cloud-functions' });
-      } else {
-        cloudFunctionStore.active = currentCloudFunction;
+    const currentCloudFunction = await cloudFunctionStore.getCloudFunction(functionUuid);
+    if (!currentCloudFunction?.function_uuid) {
+      router.push({ name: 'dashboard-service-cloud-functions' });
+    } else {
+      cloudFunctionStore.active = currentCloudFunction;
 
-        checkUnfinishedJobs();
-      }
+      checkUnfinishedJobs();
+    }
 
-      pageLoading.value = false;
-    });
+    pageLoading.value = false;
   }
 
   async function parseEnvFile(file: UploadFileInfo): Promise<Record<string, string>> {
     const env: Record<string, string> = {};
 
+    console.log(env, file);
     const fileContent = (await readFileContent(file.file)) as string;
+    console.log(fileContent);
 
     // Split content by lines
     const lines = fileContent.split('\n');
@@ -64,6 +68,7 @@ export default function useCloudFunctions() {
       if (key && value) {
         env[key.trim()] = removeSurroundingQuotes(value.trim());
       }
+      console.log(key, value, removeSurroundingQuotes(value.trim()));
     }
 
     return env;
