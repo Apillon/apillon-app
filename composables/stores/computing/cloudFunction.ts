@@ -28,7 +28,7 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
       return state.active.function_uuid;
     },
     gatewayUrl(state): string {
-      return state.active.gatewayUrl;
+      return state.active.gatewayUrl || '';
     },
     jobs(state): JobInterface[] {
       return state.active.jobs;
@@ -60,11 +60,27 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
   },
   actions: {
     resetData() {
+      console.log('reset');
       this.active = {} as CloudFunctionInterface;
+      this.archive = [] as CloudFunctionInterface[];
       this.items = [] as CloudFunctionInterface[];
       this.search = '';
+      this.loading = false;
+      this.loadingVariables = false;
       this.pagination.itemCount = 0;
       this.pagination.page = 1;
+      this.search = '';
+      this.searchJobs = '';
+      this.searchVariables = '';
+      this.total = 0;
+      this.totalArchive = 0;
+      this.usage = [] as CloudFunctionUsageInterface[];
+      this.resetVariables();
+    },
+    resetVariables() {
+      this.variables = [] as EnvVariable[];
+      this.variablesNew = [] as EnvVariable[];
+      this.variablesUpdate = false;
     },
 
     addJob(job: JobInterface) {
@@ -84,20 +100,20 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     /**
      * Fetch wrappers
      */
-    async getCloudFunctions(): Promise<CloudFunctionInterface[]> {
+    async getCloudFunctions() {
       if (!this.hasCloudFunctions || isCacheExpired(LsCacheKeys.CLOUD_FUNCTIONS)) {
         return await this.fetchCloudFunctions();
       }
       return this.items;
     },
-    async getCloudFunctionsArchive(): Promise<CloudFunctionInterface[]> {
+    async getCloudFunctionsArchive() {
       if (!this.hasCloudFunctionsArchive || isCacheExpired(LsCacheKeys.CLOUD_FUNCTIONS_ARCHIVE)) {
         return await this.fetchCloudFunctions(true);
       }
       return this.items;
     },
 
-    async getCloudFunction(functionUuid: string): Promise<CloudFunctionInterface> {
+    async getCloudFunction(functionUuid: string) {
       if (
         this.active?.function_uuid !== functionUuid ||
         isCacheExpired(LsCacheKeys.CLOUD_FUNCTION)

@@ -226,6 +226,23 @@ function createValidation(input: any): FormItemRule[] {
   }
 }
 
+function getServiceName(chainId?: number | null) {
+  switch (chainId) {
+    case Chains.ASTAR:
+      return PriceServiceName.CONTRACT_ASTAR_CREATE;
+    case Chains.MOONBASE:
+      return PriceServiceName.CONTRACT_MOONBASE_CREATE;
+    case Chains.MOONBEAM:
+      return PriceServiceName.CONTRACT_MOONBEAM_CREATE;
+    case EvmChain.SEPOLIA:
+      return PriceServiceName.CONTRACT_SEPOLIA_CREATE;
+    case EvmChain.ETHEREUM:
+      return PriceServiceName.CONTRACT_ETHEREUM_CREATE;
+    default:
+      return PriceServiceName.CONTRACT_MOONBASE_CREATE;
+  }
+}
+
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
 
@@ -235,7 +252,7 @@ function handleSubmit(e: Event | MouseEvent) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else {
-      warningStore.showSpendingWarning(PriceServiceName.HOSTING_WEBSITE, () => deployContract());
+      warningStore.showSpendingWarning(getServiceName(form.value.chain), () => deployContract());
     }
   });
 }

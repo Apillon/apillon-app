@@ -116,7 +116,6 @@ function handleSubmit(e: Event | MouseEvent) {
       await updateIndexer();
     } else {
       await createIndexer();
-      // warningStore.showSpendingWarning(PriceServiceName.HOSTING_WEBSITE, () => createWebsite());
     }
   });
 }
