@@ -74,7 +74,7 @@ export default function assetHub() {
 
   const refreshAsset = async (assetId: number) => {
     await sleep(2000);
-    const updatedAsset = await assetHubStore.fetchAsset(assetId);
+    const updatedAsset = await assetHubStore.fetchAssets();
 
     Object.assign(assetHubStore.active, updatedAsset);
     assetHubStore.items.forEach(item => {
@@ -82,6 +82,23 @@ export default function assetHub() {
         Object.assign(item, updatedAsset);
       }
     });
+  };
+
+  const refreshAssets = async (assetId: number, network: string) => {
+    await sleep(2000);
+
+    assetHubStore.mainnet = network === assetHubNetworks.assetHub.rpc;
+    const newAsset = await assetHubStore.fetchAsset(assetId);
+
+    if (newAsset) {
+      assetHubStore.active = newAsset;
+
+      if (network === assetHubNetworks.westend.rpc) {
+        assetHubStore.itemsTestnet.push(newAsset);
+      } else {
+        assetHubStore.itemsMainnet.push(newAsset);
+      }
+    }
   };
 
   async function reconnectWallet() {
@@ -137,6 +154,7 @@ export default function assetHub() {
     initClient,
     reconnectWallet,
     refreshAsset,
+    refreshAssets,
     walletConnect,
   };
 }

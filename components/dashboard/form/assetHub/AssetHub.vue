@@ -3,7 +3,6 @@
     v-bind="$attrs"
     ref="formRef"
     :model="formData"
-    class="w-full max-w-xl"
     :rules="rules"
     @submit.prevent="handleSubmit"
   >
@@ -171,6 +170,7 @@
 </template>
 
 <script lang="ts" setup>
+import { nToBigInt } from '@polkadot/util';
 import type { FormItemRule } from 'naive-ui';
 
 type FormAsset = {
@@ -201,13 +201,13 @@ const formRef = ref<NFormInst | null>(null);
 const txHash = ref<string | undefined>();
 
 const formData = ref<FormAsset>({
-  network: null,
+  network: assetHubNetworks.westend.rpc,
   name: '',
   symbol: '',
   assetId: null,
   decimals: 18,
   initialSupply: null,
-  minBalance: 0.001,
+  minBalance: null,
   issuerAddress: assetHubStore.account?.address || '',
   freezerAddress: assetHubStore.account?.address || '',
 });
@@ -261,6 +261,8 @@ onMounted(async () => {
       formData.value.network = assetHubNetworks.westend.rpc;
       formData.value.symbol = asset.value.symbol;
     }
+  } else {
+    formData.value.assetId = findFirstAvailableNumber(assetIDs.value);
   }
 
   assetHubStore.getAssetsMainnet();
@@ -376,15 +378,19 @@ async function createAsset() {
       formData.value.name,
       formData.value.symbol,
       formData.value.decimals,
-      Number(formData.value.minBalance) * Math.pow(10, Number(formData.value.decimals)),
+      nToBigInt(Number(formData.value.minBalance) * Math.pow(10, Number(formData.value.decimals))),
       team
     );
+    if (txHash.value) {
+      message.success(t('form.success.created.asset'));
 
-    message.success(t('form.success.created.asset'));
-
-    /** Emit events */
-    emit('submitSuccess');
-    emit('createSuccess', txHash.value);
+      /** Emit events */
+      emit('submitSuccess');
+      emit('createSuccess', formData.value.assetId, formData.value.network);
+    } else {
+      message.warning(t('error.general'));
+      emit('close');
+    }
   } catch (error: any) {
     if (error?.message) {
       message.error(error?.message);
@@ -423,15 +429,19 @@ async function updateAsset() {
       formData.value.symbol,
       formData.value.decimals
     );
-    assetHubStore.active.name = formData.value.name;
-    assetHubStore.active.symbol = formData.value.symbol;
-    assetHubStore.active.decimals = `${formData.value.decimals}`;
+    if (txHash.value) {
+      assetHubStore.active.name = formData.value.name;
+      assetHubStore.active.symbol = formData.value.symbol;
+      assetHubStore.active.decimals = `${formData.value.decimals}`;
 
-    message.success(t('form.success.updated.asset'));
+      message.success(t('form.success.updated.asset'));
 
-    /** Emit events */
-    emit('submitSuccess');
-    emit('createSuccess', txHash.value);
+      /** Emit events */
+      emit('submitSuccess');
+      emit('createSuccess', txHash.value);
+    } else {
+      message.warning(t('error.general'));
+    }
   } catch (error: any) {
     if (error?.message) {
       message.error(error?.message);
