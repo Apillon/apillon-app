@@ -14,6 +14,12 @@ export const useIndexerStore = defineStore('indexer', {
     },
   },
   actions: {
+    resetData() {
+      this.active = {} as IndexerInterface;
+      this.items = [] as Array<IndexerBaseInterface>;
+      this.search = '';
+    },
+
     /**
      * Fetch wrappers
      */

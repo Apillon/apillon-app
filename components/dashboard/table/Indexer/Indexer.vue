@@ -41,7 +41,7 @@ const currentRow = ref<IndexerBaseInterface>(indexerStore.items[0]);
 const columns = computed(() => [
   {
     key: 'name',
-    title: t('dashboard.service.indexer.table.name'),
+    title: t('indexer.table.name'),
     className: ON_COLUMN_CLICK_OPEN_CLASS,
     render(row) {
       return h('strong', {}, { default: () => row.name });
@@ -49,14 +49,14 @@ const columns = computed(() => [
   },
   {
     key: 'indexer_uuid',
-    title: t('dashboard.service.indexer.table.uuid'),
+    title: t('indexer.table.uuid'),
     render(row: IndexerBaseInterface) {
       return h(resolveComponent('TableEllipsis'), { text: row.indexer_uuid }, '');
     },
   },
   {
     key: 'description',
-    title: t('dashboard.service.indexer.table.description'),
+    title: t('indexer.table.description'),
     className: ON_COLUMN_CLICK_OPEN_CLASS,
     render(row) {
       return h('strong', {}, { default: () => row.description });
@@ -71,7 +71,7 @@ const columns = computed(() => [
   },
   {
     key: 'status',
-    title: t('dashboard.service.indexer.table.status'),
+    title: t('indexer.table.status'),
     render(row: IndexerBaseInterface) {
       return h(resolveComponent('IndexerStatusLabel'), { indexerStatus: row.status }, '');
     },

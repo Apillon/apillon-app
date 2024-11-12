@@ -403,7 +403,9 @@
       "getMore": "Get more",
       "included": "Can be used for:",
       "name": "Name",
+      "notEnoughCredits": "Not enough credits",
       "packages": "Credit packages",
+      "pricingNotification": "Pricing notification",
       "product_id": "Product ID",
       "service": "Service",
       "serviceDescription": "Service description",
@@ -689,34 +691,6 @@
           "writeOverApillon": "Write over Apillon",
           "readFromDapp": "Read from your dapp"
         }
-      },
-      "indexer": {
-        "create": "Create new indexer",
-        "info": "Add it to your Web3 project",
-        "new": "New indexer",
-        "table": {
-          "name": "Name",
-          "description": "Description",
-          "status": "Status",
-          "uuid": "Indexer UUID"
-        },
-        "tableLog": {
-          "level": "Level",
-          "ts": "Timestamp",
-          "container": "Continer",
-          "msg": "Message"
-        },
-        "tableDeployments": {
-          "type": "Type",
-          "failed": "Failed",
-          "status": "Status",
-          "updatedAt": "Updated",
-          "createdAt": "Created"
-        },
-        "general": "General",
-        "logs": "Logs",
-        "deployments": "Deployments",
-        "viewDocumentation": "View Documentation"
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -1088,10 +1062,8 @@
       "indexing": {
         "content": [
           {
-            "headline": "Features:",
-            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints."
-          },
-          {
+            "title": "Features:",
+            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints.",
             "benefits": [
               "Real-time Data Processing: Continuously indexes new blockchain data for immediate access.",
               "Historical Data Access: Easily retrieve past blockchain data for analysis or verification.",
@@ -1182,6 +1154,7 @@
     "oasisSignatures": "Signatures"
   },
   "error": {
+    "general": "Something went wrong, please try again later.",
     "404": "Page not found",
     "40006022": "You have to upload \"index.html\" file, to deploy website!",
     "FIELD_INVALID": "Invalid filed, please upload valid .env file.",
@@ -1308,6 +1281,9 @@
     "COMPUTING_CONTRACT_TYPE_NOT_VALID": "Contract type is not valid",
     "CONTRACT_DOES_NOT_EXIST": "Contract does not exist",
     "CONTRACT_NOT_DEPLOYED": "Contract is not deployed",
+    "CALL_CONTRACT_ERROR": "Contract call failed. Please try again or contact support if the issue persists.",
+    "CONTRACT_OWNER_ERROR": "Contract call failed. Please try again or contact support if the issue persists.",
+    "DEPLOY_CONTRACT_ERROR": "Deployment failed. Please try again or contact support if the issue persists.",
     "TRANSACTION_FOR_TRANSFER_ALREADY_EXISTS": "Contract has already been transferred.",
     "REVIEW_ALREADY_SUBMITTED": "Review has already been submitted.",
     "USER_NOT_ELIGIBLE": "User is not eligible for airdrop.",
@@ -1549,6 +1525,7 @@
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
       "number": "Enter number",
+      "onlyJsFiles": "Only .js files are allowed",
       "password": "password",
       "phone": "+000 12345678",
       "postalCode": "4223",
@@ -1851,38 +1828,26 @@
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "indexer": {
-    "startNew": "Star by creating a new indexer",
-    "create": "Create new indexer",
-    "update": "Update Indexer",
-    "statuses": {
-      "1": "Created",
-      "3": "Hibernated",
-      "5": "Active"
+    "containers": {
+      "db": "DB",
+      "init": "Init",
+      "api": "API",
+      "processor": "Processor"
     },
-    "uuid": "Indexer UUID",
     "instructions": {
-      "deployYourIndexer": "Deploy your indexer",
-      "instruction1": "Indexer deployments are handled over the Apillon CLI.\n Please follow the step by step instructions below and deploy your indexer with the help of our CLI.",
-      "instruction2": "Note, that you need at least 20,000 credits to perform this action.",
-      "step1": "Step 1 - Setup the Apillon CLI",
-      "step2": "Step 2 - Set up your indexer locally",
+      "btnFinish": "I have finished the deployment - Show me the indexers",
       "chooseTemplate": "Choose a template for you indexer from the Subsquid Github repository and clone it. \nThe templates below are available:",
-      "substrateTemplate": "Template for Substrate chains",
+      "deployNotFinished": "Indexer is not yet deployed, please follow the instructions.",
+      "deployYourIndexer": "Instructions to deploy your first Indexer",
       "evmTemplates": "Templates for EVM chains",
-      "step3": "Step 3 - Customize your indexer",
-      "step4": "Step 4 - Deploy the indexer"
+      "instruction1": "Indexer deployments are handled over the <b>Apillon CLI</b>.",
+      "instruction2": "Before you can see your indexer in the dashboard, please follow the step by step instructions below and deploy your indexer with the help of our CLI. ",
+      "step1": "Setup the Apillon CLI",
+      "step2": "Set up your indexer",
+      "step3": "Customize your indexer",
+      "step4": "Deploy the indexer",
+      "substrateTemplate": "Template for Substrate chains"
     },
-    "indexerApiEndpoint": "Indexer API endpoint",
-    "indexerGeneralData": "Indexer - general data",
-    "name": "Name",
-    "description": "Description",
-    "status": "Status",
-    "created": "Created",
-    "lastDeployed": "Last deployed",
-    "apiStatus": "Api status",
-    "processorStatus": "Processor status",
-    "processedBlocks": "Processed blocks",
-    "squidStatus": "Squid status",
     "logLevels": {
       "error": "Error",
       "debug": "Debug",
@@ -1891,16 +1856,62 @@
       "warning": "Warning",
       "critical": "Critical"
     },
-    "containers": {
-      "db": "DB",
-      "init": "Init",
-      "api": "API",
-      "processor": "Processor"
+    "spendingWarning": {
+      "btnProceed": "Got it, Proceed",
+      "btnBuyCredits": "I want to buy credits right now",
+      "content": "When you deploy an indexer, <b>50,000 credits will be deducted from your account.</b> This is the minimum required to start running the indexer. The rate of credit usage depends on the amount of data being indexed. You can explore typical pricing scenarios here:",
+      "info": "Don't worry, we'll notify you via email when your credits are running low.",
+      "notEnough1": "To deploy an indexer, you need at least 50,000 credits in your account. This ensures the indexer is set up and starts indexing.",
+      "notEnough2": "However, the actual usage depends on the indexing you're performing."
     },
+    "statuses": {
+      "1": "Created",
+      "3": "Hibernated",
+      "5": "Active"
+    },
+    "table": {
+      "name": "Name",
+      "description": "Description",
+      "status": "Status",
+      "uuid": "Indexer UUID"
+    },
+    "tableLog": {
+      "level": "Level",
+      "ts": "Timestamp",
+      "container": "Container",
+      "msg": "Message"
+    },
+    "tableDeployments": {
+      "type": "Type",
+      "failed": "Failed",
+      "updatedAt": "Updated",
+      "createdAt": "Created"
+    },
+    "apiStatus": "Api status",
+    "create": "Create new indexer",
+    "created": "Created",
+    "deployments": "Deployments",
+    "description": "Description",
+    "general": "General",
     "hibernate": "Hibernate",
     "hibernateIndexer": "Hibernate indexer",
     "hibernateIndexerInfo": "Hibernation of indexer lets you pause virtual machines, lowering costs while keeping data safe. Wheen needed, redeploy the indexer with all data intact.",
-    "successfullyHibernated": "Indexer successfully hibernated"
+    "indexerApiEndpoint": "Indexer API endpoint",
+    "indexerGeneralData": "Indexer - general data",
+    "info": "Add it to your Web3 project",
+    "lastDeployed": "Last deployed",
+    "logs": "Logs",
+    "name": "Name",
+    "new": "New indexer",
+    "processors": "Processors",
+    "processorStatus": "Processor status",
+    "processedBlocks": "Processed blocks",
+    "squidStatus": "Squid status",
+    "startNew": "Star by creating a new indexer",
+    "successfullyHibernated": "Indexer successfully hibernated",
+    "update": "Update Indexer",
+    "uuid": "Indexer UUID",
+    "viewDocumentation": "View Documentation"
   },
   "nft": {
     "amount": {
@@ -2063,6 +2074,16 @@
         "2": "UPDATING JSONs",
         "3": "METADATA UPLOADED ON IPFS",
         "10": "METADATA SUCCESSFULLY PREPARED"
+      },
+      "dynamic": {
+        "btn": "Create Dynamic NFT collection",
+        "content": "If you plan to update or reveal metadata over time, after you’ve deployed the NFT Collection, this is your way to go. This solution uses IPNS records with data stored on IPFS.",
+        "title": "Dynamic NFT collection"
+      },
+      "static": {
+        "btn": "Create Static NFT collection",
+        "content": "If you plan to create an NFT Collection and not make any post-deployment changes, a static collection is your jam. The data will be stored on IPFS.",
+        "title": "Static NFT collection"
       }
     },
     "network": {
@@ -2310,11 +2331,12 @@
     "apiKey": {
       "new": "New key",
       "save": "Save",
-      "keys": "Your API keys",
+      "keys": "API key management",
       "turnOnService": "Turn on RPC service",
       "mustBeOwner": "You must be the project owner to turn on the RPC service.",
       "powered": "Powered by",
-      "headline": "Access over 100 blockchains",
+      "headline": "Before proceeding, select a plan.",
+      "management": "Key management",
       "description": "Apillon’s RPC service, powered by Dwellir, provides developers with reliable, low-latency access to over 100 blockchain networks. This scalable solution ensures seamless communication between decentralized applications and blockchains, backed by 99% uptime and top-tier performance. With easy API key management, you can quickly integrate multiple chains, eliminating the complexity of running your own nodes. The intuitive dashboard allows you to browse and favorite endpoints, simplifying Web3 project management from start to scale.",
       "uuid": "UUID",
       "usage": "RPC Usage monitoring",
@@ -2344,9 +2366,6 @@
       "noFavoriteEndpointDescription": "Browse our available endpoints and click \"Add\" for quick access. Once you add a chain you plan to use, it will appear in your \"Endpoints\" table.",
       "browse": "Browse endpoints"
     },
-    "usage": {
-      "requestsNumber": "Number of requests"
-    },
     "initial": {
       "benefits": [
         {
@@ -2373,7 +2392,7 @@
           "text": "Browse, manage and favorite your blockchain endpoints effortlessly."
         }
       ],
-      "planSelection": "Before proceeding, select a plan.\nIf you choose the free plan, we'll notify you when you're approaching the limits.\nAt that point, you'll need to upgrade to keep the RPC service active.",
+      "planSelection": "If you choose the free plan, we’ll notify you when you're approaching the limits. At that point, you'll need to upgrade to keep the RPC service active.",
       "subscriptionBenefits": [
         {
           "text": "Only one free plan is available per registered user, regardless of how many projects you have."
@@ -2391,6 +2410,9 @@
       "unavailable": "Unavailable",
       "unavailableDescription": "You've already used the Freemium plan on this or other projects you own.",
       "mustBeOwner": "You must be the project owner to change the plan."
+    },
+    "usage": {
+      "requestsNumber": "Number of requests"
     }
   },
   "social": {
@@ -2786,7 +2808,8 @@
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
-      "missingIndex": "Please upload index.html file"
+      "missingIndex": "Please upload index.html file",
+      "waitActiveDeployment": "Staging deployment is still in progress. Please wait until it completes before proceeding with the production deployment."
     },
     "smartContracts": {
       "fieldRequired": "Please fill all fields"

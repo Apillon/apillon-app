@@ -2,13 +2,13 @@
   <n-card
     class="deploy-actions card-dark fixed right-0 bottom-0 max-w-[500px] z-10 !border-yellow !rounded-none -mr-[1px] -mb-[1px]"
   >
-    <n-collapse display-directive="show" :default-expanded-names="['1']">
+    <n-collapse class="collapse-up" display-directive="show" :default-expanded-names="['1']">
       <n-collapse-item v-model:expanded="expanded" name="1">
         <template #header>
           <div class="flex items-center justify-between w-full">
             <span class="ml-4 my-1" @click="expanded = !expanded">
-              {{ $t('dashboard.refreshModal.title') }}</span
-            >
+              {{ $t('dashboard.refreshModal.title') }}
+            </span>
             <!-- <n-button-group @click.stop>
               <n-button size="small" @click="refresh">
                 <span class="icon-refresh text-xl mr-2"></span>

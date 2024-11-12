@@ -68,7 +68,15 @@ const createColumns = (): NDataTableColumns<JobInterface> => {
       key: 'cid',
       title: t('computing.cloudFunctions.job.cid'),
       render(row: JobInterface) {
-        return h(resolveComponent('TableEllipsis'), { text: row.scriptCid }, '');
+        return h(
+          'a',
+          {
+            href: `https://ipfs.io/ipfs/${row.scriptCid}`,
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          },
+          row.scriptCid
+        );
       },
     },
     {
