@@ -244,8 +244,8 @@
         "status": {
           "1": "DEPLOYING",
           "2": "ASSIGNING PROCESSORS",
-          "3": "ACTIVE",
-          "4": "PAUSED",
+          "3": "RUNNING",
+          "4": "NOT ACTIVE",
           "9": "DELETED"
         },
         "viewTemplate": "View code template"

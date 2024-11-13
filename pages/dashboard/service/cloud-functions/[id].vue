@@ -14,9 +14,7 @@
           <h4>{{ $t('computing.cloudFunctions.job.title') }}</h4>
           <i18n-t keypath="computing.cloudFunctions.job.content" tag="p" />
 
-          <p class="my-5">{{ $t('general.or') }}</p>
-
-          <div class="my-auto mb-2">
+          <div class="my-4">
             <Btn @click="modalCreateJobVisible = true">
               {{ $t('computing.cloudFunctions.job.btnUpload') }}
             </Btn>
