@@ -1154,6 +1154,20 @@
     "oasisSignatures": "Signatures"
   },
   "error": {
+    "contract": {
+      "32700": "Parse error: Invalid JSON.",
+      "32600": "Invalid request: This can happen when your request is malformed. Additionally, some providers use this code to signal that a particular method is not available or requires switching to a paid tier.",
+      "32601": "Method not found: This usually happens when the method is not available with a given provider. If you need to use a specific method that's not supported by the provider, try changing the provider or consider switching to a more expensive tier.",
+      "32602": "Invalid params: This happens when the request parameters are invalid. To fix, double check the parameters that you pass with the request and make sure they comply with the spec.",
+      "32603": "Internal error: This might happen when the node reverts during the request execution. This can also happen if the request is malformed or invalid.",
+      "32000": "Invalid input: Missing or invalid parameters.",
+      "32001": "Resource not found: This usually happens when calling a method that's not supported. Try using a different method or switch providers.",
+      "32002": "Resource unavailable: Requested resource not available.",
+      "32003": "Transaction rejected: Transaction creation failed.",
+      "32004": "Method not supported: Method is not implemented.",
+      "32005": "Limit exceeded: Request exceeds defined limit.",
+      "32006": "JSON-RPC version not supported: Version of JSON-RPC protocol is not supported."
+    },
     "general": "Something went wrong, please try again later.",
     "404": "Page not found",
     "40006022": "You have to upload \"index.html\" file, to deploy website!",
@@ -1284,6 +1298,9 @@
     "CALL_CONTRACT_ERROR": "Contract call failed. Please try again or contact support if the issue persists.",
     "CONTRACT_OWNER_ERROR": "Contract call failed. Please try again or contact support if the issue persists.",
     "DEPLOY_CONTRACT_ERROR": "Deployment failed. Please try again or contact support if the issue persists.",
+    "INVALID_ARGUMENT": "Invalid argument provided. Please check your input and try again.",
+    "MISSING_ARGUMENT": "Missing required argument. Please ensure all necessary inputs are provided.",
+    "UNEXPECTED_ARGUMENT": "Unexpected argument provided. Please remove any unnecessary inputs and try again.",
     "TRANSACTION_FOR_TRANSFER_ALREADY_EXISTS": "Contract has already been transferred.",
     "REVIEW_ALREADY_SUBMITTED": "Review has already been submitted.",
     "USER_NOT_ELIGIBLE": "User is not eligible for airdrop.",

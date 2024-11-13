@@ -200,6 +200,7 @@ declare global {
   interface EntityErrorMessageInterface {
     message: string;
     property: string;
+    code?: number;
     statusCode: number;
   }
 

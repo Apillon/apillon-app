@@ -14,7 +14,17 @@
         :path="input.name"
         :label="labelInfoText(input.name, input?.description)"
       >
-        <n-input v-model:value="formData[input.name]" :maxlength="256" required />
+        <n-input
+          v-if="isDataMint(input.name)"
+          v-model:value="formData[input.name]"
+          :maxlength="256"
+          required
+        >
+          <template #prefix v-if="!formData[input.name]?.startsWith('0x')">
+            <span class="text-bodyDark">0x</span>
+          </template>
+        </n-input>
+        <n-input v-else v-model:value="formData[input.name]" :maxlength="256" required />
       </n-form-item>
     </template>
 
@@ -82,15 +92,17 @@ const rules: NFormRules = props.args
       {}
     );
 
-const data = computed(() =>
-  props.args && props.args.length
-    ? props.args
-    : Object.keys(formData).length
-      ? Object.values(formData)
-      : props.owner
-        ? ['true']
-        : []
-);
+const isDataMint = (inputName: string) => inputName === 'data' && props.fn.name.includes('mint');
+
+const prepareData = () => {
+  if (props.args && props.args.length) return props.args;
+  if (Object.keys(formData).length === 0) return [];
+
+  if (props.fn.name.includes('mint') && 'data' in formData) {
+    formData.data = formData.data?.startsWith('0x') ? formData.data : `0x${formData.data}`;
+  }
+  return Object.values(formData);
+};
 
 onMounted(() => {
   if (props.read && props.fn.inputs.length === 0) {
@@ -101,7 +113,6 @@ onMounted(() => {
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e?.preventDefault();
-
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors =>
@@ -136,13 +147,13 @@ async function execRead(methodName: string) {
       address: contractAddress,
       abi: abi.filter(a => a.inputs.length === props.fn.inputs.length),
       functionName: methodName,
-      args: data.value,
+      args: prepareData(),
     });
     result.value = `${res}`;
     message.success(t('dashboard.service.smartContracts.functions.executed'));
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
-    message.error(userFriendlyMsg(e));
+    message.error(contractError(e));
   } finally {
     loading.value = false;
   }
@@ -168,13 +179,14 @@ async function execWalletWrite(methodName: string) {
       address: contractAddress,
       abi,
       functionName: methodName,
-      args: data.value,
+      args: prepareData(),
       account: address.value,
     });
     result.value = `${res}`;
     message.success(t('dashboard.service.smartContracts.functions.executed'));
-  } catch (e) {
-    message.error(userFriendlyMsg(e));
+  } catch (e: any) {
+    console.error(e);
+    message.error(contractError(e));
   } finally {
     loading.value = false;
   }
@@ -188,7 +200,7 @@ async function execOwnerWrite(methodName: string) {
       endpoints.smartContractsCall(deployedContractStore.active.contract_uuid),
       {
         methodName,
-        methodArguments: data.value,
+        methodArguments: prepareData(),
       }
     );
     message.success(t('dashboard.service.smartContracts.functions.executed'));
@@ -201,7 +213,8 @@ async function execOwnerWrite(methodName: string) {
         }
       });
     }
-  } catch (e) {
+  } catch (e: any) {
+    console.error(e);
     message.error(userFriendlyMsg(e));
   } finally {
     loading.value = false;
