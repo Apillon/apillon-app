@@ -1910,7 +1910,7 @@
     "processorStatus": "Processor status",
     "processedBlocks": "Processed blocks",
     "squidStatus": "Squid status",
-    "startNew": "Star by creating a new indexer",
+    "startNew": "Start by creating a new indexer",
     "successfullyHibernated": "Indexer successfully hibernated",
     "update": "Update Indexer",
     "uuid": "Indexer UUID",
