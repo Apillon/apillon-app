@@ -4,14 +4,11 @@
     v-bind="$attrs"
     :bordered="false"
     :columns="columns"
-    :data="indexerStore.items"
+    :data="data"
     :loading="indexerStore.loading"
-    :pagination="indexerStore.pagination"
+    :pagination="createPagination(false)"
     :row-key="rowKey"
     :row-props="rowProps"
-    remote
-    @update:page="(page: number) => handlePageChange(page, indexerStore.pagination.pageSize)"
-    @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
   />
   <!-- Modal - Update Indexer -->
   <modal v-model:show="showModalEditIndexer" :title="$t('indexer.update')">
@@ -23,7 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useDebounceFn } from '@vueuse/core';
 import { NButton, NDropdown } from 'naive-ui';
 
 const { t } = useI18n();
@@ -33,10 +29,17 @@ const dataStore = useDataStore();
 const authStore = useAuthStore();
 const showModalEditIndexer = ref<boolean | null>(false);
 const message = useMessage();
-const $i18n = useI18n();
 
 const rowKey = (row: IndexerBaseInterface) => row.indexer_uuid;
 const currentRow = ref<IndexerBaseInterface>(indexerStore.items[0]);
+
+const data = computed<IndexerBaseInterface[]>(() => {
+  return (
+    indexerStore.items.filter(item =>
+      item.name.toLowerCase().includes(indexerStore.search.toLowerCase())
+    ) || []
+  );
+});
 
 const columns = computed(() => [
   {
@@ -135,24 +138,8 @@ const dropdownOptions = [
   },
 ];
 
-/** Search posts */
-watch(
-  () => indexerStore.search,
-  _ => {
-    indexerStore.loading = true;
-    debouncedSearchFilter();
-  }
-);
-const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
-
-async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIMIT) {
-  await indexerStore.fetchIndexers(page, limit);
-  indexerStore.pagination.page = page;
-  indexerStore.pagination.pageSize = limit;
-}
-
 async function deleteIndexer() {
   await indexerStore.deleteIndexer(currentRow.value.indexer_uuid);
-  message.success($i18n.t('form.success.deleted.indexer'));
+  message.success(t('form.success.deleted.indexer'));
 }
 </script>

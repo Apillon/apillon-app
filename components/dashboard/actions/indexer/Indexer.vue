@@ -17,13 +17,7 @@
 
     <n-space size="large">
       <!-- Refresh -->
-      <n-button
-        size="small"
-        :loading="indexerStore.loading"
-        @click="
-          indexerStore.fetchIndexers(indexerStore.pagination.page, indexerStore.pagination.pageSize)
-        "
-      >
+      <n-button size="small" :loading="indexerStore.loading" @click="indexerStore.fetchIndexers()">
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>

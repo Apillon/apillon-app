@@ -70,7 +70,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
@@ -86,8 +86,8 @@ const formData = ref<FormIndexer>({
 });
 
 const rules: NFormRules = {
-  name: [ruleRequired($i18n.t('validation.indexerNameRequired'))],
-  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  name: [ruleRequired(t('validation.indexerNameRequired'))],
+  description: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 onMounted(async () => {
@@ -134,10 +134,10 @@ async function createIndexer() {
     };
     const res = await $api.post<IndexerBaseResponse>(endpoints.indexer(), bodyData);
 
-    message.success($i18n.t('form.success.created.indexer'));
+    message.success(t('form.success.created.indexer'));
 
     /** On new website created add new website to list */
-    indexerStore.items.push(res.data as IndexerBaseInterface);
+    indexerStore.items.unshift(res.data as IndexerBaseInterface);
 
     /** Emit events */
     emit('submitSuccess');
@@ -159,7 +159,7 @@ async function updateIndexer() {
       endpoints.indexers(props.indexerUuid),
       formData.value
     );
-    message.success($i18n.t('form.success.updated.indexer'));
+    message.success(t('form.success.updated.indexer'));
     /** On indexer updated refresh indexer data */
     indexerStore.items.forEach((item: IndexerBaseInterface) => {
       if (item.indexer_uuid === props.indexerUuid) {

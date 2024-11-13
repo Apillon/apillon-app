@@ -70,6 +70,8 @@ const showModalNewIndexer = ref<boolean | null>(false);
 const showModalEditIndexer = ref<boolean | null>(false);
 const showModalHibernateIndexer = ref<boolean | null>(false);
 
+const isActive = computed(() => indexerStore.active.status === IndexerStatuses.ACTIVE);
+
 function handleIndexerHibernation() {
   showModalHibernateIndexer.value = false;
   initIndexer();
@@ -80,10 +82,12 @@ const options = computed(() => {
     {
       label: t('indexer.hibernate'),
       key: 'mint',
-      disabled: indexerStore.active.status !== IndexerStatuses.ACTIVE,
+      disabled: !isActive.value,
       props: {
         onClick: () => {
-          showModalHibernateIndexer.value = true;
+          if (isActive.value) {
+            showModalHibernateIndexer.value = true;
+          }
         },
       },
     },
