@@ -77,13 +77,13 @@
         />
       </div>
 
-      <div class="flex gap-x-4 border-t border-bg-lighter mt-8 pt-8 mb-4">
+      <div class="flex flex-wrap sm:flex-nowrap gap-4 border-t border-bg-lighter mt-8 pt-8 mb-4">
         <div
           class="h-full"
           :class="
             ownerFunctions?.length && writeFunctions?.length
-              ? 'w-2/3 max-w-[840px]'
-              : 'w-1/3 max-w-[420px]'
+              ? 'w-full sm:w-1/2 lg:w-2/3 max-w-[840px]'
+              : 'w-full sm:w-1/2 lg:w-1/3 max-w-[420px]'
           "
         >
           <h2 class="mb-6">
@@ -103,7 +103,7 @@
             />
           </div>
         </div>
-        <div class="w-1/3 max-w-[420px]">
+        <div class="w-full sm:w-1/2 lg:w-1/3 max-w-[420px]">
           <h2 class="mb-6">
             {{ $t('dashboard.service.smartContracts.functions.read') }}
           </h2>
