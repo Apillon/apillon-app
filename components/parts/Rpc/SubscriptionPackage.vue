@@ -1,17 +1,5 @@
 <template>
   <div class="flex flex-col flex-grow max-w-sm relative bg-bg-light p-8 rounded-lg">
-    <div
-      v-if="!allowSwitch && !isSelected"
-      class="absolute inset-0 bg-opacity-40 backdrop-blur-sm z-10 flex items-end justify-center"
-    >
-      <div class="text-center relative z-10 bg-bg-light p-8 pt-2 rounded-lg">
-        <p class="text-white font-bold text-xl mb-2">{{ $t('rpc.subscription.unavailable') }}</p>
-        <p>
-          {{ $t('rpc.subscription.unavailableDescription') }}
-        </p>
-      </div>
-    </div>
-
     <div class="text-center">
       <h4 class="text-bodyDark mb-4">{{ package.name }}</h4>
 
@@ -59,7 +47,6 @@ defineProps({
   isSelected: { type: Boolean, required: true },
   onPress: { type: Function as PropType<() => void>, required: true },
   loading: { type: Boolean, required: true },
-  allowSwitch: { type: Boolean, required: true },
   isOwner: { type: Boolean, default: false },
 });
 </script>
