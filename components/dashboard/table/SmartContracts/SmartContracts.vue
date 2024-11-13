@@ -81,9 +81,12 @@ const columns = computed(() => [
     },
   },
   {
-    key: 'version_id',
+    key: 'version',
     title: t('dashboard.service.smartContracts.table.version'),
     className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('version') }],
+    render(row: DeployedContractInterface) {
+      return row.version || row.version_id;
+    },
   },
   {
     key: 'description',

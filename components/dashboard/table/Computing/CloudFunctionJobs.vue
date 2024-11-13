@@ -45,7 +45,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
-const { checkUnfinishedJobs } = useRefreshStatus();
+const { checkUnfinishedJobs } = useCloudFunctions();
 
 const loadingRedeploy = ref<boolean>(false);
 const modalEditJobsVisible = ref<boolean>(false);
@@ -143,9 +143,9 @@ const actionsEnabled = computed<boolean>(() => {
 
 const data = computed(
   () =>
-    cloudFunctionStore.jobs.filter(item =>
-      item.name.toLowerCase().includes(cloudFunctionStore.searchJobs.toLowerCase())
-    ) || []
+    cloudFunctionStore.jobs
+      .filter(item => item.name.toLowerCase().includes(cloudFunctionStore.searchJobs.toLowerCase()))
+      .reverse() || []
 );
 
 /**

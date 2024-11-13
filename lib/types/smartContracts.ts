@@ -64,6 +64,7 @@ declare global {
     description: string | null;
     chainType: number;
     chain: number;
+    version?: number;
     version_id: number;
     constructorArguments: string | null;
     contractStatus: number;

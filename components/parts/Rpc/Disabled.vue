@@ -42,7 +42,7 @@
           <TableRpcPublicEndpoint
             v-if="rpcEndpointStore.hasPublicEndpoints"
             class="mb-4"
-            :rpc-endpoints="rpcEndpointStore.publicEndpoints"
+            :rpc-endpoints="tableData"
           />
         </n-space>
       </div>
@@ -56,6 +56,20 @@ const dataStore = useDataStore();
 const rpcEndpointStore = useRpcEndpointStore();
 
 const pageLoading = ref<boolean>(true);
+
+const tableData = computed(() => {
+  const allEndpoints = rpcEndpointStore.publicEndpoints;
+  const priorityOrder = ['Base', 'Celo', 'Moonbeam', 'Gnosis', 'Polkadot'];
+
+  const prioritizedEndpoints = allEndpoints.filter(endpoint =>
+    priorityOrder.includes(endpoint.name)
+  );
+  const otherEndpoints = allEndpoints.filter(endpoint => !priorityOrder.includes(endpoint.name));
+
+  prioritizedEndpoints.sort((a, b) => a.name.localeCompare(b.name));
+
+  return [...prioritizedEndpoints, ...otherEndpoints];
+});
 
 onMounted(async () => {
   await Promise.all(Object.values(dataStore.promises));

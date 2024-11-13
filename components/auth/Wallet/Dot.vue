@@ -61,7 +61,9 @@
                   </td>
                   <td>
                     <Btn
-                      v-if="authStore.jwt && authStore.user.wallet === account.address"
+                      v-if="
+                        authStore.jwt && authStore.user.wallet === account.address && disconnect
+                      "
                       type="error"
                       :loading="loading && authStore.wallet.address === account.address"
                       @click="emit('remove', account)"
@@ -99,6 +101,7 @@
 defineProps({
   actionText: { type: String, default: '' },
   loading: { type: Boolean, default: false },
+  disconnect: { type: Boolean, default: true },
 });
 const emit = defineEmits(['sign', 'remove']);
 

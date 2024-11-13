@@ -153,7 +153,8 @@ export default function useCloudFunctions() {
 
       return res.data;
     } catch (error) {
-      message.error(userFriendlyMsg(error));
+      message.error(userFriendlyMsg(error), { duration: 7000 });
+      clearIntervalJob();
     }
     return null;
   }
@@ -207,6 +208,7 @@ export default function useCloudFunctions() {
     envLoading,
     modalCreateJobVisible,
     pageLoading,
+    checkUnfinishedJobs,
     createEnvVariables,
     createNewJob,
     init,

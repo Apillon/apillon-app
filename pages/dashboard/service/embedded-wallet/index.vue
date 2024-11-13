@@ -16,31 +16,28 @@
 
     <slot>
       <div class="pb-8">
-        <n-collapse
-          v-if="embeddedWalletStore.hasEmbeddedWallets"
-          class="border-b-1 border-bg-lighter -mt-4 pb-4"
-          accordion
-          @update:expanded-names="onUpdateAccordion"
-        >
-          <n-collapse-item>
-            <template #header>
-              <span class="icon-info text-xl mr-2"></span>
-              {{
-                instructionsVisible
-                  ? $t('general.instructions.hide')
-                  : $t('general.instructions.show')
-              }}
-            </template>
-            <EmbeddedWalletInstructions />
-          </n-collapse-item>
-        </n-collapse>
-        <EmbeddedWalletInstructions v-else class="border-b-1 border-bg-lighter pb-8" />
-
-        <ActionsEmbeddedWallet v-if="embeddedWalletStore.hasEmbeddedWallets" class="my-8" />
-        <TableEmbeddedWallet
-          v-if="embeddedWalletStore.hasEmbeddedWallets"
-          :embedded-wallets="embeddedWalletStore.items"
-        />
+        <n-space v-if="embeddedWalletStore.hasEmbeddedWallets" :size="32" vertical>
+          <n-collapse
+            class="border-b-1 border-bg-lighter -mt-4 pb-4"
+            accordion
+            @update:expanded-names="onUpdateAccordion"
+          >
+            <n-collapse-item>
+              <template #header>
+                <span class="icon-info text-xl mr-2"></span>
+                {{
+                  instructionsVisible
+                    ? $t('general.instructions.hide')
+                    : $t('general.instructions.show')
+                }}
+              </template>
+              <EmbeddedWalletInstructions />
+            </n-collapse-item>
+          </n-collapse>
+          <ActionsEmbeddedWallet />
+          <TableEmbeddedWallet />
+        </n-space>
+        <EmbeddedWalletInstructions v-else />
       </div>
     </slot>
   </Dashboard>

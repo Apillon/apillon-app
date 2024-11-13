@@ -170,6 +170,10 @@ async function createService() {
     emit('submitSuccess');
     emit('createSuccess', createdService);
   } catch (error) {
+    if (props.serviceType === ServiceType.RPC) {
+      // At the moment dwellir returns 500 if email is taken for RPC service
+      message.error($i18n.t('form.error.rpcEmailTaken'));
+    }
     message.error(userFriendlyMsg(error));
   }
   loading.value = false;
