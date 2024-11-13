@@ -19,16 +19,29 @@ import {
 import colors from '~~/tailwind.colors';
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+type ChartDataset = {
+  label: string;
+  backgroundColor: string;
+  borderColor: string;
+  data: number[];
+  fill: boolean;
+  borderWidth: number;
+};
 type ChartData = {
   labels: String[];
-  datasets: Array<any>;
+  datasets: ChartDataset[];
 };
 
-defineProps({
+const props = defineProps({
   data: { type: Object as PropType<ChartData>, default: null },
 });
 
 const chartRef = ref<{ chart: Chart } | null>(null);
+
+const suggestedMax = computed(() => {
+  const max = Math.max(...props.data.datasets.flatMap(dataSet => dataSet?.data || []));
+  return Math.round((max + 4) * 1.1);
+});
 
 const options = ref({
   responsive: true,
@@ -36,6 +49,15 @@ const options = ref({
   plugins: {
     customCanvasBackgroundColor: {
       color: colors.bg.light,
+    },
+    decimation: {
+      enabled: false,
+      algorithm: 'min-max',
+    },
+  },
+  scales: {
+    y: {
+      suggestedMax: suggestedMax.value,
     },
   },
 });
