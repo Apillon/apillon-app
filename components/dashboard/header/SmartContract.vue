@@ -12,7 +12,8 @@
       </div>
     </div>
     <template #info>
-      <n-space :size="32" align="center">
+      <n-space :size="24" align="center">
+        <slot> </slot>
         <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" filter-by-chain />
       </n-space>
     </template>
