@@ -25,7 +25,6 @@
           :package="rpcPackage"
           :is-selected="selectedPackage === rpcPackage.id"
           :loading="loading && selectedPackage === rpcPackage.id"
-          :allow-switch="allowSwitch"
           :is-owner="dataStore.isUserOwner"
         />
       </div>
@@ -40,11 +39,10 @@ const emit = defineEmits(['close']);
 const { t, tm, rt } = useI18n();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
-const { loading, getSubscriptionSessionUrl } = usePayment();
+const { loading, getSubscriptionSessionUrl, goToCustomerPortal } = usePayment();
 
 const selectedPackage = ref<number>(0);
 const initialPackage = ref<number>(0);
-const allowSwitch = ref<boolean>(true);
 
 onMounted(async () => {
   const rpcPlan = await paymentStore.getRpcPlan();
@@ -52,7 +50,6 @@ onMounted(async () => {
   if (rpcPlan === RpcPlanType.PAID) {
     selectedPackage.value = 5;
     initialPackage.value = 5;
-    allowSwitch.value = false;
   } else if (rpcPlan === RpcPlanType.FREE) {
     selectedPackage.value = 0;
     initialPackage.value = 0;
@@ -110,6 +107,8 @@ const handlePackagePress = (id: number) => {
 const handleContinuePress = () => {
   if (selectedPackage.value === initialPackage.value) {
     emit('close');
+  } else if (selectedPackage.value === 0) {
+    goToCustomerPortal();
   } else {
     getSubscriptionSessionUrl(selectedPackage.value);
   }

@@ -1583,6 +1583,9 @@
         "containers": "Containers"
       }
     },
+    "error": {
+      "rpcEmailTaken": "Dwellir user with this email already exists. Please remove the user or use another email."
+    },
     "success": {
       "apiKey": "API key has been created",
       "assetMinted": "Asset tokens have been minted",
@@ -2349,7 +2352,8 @@
       "empty": "You currently have no API keys for the selected project.",
       "emptyInfo": "Create your first API key to start using the RPC service.",
       "createFirst": "Create first API key",
-      "monthlyUsage": "{used} of {max} monthly calls used"
+      "monthlyUsage": "{used} of {max} monthly calls used",
+      "pleaseUpgrade": "You've already used all 5 million API requests included in Free plan. Please upgrade."
     },
     "endpoint": {
       "chainName": "Chain name",
@@ -2407,8 +2411,6 @@
       "subscriptionLimits": "Limits"
     },
     "subscription": {
-      "unavailable": "Unavailable",
-      "unavailableDescription": "You've already used the Freemium plan on this or other projects you own.",
       "mustBeOwner": "You must be the project owner to change the plan."
     },
     "usage": {

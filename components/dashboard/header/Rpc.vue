@@ -29,6 +29,22 @@
       </div>
     </template>
     <template #submenu>
+      <div
+        class="flex mb-4 flex-row justify-start border-yellow border-2 p-4 items-center gap-4 max-w-xl"
+        v-if="
+          dataStore.isUserOwner &&
+          paymentStore.isRpcPlanLoaded &&
+          !hasRpcPlan &&
+          (rpcApiKeyStore?.usage?.totalRequests ?? 0) > 5000000
+        "
+      >
+        <span class="icon-info text-xl"></span>
+        {{ $t('rpc.apiKey.pleaseUpgrade') }}
+        <Btn type="primary" @click="modalSubscriptionVisible = true">
+          {{ $t('dashboard.payment.upgrade') }}
+        </Btn>
+      </div>
+
       <div class="relative">
         <MenuRpc class="lg:absolute top-0 left-0 w-2/3 z-1" />
         <n-collapse
