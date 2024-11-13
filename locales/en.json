@@ -1583,6 +1583,9 @@
         "containers": "Containers"
       }
     },
+    "error": {
+      "rpcEmailTaken": "Dwellir user with this email already exists. Please remove the user or use another email."
+    },
     "success": {
       "apiKey": "API key has been created",
       "assetMinted": "Asset tokens have been minted",
