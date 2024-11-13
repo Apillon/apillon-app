@@ -2408,8 +2408,6 @@
       "subscriptionLimits": "Limits"
     },
     "subscription": {
-      "unavailable": "Unavailable",
-      "unavailableDescription": "You've already used the Freemium plan on this or other projects you own.",
       "mustBeOwner": "You must be the project owner to change the plan."
     },
     "usage": {
