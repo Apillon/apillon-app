@@ -74,21 +74,10 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
 
       if (this.selectedId) {
         try {
-          /* const res = await $api.get<RpcApiKeyUsageResponse>(
+          const res = await $api.get<RpcApiKeyUsageResponse>(
             endpoints.rpcApiKeyUsage(dataStore.projectUuid, this.selectedId)
-          );*/
-          this.usage = {
-            per_day: {},
-            totalRequests: 0,
-            totalResponses: 0,
-            requests: 0,
-            responses: 0,
-            name: '',
-            description: '',
-            createTime: '',
-            updateTime: '',
-            status: 0,
-          };
+          );
+          this.usage = res.data;
 
           sessionStorage.setItem(LsCacheKeys.RPC_API_KEY_USAGE, Date.now().toString());
         } catch (error) {}
