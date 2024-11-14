@@ -3,15 +3,11 @@
     <div class="min-w-[11rem] w-[20vw] max-w-xs"></div>
 
     <n-space v-if="indexerStore.active" size="large">
-      <Btn
+      <BtnDocumentation
         size="small"
-        type="secondary"
-        inner-class="text-white flex items-center justify-center"
         href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
-      >
-        <span class="icon-file text-xl mr-2"></span>
-        <span>{{ $t('indexer.viewDocumentation') }}</span>
-      </Btn>
+        hover-lighter
+      />
 
       <n-button size="small" :loading="indexerStore.loading" @click="initIndexer">
         <span class="icon-refresh text-xl mr-2"></span>

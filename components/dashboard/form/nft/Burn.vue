@@ -50,7 +50,7 @@ const rules: NFormRules = {
   tokenId: [
     {
       required: true,
-      message: $i18n.t('validation.nftBurnTokenIdRequired'),
+      message: $i18n.t('validation.nft.burnTokenIdRequired'),
     },
   ],
 };

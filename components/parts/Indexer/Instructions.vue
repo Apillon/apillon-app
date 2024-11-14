@@ -9,14 +9,9 @@
         <Btn @click="showModalNewIndexer = true">
           {{ $t('indexer.new') }}
         </Btn>
-        <Btn
-          type="secondary"
-          inner-class="text-white flex items-center justify-center"
-          href="https://wiki-staging.apillon.io/web3-services/10-web3-infrastructure.html"
-        >
-          <span class="icon-file text-xl mr-2"></span>
-          <span>{{ $t('computing.cloudFunctions.documentation') }}</span>
-        </Btn>
+        <BtnDocumentation
+          href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
+        />
       </n-space>
     </div>
     <div class="lg:w-1/2 lg:pr-6">

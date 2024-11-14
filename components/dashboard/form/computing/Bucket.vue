@@ -127,7 +127,7 @@ const rules: NFormRules = {
   bucket: [
     {
       required: true,
-      message: $i18n.t('validation.nftBucketRequired'),
+      message: $i18n.t('validation.nft.bucketRequired'),
     },
   ],
 };

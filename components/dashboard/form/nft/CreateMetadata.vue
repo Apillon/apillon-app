@@ -20,7 +20,7 @@
         collectionStore.nftStep === NftCreateStep.DEPLOY &&
         collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOYED
       "
-      show-footer
+      :show-footer="!isUnique"
     />
     <div v-else-if="collectionStore.nftStep === NftCreateStep.DEPLOY" class="w-full pb-8">
       <div class="text-center">
