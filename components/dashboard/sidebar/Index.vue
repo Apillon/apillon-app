@@ -180,17 +180,16 @@ onMounted(async () => {
 
 async function initProject() {
   projectsLoaded.value = false;
+  await Promise.all(Object.values(dataStore.promises));
   if (authStore.isAdmin()) {
     const currentProject = await dataStore.getProject(dataStore.project.selected);
     dataStore.project.items = [currentProject];
     dataStore.updateCurrentProject(currentProject);
     projectsLoaded.value = true;
   } else {
-    await Promise.all(Object.values(dataStore.promises));
-    await dataStore.getProjects().then(async _ => {
-      await dataStore.getProject(dataStore.project.selected);
-      projectsLoaded.value = true;
-    });
+    await dataStore.getProjects();
+    await dataStore.getProject(dataStore.project.selected);
+    projectsLoaded.value = true;
   }
 }
 

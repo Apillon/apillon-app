@@ -98,10 +98,17 @@ const prepareData = () => {
   if (props.args && props.args.length) return props.args;
   if (Object.keys(formData).length === 0) return [];
 
-  if (props.fn.name.includes('mint') && 'data' in formData) {
-    formData.data = formData.data?.startsWith('0x') ? formData.data : `0x${formData?.data || ''}`;
+  const parsedData: Record<string, any> = Object.assign({}, formData);
+  if (props.fn.name.includes('mint') && 'data' in parsedData) {
+    parsedData.data = formData.data?.startsWith('0x') ? formData.data : `0x${formData?.data || ''}`;
   }
-  return Object.values(formData);
+
+  props.fn.inputs.forEach(input => {
+    if (input.type === 'uint256[]' && parsedData[input.name] && formData[input.name]) {
+      parsedData[input.name] = (formData[input.name] || '').split(',').map(i => Number(i));
+    }
+  });
+  return Object.values(parsedData);
 };
 
 onMounted(() => {
