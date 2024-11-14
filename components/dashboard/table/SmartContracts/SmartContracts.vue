@@ -81,11 +81,11 @@ const columns = computed(() => [
     },
   },
   {
-    key: 'version',
+    key: 'contractVersion',
     title: t('dashboard.service.smartContracts.table.version'),
     className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('version') }],
     render(row: DeployedContractInterface) {
-      return row.version || row.version_id;
+      return row.contractVersion || row.version_id;
     },
   },
   {
