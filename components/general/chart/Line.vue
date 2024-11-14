@@ -40,7 +40,7 @@ const chartRef = ref<{ chart: Chart } | null>(null);
 
 const suggestedMax = computed(() => {
   const max = Math.max(...props.data.datasets.flatMap(dataSet => dataSet?.data || []));
-  return Math.round((max + 4) * 1.1);
+  return Math.max(6, Math.round(max * 1.1));
 });
 
 const options = ref({
