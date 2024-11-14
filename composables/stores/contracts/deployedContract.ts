@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useDeployedContractStore = defineStore('deployedContract', {
   state: () => ({
-    active: {} as DeployedContractInterface,
+    active: {} as DeployedContractDetailsInterface,
     items: [] as DeployedContractInterface[],
     loading: false,
     pagination: createPagination(),
