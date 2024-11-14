@@ -33,7 +33,7 @@
       </n-button>
 
       <!-- View Documentation -->
-      <BtnDocumentation href="https://wiki.polkadot.network/docs/learn-assets" />
+      <BtnDocumentation size="small" href="https://wiki.polkadot.network/docs/learn-assets" />
     </n-space>
   </n-space>
 </template>
