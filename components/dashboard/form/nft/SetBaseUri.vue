@@ -42,7 +42,7 @@ const formData = ref<FormNftTransfer>({
 });
 
 const rules: NFormRules = {
-  uri: ruleRequired(t('validation.nftSetBaseUriRequired')),
+  uri: ruleRequired(t('validation.nft.setBaseUriRequired')),
 };
 
 // Submit

@@ -20,13 +20,9 @@
           <span>{{ $t('embeddedWallet.createNew') }}</span>
         </Btn>
 
-        <Btn
-          type="secondary"
-          inner-class="text-white flex items-center justify-center"
+        <BtnDocumentation
           href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
-        >
-          <span>{{ $t('embeddedWallet.viewDocumentation') }}</span>
-        </Btn>
+        />
       </div>
     </div>
 

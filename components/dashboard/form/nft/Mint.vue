@@ -11,11 +11,7 @@
     @submit.prevent="handleSubmit"
   >
     <!--  NFT Mint Address -->
-    <n-form-item
-      path="receivingAddress"
-      :label="$t('form.label.nft.mintAddress')"
-      :label-props="{ for: 'receivingAddress' }"
-    >
+    <n-form-item path="receivingAddress" :label="addressLabel">
       <n-input
         v-model:value="formData.receivingAddress"
         :input-props="{ id: 'receivingAddress' }"
@@ -68,6 +64,7 @@ const $i18n = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+const { addressLabel } = useCollection();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -94,6 +91,12 @@ const rules: NFormRules = {
     },
   ],
 };
+
+const isSubstrate = computed(
+  () =>
+    collectionStore.active.chainType === ChainType.SUBSTRATE ||
+    collectionStore.active.chain === SubstrateChain.UNIQUE
+);
 
 function validateQuantity(_: FormItemRule, value: number): boolean {
   return (

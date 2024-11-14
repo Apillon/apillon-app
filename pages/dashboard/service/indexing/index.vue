@@ -9,7 +9,14 @@
           </h1>
         </slot>
         <template #info>
-          <ModalCreditCosts :service="ServiceTypeName.INDEXING" />
+          <n-space size="large">
+            <BtnDocumentation
+              size="small"
+              href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
+              hover-lighter
+            />
+            <ModalCreditCosts :service="ServiceTypeName.INDEXING" />
+          </n-space>
         </template>
       </Heading>
     </template>

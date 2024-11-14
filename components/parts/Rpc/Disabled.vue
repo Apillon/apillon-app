@@ -22,7 +22,11 @@
                 :disabled="!dataStore.isUserOwner"
                 @create-success="$emit('serviceCreated')"
               />
-              <p v-if="!dataStore.isUserOwner" class="mt-4">
+              <BtnDocumentation
+                class="relative top-[2px]"
+                href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html"
+              />
+              <p v-if="!dataStore.isUserOwner" class="mt-2">
                 {{ $t('rpc.apiKey.mustBeOwner') }}
               </p>
             </div>
