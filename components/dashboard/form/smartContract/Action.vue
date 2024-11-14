@@ -99,7 +99,7 @@ const prepareData = () => {
   if (Object.keys(formData).length === 0) return [];
 
   if (props.fn.name.includes('mint') && 'data' in formData) {
-    formData.data = formData.data?.startsWith('0x') ? formData.data : `0x${formData.data}`;
+    formData.data = formData.data?.startsWith('0x') ? formData.data : `0x${formData?.data || ''}`;
   }
   return Object.values(formData);
 };
