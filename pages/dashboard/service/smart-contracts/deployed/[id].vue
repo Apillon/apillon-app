@@ -75,6 +75,7 @@
           :btn-text="$t('dashboard.service.smartContracts.infoSection.takeOwnershipBtn')"
           owner
         />
+        <SmartContractsBtnSubmit v-else-if="!isConnected" size="small" />
       </div>
 
       <div class="flex flex-wrap sm:flex-nowrap gap-4 border-t border-bg-lighter mt-8 pt-8 mb-4">
