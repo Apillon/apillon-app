@@ -38,12 +38,9 @@
           </div>
 
           <!-- Table Metadata deploys -->
-          <div>
+          <div v-if="collectionStore.active.bucket_uuid">
             <h4 class="mb-4">{{ $t('nft.metadata.deployTitle') }}</h4>
-            <TableNftMetadataDeploys
-              v-if="collectionStore.active.bucket_uuid"
-              :deploys="collectionStore.metadataDeploys"
-            />
+            <TableNftMetadataDeploys :deploys="collectionStore.metadataDeploys" />
           </div>
 
           <!-- Links to NFT templates -->

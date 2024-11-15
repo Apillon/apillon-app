@@ -6,48 +6,58 @@
       <p class="max-w-lg text-xs">
         {{ $t('nft.single.uploadDescription') }}
       </p>
-      <div
-        v-if="collectionStore.form.single.image"
-        class="bg-bg-light rounded-xl overflow-hidden w-72 mx-auto"
-      >
-        <figure class="flex flex-col h-full">
-          <Image
-            :src="imageByName(collectionStore.form.single.image)"
-            class="w-full h-full object-contain"
-            :alt="collectionStore.images[0]?.name"
-          />
-          <figcaption class="block h-12 px-4 py-3 font-bold">
-            {{ collectionStore.form.single.image }}
-            <button
-              class="flex justify-center items-center p-1 float-right"
-              @click="removeImages()"
-            >
-              <span class="icon-delete text-xl"></span>
-            </button>
-          </figcaption>
-        </figure>
-      </div>
-      <n-upload
-        v-else
-        ref="uploadRef"
-        accept="image/png, image/jpeg"
-        :default-file-list="collectionStore.images"
-        :show-file-list="false"
-        directory-dnd
-        :custom-request="upload => nft.uploadImageRequest(upload, !isUnique)"
-        @remove="nft.handleImageRemove"
-      >
-        <n-upload-dragger class="h-40">
-          <div class="py-2 text-center">
-            <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-              <span class="icon-image text-violet text-2xl"></span>
-            </div>
+      <n-form-item>
+        <div
+          v-if="collectionStore.form.single.image"
+          class="bg-bg-light rounded-xl overflow-hidden w-72 mx-auto"
+        >
+          <figure class="flex flex-col h-full">
+            <Image
+              :src="imageByName(collectionStore.form.single.image)"
+              class="w-full h-full object-contain"
+              :alt="collectionStore.images[0]?.name"
+            />
+            <figcaption class="block h-12 px-4 py-3 font-bold">
+              {{ collectionStore.form.single.image }}
+              <button
+                class="flex justify-center items-center p-1 float-right"
+                @click="removeImages()"
+              >
+                <span class="icon-delete text-xl"></span>
+              </button>
+            </figcaption>
+          </figure>
+        </div>
+        <n-upload
+          v-else
+          ref="uploadRef"
+          accept="image/png, image/jpeg"
+          :default-file-list="collectionStore.images"
+          :show-file-list="false"
+          directory-dnd
+          required
+          :custom-request="upload => nft.uploadImageRequest(upload, !isUnique)"
+          @remove="nft.handleImageRemove"
+        >
+          <n-upload-dragger class="h-40">
+            <div class="py-2 text-center n-form-item">
+              <div
+                class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2 justify-self-center"
+              >
+                <span class="icon-image text-violet text-2xl"></span>
+              </div>
 
-            <h4 class="mb-1">{{ $t('nft.upload.images') }}</h4>
-            <span class="text-body">{{ $t('nft.upload.dragAndDrop') }}</span>
-          </div>
-        </n-upload-dragger>
-      </n-upload>
+              <h4>
+                {{ $t('nft.upload.images') }}
+                <span class="!inline n-form-item-label !p-0 !text-lg -ml-1">
+                  <span class="n-form-item-label__asterisk">&nbsp;*</span>
+                </span>
+              </h4>
+              <span class="block mt-1 text-body">{{ $t('nft.upload.dragAndDrop') }}</span>
+            </div>
+          </n-upload-dragger>
+        </n-upload>
+      </n-form-item>
     </div>
 
     <div class="mb-4">
@@ -123,7 +133,7 @@
                 v-model:value="collectionStore.form.single.copies"
                 :min="0"
                 :input-props="{ id: 'copies' }"
-                :placeholder="collectionStore.form.single.copies"
+                :placeholder="`${collectionStore.form.single.copies}`"
                 clearable
               />
             </n-form-item-gi>
@@ -169,7 +179,7 @@ function handleSubmitForm(e: Event | MouseEvent) {
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors || !collectionStore.hasImages) {
       if (!collectionStore.hasImages) {
-        message.warning(t('validation.nft') || 'Error');
+        message.warning(t('validation.nft.image') || 'Error');
       }
 
       errors?.map(fieldErrors =>

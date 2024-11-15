@@ -6,7 +6,6 @@
     :loading="embeddedWalletStore.signature.loading"
     :pagination="embeddedWalletStore.signature.pagination"
     :row-key="rowKey"
-    :row-props="rowProps"
     remote
     @update:page="
       (page: number) => handlePageChange(page, embeddedWalletStore.signature.pagination.pageSize)

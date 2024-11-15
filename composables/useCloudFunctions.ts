@@ -24,25 +24,26 @@ export default function useCloudFunctions() {
   async function init() {
     /** CloudFunction UUID from route */
     const functionUuid = params?.id ? `${params?.id}` : params?.slug ? `${params?.slug}` : '';
+    if (functionUuid !== cloudFunctionStore.functionUuid) {
+      cloudFunctionStore.resetVariables();
+    }
 
-    await Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const currentCloudFunction = await cloudFunctionStore.getCloudFunction(functionUuid);
+    await Promise.all(Object.values(dataStore.promises));
 
-      if (!currentCloudFunction?.function_uuid) {
-        router.push({ name: 'dashboard-service-cloud-functions' });
-      } else {
-        cloudFunctionStore.active = currentCloudFunction;
+    const currentCloudFunction = await cloudFunctionStore.getCloudFunction(functionUuid);
+    if (!currentCloudFunction?.function_uuid) {
+      router.push({ name: 'dashboard-service-cloud-functions' });
+    } else {
+      cloudFunctionStore.active = currentCloudFunction;
 
-        checkUnfinishedJobs();
-      }
+      checkUnfinishedJobs();
+    }
 
-      pageLoading.value = false;
-    });
+    pageLoading.value = false;
   }
 
   async function parseEnvFile(file: UploadFileInfo): Promise<Record<string, string>> {
     const env: Record<string, string> = {};
-
     const fileContent = (await readFileContent(file.file)) as string;
 
     // Split content by lines
@@ -152,7 +153,8 @@ export default function useCloudFunctions() {
 
       return res.data;
     } catch (error) {
-      message.error(userFriendlyMsg(error));
+      message.error(userFriendlyMsg(error), { duration: 7000 });
+      clearIntervalJob();
     }
     return null;
   }
@@ -206,6 +208,7 @@ export default function useCloudFunctions() {
     envLoading,
     modalCreateJobVisible,
     pageLoading,
+    checkUnfinishedJobs,
     createEnvVariables,
     createNewJob,
     init,

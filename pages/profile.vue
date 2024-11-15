@@ -13,9 +13,6 @@
     </template>
     <slot>
       <n-space class="pb-8" :size="32" vertical>
-        <!-- Referral -->
-        <ReferralBanner v-if="isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" />
-
         <!-- Discord -->
         <template v-if="isFeatureEnabled(Feature.DISCORD, authStore.getUserRoles())">
           <div class="card-light p-8 flex gap-8 justify-between mobile:flex-wrap">

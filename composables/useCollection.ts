@@ -78,6 +78,14 @@ export default function useCollection() {
     return collectionStore.form.base.chain === SubstrateChain.UNIQUE;
   });
 
+  const addressLabel = computed(() =>
+    collectionStore.active.chain === SubstrateChain.UNIQUE
+      ? t('form.label.nft.addressUnique')
+      : collectionStore.active.chainType === ChainType.SUBSTRATE
+        ? t('form.label.nft.addressSubstrate')
+        : t('form.label.nft.addressEvm')
+  );
+
   /**
    * Rules
    */
@@ -129,10 +137,10 @@ export default function useCollection() {
     },
   ];
   const validateSingleIdRequired: FormItemRule[] = [
-    ruleRequired(t('validation.nftIdRequired')),
+    ruleRequired(t('validation.nft.idRequired')),
     {
       validator: validateSingleNftIdUnique,
-      message: t('validation.nftIdDuplicate'),
+      message: t('validation.nft.idDuplicate'),
     },
   ];
 
@@ -171,9 +179,9 @@ export default function useCollection() {
 
   const rulesSingle: NFormRules = {
     id: validateSingleIdRequired,
-    collectionUuid: ruleRequired(t('validation.nftCollection')),
-    name: ruleRequired(t('validation.nftName')),
-    description: ruleRequired(t('validation.nftDescription')),
+    collectionUuid: ruleRequired(t('validation.nft.collection')),
+    name: ruleRequired(t('validation.nft.name')),
+    description: ruleRequired(t('validation.nft.description')),
   };
 
   function prepareFormData(addBaseUri = false) {
@@ -332,20 +340,21 @@ export default function useCollection() {
   }
 
   return {
-    loading,
-    formRef,
+    addressLabel,
+    booleanSelect,
     chains,
     chainTypes,
     collectionTypes,
     evmChains,
+    formRef,
+    isFormDisabled,
     isUnique,
+    loading,
     nftChains,
-    substrateChains,
-    supplyTypes,
-    booleanSelect,
     rules,
     rulesSingle,
-    isFormDisabled,
+    substrateChains,
+    supplyTypes,
     chainCurrency,
     collectionEndpoint,
     disablePastDate,

@@ -68,7 +68,7 @@
       <div
         v-if="!collapsed && dataStore.hasProjects && !authStore.isAdmin()"
         ref="footerRef"
-        class="relative flex border-t border-bg-lighter flex-col p-8"
+        class="relative flex border-t border-bg-lighter flex-col p-8 z-2"
       >
         <div class="flex items-end" :class="{ 'opacity-0': paymentStore.loading }">
           <div class="w-1/2">
@@ -180,16 +180,16 @@ onMounted(async () => {
 
 async function initProject() {
   projectsLoaded.value = false;
+  await Promise.all(Object.values(dataStore.promises));
   if (authStore.isAdmin()) {
     const currentProject = await dataStore.getProject(dataStore.project.selected);
     dataStore.project.items = [currentProject];
     dataStore.updateCurrentProject(currentProject);
     projectsLoaded.value = true;
   } else {
-    await dataStore.getProjects().then(async _ => {
-      await dataStore.getProject(dataStore.project.selected);
-      projectsLoaded.value = true;
-    });
+    await dataStore.getProjects();
+    await dataStore.getProject(dataStore.project.selected);
+    projectsLoaded.value = true;
   }
 }
 

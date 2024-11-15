@@ -29,16 +29,16 @@ declare global {
     indexed?: boolean;
   }
   interface ContractMethod {
-    createTime: string; // ISO 8601 format date string
-    updateTime: string; // ISO 8601 format date string
+    createTime: string;
+    updateTime: string;
     onlyOwner: boolean;
     name: string;
     description: string;
   }
 
   interface ContractVersion {
-    createTime: string; // ISO 8601 format date string
-    updateTime: string; // ISO 8601 format date string
+    createTime: string;
+    updateTime: string;
     version: number;
     abi: SmartContractABI[];
     methods: ContractMethod[];
@@ -54,26 +54,24 @@ declare global {
   interface SmartContractResponse extends GeneralResponse<SmartContractInterface> {}
   interface SmartContractsResponse extends GeneralItemsResponse<SmartContractInterface> {}
 
-  interface DeployedContractInterface {
-    status: number;
-    createTime: string; // ISO 8601 format date string
-    updateTime: string | null; // ISO 8601 format date string or null
-    contract_uuid: string; // UUID format string
-    project_uuid: string; // UUID format string
-    name: string;
-    description: string | null;
-    chainType: number;
+  interface DeployedContractInterface extends BaseObjectInterface {
     chain: number;
-    version_id: number;
-    constructorArguments: string | null;
+    chainType: number;
+    contractAddress: string;
     contractStatus: number;
-    contractAddress: string; // Ethereum or blockchain address format
-    deployerAddress: string; // Ethereum or blockchain address format
-    transactionHash: string | null;
+    contractVersion: number | any;
+    contract_uuid: string;
+    deployerAddress: string;
+    project_uuid: string;
+    version_id: number;
+  }
+  interface DeployedContractDetailsInterface extends DeployedContractInterface {
+    constructorArguments: string | null;
     contractVersion: ContractVersion;
+    transactionHash: string | null;
   }
 
-  interface DeployedContractResponse extends GeneralResponse<DeployedContractInterface> {}
+  interface DeployedContractResponse extends GeneralResponse<DeployedContractDetailsInterface> {}
   interface DeployedContractsResponse extends GeneralItemsResponse<DeployedContractInterface> {}
 
   interface SmartContractCallInterface {
@@ -87,7 +85,7 @@ declare global {
     transactionHash: string;
     referenceTable: string;
     referenceId: string;
-    data: any | null; // 'data' can be of any type, or null.
+    data: any | null;
     project_uuid: string;
   }
   interface SmartContractCallResponse extends GeneralResponse<SmartContractCallInterface> {}

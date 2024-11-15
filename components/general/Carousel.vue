@@ -16,7 +16,7 @@
       class="pointer-events-none absolute left-1/2 bottom-0 z-1 flex w-full -translate-x-1/2 flex-wrap justify-center"
     >
       <div>
-        <Button
+        <button
           title="Previous"
           class="pointer-events-auto mr-2 block !h-16 !w-16 text-black"
           isType="custom"
@@ -30,7 +30,7 @@
         />
       </div>
       <div>
-        <Button
+        <button
           title="Next"
           class="pointer-events-auto ml-2 block !h-16 !w-16 text-black"
           isType="custom"

@@ -2,9 +2,7 @@
   <Dashboard :loading="pageLoading">
     <template #heading>
       <Heading>
-        <slot>
-          <h1>{{ t('dashboard.nav.rpc') }}</h1>
-        </slot>
+        <h1>{{ t('dashboard.nav.rpc') }}</h1>
       </Heading>
     </template>
 
@@ -12,54 +10,73 @@
       <div class="flex flex-col h-full pb-8">
         <div class="flex flex-col flex-grow">
           <RpcFeatures />
-          <div class="flex flex-col gap-8 border-b border-bg-lighter pb-8 my-8">
+          <div class="flex flex-col gap-8">
             <p class="text-sm font-bold text-white">{{ $t('rpc.apiKey.start') }}</p>
 
             <div>
               <FormService
-                class="mt-4 pr-4 inline-block"
+                class="mt-4 pr-4 inline-block min-w-52"
                 :service-type="ServiceType.RPC"
                 default-service-name="RPC service"
                 :btn-text="$t('rpc.apiKey.turnOnService')"
                 :disabled="!dataStore.isUserOwner"
-                @create-success="onServiceCreated"
+                @create-success="$emit('serviceCreated')"
               />
-              <p v-if="!dataStore.isUserOwner" class="mt-4">
+              <BtnDocumentation
+                class="relative top-[2px]"
+                href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html"
+              />
+              <p v-if="!dataStore.isUserOwner" class="mt-2">
                 {{ $t('rpc.apiKey.mustBeOwner') }}
               </p>
             </div>
           </div>
         </div>
-        <div class="flex flex-col gap-2">
-          <div class="mb-2">
-            <h4 class="font-bold">{{ $t('rpc.apiKey.curious') }}</h4>
-            <h4 class="font-normal">{{ $t('rpc.apiKey.explore') }}</h4>
+      </div>
+    </slot>
+
+    <template #learn>
+      <div class="card-light p-8 rounded-lg">
+        <n-space :size="24" vertical>
+          <div>
+            <h3 class="font-bold">{{ $t('rpc.apiKey.curious') }}</h3>
+            <p class="font-normal">{{ $t('rpc.apiKey.explore') }}</p>
           </div>
           <ActionsRpcPublicEndpoint />
           <TableRpcPublicEndpoint
             v-if="rpcEndpointStore.hasPublicEndpoints"
             class="mb-4"
-            :rpc-endpoints="rpcEndpointStore.publicEndpoints"
+            :rpc-endpoints="tableData"
           />
-        </div>
+        </n-space>
       </div>
-    </slot>
+    </template>
   </Dashboard>
 </template>
 <script lang="ts" setup>
+defineEmits(['serviceCreated']);
 const { t } = useI18n();
-const router = useRouter();
-const rpcEndpointStore = useRpcEndpointStore();
 const dataStore = useDataStore();
+const rpcEndpointStore = useRpcEndpointStore();
+
 const pageLoading = ref<boolean>(true);
 
-const onServiceCreated = () => {
-  router.push('/dashboard/service/rpc/subscription');
-};
+const tableData = computed(() => {
+  const allEndpoints = rpcEndpointStore.publicEndpoints;
+  const priorityOrder = ['Base', 'Celo', 'Moonbeam', 'Gnosis', 'Polkadot'];
+
+  const prioritizedEndpoints = allEndpoints.filter(endpoint =>
+    priorityOrder.includes(endpoint.name)
+  );
+  const otherEndpoints = allEndpoints.filter(endpoint => !priorityOrder.includes(endpoint.name));
+
+  prioritizedEndpoints.sort((a, b) => a.name.localeCompare(b.name));
+
+  return [...prioritizedEndpoints, ...otherEndpoints];
+});
 
 onMounted(async () => {
   await Promise.all(Object.values(dataStore.promises));
-
   await rpcEndpointStore.getPublicEndpoints();
 
   pageLoading.value = false;

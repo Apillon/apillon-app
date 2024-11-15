@@ -207,7 +207,6 @@
       "addNew": "Add new Cloud function",
       "checkVideo": "Check out the video",
       "deployments": "Deployments",
-      "documentation": "View Documentation",
       "endpoint": "Cloud function API endpoint",
       "emptyArchive": "Cloud functions Archive",
       "emptyArchiveInfo": "There are currently no Cloud functions in the Archive.",
@@ -244,8 +243,8 @@
         "status": {
           "1": "DEPLOYING",
           "2": "ASSIGNING PROCESSORS",
-          "3": "ACTIVE",
-          "4": "PAUSED",
+          "3": "RUNNING",
+          "4": "NOT ACTIVE",
           "9": "DELETED"
         },
         "viewTemplate": "View code template"
@@ -403,7 +402,9 @@
       "getMore": "Get more",
       "included": "Can be used for:",
       "name": "Name",
+      "notEnoughCredits": "Not enough credits",
       "packages": "Credit packages",
+      "pricingNotification": "Pricing notification",
       "product_id": "Product ID",
       "service": "Service",
       "serviceDescription": "Service description",
@@ -582,8 +583,7 @@
           "anyway": "Leave anyway",
           "info": "If you leave, your changes won’t be saved.",
           "title": "Are you sure you want to leave?"
-        },
-        "viewDocumentation": "View Documentation"
+        }
       },
       "authentication": {
         "name": "Decentralized Authentication",
@@ -689,34 +689,6 @@
           "writeOverApillon": "Write over Apillon",
           "readFromDapp": "Read from your dapp"
         }
-      },
-      "indexer": {
-        "create": "Create new indexer",
-        "info": "Add it to your Web3 project",
-        "new": "New indexer",
-        "table": {
-          "name": "Name",
-          "description": "Description",
-          "status": "Status",
-          "uuid": "Indexer UUID"
-        },
-        "tableLog": {
-          "level": "Level",
-          "ts": "Timestamp",
-          "container": "Continer",
-          "msg": "Message"
-        },
-        "tableDeployments": {
-          "type": "Type",
-          "failed": "Failed",
-          "status": "Status",
-          "updatedAt": "Updated",
-          "createdAt": "Created"
-        },
-        "general": "General",
-        "logs": "Logs",
-        "deployments": "Deployments",
-        "viewDocumentation": "View Documentation"
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -1088,10 +1060,8 @@
       "indexing": {
         "content": [
           {
-            "headline": "Features:",
-            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints."
-          },
-          {
+            "title": "Features:",
+            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints.",
             "benefits": [
               "Real-time Data Processing: Continuously indexes new blockchain data for immediate access.",
               "Historical Data Access: Easily retrieve past blockchain data for analysis or verification.",
@@ -1176,12 +1146,28 @@
     "user": "User",
     "viewInvoice": "View Invoice",
     "value": "Value",
+    "viewDocumentation": "View Documentation",
     "visibleColumns": "Visible columns",
     "wiki": "Wiki",
     "w3Warn": "W3 warn",
     "oasisSignatures": "Signatures"
   },
   "error": {
+    "contract": {
+      "32700": "Parse error: Invalid JSON.",
+      "32600": "Invalid request: This can happen when your request is malformed. Additionally, some providers use this code to signal that a particular method is not available or requires switching to a paid tier.",
+      "32601": "Method not found: This usually happens when the method is not available with a given provider. If you need to use a specific method that's not supported by the provider, try changing the provider or consider switching to a more expensive tier.",
+      "32602": "Invalid params: This happens when the request parameters are invalid. To fix, double check the parameters that you pass with the request and make sure they comply with the spec.",
+      "32603": "Internal error: This might happen when the node reverts during the request execution. This can also happen if the request is malformed or invalid.",
+      "32000": "Invalid input: Missing or invalid parameters.",
+      "32001": "Resource not found: This usually happens when calling a method that's not supported. Try using a different method or switch providers.",
+      "32002": "Resource unavailable: Requested resource not available.",
+      "32003": "Transaction rejected: Transaction creation failed.",
+      "32004": "Method not supported: Method is not implemented.",
+      "32005": "Limit exceeded: Request exceeds defined limit.",
+      "32006": "JSON-RPC version not supported: Version of JSON-RPC protocol is not supported."
+    },
+    "general": "Something went wrong, please try again later.",
     "404": "Page not found",
     "40006022": "You have to upload \"index.html\" file, to deploy website!",
     "FIELD_INVALID": "Invalid filed, please upload valid .env file.",
@@ -1308,6 +1294,12 @@
     "COMPUTING_CONTRACT_TYPE_NOT_VALID": "Contract type is not valid",
     "CONTRACT_DOES_NOT_EXIST": "Contract does not exist",
     "CONTRACT_NOT_DEPLOYED": "Contract is not deployed",
+    "CALL_CONTRACT_ERROR": "Contract call failed. Please try again or contact support if the issue persists.",
+    "CONTRACT_OWNER_ERROR": "Contract call failed. Please try again or contact support if the issue persists.",
+    "DEPLOY_CONTRACT_ERROR": "Deployment failed. Please try again or contact support if the issue persists.",
+    "INVALID_ARGUMENT": "Invalid argument provided. Please check your input and try again.",
+    "MISSING_ARGUMENT": "Missing required argument. Please ensure all necessary inputs are provided.",
+    "UNEXPECTED_ARGUMENT": "Unexpected argument provided. Please remove any unnecessary inputs and try again.",
     "TRANSACTION_FOR_TRANSFER_ALREADY_EXISTS": "Contract has already been transferred.",
     "REVIEW_ALREADY_SUBMITTED": "Review has already been submitted.",
     "USER_NOT_ELIGIBLE": "User is not eligible for airdrop.",
@@ -1428,7 +1420,7 @@
           "csvUpload": "Before adding new items to the collection with existing NFTs, please add an id column to the CSV file. This will help maintain data integrity and avoid any conflicts when adding new entries.",
           "dropStart": "A date when your NFT collection becomes publicly available for visitors to buy NFTs.",
           "drop": "With drop, your collection becomes accessible for visitors to buy NFTs from a certain date onwards.",
-          "dropAddress": "Drop Withdrawal  Address",
+          "dropAddress": "Substrate Address",
           "dropPrice": "",
           "dropReserve": "A number of NFT you wish to reserve for yourself before the drop.",
           "initialOwner": "Initial owner of an NFT collection get access to exclusive rewards, increased resale potential, community influence, and potential royalties.",
@@ -1437,7 +1429,7 @@
           "name": "The name you choose will be the official name of your NFT collection, “name” NFT collection.",
           "nftDisplayType": "Display type is a field indicating how you would like it to be displayed",
           "revocable": "Collection owner can destroy NFT(s) at any point in time.",
-          "royaltiesAddress": "It’s Astar address to receive Withdrawal tokens when tokens are being minted.",
+          "royaltiesAddress": "It’s EVM address to receive Withdrawal tokens when tokens are being minted.",
           "royaltiesFees": "The % value of royalties you want to collect in the future NFT sales.",
           "soulbound": "Soulbound NFTs are not tradeable, they cannot leave the wallet they were deposited into.",
           "supplyLimited": "If limited, please specify the actual number of the NFTs in total supply on the right.",
@@ -1490,19 +1482,20 @@
         }
       },
       "nft": {
+        "addressEvm": "EVM Address",
+        "addressSubstrate": "Substrate Address",
+        "addressUnique": "Unique Address",
         "burnTokenId": "Token ID",
         "collection": "Collection",
         "copies": "Copies",
         "description": "Description",
         "displayType": "Type",
         "id": "ID",
-        "mintAddress": "Address",
         "mintCollectionUuid": "Collection",
         "mintParentNftId": "Parent NFT ID",
         "mintQuantity": "Quantity",
         "name": "Name",
         "setBaseUri": "Set base URI",
-        "transferAddress": "Address",
         "traitType": "Trait",
         "value": "Value"
       },
@@ -1549,6 +1542,7 @@
       "nftMintQuantity": "Quantity",
       "nftTransferAddress": "Address",
       "number": "Enter number",
+      "onlyJsFiles": "Only .js files are allowed",
       "password": "password",
       "phone": "+000 12345678",
       "postalCode": "4223",
@@ -1605,6 +1599,9 @@
         "logLevels": "Log levels",
         "containers": "Containers"
       }
+    },
+    "error": {
+      "rpcEmailTaken": "Dwellir user with this email already exists. Please remove the user or use another email."
     },
     "success": {
       "apiKey": "API key has been created",
@@ -1851,38 +1848,26 @@
     "web3HostingEnable": "Enable Web3 hosting to host your website."
   },
   "indexer": {
-    "startNew": "Star by creating a new indexer",
-    "create": "Create new indexer",
-    "update": "Update Indexer",
-    "statuses": {
-      "1": "Created",
-      "3": "Hibernated",
-      "5": "Active"
+    "containers": {
+      "db": "DB",
+      "init": "Init",
+      "api": "API",
+      "processor": "Processor"
     },
-    "uuid": "Indexer UUID",
     "instructions": {
-      "deployYourIndexer": "Deploy your indexer",
-      "instruction1": "Indexer deployments are handled over the Apillon CLI.\n Please follow the step by step instructions below and deploy your indexer with the help of our CLI.",
-      "instruction2": "Note, that you need at least 20,000 credits to perform this action.",
-      "step1": "Step 1 - Setup the Apillon CLI",
-      "step2": "Step 2 - Set up your indexer locally",
+      "btnFinish": "I have finished the deployment - Show me the indexers",
       "chooseTemplate": "Choose a template for you indexer from the Subsquid Github repository and clone it. \nThe templates below are available:",
-      "substrateTemplate": "Template for Substrate chains",
+      "deployNotFinished": "Indexer is not yet deployed, please follow the instructions.",
+      "deployYourIndexer": "Instructions to deploy your first Indexer",
       "evmTemplates": "Templates for EVM chains",
-      "step3": "Step 3 - Customize your indexer",
-      "step4": "Step 4 - Deploy the indexer"
+      "instruction1": "Indexer deployments are handled over the <b>Apillon CLI</b>.",
+      "instruction2": "Before you can see your indexer in the dashboard, please follow the step by step instructions below and deploy your indexer with the help of our CLI. ",
+      "step1": "Setup the Apillon CLI",
+      "step2": "Set up your indexer",
+      "step3": "Customize your indexer",
+      "step4": "Deploy the indexer",
+      "substrateTemplate": "Template for Substrate chains"
     },
-    "indexerApiEndpoint": "Indexer API endpoint",
-    "indexerGeneralData": "Indexer - general data",
-    "name": "Name",
-    "description": "Description",
-    "status": "Status",
-    "created": "Created",
-    "lastDeployed": "Last deployed",
-    "apiStatus": "Api status",
-    "processorStatus": "Processor status",
-    "processedBlocks": "Processed blocks",
-    "squidStatus": "Squid status",
     "logLevels": {
       "error": "Error",
       "debug": "Debug",
@@ -1891,16 +1876,61 @@
       "warning": "Warning",
       "critical": "Critical"
     },
-    "containers": {
-      "db": "DB",
-      "init": "Init",
-      "api": "API",
-      "processor": "Processor"
+    "spendingWarning": {
+      "btnProceed": "Got it, Proceed",
+      "btnBuyCredits": "I want to buy credits right now",
+      "content": "When you deploy an indexer, <b>50,000 credits will be deducted from your account.</b> This is the minimum required to start running the indexer. The rate of credit usage depends on the amount of data being indexed. You can explore typical pricing scenarios here:",
+      "info": "Don't worry, we'll notify you via email when your credits are running low.",
+      "notEnough1": "To deploy an indexer, you need at least 50,000 credits in your account. This ensures the indexer is set up and starts indexing.",
+      "notEnough2": "However, the actual usage depends on the indexing you're performing."
     },
+    "statuses": {
+      "1": "Created",
+      "3": "Hibernated",
+      "5": "Active"
+    },
+    "table": {
+      "name": "Name",
+      "description": "Description",
+      "status": "Status",
+      "uuid": "Indexer UUID"
+    },
+    "tableLog": {
+      "level": "Level",
+      "ts": "Timestamp",
+      "container": "Container",
+      "msg": "Message"
+    },
+    "tableDeployments": {
+      "type": "Type",
+      "failed": "Failed",
+      "updatedAt": "Updated",
+      "createdAt": "Created"
+    },
+    "apiStatus": "Api status",
+    "create": "Create new indexer",
+    "created": "Created",
+    "deployments": "Deployments",
+    "description": "Description",
+    "general": "General",
     "hibernate": "Hibernate",
     "hibernateIndexer": "Hibernate indexer",
     "hibernateIndexerInfo": "Hibernation of indexer lets you pause virtual machines, lowering costs while keeping data safe. Wheen needed, redeploy the indexer with all data intact.",
-    "successfullyHibernated": "Indexer successfully hibernated"
+    "indexerApiEndpoint": "Indexer API endpoint",
+    "indexerGeneralData": "Indexer - general data",
+    "info": "Add it to your Web3 project",
+    "lastDeployed": "Last deployed",
+    "logs": "Logs",
+    "name": "Name",
+    "new": "New indexer",
+    "processors": "Processors",
+    "processorStatus": "Processor status",
+    "processedBlocks": "Processed blocks",
+    "squidStatus": "Squid status",
+    "startNew": "Start by creating a new indexer",
+    "successfullyHibernated": "Indexer successfully hibernated",
+    "update": "Update Indexer",
+    "uuid": "Indexer UUID"
   },
   "nft": {
     "amount": {
@@ -2063,6 +2093,16 @@
         "2": "UPDATING JSONs",
         "3": "METADATA UPLOADED ON IPFS",
         "10": "METADATA SUCCESSFULLY PREPARED"
+      },
+      "dynamic": {
+        "btn": "Create Dynamic NFT collection",
+        "content": "If you plan to update or reveal metadata over time, after you’ve deployed the NFT Collection, this is your way to go. This solution uses IPNS records with data stored on IPFS.",
+        "title": "Dynamic NFT collection"
+      },
+      "static": {
+        "btn": "Create Static NFT collection",
+        "content": "If you plan to create an NFT Collection and not make any post-deployment changes, a static collection is your jam. The data will be stored on IPFS.",
+        "title": "Static NFT collection"
       }
     },
     "network": {
@@ -2310,11 +2350,12 @@
     "apiKey": {
       "new": "New key",
       "save": "Save",
-      "keys": "Your API keys",
+      "keys": "API key management",
       "turnOnService": "Turn on RPC service",
       "mustBeOwner": "You must be the project owner to turn on the RPC service.",
       "powered": "Powered by",
-      "headline": "Access over 100 blockchains",
+      "headline": "Before proceeding, select a plan.",
+      "management": "Key management",
       "description": "Apillon’s RPC service, powered by Dwellir, provides developers with reliable, low-latency access to over 100 blockchain networks. This scalable solution ensures seamless communication between decentralized applications and blockchains, backed by 99% uptime and top-tier performance. With easy API key management, you can quickly integrate multiple chains, eliminating the complexity of running your own nodes. The intuitive dashboard allows you to browse and favorite endpoints, simplifying Web3 project management from start to scale.",
       "uuid": "UUID",
       "usage": "RPC Usage monitoring",
@@ -2327,7 +2368,8 @@
       "empty": "You currently have no API keys for the selected project.",
       "emptyInfo": "Create your first API key to start using the RPC service.",
       "createFirst": "Create first API key",
-      "monthlyUsage": "{used} of {max} monthly calls used"
+      "monthlyUsage": "{used} of {max} monthly calls used",
+      "pleaseUpgrade": "You've already used all 5 million API requests included in Free plan. Please upgrade."
     },
     "endpoint": {
       "chainName": "Chain name",
@@ -2335,7 +2377,6 @@
       "httpsEndpoint": "HTTPS endpoint",
       "wssEndpoint": "WSS endpoint",
       "viewAll": "View all endpoints",
-      "viewDocumentation": "View Documentation",
       "allEndpoints": "All endpoints",
       "add": "Add",
       "added": "Added",
@@ -2343,9 +2384,6 @@
       "noFavoriteEndpointTitle": "You currently have no favorite endpoints.",
       "noFavoriteEndpointDescription": "Browse our available endpoints and click \"Add\" for quick access. Once you add a chain you plan to use, it will appear in your \"Endpoints\" table.",
       "browse": "Browse endpoints"
-    },
-    "usage": {
-      "requestsNumber": "Number of requests"
     },
     "initial": {
       "benefits": [
@@ -2373,7 +2411,7 @@
           "text": "Browse, manage and favorite your blockchain endpoints effortlessly."
         }
       ],
-      "planSelection": "Before proceeding, select a plan.\nIf you choose the free plan, we'll notify you when you're approaching the limits.\nAt that point, you'll need to upgrade to keep the RPC service active.",
+      "planSelection": "If you choose the free plan, we’ll notify you when you're approaching the limits. At that point, you'll need to upgrade to keep the RPC service active.",
       "subscriptionBenefits": [
         {
           "text": "Only one free plan is available per registered user, regardless of how many projects you have."
@@ -2388,9 +2426,10 @@
       "subscriptionLimits": "Limits"
     },
     "subscription": {
-      "unavailable": "Unavailable",
-      "unavailableDescription": "You've already used the Freemium plan on this or other projects you own.",
       "mustBeOwner": "You must be the project owner to change the plan."
+    },
+    "usage": {
+      "requestsNumber": "Number of requests"
     }
   },
   "social": {
@@ -2457,7 +2496,6 @@
     "editIntegration": "Edit integration",
     "howItWorks": "See how it works",
     "readBlog": "Read our blog post",
-    "viewDocumentation": "View Documentation",
     "generate": {
       "title": "Generate API key and start using Embedded Wallet service",
       "generate": "Generate new key"
@@ -2677,24 +2715,6 @@
     "ipnsNameRequired": "Please enter IPNS name",
     "ipnsRequired": "Please select IPNS",
     "naturalNumber": "Please enter a positive number",
-    "nft": "Please select an NFT",
-    "nftBucketRequired": "Please select a bucket",
-    "nftBurnTokenIdRequired": "Please enter token ID",
-    "nftMetadata": "Please insert missing data, fields ID, image, name and description are required!",
-    "nftMintAddressRequired": "Please enter your wallet address for minting",
-    "nftMintCollectionUuidRequired": "Please select collection",
-    "nftMintParentNftIdRequired": "Please enter Parent NFT ID",
-    "nftMintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
-    "nftMintQuantityRequired": "Please enter mint Quantity",
-    "nftSetBaseUriRequired": "Please enter base URI",
-    "nftTransferAddressRequired": "Please enter wallet address",
-    "nftIdRequired": "Please enter ID of NFT",
-    "nftIdDuplicate": "Please enter different ID",
-    "nftName": "Please enter name of NFT",
-    "nftCollection": "Please select a Collection",
-    "nftRoyalties": "Please enter royalties",
-    "nftCopies": "Please enter number of NFT copies",
-    "nftDescription": "Please enter NFT's description",
     "notEnoughSpaceInStorage": "File \"{name}\" is too big. To proceed, please upgrade your subscription plan.",
     "notImage": "{name} is not an image",
     "passwordMinLength": "Password must contain at least 12 characters.",
@@ -2786,7 +2806,28 @@
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
-      "missingIndex": "Please upload index.html file"
+      "missingIndex": "Please upload index.html file",
+      "waitActiveDeployment": "Staging deployment is still in progress. Please wait until it completes before proceeding with the production deployment."
+    },
+    "nft": {
+      "bucketRequired": "Please select a bucket",
+      "burnTokenIdRequired": "Please enter token ID",
+      "collection": "Please select a Collection",
+      "copies": "Please enter number of NFT copies",
+      "description": "Please enter NFT's description",
+      "idRequired": "Please enter ID of NFT",
+      "idDuplicate": "Please enter different ID",
+      "image": "Please add image",
+      "metadata": "Please insert missing data, fields ID, image, name and description are required!",
+      "mintAddressRequired": "Please enter your wallet address for minting",
+      "mintCollectionUuidRequired": "Please select collection",
+      "mintParentNftIdRequired": "Please enter Parent NFT ID",
+      "mintQuantity": "Please enter a lower number. You can only mint those tokens that you have reserved for yourself.",
+      "mintQuantityRequired": "Please enter mint Quantity",
+      "name": "Please enter name of NFT",
+      "royalties": "Please enter royalties",
+      "setBaseUriRequired": "Please enter base URI",
+      "transferAddressRequired": "Please enter wallet address"
     },
     "smartContracts": {
       "fieldRequired": "Please fill all fields"

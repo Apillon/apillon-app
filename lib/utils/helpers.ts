@@ -167,7 +167,7 @@ export function contractLink(contractAddress?: string | null, chainId?: number):
     case Chains.MOONBASE:
       return `https://moonbase.moonscan.io/${address}`;
     case Chains.ASTAR:
-      return `https://astar.subscan.io/${address}`;
+      return `https://astar.blockscout.com/${address}`;
     case SubstrateChain.ASTAR:
       const config = useRuntimeConfig();
       if (config.public.ENV === AppEnv.DEV) {
@@ -192,7 +192,7 @@ export function transactionLink(transactionHash?: string | null, chainId?: numbe
     case Chains.MOONBASE:
       return `https://moonbase.moonscan.io/${hash}`;
     case Chains.ASTAR:
-      return `https://astar.subscan.io/${hash}`;
+      return `https://astar.blockscout.com/${hash}`;
     case SubstrateChain.ASTAR:
       const config = useRuntimeConfig();
       if (config.public.ENV === AppEnv.DEV) {
