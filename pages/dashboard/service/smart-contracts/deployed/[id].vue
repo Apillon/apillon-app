@@ -75,6 +75,19 @@
           :btn-text="$t('dashboard.service.smartContracts.infoSection.takeOwnershipBtn')"
           owner
         />
+        <FormSmartContractAction
+          v-else-if="isConnected && !isContractTransferred && fnRenounceRole"
+          class="max-w-sm"
+          :fn="fnRenounceRole"
+          :args="[
+            '0x7b765e0e932d348852a6f810bfa1ab891e259123f02db8cdcde614c570223357',
+            address as string,
+          ]"
+          :btn-text="
+            $t('dashboard.service.smartContracts.infoSection.takeOwnershipBtn') + ' renounce'
+          "
+          owner
+        />
         <SmartContractsBtnSubmit v-else-if="!isConnected" size="small" />
       </div>
 
@@ -90,7 +103,7 @@
           <h2 class="mb-6">
             {{ $t('dashboard.service.smartContracts.functions.write') }}
           </h2>
-          <div class="bg-black rounded-lg h-full flex gap-x-4">
+          <div class="bg-black rounded-lg h-full flex gap-x-4 flex-wrap lg:flex-nowrap">
             <SmartContractsPanelFunctions
               v-if="ownerFunctions?.length"
               :functions="ownerFunctions"
@@ -104,7 +117,7 @@
             />
           </div>
         </div>
-        <div class="w-full sm:w-1/2 lg:w-1/3 max-w-[420px]">
+        <div class="w-full sm:w-1/2 lg:w-1/3">
           <h2 class="mb-6">
             {{ $t('dashboard.service.smartContracts.functions.read') }}
           </h2>
@@ -142,6 +155,12 @@ useHead({
 const pageLoading = ref<boolean>(true);
 const btnLoading = ref<boolean>(false);
 const contractUuid = ref<string>(`${params?.id}` || '');
+
+// Data
+const ownerFunctions = ref<SmartContractABI[]>([]);
+const readFunctions = ref<SmartContractABI[]>([]);
+const writeFunctions = ref<SmartContractABI[]>([]);
+
 const contractStatus = computed(() => deployedContractStore.active.contractStatus);
 const isContractTransferring = computed(
   () => contractStatus.value === SmartContractStatus.TRANSFERRING
@@ -150,13 +169,11 @@ const isContractTransferred = computed(
   () => contractStatus.value === SmartContractStatus.TRANSFERRED
 );
 
-// Data
-const ownerFunctions = ref<SmartContractABI[]>([]);
-const readFunctions = ref<SmartContractABI[]>([]);
-const writeFunctions = ref<SmartContractABI[]>([]);
-
 const fnTransferOwnership = computed(() =>
   ownerFunctions.value.find(method => method.name === 'transferOwnership')
+);
+const fnRenounceRole = computed(() =>
+  ownerFunctions.value.find(method => method.name === 'renounceRole')
 );
 
 async function onWalletConnected() {
@@ -203,6 +220,10 @@ async function refreshPage() {
 }
 
 function initFunctions() {
+  ownerFunctions.value = [];
+  readFunctions.value = [];
+  writeFunctions.value = [];
+
   const functionObjects = deployedContractStore.active?.contractVersion?.abi.filter(
     item => item.type === 'function'
   );

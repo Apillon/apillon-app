@@ -19,6 +19,11 @@ export const useDeployedContractStore = defineStore('deployedContract', {
     },
   },
   actions: {
+    resetData() {
+      this.active = {} as DeployedContractDetailsInterface;
+      this.items = [] as DeployedContractInterface[];
+      this.search = '';
+    },
     /**
      * Fetch wrappers
      */
@@ -102,7 +107,7 @@ export const useDeployedContractStore = defineStore('deployedContract', {
         // this.active = {} as DeployedContractInterface;
         /** Show error message */
       }
-      return {} as DeployedContractInterface;
+      return {} as DeployedContractDetailsInterface;
     },
   },
 });
