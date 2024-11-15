@@ -1,52 +1,39 @@
 export default function useStore() {
-  const dataStore = useDataStore();
-  const storageStore = useStorageStore();
   const bucketStore = useBucketStore();
   const chatStore = useChatStore();
-  const embeddedWalletStore = useEmbeddedWalletStore();
-  const postStore = usePostStore();
   const cloudFunctionStore = useCloudFunctionStore();
-  const contractStore = useContractStore();
-  const fileStore = useFileStore();
-  const ipfsStore = useIpfsStore();
-  const ipnsStore = useIpnsStore();
-  const websiteStore = useWebsiteStore();
-  const deploymentStore = useDeploymentStore();
   const collectionStore = useCollectionStore();
-  const paymentStore = usePaymentStore();
-  const settingsStore = useSettingsStore();
-  const rpcApiKeyStore = useRpcApiKeyStore();
-  const rpcEndpointStore = useRpcEndpointStore();
+  const contractStore = useContractStore();
+  const dataStore = useDataStore();
+  const deployedContractStore = useDeployedContractStore();
+  const deploymentStore = useDeploymentStore();
+  const embeddedWalletStore = useEmbeddedWalletStore();
+  const fileStore = useFileStore();
   const indexerStore = useIndexerStore();
   const indexerLogStore = useIndexerLogStore();
   const indexerDeploymentsStore = useIndexerDeploymentsStore();
+  const ipfsStore = useIpfsStore();
+  const ipnsStore = useIpnsStore();
+  const paymentStore = usePaymentStore();
+  const postStore = usePostStore();
+  const rpcApiKeyStore = useRpcApiKeyStore();
+  const rpcEndpointStore = useRpcEndpointStore();
+  const settingsStore = useSettingsStore();
+  const storageStore = useStorageStore();
+  const websiteStore = useWebsiteStore();
 
   function clearAll() {
     dataStore.resetData();
     embeddedWalletStore.resetData();
-    clearStorage();
     clearCollection();
     clearComputing();
-    clearPayments();
-    clearSettings();
-    clearSocial();
-    clearRpc();
     clearIndexer();
-  }
-
-  function clearStorage() {
-    storageStore.resetData();
-    bucketStore.resetData();
-    fileStore.resetData();
-    ipfsStore.resetData();
-    ipnsStore.resetData();
-    websiteStore.resetData();
-    deploymentStore.resetData();
-  }
-
-  function clearHosting() {
-    websiteStore.resetData();
-    deploymentStore.resetData();
+    clearPayments();
+    clearRpc();
+    clearSettings();
+    clearSmartContracts();
+    clearSocial();
+    clearStorage();
   }
 
   function clearCollection() {
@@ -58,17 +45,19 @@ export default function useStore() {
     cloudFunctionStore.resetData();
   }
 
+  function clearHosting() {
+    websiteStore.resetData();
+    deploymentStore.resetData();
+  }
+
+  function clearIndexer() {
+    indexerStore.resetData();
+    indexerLogStore.resetData();
+    indexerDeploymentsStore.resetData();
+  }
+
   function clearPayments() {
     paymentStore.resetData();
-  }
-
-  function clearSettings() {
-    settingsStore.resetData();
-  }
-
-  function clearSocial() {
-    chatStore.resetData();
-    postStore.resetData();
   }
 
   function clearRpc() {
@@ -76,10 +65,27 @@ export default function useStore() {
     rpcEndpointStore.reset();
   }
 
-  function clearIndexer() {
-    indexerStore.resetData();
-    indexerLogStore.resetData();
-    indexerDeploymentsStore.resetData();
+  function clearSettings() {
+    settingsStore.resetData();
+  }
+
+  function clearSmartContracts() {
+    deployedContractStore.resetData();
+  }
+
+  function clearSocial() {
+    chatStore.resetData();
+    postStore.resetData();
+  }
+
+  function clearStorage() {
+    storageStore.resetData();
+    bucketStore.resetData();
+    fileStore.resetData();
+    ipfsStore.resetData();
+    ipnsStore.resetData();
+    websiteStore.resetData();
+    deploymentStore.resetData();
   }
 
   return {

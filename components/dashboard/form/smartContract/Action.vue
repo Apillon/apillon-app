@@ -15,7 +15,7 @@
         :label="labelInfoText(input.name, input?.description)"
       >
         <n-input
-          v-if="isDataMint(input.name)"
+          v-if="input.name === 'data'"
           v-model:value="formData[input.name]"
           :maxlength="256"
           required
@@ -92,14 +92,12 @@ const rules: NFormRules = props.args
       {}
     );
 
-const isDataMint = (inputName: string) => inputName === 'data' && props.fn.name.includes('mint');
-
 const prepareData = () => {
   if (props.args && props.args.length) return props.args;
   if (Object.keys(formData).length === 0) return [];
 
   const parsedData: Record<string, any> = Object.assign({}, formData);
-  if (props.fn.name.includes('mint') && 'data' in parsedData) {
+  if ('data' in parsedData) {
     parsedData.data = formData.data?.startsWith('0x') ? formData.data : `0x${formData?.data || ''}`;
   }
 
