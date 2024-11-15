@@ -81,7 +81,7 @@
           :fn="fnRenounceRole"
           :args="[
             '0x7b765e0e932d348852a6f810bfa1ab891e259123f02db8cdcde614c570223357',
-            address as string,
+            deployedContractStore.active.deployerAddress,
           ]"
           :btn-text="
             $t('dashboard.service.smartContracts.infoSection.takeOwnershipBtn') + ' renounce'
