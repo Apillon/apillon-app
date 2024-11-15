@@ -6,7 +6,7 @@
 
     <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="pb-8" :size="32" vertical>
       <ActionsRpc />
-      <ChartLine v-if="chartData" :data="chartData" />
+      <ChartLine v-if="chartData?.labels.length" :data="chartData" />
       <div v-else class="flex-cc min-h-40">
         <h2>No RPC usage has been detected yet.</h2>
       </div>
@@ -41,55 +41,97 @@ onMounted(async () => {
     rpcApiKeyStore.selectedId = rpcApiKeyStore.items[0].id;
   }
 
-  await rpcApiKeyStore.getRpcApiKeyUsage();
+  await rpcApiKeyStore.getRpcApiKeyUsagePerChain();
 
-  if (rpcApiKeyStore.usage) {
-    chartData.value = prepareData(rpcApiKeyStore.usage);
+  if (rpcApiKeyStore.usagePerChain) {
+    chartData.value = prepareData(rpcApiKeyStore.usagePerChain);
   }
 
   pageLoading.value = false;
   initialLoadComplete.value = true;
 });
 
-function formatDate(timestamp: string): string {
-  const timestampNumber = parseInt(timestamp);
-  const date = new Date(timestampNumber * 1000);
-  return date.toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+// Format date to human-readable format (e.g., YYYY-MM-DD)
+function formatDate(dateString: string): string {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  return new Intl.DateTimeFormat('en-CA', options).format(new Date(dateString));
 }
 
-const prepareData = (usage: RpcApiKeyUsageInterface) => {
-  const requests = Object.keys(usage.per_day).map(key => {
-    return usage.per_day[key].requests;
-  });
+function getSortedUniqueDatesDesc(data: RpcApiKeyUsagePerChainInterface): string[] {
+  // Use a Set to store unique dates from all keys.
+  const dateSet = new Set<string>();
+
+  // Iterate over each key in the data object.
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      const entries = data[key];
+
+      // Add each date to the Set to ensure uniqueness.
+      entries.forEach(entry => dateSet.add(entry.date));
+    }
+  }
+
+  // Convert the Set to an array, then sort it in descending order.
+  return Array.from(dateSet).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+}
+
+function getRequestsPerChainPerDate(
+  data: RpcApiKeyUsagePerChainInterface,
+  sortedDates: string[]
+): { name: string; requests: number[] }[] {
+  const requestsPerChain: { name: string; requests: number[] }[] = [];
+
+  // Iterate over each chain in the data object.
+  for (const chain in data) {
+    if (data.hasOwnProperty(chain)) {
+      // Create a map of dates to requests for easy lookup.
+      const dateToRequests = new Map<string, number>(
+        data[chain].map(entry => [entry.date, entry.requests])
+      );
+
+      // Populate requests array for each date in sortedDates.
+      const requestsArray = sortedDates.map(date => dateToRequests.get(date) ?? 0);
+
+      // Add the result to the output array.
+      requestsPerChain.push({ name: chain, requests: requestsArray });
+    }
+  }
+
+  return requestsPerChain;
+}
+
+const prepareData = (usage: RpcApiKeyUsagePerChainInterface) => {
+  const dates = getSortedUniqueDatesDesc(usage);
+  const requestsPerChain = getRequestsPerChainPerDate(usage, dates);
+
+  const colorPalette = [
+    colors.green,
+    colors.blue,
+    colors.yellow,
+    colors.white,
+    colors.pink,
+    colors.orange,
+    colors.discord,
+    colors.violet,
+    colors.body,
+  ];
 
   return {
-    labels: Object.keys(usage.per_day).map(formatDate),
+    labels: dates.map(formatDate),
     color: colors.bg.light,
     chartArea: {
       backgroundColor: colors.bg.light,
     },
-    datasets: [
-      {
-        label: t('rpc.usage.requestsNumber'),
-        backgroundColor: colors.green,
-        borderColor: colors.green,
-        data: requests,
-        fill: false,
-      },
-    ],
+    datasets: requestsPerChain.map((requests, index) => ({
+      active: true,
+      label: requests.name,
+      backgroundColor: colorPalette[index % colorPalette.length],
+      borderColor: colorPalette[index % colorPalette.length],
+      data: requests.requests,
+      fill: false,
+    })),
   };
 };
-
-const options = computed<SelectOption[]>(() =>
-  rpcApiKeyStore.items.map(item => ({
-    value: item.id,
-    label: item.name,
-  }))
-);
 
 watch(
   () => rpcApiKeyStore.selectedId,
@@ -99,7 +141,7 @@ watch(
 
       rpcApiKeyStore.handleSelectedIdChange();
 
-      await rpcApiKeyStore.getRpcApiKeyUsage();
+      await rpcApiKeyStore.getRpcApiKeyUsagePerChain();
 
       pageLoading.value = false;
     }
