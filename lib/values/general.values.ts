@@ -120,6 +120,7 @@ export const LsCacheKeys = {
   RPC_API_KEYS: 'al_cache_rpc_api_keys',
   RPC_API_KEY: 'al_cache_rpc_api_key',
   RPC_API_KEY_USAGE: 'al_cache_rpc_api_key_usage',
+  RPC_API_KEY_USAGE_PER_CHAIN: 'al_cache_rpc_api_key_usage_per_chain',
   RPC_ENDPOINTS: 'al_cache_rpc_endpoints',
   RPC_FAVORITE_ENDPOINTS: 'al_cache_rpc_favorite_endpoints',
   RPC_DWELLIR_ID: 'al_cache_rpc_dwellir_id',

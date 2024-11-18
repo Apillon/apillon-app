@@ -362,6 +362,10 @@ const Endpoints = {
     return `/rpc/${projectUuid}/api-key/${apiKeyId}/usage`;
   },
 
+  rpcApiKeyUsagePerChain: (projectUuid: string, apiKeyId: number) => {
+    return `/rpc/${projectUuid}/api-key/${apiKeyId}/usage-per-chain`;
+  },
+
   /**
    * Project settings
    */
