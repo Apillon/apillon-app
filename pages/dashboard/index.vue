@@ -6,6 +6,7 @@
       </Heading>
     </template>
     <slot>
+      <ProductHuntBanner v-if="authStore.user.wallet" />
       <div
         v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())"
         class="mb-8"
