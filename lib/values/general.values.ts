@@ -111,6 +111,7 @@ export const LsCacheKeys = {
   POST: 'al_cache_post',
   POSTS: 'al_cache_posts',
   POST_ARCHIVE: 'al_cache_post_archive',
+  PRODUCT_HUNT_COMMENT: 'al_cache_product_hunt_comment',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
   PROJECT_OVERVIEW: 'al_cache_project_overview',
