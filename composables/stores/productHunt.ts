@@ -4,7 +4,6 @@ export const useProductHuntStore = defineStore('productHunt', {
   state: () => ({
     comment: null as ProductHuntComment | null,
     form: {
-      username: '',
       url: '',
     },
   }),
@@ -27,7 +26,7 @@ export const useProductHuntStore = defineStore('productHunt', {
       const dataStore = useDataStore();
 
       try {
-        const req = $api.get<ProductHuntCommentResponse>(endpoints.productHuntComment());
+        const req = $api.get<ProductHuntCommentResponse>(endpoints.productHuntComment);
         dataStore.promises.productHuntComment = req;
 
         const res = await req;

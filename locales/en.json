@@ -1500,7 +1500,6 @@
         "value": "Value"
       },
       "productHunt": {
-        "username": "Product Hunt username",
         "url": "Link to your comment",
         "wallet": "Wallet to receive reward"
       },
@@ -1552,7 +1551,6 @@
       "phone": "+000 12345678",
       "postalCode": "4223",
       "productHunt": {
-        "username": "Enter your Product hunt username",
         "url": "Paste the link to your comment"
       },
       "projectName": "Enter project name",
@@ -2814,8 +2812,7 @@
       "uuid": "Cloud Function UUID"
     },
     "productHunt": {
-      "usernameRequired": "Product Hunt username",
-      "urlRequired": "Link to your comment"
+      "urlRequired": "Please enter link to your comment"
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
@@ -2891,7 +2888,7 @@
     },
     "banner": {
       "title": "Apillon embedded wallet SDK on Product Hunt",
-      "description": "Apillons Embedded Wallets will be live on Product Hunt on <strong>Thursday, November, 21!</strong> Check out our SDK, and vote for us on the day of the launch.\n\n<strong>Until then: Check the page, create a profile and click “Notify me” so you don’t miss the launch day and a chance to get rewarded.</strong>\n\nHint: We’ve prepared a bag of 100.000NCTR for our loyal supporters. Submit your username and be the part of reward.\n\nInterested in Embedded Wallets? Check out the Apillon Wiki.",
+      "description": "Apillons Embedded Wallets will be live on Product Hunt on <strong>Thursday, November, 21!</strong> Check out our SDK, and vote for us on the day of the launch.\n\n<strong>Until then: Check the page, create a profile and click “Notify me” so you don’t miss the launch day and a chance to get rewarded.</strong>\n\nHint: We’ve prepared a bag of 100.000NCTR for our loyal supporters. Submit your comment and be the part of reward.\n\nInterested in Embedded Wallets? Check out the Apillon Wiki.",
       "btn": "Check it out and get notified"
     }
   }
