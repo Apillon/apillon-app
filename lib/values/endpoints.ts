@@ -84,6 +84,9 @@ const Endpoints = {
     return id ? `/services/${id}` : '/services';
   },
 
+  /** Product Hunt comment */
+  productHuntComment: '/product-hunt',
+
   /** Instructions */
   instructions: (key?: string) => {
     return key ? `/instructions/${key}` : '/instructions';
