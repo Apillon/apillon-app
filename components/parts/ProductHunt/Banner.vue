@@ -46,7 +46,6 @@ onMounted(async () => {
 const onBannerBtnPress = () => {
   if (productHuntStore.comment) {
     productHuntStore.form.url = productHuntStore.comment.url;
-    productHuntStore.form.username = productHuntStore.comment.username;
   }
   modalVisible.value = true;
 };

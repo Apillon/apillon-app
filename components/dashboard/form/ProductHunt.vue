@@ -7,19 +7,6 @@
     autocomplete="off"
     @submit.prevent="handleSubmit"
   >
-    <n-form-item
-      path="username"
-      :label="$t('form.label.productHunt.username')"
-      :label-props="{ for: 'username' }"
-    >
-      <n-input
-        v-model:value="productHuntStore.form.username"
-        :input-props="{ id: 'username' }"
-        :placeholder="$t('form.placeholder.productHunt.username')"
-        clearable
-      />
-    </n-form-item>
-
     <n-form-item path="url" :label="$t('form.label.productHunt.url')" :label-props="{ for: 'url' }">
       <n-input
         v-model:value="productHuntStore.form.url"
@@ -66,7 +53,6 @@ const formRef = ref<NFormInst | null>(null);
 const loading = ref<boolean>(false);
 
 const rules: NFormRules = {
-  username: [ruleRequired($i18n.t('validation.productHunt.usernameRequired'))],
   url: [ruleRequired($i18n.t('validation.productHunt.urlRequired'))],
 };
 
