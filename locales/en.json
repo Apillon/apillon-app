@@ -1655,6 +1655,7 @@
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
         "item": "Item has been created",
+        "productHunt": "Product Hunt comment has been added",
         "rpcApiKey": "RPC API key has been created",
         "rpcEndpoint": "RPC endpoint has been added",
         "service": "Service has been created",
@@ -1721,6 +1722,7 @@
         "indexer": "Indexer has been updated",
         "ipns": "IPNS has been updated",
         "item": "Item has been updated",
+        "productHunt": "Product Hunt comment has been updated",
         "project": "Project has been updated",
         "rpcApiKey": "RPC API key has been updated",
         "service": "Service has been updated",
@@ -2812,7 +2814,8 @@
       "uuid": "Cloud Function UUID"
     },
     "productHunt": {
-      "urlRequired": "Please enter link to your comment"
+      "urlRequired": "Please enter link to your comment",
+      "urlInvalid": "Please enter valid Product Hunt URL"
     },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",

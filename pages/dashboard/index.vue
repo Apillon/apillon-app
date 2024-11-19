@@ -7,7 +7,7 @@
     </template>
     <slot>
       <ProductHuntBanner
-        v-if="authStore.user.wallet || true"
+        v-if="authStore.user.wallet"
         :wallet="authStore.user.wallet ?? undefined"
       />
       <div
