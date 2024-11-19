@@ -38,6 +38,8 @@
   </n-form>
 </template>
 <script lang="ts" setup>
+import type { FormItemRule } from 'naive-ui';
+
 const props = defineProps({
   id: { type: Number, default: 0 },
   wallet: { type: String, default: '' },
@@ -52,8 +54,19 @@ const productHuntStore = useProductHuntStore();
 const formRef = ref<NFormInst | null>(null);
 const loading = ref<boolean>(false);
 
+function validateProductHuntUrl(_rule: FormItemRule, value: string): boolean {
+  return value ? value.includes('producthunt.com') : true;
+}
+
 const rules: NFormRules = {
-  url: [ruleRequired($i18n.t('validation.productHunt.urlRequired'))],
+  url: [
+    ruleRequired($i18n.t('validation.productHunt.urlRequired')),
+    {
+      validator: validateProductHuntUrl,
+      message: $i18n.t('validation.productHunt.urlInvalid'),
+      trigger: 'input',
+    },
+  ],
 };
 
 function handleSubmit(e: Event | MouseEvent) {
