@@ -24,12 +24,20 @@
   </div>
   <!-- Modal - Subscription -->
   <modal v-model:show="modalVisible" class="max-w-3xl" :title="$t('producthunt.modal.headline')">
-    <FormProductHunt :id="productHuntStore.comment?.id" @submit-success="modalVisible = false" />
+    <FormProductHunt
+      :id="productHuntStore.comment?.id"
+      @submit-success="modalVisible = false"
+      :wallet="props.wallet"
+    />
   </modal>
 </template>
 <script lang="ts" setup>
 const modalVisible = ref<boolean>(false);
 const productHuntStore = useProductHuntStore();
+
+const props = defineProps({
+  wallet: { type: String, default: '' },
+});
 
 onMounted(async () => {
   await productHuntStore.getComment();

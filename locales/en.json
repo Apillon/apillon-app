@@ -1501,7 +1501,8 @@
       },
       "productHunt": {
         "username": "Product Hunt username",
-        "url": "Link to your comment"
+        "url": "Link to your comment",
+        "wallet": "Wallet to receive reward"
       },
       "rpcApiKey": {
         "name": "Name",

@@ -29,6 +29,18 @@
       />
     </n-form-item>
 
+    <n-form-item
+      path="wallet"
+      :label="$t('form.label.productHunt.wallet')"
+      :label-props="{ for: 'wallet' }"
+    >
+      <n-input
+        v-model:value="props.wallet"
+        :input-props="{ id: 'wallet' }"
+        :disabled="true"
+      ></n-input>
+    </n-form-item>
+
     <n-form-item :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.continue')" />
 
@@ -41,6 +53,7 @@
 <script lang="ts" setup>
 const props = defineProps({
   id: { type: Number, default: 0 },
+  wallet: { type: String, default: '' },
 });
 
 const $i18n = useI18n();
@@ -76,10 +89,7 @@ async function createProductHuntComment() {
   try {
     const bodyData = productHuntStore.form;
 
-    const res = await $api.post<ProductHuntCommentResponse>(
-      endpoints.productHuntComment(),
-      bodyData
-    );
+    const res = await $api.post<ProductHuntCommentResponse>(endpoints.productHuntComment, bodyData);
 
     message.success(
       $i18n.t(props.id ? 'form.success.updated.productHunt' : 'form.success.created.productHunt')
