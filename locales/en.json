@@ -2891,8 +2891,9 @@
     },
     "banner": {
       "title": "Apillon embedded wallet SDK on Product Hunt",
-      "description": "Apillons Embedded Wallets will be live on Product Hunt on <strong>Thursday, November, 21!</strong> Check out our SDK, and vote for us on the day of the launch.\n\n<strong>Until then: Check the page, create a profile and click “Notify me” so you don’t miss the launch day and a chance to get rewarded.</strong>\n\nHint: We’ve prepared a bag of 100.000NCTR for our loyal supporters. Submit your comment and be the part of reward.\n\nInterested in Embedded Wallets? Check out the Apillon Wiki.",
-      "btn": "Check it out and get notified"
+      "subtitle": "Apillon's Embedded Wallets are live on Product Hunt!",
+      "description": "Show us your support while earning some extra $NCTRs.\n1. Go to Embedded wallets SDK page <a target=”_blank”  href='https://www.producthunt.com/posts/embedded-wallet-sdk'>here</a>.\n2. Click \"Upvote\".\n3. Leave a comment or a review.\n4. Come back here to claim rewards.\n\nHint: There's a bag of 100.000 NCTR for our loyal supporters. Don't miss out!\n\nInterested in Embedded Wallets? Check out the <a target=”_blank”  href='https://wiki.apillon.io/web3-services/9-embedded-wallets.html'>Apillon Wiki</a>.",
+      "btn": "Claim your Product Hunt reward"
     }
   }
 }
