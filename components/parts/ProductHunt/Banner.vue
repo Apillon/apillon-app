@@ -3,6 +3,10 @@
     <div class="card-light flex flex-wrap gap-4 p-8">
       <div class="flex-1 min-w-[16rem]">
         <h4 class="">{{ $t('producthunt.banner.title') }}</h4>
+
+        <p class="mt-4 mb-6 whitespace-break-spaces">
+          <span v-html="$t('producthunt.banner.subtitle')"></span>
+        </p>
         <p class="mt-4 mb-6 whitespace-break-spaces">
           <span v-html="$t('producthunt.banner.description')"></span>
         </p>
