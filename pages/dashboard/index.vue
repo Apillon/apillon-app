@@ -7,8 +7,8 @@
     </template>
     <slot>
       <ProductHuntBanner
-        v-if="authStore.user.wallet"
-        :wallet="authStore.user.wallet ?? undefined"
+        v-if="authStore.user.evmWallet."
+        :wallet="authStore.user.evmWallet ?? undefined"
       />
       <div
         v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())"
