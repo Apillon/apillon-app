@@ -2394,7 +2394,8 @@
       "delete": "Are you sure you want to remove this network from favorites?",
       "noFavoriteEndpointTitle": "You currently have no favorite networks.",
       "noFavoriteEndpointDescription": "Browse our available networks and click \"Add\" for quick access. Once you add a network you plan to use, it will appear in \"Your networks\" table.",
-      "browse": "Browse networks"
+      "browse": "Browse networks",
+      "requestNew": "Request new RPC"
     },
     "initial": {
       "benefits": [
