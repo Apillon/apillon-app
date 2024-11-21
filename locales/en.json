@@ -1499,6 +1499,10 @@
         "traitType": "Trait",
         "value": "Value"
       },
+      "productHunt": {
+        "url": "Link to your comment",
+        "wallet": "Wallet to receive reward"
+      },
       "rpcApiKey": {
         "name": "Name",
         "description": "Description"
@@ -1546,6 +1550,9 @@
       "password": "password",
       "phone": "+000 12345678",
       "postalCode": "4223",
+      "productHunt": {
+        "url": "Paste the link to your comment"
+      },
       "projectName": "Enter project name",
       "projectDescription": "Enter project description",
       "reenterPassword": "Re-enter your complex password",
@@ -1648,6 +1655,7 @@
         "hosting": "Hosting has been created",
         "ipns": "IPNS has been created",
         "item": "Item has been created",
+        "productHunt": "Product Hunt comment has been added",
         "rpcApiKey": "RPC API key has been created",
         "rpcEndpoint": "RPC endpoint has been added",
         "service": "Service has been created",
@@ -1714,6 +1722,7 @@
         "indexer": "Indexer has been updated",
         "ipns": "IPNS has been updated",
         "item": "Item has been updated",
+        "productHunt": "Product Hunt comment has been updated",
         "project": "Project has been updated",
         "rpcApiKey": "RPC API key has been updated",
         "service": "Service has been updated",
@@ -2804,6 +2813,10 @@
       "slotsRequired": "Please enter number of slots",
       "uuid": "Cloud Function UUID"
     },
+    "productHunt": {
+      "urlRequired": "Please enter link to your comment",
+      "urlInvalid": "Please enter valid Product Hunt URL"
+    },
     "hosting": {
       "missingHtml": "You have to upload at least one html file, to deploy website!",
       "missingIndex": "Please upload index.html file",
@@ -2870,6 +2883,17 @@
     },
     "storage": {
       "shortUrl": ""
+    }
+  },
+  "producthunt": {
+    "modal": {
+      "headline": "Enter your Product Hunt data"
+    },
+    "banner": {
+      "title": "Apillon embedded wallet SDK on Product Hunt",
+      "subtitle": "Apillon's Embedded Wallets are live on Product Hunt!",
+      "description": "Show us your support while earning some extra $NCTRs.\n1. Go to Embedded wallets SDK page <a target=”_blank”  href='https://www.producthunt.com/posts/embedded-wallet-sdk'>here</a>.\n2. Click \"Upvote\".\n3. Leave a comment or a review.\n4. Come back here to claim rewards.\n\nHint: There's a bag of 100.000 NCTR for our loyal supporters. Don't miss out!\n\nInterested in Embedded Wallets? Check out the <a target=”_blank”  href='https://wiki.apillon.io/web3-services/9-embedded-wallets.html'>Apillon Wiki</a>.",
+      "btn": "Claim your Product Hunt reward"
     }
   }
 }
