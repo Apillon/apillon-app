@@ -5,7 +5,7 @@
       <Heading>
         <slot>
           <div class="flex gap-4 items-center">
-            <NuxtLink :to="{ name: 'dashboard-service-rpc' }">
+            <NuxtLink v-if="rpcEndpointStore.hasFavorites" :to="{ name: 'dashboard-service-rpc' }">
               <span class="icon-back text-2xl align-sub"></span>
             </NuxtLink>
             <div>
@@ -21,7 +21,7 @@
       <TableRpcEndpoint :rpcEndpoints="rpcEndpointStore.items" :allowFavoriteCheck="true" />
     </n-space>
     <template v-else>
-      <RpcNoApiKeys />
+      <RpcNoEndpoints />
     </template>
   </Dashboard>
 </template>
@@ -44,6 +44,8 @@ onMounted(async () => {
       rpcApiKeyStore.selectedId = rpcApiKeyStore.items[0].id;
     }
   }
+
+  console.log(rpcApiKeyStore.selectedId);
 
   await rpcEndpointStore.getEndpoints();
 
