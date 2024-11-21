@@ -6,6 +6,7 @@ export const useIndexerStore = defineStore('indexer', {
     items: [] as IndexerBaseInterface[],
     loading: false,
     search: '',
+    usageMetrics: [] as IndexerUsageMetricsInterface[],
   }),
   getters: {
     hasIndexers(state): boolean {
@@ -34,6 +35,10 @@ export const useIndexerStore = defineStore('indexer', {
         return this.active;
       }
       return await this.fetchIndexer(indexerUUID);
+    },
+
+    async getIndexerUsage(indexerUUID: string) {
+      return await this.fetchUsage(indexerUUID);
     },
 
     /**
@@ -118,6 +123,25 @@ export const useIndexerStore = defineStore('indexer', {
       } finally {
         this.loading = false;
       }
+    },
+
+    async fetchUsage(indexerUUID: string, showLoader: boolean = true) {
+      this.loading = showLoader;
+      try {
+        const res = await $api.get<IndexerUsageResponse>(endpoints.indexerUsage(indexerUUID));
+        this.loading = false;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.INDEXER_USAGE, Date.now().toString());
+        this.usageMetrics = res.data.metrics;
+        return this.usageMetrics;
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.loading = false;
+      }
+      return null;
     },
   },
 });
