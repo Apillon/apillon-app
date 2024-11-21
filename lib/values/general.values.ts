@@ -143,6 +143,8 @@ export const LsCacheKeys = {
   INDEXER: 'al_cache_indexer',
   INDEXER_LOGS: 'al_cache_indexer_logs',
   INDEXER_DEPLOYMENTS: 'al_cache_indexer_deployments',
+  INDEXER_USAGE: 'al_cache_indexer_usage',
+  INDEXER_BILLING: 'al_cache_indexer_billing',
 };
 
 /** User roles */

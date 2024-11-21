@@ -72,7 +72,7 @@ onMounted(async () => {
 });
 
 const isFormDisabled = computed<boolean>(() => {
-  return dataStore.isProjectUser || true;
+  return dataStore.isProjectUser;
 });
 
 // Submit

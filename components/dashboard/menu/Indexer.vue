@@ -24,5 +24,11 @@ const menuOptions: NMenuOption[] = [
     path: `/dashboard/service/indexing/${indexerStore.active.indexer_uuid}/logs`,
     disabled: !indexerStore.active.squidId,
   },
+  {
+    key: 'dashboard-service-indexing-slug-billing',
+    label: t('indexer.billing'),
+    path: `/dashboard/service/indexing/${indexerStore.active.indexer_uuid}/billing`,
+    disabled: !indexerStore.active.squidId,
+  },
 ];
 </script>

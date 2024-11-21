@@ -1888,9 +1888,9 @@
     "spendingWarning": {
       "btnProceed": "Got it, Proceed",
       "btnBuyCredits": "I want to buy credits right now",
-      "content": "When you deploy an indexer, <b>50,000 credits will be deducted from your account.</b> This is the minimum required to start running the indexer. The rate of credit usage depends on the amount of data being indexed. You can explore typical pricing scenarios here:",
+      "content": "To deploy an indexer, <b>20,000 credits are needed on project account.</b> This is the minimum required to start running the indexer. The rate of credit usage depends on the amount of data being indexed.",
       "info": "Don't worry, we'll notify you via email when your credits are running low.",
-      "notEnough1": "To deploy an indexer, you need at least 50,000 credits in your account. This ensures the indexer is set up and starts indexing.",
+      "notEnough1": "To deploy an indexer, you need at least 20,000 credits in your account. This ensures the indexer is set up and starts indexing.",
       "notEnough2": "However, the actual usage depends on the indexing you're performing."
     },
     "statuses": {
@@ -1916,6 +1916,11 @@
       "updatedAt": "Updated",
       "createdAt": "Created"
     },
+    "tableBilling": {
+      "year": "Year",
+      "month": "Month",
+      "billedAmount": "Amount"
+    },
     "apiStatus": "Api status",
     "create": "Create new indexer",
     "created": "Created",
@@ -1926,7 +1931,8 @@
     "hibernateIndexer": "Hibernate indexer",
     "hibernateIndexerInfo": "Hibernation of indexer lets you pause virtual machines, lowering costs while keeping data safe. Wheen needed, redeploy the indexer with all data intact.",
     "indexerApiEndpoint": "Indexer API endpoint",
-    "indexerGeneralData": "Indexer - general data",
+    "indexerGeneralData": "General data",
+    "usageData": "Usage per day",
     "info": "Add it to your Web3 project",
     "lastDeployed": "Last deployed",
     "logs": "Logs",
@@ -1939,7 +1945,8 @@
     "startNew": "Start by creating a new indexer",
     "successfullyHibernated": "Indexer successfully hibernated",
     "update": "Update Indexer",
-    "uuid": "Indexer UUID"
+    "uuid": "Indexer UUID",
+    "billing": "Billing"
   },
   "nft": {
     "amount": {
