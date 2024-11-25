@@ -5,7 +5,7 @@
     </template>
 
     <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="pb-8" :size="32" vertical>
-      <ActionsRpc />
+      <ActionsRpc :show-usage-refresh="true" />
       <n-tag closable size="small" v-if="network" @close="handleRemoveNetwork">{{ network }}</n-tag>
       <ChartLine v-if="chartData?.labels.length" :data="chartData" />
       <div v-else class="flex-cc min-h-40">
