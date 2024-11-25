@@ -73,6 +73,10 @@ watch(
 
       await rpcEndpointStore.getEndpoints();
 
+      if (!rpcEndpointStore.hasFavorites) {
+        router.replace({ name: 'dashboard-service-rpc-endpoints' });
+      }
+
       pageLoading.value = false;
     }
   }
@@ -93,6 +97,10 @@ async function initRpc() {
     }
 
     await rpcEndpointStore.getEndpoints();
+
+    if (!rpcEndpointStore.hasFavorites) {
+      await router.replace({ name: 'dashboard-service-rpc-endpoints' });
+    }
   }
 }
 </script>

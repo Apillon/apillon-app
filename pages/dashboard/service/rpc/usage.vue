@@ -6,6 +6,7 @@
 
     <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" class="pb-8" :size="32" vertical>
       <ActionsRpc />
+      <n-tag closable size="small" v-if="network" @close="handleRemoveNetwork">{{ network }}</n-tag>
       <ChartLine v-if="chartData?.labels.length" :data="chartData" />
       <div v-else class="flex-cc min-h-40">
         <h2>No RPC usage has been detected yet.</h2>
@@ -16,16 +17,17 @@
 </template>
 
 <script lang="ts" setup>
-import type { SelectOption } from 'naive-ui';
 import colors from '~/tailwind.colors';
 
 const { t } = useI18n();
 const dataStore = useDataStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
+const route = useRoute();
 
 const pageLoading = ref<boolean>(true);
 const chartData = ref();
 const initialLoadComplete = ref<boolean>(false);
+const network = ref<string | undefined>(route.query.network as string);
 
 useHead({
   title: t('dashboard.nav.rpc'),
@@ -44,7 +46,7 @@ onMounted(async () => {
   await rpcApiKeyStore.getRpcApiKeyUsagePerChain();
 
   if (rpcApiKeyStore.usagePerChain) {
-    chartData.value = prepareData(rpcApiKeyStore.usagePerChain);
+    chartData.value = prepareData(rpcApiKeyStore.usagePerChain, network.value);
   }
 
   pageLoading.value = false;
@@ -100,9 +102,21 @@ function getRequestsPerChainPerDate(
   return requestsPerChain;
 }
 
-const prepareData = (usage: RpcApiKeyUsagePerChainInterface) => {
-  const dates = getSortedUniqueDatesDesc(usage);
-  const requestsPerChain = getRequestsPerChainPerDate(usage, dates);
+const prepareData = (usage: RpcApiKeyUsagePerChainInterface, network?: string) => {
+  let computedUsage = usage;
+  if (network) {
+    const networkData = usage[network];
+    if (networkData) {
+      computedUsage = {
+        [network]: networkData,
+      };
+    } else {
+      computedUsage = {};
+    }
+  }
+
+  const dates = getSortedUniqueDatesDesc(computedUsage);
+  const requestsPerChain = getRequestsPerChainPerDate(computedUsage, dates);
 
   const colorPalette = [
     colors.green,
@@ -132,6 +146,14 @@ const prepareData = (usage: RpcApiKeyUsagePerChainInterface) => {
     })),
   };
 };
+
+function handleRemoveNetwork() {
+  network.value = undefined;
+
+  if (rpcApiKeyStore.usagePerChain) {
+    chartData.value = prepareData(rpcApiKeyStore.usagePerChain);
+  }
+}
 
 watch(
   () => rpcApiKeyStore.selectedId,
