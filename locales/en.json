@@ -228,9 +228,9 @@
         }
       ],
       "job": {
-        "btnUpload": "Upload new Script",
+        "btnUpload": "Create new deployment",
         "cid": "CID",
-        "content": "Start by uploading your script by drag & drop files",
+        "content": "Start by creating and uploading your Node.js project",
         "dateStarted": "Date started",
         "delete": "Delete job",
         "edit": "Edit job",
