@@ -45,8 +45,6 @@ onMounted(async () => {
     }
   }
 
-  console.log(rpcApiKeyStore.selectedId);
-
   await rpcEndpointStore.getEndpoints();
 
   pageLoading.value = false;

@@ -135,8 +135,6 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
         await dataStore.fetchProjects();
       }
 
-      console.log(dataStore.projectUuid);
-
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
