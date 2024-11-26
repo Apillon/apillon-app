@@ -180,6 +180,7 @@ onMounted(async () => {
 
 async function initProject() {
   projectsLoaded.value = false;
+  await sleep(1);
   await Promise.all(Object.values(dataStore.promises));
   if (authStore.isAdmin()) {
     const currentProject = await dataStore.getProject(dataStore.project.selected);

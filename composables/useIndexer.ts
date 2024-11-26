@@ -16,6 +16,7 @@ export default function useIndexer() {
       router.push({ name: 'dashboard-service-indexer' });
     }
 
+    await sleep(10);
     await Promise.all(Object.values(dataStore.promises));
 
     const indexer = await indexerStore.getIndexer(`${indexerUuid}`);
