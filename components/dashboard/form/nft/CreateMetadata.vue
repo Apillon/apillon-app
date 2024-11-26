@@ -67,7 +67,7 @@ function w3WarnAndDeploy() {
 
 async function onModalW3WarnConfirm() {
   if (!metadataValid()) {
-    message.warning(t('validation.nftMetadata'));
+    message.warning(t('validation.nft.metadata'));
   } else if (isUnique.value) {
     warningStore.showSpendingWarning(getPriceServiceName(), () => deployUnique());
   } else {
