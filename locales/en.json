@@ -1888,10 +1888,9 @@
     "spendingWarning": {
       "btnProceed": "Got it, Proceed",
       "btnBuyCredits": "I want to buy credits right now",
-      "content": "To deploy an indexer, <b>20,000 credits are needed on project account.</b> This is the minimum required to start running the indexer. The rate of credit usage depends on the amount of data being indexed.",
-      "info": "Don't worry, we'll notify you via email when your credits are running low.",
-      "notEnough1": "To deploy an indexer, you need at least 20,000 credits in your account. This ensures the indexer is set up and starts indexing.",
-      "notEnough2": "However, the actual usage depends on the indexing you're performing."
+      "content": "To deploy an indexer, your project account must have <b> at least 5,000 credits.</b> This ensures the indexer can operate properly without interruptions.",
+      "content2": "<b>Important:</b> The 5,000 credits are <b>not spent or reserved upfront.</b>Credits are consumed gradually based on the volume of data being indexer. You have full control and can hibernate the indexer at any time to minimize credit usage.",
+      "info": "We will notify you via email when your credits are running low to help you stay on track."
     },
     "statuses": {
       "1": "Created",
