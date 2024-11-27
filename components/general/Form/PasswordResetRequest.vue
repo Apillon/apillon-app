@@ -19,7 +19,7 @@
     </div>
 
     <!-- <div class="flex justify-center align-center mb-3">
-      <n-form-item path="captcha"> -->
+      <n-form-item path="captcha"> 
     <vue-hcaptcha
       ref="captchaInput"
       :sitekey="captchaKey"
@@ -30,9 +30,20 @@
       @expired="onCaptchaExpire"
       @challenge-expired="onCaptchaChallengeExpire"
       @closed="onCaptchaClose"
-    />
+    />-->
     <!-- </n-form-item>
     </div> -->
+    <div
+      class="procaptcha"
+      data-theme="dark"
+      data-captcha-type="image"
+      data-sitekey="5FPCpm2ycomt2c9FcSS551mjZJ6iyA1vP5Ucx8hjQrk3NfDA"
+      :data-callback="(...args) => console.debug(args)"
+      :data-error-callback="(...args) => console.debug(args)"
+      :data-expired-callback="(...args) => console.debug(args)"
+      :data-reset-callback="(...args) => console.debug(args)"
+      :data-failed-callback="(...args) => console.debug(args)"
+    ></div>
 
     <!--  Btn submit -->
     <n-form-item :show-label="false">
@@ -51,7 +62,19 @@
 </template>
 
 <script lang="ts" setup>
-import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+// import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+
+useHead({
+  script: [
+    {
+      type: 'module',
+      // id: 'procaptcha-script',
+      src: 'https://js.prosopo.io/js/procaptcha.bundle.js',
+      async: true,
+      defer: true,
+    },
+  ],
+});
 
 type PasswordResetForm = {
   email: string;
@@ -70,15 +93,7 @@ const props = defineProps({
 
 const $i18n = useI18n();
 const message = useMessage();
-const {
-  loading,
-  captchaKey,
-  captchaInput,
-  onCaptchaChallengeExpire,
-  onCaptchaClose,
-  onCaptchaError,
-  onCaptchaExpire,
-} = useCaptcha();
+const { loading, captchaKey, captchaInput } = useCaptcha();
 
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<PasswordResetForm>({
