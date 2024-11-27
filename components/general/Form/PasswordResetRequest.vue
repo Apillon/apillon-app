@@ -36,13 +36,8 @@
     <div
       class="procaptcha"
       data-theme="dark"
-      data-captcha-type="image"
       data-sitekey="5FPCpm2ycomt2c9FcSS551mjZJ6iyA1vP5Ucx8hjQrk3NfDA"
-      :data-callback="(...args) => console.debug(args)"
-      :data-error-callback="(...args) => console.debug(args)"
-      :data-expired-callback="(...args) => console.debug(args)"
-      :data-reset-callback="(...args) => console.debug(args)"
-      :data-failed-callback="(...args) => console.debug(args)"
+      :data-callback="onCaptchaVerified"
     ></div>
 
     <!--  Btn submit -->
@@ -62,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-// import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+import type { ButtonType } from '../Btn.vue';
 
 useHead({
   script: [
@@ -83,17 +78,18 @@ type PasswordResetForm = {
 };
 
 const props = defineProps({
-  btnType: {
-    type: String,
-    validator: (value: string) => ['primary', 'secondary', 'link'].includes(value),
-    default: 'secondary',
-  },
+  btnType: { type: String as PropType<ButtonType>, default: 'secondary' },
   email: { type: String, default: '' },
 });
 
 const $i18n = useI18n();
 const message = useMessage();
 const { loading, captchaKey, captchaInput } = useCaptcha();
+
+const onCaptchaVerified = (...args) => {
+  console.debug(args);
+};
+window.onCaptchaVerified = onCaptchaVerified;
 
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<PasswordResetForm>({
@@ -123,7 +119,7 @@ function handleSubmit(e: Event | MouseEvent | null) {
       errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || '')));
     } else if (!formData.value.captcha) {
       loading.value = true;
-      captchaInput.value.execute();
+      // captchaInput.value.execute();
     } else {
       /** Request password change */
       await passwordChangeRequest();
