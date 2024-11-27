@@ -7,7 +7,7 @@ const config: ConfigInterface = {
   oauthUrl: 'https://oauth-dev.apillon.io',
   adminUrl: 'https://admin-dev.apillon.io',
   mailerLiteSubscribeUrl: 'https://landing.mailerlite.com/webforms/landing/i9f9l9',
-  captchaKey: 'f5f700a0-51b2-49f3-9ba5-46c7fe146af0',
+  captchaKey: '5FPCpm2ycomt2c9FcSS551mjZJ6iyA1vP5Ucx8hjQrk3NfDA',
   githubId: 'd0482598d8adbd8adffa',
   gtmId: 'GTM-P7V3D3P6',
   nctrContract: '0xc27e62A737C7474AD9EEF6C493Ed68c71dB80A65',

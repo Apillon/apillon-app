@@ -23,18 +23,12 @@
       />
     </n-form-item>
 
-    <!-- Hcaptcha -->
-    <vue-hcaptcha
-      ref="captchaInput"
-      :sitekey="captchaKey"
-      size="invisible"
-      theme="dark"
-      @error="onCaptchaError"
-      @verify="onCaptchaVerify"
-      @expired="onCaptchaExpire"
-      @challenge-expired="onCaptchaChallengeExpire"
-      @closed="onCaptchaClose"
-    />
+    <n-form-item path="captcha" :show-label="false">
+      <div class="block w-full h-20">
+        <Captcha />
+      </div>
+      <n-input v-model:value="formData.captcha" class="absolute hidden" />
+    </n-form-item>
 
     <!--  Login submit -->
     <n-form-item :show-label="false">
@@ -47,8 +41,6 @@
 </template>
 
 <script lang="ts" setup>
-import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
-
 type FormLogin = {
   email: string;
   password: string;
@@ -56,21 +48,13 @@ type FormLogin = {
   captchaJwt?: any;
 };
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
-const {
-  loading,
-  captchaKey,
-  captchaInput,
-  onCaptchaChallengeExpire,
-  onCaptchaClose,
-  onCaptchaError,
-  onCaptchaExpire,
-} = useCaptcha();
 
+const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormLogin>({
   email: authStore.email,
@@ -81,25 +65,19 @@ const formData = ref<FormLogin>({
 
 const rules: NFormRules = {
   email: [
+    ruleRequired(t('validation.emailRequired')),
     {
       type: 'email',
-      message: $i18n.t('validation.email'),
-    },
-    {
-      required: true,
-      message: $i18n.t('validation.emailRequired'),
+      message: t('validation.email'),
     },
   ],
-  password: [
-    {
-      required: true,
-      message: $i18n.t('validation.passwordRequired'),
-    },
-  ],
+  password: ruleRequired(t('validation.passwordRequired')),
+  captcha: ruleRequired(t('validation.captchaRequired')),
 };
 
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
+  formData.value.captcha = sessionStorage.getItem(AuthLsKeys.PROSOPO);
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
@@ -111,8 +89,8 @@ function handleSubmit(e: Event | MouseEvent | null) {
       isFeatureEnabled(Feature.CAPTCHA_LOGIN, authStore.getUserRoles()) &&
       !isCaptchaConfirmed()
     ) {
-      loading.value = true;
-      captchaInput.value.execute();
+      // loading.value = true;
+      // captchaInput.value.execute();
     } else {
       /** Login with mail and password */
       await login();
@@ -146,7 +124,7 @@ async function login() {
 
     if (error.code === ValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
       loading.value = true;
-      captchaInput.value.execute();
+      // captchaInput.value.execute();
       authStore.removeCaptchaJwt(formData.value.email);
     } else if (DevConsoleError.USER_INVALID_LOGIN) {
       authStore.removeCaptchaJwt(formData.value.email);
@@ -171,6 +149,6 @@ function onCaptchaVerify(token: string, eKey: string) {
 
 function captchaReset() {
   formData.value.captcha = null;
-  captchaInput.value.reset();
+  sessionStorage.removeItem(AuthLsKeys.PROSOPO);
 }
 </script>

@@ -9,18 +9,14 @@ export default function useCaptcha() {
     loading.value = false;
   }
 
-  function onCaptchaChallengeExpire(err: any) {
-    console.warn(err);
-    loading.value = false;
-    captchaInput.value.reset();
-  }
   function onCaptchaExpire(err: any) {
     console.warn(err);
     loading.value = false;
-    captchaInput.value.reset();
+    // captchaInput.value.reset();
   }
 
-  function onCaptchaClose() {
+  function onCaptchaClose(...args) {
+    console.debug(args);
     loading.value = false;
   }
 
@@ -29,7 +25,6 @@ export default function useCaptcha() {
     captchaInput,
     loading,
     onCaptchaError,
-    onCaptchaChallengeExpire,
     onCaptchaExpire,
     onCaptchaClose,
   };

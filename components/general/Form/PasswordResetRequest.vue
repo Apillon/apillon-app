@@ -18,27 +18,12 @@
       </n-form-item>
     </div>
 
-    <!-- <div class="flex justify-center align-center mb-3">
-      <n-form-item path="captcha"> 
-    <vue-hcaptcha
-      ref="captchaInput"
-      :sitekey="captchaKey"
-      size="invisible"
-      theme="dark"
-      @error="onCaptchaError"
-      @verify="onCaptchaVerify"
-      @expired="onCaptchaExpire"
-      @challenge-expired="onCaptchaChallengeExpire"
-      @closed="onCaptchaClose"
-    />-->
-    <!-- </n-form-item>
-    </div> -->
-    <div
-      class="procaptcha"
-      data-theme="dark"
-      data-sitekey="5FPCpm2ycomt2c9FcSS551mjZJ6iyA1vP5Ucx8hjQrk3NfDA"
-      :data-callback="onCaptchaVerified"
-    ></div>
+    <n-form-item path="captcha" :show-label="false">
+      <div class="block w-full h-20">
+        <Captcha />
+      </div>
+      <n-input v-model:value="formData.captcha" class="absolute hidden" />
+    </n-form-item>
 
     <!--  Btn submit -->
     <n-form-item :show-label="false">
@@ -59,18 +44,6 @@
 <script lang="ts" setup>
 import type { ButtonType } from '../Btn.vue';
 
-useHead({
-  script: [
-    {
-      type: 'module',
-      // id: 'procaptcha-script',
-      src: 'https://js.prosopo.io/js/procaptcha.bundle.js',
-      async: true,
-      defer: true,
-    },
-  ],
-});
-
 type PasswordResetForm = {
   email: string;
   captcha?: any;
@@ -82,15 +55,10 @@ const props = defineProps({
   email: { type: String, default: '' },
 });
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
-const { loading, captchaKey, captchaInput } = useCaptcha();
 
-const onCaptchaVerified = (...args) => {
-  console.debug(args);
-};
-window.onCaptchaVerified = onCaptchaVerified;
-
+const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<PasswordResetForm>({
   email: props.email,
@@ -102,17 +70,19 @@ const rules: NFormRules = {
   email: [
     {
       type: 'email',
-      message: $i18n.t('validation.email'),
+      message: t('validation.email'),
     },
     {
       required: true,
-      message: $i18n.t('validation.emailRequired'),
+      message: t('validation.emailRequired'),
     },
   ],
+  captcha: ruleRequired(t('validation.captchaRequired')),
 };
 
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
+  formData.value.captcha = sessionStorage.getItem(AuthLsKeys.PROSOPO);
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
@@ -136,7 +106,7 @@ async function passwordChangeRequest() {
     );
 
     if (res.data) {
-      message.success($i18n.t('form.success.requestPasswordChange'));
+      message.success(t('form.success.requestPasswordChange'));
     }
   } catch (error) {
     message.error(userFriendlyMsg(error));
@@ -144,9 +114,9 @@ async function passwordChangeRequest() {
   loading.value = false;
 }
 
-function onCaptchaVerify(token: string, eKey: string) {
-  formData.value.captcha = { token, eKey };
-  handleSubmit(null);
-  loading.value = false;
-}
+// function onCaptchaVerify(token: string, eKey: string) {
+//   formData.value.captcha = { token, eKey };
+//   handleSubmit(null);
+//   loading.value = false;
+// }
 </script>

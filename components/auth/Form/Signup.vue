@@ -24,18 +24,12 @@
       />
     </div>
 
-    <!-- Hcaptcha -->
-    <vue-hcaptcha
-      ref="captchaInput"
-      :sitekey="captchaKey"
-      size="invisible"
-      theme="dark"
-      @error="onCaptchaError"
-      @verify="onCaptchaVerify"
-      @expired="onCaptchaExpire"
-      @challenge-expired="onCaptchaChallengeExpire"
-      @closed="onCaptchaClose"
-    />
+    <n-form-item path="captcha" :show-label="false">
+      <div class="block w-full h-20">
+        <Captcha />
+      </div>
+      <n-input v-model:value="formData.captcha" class="absolute hidden" />
+    </n-form-item>
 
     <!--  Signup submit -->
     <n-form-item :show-label="false" :show-feedback="false">
@@ -52,7 +46,6 @@
 
 <script lang="ts" setup>
 import type { FormItemRule } from 'naive-ui';
-import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 import { useAccount } from 'use-wagmi';
 
 type SignupForm = {
@@ -72,24 +65,16 @@ const props = defineProps({
 });
 
 const { query } = useRoute();
-const $i18n = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
 const authStore = useAuthStore();
-const {
-  loading,
-  captchaKey,
-  captchaInput,
-  onCaptchaChallengeExpire,
-  onCaptchaClose,
-  onCaptchaError,
-  onCaptchaExpire,
-} = useCaptcha();
 const { address, isConnected } = useAccount();
 
 const formRef = ref<NFormInst | null>(null);
 const formErrors = ref<boolean>(false);
 const newsletterChecked = ref<boolean>(false);
+const loading = ref<boolean>(false);
 
 const formData = ref<SignupForm>({
   email: authStore.email,
@@ -103,11 +88,11 @@ const rules: NFormRules = {
   email: [
     {
       type: 'email',
-      message: $i18n.t('validation.email'),
+      message: t('validation.email'),
     },
     {
       required: true,
-      message: $i18n.t('validation.emailRequired'),
+      message: t('validation.emailRequired'),
     },
   ],
   terms: [
@@ -115,26 +100,27 @@ const rules: NFormRules = {
       validator(_: FormItemRule, value: string) {
         return props.sendAgain || !!value;
       },
-      message: $i18n.t('validation.terms'),
+      message: t('validation.terms'),
       trigger: 'change',
     },
   ],
+  captcha: ruleRequired(t('validation.captchaRequired')),
 };
 
 /** Terms label with link  */
 const termsLabel = computed<any>(() => {
   return h('span', {}, [
-    $i18n.t('auth.terms.accept'),
+    t('auth.terms.accept'),
     h(
       'a',
       { href: 'https://apillon.io/legal-disclaimer', target: '_blank' },
-      { default: () => $i18n.t('auth.terms.tc') }
+      { default: () => t('auth.terms.tc') }
     ),
-    $i18n.t('auth.terms.and'),
+    t('auth.terms.and'),
     h(
       'a',
       { href: 'https://apillon.io/privacy-policy', target: '_blank' },
-      { default: () => $i18n.t('auth.terms.pp') }
+      { default: () => t('auth.terms.pp') }
     ),
     '.',
   ]);
@@ -143,6 +129,8 @@ const termsLabel = computed<any>(() => {
 function handleSubmit(e: MouseEvent | null) {
   e?.preventDefault();
   formErrors.value = false;
+  formData.value.captcha = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       formErrors.value = true;
@@ -151,7 +139,7 @@ function handleSubmit(e: MouseEvent | null) {
       );
     } else if (!formData.value.captcha) {
       loading.value = true;
-      captchaInput.value.execute();
+      // TODO: captchaInput.value.execute();
     } else {
       // Email validation
       authStore.saveEmail(formData.value.email);
@@ -185,7 +173,7 @@ async function signupWithEmail() {
 
       router.push({ name: 'register-email' });
     } else {
-      message.success($i18n.t('form.success.sendAgainEmail'));
+      message.success(t('form.success.sendAgainEmail'));
     }
   } catch (error) {
     formData.value.captcha = null;
