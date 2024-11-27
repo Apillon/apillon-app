@@ -228,9 +228,9 @@
         }
       ],
       "job": {
-        "btnUpload": "Upload new Script",
+        "btnUpload": "Create new deployment",
         "cid": "CID",
-        "content": "Start by uploading your script by drag & drop files",
+        "content": "Start by creating and uploading your Node.js project",
         "dateStarted": "Date started",
         "delete": "Delete job",
         "edit": "Edit job",
@@ -1888,10 +1888,9 @@
     "spendingWarning": {
       "btnProceed": "Got it, Proceed",
       "btnBuyCredits": "I want to buy credits right now",
-      "content": "When you deploy an indexer, <b>50,000 credits will be deducted from your account.</b> This is the minimum required to start running the indexer. The rate of credit usage depends on the amount of data being indexed. You can explore typical pricing scenarios here:",
-      "info": "Don't worry, we'll notify you via email when your credits are running low.",
-      "notEnough1": "To deploy an indexer, you need at least 50,000 credits in your account. This ensures the indexer is set up and starts indexing.",
-      "notEnough2": "However, the actual usage depends on the indexing you're performing."
+      "content": "To deploy an indexer, your project account must have <b> at least 5,000 credits.</b> This ensures the indexer can operate properly without interruptions.",
+      "content2": "<b>Important:</b> The 5,000 credits are <b>not spent or reserved upfront.</b>Credits are consumed gradually based on the volume of data being indexer. You have full control and can hibernate the indexer at any time to minimize credit usage.",
+      "info": "We will notify you via email when your credits are running low to help you stay on track."
     },
     "statuses": {
       "1": "Created",
@@ -1916,6 +1915,11 @@
       "updatedAt": "Updated",
       "createdAt": "Created"
     },
+    "tableBilling": {
+      "year": "Year",
+      "month": "Month",
+      "billedAmount": "Amount"
+    },
     "apiStatus": "Api status",
     "create": "Create new indexer",
     "created": "Created",
@@ -1926,7 +1930,8 @@
     "hibernateIndexer": "Hibernate indexer",
     "hibernateIndexerInfo": "Hibernation of indexer lets you pause virtual machines, lowering costs while keeping data safe. Wheen needed, redeploy the indexer with all data intact.",
     "indexerApiEndpoint": "Indexer API endpoint",
-    "indexerGeneralData": "Indexer - general data",
+    "indexerGeneralData": "General data",
+    "usageData": "Usage per day",
     "info": "Add it to your Web3 project",
     "lastDeployed": "Last deployed",
     "logs": "Logs",
@@ -1939,7 +1944,8 @@
     "startNew": "Start by creating a new indexer",
     "successfullyHibernated": "Indexer successfully hibernated",
     "update": "Update Indexer",
-    "uuid": "Indexer UUID"
+    "uuid": "Indexer UUID",
+    "billing": "Billing"
   },
   "nft": {
     "amount": {
@@ -2368,7 +2374,7 @@
       "description": "Apillon’s RPC service, powered by Dwellir, provides developers with reliable, low-latency access to over 100 blockchain networks. This scalable solution ensures seamless communication between decentralized applications and blockchains, backed by 99% uptime and top-tier performance. With easy API key management, you can quickly integrate multiple chains, eliminating the complexity of running your own nodes. The intuitive dashboard allows you to browse and favorite endpoints, simplifying Web3 project management from start to scale.",
       "uuid": "UUID",
       "usage": "RPC Usage monitoring",
-      "yourEndpoints": "Your endpoints",
+      "yourNetworks": "Your networks",
       "curious": "Curious about what we offer before enabling the service?",
       "explore": "Explore the supported chains and pick the one that fits your needs.",
       "start": "Start by browsing the list of available endpoints, and don't forget to mark the chains you're using as favorites for quick access and efficient management.",
@@ -2382,17 +2388,20 @@
     },
     "endpoint": {
       "chainName": "Chain name",
+      "empty": "No networks are currently available.",
+      "emptyInfo": "Please check later",
       "network": "Network",
       "httpsEndpoint": "HTTPS endpoint",
       "wssEndpoint": "WSS endpoint",
-      "viewAll": "View all endpoints",
-      "allEndpoints": "All endpoints",
+      "viewAll": "View all networks",
+      "allEndpoints": "All networks",
       "add": "Add",
       "added": "Added",
-      "delete": "Are you sure you want to remove this endpoint from favorites?",
-      "noFavoriteEndpointTitle": "You currently have no favorite endpoints.",
-      "noFavoriteEndpointDescription": "Browse our available endpoints and click \"Add\" for quick access. Once you add a chain you plan to use, it will appear in your \"Endpoints\" table.",
-      "browse": "Browse endpoints"
+      "delete": "Are you sure you want to remove this network from favorites?",
+      "noFavoriteEndpointTitle": "You currently have no favorite networks.",
+      "noFavoriteEndpointDescription": "Browse our available networks and click \"Add\" for quick access. Once you add a network you plan to use, it will appear in \"Your networks\" table.",
+      "browse": "Browse networks",
+      "requestNew": "Request new RPC"
     },
     "initial": {
       "benefits": [

@@ -36,11 +36,28 @@ const $i18n = useI18n();
 const { t } = useI18n();
 const rpcEndpointStore = useRpcEndpointStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
+const router = useRouter();
+
+const extractDomain = (url?: string) => {
+  if (!url) {
+    return '';
+  }
+  const domain = url.replace('https://', '').replace('http://', '').split(/[/?#]/)[0];
+  return domain;
+};
 
 function rowProps(row: RpcEndpointInterface) {
   return {
     onClick: () => {
       currentRow.value = row;
+      if (!props.allowFavoriteCheck) {
+        router.push({
+          name: 'dashboard-service-rpc-usage',
+          query: {
+            network: extractDomain(row.favoriteData?.httpsUrl),
+          },
+        });
+      }
     },
   };
 }
@@ -89,7 +106,15 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
           return;
         }
 
-        return h(resolveComponent('TableEllipsis'), { text: row?.favoriteData?.httpsUrl }, '');
+        return h(
+          'div',
+          {
+            onClick: event => {
+              event.stopPropagation();
+            },
+          },
+          [h(resolveComponent('TableEllipsis'), { text: row?.favoriteData?.httpsUrl }, '')]
+        );
       },
     },
     {
@@ -100,7 +125,15 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
           return;
         }
 
-        return h(resolveComponent('TableEllipsis'), { text: row?.favoriteData?.wssUrl }, '');
+        return h(
+          'div',
+          {
+            onClick: event => {
+              event.stopPropagation();
+            },
+          },
+          [h(resolveComponent('TableEllipsis'), { text: row?.favoriteData?.wssUrl }, '')]
+        );
       },
     },
     {
@@ -154,7 +187,15 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
                 default: () =>
                   h(
                     NButton,
-                    { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                    {
+                      type: 'tertiary',
+                      size: 'small',
+                      quaternary: true,
+                      round: true,
+                      onClick: event => {
+                        event.stopPropagation();
+                      },
+                    },
                     { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
                   ),
               }

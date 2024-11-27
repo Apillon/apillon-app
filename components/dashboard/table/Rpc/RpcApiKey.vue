@@ -60,7 +60,7 @@ const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {
       key: 'uuid',
       title: t('rpc.apiKey.uuid'),
       render(row) {
-        return h(resolveComponent('HiddenContent'), { value: row.uuid }, '');
+        return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.uuid });
       },
     },
     {

@@ -334,6 +334,14 @@ const Endpoints = {
     return `/indexing/indexers/${uuid}/hibernate`;
   },
 
+  indexerUsage: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/usage`;
+  },
+
+  indexerBilling: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/billing`;
+  },
+
   /**
    * RPC
    */
@@ -363,6 +371,10 @@ const Endpoints = {
 
   rpcApiKeyUsage: (projectUuid: string, apiKeyId: number) => {
     return `/rpc/${projectUuid}/api-key/${apiKeyId}/usage`;
+  },
+
+  rpcApiKeyUsagePerChain: (projectUuid: string, apiKeyId: number) => {
+    return `/rpc/${projectUuid}/api-key/${apiKeyId}/usage-per-chain`;
   },
 
   /**

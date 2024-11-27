@@ -8,7 +8,7 @@ const { t } = useI18n();
 const menuOptions: NMenuOption[] = [
   {
     key: 'dashboard-service-rpc',
-    label: t('rpc.apiKey.yourEndpoints'),
+    label: t('rpc.apiKey.yourNetworks'),
     path: `/dashboard/service/rpc`,
   },
   {

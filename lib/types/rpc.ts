@@ -41,6 +41,14 @@ declare global {
     totalResponses: number;
   }
 
+  interface RpcApiKeyUsagePerChainInterface {
+    [chainId: string]: {
+      requests: number;
+      responses: number;
+      date: string;
+    }[];
+  }
+
   interface RpcFavoriteEndpointsResponse
     extends GeneralItemsResponse<RpcFavoriteEndpointInterface> {}
 
@@ -51,6 +59,9 @@ declare global {
   interface RpcApiKeysQuotaResponse extends GeneralResponse<boolean> {}
 
   interface RpcApiKeyUsageResponse extends GeneralResponse<RpcApiKeyUsageInterface> {}
+
+  interface RpcApiKeyUsagePerChainResponse
+    extends GeneralResponse<RpcApiKeyUsagePerChainInterface> {}
 }
 
 export enum RpcPlanType {

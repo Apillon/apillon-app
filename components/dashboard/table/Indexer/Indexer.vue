@@ -117,6 +117,16 @@ const rowProps = (row: IndexerBaseInterface) => {
 
 const dropdownOptions = [
   {
+    key: 'indexerView',
+    label: t('general.view'),
+    disabled: dataStore.isProjectUser,
+    props: {
+      onClick: () => {
+        router.push({ path: `/dashboard/service/indexing/${currentRow.value.indexer_uuid}` });
+      },
+    },
+  },
+  {
     key: 'indexerEdit',
     label: t('general.edit'),
     disabled: dataStore.isProjectUser,
