@@ -19,7 +19,7 @@
     </div>
 
     <!-- <div class="flex justify-center align-center mb-3">
-      <n-form-item path="captcha"> -->
+      <n-form-item path="captcha"> 
     <vue-hcaptcha
       ref="captchaInput"
       :sitekey="captchaKey"
@@ -30,9 +30,15 @@
       @expired="onCaptchaExpire"
       @challenge-expired="onCaptchaChallengeExpire"
       @closed="onCaptchaClose"
-    />
+    />-->
     <!-- </n-form-item>
     </div> -->
+    <div
+      class="procaptcha"
+      data-theme="dark"
+      data-sitekey="5FPCpm2ycomt2c9FcSS551mjZJ6iyA1vP5Ucx8hjQrk3NfDA"
+      :data-callback="onCaptchaVerified"
+    ></div>
 
     <!--  Btn submit -->
     <n-form-item :show-label="false">
@@ -51,7 +57,19 @@
 </template>
 
 <script lang="ts" setup>
-import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+import type { ButtonType } from '../Btn.vue';
+
+useHead({
+  script: [
+    {
+      type: 'module',
+      // id: 'procaptcha-script',
+      src: 'https://js.prosopo.io/js/procaptcha.bundle.js',
+      async: true,
+      defer: true,
+    },
+  ],
+});
 
 type PasswordResetForm = {
   email: string;
@@ -60,25 +78,18 @@ type PasswordResetForm = {
 };
 
 const props = defineProps({
-  btnType: {
-    type: String,
-    validator: (value: string) => ['primary', 'secondary', 'link'].includes(value),
-    default: 'secondary',
-  },
+  btnType: { type: String as PropType<ButtonType>, default: 'secondary' },
   email: { type: String, default: '' },
 });
 
 const $i18n = useI18n();
 const message = useMessage();
-const {
-  loading,
-  captchaKey,
-  captchaInput,
-  onCaptchaChallengeExpire,
-  onCaptchaClose,
-  onCaptchaError,
-  onCaptchaExpire,
-} = useCaptcha();
+const { loading, captchaKey, captchaInput } = useCaptcha();
+
+const onCaptchaVerified = (...args) => {
+  console.debug(args);
+};
+window.onCaptchaVerified = onCaptchaVerified;
 
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<PasswordResetForm>({
@@ -108,7 +119,7 @@ function handleSubmit(e: Event | MouseEvent | null) {
       errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || '')));
     } else if (!formData.value.captcha) {
       loading.value = true;
-      captchaInput.value.execute();
+      // captchaInput.value.execute();
     } else {
       /** Request password change */
       await passwordChangeRequest();
