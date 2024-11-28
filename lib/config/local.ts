@@ -7,7 +7,7 @@ const config: ConfigInterface = {
   oauthUrl: 'http://localhost:5173',
   adminUrl: 'http://localhost:3001',
   mailerLiteSubscribeUrl: '',
-  captchaKey: '10000000-ffff-ffff-ffff-000000000001',
+  captchaKey: '5FPCpm2ycomt2c9FcSS551mjZJ6iyA1vP5Ucx8hjQrk3NfDA',
   githubId: 'd0482598d8adbd8adffa',
   gtmId: '',
   nctrContract: '0xddf5F225218fd09Ffa39712aFd9a4Bc34b21b473',
