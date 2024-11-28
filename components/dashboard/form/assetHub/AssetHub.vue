@@ -123,7 +123,6 @@
           clearable
           class="bg-bg-light rounded-lg"
           :min="0"
-          :precision="formData?.decimals || 3"
           :disabled="!!assetId"
           @keydown.enter.prevent
         />
