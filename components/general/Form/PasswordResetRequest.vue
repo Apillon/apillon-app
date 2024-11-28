@@ -57,6 +57,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 const message = useMessage();
+const config = useRuntimeConfig();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
@@ -87,9 +88,6 @@ function handleSubmit(e: Event | MouseEvent | null) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || '')));
-    } else if (!formData.value.captcha) {
-      loading.value = true;
-      // captchaInput.value.execute();
     } else {
       /** Request password change */
       await passwordChangeRequest();
@@ -99,6 +97,11 @@ function handleSubmit(e: Event | MouseEvent | null) {
 
 async function passwordChangeRequest() {
   loading.value = true;
+
+  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+  if (prosopoToken) {
+    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
+  }
   try {
     const res = await $api.post<PasswordResetRequestResponse>(
       endpoints.passwordResetRequest,
@@ -110,13 +113,14 @@ async function passwordChangeRequest() {
     }
   } catch (error) {
     message.error(userFriendlyMsg(error));
+  } finally {
+    captchaReset();
+    loading.value = false;
   }
-  loading.value = false;
 }
 
-// function onCaptchaVerify(token: string, eKey: string) {
-//   formData.value.captcha = { token, eKey };
-//   handleSubmit(null);
-//   loading.value = false;
-// }
+function captchaReset() {
+  formData.value.captcha = undefined;
+  sessionStorage.removeItem(AuthLsKeys.PROSOPO);
+}
 </script>

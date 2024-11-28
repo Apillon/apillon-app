@@ -68,6 +68,7 @@ const { query } = useRoute();
 const { t } = useI18n();
 const router = useRouter();
 const message = useMessage();
+const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const { address, isConnected } = useAccount();
 
@@ -86,13 +87,10 @@ const formData = ref<SignupForm>({
 
 const rules: NFormRules = {
   email: [
+    ruleRequired(t('validation.emailRequired')),
     {
       type: 'email',
       message: t('validation.email'),
-    },
-    {
-      required: true,
-      message: t('validation.emailRequired'),
     },
   ],
   terms: [
@@ -129,7 +127,11 @@ const termsLabel = computed<any>(() => {
 function handleSubmit(e: MouseEvent | null) {
   e?.preventDefault();
   formErrors.value = false;
-  formData.value.captcha = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+
+  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+  if (prosopoToken) {
+    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
+  }
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
@@ -160,6 +162,7 @@ async function signupWithEmail() {
 
   try {
     await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
+    captchaReset();
 
     if (!props.sendAgain) {
       if (newsletterChecked.value) {
@@ -178,14 +181,14 @@ async function signupWithEmail() {
   } catch (error) {
     formData.value.captcha = null;
     message.error(userFriendlyMsg(error));
+    captchaReset();
   }
   loading.value = false;
 }
 
-function onCaptchaVerify(token: string, eKey: string) {
-  formData.value.captcha = { token, eKey };
-  handleSubmit(null);
-  loading.value = false;
+function captchaReset() {
+  formData.value.captcha = undefined;
+  sessionStorage.removeItem(AuthLsKeys.PROSOPO);
 }
 
 function getMetadata() {

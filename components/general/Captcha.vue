@@ -15,22 +15,21 @@ useHead({
     {
       type: 'module',
       body: true,
-      children: `
+      children: `      
+            const eventCaptchaVerified = new Event("EventCaptchaVerified");
+
             function onCaptchaVerified(captcha) {
-              console.log('Captcha verified, output: ' + JSON.stringify(captcha))
-              sessionStorage.setItem('${AuthLsKeys.PROSOPO}', captcha)
+              sessionStorage.setItem('${AuthLsKeys.PROSOPO}', captcha);
+              document.dispatchEvent(eventCaptchaVerified);
             }
             function onCaptchaOpen(captcha) {
-              console.log('Captcha error: ' + JSON.stringify(captcha))
-              sessionStorage.removeItem('${AuthLsKeys.PROSOPO}')
+              sessionStorage.removeItem('${AuthLsKeys.PROSOPO}');
             }
             function onCaptchaError(captcha) {
-              console.log('Captcha error: ' + JSON.stringify(captcha))
-              sessionStorage.removeItem('${AuthLsKeys.PROSOPO}')
+              sessionStorage.removeItem('${AuthLsKeys.PROSOPO}');
             }
             function onCaptchaExpired(captcha) {
-              console.log('Captcha onCaptchaExpire: ' + JSON.stringify(captcha))
-              sessionStorage.removeItem('${AuthLsKeys.PROSOPO}')
+              sessionStorage.removeItem('${AuthLsKeys.PROSOPO}');
             }
 
             window.procaptchaLoaded = false;

@@ -23,7 +23,7 @@
       />
     </n-form-item>
 
-    <n-form-item path="captcha" :show-label="false">
+    <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
       <div class="block w-full h-20">
         <Captcha />
       </div>
@@ -44,23 +44,25 @@
 type FormLogin = {
   email: string;
   password: string;
-  captcha?: any;
-  captchaJwt?: any;
+  captcha?: { token: string; eKey: string };
+  captchaJwt?: string | null;
 };
 
 const { t } = useI18n();
 const message = useMessage();
+const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
 
 const loading = ref<boolean>(false);
+const showCaptcha = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormLogin>({
   email: authStore.email,
   password: '',
-  captcha: null as any,
-  captchaJwt: '',
+  captcha: undefined,
+  captchaJwt: null,
 });
 
 const rules: NFormRules = {
@@ -72,27 +74,30 @@ const rules: NFormRules = {
     },
   ],
   password: ruleRequired(t('validation.passwordRequired')),
-  captcha: ruleRequired(t('validation.captchaRequired')),
+  captcha: {
+    required: showCaptcha.value,
+    message: t('validation.captchaRequired'),
+  },
 };
+
+onMounted(() => {
+  document.addEventListener('EventCaptchaVerified', login);
+});
+onUnmounted(() => {
+  document.removeEventListener('EventCaptchaVerified', login);
+});
 
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
-  formData.value.captcha = sessionStorage.getItem(AuthLsKeys.PROSOPO);
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (
-      !formData.value.captcha &&
-      isFeatureEnabled(Feature.CAPTCHA_LOGIN, authStore.getUserRoles()) &&
-      !isCaptchaConfirmed()
-    ) {
-      // loading.value = true;
-      // captchaInput.value.execute();
+    } else if (!formData.value.captcha && !isCaptchaConfirmed()) {
+      showCaptcha.value = true;
     } else {
-      /** Login with mail and password */
       await login();
     }
   });
@@ -100,7 +105,12 @@ function handleSubmit(e: Event | MouseEvent | null) {
 
 async function login() {
   loading.value = true;
+  document.removeEventListener('EventCaptchaVerified', login);
 
+  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+  if (prosopoToken) {
+    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
+  }
   const captchaData = authStore.getCaptchaData(formData.value.email);
   if (captchaData) {
     formData.value.captchaJwt = captchaData.jwt;
@@ -116,19 +126,19 @@ async function login() {
     const res = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
     authStore.saveUser(res.data);
+    captchaReset();
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     dataStore.project.items = await dataStore.fetchProjects(true);
   } catch (error: ApiError | ReferenceError | any) {
     message.error(userFriendlyMsg(error));
+    captchaReset();
 
     if (error.code === ValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
       loading.value = true;
-      // captchaInput.value.execute();
       authStore.removeCaptchaJwt(formData.value.email);
     } else if (DevConsoleError.USER_INVALID_LOGIN) {
       authStore.removeCaptchaJwt(formData.value.email);
-      captchaReset();
     }
   }
   loading.value = false;
@@ -142,13 +152,8 @@ function isCaptchaConfirmed(): boolean {
   return !!captchaData && !!captchaData.ts && Date.now() < parseInt(captchaData.ts) + WEEK_IN_MS;
 }
 
-function onCaptchaVerify(token: string, eKey: string) {
-  formData.value.captcha = { token, eKey };
-  login();
-}
-
 function captchaReset() {
-  formData.value.captcha = null;
+  formData.value.captcha = undefined;
   sessionStorage.removeItem(AuthLsKeys.PROSOPO);
 }
 </script>
