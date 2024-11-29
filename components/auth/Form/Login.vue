@@ -65,27 +65,30 @@ const formData = ref<FormLogin>({
   captchaJwt: null,
 });
 
-const rules: NFormRules = {
-  email: [
-    ruleRequired(t('validation.emailRequired')),
-    {
-      type: 'email',
-      message: t('validation.email'),
+const rules = computed<NFormRules>(() => {
+  return {
+    email: [
+      ruleRequired(t('validation.emailRequired')),
+      {
+        type: 'email',
+        message: t('validation.email'),
+      },
+    ],
+    password: ruleRequired(t('validation.passwordRequired')),
+    captcha: {
+      required: showCaptcha.value,
+      message: t('validation.captchaRequired'),
     },
-  ],
-  password: ruleRequired(t('validation.passwordRequired')),
-  captcha: {
-    required: showCaptcha.value,
-    message: t('validation.captchaRequired'),
-  },
-};
+  };
+});
 
 onMounted(() => {
-  document.addEventListener('EventCaptchaVerified', login);
+  showCaptcha.value = !isCaptchaConfirmed();
+  // document.addEventListener('EventCaptchaVerified', login);
 });
-onUnmounted(() => {
-  document.removeEventListener('EventCaptchaVerified', login);
-});
+// onUnmounted(() => {
+//   document.removeEventListener('EventCaptchaVerified', login);
+// });
 
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
@@ -96,7 +99,8 @@ function handleSubmit(e: Event | MouseEvent | null) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else if (!formData.value.captcha && !isCaptchaConfirmed()) {
-      showCaptcha.value = true;
+      showCaptcha.value = false;
+      setTimeout(() => (showCaptcha.value = true), 1);
     } else {
       await login();
     }
@@ -105,7 +109,7 @@ function handleSubmit(e: Event | MouseEvent | null) {
 
 async function login() {
   loading.value = true;
-  document.removeEventListener('EventCaptchaVerified', login);
+  // document.removeEventListener('EventCaptchaVerified', login);
 
   const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
   if (prosopoToken) {
