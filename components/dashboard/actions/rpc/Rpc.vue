@@ -32,7 +32,11 @@
         {{ $t('general.refresh') }}
       </n-button>
 
-      <n-button size="small" @click="$router.push(`/dashboard/service/rpc/endpoints`)">
+      <n-button
+        v-if="rpcApiKeyStore.selectedId"
+        size="small"
+        @click="$router.push(`/dashboard/service/rpc/endpoints`)"
+      >
         <span class="text-primary">{{ $t('rpc.endpoint.viewAll') }}</span>
       </n-button>
 
