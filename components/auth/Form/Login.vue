@@ -140,8 +140,10 @@ async function login() {
 
     if (error.code === ValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
       loading.value = true;
+      showCaptcha.value = true;
       authStore.removeCaptchaJwt(formData.value.email);
     } else if (DevConsoleError.USER_INVALID_LOGIN) {
+      showCaptcha.value = true;
       authStore.removeCaptchaJwt(formData.value.email);
     }
   }
