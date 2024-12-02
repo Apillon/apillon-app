@@ -103,7 +103,7 @@ declare global {
     contentType: string | null;
     directoryUuid: string | null;
     fileStatus: number | null;
-    link: string;
+    link: string | null;
     size: number | null;
     type: number;
     uuid: string;
@@ -149,6 +149,9 @@ declare global {
   type IpfsLink = {
     link: string;
   };
+  type IpfsLinks = {
+    links: string[];
+  };
   interface IpfsInterface extends BaseObjectInterface {
     ipfsGateway: string | null;
     ipnsGateway: string | null;
@@ -159,6 +162,7 @@ declare global {
   }
   interface IpfsResponse extends GeneralResponse<IpfsInterface> {}
   interface IpfsLinkResponse extends GeneralResponse<IpfsLink> {}
+  interface IpfsLinksResponse extends GeneralResponse<IpfsLinks> {}
 
   /**
    * File

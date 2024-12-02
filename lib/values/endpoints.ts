@@ -166,6 +166,7 @@ const Endpoints = {
   /** IPFS */
   ipfsInfo: '/storage/ipfs-cluster-info',
   ipfsLink: '/storage/link-on-ipfs/',
+  ipfsLinks: '/storage/link-on-ipfs-multiple',
 
   /**
    * Hosting
