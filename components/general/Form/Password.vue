@@ -9,7 +9,7 @@
     <!--  Register password -->
     <n-form-item
       path="password"
-      :label="$t('form.label.password')"
+      :label="$t('form.label.password', { length: 8 })"
       :label-props="{ for: 'password' }"
     >
       <n-input
@@ -88,8 +88,9 @@ const rules: NFormRules = {
       message: $i18n.t('validation.passwordRequired'),
     },
     {
-      min: 12,
-      message: $i18n.t('validation.passwordMinLength'),
+      min: 8,
+      message: $i18n.t('validation.passwordMinLength', { length: 8 }),
+      trigger: ['input', 'blur'],
     },
   ],
   reenteredPassword: [
