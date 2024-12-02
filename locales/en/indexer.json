@@ -1,93 +1,95 @@
 {
-    "indexer": {
-        "containers": {
-          "db": "DB",
-          "init": "Init",
-          "api": "API",
-          "processor": "Processor"
-        },
-        "instructions": {
-          "btnFinish": "I have finished the deployment - Show me the indexers",
-          "chooseTemplate": "Choose a template for you indexer from the Subsquid Github repository and clone it. \nThe templates below are available:",
-          "deployNotFinished": "Indexer is not yet deployed, please follow the instructions.",
-          "deployYourIndexer": "Instructions to deploy your first Indexer",
-          "evmTemplates": "Templates for EVM chains",
-          "instruction1": "Indexer deployments are handled over the <b>Apillon CLI</b>.",
-          "instruction2": "Before you can see your indexer in the dashboard, please follow the step by step instructions below and deploy your indexer with the help of our CLI. ",
-          "step1": "Setup the Apillon CLI",
-          "step2": "Set up your indexer",
-          "step3": "Customize your indexer",
-          "step4": "Deploy the indexer",
-          "substrateTemplate": "Template for Substrate chains"
-        },
-        "logLevels": {
-          "error": "Error",
-          "debug": "Debug",
-          "info": "Info",
-          "notice": "Notice",
-          "warning": "Warning",
-          "critical": "Critical"
-        },
-        "spendingWarning": {
-          "btnProceed": "Got it, Proceed",
-          "btnBuyCredits": "I want to buy credits right now",
-          "content": "To deploy an indexer, your project account must have <b> at least 5,000 credits.</b> This ensures the indexer can operate properly without interruptions.",
-          "content2": "<b>Important:</b> The 5,000 credits are <b>not spent or reserved upfront.</b>Credits are consumed gradually based on the volume of data being indexer. You have full control and can hibernate the indexer at any time to minimize credit usage.",
-          "info": "We will notify you via email when your credits are running low to help you stay on track."
-        },
-        "statuses": {
-          "1": "Created",
-          "3": "Hibernated",
-          "5": "Active"
-        },
-        "table": {
-          "name": "Name",
-          "description": "Description",
-          "status": "Status",
-          "uuid": "Indexer UUID"
-        },
-        "tableLog": {
-          "level": "Level",
-          "ts": "Timestamp",
-          "container": "Container",
-          "msg": "Message"
-        },
-        "tableDeployments": {
-          "type": "Type",
-          "failed": "Failed",
-          "updatedAt": "Updated",
-          "createdAt": "Created"
-        },
-        "tableBilling": {
-          "year": "Year",
-          "month": "Month",
-          "billedAmount": "Amount"
-        },
-        "apiStatus": "Api status",
-        "create": "Create new indexer",
-        "created": "Created",
-        "deployments": "Deployments",
-        "description": "Description",
-        "general": "General",
-        "hibernate": "Hibernate",
-        "hibernateIndexer": "Hibernate indexer",
-        "hibernateIndexerInfo": "Hibernation of indexer lets you pause virtual machines, lowering costs while keeping data safe. Wheen needed, redeploy the indexer with all data intact.",
-        "indexerApiEndpoint": "Indexer API endpoint",
-        "indexerGeneralData": "General data",
-        "usageData": "Usage per day",
-        "info": "Add it to your Web3 project",
-        "lastDeployed": "Last deployed",
-        "logs": "Logs",
-        "name": "Name",
-        "new": "New indexer",
-        "processors": "Processors",
-        "processorStatus": "Processor status",
-        "processedBlocks": "Processed blocks",
-        "squidStatus": "Squid status",
-        "startNew": "Start by creating a new indexer",
-        "successfullyHibernated": "Indexer successfully hibernated",
-        "update": "Update Indexer",
-        "uuid": "Indexer UUID",
-        "billing": "Billing"
-      },
+  "indexer": {
+    "containers": {
+      "db": "DB",
+      "init": "Init",
+      "api": "API",
+      "processor": "Processor"
+    },
+    "instructions": {
+      "btnFinish": "I have finished the deployment - Show me the indexers",
+      "chooseTemplate": "Choose a template for you indexer from the Subsquid Github repository and clone it. \nThe templates below are available:",
+      "deployNotFinished": "Indexer is not yet deployed, please follow the instructions.",
+      "deployYourIndexer": "Instructions to deploy your first Indexer",
+      "evmTemplates": "Templates for EVM chains",
+      "instruction1": "Indexer deployments are handled over the <b>Apillon CLI</b>.",
+      "instruction2": "Before you can see your indexer in the dashboard, please follow the step by step instructions below and deploy your indexer with the help of our CLI. ",
+      "step1": "Setup the Apillon CLI",
+      "step2": "Set up your indexer",
+      "step3": "Customize your indexer",
+      "step4": "Deploy the indexer",
+      "substrateTemplate": "Template for Substrate chains",
+      "title": "Features:",
+      "content": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints."
+    },
+    "logLevels": {
+      "error": "Error",
+      "debug": "Debug",
+      "info": "Info",
+      "notice": "Notice",
+      "warning": "Warning",
+      "critical": "Critical"
+    },
+    "spendingWarning": {
+      "btnProceed": "Got it, Proceed",
+      "btnBuyCredits": "I want to buy credits right now",
+      "content": "To deploy an indexer, your project account must have <b> at least 5,000 credits.</b> This ensures the indexer can operate properly without interruptions.",
+      "content2": "<b>Important:</b> The 5,000 credits are <b>not spent or reserved upfront.</b>Credits are consumed gradually based on the volume of data being indexer. You have full control and can hibernate the indexer at any time to minimize credit usage.",
+      "info": "We will notify you via email when your credits are running low to help you stay on track."
+    },
+    "statuses": {
+      "1": "Created",
+      "3": "Hibernated",
+      "5": "Active"
+    },
+    "table": {
+      "name": "Name",
+      "description": "Description",
+      "status": "Status",
+      "uuid": "Indexer UUID"
+    },
+    "tableLog": {
+      "level": "Level",
+      "ts": "Timestamp",
+      "container": "Container",
+      "msg": "Message"
+    },
+    "tableDeployments": {
+      "type": "Type",
+      "failed": "Failed",
+      "updatedAt": "Updated",
+      "createdAt": "Created"
+    },
+    "tableBilling": {
+      "year": "Year",
+      "month": "Month",
+      "billedAmount": "Amount"
+    },
+    "apiStatus": "Api status",
+    "create": "Create new indexer",
+    "created": "Created",
+    "deployments": "Deployments",
+    "description": "Description",
+    "general": "General",
+    "hibernate": "Hibernate",
+    "hibernateIndexer": "Hibernate indexer",
+    "hibernateIndexerInfo": "Hibernation of indexer lets you pause virtual machines, lowering costs while keeping data safe. Wheen needed, redeploy the indexer with all data intact.",
+    "indexerApiEndpoint": "Indexer API endpoint",
+    "indexerGeneralData": "General data",
+    "usageData": "Usage per day",
+    "info": "Add it to your Web3 project",
+    "lastDeployed": "Last deployed",
+    "logs": "Logs",
+    "name": "Name",
+    "new": "New indexer",
+    "processors": "Processors",
+    "processorStatus": "Processor status",
+    "processedBlocks": "Processed blocks",
+    "squidStatus": "Squid status",
+    "startNew": "Start by creating a new indexer",
+    "successfullyHibernated": "Indexer successfully hibernated",
+    "update": "Update Indexer",
+    "uuid": "Indexer UUID",
+    "billing": "Billing"
+  }
 }
