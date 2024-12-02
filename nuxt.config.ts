@@ -127,7 +127,7 @@ export default defineNuxtConfig({
       {
         code: 'en',
         name: 'English',
-        file: 'en.json',
+        file: 'en/index.ts',
       },
     ],
     detectBrowserLanguage: {

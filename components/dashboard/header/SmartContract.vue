@@ -12,10 +12,10 @@
       </div>
     </div>
     <template #info>
-      <n-space :size="24" align="center">
+      <div class="flex flex-wrap justify-end items-center gap-6 gap-y-2">
         <slot> </slot>
         <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" filter-by-chain />
-      </n-space>
+      </div>
     </template>
   </Heading>
 </template>

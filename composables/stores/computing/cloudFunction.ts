@@ -60,7 +60,6 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
   },
   actions: {
     resetData() {
-      console.log('reset');
       this.active = {} as CloudFunctionInterface;
       this.archive = [] as CloudFunctionInterface[];
       this.items = [] as CloudFunctionInterface[];

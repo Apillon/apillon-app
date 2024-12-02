@@ -1,26 +1,30 @@
 <template>
-  <div v-bind="$attrs" class="flex gap-x-6 gap-y-8 flex-wrap lg:flex-nowrap pb-8">
-    <div class="lg:w-1/2">
-      <SolutionContent :content="content" />
-
-      <h6 class="my-4">{{ $t('indexer.startNew') }}</h6>
-
-      <n-space>
-        <Btn @click="showModalNewIndexer = true">
-          {{ $t('indexer.new') }}
-        </Btn>
-        <BtnDocumentation
-          href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
-        />
-      </n-space>
+  <div v-bind="$attrs" class="pb-8">
+    <div class="flex flex-col gap-2">
+      <h4>
+        {{ $t('indexer.instructions.title') }}
+      </h4>
+      <p>
+        {{ $t('indexer.instructions.content') }}
+      </p>
     </div>
-    <div class="lg:w-1/2 lg:pr-6">
-      <LearnVideo
-        title="Embedded Wallet"
-        html-content="https://www.youtube.com/embed/9y-9nz0tpVs"
-        class="w-full max-w-lg mx-auto"
+
+    <div class="text-body flex flex-row items-center gap-2 mt-2">
+      {{ $t('rpc.apiKey.powered') }}
+      <NuxtIcon name="logo/sqd" class="h-6 w-16 icon-auto text-white" alt="sqd" />
+    </div>
+    <SolutionContent :content="content" />
+
+    <h6 class="my-4">{{ $t('indexer.startNew') }}</h6>
+
+    <n-space>
+      <Btn @click="showModalNewIndexer = true">
+        {{ $t('indexer.new') }}
+      </Btn>
+      <BtnDocumentation
+        href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
       />
-    </div>
+    </n-space>
   </div>
   <!-- Modal - Create Indexer -->
   <IndexerSpendingWarning v-model:show="showModalNewIndexer">
@@ -31,6 +35,7 @@
 <script lang="ts" setup>
 const { generateContent } = useSolution();
 const content = generateContent(SolutionKey.INDEXING);
+console.log(content);
 
 const showModalNewIndexer = ref<boolean | null>(false);
 </script>
