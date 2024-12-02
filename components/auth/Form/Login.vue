@@ -92,6 +92,10 @@ onMounted(() => {
 
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
+  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+  if (prosopoToken) {
+    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
+  }
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
@@ -111,10 +115,6 @@ async function login() {
   loading.value = true;
   // document.removeEventListener('EventCaptchaVerified', login);
 
-  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
-  if (prosopoToken) {
-    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
-  }
   const captchaData = authStore.getCaptchaData(formData.value.email);
   if (captchaData) {
     formData.value.captchaJwt = captchaData.jwt;
