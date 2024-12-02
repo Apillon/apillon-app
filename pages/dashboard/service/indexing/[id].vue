@@ -9,12 +9,12 @@
         <ActionsIndexerGeneral />
         <div class="flex gap-x-6 gap-y-8 flex-wrap lg:flex-nowrap pb-8">
           <div class="lg:w-1/2">
-            <h4>{{ $t('indexer.indexerGeneralData') }}</h4>
+            <h4 class="mb-4">{{ $t('indexer.indexerGeneralData') }}</h4>
             <TableIndexerGeneral />
           </div>
           <div class="lg:w-1/2">
-            <h4>{{ $t('indexer.usageData') }}</h4>
-            <ChartLine v-if="chartData" :data="chartData" />
+            <h4 class="mb-4">{{ $t('indexer.usageData') }}</h4>
+            <ChartLine v-if="chartData" class="max-w-3xl" :data="chartData" />
           </div>
         </div>
       </n-space>
