@@ -1,811 +1,811 @@
 {
-    "dashboard": {
-        "apiKey": {
-          "apiKey": "API key",
-          "apiKeySecret": "API key secret",
-          "authentication": "Authentication",
-          "authorization": "Authentication",
-          "delete": "Delete API key",
-          "details": "API key details",
-          "generate": "Generate new key",
-          "secretSaved": "I've saved API key's secret",
-          "title": "API Keys",
-          "update": "Update API key",
-          "service": {
-            "authentication": "Authentication service",
-            "computing": "Computing service",
-            "contracts": "Contracts service",
-            "hosting": "Hosting service",
-            "nft": "NFT service",
-            "rpc": "RPC Service",
-            "social": "Social service",
-            "storage": "Storage service",
-            "wallet": "Wallet service",
-            "indexing": "Indexing service"
-          }
-        },
-        "clipboard": {
-          "copied": "Text has been copied to clipboard",
-          "copy": "Copy to clipboard",
-          "copyApiKey": "Copy API key to clipboard",
-          "copyCid": "Copy CID",
-          "copyLink": "Copy link",
-          "copyUuid": "Copy UUID",
-          "error": "Failed to copy"
-        },
-        "credits": {
-          "amount": "Amount",
-          "bonus": "Bonus credits",
-          "buy": "Buy",
-          "buyWithCrypto": "Buy with Crypto",
-          "buyWithCreditCard": "Buy with Credit Card",
-          "buyWithDot": "Buy with DOT",
-          "available": "available",
-          "category": "Category",
-          "checkPrice": "Check price",
-          "confirmPrices": "I understand",
-          "cost": "Cost",
-          "credits": "credits",
-          "creditsAmount": "Credit amount",
-          "creditCosts": "Service costs",
-          "currentCredits": "Current credits",
-          "date": "Date and time",
-          "description": "Description",
-          "direction": "Direction",
-          "disabled": "Due to limitations set by our payment provider, this payment is disabled",
-          "filterByChain": "Filter by chain",
-          "filterByService": "Filter by service",
-          "getMore": "Get more",
-          "included": "Can be used for:",
-          "name": "Name",
-          "notEnoughCredits": "Not enough credits",
-          "packages": "Credit packages",
-          "pricingNotification": "Pricing notification",
-          "product_id": "Product ID",
-          "service": "Service",
-          "serviceDescription": "Service description",
-          "serviceStorage": "Web3 Storage",
-          "title": "Credits",
-          "transactions": "Credit transactions",
-          "threshold": "Credit notification threshold",
-          "yourFunds": "Your funds",
-          "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
-          "services": {
-            "ACURAST": {
-              "name": "Cloud functions",
-              "description": null
-            },
-            "COMPUTING": {
-              "name": "Web3 Computing",
-              "description": null
-            },
-            "CONTRACTS": {
-              "name": "Smart contracts",
-              "description": null
-            },
-            "HOSTING": {
-              "name": "Web3 Hosting",
-              "description": null
-            },
-            "IDENTITY": {
-              "name": "Web3 Identity",
-              "description": null
-            },
-            "NFT": {
-              "name": "NFTs",
-              "description": null
-            },
-            "SOCIAL": {
-              "name": "Social",
-              "description": null
-            },
-            "STORAGE": {
-              "name": "Web3 Storage",
-              "description": null
-            },
-            "WALLET": {
-              "name": "Embedded Wallet",
-              "description": null
-            },
-            "INDEXING": {
-              "name": "Indexing",
-              "description": null
-            }
-          }
-        },
-        "refreshModal": {
-          "title": "Deployment Status",
-          "refresh": "refresh",
-          "subtitle": "To check the deployment status, click the refresh button or select the time intervals for the automatic update."
-        },
-        "invoice": {
-          "client": "Client",
-          "currency": "Currency",
-          "invoices": "Credit purchases",
-          "referenceTable": "Reference",
-          "subtotalAmount": "Subtotal",
-          "totalAmount": "Total",
-          "date": "Date and time"
-        },
-        "nav": {
-          "access": "Access",
-          "authentication": "Authentication",
-          "assetManagement": "Asset Management & Development",
-          "apiKeys": "API Keys",
-          "analytics": "Analytics",
-          "assetHub": "Asset hub",
-          "billing": "Billing & usage",
-          "configuration": "Configuration",
-          "computing": "Computing",
-          "cloudFunctions": "Cloud Functions",
-          "coreWeb3Infrastructure": "Core Web3 Infrastructure",
-          "explore": "Explore",
-          "hosting": "Hosting",
-          "nft": "NFTs",
-          "projectOverview": "Project overview",
-          "projectSettings": "Project settings",
-          "services": "Web3 Services",
-          "smartContracts": "Smart Contracts",
-          "smartContractDetails": "Smart Contract Details",
-          "social": "Social",
-          "rpc": "RPC Service",
-          "utility": "Utility",
-          "solutions": "Pre-built Solutions",
-          "storage": "Storage",
-          "simplets": "Simplets",
-          "embeddedWallet": "Embedded Wallet",
-          "indexing": "Indexing"
-        },
-        "pageMenu": {
-          "access": "Access",
-          "accountManagement": "Account management",
-          "apiKeys": "API Keys",
-          "billing": "Billing",
-          "charts": "Charts",
-          "credentials": "Credentials & API Keys",
-          "credits": "Credits",
-          "destroy": "Destroy",
-          "history": "History",
-          "methods": "Methods",
-          "payments": "Overview",
-          "priceList": "Price list",
-          "profile": "Profile",
-          "projectSettings": "Project settings",
-          "usage": "Usage",
-          "usersPermissions": "Users & permissions"
-        },
-        "payment": {
-          "buyCredits": "Buy credits",
-          "costs": "Costs",
-          "changePlan": "Change plan",
-          "comparePlans": "Compare plans",
-          "currentPlan": "Current plan",
-          "expiresOn": "Expires on:",
-          "decline": "Decline",
-          "managePlan": "Manage billing",
-          "notEnoughCredits": "You don't have enough credits. Please, buy more credits to proceed",
-          "proceed": "Proceed",
-          "selectPlan": "Select plan",
-          "spendingAlert": "Spending ALERT!",
-          "title": "Payment",
-          "upgrade": "Upgrade",
-          "upgradePlan": "Upgrade plan",
-          "stripe": {
-            "credits": "Successfully acquired {credits} credits.",
-            "error": "Failed to subscribe",
-            "subscription": "Successfully subscribed to a {plan} plan."
-          }
-        },
-        "permissions": {
-          "notOwner": "Only project owner can perform this action.",
-          "read": "Read permissions",
-          "write": "Write permissions",
-          "execute": "Execute permissions",
-          "insufficient": "You don't have permissions to create or edit this item."
-        },
-        "service": {
-          "assetHub": {
-            "asset": "asset",
-            "assetCreating": "We are creating your asset",
-            "assetCreatingInfo": "While you wait, feel free to review the article about asset metadata publishing {0}.",
-            "assetCreatingWait": "Please stay put, we will let you know once the asset is created. ",
-            "changeIssuer": "Change issuer",
-            "changeIssuerInfo": "Changing the issuer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
-            "changeFreezer": "Change freezer",
-            "changeFreezerInfo": "Changing the freezer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
-            "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
-            "connectWallet": "Connect wallet",
-            "create": "Create asset",
-            "createNew": "Create new asset",
-            "createAsset": "Create an asset",
-            "characteristics": "Characteristics",
-            "edit": "Edit asset",
-            "loadingTransaction": "The transaction is being processed, please wait.",
-            "mintTokens": "Mint Tokens",
-            "mintTokensInfo": "Mint Tokens",
-            "noProject": "Your project has no assets yet",
-            "new": "Create new asset",
-            "otherAssets": "Other assets on Asset Hub",
-            "select": "Select asset",
-            "sendTokens": "Send Tokens",
-            "sendTokensInfo": "You may only send tokens available in your connected wallet. If you do not see any tokens available, please review your wallet connection.",
-            "transactionDetails": "You may view the transaction details {0}.",
-            "transactionHistory": "View transaction history",
-            "transactionProcessed": "The transaction was successfully processed.",
-            "transfer": "Transfer ownership",
-            "transferInfo": "Transferring the ownership means handing all rights over to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
-            "walletStats": "Connected wallet stats",
-            "leave": {
-              "anyway": "Leave anyway",
-              "info": "If you leave, your changes won’t be saved.",
-              "title": "Are you sure you want to leave?"
-            }
-          },
-          "authentication": {
-            "name": "Decentralized Authentication",
-            "description": "Boost users’ privacy and security with decentralized digital identity.",
-            "didCount": "Number of digital identities",
-            "emptyTitle": "Your project does not have Authentication service yet",
-            "emptyInfo": "Add Web3 Authentication and create an API key.",
-            "emptyBtn": "Attach Web3 Auth",
-            "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
-          },
-          "computing": {
-            "contractCount": "Number of contracts",
-            "computingTransactionCount": "Number of transactions",
-            "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
-            "name": "Computing",
-            "usage": [
-              "computing smart contracts",
-              "cross-chain",
-              "secure computing environment",
-              "internet access"
-            ]
-          },
-          "hosting": {
-            "name": "Decentralized Hosting",
-            "description": "Make your website or app unstoppable and free from third-party impact.",
-            "title": "Web3 Hosting",
-            "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"],
-            "usedBandwidth": "Used bandwidth",
-            "websiteCount": "Number of websites"
-          },
-          "nft": {
-            "collectionCount": "Number of collections",
-            "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
-            "name": "NFTs",
-            "nftTransactionCount": "Number of transactions",
-            "usage": [
-              "storage buckets",
-              "smart contracts",
-              "drag-n-drop ui",
-              "website template",
-              "hosting"
-            ]
-          },
-          "social": {
-            "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
-            "name": "Social",
-            "postCount": "Number of channels",
-            "spaceCount": "Number of hubs",
-            "usage": [
-              "social media",
-              "real-time chat",
-              "user-friendly UI",
-              "HIGH PRIVACY",
-              "configurable interface"
-            ]
-          },
-          "storage": {
-            "bucket": "Web3 storage bucket",
-            "bucketCount": "Number of buckets",
-            "description": "Make your content permanently accessible and easily shareable.",
-            "fileCount": "Number of files",
-            "name": "Decentralized Storage",
-            "website": "Main Website Storage",
-            "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
-          },
-          "smartContracts": {
-            "audited": "Audited",
-            "new": "New smart contract",
-            "customizeAndDeploy": "Customize and deploy",
-            "create": "Create your smart contract",
-            "createNew": "Create a new smart contract",
-            "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
-            "details": "Smart Contract Details",
-            "info": "Add it to your Web3 project",
-            "table": {
-              "chain": "Chain",
-              "contractAddress": "Contract Address",
-              "contractStatus": "Status",
-              "name": "Name",
-              "version": "Version"
-            },
-            "status": {
-              "0": "CREATED",
-              "1": "INITIATED",
-              "2": "DEPLOYING",
-              "3": "DEPLOYED",
-              "4": "FAILED",
-              "5": "TRANSFERRING",
-              "6": "TRANSFERRED"
-            },
-            "infoSection": {
-              "title": "Execute read & write functions",
-              "p": "Your smart contract was deployed via Apillon. This means certain write functions are available only through the Apillon Backend, until you decide to take ownership of the contract. ",
-              "info": "Take ownership of the Smart Contract. Once you take ownership of the Smart Contract, you will be able to execute all the functions directly from your dapp. This is not a mandatory step, but it makes sense to take the ownership of the contract before going to production.",
-              "infoTransferred": "You are owner of this contract, now you execute all the functions directly from your dapp.",
-              "takeOwnershipBtn": "Take smart contract ownership"
-            },
-            "functions": {
-              "executed": "Function has been executed",
-              "write": "Write functions",
-              "read": "Read functions",
-              "writeFromDapp": "Write from your dapp",
-              "writeOverApillon": "Write over Apillon",
-              "readFromDapp": "Read from your dapp"
-            }
-          },
-          "addFirst": "Add first service",
-          "delete": "Delete service",
-          "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",
-          "edit": "Edit service",
-          "info": "Launch a service, receive API keys and start building your next dapp.",
-          "new": "New service",
-          "used": "Web3 services used"
-        },
-        "smartContracts": {
-          "collection": "NFT collection",
-          "info": "Browse the list of smart contracts you can deploy and integrate and start building immediately via API.",
-          "kraken": "Smart contract for Kraken",
-          "meerkats": "Meerkats"
-        },
-        "solution": {
-          "encryption": {
-            "name": "Encryption as a Service",
-            "description": "Provide public service allowing NFT owners to upload and encrypt files using Phala Compute.",
-            "configure": {
-              "customEvm": "Custom EVM",
-              "formName": "Name your Compute instance for personal reference.",
-              "nftCollection": "Choose NFT Collection Chain",
-              "nftCollectionInfo": "To enable the encryption functionality, you need an NFT collection. Select the chain your NFT collection is deployed on."
-            },
-            "deploy": {
-              "finish": "Deployment Success",
-              "finishInfo": "Your prebuilt solution is successfully deployed.",
-              "goBack": "Go back to Computing",
-              "goToContract": "Go to contract",
-              "loading": "Deploying to blockchain....",
-              "loadingInfo": "Give it a minute or two. You’ll be informed when the deployment is done.",
-              "preview": "Deploy preview",
-              "previewData": "Contract data",
-              "previewInfo": "Here is the overview of your deploy:",
-              "previewNftCollection": "NFT Collection"
-            },
-            "tabs": ["Choose Computing Solution", "Configure Deployment", "Deploy"],
-            "usage": []
-          },
-          "fileSharing": {
-            "name": "Decentralized File Sharing",
-            "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
-            "usage": ["metadata storage", "file storage"]
-          },
-          "smartContracts": {
-            "name": "NFT Email Airdrop",
-            "description": "Create an NFT collection, upload target addresses and automatically distribute NFTs to them.",
-            "content": [
-              {
-                "title": "What do you get?",
-                "content": ["Free metadata storage", "No gas cost", "Free web template", "Free hosting"]
-              }
-            ]
-          },
-          "embeddedWallet": {
-            "content": [
-              {
-                "subtitle": "Embedded Wallet service removes friction in user onboarding."
-              },
-              {
-                "title": "Benefits:",
-                "benefits": [
-                  "Email onboard: Simplifies the onboarding process.",
-                  "A seamless and secure UX: EVM wallets are auto-created and encrypted.",
-                  "Autonomy and security over funds: No third-party services to store user’s private keys.",
-                  "Authentication: User can add different methods of verification.",
-                  "Gasless wallet creation: charged in Apillon credits per each onboarded user.",
-                  "Fully trustless. Powered by Oasis."
-                ]
-              }
-            ]
-          },
-          "rpcService": {
-            "content": [
-              {
-                "benefits": [
-                  "Free Tier to start",
-                  "Receive API keys for different chains (over 100 chains supported)",
-                  "over 99% uptime"
-                ]
-              }
-            ]
-          },
-          "nftAirdrop": {
-            "name": "NFT Email Airdrop",
-            "description": "Create an NFT collection, upload target addresses and automatically distribute NFTs to them.",
-            "content": [
-              {
-                "content": "This ready-to-use solution allows you to distribute digital collectibles (NFTs) to your audience only through email addresses."
-              },
-              {
-                "title": "The admin panel you will set up will allow you to:",
-                "content": [
-                  "Add email addresses one by one or upload a file with multiple email addresses at once,",
-                  "See which email addresses did and did not receive NFTs,",
-                  "See wallets linked to each email,",
-                  "Send automatic email instructions to each address leading to a page for claiming NFTs."
-                ]
-              },
-              {
-                "title": "Before you start, you'll need to:",
-                "content": [
-                  "Create an NFT collection using [Apillon NFT Service](/dashboard/service/nft),",
-                  "Know the details of email server, e. g. location and address,",
-                  "Use an Ethereum-based digital wallet to access the admin panel,",
-                  "Have [Apillon API key and secret](/dashboard/api-keys) to connect to the Apillon dashboard."
-                ]
-              },
-              {
-                "title": "System setup",
-                "content": [
-                  "The front end is made with Vue.js,",
-                  "The back end is made with Node.js and stores information in a MySQL database."
-                ]
-              },
-              {
-                "title": "Options to run the solution",
-                "content": [
-                  "You can run the front end on your computer, host it on any website provider, or use [Apillon's Web3 Hosting](/dashboard/service/hosting) service via the Apillon dashboard or GitHub actions.",
-                  "You can run the back end on your computer or use a tool called Docker to set configuration files with the correct information, e.g., the details of your NFTs and your email server (see instructions on [GitHub](https://github.com/Apillon/ps-email-airdrop))."
-                ]
-              }
-            ],
-            "tabs": ["First task", "Second task", "Third task"],
-            "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
-          },
-          "nftCollection": {
-            "name": "Self-hosted NFT collection",
-            "description": "Get your self sovereign standalone NFT collection with one click. Create NFTs, deploy smart contract and finally host the collection website.",
-            "content": [
-              {
-                "title": "How does it work?",
-                "content": "Launch your end-to-end decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the collection website on Web3.",
-                "benefits": ["Free metadata storage", "0 gas cost", "Free web template", "Free hosting"]
-              }
-            ],
-            "tabs": ["Create Collection", "Preview Collection", "Mint NFTs"],
-            "usage": [
-              "metadata storage",
-              "file storage",
-              "smart contracts",
-              "website template",
-              "hosting"
-            ]
-          },
-          "nftContentDelivery": {
-            "name": "NFT-Based Content Delivery",
-            "description": "Encrypt private files or assets using an NFT key. Sell or transmit the key to new owner/s and grant them access.",
-            "content": [
-              {
-                "title": "How does it work?",
-                "content": "Schrödinger’s NFT feature allows you to encrypt sensitive files of any kind using NFTs from a premade NFT collection. \n\nWith NFT-based content delivery, you can attach different files to each NFT in the collection. The files are then encrypted using unique data from the NFT and stored on a decentralized network. \n\nAs you sell or transfer the NFT, the new owner also obtains the encrypted file/s and can unlock its contents using the newly acquired NFT.",
-                "benefits": [
-                  "Selling music or audio",
-                  "Selling PDFs or e-books",
-                  "Selling video and other media files",
-                  "Encrypting and delivering sensitive documents"
-                ]
-              }
-            ],
-            "tabs": ["Choose Computing Solution", "Configure Deployment", "Deploy"],
-            "usage": ["PHALA"]
-          },
-          "nftDrop": {
-            "name": "NFT Drop",
-            "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
-            "usage": ["metadata storage", "file storage"]
-          },
-          "nftEmailSignupAirdrop": {
-            "name": "NFT Email Signup Airdrop",
-            "description": "Airdrop NFTs with a limited or unlimited supply to new and random user wallets.",
-            "content": [
-              {
-                "content": "This ready-to-use solution allows you to distribute digital collectibles (NFTs) to your audience only through email addresses."
-              },
-              {
-                "title": "The admin panel you will set up will allow you to:",
-                "content": [
-                  "Add email addresses one by one or upload a file with multiple email addresses at once,",
-                  "See which email addresses did and did not receive NFTs,",
-                  "See wallets linked to each email,",
-                  "Send automatic email instructions to each address leading to a page for claiming NFTs."
-                ]
-              },
-              {
-                "title": "Before you start, you'll need to:",
-                "content": [
-                  "Create an NFT collection using [Apillon NFT Service](/dashboard/service/nft),",
-                  "Know the details of email server, e. g. location and address,",
-                  "Use an Ethereum-based digital wallet to access the admin panel,",
-                  "Have [Apillon API key and secret](/dashboard/api-keys) to connect to the Apillon dashboard."
-                ]
-              },
-              {
-                "title": "System setup",
-                "content": [
-                  "The front end is made with Vue.js,",
-                  "The back end is made with Node.js and stores information in a MySQL database."
-                ]
-              },
-              {
-                "title": "Options to run the solution",
-                "content": [
-                  "You can run the front end on your computer, host it on any website provider, or use [Apillon's Web3 Hosting](/dashboard/service/hosting) service via the Apillon dashboard or GitHub actions.",
-                  "You can run the back end on your computer or use a tool called Docker to set configuration files with the correct information, e.g., the details of your NFTs and your email server (see instructions on [GitHub](https://github.com/Apillon/ps-signup-email-airdrop))."
-                ]
-              }
-            ],
-            "tabs": ["First task", "Second task", "Third task"],
-            "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
-          },
-          "nftLoyalty": {
-            "name": "NFT-based Loyalty Program",
-            "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
-            "usage": ["metadata storage", "file storage"]
-          },
-          "nftMembership": {
-            "name": "NFT-based Brand Membership",
-            "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
-            "usage": ["metadata storage", "file storage"]
-          },
-          "nftPoap": {
-            "name": "PoAP - Proof of Attendance NFTs",
-            "description": "Boost your event by creating PoAP drops in a click and let users mint or email-reserve NFTs.",
-            "content": [
-              {
-                "content": "Proof of Attendance Protocol (PoAP) allows you to create digital keepsakes to commemorate special events and distribute them to your audience for their attendance."
-              },
-              {
-                "headline": "Use cases",
-                "title": "PoAPs can serve as:",
-                "content": [
-                  "Digital collectibles, unique digital items that can be collected similarly to physical memorabilia",
-                  "Proof of participation proving a person's attendance at an event",
-                  "Reward system for engagement, participation, or contribution in an organization or event",
-                  "Community boosters to encourage interaction and participation and foster a sense of community",
-                  "Tradeable NFTs as a form of investment or monetization of event participation",
-                  "Exclusive access to invite-only events, content, or privileges in online communities"
-                ]
-              },
-              {
-                "headline": "How does it work?",
-                "title": "The solution consists of the admin dashboard and a webpage for claiming PoAP NFTs.",
-                "content": [
-                  "On the admin dashboard, you can create and manage PoAP events, see their status and statistics and link them with NFTs created on the Apillon dashboard.",
-                  "The webpage is displayed at the event and allows your audience to claim their NFTs."
-                ]
-              },
-              {
-                "title": "User flow",
-                "content": [
-                  "A user scans the QR code on the claim-NFT page and enters their email.",
-                  "Email instructions with a link for NFT minting are sent to the email address.",
-                  "The user connects their wallet and mints a PoAP NFT on the minting page."
-                ]
-              },
-              {
-                "title": "Before you start, you'll need to:",
-                "content": [
-                  "Create an NFT collection using [Apillon NFT Service](/dashboard/service/nft), allowing event attendees to mint NFTs."
-                ]
-              },
-              {
-                "title": "System setup",
-                "content": [
-                  "The front end is made with Vue.js,",
-                  "The back end is made with Node.js and stores information in a MySQL database."
-                ]
-              },
-              {
-                "title": "Options to run the solution",
-                "content": [
-                  "You can run the front end on your computer, host it on any website provider, or use [Apillon's Web3 Hosting](/dashboard/service/hosting) service via the Apillon dashboard or GitHub actions.",
-                  "You can run the back end on your computer or use a tool called Docker to set configuration files with the correct information, e.g., the details of your NFTs and your email server (see instructions on [GitHub](https://github.com/Apillon/ps-proof-of-attendance))."
-                ]
-              }
-            ],
-            "usage": ["metadata storage", "file storage"]
-          },
-          "nftWhitelistClaim": {
-            "name": "Whitelist NFT Claim",
-            "description": "Instead of giving out NFTs for free, let users claim them and pay transaction fees.",
-            "content": [
-              {
-                "content": "This ready-to-use solution allows your audience to claim NFTs by covering transaction fees, instead of you distributing NFTs for free."
-              },
-              {
-                "title": "How does it work?",
-                "content": [
-                  "Users can claim NFTs only if their addresses are added to a list in your admin panel.",
-                  "As admin, you can manage the admin panel and the list of addresses allowed to claim NFTs."
-                ]
-              },
-              {
-                "title": "Before you start, you will need:",
-                "content": ["A smart contract allowing eligible users to claim NFTs"]
-              },
-              {
-                "title": "System setup",
-                "content": [
-                  "The front end is made with Vue.js,",
-                  "The back end is made with Node.js and stores information in a MySQL database."
-                ]
-              },
-              {
-                "title": "Options to run the system",
-                "content": [
-                  "You can run the front end on your computer, host it on any website provider, or use [Apillon's Web3 Hosting](/dashboard/service/hosting) service via the Apillon dashboard or GitHub actions.",
-                  "You can run the back end on your computer or use a tool called Docker to set configuration files with the correct information, e.g., the details of your NFTs and your email server (see instructions on [GitHub](https://github.com/Apillon/ps-whitelist-claim))."
-                ]
-              }
-            ],
-            "tabs": ["First task", "Second task", "Third task"],
-            "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
-          },
-          "openGov": {
-            "name": "OpenGov WASM Proposal Airdrop",
-            "description": "Send NFTs using WASM smart contract to Aye/Nay voters on an OpenGov proposal.",
-            "content": [
-              {
-                "content": "This ready-to-use solution allows you to distribute NFTs using a WASM smart contract to voters on Polkassembly OpenGov proposals."
-              },
-              {
-                "title": "How does it work?",
-                "content": [
-                  "On a simple webpage, enter the number of a proposal and the vote (Aye/Nay) you wish to reward with NFTs.",
-                  "All the accounts that voted that way will be shown on a list you can edit.",
-                  "Once you've finished editing the list, the NFTs will be sent to all the listed addresses."
-                ]
-              },
-              {
-                "title": "Before you start, you need to:",
-                "content": [
-                  "Create an NFT collection using [Apillon NFT Service](/dashboard/service/nft),",
-                  "Use an Ethereum-based digital wallet to access the admin panel,",
-                  "Have [Apillon API key and secret](/dashboard/api-keys) to connect to the Apillon dashboard.",
-                  "Know details about a specific OpenGov proposal."
-                ]
-              },
-              {
-                "title": "System setup",
-                "content": [
-                  "The front end is made with Vue.js,",
-                  "The back end is made with Node.js and stores information in a MySQL database."
-                ]
-              },
-              {
-                "title": "Options to run the solution",
-                "content": [
-                  "You can run the front end on your computer, host it on any website provider, or use [Apillon's Web3 Hosting](/dashboard/service/hosting) service via the Apillon dashboard or GitHub actions.",
-                  "You can run the back end on your computer or use a tool called Docker to set configuration files with the correct information, e.g., the details of your NFTs and your email server (see instructions on [GitHub](https://github.com/Apillon/ps-wasm-proposal-airdrop))."
-                ]
-              }
-            ],
-            "tabs": ["First task", "Second task", "Third task"],
-            "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
-          },
-          "tokenGating": {
-            "name": "Token Gating",
-            "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
-            "usage": ["metadata storage", "file storage"]
-          },
-          "wallet": {
-            "name": "Non-custodial Wallet",
-            "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
-            "usage": ["metadata storage", "file storage"]
-          },
-          "indexing": {
-            "content": [
-              {
-                "title": "Features:",
-                "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints.",
-                "benefits": [
-                  "Real-time Data Processing: Continuously indexes new blockchain data for immediate access.",
-                  "Historical Data Access: Easily retrieve past blockchain data for analysis or verification.",
-                  "Customizable APIs: Flexible API endpoints enable tailored querying for specific blockchain data needs.",
-                  "Multi-Blockchain Support: Seamlessly index data across various blockchain networks.",
-                  "Scalability: Efficiently handles large amounts of data, suitable for high-traffic applications."
-                ]
-              }
-            ]
-          },
-          "choose": "Choose Solution",
-          "deploy": "Deploy solution",
-          "chooseComputing": "Select a computing template for your project. Deploy it on testnet to test it and fix if needed before launching in production on mainnet.",
-          "description": "Quickly deploy pre-built templates made and audited by Apillon. Each solution features a combination of Web3 services to demonstrate how they can be combined together, so you can learn, experiment, and launch your Web3 project fast.",
-          "includedWeb3Services": "Included Web3 Services",
-          "info": "Customize ready-to-deploy templates built and audited by Apillon.",
-          "viewCode": "View code"
-        },
-    
-        "subscription": {
-          "bandwidth": "Bandwith",
-          "canceledOn": "Your plan will be canceled on {date}.",
-          "creditsLifetime": "Credits Lifetime",
-          "forever": "Forever",
-          "free": "Free",
-          "lifetime": "Lifetime",
-          "monthly": "Monthly",
-          "nextBilling": "Next billing cycle on {date}.",
-          "otherServices": "Free credits for other services",
-          "packages": "Subscription packages",
-          "perMonth": "per month",
-          "storage": "Storage",
-          "web3Services": "Web3 services",
-          "plusTaxes": "+taxes",
-          "wallets": "Embedded Wallets"
-        },
-        "usage": {
-          "bandwith": "Bandwith",
-          "bytesStored": "Byte stored",
-          "description": "",
-          "downloads": "Downloads",
-          "hosting": "Web3 hosting",
-          "storage": "Web3 storage",
-          "title": "Project usage",
-          "upgrade": "Increase quotas"
-        },
-        "adminMode": "You are in ADMIN mode!",
-        "attached": "Attached",
-        "attachService": "Attach service",
-        "attachNewService": "Attach new service",
-        "billing": "Billing and Usage",
-        "changePayment": "Change payment",
-        "clientLibraries": "Client Libraries",
-        "created": "Created",
-        "createTime": "Created at",
-        "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
-        "dashboard": "Dashboard",
-        "date": "Date",
-        "discord": "Discord",
-        "deletedAt": "Deleted at",
-        "demoVideo": "Demo video",
-        "email": "Email",
-        "emailMethodConfiguration": "Email method configuration",
-        "env": "Environment",
-        "expiration": "Expiration",
-        "gotIt": "Got it, thanks!",
-        "goToApiManagement": "Go to central API management",
-        "guides": "Guides",
-        "homepage": "Project overview",
-        "inviteTeamMember": "Invite team member",
-        "learnMoreAboutServices": "Learn more about services",
-        "manageRoles": "Manage roles",
-        "name": "Name",
-        "projectResources": "Project resources",
-        "readDocs": "Read the Docs",
-        "role": "Role",
-        "searchDocs": "Search the docs",
-        "secret": "Secret",
-        "secrets": "Secrets",
-        "total": "Total",
-        "tutorials": "Tutorials",
-        "user": "User",
-        "viewInvoice": "View Invoice",
-        "value": "Value",
-        "viewDocumentation": "View Documentation",
-        "visibleColumns": "Visible columns",
-        "wiki": "Wiki",
-        "w3Warn": "W3 warn",
-        "oasisSignatures": "Signatures"
+  "dashboard": {
+    "apiKey": {
+      "apiKey": "API key",
+      "apiKeySecret": "API key secret",
+      "authentication": "Authentication",
+      "authorization": "Authentication",
+      "delete": "Delete API key",
+      "details": "API key details",
+      "generate": "Generate new key",
+      "secretSaved": "I've saved API key's secret",
+      "title": "API Keys",
+      "update": "Update API key",
+      "service": {
+        "authentication": "Authentication service",
+        "computing": "Computing service",
+        "contracts": "Contracts service",
+        "hosting": "Hosting service",
+        "nft": "NFT service",
+        "rpc": "RPC Service",
+        "social": "Social service",
+        "storage": "Storage service",
+        "wallet": "Wallet service",
+        "indexing": "Indexing service"
       }
+    },
+    "clipboard": {
+      "copied": "Text has been copied to clipboard",
+      "copy": "Copy to clipboard",
+      "copyApiKey": "Copy API key to clipboard",
+      "copyCid": "Copy CID",
+      "copyLink": "Copy link",
+      "copyUuid": "Copy UUID",
+      "error": "Failed to copy"
+    },
+    "credits": {
+      "amount": "Amount",
+      "bonus": "Bonus credits",
+      "buy": "Buy",
+      "buyWithCrypto": "Buy with Crypto",
+      "buyWithCreditCard": "Buy with Credit Card",
+      "buyWithDot": "Buy with DOT",
+      "available": "available",
+      "category": "Category",
+      "checkPrice": "Check price",
+      "confirmPrices": "I understand",
+      "cost": "Cost",
+      "credits": "credits",
+      "creditsAmount": "Credit amount",
+      "creditCosts": "Service costs",
+      "currentCredits": "Current credits",
+      "date": "Date and time",
+      "description": "Description",
+      "direction": "Direction",
+      "disabled": "Due to limitations set by our payment provider, this payment is disabled",
+      "filterByChain": "Filter by chain",
+      "filterByService": "Filter by service",
+      "getMore": "Get more",
+      "included": "Can be used for:",
+      "name": "Name",
+      "notEnoughCredits": "Not enough credits",
+      "packages": "Credit packages",
+      "pricingNotification": "Pricing notification",
+      "product_id": "Product ID",
+      "service": "Service",
+      "serviceDescription": "Service description",
+      "serviceStorage": "Web3 Storage",
+      "title": "Credits",
+      "transactions": "Credit transactions",
+      "threshold": "Credit notification threshold",
+      "yourFunds": "Your funds",
+      "includedServices": ["All Web3 services", "All prebuilt solutions", "All smart contracts"],
+      "services": {
+        "ACURAST": {
+          "name": "Cloud functions",
+          "description": null
+        },
+        "COMPUTING": {
+          "name": "Web3 Computing",
+          "description": null
+        },
+        "CONTRACTS": {
+          "name": "Smart contracts",
+          "description": null
+        },
+        "HOSTING": {
+          "name": "Web3 Hosting",
+          "description": null
+        },
+        "IDENTITY": {
+          "name": "Web3 Identity",
+          "description": null
+        },
+        "NFT": {
+          "name": "NFTs",
+          "description": null
+        },
+        "SOCIAL": {
+          "name": "Social",
+          "description": null
+        },
+        "STORAGE": {
+          "name": "Web3 Storage",
+          "description": null
+        },
+        "WALLET": {
+          "name": "Embedded Wallet",
+          "description": null
+        },
+        "INDEXING": {
+          "name": "Indexing",
+          "description": null
+        }
+      }
+    },
+    "refreshModal": {
+      "title": "Deployment Status",
+      "refresh": "refresh",
+      "subtitle": "To check the deployment status, click the refresh button or select the time intervals for the automatic update."
+    },
+    "invoice": {
+      "client": "Client",
+      "currency": "Currency",
+      "invoices": "Credit purchases",
+      "referenceTable": "Reference",
+      "subtotalAmount": "Subtotal",
+      "totalAmount": "Total",
+      "date": "Date and time"
+    },
+    "nav": {
+      "access": "Access",
+      "authentication": "Authentication",
+      "assetManagement": "Asset Management & Development",
+      "apiKeys": "API Keys",
+      "analytics": "Analytics",
+      "assetHub": "Asset hub",
+      "billing": "Billing & usage",
+      "configuration": "Configuration",
+      "computing": "Computing",
+      "cloudFunctions": "Cloud Functions",
+      "coreWeb3Infrastructure": "Core Web3 Infrastructure",
+      "explore": "Explore",
+      "hosting": "Hosting",
+      "nft": "NFTs",
+      "projectOverview": "Project overview",
+      "projectSettings": "Project settings",
+      "services": "Web3 Services",
+      "smartContracts": "Smart Contracts",
+      "smartContractDetails": "Smart Contract Details",
+      "social": "Social",
+      "rpc": "RPC Service",
+      "utility": "Utility",
+      "solutions": "Pre-built Solutions",
+      "storage": "Storage",
+      "simplets": "Simplets",
+      "embeddedWallet": "Embedded Wallet",
+      "indexing": "Indexing"
+    },
+    "pageMenu": {
+      "access": "Access",
+      "accountManagement": "Account management",
+      "apiKeys": "API Keys",
+      "billing": "Billing",
+      "charts": "Charts",
+      "credentials": "Credentials & API Keys",
+      "credits": "Credits",
+      "destroy": "Destroy",
+      "history": "History",
+      "methods": "Methods",
+      "payments": "Overview",
+      "priceList": "Price list",
+      "profile": "Profile",
+      "projectSettings": "Project settings",
+      "usage": "Usage",
+      "usersPermissions": "Users & permissions"
+    },
+    "payment": {
+      "buyCredits": "Buy credits",
+      "costs": "Costs",
+      "changePlan": "Change plan",
+      "comparePlans": "Compare plans",
+      "currentPlan": "Current plan",
+      "expiresOn": "Expires on:",
+      "decline": "Decline",
+      "managePlan": "Manage billing",
+      "notEnoughCredits": "You don't have enough credits. Please, buy more credits to proceed",
+      "proceed": "Proceed",
+      "selectPlan": "Select plan",
+      "spendingAlert": "Spending ALERT!",
+      "title": "Payment",
+      "upgrade": "Upgrade",
+      "upgradePlan": "Upgrade plan",
+      "stripe": {
+        "credits": "Successfully acquired {credits} credits.",
+        "error": "Failed to subscribe",
+        "subscription": "Successfully subscribed to a {plan} plan."
+      }
+    },
+    "permissions": {
+      "notOwner": "Only project owner can perform this action.",
+      "read": "Read permissions",
+      "write": "Write permissions",
+      "execute": "Execute permissions",
+      "insufficient": "You don't have permissions to create or edit this item."
+    },
+    "service": {
+      "assetHub": {
+        "asset": "asset",
+        "assetCreating": "We are creating your asset",
+        "assetCreatingInfo": "While you wait, feel free to review the article about asset metadata publishing {0}.",
+        "assetCreatingWait": "Please stay put, we will let you know once the asset is created. ",
+        "changeIssuer": "Change issuer",
+        "changeIssuerInfo": "Changing the issuer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "changeFreezer": "Change freezer",
+        "changeFreezerInfo": "Changing the freezer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
+        "connectWallet": "Connect wallet",
+        "create": "Create asset",
+        "createNew": "Create new asset",
+        "createAsset": "Create an asset",
+        "characteristics": "Characteristics",
+        "edit": "Edit asset",
+        "loadingTransaction": "The transaction is being processed, please wait.",
+        "mintTokens": "Mint Tokens",
+        "mintTokensInfo": "Mint Tokens",
+        "noProject": "Your project has no assets yet",
+        "new": "Create new asset",
+        "otherAssets": "Other assets on Asset Hub",
+        "select": "Select asset",
+        "sendTokens": "Send Tokens",
+        "sendTokensInfo": "You may only send tokens available in your connected wallet. If you do not see any tokens available, please review your wallet connection.",
+        "transactionDetails": "You may view the transaction details {0}.",
+        "transactionHistory": "View transaction history",
+        "transactionProcessed": "The transaction was successfully processed.",
+        "transfer": "Transfer ownership",
+        "transferInfo": "Transferring the ownership means handing all rights over to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
+        "walletStats": "Connected wallet stats",
+        "leave": {
+          "anyway": "Leave anyway",
+          "info": "If you leave, your changes won’t be saved.",
+          "title": "Are you sure you want to leave?"
+        }
+      },
+      "authentication": {
+        "name": "Decentralized Authentication",
+        "description": "Boost users’ privacy and security with decentralized digital identity.",
+        "didCount": "Number of digital identities",
+        "emptyTitle": "Your project does not have Authentication service yet",
+        "emptyInfo": "Add Web3 Authentication and create an API key.",
+        "emptyBtn": "Attach Web3 Auth",
+        "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
+      },
+      "computing": {
+        "contractCount": "Number of contracts",
+        "computingTransactionCount": "Number of transactions",
+        "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
+        "name": "Computing",
+        "usage": [
+          "computing smart contracts",
+          "cross-chain",
+          "secure computing environment",
+          "internet access"
+        ]
+      },
+      "hosting": {
+        "name": "Decentralized Hosting",
+        "description": "Make your website or app unstoppable and free from third-party impact.",
+        "title": "Web3 Hosting",
+        "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"],
+        "usedBandwidth": "Used bandwidth",
+        "websiteCount": "Number of websites"
+      },
+      "nft": {
+        "collectionCount": "Number of collections",
+        "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
+        "name": "NFTs",
+        "nftTransactionCount": "Number of transactions",
+        "usage": [
+          "storage buckets",
+          "smart contracts",
+          "drag-n-drop ui",
+          "website template",
+          "hosting"
+        ]
+      },
+      "social": {
+        "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
+        "name": "Social",
+        "postCount": "Number of channels",
+        "spaceCount": "Number of hubs",
+        "usage": [
+          "social media",
+          "real-time chat",
+          "user-friendly UI",
+          "HIGH PRIVACY",
+          "configurable interface"
+        ]
+      },
+      "storage": {
+        "bucket": "Web3 storage bucket",
+        "bucketCount": "Number of buckets",
+        "description": "Make your content permanently accessible and easily shareable.",
+        "fileCount": "Number of files",
+        "name": "Decentralized Storage",
+        "website": "Main Website Storage",
+        "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
+      },
+      "smartContracts": {
+        "audited": "Audited",
+        "new": "New smart contract",
+        "customizeAndDeploy": "Customize and deploy",
+        "create": "Create your smart contract",
+        "createNew": "Create a new smart contract",
+        "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
+        "details": "Smart Contract Details",
+        "info": "Add it to your Web3 project",
+        "table": {
+          "chain": "Chain",
+          "contractAddress": "Contract Address",
+          "contractStatus": "Status",
+          "contractType": "Contract type",
+          "name": "Name",
+          "version": "Version"
+        },
+        "status": {
+          "0": "CREATED",
+          "1": "INITIATED",
+          "2": "DEPLOYING",
+          "3": "DEPLOYED",
+          "4": "FAILED",
+          "5": "TRANSFERRING",
+          "6": "TRANSFERRED"
+        },
+        "type": {
+          "1": "OTHER",
+          "2": "ERC 20",
+          "3": "ERC 1155"
+        },
+        "infoSection": {
+          "title": "Execute read & write functions",
+          "p": "Your smart contract was deployed via Apillon. This means certain write functions are available only through the Apillon Backend, until you decide to take ownership of the contract. ",
+          "info": "Take ownership of the Smart Contract. Once you take ownership of the Smart Contract, you will be able to execute all the functions directly from your dapp. This is not a mandatory step, but it makes sense to take the ownership of the contract before going to production.",
+          "infoTransferred": "You are owner of this contract, now you execute all the functions directly from your dapp.",
+          "takeOwnershipBtn": "Take smart contract ownership"
+        },
+        "functions": {
+          "executed": "Function has been executed",
+          "write": "Write functions",
+          "read": "Read functions",
+          "writeFromDapp": "Write from your dapp",
+          "writeOverApillon": "Write over Apillon",
+          "readFromDapp": "Read from your dapp"
+        }
+      },
+      "addFirst": "Add first service",
+      "delete": "Delete service",
+      "description": "Choose the Web3 services to power the infrastructure behind your Web3 project and build using simple APIs, CLI, or SDK by Apillon. Launch a service, receive API keys and start building your next Web3 project.",
+      "edit": "Edit service",
+      "info": "Launch a service, receive API keys and start building your next dapp.",
+      "new": "New service",
+      "used": "Web3 services used"
+    },
+    "solution": {
+      "encryption": {
+        "name": "Encryption as a Service",
+        "description": "Provide public service allowing NFT owners to upload and encrypt files using Phala Compute.",
+        "configure": {
+          "customEvm": "Custom EVM",
+          "formName": "Name your Compute instance for personal reference.",
+          "nftCollection": "Choose NFT Collection Chain",
+          "nftCollectionInfo": "To enable the encryption functionality, you need an NFT collection. Select the chain your NFT collection is deployed on."
+        },
+        "deploy": {
+          "finish": "Deployment Success",
+          "finishInfo": "Your prebuilt solution is successfully deployed.",
+          "goBack": "Go back to Computing",
+          "goToContract": "Go to contract",
+          "loading": "Deploying to blockchain....",
+          "loadingInfo": "Give it a minute or two. You’ll be informed when the deployment is done.",
+          "preview": "Deploy preview",
+          "previewData": "Contract data",
+          "previewInfo": "Here is the overview of your deploy:",
+          "previewNftCollection": "NFT Collection"
+        },
+        "tabs": ["Choose Computing Solution", "Configure Deployment", "Deploy"],
+        "usage": []
+      },
+      "fileSharing": {
+        "name": "Decentralized File Sharing",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "smartContracts": {
+        "name": "NFT Email Airdrop",
+        "description": "Create an NFT collection, upload target addresses and automatically distribute NFTs to them.",
+        "content": [
+          {
+            "title": "What do you get?",
+            "content": ["Free metadata storage", "No gas cost", "Free web template", "Free hosting"]
+          }
+        ]
+      },
+      "embeddedWallet": {
+        "content": [
+          {
+            "subtitle": "Embedded Wallet service removes friction in user onboarding."
+          },
+          {
+            "title": "Benefits:",
+            "benefits": [
+              "Email onboard: Simplifies the onboarding process.",
+              "A seamless and secure UX: EVM wallets are auto-created and encrypted.",
+              "Autonomy and security over funds: No third-party services to store user’s private keys.",
+              "Authentication: User can add different methods of verification.",
+              "Gasless wallet creation: charged in Apillon credits per each onboarded user.",
+              "Fully trustless. Powered by Oasis."
+            ]
+          }
+        ]
+      },
+      "rpcService": {
+        "content": [
+          {
+            "benefits": [
+              "Free Tier to start",
+              "Receive API keys for different chains (over 100 chains supported)",
+              "over 99% uptime"
+            ]
+          }
+        ]
+      },
+      "nftAirdrop": {
+        "name": "NFT Email Airdrop",
+        "description": "Create an NFT collection, upload target addresses and automatically distribute NFTs to them.",
+        "content": [
+          {
+            "content": "This ready-to-use solution allows you to distribute digital collectibles (NFTs) to your audience only through email addresses."
+          },
+          {
+            "title": "The admin panel you will set up will allow you to:",
+            "content": [
+              "Add email addresses one by one or upload a file with multiple email addresses at once,",
+              "See which email addresses did and did not receive NFTs,",
+              "See wallets linked to each email,",
+              "Send automatic email instructions to each address leading to a page for claiming NFTs."
+            ]
+          },
+          {
+            "title": "Before you start, you'll need to:",
+            "content": [
+              "Create an NFT collection using [Apillon NFT Service](/dashboard/service/nft),",
+              "Know the details of email server, e. g. location and address,",
+              "Use an Ethereum-based digital wallet to access the admin panel,",
+              "Have [Apillon API key and secret](/dashboard/api-keys) to connect to the Apillon dashboard."
+            ]
+          },
+          {
+            "title": "System setup",
+            "content": [
+              "The front end is made with Vue.js,",
+              "The back end is made with Node.js and stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "Options to run the solution",
+            "content": [
+              "You can run the front end on your computer, host it on any website provider, or use [Apillon's Web3 Hosting](/dashboard/service/hosting) service via the Apillon dashboard or GitHub actions.",
+              "You can run the back end on your computer or use a tool called Docker to set configuration files with the correct information, e.g., the details of your NFTs and your email server (see instructions on [GitHub](https://github.com/Apillon/ps-email-airdrop))."
+            ]
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
+      },
+      "nftCollection": {
+        "name": "Self-hosted NFT collection",
+        "description": "Get your self sovereign standalone NFT collection with one click. Create NFTs, deploy smart contract and finally host the collection website.",
+        "content": [
+          {
+            "title": "How does it work?",
+            "content": "Launch your end-to-end decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the collection website on Web3.",
+            "benefits": ["Free metadata storage", "0 gas cost", "Free web template", "Free hosting"]
+          }
+        ],
+        "tabs": ["Create Collection", "Preview Collection", "Mint NFTs"],
+        "usage": [
+          "metadata storage",
+          "file storage",
+          "smart contracts",
+          "website template",
+          "hosting"
+        ]
+      },
+      "nftContentDelivery": {
+        "name": "NFT-Based Content Delivery",
+        "description": "Encrypt private files or assets using an NFT key. Sell or transmit the key to new owner/s and grant them access.",
+        "content": [
+          {
+            "title": "How does it work?",
+            "content": "Schrödinger’s NFT feature allows you to encrypt sensitive files of any kind using NFTs from a premade NFT collection. \n\nWith NFT-based content delivery, you can attach different files to each NFT in the collection. The files are then encrypted using unique data from the NFT and stored on a decentralized network. \n\nAs you sell or transfer the NFT, the new owner also obtains the encrypted file/s and can unlock its contents using the newly acquired NFT.",
+            "benefits": [
+              "Selling music or audio",
+              "Selling PDFs or e-books",
+              "Selling video and other media files",
+              "Encrypting and delivering sensitive documents"
+            ]
+          }
+        ],
+        "tabs": ["Choose Computing Solution", "Configure Deployment", "Deploy"],
+        "usage": ["PHALA"]
+      },
+      "nftDrop": {
+        "name": "NFT Drop",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftEmailSignupAirdrop": {
+        "name": "NFT Email Signup Airdrop",
+        "description": "Airdrop NFTs with a limited or unlimited supply to new and random user wallets.",
+        "content": [
+          {
+            "content": "This ready-to-use solution allows you to distribute digital collectibles (NFTs) to your audience only through email addresses."
+          },
+          {
+            "title": "The admin panel you will set up will allow you to:",
+            "content": [
+              "Add email addresses one by one or upload a file with multiple email addresses at once,",
+              "See which email addresses did and did not receive NFTs,",
+              "See wallets linked to each email,",
+              "Send automatic email instructions to each address leading to a page for claiming NFTs."
+            ]
+          },
+          {
+            "title": "Before you start, you'll need to:",
+            "content": [
+              "Create an NFT collection using [Apillon NFT Service](/dashboard/service/nft),",
+              "Know the details of email server, e. g. location and address,",
+              "Use an Ethereum-based digital wallet to access the admin panel,",
+              "Have [Apillon API key and secret](/dashboard/api-keys) to connect to the Apillon dashboard."
+            ]
+          },
+          {
+            "title": "System setup",
+            "content": [
+              "The front end is made with Vue.js,",
+              "The back end is made with Node.js and stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "Options to run the solution",
+            "content": [
+              "You can run the front end on your computer, host it on any website provider, or use [Apillon's Web3 Hosting](/dashboard/service/hosting) service via the Apillon dashboard or GitHub actions.",
+              "You can run the back end on your computer or use a tool called Docker to set configuration files with the correct information, e.g., the details of your NFTs and your email server (see instructions on [GitHub](https://github.com/Apillon/ps-signup-email-airdrop))."
+            ]
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
+      },
+      "nftLoyalty": {
+        "name": "NFT-based Loyalty Program",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftMembership": {
+        "name": "NFT-based Brand Membership",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftPoap": {
+        "name": "PoAP - Proof of Attendance NFTs",
+        "description": "Boost your event by creating PoAP drops in a click and let users mint or email-reserve NFTs.",
+        "content": [
+          {
+            "content": "Proof of Attendance Protocol (PoAP) allows you to create digital keepsakes to commemorate special events and distribute them to your audience for their attendance."
+          },
+          {
+            "headline": "Use cases",
+            "title": "PoAPs can serve as:",
+            "content": [
+              "Digital collectibles, unique digital items that can be collected similarly to physical memorabilia",
+              "Proof of participation proving a person's attendance at an event",
+              "Reward system for engagement, participation, or contribution in an organization or event",
+              "Community boosters to encourage interaction and participation and foster a sense of community",
+              "Tradeable NFTs as a form of investment or monetization of event participation",
+              "Exclusive access to invite-only events, content, or privileges in online communities"
+            ]
+          },
+          {
+            "headline": "How does it work?",
+            "title": "The solution consists of the admin dashboard and a webpage for claiming PoAP NFTs.",
+            "content": [
+              "On the admin dashboard, you can create and manage PoAP events, see their status and statistics and link them with NFTs created on the Apillon dashboard.",
+              "The webpage is displayed at the event and allows your audience to claim their NFTs."
+            ]
+          },
+          {
+            "title": "User flow",
+            "content": [
+              "A user scans the QR code on the claim-NFT page and enters their email.",
+              "Email instructions with a link for NFT minting are sent to the email address.",
+              "The user connects their wallet and mints a PoAP NFT on the minting page."
+            ]
+          },
+          {
+            "title": "Before you start, you'll need to:",
+            "content": [
+              "Create an NFT collection using [Apillon NFT Service](/dashboard/service/nft), allowing event attendees to mint NFTs."
+            ]
+          },
+          {
+            "title": "System setup",
+            "content": [
+              "The front end is made with Vue.js,",
+              "The back end is made with Node.js and stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "Options to run the solution",
+            "content": [
+              "You can run the front end on your computer, host it on any website provider, or use [Apillon's Web3 Hosting](/dashboard/service/hosting) service via the Apillon dashboard or GitHub actions.",
+              "You can run the back end on your computer or use a tool called Docker to set configuration files with the correct information, e.g., the details of your NFTs and your email server (see instructions on [GitHub](https://github.com/Apillon/ps-proof-of-attendance))."
+            ]
+          }
+        ],
+        "usage": ["metadata storage", "file storage"]
+      },
+      "nftWhitelistClaim": {
+        "name": "Whitelist NFT Claim",
+        "description": "Instead of giving out NFTs for free, let users claim them and pay transaction fees.",
+        "content": [
+          {
+            "content": "This ready-to-use solution allows your audience to claim NFTs by covering transaction fees, instead of you distributing NFTs for free."
+          },
+          {
+            "title": "How does it work?",
+            "content": [
+              "Users can claim NFTs only if their addresses are added to a list in your admin panel.",
+              "As admin, you can manage the admin panel and the list of addresses allowed to claim NFTs."
+            ]
+          },
+          {
+            "title": "Before you start, you will need:",
+            "content": ["A smart contract allowing eligible users to claim NFTs"]
+          },
+          {
+            "title": "System setup",
+            "content": [
+              "The front end is made with Vue.js,",
+              "The back end is made with Node.js and stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "Options to run the system",
+            "content": [
+              "You can run the front end on your computer, host it on any website provider, or use [Apillon's Web3 Hosting](/dashboard/service/hosting) service via the Apillon dashboard or GitHub actions.",
+              "You can run the back end on your computer or use a tool called Docker to set configuration files with the correct information, e.g., the details of your NFTs and your email server (see instructions on [GitHub](https://github.com/Apillon/ps-whitelist-claim))."
+            ]
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
+      },
+      "openGov": {
+        "name": "OpenGov WASM Proposal Airdrop",
+        "description": "Send NFTs using WASM smart contract to Aye/Nay voters on an OpenGov proposal.",
+        "content": [
+          {
+            "content": "This ready-to-use solution allows you to distribute NFTs using a WASM smart contract to voters on Polkassembly OpenGov proposals."
+          },
+          {
+            "title": "How does it work?",
+            "content": [
+              "On a simple webpage, enter the number of a proposal and the vote (Aye/Nay) you wish to reward with NFTs.",
+              "All the accounts that voted that way will be shown on a list you can edit.",
+              "Once you've finished editing the list, the NFTs will be sent to all the listed addresses."
+            ]
+          },
+          {
+            "title": "Before you start, you need to:",
+            "content": [
+              "Create an NFT collection using [Apillon NFT Service](/dashboard/service/nft),",
+              "Use an Ethereum-based digital wallet to access the admin panel,",
+              "Have [Apillon API key and secret](/dashboard/api-keys) to connect to the Apillon dashboard.",
+              "Know details about a specific OpenGov proposal."
+            ]
+          },
+          {
+            "title": "System setup",
+            "content": [
+              "The front end is made with Vue.js,",
+              "The back end is made with Node.js and stores information in a MySQL database."
+            ]
+          },
+          {
+            "title": "Options to run the solution",
+            "content": [
+              "You can run the front end on your computer, host it on any website provider, or use [Apillon's Web3 Hosting](/dashboard/service/hosting) service via the Apillon dashboard or GitHub actions.",
+              "You can run the back end on your computer or use a tool called Docker to set configuration files with the correct information, e.g., the details of your NFTs and your email server (see instructions on [GitHub](https://github.com/Apillon/ps-wasm-proposal-airdrop))."
+            ]
+          }
+        ],
+        "tabs": ["First task", "Second task", "Third task"],
+        "usage": ["metadata storage", "file storage", "smart contracts", "publish to opensea"]
+      },
+      "tokenGating": {
+        "name": "Token Gating",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "wallet": {
+        "name": "Non-custodial Wallet",
+        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "usage": ["metadata storage", "file storage"]
+      },
+      "indexing": {
+        "content": [
+          {
+            "title": "Features:",
+            "subtitle": "The indexing service from SQD.dev allows blockchain data to be collected, processed, and made searchable in an efficient manner. It enables applications to access and retrieve data from blockchain networks with ease, by transforming complex, unstructured blockchain data into organized, queryable formats. The service works by continuously monitoring the blockchain for new data, indexing it in real-time, and offering fast access to historical and live data through flexible API endpoints.",
+            "benefits": [
+              "Real-time Data Processing: Continuously indexes new blockchain data for immediate access.",
+              "Historical Data Access: Easily retrieve past blockchain data for analysis or verification.",
+              "Customizable APIs: Flexible API endpoints enable tailored querying for specific blockchain data needs.",
+              "Multi-Blockchain Support: Seamlessly index data across various blockchain networks.",
+              "Scalability: Efficiently handles large amounts of data, suitable for high-traffic applications."
+            ]
+          }
+        ]
+      },
+      "choose": "Choose Solution",
+      "deploy": "Deploy solution",
+      "chooseComputing": "Select a computing template for your project. Deploy it on testnet to test it and fix if needed before launching in production on mainnet.",
+      "description": "Quickly deploy pre-built templates made and audited by Apillon. Each solution features a combination of Web3 services to demonstrate how they can be combined together, so you can learn, experiment, and launch your Web3 project fast.",
+      "includedWeb3Services": "Included Web3 Services",
+      "info": "Customize ready-to-deploy templates built and audited by Apillon.",
+      "viewCode": "View code"
+    },
+
+    "subscription": {
+      "bandwidth": "Bandwith",
+      "canceledOn": "Your plan will be canceled on {date}.",
+      "creditsLifetime": "Credits Lifetime",
+      "forever": "Forever",
+      "free": "Free",
+      "lifetime": "Lifetime",
+      "monthly": "Monthly",
+      "nextBilling": "Next billing cycle on {date}.",
+      "otherServices": "Free credits for other services",
+      "packages": "Subscription packages",
+      "perMonth": "per month",
+      "storage": "Storage",
+      "web3Services": "Web3 services",
+      "plusTaxes": "+taxes",
+      "wallets": "Embedded Wallets"
+    },
+    "usage": {
+      "bandwith": "Bandwith",
+      "bytesStored": "Byte stored",
+      "description": "",
+      "downloads": "Downloads",
+      "hosting": "Web3 hosting",
+      "storage": "Web3 storage",
+      "title": "Project usage",
+      "upgrade": "Increase quotas"
+    },
+    "adminMode": "You are in ADMIN mode!",
+    "attached": "Attached",
+    "attachService": "Attach service",
+    "attachNewService": "Attach new service",
+    "billing": "Billing and Usage",
+    "changePayment": "Change payment",
+    "clientLibraries": "Client Libraries",
+    "created": "Created",
+    "createTime": "Created at",
+    "currentlyNotAvailable": "Currently not available. We will do our best to add this feature soon.",
+    "dashboard": "Dashboard",
+    "date": "Date",
+    "discord": "Discord",
+    "deletedAt": "Deleted at",
+    "demoVideo": "Demo video",
+    "email": "Email",
+    "emailMethodConfiguration": "Email method configuration",
+    "env": "Environment",
+    "expiration": "Expiration",
+    "gotIt": "Got it, thanks!",
+    "goToApiManagement": "Go to central API management",
+    "guides": "Guides",
+    "homepage": "Project overview",
+    "inviteTeamMember": "Invite team member",
+    "learnMoreAboutServices": "Learn more about services",
+    "manageRoles": "Manage roles",
+    "name": "Name",
+    "projectResources": "Project resources",
+    "readDocs": "Read the Docs",
+    "role": "Role",
+    "searchDocs": "Search the docs",
+    "secret": "Secret",
+    "secrets": "Secrets",
+    "total": "Total",
+    "tutorials": "Tutorials",
+    "user": "User",
+    "viewInvoice": "View Invoice",
+    "value": "Value",
+    "viewDocumentation": "View Documentation",
+    "visibleColumns": "Visible columns",
+    "wiki": "Wiki",
+    "w3Warn": "W3 warn",
+    "oasisSignatures": "Signatures"
+  }
 }
