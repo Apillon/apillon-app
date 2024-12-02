@@ -9,7 +9,7 @@
     <!--  Register password -->
     <n-form-item
       path="password"
-      :label="$t('form.label.password', { length: 8 })"
+      :label="$t('form.label.password', { length: 12 })"
       :label-props="{ for: 'password' }"
     >
       <n-input
@@ -64,7 +64,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const { query } = useRoute();
 const message = useMessage();
 const authStore = useAuthStore();
@@ -85,23 +85,23 @@ const rules: NFormRules = {
   password: [
     {
       required: true,
-      message: $i18n.t('validation.passwordRequired'),
+      message: t('validation.passwordRequired'),
     },
     {
-      min: 8,
-      message: $i18n.t('validation.passwordMinLength', { length: 8 }),
+      min: 12,
+      message: t('validation.passwordMinLength', { length: 12 }),
       trigger: ['input', 'blur'],
     },
   ],
   reenteredPassword: [
     {
       required: true,
-      message: $i18n.t('validation.passwordReenterRequired'),
+      message: t('validation.passwordReenterRequired'),
       trigger: ['input', 'blur'],
     },
     {
       validator: validatePasswordSame,
-      message: $i18n.t('validation.passwordReenterSame'),
+      message: t('validation.passwordReenterSame'),
       trigger: ['blur', 'password-input'],
     },
   ],
@@ -177,7 +177,7 @@ async function submitResetPassword() {
     });
 
     if (res.data) {
-      message.success($i18n.t('auth.login.passwordReplaced'));
+      message.success(t('auth.login.passwordReplaced'));
       emit('submitSuccess');
     }
   } catch (error) {
