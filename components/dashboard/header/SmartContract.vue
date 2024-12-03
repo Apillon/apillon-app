@@ -12,8 +12,12 @@
       </div>
     </div>
     <template #info>
-      <div class="flex flex-wrap justify-end items-center gap-6 gap-y-2">
+      <div class="flex flex-wrap justify-end items-center gap-4 gap-y-2">
         <slot> </slot>
+        <BtnDocumentation
+          size="small"
+          href="https://wiki.apillon.io/web3-services/12-web3-smart-contracts.html"
+        />
         <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" filter-by-chain />
       </div>
     </template>

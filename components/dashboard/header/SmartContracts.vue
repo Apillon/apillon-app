@@ -7,7 +7,11 @@
       </h1>
     </slot>
     <template #info>
-      <n-space :size="32" align="center">
+      <n-space align="center">
+        <BtnDocumentation
+          size="small"
+          href="https://wiki.apillon.io/web3-services/12-web3-smart-contracts.html"
+        />
         <ModalCreditCosts :service="ServiceTypeName.CONTRACTS" filter-by-chain />
       </n-space>
     </template>
