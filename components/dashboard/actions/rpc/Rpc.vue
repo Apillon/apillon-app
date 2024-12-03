@@ -22,7 +22,21 @@
     </div>
 
     <div class="flex space-x-2">
-      <n-button size="small" @click="$router.push(`/dashboard/service/rpc/endpoints`)">
+      <n-button
+        v-if="props.showUsageRefresh"
+        size="small"
+        @click="rpcApiKeyStore.fetchRpcApiKeyUsagePerChain"
+        :loading="rpcApiKeyStore.loading"
+      >
+        <span class="icon-refresh text-xl mr-2"></span>
+        {{ $t('general.refresh') }}
+      </n-button>
+
+      <n-button
+        v-if="rpcApiKeyStore.selectedId"
+        size="small"
+        @click="$router.push(`/dashboard/service/rpc/endpoints`)"
+      >
         <span class="text-primary">{{ $t('rpc.endpoint.viewAll') }}</span>
       </n-button>
 
@@ -37,6 +51,10 @@
 
 <script lang="ts" setup>
 import type { SelectOption } from 'naive-ui';
+
+const props = defineProps({
+  showUsageRefresh: { type: Boolean, default: false },
+});
 
 const rpcApiKeyStore = useRpcApiKeyStore();
 

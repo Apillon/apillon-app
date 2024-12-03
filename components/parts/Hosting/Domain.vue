@@ -34,12 +34,7 @@
         {{ $t('hosting.domain.remove') }}
       </Btn>
     </n-space>
-    <Btn
-      v-else-if="editEnabled || true"
-      type="primary"
-      size="small"
-      @click="showModalDomain = true"
-    >
+    <Btn v-else-if="editEnabled" type="primary" size="small" @click="showModalDomain = true">
       {{ $t('hosting.domain.add') }}
     </Btn>
     <n-tooltip v-else placement="top" trigger="hover">

@@ -62,7 +62,7 @@ import {
   type Size as ButtonSize,
 } from 'naive-ui/es/button/src/interface';
 
-type ButtonType = NButtonType | 'secondary' | 'builders' | 'link';
+export type ButtonType = NButtonType | 'secondary' | 'builders' | 'link';
 
 const props = defineProps({
   href: { type: String, default: null },

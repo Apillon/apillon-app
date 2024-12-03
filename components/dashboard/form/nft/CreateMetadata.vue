@@ -21,7 +21,13 @@
         collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOYED
       "
       :show-footer="!isUnique"
-    />
+    >
+    <div v-if="isUnique" class="mt-4">
+      <Btn :to="`/dashboard/service/nft/${collectionStore.active.collection_uuid}`" size="large">
+        Open NFT Collection
+      </Btn>
+    </div>
+  </NftPreviewFinish>
     <div v-else-if="collectionStore.nftStep === NftCreateStep.DEPLOY" class="w-full pb-8">
       <div class="text-center">
         <AnimationLoader />
@@ -67,7 +73,7 @@ function w3WarnAndDeploy() {
 
 async function onModalW3WarnConfirm() {
   if (!metadataValid()) {
-    message.warning(t('validation.nftMetadata'));
+    message.warning(t('validation.nft.metadata'));
   } else if (isUnique.value) {
     warningStore.showSpendingWarning(getPriceServiceName(), () => deployUnique());
   } else {

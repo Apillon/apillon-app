@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-8">
+  <div class="card-light px-6 py-4 mb-8">
     <Line ref="chartRef" class="min-h-80" :data="data" :options="options" :plugins="[plugin]" />
   </div>
 </template>

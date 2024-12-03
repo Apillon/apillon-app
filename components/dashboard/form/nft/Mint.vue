@@ -77,17 +77,17 @@ const rules: NFormRules = {
   receivingAddress: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintAddressRequired'),
+      message: $i18n.t('validation.nft.mintAddressRequired'),
     },
   ],
   quantity: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintQuantityRequired'),
+      message: $i18n.t('validation.nft.mintQuantityRequired'),
     },
     {
       validator: validateQuantity,
-      message: $i18n.t('validation.nftMintQuantity'),
+      message: $i18n.t('validation.nft.mintQuantity'),
     },
   ],
 };

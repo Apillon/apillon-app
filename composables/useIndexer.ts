@@ -5,6 +5,7 @@ export default function useIndexer() {
   const indexerStore = useIndexerStore();
   const indexerLogsStore = useIndexerLogStore();
   const indexerDeploymentsStore = useIndexerDeploymentsStore();
+  const indexerBillingStore = useIndexerBillingStore();
   const pageLoading = ref<boolean>(true);
 
   async function initIndexer() {
@@ -15,6 +16,7 @@ export default function useIndexer() {
       router.push({ name: 'dashboard-service-indexer' });
     }
 
+    await sleep(10);
     await Promise.all(Object.values(dataStore.promises));
 
     const indexer = await indexerStore.getIndexer(`${indexerUuid}`);
@@ -32,6 +34,8 @@ export default function useIndexer() {
       await indexerLogsStore.getLogs(indexer.indexer_uuid);
       // Get deployments
       await indexerDeploymentsStore.getDeployments(indexer.indexer_uuid);
+      // Get billing data
+      await indexerBillingStore.getIndexerBilling(indexer.indexer_uuid);
     }
   }
 

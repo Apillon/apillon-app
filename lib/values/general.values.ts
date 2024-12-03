@@ -111,7 +111,6 @@ export const LsCacheKeys = {
   POST: 'al_cache_post',
   POSTS: 'al_cache_posts',
   POST_ARCHIVE: 'al_cache_post_archive',
-  PRODUCT_HUNT_COMMENT: 'al_cache_product_hunt_comment',
   PROJECT: 'al_cache_project',
   PROJECTS: 'al_cache_projects',
   PROJECT_OVERVIEW: 'al_cache_project_overview',
@@ -121,6 +120,7 @@ export const LsCacheKeys = {
   RPC_API_KEYS: 'al_cache_rpc_api_keys',
   RPC_API_KEY: 'al_cache_rpc_api_key',
   RPC_API_KEY_USAGE: 'al_cache_rpc_api_key_usage',
+  RPC_API_KEY_USAGE_PER_CHAIN: 'al_cache_rpc_api_key_usage_per_chain',
   RPC_ENDPOINTS: 'al_cache_rpc_endpoints',
   RPC_FAVORITE_ENDPOINTS: 'al_cache_rpc_favorite_endpoints',
   RPC_DWELLIR_ID: 'al_cache_rpc_dwellir_id',
@@ -142,6 +142,8 @@ export const LsCacheKeys = {
   INDEXER: 'al_cache_indexer',
   INDEXER_LOGS: 'al_cache_indexer_logs',
   INDEXER_DEPLOYMENTS: 'al_cache_indexer_deployments',
+  INDEXER_USAGE: 'al_cache_indexer_usage',
+  INDEXER_BILLING: 'al_cache_indexer_billing',
 };
 
 /** User roles */

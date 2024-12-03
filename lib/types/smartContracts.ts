@@ -7,6 +7,11 @@ export enum SmartContractStatus {
   TRANSFERRING = 5,
   TRANSFERRED = 6,
 }
+export enum SmartContractType {
+  OTHER = 1,
+  ERC_20 = 2,
+  ERC_1155 = 3,
+}
 
 declare global {
   interface SmartContractABI {
@@ -60,6 +65,7 @@ declare global {
     contractAddress: string;
     contractStatus: number;
     contractVersion: number | any;
+    contractType: number;
     contract_uuid: string;
     deployerAddress: string;
     project_uuid: string;
