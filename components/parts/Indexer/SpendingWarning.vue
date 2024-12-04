@@ -11,24 +11,33 @@
       <div class="flex flex-col gap-1 mb-4">
         <span v-html="$t('indexer.spendingWarning.content')"></span>
       </div>
+
+      <div class="flex flex-col gap-1 mb-4">
+        <span v-html="$t('indexer.spendingWarning.content2')"></span>
+      </div>
       <div class="mt-4 mb-8">
         <span class="text-primary">
           {{ $t('indexer.spendingWarning.info') }}
         </span>
       </div>
 
-      <Btn type="primary" size="large" @click="proceed = true">
-        {{ $t('indexer.spendingWarning.btnProceed') }}
-      </Btn>
       <Btn
         v-if="!isEnoughCredits"
-        type="secondary"
+        type="primary"
         size="large"
         :to="{ name: 'dashboard-payments' }"
         class="mt-2"
         @click="$emit('close')"
       >
         {{ $t('indexer.spendingWarning.btnBuyCredits') }}
+      </Btn>
+      <Btn
+        :type="isEnoughCredits ? 'primary' : 'secondary'"
+        size="large"
+        class="mt-2"
+        @click="proceed = true"
+      >
+        {{ $t('indexer.spendingWarning.btnProceed') }}
       </Btn>
     </div>
   </modal>
@@ -39,6 +48,6 @@ const paymentStore = usePaymentStore();
 const proceed = ref<boolean>(false);
 
 const isEnoughCredits = computed(() => {
-  return (paymentStore.credit.balance || 0) >= 20000;
+  return (paymentStore.credit.balance || 0) >= 5000;
 });
 </script>

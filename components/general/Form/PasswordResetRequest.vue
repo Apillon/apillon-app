@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ButtonType } from '../Btn.vue';
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
 type PasswordResetForm = {
   email: string;
@@ -51,7 +51,11 @@ type PasswordResetForm = {
 };
 
 const props = defineProps({
-  btnType: { type: String as PropType<ButtonType>, default: 'secondary' },
+  btnType: {
+    type: String,
+    validator: (value: string) => ['primary', 'secondary', 'link'].includes(value),
+    default: 'secondary',
+  },
   email: { type: String, default: '' },
 });
 

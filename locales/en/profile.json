@@ -1,0 +1,48 @@
+{
+    "profile": {
+        "userRole": {
+          "ADMIN": "Admin",
+          "SUPPORT": "Support",
+          "ANALYTIC": "Analytic",
+          "PROJECT_OWNER": "Project owner",
+          "PROJECT_ADMIN": "Project admin",
+          "PROJECT_USER": "Project user",
+          "USER": "User"
+        },
+        "discord": {
+          "connect": "Link with Discord",
+          "connected": "Discord connected",
+          "disconnect": "Discord disconnect",
+          "disconnected": "You have successfully disconnected your Discord account",
+          "infoConnected": "You have connected your Apillon account to our Discord server and now you can participate in community discussions and product governance.",
+          "infoDisconnected": "Link your Apillon account to our Discord server and participate in community discussions and product governance.",
+          "titleConnected": "Discord connected",
+          "titleDisconnected": "Connect with Discord"
+        },
+        "marketing": {
+          "btn": "Receive useful data, tips an tricks via email",
+          "check": "I want to receive useful data, tips an tricks via email.",
+          "info": "Say yes to Apillon emails about product updates, new feature releases, how-to guides and other platform related content. Unsubscribe at anytime.",
+          "privacy": "Privacy Policy",
+          "subscribed": "Subscribed",
+          "title": "Marketing"
+        },
+        "password": {
+          "btn": "Send e-mail",
+          "change": "Change password",
+          "info": "In case you need to reset your password, an email will be sent to the email address you saved in the upper section  \"Account Information\".",
+          "title": "Password reset"
+        },
+        "2fa": "Two-factor authentication",
+        "2faText": "Add an extra layer of security to your account. To sign in, you'll need to provide a code along with your username and password.",
+        "account": "Account",
+        "accountInformation": "Account information",
+        "billing": "Billing",
+        "logout": "Logout",
+        "mySettings": "Settings",
+        "profile": "Profile",
+        "security": "Security",
+        "settings": "Settings",
+        "setup2fa": "Set up 2FA"
+      }
+}

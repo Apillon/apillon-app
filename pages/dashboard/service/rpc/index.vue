@@ -46,6 +46,7 @@ const pageLoading = ref<boolean>(true);
 const isRpcActivated = ref<boolean>(false);
 const initialLoadComplete = ref<boolean>(false);
 const modalSubscriptionVisible = ref<boolean>(false);
+const isInitialVisit = ref<boolean>(false);
 
 useHead({
   title: t('dashboard.nav.rpc'),
@@ -73,7 +74,7 @@ watch(
 
       await rpcEndpointStore.getEndpoints();
 
-      if (!rpcEndpointStore.hasFavorites) {
+      if (!rpcEndpointStore.hasFavorites && rpcApiKeyStore.selectedId) {
         router.replace({ name: 'dashboard-service-rpc-endpoints' });
       }
 
@@ -82,9 +83,22 @@ watch(
   }
 );
 
+watch(
+  () => modalSubscriptionVisible.value,
+  async isVisible => {
+    if (isVisible) {
+      return;
+    }
+
+    if (isInitialVisit.value) {
+      router.replace({ name: 'dashboard-service-rpc-endpoints' });
+    }
+  }
+);
+
 function onServiceCreated() {
   modalSubscriptionVisible.value = true;
-  initRpc();
+  isInitialVisit.value = true;
 }
 
 async function initRpc() {
@@ -98,7 +112,7 @@ async function initRpc() {
 
     await rpcEndpointStore.getEndpoints();
 
-    if (!rpcEndpointStore.hasFavorites) {
+    if (!rpcEndpointStore.hasFavorites && rpcApiKeyStore.selectedId) {
       await router.replace({ name: 'dashboard-service-rpc-endpoints' });
     }
   }
