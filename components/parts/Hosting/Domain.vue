@@ -101,7 +101,7 @@ const domainStatusType = computed<TagType>(() => {
 
 const editEnabled = computed<boolean>(() => {
   const time = websiteStore.active.domainChangeDate;
-  return !!time && new Date(time).getTime() + 15 * 60 * 1000 < Date.now();
+  return !time || new Date(time).getTime() + 15 * 60 * 1000 < Date.now();
 });
 
 async function refreshDomainStatus() {
