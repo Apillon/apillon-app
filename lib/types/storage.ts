@@ -68,6 +68,8 @@ export enum FileUploadSessionStatus {
   VALIDATION_FAILED = 4,
 }
 
+export const CALCULATED_CIDS_KEY = 'apl_calculated_cids';
+
 declare global {
   /**
    * Storage

@@ -70,7 +70,7 @@
 import { useDebounceFn } from '@vueuse/core';
 import type { DataTableInst, DataTableRowKey, DataTableSortState } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
-import { TableFilesType } from '~/lib/types/storage';
+import { FileStatus, TableFilesType } from '~/lib/types/storage';
 
 const props = defineProps({
   type: { type: Number as PropType<TableFilesType>, default: 0 },
@@ -281,7 +281,20 @@ const columns = computed(() => {
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        return h(TableLink, { link: row.link }, '');
+        return h(
+          TableLink,
+          {
+            link: row.link,
+            tooltip:
+              row.link &&
+              [FileStatus.REQUEST_FOR_UPLOAD_GENERATED, FileStatus.UPLOADED_TO_S3].includes(
+                row.fileStatus as FileStatus
+              )
+                ? t('storage.link-tooltip')
+                : undefined,
+          },
+          ''
+        );
       },
     },
     {

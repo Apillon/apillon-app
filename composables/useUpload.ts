@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import Hash from 'ipfs-only-hash';
+import { CALCULATED_CIDS_KEY } from '~/lib/types/storage';
 
 export default function useUpload() {
   const { t } = useI18n();
@@ -125,8 +126,6 @@ export default function useUpload() {
 
           if (fileRequests.data) {
             if (!wrapFilesToDirectory) {
-              bucketStore.calculatedCids = {};
-
               const cids = {} as Record<
                 string,
                 {
@@ -165,10 +164,7 @@ export default function useUpload() {
                 cids[fileUuid].link = link;
               });
 
-              bucketStore.calculatedCids = {
-                ...bucketStore.calculatedCids,
-                ...cids,
-              };
+              localStorage.setItem(CALCULATED_CIDS_KEY, JSON.stringify(cids));
             }
             await uploadFilesToS3(fileRequests.data.files);
           } else {

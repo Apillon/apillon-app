@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { CALCULATED_CIDS_KEY } from '~/lib/types/storage';
 
 export const useBucketStore = defineStore('bucket', {
   state: () => ({
@@ -250,7 +251,8 @@ export const useBucketStore = defineStore('bucket', {
           return file;
         }
 
-        const cidInfo = this.calculatedCids[file.uuid];
+        const calculatedCids = JSON.parse(localStorage.getItem(CALCULATED_CIDS_KEY) || '{}');
+        const cidInfo = calculatedCids[file.uuid];
         if (cidInfo) {
           file.CID = cidInfo.CID;
           file.link = cidInfo.link;
