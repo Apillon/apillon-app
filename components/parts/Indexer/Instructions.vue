@@ -35,7 +35,6 @@
 <script lang="ts" setup>
 const { generateContent } = useSolution();
 const content = generateContent(SolutionKey.INDEXING);
-console.log(content);
 
 const showModalNewIndexer = ref<boolean | null>(false);
 </script>

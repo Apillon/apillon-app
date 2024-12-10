@@ -48,7 +48,7 @@
       :label-props="{ for: 'chatImage' }"
     >
       <n-upload
-        accept="image/png, image/jpeg"
+        accept="image/*"
         :show-file-list="false"
         :disabled="authStore.isAdmin()"
         :custom-request="uploadImageRequest"
