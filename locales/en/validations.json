@@ -71,7 +71,7 @@
       "chainRequired": "Please select Chain",
       "chainTypeRequired": "Please select Chain type",
       "coverImageRequired": "Please select Collection cover image",
-      "dropPrice": "Please enter a valid Mint price",
+      "dropPrice": "Please enter a valid Mint price, it should be greater than 0",
       "dropPriceRequired": "Please enter Mint price",
       "dropReserve": "Number of reserved NFTs can be equal or lower than max supply.",
       "dropStart": "Drop start is not a valid date or has already passed by",
