@@ -2,10 +2,10 @@ import {
   useAccount,
   useConnect,
   useDisconnect,
-  useSwitchNetwork,
+  useSwitchChain,
   useNetwork,
-  useWalletClient,
-} from 'use-wagmi';
+  useConnectorClient,
+} from '@wagmi/vue';
 
 export default function useWallet() {
   const { t } = useI18n();
@@ -14,7 +14,7 @@ export default function useWallet() {
 
   /** Evm wallet - wagmi */
   const { connectAsync } = useConnect();
-  const { data: walletClient, refetch } = useWalletClient();
+  const { data: walletClient, refetch } = useConnectorClient();
   const { address, connector } = useAccount();
 
   async function connectAndSign() {

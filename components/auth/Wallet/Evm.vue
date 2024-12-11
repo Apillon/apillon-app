@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useAccount, useConnect, useWalletClient } from 'use-wagmi';
+import { useAccount, useConnect, useConnectorClient } from '@wagmi/vue';
 
 defineProps({
   loading: { type: Boolean, default: false },
@@ -8,7 +8,7 @@ defineProps({
 const { fullPath } = useRoute();
 const config = useRuntimeConfig();
 const { connector: activeConnector, isConnected } = useAccount();
-const { refetch } = useWalletClient();
+const { refetch } = useConnectorClient();
 const { connect, connectors, pendingConnector, isLoading } = useConnect();
 
 const Btn = resolveComponent('Btn');

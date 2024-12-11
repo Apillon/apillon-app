@@ -1,45 +1,16 @@
-import { UseWagmiPlugin, createConfig } from 'use-wagmi';
-import { MetaMaskConnector } from 'use-wagmi/connectors/metaMask';
-import { CoinbaseWalletConnector } from 'use-wagmi/connectors/coinbaseWallet';
-import { createPublicClient, http } from 'viem';
-import { moonbeam, moonbaseAlpha } from 'use-wagmi/chains';
+import { moonbeam, moonbaseAlpha } from '@wagmi/vue/chains';
+import { http, createConfig, WagmiPlugin } from '@wagmi/vue';
+import { VueQueryPlugin } from '@tanstack/vue-query';
+
+export const wagmiConfig = createConfig({
+  chains: [moonbeam, moonbaseAlpha],
+  transports: {
+    [moonbeam.id]: http(),
+    [moonbaseAlpha.id]: http(),
+  },
+});
 
 export default defineNuxtPlugin(nuxtApp => {
-  const nuxtConfig = useRuntimeConfig();
-  // const chain = nuxtConfig.public.ENV === AppEnv.PROD ? moonbeam : moonbaseAlpha;
-  const chain = moonbeam;
-  const chains = [chain];
-
-  const config = createConfig({
-    autoConnect: true,
-    connectors: [
-      new MetaMaskConnector({
-        chains,
-        options: {
-          UNSTABLE_shimOnConnectSelectAccount: true,
-        },
-      }),
-      markRaw(
-        new CoinbaseWalletConnector({
-          chains,
-          options: {
-            appName: 'Apillon Dashboard',
-          },
-        })
-      ),
-      // new WalletConnectConnector({
-      //   chains,
-      //   options: {
-      //     projectId: 'fefd3005e5f3b8fd2e73de5333eeccf9',
-      //     qrcode: true,
-      //   },
-      // }),
-    ],
-    publicClient: createPublicClient({
-      chain,
-      transport: http(),
-    }),
-  });
-
-  nuxtApp.vueApp.use(UseWagmiPlugin, config);
+  nuxtApp.vueApp.use(WagmiPlugin, { config: wagmiConfig });
+  nuxtApp.vueApp.use(VueQueryPlugin);
 });

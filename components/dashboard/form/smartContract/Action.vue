@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount } from 'use-wagmi';
+import { useAccount } from '@wagmi/vue';
 import { createPublicClient, createWalletClient, custom, http } from 'viem';
 
 const emit = defineEmits(['submitSuccess', 'transferred']);

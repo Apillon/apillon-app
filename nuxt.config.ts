@@ -33,6 +33,7 @@ export default defineNuxtConfig({
     'nuxt-icons',
     '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
+    '@wagmi/vue/nuxt',
     ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
   ],
 

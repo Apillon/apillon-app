@@ -107,13 +107,14 @@
 </template>
 
 <script setup lang="ts">
-import { useAccount, useConnect, useDisconnect, useWalletClient } from 'use-wagmi';
+import { useAccount, useConnect, useDisconnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
 
 const { connect, connectors } = useConnect();
-const { refetch: refetchWalletClient } = useWalletClient();
-const { isConnected } = useAccount({ onConnect: onWalletConnected });
+const { refetch: refetchWalletClient } = useConnectorClient();
+const { isConnected } = useAccount();
 const referralStore = useReferralStore();
 const { disconnect } = useDisconnect();
+useAccountEffect({ onConnect: onWalletConnected });
 
 const {
   initContract,

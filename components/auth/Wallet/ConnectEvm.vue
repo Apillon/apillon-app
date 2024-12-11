@@ -37,17 +37,18 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount, useConnect, useDisconnect, useWalletClient } from 'use-wagmi';
+import { useAccount, useConnect, useDisconnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
 
 const { t } = useI18n();
 const authStore = useAuthStore();
 const { error, success } = useMessage();
 const { connectAndSign } = useWallet();
 
-const { connect, connectors, isLoading } = useConnect();
-const { refetch: refetchWalletClient } = useWalletClient();
-const { address, isConnected } = useAccount({ onConnect: onWalletConnected });
+const { connect, connectors } = useConnect();
+const { refetch: refetchWalletClient } = useConnectorClient();
+const { address, isConnected } = useAccount();
 const { disconnect } = useDisconnect();
+useAccountEffect({ onConnect: onWalletConnected });
 
 const loading = ref<boolean>(false);
 const loadingRemove = ref<boolean>(false);

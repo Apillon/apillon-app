@@ -135,7 +135,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount, useDisconnect } from 'use-wagmi';
+import { useAccount, useAccountEffect, useDisconnect } from '@wagmi/vue';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -146,7 +146,8 @@ const { checkUnfinishedSmartContracts } = useSmartContracts();
 
 const { address } = useAccount();
 const { disconnect } = useDisconnect();
-const { isConnected } = useAccount({ onConnect: onWalletConnected });
+const { isConnected } = useAccount();
+useAccountEffect({ onConnect: onWalletConnected });
 
 useHead({
   title: t('dashboard.nav.smartContracts'),
