@@ -13,10 +13,7 @@
           :style="isLg ? scrollStyle : {}"
         />
         <button
-          v-if="
-            collectionStore.nftStep !== NftCreateStep.AMOUNT &&
-            collectionStore.nftStep !== NftCreateStep.DEPLOY
-          "
+          v-if="collectionStore.nftStep !== NftCreateStep.DEPLOY"
           class="absolute left-0 top-2"
           :class="collectionStore.nftStep === NftCreateStep.PREVIEW ? 'md:top-6' : 'md:top-10'"
           @click="goToPreviousStep"
@@ -124,6 +121,7 @@ function resetAndAddNft() {
 function goToPreviousStep() {
   switch (collectionStore.nftStep) {
     case NftCreateStep.AMOUNT:
+      router.back();
       return;
     case NftCreateStep.SINGLE:
       collectionStore.nftStep = NftCreateStep.AMOUNT;
