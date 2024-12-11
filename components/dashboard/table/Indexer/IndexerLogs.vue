@@ -23,14 +23,14 @@ const rowKey = (row: IndexerLogInterface) => row.id;
 const columns = computed(() => [
   {
     key: 'level',
-    title: t('dashboard.service.indexer.tableLog.level'),
+    title: t('indexer.tableLog.level'),
     render(row: IndexerLogInterface) {
       return h(resolveComponent('IndexerLogLevel'), { logLevel: row.level }, '');
     },
   },
   {
     key: 'container',
-    title: t('dashboard.service.indexer.tableLog.container'),
+    title: t('indexer.tableLog.container'),
     minWidth: 150,
     render(row: IndexerLogInterface) {
       return h('strong', {}, { default: () => row.container });
@@ -38,7 +38,7 @@ const columns = computed(() => [
   },
   {
     key: 'timestamp',
-    title: t('dashboard.service.indexer.tableLog.ts'),
+    title: t('indexer.tableLog.ts'),
     minWidth: 200,
     render(row: IndexerLogInterface) {
       return h('span', {}, { default: () => dateTimeToDateAndTime(row.timestamp || '') });
@@ -46,7 +46,7 @@ const columns = computed(() => [
   },
   {
     key: 'payload',
-    title: t('dashboard.service.indexer.tableLog.msg'),
+    title: t('indexer.tableLog.msg'),
     render(row) {
       return h('strong', {}, { default: () => row.payload.msg });
     },

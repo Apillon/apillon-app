@@ -18,13 +18,17 @@ export function getAppConfig(env?: string) {
 /**
  * Analytics GTM
  */
-export function trackEvent(eventName: string, eventCategory = 'Dashboard', eventAction = 'click') {
+export function trackEvent(eventName: string, data?: Record<string, any>) {
   const gtm = useGtm();
   if (gtm && gtm.enabled()) {
     gtm.trackEvent({
       event: eventName,
-      category: eventCategory,
-      action: eventAction,
+      category: 'category',
+      action: 'click',
+      label: 'My custom component trigger',
+      value: 5000,
+      noninteraction: false,
+      ...data,
     });
   }
 }

@@ -9,14 +9,9 @@
         <Btn @click="modalCreateCloudFunctionsVisible = true">
           {{ $t('computing.cloudFunctions.new') }}
         </Btn>
-        <Btn
-          type="secondary"
-          inner-class="text-white flex items-center justify-center"
+        <BtnDocumentation
           href="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html"
-        >
-          <span class="icon-file text-xl mr-2"></span>
-          <span>{{ $t('computing.cloudFunctions.documentation') }}</span>
-        </Btn>
+        />
         <Btn
           type="secondary"
           inner-class="text-white flex items-center justify-center"

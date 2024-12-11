@@ -20,12 +20,7 @@
       <n-button
         size="small"
         :loading="embeddedWalletStore.loading"
-        @click="
-          embeddedWalletStore.fetchEmbeddedWallets(
-            embeddedWalletStore.pagination.page,
-            embeddedWalletStore.pagination.pageSize
-          )
-        "
+        @click="embeddedWalletStore.fetchEmbeddedWallets()"
       >
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}

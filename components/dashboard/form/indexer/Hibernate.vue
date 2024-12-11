@@ -42,7 +42,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const indexerStore = useIndexerStore();
@@ -57,8 +57,8 @@ const formData = ref<FormIndexer>({
 });
 
 const rules: NFormRules = {
-  name: [ruleRequired($i18n.t('validation.indexerNameRequired'))],
-  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
+  name: [ruleRequired(t('validation.indexerNameRequired'))],
+  description: [ruleDescription(t('validation.descriptionTooLong'))],
 };
 
 onMounted(async () => {
@@ -91,7 +91,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function hibernateIndexer() {
   await indexerStore.hibernateIndexer(indexerStore.active?.indexer_uuid);
-  message.success($i18n.t('indexer.successfullyHibernated'));
+  message.success(t('indexer.successfullyHibernated'));
   emit('submitSuccess');
 }
 </script>

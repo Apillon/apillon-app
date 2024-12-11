@@ -98,7 +98,7 @@ declare global {
   interface EmbeddedWalletInterface extends BaseObjectInterface {
     integration_uuid: string;
     title: string;
-    numOfSignatures: number;
+    numOfSignatures?: number | null;
     usage: EmbeddedWalletUsage[];
     whitelistedDomains: string | null;
   }

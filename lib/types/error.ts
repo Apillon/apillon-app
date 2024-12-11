@@ -160,6 +160,7 @@ export enum DevConsoleBadRequestErrorCode {
   DEFAULT_BAD_REQUEST_ERROR = 40004000,
   CANNOT_MODIFY_PROJECT_OWNER = 40004001,
   ROLE_ON_PROJECT_ALREADY_ASSIGNED = 40004002,
+  DWELLIR_EMAIL_AREADY_EXISTS = 40020004,
 }
 
 /**
@@ -200,6 +201,7 @@ declare global {
   interface EntityErrorMessageInterface {
     message: string;
     property: string;
+    code?: number;
     statusCode: number;
   }
 

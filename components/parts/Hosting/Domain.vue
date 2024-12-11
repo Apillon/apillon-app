@@ -11,7 +11,7 @@
           <strong class="whitespace-nowrap">{{ $t('hosting.domain.domainStatus') }}:</strong>
         </div>
         <Pill :type="domainStatusType">
-          {{ $t(`hosting.domain.status.${domainStatus?.domainStatus || 0}`) }}
+          {{ $t(`hosting.domain.status.${domainStatus || 0}`) }}
         </Pill>
         <n-button
           size="small"
@@ -34,12 +34,7 @@
         {{ $t('hosting.domain.remove') }}
       </Btn>
     </n-space>
-    <Btn
-      v-else-if="editEnabled || true"
-      type="primary"
-      size="small"
-      @click="showModalDomain = true"
-    >
+    <Btn v-else-if="editEnabled" type="primary" size="small" @click="showModalDomain = true">
       {{ $t('hosting.domain.add') }}
     </Btn>
     <n-tooltip v-else placement="top" trigger="hover">
@@ -78,14 +73,13 @@ const { deleteItem } = useDelete();
 
 const showModalDomain = ref<boolean>(false);
 const showModalConfiguration = ref<boolean>(false);
-const domainStatus = ref<DomainInterface | null>(null);
+const domainStatus = ref<number | null>(null);
 const loadingDomain = ref<boolean>(false);
 const loadingDelete = ref<boolean>(false);
 const btnDomainDisabled = ref<boolean>(false);
 
-onMounted(async () => {
-  await websiteStore.getWebsites();
-  refreshDomainStatus();
+onMounted(() => {
+  domainStatus.value = websiteStore.active.domainStatus;
 });
 
 const domain = computed<string>(() => {
@@ -93,7 +87,7 @@ const domain = computed<string>(() => {
 });
 
 const domainStatusType = computed<TagType>(() => {
-  switch (domainStatus.value?.domainStatus) {
+  switch (domainStatus.value) {
     case WebsiteDomainStatus.PENDING:
       return 'info';
     case WebsiteDomainStatus.OK:
@@ -107,14 +101,18 @@ const domainStatusType = computed<TagType>(() => {
 
 const editEnabled = computed<boolean>(() => {
   const time = websiteStore.active.domainChangeDate;
-  return time && new Date(time).getTime() + 15 * 60 * 1000 < Date.now();
+  return !time || new Date(time).getTime() + 15 * 60 * 1000 < Date.now();
 });
 
 async function refreshDomainStatus() {
   if (domain.value) {
     loadingDomain.value = true;
     btnDomainDisabled.value = true;
-    domainStatus.value = await websiteStore.fetchDomainStatus(websiteUuid.value);
+
+    const websiteDomain = await websiteStore.fetchDomainStatus(websiteUuid.value);
+    if (websiteDomain) {
+      domainStatus.value = websiteDomain.domainStatus;
+    }
     loadingDomain.value = false;
     setTimeout(() => (btnDomainDisabled.value = false), 5000);
   }

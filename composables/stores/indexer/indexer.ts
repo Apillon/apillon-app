@@ -5,8 +5,8 @@ export const useIndexerStore = defineStore('indexer', {
     active: {} as IndexerInterface,
     items: [] as IndexerBaseInterface[],
     loading: false,
-    pagination: createPagination(),
     search: '',
+    usageMetrics: [] as IndexerUsageMetricsInterface[],
   }),
   getters: {
     hasIndexers(state): boolean {
@@ -14,18 +14,20 @@ export const useIndexerStore = defineStore('indexer', {
     },
   },
   actions: {
+    resetData() {
+      this.active = {} as IndexerInterface;
+      this.items = [] as Array<IndexerBaseInterface>;
+      this.search = '';
+    },
+
     /**
      * Fetch wrappers
      */
-    async getIndexers(page = 1, limit = PAGINATION_LIMIT) {
-      if (
-        page === this.pagination.page &&
-        this.hasIndexers &&
-        !isCacheExpired(LsCacheKeys.INDEXERS)
-      ) {
+    async getIndexers() {
+      if (this.hasIndexers && !isCacheExpired(LsCacheKeys.INDEXERS)) {
         return this.items;
       }
-      return await this.fetchIndexers(page, limit);
+      return await this.fetchIndexers();
     },
 
     async getIndexer(indexerUUID: string) {
@@ -35,10 +37,14 @@ export const useIndexerStore = defineStore('indexer', {
       return await this.fetchIndexer(indexerUUID);
     },
 
+    async getIndexerUsage(indexerUUID: string) {
+      return await this.fetchUsage(indexerUUID);
+    },
+
     /**
      * API calls
      */
-    async fetchIndexers(page = 1, limit = PAGINATION_LIMIT, showLoader: boolean = true) {
+    async fetchIndexers(showLoader: boolean = true) {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         await dataStore.fetchProjects();
@@ -47,22 +53,19 @@ export const useIndexerStore = defineStore('indexer', {
       this.loading = showLoader;
       try {
         const params = parseArguments({
-          limit,
-          page,
           search: this.search,
           project_uuid: dataStore.projectUuid,
+          page: PARAMS_ALL_ITEMS.page,
+          limit: PARAMS_ALL_ITEMS.limit,
         });
 
         const res = await $api.get<IndexersResponse>(endpoints.indexers(), params);
         this.items = res.data.items;
-        this.pagination.itemCount = res.data.total;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.INDEXERS, Date.now().toString());
       } catch (error: any) {
         this.items = [];
-        this.pagination.itemCount = 0;
-
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       } finally {
@@ -120,6 +123,25 @@ export const useIndexerStore = defineStore('indexer', {
       } finally {
         this.loading = false;
       }
+    },
+
+    async fetchUsage(indexerUUID: string, showLoader: boolean = true) {
+      this.loading = showLoader;
+      try {
+        const res = await $api.get<IndexerUsageResponse>(endpoints.indexerUsage(indexerUUID));
+        this.loading = false;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.INDEXER_USAGE, Date.now().toString());
+        this.usageMetrics = res.data.metrics;
+        return this.usageMetrics;
+      } catch (error: any) {
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.loading = false;
+      }
+      return null;
     },
   },
 });

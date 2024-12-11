@@ -167,16 +167,21 @@ export function contractLink(contractAddress?: string | null, chainId?: number):
     case Chains.MOONBASE:
       return `https://moonbase.moonscan.io/${address}`;
     case Chains.ASTAR:
-      return `https://astar.subscan.io/${address}`;
+      return `https://astar.blockscout.com/${address}`;
     case SubstrateChain.ASTAR:
-      const config = useRuntimeConfig();
-      if (config.public.ENV === AppEnv.DEV) {
+      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
         return `https://shibuya.subscan.io/${address}`;
       } else {
         return `https://astar.subscan.io/${address}`;
       }
     case SubstrateChain.PHALA:
       return `https://phala.subscan.io/${address}`;
+    case SubstrateChain.UNIQUE:
+      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
+        return `https://uniquescan.io/opal/collections/${contractAddress}`;
+      } else {
+        return `https://uniquescan.io/unique/collections/${contractAddress}`;
+      }
     default:
       console.warn('Missing chainId');
       return '';
@@ -192,16 +197,21 @@ export function transactionLink(transactionHash?: string | null, chainId?: numbe
     case Chains.MOONBASE:
       return `https://moonbase.moonscan.io/${hash}`;
     case Chains.ASTAR:
-      return `https://astar.subscan.io/${hash}`;
+      return `https://astar.blockscout.com/${hash}`;
     case SubstrateChain.ASTAR:
-      const config = useRuntimeConfig();
-      if (config.public.ENV === AppEnv.DEV) {
+      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
         return `https://shibuya.subscan.io/${hash}`;
       } else {
         return `https://astar.subscan.io/${hash}`;
       }
     case SubstrateChain.PHALA:
       return `https://phala.subscan.io/${hash}`;
+    case SubstrateChain.UNIQUE:
+      if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
+        return `https://opal.subscan.io/extrinsic/${transactionHash}`;
+      } else {
+        return `https://unique.subscan.io/extrinsic/${transactionHash}`;
+      }
     case SubstrateChain.ASSET_HUB:
       return `https://assethub-polkadot.subscan.io/extrinsic/${transactionHash}`;
     case SubstrateChain.WESTEND_ASSET_HUB:

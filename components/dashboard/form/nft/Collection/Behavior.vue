@@ -194,9 +194,9 @@
       >
         <n-input-number
           v-model:value="collectionStore.form.behavior.dropPrice"
-          :min="0"
-          :max="1000"
-          :step="0.001"
+          :min="0.00001"
+          :max="10000000000"
+          :step="0.00001"
           :input-props="{ id: 'dropPrice' }"
           clearable
         />

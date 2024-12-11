@@ -173,7 +173,7 @@ export class AssetHubClient {
     name: string,
     symbol: string,
     decimals: number,
-    minBalance: number,
+    minBalance: bigint,
     team?: { issuer: string; admin: string; freezer: string }
   ) {
     const createTx = this.api.tx.assets.create(id, admin, minBalance);

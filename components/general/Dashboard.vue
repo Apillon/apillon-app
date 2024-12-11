@@ -156,9 +156,8 @@ const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
 
-  if (gtm && gtm.enabled() && !sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
-    gtm.trackEvent({
-      event: 'dashboard_on_load',
+  if (!sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
+    trackEvent('dashboard_on_load', {
       user_uuid: authStore.userUuid,
     });
     sessionStorage.setItem(LsAnalyticsKeys.USER_UUID, Date.now().toString());

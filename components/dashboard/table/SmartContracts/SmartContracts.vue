@@ -25,7 +25,7 @@ const props = defineProps({
   contracts: { type: Array<DeployedContractInterface>, default: [] },
 });
 
-const { t } = useI18n();
+const { t, te } = useI18n();
 const router = useRouter();
 const deployedContractStore = useDeployedContractStore();
 
@@ -39,6 +39,7 @@ const availableColumns = ref([
   { value: 'version', label: t('dashboard.service.smartContracts.table.version') },
   { value: 'description', label: t('general.description') },
   { value: 'contractStatus', label: t('dashboard.service.smartContracts.table.contractStatus') },
+  { value: 'contractType', label: t('dashboard.service.smartContracts.table.contractType') },
 ]);
 const selectedColumns = ref([
   'name',
@@ -47,6 +48,7 @@ const selectedColumns = ref([
   'version',
   'description',
   'contractStatus',
+  'contractType',
 ]);
 
 const columns = computed(() => [
@@ -81,7 +83,20 @@ const columns = computed(() => [
     },
   },
   {
-    key: 'version_id',
+    key: 'contractType',
+    title: t('dashboard.service.smartContracts.table.contractType'),
+    className: [
+      ON_COLUMN_CLICK_OPEN_CLASS,
+      { hidden: !selectedColumns.value.includes('contractType') },
+    ],
+    render(row: DeployedContractInterface) {
+      return !!row?.contractType && te(`dashboard.service.smartContracts.type.${row.contractType}`)
+        ? t(`dashboard.service.smartContracts.type.${row.contractType}`)
+        : '';
+    },
+  },
+  {
+    key: 'contractVersion',
     title: t('dashboard.service.smartContracts.table.version'),
     className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('version') }],
   },
@@ -176,8 +191,10 @@ const dropdownOptions = [
 
 onMounted(() => {
   /** Check if selected columns are stored in LS */
-  if (localStorage.getItem(LsTableColumnsKeys.ASSET_HUB)) {
-    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.ASSET_HUB) || '');
+  if (localStorage.getItem(LsTableColumnsKeys.SMART_CONTRACTS)) {
+    selectedColumns.value = JSON.parse(
+      localStorage.getItem(LsTableColumnsKeys.SMART_CONTRACTS) || ''
+    );
   }
 });
 

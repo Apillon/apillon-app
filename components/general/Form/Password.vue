@@ -9,7 +9,7 @@
     <!--  Register password -->
     <n-form-item
       path="password"
-      :label="$t('form.label.password')"
+      :label="$t('form.label.password', { length: 12 })"
       :label-props="{ for: 'password' }"
     >
       <n-input
@@ -64,7 +64,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const { query } = useRoute();
 const message = useMessage();
 const authStore = useAuthStore();
@@ -85,22 +85,23 @@ const rules: NFormRules = {
   password: [
     {
       required: true,
-      message: $i18n.t('validation.passwordRequired'),
+      message: t('validation.passwordRequired'),
     },
     {
       min: 12,
-      message: $i18n.t('validation.passwordMinLength'),
+      message: t('validation.passwordMinLength', { length: 12 }),
+      trigger: ['input', 'blur'],
     },
   ],
   reenteredPassword: [
     {
       required: true,
-      message: $i18n.t('validation.passwordReenterRequired'),
+      message: t('validation.passwordReenterRequired'),
       trigger: ['input', 'blur'],
     },
     {
       validator: validatePasswordSame,
-      message: $i18n.t('validation.passwordReenterSame'),
+      message: t('validation.passwordReenterSame'),
       trigger: ['blur', 'password-input'],
     },
   ],
@@ -155,6 +156,7 @@ async function register() {
     authStore.saveUser(res.data);
 
     /** Track Registration created */
+    trackEvent('enhanced_email');
     trackEvent('registration_done');
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
@@ -176,7 +178,7 @@ async function submitResetPassword() {
     });
 
     if (res.data) {
-      message.success($i18n.t('auth.login.passwordReplaced'));
+      message.success(t('auth.login.passwordReplaced'));
       emit('submitSuccess');
     }
   } catch (error) {

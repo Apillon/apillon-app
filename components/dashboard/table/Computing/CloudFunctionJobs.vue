@@ -45,7 +45,7 @@ const message = useMessage();
 const dataStore = useDataStore();
 const warningStore = useWarningStore();
 const cloudFunctionStore = useCloudFunctionStore();
-const { checkUnfinishedJobs } = useRefreshStatus();
+const { checkUnfinishedJobs } = useCloudFunctions();
 
 const loadingRedeploy = ref<boolean>(false);
 const modalEditJobsVisible = ref<boolean>(false);
@@ -68,7 +68,15 @@ const createColumns = (): NDataTableColumns<JobInterface> => {
       key: 'cid',
       title: t('computing.cloudFunctions.job.cid'),
       render(row: JobInterface) {
-        return h(resolveComponent('TableEllipsis'), { text: row.scriptCid }, '');
+        return h(
+          'a',
+          {
+            href: `https://ipfs.io/ipfs/${row.scriptCid}`,
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          },
+          row.scriptCid
+        );
       },
     },
     {
@@ -135,9 +143,9 @@ const actionsEnabled = computed<boolean>(() => {
 
 const data = computed(
   () =>
-    cloudFunctionStore.jobs.filter(item =>
-      item.name.toLowerCase().includes(cloudFunctionStore.searchJobs.toLowerCase())
-    ) || []
+    cloudFunctionStore.jobs
+      .filter(item => item.name.toLowerCase().includes(cloudFunctionStore.searchJobs.toLowerCase()))
+      .reverse() || []
 );
 
 /**

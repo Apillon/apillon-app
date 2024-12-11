@@ -5,7 +5,7 @@
       <n-space :size="32">
         <!-- Filter by service -->
         <div v-if="filterByService && !service" class="mb-4">
-          <strong>{{ $t('dashboard.credits.filterByService') }}:</strong>
+          <strong class="mb-1 inline-block">{{ $t('dashboard.credits.filterByService') }}:</strong>
           <select-options
             v-model:value="selectedService"
             :options="services"
@@ -18,7 +18,7 @@
         </div>
         <!-- Filter by chain -->
         <div v-if="filterByChain" class="mb-4">
-          <strong>{{ $t('dashboard.credits.filterByChain') }}:</strong>
+          <strong class="mb-1 inline-block">{{ $t('dashboard.credits.filterByChain') }}:</strong>
           <select-options
             v-model:value="selectedChain"
             :options="chainsByService"
@@ -26,7 +26,7 @@
             size="small"
             :placeholder="$t('form.placeholder.chain')"
             filterable
-            :clearable="!service"
+            clearable
           />
         </div>
       </n-space>
@@ -123,7 +123,6 @@ const shownPrices = computed(() => {
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
     const chainName = getChainName(selectedChain.value, props.service);
-    console.log(chainName);
     return servicePrices.value.filter(item => item.name.includes(chainName));
   } else if (props.filterByService && selectedService.value) {
     /** Filter by service */

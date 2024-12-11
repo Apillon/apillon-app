@@ -7,7 +7,6 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
     items: [] as EmbeddedWalletInterface[],
     loading: false,
     search: '',
-    pagination: createPagination(),
     quotaReached: undefined as Boolean | undefined,
     signature: {
       items: [] as SignatureInterface[],
@@ -37,6 +36,7 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
       this.items = [] as EmbeddedWalletInterface[];
       this.signature.items = [] as SignatureInterface[];
       this.search = '';
+      this.quotaReached = undefined;
     },
 
     /**
@@ -44,13 +44,9 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
      */
 
     /** Oasis embedded wallets */
-    async getEmbeddedWallets(page = 1, limit = PAGINATION_LIMIT) {
-      if (
-        this.pagination.page !== page ||
-        !this.hasEmbeddedWallets ||
-        isCacheExpired(LsCacheKeys.EMBEDDED_WALLETS)
-      ) {
-        await this.fetchEmbeddedWallets(page, limit);
+    async getEmbeddedWallets() {
+      if (!this.hasEmbeddedWallets || isCacheExpired(LsCacheKeys.EMBEDDED_WALLETS)) {
+        await this.fetchEmbeddedWallets();
       }
       return this.items;
     },
@@ -86,7 +82,7 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
      *
      * API calls
      */
-    async fetchEmbeddedWallets(page: number, limit: number) {
+    async fetchEmbeddedWallets() {
       const dataStore = useDataStore();
       const project_uuid = await dataStore.getProjectUuid();
       if (!project_uuid) return;
@@ -94,25 +90,22 @@ export const useEmbeddedWalletStore = defineStore('embeddedWallet', {
       this.loading = true;
       try {
         const params = parseArguments({
-          limit,
-          page,
           project_uuid,
-          search: this.search,
+          page: PARAMS_ALL_ITEMS.page,
+          limit: PARAMS_ALL_ITEMS.limit,
         });
         const res = await $api.get<EmbeddedWalletsResponse>(endpoints.embeddedWallets(), params);
         this.items = res.data.items;
-        this.pagination.itemCount = res.data.total;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.EMBEDDED_WALLETS, Date.now().toString());
       } catch (error) {
         this.items = [] as EmbeddedWalletInterface[];
-        this.pagination.itemCount = 0;
+        this.search = '';
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       } finally {
         this.loading = false;
-        this.search = '';
       }
     },
 

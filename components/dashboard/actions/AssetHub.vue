@@ -33,15 +33,7 @@
       </n-button>
 
       <!-- View Documentation -->
-      <Btn
-        size="small"
-        type="secondary"
-        inner-class="text-white flex items-center justify-center"
-        href="https://wiki.polkadot.network/docs/learn-assets"
-      >
-        <span class="icon-file text-xl mr-2"></span>
-        <span>{{ $t('dashboard.service.assetHub.viewDocumentation') }}</span>
-      </Btn>
+      <BtnDocumentation size="small" href="https://wiki.polkadot.network/docs/learn-assets" />
     </n-space>
   </n-space>
 </template>

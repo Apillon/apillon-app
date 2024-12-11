@@ -111,6 +111,14 @@
       transform: rotate(-90deg);
     }
   }
+  &.collapse-up .n-collapse-item {
+    .n-collapse-item-arrow {
+      transform: rotate(-90deg);
+    }
+    .n-collapse-item__header.n-collapse-item__header--active .n-collapse-item-arrow {
+      transform: rotate(90deg);
+    }
+  }
 }
 
 /** Container */
@@ -377,7 +385,7 @@
       @apply sticky top-0 z-2 mb-2;
 
       .n-menu-item-content {
-                &::before {
+        &::before {
           @apply rounded-none bg-bg;
         }
 

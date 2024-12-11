@@ -17,15 +17,11 @@
       </n-button>
 
       <!-- View documentation -->
-      <Btn
-        type="secondary"
+      <BtnDocumentation
         size="small"
-        inner-class="text-white flex items-center justify-center"
         href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
-      >
-        <span class="icon-file text-xl mr-2"></span>
-        {{ $t('embeddedWallet.viewDocumentation') }}
-      </Btn>
+        hover-lighter
+      />
 
       <ModalCreditCosts :service="ServiceTypeName.WALLET" />
     </n-space>

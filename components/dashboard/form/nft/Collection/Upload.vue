@@ -14,7 +14,7 @@
     <n-upload
       v-else
       ref="uploadRef"
-      accept="image/png, image/jpeg"
+      accept="image/*"
       :show-file-list="false"
       :custom-request="e => collection.uploadFileRequest(e, isLogo)"
       @change="onUploadChange"

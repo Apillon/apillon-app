@@ -73,7 +73,7 @@
             <n-upload
               v-else
               ref="uploadRef"
-              accept="image/png, image/jpeg"
+              accept="image/*"
               :default-file-list="collectionStore.images"
               :show-file-list="false"
               directory-dnd
@@ -111,8 +111,13 @@
     <FormInstructions :title="t('nft.upload.attributes')" :instructions="[]">
       <NftSingleProperties />
     </FormInstructions>
-
-    <Btn class="my-8" @click="handleSubmitForm">{{ t('form.proceed') }}</Btn>
+   
+    <div class="flex flex-wrap gap-6 justify-between my-8">
+      <Btn @click="handleSubmitForm">{{ $t('nft.add') }}</Btn>
+      <Btn v-if="collectionStore.metadata?.length > 0" type="secondary" @click="collectionStore.nftStep = NftCreateStep.PREVIEW">
+        Go to preview
+      </Btn>
+    </div>
   </div>
 </template>
 
