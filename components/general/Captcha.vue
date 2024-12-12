@@ -17,6 +17,7 @@ useHead({
       body: true,
       children: `      
             const eventCaptchaVerified = new Event("EventCaptchaVerified");
+            const eventCaptchaReload = new Event("EventCaptchaReload");
 
             function onCaptchaVerified(captcha) {
               sessionStorage.setItem('${AuthLsKeys.PROSOPO}', captcha);
@@ -27,9 +28,11 @@ useHead({
             }
             function onCaptchaError(captcha) {
               sessionStorage.removeItem('${AuthLsKeys.PROSOPO}');
+              document.dispatchEvent(eventCaptchaReload);
             }
             function onCaptchaExpired(captcha) {
               sessionStorage.removeItem('${AuthLsKeys.PROSOPO}');
+              document.dispatchEvent(eventCaptchaReload);
             }
 
             window.procaptchaLoaded = false;
