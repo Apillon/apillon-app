@@ -108,8 +108,7 @@ function handleSubmit(e: Event | MouseEvent | null) {
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
     } else if (!formData.value.captcha && !isCaptchaConfirmed()) {
-      showCaptcha.value = false;
-      setTimeout(() => (showCaptcha.value = true), 1);
+      reloadCaptcha();
     } else {
       await login();
     }
