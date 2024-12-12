@@ -42,8 +42,6 @@
 </template>
 
 <script lang="ts" setup>
-import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
-
 type PasswordResetForm = {
   email: string;
   captcha?: any;
