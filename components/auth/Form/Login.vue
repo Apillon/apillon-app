@@ -84,11 +84,16 @@ const rules = computed<NFormRules>(() => {
 
 onMounted(() => {
   showCaptcha.value = !isCaptchaConfirmed();
-  // document.addEventListener('EventCaptchaVerified', login);
+  document.addEventListener('EventCaptchaReload', reloadCaptcha);
 });
-// onUnmounted(() => {
-//   document.removeEventListener('EventCaptchaVerified', login);
-// });
+onUnmounted(() => {
+  document.removeEventListener('EventCaptchaReload', reloadCaptcha);
+});
+
+function reloadCaptcha() {
+  showCaptcha.value = false;
+  setTimeout(() => (showCaptcha.value = true), 1);
+}
 
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
@@ -143,8 +148,15 @@ async function login() {
       showCaptcha.value = true;
       authStore.removeCaptchaJwt(formData.value.email);
     } else if (DevConsoleError.USER_INVALID_LOGIN) {
-      showCaptcha.value = true;
       authStore.removeCaptchaJwt(formData.value.email);
+
+      if (!showCaptcha.value) {
+        showCaptcha.value = true;
+      } else {
+        window?.loadProcaptcha();
+      }
+    } else {
+      window?.loadProcaptcha();
     }
   }
   loading.value = false;
