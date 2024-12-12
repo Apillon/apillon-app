@@ -5,6 +5,7 @@ export const AuthLsKeys = {
   EMAIL: 'al_email',
   WALLET: 'al_wallet',
   CAPTCHA: 'al_captcha',
+  PROSOPO: 'al_prosopo',
 };
 
 export const useAuthStore = defineStore('auth', {
