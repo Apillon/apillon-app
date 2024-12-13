@@ -171,6 +171,7 @@
 <script lang="ts" setup>
 import { nToBigInt } from '@polkadot/util';
 import type { FormItemRule } from 'naive-ui';
+import { assetHubNetworks } from '~/composables/useAssetHub';
 
 type FormAsset = {
   network: string | null;

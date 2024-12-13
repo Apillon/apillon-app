@@ -24,12 +24,7 @@ export default defineNuxtConfig({
     public: appConfig,
   },
 
-  components: [
-    '~/components',
-    '~/components/general/',
-    '~/components/parts/',
-    '~/components/dashboard/',
-  ],
+  components: ['~/components', '~/components/general/', '~/components/parts/', '~/components/dashboard/'],
 
   modules: [
     '@vueuse/nuxt',
@@ -38,6 +33,7 @@ export default defineNuxtConfig({
     'nuxt-icons',
     '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
+    '@wagmi/vue/nuxt',
     ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
   ],
 

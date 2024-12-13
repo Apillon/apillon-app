@@ -1,5 +1,3 @@
-import { crustTypes } from '@crustio/type-definitions';
-
 /**
  * Bucket type
  */
@@ -230,7 +228,17 @@ declare global {
   }
 
   type FileDetails = FileInterface | FileUploadInterface;
-  type FileCrust = typeof crustTypes.market.types.FileInfoV2;
+  type FileCrust = {
+    file_size: string;
+    spower: string;
+    expired_at: string;
+    calculated_at: string;
+    amount: string;
+    prepaid: string;
+    reported_replica_count: string;
+    remaining_paid_count: string;
+    replicas: string;
+  };
 
   interface FileDetailsResponse extends GeneralResponse<FileInterface> {}
   interface FileUploadRequestResponse extends GeneralResponse<FileUploadRequestInterface> {}

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center" style="min-height: calc(70dvh - 50px)">
+  <div class="flex items-center justify-center" style="min-height: calc(70dvh - 50px)">
     <div
       class="w-full text-center"
       :class="collectionStore.stepUpload === NftUploadStep.PREVIEW ? 'self-start' : 'max-w-lg'"
@@ -7,7 +7,7 @@
       <!-- Upload Img -->
       <template v-if="collectionStore.stepUpload === NftUploadStep.IMAGES">
         <h2>{{ $t('nft.upload.titleImage') }}</h2>
-        <p class="text-body whitespace-pre-line">
+        <p class="whitespace-pre-line text-body">
           {{ $t('nft.upload.infoImages') }}
         </p>
         <p class="mb-6">
@@ -32,8 +32,8 @@
         >
           <n-upload-dragger class="h-40">
             <div class="py-2 text-center">
-              <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-                <span class="icon-image text-violet text-2xl"></span>
+              <div class="mb-2 inline-block h-10 w-10 rounded-full bg-bg-lighter p-2">
+                <span class="icon-image text-2xl text-violet"></span>
               </div>
 
               <h4 class="mb-1">{{ $t('nft.upload.images') }}</h4>
@@ -41,24 +41,21 @@
             </div>
           </n-upload-dragger>
         </n-upload>
-        <div v-if="collectionStore.hasImages" class="flex mt-5 text-left">
+        <div v-if="collectionStore.hasImages" class="mt-5 flex text-left">
           <div class="card w-full px-4 py-[10px]">
-            <span class="icon-image text-xl align-sub mr-3"></span>
+            <span class="icon-image mr-3 align-sub text-xl"></span>
             <span>{{ collectionStore.images.length }}</span>
             &nbsp;
             <span>{{ $t('general.images') }}</span>
           </div>
           <div class="">
-            <button
-              class="flex justify-center items-center h-12 w-12 ml-4 p-3"
-              @click="removeImages()"
-            >
+            <button class="ml-4 flex h-12 w-12 items-center justify-center p-3" @click="removeImages()">
               <span class="icon-delete text-xl"></span>
             </button>
           </div>
         </div>
 
-        <n-space class="mt-5 mb-8" :size="20" justify="space-between" vertical>
+        <n-space class="mb-8 mt-5" :size="20" justify="space-between" vertical>
           <Notification
             v-if="collectionStore.hasImages && !nft.allImagesUploaded.value"
             type="error"
@@ -81,14 +78,14 @@
       <!-- Upload/Confirm CSV -->
       <template v-else>
         <h2>{{ $t('nft.upload.titleCsv') }}</h2>
-        <p class="text-body whitespace-pre-line">
+        <p class="whitespace-pre-line text-body">
           {{ $t('nft.upload.infoFile') }}
         </p>
-        <p class="mb-6 text-body whitespace-pre-line">
+        <p class="mb-6 whitespace-pre-line text-body">
           <Btn type="builders" size="tiny" href="https://wiki.apillon.io/web3-services/4-nfts.html">
             {{ $t('general.learnMore') }}
           </Btn>
-          <span class="inline-block mx-1">{{ $t('general.or') }}</span>
+          <span class="mx-1 inline-block">{{ $t('general.or') }}</span>
           <Btn type="builders" size="tiny" href="/files/example.csv">
             {{ $t('nft.upload.downloadCsv') }}
           </Btn>
@@ -109,15 +106,12 @@
         </div>
         <template v-else>
           <div class="flex text-left">
-            <div class="card flex-1 px-4 py-2 rounded-lg">
-              <span class="icon-file text-xl align-sub mr-3"></span>
+            <div class="card flex-1 rounded-lg px-4 py-2">
+              <span class="icon-file mr-3 align-sub text-xl"></span>
               <span>{{ collectionStore.csvFile.name }}</span>
             </div>
             <div class="">
-              <button
-                class="flex justify-center items-center h-12 w-12 ml-4 p-3"
-                @click="collectionStore.resetFile()"
-              >
+              <button class="ml-4 flex h-12 w-12 items-center justify-center p-3" @click="collectionStore.resetFile()">
                 <span class="icon-delete text-xl"></span>
               </button>
             </div>
@@ -128,7 +122,7 @@
         </template>
 
         <Btn
-          class="mt-10 mb-8"
+          class="mb-8 mt-10"
           size="large"
           type="primary"
           :disabled="!collectionStore.hasCsvFile || !nft.hasRequiredMetadata.value"

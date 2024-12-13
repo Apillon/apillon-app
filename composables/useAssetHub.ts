@@ -1,4 +1,4 @@
-import { nToBigInt, BN } from '@polkadot/util';
+import { BN } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import type { AssetHubClient as AssetHubClientType } from '#imports';
 

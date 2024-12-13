@@ -46,17 +46,11 @@
         <tbody>
           <tr v-for="(price, key) in shownPrices" :key="key">
             <td>
-              <NuxtIcon
-                :name="getIconName(price)"
-                class="float-left text-white text-2xl mr-3"
-                filled
-              />
+              <NuxtIcon :name="getIconName(price)" class="float-left mr-3 text-2xl text-white" filled />
               <span>{{ price.description }} </span>
             </td>
             <td class="text-right">
-              <strong class="text-white">
-                {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
-              </strong>
+              <strong class="text-white"> {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }} </strong>
             </td>
           </tr>
         </tbody>
@@ -89,7 +83,7 @@ const loading = ref<boolean>(true);
 
 onMounted(async () => {
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
-    selectedChain.value = props.chain || collectionStore.form.base.chain || Chains.MOONBEAM;
+    selectedChain.value = props.chain || collectionStore.form.behavior.chain || Chains.MOONBEAM;
   }
 
   servicePrices.value = props.category
@@ -99,9 +93,7 @@ onMounted(async () => {
       : await paymentStore.getPriceList();
 
   /** Sort by category (chain name) */
-  servicePrices.value.sort((a, b) =>
-    a.category.toLowerCase() < b.category.toLowerCase() ? -1 : 1
-  );
+  servicePrices.value.sort((a, b) => (a.category.toLowerCase() < b.category.toLowerCase() ? -1 : 1));
 
   loading.value = false;
 });
@@ -125,16 +117,9 @@ const chainsByService = computed(() => {
 
 const shownPrices = computed(() => {
   /** Filter by chain and service */
-  if (
-    props.filterByChain &&
-    selectedChain.value &&
-    props.filterByService &&
-    selectedService.value
-  ) {
+  if (props.filterByChain && selectedChain.value && props.filterByService && selectedService.value) {
     const chainName = getChainName(selectedChain.value, selectedService.value);
-    return servicePrices.value.filter(
-      item => item.category === chainName + '_' + selectedService.value
-    );
+    return servicePrices.value.filter(item => item.category === chainName + '_' + selectedService.value);
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
     const chainName = getChainName(selectedChain.value, props.service);

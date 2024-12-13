@@ -1,12 +1,14 @@
 import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
 import IconInfo from '../components/parts/Icon/Info.vue';
 import { EvmChain, SubstrateChain } from '~/lib/types/nft';
+import type { TimeValidator } from 'naive-ui/es/date-picker/src/interface';
 
 export default function useCollection() {
-  const { t, te } = useI18n();
   const router = useRouter();
+  const { t, te } = useI18n();
   const message = useMessage();
   const dataStore = useDataStore();
+  const bucketStore = useBucketStore();
   const collectionStore = useCollectionStore();
 
   const { isEnoughSpaceInStorage } = useUpload();
@@ -75,7 +77,7 @@ export default function useCollection() {
   });
 
   const isUnique = computed(() => {
-    return collectionStore.form.base.chain === SubstrateChain.UNIQUE;
+    return collectionStore.form.behavior.chain === SubstrateChain.UNIQUE;
   });
 
   const addressLabel = computed(() =>
@@ -186,48 +188,47 @@ export default function useCollection() {
 
   function prepareFormData(addBaseUri = false) {
     const chain =
-      collectionStore.form.base.chain === Chains.ASTAR &&
-      collectionStore.form.base.chainType === ChainType.SUBSTRATE
+      collectionStore.form.behavior.chain === Chains.ASTAR &&
+      collectionStore.form.behavior.chainType === ChainType.SUBSTRATE
         ? SubstrateChain.ASTAR
-        : collectionStore.form.base.chain;
+        : collectionStore.form.behavior.chain;
 
-    return {
+    const params: Record<string, string | number | boolean | null | undefined> = {
       chain,
       project_uuid: dataStore.projectUuid,
       name: collectionStore.form.base.name,
       symbol: collectionStore.form.base.symbol,
-      collectionType: collectionStore.form.base.collectionType,
-      maxSupply:
-        collectionStore.form.behavior.supplyLimited === 1
-          ? collectionStore.form.behavior.maxSupply
-          : 0,
+      collectionType: collectionStore.form.behavior.collectionType,
+      maxSupply: collectionStore.form.behavior.supplyLimited === 1 ? collectionStore.form.behavior.maxSupply : 0,
       isRevokable: collectionStore.form.behavior.revocable,
       isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesFees: isUnique.value ? undefined : collectionStore.form.behavior.royaltiesFees,
       royaltiesAddress:
-        collectionStore.form.behavior.royaltiesFees === 0
-          ? undefined
-          : collectionStore.form.behavior.royaltiesAddress,
-      baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
-      baseExtension: isUnique.value ? undefined : collectionStore.form.behavior.baseExtension,
-      drop: isUnique.value ? undefined : collectionStore.form.behavior.drop,
-      dropPrice: isUnique.value ? undefined : collectionStore.form.behavior.dropPrice,
-      dropStart: isUnique.value
-        ? undefined
-        : Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
-      dropReserve: isUnique.value ? undefined : collectionStore.form.behavior.dropReserve || 0,
-      useApillonIpfsGateway: isUnique.value
-        ? undefined
-        : collectionStore.form.base.useApillonIpfsGateway,
-      useIpns: isUnique.value ? undefined : collectionStore.form.base.useIpns,
+        collectionStore.form.behavior.royaltiesFees === 0 ? undefined : collectionStore.form.behavior.royaltiesAddress,
     };
+    if (addBaseUri) {
+      params.baseUri = collectionStore.form.behavior.baseUri;
+    }
+    if (!isUnique.value) {
+      params.baseExtension = collectionStore.form.behavior.baseExtension;
+      params.drop = collectionStore.form.behavior.drop;
+      params.dropPrice = collectionStore.form.behavior.dropPrice;
+      params.dropStart = Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000);
+      params.dropReserve = collectionStore.form.behavior.dropReserve;
+      params.royaltiesFees = collectionStore.form.behavior.royaltiesFees;
+      params.useApillonIpfsGateway = collectionStore.form.behavior.useApillonIpfsGateway;
+      params.useIpns = collectionStore.form.behavior.useIpns;
+    }
+    if (collectionStore.form.behavior.royaltiesFees > 0) {
+      params.royaltiesAddress = collectionStore.form.behavior.royaltiesAddress;
+    }
+    return params;
   }
 
   function collectionEndpoint() {
     return isUnique.value
       ? endpoints.collectionsUnique
-      : collectionStore.form.base.chain === Chains.ASTAR &&
-          collectionStore.form.base.chainType === ChainType.SUBSTRATE
+      : collectionStore.form.behavior.chain === Chains.ASTAR &&
+          collectionStore.form.behavior.chainType === ChainType.SUBSTRATE
         ? endpoints.collectionsSubstrate
         : endpoints.collections();
   }
@@ -256,7 +257,7 @@ export default function useCollection() {
       !isRoyaltyRequired() ||
       (isUnique.value
         ? substrateAddressValidate(_, value, SubstrateChainPrefix.UNIQUE)
-        : collectionStore.form.base.chainType === ChainType.SUBSTRATE
+        : collectionStore.form.behavior.chainType === ChainType.SUBSTRATE
           ? substrateAddressValidate(_, value, SubstrateChainPrefix.ASTAR)
           : validateEvmAddress(_, value))
     );
@@ -270,10 +271,8 @@ export default function useCollection() {
 
   function isRoyaltyRequired() {
     return (
-      (collectionStore.form.base.chainType === ChainType.EVM &&
-        collectionStore.form.behavior.royaltiesFees > 0) ||
-      (collectionStore.form.base.chainType === ChainType.SUBSTRATE &&
-        collectionStore.form.behavior.drop)
+      (collectionStore.form.behavior.chainType === ChainType.EVM && collectionStore.form.behavior.royaltiesFees > 0) ||
+      (collectionStore.form.behavior.chainType === ChainType.SUBSTRATE && collectionStore.form.behavior.drop)
     );
   }
 
@@ -281,12 +280,16 @@ export default function useCollection() {
     return ts < new Date().setHours(0, 0, 0, 0);
   }
 
-  function disablePastTime(ts: number) {
-    return ts < Date.now();
+  function disablePastTime(ts: number): TimeValidator {
+    return {
+      isHourDisabled: (hour: number) => ts < Date.now(),
+      isMinuteDisabled: (minute: number, hour: number | null) => ts < Date.now(),
+      isSecondDisabled: (second: number, minute: number | null, hour: number | null) => ts < Date.now(),
+    };
   }
 
   function chainCurrency() {
-    switch (collectionStore.form.base.chain) {
+    switch (collectionStore.form.behavior.chain) {
       case Chains.ASTAR:
         return 'ASTR';
       default:
@@ -294,10 +297,7 @@ export default function useCollection() {
     }
   }
 
-  function uploadFileRequest(
-    { file, onError, onFinish }: UploadCustomRequestOptions,
-    logo: boolean
-  ) {
+  function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptions, logo: boolean) {
     const uploadedFile: FileListItemType = {
       ...file,
       fullPath: file.fullPath,
@@ -307,6 +307,7 @@ export default function useCollection() {
       onFinish: onFinish || (() => {}),
       onError: onError || (() => {}),
     };
+
     if (!isEnoughSpaceInStorage([], uploadedFile)) {
       message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
 
@@ -333,10 +334,18 @@ export default function useCollection() {
 
   function onChainChange(chain: number) {
     if (chain === Chains.ASTAR_SHIBUYA) {
-      collectionStore.form.base.chainType = ChainType.SUBSTRATE;
+      collectionStore.form.behavior.chainType = ChainType.SUBSTRATE;
     } else if (chain !== Chains.ASTAR) {
-      collectionStore.form.base.chainType = ChainType.EVM;
+      collectionStore.form.behavior.chainType = ChainType.EVM;
     }
+  }
+
+  function resetAll() {
+    bucketStore.resetFolder();
+    bucketStore.resetUpload();
+    collectionStore.resetForms();
+    collectionStore.resetMetadata();
+    collectionStore.metadataStored = undefined;
   }
 
   return {
@@ -362,6 +371,7 @@ export default function useCollection() {
     onChainChange,
     openAddNft,
     prepareFormData,
+    resetAll,
     uploadFileRequest,
   };
 }

@@ -1,5 +1,6 @@
 <template>
   <div
+    v-bind="$attrs"
     class="relative w-full"
     :class="{ 'flex-cc': collectionStore.nftStep !== NftCreateStep.PREVIEW }"
   >
@@ -11,7 +12,7 @@
     <div v-else-if="collectionStore.nftStep === NftCreateStep.PREVIEW" class="pt-8">
       <NftPreview>
         <Btn class="w-60" type="primary" @click="w3WarnAndDeploy()">
-          {{ $t('nft.deploy.single') }}
+          {{ t('nft.deploy.single') }}
         </Btn>
       </NftPreview>
     </div>
@@ -29,27 +30,49 @@
       </div>
     </NftPreviewFinish>
     <div v-else-if="collectionStore.nftStep === NftCreateStep.DEPLOY" class="w-full pb-8">
-      <div class="text-center">
-        <AnimationLoader />
-        <h2>{{ $t('nft.deploy.deployingCollection') }}</h2>
-        <p class="mb-8 text-body whitespace-pre-line">
-          <span>
-            {{ $t('nft.deploy.collection') }}
-          </span>
-        </p>
-      </div>
+      <AnimationDeploy />
     </div>
 
     <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnConfirm">
-      {{ $t('w3Warn.nft.new') }}
+      {{ t('w3Warn.nft.new') }}
     </W3Warn>
   </div>
+
+  <!-- Buttons switch preview-->
+  <div v-if="collectionStore.nftStep === NftCreateStep.PREVIEW" class="absolute right-4 top-4 flex items-center">
+    <span class="mr-2">{{ t('general.view') }}:</span>
+    <n-button
+      class="w-10 px-0"
+      :class="{ '!bg-bg-lighter': !collectionStore.gridView }"
+      size="small"
+      type="tertiary"
+      quaternary
+      round
+      @click="collectionStore.gridView = false"
+    >
+      <span class="icon-list-view align-sub text-2xl"></span>
+    </n-button>
+    <n-button
+      class="w-10 px-0"
+      :class="{ '!bg-bg-lighter': collectionStore.gridView }"
+      size="small"
+      type="tertiary"
+      quaternary
+      round
+      @click="collectionStore.gridView = true"
+    >
+      <span class="icon-grid-view align-sub text-2xl"></span>
+    </n-button>
+  </div>
+  <W3Warn v-model:show="modalW3WarnVisible" @submit="modalW3WarnVisible = false">
+    {{ t('w3Warn.nft.collection') }}
+  </W3Warn>
 </template>
 
 <script setup lang="ts">
-const props = defineProps({ deployCollection: { type: Boolean, default: false } });
-const emit = defineEmits(['submitSuccess']);
+import { CollectionStatus, NftCreateStep } from '~/lib/types/nft';
 
+const emit = defineEmits(['submitSuccess']);
 const { t, te } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
@@ -62,6 +85,8 @@ const { isUnique, prepareFormData } = useCollection();
 const { deployCollection, getPriceServiceName, uploadLogoAndCover } = useNft();
 const { uploadFiles } = useUpload();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
+
+const metadataValid = () => !collectionStore.metadata.some(item => !item.image || !item.name || !item.description);
 
 function w3WarnAndDeploy() {
   if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new') && t('w3Warn.nft.new')) {
@@ -81,23 +106,16 @@ async function onModalW3WarnConfirm() {
   }
 }
 
-function metadataValid(): boolean {
-  return !collectionStore.metadata.some(item => !item.image || !item.name || !item.description);
-}
-
 async function deploy() {
   modalW3WarnVisible.value = false;
   collectionStore.nftStep = NftCreateStep.DEPLOY;
   collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
 
   try {
-    await deployCollection(props.deployCollection);
+    await deployCollection(collectionStore.active.collectionStatus === CollectionStatus.CREATED);
 
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
     collectionStore.resetCache();
-
-    /** Emit events */
-    emit('submitSuccess');
   } catch (error) {
     /** Deployment status */
     collectionStore.nftStep = NftCreateStep.PREVIEW;
@@ -169,7 +187,7 @@ async function prepareUniqueData(bucketUuid: string) {
 
   /** Prepare metadata */
   const baseData = prepareFormData();
-  const metadata = Object.values(collectionStore.metadata).reduce((acc, meta, key) => {
+  const metadata = collectionStore.metadata.reduce((acc, meta: Record<string, any>, key: number) => {
     const id = Number(meta.id) || key + 1;
     const m = Object.assign({}, meta);
     delete m.id;

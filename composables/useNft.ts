@@ -31,8 +31,7 @@ export default function useNft() {
   /** CSV */
   const isSameNumOfRows = computed<boolean>(() => {
     return (
-      collectionStore.active?.maxSupply === 0 ||
-      collectionStore.active?.maxSupply === collectionStore.csvData?.length
+      collectionStore.active?.maxSupply === 0 || collectionStore.active?.maxSupply === collectionStore.csvData?.length
     );
   });
   const hasRequiredMetadata = computed<boolean>(() => {
@@ -63,9 +62,7 @@ export default function useNft() {
       return '(' + collectionStore.images.length + '/' + collectionStore.csvData.length + ')';
     }
 
-    const missingImagesName = dataImagesNames.value.filter(
-      item => !uploadedImagesNames.value.includes(item)
-    );
+    const missingImagesName = dataImagesNames.value.filter(item => !uploadedImagesNames.value.includes(item));
 
     return [...new Set(missingImagesName)].join(', ');
   });
@@ -309,15 +306,9 @@ export default function useNft() {
   /**
    * Deploy NFT with metadata
    */
-  async function deployCollection(deployCollection: boolean = false) {
+  async function deployCollection(deploy: boolean = false) {
     const nftMetadataFiles = createNftFiles(collectionStore.metadata);
-    const metadataSession = await uploadFiles(
-      collectionStore.active.bucket_uuid,
-      nftMetadataFiles,
-      false,
-      true,
-      false
-    );
+    const metadataSession = await uploadFiles(collectionStore.active.bucket_uuid, nftMetadataFiles, false, true, false);
     const imagesSession = await uploadFiles(
       collectionStore.active.bucket_uuid,
       collectionStore.images,
@@ -326,7 +317,7 @@ export default function useNft() {
       false
     );
 
-    const endpoint = deployCollection
+    const endpoint = deploy
       ? endpoints.nftDeploy(collectionStore.active.collection_uuid)
       : endpoints.collectionNftsMetadata(collectionStore.active.collection_uuid);
 
@@ -335,11 +326,11 @@ export default function useNft() {
         const useApillonIpfsGateway =
           !deployCollection && collectionStore.active?.collection_uuid
             ? collectionStore.active.useApillonIpfsGateway
-            : collectionStore.form.base.useApillonIpfsGateway;
+            : collectionStore.form.behavior.useApillonIpfsGateway;
         const useIpns =
           !deployCollection && collectionStore.active?.collection_uuid
             ? collectionStore.active.useIpns
-            : collectionStore.form.base.useIpns;
+            : collectionStore.form.behavior.useIpns;
 
         const res = await $api.post<CollectionResponse>(endpoint, {
           useApillonIpfsGateway,
@@ -347,7 +338,7 @@ export default function useNft() {
           metadataSession,
           imagesSession,
         });
-        if (deployCollection) {
+        if (deploy) {
           collectionStore.active = res.data;
         }
 
@@ -396,9 +387,7 @@ export default function useNft() {
   }
 
   function getPriceServiceName() {
-    const chain = collectionStore.form.base?.chain
-      ? collectionStore.form.base.chain
-      : collectionStore.active.chain;
+    const chain = collectionStore.form.base?.chain ? collectionStore.form.behavior.chain : collectionStore.active.chain;
     return generatePriceServiceName(ServiceTypeName.NFT, chain, PriceServiceAction.COLLECTION);
   }
 
