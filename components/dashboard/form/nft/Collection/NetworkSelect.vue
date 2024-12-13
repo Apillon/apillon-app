@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="text-center">
     <h2>{{ t('nft.collection.environment') }}</h2>
     <p>{{ t('nft.collection.environmentContent') }}</p>
     <div class="my-8 flex flex-wrap justify-center gap-4 whitespace-pre-line">
@@ -7,8 +7,8 @@
         v-for="chain in nftChains"
         :key="chain.value"
         class="flex w-40 justify-center rounded-md border-2 border-bg-lightest p-4 hover:cursor-pointer"
-        :class="collectionStore.form.behavior.chain === chain.value ? 'border-yellow' : ''"
-        @click="selectChain(chain.value)"
+        :class="selectedChain === chain.value ? 'border-yellow' : ''"
+        @click="selectedChain = chain.value"
       >
         <div>
           <div class="h-20">
@@ -29,7 +29,7 @@
     <div
       v-if="isSubstrateEnabled"
       class="overflow-hidden transition-all"
-      :class="collectionStore.form.behavior.chain === Chains.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
+      :class="selectedChain === Chains.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
     >
       <h4 class="relative top-2">{{ t('nft.collection.chainType') }}</h4>
       <div class="my-8 flex justify-center gap-4 whitespace-pre-line">
@@ -70,7 +70,7 @@
       <SolutionContent :content="content" />
     </div>
 
-    <Btn @click="$emit('submit')">{{ t('form.proceed') }}</Btn>
+    <Btn @click="selectChain">{{ t('form.proceed') }}</Btn>
   </div>
 </template>
 
@@ -78,17 +78,24 @@
 import uniquePNG from 'assets/images/logo/unique.png';
 import { Chains, SubstrateChain } from '~/lib/types/nft';
 
-defineEmits(['submit']);
+const emit = defineEmits(['submit']);
 const { t } = useI18n();
+const router = useRouter();
+const message = useMessage();
 const collectionStore = useCollectionStore();
-const { nftChains, chainTypes, onChainChange } = useCollection();
+const { nftChains, chainTypes } = useCollection();
 const { generateContent } = useSolution();
-const isSubstrateEnabled = ref<boolean>(false);
 
-function selectChain(chain: number) {
-  collectionStore.metadataStored = false;
-  collectionStore.form.behavior.chain = chain;
-  onChainChange(chain);
+const isSubstrateEnabled = ref<boolean>(false);
+const selectedChain = ref<number | undefined>();
+
+function selectChain() {
+  if (selectedChain.value) {
+    collectionStore.metadataStored = false;
+    emit('submit', selectedChain.value);
+  } else {
+    message.warning(t('validation.collection.chainRequired'));
+  }
 }
 const content = computed(() => {
   return collectionStore.form.behavior.chain

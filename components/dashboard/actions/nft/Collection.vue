@@ -36,9 +36,13 @@
   </n-space>
 
   <!-- Modal - Collection Transfer -->
-  <modal v-model:show="modalCreateCollectionVisible" class="max-w-4xl text-center">
-    <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === null" class="-mt-8" />
-    <FormNftCollectionNetworkSelect v-else class="-mt-8" @submit="router.push({ name: 'dashboard-service-nft-new' })" />
+  <modal v-model:show="modalCreateCollectionVisible" class="hide-header max-w-4xl text-center">
+    <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === undefined" />
+    <FormNftCollectionNetworkSelect
+      v-else-if="collectionStore.form.behavior.chain === undefined"
+      @submit="onNetworkSelected"
+    />
+    <FormNftCollectionIpnsType v-else @submit="router.push({ name: 'dashboard-service-nft-new' })" />
   </modal>
 </template>
 
@@ -51,5 +55,16 @@ const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
+const { onChainChange } = useCollection();
 const modalCreateCollectionVisible = ref<boolean>(false);
+
+const onNetworkSelected = (chainId: number) => {
+  if (chainId === SubstrateChain.UNIQUE) {
+    router.push({ name: 'dashboard-service-nft-new' });
+  }
+  setTimeout(() => {
+    collectionStore.form.behavior.chain = chainId;
+    onChainChange(chainId);
+  }, 10);
+};
 </script>

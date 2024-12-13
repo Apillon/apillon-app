@@ -16,7 +16,7 @@ const Btn = resolveComponent('Btn');
 function connectWallet(connector) {
   if (isConnected.value) {
     refetch();
-  } else if (connector.ready) {
+  } else {
     connect({ connector });
   }
 }
@@ -30,25 +30,24 @@ function connectWallet(connector) {
       :key="key"
       class="flex justify-start"
       :class="{
-        'relative card flex items-center py-3 pl-2 pr-4 pointer-events-none': !connector.ready,
+        'card pointer-events-none relative flex items-center py-3 pl-2 pr-4': !connector.ready,
       }"
       type="secondary"
       size="large"
       :loading="
-        (connector.id === pendingConnector?.id && isLoading) ||
-        (connector.id === activeConnector?.id && loading)
+        (connector.id === pendingConnector?.id && isLoading) || (connector.id === activeConnector?.id && loading)
       "
       :disabled="!connector.ready"
       @click="connectWallet(connector)"
     >
-      <span class="flex flex-1 justify-start gap-2 items-center ml-2">
+      <span class="ml-2 flex flex-1 items-center justify-start gap-2">
         <NuxtIcon :name="`wallet/${connector.id}`" class="text-xl" filled />
-        <span class="text-white font-normal">{{ connector.name }}</span>
+        <span class="font-normal text-white">{{ connector.name }}</span>
       </span>
 
       <Btn
         v-if="!connector.ready"
-        class="inline-block relative pointer-events-auto z-1"
+        class="pointer-events-auto relative z-1 inline-block"
         type="link"
         :href="`https://metamask.app.link/dapp/${config.public.url}${fullPath}`"
         target="_blank"

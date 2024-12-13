@@ -18,7 +18,7 @@ export const useCollectionStore = defineStore('collection', {
     loading: false,
     metadata: [] as Array<Record<string, any>>,
     metadataDeploys: [] as MetadataDeployInterface[],
-    metadataStored: null as Boolean | null,
+    metadataStored: undefined as Boolean | undefined,
     search: '',
     nftStep: NftCreateStep.AMOUNT,
     amount: 0,
@@ -35,11 +35,11 @@ export const useCollectionStore = defineStore('collection', {
         symbol: '',
       },
       behavior: {
-        chain: Chains.MOONBASE as number,
+        chain: undefined as number | undefined,
         chainType: ChainType.EVM,
         collectionType: NFTCollectionType.GENERIC,
         useApillonIpfsGateway: false,
-        useIpns: false,
+        useIpns: undefined as boolean | undefined,
         baseUri: '',
         baseExtension: '.json',
         dropStart: Date.now() + 3600000,
@@ -139,11 +139,11 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.name = '';
       this.form.base.symbol = '';
 
-      this.form.behavior.chain = Chains.MOONBASE;
+      this.form.behavior.chain = undefined;
       this.form.behavior.chainType = ChainType.EVM;
       this.form.behavior.collectionType = NFTCollectionType.GENERIC;
       this.form.behavior.useApillonIpfsGateway = false;
-      this.form.behavior.useIpns = false;
+      this.form.behavior.useIpns = undefined;
       this.form.behavior.baseUri = '';
       this.form.behavior.baseExtension = '.json';
       this.form.behavior.dropStart = Date.now() + 3600000;

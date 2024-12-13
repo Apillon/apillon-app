@@ -7,7 +7,7 @@ export const useStorageStore = defineStore('storage', {
   }),
   getters: {
     hasInfo(state): boolean {
-      return state.info && state.info.availableStorage > 0;
+      return state.info && state.info?.availableStorage > 0;
     },
   },
   actions: {

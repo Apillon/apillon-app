@@ -3,8 +3,10 @@
     <div v-if="image?.id" class="mx-auto w-full overflow-hidden rounded-xl bg-bg-light">
       <figure class="flex h-full flex-col">
         <Image :src="createThumbnailUrl(image)" class="h-full w-full object-contain" :alt="image.name" />
-        <figcaption class="block h-12 px-4 py-3 font-bold">
-          {{ image.name }}
+        <figcaption class="flex h-12 justify-between px-4 py-3 font-bold">
+          <n-ellipsis class="break-all align-bottom" :class="color" :line-clamp="1">
+            {{ image.name }}
+          </n-ellipsis>
           <button class="float-right flex items-center justify-center p-1" @click="handleImageRemove()">
             <span class="icon-delete text-xl"></span>
           </button>
@@ -17,7 +19,6 @@
       accept="image/*"
       :show-file-list="false"
       :custom-request="e => collection.uploadFileRequest(e, isLogo)"
-      @change="onUploadChange"
       @remove="handleImageRemove"
     >
       <n-upload-dragger class="flex-cc h-56">

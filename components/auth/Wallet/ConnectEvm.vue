@@ -63,7 +63,7 @@ onMounted(() => {
 function wagmiConnect(connector) {
   if (isConnected.value) {
     refetchWalletClient();
-  } else if (connector.ready) {
+  } else {
     connect({ connector });
   }
 }
@@ -87,7 +87,7 @@ async function connectWallet() {
   loading.value = true;
 
   if (!isConnected.value) {
-    wagmiConnect(connectors.value[0]);
+    wagmiConnect(connectors[0]);
     loading.value = false;
     return;
   }

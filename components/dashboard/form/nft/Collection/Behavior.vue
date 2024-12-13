@@ -27,12 +27,7 @@
     </n-form-item>
 
     <!--  Chain -->
-    <n-form-item
-      v-if="showNetwork"
-      path="chain"
-      :label="infoLabel('chain') as string"
-      :label-props="{ for: 'chain' }"
-    >
+    <n-form-item v-if="showNetwork" path="chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
       <select-options
         v-model:value="collectionStore.form.behavior.chain"
         :options="nftChains"
@@ -49,11 +44,11 @@
         v-model:checked="collectionStore.form.behavior.useApillonIpfsGateway"
         size="medium"
         :label="infoLabel('useGateway') as string"
-      /> 
+      />
     </n-form-item>
 
     <!--  Collection Dynamic metadata -->
-    <n-form-item v-if="!isUnique" path="useIpns" :show-label="false">
+    <n-form-item v-if="!isUnique && showIpns" path="useIpns" :show-label="false">
       <n-checkbox
         v-model:checked="collectionStore.form.behavior.useIpns"
         size="medium"
@@ -61,7 +56,7 @@
       />
     </n-form-item>
 
-    <n-grid class="items-end" :cols="12" :x-gap="32">
+    <n-grid class="mt-8 items-end" :cols="12" :x-gap="32">
       <!-- Collection Total supply -->
       <n-form-item-gi
         path="supplyLimited"
@@ -100,7 +95,7 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid 
+    <n-grid
       v-if="collectionStore.form.behavior.chainType === ChainType.EVM || isUnique"
       class="items-end"
       :cols="12"
@@ -139,7 +134,12 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="collectionStore.form.behavior.chainType === ChainType.EVM && !isUnique" class="items-end" :cols="12" :x-gap="32">
+    <n-grid
+      v-if="collectionStore.form.behavior.chainType === ChainType.EVM && !isUnique"
+      class="items-end"
+      :cols="12"
+      :x-gap="32"
+    >
       <!-- Royalties Address -->
       <n-form-item-gi
         path="royaltiesAddress"
@@ -275,6 +275,7 @@ import { isFeatureEnabled } from '~/lib/utils';
 defineProps({
   hideSubmit: { type: Boolean, default: false },
   showNetwork: { type: Boolean, default: true },
+  showIpns: { type: Boolean, default: true },
 });
 const { t } = useI18n();
 const message = useMessage();
@@ -310,7 +311,7 @@ async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {
   e?.preventDefault();
   return !(
     await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-      console.log(errors);
+      console.warn(errors);
       if (errors) {
         errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
       } else {

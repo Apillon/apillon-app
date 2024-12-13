@@ -8,7 +8,7 @@
 
     <slot>
       <NftCreateMetadata :style="isLg ? scrollStyle : {}" />
-      <ModalLeaving />
+      <ModalLeaving v-if="collectionStore.stepCollectionDeploy < CollectionStatus.DEPLOYED" />
     </slot>
   </Dashboard>
 </template>
@@ -38,9 +38,6 @@ const scrollStyle = computed(() => {
 onMounted(async () => {
   if (!params?.slug) router.push({ name: 'dashboard-service-nft' });
 
-  /** Get Price list */
-  paymentStore.getPriceList();
-
   const currentCollection = await collectionStore.getCollection(collectionUuid.value);
 
   if (!currentCollection?.collection_uuid) {
@@ -50,7 +47,8 @@ onMounted(async () => {
     collectionStore.resetImages();
     collectionStore.stepCollectionDeploy = CollectionStatus.CREATED;
 
-    await storageStore.getStorageInfo();
+    paymentStore.getPriceList();
+    storageStore.getStorageInfo();
 
     pageLoading.value = false;
     collectionStore.active = currentCollection;

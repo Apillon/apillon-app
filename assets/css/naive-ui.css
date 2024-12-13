@@ -41,6 +41,13 @@
     cursor: not-allowed;
   }
 
+  &.border-dark {
+    .n-button__border,
+    &.n-button:not(.n-button--disabled):hover .n-button__state-border {
+      @apply border-bg-light;
+    }
+  }
+
   /** Type error */
   &--error-type {
     .n-button__border {

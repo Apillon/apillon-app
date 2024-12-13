@@ -73,21 +73,21 @@
             <n-upload
               v-else
               ref="uploadRef"
-              accept="image/*"
+              accept="image/*,video/*"
               :default-file-list="collectionStore.images"
               :show-file-list="false"
               directory-dnd
               :custom-request="uploadImageRequest"
               @remove="handleImageRemove"
             >
-              <n-upload-dragger class="h-40">
-                <div class="py-2 text-center">
+              <n-upload-dragger class="min-h-40">
+                <div class="text-center">
                   <div class="mb-2 inline-block h-10 w-10 rounded-full bg-bg-lighter p-2">
                     <span class="icon-image text-2xl text-violet"></span>
                   </div>
 
                   <h4 class="mb-1">{{ t('nft.upload.images') }}</h4>
-                  <p class="max-w-lg text-xs">
+                  <p class="-mx-2 max-w-lg text-xs">
                     {{ t('nft.single.uploadDescription') }}
                   </p>
                 </div>
@@ -111,10 +111,14 @@
     <FormInstructions :title="t('nft.upload.attributes')" :instructions="[]">
       <NftSingleProperties />
     </FormInstructions>
-   
-    <div class="flex flex-wrap gap-6 justify-between my-8">
+
+    <div class="my-8 flex flex-wrap justify-between gap-6">
       <Btn @click="handleSubmitForm">{{ $t('nft.add') }}</Btn>
-      <Btn v-if="collectionStore.metadata?.length > 0" type="secondary" @click="collectionStore.nftStep = NftCreateStep.PREVIEW">
+      <Btn
+        v-if="collectionStore.metadata?.length > 0"
+        type="secondary"
+        @click="collectionStore.nftStep = NftCreateStep.PREVIEW"
+      >
         Go to preview
       </Btn>
     </div>
@@ -127,8 +131,10 @@ import type { UploadInst } from 'naive-ui';
 const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
-const { createThumbnailUrl, handleImageRemove, uploadImageRequest } = useNft();
+
+const { labelInfo } = useComputing();
 const { formRef, isUnique, rulesSingle } = useCollection();
+const { createThumbnailUrl, handleImageRemove, uploadImageRequest } = useNft();
 
 const uploadRef = ref<UploadInst | null>(null);
 

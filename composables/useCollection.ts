@@ -307,6 +307,7 @@ export default function useCollection() {
       onFinish: onFinish || (() => {}),
       onError: onError || (() => {}),
     };
+
     if (!isEnoughSpaceInStorage([], uploadedFile)) {
       message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
 
@@ -344,7 +345,7 @@ export default function useCollection() {
     bucketStore.resetUpload();
     collectionStore.resetForms();
     collectionStore.resetMetadata();
-    collectionStore.metadataStored = null;
+    collectionStore.metadataStored = undefined;
   }
 
   return {

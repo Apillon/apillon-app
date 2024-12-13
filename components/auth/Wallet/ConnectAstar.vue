@@ -69,9 +69,7 @@ useAccountEffect({ onConnect: onWalletConnected });
 const loading = ref<boolean>(false);
 const modalWalletVisible = ref<boolean>(false);
 
-const wallet = computed<string | null>(
-  () => referralStore.tokenClaim.wallet || authStore.user.evmWallet
-);
+const wallet = computed<string | null>(() => referralStore.tokenClaim.wallet || authStore.user.evmWallet);
 
 onMounted(() => {
   if (!authStore.user.evmWallet) {
@@ -79,11 +77,10 @@ onMounted(() => {
   }
 });
 
-
 function wagmiConnect(connector) {
   if (isConnected.value) {
     refetchWalletClient();
-  } else if (connector.ready) {
+  } else {
     connect({ connector });
   }
 }
@@ -107,7 +104,7 @@ async function connectWallet() {
   loading.value = true;
 
   if (!isConnected.value) {
-    wagmiConnect(connectors.value[0]);
+    wagmiConnect(connectors[0]);
     loading.value = false;
     return;
   }

@@ -1,6 +1,6 @@
 <template>
-  <Modal v-model:show="modalVisible" class="text-center">
-    <h2 class="mb-2 mt-6">
+  <Modal v-model:show="modalVisible" class="hide-header text-center">
+    <h2 class="mb-2">
       {{ $t('dashboard.service.assetHub.leave.title') }}
     </h2>
     <p>{{ $t('dashboard.service.assetHub.leave.info') }}</p>
