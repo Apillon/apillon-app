@@ -249,7 +249,7 @@ export default function useCollection() {
     return !collectionStore.form.behavior.drop || value > Date.now();
   }
   function validateDropPrice(_: FormItemRule, value: number): boolean {
-    return !collectionStore.form.behavior.drop || (value > 0 && value < Number.MAX_SAFE_INTEGER);
+    return !collectionStore.form.behavior.drop || (value >= 0.00001 && value <= 10000000000);
   }
   function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
     return (
@@ -313,7 +313,7 @@ export default function useCollection() {
       /** Mark file as failed */
       onError();
       return;
-    } else if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+    } else if (!file.type?.includes('image')) {
       message.warning(t('validation.notImage'));
 
       /** Mark file as failed */

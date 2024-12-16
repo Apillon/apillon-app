@@ -22,12 +22,12 @@
       "
       :show-footer="!isUnique"
     >
-    <div v-if="isUnique" class="mt-4">
-      <Btn :to="`/dashboard/service/nft/${collectionStore.active.collection_uuid}`" size="large">
-        Open NFT Collection
-      </Btn>
-    </div>
-  </NftPreviewFinish>
+      <div v-if="isUnique" class="mt-4">
+        <Btn :to="`/dashboard/service/nft/${collectionStore.active.collection_uuid}`" size="large">
+          Open NFT Collection
+        </Btn>
+      </div>
+    </NftPreviewFinish>
     <div v-else-if="collectionStore.nftStep === NftCreateStep.DEPLOY" class="w-full pb-8">
       <div class="text-center">
         <AnimationLoader />
@@ -148,7 +148,7 @@ async function prepareUniqueData(bucketUuid: string) {
   await uploadFiles(bucketUuid, collectionStore.images, false);
 
   /** Get images links */
-  const imageLinks: Record<string, string> = {};
+  const imageLinks: Record<string, string | null> = {};
 
   if (collectionStore.images[0] && collectionStore.images[0]?.file_uuid) {
     const file = await getFile(bucketUuid, collectionStore.images[0].file_uuid);

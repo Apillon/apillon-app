@@ -6,7 +6,6 @@ export type ItemDelete =
   | CloudFunctionInterface
   | CollectionInterface
   | ContractInterface
-  | DomainInterface
   | IpnsInterface
   | JobInterface
   | PostInterface

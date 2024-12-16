@@ -1,9 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
+import Hash from 'ipfs-only-hash';
+import { CALCULATED_CIDS_KEY } from '~/lib/types/storage';
 
 export default function useUpload() {
   const { t } = useI18n();
   const message = useMessage();
   const bucketStore = useBucketStore();
+  const dataStore = useDataStore();
   const storageStore = useStorageStore();
   const config = useRuntimeConfig();
 
@@ -122,6 +125,47 @@ export default function useUpload() {
           );
 
           if (fileRequests.data) {
+            if (!wrapFilesToDirectory) {
+              const cids = {} as Record<
+                string,
+                {
+                  CID: string | null;
+                  link: string | null;
+                }
+              >;
+
+              await Promise.all(
+                fileRequests.data.files.map(async uploadFileRequest => {
+                  const content = fileList.value.find(
+                    file =>
+                      file.name === uploadFileRequest.fileName &&
+                      file.path === uploadFileRequest.path
+                  );
+                  const buffer = await content?.file?.arrayBuffer();
+                  if (content && buffer) {
+                    const calculatedCID = await Hash.of(Buffer.from(buffer), {
+                      cidVersion: 1,
+                    });
+                    cids[uploadFileRequest.file_uuid] = {
+                      CID: calculatedCID,
+                      link: null,
+                    };
+                  }
+                })
+              );
+
+              const { data } = await $api.post<IpfsLinksResponse>(endpoints.ipfsLinks, {
+                cids: Object.values(cids).map(item => item.CID),
+                project_uuid: await dataStore.getProjectUuid(),
+              });
+
+              data.links.forEach((link: string, index: number) => {
+                const fileUuid = Object.keys(cids)[index];
+                cids[fileUuid].link = link;
+              });
+
+              localStorage.setItem(CALCULATED_CIDS_KEY, JSON.stringify(cids));
+            }
             await uploadFilesToS3(fileRequests.data.files);
           } else {
             /** Show warning message - zero files uploaded */

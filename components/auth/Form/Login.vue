@@ -23,18 +23,12 @@
       />
     </n-form-item>
 
-    <!-- Hcaptcha -->
-    <vue-hcaptcha
-      ref="captchaInput"
-      :sitekey="captchaKey"
-      size="invisible"
-      theme="dark"
-      @error="onCaptchaError"
-      @verify="onCaptchaVerify"
-      @expired="onCaptchaExpire"
-      @challenge-expired="onCaptchaChallengeExpire"
-      @closed="onCaptchaClose"
-    />
+    <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
+      <div class="block w-full h-20">
+        <Captcha />
+      </div>
+      <n-input v-model:value="formData.captcha" class="absolute hidden" />
+    </n-form-item>
 
     <!--  Login submit -->
     <n-form-item :show-label="false">
@@ -47,74 +41,75 @@
 </template>
 
 <script lang="ts" setup>
-import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
-
 type FormLogin = {
   email: string;
   password: string;
-  captcha?: any;
-  captchaJwt?: any;
+  captcha?: { token: string; eKey: string };
+  captchaJwt?: string | null;
 };
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
+const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
-const {
-  loading,
-  captchaKey,
-  captchaInput,
-  onCaptchaChallengeExpire,
-  onCaptchaClose,
-  onCaptchaError,
-  onCaptchaExpire,
-} = useCaptcha();
 
+const loading = ref<boolean>(false);
+const showCaptcha = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormLogin>({
   email: authStore.email,
   password: '',
-  captcha: null as any,
-  captchaJwt: '',
+  captcha: undefined,
+  captchaJwt: null,
 });
 
-const rules: NFormRules = {
-  email: [
-    {
-      type: 'email',
-      message: $i18n.t('validation.email'),
+const rules = computed<NFormRules>(() => {
+  return {
+    email: [
+      ruleRequired(t('validation.emailRequired')),
+      {
+        type: 'email',
+        message: t('validation.email'),
+      },
+    ],
+    password: ruleRequired(t('validation.passwordRequired')),
+    captcha: {
+      required: showCaptcha.value,
+      message: t('validation.captchaRequired'),
     },
-    {
-      required: true,
-      message: $i18n.t('validation.emailRequired'),
-    },
-  ],
-  password: [
-    {
-      required: true,
-      message: $i18n.t('validation.passwordRequired'),
-    },
-  ],
-};
+  };
+});
+
+onMounted(() => {
+  showCaptcha.value = !isCaptchaConfirmed();
+  document.addEventListener('EventCaptchaReload', reloadCaptcha);
+});
+onUnmounted(() => {
+  document.removeEventListener('EventCaptchaReload', reloadCaptcha);
+});
+
+function reloadCaptcha() {
+  showCaptcha.value = false;
+  setTimeout(() => (showCaptcha.value = true), 1);
+}
 
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
+  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+  if (prosopoToken) {
+    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
+  }
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (
-      !formData.value.captcha &&
-      isFeatureEnabled(Feature.CAPTCHA_LOGIN, authStore.getUserRoles()) &&
-      !isCaptchaConfirmed()
-    ) {
-      loading.value = true;
-      captchaInput.value.execute();
+    } else if (!formData.value.captcha && !isCaptchaConfirmed()) {
+      reloadCaptcha();
     } else {
-      /** Login with mail and password */
       await login();
     }
   });
@@ -122,6 +117,7 @@ function handleSubmit(e: Event | MouseEvent | null) {
 
 async function login() {
   loading.value = true;
+  // document.removeEventListener('EventCaptchaVerified', login);
 
   const captchaData = authStore.getCaptchaData(formData.value.email);
   if (captchaData) {
@@ -138,19 +134,28 @@ async function login() {
     const res = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
     authStore.saveUser(res.data);
+    captchaReset();
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     dataStore.project.items = await dataStore.fetchProjects(true);
   } catch (error: ApiError | ReferenceError | any) {
     message.error(userFriendlyMsg(error));
+    captchaReset();
 
     if (error.code === ValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
       loading.value = true;
-      captchaInput.value.execute();
+      showCaptcha.value = true;
       authStore.removeCaptchaJwt(formData.value.email);
     } else if (DevConsoleError.USER_INVALID_LOGIN) {
       authStore.removeCaptchaJwt(formData.value.email);
-      captchaReset();
+
+      if (!showCaptcha.value) {
+        showCaptcha.value = true;
+      } else {
+        window?.loadProcaptcha();
+      }
+    } else {
+      window?.loadProcaptcha();
     }
   }
   loading.value = false;
@@ -164,13 +169,8 @@ function isCaptchaConfirmed(): boolean {
   return !!captchaData && !!captchaData.ts && Date.now() < parseInt(captchaData.ts) + WEEK_IN_MS;
 }
 
-function onCaptchaVerify(token: string, eKey: string) {
-  formData.value.captcha = { token, eKey };
-  login();
-}
-
 function captchaReset() {
-  formData.value.captcha = null;
-  captchaInput.value.reset();
+  formData.value.captcha = undefined;
+  sessionStorage.removeItem(AuthLsKeys.PROSOPO);
 }
 </script>

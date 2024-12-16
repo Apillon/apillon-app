@@ -18,7 +18,7 @@
         <n-upload
           ref="uploadRef"
           v-on-click-outside="stopLoader"
-          accept="image/png, image/jpeg"
+          accept="image/*"
           :default-file-list="collectionStore.images"
           :show-file-list="false"
           :max="nft.dataImagesNames.value.length"
