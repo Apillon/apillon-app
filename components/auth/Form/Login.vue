@@ -23,12 +23,12 @@
       />
     </n-form-item>
 
-    <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
+    <!-- <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
       <div class="block w-full h-20">
         <Captcha />
       </div>
       <n-input v-model:value="formData.captcha" class="absolute hidden" />
-    </n-form-item>
+    </n-form-item> -->
 
     <!--  Login submit -->
     <n-form-item :show-label="false">
@@ -44,25 +44,25 @@
 type FormLogin = {
   email: string;
   password: string;
-  captcha?: { token: string; eKey: string };
-  captchaJwt?: string | null;
+  // captcha?: { token: string; eKey: string };
+  // captchaJwt?: string | null;
 };
 
 const { t } = useI18n();
 const message = useMessage();
-const config = useRuntimeConfig();
+// const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const { clearAll } = useStore();
 
 const loading = ref<boolean>(false);
-const showCaptcha = ref<boolean>(false);
+// const showCaptcha = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormLogin>({
   email: authStore.email,
   password: '',
-  captcha: undefined,
-  captchaJwt: null,
+  // captcha: undefined,
+  // captchaJwt: null,
 });
 
 const rules = computed<NFormRules>(() => {
@@ -75,40 +75,40 @@ const rules = computed<NFormRules>(() => {
       },
     ],
     password: ruleRequired(t('validation.passwordRequired')),
-    captcha: {
-      required: showCaptcha.value,
-      message: t('validation.captchaRequired'),
-    },
+    // captcha: {
+    //   required: showCaptcha.value,
+    //   message: t('validation.captchaRequired'),
+    // },
   };
 });
 
-onMounted(() => {
-  showCaptcha.value = !isCaptchaConfirmed();
-  document.addEventListener('EventCaptchaReload', reloadCaptcha);
-});
-onUnmounted(() => {
-  document.removeEventListener('EventCaptchaReload', reloadCaptcha);
-});
+// onMounted(() => {
+//   showCaptcha.value = !isCaptchaConfirmed();
+//   document.addEventListener('EventCaptchaReload', reloadCaptcha);
+// });
+// onUnmounted(() => {
+//   document.removeEventListener('EventCaptchaReload', reloadCaptcha);
+// });
 
-function reloadCaptcha() {
-  showCaptcha.value = false;
-  setTimeout(() => (showCaptcha.value = true), 1);
-}
+// function reloadCaptcha() {
+//   showCaptcha.value = false;
+//   setTimeout(() => (showCaptcha.value = true), 1);
+// }
 
 function handleSubmit(e: Event | MouseEvent | null) {
   e?.preventDefault();
-  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
-  if (prosopoToken) {
-    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
-  }
+  // const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+  // if (prosopoToken) {
+  //   formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
+  // }
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-    } else if (!formData.value.captcha && !isCaptchaConfirmed()) {
-      reloadCaptcha();
+      // } else if (!formData.value.captcha && !isCaptchaConfirmed()) {
+      //   reloadCaptcha();
     } else {
       await login();
     }
@@ -119,10 +119,10 @@ async function login() {
   loading.value = true;
   // document.removeEventListener('EventCaptchaVerified', login);
 
-  const captchaData = authStore.getCaptchaData(formData.value.email);
-  if (captchaData) {
-    formData.value.captchaJwt = captchaData.jwt;
-  }
+  // const captchaData = authStore.getCaptchaData(formData.value.email);
+  // if (captchaData) {
+  //   formData.value.captchaJwt = captchaData.jwt;
+  // }
   try {
     // Logout first - delete LS and store if there is any data
     authStore.logout();
@@ -134,29 +134,29 @@ async function login() {
     const res = await $api.post<LoginResponse>(endpoints.login, formData.value);
 
     authStore.saveUser(res.data);
-    captchaReset();
+    // captchaReset();
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
     dataStore.project.items = await dataStore.fetchProjects(true);
   } catch (error: ApiError | ReferenceError | any) {
     message.error(userFriendlyMsg(error));
-    captchaReset();
+    // captchaReset();
 
-    if (error.code === ValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
-      loading.value = true;
-      showCaptcha.value = true;
-      authStore.removeCaptchaJwt(formData.value.email);
-    } else if (DevConsoleError.USER_INVALID_LOGIN) {
-      authStore.removeCaptchaJwt(formData.value.email);
+    // if (error.code === ValidatorErrorCode.CAPTCHA_NOT_PRESENT) {
+    //   loading.value = true;
+    //   showCaptcha.value = true;
+    //   authStore.removeCaptchaJwt(formData.value.email);
+    // } else if (DevConsoleError.USER_INVALID_LOGIN) {
+    //   authStore.removeCaptchaJwt(formData.value.email);
 
-      if (!showCaptcha.value) {
-        showCaptcha.value = true;
-      } else {
-        window?.loadProcaptcha();
-      }
-    } else {
-      window?.loadProcaptcha();
-    }
+    //   if (!showCaptcha.value) {
+    //     showCaptcha.value = true;
+    //   } else {
+    //     window?.loadProcaptcha();
+    //   }
+    // } else {
+    //   window?.loadProcaptcha();
+    // }
   }
   loading.value = false;
 }
@@ -164,13 +164,13 @@ async function login() {
 /**
  * Captcha confirmed is last week
  */
-function isCaptchaConfirmed(): boolean {
-  const captchaData = authStore.getCaptchaData(formData.value.email);
-  return !!captchaData && !!captchaData.ts && Date.now() < parseInt(captchaData.ts) + WEEK_IN_MS;
-}
+// function isCaptchaConfirmed(): boolean {
+//   const captchaData = authStore.getCaptchaData(formData.value.email);
+//   return !!captchaData && !!captchaData.ts && Date.now() < parseInt(captchaData.ts) + WEEK_IN_MS;
+// }
 
-function captchaReset() {
-  formData.value.captcha = undefined;
-  sessionStorage.removeItem(AuthLsKeys.PROSOPO);
-}
+// function captchaReset() {
+//   formData.value.captcha = undefined;
+//   sessionStorage.removeItem(AuthLsKeys.PROSOPO);
+// }
 </script>
