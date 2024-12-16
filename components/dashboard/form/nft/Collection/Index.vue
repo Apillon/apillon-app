@@ -327,6 +327,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useTemplateRef } from 'vue';
 import { Feature } from '~/lib/types/config';
 import { Chains, ChainType } from '~/lib/types/nft';
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
