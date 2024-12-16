@@ -1,6 +1,6 @@
 <template>
   <div class="w-full max-w-3xl">
-    <FormInstructions :title="t('nft.single.data')" :instructions="[t('nft.collection.instruction.data')]">
+    <FormInstructions :title="t('nft.single.title')" :instructions="[t('nft.collection.instruction.data')]">
       <n-form
         ref="formRef"
         :model="collectionStore.form.single"
@@ -9,7 +9,7 @@
       >
         <n-grid :cols="12" :x-gap="32">
           <!-- NFT name -->
-          <n-form-item-gi :span="8" path="name" :label="infoLabel('name')" :label-props="{ for: 'name' }">
+          <n-form-item-gi :span="8" path="name" :label="infoLabel('name') as string" :label-props="{ for: 'name' }">
             <n-input
               v-model:value="collectionStore.form.single.name"
               :input-props="{ id: 'name' }"
@@ -19,7 +19,7 @@
           </n-form-item-gi>
 
           <!-- NFT ID -->
-          <n-form-item-gi :span="4" path="id" :label="infoLabel('id')" :label-props="{ for: 'nftId' }">
+          <n-form-item-gi :span="4" path="id" :label="infoLabel('id') as string" :label-props="{ for: 'nftId' }">
             <n-input-number
               v-model:value="collectionStore.form.single.id"
               :input-props="{ id: 'nftId' }"
@@ -35,7 +35,7 @@
           <n-form-item-gi
             :span="12"
             path="description"
-            :label="infoLabel('description')"
+            :label="infoLabel('description') as string"
             :label-props="{ for: 'description' }"
           >
             <n-input
@@ -96,7 +96,12 @@
           </n-form-item-gi>
 
           <!-- Number NFT of copies -->
-          <n-form-item-gi :span="6" path="copies" :label="infoLabel('nftCopies')" :label-props="{ for: 'copies' }">
+          <n-form-item-gi
+            :span="6"
+            path="copies"
+            :label="infoLabel('nftCopies') as string"
+            :label-props="{ for: 'copies' }"
+          >
             <n-input-number
               v-model:value="collectionStore.form.single.copies"
               :min="0"
@@ -127,13 +132,14 @@
 
 <script lang="ts" setup>
 import type { UploadInst } from 'naive-ui';
+import { NftCreateStep } from '~/lib/types/nft';
 
 const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
 
 const { labelInfo } = useComputing();
-const { formRef, isUnique, rulesSingle } = useCollection();
+const { formRef, rulesSingle } = useCollection();
 const { createThumbnailUrl, handleImageRemove, uploadImageRequest } = useNft();
 
 const uploadRef = ref<UploadInst | null>(null);

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center" style="min-height: calc(70dvh - 50px)">
+  <div class="flex items-center justify-center">
     <div
       class="w-full text-center"
       :class="collectionStore.stepUpload === NftUploadStep.PREVIEW ? 'self-start' : 'max-w-lg'"
@@ -68,11 +68,27 @@
             size="large"
             :loading="nft.loadingImages.value"
             :disabled="!collectionStore.hasImages || !nft.allImagesUploaded.value"
-            @click="collectionStore.nftStep = NftCreateStep.PREVIEW"
+            @click="goToPreview"
           >
             {{ $t('nft.upload.previewNfts') }}
           </Btn>
         </n-space>
+      </template>
+
+      <template v-else-if="collectionStore.stepUpload === NftUploadStep.ATTRIBUTES">
+        <h2>{{ $t('nft.upload.attributes') }}</h2>
+        <p class="whitespace-pre-line text-body">
+          {{ $t('nft.upload.attributesInfo') }}
+        </p>
+        <NftMetadataAttributes class="mb-8" />
+        <div class="-ml-2 flex items-center justify-between gap-4 px-2">
+          <Btn type="secondary" class="w-1/2" @click="collectionStore.stepUpload = NftUploadStep.FILE">
+            {{ $t('form.goBack') }}
+          </Btn>
+          <Btn class="w-1/2" @click="createMetadata">
+            {{ $t('nft.upload.csvConfirmAttributes') }}
+          </Btn>
+        </div>
       </template>
 
       <!-- Upload/Confirm CSV -->
@@ -126,7 +142,7 @@
           size="large"
           type="primary"
           :disabled="!collectionStore.hasCsvFile || !nft.hasRequiredMetadata.value"
-          @click="modalMetadataAttributesVisible = true"
+          @click="openAttributes"
         >
           {{ $t('form.proceed') }}
         </Btn>
@@ -147,10 +163,15 @@
 <script lang="ts" setup>
 import { vOnClickOutside } from '@vueuse/components';
 import type { UploadCustomRequestOptions, UploadInst } from 'naive-ui';
+import { NftCreateStep, NftUploadStep } from '~/lib/types/nft';
+
+const props = defineProps({
+  modal: { type: Boolean, default: false },
+});
 
 const nft = useNft();
 const collectionStore = useCollectionStore();
-const { isUnique } = useCollection();
+const { isUnique, openAddNft } = useCollection();
 
 const uploadRef = ref<UploadInst | null>(null);
 const modalMetadataAttributesVisible = ref<boolean>(false);
@@ -160,6 +181,21 @@ onMounted(() => {
     nft.parseUploadedFile(collectionStore.csvFile.file);
   }
 });
+
+function openAttributes() {
+  if (props.modal) {
+    collectionStore.stepUpload = NftUploadStep.ATTRIBUTES;
+  } else {
+    modalMetadataAttributesVisible.value = true;
+  }
+}
+
+function goToPreview() {
+  if (props.modal) {
+    openAddNft(collectionStore.active.collection_uuid);
+  }
+  collectionStore.nftStep = NftCreateStep.PREVIEW;
+}
 
 function createMetadata() {
   collectionStore.metadata = nft.createNftData();

@@ -14,6 +14,7 @@
           <div class="card max-w-64 px-6 py-4">
             <h6 class="mb-2">{{ t('general.actions') }}</h6>
             <ActionsNftTransaction
+              @add-nfts="openModalAddNfts"
               @mint="modalMintCollectionVisible = true"
               @nest-mint="modalNestMintCollectionVisible = true"
               @revoke="modalBurnTokensVisible = true"
@@ -22,8 +23,7 @@
             />
           </div>
         </div>
-        <n-tabs  
-        v-model:value="tab" type="line" size="large" class="min-h-64" animated>
+        <n-tabs v-model:value="tab" type="line" size="large" class="min-h-64" animated>
           <n-tab-pane
             :name="Tabs.TRANSACTIONS"
             :disabled="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
@@ -37,7 +37,10 @@
               <TableNftTransaction :transactions="collectionStore.transaction" />
             </slot>
           </n-tab-pane>
-          <n-tab-pane :name="Tabs.DEPLOYS" :disabled="collectionStore.active.collectionStatus === CollectionStatus.CREATED">
+          <n-tab-pane
+            :name="Tabs.DEPLOYS"
+            :disabled="collectionStore.active.collectionStatus === CollectionStatus.CREATED"
+          >
             <template #tab>
               <span class="ml-2 text-sm text-white">
                 {{ t('nft.metadata.deployTitle') }}
@@ -60,7 +63,7 @@
               <div v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED">
                 <p class="my-4">{{ t('nft.transaction.empty') }}</p>
                 <!-- Add NFT -->
-                <n-button @click="modalAddNftVisible = true">
+                <n-button @click="openModalAddNfts">
                   <span class="icon-add mr-2 text-xl text-primary"></span>
                   <span class="text-primary">{{ t('nft.add') }}</span>
                 </n-button>
@@ -119,14 +122,15 @@
 
       <!-- Modal - Add NFT -->
       <modal v-model:show="modalAddNftVisible">
-        <FormNftAmountOption class="-mt-8" @submit="openAddNft(collectionStore.active.collection_uuid)" />
+        <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" @submit="onAmountSelected" />
+        <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" modal />
       </modal>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { CollectionStatus, ChainType } from '~/lib/types/nft';
+import { CollectionStatus, ChainType, NftCreateStep } from '~/lib/types/nft';
 
 enum Tabs {
   TRANSACTIONS = 'transactions',
@@ -137,8 +141,10 @@ enum Tabs {
 const { t } = useI18n();
 const router = useRouter();
 const { params } = useRoute();
-const { openAddNft } = useCollection();
+const storageStore = useStorageStore();
+const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
+const { openAddNft } = useCollection();
 
 const pageLoading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
@@ -147,7 +153,7 @@ const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 const modalSetBaseUriVisible = ref<boolean | null>(false);
 const modalAddNftVisible = ref<boolean | null>(false);
-const tab = ref(collectionStore.active.collectionStatus === CollectionStatus.CREATED ? Tabs.NFTs :Tabs.DEPLOYS)
+const tab = ref(collectionStore.active.collectionStatus === CollectionStatus.CREATED ? Tabs.NFTs : Tabs.DEPLOYS);
 
 /** Polling */
 let collectionInterval: any = null as any;
@@ -177,6 +183,9 @@ onMounted(async () => {
     await collectionStore.getCollectionTransactions(currentCollection.collection_uuid);
     collectionStore.active = currentCollection;
     pageLoading.value = false;
+
+    storageStore.getStorageInfo();
+    paymentStore.getPriceList();
 
     checkIfCollectionUnfinished();
     checkUnfinishedTransactions();
@@ -297,5 +306,15 @@ function checkUnfinishedTransactions() {
       }
     }
   }, 30000);
+}
+
+function openModalAddNfts() {
+  collectionStore.nftStep = NftCreateStep.AMOUNT;
+  modalAddNftVisible.value = true;
+}
+function onAmountSelected(amount: number) {
+  if (amount === NftAmount.SINGLE) {
+    openAddNft(collectionStore.active.collection_uuid);
+  }
 }
 </script>

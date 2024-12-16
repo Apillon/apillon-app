@@ -3,15 +3,16 @@
     v-if="collectionStore.csvAttributes.length > 0"
     v-bind="$attrs"
     v-model:value="collectionStore.csvSelectedAttributes"
+    class="text-left"
   >
-    <n-space vertical class="p-3" size="small">
-      <n-space align="center" justify="space-between">
-        <strong class="mr-4 text-body">{{ $t('nft.upload.selectAttributes') }}:</strong>
+    <n-space vertical class="mb-2" size="small">
+      <div class="mb-6 text-center">
+        <!-- <strong class="mr-4 text-body">{{ $t('nft.upload.selectAttributes') }}:</strong> -->
 
         <Btn type="builders" size="tiny" href="https://wiki.apillon.io/web3-services/4-nfts.html">
           {{ $t('general.learnMore') }}
         </Btn>
-      </n-space>
+      </div>
 
       <n-space
         v-for="(column, key) in collectionStore.csvAttributes"

@@ -119,7 +119,7 @@ onMounted(async () => {
 const onNetworkSelected = (chainId: number) => {
   collectionStore.form.behavior.chain = chainId;
   onChainChange(chainId);
-  isNetworkSelected = true;
+  isNetworkSelected.value = true;
 };
 
 const submitFormBase = async () => (formBaseRef.value ? await formBaseRef.value.handleSubmitForm() : false);
