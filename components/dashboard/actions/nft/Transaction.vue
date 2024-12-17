@@ -23,8 +23,8 @@
       v-if="
         collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
         collectionStore.active.cid &&
-          !collectionStore.active.ipns_uuid &&
-          !collectionStore.isUnique
+        !collectionStore.active.ipns_uuid &&
+        !collectionStore.isUnique
       "
       @positive-click="createDynamicMetadata()"
     >
@@ -45,7 +45,7 @@
       size="small"
       :loading="loadingBucket"
       :disabled="!allowAddMetadata"
-      @click="openAddNft(collectionStore.active.collection_uuid)"
+      @click="emit('addNfts')"
     >
       <span class="icon-add mr-2 text-xl text-primary"></span>
       <span class="text-primary">{{ t('nft.add') }}</span>
@@ -97,7 +97,7 @@ import { CollectionStatus, NFTCollectionType } from '~/lib/types/nft';
 defineProps({
   env: { type: Number, default: 0 },
 });
-const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer', 'setBaseUri']);
+const emit = defineEmits(['addNfts', 'mint', 'nestMint', 'revoke', 'transfer', 'setBaseUri']);
 
 const message = useMessage();
 const authStore = useAuthStore();
@@ -105,7 +105,6 @@ const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
 const { t } = useI18n();
-const { openAddNft } = useCollection();
 const { loadingBucket, openBucket } = useStorage();
 
 const actionsDisabled = computed<boolean>(() => {
@@ -126,24 +125,6 @@ const allowAddMetadata = computed<boolean>(() => {
     collectionStore.active?.collectionStatus === CollectionStatus.CREATED ||
     (collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED && isMetadataStoreOnApillon.value)
   );
-});
-
-const options = computed(() => {
-  return [
-    {
-      label: t('nft.collection.setBaseUri'),
-      key: 'setBaseUri',
-      show: !collectionStore.isUnique,
-      disabled: actionsDisabled.value,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value) {
-            emit('setBaseUri');
-          }
-        },
-      },
-    },
-  ];
 });
 
 function refresh() {

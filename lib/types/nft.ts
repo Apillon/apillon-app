@@ -95,6 +95,7 @@ export enum NftUploadStep {
   FILE = 1,
   IMAGES = 2,
   PREVIEW = 3,
+  ATTRIBUTES = 4,
 }
 
 export enum PrepareCollectionMetadataStep {

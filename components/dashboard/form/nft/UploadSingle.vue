@@ -1,6 +1,6 @@
 <template>
   <div class="w-full max-w-3xl">
-    <FormInstructions :title="t('nft.single.data')" :instructions="[t('nft.collection.instruction.data')]">
+    <FormInstructions :title="t('nft.single.title')" :instructions="[t('nft.collection.instruction.data')]">
       <n-form
         ref="formRef"
         :model="collectionStore.form.single"
@@ -9,7 +9,7 @@
       >
         <n-grid :cols="12" :x-gap="32">
           <!-- NFT name -->
-          <n-form-item-gi :span="8" path="name" :label="infoLabel('name')" :label-props="{ for: 'name' }">
+          <n-form-item-gi :span="8" path="name" :label="infoLabel('name') as string" :label-props="{ for: 'name' }">
             <n-input
               v-model:value="collectionStore.form.single.name"
               :input-props="{ id: 'name' }"
@@ -19,7 +19,7 @@
           </n-form-item-gi>
 
           <!-- NFT ID -->
-          <n-form-item-gi :span="4" path="id" :label="infoLabel('id')" :label-props="{ for: 'nftId' }">
+          <n-form-item-gi :span="4" path="id" :label="infoLabel('id') as string" :label-props="{ for: 'nftId' }">
             <n-input-number
               v-model:value="collectionStore.form.single.id"
               :input-props="{ id: 'nftId' }"
@@ -35,7 +35,7 @@
           <n-form-item-gi
             :span="12"
             path="description"
-            :label="infoLabel('description')"
+            :label="infoLabel('description') as string"
             :label-props="{ for: 'description' }"
           >
             <n-input
@@ -96,7 +96,12 @@
           </n-form-item-gi>
 
           <!-- Number NFT of copies -->
-          <n-form-item-gi :span="6" path="copies" :label="infoLabel('nftCopies')" :label-props="{ for: 'copies' }">
+          <n-form-item-gi
+            :span="6"
+            path="copies"
+            :label="infoLabel('nftCopies') as string"
+            :label-props="{ for: 'copies' }"
+          >
             <n-input-number
               v-model:value="collectionStore.form.single.copies"
               :min="0"
@@ -112,28 +117,32 @@
       <NftSingleProperties />
     </FormInstructions>
 
-    <div class="my-8 flex flex-wrap justify-between gap-6">
-      <Btn @click="handleSubmitForm">{{ $t('nft.add') }}</Btn>
-      <Btn
-        v-if="collectionStore.metadata?.length > 0"
-        type="secondary"
-        @click="collectionStore.nftStep = NftCreateStep.PREVIEW"
-      >
-        Go to preview
-      </Btn>
+    <div class="my-8 flex flex-wrap items-start justify-center self-stretch lg:flex-nowrap">
+      <div class="flex w-1/2 max-w-xl flex-auto flex-wrap justify-between gap-6 px-4 md:px-8 xl:max-w-2xl">
+        <Btn @click="handleSubmitForm">{{ $t('nft.add') }}</Btn>
+        <Btn
+          v-if="collectionStore.metadata?.length > 0"
+          type="secondary"
+          @click="collectionStore.nftStep = NftCreateStep.PREVIEW"
+        >
+          {{ $t('nft.single.preview') }}
+        </Btn>
+      </div>
+      <div class="flex w-1/2 max-w-xl flex-auto lg:flex-1 xl:max-w-2xl"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { UploadInst } from 'naive-ui';
+import { NftCreateStep } from '~/lib/types/nft';
 
 const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
 
 const { labelInfo } = useComputing();
-const { formRef, isUnique, rulesSingle } = useCollection();
+const { formRef, rulesSingle } = useCollection();
 const { createThumbnailUrl, handleImageRemove, uploadImageRequest } = useNft();
 
 const uploadRef = ref<UploadInst | null>(null);

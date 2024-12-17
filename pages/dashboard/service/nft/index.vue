@@ -32,6 +32,7 @@ const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
+const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
 const { onChainChange, resetAll } = useCollection();
 
@@ -50,7 +51,7 @@ onMounted(async () => {
   Promise.all(Object.values(dataStore.promises)).then(async _ => {
     await collectionStore.getCollections();
 
-    /** Get Price list */
+    storageStore.getStorageInfo();
     paymentStore.getPriceList();
 
     setTimeout(() => {

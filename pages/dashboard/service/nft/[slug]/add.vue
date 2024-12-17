@@ -43,8 +43,6 @@ onMounted(async () => {
   if (!currentCollection?.collection_uuid) {
     router.push({ name: 'dashboard-service-nft' });
   } else {
-    collectionStore.resetFile();
-    collectionStore.resetImages();
     collectionStore.stepCollectionDeploy = CollectionStatus.CREATED;
 
     paymentStore.getPriceList();
