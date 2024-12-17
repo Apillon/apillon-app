@@ -121,7 +121,7 @@
       </modal>
 
       <!-- Modal - Add NFT -->
-      <modal v-model:show="modalAddNftVisible">
+      <modal v-model:show="modalAddNftVisible" class="hide-header">
         <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" @submit="onAmountSelected" />
         <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" modal />
       </modal>

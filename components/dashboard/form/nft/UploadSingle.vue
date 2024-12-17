@@ -117,15 +117,18 @@
       <NftSingleProperties />
     </FormInstructions>
 
-    <div class="my-8 flex flex-wrap justify-between gap-6">
-      <Btn @click="handleSubmitForm">{{ $t('nft.add') }}</Btn>
-      <Btn
-        v-if="collectionStore.metadata?.length > 0"
-        type="secondary"
-        @click="collectionStore.nftStep = NftCreateStep.PREVIEW"
-      >
-        Go to preview
-      </Btn>
+    <div class="my-8 flex flex-wrap items-start justify-center self-stretch lg:flex-nowrap">
+      <div class="flex w-1/2 max-w-xl flex-auto flex-wrap justify-between gap-6 px-4 md:px-8 xl:max-w-2xl">
+        <Btn @click="handleSubmitForm">{{ $t('nft.add') }}</Btn>
+        <Btn
+          v-if="collectionStore.metadata?.length > 0"
+          type="secondary"
+          @click="collectionStore.nftStep = NftCreateStep.PREVIEW"
+        >
+          {{ $t('nft.single.preview') }}
+        </Btn>
+      </div>
+      <div class="flex w-1/2 max-w-xl flex-auto lg:flex-1 xl:max-w-2xl"></div>
     </div>
   </div>
 </template>

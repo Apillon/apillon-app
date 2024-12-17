@@ -63,6 +63,10 @@ import type { SelectOption } from 'naive-ui';
 
 const collectionStore = useCollectionStore();
 
+onMounted(() => {
+  selectAllAttributes();
+});
+
 const displayTypes = ref<Array<SelectOption>>([
   { value: 'string', label: 'String' },
   { value: 'date', label: 'Date' },

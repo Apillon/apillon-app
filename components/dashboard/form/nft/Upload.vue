@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center">
+  <div v-bind="$attrs" class="flex items-center justify-center">
     <div
       class="w-full text-center"
       :class="collectionStore.stepUpload === NftUploadStep.PREVIEW ? 'self-start' : 'max-w-lg'"
@@ -149,14 +149,17 @@
       </template>
     </div>
 
-    <modal v-model:show="modalMetadataAttributesVisible" :title="$t('nft.upload.attributes')">
-      <n-space :size="32" vertical>
+    <Modal v-model:show="modalMetadataAttributesVisible" :title="$t('nft.upload.attributes')">
+      <div class="-mt-4">
+        <p class="mb-2 whitespace-pre-line text-body">
+          {{ $t('nft.upload.attributesInfo') }}
+        </p>
         <NftMetadataAttributes />
         <Btn class="float-right" type="primary" @click="createMetadata">
           {{ $t('nft.upload.csvConfirmAttributes') }}
         </Btn>
-      </n-space>
-    </modal>
+      </div>
+    </Modal>
   </div>
 </template>
 

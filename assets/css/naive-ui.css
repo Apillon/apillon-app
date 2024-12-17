@@ -527,7 +527,11 @@ body > .n-message-container {
     @apply card-border py-4 lg:py-12;
 
     &.hide-header .n-card-header {
-      @apply hidden;
+      @apply absolute right-0 top-0;
+
+      .n-card-header__main {
+        @apply hidden;
+      }
     }
 
     .n-card {

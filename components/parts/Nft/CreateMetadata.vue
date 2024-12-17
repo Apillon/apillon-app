@@ -5,10 +5,7 @@
     :class="{ 'flex-cc': collectionStore.nftStep !== NftCreateStep.PREVIEW }"
   >
     <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" />
-    <FormNftUpload
-      v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE"
-      style="min-height: calc(70dvh - 50px)"
-    />
+    <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" />
     <FormNftUploadSingle v-else-if="collectionStore.nftStep === NftCreateStep.SINGLE" />
 
     <!-- Preview -->
