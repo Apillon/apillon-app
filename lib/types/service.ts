@@ -11,6 +11,7 @@ export enum ServiceType {
   WALLET = 7,
   CONTRACTS = 8,
   RPC = 9,
+  INDEXING = 10,
 }
 export enum ServiceTypeName {
   STORAGE = 'STORAGE',
