@@ -110,7 +110,6 @@ const block = {
   },
 };
 
-//
 export const calculateCID = async (content: any, options: UserImporterOptions) => {
   options.onlyHash = true;
 
