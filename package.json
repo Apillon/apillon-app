@@ -51,7 +51,7 @@
     "buffer": "^6.0.3",
     "chart.js": "^4.4.4",
     "drag-scroll-vue3": "^1.0.7",
-    "ipfs-only-hash": "^4.0.0",
+    "ipfs-unixfs-importer": "7.0.1",
     "lodash.debounce": "^4.0.8",
     "nuxt-icons": "^3.0.0",
     "passive-events-support": "^1.1.0",
