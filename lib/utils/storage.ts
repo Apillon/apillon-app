@@ -1,5 +1,5 @@
 import { textMarshal } from 'text-marshal';
-import { importer, type ImportCandidate, type UserImporterOptions } from 'ipfs-unixfs-importer';
+import { importer, type UserImporterOptions } from 'ipfs-unixfs-importer';
 
 /** Size calculations */
 export function kbToMb(kb: number): number {
