@@ -307,16 +307,18 @@
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
       "smartContracts": {
-        "name": "Smart Contracts",
         "audited": "Audited",
-        "new": "New smart contract",
         "customizeAndDeploy": "Customize and deploy",
         "create": "Create your smart contract",
         "createNew": "Create a new smart contract",
         "deployedContractsCount": "Number of deployed contracts",
         "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
         "details": "Smart Contract Details",
+        "emptyArchive": "Smart Contracts Archive",
+        "emptyArchiveInfo": "There are currently no Smart Contracts in the Archive.",
         "info": "Add it to your Web3 project",
+        "name": "Smart Contracts",
+        "new": "New smart contract",
 
         "table": {
           "chain": "Chain",

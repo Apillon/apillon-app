@@ -379,6 +379,7 @@
         "directory": "Folder has been restored",
         "file": "File has been restored",
         "post": "Channel has been restored",
+        "smartContract": "Smart Contract has been restored",
         "website": "Website has been restored"
       },
       "updated": {
