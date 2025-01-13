@@ -12,7 +12,8 @@
         class="flex-cc pt-4"
         style="min-height: calc(70dvh - 50px)"
       >
-        <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === undefined" />
+        <Spinner v-if="collectionStore.loading" />
+        <FormNftCollectionMetadataType v-else-if="collectionStore.metadataStored === undefined" />
         <FormNftCollectionNetworkSelect
           v-else-if="collectionStore.form.behavior.chain === undefined"
           class="mb-8"

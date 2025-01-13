@@ -180,6 +180,7 @@
         "description": "Description",
         "displayType": "Type",
         "id": "ID",
+        "image": "NFT image",
         "mintCollectionUuid": "Collection",
         "mintParentNftId": "Parent NFT ID",
         "mintQuantity": "Quantity",

@@ -58,7 +58,7 @@ import { PAGINATION_LIMIT } from '~/lib/values/general.values';
 import colors from '~/tailwind.colors';
 
 const { t } = useI18n();
-const { createThumbnailUrl } = useNft();
+const { imageByName } = useNft();
 const collectionStore = useCollectionStore();
 const { isXxl } = useScreen();
 
@@ -155,11 +155,6 @@ const createColumns = (): DataTableColumns<Record<string, string>> => {
 
 const columns = createColumns();
 const rowKey = (row: TransactionInterface) => row.id;
-
-function imageByName(name: string = '') {
-  const image = collectionStore.images.find(img => img.name === name);
-  return image ? createThumbnailUrl(image) : '';
-}
 
 function addNewNft() {
   collectionStore.nftStep = NftCreateStep.SINGLE;

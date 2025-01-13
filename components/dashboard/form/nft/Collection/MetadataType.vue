@@ -22,6 +22,7 @@
 
 <script setup lang="ts">
 const { t } = useI18n();
+const { name } = useRoute();
 const router = useRouter();
 const collectionStore = useCollectionStore();
 const { isFormDisabled, resetAll } = useCollection();
@@ -31,7 +32,15 @@ onMounted(() => {
 });
 
 function onMetadataStored() {
-  router.push({ name: 'dashboard-service-nft-new' });
-  setTimeout(() => (collectionStore.metadataStored = true), 10);
+  if (name !== 'dashboard-service-nft-new') {
+    router.push({ name: 'dashboard-service-nft-new' });
+    collectionStore.loading = true;
+    setTimeout(() => {
+      collectionStore.metadataStored = true;
+      collectionStore.loading = false;
+    }, 500);
+  } else {
+    collectionStore.metadataStored = true;
+  }
 }
 </script>

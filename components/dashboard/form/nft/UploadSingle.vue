@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-3xl">
+  <div class="w-full max-w-5xl">
     <FormInstructions :title="t('nft.single.title')" :instructions="[t('nft.collection.instruction.data')]">
       <n-form
         ref="formRef"
@@ -50,9 +50,9 @@
           <!--  Collection cover image -->
           <n-form-item-gi
             :span="6"
-            path="coverImage"
-            :label="infoLabel('coverImage') as string"
-            :label-props="{ for: 'coverImage' }"
+            path="image"
+            :label="infoLabel('image') as string"
+            :label-props="{ for: 'image' }"
             :show-feedback="false"
           >
             <div v-if="collectionStore.form.single.image" class="mx-auto w-72 overflow-hidden rounded-xl bg-bg-light">
@@ -99,7 +99,7 @@
           <n-form-item-gi
             :span="6"
             path="copies"
-            :label="infoLabel('nftCopies') as string"
+            :label="infoLabel('copies') as string"
             :label-props="{ for: 'copies' }"
           >
             <n-input-number
@@ -143,7 +143,7 @@ const collectionStore = useCollectionStore();
 
 const { labelInfo } = useComputing();
 const { formRef, rulesSingle } = useCollection();
-const { createThumbnailUrl, handleImageRemove, uploadImageRequest } = useNft();
+const { imageByName, handleImageRemove, uploadImageRequest } = useNft();
 
 const uploadRef = ref<UploadInst | null>(null);
 
@@ -157,18 +157,13 @@ function removeImages() {
   uploadRef.value?.clear();
 }
 
-function imageByName(name: string = '') {
-  const image = collectionStore.images.find(img => img.name === name);
-  return image ? createThumbnailUrl(image) : '';
-}
-
 function handleSubmitForm(e: Event | MouseEvent) {
   e.preventDefault();
 
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors || !collectionStore.hasImages) {
       if (!collectionStore.hasImages) {
-        message.warning(t('validation.nft') || 'Error');
+        message.warning(t('validation.nft.image') || 'Error');
       }
 
       errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
