@@ -6,7 +6,10 @@
       <div class="mb-6 flex items-center gap-2">
         <span
           class="text-2xl"
-          :class="[service.icon, key % 3 === 0 ? 'text-blue' : key % 3 === 1 ? 'text-pink' : 'text-orange']"
+          :class="[
+            service.icon,
+            key % 3 === 0 ? 'text-blue' : key % 3 === 1 ? 'text-pink' : 'text-orange',
+          ]"
         ></span>
         <h5>{{ $t(`dashboard.service.${service.name}.name`) }}</h5>
       </div>
@@ -95,52 +98,12 @@ const web3Services = computed(() => [
     data: [
       {
         name: t(`dashboard.service.nft.collectionCount`),
-        value: dataStore.project.overview.numOfCollections || dataStore.project.overview.collectionCount,
+        value:
+          dataStore.project.overview.numOfCollections || dataStore.project.overview.collectionCount,
       },
       {
         name: t(`dashboard.service.nft.nftTransactionCount`),
         value: dataStore.project.overview.nftTransactionCount,
-      },
-    ],
-  },
-  {
-    id: ServiceType.AUTHENTICATION,
-    name: 'authentication',
-    icon: 'icon-authentication',
-    data: [
-      {
-        name: t(`dashboard.service.authentication.didCount`),
-        value: dataStore.project.overview.didCount,
-      },
-    ],
-  },
-  {
-    id: ServiceType.COMPUTING,
-    name: 'computing',
-    icon: 'icon-computing',
-    data: [
-      {
-        name: t(`dashboard.service.computing.contractCount`),
-        value: dataStore.project.overview.contractCount,
-      },
-      {
-        name: t(`dashboard.service.computing.computingTransactionCount`),
-        value: dataStore.project.overview.computingTransactionCount,
-      },
-    ],
-  },
-  {
-    id: ServiceType.SOCIAL,
-    name: 'social',
-    icon: 'icon-social',
-    data: [
-      {
-        name: t(`dashboard.service.social.spaceCount`),
-        value: dataStore.project.overview.spaceCount,
-      },
-      {
-        name: t(`dashboard.service.social.postCount`),
-        value: dataStore.project.overview.postCount,
       },
     ],
   },
@@ -212,6 +175,47 @@ const web3Services = computed(() => [
       {
         name: t('dashboard.service.smartContracts.transactionCount'),
         value: dataStore.project.overview.smartContractTransactionCount,
+      },
+    ],
+  },
+  {
+    id: ServiceType.AUTHENTICATION,
+    name: 'authentication',
+    icon: 'icon-authentication',
+    data: [
+      {
+        name: t(`dashboard.service.authentication.didCount`),
+        value: dataStore.project.overview.didCount,
+      },
+    ],
+  },
+  {
+    id: ServiceType.COMPUTING,
+    name: 'computing',
+    icon: 'icon-computing',
+    data: [
+      {
+        name: t(`dashboard.service.computing.contractCount`),
+        value: dataStore.project.overview.contractCount,
+      },
+      {
+        name: t(`dashboard.service.computing.computingTransactionCount`),
+        value: dataStore.project.overview.computingTransactionCount,
+      },
+    ],
+  },
+  {
+    id: ServiceType.SOCIAL,
+    name: 'social',
+    icon: 'icon-social',
+    data: [
+      {
+        name: t(`dashboard.service.social.spaceCount`),
+        value: dataStore.project.overview.spaceCount,
+      },
+      {
+        name: t(`dashboard.service.social.postCount`),
+        value: dataStore.project.overview.postCount,
       },
     ],
   },
