@@ -61,7 +61,8 @@ declare global {
     contractCount: number;
     didCount: number;
     embeddedWalletCount: number;
-    favoriteRpcUrlCount: number;
+    integrationCount: number;
+    selectedRpcUrlCount: number;
     fileCount: number;
     indexerCount: number;
     nftTransactionCount: number;

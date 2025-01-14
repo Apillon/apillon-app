@@ -263,6 +263,7 @@
         "usage": ["computing smart contracts", "cross-chain", "secure computing environment", "internet access"]
       },
       "embeddedWallet": {
+        "integrationCount": "Number of integrations",
         "walletCount": "Number of wallets",
         "name": "Embedded Wallet"
       },
@@ -281,7 +282,7 @@
       "rpc": {
         "name": "RPC Service",
         "keyCount": "Number of keys",
-        "favoriteNetworkCount": "Number of favorite networks"
+        "selectedNetworkCount": "Number of selected networks"
       },
       "nft": {
         "collectionCount": "Number of collections",
