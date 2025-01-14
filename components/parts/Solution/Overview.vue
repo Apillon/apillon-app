@@ -150,6 +150,10 @@ const web3Services = computed(() => [
     icon: 'icon-wallet',
     data: [
       {
+        name: t('dashboard.service.embeddedWallet.integrationCount'),
+        value: dataStore.project.overview.integrationCount,
+      },
+      {
         name: t('dashboard.service.embeddedWallet.walletCount'),
         value: dataStore.project.overview.embeddedWalletCount,
       },
@@ -180,8 +184,8 @@ const web3Services = computed(() => [
         value: dataStore.project.overview.rpcApiKeyCount,
       },
       {
-        name: t('dashboard.service.rpc.favoriteNetworkCount'),
-        value: dataStore.project.overview.favoriteRpcUrlCount,
+        name: t('dashboard.service.rpc.selectedNetworkCount'),
+        value: dataStore.project.overview.selectedRpcUrlCount,
       },
     ],
   },
