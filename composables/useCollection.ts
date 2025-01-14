@@ -340,6 +340,22 @@ export default function useCollection() {
     }
   }
 
+  function onNetworkSelected(chainId: number) {
+    if (chainId === SubstrateChain.UNIQUE) {
+      collectionStore.loading = true;
+      router.push({ name: 'dashboard-service-nft-new' });
+
+      setTimeout(() => {
+        collectionStore.form.behavior.chain = chainId;
+        onChainChange(chainId);
+        collectionStore.loading = false;
+      }, 300);
+    } else {
+      collectionStore.form.behavior.chain = chainId;
+      onChainChange(chainId);
+    }
+  }
+
   function resetAll() {
     bucketStore.resetFolder();
     bucketStore.resetUpload();
@@ -369,6 +385,7 @@ export default function useCollection() {
     disablePastDate,
     disablePastTime,
     onChainChange,
+    onNetworkSelected,
     openAddNft,
     prepareFormData,
     resetAll,

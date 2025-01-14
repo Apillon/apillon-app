@@ -142,10 +142,11 @@
       "collection": "Give it a minute or two while we prepare everything for you.",
       "deployingCollection": "Deploying to blockchain...",
       "creatingCollection": "Creating collection...",
-      "deploying": "Deploying your NFTs",
-      "metadata": "Uploading metadata",
+      "deploying": "Creating your NFTs",
+      "metadata": "Deploying metadata...",
       "nft": "Deploying NFTs",
-      "single": "Deploy NFT metadata"
+      "single": "Deploy NFT metadata",
+      "unique": "Deploy NFT collection"
     },
     "metadata": {
       "currentStep": "Metadata deploy step",
@@ -339,11 +340,13 @@
     },
     "add": "Add NFT",
     "addNfts": "Add NFTs",
+    "addNftsNow": "Now you can add NFTs to collection or you can do it later.",
     "addAttribute": "Add attribute",
     "addIpns": "Add IPNS",
     "addIpnsInfo": "With IPNS, you will be able to modify the metadata and add new NFTs to this collection.",
     "create": "Create an NFT",
     "openBucket": "Go to storage",
+    "openCollection": "Go to collection",
     "transactionType": "Transaction Type"
   }
 }

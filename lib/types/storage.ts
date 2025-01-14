@@ -66,9 +66,13 @@ export enum FileUploadSessionStatus {
   VALIDATION_FAILED = 4,
 }
 
-export const CALCULATED_CIDS_KEY = 'apl_calculated_cids';
-
 declare global {
+  type UploadedFileInfo = {
+    CID: string | null;
+    link: string | null;
+    name: string | null;
+    path: string | null;
+  };
   /**
    * Storage
    */

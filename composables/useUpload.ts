@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { CALCULATED_CIDS_KEY } from '~/lib/types/storage';
 
 export default function useUpload() {
   const { t } = useI18n();
@@ -118,13 +117,7 @@ export default function useUpload() {
 
           if (fileRequests.data) {
             if (!wrapFilesToDirectory) {
-              const cids = {} as Record<
-                string,
-                {
-                  CID: string | null;
-                  link: string | null;
-                }
-              >;
+              const cids = {} as Record<string, UploadedFileInfo>;
 
               await Promise.all(
                 fileRequests.data.files.map(async uploadFileRequest => {
@@ -139,6 +132,8 @@ export default function useUpload() {
                     cids[uploadFileRequest.file_uuid] = {
                       CID: calculatedCID,
                       link: null,
+                      name: uploadFileRequest.fileName,
+                      path: uploadFileRequest.path,
                     };
                   }
                 })
@@ -146,7 +141,7 @@ export default function useUpload() {
 
               const { data } = await $api.post<IpfsLinksResponse>(endpoints.ipfsLinks, {
                 cids: Object.values(cids).map(item => item.CID),
-                project_uuid: await dataStore.getProjectUuid(),
+                project_uuid: dataStore.projectUuid,
               });
 
               data.links.forEach((link: string, index: number) => {
@@ -154,7 +149,7 @@ export default function useUpload() {
                 cids[fileUuid].link = link;
               });
 
-              localStorage.setItem(CALCULATED_CIDS_KEY, JSON.stringify(cids));
+              bucketStore.addCids(cids);
             }
             await uploadFilesToS3(fileRequests.data.files);
           } else {

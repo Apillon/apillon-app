@@ -112,8 +112,8 @@ onMounted(async () => {
   await initContract();
   try {
     hasClaimed.value = await getClaimStatus();
-  } catch {
-    console.log('error');
+  } catch (e) {
+    console.error(e);
   } finally {
     loading.value = false;
   }

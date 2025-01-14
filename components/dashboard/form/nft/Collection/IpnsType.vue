@@ -9,14 +9,14 @@
           <h4>{{ $t('nft.metadata.static.title') }}</h4>
           <p class="mb-8 mt-4">{{ $t('nft.metadata.static.content') }}</p>
         </div>
-        <Btn @click="onStaticSelect">{{ $t('nft.metadata.static.btn') }}</Btn>
+        <Btn @click="onSelect(false)">{{ $t('nft.metadata.static.btn') }}</Btn>
       </div>
       <div class="flex max-w-md flex-col items-center justify-between">
         <div>
           <h4>{{ $t('nft.metadata.dynamic.title') }}</h4>
           <p class="mb-8 mt-4">{{ $t('nft.metadata.dynamic.content') }}</p>
         </div>
-        <Btn @click="onDynamicSelect">{{ $t('nft.metadata.dynamic.btn') }}</Btn>
+        <Btn @click="onSelect(true)">{{ $t('nft.metadata.dynamic.btn') }}</Btn>
       </div>
     </div>
   </div>
@@ -26,12 +26,8 @@
 const emit = defineEmits(['submit']);
 const collectionStore = useCollectionStore();
 
-function onStaticSelect() {
-  collectionStore.form.behavior.useIpns = false;
-  emit('submit');
-}
-function onDynamicSelect() {
-  collectionStore.form.behavior.useIpns = true;
+function onSelect(value: boolean) {
+  collectionStore.form.behavior.useIpns = value;
   emit('submit');
 }
 </script>

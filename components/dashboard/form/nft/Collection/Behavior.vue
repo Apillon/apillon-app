@@ -56,7 +56,7 @@
       />
     </n-form-item>
 
-    <n-grid class="mt-8 items-end" :cols="12" :x-gap="32">
+    <n-grid class="items-end" :class="{ 'mt-8': !isUnique && showIpns }" :cols="12" :x-gap="32">
       <!-- Collection Total supply -->
       <n-form-item-gi
         path="supplyLimited"

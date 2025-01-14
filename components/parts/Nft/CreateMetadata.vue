@@ -12,7 +12,10 @@
     <div v-else-if="collectionStore.nftStep === NftCreateStep.PREVIEW" class="pt-8">
       <NftPreview>
         <Btn class="w-60" type="primary" @click="w3WarnAndDeploy()">
-          {{ t('nft.deploy.single') }}
+          <template v-if="isUnique"> {{ t('nft.deploy.unique') }} </template
+          ><template v-else>
+            {{ t('nft.deploy.single') }}
+          </template>
         </Btn>
       </NftPreview>
     </div>
@@ -25,7 +28,7 @@
     >
       <div v-if="isUnique" class="mt-4">
         <Btn :to="`/dashboard/service/nft/${collectionStore.active.collection_uuid}`" size="large">
-          Open NFT Collection
+          {{ $t('nft.openCollection') }}
         </Btn>
       </div>
     </NftPreviewFinish>
@@ -163,35 +166,18 @@ async function deployUnique() {
 }
 
 async function prepareUniqueData(bucketUuid: string) {
+  const baseData = prepareFormData();
   await uploadFiles(bucketUuid, collectionStore.images, false);
 
-  /** Get images links */
-  const imageLinks: Record<string, string | null> = {};
-
-  if (collectionStore.images[0] && collectionStore.images[0]?.file_uuid) {
-    const file = await getFile(bucketUuid, collectionStore.images[0].file_uuid);
-    imageLinks[file.name] = file.link;
-  }
-  const filesChunks = sliceIntoChunks([...collectionStore.images], 100);
-
-  for (let i = 1; i <= filesChunks.length; i++) {
-    const uploadedImages = await bucketStore.fetchDirectoryContent({
-      bucketUuid: bucketUuid,
-      page: i,
-      limit: 100,
-    });
-    uploadedImages.forEach(img => {
-      imageLinks[img.name] = img.link;
-    });
-  }
-
   /** Prepare metadata */
-  const baseData = prepareFormData();
   const metadata = collectionStore.metadata.reduce((acc, meta: Record<string, any>, key: number) => {
+    /** Get image link from calculatedCids */
+    const image = Object.values(bucketStore.calculatedCids).find(fileInfo => fileInfo.name === meta.image);
+
     const id = Number(meta.id) || key + 1;
     const m = Object.assign({}, meta);
     delete m.id;
-    m.image = meta.image in imageLinks ? imageLinks[meta.image] : meta.image;
+    m.image = image?.link || meta.image;
     acc[id] = m;
     return acc;
   }, {});

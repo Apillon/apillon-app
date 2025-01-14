@@ -63,10 +63,7 @@
       </div>
     </div>
 
-    <div
-      v-if="collectionStore.form.behavior.chain"
-      class="card-dark mx-auto mb-6 max-w-3xl p-2 text-left sm:p-4 lg:p-8"
-    >
+    <div v-if="selectedChain" class="card-dark mx-auto mb-6 max-w-3xl p-2 text-left sm:p-4 lg:p-8">
       <SolutionContent :content="content" />
     </div>
 
@@ -98,8 +95,6 @@ function selectChain() {
   }
 }
 const content = computed(() => {
-  return collectionStore.form.behavior.chain
-    ? generateContent(`${collectionStore.form.behavior.chain}`, 'nft.network')
-    : [];
+  return selectedChain.value ? generateContent(`${selectedChain.value}`, 'nft.network') : [];
 });
 </script>

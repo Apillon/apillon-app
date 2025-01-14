@@ -27,7 +27,7 @@
         v-if="collectionStore.hasCollections"
         size="small"
         :disabled="authStore.isAdmin()"
-        @click="modalCreateCollectionVisible = true"
+        @click="createNewCollection()"
       >
         <span class="icon-create-folder mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ t('nft.collection.new') }}</span>
@@ -55,26 +55,11 @@ const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
-const { onChainChange } = useCollection();
+const { onNetworkSelected, resetAll } = useCollection();
 const modalCreateCollectionVisible = ref<boolean>(false);
 
-const onNetworkSelected = (chainId: number) => {
-  if (chainId === SubstrateChain.UNIQUE) {
-    router.push({ name: 'dashboard-service-nft-new' });
-  }
-  setTimeout(() => {
-    collectionStore.form.behavior.chain = chainId;
-    onChainChange(chainId);
-  }, 10);
-};
-
-const onMetadataTypeSelect = (chainId: number) => {
-  if (chainId === SubstrateChain.UNIQUE) {
-    router.push({ name: 'dashboard-service-nft-new' });
-  }
-  setTimeout(() => {
-    collectionStore.form.behavior.chain = chainId;
-    onChainChange(chainId);
-  }, 10);
-};
+function createNewCollection() {
+  modalCreateCollectionVisible.value = true;
+  resetAll();
+}
 </script>

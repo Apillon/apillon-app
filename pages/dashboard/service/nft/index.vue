@@ -34,7 +34,7 @@ const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
-const { onChainChange, resetAll } = useCollection();
+const { onNetworkSelected, resetAll } = useCollection();
 
 const pageLoading = ref<boolean>(true);
 const modalCreateCollectionVisible = ref<boolean>(false);
@@ -64,16 +64,6 @@ onMounted(async () => {
 onUnmounted(() => {
   clearInterval(collectionInterval);
 });
-
-const onNetworkSelected = (chainId: number) => {
-  if (chainId === SubstrateChain.UNIQUE) {
-    router.push({ name: 'dashboard-service-nft-new' });
-  }
-  setTimeout(() => {
-    collectionStore.form.behavior.chain = chainId;
-    onChainChange(chainId);
-  }, 10);
-};
 
 /** Collection polling */
 function checkUnfinishedCollections() {

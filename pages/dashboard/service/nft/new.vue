@@ -12,7 +12,8 @@
         class="flex-cc pt-4"
         style="min-height: calc(70dvh - 50px)"
       >
-        <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === undefined" />
+        <Spinner v-if="collectionStore.loading" />
+        <FormNftCollectionMetadataType v-else-if="collectionStore.metadataStored === undefined" />
         <FormNftCollectionNetworkSelect
           v-else-if="collectionStore.form.behavior.chain === undefined"
           class="mb-8"
@@ -61,6 +62,15 @@
       </div>
 
       <ModalLeaving v-if="collectionStore.stepCollectionDeploy < CollectionStatus.DEPLOYED" />
+      <ModalSuccess
+        v-if="!isUnique && collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOYED"
+        :title="$t('form.success.created.nftCollection')"
+        :content="$t('nft.addNftsNow')"
+        :btn1="$t('nft.addNfts')"
+        :btn1-action="() => router.push(`/dashboard/service/nft/${collectionStore.active.collection_uuid}/add`)"
+        :btn2="$t('nft.openCollection')"
+        :btn2-action="() => router.push(`/dashboard/service/nft/${collectionStore.active.collection_uuid}`)"
+      />
 
       <W3Warn v-model:show="modalW3WarnVisible" @submit="onModalW3WarnConfirm">
         {{ t('w3Warn.nft.collection') }}
@@ -124,7 +134,9 @@ const onNetworkSelected = (chainId: number) => {
 
 const submitFormBase = async () => (formBaseRef.value ? await formBaseRef.value.handleSubmitForm() : false);
 const submitFormBehavior = async () => (formBehaviorRef.value ? await formBehaviorRef.value.handleSubmitForm() : false);
-const isLoading = computed(() => collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOY_INITIATED);
+const isLoading = computed(
+  () => modalW3WarnVisible.value || collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOY_INITIATED
+);
 
 async function w3WarnAndDeploy() {
   const formBaseSubmitted = await submitFormBase();
@@ -147,33 +159,28 @@ async function onModalW3WarnConfirm() {
   }
 }
 async function createCollection() {
-  modalW3WarnVisible.value = false;
   collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOY_INITIATED;
+  modalW3WarnVisible.value = false;
 
   try {
-    const res = await $api.post<CollectionResponse>(collectionEndpoint(), prepareFormData());
-    collectionStore.active = res.data;
+    const { data } = await $api.post<CollectionResponse>(collectionEndpoint(), prepareFormData());
+    collectionStore.active = data;
 
     /** On new collection created add new collection to list */
-    collectionStore.items.push(res.data);
-
-    collectionStore.form.single.collectionUuid = res.data.collection_uuid;
+    collectionStore.items.push(data);
+    collectionStore.form.single.collectionUuid = data.collection_uuid;
 
     /** Uploads logo and cover image */
-    await uploadLogoAndCover(res.data.bucket_uuid);
+    uploadLogoAndCover(data.bucket_uuid);
 
     /** Deployment status */
     collectionStore.stepCollectionDeploy = CollectionStatus.DEPLOYED;
-
-    router.push(`/dashboard/service/nft/${res.data.collection_uuid}/add`);
-
-    /** Redirects to NFT Create tab
-    // collectionStore.mintTab = NftCreateTab.DEPLOY; */
-  } catch (error) {
+  } catch (e) {
+    console.error(e);
     /** Deployment status */
     collectionStore.stepCollectionDeploy = CollectionStatus.FAILED;
 
-    message.error(userFriendlyMsg(error));
+    message.error(userFriendlyMsg(e));
   }
 }
 </script>

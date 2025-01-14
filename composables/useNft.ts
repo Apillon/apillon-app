@@ -226,10 +226,7 @@ export default function useNft() {
     }, 300);
   }
 
-  function uploadImageRequest(
-    { file, onError, onFinish }: UploadCustomRequestOptions,
-    wrapToFolder = true
-  ) {
+  function uploadImageRequest({ file, onError, onFinish }: UploadCustomRequestOptions, wrapToFolder = true) {
     if (!isImage(file.type)) {
       message.warning(t('validation.notImage', { name: file.name }));
       onError();
@@ -301,6 +298,11 @@ export default function useNft() {
       return window.URL.createObjectURL(file.file);
     }
     return '';
+  }
+
+  function imageByName(name: string = '') {
+    const image = collectionStore.images.find(img => img.name === name);
+    return image ? createThumbnailUrl(image) : '';
   }
 
   /**
@@ -387,7 +389,9 @@ export default function useNft() {
   }
 
   function getPriceServiceName() {
-    const chain = collectionStore.form.base?.chain ? collectionStore.form.behavior.chain : collectionStore.active.chain;
+    const chain = collectionStore.form.behavior?.chain
+      ? collectionStore.form.behavior.chain
+      : collectionStore.active.chain;
     return generatePriceServiceName(ServiceTypeName.NFT, chain, PriceServiceAction.COLLECTION);
   }
 
@@ -425,6 +429,7 @@ export default function useNft() {
     handleImageChange,
     handleImageRemove,
     isImage,
+    imageByName,
     parseUploadedFile,
     uploadFileRequest,
     uploadImagesRequest,
