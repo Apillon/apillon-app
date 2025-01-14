@@ -196,7 +196,7 @@ export default function useDelete() {
       return ItemDeleteKey.BUCKET;
     } else if ('collection_uuid' in item) {
       return ItemDeleteKey.COLLECTION;
-    } else if ('contract_uuid' in item) {
+    } else if ('contract_uuid' in item && 'contractAbi_id' in item) {
       return ItemDeleteKey.CONTRACT;
     } else if ('function_uuid' in item) {
       return ItemDeleteKey.CLOUD_FUNCTION;

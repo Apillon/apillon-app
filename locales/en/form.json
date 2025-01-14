@@ -365,6 +365,7 @@
         "rpcEndpoint": "RPC endpoint has been removed from favorites",
         "space": "Hub has been archived",
         "service": "Service has been deleted",
+        "smartContract": "Smart Contract has been archived",
         "user": "User has been removed from project",
         "userUninvited": "User has been uninvited from project",
         "webhook": "Webhook has been deleted",
