@@ -308,6 +308,7 @@
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
       "smartContracts": {
+        "name": "Smart Contracts",
         "audited": "Audited",
         "customizeAndDeploy": "Customize and deploy",
         "create": "Create your smart contract",
@@ -320,7 +321,6 @@
         "info": "Add it to your Web3 project",
         "name": "Smart Contracts",
         "new": "New smart contract",
-
         "table": {
           "chain": "Chain",
           "contractAddress": "Contract Address",

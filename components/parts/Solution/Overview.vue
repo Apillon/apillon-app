@@ -104,6 +104,77 @@ const web3Services = computed(() => [
     ],
   },
   {
+    id: ServiceType.WALLET,
+    name: 'embeddedWallet',
+    icon: 'icon-wallet',
+    data: [
+      {
+        name: t('dashboard.service.embeddedWallet.integrationCount'),
+        value: dataStore.project.overview.integrationCount,
+      },
+      {
+        name: t('dashboard.service.embeddedWallet.walletCount'),
+        value: dataStore.project.overview.embeddedWalletCount,
+      },
+    ],
+  },
+  {
+    id: 99,
+    name: 'cloudFunction',
+    icon: 'icon-cloud-functions',
+    data: [
+      {
+        name: t('dashboard.service.cloudFunction.functionCount'),
+        value: dataStore.project.overview.cloudFunctionCount,
+      },
+      {
+        name: t('dashboard.service.cloudFunction.deploymentCount'),
+        value: dataStore.project.overview.cloudFunctionJobCount,
+      },
+    ],
+  },
+  {
+    id: ServiceType.RPC,
+    name: 'rpc',
+    icon: 'icon-rpc',
+    data: [
+      {
+        name: t('dashboard.service.rpc.keyCount'),
+        value: dataStore.project.overview.rpcApiKeyCount,
+      },
+      {
+        name: t('dashboard.service.rpc.selectedNetworkCount'),
+        value: dataStore.project.overview.selectedRpcUrlCount,
+      },
+    ],
+  },
+  {
+    id: ServiceType.INDEXING,
+    name: 'indexing',
+    icon: 'icon-indexer',
+    data: [
+      {
+        name: t('dashboard.service.indexing.deployedIndexerCount'),
+        value: dataStore.project.overview.indexerCount,
+      },
+    ],
+  },
+  {
+    id: ServiceType.CONTRACTS,
+    name: 'smartContracts',
+    icon: 'icon-file',
+    data: [
+      {
+        name: t('dashboard.service.smartContracts.deployedContractsCount'),
+        value: dataStore.project.overview.smartContractDeploymentCount,
+      },
+      {
+        name: t('dashboard.service.smartContracts.transactionCount'),
+        value: dataStore.project.overview.smartContractTransactionCount,
+      },
+    ],
+  },
+  {
     id: ServiceType.AUTHENTICATION,
     name: 'authentication',
     icon: 'icon-authentication',
