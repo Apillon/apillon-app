@@ -250,17 +250,22 @@
         "emptyBtn": "Attach Web3 Auth",
         "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
       },
+      "cloudFunction": {
+        "name": "Cloud Functions",
+        "functionCount": "Number of functions",
+        "deploymentCount": "Number of deployments"
+      },
       "computing": {
         "contractCount": "Number of contracts",
         "computingTransactionCount": "Number of transactions",
         "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
         "name": "Computing",
-        "usage": [
-          "computing smart contracts",
-          "cross-chain",
-          "secure computing environment",
-          "internet access"
-        ]
+        "usage": ["computing smart contracts", "cross-chain", "secure computing environment", "internet access"]
+      },
+      "embeddedWallet": {
+        "integrationCount": "Number of integrations",
+        "walletCount": "Number of wallets",
+        "name": "Embedded Wallet"
       },
       "hosting": {
         "name": "Decentralized Hosting",
@@ -270,31 +275,28 @@
         "usedBandwidth": "Used bandwidth",
         "websiteCount": "Number of websites"
       },
+      "indexing": {
+        "name": "Indexing",
+        "deployedIndexerCount": "Number of deployed indexers"
+      },
+      "rpc": {
+        "name": "RPC Service",
+        "keyCount": "Number of keys",
+        "selectedNetworkCount": "Number of selected networks"
+      },
       "nft": {
         "collectionCount": "Number of collections",
         "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
         "name": "NFTs",
         "nftTransactionCount": "Number of transactions",
-        "usage": [
-          "storage buckets",
-          "smart contracts",
-          "drag-n-drop ui",
-          "website template",
-          "hosting"
-        ]
+        "usage": ["storage buckets", "smart contracts", "drag-n-drop ui", "website template", "hosting"]
       },
       "social": {
         "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
         "name": "Social",
         "postCount": "Number of channels",
         "spaceCount": "Number of hubs",
-        "usage": [
-          "social media",
-          "real-time chat",
-          "user-friendly UI",
-          "HIGH PRIVACY",
-          "configurable interface"
-        ]
+        "usage": ["social media", "real-time chat", "user-friendly UI", "HIGH PRIVACY", "configurable interface"]
       },
       "storage": {
         "bucket": "Web3 storage bucket",
@@ -306,14 +308,17 @@
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
       "smartContracts": {
+        "name": "Smart Contracts",
         "audited": "Audited",
         "new": "New smart contract",
         "customizeAndDeploy": "Customize and deploy",
         "create": "Create your smart contract",
         "createNew": "Create a new smart contract",
+        "deployedContractsCount": "Number of deployed contracts",
         "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
         "details": "Smart Contract Details",
         "info": "Add it to your Web3 project",
+
         "table": {
           "chain": "Chain",
           "contractAddress": "Contract Address",
@@ -350,7 +355,8 @@
           "writeFromDapp": "Write from your dapp",
           "writeOverApillon": "Write over Apillon",
           "readFromDapp": "Read from your dapp"
-        }
+        },
+        "transactionCount": "Number of transactions"
       },
       "addFirst": "Add first service",
       "delete": "Delete service",
@@ -483,13 +489,7 @@
           }
         ],
         "tabs": ["Create Collection", "Preview Collection", "Mint NFTs"],
-        "usage": [
-          "metadata storage",
-          "file storage",
-          "smart contracts",
-          "website template",
-          "hosting"
-        ]
+        "usage": ["metadata storage", "file storage", "smart contracts", "website template", "hosting"]
       },
       "nftContentDelivery": {
         "name": "NFT-Based Content Delivery",

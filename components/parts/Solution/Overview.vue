@@ -1,9 +1,9 @@
 <template>
   <h4 class="mb-8">{{ $t('dashboard.projectResources') }}</h4>
 
-  <div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-8">
+  <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
     <div v-for="(service, key) in web3Services" :key="key" class="card-light p-8">
-      <div class="flex items-center gap-2 mb-6">
+      <div class="mb-6 flex items-center gap-2">
         <span
           class="text-2xl"
           :class="[
@@ -13,16 +13,16 @@
         ></span>
         <h5>{{ $t(`dashboard.service.${service.name}.name`) }}</h5>
       </div>
-      <div class="text-sm pb-1 mb-3 border-b border-bg-lighter">
+      <div class="mb-3 border-b border-bg-lighter pb-1 text-sm">
         <div
           v-for="(serviceData, dataKey) in service.data"
           :key="dataKey"
-          class="flex justify-between items-center pb-2"
+          class="flex items-center justify-between pb-2"
         >
           <span class="text-body">
             {{ serviceData.name }}
           </span>
-          <div class="relative text-right min-w-[1rem]">
+          <div class="relative min-w-[1rem] text-right">
             <Spinner v-if="loading" :size="14" />
             <span v-else>
               {{ serviceData.value }}
@@ -104,6 +104,77 @@ const web3Services = computed(() => [
       {
         name: t(`dashboard.service.nft.nftTransactionCount`),
         value: dataStore.project.overview.nftTransactionCount,
+      },
+    ],
+  },
+  {
+    id: ServiceType.WALLET,
+    name: 'embeddedWallet',
+    icon: 'icon-wallet',
+    data: [
+      {
+        name: t('dashboard.service.embeddedWallet.integrationCount'),
+        value: dataStore.project.overview.integrationCount,
+      },
+      {
+        name: t('dashboard.service.embeddedWallet.walletCount'),
+        value: dataStore.project.overview.embeddedWalletCount,
+      },
+    ],
+  },
+  {
+    id: 99,
+    name: 'cloudFunction',
+    icon: 'icon-cloud-functions',
+    data: [
+      {
+        name: t('dashboard.service.cloudFunction.functionCount'),
+        value: dataStore.project.overview.cloudFunctionCount,
+      },
+      {
+        name: t('dashboard.service.cloudFunction.deploymentCount'),
+        value: dataStore.project.overview.cloudFunctionJobCount,
+      },
+    ],
+  },
+  {
+    id: ServiceType.RPC,
+    name: 'rpc',
+    icon: 'icon-rpc',
+    data: [
+      {
+        name: t('dashboard.service.rpc.keyCount'),
+        value: dataStore.project.overview.rpcApiKeyCount,
+      },
+      {
+        name: t('dashboard.service.rpc.selectedNetworkCount'),
+        value: dataStore.project.overview.selectedRpcUrlCount,
+      },
+    ],
+  },
+  {
+    id: ServiceType.INDEXING,
+    name: 'indexing',
+    icon: 'icon-indexer',
+    data: [
+      {
+        name: t('dashboard.service.indexing.deployedIndexerCount'),
+        value: dataStore.project.overview.indexerCount,
+      },
+    ],
+  },
+  {
+    id: ServiceType.CONTRACTS,
+    name: 'smartContracts',
+    icon: 'icon-file',
+    data: [
+      {
+        name: t('dashboard.service.smartContracts.deployedContractsCount'),
+        value: dataStore.project.overview.smartContractDeploymentCount,
+      },
+      {
+        name: t('dashboard.service.smartContracts.transactionCount'),
+        value: dataStore.project.overview.smartContractTransactionCount,
       },
     ],
   },
