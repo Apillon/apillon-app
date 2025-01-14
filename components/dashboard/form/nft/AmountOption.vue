@@ -53,6 +53,9 @@ const nftMultiple = {
 };
 
 function handleSubmit() {
+  collectionStore.resetFile();
+  collectionStore.resetImages();
+
   if (collectionStore.amount === NftAmount.SINGLE) {
     collectionStore.nftStep = NftCreateStep.SINGLE;
     emit('submit', collectionStore.amount);

@@ -54,7 +54,7 @@
     </n-button>
   </n-checkbox-group>
   <div v-else>
-    <h5>{{ $t('nft.validation.csvMissingAttributes') }}</h5>
+    <h5 class="mb-6">{{ $t('nft.validation.csvMissingAttributes') }}</h5>
   </div>
 </template>
 

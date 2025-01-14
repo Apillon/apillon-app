@@ -29,6 +29,27 @@
             <NuxtIcon name="logo/astar" class="icon-auto" filled />
           </div>
         </template>
+
+        <!--  Collection type -->
+        <n-form-item
+          v-if="
+            isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
+            collectionStore.form.behavior.chainType === ChainType.EVM
+          "
+          path="base.collectionType"
+          :label="infoLabel('type') as string"
+          :label-props="{ for: 'collectionType' }"
+        >
+          <select-options
+            v-model:value="collectionStore.form.behavior.collectionType"
+            :options="collectionTypes"
+            :input-props="{ id: 'collectionType' }"
+            :placeholder="t('general.pleaseSelect')"
+            filterable
+            clearable
+          />
+        </n-form-item>
+
         <!--  Chain -->
         <n-form-item path="base.chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
           <select-options
@@ -52,26 +73,6 @@
             v-model:value="collectionStore.form.behavior.chainType"
             :options="chainTypes"
             :input-props="{ id: 'chainType' }"
-            :placeholder="t('general.pleaseSelect')"
-            filterable
-            clearable
-          />
-        </n-form-item>
-
-        <!--  Collection type -->
-        <n-form-item
-          v-if="
-            isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
-            collectionStore.form.behavior.chainType === ChainType.EVM
-          "
-          path="base.collectionType"
-          :label="infoLabel('type') as string"
-          :label-props="{ for: 'collectionType' }"
-        >
-          <select-options
-            v-model:value="collectionStore.form.behavior.collectionType"
-            :options="collectionTypes"
-            :input-props="{ id: 'collectionType' }"
             :placeholder="t('general.pleaseSelect')"
             filterable
             clearable
@@ -157,7 +158,7 @@
         </n-grid>
 
         <n-grid
-          v-if="collectionStore.form.behavior.chainType === ChainType.EVM"
+          v-if="collectionStore.form.behavior.chainType === ChainType.EVM || isUnique"
           class="items-end"
           :cols="12"
           :x-gap="32"
@@ -196,7 +197,7 @@
         </n-grid>
 
         <n-grid
-          v-if="collectionStore.form.behavior.chainType === ChainType.EVM"
+          v-if="collectionStore.form.behavior.chainType === ChainType.EVM && !isUnique"
           class="items-end"
           :cols="12"
           :x-gap="32"
@@ -381,7 +382,9 @@ const metadataUri = computed<string>(() => {
 watch(
   () => collectionStore.form.behavior.chain,
   chain => {
-    onChainChange(chain);
+    if (chain) {
+      onChainChange(chain);
+    }
   }
 );
 
