@@ -24,12 +24,12 @@
       />
     </div>
 
-    <!-- <n-form-item path="captcha" :show-label="false">
+    <n-form-item path="captcha" :show-label="false">
       <div class="block w-full h-20">
         <Captcha />
       </div>
       <n-input v-model:value="formData.captcha" class="absolute hidden" />
-    </n-form-item> -->
+    </n-form-item>
 
     <!--  Signup submit -->
     <n-form-item :show-label="false" :show-feedback="false">
@@ -50,7 +50,7 @@ import { useAccount } from '@wagmi/vue';
 
 type SignupForm = {
   email: string;
-  // captcha?: any;
+  captcha?: any;
   refCode?: string;
   metadata?: any;
   terms?: boolean;
@@ -79,7 +79,7 @@ const loading = ref<boolean>(false);
 
 const formData = ref<SignupForm>({
   email: authStore.email,
-  // captcha: null as any,
+  captcha: null as any,
   refCode: `${query?.REF || ''}`,
   metadata: getMetadata(),
   terms: false,
@@ -102,7 +102,7 @@ const rules: NFormRules = {
       trigger: 'change',
     },
   ],
-  // captcha: ruleRequired(t('validation.captchaRequired')),
+  captcha: ruleRequired(t('validation.captchaRequired')),
 };
 
 /** Terms label with link  */
@@ -128,10 +128,10 @@ function handleSubmit(e: MouseEvent | null) {
   e?.preventDefault();
   formErrors.value = false;
 
-  // const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
-  // if (prosopoToken) {
-  //   formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
-  // }
+  const prosopoToken = sessionStorage.getItem(AuthLsKeys.PROSOPO);
+  if (prosopoToken) {
+    formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
+  }
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
@@ -139,9 +139,9 @@ function handleSubmit(e: MouseEvent | null) {
       errors.map(fieldErrors =>
         fieldErrors.map(error => message.warning(error.message || 'Error'))
       );
-      // } else if (!formData.value.captcha) {
-      //   loading.value = true;
-      //   // TODO: captchaInput.value.execute();
+    } else if (!formData.value.captcha) {
+      loading.value = true;
+      // TODO: captchaInput.value.execute();
     } else {
       // Email validation
       authStore.saveEmail(formData.value.email);
@@ -162,7 +162,7 @@ async function signupWithEmail() {
 
   try {
     await $api.post<ValidateMailResponse>(endpoints.validateMail, formData.value);
-    // captchaReset();
+    captchaReset();
 
     if (!props.sendAgain) {
       if (newsletterChecked.value) {
@@ -179,17 +179,17 @@ async function signupWithEmail() {
       message.success(t('form.success.sendAgainEmail'));
     }
   } catch (error) {
-    // formData.value.captcha = null;
+    formData.value.captcha = null;
     message.error(userFriendlyMsg(error));
-    // captchaReset();
+    captchaReset();
   }
   loading.value = false;
 }
 
-// function captchaReset() {
-//   formData.value.captcha = undefined;
-//   sessionStorage.removeItem(AuthLsKeys.PROSOPO);
-// }
+function captchaReset() {
+  formData.value.captcha = undefined;
+  sessionStorage.removeItem(AuthLsKeys.PROSOPO);
+}
 
 function getMetadata() {
   return query && Object.keys(query).length
