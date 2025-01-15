@@ -1,14 +1,11 @@
 <template>
-  <div class="border-none">
-    <n-menu
-      v-bind="$attrs"
-      v-model:value="selectedMenu"
-      :render-icon="renderMenuIcon"
-      :render-label="renderMenuLabel"
-      :render-extra="renderMenuExtra"
-    />
-    <slot />
-  </div>
+  <n-menu
+    v-bind="$attrs"
+    v-model:value="selectedMenu"
+    :render-icon="renderMenuIcon"
+    :render-label="renderMenuLabel"
+    :render-extra="renderMenuExtra"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -43,28 +40,16 @@ function removeIdOrSlug(text) {
  * Render functions
  */
 function renderMenuLabel(option: NMenuOption) {
-  const colorClass = option.iconName === 'icon-wide-right' ? '!text-yellow' : '';
+  const colorClass = option?.color === 'yellow' ? '!text-yellow' : '';
 
   if ('disabled' in option && option.disabled) {
     return h('span', { class: 'text-body' }, { default: () => option.label as string });
   } else if ('href' in option) {
-    return h(
-      'a',
-      { href: option.href, class: colorClass, target: '_blank' },
-      () => option.label as string
-    );
+    return h('a', { href: option.href, class: colorClass, target: '_blank' }, () => option.label as string);
   } else if ('path' in option) {
-    return h(
-      NuxtLink,
-      { to: { path: option.path }, class: colorClass },
-      () => option.label as string
-    );
+    return h(NuxtLink, { to: { path: option.path }, class: colorClass }, () => option.label as string);
   } else if ('to' in option) {
-    return h(
-      NuxtLink,
-      { to: { name: option.to }, class: colorClass },
-      () => option.label as string
-    );
+    return h(NuxtLink, { to: { name: option.to }, class: colorClass }, () => option.label as string);
   }
   return h('span', { class: 'text' }, { default: () => option.label as string });
 }
@@ -89,7 +74,11 @@ function renderMenuExtra(option: NMenuOption) {
 
 function renderMenuIcon(option: NMenuOption) {
   if ('svgIcon' in option) {
-    return h(resolveComponent('NuxtIcon'), { name: option.svgIcon, class: 'text-xl mx-2' }, '');
+    return h(
+      resolveComponent('NuxtIcon'),
+      { name: option.svgIcon, class: `text-xl mx-2 ${iconClass(option.svgIcon)}` },
+      ''
+    );
   } else if ('iconName' in option) {
     return h('span', { class: iconClass(option.iconName) }, '');
   }
@@ -98,6 +87,6 @@ function renderMenuIcon(option: NMenuOption) {
 
 function iconClass(iconName?: any): string {
   if (!iconName) return '';
-  return iconName === 'icon-wide-right' ? `${iconName} text-yellow` : iconName;
+  return iconName === 'menu/home-gear' ? `${iconName} text-yellow` : iconName;
 }
 </script>

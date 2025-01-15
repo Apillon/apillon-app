@@ -1,6 +1,6 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs">
+    <div class="w-[20vw] min-w-[11rem] max-w-xs">
       <n-input
         v-if="archive"
         v-model:value="chatStore.archive.search"
@@ -39,13 +39,13 @@
         :loading="chatStore.loading"
         @click="archive ? chatStore.fetchChatArchive() : chatStore.fetchChats()"
       >
-        <span class="icon-refresh text-xl mr-2"></span>
+        <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
       <!-- Create new chat -->
       <n-button size="small" :disabled="authStore.isAdmin()" @click="modalCreateChatVisible = true">
-        <span class="icon-create-folder text-xl text-primary mr-2"></span>
+        <span class="icon-create-folder mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('social.chat.new') }}</span>
       </n-button>
     </n-space>
@@ -61,6 +61,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ServiceTypeName } from '~/lib/types/service';
+
 defineEmits(['createSuccess']);
 defineProps({
   archive: { type: Boolean, default: false },

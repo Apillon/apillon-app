@@ -124,11 +124,11 @@ const web3Services = computed(() => [
     icon: 'icon-cloud-functions',
     data: [
       {
-        name: t('dashboard.service.cloudFunction.functionCount'),
+        name: t('dashboard.service.cloudFunctions.functionCount'),
         value: dataStore.project.overview.cloudFunctionCount,
       },
       {
-        name: t('dashboard.service.cloudFunction.deploymentCount'),
+        name: t('dashboard.service.cloudFunctions.deploymentCount'),
         value: dataStore.project.overview.cloudFunctionJobCount,
       },
     ],
@@ -160,7 +160,7 @@ const web3Services = computed(() => [
     ],
   },
   {
-    id: ServiceType.CONTRACTS,
+    id: ServiceType.SMART_CONTRACTS,
     name: 'smartContracts',
     icon: 'icon-file',
     data: [
@@ -236,11 +236,11 @@ const web3Services = computed(() => [
     icon: 'icon-cloud-functions',
     data: [
       {
-        name: t('dashboard.service.cloudFunction.functionCount'),
+        name: t('dashboard.service.cloudFunctions.functionCount'),
         value: dataStore.project.overview.cloudFunctionCount,
       },
       {
-        name: t('dashboard.service.cloudFunction.deploymentCount'),
+        name: t('dashboard.service.cloudFunctions.deploymentCount'),
         value: dataStore.project.overview.cloudFunctionJobCount,
       },
     ],
@@ -272,7 +272,7 @@ const web3Services = computed(() => [
     ],
   },
   {
-    id: ServiceType.CONTRACTS,
+    id: ServiceType.SMART_CONTRACTS,
     name: 'smartContracts',
     icon: 'icon-file',
     data: [

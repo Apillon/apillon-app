@@ -219,11 +219,13 @@
         "createNew": "Create new asset",
         "createAsset": "Create an asset",
         "characteristics": "Characteristics",
+        "description": "Decentralized hub for secure digital asset management on the Polkadot network. \nSecure storage, easy transfer, cross-chain compatibility.",
         "edit": "Edit asset",
         "loadingTransaction": "The transaction is being processed, please wait.",
         "mintTokens": "Mint Tokens",
         "mintTokensInfo": "Mint Tokens",
         "noProject": "Your project has no assets yet",
+        "name": "Asset Hub",
         "new": "Create new asset",
         "otherAssets": "Other assets on Asset Hub",
         "select": "Select asset",
@@ -250,10 +252,11 @@
         "emptyBtn": "Attach Web3 Auth",
         "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
       },
-      "cloudFunction": {
-        "name": "Cloud Functions",
+      "cloudFunctions": {
+        "description": "Deploy any script or backend app to a secure, scalable, and decentralized cloud network. \nDecentralized cloud, fully scalable, API gateway, cross-chain apps.",
+        "deploymentCount": "Number of deployments",
         "functionCount": "Number of functions",
-        "deploymentCount": "Number of deployments"
+        "name": "Cloud Functions"
       },
       "computing": {
         "contractCount": "Number of contracts",
@@ -263,9 +266,10 @@
         "usage": ["computing smart contracts", "cross-chain", "secure computing environment", "internet access"]
       },
       "embeddedWallet": {
+        "description": "Easily create secure and decentralized wallets for your users on any chain. \nWeb3 wallets, fully decentralized, easy integration, multi-chain support.",
         "integrationCount": "Number of integrations",
-        "walletCount": "Number of wallets",
-        "name": "Embedded Wallet"
+        "name": "Embedded Wallet",
+        "walletCount": "Number of wallets"
       },
       "hosting": {
         "name": "Decentralized Hosting",
@@ -276,12 +280,14 @@
         "websiteCount": "Number of websites"
       },
       "indexing": {
-        "name": "Indexing",
-        "deployedIndexerCount": "Number of deployed indexers"
+        "description": "Fast and efficient data indexing for blockchain data. \nReal-time data sync, powerful APIs, on-chain data querying.",
+        "deployedIndexerCount": "Number of deployed indexers",
+        "name": "Indexing Service"
       },
       "rpc": {
-        "name": "RPC Service",
+        "description": "Reliable and secure remote procedure call service for blockchain interaction. \nLow latency, high availability, multi-chain support.",
         "keyCount": "Number of keys",
+        "name": "RPC Service",
         "selectedNetworkCount": "Number of selected networks"
       },
       "nft": {
@@ -308,13 +314,13 @@
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
       "smartContracts": {
-        "name": "Smart Contracts",
         "audited": "Audited",
         "customizeAndDeploy": "Customize and deploy",
         "create": "Create your smart contract",
         "createNew": "Create a new smart contract",
         "deployedContractsCount": "Number of deployed contracts",
-        "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
+        "description": "Simplify smart contract deployment across multiple chains. \nAutomated verification, multi-chain support, security checks.",
+        "description2": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately.",
         "details": "Smart Contract Details",
         "emptyArchive": "Smart Contracts Archive",
         "emptyArchiveInfo": "There are currently no Smart Contracts in the Archive.",
