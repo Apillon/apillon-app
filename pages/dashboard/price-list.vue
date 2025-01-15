@@ -24,6 +24,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ServiceTypeName } from '~/lib/types/service';
+
 const { t } = useI18n();
 const paymentStore = usePaymentStore();
 const loading = ref<boolean>(true);

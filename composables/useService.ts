@@ -5,6 +5,7 @@ declare global {
     name: string;
     description: string;
     icon: string;
+    iconSvg?: string;
     link?: string;
     disabled?: boolean | null;
     usage?: String[];
@@ -16,23 +17,65 @@ export default function useService() {
   const authStore = useAuthStore();
 
   const services = {
-    authentication: ServiceType.AUTHENTICATION,
-    computing: ServiceType.COMPUTING,
-    hosting: ServiceType.HOSTING,
-    nft: ServiceType.NFT,
-    social: ServiceType.SOCIAL,
     storage: ServiceType.STORAGE,
+    hosting: ServiceType.HOSTING,
+    embeddedWallet: ServiceType.EMBEDDED_WALLET,
+    cloudFunctions: ServiceType.CLOUD_FUNCTIONS,
+    rpc: ServiceType.RPC,
+    indexing: ServiceType.INDEXING,
+    nft: ServiceType.NFT,
+    smartContracts: ServiceType.SMART_CONTRACTS,
+    assetHub: ServiceType.ASSET_HUB,
+    computing: ServiceType.COMPUTING,
+    authentication: ServiceType.AUTHENTICATION,
+    social: ServiceType.SOCIAL,
+  };
+
+  const generateLink = (service: string) => {
+    switch (service) {
+      case 'embeddedWallet':
+        return 'dashboard-service-embedded-wallet';
+      case 'cloudFunctions':
+        return 'dashboard-service-cloud-functions';
+      case 'smartContracts':
+        return 'dashboard-service-smart-contracts';
+      case 'assetHub':
+        return 'dashboard-service-asset-hub';
+      default:
+        return `dashboard-service-${service}`;
+    }
+  };
+  const generateIcon = (service: string) => {
+    switch (service) {
+      case 'embeddedWallet':
+        return 'icon-wallet';
+      case 'cloudFunctions':
+        return 'icon-cloud-functions';
+      case 'smartContracts':
+        return 'icon-file';
+      default:
+        return `icon-${service}`;
+    }
+  };
+  const generateSvgIcon = (service: string) => {
+    switch (service) {
+      case 'assetHub':
+        return 'icon/asset-hub';
+      default:
+        return '';
+    }
   };
 
   /** Web3 Services */
-  const web3Services: Array<ServiceTypeItem> = Object.entries(services).map(([service, id]) => {
+  const web3Services: ServiceTypeItem[] = Object.entries(services).map(([service, id]) => {
     return {
       id,
       key: service,
       name: t(`dashboard.service.${service}.name`),
       description: t(`dashboard.service.${service}.description`),
-      icon: `icon-${service}`,
-      link: `dashboard-service-${service}`,
+      icon: generateIcon(service),
+      iconSvg: generateSvgIcon(service),
+      link: generateLink(service),
       disabled: !isFeatureEnabled(Feature[ServiceType[id]], authStore.getUserRoles()),
       usage: translateItems(`dashboard.service.${service}.usage`),
     };
