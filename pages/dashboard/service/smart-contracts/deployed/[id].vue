@@ -6,7 +6,14 @@
           <div>
             <h1>
               {{ deployedContractStore.active.name }}
-              <small class="ml-2 text-sm text-body">
+              <small class="text-body text-sm ml-2">
+                {{
+                  t(
+                    `dashboard.service.smartContracts.type.${deployedContractStore.active.contractVersion.contract.contractType}`
+                  )
+                }}
+              </small>
+              <small class="text-body text-sm ml-2">
                 {{ t(`nft.chain.${deployedContractStore.active.chain}`) }}
               </small>
             </h1>

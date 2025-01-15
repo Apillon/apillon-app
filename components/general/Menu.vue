@@ -40,7 +40,8 @@ function removeIdOrSlug(text) {
  * Render functions
  */
 function renderMenuLabel(option: NMenuOption) {
-  const colorClass = option?.color === 'yellow' ? '!text-yellow' : option?.color === 'blue' ? '!text-blue' : '';
+  const colorClass =
+    option?.color === 'yellow' ? '!text-yellow' : option?.color === 'blue' ? '!text-blue' : '';
 
   if ('disabled' in option && option.disabled) {
     return h('span', { class: 'text-body' }, { default: () => option.label as string });
