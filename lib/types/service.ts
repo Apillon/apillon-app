@@ -8,21 +8,25 @@ export enum ServiceType {
   HOSTING = 4,
   COMPUTING = 5,
   SOCIAL = 6,
-  WALLET = 7,
-  CONTRACTS = 8,
+  EMBEDDED_WALLET = 7,
+  SMART_CONTRACTS = 8,
   RPC = 9,
   INDEXING = 10,
+  CLOUD_FUNCTIONS = 50,
+  ASSET_HUB = 51,
 }
 export enum ServiceTypeName {
-  STORAGE = 'STORAGE',
-  HOSTING = 'HOSTING',
   AUTHENTICATION = 'IDENTITY',
-  NFT = 'NFT',
+  CLOUD_FUNCTIONS = 'CLOUD_FUNCTIONS',
   COMPUTING = 'COMPUTING',
-  CONTRACTS = 'CONTRACTS',
-  SOCIAL = 'SOCIAL',
-  WALLET = 'WALLET',
+  SMART_CONTRACTS = 'CONTRACTS',
+  HOSTING = 'HOSTING',
   INDEXING = 'INDEXING',
+  NFT = 'NFT',
+  RPC = 'RPC',
+  SOCIAL = 'SOCIAL',
+  STORAGE = 'STORAGE',
+  EMBEDDED_WALLET = 'WALLET',
 }
 
 export enum IdentityChains {
@@ -147,7 +151,7 @@ export const ServiceTypeNames: { [k: number]: ServiceTypeName } = {
   [ServiceType.HOSTING]: ServiceTypeName.HOSTING,
   [ServiceType.COMPUTING]: ServiceTypeName.COMPUTING,
   [ServiceType.SOCIAL]: ServiceTypeName.SOCIAL,
-  [ServiceType.WALLET]: ServiceTypeName.WALLET,
+  [ServiceType.EMBEDDED_WALLET]: ServiceTypeName.EMBEDDED_WALLET,
 };
 
 declare global {
