@@ -78,12 +78,11 @@ import { CollectionStatus, NftCreateStep } from '~/lib/types/nft';
 const emit = defineEmits(['submitSuccess']);
 const { t, te } = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
-
-const { getFile } = useComputing();
 const { isUnique, prepareFormData } = useCollection();
 const { deployCollection, getPriceServiceName, uploadLogoAndCover } = useNft();
 const { uploadFiles } = useUpload();
@@ -137,9 +136,18 @@ async function deployUnique() {
     const bucketUuid = await createBucket(collectionStore.form.base.name);
     if (!bucketUuid) return;
 
-    const metadata = await prepareUniqueData(bucketUuid);
+    const body = await prepareUniqueData(bucketUuid);
 
-    const res = await $api.post<CollectionResponse>(endpoints.collectionsUnique, metadata);
+    const req = await fetch(APISettings.basePath + endpoints.collectionsUnique, {
+      method: 'POST',
+      body,
+      headers: {
+        Authorization: 'Bearer ' + authStore.jwt,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    const res = await $api.onResponse<CollectionResponse>(req);
     collectionStore.active = res.data;
 
     /** On new collection created add new collection to list */
@@ -166,7 +174,6 @@ async function deployUnique() {
 }
 
 async function prepareUniqueData(bucketUuid: string) {
-  const baseData = prepareFormData();
   await uploadFiles(bucketUuid, collectionStore.images, false);
 
   /** Prepare metadata */
@@ -182,7 +189,23 @@ async function prepareUniqueData(bucketUuid: string) {
     return acc;
   }, {});
 
-  return { ...baseData, metadata, bucket_uuid: bucketUuid };
+  const body = new FormData();
+  body.append('bucket_uuid', bucketUuid);
+  body.append('project_uuid', dataStore.projectUuid);
+
+  const baseData = prepareFormData();
+  Object.entries(baseData).forEach(([key, value]) => {
+    if (value) {
+      body.append(key, value);
+    }
+  });
+
+  const metadataFile = new Blob([JSON.stringify(metadata, null, 2)], {
+    type: 'application/json',
+  });
+  body.append('metadata', metadataFile);
+
+  return body;
 }
 
 async function createBucket(name: string) {
