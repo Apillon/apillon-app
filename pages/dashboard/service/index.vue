@@ -13,7 +13,7 @@
           <p>{{ $t('dashboard.service.description') }}</p>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
-          <Card v-for="(service, key) in services" :key="key" :service="service">
+          <Card v-for="(service, key) in web3Services" :key="key" :service="service">
             <Btn
               v-if="service.link"
               size="large"
@@ -38,15 +38,4 @@ useHead({
 });
 
 const { web3Services } = useService();
-
-const services: ServiceTypeItem[] = web3Services.filter((item: ServiceTypeItem) =>
-  [
-    ServiceType.EMBEDDED_WALLET,
-    ServiceType.CLOUD_FUNCTIONS,
-    ServiceType.RPC,
-    ServiceType.INDEXING,
-    ServiceType.SMART_CONTRACTS,
-    ServiceType.ASSET_HUB,
-  ].includes(Number(item.id))
-);
 </script>

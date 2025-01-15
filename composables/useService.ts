@@ -17,18 +17,18 @@ export default function useService() {
   const authStore = useAuthStore();
 
   const services = {
+    storage: ServiceType.STORAGE,
+    hosting: ServiceType.HOSTING,
     embeddedWallet: ServiceType.EMBEDDED_WALLET,
     cloudFunctions: ServiceType.CLOUD_FUNCTIONS,
     rpc: ServiceType.RPC,
     indexing: ServiceType.INDEXING,
+    nft: ServiceType.NFT,
     smartContracts: ServiceType.SMART_CONTRACTS,
     assetHub: ServiceType.ASSET_HUB,
-    authentication: ServiceType.AUTHENTICATION,
     computing: ServiceType.COMPUTING,
-    hosting: ServiceType.HOSTING,
-    nft: ServiceType.NFT,
+    authentication: ServiceType.AUTHENTICATION,
     social: ServiceType.SOCIAL,
-    storage: ServiceType.STORAGE,
   };
 
   const generateLink = (service: string) => {
