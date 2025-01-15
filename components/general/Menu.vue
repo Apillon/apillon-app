@@ -40,7 +40,7 @@ function removeIdOrSlug(text) {
  * Render functions
  */
 function renderMenuLabel(option: NMenuOption) {
-  const colorClass = option?.color === 'yellow' ? '!text-yellow' : '';
+  const colorClass = option?.color === 'yellow' ? '!text-yellow' : option?.color === 'blue' ? '!text-blue' : '';
 
   if ('disabled' in option && option.disabled) {
     return h('span', { class: 'text-body' }, { default: () => option.label as string });
@@ -87,6 +87,11 @@ function renderMenuIcon(option: NMenuOption) {
 
 function iconClass(iconName?: any): string {
   if (!iconName) return '';
-  return iconName === 'menu/home-gear' ? `${iconName} text-yellow` : iconName;
+  if (iconName === 'menu/home-gear') {
+    return `${iconName} text-yellow`;
+  } else if (iconName === 'menu/tools') {
+    return `${iconName} text-blue`;
+  }
+  return iconName;
 }
 </script>

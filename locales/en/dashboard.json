@@ -148,11 +148,11 @@
       "smartContracts": "Smart Contracts",
       "smartContractDetails": "Smart Contract Details",
       "social": "Social",
+      "simplets": "Simplets",
       "rpc": "RPC Service",
       "utility": "Utility",
-      "solutions": "Pre-built Solutions",
+      "solutions": "Pre-built Solutions (Simplets)",
       "storage": "Storage",
-      "simplets": "Simplets",
       "embeddedWallet": "Embedded Wallet",
       "indexing": "Indexing"
     },
@@ -241,7 +241,8 @@
           "anyway": "Leave anyway",
           "info": "If you leave, your changes won’t be saved.",
           "title": "Are you sure you want to leave?"
-        }
+        },
+        "usage": ["secure storage", "easy transfer", "cross-chain compatibility"]
       },
       "authentication": {
         "name": "Decentralized Authentication",
@@ -256,7 +257,8 @@
         "description": "Deploy any script or backend app to a secure, scalable, and decentralized cloud network. \nDecentralized cloud, fully scalable, API gateway, cross-chain apps.",
         "deploymentCount": "Number of deployments",
         "functionCount": "Number of functions",
-        "name": "Cloud Functions"
+        "name": "Cloud Functions",
+        "usage": ["decentralized cloud", "fully scalable", "API gateway", "cross-chain apps"]
       },
       "computing": {
         "contractCount": "Number of contracts",
@@ -269,7 +271,8 @@
         "description": "Easily create secure and decentralized wallets for your users on any chain. \nWeb3 wallets, fully decentralized, easy integration, multi-chain support.",
         "integrationCount": "Number of integrations",
         "name": "Embedded Wallet",
-        "walletCount": "Number of wallets"
+        "walletCount": "Number of wallets",
+        "usage": ["Web3 wallets", "fully decentralized", "easy integration", "multi-chain support"]
       },
       "hosting": {
         "name": "Decentralized Hosting",
@@ -282,13 +285,15 @@
       "indexing": {
         "description": "Fast and efficient data indexing for blockchain data. \nReal-time data sync, powerful APIs, on-chain data querying.",
         "deployedIndexerCount": "Number of deployed indexers",
-        "name": "Indexing Service"
+        "name": "Indexing Service",
+        "usage": ["real-time data sync", "powerful APIs", "on-chain data querying"]
       },
       "rpc": {
         "description": "Reliable and secure remote procedure call service for blockchain interaction. \nLow latency, high availability, multi-chain support.",
         "keyCount": "Number of keys",
         "name": "RPC Service",
-        "selectedNetworkCount": "Number of selected networks"
+        "selectedNetworkCount": "Number of selected networks",
+        "usage": ["low latency", "high availability", "multi-chain support"]
       },
       "nft": {
         "collectionCount": "Number of collections",
@@ -364,7 +369,8 @@
           "writeOverApillon": "Write over Apillon",
           "readFromDapp": "Read from your dapp"
         },
-        "transactionCount": "Number of transactions"
+        "transactionCount": "Number of transactions",
+        "usage": ["automated verification", "multi-chain support", "security checks"]
       },
       "addFirst": "Add first service",
       "delete": "Delete service",

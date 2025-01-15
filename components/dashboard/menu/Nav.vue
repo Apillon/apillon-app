@@ -42,14 +42,24 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
     iconName: 'icon-home',
     disabled: isMenuItemDisabled(Feature.PROJECT),
   };
-  const services = {
-    key: 'dashboard-service',
-    label: t('dashboard.nav.services'),
-    to: 'dashboard-service',
-    color: 'yellow',
-    svgIcon: 'menu/home-gear',
-    // show: !props.collapsed,
-  };
+  const services = [
+    {
+      key: 'dashboard-service',
+      label: t('dashboard.nav.services'),
+      to: 'dashboard-service',
+      color: 'yellow',
+      svgIcon: 'menu/home-gear',
+      // show: !props.collapsed,
+    },
+    {
+      key: 'dashboard-simplets',
+      label: t('dashboard.nav.simplets'),
+      to: 'dashboard-solution',
+      color: 'blue',
+      svgIcon: 'menu/tools',
+      // show: !props.collapsed,
+    },
+  ];
 
   const coreWeb3Infrastructure = [
     {
@@ -248,7 +258,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
   return props.collapsed
     ? [
         dashboard,
-        services,
+        ...services,
         {
           key: 'divider-1',
           type: 'divider',
@@ -273,7 +283,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       ]
     : [
         dashboard,
-        services,
+        ...services,
         {
           label: t('dashboard.nav.coreWeb3Infrastructure'),
           key: 'coreWeb3Infrastructure',
