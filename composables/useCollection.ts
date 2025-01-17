@@ -1,5 +1,4 @@
 import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
-import IconInfo from '../components/parts/Icon/Info.vue';
 import { EvmChain, SubstrateChain } from '~/lib/types/nft';
 import type { TimeValidator } from 'naive-ui/es/date-picker/src/interface';
 

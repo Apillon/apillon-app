@@ -6,6 +6,10 @@ export const useSettingsStore = defineStore('settings', {
     discordLink: '' as string,
     oauthLinks: [] as OauthLinkInterface[],
     users: [] as ProjectUserInterface[],
+    notifications: {
+      loading: false,
+      items: [] as NotificationInterface[],
+    },
   }),
   getters: {
     currentUser(state) {
@@ -17,6 +21,9 @@ export const useSettingsStore = defineStore('settings', {
     },
     hasApiKeys(state) {
       return Array.isArray(state.apiKeys) && state.apiKeys.length > 0;
+    },
+    hasNotifications(state) {
+      return Array.isArray(state.notifications.items) && state.notifications.items.length > 0;
     },
     hasUsers(state) {
       return Array.isArray(state.users) && state.users.length > 0;
@@ -62,6 +69,15 @@ export const useSettingsStore = defineStore('settings', {
       return this.discordLink;
     },
 
+    /** Notifications */
+    async getNotifications(): Promise<NotificationInterface[]> {
+      console.log(!this.hasNotifications, isCacheExpired(LsCacheKeys.NOTIFICATIONS));
+      if (!this.hasNotifications || isCacheExpired(LsCacheKeys.NOTIFICATIONS)) {
+        await this.fetchNotifications();
+      }
+      return this.notifications.items;
+    },
+
     /**
      *
      * API calls
@@ -94,9 +110,7 @@ export const useSettingsStore = defineStore('settings', {
     async fetchProjectUsers() {
       const dataStore = useDataStore();
       try {
-        const res = await $api.get<ProjectUsersResponse>(
-          endpoints.projectUsers(dataStore.project.selected)
-        );
+        const res = await $api.get<ProjectUsersResponse>(endpoints.projectUsers(dataStore.project.selected));
         this.users = res.data.items;
       } catch (error) {
         this.users = [];
@@ -138,6 +152,26 @@ export const useSettingsStore = defineStore('settings', {
         window.$message.error(userFriendlyMsg(error));
       }
       return this.discordLink;
+    },
+
+    /** Notifications */
+    async fetchNotifications() {
+      this.notifications.loading = true;
+      try {
+        const params = parseArguments({ limit: PARAMS_ALL_ITEMS.limit });
+        const { data } = await $api.get<NotificationsResponse>(endpoints.notification, params);
+        this.notifications.items = data.items;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.NOTIFICATIONS, Date.now().toString());
+      } catch (error: any) {
+        this.notifications.items = [] as NotificationInterface[];
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.notifications.loading = false;
+      }
     },
   },
 });

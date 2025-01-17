@@ -24,6 +24,10 @@ export enum OauthLinkType {
   GITHUB = 3,
 }
 
+export enum NotificationType {
+  UNKNOWN = 0,
+}
+
 declare global {
   /**
    * API key
@@ -122,4 +126,16 @@ declare global {
   interface EmbeddedWalletsResponse extends GeneralItemsResponse<EmbeddedWalletInterface> {}
   interface EmbeddedWalletInfoResponse extends GeneralResponse<EmbeddedWalletInfoInterface> {}
   interface SignaturesResponse extends GeneralItemsResponse<SignatureInterface> {}
+
+  /**
+   * Notifications
+   */
+  interface NotificationInterface extends GeneralInterface {
+    createTime: string;
+    id: number;
+    message: string;
+    type: string;
+    userId: number;
+  }
+  interface NotificationsResponse extends GeneralItemsResponse<NotificationInterface> {}
 }

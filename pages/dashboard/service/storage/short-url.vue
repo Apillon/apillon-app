@@ -19,8 +19,7 @@
       </Heading>
     </template>
     <slot>
-      <n-card
-        size="small"
+      <n-card        
         class="card mt-8 !border-bg-lighter max-w-2xl"
         :title="$t('storage.shortUrl.generateShortLink')"
       >

@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const {t} = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
@@ -47,25 +47,25 @@ const renderNuxtIcon = (iconName: string) => {
 const options = computed(() => [
   {
     key: 'dashboard-account-management',
-    label: $i18n.t('profile.account'),
+    label: t('profile.account'),
     icon: renderIcon('icon-anonymous'),
   },
   {
     key: 'dashboard-payments',
-    label: $i18n.t('profile.billing'),
+    label: t('profile.billing'),
     disabled: !dataStore.hasProjects,
     show: !dataStore.isProjectUser,
     icon: renderIcon('icon-billing'),
   },
   {
     key: 'dashboard-project-settings',
-    label: $i18n.t('profile.settings'),
+    label: t('profile.settings'),
     disabled: !dataStore.hasProjects,
     icon: renderIcon('icon-project-setting'),
   },
   {
     key: 'logout',
-    label: $i18n.t('profile.logout'),
+    label: t('profile.logout'),
     icon: renderNuxtIcon('icon/logout'),
   },
 ]);

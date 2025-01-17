@@ -50,6 +50,16 @@ export default defineNuxtConfig({
       Components({
         resolvers: [NaiveUiResolver()],
       }),
+      
+      {
+        name: 'vite-plugin-glob-transform',
+        transform(code: string, id: string) {
+          if (id.includes('nuxt-icons')) {
+            return code.replace(/as:\s*['"]raw['"]/g, 'query: "?raw", import: "default"');
+          }
+          return code;
+        }
+      },
     ],
 
     optimizeDeps: {

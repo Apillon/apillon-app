@@ -433,6 +433,9 @@ const Endpoints = {
 
   /** Service status */
   serviceStatus: '/public/service-status',
+
+  /** Notifications */
+  notification: '/notification',
 };
 
 export default Endpoints;

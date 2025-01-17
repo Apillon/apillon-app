@@ -6,35 +6,25 @@
 
     <slot>
       <n-space :size="32" class="relative pb-8" vertical>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          <n-card class="card-dark" size="small" :bordered="false" title="Number of integrations">
+        <div class="grid grid-cols-2 gap-6 lg:grid-cols-4">
+          <n-card class="card-dark" :bordered="false" title="Number of integrations">
             <h4 class="text-primary">
               {{ embeddedWalletStore.info.numOfEWIntegrations }}
             </h4>
           </n-card>
-          <n-card
-            class="card-dark"
-            size="small"
-            :bordered="false"
-            title="Max number of integrations"
-          >
+          <n-card class="card-dark" :bordered="false" title="Max number of integrations">
             <h4 class="text-primary">{{ embeddedWalletStore.info.maxNumOfEWIntegrations }}</h4>
           </n-card>
-          <n-card
-            class="card-dark"
-            size="small"
-            :bordered="false"
-            title="Generated wallets this month"
-          >
+          <n-card class="card-dark" :bordered="false" title="Generated wallets this month">
             <h4 class="text-primary">
               {{ embeddedWalletStore.info.numOfEWSignaturesForCurrentMonth }}
             </h4>
           </n-card>
-          <n-card class="card-dark" size="small" :bordered="false" title="Max wallets per month">
+          <n-card class="card-dark" :bordered="false" title="Max wallets per month">
             <h4 class="text-primary">{{ embeddedWalletStore.info.maxNumOfEWSignatures }}</h4>
           </n-card>
         </div>
-        <div class="flex justify-end mr-4">
+        <div class="mr-4 flex justify-end">
           <n-button
             size="small"
             :loading="embeddedWalletStore.loading"
@@ -46,7 +36,7 @@
               )
             "
           >
-            <span class="icon-refresh text-xl mr-2"></span>
+            <span class="icon-refresh mr-2 text-xl"></span>
             {{ $t('general.refresh') }}
           </n-button>
         </div>

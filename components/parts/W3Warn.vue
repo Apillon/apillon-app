@@ -6,6 +6,7 @@
       :bordered="false"
       role="dialog"
       aria-modal="true"
+      size="large"
     >
       <template v-if="content">
         <p>{{ content }}</p>
