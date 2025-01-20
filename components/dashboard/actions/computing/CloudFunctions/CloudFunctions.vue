@@ -16,8 +16,6 @@
     </div>
 
     <n-space size="large">
-      <ModalCreditCosts v-if="!archive" :category="PriceServiceCategory.ACURAST" />
-
       <!-- Refresh cloudFunctions -->
       <n-button
         size="small"

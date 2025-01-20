@@ -15,6 +15,9 @@ export const useRpcEndpointStore = defineStore('endpoint', {
     hasPublicEndpoints(state): boolean {
       return Array.isArray(state.publicEndpoints) && state.publicEndpoints.length > 0;
     },
+    hasFavorites(state): boolean {
+      return state.items.some(item => item.isFavorite);
+    },
   },
 
   actions: {

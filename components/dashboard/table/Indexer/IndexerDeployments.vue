@@ -18,11 +18,11 @@ const { t } = useI18n();
 const indexerDeploymentsStore = useIndexerDeploymentsStore();
 const expandedRows = ref<Array<string | number>>([]);
 
-const rowKey = (row: IndexerDeploymentInferface) => row.id;
-const currentRow = ref<IndexerDeploymentInferface | null>(null);
+const rowKey = (row: IndexerDeploymentInterface) => row.id;
+const currentRow = ref<IndexerDeploymentInterface | null>(null);
 
 /** On row click */
-const rowProps = (row: IndexerDeploymentInferface) => {
+const rowProps = (row: IndexerDeploymentInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;
@@ -38,7 +38,7 @@ const columns = computed(() => [
   {
     type: 'expand',
     className: ON_COLUMN_CLICK_OPEN_CLASS,
-    renderExpand(row: IndexerDeploymentInferface) {
+    renderExpand(row: IndexerDeploymentInterface) {
       if (row.id) {
         return h(resolveComponent('IndexerDeploymentDetails'), {}, '');
       }
@@ -48,41 +48,33 @@ const columns = computed(() => [
   {
     key: 'level',
     className: ON_COLUMN_CLICK_OPEN_CLASS,
-    title: t('dashboard.service.indexer.tableDeployments.type'),
+    title: t('indexer.tableDeployments.type'),
     render(row) {
       return h('strong', {}, { default: () => row.type });
     },
   },
   {
-    key: 'failed',
-    className: ON_COLUMN_CLICK_OPEN_CLASS,
-    title: t('dashboard.service.indexer.tableDeployments.failed'),
-    render(row) {
-      return h('strong', {}, { default: () => row.failed });
-    },
-  },
-  {
-    key: 'status',
-    className: ON_COLUMN_CLICK_OPEN_CLASS,
-    title: t('dashboard.service.indexer.tableDeployments.status'),
-    render(row) {
-      return h('strong', {}, { default: () => row.status });
-    },
-  },
-  {
     key: 'createdAt',
     className: ON_COLUMN_CLICK_OPEN_CLASS,
-    title: t('dashboard.service.indexer.tableDeployments.createdAt'),
-    render(row: IndexerDeploymentInferface) {
+    title: t('indexer.tableDeployments.createdAt'),
+    render(row: IndexerDeploymentInterface) {
       return h('span', {}, { default: () => dateTimeToDateAndTime(row.createdAt || '') });
     },
   },
   {
     key: 'updatedAt',
     className: ON_COLUMN_CLICK_OPEN_CLASS,
-    title: t('dashboard.service.indexer.tableDeployments.updatedAt'),
-    render(row: IndexerDeploymentInferface) {
+    title: t('indexer.tableDeployments.updatedAt'),
+    render(row: IndexerDeploymentInterface) {
       return h('span', {}, { default: () => dateTimeToDateAndTime(row.updatedAt || '') });
+    },
+  },
+  {
+    key: 'status',
+    className: ON_COLUMN_CLICK_OPEN_CLASS,
+    title: t('general.status'),
+    render(row: IndexerDeploymentInterface) {
+      return h(resolveComponent('IndexerStatusDeployment'), { deploy: row }, '');
     },
   },
 ]);

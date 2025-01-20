@@ -95,23 +95,23 @@ const rules: NFormRules = {
   parentCollectionUuid: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintCollectionUuidRequired'),
+      message: $i18n.t('validation.nft.mintCollectionUuidRequired'),
     },
   ],
   parentNftId: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintParentNftIdRequired'),
+      message: $i18n.t('validation.nft.mintParentNftIdRequired'),
     },
   ],
   quantity: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintQuantityRequired'),
+      message: $i18n.t('validation.nft.mintQuantityRequired'),
     },
     {
       validator: validateQuantity,
-      message: $i18n.t('validation.nftMintQuantity'),
+      message: $i18n.t('validation.nft.mintQuantity'),
     },
   ],
 };

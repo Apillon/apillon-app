@@ -5,13 +5,11 @@
     :bordered="false"
     :columns="columns"
     :data="contracts"
-    :loading="deployedContractStore.loading"
-    :pagination="deployedContractStore.pagination"
+    :loading="archive ? deployedContractStore.archive.loading : deployedContractStore.loading"
+    :pagination="archive ? deployedContractStore.archive.pagination : deployedContractStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
-    @update:page="
-      (page: number) => handlePageChange(page, deployedContractStore.pagination.pageSize)
-    "
+    @update:page="(page: number) => handlePageChange(page, deployedContractStore.pagination.pageSize)"
     @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
     remote
   />
@@ -23,11 +21,15 @@ import { NButton, NDropdown } from 'naive-ui';
 
 const props = defineProps({
   contracts: { type: Array<DeployedContractInterface>, default: [] },
+  archive: { type: Boolean, default: false },
 });
 
-const { t } = useI18n();
+const { t, te } = useI18n();
 const router = useRouter();
+const message = useMessage();
+const authStore = useAuthStore();
 const deployedContractStore = useDeployedContractStore();
+const { deleteItem } = useDelete();
 
 const rowKey = (row: DeployedContractInterface) => row.contract_uuid;
 const currentRow = ref<DeployedContractInterface>(props.contracts[0]);
@@ -39,6 +41,7 @@ const availableColumns = ref([
   { value: 'version', label: t('dashboard.service.smartContracts.table.version') },
   { value: 'description', label: t('general.description') },
   { value: 'contractStatus', label: t('dashboard.service.smartContracts.table.contractStatus') },
+  { value: 'contractType', label: t('dashboard.service.smartContracts.table.contractType') },
 ]);
 const selectedColumns = ref([
   'name',
@@ -47,13 +50,14 @@ const selectedColumns = ref([
   'version',
   'description',
   'contractStatus',
+  'contractType',
 ]);
 
 const columns = computed(() => [
   {
     key: 'name',
     title: t('dashboard.service.smartContracts.table.name'),
-    className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
+    className: [{ [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive }, { hidden: !selectedColumns.value.includes('name') }],
     render(row: DeployedContractInterface) {
       return h('strong', {}, { default: () => row.name });
     },
@@ -61,7 +65,7 @@ const columns = computed(() => [
   {
     key: 'chain',
     title: t('dashboard.service.smartContracts.table.chain'),
-    className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('chain') }],
+    className: [{ [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive }, { hidden: !selectedColumns.value.includes('chain') }],
     minWidth: 120,
     render(row: DeployedContractInterface) {
       return h('span', {}, { default: () => t(`nft.chain.${row.chain}`) });
@@ -81,15 +85,31 @@ const columns = computed(() => [
     },
   },
   {
-    key: 'version_id',
+    key: 'contractType',
+    title: t('dashboard.service.smartContracts.table.contractType'),
+    className: [
+      { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+      { hidden: !selectedColumns.value.includes('contractType') },
+    ],
+    render(row: DeployedContractInterface) {
+      return !!row?.contractType && te(`dashboard.service.smartContracts.type.${row.contractType}`)
+        ? t(`dashboard.service.smartContracts.type.${row.contractType}`)
+        : '';
+    },
+  },
+  {
+    key: 'contractVersion',
     title: t('dashboard.service.smartContracts.table.version'),
-    className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('version') }],
+    className: [
+      { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+      { hidden: !selectedColumns.value.includes('version') },
+    ],
   },
   {
     key: 'description',
     title: t('general.description'),
     className: [
-      ON_COLUMN_CLICK_OPEN_CLASS,
+      { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
       { hidden: !selectedColumns.value.includes('description') },
     ],
   },
@@ -98,11 +118,7 @@ const columns = computed(() => [
     title: t('dashboard.service.smartContracts.table.contractStatus'),
     className: { hidden: !selectedColumns.value.includes('contractStatus') },
     render(row: DeployedContractInterface) {
-      return h(
-        resolveComponent('SmartContractsStatusLabel'),
-        { contractStatus: row.contractStatus },
-        ''
-      );
+      return h(resolveComponent('SmartContractsStatusLabel'), { contractStatus: row.contractStatus }, '');
     },
   },
   {
@@ -130,7 +146,7 @@ const columns = computed(() => [
       return h(
         NDropdown,
         {
-          options: dropdownOptions,
+          options: props.archive ? dropdownOptionsArchive : dropdownOptions,
           trigger: 'click',
         },
         {
@@ -145,12 +161,13 @@ const columns = computed(() => [
     },
   },
 ]);
+
 /** On row click */
 const rowProps = (row: DeployedContractInterface) => {
   return {
     onClick: (e: Event) => {
       currentRow.value = row;
-      if (canOpenColumnCell(e.composedPath())) {
+      if (!props.archive && canOpenColumnCell(e.composedPath())) {
         router.push({ path: `/dashboard/service/smart-contracts/deployed/${row.contract_uuid}` });
       }
     },
@@ -172,12 +189,35 @@ const dropdownOptions = [
       },
     },
   },
+  {
+    key: 'socialDelete',
+    label: t('general.archive'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        deleteSmartContract();
+      },
+    },
+  },
+];
+
+const dropdownOptionsArchive = [
+  {
+    key: 'restore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        restoreSmartContract();
+      },
+    },
+  },
 ];
 
 onMounted(() => {
   /** Check if selected columns are stored in LS */
-  if (localStorage.getItem(LsTableColumnsKeys.ASSET_HUB)) {
-    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.ASSET_HUB) || '');
+  if (localStorage.getItem(LsTableColumnsKeys.SMART_CONTRACTS)) {
+    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.SMART_CONTRACTS) || '');
   }
 });
 
@@ -189,16 +229,60 @@ watch(
     debouncedSearchFilter();
   }
 );
+watch(
+  () => deployedContractStore.archive.search,
+  _ => {
+    deployedContractStore.archive.loading = true;
+    debouncedSearchFilter();
+  }
+);
 const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
 
 async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIMIT) {
-  await deployedContractStore.fetchDeployedContracts(page, limit);
-  deployedContractStore.pagination.page = page;
-  deployedContractStore.pagination.pageSize = limit;
+  if (props.archive) {
+    await deployedContractStore.fetchDeployedContractsArchive(page, limit);
+    deployedContractStore.archive.pagination.page = page;
+    deployedContractStore.archive.pagination.pageSize = limit;
+  } else {
+    await deployedContractStore.fetchDeployedContracts(page, limit);
+    deployedContractStore.pagination.page = page;
+    deployedContractStore.pagination.pageSize = limit;
+  }
 }
 
 function handleColumnChange(selectedValues: Array<string>) {
   selectedColumns.value = selectedValues;
-  localStorage.setItem(LsTableColumnsKeys.ASSET_HUB, JSON.stringify(selectedColumns.value));
+  localStorage.setItem(LsTableColumnsKeys.SMART_CONTRACTS, JSON.stringify(selectedColumns.value));
+}
+
+async function deleteSmartContract() {
+  if (currentRow.value && (await deleteItem(ItemDeleteKey.SMART_CONTRACT, currentRow.value.contract_uuid))) {
+    deployedContractStore.items = deployedContractStore.items.filter(
+      item => item.contract_uuid !== currentRow.value?.contract_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.SMART_CONTRACTS_DEPLOYED_ARCHIVED);
+  }
+}
+
+async function restoreSmartContract() {
+  if (!currentRow.value?.contract_uuid) return;
+
+  deployedContractStore.loading = true;
+
+  try {
+    await $api.patch<DeployedContractResponse>(endpoints.smartContractsActivate(currentRow.value?.contract_uuid));
+
+    deployedContractStore.archive.items = deployedContractStore.archive.items.filter(
+      item => item.contract_uuid !== currentRow.value?.contract_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.SMART_CONTRACTS_DEPLOYED);
+
+    message.success(t('form.success.restored.smartContract'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  deployedContractStore.loading = false;
 }
 </script>

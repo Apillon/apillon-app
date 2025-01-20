@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { CALCULATED_CIDS_KEY } from '~/lib/types/storage';
 
 export const useBucketStore = defineStore('bucket', {
   state: () => ({
@@ -26,6 +27,13 @@ export const useBucketStore = defineStore('bucket', {
       selectedItems: [] as BucketItemInterface[],
       pagination: createPagination(),
     },
+    calculatedCids: {} as Record<
+      string,
+      {
+        CID: string | null;
+        link: string | null;
+      }
+    >,
   }),
   getters: {
     bucketUuid(state): string {
@@ -236,6 +244,25 @@ export const useBucketStore = defineStore('bucket', {
       return {} as BucketInterface;
     },
 
+    populateCids(directoryContent: BucketItemInterface[]) {
+      return directoryContent.map(file => {
+        if (file.CID || file.link) {
+          // If CID is already present, return the file
+          return file;
+        }
+
+        const calculatedCids = JSON.parse(localStorage.getItem(CALCULATED_CIDS_KEY) || '{}');
+        const cidInfo = calculatedCids[file.uuid];
+        if (cidInfo) {
+          file.CID = cidInfo.CID;
+          file.link = cidInfo.link;
+          return file;
+        }
+
+        return file;
+      });
+    },
+
     async fetchDirectoryContent(arg: FetchDirectoryParams = {}) {
       this.folder.loading = arg.loader !== undefined ? arg.loader : true;
 
@@ -266,7 +293,7 @@ export const useBucketStore = defineStore('bucket', {
 
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
 
-        this.folder.items = res.data.items;
+        this.folder.items = this.populateCids(res.data.items);
         this.folder.pagination.itemCount = res.data.total;
         this.folder.loading = false;
 

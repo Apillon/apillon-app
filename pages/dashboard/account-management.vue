@@ -21,8 +21,8 @@
       <FormWrapper :title="$t('profile.security')">
         <!-- Change password -->
         <n-h5>{{ $t('profile.password.title') }}</n-h5>
-        <p>{{ $t('profile.password.info') }}</p>
-        <FormPasswordResetRequest class="w-full mt-8" :email="authStore.email">
+        <p class="mb-4">{{ $t('profile.password.info') }}</p>
+        <FormPasswordResetRequest class="w-full" :email="authStore.email">
           {{ $t('profile.password.btn') }}
         </FormPasswordResetRequest>
 

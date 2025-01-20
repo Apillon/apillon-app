@@ -1,6 +1,21 @@
 /**
  * Error messages
  */
+export function contractError(error: any) {
+  if (!window.$i18n || !(window.$i18n instanceof Object) || !error) {
+    if (error instanceof ReferenceError || error instanceof TypeError) {
+      return error.message;
+    }
+    return (
+      error?.message.split(/\r?\n/).splice(0, 1).join() ||
+      'Something went wrong, please try again later.'
+    );
+  }
+  return error?.code && window.$i18n.te(`error.contract.${error?.code}`)
+    ? window.$i18n.t(`error.${error.message}`)
+    : error.message.split(/\r?\n/).splice(0, 1).join();
+}
+
 export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | DOMException | any) {
   // Check error exists and if translation is included
   if (!window.$i18n || !(window.$i18n instanceof Object) || !error) {
@@ -16,7 +31,7 @@ export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | D
     const err = error as ApiError;
     if (err.errors && Array.isArray(err.errors)) {
       const errorMessages = err.errors.map(e =>
-        singleErrorMessage(window.$i18n, e.message, e.statusCode)
+        singleErrorMessage(window.$i18n, e.message, e.statusCode || e?.code)
       );
       return [...new Set(errorMessages)].join('\n');
     } else if (err.message) {

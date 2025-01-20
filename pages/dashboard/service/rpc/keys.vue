@@ -1,11 +1,11 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderRpc />
+      <HeaderRpcKeys />
     </template>
     <slot>
       <n-space v-if="rpcApiKeyStore.hasRpcApiKeys" :size="32" vertical>
-        <div class="flex justify-end flex-row">
+        <div>
           <ActionsRpcApiKey v-if="dataStore.isUserOwner" />
         </div>
         <TableRpcApiKey :is-owner="dataStore.isUserOwner" />

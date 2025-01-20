@@ -36,11 +36,29 @@ const $i18n = useI18n();
 const { t } = useI18n();
 const rpcEndpointStore = useRpcEndpointStore();
 const rpcApiKeyStore = useRpcApiKeyStore();
+const router = useRouter();
+const loadedId = ref<number | null>(null);
+
+const extractDomain = (url?: string) => {
+  if (!url) {
+    return '';
+  }
+  const domain = url.replace('https://', '').replace('http://', '').split(/[/?#]/)[0];
+  return domain;
+};
 
 function rowProps(row: RpcEndpointInterface) {
   return {
     onClick: () => {
       currentRow.value = row;
+      if (!props.allowFavoriteCheck) {
+        router.push({
+          name: 'dashboard-service-rpc-usage',
+          query: {
+            network: extractDomain(row.favoriteData?.httpsUrl),
+          },
+        });
+      }
     },
   };
 }
@@ -89,7 +107,15 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
           return;
         }
 
-        return h(resolveComponent('TableEllipsis'), { text: row?.favoriteData?.httpsUrl }, '');
+        return h(
+          'div',
+          {
+            onClick: event => {
+              event.stopPropagation();
+            },
+          },
+          [h(resolveComponent('TableEllipsis'), { text: row?.favoriteData?.httpsUrl }, '')]
+        );
       },
     },
     {
@@ -100,7 +126,15 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
           return;
         }
 
-        return h(resolveComponent('TableEllipsis'), { text: row?.favoriteData?.wssUrl }, '');
+        return h(
+          'div',
+          {
+            onClick: event => {
+              event.stopPropagation();
+            },
+          },
+          [h(resolveComponent('TableEllipsis'), { text: row?.favoriteData?.wssUrl }, '')]
+        );
       },
     },
     {
@@ -137,9 +171,17 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
                     type: 'tertiary',
                     quaternary: true,
                     round: true,
-                    onClick: () => addRpcEndpoint(row.name, row.networkName),
+                    loading: loadedId.value === row.networkId,
+                    onClick: () => addRpcEndpoint(row.name, row.networkName, row.networkId),
                   },
-                  { default: () => h('span', { class: 'text-primary' }, t('rpc.endpoint.add')) }
+                  {
+                    default: () =>
+                      h(
+                        'span',
+                        { class: 'text-primary' },
+                        loadedId.value === row.networkId ? '' : t('rpc.endpoint.add')
+                      ),
+                  }
                 ),
           ]);
         } else {
@@ -154,7 +196,15 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
                 default: () =>
                   h(
                     NButton,
-                    { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                    {
+                      type: 'tertiary',
+                      size: 'small',
+                      quaternary: true,
+                      round: true,
+                      onClick: event => {
+                        event.stopPropagation();
+                      },
+                    },
                     { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
                   ),
               }
@@ -171,11 +221,10 @@ const columns = createColumns();
 const rowKey = (row: RpcEndpointInterface) => row.networkId;
 const message = useMessage();
 
-const loading = ref<boolean>(false);
 const modalDeleteEndpointVisible = ref<boolean>(false);
 
-async function addRpcEndpoint(chainName: string, networkName: string) {
-  loading.value = true;
+async function addRpcEndpoint(chainName: string, networkName: string, networkId: number) {
+  loadedId.value = networkId;
   if (!rpcApiKeyStore.selectedId) {
     return;
   }
@@ -201,8 +250,7 @@ async function addRpcEndpoint(chainName: string, networkName: string) {
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
-
-  loading.value = false;
+  loadedId.value = null;
 }
 
 const dropdownOptions = [

@@ -12,7 +12,7 @@
           <n-upload
             v-else
             ref="uploadRef"
-            accept="image/png, image/jpeg"
+            accept="image/*"
             :show-file-list="false"
             :custom-request="e => onLogoUploaded(e, true)"
             @change="onUploadLogoChange"
@@ -33,7 +33,7 @@
           <n-upload
             v-if="!collectionStore.form.base.logo?.id"
             class="w-full"
-            accept="image/png, image/jpeg"
+            accept="image/*"
             :show-file-list="false"
             :custom-request="e => onLogoUploaded(e, true)"
           >
@@ -86,7 +86,7 @@
       <n-upload
         v-else
         ref="uploadRef"
-        accept="image/png, image/jpeg"
+        accept="image/*"
         :show-file-list="false"
         :custom-request="e => onLogoUploaded(e, false)"
         @change="onUploadChange"

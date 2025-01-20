@@ -9,14 +9,29 @@
         <ActionsComputingCloudFunctionsJobs />
         <TableComputingCloudFunctionJobs />
       </n-space>
-      <div v-else class="flex justify-center items-center h-full">
-        <div class="flex flex-col gap-4 mb-8 my-20 max-w-xl text-center">
+      <div v-else class="flex flex-col justify-center items-center h-full">
+        <n-space size="large" class="self-end mb-8">
+          <!-- View template -->
+          <n-button
+            size="small"
+            tag="a"
+            href="https://github.com/Apillon/cloud-function-template"
+            target="_blank"
+          >
+            <span class="icon-cloud-functions text-xl mr-2"></span>
+            {{ $t('computing.cloudFunctions.job.viewTemplate') }}
+          </n-button>
+          <BtnDocumentation
+            size="small"
+            href="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html"
+            hover-lighter
+          />
+        </n-space>
+        <div class="flex flex-col gap-4 mt-8 max-w-xl text-center">
           <h4>{{ $t('computing.cloudFunctions.job.title') }}</h4>
           <i18n-t keypath="computing.cloudFunctions.job.content" tag="p" />
 
-          <p class="my-5">{{ $t('general.or') }}</p>
-
-          <div class="my-auto mb-2">
+          <div class="my-4">
             <Btn @click="modalCreateJobVisible = true">
               {{ $t('computing.cloudFunctions.job.btnUpload') }}
             </Btn>

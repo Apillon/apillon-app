@@ -16,18 +16,11 @@
     </slot>
 
     <template #info>
-      <div v-if="cloudFunctionStore.active.activeJob_id">
-        <h4>
-          {{ $t('computing.cloudFunctions.endpoint') }}
-        </h4>
-        <div class="flex items-center gap-4 mt-2">
-          <TableEllipsis
-            class="bg-white px-4 py-[10px] rounded-lg !text-black max-w-sm lg:max-w-md xl:max-w-lg xxl:max-w-none"
-            color="text-black"
-            :text="gatewayUrl"
-          />
-        </div>
-      </div>
+      <ApiLink
+        v-if="cloudFunctionStore.active.activeJob_id"
+        :title="$t('computing.cloudFunctions.endpoint')"
+        :url="gatewayUrl"
+      />
     </template>
 
     <template #submenu>

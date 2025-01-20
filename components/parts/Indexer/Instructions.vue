@@ -1,29 +1,35 @@
 <template>
-  <div v-bind="$attrs" class="flex gap-y-8 flex-wrap pb-8">
-    <div class="lg:pr-6">
-      <SolutionContent class="lg:flex gap-4" inner-class="lg:w-1/2" :content="content" />
-
-      <h4 class="my-4">{{ $t('indexer.startNew') }}</h4>
-
-      <n-space>
-        <Btn @click="showModalNewIndexer = true">
-          {{ $t('dashboard.service.indexer.create') }}
-        </Btn>
-        <!-- <Btn
-                    type="secondary"
-                    inner-class="text-white flex items-center justify-center"
-                    href="https://wiki.apillon.io/web3-services/7-web3-compute.html"
-                  >
-                    <span class="icon-file text-xl mr-2"></span>
-                    <span>{{ $t('computing.cloudFunctions.documentation') }}</span>
-                  </Btn> -->
-      </n-space>
+  <div v-bind="$attrs" class="pb-8">
+    <div class="flex flex-col gap-2">
+      <h4>
+        {{ $t('indexer.instructions.title') }}
+      </h4>
+      <p>
+        {{ $t('indexer.instructions.content') }}
+      </p>
     </div>
+
+    <div class="text-body flex flex-row items-center gap-2 mt-2">
+      {{ $t('rpc.apiKey.powered') }}
+      <NuxtIcon name="logo/sqd" class="h-6 w-16 icon-auto text-white" alt="sqd" />
+    </div>
+    <SolutionContent :content="content" />
+
+    <h6 class="my-4">{{ $t('indexer.startNew') }}</h6>
+
+    <n-space>
+      <Btn @click="showModalNewIndexer = true">
+        {{ $t('indexer.new') }}
+      </Btn>
+      <BtnDocumentation
+        href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
+      />
+    </n-space>
   </div>
   <!-- Modal - Create Indexer -->
-  <modal v-model:show="showModalNewIndexer" :title="$t('dashboard.service.indexer.new')">
+  <IndexerSpendingWarning v-model:show="showModalNewIndexer">
     <FormIndexer />
-  </modal>
+  </IndexerSpendingWarning>
 </template>
 
 <script lang="ts" setup>

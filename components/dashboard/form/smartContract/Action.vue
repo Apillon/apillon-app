@@ -14,24 +14,39 @@
         :path="input.name"
         :label="labelInfoText(input.name, input?.description)"
       >
-        <n-input v-model:value="formData[input.name]" :maxlength="256" required />
+        <n-input
+          v-if="input.name === 'data'"
+          v-model:value="formData[input.name]"
+          :maxlength="256"
+          required
+        >
+          <template #prefix v-if="!formData[input.name]?.startsWith('0x')">
+            <span class="text-bodyDark">0x</span>
+          </template>
+        </n-input>
+        <n-input v-else v-model:value="formData[input.name]" :maxlength="256" required />
       </n-form-item>
     </template>
 
     <!-- Submit -->
-    <Btn v-if="owner" type="primary" class="w-full" :loading="loading" @click="handleSubmit">
-      {{ btnText ? btnText : read ? 'Query' : 'Execute' }}
-    </Btn>
-    <SmartContractsBtnSubmit
-      v-else
-      :owner="owner"
-      :loading="loading"
-      :btn-text="btnText ? btnText : read ? 'Query' : 'Execute'"
-      @submit="handleSubmit"
-    />
+    <div v-if="!read || fn.inputs.length > 0" class="mb-6">
+      <Btn v-if="owner" type="primary" class="w-full" :loading="loading" @click="handleSubmit">
+        {{ btnText ? btnText : read ? 'Query' : 'Execute' }}
+      </Btn>
+      <SmartContractsBtnSubmit
+        v-else
+        :owner="owner"
+        :loading="loading"
+        :btn-text="btnText ? btnText : read ? 'Query' : 'Execute'"
+        @submit="handleSubmit"
+      />
+    </div>
+    <div v-else-if="loading" class="relative h-4">
+      <Spinner :size="24" />
+    </div>
 
     <!-- Result -->
-    <Notification v-if="result !== undefined" type="success" class="mt-6" hide-icon>
+    <Notification v-if="result !== undefined" type="success" hide-icon>
       {{ result }}
     </Notification>
   </n-form>
@@ -77,20 +92,32 @@ const rules: NFormRules = props.args
       {}
     );
 
-const data = computed(() =>
-  props.args && props.args.length
-    ? props.args
-    : Object.keys(formData).length
-      ? Object.values(formData)
-      : props.owner
-        ? ['true']
-        : []
-);
+const prepareData = () => {
+  if (props.args && props.args.length) return props.args;
+  if (Object.keys(formData).length === 0) return [];
+
+  const parsedData: Record<string, any> = Object.assign({}, formData);
+  if ('data' in parsedData) {
+    parsedData.data = formData.data?.startsWith('0x') ? formData.data : `0x${formData?.data || ''}`;
+  }
+
+  props.fn.inputs.forEach(input => {
+    if (input.type === 'uint256[]' && parsedData[input.name] && formData[input.name]) {
+      parsedData[input.name] = (formData[input.name] || '').split(',').map(i => Number(i));
+    }
+  });
+  return Object.values(parsedData);
+};
+
+onMounted(() => {
+  if (props.read && props.fn.inputs.length === 0) {
+    execRead(props.fn.name);
+  }
+});
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e?.preventDefault();
-
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       errors.map(fieldErrors =>
@@ -125,13 +152,13 @@ async function execRead(methodName: string) {
       address: contractAddress,
       abi: abi.filter(a => a.inputs.length === props.fn.inputs.length),
       functionName: methodName,
-      args: data.value,
+      args: prepareData(),
     });
     result.value = `${res}`;
     message.success(t('dashboard.service.smartContracts.functions.executed'));
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
-    message.error(userFriendlyMsg(e));
+    message.error(contractError(e));
   } finally {
     loading.value = false;
   }
@@ -157,13 +184,14 @@ async function execWalletWrite(methodName: string) {
       address: contractAddress,
       abi,
       functionName: methodName,
-      args: data.value,
+      args: prepareData(),
       account: address.value,
     });
     result.value = `${res}`;
     message.success(t('dashboard.service.smartContracts.functions.executed'));
-  } catch (e) {
-    message.error(userFriendlyMsg(e));
+  } catch (e: any) {
+    console.error(e);
+    message.error(contractError(e));
   } finally {
     loading.value = false;
   }
@@ -177,7 +205,7 @@ async function execOwnerWrite(methodName: string) {
       endpoints.smartContractsCall(deployedContractStore.active.contract_uuid),
       {
         methodName,
-        methodArguments: data.value,
+        methodArguments: prepareData(),
       }
     );
     message.success(t('dashboard.service.smartContracts.functions.executed'));
@@ -190,7 +218,8 @@ async function execOwnerWrite(methodName: string) {
         }
       });
     }
-  } catch (e) {
+  } catch (e: any) {
+    console.error(e);
     message.error(userFriendlyMsg(e));
   } finally {
     loading.value = false;

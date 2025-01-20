@@ -141,9 +141,9 @@ export const useWebsiteStore = defineStore('website', {
       return {} as WebsiteInterface;
     },
 
-    async fetchDomainStatus(uuid: string): Promise<DomainInterface | null> {
+    async fetchDomainStatus(uuid: string): Promise<WebsiteInterface | null> {
       try {
-        const res = await $api.post<DomainResponse>(endpoints.websiteDomainStatus(uuid));
+        const res = await $api.post<WebsiteResponse>(endpoints.websiteDomainStatus(uuid));
         return res.data;
       } catch (error: any) {
         /** Show error message */

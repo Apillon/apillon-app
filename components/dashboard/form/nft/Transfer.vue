@@ -1,11 +1,7 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  NFT Mint Address -->
-    <n-form-item
-      path="address"
-      :label="$t('form.label.nft.transferAddress')"
-      :label-props="{ for: 'address' }"
-    >
+    <n-form-item path="address" :label="addressLabel" :label-props="{ for: 'address' }">
       <n-input
         v-model:value="formData.address"
         :input-props="{ id: 'address' }"
@@ -38,6 +34,7 @@ const emit = defineEmits(['submitSuccess']);
 const { t } = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
+const { addressLabel } = useCollection();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -49,7 +46,7 @@ const rules: NFormRules = {
   address: [
     {
       required: true,
-      message: t('validation.nftTransferAddressRequired'),
+      message: t('validation.nft.transferAddressRequired'),
     },
   ],
 };

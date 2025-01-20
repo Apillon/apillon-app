@@ -12,27 +12,25 @@
 
     <n-space size="large">
       <n-button size="small" @click="showModalEditEmbeddedWallet = true">
-        <span class="icon-edit text-xl text-primary mr-2"></span>
+        <span class="icon-edit mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('embeddedWallet.editIntegration') }}</span>
       </n-button>
 
       <!-- View documentation -->
-      <Btn
-        type="secondary"
+      <BtnDocumentation
         size="small"
-        inner-class="text-white flex items-center justify-center"
         href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
-      >
-        <span class="icon-file text-xl mr-2"></span>
-        {{ $t('embeddedWallet.viewDocumentation') }}
-      </Btn>
+        hover-lighter
+      />
 
-      <ModalCreditCosts :service="ServiceTypeName.WALLET" />
+      <ModalCreditCosts :service="ServiceTypeName.EMBEDDED_WALLET" />
     </n-space>
   </n-space>
 </template>
 
 <script lang="ts" setup>
+import { ServiceTypeName } from '~/lib/types/service';
+
 const embeddedWalletStore = useEmbeddedWalletStore();
 const showModalEditEmbeddedWallet = ref<boolean | null>(false);
 </script>

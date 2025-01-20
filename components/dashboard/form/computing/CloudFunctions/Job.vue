@@ -26,6 +26,7 @@
         path="name"
         :label="$t('form.label.cloudFunctions.jobName')"
         :label-props="{ for: 'name' }"
+        :required="true"
       >
         <n-input
           v-model:value="formData.name"
@@ -50,6 +51,14 @@
           clearable
         />
       </n-form-item>
+
+      <!-- Info text with icon for allowed file types -->
+      <n-alert type="info" class="mb-4">
+        <template #icon>
+          <span class="icon-info"></span>
+        </template>
+        {{ $t('form.placeholder.onlyJsFiles') }}
+      </n-alert>
 
       <!--  File -->
       <n-form-item
@@ -117,6 +126,7 @@ const formData = ref<FormCloudFunctions>({
 
 const rules: NFormRules = {
   // slots: ruleRequired(t('validation.cloudFunctions.slotsRequired')),
+  name: ruleRequired(t('validation.cloudFunctions.nameRequired')),
   file: ruleRequired(t('validation.cloudFunctions.fileRequired')),
 };
 
@@ -149,7 +159,7 @@ async function onFileChange({ file, onError, onFinish }: UploadCustomRequestOpti
   formData.value.file = {
     ...file,
     percentage: 0,
-    size: size,
+    size,
     timestamp: Date.now(),
     onFinish,
     onError,

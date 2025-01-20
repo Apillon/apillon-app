@@ -251,27 +251,26 @@ watch(
     debouncedSearchFilter();
   }
 );
-const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
-
 watch(
   () => postStore.archive.search,
   _ => {
     postStore.archive.loading = true;
-    debouncedSearchArchiveFilter();
+    debouncedSearchFilter();
   }
 );
-const debouncedSearchArchiveFilter = useDebounceFn(handlePageArchiveChange, 500);
+const debouncedSearchFilter = useDebounceFn(handlePageChange, 500);
 
 /** On page change, load data */
 async function handlePageChange(page = 1, limit = PAGINATION_LIMIT) {
-  await postStore.fetchPosts(page, limit);
-  postStore.pagination.page = page;
-  postStore.pagination.pageSize = limit;
-}
-async function handlePageArchiveChange(page = 1, limit = PAGINATION_LIMIT) {
-  await postStore.getPostArchive(page, limit);
-  postStore.archive.pagination.page = page;
-  postStore.archive.pagination.pageSize = limit;
+  if (props.archive) {
+    await postStore.getPostArchive(page, limit);
+    postStore.archive.pagination.page = page;
+    postStore.archive.pagination.pageSize = limit;
+  } else {
+    await postStore.fetchPosts(page, limit);
+    postStore.pagination.page = page;
+    postStore.pagination.pageSize = limit;
+  }
 }
 
 async function selectPost() {
@@ -296,9 +295,7 @@ function handleColumnChange(selectedValues: Array<string>) {
 
 async function deletePost() {
   if (currentRow.value && (await deleteItem(ItemDeleteKey.POST, currentRow.value.post_uuid))) {
-    postStore.items = postStore.items.filter(
-      item => item.post_uuid !== currentRow.value?.post_uuid
-    );
+    postStore.items = postStore.items.filter(item => item.post_uuid !== currentRow.value?.post_uuid);
 
     sessionStorage.removeItem(LsCacheKeys.POSTS);
     sessionStorage.removeItem(LsCacheKeys.POST_ARCHIVE);
@@ -316,9 +313,7 @@ async function restorePost() {
   try {
     await $api.patch<PostResponse>(endpoints.postActivate(currentRow.value?.post_uuid));
 
-    postStore.archive.items = postStore.archive.items.filter(
-      item => item.post_uuid !== currentRow.value?.post_uuid
-    );
+    postStore.archive.items = postStore.archive.items.filter(item => item.post_uuid !== currentRow.value?.post_uuid);
 
     sessionStorage.removeItem(LsCacheKeys.POSTS);
     sessionStorage.removeItem(LsCacheKeys.POST_ARCHIVE);

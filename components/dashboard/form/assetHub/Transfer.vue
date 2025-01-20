@@ -89,13 +89,16 @@ async function transfer() {
       props.assetId,
       formData.value.address
     );
+    if (txHash.value) {
+      message.success(t('form.success.assetTransferred'));
+      sessionStorage.removeItem(LsCacheKeys.ASSETS);
 
-    message.success(t('form.success.assetTransferred'));
-
-    sessionStorage.removeItem(LsCacheKeys.ASSETS);
-
-    /** Emit events */
-    emit('submitSuccess');
+      /** Emit events */
+      emit('submitSuccess');
+    } else {
+      message.warning(t('error.general'));
+      emit('close');
+    }
   } catch (error: any) {
     if (error?.message) {
       message.error(error?.message);

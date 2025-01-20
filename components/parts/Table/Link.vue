@@ -8,7 +8,7 @@
             {{ textOrLink }}
           </span>
           <template #tooltip>
-            {{ link }}
+            {{ tooltip ?? link }}
           </template>
         </n-ellipsis>
       </a>
@@ -26,6 +26,7 @@ const props = defineProps({
   link: { type: String, default: '' },
   text: { type: String, default: '' },
   color: { type: String, default: 'text-body' },
+  tooltip: { type: String, default: undefined },
 });
 
 const textOrLink = computed(() => {

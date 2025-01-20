@@ -1,21 +1,22 @@
 <template>
-  <Dashboard :loading="pageLoading" :mainnet="assetHubStore.mainnet">
+  <Dashboard :loading="pageLoading" :mainnet="assetHubStore.mainnet" full-height>
     <template #heading>
       <HeaderAssetHub :title="$t('dashboard.nav.assetHub')" switcher />
     </template>
     <slot>
-      <div
-        v-if="!assetHubStore.account"
-        class="flex gap-4 items-center py-2 px-5 border-1 border-primary max-w-3xl lg:gap-10 xl:gap-20"
-      >
-        <div class="flex items-center mb-2">
-          <span class="icon-info"></span>
-          <p class="ml-2">{{ $t('dashboard.service.assetHub.connect') }}</p>
-        </div>
+      <div v-if="!assetHubStore.account" class="h-full">
+        <div
+          class="flex gap-4 items-center py-2 px-5 border-1 border-primary max-w-3xl lg:gap-10 xl:gap-20"
+        >
+          <div class="flex items-center mb-2">
+            <span class="icon-info"></span>
+            <p class="ml-2">{{ $t('dashboard.service.assetHub.connect') }}</p>
+          </div>
 
-        <Btn type="primary" :loading="loadingWallet" @click="modalWalletSelectVisible = true">
-          {{ $t('dashboard.service.assetHub.connectWallet') }}
-        </Btn>
+          <Btn type="primary" :loading="loadingWallet" @click="modalWalletSelectVisible = true">
+            {{ $t('dashboard.service.assetHub.connectWallet') }}
+          </Btn>
+        </div>
       </div>
 
       <div
@@ -51,6 +52,7 @@
     <AuthWalletDot
       :action-text="$t('auth.wallet.connect.btn')"
       :loading="loadingWallet"
+      :disconnect="false"
       @sign="walletConnect"
     />
   </modal>

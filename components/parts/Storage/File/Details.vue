@@ -9,7 +9,7 @@
         <div>
           <strong>{{ file.uuid }}</strong>
         </div>
-        <button class="text-primary btn-small" @click="copyToClipboard(file.uuid)">
+        <button class="btn-small text-primary" @click="copyToClipboard(file.uuid)">
           <strong>{{ $t('dashboard.clipboard.copyUuid') }}</strong>
         </button>
       </div>
@@ -22,7 +22,7 @@
         <div>
           <strong>{{ file.CID }}</strong>
         </div>
-        <button class="text-primary btn-small" @click="copyToClipboard(file.CID)">
+        <button class="btn-small text-primary" @click="copyToClipboard(file.CID)">
           <strong>{{ $t('dashboard.clipboard.copyCid') }}</strong>
         </button>
       </div>
@@ -35,7 +35,7 @@
         <div>
           <strong>{{ file.CIDv1 }}</strong>
         </div>
-        <button class="text-primary btn-small" @click="copyToClipboard(file.CIDv1)">
+        <button class="btn-small text-primary" @click="copyToClipboard(file.CIDv1)">
           <strong>{{ $t('dashboard.clipboard.copyCid') }}v1</strong>
         </button>
       </div>
@@ -50,7 +50,7 @@
             <strong>{{ file.link }}</strong>
           </a>
         </div>
-        <button class="text-primary btn-small" @click="copyToClipboard(file.link)">
+        <button class="btn-small text-primary" @click="copyToClipboard(file.link)">
           <strong>{{ $t('dashboard.clipboard.copyLink') }}</strong>
         </button>
       </div>
@@ -153,7 +153,11 @@ async function getFileDetails(uuidOrCID?: string) {
 /** Get File details from CRUST */
 async function getCrustFileDetails(cid: string) {
   if (!(cid in fileStore.crust)) {
-    fileStore.crust[cid] = await fileStore.fetchFileDetailsFromCrust(cid);
+    try {
+      fileStore.crust[cid] = await fileStore.fetchFileDetailsFromCrust(cid);
+    } catch (e) {
+      console.error(e);
+    }
   }
   crustFileDetails.value = fileStore.crust[cid] as FileCrust;
 }

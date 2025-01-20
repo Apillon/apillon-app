@@ -37,6 +37,8 @@
             </Btn>
           </NuxtLink>
         </template>
+
+        <slot />
       </div>
     </div>
     <div v-if="showFooter" class="relative border-t-1 border-bg-lighter py-6 px-5 mt-8">

@@ -6,31 +6,51 @@
     autocomplete="off"
     @submit.prevent="handleSubmit"
   >
-    <n-grid v-for="(item, key) in formData" :key="key" class="items-end" :cols="2" :x-gap="32">
-      <!--  Variable key -->
-      <n-form-item-gi
-        class="mb-4"
-        :class="{ 'hide-feedback': item.key || !formErrors }"
-        :path="`${key}.key`"
-        :label="$t('form.label.cloudFunctions.varKey')"
-        :show-label="key === 0"
-      >
-        <n-input v-model:value="item.key" :placeholder="$t('general.typeHere')" clearable />
-      </n-form-item-gi>
+    <n-grid class="items-end" :span="24" :x-gap="24" :y-gap="16">
+      <template v-for="(item, key) in formData">
+        <!--  Variable key -->
+        <n-form-item-gi
+          :class="{ 'hide-feedback': item.key || !formErrors }"
+          :path="`${key}.key`"
+          :label="$t('form.label.cloudFunctions.varKey')"
+          :show-label="key === 0"
+          :span="10"
+        >
+          <n-input v-model:value="item.key" :placeholder="$t('general.typeHere')" clearable />
+        </n-form-item-gi>
 
-      <!--  Variable value -->
-      <n-form-item-gi
-        class="mb-4"
-        :class="{ 'hide-feedback': item.key || !formErrors }"
-        :path="`${key}.value`"
-        :label="$t('form.label.cloudFunctions.varValue')"
-        :show-label="key === 0"
-      >
-        <n-input v-model:value="item.value" :placeholder="$t('general.typeHere')" clearable />
-      </n-form-item-gi>
+        <!--  Variable value -->
+        <n-form-item-gi
+          :class="{ 'hide-feedback': item.key || !formErrors }"
+          :path="`${key}.value`"
+          :label="$t('form.label.cloudFunctions.varValue')"
+          :show-label="key === 0"
+          :span="10"
+        >
+          <n-input v-model:value="item.value" :placeholder="$t('general.typeHere')" clearable />
+        </n-form-item-gi>
+
+        <!--  Variable value -->
+        <n-form-item-gi
+          :class="{ 'hide-feedback': item.key || !formErrors }"
+          :show-label="key === 0"
+          :span="2"
+        >
+          <n-button
+            v-if="key > 0"
+            class="w-10"
+            size="small"
+            type="error"
+            ghost
+            @click="formData.splice(key, 1)"
+          >
+            <span class="icon-delete text-xl"></span>
+          </n-button>
+        </n-form-item-gi>
+      </template>
     </n-grid>
 
-    <div class="text-right mb-8">
+    <div class="text-right mt-4 mb-8">
       <n-button size="small" @click="formData.push({ key: '', value: '' })">
         <span class="icon-add text-xl mr-2 text-primary"></span>
         <span class="text-primary">{{ $t('computing.cloudFunctions.variable.addRow') }}</span>

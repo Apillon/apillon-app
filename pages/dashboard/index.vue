@@ -96,10 +96,6 @@
         <p>Happy Web3 building!</p>
       </div>
     </slot>
-
-    <template v-if="false && isFeatureEnabled(Feature.REFERRAL, authStore.getUserRoles())" #learn>
-      <ReferralBanner class="mt-8" />
-    </template>
   </Dashboard>
 </template>
 

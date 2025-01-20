@@ -1,5 +1,8 @@
 <template>
-  <strong class="w-6 h-6 leading-5 text-xs rounded-full border-1 text-center" :class="iconClasses">
+  <strong
+    class="inline-flex-cc w-6 h-6 leading-5 text-xs rounded-full border-1"
+    :class="iconClasses"
+  >
     {{ number }}
   </strong>
 </template>

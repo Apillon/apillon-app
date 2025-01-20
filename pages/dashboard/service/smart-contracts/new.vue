@@ -6,17 +6,17 @@
 
     <slot>
       <div class="pb-8">
-        <div class="max-w-lg mb-8">
-          <p>{{ $t('dashboard.service.smartContracts.description') }}</p>
+        <div class="mb-8 max-w-lg">
+          <p>{{ $t('dashboard.service.smartContracts.description2') }}</p>
         </div>
         <div class="grid gap-4 md:grid-cols-services">
           <SmartContractsCard v-for="(contract, key) in smartContractStore.items" :key="key">
-            <div class="flex items-center gap-2 mb-4 text-green">
+            <div class="mb-4 flex items-center gap-2 text-green">
               <span class="icon-security"></span>
               {{ $t('dashboard.service.smartContracts.audited') }}
             </div>
-            <div class="flex items-center gap-2 mb-4">
-              <span class="text-2xl icon-file"></span>
+            <div class="mb-4 flex items-center gap-2">
+              <span class="icon-file text-2xl"></span>
               <h5>{{ contract.name }}</h5>
             </div>
             <p>{{ contract.description }}</p>

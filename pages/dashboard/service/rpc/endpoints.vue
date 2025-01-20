@@ -5,7 +5,7 @@
       <Heading>
         <slot>
           <div class="flex gap-4 items-center">
-            <NuxtLink :to="{ name: 'dashboard-service-rpc' }">
+            <NuxtLink v-if="rpcEndpointStore.hasFavorites" :to="{ name: 'dashboard-service-rpc' }">
               <span class="icon-back text-2xl align-sub"></span>
             </NuxtLink>
             <div>
@@ -15,16 +15,13 @@
         </slot>
       </Heading>
     </template>
-    <template v-if="rpcApiKeyStore.selectedId">
-      <slot>
-        <ActionsRpcEndpoint />
-      </slot>
-      <slot>
-        <TableRpcEndpoint :rpcEndpoints="rpcEndpointStore.items" :allowFavoriteCheck="true" />
-      </slot>
-    </template>
+
+    <n-space v-if="rpcApiKeyStore.selectedId" class="pb-8" :size="32" vertical>
+      <ActionsRpcEndpoint />
+      <TableRpcEndpoint :rpcEndpoints="rpcEndpointStore.items" :allowFavoriteCheck="true" />
+    </n-space>
     <template v-else>
-      <RpcNoApiKeys />
+      <RpcNoEndpoints />
     </template>
   </Dashboard>
 </template>

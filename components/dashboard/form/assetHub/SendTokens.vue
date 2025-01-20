@@ -117,11 +117,15 @@ async function sendTokens() {
       formData.value.address,
       nToBigInt(Number(formData.value.amount) * Math.pow(10, Number(assetHubStore.active.decimals)))
     );
+    if (txHash.value) {
+      message.success(t('form.success.assetSend'));
 
-    message.success(t('form.success.assetSend'));
-
-    /** Emit events */
-    emit('submitSuccess');
+      /** Emit events */
+      emit('submitSuccess');
+    } else {
+      message.warning(t('error.general'));
+      emit('close');
+    }
   } catch (error: any) {
     if (error?.message) {
       message.error(error?.message);

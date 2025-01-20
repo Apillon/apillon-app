@@ -6,12 +6,15 @@
     :columns="columns"
     :data="data"
     :loading="rpcEndpointStore.loading"
+    :theme-overrides="tableOverrides"
     :max-height="250"
     :row-key="rowKey"
   />
 </template>
 
 <script lang="ts" setup>
+import type { DataTableProps } from 'naive-ui';
+
 const props = defineProps({
   rpcEndpoints: { type: Array<RpcEndpointInterface | RpcFavoriteEndpointInterface>, default: [] },
   allowFavoriteCheck: { type: Boolean, default: false },
@@ -56,4 +59,10 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
 
 const columns = createColumns();
 const rowKey = (row: RpcEndpointInterface) => row.networkId;
+
+/** Theme override */
+type TableThemeOverrides = NonNullable<DataTableProps['themeOverrides']>;
+const tableOverrides: TableThemeOverrides = {
+  tdColor: 'transparent',
+};
 </script>

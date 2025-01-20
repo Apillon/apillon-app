@@ -6,11 +6,11 @@ export type ItemDelete =
   | CloudFunctionInterface
   | CollectionInterface
   | ContractInterface
-  | DomainInterface
   | IpnsInterface
   | JobInterface
   | PostInterface
   | ServiceInterface
+  | SmartContractInterface
   | RpcApiKeyInterface
   | RpcEndpointInterface
   | WebsiteBaseInterface;
@@ -31,6 +31,7 @@ export enum ItemDeleteKey {
   RPC_API_KEY = 'rpcApiKey',
   RPC_ENDPOINT = 'rpcEndpoint',
   SERVICE = 'service',
+  SMART_CONTRACT = 'smartContract',
   SPACE = 'space',
   WEBSITE = 'website',
 }
@@ -92,6 +93,8 @@ export default function useDelete() {
         return endpoints.posts(`${id}`);
       case ItemDeleteKey.SERVICE:
         return endpoints.services(`${id}`);
+      case ItemDeleteKey.SMART_CONTRACT:
+        return endpoints.smartContractsDeployed(`${id}`);
       case ItemDeleteKey.SPACE:
         return endpoints.spaces(`${id}`);
       case ItemDeleteKey.WEBSITE:
@@ -158,10 +161,7 @@ export default function useDelete() {
       case ItemDeleteKey.DIRECTORY:
         return endpoints.directory((item as BucketItemInterface).uuid);
       case ItemDeleteKey.FILE:
-        return endpoints.storageFileDelete(
-          bucketStore.bucketUuid,
-          (item as BucketItemInterface).uuid
-        );
+        return endpoints.storageFileDelete(bucketStore.bucketUuid, (item as BucketItemInterface).uuid);
       case ItemDeleteKey.IPNS:
         return endpoints.ipns(bucketStore.selected, (item as IpnsInterface).ipns_uuid);
       case ItemDeleteKey.JOB:
@@ -170,6 +170,8 @@ export default function useDelete() {
         return endpoints.posts((item as PostInterface).post_uuid);
       case ItemDeleteKey.SERVICE:
         return endpoints.services((item as ServiceInterface).service_uuid);
+      case ItemDeleteKey.SMART_CONTRACT:
+        return endpoints.smartContractsDeployed((item as SmartContractInterface).contract_uuid);
       case ItemDeleteKey.SPACE:
         return endpoints.spaces((item as ChatInterface).space_uuid);
       case ItemDeleteKey.WEBSITE:
@@ -194,7 +196,7 @@ export default function useDelete() {
       return ItemDeleteKey.BUCKET;
     } else if ('collection_uuid' in item) {
       return ItemDeleteKey.COLLECTION;
-    } else if ('contract_uuid' in item) {
+    } else if ('contract_uuid' in item && 'contractAbi_id' in item) {
       return ItemDeleteKey.CONTRACT;
     } else if ('function_uuid' in item) {
       return ItemDeleteKey.CLOUD_FUNCTION;
@@ -202,6 +204,8 @@ export default function useDelete() {
       return ItemDeleteKey.JOB;
     } else if ('post_uuid' in item) {
       return ItemDeleteKey.POST;
+    } else if ('contract_uuid' in item) {
+      return ItemDeleteKey.SMART_CONTRACT;
     } else if ('space_uuid' in item) {
       return ItemDeleteKey.SPACE;
     } else if ('website_uuid' in item) {

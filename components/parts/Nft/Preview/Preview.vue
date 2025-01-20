@@ -47,7 +47,7 @@
         size="small"
         @click="addNewNft"
       >
-        {{ $t('nft.add') }}
+        <strong class="inline-block px-1">{{ $t('nft.addNfts') }}</strong>
       </Btn>
     </div>
   </n-scrollbar>

@@ -17,13 +17,7 @@
 
     <n-space size="large">
       <!-- Refresh -->
-      <n-button
-        size="small"
-        :loading="indexerStore.loading"
-        @click="
-          indexerStore.fetchIndexers(indexerStore.pagination.page, indexerStore.pagination.pageSize)
-        "
-      >
+      <n-button size="small" :loading="indexerStore.loading" @click="indexerStore.fetchIndexers()">
         <span class="icon-refresh text-xl mr-2"></span>
         {{ $t('general.refresh') }}
       </n-button>
@@ -31,24 +25,14 @@
       <!-- Create new indexer -->
       <n-button size="small" :disabled="authStore.isAdmin()" @click="showModalNewIndexer = true">
         <span class="icon-file text-xl text-primary mr-2"></span>
-        <span class="text-primary">{{ $t('dashboard.service.indexer.new') }}</span>
+        <span class="text-primary">{{ $t('indexer.new') }}</span>
       </n-button>
-      <!-- Show Docs -->
-      <Btn
-        size="small"
-        type="secondary"
-        inner-class="text-white flex items-center justify-center"
-        href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
-      >
-        <span class="icon-file text-xl mr-2"></span>
-        <span>{{ $t('dashboard.service.indexer.viewDocumentation') }}</span>
-      </Btn>
     </n-space>
   </n-space>
   <!-- Modal - Create Indexer -->
-  <modal v-model:show="showModalNewIndexer" :title="$t('dashboard.service.indexer.new')">
+  <IndexerSpendingWarning v-model:show="showModalNewIndexer">
     <FormIndexer />
-  </modal>
+  </IndexerSpendingWarning>
 </template>
 
 <script lang="ts" setup>

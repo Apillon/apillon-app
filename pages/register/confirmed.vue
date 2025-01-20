@@ -15,14 +15,14 @@
 </template>
 
 <script lang="ts" setup>
-const $i18n = useI18n();
+const { t } = useI18n();
 const { query } = useRoute();
 
 definePageMeta({
   layout: 'auth',
 });
 useHead({
-  title: $i18n.t('auth.signup.emailConfirmed'),
+  title: t('auth.signup.emailConfirmed'),
 });
 
 const isWalletRegister = computed(() => query.walletLogin === 'true');

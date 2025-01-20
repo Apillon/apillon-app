@@ -67,6 +67,16 @@ export default defineNuxtConfig({
 
   nitro: {
     compressPublicAssets: true,
+    routeRules: {
+      '/**': {
+        headers: {
+          'X-Frame-Options': 'SAMEORIGIN',
+          'X-Content-Type-Options': 'nosniff',
+          'Referrer-Policy': 'no-referrer',
+          'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+        },
+      },
+    },
   },
 
   app: {
@@ -117,7 +127,7 @@ export default defineNuxtConfig({
       {
         code: 'en',
         name: 'English',
-        file: 'en.json',
+        file: 'en/index.ts',
       },
     ],
     detectBrowserLanguage: {

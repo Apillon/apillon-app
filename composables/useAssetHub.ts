@@ -74,7 +74,7 @@ export default function assetHub() {
 
   const refreshAsset = async (assetId: number) => {
     await sleep(2000);
-    const updatedAsset = await assetHubStore.fetchAsset(assetId);
+    const updatedAsset = await assetHubStore.fetchAssets();
 
     Object.assign(assetHubStore.active, updatedAsset);
     assetHubStore.items.forEach(item => {
@@ -84,8 +84,27 @@ export default function assetHub() {
     });
   };
 
+  const refreshAssets = async (assetId: number, network: string) => {
+    await sleep(2000);
+
+    assetHubStore.mainnet = network === assetHubNetworks.assetHub.rpc;
+    const newAsset = await assetHubStore.fetchAsset(assetId);
+
+    if (newAsset) {
+      assetHubStore.active = newAsset;
+
+      if (network === assetHubNetworks.westend.rpc) {
+        assetHubStore.itemsTestnet.push(newAsset);
+      } else {
+        assetHubStore.itemsMainnet.push(newAsset);
+      }
+    }
+  };
+
   async function reconnectWallet() {
     await sleep(200);
+    const userWallet = authStore.wallet.address || authStore.user.wallet;
+
     if (assetHubStore?.account?.address && assetHubStore?.account?.wallet) {
       await cryptoWaitReady();
 
@@ -100,10 +119,8 @@ export default function assetHub() {
       } else {
         assetHubStore.account = null;
       }
-    } else if (authStore.wallet.address && authStore.wallet.accounts.length > 0) {
-      assetHubStore.account = authStore.wallet.accounts.find(
-        acc => acc.address === authStore.wallet.address
-      );
+    } else if (userWallet && authStore.wallet.accounts.length > 0) {
+      assetHubStore.account = authStore.wallet.accounts.find(acc => acc.address === userWallet);
     } else {
       assetHubStore.account = null;
     }
@@ -137,6 +154,7 @@ export default function assetHub() {
     initClient,
     reconnectWallet,
     refreshAsset,
+    refreshAssets,
     walletConnect,
   };
 }

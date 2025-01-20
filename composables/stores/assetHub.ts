@@ -74,9 +74,11 @@ export const useAssetHubStore = defineStore('assetHub', {
       this.search = '';
     },
 
-    async initClient(mainnet?: boolean) {
+    async initClient(mainnet?: boolean, showMsg = true) {
       if (!this.account) {
-        window.$message.warning(window.$i18n.t('dashboard.service.assetHub.connect'));
+        if(showMsg){
+          window.$message.warning(window.$i18n.t('dashboard.service.assetHub.connect'));
+        }
         return null;
       }
       await cryptoWaitReady();
@@ -124,7 +126,7 @@ export const useAssetHubStore = defineStore('assetHub', {
     async fetchAssets(mainnet?: boolean): Promise<AssetInterface[]> {
       this.loading = true;
 
-      const assetHubClient = await this.initClient(mainnet);
+      const assetHubClient = await this.initClient(mainnet, false);
       if (!assetHubClient || !this.account) return [];
 
       const loadedAssets = await assetHubClient.getAssets();
@@ -157,7 +159,7 @@ export const useAssetHubStore = defineStore('assetHub', {
     },
 
     async fetchAsset(assetId: number): Promise<AssetInterface> {
-      const assetHubClient = await this.initClient();
+      const assetHubClient = await this.initClient(this.mainnet, false);
       if (!assetHubClient || !this.accountConnected) return {} as AssetInterface;
 
       const metadata = await assetHubClient.getAssetMetadata(assetId);

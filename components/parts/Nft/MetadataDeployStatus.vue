@@ -33,6 +33,8 @@ function getStatus(status: number): TagType {
   switch (status) {
     case PrepareCollectionMetadataStep.UPLOAD_METADATA_TO_IPFS:
       return 'info';
+    case PrepareCollectionMetadataStep.PUBLISH_TO_IPNS:
+      return 'info';
     case PrepareCollectionMetadataStep.METADATA_SUCCESSFULLY_PREPARED:
       return 'success';
     default:

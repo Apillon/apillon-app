@@ -171,6 +171,11 @@ const isUpload = computed<Boolean>(() => {
     props.env !== DeploymentEnvironment.STAGING && props.env !== DeploymentEnvironment.PRODUCTION
   );
 });
+const hasActiveDeployments = computed<Boolean>(() => {
+  return deploymentStore.staging.some(
+    deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL
+  );
+});
 
 const deployOptions = ref([
   {
@@ -269,7 +274,13 @@ async function deploy(env: number) {
  * */
 function deployWebsite(env: number) {
   deployEnv.value = env;
-  if (bucketStore.folder.items.length === 0) {
+  if (
+    bucketStore.folder.items.length === 0 &&
+    env === DeploymentEnvironment.PRODUCTION &&
+    hasActiveDeployments.value
+  ) {
+    message.warning(t('validation.hosting.waitActiveDeployment'));
+  } else if (bucketStore.folder.items.length === 0) {
     message.warning(t('error.NO_FILES_TO_DEPLOY'));
   } else if (websiteStore.missingHtml) {
     message.error(t('validation.hosting.missingHtml'));

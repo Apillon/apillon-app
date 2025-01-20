@@ -1,0 +1,21 @@
+{
+    "referral": {
+        "referres": {
+          "active": "Active",
+          "disclaimer": "Disclaimer: To prevent users from duplicating accounts and referring to themselves, Apillon will measure the activity of referred accounts and reward them accordingly. It will also monitor potential bot activity or users creating multiple accounts. Accounts detected as either bot or self-referral will be excluded from receiving NCTR in the Airdrop.",
+          "header": "Your referees",
+          "info": "See who registered to Apillon using your referral link. \n\nActive users are those who actively use the Apillon platform.",
+          "invite": "Invite other developers to score",
+          "link": "Your referral link",
+          "linkDesc": "Share the link below with your dev peers and have them register to the Apillon platform.",
+          "name": "Email",
+          "github": "GitHub profile",
+          "joined": "Joined"
+        },
+        "shoutout": {
+          "title": "Help us with the shoutout",
+          "content": "Spread the word about Apillon and its killer features of the platform. Follow us on Twitter,    retweet the posts and earn reward points."
+        },
+        "title": "Referral program"
+      }
+}

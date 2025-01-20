@@ -1,5 +1,4 @@
 <template>
-  <!-- <span>pan</span> -->
   <n-tag
     v-bind="$attrs"
     :type="getIndexerStatus(indexerStatus)"

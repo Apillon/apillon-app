@@ -9,7 +9,7 @@
     </template>
     <slot>
       <div class="pb-8">
-        <div class="max-w-lg mb-8">
+        <div class="mb-8 max-w-lg">
           <p>{{ $t('dashboard.service.description') }}</p>
         </div>
         <div class="grid gap-4 md:grid-cols-3">

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-[420px]">
+  <div class="w-full">
     <div class="px-3 py-2 rounded-lg" :class="bgClass">
       <h4 class="my-3">
         {{ title }}

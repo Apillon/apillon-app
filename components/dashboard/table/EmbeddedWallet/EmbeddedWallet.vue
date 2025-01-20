@@ -2,16 +2,11 @@
   <n-data-table
     :bordered="false"
     :columns="columns"
-    :data="embeddedWallets"
+    :data="items"
     :loading="embeddedWalletStore.loading"
-    :pagination="embeddedWalletStore.pagination"
+    :pagination="createPagination(false)"
     :row-key="rowKey"
     :row-props="rowProps"
-    @update:page="(page: number) => handlePageChange(page, embeddedWalletStore.pagination.pageSize)"
-    @update:page-size="
-      (pageSize: number) => handlePageChange(embeddedWalletStore.pagination.page, pageSize)
-    "
-    remote
   />
   <!-- Modal - Edit embedded wallet -->
   <modal v-model:show="modalEditEmbeddedWalletVisible" :title="$t('embeddedWallet.edit')">
@@ -26,7 +21,6 @@
 import { NButton, NDropdown } from 'naive-ui';
 
 defineProps({
-  embeddedWallets: { type: Array<EmbeddedWalletInterface>, default: [] },
   archive: { type: Boolean, default: false },
 });
 
@@ -36,6 +30,11 @@ const dataStore = useDataStore();
 const embeddedWalletStore = useEmbeddedWalletStore();
 const modalEditEmbeddedWalletVisible = ref<boolean>(false);
 
+const items = computed(() => {
+  return embeddedWalletStore.items.filter(item =>
+    item.title.toLowerCase().includes(embeddedWalletStore.search.toLowerCase())
+  );
+});
 /**
  * Dropdown Actions
  */
@@ -142,15 +141,5 @@ function rowProps(row: EmbeddedWalletInterface) {
       }
     },
   };
-}
-
-/** On page change, load data */
-async function handlePageChange(page: number = 1, limit: number = PAGINATION_LIMIT) {
-  if (!embeddedWalletStore.loading) {
-    await embeddedWalletStore.fetchEmbeddedWallets(page, limit);
-
-    embeddedWalletStore.pagination.page = page;
-    embeddedWalletStore.pagination.pageSize = limit;
-  }
 }
 </script>

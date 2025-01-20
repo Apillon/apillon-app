@@ -7,8 +7,10 @@
       />
     </template>
     <slot>
-      <ActionsIndexerLogs />
-      <TableIndexerLogs />
+      <n-space class="pb-8" :size="32" vertical>
+        <ActionsIndexerLogs />
+        <TableIndexerLogs />
+      </n-space>
     </slot>
   </Dashboard>
 </template>

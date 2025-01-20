@@ -1,7 +1,7 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
     <n-space size="large">
-      <div class="min-w-[11rem] w-[20vw] max-w-xs">
+      <div class="w-[20vw] min-w-[11rem] max-w-xs">
         <n-input
           v-model:value="bucketStore.filter.search"
           type="text"
@@ -19,7 +19,7 @@
       <select-options
         v-model:value="bucketStore.filter.bucketType"
         :options="bucketTypes"
-        class="min-w-[11rem] w-[20vw] max-w-xs"
+        class="w-[20vw] min-w-[11rem] max-w-xs"
         size="small"
         :placeholder="$t('form.placeholder.bucketType')"
         filterable
@@ -48,14 +48,14 @@
         </n-tooltip>
 
         <!-- Separator -->
-        <n-divider class="h-full mx-4" vertical />
+        <n-divider class="mx-4 h-full" vertical />
       </template>
 
       <ModalCreditCosts :service="ServiceTypeName.STORAGE" />
 
       <!-- Refresh storage content -->
       <n-button size="small" :loading="bucketStore.loading" @click="bucketStore.fetchBuckets()">
-        <span class="icon-refresh text-xl mr-2"></span>
+        <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('storage.refresh') }}
       </n-button>
 
@@ -66,7 +66,7 @@
         :disabled="authStore.isAdmin()"
         @click="showModalNewBucket = true"
       >
-        <span class="icon-create-folder text-xl text-primary mr-2"></span>
+        <span class="icon-create-folder mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('storage.bucket.new') }}</span>
       </n-button>
     </n-space>
@@ -74,15 +74,13 @@
 
   <!-- Modal - Create bucket -->
   <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
-    <FormStorageBucket
-      @submit-success="showModalNewBucket = false"
-      @create-success="onBucketCreated"
-    />
+    <FormStorageBucket @submit-success="showModalNewBucket = false" @create-success="onBucketCreated" />
   </modal>
 </template>
 
 <script lang="ts" setup>
 import type { SelectOption } from 'naive-ui';
+import { ServiceTypeName } from '~/lib/types/service';
 
 const emit = defineEmits(['onBucketDelete']);
 

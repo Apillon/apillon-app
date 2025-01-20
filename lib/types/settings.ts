@@ -12,6 +12,7 @@ export enum Permission {
   COMPUTING = 5,
   SOCIAL = 6,
   EMBEDDED_WALLET = 7,
+  CONTRACTS = 8,
   RPC = 9,
   INDEXING = 10,
 }
@@ -98,7 +99,7 @@ declare global {
   interface EmbeddedWalletInterface extends BaseObjectInterface {
     integration_uuid: string;
     title: string;
-    numOfSignatures: number;
+    numOfSignatures?: number | null;
     usage: EmbeddedWalletUsage[];
     whitelistedDomains: string | null;
   }

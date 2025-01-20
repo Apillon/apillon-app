@@ -106,9 +106,7 @@ const Endpoints = {
     return `/buckets/${bucketUuid}/cancel-deletion`;
   },
   bucketWebhook: (bucketUuid: string, webhookId?: number) => {
-    return webhookId
-      ? `/buckets/${bucketUuid}/webhook/${webhookId}`
-      : `/buckets/${bucketUuid}/webhook`;
+    return webhookId ? `/buckets/${bucketUuid}/webhook/${webhookId}` : `/buckets/${bucketUuid}/webhook`;
   },
 
   /** Directories */
@@ -126,9 +124,7 @@ const Endpoints = {
   storage: '/storage/',
   storageInfo: '/storage/info',
   storageFileUpload: (bucketUuid: string, sessionUuid?: string) => {
-    return sessionUuid
-      ? `/storage/${bucketUuid}/file-upload/${sessionUuid}/end`
-      : `/storage/${bucketUuid}/file-upload`;
+    return sessionUuid ? `/storage/${bucketUuid}/file-upload/${sessionUuid}/end` : `/storage/${bucketUuid}/file-upload`;
   },
   storageFilesUpload: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/files-upload`;
@@ -166,6 +162,7 @@ const Endpoints = {
   /** IPFS */
   ipfsInfo: '/storage/ipfs-cluster-info',
   ipfsLink: '/storage/link-on-ipfs/',
+  ipfsLinks: '/storage/link-on-ipfs-multiple',
 
   /**
    * Hosting
@@ -309,6 +306,9 @@ const Endpoints = {
   smartContractsCall: (contractUuid: string) => {
     return `/contracts/deployed/${contractUuid}/call`;
   },
+  smartContractsActivate: (uuid: number | string) => {
+    return `/contracts/deployed/${uuid}/activate`;
+  },
 
   /** Indexers */
   indexers: (uuid?: string) => {
@@ -329,6 +329,14 @@ const Endpoints = {
 
   indexerHibernate: (uuid: string) => {
     return `/indexing/indexers/${uuid}/hibernate`;
+  },
+
+  indexerUsage: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/usage`;
+  },
+
+  indexerBilling: (uuid: string) => {
+    return `/indexing/indexers/${uuid}/billing`;
   },
 
   /**
@@ -360,6 +368,10 @@ const Endpoints = {
 
   rpcApiKeyUsage: (projectUuid: string, apiKeyId: number) => {
     return `/rpc/${projectUuid}/api-key/${apiKeyId}/usage`;
+  },
+
+  rpcApiKeyUsagePerChain: (projectUuid: string, apiKeyId: number) => {
+    return `/rpc/${projectUuid}/api-key/${apiKeyId}/usage-per-chain`;
   },
 
   /**

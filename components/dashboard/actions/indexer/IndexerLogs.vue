@@ -33,6 +33,7 @@
         filterable
         clearable
         multiple
+        @update:value="fetchLogsDebounced"
       />
       <!--Filter containers -->
       <select-options
@@ -44,6 +45,7 @@
         filterable
         clearable
         multiple
+        @update:value="fetchLogsDebounced"
       />
     </div>
 
@@ -64,7 +66,7 @@
 <script lang="ts" setup>
 import type { SelectOption } from 'naive-ui';
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const indexerStore = useIndexerStore();
 const indexerLogStore = useIndexerLogStore();
 
@@ -72,27 +74,27 @@ const indexerLogStore = useIndexerLogStore();
 const logLevels = ref<SelectOption[]>([
   {
     value: 'ERROR',
-    label: $i18n.t(`indexer.logLevels.error`),
+    label: t(`indexer.logLevels.error`),
   },
   {
     value: 'DEBUG',
-    label: $i18n.t(`indexer.logLevels.debug`),
+    label: t(`indexer.logLevels.debug`),
   },
   {
     value: 'INFO',
-    label: $i18n.t(`indexer.logLevels.info`),
+    label: t(`indexer.logLevels.info`),
   },
   {
     value: 'NOTICE',
-    label: $i18n.t(`indexer.logLevels.notice`),
+    label: t(`indexer.logLevels.notice`),
   },
   {
     value: 'WARNING',
-    label: $i18n.t(`indexer.logLevels.warning`),
+    label: t(`indexer.logLevels.warning`),
   },
   {
     value: 'CRITICAL',
-    label: $i18n.t(`indexer.logLevels.critical`),
+    label: t(`indexer.logLevels.critical`),
   },
 ]);
 
@@ -100,19 +102,27 @@ const logLevels = ref<SelectOption[]>([
 const containers = ref<SelectOption[]>([
   {
     value: 'db',
-    label: $i18n.t(`indexer.containers.db`),
+    label: t(`indexer.containers.db`),
   },
   {
     value: 'init',
-    label: $i18n.t(`indexer.containers.init`),
+    label: t(`indexer.containers.init`),
   },
   {
     value: 'api',
-    label: $i18n.t(`indexer.containers.api`),
+    label: t(`indexer.containers.api`),
   },
   {
     value: 'processor',
-    label: $i18n.t(`indexer.containers.processor`),
+    label: t(`indexer.containers.processor`),
   },
 ]);
+
+const fetchLogsDebounced = useDebounceFn(fetchLogs, 1000);
+
+async function fetchLogs() {
+  if (indexerStore.active) {
+    await indexerLogStore.fetchLogs(indexerStore.active.indexer_uuid);
+  }
+}
 </script>

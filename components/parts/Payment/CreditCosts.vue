@@ -5,7 +5,7 @@
       <n-space :size="32">
         <!-- Filter by service -->
         <div v-if="filterByService && !service" class="mb-4">
-          <strong>{{ $t('dashboard.credits.filterByService') }}:</strong>
+          <strong class="mb-1 inline-block">{{ $t('dashboard.credits.filterByService') }}:</strong>
           <select-options
             v-model:value="selectedService"
             :options="services"
@@ -18,7 +18,7 @@
         </div>
         <!-- Filter by chain -->
         <div v-if="filterByChain" class="mb-4">
-          <strong>{{ $t('dashboard.credits.filterByChain') }}:</strong>
+          <strong class="mb-1 inline-block">{{ $t('dashboard.credits.filterByChain') }}:</strong>
           <select-options
             v-model:value="selectedChain"
             :options="chainsByService"
@@ -26,7 +26,7 @@
             size="small"
             :placeholder="$t('form.placeholder.chain')"
             filterable
-            :clearable="!service"
+            clearable
           />
         </div>
       </n-space>
@@ -116,7 +116,7 @@ const chainsByService = computed(() => {
       return nftChains;
     case ServiceTypeName.STORAGE:
       return [];
-    case ServiceTypeName.CONTRACTS:
+    case ServiceTypeName.SMART_CONTRACTS:
       return [...evmChains, ...chains];
     default:
       return [...identityChains, ...chains, ...substrateChains];
@@ -138,7 +138,6 @@ const shownPrices = computed(() => {
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
     const chainName = getChainName(selectedChain.value, props.service);
-    console.log(chainName);
     return servicePrices.value.filter(item => item.name.includes(chainName));
   } else if (props.filterByService && selectedService.value) {
     /** Filter by service */
@@ -159,7 +158,7 @@ watch(
 );
 
 function getChainName(chain: string | number, service?: string): string {
-  if (service === ServiceTypeName.CONTRACTS && Number.isInteger(chain)) {
+  if (service === ServiceTypeName.SMART_CONTRACTS && Number.isInteger(chain)) {
     return chain in EvmChain ? EvmChain[chain] : Chains[chain];
   } else if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
     return chain in Chains
@@ -213,7 +212,7 @@ function getIconName(service: ProductPriceInterface) {
       return 'menu/computing';
     case ServiceTypeName.SOCIAL:
       return 'logo/subsocial';
-    case ServiceTypeName.WALLET:
+    case ServiceTypeName.EMBEDDED_WALLET:
       return 'icon/wallet';
   }
 

@@ -5,6 +5,7 @@ export default function useIndexer() {
   const indexerStore = useIndexerStore();
   const indexerLogsStore = useIndexerLogStore();
   const indexerDeploymentsStore = useIndexerDeploymentsStore();
+  const indexerBillingStore = useIndexerBillingStore();
   const pageLoading = ref<boolean>(true);
 
   async function initIndexer() {
@@ -15,24 +16,27 @@ export default function useIndexer() {
       router.push({ name: 'dashboard-service-indexer' });
     }
 
-    await Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const indexer = await indexerStore.getIndexer(`${indexerUuid}`);
+    await sleep(10);
+    await Promise.all(Object.values(dataStore.promises));
 
-      if (!indexer) {
-        router.push({ name: 'dashboard-service-indexer' });
-        return;
-      }
+    const indexer = await indexerStore.getIndexer(`${indexerUuid}`);
 
-      indexerStore.active = indexer;
-      pageLoading.value = false;
+    if (!indexer) {
+      router.push({ name: 'dashboard-service-indexer' });
+      return;
+    }
 
-      if (indexer.squidId) {
-        // Get logs
-        await indexerLogsStore.getLogs(indexer.indexer_uuid);
-        // Get deployments
-        await indexerDeploymentsStore.getDeployments(indexer.indexer_uuid);
-      }
-    });
+    indexerStore.active = indexer;
+    pageLoading.value = false;
+
+    if (indexer.squidId) {
+      // Get logs
+      await indexerLogsStore.getLogs(indexer.indexer_uuid);
+      // Get deployments
+      await indexerDeploymentsStore.getDeployments(indexer.indexer_uuid);
+      // Get billing data
+      await indexerBillingStore.getIndexerBilling(indexer.indexer_uuid);
+    }
   }
 
   return {

@@ -5,7 +5,7 @@
         <slot>
           <h3>
             <NuxtLink :to="{ name: 'dashboard-service-computing' }">
-              <span class="text-body font-normal">{{ $t('dashboard.nav.services') }}</span>
+              <span class="font-normal text-body">{{ $t('dashboard.nav.services') }}</span>
             </NuxtLink>
             <span class="mx-1">/</span>
             {{ $t('dashboard.nav.computing') }}
@@ -20,17 +20,14 @@
       </Heading>
     </template>
     <slot>
-      <SolutionTabs
-        :solution="SolutionKey.ENCRYPTION"
-        :tab="tab"
-        :tabs="tabs"
-        @change="t => (tab = t)"
-      />
+      <SolutionTabs :solution="SolutionKey.ENCRYPTION" :tab="tab" :tabs="tabs" @change="t => (tab = t)" />
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
+import { ServiceTypeName } from '~/lib/types/service';
+
 const $i18n = useI18n();
 const paymentStore = usePaymentStore();
 

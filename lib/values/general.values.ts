@@ -120,6 +120,7 @@ export const LsCacheKeys = {
   RPC_API_KEYS: 'al_cache_rpc_api_keys',
   RPC_API_KEY: 'al_cache_rpc_api_key',
   RPC_API_KEY_USAGE: 'al_cache_rpc_api_key_usage',
+  RPC_API_KEY_USAGE_PER_CHAIN: 'al_cache_rpc_api_key_usage_per_chain',
   RPC_ENDPOINTS: 'al_cache_rpc_endpoints',
   RPC_FAVORITE_ENDPOINTS: 'al_cache_rpc_favorite_endpoints',
   RPC_DWELLIR_ID: 'al_cache_rpc_dwellir_id',
@@ -137,10 +138,13 @@ export const LsCacheKeys = {
   SMART_CONTRACTS: 'al_cache_smart_contracts',
   SMART_CONTRACT_DEPLOYED: 'al_smart_contract_deployed',
   SMART_CONTRACTS_DEPLOYED: 'al_smart_contracts_deployed',
+  SMART_CONTRACTS_DEPLOYED_ARCHIVED: 'al_smart_contracts_deployed_archived',
   INDEXERS: 'al_cache_indexers',
   INDEXER: 'al_cache_indexer',
   INDEXER_LOGS: 'al_cache_indexer_logs',
   INDEXER_DEPLOYMENTS: 'al_cache_indexer_deployments',
+  INDEXER_USAGE: 'al_cache_indexer_usage',
+  INDEXER_BILLING: 'al_cache_indexer_billing',
 };
 
 /** User roles */

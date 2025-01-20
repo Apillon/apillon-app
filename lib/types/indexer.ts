@@ -12,7 +12,7 @@ declare global {
     squidReference?: string;
   }
 
-  interface IndexerDeploymentInferface {
+  interface IndexerDeploymentInterface {
     id: number;
     type: string;
     failed: string;
@@ -40,6 +40,26 @@ declare global {
     };
   }
 
+  interface IndexerUsageMetricsInterface {
+    ts: string;
+    success: {
+      count: number;
+    };
+    error: {
+      count: number;
+    };
+  }
+  interface IndexerUsageInterface {
+    metrics: IndexerUsageMetricsInterface[];
+  }
+
+  interface IndexerBillingInterface {
+    id: number;
+    year: number;
+    month: number;
+    billedAmount: number;
+  }
+
   interface IndexerInterface extends IndexerBaseInterface {
     squid: {
       id: number;
@@ -59,7 +79,7 @@ declare global {
       deployedAt: string;
       hibernatedAt: string;
     };
-    lastDeployment: IndexerDeploymentInferface;
+    lastDeployment: IndexerDeploymentInterface;
   }
 
   interface IndexersResponse extends GeneralItemsResponse<IndexerInterface> {}
@@ -68,5 +88,7 @@ declare global {
   interface IndexerLogsResponse
     extends GeneralResponse<{ logs: IndexerLogInterface[]; nextPage: string }> {}
 
-  interface IndexerDeploymentsResponse extends GeneralResponse<IndexerDeploymentInferface[]> {}
+  interface IndexerDeploymentsResponse extends GeneralResponse<IndexerDeploymentInterface[]> {}
+  interface IndexerUsageResponse extends GeneralResponse<IndexerUsageInterface> {}
+  interface IndexerBillingResponse extends GeneralItemsResponse<IndexerBillingInterface> {}
 }
