@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import Hash from 'ipfs-only-hash';
 import { CALCULATED_CIDS_KEY } from '~/lib/types/storage';
 
 export default function useUpload() {
@@ -143,7 +142,7 @@ export default function useUpload() {
                   );
                   const buffer = await content?.file?.arrayBuffer();
                   if (content && buffer) {
-                    const calculatedCID = await Hash.of(Buffer.from(buffer), {
+                    const calculatedCID = await calculateCID(Buffer.from(buffer), {
                       cidVersion: 1,
                     });
                     cids[uploadFileRequest.file_uuid] = {

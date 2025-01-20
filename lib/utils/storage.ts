@@ -1,4 +1,5 @@
 import { textMarshal } from 'text-marshal';
+import { importer, type UserImporterOptions } from 'ipfs-unixfs-importer';
 
 /** Size calculations */
 export function kbToMb(kb: number): number {
@@ -99,3 +100,27 @@ export const readFileContent = file => {
 export function removeSurroundingQuotes(str: string): string {
   return str.replace(/^'+|'+$/g, '');
 }
+
+const block = {
+  get: async cid => {
+    throw new Error(`unexpected block API get for ${cid}`);
+  },
+  put: async () => {
+    throw new Error('unexpected block API put');
+  },
+};
+
+export const calculateCID = async (content: any, options: UserImporterOptions) => {
+  options.onlyHash = true;
+
+  if (typeof content === 'string') {
+    content = new TextEncoder().encode(content);
+  }
+
+  let lastCid;
+  for await (const { cid } of importer([{ content }], block, options)) {
+    lastCid = cid;
+  }
+
+  return `${lastCid}`;
+};

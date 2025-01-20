@@ -1,6 +1,6 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs">
+    <div class="w-[20vw] min-w-[11rem] max-w-xs">
       <!-- Search transactions
       <n-input
         v-model:value="transactionStore.search"
@@ -24,7 +24,7 @@
         :disabled="authStore.isAdmin()"
         @click="uploadActive = !uploadActive"
       >
-        <span class="icon-file text-xl mr-2"></span>
+        <span class="icon-file mr-2 text-xl"></span>
         {{ $t('computing.contract.encryptFile') }}
       </n-button>
 
@@ -35,7 +35,7 @@
         :loading="loadingBucket"
         @click="openBucket(contractStore.active.bucket_uuid)"
       >
-        <span class="icon-storage text-xl mr-2"></span>
+        <span class="icon-storage mr-2 text-xl"></span>
         <span>{{ $t('nft.openBucket') }}</span>
       </n-button>
 
@@ -56,7 +56,7 @@
           })
         "
       >
-        <span class="icon-refresh text-xl mr-2"></span>
+        <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
     </n-space>
@@ -68,6 +68,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ServiceTypeName } from '~/lib/types/service';
 import colors from '~/tailwind.colors';
 
 const props = defineProps({
@@ -86,9 +87,7 @@ const uploadActive = ref<boolean>(props.showUpload);
 
 const actionsDisabled = computed<boolean>(
   () =>
-    contractStore.active?.contractStatus !== ContractStatus.DEPLOYED ||
-    dataStore.isProjectUser ||
-    authStore.isAdmin()
+    contractStore.active?.contractStatus !== ContractStatus.DEPLOYED || dataStore.isProjectUser || authStore.isAdmin()
 );
 
 onMounted(() => {

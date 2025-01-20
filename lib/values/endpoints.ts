@@ -106,9 +106,7 @@ const Endpoints = {
     return `/buckets/${bucketUuid}/cancel-deletion`;
   },
   bucketWebhook: (bucketUuid: string, webhookId?: number) => {
-    return webhookId
-      ? `/buckets/${bucketUuid}/webhook/${webhookId}`
-      : `/buckets/${bucketUuid}/webhook`;
+    return webhookId ? `/buckets/${bucketUuid}/webhook/${webhookId}` : `/buckets/${bucketUuid}/webhook`;
   },
 
   /** Directories */
@@ -126,9 +124,7 @@ const Endpoints = {
   storage: '/storage/',
   storageInfo: '/storage/info',
   storageFileUpload: (bucketUuid: string, sessionUuid?: string) => {
-    return sessionUuid
-      ? `/storage/${bucketUuid}/file-upload/${sessionUuid}/end`
-      : `/storage/${bucketUuid}/file-upload`;
+    return sessionUuid ? `/storage/${bucketUuid}/file-upload/${sessionUuid}/end` : `/storage/${bucketUuid}/file-upload`;
   },
   storageFilesUpload: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/files-upload`;
@@ -309,6 +305,9 @@ const Endpoints = {
   },
   smartContractsCall: (contractUuid: string) => {
     return `/contracts/deployed/${contractUuid}/call`;
+  },
+  smartContractsActivate: (uuid: number | string) => {
+    return `/contracts/deployed/${uuid}/activate`;
   },
 
   /** Indexers */

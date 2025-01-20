@@ -1,21 +1,11 @@
 <template>
-  <Btn v-if="targetUrl" v-bind="$attrs" type="primary" :loading="loading" @click="generateShortUrl">
+  <template v-if="autoSubmit"></template>
+  <Btn v-else-if="targetUrl" v-bind="$attrs" type="primary" :loading="loading" @click="generateShortUrl">
     {{ $t('storage.shortUrl.generateShortLink') }}
   </Btn>
-  <n-form
-    v-else
-    v-bind="$attrs"
-    ref="formRef"
-    :model="formData"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form v-else v-bind="$attrs" ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Ipfs name -->
-    <n-form-item
-      path="name"
-      :label="$t('storage.shortUrl.targetUrl')"
-      :label-props="{ for: 'targetUrl' }"
-    >
+    <n-form-item path="name" :label="$t('storage.shortUrl.targetUrl')" :label-props="{ for: 'targetUrl' }">
       <n-input
         v-model:value="formData.targetUrl"
         :input-props="{ id: 'targetUrl' }"
@@ -27,7 +17,7 @@
     <!--  Form submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('storage.shortUrl.generateLink')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
         {{ $t('storage.shortUrl.generateLink') }}
       </Btn>
     </n-form-item>
@@ -42,10 +32,13 @@
     preset="dialog"
     :title="$t('storage.shortUrl.title')"
     :positive-text="$t('storage.shortUrl.btnCopy')"
-    @positive-click="shortUrl = ''"
+    @positive-click="onClose"
   >
+    <div v-if="loading" class="my-1 h-16 p-4">
+      <Spinner />
+    </div>
     <HostingPreviewLink
-      :loading="loading"
+      v-else
       :link="shortUrl"
       :title="$t('storage.shortUrl.title')"
       :info="$t('storage.shortUrl.shortUrlInfo')"
@@ -59,14 +52,17 @@ type FormIpfs = {
   targetUrl: string | null;
 };
 
+const emit = defineEmits(['close', 'submitSuccess']);
 const props = defineProps({
   targetUrl: { type: String, default: null },
+  autoSubmit: { type: Boolean, default: false },
 });
 
 const message = useMessage();
 const $i18n = useI18n();
 
-const loading = ref(false);
+const loading = ref<boolean>(false);
+const showModal = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 const shortUrl = ref<string | undefined>();
 
@@ -78,16 +74,19 @@ const rules: NFormRules = {
   targetUrl: ruleRequired($i18n.t('validation.ipfsCidRequired')),
 };
 
-const showModal = computed<boolean>(() => !!shortUrl.value);
+onMounted(() => {
+  if (props.autoSubmit && props.targetUrl) {
+    showModal.value = true;
+    generateShortUrl();
+  }
+});
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       await generateShortUrl();
     }
@@ -99,14 +98,21 @@ async function generateShortUrl() {
   shortUrl.value = '';
 
   try {
-    const res = await $api.post<ShortUrlResponse>(endpoints.shortUrl, formData.value);
-    if (res?.data) {
-      shortUrl.value = res.data.url;
+    const { data } = await $api.post<ShortUrlResponse>(endpoints.shortUrl, formData.value);
+    if (data) {
+      shortUrl.value = data.url;
+      showModal.value = true;
+      emit('submitSuccess', data.url);
     }
   } catch (error: any) {
     /** Show error message  */
     window.$message.error(userFriendlyMsg(error));
   }
   loading.value = false;
+}
+
+function onClose() {
+  showModal.value = false;
+  emit('close');
 }
 </script>

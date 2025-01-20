@@ -15,7 +15,7 @@
         :info="$t('social.post.emptyArchiveInfo')"
         icon="logo/grill-chat"
       >
-        <Btn type="primary" @click="$router.push({ name: 'dashboard-service-social' })">
+        <Btn type="primary" @click="router.push({ name: 'dashboard-service-social' })">
           {{ $t('social.post.list') }}
         </Btn>
       </Empty>
@@ -25,6 +25,7 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
+const router = useRouter();
 const dataStore = useDataStore();
 const postStore = usePostStore();
 

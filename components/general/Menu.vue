@@ -1,14 +1,11 @@
 <template>
-  <div class="border-none">
-    <n-menu
-      v-bind="$attrs"
-      v-model:value="selectedMenu"
-      :render-icon="renderMenuIcon"
-      :render-label="renderMenuLabel"
-      :render-extra="renderMenuExtra"
-    />
-    <slot />
-  </div>
+  <n-menu
+    v-bind="$attrs"
+    v-model:value="selectedMenu"
+    :render-icon="renderMenuIcon"
+    :render-label="renderMenuLabel"
+    :render-extra="renderMenuExtra"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -43,7 +40,8 @@ function removeIdOrSlug(text) {
  * Render functions
  */
 function renderMenuLabel(option: NMenuOption) {
-  const colorClass = option.iconName === 'icon-wide-right' ? '!text-yellow' : '';
+  const colorClass =
+    option?.color === 'yellow' ? '!text-yellow' : option?.color === 'blue' ? '!text-blue' : '';
 
   if ('disabled' in option && option.disabled) {
     return h('span', { class: 'text-body' }, { default: () => option.label as string });
@@ -89,7 +87,11 @@ function renderMenuExtra(option: NMenuOption) {
 
 function renderMenuIcon(option: NMenuOption) {
   if ('svgIcon' in option) {
-    return h(resolveComponent('NuxtIcon'), { name: option.svgIcon, class: 'text-xl mx-2' }, '');
+    return h(
+      resolveComponent('NuxtIcon'),
+      { name: option.svgIcon, class: `text-xl mx-2 ${iconClass(option.svgIcon)}` },
+      ''
+    );
   } else if ('iconName' in option) {
     return h('span', { class: iconClass(option.iconName) }, '');
   }
@@ -98,6 +100,11 @@ function renderMenuIcon(option: NMenuOption) {
 
 function iconClass(iconName?: any): string {
   if (!iconName) return '';
-  return iconName === 'icon-wide-right' ? `${iconName} text-yellow` : iconName;
+  if (iconName === 'menu/home-gear') {
+    return `${iconName} text-yellow`;
+  } else if (iconName === 'menu/tools') {
+    return `${iconName} text-blue`;
+  }
+  return iconName;
 }
 </script>

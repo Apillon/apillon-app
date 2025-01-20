@@ -148,11 +148,11 @@
       "smartContracts": "Smart Contracts",
       "smartContractDetails": "Smart Contract Details",
       "social": "Social",
+      "simplets": "Simplets",
       "rpc": "RPC Service",
       "utility": "Utility",
-      "solutions": "Pre-built Solutions",
+      "solutions": "Pre-built Solutions (Simplets)",
       "storage": "Storage",
-      "simplets": "Simplets",
       "embeddedWallet": "Embedded Wallet",
       "indexing": "Indexing"
     },
@@ -219,11 +219,13 @@
         "createNew": "Create new asset",
         "createAsset": "Create an asset",
         "characteristics": "Characteristics",
+        "description": "Decentralized hub for secure digital asset management on the Polkadot network. \nSecure storage, easy transfer, cross-chain compatibility.",
         "edit": "Edit asset",
         "loadingTransaction": "The transaction is being processed, please wait.",
         "mintTokens": "Mint Tokens",
         "mintTokensInfo": "Mint Tokens",
         "noProject": "Your project has no assets yet",
+        "name": "Asset Hub",
         "new": "Create new asset",
         "otherAssets": "Other assets on Asset Hub",
         "select": "Select asset",
@@ -239,7 +241,8 @@
           "anyway": "Leave anyway",
           "info": "If you leave, your changes won’t be saved.",
           "title": "Are you sure you want to leave?"
-        }
+        },
+        "usage": ["secure storage", "easy transfer", "cross-chain compatibility"]
       },
       "authentication": {
         "name": "Decentralized Authentication",
@@ -249,6 +252,13 @@
         "emptyInfo": "Add Web3 Authentication and create an API key.",
         "emptyBtn": "Attach Web3 Auth",
         "usage": ["decentralized id", "HIGH PRIVACY", "SEAMLESS UI", "OAuth protocol"]
+      },
+      "cloudFunctions": {
+        "description": "Deploy any script or backend app to a secure, scalable, and decentralized cloud network. \nDecentralized cloud, fully scalable, API gateway, cross-chain apps.",
+        "deploymentCount": "Number of deployments",
+        "functionCount": "Number of functions",
+        "name": "Cloud Functions",
+        "usage": ["decentralized cloud", "fully scalable", "API gateway", "cross-chain apps"]
       },
       "computing": {
         "contractCount": "Number of contracts",
@@ -262,6 +272,13 @@
           "internet access"
         ]
       },
+      "embeddedWallet": {
+        "description": "Easily create secure and decentralized wallets for your users on any chain. \nWeb3 wallets, fully decentralized, easy integration, multi-chain support.",
+        "integrationCount": "Number of integrations",
+        "name": "Embedded Wallet",
+        "walletCount": "Number of wallets",
+        "usage": ["Web3 wallets", "fully decentralized", "easy integration", "multi-chain support"]
+      },
       "hosting": {
         "name": "Decentralized Hosting",
         "description": "Make your website or app unstoppable and free from third-party impact.",
@@ -269,6 +286,19 @@
         "usage": ["unstoppable", "domain support", "free ssl support", "drag-n-drop ui"],
         "usedBandwidth": "Used bandwidth",
         "websiteCount": "Number of websites"
+      },
+      "indexing": {
+        "description": "Fast and efficient data indexing for blockchain data. \nReal-time data sync, powerful APIs, on-chain data querying.",
+        "deployedIndexerCount": "Number of deployed indexers",
+        "name": "Indexing Service",
+        "usage": ["real-time data sync", "powerful APIs", "on-chain data querying"]
+      },
+      "rpc": {
+        "description": "Reliable and secure remote procedure call service for blockchain interaction. \nLow latency, high availability, multi-chain support.",
+        "keyCount": "Number of keys",
+        "name": "RPC Service",
+        "selectedNetworkCount": "Number of selected networks",
+        "usage": ["low latency", "high availability", "multi-chain support"]
       },
       "nft": {
         "collectionCount": "Number of collections",
@@ -307,13 +337,18 @@
       },
       "smartContracts": {
         "audited": "Audited",
-        "new": "New smart contract",
         "customizeAndDeploy": "Customize and deploy",
         "create": "Create your smart contract",
         "createNew": "Create a new smart contract",
-        "description": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately. ",
+        "deployedContractsCount": "Number of deployed contracts",
+        "description": "Simplify smart contract deployment across multiple chains. \nAutomated verification, multi-chain support, security checks.",
+        "description2": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately.",
         "details": "Smart Contract Details",
+        "emptyArchive": "Smart Contracts Archive",
+        "emptyArchiveInfo": "There are currently no Smart Contracts in the Archive.",
         "info": "Add it to your Web3 project",
+        "name": "Smart Contracts",
+        "new": "New smart contract",
         "table": {
           "chain": "Chain",
           "contractAddress": "Contract Address",
@@ -350,7 +385,9 @@
           "writeFromDapp": "Write from your dapp",
           "writeOverApillon": "Write over Apillon",
           "readFromDapp": "Read from your dapp"
-        }
+        },
+        "transactionCount": "Number of transactions",
+        "usage": ["automated verification", "multi-chain support", "security checks"]
       },
       "addFirst": "Add first service",
       "delete": "Delete service",

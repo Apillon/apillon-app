@@ -116,7 +116,7 @@ const chainsByService = computed(() => {
       return nftChains;
     case ServiceTypeName.STORAGE:
       return [];
-    case ServiceTypeName.CONTRACTS:
+    case ServiceTypeName.SMART_CONTRACTS:
       return [...evmChains, ...chains];
     default:
       return [...identityChains, ...chains, ...substrateChains];
@@ -158,7 +158,7 @@ watch(
 );
 
 function getChainName(chain: string | number, service?: string): string {
-  if (service === ServiceTypeName.CONTRACTS && Number.isInteger(chain)) {
+  if (service === ServiceTypeName.SMART_CONTRACTS && Number.isInteger(chain)) {
     return chain in EvmChain ? EvmChain[chain] : Chains[chain];
   } else if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
     return chain in Chains
@@ -212,7 +212,7 @@ function getIconName(service: ProductPriceInterface) {
       return 'menu/computing';
     case ServiceTypeName.SOCIAL:
       return 'logo/subsocial';
-    case ServiceTypeName.WALLET:
+    case ServiceTypeName.EMBEDDED_WALLET:
       return 'icon/wallet';
   }
 

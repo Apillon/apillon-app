@@ -12,18 +12,12 @@ export const usePostStore = defineStore('post', {
       items: [] as PostInterface[],
       loading: false,
       search: '',
-      pagination: {
-        page: 1,
-        pageSize: PAGINATION_LIMIT,
-        itemCount: 0,
-      },
+      pagination: createPagination(),
     },
   }),
   getters: {
     hasPosts(state): boolean {
-      return (
-        !!state.search || state.loading || (Array.isArray(state.items) && state.items.length > 0)
-      );
+      return !!state.search || state.loading || (Array.isArray(state.items) && state.items.length > 0);
     },
     hasPostArchive(state): boolean {
       return (
@@ -82,11 +76,7 @@ export const usePostStore = defineStore('post', {
       return this.items;
     },
     async getPostArchive(page = 1, limit = PAGINATION_LIMIT): Promise<PostInterface[]> {
-      if (
-        page !== this.archive.pagination.page ||
-        !this.hasPostArchive ||
-        isCacheExpired(LsCacheKeys.POST_ARCHIVE)
-      ) {
+      if (page !== this.archive.pagination.page || !this.hasPostArchive || isCacheExpired(LsCacheKeys.POST_ARCHIVE)) {
         return await this.fetchPostsArchive(page, limit);
       }
       return this.items;
