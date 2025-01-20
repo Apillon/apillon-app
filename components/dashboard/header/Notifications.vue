@@ -26,6 +26,9 @@ onMounted(() => {
 });
 
 const options = computed(() => {
+  if (!settingsStore.hasNotifications) {
+    return [{ key: 'empty', label: '' }];
+  }
   const notifications = settingsStore.notifications.items.map(n => ({
     key: n.id,
     label: n.message,
@@ -41,6 +44,9 @@ const options = computed(() => {
 });
 
 function renderOption({ node, option }) {
+  if (option?.key === 'empty') {
+    return h(resolveComponent('HeaderNotificationEmpty'));
+  }
   if (option?.key === 'footer') {
     return h(resolveComponent('HeaderNotificationFooter'));
   }
