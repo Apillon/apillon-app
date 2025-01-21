@@ -104,7 +104,7 @@ const web3Services = computed(() => [
     ],
   },
   {
-    id: ServiceType.WALLET,
+    id: ServiceType.EMBEDDED_WALLET,
     name: 'embeddedWallet',
     icon: 'icon-wallet',
     data: [
@@ -120,15 +120,15 @@ const web3Services = computed(() => [
   },
   {
     id: 99,
-    name: 'cloudFunction',
+    name: 'cloudFunctions',
     icon: 'icon-cloud-functions',
     data: [
       {
-        name: t('dashboard.service.cloudFunction.functionCount'),
+        name: t('dashboard.service.cloudFunctions.functionCount'),
         value: dataStore.project.overview.cloudFunctionCount,
       },
       {
-        name: t('dashboard.service.cloudFunction.deploymentCount'),
+        name: t('dashboard.service.cloudFunctions.deploymentCount'),
         value: dataStore.project.overview.cloudFunctionJobCount,
       },
     ],
@@ -160,7 +160,7 @@ const web3Services = computed(() => [
     ],
   },
   {
-    id: ServiceType.CONTRACTS,
+    id: ServiceType.SMART_CONTRACTS,
     name: 'smartContracts',
     icon: 'icon-file',
     data: [
@@ -212,77 +212,6 @@ const web3Services = computed(() => [
       {
         name: t(`dashboard.service.social.postCount`),
         value: dataStore.project.overview.postCount,
-      },
-    ],
-  },
-  {
-    id: ServiceType.WALLET,
-    name: 'embeddedWallet',
-    icon: 'icon-wallet',
-    data: [
-      {
-        name: t('dashboard.service.embeddedWallet.integrationCount'),
-        value: dataStore.project.overview.integrationCount,
-      },
-      {
-        name: t('dashboard.service.embeddedWallet.walletCount'),
-        value: dataStore.project.overview.embeddedWalletCount,
-      },
-    ],
-  },
-  {
-    id: 99,
-    name: 'cloudFunction',
-    icon: 'icon-cloud-functions',
-    data: [
-      {
-        name: t('dashboard.service.cloudFunction.functionCount'),
-        value: dataStore.project.overview.cloudFunctionCount,
-      },
-      {
-        name: t('dashboard.service.cloudFunction.deploymentCount'),
-        value: dataStore.project.overview.cloudFunctionJobCount,
-      },
-    ],
-  },
-  {
-    id: ServiceType.RPC,
-    name: 'rpc',
-    icon: 'icon-rpc',
-    data: [
-      {
-        name: t('dashboard.service.rpc.keyCount'),
-        value: dataStore.project.overview.rpcApiKeyCount,
-      },
-      {
-        name: t('dashboard.service.rpc.selectedNetworkCount'),
-        value: dataStore.project.overview.selectedRpcUrlCount,
-      },
-    ],
-  },
-  {
-    id: ServiceType.INDEXING,
-    name: 'indexing',
-    icon: 'icon-indexer',
-    data: [
-      {
-        name: t('dashboard.service.indexing.deployedIndexerCount'),
-        value: dataStore.project.overview.indexerCount,
-      },
-    ],
-  },
-  {
-    id: ServiceType.CONTRACTS,
-    name: 'smartContracts',
-    icon: 'icon-file',
-    data: [
-      {
-        name: t('dashboard.service.smartContracts.deployedContractsCount'),
-        value: dataStore.project.overview.smartContractDeploymentCount,
-      },
-      {
-        name: t('dashboard.service.smartContracts.transactionCount'),
-        value: dataStore.project.overview.smartContractTransactionCount,
       },
     ],
   },

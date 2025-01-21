@@ -24,10 +24,10 @@
     </n-form-item>
 
     <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
-      <div class="block w-full h-20">
+      <div class="block h-20 w-full">
         <Captcha />
       </div>
-      <n-input v-model:value="formData.captcha" class="absolute hidden" />
+      <!-- <n-input v-model:value="formData.captcha" class="absolute hidden" /> -->
     </n-form-item>
 
     <!--  Login submit -->
@@ -104,9 +104,7 @@ function handleSubmit(e: Event | MouseEvent | null) {
 
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (!formData.value.captcha && !isCaptchaConfirmed()) {
       reloadCaptcha();
     } else {
