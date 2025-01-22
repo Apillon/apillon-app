@@ -12,8 +12,8 @@
     <div v-else-if="collectionStore.nftStep === NftCreateStep.PREVIEW" class="pt-8">
       <NftPreview>
         <Btn class="w-60" type="primary" @click="w3WarnAndDeploy()">
-          <template v-if="isUnique"> {{ t('nft.deploy.unique') }} </template
-          ><template v-else>
+          <template v-if="isUnique">{{ t('nft.deploy.unique') }}</template>
+          <template v-else>
             {{ t('nft.deploy.single') }}
           </template>
         </Btn>
@@ -143,7 +143,7 @@ async function deployUnique() {
       body,
       headers: {
         Authorization: 'Bearer ' + authStore.jwt,
-        'Content-Type': 'multipart/form-data',
+        Accept: '*/*',
       },
     });
 
@@ -191,11 +191,10 @@ async function prepareUniqueData(bucketUuid: string) {
 
   const body = new FormData();
   body.append('bucket_uuid', bucketUuid);
-  body.append('project_uuid', dataStore.projectUuid);
 
   const baseData = prepareFormData();
   Object.entries(baseData).forEach(([key, value]) => {
-    if (value) {
+    if (value !== undefined) {
       body.append(key, value);
     }
   });
@@ -215,12 +214,7 @@ async function createBucket(name: string) {
     name: `NFT Collection: ${name}`,
   };
 
-  try {
-    const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
-    return res.data.bucket_uuid;
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
-  }
-  return null;
+  const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
+  return res.data.bucket_uuid;
 }
 </script>
