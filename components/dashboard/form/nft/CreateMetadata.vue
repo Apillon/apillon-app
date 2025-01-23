@@ -52,6 +52,7 @@ const emit = defineEmits(['submitSuccess']);
 
 const { t, te } = useI18n();
 const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
@@ -116,9 +117,18 @@ async function deployUnique() {
     const bucketUuid = await createBucket(collectionStore.form.base.name);
     if (!bucketUuid) return;
 
-    const metadata = await prepareUniqueData(bucketUuid);
+    const body = await prepareUniqueData(bucketUuid);
 
-    const res = await $api.post<CollectionResponse>(endpoints.collectionsUnique, metadata);
+    const req = await fetch(APISettings.basePath + endpoints.collectionsUnique, {
+      method: 'POST',
+      body,
+      headers: {
+        Authorization: 'Bearer ' + authStore.jwt,
+        Accept: '*/*',
+      },
+    });
+
+    const res = await $api.onResponse<CollectionResponse>(req);
     collectionStore.active = res.data;
 
     /** On new collection created add new collection to list */
@@ -168,7 +178,6 @@ async function prepareUniqueData(bucketUuid: string) {
   }
 
   /** Prepare metadata */
-  const baseData = prepareFormData();
   const metadata = Object.values(collectionStore.metadata).reduce((acc, meta, key) => {
     const id = Number(meta.id) || key + 1;
     const m = Object.assign({}, meta);
@@ -178,7 +187,22 @@ async function prepareUniqueData(bucketUuid: string) {
     return acc;
   }, {});
 
-  return { ...baseData, metadata, bucket_uuid: bucketUuid };
+  const body = new FormData();
+  body.append('bucket_uuid', bucketUuid);
+
+  const baseData = prepareFormData();
+  Object.entries(baseData).forEach(([key, value]) => {
+    if (value !== undefined) {
+      body.append(key, value);
+    }
+  });
+
+  const metadataFile = new Blob([JSON.stringify(metadata, null, 2)], {
+    type: 'application/json',
+  });
+  body.append('metadata', metadataFile);
+
+  return body;
 }
 
 async function createBucket(name: string) {
@@ -188,12 +212,7 @@ async function createBucket(name: string) {
     name: `NFT Collection: ${name}`,
   };
 
-  try {
-    const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
-    return res.data.bucket_uuid;
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
-  }
-  return null;
+  const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
+  return res.data.bucket_uuid;
 }
 </script>
