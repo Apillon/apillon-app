@@ -1,11 +1,6 @@
-import {
-  useAccount,
-  useConnect,
-  useDisconnect,
-  useSwitchNetwork,
-  useNetwork,
-  useWalletClient,
-} from 'use-wagmi';
+import { useAccount, useConnect, useConnectorClient } from '@wagmi/vue';
+import { signMessage } from '@wagmi/vue/actions';
+import { wagmiConfig } from '~/plugins/use-wagmi';
 
 export default function useWallet() {
   const { t } = useI18n();
@@ -14,7 +9,7 @@ export default function useWallet() {
 
   /** Evm wallet - wagmi */
   const { connectAsync } = useConnect();
-  const { data: walletClient, refetch } = useWalletClient();
+  const { data: walletClient, refetch } = useConnectorClient();
   const { address, connector } = useAccount();
 
   async function connectAndSign() {
@@ -34,7 +29,7 @@ export default function useWallet() {
 
     try {
       const { message, timestamp } = await authStore.getAuthMsg();
-      const signature = await walletClient.value.signMessage({ message });
+      const signature = await signMessage(wagmiConfig, { message });
 
       await sleep(200);
 
@@ -48,7 +43,7 @@ export default function useWallet() {
 
       return { signature, timestamp };
     } catch (e) {
-      console.log(e);
+      console.warn(e);
     }
   }
 

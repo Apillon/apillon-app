@@ -24,12 +24,7 @@ export default defineNuxtConfig({
     public: appConfig,
   },
 
-  components: [
-    '~/components',
-    '~/components/general/',
-    '~/components/parts/',
-    '~/components/dashboard/',
-  ],
+  components: ['~/components', '~/components/general/', '~/components/parts/', '~/components/dashboard/'],
 
   modules: [
     '@vueuse/nuxt',
@@ -38,6 +33,7 @@ export default defineNuxtConfig({
     'nuxt-icons',
     '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
+    '@wagmi/vue/nuxt',
     ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
   ],
 
@@ -50,10 +46,18 @@ export default defineNuxtConfig({
           },
         ],
       }),
-
       Components({
         resolvers: [NaiveUiResolver()],
       }),
+      {
+        name: 'vite-plugin-glob-transform',
+        transform(code: string, id: string) {
+          if (id.includes('nuxt-icons')) {
+            return code.replace(/as:\s*['"]raw['"]/g, 'query: "?raw", import: "default"');
+          }
+          return code;
+        },
+      },
     ],
 
     optimizeDeps: {

@@ -1,16 +1,7 @@
 <template>
   <!-- button -->
-  <template
-    v-if="!hasClaimed && referralStore.tokenClaim.wallet && referralStore.tokenClaim.status === 5"
-  >
-    <Btn
-      v-if="!isConnected"
-      type="primary"
-      size="large"
-      class="mt-2"
-      :loading="loading"
-      @click="connectWallet"
-    >
+  <template v-if="!hasClaimed && referralStore.tokenClaim.wallet && referralStore.tokenClaim.status === 5">
+    <Btn v-if="!isConnected" type="primary" size="large" class="mt-2" :loading="loading" @click="connectWallet">
       {{ $t('referral.info.claim.connectToClaim') }}
     </Btn>
     <Btn
@@ -24,35 +15,20 @@
     >
       {{ $t('referral.info.claim.switchToClaim') }}
     </Btn>
-    <Btn
-      v-else
-      type="primary"
-      size="large"
-      class="mt-2"
-      :loading="loading"
-      :disabled="isDisabled"
-      @click="claimNctr"
-    >
+    <Btn v-else type="primary" size="large" class="mt-2" :loading="loading" :disabled="isDisabled" @click="claimNctr">
       {{ $t('referral.info.claim.claim') }}
     </Btn>
   </template>
 
   <!-- Airdrop finished -->
-  <Notification v-if="!referralStore.tokenClaim?.wallet" type="info">
-    The NCTR Airdrop is now finished.
-  </Notification>
+  <Notification v-if="!referralStore.tokenClaim?.wallet" type="info"> The NCTR Airdrop is now finished. </Notification>
 
   <!-- Being claimed -->
   <Notification v-if="transactionHash && !claimSuccess" type="success" class="w-full">
     <span>Your $NCTR is being claimed.</span>
     <span v-if="transactionHash"
       >You can monitor the transaction on
-      <a
-        class="underline"
-        target="_blank"
-        :href="`https://moonbeam.moonscan.io/x/${transactionHash}`"
-        >Moonbeam.</a
-      >
+      <a class="underline" target="_blank" :href="`https://moonbeam.moonscan.io/x/${transactionHash}`">Moonbeam.</a>
     </span>
   </Notification>
 
@@ -76,9 +52,8 @@
       >Account disqualified from rewards due breach of
       <a target="_blank" href="https://apillon.io/privacy-policy/">Privacy Policy.</a></strong
     ><br /><br />
-    We detected unauthorized, fraudulent and/or illicit activities aimed at directly or indirectly
-    manipulating, distorting or otherwise illicitly influencing the reward outcomes from the
-    Programs.
+    We detected unauthorized, fraudulent and/or illicit activities aimed at directly or indirectly manipulating,
+    distorting or otherwise illicitly influencing the reward outcomes from the Programs.
     <!-- <a target="_blank" href="https://apillon.io/privacy-policy/">Privacy Policy</a>. -->
   </Notification>
 
@@ -95,8 +70,8 @@
 
   <!-- Error message -->
   <Notification v-if="claimError" type="error" class="w-full">
-    Something went wrong. Please try again or try later.<br />Make sure that your connected wallet
-    is the same as submitted EVM wallet address.
+    Something went wrong. Please try again or try later.<br />Make sure that your connected wallet is the same as
+    submitted EVM wallet address.
   </Notification>
 
   <template v-if="referralStore.tokenClaim.status === 5 && referralStore.tokenClaim?.wallet">
@@ -107,13 +82,14 @@
 </template>
 
 <script setup lang="ts">
-import { useAccount, useConnect, useDisconnect, useWalletClient } from 'use-wagmi';
+import { useAccount, useConnect, useDisconnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
 
 const { connect, connectors } = useConnect();
-const { refetch: refetchWalletClient } = useWalletClient();
-const { isConnected } = useAccount({ onConnect: onWalletConnected });
+const { refetch: refetchWalletClient } = useConnectorClient();
+const { isConnected } = useAccount();
 const referralStore = useReferralStore();
 const { disconnect } = useDisconnect();
+useAccountEffect({ onConnect: onWalletConnected });
 
 const {
   initContract,
@@ -136,8 +112,8 @@ onMounted(async () => {
   await initContract();
   try {
     hasClaimed.value = await getClaimStatus();
-  } catch {
-    console.log('error');
+  } catch (e) {
+    console.error(e);
   } finally {
     loading.value = false;
   }
@@ -162,7 +138,7 @@ const wrongNetwork = computed(() => {
 });
 
 async function connectWallet() {
-  await wagmiConnect(connectors.value[0]);
+  await wagmiConnect(connectors[0]);
 }
 
 // Claim
@@ -172,7 +148,7 @@ async function claimNctr(e: MouseEvent | null) {
   try {
     // Verify wallet connection
     if (!isConnected.value) {
-      await wagmiConnect(connectors.value[0]);
+      await wagmiConnect(connectors[0]);
       return;
     }
 
@@ -208,7 +184,7 @@ async function getNctrClaimParams(): Promise<NctrClaimParams> {
 async function wagmiConnect(connector) {
   if (isConnected.value) {
     refetchWalletClient();
-  } else if (connector.ready) {
+  } else {
     connect({ connector });
   }
 }

@@ -1,28 +1,21 @@
 <template>
   <n-scrollbar
-    class="min-h-[300px] mt-10 lg:mt-4 text-left"
+    class="mt-10 min-h-[300px] text-left lg:mt-4"
     :style="isXxl ? 'max-height: calc(70dvh - 100px)' : {}"
     y-scrollable
   >
     <template v-if="collectionStore.gridView">
       <div class="grid gap-8" :class="nfts.length > 100 ? 'grid-cols-nftSmall' : 'grid-cols-nft'">
-        <div v-for="nft in nfts" :key="nft.id" class="bg-bg-light rounded-xl overflow-hidden">
-          <figure class="flex flex-col h-full">
-            <Image
-              :src="imageByName(nft.image)"
-              class="w-full h-full object-contain"
-              :alt="nft.name"
-            />
+        <div v-for="nft in nfts" :key="nft.id" class="overflow-hidden rounded-xl bg-bg-light">
+          <figure class="flex h-full flex-col">
+            <Image :src="imageByName(nft.image)" class="h-full w-full object-contain" :alt="nft.name" />
             <figcaption class="block h-12 px-4 py-3 font-bold">
               {{ nft.name }}
             </figcaption>
           </figure>
         </div>
       </div>
-      <div
-        v-if="collectionStore.images.length > PAGINATION_LIMIT"
-        class="flex justify-center items-center p-4 mt-4"
-      >
+      <div v-if="collectionStore.images.length > PAGINATION_LIMIT" class="mt-4 flex items-center justify-center p-4">
         <n-pagination
           v-model:page="page"
           v-model:page-size="pageSize"
@@ -42,7 +35,7 @@
       />
       <Btn
         v-if="collectionStore.amount === NftAmount.SINGLE"
-        class="lg:absolute bottom-0"
+        class="bottom-0 lg:absolute"
         type="secondary"
         size="small"
         @click="addNewNft"
@@ -52,7 +45,7 @@
     </div>
   </n-scrollbar>
 
-  <n-space class="w-auto mx-auto my-4" justify="center">
+  <n-space class="mx-auto my-4 w-auto" justify="center">
     <slot />
   </n-space>
 </template>
@@ -60,10 +53,12 @@
 <script lang="ts" setup>
 import type { DataTableColumns, DataTableProps } from 'naive-ui';
 import { NButton, NInput } from 'naive-ui';
+import { NftAmount } from '~/lib/types/nft';
+import { PAGINATION_LIMIT } from '~/lib/values/general.values';
 import colors from '~/tailwind.colors';
 
 const { t } = useI18n();
-const { createThumbnailUrl } = useNft();
+const { imageByName } = useNft();
 const collectionStore = useCollectionStore();
 const { isXxl } = useScreen();
 
@@ -160,11 +155,6 @@ const createColumns = (): DataTableColumns<Record<string, string>> => {
 
 const columns = createColumns();
 const rowKey = (row: TransactionInterface) => row.id;
-
-function imageByName(name: string = '') {
-  const image = collectionStore.images.find(img => img.name === name);
-  return image ? createThumbnailUrl(image) : '';
-}
 
 function addNewNft() {
   collectionStore.nftStep = NftCreateStep.SINGLE;

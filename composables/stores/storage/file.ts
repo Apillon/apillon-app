@@ -70,11 +70,7 @@ export const useFileStore = defineStore('file', {
       }
     },
     async getDeletedFiles(page = 1) {
-      if (
-        this.trash.pagination.page !== page ||
-        !this.hasDeletedFiles ||
-        isCacheExpired(LsCacheKeys.FILE_DELETED)
-      ) {
+      if (this.trash.pagination.page !== page || !this.hasDeletedFiles || isCacheExpired(LsCacheKeys.FILE_DELETED)) {
         await this.fetchDeletedFiles();
       }
     },
@@ -150,10 +146,7 @@ export const useFileStore = defineStore('file', {
           params.sessionStatus = fileStatus;
         }
 
-        const res = await $api.get<FileUploadSessionsResponse>(
-          endpoints.storageFileUploadSessions(bucketUuid),
-          params
-        );
+        const res = await $api.get<FileUploadSessionsResponse>(endpoints.storageFileUploadSessions(bucketUuid), params);
         this.loading = false;
 
         this.session.items = res.data.items;
@@ -180,10 +173,7 @@ export const useFileStore = defineStore('file', {
       try {
         const params = parseArguments(args);
 
-        const res = await $api.get<FolderResponse>(
-          endpoints.storageFilesTrashed(bucketStore.bucketUuid),
-          params
-        );
+        const res = await $api.get<FolderResponse>(endpoints.storageFilesTrashed(bucketStore.bucketUuid), params);
 
         this.trash.items = res.data.items;
         this.trash.pagination.itemCount = res.data.total;
