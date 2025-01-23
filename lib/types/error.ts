@@ -211,7 +211,6 @@ declare global {
     status?: number;
     message?: string;
     path?: string;
-    property?: string;
     timestamp?: string;
   }
 }

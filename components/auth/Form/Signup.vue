@@ -46,7 +46,7 @@
 
 <script lang="ts" setup>
 import type { FormItemRule } from 'naive-ui';
-import { useAccount } from '@wagmi/vue';
+import { useAccount } from 'use-wagmi';
 
 type SignupForm = {
   email: string;

@@ -1,14 +1,18 @@
 <template>
-  <div class="w-full">
-    <div class="mb-4">
-      <n-data-table :bordered="false" :columns="columns" :data="collectionStore.form.single.attributes" />
+  <div class="bg-bg-light p-4 w-full rounded-md">
+    <div class="flex items-center">
+      <h4>{{ $t('nft.upload.attributes') }}</h4>
+      <n-button class="ml-auto rounded-lg" size="small" @click="modalAttributeVisible = true">
+        <span class="icon-add text-xl p-1 rounded-md"></span>
+      </n-button>
     </div>
-    <Btn type="secondary" class="ml-auto rounded-lg" @click="modalAttributeVisible = true">
-      <span class="flex items-center gap-2">
-        <span class="icon-add rounded-md p-1 text-xl"></span>
-        <span>{{ t('nft.addAttribute') }}</span>
-      </span>
-    </Btn>
+    <div class="mt-4">
+      <n-data-table
+        :bordered="false"
+        :columns="columns"
+        :data="collectionStore.form.single.attributes"
+      />
+    </div>
 
     <Modal v-model:show="modalAttributeVisible" title="Attribute">
       <NftSingleAttributes @close="modalAttributeVisible = false" />
@@ -58,7 +62,11 @@ const createColumns = (): NDataTableColumns<AttributeInterface> => {
       title: '',
       align: 'right',
       render(row: AttributeInterface) {
-        return h('button', { class: 'icon-delete text-xl text-white', onClick: () => removeItem(row) }, '');
+        return h(
+          'button',
+          { class: 'icon-delete text-xl text-white', onClick: () => removeItem(row) },
+          ''
+        );
       },
     },
   ];
@@ -67,6 +75,8 @@ const createColumns = (): NDataTableColumns<AttributeInterface> => {
 const columns = createColumns();
 
 function removeItem(attribute: AttributeInterface) {
-  collectionStore.form.single.attributes = collectionStore.form.single.attributes.filter(att => att !== attribute);
+  collectionStore.form.single.attributes = collectionStore.form.single.attributes.filter(
+    att => att !== attribute
+  );
 }
 </script>

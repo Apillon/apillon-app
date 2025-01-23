@@ -1,12 +1,12 @@
 <template>
-  <div class="border-b-1 border-bg-lighter p-3">
-    <div class="flex w-full items-center justify-between">
-      <div class="mr-4 flex w-full flex-col">
+  <div class="p-3 border-b-1 border-bg-lighter">
+    <div class="w-full flex justify-between items-center">
+      <div class="flex flex-col w-full mr-4">
         <strong class="body-md">{{ name }}</strong>
         <span class="body-sm text-body">{{ folderPath(fullPath) }}</span>
       </div>
-      <div class="flex min-w-[40px] items-center justify-end">
-        <IconSuccess v-if="status === FileUploadStatusValue.FINISHED" />
+      <div class="flex items-center justify-end min-w-[40px]">
+        <IconSuccessful v-if="status === FileUploadStatusValue.FINISHED" />
         <button v-else-if="status === FileUploadStatusValue.ERROR" @click="onRemoveFile">
           <span class="icon-close align-middle text-2xl text-pink"></span>
         </button>
@@ -19,7 +19,7 @@
       v-if="status === FileUploadStatusValue.UPLOADING"
       :key="percentage"
       type="line"
-      class="mt-2 w-full"
+      class="w-full mt-2"
       :color="colors.primary"
       :percentage="percentage"
       :rail-color="colors.bg.lighter"

@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount, useAccountEffect, useConnect, useDisconnect, useConnectorClient } from '@wagmi/vue';
+import { useAccount, useConnect, useDisconnect, useWalletClient } from 'use-wagmi';
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -60,16 +60,17 @@ const referralStore = useReferralStore();
 const { error, success } = useMessage();
 const { connectAndSign } = useWallet();
 
-const { connect, connectors } = useConnect();
-const { refetch: refetchWalletClient } = useConnectorClient();
-const { address, isConnected } = useAccount();
+const { connect, connectors, isLoading } = useConnect();
+const { refetch: refetchWalletClient } = useWalletClient();
+const { address, isConnected } = useAccount({ onConnect: onWalletConnected });
 const { disconnect } = useDisconnect();
-useAccountEffect({ onConnect: onWalletConnected });
 
 const loading = ref<boolean>(false);
 const modalWalletVisible = ref<boolean>(false);
 
-const wallet = computed<string | null>(() => referralStore.tokenClaim.wallet || authStore.user.evmWallet);
+const wallet = computed<string | null>(
+  () => referralStore.tokenClaim.wallet || authStore.user.evmWallet
+);
 
 onMounted(() => {
   if (!authStore.user.evmWallet) {
@@ -80,7 +81,7 @@ onMounted(() => {
 function wagmiConnect(connector) {
   if (isConnected.value) {
     refetchWalletClient();
-  } else {
+  } else if (connector.ready) {
     connect({ connector });
   }
 }
@@ -104,7 +105,7 @@ async function connectWallet() {
   loading.value = true;
 
   if (!isConnected.value) {
-    wagmiConnect(connectors[0]);
+    wagmiConnect(connectors.value[0]);
     loading.value = false;
     return;
   }

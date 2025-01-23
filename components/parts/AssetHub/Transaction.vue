@@ -1,8 +1,8 @@
 <template>
   <Modal v-model:show="modalTransactionVisible" class="text-center">
-    <IconSuccess class="text-4xl" />
+    <IconSuccessful class="text-4xl" />
 
-    <h2 class="mb-2 mt-6">
+    <h2 class="mt-6 mb-2">
       {{ $t('dashboard.service.assetHub.transactionProcessed') }}
     </h2>
     <i18n-t keypath="dashboard.service.assetHub.transactionDetails" tag="p">
@@ -13,7 +13,7 @@
 
     <Btn
       type="secondary"
-      class="mt-8 w-full"
+      class="w-full mt-8"
       @click="
         () => {
           modalTransactionVisible = false;
@@ -35,5 +35,7 @@ defineProps({
 const assetHubStore = useAssetHubStore();
 const modalTransactionVisible = ref<boolean>(true);
 
-const chainId = computed(() => (assetHubStore.mainnet ? SubstrateChain.ASSET_HUB : SubstrateChain.WESTEND_ASSET_HUB));
+const chainId = computed(() =>
+  assetHubStore.mainnet ? SubstrateChain.ASSET_HUB : SubstrateChain.WESTEND_ASSET_HUB
+);
 </script>

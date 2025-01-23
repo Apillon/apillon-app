@@ -1,3 +1,5 @@
+import { crustTypes } from '@crustio/type-definitions';
+
 /**
  * Bucket type
  */
@@ -66,13 +68,9 @@ export enum FileUploadSessionStatus {
   VALIDATION_FAILED = 4,
 }
 
+export const CALCULATED_CIDS_KEY = 'apl_calculated_cids';
+
 declare global {
-  type UploadedFileInfo = {
-    CID: string | null;
-    link: string | null;
-    name: string | null;
-    path: string | null;
-  };
   /**
    * Storage
    */
@@ -232,17 +230,7 @@ declare global {
   }
 
   type FileDetails = FileInterface | FileUploadInterface;
-  type FileCrust = {
-    file_size: string;
-    spower: string;
-    expired_at: string;
-    calculated_at: string;
-    amount: string;
-    prepaid: string;
-    reported_replica_count: string;
-    remaining_paid_count: string;
-    replicas: string;
-  };
+  type FileCrust = typeof crustTypes.market.types.FileInfoV2;
 
   interface FileDetailsResponse extends GeneralResponse<FileInterface> {}
   interface FileUploadRequestResponse extends GeneralResponse<FileUploadRequestInterface> {}

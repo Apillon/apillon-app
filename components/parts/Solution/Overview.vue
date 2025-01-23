@@ -6,7 +6,10 @@
       <div class="mb-6 flex items-center gap-2">
         <span
           class="text-2xl"
-          :class="[service.icon, key % 3 === 0 ? 'text-blue' : key % 3 === 1 ? 'text-pink' : 'text-orange']"
+          :class="[
+            service.icon,
+            key % 3 === 0 ? 'text-blue' : key % 3 === 1 ? 'text-pink' : 'text-orange',
+          ]"
         ></span>
         <h5>{{ $t(`dashboard.service.${service.name}.name`) }}</h5>
       </div>
@@ -95,7 +98,8 @@ const web3Services = computed(() => [
     data: [
       {
         name: t(`dashboard.service.nft.collectionCount`),
-        value: dataStore.project.overview.numOfCollections || dataStore.project.overview.collectionCount,
+        value:
+          dataStore.project.overview.numOfCollections || dataStore.project.overview.collectionCount,
       },
       {
         name: t(`dashboard.service.nft.nftTransactionCount`),

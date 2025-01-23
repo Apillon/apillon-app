@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount, useDisconnect } from '@wagmi/vue';
+import { useAccount, useDisconnect } from 'use-wagmi';
 import colors from '~/tailwind.colors';
 
 const props = defineProps({

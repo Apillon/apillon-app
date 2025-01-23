@@ -112,7 +112,7 @@ export const useAuthStore = defineStore('auth', {
         const data = JSON.parse(localStorage.getItem(AuthLsKeys.PROSOPO) || '{}');
         return typeof data === 'object' ? data : {};
       } catch (error) {
-        console.warn(error);
+        console.log(error);
       }
       return {};
     },

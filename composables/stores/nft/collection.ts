@@ -18,8 +18,10 @@ export const useCollectionStore = defineStore('collection', {
     loading: false,
     metadata: [] as Array<Record<string, any>>,
     metadataDeploys: [] as MetadataDeployInterface[],
-    metadataStored: undefined as Boolean | undefined,
+    metadataStored: null as Boolean | null,
+    mintTab: NftCreateTab.METADATA,
     search: '',
+    step: CollectionStep.STORAGE_TYPE,
     nftStep: NftCreateStep.AMOUNT,
     amount: 0,
     stepCollectionDeploy: CollectionStatus.CREATED,
@@ -29,17 +31,17 @@ export const useCollectionStore = defineStore('collection', {
     uploadActive: false,
     form: {
       base: {
-        coverImage: null as FileListItemType | null,
         logo: null as FileListItemType | null,
+        coverImage: null as FileListItemType | null,
         name: '',
         symbol: '',
-      },
-      behavior: {
-        chain: undefined as number | undefined,
+        chain: Chains.MOONBASE as number,
         chainType: ChainType.EVM,
         collectionType: NFTCollectionType.GENERIC,
         useApillonIpfsGateway: false,
-        useIpns: undefined as boolean | undefined,
+        useIpns: false,
+      },
+      behavior: {
         baseUri: '',
         baseExtension: '.json',
         dropStart: Date.now() + 3600000,
@@ -47,8 +49,8 @@ export const useCollectionStore = defineStore('collection', {
         maxSupply: 0,
         dropPrice: 0,
         dropReserve: 0,
-        revocable: false as boolean | null,
-        soulbound: false as boolean | null,
+        revocable: false as Boolean | null,
+        soulbound: false as Boolean | null,
         supplyLimited: 0,
         royaltiesAddress: null,
         royaltiesFees: 0,
@@ -106,6 +108,8 @@ export const useCollectionStore = defineStore('collection', {
     resetMetadata() {
       this.resetFile();
       this.resetImages();
+      this.mintTab = NftCreateTab.METADATA;
+      this.step = CollectionStep.STORAGE_TYPE;
       this.nftStep = NftCreateStep.AMOUNT;
       this.stepCollectionDeploy = CollectionStatus.CREATED;
     },
@@ -138,12 +142,12 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.coverImage = null;
       this.form.base.name = '';
       this.form.base.symbol = '';
+      this.form.base.chain = Chains.MOONBASE;
+      this.form.base.chainType = ChainType.EVM;
+      this.form.base.collectionType = NFTCollectionType.GENERIC;
+      this.form.base.useApillonIpfsGateway = false;
+      this.form.base.useIpns = false;
 
-      this.form.behavior.chain = undefined;
-      this.form.behavior.chainType = ChainType.EVM;
-      this.form.behavior.collectionType = NFTCollectionType.GENERIC;
-      this.form.behavior.useApillonIpfsGateway = false;
-      this.form.behavior.useIpns = undefined;
       this.form.behavior.baseUri = '';
       this.form.behavior.baseExtension = '.json';
       this.form.behavior.dropStart = Date.now() + 3600000;
@@ -284,13 +288,19 @@ export const useCollectionStore = defineStore('collection', {
       return null;
     },
 
-    async fetchCollectionTransactions(collectionUuid: string, showLoader = true): Promise<TransactionInterface[]> {
+    async fetchCollectionTransactions(
+      collectionUuid: string,
+      showLoader = true
+    ): Promise<TransactionInterface[]> {
       this.loading = showLoader;
       try {
         const params: Record<string, string | number> = {
           ...PARAMS_ALL_ITEMS,
         };
-        const res = await $api.get<TransactionResponse>(endpoints.collectionTransactions(collectionUuid), params);
+        const res = await $api.get<TransactionResponse>(
+          endpoints.collectionTransactions(collectionUuid),
+          params
+        );
         this.transaction = res.data.items;
         this.loading = false;
 

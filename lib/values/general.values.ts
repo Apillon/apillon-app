@@ -27,7 +27,6 @@ export const LS_KEYS = {
 
 export const SessionKeys = {
   ASSET_HUB: 'al_asset_hub',
-  BUCKET_STORE: 'al_bucket_store',
   CREDITS_MSG: 'al_credits_msg',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',

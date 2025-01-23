@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { CALCULATED_CIDS_KEY } from '~/lib/types/storage';
 
 export const useBucketStore = defineStore('bucket', {
   state: () => ({
@@ -26,27 +27,37 @@ export const useBucketStore = defineStore('bucket', {
       selectedItems: [] as BucketItemInterface[],
       pagination: createPagination(),
     },
-    calculatedCids: {} as Record<string, UploadedFileInfo>,
+    calculatedCids: {} as Record<
+      string,
+      {
+        CID: string | null;
+        link: string | null;
+      }
+    >,
   }),
   getters: {
     bucketUuid(state): string {
       return (
         state.active?.bucket_uuid ||
-        (state.items.find((item: BucketInterface) => item.bucket_uuid === state.selected) || ({} as BucketInterface))
-          ?.bucket_uuid ||
+        (
+          state.items.find((item: BucketInterface) => item.bucket_uuid === state.selected) ||
+          ({} as BucketInterface)
+        )?.bucket_uuid ||
         ''
       );
     },
     currentBucket(state): BucketInterface {
       return (
-        state.items.find((item: BucketInterface) => item.bucket_uuid === state.selected) || ({} as BucketInterface)
+        state.items.find((item: BucketInterface) => item.bucket_uuid === state.selected) ||
+        ({} as BucketInterface)
       );
     },
     hasBuckets(state): boolean {
       if (Array.isArray(state.items) && state.items.length > 0) {
         return state.items.some(
           (bucket: BucketInterface) =>
-            bucket.bucketType === BucketType.STORAGE || bucket.bucketType === BucketType.NFT_METADATA
+            bucket.bucketType === BucketType.STORAGE ||
+            bucket.bucketType === BucketType.NFT_METADATA
         );
       }
       return false;
@@ -133,7 +144,8 @@ export const useBucketStore = defineStore('bucket', {
      */
     async getBuckets(statusDestroyed = false) {
       if (
-        (statusDestroyed && (!this.hasDestroyedBuckets || isCacheExpired(LsCacheKeys.BUCKET_DESTROYED))) ||
+        (statusDestroyed &&
+          (!this.hasDestroyedBuckets || isCacheExpired(LsCacheKeys.BUCKET_DESTROYED))) ||
         !this.hasBuckets ||
         isCacheExpired(LsCacheKeys.BUCKETS)
       ) {
@@ -232,13 +244,6 @@ export const useBucketStore = defineStore('bucket', {
       return {} as BucketInterface;
     },
 
-    addCids(cids: Record<string, UploadedFileInfo>) {
-      this.calculatedCids = {
-        ...this.calculatedCids,
-        ...cids,
-      };
-    },
-
     populateCids(directoryContent: BucketItemInterface[]) {
       return directoryContent.map(file => {
         if (file.CID || file.link) {
@@ -246,7 +251,8 @@ export const useBucketStore = defineStore('bucket', {
           return file;
         }
 
-        const cidInfo = this.calculatedCids[file.uuid];
+        const calculatedCids = JSON.parse(localStorage.getItem(CALCULATED_CIDS_KEY) || '{}');
+        const cidInfo = calculatedCids[file.uuid];
         if (cidInfo) {
           file.CID = cidInfo.CID;
           file.link = cidInfo.link;
@@ -308,10 +314,4 @@ export const useBucketStore = defineStore('bucket', {
       return [];
     },
   },
-  persist: {
-    key: SessionKeys.BUCKET_STORE,
-    storage: persistedState.localStorage,
-    paths: ['calculatedCids', 'itemsMainnet', 'itemsTestnet'],
-    // debug: true,
-  } as any,
 });

@@ -1,12 +1,12 @@
 <template>
-  <div class="mb-8 mt-6 max-w-xl">
+  <div class="max-w-xl mt-6 mb-8">
     <div class="mb-4">
       <h2 class="text-center">{{ $t('nft.collection.preview') }}</h2>
       <p>
         {{ $t('nft.collection.previewInfo') }}
       </p>
     </div>
-    <div class="relative mb-4">
+    <div class="mb-4 relative">
       <Image
         v-if="collectionStore.form.base.coverImage"
         :src="createThumbnailUrl(collectionStore.form.base.coverImage)"
@@ -15,10 +15,10 @@
       <Image
         v-if="collectionStore.form.base.logo"
         :src="createThumbnailUrl(collectionStore.form.base.logo)"
-        class="absolute left-2 top-2 h-20 border-2 border-bg-lighter"
+        class="top-2 left-2 absolute h-20 border-2 border-bg-lighter"
       />
     </div>
-    <n-table class="plain mb-6 table-fixed" :bordered="false" :single-line="true">
+    <n-table class="plain table-fixed mb-6" :bordered="false" :single-line="true">
       <thead>
         <tr>
           <th>{{ $t('nft.collection.data') }}</th>
@@ -41,20 +41,20 @@
         <tr>
           <td>{{ $t('form.label.collection.chain') }}:</td>
           <td>
-            <span class="text-white">{{ getChainName(collectionStore.form.behavior.chain) }}</span>
+            <span class="text-white">{{ getChainName(collectionStore.form.base.chain) }}</span>
           </td>
         </tr>
         <tr>
           <td>{{ $t('form.label.collection.chainType') }}:</td>
           <td>
-            <span class="text-white">{{ ChainType[collectionStore.form.behavior.chainType] }}</span>
+            <span class="text-white">{{ ChainType[collectionStore.form.base.chainType] }}</span>
           </td>
         </tr>
         <tr>
           <td>{{ $t('form.label.collection.type') }}:</td>
           <td>
             <span class="text-white">
-              {{ getCollectionTypeName(collectionStore.form.behavior.collectionType) }}
+              {{ getCollectionTypeName(collectionStore.form.base.collectionType) }}
             </span>
           </td>
         </tr>
@@ -63,7 +63,7 @@
           <td>
             <span class="text-white">
               {{
-                collectionStore.form.behavior.useApillonIpfsGateway
+                collectionStore.form.base.useApillonIpfsGateway
                   ? $t('form.booleanSelect.true')
                   : $t('form.booleanSelect.false')
               }}
@@ -75,7 +75,9 @@
           <td>
             <span class="text-white">
               {{
-                collectionStore.form.behavior.useIpns ? $t('form.booleanSelect.true') : $t('form.booleanSelect.false')
+                collectionStore.form.base.useIpns
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
               }}
             </span>
           </td>
@@ -108,7 +110,9 @@
           <td>
             <span class="text-white">
               {{
-                collectionStore.form.behavior.revocable ? $t('form.booleanSelect.true') : $t('form.booleanSelect.false')
+                collectionStore.form.behavior.revocable
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
               }}
             </span>
           </td>
@@ -118,7 +122,9 @@
           <td>
             <span class="text-white">
               {{
-                collectionStore.form.behavior.soulbound ? $t('form.booleanSelect.true') : $t('form.booleanSelect.false')
+                collectionStore.form.behavior.soulbound
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
               }}
             </span>
           </td>
@@ -127,7 +133,11 @@
           <td>{{ $t('form.label.collection.royaltiesFees') }}:</td>
           <td>
             <span class="text-white">
-              {{ collectionStore.form.behavior.royaltiesFees ? collectionStore.form.behavior.royaltiesFees : '0' }}
+              {{
+                collectionStore.form.behavior.royaltiesFees
+                  ? collectionStore.form.behavior.royaltiesFees
+                  : '0'
+              }}
             </span>
           </td>
         </tr>
@@ -143,7 +153,11 @@
           <td>{{ $t('form.label.collection.drop') }}:</td>
           <td>
             <span class="text-white">
-              {{ collectionStore.form.behavior.drop ? $t('form.booleanSelect.true') : $t('form.booleanSelect.false') }}
+              {{
+                collectionStore.form.behavior.drop
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
+              }}
             </span>
           </td>
         </tr>
@@ -175,9 +189,6 @@
 </template>
 
 <script setup lang="ts">
-import { ChainType } from '~/lib/types/nft';
-import { timestampToDateAndTime } from '~/lib/utils/dates';
-
 const collectionStore = useCollectionStore();
 const { collectionTypes, nftChains, chainCurrency } = useCollection();
 const { createThumbnailUrl } = useNft();

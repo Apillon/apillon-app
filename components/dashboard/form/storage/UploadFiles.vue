@@ -2,7 +2,7 @@
   <!-- Upload - File list  -->
   <div
     v-if="bucketStore.uploadFileList.length > 0"
-    class="card-dark fixed bottom-0 right-0 z-10 -mb-[1px] -mr-[1px] w-[30rem] !rounded-none !border-yellow px-5 py-3"
+    class="card-dark fixed right-0 bottom-0 w-[30rem] px-5 py-3 !border-yellow !rounded-none z-10 -mr-[1px] -mb-[1px]"
   >
     <!-- Header -->
     <n-space v-if="filesUploading" justify="space-between" align="center">
@@ -22,7 +22,10 @@
       </n-space>
       <n-space align="center">
         <button class="p-2" @click="fileListExpanded = !fileListExpanded">
-          <span class="icon-down align-middle text-2xl" :class="[fileListExpanded ? 'icon-down' : 'icon-up']"></span>
+          <span
+            class="icon-down align-middle text-2xl"
+            :class="[fileListExpanded ? 'icon-down' : 'icon-up']"
+          ></span>
         </button>
         <button class="p-2" @click="clearFileList()">
           <span class="icon-close align-middle text-2xl"></span>
@@ -31,14 +34,17 @@
     </n-space>
     <n-space v-else-if="allFilesSuccess" justify="space-between" align="center">
       <n-space justify="space-between" align="center">
-        <IconSuccess />
+        <IconSuccessful />
         <div>
           <strong>{{ $t('form.success.filesUploaded') }}</strong>
         </div>
       </n-space>
       <n-space align="center">
         <button class="p-2" @click="fileListExpanded = !fileListExpanded">
-          <span class="icon-down align-middle text-2xl" :class="[fileListExpanded ? 'icon-down' : 'icon-up']"></span>
+          <span
+            class="icon-down align-middle text-2xl"
+            :class="[fileListExpanded ? 'icon-down' : 'icon-up']"
+          ></span>
         </button>
         <button class="p-2" @click="clearFileList()">
           <span class="icon-close align-middle text-2xl"></span>
@@ -47,7 +53,7 @@
     </n-space>
     <n-space v-else justify="space-between" align="center">
       <n-space justify="space-between" align="center">
-        <span class="icon-upload mr-2 align-middle text-2xl"></span>
+        <span class="icon-upload align-middle text-2xl mr-2"></span>
         <div>
           <strong>{{ $t('storage.file.confirmUpload') }}</strong>
           <span class="ml-1 text-body">
@@ -56,12 +62,12 @@
         </div>
       </n-space>
       <button class="p-2" @click="clearFileList()">
-        <span class="icon-delete align-middle text-2xl"></span>
+        <span class="icon-delete text-2xl align-middle"></span>
       </button>
     </n-space>
 
     <!-- LIST -->
-    <n-scrollbar v-if="fileListExpanded" class="mt-4 max-h-72" y-scrollable>
+    <n-scrollbar v-if="fileListExpanded" class="max-h-72 mt-4" y-scrollable>
       <div v-for="file in bucketStore.uploadFileList" :key="file.id">
         <StorageFileListItem
           :id="file.id"
@@ -76,26 +82,36 @@
 
     <!-- Actions -->
     <template v-if="fileListExpanded">
-      <div v-if="filesUploading" class="mb-2 mt-10 w-full">
-        <n-upload class="w-full" :show-file-list="false" multiple directory-dnd :custom-request="uploadFilesRequest">
+      <div v-if="filesUploading" class="w-full mt-10 mb-2">
+        <n-upload
+          class="w-full"
+          :show-file-list="false"
+          multiple
+          directory-dnd
+          :custom-request="uploadFilesRequest"
+        >
           <n-button class="w-full">
             <span class="text-primary">{{ $t('storage.file.uploadMore') }}</span>
           </n-button>
         </n-upload>
       </div>
-      <div v-else-if="allFilesSuccess" class="mb-2 mt-10 w-full">
+      <div v-else-if="allFilesSuccess" class="w-full mt-10 mb-2">
         <n-button class="w-full" @click="clearFileList(true)">
           <span class="text-primary">{{ $t('storage.file.refresh') }}</span>
         </n-button>
       </div>
-      <div v-else-if="allFilesFinished" class="mb-2 mt-10 w-full">
+      <div v-else-if="allFilesFinished" class="w-full mt-10 mb-2">
         <n-button class="w-full" type="primary" tertiary @click="upload()">
           <span class="text-primary">{{ $t('storage.file.retry') }}</span>
         </n-button>
       </div>
-      <n-grid v-else class="mb-2 mt-10 w-full" :cols="2" :span="2" :x-gap="8">
+      <n-grid v-else class="w-full mt-10 mb-2" :cols="2" :span="2" :x-gap="8">
         <n-gi class="self-center">
-          <n-checkbox v-model:checked="wrapToDirectoryCheckbox" size="medium" :label="$t('storage.wrapToDirectory')" />
+          <n-checkbox
+            v-model:checked="wrapToDirectoryCheckbox"
+            size="medium"
+            :label="$t('storage.wrapToDirectory')"
+          />
         </n-gi>
         <n-gi>
           <Btn type="primary" size="large" @click="requestUpload">
@@ -110,7 +126,11 @@
       <p>{{ $t('storage.wrapFilesDescription') }}</p>
       <br />
       <!--  Folder name -->
-      <n-form-item path="name" :label="$t('form.label.folderName')" :label-props="{ for: 'folderName' }">
+      <n-form-item
+        path="name"
+        :label="$t('form.label.folderName')"
+        :label-props="{ for: 'folderName' }"
+      >
         <n-input
           v-model:value="folderName"
           :placeholder="$t('form.placeholder.folderName')"
@@ -154,7 +174,9 @@ const wrapToDirectoryCheckbox = ref<boolean>(false);
 /** Check if all files are finished (status FINISHED or ERROR) */
 const allFilesFinished = computed<boolean>(() => {
   return !bucketStore.uploadFileList.some(
-    file => file.status === FileUploadStatusValue.PENDING || file.status === FileUploadStatusValue.UPLOADING
+    file =>
+      file.status === FileUploadStatusValue.PENDING ||
+      file.status === FileUploadStatusValue.UPLOADING
   );
 });
 const allFilesSuccess = computed<boolean>(() => {
@@ -164,7 +186,10 @@ const filesUploading = computed<boolean>(() => {
   return bucketStore.uploadFileList.some(file => file.status === FileUploadStatusValue.UPLOADING);
 });
 const numOfUploadedFiles = computed<number>(() => {
-  return bucketStore.uploadFileList.filter(file => file.status !== FileUploadStatusValue.PENDING).length || 0;
+  return (
+    bucketStore.uploadFileList.filter(file => file.status !== FileUploadStatusValue.PENDING)
+      .length || 0
+  );
 });
 
 /**

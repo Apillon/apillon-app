@@ -10,7 +10,7 @@
   >
     <n-tab-pane v-for="(component, key) in tabs" :key="key" :name="key">
       <template #tab>
-        <IconSuccess v-if="currentIndex > tabIndex(key)" />
+        <IconSuccessful v-if="currentIndex > tabIndex(key)" />
         <IconNumber v-else :number="tabIndex(key) + 1" :active="currentTab === key" />
         <span class="ml-2 text-sm text-white">
           {{ $t(`dashboard.solution.${solution}.tabs[${tabIndex(key)}]`) }}
@@ -18,14 +18,23 @@
       </template>
       <slot>
         <div class="pb-36">
-          <component :is="component" @proceed="$emit('change', Object.keys(tabs)[currentIndex + 1])" />
+          <component
+            :is="component"
+            @proceed="$emit('change', Object.keys(tabs)[currentIndex + 1])"
+          />
         </div>
       </slot>
     </n-tab-pane>
   </n-tabs>
-  <div class="absolute bottom-0 left-0 right-0 flex h-[120px] items-center border-t border-bg-lighter bg-bg">
+  <div
+    class="absolute left-0 right-0 bottom-0 h-[120px] flex items-center border-t border-bg-lighter bg-bg"
+  >
     <div class="w-full">
-      <Btn v-if="currentIndex > 0" type="secondary" @click="$emit('change', Object.keys(tabs)[currentIndex - 1])">
+      <Btn
+        v-if="currentIndex > 0"
+        type="secondary"
+        @click="$emit('change', Object.keys(tabs)[currentIndex - 1])"
+      >
         {{ $t('form.goBack') }}</Btn
       >
       <Btn
@@ -49,7 +58,9 @@ const props = defineProps({
 const emit = defineEmits(['back', 'change', 'proceed']);
 
 const currentTab = ref(props.tab);
-const currentIndex = computed(() => Object.keys(props.tabs).findIndex(item => item === currentTab.value));
+const currentIndex = computed(() =>
+  Object.keys(props.tabs).findIndex(item => item === currentTab.value)
+);
 
 const onTabChange = (newTab: string) => {
   if (props.tab !== newTab) {

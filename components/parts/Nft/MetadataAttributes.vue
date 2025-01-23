@@ -3,16 +3,15 @@
     v-if="collectionStore.csvAttributes.length > 0"
     v-bind="$attrs"
     v-model:value="collectionStore.csvSelectedAttributes"
-    class="text-left"
   >
-    <n-space vertical class="mb-2" size="small">
-      <div class="mb-6 text-center">
-        <!-- <strong class="mr-4 text-body">{{ $t('nft.upload.selectAttributes') }}:</strong> -->
+    <n-space vertical class="p-3" size="small">
+      <n-space align="center" justify="space-between">
+        <strong class="text-body mr-4">{{ $t('nft.upload.selectAttributes') }}:</strong>
 
         <Btn type="builders" size="tiny" href="https://wiki.apillon.io/web3-services/4-nfts.html">
           {{ $t('general.learnMore') }}
         </Btn>
-      </div>
+      </n-space>
 
       <n-space
         v-for="(column, key) in collectionStore.csvAttributes"
@@ -54,7 +53,7 @@
     </n-button>
   </n-checkbox-group>
   <div v-else>
-    <h5 class="mb-6">{{ $t('nft.validation.csvMissingAttributes') }}</h5>
+    <h5>{{ $t('nft.validation.csvMissingAttributes') }}</h5>
   </div>
 </template>
 
@@ -62,10 +61,6 @@
 import type { SelectOption } from 'naive-ui';
 
 const collectionStore = useCollectionStore();
-
-onMounted(() => {
-  selectAllAttributes();
-});
 
 const displayTypes = ref<Array<SelectOption>>([
   { value: 'string', label: 'String' },

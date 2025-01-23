@@ -1,10 +1,10 @@
 <template>
   <div class="text-center">
-    <h2>{{ t('nft.amount.title') }}</h2>
-    <p>{{ t('nft.amount.content') }}</p>
-    <div class="mt-4 grid grid-cols-2 justify-items-center gap-8 whitespace-pre-line">
+    <h2>{{ $t('nft.amount.title') }}</h2>
+    <p>{{ $t('nft.amount.content') }}</p>
+    <div class="grid grid-cols-2 gap-8 whitespace-pre-line mt-4 justify-center">
       <div
-        class="card-dark mt-3 flex max-w-[12rem] cursor-pointer flex-col justify-between p-4 sm:p-8"
+        class="card-dark flex flex-col justify-between p-4 sm:p-8 mt-3 cursor-pointer max-w-[12rem]"
         :class="{ '!border-yellow': collectionStore.amount === nftSingle.value }"
         @click="collectionStore.amount = nftSingle.value"
       >
@@ -14,9 +14,12 @@
         </div>
       </div>
 
-      <div class="card-dark-multiple max-w-[12rem]" :class="{ active: collectionStore.amount === nftMultiple.value }">
+      <div
+        class="card-dark-multiple max-w-[12rem]"
+        :class="{ active: collectionStore.amount === nftMultiple.value }"
+      >
         <div
-          class="card-dark flex h-full cursor-pointer flex-col justify-between p-4 sm:p-8"
+          class="card-dark flex flex-col justify-between p-4 sm:p-8 h-full cursor-pointer"
           :class="{ '!border-yellow': collectionStore.amount === nftMultiple.value }"
           @click="collectionStore.amount = nftMultiple.value"
         >
@@ -29,13 +32,12 @@
     </div>
 
     <Btn class="mt-8" size="large" :disabled="!collectionStore.amount" @click="handleSubmit()">
-      {{ t('form.proceed') }}
+      {{ $t('form.proceed') }}
     </Btn>
   </div>
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(['submit']);
 const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
@@ -53,16 +55,11 @@ const nftMultiple = {
 };
 
 function handleSubmit() {
-  collectionStore.resetFile();
-  collectionStore.resetImages();
-
   if (collectionStore.amount === NftAmount.SINGLE) {
     collectionStore.nftStep = NftCreateStep.SINGLE;
-    emit('submit', collectionStore.amount);
   } else if (collectionStore.amount === NftAmount.MULTIPLE) {
     collectionStore.nftStep = NftCreateStep.MULTIPLE;
     collectionStore.stepUpload = NftUploadStep.FILE;
-    emit('submit', collectionStore.amount);
   } else {
     message.warning(t('nft.validation.selectAmount'));
   }

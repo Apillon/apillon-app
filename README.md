@@ -24,9 +24,9 @@ await $api.get('/login', formData);
 
 ### Blockchain
 
-Blockchain connection is realized with [viem](https://viem.sh/) and [wagmi](https://github.com/wagmi-dev/wagmi). For easier integration, a vue wrapper is used: [wagmi/vue](https://github.com/unicape/wagmi/vue). Docs for react hooks work with wagmi/vue: [https://wagmi.sh/react/hooks/useAccount](https://wagmi.sh/react/hooks/useAccount).
+Blockchain connection is realized with [viem](https://viem.sh/) and [wagmi](https://github.com/wagmi-dev/wagmi). For easier integration, a vue wrapper is used: [use-wagmi](https://github.com/unicape/use-wagmi). Docs for react hooks work with use-wagmi: [https://wagmi.sh/react/hooks/useAccount](https://wagmi.sh/react/hooks/useAccount).
 
-Wagmi config is in `~/plugins/wagmi/vue.ts`. Connectors, available chains and RPC urls can be defined here.
+Wagmi config is in `~/plugins/use-wagmi.ts`. Connectors, available chains and RPC urls can be defined here.
 
 ### Error handling
 
