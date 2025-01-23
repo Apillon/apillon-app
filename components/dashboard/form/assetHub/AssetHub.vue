@@ -60,23 +60,6 @@
 
       <n-form-item
         class="bg-bg-lighter rounded-lg"
-        :class="{ hidden: !!assetId }"
-        :label="$t('form.label.assetHub.id')"
-        path="assetId"
-      >
-        <n-input-number
-          v-model:value="formData.assetId"
-          :placeholder="$t('form.placeholder.assetHub.assetId')"
-          clearable
-          class="bg-bg-light rounded-lg"
-          :min="0"
-          :step="1"
-          :disabled="!!assetId"
-          @keydown.enter.prevent
-        />
-      </n-form-item>
-      <n-form-item
-        class="bg-bg-lighter rounded-lg"
         :label="$t('form.label.assetHub.decimals')"
         path="decimals"
       >
@@ -169,7 +152,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nToBigInt } from '@polkadot/util';
+import { nToBigInt, hexToBigInt, hexToNumber, u8aToNumber, u8aToBigInt } from '@polkadot/util';
 import type { FormItemRule } from 'naive-ui';
 import { assetHubNetworks } from '~/composables/useAssetHub';
 
@@ -193,7 +176,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
-const { assetHubClient } = useAssetHub();
+const { assetHubClient, assetHubNetworks } = useAssetHub();
 
 const loading = ref(false);
 const asset = ref<AssetInterface | undefined>();
@@ -222,10 +205,6 @@ const rules: NFormRules = {
     ruleRequired('Symbol is required'),
     { validator: validateSymbol, message: t('validation.assetHub.symbolNotUnique') },
   ],
-  assetId: [
-    ruleRequired('Asset Id is required'),
-    { validator: validateAssetId, message: t('validation.assetHub.idNotUnique') },
-  ],
   decimals: ruleRequired('Decimals is required'),
   initialSupply: ruleRequired('Initial Supply is required'),
   minBalance: ruleRequired('Min balance is required'),
@@ -238,11 +217,7 @@ const networks = computed(() =>
 );
 
 const isMainnetSelected = computed(() => formData.value.network === assetHubNetworks.assetHub.rpc);
-const assetIDsMainnet = computed(() => new Set(assetHubStore.itemsMainnet.map(i => i.id)));
-const assetIDsTestnet = computed(() => new Set(assetHubStore.itemsTestnet.map(i => i.id)));
-const assetIDs = computed(() =>
-  isMainnetSelected.value ? assetIDsMainnet.value : assetIDsTestnet.value
-);
+
 const assets = computed(() =>
   isMainnetSelected.value ? assetHubStore.itemsMainnet : assetHubStore.itemsTestnet
 );
@@ -261,26 +236,11 @@ onMounted(async () => {
       formData.value.network = assetHubNetworks.westend.rpc;
       formData.value.symbol = asset.value.symbol;
     }
-  } else {
-    formData.value.assetId = findFirstAvailableNumber(assetIDs.value);
   }
 
   assetHubStore.getAssetsMainnet();
   assetHubStore.getAssetsTestnet();
 });
-
-watch(
-  () => formData.value.assetId,
-  (newId, oldId) => {
-    if (oldId && newId) {
-      const delta = newId - oldId;
-
-      if (Math.abs(delta) === 1 && assetIDs.value.has(newId)) {
-        formData.value.assetId = newId + delta;
-      }
-    }
-  }
-);
 
 watch(
   () => formData.value.network,
@@ -289,18 +249,8 @@ watch(
       await assetHubClient.value.destroyInstance();
       await sleep(200);
     }
-    if (rpc && assetHubStore.account) {
-      formData.value.assetId = findFirstAvailableNumber(assetIDs.value);
-    }
   }
 );
-function findFirstAvailableNumber(set) {
-  let i = 1;
-  while (set.has(i)) {
-    i++;
-  }
-  return i;
-}
 
 // Custom validations
 function validateAssetId(_: FormItemRule, value: string): boolean {
@@ -352,21 +302,23 @@ async function createAsset() {
     message.warning(t('dashboard.service.assetHub.connect'));
     return;
   }
-  if (
-    !formData.value.network ||
-    !formData.value.assetId ||
-    !formData.value.decimals ||
-    !formData.value.minBalance
-  ) {
+  if (!formData.value.network || !formData.value.decimals || !formData.value.minBalance) {
     message.warning('Missing data');
     return;
   }
   loading.value = true;
 
   assetHubClient.value = await assetHubStore.initClient(isMainnetSelected.value);
-  if (!assetHubClient.value) return;
+  if (!assetHubClient.value) {
+    loading.value = false;
+    message.warning(t('error.general'));
+    return;
+  }
 
   try {
+    const nextId = await assetHubClient.value.getNextId();
+    const id = Number(nextId.toJSON());
+
     const team = {
       issuer: formData.value.issuerAddress,
       admin: assetHubStore.account.address,
@@ -374,7 +326,7 @@ async function createAsset() {
     };
     txHash.value = await assetHubClient.value.createAsset(
       assetHubStore.account.address,
-      formData.value.assetId,
+      id,
       formData.value.name,
       formData.value.symbol,
       formData.value.decimals,
@@ -386,7 +338,7 @@ async function createAsset() {
 
       /** Emit events */
       emit('submitSuccess');
-      emit('createSuccess', formData.value.assetId, formData.value.network);
+      emit('createSuccess', id, formData.value.network);
     } else {
       message.warning(t('error.general'));
       emit('close');
