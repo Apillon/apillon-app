@@ -80,7 +80,9 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       ],
       minWidth: 120,
       render(row: CollectionInterface) {
-        return h('span', {}, { default: () => t(`nft.chain.${row.chain}`) });
+        return h('span', {}, { 
+          default: () => te(`nft.chain.${EvmChain[row.chain]}`) ? t(`nft.chain.${EvmChain[row.chain]}`): EvmChain[EvmChain[row.chain]]
+        });
       },
     },
     {

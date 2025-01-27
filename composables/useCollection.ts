@@ -17,9 +17,13 @@ export default function useCollection() {
   const formRef = ref<NFormInst | null>(null);
 
   const chains = enumKeys(EvmChain)
-    .filter(key => EvmChain[key] !== EvmChain.ASTAR_SHIBUYA && EvmChain[key] !== EvmChain.OASIS)
+    .filter(key => EvmChain[key] !== EvmChain.ASTAR_SHIBUYA && EvmChain[key] !== EvmChain.OASIS && EvmChain[key] !== EvmChain.OASIS_SAPPHIRE && EvmChain[key] !== EvmChain.OASIS_TESTNET)
     .map(k => {
-      return { name: k.toLowerCase(), label: t(`nft.chain.${EvmChain[k]}`), value: EvmChain[k] };
+      return { 
+        name: k.toLowerCase(), 
+        label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`): EvmChain[EvmChain[k]], 
+        value: EvmChain[k] 
+      };
     });
   const nftChains = [
     ...chains,

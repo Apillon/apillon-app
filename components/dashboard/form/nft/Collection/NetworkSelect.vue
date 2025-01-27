@@ -29,7 +29,7 @@
     <div
       v-if="isSubstrateEnabled"
       class="overflow-hidden transition-all"
-      :class="selectedChain === Chains.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
+      :class="selectedChain === EvmChain.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
     >
       <h4 class="relative top-2">{{ t('nft.collection.chainType') }}</h4>
       <div class="my-8 flex justify-center gap-4 whitespace-pre-line">
@@ -73,11 +73,10 @@
 
 <script setup lang="ts">
 import uniquePNG from 'assets/images/logo/unique.png';
-import { Chains, SubstrateChain } from '~/lib/types/nft';
+import { EvmChain, SubstrateChain } from '~/lib/types/nft';
 
 const emit = defineEmits(['submit']);
 const { t } = useI18n();
-const router = useRouter();
 const message = useMessage();
 const collectionStore = useCollectionStore();
 const { nftChains, chainTypes } = useCollection();

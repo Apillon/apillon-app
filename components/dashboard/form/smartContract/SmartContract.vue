@@ -228,11 +228,11 @@ function createValidation(input: any): FormItemRule[] {
 
 function getServiceName(chainId?: number | null) {
   switch (chainId) {
-    case Chains.ASTAR:
+    case EvmChain.ASTAR:
       return PriceServiceName.CONTRACT_ASTAR_CREATE;
-    case Chains.MOONBASE:
+    case EvmChain.MOONBASE:
       return PriceServiceName.CONTRACT_MOONBASE_CREATE;
-    case Chains.MOONBEAM:
+    case EvmChain.MOONBEAM:
       return PriceServiceName.CONTRACT_MOONBEAM_CREATE;
     case EvmChain.SEPOLIA:
       return PriceServiceName.CONTRACT_SEPOLIA_CREATE;

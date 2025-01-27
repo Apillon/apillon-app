@@ -116,7 +116,11 @@ const allowedChains = [EvmChain.ASTAR, EvmChain.MOONBASE, EvmChain.MOONBEAM];
 const chains = enumKeys(EvmChain)
   .filter(item => allowedChains.includes(EvmChain[item]))
   .map(k => {
-    return { name: k.toLowerCase(), label: t(`nft.chain.${EvmChain[k]}`), value: EvmChain[k] };
+    return { 
+      name: k.toLowerCase(), 
+      label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`): EvmChain[EvmChain[k]], 
+      value: EvmChain[k] 
+    };
   });
 
 const nftChains = [

@@ -83,7 +83,7 @@ const loading = ref<boolean>(true);
 
 onMounted(async () => {
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
-    selectedChain.value = props.chain || collectionStore.form.behavior.chain || Chains.MOONBEAM;
+    selectedChain.value = props.chain || collectionStore.form.behavior.chain || EvmChain.MOONBEAM;
   }
 
   servicePrices.value = props.category
