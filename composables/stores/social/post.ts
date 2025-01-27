@@ -7,22 +7,33 @@ export const usePostStore = defineStore('post', {
     loading: false,
     search: '',
     settings: null as any,
-    pagination: {
-      page: 1,
-      pageSize: PAGINATION_LIMIT,
-      itemCount: 0,
+    pagination: createPagination(),
+    archive: {
+      items: [] as PostInterface[],
+      loading: false,
+      search: '',
+      pagination: createPagination(),
     },
   }),
   getters: {
     hasPosts(state): boolean {
+      return !!state.search || state.loading || (Array.isArray(state.items) && state.items.length > 0);
+    },
+    hasPostArchive(state): boolean {
       return (
-        !!state.search || state.loading || (Array.isArray(state.items) && state.items.length > 0)
+        !!state.archive.search ||
+        state.archive.loading ||
+        (Array.isArray(state.archive.items) && state.archive.items.length > 0)
       );
     },
   },
   actions: {
     resetData() {
       this.active = {} as PostInterface;
+      this.archive.items = [] as PostInterface[];
+      this.archive.pagination.page = 1;
+      this.archive.pagination.itemCount = 0;
+      this.archive.search = '';
       this.items = [] as PostInterface[];
       this.pagination.page = 1;
       this.pagination.itemCount = 0;
@@ -58,9 +69,15 @@ export const usePostStore = defineStore('post', {
     /**
      * Fetch wrappers
      */
-    async getPosts(page = 1): Promise<PostInterface[]> {
+    async getPosts(page = 1, limit = PAGINATION_LIMIT): Promise<PostInterface[]> {
       if (page !== this.pagination.page || !this.hasPosts || isCacheExpired(LsCacheKeys.POSTS)) {
-        return await this.fetchPosts();
+        return await this.fetchPosts(page, limit);
+      }
+      return this.items;
+    },
+    async getPostArchive(page = 1, limit = PAGINATION_LIMIT): Promise<PostInterface[]> {
+      if (page !== this.archive.pagination.page || !this.hasPostArchive || isCacheExpired(LsCacheKeys.POST_ARCHIVE)) {
+        return await this.fetchPostsArchive(page, limit);
       }
       return this.items;
     },
@@ -75,14 +92,18 @@ export const usePostStore = defineStore('post', {
     /**
      * API calls
      */
-    async fetchPosts(page?: number, showLoader: boolean = true): Promise<PostInterface[]> {
+    async fetchPosts(
+      page: number = 1,
+      limit: number = PAGINATION_LIMIT,
+      showLoader: boolean = true
+    ): Promise<PostInterface[]> {
       this.loading = showLoader;
 
       try {
         const dataStore = useDataStore();
         const params = parseArguments({
-          limit: this.pagination.pageSize,
-          page: page,
+          limit,
+          page,
           search: this.search,
           project_uuid: dataStore.projectUuid,
         });
@@ -106,6 +127,45 @@ export const usePostStore = defineStore('post', {
       }
 
       this.loading = false;
+      return [];
+    },
+
+    async fetchPostsArchive(
+      page?: number,
+      limit: number = PAGINATION_LIMIT,
+      showLoader: boolean = true
+    ): Promise<PostInterface[]> {
+      this.archive.loading = showLoader;
+
+      try {
+        const dataStore = useDataStore();
+        const params = parseArguments({
+          limit,
+          page,
+          search: this.archive.search,
+          project_uuid: dataStore.projectUuid,
+          status: SqlModelStatus.ARCHIVED,
+        });
+
+        const res = await $api.get<PostsResponse>(endpoints.posts(), params);
+
+        this.archive.items = res.data.items;
+        this.archive.pagination.itemCount = res.data.total;
+        this.archive.loading = false;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.POST_ARCHIVE, Date.now().toString());
+
+        return res.data.items;
+      } catch (error: any) {
+        this.archive.items = [] as Array<PostInterface>;
+        this.archive.pagination.itemCount = 0;
+
+        /** Show error message  */
+        window.$message.error(userFriendlyMsg(error));
+      }
+
+      this.archive.loading = false;
       return [];
     },
 

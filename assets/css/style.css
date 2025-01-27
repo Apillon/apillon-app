@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'apillon';
-  src:  url('fonts/apillon.eot?92fgbz');
-  src:  url('fonts/apillon.eot?92fgbz#iefix') format('embedded-opentype'),
-    url('fonts/apillon.ttf?92fgbz') format('truetype'),
-    url('fonts/apillon.woff?92fgbz') format('woff'),
-    url('fonts/apillon.svg?92fgbz#apillon') format('svg');
+  src:  url('fonts/apillon.eot?a74t2b');
+  src:  url('fonts/apillon.eot?a74t2b#iefix') format('embedded-opentype'),
+    url('fonts/apillon.ttf?a74t2b') format('truetype'),
+    url('fonts/apillon.woff?a74t2b') format('woff'),
+    url('fonts/apillon.svg?a74t2b#apillon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-indexing:before {
+  content: "\e968";
+}
+.icon-indexer:before {
+  content: "\e966";
+}
+.icon-rpc:before {
+  content: "\e967";
+}
+.icon-contracts:before {
+  content: "\e965";
+}
+.icon-play:before {
+  content: "\e962";
+}
+.icon-cloud-functions:before {
+  content: "\e963";
+}
+.icon-add-link:before {
+  content: "\e964";
+}
 .icon-social:before {
   content: "\e961";
 }

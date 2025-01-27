@@ -5,10 +5,10 @@
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="$i18n.te('computing.contract.infoNew')" class="text-body mb-8">
+      <p v-if="$te('computing.contract.infoNew')" class="text-body mb-8">
         {{ $t('computing.contract.infoNew') }}
       </p>
-      <p v-else-if="$i18n.te('computing.contract.infoEdit')" class="text-body mb-8">
+      <p v-else-if="$te('computing.contract.infoEdit')" class="text-body mb-8">
         {{ $t('computing.contract.infoEdit') }}
       </p>
     </template>
@@ -194,7 +194,7 @@ type FormContract = {
 
 const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
@@ -213,7 +213,7 @@ const contractTypes = ref<SelectOption[]>(
   enumValues(ComputingContractType).map(value => {
     return {
       value,
-      label: $i18n.t(`computing.contract.type.${value}`),
+      label: t(`computing.contract.type.${value}`),
     };
   })
 );
@@ -248,9 +248,12 @@ const nftChainRpcUrls = ref<SelectOption[]>(
 );
 
 const rules: NFormRules = {
-  name: [ruleRequired($i18n.t('validation.contract.nameRequired'))],
-  description: [ruleDescription($i18n.t('validation.descriptionTooLong'))],
-  'contractData.nftContractAddress': [ruleRequired($i18n.t('validation.contract.addressRequired'))],
+  name: [ruleRequired(t('validation.contract.nameRequired'))],
+  description: [
+    ruleRequired(t('validation.descriptionRequired')),
+    ruleDescription(t('validation.descriptionTooLong')),
+  ],
+  'contractData.nftContractAddress': [ruleRequired(t('validation.contract.addressRequired'))],
 };
 
 onMounted(async () => {
@@ -295,7 +298,7 @@ async function createContract() {
     };
     const res = await $api.post<ContractResponse>(endpoints.contracts(), bodyData);
 
-    message.success($i18n.t('form.success.contract.deploy'));
+    message.success(t('form.success.contract.deploy'));
 
     /** On new contract created add new contract to list */
     contractStore.items.unshift(res.data as ContractInterface);

@@ -113,13 +113,14 @@ const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 
 const allowedChains = [EvmChain.ASTAR, EvmChain.MOONBASE, EvmChain.MOONBEAM];
-const dotChains = enumKeys(EvmChain)
+const chains = enumKeys(EvmChain)
   .filter(item => allowedChains.includes(EvmChain[item]))
   .map(k => {
     return { name: k.toLowerCase(), label: t(`nft.chain.${EvmChain[k]}`), value: EvmChain[k] };
   });
+
 const nftChains = [
-  ...dotChains,
+  ...chains,
   {
     name: 'custom',
     label: t('dashboard.solution.encryption.configure.customEvm'),

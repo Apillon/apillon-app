@@ -14,7 +14,7 @@
     <!--  NFT Nest Mint - Collection -->
     <n-form-item
       path="parentCollectionUuid"
-      :label="$t('form.label.nftMintCollectionUuid')"
+      :label="$t('form.label.nft.mintCollectionUuid')"
       :label-props="{ for: 'bucket' }"
     >
       <select-options
@@ -28,7 +28,7 @@
     </n-form-item>
 
     <!--  NFT Nest Mint - NFT ID -->
-    <n-form-item path="parentNftId" :label="$t('form.label.nftMintParentNftId')">
+    <n-form-item path="parentNftId" :label="$t('form.label.nft.mintParentNftId')">
       <n-input-number
         v-model:value="formData.parentNftId"
         :min="1"
@@ -38,7 +38,7 @@
     </n-form-item>
 
     <!--  NFT Mint Quantity -->
-    <n-form-item path="quantity" :label="$t('form.label.nftMintQuantity')">
+    <n-form-item path="quantity" :label="$t('form.label.nft.mintQuantity')">
       <n-input-number
         v-model:value="formData.quantity"
         :min="1"
@@ -95,23 +95,23 @@ const rules: NFormRules = {
   parentCollectionUuid: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintCollectionUuidRequired'),
+      message: $i18n.t('validation.nft.mintCollectionUuidRequired'),
     },
   ],
   parentNftId: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintParentNftIdRequired'),
+      message: $i18n.t('validation.nft.mintParentNftIdRequired'),
     },
   ],
   quantity: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintQuantityRequired'),
+      message: $i18n.t('validation.nft.mintQuantityRequired'),
     },
     {
       validator: validateQuantity,
-      message: $i18n.t('validation.nftMintQuantity'),
+      message: $i18n.t('validation.nft.mintQuantity'),
     },
   ],
 };

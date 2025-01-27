@@ -40,7 +40,13 @@
     <!--  Service submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn type="primary" size="large" :loading="loading" @click="handleSubmit">
+      <Btn
+        :disabled="disabled"
+        type="primary"
+        size="large"
+        :loading="loading"
+        @click="handleSubmit"
+      >
         <template v-if="service">
           {{ $t('form.update') }}
         </template>
@@ -70,6 +76,7 @@ const props = defineProps({
   },
   defaultServiceName: { type: String, default: '' },
   btnText: { type: String, default: '' },
+  disabled: { type: Boolean, default: false },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
@@ -163,7 +170,19 @@ async function createService() {
     emit('submitSuccess');
     emit('createSuccess', createdService);
   } catch (error) {
-    message.error(userFriendlyMsg(error));
+    if (
+      props.serviceType === ServiceType.RPC &&
+      (
+        error as {
+          code: number;
+        }
+      )?.code === DevConsoleBadRequestErrorCode.DWELLIR_EMAIL_AREADY_EXISTS
+    ) {
+      // At the moment dwellir returns 500 if email is taken for RPC service
+      message.error($i18n.t('form.error.rpcEmailTaken'));
+    } else {
+      message.error(userFriendlyMsg(error));
+    }
   }
   loading.value = false;
 }

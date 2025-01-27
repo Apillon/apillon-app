@@ -1,6 +1,6 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs">
+    <div class="w-[20vw] min-w-[11rem] max-w-xs">
       <n-input
         v-model:value="websiteStore.search"
         type="text"
@@ -20,8 +20,8 @@
       <ModalCreditCosts :service="ServiceTypeName.HOSTING" />
 
       <!-- Refresh websites -->
-      <n-button size="small" :loading="websiteStore.loading" @click="websiteStore.fetchWebsites()">
-        <span class="icon-refresh text-xl mr-2"></span>
+      <n-button size="small" :loading="websiteStore.loading" @click="websiteStore.fetchWebsites(archive)">
+        <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
@@ -32,7 +32,7 @@
         :disabled="authStore.isAdmin()"
         @click="showModalEditWebsite = true"
       >
-        <span class="icon-create-folder text-xl text-primary mr-2"></span>
+        <span class="icon-create-folder mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('hosting.website.new') }}</span>
       </n-button>
     </n-space>
@@ -49,6 +49,12 @@
 </template>
 
 <script lang="ts" setup>
+import { ServiceTypeName, PriceServiceName } from '~/lib/types/service';
+
+defineProps({
+  archive: { type: Boolean, default: false },
+});
+
 const authStore = useAuthStore();
 const websiteStore = useWebsiteStore();
 const showModalEditWebsite = ref<boolean>(false);

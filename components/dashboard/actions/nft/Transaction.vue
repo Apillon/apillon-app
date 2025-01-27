@@ -1,89 +1,103 @@
 <template>
-  <n-space justify="space-between">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs">
-      <!-- <n-input
-          v-model:value="collectionStore.search"
-          type="text"
-          name="search"
-          size="small"
-          :placeholder="$t('general.search')"
-          clearable
-        >
-          <template #prefix>
-            <span class="icon-search text-2xl"></span>
-          </template>
-        </n-input> -->
-    </div>
+  <n-space class="w-full lg:min-w-52" size="large" vertical>
+    <!-- Open Bucket -->
+    <n-button
+      v-if="collectionStore.active.bucket_uuid"
+      class="w-full"
+      size="small"
+      :loading="loadingBucket"
+      @click="openBucket(collectionStore.active.bucket_uuid)"
+    >
+      <span class="icon-storage mr-2 text-xl"></span>
+      <span>{{ t('nft.openBucket') }}</span>
+    </n-button>
 
-    <n-space size="large">
-      <!-- Open Bucket -->
-      <n-button
-        v-if="collectionStore.active.bucket_uuid"
-        size="small"
-        :loading="loadingBucket"
-        @click="openBucket(collectionStore.active.bucket_uuid)"
-      >
-        <span class="icon-storage text-xl mr-2"></span>
-        <span>{{ $t('nft.openBucket') }}</span>
-      </n-button>
+    <!-- Refresh -->
+    <n-button class="w-full" size="small" :loading="collectionStore.loading" @click="refresh">
+      <span class="icon-refresh mr-2 text-xl"></span>
+      {{ t('general.refresh') }}
+    </n-button>
 
-      <!-- Refresh -->
-      <n-button size="small" :loading="collectionStore.loading" @click="refresh">
-        <span class="icon-refresh text-xl mr-2"></span>
-        {{ $t('general.refresh') }}
-      </n-button>
+    <!-- Add IPNS -->
+    <n-popconfirm
+      v-if="
+        collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
+        collectionStore.active.cid &&
+        !collectionStore.active.ipns_uuid &&
+        !collectionStore.isUnique
+      "
+      @positive-click="createDynamicMetadata()"
+    >
+      <template #icon> <IconInfo /> </template>
+      <template #trigger>
+        <n-button class="w-full" size="small">{{ t('nft.addIpns') }}</n-button>
+      </template>
+      {{ t('nft.addIpnsInfo') }}
+    </n-popconfirm>
 
-      <!-- Add IPNS -->
-      <n-popconfirm
-        v-if="
-          collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
-          !collectionStore.active.ipns_uuid
-        "
-        @positive-click="createDynamicMetadata()"
-      >
-        <template #icon> <IconInfo /> </template>
-        <template #trigger>
-          <n-button size="small">{{ $t('nft.addIpns') }}</n-button>
-        </template>
-        {{ $t('nft.addIpnsInfo') }}
-      </n-popconfirm>
+    <!-- Add NFT -->
+    <n-button
+      v-if="
+        (collectionStore.active.collection_uuid && collectionStore.active.useIpns !== false) ||
+        collectionStore.active.collectionStatus === CollectionStatus.CREATED
+      "
+      class="w-full"
+      size="small"
+      :loading="loadingBucket"
+      :disabled="!allowAddMetadata"
+      @click="emit('addNfts')"
+    >
+      <span class="icon-add mr-2 text-xl text-primary"></span>
+      <span class="text-primary">{{ t('nft.add') }}</span>
+    </n-button>
 
-      <!-- Add NFT -->
-      <n-button
-        v-if="collectionStore.active.collection_uuid"
-        size="small"
-        :loading="loadingBucket"
-        :disabled="!allowAddMetadata"
-        @click="openAddNft(collectionStore.active.collection_uuid)"
-      >
-        <span class="icon-add text-xl mr-2 text-primary"></span>
-        <span class="text-primary">{{ $t('nft.add') }}</span>
-      </n-button>
-
-      <!-- Actions -->
-      <n-dropdown
-        :key="collectionStore.active.collectionStatus"
-        placement="bottom-end"
-        trigger="click"
-        :options="options"
-        :disabled="authStore.isAdmin()"
-      >
-        <n-button size="small">
-          <span class="text-primary">{{ $t('general.actions') }}</span>
-          <div class="hidden md:flex items-center relative left-1">
-            <span class="icon-down text-2xl text-primary"></span>
-          </div>
-        </n-button>
-      </n-dropdown>
-    </n-space>
+    <!-- Mint -->
+    <n-button class="w-full" size="small" :disabled="authStore.isAdmin() || actionsDisabled" @click="emit('mint')">
+      <span class="icon-nft mr-2 text-xl"></span>
+      {{ t('nft.collection.mint') }}
+    </n-button>
+    <n-button
+      v-if="collectionStore.active?.collectionType === NFTCollectionType.NESTABLE"
+      class="w-full"
+      size="small"
+      :disabled="authStore.isAdmin() || actionsDisabled"
+      @click="emit('nestMint')"
+    >
+      <span class="icon-nft mr-2 text-xl"></span>
+      <span class="inline-block w-full">{{ t('nft.collection.nestMint') }}</span>
+    </n-button>
+    <n-button class="w-full" size="small" :disabled="authStore.isAdmin() || actionsDisabled" @click="emit('transfer')">
+      {{ t('nft.collection.transfer') }}
+    </n-button>
+    <n-button
+      class="w-full"
+      size="small"
+      :disabled="authStore.isAdmin() || actionsDisabled"
+      @click="emit('setBaseUri')"
+    >
+      {{ t('nft.collection.setBaseUri') }}
+    </n-button>
+    <n-button
+      class="w-full"
+      size="small"
+      type="error"
+      :disabled="authStore.isAdmin() || actionsDisabled"
+      ghost
+      @click="emit('revoke')"
+    >
+      <span class="icon-delete mr-2 text-xl text-pink"></span>
+      {{ t('nft.collection.revoke') }}
+    </n-button>
   </n-space>
 </template>
 
 <script lang="ts" setup>
+import { CollectionStatus, NFTCollectionType } from '~/lib/types/nft';
+
 defineProps({
   env: { type: Number, default: 0 },
 });
-const emit = defineEmits(['mint', 'nestMint', 'revoke', 'transfer', 'setBaseUri']);
+const emit = defineEmits(['addNfts', 'mint', 'nestMint', 'revoke', 'transfer', 'setBaseUri']);
 
 const message = useMessage();
 const authStore = useAuthStore();
@@ -91,7 +105,6 @@ const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
 const { t } = useI18n();
-const { openAddNft } = useCollection();
 const { loadingBucket, openBucket } = useStorage();
 
 const actionsDisabled = computed<boolean>(() => {
@@ -110,75 +123,8 @@ const isMetadataStoreOnApillon = computed<boolean>(() => {
 const allowAddMetadata = computed<boolean>(() => {
   return (
     collectionStore.active?.collectionStatus === CollectionStatus.CREATED ||
-    (collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
-      isMetadataStoreOnApillon.value)
+    (collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED && isMetadataStoreOnApillon.value)
   );
-});
-
-const options = computed(() => {
-  return [
-    {
-      label: t('nft.collection.mint'),
-      key: 'mint',
-      disabled: actionsDisabled.value,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value) {
-            emit('mint');
-          }
-        },
-      },
-    },
-    {
-      label: t('nft.collection.nestMint'),
-      key: 'nestMint',
-      show: collectionStore.active?.collectionType === NFTCollectionType.NESTABLE,
-      disabled: actionsDisabled.value,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value) {
-            emit('nestMint');
-          }
-        },
-      },
-    },
-    {
-      label: t('nft.collection.revoke'),
-      key: 'revoke',
-      disabled: actionsDisabled.value || !collectionStore.active?.isRevokable,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value && !!collectionStore.active?.isRevokable) {
-            emit('revoke');
-          }
-        },
-      },
-    },
-    {
-      label: t('nft.collection.transfer'),
-      key: 'transfer',
-      disabled: actionsDisabled.value,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value) {
-            emit('transfer');
-          }
-        },
-      },
-    },
-    {
-      label: t('nft.collection.setBaseUri'),
-      key: 'setBaseUri',
-      disabled: actionsDisabled.value,
-      props: {
-        onClick: () => {
-          if (!actionsDisabled.value) {
-            emit('setBaseUri');
-          }
-        },
-      },
-    },
-  ];
 });
 
 function refresh() {
@@ -196,28 +142,20 @@ async function createDynamicMetadata() {
   warningStore.showSpendingWarning([PriceServiceName.IPNS, priceServiceName], () => createIpns());
 }
 async function createIpns() {
-  const bucketUuid = collectionStore.active.bucket_uuid;
-  const collectionUuid = collectionStore.active.collection_uuid;
-  const cid = collectionStore.active.cid;
   try {
-    const ipnsRes = await $api.post<IpnsCreateResponse>(endpoints.ipns(bucketUuid), {
-      bucket_uuid: bucketUuid,
-      cid,
-      name: `${collectionStore.active.name} IPNS Record`,
-    });
-    collectionStore.active.ipns_uuid = ipnsRes.data.ipns_uuid;
+    const res = await $api.post<CollectionResponse>(endpoints.collectionIpns(collectionStore.active.collection_uuid));
 
-    const ipnsPublishRes = await $api.post<IpnsPublishResponse>(
-      endpoints.ipnsPublish(bucketUuid, ipnsRes.data.ipns_uuid),
-      { cid }
-    );
-
-    await $api.post(endpoints.collectionSetBaseUri(collectionUuid), {
-      collection_uuid: collectionUuid,
-      uri: ipnsPublishRes.data.link,
+    /** Update collection data in store */
+    collectionStore.active = res.data;
+    collectionStore.items.forEach(item => {
+      if (item.collection_uuid === res.data.collection_uuid) {
+        item.baseUri = res.data.baseUri;
+      }
     });
 
     message.success(t('form.success.created.ipns'));
+
+    collectionStore.fetchCollectionTransactions(collectionStore.collectionUuid);
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

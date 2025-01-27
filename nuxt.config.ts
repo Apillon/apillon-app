@@ -18,26 +18,22 @@ const meta = {
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   ssr: false,
-
   typescript: { shim: false },
 
   runtimeConfig: {
     public: appConfig,
   },
 
-  components: [
-    '~/components',
-    '~/components/general/',
-    '~/components/parts/',
-    '~/components/dashboard/',
-  ],
+  components: ['~/components', '~/components/general/', '~/components/parts/', '~/components/dashboard/'],
 
   modules: [
     '@vueuse/nuxt',
     '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
     'nuxt-icons',
     '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
+    '@wagmi/vue/nuxt',
     ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
   ],
 
@@ -50,10 +46,18 @@ export default defineNuxtConfig({
           },
         ],
       }),
-
       Components({
         resolvers: [NaiveUiResolver()],
       }),
+      {
+        name: 'vite-plugin-glob-transform',
+        transform(code: string, id: string) {
+          if (id.includes('nuxt-icons')) {
+            return code.replace(/as:\s*['"]raw['"]/g, 'query: "?raw", import: "default"');
+          }
+          return code;
+        },
+      },
     ],
 
     optimizeDeps: {
@@ -67,6 +71,16 @@ export default defineNuxtConfig({
 
   nitro: {
     compressPublicAssets: true,
+    routeRules: {
+      '/**': {
+        headers: {
+          'X-Frame-Options': 'SAMEORIGIN',
+          'X-Content-Type-Options': 'nosniff',
+          'Referrer-Policy': 'no-referrer',
+          'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+        },
+      },
+    },
   },
 
   app: {
@@ -112,11 +126,12 @@ export default defineNuxtConfig({
     langDir: 'locales',
     defaultLocale: 'en',
     strategy: 'no_prefix',
+    compilation: { strictMessage: false, escapeHtml: false },
     locales: [
       {
         code: 'en',
         name: 'English',
-        file: 'en.json',
+        file: 'en/index.ts',
       },
     ],
     detectBrowserLanguage: {
@@ -125,6 +140,7 @@ export default defineNuxtConfig({
       redirectOn: 'root',
     },
   },
+
   googleFonts: {
     useStylesheet: true,
     display: 'swap',
@@ -135,4 +151,6 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  compatibilityDate: '2024-08-29',
 });

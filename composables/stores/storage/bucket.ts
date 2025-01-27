@@ -26,30 +26,27 @@ export const useBucketStore = defineStore('bucket', {
       selectedItems: [] as BucketItemInterface[],
       pagination: createPagination(),
     },
+    calculatedCids: {} as Record<string, UploadedFileInfo>,
   }),
   getters: {
     bucketUuid(state): string {
       return (
         state.active?.bucket_uuid ||
-        (
-          state.items.find((item: BucketInterface) => item.bucket_uuid === state.selected) ||
-          ({} as BucketInterface)
-        )?.bucket_uuid ||
+        (state.items.find((item: BucketInterface) => item.bucket_uuid === state.selected) || ({} as BucketInterface))
+          ?.bucket_uuid ||
         ''
       );
     },
     currentBucket(state): BucketInterface {
       return (
-        state.items.find((item: BucketInterface) => item.bucket_uuid === state.selected) ||
-        ({} as BucketInterface)
+        state.items.find((item: BucketInterface) => item.bucket_uuid === state.selected) || ({} as BucketInterface)
       );
     },
     hasBuckets(state): boolean {
       if (Array.isArray(state.items) && state.items.length > 0) {
         return state.items.some(
           (bucket: BucketInterface) =>
-            bucket.bucketType === BucketType.STORAGE ||
-            bucket.bucketType === BucketType.NFT_METADATA
+            bucket.bucketType === BucketType.STORAGE || bucket.bucketType === BucketType.NFT_METADATA
         );
       }
       return false;
@@ -136,8 +133,7 @@ export const useBucketStore = defineStore('bucket', {
      */
     async getBuckets(statusDestroyed = false) {
       if (
-        (statusDestroyed &&
-          (!this.hasDestroyedBuckets || isCacheExpired(LsCacheKeys.BUCKET_DESTROYED))) ||
+        (statusDestroyed && (!this.hasDestroyedBuckets || isCacheExpired(LsCacheKeys.BUCKET_DESTROYED))) ||
         !this.hasBuckets ||
         isCacheExpired(LsCacheKeys.BUCKETS)
       ) {
@@ -182,7 +178,7 @@ export const useBucketStore = defineStore('bucket', {
           desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
-        params.status = statusDeleted ? 8 : 5;
+        params.status = statusDeleted ? SqlModelStatus.ARCHIVED : SqlModelStatus.ACTIVE;
 
         const req = $api.get<BucketsResponse>(endpoints.buckets, params);
         dataStore.promises.buckets = req;
@@ -236,6 +232,31 @@ export const useBucketStore = defineStore('bucket', {
       return {} as BucketInterface;
     },
 
+    addCids(cids: Record<string, UploadedFileInfo>) {
+      this.calculatedCids = {
+        ...this.calculatedCids,
+        ...cids,
+      };
+    },
+
+    populateCids(directoryContent: BucketItemInterface[]) {
+      return directoryContent.map(file => {
+        if (file.CID || file.link) {
+          // If CID is already present, return the file
+          return file;
+        }
+
+        const cidInfo = this.calculatedCids[file.uuid];
+        if (cidInfo) {
+          file.CID = cidInfo.CID;
+          file.link = cidInfo.link;
+          return file;
+        }
+
+        return file;
+      });
+    },
+
     async fetchDirectoryContent(arg: FetchDirectoryParams = {}) {
       this.folder.loading = arg.loader !== undefined ? arg.loader : true;
 
@@ -243,7 +264,7 @@ export const useBucketStore = defineStore('bucket', {
       const bucket = arg.bucketUuid || this.bucketUuid;
       if (!bucket) {
         this.folder.loading = false;
-        return;
+        return [];
       }
 
       /** Update current folderUuid */
@@ -266,11 +287,14 @@ export const useBucketStore = defineStore('bucket', {
 
         const res = await $api.get<FolderResponse>(endpoints.directoryContent, params);
 
-        this.folder.items = res.data.items;
+        this.folder.items = this.populateCids(res.data.items);
         this.folder.pagination.itemCount = res.data.total;
+        this.folder.loading = false;
 
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.BUCKET_ITEMS, Date.now().toString());
+
+        return res.data.items;
       } catch (error: any) {
         /** Reset data */
         this.folder.items = [];
@@ -281,6 +305,13 @@ export const useBucketStore = defineStore('bucket', {
       }
 
       this.folder.loading = false;
+      return [];
     },
   },
+  persist: {
+    key: SessionKeys.BUCKET_STORE,
+    storage: persistedState.localStorage,
+    paths: ['calculatedCids', 'itemsMainnet', 'itemsTestnet'],
+    // debug: true,
+  } as any,
 });

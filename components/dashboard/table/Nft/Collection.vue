@@ -1,36 +1,34 @@
 <template>
-  <n-space class="pb-8" :size="32" vertical>
-    <ActionsNftCollection />
-
-    <n-data-table
-      ref="tableRef"
-      v-bind="$attrs"
-      :bordered="false"
-      :columns="columns"
-      :data="data"
-      :loading="collectionStore.loading"
-      :pagination="{
-        pageSize: PAGINATION_LIMIT,
-        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-      }"
-      :row-key="rowKey"
-      :row-props="rowProps"
-    />
-  </n-space>
+  <n-data-table
+    ref="tableRef"
+    v-bind="$attrs"
+    :bordered="false"
+    :columns="columns"
+    :data="data"
+    :loading="collectionStore.loading"
+    :pagination="{
+      pageSize: PAGINATION_LIMIT,
+      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+    }"
+    :row-key="rowKey"
+    :row-props="rowProps"
+  />
 </template>
 
 <script lang="ts" setup>
+import { NButton, NDropdown } from 'naive-ui';
+
 const props = defineProps({
   collections: { type: Array<CollectionInterface>, default: [] },
+  archive: { type: Boolean, default: false },
 });
 
-const { t } = useI18n();
+const { t, te } = useI18n();
 const router = useRouter();
+const message = useMessage();
+const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
-
-const NftCollectionStatus = resolveComponent('NftCollectionStatus');
-const TableEllipsis = resolveComponent('TableEllipsis');
-const TableLink = resolveComponent('TableLink');
+const { deleteItem } = useDelete();
 
 /** Available columns - show/hide column */
 const selectedColumns = ref([
@@ -66,7 +64,7 @@ const availableColumns = ref([
 const data = computed<Array<CollectionInterface>>(() => {
   return (
     props.collections.filter(item =>
-      item.name.toLocaleLowerCase().includes(collectionStore.search.toLocaleLowerCase())
+      item.name.toLowerCase().includes(collectionStore.search.toLowerCase())
     ) || []
   );
 });
@@ -76,7 +74,10 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     {
       key: 'chain',
       title: t('nft.transaction.chain'),
-      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('chain') }],
+      className: [
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('chain') },
+      ],
       minWidth: 120,
       render(row: CollectionInterface) {
         return h('span', {}, { default: () => t(`nft.chain.${row.chain}`) });
@@ -86,7 +87,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'symbol',
       title: t('nft.collection.symbol'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('symbol') },
       ],
       render(row) {
@@ -96,7 +97,10 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
     {
       key: 'name',
       title: t('nft.collection.name'),
-      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('name') }],
+      className: [
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('name') },
+      ],
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
@@ -105,7 +109,10 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'type',
       title: t('general.type'),
       minWidth: 100,
-      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('type') }],
+      className: [
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
+        { hidden: !selectedColumns.value.includes('type') },
+      ],
       render(row) {
         if (row.collectionType) {
           return t(`nft.collection.type.${row.collectionType}`);
@@ -119,7 +126,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('nft.collection.uuid'),
       className: { hidden: !selectedColumns.value.includes('collection_uuid') },
       render(row: CollectionInterface) {
-        return h(TableEllipsis, { text: row.collection_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.collection_uuid }, '');
       },
     },
     {
@@ -130,7 +137,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
         if (!row.contractAddress) return '';
 
         return h(
-          TableLink,
+          resolveComponent('TableLink'),
           { link: contractLink(row.contractAddress, row.chain), text: row.contractAddress },
           ''
         );
@@ -141,14 +148,14 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('nft.collection.baseUri'),
       className: { hidden: !selectedColumns.value.includes('baseUri') },
       render(row: CollectionInterface) {
-        return h(TableEllipsis, { text: row.baseUri }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.baseUri }, '');
       },
     },
     {
       key: 'dropPrice',
       title: t('nft.collection.dropPrice'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('dropPrice') },
       ],
     },
@@ -156,7 +163,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'dropReserve',
       title: t('nft.collection.dropReserve'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('dropReserve') },
       ],
     },
@@ -164,7 +171,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       key: 'maxSupply',
       title: t('nft.collection.maxSupply'),
       className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
+        { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
         { hidden: !selectedColumns.value.includes('maxSupply') },
       ],
       render(row: CollectionInterface) {
@@ -176,7 +183,11 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('general.status'),
       className: { hidden: !selectedColumns.value.includes('collectionStatus') },
       render(row) {
-        return h(NftCollectionStatus, { collectionStatus: row.collectionStatus }, '');
+        return h(
+          resolveComponent('NftCollectionStatus'),
+          { collectionStatus: row.collectionStatus },
+          ''
+        );
       },
     },
     {
@@ -191,9 +202,28 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       },
     },
     {
-      key: 'columns',
+      key: 'actions',
+      align: 'right',
+      className: '!sticky right-0',
       filter: 'default',
       filterOptionValue: null,
+      render() {
+        return h(
+          NDropdown,
+          {
+            options: props.archive ? dropdownOptionsArchive : dropdownOptions,
+            trigger: 'click',
+          },
+          {
+            default: () =>
+              h(
+                NButton,
+                { type: 'tertiary', size: 'small', quaternary: true, round: true },
+                { default: () => h('span', { class: 'icon-more text-2xl' }, {}) }
+              ),
+          }
+        );
+      },
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },
@@ -213,6 +243,51 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
 });
 const rowKey = (row: CollectionInterface) => row.collection_uuid;
 const currentRow = ref<CollectionInterface>(props.collections[0]);
+
+const dropdownOptions = [
+  {
+    key: 'collectionView',
+    label: t('general.view'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        router.push(`/dashboard/service/nft/${currentRow.value.collection_uuid}`);
+      },
+    },
+  },
+  {
+    key: 'collectionDelete',
+    label: t('general.archive'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        deleteCollection();
+      },
+    },
+  },
+];
+
+const dropdownOptionsArchive = [
+  {
+    key: 'collectionRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        restoreCollection();
+      },
+    },
+  },
+];
+
+onMounted(() => {
+  /** Check if selected columns are stored in LS */
+  if (localStorage.getItem(LsTableColumnsKeys.NFT_COLLECTION)) {
+    selectedColumns.value = JSON.parse(
+      localStorage.getItem(LsTableColumnsKeys.NFT_COLLECTION) || ''
+    );
+  }
+});
 
 /** On row click */
 const rowProps = (row: CollectionInterface) => {
@@ -234,5 +309,41 @@ function handleColumnChange(selectedValues: Array<string>) {
 
 function maxSupply(maxSupply: number) {
   return maxSupply > 0 ? maxSupply : t('form.supplyTypes.unlimited');
+}
+
+async function deleteCollection() {
+  if (await deleteItem(ItemDeleteKey.COLLECTION, currentRow.value.collection_uuid)) {
+    collectionStore.items = collectionStore.items.filter(
+      item => item.collection_uuid !== currentRow.value.collection_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.COLLECTION);
+    sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
+  }
+}
+
+/**
+ * Restore collection
+ * */
+async function restoreCollection() {
+  collectionStore.loading = true;
+
+  try {
+    await $api.patch<CollectionResponse>(
+      endpoints.collectionActivate(currentRow.value.collection_uuid)
+    );
+
+    collectionStore.archive = collectionStore.archive.filter(
+      item => item.collection_uuid !== currentRow.value.collection_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.COLLECTION);
+    sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
+
+    message.success(t('form.success.restored.collection'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  collectionStore.loading = false;
 }
 </script>

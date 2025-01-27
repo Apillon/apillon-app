@@ -1,11 +1,14 @@
 import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
 import IconInfo from '../components/parts/Icon/Info.vue';
+import { EvmChain, SubstrateChain } from '~/lib/types/nft';
+import type { TimeValidator } from 'naive-ui/es/date-picker/src/interface';
 
 export default function useCollection() {
-  const { t, te } = useI18n();
   const router = useRouter();
+  const { t, te } = useI18n();
   const message = useMessage();
   const dataStore = useDataStore();
+  const bucketStore = useBucketStore();
   const collectionStore = useCollectionStore();
 
   const { isEnoughSpaceInStorage } = useUpload();
@@ -18,6 +21,14 @@ export default function useCollection() {
     .map(k => {
       return { name: k.toLowerCase(), label: t(`nft.chain.${EvmChain[k]}`), value: EvmChain[k] };
     });
+  const nftChains = [
+    ...chains,
+    {
+      name: SubstrateChain.UNIQUE,
+      label: t(`nft.chain.${SubstrateChain.UNIQUE}`),
+      value: SubstrateChain.UNIQUE,
+    },
+  ];
   const substrateChains = enumKeys(SubstrateChain)
     .filter(key => SubstrateChain[key] === SubstrateChain.ASTAR)
     .map(k => {
@@ -27,6 +38,12 @@ export default function useCollection() {
         value: SubstrateChain[k],
       };
     });
+  const evmChains = enumKeys(EvmChain)
+    .filter(key => [EvmChain.ETHEREUM, EvmChain.SEPOLIA].includes(EvmChain[key]))
+    .map(k => {
+      return { name: k.toLowerCase(), label: t(`nft.evmChain.${EvmChain[k]}`), value: EvmChain[k] };
+    });
+
   const chainTypes = enumKeys(ChainType).map(k => {
     return {
       name: k.toLowerCase(),
@@ -59,88 +76,100 @@ export default function useCollection() {
     return collectionStore.form.behavior.supplyLimited === 1;
   });
 
+  const isUnique = computed(() => {
+    return collectionStore.form.behavior.chain === SubstrateChain.UNIQUE;
+  });
+
+  const addressLabel = computed(() =>
+    collectionStore.active.chain === SubstrateChain.UNIQUE
+      ? t('form.label.nft.addressUnique')
+      : collectionStore.active.chainType === ChainType.SUBSTRATE
+        ? t('form.label.nft.addressSubstrate')
+        : t('form.label.nft.addressEvm')
+  );
+
   /**
    * Rules
    */
   const rulesBaseUri: FormItemRule[] = [
-    ruleRequired(t('validation.collectionBaseUriRequired')),
+    ruleRequired(t('validation.collection.baseUriRequired')),
     {
       type: 'url',
-      message: t('validation.collectionBaseUri'),
+      message: t('validation.collection.baseUri'),
     },
   ];
   const rulesMaxSupply: FormItemRule[] = [
     {
       max: NFT_MAX_SUPPLY,
       validator: validateMaxSupply,
-      message: t('validation.collectionMaxSupplyReached', {
+      message: t('validation.collection.maxSupplyReached', {
         max: NFT_MAX_SUPPLY,
       }),
     },
   ];
   const rulesDropPrice: FormItemRule[] = [
-    ruleRequired(t('validation.collectionDropPrice')),
+    ruleRequired(t('validation.collection.dropPrice')),
     {
       validator: validateDropPrice,
-      message: t('validation.collectionDropPrice'),
+      message: t('validation.collection.dropPrice'),
     },
   ];
   const rulesDropReserve: FormItemRule[] = [
-    ruleRequired(t('validation.collectionDropReserve')),
+    ruleRequired(t('validation.collection.dropReserve')),
     {
       validator: validateReserve,
-      message: t('validation.collectionDropReserve'),
+      message: t('validation.collection.dropReserve'),
     },
   ];
   const rulesRoyaltiesAddress: FormItemRule[] = [
     {
       required: isRoyaltyRequired(),
-      message: t('validation.collectionRoyaltiesAddressRequired'),
+      message: t('validation.collection.royaltiesAddressRequired'),
     },
     {
       validator: validateRoyaltiesAddress,
-      message: t('validation.collectionRoyaltiesAddress'),
+      message: t('validation.collection.royaltiesAddress'),
     },
   ];
   const rulesRoyaltyFee: FormItemRule[] = [
-    ruleRequired(t('validation.collectionRoyaltiesFeesRequired')),
+    ruleRequired(t('validation.collection.royaltiesFeesRequired')),
     {
       validator: validateNaturalNumber,
-      message: t('validation.collectionRoyaltiesFees'),
+      message: t('validation.collection.royaltiesFees'),
     },
   ];
   const validateSingleIdRequired: FormItemRule[] = [
-    ruleRequired(t('validation.nftIdRequired')),
+    ruleRequired(t('validation.nft.idRequired')),
     {
       validator: validateSingleNftIdUnique,
-      message: t('validation.nftIdDuplicate'),
+      message: t('validation.nft.idDuplicate'),
     },
   ];
 
   const rules: NFormRules = {
-    symbol: ruleRequired(t('validation.collectionSymbolRequired')),
-    'base.symbol': ruleRequired(t('validation.collectionSymbolRequired')),
-    name: ruleRequired(t('validation.collectionNameRequired')),
-    'base.name': ruleRequired(t('validation.collectionNameRequired')),
-    chain: ruleRequired(t('validation.collectionChainRequired')),
-    'base.chain': ruleRequired(t('validation.collectionChainRequired')),
-    'base.chainType': ruleRequired(t('validation.collectionChainTypeRequired')),
-    collectionType: ruleRequired(t('validation.collectionTypeRequired')),
-    'base.collectionType': ruleRequired(t('validation.collectionTypeRequired')),
+    symbol: ruleRequired(t('validation.collection.symbolRequired')),
+    'base.symbol': ruleRequired(t('validation.collection.symbolRequired')),
+    name: ruleRequired(t('validation.collection.nameRequired')),
+    'base.name': ruleRequired(t('validation.collection.nameRequired')),
+    chain: ruleRequired(t('validation.collection.chainRequired')),
+    'base.chain': ruleRequired(t('validation.collection.chainRequired')),
+    'base.chainType': ruleRequired(t('validation.collection.chainTypeRequired')),
+    collectionType: ruleRequired(t('validation.collection.typeRequired')),
+    'base.collectionType': ruleRequired(t('validation.collection.typeRequired')),
     baseUri: rulesBaseUri,
     'behavior.baseUri': rulesBaseUri,
-    baseExtension: ruleRequired(t('validation.collectionBaseExtensionRequired')),
-    'behavior.baseExtension': ruleRequired(t('validation.collectionBaseExtensionRequired')),
+    baseExtension: ruleRequired(t('validation.collection.baseExtensionRequired')),
+    'behavior.baseExtension': ruleRequired(t('validation.collection.baseExtensionRequired')),
     maxSupply: rulesMaxSupply,
     dropPrice: rulesDropPrice,
     'behavior.dropPrice': rulesDropPrice,
     dropStart: {
       validator: validateDropStart,
-      message: t('validation.collectionDropStart'),
+      message: t('validation.collection.dropStart'),
     },
     'behavior.dropStart': {
       validator: validateDropStart,
-      message: t('validation.collectionDropStart'),
+      message: t('validation.collection.dropStart'),
     },
     dropReserve: rulesDropReserve,
     'behavior.dropReserve': rulesDropReserve,
@@ -152,48 +181,56 @@ export default function useCollection() {
 
   const rulesSingle: NFormRules = {
     id: validateSingleIdRequired,
-    collectionUuid: ruleRequired(t('validation.nftCollection')),
-    name: ruleRequired(t('validation.nftName')),
-    description: ruleRequired(t('validation.nftDescription')),
+    collectionUuid: ruleRequired(t('validation.nft.collection')),
+    name: ruleRequired(t('validation.nft.name')),
+    description: ruleRequired(t('validation.nft.description')),
   };
 
   function prepareFormData(addBaseUri = false) {
     const chain =
-      collectionStore.form.base.chain === EvmChain.ASTAR &&
-      collectionStore.form.base.chainType === ChainType.SUBSTRATE
+      collectionStore.form.behavior.chain === EvmChain.ASTAR &&
+      collectionStore.form.behavior.chainType === ChainType.SUBSTRATE
         ? SubstrateChain.ASTAR
-        : collectionStore.form.base.chain;
+        : collectionStore.form.behavior.chain;
 
-    return {
+    const params: Record<string, string | number | boolean | null | undefined> = {
       chain,
       project_uuid: dataStore.projectUuid,
       name: collectionStore.form.base.name,
       symbol: collectionStore.form.base.symbol,
-      collectionType: collectionStore.form.base.collectionType,
-      baseExtension: collectionStore.form.behavior.baseExtension,
-      dropPrice: collectionStore.form.behavior.dropPrice,
-      maxSupply:
-        collectionStore.form.behavior.supplyLimited === 1
-          ? collectionStore.form.behavior.maxSupply
-          : 0,
-      drop: collectionStore.form.behavior.drop,
-      dropStart: Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000),
-      dropReserve: collectionStore.form.behavior.dropReserve || 0,
+      collectionType: collectionStore.form.behavior.collectionType,
+      maxSupply: collectionStore.form.behavior.supplyLimited === 1 ? collectionStore.form.behavior.maxSupply : 0,
       isRevokable: collectionStore.form.behavior.revocable,
       isSoulbound: collectionStore.form.behavior.soulbound,
-      royaltiesAddress: collectionStore.form.behavior.royaltiesAddress,
-      royaltiesFees: collectionStore.form.behavior.royaltiesFees,
-      baseUri: addBaseUri ? collectionStore.form.behavior.baseUri : undefined,
-      useApillonIpfsGateway: collectionStore.form.base.useApillonIpfsGateway,
-      useIpns: collectionStore.form.base.useIpns,
+      royaltiesAddress:
+        collectionStore.form.behavior.royaltiesFees === 0 ? undefined : collectionStore.form.behavior.royaltiesAddress,
     };
+    if (addBaseUri) {
+      params.baseUri = collectionStore.form.behavior.baseUri;
+    }
+    if (!isUnique.value) {
+      params.baseExtension = collectionStore.form.behavior.baseExtension;
+      params.drop = collectionStore.form.behavior.drop;
+      params.dropPrice = collectionStore.form.behavior.dropPrice;
+      params.dropStart = Math.floor((collectionStore.form.behavior.dropStart || Date.now()) / 1000);
+      params.dropReserve = collectionStore.form.behavior.dropReserve;
+      params.royaltiesFees = collectionStore.form.behavior.royaltiesFees;
+      params.useApillonIpfsGateway = collectionStore.form.behavior.useApillonIpfsGateway;
+      params.useIpns = collectionStore.form.behavior.useIpns;
+    }
+    if (collectionStore.form.behavior.royaltiesFees > 0) {
+      params.royaltiesAddress = collectionStore.form.behavior.royaltiesAddress;
+    }
+    return params;
   }
 
   function collectionEndpoint() {
-    return collectionStore.form.base.chain === EvmChain.ASTAR &&
-      collectionStore.form.base.chainType === ChainType.SUBSTRATE
-      ? endpoints.collectionsSubstrate
-      : endpoints.collections();
+    return isUnique.value
+      ? endpoints.collectionsUnique
+      : collectionStore.form.behavior.chain === EvmChain.ASTAR &&
+          collectionStore.form.behavior.chainType === ChainType.SUBSTRATE
+        ? endpoints.collectionsSubstrate
+        : endpoints.collections();
   }
 
   /**
@@ -213,14 +250,16 @@ export default function useCollection() {
     return !collectionStore.form.behavior.drop || value > Date.now();
   }
   function validateDropPrice(_: FormItemRule, value: number): boolean {
-    return !collectionStore.form.behavior.drop || (value > 0 && value < Number.MAX_SAFE_INTEGER);
+    return !collectionStore.form.behavior.drop || (value >= 0.00001 && value <= 10000000000);
   }
   function validateRoyaltiesAddress(_: FormItemRule, value: string): boolean {
     return (
       !isRoyaltyRequired() ||
-      (collectionStore.form.base.chainType === ChainType.EVM
-        ? validateEvmAddress(_, value)
-        : substrateAddressValidate(_, value, SubstrateChainPrefix.ASTAR))
+      (isUnique.value
+        ? substrateAddressValidate(_, value, SubstrateChainPrefix.UNIQUE)
+        : collectionStore.form.behavior.chainType === ChainType.SUBSTRATE
+          ? substrateAddressValidate(_, value, SubstrateChainPrefix.ASTAR)
+          : validateEvmAddress(_, value))
     );
   }
   function validateSingleNftIdUnique(_: FormItemRule): boolean {
@@ -232,37 +271,25 @@ export default function useCollection() {
 
   function isRoyaltyRequired() {
     return (
-      (collectionStore.form.base.chainType === ChainType.EVM &&
-        collectionStore.form.behavior.royaltiesFees > 0) ||
-      (collectionStore.form.base.chainType === ChainType.SUBSTRATE &&
-        collectionStore.form.behavior.drop)
+      (collectionStore.form.behavior.chainType === ChainType.EVM && collectionStore.form.behavior.royaltiesFees > 0) ||
+      (collectionStore.form.behavior.chainType === ChainType.SUBSTRATE && collectionStore.form.behavior.drop)
     );
   }
 
-  function disablePasteDate(ts: number) {
+  function disablePastDate(ts: number) {
     return ts < new Date().setHours(0, 0, 0, 0);
   }
 
-  function disablePasteTime(ts: number) {
-    return ts < Date.now();
+  function disablePastTime(ts: number): TimeValidator {
+    return {
+      isHourDisabled: (hour: number) => ts < Date.now(),
+      isMinuteDisabled: (minute: number, hour: number | null) => ts < Date.now(),
+      isSecondDisabled: (second: number, minute: number | null, hour: number | null) => ts < Date.now(),
+    };
   }
 
-  const infoLabel = (field: string) => {
-    if (
-      te(`form.label.${field}`) &&
-      te(`nft.collection.labelInfo.${field}`) &&
-      t(`nft.collection.labelInfo.${field}`)
-    ) {
-      return [
-        h('span', { class: 'mr-1' }, t(`form.label.${field}`)),
-        h(IconInfo, { size: 'sm', tooltip: t(`nft.collection.labelInfo.${field}`) }, ''),
-      ];
-    }
-    return te(`form.label.${field}`) ? t(`form.label.${field}`) : field;
-  };
-
   function chainCurrency() {
-    switch (collectionStore.form.base.chain) {
+    switch (collectionStore.form.behavior.chain) {
       case EvmChain.ASTAR:
         return 'ASTR';
       default:
@@ -270,10 +297,7 @@ export default function useCollection() {
     }
   }
 
-  function uploadFileRequest(
-    { file, onError, onFinish }: UploadCustomRequestOptions,
-    logo: boolean
-  ) {
+  function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptions, logo: boolean) {
     const uploadedFile: FileListItemType = {
       ...file,
       fullPath: file.fullPath,
@@ -283,13 +307,14 @@ export default function useCollection() {
       onFinish: onFinish || (() => {}),
       onError: onError || (() => {}),
     };
+
     if (!isEnoughSpaceInStorage([], uploadedFile)) {
       message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
 
       /** Mark file as failed */
       onError();
       return;
-    } else if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+    } else if (!file.type?.includes('image')) {
       message.warning(t('validation.notImage'));
 
       /** Mark file as failed */
@@ -309,32 +334,61 @@ export default function useCollection() {
 
   function onChainChange(chain: number) {
     if (chain === EvmChain.ASTAR_SHIBUYA) {
-      collectionStore.form.base.chainType = ChainType.SUBSTRATE;
+      collectionStore.form.behavior.chainType = ChainType.SUBSTRATE;
     } else if (chain !== EvmChain.ASTAR) {
-      collectionStore.form.base.chainType = ChainType.EVM;
+      collectionStore.form.behavior.chainType = ChainType.EVM;
     }
   }
 
+  function onNetworkSelected(chainId: number) {
+    if (chainId === SubstrateChain.UNIQUE) {
+      collectionStore.loading = true;
+      router.push({ name: 'dashboard-service-nft-new' });
+
+      setTimeout(() => {
+        collectionStore.form.behavior.chain = chainId;
+        onChainChange(chainId);
+        collectionStore.loading = false;
+      }, 300);
+    } else {
+      collectionStore.form.behavior.chain = chainId;
+      onChainChange(chainId);
+    }
+  }
+
+  function resetAll() {
+    bucketStore.resetFolder();
+    bucketStore.resetUpload();
+    collectionStore.resetForms();
+    collectionStore.resetMetadata();
+    collectionStore.metadataStored = undefined;
+  }
+
   return {
-    loading,
-    formRef,
+    addressLabel,
+    booleanSelect,
     chains,
     chainTypes,
     collectionTypes,
-    substrateChains,
-    supplyTypes,
-    booleanSelect,
+    evmChains,
+    formRef,
+    isFormDisabled,
+    isUnique,
+    loading,
+    nftChains,
     rules,
     rulesSingle,
-    isFormDisabled,
+    substrateChains,
+    supplyTypes,
     chainCurrency,
     collectionEndpoint,
-    disablePasteDate,
-    disablePasteTime,
-    infoLabel,
+    disablePastDate,
+    disablePastTime,
     onChainChange,
+    onNetworkSelected,
     openAddNft,
     prepareFormData,
+    resetAll,
     uploadFileRequest,
   };
 }

@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import type { DataTableSortState, DataTableInst } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, useMessage } from 'naive-ui';
 
@@ -162,7 +162,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       key: 'actions',
       title: '',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
       render() {
         return h(
           NDropdown,
@@ -192,7 +192,6 @@ const dropdownOptions = [
     label: $i18n.t('general.restore'),
     disabled: authStore.isAdmin(),
     props: {
-      class: '!text-pink',
       onClick: () => {
         restore();
       },
@@ -231,7 +230,7 @@ watch(
     clearSorter();
   }
 );
-const debouncedSearchFilter = debounce(getDeletedFiles, 500);
+const debouncedSearchFilter = useDebounceFn(getDeletedFiles, 500);
 
 /** On page change, load data */
 async function handlePageChange(currentPage: number, pageSize?: number) {

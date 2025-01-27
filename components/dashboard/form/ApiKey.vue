@@ -31,12 +31,12 @@
         <n-collapse-item
           v-for="service in formData.roles"
           :key="service.service_uuid"
-          :title="$t(`dashboard.apiKey.service.${service.serviceType.toLocaleLowerCase()}`)"
+          :title="$t(`dashboard.apiKey.service.${service.serviceType.toLowerCase()}`)"
           :name="service.service_uuid"
         >
           <template #arrow>
             <span
-              :class="`icon-${service.serviceType.toLocaleLowerCase()}`"
+              :class="`icon-${service.serviceType.toLowerCase()}`"
               class="min-w-[20px] text-center"
             >
             </span>
@@ -80,7 +80,7 @@
         :name="serviceType.name"
       >
         <template #arrow>
-          <span :class="`icon-${serviceType.name.toLocaleLowerCase()}`"></span>
+          <span :class="`icon-${serviceType.name.toLowerCase()}`"></span>
         </template>
 
         <FormService

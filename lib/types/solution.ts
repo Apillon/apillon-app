@@ -1,6 +1,7 @@
 export enum SolutionKey {
   ENCRYPTION = 'encryption',
   FILE_SHARING = 'fileSharing',
+  INDEXING = 'indexing',
   NFT_AIRDROP = 'nftAirdrop',
   NFT_COLLECTION = 'nftCollection',
   NFT_CONTENT_DELIVERY = 'nftContentDelivery',
@@ -14,4 +15,5 @@ export enum SolutionKey {
   TOKEN_GATING = 'tokenGating',
   WALLET = 'wallet',
   EMBEDDED_WALLET = 'embeddedWallet',
+  SMART_CONTRACT = 'smartContracts',
 }

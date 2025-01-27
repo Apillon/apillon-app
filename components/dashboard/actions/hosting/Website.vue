@@ -47,13 +47,6 @@
           {{ $t('hosting.clearAll') }}
         </n-button>
 
-        <!-- Generate short URL -->
-        <FormStorageShortUrl
-          v-if="env === DeploymentEnvironment.PRODUCTION && websiteStore.active.w3ProductionLink"
-          :target-url="websiteStore.active.w3ProductionLink"
-          size="small"
-        />
-
         <!-- Deploy to staging -->
         <div v-if="isUpload" class="flex items-center align-middle bg-primary rounded-lg">
           <n-button
@@ -178,6 +171,11 @@ const isUpload = computed<Boolean>(() => {
     props.env !== DeploymentEnvironment.STAGING && props.env !== DeploymentEnvironment.PRODUCTION
   );
 });
+const hasActiveDeployments = computed<Boolean>(() => {
+  return deploymentStore.staging.some(
+    deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL
+  );
+});
 
 const deployOptions = ref([
   {
@@ -276,7 +274,13 @@ async function deploy(env: number) {
  * */
 function deployWebsite(env: number) {
   deployEnv.value = env;
-  if (bucketStore.folder.items.length === 0) {
+  if (
+    bucketStore.folder.items.length === 0 &&
+    env === DeploymentEnvironment.PRODUCTION &&
+    hasActiveDeployments.value
+  ) {
+    message.warning(t('validation.hosting.waitActiveDeployment'));
+  } else if (bucketStore.folder.items.length === 0) {
     message.warning(t('error.NO_FILES_TO_DEPLOY'));
   } else if (websiteStore.missingHtml) {
     message.error(t('validation.hosting.missingHtml'));

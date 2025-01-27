@@ -1,11 +1,11 @@
 <template>
   <div class="max-w-2xl">
     <div v-if="step === EncryptDeployTab.PREVIEW">
-      <h3 class="mt-4 mb-8">{{ $t('dashboard.solution.encryption.deploy.preview') }}</h3>
-      <n-table class="plain table-fixed mb-6" :bordered="false" :single-line="true">
+      <h3 class="mb-8 mt-4">{{ t('dashboard.solution.encryption.deploy.preview') }}</h3>
+      <n-table class="plain mb-6 table-fixed" :bordered="false" :single-line="true">
         <thead>
           <tr>
-            <th>{{ $t('dashboard.solution.encryption.deploy.previewData') }}</th>
+            <th>{{ t('dashboard.solution.encryption.deploy.previewData') }}</th>
             <th></th>
           </tr>
         </thead>
@@ -18,44 +18,40 @@
           </tr>
         </tbody>
       </n-table>
-      <Btn type="primary" class="w-full mt-2" @click="createContract">
-        {{ $t('computing.contract.create') }}
+      <Btn type="primary" class="mt-2 w-full" @click="createContract">
+        {{ t('computing.contract.create') }}
       </Btn>
     </div>
     <div v-else-if="step === EncryptDeployTab.DEPLOYING" class="mt-10 text-center">
       <AnimationLoader />
-      <h2>{{ $t('dashboard.solution.encryption.deploy.loading') }}</h2>
-      <p class="mb-8 text-body whitespace-pre-line">
-        {{ $t('dashboard.solution.encryption.deploy.loadingInfo') }}
+      <h2>{{ t('dashboard.solution.encryption.deploy.loading') }}</h2>
+      <p class="mb-8 whitespace-pre-line text-body">
+        {{ t('dashboard.solution.encryption.deploy.loadingInfo') }}
       </p>
     </div>
-    <div v-else class="text-center mt-20">
-      <NuxtIcon name="icon/success" class="inline-block mr-2 text-7xl text-green" />
-      <h2>{{ $t('dashboard.solution.encryption.deploy.finish') }}</h2>
-      <p class="mb-8 text-body whitespace-pre-line">
-        {{ $t('dashboard.solution.encryption.deploy.finishInfo') }}
+    <div v-else class="mt-20 text-center">
+      <NuxtIcon name="icon/success" class="mr-2 inline-block text-7xl text-green" />
+      <h2>{{ t('dashboard.solution.encryption.deploy.finish') }}</h2>
+      <p class="mb-8 whitespace-pre-line text-body">
+        {{ t('dashboard.solution.encryption.deploy.finishInfo') }}
       </p>
 
-      <div class="max-w-sm flex flex-col gap-4 mx-auto">
-        <Btn
-          type="secondary"
-          size="large"
-          @click="$router.push({ name: 'dashboard-service-computing' })"
-        >
-          {{ $t('dashboard.solution.encryption.deploy.goBack') }}
+      <div class="mx-auto flex max-w-sm flex-col gap-4">
+        <Btn type="secondary" size="large" @click="router.push({ name: 'dashboard-service-computing' })">
+          {{ t('dashboard.solution.encryption.deploy.goBack') }}
         </Btn>
         <Btn
           v-if="contract"
           type="primary"
           size="large"
           @click="
-            $router.push({
+            router.push({
               name: 'dashboard-service-computing-id',
               params: { id: contract?.contract_uuid },
             })
           "
         >
-          {{ $t('dashboard.solution.encryption.deploy.goToContract') }}
+          {{ t('dashboard.solution.encryption.deploy.goToContract') }}
         </Btn>
       </div>
     </div>
@@ -66,6 +62,7 @@
 const emit = defineEmits(['submitSuccess', 'createSuccess']);
 
 const { t } = useI18n();
+const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
@@ -107,7 +104,7 @@ const data = [
     value: contractStore.form.contractData.nftContractAddress,
   },
   {
-    label: t('form.label.collectionChain'),
+    label: t('form.label.collection.chain'),
     value: chainName.value,
   },
   {

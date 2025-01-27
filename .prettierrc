@@ -4,5 +4,6 @@
   "trailingComma": "es5",
   "semi": true,
   "twConfig": "./tailwind.config.js",
-  "printWidth": 100
+  "printWidth": 120,
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

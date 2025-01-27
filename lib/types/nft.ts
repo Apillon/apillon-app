@@ -14,7 +14,22 @@ export enum EvmChain {
   ASTAR_SHIBUYA = 81, // testnet
   ASTAR = 592,
   OASIS = 42262,
+  OASIS_TESTNET = 42262,
+  OASIS_SAPPHIRE = 23294,
+  ALFAJORES = 44787, // Celo testnet
+  CELO = 42220,
+  BASE = 8453,
+  BASE_SEPOLIA = 84532,
+  ARBITRUM_ONE = 42161,
+  ARBITRUM_ONE_SEPOLIA = 421614,
+  AVALANCHE = 43114,
+  AVALANCHE_FUJI = 43113,
+  OPTIMISM = 10,
+  OPTIMISM_SEPOLIA = 11155420,
+  POLYGON = 137,
+  POLYGON_AMOY = 80002,
 }
+
 export enum SubstrateChain {
   CRUST = 1,
   KILT = 2,
@@ -23,11 +38,17 @@ export enum SubstrateChain {
   SUBSOCIAL = 6,
   XSOCIAL = 7,
   ASTAR = 8,
+  ACURAST = 9,
+  UNIQUE = 11,
+  ASSET_HUB = 1000,
+  WESTEND_ASSET_HUB = 1001,
 }
 
 export enum SubstrateChainPrefix {
   ASTAR = 5,
   PHALA = 30,
+  HYDRATION = 63,
+  UNIQUE = 7391,
 }
 
 /** NFT Collection type */
@@ -44,14 +65,6 @@ export enum CollectionStatus {
   DEPLOYED = 3,
   TRANSFERRED = 4,
   FAILED = 5,
-}
-
-/** NFT Collection create step */
-export enum CollectionStep {
-  STORAGE_TYPE = 0,
-  ENVIRONMENT = 1,
-  METADATA = 2,
-  BEHAVIOR = 3,
 }
 
 /** NFT Transaction status */
@@ -78,13 +91,6 @@ export enum NftAmount {
   SINGLE = 1,
   MULTIPLE = 2,
 }
-/** Mint steps */
-export enum NftCreateTab {
-  METADATA = 1,
-  PREVIEW = 2,
-  IMAGES = 3,
-  DEPLOY = 4,
-}
 /** NFT create steps */
 export enum NftCreateStep {
   AMOUNT = 1,
@@ -98,21 +104,14 @@ export enum NftUploadStep {
   FILE = 1,
   IMAGES = 2,
   PREVIEW = 3,
-}
-
-/** NFT Collection deploy status */
-export enum NftDeployStatus {
-  IDLE = 0,
-  CREATING = 1,
-  UPLOADING = 2,
-  DEPLOYING = 3,
-  DEPLOYED = 4,
+  ATTRIBUTES = 4,
 }
 
 export enum PrepareCollectionMetadataStep {
   UPLOAD_IMAGES_TO_IPFS = 1,
   UPDATE_JSONS_ON_S3 = 2,
   UPLOAD_METADATA_TO_IPFS = 3,
+  PUBLISH_TO_IPNS = 4,
   METADATA_SUCCESSFULLY_PREPARED = 10,
 }
 
@@ -159,6 +158,7 @@ declare global {
     transactionHash: string | null;
     updateTime: string;
     useApillonIpfsGateway: boolean;
+    useIpns: boolean;
   }
 
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}

@@ -17,8 +17,8 @@ declare global {
     address: string;
     source: string;
     name?: string;
-    wallet?: Wallet;
-    signer?: unknown;
+    wallet: Wallet;
+    signer: Signer;
   }
 
   interface WalletInfo {

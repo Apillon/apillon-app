@@ -25,7 +25,15 @@
       <slot name="heading"> </slot>
     </div>
 
-    <div class="flex flex-auto w-full flex-col md:flex-row">
+    <div class="flex flex-auto w-full flex-col md:flex-row" :class="{ [$style.mainnet]: mainnet }">
+      <div v-if="mainnet" class="absolute top-0 w-full">
+        <Tag
+          class="absolute top-0 left-1/2 -translate-y-full -translate-x-1/2 text-[10px] px-1"
+          color="violet"
+        >
+          MAINNET
+        </Tag>
+      </div>
       <n-layout
         class="has-scrollbar"
         sider-placement="right"
@@ -55,6 +63,9 @@
               v-model:show="warningStore.isSpendingWarningOpen"
               @close="onSpendingWaningClose"
             />
+
+            <!-- Global component: deployment progress -->
+            <StatusCard v-if="activeDeployments.length > 0" />
           </n-scrollbar>
         </n-layout-content>
         <n-layout-sider
@@ -109,9 +120,10 @@
 <script lang="ts" setup>
 import { useGtm } from '@gtm-support/vue-gtm';
 const props = defineProps({
+  fullHeight: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   learnCollapsible: { type: Boolean, default: false },
-  fullHeight: { type: Boolean, default: false },
+  mainnet: { type: Boolean, default: false },
 });
 
 /** Check if instructions are available (page has content and feature is enabled) */
@@ -120,6 +132,7 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
 const warningStore = useWarningStore();
+const { activeDeployments } = useRefreshStatus();
 
 const gtm = useGtm();
 const { isMd, isLg, isXl } = useScreen();
@@ -143,9 +156,8 @@ const loadingAnimation = ref<boolean>(false);
 onMounted(() => {
   setLoadingAnimation(props.loading);
 
-  if (gtm && gtm.enabled() && !sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
-    gtm.trackEvent({
-      event: 'dashboard_on_load',
+  if (!sessionStorage.getItem(LsAnalyticsKeys.USER_UUID)) {
+    trackEvent('dashboard_on_load', {
       user_uuid: authStore.userUuid,
     });
     sessionStorage.setItem(LsAnalyticsKeys.USER_UUID, Date.now().toString());
@@ -198,5 +210,15 @@ function onSpendingWaningClose() {
 <style lang="postcss">
 .btn-collapse > svg path {
   transition: all 0.5s;
+}
+</style>
+<style lang="postcss" module>
+.mainnet {
+  @apply relative py-[1px] -mt-[2px];
+
+  &:before {
+    content: '';
+    @apply absolute top-0 -left-8 -right-8 bottom-0 border border-violet;
+  }
 }
 </style>

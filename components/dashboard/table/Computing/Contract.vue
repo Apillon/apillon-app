@@ -28,17 +28,17 @@ import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
   contracts: { type: Array<ContractInterface>, default: [] },
+  archive: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();
 const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const contractStore = useContractStore();
-const { checkUnfinishedContract } = useComputing();
-
-const TableEllipsis = resolveComponent('TableEllipsis');
-const ComputingContractStatus = resolveComponent('ComputingContractStatus');
+const { checkUnfinishedContracts } = useComputing();
+const { deleteItem } = useDelete();
 
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 
@@ -46,7 +46,7 @@ const modalTransferOwnershipVisible = ref<boolean | null>(false);
 const data = computed<Array<ContractInterface>>(() => {
   return (
     props.contracts.filter(item =>
-      item.name.toLocaleLowerCase().includes(contractStore.search.toLocaleLowerCase())
+      item.name.toLowerCase().includes(contractStore.search.toLowerCase())
     ) || []
   );
 });
@@ -56,7 +56,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'name',
       title: t('computing.contract.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
@@ -64,7 +64,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'description',
       title: t('general.description'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
@@ -72,7 +72,7 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
     {
       key: 'type',
       title: t('general.type'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       minWidth: 130,
       render(row) {
         return t(
@@ -84,14 +84,14 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
       key: 'contract_uuid',
       title: t('computing.contract.uuid'),
       render(row: ContractInterface) {
-        return h(TableEllipsis, { text: row.contract_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.contract_uuid }, '');
       },
     },
     {
       key: 'contractAddress',
       title: t('computing.contract.address'),
       render(row: ContractInterface) {
-        return h(TableEllipsis, { text: row.contractAddress }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.contractAddress }, '');
       },
     },
     {
@@ -106,18 +106,25 @@ const createColumns = (): NDataTableColumns<ContractInterface> => {
       key: 'contractStatus',
       title: t('general.status'),
       render(row) {
-        return h(ComputingContractStatus, { contractStatus: row.contractStatus }, '');
+        return h(
+          resolveComponent('ComputingContractStatus'),
+          { contractStatus: row.contractStatus },
+          ''
+        );
       },
     },
     {
       title: '',
       key: 'actions',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
       render() {
         return h(
           NDropdown,
-          { options: dropdownOptions.value, trigger: 'click' },
+          {
+            options: props.archive ? dropdownOptionsArchive : dropdownOptions.value,
+            trigger: 'click',
+          },
           {
             default: () =>
               h(
@@ -172,8 +179,30 @@ const dropdownOptions = computed(() => {
         },
       },
     },
+    {
+      key: 'computingDelete',
+      label: t('general.archive'),
+      disabled: authStore.isAdmin(),
+      props: {
+        onClick: () => {
+          deleteContract();
+        },
+      },
+    },
   ];
 });
+const dropdownOptionsArchive = [
+  {
+    key: 'computingRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        restoreContract();
+      },
+    },
+  },
+];
 
 /** On row click */
 const rowProps = (row: ContractInterface) => {
@@ -181,7 +210,7 @@ const rowProps = (row: ContractInterface) => {
     onClick: (e: Event) => {
       currentRow.value = row;
 
-      if (canOpenColumnCell(e.composedPath()) && viewEnabled.value) {
+      if (!props.archive && canOpenColumnCell(e.composedPath()) && viewEnabled.value) {
         router.push({ path: `/dashboard/service/computing/${row.contract_uuid}` });
       }
     },
@@ -192,7 +221,46 @@ function onContractTransferred() {
   modalTransferOwnershipVisible.value = false;
   setTimeout(async () => {
     await contractStore.fetchContracts();
-    checkUnfinishedContract();
+    checkUnfinishedContracts();
   }, 3000);
+}
+
+/**
+ * contract delete
+ * */
+async function deleteContract() {
+  if (
+    currentRow.value &&
+    (await deleteItem(ItemDeleteKey.CONTRACT, currentRow.value.contract_uuid))
+  ) {
+    contractStore.items = contractStore.items.filter(
+      item => item.contract_uuid !== currentRow.value.contract_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
+    sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);
+  }
+}
+
+/**
+ * Restore contract
+ * */
+async function restoreContract() {
+  contractStore.loading = true;
+
+  try {
+    await $api.patch<ContractResponse>(endpoints.contractActivate(currentRow.value.contract_uuid));
+    contractStore.archive = contractStore.archive.filter(
+      item => item.contract_uuid !== currentRow.value.contract_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.CONTRACTS);
+    sessionStorage.removeItem(LsCacheKeys.CONTRACT_ARCHIVE);
+
+    message.success(t('form.success.restored.contract'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  contractStore.loading = false;
 }
 </script>

@@ -1,11 +1,7 @@
 <template>
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  NFT Mint Address -->
-    <n-form-item
-      path="address"
-      :label="$t('form.label.nftTransferAddress')"
-      :label-props="{ for: 'address' }"
-    >
+    <n-form-item path="address" :label="addressLabel" :label-props="{ for: 'address' }">
       <n-input
         v-model:value="formData.address"
         :input-props="{ id: 'address' }"
@@ -35,9 +31,10 @@ const props = defineProps({
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
+const { addressLabel } = useCollection();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -49,7 +46,7 @@ const rules: NFormRules = {
   address: [
     {
       required: true,
-      message: $i18n.t('validation.nftTransferAddressRequired'),
+      message: t('validation.nft.transferAddressRequired'),
     },
   ],
 };
@@ -81,12 +78,9 @@ async function transfer() {
       ...formData.value,
       collection_uuid: props.collectionUuid,
     };
-    const res = await $api.post<any>(
-      endpoints.collectionTransferOwnership(props.collectionUuid),
-      bodyData
-    );
+    await $api.post<any>(endpoints.collectionTransferOwnership(props.collectionUuid), bodyData);
 
-    message.success($i18n.t('form.success.nftTransfer'));
+    message.success(t('form.success.nftTransfer'));
 
     /** Emit events */
     emit('submitSuccess');

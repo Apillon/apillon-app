@@ -97,10 +97,9 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
 import type { Type as NButtonType } from 'naive-ui/es/button/src/interface';
-
-type ButtonType = NButtonType | 'secondary' | 'builders' | 'link';
+import type { ButtonType } from '~/components/general/Btn.vue';
+import colors from '~/tailwind.colors';
 
 defineProps({
   showCard: { type: Boolean, default: true },
@@ -124,9 +123,9 @@ const pricingPlans: Record<string, PricingPlan> = {
     services: {
       storage: '3 GB Lifetime',
       bandwith: '20 GB Monthly',
+      wallets: '100 Wallets Monthly',
       credits: '1200 Credits Lifetime',
     },
-    otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
   Caterpillar: {
     name: 'Caterpillar',
@@ -135,9 +134,9 @@ const pricingPlans: Record<string, PricingPlan> = {
     services: {
       storage: '60 GB Lifetime',
       bandwith: '150 GB Monthly',
+      wallets: '500 Wallets Monthly',
       credits: '5000 Credits Lifetime',
     },
-    otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
   Cocoon: {
     name: 'Cocoon',
@@ -146,11 +145,9 @@ const pricingPlans: Record<string, PricingPlan> = {
     services: {
       storage: '300 GB Lifetime',
       bandwith: '750 GB Monthly',
+      wallets: '1000 Wallets Monthly',
       credits: '20000 Credits Lifetime',
     },
-    otherServices: ['Smart Contract deploy', 'NFT minting', 'Identity (Kilt)', 'Compute (PHALA)'],
   },
 };
-
-function upgradePlan() {}
 </script>

@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
+    archive: [] as CollectionInterface[],
     attribute: {} as AttributeInterface,
     columns: [] as TableColumns<KeyTitle>,
     csvAttributes: [] as Array<MetadataAttributes>,
@@ -17,11 +18,9 @@ export const useCollectionStore = defineStore('collection', {
     loading: false,
     metadata: [] as Array<Record<string, any>>,
     metadataDeploys: [] as MetadataDeployInterface[],
-    metadataStored: null as Boolean | null,
-    mintTab: NftCreateTab.METADATA,
+    metadataStored: undefined as Boolean | undefined,
     quotaReached: undefined as Boolean | undefined,
     search: '',
-    step: CollectionStep.STORAGE_TYPE,
     nftStep: NftCreateStep.AMOUNT,
     amount: 0,
     stepCollectionDeploy: CollectionStatus.CREATED,
@@ -31,17 +30,17 @@ export const useCollectionStore = defineStore('collection', {
     uploadActive: false,
     form: {
       base: {
-        logo: null as FileListItemType | null,
         coverImage: null as FileListItemType | null,
+        logo: null as FileListItemType | null,
         name: '',
         symbol: '',
-        chain: EvmChain.MOONBASE,
+      },
+      behavior: {
+        chain: undefined as number | undefined,
         chainType: ChainType.EVM,
         collectionType: NFTCollectionType.GENERIC,
         useApillonIpfsGateway: false,
-        useIpns: false,
-      },
-      behavior: {
+        useIpns: undefined as boolean | undefined,
         baseUri: '',
         baseExtension: '.json',
         dropStart: Date.now() + 3600000,
@@ -49,8 +48,8 @@ export const useCollectionStore = defineStore('collection', {
         maxSupply: 0,
         dropPrice: 0,
         dropReserve: 0,
-        revocable: false as Boolean | null,
-        soulbound: false as Boolean | null,
+        revocable: false as boolean | null,
+        soulbound: false as boolean | null,
         supplyLimited: 0,
         royaltiesAddress: null,
         royaltiesFees: 0,
@@ -73,6 +72,9 @@ export const useCollectionStore = defineStore('collection', {
     hasCollections(state): boolean {
       return Array.isArray(state.items) && state.items.length > 0;
     },
+    hasCollectionArchive(state): boolean {
+      return Array.isArray(state.archive) && state.archive.length > 0;
+    },
     hasCollectionTransactions(state): boolean {
       return Array.isArray(state.transaction) && state.transaction.length > 0;
     },
@@ -88,10 +90,14 @@ export const useCollectionStore = defineStore('collection', {
     hasMetadataDeploys(state): boolean {
       return Array.isArray(state.metadataDeploys) && state.metadataDeploys.length > 0;
     },
+    isUnique(state): boolean {
+      return state.active.chain === SubstrateChain.UNIQUE;
+    },
   },
   actions: {
     resetData() {
       this.active = {} as CollectionInterface;
+      this.archive = [] as CollectionInterface[];
       this.items = [] as CollectionInterface[];
       this.metadataDeploys = [] as MetadataDeployInterface[];
       this.search = '';
@@ -102,8 +108,6 @@ export const useCollectionStore = defineStore('collection', {
     resetMetadata() {
       this.resetFile();
       this.resetImages();
-      this.mintTab = NftCreateTab.METADATA;
-      this.step = CollectionStep.STORAGE_TYPE;
       this.nftStep = NftCreateStep.AMOUNT;
       this.stepCollectionDeploy = CollectionStatus.CREATED;
     },
@@ -136,12 +140,12 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.coverImage = null;
       this.form.base.name = '';
       this.form.base.symbol = '';
-      this.form.base.chain = EvmChain.MOONBASE;
-      this.form.base.chainType = ChainType.EVM;
-      this.form.base.collectionType = NFTCollectionType.GENERIC;
-      this.form.base.useApillonIpfsGateway = false;
-      this.form.base.useIpns = false;
 
+      this.form.behavior.chain = undefined;
+      this.form.behavior.chainType = ChainType.EVM;
+      this.form.behavior.collectionType = NFTCollectionType.GENERIC;
+      this.form.behavior.useApillonIpfsGateway = false;
+      this.form.behavior.useIpns = undefined;
       this.form.behavior.baseUri = '';
       this.form.behavior.baseExtension = '.json';
       this.form.behavior.dropStart = Date.now() + 3600000;
@@ -169,6 +173,12 @@ export const useCollectionStore = defineStore('collection', {
         return await this.fetchCollections();
       }
       return this.items;
+    },
+    async getCollectionArchive(): Promise<CollectionInterface[]> {
+      if (!this.hasCollectionArchive || isCacheExpired(LsCacheKeys.COLLECTION_ARCHIVE)) {
+        return await this.fetchCollections(true);
+      }
+      return this.archive;
     },
 
     async getCollection(collectionUuid: string): Promise<CollectionInterface | null> {
@@ -214,7 +224,7 @@ export const useCollectionStore = defineStore('collection', {
     /**
      * API calls
      */
-    async fetchCollections(showLoader = true): Promise<CollectionInterface[]> {
+    async fetchCollections(archive = false, showLoader = true): Promise<CollectionInterface[]> {
       this.loading = showLoader;
 
       const dataStore = useDataStore();
@@ -229,24 +239,37 @@ export const useCollectionStore = defineStore('collection', {
           desc: 'true',
           ...PARAMS_ALL_ITEMS,
         };
+        if (archive) {
+          params.status = SqlModelStatus.ARCHIVED;
+        }
 
         const req = $api.get<CollectionsResponse>(endpoints.collections(), params);
         dataStore.promises.collections = req;
         const res = await req;
 
-        this.items = res.data.items;
+        if (archive) {
+          this.archive = res.data.items;
+        } else {
+          this.items = res.data.items;
+        }
         this.total = res.data.total;
         this.search = '';
         this.loading = false;
 
         /** Save timestamp to SS */
-        sessionStorage.setItem(LsCacheKeys.COLLECTIONS, Date.now().toString());
+        const key = archive ? LsCacheKeys.COLLECTION_ARCHIVE : LsCacheKeys.COLLECTIONS;
+        sessionStorage.setItem(key, Date.now().toString());
 
         return res.data.items;
       } catch (error: any) {
         /** Clear promise */
         dataStore.promises.collections = null;
-        this.items = [] as Array<CollectionInterface>;
+
+        if (archive) {
+          this.archive = [] as Array<CollectionInterface>;
+        } else {
+          this.items = [] as Array<CollectionInterface>;
+        }
         this.total = 0;
 
         /** Show error message  */
@@ -272,19 +295,13 @@ export const useCollectionStore = defineStore('collection', {
       return null;
     },
 
-    async fetchCollectionTransactions(
-      collectionUuid: string,
-      showLoader = true
-    ): Promise<TransactionInterface[]> {
+    async fetchCollectionTransactions(collectionUuid: string, showLoader = true): Promise<TransactionInterface[]> {
       this.loading = showLoader;
       try {
         const params: Record<string, string | number> = {
           ...PARAMS_ALL_ITEMS,
         };
-        const res = await $api.get<TransactionResponse>(
-          endpoints.collectionTransactions(collectionUuid),
-          params
-        );
+        const res = await $api.get<TransactionResponse>(endpoints.collectionTransactions(collectionUuid), params);
         this.transaction = res.data.items;
         this.loading = false;
 

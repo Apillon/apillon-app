@@ -55,9 +55,18 @@ export function substrateAddressValidate(
     return false;
   }
 }
+export function validateInteger(_: FormItemRule, value: number | string | null): boolean {
+  return Number.isInteger(value);
+}
 export function validateNaturalNumber(_: FormItemRule, value: number | string | null): boolean {
   return value !== null && intVal(value) >= 0;
 }
 export function validateNumberNotZero(_: FormItemRule, value: number | string | null): boolean {
   return !!value && intVal(value) > 0;
+}
+export function validatePercent(_: FormItemRule, value: number | string | null): boolean {
+  return !!value && intVal(value) >= 0 && intVal(value) <= 100;
+}
+export function validateBoolean(_: FormItemRule, value: number | string | null): boolean {
+  return value !== null && value !== undefined;
 }

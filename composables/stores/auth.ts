@@ -5,6 +5,7 @@ export const AuthLsKeys = {
   EMAIL: 'al_email',
   WALLET: 'al_wallet',
   CAPTCHA: 'al_captcha',
+  PROSOPO: 'al_prosopo',
 };
 
 export const useAuthStore = defineStore('auth', {
@@ -32,13 +33,13 @@ export const useAuthStore = defineStore('auth', {
       return !!state.email && !!state.jwt;
     },
     userId(state) {
-      return state.user.id;
+      return state.user?.id || 0;
     },
     userUuid(state) {
       return state.user.user_uuid || '';
     },
     username(state) {
-      return state.user.name;
+      return state.user?.name || '';
     },
     allowedEntry: state => !!state.jwt,
   },
@@ -108,10 +109,10 @@ export const useAuthStore = defineStore('auth', {
 
     getCaptchaLS(): Record<string, any> {
       try {
-        const data = JSON.parse(localStorage.getItem(AuthLsKeys.CAPTCHA) || '{}');
+        const data = JSON.parse(localStorage.getItem(AuthLsKeys.PROSOPO) || '{}');
         return typeof data === 'object' ? data : {};
       } catch (error) {
-        console.log(error);
+        console.warn(error);
       }
       return {};
     },
@@ -132,7 +133,7 @@ export const useAuthStore = defineStore('auth', {
         ts: Date.now().toString(),
         jwt: captchaJwt,
       };
-      localStorage.setItem(AuthLsKeys.CAPTCHA, JSON.stringify(data));
+      localStorage.setItem(AuthLsKeys.PROSOPO, JSON.stringify(data));
     },
 
     removeCaptchaJwt(email?: string) {
@@ -141,10 +142,10 @@ export const useAuthStore = defineStore('auth', {
         const emails = Object.keys(data);
         if (emails.includes(email)) {
           delete data[email];
-          localStorage.setItem(AuthLsKeys.CAPTCHA, JSON.stringify(data));
+          localStorage.setItem(AuthLsKeys.PROSOPO, JSON.stringify(data));
         }
       } else {
-        localStorage.removeItem(AuthLsKeys.CAPTCHA);
+        localStorage.removeItem(AuthLsKeys.PROSOPO);
       }
     },
 

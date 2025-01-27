@@ -1,6 +1,18 @@
 /**
  * Error messages
  */
+export function contractError(error: any) {
+  if (!window.$i18n || !(window.$i18n instanceof Object) || !error) {
+    if (error instanceof ReferenceError || error instanceof TypeError) {
+      return error.message;
+    }
+    return error?.message.split(/\r?\n/).splice(0, 1).join() || 'Something went wrong, please try again later.';
+  }
+  return error?.code && window.$i18n.te(`error.contract.${error?.code}`)
+    ? window.$i18n.t(`error.${error.message}`)
+    : error.message.split(/\r?\n/).splice(0, 1).join();
+}
+
 export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | DOMException | any) {
   // Check error exists and if translation is included
   if (!window.$i18n || !(window.$i18n instanceof Object) || !error) {
@@ -16,28 +28,28 @@ export function userFriendlyMsg(error: ApiError | ReferenceError | TypeError | D
     const err = error as ApiError;
     if (err.errors && Array.isArray(err.errors)) {
       const errorMessages = err.errors.map(e =>
-        singleErrorMessage(window.$i18n, e.message, e.statusCode)
+        singleErrorMessage(window.$i18n, e.message, e.statusCode || e?.code, e.property)
       );
       return [...new Set(errorMessages)].join('\n');
     } else if (err.message) {
-      return singleErrorMessage(window.$i18n, err.message, err.code || err.status);
+      return singleErrorMessage(window.$i18n, err.message, err.code || err.status, err.property);
     }
   } else if (error instanceof ReferenceError || error instanceof TypeError) {
-    return window.$i18n.te(`error.${error.message}`)
-      ? window.$i18n.t(`error.${error.message}`)
-      : error.message;
+    return window.$i18n.te(`error.${error.message}`) ? window.$i18n.t(`error.${error.message}`) : error.message;
   }
 
   return window.$i18n.t('error.API');
 }
 
 /** Translate single error message */
-function singleErrorMessage($i18n: i18nType, message: string, statusCode: number = 0) {
+function singleErrorMessage($i18n: i18nType, message: string, statusCode: number = 0, property?: string) {
   const code = takeFirstDigitsFromNumber(statusCode);
   if ($i18n.te(`error.${message}`)) {
     return $i18n.t(`error.${message}`);
   } else if ($i18n.te(`error.${statusCode}`)) {
     return $i18n.t(`error.${statusCode}`);
+  } else if (property === 'metadata') {
+    return message;
   } else if (code >= 500) {
     return $i18n.t('error.DEFAULT_SYSTEM_ERROR');
   } else if (code >= 400) {

@@ -1,29 +1,31 @@
 <template>
-  <div class="max-w-xl mx-auto">
-    <div v-if="loadingImages || logo || coverImage" class="mb-4 relative min-h-[10rem]">
+  <div class="flex h-full flex-col justify-between">
+    <div class="relative mb-9 min-h-32 w-full flex-auto rounded-lg bg-bg-lighter">
       <Spinner v-if="loadingImages" />
       <template v-else>
-        <Image v-if="coverImage" :src="coverImage.link" class="h-50" />
+        <Image
+          v-if="coverImage"
+          :src="coverImage.link"
+          class="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-lg object-cover object-center"
+        />
         <Image
           v-if="logo"
           :src="logo.link"
-          class="top-2 left-2 absolute h-20 border-2 border-bg-lighter"
+          class="absolute left-6 top-10 h-28 w-28 rounded-full object-cover object-center"
         />
+        <div v-else class="absolute left-6 top-10 h-28 w-28 rounded-full bg-bg-dark" />
       </template>
-    </div>
-    <div class="text-center">
-      <h2>{{ collectionStore.active.name }}</h2>
-      <p>{{ collectionStore.active.description }}</p>
     </div>
     <n-table class="plain" :bordered="false" single-line>
       <tbody>
         <tr v-for="(item, key) in data" :key="key">
-          <td>
+          <td :class="{ '!border-b-0': key + 1 === data.length }">
             <span class="text-white lg:whitespace-nowrap">{{ item.label }}</span>
           </td>
-          <td>
-            <TableLink v-if="item.link && item.value" :link="item.link" :text="item.value" />
-            <TableEllipsis v-else-if="item.value" :text="item.value" />
+          <td :class="{ '!border-b-0': key + 1 === data.length }">
+            <TableLink v-if="item.link && item.value" class="w-full" :link="item.link" :text="item.value" />
+            <TableEllipsis v-else-if="item.copy" class="w-full justify-between" :text="item.value" />
+            <p v-else class="w-full">{{ item.value }}</p>
           </td>
         </tr>
       </tbody>
@@ -46,9 +48,7 @@ onMounted(async () => {
     ...PARAMS_ALL_ITEMS,
   });
 
-  logo.value = bucketStore.folder.items.find(
-    item => item.type === BucketItemType.FILE && item.name.includes('logo')
-  );
+  logo.value = bucketStore.folder.items.find(item => item.type === BucketItemType.FILE && item.name.includes('logo'));
   coverImage.value = bucketStore.folder.items.find(
     item => item.type === BucketItemType.FILE && item.name.includes('cover')
   );
@@ -60,6 +60,10 @@ onMounted(async () => {
 const data = computed(() => {
   return [
     {
+      label: t('nft.collection.name'),
+      value: collectionStore.active.name,
+    },
+    {
       label: t('nft.collection.contractAddress'),
       value: collectionStore.active.contractAddress,
       link: contractLink(collectionStore.active.contractAddress, collectionStore.active.chain),
@@ -67,18 +71,12 @@ const data = computed(() => {
     {
       label: t('nft.collection.uuid'),
       value: collectionStore.active.collection_uuid,
+      copy: true,
     },
     {
       label: t('nft.collection.baseUri'),
       value: collectionStore.active.baseUri,
-    },
-    {
-      label: t('form.label.collectionLogo'),
-      value: logo.value?.link,
-    },
-    {
-      label: t('form.label.collectionCoverImage'),
-      value: coverImage.value?.link,
+      copy: true,
     },
   ];
 });

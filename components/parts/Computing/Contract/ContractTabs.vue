@@ -1,18 +1,9 @@
 <template>
-  <n-tabs
-    ref="encryptTabRef"
-    v-model:value="contractStore.encryptTab"
-    class="types-hidden"
-    animated
-  >
+  <n-tabs ref="encryptTabRef" v-model:value="contractStore.encryptTab" class="types-hidden" animated>
     <n-tab-pane :name="EncryptTab.BUCKET">
       <template #tab>
-        <IconNumber
-          v-if="contractStore.encryptTab === EncryptTab.BUCKET"
-          :number="1"
-          :active="true"
-        />
-        <IconSuccessful v-else />
+        <IconNumber v-if="contractStore.encryptTab === EncryptTab.BUCKET" :number="1" :active="true" />
+        <IconSuccess v-else />
         <span class="ml-2">{{ $t('computing.contract.encrypt.step1') }}</span>
       </template>
       <slot>
@@ -21,13 +12,13 @@
     </n-tab-pane>
     <n-tab-pane :name="EncryptTab.ASSIGN" :disabled="!contractStore.bucketUuid">
       <template #tab>
-        <IconSuccessful v-if="contractStore.encryptTab === EncryptTab.FINISHED" />
+        <IconSuccess v-if="contractStore.encryptTab === EncryptTab.FINISHED" />
         <IconNumber v-else :number="2" :active="contractStore.encryptTab === EncryptTab.ASSIGN" />
         <span class="ml-2">{{ $t('computing.contract.encrypt.step2') }}</span>
       </template>
       <slot>
         <FormComputingAssignCID
-          class="max-w-xl mx-auto my-8"
+          class="mx-auto my-8 max-w-xl"
           :contract-uuid="contractStore.active.contract_uuid"
           @submit-success="onCidAssigned"
         />
@@ -39,7 +30,7 @@
         <span class="ml-2">{{ $t('computing.contract.encrypt.step3') }}</span>
       </template>
       <slot>
-        <div class="max-w-md mx-auto my-8 text-center">
+        <div class="mx-auto my-8 max-w-md text-center">
           <h4 class="mb-2">{{ $t('computing.contract.encrypt.step3') }}</h4>
           <p class="mb-4">{{ $t('computing.contract.encrypt.step3Info') }}</p>
           <Btn type="secondary" @click="goToFirstStep()">
@@ -97,7 +88,7 @@ async function onCidAssigned() {
 
   await transactionStore.fetchTransactions(
     contractStore.active.contract_uuid,
-    transactionStore.pagination.page,
+    { page: transactionStore.pagination.page },
     false
   );
   checkUnfinishedTransactions();

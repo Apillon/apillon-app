@@ -8,8 +8,8 @@ export default function useComputing() {
   const contractStore = useContractStore();
   const transactionStore = useComputingTransactionStore();
 
-  let contractInterval: any = null as any;
   let transactionInterval: any = null as any;
+  let contractInterval: any = null as any;
 
   onUnmounted(() => {
     clearInterval(contractInterval);
@@ -21,16 +21,12 @@ export default function useComputing() {
     clearInterval(contractInterval);
 
     const unfinishedCollection = contractStore.items.find(
-      contract =>
-        contract.contractStatus === ContractStatus.DEPLOY_INITIATED ||
-        contract.contractStatus === ContractStatus.DEPLOYING
+      contract => contract.contractStatus < ContractStatus.DEPLOYED
     );
-    if (unfinishedCollection === undefined) {
-      return;
-    }
+    if (unfinishedCollection === undefined) return;
 
     contractInterval = setInterval(async () => {
-      const contracts = await contractStore.fetchContracts(false);
+      const contracts = await contractStore.fetchContracts(false, false);
       const contract = contracts.find(
         contract => contract.contract_uuid === unfinishedCollection.contract_uuid
       );
@@ -80,7 +76,7 @@ export default function useComputing() {
   async function uploadFileToIPFS(
     file: FileListItemType,
     bucketUuid: string,
-    encryptedContent: string
+    encryptedContent?: string
   ): Promise<FileInterface | null> {
     const sessionUuid = uuidv4();
     const data = {
@@ -97,15 +93,17 @@ export default function useComputing() {
       // Upload to S3
       await fetch(uploadUrl.url, {
         method: 'PUT',
-        body: encryptedContent,
+        body: encryptedContent || file.file,
       });
 
       // End session
       await $api.post(endpoints.storageFileUpload(bucketUuid, sessionUuid));
 
-      setTimeout(() => {
-        message.success(t('computing.contract.encrypt.step2Info'), { duration: 5000 });
-      }, 1000);
+      if (encryptedContent) {
+        setTimeout(() => {
+          message.success(t('computing.contract.encrypt.step2Info'), { duration: 5000 });
+        }, 1000);
+      }
 
       // Start pooling file
       return await getFile(bucketUuid, uploadUrl.file_uuid);
@@ -141,22 +139,30 @@ export default function useComputing() {
       te(`${base}.labelInfo.${field}`) &&
       t(`${base}.labelInfo.${field}`)
     ) {
-      return [
-        h('span', { class: 'mr-1' }, t(`${base}.${field}`)),
-        h(
-          IconInfo,
-          { class: 'info-icon', size: 'sm', tooltip: t(`${base}.labelInfo.${field}`) },
-          ''
-        ),
-      ];
+      return labelInfoText(
+        t(`${base}.${field}`),
+        decodeHTMLEntities(t(`${base}.labelInfo.${field}`))
+      );
     }
     return te(`${base}.${field}`) ? t(`${base}.${field}`) : field;
+  }
+
+  function labelInfoText(label: string, info?: string) {
+    if (info && info.length > 0) {
+      return h('span', { class: 'inline-flex items-center' }, [
+        h('span', { class: 'mr-1' }, label),
+        h(IconInfo, { class: 'info-icon', size: 'sm', tooltip: info }, ''),
+      ]);
+    }
+    return label;
   }
 
   return {
     checkUnfinishedContracts,
     checkUnfinishedTransactions,
+    getFile,
     labelInfo,
+    labelInfoText,
     onContractCreated,
     uploadFileToIPFS,
   };

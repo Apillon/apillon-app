@@ -11,11 +11,7 @@
     @submit.prevent="handleSubmit"
   >
     <!--  NFT Mint Address -->
-    <n-form-item
-      path="receivingAddress"
-      :label="$t('form.label.nftMintAddress')"
-      :label-props="{ for: 'receivingAddress' }"
-    >
+    <n-form-item path="receivingAddress" :label="addressLabel">
       <n-input
         v-model:value="formData.receivingAddress"
         :input-props="{ id: 'receivingAddress' }"
@@ -25,7 +21,7 @@
     </n-form-item>
 
     <!--  NFT Mint Quantity -->
-    <n-form-item path="quantity" :label="$t('form.label.nftMintQuantity')">
+    <n-form-item path="quantity" :label="$t('form.label.nft.mintQuantity')">
       <n-input-number
         v-model:value="formData.quantity"
         :min="1"
@@ -68,6 +64,7 @@ const $i18n = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+const { addressLabel } = useCollection();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
@@ -80,20 +77,26 @@ const rules: NFormRules = {
   receivingAddress: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintAddressRequired'),
+      message: $i18n.t('validation.nft.mintAddressRequired'),
     },
   ],
   quantity: [
     {
       required: true,
-      message: $i18n.t('validation.nftMintQuantityRequired'),
+      message: $i18n.t('validation.nft.mintQuantityRequired'),
     },
     {
       validator: validateQuantity,
-      message: $i18n.t('validation.nftMintQuantity'),
+      message: $i18n.t('validation.nft.mintQuantity'),
     },
   ],
 };
+
+const isSubstrate = computed(
+  () =>
+    collectionStore.active.chainType === ChainType.SUBSTRATE ||
+    collectionStore.active.chain === SubstrateChain.UNIQUE
+);
 
 function validateQuantity(_: FormItemRule, value: number): boolean {
   return (

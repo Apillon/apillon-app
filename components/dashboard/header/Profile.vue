@@ -40,14 +40,14 @@ const renderIcon = (iconName: string) => {
 };
 const renderNuxtIcon = (iconName: string) => {
   return () => {
-    return h(resolveComponent('NuxtIcon'), { name: iconName, class: 'text-xl' }, '');
+    return h(resolveComponent('NuxtIcon'), { name: iconName, class: 'text' }, '');
   };
 };
 
 const options = computed(() => [
   {
-    key: 'profile',
-    label: $i18n.t('profile.profile'),
+    key: 'dashboard-account-management',
+    label: $i18n.t('profile.account'),
     icon: renderIcon('icon-anonymous'),
   },
   {

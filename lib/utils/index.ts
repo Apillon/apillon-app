@@ -7,8 +7,7 @@ import local from '../config/local';
 import { Feature } from '../types/config';
 
 export function getAppConfig(env?: string) {
-  const configFile =
-    env === 'staging' ? stg : env === 'development' ? dev : env === 'local' ? local : prod;
+  const configFile = env === 'staging' ? stg : env === 'development' ? dev : env === 'local' ? local : prod;
   return {
     ...configFile,
     ENV: env,
@@ -18,13 +17,17 @@ export function getAppConfig(env?: string) {
 /**
  * Analytics GTM
  */
-export function trackEvent(eventName: string, eventCategory = 'Dashboard', eventAction = 'click') {
+export function trackEvent(eventName: string, data?: Record<string, any>) {
   const gtm = useGtm();
   if (gtm && gtm.enabled()) {
     gtm.trackEvent({
       event: eventName,
-      category: eventCategory,
-      action: eventAction,
+      category: 'category',
+      action: 'click',
+      label: 'My custom component trigger',
+      value: 5000,
+      noninteraction: false,
+      ...data,
     });
   }
 }
@@ -85,12 +88,17 @@ export function isFeatureEnabled(feature: Feature | string, userRoles: number[])
   return enabledFeatures.includes(feature) || false;
 }
 
+/** Feature flags - check if feature is only for beta users */
+export function isBetaFeature(feature: Feature | string): boolean {
+  const config = useRuntimeConfig();
+  return config.public.betaFeatures.includes(feature) || false;
+}
+
 /** Check if any of elements contains class ${ON_COLUMN_CLICK_OPEN_CLASS}, which means this column is clickable */
 export function canOpenColumnCell(path: EventTarget[]) {
   return path.some(
     (item: EventTarget) =>
-      (item as HTMLElement).tagName !== 'svg' &&
-      (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
+      (item as HTMLElement).tagName !== 'svg' && (item as HTMLElement)?.className?.includes(ON_COLUMN_CLICK_OPEN_CLASS)
   );
 }
 
@@ -111,10 +119,7 @@ export async function subscribeToNewsletter(email: string, username?: string): P
     anticsrf: true,
     ajax: 1,
   };
-  const URL =
-    config.public.mailerLiteSubscribeUrl +
-    '?' +
-    queryString.stringify(data, { arrayFormat: 'comma' });
+  const URL = config.public.mailerLiteSubscribeUrl + '?' + queryString.stringify(data, { arrayFormat: 'comma' });
 
   try {
     await fetch(URL, {
@@ -166,6 +171,7 @@ export function parseArguments(args: FetchParams): Record<string, string | numbe
   };
   if (args.search) params.search = args.search;
   if (args.project_uuid) params.project_uuid = args.project_uuid;
+  if (args.status) params.status = args.status;
 
   return params;
 }

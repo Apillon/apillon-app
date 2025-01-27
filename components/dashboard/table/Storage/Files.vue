@@ -9,19 +9,12 @@
       :columns="columns"
       :data="bucketStore.folder.items"
       :loading="bucketStore.folder.loading"
-      :pagination="{
-        ...bucketStore.folder.pagination,
-        onChange: (page: number) => {
-          handlePageChange(page, bucketStore.folder.pagination.pageSize);
-        },
-        onUpdatePageSize: (pageSize: number) => {
-          handlePageChange(1, pageSize);
-        },
-      }"
+      :pagination="bucketStore.folder.pagination"
       :row-key="rowKey"
       :row-props="rowProps"
       @update:checked-row-keys="handleCheck"
-      @update:page="handlePageChange"
+      @update:page="(page: number) => handlePageChange(page, bucketStore.folder.pagination.pageSize)"
+      @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
       @update:sorter="handleSorterChange"
     />
 
@@ -36,9 +29,7 @@
     <ModalDelete
       v-model:show="showModalDelete"
       :title="
-        $te(`storage.${currentRowType}.delete`)
-          ? $t(`storage.${currentRowType}.delete`)
-          : $t(`storage.delete.item`)
+        $te(`storage.${currentRowType}.delete`) ? $t(`storage.${currentRowType}.delete`) : $t(`storage.delete.item`)
       "
     >
       <template #content>
@@ -53,11 +44,16 @@
 
     <!-- Modal - Publish IPNS -->
     <modal v-model:show="modalIpnsPublishVisible" :title="$t('storage.ipns.publish')">
-      <FormStorageIpnsPublish
-        :cid="currentRow?.CID || ''"
-        @submit-success="modalIpnsPublishVisible = false"
-      />
+      <FormStorageIpnsPublish :cid="currentRow?.CID || ''" @submit-success="modalIpnsPublishVisible = false" />
     </modal>
+
+    <!-- Short URL -->
+    <FormStorageShortUrl
+      v-if="modalShortUrlVisible && currentRow?.link"
+      :target-url="currentRow.link"
+      auto-submit
+      @close="modalShortUrlVisible = false"
+    />
 
     <!-- W3Warn: delete bucket -->
     <W3Warn v-model:show="showModalW3Warn" @submit="onModalW3WarnHide">
@@ -67,10 +63,10 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import type { DataTableInst, DataTableRowKey, DataTableSortState } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis, NSpace, NTooltip } from 'naive-ui';
-import { TableFilesType } from '~/lib/types/storage';
+import { FileStatus, TableFilesType } from '~/lib/types/storage';
 
 const props = defineProps({
   type: { type: Number as PropType<TableFilesType>, default: 0 },
@@ -96,6 +92,7 @@ const showModalW3Warn = ref<boolean>(false);
 const showModalDelete = ref<boolean | null>(false);
 const drawerFileDetailsVisible = ref<boolean>(false);
 const modalIpnsPublishVisible = ref<boolean>(false);
+const modalShortUrlVisible = ref<boolean>(false);
 
 const tableRef = ref<DataTableInst | null>(null);
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
@@ -158,6 +155,16 @@ const dropdownOptions = (bucketItem: BucketItemInterface) => {
       },
     },
     {
+      key: 'shortUrl',
+      label: t('storage.shortUrl.generateShortLink'),
+      show: bucketItem.link && (props.type === TableFilesType.BUCKET || props.type === TableFilesType.NFT_METADATA),
+      props: {
+        onClick: () => {
+          modalShortUrlVisible.value = true;
+        },
+      },
+    },
+    {
       key: 'delete',
       label: t('general.delete'),
       disabled: authStore.isAdmin(),
@@ -186,15 +193,7 @@ function renderOption({ node, option }: DropdownRenderOption) {
 }
 
 /** Available columns - show/hide column */
-const selectedColumns = ref([
-  'name',
-  'CID',
-  'link',
-  'size',
-  'createTime',
-  'contentType',
-  'fileStatus',
-]);
+const selectedColumns = ref(['name', 'CID', 'link', 'size', 'createTime', 'contentType', 'fileStatus']);
 const availableColumns = ref([
   { value: 'name', label: t('storage.fileName') },
   { value: 'uuid', label: t('general.uuid') },
@@ -281,7 +280,20 @@ const columns = computed(() => {
       },
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        return h(TableLink, { link: row.link }, '');
+        return h(
+          TableLink,
+          {
+            link: row.link,
+            tooltip:
+              row.link &&
+              [FileStatus.REQUEST_FOR_UPLOAD_GENERATED, FileStatus.UPLOADED_TO_S3].includes(
+                row.fileStatus as FileStatus
+              )
+                ? t('storage.link-tooltip')
+                : undefined,
+          },
+          ''
+        );
       },
     },
     {
@@ -291,11 +303,7 @@ const columns = computed(() => {
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (row.size) {
-          return h(
-            'span',
-            { class: cellClasses(row.type) },
-            { default: () => formatBytes(row.size || 0) }
-          );
+          return h('span', { class: cellClasses(row.type) }, { default: () => formatBytes(row.size || 0) });
         }
         return '';
       },
@@ -303,26 +311,16 @@ const columns = computed(() => {
     {
       title: t('dashboard.created'),
       key: 'createTime',
-      className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
-        { hidden: !selectedColumns.value.includes('createTime') },
-      ],
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('createTime') }],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
-        return h(
-          'span',
-          { class: cellClasses(row.type) },
-          { default: () => dateTimeToDate(row.createTime || '') }
-        );
+        return h('span', { class: cellClasses(row.type) }, { default: () => dateTimeToDate(row.createTime || '') });
       },
     },
     {
       key: 'contentType',
       title: t('storage.contentType'),
-      className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
-        { hidden: !selectedColumns.value.includes('contentType') },
-      ],
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('contentType') }],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (row.contentType) {
@@ -334,18 +332,12 @@ const columns = computed(() => {
     {
       key: 'fileStatus',
       title: t('general.status'),
-      className: [
-        ON_COLUMN_CLICK_OPEN_CLASS,
-        { hidden: !selectedColumns.value.includes('fileStatus') },
-      ],
+      className: [ON_COLUMN_CLICK_OPEN_CLASS, { hidden: !selectedColumns.value.includes('fileStatus') }],
       sorter: props.type === TableFilesType.DEPLOYMENT ? false : 'default',
       render(row: BucketItemInterface) {
         if (!row.fileStatus) {
           return '';
-        } else if (
-          props.type === TableFilesType.HOSTING &&
-          row.fileStatus === FileStatus.UPLOADED_TO_S3
-        ) {
+        } else if (props.type === TableFilesType.HOSTING && row.fileStatus === FileStatus.UPLOADED_TO_S3) {
           return h(StorageFileStatus, { fileStatus: FileStatus.UPLOAD_COMPLETED }, '');
         } else {
           return h(StorageFileStatus, { fileStatus: row.fileStatus }, '');
@@ -353,10 +345,11 @@ const columns = computed(() => {
       },
     },
     {
-      title: '',
       key: 'actions',
       align: 'right',
-      className: ['!py-0', { hidden: props.type === TableFilesType.DEPLOYMENT }],
+      filter: 'default',
+      filterOptionValue: null,
+      className: ['!py-0 !sticky right-0', { hidden: props.type === TableFilesType.DEPLOYMENT }],
       render(row: BucketItemInterface) {
         return h(
           NDropdown,
@@ -375,12 +368,6 @@ const columns = computed(() => {
           }
         );
       },
-    },
-    {
-      key: 'columns',
-      filter: 'default',
-      filterOptionValue: null,
-      className: { hidden: props.type === TableFilesType.DEPLOYMENT },
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },
@@ -403,9 +390,7 @@ const rowKey = (row: BucketItemInterface) => row.uuid;
 const handleCheck = (rowKeys: Array<DataTableRowKey>) => {
   checkedRowKeys.value = rowKeys;
 
-  bucketStore.folder.selectedItems = bucketStore.folder.items.filter(item =>
-    rowKeys.includes(item.uuid)
-  );
+  bucketStore.folder.selectedItems = bucketStore.folder.items.filter(item => rowKeys.includes(item.uuid));
 };
 
 function handleColumnChange(selectedValues: Array<string>) {
@@ -514,12 +499,7 @@ watch(
 /** On page change, load data */
 async function handlePageChange(currentPage: number, pageSize?: number) {
   if (!bucketStore.folder.loading) {
-    await getDirectoryContent(
-      bucketStore.bucketUuid,
-      bucketStore.folder.selected,
-      currentPage,
-      pageSize
-    );
+    await getDirectoryContent(bucketStore.bucketUuid, bucketStore.folder.selected, currentPage, pageSize);
   }
 }
 
@@ -582,15 +562,10 @@ watch(
     }
   }
 );
-const debouncedSearchFilter = debounce(getDirectoryContent, 500);
+const debouncedSearchFilter = useDebounceFn(getDirectoryContent, 500);
 
 /** Function "Fetch directory content" wrapper  */
-async function getDirectoryContent(
-  bucketUuid?: string,
-  folderUuid?: string,
-  page = 1,
-  limit?: number
-) {
+async function getDirectoryContent(bucketUuid?: string, folderUuid?: string, page = 1, limit?: number) {
   clearInterval(fileInterval);
 
   await bucketStore.fetchDirectoryContent({
@@ -626,17 +601,12 @@ function checkUnfinishedFiles() {
 }
 function hasUnfinishedFiles(): boolean {
   return bucketStore.folder.items.some(
-    file =>
-      file.type === BucketItemType.FILE &&
-      file.fileStatus &&
-      file.fileStatus < finishedFileStatus.value
+    file => file.type === BucketItemType.FILE && file.fileStatus && file.fileStatus < finishedFileStatus.value
   );
 }
 
 /** Additional classes if TableType is Hosting and RowType is File  */
 function cellClasses(rowType: number) {
-  return props.type === TableFilesType.HOSTING && rowType === BucketItemType.FILE
-    ? 'p-3 -m-3 cursor-default'
-    : '';
+  return props.type === TableFilesType.HOSTING && rowType === BucketItemType.FILE ? 'p-3 -m-3 cursor-default' : '';
 }
 </script>

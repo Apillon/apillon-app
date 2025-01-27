@@ -5,6 +5,7 @@ import { typesBundleForPolkadot } from '@crustio/type-definitions';
 
 export const useFileStore = defineStore('file', {
   state: () => ({
+    api: null as any,
     crust: {} as Record<string, AnyJson>,
     currentBlockId: 0,
     items: {} as Record<string, FileInterface>,
@@ -44,6 +45,22 @@ export const useFileStore = defineStore('file', {
       this.trash.pagination.page = 1;
     },
 
+    async initApi() {
+      if (this.api) return this.api;
+
+      this.api = new ApiPromise({
+        provider: new WsProvider('wss://rpc.crust.network'),
+        typesBundle: typesBundleForPolkadot,
+      });
+
+      await this.api.isReadyOrError;
+    },
+
+    async destroyApi() {
+      await this.api.disconnect();
+      this.api = null;
+    },
+
     /**
      * Fetch wrappers
      */
@@ -53,11 +70,7 @@ export const useFileStore = defineStore('file', {
       }
     },
     async getDeletedFiles(page = 1) {
-      if (
-        this.trash.pagination.page !== page ||
-        !this.hasDeletedFiles ||
-        isCacheExpired(LsCacheKeys.FILE_DELETED)
-      ) {
+      if (this.trash.pagination.page !== page || !this.hasDeletedFiles || isCacheExpired(LsCacheKeys.FILE_DELETED)) {
         await this.fetchDeletedFiles();
       }
     },
@@ -97,32 +110,21 @@ export const useFileStore = defineStore('file', {
     },
 
     async fetchFileDetailsFromCrust(cid: string) {
-      const api = new ApiPromise({
-        provider: new WsProvider('wss://rpc.crust.network'),
-        typesBundle: typesBundleForPolkadot,
-      });
+      await this.initApi();
 
-      await api.isReadyOrError;
-      const fileInfo = await api.query.market.filesV2(cid);
-      await api.disconnect();
+      const fileInfo = await this.api.query.market.filesV2(cid);
       return fileInfo.toJSON();
     },
 
     async fetchCurrentBlockFromCrust() {
-      const api = new ApiPromise({
-        provider: new WsProvider('wss://rpc.crust.network'),
-        typesBundle: typesBundleForPolkadot,
-      });
+      await this.initApi();
 
       try {
-        await api.isReadyOrError;
-        const blockId = await api.query.system.number();
+        const blockId = await this.api.query.system.number();
 
         this.currentBlockId = blockId.toJSON() as number;
-        await api.disconnect();
         return blockId.toJSON() as number;
       } catch (error) {
-        await api.disconnect();
         this.currentBlockId = 0;
       }
       return 0;
@@ -144,10 +146,7 @@ export const useFileStore = defineStore('file', {
           params.sessionStatus = fileStatus;
         }
 
-        const res = await $api.get<FileUploadSessionsResponse>(
-          endpoints.storageFileUploadSessions(bucketUuid),
-          params
-        );
+        const res = await $api.get<FileUploadSessionsResponse>(endpoints.storageFileUploadSessions(bucketUuid), params);
         this.loading = false;
 
         this.session.items = res.data.items;
@@ -174,10 +173,7 @@ export const useFileStore = defineStore('file', {
       try {
         const params = parseArguments(args);
 
-        const res = await $api.get<FolderResponse>(
-          endpoints.storageFilesTrashed(bucketStore.bucketUuid),
-          params
-        );
+        const res = await $api.get<FolderResponse>(endpoints.storageFilesTrashed(bucketStore.bucketUuid), params);
 
         this.trash.items = res.data.items;
         this.trash.pagination.itemCount = res.data.total;

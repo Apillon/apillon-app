@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export default function useUpload() {
-  const $i18n = useI18n();
+  const { t } = useI18n();
   const message = useMessage();
   const bucketStore = useBucketStore();
+  const dataStore = useDataStore();
   const storageStore = useStorageStore();
   const config = useRuntimeConfig();
 
@@ -29,10 +30,7 @@ export default function useUpload() {
       return BASE_UPLOAD_SPEED;
     }
 
-    const sumSpeeds = fileList.value.reduce(
-      (acc, file) => acc + (file.uploadSpeed || BASE_UPLOAD_SPEED),
-      0
-    );
+    const sumSpeeds = fileList.value.reduce((acc, file) => acc + (file.uploadSpeed || BASE_UPLOAD_SPEED), 0);
     return sumSpeeds / uploadSpeeds.length;
   });
 
@@ -40,11 +38,7 @@ export default function useUpload() {
    *  Methods
    */
   /** Check if file is already on list */
-  function fileAlreadyOnFileList(
-    uploadFileList: FileListItemType[],
-    file: FileListItemType,
-    fileNameCheck = false
-  ) {
+  function fileAlreadyOnFileList(uploadFileList: FileListItemType[], file: FileListItemType, fileNameCheck = false) {
     return uploadFileList.some(
       item =>
         item.name === file.name &&
@@ -122,10 +116,45 @@ export default function useUpload() {
           );
 
           if (fileRequests.data) {
+            if (!wrapFilesToDirectory) {
+              const cids = {} as Record<string, UploadedFileInfo>;
+
+              await Promise.all(
+                fileRequests.data.files.map(async uploadFileRequest => {
+                  const content = fileList.value.find(
+                    file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path
+                  );
+                  const buffer = await content?.file?.arrayBuffer();
+                  if (content && buffer) {
+                    const calculatedCID = await calculateCID(Buffer.from(buffer), {
+                      cidVersion: 1,
+                    });
+                    cids[uploadFileRequest.file_uuid] = {
+                      CID: calculatedCID,
+                      link: null,
+                      name: uploadFileRequest.fileName,
+                      path: uploadFileRequest.path,
+                    };
+                  }
+                })
+              );
+
+              const { data } = await $api.post<IpfsLinksResponse>(endpoints.ipfsLinks, {
+                cids: Object.values(cids).map(item => item.CID),
+                project_uuid: dataStore.projectUuid,
+              });
+
+              data.links.forEach((link: string, index: number) => {
+                const fileUuid = Object.keys(cids)[index];
+                cids[fileUuid].link = link;
+              });
+
+              bucketStore.addCids(cids);
+            }
             await uploadFilesToS3(fileRequests.data.files);
           } else {
             /** Show warning message - zero files uploaded */
-            message.warning($i18n.t('error.fileUploadStopped'));
+            message.warning(t('error.fileUploadStopped'));
           }
         } catch (error: any) {
           onUploadError();
@@ -143,18 +172,16 @@ export default function useUpload() {
         file => file.name === uploadFileRequest.fileName && file.path === uploadFileRequest.path
       );
       if (file) {
+        file['file_uuid'] = uploadFileRequest.file_uuid;
         uploadFileToS3(file, uploadFileRequest);
       } else {
         /** Show warning message - file not found by name */
-        message.warning($i18n.t('error.fileUploadMissing', { name: uploadFileRequest.fileName }));
+        message.warning(t('error.fileUploadMissing', { name: uploadFileRequest.fileName }));
       }
     });
   }
 
-  async function uploadFileToS3(
-    file: FileListItemType,
-    uploadFilesRequest: S3FileUploadRequestInterface
-  ) {
+  async function uploadFileToS3(file: FileListItemType, uploadFilesRequest: S3FileUploadRequestInterface) {
     try {
       /** Upload file to S3 using fetch */
       const req = fetch(uploadFilesRequest.url, {
@@ -187,9 +214,7 @@ export default function useUpload() {
   /** Upload Session End  */
   async function uploadSessionEnd(sessionUuid: string) {
     const allFilesFinished = !fileList.value.some(
-      file =>
-        file.status === FileUploadStatusValue.PENDING ||
-        file.status === FileUploadStatusValue.UPLOADING
+      file => file.status === FileUploadStatusValue.PENDING || file.status === FileUploadStatusValue.UPLOADING
     );
 
     if (!allFilesFinished || !endSession.value) {
@@ -199,9 +224,7 @@ export default function useUpload() {
       const params: Record<string, string | number | boolean | null> = {
         directSync: config.public.ENV === AppEnv.LOCAL,
         wrapWithDirectory: wrapToDirectory.value,
-        directoryPath: wrapToDirectory.value
-          ? bucketStore.getFolderPath + wrapperFolderPath(folderName.value)
-          : null,
+        directoryPath: wrapToDirectory.value ? bucketStore.getFolderPath + wrapperFolderPath(folderName.value) : null,
       };
       await $api.post(endpoints.storageFileUpload(bucketUuid.value, sessionUuid), params);
     } catch (error) {
@@ -296,11 +319,12 @@ export default function useUpload() {
   }
 
   return {
-    uploadFiles,
     fileAlreadyOnFileList,
     fileTypeValid,
     isEnoughSpaceInStorage,
     onUploadError,
+    updateFileStatus,
+    uploadFiles,
     folderName,
     putRequests,
   };

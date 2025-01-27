@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import debounce from 'lodash.debounce';
+import { useDebounceFn } from '@vueuse/core';
 import type { DataTableInst, DataTableSortState } from 'naive-ui';
 import { NButton, NDropdown } from 'naive-ui';
 
@@ -126,7 +126,9 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
       key: 'actions',
       title: '',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
+      filter: 'default',
+      filterOptionValue: null,
       render() {
         return h(
           NDropdown,
@@ -144,11 +146,6 @@ const columns = computed<NDataTableColumns<IpnsInterface>>(() => {
           }
         );
       },
-    },
-    {
-      key: 'columns',
-      filter: 'default',
-      filterOptionValue: null,
       renderFilterIcon: () => {
         return h('span', { class: 'icon-more' }, '');
       },
@@ -208,7 +205,7 @@ function rowProps(row: IpnsInterface) {
 const data = computed<Array<IpnsInterface>>(() => {
   return (
     ipnsStore.items.filter(item =>
-      item.name.toLocaleLowerCase().includes(ipnsStore.search.toLocaleLowerCase())
+      item.name.toLowerCase().includes(ipnsStore.search.toLowerCase())
     ) || []
   );
 });
@@ -252,7 +249,7 @@ watch(
     }
   }
 );
-const debouncedSearchFilter = debounce(getIpns, 500);
+const debouncedSearchFilter = useDebounceFn(getIpns, 500);
 
 /** Function "Fetch directory content" wrapper  */
 async function getIpns(page = 1) {

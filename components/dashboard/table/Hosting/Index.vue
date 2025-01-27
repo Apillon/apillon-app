@@ -1,22 +1,18 @@
 <template>
-  <n-space class="pb-8" :size="32" vertical>
-    <ActionsHosting />
-
-    <n-data-table
-      ref="tableRef"
-      v-bind="$attrs"
-      :bordered="false"
-      :columns="columns"
-      :data="data"
-      :loading="websiteStore.loading"
-      :pagination="{
-        pageSize: PAGINATION_LIMIT,
-        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-      }"
-      :row-key="rowKey"
-      :row-props="rowProps"
-    />
-  </n-space>
+  <n-data-table
+    ref="tableRef"
+    v-bind="$attrs"
+    :bordered="false"
+    :columns="columns"
+    :data="data"
+    :loading="websiteStore.loading"
+    :pagination="{
+      pageSize: PAGINATION_LIMIT,
+      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
+    }"
+    :row-key="rowKey"
+    :row-props="rowProps"
+  />
 
   <!-- Modal - Edit website -->
   <modal v-model:show="showModalEditWebsite" :title="$t('hosting.website.edit')">
@@ -32,20 +28,23 @@ import { NButton, NDropdown, NEllipsis } from 'naive-ui';
 
 const props = defineProps({
   websites: { type: Array<WebsiteBaseInterface>, default: [] },
+  archive: { type: Boolean, default: false },
 });
 
-const $i18n = useI18n();
+const { t, te } = useI18n();
 const router = useRouter();
+const message = useMessage();
+const authStore = useAuthStore();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
+const { deleteItem } = useDelete();
 const showModalEditWebsite = ref<boolean>(false);
-const TableEllipsis = resolveComponent('TableEllipsis');
 
 /** Data: filtered websites */
 const data = computed<Array<WebsiteBaseInterface>>(() => {
   return (
     props.websites.filter(item =>
-      item.name.toLocaleLowerCase().includes(websiteStore.search.toLocaleLowerCase())
+      item.name.toLowerCase().includes(websiteStore.search.toLowerCase())
     ) || []
   );
 });
@@ -54,28 +53,28 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
   return [
     {
       key: 'name',
-      title: $i18n.t('hosting.website.name'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('hosting.website.name'),
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h('strong', {}, { default: () => row.name });
       },
     },
     {
       key: 'website_uuid',
-      title: $i18n.t('hosting.website.uuid'),
+      title: t('hosting.website.uuid'),
       render(row: WebsiteBaseInterface) {
-        return h(TableEllipsis, { text: row.website_uuid }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.website_uuid }, '');
       },
     },
     {
       key: 'domain',
-      title: $i18n.t('hosting.website.domain'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('hosting.website.domain'),
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
     },
     {
       key: 'description',
-      title: $i18n.t('hosting.website.description'),
-      className: ON_COLUMN_CLICK_OPEN_CLASS,
+      title: t('hosting.website.description'),
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
       render(row) {
         return h(NEllipsis, { 'line-clamp': 1 }, { default: () => row.description });
       },
@@ -84,12 +83,12 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
       key: 'actions',
       title: '',
       align: 'right',
-      className: '!py-0',
+      className: '!py-0 !sticky right-0',
       render() {
         return h(
           NDropdown,
           {
-            options: dropdownOptions,
+            options: props.archive ? dropdownOptionsArchive : dropdownOptions,
             trigger: 'click',
           },
           {
@@ -106,7 +105,7 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
   ];
 };
 const columns = createColumns();
-const rowKey = (row: BucketItemInterface) => row.uuid;
+const rowKey = (row: WebsiteInterface) => row.website_uuid;
 const currentRow = ref<WebsiteBaseInterface>(props.websites[0]);
 
 /** On row click */
@@ -124,8 +123,8 @@ const rowProps = (row: WebsiteBaseInterface) => {
 
 const dropdownOptions = [
   {
-    label: $i18n.t('storage.edit'),
-    key: 'storageEdit',
+    key: 'hostingEdit',
+    label: t('general.edit'),
     disabled: dataStore.isProjectUser,
     props: {
       onClick: () => {
@@ -133,5 +132,68 @@ const dropdownOptions = [
       },
     },
   },
+  {
+    key: 'hostingDelete',
+    label: t('general.archive'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        deleteWebsite();
+      },
+    },
+  },
 ];
+
+const dropdownOptionsArchive = [
+  {
+    key: 'hostingRestore',
+    label: t('general.restore'),
+    disabled: authStore.isAdmin(),
+    props: {
+      onClick: () => {
+        restoreWebsite();
+      },
+    },
+  },
+];
+
+/**
+ * On deleteWebsite click
+ * */
+async function deleteWebsite() {
+  if (
+    currentRow.value &&
+    (await deleteItem(ItemDeleteKey.WEBSITE, currentRow.value.website_uuid))
+  ) {
+    websiteStore.items = websiteStore.items.filter(
+      item => item.website_uuid !== currentRow.value.website_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.WEBSITE);
+    sessionStorage.removeItem(LsCacheKeys.WEBSITE_ARCHIVE);
+  }
+}
+
+/**
+ * Restore website
+ * */
+async function restoreWebsite() {
+  websiteStore.loading = true;
+
+  try {
+    await $api.patch<WebsiteResponse>(endpoints.websiteActivate(currentRow.value.website_uuid));
+
+    websiteStore.archive = websiteStore.archive.filter(
+      item => item.website_uuid !== currentRow.value.website_uuid
+    );
+
+    sessionStorage.removeItem(LsCacheKeys.WEBSITE);
+    sessionStorage.removeItem(LsCacheKeys.WEBSITE_ARCHIVE);
+
+    message.success(t('form.success.restored.website'));
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  websiteStore.loading = false;
+}
 </script>

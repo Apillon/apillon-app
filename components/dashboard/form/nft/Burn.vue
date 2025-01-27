@@ -3,7 +3,7 @@
     <p class="mb-8">{{ $t('nft.collection.burn.info') }}</p>
 
     <!--  NFT Mint Quantity -->
-    <n-form-item path="tokenId" :label="$t('form.label.nftBurnTokenId')">
+    <n-form-item path="tokenId" :label="$t('form.label.nft.burnTokenId')">
       <n-input-number
         v-model:value="formData.tokenId"
         :min="1"
@@ -16,7 +16,7 @@
     <!--  Form submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('nft.collection.burn.title')" />
-      <Btn type="error" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="error" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
         {{ $t('nft.collection.revoke') }}
       </Btn>
     </n-form-item>
@@ -50,7 +50,7 @@ const rules: NFormRules = {
   tokenId: [
     {
       required: true,
-      message: $i18n.t('validation.nftBurnTokenIdRequired'),
+      message: $i18n.t('validation.nft.burnTokenIdRequired'),
     },
   ],
 };
@@ -60,15 +60,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
-      const priceServiceName = generatePriceServiceName(
-        ServiceTypeName.NFT,
-        props.chainId,
-        PriceServiceAction.BURN
-      );
+      const priceServiceName = generatePriceServiceName(ServiceTypeName.NFT, props.chainId, PriceServiceAction.BURN);
       warningStore.showSpendingWarning(priceServiceName, () => burn());
     }
   });
