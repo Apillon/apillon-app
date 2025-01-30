@@ -1,6 +1,6 @@
 {
   "name": "apillon-app",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "Apillon",
   "license": "GNU GPL V3",
   "description": "Apillon developer console frontend",
@@ -44,7 +44,7 @@
     "@metamask/detect-provider": "^2.0.0",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
     "@pinia/nuxt": "^0.5.1",
-    "@polkadot/api": "^11.0.2",
+    "@polkadot/api": "^15.4.1",
     "@polkadot/extension-inject": "^0.47.2",
     "@polkadot/util-crypto": "^12.6.2",
     "@subsocial/grill-widget": "^0.1.3",

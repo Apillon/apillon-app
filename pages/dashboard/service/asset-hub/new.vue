@@ -11,7 +11,7 @@
       <FormAssetHub
         class="flex-auto w-full min-w-40 max-w-xl"
         @create-success="(id, network) => refreshAssets(id, network)"
-        @close="$router.push({ name: 'dashboard-service-asset-hub' })"
+        @close="router.push({ name: 'dashboard-service-asset-hub' })"
       />
       <AssetHubInfoBoxes />
     </div>
