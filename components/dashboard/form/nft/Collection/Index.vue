@@ -24,9 +24,8 @@
         :instructions="[t('nft.collection.instruction.smartContract')]"
       >
         <template #headerExtra>
-          <div class="flex items-center gap-4 text-2xl">
-            <NuxtIcon name="logo/moonbeam" class="icon-auto" filled />
-            <NuxtIcon name="logo/astar" class="icon-auto" filled />
+          <div class="flex items-center gap-2 text-2xl">
+            <NuxtIcon v-for="chain in nftChains" :name="`logo/${chain.name.toLowerCase()}`" class="icon-auto" filled />
           </div>
         </template>
 
@@ -64,7 +63,7 @@
 
         <!--  Chain type -->
         <n-form-item
-          v-show="collectionStore.form.behavior.chain === EvmChain.ASTAR"
+          v-show="collectionStore.form.behavior.chain === EvmChainMainnet.ASTAR"
           path="base.chainType"
           :label="infoLabel('chainType') as string"
           :label-props="{ for: 'chainType' }"

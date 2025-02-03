@@ -38,8 +38,12 @@
         >
           <template #headerExtra>
             <div class="flex items-center gap-4 text-2xl">
-              <NuxtIcon name="logo/moonbeam" class="icon-auto" filled />
-              <NuxtIcon name="logo/astar" class="icon-auto" filled />
+              <NuxtIcon
+                v-for="chain in nftChains"
+                :name="`logo/${chain.name.toLowerCase()}`"
+                class="icon-auto"
+                filled
+              />
             </div>
           </template>
           <FormNftCollectionBehavior
@@ -95,7 +99,7 @@ const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
 const { getPriceServiceName, uploadLogoAndCover } = useNft();
-const { isFormDisabled, isUnique, collectionEndpoint, onChainChange, prepareFormData } = useCollection();
+const { collectionEndpoint, isFormDisabled, isUnique, nftChains, onChainChange, prepareFormData } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 const headingRef = ref<HTMLElement>();
@@ -122,6 +126,9 @@ onMounted(async () => {
   await collectionStore.getCollections();
   storageStore.getStorageInfo();
   paymentStore.getPriceList();
+
+  /** Check if user can create Ethereum collection */
+  collectionStore.getQuota();
 
   pageLoading.value = false;
 });
