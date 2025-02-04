@@ -7,25 +7,22 @@
     autocomplete="off"
     @submit.prevent="handleSubmit"
   >
-    <div class="flex gap-4 whitespace-pre-line my-8 justify-center">
+    <div class="my-8 flex justify-center gap-4 whitespace-pre-line">
       <div
         v-for="chain in nftChains"
         :key="chain.value"
-        class="border-2 p-4 rounded-md border-bg-lightest hover:cursor-pointer w-full flex justify-center"
+        class="flex w-full justify-center rounded-md border-2 border-bg-lightest p-4 hover:cursor-pointer"
         :class="contractStore.form.contractData.nftChain === chain.value ? '!border-yellow' : ''"
         @click="onChainChange(chain.value)"
       >
         <div>
-          <div
-            v-if="chain.value === CUSTOM_EVM"
-            class="flex-cc h-[74px] w-[74px] p-4 bg-orange rounded-full"
-          >
-            <span class="text-black text-xs text-center">{{ chain.label }}</span>
+          <div v-if="chain.value === CUSTOM_EVM" class="flex-cc h-[74px] w-[74px] rounded-full bg-orange p-4">
+            <span class="text-center text-xs text-black">{{ chain.label }}</span>
           </div>
           <NuxtIcon
             v-else
-            :name="`logo/${chain.name}`"
-            class="flex justify-center mx-auto text-7xl"
+            :name="`logo/${chain.name.toLowerCase()}`"
+            class="mx-auto flex justify-center text-7xl"
             filled
           />
           <p class="mt-4 text-center">{{ chain.label }}</p>
@@ -83,13 +80,7 @@
     <!--  Form submit -->
     <n-form-item :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="$t('computing.contract.create')" />
-      <Btn
-        type="primary"
-        class="w-full mt-2"
-        :loading="loading"
-        :disabled="isFormDisabled"
-        @click="handleSubmit"
-      >
+      <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
         {{ $t('computing.contract.create') }}
       </Btn>
     </n-form-item>
@@ -112,14 +103,14 @@ const CUSTOM_EVM = 1;
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
 
-const allowedChains = [EvmChain.ASTAR, EvmChain.MOONBASE, EvmChain.MOONBEAM];
+const allowedChains = [EvmChainMainnet.ASTAR, EvmChainTestnet.MOONBASE, EvmChainMainnet.MOONBEAM];
 const chains = enumKeys(EvmChain)
   .filter(item => allowedChains.includes(EvmChain[item]))
   .map(k => {
-    return { 
-      name: k.toLowerCase(), 
-      label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`): EvmChain[EvmChain[k]], 
-      value: EvmChain[k] 
+    return {
+      name: k.toLowerCase(),
+      label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`) : EvmChain[EvmChain[k]],
+      value: EvmChain[k],
     };
   });
 
@@ -134,9 +125,7 @@ const nftChains = [
 
 const collectionAddresses = computed(() => {
   return collectionStore.items
-    .filter(
-      item => !!item.contractAddress && item.chain === contractStore.form.contractData.nftChain
-    )
+    .filter(item => !!item.contractAddress && item.chain === contractStore.form.contractData.nftChain)
     .map(item => {
       return {
         value: item.contractAddress,
@@ -146,9 +135,9 @@ const collectionAddresses = computed(() => {
 });
 
 const rpc: Record<number, string> = {
-  [EvmChain.ASTAR]: 'https://evm.astar.network',
-  [EvmChain.MOONBASE]: 'https://rpc.api.moonbase.moonbeam.network',
-  [EvmChain.MOONBEAM]: 'https://rpc.api.moonbeam.network',
+  [EvmChainMainnet.ASTAR]: 'https://evm.astar.network',
+  [EvmChainTestnet.MOONBASE]: 'https://rpc.api.moonbase.moonbeam.network',
+  [EvmChainMainnet.MOONBEAM]: 'https://rpc.api.moonbeam.network',
 };
 
 const rules: NFormRules = {
@@ -169,9 +158,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       emit('submitSuccess');
     }

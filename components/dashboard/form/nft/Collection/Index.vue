@@ -24,9 +24,14 @@
         :instructions="[t('nft.collection.instruction.smartContract')]"
       >
         <template #headerExtra>
-          <div class="flex items-center gap-4 text-2xl">
-            <NuxtIcon name="logo/moonbeam" class="icon-auto" filled />
-            <NuxtIcon name="logo/astar" class="icon-auto" filled />
+          <div class="flex items-center gap-2 text-2xl">
+            <NuxtIcon
+              v-for="chain in enumKeys(EvmChainMainnet)"
+              :name="`logo/${chain.toLowerCase()}`"
+              class="icon-auto"
+              filled
+              :title="chain"
+            />
           </div>
         </template>
 
@@ -64,7 +69,7 @@
 
         <!--  Chain type -->
         <n-form-item
-          v-show="collectionStore.form.behavior.chain === EvmChain.ASTAR"
+          v-show="collectionStore.form.behavior.chain === EvmChainMainnet.ASTAR"
           path="base.chainType"
           :label="infoLabel('chainType') as string"
           :label-props="{ for: 'chainType' }"
@@ -331,7 +336,7 @@
 import { useTemplateRef } from 'vue';
 import { Feature } from '~/lib/types/config';
 import { isFeatureEnabled } from '~/lib/utils';
-import { EvmChain, ChainType } from '~/lib/types/nft';
+import { EvmChain, ChainType, EvmChainMainnet } from '~/lib/types/nft';
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
 
 const emit = defineEmits(['submitSuccess']);

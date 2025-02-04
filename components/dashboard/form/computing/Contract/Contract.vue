@@ -1,14 +1,14 @@
 <template>
   <div>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="$te('computing.contract.infoNew')" class="text-body mb-8">
+      <p v-if="$te('computing.contract.infoNew')" class="mb-8 text-body">
         {{ $t('computing.contract.infoNew') }}
       </p>
-      <p v-else-if="$te('computing.contract.infoEdit')" class="text-body mb-8">
+      <p v-else-if="$te('computing.contract.infoEdit')" class="mb-8 text-body">
         {{ $t('computing.contract.infoEdit') }}
       </p>
     </template>
@@ -22,11 +22,7 @@
       @submit.prevent="handleSubmit"
     >
       <!--  Contract name -->
-      <n-form-item
-        path="name"
-        :label="$t('form.label.contract.name')"
-        :label-props="{ for: 'name' }"
-      >
+      <n-form-item path="name" :label="$t('form.label.contract.name')" :label-props="{ for: 'name' }">
         <n-input
           v-model:value="contractStore.form.name"
           :input-props="{ id: 'name' }"
@@ -67,11 +63,7 @@
       </n-form-item>
 
       <!--  Bucket Uuid -->
-      <n-form-item
-        path="bucket_uuid"
-        :label="$t('form.label.bucketName')"
-        :label-props="{ for: 'bucket_uuid' }"
-      >
+      <n-form-item path="bucket_uuid" :label="$t('form.label.bucketName')" :label-props="{ for: 'bucket_uuid' }">
         <select-options
           v-model:value="contractStore.form.bucket_uuid"
           :options="buckets"
@@ -82,11 +74,7 @@
       </n-form-item>
 
       <!-- Use Apillon Collection -->
-      <n-form-item
-        class="cursor-default mb-4"
-        :label="labelInfo('useApillonCollection')"
-        :show-feedback="false"
-      >
+      <n-form-item class="mb-4 cursor-default" :label="labelInfo('useApillonCollection')" :show-feedback="false">
         <n-switch v-model:value="useApillonCollection" />
       </n-form-item>
 
@@ -163,13 +151,7 @@
       <!--  Form submit -->
       <n-form-item :show-feedback="false" :show-label="false">
         <input type="submit" class="hidden" :value="$t('computing.contract.create')" />
-        <Btn
-          type="primary"
-          class="w-full mt-2"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          @click="handleSubmit"
-        >
+        <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           {{ $t('computing.contract.create') }}
         </Btn>
       </n-form-item>
@@ -236,9 +218,9 @@ const contractAddresses = computed(() => {
 });
 
 const rpc: Record<number, string> = {
-  [EvmChain.ASTAR]: 'https://evm.astar.network',
-  [EvmChain.MOONBASE]: 'https://rpc.api.moonbase.moonbeam.network',
-  [EvmChain.MOONBEAM]: 'https://rpc.api.moonbeam.network',
+  [EvmChainMainnet.ASTAR]: 'https://evm.astar.network',
+  [EvmChainTestnet.MOONBASE]: 'https://rpc.api.moonbase.moonbeam.network',
+  [EvmChainMainnet.MOONBEAM]: 'https://rpc.api.moonbeam.network',
 };
 
 const nftChainRpcUrls = ref<SelectOption[]>(
@@ -249,10 +231,7 @@ const nftChainRpcUrls = ref<SelectOption[]>(
 
 const rules: NFormRules = {
   name: [ruleRequired(t('validation.contract.nameRequired'))],
-  description: [
-    ruleRequired(t('validation.descriptionRequired')),
-    ruleDescription(t('validation.descriptionTooLong')),
-  ],
+  description: [ruleRequired(t('validation.descriptionRequired')), ruleDescription(t('validation.descriptionTooLong'))],
   'contractData.nftContractAddress': [ruleRequired(t('validation.contract.addressRequired'))],
 };
 
@@ -271,13 +250,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
-      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_SCHRODINGER_CREATE, () =>
-        createContract()
-      );
+      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_SCHRODINGER_CREATE, () => createContract());
     }
   });
 }

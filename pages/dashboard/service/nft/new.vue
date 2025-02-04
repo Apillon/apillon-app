@@ -37,9 +37,14 @@
           :instructions="[t('nft.collection.instruction.smartContract')]"
         >
           <template #headerExtra>
-            <div class="flex items-center gap-4 text-2xl">
-              <NuxtIcon name="logo/moonbeam" class="icon-auto" filled />
-              <NuxtIcon name="logo/astar" class="icon-auto" filled />
+            <div class="flex items-center gap-2 text-2xl">
+              <NuxtIcon
+                v-for="chain in enumKeys(EvmChainMainnet)"
+                :name="`logo/${chain.toLowerCase()}`"
+                class="icon-auto"
+                filled
+                :title="chain"
+              />
             </div>
           </template>
           <FormNftCollectionBehavior
@@ -82,7 +87,7 @@
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
 import { useMessage } from 'naive-ui';
-import { CollectionStatus } from '~/lib/types/nft';
+import { CollectionStatus, EvmChainMainnet } from '~/lib/types/nft';
 
 const { t, te } = useI18n();
 const { isLg } = useScreen();
@@ -95,7 +100,7 @@ const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
 const { getPriceServiceName, uploadLogoAndCover } = useNft();
-const { isFormDisabled, isUnique, collectionEndpoint, onChainChange, prepareFormData } = useCollection();
+const { collectionEndpoint, isFormDisabled, isUnique, nftChains, onChainChange, prepareFormData } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 const headingRef = ref<HTMLElement>();
@@ -122,6 +127,9 @@ onMounted(async () => {
   await collectionStore.getCollections();
   storageStore.getStorageInfo();
   paymentStore.getPriceList();
+
+  /** Check if user can create Ethereum collection */
+  collectionStore.getQuota();
 
   pageLoading.value = false;
 });
