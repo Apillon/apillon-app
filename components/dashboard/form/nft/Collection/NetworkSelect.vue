@@ -119,7 +119,6 @@ const enterpriseChains = [
   EvmChainMainnet.BASE,
   EvmChainMainnet.CELO,
   EvmChainMainnet.ETHEREUM,
-  EvmChainMainnet.OASIS,
   EvmChainMainnet.OPTIMISM,
   EvmChainMainnet.POLYGON,
 ];

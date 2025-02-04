@@ -37,12 +37,13 @@
           :instructions="[t('nft.collection.instruction.smartContract')]"
         >
           <template #headerExtra>
-            <div class="flex items-center gap-4 text-2xl">
+            <div class="flex items-center gap-2 text-2xl">
               <NuxtIcon
-                v-for="chain in nftChains"
-                :name="`logo/${chain.name.toLowerCase()}`"
+                v-for="chain in enumKeys(EvmChainMainnet)"
+                :name="`logo/${chain.toLowerCase()}`"
                 class="icon-auto"
                 filled
+                :title="chain"
               />
             </div>
           </template>
@@ -86,7 +87,7 @@
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
 import { useMessage } from 'naive-ui';
-import { CollectionStatus } from '~/lib/types/nft';
+import { CollectionStatus, EvmChainMainnet } from '~/lib/types/nft';
 
 const { t, te } = useI18n();
 const { isLg } = useScreen();

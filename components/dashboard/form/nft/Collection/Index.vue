@@ -25,7 +25,13 @@
       >
         <template #headerExtra>
           <div class="flex items-center gap-2 text-2xl">
-            <NuxtIcon v-for="chain in nftChains" :name="`logo/${chain.name.toLowerCase()}`" class="icon-auto" filled />
+            <NuxtIcon
+              v-for="chain in enumKeys(EvmChainMainnet)"
+              :name="`logo/${chain.toLowerCase()}`"
+              class="icon-auto"
+              filled
+              :title="chain"
+            />
           </div>
         </template>
 
@@ -330,7 +336,7 @@
 import { useTemplateRef } from 'vue';
 import { Feature } from '~/lib/types/config';
 import { isFeatureEnabled } from '~/lib/utils';
-import { EvmChain, ChainType } from '~/lib/types/nft';
+import { EvmChain, ChainType, EvmChainMainnet } from '~/lib/types/nft';
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
 
 const emit = defineEmits(['submitSuccess']);

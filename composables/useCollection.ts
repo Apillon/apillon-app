@@ -1,5 +1,4 @@
 import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
-import IconInfo from '../components/parts/Icon/Info.vue';
 import { EvmChain, EvmChainMainnet, EvmChainTestnet, SubstrateChain } from '~/lib/types/nft';
 import type { TimeValidator } from 'naive-ui/es/date-picker/src/interface';
 
@@ -17,17 +16,14 @@ export default function useCollection() {
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
 
-  const evmChains = enumKeys(isDev() ? EvmChainTestnet : EvmChainMainnet)
+  const evmChains = enumKeys(EvmChain)
     .filter(key => [EvmChainMainnet.ETHEREUM, EvmChainTestnet.SEPOLIA].includes(EvmChain[key]))
     .map(k => {
       return { name: k.toLowerCase(), label: t(`nft.evmChain.${EvmChain[k]}`), value: EvmChain[k] };
     });
 
-  const chains = enumKeys(isDev() ? EvmChainTestnet : EvmChainMainnet)
-    .filter(
-      key =>
-        ![EvmChainMainnet.OASIS, EvmChainTestnet.OASIS_SAPPHIRE, EvmChainTestnet.ASTAR_SHIBUYA].includes(EvmChain[key])
-    )
+  const chains = enumKeys(EvmChain)
+    .filter(key => ![EvmChainTestnet.ASTAR_SHIBUYA].includes(EvmChain[key]))
     .map(k => {
       return {
         name: k.toLowerCase(),

@@ -10,7 +10,7 @@ export enum EvmChainMainnet {
   ETHEREUM = 1,
   MOONBEAM = 1284,
   ASTAR = 592,
-  OASIS = 42262,
+  // OASIS = 42262,
   CELO = 42220,
   BASE = 8453,
   ARBITRUM_ONE = 42161,
@@ -22,7 +22,7 @@ export enum EvmChainTestnet {
   SEPOLIA = 11155111,
   MOONBASE = 1287,
   ASTAR_SHIBUYA = 81, // testnet
-  OASIS_SAPPHIRE = 23294,
+  // OASIS_SAPPHIRE = 23294,
   ALFAJORES = 44787, // Celo testnet
   BASE_SEPOLIA = 84532,
   ARBITRUM_ONE_SEPOLIA = 421614,
@@ -31,10 +31,7 @@ export enum EvmChainTestnet {
   POLYGON_AMOY = 80002,
 }
 
-export const EvmChain = {
-  ...EvmChainMainnet,
-  ...EvmChainTestnet,
-};
+export const EvmChain = mergeObjects(EvmChainMainnet, EvmChainTestnet);
 
 export enum SubstrateChain {
   CRUST = 1,
