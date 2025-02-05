@@ -199,6 +199,22 @@
               filterable
             />
           </n-form-item-gi>
+
+          <!-- Collection AutoIncrement -->
+          <n-form-item-gi
+            path="behavior.isAutoIncrement"
+            :span="4"
+            :label="infoLabel('autoIncrement') as string"
+            :label-props="{ for: 'autoIncrement' }"
+          >
+            <select-options
+              v-model:value="collectionStore.form.behavior.isAutoIncrement"
+              :options="booleanSelect"
+              :input-props="{ id: 'autoIncrement' }"
+              :placeholder="t('general.pleaseSelect')"
+              filterable
+            />
+          </n-form-item-gi>
         </n-grid>
 
         <n-grid

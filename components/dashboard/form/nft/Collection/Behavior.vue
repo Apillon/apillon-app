@@ -56,7 +56,7 @@
       />
     </n-form-item>
 
-    <n-grid class="items-end" :class="{ 'mt-8': !isUnique && showIpns }" :cols="12" :x-gap="32">
+    <n-grid class="items-end" :class="{ 'mt-8': !isUnique }" :cols="12" :x-gap="32">
       <!-- Collection Total supply -->
       <n-form-item-gi
         path="supplyLimited"
@@ -104,7 +104,7 @@
       <!-- Collection Revocable -->
       <n-form-item-gi
         path="revocable"
-        :span="6"
+        :span="4"
         :label="infoLabel('revocable') as string"
         :label-props="{ for: 'revocable' }"
       >
@@ -120,7 +120,7 @@
       <!-- Collection Soulbound -->
       <n-form-item-gi
         path="soulbound"
-        :span="6"
+        :span="4"
         :label="infoLabel('soulbound') as string"
         :label-props="{ for: 'soulbound' }"
       >
@@ -128,6 +128,22 @@
           v-model:value="collectionStore.form.behavior.soulbound"
           :options="booleanSelect"
           :input-props="{ id: 'soulbound' }"
+          :placeholder="t('general.pleaseSelect')"
+          filterable
+        />
+      </n-form-item-gi>
+
+      <!-- Collection AutoIncrement -->
+      <n-form-item-gi
+        path="isAutoIncrement"
+        :span="4"
+        :label="infoLabel('autoIncrement') as string"
+        :label-props="{ for: 'autoIncrement' }"
+      >
+        <select-options
+          v-model:value="collectionStore.form.behavior.isAutoIncrement"
+          :options="booleanSelect"
+          :input-props="{ id: 'autoIncrement' }"
           :placeholder="t('general.pleaseSelect')"
           filterable
         />

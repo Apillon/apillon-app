@@ -78,7 +78,7 @@
       <!-- Modal - Collection Mint -->
       <modal v-model:show="modalMintCollectionVisible" :title="t('nft.collection.mint')">
         <FormNftMint
-          :collection-uuid="collectionStore.active.collection_uuid"
+          :collection="collectionStore.active"
           :chain-id="collectionStore.active.chain"
           @submit-success="onNftMinted"
         />

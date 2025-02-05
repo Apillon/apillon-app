@@ -50,6 +50,7 @@ export const useCollectionStore = defineStore('collection', {
         dropReserve: 0,
         revocable: false as boolean | null,
         soulbound: false as boolean | null,
+        isAutoIncrement: false as boolean | null,
         supplyLimited: 0,
         royaltiesAddress: null,
         royaltiesFees: 0,
@@ -155,6 +156,7 @@ export const useCollectionStore = defineStore('collection', {
       this.form.behavior.dropReserve = 0;
       this.form.behavior.revocable = false;
       this.form.behavior.soulbound = false;
+      this.form.behavior.isAutoIncrement = false;
       this.form.behavior.supplyLimited = 0;
 
       this.resetSingleFormData();
