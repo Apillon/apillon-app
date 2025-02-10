@@ -10,6 +10,7 @@ const config: ConfigInterface = {
   captchaKey: '5DWvYfCSGqbUiQyvV5idUmbD3xdNHM9jtjGzs5iK4K4A5Rh4',
   githubId: '70d0aa8922fe05268341',
   gtmId: 'GTM-P7V3D3P6',
+  deploymentGithubId: 'Ov23li86OJHAvoIF7UUg',
   nctrContract: '0xc27e62A737C7474AD9EEF6C493Ed68c71dB80A65',
   publishedFeatures: [
     'ACCESS',
@@ -40,14 +41,7 @@ const config: ConfigInterface = {
     'STORAGE',
     'WALLET_LOGIN',
   ],
-  betaFeatures: [
-    'ASSET_HUB',
-    'EMBEDDED_WALLET',
-    'INDEXING',
-    'RPC',
-    'SMART_CONTRACTS',
-    'CLOUD_FUNCTIONS',
-  ],
+  betaFeatures: ['ASSET_HUB', 'EMBEDDED_WALLET', 'INDEXING', 'RPC', 'SMART_CONTRACTS', 'CLOUD_FUNCTIONS'],
 };
 
 export default config;

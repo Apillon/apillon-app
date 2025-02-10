@@ -20,7 +20,7 @@
     </template>
 
     <template #submenu>
-      <MenuWebsite />
+      <MenuWebsite :has-github-connected="!!storageStore.projectConfig" />
     </template>
   </Heading>
 
@@ -46,6 +46,7 @@ const showModalW3Warn = ref<boolean>(false);
 
 onMounted(() => {
   storageStore.getStorageInfo();
+  storageStore.getGithubProjectConfig();
 
   if (
     websiteUuid.value &&

@@ -18,7 +18,7 @@ export default function useHosting() {
     clearInterval(websiteInterval);
   });
 
-  function initWebsite(env: number = 0) {
+  function initWebsite(env: number = 0, fetchBuilds: boolean = false) {
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
     websiteStore.setWebsite(websiteUuid.value);
 
@@ -30,6 +30,10 @@ export default function useHosting() {
         if (!website?.website_uuid) {
           router.push({ name: 'dashboard-service-hosting' });
           return;
+        }
+
+        if (fetchBuilds) {
+          await deploymentStore.getBuilds(websiteUuid.value);
         }
         /** Get deployments for this website */
         if (env > 0) {
