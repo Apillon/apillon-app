@@ -8,7 +8,9 @@ export const useSettingsStore = defineStore('settings', {
     users: [] as ProjectUserInterface[],
     notifications: {
       loading: false,
+      showOnlyUnread: false,
       items: [] as NotificationInterface[],
+      read: [] as number[],
     },
   }),
   getters: {
@@ -31,6 +33,12 @@ export const useSettingsStore = defineStore('settings', {
     hasOauthLinks(state) {
       return Array.isArray(state.oauthLinks) && state.oauthLinks.length > 0;
     },
+    notificationsToShow(state) {
+      if (state.notifications.showOnlyUnread) {
+        return state.notifications.items.filter(n => !this.notifications.read.includes(n.id)) || [];
+      }
+      return state.notifications.items;
+    },
   },
   actions: {
     resetData() {
@@ -40,6 +48,17 @@ export const useSettingsStore = defineStore('settings', {
 
     getApiKeyById(id: number) {
       return this.apiKeys.find(item => item.id === id) || ({} as ApiKeyInterface);
+    },
+
+    /** Notification actions */
+    readNotification(id: number) {
+      if (!this.notifications.read.includes(id)) {
+        this.notifications.read.push(id);
+      }
+    },
+
+    readAllNotifications() {
+      this.notifications.items.forEach(n => this.readNotification(n.id));
     },
 
     /**
@@ -174,4 +193,10 @@ export const useSettingsStore = defineStore('settings', {
       }
     },
   },
+  persist: {
+    key: SessionKeys.SETTINGS_STORE,
+    storage: persistedState.localStorage,
+    pick: ['notifications'],
+    debug: true,
+  } as any,
 });

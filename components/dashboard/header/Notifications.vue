@@ -26,10 +26,13 @@ onMounted(() => {
 });
 
 const options = computed(() => {
-  if (!settingsStore.hasNotifications) {
-    return [{ key: 'empty', label: '' }];
+  if (settingsStore.notificationsToShow.length === 0) {
+    return [
+      { key: 'empty', label: '' },
+      { key: 'footer', label: '' },
+    ];
   }
-  const notifications = settingsStore.notifications.items.map(n => ({
+  const notifications = settingsStore.notificationsToShow.map(n => ({
     key: n.id,
     label: n.message,
     notification: n,
@@ -50,7 +53,9 @@ function renderOption({ node, option }) {
   if (option?.key === 'footer') {
     return h(resolveComponent('HeaderNotificationFooter'));
   }
-  return h(resolveComponent('HeaderNotification'), { notification: option.notification });
+  return h(resolveComponent('HeaderNotification'), {
+    notification: option.notification,
+  });
 }
 
 function handleSelect(key: string | number) {
