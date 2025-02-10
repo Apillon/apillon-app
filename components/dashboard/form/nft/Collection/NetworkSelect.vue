@@ -2,24 +2,41 @@
   <div class="text-center">
     <h2>{{ t('nft.collection.environment') }}</h2>
     <p>{{ t('nft.collection.environmentContent') }}</p>
-    <div class="my-8 flex flex-wrap justify-center gap-4 whitespace-pre-line">
+    <div class="my-8 flex max-w-xl flex-wrap justify-center gap-4 whitespace-pre-line xl:max-w-4xl">
       <div
         v-for="chain in nftChains"
         :key="chain.value"
-        class="flex w-40 justify-center rounded-md border-2 border-bg-lightest p-4 hover:cursor-pointer"
-        :class="selectedChain === chain.value ? 'border-yellow' : ''"
-        @click="selectedChain = chain.value"
+        class="flex w-40 justify-center rounded-md border-2 p-4 hover:cursor-pointer"
+        :class="
+          selectedChain === chain.value
+            ? 'border-yellow'
+            : disabledChain(chain.value)
+              ? 'border-bodyDark'
+              : 'border-bg-lightest'
+        "
+        @click="() => onChainChange(chain.value)"
       >
-        <div>
+        <n-tooltip v-if="disabledChain(chain.value)" placement="bottom" trigger="hover">
+          <template #trigger>
+            <div class="!cursor-default opacity-60">
+              <NuxtIcon
+                :name="`logo/${chain.name.toLowerCase()}`"
+                class="mx-auto flex justify-center text-7xl"
+                filled
+              />
+              <p>{{ chain.label }}</p>
+            </div>
+          </template>
+          <span v-if="collectionStore.quotaReached">
+            {{ $t('error.ETHEREUM_COLLECTION_QUOTA_REACHED') }}
+          </span>
+          <span v-else-if="!paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY)">
+            {{ $t('error.REQUIRES_BUTTERFLY_PLAN') }}
+          </span>
+        </n-tooltip>
+        <div v-else>
           <div class="h-20">
-            <Image
-              v-if="chain.value === SubstrateChain.UNIQUE"
-              :src="uniquePNG"
-              class="mx-auto"
-              :width="112"
-              :height="42"
-            />
-            <NuxtIcon v-else :name="`logo/${chain.name}`" class="mx-auto flex justify-center text-7xl" filled />
+            <NuxtIcon :name="`logo/${chain.name.toLowerCase()}`" class="mx-auto flex justify-center text-7xl" filled />
           </div>
           <p>{{ chain.label }}</p>
         </div>
@@ -29,7 +46,7 @@
     <div
       v-if="isSubstrateEnabled"
       class="overflow-hidden transition-all"
-      :class="selectedChain === Chains.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
+      :class="selectedChain === EvmChainMainnet.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
     >
       <h4 class="relative top-2">{{ t('nft.collection.chainType') }}</h4>
       <div class="my-8 flex justify-center gap-4 whitespace-pre-line">
@@ -67,34 +84,64 @@
       <SolutionContent :content="content" />
     </div>
 
-    <Btn @click="selectChain">{{ t('form.proceed') }}</Btn>
+    <Btn :disabled="!!selectedChain && disabledChain(selectedChain)" @click="selectChain">{{ t('form.proceed') }}</Btn>
   </div>
 </template>
 
 <script setup lang="ts">
-import uniquePNG from 'assets/images/logo/unique.png';
-import { Chains, SubstrateChain } from '~/lib/types/nft';
+import { EvmChainMainnet } from '~/lib/types/nft';
+import { PLAN_NAMES } from '~/lib/types/payment';
 
 const emit = defineEmits(['submit']);
-const { t } = useI18n();
-const router = useRouter();
 const message = useMessage();
+const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
-const { nftChains, chainTypes } = useCollection();
+
+const { t } = useI18n();
+const { isDev } = useService();
 const { generateContent } = useSolution();
+const { nftChains, chainTypes } = useCollection();
 
 const isSubstrateEnabled = ref<boolean>(false);
 const selectedChain = ref<number | undefined>();
 
-function selectChain() {
-  if (selectedChain.value) {
-    collectionStore.metadataStored = false;
-    emit('submit', selectedChain.value);
-  } else {
-    message.warning(t('validation.collection.chainRequired'));
-  }
-}
 const content = computed(() => {
   return selectedChain.value ? generateContent(`${selectedChain.value}`, 'nft.network') : [];
 });
+
+onMounted(() => {
+  collectionStore.getQuota();
+});
+
+const enterpriseChains = [
+  EvmChainMainnet.ARBITRUM_ONE,
+  EvmChainMainnet.AVALANCHE,
+  EvmChainMainnet.BASE,
+  EvmChainMainnet.CELO,
+  EvmChainMainnet.ETHEREUM,
+  EvmChainMainnet.OPTIMISM,
+  EvmChainMainnet.POLYGON,
+];
+
+const disabledChain = (chainId: number) =>
+  !isDev() &&
+  (!paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) || collectionStore.quotaReached) &&
+  enterpriseChains.includes(chainId);
+
+function onChainChange(chainId: number) {
+  if (!disabledChain(chainId)) {
+    selectedChain.value = chainId;
+  }
+}
+
+function selectChain() {
+  if (!selectedChain.value) {
+    message.warning(t('validation.collection.chainRequired'));
+  } else if (disabledChain(selectedChain.value)) {
+    return;
+  } else {
+    collectionStore.metadataStored = false;
+    emit('submit', selectedChain.value);
+  }
+}
 </script>

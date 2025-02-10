@@ -62,11 +62,7 @@ const availableColumns = ref([
 
 /** Data: filtered collections */
 const data = computed<Array<CollectionInterface>>(() => {
-  return (
-    props.collections.filter(item =>
-      item.name.toLowerCase().includes(collectionStore.search.toLowerCase())
-    ) || []
-  );
+  return props.collections.filter(item => item.name.toLowerCase().includes(collectionStore.search.toLowerCase())) || [];
 });
 
 const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
@@ -80,7 +76,14 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       ],
       minWidth: 120,
       render(row: CollectionInterface) {
-        return h('span', {}, { default: () => t(`nft.chain.${row.chain}`) });
+        return h(
+          'span',
+          {},
+          {
+            default: () =>
+              te(`nft.chain.${EvmChain[row.chain]}`) ? t(`nft.chain.${EvmChain[row.chain]}`) : EvmChain[row.chain],
+          }
+        );
       },
     },
     {
@@ -183,11 +186,7 @@ const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
       title: t('general.status'),
       className: { hidden: !selectedColumns.value.includes('collectionStatus') },
       render(row) {
-        return h(
-          resolveComponent('NftCollectionStatus'),
-          { collectionStatus: row.collectionStatus },
-          ''
-        );
+        return h(resolveComponent('NftCollectionStatus'), { collectionStatus: row.collectionStatus }, '');
       },
     },
     {
@@ -283,9 +282,7 @@ const dropdownOptionsArchive = [
 onMounted(() => {
   /** Check if selected columns are stored in LS */
   if (localStorage.getItem(LsTableColumnsKeys.NFT_COLLECTION)) {
-    selectedColumns.value = JSON.parse(
-      localStorage.getItem(LsTableColumnsKeys.NFT_COLLECTION) || ''
-    );
+    selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.NFT_COLLECTION) || '');
   }
 });
 
@@ -329,9 +326,7 @@ async function restoreCollection() {
   collectionStore.loading = true;
 
   try {
-    await $api.patch<CollectionResponse>(
-      endpoints.collectionActivate(currentRow.value.collection_uuid)
-    );
+    await $api.patch<CollectionResponse>(endpoints.collectionActivate(currentRow.value.collection_uuid));
 
     collectionStore.archive = collectionStore.archive.filter(
       item => item.collection_uuid !== currentRow.value.collection_uuid

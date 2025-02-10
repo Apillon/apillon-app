@@ -130,6 +130,8 @@
         "NFT_DEPLOY_BASE_EXTENSION_NOT_PRESENT": "NFT base extension not present",
         "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_PRESENT": "Royalties address is not present, please enter a valid Wallet address",
         "NFT_COLLECTION_ROYALTIES_ADDRESS_NOT_VALID": "Wrong royalties address, please enter a valid Wallet address",
+        "REQUIRES_BUTTERFLY_PLAN": "This action is allowed only on Butterfly plan, please upgrade your plan.",
+        "ETHEREUM_COLLECTION_QUOTA_REACHED": "You have reached the maximum number of Ethereum collections for this project. Please upgrade your plan.",
         "INVALID_ADDRESS_FOR_TRANSFER_TO": "Wrong address, please enter different address",
         "INVALID_EVM_ADDRESS": "Invalid EVM address, please enter a valid EVM address",
         "INVALID_SUBSTRATE_ADDRESS": "Invalid Substrate address, please enter a valid Substrate address",

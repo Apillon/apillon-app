@@ -82,6 +82,13 @@ export const usePaymentStore = defineStore('payment', {
       this.priceList = [] as ProductPriceInterface[];
     },
 
+    hasPlan(planName: string) {
+      const activePackage =
+        this.subscriptionPackages.find(item => item.id === this.activeSubscription.package_id) ||
+        this.subscriptionPackages[0];
+      return activePackage.name === planName;
+    },
+
     /**
      * Fetch wrappers
      */
@@ -250,10 +257,7 @@ export const usePaymentStore = defineStore('payment', {
         if (args.direction) params.direction = args.direction;
         if (args.service) params.service = args.service;
 
-        const res = await $api.get<CreditTransactionsResponse>(
-          endpoints.creditTransactions(projectUuid),
-          params
-        );
+        const res = await $api.get<CreditTransactionsResponse>(endpoints.creditTransactions(projectUuid), params);
 
         this.creditTransactions.items = res.data.items;
         this.creditTransactions.total = res.data.total;
@@ -273,9 +277,7 @@ export const usePaymentStore = defineStore('payment', {
       if (!projectUuid) return;
 
       try {
-        const res = await $api.get<ActiveSubscriptionResponse>(
-          endpoints.activeSubscription(projectUuid)
-        );
+        const res = await $api.get<ActiveSubscriptionResponse>(endpoints.activeSubscription(projectUuid));
 
         this.activeSubscription = res.data;
 
@@ -326,10 +328,7 @@ export const usePaymentStore = defineStore('payment', {
     },
 
     /** API Invoices */
-    async fetchInvoices(
-      page = 1,
-      limit: number = PAGINATION_LIMIT
-    ): Promise<InvoiceResponse | null> {
+    async fetchInvoices(page = 1, limit: number = PAGINATION_LIMIT): Promise<InvoiceResponse | null> {
       const dataStore = useDataStore();
       const projectUuid = await dataStore.getProjectUuid();
       if (!projectUuid) {
@@ -430,13 +429,9 @@ export const usePaymentStore = defineStore('payment', {
       abortController = new AbortController();
 
       try {
-        this.promises.priceList = $api.get<PriceListResponse>(
-          endpoints.productPrice(),
-          PARAMS_ALL_ITEMS,
-          {
-            signal: abortController.signal,
-          }
-        );
+        this.promises.priceList = $api.get<PriceListResponse>(endpoints.productPrice(), PARAMS_ALL_ITEMS, {
+          signal: abortController.signal,
+        });
         const res = await this.promises.priceList;
 
         this.priceList = res.data.items;

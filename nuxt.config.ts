@@ -46,11 +46,9 @@ export default defineNuxtConfig({
           },
         ],
       }),
-
       Components({
         resolvers: [NaiveUiResolver()],
       }),
-      
       {
         name: 'vite-plugin-glob-transform',
         transform(code: string, id: string) {
@@ -58,7 +56,7 @@ export default defineNuxtConfig({
             return code.replace(/as:\s*['"]raw['"]/g, 'query: "?raw", import: "default"');
           }
           return code;
-        }
+        },
       },
     ],
 
@@ -68,7 +66,7 @@ export default defineNuxtConfig({
   },
 
   imports: {
-    dirs: ['composables/', 'composables/stores/**', 'lib/**'],
+    dirs: ['composables/', 'stores/**', 'lib/**'],
   },
 
   nitro: {

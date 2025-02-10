@@ -15,7 +15,7 @@ const props = defineProps({
   transactions: { type: Array<TransactionInterface>, default: [] },
 });
 
-const { t } = useI18n();
+const { t, te } = useI18n();
 const collectionStore = useCollectionStore();
 
 const NftTransactionStatus = resolveComponent('NftTransactionStatus');
@@ -55,7 +55,9 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       title: t('nft.transaction.chain'),
       minWidth: 120,
       render(row: TransactionInterface) {
-        return h('span', {}, { default: () => t(`nft.chain.${row.chainId}`) });
+        return h('span', {}, {           
+          default: () => te(`nft.chain.${EvmChain[row.chainId]}`) ? t(`nft.chain.${EvmChain[row.chainId]}`): EvmChain[EvmChain[row.chainId]]
+         });
       },
     },
     {

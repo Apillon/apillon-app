@@ -83,7 +83,7 @@ const loading = ref<boolean>(true);
 
 onMounted(async () => {
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
-    selectedChain.value = props.chain || collectionStore.form.behavior.chain || Chains.MOONBEAM;
+    selectedChain.value = props.chain || collectionStore.form.behavior.chain;
   }
 
   servicePrices.value = props.category
@@ -116,13 +116,16 @@ const chainsByService = computed(() => {
 });
 
 const shownPrices = computed(() => {
+  const chainName = getChainName(selectedChain.value, selectedService.value);
   /** Filter by chain and service */
   if (props.filterByChain && selectedChain.value && props.filterByService && selectedService.value) {
-    const chainName = getChainName(selectedChain.value, selectedService.value);
     return servicePrices.value.filter(item => item.category === chainName + '_' + selectedService.value);
+  } else if (props.filterByChain && selectedChain.value && props.service) {
+    /** Filter by chain */
+    const service = props.service === ServiceTypeName.SMART_CONTRACTS ? 'CONTRACT' : props.service;
+    return servicePrices.value.filter(item => item.name.startsWith(service + '_' + chainName));
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
-    const chainName = getChainName(selectedChain.value, props.service);
     return servicePrices.value.filter(item => item.name.includes(chainName));
   } else if (props.filterByService && selectedService.value) {
     /** Filter by service */
@@ -144,10 +147,10 @@ watch(
 
 function getChainName(chain: string | number, service?: string): string {
   if (service === ServiceTypeName.SMART_CONTRACTS && Number.isInteger(chain)) {
-    return chain in EvmChain ? EvmChain[chain] : Chains[chain];
+    return chain in EvmChain ? EvmChain[chain] : SubstrateChain[chain];
   } else if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
-    return chain in Chains
-      ? Chains[chain]
+    return chain in EvmChain
+      ? EvmChain[chain]
       : SubstrateChain[chain] === SubstrateChain.ASTAR
         ? SubstrateChain[chain] + '_WASM'
         : SubstrateChain[chain];
@@ -159,22 +162,6 @@ function getIconName(service: ProductPriceInterface) {
   switch (service.category.trim()) {
     case PriceServiceCategory.ACURAST:
       return 'icon/cloud-functions';
-    case PriceServiceCategory.ASTAR_CONTRACT:
-    case PriceServiceCategory.ASTAR_NFT:
-      return 'logo/astar';
-    case PriceServiceCategory.MOONBASE_CONTRACT:
-    case PriceServiceCategory.MOONBASE_NFT:
-      return 'logo/moonbase';
-    case PriceServiceCategory.MOONBEAM_CONTRACT:
-    case PriceServiceCategory.MOONBEAM_NFT:
-      return 'logo/moonbeam';
-    case PriceServiceCategory.ETHEREUM_CONTRACT:
-    case PriceServiceCategory.ETHEREUM_NFT:
-    case PriceServiceCategory.SEPOLIA_CONTRACT:
-    case PriceServiceCategory.SEPOLIA_NFT:
-      return 'logo/evm';
-    case PriceServiceCategory.UNIQUE_NFT:
-      return 'logo/unique';
     case PriceServiceCategory.GRILL_CHAT:
       return 'logo/subsocial';
     case PriceServiceName.INDEXER:
@@ -199,8 +186,15 @@ function getIconName(service: ProductPriceInterface) {
       return 'logo/subsocial';
     case ServiceTypeName.EMBEDDED_WALLET:
       return 'icon/wallet';
+    case ServiceTypeName.SMART_CONTRACTS:
+      return `logo/${extractChainFromCategory(service.category, 'CONTRACT')}`;
+    case ServiceTypeName.NFT:
+      return `logo/${extractChainFromCategory(service.category, ServiceTypeName.NFT)}`;
   }
 
   return 'icon/change';
 }
+
+const extractChainFromCategory = (category: string, suffix = '') =>
+  category.trim().replace(`_${suffix}`, '').toLowerCase();
 </script>

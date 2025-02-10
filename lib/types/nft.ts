@@ -1,26 +1,38 @@
+export type Merge<T, K> = Omit<T, keyof K> & K;
+
 export enum ChainType {
   SUBSTRATE = 1,
   EVM = 2,
 }
 
 /** NFT Chains */
-export enum Chains {
-  MOONBASE = 1287,
-  MOONBEAM = 1284,
-  ASTAR_SHIBUYA = 81,
-  ASTAR = 592,
-}
-export enum EvmChain {
+export enum EvmChainMainnet {
   ETHEREUM = 1,
-  SEPOLIA = 11155111,
   MOONBEAM = 1284,
+  ASTAR = 592,
+  // OASIS = 42262,
+  CELO = 42220,
+  BASE = 8453,
+  ARBITRUM_ONE = 42161,
+  AVALANCHE = 43114,
+  OPTIMISM = 10,
+  POLYGON = 137,
+}
+export enum EvmChainTestnet {
+  SEPOLIA = 11155111,
   MOONBASE = 1287,
   ASTAR_SHIBUYA = 81, // testnet
-  ASTAR = 592,
-  OASIS = 42262,
+  // OASIS_SAPPHIRE = 23294,
   ALFAJORES = 44787, // Celo testnet
-  CELO = 42220,
+  BASE_SEPOLIA = 84532,
+  ARBITRUM_ONE_SEPOLIA = 421614,
+  AVALANCHE_FUJI = 43113,
+  OPTIMISM_SEPOLIA = 11155420,
+  POLYGON_AMOY = 80002,
 }
+
+export const EvmChain = mergeObjects(EvmChainMainnet, EvmChainTestnet);
+
 export enum SubstrateChain {
   CRUST = 1,
   KILT = 2,

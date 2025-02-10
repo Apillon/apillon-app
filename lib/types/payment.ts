@@ -13,6 +13,14 @@ export enum CreditDirection {
   RECEIVE = 1,
   SPEND = 2,
 }
+
+export const PLAN_NAMES = {
+  FREEMIUM: 'Egg',
+  CATERPILLAR: 'Caterpillar',
+  COCOON: 'Cocoon',
+  BUTTERFLY: 'Butterfly',
+};
+
 declare global {
   /**
    * Pricing

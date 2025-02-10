@@ -1,11 +1,12 @@
 import type { FormItemRule, UploadCustomRequestOptions } from 'naive-ui';
-import { EvmChain, SubstrateChain } from '~/lib/types/nft';
+import { EvmChain, EvmChainMainnet, EvmChainTestnet, SubstrateChain } from '~/lib/types/nft';
 import type { TimeValidator } from 'naive-ui/es/date-picker/src/interface';
 
 export default function useCollection() {
   const router = useRouter();
-  const { t, te } = useI18n();
   const message = useMessage();
+  const { t, te } = useI18n();
+  const { isDev } = useService();
   const dataStore = useDataStore();
   const bucketStore = useBucketStore();
   const collectionStore = useCollectionStore();
@@ -15,15 +16,25 @@ export default function useCollection() {
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
 
-  const chains = enumKeys(Chains)
-    .filter(key => Chains[key] !== Chains.ASTAR_SHIBUYA)
+  const evmChains = enumKeys(EvmChain)
+    .filter(key => [EvmChainMainnet.ETHEREUM, EvmChainTestnet.SEPOLIA].includes(EvmChain[key]))
     .map(k => {
-      return { name: k.toLowerCase(), label: t(`nft.chain.${Chains[k]}`), value: Chains[k] };
+      return { name: k.toLowerCase(), label: t(`nft.evmChain.${EvmChain[k]}`), value: EvmChain[k] };
+    });
+
+  const chains = enumKeys(EvmChain)
+    .filter(key => ![EvmChainTestnet.ASTAR_SHIBUYA].includes(EvmChain[key]))
+    .map(k => {
+      return {
+        name: k.toLowerCase(),
+        label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`) : EvmChain[EvmChain[k]],
+        value: EvmChain[k],
+      };
     });
   const nftChains = [
     ...chains,
     {
-      name: SubstrateChain.UNIQUE,
+      name: SubstrateChain[SubstrateChain.UNIQUE],
       label: t(`nft.chain.${SubstrateChain.UNIQUE}`),
       value: SubstrateChain.UNIQUE,
     },
@@ -36,11 +47,6 @@ export default function useCollection() {
         label: t(`nft.chain.${SubstrateChain[k]}`),
         value: SubstrateChain[k],
       };
-    });
-  const evmChains = enumKeys(EvmChain)
-    .filter(key => [EvmChain.ETHEREUM, EvmChain.SEPOLIA].includes(EvmChain[key]))
-    .map(k => {
-      return { name: k.toLowerCase(), label: t(`nft.evmChain.${EvmChain[k]}`), value: EvmChain[k] };
     });
 
   const chainTypes = enumKeys(ChainType).map(k => {
@@ -187,7 +193,7 @@ export default function useCollection() {
 
   function prepareFormData(addBaseUri = false) {
     const chain =
-      collectionStore.form.behavior.chain === Chains.ASTAR &&
+      collectionStore.form.behavior.chain === EvmChainMainnet.ASTAR &&
       collectionStore.form.behavior.chainType === ChainType.SUBSTRATE
         ? SubstrateChain.ASTAR
         : collectionStore.form.behavior.chain;
@@ -226,7 +232,7 @@ export default function useCollection() {
   function collectionEndpoint() {
     return isUnique.value
       ? endpoints.collectionsUnique
-      : collectionStore.form.behavior.chain === Chains.ASTAR &&
+      : collectionStore.form.behavior.chain === EvmChainMainnet.ASTAR &&
           collectionStore.form.behavior.chainType === ChainType.SUBSTRATE
         ? endpoints.collectionsSubstrate
         : endpoints.collections();
@@ -289,7 +295,7 @@ export default function useCollection() {
 
   function chainCurrency() {
     switch (collectionStore.form.behavior.chain) {
-      case Chains.ASTAR:
+      case EvmChainMainnet.ASTAR:
         return 'ASTR';
       default:
         return 'GLMR';
@@ -332,9 +338,9 @@ export default function useCollection() {
   }
 
   function onChainChange(chain: number) {
-    if (chain === Chains.ASTAR_SHIBUYA) {
+    if (chain === EvmChainMainnet.ASTAR_SHIBUYA) {
       collectionStore.form.behavior.chainType = ChainType.SUBSTRATE;
-    } else if (chain !== Chains.ASTAR) {
+    } else if (chain !== EvmChainMainnet.ASTAR) {
       collectionStore.form.behavior.chainType = ChainType.EVM;
     }
   }

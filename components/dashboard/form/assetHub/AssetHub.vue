@@ -1,12 +1,6 @@
 <template>
-  <n-form
-    v-bind="$attrs"
-    ref="formRef"
-    :model="formData"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-  >
-    <div class="bg-bg-lighter rounded-lg p-8 pb-2 mb-4" :class="{ hidden: !!assetId }">
+  <n-form v-bind="$attrs" ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
+    <div class="mb-4 rounded-lg bg-bg-lighter p-8 pb-2" :class="{ hidden: !!assetId }">
       <n-form-item
         :span="6"
         :label-props="{ for: 'chainId' }"
@@ -33,10 +27,10 @@
       </n-form-item>
     </div>
 
-    <p class="text-white font-bold mb-4" :class="{ hidden: !!assetId }">
+    <p class="mb-4 font-bold text-white" :class="{ hidden: !!assetId }">
       {{ $t('dashboard.service.assetHub.characteristics') }}
     </p>
-    <div class="bg-bg-lighter rounded-lg p-8 pb-2">
+    <div class="rounded-lg bg-bg-lighter p-8 pb-2">
       <n-form-item :label="$t('form.label.assetHub.name')" path="name">
         <n-input
           v-model:value="formData.name"
@@ -58,33 +52,12 @@
         />
       </n-form-item>
 
-      <n-form-item
-        class="bg-bg-lighter rounded-lg"
-        :class="{ hidden: !!assetId }"
-        :label="$t('form.label.assetHub.id')"
-        path="assetId"
-      >
-        <n-input-number
-          v-model:value="formData.assetId"
-          :placeholder="$t('form.placeholder.assetHub.assetId')"
-          clearable
-          class="bg-bg-light rounded-lg"
-          :min="0"
-          :step="1"
-          :disabled="!!assetId"
-          @keydown.enter.prevent
-        />
-      </n-form-item>
-      <n-form-item
-        class="bg-bg-lighter rounded-lg"
-        :label="$t('form.label.assetHub.decimals')"
-        path="decimals"
-      >
+      <n-form-item class="rounded-lg bg-bg-lighter" :label="$t('form.label.assetHub.decimals')" path="decimals">
         <n-input-number
           v-model:value="formData.decimals"
           :placeholder="$t('form.placeholder.assetHub.decimals')"
           clearable
-          class="bg-bg-light rounded-lg"
+          class="rounded-lg bg-bg-light"
           :min="0"
           :max="18"
           :step="1"
@@ -93,7 +66,7 @@
       </n-form-item>
 
       <n-form-item
-        class="bg-bg-lighter rounded-lg"
+        class="rounded-lg bg-bg-lighter"
         :class="{ hidden: !!assetId }"
         :label="$t('form.label.assetHub.supply')"
         path="initialSupply"
@@ -102,7 +75,7 @@
           v-model:value="formData.initialSupply"
           :placeholder="$t('form.placeholder.assetHub.supply')"
           clearable
-          class="bg-bg-light rounded-lg"
+          class="rounded-lg bg-bg-light"
           :min="0"
           :step="1"
           :disabled="!!assetId"
@@ -112,7 +85,7 @@
         />
       </n-form-item>
       <n-form-item
-        class="bg-bg-lighter rounded-lg"
+        class="rounded-lg bg-bg-lighter"
         :class="{ hidden: !!assetId }"
         :label="$t('form.label.assetHub.minBalance')"
         path="minBalance"
@@ -121,7 +94,7 @@
           v-model:value="formData.minBalance"
           :placeholder="$t('form.placeholder.assetHub.minBalance')"
           clearable
-          class="bg-bg-light rounded-lg"
+          class="rounded-lg bg-bg-light"
           :min="0"
           :disabled="!!assetId"
           @keydown.enter.prevent
@@ -129,7 +102,7 @@
       </n-form-item>
     </div>
 
-    <div class="bg-bg-lighter rounded-lg p-8 pb-2 mt-4" :class="{ hidden: !!assetId }">
+    <div class="mt-4 rounded-lg bg-bg-lighter p-8 pb-2" :class="{ hidden: !!assetId }">
       <n-form-item :label="$t('form.label.assetHub.issuer')" path="issuerAddress">
         <n-input
           v-model:value="formData.issuerAddress"
@@ -171,7 +144,6 @@
 <script lang="ts" setup>
 import { nToBigInt } from '@polkadot/util';
 import type { FormItemRule } from 'naive-ui';
-import { assetHubNetworks } from '~/composables/useAssetHub';
 
 type FormAsset = {
   network: string | null;
@@ -193,7 +165,7 @@ const props = defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const assetHubStore = useAssetHubStore();
-const { assetHubClient } = useAssetHub();
+const { assetHubClient, assetHubNetworks } = useAssetHub();
 
 const loading = ref(false);
 const asset = ref<AssetInterface | undefined>();
@@ -222,10 +194,6 @@ const rules: NFormRules = {
     ruleRequired('Symbol is required'),
     { validator: validateSymbol, message: t('validation.assetHub.symbolNotUnique') },
   ],
-  assetId: [
-    ruleRequired('Asset Id is required'),
-    { validator: validateAssetId, message: t('validation.assetHub.idNotUnique') },
-  ],
   decimals: ruleRequired('Decimals is required'),
   initialSupply: ruleRequired('Initial Supply is required'),
   minBalance: ruleRequired('Min balance is required'),
@@ -238,14 +206,8 @@ const networks = computed(() =>
 );
 
 const isMainnetSelected = computed(() => formData.value.network === assetHubNetworks.assetHub.rpc);
-const assetIDsMainnet = computed(() => new Set(assetHubStore.itemsMainnet.map(i => i.id)));
-const assetIDsTestnet = computed(() => new Set(assetHubStore.itemsTestnet.map(i => i.id)));
-const assetIDs = computed(() =>
-  isMainnetSelected.value ? assetIDsMainnet.value : assetIDsTestnet.value
-);
-const assets = computed(() =>
-  isMainnetSelected.value ? assetHubStore.itemsMainnet : assetHubStore.itemsTestnet
-);
+
+const assets = computed(() => (isMainnetSelected.value ? assetHubStore.itemsMainnet : assetHubStore.itemsTestnet));
 
 onMounted(async () => {
   if (props.assetId) {
@@ -261,26 +223,11 @@ onMounted(async () => {
       formData.value.network = assetHubNetworks.westend.rpc;
       formData.value.symbol = asset.value.symbol;
     }
-  } else {
-    formData.value.assetId = findFirstAvailableNumber(assetIDs.value);
   }
 
   assetHubStore.getAssetsMainnet();
   assetHubStore.getAssetsTestnet();
 });
-
-watch(
-  () => formData.value.assetId,
-  (newId, oldId) => {
-    if (oldId && newId) {
-      const delta = newId - oldId;
-
-      if (Math.abs(delta) === 1 && assetIDs.value.has(newId)) {
-        formData.value.assetId = newId + delta;
-      }
-    }
-  }
-);
 
 watch(
   () => formData.value.network,
@@ -289,18 +236,8 @@ watch(
       await assetHubClient.value.destroyInstance();
       await sleep(200);
     }
-    if (rpc && assetHubStore.account) {
-      formData.value.assetId = findFirstAvailableNumber(assetIDs.value);
-    }
   }
 );
-function findFirstAvailableNumber(set) {
-  let i = 1;
-  while (set.has(i)) {
-    i++;
-  }
-  return i;
-}
 
 // Custom validations
 function validateAssetId(_: FormItemRule, value: string): boolean {
@@ -328,9 +265,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.assetId && asset.value) {
       if (
         formData.value.name === asset.value.name &&
@@ -352,21 +287,23 @@ async function createAsset() {
     message.warning(t('dashboard.service.assetHub.connect'));
     return;
   }
-  if (
-    !formData.value.network ||
-    !formData.value.assetId ||
-    !formData.value.decimals ||
-    !formData.value.minBalance
-  ) {
+  if (!formData.value.network || !formData.value.decimals || !formData.value.minBalance) {
     message.warning('Missing data');
     return;
   }
   loading.value = true;
 
   assetHubClient.value = await assetHubStore.initClient(isMainnetSelected.value);
-  if (!assetHubClient.value) return;
+  if (!assetHubClient.value) {
+    loading.value = false;
+    message.warning(t('error.general'));
+    return;
+  }
 
   try {
+    const nextId = await assetHubClient.value.getNextId();
+    const id = Number(nextId.toJSON());
+
     const team = {
       issuer: formData.value.issuerAddress,
       admin: assetHubStore.account.address,
@@ -374,7 +311,7 @@ async function createAsset() {
     };
     txHash.value = await assetHubClient.value.createAsset(
       assetHubStore.account.address,
-      formData.value.assetId,
+      id,
       formData.value.name,
       formData.value.symbol,
       formData.value.decimals,
@@ -386,7 +323,7 @@ async function createAsset() {
 
       /** Emit events */
       emit('submitSuccess');
-      emit('createSuccess', formData.value.assetId, formData.value.network);
+      emit('createSuccess', id, formData.value.network);
     } else {
       message.warning(t('error.general'));
       emit('close');
@@ -408,12 +345,7 @@ async function updateAsset() {
     message.warning(t('dashboard.service.assetHub.connect'));
     return;
   }
-  if (
-    !asset.value ||
-    !formData.value.network ||
-    !formData.value.assetId ||
-    !formData.value.decimals
-  ) {
+  if (!asset.value || !formData.value.network || !formData.value.assetId || !formData.value.decimals) {
     message.warning('Missing data');
     return;
   }

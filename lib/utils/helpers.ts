@@ -102,11 +102,7 @@ export function copyToClipboard(text: string) {
     }
   );
 }
-export function copyToClipboardWithResponseTexts(
-  text: string,
-  successMsg?: string,
-  errorMsg?: string
-) {
+export function copyToClipboardWithResponseTexts(text: string, successMsg?: string, errorMsg?: string) {
   navigator.clipboard.writeText(text).then(
     () => {
       /* Resolved - text copied to clipboard successfully */
@@ -150,7 +146,7 @@ export function formatCurrency(currency: string) {
 }
 
 export function generatePriceServiceName(service: string, chain: number, action: string) {
-  const chainName = Chains[chain] || SubstrateChain[chain];
+  const chainName = EvmChain[chain] || SubstrateChain[chain];
   return service + '_' + chainName + '_' + action;
 }
 
@@ -162,11 +158,11 @@ export function contractLink(contractAddress?: string | null, chainId?: number):
   const address = contractAddress ? `address/${contractAddress}` : '';
 
   switch (chainId) {
-    case Chains.MOONBEAM:
+    case EvmChainMainnet.MOONBEAM:
       return `https://moonbeam.moonscan.io/${address}`;
-    case Chains.MOONBASE:
+    case EvmChainTestnet.MOONBASE:
       return `https://moonbase.moonscan.io/${address}`;
-    case Chains.ASTAR:
+    case EvmChainMainnet.ASTAR:
       return `https://astar.blockscout.com/${address}`;
     case SubstrateChain.ASTAR:
       if (useRuntimeConfig().public.ENV === AppEnv.DEV) {
@@ -192,11 +188,11 @@ export function transactionLink(transactionHash?: string | null, chainId?: numbe
   const hash = transactionHash ? `tx/${transactionHash}` : '';
 
   switch (chainId) {
-    case Chains.MOONBEAM:
+    case EvmChainMainnet.MOONBEAM:
       return `https://moonbeam.moonscan.io/${hash}`;
-    case Chains.MOONBASE:
+    case EvmChainTestnet.MOONBASE:
       return `https://moonbase.moonscan.io/${hash}`;
-    case Chains.ASTAR:
+    case EvmChainMainnet.ASTAR:
       return `https://astar.blockscout.com/${hash}`;
     case SubstrateChain.ASTAR:
       if (useRuntimeConfig().public.ENV === AppEnv.DEV) {

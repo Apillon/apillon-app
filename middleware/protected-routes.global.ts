@@ -1,4 +1,4 @@
-import { useAuthStore } from '~/composables/stores/auth';
+import { useAuthStore } from '~/stores/auth';
 import { Permission } from '~/lib/types/settings';
 interface ProtectedRouteInterface {
   path?: string;
@@ -125,8 +125,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
       continue;
     }
     if (
-      ((protectedRoute.regex && protectedRoute.regex.test(decodedUrl)) ||
-        decodedUrl === protectedRoute.path) &&
+      ((protectedRoute.regex && protectedRoute.regex.test(decodedUrl)) || decodedUrl === protectedRoute.path) &&
       !authStore.allowedEntry
     ) {
       return navigateTo(protectedRoute.redirect, { redirectCode: 301 });
@@ -139,8 +138,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
       continue;
     }
     if (
-      ((featureRoute.regex && featureRoute.regex.test(decodedUrl)) ||
-        decodedUrl === featureRoute.path) &&
+      ((featureRoute.regex && featureRoute.regex.test(decodedUrl)) || decodedUrl === featureRoute.path) &&
       (!isFeatureEnabled(featureRoute.feature, authStore.getUserRoles()) ||
         (featureRoute.permission && !authStore.isUserAllowed(featureRoute.permission))) &&
       (!authStore.jwt || !!authStore.userUuid)

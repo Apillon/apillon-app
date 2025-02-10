@@ -180,6 +180,12 @@
       }
     },
     "network": {
+      "1": {
+        "content": [{ "title": "Ethereum" }]
+      },
+      "10": {
+        "content": [{ "title": "OPTIMISM" }]
+      },
       "11": {
         "content": [
           {
@@ -198,6 +204,12 @@
             "content": "Use case: Best suited for NFT-focused projects, particularly those that require advanced features like dynamic NFTs, fractional ownership, and low-cost minting."
           }
         ]
+      },
+      "81": {
+        "content": [{ "title": "ASTAR SHIBUYA" }]
+      },
+      "137": {
+        "content": [{ "title": "Polygon" }]
       },
       "592": {
         "content": [
@@ -252,6 +264,42 @@
             "content": "Use case: Best suited for developers who want to test minting processes and smart contract deployment before moving to production."
           }
         ]
+      },
+      "8453": {
+        "content": [{ "title": "Base" }]
+      },
+      "23294": {
+        "content": [{ "title": "Oasis Sapphire" }]
+      },
+      "42161": {
+        "content": [{ "title": "Arbitrum One" }]
+      },
+      "42262": {
+        "content": [{ "title": "Oasis" }]
+      },
+      "43113": {
+        "content": [{ "title": "AVALANCHE FUJI" }]
+      },
+      "43114": {
+        "content": [{ "title": "AVALANCHE" }]
+      },
+      "44787": {
+        "content": [{ "title": "ALFAJORES" }]
+      },
+      "80002": {
+        "content": [{ "title": "Polygon Amoy" }]
+      },
+      "84532": {
+        "content": [{ "title": "Base sepolia" }]
+      },
+      "421614": {
+        "content": [{ "title": "Arbitrum One Sepolia" }]
+      },
+      "11155111": {
+        "content": [{ "title": "Sepolia" }]
+      },
+      "11155420": {
+        "content": [{ "title": "OPTIMISM Sepolia" }]
       }
     },
     "single": {

@@ -145,6 +145,7 @@ export default function assetHub() {
 
   return {
     assetHubClient,
+    assetHubNetworks,
     loadingWallet,
     modalWalletSelectVisible,
     pageLoading,
