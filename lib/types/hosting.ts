@@ -77,6 +77,7 @@ declare global {
     ipnsStaging: string | null;
     productionBucket: BucketInterface;
     repoId: number | null;
+    deploymentConfig_id: number | null;
     stagingBucket: BucketInterface;
     w3ProductionLink: string | null;
     w3StagingLink: string | null;
@@ -106,6 +107,12 @@ declare global {
     createTime: string;
     finishedTime: string;
   }
+
+  interface DeploymentConfigVariable {
+    key: string;
+    value: string;
+  }
+  interface DeploymentConfigVariablesResponse extends GeneralResponse<DeploymentConfigVariable[]> {}
 
   interface DeploymentBuildResponse extends GeneralResponse<DeploymentBuildInterface> {}
   interface DeploymentBuildsResponse extends GeneralItemsResponse<DeploymentBuildInterface> {}

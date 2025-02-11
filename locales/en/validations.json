@@ -99,6 +99,10 @@
       "nameRequired": "Please enter name",
       "nftIdRequired": "Please enter NFT ID"
     },
+    "deploy-env": {
+      "key-required": "Please enter variable key",
+      "value-required": "Please enter variable value"
+    },
     "embeddedWallet": {
       "titleRequired": "Embedded Wallet title is required",
       "whitelistedDomains": "Domains not valid"

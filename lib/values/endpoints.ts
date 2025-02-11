@@ -203,6 +203,7 @@ const Endpoints = {
     return `/storage/hosting/websites/${websiteUuid}/deployments`;
   },
   deploymentBuilds: `/deploy/deploy-build`,
+  deploymentConfigVariables: (deploymentConfigId: number) => `/deploy/config/variables/${deploymentConfigId}`,
 
   /**
    * NFT

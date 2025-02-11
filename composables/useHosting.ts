@@ -18,7 +18,7 @@ export default function useHosting() {
     clearInterval(websiteInterval);
   });
 
-  function initWebsite(env: number = 0, fetchBuilds: boolean = false) {
+  function initWebsite(env: number = 0, fetchBuilds: boolean = false, fetchVariables: boolean = false) {
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
     websiteStore.setWebsite(websiteUuid.value);
 
@@ -34,6 +34,10 @@ export default function useHosting() {
 
         if (fetchBuilds) {
           await deploymentStore.getBuilds(websiteUuid.value);
+        }
+
+        if (fetchVariables && website.deploymentConfig_id) {
+          await deploymentStore.getVariables(website.deploymentConfig_id);
         }
         /** Get deployments for this website */
         if (env > 0) {
