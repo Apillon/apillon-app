@@ -10,10 +10,15 @@
     :key="settingsStore.notifications.items.length"
     :options="options"
     :render-option="renderOption"
-    @select="handleSelect"
   >
-    <div class="cursor-pointer p-2 text-blue">
+    <div class="relative cursor-pointer p-2 text-blue">
       <NuxtIcon name="dashboard/bell" class="text-lg" />
+      <strong
+        v-if="settingsStore.unreadNotifications.length"
+        class="flex-cc absolute -right-1 -top-1 h-5 w-5 rounded-full bg-blue text-xs text-black"
+      >
+        {{ settingsStore.unreadNotifications.length }}
+      </strong>
     </div>
   </n-dropdown>
 </template>
@@ -56,9 +61,5 @@ function renderOption({ node, option }) {
   return h(resolveComponent('HeaderNotification'), {
     notification: option.notification,
   });
-}
-
-function handleSelect(key: string | number) {
-  console.log(key);
 }
 </script>

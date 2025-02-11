@@ -33,6 +33,9 @@ export const useSettingsStore = defineStore('settings', {
     hasOauthLinks(state) {
       return Array.isArray(state.oauthLinks) && state.oauthLinks.length > 0;
     },
+    unreadNotifications(state) {
+      return state.notifications.items.filter(n => !this.notifications.read.includes(n.id)) || [];
+    },
     notificationsToShow(state) {
       if (state.notifications.showOnlyUnread) {
         return state.notifications.items.filter(n => !this.notifications.read.includes(n.id)) || [];
@@ -90,7 +93,6 @@ export const useSettingsStore = defineStore('settings', {
 
     /** Notifications */
     async getNotifications(): Promise<NotificationInterface[]> {
-      console.log(!this.hasNotifications, isCacheExpired(LsCacheKeys.NOTIFICATIONS));
       if (!this.hasNotifications || isCacheExpired(LsCacheKeys.NOTIFICATIONS)) {
         await this.fetchNotifications();
       }
