@@ -16,10 +16,7 @@
               <template #checked> Basic design </template>
               <template #unchecked>Custom design </template>
             </n-switch>
-            <IconInfo
-              v-if="$te('w3Warn.ipfs.gateway') && $t('w3Warn.ipfs.gateway')"
-              @click="showModalW3Warn = true"
-            />
+            <IconInfo v-if="$te('w3Warn.ipfs.gateway') && $t('w3Warn.ipfs.gateway')" @click="showModalW3Warn = true" />
           </n-space>
         </template>
 
@@ -30,11 +27,11 @@
     </template>
     <slot>
       <!-- Basic design -->
-      <n-space v-if="basicDesign" class="pb-8 max-w-4xl mx-auto" :size="16" vertical>
-        <div class="flex gap-2 items-end">
+      <n-space v-if="basicDesign" class="mx-auto max-w-4xl pb-8" :size="16" vertical>
+        <div class="flex items-end gap-2">
           <h4>{{ $t('storage.ipfs.titleInfo') }}</h4>
           <Btn
-            class="inline-block mb-[-2px]"
+            class="mb-[-2px] inline-block"
             type="link"
             href="https://wiki.apillon.io/build/2-storage-api.html#get-or-generate-link-for-ipfs"
             target="_blank"
@@ -45,10 +42,10 @@
 
         <StorageIpfsGateway v-if="ipfsStore.info" :gateway="ipfsStore.info" />
 
-        <div class="flex gap-2 items-end mb-4">
+        <div class="mb-4 flex items-end gap-2">
           <h4>{{ $t('storage.ipfs.hotToGenerateLink') }}</h4>
           <Btn
-            class="inline-block mb-[-2px]"
+            class="mb-[-2px] inline-block"
             type="link"
             href="https://wiki.apillon.io/build/2-storage-api.html#get-or-generate-link-for-ipfs"
             target="_blank"
@@ -62,7 +59,7 @@
       <n-card v-else class="card-light !border-none" :title="$t('storage.ipfs.titleInfo')">
         <template #header-extra>
           <Btn
-            class="inline-block mb-[-2px]"
+            class="mb-[-2px] inline-block"
             type="link"
             href="https://wiki.apillon.io/build/2-storage-api.html#get-or-generate-link-for-ipfs"
             target="_blank"
@@ -81,14 +78,10 @@
     </slot>
 
     <template #learn v-if="!basicDesign">
-      <n-card
-        size="small"
-        class="card mt-8 !border-bg-lighter"
-        :title="$t('storage.ipfs.hotToGenerateLink')"
-      >
-        <template #header-extra
-          ><Btn
-            class="inline-block mb-[-2px]"
+      <n-card class="card !border-bg-lighter mobile:mt-8" :title="$t('storage.ipfs.hotToGenerateLink')">
+        <template #header-extra>
+          <Btn
+            class="mb-[-2px] inline-block"
             type="link"
             href="https://wiki.apillon.io/build/2-storage-api.html#get-or-generate-link-for-ipfs"
             target="_blank"

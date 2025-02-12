@@ -29,6 +29,7 @@ export const SessionKeys = {
   ASSET_HUB: 'al_asset_hub',
   BUCKET_STORE: 'al_bucket_store',
   CREDITS_MSG: 'al_credits_msg',
+  SETTINGS_STORE: 'al_settings_store',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',
 };
@@ -108,6 +109,7 @@ export const LsCacheKeys = {
   IPNS_ITEM: 'al_cache_ipns_item',
   JOB: 'al_cache_job',
   JOBS: 'al_cache_jobs',
+  NOTIFICATIONS: 'al_cache_notifications',
   OAUTH_LINKS: 'al_cache_oauth_links',
   PRICE_LIST: 'al_cache_price_list',
   POST: 'al_cache_post',

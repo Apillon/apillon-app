@@ -8,6 +8,12 @@ export const useSettingsStore = defineStore('settings', {
     oauthLinks: [] as OauthLinkInterface[],
     users: [] as ProjectUserInterface[],
     youtubeChapters: {} as Record<string, VideoChapter[]>,
+    notifications: {
+      loading: false,
+      showOnlyUnread: false,
+      items: [] as NotificationInterface[],
+      read: [] as number[],
+    },
   }),
   getters: {
     currentUser(state) {
@@ -20,11 +26,23 @@ export const useSettingsStore = defineStore('settings', {
     hasApiKeys(state) {
       return Array.isArray(state.apiKeys) && state.apiKeys.length > 0;
     },
+    hasNotifications(state) {
+      return Array.isArray(state.notifications.items) && state.notifications.items.length > 0;
+    },
     hasUsers(state) {
       return Array.isArray(state.users) && state.users.length > 0;
     },
     hasOauthLinks(state) {
       return Array.isArray(state.oauthLinks) && state.oauthLinks.length > 0;
+    },
+    unreadNotifications(state) {
+      return state.notifications.items.filter(n => !this.notifications.read.includes(n.id)) || [];
+    },
+    notificationsToShow(state) {
+      if (state.notifications.showOnlyUnread) {
+        return state.notifications.items.filter(n => !this.notifications.read.includes(n.id)) || [];
+      }
+      return state.notifications.items;
     },
   },
   actions: {
@@ -35,6 +53,17 @@ export const useSettingsStore = defineStore('settings', {
 
     getApiKeyById(id: number) {
       return this.apiKeys.find(item => item.id === id) || ({} as ApiKeyInterface);
+    },
+
+    /** Notification actions */
+    readNotification(id: number) {
+      if (!this.notifications.read.includes(id)) {
+        this.notifications.read.push(id);
+      }
+    },
+
+    readAllNotifications() {
+      this.notifications.items.forEach(n => this.readNotification(n.id));
     },
 
     /**
@@ -62,6 +91,14 @@ export const useSettingsStore = defineStore('settings', {
         await this.fetchDiscordLink();
       }
       return this.discordLink;
+    },
+
+    /** Notifications */
+    async getNotifications(): Promise<NotificationInterface[]> {
+      if (!this.hasNotifications || isCacheExpired(LsCacheKeys.NOTIFICATIONS)) {
+        await this.fetchNotifications();
+      }
+      return this.notifications.items;
     },
 
     /**
@@ -139,5 +176,31 @@ export const useSettingsStore = defineStore('settings', {
       }
       return this.discordLink;
     },
+
+    /** Notifications */
+    async fetchNotifications() {
+      this.notifications.loading = true;
+      try {
+        const params = parseArguments({ limit: PARAMS_ALL_ITEMS.limit });
+        const { data } = await $api.get<NotificationsResponse>(endpoints.notification, params);
+        this.notifications.items = data.items;
+
+        /** Save timestamp to SS */
+        sessionStorage.setItem(LsCacheKeys.NOTIFICATIONS, Date.now().toString());
+      } catch (error: any) {
+        this.notifications.items = [] as NotificationInterface[];
+
+        /** Show error message */
+        window.$message.error(userFriendlyMsg(error));
+      } finally {
+        this.notifications.loading = false;
+      }
+    },
   },
+  persist: {
+    key: SessionKeys.SETTINGS_STORE,
+    storage: persistedState.localStorage,
+    pick: ['notifications'],
+    debug: true,
+  } as any,
 });

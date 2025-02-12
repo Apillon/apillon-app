@@ -123,8 +123,10 @@ export const themeOverrides: GlobalThemeOverrides = {
     colorModal: colors.bg.DEFAULT,
     colorPopover: colors.bg.DEFAULT,
     colorTarget: colors.bg.DEFAULT,
-    paddingSmall: '32px',
-    paddingMedium: '16px 64px 16px 64px',
+    paddingSmall: '16px',
+    paddingMedium: '32px',
+    paddingLarge: '16px 64px 16px 64px',
+    paddingHuge: '64px',
   },
   Checkbox: {
     border: `2px solid ${colors.bodyDark}`,

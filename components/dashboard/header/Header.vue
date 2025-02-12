@@ -1,51 +1,35 @@
 <template>
   <transition name="slide-down" appear>
-    <div class="px-4 sm:px-8 py-6">
-      <div class="flex justify-between items-center">
+    <div class="px-4 py-6 sm:px-8">
+      <div class="flex items-center justify-between">
         <div class="flex items-center pr-2 sm:pr-4">
           <!-- Hamburger btn to show sidebar on mobile -->
-          <BtnHamburger class="flex lg:hidden mr-2 sm:mr-4" @click="emit('toggleSidebar')" />
+          <BtnHamburger class="mr-2 flex sm:mr-4 lg:hidden" @click="emit('toggleSidebar')" />
 
           <!-- Search docs -->
           <div
             v-if="isFeatureEnabled(Feature.SEARCH, authStore.getUserRoles())"
-            class="min-w-[11rem] w-[20vw] max-w-xs"
+            class="w-[20vw] min-w-[11rem] max-w-xs"
           >
-            <a
-              class="flex items-center"
-              href="https://wiki.apillon.io/build/1-apillon-api.html"
-              target="_blank"
-            >
-              <n-input
-                type="text"
-                name="search"
-                size="small"
-                :placeholder="$t('dashboard.searchDocs')"
-                clearable
-              >
+            <a class="flex items-center" href="https://wiki.apillon.io/build/1-apillon-api.html" target="_blank">
+              <n-input type="text" name="search" size="small" :placeholder="$t('dashboard.searchDocs')" clearable>
                 <template #prefix>
                   <span class="icon-search text-2xl text-bodyDark"></span>
                 </template>
               </n-input>
             </a>
           </div>
-          <div v-if="isLg" class="flex gap-2">
-            <a
-              v-for="doc in docs"
-              :key="doc.key"
-              class="flex items-center"
-              :href="doc.link"
-              target="_blank"
-            >
+          <div v-if="isLg" class="flex flex-wrap gap-2">
+            <a v-for="doc in docs" :key="doc.key" class="flex items-center" :href="doc.link" target="_blank">
               <n-button size="small" :bordered="false">
-                <NuxtIcon :name="doc.iconName" class="text-xl mr-2" />
+                <NuxtIcon :name="doc.iconName" class="mr-2 text-xl" />
                 {{ doc.label }}
               </n-button>
             </a>
           </div>
           <n-dropdown v-else :options="docs" @select="handleSelect">
             <n-button>
-              <NuxtIcon name="icon/file" class="text-xl mr-2" />
+              <NuxtIcon name="icon/file" class="mr-2 text-xl" />
               {{ $t('dashboard.guides') }}
             </n-button>
           </n-dropdown>
@@ -53,21 +37,15 @@
 
         <slot />
 
-        <n-space :size="isSm ? 32 : 16" align="center">
-          <!-- Credits -->
+        <div class="flex flex-nowrap items-center gap-4 md:gap-6 xl:gap-8">
           <PaymentCredits />
-
-          <!-- User profile -->
+          <HeaderNotifications />
           <HeaderProfile v-if="!authStore.isAdmin()" />
-        </n-space>
+        </div>
       </div>
 
       <!-- Admin notification -->
-      <NotificationBar
-        v-if="authStore.isAdmin()"
-        class="absolute top-0 left-1/2 -translate-x-1/2"
-        type="warning"
-      >
+      <NotificationBar v-if="authStore.isAdmin()" class="absolute left-1/2 top-0 -translate-x-1/2" type="warning">
         {{ $t('dashboard.adminMode') }}
       </NotificationBar>
     </div>
