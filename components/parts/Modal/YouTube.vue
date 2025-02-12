@@ -35,6 +35,8 @@ const props = defineProps({
   chapters: { type: Array<VideoChapter>, default: null },
 });
 
+const settingsStore = useSettingsStore();
+
 const youtubeRef = ref();
 const ytChapters = ref(props.chapters);
 const YT_API_KEY = 'AIzaSyA-uVxBQx2eJX2LPsb0R284y11S9jUpKYs';
@@ -61,6 +63,11 @@ function parseChapterTime(t: string) {
 }
 
 async function getYouTubeChapters(videoId: string) {
+  const chapters = settingsStore.getYouTubeChapters(videoId);
+  if (chapters) {
+    return chapters;
+  }
+
   const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${YT_API_KEY}`;
 
   try {
@@ -72,7 +79,6 @@ async function getYouTubeChapters(videoId: string) {
     }
 
     const description = data.items[0].snippet.description;
-    console.log('Description:', description);
 
     // Extract timestamps using a regex pattern
     const chapterRegex = /(\d{1,2}:\d{2}(?::\d{2})?)\s+(.+)/g;
@@ -85,6 +91,7 @@ async function getYouTubeChapters(videoId: string) {
         title: match[2].replace(/[^a-zA-Z ]/g, '').trim(),
       });
     }
+    settingsStore.youtubeChapters[videoId] = chapters;
 
     return chapters;
   } catch (error) {

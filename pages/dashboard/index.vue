@@ -8,11 +8,9 @@
     <slot>
       <div v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())" class="mb-8">
         <Btn @click="show = true">{{ $t('dashboard.youTube.play') }}</Btn>
-        <ModalYouTube video-id="9y-9nz0tpVs" />
-        <ModalYouTube video-id="qQJnuvUo-xo" />
         <ModalYouTube
           v-model:show="show"
-          video-id="qQJnuvUo-xo"
+          video-id="9y-9nz0tpVs"
           :chapters="[
             { time: '00:00', title: 'Intro' },
             { time: '00:35', title: 'Dashboard' },

@@ -66,6 +66,10 @@ export const useSettingsStore = defineStore('settings', {
       this.notifications.items.forEach(n => this.readNotification(n.id));
     },
 
+    getYouTubeChapters(videoId: string) {
+      return videoId in this.youtubeChapters ? this.youtubeChapters[videoId] : null;
+    },
+
     /**
      * Fetch wrappers
      */
@@ -200,7 +204,6 @@ export const useSettingsStore = defineStore('settings', {
   persist: {
     key: SessionKeys.SETTINGS_STORE,
     storage: persistedState.localStorage,
-    pick: ['notifications'],
-    debug: true,
+    pick: ['notifications', 'youtubeChapters'],
   } as any,
 });
