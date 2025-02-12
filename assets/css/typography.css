@@ -2,17 +2,15 @@
   /* Headline 1 */
   h1,
   .h1 {
-    @apply font-bold;
-    font-size: 1.75rem;
-    line-height: 1.43;
+    @apply font-bold leading-tight;
+    font-size: 2.25rem;
   }
 
   /* Headline 2 */
   h2,
   .h2 {
-    @apply font-bold;
-    font-size: 1.5rem;
-    line-height: 1.5;
+    @apply font-bold leading-tight;
+    font-size: 2rem;
 
     + p {
       @apply mt-2;
@@ -22,9 +20,8 @@
   /* Headline 3 */
   h3,
   .h3 {
-    @apply font-bold;
-    font-size: 1.25rem;
-    line-height: 1.6;
+    @apply font-bold leading-tight;
+    font-size: 1.75rem;
 
     + h4,
     + .h4,
@@ -37,8 +34,8 @@
   /* Headline 4 */
   h4,
   .h4 {
-    @apply font-bold;
-    font-size: 1.125rem;
+    @apply font-semibold;
+    font-size: 1.25rem;
     line-height: 1.55;
 
     + p,
@@ -51,7 +48,7 @@
   h5,
   .h5 {
     @apply font-bold;
-    font-size: 1rem;
+    font-size: 1.125rem;
     line-height: 1.6;
   }
 
@@ -82,7 +79,7 @@
   }
 
   label {
-    @apply font-bold cursor-pointer;
+    @apply cursor-pointer font-bold;
 
     > a {
       @apply text-primary;

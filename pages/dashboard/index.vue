@@ -6,30 +6,38 @@
       </Heading>
     </template>
     <slot>
-      <div
-        v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())"
-        class="mb-8"
-      >
+      <div v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())" class="mb-8">
+        <Btn @click="show = true">{{ $t('dashboard.youTube.play') }}</Btn>
+        <ModalYouTube video-id="9y-9nz0tpVs" />
+        <ModalYouTube video-id="qQJnuvUo-xo" />
+        <ModalYouTube
+          v-model:show="show"
+          video-id="qQJnuvUo-xo"
+          :chapters="[
+            { time: '00:00', title: 'Intro' },
+            { time: '00:35', title: 'Dashboard' },
+            { time: '02:53', title: 'NFT Collection' },
+            { time: '05:20', title: 'Minting' },
+            { time: '07:15', title: 'Website' },
+          ]"
+        />
+
         <!-- Resources-->
         <SolutionOverview />
 
-        <hr class="border-bg-lighter my-8" />
+        <hr class="my-8 border-bg-lighter" />
 
         <!-- Services-->
         <h4 class="mb-8">{{ $t('general.explore') }}</h4>
 
-        <div class="grid md:grid-cols-3 gap-x-8 gap-y-4">
-          <div
-            v-for="(service, key) in services"
-            :key="key"
-            class="card-dark p-8 flex flex-col justify-between"
-          >
-            <div class="flex justify-between items-center text-white">
+        <div class="grid gap-x-8 gap-y-4 md:grid-cols-3">
+          <div v-for="(service, key) in services" :key="key" class="card-dark flex flex-col justify-between p-8">
+            <div class="flex items-center justify-between text-white">
               <strong>{{ service.title }}</strong>
               <NuxtLink
                 v-if="service.link"
                 :to="{ name: service.link }"
-                class="inline-flex-cc w-10 h-10 hover:bg-bg-lighter rounded-full transition-colors duration-300"
+                class="inline-flex-cc h-10 w-10 rounded-full transition-colors duration-300 hover:bg-bg-lighter"
               >
                 <span class="icon-wide-right text-xl"></span>
               </NuxtLink>
@@ -40,16 +48,13 @@
           </div>
         </div>
       </div>
-      <div v-else class="p-8 mb-8 bg-bg-light text-body rounded-lg">
+      <div v-else class="mb-8 rounded-lg bg-bg-light p-8 text-body">
         <h3 class="mb-4 text-white">Welcome to Apillon, your gateway to Web3!</h3>
         <p>
-          Start your Web3 journey and integrate Decentralized Hosting and Storage services in your
-          project, or create a fully-fledged decentralized NFT collection.
+          Start your Web3 journey and integrate Decentralized Hosting and Storage services in your project, or create a
+          fully-fledged decentralized NFT collection.
         </p>
-        <p>
-          Soon, more Web3 services will be added, including Decentralized Authentication and
-          Computing.
-        </p>
+        <p>Soon, more Web3 services will be added, including Decentralized Authentication and Computing.</p>
         <p>
           Find out how things work in the
           <Btn
@@ -64,12 +69,7 @@
         </p>
         <p>
           If you know your way around code, check out
-          <Btn
-            class="inline-block"
-            type="link"
-            href="https://wiki.apillon.io/build/1-apillon-api.html"
-            target="_blank"
-          >
+          <Btn class="inline-block" type="link" href="https://wiki.apillon.io/build/1-apillon-api.html" target="_blank">
             Apillon API
           </Btn>
           <span> details.</span>
@@ -77,12 +77,12 @@
         <br />
 
         <p>
-          Or, if you prefer the drag-and-drop way, navigate to the menu on the left and integrate
-          Web3 technologies with a few clicks.
+          Or, if you prefer the drag-and-drop way, navigate to the menu on the left and integrate Web3 technologies with
+          a few clicks.
         </p>
         <p>
-          Launch projects on Web3 like never before. Oh, and if you detect bugs or would like to
-          suggest UI improvements, please file a ticket in the
+          Launch projects on Web3 like never before. Oh, and if you detect bugs or would like to suggest UI
+          improvements, please file a ticket in the
           <Btn
             class="inline-block"
             type="link"
@@ -102,6 +102,8 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const authStore = useAuthStore();
+
+const show = ref<boolean>(false);
 
 useHead({
   title: t('dashboard.dashboard'),

@@ -191,14 +191,19 @@
 .n-drawer {
   max-width: 100vw;
 
-  &--right-placement .n-drawer-header__close {
-    @apply text-2xl;
+  &--right-placement {
+    .n-drawer-header__main {
+      @apply h4;
+    }
+    .n-drawer-header__close {
+      @apply absolute -left-12 top-12 ml-0 mt-1 h-12 w-12 -translate-y-1/2 translate-x-1/2 rounded-full border-1 border-solid border-white bg-bg transition-colors duration-300;
 
-    .n-base-icon {
-      @apply icon-apillon icon-right;
-
-      > svg {
+      &::before {
         display: none;
+      }
+
+      &:hover {
+        @apply bg-white text-bg;
       }
     }
   }

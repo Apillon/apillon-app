@@ -265,12 +265,7 @@
         "computingTransactionCount": "Number of transactions",
         "description": "Embrace the future of Web3 off-chain computation. Access the internet, boost performance, fully multichain, and ultimate data security.",
         "name": "Computing",
-        "usage": [
-          "computing smart contracts",
-          "cross-chain",
-          "secure computing environment",
-          "internet access"
-        ]
+        "usage": ["computing smart contracts", "cross-chain", "secure computing environment", "internet access"]
       },
       "embeddedWallet": {
         "description": "Easily create secure and decentralized wallets for your users on any chain. \nWeb3 wallets, fully decentralized, easy integration, multi-chain support.",
@@ -305,26 +300,14 @@
         "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
         "name": "NFTs",
         "nftTransactionCount": "Number of transactions",
-        "usage": [
-          "storage buckets",
-          "smart contracts",
-          "drag-n-drop ui",
-          "website template",
-          "hosting"
-        ]
+        "usage": ["storage buckets", "smart contracts", "drag-n-drop ui", "website template", "hosting"]
       },
       "social": {
         "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
         "name": "Social",
         "postCount": "Number of channels",
         "spaceCount": "Number of hubs",
-        "usage": [
-          "social media",
-          "real-time chat",
-          "user-friendly UI",
-          "HIGH PRIVACY",
-          "configurable interface"
-        ]
+        "usage": ["social media", "real-time chat", "user-friendly UI", "HIGH PRIVACY", "configurable interface"]
       },
       "storage": {
         "bucket": "Web3 storage bucket",
@@ -520,13 +503,7 @@
           }
         ],
         "tabs": ["Create Collection", "Preview Collection", "Mint NFTs"],
-        "usage": [
-          "metadata storage",
-          "file storage",
-          "smart contracts",
-          "website template",
-          "hosting"
-        ]
+        "usage": ["metadata storage", "file storage", "smart contracts", "website template", "hosting"]
       },
       "nftContentDelivery": {
         "name": "NFT-Based Content Delivery",
@@ -771,7 +748,6 @@
       "info": "Customize ready-to-deploy templates built and audited by Apillon.",
       "viewCode": "View code"
     },
-
     "subscription": {
       "bandwidth": "Bandwith",
       "canceledOn": "Your plan will be canceled on {date}.",
@@ -798,6 +774,11 @@
       "storage": "Web3 storage",
       "title": "Project usage",
       "upgrade": "Increase quotas"
+    },
+    "youTube": {
+      "chapters": "Content shortcuts",
+      "play": "Play now",
+      "title": "Getting around the platform"
     },
     "adminMode": "You are in ADMIN mode!",
     "attached": "Attached",

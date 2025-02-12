@@ -68,6 +68,7 @@
     "vue-cookie-accept-decline": "^6.1.0",
     "vue-papa-parse": "^3.1.0",
     "vue-tweet": "^2.0.2",
-    "vue3-code-block": "^2.2.14"
+    "vue3-code-block": "^2.2.14",
+    "vue3-youtube": "^0.1.9"
   }
 }
