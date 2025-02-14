@@ -8,11 +8,16 @@
         <ActionsNftCollection />
         <TableNftCollection :collections="collectionStore.items" />
       </n-space>
-      <Empty v-else :title="t('nft.collection.empty')" :info="t('nft.collection.emptyInfo')" icon="nft/illustration">
+      <ServiceEmpty
+        v-else
+        :title="t('nft.collection.empty')"
+        :info="t('nft.collection.emptyInfo')"
+        icon="nft/illustration"
+      >
         <Btn type="primary" @click="modalCreateCollectionVisible = true">
           {{ t('nft.collection.createFirst') }}
         </Btn>
-      </Empty>
+      </ServiceEmpty>
 
       <!-- Modal - Collection Transfer -->
       <modal v-model:show="modalCreateCollectionVisible" class="max-w-4xl text-center">
