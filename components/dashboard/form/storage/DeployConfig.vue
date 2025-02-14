@@ -153,6 +153,10 @@ async function createDeployConfig() {
       websiteUuid: websiteStore.active.website_uuid,
       ...storageStore.deployConfigForm,
     };
+    const res = await $api.post<any>(endpoints.deployConfig, bodyData);
+    message.success($i18n.t('hosting.deploy.form.success'));
+    websiteStore.active.deployConfig = res.data;
+    emit('submitSuccess');
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }
