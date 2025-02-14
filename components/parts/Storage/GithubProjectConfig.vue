@@ -47,7 +47,7 @@ onMounted(async () => {
 });
 
 async function handleGithubPress() {
-  if (!storageStore.projectConfig) {
+  if (storageStore.projectConfig) {
     isConfirmationModalVisible.value = true;
   } else {
     connectToGithub();
