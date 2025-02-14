@@ -25,12 +25,12 @@
           </n-tooltip>
 
           <!-- Separator -->
-          <n-divider class="h-full mx-4" vertical />
+          <n-divider class="mx-4 h-full" vertical />
         </template>
 
         <!-- Refresh -->
         <n-button size="small" :loading="bucketStore.folder.loading" @click="refreshWebpage(env)">
-          <span class="icon-refresh text-xl mr-2"></span>
+          <span class="icon-refresh mr-2 text-xl"></span>
           {{ $t('general.refresh') }}
         </n-button>
 
@@ -43,12 +43,12 @@
           ghost
           @click="showModalClearAll = true"
         >
-          <span class="icon-delete text-xl mr-2"></span>
+          <span class="icon-delete mr-2 text-xl"></span>
           {{ $t('hosting.clearAll') }}
         </n-button>
 
         <!-- Deploy to staging -->
-        <div v-if="isUpload" class="flex items-center align-middle bg-primary rounded-lg">
+        <div v-if="isUpload" class="flex items-center rounded-lg bg-primary align-middle">
           <n-button
             size="small"
             type="primary"
@@ -57,7 +57,7 @@
             :disabled="authStore.isAdmin()"
             @click="deployWebsite(DeploymentEnvironment.STAGING)"
           >
-            <span class="icon-deploy text-xl mr-2"></span>
+            <span class="icon-deploy mr-2 text-xl"></span>
             {{ $t('hosting.deployStage') }}
           </n-button>
           <n-dropdown trigger="click" :options="deployOptions" @select="handleSelectDeploy">
@@ -75,7 +75,7 @@
           :disabled="authStore.isAdmin()"
           @click="deployWebsite(DeploymentEnvironment.PRODUCTION)"
         >
-          <span class="icon-deploy text-xl mr-2"></span>
+          <span class="icon-deploy mr-2 text-xl"></span>
           {{ $t('hosting.deployProd') }}
         </n-button>
       </n-space>
@@ -106,11 +106,7 @@
         </p>
       </template>
       <slot>
-        <FormDelete
-          :id="bucketStore.active.bucket_uuid"
-          type="bucketContent"
-          @submit-success="onAllFilesDeleted"
-        />
+        <FormDelete :id="bucketStore.active.bucket_uuid" type="bucketContent" @submit-success="onAllFilesDeleted" />
       </slot>
     </ModalDelete>
 
@@ -124,13 +120,9 @@
       <p v-for="(item, key) in translateItems('hosting.review.content')" :key="key">
         {{ item }}
       </p>
-      <div class="grid grid-cols-1 gap-8 mt-8 w-full max-w-full">
+      <div class="mt-8 grid w-full max-w-full grid-cols-1 gap-8">
         <Btn type="secondary" @click="onModalConfirm">{{ $t('hosting.review.confirm') }}</Btn>
-        <PaymentCardPlan
-          :show-card="false"
-          btn-type="primary"
-          :btn-text="$t('hosting.review.upgrade')"
-        />
+        <PaymentCardPlan :show-card="false" btn-type="primary" :btn-text="$t('hosting.review.upgrade')" />
       </div>
     </Modal>
   </div>
@@ -167,14 +159,10 @@ const deploying = ref<boolean>(false);
 const deployEnv = ref<number>(DeploymentEnvironment.STAGING);
 
 const isUpload = computed<Boolean>(() => {
-  return (
-    props.env !== DeploymentEnvironment.STAGING && props.env !== DeploymentEnvironment.PRODUCTION
-  );
+  return props.env !== DeploymentEnvironment.STAGING && props.env !== DeploymentEnvironment.PRODUCTION;
 });
 const hasActiveDeployments = computed<Boolean>(() => {
-  return deploymentStore.staging.some(
-    deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL
-  );
+  return deploymentStore.staging.some(deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL);
 });
 
 const deployOptions = ref([
@@ -189,12 +177,9 @@ const deployOptions = ref([
 ]);
 
 /** Show payment messages if user create subscription */
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      subscriptionMessage();
-    });
-  }, 100);
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  subscriptionMessage();
 });
 
 function handleSelectDeploy(key: number) {
@@ -274,20 +259,13 @@ async function deploy(env: number) {
  * */
 function deployWebsite(env: number) {
   deployEnv.value = env;
-  if (
-    bucketStore.folder.items.length === 0 &&
-    env === DeploymentEnvironment.PRODUCTION &&
-    hasActiveDeployments.value
-  ) {
+  if (bucketStore.folder.items.length === 0 && env === DeploymentEnvironment.PRODUCTION && hasActiveDeployments.value) {
     message.warning(t('validation.hosting.waitActiveDeployment'));
   } else if (bucketStore.folder.items.length === 0) {
     message.warning(t('error.NO_FILES_TO_DEPLOY'));
   } else if (websiteStore.missingHtml) {
     message.error(t('validation.hosting.missingHtml'));
-  } else if (
-    !paymentStore.hasActiveSubscription &&
-    !sessionStorage.getItem(SessionKeys.WEBSITE_REVIEW)
-  ) {
+  } else if (!paymentStore.hasActiveSubscription && !sessionStorage.getItem(SessionKeys.WEBSITE_REVIEW)) {
     modalWebsiteReviewVisible.value = true;
     sessionStorage.setItem(SessionKeys.WEBSITE_REVIEW, Date.now().toString());
   } else if (!localStorage.getItem(LsW3WarnKeys.HOSTING_DEPLOY) && te('w3Warn.hosting.deploy')) {
@@ -299,9 +277,7 @@ function deployWebsite(env: number) {
 
 /** When user close W3Warn, allow him to create new website */
 function onModalConfirm() {
-  warningStore.showSpendingWarning(getPricingServiceName(deployEnv.value), () =>
-    deploy(deployEnv.value)
-  );
+  warningStore.showSpendingWarning(getPricingServiceName(deployEnv.value), () => deploy(deployEnv.value));
 }
 
 function getPricingServiceName(env: number) {

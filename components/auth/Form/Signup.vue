@@ -10,22 +10,18 @@
       />
     </n-form-item>
 
-    <div v-show="!sendAgain" class="relative" :class="formErrors ? '-top-2 ' : 'mt-2'">
+    <div v-show="!sendAgain" class="relative" :class="formErrors ? '-top-2' : 'mt-2'">
       <n-form-item path="terms" :show-label="false" :show-feedback="formErrors && !formData.terms">
         <n-checkbox v-model:checked="formData.terms" size="medium" :label="termsLabel" />
       </n-form-item>
     </div>
 
-    <div v-show="!sendAgain" class="relative" :class="formErrors ? ' mb-4' : 'mb-6'">
-      <n-checkbox
-        v-model:checked="newsletterChecked"
-        size="medium"
-        :label="$t('auth.signup.newsletter')"
-      />
+    <div v-show="!sendAgain" class="relative" :class="formErrors ? 'mb-4' : 'mb-6'">
+      <n-checkbox v-model:checked="newsletterChecked" size="medium" :label="$t('auth.signup.newsletter')" />
     </div>
 
     <n-form-item path="captcha" :show-label="false">
-      <div class="block w-full h-20">
+      <div class="block h-20 w-full">
         <Captcha />
       </div>
       <n-input v-model:value="formData.captcha" class="absolute hidden" />
@@ -34,7 +30,7 @@
     <!--  Signup submit -->
     <n-form-item :show-label="false" :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
-      <Btn v-if="sendAgain" type="primary" size="medium" @click="handleSubmit">
+      <Btn v-if="sendAgain" type="primary" size="large" @click="handleSubmit">
         {{ $t('auth.signup.sendAgain') }}
       </Btn>
       <Btn v-else type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
@@ -109,17 +105,9 @@ const rules: NFormRules = {
 const termsLabel = computed<any>(() => {
   return h('span', {}, [
     t('auth.terms.accept'),
-    h(
-      'a',
-      { href: 'https://apillon.io/legal-disclaimer', target: '_blank' },
-      { default: () => t('auth.terms.tc') }
-    ),
+    h('a', { href: 'https://apillon.io/legal-disclaimer', target: '_blank' }, { default: () => t('auth.terms.tc') }),
     t('auth.terms.and'),
-    h(
-      'a',
-      { href: 'https://apillon.io/privacy-policy', target: '_blank' },
-      { default: () => t('auth.terms.pp') }
-    ),
+    h('a', { href: 'https://apillon.io/privacy-policy', target: '_blank' }, { default: () => t('auth.terms.pp') }),
     '.',
   ]);
 });
@@ -136,9 +124,7 @@ function handleSubmit(e: MouseEvent | null) {
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
       formErrors.value = true;
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (!formData.value.captcha) {
       loading.value = true;
       // TODO: captchaInput.value.execute();
@@ -192,8 +178,6 @@ function captchaReset() {
 }
 
 function getMetadata() {
-  return query && Object.keys(query).length
-    ? JSON.stringify(query)
-    : readCookie('apillon_mkt_params');
+  return query && Object.keys(query).length ? JSON.stringify(query) : readCookie('apillon_mkt_params');
 }
 </script>

@@ -11,7 +11,7 @@
   />
 
   <!-- Modal - Edit asst -->
-  <modal v-model:show="modalEditVisible" :title="$t('dashboard.service.assetHub.edit')">
+  <modal v-model:show="modalEditVisible" :title="$t('assetHub.edit')">
     <FormAssetHub
       v-if="currentRow?.id"
       :asset-id="currentRow.id"
@@ -147,7 +147,7 @@ const rowProps = (row: AssetInterface) => {
 const dropdownOptions = [
   {
     key: 'view',
-    label: t('dashboard.service.assetHub.select'),
+    label: t('assetHub.select'),
     props: {
       onClick: () => {
         if (props.owned) {
@@ -158,7 +158,7 @@ const dropdownOptions = [
   },
   {
     key: 'edit',
-    label: t('dashboard.service.assetHub.edit'),
+    label: t('assetHub.edit'),
     props: {
       onClick: () => {
         if (props.owned) {
@@ -171,15 +171,11 @@ const dropdownOptions = [
 
 const data = ref<AssetInterface[]>([]);
 const otherAssets = ref<AssetInterface[]>([]);
-const getOwnedAssets = () =>
-  assetHubStore.items.filter(item => item.owner === assetHubStore.account?.address);
-const getOtherAssets = () =>
-  assetHubStore.items.filter(item => item.owner !== assetHubStore.account?.address);
+const getOwnedAssets = () => assetHubStore.items.filter(item => item.owner === assetHubStore.account?.address);
+const getOtherAssets = () => assetHubStore.items.filter(item => item.owner !== assetHubStore.account?.address);
 const searchAssets = () => {
   data.value = otherAssets.value.filter(item =>
-    (item.id + '' + item.name + '' + item.symbol)
-      .toLowerCase()
-      .includes(assetHubStore.search.toLowerCase())
+    (item.id + '' + item.name + '' + item.symbol).toLowerCase().includes(assetHubStore.search.toLowerCase())
   );
   assetHubStore.loading = false;
 };

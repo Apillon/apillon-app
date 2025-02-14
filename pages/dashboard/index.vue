@@ -2,15 +2,82 @@
   <Dashboard :loading="authStore.loadingProfile" :learn-collapsible="false">
     <template #heading>
       <Heading>
-        <h1>{{ $t('dashboard.homepage') }}</h1>
+        {{ $t('dashboard.homepage') }}
       </Heading>
     </template>
     <slot>
-      <div v-if="isFeatureEnabled(Feature.PREBUILD_SOLUTIONS, authStore.getUserRoles())" class="mb-8">
-        <Btn @click="show = true">{{ $t('dashboard.youTube.play') }}</Btn>
+      <div class="mb-8">
+        <h4>{{ $t('dashboard.onboarding.welcome') }}</h4>
+        <div class="mb-10 mt-8 flex gap-4">
+          <div class="flex flex-col justify-between gap-8 rounded-lg bg-violet p-6 text-bg lg:w-5/12">
+            <div>
+              <h4>{{ $t('dashboard.onboarding.banner.title') }}</h4>
+              <span class="text-sm">{{ $t('dashboard.onboarding.banner.content') }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <div class="flex items-center gap-2">
+                <img
+                  src="~/assets/images/dashboard/cpo.png"
+                  class="h-11 w-11 rounded-full"
+                  width="42"
+                  height="42"
+                  alt="CPO at Apillon"
+                />
+                <div class="flex flex-col">
+                  <strong>Nino Kutnjak</strong>
+                  <span>CPO at Apillon</span>
+                </div>
+              </div>
+              <Btn
+                class="!text-bg-dark no-underline"
+                type="link"
+                inner-class="flex gap-2 items-center"
+                @click="show = true"
+              >
+                <span class="icon-video text-xl text-bg-dark"></span>
+                <strong>{{ $t('dashboard.youTube.play') }}</strong>
+              </Btn>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-4 rounded-lg bg-bg-light p-6 lg:w-1/4">
+            <NuxtIcon name="dashboard/token" class="text-4xl" filled />
+            <h4>{{ $t('dashboard.onboarding.banner.token') }}</h4>
+            <p>{{ $t('dashboard.onboarding.banner.tokenInfo') }}</p>
+            <Btn href="https://www.apillon.io/token">{{ $t('general.learnMore') }}</Btn>
+          </div>
+
+          <div class="flex flex-col gap-6 text-sm lg:w-1/3">
+            <div class="flex items-center justify-between">
+              <strong>{{ $t('dashboard.usage.title') }}</strong>
+              <Btn class="font-bold no-underline" size="small" type="link" :to="{ name: 'dashboard-payments' }">
+                <template v-if="paymentStore.hasActiveSubscription">
+                  {{ $t('dashboard.payment.managePlan') }}
+                </template>
+                <template v-else>
+                  {{ $t('dashboard.payment.upgradePlan') }}
+                </template>
+              </Btn>
+            </div>
+            <StorageProgress
+              :label="$t('dashboard.usage.bytesStored')"
+              :size="storageStore.info.usedStorage"
+              :max-size="storageStore.info.availableStorage"
+              :unit="$t('general.total')"
+              wrap
+            />
+            <StorageProgress
+              :label="$t('dashboard.subscription.bandwidth')"
+              :size="storageStore.info.usedBandwidth"
+              :total-size="storageStore.info.availableBandwidth"
+              :unit="$t('general.month')"
+              wrap
+            />
+          </div>
+        </div>
         <ModalYouTube
           v-model:show="show"
-          video-id="9y-9nz0tpVs"
+          video-id="qQJnuvUo-xo"
           :chapters="[
             { time: '00:00', title: 'Intro' },
             { time: '00:35', title: 'Dashboard' },
@@ -19,6 +86,13 @@
             { time: '07:15', title: 'Website' },
           ]"
         />
+
+        <!-- Services-->
+        <h4 class="mb-8">{{ $t('dashboard.onboarding.servicesTitle') }}</h4>
+
+        <div class="mb-8 grid gap-x-8 gap-y-4 md:grid-cols-3">
+          <CardService v-for="service in onboardingServices" v-bind="service" />
+        </div>
 
         <!-- Resources-->
         <SolutionOverview />
@@ -46,53 +120,10 @@
           </div>
         </div>
       </div>
-      <div v-else class="mb-8 rounded-lg bg-bg-light p-8 text-body">
-        <h3 class="mb-4 text-white">Welcome to Apillon, your gateway to Web3!</h3>
-        <p>
-          Start your Web3 journey and integrate Decentralized Hosting and Storage services in your project, or create a
-          fully-fledged decentralized NFT collection.
-        </p>
-        <p>Soon, more Web3 services will be added, including Decentralized Authentication and Computing.</p>
-        <p>
-          Find out how things work in the
-          <Btn
-            class="inline-block"
-            type="link"
-            href="https://wiki.apillon.io/web3-services/1-good-to-know.html"
-            target="_blank"
-          >
-            back end
-          </Btn>
-          <span>.</span>
-        </p>
-        <p>
-          If you know your way around code, check out
-          <Btn class="inline-block" type="link" href="https://wiki.apillon.io/build/1-apillon-api.html" target="_blank">
-            Apillon API
-          </Btn>
-          <span> details.</span>
-        </p>
-        <br />
 
-        <p>
-          Or, if you prefer the drag-and-drop way, navigate to the menu on the left and integrate Web3 technologies with
-          a few clicks.
-        </p>
-        <p>
-          Launch projects on Web3 like never before. Oh, and if you detect bugs or would like to suggest UI
-          improvements, please file a ticket in the
-          <Btn
-            class="inline-block"
-            type="link"
-            href="https://discord.com/channels/881835505120079912/881848835364778006"
-            target="_blank"
-          >
-            Apillon Discord channel
-          </Btn>
-          <span>.</span>
-        </p>
-        <p>Happy Web3 building!</p>
-      </div>
+      <modal v-model:show="dataStore.project.showOnboarding" class="hide-header" size="small">
+        <OnboardingSteps />
+      </modal>
     </slot>
   </Dashboard>
 </template>
@@ -100,6 +131,10 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const authStore = useAuthStore();
+const dataStore = useDataStore();
+const paymentStore = usePaymentStore();
+const storageStore = useStorageStore();
+const { onboardingServices } = useService();
 
 const show = ref<boolean>(false);
 

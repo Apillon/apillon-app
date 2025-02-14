@@ -1,5 +1,41 @@
+/** This is copy of Tailwind custom colors */
+export const colors = {
+  primary: '#F9FF73',
+  secondary: '#78DCE8',
+
+  transparent: 'transparent',
+  current: 'currentColor',
+  black: '#000000',
+  yellow: '#F9FF73',
+  orange: '#F7AF39',
+  pink: '#FF6188',
+  green: '#A9DC76',
+  violet: '#AB9DF2',
+  blue: '#78DCE8',
+  discord: '#4554E9',
+
+  body: '#9D9E91',
+  bodyDark: '#6A6B63',
+  hover: '#999999',
+  placeholder: '#B6B6AF',
+
+  white: {
+    DEFAULT: '#F5F5EE',
+    primary: '#F0F2DA',
+    secondary: '#D5D7C1',
+  },
+
+  bg: {
+    lightest: '#F4F4EA',
+    lighter: '#313442',
+    light: '#1E212B',
+    DEFAULT: '#141721',
+    dark: '#06080F',
+  },
+};
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: 'class',
   theme: {
     screens: {
@@ -13,33 +49,7 @@ module.exports = {
       hd: '1920px',
     },
 
-    colors: {
-      primary: '#F9FF73',
-      secondary: '#78DCE8',
-
-      transparent: 'transparent',
-      current: 'currentColor',
-      black: '#000000',
-      white: '#F0F2DA',
-      yellow: '#F9FF73',
-      orange: '#F7AF39',
-      pink: '#FF6188',
-      green: '#A9DC76',
-      violet: '#AB9DF2',
-      blue: '#78DCE8',
-      discord: '#4554E9',
-
-      body: '#9D9E91',
-      bodyDark: '#6A6B63',
-
-      bg: {
-        lightest: '#F4F4EA',
-        lighter: '#313442',
-        light: '#1E212B',
-        DEFAULT: '#141721',
-        dark: '#06080F',
-      },
-    },
+    colors: colors,
 
     fontFamily: {
       sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -76,6 +86,9 @@ module.exports = {
         nft: 'repeat(auto-fill, minmax(220px, 1fr))',
         nftSmall: 'repeat(auto-fill, minmax(120px, 1fr))',
         assetHub: 'minmax(320px, 580px) minmax(80px, 420px)',
+      },
+      padding: {
+        22: '5.5rem',
       },
       scale: {
         10: '0.1',

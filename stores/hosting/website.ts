@@ -72,13 +72,10 @@ export const useWebsiteStore = defineStore('website', {
      * API calls
      */
     async fetchWebsites(archive = false) {
-      this.loading = true;
-
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return [];
 
+      this.loading = true;
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,

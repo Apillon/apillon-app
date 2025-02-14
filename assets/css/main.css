@@ -1,5 +1,5 @@
 body {
-  @apply body-md text-white font-sans;
+  @apply body-md font-sans text-white;
   font-size: 16px;
 
   /* Better Font Rendering =========== */
@@ -34,14 +34,14 @@ select:autofill,
 select:autofill:hover,
 select:autofill:focus {
   border: none;
-  -webkit-text-fill-color: theme('colors.white');
+  -webkit-text-fill-color: theme('colors.white.DEFAULT');
   -webkit-box-shadow: 0 0 0px 1000px #1e212b inset;
 }
 
 .swiper {
   .swiper-button-prev,
   .swiper-button-next {
-    @apply bg-no-repeat bg-center bg-contain;
+    @apply bg-contain bg-center bg-no-repeat;
 
     &:after {
       @apply hidden;

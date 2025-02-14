@@ -666,6 +666,9 @@ body > .n-message-container {
   .n-progress-icon.n-progress-icon--as-text {
     @apply body-sm text-right;
   }
+  .n-progress-custom-content {
+    @apply ml-0;
+  }
 }
 
 /** Radio */
@@ -729,6 +732,32 @@ body > .n-message-container {
 
   .v-vl-visible-items {
     padding: 16px 12px;
+  }
+}
+
+/** Steps */
+.n-steps {
+  &.hide-content .n-step-content {
+    @apply hidden;
+  }
+  &.dots {
+    @apply mx-auto inline-flex w-auto gap-2;
+
+    .n-step--process-status .n-step-indicator {
+      @apply bg-white;
+    }
+
+    .n-step-indicator {
+      --n-indicator-size: 8px;
+      @apply bg-bg-lighter shadow-none;
+
+      .n-step-indicator-slot {
+        @apply hidden;
+      }
+    }
+    .n-step-content {
+      @apply hidden;
+    }
   }
 }
 

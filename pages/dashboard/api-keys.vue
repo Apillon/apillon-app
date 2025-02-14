@@ -19,14 +19,14 @@
 
       <!-- Secrets -->
       <!-- <n-h5 prefix="bar">{{ $t('dashboard.secrets') }}</n-h5> -->
-      <n-space class="text-sm my-4" size="large" align="center">
+      <n-space class="my-4 text-sm" size="large" align="center">
         <strong>
           {{ $t('general.scope') }}:
           <span class="text-primary"> &nbsp; {{ dataStore.currentProject?.name }}</span>
         </strong>
       </n-space>
       <TableApiKeys />
-      <div v-if="!dataStore.isProjectUser" class="text-right mt-5">
+      <div v-if="!dataStore.isProjectUser" class="mt-5 text-right">
         <Btn type="secondary" @click="drawerGenerateApiKeyVisible = true">
           {{ $t('dashboard.apiKey.generate') }}
         </Btn>
@@ -61,15 +61,13 @@ useHead({
 const drawerGenerateApiKeyVisible = ref(false);
 
 onMounted(async () => {
-  await sleep(500);
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    /** Fetch all services if there is any service type unloaded */
-    await dataStore.getServices();
+  await sleep(300);
+  await dataStore.waitOnPromises();
+  /** Fetch all services if there is any service type unloaded */
+  await dataStore.getServices();
+  /** Fetch all api keys if they are not stored in settings store */
+  await settingsStore.getApiKeys();
 
-    /** Fetch all api keys if they are not stored in settings store */
-    await settingsStore.getApiKeys();
-
-    pageLoading.value = false;
-  });
+  pageLoading.value = false;
 });
 </script>

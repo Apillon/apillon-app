@@ -28,7 +28,7 @@
     </div>
 
     <p class="mb-4 font-bold text-white" :class="{ hidden: !!assetId }">
-      {{ $t('dashboard.service.assetHub.characteristics') }}
+      {{ $t('assetHub.characteristics') }}
     </p>
     <div class="rounded-lg bg-bg-lighter p-8 pb-2">
       <n-form-item :label="$t('form.label.assetHub.name')" path="name">
@@ -128,11 +128,11 @@
     </div>
 
     <n-form-item :show-feedback="false">
-      <input type="submit" class="hidden" :value="$t('dashboard.service.assetHub.create')" />
+      <input type="submit" class="hidden" :value="$t('assetHub.create')" />
 
       <Btn type="primary" size="large" :loading="loading" @click="handleSubmit">
-        <span v-if="assetId">{{ $t('dashboard.service.assetHub.edit') }}</span>
-        <span v-else>{{ $t('dashboard.service.assetHub.create') }}</span>
+        <span v-if="assetId">{{ $t('assetHub.edit') }}</span>
+        <span v-else>{{ $t('assetHub.create') }}</span>
       </Btn>
     </n-form-item>
   </n-form>
@@ -284,7 +284,7 @@ function handleSubmit(e: Event | MouseEvent) {
 
 async function createAsset() {
   if (!assetHubStore.account) {
-    message.warning(t('dashboard.service.assetHub.connect'));
+    message.warning(t('assetHub.connect'));
     return;
   }
   if (!formData.value.network || !formData.value.decimals || !formData.value.minBalance) {
@@ -342,7 +342,7 @@ async function createAsset() {
 
 async function updateAsset() {
   if (!assetHubStore.account) {
-    message.warning(t('dashboard.service.assetHub.connect'));
+    message.warning(t('assetHub.connect'));
     return;
   }
   if (!asset.value || !formData.value.network || !formData.value.assetId || !formData.value.decimals) {

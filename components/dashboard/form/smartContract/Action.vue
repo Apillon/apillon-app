@@ -44,6 +44,7 @@
 <script lang="ts" setup>
 import { useAccount } from '@wagmi/vue';
 import { createPublicClient, createWalletClient, custom, http } from 'viem';
+import { SmartContractStatus } from '~/lib/types/smartContracts';
 
 const emit = defineEmits(['submitSuccess', 'transferred']);
 const props = defineProps({
@@ -142,7 +143,7 @@ async function execRead(methodName: string) {
       args: prepareData(),
     });
     result.value = `${res}`;
-    message.success(t('dashboard.service.smartContracts.functions.executed'));
+    message.success(t('smartContracts.functions.executed'));
   } catch (e: any) {
     console.error(e);
     message.error(contractError(e));
@@ -175,7 +176,7 @@ async function execWalletWrite(methodName: string) {
       account: address.value,
     });
     result.value = `${res}`;
-    message.success(t('dashboard.service.smartContracts.functions.executed'));
+    message.success(t('smartContracts.functions.executed'));
   } catch (e: any) {
     console.error(e);
     message.error(contractError(e));
@@ -195,7 +196,7 @@ async function execOwnerWrite(methodName: string) {
         methodArguments: prepareData(),
       }
     );
-    message.success(t('dashboard.service.smartContracts.functions.executed'));
+    message.success(t('smartContracts.functions.executed'));
 
     if (methodName === 'transferOwnership') {
       deployedContractStore.active.contractStatus = SmartContractStatus.TRANSFERRING;

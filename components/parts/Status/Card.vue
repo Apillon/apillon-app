@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const expanded = ref(true);
 

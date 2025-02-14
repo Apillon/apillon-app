@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const { t } = useI18n();
 const { params } = useRoute();
@@ -71,22 +71,21 @@ useHead({
 });
 
 onMounted(async () => {
-  await sleep(10);
+  await dataStore.waitOnPromises();
 
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const walletUuid = `${params?.id}` || '';
-    const embeddedWallet = await embeddedWalletStore.getEmbeddedWallet(walletUuid);
+  const walletUuid = `${params?.id}` || '';
+  const embeddedWallet = await embeddedWalletStore.getEmbeddedWallet(walletUuid);
 
-    if (!embeddedWallet) {
-      router.push({ name: 'dashboard-service-embedded-wallet' });
-      return;
-    }
-    embeddedWalletStore.active = embeddedWallet;
-    chartData.value = prepareData(embeddedWallet.usage);
+  if (!embeddedWallet) {
+    router.push({ name: 'dashboard-service-embedded-wallet' });
+    return;
+  }
+  embeddedWalletStore.active = embeddedWallet;
+  chartData.value = prepareData(embeddedWallet.usage);
 
-    await embeddedWalletStore.getInfo();
-    await embeddedWalletStore.getSignatures(walletUuid);
-  });
+  await embeddedWalletStore.getInfo();
+  await embeddedWalletStore.getSignatures(walletUuid);
+
   pageLoading.value = false;
 });
 
@@ -107,7 +106,7 @@ const prepareData = (usage: EmbeddedWalletUsage[]) => {
       {
         label: 'Wallets per day',
         backgroundColor: colors.green,
-        borderColor: colors.white,
+        borderColor: colors.white.DEFAULT,
         data: graphData,
         fill: true,
         borderWidth: 1,

@@ -13,14 +13,23 @@
 
     <!--  Login password -->
     <n-form-item path="password" :show-label="false">
-      <n-input
-        v-model:value="formData.password"
-        type="password"
-        show-password-on="click"
-        :input-props="{ autocomplete: 'off' }"
-        :placeholder="$t('form.placeholder.password')"
-        clearable
-      />
+      <div class="w-full">
+        <n-input
+          v-model:value="formData.password"
+          type="password"
+          show-password-on="click"
+          :input-props="{ autocomplete: 'off' }"
+          :placeholder="$t('form.placeholder.password')"
+          clearable
+        />
+
+        <!-- Links -->
+        <div class="text-right">
+          <NuxtLink class="text-sm text-body" :to="{ name: 'login-reset-password' }">
+            {{ $t('auth.login.forgotPassword') }}
+          </NuxtLink>
+        </div>
+      </div>
     </n-form-item>
 
     <n-form-item v-if="showCaptcha" path="captcha" :show-label="false">
@@ -31,7 +40,7 @@
     </n-form-item>
 
     <!--  Login submit -->
-    <n-form-item :show-label="false">
+    <n-form-item :show-label="false" :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('form.login')" />
       <Btn type="primary" size="large" class="mt-2" :loading="loading" @click="handleSubmit">
         {{ $t('form.login') }}

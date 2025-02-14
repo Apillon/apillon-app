@@ -28,7 +28,7 @@ export default function useCloudFunctions() {
       cloudFunctionStore.resetVariables();
     }
 
-    await Promise.all(Object.values(dataStore.promises));
+    await dataStore.waitOnPromises();
 
     const currentCloudFunction = await cloudFunctionStore.getCloudFunction(functionUuid);
     if (!currentCloudFunction?.function_uuid) {
@@ -70,19 +70,15 @@ export default function useCloudFunctions() {
     return env;
   }
 
-  async function createEnvVariables(
-    data: EnvVariable[],
-    uuid?: string
-  ): Promise<CloudFunctionInterface | null> {
+  async function createEnvVariables(data: EnvVariable[], uuid?: string): Promise<CloudFunctionInterface | null> {
     envLoading.value = true;
 
     const functionUuid = uuid || cloudFunctionStore.functionUuid;
 
     try {
-      const res = await $api.post<CloudFunctionResponse>(
-        endpoints.cloudFunctionEnvironment(functionUuid),
-        { variables: data }
-      );
+      const res = await $api.post<CloudFunctionResponse>(endpoints.cloudFunctionEnvironment(functionUuid), {
+        variables: data,
+      });
       if (cloudFunctionStore.hasVariablesExisting) {
         message.success(t('form.success.updated.cloudFunctionVariable'));
       } else {
@@ -122,10 +118,7 @@ export default function useCloudFunctions() {
     }
   }
 
-  async function createNewJob(
-    data: FormCloudFunctions,
-    functionUuid: string
-  ): Promise<JobInterface | null> {
+  async function createNewJob(data: FormCloudFunctions, functionUuid: string): Promise<JobInterface | null> {
     if (!dataStore.hasProjects) {
       await dataStore.fetchProjects();
       if (!dataStore.projectUuid) return null;
@@ -191,10 +184,7 @@ export default function useCloudFunctions() {
     if (unfinishedJob === undefined) return;
 
     jobInterval = setInterval(async () => {
-      const cloudFunction = await cloudFunctionStore.fetchCloudFunction(
-        cloudFunctionStore.functionUuid,
-        false
-      );
+      const cloudFunction = await cloudFunctionStore.fetchCloudFunction(cloudFunctionStore.functionUuid, false);
       const job = cloudFunction.jobs.find(job => job.job_uuid === unfinishedJob.job_uuid);
 
       if (!job || job.jobStatus >= AcurastJobStatus.DEPLOYED) {

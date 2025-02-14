@@ -35,11 +35,7 @@
           :name="service.service_uuid"
         >
           <template #arrow>
-            <span
-              :class="`icon-${service.serviceType.toLowerCase()}`"
-              class="min-w-[20px] text-center"
-            >
-            </span>
+            <span :class="`icon-${service.serviceType.toLowerCase()}`" class="min-w-[20px] text-center"> </span>
           </template>
           <template #header-extra>
             <n-switch v-model:value="service.enabled" class="pointer-events-none" />
@@ -57,9 +53,7 @@
                 v-model:checked="permission.value"
                 size="medium"
                 :label="permission.label"
-                @update:checked="
-                  updatePermission(service.service_uuid, permission.key, permission.value)
-                "
+                @update:checked="updatePermission(service.service_uuid, permission.key, permission.value)"
               />
             </n-form-item-gi>
           </n-grid>
@@ -98,7 +92,7 @@
       <input type="submit" class="hidden" :value="$t('form.generate')" />
       <Btn
         type="primary"
-        class="w-full mt-8"
+        class="mt-8 w-full"
         :loading="loading"
         :disabled="dataStore.isProjectUser"
         @click="handleSubmit"
@@ -185,11 +179,7 @@ const rules: NFormRules = {
   roles: [
     {
       validator(_: FormItemRule, value: any) {
-        return (
-          Array.isArray(value) &&
-          value.length > 0 &&
-          value.some(item => isAnyPermissionEnabled(item))
-        );
+        return Array.isArray(value) && value.length > 0 && value.some(item => isAnyPermissionEnabled(item));
       },
       message: t('validation.apiKey.rolesRequired'),
     },
@@ -321,9 +311,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.id > 0) {
       await updateApiKey();
     } else {
@@ -375,9 +363,8 @@ async function updateApiKey() {
   loadingForm.value = true;
 
   try {
-    const projectUuid = dataStore.projectUuid;
     const bodyData = {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       name: formData.value.name,
       testNetwork: false,
     };
@@ -408,12 +395,8 @@ function isPermissionEnabled(serviceUuid: string, roleId: number) {
     }
   }
 
-  const projectUuid = dataStore.projectUuid;
   return apiKeyRoles.value.some(
-    role =>
-      role.project_uuid === projectUuid &&
-      role.service_uuid === serviceUuid &&
-      role.role_id === roleId
+    role => role.project_uuid === dataStore.projectUuid && role.service_uuid === serviceUuid && role.role_id === roleId
   );
 }
 function isAnyPermissionEnabled(service: ServiceInterface) {
@@ -443,10 +426,9 @@ async function addAllPermissions(serviceUuid: string) {
 }
 
 async function addPermission(serviceUuid: string, roleId: number, showMsg = true) {
-  const projectUuid = dataStore.projectUuid;
   try {
     await $api.post<ApiKeyRoleUpdateResponse>(endpoints.apiKeyRole(props.id), {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       service_uuid: serviceUuid,
       role_id: roleId,
     });
@@ -460,10 +442,9 @@ async function addPermission(serviceUuid: string, roleId: number, showMsg = true
 }
 
 async function removePermission(serviceUuid: string, roleId: number) {
-  const projectUuid = dataStore.projectUuid || '';
   try {
     await $api.delete<DeleteResponse>(endpoints.apiKeyRole(props.id), {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       service_uuid: serviceUuid,
       role_id: roleId,
     });
@@ -475,13 +456,12 @@ async function removePermission(serviceUuid: string, roleId: number) {
 }
 
 async function removeServicePermissions(service: ApiKeyRoleForm) {
-  const projectUuid = dataStore.projectUuid || '';
   if (props.id === 0) return;
 
   // If toggle off, remove all active roles for this service type
   try {
     await $api.delete<DeleteResponse>(endpoints.apiKeyServiceRoles(props.id), {
-      project_uuid: projectUuid,
+      project_uuid: dataStore.projectUuid,
       service_uuid: service.service_uuid,
       role_id: 50, // Validation placeholder
     });

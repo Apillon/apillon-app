@@ -70,17 +70,11 @@ export const useContractStore = defineStore('contract', {
     /**
      * API calls
      */
-    async fetchContracts(
-      archive: boolean = false,
-      showLoader: boolean = true
-    ): Promise<ContractInterface[]> {
-      this.loading = showLoader;
-
+    async fetchContracts(archive: boolean = false, showLoader: boolean = true): Promise<ContractInterface[]> {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return [];
 
+      this.loading = showLoader;
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,

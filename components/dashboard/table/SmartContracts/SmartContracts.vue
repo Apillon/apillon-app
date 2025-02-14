@@ -35,13 +35,13 @@ const rowKey = (row: DeployedContractInterface) => row.contract_uuid;
 const currentRow = ref<DeployedContractInterface>(props.contracts[0]);
 
 const availableColumns = ref([
-  { value: 'name', label: t('dashboard.service.smartContracts.table.name') },
-  { value: 'chain', label: t('dashboard.service.smartContracts.table.chain') },
-  { value: 'contractAddress', label: t('dashboard.service.smartContracts.table.contractAddress') },
-  { value: 'version', label: t('dashboard.service.smartContracts.table.version') },
+  { value: 'name', label: t('smartContracts.table.name') },
+  { value: 'chain', label: t('smartContracts.table.chain') },
+  { value: 'contractAddress', label: t('smartContracts.table.contractAddress') },
+  { value: 'version', label: t('smartContracts.table.version') },
   { value: 'description', label: t('general.description') },
-  { value: 'contractStatus', label: t('dashboard.service.smartContracts.table.contractStatus') },
-  { value: 'contractType', label: t('dashboard.service.smartContracts.table.contractType') },
+  { value: 'contractStatus', label: t('smartContracts.table.contractStatus') },
+  { value: 'contractType', label: t('smartContracts.table.contractType') },
 ]);
 const selectedColumns = ref([
   'name',
@@ -56,7 +56,7 @@ const selectedColumns = ref([
 const columns = computed(() => [
   {
     key: 'name',
-    title: t('dashboard.service.smartContracts.table.name'),
+    title: t('smartContracts.table.name'),
     className: [{ [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive }, { hidden: !selectedColumns.value.includes('name') }],
     render(row: DeployedContractInterface) {
       return h('strong', {}, { default: () => row.name });
@@ -64,7 +64,7 @@ const columns = computed(() => [
   },
   {
     key: 'chain',
-    title: t('dashboard.service.smartContracts.table.chain'),
+    title: t('smartContracts.table.chain'),
     className: [{ [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive }, { hidden: !selectedColumns.value.includes('chain') }],
     minWidth: 120,
     render(row: DeployedContractInterface) {
@@ -80,7 +80,7 @@ const columns = computed(() => [
   },
   {
     key: 'contractAddress',
-    title: t('dashboard.service.smartContracts.table.contractAddress'),
+    title: t('smartContracts.table.contractAddress'),
     minWidth: 100,
     className: { hidden: !selectedColumns.value.includes('contractAddress') },
     render(row: DeployedContractInterface) {
@@ -93,7 +93,7 @@ const columns = computed(() => [
   },
   {
     key: 'contractType',
-    title: t('dashboard.service.smartContracts.table.contractType'),
+    title: t('smartContracts.table.contractType'),
     className: [
       { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
       { hidden: !selectedColumns.value.includes('contractType') },
@@ -106,7 +106,7 @@ const columns = computed(() => [
   },
   {
     key: 'contractVersion',
-    title: t('dashboard.service.smartContracts.table.version'),
+    title: t('smartContracts.table.version'),
     className: [
       { [ON_COLUMN_CLICK_OPEN_CLASS]: !props.archive },
       { hidden: !selectedColumns.value.includes('version') },
@@ -122,7 +122,7 @@ const columns = computed(() => [
   },
   {
     key: 'contractStatus',
-    title: t('dashboard.service.smartContracts.table.contractStatus'),
+    title: t('smartContracts.table.contractStatus'),
     className: { hidden: !selectedColumns.value.includes('contractStatus') },
     render(row: DeployedContractInterface) {
       return h(resolveComponent('SmartContractsStatusLabel'), { contractStatus: row.contractStatus }, '');

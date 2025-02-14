@@ -10,12 +10,7 @@
         <ActionsSocialChat @create-success="checkUnfinishedChat" />
         <TableSocialChat />
       </n-space>
-      <Empty
-        v-else
-        :title="$t('social.chat.empty')"
-        :info="$t('social.chat.emptyInfo')"
-        icon="logo/grill-chat"
-      >
+      <Empty v-else :title="$t('social.chat.empty')" :info="$t('social.chat.emptyInfo')" icon="logo/grill-chat">
         <Btn type="primary" @click="modalCreateChatVisible = true">
           {{ $t('social.chat.createFirst') }}
         </Btn>
@@ -31,10 +26,7 @@
 
       <!-- Modal - Create Chat -->
       <modal v-model:show="modalCreateChatVisible" :title="$t('social.chat.new')">
-        <FormSocialChat
-          @submit-success="modalCreateChatVisible = false"
-          @create-success="checkUnfinishedChat"
-        />
+        <FormSocialChat @submit-success="modalCreateChatVisible = false" @create-success="checkUnfinishedChat" />
       </modal>
     </slot>
 
@@ -66,19 +58,16 @@ const scrollStyle = computed(() => {
   };
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await chatStore.getChats();
-      checkUnfinishedChat();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await chatStore.getChats();
+  checkUnfinishedChat();
 
-      /** Set first Hub as default */
-      if (!chatStore.active?.spaceId && chatStore.items.length) {
-        chatStore.active = chatStore.items[0];
-      }
-      pageLoading.value = false;
-    });
-  }, 100);
+  /** Set first Hub as default */
+  if (!chatStore.active?.spaceId && chatStore.items.length) {
+    chatStore.active = chatStore.items[0];
+  }
+  pageLoading.value = false;
 });
 
 onUnmounted(() => {

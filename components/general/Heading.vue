@@ -1,8 +1,8 @@
 <template>
   <!-- Heading template -->
-  <div>
+  <div class="text-sm">
     <n-space
-      class="pb-8 min-h-[40px] box-content"
+      class="box-content min-h-[40px] pb-4 text-hover"
       justify="space-between"
       align="center"
       :size="32"
@@ -21,7 +21,6 @@
     <div v-if="$slots.submenu">
       <slot name="submenu"> </slot>
     </div>
-    <div class="border-b-1 border-bg-lighter"></div>
   </div>
 </template>
 

@@ -28,15 +28,10 @@ export const useStorageStore = defineStore('storage', {
      * API calls
      */
     async fetchStorageInfo() {
-      this.loading = true;
-
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
+      if (!dataStore.projectUuid) return;
 
-        if (!dataStore.projectUuid) return;
-      }
-
+      this.loading = true;
       try {
         const res = await $api.get<StorageInfoResponse>(endpoints.storageInfo, {
           project_uuid: dataStore.projectUuid,

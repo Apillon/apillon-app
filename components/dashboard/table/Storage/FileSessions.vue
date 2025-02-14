@@ -1,7 +1,7 @@
 <template>
   <n-space class="pb-8" :size="12" vertical>
     <n-space justify="space-between">
-      <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
+      <div class="w-[45vw] max-w-xs sm:w-[30vw] lg:w-[20vw]">
         <!-- <n-input
           v-model:value="fileStore.search"
           type="text"
@@ -20,11 +20,9 @@
         <n-button
           size="small"
           :loading="loading"
-          @click="
-            getFiles(fileStore.session.pagination.page, fileStore.session.pagination.pageSize)
-          "
+          @click="getFiles(fileStore.session.pagination.page, fileStore.session.pagination.pageSize)"
         >
-          <span class="icon-refresh text-xl mr-2"></span>
+          <span class="icon-refresh mr-2 text-xl"></span>
           {{ $t('general.refresh') }}
         </n-button>
 
@@ -145,16 +143,13 @@ function rowProps(row: FileUploadSessionInterface) {
 /**
  * Load data on mounted
  */
-onMounted(() => {
+onMounted(async () => {
   fileStore.search = '';
   loading.value = true;
 
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await fileStore.getFileSessions();
-      loading.value = false;
-    });
-  }, 100);
+  await dataStore.waitOnPromises();
+  await fileStore.getFileSessions();
+  loading.value = false;
 });
 
 /** Search files */

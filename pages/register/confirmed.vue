@@ -1,15 +1,15 @@
 <template>
-  <div class="w-full flex flex-col justify-center items-center">
+  <div class="flex w-full flex-col items-center justify-center">
     <div class="w-full text-center">
-      <div class="mb-7 text-center text-blue">
+      <div class="mb-10 text-center">
         <AnimationLoader v-if="isWalletRegister" />
-        <span v-else class="icon-wow text-[34px]"></span>
+        <NuxtIcon v-else name="dashboard/success" class="mx-auto inline-block text-8xl text-green" filled />
       </div>
-      <h2 class="mb-2 text-center">{{ $t('auth.signup.emailConfirmed') }}</h2>
-      <p v-if="isWalletRegister" class="mb-7">{{ $t('auth.signup.walletConfirmed') }}</p>
-      <p v-else class="mb-7">{{ $t('auth.signup.enterDesiredPassword') }}</p>
+      <h2 class="mb-4 text-center">{{ $t('auth.signup.emailConfirmed') }}</h2>
+      <p v-if="isWalletRegister">{{ $t('auth.signup.walletConfirmed') }}</p>
+      <p v-else>{{ $t('auth.signup.enterDesiredPassword') }}</p>
 
-      <FormPassword class="mx-auto max-w-lg text-left" />
+      <FormPassword class="mx-auto mt-10 max-w-lg text-left" />
     </div>
   </div>
 </template>

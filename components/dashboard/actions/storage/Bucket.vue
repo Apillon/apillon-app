@@ -1,6 +1,6 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs">
+    <div class="w-[20vw] min-w-[11rem] max-w-xs">
       <n-input
         v-model:value="bucketStore.folder.search"
         type="text"
@@ -19,13 +19,7 @@
       <!-- Show only if user select files -->
       <template v-if="bucketStore.folder.selectedItems.length > 0">
         <!-- Download files -->
-        <n-button
-          class="w-10"
-          size="small"
-          :focus="true"
-          :loading="downloading"
-          @click="downloadSelectedFiles"
-        >
+        <n-button class="w-10" size="small" :focus="true" :loading="downloading" @click="downloadSelectedFiles">
           <span class="icon-download text-xl"></span>
         </n-button>
 
@@ -40,18 +34,18 @@
         </n-tooltip>
 
         <!-- Separator -->
-        <n-divider class="h-full mx-4" vertical />
+        <n-divider class="mx-4 h-full" vertical />
       </template>
 
       <!-- Refresh directory content -->
       <n-button size="small" @click="refreshDirectoryContent">
-        <span class="icon-refresh text-xl mr-2"></span>
+        <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('storage.refresh') }}
       </n-button>
 
       <!-- Create folder -->
       <n-button size="small" :disabled="authStore.isAdmin()" @click="showModalNewFolder = true">
-        <span class="icon-create-folder text-xl mr-2"></span>
+        <span class="icon-create-folder mr-2 text-xl"></span>
         {{ $t('storage.directory.create') }}
       </n-button>
 
@@ -64,7 +58,7 @@
         ghost
         @click="bucketStore.uploadActive = !bucketStore.uploadActive || !bucketStore.hasBucketItems"
       >
-        <span class="icon-upload text-xl mr-2"></span>
+        <span class="icon-upload mr-2 text-xl"></span>
         {{ $t('general.upload') }}
       </n-button>
     </n-space>
@@ -89,7 +83,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();

@@ -1,7 +1,5 @@
 <template>
-  <template
-    v-if="dataStore.hasProjects && isFeatureEnabled(Feature.PROJECT, authStore.getUserRoles())"
-  >
+  <template v-if="dataStore.hasProjects">
     <n-dropdown
       v-if="collapsed"
       :options="dropdownOptions"
@@ -9,13 +7,7 @@
       trigger="click"
       @select="onDropdownSelect"
     >
-      <n-button
-        v-bind="$attrs"
-        class="w-full h-10 bg-bg-light"
-        size="tiny"
-        icon-placement="right"
-        :loading="loading"
-      >
+      <n-button v-bind="$attrs" class="h-10 w-full bg-bg-light" size="tiny" icon-placement="right" :loading="loading">
         <span class="icon-down text-3xl"></span>
       </n-button>
     </n-dropdown>
@@ -91,35 +83,37 @@ watch(
     /** Clear all stored data */
     clearAll();
 
-    /** Payment loader */
-    paymentStore.loading = true;
+    if (projectUuid) {
+      /** Payment loader */
+      paymentStore.loading = true;
 
-    /** Save current project ID to LS and redirect to Dashboard */
-    localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, projectUuid);
-    if (projectUuid !== oldProjectUuid && oldProjectUuid !== '') {
-      router.push({ name: 'dashboard' });
+      /** Save current project ID to LS and redirect to Dashboard */
+      localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, projectUuid);
+      if (projectUuid !== oldProjectUuid && oldProjectUuid !== '') {
+        router.push({ name: 'dashboard' });
+      }
+
+      /** Reload projects if projectUuid is new project */
+      if (!dataStore.project.items.some(project => project.project_uuid === projectUuid)) {
+        loading.value = true;
+        dataStore.project.items = [];
+
+        await dataStore.fetchProjects(false);
+
+        setTimeout(() => {
+          loading.value = false;
+          componentSelectKey.value += 1;
+        }, 1000);
+      }
+      /** Fetch selected project data(get myRole_id_onProject)  */
+      await dataStore.fetchProject(projectUuid);
+
+      /** Refresh credits */
+      paymentStore.fetchCredits();
+
+      /** Refresh active subscription */
+      paymentStore.fetchActiveSubscription();
     }
-
-    /** Reload projects if projectUuid is new project */
-    if (!dataStore.project.items.some(project => project.project_uuid === projectUuid)) {
-      loading.value = true;
-      dataStore.project.items = [];
-
-      await dataStore.fetchProjects(false);
-
-      setTimeout(() => {
-        loading.value = false;
-        componentSelectKey.value += 1;
-      }, 1000);
-    }
-    /** Fetch selected project data(get myRole_id_onProject)  */
-    await dataStore.fetchProject(projectUuid);
-
-    /** Refresh credits */
-    paymentStore.fetchCredits();
-
-    /** Refresh active subscription */
-    paymentStore.fetchActiveSubscription();
   }
 );
 

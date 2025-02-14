@@ -166,11 +166,9 @@ export const useBucketStore = defineStore('bucket', {
      */
     async fetchBuckets(statusDeleted = false) {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
-      this.loading = true;
+      if (!dataStore.projectUuid) return null;
 
+      this.loading = true;
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,

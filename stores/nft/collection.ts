@@ -225,13 +225,10 @@ export const useCollectionStore = defineStore('collection', {
      * API calls
      */
     async fetchCollections(archive = false, showLoader = true): Promise<CollectionInterface[]> {
-      this.loading = showLoader;
-
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return [];
 
+      this.loading = showLoader;
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,
@@ -349,9 +346,8 @@ export const useCollectionStore = defineStore('collection', {
 
     async fetchQuota() {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return [];
+
       try {
         const res = await $api.get<GeneralResponse<boolean>>(endpoints.collectionsQuota, {
           project_uuid: dataStore.projectUuid,

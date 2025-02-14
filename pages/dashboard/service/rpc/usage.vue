@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const { t } = useI18n();
 const dataStore = useDataStore();
@@ -34,9 +34,7 @@ useHead({
 });
 
 onMounted(async () => {
-  await sleep(100);
-  await Promise.all(Object.values(dataStore.promises));
-
+  await dataStore.waitOnPromises();
   await rpcApiKeyStore.getApiKeys();
 
   if (!rpcApiKeyStore.selectedId && rpcApiKeyStore.items.length > 0) {
@@ -87,9 +85,7 @@ function getRequestsPerChainPerDate(
   for (const chain in data) {
     if (data.hasOwnProperty(chain)) {
       // Create a map of dates to requests for easy lookup.
-      const dateToRequests = new Map<string, number>(
-        data[chain].map(entry => [entry.date, entry.requests])
-      );
+      const dateToRequests = new Map<string, number>(data[chain].map(entry => [entry.date, entry.requests]));
 
       // Populate requests array for each date in sortedDates.
       const requestsArray = sortedDates.map(date => dateToRequests.get(date) ?? 0);
@@ -122,7 +118,7 @@ const prepareData = (usage: RpcApiKeyUsagePerChainInterface, network?: string) =
     colors.green,
     colors.blue,
     colors.yellow,
-    colors.white,
+    colors.white.DEFAULT,
     colors.pink,
     colors.orange,
     colors.discord,

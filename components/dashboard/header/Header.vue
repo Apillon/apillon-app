@@ -1,45 +1,23 @@
 <template>
   <transition name="slide-down" appear>
-    <div class="px-4 py-6 sm:px-8">
+    <div class="p-4 sm:px-8">
       <div class="flex items-center justify-between">
         <div class="flex items-center pr-2 sm:pr-4">
           <!-- Hamburger btn to show sidebar on mobile -->
           <BtnHamburger class="mr-2 flex sm:mr-4 lg:hidden" @click="emit('toggleSidebar')" />
-
-          <!-- Search docs -->
-          <div
-            v-if="isFeatureEnabled(Feature.SEARCH, authStore.getUserRoles())"
-            class="w-[20vw] min-w-[11rem] max-w-xs"
-          >
-            <a class="flex items-center" href="https://wiki.apillon.io/build/1-apillon-api.html" target="_blank">
-              <n-input type="text" name="search" size="small" :placeholder="$t('dashboard.searchDocs')" clearable>
-                <template #prefix>
-                  <span class="icon-search text-2xl text-bodyDark"></span>
-                </template>
-              </n-input>
-            </a>
-          </div>
-          <div v-if="isLg" class="flex flex-wrap gap-2">
-            <a v-for="doc in docs" :key="doc.key" class="flex items-center" :href="doc.link" target="_blank">
-              <n-button size="small" :bordered="false">
-                <NuxtIcon :name="doc.iconName" class="mr-2 text-xl" />
-                {{ doc.label }}
-              </n-button>
-            </a>
-          </div>
-          <n-dropdown v-else :options="docs" @select="handleSelect">
-            <n-button>
-              <NuxtIcon name="icon/file" class="mr-2 text-xl" />
-              {{ $t('dashboard.guides') }}
-            </n-button>
-          </n-dropdown>
         </div>
 
         <slot />
 
-        <div class="flex flex-nowrap items-center gap-4 md:gap-6 xl:gap-8">
+        <div class="flex flex-nowrap items-center gap-3 lg:gap-4">
+          <n-dropdown :options="docs" @select="handleSelect">
+            <n-button size="small">
+              <NuxtIcon name="icon/help" class="text-xl" />
+            </n-button>
+          </n-dropdown>
           <PaymentCredits />
           <HeaderNotifications />
+          <div class="h-5 w-0 border-l border-bg-lighter"></div>
           <HeaderProfile v-if="!authStore.isAdmin()" />
         </div>
       </div>

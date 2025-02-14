@@ -9,14 +9,14 @@
     </template>
     <slot>
       <div class="pb-8">
-        <div class="max-w-lg mb-8">
+        <div class="mb-8 max-w-lg">
           <p>{{ $t('dashboard.solution.description') }}</p>
         </div>
         <div class="grid gap-4 md:grid-cols-3">
           <div v-for="(service, key) in solutions" :key="key" class="card-dark-multiple">
-            <div class="card-dark flex flex-col justify-between p-8 h-full md:min-h-[24rem]">
+            <div class="card-dark flex h-full flex-col justify-between p-8 md:min-h-[24rem]">
               <div class="mb-8">
-                <div class="flex items-center gap-2 mb-4">
+                <div class="mb-4 flex items-center gap-2">
                   <span class="text-2xl" :class="service.icon"></span>
                   <h5>{{ $t(`dashboard.solution.${service.name}.name`) }}</h5>
                 </div>
@@ -25,7 +25,7 @@
                 </p>
               </div>
               <div>
-                <div class="flex flex-wrap gap-2 mb-8">
+                <div class="mb-8 flex flex-wrap gap-2">
                   <Pill
                     v-for="(item, key) in service.usage"
                     :key="key"
@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 type SolutionTypeItem = {
   name: string;

@@ -6,10 +6,7 @@
 
     <slot>
       <n-space class="pb-8" :size="32" vertical>
-        <ActionsComputingTransaction
-          :show-upload="showUpload"
-          @transfer="modalTransferOwnershipVisible = true"
-        />
+        <ActionsComputingTransaction :show-upload="showUpload" @transfer="modalTransferOwnershipVisible = true" />
 
         <!-- Display Contract data -->
         <ComputingContractInfo class="mb-8" />
@@ -20,10 +17,7 @@
       </n-space>
 
       <!-- Modal - Contract Transfer -->
-      <modal
-        v-model:show="modalTransferOwnershipVisible"
-        :title="$t('computing.contract.transfer')"
-      >
+      <modal v-model:show="modalTransferOwnershipVisible" :title="$t('computing.contract.transfer')">
         <FormComputingTransfer
           :contract-uuid="contractStore.active.contract_uuid"
           @submit-success="modalTransferOwnershipVisible = false"
@@ -53,22 +47,21 @@ useHead({
   title: t('dashboard.nav.computing'),
 });
 
-onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    const currentContract = await contractStore.getContract(contractUuid.value);
+onMounted(async () => {
+  await dataStore.waitOnPromises();
 
-    if (!currentContract?.contract_uuid) {
-      router.push({ name: 'dashboard-service-computing' });
-    } else {
-      contractStore.active = currentContract;
-      showUpload.value = currentContract.contractStatus === ContractStatus.DEPLOYED;
-      pageLoading.value = false;
+  const currentContract = await contractStore.getContract(contractUuid.value);
+  if (!currentContract?.contract_uuid) {
+    router.push({ name: 'dashboard-service-computing' });
+  } else {
+    contractStore.active = currentContract;
+    showUpload.value = currentContract.contractStatus === ContractStatus.DEPLOYED;
+    pageLoading.value = false;
 
-      await transactionStore.fetchTransactions(currentContract.contract_uuid, {
-        page: transactionStore.pagination.page,
-      });
-      checkUnfinishedTransactions();
-    }
-  });
+    await transactionStore.fetchTransactions(currentContract.contract_uuid, {
+      page: transactionStore.pagination.page,
+    });
+    checkUnfinishedTransactions();
+  }
 });
 </script>

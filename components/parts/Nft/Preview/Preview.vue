@@ -55,7 +55,7 @@ import type { DataTableColumns, DataTableProps } from 'naive-ui';
 import { NButton, NInput } from 'naive-ui';
 import { NftAmount } from '~/lib/types/nft';
 import { PAGINATION_LIMIT } from '~/lib/values/general.values';
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const { t } = useI18n();
 const { imageByName } = useNft();

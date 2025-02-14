@@ -115,6 +115,7 @@ export const useSettingsStore = defineStore('settings', {
       const dataStore = useDataStore();
       if (!dataStore.hasProjects) {
         this.apiKeys = [] as ApiKeyInterface[];
+        return;
       }
 
       try {

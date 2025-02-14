@@ -60,10 +60,9 @@ export default function assetHub() {
 
   async function initAssetHub() {
     await sleep(10);
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await assetHubStore.getAssets();
-      pageLoading.value = false;
-    });
+    await dataStore.waitOnPromises(false);
+    await assetHubStore.getAssets();
+    pageLoading.value = false;
   }
 
   async function initClient(rpc = assetHubNetworks.westend.rpc) {
@@ -113,9 +112,7 @@ export default function assetHub() {
         await sleep(200);
         authStore.setWallet(wallet);
 
-        assetHubStore.account = authStore.wallet.accounts.find(
-          acc => acc.address === assetHubStore.account?.address
-        );
+        assetHubStore.account = authStore.wallet.accounts.find(acc => acc.address === assetHubStore.account?.address);
       } else {
         assetHubStore.account = null;
       }

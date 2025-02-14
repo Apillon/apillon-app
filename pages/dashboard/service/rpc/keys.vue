@@ -26,13 +26,10 @@ useHead({
   title: $i18n.t('dashboard.nav.rpc'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await rpcApiKeyStore.getApiKeys();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await rpcApiKeyStore.getApiKeys();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 </script>

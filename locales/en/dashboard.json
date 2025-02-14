@@ -156,6 +156,68 @@
       "embeddedWallet": "Embedded Wallet",
       "indexing": "Indexing"
     },
+    "onboarding": {
+      "banner": {
+        "content": "Take a few moments to explore Apillon with our CPO as your guide.",
+        "title": "Getting around the platform",
+        "token": "Token $NCTR",
+        "tokenInfo": "Save on services and vote on future platform upgrades."
+      },
+      "modal": {
+        "credits": {
+          "title": "Wow, free credits!",
+          "info": "The credits unlock once you start a project.",
+          "content": "Not ready yet? No worries! Feel free to look around first. \nYour credits will be here when you’re ready to build.",
+          "start": "Your starter budget",
+          "lookAround": "Look around the platform",
+          "project": "Start a project",
+          "reward": "For a fresh start, you’ll receive"
+        },
+        "token": {
+          "reward": "credits applied",
+          "title": "Yay, free credits granted!",
+          "info": "Your 1200 credits are now unlocked. \nTime to explore, test and build with Apillon’s services.",
+          "nctr": "Holding $NCTR token?",
+          "content": "Enjoy builder discounts and a governance voting power on Apillon’s next upgrades."
+        },
+        "info": "Web3, simplified and user-friendly. Build and customize your product while we handle the heavy lifting behind the scenes.",
+        "notification": "Apillon is optimized for desktop devices. You can still build on mobile, but you'll move faster on a bigger screen."
+      },
+      "services": {
+        "hosting": {
+          "title": "Host a website",
+          "content": "Set up and launch a Web3-ready website—fast, secure, and hassle-free.",
+          "tags": ["No code"]
+        },
+        "nft": {
+          "title": "Manage your own NFT collection",
+          "content": "Create and manage your own NFT collection, hosted on your own setup.",
+          "tags": ["Coding required"]
+        },
+        "storage": {
+          "title": "Store metadata",
+          "content": "Securely store and manage metadata for NFTs, digital assets, and more.",
+          "tags": ["No code"]
+        },
+        "embedded-wallet": {
+          "title": "Use a simple login for your dapp",
+          "content": "Let users log in via embedded wallets, without browser extensions.",
+          "tags": ["No code"]
+        },
+        "cloud-functions": {
+          "title": "Automate your backend processes ",
+          "content": "Handle Web3 automation without managing a server or writing backend code.",
+          "tags": ["Coding required"]
+        },
+        "smart-contracts": {
+          "title": "Put smart contracts to work",
+          "content": "Set up smart contracts to run tasks on-chain, so you don’t have to.",
+          "tags": ["Coding required"]
+        }
+      },
+      "servicesTitle": "What do you want to achieve today?",
+      "welcome": "Welcome to Apillon"
+    },
     "pageMenu": {
       "access": "Access",
       "accountManagement": "Account management",
@@ -205,43 +267,8 @@
     },
     "service": {
       "assetHub": {
-        "asset": "asset",
-        "assetCreating": "We are creating your asset",
-        "assetCreatingInfo": "While you wait, feel free to review the article about asset metadata publishing {0}.",
-        "assetCreatingWait": "Please stay put, we will let you know once the asset is created. ",
-        "changeIssuer": "Change issuer",
-        "changeIssuerInfo": "Changing the issuer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
-        "changeFreezer": "Change freezer",
-        "changeFreezerInfo": "Changing the freezer means transferring all rights to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
-        "connect": "Looks like your wallet is not connected yet. Before creating assets you need to connect your wallet.",
-        "connectWallet": "Connect wallet",
-        "create": "Create asset",
-        "createNew": "Create new asset",
-        "createAsset": "Create an asset",
-        "characteristics": "Characteristics",
         "description": "Decentralized hub for secure digital asset management on the Polkadot network. \nSecure storage, easy transfer, cross-chain compatibility.",
-        "edit": "Edit asset",
-        "loadingTransaction": "The transaction is being processed, please wait.",
-        "mintTokens": "Mint Tokens",
-        "mintTokensInfo": "Mint Tokens",
-        "noProject": "Your project has no assets yet",
         "name": "Asset Hub",
-        "new": "Create new asset",
-        "otherAssets": "Other assets on Asset Hub",
-        "select": "Select asset",
-        "sendTokens": "Send Tokens",
-        "sendTokensInfo": "You may only send tokens available in your connected wallet. If you do not see any tokens available, please review your wallet connection.",
-        "transactionDetails": "You may view the transaction details {0}.",
-        "transactionHistory": "View transaction history",
-        "transactionProcessed": "The transaction was successfully processed.",
-        "transfer": "Transfer ownership",
-        "transferInfo": "Transferring the ownership means handing all rights over to another wallet. Proceed with caution and ensure you’re transferring them to the right address.",
-        "walletStats": "Connected wallet stats",
-        "leave": {
-          "anyway": "Leave anyway",
-          "info": "If you leave, your changes won’t be saved.",
-          "title": "Are you sure you want to leave?"
-        },
         "usage": ["secure storage", "easy transfer", "cross-chain compatibility"]
       },
       "authentication": {
@@ -319,57 +346,8 @@
         "usage": ["storage buckets", "different media", "drag-n-drop ui", "ipfs"]
       },
       "smartContracts": {
-        "audited": "Audited",
-        "customizeAndDeploy": "Customize and deploy",
-        "create": "Create your smart contract",
-        "createNew": "Create a new smart contract",
-        "deployedContractsCount": "Number of deployed contracts",
         "description": "Simplify smart contract deployment across multiple chains. \nAutomated verification, multi-chain support, security checks.",
-        "description2": "Deploy audited and field-tested smart contracts with one click. Connect to the smart contract from your dapp and start using it immediately.",
-        "details": "Smart Contract Details",
-        "emptyArchive": "Smart Contracts Archive",
-        "emptyArchiveInfo": "There are currently no Smart Contracts in the Archive.",
-        "info": "Add it to your Web3 project",
         "name": "Smart Contracts",
-        "new": "New smart contract",
-        "table": {
-          "chain": "Chain",
-          "contractAddress": "Contract Address",
-          "contractStatus": "Status",
-          "contractType": "Contract type",
-          "name": "Name",
-          "version": "Version"
-        },
-        "status": {
-          "0": "CREATED",
-          "1": "INITIATED",
-          "2": "DEPLOYING",
-          "3": "DEPLOYED",
-          "4": "FAILED",
-          "5": "TRANSFERRING",
-          "6": "TRANSFERRED"
-        },
-        "type": {
-          "1": "OTHER",
-          "2": "ERC 20",
-          "3": "ERC 1155"
-        },
-        "infoSection": {
-          "title": "Execute read & write functions",
-          "p": "Your smart contract was deployed via Apillon. This means certain write functions are available only through the Apillon Backend, until you decide to take ownership of the contract. ",
-          "info": "Take ownership of the Smart Contract. Once you take ownership of the Smart Contract, you will be able to execute all the functions directly from your dapp. This is not a mandatory step, but it makes sense to take the ownership of the contract before going to production.",
-          "infoTransferred": "You are owner of this contract, now you execute all the functions directly from your dapp.",
-          "takeOwnershipBtn": "Take smart contract ownership"
-        },
-        "functions": {
-          "executed": "Function has been executed",
-          "write": "Write functions",
-          "read": "Read functions",
-          "writeFromDapp": "Write from your dapp",
-          "writeOverApillon": "Write over Apillon",
-          "readFromDapp": "Read from your dapp"
-        },
-        "transactionCount": "Number of transactions",
         "usage": ["automated verification", "multi-chain support", "security checks"]
       },
       "addFirst": "Add first service",
@@ -407,7 +385,7 @@
       },
       "fileSharing": {
         "name": "Decentralized File Sharing",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "smartContracts": {
@@ -525,7 +503,7 @@
       },
       "nftDrop": {
         "name": "NFT Drop",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "nftEmailSignupAirdrop": {
@@ -573,12 +551,12 @@
       },
       "nftLoyalty": {
         "name": "NFT-based Loyalty Program",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "nftMembership": {
         "name": "NFT-based Brand Membership",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "nftPoap": {
@@ -719,12 +697,12 @@
       },
       "tokenGating": {
         "name": "Token Gating",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "wallet": {
         "name": "Non-custodial Wallet",
-        "description": "Crypto ipsum bitcoin ethereum dogecoin litecoin. Ethereum flow bancor TRON enjin. Bancor zcash neo gala.",
+        "description": "",
         "usage": ["metadata storage", "file storage"]
       },
       "indexing": {

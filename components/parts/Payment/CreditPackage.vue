@@ -22,7 +22,7 @@
     <!-- Included Service -->
     <div class="match-services mb-12">
       <p class="font-bold text-white">{{ $t('dashboard.credits.included') }}</p>
-      <ul class="inline-flex flex-col list-disc pl-4 mb-4 text-left">
+      <ul class="mb-4 inline-flex list-disc flex-col pl-4 text-left">
         <li v-for="(item, key) in translateItems('dashboard.credits.includedServices')" :key="key">
           {{ item }}
         </li>
@@ -31,13 +31,7 @@
 
     <n-tooltip v-if="!dataStore.isUserOwner" trigger="hover">
       <template #trigger>
-        <Btn
-          class="opacity-60 cursor-default"
-          type="primary"
-          size="large"
-          :color="colors.blue"
-          round
-        >
+        <Btn class="cursor-default opacity-60" type="primary" size="large" :color="colors.blue" round>
           {{ $t('dashboard.credits.buy') }}
         </Btn>
       </template>
@@ -57,7 +51,7 @@
 
       <n-tooltip v-if="creditPackage.creditAmount === 10000" trigger="hover">
         <template #trigger>
-          <Btn class="opacity-60 cursor-default" type="primary" size="large" round>
+          <Btn class="cursor-default opacity-60" type="primary" size="large" round>
             {{ $t('dashboard.credits.buyWithDot') }}
           </Btn>
         </template>
@@ -78,7 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 defineProps({
   creditPackage: { type: Object as PropType<CreditPackageInterface>, required: true },

@@ -45,15 +45,12 @@ useHead({
   title: $i18n.t('dashboard.nav.hosting'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await storageStore.getStorageInfo();
-      await websiteStore.getWebsiteArchive();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await storageStore.getStorageInfo();
+  await websiteStore.getWebsiteArchive();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 
 /**

@@ -5,24 +5,19 @@
     </template>
     <slot>
       <div v-if="!assetHubStore.account" class="h-full">
-        <div
-          class="flex gap-4 items-center py-2 px-5 border-1 border-primary max-w-3xl lg:gap-10 xl:gap-20"
-        >
-          <div class="flex items-center mb-2">
+        <div class="flex max-w-3xl items-center gap-4 border-1 border-primary px-5 py-2 lg:gap-10 xl:gap-20">
+          <div class="mb-2 flex items-center">
             <span class="icon-info"></span>
-            <p class="ml-2">{{ $t('dashboard.service.assetHub.connect') }}</p>
+            <p class="ml-2">{{ $t('assetHub.connect') }}</p>
           </div>
 
           <Btn type="primary" :loading="loadingWallet" @click="modalWalletSelectVisible = true">
-            {{ $t('dashboard.service.assetHub.connectWallet') }}
+            {{ $t('assetHub.connectWallet') }}
           </Btn>
         </div>
       </div>
 
-      <div
-        v-else-if="assetHubStore.loading && !assetHubStore.assetsLoaded"
-        class="relative h-full min-h-[50dvh]"
-      >
+      <div v-else-if="assetHubStore.loading && !assetHubStore.assetsLoaded" class="relative h-full min-h-[50dvh]">
         <Spinner class="absolute top-1/2" />
       </div>
 
@@ -30,18 +25,13 @@
         <ActionsAssetHub />
 
         <TableAssetHub v-if="assetHubStore.hasAssets" owned />
-        <Empty
-          v-else
-          :title="$t('dashboard.service.assetHub.noProject')"
-          icon="storage/empty"
-          small
-        >
+        <Empty v-else :title="$t('assetHub.noProject')" icon="storage/empty" small>
           <Btn type="primary" :to="{ name: 'dashboard-service-asset-hub-new' }">
-            {{ $t('dashboard.service.assetHub.createNew') }}
+            {{ $t('assetHub.createNew') }}
           </Btn>
         </Empty>
 
-        <h4 class="my-4">{{ $t('dashboard.service.assetHub.otherAssets') }}</h4>
+        <h4 class="my-4">{{ $t('assetHub.otherAssets') }}</h4>
         <TableAssetHub />
       </n-space>
     </slot>
@@ -60,14 +50,8 @@
 <script lang="ts" setup>
 const { t } = useI18n();
 const assetHubStore = useAssetHubStore();
-const {
-  loadingWallet,
-  modalWalletSelectVisible,
-  pageLoading,
-  initAssetHub,
-  reconnectWallet,
-  walletConnect,
-} = useAssetHub();
+const { loadingWallet, modalWalletSelectVisible, pageLoading, initAssetHub, reconnectWallet, walletConnect } =
+  useAssetHub();
 
 useHead({
   title: t('dashboard.nav.assetHub'),

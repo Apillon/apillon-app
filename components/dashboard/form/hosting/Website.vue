@@ -1,26 +1,20 @@
 <template>
   <Spinner v-if="websiteUuid && !website" />
   <div v-else>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="!!websiteUuid && $i18n.te('hosting.website.infoNew')" class="text-body mb-8">
+      <p v-if="!!websiteUuid && $i18n.te('hosting.website.infoNew')" class="mb-8 text-body">
         {{ $t('hosting.website.infoNew') }}
       </p>
-      <p v-else-if="!!websiteUuid && $i18n.te('hosting.website.infoEdit')" class="text-body mb-8">
+      <p v-else-if="!!websiteUuid && $i18n.te('hosting.website.infoEdit')" class="mb-8 text-body">
         {{ $t('hosting.website.infoEdit') }}
       </p>
     </template>
 
-    <n-form
-      ref="formRef"
-      :model="formData"
-      :rules="rules"
-      :disabled="isFormDisabled"
-      @submit.prevent="handleSubmit"
-    >
+    <n-form ref="formRef" :model="formData" :rules="rules" :disabled="isFormDisabled" @submit.prevent="handleSubmit">
       <!--  Website name -->
       <n-form-item path="name" :label="$t('form.label.websiteName')" :label-props="{ for: 'name' }">
         <n-input
@@ -49,13 +43,7 @@
       <!--  Form submit -->
       <n-form-item :show-feedback="false">
         <input type="submit" class="hidden" :value="$t('hosting.website.create')" />
-        <Btn
-          type="primary"
-          class="w-full mt-2"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          @click="handleSubmit"
-        >
+        <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           <template v-if="website">
             {{ $t('hosting.website.update') }}
           </template>
@@ -117,9 +105,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.websiteUuid) {
       await updateWebsite();
     } else {
@@ -129,12 +115,9 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createWebsite() {
+  if (!dataStore.projectUuid) return;
+
   loading.value = true;
-
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-  }
-
   try {
     const bodyData = {
       ...formData.value,
@@ -163,10 +146,7 @@ async function updateWebsite() {
   loading.value = true;
 
   try {
-    const res = await $api.patch<WebsiteResponse>(
-      endpoints.websites(props.websiteUuid),
-      formData.value
-    );
+    const res = await $api.patch<WebsiteResponse>(endpoints.websites(props.websiteUuid), formData.value);
 
     message.success($i18n.t('form.success.updated.website'));
 

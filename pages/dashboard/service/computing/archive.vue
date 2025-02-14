@@ -33,13 +33,10 @@ useHead({
   title: t('dashboard.nav.computing'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await contractStore.getContractArchive();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await contractStore.getContractArchive();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 </script>

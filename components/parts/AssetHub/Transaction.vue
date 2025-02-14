@@ -3,7 +3,7 @@
     <IconSuccess class="text-4xl" />
 
     <h2 class="mb-2 mt-6">
-      {{ $t('dashboard.service.assetHub.transactionProcessed') }}
+      {{ $t('assetHub.transactionProcessed') }}
     </h2>
     <i18n-t keypath="dashboard.service.assetHub.transactionDetails" tag="p">
       <a :href="transactionLink(transactionHash, chainId)" class="link" target="_blank">

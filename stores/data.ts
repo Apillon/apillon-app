@@ -13,7 +13,8 @@ export const useDataStore = defineStore('data', {
     project: {
       active: {} as ProjectInterface,
       items: [] as Array<ProjectInterface>,
-      selected: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID) || '',
+      selected: localStorage.getItem(DataLsKeys.CURRENT_PROJECT_ID) || null,
+      showOnboarding: false,
       quotaReached: undefined as Boolean | undefined,
       overview: {} as ProjectOverviewInterface,
     },
@@ -39,19 +40,14 @@ export const useDataStore = defineStore('data', {
       return Array.isArray(state.project.items) && state.project.items.length > 0;
     },
     hasProjectOverview(state) {
-      return (
-        state.project.overview &&
-        (state.project.overview.availableStorage || state.project.overview.usedStorage)
-      );
+      return state.project.overview && (state.project.overview.availableStorage || state.project.overview.usedStorage);
     },
     currentProject(state) {
       if (!this.hasProjects) {
         return null;
       }
       /** Return project with currentProjectUuid, if this ID does not exists, return first project */
-      const project = state.project.items.find(
-        project => project.project_uuid === state.project.selected
-      );
+      const project = state.project.items.find(project => project.project_uuid === state.project.selected);
       if (project) {
         return project;
       }
@@ -64,9 +60,8 @@ export const useDataStore = defineStore('data', {
       return (
         state.project.active.project_uuid ||
         (
-          state.project.items.find(
-            (item: ProjectInterface) => item.project_uuid === state.project.selected
-          ) || ({} as ProjectInterface)
+          state.project.items.find((item: ProjectInterface) => item.project_uuid === state.project.selected) ||
+          ({} as ProjectInterface)
         )?.project_uuid ||
         ''
       );
@@ -95,6 +90,13 @@ export const useDataStore = defineStore('data', {
       this.services = [] as Array<ServiceInterface>;
     },
 
+    async waitOnPromises(delay = true) {
+      if (delay) {
+        await sleep(100);
+      }
+      await Promise.all(Object.values(this.promises));
+    },
+
     isUser(type: number): boolean {
       return this.myRoleOnProject === type;
     },
@@ -111,15 +113,13 @@ export const useDataStore = defineStore('data', {
       /** Reset store data */
       this.resetData();
 
-      this.project.selected = '';
+      this.project.selected = null;
       localStorage.removeItem(DataLsKeys.CURRENT_PROJECT_ID);
     },
 
     updateCurrentProject(project: ProjectInterface) {
       /** Find index of specific object using findIndex method. */
-      const projectIndex = this.project.items.findIndex(
-        item => item.project_uuid === project.project_uuid
-      );
+      const projectIndex = this.project.items.findIndex(item => item.project_uuid === project.project_uuid);
 
       /** Update current project, add value and label, which are used in header dropdown */
       this.project.items[projectIndex] = {
@@ -134,9 +134,7 @@ export const useDataStore = defineStore('data', {
     },
 
     hasServicesByType(type: number) {
-      return (
-        Array.isArray(this.services) && this.services.some(item => item.serviceType_id === type)
-      );
+      return Array.isArray(this.services) && this.services.some(item => item.serviceType_id === type);
     },
 
     hasServiceTypes() {
@@ -144,11 +142,7 @@ export const useDataStore = defineStore('data', {
     },
 
     hasInstructions(key: string) {
-      return (
-        key in this.instructions &&
-        Array.isArray(this.instructions[key]) &&
-        this.instructions[key].length > 0
-      );
+      return key in this.instructions && Array.isArray(this.instructions[key]) && this.instructions[key].length > 0;
     },
 
     /**
@@ -169,10 +163,7 @@ export const useDataStore = defineStore('data', {
     },
 
     async getProject(projectUuid: string): Promise<ProjectInterface> {
-      if (
-        this.project.active?.project_uuid === projectUuid &&
-        !isCacheExpired(LsCacheKeys.PROJECT)
-      ) {
+      if (this.project.active?.project_uuid === projectUuid && !isCacheExpired(LsCacheKeys.PROJECT)) {
         return this.project.active;
       }
       return await this.fetchProject(projectUuid);
@@ -234,28 +225,27 @@ export const useDataStore = defineStore('data', {
       abortController = new AbortController();
 
       try {
-        this.promises.projects = $api.get<ProjectsResponse>(
-          endpoints.projectsUserProjects,
-          undefined,
-          {
-            signal: abortController.signal,
-          }
-        );
+        this.promises.projects = $api.get<ProjectsResponse>(endpoints.projectsUserProjects, undefined, {
+          signal: abortController.signal,
+        });
         const res = await this.promises.projects;
+        const hasProjects = res.data.total > 0;
 
-        const projects = res.data.items.map((project: ProjectInterface) => {
+        this.project.items = res.data.items.map((project: ProjectInterface) => {
           return {
             ...project,
             value: project.project_uuid,
             label: project.name,
           };
         });
-        this.project.items = projects;
-        const hasProjects = res.data.total > 0;
 
+        if (this.project.selected && !this.project.items.some(i => i.project_uuid === this.project.selected)) {
+          this.project.selected = null;
+        }
         /* If current project is not selected, take first one */
-        if (this.project.selected === '' && hasProjects) {
-          this.setCurrentProject(this.project.items[0].project_uuid);
+        if (hasProjects && this.project.selected) {
+          this.project.selected = this.project.items[0].project_uuid;
+          localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, this.project.items[0].project_uuid);
         }
 
         /** Save timestamp to SS */
@@ -263,17 +253,17 @@ export const useDataStore = defineStore('data', {
 
         /** If user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
         if (redirectToDashboard && !hasProjects) {
-          router.push({ name: 'onboarding' });
+          router.push({ name: 'dashboard' });
+          this.project.showOnboarding = true;
         } else if (redirectToDashboard) {
           router.push({ name: 'dashboard' });
         }
 
-        return projects;
+        return this.project.items;
       } catch (error: any) {
         if (!(error instanceof DOMException) && error.message !== 'The user aborted a request.') {
           /** Clear promise */
           this.promises.projects = null;
-
           this.project.items = [];
 
           /** Show error message */
@@ -318,6 +308,8 @@ export const useDataStore = defineStore('data', {
     },
 
     async fetchProjectOverview(projectUuid?: string): Promise<ProjectOverviewInterface> {
+      await this.waitOnPromises();
+
       const uuid = projectUuid || this.projectUuid;
       if (!uuid) {
         return {} as ProjectOverviewInterface;
@@ -341,8 +333,9 @@ export const useDataStore = defineStore('data', {
 
     /** Services */
     async fetchServices() {
-      if (!this.hasProjects) {
-        await this.fetchProjects();
+      await this.waitOnPromises();
+      if (!this.projectUuid) {
+        return [] as Array<ServiceInterface>;
       }
       this.service.loading = true;
 
@@ -384,39 +377,6 @@ export const useDataStore = defineStore('data', {
         window.$message.error(userFriendlyMsg(error));
       }
       return [] as Array<ServiceTypeInterface>;
-    },
-
-    /**
-     * Instructions
-     */
-    async fetchInstruction(key: string) {
-      try {
-        const res = await $api.get<InstructionResponse>(endpoints.instructions(key));
-
-        if (res.data) {
-          this.instruction[key] = res.data;
-        }
-      } catch (error) {
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
-    },
-    async fetchInstructions(key: string) {
-      try {
-        const res = await $api.get<InstructionsResponse>(endpoints.instructions(), {
-          forRoute: key,
-        });
-
-        if (res.data) {
-          this.instructions[key] = res.data.items;
-        } else {
-          this.instructions[key] = [];
-        }
-      } catch (error) {
-        this.instructions[key] = [];
-        /** Show error message */
-        window.$message.error(userFriendlyMsg(error));
-      }
     },
   },
 });

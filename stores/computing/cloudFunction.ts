@@ -113,10 +113,7 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     },
 
     async getCloudFunction(functionUuid: string) {
-      if (
-        this.active?.function_uuid !== functionUuid ||
-        isCacheExpired(LsCacheKeys.CLOUD_FUNCTION)
-      ) {
+      if (this.active?.function_uuid !== functionUuid || isCacheExpired(LsCacheKeys.CLOUD_FUNCTION)) {
         this.active = await this.fetchCloudFunction(functionUuid);
       }
       return this.active;
@@ -147,17 +144,11 @@ export const useCloudFunctionStore = defineStore('cloudFunction', {
     /**
      * API calls
      */
-    async fetchCloudFunctions(
-      archive = false,
-      showLoader: boolean = true
-    ): Promise<CloudFunctionInterface[]> {
-      this.loading = showLoader;
-
+    async fetchCloudFunctions(archive = false, showLoader: boolean = true): Promise<CloudFunctionInterface[]> {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return [];
 
+      this.loading = showLoader;
       try {
         const params: Record<string, string | number> = {
           project_uuid: dataStore.projectUuid,

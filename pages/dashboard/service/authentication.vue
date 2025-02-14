@@ -124,12 +124,9 @@ useHead({
   title: $i18n.t('dashboard.nav.authentication'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await dataStore.getServices();
-      pageLoading.value = false;
-    });
-  }, 100);
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await dataStore.getServices();
+  pageLoading.value = false;
 });
 </script>

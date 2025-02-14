@@ -13,12 +13,12 @@
         </n-space>
         <Empty
           v-show="!deployedContractStore.showDeployedContracts"
-          :title="$t('dashboard.service.smartContracts.create')"
-          :info="$t('dashboard.service.smartContracts.info')"
+          :title="$t('smartContracts.create')"
+          :info="$t('smartContracts.info')"
           icon="storage/empty"
         >
           <Btn :to="{ name: 'dashboard-service-smart-contracts-new' }">
-            {{ $t('dashboard.service.smartContracts.new') }}
+            {{ $t('smartContracts.new') }}
           </Btn>
         </Empty>
       </div>
@@ -37,12 +37,11 @@ useHead({
 });
 const pageLoading = ref<boolean>(true);
 
-onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await deployedContractStore.getDeployedContracts();
-    pageLoading.value = false;
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await deployedContractStore.getDeployedContracts();
+  pageLoading.value = false;
 
-    checkUnfinishedSmartContracts();
-  });
+  checkUnfinishedSmartContracts();
 });
 </script>

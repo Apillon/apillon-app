@@ -18,53 +18,50 @@ export default function useHosting() {
     clearInterval(websiteInterval);
   });
 
-  function initWebsite(env: number = 0) {
+  async function initWebsite(env: number = 0) {
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
     websiteStore.setWebsite(websiteUuid.value);
 
-    setTimeout(() => {
-      Promise.all(Object.values(dataStore.promises)).then(async _ => {
-        const website = await websiteStore.getWebsite(websiteUuid.value);
+    await dataStore.waitOnPromises();
+    const website = await websiteStore.getWebsite(websiteUuid.value);
 
-        /** Check of website exists */
-        if (!website?.website_uuid) {
-          router.push({ name: 'dashboard-service-hosting' });
-          return;
-        }
-        /** Get deployments for this website */
-        if (env > 0) {
-          await deploymentStore.getDeployments(websiteUuid.value, env);
-        }
+    /** Check of website exists */
+    if (!website?.website_uuid) {
+      router.push({ name: 'dashboard-service-hosting' });
+      return;
+    }
+    /** Get deployments for this website */
+    if (env > 0) {
+      await deploymentStore.getDeployments(websiteUuid.value, env);
+    }
 
-        if (env === DeploymentEnvironment.PRODUCTION) {
-          /** Show files from production bucket */
-          bucketStore.active = website.productionBucket;
-          bucketStore.setBucket(website.productionBucket.bucket_uuid);
+    if (env === DeploymentEnvironment.PRODUCTION) {
+      /** Show files from production bucket */
+      bucketStore.active = website.productionBucket;
+      bucketStore.setBucket(website.productionBucket.bucket_uuid);
 
-          /** Deployments polling */
-          checkUnfinishedDeployments(deploymentStore.production, env);
-        } else if (env === DeploymentEnvironment.STAGING) {
-          /** Show files from staging bucket */
-          bucketStore.active = website.stagingBucket;
-          bucketStore.setBucket(website.stagingBucket.bucket_uuid);
+      /** Deployments polling */
+      checkUnfinishedDeployments(deploymentStore.production, env);
+    } else if (env === DeploymentEnvironment.STAGING) {
+      /** Show files from staging bucket */
+      bucketStore.active = website.stagingBucket;
+      bucketStore.setBucket(website.stagingBucket.bucket_uuid);
 
-          /** Deployments polling */
-          checkUnfinishedDeployments(deploymentStore.staging, env);
-        } else {
-          /** Show files from main bucket */
-          bucketStore.active = website.bucket;
-          bucketStore.setBucket(website.bucket.bucket_uuid);
-        }
+      /** Deployments polling */
+      checkUnfinishedDeployments(deploymentStore.staging, env);
+    } else {
+      /** Show files from main bucket */
+      bucketStore.active = website.bucket;
+      bucketStore.setBucket(website.bucket.bucket_uuid);
+    }
 
-        /** Fetch directory content for bucket */
-        await bucketStore.fetchDirectoryContent({ bucketUuid: bucketStore.active.bucket_uuid });
+    /** Fetch directory content for bucket */
+    await bucketStore.fetchDirectoryContent({ bucketUuid: bucketStore.active.bucket_uuid });
 
-        if (website.bucket.size === 0) {
-          bucketStore.uploadActive = true;
-        }
-        pageLoading.value = false;
-      });
-    }, 100);
+    if (website.bucket.size === 0) {
+      bucketStore.uploadActive = true;
+    }
+    pageLoading.value = false;
   }
 
   function checkUnfinishedWebsite(unfinishedWebsite: WebsiteInterface) {

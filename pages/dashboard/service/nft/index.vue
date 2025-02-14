@@ -47,19 +47,17 @@ useHead({
 
 onMounted(async () => {
   resetAll();
-  await sleep(100);
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await collectionStore.getCollections();
+  await dataStore.waitOnPromises();
+  await collectionStore.getCollections();
 
-    storageStore.getStorageInfo();
-    paymentStore.getPriceList();
+  storageStore.getStorageInfo();
+  paymentStore.getPriceList();
 
-    setTimeout(() => {
-      checkUnfinishedCollections();
-    }, 3000);
+  setTimeout(() => {
+    checkUnfinishedCollections();
+  }, 3000);
 
-    pageLoading.value = false;
-  });
+  pageLoading.value = false;
 });
 onUnmounted(() => {
   clearInterval(collectionInterval);

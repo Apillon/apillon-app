@@ -1,21 +1,32 @@
-declare global {
-  type ServiceTypeItem = {
-    id: number | string;
-    key: string;
-    name: string;
-    description: string;
-    icon: string;
-    iconSvg?: string;
-    link?: string;
-    disabled?: boolean | null;
-    usage?: String[];
-  };
-}
+export type ServiceTypeItem = {
+  id: ServiceType | SolutionKey;
+  key: string;
+  name: string;
+  description: string;
+  icon: string;
+  iconSvg?: string;
+  link?: string;
+  disabled?: boolean | null;
+  usage?: String[];
+};
+export type OnboardingService = {
+  key: string;
+  name: string;
+  description: string;
+  link?: string;
+  tags?: String[];
+};
+type OnboardingServiceTrans = {
+  title?: VueMsg;
+  content?: VueMsg;
+  tags?: VueMsg;
+};
 
 export default function useService() {
-  const { t } = useI18n();
+  const { t, rt, tm } = useI18n();
   const authStore = useAuthStore();
   const config = useRuntimeConfig();
+  const { translate } = useSolution();
 
   const services = {
     storage: ServiceType.STORAGE,
@@ -82,11 +93,25 @@ export default function useService() {
     };
   });
 
+  const onboardingServices =
+    Object.entries(tm('dashboard.onboarding.services') as Record<string, OnboardingServiceTrans>).map(
+      ([key, trans]) => {
+        return {
+          key,
+          link: generateLink(key),
+          name: trans?.title ? rt(trans.title) : '',
+          description: trans?.content ? rt(trans.content) : '',
+          tags: trans?.tags ? translate(trans.tags) : [],
+        } as OnboardingService;
+      }
+    ) || [];
+
   const isDev = () => {
     return config.public.ENV === AppEnv.DEV || config.public.ENV === AppEnv.LOCAL;
   };
 
   return {
+    onboardingServices,
     web3Services,
     isDev,
   };

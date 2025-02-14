@@ -1,6 +1,6 @@
 <template>
   <div v-if="settingsStore.notifications.loading" class="relative h-8 w-8">
-    <Spinner />
+    <Spinner :size="28" />
   </div>
   <n-dropdown
     v-else

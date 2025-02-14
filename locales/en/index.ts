@@ -1,3 +1,4 @@
+import assetHub from './assetHub.json';
 import auth from './auth.json';
 import computing from './computing.json';
 import dashboard from './dashboard.json';
@@ -12,12 +13,14 @@ import profile from './profile.json';
 import project from './project.json';
 import referral from './referral.json';
 import rpc from './rpc.json';
+import smartContracts from './smartContracts.json';
 import social from './social.json';
 import storage from './storage.json';
 import validations from './validations.json';
 import w3Warn from './w3Warn.json';
 
 const messages = {
+  ...assetHub,
   ...auth,
   ...computing,
   ...dashboard,
@@ -32,10 +35,10 @@ const messages = {
   ...project,
   ...referral,
   ...rpc,
+  ...smartContracts,
   ...social,
   ...storage,
   ...validations,
   ...w3Warn,
-  
 };
 export default defineI18nLocale(() => messages);

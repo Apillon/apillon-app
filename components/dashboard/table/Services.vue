@@ -32,6 +32,8 @@
 
 <script lang="ts" setup>
 import { NButton, NDropdown, NTag } from 'naive-ui';
+import { ServiceType } from '~/lib/types/service';
+import { PAGINATION_LIMIT } from '~/lib/values/general.values';
 
 const props = defineProps({
   serviceType: {
@@ -55,10 +57,7 @@ const createColumns = (): NDataTableColumns<ServiceInterface> => {
       key: 'name',
       title: $i18n.t('general.serviceName'),
       render(row) {
-        return [
-          h(IconStatus, { active: row.active === 1 }, ''),
-          h('span', { class: 'ml-2 text-blue' }, row.name),
-        ];
+        return [h(IconStatus, { active: row.active === 1 }, ''), h('span', { class: 'ml-2 text-blue' }, row.name)];
       },
     },
     {
@@ -168,8 +167,6 @@ const dropdownOptions = [
  */
 function onServiceDeleted() {
   modalDeleteAuthVisible.value = false;
-  dataStore.services = dataStore.services.filter(
-    item => item.service_uuid !== currentRow.value.service_uuid
-  );
+  dataStore.services = dataStore.services.filter(item => item.service_uuid !== currentRow.value.service_uuid);
 }
 </script>

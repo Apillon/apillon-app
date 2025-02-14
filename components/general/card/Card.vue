@@ -27,6 +27,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { ServiceTypeItem } from '~/composables/useService';
+
 defineProps({
   service: { type: Object as PropType<ServiceTypeItem>, required: true },
   hideUsage: { type: Boolean, default: false },

@@ -60,11 +60,11 @@ useHead({
 const pageLoading = ref<boolean>(true);
 const instructionsVisible = ref<boolean>(false);
 
-onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await indexerStore.getIndexers();
-    pageLoading.value = false;
-  });
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await indexerStore.getIndexers();
+
+  pageLoading.value = false;
 });
 
 function onUpdateAccordion(expandedNames: Array<string | number>) {

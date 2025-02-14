@@ -1,14 +1,14 @@
 <template>
   <div>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
     <template v-else>
       <!-- Info text -->
-      <p v-if="$te('computing.cloudFunctions.infoNew')" class="text-body mb-8">
+      <p v-if="$te('computing.cloudFunctions.infoNew')" class="mb-8 text-body">
         {{ $t('computing.cloudFunctions.infoNew') }}
       </p>
-      <p v-else-if="$te('computing.cloudFunctions.infoEdit')" class="text-body mb-8">
+      <p v-else-if="$te('computing.cloudFunctions.infoEdit')" class="mb-8 text-body">
         {{ $t('computing.cloudFunctions.infoEdit') }}
       </p>
     </template>
@@ -22,11 +22,7 @@
       @submit.prevent="handleSubmit"
     >
       <!--  CloudFunctions name -->
-      <n-form-item
-        path="name"
-        :label="$t('form.label.cloudFunctions.name')"
-        :label-props="{ for: 'name' }"
-      >
+      <n-form-item path="name" :label="$t('form.label.cloudFunctions.name')" :label-props="{ for: 'name' }">
         <n-input
           v-model:value="formData.name"
           :input-props="{ id: 'name' }"
@@ -53,13 +49,7 @@
       <!--  Form submit -->
       <n-form-item :show-feedback="false" :show-label="false">
         <input type="submit" class="hidden" :value="$t('form.continue')" />
-        <Btn
-          type="primary"
-          class="w-full mt-2"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          @click="handleSubmit"
-        >
+        <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           {{ $t('form.continue') }}
         </Btn>
       </n-form-item>
@@ -116,9 +106,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (props.functionUuid) {
       updateCloudFunction();
     } else {
@@ -128,13 +116,9 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createCloudFunction() {
+  if (!dataStore.projectUuid) return;
+
   loading.value = true;
-
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-    if (!dataStore.projectUuid) return;
-  }
-
   try {
     const bodyData = {
       project_uuid: dataStore.projectUuid,
@@ -160,10 +144,7 @@ async function updateCloudFunction() {
   loading.value = true;
 
   try {
-    const res = await $api.patch<JobResponse>(
-      endpoints.cloudFunctions(props.functionUuid),
-      formData.value
-    );
+    const res = await $api.patch<JobResponse>(endpoints.cloudFunctions(props.functionUuid), formData.value);
     cloudFunctionStore.items.forEach(item => {
       if (item.function_uuid === res.data.function_uuid) {
         Object.assign(item, res.data);

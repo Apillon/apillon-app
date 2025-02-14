@@ -1,15 +1,11 @@
 <template>
   <div v-if="loading">
     <transition name="fade" appear>
-      <div
-        v-if="loadingAnimation"
-        class="w-full flex flex-col gap-8"
-        style="height: calc(100dvh - 88px)"
-      >
+      <div v-if="loadingAnimation" class="flex w-full flex-col gap-8 lg:h-screen">
         <!-- Loading skeleton - on long page load show skeleton -->
         <n-skeleton height="40px" width="100%" />
         <n-skeleton height="40px" width="100%" />
-        <div class="flex gap-8 h-full">
+        <div class="flex h-full gap-8">
           <div style="width: 100%">
             <n-skeleton height="80%" width="100%" />
           </div>
@@ -25,23 +21,16 @@
       <slot name="heading"> </slot>
     </div>
 
-    <div class="flex flex-auto w-full flex-col md:flex-row" :class="{ [$style.mainnet]: mainnet }">
+    <div class="flex w-full flex-auto flex-col md:flex-row" :class="{ [$style.mainnet]: mainnet }">
       <div v-if="mainnet" class="absolute top-0 w-full">
-        <Tag
-          class="absolute top-0 left-1/2 -translate-y-full -translate-x-1/2 text-[10px] px-1"
-          color="violet"
-        >
+        <Tag class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-full px-1 text-[10px]" color="violet">
           MAINNET
         </Tag>
       </div>
-      <n-layout
-        class="has-scrollbar"
-        sider-placement="right"
-        :has-sider="instructionsAvailable && isMd"
-      >
+      <n-layout class="has-scrollbar" sider-placement="right" :has-sider="instructionsAvailable && isMd">
         <n-layout-content>
           <n-scrollbar y-scrollable :style="instructionsAvailable || fullHeight ? {} : scrollStyle">
-            <div class="pt-8" :style="fullHeight ? heightScreen : {}">
+            <div :style="fullHeight ? heightScreen : {}">
               <slot />
             </div>
 
@@ -51,18 +40,12 @@
 
             <!-- Global component: File upload list -->
             <FormStorageUploadFiles
-              v-if="
-                (bucketStore.uploadActive && bucketStore.bucketUuid) ||
-                bucketStore.uploadFileList.length > 0
-              "
+              v-if="(bucketStore.uploadActive && bucketStore.bucketUuid) || bucketStore.uploadFileList.length > 0"
               :bucket-uuid="bucketStore.bucketUuid"
             />
 
             <!-- Global component: Spending warning -->
-            <ModalSpendingWarning
-              v-model:show="warningStore.isSpendingWarningOpen"
-              @close="onSpendingWaningClose"
-            />
+            <ModalSpendingWarning v-model:show="warningStore.isSpendingWarningOpen" @close="onSpendingWaningClose" />
 
             <!-- Global component: deployment progress -->
             <StatusCard v-if="activeDeployments.length > 0" />
@@ -84,7 +67,7 @@
                 {{ $t('general.learn') }}
               </h6>
               <button
-                class="btn-collapse flex justify-center items-center w-8 h-7 float-right border-[1px] text-[10px]"
+                class="btn-collapse float-right flex h-7 w-8 items-center justify-center border-[1px] text-[10px]"
                 @click="learnCollapsed = !learnCollapsed"
               >
                 <svg viewBox="0 0 24 24" width="24" height="24">
@@ -106,7 +89,7 @@
               <learn-section />
             </slot>
           </div>
-          <div v-else class="py-8 h-full">
+          <div v-else class="h-full py-8">
             <slot v-if="!learnCollapsed" name="learn">
               <learn-section />
             </slot>
@@ -141,7 +124,7 @@ const { name } = useRoute();
 /** Heading height */
 const headingRef = ref<HTMLElement>();
 
-const calcHeaderHeight = () => (headingRef.value?.clientHeight || 0) + (isLg.value ? 120 : 124);
+const calcHeaderHeight = () => (headingRef.value?.clientHeight || 0) + (isLg.value ? 32 : 124);
 const headingHeight = ref<number>(calcHeaderHeight());
 
 const scrollStyle = computed(() => ({
@@ -192,9 +175,7 @@ const instructionsAvailable = computed<boolean>(() => {
 });
 
 // Keep info about collapsible section learn in local storage
-const learnCollapsed = ref<boolean>(
-  props.learnCollapsible && localStorage.getItem('learnCollapsed') === '1'
-);
+const learnCollapsed = ref<boolean>(props.learnCollapsible && localStorage.getItem('learnCollapsed') === '1');
 
 function handleOnUpdateCollapse(value: boolean) {
   localStorage.setItem('learnCollapsed', value ? '1' : '0');
@@ -214,11 +195,11 @@ function onSpendingWaningClose() {
 </style>
 <style lang="postcss" module>
 .mainnet {
-  @apply relative py-[1px] -mt-[2px];
+  @apply relative -mt-[2px] py-[1px];
 
   &:before {
     content: '';
-    @apply absolute top-0 -left-8 -right-8 bottom-0 border border-violet;
+    @apply absolute -left-8 -right-8 bottom-0 top-0 border border-violet;
   }
 }
 </style>

@@ -12,7 +12,7 @@
       </Heading>
     </template>
     <slot>
-      <div class="grid sm:grid-cols-billing gap-8 mb-12 max-w-6xl">
+      <div class="mb-12 grid max-w-6xl gap-8 sm:grid-cols-billing">
         <PaymentCardCredits />
         <PaymentCardPlan />
       </div>
@@ -20,25 +20,22 @@
       <!-- Usage -->
       <div class="mt-6 pb-8">
         <h3 class="mb-6">{{ $t('dashboard.usage.title') }}</h3>
-        <div class="p-3 border-b border-bg-lighter flex gap-2">
+        <div class="flex gap-2 border-b border-bg-lighter p-3">
           <span class="icon-storage text-xl"></span>
           <h5>
             {{ $t('dashboard.usage.storage') }} -
             {{ paymentStore.getActiveSubscriptionPackage?.name }}
           </h5>
         </div>
-        <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
+        <div class="items-center gap-3 border-b border-bg-lighter p-3 text-body sm:flex">
           <div class="min-w-[12rem]">
             {{ $t('dashboard.usage.bytesStored') }}
           </div>
           <div class="w-full">
-            <PaymentProgress
-              :size="storageStore.info.usedStorage"
-              :total-size="storageStore.info.availableStorage"
-            />
+            <PaymentProgress :size="storageStore.info.usedStorage" :total-size="storageStore.info.availableStorage" />
           </div>
         </div>
-        <div class="p-3 border-b border-bg-lighter sm:flex items-center gap-3 text-body">
+        <div class="items-center gap-3 border-b border-bg-lighter p-3 text-body sm:flex">
           <div class="min-w-[12rem]">
             {{ $t('dashboard.usage.bandwith') }}
           </div>
@@ -68,39 +65,36 @@ useHead({
 
 const loading = ref<boolean>(true);
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      const promises: Promise<any>[] = [];
+onMounted(async () => {
+  await dataStore.waitOnPromises();
 
-      promises.push(
-        new Promise<void>(resolve => {
-          paymentStore.getActiveSubscription().then(() => resolve());
-        })
-      );
-      promises.push(
-        new Promise<void>(resolve => {
-          paymentStore.getSubscriptionPackages().then(() => resolve());
-        })
-      );
-      promises.push(
-        new Promise<void>(resolve => {
-          paymentStore.getCreditPackages().then(() => resolve());
-        })
-      );
-      promises.push(
-        new Promise<void>(resolve => {
-          storageStore.getStorageInfo().then(() => resolve());
-        })
-      );
+  const promises: Promise<any>[] = [];
 
-      await Promise.all(promises).then(async _ => {
-        loading.value = false;
+  promises.push(
+    new Promise<void>(resolve => {
+      paymentStore.getActiveSubscription().then(() => resolve());
+    })
+  );
+  promises.push(
+    new Promise<void>(resolve => {
+      paymentStore.getSubscriptionPackages().then(() => resolve());
+    })
+  );
+  promises.push(
+    new Promise<void>(resolve => {
+      paymentStore.getCreditPackages().then(() => resolve());
+    })
+  );
+  promises.push(
+    new Promise<void>(resolve => {
+      storageStore.getStorageInfo().then(() => resolve());
+    })
+  );
 
-        creditsMessage();
-        subscriptionMessage();
-      });
-    });
-  }, 100);
+  await Promise.all(promises);
+  creditsMessage();
+  subscriptionMessage();
+
+  loading.value = false;
 });
 </script>

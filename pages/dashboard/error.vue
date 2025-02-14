@@ -9,8 +9,7 @@
     </template>
     <slot>
       <div
-        class="flex justify-center items-center relative pt-8 px-4"
-        style="height: calc(100dvh - 88px)"
+        class="flex justify-center items-center relative pt-8 px-4 lg:h-screen"
       >
         <div class="text-center">
           <!-- customise 404 message from template section -->

@@ -69,7 +69,7 @@
 
 <script lang="ts" setup>
 import { ServiceTypeName } from '~/lib/types/service';
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const props = defineProps({
   showUpload: { type: Boolean, default: false },

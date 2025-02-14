@@ -13,27 +13,19 @@
       align="center"
       :wrap="false"
     >
-      <span class="mx-1 uppercase">{{
-        $t(`dashboard.service.smartContracts.status.${contractStatus}`)
-      }}</span>
+      <span class="mx-1 uppercase">{{ $t(`smartContracts.status.${contractStatus}`) }}</span>
       <AnimationTyping
-        v-if="
-          contractStatus < SmartContractStatus.DEPLOYED ||
-          contractStatus === SmartContractStatus.TRANSFERRING
-        "
+        v-if="contractStatus < SmartContractStatus.DEPLOYED || contractStatus === SmartContractStatus.TRANSFERRING"
       />
     </n-space>
   </n-tag>
 </template>
 
 <script lang="ts" setup>
+import { SmartContractStatus } from '~/lib/types/smartContracts';
+
 defineProps({
-  contractStatus: {
-    type: Number,
-    validator: (contractStatus: number) =>
-      Object.values(SmartContractStatus).includes(contractStatus),
-    default: 0,
-  },
+  contractStatus: { type: Number as PropType<SmartContractStatus>, default: SmartContractStatus.CREATED },
 });
 
 /** Deployment status */

@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 defineProps({
   title: { type: String, default: '' },
@@ -20,7 +20,7 @@ defineProps({
 const alertLearnOverrides = {
   color: colors.transparent,
   iconColor: colors.primary,
-  titleTextColor: colors.white,
+  titleTextColor: colors.white.DEFAULT,
   border: `1px solid ${colors.body}`,
 };
 </script>

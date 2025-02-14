@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 import type { DropdownProps } from 'naive-ui';
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 import { dateTimeToDate } from '~/lib/utils/dates';
 
 defineProps({

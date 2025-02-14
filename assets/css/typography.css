@@ -60,7 +60,7 @@
   }
 
   p {
-    @apply body-md text-body;
+    @apply body-md whitespace-break-spaces text-white-primary;
 
     + h2,
     + .h2,
@@ -72,6 +72,15 @@
     + ul {
       @apply mt-4;
     }
+
+    strong,
+    b {
+      @apply font-semibold;
+    }
+  }
+
+  b {
+    @apply font-semibold;
   }
 
   ul {
@@ -95,18 +104,39 @@
     line-height: 1.715;
   }
 
+  .body-xl {
+    @apply text-lg;
+
+    strong,
+    b {
+      @apply font-semibold;
+    }
+  }
+
   .body-lg {
-    font-size: 1rem;
-    line-height: 1.625;
+    @apply text-base;
+
+    strong,
+    b {
+      @apply font-semibold;
+    }
   }
 
   .body-md {
-    font-size: 0.875rem;
-    line-height: 1.715;
+    @apply text-sm;
+
+    strong,
+    b {
+      @apply font-semibold;
+    }
   }
 
   .body-sm {
-    font-size: 0.75rem;
-    line-height: 1.666666;
+    @apply text-xs;
+
+    strong,
+    b {
+      @apply font-semibold;
+    }
   }
 }

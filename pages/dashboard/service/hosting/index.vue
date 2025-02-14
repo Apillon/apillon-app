@@ -8,12 +8,7 @@
         <ActionsHosting />
         <TableHosting :websites="websiteStore.items" />
       </n-space>
-      <Empty
-        v-else
-        :title="$t('hosting.web3Hosting')"
-        :info="$t('hosting.web3HostingEnable')"
-        icon="storage/empty"
-      >
+      <Empty v-else :title="$t('hosting.web3Hosting')" :info="$t('hosting.web3HostingEnable')" icon="storage/empty">
         <Btn type="primary" @click="createNewWebsite">
           {{ $t('hosting.website.addFirst') }}
         </Btn>
@@ -45,15 +40,12 @@ useHead({
   title: $i18n.t('dashboard.nav.hosting'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await storageStore.getStorageInfo();
-      await websiteStore.getWebsites();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await storageStore.getStorageInfo();
+  await websiteStore.getWebsites();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 
 /**

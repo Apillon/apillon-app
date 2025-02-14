@@ -57,7 +57,7 @@
         @click="router.push({ name: 'dashboard-service-smart-contracts-new' })"
       >
         <span class="icon-file mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ $t('dashboard.service.smartContracts.new') }}</span>
+        <span class="text-primary">{{ $t('smartContracts.new') }}</span>
       </n-button>
     </n-space>
   </n-space>

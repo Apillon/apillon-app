@@ -7,7 +7,7 @@
     <slot v-if="indexerStore.active.indexer_uuid">
       <n-space v-if="indexerStore.active?.squidId" class="pb-8" :size="24" vertical>
         <ActionsIndexerGeneral />
-        <div class="flex gap-x-6 gap-y-8 flex-wrap lg:flex-nowrap pb-8">
+        <div class="flex flex-wrap gap-x-6 gap-y-8 pb-8 lg:flex-nowrap">
           <div class="lg:w-1/2">
             <h4 class="mb-4">{{ $t('indexer.indexerGeneralData') }}</h4>
             <TableIndexerGeneral />
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 const { t } = useI18n();
 const indexerStore = useIndexerStore();
@@ -68,7 +68,7 @@ const prepareUsageData = () => {
       {
         label: 'Success',
         backgroundColor: colors.green,
-        borderColor: colors.white,
+        borderColor: colors.white.DEFAULT,
         data: dataSuccess,
         fill: true,
         borderWidth: 1,
@@ -76,7 +76,7 @@ const prepareUsageData = () => {
       {
         label: 'Error',
         backgroundColor: colors.pink,
-        borderColor: colors.white,
+        borderColor: colors.white.DEFAULT,
         data: dataError,
         fill: true,
         borderWidth: 1,

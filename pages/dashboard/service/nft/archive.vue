@@ -35,16 +35,13 @@ useHead({
   title: t('dashboard.nav.nft'),
 });
 
-onMounted(() => {
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await collectionStore.getCollectionArchive();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await collectionStore.getCollectionArchive();
 
-      /** Get Price list */
-      paymentStore.getPriceList();
+  /** Get Price list */
+  paymentStore.getPriceList();
 
-      pageLoading.value = false;
-    });
-  }, 100);
+  pageLoading.value = false;
 });
 </script>

@@ -453,7 +453,7 @@ async function onFolderOpen(folder: BucketItemInterface) {
   clearSorter();
 }
 
-onMounted(() => {
+onMounted(async () => {
   /** Check if selected columns are stored in LS */
   if (localStorage.getItem(LsTableColumnsKeys.FILES)) {
     selectedColumns.value = JSON.parse(localStorage.getItem(LsTableColumnsKeys.FILES) || '');
@@ -462,12 +462,9 @@ onMounted(() => {
   /**
    * Load data on mounted
    */
-  setTimeout(() => {
-    Promise.all(Object.values(dataStore.promises)).then(async _ => {
-      await bucketStore.getDirectoryContent();
-      checkUnfinishedFiles();
-    });
-  }, 100);
+  await dataStore.waitOnPromises();
+  await bucketStore.getDirectoryContent();
+  checkUnfinishedFiles();
 });
 onUnmounted(() => {
   clearInterval(fileInterval);

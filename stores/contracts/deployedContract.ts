@@ -83,9 +83,7 @@ export const useDeployedContractStore = defineStore('deployedContract', {
       showLoader: boolean = true
     ): Promise<DeployedContractInterface[]> {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return this.items;
 
       this.loading = showLoader;
       try {
@@ -118,9 +116,7 @@ export const useDeployedContractStore = defineStore('deployedContract', {
       showLoader: boolean = true
     ): Promise<DeployedContractInterface[]> {
       const dataStore = useDataStore();
-      if (!dataStore.hasProjects) {
-        await dataStore.fetchProjects();
-      }
+      if (!dataStore.projectUuid) return this.archive.items;
 
       this.archive.loading = showLoader;
       try {

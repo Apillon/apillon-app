@@ -258,14 +258,9 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createContract() {
+  if (!dataStore.projectUuid) return;
+
   loading.value = true;
-
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-
-    if (!dataStore.projectUuid) return;
-  }
-
   try {
     const bodyData = {
       ...contractStore.form,

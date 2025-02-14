@@ -41,10 +41,7 @@
 
       <!-- Modal - Create bucket -->
       <modal v-model:show="showModalNewBucket" :title="$t('project.newBucket')">
-        <FormStorageBucket
-          @submit-success="showModalNewBucket = false"
-          @create-success="onBucketCreated"
-        />
+        <FormStorageBucket @submit-success="showModalNewBucket = false" @create-success="onBucketCreated" />
       </modal>
     </slot>
   </Dashboard>
@@ -64,13 +61,12 @@ useHead({
   title: $i18n.t('dashboard.nav.storage'),
 });
 
-onMounted(() => {
-  Promise.all(Object.values(dataStore.promises)).then(async _ => {
-    await storageStore.getStorageInfo();
-    await bucketStore.getBuckets();
+onMounted(async () => {
+  await dataStore.waitOnPromises();
+  await storageStore.getStorageInfo();
+  await bucketStore.getBuckets();
 
-    pageLoading.value = false;
-  });
+  pageLoading.value = false;
 });
 
 /**

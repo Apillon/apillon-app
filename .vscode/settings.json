@@ -6,6 +6,6 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "i18n-ally.localesPaths": ["locales"],
   "i18n-ally.keystyle": "nested",
-  "html.format.wrapLineLength": 140,
-  "nuxt.isNuxtApp": false
+  "i18n-ally.sourceLanguage": "english",
+  "html.format.wrapLineLength": 140
 }

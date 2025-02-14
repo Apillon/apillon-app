@@ -91,7 +91,7 @@
 <script lang="ts" setup>
 import type { Type as NButtonType } from 'naive-ui/es/button/src/interface';
 import type { ButtonType } from '~/components/general/Btn.vue';
-import colors from '~/tailwind.colors';
+import { colors } from '~/tailwind.config';
 
 defineProps({
   showCard: { type: Boolean, default: true },

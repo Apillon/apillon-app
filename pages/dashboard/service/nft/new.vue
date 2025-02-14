@@ -122,8 +122,7 @@ useHead({
 });
 
 onMounted(async () => {
-  await Promise.all(Object.values(dataStore.promises));
-
+  await dataStore.waitOnPromises();
   await collectionStore.getCollections();
   storageStore.getStorageInfo();
   paymentStore.getPriceList();

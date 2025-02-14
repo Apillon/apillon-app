@@ -30,8 +30,6 @@ const authStore = useAuthStore();
 const dataStore = useDataStore();
 
 const menuKey = computed<string>(() => `menu-${dataStore.project.items.length}`);
-const zeroProjects = computed(() => dataStore.hasProjects === false);
-
 const defaultExpandedKeys = computed(() => ['coreWeb3Infrastructure', 'assetManagement', 'utility']);
 
 const menuOptions = computed<MenuMixedOption[]>(() => {
@@ -49,7 +47,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       to: 'dashboard-service',
       color: 'yellow',
       svgIcon: 'menu/home-gear',
-      // show: !props.collapsed,
     },
     {
       key: 'dashboard-simplets',
@@ -57,7 +54,6 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       to: 'dashboard-solution',
       color: 'blue',
       svgIcon: 'menu/tools',
-      // show: !props.collapsed,
     },
   ];
 
@@ -68,8 +64,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       to: 'dashboard-service-storage',
       iconName: 'icon-storage',
       soon: isMenuItemDisabled(Feature.STORAGE),
-      disabled:
-        isMenuItemDisabled(Feature.STORAGE) || !authStore.isUserAllowed(Permission.STORAGE) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.STORAGE) || !authStore.isUserAllowed(Permission.STORAGE),
     },
     {
       key: 'dashboard-service-hosting',
@@ -77,8 +72,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       to: 'dashboard-service-hosting',
       iconName: 'icon-hosting',
       soon: isMenuItemDisabled(Feature.HOSTING),
-      disabled:
-        isMenuItemDisabled(Feature.HOSTING) || !authStore.isUserAllowed(Permission.HOSTING) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.HOSTING) || !authStore.isUserAllowed(Permission.HOSTING),
     },
     {
       key: 'dashboard-service-embedded-wallet',
@@ -87,10 +81,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-wallet',
       soon: isMenuItemDisabled(Feature.EMBEDDED_WALLET),
       beta: isBetaFeature(Feature.EMBEDDED_WALLET),
-      disabled:
-        isMenuItemDisabled(Feature.EMBEDDED_WALLET) ||
-        !authStore.isUserAllowed(Permission.EMBEDDED_WALLET) ||
-        zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.EMBEDDED_WALLET) || !authStore.isUserAllowed(Permission.EMBEDDED_WALLET),
     },
     {
       key: 'dashboard-service-cloud-functions',
@@ -99,10 +90,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-cloud-functions',
       soon: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS),
       beta: isBetaFeature(Feature.CLOUD_FUNCTIONS),
-      disabled:
-        isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) ||
-        !authStore.isUserAllowed(Permission.COMPUTING) ||
-        zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.CLOUD_FUNCTIONS) || !authStore.isUserAllowed(Permission.COMPUTING),
     },
     {
       key: 'dashboard-service-rpc',
@@ -111,7 +99,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-rpc',
       soon: isMenuItemDisabled(Feature.RPC),
       beta: isBetaFeature(Feature.RPC),
-      disabled: isMenuItemDisabled(Feature.RPC) || !authStore.isUserAllowed(Permission.RPC) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.RPC) || !authStore.isUserAllowed(Permission.RPC),
     },
     {
       key: 'dashboard-service-indexing',
@@ -120,8 +108,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-indexer',
       soon: isMenuItemDisabled(Feature.INDEXING),
       beta: isBetaFeature(Feature.INDEXING),
-      disabled:
-        isMenuItemDisabled(Feature.INDEXING) || !authStore.isUserAllowed(Permission.INDEXING) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.INDEXING) || !authStore.isUserAllowed(Permission.INDEXING),
     },
   ];
 
@@ -132,7 +119,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       to: 'dashboard-service-nft',
       iconName: 'icon-NFTs',
       soon: isMenuItemDisabled(Feature.NFT),
-      disabled: isMenuItemDisabled(Feature.NFT) || !authStore.isUserAllowed(Permission.NFTS) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.NFT) || !authStore.isUserAllowed(Permission.NFTS),
     },
     {
       key: 'dashboard-service-smart-contracts',
@@ -141,7 +128,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       iconName: 'icon-file',
       soon: isMenuItemDisabled(Feature.SMART_CONTRACTS),
       beta: isBetaFeature(Feature.SMART_CONTRACTS),
-      disabled: isMenuItemDisabled(Feature.SMART_CONTRACTS) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.SMART_CONTRACTS),
     },
     {
       key: 'dashboard-service-asset-hub',
@@ -150,7 +137,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       svgIcon: 'icon/asset-hub',
       show: !isMenuItemDisabled(Feature.ASSET_HUB),
       beta: isBetaFeature(Feature.ASSET_HUB),
-      disabled: isMenuItemDisabled(Feature.ASSET_HUB) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.ASSET_HUB),
     },
   ];
 
@@ -161,8 +148,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       to: 'dashboard-service-computing',
       iconName: 'icon-computing',
       soon: isMenuItemDisabled(Feature.COMPUTING),
-      disabled:
-        isMenuItemDisabled(Feature.COMPUTING) || !authStore.isUserAllowed(Permission.COMPUTING) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.COMPUTING) || !authStore.isUserAllowed(Permission.COMPUTING),
     },
     {
       key: 'dashboard-service-authentication',
@@ -170,17 +156,14 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       to: 'dashboard-service-authentication',
       iconName: 'icon-authentication',
       soon: isMenuItemDisabled(Feature.AUTHENTICATION),
-      disabled:
-        isMenuItemDisabled(Feature.AUTHENTICATION) ||
-        !authStore.isUserAllowed(Permission.AUTHENTICATION) ||
-        zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.AUTHENTICATION) || !authStore.isUserAllowed(Permission.AUTHENTICATION),
     },
     {
       key: 'dashboard-service-social',
       label: t('dashboard.nav.social'),
       to: 'dashboard-service-social',
       iconName: 'icon-social',
-      disabled: isMenuItemDisabled(Feature.SOCIAL) || !authStore.isUserAllowed(Permission.SOCIAL) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.SOCIAL) || !authStore.isUserAllowed(Permission.SOCIAL),
     },
   ];
 
@@ -190,35 +173,30 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.solution.nftPoap.name'),
       iconName: 'icon-poap',
       to: 'dashboard-solution-proof-of-attendance',
-      disabled: zeroProjects.value,
     },
     {
       key: 'dashboard-solution-airdrop',
       label: t('dashboard.solution.nftAirdrop.name'),
       iconName: 'icon-nft-mint-airdrop',
       to: 'dashboard-solution-airdrop',
-      disabled: zeroProjects.value,
     },
     {
       key: 'dashboard-solution-email-signup-airdrop',
       label: t('dashboard.solution.nftEmailSignupAirdrop.name'),
       iconName: 'icon-nft-drop',
       to: 'dashboard-solution-email-signup-airdrop',
-      disabled: zeroProjects.value,
     },
     {
       key: 'dashboard-solution-whitelist-claim',
       label: t('dashboard.solution.nftWhitelistClaim.name'),
       iconName: 'icon-gift',
       to: 'dashboard-solution-whitelist-claim',
-      disabled: zeroProjects.value,
     },
     {
       key: 'dashboard-solution-openGov',
       label: t('dashboard.solution.openGov.name'),
       iconName: 'icon-brand-membership',
       to: 'dashboard-solution-openGov',
-      disabled: zeroProjects.value,
     },
   ];
 
@@ -228,21 +206,21 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.nav.projectSettings'),
       to: 'dashboard-project-settings',
       iconName: 'icon-project-setting',
-      disabled: isMenuItemDisabled(Feature.PROJECT_SETTINGS) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.PROJECT_SETTINGS),
     },
     {
       key: 'dashboard-access',
       label: t('dashboard.nav.access'),
       to: 'dashboard-users-permissions',
       iconName: 'icon-acess',
-      disabled: isMenuItemDisabled(Feature.ACCESS) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.ACCESS),
     },
     {
       key: 'dashboard-api-keys',
       label: t('dashboard.nav.apiKeys'),
       to: 'dashboard-api-keys',
       iconName: 'icon-api-keys',
-      disabled: isMenuItemDisabled(Feature.API_KEYS) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.API_KEYS),
       show: !dataStore.isProjectUser,
     },
     {
@@ -250,7 +228,7 @@ const menuOptions = computed<MenuMixedOption[]>(() => {
       label: t('dashboard.nav.billing'),
       to: 'dashboard-payments',
       iconName: 'icon-billing',
-      disabled: isMenuItemDisabled(Feature.BILLING) || zeroProjects.value,
+      disabled: isMenuItemDisabled(Feature.BILLING),
       show: !dataStore.isProjectUser,
     },
   ];

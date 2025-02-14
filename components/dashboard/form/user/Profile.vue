@@ -1,11 +1,5 @@
 <template>
-  <n-form
-    ref="formRef"
-    class="w-full max-w-lg"
-    :model="formData"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" class="w-full max-w-lg" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Username -->
     <n-form-item path="name" :label="$t('form.label.username')" :label-props="{ for: 'username' }">
       <n-input
@@ -31,13 +25,7 @@
     <!--  Submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.save')" />
-      <Btn
-        class="mt-2"
-        size="large"
-        type="secondary"
-        :loading="loading || loadingForm"
-        @click="handleSubmit"
-      >
+      <Btn class="mt-2" size="large" type="secondary" :loading="loading || loadingForm" @click="handleSubmit">
         {{ $t('form.save') }}
       </Btn>
     </n-form-item>
@@ -78,17 +66,16 @@ const rules: NFormRules = {
   ],
 };
 
-onMounted(() => {
+onMounted(async () => {
   /** If page was reloaded, populate form data after page has been loaded */
-  setTimeout(() => {
-    Promise.all(Object.values(authStore.promises)).then(_ => {
-      if (!formData.value.name || !formData.value.email) {
-        formData.value.name = authStore.username;
-        formData.value.email = authStore.email;
-      }
-      loadingForm.value = false;
-    });
-  }, 500);
+  await sleep(300);
+  await Promise.all(Object.values(authStore.promises));
+
+  if (!formData.value.name || !formData.value.email) {
+    formData.value.name = authStore.username;
+    formData.value.email = authStore.email;
+  }
+  loadingForm.value = false;
 });
 
 // Submit
@@ -96,9 +83,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       await updateUserProfile();
     }
