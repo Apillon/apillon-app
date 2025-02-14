@@ -4,6 +4,9 @@ export const useDeploymentStore = defineStore('deployment', {
   state: () => ({
     active: {} as DeploymentInterface,
     loading: false,
+    buildsLoading: false,
+    builds: [] as DeploymentBuildInterface[],
+
     production: [] as DeploymentInterface[],
     staging: [] as DeploymentInterface[],
   }),
@@ -13,6 +16,9 @@ export const useDeploymentStore = defineStore('deployment', {
     },
     hasStagingDeployments(state): boolean {
       return Array.isArray(state.staging) && state.staging.length > 0;
+    },
+    hasBuildsLoaded(state): boolean {
+      return Array.isArray(state.builds) && state.builds.length > 0;
     },
   },
   actions: {
@@ -24,10 +30,7 @@ export const useDeploymentStore = defineStore('deployment', {
     /**
      * Fetch wrappers
      */
-    async getDeployments(
-      websiteUuid: string,
-      env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION
-    ) {
+    async getDeployments(websiteUuid: string, env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION) {
       if (env === DeploymentEnvironment.PRODUCTION) {
         if (!this.hasProductionDeployments || isCacheExpired(LsCacheKeys.DEPLOYMENTS_PRODUCTION)) {
           return await this.fetchDeployments(websiteUuid, env);
@@ -41,23 +44,23 @@ export const useDeploymentStore = defineStore('deployment', {
 
     /** Find bucket by ID, if bucket doesn't exists in store, fetch it */
     async getDeployment(websiteUuid: string, deploymentUuid: string): Promise<DeploymentInterface> {
-      if (
-        this.active?.deployment_uuid === deploymentUuid &&
-        !isCacheExpired(LsCacheKeys.DEPLOYMENT)
-      ) {
+      if (this.active?.deployment_uuid === deploymentUuid && !isCacheExpired(LsCacheKeys.DEPLOYMENT)) {
         return this.active;
       }
       return await this.fetchDeployment(websiteUuid, deploymentUuid);
+    },
+
+    async getBuilds(websiteUuid: string) {
+      if (!this.hasBuildsLoaded || isCacheExpired(LsCacheKeys.DEPLOYMENT_BUILD)) {
+        await this.fetchBuilds(websiteUuid);
+      }
     },
 
     /**
      * API calls
      */
 
-    async fetchDeployments(
-      websiteUuid: string,
-      env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION
-    ) {
+    async fetchDeployments(websiteUuid: string, env: DeploymentEnvironment = DeploymentEnvironment.PRODUCTION) {
       this.loading = true;
       try {
         const res = await $api.get<DeploymentsResponse>(endpoints.deployments(websiteUuid), {
@@ -91,15 +94,31 @@ export const useDeploymentStore = defineStore('deployment', {
       }
       this.loading = false;
     },
+    async fetchBuilds(websiteUuid: string) {
+      this.buildsLoading = true;
 
-    async fetchDeployment(
-      websiteUuid: string,
-      deploymentUuid: string
-    ): Promise<DeploymentInterface> {
       try {
-        const res = await $api.get<DeploymentResponse>(
-          endpoints.deployment(websiteUuid, deploymentUuid)
-        );
+        const res = await $api.get<DeploymentBuildsResponse>(endpoints.deploymentBuilds, {
+          orderBy: 'createTime',
+          desc: 'true',
+          ...PARAMS_ALL_ITEMS,
+          websiteUuid,
+        });
+
+        this.builds = res.data.items;
+
+        sessionStorage.setItem(LsCacheKeys.DEPLOYMENT_BUILD, Date.now().toString());
+      } catch (error) {
+        this.builds = [] as DeploymentBuildInterface[];
+        window.$message.error(userFriendlyMsg(error));
+      }
+
+      this.buildsLoading = false;
+    },
+
+    async fetchDeployment(websiteUuid: string, deploymentUuid: string): Promise<DeploymentInterface> {
+      try {
+        const res = await $api.get<DeploymentResponse>(endpoints.deployment(websiteUuid, deploymentUuid));
 
         this.active = res.data;
 
@@ -127,10 +146,7 @@ export const useDeploymentStore = defineStore('deployment', {
           environment: env,
           website_uuid: websiteUuid,
         };
-        const deployment = await $api.post<DeploymentResponse>(
-          endpoints.websiteDeploy(websiteUuid),
-          params
-        );
+        const deployment = await $api.post<DeploymentResponse>(endpoints.websiteDeploy(websiteUuid), params);
 
         window.$message.success(window.$i18n.t('form.success.websiteDeploying'));
         return deployment.data;

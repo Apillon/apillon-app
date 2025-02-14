@@ -23,6 +23,13 @@ export enum DeploymentStatus {
   REJECTED = 101,
 }
 
+export enum DeploymentBuildStatus {
+  PENDING = 1,
+  IN_PROGRESS = 2,
+  SUCCESS = 3,
+  FAILED = 4,
+}
+
 export enum WebsiteDomainStatus {
   /** Not yet processed and resolved */
   PENDING = 0,
@@ -69,6 +76,7 @@ declare global {
     ipnsProduction: string | null;
     ipnsStaging: string | null;
     productionBucket: BucketInterface;
+    repoId: number | null;
     stagingBucket: BucketInterface;
     w3ProductionLink: string | null;
     w3StagingLink: string | null;
@@ -91,6 +99,16 @@ declare global {
   interface DeploymentResponse extends GeneralResponse<DeploymentInterface> {}
   interface DeploymentsResponse extends GeneralItemsResponse<DeploymentInterface> {}
 
+  interface DeploymentBuildInterface {
+    id: number;
+    buildStatus: number;
+    logs: string;
+    createTime: string;
+    finishedTime: string;
+  }
+
+  interface DeploymentBuildResponse extends GeneralResponse<DeploymentBuildInterface> {}
+  interface DeploymentBuildsResponse extends GeneralItemsResponse<DeploymentBuildInterface> {}
   /**
    * Short URL
    */

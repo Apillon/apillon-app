@@ -1,96 +1,144 @@
 {
-    "hosting": {
-        "deployment": {
-          "env": {
-            "1": "Staging",
-            "2": "Production",
-            "3": "Direct to production"
-          },
-          "status": {
-            "0": "INITIATED",
-            "1": "IN PROGRESS",
-            "2": "IN REVIEW",
-            "3": "APPROVED",
-            "10": "SUCCESSFUL",
-            "100": "FAILED",
-            "101": "REJECTED"
-          }
-        },
-        "domain": {
-          "add": "Add domain",
-          "configure": "DNS Records",
-          "domainStatus": "Domain status",
-          "editDisabled": "Website domain can be changed every 15 minutes. ",
-          "preview": "Domain preview",
-          "refreshStatus": "Refresh domain status",
-          "remove": "Remove domain",
-          "setup": "Setup domain",
-          "update": "Update domain",
-          "useIpns": "Use IPNS",
-          "labelInfo": {
-            "useIpns": "IPNS is a feature of the IPFS that allows a consistent address to be used even when the content changes. This means you can share the same address, and any updates to the content won't require a new address."
-          },
-          "status": {
-            "0": "Not Connected",
-            "1": "OK",
-            "2": "Domain has CDN",
-            "10": "Invalid, domain is not pointing to Apillon IP"
-          }
-        },
-        "menu": {
-          "archive": "Website Archive",
-          "preview": "1. Upload",
-          "staging": "2. Preview",
-          "production": "3. Production",
-          "website": "Websites"
-        },
-        "review": {
-          "confirm": "Proceed with Website Deployment, I'll wait",
-          "content": [
-            "Deployments of websites on the Free Plan undergo security checks to prevent phishing attempts and other malicious activities. While we typically review websites promptly, please note that it may take up to 24 hours. Once approved, your website will be accessible through our IPFS gateway.",
-            "Consider upgrading to one of our paid plans for immediate deployment without the security check delay."
-          ],
-          "title": "Free Plan Website Review by Apillon",
-          "upgrade": "Upgrade Now"
-        },
-        "upload": {
-          "directory": "Upload folder",
-          "dragAndDrop": "Drag & drop (up to 100 files)",
-          "files": "Upload files and folders"
-        },
-        "website": {
-          "addFirst": "Add first website",
-          "create": "Create website",
-          "description": "Website description",
-          "delete": "Delete website",
-          "deleteConfirm": "Are you sure that you want to delete selected website?",
-          "domain": "Domain name",
-          "edit": "Edit website",
-          "infoNew": "",
-          "infoEdit": "",
-          "name": "Website name",
-          "new": "New website",
-          "update": "Update website",
-          "uuid": "Website UUID"
-        },
-        "clearAll": "Clear all",
-        "clearAllFiles": "Do you want to remove all files?",
-        "clearAllWarn": "With this action you will erase all files. To deploy new version to preview, you will have to upload whole website.",
-        "deployProd": "Deploy to production",
-        "deployStage": "Deploy to staging",
-        "deploymentStatus": "Deployment status",
-        "ipfsLink": "IPFS link",
-        "ipns": "IPNS",
-        "ipnsAddress": "IPNS Address",
-        "ipnsLink": "IPNS link",
-        "ipnsInfo": "It may take up to 5 minutes for the changes to become visible after the deployment has been completed.",
-        "management": "Hosting management",
-        "productionEmpty": "Deploy files from staging to production",
-        "size": "Size",
-        "stagingEmpty": "Upload files and deploy them to staging",
-        "web3Hosting": "Web3 hosting",
-        "web3HostingArchive": "Web3 hosting Archive",
-        "web3HostingArchiveInfo": "You don't have any website in Archive.",
-        "web3HostingEnable": "Enable Web3 hosting to host your website."
+  "hosting": {
+    "deployment": {
+      "env": {
+        "1": "Staging",
+        "2": "Production",
+        "3": "Direct to production"
+      },
+      "status": {
+        "0": "INITIATED",
+        "1": "IN PROGRESS",
+        "2": "IN REVIEW",
+        "3": "APPROVED",
+        "10": "SUCCESSFUL",
+        "100": "FAILED",
+        "101": "REJECTED"
       }
+    },
+    "domain": {
+      "add": "Add domain",
+      "configure": "DNS Records",
+      "domainStatus": "Domain status",
+      "editDisabled": "Website domain can be changed every 15 minutes. ",
+      "preview": "Domain preview",
+      "refreshStatus": "Refresh domain status",
+      "remove": "Remove domain",
+      "setup": "Setup domain",
+      "update": "Update domain",
+      "useIpns": "Use IPNS",
+      "labelInfo": {
+        "useIpns": "IPNS is a feature of the IPFS that allows a consistent address to be used even when the content changes. This means you can share the same address, and any updates to the content won't require a new address."
+      },
+      "status": {
+        "0": "Not Connected",
+        "1": "OK",
+        "2": "Domain has CDN",
+        "10": "Invalid, domain is not pointing to Apillon IP"
+      }
+    },
+    "menu": {
+      "archive": "Website Archive",
+      "preview": "1. Upload",
+      "staging": "2. Preview",
+      "deployments": "Deployments",
+      "production": "3. Production",
+      "website": "Websites"
+    },
+    "review": {
+      "confirm": "Proceed with Website Deployment, I'll wait",
+      "content": [
+        "Deployments of websites on the Free Plan undergo security checks to prevent phishing attempts and other malicious activities. While we typically review websites promptly, please note that it may take up to 24 hours. Once approved, your website will be accessible through our IPFS gateway.",
+        "Consider upgrading to one of our paid plans for immediate deployment without the security check delay."
+      ],
+      "title": "Free Plan Website Review by Apillon",
+      "upgrade": "Upgrade Now"
+    },
+    "upload": {
+      "directory": "Upload folder",
+      "dragAndDrop": "Drag & drop (up to 100 files)",
+      "files": "Upload files and folders"
+    },
+    "website": {
+      "addFirst": "Add first website",
+
+      "create": "Create website",
+      "description": "Website description",
+      "delete": "Delete website",
+      "deleteConfirm": "Are you sure that you want to delete selected website?",
+      "domain": "Domain name",
+      "edit": "Edit website",
+      "infoNew": "",
+      "infoEdit": "",
+      "name": "Website name",
+      "new": "New website",
+      "update": "Update website",
+      "uuid": "Website UUID"
+    },
+    "deploy": {
+      "new": "New deployment configuration",
+      "empty-info": "Connect Github repository to enable Continuous Deployment for this website",
+      "connect-repo": "Connect Github repository to website",
+      "build-table": {
+        "finished-time": "Finished at",
+        "build-status": "Build status",
+        "status": {
+          "1": "PENDING",
+          "2": "IN PROGRESS",
+          "3": "COMPLETED",
+          "4": "FAILED"
+        }
+      },
+      "form": {
+        "repository": "Repository",
+        "repository-placeholder": "Select repository",
+        "branch-name": "Branch name",
+        "branch-name-placeholder": "Enter branch",
+        "build-command": "Build command",
+        "build-command-placeholder": "Enter build command",
+        "build-directory": "Build directory",
+        "build-directory-placeholder": "Enter build directory",
+        "install-command": "Install command",
+        "install-command-placeholder": "Enter install command",
+        "api-key": "API key",
+        "api-key-placeholder": "Select API key",
+        "api-secret": "API secret",
+        "api-secret-placeholder": "Enter API secret",
+        "save": "Save deployment configuration",
+        "validation": {
+          "repo-required": "Repository is required",
+          "branch-name-required": "Branch name is required",
+          "build-directory-required": "Build directory is required",
+          "api-key-required": "API key is required",
+          "api-secret-required": "API secret is required"
+        }
+      }
+    },
+    "clearAll": "Clear all",
+    "clearAllFiles": "Do you want to remove all files?",
+    "clearAllWarn": "With this action you will erase all files. To deploy new version to preview, you will have to upload whole website.",
+    "deployProd": "Deploy to production",
+    "deployStage": "Deploy to staging",
+    "deploymentStatus": "Deployment status",
+    "disconnect-confirmation-title": "Disconnect GitHub",
+    "disconnect-confirmation-body": "Are you sure you want to disconnect your GitHub account?",
+    "disconnect-confirmation-button": "Disconnect",
+    "github-connected": "GitHub connected",
+    "github-connected-notice": "You have successfully connected your GitHub account.",
+    "github-disconnected-notice": "You have successfully disconnected your GitHub account.",
+    "connect-github": "Connect GitHub",
+    "ipfsLink": "IPFS link",
+    "ipns": "IPNS",
+    "ipnsAddress": "IPNS Address",
+    "ipnsLink": "IPNS link",
+    "ipnsInfo": "It may take up to 5 minutes for the changes to become visible after the deployment has been completed.",
+    "management": "Hosting management",
+    "productionEmpty": "Deploy files from staging to production",
+    "size": "Size",
+    "stagingEmpty": "Upload files and deploy them to staging",
+    "web3Hosting": "Web3 hosting",
+    "web3HostingArchive": "Web3 hosting Archive",
+    "web3HostingArchiveInfo": "You don't have any website in Archive.",
+    "web3HostingEnable": "Enable Web3 hosting to host your website."
+  }
 }

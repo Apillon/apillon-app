@@ -6,7 +6,23 @@
 const { t } = useI18n();
 const websiteStore = useWebsiteStore();
 
+const props = defineProps({
+  hasGithubConnected: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const menuOptions: NMenuOption[] = [
+  ...(props.hasGithubConnected
+    ? [
+        {
+          key: 'dashboard-service-hosting-slug-deployments',
+          label: t('hosting.menu.deployments'),
+          path: `/dashboard/service/hosting/${websiteStore.selected}/deployments`,
+        },
+      ]
+    : []),
   {
     key: 'dashboard-service-hosting-id',
     label: t('hosting.menu.preview'),
