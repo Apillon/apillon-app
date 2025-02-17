@@ -158,6 +158,7 @@ const Endpoints = {
   githubRepos: (projectUuid: string) => {
     return `/deploy/github/list-repos/${projectUuid}`;
   },
+  deployConfig: `/deploy/config`,
 
   /** IPNS */
   ipns: (bucketUuid: string, uuid?: string) => {

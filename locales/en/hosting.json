@@ -105,6 +105,7 @@
         "api-secret": "API secret",
         "api-secret-placeholder": "Enter API secret",
         "save": "Save deployment configuration",
+        "success": "Deployment configuration saved successfully",
         "validation": {
           "repo-required": "Repository is required",
           "branch-name-required": "Branch name is required",
