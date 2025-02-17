@@ -155,7 +155,8 @@ async function createDeployConfig() {
     };
     const res = await $api.post<any>(endpoints.deployConfig, bodyData);
     message.success($i18n.t('hosting.deploy.form.success'));
-    websiteStore.active.deployConfig = res.data;
+
+    websiteStore.active.repoId = res.data.repoId;
     emit('submitSuccess');
   } catch (error) {
     message.error(userFriendlyMsg(error));
@@ -179,7 +180,7 @@ onMounted(async () => {
   apiKeyOptions.value = settingsStore.apiKeys.map((item: ApiKeyInterface) => {
     return {
       label: item.name,
-      value: item.id,
+      value: item.apiKey,
     };
   });
   repoOptions.value = storageStore.repos.map((item: GithubRepo) => ({
