@@ -1,5 +1,5 @@
 <template>
-  <n-card class="mb-4 max-w-96" size="small" :theme-overrides="dropdownOverrides">
+  <n-card class="mb-4 max-w-96" size="small">
     <template #header>
       <span class="icon-info mr-2 text-xl"></span>
       <span class="relative -top-[2px] inline-block">New version deployed</span>
@@ -26,8 +26,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { DropdownProps } from 'naive-ui';
-import { colors } from '~/tailwind.config';
 import { dateTimeToDate } from '~/lib/utils/dates';
 
 defineProps({
@@ -35,11 +33,6 @@ defineProps({
 });
 
 const settingsStore = useSettingsStore();
-
-/** Theme override */
-const dropdownOverrides: NonNullable<DropdownProps['themeOverrides']> = {
-  borderColor: colors.bg.lighter,
-};
 </script>
 
 <style lang="postcss" module>

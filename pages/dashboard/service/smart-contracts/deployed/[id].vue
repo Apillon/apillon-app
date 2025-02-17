@@ -133,6 +133,8 @@
 
 <script lang="ts" setup>
 import { useAccount, useAccountEffect, useDisconnect } from '@wagmi/vue';
+import { contractLink } from '~/lib/utils/helpers';
+import { truncateWallet } from '~/lib/utils/strings';
 import { SmartContractStatus } from '~/lib/types/smartContracts';
 
 const { t } = useI18n();
@@ -231,23 +233,3 @@ function initFunctions() {
   });
 }
 </script>
-
-<style lang="postcss" scoped>
-:deep(.n-collapse-item__header-main) {
-  justify-content: space-between;
-}
-:deep(.n-card > .n-card__content) {
-  @apply p-4 pl-6;
-}
-:deep(.n-card.n-card--bordered) {
-  @apply border-none;
-}
-:deep(.n-card .n-collapse-item__content-wrapper) {
-  @apply mt-4;
-
-  &::before {
-    content: '';
-    @apply absolute left-0 right-0 top-12 border-t border-bg-lighter;
-  }
-}
-</style>

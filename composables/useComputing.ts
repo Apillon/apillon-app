@@ -27,9 +27,7 @@ export default function useComputing() {
 
     contractInterval = setInterval(async () => {
       const contracts = await contractStore.fetchContracts(false, false);
-      const contract = contracts.find(
-        contract => contract.contract_uuid === unfinishedCollection.contract_uuid
-      );
+      const contract = contracts.find(contract => contract.contract_uuid === unfinishedCollection.contract_uuid);
       if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
         clearInterval(contractInterval);
       }
@@ -55,9 +53,7 @@ export default function useComputing() {
         { page: transactionStore.pagination.page },
         false
       );
-      const transaction = transactions.find(
-        transaction => transaction.id === unfinishedTransaction.id
-      );
+      const transaction = transactions.find(transaction => transaction.id === unfinishedTransaction.id);
       if (!transaction || transaction.transactionStatus > ComputingTransactionStatus.CONFIRMED) {
         clearInterval(transactionInterval);
         contractStore.active = await contractStore.fetchContract(contractUuid);
@@ -85,10 +81,7 @@ export default function useComputing() {
     };
 
     try {
-      const uploadSession = await $api.post<FilesUploadRequestResponse>(
-        endpoints.storageFilesUpload(bucketUuid),
-        data
-      );
+      const uploadSession = await $api.post<FilesUploadRequestResponse>(endpoints.storageFilesUpload(bucketUuid), data);
       const uploadUrl = uploadSession.data.files[0];
       // Upload to S3
       await fetch(uploadUrl.url, {
@@ -127,27 +120,18 @@ export default function useComputing() {
   }
 
   async function getFilePoll(bucketUuid: string, fileUuid: string): Promise<FileInterface> {
-    const response = await $api.get<FileDetailsResponse>(
-      endpoints.storageFileDetails(bucketUuid, fileUuid)
-    );
+    const response = await $api.get<FileDetailsResponse>(endpoints.storageFileDetails(bucketUuid, fileUuid));
     return response.data;
   }
 
   function labelInfo(field: string, base = 'form.label.contract') {
-    if (
-      te(`${base}.${field}`) &&
-      te(`${base}.labelInfo.${field}`) &&
-      t(`${base}.labelInfo.${field}`)
-    ) {
-      return labelInfoText(
-        t(`${base}.${field}`),
-        decodeHTMLEntities(t(`${base}.labelInfo.${field}`))
-      );
+    if (te(`${base}.${field}`) && te(`${base}.labelInfo.${field}`) && t(`${base}.labelInfo.${field}`)) {
+      return labelInfoText(t(`${base}.${field}`), decodeHTMLEntities(t(`${base}.labelInfo.${field}`)));
     }
     return te(`${base}.${field}`) ? t(`${base}.${field}`) : field;
   }
 
-  function labelInfoText(label: string, info?: string) {
+  function labelInfoText(label: string, info?: string): string | VNode<any> {
     if (info && info.length > 0) {
       return h('span', { class: 'inline-flex items-center' }, [
         h('span', { class: 'mr-1' }, label),

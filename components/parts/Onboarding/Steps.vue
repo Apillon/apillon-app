@@ -77,5 +77,5 @@ enum Steps {
 }
 
 const dataStore = useDataStore();
-const step = ref<number>(Steps.TOKEN);
+const step = ref<number>(Steps.WELCOME);
 </script>

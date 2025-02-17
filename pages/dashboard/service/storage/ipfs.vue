@@ -56,7 +56,7 @@
 
         <FormStorageIpfs />
       </n-space>
-      <n-card v-else class="card-light !border-none" :title="$t('storage.ipfs.titleInfo')">
+      <n-card v-else class="card-light !border-none" :bordered="false" :title="$t('storage.ipfs.titleInfo')">
         <template #header-extra>
           <Btn
             class="mb-[-2px] inline-block"

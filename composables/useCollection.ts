@@ -6,7 +6,6 @@ export default function useCollection() {
   const router = useRouter();
   const message = useMessage();
   const { t, te } = useI18n();
-  const { isDev } = useService();
   const dataStore = useDataStore();
   const bucketStore = useBucketStore();
   const collectionStore = useCollectionStore();

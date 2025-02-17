@@ -114,7 +114,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     textColorTertiary: colors.white.DEFAULT,
   },
   Card: {
-    borderColor: colors.primary,
+    borderColor: colors.bg.lighter,
     borderRadius: '8px',
     color: colors.bg.DEFAULT,
     colorEmbedded: colors.bg.DEFAULT,

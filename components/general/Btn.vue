@@ -90,7 +90,7 @@ const btnClass = computed(() => {
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,
       'opacity-60': props.disabled,
-      'border-dark': props.type == 'secondary',
+      'border-lighter': props.type == 'secondary',
       'hover-bounce': props.type !== 'link' && props.type !== 'builders',
       quaternary: props.quaternary || props.type === 'builders',
       locked: isBtnLocked.value,

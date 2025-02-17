@@ -60,6 +60,7 @@
       "name": "Name",
       "notEnoughCredits": "Not enough credits",
       "packages": "Credit packages",
+      "pricing": "Pricing",
       "pricingNotification": "Pricing notification",
       "product_id": "Product ID",
       "service": "Service",
@@ -186,35 +187,31 @@
       "services": {
         "hosting": {
           "title": "Host a website",
-          "content": "Set up and launch a Web3-ready website—fast, secure, and hassle-free.",
-          "tags": ["No code"]
+          "content": "Set up and launch a Web3-ready website—fast, secure, and hassle-free."
         },
         "nft": {
           "title": "Manage your own NFT collection",
-          "content": "Create and manage your own NFT collection, hosted on your own setup.",
-          "tags": ["Coding required"]
+          "content": "Create and manage your own NFT collection, hosted on your own setup."
         },
         "storage": {
           "title": "Store metadata",
-          "content": "Securely store and manage metadata for NFTs, digital assets, and more.",
-          "tags": ["No code"]
+          "content": "Securely store and manage metadata for NFTs, digital assets, and more."
         },
         "embedded-wallet": {
           "title": "Use a simple login for your dapp",
-          "content": "Let users log in via embedded wallets, without browser extensions.",
-          "tags": ["No code"]
+          "content": "Let users log in via embedded wallets, without browser extensions."
         },
         "cloud-functions": {
           "title": "Automate your backend processes ",
-          "content": "Handle Web3 automation without managing a server or writing backend code.",
-          "tags": ["Coding required"]
+          "content": "Handle Web3 automation without managing a server or writing backend code."
         },
         "smart-contracts": {
           "title": "Put smart contracts to work",
-          "content": "Set up smart contracts to run tasks on-chain, so you don’t have to.",
-          "tags": ["Coding required"]
+          "content": "Set up smart contracts to run tasks on-chain, so you don’t have to."
         }
       },
+      "codingRequired": "Coding required",
+      "noCode": "No code",
       "servicesTitle": "What do you want to achieve today?",
       "welcome": "Welcome to Apillon"
     },
@@ -324,7 +321,7 @@
       },
       "nft": {
         "collectionCount": "Number of collections",
-        "description": "Launch a fully decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the website on IPFS.",
+        "description": "Deploy an NFT collection with just a few clicks and retain the ownership of your files.",
         "name": "NFTs",
         "nftTransactionCount": "Number of transactions",
         "usage": ["storage buckets", "smart contracts", "drag-n-drop ui", "website template", "hosting"]
@@ -755,6 +752,7 @@
     },
     "youTube": {
       "chapters": "Content shortcuts",
+      "demo": "Live demo",
       "play": "Play now",
       "title": "Getting around the platform"
     },
@@ -781,6 +779,7 @@
     "goToApiManagement": "Go to central API management",
     "guides": "Guides",
     "homepage": "Project overview",
+    "introduction": "Introduction",
     "inviteTeamMember": "Invite team member",
     "learnMoreAboutServices": "Learn more about services",
     "manageRoles": "Manage roles",
@@ -791,12 +790,14 @@
     "searchDocs": "Search the docs",
     "secret": "Secret",
     "secrets": "Secrets",
+    "startBuilding": "Start building now",
+    "supported": "Supported",
     "total": "Total",
     "tutorials": "Tutorials",
     "user": "User",
     "viewInvoice": "View Invoice",
     "value": "Value",
-    "viewDocumentation": "View Documentation",
+    "viewDocumentation": "View Docs",
     "visibleColumns": "Visible columns",
     "wiki": "Wiki",
     "w3Warn": "W3 warn",

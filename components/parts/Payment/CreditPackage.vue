@@ -73,6 +73,8 @@
 
 <script lang="ts" setup>
 import { colors } from '~/tailwind.config';
+import { translateItems } from '~/lib/utils';
+import { formatPrice, formatNumber } from '~/lib/utils/helpers';
 
 defineProps({
   creditPackage: { type: Object as PropType<CreditPackageInterface>, required: true },

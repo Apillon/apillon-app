@@ -22,10 +22,7 @@
 
   <!-- Modal - Edit bucket -->
   <modal v-model:show="showModalEditBucket" :title="$t('storage.bucket.edit')">
-    <FormStorageBucket
-      :bucket-uuid="currentRow.bucket_uuid"
-      @submit-success="showModalEditBucket = false"
-    />
+    <FormStorageBucket :bucket-uuid="currentRow.bucket_uuid" @submit-success="showModalEditBucket = false" />
   </modal>
 
   <!-- Modal - Destroy bucket -->
@@ -50,6 +47,7 @@
 <script lang="ts" setup>
 import type { DataTableRowKey } from 'naive-ui';
 import { NButton, NDropdown, NEllipsis } from 'naive-ui';
+import { PAGINATION_LIMIT } from '~/lib/values/general.values';
 
 const props = defineProps({
   buckets: { type: Array<BucketInterface>, default: [] },
@@ -76,8 +74,7 @@ const data = computed<Array<BucketInterface>>(() => {
   return (
     props.buckets.filter(
       item =>
-        (bucketStore.filter.bucketType === null ||
-          item.bucketType === bucketStore.filter.bucketType) &&
+        (bucketStore.filter.bucketType === null || item.bucketType === bucketStore.filter.bucketType) &&
         item.name.toLowerCase().includes(bucketStore.filter.search.toLowerCase())
     ) || []
   );
@@ -264,9 +261,7 @@ async function restoreBucket() {
   bucketStore.loading = true;
 
   try {
-    const response = await $api.patch<BucketResponse>(
-      endpoints.bucketRestore(currentRow.value.bucket_uuid)
-    );
+    const response = await $api.patch<BucketResponse>(endpoints.bucketRestore(currentRow.value.bucket_uuid));
     removeDeletedBucketFromList(response.data.bucket_uuid);
 
     message.success($i18n.t('form.success.restored.bucket'));

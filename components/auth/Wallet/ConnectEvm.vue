@@ -20,7 +20,7 @@
       v-else
       size="large"
       type="secondary"
-      :loading="loading || isLoading"
+      :loading="loading || isConnecting"
       borderless
       @click="modalWalletVisible = true"
     >
@@ -38,6 +38,7 @@
 
 <script lang="ts" setup>
 import { useAccount, useConnect, useDisconnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
+import { truncateWallet } from '~/lib/utils/strings';
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -46,7 +47,7 @@ const { connectAndSign } = useWallet();
 
 const { connect, connectors } = useConnect();
 const { refetch: refetchWalletClient } = useConnectorClient();
-const { address, isConnected } = useAccount();
+const { address, isConnected, isConnecting } = useAccount();
 const { disconnect } = useDisconnect();
 useAccountEffect({ onConnect: onWalletConnected });
 

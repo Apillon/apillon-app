@@ -51,6 +51,8 @@
 </template>
 
 <script lang="ts" setup>
+import { truncateWallet } from '~/lib/utils/strings';
+
 defineProps({
   backLink: { type: String, default: null },
   switcher: { type: Boolean, default: false },

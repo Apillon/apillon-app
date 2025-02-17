@@ -75,7 +75,7 @@
             />
           </div>
         </div>
-        <ModalYouTube
+        <ModalYT
           v-model:show="show"
           video-id="qQJnuvUo-xo"
           :chapters="[
@@ -90,7 +90,7 @@
         <!-- Services-->
         <h4 class="mb-8">{{ $t('dashboard.onboarding.servicesTitle') }}</h4>
 
-        <div class="mb-8 grid gap-x-8 gap-y-4 md:grid-cols-3">
+        <div class="mb-8 grid grid-cols-billing gap-4">
           <CardService v-for="service in onboardingServices" v-bind="service" />
         </div>
 
@@ -102,7 +102,7 @@
         <!-- Services-->
         <h4 class="mb-8">{{ $t('general.explore') }}</h4>
 
-        <div class="grid gap-x-8 gap-y-4 md:grid-cols-3">
+        <div class="grid grid-cols-billing gap-4">
           <div v-for="(service, key) in services" :key="key" class="card-dark flex flex-col justify-between p-8">
             <div class="flex items-center justify-between text-white">
               <strong>{{ service.title }}</strong>
@@ -150,7 +150,7 @@ const services = [
   },
   // {
   //   title: t('dashboard.nav.smartContracts'),
-  //   content: t('dashboard.smartContracts.info'),
+  //   content: t('smartContracts.info'),
   // },
   {
     title: t('dashboard.nav.solutions'),

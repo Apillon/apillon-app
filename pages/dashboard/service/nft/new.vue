@@ -87,6 +87,7 @@
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
 import { useMessage } from 'naive-ui';
+import { enumKeys } from '~/lib/utils';
 import { CollectionStatus, EvmChainMainnet } from '~/lib/types/nft';
 
 const { t, te } = useI18n();
@@ -100,7 +101,7 @@ const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
 const { getPriceServiceName, uploadLogoAndCover } = useNft();
-const { collectionEndpoint, isFormDisabled, isUnique, nftChains, onChainChange, prepareFormData } = useCollection();
+const { collectionEndpoint, isFormDisabled, isUnique, onChainChange, prepareFormData } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 const headingRef = ref<HTMLElement>();

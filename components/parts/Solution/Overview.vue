@@ -1,7 +1,7 @@
 <template>
   <h4 class="mb-8">{{ $t('dashboard.projectResources') }}</h4>
 
-  <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="grid grid-cols-billing gap-4">
     <div v-for="(service, key) in web3Services" :key="key" class="card-light p-8">
       <div class="mb-6 flex items-center gap-2">
         <span

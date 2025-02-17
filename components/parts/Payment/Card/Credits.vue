@@ -38,6 +38,8 @@
 </template>
 
 <script lang="ts" setup>
+import { formatNumber } from '~/lib/utils/helpers';
+
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();

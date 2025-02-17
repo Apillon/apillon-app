@@ -83,6 +83,10 @@
     @apply font-semibold;
   }
 
+  small {
+    @apply text-xs text-placeholder;
+  }
+
   ul {
     @apply body-md;
   }

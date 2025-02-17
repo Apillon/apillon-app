@@ -129,6 +129,9 @@
 </template>
 
 <script lang="ts" setup>
+import { translateItems } from '~/lib/utils';
+import { DeploymentEnvironment } from '~/lib/types/hosting';
+
 const props = defineProps({
   env: { type: Number, default: 0 },
   search: { type: Boolean, default: true },

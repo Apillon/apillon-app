@@ -89,8 +89,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { Type as NButtonType } from 'naive-ui/es/button/src/interface';
 import type { ButtonType } from '~/components/general/Btn.vue';
+import { formatPrice } from '~/lib/utils/helpers';
+import { dateTimeToDate } from '~/lib/utils/dates';
 import { colors } from '~/tailwind.config';
 
 defineProps({

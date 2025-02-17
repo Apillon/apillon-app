@@ -15,6 +15,7 @@ export type OnboardingService = {
   description: string;
   link?: string;
   tags?: String[];
+  codingRequired?: boolean;
 };
 type OnboardingServiceTrans = {
   title?: VueMsg;
@@ -101,7 +102,7 @@ export default function useService() {
           link: generateLink(key),
           name: trans?.title ? rt(trans.title) : '',
           description: trans?.content ? rt(trans.content) : '',
-          tags: trans?.tags ? translate(trans.tags) : [],
+          codingRequired: ['embedded-wallet', 'cloud-functions', 'smart-contracts'].includes(key),
         } as OnboardingService;
       }
     ) || [];

@@ -13,7 +13,13 @@
     <div class="mt-2">
       <p>{{ description }}</p>
     </div>
-    <div v-if="tags" class="mt-2 flex flex-wrap gap-2">
+    <div v-if="tags || codingRequired !== null" class="mt-2 flex flex-wrap gap-2">
+      <Tag v-if="codingRequired" size="small" type="default">
+        {{ $t('dashboard.onboarding.codingRequired') }}
+      </Tag>
+      <Tag v-else-if="codingRequired === false" size="small" type="success">
+        {{ $t('dashboard.onboarding.noCode') }}
+      </Tag>
       <Tag v-for="(item, key) in tags" :key="key" size="small" :type="item.includes('No code') ? 'success' : 'default'">
         {{ item }}
       </Tag>
@@ -23,10 +29,11 @@
 
 <script lang="ts" setup>
 defineProps({
-  iconSvg: { type: String, default: null },
-  name: { type: String, default: '' },
+  codingRequired: { type: Boolean, default: null },
   description: { type: String, default: '' },
+  iconSvg: { type: String, default: null },
   link: { type: String, default: '' },
-  tags: { type: Array<String>, default: null },
+  name: { type: String, default: '' },
+  tags: { type: Array<String>, default: [] },
 });
 </script>

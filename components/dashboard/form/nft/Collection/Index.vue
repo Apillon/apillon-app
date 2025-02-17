@@ -3,9 +3,6 @@
     <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ t('dashboard.permissions.insufficient') }}
     </Notification>
-    <p v-else-if="te('nft.collection.infoNew')" class="mb-8 text-body">
-      {{ t('nft.collection.infoNew') }}
-    </p>
 
     <FormInstructions :title="t('nft.collection.data')" :instructions="[t('nft.collection.instruction.data')]">
       <FormNftCollectionBase ref="formBaseRef" hide-submit />
@@ -335,8 +332,8 @@
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
 import { Feature } from '~/lib/types/config';
-import { isFeatureEnabled } from '~/lib/utils';
-import { EvmChain, ChainType, EvmChainMainnet } from '~/lib/types/nft';
+import { enumKeys, isFeatureEnabled } from '~/lib/utils';
+import { ChainType, EvmChainMainnet } from '~/lib/types/nft';
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
 
 const emit = defineEmits(['submitSuccess']);

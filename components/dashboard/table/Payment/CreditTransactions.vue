@@ -5,7 +5,7 @@
       <select-options
         v-model:value="service"
         :options="services"
-        class="min-w-[11rem] w-[20vw] max-w-xs"
+        class="w-[20vw] min-w-[11rem] max-w-xs"
         size="small"
         :placeholder="$t('form.placeholder.selectService')"
         filterable
@@ -15,7 +15,7 @@
       <select-options
         v-model:value="category"
         :options="categories"
-        class="min-w-[11rem] w-[20vw] max-w-xs"
+        class="w-[20vw] min-w-[11rem] max-w-xs"
         size="small"
         :placeholder="$t('form.placeholder.selectCategory')"
         filterable
@@ -25,7 +25,7 @@
       <select-options
         v-model:value="direction"
         :options="directions"
-        class="min-w-[11rem] w-[20vw] max-w-xs"
+        class="w-[20vw] min-w-[11rem] max-w-xs"
         size="small"
         :placeholder="$t('form.placeholder.selectDirection')"
         filterable
@@ -89,42 +89,42 @@ const createColumns = (): NDataTableColumns<CreditTransactionInterface> => {
     {
       title: t('dashboard.credits.service'),
       key: 'service',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, row.service);
       },
     },
     {
       title: t('dashboard.credits.category'),
       key: 'category',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, row.category);
       },
     },
     {
       title: t('dashboard.credits.description'),
       key: 'description',
-      render(row) {
-        return h('span', { class: 'text-body' }, row.description);
+      render(row: CreditTransactionInterface) {
+        return h('span', { class: 'text-body' }, row.description || '');
       },
     },
     {
       title: t('dashboard.credits.direction'),
       key: 'direction',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, CreditDirection[row.direction]);
       },
     },
     {
       title: t('dashboard.credits.amount'),
       key: 'amount',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, `${formatNumber(row.amount)}`);
       },
     },
     {
       title: t('dashboard.credits.date'),
       key: 'createTime',
-      render(row) {
+      render(row: CreditTransactionInterface) {
         return h('span', { class: 'text-body' }, dateTimeToDateAndTime(row?.createTime || ''));
       },
     },

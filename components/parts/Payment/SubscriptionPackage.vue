@@ -67,6 +67,8 @@
 </template>
 
 <script lang="ts" setup>
+import { dateTimeToDate } from '~/lib/utils/dates';
+import { formatPrice } from '~/lib/utils/helpers';
 import { colors } from '~/tailwind.config';
 
 defineProps({

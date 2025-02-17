@@ -4,7 +4,7 @@
       <h4 class="my-3">
         {{ title }}
       </h4>
-      <n-card v-for="fn in functions" :key="fn" class="my-1 mb-3 max-w-lg">
+      <n-card v-for="fn in functions" :key="fn.name" class="my-1 mb-3 max-w-lg" :bordered="false" size="small">
         <n-collapse accordion arrow-placement="right">
           <n-collapse-item :title="labelInfoText(fn.name, fn?.description)">
             <!-- Assign a form ref according to function ref - we have multiple form on same site -->
