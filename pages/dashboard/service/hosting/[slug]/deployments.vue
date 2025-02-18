@@ -34,6 +34,7 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const websiteStore = useWebsiteStore();
+const storageStore = useStorageStore();
 const deploymentStore = useDeploymentStore();
 const { pageLoading, initWebsite } = useHosting();
 const modalCreateKeyVisible = ref<boolean>(false);
@@ -44,6 +45,7 @@ useHead({
 
 onMounted(async () => {
   initWebsite(DeploymentEnvironment.STAGING, true);
+  storageStore.getGithubProjectConfig();
 });
 
 const refreshBuilds = async () => {
