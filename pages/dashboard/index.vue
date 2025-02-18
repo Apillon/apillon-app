@@ -1,10 +1,5 @@
 <template>
-  <Dashboard :loading="authStore.loadingProfile" :learn-collapsible="false">
-    <template #heading>
-      <Heading>
-        {{ $t('dashboard.homepage') }}
-      </Heading>
-    </template>
+  <Dashboard class="-mt-8" :loading="authStore.loadingProfile" :learn-collapsible="false">
     <slot>
       <div class="mb-8">
         <h4>{{ $t('dashboard.onboarding.welcome') }}</h4>
@@ -138,8 +133,11 @@ const { onboardingServices } = useService();
 
 const show = ref<boolean>(false);
 
+const pageTitle = useState('pageTitle', () => t('dashboard.homepage'));
+pageTitle.value = t('dashboard.homepage');
+
 useHead({
-  title: t('dashboard.dashboard'),
+  title: t('dashboard.homepage'),
 });
 
 const services = [

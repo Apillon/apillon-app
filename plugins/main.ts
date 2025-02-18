@@ -45,6 +45,9 @@ export default defineNuxtPlugin(nuxtApp => {
     /** Preserve query params */
     const router = useRouter();
     router.beforeEach((to, from, next) => {
+      const pageTitle = useState('pageTitle');
+      pageTitle.value = '';
+
       if (!hasQueryParams(to) && hasQueryParams(from) && !toStr(to.name).includes('dashboard-')) {
         next({ name: to.name?.toString(), query: from.query });
       } else {

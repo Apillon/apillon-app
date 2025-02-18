@@ -54,7 +54,7 @@ async function walletLogin(account: WalletAccount) {
 
   // Logout first - delete LS and store if there is any data
   authStore.logout();
-  dataStore.resetCurrentProject();
+  dataStore.resetData();
 
   /** Clear all stored data */
   clearAll();

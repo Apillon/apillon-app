@@ -1,13 +1,13 @@
 <template>
-  <div class="mx-auto max-w-4xl">
+  <div class="mx-auto max-w-4xl pb-8">
     <div class="mb-12 flex gap-8">
       <div class="md:w-1/2">
-        <h3>{{ $t('dashboard.service.nft.name') }}</h3>
-        <p class="my-4">{{ $t('dashboard.service.nft.description') }}</p>
+        <h3>{{ $t(`dashboard.service.${name}.name`) }}</h3>
+        <p class="my-4">{{ $t(`dashboard.service.${name}.description`) }}</p>
 
         <div class="mt-2 flex flex-wrap gap-2">
           <Tag
-            v-for="(item, key) in tags"
+            v-for="(item, key) in translateItems(`dashboard.service.${service}.tags`)"
             :key="key"
             size="small"
             :type="item.includes('No code') ? 'success' : 'default'"
@@ -27,10 +27,14 @@
           <small>{{ $t('dashboard.credits.pricing') }}</small>
           <div class="text-right">
             <p>
-              <strong>Depends on chain (500-1000 credits)</strong>
+              <strong>{{ $t(`dashboard.service.${name}.pricing`) }}</strong>
             </p>
-            <span class="underline">See details </span>
-            <ModalCreditCosts :service="ServiceTypeName.NFT" filter-by-chain />
+
+            <ModalCreditCosts :service="service" show-create-collection>
+              <template #button>
+                <span class="underline">{{ $t('dashboard.details') }} </span>
+              </template>
+            </ModalCreditCosts>
           </div>
         </div>
       </div>
@@ -66,8 +70,8 @@
           </Btn>
 
           <div class="flex justify-between gap-2">
-            <BtnDocumentation href="https://wiki.apillon.io/web3-services/4-nfts.html" />
-            <Btn>{{ $t('dashboard.startBuilding') }}</Btn>
+            <BtnDocumentation v-if="docs" :href="docs" />
+            <slot name="actions" />
           </div>
         </div>
       </div>
@@ -98,27 +102,25 @@
       </div>
     </div>
 
-    <ModalYT
-      v-model:show="showVideo"
-      video-id="qQJnuvUo-xo"
-      :chapters="[
-        { time: '00:00', title: 'Intro' },
-        { time: '00:35', title: 'Dashboard' },
-        { time: '02:53', title: 'NFT Collection' },
-        { time: '05:20', title: 'Minting' },
-        { time: '07:15', title: 'Website' },
-      ]"
-    />
+    <ModalYT v-model:show="showVideo" :video-id="videoId" :chapters="videoChapters" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { enumKeys } from '~/lib/utils';
+import { enumKeys, translateItems } from '~/lib/utils';
 import { EvmChainMainnet } from '~/lib/types/nft';
 import { ServiceTypeName } from '~/lib/types/service';
+import type { VideoChapter } from '../Modal/YT.vue';
+
+const props = defineProps({
+  name: { type: String, required: true },
+  service: { type: String as PropType<ServiceTypeName>, required: true },
+  docs: { type: String, default: null },
+  videoId: { type: String, default: null },
+  videoChapters: { type: Array<VideoChapter>, default: null },
+});
 
 const { t } = useI18n();
-const tags = ['No code required', 'API', 'SDK', 'CLI'];
 const showVideo = ref<boolean>(false);
 
 const guides = [

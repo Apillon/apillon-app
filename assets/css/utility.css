@@ -58,6 +58,17 @@
     @apply border-1 border-bg-lighter;
   }
 
+  /** Button */
+  .btn-close {
+    @apply absolute h-10 w-10 -translate-y-1/2 translate-x-1/2 rounded-full border-1 border-solid border-white bg-bg transition-colors duration-300;
+    &::before {
+      display: none;
+    }
+    &:hover {
+      @apply bg-white text-bg;
+    }
+  }
+
   /** Card */
   .card {
     @apply card-border rounded-lg bg-bg;
@@ -96,7 +107,7 @@
   }
 
   .card-auth {
-    @apply lg:px-22 bg-bg-dark p-10 md:p-14;
+    @apply bg-bg-dark p-10 md:p-14 lg:px-22;
   }
 
   /** scrollbar */

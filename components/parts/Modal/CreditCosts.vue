@@ -1,14 +1,14 @@
 <template>
-  <n-button class="rounded-lg" size="small" @click="modalCostsVisible = true">
-    <span class="icon-credits text-xl mr-2"></span>
+  <button v-if="$slots.button" class="pointer" @click="modalCostsVisible = true">
+    <slot name="button"></slot>
+  </button>
+  <n-button v-else class="rounded-lg" size="small" @click="modalCostsVisible = true">
+    <span class="icon-credits mr-2 text-xl"></span>
     {{ $t('dashboard.credits.checkPrice') }}
   </n-button>
   <Modal v-model:show="modalCostsVisible" :title="$t('dashboard.credits.creditCosts')">
     <div>
-      <p
-        v-if="$te(`dashboard.credits.services.${service || category}.description`)"
-        class="mb-8 text-body"
-      >
+      <p v-if="$te(`dashboard.credits.services.${service || category}.description`)" class="mb-8 text-body">
         {{ $t(`dashboard.credits.services.${service || category}.description`) }}
       </p>
 
@@ -19,6 +19,7 @@
         :filter-by-service="filterByService"
         :service="service"
         :category="category"
+        :showCreateCollection="showCreateCollection"
       />
       <Spinner v-else class="min-h-[7rem]" />
 
@@ -36,6 +37,7 @@ defineProps({
   service: { type: String, default: null },
   filterByChain: { type: Boolean, default: false },
   filterByService: { type: Boolean, default: false },
+  showCreateCollection: { type: Boolean, default: false },
 });
 
 const modalCostsVisible = ref<boolean>(false);

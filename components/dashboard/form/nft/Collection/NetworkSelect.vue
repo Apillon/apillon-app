@@ -2,7 +2,7 @@
   <div class="text-center">
     <h2>{{ t('nft.collection.environment') }}</h2>
     <p>{{ t('nft.collection.environmentContent') }}</p>
-    <div class="my-8 flex max-w-xl flex-wrap justify-center gap-4 whitespace-pre-line xl:max-w-4xl">
+    <div class="mx-auto my-8 flex max-w-xl flex-wrap justify-center gap-4 whitespace-pre-line xl:max-w-4xl">
       <div
         v-for="chain in nftChains"
         :key="chain.value"

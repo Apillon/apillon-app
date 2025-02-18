@@ -87,6 +87,9 @@ export default {
         nftSmall: 'repeat(auto-fill, minmax(120px, 1fr))',
         assetHub: 'minmax(320px, 580px) minmax(80px, 420px)',
       },
+      height: {
+        18: '4.5rem',
+      },
       padding: {
         22: '5.5rem',
       },

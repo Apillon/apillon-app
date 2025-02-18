@@ -1,7 +1,7 @@
 <template>
   <Btn v-bind="$attrs" type="primary" :loading="loading" @click="openPopup()">
     <div class="flex items-center">
-      <NuxtIcon name="logo/favicon_kilt_light" class="text-2xl align-sub" filled />
+      <NuxtIcon name="logo/favicon_kilt_light" class="align-sub text-2xl" filled />
       {{ $t('auth.login.kilt') }}
     </div>
   </Btn>
@@ -43,7 +43,7 @@ async function loginWithKilt() {
   try {
     // Logout first - delete LS and store if there is any data
     authStore.logout();
-    dataStore.resetCurrentProject();
+    dataStore.resetData();
 
     /** Clear all stored data */
     clearAll();

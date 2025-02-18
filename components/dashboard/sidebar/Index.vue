@@ -152,23 +152,21 @@ onMounted(async () => {
   setFooterHeight();
   projectsLoaded.value = true;
 
-  console.log(dataStore.hasProjects);
   if (dataStore.hasProjects && !authStore.isAdmin()) {
     paymentStore.getSubscriptionPackages();
     await paymentStore.fetchActiveSubscription();
 
     setTimeout(() => setFooterHeight(), 1000);
-  } else {
+  } else if (!sessionStorage.getItem(DataLsKeys.ONBOARDING)) {
     dataStore.project.showOnboarding = true;
+    sessionStorage.setItem(DataLsKeys.ONBOARDING, Date.now().toString());
   }
 });
 
 async function initProject() {
   projectsLoaded.value = false;
   await sleep(1);
-  console.log(dataStore.promises.projects);
   await dataStore.waitOnPromises(false);
-  console.log(dataStore.project.items);
 
   if (authStore.isAdmin() && dataStore.project.selected) {
     const currentProject = await dataStore.getProject(dataStore.project.selected);
@@ -177,7 +175,6 @@ async function initProject() {
     projectsLoaded.value = true;
   } else {
     await dataStore.getProjects();
-    console.log(dataStore.project.items);
 
     if (dataStore.project.selected) {
       await dataStore.getProject(dataStore.project.selected);

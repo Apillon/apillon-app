@@ -324,7 +324,9 @@
         "description": "Deploy an NFT collection with just a few clicks and retain the ownership of your files.",
         "name": "NFTs",
         "nftTransactionCount": "Number of transactions",
-        "usage": ["storage buckets", "smart contracts", "drag-n-drop ui", "website template", "hosting"]
+        "pricing": "Depends on chain (500-1000 credits)",
+        "usage": ["storage buckets", "smart contracts", "drag-n-drop ui", "website template", "hosting"],
+        "tags": ["No code required", "API", "SDK", "CLI"]
       },
       "social": {
         "description": "Connect and communicate with freedom. Experience social networking with secure and decentralized chat functionality.",
@@ -771,6 +773,7 @@
     "discord": "Discord",
     "deletedAt": "Deleted at",
     "demoVideo": "Demo video",
+    "details": "See details",
     "email": "Email",
     "emailMethodConfiguration": "Email method configuration",
     "env": "Environment",

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 
 export const DataLsKeys = {
   CURRENT_PROJECT_ID: 'al_current_project_uuid',
+  ONBOARDING: 'al_project_onboarding',
 };
 
 let abortController = null as AbortController | null;
@@ -51,6 +52,7 @@ export const useDataStore = defineStore('data', {
       if (project) {
         return project;
       }
+      console.log(state.project.items, this.project.selected);
       /** Select first project as fallback if currentProjectUuid is not available */
       this.project.selected = state.project.items[0].project_uuid;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, this.project.selected);
@@ -104,7 +106,6 @@ export const useDataStore = defineStore('data', {
     setCurrentProject(uuid: string) {
       /** Reset store data */
       this.resetData();
-
       this.project.selected = uuid;
       localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, uuid);
     },
@@ -242,8 +243,9 @@ export const useDataStore = defineStore('data', {
         if (this.project.selected && !this.project.items.some(i => i.project_uuid === this.project.selected)) {
           this.project.selected = null;
         }
+
         /* If current project is not selected, take first one */
-        if (hasProjects && this.project.selected) {
+        if (hasProjects && !this.project.selected) {
           this.project.selected = this.project.items[0].project_uuid;
           localStorage.setItem(DataLsKeys.CURRENT_PROJECT_ID, this.project.items[0].project_uuid);
         }
@@ -255,6 +257,7 @@ export const useDataStore = defineStore('data', {
         if (redirectToDashboard && !hasProjects) {
           router.push({ name: 'dashboard' });
           this.project.showOnboarding = true;
+          sessionStorage.setItem(DataLsKeys.ONBOARDING, Date.now().toString());
         } else if (redirectToDashboard) {
           router.push({ name: 'dashboard' });
         }

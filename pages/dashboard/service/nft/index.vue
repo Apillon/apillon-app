@@ -1,38 +1,63 @@
 <template>
-  <Dashboard :loading="pageLoading">
+  <ServiceEmpty
+    v-if="!dataStore.project.selected"
+    :name="ServiceTypeName.NFT.toLowerCase()"
+    :service="ServiceTypeName.NFT"
+    docs="https://wiki.apillon.io/web3-services/4-nfts.html"
+    video-id="qQJnuvUo-xo"
+    :videoChapters="[
+      { time: '00:00', title: 'Intro' },
+      { time: '00:35', title: 'Dashboard' },
+      { time: '02:53', title: 'NFT Collection' },
+      { time: '05:20', title: 'Minting' },
+      { time: '07:15', title: 'Website' },
+    ]"
+  >
+    <template #actions>
+      <Btn @click="modalCreateCollectionVisible = true">{{ $t('dashboard.startBuilding') }}</Btn>
+    </template>
+  </ServiceEmpty>
+  <Dashboard v-else :loading="pageLoading">
     <template #heading>
       <HeaderNft />
     </template>
     <slot>
-      <n-space v-if="collectionStore.hasCollections" class="pb-8" :size="32" vertical>
+      <n-space class="pb-8" :size="32" vertical>
         <ActionsNftCollection />
         <TableNftCollection :collections="collectionStore.items" />
       </n-space>
-      <ServiceEmpty
-        v-else
-        :title="t('nft.collection.empty')"
-        :info="t('nft.collection.emptyInfo')"
-        icon="nft/illustration"
-      >
-        <Btn type="primary" @click="modalCreateCollectionVisible = true">
-          {{ t('nft.collection.createFirst') }}
-        </Btn>
-      </ServiceEmpty>
-
-      <!-- Modal - Collection Transfer -->
-      <modal v-model:show="modalCreateCollectionVisible" class="max-w-4xl text-center">
-        <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === undefined" />
-        <FormNftCollectionNetworkSelect
-          v-else-if="collectionStore.form.behavior.chain === undefined"
-          @submit="onNetworkSelected"
-        />
-        <FormNftCollectionIpnsType v-else @submit="router.push({ name: 'dashboard-service-nft-new' })" />
-      </modal>
     </slot>
   </Dashboard>
+
+  <!-- Modal - Collection Transfer -->
+  <ModalFullScreen
+    v-model:show="modalCreateCollectionVisible"
+    class="text-center"
+    :progress="15"
+    :title="$t('nft.collection.create')"
+  >
+    <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === undefined" />
+    <FormNftCollectionNetworkSelect
+      v-else-if="collectionStore.form.behavior.chain === undefined"
+      @submit="onNetworkSelected"
+    />
+    <FormNftCollectionIpnsType v-else @submit="router.push({ name: 'dashboard-service-nft-new' })" />
+
+    <template #footer>
+      <div class="mx-auto flex w-full max-w-lg items-center justify-between gap-4">
+        <p>
+          <strong>Total costs: </strong>
+          <span>1 credits</span>
+        </p>
+        <Btn>Continue</Btn>
+      </div>
+    </template>
+  </ModalFullScreen>
 </template>
 
 <script lang="ts" setup>
+import { ServiceTypeName } from '~/lib/types/service';
+
 const { t } = useI18n();
 const router = useRouter();
 const dataStore = useDataStore();

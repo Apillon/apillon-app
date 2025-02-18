@@ -1,7 +1,7 @@
 <template>
   <div v-if="loading">
     <transition name="fade" appear>
-      <div v-if="loadingAnimation" class="flex w-full flex-col gap-8 lg:h-screen">
+      <div v-if="loadingAnimation" class="flex w-full flex-col gap-8" style="height: calc(100dvh - 88px)">
         <!-- Loading skeleton - on long page load show skeleton -->
         <n-skeleton height="40px" width="100%" />
         <n-skeleton height="40px" width="100%" />
@@ -30,7 +30,7 @@
       <n-layout class="has-scrollbar" sider-placement="right" :has-sider="instructionsAvailable && isMd">
         <n-layout-content>
           <n-scrollbar y-scrollable :style="instructionsAvailable || fullHeight ? {} : scrollStyle">
-            <div :style="fullHeight ? heightScreen : {}">
+            <div class="pt-8" :style="fullHeight ? heightScreen : {}">
               <slot />
             </div>
 
@@ -124,14 +124,14 @@ const { name } = useRoute();
 /** Heading height */
 const headingRef = ref<HTMLElement>();
 
-const calcHeaderHeight = () => (headingRef.value?.clientHeight || 0) + (isLg.value ? 32 : 124);
+const calcHeaderHeight = () => (headingRef.value?.clientHeight || 0) + (isLg.value ? 72 : 72);
 const headingHeight = ref<number>(calcHeaderHeight());
 
 const scrollStyle = computed(() => ({
   maxHeight: `calc(100dvh - ${headingHeight.value}px)`,
 }));
-const heightScreen = computed(() => ({
-  height: `calc(100dvh - ${headingHeight.value}px)`,
+const minHeight = computed(() => ({
+  minHeight: `calc(100dvh - ${headingHeight.value}px)`,
 }));
 
 /** Delay animation */

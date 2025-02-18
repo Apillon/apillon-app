@@ -19,9 +19,9 @@
         <Sidebar :collapsed="sidebarCollapsed" />
       </n-layout-sider>
       <n-layout>
-        <Header class="right-0 top-0 z-10 w-auto lg:fixed" @toggle-sidebar="toggleSidebar" />
-        <n-scrollbar class="lg:max-h[100dvh] bg-bg" y-scrollable>
-          <div class="relative h-screen bg-bg px-4 pt-4 sm:px-8">
+        <Header @toggle-sidebar="toggleSidebar"> </Header>
+        <n-scrollbar class="bg-bg" y-scrollable style="max-height: calc(100dvh - 72px)">
+          <div class="relative bg-bg px-4 pt-4 sm:px-8">
             <slot />
           </div>
           <!-- <CookieConsent /> -->

@@ -177,10 +177,7 @@ export const themeOverrides: GlobalThemeOverrides = {
   },
   Drawer: {
     color: colors.bg.DEFAULT,
-    headerBorderBottom: '0',
-    headerPadding: '40px 40px 0px',
-    bodyPadding: '40px',
-    footerPadding: '0px 40px 40px',
+    headerBorderBottom: `1px solid ${colors.bg.lighter}`,
   },
   Dropdown: {
     borderRadius: '8px',

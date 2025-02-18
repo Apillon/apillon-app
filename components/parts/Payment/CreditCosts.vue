@@ -68,6 +68,7 @@ const props = defineProps({
   service: { type: String, default: null },
   filterByChain: { type: Boolean, default: false },
   filterByService: { type: Boolean, default: false },
+  showCreateCollection: { type: Boolean, default: false },
 });
 
 const paymentStore = usePaymentStore();
@@ -76,9 +77,9 @@ const { chains, nftChains, evmChains, substrateChains } = useCollection();
 
 const identityChains = enumKeyValues(IdentityChains);
 const services = enumKeyValues(ServiceTypeName);
-const selectedService = ref<string | null>(props.service);
+const selectedService = ref<string | undefined>(props.service);
 const servicePrices = ref<ProductPriceInterface[]>([]);
-const selectedChain = ref<number | null>(null);
+const selectedChain = ref<number | undefined>();
 const loading = ref<boolean>(true);
 
 onMounted(async () => {
@@ -117,21 +118,29 @@ const chainsByService = computed(() => {
 
 const shownPrices = computed(() => {
   const chainName = getChainName(selectedChain.value, selectedService.value);
+
+  /** Show only create collection */
+  const filteredServices = props.showCreateCollection
+    ? servicePrices.value.filter(
+        item => item.name.endsWith('_COLLECTION') && !item.name.endsWith('_TRANSFER_COLLECTION')
+      )
+    : servicePrices.value;
+
   /** Filter by chain and service */
   if (props.filterByChain && selectedChain.value && props.filterByService && selectedService.value) {
-    return servicePrices.value.filter(item => item.category === chainName + '_' + selectedService.value);
+    return filteredServices.filter(item => item.category === chainName + '_' + selectedService.value);
   } else if (props.filterByChain && selectedChain.value && props.service) {
     /** Filter by chain */
     const service = props.service === ServiceTypeName.SMART_CONTRACTS ? 'CONTRACT' : props.service;
-    return servicePrices.value.filter(item => item.name.startsWith(service + '_' + chainName));
+    return filteredServices.filter(item => item.name.startsWith(service + '_' + chainName));
   } else if (props.filterByChain && selectedChain.value) {
     /** Filter by chain */
-    return servicePrices.value.filter(item => item.name.includes(chainName));
+    return filteredServices.filter(item => item.name.includes(chainName));
   } else if (props.filterByService && selectedService.value) {
     /** Filter by service */
-    return servicePrices.value.filter(item => item.service === selectedService.value);
+    return filteredServices.filter(item => item.service === selectedService.value);
   } else {
-    return servicePrices.value;
+    return filteredServices;
   }
 });
 
@@ -140,13 +149,15 @@ watch(
   () => selectedService.value,
   service => {
     if (service) {
-      selectedChain.value = null;
+      selectedChain.value = undefined;
     }
   }
 );
 
-function getChainName(chain: string | number, service?: string): string {
-  if (service === ServiceTypeName.SMART_CONTRACTS && Number.isInteger(chain)) {
+function getChainName(chain?: string | number, service?: string): string {
+  if (!chain) {
+    return '';
+  } else if (service === ServiceTypeName.SMART_CONTRACTS && Number.isInteger(chain)) {
     return chain in EvmChain ? EvmChain[chain] : SubstrateChain[chain];
   } else if (service === ServiceTypeName.NFT || Number.isInteger(chain)) {
     return chain in EvmChain

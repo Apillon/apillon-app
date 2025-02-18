@@ -3,6 +3,8 @@
     <div class="p-4 sm:px-8">
       <div class="flex items-center justify-between">
         <div class="flex items-center pr-2 sm:pr-4">
+          <small v-if="pageTitle">{{ pageTitle }}</small>
+
           <!-- Hamburger btn to show sidebar on mobile -->
           <BtnHamburger class="mr-2 flex sm:mr-4 lg:hidden" @click="emit('toggleSidebar')" />
         </div>
@@ -31,13 +33,11 @@
 </template>
 
 <script lang="ts" setup>
-import { NSpace } from 'naive-ui';
-
 const emit = defineEmits(['toggleSidebar', 'toggleChat']);
 
 const { t } = useI18n();
 const authStore = useAuthStore();
-const { isSm, isLg } = useScreen();
+const pageTitle = useState('pageTitle');
 
 const renderIcon = (iconName: string) => {
   return () => {

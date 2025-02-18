@@ -36,7 +36,7 @@
       "behavior": "Behavior",
       "chainType": "Chain type",
       "contractAddress": "Contract address",
-      "create": "Create collection",
+      "create": "Create NFT Collection",
       "createFirst": "Start creating NFTs",
       "createInfo": "",
       "createToDisplay": "Create website to display NFTs with",
