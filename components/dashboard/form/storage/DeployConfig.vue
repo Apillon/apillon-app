@@ -76,7 +76,9 @@
     <n-form-item path="apiSecret" :label="$t('hosting.deploy.form.api-secret')" :label-props="{ for: 'apiSecret' }">
       <n-input
         v-model:value="storageStore.deployConfigForm.apiSecret"
-        :input-props="{ id: 'apiSecret' }"
+        :input-props="{ id: 'apiSecret', autocomplete: 'off' }"
+        show-password-on="click"
+        type="password"
         :placeholder="$t('hosting.deploy.form.api-secret-placeholder')"
         clearable
       />
