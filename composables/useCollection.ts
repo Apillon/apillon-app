@@ -207,6 +207,7 @@ export default function useCollection() {
       maxSupply: collectionStore.form.behavior.supplyLimited === 1 ? collectionStore.form.behavior.maxSupply : 0,
       isRevokable: collectionStore.form.behavior.revocable,
       isSoulbound: collectionStore.form.behavior.soulbound,
+      isAutoIncrement: collectionStore.form.behavior.isAutoIncrement,
       royaltiesAddress:
         collectionStore.form.behavior.royaltiesFees === 0 ? undefined : collectionStore.form.behavior.royaltiesAddress,
     };

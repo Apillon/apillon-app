@@ -124,6 +124,18 @@
           </td>
         </tr>
         <tr>
+          <td>{{ $t('form.label.collection.autoIncrement') }}:</td>
+          <td>
+            <span class="text-white">
+              {{
+                collectionStore.form.behavior.isAutoIncrement
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
+              }}
+            </span>
+          </td>
+        </tr>
+        <tr>
           <td>{{ $t('form.label.collection.royaltiesFees') }}:</td>
           <td>
             <span class="text-white">

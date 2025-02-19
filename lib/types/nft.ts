@@ -152,6 +152,7 @@ declare global {
     ipns_uuid: string;
     isRevokable: boolean;
     isSoulbound: boolean;
+    isAutoIncrement: boolean;
     maxSupply: number;
     dropPrice: number;
     dropReserve: number;

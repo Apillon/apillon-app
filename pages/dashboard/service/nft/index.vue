@@ -15,7 +15,14 @@
       </Empty>
 
       <!-- Modal - Collection Transfer -->
-      <modal v-model:show="modalCreateCollectionVisible" class="max-w-4xl text-center">
+      <modal
+        v-model:show="modalCreateCollectionVisible"
+        class="max-w-4xl text-center"
+        :class="{
+          'xl:max-w-5xl xxl:max-w-7xl':
+            collectionStore.metadataStored !== undefined && collectionStore.form.behavior.chain === undefined,
+        }"
+      >
         <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === undefined" />
         <FormNftCollectionNetworkSelect
           v-else-if="collectionStore.form.behavior.chain === undefined"
