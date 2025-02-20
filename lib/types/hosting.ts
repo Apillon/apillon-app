@@ -114,6 +114,11 @@ declare global {
   }
   interface DeploymentConfigVariablesResponse extends GeneralResponse<DeploymentConfigVariable[]> {}
 
+  interface DeploymentConfigInterface {
+    encryptedVariables: string | null;
+  }
+  interface DeploymentConfigResponse extends GeneralResponse<DeploymentConfigInterface> {}
+
   interface DeploymentBuildResponse extends GeneralResponse<DeploymentBuildInterface> {}
   interface DeploymentBuildsResponse extends GeneralItemsResponse<DeploymentBuildInterface> {}
   /**

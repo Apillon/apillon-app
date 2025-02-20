@@ -4,8 +4,8 @@
       <HeaderWebsite />
     </template>
     <slot>
-      <template v-if="!websiteStore.active.repoId">
-        <TableHostingDeploymentVariables :variables="deploymentStore.activeVariables" />
+      <template v-if="websiteStore.active.repoId">
+        <TableHostingDeploymentVariables :variables="deploymentStore.variables" />
       </template>
     </slot>
   </Dashboard>
@@ -15,8 +15,6 @@
 const $i18n = useI18n();
 const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
-const router = useRouter();
-const { params } = useRoute();
 
 const { pageLoading, initWebsite } = useHosting();
 

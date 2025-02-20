@@ -7,8 +7,9 @@ export const useDeploymentStore = defineStore('deployment', {
     buildsLoading: false,
     builds: [] as DeploymentBuildInterface[],
     variables: [] as DeploymentConfigVariable[],
-    activeVariables: [] as DeploymentConfigVariable[],
-    variableForm: {} as DeploymentConfigVariable,
+    variableForm: {} as DeploymentConfigVariable & {
+      prevKey?: string;
+    },
 
     production: [] as DeploymentInterface[],
     staging: [] as DeploymentInterface[],
@@ -33,10 +34,13 @@ export const useDeploymentStore = defineStore('deployment', {
       this.staging = [] as DeploymentInterface[];
       this.production = [] as DeploymentInterface[];
       this.variables = [] as DeploymentConfigVariable[];
-      this.activeVariables = [] as DeploymentConfigVariable[];
     },
     revertVariableChanges() {
-      this.activeVariables = [...this.variables];
+      this.variableForm = {
+        key: '',
+        value: '',
+        prevKey: undefined,
+      };
     },
     /**
      * Fetch wrappers
@@ -122,12 +126,9 @@ export const useDeploymentStore = defineStore('deployment', {
 
         this.variables = res.data;
 
-        this.revertVariableChanges();
-
         sessionStorage.setItem(LsCacheKeys.DEPLOYMENT_VARIABLES, Date.now().toString());
       } catch (error: any) {
         this.variables = [] as DeploymentConfigVariable[];
-        this.revertVariableChanges();
         window.$message.error(userFriendlyMsg(error));
       }
 
@@ -177,25 +178,28 @@ export const useDeploymentStore = defineStore('deployment', {
     async saveVariables(deploymentConfigId: number) {
       try {
         if (this.variableForm.key) {
-          this.activeVariables.push(this.variableForm);
+          if (this.variableForm.prevKey) {
+            const index = this.variables.findIndex(v => v.key === this.variableForm.prevKey);
+            this.variables[index] = {
+              key: this.variableForm.key,
+              value: this.variableForm.value,
+            };
+          } else {
+            this.variables.push(this.variableForm);
+          }
         }
 
-        const res = await $api.post<DeploymentConfigVariablesResponse>(
-          endpoints.deploymentConfigVariables(deploymentConfigId),
-          {
-            variables: this.activeVariables,
-          }
-        );
-
-        this.variables = res.data;
-        this.revertVariableChanges();
+        await $api.post<DeploymentConfigResponse>(endpoints.deploymentConfigVariables(), {
+          variables: this.variables,
+          deploymentConfigId,
+        });
 
         window.$message.success(window.$i18n.t('hosting.deploy.env-vars.success-save'));
-        return res.data;
       } catch (error: any) {
-        this.revertVariableChanges();
         window.$message.error(userFriendlyMsg(error));
       }
+
+      this.revertVariableChanges();
     },
 
     async deploy(

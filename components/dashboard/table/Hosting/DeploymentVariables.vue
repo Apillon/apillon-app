@@ -56,8 +56,8 @@ const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
       render(row: DeploymentConfigVariable) {
         return rowInEdit.value === row.key
           ? h(NInput, {
-              value: row.key,
-              onUpdateValue: (value: string) => updateVariable(row, 'key', value),
+              value: deploymentStore.variableForm.key,
+              onUpdateValue: (value: string) => (deploymentStore.variableForm.key = value),
             })
           : row.key;
       },
@@ -68,8 +68,8 @@ const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
       render(row: DeploymentConfigVariable) {
         return rowInEdit.value === row.key
           ? h(NInput, {
-              value: row.value,
-              onUpdateValue: (value: string) => updateVariable(row, 'value', value),
+              value: deploymentStore.variableForm.value,
+              onUpdateValue: (value: string) => (deploymentStore.variableForm.value = value),
             })
           : row.value;
       },
@@ -81,7 +81,7 @@ const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
         if (rowInEdit.value === row.key) {
           return h('div', { style: { display: 'flex', gap: '8px' } }, [
             h('button', { class: 'icon-check text-2xl text-white', onClick: () => saveRow(row) }),
-            h('button', { class: 'icon-close text-2xl text-white', onClick: () => revertRow(row) }),
+            h('button', { class: 'icon-close text-2xl text-white', onClick: () => revertRow() }),
           ]);
         } else {
           return h('div', { style: { display: 'flex', gap: '8px' } }, [
@@ -98,23 +98,9 @@ const columns = createColumns();
 
 const rowKey = (row: DeploymentConfigVariable) => row.key;
 
-const updateVariable = (row: DeploymentConfigVariable, field: 'key' | 'value', value: string) => {
-  const variable = deploymentStore.activeVariables.find(variable => variable.key === row.key);
-  if (variable) {
-    deploymentStore.activeVariables = deploymentStore.activeVariables.map(variable => {
-      if (variable.key === row.key) {
-        return {
-          ...variable,
-          [field]: value,
-        };
-      }
-      return variable;
-    });
-  }
-};
-
 const editRow = (row: DeploymentConfigVariable) => {
   rowInEdit.value = row.key;
+  deploymentStore.variableForm = { key: row.key, value: row.value, prevKey: row.key };
 };
 
 const saveRow = async (row: DeploymentConfigVariable) => {
@@ -128,13 +114,13 @@ const saveRow = async (row: DeploymentConfigVariable) => {
 };
 
 const deleteRow = (row: DeploymentConfigVariable) => {
-  deploymentStore.activeVariables = deploymentStore.activeVariables.filter(variable => variable.key !== row.key);
+  deploymentStore.variables = deploymentStore.variables.filter(variable => variable.key !== row.key);
   saveVariables();
 };
 
-const revertRow = (row: DeploymentConfigVariable) => {
+const revertRow = () => {
   rowInEdit.value = '';
-  deploymentStore.revertVariableChanges();
+  deploymentStore.variableForm = { key: '', value: '' };
 };
 
 const refreshVariables = async () => {
