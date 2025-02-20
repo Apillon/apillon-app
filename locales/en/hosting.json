@@ -79,6 +79,19 @@
       "new": "New deployment configuration",
       "empty-info": "Connect Github repository to enable Continuous Deployment for this website",
       "connect-repo": "Connect Github repository to website",
+      "env-vars": {
+        "title": "Environment variables",
+        "key": "Key",
+        "value": "Value",
+        "save": "Save",
+        "revert": "Revert",
+        "success-save": "Environment variables have been saved successfully",
+        "add-new": "Add new",
+        "new-title": "New environment variable",
+        "key-placeholder": "Enter key",
+        "value-placeholder": "Enter value",
+        "error-empty": "Variable key and value can't be empty"
+      },
       "build-table": {
         "finished-time": "Finished at",
         "build-status": "Build status",

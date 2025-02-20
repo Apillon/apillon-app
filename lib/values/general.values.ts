@@ -94,6 +94,7 @@ export const LsCacheKeys = {
   CUSTOMER_PORTAL_URL: 'al_cache_customer_portal',
   DEPLOYMENT: 'al_cache_deployment',
   DEPLOYMENT_BUILD: 'al_cache_deployment_build',
+  DEPLOYMENT_VARIABLES: 'al_cache_deployment_variables',
   DEPLOYMENTS_PRODUCTION: 'al_cache_deployments_production',
   DEPLOYMENTS_STAGING: 'al_cache_deployments_staging',
   DISCORD_LINK: 'al_cache_discord_link',

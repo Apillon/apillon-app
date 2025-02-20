@@ -9,6 +9,9 @@
           <div class="flex w-full flex-row-reverse justify-between gap-8">
             <!-- Actions : refresh, deploy -->
             <n-space>
+              <n-button size="small" @click="navigateToEnvVars">
+                {{ $t('hosting.deploy.env-vars.title') }}
+              </n-button>
               <n-button size="small" :loading="deploymentStore.buildsLoading" @click="refreshBuilds">
                 <span class="icon-refresh mr-2 text-xl"></span>
                 {{ $t('general.refresh') }}
@@ -36,6 +39,7 @@ const $i18n = useI18n();
 const websiteStore = useWebsiteStore();
 const storageStore = useStorageStore();
 const deploymentStore = useDeploymentStore();
+const router = useRouter();
 const { pageLoading, initWebsite } = useHosting();
 const modalCreateKeyVisible = ref<boolean>(false);
 
@@ -52,6 +56,14 @@ const refreshBuilds = async () => {
   const websiteUuid = websiteStore.active?.website_uuid;
   if (websiteUuid) {
     await deploymentStore.fetchBuilds(websiteUuid);
+  }
+};
+
+const navigateToEnvVars = () => {
+  if (websiteStore.active.deploymentConfig_id) {
+    router.push(
+      `/dashboard/service/hosting/${websiteStore.active.website_uuid}/${websiteStore.active.deploymentConfig_id}/env-vars`
+    );
   }
 };
 </script>
