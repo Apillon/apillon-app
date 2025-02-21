@@ -6,6 +6,10 @@ export const useDeploymentStore = defineStore('deployment', {
     loading: false,
     buildsLoading: false,
     builds: [] as DeploymentBuildInterface[],
+    variables: [] as DeploymentConfigVariable[],
+    variableForm: {} as DeploymentConfigVariable & {
+      prevKey?: string;
+    },
 
     production: [] as DeploymentInterface[],
     staging: [] as DeploymentInterface[],
@@ -20,12 +24,23 @@ export const useDeploymentStore = defineStore('deployment', {
     hasBuildsLoaded(state): boolean {
       return Array.isArray(state.builds) && state.builds.length > 0;
     },
+    hasVariablesLoaded(state): boolean {
+      return Array.isArray(state.variables) && state.variables.length > 0;
+    },
   },
   actions: {
     resetData() {
       this.active = {} as DeploymentInterface;
       this.staging = [] as DeploymentInterface[];
       this.production = [] as DeploymentInterface[];
+      this.variables = [] as DeploymentConfigVariable[];
+    },
+    revertVariableChanges() {
+      this.variableForm = {
+        key: '',
+        value: '',
+        prevKey: undefined,
+      };
     },
     /**
      * Fetch wrappers
@@ -53,6 +68,12 @@ export const useDeploymentStore = defineStore('deployment', {
     async getBuilds(websiteUuid: string) {
       if (!this.hasBuildsLoaded || isCacheExpired(LsCacheKeys.DEPLOYMENT_BUILD)) {
         await this.fetchBuilds(websiteUuid);
+      }
+    },
+
+    async getVariables(deploymentConfigId: number) {
+      if (!this.hasVariablesLoaded || isCacheExpired(LsCacheKeys.DEPLOYMENT_VARIABLES)) {
+        await this.fetchVariables(deploymentConfigId);
       }
     },
 
@@ -94,6 +115,25 @@ export const useDeploymentStore = defineStore('deployment', {
       }
       this.loading = false;
     },
+
+    async fetchVariables(deploymentConfigId: number) {
+      this.loading = true;
+
+      try {
+        const res = await $api.get<DeploymentConfigVariablesResponse>(
+          endpoints.deploymentConfigVariables(deploymentConfigId)
+        );
+
+        this.variables = res.data;
+
+        sessionStorage.setItem(LsCacheKeys.DEPLOYMENT_VARIABLES, Date.now().toString());
+      } catch (error: any) {
+        this.variables = [] as DeploymentConfigVariable[];
+        window.$message.error(userFriendlyMsg(error));
+      }
+
+      this.loading = false;
+    },
     async fetchBuilds(websiteUuid: string) {
       this.buildsLoading = true;
 
@@ -133,6 +173,33 @@ export const useDeploymentStore = defineStore('deployment', {
         window.$message.error(userFriendlyMsg(error));
       }
       return {} as DeploymentInterface;
+    },
+
+    async saveVariables(deploymentConfigId: number) {
+      try {
+        if (this.variableForm.key) {
+          if (this.variableForm.prevKey) {
+            const index = this.variables.findIndex(v => v.key === this.variableForm.prevKey);
+            this.variables[index] = {
+              key: this.variableForm.key,
+              value: this.variableForm.value,
+            };
+          } else {
+            this.variables.push(this.variableForm);
+          }
+        }
+
+        await $api.post<DeploymentConfigResponse>(endpoints.deploymentConfigVariables(), {
+          variables: this.variables,
+          deploymentConfigId,
+        });
+
+        window.$message.success(window.$i18n.t('hosting.deploy.env-vars.success-save'));
+      } catch (error: any) {
+        window.$message.error(userFriendlyMsg(error));
+      }
+
+      this.revertVariableChanges();
     },
 
     async deploy(
