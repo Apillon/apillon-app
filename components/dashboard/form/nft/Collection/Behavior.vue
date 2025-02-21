@@ -42,6 +42,7 @@
     <n-form-item v-if="!isUnique" path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
       <n-checkbox
         v-model:checked="collectionStore.form.behavior.useApillonIpfsGateway"
+        id="useApillonIpfsGateway"
         size="medium"
         :label="infoLabel('useGateway') as string"
       />
@@ -195,6 +196,7 @@
         <n-checkbox
           v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
+          id="drop"
           :label="infoLabel('drop') as string"
         />
       </n-form-item-gi>

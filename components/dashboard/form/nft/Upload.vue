@@ -24,6 +24,7 @@
           :max="nft.dataImagesNames.value.length"
           multiple
           directory-dnd
+          :input-props="{ id: 'collectionImages' }"
           :custom-request="upload => nft.uploadImagesRequest(upload, !isUnique)"
           @change="onUploadChange"
           @remove="nft.handleImageRemove"
@@ -112,6 +113,7 @@
             :show-file-list="false"
             accept=".csv, application/vnd.ms-excel"
             class="w-full"
+            :input-props="{ id: 'csvFile' }"
             :custom-request="e => onCsvFileUpload(e)"
           >
             <Btn class="w-full" type="secondary">
