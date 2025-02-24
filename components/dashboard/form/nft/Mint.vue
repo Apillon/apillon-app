@@ -41,12 +41,12 @@
       <n-select
         v-else
         v-model:value="formData.idsToMint"
-        :placeholder="$t('form.placeholder.nft.idsToMint')"
-        :show-arrow="false"
-        :show="false"
-        filterable
+        :options="unlimitedValues"
+        :reset-menu-on-options-change="false"
         multiple
+        filterable
         tag
+        @scroll="handleScroll"
       />
     </n-form-item>
 
@@ -64,6 +64,7 @@
 import { repeat } from 'seemly';
 import type { FormItemRule } from 'naive-ui';
 import type { PropType } from 'vue';
+import type { SelectBaseOption } from 'naive-ui/es/select/src/interface';
 
 type FormNftMint = {
   receivingAddress: string;
@@ -135,6 +136,25 @@ const isTransferred = computed<boolean>(() => {
 const isFormDisabled = computed<boolean>(() => {
   return isTransferred.value;
 });
+
+const unlimitedPage = ref(1);
+const unlimitedValues = ref<SelectBaseOption[]>([]);
+const loadMoreOptions = async (limit = 100) => {
+  const newOptions = repeat(limit, unlimitedPage.value * limit).map((_, i) => ({
+    label: String((unlimitedPage.value - 1) * limit + i + 1),
+    value: (unlimitedPage.value - 1) * limit + i + 1,
+  }));
+  unlimitedValues.value.push(...newOptions);
+  unlimitedPage.value += 1;
+};
+loadMoreOptions();
+
+const handleScroll = (e: Event) => {
+  const currentTarget = e.currentTarget as HTMLElement;
+  if (currentTarget.scrollTop + currentTarget.offsetHeight >= currentTarget.scrollHeight) {
+    loadMoreOptions();
+  }
+};
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
