@@ -17,11 +17,16 @@
     </SeparatorText>
 
     <!-- Wallet -->
-    <AuthWalletLogin v-if="isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())" class="mb-4 w-full" />
+    <n-space size="large" vertical>
+      <AuthLoginGoogle />
+      <AuthWalletLogin v-if="isFeatureEnabled(Feature.WALLET_LOGIN, authStore.getUserRoles())" class="w-full" />
+    </n-space>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { AuthLoginGoogle } from '#components';
+
 const { t } = useI18n();
 const { isLg } = useScreen();
 const authStore = useAuthStore();

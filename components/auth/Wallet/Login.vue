@@ -20,7 +20,6 @@
 
 <script lang="ts" setup>
 import { useAccount, useDisconnect, useAccountEffect } from '@wagmi/vue';
-import { colors } from '~/tailwind.config';
 
 const props = defineProps({
   register: { type: Boolean, default: false },

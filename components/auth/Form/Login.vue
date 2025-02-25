@@ -144,7 +144,7 @@ async function login() {
     captchaReset();
 
     /** Fetch projects, if user hasn't any project redirect him to '/onboarding/first' so he will be able to create first project */
-    dataStore.project.items = await dataStore.fetchProjects(true);
+    await dataStore.fetchProjects(true);
   } catch (error: ApiError | ReferenceError | any) {
     message.error(userFriendlyMsg(error));
     captchaReset();

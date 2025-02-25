@@ -18,6 +18,14 @@ export enum PageSize {
   LG = 50,
 }
 
+export enum OauthTypes {
+  GOOGLE = 'google',
+}
+export enum OauthActionTypes {
+  LOGIN = 'login',
+  REGISTER = 'register',
+}
+
 export const LS_KEYS = {
   APP_VERSION: 'al_app_version',
   DEPLOYMENT_REFRESH_INTERVAL: 'al_deployment_refresh_interval',
@@ -29,6 +37,7 @@ export const SessionKeys = {
   ASSET_HUB: 'al_asset_hub',
   BUCKET_STORE: 'al_bucket_store',
   CREDITS_MSG: 'al_credits_msg',
+  OAUTH_ACTION: 'al_oauth_action',
   SETTINGS_STORE: 'al_settings_store',
   SUBSCRIPTION_MSG: 'al_subscription_msg',
   WEBSITE_REVIEW: 'al_website_review',
