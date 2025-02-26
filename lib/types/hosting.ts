@@ -75,6 +75,7 @@ declare global {
     domainStatus: number;
     ipnsProduction: string | null;
     ipnsStaging: string | null;
+    nftCollectionUuid: string | null;
     productionBucket: BucketInterface;
     repoId: number | null;
     deploymentConfig_id: number | null;

@@ -4,11 +4,11 @@
     :class="{ 'flex flex-col justify-between': showFooter }"
     :style="showFooter ? 'min-height: calc(100dvh - 280px)' : ''"
   >
-    <div :class="{ 'flex justify-center items-center': showFooter }">
-      <div class="w-full max-w-lg text-center mx-auto">
-        <NuxtIcon name="nft/collection" class="flex justify-center icon-auto mb-4" filled />
+    <div :class="{ 'flex items-center justify-center': showFooter }">
+      <div class="mx-auto w-full max-w-lg text-center">
+        <NuxtIcon name="nft/collection" class="icon-auto mb-4 flex justify-center" filled />
         <h2>{{ $t('nft.collection.created.title') }}</h2>
-        <p class="mb-2 text-body whitespace-pre-line">
+        <p class="mb-2 whitespace-pre-line text-body">
           {{ $t('nft.collection.created.info') }}
         </p>
 
@@ -27,6 +27,9 @@
           </a>
           <p>.</p>
         </div>
+        <Btn type="primary" size="large" @click="modalDeployWebsiteVisible = true">
+          {{ $t('nft.collection.created.deploy') }}
+        </Btn>
         <template v-if="showFooter">
           <SeparatorText class="my-4" :border-left="true">
             {{ $t('general.or') }}
@@ -41,25 +44,19 @@
         <slot />
       </div>
     </div>
-    <div v-if="showFooter" class="relative border-t-1 border-bg-lighter py-6 px-5 mt-8">
-      <IconInfo
-        v-if="$te('w3Warn.nft.new')"
-        class="absolute top-4 left-0"
-        @click="modalW3WarnVisible = true"
-      />
+    <div v-if="showFooter" class="relative mt-8 border-t-1 border-bg-lighter px-5 py-6">
+      <IconInfo v-if="$te('w3Warn.nft.new')" class="absolute left-0 top-4" @click="modalW3WarnVisible = true" />
       <p class="mb-2 text-center text-body">
-        <span class="inline-block mx-1">{{ $t('nft.collection.created.view') }}</span>
+        <span class="mx-1 inline-block">{{ $t('nft.collection.created.view') }}</span>
         <a
-          :href="
-            transactionLink(collectionStore.active.transactionHash, collectionStore.active.chain)
-          "
+          :href="transactionLink(collectionStore.active.transactionHash, collectionStore.active.chain)"
           target="_blank"
         >
           <Btn type="builders" size="tiny">
             <span class="text-sm">{{ $t('nft.collection.created.explorer') }}</span>
           </Btn>
         </a>
-        <span class="inline-block mx-1">{{ $t('nft.collection.created.or') }}</span>
+        <span class="mx-1 inline-block">{{ $t('nft.collection.created.or') }}</span>
 
         <Btn
           type="builders"
@@ -74,6 +71,9 @@
     <W3Warn v-model:show="modalW3WarnVisible">
       {{ $t('w3Warn.nft.new') }}
     </W3Warn>
+    <modal v-model:show="modalDeployWebsiteVisible" :title="$t('nft.collection.created.deploy')">
+      <FormNftWebsiteDeploy @submit-success="modalDeployWebsiteVisible = false" />
+    </modal>
   </div>
 </template>
 
@@ -82,6 +82,7 @@ defineProps({ showFooter: { type: Boolean, default: false } });
 
 const collectionStore = useCollectionStore();
 const { loadingBucket, openBucket } = useStorage();
+const modalDeployWebsiteVisible = ref<boolean>(false);
 
 const modalW3WarnVisible = ref<boolean>(false);
 

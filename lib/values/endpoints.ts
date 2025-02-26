@@ -159,6 +159,7 @@ const Endpoints = {
     return `/deploy/github/list-repos/${projectUuid}`;
   },
   deployConfig: `/deploy/config`,
+  deployNftWebsite: `/deploy/nft`,
 
   /** IPNS */
   ipns: (bucketUuid: string, uuid?: string) => {
