@@ -1,11 +1,10 @@
 <template>
-  <Notification v-if="isTransferred" type="error" class="w-full mb-8">
+  <Notification v-if="isTransferred" type="error" class="mb-8 w-full">
     {{ $t('error.NFT_CONTRACT_OWNER_ERROR') }}
   </Notification>
   <n-form
     v-bind="$attrs"
     ref="formRef"
-    class="mt-8"
     :model="formData"
     :rules="rules"
     :disabled="isFormDisabled"
@@ -14,6 +13,7 @@
     <!--  NFT Nest Mint - Collection -->
     <n-form-item
       path="parentCollectionUuid"
+      class="hidden"
       :label="$t('form.label.nft.mintCollectionUuid')"
       :label-props="{ for: 'bucket' }"
     >
@@ -50,13 +50,7 @@
     <!--  Form submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('nft.collection.mint')" />
-      <Btn
-        type="primary"
-        class="w-full mt-2"
-        :loading="loading"
-        :disabled="isFormDisabled"
-        @click="handleSubmit"
-      >
+      <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
         {{ $t('nft.collection.mint') }}
       </Btn>
     </n-form-item>
@@ -86,7 +80,7 @@ const collectionStore = useCollectionStore();
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormNftNestMint>({
-  parentCollectionUuid: null,
+  parentCollectionUuid: props.collectionUuid,
   parentNftId: null,
   quantity: null,
 });
@@ -132,9 +126,7 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 function validateQuantity(_: FormItemRule, value: number): boolean {
-  return (
-    !collectionStore.active.drop || (value > 0 && value <= collectionStore.active?.dropReserve)
-  );
+  return !collectionStore.active.drop || value <= collectionStore.active?.dropReserve;
 }
 
 // Submit
@@ -142,15 +134,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
-      const priceServiceName = generatePriceServiceName(
-        ServiceTypeName.NFT,
-        props.chainId,
-        PriceServiceAction.MINT
-      );
+      const priceServiceName = generatePriceServiceName(ServiceTypeName.NFT, props.chainId, PriceServiceAction.MINT);
       warningStore.showSpendingWarning(priceServiceName, () => mint());
     }
   });

@@ -123,7 +123,7 @@
             </span>
           </td>
         </tr>
-        <tr>
+        <tr v-show="collectionStore.form.behavior.collectionType === NFTCollectionType.GENERIC">
           <td>{{ $t('form.label.collection.autoIncrement') }}:</td>
           <td>
             <span class="text-white">
@@ -187,7 +187,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChainType } from '~/lib/types/nft';
+import { ChainType, NFTCollectionType } from '~/lib/types/nft';
 import { timestampToDateAndTime } from '~/lib/utils/dates';
 
 const collectionStore = useCollectionStore();

@@ -72,11 +72,10 @@ export enum CollectionStatus {
 
 /** NFT Transaction status */
 export enum TransactionStatus {
-  REQUESTED = 0,
   PENDING = 1,
-  FINISHED = 2,
-  VERIFIED = 3,
-  FAILED = 4,
+  CONFIRMED = 2,
+  FAILED = 3,
+  ERROR = 4,
 }
 
 /** NFT Transaction type */

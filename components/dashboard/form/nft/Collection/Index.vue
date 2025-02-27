@@ -165,7 +165,7 @@
         <n-grid
           v-if="collectionStore.form.behavior.chainType === ChainType.EVM || isUnique"
           class="items-end"
-          :cols="12"
+          :cols="collectionStore.form.behavior.collectionType === NFTCollectionType.NESTABLE ? 8 : 12"
           :x-gap="32"
         >
           <!-- Collection Revocable -->
@@ -202,6 +202,7 @@
 
           <!-- Collection AutoIncrement -->
           <n-form-item-gi
+            v-show="collectionStore.form.behavior.collectionType === NFTCollectionType.GENERIC"
             path="behavior.isAutoIncrement"
             :span="4"
             :label="infoLabel('autoIncrement') as string"

@@ -99,7 +99,7 @@
     <n-grid
       v-if="collectionStore.form.behavior.chainType === ChainType.EVM || isUnique"
       class="items-end"
-      :cols="12"
+      :cols="collectionStore.form.behavior.collectionType === NFTCollectionType.NESTABLE ? 8 : 12"
       :x-gap="32"
     >
       <!-- Collection Revocable -->
@@ -136,6 +136,7 @@
 
       <!-- Collection AutoIncrement -->
       <n-form-item-gi
+        v-show="collectionStore.form.behavior.collectionType === NFTCollectionType.GENERIC"
         path="isAutoIncrement"
         :span="4"
         :label="infoLabel('autoIncrement') as string"
@@ -287,7 +288,7 @@
 <script lang="ts" setup>
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
 import { Feature } from '~/lib/types/config';
-import { ChainType } from '~/lib/types/nft';
+import { ChainType, NFTCollectionType } from '~/lib/types/nft';
 import { isFeatureEnabled } from '~/lib/utils';
 
 defineProps({
