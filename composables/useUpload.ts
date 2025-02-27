@@ -138,18 +138,7 @@ export default function useUpload() {
                   }
                 })
               );
-
-              const { data } = await $api.post<IpfsLinksResponse>(endpoints.ipfsLinks, {
-                cids: Object.values(cids).map(item => item.CID),
-                project_uuid: dataStore.projectUuid,
-              });
-
-              data.links.forEach((link: string, index: number) => {
-                const fileUuid = Object.keys(cids)[index];
-                cids[fileUuid].link = link;
-              });
-
-              bucketStore.addCids(cids);
+              generateIpfsLinks(cids);
             }
             await uploadFilesToS3(fileRequests.data.files);
           } else {
@@ -164,6 +153,20 @@ export default function useUpload() {
     }
 
     return sessionUuid.value;
+  }
+
+  async function generateIpfsLinks(cids: Record<string, UploadedFileInfo>) {
+    const { data } = await $api.post<IpfsLinksResponse>(endpoints.ipfsLinks, {
+      cids: Object.values(cids).map(item => item.CID),
+      project_uuid: dataStore.projectUuid,
+    });
+
+    data.links.forEach((link: string, index: number) => {
+      const fileUuid = Object.keys(cids)[index];
+      cids[fileUuid].link = link;
+    });
+
+    bucketStore.addCids(cids);
   }
 
   function uploadFilesToS3(uploadFilesRequests: S3FileUploadRequestInterface[]) {
@@ -322,6 +325,7 @@ export default function useUpload() {
     fileAlreadyOnFileList,
     fileTypeValid,
     isEnoughSpaceInStorage,
+    generateIpfsLinks,
     onUploadError,
     updateFileStatus,
     uploadFiles,

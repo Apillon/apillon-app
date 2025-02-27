@@ -5,8 +5,10 @@ export default function useComputing() {
   const { t, te } = useI18n();
   const message = useMessage();
   const router = useRouter();
+  const bucketStore = useBucketStore();
   const contractStore = useContractStore();
   const transactionStore = useComputingTransactionStore();
+  const { generateIpfsLinks } = useUpload();
 
   let transactionInterval: any = null as any;
   let contractInterval: any = null as any;
@@ -27,9 +29,7 @@ export default function useComputing() {
 
     contractInterval = setInterval(async () => {
       const contracts = await contractStore.fetchContracts(false, false);
-      const contract = contracts.find(
-        contract => contract.contract_uuid === unfinishedCollection.contract_uuid
-      );
+      const contract = contracts.find(contract => contract.contract_uuid === unfinishedCollection.contract_uuid);
       if (!contract || contract.contractStatus >= CollectionStatus.DEPLOYED) {
         clearInterval(contractInterval);
       }
@@ -55,9 +55,7 @@ export default function useComputing() {
         { page: transactionStore.pagination.page },
         false
       );
-      const transaction = transactions.find(
-        transaction => transaction.id === unfinishedTransaction.id
-      );
+      const transaction = transactions.find(transaction => transaction.id === unfinishedTransaction.id);
       if (!transaction || transaction.transactionStatus > ComputingTransactionStatus.CONFIRMED) {
         clearInterval(transactionInterval);
         contractStore.active = await contractStore.fetchContract(contractUuid);
@@ -85,11 +83,9 @@ export default function useComputing() {
     };
 
     try {
-      const uploadSession = await $api.post<FilesUploadRequestResponse>(
-        endpoints.storageFilesUpload(bucketUuid),
-        data
-      );
+      const uploadSession = await $api.post<FilesUploadRequestResponse>(endpoints.storageFilesUpload(bucketUuid), data);
       const uploadUrl = uploadSession.data.files[0];
+
       // Upload to S3
       await fetch(uploadUrl.url, {
         method: 'PUT',
@@ -103,6 +99,23 @@ export default function useComputing() {
         setTimeout(() => {
           message.success(t('computing.contract.encrypt.step2Info'), { duration: 5000 });
         }, 1000);
+      }
+
+      if (!encryptedContent) {
+        const cids = {} as Record<string, UploadedFileInfo>;
+        const buffer = await file.file?.arrayBuffer();
+        if (buffer) {
+          const calculatedCID = await calculateCID(Buffer.from(buffer), {
+            cidVersion: 1,
+          });
+          cids[uploadUrl.file_uuid] = {
+            CID: calculatedCID,
+            link: null,
+            name: uploadUrl.fileName,
+            path: uploadUrl.path,
+          };
+        }
+        await generateIpfsLinks(cids);
       }
 
       // Start pooling file
@@ -121,28 +134,22 @@ export default function useComputing() {
         if (fileData && (fileData?.CID || fileData?.CIDv1)) {
           clearInterval(getFileInterval);
           resolve(fileData);
+        } else if (fileUuid in bucketStore.calculatedCids) {
+          clearInterval(getFileInterval);
+          resolve(Object.assign(fileData, bucketStore.calculatedCids[fileUuid]));
         }
-      }, 5000);
+      }, 2000);
     });
   }
 
   async function getFilePoll(bucketUuid: string, fileUuid: string): Promise<FileInterface> {
-    const response = await $api.get<FileDetailsResponse>(
-      endpoints.storageFileDetails(bucketUuid, fileUuid)
-    );
+    const response = await $api.get<FileDetailsResponse>(endpoints.storageFileDetails(bucketUuid, fileUuid));
     return response.data;
   }
 
   function labelInfo(field: string, base = 'form.label.contract') {
-    if (
-      te(`${base}.${field}`) &&
-      te(`${base}.labelInfo.${field}`) &&
-      t(`${base}.labelInfo.${field}`)
-    ) {
-      return labelInfoText(
-        t(`${base}.${field}`),
-        decodeHTMLEntities(t(`${base}.labelInfo.${field}`))
-      );
+    if (te(`${base}.${field}`) && te(`${base}.labelInfo.${field}`) && t(`${base}.labelInfo.${field}`)) {
+      return labelInfoText(t(`${base}.${field}`), decodeHTMLEntities(t(`${base}.labelInfo.${field}`)));
     }
     return te(`${base}.${field}`) ? t(`${base}.${field}`) : field;
   }
