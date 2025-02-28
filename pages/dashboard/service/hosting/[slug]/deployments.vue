@@ -4,12 +4,12 @@
       <HeaderWebsite />
     </template>
     <slot>
-      <template v-if="websiteStore.active.repoId">
+      <template v-if="websiteStore.active.repoId || websiteStore.active.nftCollectionUuid">
         <n-space class="pb-8" :size="32" vertical>
           <div class="flex w-full flex-row-reverse justify-between gap-8">
             <!-- Actions : refresh, deploy -->
             <n-space>
-              <n-button size="small" @click="navigateToEnvVars">
+              <n-button v-if="websiteStore.active.deploymentConfig_id" size="small" @click="navigateToEnvVars">
                 {{ $t('hosting.deploy.env-vars.title') }}
               </n-button>
               <n-button size="small" :loading="deploymentStore.buildsLoading" @click="refreshBuilds">
