@@ -5,6 +5,12 @@ export enum ChainType {
   EVM = 2,
 }
 
+export enum NftWebsiteType {
+  PLAIN_JS = 1,
+  REACT = 2,
+  VUE = 3,
+}
+
 /** NFT Chains */
 export enum EvmChainMainnet {
   ETHEREUM = 1,
@@ -162,11 +168,18 @@ declare global {
     updateTime: string;
     useApillonIpfsGateway: boolean;
     useIpns: boolean;
+    websiteUuid: string | null;
   }
 
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionUpdateResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionsResponse extends GeneralItemsResponse<CollectionInterface> {}
+
+  interface WebsiteDeployForm {
+    apiKey: string;
+    apiSecret: string;
+    type: NftWebsiteType;
+  }
 
   /**
    * Transaction

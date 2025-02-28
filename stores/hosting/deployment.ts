@@ -6,11 +6,11 @@ export const useDeploymentStore = defineStore('deployment', {
     loading: false,
     buildsLoading: false,
     builds: [] as DeploymentBuildInterface[],
+    buildWebsiteUuid: '',
     variables: [] as DeploymentConfigVariable[],
     variableForm: {} as DeploymentConfigVariable & {
       prevKey?: string;
     },
-
     production: [] as DeploymentInterface[],
     staging: [] as DeploymentInterface[],
   }),
@@ -66,7 +66,11 @@ export const useDeploymentStore = defineStore('deployment', {
     },
 
     async getBuilds(websiteUuid: string) {
-      if (!this.hasBuildsLoaded || isCacheExpired(LsCacheKeys.DEPLOYMENT_BUILD)) {
+      if (
+        !this.hasBuildsLoaded ||
+        isCacheExpired(LsCacheKeys.DEPLOYMENT_BUILD) ||
+        this.buildWebsiteUuid !== websiteUuid
+      ) {
         await this.fetchBuilds(websiteUuid);
       }
     },
@@ -146,6 +150,8 @@ export const useDeploymentStore = defineStore('deployment', {
         });
 
         this.builds = res.data.items;
+
+        this.buildWebsiteUuid = websiteUuid;
 
         sessionStorage.setItem(LsCacheKeys.DEPLOYMENT_BUILD, Date.now().toString());
       } catch (error) {

@@ -97,7 +97,8 @@
         "info": "To display your NFTs and mint them, you need a website. \nUse the Apillon NFT website template and host it on a decentralized network.",
         "or": "or see its contents in your",
         "title": "Display your NFTs on the internet",
-        "view": "View the transaction on"
+        "view": "View the transaction on",
+        "deploy": "Deploy NFT website"
       },
       "displayTypes": {
         "string": {
@@ -125,6 +126,7 @@
         "data": "All collection data can be changed later in settings.",
         "smartContract": "The smart contract data cannot be changed later or depends on the settings you have chosen. So make sure that you enter the correct data."
       },
+      "show-website": "Show website",
       "status": {
         "0": "CREATED",
         "1": "INITIATED",
@@ -136,6 +138,25 @@
       "type": {
         "1": "Generic",
         "2": "Nestable"
+      },
+      "website-connected": "NFT collection has been successfully connected to the Apillon website!",
+      "website-deploy": {
+        "deploy": "Deploy NFT website",
+        "plain_js": "Vanila Javascript",
+        "react": "React",
+        "vue": "Vue",
+
+        "success": "NFT website deploy successfully triggered",
+        "form": {
+          "api-key": "API Key",
+          "api-key-placeholder": "Select your API key",
+          "api-secret": "API Secret",
+          "api-secret-placeholder": "Enter your API secret",
+          "type": "Website type",
+          "type-required": "Type is required",
+          "api-key-required": "API Key is required",
+          "api-secret-required": "API Secret is required"
+        }
       }
     },
     "deploy": {

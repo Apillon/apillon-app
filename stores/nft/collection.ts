@@ -65,6 +65,7 @@ export const useCollectionStore = defineStore('collection', {
         attributes: [] as AttributesInterface,
       },
     },
+    websiteDeployForm: {} as WebsiteDeployForm,
   }),
   getters: {
     collectionUuid(state): string {
