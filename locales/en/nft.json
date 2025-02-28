@@ -9,8 +9,6 @@
       "multipleContent": "Use CSV file to upload data in bulk"
     },
     "chain": {
-      "1": "MOONBEAM (Mainnet)",
-      "2": "MOONBASE (Testnet)",
       "8": "ASTAR (Substrate)",
       "11": "Unique network",
       "81": "ASTAR SHIBUYA (Testnet)",
@@ -55,8 +53,8 @@
       "emptyInfo": "Add it to your Web3 project",
       "emptyArchive": "NFT collections Archive",
       "emptyArchiveInfo": "There are currently no NFT collections in the Archive.",
-      "environment": "Chose environment",
-      "environmentContent": "Deploy on Testnet to test the template before launching it in production on Mainnet.",
+      "environment": "Chose a chain",
+      "environmentContent": "We suggest you first to deploy on Testnet to test the template before launching it in production on Mainnet.",
       "enterData": "Enter collection data",
       "headline": "How does it work?",
       "info": "Launch your end-to-end decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the collection website on Web3.",
@@ -98,6 +96,12 @@
         "or": "or see its contents in your",
         "title": "Display your NFTs on the internet",
         "view": "View the transaction on"
+      },
+      "createStep": {
+        "1": "Metadata",
+        "2": "Smart Contract",
+        "3": "Visuals",
+        "4": "Review"
       },
       "displayTypes": {
         "string": {
@@ -157,6 +161,7 @@
       "lastError": "Last error",
       "no": "I already have it online",
       "proceedUpload": "Proceed to upload",
+      "startFresh": "We see that you already have metadata on Apillon. Would you like to use it, or start fresh?",
       "title": "Prepare NFT metadata",
       "titleCollectionBehavior": "Behavior",
       "titleCollectionName": "Name your collection",
@@ -181,12 +186,15 @@
     },
     "network": {
       "1": {
+        "advantage": "",
         "content": [{ "title": "Ethereum" }]
       },
       "10": {
+        "advantage": "",
         "content": [{ "title": "OPTIMISM" }]
       },
       "11": {
+        "advantage": "Perfect for NFT projects needing advanced customization and native features.",
         "content": [
           {
             "purpose": "Purpose: Unique Network is a Polkadot parachain optimized specifically for NFTs and gaming applications.",
@@ -206,12 +214,15 @@
         ]
       },
       "81": {
+        "advantage": "",
         "content": [{ "title": "ASTAR SHIBUYA" }]
       },
       "137": {
+        "advantage": "",
         "content": [{ "title": "Polygon" }]
       },
       "592": {
+        "advantage": "Ideal for multi-chain projects using EVM and WASM for advanced NFT minting.",
         "content": [
           {
             "title": "Astar Network",
@@ -230,6 +241,7 @@
         ]
       },
       "1284": {
+        "advantage": "Low-cost, Ethereum-compatible testnet for NFT and smart contract testing.",
         "content": [
           {
             "title": "Moonbeam (Mainnet)",
@@ -248,6 +260,7 @@
         ]
       },
       "1287": {
+        "advantage": "Low-cost, Ethereum-compatible testnet for NFT and smart contract testing.",
         "content": [
           {
             "title": "MOONBASE (Moonbeam Testnet)",
@@ -266,39 +279,55 @@
         ]
       },
       "8453": {
+        "advantage": "",
         "content": [{ "title": "Base" }]
       },
       "23294": {
+        "advantage": "",
         "content": [{ "title": "Oasis Sapphire" }]
       },
       "42161": {
+        "advantage": "",
         "content": [{ "title": "Arbitrum One" }]
       },
+      "42220": {
+        "advantage": "",
+        "content": [{ "title": "Celo" }]
+      },
       "42262": {
+        "advantage": "",
         "content": [{ "title": "Oasis" }]
       },
       "43113": {
+        "advantage": "",
         "content": [{ "title": "AVALANCHE FUJI" }]
       },
       "43114": {
+        "advantage": "",
         "content": [{ "title": "AVALANCHE" }]
       },
       "44787": {
+        "advantage": "",
         "content": [{ "title": "ALFAJORES" }]
       },
       "80002": {
+        "advantage": "",
         "content": [{ "title": "Polygon Amoy" }]
       },
       "84532": {
+        "advantage": "",
         "content": [{ "title": "Base sepolia" }]
       },
       "421614": {
+        "advantage": "",
         "content": [{ "title": "Arbitrum One Sepolia" }]
       },
       "11155111": {
+        "advantage": "",
         "content": [{ "title": "Sepolia" }]
       },
       "11155420": {
+        "advantage": "",
         "content": [{ "title": "OPTIMISM Sepolia" }]
       }
     },
@@ -393,8 +422,11 @@
     "addIpns": "Add IPNS",
     "addIpnsInfo": "With IPNS, you will be able to modify the metadata and add new NFTs to this collection.",
     "create": "Create an NFT",
+    "mainnet": "Production",
     "openBucket": "Go to storage",
     "openCollection": "Go to collection",
+    "search": "Search environment",
+    "testnet": "Testnet",
     "transactionType": "Transaction Type"
   }
 }

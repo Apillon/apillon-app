@@ -21,15 +21,20 @@ export default function useCollection() {
       return { name: k.toLowerCase(), label: t(`nft.evmChain.${EvmChain[k]}`), value: EvmChain[k] };
     });
 
-  const chains = enumKeys(EvmChain)
-    .filter(key => ![EvmChainTestnet.ASTAR_SHIBUYA].includes(EvmChain[key]))
-    .map(k => {
-      return {
-        name: k.toLowerCase(),
-        label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`) : EvmChain[EvmChain[k]],
-        value: EvmChain[k],
-      };
-    });
+  const chains = enumKeys(EvmChainMainnet).map(k => {
+    return {
+      name: k.toLowerCase(),
+      label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`) : EvmChain[EvmChain[k]],
+      value: EvmChain[k],
+    };
+  });
+  const chainsTestnet = enumKeys(EvmChainTestnet).map(k => {
+    return {
+      name: k.toLowerCase(),
+      label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`) : EvmChain[EvmChain[k]],
+      value: EvmChain[k],
+    };
+  });
   const nftChains = [
     ...chains,
     {
@@ -337,9 +342,10 @@ export default function useCollection() {
   }
 
   function onChainChange(chain: number) {
-    if (chain === EvmChainMainnet.ASTAR_SHIBUYA) {
-      collectionStore.form.behavior.chainType = ChainType.SUBSTRATE;
-    } else if (chain !== EvmChainMainnet.ASTAR) {
+    // if (chain === EvmChainMainnet.ASTAR_SHIBUYA) {
+    //   collectionStore.form.behavior.chainType = ChainType.SUBSTRATE;
+    // }
+    if (chain !== EvmChainMainnet.ASTAR) {
       collectionStore.form.behavior.chainType = ChainType.EVM;
     }
   }
@@ -372,6 +378,7 @@ export default function useCollection() {
     addressLabel,
     booleanSelect,
     chains,
+    chainsTestnet,
     chainTypes,
     collectionTypes,
     evmChains,

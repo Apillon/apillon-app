@@ -23,6 +23,7 @@ export const useCollectionStore = defineStore('collection', {
     search: '',
     nftStep: NftCreateStep.AMOUNT,
     amount: 0,
+    stepCollectionCreate: CollectionCreateStep.METADATA,
     stepCollectionDeploy: CollectionStatus.CREATED,
     stepUpload: NftUploadStep.FILE,
     total: 0,

@@ -86,6 +86,7 @@ const btnClass = computed(() => {
   return [
     {
       'w-full': props.type !== 'link' && props.size === 'large',
+      'min-w-40': ['primary', 'secondary'].includes(props.type) && props.size === 'small',
       'text-primary underline': props.type === 'link',
       'font-bold': props.type !== 'link',
       'pointer-events-none pointer-default': props.disabled || props.loading,

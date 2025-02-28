@@ -19,6 +19,8 @@
 </template>
 
 <script lang="ts" setup>
+import { DeploymentStatus } from '~/lib/types/hosting';
+
 defineProps({
   deploymentStatus: {
     type: Number as PropType<DeploymentStatus>,

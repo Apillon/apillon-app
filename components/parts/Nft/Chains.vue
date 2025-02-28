@@ -11,7 +11,7 @@
       />
       <n-tooltip placement="bottom" trigger="hover">
         <template #trigger>
-          <strong class="text-xs underline"> + {{ chains.length - 4 }} {{ $t('general.more') }} </strong>
+          <strong class="cursor-pointer text-xs underline"> + {{ chains.length - 4 }} {{ $t('general.more') }} </strong>
         </template>
         <div class="flex items-center gap-2">
           <NuxtIcon

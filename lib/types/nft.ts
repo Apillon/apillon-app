@@ -21,7 +21,7 @@ export enum EvmChainMainnet {
 export enum EvmChainTestnet {
   SEPOLIA = 11155111,
   MOONBASE = 1287,
-  ASTAR_SHIBUYA = 81, // testnet
+  // ASTAR_SHIBUYA = 81, // testnet
   // OASIS_SAPPHIRE = 23294,
   ALFAJORES = 44787, // Celo testnet
   BASE_SEPOLIA = 84532,
@@ -94,6 +94,15 @@ export enum NftAmount {
   SINGLE = 1,
   MULTIPLE = 2,
 }
+/** NFT create collection step */
+export enum CollectionCreateStep {
+  METADATA = 1,
+  SMART_CONTRACT = 2,
+  VISUAL = 3,
+  REVIEW = 4,
+  DEPLOYING = 5,
+  DEPLOYED = 6,
+}
 /** NFT create steps */
 export enum NftCreateStep {
   AMOUNT = 1,
@@ -110,7 +119,7 @@ export enum NftUploadStep {
   ATTRIBUTES = 4,
 }
 
-export enum PrepareCollectionMetadataStep {
+export enum MetadataDeployStatus {
   UPLOAD_IMAGES_TO_IPFS = 1,
   UPDATE_JSONS_ON_S3 = 2,
   UPLOAD_METADATA_TO_IPFS = 3,

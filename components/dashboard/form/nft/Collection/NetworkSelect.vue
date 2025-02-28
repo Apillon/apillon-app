@@ -1,31 +1,41 @@
 <template>
-  <div class="text-center">
+  <div class="">
     <h2>{{ t('nft.collection.environment') }}</h2>
     <p>{{ t('nft.collection.environmentContent') }}</p>
-    <div class="mx-auto my-8 flex max-w-xl flex-wrap justify-center gap-4 whitespace-pre-line xl:max-w-4xl">
+
+    <div class="my-6 flex items-center gap-1 text-sm">
+      <span>{{ t('nft.testnet') }}</span>
+      <n-switch v-model:value="isMainnet" />
+      <span>{{ t('nft.mainnet') }}</span>
+    </div>
+    <n-input v-model:value="search" type="text" name="search" size="small" :placeholder="$t('nft.search')" clearable>
+      <template #prefix>
+        <span class="icon-search text-2xl"></span>
+      </template>
+    </n-input>
+    <div class="mx-auto my-8 flex flex-col gap-4 whitespace-pre-line">
       <div
-        v-for="chain in nftChains"
+        v-for="chain in chains"
         :key="chain.value"
-        class="flex w-40 justify-center rounded-md border-2 p-4 hover:cursor-pointer"
+        class="rounded-md border hover:cursor-pointer"
         :class="
-          selectedChain === chain.value
+          collectionStore.form.behavior.chain === chain.value
             ? 'border-yellow'
             : disabledChain(chain.value)
               ? 'border-bodyDark'
-              : 'border-bg-lightest'
+              : 'border-bg-lighter'
         "
         @click="() => onChainChange(chain.value)"
       >
         <n-tooltip v-if="disabledChain(chain.value)" placement="bottom" trigger="hover">
           <template #trigger>
-            <div class="!cursor-default opacity-60">
-              <NuxtIcon
-                :name="`logo/${chain.name.toLowerCase()}`"
-                class="mx-auto flex justify-center text-7xl"
-                filled
-              />
-              <p>{{ chain.label }}</p>
-            </div>
+            <NftCardNetwork
+              class="!cursor-default opacity-60"
+              :name="chain.name.toLowerCase()"
+              :label="chain.label"
+              :price="1"
+              :chainId="chain.value"
+            />
           </template>
           <span v-if="collectionStore.quotaReached">
             {{ $t('error.ETHEREUM_COLLECTION_QUOTA_REACHED') }}
@@ -34,12 +44,13 @@
             {{ $t('error.REQUIRES_BUTTERFLY_PLAN') }}
           </span>
         </n-tooltip>
-        <div v-else>
-          <div class="h-20">
-            <NuxtIcon :name="`logo/${chain.name.toLowerCase()}`" class="mx-auto flex justify-center text-7xl" filled />
-          </div>
-          <p>{{ chain.label }}</p>
-        </div>
+        <NftCardNetwork
+          v-else
+          :name="chain.name.toLowerCase()"
+          :label="chain.label"
+          :price="1"
+          :chainId="chain.value"
+        />
       </div>
     </div>
 
@@ -79,12 +90,6 @@
         </div>
       </div>
     </div>
-
-    <div v-if="selectedChain" class="card-dark mx-auto mb-6 max-w-3xl p-2 text-left sm:p-4 lg:p-8">
-      <SolutionContent :content="content" />
-    </div>
-
-    <Btn :disabled="!!selectedChain && disabledChain(selectedChain)" @click="selectChain">{{ t('form.proceed') }}</Btn>
   </div>
 </template>
 
@@ -99,15 +104,17 @@ const collectionStore = useCollectionStore();
 
 const { t } = useI18n();
 const { isDev } = useService();
-const { generateContent } = useSolution();
-const { nftChains, chainTypes } = useCollection();
+const { nftChains, chainsTestnet, chainTypes } = useCollection();
 
+const isMainnet = ref<boolean>(false);
 const isSubstrateEnabled = ref<boolean>(false);
-const selectedChain = ref<number | undefined>();
+const search = ref<string>('');
 
-const content = computed(() => {
-  return selectedChain.value ? generateContent(`${selectedChain.value}`, 'nft.network') : [];
-});
+const chains = computed(() =>
+  (isMainnet.value ? nftChains : chainsTestnet).filter(
+    chain => !search.value || chain.label.toLowerCase().includes(search.value.toLowerCase())
+  )
+);
 
 onMounted(() => {
   collectionStore.getQuota();
@@ -130,18 +137,7 @@ const disabledChain = (chainId: number) =>
 
 function onChainChange(chainId: number) {
   if (!disabledChain(chainId)) {
-    selectedChain.value = chainId;
-  }
-}
-
-function selectChain() {
-  if (!selectedChain.value) {
-    message.warning(t('validation.collection.chainRequired'));
-  } else if (disabledChain(selectedChain.value)) {
-    return;
-  } else {
-    collectionStore.metadataStored = false;
-    emit('submit', selectedChain.value);
+    collectionStore.form.behavior.chain = chainId;
   }
 }
 </script>
