@@ -20,7 +20,7 @@
     </template>
 
     <template #submenu>
-      <MenuWebsite :has-github-connected="!!storageStore.projectConfig" />
+      <MenuWebsite :has-github-connected="!!storageStore.projectConfig || !!websiteStore.active.nftCollectionUuid" />
     </template>
   </Heading>
 

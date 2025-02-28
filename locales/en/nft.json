@@ -142,7 +142,7 @@
       "website-connected": "NFT collection has been successfully connected to the Apillon website!",
       "website-deploy": {
         "deploy": "Deploy NFT website",
-        "js": "Vanila Javascript",
+        "plain_js": "Vanila Javascript",
         "react": "React",
         "vue": "Vue",
 
