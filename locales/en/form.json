@@ -103,7 +103,7 @@
         "useGateway": "Use apillon gateway for base URI",
         "useIpns": "Dynamic metadata",
         "labelInfo": {
-          "autoIncrement": "To mint an NFT with a custom ID, keep Auto Increment disabled when creating the collection; if you want automatic IDs, enable Auto Increment instead.",
+          "autoIncrement": "Disable Auto Increment to mint an NFT with a custom ID.",
           "baseExtension": "",
           "baseUri": "Paste the collection metadata base URI here.",
           "chain": "Select the network where your NFTs will be deployed",

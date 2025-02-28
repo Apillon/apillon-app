@@ -41,7 +41,7 @@
             isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
             collectionStore.form.behavior.chainType === ChainType.EVM
           "
-          path="base.collectionType"
+          path="behavior.collectionType"
           :label="infoLabel('type') as string"
           :label-props="{ for: 'collectionType' }"
         >
@@ -56,7 +56,7 @@
         </n-form-item>
 
         <!--  Chain -->
-        <n-form-item path="base.chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
+        <n-form-item path="behavior.chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
           <select-options
             v-model:value="collectionStore.form.behavior.chain"
             :options="nftChains"
@@ -171,7 +171,7 @@
           <!-- Collection Revocable -->
           <n-form-item-gi
             path="behavior.revocable"
-            :span="6"
+            :span="4"
             :label-props="{ for: 'revocable' }"
             :label="infoLabel('revocable') as string"
           >
@@ -187,7 +187,7 @@
           <!-- Collection Soulbound -->
           <n-form-item-gi
             path="behavior.soulbound"
-            :span="6"
+            :span="4"
             :label-props="{ for: 'soulbound' }"
             :label="infoLabel('soulbound') as string"
           >
@@ -353,7 +353,7 @@
 import { useTemplateRef } from 'vue';
 import { Feature } from '~/lib/types/config';
 import { isFeatureEnabled } from '~/lib/utils';
-import { EvmChain, ChainType, EvmChainMainnet } from '~/lib/types/nft';
+import { EvmChain, ChainType, EvmChainMainnet, NFTCollectionType } from '~/lib/types/nft';
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
 
 const emit = defineEmits(['submitSuccess']);
