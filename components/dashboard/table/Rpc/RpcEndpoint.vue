@@ -16,11 +16,7 @@
 
   <!-- Modal - Delete API key -->
   <ModalDelete v-model:show="modalDeleteEndpointVisible" :title="$t('rpc.endpoint.delete')">
-    <FormDelete
-      :id="currentRow?.favoriteData?.id"
-      type="rpcEndpoint"
-      @submit-success="onRpcEndpointDeleted"
-    />
+    <FormDelete :id="currentRow?.favoriteData?.id" type="rpcEndpoint" @submit-success="onRpcEndpointDeleted" />
   </ModalDelete>
 </template>
 
@@ -43,7 +39,7 @@ const extractDomain = (url?: string) => {
   if (!url) {
     return '';
   }
-  const domain = url.replace('https://', '').replace('http://', '').split(/[/?#]/)[0];
+  const domain = url.replace('https://', '').replace('http://', '').replace('wss://', '').split(/[/?#]/)[0];
   return domain;
 };
 
@@ -55,7 +51,7 @@ function rowProps(row: RpcEndpointInterface) {
         router.push({
           name: 'dashboard-service-rpc-usage',
           query: {
-            network: extractDomain(row.favoriteData?.httpsUrl),
+            network: extractDomain(row.favoriteData?.httpsUrl || ''),
           },
         });
       }
@@ -107,6 +103,10 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
           return;
         }
 
+        if (!row.favoriteData?.httpsUrl) {
+          return;
+        }
+
         return h(
           'div',
           {
@@ -123,6 +123,10 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
       title: t('rpc.endpoint.wssEndpoint'),
       render(row) {
         if (!row.isFavorite && props.allowFavoriteCheck) {
+          return;
+        }
+
+        if (!row.favoriteData?.wssUrl) {
           return;
         }
 
@@ -240,9 +244,7 @@ async function addRpcEndpoint(chainName: string, networkName: string, networkId:
 
     message.success($i18n.t('form.success.created.rpcEndpoint'));
 
-    const endpoint = rpcEndpointStore.items.find(
-      item => item.name === chainName && item.networkName === networkName
-    );
+    const endpoint = rpcEndpointStore.items.find(item => item.name === chainName && item.networkName === networkName);
     if (endpoint) {
       endpoint.isFavorite = true;
       endpoint.favoriteData = res.data;
