@@ -47,8 +47,7 @@
 
     <slot>
       <div class="mx-auto max-w-lg">
-        <FormNftCollectionNetworkSelect />
-        <FormNftCollectionMetadataSelect />
+        <NftMetadataWizard />
       </div>
     </slot>
     <template #footer>

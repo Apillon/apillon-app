@@ -37,7 +37,7 @@
 
   <!-- Modal - Collection Transfer -->
   <modal v-model:show="modalCreateCollectionVisible" class="hide-header max-w-4xl text-center">
-    <FormNftCollectionMetadataType v-if="collectionStore.metadataStored === undefined" @submit="" />
+    <FormNftMetadataType v-if="collectionStore.metadataStored === undefined" @submit="" />
     <FormNftCollectionNetworkSelect
       v-else-if="collectionStore.form.behavior.chain === undefined"
       @submit="onNetworkSelected"

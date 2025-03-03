@@ -13,7 +13,7 @@
         style="min-height: calc(70dvh - 50px)"
       >
         <Spinner v-if="collectionStore.loading" />
-        <FormNftCollectionMetadataType v-else-if="collectionStore.metadataStored === undefined" />
+        <FormNftMetadataType v-else-if="collectionStore.metadataStored === undefined" />
         <FormNftCollectionNetworkSelect
           v-else-if="collectionStore.form.behavior.chain === undefined"
           class="mb-8"
@@ -25,7 +25,7 @@
         <FormNftCollection />
       </div>
       <div v-else-if="createUniqueMetadata">
-        <NftCreateMetadata :style="isLg ? scrollStyle : {}" />
+        <NftMetadataCreate :style="isLg ? scrollStyle : {}" />
       </div>
       <div v-else class="relative">
         <FormInstructions :title="t('nft.collection.data')" :instructions="[t('nft.collection.instruction.data')]">

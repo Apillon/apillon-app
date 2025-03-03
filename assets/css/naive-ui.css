@@ -244,7 +244,7 @@
       @apply relative;
     }
     .n-drawer-body-content-wrapper {
-      @apply lg:px-10 lg:pt-8;
+      @apply scrollable lg:px-10 lg:pt-8;
     }
     .n-drawer-footer {
       @apply bg-bg-light px-10 py-3;
@@ -350,10 +350,12 @@
     }
   }
 }
-.nuxt-icon {
+body .nuxt-icon {
   &.icon-auto svg {
-    width: auto;
-    height: auto;
+    @apply h-auto w-auto;
+  }
+  svg {
+    @apply mb-0;
   }
 }
 

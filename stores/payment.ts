@@ -86,7 +86,7 @@ export const usePaymentStore = defineStore('payment', {
       const activePackage =
         this.subscriptionPackages.find(item => item.id === this.activeSubscription.package_id) ||
         this.subscriptionPackages[0];
-      return activePackage.name === planName;
+      return activePackage?.name === planName;
     },
 
     /**

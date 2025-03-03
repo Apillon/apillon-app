@@ -1,12 +1,16 @@
 {
   "nft": {
     "amount": {
-      "title": "Create NFT",
-      "content": "Add NFTs one by one or upload them in bulk.",
-      "single": "Build one by one",
-      "singleContent": "Enter data manually",
-      "multiple": "Build multiple NFTs at once",
-      "multipleContent": "Use CSV file to upload data in bulk"
+      "content": "Add NFTs to your collection effortlessly - we provide multiple flexible options to suit your needs.",
+      "csv": "Import CSV",
+      "csvContent": "Upload a CSV file to efficiently bulk-add NFTs to your collection.",
+      "endpoint": "Import from endpoint",
+      "endpointContent": "Easily import NFTs via an endpoint.",
+      "json": "Import JSON",
+      "jsonContent": "Import a JSON file to quickly add NFTs to your collection.",
+      "single": "Create one by one",
+      "singleContent": "Create your NFTs one by one for full control over each asset.",
+      "title": "Start by adding NFTs"
     },
     "chain": {
       "8": "ASTAR (Substrate)",

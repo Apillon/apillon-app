@@ -13,36 +13,25 @@
         <span class="icon-search text-2xl"></span>
       </template>
     </n-input>
-    <div class="mx-auto my-8 flex flex-col gap-4 whitespace-pre-line">
-      <div
-        v-for="chain in chains"
-        :key="chain.value"
-        class="rounded-md border hover:cursor-pointer"
-        :class="
-          collectionStore.form.behavior.chain === chain.value
-            ? 'border-yellow'
-            : disabledChain(chain.value)
-              ? 'border-bodyDark'
-              : 'border-bg-lighter'
-        "
-        @click="() => onChainChange(chain.value)"
-      >
+    <div class="my-8">
+      <template v-for="chain in chains" :key="chain.value">
         <n-tooltip v-if="disabledChain(chain.value)" placement="bottom" trigger="hover">
           <template #trigger>
             <NftCardNetwork
-              class="!cursor-default opacity-60"
               :name="chain.name.toLowerCase()"
               :label="chain.label"
               :price="1"
               :chainId="chain.value"
-            />
+              :disabled="true"
+            >
+              <Notification v-if="collectionStore.quotaReached" type="error">
+                {{ $t('error.ETHEREUM_COLLECTION_QUOTA_REACHED') }}
+              </Notification>
+              <Notification v-else-if="!paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY)" type="warning">
+                {{ $t('error.REQUIRES_BUTTERFLY_PLAN') }}
+              </Notification>
+            </NftCardNetwork>
           </template>
-          <span v-if="collectionStore.quotaReached">
-            {{ $t('error.ETHEREUM_COLLECTION_QUOTA_REACHED') }}
-          </span>
-          <span v-else-if="!paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY)">
-            {{ $t('error.REQUIRES_BUTTERFLY_PLAN') }}
-          </span>
         </n-tooltip>
         <NftCardNetwork
           v-else
@@ -50,14 +39,16 @@
           :label="chain.label"
           :price="1"
           :chainId="chain.value"
+          :selected="collectionStore.form.behavior.chain === chain.value"
+          @click="() => onChainChange(chain.value)"
         />
-      </div>
+      </template>
     </div>
 
     <div
       v-if="isSubstrateEnabled"
       class="overflow-hidden transition-all"
-      :class="selectedChain === EvmChainMainnet.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
+      :class="collectionStore.form.behavior.chain === EvmChainMainnet.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
     >
       <h4 class="relative top-2">{{ t('nft.collection.chainType') }}</h4>
       <div class="my-8 flex justify-center gap-4 whitespace-pre-line">

@@ -93,6 +93,8 @@ export enum TransactionType {
 export enum NftAmount {
   SINGLE = 1,
   MULTIPLE = 2,
+  ENDPOINT = 3,
+  JSON = 4,
 }
 /** NFT create collection step */
 export enum CollectionCreateStep {

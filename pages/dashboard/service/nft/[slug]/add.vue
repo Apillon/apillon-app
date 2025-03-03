@@ -7,7 +7,7 @@
     </template>
 
     <slot>
-      <NftCreateMetadata :style="isLg ? scrollStyle : {}" />
+      <NftMetadataCreate :style="isLg ? scrollStyle : {}" />
       <ModalLeaving v-if="collectionStore.stepCollectionDeploy < CollectionStatus.DEPLOYED" />
     </slot>
   </Dashboard>
