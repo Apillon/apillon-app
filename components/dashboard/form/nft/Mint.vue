@@ -34,7 +34,9 @@
       <n-select
         v-if="collection.maxSupply"
         v-model:value="formData.idsToMint"
-        :options="repeat(collection.maxSupply, 1).map((_, i) => ({ label: String(i + 1), value: i + 1 }))"
+        :options="limitedValues"
+        :virtual-scroll="false"
+        :render-option="renderOption"
         filterable
         multiple
       />
@@ -43,6 +45,8 @@
         v-model:value="formData.idsToMint"
         :options="unlimitedValues"
         :reset-menu-on-options-change="false"
+        :virtual-scroll="false"
+        :render-option="renderOption"
         multiple
         filterable
         tag
@@ -62,7 +66,7 @@
 
 <script lang="ts" setup>
 import { repeat } from 'seemly';
-import type { FormItemRule } from 'naive-ui';
+import { NTooltip, type FormItemRule } from 'naive-ui';
 import type { PropType } from 'vue';
 import type { SelectBaseOption } from 'naive-ui/es/select/src/interface';
 
@@ -82,8 +86,10 @@ const { t } = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
 const { addressLabel } = useCollection();
+const { getAllTokens } = useNftContract();
 
-const loading = ref(false);
+const loading = ref<boolean>(false);
+const mintedTokens = ref<Number[]>([]);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormNftMint>({
   receivingAddress: '',
@@ -138,16 +144,15 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 const unlimitedPage = ref(1);
+const limitedValues = ref<SelectBaseOption[]>([]);
 const unlimitedValues = ref<SelectBaseOption[]>([]);
 const loadMoreOptions = async (limit = 100) => {
-  const newOptions = repeat(limit, unlimitedPage.value * limit).map((_, i) => ({
-    label: String((unlimitedPage.value - 1) * limit + i + 1),
-    value: (unlimitedPage.value - 1) * limit + i + 1,
-  }));
+  const newOptions = repeat(limit, unlimitedPage.value * limit).map((_, i) =>
+    createOption((unlimitedPage.value - 1) * limit + i + 1)
+  );
   unlimitedValues.value.push(...newOptions);
   unlimitedPage.value += 1;
 };
-loadMoreOptions();
 
 const handleScroll = (e: Event) => {
   const currentTarget = e.currentTarget as HTMLElement;
@@ -155,6 +160,34 @@ const handleScroll = (e: Event) => {
     loadMoreOptions();
   }
 };
+
+onMounted(async () => {
+  props.collection.isAutoIncrement = true;
+
+  if (!props.collection.isAutoIncrement) {
+    if (props.collection.contractAddress) {
+      mintedTokens.value = await getAllTokens(props.collection.contractAddress, props.chainId);
+    }
+
+    if (props.collection.maxSupply) {
+      limitedValues.value = repeat(props.collection.maxSupply, 1).map((_, i) => createOption(i + 1));
+    } else {
+      loadMoreOptions();
+    }
+  }
+});
+const createOption = (v: number) => ({
+  label: String(v),
+  value: v,
+  disabled: mintedTokens.value.includes(v),
+});
+const renderOption = ({ node, option }) =>
+  option.disabled
+    ? h(NTooltip, null, {
+        trigger: () => node,
+        default: () => t('nft.collection.minted'),
+      })
+    : node;
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
@@ -180,15 +213,20 @@ async function mint() {
       ...formData.value,
       collection_uuid: props.collection.collection_uuid,
     };
-    await $api.post<any>(endpoints.collectionMint(props.collection.collection_uuid), bodyData);
+    const { data } = await $api.post<MintResponse>(
+      endpoints.collectionMint(props.collection.collection_uuid),
+      bodyData
+    );
 
-    message.success(t('form.success.nftMint'));
+    if (data.success) {
+      message.success(t('form.success.nftMint'));
 
-    /** Invalidate local cache */
-    sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
+      /** Invalidate local cache */
+      sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
 
-    /** Emit events */
-    emit('submitSuccess');
+      /** Emit events */
+      emit('submitSuccess', data.transactionHash);
+    }
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

@@ -712,6 +712,9 @@ body > .n-message-container {
     }
   }
 }
+.dropdown-grid .n-base-select-menu .n-base-select-menu-option-wrapper {
+  @apply grid-cols-fill100 grid;
+}
 
 /** Selection */
 .n-base-selection .n-base-suffix {

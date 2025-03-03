@@ -62,7 +62,7 @@
       "info": "Launch your end-to-end decentralized NFT collection with one click. Create NFTs, deploy smart contract and host the collection website on Web3.",
       "maxSupply": "Max supply",
       "mint": "Mint",
-      "minted": "Minted",
+      "minted": "Already minted",
       "mintNfts": "Mint NFTs",
       "name": "Collection name",
       "nestMint": "Nestable Mint",

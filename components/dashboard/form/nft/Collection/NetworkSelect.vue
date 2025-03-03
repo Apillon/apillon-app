@@ -4,7 +4,7 @@
     <p>{{ t('nft.collection.environmentContent') }}</p>
     <div class="mx-auto my-8 flex max-w-4xl flex-wrap justify-center gap-4 whitespace-pre-line xl:max-w-6xl">
       <div
-        v-for="chain in nftChains"
+        v-for="chain in chains"
         :key="chain.value"
         class="flex w-40 justify-center rounded-md border-2 p-4 hover:cursor-pointer"
         :class="
@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { EvmChainMainnet } from '~/lib/types/nft';
+import { EvmChainMainnet, EvmChainTestnet } from '~/lib/types/nft';
 import { PLAN_NAMES } from '~/lib/types/payment';
 
 const emit = defineEmits(['submit']);
@@ -98,20 +98,11 @@ const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
 
 const { t } = useI18n();
-const { isDev } = useService();
 const { generateContent } = useSolution();
 const { nftChains, chainTypes } = useCollection();
 
 const isSubstrateEnabled = ref<boolean>(false);
 const selectedChain = ref<number | undefined>();
-
-const content = computed(() => {
-  return selectedChain.value ? generateContent(`${selectedChain.value}`, 'nft.network') : [];
-});
-
-onMounted(() => {
-  collectionStore.getQuota();
-});
 
 const enterpriseChains = [
   EvmChainMainnet.ARBITRUM_ONE,
@@ -121,12 +112,26 @@ const enterpriseChains = [
   EvmChainMainnet.ETHEREUM,
   EvmChainMainnet.OPTIMISM,
   EvmChainMainnet.POLYGON,
+  EvmChainTestnet.ARBITRUM_ONE_SEPOLIA,
+  EvmChainTestnet.AVALANCHE_FUJI,
+  EvmChainTestnet.BASE_SEPOLIA,
+  EvmChainTestnet.ALFAJORES,
+  EvmChainTestnet.SEPOLIA,
+  EvmChainTestnet.OPTIMISM_SEPOLIA,
+  EvmChainTestnet.POLYGON_AMOY,
 ];
-
 const disabledChain = (chainId: number) =>
-  !isDev() &&
-  (!paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) || collectionStore.quotaReached) &&
-  enterpriseChains.includes(chainId);
+  (!paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) || collectionStore.quotaReached) && enterpriseChains.includes(chainId);
+
+const content = computed(() => {
+  return selectedChain.value ? generateContent(`${selectedChain.value}`, 'nft.network') : [];
+});
+const chains = computed(() => nftChains.filter(c => !disabledChain(c.value)));
+console.log(chains.value);
+
+onMounted(() => {
+  collectionStore.getQuota();
+});
 
 function onChainChange(chainId: number) {
   if (!disabledChain(chainId)) {

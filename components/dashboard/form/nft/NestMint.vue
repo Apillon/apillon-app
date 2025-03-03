@@ -29,7 +29,15 @@
 
     <!--  NFT Nest Mint - NFT ID -->
     <n-form-item path="parentNftId" :label="$t('form.label.nft.mintParentNftId')">
+      <n-select
+        v-if="parentNfts.length"
+        v-model:value="formData.parentNftId"
+        :options="parentNfts"
+        :placeholder="$t('form.placeholder.nftMintParentNftId')"
+        filterable
+      />
       <n-input-number
+        v-else
         v-model:value="formData.parentNftId"
         :min="1"
         :placeholder="$t('form.placeholder.nftMintParentNftId')"
@@ -76,8 +84,11 @@ const $i18n = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
+const { getAllTokens } = useNftContract();
 
 const loading = ref(false);
+const mintedTokens = ref<Number[]>([]);
+const parentNfts = ref<SelectOption[]>([]);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormNftNestMint>({
   parentCollectionUuid: props.collectionUuid,
@@ -125,6 +136,18 @@ const isFormDisabled = computed<boolean>(() => {
   return isTransferred.value;
 });
 
+onMounted(async () => {
+  const collection =
+    collectionStore.active.collection_uuid === props.collectionUuid
+      ? collectionStore.active
+      : collectionStore.items.find(c => c.collection_uuid === props.collectionUuid);
+
+  if (collection && collection?.contractAddress) {
+    mintedTokens.value = await getAllTokens(collection.contractAddress, props.chainId);
+    parentNfts.value = mintedTokens.value.map(i => ({ label: String(i), value: i }) as SelectOption);
+  }
+});
+
 function validateQuantity(_: FormItemRule, value: number): boolean {
   return !collectionStore.active.drop || value <= collectionStore.active?.dropReserve;
 }
@@ -150,15 +173,17 @@ async function mint() {
       ...formData.value,
       collection_uuid: props.collectionUuid,
     };
-    await $api.post<any>(endpoints.collectionNestMint(props.collectionUuid), bodyData);
+    const { data } = await $api.post<MintResponse>(endpoints.collectionNestMint(props.collectionUuid), bodyData);
 
-    message.success($i18n.t('form.success.nftMint'));
+    if (data.success) {
+      message.success($i18n.t('form.success.nftMint'));
 
-    /** Invalidate local cache */
-    sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
+      /** Invalidate local cache */
+      sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
 
-    /** Emit events */
-    emit('submitSuccess');
+      /** Emit events */
+      emit('submitSuccess', data.transactionHash);
+    }
   } catch (error) {
     message.error(userFriendlyMsg(error));
   }

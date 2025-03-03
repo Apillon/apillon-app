@@ -6,7 +6,7 @@ import { injected, metaMask, coinbaseWallet } from '@wagmi/vue/connectors';
 export const wagmiConfig = createConfig({
   chains: [moonbeam, moonbaseAlpha],
   connectors: [
-    injected(),
+    // injected(),
     metaMask({
       dappMetadata: {
         name: 'Apillon Metamask wallet',

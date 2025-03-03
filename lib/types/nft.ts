@@ -1,3 +1,5 @@
+import type { Address } from 'viem';
+
 export type Merge<T, K> = Omit<T, keyof K> & K;
 
 export enum ChainType {
@@ -151,7 +153,7 @@ declare global {
     collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
-    contractAddress: string | null;
+    contractAddress: Address | null;
     dropStart: number;
     drop: boolean;
     ipns_uuid: string;
@@ -193,6 +195,12 @@ declare global {
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}
+
+  interface MintInterface {
+    success: boolean;
+    transactionHash: string | null;
+  }
+  interface MintResponse extends GeneralResponse<MintInterface> {}
 
   /**
    * Metadata deploys

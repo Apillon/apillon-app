@@ -76,6 +76,8 @@ module.exports = {
         nft: 'repeat(auto-fill, minmax(220px, 1fr))',
         nftSmall: 'repeat(auto-fill, minmax(120px, 1fr))',
         assetHub: 'minmax(320px, 580px) minmax(80px, 420px)',
+        fit200: 'repeat(auto-fit, minmax(200px,1fr))',
+        fill100: 'repeat(auto-fill, minmax(100px, 1fr))',
       },
       scale: {
         10: '0.1',

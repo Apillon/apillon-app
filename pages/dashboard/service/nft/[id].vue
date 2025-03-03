@@ -89,7 +89,7 @@
       </n-space>
 
       <!-- Modal - Collection Mint -->
-      <modal v-model:show="modalMintCollectionVisible" :title="t('nft.collection.mint')">
+      <modal v-model:show="modalMintCollectionVisible" class="dropdown-grid" :title="t('nft.collection.mint')">
         <FormNftMint
           :collection="collectionStore.active"
           :chain-id="collectionStore.active.chain"
@@ -98,7 +98,7 @@
       </modal>
 
       <!-- Modal - Collection Nest Mint -->
-      <modal v-model:show="modalNestMintCollectionVisible" :title="t('nft.collection.nestMint')">
+      <modal v-model:show="modalNestMintCollectionVisible" class="dropdown-grid" :title="t('nft.collection.nestMint')">
         <FormNftNestMint
           :collection-uuid="collectionStore.active.collection_uuid"
           :chain-id="collectionStore.active.chain"
@@ -138,11 +138,21 @@
         <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" @submit="onAmountSelected" />
         <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" modal />
       </modal>
+
+      <ModalSuccess
+        v-if="transactionHash"
+        :title="$t('nft.transaction.link')"
+        :btn1="$t('general.close')"
+        :btn1-action="() => (transactionHash = '')"
+      >
+        <TableLink :link="transactionLink(transactionHash, collectionStore.active.chain)" />
+      </ModalSuccess>
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
+import { transactionLink } from '~/lib/utils/helpers';
 import { CollectionStatus, ChainType, NftCreateStep } from '~/lib/types/nft';
 
 enum Tabs {
@@ -166,6 +176,7 @@ const modalBurnTokensVisible = ref<boolean | null>(false);
 const modalTransferOwnershipVisible = ref<boolean | null>(false);
 const modalSetBaseUriVisible = ref<boolean | null>(false);
 const modalAddNftVisible = ref<boolean | null>(false);
+const transactionHash = ref<string | null>('');
 const tab = ref(collectionStore.active.collectionStatus === CollectionStatus.CREATED ? Tabs.NFTs : Tabs.DEPLOYS);
 
 /** Polling */
@@ -219,8 +230,10 @@ watch(
   }
 );
 
-function onNftMinted() {
+function onNftMinted(hash: string) {
   modalMintCollectionVisible.value = false;
+  transactionHash.value = hash;
+
   setTimeout(() => {
     collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
 
@@ -230,8 +243,10 @@ function onNftMinted() {
   }, 3000);
 }
 
-function onNftNestMinted() {
+function onNftNestMinted(hash: string) {
   modalNestMintCollectionVisible.value = false;
+  transactionHash.value = hash;
+
   setTimeout(() => {
     collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
 
