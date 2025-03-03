@@ -99,11 +99,7 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
       key: 'httpsUrl',
       title: t('rpc.endpoint.httpsEndpoint'),
       render(row) {
-        if (!row.isFavorite && props.allowFavoriteCheck) {
-          return;
-        }
-
-        if (!row.favoriteData?.httpsUrl) {
+        if ((!row.isFavorite && props.allowFavoriteCheck) || !row.favoriteData?.httpsUrl) {
           return;
         }
 
@@ -122,11 +118,7 @@ const createColumns = (): NDataTableColumns<RpcEndpointInterface> => {
       key: 'wssUrl',
       title: t('rpc.endpoint.wssEndpoint'),
       render(row) {
-        if (!row.isFavorite && props.allowFavoriteCheck) {
-          return;
-        }
-
-        if (!row.favoriteData?.wssUrl) {
+        if ((!row.isFavorite && props.allowFavoriteCheck) || !row.favoriteData?.wssUrl) {
           return;
         }
 
