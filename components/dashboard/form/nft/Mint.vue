@@ -162,8 +162,6 @@ const handleScroll = (e: Event) => {
 };
 
 onMounted(async () => {
-  props.collection.isAutoIncrement = true;
-
   if (!props.collection.isAutoIncrement) {
     if (props.collection.contractAddress) {
       mintedTokens.value = await getAllTokens(props.collection.contractAddress, props.chainId);
