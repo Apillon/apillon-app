@@ -111,7 +111,7 @@ declare global {
   }
   interface SignatureInterface {
     apiKey: string;
-    dataHash: string;
+    contractAddress: string;
     hashedUsername: string | null;
     publicAddress: string | null;
     status: number;
