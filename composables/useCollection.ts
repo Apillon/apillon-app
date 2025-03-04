@@ -16,21 +16,21 @@ export default function useCollection() {
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
 
+  const toEvmChainOption = (chain: string) => ({
+    name: chain.toLowerCase(),
+    label: te(`nft.evmChain.${EvmChain[chain]}`) ? t(`nft.evmChain.${EvmChain[chain]}`) : EvmChain[EvmChain[chain]],
+    value: EvmChain[chain],
+  });
+
+  const chains = enumKeys(EvmChain).map(c => toEvmChainOption(c));
   const evmChains = enumKeys(EvmChain)
     .filter(key => [EvmChainMainnet.ETHEREUM, EvmChainTestnet.SEPOLIA].includes(EvmChain[key]))
-    .map(k => {
-      return { name: k.toLowerCase(), label: t(`nft.evmChain.${EvmChain[k]}`), value: EvmChain[k] };
-    });
+    .map(c => toEvmChainOption(c));
 
-  const chains = enumKeys(EvmChain)
-    .filter(key => ![EvmChainTestnet.ASTAR_SHIBUYA].includes(EvmChain[key]))
-    .map(k => {
-      return {
-        name: k.toLowerCase(),
-        label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`) : EvmChain[EvmChain[k]],
-        value: EvmChain[k],
-      };
-    });
+  const enterpriseChainIDs = enumValues(EvmChain).filter(
+    key => ![EvmChainMainnet.MOONBEAM, EvmChainMainnet.ASTAR, EvmChainTestnet.MOONBASE].includes(key as number)
+  );
+
   const nftChains = [
     ...chains,
     {
@@ -342,9 +342,10 @@ export default function useCollection() {
   }
 
   function onChainChange(chain: number) {
-    if (chain === EvmChainMainnet.ASTAR_SHIBUYA) {
-      collectionStore.form.behavior.chainType = ChainType.SUBSTRATE;
-    } else if (chain !== EvmChainMainnet.ASTAR) {
+    // if (chain === EvmChainMainnet.ASTAR_SHIBUYA) {
+    //   collectionStore.form.behavior.chainType = ChainType.SUBSTRATE;
+    // }
+    if (chain !== EvmChainMainnet.ASTAR) {
       collectionStore.form.behavior.chainType = ChainType.EVM;
     }
   }
@@ -380,6 +381,7 @@ export default function useCollection() {
     chainTypes,
     collectionTypes,
     evmChains,
+    enterpriseChainIDs,
     formRef,
     isFormDisabled,
     isUnique,

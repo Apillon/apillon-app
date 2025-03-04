@@ -28,6 +28,7 @@ export const usePaymentStore = defineStore('payment', {
     loading: false,
     priceList: [] as ProductPriceInterface[],
     promises: {
+      activeSubscription: null as any,
       priceList: null as any,
     },
     rpcPlan: undefined as RpcPlanType | undefined,
@@ -86,7 +87,7 @@ export const usePaymentStore = defineStore('payment', {
       const activePackage =
         this.subscriptionPackages.find(item => item.id === this.activeSubscription.package_id) ||
         this.subscriptionPackages[0];
-      return activePackage.name === planName;
+      return activePackage?.name === planName;
     },
 
     /**
@@ -115,7 +116,9 @@ export const usePaymentStore = defineStore('payment', {
 
     /** GET Active Subscription */
     async getActiveSubscription() {
-      if (!this.hasActiveSubscription || isCacheExpired(LsCacheKeys.SUBSCRIPTION_ACTIVE)) {
+      if (!this.hasActiveSubscription || this.promises.activeSubscription) {
+        await this.promises.activeSubscription;
+      } else if (!this.hasActiveSubscription || isCacheExpired(LsCacheKeys.SUBSCRIPTION_ACTIVE)) {
         await this.fetchActiveSubscription();
       }
     },
@@ -277,7 +280,10 @@ export const usePaymentStore = defineStore('payment', {
       if (!projectUuid) return;
 
       try {
-        const res = await $api.get<ActiveSubscriptionResponse>(endpoints.activeSubscription(projectUuid));
+        this.promises.activeSubscription = await $api.get<ActiveSubscriptionResponse>(
+          endpoints.activeSubscription(projectUuid)
+        );
+        const res = await this.promises.activeSubscription;
 
         this.activeSubscription = res.data;
 
@@ -289,6 +295,7 @@ export const usePaymentStore = defineStore('payment', {
         /** Show error message */
         window.$message.error(userFriendlyMsg(error));
       }
+      this.promises.activeSubscription = null;
       this.loading = false;
     },
 

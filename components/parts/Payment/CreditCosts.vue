@@ -72,19 +72,20 @@ const props = defineProps({
 
 const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
-const { chains, nftChains, evmChains, substrateChains } = useCollection();
+const { chains, enterpriseChainIDs, nftChains, evmChains, substrateChains } = useCollection();
 
 const identityChains = enumKeyValues(IdentityChains);
 const services = enumKeyValues(ServiceTypeName);
-const selectedService = ref<string | null>(props.service);
+const selectedService = ref<string | undefined>(props.service);
 const servicePrices = ref<ProductPriceInterface[]>([]);
-const selectedChain = ref<number | null>(null);
+const selectedChain = ref<number | undefined>();
 const loading = ref<boolean>(true);
 
 onMounted(async () => {
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
     selectedChain.value = props.chain || collectionStore.form.behavior.chain;
   }
+  await paymentStore.getActiveSubscription();
 
   servicePrices.value = props.category
     ? await paymentStore.getServicePricesByCategory(props.category)
@@ -92,11 +93,23 @@ onMounted(async () => {
       ? await paymentStore.getServicePrices(props.service)
       : await paymentStore.getPriceList();
 
+  /** Filter enterprise service prices */
+  const enterpriseServiceCategories = enterpriseChainIDs
+    .map(chain => [`${EvmChain[chain]}_NFT`, `${EvmChain[chain]}_CONTRACT`])
+    .flat();
+
+  servicePrices.value = servicePrices.value.filter(
+    s => paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) || !enterpriseServiceCategories.includes(s.category)
+  );
+
   /** Sort by category (chain name) */
   servicePrices.value.sort((a, b) => (a.category.toLowerCase() < b.category.toLowerCase() ? -1 : 1));
 
   loading.value = false;
 });
+
+const hiddenChain = (chainId: number) =>
+  !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
 
 const chainsByService = computed(() => {
   switch (selectedService.value) {
@@ -105,18 +118,18 @@ const chainsByService = computed(() => {
     case ServiceTypeName.HOSTING:
       return [];
     case ServiceTypeName.NFT:
-      return nftChains;
+      return nftChains.filter(c => !hiddenChain(c.value));
     case ServiceTypeName.STORAGE:
       return [];
     case ServiceTypeName.SMART_CONTRACTS:
-      return [...evmChains, ...chains];
+      return [...evmChains, ...chains].filter(c => !hiddenChain(c.value));
     default:
-      return [...identityChains, ...chains, ...substrateChains];
+      return [...identityChains, ...chains, ...substrateChains].filter(c => !hiddenChain(c.value));
   }
 });
 
 const shownPrices = computed(() => {
-  const chainName = getChainName(selectedChain.value, selectedService.value);
+  const chainName = selectedChain.value ? getChainName(selectedChain.value, selectedService.value) : '';
   /** Filter by chain and service */
   if (props.filterByChain && selectedChain.value && props.filterByService && selectedService.value) {
     return servicePrices.value.filter(item => item.category === chainName + '_' + selectedService.value);
@@ -140,7 +153,7 @@ watch(
   () => selectedService.value,
   service => {
     if (service) {
-      selectedChain.value = null;
+      selectedChain.value = undefined;
     }
   }
 );

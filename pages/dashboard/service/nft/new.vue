@@ -100,7 +100,7 @@ const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
 const { getPriceServiceName, uploadLogoAndCover } = useNft();
-const { collectionEndpoint, isFormDisabled, isUnique, nftChains, onChainChange, prepareFormData } = useCollection();
+const { collectionEndpoint, isFormDisabled, isUnique, onChainChange, prepareFormData } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 const headingRef = ref<HTMLElement>();

@@ -29,7 +29,7 @@ export enum EvmChainMainnet {
 export enum EvmChainTestnet {
   SEPOLIA = 11155111,
   MOONBASE = 1287,
-  ASTAR_SHIBUYA = 81, // testnet
+  // ASTAR_SHIBUYA = 81, // testnet
   // OASIS_SAPPHIRE = 23294,
   ALFAJORES = 44787, // Celo testnet
   BASE_SEPOLIA = 84532,

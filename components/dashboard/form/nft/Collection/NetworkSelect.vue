@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { EvmChainMainnet, EvmChainTestnet } from '~/lib/types/nft';
+import { EvmChainMainnet } from '~/lib/types/nft';
 import { PLAN_NAMES } from '~/lib/types/payment';
 
 const emit = defineEmits(['submit']);
@@ -99,35 +99,19 @@ const collectionStore = useCollectionStore();
 
 const { t } = useI18n();
 const { generateContent } = useSolution();
-const { nftChains, chainTypes } = useCollection();
+const { enterpriseChainIDs, nftChains, chainTypes } = useCollection();
 
 const isSubstrateEnabled = ref<boolean>(false);
 const selectedChain = ref<number | undefined>();
 
-const enterpriseChains = [
-  EvmChainMainnet.ARBITRUM_ONE,
-  EvmChainMainnet.AVALANCHE,
-  EvmChainMainnet.BASE,
-  EvmChainMainnet.CELO,
-  EvmChainMainnet.ETHEREUM,
-  EvmChainMainnet.OPTIMISM,
-  EvmChainMainnet.POLYGON,
-  EvmChainTestnet.ARBITRUM_ONE_SEPOLIA,
-  EvmChainTestnet.AVALANCHE_FUJI,
-  EvmChainTestnet.BASE_SEPOLIA,
-  EvmChainTestnet.ALFAJORES,
-  EvmChainTestnet.SEPOLIA,
-  EvmChainTestnet.OPTIMISM_SEPOLIA,
-  EvmChainTestnet.POLYGON_AMOY,
-];
-const disabledChain = (chainId: number) =>
-  (!paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) || collectionStore.quotaReached) && enterpriseChains.includes(chainId);
+const disabledChain = (chainId: number) => collectionStore.quotaReached && enterpriseChainIDs.includes(chainId);
+const hiddenChain = (chainId: number) =>
+  !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
 
 const content = computed(() => {
   return selectedChain.value ? generateContent(`${selectedChain.value}`, 'nft.network') : [];
 });
-const chains = computed(() => nftChains.filter(c => !disabledChain(c.value)));
-console.log(chains.value);
+const chains = computed(() => nftChains.filter(c => !hiddenChain(c.value)));
 
 onMounted(() => {
   collectionStore.getQuota();

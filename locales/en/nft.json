@@ -20,6 +20,11 @@
     },
     "evmChain": {
       "1": "Ethereum (Mainnet)",
+      "11": "Unique network",
+      "81": "ASTAR SHIBUYA (Testnet)",
+      "592": "ASTAR (Mainnet)",
+      "1284": "MOONBEAM (Mainnet)",
+      "1287": "MOONBASE (Testnet)",
       "11155111": "Sepolia (Testnet)"
     },
     "chainType": {

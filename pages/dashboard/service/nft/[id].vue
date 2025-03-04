@@ -139,20 +139,17 @@
         <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" modal />
       </modal>
 
-      <ModalSuccess
+      <ModalTransaction
         v-if="transactionHash"
-        :title="$t('nft.transaction.link')"
-        :btn1="$t('general.close')"
-        :btn1-action="() => (transactionHash = '')"
-      >
-        <TableLink :link="transactionLink(transactionHash, collectionStore.active.chain)" />
-      </ModalSuccess>
+        :transactionHash="transactionHash"
+        :chain-id="collectionStore.active.chain"
+        @close="transactionHash = ''"
+      />
     </slot>
   </Dashboard>
 </template>
 
 <script lang="ts" setup>
-import { transactionLink } from '~/lib/utils/helpers';
 import { CollectionStatus, ChainType, NftCreateStep } from '~/lib/types/nft';
 
 enum Tabs {
