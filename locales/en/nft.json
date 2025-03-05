@@ -147,7 +147,7 @@
       "website-connected": "NFT collection has been successfully connected to the Apillon website!",
       "website-deploy": {
         "deploy": "Deploy NFT website",
-        "plain_js": "Vanila Javascript",
+        "plain_js": "Vanilla Javascript",
         "react": "React",
         "vue": "Vue",
 
@@ -382,7 +382,7 @@
       "csvConfirm": "Confirm CSV data",
       "csvConfirmAttributes": "Confirm attributes",
       "csvFile": "Select CSV file",
-      "csvFileDesc": "Viverra vel nisl urna erat eu lectus lacinia vulputate. Malesuada facilisi morbi.",
+      "csvFileDesc": "",
       "deploy": "Deploy",
       "deployError": "There is a problem with deploy.",
       "downloadCsv": "Download CSV example",

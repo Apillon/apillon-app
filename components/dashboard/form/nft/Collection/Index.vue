@@ -24,14 +24,10 @@
         :instructions="[t('nft.collection.instruction.smartContract')]"
       >
         <template #headerExtra>
-          <div class="flex items-center gap-2 text-2xl">
-            <NuxtIcon
-              v-for="chain in enumKeys(EvmChainMainnet)"
-              :name="`logo/${chain.toLowerCase()}`"
-              class="icon-auto"
-              filled
-              :title="chain"
-            />
+          <div class="flex items-center gap-4 text-2xl">
+            <NuxtIcon name="logo/moonbase" class="icon-auto" filled />
+            <NuxtIcon name="logo/moonbeam" class="icon-auto" filled />
+            <NuxtIcon name="logo/astar" class="icon-auto" filled />
           </div>
         </template>
 

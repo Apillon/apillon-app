@@ -107,7 +107,7 @@
       </modal>
 
       <!-- Modal - Burn Tokens -->
-      <modal v-model:show="modalBurnTokensVisible" :title="t('nft.collection.burn.title')">
+      <modal v-model:show="modalBurnTokensVisible" :title="$t('nft.collection.burn.title')">
         <FormNftBurn
           :collection-uuid="collectionStore.active.collection_uuid"
           :chain-id="collectionStore.active.chain"
@@ -116,7 +116,7 @@
       </modal>
 
       <!-- Modal - Collection Transfer -->
-      <modal v-model:show="modalTransferOwnershipVisible" :title="t('nft.collection.transfer')">
+      <modal v-model:show="modalTransferOwnershipVisible" :title="$t('nft.collection.transfer')">
         <FormNftTransfer
           :collection-uuid="collectionStore.active.collection_uuid"
           :chain-id="collectionStore.active.chain"
@@ -125,7 +125,7 @@
       </modal>
 
       <!-- Modal - Collection Set base URI -->
-      <modal v-model:show="modalSetBaseUriVisible" :title="t('nft.collection.setBaseUri')">
+      <modal v-model:show="modalSetBaseUriVisible" :title="$t('nft.collection.setBaseUri')">
         <FormNftSetBaseUri
           :collection-uuid="collectionStore.active.collection_uuid"
           :chain-id="collectionStore.active.chain"
@@ -308,7 +308,7 @@ function checkIfCollectionUnfinished() {
 /** Transactions polling */
 function checkUnfinishedTransactions() {
   const unfinishedTransaction = collectionStore.transaction.find(
-    transaction => transaction.transactionStatus < TransactionStatus.FINISHED
+    transaction => transaction.transactionStatus < TransactionStatus.CONFIRMED
   );
   if (unfinishedTransaction === undefined) {
     clearInterval(transactionInterval);
@@ -322,7 +322,7 @@ function checkUnfinishedTransactions() {
       false
     );
     const transaction = transactions.find(transaction => transaction.id === unfinishedTransaction.id);
-    if (!transaction || transaction.transactionStatus >= TransactionStatus.FINISHED) {
+    if (!transaction || transaction.transactionStatus >= TransactionStatus.CONFIRMED) {
       clearInterval(transactionInterval);
 
       const newCollection = await collectionStore.fetchCollection(collectionUuid.value);

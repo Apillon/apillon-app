@@ -46,11 +46,17 @@
         <tbody>
           <tr v-for="(price, key) in shownPrices" :key="key">
             <td>
-              <NuxtIcon :name="getIconName(price)" class="float-left mr-3 text-2xl text-white" filled />
+              <NuxtIcon
+                :name="getIconName(price)"
+                class="float-left text-white text-2xl mr-3"
+                filled
+              />
               <span>{{ price.description }} </span>
             </td>
             <td class="text-right">
-              <strong class="text-white"> {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }} </strong>
+              <strong class="text-white">
+                {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
+              </strong>
             </td>
           </tr>
         </tbody>
