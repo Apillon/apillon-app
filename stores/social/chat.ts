@@ -6,27 +6,17 @@ export const useChatStore = defineStore('chat', {
     items: [] as ChatInterface[],
     loading: false,
     search: '',
-    pagination: {
-      page: 1,
-      pageSize: PAGINATION_LIMIT,
-      itemCount: 0,
-    },
+    pagination: createPagination(),
     archive: {
       items: [] as ChatInterface[],
       loading: false,
       search: '',
-      pagination: {
-        page: 1,
-        pageSize: PAGINATION_LIMIT,
-        itemCount: 0,
-      },
+      pagination: createPagination(),
     },
   }),
   getters: {
     hasChats(state): boolean {
-      return (
-        !!state.search || state.loading || (Array.isArray(state.items) && state.items.length > 0)
-      );
+      return !!state.search || state.loading || (Array.isArray(state.items) && state.items.length > 0);
     },
     hasChatArchive(state): boolean {
       return (
@@ -52,19 +42,15 @@ export const useChatStore = defineStore('chat', {
     /**
      * Fetch wrappers
      */
-    async getChats(page = 1): Promise<ChatInterface[]> {
+    async getChats(page = 1, limit = PAGINATION_LIMIT): Promise<ChatInterface[]> {
       if (page !== this.pagination.page || !this.hasChats || isCacheExpired(LsCacheKeys.CHATS)) {
-        return await this.fetchChats(page);
+        return await this.fetchChats(page, limit);
       }
       return this.items;
     },
-    async getChatArchive(page = 1): Promise<ChatInterface[]> {
-      if (
-        page !== this.archive.pagination.page ||
-        !this.hasChats ||
-        isCacheExpired(LsCacheKeys.CHAT_ARCHIVE)
-      ) {
-        return await this.fetchChatArchive(page);
+    async getChatArchive(page = 1, limit = PAGINATION_LIMIT): Promise<ChatInterface[]> {
+      if (page !== this.archive.pagination.page || !this.hasChats || isCacheExpired(LsCacheKeys.CHAT_ARCHIVE)) {
+        return await this.fetchChatArchive(page, limit);
       }
       return this.items;
     },
@@ -79,21 +65,19 @@ export const useChatStore = defineStore('chat', {
     /**
      * API calls
      */
-    async fetchChats(page?: number, showLoader: boolean = true): Promise<ChatInterface[]> {
+    async fetchChats(page?: number, limit = PAGINATION_LIMIT, showLoader: boolean = true): Promise<ChatInterface[]> {
       this.loading = showLoader;
 
       const dataStore = useDataStore();
       const projectUuid = await dataStore.getProjectUuid();
 
       try {
-        const params: Record<string, string | number> = {
-          project_uuid: projectUuid,
-          orderBy: 'createTime',
-          desc: 'true',
-          limit: this.pagination.pageSize,
-          page: page || this.pagination.page,
-        };
-        if (this.search) params.search = this.search;
+        const params = parseArguments({
+          limit,
+          page,
+          search: this.search,
+          project_uuid: dataStore.projectUuid,
+        });
 
         const res = await $api.get<ChatsResponse>(endpoints.spaces(), params);
 
@@ -117,22 +101,24 @@ export const useChatStore = defineStore('chat', {
       return [];
     },
 
-    async fetchChatArchive(page?: number, showLoader: boolean = true): Promise<ChatInterface[]> {
+    async fetchChatArchive(
+      page?: number,
+      limit = PAGINATION_LIMIT,
+      showLoader: boolean = true
+    ): Promise<ChatInterface[]> {
       this.archive.loading = showLoader;
 
       const dataStore = useDataStore();
       const projectUuid = await dataStore.getProjectUuid();
 
       try {
-        const params: Record<string, string | number> = {
-          project_uuid: projectUuid,
-          orderBy: 'createTime',
-          desc: 'true',
-          limit: this.archive.pagination.pageSize,
-          page: page || this.archive.pagination.page,
+        const params = parseArguments({
+          limit,
+          page,
+          search: this.archive.search,
+          project_uuid: dataStore.projectUuid,
           status: SqlModelStatus.ARCHIVED,
-        };
-        if (this.archive.search) params.search = this.archive.search;
+        });
 
         const res = await $api.get<ChatsResponse>(endpoints.spaces(), params);
 

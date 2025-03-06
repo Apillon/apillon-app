@@ -19,11 +19,9 @@
     :columns="columns"
     :data="variables"
     :loading="deploymentStore.loading"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
+    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
   <modal v-model:show="modalCreateVariableVisible" :title="$t('hosting.deploy.env-vars.new-title')">
     <FormHostingDeploymentConfigVariable
@@ -34,8 +32,8 @@
 </template>
 
 <script lang="ts" setup>
-import { NInput, NDataTable } from 'naive-ui';
 import { h } from 'vue';
+import { NInput, NDataTable } from 'naive-ui';
 
 defineProps({
   variables: { type: Array<DeploymentConfigVariable>, default: [] },
@@ -43,10 +41,11 @@ defineProps({
 
 const $i18n = useI18n();
 const websiteStore = useWebsiteStore();
+const deploymentStore = useDeploymentStore();
+
 const rowInEdit = ref('');
 const modalCreateVariableVisible = ref<boolean>(false);
-
-const deploymentStore = useDeploymentStore();
+const pagination = reactive(createPagination(false));
 
 const createColumns = (): NDataTableColumns<DeploymentConfigVariable> => {
   return [

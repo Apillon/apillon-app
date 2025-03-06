@@ -49,11 +49,7 @@ const createColumns = (): NDataTableColumns<InvoiceInterface> => {
       key: 'subtotalAmount',
       title: t('dashboard.invoice.subtotalAmount'),
       render(row) {
-        return h(
-          'span',
-          { class: 'text-body' },
-          `${formatPrice(row.subtotalAmount, row.currency)}`
-        );
+        return h('span', { class: 'text-body' }, `${formatPrice(row.subtotalAmount, row.currency)}`);
       },
     },
     {
