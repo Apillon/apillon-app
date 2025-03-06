@@ -30,50 +30,18 @@
   </Dashboard>
 
   <!-- Modal - Collection Transfer -->
-  <ModalFullScreen v-model:show="modalCreateCollectionVisible" :progress="15" :title="$t('nft.collection.create')">
-    <template #header-center>
-      <div class="flex items-center gap-4 text-xs">
-        <template v-for="(step, key) in enumValues(CollectionCreateStep)">
-          <span v-if="key > 0 && $te(`nft.collection.createStep.${step}`)" class="card-border w-3"></span>
-          <strong
-            v-if="$te(`nft.collection.createStep.${step}`)"
-            :class="{ 'text-yellow': step === collectionStore.stepCollectionCreate }"
-          >
-            {{ $t(`nft.collection.createStep.${step}`) }}
-          </strong>
-        </template>
-      </div>
-    </template>
-
-    <slot>
-      <div class="mx-auto max-w-lg">
-        <NftMetadataWizard />
-      </div>
-    </slot>
-    <template #footer>
-      <div class="flex w-full items-center justify-between gap-4 px-10 py-3">
-        <p>
-          <strong>Total costs: </strong>
-          <span>1 credits</span>
-        </p>
-        <Btn size="small" @click="collectionStore.stepCollectionCreate += 1">Continue</Btn>
-      </div>
-    </template>
-  </ModalFullScreen>
+  <ModalNft v-model:show="modalCreateCollectionVisible" />
 </template>
 
 <script lang="ts" setup>
-import { enumValues } from '~/lib/utils';
-import { CollectionCreateStep } from '~/lib/types/nft';
 import { ServiceTypeName } from '~/lib/types/service';
 
 const { t } = useI18n();
-const router = useRouter();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
-const { onNetworkSelected, resetAll } = useCollection();
+const { resetAll } = useCollection();
 
 const pageLoading = ref<boolean>(true);
 const modalCreateCollectionVisible = ref<boolean>(false);

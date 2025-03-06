@@ -105,6 +105,20 @@ export enum CollectionCreateStep {
   DEPLOYING = 5,
   DEPLOYED = 6,
 }
+/** NFT Metadata steps */
+export enum NftMetadataStep {
+  CHAIN = 1,
+  METADATA = 2,
+  NEW = 3,
+  SINGLE = 4,
+  SINGLE_PREVIEW = 5,
+  CSV = 6,
+  CSV_PREVIEW = 7,
+  ENDPOINT = 8,
+  ENDPOINT_PREVIEW = 9,
+  JSON = 10,
+  JSON_PREVIEW = 11,
+}
 /** NFT create steps */
 export enum NftCreateStep {
   AMOUNT = 1,

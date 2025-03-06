@@ -17,18 +17,14 @@
         </p>
         <n-upload
           ref="uploadRef"
-          v-on-click-outside="stopLoader"
           accept="image/*"
           :default-file-list="collectionStore.images"
           :show-file-list="false"
           :max="nft.dataImagesNames.value.length"
           multiple
           directory-dnd
-          :custom-request="upload => nft.uploadImagesRequest(upload, !isUnique)"
-          @change="onUploadChange"
+          :custom-request="upload => nft.uploadImageRequest(upload, !isUnique)"
           @remove="nft.handleImageRemove"
-          @click="startLoader"
-          @click-outside="nft.loadingImages.value = false"
         >
           <n-upload-dragger class="h-40">
             <div class="py-2 text-center">
@@ -56,8 +52,13 @@
         </div>
 
         <n-space class="mb-8 mt-5" :size="20" justify="space-between" vertical>
+          <Notification v-if="nft.loadingImages.value" type="info" class="overflow-hidden">
+            {{ $t('storage.file.uploading') }}: ({{ collectionStore.images.length }}/{{
+              nft.dataImagesNames.value.length
+            }})
+          </Notification>
           <Notification
-            v-if="collectionStore.hasImages && !nft.allImagesUploaded.value"
+            v-else-if="collectionStore.hasImages && !nft.allImagesUploaded.value"
             type="error"
             class="overflow-hidden"
           >
@@ -164,7 +165,6 @@
 </template>
 
 <script lang="ts" setup>
-import { vOnClickOutside } from '@vueuse/components';
 import type { UploadCustomRequestOptions, UploadInst } from 'naive-ui';
 import { NftCreateStep, NftUploadStep } from '~/lib/types/nft';
 
@@ -207,13 +207,12 @@ function createMetadata() {
 }
 
 function startLoader() {
-  if ((collectionStore.csvData?.length || 0) > nft.dataImagesNames.value.length) {
+  if (
+    (collectionStore.csvData?.length || 0) > nft.dataImagesNames.value.length ||
+    collectionStore.images.length < nft.dataImagesNames.value.length
+  ) {
     nft.loadingImages.value = true;
   }
-}
-
-function stopLoader() {
-  nft.loadingImages.value = false;
 }
 
 function onCsvFileUpload(event: UploadCustomRequestOptions) {

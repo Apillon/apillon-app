@@ -1,135 +1,112 @@
 <template>
-  <div class="w-full max-w-5xl">
-    <FormInstructions :title="t('nft.single.title')" :instructions="[t('nft.collection.instruction.data')]">
-      <n-form
-        ref="formRef"
-        :model="collectionStore.form.single"
-        :rules="rulesSingle"
-        @submit.prevent="handleSubmitForm"
-      >
-        <n-grid :cols="12" :x-gap="32">
-          <!-- NFT name -->
-          <n-form-item-gi :span="8" path="name" :label="infoLabel('name') as string" :label-props="{ for: 'name' }">
-            <n-input
-              v-model:value="collectionStore.form.single.name"
-              :input-props="{ id: 'name' }"
-              :placeholder="t('general.typeHere')"
-              clearable
-            />
-          </n-form-item-gi>
+  <div class="flex gap-12">
+    <n-form ref="formRef" :model="collectionStore.form.single" :rules="rulesSingle" @submit.prevent="handleSubmitForm">
+      <h4>{{ t('nft.single.title') }}</h4>
+      <p>{{ t('nft.single.info') }}</p>
 
-          <!-- NFT ID -->
-          <n-form-item-gi :span="4" path="id" :label="infoLabel('id') as string" :label-props="{ for: 'nftId' }">
-            <n-input-number
-              v-model:value="collectionStore.form.single.id"
-              :input-props="{ id: 'nftId' }"
-              :placeholder="t('general.typeHere')"
-              :step="1"
-              :min="0"
-              :max="100000"
-              clearable
-            />
-          </n-form-item-gi>
-
-          <!-- NFT description -->
-          <n-form-item-gi
-            :span="12"
-            path="description"
-            :label="infoLabel('description') as string"
-            :label-props="{ for: 'description' }"
-          >
-            <n-input
-              v-model:value="collectionStore.form.single.description"
-              :input-props="{ id: 'description' }"
-              :placeholder="t('general.typeHere')"
-              type="textarea"
-              clearable
-            />
-          </n-form-item-gi>
-
-          <!--  Collection cover image -->
-          <n-form-item-gi
-            :span="6"
-            path="image"
-            :label="infoLabel('image') as string"
-            :label-props="{ for: 'image' }"
-            :show-feedback="false"
-          >
-            <div v-if="collectionStore.form.single.image" class="mx-auto w-72 overflow-hidden rounded-xl bg-bg-light">
-              <figure class="flex h-full flex-col">
-                <Image
-                  :src="imageByName(collectionStore.form.single.image)"
-                  class="h-full w-full object-contain"
-                  :alt="collectionStore.images[0]?.name"
-                />
-                <figcaption class="block h-12 px-4 py-3 font-bold">
-                  {{ collectionStore.form.single.image }}
-                  <button class="float-right flex items-center justify-center p-1" @click="removeImages()">
-                    <span class="icon-delete text-xl"></span>
-                  </button>
-                </figcaption>
-              </figure>
-            </div>
-            <n-upload
-              v-else
-              ref="uploadRef"
-              accept="image/*,video/*"
-              :default-file-list="collectionStore.images"
-              :show-file-list="false"
-              directory-dnd
-              :custom-request="uploadImageRequest"
-              @remove="handleImageRemove"
-            >
-              <n-upload-dragger class="min-h-40">
-                <div class="text-center">
-                  <div class="mb-2 inline-block h-10 w-10 rounded-full bg-bg-lighter p-2">
-                    <span class="icon-image text-2xl text-violet"></span>
-                  </div>
-
-                  <h4 class="mb-1">{{ t('nft.upload.images') }}</h4>
-                  <p class="-mx-2 max-w-lg text-xs">
-                    {{ t('nft.single.uploadDescription') }}
-                  </p>
-                </div>
-              </n-upload-dragger>
-            </n-upload>
-          </n-form-item-gi>
-
-          <!-- Number NFT of copies -->
-          <n-form-item-gi
-            :span="6"
-            path="copies"
-            :label="infoLabel('copies') as string"
-            :label-props="{ for: 'copies' }"
-          >
-            <n-input-number
-              v-model:value="collectionStore.form.single.copies"
-              :min="0"
-              :input-props="{ id: 'copies' }"
-              clearable
-            />
-          </n-form-item-gi>
-        </n-grid>
-      </n-form>
-    </FormInstructions>
-
-    <FormInstructions :title="t('nft.upload.attributes')" :instructions="[]">
-      <NftSingleProperties />
-    </FormInstructions>
-
-    <div class="my-8 flex flex-wrap items-start justify-center self-stretch lg:flex-nowrap">
-      <div class="flex w-1/2 max-w-xl flex-auto flex-wrap justify-between gap-6 px-4 md:px-8 xl:max-w-2xl">
-        <Btn @click="handleSubmitForm">{{ $t('nft.add') }}</Btn>
-        <Btn
-          v-if="collectionStore.metadata?.length > 0"
-          type="secondary"
-          @click="collectionStore.nftStep = NftCreateStep.PREVIEW"
+      <n-grid :cols="12" :x-gap="32">
+        <!--  Collection cover image -->
+        <n-form-item-gi
+          :span="6"
+          path="image"
+          :label="infoLabel('image') as string"
+          :label-props="{ for: 'image' }"
+          :show-feedback="false"
         >
-          {{ $t('nft.single.preview') }}
-        </Btn>
-      </div>
-      <div class="flex w-1/2 max-w-xl flex-auto lg:flex-1 xl:max-w-2xl"></div>
-    </div>
+          <div v-if="collectionStore.form.single.image" class="mx-auto w-72 overflow-hidden rounded-xl bg-bg-light">
+            <figure class="flex h-full flex-col">
+              <Image
+                :src="imageByName(collectionStore.form.single.image)"
+                class="h-full w-full object-contain"
+                :alt="collectionStore.images[0]?.name"
+              />
+              <figcaption class="block h-12 px-4 py-3 font-bold">
+                {{ collectionStore.form.single.image }}
+                <button class="float-right flex items-center justify-center p-1" @click="removeImages()">
+                  <span class="icon-delete text-xl"></span>
+                </button>
+              </figcaption>
+            </figure>
+          </div>
+          <n-upload
+            v-else
+            ref="uploadRef"
+            accept="image/*,video/*"
+            :default-file-list="collectionStore.images"
+            :show-file-list="false"
+            directory-dnd
+            :custom-request="uploadImageRequest"
+            @remove="handleImageRemove"
+          >
+            <n-upload-dragger class="min-h-40">
+              <div class="text-center">
+                <div class="mb-2 inline-block h-10 w-10 rounded-full bg-bg-lighter p-2">
+                  <span class="icon-image text-2xl text-violet"></span>
+                </div>
+
+                <h4 class="mb-1">{{ t('nft.upload.images') }}</h4>
+                <p class="-mx-2 max-w-lg text-xs">
+                  {{ t('nft.single.uploadDescription') }}
+                </p>
+              </div>
+            </n-upload-dragger>
+          </n-upload>
+        </n-form-item-gi>
+
+        <!-- NFT name -->
+        <n-form-item-gi :span="12" path="name" :label="infoLabel('name') as string" :label-props="{ for: 'name' }">
+          <n-input
+            v-model:value="collectionStore.form.single.name"
+            :input-props="{ id: 'name' }"
+            :placeholder="t('general.typeHere')"
+            clearable
+          />
+        </n-form-item-gi>
+
+        <!-- NFT ID -->
+        <n-form-item-gi :span="6" path="id" :label="infoLabel('id') as string" :label-props="{ for: 'nftId' }">
+          <n-input-number
+            v-model:value="collectionStore.form.single.id"
+            :input-props="{ id: 'nftId' }"
+            :placeholder="t('general.typeHere')"
+            :step="1"
+            :min="0"
+            :max="100000"
+            clearable
+          />
+        </n-form-item-gi>
+
+        <!-- Number NFT of copies -->
+        <n-form-item-gi :span="6" path="copies" :label="infoLabel('copies') as string" :label-props="{ for: 'copies' }">
+          <n-input-number
+            v-model:value="collectionStore.form.single.copies"
+            :min="0"
+            :input-props="{ id: 'copies' }"
+            clearable
+          />
+        </n-form-item-gi>
+
+        <!-- NFT description -->
+        <n-form-item-gi
+          :span="12"
+          path="description"
+          :label="infoLabel('description') as string"
+          :label-props="{ for: 'description' }"
+        >
+          <n-input
+            v-model:value="collectionStore.form.single.description"
+            :input-props="{ id: 'description' }"
+            :placeholder="t('general.typeHere')"
+            type="textarea"
+            clearable
+          />
+        </n-form-item-gi>
+      </n-grid>
+    </n-form>
+
+    <div class="border-l border-bg-lighter"></div>
+
+    <NftSingleProperties />
   </div>
 </template>
 

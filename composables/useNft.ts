@@ -59,7 +59,7 @@ export default function useNft() {
 
   const missingImages = computed<string>(() => {
     if (dataImagesNames.value.length - collectionStore.images.length > 5) {
-      return '(' + collectionStore.images.length + '/' + collectionStore.csvData.length + ')';
+      return '(' + collectionStore.images.length + '/' + dataImagesNames.value.length + ')';
     }
 
     const missingImagesName = dataImagesNames.value.filter(item => !uploadedImagesNames.value.includes(item));
@@ -81,6 +81,7 @@ export default function useNft() {
       onFinish,
       onError,
     };
+
     if (!isEnoughSpaceInStorage([], uploadedFile)) {
       message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
 
@@ -187,7 +188,7 @@ export default function useNft() {
    */
 
   /** Upload image request - add file to list */
-  function uploadImagesRequest(
+  async function uploadImageRequest(
     { file, onProgress, onError, onFinish }: UploadCustomRequestOptions,
     wrapToFolder = true
   ) {
@@ -196,6 +197,8 @@ export default function useNft() {
       onError();
       return;
     }
+    loadingImages.value = true;
+    await sleep(0.01);
 
     const image = {
       ...file,
@@ -213,52 +216,16 @@ export default function useNft() {
     } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
       message.warning(t('validation.alreadyOnList', { name: file.name }));
       onError();
-    } else if (collectionStore.images.length >= collectionStore.csvData.length) {
-      message.warning(t('validation.tooManyImages', { num: collectionStore.csvData.length }));
-      onError();
-    } else {
-      onProgress({ percent: 0 });
-      collectionStore.images.push(image);
-    }
-
-    setTimeout(() => {
-      loadingImages.value = false;
-    }, 300);
-  }
-
-  function uploadImageRequest({ file, onError, onFinish }: UploadCustomRequestOptions, wrapToFolder = true) {
-    if (!isImage(file.type)) {
-      message.warning(t('validation.notImage', { name: file.name }));
-      onError();
-      return;
-    }
-
-    const image = {
-      ...file,
-      fullPath: wrapToFolder ? `/Images/${file.name}` : file.name,
-      percentage: 0,
-      size: file.file?.size || 0,
-      timestamp: Date.now(),
-      onFinish,
-      onError,
-    };
-
-    if (collectionStore.amount === NftAmount.SINGLE) {
-      collectionStore.form.single.image = image.name;
-    }
-
-    if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
-      message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
-      onError();
-    } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
-      console.warn(t('validation.alreadyOnList', { name: file.name }));
-      onError();
     } else if (fileAlreadyOnFileList(collectionStore.images, image, true)) {
       collectionStore.images = collectionStore.images.map(img => {
         return image.name === img.name ? image : img;
       });
       onError();
+      // } else if (collectionStore.images.length >= dataImagesNames.value.length) {
+      //   message.warning(t('validation.tooManyImages', { num: dataImagesNames.value.length }));
+      //   onError();
     } else {
+      onProgress({ percent: 0 });
       collectionStore.images.push(image);
     }
 
@@ -432,7 +399,6 @@ export default function useNft() {
     imageByName,
     parseUploadedFile,
     uploadFileRequest,
-    uploadImagesRequest,
     uploadImageRequest,
     uploadLogoAndCover,
   };

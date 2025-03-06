@@ -7,8 +7,8 @@
       icon="menu/NFTs"
       :title="$t('nft.amount.single')"
       :content="$t('nft.amount.singleContent')"
-      :selected="collectionStore.amount === NftAmount.SINGLE"
-      @click="collectionStore.amount = NftAmount.SINGLE"
+      :selected="nextStep === NftMetadataStep.SINGLE"
+      @click="select(NftMetadataStep.SINGLE)"
     />
 
     <strong class="text-sm">OR select from import options</strong>
@@ -19,26 +19,34 @@
       :icon="option.icon"
       :title="$t(`nft.amount.${option.key}`)"
       :content="$t(`nft.amount.${option.key}Content`)"
-      :selected="collectionStore.amount === option.value"
-      @click="collectionStore.amount = option.value"
+      :selected="nextStep === option.value"
+      @click="select(option.value)"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { NftAmount } from '~/lib/types/nft';
+import { NftMetadataStep } from '~/lib/types/nft';
 
+const emits = defineEmits(['nextStep']);
 const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
+
+const nextStep = ref<number>();
 
 onMounted(() => {
   collectionStore.getQuota();
 });
 
 const options = [
-  { key: 'csv', icon: 'icon/table', value: NftAmount.MULTIPLE },
-  { key: 'endpoint', icon: 'icon/web', value: NftAmount.ENDPOINT },
-  { key: 'json', icon: 'icon/json', value: NftAmount.JSON },
+  { key: 'csv', icon: 'icon/table', value: NftMetadataStep.CSV },
+  { key: 'endpoint', icon: 'icon/web', value: NftMetadataStep.ENDPOINT },
+  { key: 'json', icon: 'icon/json', value: NftMetadataStep.JSON },
 ];
+
+function select(next: number) {
+  nextStep.value = next;
+  emits('nextStep', next);
+}
 </script>

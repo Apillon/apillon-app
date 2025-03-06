@@ -29,6 +29,7 @@ export const useStorageStore = defineStore('storage', {
      */
     async fetchStorageInfo() {
       const dataStore = useDataStore();
+      await Promise.resolve(dataStore.promises.projects);
       if (!dataStore.projectUuid) return;
 
       this.loading = true;

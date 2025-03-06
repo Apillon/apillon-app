@@ -1,5 +1,6 @@
 import type { TableColumns } from 'naive-ui/es/data-table/src/interface';
 import { defineStore } from 'pinia';
+import { NftMetadataStep } from '~/lib/types/nft';
 
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
@@ -25,6 +26,7 @@ export const useCollectionStore = defineStore('collection', {
     amount: 0,
     stepCollectionCreate: CollectionCreateStep.METADATA,
     stepCollectionDeploy: CollectionStatus.CREATED,
+    stepMetadata: NftMetadataStep.CHAIN,
     stepUpload: NftUploadStep.FILE,
     total: 0,
     transaction: [] as TransactionInterface[],

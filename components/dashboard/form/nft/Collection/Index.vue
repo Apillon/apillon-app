@@ -22,13 +22,7 @@
       >
         <template #headerExtra>
           <div class="flex items-center gap-2 text-2xl">
-            <NuxtIcon
-              v-for="chain in enumKeys(EvmChainMainnet)"
-              :name="`logo/${chain.toLowerCase()}`"
-              class="icon-auto"
-              filled
-              :title="chain"
-            />
+            <NftChains :chains="enumKeys(EvmChainMainnet)" />
           </div>
         </template>
 
