@@ -35,7 +35,7 @@
             {{ $t('general.or') }}
           </SeparatorText>
           <NuxtLink :to="backLink">
-            <Btn type="primary" size="large">
+            <Btn type="secondary" size="large">
               {{ $t('nft.collection.created.goBack') }}
             </Btn>
           </NuxtLink>

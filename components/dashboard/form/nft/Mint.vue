@@ -47,8 +47,8 @@
         :reset-menu-on-options-change="false"
         :virtual-scroll="false"
         :render-option="renderOption"
-        multiple
         filterable
+        multiple
         tag
         @scroll="handleScroll"
       />

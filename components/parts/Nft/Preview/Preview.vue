@@ -15,13 +15,13 @@
           </figure>
         </div>
       </div>
-      <div v-if="collectionStore.images.length > PAGINATION_LIMIT" class="mt-4 flex items-center justify-center p-4">
+      <div v-if="collectionStore.metadata.length > PAGINATION_LIMIT" class="my-4 flex items-center justify-center p-4">
         <n-pagination
           v-model:page="page"
           v-model:page-size="pageSize"
-          :page-count="Math.ceil(collectionStore.images.length / pageSize)"
+          :page-count="Math.ceil(collectionStore.metadata.length / pageSize)"
           show-size-picker
-          :page-sizes="[PAGINATION_LIMIT, 50, 100]"
+          :page-sizes="pagination.pageSizes"
         />
       </div>
     </template>
@@ -32,6 +32,13 @@
         :theme-overrides="tableOverrides"
         :pagination="pagination"
         :row-key="rowKey"
+        @update:page="(page: number) => (pagination.page = page)"
+        @update:page-size="
+          (pageSize: number) => {
+            pagination.pageSize = pageSize;
+            pagination.page = 1;
+          }
+        "
       />
       <Btn
         v-if="collectionStore.amount === NftAmount.SINGLE"
@@ -68,20 +75,7 @@ const pageSize = ref<number>(PAGINATION_LIMIT);
 /**
  * Table
  */
-const pagination = reactive({
-  page: 1,
-  pageSize: PAGINATION_LIMIT,
-  showSizePicker: true,
-  pageSizes: [...enumValues(PageSize), 100] as number[],
-  prefix: ({ itemCount }) => t('general.total', { total: itemCount }),
-  onChange: (page: number) => {
-    pagination.page = page;
-  },
-  onUpdatePageSize: (pageSize: number) => {
-    pagination.pageSize = pageSize;
-    pagination.page = 1;
-  },
-});
+const pagination = reactive(createPagination(false));
 
 const nfts = computed(() => {
   const first = (page.value - 1) * pageSize.value;
