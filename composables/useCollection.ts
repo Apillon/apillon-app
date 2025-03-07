@@ -230,7 +230,11 @@ export default function useCollection() {
     if (collectionStore.form.behavior.royaltiesFees > 0) {
       params.royaltiesAddress = collectionStore.form.behavior.royaltiesAddress;
     }
-    if (collectionStore.form.behavior.chainType !== ChainType.SUBSTRATE) {
+    if (
+      collectionStore.form.behavior.chainType !== ChainType.SUBSTRATE &&
+      collectionStore.form.behavior.adminAddress &&
+      collectionStore.form.behavior.adminAddress.length > 10
+    ) {
       params.adminAddress = collectionStore.form.behavior.adminAddress;
     }
     return params;

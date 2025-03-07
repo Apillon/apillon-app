@@ -66,8 +66,8 @@
 
 <script lang="ts" setup>
 import { repeat } from 'seemly';
-import { NTooltip, type FormItemRule } from 'naive-ui';
 import type { PropType } from 'vue';
+import { NTooltip, type FormItemRule } from 'naive-ui';
 import type { SelectBaseOption } from 'naive-ui/es/select/src/interface';
 
 type FormNftMint = {
