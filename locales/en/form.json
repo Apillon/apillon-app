@@ -77,6 +77,7 @@
         "symbol": "Asset symbol"
       },
       "collection": {
+        "adminAddress": "Admin address",
         "autoIncrement": "Auto Increment",
         "baseUri": "Base URI",
         "baseExtension": "Base Extension",
@@ -103,6 +104,7 @@
         "useGateway": "Use apillon gateway for base URI",
         "useIpns": "Dynamic metadata",
         "labelInfo": {
+          "adminAddress": "The admin of a collection is able to grant and revoke control of the contract to addresses. You can change this later.",
           "autoIncrement": "Disable Auto Increment to mint an NFT with a custom ID.",
           "baseExtension": "",
           "baseUri": "Paste the collection metadata base URI here.",

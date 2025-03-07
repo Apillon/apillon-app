@@ -55,9 +55,16 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       title: t('nft.transaction.chain'),
       minWidth: 120,
       render(row: TransactionInterface) {
-        return h('span', {}, {           
-          default: () => te(`nft.chain.${EvmChain[row.chainId]}`) ? t(`nft.chain.${EvmChain[row.chainId]}`): EvmChain[EvmChain[row.chainId]]
-         });
+        return h(
+          'span',
+          {},
+          {
+            default: () =>
+              te(`nft.chain.${EvmChain[row.chainId]}`)
+                ? t(`nft.chain.${EvmChain[row.chainId]}`)
+                : EvmChain[row.chainId],
+          }
+        );
       },
     },
     {

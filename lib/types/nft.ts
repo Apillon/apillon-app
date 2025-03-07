@@ -144,6 +144,7 @@ declare global {
    * Collection
    */
   interface CollectionInterface extends BaseObjectInterface {
+    adminAddress: string | null;
     baseExtension: string;
     baseUri: string;
     bucket_uuid: string;

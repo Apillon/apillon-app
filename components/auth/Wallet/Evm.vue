@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-import { useAccount, useConnect, useConnectorClient, type Connector } from '@wagmi/vue';
+import type { Connector } from '@wagmi/vue';
+import { useAccount, useConnect, useConnectorClient, useAccountEffect } from '@wagmi/vue';
 
+const emit = defineEmits(['connected']);
 defineProps({
   loading: { type: Boolean, default: false },
 });
@@ -11,6 +13,8 @@ const { connect, connectors } = useConnect();
 
 const connectorLoading = ref();
 
+useAccountEffect({ onConnect: onWalletConnected });
+
 function connectWallet(connector: Connector) {
   connectorLoading.value = connector.id;
   if (isConnected.value) {
@@ -18,6 +22,11 @@ function connectWallet(connector: Connector) {
   } else {
     connect({ connector });
   }
+}
+
+function onWalletConnected(args) {
+  console.log(args);
+  emit('connected', args.address);
 }
 </script>
 

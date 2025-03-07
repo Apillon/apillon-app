@@ -36,6 +36,7 @@ export const useCollectionStore = defineStore('collection', {
         symbol: '',
       },
       behavior: {
+        adminAddress: '',
         chain: undefined as number | undefined,
         chainType: ChainType.EVM,
         collectionType: NFTCollectionType.GENERIC,

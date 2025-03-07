@@ -1,10 +1,13 @@
 body {
-  @apply body-md text-white font-sans;
+  @apply body-md font-sans text-white;
   font-size: 16px;
 
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /** Wallet connect */
+  --wcm-z-index: 3000;
 }
 
 #app .nuxt-icon svg {
@@ -41,7 +44,7 @@ select:autofill:focus {
 .swiper {
   .swiper-button-prev,
   .swiper-button-next {
-    @apply bg-no-repeat bg-center bg-contain;
+    @apply bg-contain bg-center bg-no-repeat;
 
     &:after {
       @apply hidden;

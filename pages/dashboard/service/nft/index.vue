@@ -5,7 +5,7 @@
     </template>
     <slot>
       <n-space v-if="collectionStore.hasCollections" class="pb-8" :size="32" vertical>
-        <ActionsNftCollection />
+        <ActionsNft />
         <TableNftCollection :collections="collectionStore.items" />
       </n-space>
       <Empty v-else :title="t('nft.collection.empty')" :info="t('nft.collection.emptyInfo')" icon="nft/illustration">

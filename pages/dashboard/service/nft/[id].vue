@@ -13,7 +13,7 @@
 
           <div class="card max-w-64 px-6 py-4">
             <h6 class="mb-2">{{ t('general.actions') }}</h6>
-            <ActionsNftTransaction
+            <ActionsNftCollection
               @add-nfts="openModalAddNfts"
               @mint="modalMintCollectionVisible = true"
               @nest-mint="modalNestMintCollectionVisible = true"

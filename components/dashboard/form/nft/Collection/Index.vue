@@ -80,6 +80,20 @@
           />
         </n-form-item>
 
+        <!-- Admin Address -->
+        <n-form-item
+          v-if="collectionStore.form.behavior.chainType !== ChainType.SUBSTRATE"
+          path="adminAddress"
+          :label="infoLabel('adminAddress') as string"
+          :label-props="{ for: 'adminAddress' }"
+        >
+          <FormFieldWalletAddress
+            v-model:value="collectionStore.form.behavior.adminAddress"
+            :input-props="{ id: 'adminAddress' }"
+            @connected="address => (collectionStore.form.behavior.adminAddress = address)"
+          />
+        </n-form-item>
+
         <n-grid class="items-end" :cols="12" :x-gap="32">
           <!--  Collection Base URI -->
           <n-form-item-gi
