@@ -21,7 +21,6 @@ export default function useCollection() {
     value: EvmChain[chain],
   });
 
-  const chains = enumKeys(EvmChain).map(c => toEvmChainOption(c));
   const evmChains = enumKeys(EvmChain)
     .filter(key => [EvmChainMainnet.ETHEREUM, EvmChainTestnet.SEPOLIA].includes(EvmChain[key]))
     .map(c => toEvmChainOption(c));
@@ -30,20 +29,8 @@ export default function useCollection() {
     key => ![EvmChainMainnet.MOONBEAM, EvmChainMainnet.ASTAR, EvmChainTestnet.MOONBASE].includes(key as number)
   );
 
-  const chains = enumKeys(EvmChainMainnet).map(k => {
-    return {
-      name: k.toLowerCase(),
-      label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`) : EvmChain[EvmChain[k]],
-      value: EvmChain[k],
-    };
-  });
-  const chainsTestnet = enumKeys(EvmChainTestnet).map(k => {
-    return {
-      name: k.toLowerCase(),
-      label: te(`nft.chain.${EvmChain[k]}`) ? t(`nft.chain.${EvmChain[k]}`) : EvmChain[EvmChain[k]],
-      value: EvmChain[k],
-    };
-  });
+  const chains = enumKeys(EvmChainMainnet).map(c => toEvmChainOption(c));
+  const chainsTestnet = enumKeys(EvmChainTestnet).map(c => toEvmChainOption(c));
   const nftChains = [
     ...chains,
     {

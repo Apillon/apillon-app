@@ -104,8 +104,11 @@ const disabledChain = (chainId: number) => collectionStore.quotaReached && enter
 const hiddenChain = (chainId: number) =>
   !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
 
+const chains = computed(() =>
+  (isMainnet.value ? nftChains : chainsTestnet)
+    .filter(chain => !search.value || chain.label.toLowerCase().includes(search.value.toLowerCase()))
+    .filter(chain => !hiddenChain(chain.value))
 );
-const chains = computed(() => nftChains.filter(c => !hiddenChain(c.value)));
 
 onMounted(() => {
   collectionStore.getQuota();
