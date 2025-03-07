@@ -46,11 +46,17 @@
         <tbody>
           <tr v-for="(price, key) in shownPrices" :key="key">
             <td>
-              <NuxtIcon :name="getIconName(price)" class="float-left mr-3 text-2xl text-white" filled />
+              <NuxtIcon
+                :name="getIconName(price)"
+                class="float-left text-white text-2xl mr-3"
+                filled
+              />
               <span>{{ price.description }} </span>
             </td>
             <td class="text-right">
-              <strong class="text-white"> {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }} </strong>
+              <strong class="text-white">
+                {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
+              </strong>
             </td>
           </tr>
         </tbody>
@@ -73,7 +79,7 @@ const props = defineProps({
 
 const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
-const { chains, nftChains, evmChains, substrateChains } = useCollection();
+const { chains, enterpriseChainIDs, nftChains, evmChains, substrateChains } = useCollection();
 
 const identityChains = enumKeyValues(IdentityChains);
 const services = enumKeyValues(ServiceTypeName);
@@ -86,6 +92,7 @@ onMounted(async () => {
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
     selectedChain.value = props.chain || collectionStore.form.behavior.chain;
   }
+  await paymentStore.getActiveSubscription();
 
   servicePrices.value = props.category
     ? await paymentStore.getServicePricesByCategory(props.category)
@@ -93,11 +100,23 @@ onMounted(async () => {
       ? await paymentStore.getServicePrices(props.service)
       : await paymentStore.getPriceList();
 
+  /** Filter enterprise service prices */
+  const enterpriseServiceCategories = enterpriseChainIDs
+    .map(chain => [`${EvmChain[chain]}_NFT`, `${EvmChain[chain]}_CONTRACT`])
+    .flat();
+
+  servicePrices.value = servicePrices.value.filter(
+    s => paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) || !enterpriseServiceCategories.includes(s.category)
+  );
+
   /** Sort by category (chain name) */
   servicePrices.value.sort((a, b) => (a.category.toLowerCase() < b.category.toLowerCase() ? -1 : 1));
 
   loading.value = false;
 });
+
+const hiddenChain = (chainId: number) =>
+  !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
 
 const chainsByService = computed(() => {
   switch (selectedService.value) {
@@ -106,18 +125,18 @@ const chainsByService = computed(() => {
     case ServiceTypeName.HOSTING:
       return [];
     case ServiceTypeName.NFT:
-      return nftChains;
+      return nftChains.filter(c => !hiddenChain(c.value));
     case ServiceTypeName.STORAGE:
       return [];
     case ServiceTypeName.SMART_CONTRACTS:
-      return [...evmChains, ...chains];
+      return [...evmChains, ...chains].filter(c => !hiddenChain(c.value));
     default:
-      return [...identityChains, ...chains, ...substrateChains];
+      return [...identityChains, ...chains, ...substrateChains].filter(c => !hiddenChain(c.value));
   }
 });
 
 const shownPrices = computed(() => {
-  const chainName = getChainName(selectedChain.value, selectedService.value);
+  const chainName = selectedChain.value ? getChainName(selectedChain.value, selectedService.value) : '';
 
   /** Show only create collection */
   const filteredServices = props.showCreateCollection

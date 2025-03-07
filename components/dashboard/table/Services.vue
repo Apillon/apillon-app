@@ -7,11 +7,9 @@
       :columns="columns"
       :data="data"
       :loading="dataStore.service.loading"
-      :pagination="{
-        pageSize: PAGINATION_LIMIT,
-        prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-      }"
+      :pagination="pagination"
       :row-props="rowProps"
+      @update:page-size="(pz: number) => (pagination.pageSize = pz)"
     />
   </n-space>
 
@@ -50,6 +48,7 @@ const TableEllipsis = resolveComponent('TableEllipsis');
 
 const modalEditAuthVisible = ref<boolean>(false);
 const modalDeleteAuthVisible = ref<boolean>(false);
+const pagination = reactive(createPagination(false));
 
 const createColumns = (): NDataTableColumns<ServiceInterface> => {
   return [

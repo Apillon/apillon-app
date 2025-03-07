@@ -6,12 +6,10 @@
     :columns="columns"
     :data="data"
     :loading="collectionStore.loading"
-    :pagination="{
-      pageSize: PAGINATION_LIMIT,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="pagination"
     :row-key="rowKey"
     :row-props="rowProps"
+    @update:page-size="(pz: number) => (pagination.pageSize = pz)"
   />
 </template>
 
@@ -29,6 +27,8 @@ const message = useMessage();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
 const { deleteItem } = useDelete();
+
+const pagination = reactive(createPagination(false));
 
 /** Available columns - show/hide column */
 const selectedColumns = ref([

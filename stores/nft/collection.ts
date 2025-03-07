@@ -39,6 +39,7 @@ export const useCollectionStore = defineStore('collection', {
         symbol: '',
       },
       behavior: {
+        adminAddress: null as string | null,
         chain: undefined as number | undefined,
         chainType: ChainType.EVM,
         collectionType: NFTCollectionType.GENERIC,
@@ -53,6 +54,7 @@ export const useCollectionStore = defineStore('collection', {
         dropReserve: 0,
         revocable: false as boolean | null,
         soulbound: false as boolean | null,
+        isAutoIncrement: true as boolean | null,
         supplyLimited: 0,
         royaltiesAddress: null,
         royaltiesFees: 0,
@@ -67,6 +69,7 @@ export const useCollectionStore = defineStore('collection', {
         attributes: [] as AttributesInterface,
       },
     },
+    websiteDeployForm: {} as WebsiteDeployForm,
   }),
   getters: {
     collectionUuid(state): string {
@@ -144,6 +147,7 @@ export const useCollectionStore = defineStore('collection', {
       this.form.base.name = '';
       this.form.base.symbol = '';
 
+      this.form.behavior.adminAddress = null;
       this.form.behavior.chain = undefined;
       this.form.behavior.chainType = ChainType.EVM;
       this.form.behavior.collectionType = NFTCollectionType.GENERIC;
@@ -158,6 +162,7 @@ export const useCollectionStore = defineStore('collection', {
       this.form.behavior.dropReserve = 0;
       this.form.behavior.revocable = false;
       this.form.behavior.soulbound = false;
+      this.form.behavior.isAutoIncrement = true;
       this.form.behavior.supplyLimited = 0;
 
       this.resetSingleFormData();

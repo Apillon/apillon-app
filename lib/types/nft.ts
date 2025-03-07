@@ -1,8 +1,16 @@
+import type { Address } from 'viem';
+
 export type Merge<T, K> = Omit<T, keyof K> & K;
 
 export enum ChainType {
   SUBSTRATE = 1,
   EVM = 2,
+}
+
+export enum NftWebsiteType {
+  PLAIN_JS = 1,
+  REACT = 2,
+  VUE = 3,
 }
 
 /** NFT Chains */
@@ -72,11 +80,10 @@ export enum CollectionStatus {
 
 /** NFT Transaction status */
 export enum TransactionStatus {
-  REQUESTED = 0,
   PENDING = 1,
-  FINISHED = 2,
-  VERIFIED = 3,
-  FAILED = 4,
+  CONFIRMED = 2,
+  FAILED = 3,
+  ERROR = 4,
 }
 
 /** NFT Transaction type */
@@ -162,6 +169,7 @@ declare global {
    * Collection
    */
   interface CollectionInterface extends BaseObjectInterface {
+    adminAddress: string | null;
     baseExtension: string;
     baseUri: string;
     bucket_uuid: string;
@@ -171,12 +179,13 @@ declare global {
     collectionType: number;
     collectionStatus: number;
     collection_uuid: string;
-    contractAddress: string | null;
+    contractAddress: Address | null;
     dropStart: number;
     drop: boolean;
     ipns_uuid: string;
     isRevokable: boolean;
     isSoulbound: boolean;
+    isAutoIncrement: boolean;
     maxSupply: number;
     dropPrice: number;
     dropReserve: number;
@@ -187,11 +196,18 @@ declare global {
     updateTime: string;
     useApillonIpfsGateway: boolean;
     useIpns: boolean;
+    websiteUuid: string | null;
   }
 
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionUpdateResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionsResponse extends GeneralItemsResponse<CollectionInterface> {}
+
+  interface WebsiteDeployForm {
+    apiKey: string;
+    apiSecret: string;
+    type: NftWebsiteType;
+  }
 
   /**
    * Transaction
@@ -205,6 +221,12 @@ declare global {
   }
 
   interface TransactionResponse extends GeneralItemsResponse<TransactionInterface> {}
+
+  interface MintInterface {
+    success: boolean;
+    transactionHash: string | null;
+  }
+  interface MintResponse extends GeneralResponse<MintInterface> {}
 
   /**
    * Metadata deploys

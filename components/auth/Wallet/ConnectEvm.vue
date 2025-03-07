@@ -16,14 +16,7 @@
         {{ $t('auth.wallet.evm.disconnect') }}
       </Btn>
     </div>
-    <Btn
-      v-else
-      size="large"
-      type="secondary"
-      :loading="loading || isConnecting"
-      borderless
-      @click="modalWalletVisible = true"
-    >
+    <Btn v-else size="large" type="secondary" :loading="loading" borderless @click="modalWalletVisible = true">
       {{ $t('auth.wallet.evm.connect') }}
     </Btn>
   </div>
@@ -69,7 +62,7 @@ function wagmiConnect(connector) {
   }
 }
 
-async function onWalletConnected({ address, connector, isReconnected }) {
+async function onWalletConnected({ address }) {
   await sleep(200);
   if (authStore.user.evmWallet !== address) {
     connectWallet();

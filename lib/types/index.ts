@@ -9,6 +9,7 @@ export enum SqlModelStatus {
   BLOCKED = 7,
   ARCHIVED = 8,
   DELETED = 9,
+  REFUNDED = 100,
 }
 
 /**

@@ -15,11 +15,20 @@ export default function useCollection() {
   const loading = ref<boolean>(false);
   const formRef = ref<NFormInst | null>(null);
 
+  const toEvmChainOption = (chain: string) => ({
+    name: chain.toLowerCase(),
+    label: te(`nft.evmChain.${EvmChain[chain]}`) ? t(`nft.evmChain.${EvmChain[chain]}`) : EvmChain[EvmChain[chain]],
+    value: EvmChain[chain],
+  });
+
+  const chains = enumKeys(EvmChain).map(c => toEvmChainOption(c));
   const evmChains = enumKeys(EvmChain)
     .filter(key => [EvmChainMainnet.ETHEREUM, EvmChainTestnet.SEPOLIA].includes(EvmChain[key]))
-    .map(k => {
-      return { name: k.toLowerCase(), label: t(`nft.evmChain.${EvmChain[k]}`), value: EvmChain[k] };
-    });
+    .map(c => toEvmChainOption(c));
+
+  const enterpriseChainIDs = enumValues(EvmChain).filter(
+    key => ![EvmChainMainnet.MOONBEAM, EvmChainMainnet.ASTAR, EvmChainTestnet.MOONBASE].includes(key as number)
+  );
 
   const chains = enumKeys(EvmChainMainnet).map(k => {
     return {
@@ -161,10 +170,10 @@ export default function useCollection() {
     name: ruleRequired(t('validation.collection.nameRequired')),
     'base.name': ruleRequired(t('validation.collection.nameRequired')),
     chain: ruleRequired(t('validation.collection.chainRequired')),
-    'base.chain': ruleRequired(t('validation.collection.chainRequired')),
-    'base.chainType': ruleRequired(t('validation.collection.chainTypeRequired')),
+    'behavior.chain': ruleRequired(t('validation.collection.chainRequired')),
+    'behavior.chainType': ruleRequired(t('validation.collection.chainTypeRequired')),
     collectionType: ruleRequired(t('validation.collection.typeRequired')),
-    'base.collectionType': ruleRequired(t('validation.collection.typeRequired')),
+    'behavior.collectionType': ruleRequired(t('validation.collection.typeRequired')),
     baseUri: rulesBaseUri,
     'behavior.baseUri': rulesBaseUri,
     baseExtension: ruleRequired(t('validation.collection.baseExtensionRequired')),
@@ -211,6 +220,10 @@ export default function useCollection() {
       maxSupply: collectionStore.form.behavior.supplyLimited === 1 ? collectionStore.form.behavior.maxSupply : 0,
       isRevokable: collectionStore.form.behavior.revocable,
       isSoulbound: collectionStore.form.behavior.soulbound,
+      isAutoIncrement:
+        collectionStore.form.behavior.collectionType === NFTCollectionType.GENERIC
+          ? collectionStore.form.behavior.isAutoIncrement
+          : true,
       royaltiesAddress:
         collectionStore.form.behavior.royaltiesFees === 0 ? undefined : collectionStore.form.behavior.royaltiesAddress,
     };
@@ -229,6 +242,13 @@ export default function useCollection() {
     }
     if (collectionStore.form.behavior.royaltiesFees > 0) {
       params.royaltiesAddress = collectionStore.form.behavior.royaltiesAddress;
+    }
+    if (
+      collectionStore.form.behavior.chainType !== ChainType.SUBSTRATE &&
+      collectionStore.form.behavior.adminAddress &&
+      collectionStore.form.behavior.adminAddress.length > 10
+    ) {
+      params.adminAddress = collectionStore.form.behavior.adminAddress;
     }
     return params;
   }
@@ -382,6 +402,7 @@ export default function useCollection() {
     chainTypes,
     collectionTypes,
     evmChains,
+    enterpriseChainIDs,
     formRef,
     isFormDisabled,
     isUnique,

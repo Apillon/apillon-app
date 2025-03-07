@@ -1,5 +1,5 @@
 <template>
-  <n-card v-if="showCard" class="card-dark" :bordered="false" :title="$t('dashboard.payment.currentPlan')">
+  <n-card v-if="showCard" class="card-dark" size="small" :bordered="false" :title="$t('dashboard.payment.currentPlan')">
     <div class="flex h-full flex-col justify-between">
       <div class="mb-4 flex items-center gap-4">
         <span class="icon-billing text-xl"></span>
@@ -28,7 +28,7 @@
           }}
         </span>
       </div>
-      <div class="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-4">
+      <div class="grid-cols-fit200 grid gap-4">
         <Btn
           :class="btnClass"
           :type="btnType"

@@ -4,7 +4,7 @@
       <figure class="flex h-full flex-col">
         <Image :src="createThumbnailUrl(image)" class="h-full w-full object-contain" :alt="image.name" />
         <figcaption class="flex h-12 justify-between px-4 py-3 font-bold">
-          <n-ellipsis class="break-all align-bottom text-body" :line-clamp="1">
+          <n-ellipsis class="break-all align-bottom" :line-clamp="1">
             {{ image.name }}
           </n-ellipsis>
           <button class="float-right flex items-center justify-center p-1" @click="handleImageRemove()">
@@ -15,6 +15,7 @@
     </div>
     <n-upload
       v-else
+      :input-props="$attrs"
       ref="uploadRef"
       accept="image/*"
       :show-file-list="false"

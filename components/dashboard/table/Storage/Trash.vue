@@ -1,7 +1,7 @@
 <template>
   <n-space class="pb-8" :size="12" vertical>
     <n-space justify="space-between">
-      <div class="w-[45vw] sm:w-[30vw] lg:w-[20vw] max-w-xs">
+      <div class="w-[45vw] max-w-xs sm:w-[30vw] lg:w-[20vw]">
         <n-input
           v-model:value="fileStore.trash.search"
           type="text"
@@ -18,12 +18,8 @@
 
       <n-space size="large">
         <!-- Refresh files -->
-        <n-button
-          size="small"
-          :loading="fileStore.trash.loading"
-          @click="fileStore.fetchDeletedFiles()"
-        >
-          <span class="icon-refresh text-xl mr-2"></span>
+        <n-button size="small" :loading="fileStore.trash.loading" @click="fileStore.fetchDeletedFiles()">
+          <span class="icon-refresh mr-2 text-xl"></span>
           {{ $t('general.refresh') }}
         </n-button>
       </n-space>
@@ -34,18 +30,10 @@
       :columns="columns"
       :data="fileStore.trash.items"
       :loading="fileStore.trash.loading"
-      :pagination="{
-        ...fileStore.trash.pagination,
-        onChange: (page: number) => {
-          handlePageChange(page, fileStore.trash.pagination.pageSize);
-        },
-        onUpdatePageSize: (pageSize: number) => {
-          handlePageChange(1, pageSize);
-        },
-      }"
+      :pagination="fileStore.trash.pagination"
       :row-props="rowProps"
-      @update:page="handlePageChange"
-      @update:sorter="handleSorterChange"
+      @update:page="(page: number) => handlePageChange(page, fileStore.trash.pagination.pageSize)"
+      @update:sorter="(pageSize: number) => handlePageChange(1, pageSize)"
       remote
     />
   </n-space>
@@ -99,11 +87,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
               { class: 'flex' },
               {
                 default: () => [
-                  h(
-                    NEllipsis,
-                    { class: 'text-body align-bottom', 'line-clamp': 1 },
-                    { default: () => row.link }
-                  ),
+                  h(NEllipsis, { class: 'text-body align-bottom', 'line-clamp': 1 }, { default: () => row.link }),
                   h(
                     'button',
                     { class: 'ml-2', onClick: () => copyToClipboard(row.link) },
@@ -140,11 +124,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       key: 'createTime',
       title: $i18n.t('dashboard.deletedAt'),
       render(row: BucketItemInterface) {
-        return h(
-          'span',
-          {},
-          { default: () => dateTimeToDateForDeletedFiles(row.updateTime || '') }
-        );
+        return h('span', {}, { default: () => dateTimeToDateForDeletedFiles(row.updateTime || '') });
       },
     },
     {
@@ -261,10 +241,7 @@ async function restore() {
 
   try {
     const restoredFile = await $api.patch<BucketItemResponse>(
-      endpoints.storageFileRestore(
-        bucketStore.bucketUuid,
-        currentRow.value.file_uuid || currentRow.value.uuid
-      )
+      endpoints.storageFileRestore(bucketStore.bucketUuid, currentRow.value.file_uuid || currentRow.value.uuid)
     );
 
     removeTrashedFileFromList(restoredFile.data.file_uuid || restoredFile.data.uuid);
@@ -279,8 +256,6 @@ async function restore() {
 }
 
 function removeTrashedFileFromList(uuid: string) {
-  fileStore.trash.items = fileStore.trash.items.filter(
-    item => item.file_uuid !== uuid && item.uuid !== uuid
-  );
+  fileStore.trash.items = fileStore.trash.items.filter(item => item.file_uuid !== uuid && item.uuid !== uuid);
 }
 </script>

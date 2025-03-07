@@ -94,37 +94,22 @@ const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
 
 const { t } = useI18n();
-const { isDev } = useService();
-const { nftChains, chainsTestnet, chainTypes } = useCollection();
+const { enterpriseChainIDs, nftChains, chainsTestnet, chainTypes } = useCollection();
 
 const isMainnet = ref<boolean>(false);
 const isSubstrateEnabled = ref<boolean>(false);
 const search = ref<string>('');
 
-const chains = computed(() =>
-  (isMainnet.value ? nftChains : chainsTestnet).filter(
-    chain => !search.value || chain.label.toLowerCase().includes(search.value.toLowerCase())
-  )
+const disabledChain = (chainId: number) => collectionStore.quotaReached && enterpriseChainIDs.includes(chainId);
+const hiddenChain = (chainId: number) =>
+  !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
+
 );
+const chains = computed(() => nftChains.filter(c => !hiddenChain(c.value)));
 
 onMounted(() => {
   collectionStore.getQuota();
 });
-
-const enterpriseChains = [
-  EvmChainMainnet.ARBITRUM_ONE,
-  EvmChainMainnet.AVALANCHE,
-  EvmChainMainnet.BASE,
-  EvmChainMainnet.CELO,
-  EvmChainMainnet.ETHEREUM,
-  EvmChainMainnet.OPTIMISM,
-  EvmChainMainnet.POLYGON,
-];
-
-const disabledChain = (chainId: number) =>
-  !isDev() &&
-  (!paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) || collectionStore.quotaReached) &&
-  enterpriseChains.includes(chainId);
 
 function onChainChange(chainId: number) {
   if (!disabledChain(chainId)) {

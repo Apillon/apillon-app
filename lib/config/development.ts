@@ -6,6 +6,7 @@ const config: ConfigInterface = {
   apiUrl: 'https://console-api-dev.apillon.io',
   oauthUrl: 'https://oauth-dev.apillon.io',
   adminUrl: 'https://admin-dev.apillon.io',
+  deploymentGithubId: 'Ov23li86OJHAvoIF7UUg',
   mailerLiteSubscribeUrl: 'https://landing.mailerlite.com/webforms/landing/i9f9l9',
   captchaKey: '5DWvYfCSGqbUiQyvV5idUmbD3xdNHM9jtjGzs5iK4K4A5Rh4',
   githubId: 'd0482598d8adbd8adffa',

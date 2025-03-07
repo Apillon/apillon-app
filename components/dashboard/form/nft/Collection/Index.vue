@@ -32,7 +32,7 @@
             isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
             collectionStore.form.behavior.chainType === ChainType.EVM
           "
-          path="base.collectionType"
+          path="behavior.collectionType"
           :label="infoLabel('type') as string"
           :label-props="{ for: 'collectionType' }"
         >
@@ -47,7 +47,7 @@
         </n-form-item>
 
         <!--  Chain -->
-        <n-form-item path="base.chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
+        <n-form-item path="behavior.chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
           <select-options
             v-model:value="collectionStore.form.behavior.chain"
             :options="nftChains"
@@ -72,6 +72,20 @@
             :placeholder="t('general.pleaseSelect')"
             filterable
             clearable
+          />
+        </n-form-item>
+
+        <!-- Admin Address -->
+        <n-form-item
+          v-if="collectionStore.form.behavior.chainType !== ChainType.SUBSTRATE"
+          path="adminAddress"
+          :label="infoLabel('adminAddress') as string"
+          :label-props="{ for: 'adminAddress' }"
+        >
+          <FormFieldWalletAddress
+            v-model:value="collectionStore.form.behavior.adminAddress"
+            :input-props="{ id: 'adminAddress' }"
+            @connected="address => (collectionStore.form.behavior.adminAddress = address)"
           />
         </n-form-item>
 
@@ -156,13 +170,13 @@
         <n-grid
           v-if="collectionStore.form.behavior.chainType === ChainType.EVM || isUnique"
           class="items-end"
-          :cols="12"
+          :cols="collectionStore.form.behavior.collectionType === NFTCollectionType.NESTABLE ? 8 : 12"
           :x-gap="32"
         >
           <!-- Collection Revocable -->
           <n-form-item-gi
             path="behavior.revocable"
-            :span="6"
+            :span="4"
             :label-props="{ for: 'revocable' }"
             :label="infoLabel('revocable') as string"
           >
@@ -178,7 +192,7 @@
           <!-- Collection Soulbound -->
           <n-form-item-gi
             path="behavior.soulbound"
-            :span="6"
+            :span="4"
             :label-props="{ for: 'soulbound' }"
             :label="infoLabel('soulbound') as string"
           >
@@ -186,6 +200,23 @@
               v-model:value="collectionStore.form.behavior.soulbound"
               :options="booleanSelect"
               :input-props="{ id: 'soulbound' }"
+              :placeholder="t('general.pleaseSelect')"
+              filterable
+            />
+          </n-form-item-gi>
+
+          <!-- Collection AutoIncrement -->
+          <n-form-item-gi
+            v-show="collectionStore.form.behavior.collectionType === NFTCollectionType.GENERIC"
+            path="behavior.isAutoIncrement"
+            :span="4"
+            :label="infoLabel('autoIncrement') as string"
+            :label-props="{ for: 'autoIncrement' }"
+          >
+            <select-options
+              v-model:value="collectionStore.form.behavior.isAutoIncrement"
+              :options="booleanSelect"
+              :input-props="{ id: 'autoIncrement' }"
               :placeholder="t('general.pleaseSelect')"
               filterable
             />
@@ -327,7 +358,7 @@
 import { useTemplateRef } from 'vue';
 import { Feature } from '~/lib/types/config';
 import { enumKeys, isFeatureEnabled } from '~/lib/utils';
-import { ChainType, EvmChainMainnet } from '~/lib/types/nft';
+import { EvmChain, ChainType, EvmChainMainnet, NFTCollectionType } from '~/lib/types/nft';
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
 
 const emit = defineEmits(['submitSuccess']);

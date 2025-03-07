@@ -40,20 +40,7 @@ const loading = ref<boolean>(true);
 
 onMounted(async () => {
   await dataStore.waitOnPromises();
-  const promises: Promise<any>[] = [];
-
-  promises.push(
-    new Promise<void>(resolve => {
-      paymentStore.getInvoices().then(() => resolve());
-    })
-  );
-  promises.push(
-    new Promise<void>(resolve => {
-      paymentStore.fetchCreditTransactions().then(() => resolve());
-    })
-  );
-
-  await Promise.all(promises);
+  await Promise.all([paymentStore.getInvoices(), paymentStore.fetchCreditTransactions()]);
   loading.value = false;
 });
 </script>

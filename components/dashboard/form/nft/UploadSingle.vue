@@ -32,6 +32,7 @@
             v-else
             ref="uploadRef"
             accept="image/*,video/*"
+              :input-props="{ id: 'nftImage' }"
             :default-file-list="collectionStore.images"
             :show-file-list="false"
             directory-dnd

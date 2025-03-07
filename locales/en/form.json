@@ -77,6 +77,8 @@
         "symbol": "Asset symbol"
       },
       "collection": {
+        "adminAddress": "Admin address",
+        "autoIncrement": "Auto Increment",
         "baseUri": "Base URI",
         "baseExtension": "Base Extension",
         "chain": "Chain",
@@ -102,6 +104,8 @@
         "useGateway": "Use apillon gateway for base URI",
         "useIpns": "Dynamic metadata",
         "labelInfo": {
+          "adminAddress": "The admin of a collection is able to grant and revoke control of the contract to addresses. You can change this later.",
+          "autoIncrement": "Disable Auto Increment to mint an NFT with a custom ID.",
           "baseExtension": "",
           "baseUri": "Paste the collection metadata base URI here.",
           "chain": "Select the network where your NFTs will be deployed",
@@ -180,6 +184,7 @@
         "description": "Description",
         "displayType": "Type",
         "id": "ID",
+        "idsToMint": "IDs to Mint",
         "image": "NFT image",
         "mintCollectionUuid": "Collection",
         "mintParentNftId": "Parent NFT ID",
@@ -288,6 +293,9 @@
       "indexer": {
         "logLevels": "Log levels",
         "containers": "Containers"
+      },
+      "nft": {
+        "idsToMint": "Enter NFT IDs you want to mint"
       }
     },
     "error": {

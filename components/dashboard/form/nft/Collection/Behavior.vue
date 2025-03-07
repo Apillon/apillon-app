@@ -38,17 +38,32 @@
       />
     </n-form-item>
 
+    <!-- Admin Address -->
+    <n-form-item
+      v-if="collectionStore.form.behavior.chainType !== ChainType.SUBSTRATE"
+      path="adminAddress"
+      :label="infoLabel('adminAddress') as string"
+      :label-props="{ for: 'adminAddress' }"
+    >
+      <FormFieldWalletAddress
+        v-model:value="collectionStore.form.behavior.adminAddress"
+        :input-props="{ id: 'adminAddress' }"
+        @connected="address => (collectionStore.form.behavior.adminAddress = address)"
+      />
+    </n-form-item>
+
     <!--  Collection Use Gateway -->
     <n-form-item v-if="!isUnique" path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
       <n-checkbox
         v-model:checked="collectionStore.form.behavior.useApillonIpfsGateway"
+        id="useApillonIpfsGateway"
         size="medium"
         :label="infoLabel('useGateway') as string"
       />
     </n-form-item>
 
     <!--  Collection Dynamic metadata -->
-    <n-form-item v-if="!isUnique && showIpns" path="useIpns" :show-label="false">
+    <n-form-item v-if="!isUnique && showIpns" path="useIpns" :show-label="false" :show-feedback="false">
       <n-checkbox
         v-model:checked="collectionStore.form.behavior.useIpns"
         size="medium"
@@ -56,7 +71,7 @@
       />
     </n-form-item>
 
-    <n-grid class="items-end" :class="{ 'mt-8': !isUnique && showIpns }" :cols="12" :x-gap="32">
+    <n-grid class="items-end" :class="{ 'mt-8': !isUnique }" :cols="12" :x-gap="32">
       <!-- Collection Total supply -->
       <n-form-item-gi
         path="supplyLimited"
@@ -98,13 +113,13 @@
     <n-grid
       v-if="collectionStore.form.behavior.chainType === ChainType.EVM || isUnique"
       class="items-end"
-      :cols="12"
+      :cols="collectionStore.form.behavior.collectionType === NFTCollectionType.NESTABLE ? 8 : 12"
       :x-gap="32"
     >
       <!-- Collection Revocable -->
       <n-form-item-gi
         path="revocable"
-        :span="6"
+        :span="4"
         :label="infoLabel('revocable') as string"
         :label-props="{ for: 'revocable' }"
       >
@@ -120,7 +135,7 @@
       <!-- Collection Soulbound -->
       <n-form-item-gi
         path="soulbound"
-        :span="6"
+        :span="4"
         :label="infoLabel('soulbound') as string"
         :label-props="{ for: 'soulbound' }"
       >
@@ -128,6 +143,23 @@
           v-model:value="collectionStore.form.behavior.soulbound"
           :options="booleanSelect"
           :input-props="{ id: 'soulbound' }"
+          :placeholder="t('general.pleaseSelect')"
+          filterable
+        />
+      </n-form-item-gi>
+
+      <!-- Collection AutoIncrement -->
+      <n-form-item-gi
+        v-show="collectionStore.form.behavior.collectionType === NFTCollectionType.GENERIC"
+        path="isAutoIncrement"
+        :span="4"
+        :label="infoLabel('autoIncrement') as string"
+        :label-props="{ for: 'autoIncrement' }"
+      >
+        <select-options
+          v-model:value="collectionStore.form.behavior.isAutoIncrement"
+          :options="booleanSelect"
+          :input-props="{ id: 'autoIncrement' }"
           :placeholder="t('general.pleaseSelect')"
           filterable
         />
@@ -179,6 +211,7 @@
         <n-checkbox
           v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
+          id="drop"
           :label="infoLabel('drop') as string"
         />
       </n-form-item-gi>
@@ -269,7 +302,7 @@
 <script lang="ts" setup>
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
 import { Feature } from '~/lib/types/config';
-import { ChainType } from '~/lib/types/nft';
+import { ChainType, NFTCollectionType } from '~/lib/types/nft';
 import { isFeatureEnabled } from '~/lib/utils';
 
 defineProps({

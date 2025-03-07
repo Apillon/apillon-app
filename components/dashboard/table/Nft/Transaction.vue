@@ -7,6 +7,13 @@
     :data="data"
     :loading="collectionStore.loading"
     :pagination="pagination"
+    @update:page="(page: number) => (pagination.page = page)"
+    @update:page-size="
+      (pageSize: number) => {
+        pagination.page = 1;
+        pagination.pageSize = pageSize;
+      }
+    "
   />
 </template>
 
@@ -22,22 +29,7 @@ const NftTransactionStatus = resolveComponent('NftTransactionStatus');
 const NftTransactionType = resolveComponent('NftTransactionType');
 const TableLink = resolveComponent('TableLink');
 
-const pagination = reactive({
-  page: 1,
-  pageSize: PAGINATION_LIMIT,
-  showSizePicker: true,
-  pageSizes: enumValues(PageSize) as number[],
-  prefix({ itemCount }) {
-    return t('general.total', { total: itemCount });
-  },
-  onChange: (page: number) => {
-    pagination.page = page;
-  },
-  onUpdatePageSize: (pageSize: number) => {
-    pagination.page = 1;
-    pagination.pageSize = pageSize;
-  },
-});
+const pagination = reactive(createPagination(false));
 
 /** Data: filtered transactions */
 const data = computed<Array<TransactionInterface>>(() => {
@@ -55,9 +47,16 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       title: t('nft.transaction.chain'),
       minWidth: 120,
       render(row: TransactionInterface) {
-        return h('span', {}, {           
-          default: () => te(`nft.chain.${EvmChain[row.chainId]}`) ? t(`nft.chain.${EvmChain[row.chainId]}`): EvmChain[EvmChain[row.chainId]]
-         });
+        return h(
+          'span',
+          {},
+          {
+            default: () =>
+              te(`nft.chain.${EvmChain[row.chainId]}`)
+                ? t(`nft.chain.${EvmChain[row.chainId]}`)
+                : EvmChain[row.chainId],
+          }
+        );
       },
     },
     {

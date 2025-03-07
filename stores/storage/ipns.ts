@@ -8,12 +8,7 @@ export const useIpnsStore = defineStore('ipns', {
     loading: false,
     search: '',
     total: 0,
-    pagination: {
-      page: 1,
-      pageSize: PAGINATION_LIMIT,
-      pageCount: 1,
-      itemCount: 0,
-    },
+    pagination: createPagination(false),
   }),
   getters: {
     hasIpns(state): boolean {
@@ -25,17 +20,13 @@ export const useIpnsStore = defineStore('ipns', {
       /** Ipns */
       this.items = [] as Array<IpnsInterface>;
       this.search = '';
-      this.total = 0;
 
       this.updatePagination();
     },
 
-    updatePagination(page?: number) {
-      this.pagination.pageCount = Math.ceil(this.total / PAGINATION_LIMIT);
-      this.pagination.itemCount = this.total;
-      if (page && page > 0) {
-        this.pagination.page = page;
-      }
+    updatePagination(page = 1, total = 0) {
+      this.pagination.page = page;
+      this.pagination.itemCount = total;
     },
 
     /**
@@ -48,10 +39,7 @@ export const useIpnsStore = defineStore('ipns', {
       return this.items;
     },
 
-    async getIpnsFromList(
-      bucketUuid: string,
-      ipnsUuid: string
-    ): Promise<IpnsInterface | undefined> {
+    async getIpnsFromList(bucketUuid: string, ipnsUuid: string): Promise<IpnsInterface | undefined> {
       const IPNSs = await this.getIPNSs(bucketUuid);
       return IPNSs.find(item => item.ipns_uuid === ipnsUuid);
     },
@@ -81,7 +69,7 @@ export const useIpnsStore = defineStore('ipns', {
         /** Save timestamp to SS */
         sessionStorage.setItem(LsCacheKeys.IPNS, Date.now().toString());
 
-        this.updatePagination(parseInt(`${params?.page}`));
+        this.updatePagination(parseInt(`${params?.page}`), res.data.total);
         return res.data.items;
       } catch (error: any) {
         this.items = [] as Array<IpnsInterface>;
@@ -92,7 +80,7 @@ export const useIpnsStore = defineStore('ipns', {
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
-      this.updatePagination(args?.page || 1);
+      this.updatePagination();
       return [];
     },
 

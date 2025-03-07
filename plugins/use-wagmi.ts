@@ -1,7 +1,7 @@
 import { moonbeam, moonbaseAlpha } from '@wagmi/vue/chains';
 import { http, createConfig, WagmiPlugin, createStorage } from '@wagmi/vue';
 import { VueQueryPlugin } from '@tanstack/vue-query';
-import { metaMask, coinbaseWallet } from '@wagmi/vue/connectors';
+import { metaMask, coinbaseWallet, walletConnect } from '@wagmi/vue/connectors';
 
 export const wagmiConfig = createConfig({
   chains: [moonbeam, moonbaseAlpha],
@@ -14,6 +14,10 @@ export const wagmiConfig = createConfig({
       },
     }),
     coinbaseWallet({ appName: 'Apillon Coinbase wallet', appLogoUrl: '/favicon.png' }),
+    // walletConnect({
+    //   projectId: 'fefd3005e5f3b8fd2e73de5333eeccf9',
+    //   showQrModal: true,
+    // }),
   ],
   multiInjectedProviderDiscovery: false,
   storage: createStorage({ storage: window.sessionStorage }),

@@ -137,7 +137,7 @@
     </n-form-item>
   </n-form>
 
-  <AssetHubTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
+  <ModalTransaction v-if="txHash" :transactionHash="txHash" @close="$emit('close')" />
   <AssetHubLoader v-if="loading && assetHubClient?.txApproved" class="z-3000" />
 </template>
 

@@ -84,7 +84,7 @@ function checkUnfinishedChat() {
   }
 
   chatInterval = setInterval(async () => {
-    const chats = await chatStore.fetchChats(chatStore.pagination.page, false);
+    const chats = await chatStore.fetchChats(chatStore.pagination.page, chatStore.pagination.pageSize, false);
     const chat = chats.find(item => item.space_uuid === unfinishedChat.space_uuid);
     if (!chat || chat.status >= SocialStatus.ACTIVE) {
       clearInterval(chatInterval);

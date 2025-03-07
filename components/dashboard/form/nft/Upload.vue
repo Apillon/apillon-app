@@ -113,6 +113,7 @@
             :show-file-list="false"
             accept=".csv, application/vnd.ms-excel"
             class="w-full"
+            :input-props="{ id: 'csvFile' }"
             :custom-request="e => onCsvFileUpload(e)"
           >
             <Btn class="w-full" type="secondary">

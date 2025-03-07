@@ -5,7 +5,7 @@
     </template>
     <slot>
       <n-space v-if="collectionStore.hasCollectionArchive" class="pb-8" :size="32" vertical>
-        <ActionsNftCollection archive />
+        <ActionsNft archive />
         <TableNftCollection :collections="collectionStore.archive" archive />
       </n-space>
       <Empty

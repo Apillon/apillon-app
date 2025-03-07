@@ -5,6 +5,9 @@ body {
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /** Wallet connect */
+  --wcm-z-index: 3000;
 }
 
 #app .nuxt-icon svg {

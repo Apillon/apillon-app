@@ -12,12 +12,7 @@
   >
     <n-grid :cols="12" :x-gap="32">
       <!--  Collection name -->
-      <n-form-item-gi
-        :span="8"
-        path="name"
-        :label="infoLabel('name') as string"
-        :label-props="{ for: 'name' }"
-      >
+      <n-form-item-gi :span="8" path="name" :label="infoLabel('name') as string" :label-props="{ for: 'name' }">
         <n-input
           v-model:value="collectionStore.form.base.name"
           :input-props="{ id: 'name' }"
@@ -27,12 +22,7 @@
       </n-form-item-gi>
 
       <!--  Collection Symbol -->
-      <n-form-item-gi
-        :span="4"
-        path="symbol"
-        :label="infoLabel('symbol') as string"
-        :label-props="{ for: 'symbol' }"
-      >
+      <n-form-item-gi :span="4" path="symbol" :label="infoLabel('symbol') as string" :label-props="{ for: 'symbol' }">
         <n-input
           v-model:value="collectionStore.form.base.symbol"
           :minlength="1"
@@ -51,7 +41,11 @@
         :label-props="{ for: 'collectionLogo' }"
         :show-feedback="false"
       >
-        <FormNftCollectionUpload :image="collectionStore.form.base.logo || ({} as FileListItemType)" is-logo />
+        <FormNftCollectionUpload
+          id="collectionLogo"
+          :image="collectionStore.form.base.logo || ({} as FileListItemType)"
+          is-logo
+        />
       </n-form-item-gi>
 
       <!--  Collection cover image -->
@@ -62,7 +56,10 @@
         :label-props="{ for: 'coverImage' }"
         :show-feedback="false"
       >
-        <FormNftCollectionUpload :image="collectionStore.form.base.coverImage || ({} as FileListItemType)" />
+        <FormNftCollectionUpload
+          id="coverImage"
+          :image="collectionStore.form.base.coverImage || ({} as FileListItemType)"
+        />
       </n-form-item-gi>
     </n-grid>
 

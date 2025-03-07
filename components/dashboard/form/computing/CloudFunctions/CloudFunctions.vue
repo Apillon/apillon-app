@@ -144,7 +144,7 @@ async function updateCloudFunction() {
   loading.value = true;
 
   try {
-    const res = await $api.patch<JobResponse>(endpoints.cloudFunctions(props.functionUuid), formData.value);
+    const res = await $api.patch<CloudFunctionResponse>(endpoints.cloudFunctions(props.functionUuid), formData.value);
     cloudFunctionStore.items.forEach(item => {
       if (item.function_uuid === res.data.function_uuid) {
         Object.assign(item, res.data);

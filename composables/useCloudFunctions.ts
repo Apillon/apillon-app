@@ -127,7 +127,10 @@ export default function useCloudFunctions() {
       setJobStatus(data?.file?.name);
 
       const fileCid = await uploadFile(data.file);
-      if (!fileCid) return null;
+      if (!fileCid) {
+        setJobStatus(null);
+        return null;
+      }
 
       const bodyData = {
         project_uuid: dataStore.projectUuid,

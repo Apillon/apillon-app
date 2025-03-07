@@ -123,6 +123,18 @@
             </span>
           </td>
         </tr>
+        <tr v-show="collectionStore.form.behavior.collectionType === NFTCollectionType.GENERIC">
+          <td>{{ $t('form.label.collection.autoIncrement') }}:</td>
+          <td>
+            <span class="text-white">
+              {{
+                collectionStore.form.behavior.isAutoIncrement
+                  ? $t('form.booleanSelect.true')
+                  : $t('form.booleanSelect.false')
+              }}
+            </span>
+          </td>
+        </tr>
         <tr>
           <td>{{ $t('form.label.collection.royaltiesFees') }}:</td>
           <td>
@@ -175,7 +187,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChainType } from '~/lib/types/nft';
+import { ChainType, NFTCollectionType } from '~/lib/types/nft';
 import { timestampToDateAndTime } from '~/lib/utils/dates';
 
 const collectionStore = useCollectionStore();

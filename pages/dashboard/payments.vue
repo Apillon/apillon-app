@@ -68,33 +68,15 @@ const loading = ref<boolean>(true);
 onMounted(async () => {
   await dataStore.waitOnPromises();
 
-  const promises: Promise<any>[] = [];
-
-  promises.push(
-    new Promise<void>(resolve => {
-      paymentStore.getActiveSubscription().then(() => resolve());
-    })
-  );
-  promises.push(
-    new Promise<void>(resolve => {
-      paymentStore.getSubscriptionPackages().then(() => resolve());
-    })
-  );
-  promises.push(
-    new Promise<void>(resolve => {
-      paymentStore.getCreditPackages().then(() => resolve());
-    })
-  );
-  promises.push(
-    new Promise<void>(resolve => {
-      storageStore.getStorageInfo().then(() => resolve());
-    })
-  );
-
-  await Promise.all(promises);
-  creditsMessage();
-  subscriptionMessage();
+  await Promise.all([
+    paymentStore.getActiveSubscription(),
+    paymentStore.getSubscriptionPackages(),
+    paymentStore.getCreditPackages(),
+    storageStore.getStorageInfo(),
+  ]);
 
   loading.value = false;
+  creditsMessage();
+  subscriptionMessage();
 });
 </script>
