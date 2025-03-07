@@ -284,17 +284,17 @@ function checkIfCollectionUnfinished() {
   clearInterval(collectionInterval);
   collectionInterval = setInterval(async () => {
     const collection = await collectionStore.fetchCollection(collectionUuid.value);
-    await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
     if (!collection || collection.collectionStatus >= CollectionStatus.DEPLOYED) {
       if (collection) {
         collectionStore.active = collection;
+        await collectionStore.fetchCollectionTransactions(collectionStore.active.collection_uuid, false);
       }
       clearInterval(collectionInterval);
 
       /** On collection deploy, start transaction polling */
       checkUnfinishedTransactions();
     }
-  }, 30000);
+  }, 10000);
 }
 
 /** Transactions polling */
@@ -322,7 +322,7 @@ function checkUnfinishedTransactions() {
         collectionStore.active = newCollection;
       }
     }
-  }, 30000);
+  }, 10000);
 }
 
 function openModalAddNfts() {

@@ -37,10 +37,17 @@
           :instructions="[t('nft.collection.instruction.smartContract')]"
         >
           <template #headerExtra>
-            <div class="flex items-center gap-2 text-2xl">
+            <NuxtIcon
+              v-if="collectionStore.form.behavior.chain"
+              :name="`logo/${chainIdToName(collectionStore.form.behavior.chain)}`"
+              class="icon-auto text-2xl"
+              filled
+            />
+            <div v-else class="flex items-center gap-2 text-2xl">
               <NuxtIcon name="logo/moonbase" class="icon-auto" filled />
               <NuxtIcon name="logo/moonbeam" class="icon-auto" filled />
               <NuxtIcon name="logo/astar" class="icon-auto" filled />
+              <NuxtIcon name="logo/unique" class="icon-auto" filled />
             </div>
           </template>
           <FormNftCollectionBehavior
@@ -62,7 +69,9 @@
         </Modal>
       </div>
 
-      <ModalLeaving v-if="collectionStore.stepCollectionDeploy < CollectionStatus.DEPLOYED" />
+      <ModalLeaving
+        v-if="collectionStore.stepCollectionDeploy < CollectionStatus.DEPLOYED && !collectionStore.metadataStored"
+      />
       <ModalSuccess
         v-if="!isUnique && collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOYED"
         :title="$t('form.success.created.nftCollection')"
@@ -83,7 +92,8 @@
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
 import { useMessage } from 'naive-ui';
-import { CollectionStatus, EvmChainMainnet } from '~/lib/types/nft';
+import { chainIdToName } from '~/lib/utils/helpers';
+import { CollectionStatus } from '~/lib/types/nft';
 
 const { t, te } = useI18n();
 const { isLg } = useScreen();

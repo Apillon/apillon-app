@@ -24,10 +24,17 @@
         :instructions="[t('nft.collection.instruction.smartContract')]"
       >
         <template #headerExtra>
-          <div class="flex items-center gap-4 text-2xl">
+          <NuxtIcon
+            v-if="collectionStore.form.behavior.chain"
+            :name="`logo/${chainIdToName(collectionStore.form.behavior.chain)}`"
+            class="icon-auto text-2xl"
+            filled
+          />
+          <div v-else class="flex items-center gap-2 text-2xl">
             <NuxtIcon name="logo/moonbase" class="icon-auto" filled />
             <NuxtIcon name="logo/moonbeam" class="icon-auto" filled />
             <NuxtIcon name="logo/astar" class="icon-auto" filled />
+            <NuxtIcon name="logo/unique" class="icon-auto" filled />
           </div>
         </template>
 
@@ -55,7 +62,7 @@
         <n-form-item path="behavior.chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
           <select-options
             v-model:value="collectionStore.form.behavior.chain"
-            :options="nftChains"
+            :options="chains"
             :input-props="{ id: 'chain' }"
             :placeholder="t('general.pleaseSelect')"
             filterable
@@ -301,8 +308,6 @@
               v-model:value="collectionStore.form.behavior.dropStart"
               class="w-full"
               type="datetime"
-              :is-date-disabled="disablePastDate"
-              :is-time-disabled="disablePastTime"
               clearable
             />
           </n-form-item-gi>
@@ -363,7 +368,8 @@
 import { useTemplateRef } from 'vue';
 import { Feature } from '~/lib/types/config';
 import { isFeatureEnabled } from '~/lib/utils';
-import { EvmChain, ChainType, EvmChainMainnet, NFTCollectionType } from '~/lib/types/nft';
+import { chainIdToName } from '~/lib/utils/helpers';
+import { ChainType, EvmChainMainnet, NFTCollectionType } from '~/lib/types/nft';
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
 
 const emit = defineEmits(['submitSuccess']);
@@ -373,6 +379,7 @@ const router = useRouter();
 const message = useMessage();
 
 const authStore = useAuthStore();
+const paymentStore = usePaymentStore();
 const warningStore = useWarningStore();
 const collectionStore = useCollectionStore();
 
@@ -381,6 +388,7 @@ const { labelInfo } = useComputing();
 const { getPriceServiceName } = useNft();
 const {
   booleanSelect,
+  enterpriseChainIDs,
   nftChains,
   chainTypes,
   collectionTypes,
@@ -392,8 +400,6 @@ const {
   isUnique,
   chainCurrency,
   collectionEndpoint,
-  disablePastDate,
-  disablePastTime,
   onChainChange,
   prepareFormData,
   resetAll,
@@ -411,6 +417,11 @@ const metadataUri = computed<string>(() => {
       ? baseUri + '/1.' + t('nft.collection.extension')
       : '';
 });
+
+const hiddenChain = (chainId: number) =>
+  !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
+
+const chains = computed(() => nftChains.filter(c => !hiddenChain(c.value)));
 
 watch(
   () => collectionStore.form.behavior.chain,

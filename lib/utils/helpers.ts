@@ -153,6 +153,14 @@ export function generatePriceServiceName(service: string, chain: number, action:
 /**
  * Crypto
  */
+export function chainIdToName(id: number) {
+  if (id in EvmChain) {
+    return EvmChain[id].toLowerCase();
+  } else if (id in SubstrateChain) {
+    return SubstrateChain[id].toLowerCase();
+  }
+  return '';
+}
 
 export function contractLink(contractAddress?: string | null, chainId?: number): string {
   return contractAddress ? `${chainRpc(chainId)}address/${contractAddress}` : '';
