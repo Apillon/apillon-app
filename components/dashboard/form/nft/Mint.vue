@@ -78,7 +78,6 @@ type FormNftMint = {
 
 const props = defineProps({
   collection: { type: Object as PropType<CollectionInterface>, required: true },
-  chainId: { type: Number, required: true },
 });
 const emit = defineEmits(['submitSuccess']);
 
@@ -164,7 +163,7 @@ const handleScroll = (e: Event) => {
 onMounted(async () => {
   if (!props.collection.isAutoIncrement) {
     if (props.collection.contractAddress) {
-      mintedTokens.value = await getAllTokens(props.collection.contractAddress, props.chainId);
+      mintedTokens.value = await getAllTokens(props.collection.contractAddress, props.collection.chain);
     }
 
     if (props.collection.maxSupply) {
@@ -194,7 +193,11 @@ function handleSubmit(e: Event | MouseEvent) {
     if (errors) {
       errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
-      const priceServiceName = generatePriceServiceName(ServiceTypeName.NFT, props.chainId, PriceServiceAction.MINT);
+      const priceServiceName = generatePriceServiceName(
+        ServiceTypeName.NFT,
+        props.collection.chain,
+        PriceServiceAction.MINT
+      );
       warningStore.showSpendingWarning(priceServiceName, () => mint());
     }
   });
