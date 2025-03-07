@@ -90,11 +90,7 @@
 
       <!-- Modal - Collection Mint -->
       <modal v-model:show="modalMintCollectionVisible" class="dropdown-grid" :title="t('nft.collection.mint')">
-        <FormNftMint
-          :collection="collectionStore.active"
-          :chain-id="collectionStore.active.chain"
-          @submit-success="onNftMinted"
-        />
+        <FormNftMint :collection="collectionStore.active" @submit-success="onNftMinted" />
       </modal>
 
       <!-- Modal - Collection Nest Mint -->
@@ -108,11 +104,7 @@
 
       <!-- Modal - Burn Tokens -->
       <modal v-model:show="modalBurnTokensVisible" :title="$t('nft.collection.burn.title')">
-        <FormNftBurn
-          :collection-uuid="collectionStore.active.collection_uuid"
-          :chain-id="collectionStore.active.chain"
-          @submit-success="onNftBurned"
-        />
+        <FormNftBurn :collection="collectionStore.active" @submit-success="onNftBurned" />
       </modal>
 
       <!-- Modal - Collection Transfer -->
