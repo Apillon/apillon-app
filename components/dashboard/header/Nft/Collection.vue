@@ -9,6 +9,13 @@
           {{ t('nft.collection.title') }}:
           <span class="capitalize">{{ chainIdToName(collectionStore.form.behavior.chain).replace('_', ' ') }}</span>
         </h2>
+        <h2 v-else-if="collectionStore.active.chain && collectionStore.active.name">
+          {{ collectionStore.active.name }}
+          <small
+            >(<span class="capitalize">{{ chainIdToName(collectionStore.active.chain).replace('_', ' ') }}</span
+            >)</small
+          >
+        </h2>
         <h2 v-else>{{ t('dashboard.solution.nftCollection.name') }}</h2>
       </n-space>
     </slot>
