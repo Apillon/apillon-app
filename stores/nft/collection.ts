@@ -26,7 +26,7 @@ export const useCollectionStore = defineStore('collection', {
     amount: 0,
     stepCollectionCreate: CollectionCreateStep.METADATA,
     stepCollectionDeploy: CollectionStatus.CREATED,
-    stepMetadata: NftMetadataStep.CHAIN,
+    stepMetadata: NftMetadataStep.CSV,
     stepUpload: NftUploadStep.FILE,
     total: 0,
     transaction: [] as TransactionInterface[],
@@ -127,7 +127,6 @@ export const useCollectionStore = defineStore('collection', {
       this.metadata = [] as Array<Record<string, any>>;
     },
     resetImages() {
-      this.images.forEach(img => img.onError());
       while (this.images.length > 0) {
         this.images.pop();
       }

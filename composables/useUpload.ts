@@ -78,12 +78,10 @@ export default function useUpload() {
 
     /** Files data for upload params */
     const filesUpload: Array<UploadFileType> = fileList.value.map(file => {
-      file.path = fileFolderPath(file?.fullPath || '', wrapFilesToDirectory);
-
       return {
         fileName: file.name,
         contentType: file.type || getExtension(file.name),
-        path: file.path,
+        path: fileFolderPath(file.path || '', wrapFilesToDirectory),
       };
     });
 
@@ -239,7 +237,7 @@ export default function useUpload() {
       if (clearFileList.value) {
         fileList.value.forEach(item => {
           if (item.status !== FileUploadStatusValue.FINISHED) {
-            item.onError();
+            item?.onError();
           }
         });
         while (fileList.value.length > 0) {

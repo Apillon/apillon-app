@@ -101,7 +101,11 @@ export const themeOverrides: GlobalThemeOverrides = {
     paddingMedium: '8px 24px',
     paddingSmall: '6px 16px',
     paddingTiny: '1px',
-    textColorHover: 'inherit',
+    textColorGhostHover: 'inherit',
+    textColorGhostHoverInfo: 'inherit',
+    textColorGhostHoverSuccess: 'inherit',
+    textColorGhostHoverPrimary: 'initial',
+    textColorGhostHoverWarning: 'initial',
     textColorInfo: colors.bg.DEFAULT,
     textColorFocus: colors.white.DEFAULT,
     textColorError: colors.pink,
@@ -177,6 +181,7 @@ export const themeOverrides: GlobalThemeOverrides = {
   },
   Drawer: {
     color: colors.bg.DEFAULT,
+    textColor: colors.white.DEFAULT,
     headerBorderBottom: `1px solid ${colors.bg.lighter}`,
   },
   Dropdown: {

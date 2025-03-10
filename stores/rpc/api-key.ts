@@ -74,6 +74,7 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
 
     async fetchRpcApiKeyUsage(showLoader: boolean = true) {
       const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
       if (!dataStore.projectUuid) return;
 
       this.loading = showLoader;
@@ -92,6 +93,7 @@ export const useRpcApiKeyStore = defineStore('rpc-api-key', {
 
     async fetchRpcApiKeyUsagePerChain(showLoader: boolean = true) {
       const dataStore = useDataStore();
+      await dataStore.waitOnPromises(false);
       if (!dataStore.projectUuid) return;
 
       this.loading = showLoader;

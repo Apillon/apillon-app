@@ -1,30 +1,65 @@
 <template>
-  <div v-bind="$attrs" class="flex items-center justify-center">
-    <div
-      class="w-full text-center"
-      :class="collectionStore.stepUpload === NftUploadStep.PREVIEW ? 'self-start' : 'max-w-lg'"
-    >
+  <div class="flex h-full flex-col gap-x-12 md:flex-row">
+    <div class="md:w-1/2">
+      <!-- Upload/Confirm CSV -->
+      <h4>{{ $t('nft.upload.titleCsv') }}</h4>
+      <p class="mb-6">
+        {{ $t('nft.upload.infoFile') }}
+      </p>
+
+      <strong class="text-sm">{{ $t('nft.step', { step: 1 }) }}</strong>
+      <p class="mb-6">
+        <span class="mr-1 inline-block">{{ $t('nft.upload.csvHelp') }}</span>
+        <Btn type="link" href="/files/example.csv">
+          {{ $t('nft.upload.downloadCsv') }}
+        </Btn>
+        <span class="mx-1 inline-block">{{ $t('general.or') }}</span>
+        <Btn type="link" href="https://wiki.apillon.io/web3-services/4-nfts.html">
+          {{ $t('general.learnMore') }}
+        </Btn>
+      </p>
+      <n-upload
+        v-if="!collectionStore.hasCsvFile"
+        :show-file-list="false"
+        accept=".csv, application/vnd.ms-excel"
+        :input-props="{ id: 'csvFile' }"
+        :custom-request="e => onCsvFileUpload(e)"
+      >
+        <Btn type="secondary">
+          {{ $t('nft.upload.csvFile') }}
+        </Btn>
+      </n-upload>
+      <template v-else>
+        <div class="flex">
+          <div class="card flex h-9 flex-1 items-center gap-2 rounded-lg px-4 py-2 text-xs">
+            <IconSuccess />
+            <strong>{{ collectionStore.csvFile.name }}</strong>
+          </div>
+          <button class="ml-4 flex h-9 w-9 items-center justify-center p-3" @click="collectionStore.resetFile()">
+            <span class="icon-delete text-xl"></span>
+          </button>
+        </div>
+        <Notification v-if="!hasRequiredMetadata" type="error" class="mt-4">
+          {{ $t('nft.validation.fileInvalid') }}
+        </Notification>
+      </template>
+
       <!-- Upload Img -->
-      <template v-if="collectionStore.stepUpload === NftUploadStep.IMAGES">
-        <h2>{{ $t('nft.upload.titleImage') }}</h2>
-        <p class="whitespace-pre-line text-body">
+      <template v-if="collectionStore.hasCsvFile && hasRequiredMetadata">
+        <strong class="mt-6 inline-block">{{ $t('nft.step', { step: 2 }) }}</strong>
+        <p class="mb-6 mt-2">
           {{ $t('nft.upload.infoImages') }}
         </p>
-        <p class="mb-6">
-          <Btn type="builders" size="tiny" href="https://wiki.apillon.io/web3-services/4-nfts.html">
-            {{ $t('general.learnMore') }}
-          </Btn>
-        </p>
         <n-upload
+          v-if="!allImagesUploaded"
           ref="uploadRef"
           accept="image/*"
-          :default-file-list="collectionStore.images"
+          :file-list="collectionStore.images"
           :show-file-list="false"
-          :max="nft.dataImagesNames.value.length"
           multiple
           directory-dnd
-          :custom-request="upload => nft.uploadImageRequest(upload, !isUnique)"
-          @remove="nft.handleImageRemove"
+          @change="upload => uploadImageRequest(upload, !isUnique)"
+          @remove="handleImageRemove"
         >
           <n-upload-dragger class="h-40">
             <div class="py-2 text-center">
@@ -32,136 +67,48 @@
                 <span class="icon-image text-2xl text-violet"></span>
               </div>
 
-              <h4 class="mb-1">{{ $t('nft.upload.images') }}</h4>
-              <span class="text-body">{{ $t('nft.upload.dragAndDrop') }}</span>
+              <strong class="mb-1 block">{{ $t('nft.upload.images') }}</strong>
+              <span class="text-white-terciary">{{ $t('nft.upload.dragAndDrop') }}</span>
             </div>
           </n-upload-dragger>
         </n-upload>
-        <div v-if="collectionStore.hasImages" class="mt-5 flex text-left">
-          <div class="card w-full px-4 py-[10px]">
-            <span class="icon-image mr-3 align-sub text-xl"></span>
-            <span>{{ collectionStore.images.length }}</span>
-            &nbsp;
-            <span>{{ $t('general.images') }}</span>
+        <div v-if="collectionStore.hasImages" class="mt-5 flex">
+          <div class="card flex h-9 flex-1 items-center gap-2 rounded-lg px-4 py-2 text-xs">
+            <IconSuccess v-if="allImagesUploaded" />
+            <strong>{{ collectionStore.images.length }}</strong>
+            <strong>{{ $t('general.images') }}</strong>
           </div>
-          <div class="">
-            <button class="ml-4 flex h-12 w-12 items-center justify-center p-3" @click="removeImages()">
-              <span class="icon-delete text-xl"></span>
-            </button>
-          </div>
+          <button class="ml-4 flex h-9 w-9 items-center justify-center p-3" @click="removeImages()">
+            <span class="icon-delete text-xl"></span>
+          </button>
         </div>
 
         <n-space class="mb-8 mt-5" :size="20" justify="space-between" vertical>
-          <Notification v-if="nft.loadingImages.value" type="info" class="overflow-hidden">
-            {{ $t('storage.file.uploading') }}: ({{ collectionStore.images.length }}/{{
-              nft.dataImagesNames.value.length
-            }})
+          <Notification v-if="loadingImages" type="info" class="overflow-hidden">
+            {{ $t('storage.file.uploading') }}: ({{ collectionStore.images.length }}/{{ dataImagesNames.length }})
           </Notification>
           <Notification
-            v-else-if="collectionStore.hasImages && !nft.allImagesUploaded.value"
+            v-else-if="collectionStore.hasImages && !allImagesUploaded"
             type="error"
             class="overflow-hidden"
           >
-            {{ $t('nft.validation.imagesMissing') }} {{ nft.missingImages }}
+            {{ $t('nft.validation.imagesMissing') }} {{ missingImages }}
           </Notification>
-          <Btn
-            type="primary"
-            size="large"
-            :loading="nft.loadingImages.value"
-            :disabled="!collectionStore.hasImages || !nft.allImagesUploaded.value"
-            @click="goToPreview"
-          >
-            {{ $t('nft.upload.previewNfts') }}
-          </Btn>
         </n-space>
       </template>
-
-      <template v-else-if="collectionStore.stepUpload === NftUploadStep.ATTRIBUTES">
-        <h2>{{ $t('nft.upload.attributes') }}</h2>
-        <p class="whitespace-pre-line text-body">
-          {{ $t('nft.upload.attributesInfo') }}
-        </p>
-        <NftMetadataAttributes class="mb-8" />
-        <div class="-ml-2 flex items-center justify-between gap-4 px-2">
-          <Btn type="secondary" class="w-1/2" @click="collectionStore.stepUpload = NftUploadStep.FILE">
-            {{ $t('form.goBack') }}
-          </Btn>
-          <Btn class="w-1/2" @click="createMetadata">
-            {{ $t('nft.upload.csvConfirmAttributes') }}
-          </Btn>
-        </div>
-      </template>
-
-      <!-- Upload/Confirm CSV -->
-      <template v-else>
-        <h2>{{ $t('nft.upload.titleCsv') }}</h2>
-        <p class="whitespace-pre-line text-body">
-          {{ $t('nft.upload.infoFile') }}
-        </p>
-        <p class="mb-6 whitespace-pre-line text-body">
-          <Btn type="builders" size="tiny" href="https://wiki.apillon.io/web3-services/4-nfts.html">
-            {{ $t('general.learnMore') }}
-          </Btn>
-          <span class="mx-1 inline-block">{{ $t('general.or') }}</span>
-          <Btn type="builders" size="tiny" href="/files/example.csv">
-            {{ $t('nft.upload.downloadCsv') }}
-          </Btn>
-        </p>
-        <div v-if="!collectionStore.hasCsvFile" class="flex">
-          <n-upload
-            v-if="!collectionStore.hasCsvFile"
-            :show-file-list="false"
-            accept=".csv, application/vnd.ms-excel"
-            class="w-full"
-            :input-props="{ id: 'csvFile' }"
-            :custom-request="e => onCsvFileUpload(e)"
-          >
-            <Btn class="w-full" type="secondary">
-              {{ $t('nft.upload.csvFile') }}
-            </Btn>
-          </n-upload>
-          <IconInfo :tooltip="$t('form.label.collection.labelInfo.csvUpload')" size="lg" />
-        </div>
-        <template v-else>
-          <div class="flex text-left">
-            <div class="card flex-1 rounded-lg px-4 py-2">
-              <span class="icon-file mr-3 align-sub text-xl"></span>
-              <span>{{ collectionStore.csvFile.name }}</span>
-            </div>
-            <div class="">
-              <button class="ml-4 flex h-12 w-12 items-center justify-center p-3" @click="collectionStore.resetFile()">
-                <span class="icon-delete text-xl"></span>
-              </button>
-            </div>
-          </div>
-          <Notification v-if="!nft.hasRequiredMetadata.value" type="error" class="mt-4 text-left">
-            {{ $t('nft.validation.fileInvalid') }}
-          </Notification>
-        </template>
-
-        <Btn
-          class="mb-8 mt-10"
-          size="large"
-          type="primary"
-          :disabled="!collectionStore.hasCsvFile || !nft.hasRequiredMetadata.value"
-          @click="openAttributes"
-        >
-          {{ $t('form.proceed') }}
-        </Btn>
-      </template>
     </div>
-
-    <Modal v-model:show="modalMetadataAttributesVisible" :title="$t('nft.upload.attributes')">
-      <div class="-mt-4">
-        <p class="mb-2 whitespace-pre-line text-body">
+    <div class="relative h-full">
+      <div class="absolute bottom-8 top-8 border-l border-bg-lighter"></div>
+    </div>
+    <div class="md:w-1/2">
+      <div v-if="collectionStore.hasCsvFile && hasRequiredMetadata && allImagesUploaded" class="">
+        <h4>{{ $t('nft.upload.attributes') }}</h4>
+        <p class="mb-2">
           {{ $t('nft.upload.attributesInfo') }}
         </p>
         <NftMetadataAttributes />
-        <Btn class="float-right" type="primary" @click="createMetadata">
-          {{ $t('nft.upload.csvConfirmAttributes') }}
-        </Btn>
       </div>
-    </Modal>
+    </div>
   </div>
 </template>
 
@@ -173,26 +120,29 @@ const props = defineProps({
   modal: { type: Boolean, default: false },
 });
 
-const nft = useNft();
 const collectionStore = useCollectionStore();
 const { isUnique, openAddNft } = useCollection();
+const {
+  allImagesUploaded,
+  dataImagesNames,
+  hasRequiredMetadata,
+  loadingImages,
+  missingImages,
+  createNftData,
+  handleImageRemove,
+  parseUploadedFile,
+  uploadFileRequest,
+  uploadImageRequest,
+} = useNft();
 
 const uploadRef = ref<UploadInst | null>(null);
 const modalMetadataAttributesVisible = ref<boolean>(false);
 
 onMounted(() => {
   if (!!collectionStore.csvFile?.file && !collectionStore.csvData) {
-    nft.parseUploadedFile(collectionStore.csvFile.file);
+    parseUploadedFile(collectionStore.csvFile.file);
   }
 });
-
-function openAttributes() {
-  if (props.modal) {
-    collectionStore.stepUpload = NftUploadStep.ATTRIBUTES;
-  } else {
-    modalMetadataAttributesVisible.value = true;
-  }
-}
 
 function goToPreview() {
   if (props.modal) {
@@ -202,28 +152,23 @@ function goToPreview() {
 }
 
 function createMetadata() {
-  collectionStore.metadata = nft.createNftData();
+  collectionStore.metadata = createNftData();
   collectionStore.stepUpload = NftUploadStep.IMAGES;
   modalMetadataAttributesVisible.value = false;
 }
 
 function startLoader() {
   if (
-    (collectionStore.csvData?.length || 0) > nft.dataImagesNames.value.length ||
-    collectionStore.images.length < nft.dataImagesNames.value.length
+    (collectionStore.csvData?.length || 0) > dataImagesNames.value.length ||
+    collectionStore.images.length < dataImagesNames.value.length
   ) {
-    nft.loadingImages.value = true;
+    loadingImages.value = true;
   }
 }
 
 function onCsvFileUpload(event: UploadCustomRequestOptions) {
   removeImages();
-  nft.uploadFileRequest(event);
-}
-
-function onUploadChange(options: FileUploadOptions) {
-  nft.handleImageChange(options);
-  startLoader();
+  uploadFileRequest(event);
 }
 
 function removeImages() {

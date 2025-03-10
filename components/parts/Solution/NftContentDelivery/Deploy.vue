@@ -120,11 +120,7 @@ const data = [
 ];
 
 async function createContract() {
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-
-    if (!dataStore.projectUuid) return;
-  }
+  if (!dataStore.projectUuid) return;
 
   step.value = EncryptDeployTab.DEPLOYING;
 

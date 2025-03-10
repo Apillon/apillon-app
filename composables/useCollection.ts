@@ -307,7 +307,7 @@ export default function useCollection() {
   function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptions, logo: boolean) {
     const uploadedFile: FileListItemType = {
       ...file,
-      fullPath: file.fullPath,
+      path: file.fullPath,
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),

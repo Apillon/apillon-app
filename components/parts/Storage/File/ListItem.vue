@@ -28,6 +28,7 @@
 </template>
 
 <script lang="ts" setup>
+import { FileUploadStatusValue } from '~/lib/types/storage';
 import { colors } from '~/tailwind.config';
 
 const props = defineProps({

@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto" :class="collectionStore.stepMetadata <= NftMetadataStep.NEW ? 'max-w-lg' : 'max-w-6xl'">
+  <div class="mx-auto h-full" :class="collectionStore.stepMetadata <= NftMetadataStep.NEW ? 'max-w-lg' : 'max-w-6xl'">
     <FormNftCollectionNetworkSelect v-if="collectionStore.stepMetadata === NftMetadataStep.CHAIN" />
     <FormNftMetadataSelect
       v-else-if="collectionStore.stepMetadata === NftMetadataStep.METADATA"

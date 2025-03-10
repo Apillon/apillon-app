@@ -16,13 +16,15 @@ export const colors = {
 
   body: '#9D9E91',
   bodyDark: '#6A6B63',
-  hover: '#999999',
+  disabled: '#999',
+  hover: '#999',
   placeholder: '#B6B6AF',
 
   white: {
     DEFAULT: '#F5F5EE',
     primary: '#F0F2DA',
     secondary: '#D5D7C1',
+    terciary: '#B6B6AF',
   },
 
   bg: {

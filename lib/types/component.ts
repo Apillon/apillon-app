@@ -40,15 +40,15 @@ declare global {
     iconName?: string;
   }
 
-  interface FileListItemType extends UploadSettledFileInfo {
-    path?: string;
+  interface FileListItemType extends UploadFileInfo {
+    path: string | null;
     percentage: number;
     progress?: any;
     size: number;
     timestamp: number;
     uploadSpeed?: number;
-    onFinish: any;
-    onError: any;
+    onFinish?: any;
+    onError?: any;
     file_uuid?: string;
   }
 

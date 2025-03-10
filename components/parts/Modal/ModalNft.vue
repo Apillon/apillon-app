@@ -6,7 +6,7 @@
           <span v-if="key > 0 && $te(`nft.collection.createStep.${step}`)" class="card-border w-3"></span>
           <strong
             v-if="$te(`nft.collection.createStep.${step}`)"
-            :class="{ 'text-yellow': step === collectionStore.stepCollectionCreate }"
+            :class="step === collectionStore.stepCollectionCreate ? 'text-yellow' : 'text-disabled'"
           >
             {{ $t(`nft.collection.createStep.${step}`) }}
           </strong>
@@ -32,8 +32,9 @@
             size="small"
             type="secondary"
             @click="back"
-            >{{ $t('general.back') }}</Btn
           >
+            {{ $t('general.back') }}
+          </Btn>
           <Btn size="small" @click="nextStep">{{ $t('form.continue') }}</Btn>
         </div>
       </div>
@@ -46,7 +47,7 @@ import { useTemplateRef } from 'vue';
 import { enumValues } from '~/lib/utils';
 import { CollectionCreateStep, NftMetadataStep } from '~/lib/types/nft';
 
-const { t } = useI18n();
+const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
 
 const metadataRef = useTemplateRef('metadataRef');
@@ -69,6 +70,10 @@ const progress = computed(() => {
     }
   }
   return baseProgress;
+});
+
+onMounted(() => {
+  storageStore.getStorageInfo();
 });
 
 function back() {

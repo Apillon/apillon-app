@@ -139,17 +139,9 @@ function handleSubmit(e: Event | MouseEvent) {
 }
 
 async function createDeployConfig() {
+  if (!dataStore.projectUuid || !websiteStore.active) return;
+
   loading.value = true;
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-
-    if (!dataStore.projectUuid) return;
-  }
-
-  if (!websiteStore.active) {
-    return;
-  }
-
   try {
     const bodyData = {
       websiteUuid: websiteStore.active.website_uuid,

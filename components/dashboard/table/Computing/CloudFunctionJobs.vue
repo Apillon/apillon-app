@@ -24,10 +24,7 @@
   </modal>
 
   <!-- Modal - Delete Job -->
-  <ModalDelete
-    v-model:show="modalDeleteJobsVisible"
-    :title="$t('computing.cloudFunctions.job.delete')"
-  >
+  <ModalDelete v-model:show="modalDeleteJobsVisible" :title="$t('computing.cloudFunctions.job.delete')">
     <template #content>
       <p>
         {{ $t(`storage.delete.deleteConfirm`, { num: 1 }) }}
@@ -172,9 +169,7 @@ const dropdownOptions = computed(() => {
       props: {
         onClick: () => {
           if (actionsEnabled.value && currentRow.value) {
-            warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_CREATE, () =>
-              redeploy(currentRow.value)
-            );
+            warningStore.showSpendingWarning(PriceServiceName.COMPUTING_JOB_CREATE, () => redeploy(currentRow.value));
           }
         },
       },
@@ -205,14 +200,9 @@ const rowProps = (row: JobInterface) => {
 };
 
 async function redeploy(job?: JobInterface) {
-  if (!job) return;
+  if (!dataStore.projectUuid || !job) return;
 
   loadingRedeploy.value = true;
-
-  if (!dataStore.hasProjects) {
-    await dataStore.fetchProjects();
-    if (!dataStore.projectUuid) return;
-  }
 
   try {
     const bodyData = {
@@ -222,10 +212,7 @@ async function redeploy(job?: JobInterface) {
       slots: job.slots,
       scriptCid: job.scriptCid,
     };
-    const res = await $api.post<JobResponse>(
-      endpoints.cloudFunctionJobs(job.function_uuid),
-      bodyData
-    );
+    const res = await $api.post<JobResponse>(endpoints.cloudFunctionJobs(job.function_uuid), bodyData);
     cloudFunctionStore.addJob(res.data);
     setTimeout(() => checkUnfinishedJobs(), 500);
 

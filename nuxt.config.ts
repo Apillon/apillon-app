@@ -62,6 +62,10 @@ export default defineNuxtConfig({
 
     optimizeDeps: {
       include: process.env.NODE_ENV === 'development' ? ['naive-ui'] : [],
+      exclude:
+        process.env.NODE_ENV === 'development'
+          ? ['uuid', 'viem/chains', 'swiper/vue', 'swiper/modules', '@subsocial/grill-widget', 'vue3-code-block']
+          : [],
     },
   },
 

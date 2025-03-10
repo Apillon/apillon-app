@@ -66,7 +66,7 @@
         <StorageFileListItem
           :id="file.id"
           :name="file.name"
-          :full-path="file.fullPath || ''"
+          :full-path="file.path || file.fullPath || ''"
           :percentage="file.percentage"
           :status="file.status"
           @remove-file="removeFileFromFileList"
@@ -222,7 +222,7 @@ async function upload() {
 function clearFileList(refreshDirectoryContent: boolean = false) {
   bucketStore.uploadFileList.forEach(item => {
     if (item.status !== FileUploadStatusValue.FINISHED) {
-      item.onError();
+      item?.onError();
     }
   });
   bucketStore.uploadFileList = [] as Array<FileListItemType>;
@@ -238,7 +238,7 @@ function clearFileList(refreshDirectoryContent: boolean = false) {
 function removeFileFromFileList(fileId: string) {
   bucketStore.uploadFileList.forEach(item => {
     if (item.id === fileId) {
-      item.onError();
+      item?.onError();
     }
   });
   bucketStore.uploadFileList = bucketStore.uploadFileList.filter(item => item.id !== fileId);

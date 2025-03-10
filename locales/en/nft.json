@@ -409,13 +409,14 @@
     "upload": {
       "avatar": "Upload avatar",
       "addNft": "Add NFT",
-      "attributes": "Metadata attributes",
-      "attributesInfo": "Attributes represents a crucial trait of NFTs and are a part of metadata that communicates detailed features of NFT contents.",
+      "attributes": "Review metadata attributes",
+      "attributesInfo": "Attributes are key traits of NFTs, forming part of the metadata that defines their unique characteristics. Which ones would you like to include?",
       "cover": "Upload cover image",
       "csvConfirm": "Confirm CSV data",
       "csvConfirmAttributes": "Confirm attributes",
       "csvFile": "Select CSV file",
       "csvFileDesc": "",
+      "csvHelp": "Need help structuring your CSV file?",
       "deploy": "Deploy",
       "deployError": "There is a problem with deploy.",
       "downloadCsv": "Download CSV example",
@@ -424,15 +425,15 @@
       "images": "Upload files",
       "imagesConfirm": "Confirm & upload images",
       "imagesDesc": "",
-      "infoFile": "This is the first step to your NFT collection. The file names in the CSV record should match the names of NFT files you upload in the next step.",
-      "infoImages": "Now, upload NFT files for your NFT collection, images or other media. File names should match those in the CSV metadata record from the previous step.",
+      "infoFile": "Import your NFTs with a CSV file in two simple steps: \n\nupload the CSV, then add images or media. Ensure file names match the CSV metadata.",
+      "infoImages": "Upload NFT files, including images or other media, for your collection. Ensure file names match the CSV metadata from the previous step.",
       "logo": "Upload logo",
       "preview": "Preview upload",
       "previewConfirm": "Looks good, proceed",
       "previewNfts": "Preview your NFTs",
       "selectAttributes": "Select attributes",
       "takeMeBack": "Take me back",
-      "titleCsv": "Upload metadata in CSV file",
+      "titleCsv": "Import CSV",
       "titleImage": "Upload NFT files"
     },
     "validation": {
@@ -455,6 +456,7 @@
     "openBucket": "Go to storage",
     "openCollection": "Go to collection",
     "search": "Search environment",
+    "step": "Step {step}",
     "testnet": "Testnet",
     "transactionType": "Transaction Type"
   }

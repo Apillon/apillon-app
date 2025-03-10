@@ -1,4 +1,4 @@
-import type { UploadCustomRequestOptions } from 'naive-ui';
+import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui';
 
 export default function useNft() {
   const { t } = useI18n();
@@ -138,14 +138,12 @@ export default function useNft() {
         } else {
           message.warning(t('validation.fileNoData'));
 
-          collectionStore.csvFile.onError();
           collectionStore.csvFile = {} as FileListItemType;
         }
       },
       error: function (error: string) {
         console.warn(error);
 
-        collectionStore.csvFile.onError();
         collectionStore.csvFile = {} as FileListItemType;
       },
     });
@@ -188,13 +186,9 @@ export default function useNft() {
    */
 
   /** Upload image request - add file to list */
-  async function uploadImageRequest(
-    { file, onProgress, onError, onFinish }: UploadCustomRequestOptions,
-    wrapToFolder = true
-  ) {
+  async function uploadImageRequest({ file }, wrapToFolder = true) {
     if (!isImage(file.type)) {
       message.warning(t('validation.notImage', { name: file.name }));
-      onError();
       return;
     }
     loadingImages.value = true;
@@ -202,53 +196,29 @@ export default function useNft() {
 
     const image = {
       ...file,
-      fullPath: wrapToFolder ? `/Images/${file.name}` : file.name,
+      path: wrapToFolder ? `/Images/${file.name}` : file.name,
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
-      onFinish,
-      onError,
     };
 
     if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
       message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
-      onError();
     } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
       message.warning(t('validation.alreadyOnList', { name: file.name }));
-      onError();
     } else if (fileAlreadyOnFileList(collectionStore.images, image, true)) {
       collectionStore.images = collectionStore.images.map(img => {
         return image.name === img.name ? image : img;
       });
-      onError();
-      // } else if (collectionStore.images.length >= dataImagesNames.value.length) {
-      //   message.warning(t('validation.tooManyImages', { num: dataImagesNames.value.length }));
-      //   onError();
+    } else if (collectionStore.images.length >= dataImagesNames.value.length) {
+      message.warning(t('validation.tooManyImages', { num: dataImagesNames.value.length }));
     } else {
-      onProgress({ percent: 0 });
       collectionStore.images.push(image);
     }
 
     setTimeout(() => {
       loadingImages.value = false;
     }, 300);
-  }
-
-  function handleImageChange(options: FileUploadOptions) {
-    const index = options.fileList.indexOf(options.file);
-    const indexImage = collectionStore.images.findIndex(
-      item => item.name === options.file.name && item.fullPath === options.file.fullPath
-    );
-
-    if (!isImage(options.file.type)) {
-      options.fileList.splice(index, 1);
-      message.warning(t('validation.notImage', { name: options.file.name }));
-    } else if (indexImage !== -1) {
-      options.fileList.splice(index, 1);
-      if (!allImagesUploaded.value) {
-        message.warning(t('validation.alreadyOnList', { name: options.file.name }));
-      }
-    }
   }
 
   function handleImageRemove(data: FileUploadOptions) {
@@ -261,10 +231,7 @@ export default function useNft() {
   }
 
   function createThumbnailUrl(file: FileListItemType): string {
-    if (file.file) {
-      return window.URL.createObjectURL(file.file);
-    }
-    return '';
+    return file.file ? URL.createObjectURL(file.file) : '';
   }
 
   function imageByName(name: string = '') {
@@ -393,7 +360,6 @@ export default function useNft() {
     createThumbnailUrl,
     deployCollection,
     getPriceServiceName,
-    handleImageChange,
     handleImageRemove,
     isImage,
     imageByName,

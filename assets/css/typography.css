@@ -60,7 +60,7 @@
   }
 
   p {
-    @apply body-md whitespace-break-spaces text-white-primary;
+    @apply body-md whitespace-break-spaces text-white-secondary;
 
     + h2,
     + .h2,

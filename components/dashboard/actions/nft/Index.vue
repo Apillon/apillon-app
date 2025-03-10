@@ -35,7 +35,7 @@
     </n-space>
   </n-space>
 
-  <!-- Modal - Collection Create -->
+  <!-- Modal - Collection Create
   <modal
     v-model:show="modalCreateCollectionVisible"
     class="hide-header max-w-4xl text-center"
@@ -50,7 +50,8 @@
       @submit="onNetworkSelected"
     />
     <FormNftCollectionIpnsType v-else @submit="router.push({ name: 'dashboard-service-nft-new' })" />
-  </modal>
+  </modal> -->
+  <ModalNft v-model:show="modalCreateCollectionVisible" />
 </template>
 
 <script lang="ts" setup>
