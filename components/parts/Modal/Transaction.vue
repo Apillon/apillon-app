@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { transactionLink } from '~/lib/utils/helpers';
+import { transactionLink } from '~/lib/utils/chain';
 
 defineEmits(['close']);
 defineProps({

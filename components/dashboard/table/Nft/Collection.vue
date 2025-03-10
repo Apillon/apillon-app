@@ -314,7 +314,7 @@ async function deleteCollection() {
       item => item.collection_uuid !== currentRow.value.collection_uuid
     );
 
-    sessionStorage.removeItem(LsCacheKeys.COLLECTION);
+    sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
     sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
   }
 }
@@ -332,7 +332,7 @@ async function restoreCollection() {
       item => item.collection_uuid !== currentRow.value.collection_uuid
     );
 
-    sessionStorage.removeItem(LsCacheKeys.COLLECTION);
+    sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
     sessionStorage.removeItem(LsCacheKeys.COLLECTION_ARCHIVE);
 
     message.success(t('form.success.restored.collection'));

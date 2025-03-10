@@ -161,7 +161,11 @@
         </tr>
         <template v-if="collectionStore.form.behavior.drop">
           <tr>
-            <td>{{ $t('form.label.collection.dropPrice', { currency: chainCurrency() }) }}:</td>
+            <td>
+              {{
+                $t('form.label.collection.dropPrice', { currency: chainCurrency(collectionStore.form.behavior.chain) })
+              }}:
+            </td>
             <td>
               <span class="text-white"> {{ collectionStore.form.behavior.dropPrice }} </span>
             </td>
@@ -191,7 +195,7 @@ import { ChainType, NFTCollectionType } from '~/lib/types/nft';
 import { timestampToDateAndTime } from '~/lib/utils/dates';
 
 const collectionStore = useCollectionStore();
-const { collectionTypes, nftChains, chainCurrency } = useCollection();
+const { collectionTypes, nftChains } = useCollection();
 const { createThumbnailUrl } = useNft();
 
 function getCollectionTypeName(collectionType: Number) {

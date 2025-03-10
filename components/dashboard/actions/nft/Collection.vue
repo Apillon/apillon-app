@@ -90,6 +90,7 @@
 
     <!-- Burn -->
     <n-button
+      v-if="collectionStore.active.isRevokable"
       class="w-full"
       size="small"
       type="error"

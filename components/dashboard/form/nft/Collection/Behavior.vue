@@ -30,7 +30,7 @@
     <n-form-item v-if="showNetwork" path="chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
       <select-options
         v-model:value="collectionStore.form.behavior.chain"
-        :options="nftChains"
+        :options="chains"
         :input-props="{ id: 'chain' }"
         :placeholder="t('general.pleaseSelect')"
         filterable
@@ -222,7 +222,7 @@
       <n-form-item-gi
         path="dropPrice"
         :span="6"
-        :label="$t('form.label.collection.dropPrice', { currency: chainCurrency() })"
+        :label="$t('form.label.collection.dropPrice', { currency: chainCurrency(collectionStore.form.behavior.chain) })"
         :label-props="{ for: 'dropPrice' }"
       >
         <n-input-number
@@ -247,8 +247,6 @@
           class="w-full"
           type="datetime"
           :input-props="{ id: 'dropStart' }"
-          :is-date-disabled="disablePastDate"
-          :is-time-disabled="disablePastTime"
           clearable
         />
       </n-form-item-gi>
@@ -313,20 +311,12 @@ defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
-const { labelInfo } = useComputing();
+const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
-const {
-  booleanSelect,
-  collectionTypes,
-  formRef,
-  isUnique,
-  nftChains,
-  supplyTypes,
-  rules,
-  chainCurrency,
-  disablePastDate,
-  disablePastTime,
-} = useCollection();
+
+const { labelInfo } = useComputing();
+const { booleanSelect, collectionTypes, enterpriseChainIDs, formRef, isUnique, nftChains, supplyTypes, rules } =
+  useCollection();
 defineExpose({ formRef, handleSubmitForm });
 
 onMounted(() => {
@@ -334,6 +324,11 @@ onMounted(() => {
     collectionStore.form.behavior.maxSupply = collectionStore.csvData.length;
   }
 });
+
+const hiddenChain = (chainId: number) =>
+  !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
+
+const chains = computed(() => nftChains.filter(c => !hiddenChain(c.value)));
 
 function infoLabel(field: string) {
   return labelInfo(field, 'form.label.collection');

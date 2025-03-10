@@ -304,15 +304,6 @@ export default function useCollection() {
     };
   }
 
-  function chainCurrency() {
-    switch (collectionStore.form.behavior.chain) {
-      case EvmChainMainnet.ASTAR:
-        return 'ASTR';
-      default:
-        return 'GLMR';
-    }
-  }
-
   function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptions, logo: boolean) {
     const uploadedFile: FileListItemType = {
       ...file,
@@ -399,7 +390,6 @@ export default function useCollection() {
     rulesSingle,
     substrateChains,
     supplyTypes,
-    chainCurrency,
     collectionEndpoint,
     disablePastDate,
     disablePastTime,

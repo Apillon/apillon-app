@@ -78,6 +78,8 @@
 </template>
 
 <script setup lang="ts">
+import { transactionLink } from '~/lib/utils/chain';
+
 defineProps({ showFooter: { type: Boolean, default: false } });
 
 const collectionStore = useCollectionStore();

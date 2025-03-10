@@ -25,7 +25,6 @@ function connectWallet(connector: Connector) {
 }
 
 function onWalletConnected(args) {
-  console.log(args);
   emit('connected', args.address);
 }
 </script>

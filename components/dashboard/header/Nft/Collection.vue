@@ -5,7 +5,11 @@
         <NuxtLink :to="{ name: 'dashboard-service-nft' }">
           <span class="icon-back align-sub text-2xl"></span>
         </NuxtLink>
-        <h2>{{ t('dashboard.solution.nftCollection.name') }}</h2>
+        <h2 v-if="collectionStore.form.behavior.chain">
+          {{ t('nft.collection.title') }}:
+          <span class="capitalize">{{ chainIdToName(collectionStore.form.behavior.chain).replace('_', ' ') }}</span>
+        </h2>
+        <h2 v-else>{{ t('dashboard.solution.nftCollection.name') }}</h2>
       </n-space>
     </slot>
     <template #info>
@@ -23,6 +27,7 @@
 </template>
 
 <script lang="ts" setup>
+import { chainIdToName } from '~/lib/utils/chain';
 import { ServiceTypeName } from '~/lib/types/service';
 
 const { t, te } = useI18n();

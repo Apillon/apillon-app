@@ -77,7 +77,6 @@
           required
           clearable
           :is-date-disabled="disablePastDate"
-          :is-time-disabled="disablePastTime"
         />
       </n-form-item>
     </div>
@@ -111,7 +110,7 @@ const deployedContractStore = useDeployedContractStore();
 
 const { labelInfo } = useComputing();
 const { isSpecialField } = useSmartContracts();
-const { chains, disablePastDate, disablePastTime } = useCollection();
+const { chains, disablePastDate } = useCollection();
 
 const loading = ref<boolean>(false);
 const formRef = ref<NFormInst | null>(null);
