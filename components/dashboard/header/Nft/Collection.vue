@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { chainIdToName } from '~/lib/utils/helpers';
+import { chainIdToName } from '~/lib/utils/chain';
 import { ServiceTypeName } from '~/lib/types/service';
 
 const { t, te } = useI18n();

@@ -222,7 +222,7 @@
       <n-form-item-gi
         path="dropPrice"
         :span="6"
-        :label="$t('form.label.collection.dropPrice', { currency: chainCurrency() })"
+        :label="$t('form.label.collection.dropPrice', { currency: chainCurrency(collectionStore.form.behavior.chain) })"
         :label-props="{ for: 'dropPrice' }"
       >
         <n-input-number
@@ -315,17 +315,8 @@ const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
 
 const { labelInfo } = useComputing();
-const {
-  booleanSelect,
-  collectionTypes,
-  enterpriseChainIDs,
-  formRef,
-  isUnique,
-  nftChains,
-  supplyTypes,
-  rules,
-  chainCurrency,
-} = useCollection();
+const { booleanSelect, collectionTypes, enterpriseChainIDs, formRef, isUnique, nftChains, supplyTypes, rules } =
+  useCollection();
 defineExpose({ formRef, handleSubmitForm });
 
 onMounted(() => {

@@ -22,7 +22,8 @@ const modalVisible = ref<boolean>(false);
 const nextRoute = ref<RouteLocationNormalized | undefined>();
 
 onBeforeRouteLeave(to => {
-  if (!modalVisible.value) {
+  const authStore = useAuthStore();
+  if (!modalVisible.value && authStore.loggedIn) {
     modalVisible.value = true;
     nextRoute.value = to;
     return false;

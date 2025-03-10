@@ -288,7 +288,9 @@
           <n-form-item-gi
             path="behavior.dropPrice"
             :span="6"
-            :label="$t('form.label.collection.dropPrice', { currency: chainCurrency() })"
+            :label="
+              $t('form.label.collection.dropPrice', { currency: chainCurrency(collectionStore.form.behavior.chain) })
+            "
             :label-props="{ for: 'dropPrice' }"
           >
             <n-input-number
@@ -368,7 +370,7 @@
 import { useTemplateRef } from 'vue';
 import { Feature } from '~/lib/types/config';
 import { isFeatureEnabled } from '~/lib/utils';
-import { chainIdToName } from '~/lib/utils/helpers';
+import { chainIdToName } from '~/lib/utils/chain';
 import { ChainType, EvmChainMainnet, NFTCollectionType } from '~/lib/types/nft';
 import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
 
@@ -398,7 +400,6 @@ const {
   rules,
   isFormDisabled,
   isUnique,
-  chainCurrency,
   collectionEndpoint,
   onChainChange,
   prepareFormData,

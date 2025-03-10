@@ -92,7 +92,7 @@
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
 import { useMessage } from 'naive-ui';
-import { chainIdToName } from '~/lib/utils/helpers';
+import { chainIdToName } from '~/lib/utils/chain';
 import { CollectionStatus } from '~/lib/types/nft';
 
 const { t, te } = useI18n();
