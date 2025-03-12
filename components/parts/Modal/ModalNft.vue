@@ -15,7 +15,14 @@
     </template>
 
     <slot>
-      <NftMetadataWizard ref="metadataRef" />
+      <NftMetadataWizard
+        v-if="collectionStore.stepCollectionCreate === CollectionCreateStep.METADATA"
+        ref="metadataRef"
+      />
+      <div v-if="collectionStore.stepCollectionCreate === CollectionCreateStep.SMART_CONTRACT" class="mx-auto max-w-lg">
+        <FormNftCollectionBase ref="formBaseRef" class="mb-6" hide-submit />
+        <FormNftCollectionBehavior ref="formBehaviorRef" hide-submit />
+      </div>
     </slot>
     <template #footer>
       <div class="flex w-full items-center justify-between gap-4 px-10 py-3">
@@ -35,7 +42,12 @@
           >
             {{ $t('general.back') }}
           </Btn>
-          <Btn size="small" @click="nextStep">{{ $t('form.continue') }}</Btn>
+          <Btn size="small" @click="nextStep">
+            <template v-if="collectionStore.stepMetadata === NftMetadataStep.SINGLE">
+              {{ $t('nft.add') }}
+            </template>
+            <template v-else>{{ $t('form.continue') }}</template>
+          </Btn>
         </div>
       </div>
     </template>
@@ -51,6 +63,8 @@ const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
 
 const metadataRef = useTemplateRef('metadataRef');
+const formBaseRef = useTemplateRef('formBaseRef');
+const formBehaviorRef = useTemplateRef('formBehaviorRef');
 
 const progress = computed(() => {
   const baseProgress = 25 * (collectionStore.stepCollectionCreate - 1);
@@ -75,11 +89,23 @@ const progress = computed(() => {
 onMounted(() => {
   storageStore.getStorageInfo();
 });
+const submitFormBase = async () => (formBaseRef.value ? await formBaseRef.value.handleSubmitForm() : false);
+const submitFormBehavior = async () => (formBehaviorRef.value ? await formBehaviorRef.value.handleSubmitForm() : false);
+
+async function submitForms() {
+  const formBaseSubmitted = await submitFormBase();
+  const formBehaviorSubmitted = await submitFormBehavior();
+
+  if (formBaseSubmitted && formBehaviorSubmitted) {
+    collectionStore.stepCollectionCreate = CollectionCreateStep.VISUAL;
+  }
+}
 
 function back() {
   switch (collectionStore.stepCollectionCreate) {
     case CollectionCreateStep.METADATA:
       metadataRef.value?.back();
+      break;
     default:
       collectionStore.stepCollectionCreate = CollectionCreateStep.METADATA;
   }
@@ -88,6 +114,10 @@ function nextStep() {
   switch (collectionStore.stepCollectionCreate) {
     case CollectionCreateStep.METADATA:
       metadataRef.value?.nextStep();
+      break;
+    case CollectionCreateStep.SMART_CONTRACT:
+      submitForms();
+      break;
     default:
       collectionStore.stepCollectionCreate = CollectionCreateStep.METADATA;
   }

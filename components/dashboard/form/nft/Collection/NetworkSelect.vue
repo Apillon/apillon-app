@@ -15,7 +15,7 @@
     </n-input>
     <div class="my-8">
       <template v-for="chain in chains" :key="chain.value">
-        <n-tooltip v-if="disabledChain(chain.value)" placement="bottom" trigger="hover">
+        <n-tooltip v-if="disabledChain(chain.value)" placement="bottom" :trigger="isMd ? 'hover' : 'click'"">
           <template #trigger>
             <NftCardNetwork
               :name="chain.name.toLowerCase()"
@@ -94,6 +94,7 @@ const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
 
 const { t } = useI18n();
+const { isMd } = useScreen();
 const { enterpriseChainIDs, nftChains, chainsTestnet, chainTypes } = useCollection();
 
 const isMainnet = ref<boolean>(false);

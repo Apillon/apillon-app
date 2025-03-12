@@ -126,6 +126,7 @@
       "waitActiveDeployment": "Staging deployment is still in progress. Please wait until it completes before proceeding with the production deployment."
     },
     "nft": {
+      "attributes": "Please check attributes",
       "bucketRequired": "Please select a bucket",
       "burnTokenIdRequired": "Please enter token ID",
       "collection": "Please select a Collection",

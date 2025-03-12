@@ -44,6 +44,13 @@ const messageOverrides: MessageThemeOverrides = {
   textColorWarning: colors.bg.DEFAULT,
 };
 
+/** Theme override */
+type TableThemeOverrides = NonNullable<FormProps['themeOverrides']>;
+const labelOverride: TableThemeOverrides = {
+  labelFontSizeLeftMedium: '14px',
+  labelFontWeight: 'semibold',
+};
+
 /**
  * Theme configs
  */
@@ -99,7 +106,7 @@ export const themeOverrides: GlobalThemeOverrides = {
     heightTiny: '24px',
     paddingLarge: '8px',
     paddingMedium: '8px 24px',
-    paddingSmall: '6px 16px',
+    paddingSmall: '6px 12px',
     paddingTiny: '1px',
     textColorGhostHover: 'inherit',
     textColorGhostHoverInfo: 'inherit',
@@ -154,10 +161,14 @@ export const themeOverrides: GlobalThemeOverrides = {
     borderColor: colors.bg.lighter,
     tdColor: colors.bg.DEFAULT,
     tdColorHover: colors.bg.dark,
+    tdColorModal: colors.transparent,
+    tdColorHoverModal: colors.transparent,
     tdTextColor: colors.white.DEFAULT,
-    thColor: colors.bg.DEFAULT,
-    thColorHover: colors.bg.DEFAULT,
-    thFontWeight: '700',
+    thColor: `${colors.bg.light}a3`,
+    thColorHover: `${colors.bg.light}a3`,
+    thColorModal: `${colors.bg.light}a3`,
+    thColorHoverModal: `${colors.bg.light}a3`,
+    thFontWeight: '600',
     thTextColor: colors.white.DEFAULT,
   },
   DatePicker: {
@@ -239,8 +250,9 @@ export const themeOverrides: GlobalThemeOverrides = {
     fontSizeMedium: '14px',
     fontSizeLarge: '16px',
     groupLabelTextColor: colors.white.DEFAULT,
+    heightTiny: '32px',
     heightSmall: '38px',
-    heightMedium: '48px',
+    heightMedium: '38px',
     heightLarge: '48px',
     iconSize: '24px',
     paddingTiny: '10px',
@@ -381,7 +393,7 @@ export const themeOverrides: GlobalThemeOverrides = {
         colorDisabled: colors.bg.DEFAULT,
         heightLarge: '48px',
         heightMedium: '48px',
-        heightSmall: '40px',
+        heightSmall: '38px',
         heightTiny: '32px',
       },
       InternalSelectMenu: {
@@ -409,13 +421,15 @@ export const themeOverrides: GlobalThemeOverrides = {
     colorEnd: colors.bg.lighter,
   },
   Switch: {
-    railColor: colors.white.DEFAULT,
-    railColorActive: colors.white.DEFAULT,
-    railWidthMedium: '34px',
-    railHeightMedium: '14px',
-    buttonColor: colors.body,
+    boxShadowFocus: 'none',
+    buttonBoxShadow: 'none',
+    buttonColor: colors.white.primary,
     buttonHeightMedium: '20px',
     buttonWidthMedium: '20px',
+    railColor: `${colors.bg.light}a3`,
+    railColorActive: `${colors.bg.light}a3`,
+    railWidthMedium: '56px',
+    railHeightMedium: '33px',
   },
   Table: {
     borderColor: colors.bg.lighter,

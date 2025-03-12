@@ -207,12 +207,13 @@
 
     <n-grid v-if="!isUnique" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Is Drop -->
-      <n-form-item-gi path="drop" :span="6" :show-label="false" :show-feedback="false">
-        <n-checkbox
+      <n-form-item-gi path="drop" :span="6" :label="infoLabel('drop') as string" :show-feedback="false">
+        <n-switch
           v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
           id="drop"
-          :label="infoLabel('drop') as string"
+          :checked-value="$t('form.switch.on')"
+          :unchecked-value="$t('form.switch.off')"
         />
       </n-form-item-gi>
     </n-grid>

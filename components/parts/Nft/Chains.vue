@@ -9,7 +9,7 @@
         filled
         :title="chain"
       />
-      <n-tooltip placement="bottom" trigger="hover">
+      <n-tooltip placement="bottom" :trigger="isMd ? 'hover' : 'click'"">
         <template #trigger>
           <strong class="cursor-pointer text-xs underline"> + {{ chains.length - 4 }} {{ $t('general.more') }} </strong>
         </template>
@@ -42,4 +42,5 @@
 defineProps({
   chains: { type: Array<string>, default: [] },
 });
+const { isMd } = useScreen();
 </script>

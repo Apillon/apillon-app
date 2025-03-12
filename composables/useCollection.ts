@@ -185,10 +185,15 @@ export default function useCollection() {
   };
 
   const rulesSingle: NFormRules = {
-    id: validateSingleIdRequired,
     collectionUuid: ruleRequired(t('validation.nft.collection')),
+    id: validateSingleIdRequired,
+    image: ruleRequired(t('validation.nft.image')),
     name: ruleRequired(t('validation.nft.name')),
     description: ruleRequired(t('validation.nft.description')),
+    attributes: {
+      validator: validateAttributes,
+      message: t('validation.nft.attributes'),
+    },
   };
 
   function prepareFormData(addBaseUri = false) {
@@ -283,6 +288,9 @@ export default function useCollection() {
       return !collectionStore.metadata.find(item => item.id === collectionStore.form.single.id);
     }
     return true;
+  }
+  function validateAttributes(_: FormItemRule, values: AttributeInterface[]): boolean {
+    return values.every(v => !!v.display_type && !!v.trait_type && v.value);
   }
 
   function isRoyaltyRequired() {

@@ -5,7 +5,7 @@
     </p>
     <n-space size="small">
       <span v-for="(library, key) in libraries" v-show="library.show" :key="key">
-        <n-tooltip v-if="library.show" placement="bottom" trigger="hover">
+        <n-tooltip v-if="library.show" placement="bottom" :trigger="isMd ? 'hover' : 'click'"">
           <template #trigger>
             <div
               class="bg-white border-grey border-[1px] inline-flex justify-center items-center w-12 h-12"
@@ -21,6 +21,7 @@
 </template>
 
 <script lang="ts" setup>
+const { isMd } = useScreen();
 const props = defineProps({
   react: { type: Boolean, default: true },
   vue: { type: Boolean, default: true },

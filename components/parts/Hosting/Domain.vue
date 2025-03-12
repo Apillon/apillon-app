@@ -37,7 +37,7 @@
     <Btn v-else-if="editEnabled" type="primary" size="small" @click="showModalDomain = true">
       {{ $t('hosting.domain.add') }}
     </Btn>
-    <n-tooltip v-else placement="top" trigger="hover">
+    <n-tooltip v-else placement="top" :trigger="isMd ? 'hover' : 'click'"">
       <template #trigger>
         <Btn type="primary" size="small" class="cursor-default !bg-primary/50 locked">
           {{ $t('hosting.domain.add') }}
@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-const { isLg } = useScreen();
+const { isMd, isLg } = useScreen();
 const websiteStore = useWebsiteStore();
 const { websiteUuid } = useHosting();
 const { deleteItem } = useDelete();

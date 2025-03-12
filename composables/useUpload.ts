@@ -53,7 +53,7 @@ export default function useUpload() {
   }
 
   /** Check if file is too big (out of space) */
-  function isEnoughSpaceInStorage(uploadFileList: FileListItemType[], file: FileListItemType) {
+  function isEnoughSpaceInStorage(uploadFileList: FileListItemType[], file: FileListItemType | File) {
     const availableSize = storageStore.info.availableStorage - storageStore.info.usedStorage;
     totalFilesSize.value = uploadFileList.reduce((acc, item) => {
       return acc + item.size;

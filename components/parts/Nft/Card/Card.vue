@@ -1,32 +1,40 @@
 <template>
-  <div v-if="data" class="flex flex-col justify-between rounded-xl bg-white overflow-hidden">
-    <figure v-if="image">
-      <img
-        :src="createThumbnailUrl(image)"
-        class="w-full h-full object-contain"
+  <div class="overflow-hidden rounded-xl bg-bg-light">
+    <figure class="flex h-full flex-col">
+      <Image
+        v-if="typeof image === 'string'"
+        :src="imageByName(image)"
+        class="h-full w-full object-contain"
+        :alt="image"
+      />
+      <Image
+        v-else-if="image?.file"
+        :src="createThumbnailUrl(image as FileListItemType)"
+        class="h-full w-full object-contain"
         :alt="image.name"
       />
+
+      <figcaption v-if="name || image || description" class="flex justify-between gap-2 px-4 py-3">
+        <div>
+          <n-ellipsis v-if="name || image" class="break-all align-bottom font-semibold" :line-clamp="2">
+            {{ name || typeof image === 'string' ? image : image?.name }}
+          </n-ellipsis>
+          <p v-if="description">{{ description }}</p>
+        </div>
+        <button v-if="'onRemove' in $attrs" class="flex-cc p-1" @click="$emit('remove')">
+          <span class="icon-delete text-xl"></span>
+        </button>
+      </figcaption>
     </figure>
-    <div class="p-4 text-bg">
-      <h4>
-        <span>#{{ id }}</span>
-        {{ data.name }}
-      </h4>
-      <p>{{ data.description }}</p>
-    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-  id: { type: Number, default: 0 },
-  data: { type: Object, default: null },
+defineProps({
+  name: { type: String, default: null },
+  description: { type: String, default: null },
+  image: { type: [String, Object], default: null },
 });
 
-const { createThumbnailUrl } = useNft();
-const collectionStore = useCollectionStore();
-
-const image = computed(() => {
-  return collectionStore.images.find(img => img.name === props.data.image);
-});
+const { createThumbnailUrl, imageByName } = useNft();
 </script>

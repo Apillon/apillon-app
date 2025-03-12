@@ -1,19 +1,12 @@
 <template>
-  <n-scrollbar
-    class="mt-10 min-h-[300px] text-left lg:mt-4"
-    :style="isXxl ? 'max-height: calc(70dvh - 100px)' : {}"
-    y-scrollable
-  >
+  <n-scrollbar class="has-scrollbar min-h-[300px]" :style="isXxl ? 'max-height: calc(92dvh - 205)' : {}" y-scrollable>
+    <div class="mb-6 flex items-center justify-between">
+      <h5 class="text-center">{{ $t('nft.collection.preview') }}</h5>
+      <NftPreviewSwitch />
+    </div>
     <template v-if="collectionStore.gridView">
       <div class="grid gap-8" :class="nfts.length > 100 ? 'grid-cols-nftSmall' : 'grid-cols-nft'">
-        <div v-for="nft in nfts" :key="nft.id" class="overflow-hidden rounded-xl bg-bg-light">
-          <figure class="flex h-full flex-col">
-            <Image :src="imageByName(nft.image)" class="h-full w-full object-contain" :alt="nft.name" />
-            <figcaption class="block h-12 px-4 py-3 font-bold">
-              {{ nft.name }}
-            </figcaption>
-          </figure>
-        </div>
+        <NftCard v-for="nft in nfts" :key="nft.id" :name="`${nft.name}`" :image="`${nft.image}`" />
       </div>
       <div v-if="collectionStore.metadata.length > PAGINATION_LIMIT" class="my-4 flex items-center justify-center p-4">
         <n-pagination
@@ -28,8 +21,9 @@
     <div v-else class="relative">
       <n-data-table
         :columns="columns"
+        :bordered="false"
         :data="collectionStore.metadata"
-        :theme-overrides="tableOverrides"
+        :loading="collectionStore.loadingMetadata"
         :pagination="pagination"
         :row-key="rowKey"
         @update:page="(page: number) => (pagination.page = page)"
@@ -40,31 +34,17 @@
           }
         "
       />
-      <Btn
-        v-if="collectionStore.amount === NftAmount.SINGLE"
-        class="bottom-0 lg:absolute"
-        type="secondary"
-        size="small"
-        @click="addNewNft"
-      >
-        <strong class="inline-block px-1">{{ $t('nft.addNfts') }}</strong>
-      </Btn>
     </div>
-  </n-scrollbar>
-
-  <n-space class="mx-auto my-4 w-auto" justify="center">
     <slot />
-  </n-space>
+  </n-scrollbar>
 </template>
 
 <script lang="ts" setup>
-import type { DataTableColumns, DataTableProps } from 'naive-ui';
+import type { DataTableColumns } from 'naive-ui';
 import { NButton, NInput } from 'naive-ui';
-import { NftAmount } from '~/lib/types/nft';
+import { NftMetadataStep } from '~/lib/types/nft';
 import { PAGINATION_LIMIT } from '~/lib/values/general.values';
-import { colors } from '~/tailwind.config';
 
-const { t } = useI18n();
 const { imageByName } = useNft();
 const collectionStore = useCollectionStore();
 const { isXxl } = useScreen();
@@ -121,14 +101,9 @@ const createColumns = (): DataTableColumns<Record<string, string>> => {
   return [
     {
       key: 'img',
-      className: '!py-2',
-      width: 120,
+      width: 88,
       render(row) {
-        return h(
-          resolveComponent('Image') as any,
-          { src: imageByName(row.image), class: 'max-w-[90px] max-w-[60px] mx-auto' },
-          {}
-        );
+        return h(resolveComponent('Image') as any, { src: imageByName(row.image), class: 'max-h-16  mx-auto' }, {});
       },
     },
     ...cols,
@@ -150,23 +125,7 @@ const createColumns = (): DataTableColumns<Record<string, string>> => {
 const columns = createColumns();
 const rowKey = (row: TransactionInterface) => row.id;
 
-function addNewNft() {
-  collectionStore.nftStep = NftCreateStep.SINGLE;
-
-  /** Reset form */
-  collectionStore.form.single.image = '';
-  collectionStore.form.single.name = '';
-  collectionStore.form.single.description = '';
-  collectionStore.form.single.copies = 1;
-}
-
 function removeNft(id: number | string) {
   collectionStore.metadata = collectionStore.metadata.filter(nft => nft.id !== Number(id));
 }
-
-/** Theme override */
-type TableThemeOverrides = NonNullable<DataTableProps['themeOverrides']>;
-const tableOverrides: TableThemeOverrides = {
-  tdTextColor: colors.body,
-};
 </script>

@@ -6,7 +6,7 @@
         type="text"
         name="search"
         size="small"
-        :placeholder="t('general.search')"
+        :placeholder="$t('general.search')"
         clearable
       >
         <template #prefix>
@@ -19,7 +19,7 @@
       <!-- Refresh collections -->
       <n-button size="small" :loading="collectionStore.loading" @click="collectionStore.fetchCollections(archive)">
         <span class="icon-refresh mr-2 text-xl"></span>
-        {{ t('general.refresh') }}
+        {{ $t('general.refresh') }}
       </n-button>
 
       <!-- Create new collection -->
@@ -27,10 +27,10 @@
         v-if="collectionStore.hasCollections"
         size="small"
         :disabled="authStore.isAdmin()"
-        @click="createNewCollection()"
+        @click="modalCreateCollectionVisible = true"
       >
         <span class="icon-create-folder mr-2 text-xl text-primary"></span>
-        <span class="text-primary">{{ t('nft.collection.new') }}</span>
+        <span class="text-primary">{{ $t('nft.collection.new') }}</span>
       </n-button>
     </n-space>
   </n-space>
@@ -59,15 +59,7 @@ defineProps({
   archive: { type: Boolean, default: false },
 });
 
-const { t } = useI18n();
-const router = useRouter();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
-const { onNetworkSelected, resetAll } = useCollection();
 const modalCreateCollectionVisible = ref<boolean>(false);
-
-function createNewCollection() {
-  modalCreateCollectionVisible.value = true;
-  resetAll();
-}
 </script>

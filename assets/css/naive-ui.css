@@ -97,6 +97,18 @@
 
 /** Checkbox */
 .n-checkbox {
+  &.hide-box {
+    .n-checkbox-box-wrapper {
+      @apply invisible absolute -z-1;
+    }
+    .n-checkbox__label {
+      @apply pl-0;
+    }
+    .n-switch {
+      @apply ml-0;
+    }
+  }
+
   .n-checkbox__label a {
     @apply text-primary;
   }
@@ -270,6 +282,12 @@
   &:not(.form-errors) {
     .hide-feedback .n-form-item-feedback-wrapper {
       display: none;
+    }
+  }
+
+  .n-form-item {
+    &--large-size label {
+      --n-label-font-weight: 600;
     }
   }
 
@@ -795,14 +813,14 @@ body > .n-message-container {
 
 /** Switch */
 .n-switch {
-  margin: 0 1rem;
+  @apply mx-4;
 
   &.n-switch--active .n-switch__button {
-    background-color: theme('colors.green');
+    @apply bg-green;
   }
 
   .n-switch__rail {
-    overflow: visible;
+    @apply overflow-visible border border-bg-lighter;
   }
 }
 

@@ -1,4 +1,5 @@
-import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui';
+import type { UploadCustomRequestOptions } from 'naive-ui';
+import { MetadataFieldRequired, type FormSingleNft } from '~/lib/types/nft';
 
 export default function useNft() {
   const { t } = useI18n();
@@ -10,19 +11,6 @@ export default function useNft() {
   const $papa = vueApp.config.globalProperties.$papa;
 
   const loadingImages = ref<boolean>(false);
-  const metadataRequired = ['name', 'description', 'image'];
-  const metadataProperties = [
-    'id',
-    'name',
-    'description',
-    'external_url',
-    'image',
-    'image_data',
-    'attributes',
-    'background_color',
-    'animation_url',
-    'youtube_url',
-  ];
 
   /**
    * Validation
@@ -38,7 +26,7 @@ export default function useNft() {
     const columns: Array<string> = collectionStore.columns.map((item: NTableColumn<KeyTitle>) => {
       return (item as KeyTitle).key;
     });
-    return metadataRequired.every(item => columns.includes(item));
+    return enumValues(MetadataFieldRequired).every(item => columns.includes(`${item}`));
   });
   const isCsvValid = computed<boolean>(() => {
     return isSameNumOfRows.value && hasRequiredMetadata.value;
@@ -75,6 +63,7 @@ export default function useNft() {
   function uploadFileRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
     const uploadedFile: FileListItemType = {
       ...file,
+      path: file.fullPath,
       percentage: 0,
       size: file.file?.size || 0,
       timestamp: Date.now(),
@@ -127,7 +116,7 @@ export default function useNft() {
           });
 
           collectionStore.csvAttributes = results.meta.fields
-            .filter(item => !metadataProperties.includes(item))
+            .filter(item => !enumValues(MetadataProperties).includes(item))
             .map(item => {
               return {
                 value: item,
@@ -152,16 +141,22 @@ export default function useNft() {
   /**
    * Prepare NFT data: array of JSONs with formatted properties and attributes
    */
-  function createNftData(): Array<Record<string, any>> {
+  async function createNftDataAsync() {
+    collectionStore.loadingMetadata = true;
+    await sleep(0.01);
+    collectionStore.metadata = createNftData();
+    collectionStore.loadingMetadata = false;
+  }
+  function createNftData(): MetadataItem[] {
     return collectionStore.csvData.map((item, index) => {
-      const nft: Record<string, any> = {};
+      const nft: MetadataItem = {};
       Object.entries(item).forEach(([key, value]) => {
         if (!collectionStore.csvSelectedAttributes.includes(key)) {
           nft[key] = value;
         }
       });
 
-      const attributes: Array<Record<string, any>> = [];
+      const attributes: AttributeInterface[] = [];
       collectionStore.csvAttributes.forEach(attribute => {
         if (collectionStore.csvSelectedAttributes.includes(attribute.value)) {
           attributes.push({
@@ -182,17 +177,47 @@ export default function useNft() {
   }
 
   /**
+   * Add single NFT
+   */
+  function createSingleNft(singleNft: FormSingleNft) {
+    for (let index = 0; index < singleNft.copies; index += 1) {
+      collectionStore.metadata.push(JSON.parse(JSON.stringify(singleNft)) as MetadataItem);
+      singleNft.id += 1;
+    }
+
+    const addKey = (key: string, title: string) => {
+      if (!collectionStore.columns.some(c => c.key === key)) collectionStore.columns.push({ title, key });
+    };
+    Object.entries(singleNft).forEach(([key, value]) => {
+      if (key !== 'collectionUuid' && key !== 'copies') {
+        if (Array.isArray(value)) {
+          value.forEach((item: AttributeInterface, index: number) => {
+            addKey(`${key}[${index}].value`, item.trait_type);
+          });
+        } else {
+          addKey(key, key);
+        }
+      }
+    });
+
+    collectionStore.resetSingleFormData(false);
+  }
+
+  /**
    * Images
    */
 
   /** Upload image request - add file to list */
   async function uploadImageRequest({ file }, wrapToFolder = true) {
+    await sleep(0.01);
     if (!isImage(file.type)) {
       message.warning(t('validation.notImage', { name: file.name }));
       return;
+    } else if (!isEnoughSpaceInStorage(collectionStore.images, file.file)) {
+      message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
+      return;
     }
     loadingImages.value = true;
-    await sleep(0.01);
 
     const image = {
       ...file,
@@ -201,17 +226,16 @@ export default function useNft() {
       size: file.file?.size || 0,
       timestamp: Date.now(),
     };
+    if (collectionStore.stepMetadata === NftMetadataStep.SINGLE) {
+      collectionStore.form.single.image = image.name;
+    }
 
-    if (!isEnoughSpaceInStorage(collectionStore.images, image)) {
-      message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
-    } else if (fileAlreadyOnFileList(collectionStore.images, image)) {
+    if (fileAlreadyOnFileList(collectionStore.images, image)) {
       message.warning(t('validation.alreadyOnList', { name: file.name }));
     } else if (fileAlreadyOnFileList(collectionStore.images, image, true)) {
       collectionStore.images = collectionStore.images.map(img => {
         return image.name === img.name ? image : img;
       });
-    } else if (collectionStore.images.length >= dataImagesNames.value.length) {
-      message.warning(t('validation.tooManyImages', { num: dataImagesNames.value.length }));
     } else {
       collectionStore.images.push(image);
     }
@@ -294,7 +318,7 @@ export default function useNft() {
   /**
    * Prepare NFT files: parse NFT data to JSON files
    */
-  function createNftFiles(nftData: Array<Record<string, any>>): FileListItemType[] {
+  function createNftFiles(nftData: Array<MetadataItem>): FileListItemType[] {
     return nftData.map((nft, index) => {
       const id = nft.id === undefined ? index + 1 : Number(nft.id);
 
@@ -354,9 +378,10 @@ export default function useNft() {
     isCsvValid,
     isSameNumOfRows,
     loadingImages,
-    metadataRequired,
     missingImages,
     createNftData,
+    createNftDataAsync,
+    createSingleNft,
     createThumbnailUrl,
     deployCollection,
     getPriceServiceName,

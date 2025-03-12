@@ -9,19 +9,44 @@
       v-else-if="collectionStore.stepMetadata === NftMetadataStep.NEW"
       @next-step="v => (step = v)"
     />
-    <FormNftUploadSingle v-else-if="collectionStore.stepMetadata === NftMetadataStep.SINGLE" />
+    <FormNftUploadSingle v-else-if="collectionStore.stepMetadata === NftMetadataStep.SINGLE" ref="formSingleRef" />
     <FormNftUpload v-else-if="collectionStore.stepMetadata === NftMetadataStep.CSV" />
-    <NftPreview v-else />
+    <NftPreview v-else>
+      <Btn
+        v-if="collectionStore.stepMetadata === NftMetadataStep.SINGLE_PREVIEW"
+        size="small"
+        type="secondary"
+        class="locked !min-w-0 lg:-translate-y-full"
+        @click="back()"
+      >
+        <span class="flex items-center gap-2">
+          <span class="icon-add rounded-md p-1 text-xl text-yellow"></span>
+          <span>{{ $t('nft.add') }}</span>
+        </span>
+      </Btn>
+    </NftPreview>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useTemplateRef } from 'vue';
 import { NftMetadataStep } from '~/lib/types/nft';
 
 defineExpose({ back, nextStep });
 const collectionStore = useCollectionStore();
+const { createNftDataAsync } = useNft();
 
 const step = ref(collectionStore.stepMetadata);
+
+const formSingleRef = useTemplateRef('formSingleRef');
+const submitFormSingle = async () => (formSingleRef.value ? await formSingleRef.value.handleSubmitForm() : false);
+async function submitSingle() {
+  const formSingleSubmitted = await submitFormSingle();
+  if (formSingleSubmitted) {
+    step.value += 1;
+    collectionStore.stepMetadata = step.value;
+  }
+}
 
 function back() {
   switch (collectionStore.stepMetadata) {
@@ -42,6 +67,11 @@ function back() {
 }
 function nextStep() {
   switch (collectionStore.stepMetadata) {
+    case NftMetadataStep.SINGLE:
+      submitSingle();
+      break;
+    case NftMetadataStep.CSV:
+      createNftDataAsync();
     case NftMetadataStep.CHAIN:
     case NftMetadataStep.SINGLE:
     case NftMetadataStep.CSV:
@@ -53,6 +83,7 @@ function nextStep() {
     case NftMetadataStep.CSV_PREVIEW:
     case NftMetadataStep.ENDPOINT_PREVIEW:
     case NftMetadataStep.JSON_PREVIEW:
+      console.log(collectionStore.stepMetadata, collectionStore.stepCollectionCreate);
       collectionStore.stepCollectionCreate += 1;
       break;
   }

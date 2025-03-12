@@ -178,6 +178,7 @@
         "addressEvm": "EVM Address",
         "addressSubstrate": "Substrate Address",
         "addressUnique": "Unique Address",
+        "attributes": "Add metadata attributes",
         "burnTokenId": "Token ID",
         "collection": "Collection",
         "copies": "Copies",
@@ -192,7 +193,11 @@
         "name": "Name",
         "setBaseUri": "Set base URI",
         "traitType": "Trait",
-        "value": "Value"
+        "value": "Value",
+        "labelInfo": {
+          "attributes": "Attributes are key traits of NFTs, forming part of the metadata that defines their unique characteristics. Which ones would you like to include?",
+          "image": "Upload image, video, audio, or a 3D-model. Supported file formats: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB."
+        }
       },
       "rpcApiKey": {
         "name": "Name",
@@ -202,10 +207,6 @@
     "networkTypes": {
       "test": "Test network",
       "live": "Live network"
-    },
-    "supplyTypes": {
-      "limited": "Limited",
-      "unlimited": "Unlimited"
     },
     "placeholder": {
       "apiKeyName": "API Key name",
@@ -250,6 +251,7 @@
       },
       "role": "Select role",
       "serviceName": "Enter the name for the new service",
+      "select": "Select option",
       "selectCategory": "Filter by category",
       "selectDirection": "Filter by direction",
       "selectService": "Filter by service",
@@ -425,6 +427,14 @@
       "newsletter": {
         "subscribed": "You have successfully subscribed to Apillon platform news."
       }
+    },
+    "supplyTypes": {
+      "limited": "Limited",
+      "unlimited": "Unlimited"
+    },
+    "switch": {
+      "on": "On",
+      "off": "Off"
     },
     "terms": {
       "project": "I understand that the Apillon Closed Beta delivers no guarantees related to functionalities or access and is intended for testing purposes only. Beta features also come with several limitations, which will be removed with each platform update as more and more users deliver feedback on Closed Beta and help improve the platform's services.",

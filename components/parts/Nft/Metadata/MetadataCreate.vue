@@ -42,31 +42,8 @@
   </div>
 
   <!-- Buttons switch preview-->
-  <div v-if="collectionStore.nftStep === NftCreateStep.PREVIEW" class="absolute right-4 top-4 flex items-center">
-    <span class="mr-2">{{ t('general.view') }}:</span>
-    <n-button
-      class="w-10 px-0"
-      :class="{ '!bg-bg-lighter': !collectionStore.gridView }"
-      size="small"
-      type="tertiary"
-      quaternary
-      round
-      @click="collectionStore.gridView = false"
-    >
-      <span class="icon-list-view align-sub text-2xl"></span>
-    </n-button>
-    <n-button
-      class="w-10 px-0"
-      :class="{ '!bg-bg-lighter': collectionStore.gridView }"
-      size="small"
-      type="tertiary"
-      quaternary
-      round
-      @click="collectionStore.gridView = true"
-    >
-      <span class="icon-grid-view align-sub text-2xl"></span>
-    </n-button>
-  </div>
+  <NftPreviewSwitch v-if="collectionStore.nftStep === NftCreateStep.PREVIEW" class="absolute right-4 top-4" />
+
   <W3Warn v-model:show="modalW3WarnVisible" @submit="modalW3WarnVisible = false">
     {{ t('w3Warn.nft.collection') }}
   </W3Warn>
@@ -177,17 +154,20 @@ async function prepareUniqueData(bucketUuid: string) {
   await uploadFiles(bucketUuid, collectionStore.images, false);
 
   /** Prepare metadata */
-  const metadata = collectionStore.metadata.reduce((acc, meta: Record<string, any>, key: number) => {
-    /** Get image link from calculatedCids */
-    const image = Object.values(bucketStore.calculatedCids).find(fileInfo => fileInfo.name === meta.image);
+  const metadata = collectionStore.metadata.reduce(
+    (acc: Record<number, MetadataItem>, meta: MetadataItem, key: number) => {
+      /** Get image link from calculatedCids */
+      const image = Object.values(bucketStore.calculatedCids).find(fileInfo => fileInfo.name === meta.image);
 
-    const id = Number(meta.id) || key + 1;
-    const m = Object.assign({}, meta);
-    delete m.id;
-    m.image = image?.link || meta.image;
-    acc[id] = m;
-    return acc;
-  }, {});
+      const id = Number(meta.id) || key + 1;
+      const m = Object.assign({}, meta);
+      delete m.id;
+      m.image = image?.link || meta.image;
+      acc[id] = m;
+      return acc;
+    },
+    {}
+  );
 
   const body = new FormData();
   body.append('bucket_uuid', bucketUuid);
@@ -195,7 +175,7 @@ async function prepareUniqueData(bucketUuid: string) {
   const baseData = prepareFormData();
   Object.entries(baseData).forEach(([key, value]) => {
     if (value !== undefined) {
-      body.append(key, value);
+      body.append(key, value as any);
     }
   });
 

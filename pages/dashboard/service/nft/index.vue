@@ -41,7 +41,6 @@ const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const collectionStore = useCollectionStore();
-const { resetAll } = useCollection();
 
 const pageLoading = ref<boolean>(true);
 const modalCreateCollectionVisible = ref<boolean>(false);
@@ -53,7 +52,6 @@ useHead({
 });
 
 onMounted(async () => {
-  resetAll();
   await dataStore.waitOnPromises();
   await collectionStore.getCollections();
 

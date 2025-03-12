@@ -10,7 +10,7 @@
       @slideChange="onSlideChange"
     >
       <swiper-slide v-for="(slide, key) in slides" :key="key" class="mx-auto flex justify-center">
-        <NftCard :id="key + 1" :data="slide" class="min-h-[16rem] md:min-h-[18rem] lg:min-h-[20rem]" />
+        <NftCard :id="key + 1" v-bind="slide" class="min-h-[16rem] md:min-h-[18rem] lg:min-h-[20rem]" />
       </swiper-slide>
     </swiper>
   </div>

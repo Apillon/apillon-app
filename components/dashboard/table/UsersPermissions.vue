@@ -70,8 +70,7 @@ const createColumns = ({
             bordered: row.pendingInvitation,
           },
           {
-            default: () =>
-              row.pendingInvitation ? $i18n.t('general.pending') : $i18n.t('general.active'),
+            default: () => (row.pendingInvitation ? $i18n.t('general.pending') : $i18n.t('general.active')),
           }
         );
       },

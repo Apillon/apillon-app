@@ -25,11 +25,7 @@ const { t } = useI18n();
 const { name } = useRoute();
 const router = useRouter();
 const collectionStore = useCollectionStore();
-const { isFormDisabled, resetAll } = useCollection();
-
-onMounted(() => {
-  resetAll();
-});
+const { isFormDisabled } = useCollection();
 
 function onMetadataStored() {
   if (name !== 'dashboard-service-nft-new') {

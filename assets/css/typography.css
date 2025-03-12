@@ -50,6 +50,11 @@
     @apply font-bold;
     font-size: 1.125rem;
     line-height: 1.6;
+
+    + p,
+    + ul {
+      @apply mt-2;
+    }
   }
 
   /* Headline 6 */
@@ -57,6 +62,11 @@
     @apply font-bold;
     font-size: 0.875rem;
     line-height: 1.6;
+
+    + p,
+    + ul {
+      @apply mt-2;
+    }
   }
 
   p {

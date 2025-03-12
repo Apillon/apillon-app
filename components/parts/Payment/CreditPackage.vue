@@ -29,7 +29,7 @@
       </ul>
     </div>
 
-    <n-tooltip v-if="!dataStore.isUserOwner" trigger="hover">
+    <n-tooltip v-if="!dataStore.isUserOwner" :trigger="isMd ? 'hover' : 'click'"">
       <template #trigger>
         <Btn class="cursor-default opacity-60" type="primary" size="large" :color="colors.blue" round>
           {{ $t('dashboard.credits.buy') }}
@@ -49,7 +49,7 @@
         {{ $t('dashboard.credits.buyWithCreditCard') }}
       </Btn>
 
-      <n-tooltip v-if="creditPackage.creditAmount === 10000" trigger="hover">
+      <n-tooltip v-if="creditPackage.creditAmount === 10000" :trigger="isMd ? 'hover' : 'click'"">
         <template #trigger>
           <Btn class="cursor-default opacity-60" type="primary" size="large" round>
             {{ $t('dashboard.credits.buyWithDot') }}
@@ -80,10 +80,12 @@ defineProps({
   creditPackage: { type: Object as PropType<CreditPackageInterface>, required: true },
 });
 
-const loading = ref<boolean>(false);
-const loadingCrypto = ref<boolean>(false);
+const { isMd } = useScreen();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
+
+const loading = ref<boolean>(false);
+const loadingCrypto = ref<boolean>(false);
 
 async function getCreditSessionUrl(packageId: number) {
   loading.value = true;

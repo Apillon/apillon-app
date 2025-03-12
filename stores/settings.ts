@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { VideoChapter } from '~/components/parts/Modal/YouTube.vue';
+import type { VideoChapter } from '~/components/parts/Modal/YT.vue';
 
 export const useSettingsStore = defineStore('settings', {
   state: () => ({

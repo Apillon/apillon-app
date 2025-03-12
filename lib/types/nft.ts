@@ -126,6 +126,7 @@ export enum NftMetadataStep {
   JSON = 10,
   JSON_PREVIEW = 11,
 }
+// TODO: remove
 /** NFT create steps */
 export enum NftCreateStep {
   AMOUNT = 1,
@@ -134,12 +135,31 @@ export enum NftCreateStep {
   PREVIEW = 4,
   DEPLOY = 5,
 }
-/** Multiple NFTs upload steps */
-export enum NftUploadStep {
-  FILE = 1,
-  IMAGES = 2,
-  PREVIEW = 3,
-  ATTRIBUTES = 4,
+/** NFTs metadata field */
+export enum MetadataFieldRequired {
+  NAME = 'name',
+  DESCRIPTION = 'description',
+  IMAGE = 'image',
+}
+export enum MetadataProperties {
+  ID = 'id',
+  NAME = 'name',
+  DESCRIPTION = 'description',
+  EXTERNAL_URL = 'external_url',
+  IMAGE = 'image',
+  IMAGE_DATA = 'image_data',
+  ATTRIBUTES = 'attributes',
+  BACKGROUND_COLOR = 'background_color',
+  ANIMATION_URL = 'animation_url',
+  YOUTUBE_URL = 'youtube_url',
+}
+
+export enum TraitTypes {
+  STRING = 'string',
+  DATE = 'date',
+  NUMBER = 'number',
+  BOOST_NUMBER = 'boost_number',
+  BOOST_PERCENTAGE = 'boost_percentage',
 }
 
 export enum MetadataDeployStatus {
@@ -149,6 +169,16 @@ export enum MetadataDeployStatus {
   PUBLISH_TO_IPNS = 4,
   METADATA_SUCCESSFULLY_PREPARED = 10,
 }
+
+export type FormSingleNft = {
+  image: string;
+  id: number;
+  collectionUuid: string;
+  name: string;
+  description: string;
+  copies: number;
+  attributes: AttributeInterface[];
+};
 
 declare global {
   /** Papa parser */
@@ -251,8 +281,10 @@ declare global {
   interface AttributeInterface {
     trait_type: string;
     value: string;
-    display_type: string;
+    display_type: string | null;
   }
 
   interface AttributesInterface extends Array<AttributeInterface> {}
+
+  type MetadataItem = Record<string | MetadataProperties, string | number> & { attributes?: AttributeInterface[] };
 }

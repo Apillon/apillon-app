@@ -1,13 +1,13 @@
 import type { TableColumns } from 'naive-ui/es/data-table/src/interface';
 import { defineStore } from 'pinia';
-import { NftMetadataStep } from '~/lib/types/nft';
+import { NftMetadataStep, type FormSingleNft } from '~/lib/types/nft';
 
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
     archive: [] as CollectionInterface[],
     attribute: {} as AttributeInterface,
-    columns: [] as TableColumns<KeyTitle>,
+    columns: [] as KeyTitle[],
     csvAttributes: [] as Array<MetadataAttributes>,
     csvData: [] as Array<Record<string, string>>,
     csvFile: {} as FileListItemType,
@@ -17,17 +17,17 @@ export const useCollectionStore = defineStore('collection', {
     images: [] as FileListItemType[],
     items: [] as CollectionInterface[],
     loading: false,
-    metadata: [] as Array<Record<string, any>>,
+    loadingMetadata: false,
+    metadata: [] as MetadataItem[],
     metadataDeploys: [] as MetadataDeployInterface[],
     metadataStored: undefined as Boolean | undefined,
     quotaReached: undefined as Boolean | undefined,
     search: '',
-    nftStep: NftCreateStep.AMOUNT,
+    nftStep: NftCreateStep.AMOUNT, // TODO: remove
     amount: 0,
     stepCollectionCreate: CollectionCreateStep.METADATA,
     stepCollectionDeploy: CollectionStatus.CREATED,
-    stepMetadata: NftMetadataStep.CSV,
-    stepUpload: NftUploadStep.FILE,
+    stepMetadata: NftMetadataStep.CHAIN,
     total: 0,
     transaction: [] as TransactionInterface[],
     uploadActive: false,
@@ -67,7 +67,7 @@ export const useCollectionStore = defineStore('collection', {
         description: '',
         copies: 1,
         attributes: [] as AttributesInterface,
-      },
+      } as FormSingleNft,
     },
     websiteDeployForm: {} as WebsiteDeployForm,
   }),
@@ -124,21 +124,26 @@ export const useCollectionStore = defineStore('collection', {
       this.csvFile = {} as FileListItemType;
       this.csvSelectedAttributes = [] as Array<string>;
       this.filesMetadata = [] as FileListItemType[];
-      this.metadata = [] as Array<Record<string, any>>;
+      this.metadata = [] as MetadataItem[];
     },
     resetImages() {
       while (this.images.length > 0) {
         this.images.pop();
       }
     },
-    resetSingleFormData() {
-      this.form.single.image = '';
-      this.form.single.id = 1;
+    resetSingleFormData(clear = true) {
       this.form.single.collectionUuid = this.active?.collection_uuid;
-      this.form.single.name = '';
-      this.form.single.description = '';
       this.form.single.copies = 1;
-      this.form.single.attributes = [];
+      this.form.single.description = '';
+      this.form.single.image = '';
+      this.form.single.name = '';
+
+      if (clear) {
+        this.form.single.attributes = [];
+        this.form.single.id = 1;
+      } else {
+        this.form.single.attributes.forEach(attr => (attr.value = ''));
+      }
     },
     resetForms() {
       this.form.base.logo = null;
