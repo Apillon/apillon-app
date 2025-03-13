@@ -4,19 +4,22 @@
       <Image
         v-if="typeof image === 'string'"
         :src="imageByName(image)"
-        class="h-full w-full object-contain"
+        class="h-full max-h-60 w-full object-contain"
         :alt="image"
       />
       <Image
         v-else-if="image?.file"
         :src="createThumbnailUrl(image as FileListItemType)"
-        class="h-full w-full object-contain"
+        class="h-full max-h-60 w-full object-contain"
         :alt="image.name"
       />
 
-      <figcaption v-if="name || image || description" class="flex justify-between gap-2 px-4 py-3">
+      <figcaption
+        v-if="name || image || description"
+        class="flex min-h-14 items-center justify-between gap-2 px-4 py-1"
+      >
         <div>
-          <n-ellipsis v-if="name || image" class="break-all align-bottom font-semibold" :line-clamp="2">
+          <n-ellipsis v-if="name || image" class="break-all align-bottom text-sm font-semibold" :line-clamp="2">
             {{ name || typeof image === 'string' ? image : image?.name }}
           </n-ellipsis>
           <p v-if="description">{{ description }}</p>
@@ -36,5 +39,5 @@ defineProps({
   image: { type: [String, Object], default: null },
 });
 
-const { createThumbnailUrl, imageByName } = useNft();
+const { createThumbnailUrl, imageByName } = useMetadata();
 </script>

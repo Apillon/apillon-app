@@ -1,32 +1,8 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
     <div class="w-[20vw] min-w-[11rem] max-w-xs">
-      <n-input
-        v-if="archive"
-        v-model:value="deployedContractStore.archive.search"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('general.search')"
-        clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
-      <n-input
-        v-else
-        v-model:value="deployedContractStore.search"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('general.search')"
-        clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
+      <FormFieldSearch v-if="archive" v-model:value="deployedContractStore.archive.search" />
+      <FormFieldSearch v-else v-model:value="deployedContractStore.search" />
     </div>
 
     <n-space size="large">

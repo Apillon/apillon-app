@@ -1,5 +1,3 @@
-import type { FormSingleNft } from '../types/nft';
-
 export function sleep(timeMs = 1000) {
   return new Promise(resolve => setTimeout(resolve, timeMs));
 }
@@ -174,7 +172,7 @@ export function prepareOG(
   };
 }
 
-export function createPagination(remote = true) {
+export function createPagination(remote = true): Pagination {
   const { t } = useI18n();
   return {
     itemCount: remote ? 0 : undefined,

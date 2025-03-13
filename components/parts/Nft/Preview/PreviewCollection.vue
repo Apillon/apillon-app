@@ -1,207 +1,166 @@
 <template>
-  <div class="mb-8 mt-6 max-w-xl">
-    <div class="mb-4">
-      <h2 class="text-center">{{ $t('nft.collection.preview') }}</h2>
-      <p>
-        {{ $t('nft.collection.previewInfo') }}
-      </p>
-    </div>
-    <div class="relative mb-4">
-      <Image
-        v-if="collectionStore.form.base.coverImage"
-        :src="createThumbnailUrl(collectionStore.form.base.coverImage)"
-        class="h-50"
-      />
-      <Image
-        v-if="collectionStore.form.base.logo"
-        :src="createThumbnailUrl(collectionStore.form.base.logo)"
-        class="absolute left-2 top-2 h-20 border-2 border-bg-lighter"
-      />
-    </div>
-    <n-table class="plain mb-6 table-fixed" :bordered="false" :single-line="true">
-      <thead>
-        <tr>
-          <th>{{ $t('nft.collection.data') }}</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ $t('form.label.collection.name') }}:</td>
-          <td>
-            <span class="text-white">{{ collectionStore.form.base.name }}</span>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ $t('form.label.collection.symbol') }}:</td>
-          <td>
-            <span class="text-white">{{ collectionStore.form.base.symbol }}</span>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ $t('form.label.collection.chain') }}:</td>
-          <td>
-            <span class="text-white">{{ getChainName(collectionStore.form.behavior.chain) }}</span>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ $t('form.label.collection.chainType') }}:</td>
-          <td>
-            <span class="text-white">{{ ChainType[collectionStore.form.behavior.chainType] }}</span>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ $t('form.label.collection.type') }}:</td>
-          <td>
-            <span class="text-white">
-              {{ getCollectionTypeName(collectionStore.form.behavior.collectionType) }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ $t('form.label.collection.useGateway') }}:</td>
-          <td>
-            <span class="text-white">
-              {{
-                collectionStore.form.behavior.useApillonIpfsGateway
-                  ? $t('form.booleanSelect.true')
-                  : $t('form.booleanSelect.false')
-              }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ $t('form.label.collection.useIpns') }}:</td>
-          <td>
-            <span class="text-white">
-              {{
-                collectionStore.form.behavior.useIpns ? $t('form.booleanSelect.true') : $t('form.booleanSelect.false')
-              }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </n-table>
-
-    <n-table class="plain table-fixed" :bordered="false" :single-line="true">
-      <thead>
-        <tr>
-          <th>{{ $t('nft.collection.behavior') }}</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ $t('form.label.collection.supplyLimited') }}:</td>
-          <td>
-            <span class="text-white">
-              {{
-                collectionStore.form.behavior.supplyLimited
-                  ? collectionStore.form.behavior.maxSupply
-                  : $t('form.supplyTypes.unlimited')
-              }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ $t('form.label.collection.revocable') }}:</td>
-          <td>
-            <span class="text-white">
-              {{
-                collectionStore.form.behavior.revocable ? $t('form.booleanSelect.true') : $t('form.booleanSelect.false')
-              }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ $t('form.label.collection.soulbound') }}:</td>
-          <td>
-            <span class="text-white">
-              {{
-                collectionStore.form.behavior.soulbound ? $t('form.booleanSelect.true') : $t('form.booleanSelect.false')
-              }}
-            </span>
-          </td>
-        </tr>
-        <tr v-show="collectionStore.form.behavior.collectionType === NFTCollectionType.GENERIC">
-          <td>{{ $t('form.label.collection.autoIncrement') }}:</td>
-          <td>
-            <span class="text-white">
-              {{
-                collectionStore.form.behavior.isAutoIncrement
-                  ? $t('form.booleanSelect.true')
-                  : $t('form.booleanSelect.false')
-              }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ $t('form.label.collection.royaltiesFees') }}:</td>
-          <td>
-            <span class="text-white">
-              {{ collectionStore.form.behavior.royaltiesFees ? collectionStore.form.behavior.royaltiesFees : '0' }}
-            </span>
-          </td>
-        </tr>
-        <tr v-if="collectionStore.form.behavior.royaltiesAddress">
-          <td>{{ $t('form.label.collection.royaltiesAddress') }}:</td>
-          <td>
-            <span class="text-white">
-              {{ collectionStore.form.behavior.royaltiesAddress }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>{{ $t('form.label.collection.drop') }}:</td>
-          <td>
-            <span class="text-white">
-              {{ collectionStore.form.behavior.drop ? $t('form.booleanSelect.true') : $t('form.booleanSelect.false') }}
-            </span>
-          </td>
-        </tr>
-        <template v-if="collectionStore.form.behavior.drop">
-          <tr>
+  <div class="relative flex flex-col items-start gap-12 md:flex-row">
+    <div class="md:w-1/2">
+      <div class="mb-4">
+        <h2>{{ $t('nft.collection.review.title') }}</h2>
+        <p>
+          {{ $t('nft.collection.review.info') }}
+        </p>
+      </div>
+      <div class="relative mb-20 mt-6 min-h-36 w-full flex-auto rounded-lg bg-bg-lighter">
+        <Image
+          v-if="metadataStore.form.visual.coverImage"
+          :src="createThumbnailUrl(metadataStore.form.visual.coverImage)"
+          class="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-lg object-cover object-center"
+        />
+        <Image
+          v-if="metadataStore.form.visual.logo"
+          :src="createThumbnailUrl(metadataStore.form.visual.logo)"
+          class="absolute left-6 top-20 mt-2 h-28 w-28 rounded-full object-cover object-center"
+        />
+        <div v-else class="absolute left-6 top-10 h-28 w-28 rounded-full bg-bg-dark" />
+      </div>
+      <div class="relative mb-4"></div>
+      <n-table class="plain mb-6 table-fixed" :bordered="false" :single-line="true">
+        <tbody>
+          <tr v-for="item in data" :class="{ hidden: item.show === false }">
+            <td class="!text-white">{{ item.label }}</td>
             <td>
-              {{
-                $t('form.label.collection.dropPrice', { currency: chainCurrency(collectionStore.form.behavior.chain) })
-              }}:
-            </td>
-            <td>
-              <span class="text-white"> {{ collectionStore.form.behavior.dropPrice }} </span>
-            </td>
-          </tr>
-          <tr>
-            <td>{{ $t('form.label.collection.dropStart') }}:</td>
-            <td>
-              <span class="text-white">
-                {{ timestampToDateAndTime(collectionStore.form.behavior.dropStart / 1000) }}
+              <span v-if="item?.key === 'chain'" class="flex items-center gap-2">
+                <NuxtIcon
+                  :name="`logo/${getChainIconName(item.value)}`"
+                  class="inline-flex text-xl"
+                  filled
+                  :title="item.value"
+                />
+                {{ getChainName(item.value) }}
               </span>
+              <template v-else-if="item.value === true">{{ $t('form.booleanSelect.true') }}</template>
+              <template v-else-if="item.value === false">{{ $t('form.booleanSelect.false') }}</template>
+              <template v-else-if="typeof item.value === 'string' && item.value?.length === 42">
+                {{ truncateWallet(item.value) }}
+              </template>
+              <template v-else> {{ item.value }}</template>
             </td>
+          </tr>
+        </tbody>
+      </n-table>
+    </div>
+
+    <div class="static hidden h-full md:block">
+      <div class="absolute bottom-4 top-8 border-l border-bg-lighter"></div>
+    </div>
+
+    <div class="mt-8 md:!w-1/2">
+      <h6>{{ t('nft.collection.review.costs') }}</h6>
+      <n-table class="plain my-6 table-fixed" :bordered="false" :single-line="true">
+        <tbody>
+          <tr>
+            <td>Create new collection</td>
+            <td class="!text-white">500 {{ $t('dashboard.credits.credits') }}</td>
           </tr>
           <tr>
-            <td>{{ $t('form.label.collection.dropReserve') }}:</td>
-            <td>
-              <span class="text-white"> {{ collectionStore.form.behavior.dropReserve }} </span>
-            </td>
+            <td>Create new collection</td>
+            <td class="!text-white">500 {{ $t('dashboard.credits.credits') }}</td>
           </tr>
-        </template>
-      </tbody>
-    </n-table>
+        </tbody>
+      </n-table>
+      <div class="card-light p-6">
+        <div class="flex gap-2">
+          <strong class="block w-1/2">{{ t('nft.collection.review.totalSpend') }}</strong>
+          <div class="flex w-1/2 flex-col gap-1 text-right">
+            <strong>500 {{ $t('dashboard.credits.credits') }}</strong>
+            <small>
+              {{ t('nft.collection.review.balance') }}: {{ formatNumber(paymentStore.credit.balance || 0) }}
+              {{ $t('dashboard.credits.credits') }}
+            </small>
+          </div>
+        </div>
+        <hr class="my-6 w-full border-bg-lighter" />
+        <div class="my-6">
+          <n-checkbox v-model:checked="nonRefundable" :label="t('nft.collection.review.nonRefundable')" />
+        </div>
+        <Btn size="large" type="primary" @click="">
+          {{ $t('nft.collection.review.createCollection') }}
+        </Btn>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ChainType, NFTCollectionType } from '~/lib/types/nft';
+import { chainCurrency } from '~/lib/utils/chain';
+import { formatNumber } from '~/lib/utils/helpers';
+import { truncateWallet } from '~/lib/utils/strings';
 import { timestampToDateAndTime } from '~/lib/utils/dates';
 
-const collectionStore = useCollectionStore();
-const { collectionTypes, nftChains } = useCollection();
-const { createThumbnailUrl } = useNft();
+const { t } = useI18n();
+const paymentStore = usePaymentStore();
+const metadataStore = useMetadataStore();
+
+const { createThumbnailUrl } = useMetadata();
+const { collectionTypes, nftChains, chainsTestnet } = useCollection();
+
+const nonRefundable = ref<boolean>(false);
+const data = ref([
+  {
+    label: t('form.label.collection.chain'),
+    value: metadataStore.form.smartContract.chain,
+    key: 'chain',
+  },
+  { label: t('nft.collection.name'), value: metadataStore.form.smartContract.name },
+  { label: t('form.label.collection.symbol'), value: metadataStore.form.smartContract.symbol },
+  { label: t('form.label.collection.type'), value: metadataStore.form.smartContract.collectionType },
+  {
+    label: t('form.label.collection.supplyLimited'),
+    value: metadataStore.form.smartContract.supplyLimited
+      ? metadataStore.form.smartContract.maxSupply
+      : t('form.supplyTypes.unlimited'),
+  },
+  { label: t('form.label.collection.revocable'), value: metadataStore.form.smartContract.revocable },
+  { label: t('form.label.collection.soulbound'), value: metadataStore.form.smartContract.soulbound },
+  { label: t('form.label.collection.autoIncrement'), value: metadataStore.form.smartContract.isAutoIncrement },
+  { label: t('form.label.collection.royaltiesAddress'), value: metadataStore.form.smartContract.royaltiesAddress },
+  {
+    label: t('form.label.collection.royaltiesFees'),
+    value: (metadataStore.form.smartContract.royaltiesFees || '0') + '%',
+  },
+  { label: t('form.label.collection.drop'), value: metadataStore.form.smartContract.drop },
+  {
+    label: t('form.label.collection.dropReserve'),
+    value: metadataStore.form.smartContract.dropReserve,
+    show: metadataStore.form.smartContract.drop,
+  },
+  {
+    label: t('form.label.collection.dropPrice', {
+      currency: chainCurrency(metadataStore.form.smartContract.chain),
+    }),
+    value: metadataStore.form.smartContract.dropPrice,
+    show: metadataStore.form.smartContract.drop,
+  },
+  {
+    label: t('form.label.collection.dropStart'),
+    value: timestampToDateAndTime(metadataStore.form.smartContract.dropStart / 1000),
+    show: metadataStore.form.smartContract.drop,
+  },
+  {
+    label: t('form.label.collection.dropReserve'),
+    value: metadataStore.form.smartContract.dropReserve,
+    show: metadataStore.form.smartContract.drop,
+  },
+  {
+    label: t('nft.collection.review.nftFiles'),
+    value: `${metadataStore.metadata.length} ${t('storage.files')}`,
+  },
+]);
 
 function getCollectionTypeName(collectionType: Number) {
   return collectionTypes.find(type => type.value === collectionType)?.label;
 }
-function getChainName(collectionChain: Number) {
-  return nftChains.find(chain => chain.value === collectionChain)?.label;
+function getChainIconName(collectionChain?: Number) {
+  return [...nftChains, ...chainsTestnet].find(chain => chain.value === collectionChain)?.name;
+}
+function getChainName(collectionChain?: Number) {
+  return [...nftChains, ...chainsTestnet].find(chain => chain.value === collectionChain)?.label;
 }
 </script>

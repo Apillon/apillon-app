@@ -20,14 +20,14 @@ const props = defineProps({
   isLogo: { type: Boolean, default: false },
 });
 
-const collectionStore = useCollectionStore();
+const metadataStore = useMetadataStore();
 const collection = useCollection();
 
 function handleImageRemove() {
   if (props.isLogo) {
-    collectionStore.form.base.logo = null;
+    metadataStore.form.visual.logo = null;
   } else {
-    collectionStore.form.base.coverImage = null;
+    metadataStore.form.visual.coverImage = null;
   }
 }
 </script>

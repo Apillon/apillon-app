@@ -8,20 +8,20 @@
 
     <slot>
       <div
-        v-if="!isNetworkSelected && !collectionStore.metadataStored && !isIpnsTypeSelected && !isUnique"
+        v-if="!isNetworkSelected && !metadataStore.metadataStored && !isIpnsTypeSelected && !isUnique"
         class="flex-cc pt-4"
         style="min-height: calc(70dvh - 50px)"
       >
         <Spinner v-if="collectionStore.loading" />
-        <FormNftMetadataType v-else-if="collectionStore.metadataStored === undefined" />
+        <FormNftMetadataType v-else-if="metadataStore.metadataStored === undefined" />
         <FormNftCollectionNetworkSelect
-          v-else-if="collectionStore.form.behavior.chain === undefined"
+          v-else-if="metadataStore.form.smartContract.chain === undefined"
           class="mb-8"
           @submit="onNetworkSelected"
         />
         <FormNftCollectionIpnsType v-else @submit="isIpnsTypeSelected = true" />
       </div>
-      <div v-else-if="collectionStore.metadataStored">
+      <div v-else-if="metadataStore.metadataStored">
         <FormNftCollection />
       </div>
       <div v-else-if="createUniqueMetadata">
@@ -29,7 +29,7 @@
       </div>
       <div v-else class="relative">
         <FormInstructions :title="t('nft.collection.data')" :instructions="[t('nft.collection.instruction.data')]">
-          <FormNftCollectionBase ref="formBaseRef" hide-submit />
+          <FormNftCollectionBase ref="formVisualRef" hide-submit />
         </FormInstructions>
 
         <FormInstructions
@@ -38,8 +38,8 @@
         >
           <template #headerExtra>
             <NuxtIcon
-              v-if="collectionStore.form.behavior.chain"
-              :name="`logo/${chainIdToName(collectionStore.form.behavior.chain)}`"
+              v-if="metadataStore.form.smartContract.chain"
+              :name="`logo/${chainIdToName(metadataStore.form.smartContract.chain)}`"
               class="icon-auto text-2xl"
               filled
             />
@@ -48,7 +48,7 @@
             </div>
           </template>
           <FormNftCollectionBehavior
-            ref="formBehaviorRef"
+            ref="formSmartContractRef"
             :show-network="!isNetworkSelected"
             :show-ipns="!isIpnsTypeSelected"
             hide-submit
@@ -67,7 +67,7 @@
       </div>
 
       <ModalLeaving
-        v-if="collectionStore.stepCollectionDeploy < CollectionStatus.DEPLOYED && !collectionStore.metadataStored"
+        v-if="collectionStore.stepCollectionDeploy < CollectionStatus.DEPLOYED && !metadataStore.metadataStored"
       />
       <ModalSuccess
         v-if="!isUnique && collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOYED"
@@ -101,19 +101,20 @@ const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const warningStore = useWarningStore();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
-const { getPriceServiceName, uploadLogoAndCover } = useNft();
+const { getPriceServiceName, uploadLogoAndCover } = useMetadata();
 const { collectionEndpoint, isFormDisabled, isUnique, onChainChange, prepareFormData } = useCollection();
 const { modalW3WarnVisible } = useW3Warn(LsW3WarnKeys.NFT_NEW);
 
 const headingRef = ref<HTMLElement>();
-const formBaseRef = useTemplateRef('formBaseRef');
-const formBehaviorRef = useTemplateRef('formBehaviorRef');
+const formVisualRef = useTemplateRef('formVisualRef');
+const formSmartContractRef = useTemplateRef('formSmartContractRef');
 const pageLoading = ref<boolean>(true);
 const createUniqueMetadata = ref<boolean>(false);
-const isNetworkSelected = ref<boolean>(collectionStore.metadataStored !== undefined);
-const isIpnsTypeSelected = ref<boolean>(collectionStore.form.behavior.useIpns !== undefined);
+const isNetworkSelected = ref<boolean>(metadataStore.metadataStored !== undefined);
+const isIpnsTypeSelected = ref<boolean>(metadataStore.form.smartContract.useIpns !== undefined);
 
 const scrollStyle = computed(() => {
   return {
@@ -138,22 +139,23 @@ onMounted(async () => {
 });
 
 const onNetworkSelected = (chainId: number) => {
-  collectionStore.form.behavior.chain = chainId;
+  metadataStore.form.smartContract.chain = chainId;
   onChainChange(chainId);
   isNetworkSelected.value = true;
 };
 
-const submitFormBase = async () => (formBaseRef.value ? await formBaseRef.value.handleSubmitForm() : false);
-const submitFormBehavior = async () => (formBehaviorRef.value ? await formBehaviorRef.value.handleSubmitForm() : false);
+const submitFormVisual = async () => (formVisualRef.value ? await formVisualRef.value.handleSubmitForm() : false);
+const submitFormSmartContract = async () =>
+  formSmartContractRef.value ? await formSmartContractRef.value.handleSubmitForm() : false;
 const isLoading = computed(
   () => modalW3WarnVisible.value || collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOY_INITIATED
 );
 
 async function w3WarnAndDeploy() {
-  const formBaseSubmitted = await submitFormBase();
-  const formBehaviorSubmitted = await submitFormBehavior();
+  const FormVisualSubmitted = await submitFormVisual();
+  const FormSmartContractSubmitted = await submitFormSmartContract();
 
-  if (formBaseSubmitted && formBehaviorSubmitted) {
+  if (FormVisualSubmitted && FormSmartContractSubmitted) {
     if (!localStorage.getItem(LsW3WarnKeys.NFT_NEW) && te('w3Warn.nft.new')) {
       modalW3WarnVisible.value = true;
     } else {
@@ -179,7 +181,7 @@ async function createCollection() {
 
     /** On new collection created add new collection to list */
     collectionStore.items.push(data);
-    collectionStore.form.single.collectionUuid = data.collection_uuid;
+    metadataStore.form.single.collectionUuid = data.collection_uuid;
 
     /** Uploads logo and cover image */
     uploadLogoAndCover(data.bucket_uuid);

@@ -96,13 +96,6 @@ export enum TransactionType {
   NEST_MINT_NFT = 6,
 }
 
-/** NFT create steps */
-export enum NftAmount {
-  SINGLE = 1,
-  MULTIPLE = 2,
-  ENDPOINT = 3,
-  JSON = 4,
-}
 /** NFT create collection step */
 export enum CollectionCreateStep {
   METADATA = 1,
@@ -125,15 +118,6 @@ export enum NftMetadataStep {
   ENDPOINT_PREVIEW = 9,
   JSON = 10,
   JSON_PREVIEW = 11,
-}
-// TODO: remove
-/** NFT create steps */
-export enum NftCreateStep {
-  AMOUNT = 1,
-  SINGLE = 2,
-  MULTIPLE = 3,
-  PREVIEW = 4,
-  DEPLOY = 5,
 }
 /** NFTs metadata field */
 export enum MetadataFieldRequired {
@@ -232,12 +216,6 @@ declare global {
   interface CollectionResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionUpdateResponse extends GeneralResponse<CollectionInterface> {}
   interface CollectionsResponse extends GeneralItemsResponse<CollectionInterface> {}
-
-  interface WebsiteDeployForm {
-    apiKey: string;
-    apiSecret: string;
-    type: NftWebsiteType;
-  }
 
   /**
    * Transaction

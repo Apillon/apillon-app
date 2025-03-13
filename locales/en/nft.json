@@ -77,12 +77,11 @@
       "numOfData": "Number of data",
       "preview": "NFT collection",
       "previewTab": "Collection preview",
-      "previewInfo": "This is the preview of your collection. After a successful deployment, you will be able to start adding NFTs.",
       "revoke": "Burn",
       "setBaseUri": "Set base URI",
       "setBehavior": "Set collection behavior",
-      "smartContract": "Smart contract",
       "symbol": "Symbol",
+      "showWebsite": "Show website",
       "title": "Collection",
       "transfer": "Transfer ownership",
       "upload": "Deploy NFT collection",
@@ -93,6 +92,7 @@
       "uploadYourFirst": "Upload your first NFTs and start building your collection.",
       "uuid": "Collection UUID",
       "view": "Or, display them on your existing website",
+      "websiteConnected": "NFT collection has been successfully connected to the Apillon website!",
       "burn": {
         "title": "Burn token",
         "info": "Are you sure, you want to burn your token?"
@@ -137,9 +137,20 @@
       },
       "instruction": {
         "data": "All collection data can be changed later in settings.",
-        "smartContract": "The smart contract data cannot be changed later or depends on the settings you have chosen. So make sure that you enter the correct data."
+        "smartContract": "Once created, the smart contract details will be permanently deployed to the blockchain.",
+        "visuals": "All collection data can be changed later in settings."
       },
-      "show-website": "Show website",
+      "review": {
+        "balance": "Your balance",
+        "costs": "Costs details",
+        "createCollection": "Create collection",
+        "info": "Give your collection a final review before deploying it to the blockchain.",
+        "nonRefundable": "I understand credits are non-refundable after creation.",
+        "nftFiles": "NFT files",
+        "title": "Almost there!",
+        "totalCosts": "Total costs",
+        "totalSpend": "Total spend"
+      },
       "status": {
         "0": "CREATED",
         "1": "INITIATED",
@@ -152,13 +163,11 @@
         "1": "Generic",
         "2": "Nestable"
       },
-      "website-connected": "NFT collection has been successfully connected to the Apillon website!",
       "website-deploy": {
         "deploy": "Deploy NFT website",
         "plain_js": "Vanilla Javascript",
         "react": "React",
         "vue": "Vue",
-
         "success": "NFT website deploy successfully triggered",
         "form": {
           "api-key": "API Key",
@@ -217,11 +226,19 @@
     "network": {
       "1": {
         "advantage": "",
-        "content": [{ "title": "Ethereum" }]
+        "content": [
+          {
+            "title": "Ethereum"
+          }
+        ]
       },
       "10": {
         "advantage": "",
-        "content": [{ "title": "OPTIMISM" }]
+        "content": [
+          {
+            "title": "OPTIMISM"
+          }
+        ]
       },
       "11": {
         "advantage": "Perfect for NFT projects needing advanced customization and native features.",
@@ -245,11 +262,19 @@
       },
       "81": {
         "advantage": "",
-        "content": [{ "title": "ASTAR SHIBUYA" }]
+        "content": [
+          {
+            "title": "ASTAR SHIBUYA"
+          }
+        ]
       },
       "137": {
         "advantage": "",
-        "content": [{ "title": "Polygon" }]
+        "content": [
+          {
+            "title": "Polygon"
+          }
+        ]
       },
       "592": {
         "advantage": "Ideal for multi-chain projects using EVM and WASM for advanced NFT minting.",
@@ -310,55 +335,107 @@
       },
       "8453": {
         "advantage": "",
-        "content": [{ "title": "Base" }]
+        "content": [
+          {
+            "title": "Base"
+          }
+        ]
       },
       "23294": {
         "advantage": "",
-        "content": [{ "title": "Oasis Sapphire" }]
+        "content": [
+          {
+            "title": "Oasis Sapphire"
+          }
+        ]
       },
       "42161": {
         "advantage": "",
-        "content": [{ "title": "Arbitrum One" }]
+        "content": [
+          {
+            "title": "Arbitrum One"
+          }
+        ]
       },
       "42220": {
         "advantage": "",
-        "content": [{ "title": "Celo" }]
+        "content": [
+          {
+            "title": "Celo"
+          }
+        ]
       },
       "42262": {
         "advantage": "",
-        "content": [{ "title": "Oasis" }]
+        "content": [
+          {
+            "title": "Oasis"
+          }
+        ]
       },
       "43113": {
         "advantage": "",
-        "content": [{ "title": "AVALANCHE FUJI" }]
+        "content": [
+          {
+            "title": "AVALANCHE FUJI"
+          }
+        ]
       },
       "43114": {
         "advantage": "",
-        "content": [{ "title": "AVALANCHE" }]
+        "content": [
+          {
+            "title": "AVALANCHE"
+          }
+        ]
       },
       "44787": {
         "advantage": "",
-        "content": [{ "title": "ALFAJORES" }]
+        "content": [
+          {
+            "title": "ALFAJORES"
+          }
+        ]
       },
       "80002": {
         "advantage": "",
-        "content": [{ "title": "Polygon Amoy" }]
+        "content": [
+          {
+            "title": "Polygon Amoy"
+          }
+        ]
       },
       "84532": {
         "advantage": "",
-        "content": [{ "title": "Base sepolia" }]
+        "content": [
+          {
+            "title": "Base sepolia"
+          }
+        ]
       },
       "421614": {
         "advantage": "",
-        "content": [{ "title": "Arbitrum One Sepolia" }]
+        "content": [
+          {
+            "title": "Arbitrum One Sepolia"
+          }
+        ]
       },
       "11155111": {
         "advantage": "",
-        "content": [{ "title": "Sepolia" }]
+        "content": [
+          {
+            "title": "Sepolia"
+          }
+        ]
       },
       "11155420": {
         "advantage": "",
-        "content": [{ "title": "OPTIMISM Sepolia" }]
+        "content": [
+          {
+            "title": "OPTIMISM Sepolia"
+          }
+        ]
       }
     },
     "single": {

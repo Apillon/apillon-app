@@ -46,17 +46,11 @@
         <tbody>
           <tr v-for="(price, key) in shownPrices" :key="key">
             <td>
-              <NuxtIcon
-                :name="getIconName(price)"
-                class="float-left text-white text-2xl mr-3"
-                filled
-              />
+              <NuxtIcon :name="getIconName(price)" class="float-left mr-3 text-2xl text-white" filled />
               <span>{{ price.description }} </span>
             </td>
             <td class="text-right">
-              <strong class="text-white">
-                {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}
-              </strong>
+              <strong class="text-white"> {{ price.currentPrice }} {{ $t('dashboard.credits.credits') }} </strong>
             </td>
           </tr>
         </tbody>
@@ -78,8 +72,9 @@ const props = defineProps({
 });
 
 const paymentStore = usePaymentStore();
-const collectionStore = useCollectionStore();
-const { chains, enterpriseChainIDs, nftChains, evmChains, substrateChains } = useCollection();
+const metadataStore = useMetadataStore();
+const { chains, enterpriseChainIDs, availableNftChains, chainsTestnet, substrateChains, isChainAvailable } =
+  useCollection();
 
 const identityChains = enumKeyValues(IdentityChains);
 const services = enumKeyValues(ServiceTypeName);
@@ -90,7 +85,7 @@ const loading = ref<boolean>(true);
 
 onMounted(async () => {
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
-    selectedChain.value = props.chain || collectionStore.form.behavior.chain;
+    selectedChain.value = props.chain || metadataStore.form.smartContract.chain;
   }
   await paymentStore.getActiveSubscription();
 
@@ -115,9 +110,6 @@ onMounted(async () => {
   loading.value = false;
 });
 
-const hiddenChain = (chainId: number) =>
-  !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
-
 const chainsByService = computed(() => {
   switch (selectedService.value) {
     case ServiceTypeName.AUTHENTICATION:
@@ -125,13 +117,15 @@ const chainsByService = computed(() => {
     case ServiceTypeName.HOSTING:
       return [];
     case ServiceTypeName.NFT:
-      return nftChains.filter(c => !hiddenChain(c.value));
+      return availableNftChains;
     case ServiceTypeName.STORAGE:
       return [];
     case ServiceTypeName.SMART_CONTRACTS:
-      return [...evmChains, ...chains].filter(c => !hiddenChain(c.value));
+      return [...chains, ...chainsTestnet].filter(c => isChainAvailable(c.value));
     default:
-      return [...identityChains, ...chains, ...substrateChains].filter(c => !hiddenChain(c.value));
+      return [...identityChains, ...chains, ...chainsTestnet, ...substrateChains].filter(c =>
+        isChainAvailable(c.value)
+      );
   }
 });
 

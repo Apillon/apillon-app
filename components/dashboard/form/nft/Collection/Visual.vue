@@ -6,33 +6,11 @@
     v-bind="$attrs"
     ref="formRef"
     class="max-w-xl"
-    :model="collectionStore.form.base"
+    :model="metadataStore.form.visual"
     :rules="rules"
     @submit.prevent="handleSubmitForm"
   >
     <n-grid :cols="12" :x-gap="32">
-      <!--  Collection name -->
-      <n-form-item-gi :span="8" path="name" :label="infoLabel('name') as string" :label-props="{ for: 'name' }">
-        <n-input
-          v-model:value="collectionStore.form.base.name"
-          :input-props="{ id: 'name' }"
-          :placeholder="t('general.typeHere')"
-          clearable
-        />
-      </n-form-item-gi>
-
-      <!--  Collection Symbol -->
-      <n-form-item-gi :span="4" path="symbol" :label="infoLabel('symbol') as string" :label-props="{ for: 'symbol' }">
-        <n-input
-          v-model:value="collectionStore.form.base.symbol"
-          :minlength="1"
-          :maxlength="8"
-          :input-props="{ id: 'symbol' }"
-          :placeholder="t('general.typeHere')"
-          clearable
-        />
-      </n-form-item-gi>
-
       <!--  Collection logo -->
       <n-form-item-gi
         :span="6"
@@ -43,7 +21,7 @@
       >
         <FormNftCollectionUpload
           id="collectionLogo"
-          :image="collectionStore.form.base.logo || ({} as FileListItemType)"
+          :image="metadataStore.form.visual.logo || ({} as FileListItemType)"
           is-logo
         />
       </n-form-item-gi>
@@ -58,7 +36,7 @@
       >
         <FormNftCollectionUpload
           id="coverImage"
-          :image="collectionStore.form.base.coverImage || ({} as FileListItemType)"
+          :image="metadataStore.form.visual.coverImage || ({} as FileListItemType)"
         />
       </n-form-item-gi>
     </n-grid>
@@ -79,7 +57,7 @@ defineProps({
 });
 const { t } = useI18n();
 const message = useMessage();
-const collectionStore = useCollectionStore();
+const metadataStore = useMetadataStore();
 
 const { labelInfo } = useComputing();
 const { formRef, isFormDisabled, rules } = useCollection();

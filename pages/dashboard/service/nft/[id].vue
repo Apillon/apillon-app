@@ -49,7 +49,7 @@
             <slot>
               <TableNftMetadataDeploys
                 v-if="collectionStore.active.bucket_uuid"
-                :deploys="collectionStore.metadataDeploys"
+                :deploys="metadataStore.metadataDeploys"
               />
             </slot>
           </n-tab-pane>
@@ -74,12 +74,12 @@
               />
               <div v-else-if="collectionStore.active.websiteUuid">
                 <p class="my-4">
-                  {{ t('nft.collection.website-connected') }}
+                  {{ t('nft.collection.websiteConnected') }}
                 </p>
 
                 <NuxtLink :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}`">
                   <Btn type="primary">
-                    {{ t('nft.collection.show-website') }}
+                    {{ t('nft.collection.showWebsite') }}
                   </Btn>
                 </NuxtLink>
               </div>
@@ -125,11 +125,11 @@
         />
       </modal>
 
-      <!-- Modal - Add NFT -->
+      <!-- Modal - Add NFT
       <modal v-model:show="modalAddNftVisible" class="hide-header">
         <FormNftAmountOption v-if="collectionStore.nftStep === NftCreateStep.AMOUNT" @submit="onAmountSelected" />
         <FormNftUpload v-else-if="collectionStore.nftStep === NftCreateStep.MULTIPLE" modal />
-      </modal>
+      </modal> -->
 
       <ModalTransaction
         v-if="transactionHash"
@@ -142,7 +142,7 @@
 </template>
 
 <script lang="ts" setup>
-import { CollectionStatus, ChainType, NftCreateStep } from '~/lib/types/nft';
+import { CollectionStatus, ChainType } from '~/lib/types/nft';
 
 enum Tabs {
   TRANSACTIONS = 'transactions',
@@ -186,7 +186,7 @@ onMounted(async () => {
 
   /** Reset state if user opens different collection */
   if (collectionUuid.value !== collectionStore.active?.collection_uuid) {
-    collectionStore.resetMetadata();
+    metadataStore.resetMetadata();
   }
 
   if (!currentCollection?.collection_uuid) {

@@ -31,7 +31,7 @@ import 'swiper/css/effect-cards';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-const collectionStore = useCollectionStore();
+const metadataStore = useMetadataStore();
 
 const SLIDES_TO_SHOW = 10;
 const swiperRef = ref<SwiperClass>();
@@ -40,12 +40,12 @@ const slides = ref<Array<any>>([]);
 const pagination = reactive({
   type: 'fraction',
   formatFractionTotal: () => {
-    return collectionStore.metadata.length;
+    return metadataStore.metadata.length;
   },
 });
 
 onMounted(() => {
-  slides.value = collectionStore.metadata.slice(0, SLIDES_TO_SHOW);
+  slides.value = metadataStore.metadata.slice(0, SLIDES_TO_SHOW);
 });
 onUnmounted(() => {
   if (swiperRef.value) {
@@ -76,9 +76,9 @@ function onSlideChange(swiper: SwiperClass) {
   if (
     swiper.previousIndex < swiper.realIndex &&
     swiper.realIndex + SLIDES_TO_SHOW > slides.value.length &&
-    slides.value.length < collectionStore.metadata.length
+    slides.value.length < metadataStore.metadata.length
   ) {
-    slides.value.push(collectionStore.metadata[swiper.previousIndex + SLIDES_TO_SHOW]);
+    slides.value.push(metadataStore.metadata[swiper.previousIndex + SLIDES_TO_SHOW]);
   }
 }
 </script>

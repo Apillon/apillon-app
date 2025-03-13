@@ -1,19 +1,7 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
     <div class="flex">
-      <n-input
-        v-model:value="indexerLogStore.search"
-        class="min-w-[11rem] w-[20vw] max-w-xs"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('general.search')"
-        clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
+      <FormFieldSearch v-model:value="indexerLogStore.search" class="w-[20vw] min-w-[11rem] max-w-xs" />
 
       <!-- <n-date-picker
         v-model:value="indexerLogStore.filter.dateFrom"
@@ -29,7 +17,7 @@
         :options="logLevels"
         :placeholder="$t('form.placeholder.indexer.logLevels')"
         size="small"
-        class="ml-2 min-w-[11rem] w-[20vw] max-w-xs"
+        class="ml-2 w-[20vw] min-w-[11rem] max-w-xs"
         filterable
         clearable
         multiple
@@ -41,7 +29,7 @@
         :options="containers"
         :placeholder="$t('form.placeholder.indexer.containers')"
         size="small"
-        class="ml-2 min-w-[11rem] w-[20vw] max-w-xs"
+        class="ml-2 w-[20vw] min-w-[11rem] max-w-xs"
         filterable
         clearable
         multiple
@@ -56,7 +44,7 @@
         :loading="indexerLogStore.loading"
         @click="indexerLogStore.fetchLogs(indexerStore.active.indexer_uuid)"
       >
-        <span class="icon-refresh text-xl mr-2"></span>
+        <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
     </n-space>

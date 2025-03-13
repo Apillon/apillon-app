@@ -73,6 +73,15 @@ declare global {
     };
   }
 
+  type Pagination = {
+    itemCount: number | undefined;
+    page: number | undefined;
+    pageSize: number;
+    showSizePicker: boolean;
+    pageSizes: number[];
+    prefix: ({ itemCount }: { itemCount: number }) => string;
+  };
+
   /** Naive UI */
   interface NFormInst extends FormInst {}
   interface NFormRules extends FormRules {}

@@ -1,75 +1,21 @@
-import type { TableColumns } from 'naive-ui/es/data-table/src/interface';
 import { defineStore } from 'pinia';
-import { NftMetadataStep, type FormSingleNft } from '~/lib/types/nft';
 
 export const useCollectionStore = defineStore('collection', {
   state: () => ({
     active: {} as CollectionInterface,
-    archive: [] as CollectionInterface[],
-    attribute: {} as AttributeInterface,
-    columns: [] as KeyTitle[],
-    csvAttributes: [] as Array<MetadataAttributes>,
-    csvData: [] as Array<Record<string, string>>,
-    csvFile: {} as FileListItemType,
-    csvSelectedAttributes: [] as Array<string>,
-    filesMetadata: [] as FileListItemType[],
-    gridView: false,
-    images: [] as FileListItemType[],
     items: [] as CollectionInterface[],
     loading: false,
-    loadingMetadata: false,
-    metadata: [] as MetadataItem[],
     metadataDeploys: [] as MetadataDeployInterface[],
-    metadataStored: undefined as Boolean | undefined,
-    quotaReached: undefined as Boolean | undefined,
+    pagination: createPagination(false),
     search: '',
-    nftStep: NftCreateStep.AMOUNT, // TODO: remove
-    amount: 0,
-    stepCollectionCreate: CollectionCreateStep.METADATA,
-    stepCollectionDeploy: CollectionStatus.CREATED,
-    stepMetadata: NftMetadataStep.CHAIN,
-    total: 0,
+    quotaReached: undefined as Boolean | undefined,
     transaction: [] as TransactionInterface[],
-    uploadActive: false,
-    form: {
-      base: {
-        coverImage: null as FileListItemType | null,
-        logo: null as FileListItemType | null,
-        name: '',
-        symbol: '',
-      },
-      behavior: {
-        adminAddress: null as string | null,
-        chain: undefined as number | undefined,
-        chainType: ChainType.EVM,
-        collectionType: NFTCollectionType.GENERIC,
-        useApillonIpfsGateway: false,
-        useIpns: undefined as boolean | undefined,
-        baseUri: '',
-        baseExtension: '.json',
-        dropStart: Date.now() + 3600000,
-        drop: false,
-        maxSupply: 0,
-        dropPrice: 0,
-        dropReserve: 0,
-        revocable: false as boolean | null,
-        soulbound: false as boolean | null,
-        isAutoIncrement: true as boolean | null,
-        supplyLimited: 0,
-        royaltiesAddress: null,
-        royaltiesFees: 0,
-      },
-      single: {
-        image: '',
-        id: 1,
-        collectionUuid: '',
-        name: '',
-        description: '',
-        copies: 1,
-        attributes: [] as AttributesInterface,
-      } as FormSingleNft,
+    archive: {
+      items: [] as CollectionInterface[],
+      loading: false,
+      pagination: createPagination(false),
+      search: '',
     },
-    websiteDeployForm: {} as WebsiteDeployForm,
   }),
   getters: {
     collectionUuid(state): string {
@@ -79,19 +25,10 @@ export const useCollectionStore = defineStore('collection', {
       return Array.isArray(state.items) && state.items.length > 0;
     },
     hasCollectionArchive(state): boolean {
-      return Array.isArray(state.archive) && state.archive.length > 0;
+      return Array.isArray(state.archive.items) && state.archive.items.length > 0;
     },
     hasCollectionTransactions(state): boolean {
       return Array.isArray(state.transaction) && state.transaction.length > 0;
-    },
-    hasCsvFile(state): boolean {
-      return !!state.csvFile?.id && Array.isArray(state.csvData) && state.csvData.length > 0;
-    },
-    hasImages(state): boolean {
-      return Array.isArray(state.images) && state.images.length > 0;
-    },
-    hasMetadata(state): boolean {
-      return Array.isArray(state.metadata) && state.metadata.length > 0;
     },
     hasMetadataDeploys(state): boolean {
       return Array.isArray(state.metadataDeploys) && state.metadataDeploys.length > 0;
@@ -103,74 +40,13 @@ export const useCollectionStore = defineStore('collection', {
   actions: {
     resetData() {
       this.active = {} as CollectionInterface;
-      this.archive = [] as CollectionInterface[];
       this.items = [] as CollectionInterface[];
-      this.metadataDeploys = [] as MetadataDeployInterface[];
       this.search = '';
       this.transaction = [] as TransactionInterface[];
-      this.quotaReached = undefined as Boolean | undefined;
-      this.resetMetadata();
+      this.archive.items = [] as CollectionInterface[];
+      this.archive.search = '';
     },
-    resetMetadata() {
-      this.resetFile();
-      this.resetImages();
-      this.nftStep = NftCreateStep.AMOUNT;
-      this.stepCollectionDeploy = CollectionStatus.CREATED;
-    },
-    resetFile() {
-      this.csvAttributes = [] as MetadataAttributes[];
-      this.columns = [] as NTableColumns<KeyTitle>;
-      this.csvData = [] as Array<Record<string, string>>;
-      this.csvFile = {} as FileListItemType;
-      this.csvSelectedAttributes = [] as Array<string>;
-      this.filesMetadata = [] as FileListItemType[];
-      this.metadata = [] as MetadataItem[];
-    },
-    resetImages() {
-      while (this.images.length > 0) {
-        this.images.pop();
-      }
-    },
-    resetSingleFormData(clear = true) {
-      this.form.single.collectionUuid = this.active?.collection_uuid;
-      this.form.single.copies = 1;
-      this.form.single.description = '';
-      this.form.single.image = '';
-      this.form.single.name = '';
 
-      if (clear) {
-        this.form.single.attributes = [];
-        this.form.single.id = 1;
-      } else {
-        this.form.single.attributes.forEach(attr => (attr.value = ''));
-      }
-    },
-    resetForms() {
-      this.form.base.logo = null;
-      this.form.base.coverImage = null;
-      this.form.base.name = '';
-      this.form.base.symbol = '';
-
-      this.form.behavior.adminAddress = null;
-      this.form.behavior.chain = undefined;
-      this.form.behavior.chainType = ChainType.EVM;
-      this.form.behavior.collectionType = NFTCollectionType.GENERIC;
-      this.form.behavior.useApillonIpfsGateway = false;
-      this.form.behavior.useIpns = undefined;
-      this.form.behavior.baseUri = '';
-      this.form.behavior.baseExtension = '.json';
-      this.form.behavior.dropStart = Date.now() + 3600000;
-      this.form.behavior.drop = false;
-      this.form.behavior.maxSupply = 0;
-      this.form.behavior.dropPrice = 0;
-      this.form.behavior.dropReserve = 0;
-      this.form.behavior.revocable = false;
-      this.form.behavior.soulbound = false;
-      this.form.behavior.isAutoIncrement = true;
-      this.form.behavior.supplyLimited = 0;
-
-      this.resetSingleFormData();
-    },
     resetCache() {
       sessionStorage.removeItem(LsCacheKeys.COLLECTION);
       sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
@@ -240,31 +116,19 @@ export const useCollectionStore = defineStore('collection', {
       const dataStore = useDataStore();
       if (!dataStore.projectUuid) return [];
 
-      this.loading = showLoader;
+      (archive ? this.archive : this).loading = false;
       try {
-        const params: Record<string, string | number> = {
-          project_uuid: dataStore.projectUuid,
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        };
-        if (archive) {
-          params.status = SqlModelStatus.ARCHIVED;
-        }
+        const params = parseArguments({ ...PARAMS_ALL_ITEMS, project_uuid: dataStore.projectUuid });
+        if (archive) params.status = SqlModelStatus.ARCHIVED;
 
         const req = $api.get<CollectionsResponse>(endpoints.collections(), params);
         dataStore.promises.collections = req;
         const res = await req;
 
-        if (archive) {
-          this.archive = res.data.items;
-        } else {
-          this.items = res.data.items;
-        }
-        this.total = res.data.total;
-        this.search = '';
-        this.loading = false;
-
+        (archive ? this.archive : this).items = res.data.items;
+        (archive ? this.archive : this).pagination.itemCount = res.data.total;
+        (archive ? this.archive : this).search = '';
+        (archive ? this.archive : this).loading = false;
         /** Save timestamp to SS */
         const key = archive ? LsCacheKeys.COLLECTION_ARCHIVE : LsCacheKeys.COLLECTIONS;
         sessionStorage.setItem(key, Date.now().toString());
@@ -274,18 +138,15 @@ export const useCollectionStore = defineStore('collection', {
         /** Clear promise */
         dataStore.promises.collections = null;
 
-        if (archive) {
-          this.archive = [] as Array<CollectionInterface>;
-        } else {
-          this.items = [] as Array<CollectionInterface>;
-        }
-        this.total = 0;
+        (archive ? this.archive : this).items = [];
+        (archive ? this.archive : this).pagination.itemCount = 0;
+        (archive ? this.archive : this).search = '';
+        (archive ? this.archive : this).loading = false;
 
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
 
-      this.loading = false;
       return [];
     },
 
@@ -307,10 +168,10 @@ export const useCollectionStore = defineStore('collection', {
     async fetchCollectionTransactions(collectionUuid: string, showLoader = true): Promise<TransactionInterface[]> {
       this.loading = showLoader;
       try {
-        const params: Record<string, string | number> = {
-          ...PARAMS_ALL_ITEMS,
-        };
-        const res = await $api.get<TransactionResponse>(endpoints.collectionTransactions(collectionUuid), params);
+        const res = await $api.get<TransactionResponse>(
+          endpoints.collectionTransactions(collectionUuid),
+          PARAMS_ALL_ITEMS
+        );
         this.transaction = res.data.items;
         this.loading = false;
 
@@ -330,15 +191,9 @@ export const useCollectionStore = defineStore('collection', {
 
     async fetchMetadataDeploys(collectionUuid?: string): Promise<MetadataDeployInterface[]> {
       try {
-        const params: Record<string, string | number> = {
-          orderBy: 'createTime',
-          desc: 'true',
-          ...PARAMS_ALL_ITEMS,
-        };
-
         const res = await $api.get<MetadataDeploysResponse>(
           endpoints.collectionNftsMetadata(collectionUuid || this.collectionUuid),
-          params
+          parseArguments({ ...PARAMS_ALL_ITEMS })
         );
 
         this.metadataDeploys = res.data.items;

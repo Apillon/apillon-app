@@ -5,8 +5,8 @@
     :bordered="false"
     :columns="columns"
     :data="data"
-    :loading="collectionStore.loading"
-    :pagination="pagination"
+    :loading="archive ? collectionStore.archive.loading : collectionStore.loading"
+    :pagination="archive ? collectionStore.archive.pagination : collectionStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
     @update:page-size="(pz: number) => (pagination.pageSize = pz)"
@@ -17,8 +17,10 @@
 import { NButton, NDropdown } from 'naive-ui';
 
 const props = defineProps({
-  collections: { type: Array<CollectionInterface>, default: [] },
   archive: { type: Boolean, default: false },
+  collections: { type: Array<CollectionInterface>, default: [] },
+  pagination: { type: Object, default: {} },
+  search: { type: String, default: '' },
 });
 
 const { t, te } = useI18n();
@@ -27,8 +29,6 @@ const message = useMessage();
 const authStore = useAuthStore();
 const collectionStore = useCollectionStore();
 const { deleteItem } = useDelete();
-
-const pagination = reactive(createPagination(false));
 
 /** Available columns - show/hide column */
 const selectedColumns = ref([
@@ -62,7 +62,7 @@ const availableColumns = ref([
 
 /** Data: filtered collections */
 const data = computed<Array<CollectionInterface>>(() => {
-  return props.collections.filter(item => item.name.toLowerCase().includes(collectionStore.search.toLowerCase())) || [];
+  return props.collections.filter(item => item.name.toLowerCase().includes(props.search.toLowerCase())) || [];
 });
 
 const columns = computed<NDataTableColumns<CollectionInterface>>(() => {
@@ -328,7 +328,7 @@ async function restoreCollection() {
   try {
     await $api.patch<CollectionResponse>(endpoints.collectionActivate(currentRow.value.collection_uuid));
 
-    collectionStore.archive = collectionStore.archive.filter(
+    collectionStore.archive.items = collectionStore.archive.items.filter(
       item => item.collection_uuid !== currentRow.value.collection_uuid
     );
 

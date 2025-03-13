@@ -1,5 +1,5 @@
 <template>
-  <n-form ref="formRef" class="h-full" :model="collectionStore.form.single" :rules="rulesSingle">
+  <n-form ref="formRef" class="h-full" :model="metadataStore.form.single" :rules="rulesSingle">
     <div class="flex h-full flex-col gap-12 md:flex-row">
       <div class="md:w-1/2">
         <h4>{{ t('nft.add') }}</h4>
@@ -9,16 +9,16 @@
           <!--  Collection cover image -->
           <n-form-item-gi :span="6" path="image" :label="infoLabel('image') as string" :label-props="{ for: 'image' }">
             <NftCard
-              v-if="collectionStore.form.single.image"
-              class="mx-auto w-72"
-              :image="collectionStore.form.single.image"
+              v-if="metadataStore.form.single.image"
+              class="mx-auto max-w-72"
+              :image="metadataStore.form.single.image"
               @remove="() => removeImages()"
             />
             <FormFieldUploadImage
               v-else
               ref="uploadRef"
               :input-props="{ id: 'nftImage' }"
-              :file-list="collectionStore.images"
+              :file-list="metadataStore.images"
               @change="uploadImageRequest"
               @remove="handleImageRemove"
             />
@@ -27,7 +27,7 @@
           <!-- NFT name -->
           <n-form-item-gi :span="12" path="name" :label="infoLabel('name') as string" :label-props="{ for: 'name' }">
             <n-input
-              v-model:value="collectionStore.form.single.name"
+              v-model:value="metadataStore.form.single.name"
               :input-props="{ id: 'name' }"
               :placeholder="t('general.typeHere')"
               clearable
@@ -37,7 +37,7 @@
           <!-- NFT ID -->
           <n-form-item-gi :span="6" path="id" :label="infoLabel('id') as string" :label-props="{ for: 'nftId' }">
             <n-input-number
-              v-model:value="collectionStore.form.single.id"
+              v-model:value="metadataStore.form.single.id"
               :input-props="{ id: 'nftId' }"
               :placeholder="t('general.typeHere')"
               :step="1"
@@ -55,7 +55,7 @@
             :label-props="{ for: 'copies' }"
           >
             <n-input-number
-              v-model:value="collectionStore.form.single.copies"
+              v-model:value="metadataStore.form.single.copies"
               :min="0"
               :input-props="{ id: 'copies' }"
               clearable
@@ -70,7 +70,7 @@
             :label-props="{ for: 'description' }"
           >
             <n-input
-              v-model:value="collectionStore.form.single.description"
+              v-model:value="metadataStore.form.single.description"
               :input-props="{ id: 'description' }"
               :placeholder="t('general.typeHere')"
               type="textarea"
@@ -114,11 +114,12 @@ import type { UploadInst } from 'naive-ui';
 
 const { t } = useI18n();
 const message = useMessage();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
 const { labelInfo } = useComputing();
 const { formRef, rulesSingle } = useCollection();
-const { createSingleNft, handleImageRemove, uploadImageRequest } = useNft();
+const { createSingleNft, handleImageRemove, uploadImageRequest } = useMetadata();
 defineExpose({ formRef, handleSubmitForm });
 
 const uploadRef = ref<UploadInst | null>(null);
@@ -128,13 +129,13 @@ function infoLabel(field: string) {
 }
 
 function removeImages() {
-  collectionStore.images.pop();
-  collectionStore.form.single.image = '';
+  metadataStore.images.pop();
+  metadataStore.form.single.image = '';
   uploadRef.value?.clear();
 }
 
 function addAttribute() {
-  collectionStore.form.single.attributes.push({
+  metadataStore.form.single.attributes.push({
     display_type: null,
     trait_type: '',
     value: '',
@@ -146,14 +147,14 @@ async function handleSubmitForm(e?: Event | MouseEvent) {
 
   return !(
     await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-      if (errors || !collectionStore.hasImages) {
-        if (!collectionStore.hasImages) {
+      if (errors || !metadataStore.hasImages) {
+        if (!metadataStore.hasImages) {
           message.warning(t('validation.nft.image') || 'Error');
         }
 
         errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
       } else {
-        createSingleNft(collectionStore.form.single);
+        createSingleNft(metadataStore.form.single);
       }
     })
   )?.warnings;

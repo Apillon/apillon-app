@@ -2,18 +2,7 @@
   <n-space class="pb-8" :size="12" vertical>
     <n-space justify="space-between">
       <div class="w-[45vw] max-w-xs sm:w-[30vw] lg:w-[20vw]">
-        <n-input
-          v-model:value="fileStore.trash.search"
-          type="text"
-          name="search"
-          size="small"
-          :placeholder="$t('storage.file.search')"
-          clearable
-        >
-          <template #prefix>
-            <span class="icon-search text-2xl"></span>
-          </template>
-        </n-input>
+        <FormFieldSearch v-model:value="fileStore.trash.search" :placeholder="$t('storage.file.search')" />
       </div>
 
       <n-space size="large">
@@ -49,8 +38,6 @@ const message = useMessage();
 const authStore = useAuthStore();
 const bucketStore = useBucketStore();
 const fileStore = useFileStore();
-const IconFolderFile = resolveComponent('IconFolderFile');
-const TableEllipsis = resolveComponent('TableEllipsis');
 
 const tableRef = ref<DataTableInst | null>(null);
 const currentRow = ref<BucketItemInterface>({} as BucketItemInterface);
@@ -65,7 +52,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       sorter: 'default',
       title: $i18n.t('storage.fileName'),
       render(row) {
-        return [h(IconFolderFile, { isFile: true }, ''), h('span', { class: 'ml-2 ' }, row.name)];
+        return [h(resolveComponent('IconFolderFile'), { isFile: true }, ''), h('span', { class: 'ml-2 ' }, row.name)];
       },
     },
     {
@@ -73,7 +60,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
       sorter: 'default',
       title: $i18n.t('storage.fileCid'),
       render(row) {
-        return h(TableEllipsis, { text: row.CID }, '');
+        return h(resolveComponent('TableEllipsis'), { text: row.CID }, '');
       },
     },
     {
@@ -90,7 +77,7 @@ const createColumns = (): NDataTableColumns<BucketItemInterface> => {
                   h(NEllipsis, { class: 'text-body align-bottom', 'line-clamp': 1 }, { default: () => row.link }),
                   h(
                     'button',
-                    { class: 'ml-2', onClick: () => copyToClipboard(row.link) },
+                    { class: 'ml-2', onClick: () => copyToClipboard(row.link || '') },
                     h('span', { class: 'icon-copy text-body' }, {})
                   ),
                 ],

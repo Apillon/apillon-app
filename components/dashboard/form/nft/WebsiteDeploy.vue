@@ -1,14 +1,7 @@
 <template>
-  <n-form
-    v-bind="$attrs"
-    ref="formRef"
-    :model="collectionStore.websiteDeployForm"
-    :rules="rules"
-    autocomplete="off"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" :model="formData" :rules="rules" autocomplete="off" @submit.prevent="handleSubmit">
     <n-form-item path="type" :label="$t('nft.collection.website-deploy.form.type')">
-      <n-radio-group v-model:value="collectionStore.websiteDeployForm.type" name="radiogroup">
+      <n-radio-group v-model:value="formData.type" name="radiogroup">
         <n-space>
           <n-radio v-for="(type, key) in websiteTypes" :key="key" :value="type.value" :label="`${type.label}`" />
         </n-space>
@@ -20,7 +13,7 @@
       :label-props="{ for: 'apiKey' }"
     >
       <n-select
-        v-model:value="collectionStore.websiteDeployForm.apiKey"
+        v-model:value="formData.apiKey"
         :placeholder="$t('nft.collection.website-deploy.form.api-key-placeholder')"
         :options="apiKeyOptions"
       >
@@ -33,7 +26,7 @@
       :label-props="{ for: 'apiSecret' }"
     >
       <n-input
-        v-model:value="collectionStore.websiteDeployForm.apiSecret"
+        v-model:value="formData.apiSecret"
         :input-props="{ id: 'apiSecret', autocomplete: 'off' }"
         show-password-on="click"
         type="password"
@@ -55,7 +48,13 @@
 import type { SelectOption } from 'naive-ui';
 import { NftWebsiteType } from '~/lib/types/nft';
 
-const dataStore = useDataStore();
+type FormWebsiteDeploy = {
+  apiKey: string;
+  apiSecret: string;
+  type: NftWebsiteType | null;
+};
+
+const emit = defineEmits(['submitSuccess']);
 const message = useMessage();
 const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
@@ -64,7 +63,6 @@ const $i18n = useI18n();
 const loading = ref<boolean>(false);
 
 const formRef = ref<NFormInst | null>(null);
-const apiKeyOptions = ref<SelectOption[]>([]);
 
 const websiteTypes = ref<Array<SelectOption>>([
   { value: NftWebsiteType.PLAIN_JS, label: $i18n.t('nft.collection.website-deploy.plain_js') },
@@ -72,13 +70,28 @@ const websiteTypes = ref<Array<SelectOption>>([
   { value: NftWebsiteType.VUE, label: $i18n.t('nft.collection.website-deploy.vue') },
 ]);
 
-const emit = defineEmits(['submitSuccess']);
+const formData = reactive<FormWebsiteDeploy>({
+  apiKey: '',
+  apiSecret: '',
+  type: null,
+});
 
 const rules: NFormRules = {
   type: [ruleRequired($i18n.t('nft.collection.website-deploy.form.type-required'))],
   apiKey: [ruleRequired($i18n.t('nft.collection.website-deploy.form.api-key-required'))],
   apiSecret: [ruleRequired($i18n.t('nft.collection.website-deploy.form.api-secret-required'))],
 };
+
+const apiKeyOptions = computed<SelectOption[]>(() =>
+  settingsStore.apiKeys.map((item: ApiKeyInterface) => ({
+    label: item.name,
+    value: item.apiKey,
+  }))
+);
+
+onMounted(async () => {
+  await settingsStore.getApiKeys();
+});
 
 async function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
@@ -95,14 +108,14 @@ async function deployNftWebsite() {
   loading.value = true;
   try {
     const bodyData = {
+      ...formData,
       collectionUuid: collectionStore.active.collection_uuid,
-      ...collectionStore.websiteDeployForm,
     };
 
-    const res = await $api.post<WebsiteResponse>(endpoints.deployNftWebsite, bodyData);
+    const { data } = await $api.post<WebsiteResponse>(endpoints.deployNftWebsite, bodyData);
     message.success($i18n.t('nft.collection.website-deploy.success'));
 
-    collectionStore.active.websiteUuid = res.data.website_uuid;
+    collectionStore.active.websiteUuid = data.website_uuid;
     emit('submitSuccess');
   } catch (e) {
     message.error(userFriendlyMsg(e));
@@ -110,15 +123,4 @@ async function deployNftWebsite() {
 
   loading.value = false;
 }
-
-onMounted(async () => {
-  await settingsStore.getApiKeys();
-
-  apiKeyOptions.value = settingsStore.apiKeys.map((item: ApiKeyInterface) => {
-    return {
-      label: item.name,
-      value: item.apiKey,
-    };
-  });
-});
 </script>

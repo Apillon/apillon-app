@@ -5,7 +5,7 @@ export default function useNft() {
   const { t } = useI18n();
   const message = useMessage();
   const { putRequests, fileAlreadyOnFileList, isEnoughSpaceInStorage, uploadFiles } = useUpload();
-  const collectionStore = useCollectionStore();
+  const metadataStore = useMetadataStore();
 
   const { vueApp } = useNuxtApp();
   const $papa = vueApp.config.globalProperties.$papa;
@@ -18,12 +18,10 @@ export default function useNft() {
 
   /** CSV */
   const isSameNumOfRows = computed<boolean>(() => {
-    return (
-      collectionStore.active?.maxSupply === 0 || collectionStore.active?.maxSupply === collectionStore.csvData?.length
-    );
+    return collection?.maxSupply === 0 || collection?.maxSupply === metadataStore.csvData?.length;
   });
   const hasRequiredMetadata = computed<boolean>(() => {
-    const columns: Array<string> = collectionStore.columns.map((item: NTableColumn<KeyTitle>) => {
+    const columns: Array<string> = metadataStore.columns.map((item: NTableColumn<KeyTitle>) => {
       return (item as KeyTitle).key;
     });
     return enumValues(MetadataFieldRequired).every(item => columns.includes(`${item}`));
@@ -34,11 +32,11 @@ export default function useNft() {
 
   /** Images */
   const dataImagesNames = computed<string[]>(() => {
-    const imgNames = collectionStore.csvData.map(item => item.image);
+    const imgNames = metadataStore.csvData.map(item => item.image);
     return [...new Set(imgNames)];
   });
   const uploadedImagesNames = computed<string[]>(() => {
-    return collectionStore.images.map(img => img.name);
+    return metadataStore.images.map(img => img.name);
   });
 
   const allImagesUploaded = computed<boolean>(() => {
@@ -46,8 +44,8 @@ export default function useNft() {
   });
 
   const missingImages = computed<string>(() => {
-    if (dataImagesNames.value.length - collectionStore.images.length > 5) {
-      return '(' + collectionStore.images.length + '/' + dataImagesNames.value.length + ')';
+    if (dataImagesNames.value.length - metadataStore.images.length > 5) {
+      return '(' + metadataStore.images.length + '/' + dataImagesNames.value.length + ')';
     }
 
     const missingImagesName = dataImagesNames.value.filter(item => !uploadedImagesNames.value.includes(item));
@@ -84,9 +82,9 @@ export default function useNft() {
       onError();
       return;
     }
-    collectionStore.csvAttributes = [];
-    collectionStore.csvFile = uploadedFile;
-    parseUploadedFile(collectionStore.csvFile.file);
+    metadataStore.csvAttributes = [];
+    metadataStore.csvFile = uploadedFile;
+    parseUploadedFile(metadataStore.csvFile.file);
   }
 
   /**
@@ -102,20 +100,20 @@ export default function useNft() {
       skipEmptyLines: true,
       complete: function (results: CsvFileData) {
         if (results.data.length) {
-          collectionStore.csvData = results.data;
+          metadataStore.csvData = results.data;
 
           const fields = results.meta.fields;
           if (!fields.includes('id')) {
             fields.unshift('id');
           }
-          collectionStore.columns = fields.map(item => {
+          metadataStore.columns = fields.map(item => {
             return {
               title: item,
               key: item,
             };
           });
 
-          collectionStore.csvAttributes = results.meta.fields
+          metadataStore.csvAttributes = results.meta.fields
             .filter(item => !enumValues(MetadataProperties).includes(item))
             .map(item => {
               return {
@@ -127,13 +125,13 @@ export default function useNft() {
         } else {
           message.warning(t('validation.fileNoData'));
 
-          collectionStore.csvFile = {} as FileListItemType;
+          metadataStore.csvFile = {} as FileListItemType;
         }
       },
       error: function (error: string) {
         console.warn(error);
 
-        collectionStore.csvFile = {} as FileListItemType;
+        metadataStore.csvFile = {} as FileListItemType;
       },
     });
   }
@@ -142,23 +140,23 @@ export default function useNft() {
    * Prepare NFT data: array of JSONs with formatted properties and attributes
    */
   async function createNftDataAsync() {
-    collectionStore.loadingMetadata = true;
+    metadataStore.loadingMetadata = true;
     await sleep(0.01);
-    collectionStore.metadata = createNftData();
-    collectionStore.loadingMetadata = false;
+    metadataStore.metadata = createNftData();
+    metadataStore.loadingMetadata = false;
   }
   function createNftData(): MetadataItem[] {
-    return collectionStore.csvData.map((item, index) => {
+    return metadataStore.csvData.map((item, index) => {
       const nft: MetadataItem = {};
       Object.entries(item).forEach(([key, value]) => {
-        if (!collectionStore.csvSelectedAttributes.includes(key)) {
+        if (!metadataStore.csvSelectedAttributes.includes(key)) {
           nft[key] = value;
         }
       });
 
       const attributes: AttributeInterface[] = [];
-      collectionStore.csvAttributes.forEach(attribute => {
-        if (collectionStore.csvSelectedAttributes.includes(attribute.value)) {
+      metadataStore.csvAttributes.forEach(attribute => {
+        if (metadataStore.csvSelectedAttributes.includes(attribute.value)) {
           attributes.push({
             value: item[attribute.value],
             trait_type: attribute.value,
@@ -181,12 +179,12 @@ export default function useNft() {
    */
   function createSingleNft(singleNft: FormSingleNft) {
     for (let index = 0; index < singleNft.copies; index += 1) {
-      collectionStore.metadata.push(JSON.parse(JSON.stringify(singleNft)) as MetadataItem);
+      metadataStore.metadata.push(JSON.parse(JSON.stringify(singleNft)) as MetadataItem);
       singleNft.id += 1;
     }
 
     const addKey = (key: string, title: string) => {
-      if (!collectionStore.columns.some(c => c.key === key)) collectionStore.columns.push({ title, key });
+      if (!metadataStore.columns.some(c => c.key === key)) metadataStore.columns.push({ title, key });
     };
     Object.entries(singleNft).forEach(([key, value]) => {
       if (key !== 'collectionUuid' && key !== 'copies') {
@@ -200,7 +198,7 @@ export default function useNft() {
       }
     });
 
-    collectionStore.resetSingleFormData(false);
+    metadataStore.resetSingleFormData(false);
   }
 
   /**
@@ -213,7 +211,7 @@ export default function useNft() {
     if (!isImage(file.type)) {
       message.warning(t('validation.notImage', { name: file.name }));
       return;
-    } else if (!isEnoughSpaceInStorage(collectionStore.images, file.file)) {
+    } else if (!isEnoughSpaceInStorage(metadataStore.images, file.file)) {
       message.warning(t('validation.notEnoughSpaceInStorage', { name: file.name }));
       return;
     }
@@ -226,18 +224,18 @@ export default function useNft() {
       size: file.file?.size || 0,
       timestamp: Date.now(),
     };
-    if (collectionStore.stepMetadata === NftMetadataStep.SINGLE) {
-      collectionStore.form.single.image = image.name;
+    if (metadataStore.stepMetadata === NftMetadataStep.SINGLE) {
+      metadataStore.form.single.image = image.name;
     }
 
-    if (fileAlreadyOnFileList(collectionStore.images, image)) {
+    if (fileAlreadyOnFileList(metadataStore.images, image)) {
       message.warning(t('validation.alreadyOnList', { name: file.name }));
-    } else if (fileAlreadyOnFileList(collectionStore.images, image, true)) {
-      collectionStore.images = collectionStore.images.map(img => {
+    } else if (fileAlreadyOnFileList(metadataStore.images, image, true)) {
+      metadataStore.images = metadataStore.images.map(img => {
         return image.name === img.name ? image : img;
       });
     } else {
-      collectionStore.images.push(image);
+      metadataStore.images.push(image);
     }
 
     setTimeout(() => {
@@ -246,7 +244,7 @@ export default function useNft() {
   }
 
   function handleImageRemove(data: FileUploadOptions) {
-    collectionStore.images = collectionStore.images.filter(item => item.id !== data.file.id);
+    metadataStore.images = metadataStore.images.filter(item => item.id !== data.file.id);
   }
 
   function isImage(type: string | null = '') {
@@ -259,60 +257,52 @@ export default function useNft() {
   }
 
   function imageByName(name: string = '') {
-    const image = collectionStore.images.find(img => img.name === name);
+    const image = metadataStore.images.find(img => img.name === name);
     return image ? createThumbnailUrl(image) : '';
   }
 
   /**
    * Deploy NFT with metadata
    */
-  async function deployCollection(deploy: boolean = false) {
-    const nftMetadataFiles = createNftFiles(collectionStore.metadata);
-    const metadataSession = await uploadFiles(collectionStore.active.bucket_uuid, nftMetadataFiles, false, true, false);
-    const imagesSession = await uploadFiles(
-      collectionStore.active.bucket_uuid,
-      collectionStore.images,
-      false,
-      true,
-      false
-    );
+  async function deployCollection(collection: CollectionInterface, deploy: boolean = false) {
+    const nftMetadataFiles = createNftFiles(metadataStore.metadata);
+    const metadataSession = await uploadFiles(collection.bucket_uuid, nftMetadataFiles, false, true, false);
+    const imagesSession = await uploadFiles(collection.bucket_uuid, metadataStore.images, false, true, false);
 
     const endpoint = deploy
-      ? endpoints.nftDeploy(collectionStore.active.collection_uuid)
-      : endpoints.collectionNftsMetadata(collectionStore.active.collection_uuid);
+      ? endpoints.nftDeploy(collection.collection_uuid)
+      : endpoints.collectionNftsMetadata(collection.collection_uuid);
 
-    await Promise.all(putRequests.value).then(async _ => {
-      if (!!metadataSession && !!imagesSession) {
-        const useApillonIpfsGateway =
-          !deployCollection && collectionStore.active?.collection_uuid
-            ? collectionStore.active.useApillonIpfsGateway
-            : collectionStore.form.behavior.useApillonIpfsGateway;
-        const useIpns =
-          !deployCollection && collectionStore.active?.collection_uuid
-            ? collectionStore.active.useIpns
-            : collectionStore.form.behavior.useIpns;
+    await Promise.all(putRequests.value);
 
-        const res = await $api.post<CollectionResponse>(endpoint, {
-          useApillonIpfsGateway,
-          useIpns,
-          metadataSession,
-          imagesSession,
-        });
-        if (deploy) {
-          collectionStore.active = res.data;
-        }
+    if (!metadataSession || !imagesSession) {
+      message.error(t('nft.upload.deployError'));
+      return null;
+    }
 
-        collectionStore.metadata = [];
+    const useApillonIpfsGateway =
+      !deploy && collection?.collection_uuid
+        ? collection.useApillonIpfsGateway
+        : metadataStore.form.smartContract.useApillonIpfsGateway;
+    const useIpns =
+      !deploy && collection?.collection_uuid ? collection.useIpns : metadataStore.form.smartContract.useIpns;
 
-        message.success(t('form.success.nftDeployed'));
-
-        /** Reset timestamp to SS */
-        sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
-        sessionStorage.removeItem(LsCacheKeys.COLLECTION_METADATA);
-      } else {
-        message.error(t('nft.upload.deployError'));
-      }
+    const { data } = await $api.post<CollectionResponse>(endpoint, {
+      useApillonIpfsGateway,
+      useIpns,
+      metadataSession,
+      imagesSession,
     });
+
+    metadataStore.resetMetadata();
+
+    message.success(t('form.success.nftDeployed'));
+
+    /** Reset timestamp to SS */
+    sessionStorage.removeItem(LsCacheKeys.COLLECTIONS);
+    sessionStorage.removeItem(LsCacheKeys.COLLECTION_METADATA);
+
+    return data;
   }
 
   /**
@@ -346,17 +336,15 @@ export default function useNft() {
     });
   }
 
-  function getPriceServiceName() {
-    const chain = collectionStore.form.behavior?.chain
-      ? collectionStore.form.behavior.chain
-      : collectionStore.active.chain;
+  function getPriceServiceName(chanId?: number) {
+    const chain = chanId || metadataStore.form.smartContract.chain || useCollectionStore().active.chain;
     return generatePriceServiceName(ServiceTypeName.NFT, chain, PriceServiceAction.COLLECTION);
   }
 
   async function uploadLogoAndCover(bucketUuid: string) {
     const images: FileListItemType[] = [];
-    const cover = collectionStore.form.base.coverImage;
-    const logo = collectionStore.form.base.logo;
+    const cover = metadataStore.form.visual.coverImage;
+    const logo = metadataStore.form.visual.logo;
 
     if (logo) {
       logo.name = 'logo.' + logo.name.split('.')[logo.name.split('.').length - 1];

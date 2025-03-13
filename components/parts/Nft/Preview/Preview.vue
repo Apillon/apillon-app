@@ -4,15 +4,15 @@
       <h5 class="text-center">{{ $t('nft.collection.preview') }}</h5>
       <NftPreviewSwitch />
     </div>
-    <template v-if="collectionStore.gridView">
+    <template v-if="metadataStore.gridView">
       <div class="grid gap-8" :class="nfts.length > 100 ? 'grid-cols-nftSmall' : 'grid-cols-nft'">
         <NftCard v-for="nft in nfts" :key="nft.id" :name="`${nft.name}`" :image="`${nft.image}`" />
       </div>
-      <div v-if="collectionStore.metadata.length > PAGINATION_LIMIT" class="my-4 flex items-center justify-center p-4">
+      <div v-if="metadataStore.metadata.length > PAGINATION_LIMIT" class="my-4 flex items-center justify-center p-4">
         <n-pagination
           v-model:page="page"
           v-model:page-size="pageSize"
-          :page-count="Math.ceil(collectionStore.metadata.length / pageSize)"
+          :page-count="Math.ceil(metadataStore.metadata.length / pageSize)"
           show-size-picker
           :page-sizes="pagination.pageSizes"
         />
@@ -22,8 +22,8 @@
       <n-data-table
         :columns="columns"
         :bordered="false"
-        :data="collectionStore.metadata"
-        :loading="collectionStore.loadingMetadata"
+        :data="metadataStore.metadata"
+        :loading="metadataStore.loading"
         :pagination="pagination"
         :row-key="rowKey"
         @update:page="(page: number) => (pagination.page = page)"
@@ -42,11 +42,10 @@
 <script lang="ts" setup>
 import type { DataTableColumns } from 'naive-ui';
 import { NButton, NInput } from 'naive-ui';
-import { NftMetadataStep } from '~/lib/types/nft';
 import { PAGINATION_LIMIT } from '~/lib/values/general.values';
 
-const { imageByName } = useNft();
-const collectionStore = useCollectionStore();
+const { imageByName } = useMetadata();
+const metadataStore = useMetadataStore();
 const { isXxl } = useScreen();
 
 const page = ref<number>(1);
@@ -60,14 +59,14 @@ const pagination = reactive(createPagination(false));
 const nfts = computed(() => {
   const first = (page.value - 1) * pageSize.value;
   let last = first + pageSize.value;
-  if (last > collectionStore.metadata.length) {
-    last = collectionStore.metadata.length;
+  if (last > metadataStore.metadata.length) {
+    last = metadataStore.metadata.length;
   }
 
-  return collectionStore.metadata.slice(first, last);
+  return metadataStore.metadata.slice(first, last);
 });
 
-const cols = collectionStore.columns.map(item => {
+const cols = metadataStore.columns.map(item => {
   const key = item?.title || item?.key || '';
 
   if (key === 'id') return { key: key, title: key, minWidth: 50 };
@@ -126,6 +125,6 @@ const columns = createColumns();
 const rowKey = (row: TransactionInterface) => row.id;
 
 function removeNft(id: number | string) {
-  collectionStore.metadata = collectionStore.metadata.filter(nft => nft.id !== Number(id));
+  metadataStore.metadata = metadataStore.metadata.filter(nft => nft.id !== Number(id));
 }
 </script>

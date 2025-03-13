@@ -1,5 +1,5 @@
 <template>
-  <n-data-table :bordered="false" :columns="columns" :data="collectionStore.form.single.attributes" />
+  <n-data-table :bordered="false" :columns="columns" :data="metadataStore.form.single.attributes" />
 </template>
 
 <script lang="ts" setup>
@@ -7,7 +7,7 @@ import type { SelectOption } from 'naive-ui';
 import { NInput, NTooltip } from 'naive-ui';
 
 const { t } = useI18n();
-const collectionStore = useCollectionStore();
+const metadataStore = useMetadataStore();
 
 const displayTypes = ref<SelectOption[]>(
   enumValues(TraitTypes).map(type => {
@@ -87,6 +87,6 @@ const renderOption = ({ node, option }: DropdownRenderOption) => {
 };
 
 function removeItem(attribute: AttributeInterface) {
-  collectionStore.form.single.attributes = collectionStore.form.single.attributes.filter(att => att !== attribute);
+  metadataStore.form.single.attributes = metadataStore.form.single.attributes.filter(att => att !== attribute);
 }
 </script>

@@ -6,7 +6,12 @@
     <slot>
       <n-space v-if="collectionStore.hasCollectionArchive" class="pb-8" :size="32" vertical>
         <ActionsNft archive />
-        <TableNftCollection :collections="collectionStore.archive" archive />
+        <TableNftCollection
+          :collections="collectionStore.archive.items"
+          :pagination="collectionStore.archive.pagination"
+          :search="collectionStore.archive.search"
+          archive
+        />
       </n-space>
       <Empty
         v-else

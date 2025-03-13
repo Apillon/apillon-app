@@ -46,7 +46,7 @@
         <div class="flex justify-between gap-4">
           <div class="flex max-w-96 flex-col justify-evenly gap-6">
             <div class="px-4 text-hover">
-              <strong>Create Collection</strong>
+              <strong>{{ $t('nft.collection.review.createCollection') }}</strong>
               <span class="mt-2 block">Import your NFT files and metadata with just few clicks.</span>
             </div>
             <div class="border-l-2 border-blue px-4">

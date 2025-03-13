@@ -24,7 +24,11 @@
     <slot>
       <n-space class="pb-8" :size="32" vertical>
         <ActionsNft />
-        <TableNftCollection :collections="collectionStore.items" />
+        <TableNftCollection
+          :collections="collectionStore.items"
+          :pagination="collectionStore.pagination"
+          :search="collectionStore.search"
+        />
       </n-space>
     </slot>
   </Dashboard>

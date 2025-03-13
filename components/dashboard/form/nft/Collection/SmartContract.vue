@@ -2,22 +2,46 @@
   <n-form
     ref="formRef"
     class="max-w-xl"
-    :model="collectionStore.form.behavior"
+    :model="metadataStore.form.smartContract"
     :rules="rules"
     @submit.prevent="handleSubmitForm"
   >
+    <n-grid :cols="12" :x-gap="32">
+      <!--  Collection name -->
+      <n-form-item-gi :span="8" path="name" :label="infoLabel('name') as string" :label-props="{ for: 'name' }">
+        <n-input
+          v-model:value="metadataStore.form.smartContract.name"
+          :input-props="{ id: 'name' }"
+          :placeholder="t('general.typeHere')"
+          clearable
+        />
+      </n-form-item-gi>
+
+      <!--  Collection Symbol -->
+      <n-form-item-gi :span="4" path="symbol" :label="infoLabel('symbol') as string" :label-props="{ for: 'symbol' }">
+        <n-input
+          v-model:value="metadataStore.form.smartContract.symbol"
+          :minlength="1"
+          :maxlength="8"
+          :input-props="{ id: 'symbol' }"
+          :placeholder="t('general.typeHere')"
+          clearable
+        />
+      </n-form-item-gi>
+    </n-grid>
+
     <!--  Collection type -->
     <n-form-item
       v-if="
         isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
-        collectionStore.form.behavior.chainType === ChainType.EVM
+        metadataStore.form.smartContract.chainType === ChainType.EVM
       "
       path="collectionType"
       :label="infoLabel('type') as string"
       :label-props="{ for: 'collectionType' }"
     >
       <select-options
-        v-model:value="collectionStore.form.behavior.collectionType"
+        v-model:value="metadataStore.form.smartContract.collectionType"
         :options="collectionTypes"
         :input-props="{ id: 'collectionType' }"
         :placeholder="t('general.pleaseSelect')"
@@ -29,7 +53,7 @@
     <!--  Chain -->
     <n-form-item v-if="showNetwork" path="chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
       <select-options
-        v-model:value="collectionStore.form.behavior.chain"
+        v-model:value="metadataStore.form.smartContract.chain"
         :options="chains"
         :input-props="{ id: 'chain' }"
         :placeholder="t('general.pleaseSelect')"
@@ -40,22 +64,22 @@
 
     <!-- Admin Address -->
     <n-form-item
-      v-if="collectionStore.form.behavior.chainType !== ChainType.SUBSTRATE"
+      v-if="metadataStore.form.smartContract.chainType !== ChainType.SUBSTRATE"
       path="adminAddress"
       :label="infoLabel('adminAddress') as string"
       :label-props="{ for: 'adminAddress' }"
     >
       <FormFieldWalletAddress
-        v-model:value="collectionStore.form.behavior.adminAddress"
+        v-model:value="metadataStore.form.smartContract.adminAddress"
         :input-props="{ id: 'adminAddress' }"
-        @connected="address => (collectionStore.form.behavior.adminAddress = address)"
+        @connected="address => (metadataStore.form.smartContract.adminAddress = address)"
       />
     </n-form-item>
 
     <!--  Collection Use Gateway -->
     <n-form-item v-if="!isUnique" path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
       <n-checkbox
-        v-model:checked="collectionStore.form.behavior.useApillonIpfsGateway"
+        v-model:checked="metadataStore.form.smartContract.useApillonIpfsGateway"
         id="useApillonIpfsGateway"
         size="medium"
         :label="infoLabel('useGateway') as string"
@@ -65,7 +89,7 @@
     <!--  Collection Dynamic metadata -->
     <n-form-item v-if="!isUnique && showIpns" path="useIpns" :show-label="false" :show-feedback="false">
       <n-checkbox
-        v-model:checked="collectionStore.form.behavior.useIpns"
+        v-model:checked="metadataStore.form.smartContract.useIpns"
         size="medium"
         :label="infoLabel('useIpns') as string"
       />
@@ -80,7 +104,7 @@
         :label-props="{ for: 'supplyLimited' }"
       >
         <select-options
-          v-model:value="collectionStore.form.behavior.supplyLimited"
+          v-model:value="metadataStore.form.smartContract.supplyLimited"
           :options="supplyTypes"
           :input-props="{ id: 'supplyLimited' }"
           :placeholder="$t('general.pleaseSelect')"
@@ -97,13 +121,15 @@
         :label-props="{ for: 'maxSupply' }"
       >
         <n-input-number
-          v-model:value="collectionStore.form.behavior.maxSupply"
+          v-model:value="metadataStore.form.smartContract.maxSupply"
           :min="0"
           :max="NFT_MAX_SUPPLY"
-          :disabled="!collectionStore.form.behavior.supplyLimited"
+          :disabled="!metadataStore.form.smartContract.supplyLimited"
           :input-props="{ id: 'maxSupply' }"
           :placeholder="
-            collectionStore.form.behavior.supplyLimited ? t('form.placeholder.collectionMaxSupply') : t('form.disabled')
+            metadataStore.form.smartContract.supplyLimited
+              ? t('form.placeholder.collectionMaxSupply')
+              : t('form.disabled')
           "
           clearable
         />
@@ -111,9 +137,9 @@
     </n-grid>
 
     <n-grid
-      v-if="collectionStore.form.behavior.chainType === ChainType.EVM || isUnique"
+      v-if="metadataStore.form.smartContract.chainType === ChainType.EVM || isUnique"
       class="items-end"
-      :cols="collectionStore.form.behavior.collectionType === NFTCollectionType.NESTABLE ? 8 : 12"
+      :cols="metadataStore.form.smartContract.collectionType === NFTCollectionType.NESTABLE ? 8 : 12"
       :x-gap="32"
     >
       <!-- Collection Revocable -->
@@ -124,7 +150,7 @@
         :label-props="{ for: 'revocable' }"
       >
         <select-options
-          v-model:value="collectionStore.form.behavior.revocable"
+          v-model:value="metadataStore.form.smartContract.revocable"
           :options="booleanSelect"
           :input-props="{ id: 'revocable' }"
           :placeholder="t('general.pleaseSelect')"
@@ -140,7 +166,7 @@
         :label-props="{ for: 'soulbound' }"
       >
         <select-options
-          v-model:value="collectionStore.form.behavior.soulbound"
+          v-model:value="metadataStore.form.smartContract.soulbound"
           :options="booleanSelect"
           :input-props="{ id: 'soulbound' }"
           :placeholder="t('general.pleaseSelect')"
@@ -150,14 +176,14 @@
 
       <!-- Collection AutoIncrement -->
       <n-form-item-gi
-        v-show="collectionStore.form.behavior.collectionType === NFTCollectionType.GENERIC"
+        v-show="metadataStore.form.smartContract.collectionType === NFTCollectionType.GENERIC"
         path="isAutoIncrement"
         :span="4"
         :label="infoLabel('autoIncrement') as string"
         :label-props="{ for: 'autoIncrement' }"
       >
         <select-options
-          v-model:value="collectionStore.form.behavior.isAutoIncrement"
+          v-model:value="metadataStore.form.smartContract.isAutoIncrement"
           :options="booleanSelect"
           :input-props="{ id: 'autoIncrement' }"
           :placeholder="t('general.pleaseSelect')"
@@ -167,7 +193,7 @@
     </n-grid>
 
     <n-grid
-      v-if="collectionStore.form.behavior.chainType === ChainType.EVM && !isUnique"
+      v-if="metadataStore.form.smartContract.chainType === ChainType.EVM && !isUnique"
       class="items-end"
       :cols="12"
       :x-gap="32"
@@ -180,7 +206,7 @@
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
-          v-model:value="collectionStore.form.behavior.royaltiesAddress"
+          v-model:value="metadataStore.form.smartContract.royaltiesAddress"
           :input-props="{ id: 'royaltiesAddress' }"
           :placeholder="t('general.typeHere')"
           clearable
@@ -195,7 +221,7 @@
         :label-props="{ for: 'royaltiesFees' }"
       >
         <n-input-number
-          v-model:value="collectionStore.form.behavior.royaltiesFees"
+          v-model:value="metadataStore.form.smartContract.royaltiesFees"
           :min="0"
           :max="100"
           :input-props="{ id: 'royaltiesFees' }"
@@ -207,27 +233,27 @@
 
     <n-grid v-if="!isUnique" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Is Drop -->
-      <n-form-item-gi path="drop" :span="6" :label="infoLabel('drop') as string" :show-feedback="false">
-        <n-switch
-          v-model:checked="collectionStore.form.behavior.drop"
-          size="medium"
-          id="drop"
-          :checked-value="$t('form.switch.on')"
-          :unchecked-value="$t('form.switch.off')"
-        />
+      <n-form-item-gi path="drop" :span="6" :label="infoLabel('drop') as string">
+        <n-switch v-model:value="metadataStore.form.smartContract.drop" size="medium" id="drop" class="!ml-0" />
+        <strong v-if="metadataStore.form.smartContract.drop" class="text-xs text-green">
+          {{ $t('form.switch.on') }}
+        </strong>
+        <span v-else class="text-xs text-disabled">{{ $t('form.switch.off') }}</span>
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="!!collectionStore.form.behavior.drop" class="items-end" :cols="12" :x-gap="32">
+    <n-grid v-if="!!metadataStore.form.smartContract.drop" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Mint price -->
       <n-form-item-gi
         path="dropPrice"
         :span="6"
-        :label="$t('form.label.collection.dropPrice', { currency: chainCurrency(collectionStore.form.behavior.chain) })"
+        :label="
+          $t('form.label.collection.dropPrice', { currency: chainCurrency(metadataStore.form.smartContract.chain) })
+        "
         :label-props="{ for: 'dropPrice' }"
       >
         <n-input-number
-          v-model:value="collectionStore.form.behavior.dropPrice"
+          v-model:value="metadataStore.form.smartContract.dropPrice"
           :min="0.00001"
           :max="10000000000"
           :step="0.00001"
@@ -244,7 +270,7 @@
         :label-props="{ for: 'dropStart' }"
       >
         <n-date-picker
-          v-model:value="collectionStore.form.behavior.dropStart"
+          v-model:value="metadataStore.form.smartContract.dropStart"
           class="w-full"
           type="datetime"
           :input-props="{ id: 'dropStart' }"
@@ -253,17 +279,17 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid v-if="!!collectionStore.form.behavior.drop" class="items-end" :cols="12" :x-gap="32">
+    <n-grid v-if="!!metadataStore.form.smartContract.drop" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Reserve -->
       <n-form-item-gi
-        v-if="collectionStore.form.behavior.chainType === ChainType.EVM"
+        v-if="metadataStore.form.smartContract.chainType === ChainType.EVM"
         path="dropReserve"
         :span="6"
         :label="infoLabel('dropReserve') as string"
         :label-props="{ for: 'dropReserve' }"
       >
         <n-input-number
-          v-model:value="collectionStore.form.behavior.dropReserve"
+          v-model:value="metadataStore.form.smartContract.dropReserve"
           :min="0"
           :step="1"
           :input-props="{ id: 'dropReserve' }"
@@ -273,14 +299,14 @@
 
       <!-- Royalties Address -->
       <n-form-item-gi
-        v-if="collectionStore.form.behavior.chainType === ChainType.SUBSTRATE"
+        v-if="metadataStore.form.smartContract.chainType === ChainType.SUBSTRATE"
         path="royaltiesAddress"
         :span="6"
         :label="infoLabel('dropAddress') as string"
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
-          v-model:value="collectionStore.form.behavior.royaltiesAddress"
+          v-model:value="metadataStore.form.smartContract.royaltiesAddress"
           :input-props="{ id: 'royaltiesAddress' }"
           :placeholder="t('general.typeHere')"
           clearable
@@ -312,24 +338,29 @@ defineProps({
 const { t } = useI18n();
 const message = useMessage();
 const authStore = useAuthStore();
-const paymentStore = usePaymentStore();
-const collectionStore = useCollectionStore();
+const metadataStore = useMetadataStore();
 
 const { labelInfo } = useComputing();
-const { booleanSelect, collectionTypes, enterpriseChainIDs, formRef, isUnique, nftChains, supplyTypes, rules } =
-  useCollection();
+const {
+  booleanSelect,
+  collectionTypes,
+  nftChains,
+  chainsTestnet,
+  formRef,
+  isUnique,
+  supplyTypes,
+  rules,
+  isChainAvailable,
+} = useCollection();
 defineExpose({ formRef, handleSubmitForm });
 
 onMounted(() => {
-  if (collectionStore.form.behavior.maxSupply === 0) {
-    collectionStore.form.behavior.maxSupply = collectionStore.csvData.length;
+  if (metadataStore.form.smartContract.maxSupply === 0) {
+    metadataStore.form.smartContract.maxSupply = metadataStore.csvData.length;
   }
 });
 
-const hiddenChain = (chainId: number) =>
-  !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
-
-const chains = computed(() => nftChains.filter(c => !hiddenChain(c.value)));
+const chains = computed(() => [...nftChains, ...chainsTestnet].filter(chain => isChainAvailable(chain.value)));
 
 function infoLabel(field: string) {
   return labelInfo(field, 'form.label.collection');

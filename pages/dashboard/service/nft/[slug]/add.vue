@@ -50,7 +50,7 @@ onMounted(async () => {
 
     pageLoading.value = false;
     collectionStore.active = currentCollection;
-    collectionStore.form.single.collectionUuid = currentCollection.collection_uuid;
+    metadataStore.form.single.collectionUuid = currentCollection.collection_uuid;
   }
 });
 </script>

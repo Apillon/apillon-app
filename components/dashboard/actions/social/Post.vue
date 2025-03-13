@@ -1,18 +1,8 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
     <div class="w-[20vw] min-w-[11rem] max-w-xs">
-      <n-input
-        v-model:value="postStore.search"
-        type="text"
-        name="search"
-        size="small"
-        :placeholder="$t('general.search')"
-        clearable
-      >
-        <template #prefix>
-          <span class="icon-search text-2xl"></span>
-        </template>
-      </n-input>
+      <FormFieldSearch v-if="archive" v-model:value="postStore.archive.search" />
+      <FormFieldSearch v-else v-model:value="postStore.search" />
     </div>
 
     <n-space size="large">
@@ -57,8 +47,4 @@ defineProps({
 const authStore = useAuthStore();
 const postStore = usePostStore();
 const modalCreatePostVisible = ref<boolean>(false);
-
-// const isDisabled = computed<boolean>(() => {
-//   return chatStore.active.status < SocialStatus.ACTIVE;
-// });
 </script>

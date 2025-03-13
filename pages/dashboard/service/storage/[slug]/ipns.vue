@@ -9,18 +9,7 @@
         <!-- Actions -->
         <n-space justify="space-between">
           <div class="w-[45vw] max-w-xs sm:w-[30vw] lg:w-[20vw]">
-            <n-input
-              v-model:value="ipnsStore.search"
-              type="text"
-              name="search"
-              size="small"
-              :placeholder="$t('storage.file.search')"
-              clearable
-            >
-              <template #prefix>
-                <span class="icon-search text-2xl"></span>
-              </template>
-            </n-input>
+            <FormFieldSearch v-model:value="ipnsStore.search" />
           </div>
 
           <n-space size="large">
