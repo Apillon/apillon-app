@@ -55,13 +55,9 @@
       <h6>{{ t('nft.collection.review.costs') }}</h6>
       <n-table class="plain my-6 table-fixed" :bordered="false" :single-line="true">
         <tbody>
-          <tr>
-            <td>Create new collection</td>
-            <td class="!text-white">500 {{ $t('dashboard.credits.credits') }}</td>
-          </tr>
-          <tr>
-            <td>Create new collection</td>
-            <td class="!text-white">500 {{ $t('dashboard.credits.credits') }}</td>
+          <tr v-for="price in pricing">
+            <td>{{ price.description }}</td>
+            <td class="!text-white">{{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}</td>
           </tr>
         </tbody>
       </n-table>
@@ -69,7 +65,7 @@
         <div class="flex gap-2">
           <strong class="block w-1/2">{{ t('nft.collection.review.totalSpend') }}</strong>
           <div class="flex w-1/2 flex-col gap-1 text-right">
-            <strong>500 {{ $t('dashboard.credits.credits') }}</strong>
+            <strong>{{ totalCredits }} {{ $t('dashboard.credits.credits') }}</strong>
             <small>
               {{ t('nft.collection.review.balance') }}: {{ formatNumber(paymentStore.credit.balance || 0) }}
               {{ $t('dashboard.credits.credits') }}
@@ -80,7 +76,7 @@
         <div class="my-6">
           <n-checkbox v-model:checked="nonRefundable" :label="t('nft.collection.review.nonRefundable')" />
         </div>
-        <Btn size="large" type="primary" @click="">
+        <Btn size="large" type="primary" :disabled="!nonRefundable" @click="$emit('deploy')">
           {{ $t('nft.collection.review.createCollection') }}
         </Btn>
       </div>
@@ -94,12 +90,13 @@ import { formatNumber } from '~/lib/utils/helpers';
 import { truncateWallet } from '~/lib/utils/strings';
 import { timestampToDateAndTime } from '~/lib/utils/dates';
 
+defineEmits(['deploy']);
 const { t } = useI18n();
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
 
-const { createThumbnailUrl } = useMetadata();
-const { collectionTypes, nftChains, chainsTestnet } = useCollection();
+const { pricing, createThumbnailUrl } = useMetadata();
+const { nftChains, chainsTestnet } = useCollection();
 
 const nonRefundable = ref<boolean>(false);
 const data = ref([
@@ -111,6 +108,8 @@ const data = ref([
   { label: t('nft.collection.name'), value: metadataStore.form.smartContract.name },
   { label: t('form.label.collection.symbol'), value: metadataStore.form.smartContract.symbol },
   { label: t('form.label.collection.type'), value: metadataStore.form.smartContract.collectionType },
+  { label: t('form.label.collection.useGateway'), value: metadataStore.form.smartContract.useApillonIpfsGateway },
+  { label: t('form.label.collection.useIpns'), value: metadataStore.form.smartContract.useIpns },
   {
     label: t('form.label.collection.supplyLimited'),
     value: metadataStore.form.smartContract.supplyLimited
@@ -120,10 +119,15 @@ const data = ref([
   { label: t('form.label.collection.revocable'), value: metadataStore.form.smartContract.revocable },
   { label: t('form.label.collection.soulbound'), value: metadataStore.form.smartContract.soulbound },
   { label: t('form.label.collection.autoIncrement'), value: metadataStore.form.smartContract.isAutoIncrement },
-  { label: t('form.label.collection.royaltiesAddress'), value: metadataStore.form.smartContract.royaltiesAddress },
+  {
+    label: t('form.label.collection.royaltiesAddress'),
+    value: metadataStore.form.smartContract.royaltiesAddress,
+    show: !!metadataStore.form.smartContract.royaltiesAddress,
+  },
   {
     label: t('form.label.collection.royaltiesFees'),
     value: (metadataStore.form.smartContract.royaltiesFees || '0') + '%',
+    show: !!metadataStore.form.smartContract.royaltiesAddress,
   },
   { label: t('form.label.collection.drop'), value: metadataStore.form.smartContract.drop },
   {
@@ -154,9 +158,12 @@ const data = ref([
   },
 ]);
 
-function getCollectionTypeName(collectionType: Number) {
-  return collectionTypes.find(type => type.value === collectionType)?.label;
-}
+const totalCredits = computed(() => sumCredits(pricing.value));
+
+onMounted(() => {
+  paymentStore.getPriceList();
+});
+
 function getChainIconName(collectionChain?: Number) {
   return [...nftChains, ...chainsTestnet].find(chain => chain.value === collectionChain)?.name;
 }

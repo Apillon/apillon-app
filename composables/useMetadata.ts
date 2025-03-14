@@ -4,8 +4,9 @@ import { MetadataFieldRequired, type FormSingleNft } from '~/lib/types/nft';
 export default function useNft() {
   const { t } = useI18n();
   const message = useMessage();
-  const { putRequests, fileAlreadyOnFileList, isEnoughSpaceInStorage, uploadFiles } = useUpload();
+  const paymentStore = usePaymentStore();
   const metadataStore = useMetadataStore();
+  const { putRequests, fileAlreadyOnFileList, isEnoughSpaceInStorage, uploadFiles } = useUpload();
 
   const { vueApp } = useNuxtApp();
   const $papa = vueApp.config.globalProperties.$papa;
@@ -18,7 +19,10 @@ export default function useNft() {
 
   /** CSV */
   const isSameNumOfRows = computed<boolean>(() => {
-    return collection?.maxSupply === 0 || collection?.maxSupply === metadataStore.csvData?.length;
+    return (
+      metadataStore.form.smartContract?.maxSupply === 0 ||
+      metadataStore.form.smartContract?.maxSupply === metadataStore.csvData?.length
+    );
   });
   const hasRequiredMetadata = computed<boolean>(() => {
     const columns: Array<string> = metadataStore.columns.map((item: NTableColumn<KeyTitle>) => {
@@ -51,6 +55,20 @@ export default function useNft() {
     const missingImagesName = dataImagesNames.value.filter(item => !uploadedImagesNames.value.includes(item));
 
     return [...new Set(missingImagesName)].join(', ');
+  });
+
+  /** Pricing */
+  const pricing = computed<ProductPriceInterface[]>(() => {
+    const prices: ProductPriceInterface[] = [];
+
+    const priceCollection = paymentStore.findServicePrice(getPriceServiceName());
+    if (priceCollection) prices.push(priceCollection);
+
+    if (metadataStore.form.smartContract.useIpns) {
+      const priceIPNS = paymentStore.findServicePrice(PriceServiceName.IPNS);
+      if (priceIPNS) prices.push(priceIPNS);
+    }
+    return prices;
   });
 
   /**
@@ -140,10 +158,10 @@ export default function useNft() {
    * Prepare NFT data: array of JSONs with formatted properties and attributes
    */
   async function createNftDataAsync() {
-    metadataStore.loadingMetadata = true;
+    metadataStore.loading = true;
     await sleep(0.01);
     metadataStore.metadata = createNftData();
-    metadataStore.loadingMetadata = false;
+    metadataStore.loading = false;
   }
   function createNftData(): MetadataItem[] {
     return metadataStore.csvData.map((item, index) => {
@@ -367,6 +385,7 @@ export default function useNft() {
     isSameNumOfRows,
     loadingImages,
     missingImages,
+    pricing,
     createNftData,
     createNftDataAsync,
     createSingleNft,

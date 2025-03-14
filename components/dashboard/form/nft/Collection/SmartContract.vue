@@ -12,7 +12,7 @@
         <n-input
           v-model:value="metadataStore.form.smartContract.name"
           :input-props="{ id: 'name' }"
-          :placeholder="t('general.typeHere')"
+          :placeholder="$t('general.typeHere')"
           clearable
         />
       </n-form-item-gi>
@@ -24,7 +24,7 @@
           :minlength="1"
           :maxlength="8"
           :input-props="{ id: 'symbol' }"
-          :placeholder="t('general.typeHere')"
+          :placeholder="$t('general.typeHere')"
           clearable
         />
       </n-form-item-gi>
@@ -44,7 +44,7 @@
         v-model:value="metadataStore.form.smartContract.collectionType"
         :options="collectionTypes"
         :input-props="{ id: 'collectionType' }"
-        :placeholder="t('general.pleaseSelect')"
+        :placeholder="$t('general.pleaseSelect')"
         filterable
         clearable
       />
@@ -56,7 +56,7 @@
         v-model:value="metadataStore.form.smartContract.chain"
         :options="chains"
         :input-props="{ id: 'chain' }"
-        :placeholder="t('general.pleaseSelect')"
+        :placeholder="$t('general.pleaseSelect')"
         filterable
         clearable
       />
@@ -153,7 +153,7 @@
           v-model:value="metadataStore.form.smartContract.revocable"
           :options="booleanSelect"
           :input-props="{ id: 'revocable' }"
-          :placeholder="t('general.pleaseSelect')"
+          :placeholder="$t('general.pleaseSelect')"
           filterable
         />
       </n-form-item-gi>
@@ -169,7 +169,7 @@
           v-model:value="metadataStore.form.smartContract.soulbound"
           :options="booleanSelect"
           :input-props="{ id: 'soulbound' }"
-          :placeholder="t('general.pleaseSelect')"
+          :placeholder="$t('general.pleaseSelect')"
           filterable
         />
       </n-form-item-gi>
@@ -186,7 +186,7 @@
           v-model:value="metadataStore.form.smartContract.isAutoIncrement"
           :options="booleanSelect"
           :input-props="{ id: 'autoIncrement' }"
-          :placeholder="t('general.pleaseSelect')"
+          :placeholder="$t('general.pleaseSelect')"
           filterable
         />
       </n-form-item-gi>
@@ -208,7 +208,7 @@
         <n-input
           v-model:value="metadataStore.form.smartContract.royaltiesAddress"
           :input-props="{ id: 'royaltiesAddress' }"
-          :placeholder="t('general.typeHere')"
+          :placeholder="$t('general.typeHere')"
           clearable
         />
       </n-form-item-gi>
@@ -225,9 +225,11 @@
           :min="0"
           :max="100"
           :input-props="{ id: 'royaltiesFees' }"
-          :placeholder="t('general.typeHere')"
+          :placeholder="$t('general.typeHere')"
           clearable
-        />
+        >
+          <template #suffix>%</template>
+        </n-input-number>
       </n-form-item-gi>
     </n-grid>
 
@@ -308,7 +310,7 @@
         <n-input
           v-model:value="metadataStore.form.smartContract.royaltiesAddress"
           :input-props="{ id: 'royaltiesAddress' }"
-          :placeholder="t('general.typeHere')"
+          :placeholder="$t('general.typeHere')"
           clearable
         />
       </n-form-item-gi>
@@ -316,7 +318,7 @@
 
     <!--  Form submit -->
     <n-form-item v-if="!hideSubmit" :show-label="false">
-      <input type="submit" class="hidden" :value="t('form.proceed')" />
+      <input type="submit" class="hidden" :value="$t('form.proceed')" />
       <Btn type="primary" class="mt-2 w-full" @click="handleSubmitForm">
         {{ t('form.proceed') }}
       </Btn>

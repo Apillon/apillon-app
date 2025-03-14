@@ -1,26 +1,12 @@
 <template>
-  <n-form
-    ref="formRef"
-    :model="formData"
-    :rules="rules"
-    :disabled="uploadDisabled"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" :model="formData" :rules="rules" :disabled="uploadDisabled" @submit.prevent="handleSubmit">
     <!--  File -->
     <n-form-item path="file" :label="$t('form.label.contract.file')" :label-props="{ for: 'file' }">
-      <FormFieldUploadFile
-        :file="formData.file"
-        :disabled="uploadDisabled"
-        @upload="onFileChange"
-      />
+      <FormFieldUploadFile :file="formData.file" :disabled="uploadDisabled" @upload="onFileChange" />
     </n-form-item>
 
     <!--  NFT ID -->
-    <n-form-item
-      path="nftId"
-      :label="$t('form.label.contract.nftId')"
-      :label-props="{ for: 'nftId' }"
-    >
+    <n-form-item path="nftId" :label="$t('form.label.contract.nftId')" :label-props="{ for: 'nftId' }">
       <n-input-number
         v-model:value="formData.nftId"
         :input-props="{ id: 'nftId' }"
@@ -34,13 +20,7 @@
     <!--  Form submit -->
     <n-form-item :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="$t('computing.contract.assignCid')" />
-      <Btn
-        type="primary"
-        class="w-full mt-2"
-        :disabled="uploadDisabled"
-        :loading="loading"
-        @click="handleSubmit"
-      >
+      <Btn type="primary" class="mt-2 w-full" :disabled="uploadDisabled" :loading="loading" @click="handleSubmit">
         {{ $t('computing.contract.assignCid') }}
       </Btn>
     </n-form-item>
@@ -84,9 +64,7 @@ const contract = computed<ContractInterface | undefined>(() => {
   }
   return contractStore.items.find(item => item.contract_uuid === props.contractUuid);
 });
-const uploadDisabled = computed<boolean>(
-  () => contract.value?.contractStatus !== ContractStatus.DEPLOYED
-);
+const uploadDisabled = computed<boolean>(() => contract.value?.contractStatus !== ContractStatus.DEPLOYED);
 
 const rules: NFormRules = {
   file: [ruleRequired($i18n.t('validation.contract.fileRequired'))],
@@ -98,13 +76,10 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
-      warningStore.showSpendingWarning(
-        PriceServiceName.COMPUTING_SCHRODINGER_ASSIGN_CID_TO_NFT,
-        () => encryptFile(formData.value.file)
+      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_SCHRODINGER_ASSIGN_CID_TO_NFT, () =>
+        encryptFile(formData.value.file)
       );
     }
   });
@@ -113,10 +88,7 @@ function handleSubmit(e: Event | MouseEvent) {
 async function onFileChange({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const size = file.file?.size || 0;
 
-  if (
-    file.type?.startsWith('application/octet-stream') ||
-    file.type?.startsWith('application/x-msdownload')
-  ) {
+  if (file.type?.startsWith('application/octet-stream') || file.type?.startsWith('application/x-msdownload')) {
     message.warning($i18n.t('validation.contract.fileIsApp', { name: file.name }));
     onError();
     return;
@@ -128,6 +100,7 @@ async function onFileChange({ file, onError, onFinish }: UploadCustomRequestOpti
 
   formData.value.file = {
     ...file,
+    path: file.fullPath,
     percentage: 0,
     size: size,
     timestamp: Date.now(),
@@ -143,13 +116,10 @@ async function encryptFile(file?: FileListItemType) {
   try {
     const fileContent = await convertBase64(file.file);
 
-    const res = await $api.post<GeneralResponse<EncryptContent>>(
-      endpoints.contractEncrypt(props.contractUuid),
-      {
-        contract_uuid: props.contractUuid,
-        content: fileContent,
-      }
-    );
+    const res = await $api.post<GeneralResponse<EncryptContent>>(endpoints.contractEncrypt(props.contractUuid), {
+      contract_uuid: props.contractUuid,
+      content: fileContent,
+    });
     message.success($i18n.t('form.success.contract.encrypted'));
     file.onFinish();
 

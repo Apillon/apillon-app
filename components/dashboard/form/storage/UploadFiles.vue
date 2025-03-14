@@ -175,6 +175,7 @@ const numOfUploadedFiles = computed<number>(() => {
 function uploadFilesRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
   const fileListItem: FileListItemType = {
     ...file,
+    path: file.fullPath,
     percentage: 0,
     size: file.file?.size || 0,
     timestamp: Date.now(),

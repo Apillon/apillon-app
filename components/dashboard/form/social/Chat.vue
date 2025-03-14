@@ -1,11 +1,5 @@
 <template>
-  <n-form
-    ref="formRef"
-    :model="formData"
-    :rules="rules"
-    :disabled="isFormDisabled"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" :model="formData" :rules="rules" :disabled="isFormDisabled" @submit.prevent="handleSubmit">
     <!--  Chat name -->
     <n-form-item path="name" :label="$t('form.label.chatName')" :label-props="{ for: 'chatName' }">
       <n-input
@@ -17,11 +11,7 @@
     </n-form-item>
 
     <!-- Chat about -->
-    <n-form-item
-      path="about"
-      :label="$t('form.label.chatAbout')"
-      :label-props="{ for: 'chatAbout' }"
-    >
+    <n-form-item path="about" :label="$t('form.label.chatAbout')" :label-props="{ for: 'chatAbout' }">
       <n-input
         v-model:value="formData.about"
         type="textarea"
@@ -41,42 +31,10 @@
       />
     </n-form-item>
 
-    <!-- Chat image
-    <n-form-item
-      path="image"
-      :label="$t('form.label.chatImage')"
-      :label-props="{ for: 'chatImage' }"
-    >
-      <n-upload
-        accept="image/*"
-        :show-file-list="false"
-        :disabled="authStore.isAdmin()"
-        :custom-request="uploadImageRequest"
-      >
-        <n-upload-dragger class="h-40">
-          <div class="py-2 text-center">
-            <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-              <span class="icon-upload text-violet text-2xl"></span>
-            </div>
-
-            <h4 class="mb-1">{{ $t('social.chat.uploadImage') }}</h4>
-            <span class="text-body">{{ $t('social.chat.dragAndDrop') }}</span>
-          </div>
-        </n-upload-dragger>
-      </n-upload>
-    </n-form-item>
-   -->
-
     <!--  Form submit -->
     <n-form-item :show-label="false" :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('social.chat.create')" />
-      <Btn
-        type="primary"
-        class="w-full mt-2"
-        :loading="loading"
-        :disabled="isFormDisabled"
-        @click="handleSubmit"
-      >
+      <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
         {{ $t('social.chat.create') }}
       </Btn>
     </n-form-item>
@@ -84,8 +42,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { UploadCustomRequestOptions } from 'naive-ui';
-
 type FormSpace = {
   name: string;
   about: string | null;
@@ -119,30 +75,12 @@ const isFormDisabled = computed<boolean>(() => {
   return dataStore.isProjectUser;
 });
 
-/** Upload image request */
-async function uploadImageRequest({ file, onError, onFinish }: UploadCustomRequestOptions) {
-  try {
-    const image = await convertBase64(file.file);
-
-    if (image) {
-      formData.value.image = image as string;
-      onFinish();
-    } else {
-      onError();
-    }
-  } catch (error) {
-    onError();
-  }
-}
-
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       warningStore.showSpendingWarning(PriceServiceName.SOCIAL_SPACE, () => createSpace());
     }

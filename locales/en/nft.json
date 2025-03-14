@@ -40,7 +40,8 @@
       "addLogo": "Select logo",
       "address": "Collection address",
       "baseUri": "Base URI",
-      "behavior": "Behavior",
+      "behavior": "Collection supply and behavior",
+      "behaviorInfo": "Set the total number of NFTs in your collection or choose to keep it unlimited. Customize how your NFTs behave by enabling or disabling special features.",
       "chainType": "Chain type",
       "contractAddress": "Contract address",
       "create": "Create NFT Collection",
@@ -53,6 +54,8 @@
       "deploy": "Deploy collection",
       "deployInfo": "Deploy on Testnet to test the template before launching it in production in Mainnet.",
       "display": "Display NFT collection",
+      "drop": "Mint scheduling, reservation and pricing",
+      "dorpInfo": "Decide when minting starts, set a price, and reserve NFTs if needed.",
       "dropPrice": "Mint price",
       "dropReserve": "Reserved",
       "dropStart": "Drop start",
@@ -78,8 +81,9 @@
       "preview": "NFT collection",
       "previewTab": "Collection preview",
       "revoke": "Burn",
+      "royalties": "Collection royalties",
+      "royaltiesInfo": "Set up royalties to earn a percentage of every resale of your NFTs after minting. This percentage will be automatically deducted from transactions and sent to your designated wallet.",
       "setBaseUri": "Set base URI",
-      "setBehavior": "Set collection behavior",
       "symbol": "Symbol",
       "showWebsite": "Show website",
       "title": "Collection",
@@ -112,6 +116,14 @@
         "2": "Smart Contract",
         "3": "Visuals",
         "4": "Review"
+      },
+      "deployed": {
+        "info": "We're still deploying your images to the blockchain. This may take a few minutes, but we'll notify you once it's done.",
+        "next": "So what’s next? What’s next for your collection?",
+        "nextInfo": "Before you finish, let us know where you plan to use it - we’ll make your next step easier.",
+        "title": "Great, NFT Collection successfully created!",
+        "standalone": "Standalone Collection",
+        "standaloneInfo": "Easily expand your collection to multiple marketplaces with Apillon."
       },
       "displayTypes": {
         "string": {
@@ -534,6 +546,7 @@
     "search": "Search environment",
     "step": "Step {step}",
     "testnet": "Testnet",
-    "transactionType": "Transaction Type"
+    "transactionType": "Transaction Type",
+    "marketplaces": "Discover marketplaces"
   }
 }

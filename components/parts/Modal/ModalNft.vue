@@ -29,15 +29,24 @@
         <p>{{ $t('nft.collection.instruction.visuals') }}</p>
         <FormNftCollectionVisual ref="formVisualRef" class="my-6" hide-submit />
       </div>
-      <NftPreviewCollection v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.REVIEW" />
-      <AnimationDeploy v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYING" />
-      <NftPreviewFinish v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYED" />
+      <NftPreviewCollection
+        v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.REVIEW"
+        @deploy="createCollection()"
+      />
+      <AnimationDeploy
+        v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYING"
+        class="min-h-full"
+      />
+      <NftCollectionDeployed
+        v-if="metadataStore.stepCollectionCreate === CollectionCreateStep.DEPLOYED"
+        class="mx-auto max-w-5xl"
+      />
     </slot>
-    <template v-if="metadataStore.stepCollectionCreate !== CollectionCreateStep.REVIEW" #footer>
+    <template v-if="metadataStore.stepCollectionCreate < CollectionCreateStep.REVIEW" #footer>
       <div class="flex w-full items-center justify-between gap-4 px-10 py-3">
         <p>
-          <strong>Total costs: </strong>
-          <span>1 credits</span>
+          <strong>{{ $t('nft.collection.review.totalCosts') }}: </strong>
+          <span>{{ totalCredits }} {{ $t('dashboard.credits.credits') }}</span>
         </p>
         <div class="flex items-center gap-2">
           <Btn v-if="showBack" size="small" type="secondary" @click="back">
@@ -60,42 +69,52 @@ import { useTemplateRef } from 'vue';
 import { enumValues } from '~/lib/utils';
 import { CollectionCreateStep, NftMetadataStep } from '~/lib/types/nft';
 
+const message = useMessage();
+const authStore = useAuthStore();
+const dataStore = useDataStore();
+const bucketStore = useBucketStore();
 const storageStore = useStorageStore();
 const metadataStore = useMetadataStore();
+const collectionStore = useCollectionStore();
+
+const { t } = useI18n();
+const { uploadFiles } = useUpload();
+const { isUnique, collectionEndpoint, prepareFormData } = useCollection();
+const { pricing, deployCollection, uploadLogoAndCover } = useMetadata();
 
 const metadataRef = useTemplateRef('metadataRef');
 const formVisualRef = useTemplateRef('formVisualRef');
 const formSmartContractRef = useTemplateRef('formSmartContractRef');
 
+const totalCredits = computed(() => sumCredits(pricing.value));
 const showBack = computed(
   () =>
     metadataStore.stepMetadata !== NftMetadataStep.CHAIN ||
     metadataStore.stepCollectionCreate !== CollectionCreateStep.METADATA
 );
 
-const progress = computed(() => {
-  const baseProgress = 15 * (metadataStore.stepCollectionCreate - 1);
-  if (metadataStore.stepCollectionCreate === CollectionCreateStep.METADATA) {
-    switch (metadataStore.stepMetadata) {
-      case NftMetadataStep.CHAIN:
-      case NftMetadataStep.METADATA:
-      case NftMetadataStep.NEW:
-        return baseProgress + 10 * (metadataStore.stepMetadata - 1);
-      case NftMetadataStep.SINGLE:
-      case NftMetadataStep.CSV:
-      case NftMetadataStep.ENDPOINT:
-      case NftMetadataStep.JSON:
-        return baseProgress + 10 * (NftMetadataStep.SINGLE - 1);
-      default:
-        return baseProgress + 10 * (NftMetadataStep.SINGLE_PREVIEW - 1);
-    }
+const metadataProgress = computed(() => {
+  switch (metadataStore.stepMetadata) {
+    case NftMetadataStep.CHAIN:
+    case NftMetadataStep.METADATA:
+    case NftMetadataStep.NEW:
+      return 10 * (metadataStore.stepMetadata - 1);
+    case NftMetadataStep.SINGLE:
+    case NftMetadataStep.CSV:
+    case NftMetadataStep.ENDPOINT:
+    case NftMetadataStep.JSON:
+      return 10 * (NftMetadataStep.SINGLE - 1);
+    default:
+      return 10 * (NftMetadataStep.SINGLE_PREVIEW - 1);
   }
-  return baseProgress;
 });
+const progress = computed(() => Math.min(100, metadataProgress.value + 15 * (metadataStore.stepCollectionCreate - 1)));
 
 onMounted(() => {
   storageStore.getStorageInfo();
 });
+
+const metadataValid = () => !metadataStore.metadata.some(item => !item.image || !item.name || !item.description);
 const submitForm = async formRef => (formRef ? await formRef.handleSubmitForm() : false);
 
 async function submitFormSmartContract() {
@@ -134,5 +153,101 @@ function nextStep() {
     default:
       metadataStore.stepCollectionCreate = CollectionCreateStep.METADATA;
   }
+}
+
+async function createCollection() {
+  if (!metadataValid()) {
+    message.warning(t('validation.nft.metadata'));
+    return;
+  }
+
+  metadataStore.stepCollectionCreate = CollectionCreateStep.DEPLOYING;
+  try {
+    const collection = isUnique.value ? await deployUniqueCollection() : await deployNftCollection();
+    collectionStore.active = collection;
+    collectionStore.items.push(collection);
+    collectionStore.resetCache();
+    metadataStore.form.single.collectionUuid = collection.collection_uuid;
+
+    metadataStore.stepCollectionCreate = CollectionCreateStep.DEPLOYED;
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+    metadataStore.stepCollectionCreate = CollectionCreateStep.REVIEW;
+  }
+}
+
+async function deployNftCollection(): Promise<CollectionInterface> {
+  const { data } = await $api.post<CollectionResponse>(collectionEndpoint(), prepareFormData());
+  uploadLogoAndCover(data.bucket_uuid);
+  await deployCollection(data, true);
+
+  return data;
+}
+
+async function deployUniqueCollection(): Promise<CollectionInterface> {
+  const bucketUuid = await createBucket(metadataStore.form.smartContract.name);
+  const body = await prepareUniqueData(bucketUuid);
+
+  const req = await fetch(APISettings.basePath + endpoints.collectionsUnique, {
+    method: 'POST',
+    body,
+    headers: {
+      Authorization: 'Bearer ' + authStore.jwt,
+      Accept: '*/*',
+    },
+  });
+  const { data } = await $api.onResponse<CollectionResponse>(req);
+
+  await uploadLogoAndCover(bucketUuid);
+
+  return data;
+}
+
+async function prepareUniqueData(bucketUuid: string) {
+  await uploadFiles(bucketUuid, metadataStore.images, false);
+
+  /** Prepare metadata */
+  const metadata = metadataStore.metadata.reduce(
+    (acc: Record<number, MetadataItem>, meta: MetadataItem, key: number) => {
+      /** Get image link from calculatedCids */
+      const image = Object.values(bucketStore.calculatedCids).find(fileInfo => fileInfo.name === meta.image);
+
+      const id = Number(meta.id) || key + 1;
+      const m = Object.assign({}, meta);
+      delete m.id;
+      m.image = image?.link || meta.image;
+      acc[id] = m;
+      return acc;
+    },
+    {}
+  );
+
+  const body = new FormData();
+  body.append('bucket_uuid', bucketUuid);
+
+  const baseData = prepareFormData();
+  Object.entries(baseData).forEach(([key, value]) => {
+    if (value !== undefined) {
+      body.append(key, value as any);
+    }
+  });
+
+  const metadataFile = new Blob([JSON.stringify(metadata, null, 2)], {
+    type: 'application/json',
+  });
+  body.append('metadata', metadataFile);
+
+  return body;
+}
+
+async function createBucket(name: string) {
+  const bodyData = {
+    project_uuid: dataStore.projectUuid,
+    bucketType: BucketType.NFT_METADATA,
+    name: `NFT Collection: ${name}`,
+  };
+
+  const res = await $api.post<BucketResponse>(endpoints.buckets, bodyData);
+  return res.data.bucket_uuid;
 }
 </script>

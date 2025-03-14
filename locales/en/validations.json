@@ -138,7 +138,7 @@
       "idsToMintMax": "You can mint a maximum of 20 NFTs at a time",
       "idsToMintRequired": "Please enter ID of NFTs you want to mint",
       "image": "Please add image",
-      "metadata": "Please insert missing data, fields ID, image, name and description are required!",
+      "metadata": "Please check metadata. Fields: ID, image, name and description are required!",
       "mintAddressRequired": "Please enter your wallet address for minting",
       "mintCollectionUuidRequired": "Please select collection",
       "mintParentNftIdRequired": "Please enter Parent NFT ID",

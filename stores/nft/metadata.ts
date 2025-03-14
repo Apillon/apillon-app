@@ -13,7 +13,7 @@ export const useMetadataStore = defineStore('metadata', {
     images: [] as FileListItemType[],
     loading: false,
     metadata: [] as MetadataItem[],
-    stepCollectionCreate: CollectionCreateStep.SMART_CONTRACT,
+    stepCollectionCreate: CollectionCreateStep.METADATA,
     stepMetadata: NftMetadataStep.CHAIN,
     form: {
       single: {
