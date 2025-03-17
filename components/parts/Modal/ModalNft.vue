@@ -19,11 +19,12 @@
         v-if="metadataStore.stepCollectionCreate === CollectionCreateStep.METADATA"
         ref="metadataRef"
       />
-      <div v-if="metadataStore.stepCollectionCreate === CollectionCreateStep.SMART_CONTRACT" class="mx-auto max-w-lg">
-        <h4>{{ $t(`nft.collection.createStep.${CollectionCreateStep.SMART_CONTRACT}`) }}</h4>
-        <p>{{ $t('nft.collection.instruction.smartContract') }}</p>
-        <FormNftCollectionSmartContract ref="formSmartContractRef" class="my-6" hide-submit />
-      </div>
+      <FormNftCollectionSmartContract
+        v-if="metadataStore.stepCollectionCreate === CollectionCreateStep.SMART_CONTRACT"
+        ref="formSmartContractRef"
+        class="mx-auto max-w-lg"
+        hide-submit
+      />
       <div v-if="metadataStore.stepCollectionCreate === CollectionCreateStep.VISUAL" class="mx-auto max-w-lg">
         <h4>{{ $t(`nft.collection.createStep.${CollectionCreateStep.VISUAL}`) }}</h4>
         <p>{{ $t('nft.collection.instruction.visuals') }}</p>
@@ -31,6 +32,7 @@
       </div>
       <NftPreviewCollection
         v-else-if="metadataStore.stepCollectionCreate === CollectionCreateStep.REVIEW"
+        @back="metadataStore.stepCollectionCreate = CollectionCreateStep.SMART_CONTRACT"
         @deploy="createCollection()"
       />
       <AnimationDeploy
@@ -73,6 +75,7 @@ const message = useMessage();
 const authStore = useAuthStore();
 const dataStore = useDataStore();
 const bucketStore = useBucketStore();
+const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
@@ -108,10 +111,12 @@ const metadataProgress = computed(() => {
       return 10 * (NftMetadataStep.SINGLE_PREVIEW - 1);
   }
 });
-const progress = computed(() => Math.min(100, metadataProgress.value + 15 * (metadataStore.stepCollectionCreate - 1)));
+const progress = computed(() => Math.min(100, metadataProgress.value + 10 * metadataStore.stepCollectionCreate));
 
-onMounted(() => {
+onMounted(async () => {
+  await dataStore.waitOnPromises();
   storageStore.getStorageInfo();
+  paymentStore.getPriceList();
 });
 
 const metadataValid = () => !metadataStore.metadata.some(item => !item.image || !item.name || !item.description);
@@ -178,7 +183,7 @@ async function createCollection() {
 
 async function deployNftCollection(): Promise<CollectionInterface> {
   const { data } = await $api.post<CollectionResponse>(collectionEndpoint(), prepareFormData());
-  uploadLogoAndCover(data.bucket_uuid);
+  await uploadLogoAndCover(data.bucket_uuid);
   await deployCollection(data, true);
 
   return data;

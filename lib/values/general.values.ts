@@ -37,6 +37,7 @@ export const SessionKeys = {
   ASSET_HUB: 'al_asset_hub',
   BUCKET_STORE: 'al_bucket_store',
   CREDITS_MSG: 'al_credits_msg',
+  METADATA_STORE: 'al_metadata_store',
   OAUTH_ACTION: 'al_oauth_action',
   SETTINGS_STORE: 'al_settings_store',
   SUBSCRIPTION_MSG: 'al_subscription_msg',

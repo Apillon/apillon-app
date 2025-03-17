@@ -1,7 +1,7 @@
 <template>
   <Heading>
     <slot>
-      <h1>{{ t('dashboard.nav.nft') }}</h1>
+      <h1>{{ $t('dashboard.nav.nft') }}</h1>
     </slot>
     <template #info>
       <n-space size="large">

@@ -2,9 +2,9 @@
   <div class="flex flex-col gap-8">
     <div class="flex flex-col">
       <p class="whitespace-pre-line">
-        {{ t('rpc.initial.planSelection') }}
+        {{ $t('rpc.initial.planSelection') }}
       </p>
-      <ul class="mt-4 ml-4 list-disc">
+      <ul class="ml-4 mt-4 list-disc">
         <li v-for="(benefit, keyB) in benefits" :key="keyB" class="my-2">
           <strong v-if="benefit.bolded">{{ benefit.bolded }}</strong>
           {{ benefit.text }}
@@ -61,13 +61,7 @@ const subscriptionPackages = [
     id: 0,
     name: 'Free plan',
     price: 0,
-    benefits: [
-      '20 Requests/sec',
-      '500,000 daily request limit',
-      'Access 100+ Blockchains',
-      'Trace APIs',
-      'Debug APIs',
-    ],
+    benefits: ['20 Requests/sec', '500,000 daily request limit', 'Access 100+ Blockchains', 'Trace APIs', 'Debug APIs'],
     limits: '5 million API requests included',
   },
   {

@@ -6,6 +6,9 @@
     :rules="rules"
     @submit.prevent="handleSubmitForm"
   >
+    <h4>{{ $t('nft.collection.smartContract') }}</h4>
+    <p class="mb-6">{{ $t('nft.collection.instruction.smartContract') }}</p>
+
     <n-grid :cols="12" :x-gap="32">
       <!--  Collection name -->
       <n-form-item-gi :span="8" path="name" :label="infoLabel('name') as string" :label-props="{ for: 'name' }">
@@ -94,6 +97,11 @@
         :label="infoLabel('useIpns') as string"
       />
     </n-form-item>
+
+    <div class="my-6">
+      <h4>{{ $t('nft.collection.behavior') }}</h4>
+      <p>{{ $t('nft.collection.behaviorInfo') }}</p>
+    </div>
 
     <n-grid class="items-end" :class="{ 'mt-8': !isUnique }" :cols="12" :x-gap="32">
       <!-- Collection Total supply -->
@@ -192,48 +200,62 @@
       </n-form-item-gi>
     </n-grid>
 
-    <n-grid
+    <FormInstructions
       v-if="metadataStore.form.smartContract.chainType === ChainType.EVM && !isUnique"
-      class="items-end"
-      :cols="12"
-      :x-gap="32"
+      class="lg:w-[150%]"
+      :title="$t('nft.collection.royalties')"
+      :instructions="[$t('nft.collection.royaltiesInfo')]"
     >
-      <!-- Royalties Address -->
-      <n-form-item-gi
-        path="royaltiesAddress"
-        :span="6"
-        :label="infoLabel('royaltiesAddress') as string"
-        :label-props="{ for: 'royaltiesAddress' }"
-      >
-        <n-input
-          v-model:value="metadataStore.form.smartContract.royaltiesAddress"
-          :input-props="{ id: 'royaltiesAddress' }"
-          :placeholder="$t('general.typeHere')"
-          clearable
-        />
-      </n-form-item-gi>
+      <n-grid class="items-end" :cols="12" :x-gap="32">
+        <!-- <n-form-item-gi :span="12" :show-label="false">
+        <div>
+          <h4>{{ $t('nft.collection.behavior') }}</h4>
+          <p>{{ $t('nft.collection.behaviorInfo') }}</p>
+        </div>
+      </n-form-item-gi> -->
 
-      <!-- Royalties Fees -->
-      <n-form-item-gi
-        path="royaltiesFees"
-        :span="6"
-        :label="infoLabel('royaltiesFees') as string"
-        :label-props="{ for: 'royaltiesFees' }"
-      >
-        <n-input-number
-          v-model:value="metadataStore.form.smartContract.royaltiesFees"
-          :min="0"
-          :max="100"
-          :input-props="{ id: 'royaltiesFees' }"
-          :placeholder="$t('general.typeHere')"
-          clearable
+        <!-- Royalties Fees -->
+        <n-form-item-gi
+          path="royaltiesFees"
+          :span="4"
+          :label="infoLabel('royaltiesFees') as string"
+          :label-props="{ for: 'royaltiesFees' }"
         >
-          <template #suffix>%</template>
-        </n-input-number>
-      </n-form-item-gi>
-    </n-grid>
+          <n-input-number
+            v-model:value="metadataStore.form.smartContract.royaltiesFees"
+            :min="0"
+            :max="100"
+            :input-props="{ id: 'royaltiesFees' }"
+            :placeholder="$t('general.typeHere')"
+            clearable
+          >
+            <template #suffix>%</template>
+          </n-input-number>
+        </n-form-item-gi>
+
+        <!-- Royalties Address -->
+        <n-form-item-gi
+          path="royaltiesAddress"
+          :span="8"
+          :label="infoLabel('royaltiesAddress') as string"
+          :label-props="{ for: 'royaltiesAddress' }"
+        >
+          <FormFieldWalletAddress
+            v-model:value="metadataStore.form.smartContract.royaltiesAddress"
+            :input-props="{ id: 'royaltiesAddress' }"
+            @connected="address => (metadataStore.form.smartContract.royaltiesAddress = address)"
+          />
+        </n-form-item-gi>
+      </n-grid>
+    </FormInstructions>
 
     <n-grid v-if="!isUnique" class="items-end" :cols="12" :x-gap="32">
+      <n-form-item-gi :span="12" :show-label="false">
+        <div>
+          <h4>{{ $t('nft.collection.drop') }}</h4>
+          <p>{{ $t('nft.collection.dropInfo') }}</p>
+        </div>
+      </n-form-item-gi>
       <!--  Collection Is Drop -->
       <n-form-item-gi path="drop" :span="6" :label="infoLabel('drop') as string">
         <n-switch v-model:value="metadataStore.form.smartContract.drop" size="medium" id="drop" class="!ml-0" />
@@ -320,17 +342,18 @@
     <n-form-item v-if="!hideSubmit" :show-label="false">
       <input type="submit" class="hidden" :value="$t('form.proceed')" />
       <Btn type="primary" class="mt-2 w-full" @click="handleSubmitForm">
-        {{ t('form.proceed') }}
+        {{ $t('form.proceed') }}
       </Btn>
     </n-form-item>
   </n-form>
 </template>
 
 <script lang="ts" setup>
-import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
 import { Feature } from '~/lib/types/config';
-import { ChainType, NFTCollectionType } from '~/lib/types/nft';
 import { isFeatureEnabled } from '~/lib/utils';
+import { chainCurrency } from '~/lib/utils/chain';
+import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
+import { ChainType, NFTCollectionType } from '~/lib/types/nft';
 
 defineProps({
   hideSubmit: { type: Boolean, default: false },

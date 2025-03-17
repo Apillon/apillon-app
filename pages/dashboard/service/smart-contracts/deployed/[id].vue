@@ -14,7 +14,7 @@
                 }}
               </small>
               <small class="ml-2 text-sm text-body">
-                {{ t(`nft.chain.${deployedContractStore.active.chain}`) }}
+                {{ $t(`nft.chain.${deployedContractStore.active.chain}`) }}
               </small>
             </h1>
             <TableLink

@@ -1,5 +1,5 @@
 <template>
-  <n-drawer v-bind="$attrs" width="100%" height="92vh" placement="bottom">
+  <n-drawer width="100%" height="92vh" placement="bottom">
     <n-drawer-content :title="title" closable>
       <template #header>
         <div class="flex w-full items-center justify-between">

@@ -1,10 +1,10 @@
 <template>
   <div class="flex w-full items-center gap-4">
     <n-input v-bind="$attrs" :placeholder="$t('general.typeHere')" clearable />
-    <Btn v-if="!isConnected" type="secondary" @click="modalWalletVisible = true">
+    <Btn v-if="!isConnected" size="small" type="secondary" @click="modalWalletVisible = true">
       {{ $t('auth.wallet.connect.wallet') }}
     </Btn>
-    <Btn v-else type="secondary" @click="connectDifferent">
+    <Btn v-else size="small" type="secondary" @click="connectDifferent">
       {{ $t('auth.wallet.connect.different') }}
     </Btn>
   </div>

@@ -75,6 +75,7 @@ export default function useCollection() {
   ];
 
   const availableNftChains = computed(() => nftChains.filter(c => isChainAvailable(c.value)));
+  const availableNftTestChains = computed(() => chainsTestnet.filter(c => isChainAvailable(c.value)));
 
   const isFormDisabled = computed<boolean>(() => {
     return dataStore.isProjectUser;
@@ -337,6 +338,7 @@ export default function useCollection() {
   return {
     addressLabel,
     availableNftChains,
+    availableNftTestChains,
     booleanSelect,
     chains,
     chainsTestnet,

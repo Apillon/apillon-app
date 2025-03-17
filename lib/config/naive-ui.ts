@@ -194,6 +194,9 @@ export const themeOverrides: GlobalThemeOverrides = {
     color: colors.bg.DEFAULT,
     textColor: colors.white.DEFAULT,
     headerBorderBottom: `1px solid ${colors.bg.lighter}`,
+    headerPadding: '40px 40px 20px',
+    bodyPadding: '20px 40px',
+    footerPadding: '20px 40px 40px',
   },
   Dropdown: {
     borderRadius: '8px',

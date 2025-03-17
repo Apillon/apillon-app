@@ -1,7 +1,7 @@
 <template>
   <div class="">
-    <h2>{{ t('nft.collection.createStep.1') }}</h2>
-    <p>{{ t('nft.metadata.startFresh') }}</p>
+    <h2>{{ $t('nft.collection.createStep.1') }}</h2>
+    <p>{{ $t('nft.metadata.startFresh') }}</p>
 
     <NftCardSelect
       icon="menu/NFTs"

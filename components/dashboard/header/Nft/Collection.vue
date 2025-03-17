@@ -6,10 +6,10 @@
           <span class="icon-back align-sub text-2xl"></span>
         </NuxtLink>
         <h2 v-if="metadataStore.form.smartContract.chain">
-          {{ t('nft.collection.title') }}:
+          {{ $t('nft.collection.title') }}:
           <span class="capitalize">{{ chainIdToName(metadataStore.form.smartContract.chain).replace('_', ' ') }}</span>
         </h2>
-        <h2 v-else>{{ t('dashboard.solution.nftCollection.name') }}</h2>
+        <h2 v-else>{{ $t('dashboard.solution.nftCollection.name') }}</h2>
       </n-space>
     </slot>
     <template #info>
@@ -22,7 +22,7 @@
   </Heading>
 
   <W3Warn v-model:show="modalW3WarnVisible">
-    {{ t('w3Warn.nft.new') }}
+    {{ $t('w3Warn.nft.new') }}
   </W3Warn>
 </template>
 

@@ -1,12 +1,12 @@
 <template>
   <div class="">
-    <h2>{{ t('nft.collection.environment') }}</h2>
-    <p>{{ t('nft.collection.environmentContent') }}</p>
+    <h2>{{ $t('nft.collection.environment') }}</h2>
+    <p>{{ $t('nft.collection.environmentContent') }}</p>
 
-    <div class="my-6 flex items-center gap-1 text-sm">
-      <span>{{ t('nft.testnet') }}</span>
+    <div class="my-6 flex items-center text-sm">
+      <span>{{ $t('nft.testnet') }}</span>
       <n-switch v-model:value="isMainnet" />
-      <span>{{ t('nft.mainnet') }}</span>
+      <strong :class="{'text-green': isMainnet}">{{ $t('nft.mainnet') }}</strong>
     </div>
     <FormFieldSearch v-model:value="search" :placeholder="$t('nft.search')" />
     <div class="my-8">
@@ -16,7 +16,7 @@
             <NftCardNetwork
               :name="chain.name.toLowerCase()"
               :label="chain.label"
-              :price="1"
+          :price="paymentStore.findServicePrice(getPriceServiceName(chain.value))?.currentPrice || 0"
               :chainId="chain.value"
               :disabled="true"
             >
@@ -33,7 +33,7 @@
           v-else
           :name="chain.name.toLowerCase()"
           :label="chain.label"
-          :price="1"
+          :price="paymentStore.findServicePrice(getPriceServiceName(chain.value))?.currentPrice || 0"
           :chainId="chain.value"
           :selected="metadataStore.form.smartContract.chain === chain.value"
           @click="() => onChainChange(chain.value)"
@@ -46,7 +46,7 @@
       class="overflow-hidden transition-all"
       :class="metadataStore.form.smartContract.chain === EvmChainMainnet.ASTAR ? 'max-h-[20rem]' : 'max-h-0'"
     >
-      <h4 class="relative top-2">{{ t('nft.collection.chainType') }}</h4>
+      <h4 class="relative top-2">{{ $t('nft.collection.chainType') }}</h4>
       <div class="my-8 flex justify-center gap-4 whitespace-pre-line">
         <div v-for="chainType in chainTypes">
           <div
@@ -91,7 +91,9 @@ const collectionStore = useCollectionStore();
 
 const { t } = useI18n();
 const { isMd } = useScreen();
-const { enterpriseChainIDs, nftChains, chainsTestnet, chainTypes, isChainAvailable } = useCollection();
+const { getPriceServiceName } = useMetadata();
+const {   availableNftChains,
+  availableNftTestChains, enterpriseChainIDs,  chainTypes, isChainAvailable } = useCollection();
 
 const isMainnet = ref<boolean>(false);
 const isSubstrateEnabled = ref<boolean>(false);
@@ -101,9 +103,8 @@ const disabledChain = (chainId: number) => collectionStore.quotaReached && enter
 
 
 const chains = computed(() =>
-  (isMainnet.value ? nftChains : chainsTestnet)
+  (isMainnet.value ? availableNftChains.value : availableNftTestChains.value)
     .filter(chain => !search.value || chain.label.toLowerCase().includes(search.value.toLowerCase()))
-    .filter(chain => isChainAvailable(chain.value))
 );
 
 onMounted(() => {

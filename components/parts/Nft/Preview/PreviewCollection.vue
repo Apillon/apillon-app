@@ -25,7 +25,7 @@
         <tbody>
           <tr v-for="item in data" :class="{ hidden: item.show === false }">
             <td class="!text-white">{{ item.label }}</td>
-            <td>
+            <td class="relative">
               <span v-if="item?.key === 'chain'" class="flex items-center gap-2">
                 <NuxtIcon
                   :name="`logo/${getChainIconName(item.value)}`"
@@ -41,6 +41,10 @@
                 {{ truncateWallet(item.value) }}
               </template>
               <template v-else> {{ item.value }}</template>
+
+              <Btn class="float-right mt-[2px] hidden text-xs text-yellow" type="link" @click="$emit('back')">
+                {{ $t('general.change') }}
+              </Btn>
             </td>
           </tr>
         </tbody>
@@ -52,7 +56,7 @@
     </div>
 
     <div class="mt-8 md:!w-1/2">
-      <h6>{{ t('nft.collection.review.costs') }}</h6>
+      <h6>{{ $t('nft.collection.review.costs') }}</h6>
       <n-table class="plain my-6 table-fixed" :bordered="false" :single-line="true">
         <tbody>
           <tr v-for="price in pricing">
@@ -63,11 +67,11 @@
       </n-table>
       <div class="card-light p-6">
         <div class="flex gap-2">
-          <strong class="block w-1/2">{{ t('nft.collection.review.totalSpend') }}</strong>
+          <strong class="block w-1/2">{{ $t('nft.collection.review.totalSpend') }}</strong>
           <div class="flex w-1/2 flex-col gap-1 text-right">
             <strong>{{ totalCredits }} {{ $t('dashboard.credits.credits') }}</strong>
             <small>
-              {{ t('nft.collection.review.balance') }}: {{ formatNumber(paymentStore.credit.balance || 0) }}
+              {{ $t('nft.collection.review.balance') }}: {{ formatNumber(paymentStore.credit.balance || 0) }}
               {{ $t('dashboard.credits.credits') }}
             </small>
           </div>
@@ -90,7 +94,7 @@ import { formatNumber } from '~/lib/utils/helpers';
 import { truncateWallet } from '~/lib/utils/strings';
 import { timestampToDateAndTime } from '~/lib/utils/dates';
 
-defineEmits(['deploy']);
+defineEmits(['back', 'deploy']);
 const { t } = useI18n();
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
@@ -109,7 +113,7 @@ const data = ref([
   { label: t('form.label.collection.symbol'), value: metadataStore.form.smartContract.symbol },
   { label: t('form.label.collection.type'), value: metadataStore.form.smartContract.collectionType },
   { label: t('form.label.collection.useGateway'), value: metadataStore.form.smartContract.useApillonIpfsGateway },
-  { label: t('form.label.collection.useIpns'), value: metadataStore.form.smartContract.useIpns },
+  { label: t('form.label.collection.useIpns'), value: !!metadataStore.form.smartContract.useIpns },
   {
     label: t('form.label.collection.supplyLimited'),
     value: metadataStore.form.smartContract.supplyLimited

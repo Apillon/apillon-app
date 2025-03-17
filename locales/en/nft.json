@@ -55,7 +55,7 @@
       "deployInfo": "Deploy on Testnet to test the template before launching it in production in Mainnet.",
       "display": "Display NFT collection",
       "drop": "Mint scheduling, reservation and pricing",
-      "dorpInfo": "Decide when minting starts, set a price, and reserve NFTs if needed.",
+      "dropInfo": "Decide when minting starts, set a price, and reserve NFTs if needed.",
       "dropPrice": "Mint price",
       "dropReserve": "Reserved",
       "dropStart": "Drop start",
@@ -84,6 +84,7 @@
       "royalties": "Collection royalties",
       "royaltiesInfo": "Set up royalties to earn a percentage of every resale of your NFTs after minting. This percentage will be automatically deducted from transactions and sent to your designated wallet.",
       "setBaseUri": "Set base URI",
+      "smartContract": "Collection Smart Contract data",
       "symbol": "Symbol",
       "showWebsite": "Show website",
       "title": "Collection",
@@ -149,7 +150,7 @@
       },
       "instruction": {
         "data": "All collection data can be changed later in settings.",
-        "smartContract": "Once created, the smart contract details will be permanently deployed to the blockchain.",
+        "smartContract": "Define the core details of your NFT collection. These details will be stored permanently on-chain.",
         "visuals": "All collection data can be changed later in settings."
       },
       "review": {

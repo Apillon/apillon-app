@@ -2,7 +2,7 @@
   <div class="flex flex-wrap items-start justify-center gap-x-8 gap-y-4 self-stretch lg:flex-nowrap">
     <div
       v-bind="$attrs"
-      class="mb-6 w-1/2 max-w-xl flex-auto rounded-lg bg-bg-lighter p-4 pb-2 tablet:order-1 md:p-8 xl:max-w-2xl"
+      class="card-dark mb-6 w-1/2 max-w-xl flex-auto rounded-lg p-4 pb-2 tablet:order-1 md:p-8 xl:max-w-2xl"
     >
       <div v-if="title" class="mb-4 flex justify-between">
         <h4>{{ title }}</h4>

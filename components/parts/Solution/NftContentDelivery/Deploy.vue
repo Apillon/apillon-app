@@ -1,11 +1,11 @@
 <template>
   <div class="max-w-2xl">
     <div v-if="step === EncryptDeployTab.PREVIEW">
-      <h3 class="mb-8 mt-4">{{ t('dashboard.solution.encryption.deploy.preview') }}</h3>
+      <h3 class="mb-8 mt-4">{{ $t('dashboard.solution.encryption.deploy.preview') }}</h3>
       <n-table class="plain mb-6 table-fixed" :bordered="false" :single-line="true">
         <thead>
           <tr>
-            <th>{{ t('dashboard.solution.encryption.deploy.previewData') }}</th>
+            <th>{{ $t('dashboard.solution.encryption.deploy.previewData') }}</th>
             <th></th>
           </tr>
         </thead>
@@ -19,26 +19,26 @@
         </tbody>
       </n-table>
       <Btn type="primary" class="mt-2 w-full" @click="createContract">
-        {{ t('computing.contract.create') }}
+        {{ $t('computing.contract.create') }}
       </Btn>
     </div>
     <div v-else-if="step === EncryptDeployTab.DEPLOYING" class="mt-10 text-center">
       <AnimationLoader />
-      <h2>{{ t('dashboard.solution.encryption.deploy.loading') }}</h2>
+      <h2>{{ $t('dashboard.solution.encryption.deploy.loading') }}</h2>
       <p class="mb-8 whitespace-pre-line text-body">
-        {{ t('dashboard.solution.encryption.deploy.loadingInfo') }}
+        {{ $t('dashboard.solution.encryption.deploy.loadingInfo') }}
       </p>
     </div>
     <div v-else class="mt-20 text-center">
       <NuxtIcon name="icon/success" class="mr-2 inline-block text-7xl text-green" />
-      <h2>{{ t('dashboard.solution.encryption.deploy.finish') }}</h2>
+      <h2>{{ $t('dashboard.solution.encryption.deploy.finish') }}</h2>
       <p class="mb-8 whitespace-pre-line text-body">
-        {{ t('dashboard.solution.encryption.deploy.finishInfo') }}
+        {{ $t('dashboard.solution.encryption.deploy.finishInfo') }}
       </p>
 
       <div class="mx-auto flex max-w-sm flex-col gap-4">
         <Btn type="secondary" size="large" @click="router.push({ name: 'dashboard-service-computing' })">
-          {{ t('dashboard.solution.encryption.deploy.goBack') }}
+          {{ $t('dashboard.solution.encryption.deploy.goBack') }}
         </Btn>
         <Btn
           v-if="contract"
@@ -51,7 +51,7 @@
             })
           "
         >
-          {{ t('dashboard.solution.encryption.deploy.goToContract') }}
+          {{ $t('dashboard.solution.encryption.deploy.goToContract') }}
         </Btn>
       </div>
     </div>

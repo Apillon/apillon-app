@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 const props = defineProps({
-  image: { type: Object as PropType<FileListItemType>, required: true },
+  image: { type: Object as PropType<FileListItemType>, default: null },
   isLogo: { type: Boolean, default: false },
 });
 

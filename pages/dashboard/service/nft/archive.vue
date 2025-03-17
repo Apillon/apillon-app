@@ -20,7 +20,7 @@
         icon="nft/illustration"
       >
         <Btn type="primary" :to="{ name: 'dashboard-service-nft' }">
-          {{ t('dashboard.nav.nft') }}
+          {{ $t('dashboard.nav.nft') }}
         </Btn>
       </Empty>
     </slot>

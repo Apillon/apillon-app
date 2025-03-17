@@ -1,6 +1,6 @@
 <template>
   <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
-    {{ t('dashboard.permissions.insufficient') }}
+    {{ $t('dashboard.permissions.insufficient') }}
   </Notification>
   <n-form
     v-bind="$attrs"
@@ -19,11 +19,7 @@
         :label-props="{ for: 'collectionLogo' }"
         :show-feedback="false"
       >
-        <FormNftCollectionUpload
-          id="collectionLogo"
-          :image="metadataStore.form.visual.logo || ({} as FileListItemType)"
-          is-logo
-        />
+        <FormNftCollectionUpload id="collectionLogo" :image="metadataStore.form.visual.logo" is-logo />
       </n-form-item-gi>
 
       <!--  Collection cover image -->
@@ -45,7 +41,7 @@
     <n-form-item v-if="!hideSubmit" :show-label="false">
       <input type="submit" class="hidden" :value="t('form.proceed')" />
       <Btn type="primary" class="mt-2 w-full" @click="handleSubmitForm">
-        {{ t('form.proceed') }}
+        {{ $t('form.proceed') }}
       </Btn>
     </n-form-item>
   </n-form>

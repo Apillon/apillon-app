@@ -2,8 +2,8 @@
   <n-form ref="formRef" class="h-full" :model="metadataStore.form.single" :rules="rulesSingle">
     <div class="flex h-full flex-col gap-12 md:flex-row">
       <div class="md:w-1/2">
-        <h4>{{ t('nft.add') }}</h4>
-        <p class="mb-6">{{ t('nft.amount.singleContent') }}</p>
+        <h4>{{ $t('nft.add') }}</h4>
+        <p class="mb-6">{{ $t('nft.amount.singleContent') }}</p>
 
         <n-grid :cols="12" :x-gap="32">
           <!--  Collection cover image -->
@@ -98,7 +98,7 @@
               <Btn size="small" type="secondary" class="!min-w-0" @click="addAttribute()">
                 <span class="flex items-center gap-2">
                   <span class="icon-add rounded-md p-1 text-xl text-yellow"></span>
-                  <span>{{ t('nft.addAttribute') }}</span>
+                  <span>{{ $t('nft.addAttribute') }}</span>
                 </span>
               </Btn>
             </div>

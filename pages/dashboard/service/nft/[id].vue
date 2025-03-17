@@ -12,7 +12,7 @@
           </div>
 
           <div class="card max-w-64 px-6 py-4">
-            <h6 class="mb-2">{{ t('general.actions') }}</h6>
+            <h6 class="mb-2">{{ $t('general.actions') }}</h6>
             <ActionsNftCollection
               @add-nfts="openModalAddNfts"
               @mint="modalMintCollectionVisible = true"
@@ -30,7 +30,7 @@
           >
             <template #tab>
               <span class="ml-2 text-sm text-white">
-                {{ t('nft.transaction.title') }}
+                {{ $t('nft.transaction.title') }}
               </span>
             </template>
             <slot>
@@ -43,29 +43,29 @@
           >
             <template #tab>
               <span class="ml-2 text-sm text-white">
-                {{ t('nft.metadata.deployTitle') }}
+                {{ $t('nft.metadata.deployTitle') }}
               </span>
             </template>
             <slot>
               <TableNftMetadataDeploys
                 v-if="collectionStore.active.bucket_uuid"
-                :deploys="metadataStore.metadataDeploys"
+                :deploys="collectionStore.metadataDeploys"
               />
             </slot>
           </n-tab-pane>
           <n-tab-pane :name="Tabs.NFTs">
             <template #tab>
               <span class="ml-2 text-sm text-white">
-                {{ t('dashboard.nav.nft') }}
+                {{ $t('dashboard.nav.nft') }}
               </span>
             </template>
             <slot>
               <div v-if="collectionStore.active.collectionStatus === CollectionStatus.CREATED">
-                <p class="my-4">{{ t('nft.transaction.empty') }}</p>
+                <p class="my-4">{{ $t('nft.transaction.empty') }}</p>
                 <!-- Add NFT -->
                 <n-button @click="openModalAddNfts">
                   <span class="icon-add mr-2 text-xl text-primary"></span>
-                  <span class="text-primary">{{ t('nft.add') }}</span>
+                  <span class="text-primary">{{ $t('nft.add') }}</span>
                 </n-button>
               </div>
               <!-- Links to NFT templates -->
@@ -74,12 +74,12 @@
               />
               <div v-else-if="collectionStore.active.websiteUuid">
                 <p class="my-4">
-                  {{ t('nft.collection.websiteConnected') }}
+                  {{ $t('nft.collection.websiteConnected') }}
                 </p>
 
                 <NuxtLink :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}`">
                   <Btn type="primary">
-                    {{ t('nft.collection.showWebsite') }}
+                    {{ $t('nft.collection.showWebsite') }}
                   </Btn>
                 </NuxtLink>
               </div>
@@ -155,6 +155,7 @@ const router = useRouter();
 const { params } = useRoute();
 const storageStore = useStorageStore();
 const paymentStore = usePaymentStore();
+const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 const { openAddNft } = useCollection();
 

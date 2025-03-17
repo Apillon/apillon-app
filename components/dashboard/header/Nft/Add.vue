@@ -5,7 +5,7 @@
         <NuxtLink :to="`/dashboard/service/nft/${collectionStore.active.collection_uuid}`">
           <span class="icon-back align-sub text-2xl"></span>
         </NuxtLink>
-        <h2>{{ t('nft.addNfts') }}</h2>
+        <h2>{{ $t('nft.addNfts') }}</h2>
       </n-space>
     </slot>
     <template #info>

@@ -2,7 +2,7 @@
   <Dashboard :loading="pageLoading">
     <template #heading>
       <Heading>
-        <h1>{{ t('dashboard.nav.rpc') }}</h1>
+        <h1>{{ $t('dashboard.nav.rpc') }}</h1>
       </Heading>
     </template>
 

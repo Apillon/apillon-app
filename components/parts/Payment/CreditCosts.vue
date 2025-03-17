@@ -2,9 +2,9 @@
   <Spinner v-if="loading" />
   <template v-else>
     <div v-if="!service || (servicePrices && servicePrices.length)">
-      <n-space :size="32">
+      <div class="mb-4 flex gap-6">
         <!-- Filter by service -->
-        <div v-if="filterByService && !service" class="mb-4">
+        <div v-if="filterByService && !service">
           <strong class="mb-1 inline-block">{{ $t('dashboard.credits.filterByService') }}:</strong>
           <select-options
             v-model:value="selectedService"
@@ -17,19 +17,27 @@
           />
         </div>
         <!-- Filter by chain -->
-        <div v-if="filterByChain" class="mb-4">
-          <strong class="mb-1 inline-block">{{ $t('dashboard.credits.filterByChain') }}:</strong>
-          <select-options
-            v-model:value="selectedChain"
-            :options="chainsByService"
-            class="min-w-[13rem] max-w-xs"
-            size="small"
-            :placeholder="$t('form.placeholder.chain')"
-            filterable
-            clearable
+        <div v-if="filterByChain" class="flex justify-between" :class="{ 'w-full': service === ServiceTypeName.NFT }">
+          <div>
+            <strong class="mb-1 inline-block text-sm">{{ $t('dashboard.credits.filterByChain') }}:</strong>
+            <select-options
+              v-model:value="selectedChain"
+              :options="chainsByService"
+              class="min-w-[13rem] max-w-xs"
+              size="small"
+              :placeholder="$t('form.placeholder.chain')"
+              filterable
+              clearable
+            />
+          </div>
+          <FormFieldSwitch
+            v-if="service === ServiceTypeName.NFT"
+            v-model:value="isMainnet"
+            :text-active="$t('nft.mainnet')"
+            :text-inactive="$t('nft.testnet')"
           />
         </div>
-      </n-space>
+      </div>
 
       <n-table class="plain" :bordered="false" :single-line="true">
         <thead>
@@ -73,15 +81,30 @@ const props = defineProps({
 
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
-const { chains, enterpriseChainIDs, availableNftChains, chainsTestnet, substrateChains, isChainAvailable } =
-  useCollection();
+const {
+  availableNftChains,
+  availableNftTestChains,
+  chains,
+  enterpriseChainIDs,
+  chainsTestnet,
+  substrateChains,
+  isChainAvailable,
+} = useCollection();
 
 const identityChains = enumKeyValues(IdentityChains);
 const services = enumKeyValues(ServiceTypeName);
 const selectedService = ref<string | undefined>(props.service);
 const servicePrices = ref<ProductPriceInterface[]>([]);
-const selectedChain = ref<number | undefined>();
+const selectedChain = ref<number | null | undefined>();
 const loading = ref<boolean>(true);
+const isMainnet = ref<boolean>(false);
+
+const availableNftChainsCategories = availableNftChains.value.map(
+  c => getChainName(c.value) + `_${ServiceTypeName.NFT}`
+);
+const availableNftTestChainsCategories = availableNftTestChains.value.map(
+  c => getChainName(c.value) + `_${ServiceTypeName.NFT}`
+);
 
 onMounted(async () => {
   if (props.filterByChain && props.service === ServiceTypeName.NFT) {
@@ -117,7 +140,11 @@ const chainsByService = computed(() => {
     case ServiceTypeName.HOSTING:
       return [];
     case ServiceTypeName.NFT:
-      return availableNftChains;
+      return props.service === ServiceTypeName.NFT
+        ? isMainnet.value
+          ? availableNftChains.value
+          : availableNftTestChains.value
+        : [...availableNftChains.value, ...availableNftTestChains.value];
     case ServiceTypeName.STORAGE:
       return [];
     case ServiceTypeName.SMART_CONTRACTS:
@@ -137,7 +164,11 @@ const shownPrices = computed(() => {
     ? servicePrices.value.filter(
         item => item.name.endsWith('_COLLECTION') && !item.name.endsWith('_TRANSFER_COLLECTION')
       )
-    : servicePrices.value;
+    : props.service === ServiceTypeName.NFT
+      ? isMainnet.value
+        ? servicePrices.value.filter(item => availableNftChainsCategories.includes(item.category))
+        : servicePrices.value.filter(item => availableNftTestChainsCategories.includes(item.category))
+      : servicePrices.value;
 
   /** Filter by chain and service */
   if (props.filterByChain && selectedChain.value && props.filterByService && selectedService.value) {
@@ -162,7 +193,15 @@ watch(
   () => selectedService.value,
   service => {
     if (service) {
-      selectedChain.value = undefined;
+      selectedChain.value = null;
+    }
+  }
+);
+watch(
+  () => isMainnet.value,
+  _ => {
+    if (props.service === ServiceTypeName.NFT) {
+      selectedChain.value = null;
     }
   }
 );

@@ -8,33 +8,33 @@
       <div class="grid gap-8" :class="nfts.length > 100 ? 'grid-cols-nftSmall' : 'grid-cols-nft'">
         <NftCard v-for="nft in nfts" :key="nft.id" :name="`${nft.name}`" :image="`${nft.image}`" />
       </div>
-      <div v-if="metadataStore.metadata.length > PAGINATION_LIMIT" class="my-4 flex items-center justify-center p-4">
-        <n-pagination
-          v-model:page="page"
-          v-model:page-size="pageSize"
-          :page-count="Math.ceil(metadataStore.metadata.length / pageSize)"
-          show-size-picker
-          :page-sizes="pagination.pageSizes"
-        />
-      </div>
-    </template>
-    <div v-else class="relative">
-      <n-data-table
-        :columns="columns"
-        :bordered="false"
-        :data="metadataStore.metadata"
-        :loading="metadataStore.loading"
-        :pagination="pagination"
-        :row-key="rowKey"
-        @update:page="(page: number) => (pagination.page = page)"
-        @update:page-size="
-          (pageSize: number) => {
-            pagination.pageSize = pageSize;
-            pagination.page = 1;
-          }
-        "
+      <n-pagination
+        v-if="metadataStore.metadata.length > PAGINATION_LIMIT"
+        class="flex items-center justify-end pt-3"
+        v-model:page="page"
+        v-model:page-size="pageSize"
+        :page-count="Math.ceil(metadataStore.metadata.length / pageSize)"
+        show-size-picker
+        :page-sizes="pagination.pageSizes"
       />
-    </div>
+      <div v-else class="mt-12"></div>
+    </template>
+    <n-data-table
+      v-else
+      :columns="columns"
+      :bordered="false"
+      :data="metadataStore.metadata"
+      :loading="metadataStore.loading"
+      :pagination="pagination"
+      :row-key="rowKey"
+      @update:page="(page: number) => (pagination.page = page)"
+      @update:page-size="
+        (pageSize: number) => {
+          pagination.pageSize = pageSize;
+          pagination.page = 1;
+        }
+      "
+    />
     <slot />
   </n-scrollbar>
 </template>

@@ -2,20 +2,20 @@
   <n-space class="w-full lg:min-w-52" size="large" vertical>
     <!-- Open Bucket -->
     <n-button
-      v-if="collectionStore.active.bucket_uuid"
+      v-if="collectionStore.active.bucket_uuid && !collectionStore.isUnique"
       class="w-full"
       size="small"
       :loading="loadingBucket"
       @click="openBucket(collectionStore.active.bucket_uuid)"
     >
       <span class="icon-storage mr-2 text-xl"></span>
-      <span>{{ t('nft.openBucket') }}</span>
+      <span>{{ $t('nft.openBucket') }}</span>
     </n-button>
 
     <!-- Refresh -->
     <n-button class="w-full" size="small" :loading="collectionStore.loading" @click="refresh">
       <span class="icon-refresh mr-2 text-xl"></span>
-      {{ t('general.refresh') }}
+      {{ $t('general.refresh') }}
     </n-button>
 
     <!-- Add IPNS -->
@@ -30,9 +30,9 @@
     >
       <template #icon> <IconInfo /> </template>
       <template #trigger>
-        <n-button class="w-full" size="small">{{ t('nft.addIpns') }}</n-button>
+        <n-button class="w-full" size="small">{{ $t('nft.addIpns') }}</n-button>
       </template>
-      {{ t('nft.addIpnsInfo') }}
+      {{ $t('nft.addIpnsInfo') }}
     </n-popconfirm>
 
     <!-- Add NFT -->
@@ -48,13 +48,13 @@
       @click="emit('addNfts')"
     >
       <span class="icon-add mr-2 text-xl text-primary"></span>
-      <span class="text-primary">{{ t('nft.add') }}</span>
+      <span class="text-primary">{{ $t('nft.add') }}</span>
     </n-button>
 
     <!-- Mint -->
     <n-button class="w-full" size="small" :disabled="authStore.isAdmin() || actionsDisabled" @click="emit('mint')">
       <span class="icon-nft mr-2 text-xl"></span>
-      {{ t('nft.collection.mint') }}
+      {{ $t('nft.collection.mint') }}
     </n-button>
     <n-button
       v-if="collectionStore.active?.collectionType === NFTCollectionType.NESTABLE"
@@ -64,7 +64,7 @@
       @click="emit('nestMint')"
     >
       <span class="icon-nft mr-2 text-xl"></span>
-      <span class="inline-block w-full">{{ t('nft.collection.nestMint') }}</span>
+      <span class="inline-block w-full">{{ $t('nft.collection.nestMint') }}</span>
     </n-button>
 
     <!-- Transfer ownership -->
@@ -75,7 +75,7 @@
       :disabled="authStore.isAdmin() || actionsDisabled"
       @click="emit('transfer')"
     >
-      {{ t('nft.collection.transfer') }}
+      {{ $t('nft.collection.transfer') }}
     </n-button>
 
     <!-- Change base URI -->
@@ -85,7 +85,7 @@
       :disabled="authStore.isAdmin() || actionsDisabled"
       @click="emit('setBaseUri')"
     >
-      {{ t('nft.collection.setBaseUri') }}
+      {{ $t('nft.collection.setBaseUri') }}
     </n-button>
 
     <!-- Burn -->
@@ -99,13 +99,13 @@
       @click="emit('revoke')"
     >
       <span class="icon-delete mr-2 text-xl text-pink"></span>
-      {{ t('nft.collection.revoke') }}
+      {{ $t('nft.collection.revoke') }}
     </n-button>
   </n-space>
 </template>
 
 <script lang="ts" setup>
-import { CollectionStatus, NFTCollectionType } from '~/lib/types/nft';
+import { CollectionStatus, NFTCollectionType, SubstrateChain } from '~/lib/types/nft';
 
 defineProps({
   env: { type: Number, default: 0 },
