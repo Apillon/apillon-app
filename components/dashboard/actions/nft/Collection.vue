@@ -22,7 +22,8 @@
     <n-popconfirm
       v-if="
         collectionStore.active?.collectionStatus === CollectionStatus.DEPLOYED &&
-        collectionStore.active.cid &&
+        !!collectionStore.active.bucket_uuid &&
+        !!collectionStore.active.cid &&
         !collectionStore.active.ipns_uuid &&
         !collectionStore.isUnique
       "
@@ -146,7 +147,7 @@ function refresh() {
   collectionStore.fetchCollectionTransactions(collectionStore.collectionUuid);
 }
 
-async function createDynamicMetadata() {
+function createDynamicMetadata() {
   const priceServiceName = generatePriceServiceName(
     ServiceTypeName.NFT,
     collectionStore.active.chain,
@@ -154,6 +155,7 @@ async function createDynamicMetadata() {
   );
   warningStore.showSpendingWarning([PriceServiceName.IPNS, priceServiceName], () => createIpns());
 }
+
 async function createIpns() {
   try {
     const res = await $api.post<CollectionResponse>(endpoints.collectionIpns(collectionStore.active.collection_uuid));
