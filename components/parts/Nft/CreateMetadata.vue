@@ -24,6 +24,7 @@
         collectionStore.nftStep === NftCreateStep.DEPLOY &&
         collectionStore.stepCollectionDeploy === CollectionStatus.DEPLOYED
       "
+      :chain="collectionStore.active.chain"
       :show-footer="!isUnique"
     >
       <div v-if="isUnique" class="mt-4">

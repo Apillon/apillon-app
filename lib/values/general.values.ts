@@ -93,6 +93,7 @@ export const LsCacheKeys = {
   CREDIT_PACKAGES: 'al_cache_credit_packages',
   CUSTOMER_PORTAL_URL: 'al_cache_customer_portal',
   DEPLOYMENT: 'al_cache_deployment',
+  DEPLOYMENT_CONFIG: 'al_cache_deployment_config',
   DEPLOYMENT_BUILD: 'al_cache_deployment_build',
   DEPLOYMENT_VARIABLES: 'al_cache_deployment_variables',
   DEPLOYMENTS_PRODUCTION: 'al_cache_deployments_production',

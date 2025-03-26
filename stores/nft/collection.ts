@@ -66,7 +66,9 @@ export const useCollectionStore = defineStore('collection', {
         attributes: [] as AttributesInterface,
       },
     },
-    websiteDeployForm: {} as WebsiteDeployForm,
+    websiteDeployForm: {
+      type: NftWebsiteType.PLAIN_JS,
+    } as WebsiteDeployForm,
   }),
   getters: {
     collectionUuid(state): string {
