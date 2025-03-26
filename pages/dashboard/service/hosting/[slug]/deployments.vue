@@ -4,13 +4,13 @@
       <HeaderWebsite />
     </template>
     <slot>
-      <template v-if="websiteStore.active.repoId || websiteStore.active.nftCollectionUuid">
+      <template v-if="websiteStore.isActiveWebsiteGithubSource || websiteStore.active.nftCollectionUuid">
         <n-space class="pb-8" :size="32" vertical>
           <div class="flex w-full flex-row-reverse justify-between gap-8">
             <!-- Actions : refresh, deploy -->
             <n-space>
-              <n-button v-if="websiteStore.active.deploymentConfig_id" size="small" @click="navigateToEnvVars">
-                {{ $t('hosting.deploy.env-vars.title') }}
+              <n-button v-if="websiteStore.isActiveWebsiteGithubSource" size="small" @click="showUpdateModal">
+                {{ $t('hosting.deploy.update-config') }}
               </n-button>
               <n-button size="small" :loading="deploymentStore.buildsLoading" @click="refreshBuilds">
                 <span class="icon-refresh mr-2 text-xl"></span>
@@ -27,8 +27,14 @@
         <Btn type="primary" @click="modalCreateKeyVisible = true">{{ $t('hosting.deploy.connect-repo') }}</Btn>
       </Empty>
 
-      <modal v-model:show="modalCreateKeyVisible" :title="$t('hosting.deploy.new')">
-        <FormStorageDeployConfig @submit-success="modalCreateKeyVisible = false" />
+      <modal
+        v-model:show="modalCreateKeyVisible"
+        :title="$t(websiteStore.isActiveWebsiteGithubSource ? 'hosting.deploy.update' : 'hosting.deploy.new')"
+      >
+        <FormStorageDeployConfig
+          @submit-success="modalCreateKeyVisible = false"
+          :config_id="deploymentStore.deploymentConfig?.id"
+        />
       </modal>
     </slot>
   </Dashboard>
@@ -37,9 +43,8 @@
 <script lang="ts" setup>
 const $i18n = useI18n();
 const websiteStore = useWebsiteStore();
-const storageStore = useStorageStore();
 const deploymentStore = useDeploymentStore();
-const router = useRouter();
+const storageStore = useStorageStore();
 const { pageLoading, initWebsite } = useHosting();
 const modalCreateKeyVisible = ref<boolean>(false);
 
@@ -48,7 +53,7 @@ useHead({
 });
 
 onMounted(async () => {
-  initWebsite(DeploymentEnvironment.STAGING, true);
+  initWebsite(DeploymentEnvironment.STAGING, true, false, true);
   storageStore.getGithubProjectConfig();
 });
 
@@ -59,11 +64,19 @@ const refreshBuilds = async () => {
   }
 };
 
-const navigateToEnvVars = () => {
-  if (websiteStore.active.deploymentConfig_id) {
-    router.push(
-      `/dashboard/service/hosting/${websiteStore.active.website_uuid}/${websiteStore.active.deploymentConfig_id}/env-vars`
-    );
-  }
+const showUpdateModal = async () => {
+  storageStore.deployConfigForm = {
+    branchName: deploymentStore.deploymentConfig?.branchName || '',
+    buildCommand: deploymentStore.deploymentConfig?.buildCommand || '',
+    buildDirectory: deploymentStore.deploymentConfig?.buildDirectory || '',
+    installCommand: deploymentStore.deploymentConfig?.installCommand || '',
+    apiKey: deploymentStore.deploymentConfig?.apiKey || '',
+    apiSecret: '',
+    repoId: deploymentStore.deploymentConfig?.repoId || 0,
+    repoName: deploymentStore.deploymentConfig?.repoName || '',
+    repoOwnerName: deploymentStore.deploymentConfig?.repoOwnerName || '',
+    repoUrl: '',
+  };
+  modalCreateKeyVisible.value = true;
 };
 </script>

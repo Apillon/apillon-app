@@ -30,6 +30,11 @@ export enum DeploymentBuildStatus {
   FAILED = 4,
 }
 
+export enum WebsiteSource {
+  APILLON = 1,
+  GITHUB = 2,
+}
+
 export enum WebsiteDomainStatus {
   /** Not yet processed and resolved */
   PENDING = 0,
@@ -60,6 +65,7 @@ declare global {
    * Website
    */
   interface WebsiteBaseInterface extends BaseObjectInterface {
+    source: WebsiteSource;
     website_uuid: string;
     domain: string | null;
     domainChangeDate: string | null;
@@ -77,8 +83,7 @@ declare global {
     ipnsStaging: string | null;
     nftCollectionUuid: string | null;
     productionBucket: BucketInterface;
-    repoId: number | null;
-    deploymentConfig_id: number | null;
+    source: WebsiteSource;
     stagingBucket: BucketInterface;
     w3ProductionLink: string | null;
     w3StagingLink: string | null;
@@ -116,6 +121,19 @@ declare global {
   interface DeploymentConfigVariablesResponse extends GeneralResponse<DeploymentConfigVariable[]> {}
 
   interface DeploymentConfigInterface {
+    id: number;
+    repoId: number;
+    repoName: string;
+    repoOwnerName: string;
+    hookId: number;
+    branchName: string;
+    websiteUuid: string;
+    projectConfigId: number;
+    buildCommand: string | null;
+    buildDirectory: string;
+    installCommand: string | null;
+    apiKey: string;
+    apiSecret: string;
     encryptedVariables: string | null;
   }
   interface DeploymentConfigResponse extends GeneralResponse<DeploymentConfigInterface> {}

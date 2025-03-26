@@ -205,6 +205,9 @@ const Endpoints = {
     return `/storage/hosting/websites/${websiteUuid}/deployments`;
   },
   deploymentBuilds: `/deploy/deploy-build`,
+  deploymentConfig: (websiteUuid: string) => {
+    return `/deploy/config/${websiteUuid}`;
+  },
   deploymentConfigVariables: (deploymentConfigId?: number) =>
     deploymentConfigId ? `/deploy/config/variables/${deploymentConfigId}` : '/deploy/config/variables',
 

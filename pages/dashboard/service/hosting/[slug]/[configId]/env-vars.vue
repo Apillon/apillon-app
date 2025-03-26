@@ -4,7 +4,7 @@
       <HeaderWebsite />
     </template>
     <slot>
-      <template v-if="websiteStore.active.repoId">
+      <template v-if="websiteStore.isActiveWebsiteGithubSource">
         <TableHostingDeploymentVariables :variables="deploymentStore.variables" />
       </template>
     </slot>
@@ -23,6 +23,6 @@ useHead({
 });
 
 onMounted(async () => {
-  initWebsite(DeploymentEnvironment.STAGING, false, true);
+  initWebsite(DeploymentEnvironment.STAGING, false, true, true);
 });
 </script>

@@ -26,7 +26,7 @@
   <modal v-model:show="modalCreateVariableVisible" :title="$t('hosting.deploy.env-vars.new-title')">
     <FormHostingDeploymentConfigVariable
       @submit-success="modalCreateVariableVisible = false"
-      :config-id="websiteStore.active.deploymentConfig_id ?? 0"
+      :config-id="deploymentStore.deploymentConfig?.id ?? 0"
     />
   </modal>
 </template>
@@ -40,7 +40,6 @@ defineProps({
 });
 
 const $i18n = useI18n();
-const websiteStore = useWebsiteStore();
 const deploymentStore = useDeploymentStore();
 
 const rowInEdit = ref('');
@@ -123,13 +122,13 @@ const revertRow = () => {
 };
 
 const refreshVariables = async () => {
-  const deploymentConfigId = websiteStore.active.deploymentConfig_id;
+  const deploymentConfigId = deploymentStore.deploymentConfig?.id;
   if (deploymentConfigId) {
     await deploymentStore.fetchVariables(deploymentConfigId);
   }
 };
 
 const saveVariables = () => {
-  websiteStore.active.deploymentConfig_id && deploymentStore.saveVariables(websiteStore.active.deploymentConfig_id);
+  deploymentStore.deploymentConfig && deploymentStore.saveVariables(deploymentStore.deploymentConfig.id);
 };
 </script>

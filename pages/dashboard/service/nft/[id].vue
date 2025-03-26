@@ -71,13 +71,14 @@
               <!-- Links to NFT templates -->
               <NftPreviewFinish
                 v-else-if="collectionStore.active.chainType === ChainType.EVM && !collectionStore.active.websiteUuid"
+                :chain="collectionStore.active.chain"
               />
               <div v-else-if="collectionStore.active.websiteUuid">
                 <p class="my-4">
                   {{ t('nft.collection.website-connected') }}
                 </p>
 
-                <NuxtLink :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}`">
+                <NuxtLink :to="`/dashboard/service/hosting/${collectionStore.active.websiteUuid}/deployments`">
                   <Btn type="primary">
                     {{ t('nft.collection.show-website') }}
                   </Btn>
