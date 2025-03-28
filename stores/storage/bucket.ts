@@ -308,8 +308,7 @@ export const useBucketStore = defineStore('bucket', {
   },
   persist: {
     key: SessionKeys.BUCKET_STORE,
-    storage: persistedState.localStorage,
+    storage: piniaPluginPersistedstate.localStorage(),
     paths: ['calculatedCids', 'itemsMainnet', 'itemsTestnet'],
-    // debug: true,
   } as any,
 });

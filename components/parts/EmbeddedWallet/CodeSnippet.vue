@@ -1,7 +1,7 @@
 <template>
-  <div class="flex items-center gap-x-2 mb-8">
+  <div class="mb-8 flex items-center gap-x-2">
     <h5>{{ $t('embeddedWallet.codeSnippets') }}</h5>
-    <div class="bg-bg-lighter rounded-full p-0.4">
+    <div class="p-0.4 rounded-full bg-bg-lighter">
       <n-button
         size="small"
         round
@@ -34,11 +34,11 @@
     />
   </div>
 
-  <CodeBlock :code="currentCode" lang="js" theme="github-dark" highlightjs :style="codeSize" />
+  <VCodeBlock :code="currentCode" lang="js" theme="github-dark" highlightjs :style="codeSize" />
 </template>
 
 <script lang="ts" setup>
-import CodeBlock from 'vue3-code-block';
+import VCodeBlock from '@wdns/vue-code-block';
 
 enum CodeFramework {
   REACT = 'react',

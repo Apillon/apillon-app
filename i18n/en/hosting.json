@@ -63,7 +63,6 @@
     },
     "website": {
       "addFirst": "Add first website",
-
       "create": "Create website",
       "description": "Website description",
       "delete": "Delete website",
@@ -83,7 +82,12 @@
       "basicType": "Blank website",
       "basicTypeDescription": "Deploy your static website over CLI or drag&drop files manually.",
       "githubType": "Github import repository",
-      "githubTypeDescription": "Connect your GitHub repo - we will build and deploy your project automatically."
+      "githubTypeDescription": "Connect your GitHub repo - we will build and deploy your project automatically.",
+      "createStep": {
+        "1": "Select",
+        "2": "Data",
+        "3": "Review"
+      }
     },
     "deploy": {
       "new": "New deployment configuration",

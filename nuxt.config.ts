@@ -28,12 +28,12 @@ export default defineNuxtConfig({
 
   modules: [
     '@vueuse/nuxt',
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
-    'nuxt-icons',
-    '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
+    '@nuxtjs/i18n',
+    '@pinia/nuxt',
     '@wagmi/vue/nuxt',
+    'nuxt-icons',
+    'pinia-plugin-persistedstate/nuxt',
     ['@nuxtjs/tailwindcss', { cssPath: '~/assets/css/tailwind.css' }],
   ],
 
@@ -64,7 +64,16 @@ export default defineNuxtConfig({
       include: process.env.NODE_ENV === 'development' ? ['naive-ui'] : [],
       exclude:
         process.env.NODE_ENV === 'development'
-          ? ['uuid', 'viem/chains', 'swiper/vue', 'swiper/modules', '@subsocial/grill-widget', 'vue3-code-block']
+          ? [
+              'uuid',
+              'viem/chains',
+              'swiper/vue',
+              'swiper/modules',
+              '@subsocial/grill-widget',
+              '@wdns/vue-code-block',
+              'vue3-youtube',
+              'swiper/types',
+            ]
           : [],
     },
   },
@@ -127,9 +136,10 @@ export default defineNuxtConfig({
 
   i18n: {
     lazy: true,
-    langDir: 'locales',
+    langDir: '',
     defaultLocale: 'en',
     strategy: 'no_prefix',
+    bundle: { optimizeTranslationDirective: false },
     compilation: { strictMessage: false, escapeHtml: false },
     locales: [
       {

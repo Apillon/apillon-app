@@ -204,7 +204,7 @@ export const useSettingsStore = defineStore('settings', {
   },
   persist: {
     key: SessionKeys.SETTINGS_STORE,
-    storage: persistedState.localStorage,
+    storage: piniaPluginPersistedstate.localStorage(),
     pick: ['notifications', 'youtubeChapters'],
   } as any,
 });

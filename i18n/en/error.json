@@ -77,6 +77,7 @@
     "FILE_VERSION_NOT_PRESENT": "File version is missing",
     "FILE_BODY_NOT_PRESENT": "File body is missing",
     "FILE_NOT_FOUND": "File not found",
+    "GITHUB_WEBHOOK_CREATION_FAILED": "WGitHub Webhook creation failed.",
     "WEBSITE_DOMAIN_CHANGE_NOT_ALLOWED": "Website domain can be changed every 15 minutes. ",
     "NO_FILES_TO_DEPLOY": "Please upload some files first.",
     "STATUS_NOT_PRESENT": "Status not present",

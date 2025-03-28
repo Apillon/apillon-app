@@ -141,7 +141,7 @@ export const useMetadataStore = defineStore('metadata', {
   },
   persist: {
     key: SessionKeys.METADATA_STORE,
-    storage: persistedState.sessionStorage,
+    storage: piniaPluginPersistedstate.sessionStorage(),
     paths: [
       'csvAttributes',
       'columns',

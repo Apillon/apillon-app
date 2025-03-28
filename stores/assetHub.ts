@@ -168,8 +168,7 @@ export const useAssetHubStore = defineStore('assetHub', {
 
   persist: {
     key: SessionKeys.ASSET_HUB,
-    storage: persistedState.sessionStorage,
+    storage: piniaPluginPersistedstate.sessionStorage(),
     paths: ['account', 'itemsMainnet', 'itemsTestnet'],
-    // debug: true,
   } as any,
 });

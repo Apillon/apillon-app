@@ -23,11 +23,11 @@
     </div>
   </n-space>
 
-  <CodeBlock :code="code" lang="js" theme="github-dark" highlightjs :style="codeSize" />
+  <VCodeBlock :code="code" lang="js" theme="github-dark" highlightjs :style="codeSize" />
 </template>
 
 <script lang="ts" setup>
-import CodeBlock from 'vue3-code-block';
+import VCodeBlock from '@wdns/vue-code-block';
 
 const props = defineProps({
   spaceId: { type: String, default: 'spaceID' },
