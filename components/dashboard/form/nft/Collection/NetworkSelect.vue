@@ -6,17 +6,17 @@
     <div class="my-6 flex items-center text-sm">
       <span>{{ $t('nft.testnet') }}</span>
       <n-switch v-model:value="isMainnet" />
-      <strong :class="{'text-green': isMainnet}">{{ $t('nft.mainnet') }}</strong>
+      <strong :class="{ 'text-green': isMainnet }">{{ $t('nft.mainnet') }}</strong>
     </div>
     <FormFieldSearch v-model:value="search" :placeholder="$t('nft.search')" />
     <div class="my-8">
       <template v-for="chain in chains" :key="chain.value">
-        <n-tooltip v-if="disabledChain(chain.value)" placement="bottom" :trigger="isMd ? 'hover' : 'click'"">
+        <n-tooltip v-if="disabledChain(chain.value)" placement="bottom" :trigger="isMd ? 'hover' : 'click'">
           <template #trigger>
             <NftCardNetwork
               :name="chain.name.toLowerCase()"
               :label="chain.label"
-          :price="paymentStore.findServicePrice(getPriceServiceName(chain.value))?.currentPrice || 0"
+              :price="paymentStore.findServicePrice(getPriceServiceName(chain.value))?.currentPrice || 0"
               :chainId="chain.value"
               :disabled="true"
             >
@@ -92,8 +92,8 @@ const collectionStore = useCollectionStore();
 const { t } = useI18n();
 const { isMd } = useScreen();
 const { getPriceServiceName } = useMetadata();
-const {   availableNftChains,
-  availableNftTestChains, enterpriseChainIDs,  chainTypes, isChainAvailable } = useCollection();
+const { availableNftChains, availableNftTestChains, enterpriseChainIDs, chainTypes, isChainAvailable } =
+  useCollection();
 
 const isMainnet = ref<boolean>(false);
 const isSubstrateEnabled = ref<boolean>(false);
@@ -101,10 +101,10 @@ const search = ref<string>('');
 
 const disabledChain = (chainId: number) => collectionStore.quotaReached && enterpriseChainIDs.includes(chainId);
 
-
 const chains = computed(() =>
-  (isMainnet.value ? availableNftChains.value : availableNftTestChains.value)
-    .filter(chain => !search.value || chain.label.toLowerCase().includes(search.value.toLowerCase()))
+  (isMainnet.value ? availableNftChains.value : availableNftTestChains.value).filter(
+    chain => !search.value || chain.label.toLowerCase().includes(search.value.toLowerCase())
+  )
 );
 
 onMounted(() => {

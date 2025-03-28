@@ -65,20 +65,20 @@ type FormWebsiteDeploy = {
 };
 
 const emit = defineEmits(['submitSuccess']);
+const { t } = useI18n();
 const message = useMessage();
 const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
 const dataStore = useDataStore();
 
-const $i18n = useI18n();
 const loading = ref<boolean>(false);
 
 const formRef = ref<NFormInst | null>(null);
 
 const websiteTypes = ref<Array<SelectOption>>([
-  { value: NftWebsiteType.PLAIN_JS, label: $i18n.t('nft.collection.website-deploy.plain_js') },
-  { value: NftWebsiteType.REACT, label: $i18n.t('nft.collection.website-deploy.react') },
-  { value: NftWebsiteType.VUE, label: $i18n.t('nft.collection.website-deploy.vue') },
+  { value: NftWebsiteType.PLAIN_JS, label: t('nft.collection.website-deploy.plain_js') },
+  { value: NftWebsiteType.REACT, label: t('nft.collection.website-deploy.react') },
+  { value: NftWebsiteType.VUE, label: t('nft.collection.website-deploy.vue') },
 ]);
 
 const formData = reactive<FormWebsiteDeploy>({
@@ -88,12 +88,12 @@ const formData = reactive<FormWebsiteDeploy>({
 });
 
 const rules: NFormRules = {
-  type: [ruleRequired($i18n.t('nft.collection.website-deploy.form.type-required'))],
+  type: [ruleRequired(t('nft.collection.website-deploy.form.type-required'))],
   apiKey: [
     {
       validator(_, value) {
         if (!value && formData.apiSecret) {
-          return new Error($i18n.t('nft.collection.website-deploy.form.api-key-equired'));
+          return new Error(t('nft.collection.website-deploy.form.api-key-equired'));
         }
         return true;
       },
@@ -104,7 +104,7 @@ const rules: NFormRules = {
     {
       validator(_, value) {
         if (!value && formData.apiKey) {
-          return new Error($i18n.t('nft.collection.website-deploy.form.api-secret-required'));
+          return new Error(t('nft.collection.website-deploy.form.api-secret-required'));
         }
         return true;
       },
@@ -145,7 +145,7 @@ async function deployNftWebsite() {
     };
 
     const { data } = await $api.post<WebsiteResponse>(endpoints.deployNftWebsite, bodyData);
-    message.success($i18n.t('nft.collection.website-deploy.success'));
+    message.success(t('nft.collection.website-deploy.success'));
 
     collectionStore.active.websiteUuid = data.website_uuid;
     emit('submitSuccess');

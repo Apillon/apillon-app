@@ -3,7 +3,7 @@
     <h2>{{ $t('nft.collection.createStep.1') }}</h2>
     <p>{{ $t('nft.metadata.startFresh') }}</p>
 
-    <NftCardSelect
+    <CardSelect
       icon="nft/metadata"
       title="I want a fresh start"
       content="Start by adding new NFTs"
@@ -14,7 +14,7 @@
     <strong>OR select from existing</strong>
 
     <div class="mx-auto my-6 flex flex-col gap-4 whitespace-pre-line">
-      <NftCardSelect
+      <CardSelect
         v-for="metadata in []"
         icon="nft/metadata"
         :title="metadata.name"
@@ -22,7 +22,7 @@
         :selected="selectedMetadata === metadata"
         @click="select(metadata)"
       >
-      </NftCardSelect>
+      </CardSelect>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <NftCardSelect :content="$t(`nft.network.${chainId}.advantage`)" :disabled="disabled" :selected="selected">
+  <CardSelect :content="$t(`nft.network.${chainId}.advantage`)" :disabled="disabled" :selected="selected">
     <template #title>
       <div class="flex w-full justify-between gap-2">
         <div class="flex items-center justify-between gap-2">
@@ -12,7 +12,7 @@
     <template #additional>
       <slot />
     </template>
-  </NftCardSelect>
+  </CardSelect>
 </template>
 
 <script lang="ts" setup>

@@ -1,5 +1,5 @@
 <template>
-  <NftCardSelect :icon="icon" :title="title" content="content" />
+  <CardSelect :icon="icon" :title="title" content="content" />
 </template>
 
 <script lang="ts" setup>

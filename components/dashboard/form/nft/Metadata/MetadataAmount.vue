@@ -3,7 +3,7 @@
     <h2>{{ $t('nft.collection.createStep.1') }}</h2>
     <p>{{ $t('nft.metadata.startFresh') }}</p>
 
-    <NftCardSelect
+    <CardSelect
       icon="menu/NFTs"
       :title="$t('nft.amount.single')"
       :content="$t('nft.amount.singleContent')"
@@ -13,7 +13,7 @@
 
     <strong class="text-sm">OR select from import options</strong>
 
-    <NftCardSelect
+    <CardSelect
       v-for="option in options"
       :key="option.key"
       :icon="option.icon"

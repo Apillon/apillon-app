@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { WebsiteSource } from '~/lib/types/hosting';
+import { WebsiteCreateStep, WebsiteSource, WebsiteType } from '~/lib/types/hosting';
 
 export const useWebsiteStore = defineStore('website', {
   state: () => ({
@@ -10,7 +10,23 @@ export const useWebsiteStore = defineStore('website', {
     missingHtml: false,
     search: '',
     selected: '',
+    stepWebsiteCreate: WebsiteCreateStep.TYPE,
     uploadActive: false,
+    form: {
+      type: null as null | WebsiteType,
+      name: '',
+      description: '',
+      branchName: 'main',
+      buildCommand: 'npm run build',
+      buildDirectory: './out',
+      installCommand: 'npm install',
+      apiKey: undefined,
+      apiSecret: '',
+      repoId: undefined,
+      repoName: '',
+      repoOwnerName: '',
+      repoUrl: '',
+    },
   }),
   getters: {
     hasWebsites(state): boolean {
@@ -34,6 +50,22 @@ export const useWebsiteStore = defineStore('website', {
       this.search = '';
       this.selected = '';
     },
+    resetForm() {
+      this.form.type = null as null | WebsiteType;
+      this.form.name = '';
+      this.form.description = '';
+      this.form.branchName = 'main';
+      this.form.buildCommand = 'npm run build';
+      this.form.buildDirectory = './out';
+      this.form.installCommand = 'npm install';
+      this.form.apiKey = undefined;
+      this.form.apiSecret = '';
+      this.form.repoId = undefined;
+      this.form.repoName = '';
+      this.form.repoOwnerName = '';
+      this.form.repoUrl = '';
+    },
+
     setWebsite(uuid: string) {
       if (this.selected !== uuid) {
         this.selected = uuid;
