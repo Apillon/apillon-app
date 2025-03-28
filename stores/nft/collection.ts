@@ -66,7 +66,7 @@ export const useCollectionStore = defineStore('collection', {
       if (!this.hasCollectionArchive || isCacheExpired(LsCacheKeys.COLLECTION_ARCHIVE)) {
         return await this.fetchCollections(true);
       }
-      return this.archive;
+      return this.archive.items;
     },
 
     async getCollection(collectionUuid: string): Promise<CollectionInterface | null> {

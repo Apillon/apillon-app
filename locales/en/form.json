@@ -93,7 +93,7 @@
         "logo": "Collection logo",
         "maxSupply": "How many?",
         "name": "Name",
-        "revocable": "Revocable",
+        "revocable": "Revokable",
         "royaltiesAddress": "Royalties address",
         "royaltiesFees": "Royalties fees",
         "soulbound": "Soulbound",

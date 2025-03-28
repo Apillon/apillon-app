@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { WebsiteSource } from '~/lib/types/hosting';
 
 export const useWebsiteStore = defineStore('website', {
   state: () => ({
@@ -20,6 +21,9 @@ export const useWebsiteStore = defineStore('website', {
     },
     hasWebsiteArchive(state): boolean {
       return Array.isArray(state.archive) && state.archive.length > 0;
+    },
+    isActiveWebsiteGithubSource(state): boolean {
+      return state.active.source === WebsiteSource.GITHUB;
     },
   },
   actions: {

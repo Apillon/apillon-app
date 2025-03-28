@@ -43,7 +43,9 @@
       "staging": "2. Preview",
       "deployments": "Deployments",
       "production": "3. Production",
-      "website": "Websites"
+      "production-deploy": "Production",
+      "website": "Websites",
+      "env-vars": "Environment variables"
     },
     "review": {
       "confirm": "Proceed with Website Deployment, I'll wait",
@@ -72,11 +74,20 @@
       "infoEdit": "",
       "name": "Website name",
       "new": "New website",
+      "source": "Source",
+      "apillon-source": "Apillon",
+      "github-source": "GitHub",
       "update": "Update website",
-      "uuid": "Website UUID"
+      "uuid": "Website UUID",
+      "selectType": "Select type of your website",
+      "basicType": "Blank website",
+      "basicTypeDescription": "Deploy your static website over CLI or drag&drop files manually.",
+      "githubType": "Github import repository",
+      "githubTypeDescription": "Connect your GitHub repo - we will build and deploy your project automatically."
     },
     "deploy": {
       "new": "New deployment configuration",
+      "update": "Update deployment configuration",
       "empty-info": "Connect Github repository to enable Continuous Deployment for this website",
       "connect-repo": "Connect Github repository to website",
       "env-vars": {
@@ -117,6 +128,8 @@
         "api-key-placeholder": "Select API key",
         "api-secret": "API secret",
         "api-secret-placeholder": "Enter API secret",
+        "api-secret-set": "API secret is set",
+        "api-secret-change": "Change",
         "save": "Save deployment configuration",
         "success": "Deployment configuration saved successfully",
         "validation": {
@@ -126,7 +139,8 @@
           "api-key-required": "API key is required",
           "api-secret-required": "API secret is required"
         }
-      }
+      },
+      "update-config": "Update"
     },
     "clearAll": "Clear all",
     "clearAllFiles": "Do you want to remove all files?",

@@ -13,6 +13,7 @@ export const useDeploymentStore = defineStore('deployment', {
     },
     production: [] as DeploymentInterface[],
     staging: [] as DeploymentInterface[],
+    deploymentConfig: undefined as DeploymentConfigInterface | undefined,
   }),
   getters: {
     hasProductionDeployments(state): boolean {
@@ -26,6 +27,9 @@ export const useDeploymentStore = defineStore('deployment', {
     },
     hasVariablesLoaded(state): boolean {
       return Array.isArray(state.variables) && state.variables.length > 0;
+    },
+    hasDeploymentConfigLoaded(state): boolean {
+      return !!state.deploymentConfig;
     },
   },
   actions: {
@@ -81,6 +85,16 @@ export const useDeploymentStore = defineStore('deployment', {
       }
     },
 
+    async getDeploymentConfig(websiteUuid: string) {
+      if (
+        !this.hasDeploymentConfigLoaded ||
+        isCacheExpired(LsCacheKeys.DEPLOYMENT_CONFIG) ||
+        this.deploymentConfig?.websiteUuid !== websiteUuid
+      ) {
+        await this.fetchDeploymentConfig(websiteUuid);
+      }
+    },
+
     /**
      * API calls
      */
@@ -117,6 +131,23 @@ export const useDeploymentStore = defineStore('deployment', {
         /** Show error message  */
         window.$message.error(userFriendlyMsg(error));
       }
+      this.loading = false;
+    },
+
+    async fetchDeploymentConfig(websiteUuid: string) {
+      this.loading = true;
+
+      try {
+        const res = await $api.get<DeploymentConfigResponse>(endpoints.deploymentConfig(websiteUuid));
+
+        this.deploymentConfig = res.data;
+
+        sessionStorage.setItem(LsCacheKeys.DEPLOYMENT_CONFIG, Date.now().toString());
+      } catch (error: any) {
+        this.deploymentConfig = undefined;
+        window.$message.error(userFriendlyMsg(error));
+      }
+
       this.loading = false;
     },
 

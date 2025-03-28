@@ -9,11 +9,13 @@
     @submit.prevent="handleSubmit"
   >
     <n-form-item path="repoId" :label="$t('hosting.deploy.form.repository')" :label-props="{ for: 'repo' }">
+      <n-skeleton v-if="!repoOptions.length" height="40px" width="100%" />
       <n-select
         v-model:value="storageStore.deployConfigForm.repoId"
         :placeholder="$t('hosting.deploy.form.repository-placeholder')"
         :options="repoOptions"
         @update:value="handleUpdateValue"
+        v-if="!!repoOptions.length"
       />
     </n-form-item>
     <n-form-item path="branchName" :label="$t('hosting.deploy.form.branch-name')" :label-props="{ for: 'branchName' }">
@@ -64,26 +66,41 @@
       />
     </n-form-item>
 
-    <n-form-item path="apiKey" :label="$t('hosting.deploy.form.api-key')" :label-props="{ for: 'apiKey' }">
-      <n-select
-        v-model:value="storageStore.deployConfigForm.apiKey"
-        :placeholder="$t('hosting.deploy.form.api-key-placeholder')"
-        :options="apiKeyOptions"
-      >
-      </n-select>
-    </n-form-item>
+    <n-collapse accordion>
+      <n-collapse-item>
+        <template #header>
+          {{ $t('nft.collection.website-deploy.form.advanced-settings') }}
+        </template>
+        <n-form-item path="apiKey" :label="$t('hosting.deploy.form.api-key')" :label-props="{ for: 'apiKey' }">
+          <n-select
+            v-model:value="storageStore.deployConfigForm.apiKey"
+            :placeholder="$t('hosting.deploy.form.api-key-placeholder')"
+            :options="apiKeyOptions"
+          >
+          </n-select>
+        </n-form-item>
 
-    <n-form-item path="apiSecret" :label="$t('hosting.deploy.form.api-secret')" :label-props="{ for: 'apiSecret' }">
-      <n-input
-        v-model:value="storageStore.deployConfigForm.apiSecret"
-        :input-props="{ id: 'apiSecret', autocomplete: 'off' }"
-        show-password-on="click"
-        type="password"
-        :placeholder="$t('hosting.deploy.form.api-secret-placeholder')"
-        clearable
-      />
-    </n-form-item>
-    <n-form-item :show-feedback="false" :show-label="false">
+        <n-form-item path="apiSecret" :label="$t('hosting.deploy.form.api-secret')" :label-props="{ for: 'apiSecret' }">
+          <div v-if="props.config_id && !showApiSecretInput" class="flex flex-row gap-4">
+            <n-input :disabled="true" :placeholder="$t('hosting.deploy.form.api-secret-set')"> </n-input>
+            <Btn type="primary" class="mt-2" @click="onChangeSecretPress">
+              {{ $t('hosting.deploy.form.api-secret-change') }}
+            </Btn>
+          </div>
+
+          <n-input
+            v-else
+            v-model:value="storageStore.deployConfigForm.apiSecret"
+            :input-props="{ id: 'apiSecret', autocomplete: 'off' }"
+            show-password-on="click"
+            type="password"
+            :placeholder="$t('hosting.deploy.form.api-secret-placeholder')"
+            clearable
+          />
+        </n-form-item>
+      </n-collapse-item>
+    </n-collapse>
+    <n-form-item :show-feedback="false" :show-label="false" v-if="!$props.on_create_website">
       <input type="submit" class="hidden" :value="'Save'" />
 
       <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
@@ -95,9 +112,11 @@
 
 <script lang="ts" setup>
 import type { SelectOption } from 'naive-ui';
+import { WebsiteSource } from '~/lib/types/hosting';
 
 const props = defineProps({
-  id: { type: Number, default: 0 },
+  config_id: { type: Number, default: 0 },
+  on_create_website: { type: Boolean, default: false },
 });
 
 const $i18n = useI18n();
@@ -119,12 +138,43 @@ const isFormDisabled = computed<boolean>(() => {
   return !dataStore.isUserOwner;
 });
 
+const showApiSecretInput = ref(false);
+
+const onChangeSecretPress = () => {
+  showApiSecretInput.value = true;
+};
+
 const rules: NFormRules = {
   repoId: [ruleRequired($i18n.t('hosting.deploy.form.validation.repo-required'))],
   branchName: [ruleRequired($i18n.t('hosting.deploy.form.validation.branch-name-required'))],
   buildDirectory: [ruleRequired($i18n.t('hosting.deploy.form.validation.build-directory-required'))],
-  apiKey: [ruleRequired($i18n.t('hosting.deploy.form.validation.api-key-required'))],
-  apiSecret: [ruleRequired($i18n.t('hosting.deploy.form.validation.api-secret-required'))],
+  apiKey: [
+    {
+      validator(_, value) {
+        const apiSecret = storageStore.deployConfigForm.apiSecret;
+        if (!value && apiSecret) {
+          return new Error($i18n.t('nft.collection.website-deploy.form.api-key-equired'));
+        }
+        return true;
+      },
+      trigger: 'blur',
+    },
+  ],
+  apiSecret: [
+    {
+      validator(_, value) {
+        if (!showApiSecretInput.value) {
+          return true;
+        }
+        const apiKey = storageStore.deployConfigForm.apiKey;
+        if (!value && apiKey) {
+          return new Error($i18n.t('nft.collection.website-deploy.form.api-secret-required'));
+        }
+        return true;
+      },
+      trigger: 'blur',
+    },
+  ],
 };
 
 function handleSubmit(e: Event | MouseEvent) {
@@ -145,12 +195,12 @@ async function createDeployConfig() {
   try {
     const bodyData = {
       websiteUuid: websiteStore.active.website_uuid,
+      projectUuid: dataStore.projectUuid,
       ...storageStore.deployConfigForm,
     };
-    const res = await $api.post<any>(endpoints.deployConfig, bodyData);
+    const res = await $api.post<DeploymentConfigResponse>(endpoints.deployConfig, bodyData);
     message.success($i18n.t('hosting.deploy.form.success'));
-
-    websiteStore.active.repoId = res.data.repoId;
+    websiteStore.active.source = WebsiteSource.GITHUB;
     emit('submitSuccess');
   } catch (error) {
     message.error(userFriendlyMsg(error));
@@ -165,6 +215,7 @@ function handleUpdateValue(value: number) {
     storageStore.deployConfigForm.repoName = repo.name;
     storageStore.deployConfigForm.repoOwnerName = repo.owner.login;
     storageStore.deployConfigForm.branchName = repo.default_branch;
+    storageStore.deployConfigForm.repoUrl = repo.clone_url;
   }
 }
 

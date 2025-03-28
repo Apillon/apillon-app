@@ -189,8 +189,9 @@
           "api-secret-placeholder": "Enter your API secret",
           "type": "Website type",
           "type-required": "Type is required",
-          "api-key-required": "API Key is required",
-          "api-secret-required": "API Secret is required"
+          "api-key-required": "API Key is required if API Secret is provided",
+          "api-secret-required": "API Secret is required if API Key is provided",
+          "advanced-settings": "Advanced settings"
         }
       }
     },

@@ -7,33 +7,43 @@
         </n-space>
       </n-radio-group>
     </n-form-item>
-    <n-form-item
-      path="apiKey"
-      :label="$t('nft.collection.website-deploy.form.api-key')"
-      :label-props="{ for: 'apiKey' }"
-    >
-      <n-select
-        v-model:value="formData.apiKey"
-        :placeholder="$t('nft.collection.website-deploy.form.api-key-placeholder')"
-        :options="apiKeyOptions"
-      >
-      </n-select>
-    </n-form-item>
 
-    <n-form-item
-      path="apiSecret"
-      :label="$t('nft.collection.website-deploy.form.api-secret')"
-      :label-props="{ for: 'apiSecret' }"
-    >
-      <n-input
-        v-model:value="formData.apiSecret"
-        :input-props="{ id: 'apiSecret', autocomplete: 'off' }"
-        show-password-on="click"
-        type="password"
-        :placeholder="$t('nft.collection.website-deploy.form.api-secret-placeholder')"
-        clearable
-      />
-    </n-form-item>
+    <n-collapse accordion>
+      <n-collapse-item>
+        <template #header>
+          {{ $t('nft.collection.website-deploy.form.advanced-settings') }}
+          <span class="icon-info ml-2 text-xl"></span>
+        </template>
+        <n-form-item
+          path="apiKey"
+          :label="$t('nft.collection.website-deploy.form.api-key')"
+          :label-props="{ for: 'apiKey' }"
+        >
+          <n-select
+            v-model:value="formData.apiKey"
+            :placeholder="$t('nft.collection.website-deploy.form.api-key-placeholder')"
+            :options="apiKeyOptions"
+            clearable
+          >
+          </n-select>
+        </n-form-item>
+        <n-form-item
+          path="apiSecret"
+          :label="$t('nft.collection.website-deploy.form.api-secret')"
+          :label-props="{ for: 'apiSecret' }"
+        >
+          <n-input
+            v-model:value="formData.apiSecret"
+            :input-props="{ id: 'apiSecret', autocomplete: 'off' }"
+            show-password-on="click"
+            type="password"
+            :placeholder="$t('nft.collection.website-deploy.form.api-secret-placeholder')"
+            clearable
+          />
+        </n-form-item>
+      </n-collapse-item>
+    </n-collapse>
+
     <n-form-item :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="'Save'" />
 
@@ -58,6 +68,7 @@ const emit = defineEmits(['submitSuccess']);
 const message = useMessage();
 const collectionStore = useCollectionStore();
 const settingsStore = useSettingsStore();
+const dataStore = useDataStore();
 
 const $i18n = useI18n();
 const loading = ref<boolean>(false);
@@ -78,8 +89,28 @@ const formData = reactive<FormWebsiteDeploy>({
 
 const rules: NFormRules = {
   type: [ruleRequired($i18n.t('nft.collection.website-deploy.form.type-required'))],
-  apiKey: [ruleRequired($i18n.t('nft.collection.website-deploy.form.api-key-required'))],
-  apiSecret: [ruleRequired($i18n.t('nft.collection.website-deploy.form.api-secret-required'))],
+  apiKey: [
+    {
+      validator(_, value) {
+        if (!value && formData.apiSecret) {
+          return new Error($i18n.t('nft.collection.website-deploy.form.api-key-equired'));
+        }
+        return true;
+      },
+      trigger: 'blur',
+    },
+  ],
+  apiSecret: [
+    {
+      validator(_, value) {
+        if (!value && formData.apiKey) {
+          return new Error($i18n.t('nft.collection.website-deploy.form.api-secret-required'));
+        }
+        return true;
+      },
+      trigger: 'blur',
+    },
+  ],
 };
 
 const apiKeyOptions = computed<SelectOption[]>(() =>
@@ -110,6 +141,7 @@ async function deployNftWebsite() {
     const bodyData = {
       ...formData,
       collectionUuid: collectionStore.active.collection_uuid,
+      projectUuid: dataStore.projectUuid,
     };
 
     const { data } = await $api.post<WebsiteResponse>(endpoints.deployNftWebsite, bodyData);

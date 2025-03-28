@@ -27,7 +27,12 @@
           </a>
           <p>.</p>
         </div>
-        <Btn type="primary" size="large" @click="modalDeployWebsiteVisible = true">
+        <Btn
+          v-if="[1284, 1287, 529].includes($props.chain ?? 0)"
+          type="primary"
+          size="large"
+          @click="modalDeployWebsiteVisible = true"
+        >
           {{ $t('nft.collection.created.deploy') }}
         </Btn>
         <template v-if="showFooter">
@@ -80,7 +85,7 @@
 <script setup lang="ts">
 import { transactionLink } from '~/lib/utils/chain';
 
-defineProps({ showFooter: { type: Boolean, default: false } });
+defineProps({ showFooter: { type: Boolean, default: false }, chain: { type: Number, default: 0 } });
 
 const collectionStore = useCollectionStore();
 const { loadingBucket, openBucket } = useStorage();

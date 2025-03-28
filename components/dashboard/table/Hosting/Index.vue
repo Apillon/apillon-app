@@ -73,6 +73,16 @@ const createColumns = (): NDataTableColumns<WebsiteBaseInterface> => {
       },
     },
     {
+      key: 'source',
+      title: t('hosting.website.source'),
+      className: props.archive ? '' : ON_COLUMN_CLICK_OPEN_CLASS,
+      render(row) {
+        return t(
+          row.source === WebsiteSource.GITHUB ? 'hosting.website.github-source' : 'hosting.website.apillon-source'
+        );
+      },
+    },
+    {
       key: 'actions',
       title: '',
       align: 'right',
@@ -108,7 +118,9 @@ const rowProps = (row: WebsiteBaseInterface) => {
       currentRow.value = row;
 
       if (canOpenColumnCell(e.composedPath())) {
-        router.push({ path: `/dashboard/service/hosting/${row.website_uuid}` });
+        router.push({
+          path: `/dashboard/service/hosting/${row.website_uuid}${row.source === WebsiteSource.GITHUB ? '/deployments' : ''}`,
+        });
       }
     },
   };
