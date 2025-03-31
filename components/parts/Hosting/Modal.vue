@@ -2,7 +2,7 @@
   <ModalFullScreen :progress="progress" :title="$t('hosting.website.create')">
     <template #header-center>
       <div class="flex items-center gap-4 text-xs">
-        <template v-for="(step, key) in enumValues(WebsiteCreateStep)">
+        <span v-for="(step, key) in enumValues(WebsiteCreateStep)" :key="key">
           <span v-if="key > 0 && $te(`hosting.website.createStep.${step}`)" class="card-border w-3"></span>
           <strong
             v-if="$te(`hosting.website.createStep.${step}`)"
@@ -10,7 +10,7 @@
           >
             {{ $t(`hosting.website.createStep.${step}`) }}
           </strong>
-        </template>
+        </span>
       </div>
     </template>
 
@@ -28,7 +28,7 @@
         class="mx-auto max-w-lg"
         :title="$t('hosting.website.new')"
         hide-submit
-        >
+      >
       </FormHostingWebsiteGitHub>
       <FormHostingWebsite
         v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.FORM"
@@ -73,17 +73,13 @@
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
 import { enumValues } from '~/lib/utils';
-import { WebsiteCreateStep, WebsiteSource } from '~/lib/types/hosting';
+import { WebsiteCreateStep } from '~/lib/types/hosting';
 
-const message = useMessage();
-const authStore = useAuthStore();
 const dataStore = useDataStore();
-const bucketStore = useBucketStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 
-const { t } = useI18n();
 const { createWebsite } = useHosting();
 const { pricing } = useMetadata();
 
@@ -112,7 +108,8 @@ async function submitForm() {
 function back() {
   switch (websiteStore.stepWebsiteCreate) {
     case WebsiteCreateStep.FORM:
-
+      websiteStore.stepWebsiteCreate -= 1;
+      break;
     default:
       websiteStore.stepWebsiteCreate -= 1;
   }
@@ -124,8 +121,10 @@ function nextStep() {
       break;
     case WebsiteCreateStep.TYPE:
       websiteTypeRef.value?.nextStep();
+      break;
     default:
       websiteStore.stepWebsiteCreate += 1;
+      break;
   }
 }
 </script>

@@ -10,11 +10,13 @@
     "local": "cross-env ENV=local nuxt dev",
     "stage": "cross-env ENV=staging nuxt dev",
     "generate": "cross-env nuxt generate",
-    "preview": "nuxt preview"
+    "preview": "nuxt preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
     "@crustio/type-definitions": "^1.3.0",
-    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@nuxt/eslint": "^1.3.0",
     "@nuxtjs/google-fonts": "^3.0.1",
     "@nuxtjs/i18n": "^9.4.0",
     "@nuxtjs/tailwindcss": "^6.8.0",
@@ -29,9 +31,9 @@
     "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
     "eslint": "^9.23.0",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-nuxt": "^4.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-prettier": "^5.2.5",
     "naive-ui": "^2.34.4",
     "nuxt": "^3.13.0",
     "prettier": "3.3.3",
