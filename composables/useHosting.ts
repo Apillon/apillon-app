@@ -1,3 +1,5 @@
+import { WebsiteSource } from '~/lib/types/hosting';
+
 export default function useHosting() {
   const router = useRouter();
   const { params } = useRoute();
@@ -18,7 +20,12 @@ export default function useHosting() {
     clearInterval(websiteInterval);
   });
 
-  function initWebsite(env: number = 0) {
+  function initWebsite(
+    env: number = 0,
+    fetchBuilds: boolean = false,
+    fetchVariables: boolean = false,
+    fetchDeploymentConfig = false
+  ) {
     websiteUuid.value = params.id ? `${params?.id}` : `${params?.slug}`;
     websiteStore.setWebsite(websiteUuid.value);
 
@@ -31,6 +38,19 @@ export default function useHosting() {
           router.push({ name: 'dashboard-service-hosting' });
           return;
         }
+
+        if (fetchBuilds) {
+          await deploymentStore.getBuilds(websiteUuid.value);
+        }
+
+        if (fetchDeploymentConfig && website.source === WebsiteSource.GITHUB) {
+          await deploymentStore.getDeploymentConfig(website.website_uuid);
+        }
+
+        if (fetchVariables && website.source === WebsiteSource.GITHUB && deploymentStore.deploymentConfig) {
+          await deploymentStore.getVariables(deploymentStore.deploymentConfig?.id);
+        }
+
         /** Get deployments for this website */
         if (env > 0) {
           await deploymentStore.getDeployments(websiteUuid.value, env);

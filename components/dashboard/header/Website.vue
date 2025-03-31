@@ -20,7 +20,7 @@
     </template>
 
     <template #submenu>
-      <MenuWebsite />
+      <MenuWebsite :has-github-connected="hasGithubConnected" />
     </template>
   </Heading>
 
@@ -43,9 +43,13 @@ const websiteStore = useWebsiteStore();
 /** Website ID from route */
 const websiteUuid = ref<string>(`${params?.id || ''}`);
 const showModalW3Warn = ref<boolean>(false);
+const hasGithubConnected = computed(() => {
+  return !!websiteStore.isActiveWebsiteGithubSource || !!websiteStore.active.nftCollectionUuid;
+});
 
 onMounted(() => {
   storageStore.getStorageInfo();
+  storageStore.getGithubProjectConfig();
 
   if (
     websiteUuid.value &&

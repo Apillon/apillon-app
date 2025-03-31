@@ -6,12 +6,77 @@
     :rules="rules"
     @submit.prevent="handleSubmitForm"
   >
-    <n-grid class="items-end" :cols="12" :x-gap="32">
+    <!--  Collection type -->
+    <n-form-item
+      v-if="
+        isFeatureEnabled(Feature.NFT_NESTABLE, authStore.getUserRoles()) &&
+        collectionStore.form.behavior.chainType === ChainType.EVM
+      "
+      path="collectionType"
+      :label="infoLabel('type') as string"
+      :label-props="{ for: 'collectionType' }"
+    >
+      <select-options
+        v-model:value="collectionStore.form.behavior.collectionType"
+        :options="collectionTypes"
+        :input-props="{ id: 'collectionType' }"
+        :placeholder="t('general.pleaseSelect')"
+        filterable
+        clearable
+      />
+    </n-form-item>
+
+    <!--  Chain -->
+    <n-form-item v-if="showNetwork" path="chain" :label="infoLabel('chain') as string" :label-props="{ for: 'chain' }">
+      <select-options
+        v-model:value="collectionStore.form.behavior.chain"
+        :options="chains"
+        :input-props="{ id: 'chain' }"
+        :placeholder="t('general.pleaseSelect')"
+        filterable
+        clearable
+      />
+    </n-form-item>
+
+    <!-- Admin Address -->
+    <n-form-item
+      v-if="collectionStore.form.behavior.chainType !== ChainType.SUBSTRATE"
+      path="adminAddress"
+      :label="infoLabel('adminAddress') as string"
+      :label-props="{ for: 'adminAddress' }"
+    >
+      <FormFieldWalletAddress
+        v-model:value="collectionStore.form.behavior.adminAddress"
+        :input-props="{ id: 'adminAddress' }"
+        @connected="address => (collectionStore.form.behavior.adminAddress = address)"
+      />
+    </n-form-item>
+
+    <!--  Collection Use Gateway -->
+    <n-form-item v-if="!isUnique" path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
+      <n-checkbox
+        v-model:checked="collectionStore.form.behavior.useApillonIpfsGateway"
+        id="useApillonIpfsGateway"
+        size="medium"
+        :label="infoLabel('useGateway') as string"
+      />
+    </n-form-item>
+
+    <!--  Collection Dynamic metadata -->
+    <n-form-item v-if="!isUnique && showIpns" path="useIpns" :show-label="false" :show-feedback="false">
+      <n-checkbox
+        v-model:checked="collectionStore.form.behavior.useIpns"
+        size="medium"
+        :label="infoLabel('useIpns') as string"
+      />
+    </n-form-item>
+
+    <n-grid class="items-end" :class="{ 'mt-8': !isUnique }" :cols="12" :x-gap="32">
       <!-- Collection Total supply -->
       <n-form-item-gi
         path="supplyLimited"
         :span="6"
-        :label="infoLabel('supplyLimited')"
+        :label="infoLabel('supplyLimited') as string"
         :label-props="{ for: 'supplyLimited' }"
       >
         <select-options
@@ -28,7 +93,7 @@
       <n-form-item-gi
         path="maxSupply"
         :span="6"
-        :label="infoLabel('maxSupply')"
+        :label="infoLabel('maxSupply') as string"
         :label-props="{ for: 'maxSupply' }"
       >
         <n-input-number
@@ -38,9 +103,7 @@
           :disabled="!collectionStore.form.behavior.supplyLimited"
           :input-props="{ id: 'maxSupply' }"
           :placeholder="
-            collectionStore.form.behavior.supplyLimited
-              ? $t('form.placeholder.collectionMaxSupply')
-              : $t('form.disabled')
+            collectionStore.form.behavior.supplyLimited ? t('form.placeholder.collectionMaxSupply') : t('form.disabled')
           "
           clearable
         />
@@ -48,23 +111,23 @@
     </n-grid>
 
     <n-grid
-      v-if="collectionStore.form.base.chainType === ChainType.EVM || isUnique"
+      v-if="collectionStore.form.behavior.chainType === ChainType.EVM || isUnique"
       class="items-end"
-      :cols="12"
+      :cols="collectionStore.form.behavior.collectionType === NFTCollectionType.NESTABLE ? 8 : 12"
       :x-gap="32"
     >
       <!-- Collection Revocable -->
       <n-form-item-gi
         path="revocable"
-        :span="6"
-        :label="infoLabel('revocable')"
+        :span="4"
+        :label="infoLabel('revocable') as string"
         :label-props="{ for: 'revocable' }"
       >
         <select-options
           v-model:value="collectionStore.form.behavior.revocable"
           :options="booleanSelect"
           :input-props="{ id: 'revocable' }"
-          :placeholder="$t('general.pleaseSelect')"
+          :placeholder="t('general.pleaseSelect')"
           filterable
         />
       </n-form-item-gi>
@@ -72,22 +135,39 @@
       <!-- Collection Soulbound -->
       <n-form-item-gi
         path="soulbound"
-        :span="6"
-        :label="infoLabel('soulbound')"
+        :span="4"
+        :label="infoLabel('soulbound') as string"
         :label-props="{ for: 'soulbound' }"
       >
         <select-options
           v-model:value="collectionStore.form.behavior.soulbound"
           :options="booleanSelect"
           :input-props="{ id: 'soulbound' }"
-          :placeholder="$t('general.pleaseSelect')"
+          :placeholder="t('general.pleaseSelect')"
+          filterable
+        />
+      </n-form-item-gi>
+
+      <!-- Collection AutoIncrement -->
+      <n-form-item-gi
+        v-show="collectionStore.form.behavior.collectionType === NFTCollectionType.GENERIC"
+        path="isAutoIncrement"
+        :span="4"
+        :label="infoLabel('autoIncrement') as string"
+        :label-props="{ for: 'autoIncrement' }"
+      >
+        <select-options
+          v-model:value="collectionStore.form.behavior.isAutoIncrement"
+          :options="booleanSelect"
+          :input-props="{ id: 'autoIncrement' }"
+          :placeholder="t('general.pleaseSelect')"
           filterable
         />
       </n-form-item-gi>
     </n-grid>
 
     <n-grid
-      v-if="collectionStore.form.base.chainType === ChainType.EVM && !isUnique"
+      v-if="collectionStore.form.behavior.chainType === ChainType.EVM && !isUnique"
       class="items-end"
       :cols="12"
       :x-gap="32"
@@ -96,13 +176,13 @@
       <n-form-item-gi
         path="royaltiesAddress"
         :span="6"
-        :label="infoLabel('royaltiesAddress')"
+        :label="infoLabel('royaltiesAddress') as string"
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
           v-model:value="collectionStore.form.behavior.royaltiesAddress"
           :input-props="{ id: 'royaltiesAddress' }"
-          :placeholder="$t('general.typeHere')"
+          :placeholder="t('general.typeHere')"
           clearable
         />
       </n-form-item-gi>
@@ -111,7 +191,7 @@
       <n-form-item-gi
         path="royaltiesFees"
         :span="6"
-        :label="infoLabel('royaltiesFees')"
+        :label="infoLabel('royaltiesFees') as string"
         :label-props="{ for: 'royaltiesFees' }"
       >
         <n-input-number
@@ -119,7 +199,7 @@
           :min="0"
           :max="100"
           :input-props="{ id: 'royaltiesFees' }"
-          :placeholder="$t('general.typeHere')"
+          :placeholder="t('general.typeHere')"
           clearable
         />
       </n-form-item-gi>
@@ -127,11 +207,12 @@
 
     <n-grid v-if="!isUnique" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Is Drop -->
-      <n-form-item-gi path="drop" :span="6" :show-label="false">
+      <n-form-item-gi path="drop" :span="6" :show-label="false" :show-feedback="false">
         <n-checkbox
           v-model:checked="collectionStore.form.behavior.drop"
           size="medium"
-          :label="infoLabel('drop')"
+          id="drop"
+          :label="infoLabel('drop') as string"
         />
       </n-form-item-gi>
     </n-grid>
@@ -141,7 +222,7 @@
       <n-form-item-gi
         path="dropPrice"
         :span="6"
-        :label="$t('form.label.collection.dropPrice', { currency: chainCurrency() })"
+        :label="$t('form.label.collection.dropPrice', { currency: chainCurrency(collectionStore.form.behavior.chain) })"
         :label-props="{ for: 'dropPrice' }"
       >
         <n-input-number
@@ -158,7 +239,7 @@
       <n-form-item-gi
         path="dropStart"
         :span="6"
-        :label="infoLabel('dropStart')"
+        :label="infoLabel('dropStart') as string"
         :label-props="{ for: 'dropStart' }"
       >
         <n-date-picker
@@ -166,8 +247,6 @@
           class="w-full"
           type="datetime"
           :input-props="{ id: 'dropStart' }"
-          :is-date-disabled="disablePastDate"
-          :is-time-disabled="disablePastTime"
           clearable
         />
       </n-form-item-gi>
@@ -176,10 +255,10 @@
     <n-grid v-if="!!collectionStore.form.behavior.drop" class="items-end" :cols="12" :x-gap="32">
       <!--  Collection Reserve -->
       <n-form-item-gi
-        v-if="collectionStore.form.base.chainType === ChainType.EVM"
+        v-if="collectionStore.form.behavior.chainType === ChainType.EVM"
         path="dropReserve"
         :span="6"
-        :label="infoLabel('dropReserve')"
+        :label="infoLabel('dropReserve') as string"
         :label-props="{ for: 'dropReserve' }"
       >
         <n-input-number
@@ -193,45 +272,52 @@
 
       <!-- Royalties Address -->
       <n-form-item-gi
-        v-if="collectionStore.form.base.chainType === ChainType.SUBSTRATE"
+        v-if="collectionStore.form.behavior.chainType === ChainType.SUBSTRATE"
         path="royaltiesAddress"
         :span="6"
-        :label="infoLabel('dropAddress')"
+        :label="infoLabel('dropAddress') as string"
         :label-props="{ for: 'royaltiesAddress' }"
       >
         <n-input
           v-model:value="collectionStore.form.behavior.royaltiesAddress"
           :input-props="{ id: 'royaltiesAddress' }"
-          :placeholder="$t('general.typeHere')"
+          :placeholder="t('general.typeHere')"
           clearable
         />
       </n-form-item-gi>
     </n-grid>
 
     <!--  Form submit -->
-    <n-form-item>
-      <input type="submit" class="hidden" :value="$t('form.proceed')" />
-      <Btn type="primary" class="w-full mt-2" @click="handleSubmitForm">
-        {{ $t('form.proceed') }}
+    <n-form-item v-if="!hideSubmit" :show-label="false">
+      <input type="submit" class="hidden" :value="t('form.proceed')" />
+      <Btn type="primary" class="mt-2 w-full" @click="handleSubmitForm">
+        {{ t('form.proceed') }}
       </Btn>
     </n-form-item>
   </n-form>
 </template>
 
 <script lang="ts" setup>
+import { NFT_MAX_SUPPLY } from '~/lib/values/general.values';
+import { Feature } from '~/lib/types/config';
+import { ChainType, NFTCollectionType } from '~/lib/types/nft';
+import { isFeatureEnabled } from '~/lib/utils';
+
+defineProps({
+  hideSubmit: { type: Boolean, default: false },
+  showNetwork: { type: Boolean, default: true },
+  showIpns: { type: Boolean, default: true },
+});
+const { t } = useI18n();
 const message = useMessage();
-const { labelInfo } = useComputing();
+const authStore = useAuthStore();
+const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();
-const {
-  booleanSelect,
-  formRef,
-  isUnique,
-  supplyTypes,
-  rules,
-  chainCurrency,
-  disablePastDate,
-  disablePastTime,
-} = useCollection();
+
+const { labelInfo } = useComputing();
+const { booleanSelect, collectionTypes, enterpriseChainIDs, formRef, isUnique, nftChains, supplyTypes, rules } =
+  useCollection();
+defineExpose({ formRef, handleSubmitForm });
 
 onMounted(() => {
   if (collectionStore.form.behavior.maxSupply === 0) {
@@ -239,21 +325,26 @@ onMounted(() => {
   }
 });
 
+const hiddenChain = (chainId: number) =>
+  !paymentStore.hasPlan(PLAN_NAMES.BUTTERFLY) && enterpriseChainIDs.includes(chainId);
+
+const chains = computed(() => nftChains.filter(c => !hiddenChain(c.value)));
+
 function infoLabel(field: string) {
   return labelInfo(field, 'form.label.collection');
 }
 
 // Submit
-function handleSubmitForm(e: Event | MouseEvent) {
-  e.preventDefault();
-  formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
-    } else {
-      collectionStore.mintTab = NftCreateTab.PREVIEW;
-    }
-  });
+async function handleSubmitForm(e?: Event | MouseEvent): Promise<boolean> {
+  e?.preventDefault();
+  return !(
+    await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
+      console.warn(errors);
+      if (errors) {
+        errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
+      } else {
+      }
+    })
+  )?.warnings;
 }
 </script>

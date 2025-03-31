@@ -14,7 +14,7 @@
 
         <div>
           <!-- Breadcrumbs -->
-          <div class="relative h-14 pt-2 mb-1">
+          <div class="relative mb-1 h-14 pt-2">
             <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
           </div>
           <!-- DataTable: files and directories -->

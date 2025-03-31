@@ -6,10 +6,7 @@
     :columns="columns"
     :data="data"
     :loading="ipnsStore.loading"
-    :pagination="{
-      ...ipnsStore.pagination,
-      prefix: ({ itemCount }) => $t('general.total', { total: itemCount }),
-    }"
+    :pagination="ipnsStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
     @update:page="handlePageChange"
@@ -19,10 +16,7 @@
 
   <!-- Modal - Edit IPNS -->
   <modal v-model:show="modalEditIpnsVisible" :title="$t('storage.ipns.edit')">
-    <FormStorageIpns
-      :ipns-uuid="currentRow?.ipns_uuid"
-      @submit-success="modalEditIpnsVisible = false"
-    />
+    <FormStorageIpns :ipns-uuid="currentRow?.ipns_uuid" @submit-success="modalEditIpnsVisible = false" />
   </modal>
 
   <!-- Modal - Delete API key -->
@@ -51,14 +45,7 @@ const TableEllipsis = resolveComponent('TableEllipsis');
 const TableLink = resolveComponent('TableLink');
 
 /** Available columns - show/hide column */
-const selectedColumns = ref([
-  'name',
-  'ipns_uuid',
-  'description',
-  'ipnsName',
-  'ipnsValue',
-  'createTime',
-]);
+const selectedColumns = ref(['name', 'ipns_uuid', 'description', 'ipnsName', 'ipnsValue', 'createTime']);
 const availableColumns = ref([
   { value: 'name', label: $i18n.t('general.name') },
   { value: 'ipns_uuid', label: $i18n.t('storage.ipns.uuid') },
@@ -203,11 +190,7 @@ function rowProps(row: IpnsInterface) {
 
 /** Data: filtered files */
 const data = computed<Array<IpnsInterface>>(() => {
-  return (
-    ipnsStore.items.filter(item =>
-      item.name.toLowerCase().includes(ipnsStore.search.toLowerCase())
-    ) || []
-  );
+  return ipnsStore.items.filter(item => item.name.toLowerCase().includes(ipnsStore.search.toLowerCase())) || [];
 });
 
 onMounted(() => {

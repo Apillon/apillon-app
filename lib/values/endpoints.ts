@@ -150,6 +150,16 @@ const Endpoints = {
   storageFilesTrashed: (bucketUuid: string) => {
     return `/storage/${bucketUuid}/trashed-files`;
   },
+  linkGithub: '/deploy/github/link',
+  unlinkGithub: '/deploy/github/unlink',
+  githubProjectConfig: (projectUuid: string) => {
+    return `/deploy/project-config/${projectUuid}`;
+  },
+  githubRepos: (projectUuid: string) => {
+    return `/deploy/github/list-repos/${projectUuid}`;
+  },
+  deployConfig: (websiteUuid?: string) => `/deploy/config${websiteUuid ? `/${websiteUuid}` : ''}`,
+  deployNftWebsite: `/deploy/nft`,
 
   /** IPNS */
   ipns: (bucketUuid: string, uuid?: string) => {
@@ -194,6 +204,12 @@ const Endpoints = {
   deployments: (websiteUuid: string) => {
     return `/storage/hosting/websites/${websiteUuid}/deployments`;
   },
+  deploymentBuilds: `/deploy/deploy-build`,
+  deploymentConfig: (websiteUuid: string) => {
+    return `/deploy/config/${websiteUuid}`;
+  },
+  deploymentConfigVariables: (deploymentConfigId?: number) =>
+    deploymentConfigId ? `/deploy/config/variables/${deploymentConfigId}` : '/deploy/config/variables',
 
   /**
    * NFT
@@ -205,6 +221,7 @@ const Endpoints = {
 
   /** Collection */
   collectionsSubstrate: '/nfts/collections/substrate',
+  collectionsQuota: '/nfts/collections/quota-reached',
   collectionsUnique: '/nfts/collections/unique',
   collections: (id?: string) => {
     return id ? `/nfts/collections/${id}` : '/nfts/collections';

@@ -2,9 +2,17 @@
   <n-form ref="formRef" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <p class="mb-8">{{ $t('nft.collection.burn.info') }}</p>
 
-    <!--  NFT Mint Quantity -->
+    <!--  NFT Burn token -->
     <n-form-item path="tokenId" :label="$t('form.label.nft.burnTokenId')">
+      <n-select
+        v-if="mintedTokens.length"
+        v-model:value="formData.tokenId"
+        :options="mintedTokens"
+        :placeholder="$t('form.placeholder.nftBurnTokenId')"
+        filterable
+      />
       <n-input-number
+        v-else
         v-model:value="formData.tokenId"
         :min="1"
         :step="1"
@@ -16,7 +24,7 @@
     <!--  Form submit -->
     <n-form-item :show-label="false">
       <input type="submit" class="hidden" :value="$t('nft.collection.burn.title')" />
-      <Btn type="error" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="error" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
         {{ $t('nft.collection.revoke') }}
       </Btn>
     </n-form-item>
@@ -24,25 +32,28 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectOption } from 'naive-ui';
+
 type FormNftBurn = {
   collectionUuid: string;
   tokenId: number | null;
 };
 
 const props = defineProps({
-  collectionUuid: { type: String, required: true },
-  chainId: { type: Number, required: true },
+  collection: { type: Object as PropType<CollectionInterface>, required: true },
 });
 const emit = defineEmits(['submitSuccess']);
 
-const $i18n = useI18n();
+const { t } = useI18n();
 const message = useMessage();
 const warningStore = useWarningStore();
+const { getAllTokens } = useNftContract();
 
 const loading = ref(false);
+const mintedTokens = ref<SelectOption[]>([]);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormNftBurn>({
-  collectionUuid: props.collectionUuid,
+  collectionUuid: props.collection.collection_uuid,
   tokenId: null,
 });
 
@@ -50,23 +61,28 @@ const rules: NFormRules = {
   tokenId: [
     {
       required: true,
-      message: $i18n.t('validation.nft.burnTokenIdRequired'),
+      message: t('validation.nft.burnTokenIdRequired'),
     },
   ],
 };
+
+onMounted(async () => {
+  if (props.collection.contractAddress) {
+    const minted = await getAllTokens(props.collection.contractAddress, props.collection.chain);
+    mintedTokens.value = minted.map(i => ({ label: String(i), value: i }) as SelectOption);
+  }
+});
 
 // Submit
 function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       const priceServiceName = generatePriceServiceName(
         ServiceTypeName.NFT,
-        props.chainId,
+        props.collection.chain,
         PriceServiceAction.BURN
       );
       warningStore.showSpendingWarning(priceServiceName, () => burn());
@@ -78,14 +94,18 @@ async function burn() {
   loading.value = true;
 
   try {
-    await $api.post(endpoints.collectionBurn(props.collectionUuid), formData.value);
+    await $api.post(endpoints.collectionBurn(props.collection.collection_uuid), formData.value);
 
-    message.success($i18n.t('form.success.nftBurned'));
+    message.success(t('form.success.nftBurned'));
 
     /** Emit events */
     emit('submitSuccess');
   } catch (error) {
-    message.error(userFriendlyMsg(error));
+    if (props.collection.collectionType === NFTCollectionType.NESTABLE) {
+      message.error(t('error.NFT_BURN_NESTABLE'));
+    } else {
+      message.error(userFriendlyMsg(error));
+    }
   }
   loading.value = false;
 }

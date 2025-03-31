@@ -1,6 +1,6 @@
 import { BN } from '@polkadot/util';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
-import type { AssetHubClient as AssetHubClientType } from '#imports';
+import type { AssetHubClient as AssetHubClientType } from '~/lib/asset-hub/client';
 
 export const assetHubNetworks = {
   assetHub: {
