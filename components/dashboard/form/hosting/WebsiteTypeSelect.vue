@@ -19,16 +19,12 @@
 </template>
 
 <script setup lang="ts">
-import { NftMetadataStep } from '~/lib/types/nft';
-
 defineExpose({ nextStep });
-const { t } = useI18n();
-const message = useMessage();
 const websiteStore = useWebsiteStore();
 
 const selectedType = ref();
 
-function nextStep(next: number) {
+function nextStep() {
   if (selectedType.value) {
     websiteStore.form.type = selectedType.value;
   }

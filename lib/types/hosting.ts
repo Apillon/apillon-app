@@ -52,7 +52,7 @@ export enum WebsiteCreateStep {
   FORM = 2,
   REVIEW = 3,
   DEPLOYING = 4,
-  DEPLOYEDREVIEW = 5,
+  DEPLOYED = 5,
 }
 export enum WebsiteType {
   BASIC = 'basic',

@@ -1,12 +1,17 @@
 import { WebsiteSource } from '~/lib/types/hosting';
 
 export default function useHosting() {
+  const { t } = useI18n();
   const router = useRouter();
+  const message = useMessage();
   const { params } = useRoute();
+
   const dataStore = useDataStore();
   const bucketStore = useBucketStore();
   const websiteStore = useWebsiteStore();
   const deploymentStore = useDeploymentStore();
+
+  const loading = ref<boolean>(false);
   const pageLoading = ref<boolean>(true);
 
   let deploymentInterval: any = null as any;
@@ -144,11 +149,67 @@ export default function useHosting() {
     bucketStore.fetchDirectoryContent();
   }
 
+  async function createWebsite(): Promise<WebsiteInterface | null> {
+    if (!dataStore.projectUuid) return null;
+
+    loading.value = true;
+    try {
+      const bodyData = {
+        name: websiteStore.form.name,
+        description: websiteStore.form.description,
+        project_uuid: dataStore.projectUuid,
+      };
+
+      const { data } = await $api.post<WebsiteResponse>(endpoints.website, bodyData);
+
+      message.success(t('form.success.created.website'));
+
+      /** On new website created add new website to list */
+      websiteStore.items.unshift(data as WebsiteBaseInterface);
+
+      loading.value = false;
+      return data;
+    } catch (error) {
+      message.error(userFriendlyMsg(error));
+      loading.value = false;
+    }
+    return null;
+  }
+
+  async function updateWebsite(uuid: string): Promise<WebsiteInterface | null> {
+    loading.value = true;
+
+    try {
+      const { data } = await $api.patch<WebsiteResponse>(endpoints.websites(uuid), websiteStore.form);
+
+      message.success(t('form.success.updated.website'));
+
+      /** On website updated refresh website data */
+      websiteStore.items.forEach((item: WebsiteBaseInterface) => {
+        if (item.website_uuid === uuid) {
+          Object.assign(item, data);
+        }
+      });
+      if (websiteStore.active.website_uuid === uuid) {
+        Object.assign(websiteStore.active, data);
+      }
+
+      loading.value = false;
+      return data;
+    } catch (error) {
+      message.error(userFriendlyMsg(error));
+    }
+    loading.value = false;
+    return null;
+  }
+
   return {
     pageLoading,
     websiteUuid,
     checkUnfinishedWebsite,
+    createWebsite,
     initWebsite,
     refreshWebpage,
+    updateWebsite,
   };
 }

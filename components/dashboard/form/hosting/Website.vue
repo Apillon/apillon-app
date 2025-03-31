@@ -9,6 +9,15 @@
         {{ $t('dashboard.permissions.insufficient') }}
       </Notification>
 
+      <!-- Info text -->
+      <h5 v-if="title" class="mb-2">{{ title }}</h5>
+      <p v-if="!websiteUuid && $te('hosting.website.infoNew')" class="mb-8 text-body">
+        {{ $t('hosting.website.infoNew') }}
+      </p>
+      <p v-else-if="!!websiteUuid && $te('hosting.website.infoEdit')" class="mb-8 text-body">
+        {{ $t('hosting.website.infoEdit') }}
+      </p>
+
       <n-form
         ref="formRef"
         :model="websiteStore.form"
@@ -41,7 +50,7 @@
         </n-form-item>
 
         <!-- Submit Button -->
-        <n-form-item :show-feedback="false">
+        <n-form-item v-if="!hideSubmit" :show-feedback="false">
           <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
             {{ website ? $t('hosting.website.update') : $t('hosting.website.create') }}
           </Btn>
@@ -52,29 +61,23 @@
 </template>
 
 <script lang="ts" setup>
-import type { SelectOption } from 'naive-ui';
-
 const props = defineProps({
+  title: { type: String, default: null },
   websiteUuid: { type: String, default: null },
+  hideSubmit: { type: Boolean, default: false },
 });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const { t } = useI18n();
-const router = useRouter();
 const message = useMessage();
 const dataStore = useDataStore();
 const websiteStore = useWebsiteStore();
-const storageStore = useStorageStore();
 const warningStore = useWarningStore();
-const settingsStore = useSettingsStore();
+const { createWebsite, updateWebsite } = useHosting();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
-const githubFormRef = ref<NFormInst | null>(null);
 const website = ref<WebsiteInterface | null>(null);
-const selectedWebsiteType = ref<WebsiteType>(null);
-const apiKeyOptions = ref<SelectOption[]>([]);
-const repoOptions = ref<SelectOption[]>([]);
 
 const rules: NFormRules = {
   name: [ruleRequired(t('validation.websiteNameRequired'))],
@@ -94,73 +97,33 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 // Submit
-function handleSubmit(e: Event | MouseEvent) {
-  e.preventDefault();
-  formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      console.log(errors);
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else if (props.websiteUuid) {
-      await updateWebsite();
-    } else {
-      warningStore.showSpendingWarning(PriceServiceName.HOSTING_WEBSITE, () => createWebsite());
-    }
+async function handleSubmit(e?: Event | MouseEvent) {
+  e?.preventDefault();
+
+  const validation = await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
+    errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
   });
-}
+  console.debug(validation);
 
-async function createWebsite() {
-  if (!dataStore.projectUuid) return;
-
-  loading.value = true;
-  try {
-    const bodyData = {
-      name: websiteStore.form.name,
-      description: websiteStore.form.description,
-      project_uuid: dataStore.projectUuid,
-    };
-
-    const res = await $api.post<WebsiteResponse>(endpoints.website, bodyData);
-
-    message.success(t('form.success.created.website'));
-
-    /** On new website created add new website to list */
-    websiteStore.items.push(res.data as WebsiteBaseInterface);
-
-    /** Emit events */
-    emit('submitSuccess');
-    emit('createSuccess');
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
-  }
-  loading.value = false;
-}
-
-async function updateWebsite() {
-  loading.value = true;
-
-  try {
-    const res = await $api.patch<WebsiteResponse>(endpoints.websites(props.websiteUuid), websiteStore.form);
-
-    message.success(t('form.success.updated.website'));
-
-    /** On website updated refresh website data */
-    websiteStore.items.forEach((item: WebsiteBaseInterface) => {
-      if (item.website_uuid === props.websiteUuid) {
-        item.name = res.data.name;
-        item.description = res.data.description;
-      }
-    });
-    if (websiteStore.active.website_uuid === props.websiteUuid) {
-      websiteStore.active.name = res.data.name;
-      websiteStore.active.description = res.data.description;
+  if (props.hideSubmit) {
+    return !validation?.warnings;
+  } else if (props.websiteUuid) {
+    const updatedWebsite = await updateWebsite(props.websiteUuid);
+    if (updatedWebsite) {
+      emit('submitSuccess');
+      emit('updateSuccess', updatedWebsite);
     }
-
-    /** Emit events */
-    emit('submitSuccess');
-    emit('updateSuccess');
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
+  } else {
+    warningStore.showSpendingWarning(PriceServiceName.HOSTING_WEBSITE, () => create());
   }
-  loading.value = false;
+}
+
+async function create() {
+  const createdWebsite = await createWebsite();
+
+  if (createdWebsite) {
+    emit('submitSuccess');
+    emit('createSuccess', createdWebsite);
+  }
 }
 </script>

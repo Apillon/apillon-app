@@ -47,7 +47,7 @@
   /* Headline 5 */
   h5,
   .h5 {
-    @apply font-bold;
+    @apply font-semibold;
     font-size: 1.125rem;
     line-height: 1.6;
 

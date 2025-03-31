@@ -33,16 +33,17 @@
         v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.FORM"
         ref="formWebsiteRef"
         class="mx-auto max-w-lg"
+        :title="$t('hosting.website.new')"
         hide-submit
       />
-      <NftPreviewCollection
-        v-else-if="metadataStore.stepCollectionCreate === WebsiteCreateStep.REVIEW"
-        @back="metadataStore.stepCollectionCreate = WebsiteCreateStep.FORM"
-        @deploy="createCollection()"
+      <HostingPreviewWebsite
+        v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.REVIEW"
+        @back="websiteStore.stepWebsiteCreate = WebsiteCreateStep.FORM"
+        @deploy="createWebsite()"
       />
       <AnimationDeploy v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.DEPLOYING" class="min-h-full" />
-      <NftCollectionDeployed
-        v-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.DEPLOYED"
+      <HostingWebsiteDeployed
+        v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.DEPLOYED"
         class="mx-auto max-w-5xl"
       />
     </slot>
@@ -71,7 +72,7 @@
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
 import { enumValues } from '~/lib/utils';
-import { WebsiteCreateStep } from '~/lib/types/hosting';
+import { WebsiteCreateStep, WebsiteSource } from '~/lib/types/hosting';
 
 const message = useMessage();
 const authStore = useAuthStore();
@@ -82,9 +83,8 @@ const storageStore = useStorageStore();
 const websiteStore = useWebsiteStore();
 
 const { t } = useI18n();
-const { uploadFiles } = useUpload();
-const { isUnique, collectionEndpoint, prepareFormData } = useCollection();
-const { pricing, deployCollection, uploadLogoAndCover } = useMetadata();
+const { createWebsite } = useHosting();
+const { pricing } = useMetadata();
 
 const websiteTypeRef = useTemplateRef('websiteTypeRef');
 const formWebsiteRef = useTemplateRef('formWebsiteRef');
@@ -99,16 +99,12 @@ onMounted(async () => {
   paymentStore.getPriceList();
 });
 
-const submitForm = async formRef => (formRef ? await formRef.handleSubmitForm() : false);
+const submitFormRef = async formRef => (formRef ? await formRef.handleSubmitForm() : false);
 
-async function submitFormWebsite() {
-  if (await submitForm(formWebsiteRef.value)) {
-    websiteStore.stepWebsiteCreate = WebsiteCreateStep.PREVIEW;
-  }
-}
-async function submitFormGithub() {
-  if (await submitForm(formWebsiteGithubRef.value)) {
-    websiteStore.stepWebsiteCreate = WebsiteCreateStep.PREVIEW;
+async function submitForm() {
+  const formRef = websiteStore.form.type === WebsiteType.BASIC ? formWebsiteRef : formWebsiteGithubRef;
+  if (await submitFormRef(formRef.value)) {
+    websiteStore.stepWebsiteCreate = WebsiteCreateStep.REVIEW;
   }
 }
 
@@ -122,7 +118,7 @@ function back() {
 }
 function nextStep() {
   switch (websiteStore.stepWebsiteCreate) {
-    case WebsiteCreateStep.FROM:
+    case WebsiteCreateStep.FORM:
       submitForm();
       break;
     case WebsiteCreateStep.TYPE:
