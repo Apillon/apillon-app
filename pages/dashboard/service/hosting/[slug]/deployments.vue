@@ -32,7 +32,7 @@
         :title="$t(websiteStore.isActiveWebsiteGithubSource ? 'hosting.deploy.update' : 'hosting.deploy.new')"
       >
         <FormStorageDeployConfig
-          @submit-success="modalCreateKeyVisible = false"
+          @submit-success="handleSubmitSuccess"
           :config_id="deploymentStore.deploymentConfig?.id"
         />
       </modal>
@@ -62,6 +62,11 @@ const refreshBuilds = async () => {
   if (websiteUuid) {
     await deploymentStore.fetchBuilds(websiteUuid);
   }
+};
+
+const handleSubmitSuccess = async () => {
+  storageStore.resetDeployConfigForm();
+  modalCreateKeyVisible.value = false;
 };
 
 const showUpdateModal = async () => {
