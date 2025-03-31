@@ -12,7 +12,7 @@ module.exports = {
     'plugin:vue/recommended',
     'plugin:vue/vue3-recommended',
   ],
-  plugins: ['prettier'],
+  plugins: ["@typescript-eslint/eslint-plugin",'prettier'],
   rules: {
     'vue/no-v-html': 0,
     'vue/singleline-html-element-content-newline': 0,

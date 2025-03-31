@@ -89,7 +89,6 @@ const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
 
-const { t } = useI18n();
 const { isMd } = useScreen();
 const { getPriceServiceName } = useMetadata();
 const { availableNftChains, availableNftTestChains, enterpriseChainIDs, chainTypes, isChainAvailable } =

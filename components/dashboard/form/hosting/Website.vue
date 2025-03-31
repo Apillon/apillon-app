@@ -61,12 +61,13 @@
 </template>
 
 <script lang="ts" setup>
+defineExpose({ handleSubmit });
+const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 const props = defineProps({
   title: { type: String, default: null },
   websiteUuid: { type: String, default: null },
   hideSubmit: { type: Boolean, default: false },
 });
-const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
 
 const { t } = useI18n();
 const message = useMessage();
@@ -103,7 +104,6 @@ async function handleSubmit(e?: Event | MouseEvent) {
   const validation = await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
   });
-  console.debug(validation);
 
   if (props.hideSubmit) {
     return !validation?.warnings;

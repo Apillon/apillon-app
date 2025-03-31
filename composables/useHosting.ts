@@ -154,11 +154,26 @@ export default function useHosting() {
 
     loading.value = true;
     try {
-      const bodyData = {
+      const bodyData: Record<string, string|number|object> = {
         name: websiteStore.form.name,
         description: websiteStore.form.description,
         project_uuid: dataStore.projectUuid,
       };
+      if(websiteStore.form.type === WebsiteType.GITHUB) {        
+        bodyData.deploymentConfig= {
+          branchName: websiteStore.form.branchName,
+          buildCommand: websiteStore.form.buildCommand,
+          buildDirectory: websiteStore.form.buildDirectory,
+          installCommand: websiteStore.form.installCommand,
+          repoUrl: websiteStore.form.repoUrl,
+          apiKey: websiteStore.form.apiKey,
+          apiSecret: websiteStore.form.apiSecret,
+          repoId: websiteStore.form.repoId,
+          repoName: websiteStore.form.repoName,
+          repoOwnerName: websiteStore.form.repoOwnerName,
+          projectUuid: dataStore.projectUuid,
+        };
+      }
 
       const { data } = await $api.post<WebsiteResponse>(endpoints.website, bodyData);
 

@@ -1,12 +1,7 @@
 <template>
-  <div class="relative flex flex-col items-start gap-12 md:flex-row">
-    <div class="md:w-1/2">
-      <div class="mb-4">
-        <h2>{{ $t('nft.collection.review.title') }}</h2>
-        <p>
-          {{ $t('nft.collection.review.info') }}
-        </p>
-      </div>
+    <ReviewLayout>    
+    <template #left>      
+    <ReviewTable :data="data" :info="$t('nft.colleciton.review.info')" class="md:w-1/2" @back="$emit('back')">
       <div class="relative mb-20 mt-6 min-h-36 w-full flex-auto rounded-lg bg-bg-lighter">
         <Image
           v-if="metadataStore.form.visual.coverImage"
@@ -20,78 +15,18 @@
         />
         <div v-else class="absolute left-6 top-10 h-28 w-28 rounded-full bg-bg-dark" />
       </div>
-      <div class="relative mb-4"></div>
-      <n-table class="plain mb-6 table-fixed" :bordered="false" :single-line="true">
-        <tbody>
-          <tr v-for="item in data" :class="{ hidden: item.show === false }">
-            <td class="!text-white">{{ item.label }}</td>
-            <td class="relative">
-              <span v-if="item?.key === 'chain'" class="flex items-center gap-2">
-                <NuxtIcon
-                  :name="`logo/${getChainIconName(item.value)}`"
-                  class="inline-flex text-xl"
-                  filled
-                  :title="item.value"
-                />
-                {{ getChainName(item.value) }}
-              </span>
-              <template v-else-if="item.value === true">{{ $t('form.booleanSelect.true') }}</template>
-              <template v-else-if="item.value === false">{{ $t('form.booleanSelect.false') }}</template>
-              <template v-else-if="typeof item.value === 'string' && item.value?.length === 42">
-                {{ truncateWallet(item.value) }}
-              </template>
-              <template v-else> {{ item.value }}</template>
-
-              <Btn class="float-right mt-[2px] hidden text-xs text-yellow" type="link" @click="$emit('back')">
-                {{ $t('general.change') }}
-              </Btn>
-            </td>
-          </tr>
-        </tbody>
-      </n-table>
-    </div>
-
-    <div class="static hidden h-full md:block">
-      <div class="absolute bottom-4 top-8 border-l border-bg-lighter"></div>
-    </div>
-
-    <div class="mt-8 md:!w-1/2">
-      <h6>{{ $t('nft.collection.review.costs') }}</h6>
-      <n-table class="plain my-6 table-fixed" :bordered="false" :single-line="true">
-        <tbody>
-          <tr v-for="price in pricing">
-            <td>{{ price.description }}</td>
-            <td class="!text-white">{{ price.currentPrice }} {{ $t('dashboard.credits.credits') }}</td>
-          </tr>
-        </tbody>
-      </n-table>
-      <div class="card-light p-6">
-        <div class="flex gap-2">
-          <strong class="block w-1/2">{{ $t('nft.collection.review.totalSpend') }}</strong>
-          <div class="flex w-1/2 flex-col gap-1 text-right">
-            <strong>{{ totalCredits }} {{ $t('dashboard.credits.credits') }}</strong>
-            <small>
-              {{ $t('nft.collection.review.balance') }}: {{ formatNumber(paymentStore.credit.balance || 0) }}
-              {{ $t('dashboard.credits.credits') }}
-            </small>
-          </div>
-        </div>
-        <hr class="my-6 w-full border-bg-lighter" />
-        <div class="my-6">
-          <n-checkbox v-model:checked="nonRefundable" :label="t('nft.collection.review.nonRefundable')" />
-        </div>
-        <Btn size="large" type="primary" :disabled="!nonRefundable" @click="$emit('deploy')">
-          {{ $t('nft.collection.review.createCollection') }}
-        </Btn>
-      </div>
-    </div>
-  </div>
+    </ReviewTable>
+    </template>
+    
+    <template #right>
+      <ReviewPricing class="mt-8 md:!w-1/2" :pricing="pricing" :deploy-text="$t('nft.collection.review.createCollection')"  @deploy="$emit('deploy')" />   
+    </template>
+  </ReviewLayout>
 </template>
 
 <script setup lang="ts">
 import { chainCurrency } from '~/lib/utils/chain';
 import { formatNumber } from '~/lib/utils/helpers';
-import { truncateWallet } from '~/lib/utils/strings';
 import { timestampToDateAndTime } from '~/lib/utils/dates';
 
 defineEmits(['back', 'deploy']);
@@ -100,13 +35,12 @@ const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
 
 const { pricing, createThumbnailUrl } = useMetadata();
-const { nftChains, chainsTestnet } = useCollection();
 
 const nonRefundable = ref<boolean>(false);
-const data = ref([
+const data = ref<Record<string,string|number|boolean|null>[]>([
   {
     label: t('form.label.collection.chain'),
-    value: metadataStore.form.smartContract.chain,
+    value: metadataStore.form.smartContract.chain || EvmChainTestnet.MOONBASE,
     key: 'chain',
   },
   { label: t('nft.collection.name'), value: metadataStore.form.smartContract.name },
@@ -167,11 +101,4 @@ const totalCredits = computed(() => sumCredits(pricing.value));
 onMounted(() => {
   paymentStore.getPriceList();
 });
-
-function getChainIconName(collectionChain?: Number) {
-  return [...nftChains, ...chainsTestnet].find(chain => chain.value === collectionChain)?.name;
-}
-function getChainName(collectionChain?: Number) {
-  return [...nftChains, ...chainsTestnet].find(chain => chain.value === collectionChain)?.label;
-}
 </script>

@@ -26,8 +26,9 @@
         "
         ref="formWebsiteGithubRef"
         class="mx-auto max-w-lg"
+        :title="$t('hosting.website.new')"
         hide-submit
-        >form
+        >
       </FormHostingWebsiteGitHub>
       <FormHostingWebsite
         v-else-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.FORM"
@@ -99,7 +100,7 @@ onMounted(async () => {
   paymentStore.getPriceList();
 });
 
-const submitFormRef = async formRef => (formRef ? await formRef.handleSubmitForm() : false);
+const submitFormRef = async formRef => (formRef ? await formRef.handleSubmit() : false);
 
 async function submitForm() {
   const formRef = websiteStore.form.type === WebsiteType.BASIC ? formWebsiteRef : formWebsiteGithubRef;

@@ -1,5 +1,16 @@
 <template>
   <div>
+      <!-- Permissions Error Notification -->
+      <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
+        {{ $t('dashboard.permissions.insufficient') }}
+      </Notification>
+
+      <!-- Info text -->
+      <h5 v-if="title" class="mb-2">{{ title }}</h5>
+      <p v-if="$te('hosting.website.infoNewGithub')" class="mb-8 text-body">
+        {{ $t('hosting.website.infoNewGithub') }}
+      </p>
+
     <n-form
       ref="formRef"
       :model="websiteStore.form"
@@ -39,6 +50,19 @@
       </n-form-item>
 
       <n-form-item
+        path="installCommand"
+        :label="$t('hosting.deploy.form.install-command')"
+        :label-props="{ for: 'installCommand' }"
+      >
+        <n-input
+          v-model:value="websiteStore.form.installCommand"
+          :input-props="{ id: 'installCommand' }"
+          :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
+          clearable
+        />
+      </n-form-item>
+
+      <n-form-item
         path="buildCommand"
         :label="$t('hosting.deploy.form.build-command')"
         :label-props="{ for: 'buildCommand' }"
@@ -60,19 +84,6 @@
           v-model:value="websiteStore.form.buildDirectory"
           :input-props="{ id: 'buildDirectory' }"
           :placeholder="$t('hosting.deploy.form.build-directory-placeholder')"
-          clearable
-        />
-      </n-form-item>
-
-      <n-form-item
-        path="installCommand"
-        :label="$t('hosting.deploy.form.install-command')"
-        :label-props="{ for: 'installCommand' }"
-      >
-        <n-input
-          v-model:value="websiteStore.form.installCommand"
-          :input-props="{ id: 'installCommand' }"
-          :placeholder="$t('hosting.deploy.form.install-command-placeholder')"
           clearable
         />
       </n-form-item>
@@ -121,8 +132,12 @@
 <script lang="ts" setup>
 import type { SelectOption } from 'naive-ui';
 
-const props = defineProps({});
+defineExpose({ handleSubmit });
 const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess']);
+const props = defineProps({
+  title: { type: String, default: null },
+  hideSubmit: { type: Boolean, default: false },
+});
 
 const { t } = useI18n();
 const router = useRouter();
@@ -132,11 +147,11 @@ const websiteStore = useWebsiteStore();
 const storageStore = useStorageStore();
 const warningStore = useWarningStore();
 const settingsStore = useSettingsStore();
+const { createWebsite } = useHosting();
 
 const loading = ref(false);
 const formRef = ref<NFormInst | null>(null);
 const website = ref<WebsiteInterface | null>(null);
-const selectedWebsiteType = ref<WebsiteType>(null);
 const apiKeyOptions = ref<SelectOption[]>([]);
 const repoOptions = ref<SelectOption[]>([]);
 
@@ -194,58 +209,21 @@ const isFormDisabled = computed<boolean>(() => {
 });
 
 // Submit
-function handleSubmit(e: Event | MouseEvent) {
-  e.preventDefault();
+async function handleSubmit(e?: Event | MouseEvent) {
+  e?.preventDefault();
 
-  const currentFormRef = selectedWebsiteType.value === 'github' ? githubFormRef : formRef;
-
-  currentFormRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
-    if (errors) {
-      console.log(errors);
-      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
-    } else {
-      warningStore.showSpendingWarning(PriceServiceName.HOSTING_WEBSITE, () => createWebsite());
-    }
+  const validation = await formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
+    errors?.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
   });
-}
 
-async function createWebsite() {
-  if (!dataStore.projectUuid) return;
-
-  loading.value = true;
-  try {
-    const bodyData = {
-      name: websiteStore.form.name,
-      project_uuid: dataStore.projectUuid,
-      deploymentConfig: {
-        branchName: websiteStore.form.branchName,
-        buildCommand: websiteStore.form.buildCommand,
-        buildDirectory: websiteStore.form.buildDirectory,
-        installCommand: websiteStore.form.installCommand,
-        repoUrl: websiteStore.form.repoUrl,
-        apiKey: websiteStore.form.apiKey,
-        apiSecret: websiteStore.form.apiSecret,
-        repoId: websiteStore.form.repoId,
-        repoName: websiteStore.form.repoName,
-        repoOwnerName: websiteStore.form.repoOwnerName,
-        projectUuid: dataStore.projectUuid,
-      },
-    };
-    const res = await $api.post<WebsiteResponse>(endpoints.website, bodyData);
-
-    message.success(t('form.success.created.website'));
-
-    /** On new website created add new website to list */
-    websiteStore.items.push(res.data as WebsiteBaseInterface);
-
-    /** Emit events */
-    emit('submitSuccess');
-    emit('createSuccess');
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
+  if (props.hideSubmit) {
+    return !validation?.warnings;
+  } else {
+    warningStore.showSpendingWarning(PriceServiceName.HOSTING_WEBSITE, () => createWebsite());
   }
-  loading.value = false;
 }
+
+
 
 function handleUpdateValue(value: number) {
   const repo = storageStore.repos.find((item: GithubRepo) => item.id === value);

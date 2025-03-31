@@ -70,6 +70,7 @@
       "domain": "Domain name",
       "edit": "Edit website",
       "infoNew": "Deploy your static website over CLI or drag&drop files manually.",
+      "infoNewGithub": "Deploy your static website over CLI.",
       "infoEdit": "",
       "name": "Website name",
       "new": "Create new website",
@@ -87,6 +88,9 @@
         "1": "Select",
         "2": "Data",
         "3": "Review"
+      },
+      "review": {
+        "info": "Give your website a final review before creating."
       }
     },
     "deploy": {
