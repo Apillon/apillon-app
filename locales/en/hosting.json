@@ -131,6 +131,7 @@
         "api-secret-set": "API secret is set",
         "api-secret-change": "Change",
         "save": "Save deployment configuration",
+        "remove": "Unlink repository",
         "success": "Deployment configuration saved successfully",
         "validation": {
           "repo-required": "Repository is required",

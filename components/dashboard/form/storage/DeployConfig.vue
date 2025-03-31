@@ -98,6 +98,17 @@
             clearable
           />
         </n-form-item>
+
+        <Btn
+          v-if="props.config_id"
+          type="secondary"
+          class="mt-2"
+          :loading="deleteLoading"
+          :disabled="isFormDisabled"
+          @click="handleRemove"
+        >
+          {{ $t('hosting.deploy.form.remove') }}
+        </Btn>
       </n-collapse-item>
     </n-collapse>
     <n-form-item :show-feedback="false" :show-label="false" v-if="!$props.on_create_website">
@@ -129,10 +140,13 @@ const emit = defineEmits(['submitSuccess', 'createSuccess', 'updateSuccess', 'cl
 const dataStore = useDataStore();
 const formRef = ref<NFormInst | null>(null);
 const settingsStore = useSettingsStore();
+const deploymentStore = useDeploymentStore();
 const apiKeyOptions = ref<SelectOption[]>([]);
 const repoOptions = ref<SelectOption[]>([]);
 
 const loading = ref<boolean>(false);
+
+const deleteLoading = ref<boolean>(false);
 
 const isFormDisabled = computed<boolean>(() => {
   return !dataStore.isUserOwner;
@@ -188,6 +202,19 @@ function handleSubmit(e: Event | MouseEvent) {
   });
 }
 
+async function handleRemove() {
+  deleteLoading.value = true;
+  try {
+    await $api.delete(endpoints.deployConfig(websiteStore.active.website_uuid));
+    websiteStore.active.source = WebsiteSource.APILLON;
+    deploymentStore.deploymentConfig = undefined;
+    emit('submitSuccess');
+  } catch (error) {
+    message.error(userFriendlyMsg(error));
+  }
+  deleteLoading.value = false;
+}
+
 async function createDeployConfig() {
   loading.value = true;
   if (!dataStore.hasProjects) {
@@ -206,12 +233,16 @@ async function createDeployConfig() {
       projectUuid: dataStore.projectUuid,
       ...storageStore.deployConfigForm,
     };
-    const res = await $api.post<DeploymentConfigResponse>(endpoints.deployConfig, bodyData);
+    await $api.post<DeploymentConfigResponse>(endpoints.deployConfig(), bodyData);
     message.success($i18n.t('hosting.deploy.form.success'));
     websiteStore.active.source = WebsiteSource.GITHUB;
     emit('submitSuccess');
-  } catch (error) {
-    message.error(userFriendlyMsg(error));
+  } catch (error: any) {
+    if (error.message === 'DEPLOYMENT_CONFIG_ALREADY_EXISTS') {
+      message.error('Repository is already connected to Apillon. Remove the connection or use a different repository.');
+    } else {
+      message.error(userFriendlyMsg(error));
+    }
   }
 
   loading.value = false;
