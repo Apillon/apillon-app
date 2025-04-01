@@ -7,6 +7,8 @@ export default withNuxt([
   {
     plugins: { typescriptEslint: typescriptEslint },
     rules: {
+      '@typescript-eslint/no-explicit-any': 0,
+      '@typescript-eslint/no-empty-object-type': 0,
       'vue/no-v-html': 0,
       'vue/singleline-html-element-content-newline': 0,
       'vue/multi-word-component-names': 0,

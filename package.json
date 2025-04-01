@@ -27,7 +27,7 @@
     "@vueuse/components": "^13.0.0",
     "@vueuse/core": "^13.0.0",
     "@vueuse/nuxt": "^13.0.0",
-    "@wagmi/vue": "^0.0.69",
+    "@wagmi/vue": "^0.1.14",
     "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
     "eslint": "^9.23.0",
@@ -71,6 +71,6 @@
     "vue-cookie-accept-decline": "^6.1.0",
     "vue-papa-parse": "^3.1.0",
     "vue-tweet": "^2.0.2",
-    "vue3-youtube": "^0.1.9"
+    "vue3-ytframe": "^0.4.1"
   }
 }

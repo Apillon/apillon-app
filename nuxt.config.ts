@@ -80,7 +80,7 @@ export default defineNuxtConfig({
   },
 
   imports: {
-    dirs: ['composables/', 'stores/**', 'lib/**'],
+    dirs: ['composables/', 'stores/**', 'lib/types', 'lib/utils', 'lib/values'],
   },
 
   nitro: {
