@@ -1,13 +1,13 @@
 <template>
   <n-drawer :width="774">
     <n-drawer-content :title="$t('dashboard.youTube.title')" closable>
-      <YouTube ref="youtubeRef" :src="`https://www.youtube.com/watch?v=${videoId}`" @ready="onReady" />
+      <VueYtframe ref="youtubeRef" :video-id="videoId" :player-vars="{ autoplay: 0 }" height="390" @ready="onReady" />
 
       <div v-if="ytChapters" class="my-8">
         <h4>{{ $t('dashboard.youTube.chapters') }}</h4>
 
         <table class="">
-          <tr v-for="chapter in ytChapters">
+          <tr v-for="chapter in ytChapters" :key="chapter.time">
             <td>
               <button class="inline-block h-6 w-full bg-bg-light px-1 text-center" @click="selectChapter(chapter.time)">
                 {{ chapter.time }}
@@ -22,13 +22,6 @@
 </template>
 
 <script lang="ts" setup>
-import YouTube from 'vue3-youtube';
-
-export type VideoChapter = {
-  title: string;
-  time: number | string;
-};
-
 const props = defineProps({
   videoId: { type: String, required: true },
   btnText: { type: String, default: '' },

@@ -1,19 +1,11 @@
 <template>
-  <ModalFullScreen :progress="progress" :title="$t('nft.collection.create')">
-    <template #header-center>
-      <div class="flex items-center gap-4 text-xs">
-        <template v-for="(step, key) in enumValues(CollectionCreateStep)">
-          <span v-if="key > 0 && $te(`nft.collection.createStep.${step}`)" class="card-border w-3"></span>
-          <strong
-            v-if="$te(`nft.collection.createStep.${step}`)"
-            :class="step === metadataStore.stepCollectionCreate ? 'text-yellow' : 'text-disabled'"
-          >
-            {{ $t(`nft.collection.createStep.${step}`) }}
-          </strong>
-        </template>
-      </div>
-    </template>
-
+  <ModalFullScreen
+    :progress="progress"
+    :steps="CollectionCreateStep"
+    :active-step="metadataStore.stepCollectionCreate"
+    trans-key="nft.collection.createStep"
+    :title="$t('nft.collection.create')"
+  >
     <slot>
       <NftMetadataWizard
         v-if="metadataStore.stepCollectionCreate === CollectionCreateStep.METADATA"
@@ -68,7 +60,6 @@
 
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
-import { enumValues } from '~/lib/utils';
 import { CollectionCreateStep, NftMetadataStep } from '~/lib/types/nft';
 
 const message = useMessage();

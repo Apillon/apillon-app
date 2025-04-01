@@ -22,7 +22,7 @@
 defineExpose({ nextStep });
 const websiteStore = useWebsiteStore();
 
-const selectedType = ref();
+const selectedType = ref(websiteStore.form.type);
 
 function nextStep() {
   if (selectedType.value) {

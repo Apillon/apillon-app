@@ -1,19 +1,11 @@
 <template>
-  <ModalFullScreen :progress="progress" :title="$t('hosting.website.create')">
-    <template #header-center>
-      <div class="flex items-center gap-4 text-xs">
-        <span v-for="(step, key) in enumValues(WebsiteCreateStep)" :key="key">
-          <span v-if="key > 0 && $te(`hosting.website.createStep.${step}`)" class="card-border w-3"></span>
-          <strong
-            v-if="$te(`hosting.website.createStep.${step}`)"
-            :class="step === websiteStore.stepWebsiteCreate ? 'text-yellow' : 'text-disabled'"
-          >
-            {{ $t(`hosting.website.createStep.${step}`) }}
-          </strong>
-        </span>
-      </div>
-    </template>
-
+  <ModalFullScreen
+    :progress="progress"
+    :steps="WebsiteCreateStep"
+    :active-step="websiteStore.stepWebsiteCreate"
+    trans-key="hosting.website.createStep"
+    :title="$t('hosting.website.create')"
+  >
     <slot>
       <FormHostingWebsiteTypeSelect
         v-if="websiteStore.stepWebsiteCreate === WebsiteCreateStep.TYPE"
@@ -72,9 +64,10 @@
 
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
-import { enumValues } from '~/lib/utils';
 import { WebsiteCreateStep } from '~/lib/types/hosting';
 
+const { t } = useI18n();
+const message = useMessage();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const storageStore = useStorageStore();
@@ -121,6 +114,13 @@ function nextStep() {
       break;
     case WebsiteCreateStep.TYPE:
       websiteTypeRef.value?.nextStep();
+      console.log(websiteTypeRef.value?.nextStep());
+      console.log(websiteStore.form.type, websiteStore.stepWebsiteCreate);
+      if (!websiteStore.form.type) {
+        message.warning(t('hosting.website.selectType'));
+      } else {
+        websiteStore.stepWebsiteCreate += 1;
+      }
       break;
     default:
       websiteStore.stepWebsiteCreate += 1;
