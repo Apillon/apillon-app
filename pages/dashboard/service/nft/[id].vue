@@ -134,7 +134,7 @@
 
       <ModalTransaction
         v-if="transactionHash"
-        :transactionHash="transactionHash"
+        :transaction-hash="transactionHash"
         :chain-id="collectionStore.active.chain"
         @close="transactionHash = ''"
       />
@@ -158,7 +158,6 @@ const storageStore = useStorageStore();
 const paymentStore = usePaymentStore();
 const metadataStore = useMetadataStore();
 const collectionStore = useCollectionStore();
-const { openAddNft } = useCollection();
 
 const pageLoading = ref<boolean>(true);
 const modalMintCollectionVisible = ref<boolean | null>(false);
@@ -328,12 +327,6 @@ function checkUnfinishedTransactions() {
 }
 
 function openModalAddNfts() {
-  collectionStore.nftStep = NftCreateStep.AMOUNT;
   modalAddNftVisible.value = true;
-}
-function onAmountSelected(amount: number) {
-  if (amount === NftAmount.SINGLE) {
-    openAddNft(collectionStore.active.collection_uuid);
-  }
 }
 </script>

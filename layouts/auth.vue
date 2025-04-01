@@ -1,7 +1,7 @@
 <template>
   <div class="relative z-1 min-h-screen overflow-hidden bg-bg-dark">
     <div
-      class="px-22 container relative flex min-h-screen gap-x-12 py-12"
+      class="container relative flex min-h-screen gap-x-12 px-22 py-12"
       :class="isRegister ? 'justify-between' : 'justify-center'"
     >
       <div class="relative flex flex-col justify-between" :class="isRegister ? 'items-start' : 'w-full items-center'">

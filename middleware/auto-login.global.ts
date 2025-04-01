@@ -11,7 +11,7 @@ const authRoutes: Array<RouteInterface> = [
   { name: 'register', redirect: '/dashboard' },
 ];
 
-const ignoreRoutes: String[] = ['login-admin'];
+const ignoreRoutes: string[] = ['login-admin'];
 
 /**
  * Load user data from localStorage into pinia.

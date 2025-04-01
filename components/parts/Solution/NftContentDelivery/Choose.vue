@@ -5,14 +5,9 @@
       {{ $t('dashboard.solution.chooseComputing') }}
     </p>
 
-    <div class="grid gap-4 md:grid-cols-3 mt-8">
+    <div class="mt-8 grid gap-4 md:grid-cols-3">
       <Card :service="serviceEncryption">
-        <Btn
-          size="large"
-          type="primary"
-          :disabled="serviceEncryption.disabled"
-          @click="$emit('proceed')"
-        >
+        <Btn size="large" type="primary" :disabled="serviceEncryption.disabled" @click="$emit('proceed')">
           {{ $t('auth.onboarding.getStarted') }}
         </Btn>
       </Card>

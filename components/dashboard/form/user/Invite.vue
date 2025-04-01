@@ -16,12 +16,7 @@
       </n-form-item-gi>
 
       <!--  Role -->
-      <n-form-item-gi
-        :span="colRoleWidth"
-        path="role_id"
-        :label="$t('form.label.role')"
-        :label-props="{ for: 'role' }"
-      >
+      <n-form-item-gi :span="colRoleWidth" path="role_id" :label="$t('form.label.role')" :label-props="{ for: 'role' }">
         <select-options
           v-model:value="formData.role_id"
           :options="userRoles"
@@ -106,9 +101,7 @@ function handleSubmit(e: MouseEvent | Event) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       await inviteUser();
     }
@@ -118,10 +111,7 @@ async function inviteUser() {
   loading.value = true;
 
   try {
-    await $api.post<InviteUserResponse>(
-      endpoints.projectInviteUser(dataStore.project.selected),
-      formData.value
-    );
+    await $api.post<InviteUserResponse>(endpoints.projectInviteUser(dataStore.project.selected), formData.value);
 
     /** Show success msg and refresh users */
     message.success($i18n.t('form.success.created.userInvite'));

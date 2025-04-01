@@ -1,9 +1,9 @@
 <template>
   <Heading>
     <slot>
-      <div class="flex gap-4 items-center">
+      <div class="flex items-center gap-4">
         <NuxtLink :to="{ name: 'dashboard-service-social' }">
-          <span class="icon-back text-2xl align-sub"></span>
+          <span class="icon-back align-sub text-2xl"></span>
         </NuxtLink>
         <div>
           <h1>{{ $t('social.chat.title') }}</h1>

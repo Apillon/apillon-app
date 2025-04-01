@@ -1,5 +1,5 @@
 <template v-if="items.length">
-  <Btn type="error" class="w-full mt-2" :loading="loading" @click="onDelete">
+  <Btn type="error" class="mt-2 w-full" :loading="loading" @click="onDelete">
     <slot v-if="$slots.default"></slot>
     <template v-else>{{ $t('form.confirm') }}</template>
   </Btn>

@@ -7,16 +7,16 @@
   >
     <n-upload-dragger class="h-40">
       <div v-if="file?.name" class="py-2 text-center">
-        <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-          <span class="icon-upload text-violet text-2xl"></span>
+        <div class="mb-2 inline-block h-10 w-10 rounded-full bg-bg-lighter p-2">
+          <span class="icon-upload text-2xl text-violet"></span>
         </div>
 
         <h4 class="mb-1">{{ $t('computing.upload.uploaded') }}</h4>
         <span class="text-body">{{ file?.name }}</span>
       </div>
       <div v-else class="py-2 text-center">
-        <div class="inline-block w-10 h-10 bg-bg-lighter rounded-full p-2 mb-2">
-          <span class="icon-upload text-violet text-2xl"></span>
+        <div class="mb-2 inline-block h-10 w-10 rounded-full bg-bg-lighter p-2">
+          <span class="icon-upload text-2xl text-violet"></span>
         </div>
 
         <h4 class="mb-1">{{ $t('computing.upload.upload') }}</h4>

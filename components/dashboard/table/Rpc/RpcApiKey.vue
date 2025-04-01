@@ -35,9 +35,7 @@ const { t } = useI18n();
 const rpcApiKeyStore = useRpcApiKeyStore();
 
 const tableData = computed(() => {
-  return rpcApiKeyStore.items.filter(item =>
-    item.name.toLowerCase().includes(rpcApiKeyStore.search.toLowerCase())
-  );
+  return rpcApiKeyStore.items.filter(item => item.name.toLowerCase().includes(rpcApiKeyStore.search.toLowerCase()));
 });
 
 const createColumns = (): NDataTableColumns<RpcApiKeyInterface> => {

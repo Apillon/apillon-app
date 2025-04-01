@@ -9,9 +9,9 @@
     :pagination="archive ? deployedContractStore.archive.pagination : deployedContractStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
+    remote
     @update:page="(page: number) => handlePageChange(page, deployedContractStore.pagination.pageSize)"
     @update:page-size="(pageSize: number) => handlePageChange(1, pageSize)"
-    remote
   />
 </template>
 

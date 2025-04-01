@@ -1,5 +1,5 @@
 <template>
-  <div ref="procaptchaContainerRef" id="procaptcha-container"></div>
+  <div id="procaptcha-container" ref="procaptchaContainerRef"></div>
 </template>
 
 <script lang="ts" setup>

@@ -34,6 +34,6 @@ defineProps({
   iconSvg: { type: String, default: null },
   link: { type: String, default: '' },
   name: { type: String, default: '' },
-  tags: { type: Array<String>, default: [] },
+  tags: { type: Array<string>, default: [] },
 });
 </script>

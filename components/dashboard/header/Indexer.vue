@@ -2,14 +2,14 @@
   <Heading>
     <slot v-if="!indexerUuid">
       <NuxtLink class="flex items-center gap-x-2" :to="link">
-        <span class="icon-back text-2xl align-sub"></span>
+        <span class="icon-back align-sub text-2xl"></span>
         <h1>{{ $t('dashboard.nav.indexing') }}</h1>
       </NuxtLink>
     </slot>
     <slot v-else>
       <n-space align="center" size="large" :wrap="false">
         <NuxtLink :to="{ name: 'dashboard-service-indexing' }">
-          <span class="icon-back text-2xl align-sub"></span>
+          <span class="icon-back align-sub text-2xl"></span>
         </NuxtLink>
         <div>
           <h2>{{ indexerStore.active.name }}</h2>
@@ -18,10 +18,7 @@
       </n-space>
     </slot>
     <template #info>
-      <ApiLink
-        :title="$t('indexer.indexerApiEndpoint')"
-        :url="indexerStore.active.squid?.api?.urls[0].url"
-      />
+      <ApiLink :title="$t('indexer.indexerApiEndpoint')" :url="indexerStore.active.squid?.api?.urls[0].url" />
     </template>
 
     <template #submenu>

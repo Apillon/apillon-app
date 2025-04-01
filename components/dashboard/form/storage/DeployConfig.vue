@@ -11,11 +11,11 @@
     <n-form-item path="repoId" :label="$t('hosting.deploy.form.repository')" :label-props="{ for: 'repo' }">
       <n-skeleton v-if="!repoOptions.length" height="40px" width="100%" />
       <n-select
+        v-if="!!repoOptions.length"
         v-model:value="storageStore.deployConfigForm.repoId"
         :placeholder="$t('hosting.deploy.form.repository-placeholder')"
         :options="repoOptions"
         @update:value="handleUpdateValue"
-        v-if="!!repoOptions.length"
       />
     </n-form-item>
     <n-form-item path="branchName" :label="$t('hosting.deploy.form.branch-name')" :label-props="{ for: 'branchName' }">
@@ -100,7 +100,7 @@
         </n-form-item>
       </n-collapse-item>
     </n-collapse>
-    <n-form-item :show-feedback="false" :show-label="false" v-if="!$props.on_create_website">
+    <n-form-item v-if="!$props.on_create_website" :show-feedback="false" :show-label="false">
       <input type="submit" class="hidden" :value="'Save'" />
 
       <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">

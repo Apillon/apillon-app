@@ -1,8 +1,8 @@
 <template>
   <div class="w-full max-w-[600px]">
-    <div class="mb-3 relative w-full pb-[56.25%] h-0 overflow-hidden">
+    <div class="relative mb-3 h-0 w-full overflow-hidden pb-[56.25%]">
       <iframe
-        class="absolute top-0 left-0 w-full h-full"
+        class="absolute left-0 top-0 h-full w-full"
         :src="htmlContent"
         title="YouTube video player"
         frameborder="0"

@@ -57,7 +57,7 @@
 
 <script lang="ts" setup>
 import { NButton } from 'naive-ui';
-import { type Type as NButtonType, type Size as ButtonSize } from 'naive-ui/es/button/src/interface';
+import type { Type as NButtonType, Size as ButtonSize } from 'naive-ui/es/button/src/interface';
 
 export type ButtonType = NButtonType | 'secondary' | 'builders' | 'link' | 'text';
 

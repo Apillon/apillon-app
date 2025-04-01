@@ -4,11 +4,11 @@
     :class="{ 'flex flex-col justify-between': showFooter }"
     :style="showFooter ? 'min-height: calc(100dvh - 280px)' : ''"
   >
-    <div :class="{ 'flex justify-center items-center': showFooter }">
-      <div class="w-full max-w-lg text-center mx-auto">
-        <NuxtIcon name="nft/collection" class="flex justify-center icon-auto mb-4" filled />
+    <div :class="{ 'flex items-center justify-center': showFooter }">
+      <div class="mx-auto w-full max-w-lg text-center">
+        <NuxtIcon name="nft/collection" class="icon-auto mb-4 flex justify-center" filled />
         <h2>{{ $t('computing.contract.created.title') }}</h2>
-        <p class="mb-2 text-body whitespace-pre-line">
+        <p class="mb-2 whitespace-pre-line text-body">
           {{ $t('computing.contract.created.info') }}
         </p>
 

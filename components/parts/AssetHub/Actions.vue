@@ -41,7 +41,7 @@
     </p>
     <FormAssetHubSendTokens
       class="text-left"
-      :assetId="assetId"
+      :asset-id="assetId"
       @submit-success="refreshAsset(assetId)"
       @close="modalSendTokensVisible = false"
     />
@@ -53,7 +53,7 @@
     </p> -->
     <FormAssetHubMintTokens
       class="text-left"
-      :assetId="assetId"
+      :asset-id="assetId"
       @submit-success="refreshAsset(assetId)"
       @close="modalMintTokensVisible = false"
     />
@@ -65,7 +65,7 @@
     </p>
     <FormAssetHubTransfer
       class="text-left"
-      :assetId="assetId"
+      :asset-id="assetId"
       @submit-success="onTransferred"
       @close="modalTransferVisible = false"
     />
@@ -75,14 +75,14 @@
     <p class="relative -top-4 px-4 text-center">
       {{ $t('assetHub.changeIssuerInfo') }}
     </p>
-    <FormAssetHubChangeIssuer class="text-left" :assetId="assetId" @close="modalChangeIssuerVisible = false" />
+    <FormAssetHubChangeIssuer class="text-left" :asset-id="assetId" @close="modalChangeIssuerVisible = false" />
   </Modal>
 
   <Modal v-model:show="modalChangeFreezerVisible" class="text-center" :title="$t('assetHub.changeFreezer')">
     <p class="relative -top-4 px-4 text-center">
       {{ $t('assetHub.changeFreezerInfo') }}
     </p>
-    <FormAssetHubChangeFreezer class="text-left" :assetId="assetId" @close="modalChangeFreezerVisible = false" />
+    <FormAssetHubChangeFreezer class="text-left" :asset-id="assetId" @close="modalChangeFreezerVisible = false" />
   </Modal>
 
   <Modal v-model:show="modalEditAssetVisible" class="text-center" :title="$t('assetHub.edit')">

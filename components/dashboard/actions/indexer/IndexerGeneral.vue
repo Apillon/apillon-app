@@ -1,6 +1,6 @@
 <template>
   <n-space v-bind="$attrs" justify="space-between">
-    <div class="min-w-[11rem] w-[20vw] max-w-xs"></div>
+    <div class="w-[20vw] min-w-[11rem] max-w-xs"></div>
 
     <n-space v-if="indexerStore.active" size="large">
       <BtnDocumentation
@@ -10,12 +10,12 @@
       />
 
       <n-button size="small" :loading="indexerStore.loading" @click="initIndexer">
-        <span class="icon-refresh text-xl mr-2"></span>
+        <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
       <n-button size="small" @click="showModalEditIndexer = true">
-        <span class="icon-edit text-xl text-primary mr-2"></span>
+        <span class="icon-edit mr-2 text-xl text-primary"></span>
         <span class="text-primary">{{ $t('indexer.update') }}</span>
       </n-button>
 
@@ -29,7 +29,7 @@
       >
         <n-button size="small">
           <span class="text-primary">{{ $t('general.actions') }}</span>
-          <div class="hidden md:flex items-center relative left-1">
+          <div class="relative left-1 hidden items-center md:flex">
             <span class="icon-down text-2xl text-primary"></span>
           </div>
         </n-button>
@@ -42,10 +42,7 @@
   </IndexerSpendingWarning>
   <!-- Modal - Update Indexer -->
   <modal v-model:show="showModalEditIndexer" :title="$t('indexer.update')">
-    <FormIndexer
-      :indexer-uuid="indexerStore.active.indexer_uuid"
-      @submit-success="showModalEditIndexer = false"
-    />
+    <FormIndexer :indexer-uuid="indexerStore.active.indexer_uuid" @submit-success="showModalEditIndexer = false" />
   </modal>
   <!-- Modal - Hibernate Indexer -->
   <modal v-model:show="showModalHibernateIndexer" :title="$t('indexer.hibernate')">

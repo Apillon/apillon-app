@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap justify-between xl:flex-nowrap mb-8">
+  <div class="mb-8 flex flex-wrap justify-between xl:flex-nowrap">
     <div class="flex flex-col">
       <!-- DEMO -->
       <LearnVideo
@@ -10,7 +10,7 @@
       <SolutionContent :content="content" />
 
       <h4 class="my-4">{{ $t('embeddedWallet.generate.title') }}</h4>
-      <div class="flex gap-4 mb-4">
+      <div class="mb-4 flex gap-4">
         <!-- Generate API key -->
         <Btn
           inner-class="flex items-center justify-center "
@@ -20,14 +20,12 @@
           <span>{{ $t('embeddedWallet.createNew') }}</span>
         </Btn>
 
-        <BtnDocumentation
-          href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html"
-        />
+        <BtnDocumentation href="https://wiki.apillon.io/build/12-embedded-wallets-integration.html" />
       </div>
     </div>
 
     <div class="mx-auto">
-      <h4 class="text-center mb-4">{{ $t('embeddedWallet.howItWorks') }}</h4>
+      <h4 class="mb-4 text-center">{{ $t('embeddedWallet.howItWorks') }}</h4>
       <Carousel class="w-full max-w-[440px]" :slides="[img1, img2, img3, img4, img5, img6]" />
     </div>
 

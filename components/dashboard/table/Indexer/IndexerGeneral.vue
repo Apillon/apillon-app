@@ -1,5 +1,5 @@
 <template>
-  <div class="card-light px-6 py-4 mb-6 max-w-3xl">
+  <div class="card-light mb-6 max-w-3xl px-6 py-4">
     <n-table class="plain" :bordered="false" single-line>
       <tbody>
         <tr>
@@ -48,9 +48,7 @@
             </span>
           </td>
           <td>
-            <IndexerStatus
-              :status="indexerStore.active.squid?.status == 'DEPLOYED' ? 'success' : 'error'"
-            >
+            <IndexerStatus :status="indexerStore.active.squid?.status == 'DEPLOYED' ? 'success' : 'error'">
               {{ indexerStore.active.squid?.status }}
             </IndexerStatus>
           </td>
@@ -61,9 +59,7 @@
             <span class="text-white lg:whitespace-nowrap">{{ $t('indexer.apiStatus') }}</span>
           </td>
           <td class="!border-bg-light">
-            <IndexerStatus
-              :status="indexerStore.active.squid?.api?.status == 'AVAILABLE' ? 'success' : 'error'"
-            >
+            <IndexerStatus :status="indexerStore.active.squid?.api?.status == 'AVAILABLE' ? 'success' : 'error'">
               {{ indexerStore.active.squid?.api?.status }}
             </IndexerStatus>
           </td>
@@ -81,11 +77,7 @@
             </span>
           </td>
           <td>
-            <IndexerStatus
-              :status="
-                indexerStore.active.squid?.processors[0].status == 'SYNCED' ? 'success' : 'error'
-              "
-            >
+            <IndexerStatus :status="indexerStore.active.squid?.processors[0].status == 'SYNCED' ? 'success' : 'error'">
               {{ indexerStore.active.squid?.processors[0].status }}
             </IndexerStatus>
           </td>

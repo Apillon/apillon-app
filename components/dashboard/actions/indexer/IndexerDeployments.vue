@@ -9,7 +9,7 @@
         :loading="indexerDeploymentsStore.loading"
         @click="indexerDeploymentsStore.fetchDeployments(indexerStore.active.indexer_uuid)"
       >
-        <span class="icon-refresh text-xl mr-2"></span>
+        <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
     </n-space>

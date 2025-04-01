@@ -28,7 +28,7 @@
           }}
         </span>
       </div>
-      <div class="grid-cols-fit200 grid gap-4">
+      <div class="grid grid-cols-fit200 gap-4">
         <Btn
           :class="btnClass"
           :type="btnType"

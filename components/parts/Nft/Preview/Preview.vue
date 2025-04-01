@@ -10,9 +10,9 @@
       </div>
       <n-pagination
         v-if="metadataStore.metadata.length > PAGINATION_LIMIT"
-        class="flex items-center justify-end pt-3"
         v-model:page="page"
         v-model:page-size="pageSize"
+        class="flex items-center justify-end pt-3"
         :page-count="Math.ceil(metadataStore.metadata.length / pageSize)"
         show-size-picker
         :page-sizes="pagination.pageSizes"

@@ -1,10 +1,5 @@
 <template>
-  <n-data-table
-    :bordered="false"
-    :columns="columns"
-    :data="settingsStore.apiKeys"
-    :row-props="rowProps"
-  />
+  <n-data-table :bordered="false" :columns="columns" :data="settingsStore.apiKeys" :row-props="rowProps" />
 
   <!-- Drawer - Update API Key -->
   <n-drawer v-model:show="drawerUpdateApiKeyVisible" :width="495">
@@ -45,11 +40,7 @@ const createColumns = (): NDataTableColumns<ApiKeyInterface> => {
       title: t('dashboard.env'),
       key: 'env',
       render(row) {
-        return h(
-          'span',
-          {},
-          { default: () => (row.testNetwork === 1 ? t('general.test') : t('general.live')) }
-        );
+        return h('span', {}, { default: () => (row.testNetwork === 1 ? t('general.test') : t('general.live')) });
       },
     },
     {

@@ -13,7 +13,7 @@
     <!--  Form submit -->
     <n-form-item :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('nft.collection.transfer')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
         {{ $t('nft.collection.transfer') }}
       </Btn>
     </n-form-item>
@@ -56,9 +56,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       const priceServiceName = generatePriceServiceName(
         ServiceTypeName.NFT,

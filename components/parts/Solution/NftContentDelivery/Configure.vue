@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-2xl">
     <div v-if="step === EncryptConfigureTab.BASE">
-      <h3 class="mt-4 mb-8">{{ $t('dashboard.solution.encryption.configure.formName') }}</h3>
+      <h3 class="mb-8 mt-4">{{ $t('dashboard.solution.encryption.configure.formName') }}</h3>
       <FormComputingContractBase @submit-success="step = EncryptConfigureTab.NFT_COLLECTION" />
     </div>
     <div v-else>

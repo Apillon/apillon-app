@@ -1,13 +1,7 @@
 <template>
-  <n-form
-    ref="formRef"
-    class="inline"
-    :model="formData"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-  >
+  <n-form ref="formRef" class="inline" :model="formData" :rules="rules" @submit.prevent="handleSubmit">
     <!--  Email - hidden if email provided by props -->
-    <div class="mb-8" :class="{ 'absolute invisible': email }">
+    <div class="mb-8" :class="{ 'invisible absolute': email }">
       <n-form-item path="email" :show-label="false" :show-feedback="false">
         <n-input
           v-model:value="formData.email"
@@ -19,7 +13,7 @@
     </div>
 
     <n-form-item path="captcha" :show-label="false">
-      <div class="block w-full h-20">
+      <div class="block h-20 w-full">
         <Captcha />
       </div>
       <n-input v-model:value="formData.captcha" class="absolute hidden" />
@@ -105,10 +99,7 @@ async function passwordChangeRequest() {
     formData.value.captcha = { token: prosopoToken, eKey: config.public.captchaKey };
   }
   try {
-    const res = await $api.post<PasswordResetRequestResponse>(
-      endpoints.passwordResetRequest,
-      formData.value
-    );
+    const res = await $api.post<PasswordResetRequestResponse>(endpoints.passwordResetRequest, formData.value);
 
     if (res.data) {
       message.success(t('form.success.requestPasswordChange'));

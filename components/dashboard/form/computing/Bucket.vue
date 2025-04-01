@@ -71,7 +71,7 @@
       <FormStorageBucket
         :submit-text="$t('computing.contract.createBucket')"
         @submit="loadingBucket = true"
-        @createSuccess="onBucketCreated"
+        @create-success="onBucketCreated"
       />
     </modal>
   </div>

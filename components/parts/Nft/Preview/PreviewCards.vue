@@ -7,7 +7,7 @@
       :pagination="pagination"
       :modules="[EffectCards, Pagination]"
       @swiper="onSwiper"
-      @slideChange="onSlideChange"
+      @slide-change="onSlideChange"
     >
       <swiper-slide v-for="(slide, key) in slides" :key="key" class="mx-auto flex justify-center">
         <NftCard :id="key + 1" v-bind="slide" class="min-h-[16rem] md:min-h-[18rem] lg:min-h-[20rem]" />
@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { EffectCards, Pagination } from 'swiper/modules';
-import { type Swiper as SwiperClass } from 'swiper/types';
+import type { Swiper as SwiperClass } from 'swiper/types';
 
 // Import Swiper styles
 import 'swiper/css';

@@ -9,9 +9,9 @@
     :pagination="ipnsStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
+    remote
     @update:page="handlePageChange"
     @update:sorter="handleSorterChange"
-    remote
   />
 
   <!-- Modal - Edit IPNS -->

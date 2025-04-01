@@ -1,10 +1,7 @@
 <template>
   <Dashboard :loading="pageLoading">
     <template #heading>
-      <HeaderIndexer
-        v-if="indexerStore.active.indexer_uuid"
-        :indexer-uuid="indexerStore.active.indexer_uuid"
-      />
+      <HeaderIndexer v-if="indexerStore.active.indexer_uuid" :indexer-uuid="indexerStore.active.indexer_uuid" />
     </template>
     <slot>
       <ActionsIndexerDeployments />

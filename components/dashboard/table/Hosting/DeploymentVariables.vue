@@ -25,8 +25,8 @@
   />
   <modal v-model:show="modalCreateVariableVisible" :title="$t('hosting.deploy.env-vars.new-title')">
     <FormHostingDeploymentConfigVariable
-      @submit-success="modalCreateVariableVisible = false"
       :config-id="deploymentStore.deploymentConfig?.id ?? 0"
+      @submit-success="modalCreateVariableVisible = false"
     />
   </modal>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center w-full md:w-1/2 md:pl-10 my-20 md:my-0">
+  <div class="my-20 flex w-full items-center justify-center md:my-0 md:w-1/2 md:pl-10">
     <div class="md:max-w-[400px]">
       <p class="body-lg text-bo mb-12">
         {{ $t('auth.onboarding.buildWeb3') }}

@@ -17,7 +17,7 @@
     <!--  Form submit -->
     <n-form-item :show-feedback="false">
       <input type="submit" class="hidden" :value="$t('computing.contract.transfer')" />
-      <Btn type="primary" class="w-full mt-2" :loading="loading" @click="handleSubmit">
+      <Btn type="primary" class="mt-2 w-full" :loading="loading" @click="handleSubmit">
         {{ $t('computing.contract.transfer') }}
       </Btn>
     </n-form-item>
@@ -53,14 +53,9 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate((errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
-      warningStore.showSpendingWarning(
-        PriceServiceName.COMPUTING_SCHRODINGER_TRANSFER_OWNERSHIP,
-        () => transfer()
-      );
+      warningStore.showSpendingWarning(PriceServiceName.COMPUTING_SCHRODINGER_TRANSFER_OWNERSHIP, () => transfer());
     }
   });
 }

@@ -1,12 +1,8 @@
 <template>
-  <div v-if="websiteUuid && !website" class="h-20 relative min-w-80">
+  <div v-if="websiteUuid && !website" class="relative h-20 min-w-80">
     <Spinner />
   </div>
-  <HostingDomainConfiguration
-    v-else-if="domainCreated"
-    class="mb-8"
-    :domain="formData.domain || domain"
-  />
+  <HostingDomainConfiguration v-else-if="domainCreated" class="mb-8" :domain="formData.domain || domain" />
   <div v-else class="sm:min-w-[22rem]">
     <n-form
       ref="formRef"
@@ -27,10 +23,7 @@
 
       <!--  IPNS -->
       <n-form-item v-if="!website?.ipnsProduction" path="ipns" :show-label="false">
-        <n-checkbox
-          v-model:checked="formData.ipns"
-          :label="labelInfo('useIpns', 'hosting.domain') as string"
-        />
+        <n-checkbox v-model:checked="formData.ipns" :label="labelInfo('useIpns', 'hosting.domain') as string" />
       </n-form-item>
 
       <!--  Form submit -->
@@ -38,7 +31,7 @@
         <input type="submit" class="hidden" :value="$t('hosting.domain.add')" />
         <Btn
           type="primary"
-          class="w-full mt-2"
+          class="mt-2 w-full"
           :loading="loading"
           :disabled="(!domain && formData.domain?.length === 0) || authStore.isAdmin()"
           @click="handleSubmit"
@@ -151,10 +144,7 @@ async function createWebsiteDomain() {
   }
 
   try {
-    const res = await $api.patch<WebsiteResponse>(
-      endpoints.websites(props.websiteUuid),
-      formData.value
-    );
+    const res = await $api.patch<WebsiteResponse>(endpoints.websites(props.websiteUuid), formData.value);
     updateWebsiteDomainValue(res.data.domain);
 
     domainCreated.value = true;
@@ -176,13 +166,10 @@ async function createIpns(): Promise<boolean> {
   }
 
   try {
-    const res = await $api.post<IpnsCreateResponse>(
-      endpoints.ipns(websiteStore.active.productionBucket.bucket_uuid),
-      {
-        name: `Website: ${websiteStore.active.name}`,
-        cid: lastDeployment.value.cidv1 || lastDeployment.value.cid,
-      }
-    );
+    const res = await $api.post<IpnsCreateResponse>(endpoints.ipns(websiteStore.active.productionBucket.bucket_uuid), {
+      name: `Website: ${websiteStore.active.name}`,
+      cid: lastDeployment.value.cidv1 || lastDeployment.value.cid,
+    });
     websiteStore.active.ipnsProduction = res.data.ipnsName;
 
     message.success($i18n.t('form.success.created.ipns'));
@@ -198,10 +185,7 @@ async function updateWebsiteDomain() {
   loading.value = true;
 
   try {
-    const res = await $api.patch<WebsiteResponse>(
-      endpoints.websites(props.websiteUuid),
-      formData.value
-    );
+    const res = await $api.patch<WebsiteResponse>(endpoints.websites(props.websiteUuid), formData.value);
 
     updateWebsiteDomainValue(res.data.domain);
 

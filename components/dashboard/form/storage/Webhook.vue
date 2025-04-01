@@ -21,12 +21,7 @@
     <n-form-item path="authType" :label="$t('form.label.authType')">
       <n-radio-group v-model:value="formData.authType" name="radiogroup">
         <n-space>
-          <n-radio
-            v-for="(type, key) in authTypes"
-            :key="key"
-            :value="type.value"
-            :label="`${type.label}`"
-          />
+          <n-radio v-for="(type, key) in authTypes" :key="key" :value="type.value" :label="`${type.label}`" />
         </n-space>
       </n-radio-group>
     </n-form-item>
@@ -64,12 +59,7 @@
 
     <!-- Token auth: bearer token -->
     <n-grid v-else-if="formData.authType === BucketWebhookAuthMethod.TOKEN" :cols="1" :x-gap="32">
-      <n-form-item-gi
-        :span="1"
-        path="param1"
-        :label="$t('form.label.bearerToken')"
-        :label-props="{ for: 'param1' }"
-      >
+      <n-form-item-gi :span="1" path="param1" :label="$t('form.label.bearerToken')" :label-props="{ for: 'param1' }">
         <n-input
           v-model:value="formData.param1"
           type="textarea"
@@ -86,7 +76,7 @@
         <input type="submit" class="hidden" :value="$t('form.save')" />
         <Btn
           type="primary"
-          class="w-full mt-2"
+          class="mt-2 w-full"
           :loading="loadingForm"
           :disabled="authStore.isAdmin()"
           @click="handleSubmit"
@@ -100,7 +90,7 @@
       <n-form-item-gi v-if="webhook" :span="1">
         <Btn
           type="secondary"
-          class="w-full mt-2"
+          class="mt-2 w-full"
           :loading="loadingReset"
           :disabled="authStore.isAdmin()"
           @click="resetWebhook"
@@ -218,9 +208,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else if (webhook.value) {
       await updateWebhook();
     } else {
@@ -246,10 +234,7 @@ async function createWebhook() {
   loadingForm.value = true;
 
   try {
-    const res = await $api.post<WebhookResponse>(
-      endpoints.bucketWebhook(props.bucketUuid),
-      formData.value
-    );
+    const res = await $api.post<WebhookResponse>(endpoints.bucketWebhook(props.bucketUuid), formData.value);
 
     webhook.value = res.data;
     updateFormData(res.data);
@@ -305,8 +290,8 @@ function updateFormData(webhook: WebhookInterface) {
     (webhook.param2
       ? BucketWebhookAuthMethod.BASIC
       : webhook.param1
-      ? BucketWebhookAuthMethod.TOKEN
-      : BucketWebhookAuthMethod.NONE);
+        ? BucketWebhookAuthMethod.TOKEN
+        : BucketWebhookAuthMethod.NONE);
 
   setTimeout(() => (disabledParamReset.value = false), 1);
 }

@@ -62,14 +62,12 @@ function getSortedUniqueDatesDesc(data: RpcApiKeyUsagePerChainInterface): string
   const dateSet = new Set<string>();
 
   // Iterate over each key in the data object.
-  for (const key in data) {
-    if (data.hasOwnProperty(key)) {
-      const entries = data[key];
+  Object.keys(data).forEach(key => {
+    const entries = data[key];
 
-      // Add each date to the Set to ensure uniqueness.
-      entries.forEach(entry => dateSet.add(entry.date));
-    }
-  }
+    // Add each date to the Set to ensure uniqueness.
+    entries.forEach(entry => dateSet.add(entry.date));
+  });
 
   // Convert the Set to an array, then sort it in descending order.
   return Array.from(dateSet).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
@@ -82,18 +80,16 @@ function getRequestsPerChainPerDate(
   const requestsPerChain: { name: string; requests: number[] }[] = [];
 
   // Iterate over each chain in the data object.
-  for (const chain in data) {
-    if (data.hasOwnProperty(chain)) {
-      // Create a map of dates to requests for easy lookup.
-      const dateToRequests = new Map<string, number>(data[chain].map(entry => [entry.date, entry.requests]));
+  Object.keys(data).forEach(chain => {
+    // Create a map of dates to requests for easy lookup.
+    const dateToRequests = new Map<string, number>(data[chain].map(entry => [entry.date, entry.requests]));
 
-      // Populate requests array for each date in sortedDates.
-      const requestsArray = sortedDates.map(date => dateToRequests.get(date) ?? 0);
+    // Populate requests array for each date in sortedDates.
+    const requestsArray = sortedDates.map(date => dateToRequests.get(date) ?? 0);
 
-      // Add the result to the output array.
-      requestsPerChain.push({ name: chain, requests: requestsArray });
-    }
-  }
+    // Add the result to the output array.
+    requestsPerChain.push({ name: chain, requests: requestsArray });
+  });
 
   return requestsPerChain;
 }

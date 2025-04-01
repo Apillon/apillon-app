@@ -20,7 +20,7 @@
           :filter-by-service="filterByService"
           :service="service"
           :category="category"
-          :showCreateCollection="showCreateCollection"
+          :show-create-collection="showCreateCollection"
         />
         <Spinner v-else class="min-h-[7rem]" />
       </div>

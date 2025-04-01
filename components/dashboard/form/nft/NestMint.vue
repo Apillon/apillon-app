@@ -87,7 +87,7 @@ const collectionStore = useCollectionStore();
 const { getAllTokens } = useNftContract();
 
 const loading = ref(false);
-const mintedTokens = ref<Number[]>([]);
+const mintedTokens = ref<number[]>([]);
 const parentNfts = ref<SelectOption[]>([]);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormNftNestMint>({

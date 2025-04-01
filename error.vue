@@ -20,7 +20,7 @@
             <Sidebar :show-on-mobile="showMobileSidebar" @toggle-sidebar="toggleSidebar" />
           </n-layout-sider>
           <n-layout>
-            <Header @toggleSidebar="toggleSidebar" />
+            <Header @toggle-sidebar="toggleSidebar" />
             <n-scrollbar class="lg:max-h[100dvh]" y-scrollable>
               <div ref="messageRef" class="relative flex items-center justify-center px-4 pt-8 lg:h-screen">
                 <div>

@@ -88,7 +88,7 @@ const { addressLabel } = useCollection();
 const { getAllTokens } = useNftContract();
 
 const loading = ref<boolean>(false);
-const mintedTokens = ref<Number[]>([]);
+const mintedTokens = ref<number[]>([]);
 const formRef = ref<NFormInst | null>(null);
 const formData = ref<FormNftMint>({
   receivingAddress: '',

@@ -1,9 +1,9 @@
 <template>
   <div v-if="link" class="flex justify-between">
     <div>
-      <span v-if="prefix" class="mr-1 text-white whitespace-nowrap">{{ prefix }}:</span>
+      <span v-if="prefix" class="mr-1 whitespace-nowrap text-white">{{ prefix }}:</span>
       <a :href="link" target="_blank">
-        <n-ellipsis class="align-bottom break-all" :class="color" :line-clamp="1">
+        <n-ellipsis class="break-all align-bottom" :class="color" :line-clamp="1">
           <span class="break-all" :class="{ 'text-xs': textOrLink.length > 100 }">
             {{ textOrLink }}
           </span>

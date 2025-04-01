@@ -29,7 +29,6 @@
 
 <script lang="ts" setup>
 const { t } = useI18n();
-const router = useRouter();
 const dataStore = useDataStore();
 const paymentStore = usePaymentStore();
 const collectionStore = useCollectionStore();

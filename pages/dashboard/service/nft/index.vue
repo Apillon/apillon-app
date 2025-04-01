@@ -5,7 +5,7 @@
     :service="ServiceTypeName.NFT"
     docs="https://wiki.apillon.io/web3-services/4-nfts.html"
     video-id="qQJnuvUo-xo"
-    :videoChapters="[
+    :video-chapters="[
       { time: '00:00', title: 'Intro' },
       { time: '00:35', title: 'Dashboard' },
       { time: '02:53', title: 'NFT Collection' },

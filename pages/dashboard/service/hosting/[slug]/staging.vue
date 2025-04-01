@@ -6,7 +6,7 @@
     <slot>
       <template v-if="bucketStore.folder.items.length || deploymentStore.staging.length > 0">
         <n-space class="pb-8" :size="32" vertical>
-          <div class="flex flex-col xl:flex-row-reverse gap-8 w-full justify-between">
+          <div class="flex w-full flex-col justify-between gap-8 xl:flex-row-reverse">
             <!-- Actions : refresh, deploy -->
             <ActionsHostingWebsite :env="DeploymentEnvironment.STAGING" :search="false" />
 
@@ -26,19 +26,14 @@
           <div class="mt-8">
             <ActionsHostingWebsiteSearchFiles />
 
-            <div class="relative h-14 pt-2 mb-1">
+            <div class="relative mb-1 h-14 pt-2">
               <StorageBreadcrumbs v-if="bucketStore.folder.selected" class="absolute" />
             </div>
             <TableStorageFiles :type="TableFilesType.DEPLOYMENT" />
           </div>
         </n-space>
       </template>
-      <Empty
-        v-else
-        :title="$t('general.nothingHere')"
-        :info="$t('hosting.stagingEmpty')"
-        icon="storage/empty"
-      />
+      <Empty v-else :title="$t('general.nothingHere')" :info="$t('hosting.stagingEmpty')" icon="storage/empty" />
     </slot>
   </Dashboard>
 </template>

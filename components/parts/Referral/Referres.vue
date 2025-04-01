@@ -11,7 +11,7 @@
         </n-tag> -->
       </div>
 
-      <p class="font-button text-sm text-body mt-3 mb-5">
+      <p class="font-button mb-5 mt-3 text-sm text-body">
         {{ $t('referral.referres.linkDesc') }}
       </p>
 
@@ -20,8 +20,8 @@
       </p>
 
       <div class="max-w-[480px]">
-        <div class="h-12 px-5 py-2 bg-bg-light mt-2 border-1 border-grey flex justify-between">
-          <p class="leading-7 whitespace-nowrap overflow-hidden">
+        <div class="border-grey mt-2 flex h-12 justify-between border-1 bg-bg-light px-5 py-2">
+          <p class="overflow-hidden whitespace-nowrap leading-7">
             {{ referralCode }}
           </p>
           <div class="mt-1 cursor-pointer" @click="copyWalletNumber()">
@@ -37,17 +37,15 @@
         {{ $t('referral.referres.header') }}
       </h4>
 
-      <p class="font-button text-sm text-body mb-8 whitespace-pre-line">
+      <p class="font-button mb-8 whitespace-pre-line text-sm text-body">
         {{ $t('referral.referres.info') }}
       </p>
 
-      <div
-        class="grid grid-cols-1 md:grid-cols-4 gap-4 font-content text-sm border-b-1 border-bg-lighter pb-3"
-      >
-        <div class="pl-5 col-span-2">
+      <div class="font-content grid grid-cols-1 gap-4 border-b-1 border-bg-lighter pb-3 text-sm md:grid-cols-4">
+        <div class="col-span-2 pl-5">
           <strong>{{ $t('referral.referres.name') }}</strong>
         </div>
-        <div class="flex gap-1 items-center">
+        <div class="flex items-center gap-1">
           <strong>{{ $t('referral.referres.active') }}</strong>
         </div>
         <div>

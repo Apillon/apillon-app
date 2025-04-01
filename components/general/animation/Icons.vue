@@ -3,8 +3,8 @@
     <NuxtIcon
       v-for="icon in numOfIcons"
       v-show="icon === iconIndex"
-      :name="`animation/${animationName}/${icon}`"
       :key="icon"
+      :name="`animation/${animationName}/${icon}`"
       :class="btnClass"
       filled
     />

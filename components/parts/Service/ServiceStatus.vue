@@ -1,18 +1,14 @@
 <template>
-  <Notice
-    v-if="showNotification"
-    class="relative inline-flex items-center pr-12"
-    :type="notificationType"
-  >
-    <span class="inline-block mr-2">
+  <Notice v-if="showNotification" class="relative inline-flex items-center pr-12" :type="notificationType">
+    <span class="mr-2 inline-block">
       {{ serviceStatus.message }}
     </span>
-    <span v-if="serviceStatus.url" class="inline-block mr-2">
+    <span v-if="serviceStatus.url" class="mr-2 inline-block">
       <a :href="serviceStatus.url" class="text-bg-dark underline" target="_blank">
         {{ $t('general.readMore') }}
       </a>
     </span>
-    <button class="absolute top-1/2 -translate-y-1/2 right-4" @click="close">
+    <button class="absolute right-4 top-1/2 -translate-y-1/2" @click="close">
       <span class="icon-close align-middle text-xl text-bodyDark"></span>
     </button>
   </Notice>

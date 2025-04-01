@@ -9,16 +9,11 @@
         <ActionsComputingCloudFunctionsJobs />
         <TableComputingCloudFunctionJobs />
       </n-space>
-      <div v-else class="flex flex-col justify-center items-center h-full">
-        <n-space size="large" class="self-end mb-8">
+      <div v-else class="flex h-full flex-col items-center justify-center">
+        <n-space size="large" class="mb-8 self-end">
           <!-- View template -->
-          <n-button
-            size="small"
-            tag="a"
-            href="https://github.com/Apillon/cloud-function-template"
-            target="_blank"
-          >
-            <span class="icon-cloud-functions text-xl mr-2"></span>
+          <n-button size="small" tag="a" href="https://github.com/Apillon/cloud-function-template" target="_blank">
+            <span class="icon-cloud-functions mr-2 text-xl"></span>
             {{ $t('computing.cloudFunctions.job.viewTemplate') }}
           </n-button>
           <BtnDocumentation
@@ -27,7 +22,7 @@
             hover-lighter
           />
         </n-space>
-        <div class="flex flex-col gap-4 mt-8 max-w-xl text-center">
+        <div class="mt-8 flex max-w-xl flex-col gap-4 text-center">
           <h4>{{ $t('computing.cloudFunctions.job.title') }}</h4>
           <i18n-t keypath="computing.cloudFunctions.job.content" tag="p" />
 

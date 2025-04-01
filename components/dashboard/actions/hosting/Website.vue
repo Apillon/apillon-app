@@ -161,10 +161,10 @@ const modalWebsiteReviewVisible = ref<boolean>(false);
 const deploying = ref<boolean>(false);
 const deployEnv = ref<number>(DeploymentEnvironment.STAGING);
 
-const isUpload = computed<Boolean>(() => {
+const isUpload = computed<boolean>(() => {
   return props.env !== DeploymentEnvironment.STAGING && props.env !== DeploymentEnvironment.PRODUCTION;
 });
-const hasActiveDeployments = computed<Boolean>(() => {
+const hasActiveDeployments = computed<boolean>(() => {
   return deploymentStore.staging.some(deployment => deployment.deploymentStatus < DeploymentStatus.SUCCESSFUL);
 });
 

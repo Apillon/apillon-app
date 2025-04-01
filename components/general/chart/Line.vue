@@ -19,7 +19,7 @@ type ChartDataset = {
   borderWidth: number;
 };
 type ChartData = {
-  labels: String[];
+  labels: string[];
   datasets: ChartDataset[];
 };
 

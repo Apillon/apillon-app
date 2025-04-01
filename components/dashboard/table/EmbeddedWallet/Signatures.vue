@@ -7,13 +7,8 @@
     :pagination="embeddedWalletStore.signature.pagination"
     :row-key="rowKey"
     remote
-    @update:page="
-      (page: number) => handlePageChange(page, embeddedWalletStore.signature.pagination.pageSize)
-    "
-    @update:page-size="
-      (pageSize: number) =>
-        handlePageChange(embeddedWalletStore.signature.pagination.page, pageSize)
-    "
+    @update:page="(page: number) => handlePageChange(page, embeddedWalletStore.signature.pagination.pageSize)"
+    @update:page-size="(pageSize: number) => handlePageChange(embeddedWalletStore.signature.pagination.page, pageSize)"
   />
 </template>
 

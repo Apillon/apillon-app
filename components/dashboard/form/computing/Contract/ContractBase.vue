@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Notification v-if="isFormDisabled" type="error" class="w-full mb-8">
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
       {{ $t('dashboard.permissions.insufficient') }}
     </Notification>
 
@@ -13,11 +13,7 @@
       @submit.prevent="handleSubmit"
     >
       <!--  Contract name -->
-      <n-form-item
-        path="name"
-        :label="$t('form.label.contract.name')"
-        :label-props="{ for: 'name' }"
-      >
+      <n-form-item path="name" :label="$t('form.label.contract.name')" :label-props="{ for: 'name' }">
         <n-input
           v-model:value="contractStore.form.name"
           :input-props="{ id: 'name' }"
@@ -42,11 +38,7 @@
       </n-form-item>
 
       <!--  Bucket Uuid -->
-      <n-form-item
-        path="bucket_uuid"
-        :label="$t('form.label.bucketName')"
-        :label-props="{ for: 'bucket_uuid' }"
-      >
+      <n-form-item path="bucket_uuid" :label="$t('form.label.bucketName')" :label-props="{ for: 'bucket_uuid' }">
         <select-options
           v-model:value="contractStore.form.bucket_uuid"
           :options="buckets"
@@ -75,13 +67,7 @@
       <!--  Form submit -->
       <n-form-item :show-feedback="false" :show-label="false">
         <input type="submit" class="hidden" :value="$t('computing.contract.create')" />
-        <Btn
-          type="primary"
-          class="w-full mt-2"
-          :loading="loading"
-          :disabled="isFormDisabled"
-          @click="handleSubmit"
-        >
+        <Btn type="primary" class="mt-2 w-full" :loading="loading" :disabled="isFormDisabled" @click="handleSubmit">
           {{ $t('computing.contract.create') }}
         </Btn>
       </n-form-item>
@@ -127,9 +113,7 @@ function handleSubmit(e: Event | MouseEvent) {
   e.preventDefault();
   formRef.value?.validate(async (errors: Array<NFormValidationError> | undefined) => {
     if (errors) {
-      errors.map(fieldErrors =>
-        fieldErrors.map(error => message.warning(error.message || 'Error'))
-      );
+      errors.map(fieldErrors => fieldErrors.map(error => message.warning(error.message || 'Error')));
     } else {
       emit('submitSuccess');
     }

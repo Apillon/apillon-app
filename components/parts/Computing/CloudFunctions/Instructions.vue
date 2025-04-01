@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-y-8 flex-wrap">
+  <div class="flex flex-wrap gap-y-8">
     <div>
       <SolutionContent :content="content" />
 
@@ -9,16 +9,14 @@
         <Btn @click="modalCreateCloudFunctionsVisible = true">
           {{ $t('computing.cloudFunctions.new') }}
         </Btn>
-        <BtnDocumentation
-          href="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html"
-        />
+        <BtnDocumentation href="https://wiki.apillon.io/web3-services/8-web3-cloud-functions.html" />
         <Btn
           type="secondary"
           inner-class="text-white flex items-center justify-center"
           href="https://github.com/Apillon/cloud-function-template"
           target="_blank"
         >
-          <span class="icon-cloud-functions text-xl mr-2"></span>
+          <span class="icon-cloud-functions mr-2 text-xl"></span>
           <span>{{ $t('computing.cloudFunctions.job.viewTemplate') }}</span>
         </Btn>
       </n-space>
@@ -34,14 +32,8 @@
   </div>
 
   <!-- Modal - Create Cloud Functions -->
-  <modal
-    v-model:show="modalCreateCloudFunctionsVisible"
-    :title="$t('computing.cloudFunctions.new')"
-  >
-    <FormComputingCloudFunctions
-      @submit-success="modalCreateCloudFunctionsVisible = false"
-      @create-success=""
-    />
+  <modal v-model:show="modalCreateCloudFunctionsVisible" :title="$t('computing.cloudFunctions.new')">
+    <FormComputingCloudFunctions @submit-success="modalCreateCloudFunctionsVisible = false" @create-success="" />
   </modal>
 </template>
 

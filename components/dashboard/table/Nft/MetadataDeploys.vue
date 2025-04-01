@@ -21,9 +21,8 @@ const collectionStore = useCollectionStore();
 /** Data: filtered deploys */
 const data = computed<Array<MetadataDeployInterface>>(() => {
   return (
-    props.deploys.filter(item =>
-      JSON.stringify(item).toLowerCase().includes(collectionStore.search.toLowerCase())
-    ) || []
+    props.deploys.filter(item => JSON.stringify(item).toLowerCase().includes(collectionStore.search.toLowerCase())) ||
+    []
   );
 });
 

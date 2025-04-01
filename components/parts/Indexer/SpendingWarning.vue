@@ -8,14 +8,14 @@
       <slot />
     </template>
     <div v-else>
-      <div class="flex flex-col gap-1 mb-4">
+      <div class="mb-4 flex flex-col gap-1">
         <span v-html="$t('indexer.spendingWarning.content')"></span>
       </div>
 
-      <div class="flex flex-col gap-1 mb-4">
+      <div class="mb-4 flex flex-col gap-1">
         <span v-html="$t('indexer.spendingWarning.content2')"></span>
       </div>
-      <div class="mt-4 mb-8">
+      <div class="mb-8 mt-4">
         <span class="text-primary">
           {{ $t('indexer.spendingWarning.info') }}
         </span>
@@ -31,12 +31,7 @@
       >
         {{ $t('indexer.spendingWarning.btnBuyCredits') }}
       </Btn>
-      <Btn
-        :type="isEnoughCredits ? 'primary' : 'secondary'"
-        size="large"
-        class="mt-2"
-        @click="proceed = true"
-      >
+      <Btn :type="isEnoughCredits ? 'primary' : 'secondary'" size="large" class="mt-2" @click="proceed = true">
         {{ $t('indexer.spendingWarning.btnProceed') }}
       </Btn>
     </div>

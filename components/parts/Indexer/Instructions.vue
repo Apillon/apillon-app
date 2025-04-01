@@ -9,9 +9,9 @@
       </p>
     </div>
 
-    <div class="text-body flex flex-row items-center gap-2 mt-2">
+    <div class="mt-2 flex flex-row items-center gap-2 text-body">
       {{ $t('rpc.apiKey.powered') }}
-      <NuxtIcon name="logo/sqd" class="h-6 w-16 icon-auto text-white" alt="sqd" />
+      <NuxtIcon name="logo/sqd" class="icon-auto h-6 w-16 text-white" alt="sqd" />
     </div>
     <SolutionContent :content="content" />
 
@@ -21,9 +21,7 @@
       <Btn @click="showModalNewIndexer = true">
         {{ $t('indexer.new') }}
       </Btn>
-      <BtnDocumentation
-        href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service"
-      />
+      <BtnDocumentation href="https://wiki.apillon.io/web3-services/10-web3-infrastructure.html#indexing-service" />
     </n-space>
   </div>
   <!-- Modal - Create Indexer -->

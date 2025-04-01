@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-xl mx-auto">
+  <div class="mx-auto max-w-xl">
     <div class="text-center">
       <h2>{{ contractStore.active.name }}</h2>
       <p>{{ contractStore.active.description }}</p>

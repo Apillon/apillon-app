@@ -2,7 +2,7 @@
  *  Date and time functions
  */
 /** Time to days and hours */
-export function timeToDays(time: String): string {
+export function timeToDays(time: string): string {
   if (!time) return '';
 
   const [d, h, s] = time.split(':');

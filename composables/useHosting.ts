@@ -90,12 +90,12 @@ export default function useHosting() {
   }
 
   function checkUnfinishedWebsite(unfinishedWebsite: WebsiteInterface) {
-    if (!!unfinishedWebsite?.ipnsProduction) return;
+    if (unfinishedWebsite?.ipnsProduction) return;
 
     websiteInterval = setInterval(async () => {
       const website = await websiteStore.fetchWebsite(websiteStore.active.website_uuid);
 
-      if (!!website?.ipnsProduction) {
+      if (website?.ipnsProduction) {
         clearInterval(websiteInterval);
       }
     }, 10000);
@@ -154,13 +154,13 @@ export default function useHosting() {
 
     loading.value = true;
     try {
-      const bodyData: Record<string, string|number|object> = {
+      const bodyData: Record<string, string | number | object> = {
         name: websiteStore.form.name,
         description: websiteStore.form.description,
         project_uuid: dataStore.projectUuid,
       };
-      if(websiteStore.form.type === WebsiteType.GITHUB) {        
-        bodyData.deploymentConfig= {
+      if (websiteStore.form.type === WebsiteType.GITHUB) {
+        bodyData.deploymentConfig = {
           branchName: websiteStore.form.branchName,
           buildCommand: websiteStore.form.buildCommand,
           buildDirectory: websiteStore.form.buildDirectory,

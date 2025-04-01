@@ -1,9 +1,7 @@
 <template>
   <!-- Referral - intro -->
-  <div
-    class="border-b-1 border-bg-lighter grid grid-cols-1 md:grid-cols-4 gap-4 font-content text-sm py-3"
-  >
-    <div class="pl-3 font-bold col-span-2" style="line-height: 28px">
+  <div class="font-content grid grid-cols-1 gap-4 border-b-1 border-bg-lighter py-3 text-sm md:grid-cols-4">
+    <div class="col-span-2 pl-3 font-bold" style="line-height: 28px">
       {{ item.name }}
     </div>
     <div class="text-dark">
@@ -41,10 +39,6 @@ function getTimeSince(date: string) {
 
   const diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / oneDay));
 
-  return diffDays < 1
-    ? ' < 1 day ago'
-    : diffDays === 1
-    ? ' 1 day ago'
-    : diffDays.toString() + ' days ago';
+  return diffDays < 1 ? ' < 1 day ago' : diffDays === 1 ? ' 1 day ago' : diffDays.toString() + ' days ago';
 }
 </script>

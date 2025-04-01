@@ -7,14 +7,14 @@ export type ServiceTypeItem = {
   iconSvg?: string;
   link?: string;
   disabled?: boolean | null;
-  usage?: String[];
+  usage?: string[];
 };
 export type OnboardingService = {
   key: string;
   name: string;
   description: string;
   link?: string;
-  tags?: String[];
+  tags?: string[];
   codingRequired?: boolean;
 };
 type OnboardingServiceTrans = {

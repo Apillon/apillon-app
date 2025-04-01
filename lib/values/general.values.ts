@@ -14,7 +14,7 @@ export const PARAMS_ALL_ITEMS = {
 
 export enum PageSize {
   SM = 10,
-  BASE = PAGINATION_LIMIT,
+  BASE = 20,
   LG = 50,
 }
 

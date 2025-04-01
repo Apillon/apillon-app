@@ -1,25 +1,30 @@
 <template>
-    <ReviewLayout>    
-    <template #left>      
-    <ReviewTable :data="data" :info="$t('nft.colleciton.review.info')" class="md:w-1/2" @back="$emit('back')">
-      <div class="relative mb-20 mt-6 min-h-36 w-full flex-auto rounded-lg bg-bg-lighter">
-        <Image
-          v-if="metadataStore.form.visual.coverImage"
-          :src="createThumbnailUrl(metadataStore.form.visual.coverImage)"
-          class="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-lg object-cover object-center"
-        />
-        <Image
-          v-if="metadataStore.form.visual.logo"
-          :src="createThumbnailUrl(metadataStore.form.visual.logo)"
-          class="absolute left-6 top-20 mt-2 h-28 w-28 rounded-full object-cover object-center"
-        />
-        <div v-else class="absolute left-6 top-10 h-28 w-28 rounded-full bg-bg-dark" />
-      </div>
-    </ReviewTable>
+  <ReviewLayout>
+    <template #left>
+      <ReviewTable :data="data" :info="$t('nft.colleciton.review.info')" class="md:w-1/2" @back="$emit('back')">
+        <div class="relative mb-20 mt-6 min-h-36 w-full flex-auto rounded-lg bg-bg-lighter">
+          <Image
+            v-if="metadataStore.form.visual.coverImage"
+            :src="createThumbnailUrl(metadataStore.form.visual.coverImage)"
+            class="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-lg object-cover object-center"
+          />
+          <Image
+            v-if="metadataStore.form.visual.logo"
+            :src="createThumbnailUrl(metadataStore.form.visual.logo)"
+            class="absolute left-6 top-20 mt-2 h-28 w-28 rounded-full object-cover object-center"
+          />
+          <div v-else class="absolute left-6 top-10 h-28 w-28 rounded-full bg-bg-dark" />
+        </div>
+      </ReviewTable>
     </template>
-    
+
     <template #right>
-      <ReviewPricing class="mt-8 md:!w-1/2" :pricing="pricing" :deploy-text="$t('nft.collection.review.createCollection')"  @deploy="$emit('deploy')" />   
+      <ReviewPricing
+        class="mt-8 md:!w-1/2"
+        :pricing="pricing"
+        :deploy-text="$t('nft.collection.review.createCollection')"
+        @deploy="$emit('deploy')"
+      />
     </template>
   </ReviewLayout>
 </template>
@@ -37,7 +42,7 @@ const metadataStore = useMetadataStore();
 const { pricing, createThumbnailUrl } = useMetadata();
 
 const nonRefundable = ref<boolean>(false);
-const data = ref<Record<string,string|number|boolean|null>[]>([
+const data = ref<Record<string, string | number | boolean | null>[]>([
   {
     label: t('form.label.collection.chain'),
     value: metadataStore.form.smartContract.chain || EvmChainTestnet.MOONBASE,

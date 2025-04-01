@@ -17,7 +17,7 @@
               :name="chain.name.toLowerCase()"
               :label="chain.label"
               :price="paymentStore.findServicePrice(getPriceServiceName(chain.value))?.currentPrice || 0"
-              :chainId="chain.value"
+              :chain-id="chain.value"
               :disabled="true"
             >
               <Notification v-if="collectionStore.quotaReached" type="error">
@@ -34,7 +34,7 @@
           :name="chain.name.toLowerCase()"
           :label="chain.label"
           :price="paymentStore.findServicePrice(getPriceServiceName(chain.value))?.currentPrice || 0"
-          :chainId="chain.value"
+          :chain-id="chain.value"
           :selected="metadataStore.form.smartContract.chain === chain.value"
           @click="() => onChainChange(chain.value)"
         />

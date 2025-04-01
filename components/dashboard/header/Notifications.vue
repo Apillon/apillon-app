@@ -4,10 +4,10 @@
   </div>
   <n-dropdown
     v-else
+    :key="settingsStore.notifications.items.length"
     class="scrollable max-h-96 min-w-48 overflow-y-auto rounded-lg lg:min-w-96 xl:max-h-[60vh]"
     placement="bottom-end"
     trigger="click"
-    :key="settingsStore.notifications.items.length"
     :options="options"
     :render-option="renderOption"
   >

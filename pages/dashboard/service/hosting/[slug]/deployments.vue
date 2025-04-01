@@ -32,8 +32,8 @@
         :title="$t(websiteStore.isActiveWebsiteGithubSource ? 'hosting.deploy.update' : 'hosting.deploy.new')"
       >
         <FormStorageDeployConfig
-          @submit-success="modalCreateKeyVisible = false"
           :config_id="deploymentStore.deploymentConfig?.id"
+          @submit-success="modalCreateKeyVisible = false"
         />
       </modal>
     </slot>

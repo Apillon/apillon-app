@@ -30,7 +30,7 @@ export function validateRequiredCheckbox(_: FormItemRule, value: boolean | null)
 }
 
 /** Validate dropdown if it is selected */
-export function validateRequiredDropdown(_: FormItemRule, value: String | null): boolean {
+export function validateRequiredDropdown(_: FormItemRule, value: string | null): boolean {
   if (value) {
     return value.length !== 0;
   } else {

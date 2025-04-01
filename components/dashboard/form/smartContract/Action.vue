@@ -9,7 +9,7 @@
         :label="labelInfoText(input.name, input?.description)"
       >
         <n-input v-if="input.name === 'data'" v-model:value="formData[input.name]" :maxlength="256" required>
-          <template #prefix v-if="!formData[input.name]?.startsWith('0x')">
+          <template v-if="!formData[input.name]?.startsWith('0x')" #prefix>
             <span class="text-bodyDark">0x</span>
           </template>
         </n-input>

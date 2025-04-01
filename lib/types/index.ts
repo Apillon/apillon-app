@@ -45,7 +45,7 @@ declare global {
   interface Window {
     $message: MessageApiInjection;
     $i18n: i18nType;
-    _paq: Array<String[]>;
+    _paq: Array<string[]>;
     loadProcaptcha: Function;
     procaptchaLoaded: boolean;
   }

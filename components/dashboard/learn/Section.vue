@@ -14,25 +14,19 @@ const key = computed(() => {
 
 const instructionHelper = computed<InstructionInterface | undefined>(() => {
   if (key.value in dataStore.instructions) {
-    return dataStore.instructions[key.value].find(
-      item => item.instructionType === InstructionType.HELPER
-    );
+    return dataStore.instructions[key.value].find(item => item.instructionType === InstructionType.HELPER);
   }
   return undefined;
 });
 const instructionVideo = computed<InstructionInterface | undefined>(() => {
   if (key.value in dataStore.instructions) {
-    return dataStore.instructions[key.value].find(
-      item => item.instructionType === InstructionType.VIDEO
-    );
+    return dataStore.instructions[key.value].find(item => item.instructionType === InstructionType.VIDEO);
   }
   return undefined;
 });
 const instructionQa = computed<Array<InstructionInterface>>(() => {
   if (key.value in dataStore.instructions) {
-    return dataStore.instructions[key.value].filter(
-      item => item.instructionType === InstructionType.QA
-    );
+    return dataStore.instructions[key.value].filter(item => item.instructionType === InstructionType.QA);
   }
   return [];
 });
@@ -44,7 +38,7 @@ const instructionQa = computed<Array<InstructionInterface>>(() => {
     @apply mt-2;
 
     .n-collapse-item__header {
-      @apply h-11 pl-4 py-2 pr-6 bg-bg-lighter shadow-black;
+      @apply h-11 bg-bg-lighter py-2 pl-4 pr-6 shadow-black;
     }
     .n-collapse-item-arrow {
       @apply absolute right-1 text-primary;

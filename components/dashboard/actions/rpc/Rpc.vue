@@ -5,7 +5,7 @@
         <select-options
           v-model:value="rpcApiKeyStore.selectedId"
           :options="options"
-          class="min-w-[11rem] w-[20vw] max-w-xs"
+          class="w-[20vw] min-w-[11rem] max-w-xs"
           size="small"
           filterable
         />
@@ -25,18 +25,14 @@
       <n-button
         v-if="props.showUsageRefresh"
         size="small"
-        @click="rpcApiKeyStore.fetchRpcApiKeyUsagePerChain"
         :loading="rpcApiKeyStore.loading"
+        @click="rpcApiKeyStore.fetchRpcApiKeyUsagePerChain"
       >
-        <span class="icon-refresh text-xl mr-2"></span>
+        <span class="icon-refresh mr-2 text-xl"></span>
         {{ $t('general.refresh') }}
       </n-button>
 
-      <n-button
-        v-if="rpcApiKeyStore.selectedId"
-        size="small"
-        @click="$router.push(`/dashboard/service/rpc/endpoints`)"
-      >
+      <n-button v-if="rpcApiKeyStore.selectedId" size="small" @click="$router.push(`/dashboard/service/rpc/endpoints`)">
         <span class="text-primary">{{ $t('rpc.endpoint.viewAll') }}</span>
       </n-button>
 

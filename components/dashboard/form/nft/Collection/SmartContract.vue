@@ -82,8 +82,8 @@
     <!--  Collection Use Gateway -->
     <n-form-item v-if="!isUnique" path="useApillonIpfsGateway" :show-label="false" :show-feedback="false">
       <n-checkbox
-        v-model:checked="metadataStore.form.smartContract.useApillonIpfsGateway"
         id="useApillonIpfsGateway"
+        v-model:checked="metadataStore.form.smartContract.useApillonIpfsGateway"
         size="medium"
         :label="infoLabel('useGateway') as string"
       />
@@ -258,7 +258,7 @@
       </n-form-item-gi>
       <!--  Collection Is Drop -->
       <n-form-item-gi path="drop" :span="6" :label="infoLabel('drop') as string">
-        <n-switch v-model:value="metadataStore.form.smartContract.drop" size="medium" id="drop" class="!ml-0" />
+        <n-switch id="drop" v-model:value="metadataStore.form.smartContract.drop" size="medium" class="!ml-0" />
         <strong v-if="metadataStore.form.smartContract.drop" class="text-xs text-green">
           {{ $t('form.switch.on') }}
         </strong>

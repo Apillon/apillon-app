@@ -8,7 +8,7 @@ type Deployment = {
   interval: Interval;
   progress: number;
   service: FileListItemType | JobInterface | ContractInterface | null;
-  title: String | null;
+  title: string | null;
 };
 type Deployments = Record<IntervalType, Deployment>;
 
@@ -40,9 +40,7 @@ export default function useRefreshStatus() {
 
   const setInitialRefreshInterval = () => {
     const refreshKey = localStorage.getItem(LS_KEYS.DEPLOYMENT_REFRESH_INTERVAL);
-    const selectedOption = refreshStatusOptions.value.find(
-      option => option.key === Number(refreshKey)
-    );
+    const selectedOption = refreshStatusOptions.value.find(option => option.key === Number(refreshKey));
     if (refreshKey && selectedOption) {
       refreshInterval.value = selectedOption;
     }

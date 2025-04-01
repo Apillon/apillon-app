@@ -1,5 +1,5 @@
 <template>
-  <Btn :type="storageStore.projectConfig ? 'secondary' : 'primary'" @click="handleGithubPress" :loading="loading">
+  <Btn :type="storageStore.projectConfig ? 'secondary' : 'primary'" :loading="loading" @click="handleGithubPress">
     <span>{{ $t(storageStore.projectConfig ? 'hosting.github-connected' : 'hosting.connect-github') }}</span>
   </Btn>
 
@@ -10,7 +10,7 @@
         {{ $t(`hosting.disconnect-confirmation-body`) }}
       </p>
     </template>
-    <Btn type="primary" @click="disconnectGithub" :loading="loading">
+    <Btn type="primary" :loading="loading" @click="disconnectGithub">
       {{ $t('hosting.disconnect-confirmation-button') }}
     </Btn>
   </ModalDelete>

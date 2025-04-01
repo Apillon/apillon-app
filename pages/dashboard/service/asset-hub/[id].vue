@@ -8,7 +8,7 @@
       <div class="card-light mb-6 px-6 py-4">
         <n-table class="plain" :bordered="false" :single-line="true">
           <tbody>
-            <tr v-for="(data, key) in assetData">
+            <tr v-for="(data, key) in assetData" :key="key">
               <td :class="{ '!border-bg-light': key + 1 === assetData.length }">
                 <span class="text-white">
                   {{ data.label }}

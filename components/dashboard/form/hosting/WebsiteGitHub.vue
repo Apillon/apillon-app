@@ -1,15 +1,15 @@
 <template>
   <div>
-      <!-- Permissions Error Notification -->
-      <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
-        {{ $t('dashboard.permissions.insufficient') }}
-      </Notification>
+    <!-- Permissions Error Notification -->
+    <Notification v-if="isFormDisabled" type="error" class="mb-8 w-full">
+      {{ $t('dashboard.permissions.insufficient') }}
+    </Notification>
 
-      <!-- Info text -->
-      <h5 v-if="title" class="mb-2">{{ title }}</h5>
-      <p v-if="$te('hosting.website.infoNewGithub')" class="mb-8 text-body">
-        {{ $t('hosting.website.infoNewGithub') }}
-      </p>
+    <!-- Info text -->
+    <h5 v-if="title" class="mb-2">{{ title }}</h5>
+    <p v-if="$te('hosting.website.infoNewGithub')" class="mb-8 text-body">
+      {{ $t('hosting.website.infoNewGithub') }}
+    </p>
 
     <n-form
       ref="formRef"
@@ -222,8 +222,6 @@ async function handleSubmit(e?: Event | MouseEvent) {
     warningStore.showSpendingWarning(PriceServiceName.HOSTING_WEBSITE, () => createWebsite());
   }
 }
-
-
 
 function handleUpdateValue(value: number) {
   const repo = storageStore.repos.find((item: GithubRepo) => item.id === value);

@@ -30,13 +30,13 @@
     </template>
     <template #submenu>
       <div
-        class="mb-4 flex max-w-xl flex-row items-center justify-start gap-4 border-2 border-yellow p-4"
         v-if="
           dataStore.isUserOwner &&
           paymentStore.isRpcPlanLoaded &&
           !hasRpcPlan &&
           (rpcApiKeyStore?.usage?.totalRequests ?? 0) > 5000000
         "
+        class="mb-4 flex max-w-xl flex-row items-center justify-start gap-4 border-2 border-yellow p-4"
       >
         <span class="icon-info text-xl"></span>
         {{ $t('rpc.apiKey.pleaseUpgrade') }}
@@ -47,7 +47,7 @@
 
       <div class="relative">
         <MenuRpc class="left-0 top-0 z-1 w-full" />
-        <n-collapse accordion @update:expanded-names="onUpdateAccordion" v-if="isLg">
+        <n-collapse v-if="isLg" accordion @update:expanded-names="onUpdateAccordion">
           <n-collapse-item>
             <template #header>
               {{ instructionsVisible ? $t('general.information.hide') : $t('general.information.show') }}

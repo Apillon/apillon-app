@@ -12,7 +12,7 @@
         align="center"
         justify="space-between"
       >
-        <n-checkbox v-if="!column?.hidden" class="hide-box" :id="column.label" :value="column.value">
+        <n-checkbox v-if="!column?.hidden" :id="column.label" class="hide-box" :value="column.value">
           <n-switch :value="metadataStore.csvSelectedAttributes.includes(column.value)" />
           <strong :class="{ 'text-green': metadataStore.csvSelectedAttributes.includes(column.value) }">
             {{ column.label }}

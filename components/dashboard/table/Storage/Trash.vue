@@ -21,9 +21,9 @@
       :loading="fileStore.trash.loading"
       :pagination="fileStore.trash.pagination"
       :row-props="rowProps"
+      remote
       @update:page="(page: number) => handlePageChange(page, fileStore.trash.pagination.pageSize)"
       @update:sorter="(pageSize: number) => handlePageChange(1, pageSize)"
-      remote
     />
   </n-space>
 </template>

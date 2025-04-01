@@ -7,11 +7,9 @@
     :pagination="transactionStore.pagination"
     :row-key="rowKey"
     :row-props="rowProps"
-    @update:page="(page: number) => handlePageChange(page, transactionStore.pagination.pageSize)"
-    @update:page-size="
-      (pageSize: number) => handlePageChange(transactionStore.pagination.page, pageSize)
-    "
     remote
+    @update:page="(page: number) => handlePageChange(page, transactionStore.pagination.pageSize)"
+    @update:page-size="(pageSize: number) => handlePageChange(transactionStore.pagination.page, pageSize)"
   />
 </template>
 
@@ -43,22 +41,14 @@ const createColumns = (): NDataTableColumns<TransactionInterface> => {
       key: 'transactionType',
       title: $i18n.t('computing.transaction.transactionType'),
       render(row: TransactionInterface) {
-        return h(
-          resolveComponent('ComputingTransactionType'),
-          { transactionType: row.transactionType },
-          ''
-        );
+        return h(resolveComponent('ComputingTransactionType'), { transactionType: row.transactionType }, '');
       },
     },
     {
       key: 'transactionStatus',
       title: $i18n.t('general.status'),
       render(row: TransactionInterface) {
-        return h(
-          resolveComponent('ComputingTransactionStatus'),
-          { transactionStatus: row.transactionStatus },
-          ''
-        );
+        return h(resolveComponent('ComputingTransactionStatus'), { transactionStatus: row.transactionStatus }, '');
       },
     },
   ];
